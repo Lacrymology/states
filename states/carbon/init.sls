@@ -52,14 +52,21 @@ carbon:
     - requirements: salt://carbon/requirements.txt
     - require:
       - pkg: python-virtualenv
+  git:
+    - latest
+    - name: git://github.com/graphite-project/carbon.git
+    - rev: ee5cc3fd3b7db271444d480476468461cda2d34b
+    - target: /usr/local/graphite/src/carbon
   pip:
     - installed
+    - name: /usr/local/graphite/src/carbon
     - bin_env: /usr/local/graphite/bin/pip
     - install_options:
       - "--prefix=/usr/local/graphite"
       - "--install-lib=/usr/local/graphite/lib/python2.7/site-packages"
     - require:
       - virtualenv: carbon
+      - git: carbon
   user:
     - present
     - name: graphite

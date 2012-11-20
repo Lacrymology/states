@@ -110,6 +110,16 @@ diamond_rabbitmq:
     - mode: 600
     - source: salt://rabbitmq/nrpe.jinja2
 
+{% for node in pillar['rabbitmq']['cluster']['nodes'] -%}
+    {% if node != grains['id'] -%}
+host_{{ node }}:
+  host:
+    - present
+    - name: {{ node }}
+    - ip: {{ salt['publish.publish'](node, 'grains.item', 'privateIp')[node] }}
+    {% endif %}
+{% endfor %}
+
 extend:
   diamond:
     service:

@@ -1,0 +1,2 @@
+# {{ pillar['message_do_not_modify'] }}
+command[check_syslogd]=/usr/lib/nagios/plugins/check_procs -w 1:1 -a '/usr/sbin/gsyslogd' -u root

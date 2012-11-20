@@ -1,0 +1,14 @@
+Welcome to host {{ grains['id'] }}:
+ - Architecture: {{ grains['cpuarch'] }}
+ - OS: {{ grains['lsb_description'] }}
+ - CPU: {{ grains['num_cpus'] }}
+ - Memory: {{ grains['mem_total'] }} Mb
+{%- if 'availabilityZone' in grains %}
+ - Availability Zone: {{ grains['availabilityZone'] }}
+ - Instance ID: {{ grains['instanceId'] }}
+ - Instance Type: {{ grains['instanceType'] }}
+ - AMI: {{ grains['imageId'] }}
+ - Private IP: {{ grains ['local-ipv4'] }}
+ - Public IP: {{ grains['public-ipv4'] }}
+ - Public hostname: {{ grains['public-hostname'] }}
+{% endif %}

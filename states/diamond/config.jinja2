@@ -1,0 +1,154 @@
+# {{ pillar['message_do_not_modify'] }}
+[server]
+
+# Handlers for published metrics.
+handlers = diamond.handler.graphite.GraphiteHandler
+#diamond.handler.stats_d.StatsdHandler
+
+# Leave empty to use the current user
+user =
+
+# Leave empty to use the current group
+group =
+
+pid_file = /var/run/diamond.pid
+
+# Directory to load collector modules from
+collectors_path = /usr/local/diamond/src/diamond/src/collectors/
+
+# Directory to load collector config from
+collectors_config_path = /etc/diamond/collectors/
+
+# Interval to reload collectors
+collectors_reload_interval = 3600
+
+#handlers_config_path = /etc/diamond/handlers/
+
+### Options for handlers
+[handlers]
+
+# logging handlers
+keys = syslog
+
+[[default]]
+
+[[GraphiteHandler]]
+
+host = {{ pillar['graphite_address'] }}
+
+# Port to send metrics to
+port = 2003
+
+# Socket timeout (seconds)
+timeout = 15
+
+#[[StatsdHandler]]
+#host = 127.0.0.1
+#port = 8125
+
+[collectors]
+
+[[default]]
+
+hostname_method = uname_short
+
+# All collectors are disabled by default
+enabled = False
+
+# Path Prefix
+path_prefix =
+path_suffix = os
+
+# Default splay time (seconds)
+splay = 1
+
+# Default Poll Interval (seconds)
+interval = 60
+
+# Default collector threading model
+method = Sequential
+
+# Default numeric output
+byte_unit = byte
+
+[[ConnTrackCollector]]
+
+enabled = True
+
+[[CPUCollector]]
+
+enabled = True
+
+[[DiskSpaceCollector]]
+
+enabled = True
+
+[[DiskUsageCollector]]
+
+enabled = True
+
+# when the following comment is answered positively:
+# https://github.com/BrightcoveOS/Diamond/commit/9ac782848dbfb5d25b4fcb7c59ce1228fb975350
+# this is required
+devices = md[0-9]*$|sd[a-z][0-9]*$|xvd[a-z][0-9]*$|dm\-[0-9]*$
+
+[[FilestatCollector]]
+
+enabled = True
+
+[[InterruptCollector]]
+
+enabled = True
+
+[[LoadAverageCollector]]
+
+enabled = True
+
+[[MemoryCollector]]
+
+enabled = True
+
+[[NetworkCollector]]
+
+enabled = True
+interfaces = eth, tun, tap, lo, vmbr
+
+[[ProcessStatCollector]]
+
+enabled = True
+
+[[SockstatCollector]]
+
+enabled = True
+
+[[TCPCollector]]
+
+enabled = True
+
+[[VMStatCollector]]
+
+enabled = True
+
+[loggers]
+
+keys = root
+
+[formatters]
+
+keys = syslog
+
+[logger_root]
+
+# to increase verbosity, set DEBUG
+level = INFO
+handlers = syslog
+
+[handler_syslog]
+class = handlers.SysLogHandler
+level = DEBUG
+formatter = syslog
+args = ('/dev/log',)
+
+[formatter_syslog]
+format = %(asctime)-15s diamond[%(process)d] %(message)s
+datefmt = %b %d %H:%M:%S

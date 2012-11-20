@@ -1,0 +1,73 @@
+# {{ pillar['message_do_not_modify'] }}
+
+import os.path
+
+from sentry.conf.server import INSTALLED_APPS, MIDDLEWARE_CLASSES
+
+CONF_ROOT = os.path.dirname(__file__)
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': '{{ pillar['sentry']['db']['name'] }}',
+        'USER': '{{ pillar['sentry']['db']['username'] }}',
+        'PASSWORD': '{{ pillar['sentry']['db']['password'] }}',
+        'HOST': '{{ pillar['sentry']['db']['host'] }}',
+        'PORT': '5432',
+    }
+}
+
+SENTRY_KEY = '{{ pillar['sentry']['django_key'] }}'
+
+# Set this to false to require authentication
+SENTRY_PUBLIC = False
+
+# You should configure the absolute URI to Sentry. It will attempt to guess it if you don't
+# but proxies may interfere with this.
+SENTRY_URL_PREFIX = '{{ pillar['sentry']['url'] }}'  # No trailing slash!
+
+SENTRY_WEB_HOST = '0.0.0.0'
+SENTRY_WEB_PORT = 8080
+SENTRY_WEB_OPTIONS = {
+    'workers': {{ pillar['sentry']['workers'] }},  # the number of gunicorn workers
+    'worker_class': 'gevent',
+}
+
+INSTALLED_APPS = INSTALLED_APPS + (
+    'django_statsd',
+{% if pillar['sentry']['email']['method'] == "amazon_ses" %}
+    'django_ses',
+{% endif %}
+)
+
+
+{% if pillar['sentry']['email']['method'] == "amazon_ses" %}
+EMAIL_BACKEND = 'django_ses.SESBackend'
+AWS_SES_REGION_NAME = '{{ grains['region'] }}'
+AWS_SES_REGION_ENDPOINT = 'email.{{ grains['region'] }}.amazonaws.com'
+AWS_ACCESS_KEY_ID = '{{ pillar['sentry']['email']['aws_access_key'] }}'
+AWS_SECRET_ACCESS_KEY = '{{ pillar['sentry']['email']['aws_access_key'] }}'
+{% else %}
+EMAIL_HOST = '{{ pillar['sentry']['email']['server'] }}'
+EMAIL_HOST_PASSWORD = '{{ pillar['sentry']['email']['password'] }}'
+EMAIL_HOST_USER = '{{ pillar['sentry']['email']['user'] }}'
+EMAIL_PORT = {{ pillar['sentry']['email']['port'] }}
+{% if pillar['sentry']['email']['tls'] %}
+EMAIL_USE_TLS = True
+{% else %}
+EMAIL_USE_TLS = False
+{% endif %}
+{% endif %}
+
+DEFAULT_FROM_EMAIL = '{{ pillar['sentry']['email']['from'] }}'
+SERVER_EMAIL = DEFAULT_FROM_EMAIL
+SENTRY_SERVER_EMAIL = SERVER_EMAIL
+
+
+MIDDLEWARE_CLASSES = MIDDLEWARE_CLASSES + (
+    'django_statsd.middleware.GraphiteRequestTimingMiddleware',
+    'django_statsd.middleware.GraphiteMiddleware'
+)
+
+STATSD_PREFIX = 'sentry'
+STATSD_CLIENT = 'django_statsd.clients.normal'

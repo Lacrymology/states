@@ -1,0 +1,2 @@
+# {{ pillar['message_do_not_modify'] }}
+command[check_carbon]=/usr/lib/nagios/plugins/check_procs -w 1:1 -u graphite -a "/usr/local/graphite/bin/python /usr/local/graphite/bin/carbon-cache.py start"

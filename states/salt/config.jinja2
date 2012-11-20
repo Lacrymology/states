@@ -1,0 +1,25 @@
+master: {{ pillar['salt']['master'] }}
+id: {{ grains['id'] }}
+
+#log_file: /var/log/salt/minion
+log_level: garbage
+log_level_logfile: garbage
+#
+# The date and time format used in log messages. Allowed date/time formating
+# can be seen on http://docs.python.org/library/time.html#time.strftime
+#log_datefmt: '%Y-%m-%d %H:%M:%S'
+#
+# The format of the console logging messages. Allowed formatting options can
+# be seen on http://docs.python.org/library/logging.html#logrecord-attributes
+#log_fmt_console: '[%(levelname)-8s] %(message)s'
+#log_fmt_logfile: '%(asctime)s,%(msecs)03.0f [%(name)-17s][%(levelname)-8s] %(message)s'
+#
+# Logger levels can be used to tweak specific loggers logging levels.
+# For example, if you want to have the salt library at the 'warning' level,
+# but you still wish to have 'salt.modules' at the 'debug' level:
+#   log_granular_levels: {
+#     'salt': 'warning',
+#     'salt.modules': 'debug'
+#   }
+#
+#log_granular_levels: {}

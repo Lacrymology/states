@@ -1,0 +1,48 @@
+" {{ pillar['message_do_not_modify'] }}
+filetype on
+syntax on
+filetype indent on
+filetype plugin on      " Enable filetype plugins
+filetype plugin indent on " Let filetype plugins indent for me
+
+" put background as red in file with over 80 chars
+highlight OverLength ctermbg=red ctermfg=white guibg=#592929
+match OverLength /\%81v.\+/
+
+set nu!
+set list!
+setl expandtab
+"retab 4
+
+set background=dark
+set showcmd             " Show (partial) command in status line.
+set showmatch           " Show matching brackets.
+set wildignore=*.o,*.obj,*.bak,*.exe,*.pyc,*.swp
+set ignorecase          " Do case insensitive matching
+set smartcase           " Do smart case matching
+set incsearch           " Incremental search
+set hlsearch
+set lazyredraw          " Don't repaint when scripts are running
+set scrolloff=3         " Keep 3 lines below and above the cursor
+set softtabstop=4
+set ruler
+set guitablabel=%N/\ %t\ %M
+set shortmess+=a
+set laststatus=2
+set report=0            " Notify me whenever any lines have changed
+set confirm             " Y-N-C prompt if closing with unsaved changes
+set vb t_vb=            " Disable visual bell!  I hate that flashing.
+set backspace=2         " Backspace over anything! (Super backspace!)
+
+set foldmethod=syntax   " By default, use syntax to determine folds
+set foldlevelstart=99   " All folds open by default
+
+set wildmenu            " Autocomplete features in the status bar
+
+"? work more logically with wrapped lines
+noremap j gj
+noremap k gk
+
+autocmd FileType js set tabstop=4|set shiftwidth=4|set expandtab
+autocmd FileType xml set tabstop=2|set shiftwidth=2|set expandtab
+autocmd FileType python set shiftwidth=4|set expandtab

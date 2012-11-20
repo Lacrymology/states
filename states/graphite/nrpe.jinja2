@@ -1,0 +1,2 @@
+# {{ pillar['message_do_not_modify'] }}
+command[check_graphite]=/usr/lib/nagios/plugins/check_procs -w {{ pillar['graphite']['web']['workers'] + 1 }}:{{ pillar['graphite']['web']['workers'] + 1}} -u graphite -a "/usr/local/graphite/bin/python /usr/local/graphite/django-admin.py run_gunicorn -n graphite-web -b {{ pillar['graphite']['web']['listen'] }} -w {{ pillar['graphite']['web']['workers'] }}"

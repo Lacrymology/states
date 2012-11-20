@@ -1,0 +1,13 @@
+# {{ pillar['message_do_not_modify'] }}
+/var/log/graphite/graphite/*.log {
+    weekly
+    missingok
+    rotate 7
+    compress
+    delaycompress
+    notifempty
+    sharedscripts
+    postrotate
+        restart graphite-web > /dev/null
+    endscript
+}

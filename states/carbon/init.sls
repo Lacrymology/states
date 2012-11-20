@@ -12,6 +12,16 @@ carbon_upstart:
     - mode: 600
     - source: salt://carbon/upstart.jinja2
 
+carbon_logrotate:
+  file:
+    - managed
+    - name: /etc/logrotate.d/carbon
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 600
+    - source: salt://carbon/logrotate.jinja2
+
 carbon_logdir:
   file:
     - directory

@@ -29,6 +29,15 @@ include:
     - mode: 600
     - source: salt://elasticsearch/logging.jinja2
 
+/etc/cron.daily/elasticsearch-cleanup:
+  file:
+    - managed
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 755
+    - source: salt://elasticsearch/cron_daily.jinja2
+
 elasticsearch-debianfile:
   file:
     - managed

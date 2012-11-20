@@ -16,6 +16,16 @@ graphite_upstart:
     - mode: 600
     - source: salt://graphite/upstart.jinja2
 
+carbon_logrotate:
+  file:
+    - managed
+    - name: /etc/logrotate.d/graphite-web
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 600
+    - source: salt://graphite/logrotate.jinja2
+
 graphite_logdir:
   file:
     - directory

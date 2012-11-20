@@ -45,6 +45,11 @@ rabbitmq-server:
       - pkg: rabbitmq-server
       - file: rabbitmq-server
       - rabbitmq_plugins: rabbitmq-server
+{% for node in pillar['rabbitmq']['cluster']['nodes'] -%}
+    {%- if node != grains['id'] -%}
+      - host: host_{{ node }}
+    {%- endif -%}
+{% endfor %}
   rabbitmq_plugins:
     - enabled
     - name: rabbitmq_management

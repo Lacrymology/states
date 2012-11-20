@@ -129,6 +129,3 @@ extend:
     service:
       - watch:
         - file: /etc/nagios/nrpe.d/rabbitmq.cfg
-  /etc/hosts:
-    file:
-      - source: salt://rabbitmq/hosts.jinja2

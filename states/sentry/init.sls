@@ -41,7 +41,7 @@ sentry:
     - template: jinja
     - user: nobody
     - group: nogroup
-    - mode: 644
+    - mode: 600
     - source: salt://sentry/config.jinja2
     - require:
       - virtualenv: sentry

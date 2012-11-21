@@ -32,5 +32,10 @@ def __virtual__():
     return 'rabbitmq_cluster'
 
 def listeners(host, user, password):
+    log.debug("Connect to RabbitMQ instance %s user: %s password: %s", host,
+              user, password)
     client = pyrabbit.api.Client(host, user, password)
-    return client.get_overview()['listeners']
+    log.debug("call get_overview()")
+    output = client.get_overview()
+    log.debug("Result: %s", output)
+    return output['listeners']

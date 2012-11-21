@@ -30,7 +30,6 @@ rabbitmq-server:
     - require:
       - apt_repository: rabbitmq-server
       - file: rabbitmq_erlang_cookie
-      - cmd: rabbitmq-repo
   file:
     - directory
     - name: /etc/rabbitmq/rabbitmq.conf.d
@@ -42,13 +41,13 @@ rabbitmq-server:
     - require:
       - pkg: rabbitmq-server
     - watch:
-      - pkg: rabbitmq-server
+      - apt_repository: rabbitmq-server
       - file: rabbitmq-server
       - rabbitmq_plugins: rabbitmq-server
-{% for node in pillar['rabbitmq']['cluster']['nodes'] -%}
-    {%- if node != grains['id'] -%}
+{% for node in pillar['rabbitmq']['cluster']['nodes'] %}
+    {% if node != grains['id'] %}
       - host: host_{{ node }}
-    {%- endif -%}
+    {% endif %}
 {% endfor %}
   rabbitmq_plugins:
     - enabled
@@ -59,14 +58,14 @@ rabbitmq-server:
     - present
     - name: test
     - require:
-      - pkg: rabbitmq-server
+      - service: rabbitmq-server
   rabbitmq_user:
     - present
     - name: {{ pillar['rabbitmq']['monitor']['user'] }}
     - password: {{ pillar['rabbitmq']['monitor']['password'] }}
     - force: True
     - require:
-      - pkg: rabbitmq-server
+      - service: rabbitmq-server
 {% endif %}
 
 pyrabbit:
@@ -124,6 +123,15 @@ host_{{ node }}:
     - ip: {{ salt['publish.publish'](node, 'grains.item', 'privateIp')[node] }}
     {% endif %}
 {% endfor %}
+
+/tmp/test:
+  file:
+    - managed
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 600
+    - source: salt://rabbitmq/init.sls
 
 extend:
   diamond:

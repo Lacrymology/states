@@ -5,13 +5,8 @@
 RabbitMQ cluster states
 '''
 
+import os
 import logging
-
-try:
-    import pyrabbit
-    has_pyrabbit = True
-except ImportError:
-    has_pyrabbit = False
 
 from salt import exceptions, utils
 
@@ -20,16 +15,12 @@ log.debug("module rabbitmq_cluster loaded")
 
 def __virtual__():
     '''
-    Verify PyRabbit and RabbitMQ are installed.
+    Verify RabbitMQ are installed.
     '''
     try:
         utils.check_or_die('rabbitmqctl')
-        log.debug("rabbitmqctl is available")
     except exceptions.CommandNotFoundError:
-        log.error("rabbitmqctl is not available")
         name = False
-    if not has_pyrabbit:
-        log.error("pyrabbit is not available")
     return 'rabbitmq_cluster'
 
 def _convert_env(env):
@@ -39,8 +30,10 @@ def _convert_env(env):
         output[k] = v
     return output
 
-def joined(master, user, password, disk_node=False, env=(), host='127.0.0.1:55672'):
-    ret = {'name': master, 'result': None, 'comment': '', 'changes': {}}
+def joined(master, user, password, disk_node=False, env=(),
+           host='127.0.0.1:15672'):
+    ret = {'name': 'rabbitmq cluster join master %s' % master, 'result': None,
+           'comment': '', 'changes': {}}
     _env = _convert_env(env)
     if __opts__['test']:
         ret['comment'] = 'Would have been in cluster with master {0}'.format(
@@ -51,18 +44,21 @@ def joined(master, user, password, disk_node=False, env=(), host='127.0.0.1:5567
     if len(listeners) == 1:
         log.info("Only one listener, not in cluster")
         if disk_node:
-            command_add = 'rabbitmqctl cluster rabbit@%s rabbit@%s' % (
-                master, __grains__['id'])
+            command_add = 'rabbitmqctl join_cluster --disc rabbit@%s' % master
         else:
-            command_add = 'rabbitmqctl cluster rabbit@%s' % master
+            command_add = 'rabbitmqctl join_cluster --ram rabbit@%s' % master
         commands = (
             'rabbitmqctl stop_app',
-            'rabbitmqctl reset',
+#            'rabbitmqctl reset',
             command_add,
             'rabbitmqctl start_app'
         )
+        log.debug("Going to run the following: %s", os.linesep.join(commands))
         for command in commands:
+            log.debug("run %s", command)
             sub_ret = __salt__['cmd.run_all'](command, env=_env)
+            log.debug("command stdout: %s", sub_ret['stdout'])
+            log.debug("command stderr: %s", sub_ret['stderr'])
             if sub_ret['retcode'] != 0:
                 ret['result'] = False
                 ret['comment'] = sub_ret['stdout']

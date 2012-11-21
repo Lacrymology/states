@@ -1,0 +1,19 @@
+general:
+  external_hostname: "{{ pillar['graylog2']['web']['hostname'] }}"
+  date_format: "%Y-%m-%d - %H:%M:%S"
+  allow_deleting: false
+  allow_version_check: false
+
+subscriptions:
+  from: {{ pillar['amazon-ses']['address'] }}
+  subject: "[graylog2] Subscription"
+
+# Settings for stream alarm emails.
+streamalarms:
+  from: {{ pillar['amazon-ses']['address'] }}
+  subject: "[graylog2] Stream alarm!"
+
+hoptoad:
+  enabled: false
+  ssl: false
+  api_key: 123

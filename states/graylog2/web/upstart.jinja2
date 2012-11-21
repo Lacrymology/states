@@ -1,0 +1,13 @@
+# {{ pillar['message_do_not_modify'] }}
+# ubuntu upstart script for graylog2-web
+
+start on started graylog2-server
+stop on [06]
+
+expect fork
+
+script
+  cd /opt/graylog2-web-interface-{{ pillar['graylog2']['web']['version'] }}
+  exec script/rails server -e production -eproduction -p{{ pillar['graylog2']['web']['port'] }} >> /var/log/graylog2/web.log &
+  emit graylog2-web_running
+end script

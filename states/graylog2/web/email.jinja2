@@ -1,0 +1,8 @@
+production:
+  via: smtp
+  host: "{{ pillar['amazon-ses']['host'] }}"
+  enable_starttls_auto: true
+  port: {{ pillar['amazon-ses']['port'] }}
+  auth: {{ pillar['amazon-ses']['auth'] }}
+  user: {{ pillar['amazon-ses']['access-key'] }}
+  password: {{ pillar['amazon-ses']['secret-key'] }}

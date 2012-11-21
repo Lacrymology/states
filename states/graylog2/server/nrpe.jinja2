@@ -1,0 +1,2 @@
+# {{ pillar['message_do_not_modify'] }}
+command[check_graylog2_server]=/usr/lib/nagios/plugins/check_procs -w 1:1 -a 'java -jar /opt/graylog2-server-{{ pillar['graylog2']['server']['version'] }}/graylog2-server.jar'

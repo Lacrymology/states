@@ -1,0 +1,83 @@
+# {{ pillar['message_do_not_modify'] }}
+{# config without UDP listening to port 514 #}
+[filters]
+# keep this section, even if empty to enable filtering
+#debug_handler = filter_debug
+
+[loggers]
+keys = root,archive
+#keys = root,archive,filter_debug
+
+[handlers]
+keys = gelf,logfile
+#keys = gelf,logfile,filter_debug
+
+[formatters]
+keys = detailed,debug,message_only,timed_message
+
+[logger_root]
+level = DEBUG
+handlers = gelf,logfile
+
+[logger_archive]
+level = DEBUG
+handlers = logfile
+qualname = syslog.local7
+propagate = 0
+
+[logger_filter_debug]
+qualname = filter_debug
+level = DEBUG
+handlers = filter_debug
+propagate = 0
+
+[handler_gelf]
+class=graypy.handler.GELFHandler
+level=DEBUG
+formatter=message_only
+args = ('127.0.0.1', 12201)
+
+[handler_logfile]
+class = handlers.RotatingFileHandler
+level = DEBUG
+formatter = detailed
+args = ('/var/log/all.log', 'a', 20000000, 5)
+
+[handler_filter_debug]
+class = handlers.RotatingFileHandler
+level = INFO
+formatter = message_only
+args = ('/var/log/filter.log', 'a', 20000000, 5)
+
+[formatter_detailed]
+format = %(realtimestamp)s %(facility)s:%(priority)s %(progname)s[%(pid)d] %(message)s
+datefmt =
+class = logging.Formatter
+
+[formatter_timed_message]
+format = %(asctime)s %(message)s
+datefmt =
+class = logging.Formatter
+
+[formatter_message_only]
+format = %(message)s
+datefmt =
+class = logging.Formatter
+
+[formatter_debug]
+format = %(realtimestamp)s %(facility)s:%(priority)s %(levelname)s %(progname)s[%(pid)d] %(message)s
+datefmt =
+class = logging.Formatter
+
+[handler_stdout]
+class = StreamHandler
+level = DEBUG
+formatter = debug
+args = ()
+
+# filter noisy (and useless) cron & ssh PAM session handling
+# SSH still log properly who get in
+[filter_pam_unix]
+loggers = syslog.authpriv
+deny_any =
+^pam_unix\((sshd|cron):session\): session (opened|closed) for user

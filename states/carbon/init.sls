@@ -57,7 +57,7 @@ carbon_storage:
 
 carbon:
   virtualenv:
-    - manage
+    - managed
     - name: /usr/local/graphite
     - requirements: salt://carbon/requirements.txt
     - require:

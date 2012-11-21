@@ -1,0 +1,13 @@
+# {{ pillar['message_do_not_modify'] }}
+/var/log/mongodb/*.log {
+    daily
+    missingok
+    rotate 7
+    compress
+    delaycompress
+    notifempty
+    sharedscripts
+    postrotate
+        restart mongodb > /dev/null
+    endscript
+}

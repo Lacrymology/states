@@ -1,2 +1,3 @@
 # {{ pillar['message_do_not_modify'] }}
-command[check_elasticsearc]=/usr/lib/nagios/plugins/check_procs -u elasticsearch -w 1:1 -a org.elasticsearch.bootstrap.ElasticSearch
+command[check_elasticsearch]=/usr/lib/nagios/plugins/check_procs -u elasticsearch -w 1:1 -a org.elasticsearch.bootstrap.ElasticSearch
+command[check_elasticsearch_cluster]=/usr/local/bin/check_elasticsearch_cluster.py -c 2:2

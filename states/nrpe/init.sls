@@ -1,5 +1,8 @@
 {# Nagios NRPE Agent #}
 
+include:
+  - pip
+
 nagios-nrpe-server:
   pkg:
     - installed
@@ -7,6 +10,11 @@ nagios-nrpe-server:
       - nagios-nrpe-server
       - nagios-plugins-standard
       - nagios-plugins-basic
+  pip:
+    - installed
+    - repo: hg+https://bitbucket.org/gocept/nagiosplugin#egg=nagiosplugin
+    - require:
+      - pkg: python-pip
   file:
     - managed
     - name: /etc/nagios/nrpe.d/000-nagios-servers.cfg

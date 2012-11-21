@@ -3,9 +3,9 @@ postgresql-dev:
     - ubuntu_ppa
     - user: pitti
     - name: postgresql
-    - key: 8683D8A2
+    - key_id: 8683D8A2
   pkg:
     - installed
     - name: libpq-dev
     - require:
-      - file: postgresql-repo
+      - apt_repository: postgresql-dev

@@ -13,7 +13,7 @@ import os
 
 log = logging.getLogger(__name__)
 
-def installed(name, version, address, hash):
+def installed(name, version, source, source_hash):
     ret = {'name': name, 'result': None, 'changes': {}, 'comment': ''}
     if  __salt__['pkg.version'](name) == version:
         ret['result'] = True
@@ -29,8 +29,8 @@ def installed(name, version, address, hash):
                     'file': [
                         'managed',
                         {'name': filename},
-                        {'source': address},
-                        {'source_hash': hash},
+                        {'source': source},
+                        {'source_hash': source_hash},
                         {'makedirs': True}
                     ]
                 }
@@ -59,6 +59,7 @@ def installed(name, version, address, hash):
                                                                    version)
             ret['changes']['pkg'] = {'installed': '{0} version {1}'.format(
                 name, version)}
+            os.unlink(filename)
         else:
             ret['result'] = False
             ret['comment']  = "Can't install {0} version {1}".format(name,

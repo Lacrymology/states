@@ -1,7 +1,11 @@
 # {{ pillar['message_do_not_modify'] }}
 
 # Heap Size (defaults to 256m min, 1g max)
+{% if 'heap_size' in pillar['elasticsearch'] %}
 ES_HEAP_SIZE={{ pillar['elasticsearch']['heap_size'] }}
+{% else %}
+#ES_HEAP_SIZE=2g
+{% endif %}
 
 # Heap new generation
 #ES_HEAP_NEWSIZE=

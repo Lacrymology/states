@@ -24,7 +24,7 @@ def __virtual__():
         return False
 
 def present(address, components, distribution=None, key_id=None,
-            key_server=None, in_sources_list_d=True):
+            key_server=None, in_sources_list_d=True, source=False):
     '''
     Manage a APT repository such as an Ubuntu PPA
 
@@ -62,6 +62,9 @@ def present(address, components, distribution=None, key_id=None,
         that is included when you run apt-get command.
         Create a file there instead of change /etc/apt/sources.list
         This is used by default.
+
+    source
+        If True, add the Debian source repository too. False by default.
     '''
     if distribution is None:
         distribution = __salt__['grains.item']('oscodename')
@@ -86,22 +89,17 @@ def present(address, components, distribution=None, key_id=None,
     else:
         apt_file = '/etc/apt/sources.list'
 
+    text = [' '.join(['deb'] + line_content)]
+    if source:
+        text.append(' '.join(['deb-src'] + line_content))
+
     data = {
         name: {
             'file': [
                 'append',
-                {
-                    'name': apt_file
-                },
-                {
-                    'text': [
-                        ' '.join(['deb'] + line_content),
-                        ' '.join(['deb-src'] + line_content)
-                    ]
-                },
-                {
-                    'makedirs': True
-                }
+                {'name': apt_file},
+                {'text': text},
+                {'makedirs': True}
             ]
         }
     }
@@ -129,7 +127,7 @@ def present(address, components, distribution=None, key_id=None,
     ret['changes'].update(cmd_result['changes'])
     return ret
 
-def ubuntu_ppa(user, name, key_id, distribution=None):
+def ubuntu_ppa(user, name, key_id, distribution=None, source=False):
     '''
     Manage an Ubuntu PPA repository
 
@@ -142,9 +140,12 @@ def ubuntu_ppa(user, name, key_id, distribution=None):
     key_id
         Launchpad PGP key ID
 
-    distribution:
+    distribution
         Set this to use a different Ubuntu distribution than the host that run
         this state.
+
+    source
+        If True, add the Debian source repository too. False by default.
 
     For this PPA: https://launchpad.net/~pitti/+archive/postgresql
     the state must be:
@@ -155,7 +156,7 @@ def ubuntu_ppa(user, name, key_id, distribution=None):
           apt_repository.ubuntu_ppa:
             - user: pitti
             - name: postgresql
-            - key: 8683D8A2
+            - key_id: 8683D8A2
     '''
     address = 'http://ppa.launchpad.net/{0}/{1}/ubuntu'.format(user, name)
     return present(address, ('main',), distribution, key_id,

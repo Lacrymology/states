@@ -57,11 +57,12 @@ def enabled(name, runas=None, env=None):
     name
         The name of the plugin to enable
     '''
+    ret = {'name': name, 'result': None, 'comment': '', 'changes': {}}
+
     if __opts__['test']:
         ret['comment'] = 'The plugin {0} would have been enabled'.format(name)
         return ret
 
-    ret = {'name': name, 'result': None, 'comment': '', 'changes': {}}
     plugins = __salt__['rabbitmq_plugins.list'](env=env, runas=runas)
     if name not in plugins:
         ret['result'] = True

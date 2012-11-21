@@ -1,57 +1,37 @@
 # {{ pillar['message_do_not_modify'] }}
 
 cluster:
-{% if 'availabilityZone' in grains %}
-  name: {{ grains['availabilityZone'] }}
-{% else %}
-{# no custom if not in ec2 #}
-  name: elasticsearch
-{% endif %}
-
+  name: elasticsearch-{{ pillar['elasticsearch']['cluster']['name'] }}
+  routing:
+    allocation:
+      node_concurrent_recoveries: 2
 node:
   name: {{ grains['id'] }}
-{% if 'master' in pillar['elasticsearch'] %}
-  master: true
-{% else %}
-  master: false
+{% if 'availabilityZone' in grains %}
+cloud:
+  region: {{ grains['region'] }}
+  aws:
+    access_key: {{ pillar['elasticsearch']['aws']['access_key'] }}
+    secret_key: {{ pillar['elasticsearch']['aws']['secret_key'] }}
+  node:
+    auto_attributes: true
+discovery:
+  type: ec2
+  zen:
+    ping_timeout: 30s
+  ec2:
+    host_type: private_ip
+    any_group: true
+    availability_zones: {{ grains['availabilityZone'] }}
+gateway:
+  recover_after_time: 1m
+  recover_after_nodes: 1
+  type: s3
+  s3:
+    bucket: microsigns-{{ grains['region'] }}
+    concurrent_streams: 5
+indices:
+  recovery:
+    max_size_per_sec: 0
+    concurrent_streams: 5
 {% endif %}
-{#discovery:#}
-{#  type: zen#}
-{#  zen:#}
-{#    ping:#}
-{#      multicast:#}
-{#        enabled: false#}
-{#      unicast:#}
-{#        hosts:#}
-{#{%- for sg in pillar['elasticsearch']['clusters'][grains['availabilityZone']] -%}#}
-{#{{ salt['publish.publish'](sg, 'grains.item', 'privateIp')[sg] }}#}
-{#{%- if not loop.last %},{% endif -%}#}
-{#{%- endfor %}#}
-
-{#{% if 'availabilityZone' in grains %}#}
-{#cloud:#}
-{#  aws:#}
-{#    access_key: {{ pillar['elasticsearch']['aws']['access_key'] }}#}
-{#    secret_key: {{ pillar['elasticsearch']['aws']['secret_key'] }}#}
-{##}
-{#discovery:#}
-{#  type: ec2#}
-{#  ec2:#}
-{#    host_type: private_ip#}
-{#    availability_zones: {{ grains['availabilityZone'] }}#}
-{#    groups: {% for sg in  pillar['elasticsearch']['aws']['security_groups'][grains['region']] %}{{ sg }}{% if not loop.last %},{% endif %}{% endfor %}#}
-{#{% endif %}#}
-################################## Slow Log ##################################
-
-# Shard level query and fetch threshold logging.
-
-#index.search.slowlog.level: TRACE
-#index.search.slowlog.threshold.query.warn: 10s
-#index.search.slowlog.threshold.query.info: 5s
-#index.search.slowlog.threshold.query.debug: 2s
-#index.search.slowlog.threshold.query.trace: 500ms
-
-#index.search.slowlog.threshold.fetch.warn: 1s
-#index.search.slowlog.threshold.fetch.info: 800ms
-#index.search.slowlog.threshold.fetch.debug: 500ms
-#index.search.slowlog.threshold.fetch.trace: 200ms

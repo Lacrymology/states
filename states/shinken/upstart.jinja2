@@ -1,0 +1,17 @@
+# {{ pillar['message_do_not_modify'] }}
+# ubuntu upstart script for shinken-{{ shinken_component }}
+
+start on (filesystem and net-device-up IFACE=eth0)
+stop on runlevel [!2345]
+
+respawn
+
+script
+  if [ ! -r /var/run/shinken-{{ shinken_component }}.pid ]; then
+    touch /var/run/shinken-{{ shinken_component }}.pid
+    chown shinken /var/run/shinken-{{ shinken_component }}.pid
+    chgrp shinken /var/run/shinken-{{ shinken_component }}.pid
+  fi
+  exec /usr/local/shinken/bin/shinken-{{ shinken_component }} -c /etc/shinken/{{ shinken_component }}.conf
+  emit shinken-arbiter-{{ shinken_component }}
+end script

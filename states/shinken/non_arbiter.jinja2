@@ -1,0 +1,26 @@
+# {{ pillar['message_do_not_modify'] }}
+
+[daemon]
+user=shinken
+group=shinken
+
+pidfile=/var/run/shinken-{{ shinken_component }}.pid
+local_log=/var/log/shinken/{{ shinken_component }}.log
+workdir=/var/lib/shinken
+
+use_local_log=1
+log_level={{ pillar['shinken']['log_level'] }}
+
+host=0.0.0.0
+daemon_enabled=1
+
+{#interval_poll=5#}
+{#maxfd=1024#}
+idontcareaboutsecurity=0
+
+use_ssl=0
+{#certs_dir=etc/certs#}
+{#ca_cert=etc/certs/ca.pem#}
+{#server_cert=etc/certs/server.pem#}
+{#hard_ssl_name_check=0#}
+

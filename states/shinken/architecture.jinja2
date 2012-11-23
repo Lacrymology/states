@@ -1,0 +1,237 @@
+
+define realm {
+    realm_name All
+    default 1
+}
+
+{#
+Description: The Arbiter is responsible for:
+- Loading, manipulating and dispatching the configuration
+- Validating the health of all other Shinken daemons
+- Issuing global directives to Shinken daemons (kill, activate-spare, etc.)
+http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects/arbiter
+#}
+define arbiter {
+    arbiter_name arbiter-{{ grains['id'] }}
+    host_name {{ grains['id'] }}
+    address 127.0.0.1
+    port 7770
+    spare 0
+    modules arbiter-retention
+}
+
+define module {
+    module_name arbiter-retention
+    module_type pickle_retention_file_generic
+    path /var/lib/shinken/arbiter.retention
+}
+
+{#
+The scheduler is a "Host manager". It gets the hosts and their services,
+schedules the checks and transmit them to the pollers.
+Description: The scheduler is responsible for:
+- Creating the dependancy tree
+- Scheduling checks
+- Calculating states
+- Requesting actions from a reactionner
+- Buffering and forwarding results its associated broker
+http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects/scheduler
+#}
+define scheduler {
+    scheduler_name scheduler-{{ grains['id'] }}
+    address {{ pillar['shinken']['arbiter']['ip'] }}
+    port 7768
+    modules scheduler-retention
+    realm All
+    spare 0
+{#    # Skip initial broks creation. Boot fast, but some broker modules won't#}
+{#    # work with it!#}
+    skip_initial_broks 0
+}
+
+define module {
+    module_name scheduler-retention
+    module_type pickle_retention_file_generic
+    path /var/lib/shinken/scheduler.retention
+}
+
+{#
+Description: The poller is responsible for:
+- Active data acquisition
+- Local passive data acquisition
+http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects/poller
+#}
+define poller {
+    poller_name poller-{{ grains['id'] }}
+{#    address {{ pillar['shinken']['arbiter']['ip'] }}#}
+    address 127.0.0.1
+    port 7771
+{#    poller_tags shinken#}
+    realm All
+}
+
+{#
+Description: The broker is responsible for:
+- Exporting centralized logs of all Shinken daemon processes
+- Exporting status data
+- Exporting performance data
+- Exposing Shinken APIs:
+  - Status data
+  - Performance data
+  - Configuration data
+  - Command interface
+http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects/broker
+#}
+define broker {
+    broker_name broker-{{ grains['id'] }}
+{#    address {{ pillar['shinken']['arbiter']['ip'] }}#}
+    address 127.0.0.1
+    port 7772
+    spare 0
+    modules broker-syslog, broker-graphite, broker-retention, broker-webui
+    realm All
+    # Take data from Arbiter. There should be only one
+    manage_arbiters 1
+{#                            ; broker for the arbiter.#}
+{#    manage_sub_realms   1   ; Does it take jobs from schedulers of sub-Realms?#}
+{#    timeout             3   ; Ping timeout#}
+{#    data_timeout        120 ; Data send timeout#}
+{#    max_check_attempts  3   ; If ping fails N or more, then the node is dead#}
+{#    check_interval      60  ; Ping node every minutes#}
+}
+
+{#
+Send all logs to system's Syslog
+Send all logs to a local syslog server. Support for remote syslog can be
+implemented if requested. Just lookup the syslog module source code, it's
+easy to modify. Use for example with Splunk Molog, Logstash or other log
+management and analysis system.
+#}
+define module {
+    module_name broker-syslog
+    module_type syslog
+}
+
+define module {
+    module_name broker-graphite
+    module_type graphite_perfdata
+    host {{ pillar['graphite_address'] }}
+    {# Or 2004 if using use_pickle 1 #}
+    port 2003
+    # Optionally specify a source identifier for the metric data sent to
+    # Graphite. This can help differentiate data from multiple sources for the
+    # same hosts. HostA.GRAPHITE_DATA_SOURCE.service
+    # You MUST set the same value in the graphite_perfdata and GRAPHITE_UI module
+    # configuration.
+    #tick_limit 300 ; Default value 300
+    #graphite_data_source shinken ; default is that the variable is unset
+}
+
+define module {
+    module_name broker-retention
+    module_type pickle_retention_file_generic
+    path /var/lib/shinken/broker.retention
+}
+
+define module {
+    module_name broker-webui
+    module_type webui
+    host 0.0.0.0
+    port 7767
+    auth_secret CHANGE_ME
+{#    allow_html_output 0       ; Allow or not HTML chars in plugins output.#}
+{#                                ; WARNING: Allowing can be a security issue.#}
+{#    max_output_length   100     ; Maximum output length for plugin output in webui#}
+{#    manage_acl          1       ; Use contacts ACL. 0 allow actions for all.#}
+{#    play_sound          0       ; Play sound on new non-acknowledged problems.#}
+{#    #login_text      Welcome on Shinken WebUI    ; Text in the login form.#}
+
+    modules broker-webui-auth, broker-webui-graphite
+
+{#    ## Advanced Options#}
+{#    # Don't use them as long as you don't know what you are doing!#}
+{#    #http_backend            auto    ; Choice is: auto, wsgiref, cherrypy,#}
+{#                                     ; paste, tornado, twisted or gevent.#}
+{#                                     ; Leave auto to find the best available.#}
+{#    #remote_user_enable      1       ; If WebUI is behind a web server which#}
+{#                                     ; has already authentified user, enable.#}
+{#    #remote_user_variable    X_Remote_User  ; Set to the HTTP header containing#}
+{#                                     ; the authentificated user s name, which#}
+{#                                     ; must be a Shinken contact.#}
+}
+
+{### Module:      OpenLDAP_UI#}
+{### Loaded by:   WebUI#}
+{### Usage:       Uncomment and set your value in ldap_uri#}
+{## Check authentification for WebUI using an Open Ldap server.#}
+{#define module {#}
+{#    module_name     OpenLDAP_UI#}
+{#    module_type     ad_webui#}
+{#    #ldap_uri        ldaps://myserver#}
+{#    username        user#}
+{#    password        password#}
+{#    basedn          DC=google,DC=com#}
+{##}
+{#    # For mode you can switch between ad (active dir)#}
+{#    # and openldap#}
+{#    mode            openldap#}
+{#}#}
+
+# Check authentification using password parameter in contact definition.
+define module {
+    module_name broker-webui-auth
+    module_type cfg_password_webui
+}
+
+define module {
+    module_name broker-webui-graphite
+    module_type graphite_webui
+    uri http://YOURSERVERNAME/
+    templates_path /usr/local/shinken/share/templates/graphite/
+    # Optionally specify a source identifier for the metric data sent to
+    # Graphite. This can help differentiate data from multiple sources for the
+    # same hosts. HostA.GRAPHITE_DATA_SOURCE.service
+    # You MUST set the same value in the graphite_perfdata and GRAPHITE_UI module
+    # configuration.
+    #graphite_data_source shinken
+}
+
+{#
+Description: The reactionner is responsible for:
+- Executing notification actions
+- Executing event handler actions
+http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects/reactionner
+#}
+define reactionner {
+    reactionner_name reactionner-{{ grains['id'] }}
+{#    address {{ pillar['graphite_address'] }}#}
+    address 127.0.0.1
+    port 7769
+    spare 0
+    realm All
+
+{#    ## Optionnal#}
+{#    manage_sub_realms   0   ; Does it take jobs from schedulers of sub-Realms?#}
+{#    min_workers         1   ; Starts with N processes (0 = 1 per CPU)#}
+{#    max_workers         15  ; No more than N processes (0 = 1 per CPU)#}
+{#    polling_interval    1   ; Get jobs from schedulers each 1 second#}
+{#    timeout             3   ; Ping timeout#}
+{#    data_timeout        120 ; Data send timeout#}
+{#    max_check_attempts  3   ; If ping fails N or more, then the node is dead#}
+{#    check_interval      60  ; Ping node every minutes#}
+    modules
+}
+
+# The receiver manages passive information. It's just a "buffer" which will
+# load passive modules (like NSCA) and be read by the arbiter to dispatch data.
+define receiver {
+    receiver_name receiver-{{ grains['id'] }}
+    address 127.0.0.1
+    port 7773
+    spare 0
+    modules
+    realm All
+{#    direct_routing      0   ; If enabled, it will directly send commands to the#}
+{#                            ; schedulers if it know about the hostname in the#}
+{#                            ; command.#}
+}

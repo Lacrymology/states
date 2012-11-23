@@ -2,14 +2,6 @@ include:
   - virtualenv
   - nrpe
 
-/etc/nagios/nrpe.d/statsd.cfg:
-  file.managed:
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 600
-    - source: salt://statsd/nrpe.jinja2
-
 statsd:
   file:
     - managed
@@ -30,6 +22,14 @@ statsd:
     - watch:
       - file: statsd
       - virtualenv: statsd
+
+/etc/nagios/nrpe.d/statsd.cfg:
+  file.managed:
+    - template: jinja
+    - user: nagios
+    - group: nagios
+    - mode: 600
+    - source: salt://statsd/nrpe.jinja2
 
 extend:
   nagios-nrpe-server:

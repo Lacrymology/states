@@ -53,6 +53,8 @@ rabbitmq-server:
     - enabled
     - name: rabbitmq_management
     - env: HOME=/var/lib/rabbitmq
+    - require:
+      - pkg: rabbitmq-server
 {% if grains['id'] == master_id %}
   rabbitmq_vhost:
     - present
@@ -68,15 +70,13 @@ rabbitmq-server:
       - service: rabbitmq-server
 {% endif %}
 
-pyrabbit:
+{% if grains['id'] != master_id %}
+in_rabbitmq_cluster:
   pip:
     - installed
     - name: pyrabbit
     - require:
       - pkg: python-pip
-
-{% if grains['id'] != master_id %}
-in_rabbitmq_cluster:
   rabbitmq_cluster:
     - joined
     - master: {{ master_id }}
@@ -87,7 +87,7 @@ in_rabbitmq_cluster:
     - require:
       - rabbitmq_plugins: rabbitmq-server
       - service: rabbitmq-server
-      - pip: pyrabbit
+      - pip: in_rabbitmq_cluster
 {% endif %}
 
 diamond_rabbitmq:
@@ -105,15 +105,6 @@ diamond_rabbitmq:
     - installed
     - name: python-httplib2
 
-/etc/nagios/nrpe.d/rabbitmq.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 600
-    - source: salt://rabbitmq/nrpe.jinja2
-
 {% for node in pillar['rabbitmq']['cluster']['nodes'] -%}
     {% if node != grains['id'] -%}
 host_{{ node }}:
@@ -124,14 +115,14 @@ host_{{ node }}:
     {% endif %}
 {% endfor %}
 
-/tmp/test:
+/etc/nagios/nrpe.d/rabbitmq.cfg:
   file:
     - managed
     - template: jinja
-    - user: root
-    - group: root
+    - user: nagios
+    - group: nagios
     - mode: 600
-    - source: salt://rabbitmq/init.sls
+    - source: salt://rabbitmq/nrpe.jinja2
 
 extend:
   diamond:

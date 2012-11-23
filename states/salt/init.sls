@@ -1,15 +1,6 @@
 include:
   - nrpe
 
-/etc/nagios/nrpe.d/salt-minion.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 600
-    - source: salt://salt/nrpe.jinja2
-
 salt-repository:
   file:
     - managed
@@ -39,6 +30,15 @@ salt-minion:
     - watch:
       - pkg: salt-minion
       - file: salt-minion
+
+/etc/nagios/nrpe.d/salt-minion.cfg:
+  file:
+    - managed
+    - template: jinja
+    - user: nagios
+    - group: nagios
+    - mode: 600
+    - source: salt://salt/nrpe.jinja2
 
 extend:
   nagios-nrpe-server:

@@ -2,14 +2,7 @@ include:
   - diamond
   - postgresql
   - nrpe
-
-/etc/nagios/nrpe.d/postgresql.cfg:
-  file.managed:
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 600
-    - source: salt://postgresql/nrpe.jinja2
+  - pip
 
 postgresql-server:
   pkg:
@@ -47,7 +40,16 @@ postgresql_diamond_collector:
     - name: psycopg2
     - bin_env: /usr/local/diamond/bin/pip
     - require:
+      - pkg: python-pip
       - pkg: postgresql-dev
+
+/etc/nagios/nrpe.d/postgresql.cfg:
+  file.managed:
+    - template: jinja
+    - user: nagios
+    - group: nagios
+    - mode: 600
+    - source: salt://postgresql/nrpe.jinja2
 
 extend:
   diamond:

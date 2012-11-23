@@ -57,7 +57,8 @@ shinken:
  - broker
 #}
 
-{% for role in pillar['shinken']['roles'] %}
+{% for role in ('arbiter', 'broker', 'reactionner', 'receiver', 'scheduler', 'poller') %}
+{% if grains['id'] in pillar['shinken']['architecture'][role] %}
 shinken-{{ role }}:
   file:
     - managed
@@ -78,9 +79,6 @@ shinken-{{ role }}:
       - file: /etc/init/shinken-{{ role }}.conf
       - file: shinken-{{ role }}
 {% if role == 'arbiter' %}
-{#    {% if pillar['shinken']['arbiter']['use_mongodb'] %}#}
-{#      - service: mongodb#}
-{#    {% endif %}#}
     {% for config in configs %}
       - file: /etc/shinken/{{ config }}.conf
     {% endfor %}
@@ -125,4 +123,5 @@ extend:
     service:
       - watch:
         - file: /etc/nagios/nrpe.d/shinken-{{ role }}.cfg
+{% endif %}
 {% endfor %}

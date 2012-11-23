@@ -2,3 +2,4 @@ sentry
 psycopg2
 gunicorn
 gevent
+django-statsd-mozilla

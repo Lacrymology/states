@@ -76,6 +76,7 @@ carbon:
       - "--install-lib=/usr/local/graphite/lib/python2.7/site-packages"
     - require:
       - virtualenv: carbon
+      - pkg: python-virtualenv
       - git: carbon
   user:
     - present

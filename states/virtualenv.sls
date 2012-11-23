@@ -10,3 +10,7 @@ python-virtualenv:
       - python-virtualenv
       - build-essential
       - python-dev
+    - require:
+      - pkg: python-pip
+      - pkg: git
+      - pkg: mercurial

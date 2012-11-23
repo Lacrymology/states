@@ -15,14 +15,6 @@ sentry_upstart:
     - mode: 600
     - source: salt://sentry/upstart.jinja2
 
-/etc/nagios/nrpe.d/sentry.cfg:
-  file.managed:
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 600
-    - source: salt://sentry/nrpe.jinja2
-
 sentry:
   virtualenv:
     - manage
@@ -32,6 +24,7 @@ sentry:
     - require:
       - pkg: sentry
       - pkg: postgresql-dev
+      - pkg: python-virtualenv
   pkg:
     - installed
     - name: libevent-dev
@@ -60,9 +53,6 @@ sentry:
     - require:
       - postgres_user: sentry
       - service: postgresql-server
-  pip:
-    - installed
-    - name: django-statsd-mozilla
   service:
     - running
     - require:
@@ -76,7 +66,22 @@ sentry:
 {% if pillar['sentry']['email']['method'] == "amazon_ses" %}
     - require:
       - pip: sentry
+  pip:
+    - installed
+    - names:
+      - boto
+      - django-ses
+    - require:
+      - virtualenv: sentry
 {% endif %}
+
+/etc/nagios/nrpe.d/sentry.cfg:
+  file.managed:
+    - template: jinja
+    - user: nagios
+    - group: nagios
+    - mode: 600
+    - source: salt://sentry/nrpe.jinja2
 
 extend:
   nagios-nrpe-server:

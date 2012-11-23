@@ -72,11 +72,6 @@ rabbitmq-server:
 
 {% if grains['id'] != master_id %}
 in_rabbitmq_cluster:
-  pip:
-    - installed
-    - name: pyrabbit
-    - require:
-      - pkg: python-pip
   rabbitmq_cluster:
     - joined
     - master: {{ master_id }}
@@ -87,10 +82,15 @@ in_rabbitmq_cluster:
     - require:
       - rabbitmq_plugins: rabbitmq-server
       - service: rabbitmq-server
-      - pip: in_rabbitmq_cluster
+      - pip: diamond_rabbitmq
 {% endif %}
 
 diamond_rabbitmq:
+  pip:
+    - installed
+    - name: pyrabbit
+    - require:
+      - pkg: python-pip
   file:
     - managed
     - template: jinja
@@ -100,7 +100,7 @@ diamond_rabbitmq:
     - mode: 600
     - source: salt://rabbitmq/diamond.jinja2
     - require:
-      - pip: pyrabbit
+      - pip: diamond_rabbitmq
   pkg:
     - installed
     - name: python-httplib2

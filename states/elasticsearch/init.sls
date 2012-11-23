@@ -47,8 +47,8 @@ elasticsearch:
     - installed
     - name: elasticsearch
     - version: {{ pillar['elasticsearch']['version'] }}
-    - address: https://github.com/downloads/elasticsearch/elasticsearch/elasticsearch-{{ pillar['elasticsearch']['version'] }}.deb
-    - hash: md5={{ pillar['elasticsearch']['md5'] }}
+    - source: https://github.com/downloads/elasticsearch/elasticsearch/elasticsearch-{{ pillar['elasticsearch']['version'] }}.deb
+    - source_hash: md5={{ pillar['elasticsearch']['md5'] }}
     - require:
       - pkg: elasticsearch
   file:

@@ -24,7 +24,7 @@ def __virtual__():
         return False
 
 def present(address, components, distribution=None, key_id=None,
-            key_server=None, in_sources_list_d=True, source=False):
+            key_server=None, in_sources_list_d=True, filename=None):
     '''
     Manage a APT repository such as an Ubuntu PPA
 
@@ -62,22 +62,20 @@ def present(address, components, distribution=None, key_id=None,
         that is included when you run apt-get command.
         Create a file there instead of change /etc/apt/sources.list
         This is used by default.
-
-    source
-        If True, add the Debian source repository too. False by default.
     '''
     if distribution is None:
         distribution = __salt__['grains.item']('oscodename')
 
-    url = urlparse.urlparse(address)
-    if not url.scheme:
-        return {'name': address, 'result': False, 'changes': {},
-                'comment': "Invalid address '{0}'".format(address)}
-    name = '-'.join((
-        url.netloc.split(':')[0], # address without port
-        url.path.lstrip('/').replace('/', '_'), # path with _ instead of /
-        distribution
-        ))
+    if filename is None:
+        url = urlparse.urlparse(address)
+        if not url.scheme:
+            return {'name': address, 'result': False, 'changes': {},
+                    'comment': "Invalid address '{0}'".format(address)}
+        filename = '-'.join((
+            url.netloc.split(':')[0], # address without port
+            url.path.lstrip('/').replace('/', '_'), # path with _ instead of /
+            distribution
+            ))
 
     # deb http://ppa.launchpad.net/mercurial-ppa/releases/ubuntu precise main
     # without the deb
@@ -85,21 +83,26 @@ def present(address, components, distribution=None, key_id=None,
     line_content.extend(components)
 
     if in_sources_list_d:
-        apt_file = '/etc/apt/sources.list.d/{0}.list'.format(name)
+        apt_file = '/etc/apt/sources.list.d/{0}.list'.format(filename)
     else:
         apt_file = '/etc/apt/sources.list'
 
-    text = [' '.join(['deb'] + line_content)]
-    if source:
-        text.append(' '.join(['deb-src'] + line_content))
-
     data = {
-        name: {
+        filename: {
             'file': [
                 'append',
-                {'name': apt_file},
-                {'text': text},
-                {'makedirs': True}
+                {
+                    'name': apt_file
+                },
+                {
+                    'text': [
+                        ' '.join(['deb'] + line_content),
+                        ' '.join(['deb-src'] + line_content)
+                    ]
+                },
+                {
+                    'makedirs': True
+                }
             ]
         }
     }
@@ -109,7 +112,7 @@ def present(address, components, distribution=None, key_id=None,
         if key_server:
             add_command.extend(['--keyserver', key_server])
         add_command.extend([key_id])
-        data[name]['cmd'] = [
+        data[filename]['cmd'] = [
             'run',
             {'name': ' '.join(add_command)},
             {'unless': 'apt-key list | grep -q {0}'.format(key_id)}
@@ -119,7 +122,7 @@ def present(address, components, distribution=None, key_id=None,
     file_result, cmd_result = output.values()
 
     ret = {
-        'name': name,
+        'name': filename,
         'result': file_result['result'] == cmd_result['result'] == True,
         'changes': file_result['changes'],
         'comment': ' and '.join((file_result['comment'], cmd_result['comment']))
@@ -127,7 +130,7 @@ def present(address, components, distribution=None, key_id=None,
     ret['changes'].update(cmd_result['changes'])
     return ret
 
-def ubuntu_ppa(user, name, key_id, distribution=None, source=False):
+def ubuntu_ppa(user, name, key_id, distribution=None):
     '''
     Manage an Ubuntu PPA repository
 
@@ -140,12 +143,9 @@ def ubuntu_ppa(user, name, key_id, distribution=None, source=False):
     key_id
         Launchpad PGP key ID
 
-    distribution
+    distribution:
         Set this to use a different Ubuntu distribution than the host that run
         this state.
-
-    source
-        If True, add the Debian source repository too. False by default.
 
     For this PPA: https://launchpad.net/~pitti/+archive/postgresql
     the state must be:
@@ -159,5 +159,8 @@ def ubuntu_ppa(user, name, key_id, distribution=None, source=False):
             - key_id: 8683D8A2
     '''
     address = 'http://ppa.launchpad.net/{0}/{1}/ubuntu'.format(user, name)
+    filename = '{0}-{1}-{2}.list'.format(
+        user, name,
+        __salt__['grains.item']('lsb_codename'))
     return present(address, ('main',), distribution, key_id,
-                   'keyserver.ubuntu.com')
+                   'keyserver.ubuntu.com', True, filename)

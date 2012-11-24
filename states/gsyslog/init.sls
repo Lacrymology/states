@@ -1,27 +1,41 @@
 include:
+  - virtualenv
   - nrpe
 
-/etc/nagios/nrpe.d/gsyslog.cfg:
-  file.managed:
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 600
-    - source: salt://gsyslog/nrpe.jinja2
-
 {# gsyslog depends on klogd to get kernel logs #}
-klogd:
+sysklogd:
   pkg:
-    - installed
+    - latest
+    - names:
+      - sysklogd
+      - klogd
   service:
-    - running
+    - dead
+    - enable: False
+
+gsyslog_upstart:
+  file:
+    - managed
+    - name: /etc/init/gsyslogd.conf
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 600
+    - source: salt://gsyslog/upstart.jinja2
+    - require:
+      - service: sysklogd
 
 gsyslog:
   pkg:
-    - installed
-    - names:
-      - gsyslog
-      - python-graypy
+    - latest
+    - name: libevent-dev
+  virtualenv:
+    - managed
+    - name: /usr/local/gsyslog
+    - requirements: salt://gsyslog/requirements.txt
+    - require:
+      - pkg: python-virtualenv
+      - pkg: gsyslog
   file:
     - managed
     - name: /etc/gsyslogd.conf
@@ -30,18 +44,23 @@ gsyslog:
     - group: root
     - mode: 644
     - source: salt://gsyslog/config.jinja2
-    - require:
-      - pkg: gsyslog
-      - pkg: python-graypy
   service:
     - running
     - name: gsyslogd
     - watch:
-      - pkg: gsyslog
-      - pkg: python-graypy
-      - file: /etc/gsyslogd.conf
+      - file: gsyslog_upstart
+      - virtualenv: gsyslog
+      - file: gsyslog
     - require:
-      - service: klogd
+      - service: sysklogd
+
+/etc/nagios/nrpe.d/gsyslog.cfg:
+  file.managed:
+    - template: jinja
+    - user: nagios
+    - group: nagios
+    - mode: 600
+    - source: salt://gsyslog/nrpe.jinja2
 
 extend:
   nagios-nrpe-server:

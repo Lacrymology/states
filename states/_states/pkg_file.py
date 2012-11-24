@@ -35,8 +35,9 @@ def installed(name, version, source, source_hash):
                     ]
                 }
             }
-            file_result = __salt__['state.high'](data)
+            file_result = __salt__['state.high'](data).values()[0]
             log.debug("file.managed: %s", file_result)
+
             try:
                 if not file_result['result']:
                     return file_result

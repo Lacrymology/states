@@ -2,16 +2,18 @@
 
 include:
   - pip
+  - mercurial
 
 nagios-nrpe-server:
   pkg:
-    - installed
+    - latest
     - names:
       - nagios-nrpe-server
       - nagios-plugins-standard
       - nagios-plugins-basic
   pip:
     - installed
+    - upgrade: True
     - repo: hg+https://bitbucket.org/gocept/nagiosplugin#egg=nagiosplugin
     - require:
       - pkg: python-pip

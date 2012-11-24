@@ -41,6 +41,8 @@ graylog2-web:
     - name: bundler
     - require:
       - pkg: ruby
+    - watch:
+      - archive: graylog2-web
   archive:
     - extracted
     - name: /opt/
@@ -53,6 +55,8 @@ graylog2-web:
     - run
     - name: bundle install
     - cwd: {{ web_root_dir }}
+    - require:
+      - gem: graylog2-web
     - watch:
       - archive: graylog2-web
   file:
@@ -68,6 +72,7 @@ graylog2-web:
     - require:
       - file: graylog2-web
       - file: graylog2-web_logdir
+      - cmd: graylog2-web
     - watch:
       - archive: graylog2-web
 {% for filename in ('config', 'email', 'indexer', 'mongoid') %}

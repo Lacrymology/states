@@ -37,12 +37,14 @@ include:
 
 elasticsearch:
   pkg:
-    - installed
+    - latest
     - name: openjdk-7-jre-headless
   elasticsearch_plugins:
     - installed
     - name: cloud-aws
     - url: elasticsearch/elasticsearch-cloud-aws/{{ pillar['elasticsearch']['elasticsearch-cloud-aws_version'] }}
+    - require:
+      - pkg_file: elasticsearch
   pkg_file:
     - installed
     - name: elasticsearch

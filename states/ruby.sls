@@ -1,9 +1,8 @@
 ruby:
   pkg:
-    - installed
+    - latest
     - names:
       - ruby1.8
       - rubygems
       - rake
-      - libopenssl-ruby
       - ruby-dev

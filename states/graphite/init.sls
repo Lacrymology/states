@@ -67,7 +67,7 @@ graphite-web:
       - pkg: graphite-web
       - pkg: postgresql-dev
   pkg:
-    - installed
+    - latest
     - name: libcairo2-dev
   pip:
     - installed

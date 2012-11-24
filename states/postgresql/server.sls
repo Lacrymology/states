@@ -6,7 +6,7 @@ include:
 
 postgresql-server:
   pkg:
-    - installed
+    - latest
     - names:
       - postgresql-{{ pillar['postgresql']['version'] }}
       - postgresql-client-{{ pillar['postgresql']['version'] }}
@@ -37,6 +37,7 @@ postgresql_diamond_collector:
       - service: postgresql
   pip:
     - installed
+    - upgrade: True
     - name: psycopg2
     - bin_env: /usr/local/diamond/bin/pip
     - require:

@@ -12,7 +12,7 @@ include:
 
 openssh-server:
   pkg:
-    - installed
+    - latest
   file:
     - managed
     - name: /etc/ssh/sshd_config
@@ -31,7 +31,7 @@ openssh-server:
 
 openssh-client:
   pkg:
-    - installed
+    - latest
   file:
     - managed
     - name: /etc/ssh/ssh_config

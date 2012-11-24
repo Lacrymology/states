@@ -11,7 +11,7 @@ mongodb:
      - key_id: 7F0CEB10
      - key_server: keyserver.ubuntu.com
   pkg:
-     - installed
+     - latest
      - name: mongodb-10gen
      - require:
        - apt_repository: mongodb

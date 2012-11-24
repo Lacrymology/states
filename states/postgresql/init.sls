@@ -5,7 +5,7 @@ postgresql-dev:
     - name: postgresql
     - key_id: 8683D8A2
   pkg:
-    - installed
+    - latest
     - name: libpq-dev
     - require:
       - apt_repository: postgresql-dev

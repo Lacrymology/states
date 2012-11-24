@@ -40,7 +40,7 @@ graylog2-server:
     - mode: 600
     - source: salt://graylog2/server/config.jinja2
   pkg:
-    - installed
+    - latest
     - name: openjdk-7-jre-headless
   service:
     - running

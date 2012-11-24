@@ -5,7 +5,7 @@ include:
 
 python-virtualenv:
   pkg:
-    - installed
+    - latest
     - names:
       - python-virtualenv
       - build-essential

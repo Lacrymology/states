@@ -5,6 +5,6 @@ mercurial:
     - name: releases
     - key_id: 323293EE
   pkg:
-    - installed
+    - latest
     - require:
       - apt_repository: mercurial

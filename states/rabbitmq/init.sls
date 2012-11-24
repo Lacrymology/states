@@ -88,6 +88,7 @@ in_rabbitmq_cluster:
 diamond_rabbitmq:
   pip:
     - installed
+    - upgrade: True
     - name: pyrabbit
     - require:
       - pkg: python-pip
@@ -102,7 +103,7 @@ diamond_rabbitmq:
     - require:
       - pip: diamond_rabbitmq
   pkg:
-    - installed
+    - latest
     - name: python-httplib2
 
 {% for node in pillar['rabbitmq']['cluster']['nodes'] -%}

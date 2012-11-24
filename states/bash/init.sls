@@ -1,6 +1,6 @@
 bash:
   pkg:
-    - installed
+    - latest
   file:
     - managed
     - name: /etc/profile.d/bash_prompt.sh

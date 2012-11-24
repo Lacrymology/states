@@ -4,7 +4,7 @@ tools for troubleshooting
 #}
 basic:
   pkg:
-    - installed
+    - latest
     - names:
       - command-not-found
       - debconf

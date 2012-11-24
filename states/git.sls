@@ -1,2 +1,4 @@
 git:
-  pkg.installed
+  pkg:
+    - latest
+    - refresh: True

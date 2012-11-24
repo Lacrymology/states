@@ -3,7 +3,7 @@ include:
 
 cron:
   pkg:
-    - installed
+    - latest
   file:
     - managed
     - name: /etc/crontab

@@ -25,9 +25,8 @@ nginx:
     - key_server: subkeys.pgp.net
     - key_id: 7BD9BF62
   pkg:
-    - installed
+    - latest
     - name: nginx
-    - refresh: True
     - require:
       - apt_repository: nginx
   service:

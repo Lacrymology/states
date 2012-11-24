@@ -4,8 +4,7 @@ include:
 
 memcached:
   pkg:
-    - installed
-    - refresh: True
+    - latest
   service:
     - running
 

@@ -1,6 +1,6 @@
 vim:
   pkg:
-    - installed
+    - latest
   file:
     - managed
     - name: /etc/vim/vimrc

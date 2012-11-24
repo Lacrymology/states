@@ -4,6 +4,7 @@ include:
 raven:
   pip:
     - installed
+    - upgrade: True
     - name: raven
     - requirements: salt://raven/requirements.txt
     - require:

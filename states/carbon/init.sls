@@ -29,7 +29,7 @@ carbon_logdir:
     - name: /var/log/graphite/carbon
     - user: graphite
     - group: graphite
-    - mode: 700
+    - mode: 770
     - makedirs: True
     - require:
       - user: carbon

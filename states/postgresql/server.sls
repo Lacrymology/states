@@ -34,9 +34,17 @@ postgresql_diamond_collector:
     - present
     - name: diamond
     - password: {{ pillar['postgresql']['diamond'] }}
+    - superuser: True
     - runas: postgres
     - require:
       - service: postgresql
+  postgres_database:
+    - present
+    - name: diamond
+    - owner: diamond
+    - runas: postgres
+    - require:
+      - postgres_user: postgresql_diamond_collector
   pip:
     - installed
     - upgrade: True

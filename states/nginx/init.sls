@@ -29,24 +29,22 @@ nginx:
     - name: nginx
     - require:
       - apt_repository: nginx
+  file:
+    - managed
+    - name: /etc/nginx/nginx.conf
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 600
+    - source: salt://nginx/config.jinja2
+    - require:
+      - pkg: nginx
   service:
     - running
     - watch:
-      - file: nginx_status
+      - file: nginx
       - file: /etc/nginx/conf.d/default.conf
       - file: /etc/nginx/conf.d/example_ssl.conf
-      - pkg: nginx
-
-nginx_status:
-  file:
-    - managed
-    - name: /etc/nginx/conf.d/status.conf
-    - template: jinja
-    - user: nginx
-    - group: nginx
-    - mode: 600
-    - source: salt://nginx/status.jinja2
-    - require:
       - pkg: nginx
 
 nginx_diamond_collector:
@@ -59,7 +57,7 @@ nginx_diamond_collector:
     - mode: 600
     - source: salt://nginx/diamond.jinja2
     - require:
-      - file: nginx_status
+      - file: nginx
 
 extend:
   diamond:

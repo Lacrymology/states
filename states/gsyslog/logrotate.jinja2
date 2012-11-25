@@ -1,0 +1,13 @@
+# {{ pillar['message_do_not_modify'] }}
+/var/log/all.log {
+    daily
+    missingok
+    rotate 7
+    compress
+    delaycompress
+    notifempty
+    sharedscripts
+    postrotate
+        restart gsyslogd > /dev/null
+    endscript
+}

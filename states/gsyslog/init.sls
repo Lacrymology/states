@@ -25,6 +25,16 @@ gsyslog_upstart:
     - require:
       - service: sysklogd
 
+gsyslog_logrotate:
+  file:
+    - managed
+    - name: /etc/logrotate.d/gsyslog
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 600
+    - source: salt://gsyslog/logrotate.jinja2
+
 gsyslog:
   pkg:
     - latest
@@ -53,6 +63,7 @@ gsyslog:
       - file: gsyslog
     - require:
       - service: sysklogd
+      - file: gsyslog_logrotate
 
 /etc/nagios/nrpe.d/gsyslog.cfg:
   file.managed:

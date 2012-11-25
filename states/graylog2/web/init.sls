@@ -1,6 +1,7 @@
 include:
   - ruby
   - nrpe
+  - mongodb
 
 {% set web_root_dir = '/opt/graylog2-web-interface-' + pillar['graylog2']['web']['version'] %}
 
@@ -72,6 +73,7 @@ graylog2-web:
     - require:
       - file: graylog2-web
       - file: graylog2-web_logdir
+      - service: mongodb
       - cmd: graylog2-web
     - watch:
       - archive: graylog2-web

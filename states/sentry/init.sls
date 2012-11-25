@@ -1,19 +1,13 @@
+{# TODO: add support for GELF logging #}
+
 include:
   - postgresql
   - postgresql.server
   - virtualenv
   - nrpe
   - statsd
-
-sentry_upstart:
-  file:
-    - managed
-    - name: /etc/init/sentry.conf
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 600
-    - source: salt://sentry/upstart.jinja2
+  - uwsgi
+  - nginx
 
 sentry:
   virtualenv:
@@ -26,18 +20,18 @@ sentry:
       - pkg: postgresql-dev
       - pkg: python-virtualenv
   pkg:
-    - installed
+    - latest
     - name: libevent-dev
   file:
     - managed
     - name: /etc/sentry.conf.py
     - template: jinja
-    - user: nobody
-    - group: nogroup
+    - user: www-data
+    - group: www-data
     - mode: 600
     - source: salt://sentry/config.jinja2
     - require:
-      - virtualenv: sentry
+      - pkg: nginx
   postgres_user:
     - present
     - name: {{ pillar['sentry']['db']['username'] }}
@@ -53,38 +47,66 @@ sentry:
     - require:
       - postgres_user: sentry
       - service: postgresql-server
-  service:
-    - running
-    - require:
-      - service: postgresql-server
-    - watch:
-      - virtualenv: sentry
-      - file: sentry
-      - file: sentry_upstart
-      - postgres_user: sentry
-      - postgres_database: sentry
+
 {% if pillar['sentry']['email']['method'] == "amazon_ses" %}
-    - require:
-      - pip: sentry
   pip:
     - installed
+    - bin_env: /usr/local/sentry
     - names:
-      - boto
-      - django-ses
+      - boto==2.6.0
+      - django_ses==0.4.1
     - require:
       - virtualenv: sentry
 {% endif %}
 
+sentry_uwsgi:
+  file:
+    - managed
+    - name: /etc/uwsgi/sentry.ini
+    - template: jinja
+    - user: www-data
+    - group: www-data
+    - mode: 600
+    - source: salt://sentry/uwsgi.jinja2
+    - require:
+      - service: uwsgi_emperor
+      - cmd: sentry_uwsgi
+  cmd:
+    - run
+    - user: www-data
+    - group: www-data
+    - name: /usr/local/sentry/bin/sentry --config=/etc/sentry.conf.py upgrade --noinput
+    - require:
+      - postgres_user: sentry
+      - service: postgresql-server
+    - watch:
+      - virtualenv: sentry
+      - file: sentry
+
 /etc/nagios/nrpe.d/sentry.cfg:
-  file.managed:
+  file:
+    - managed
     - template: jinja
     - user: nagios
     - group: nagios
     - mode: 600
     - source: salt://sentry/nrpe.jinja2
 
+/etc/nginx/conf.d/sentry.conf:
+  file:
+    - managed
+    - template: jinja
+    - user: www-data
+    - group: www-data
+    - mode: 600
+    - source: salt://sentry/nginx.jinja2
+
 extend:
   nagios-nrpe-server:
     service:
       - watch:
         - file: /etc/nagios/nrpe.d/sentry.cfg
+  nginx:
+    service:
+      - watch:
+        - file: /etc/nginx/conf.d/sentry.conf

@@ -1,0 +1,19 @@
+# {{ pillar['message_do_not_modify'] }}
+[uwsgi]
+master = true
+env = DJANGO_SETTINGS_MODULE=my_sentry_conf
+pymodule-alias = my_sentry_conf=/etc/sentry.conf.py
+module = sentry.wsgi
+threads = {{ pillar['sentry']['workers'] }}
+enable-threads = true
+uid = www-data
+gid = www-data
+threaded-logger = true
+logger = graylog2:{{ pillar['graylog2_address'] }}:12201,uwsgi-sentry
+carbon-id = uwsgi-sentry
+carbon = {{ pillar['graphite_address'] }}:2003
+virtualenv = /usr/local/sentry
+chdir = /usr/local/sentry
+procname = sentry
+procname-master = sentry-master
+socket = /var/run/uwsgi/sentry.sock

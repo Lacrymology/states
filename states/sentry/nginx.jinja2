@@ -1,0 +1,34 @@
+# {{ pillar['message_do_not_modify'] }}
+
+upstream sentry {
+    server unix:///var/run/uwsgi/sentry.sock;
+}
+
+server {
+    listen 80;
+
+    server_name ec2-23-21-38-220.compute-1.amazonaws.com;
+
+    root /usr/local/sentry;
+    keepalive_timeout 5;
+
+    access_log /var/log/nginx/sentry-access.log;
+    error_log /var/log/nginx/sentry-error.log;
+
+    location /_static/ {
+        rewrite ^/_static/(.+)$ /static/$1 last;
+    }
+
+    location /static/ {
+        expires 1h;
+        autoindex off;
+        root /usr/local/sentry/lib/python2.7/site-packages/sentry/;
+    }
+
+    location / {
+        {#  rewrite ^/favicon.ico$ /media/images/favicon.ico last;#}
+        uwsgi_pass sentry;
+        include uwsgi_params;
+    }
+
+}

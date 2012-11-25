@@ -1,9 +1,10 @@
 # {{ pillar['message_do_not_modify'] }}
-# TODO: logging in graylog
+{# TODO: logging in graylog #}
+{# TODO: https://github.com/dcramer/sentry-hipchat #}
 
 import os.path
 
-from sentry.conf.server import INSTALLED_APPS, MIDDLEWARE_CLASSES
+from sentry.conf.server import *
 
 CONF_ROOT = os.path.dirname(__file__)
 

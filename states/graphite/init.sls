@@ -1,4 +1,5 @@
 {# TODO: create initial admin user #}
+{# TODO: send logs straight to GELF #}
 include:
   - postgresql.server
   - memcache

@@ -1,3 +1,5 @@
+{# TODO: add support for GELF logging #}
+
 include:
   - virtualenv
   - nrpe

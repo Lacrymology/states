@@ -1,3 +1,4 @@
+{# TODO: send logs to GELF #}
 include:
   - virtualenv
   - nrpe

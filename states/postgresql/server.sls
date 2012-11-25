@@ -1,3 +1,5 @@
+{# TODO: configure syslog logging only #}
+
 include:
   - diamond
   - postgresql

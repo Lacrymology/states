@@ -1,3 +1,5 @@
+{# TODO: configure logging to GELF #}
+
 include:
   - diamond
   - nrpe

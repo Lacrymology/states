@@ -3,7 +3,7 @@ include:
   - nrpe
   - mongodb
 
-{% set web_root_dir = '/opt/graylog2-web-interface-' + pillar['graylog2']['web']['version'] %}
+{% set web_root_dir = '/usr/local/graylog2-web-interface-' + pillar['graylog2']['web']['version'] %}
 
 {% for filename in ('config', 'email', 'indexer', 'mongoid') %}
 graylog2-web-{{ filename }}:
@@ -46,7 +46,7 @@ graylog2-web:
       - archive: graylog2-web
   archive:
     - extracted
-    - name: /opt/
+    - name: /usr/local/
     - source: https://github.com/downloads/Graylog2/graylog2-web-interface/graylog2-web-interface-{{ pillar['graylog2']['server']['version'] }}.tar.gz
     - source_hash: {{ pillar['graylog2']['web']['checksum'] }}
     - archive_format: tar

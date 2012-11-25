@@ -7,7 +7,7 @@ stop on [06]
 expect fork
 
 script
-  cd /opt/graylog2-web-interface-{{ pillar['graylog2']['web']['version'] }}
+  cd /usr/local/graylog2-web-interface-{{ pillar['graylog2']['web']['version'] }}
   exec script/rails server -e production -eproduction -p{{ pillar['graylog2']['web']['port'] }} >> /var/log/graylog2/web.log &
   emit graylog2-web_running
 end script

@@ -1,5 +1,4 @@
 include:
-  - gsyslog
   - nrpe
 
 graylog2-server_upstart:
@@ -25,12 +24,12 @@ graylog2-server_upstart:
 graylog2-server:
   archive:
     - extracted
-    - name: /opt/
+    - name: /usr/local/
     - source: https://github.com/downloads/Graylog2/graylog2-server/graylog2-server-{{ pillar['graylog2']['server']['version'] }}.tar.gz
     - source_hash: {{ pillar['graylog2']['server']['checksum'] }}
     - archive_format: tar
     - tar_options: z
-    - if_missing: /opt/graylog2-server-{{ pillar['graylog2']['server']['version'] }}/
+    - if_missing: /usr/local/graylog2-server-{{ pillar['graylog2']['server']['version'] }}/
   file:
     - managed
     - name: /etc/graylog2.conf
@@ -59,9 +58,6 @@ graylog2-server:
     - source: salt://graylog2/server/nrpe.jinja2
 
 extend:
-  gsyslog:
-    file:
-      - source: salt://graylog2/server/gsyslog.jinja2
   nagios-nrpe-server:
     service:
       - watch:

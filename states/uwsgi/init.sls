@@ -53,6 +53,16 @@ uwsgi_build:
       - git: uwsgi_build
       - file: uwsgi_build
 
+uwsgi_sockets:
+  file:
+    - directory
+    - name: /var/run/uwsgi
+    - user: www-data
+    - group: www-data
+    - mode:
+    - require:
+      - pkg: nginx
+
 uwsgi_emperor:
   cmd:
     - run
@@ -60,9 +70,11 @@ uwsgi_emperor:
     - watch:
       - cmd: uwsgi_build
   service:
+    - name: uwsgi
     - running
     - require:
       - file: uwsgi_emperor
+      - file: uwsgi_sockets
     - watch:
       - cmd: uwsgi_emperor
       - file: /etc/init/uwsgi.conf

@@ -11,6 +11,18 @@ salt-repository:
     - mode: 600
     - source: salt://salt/apt.jinja2
 
+{#
+ this is until 0.16 is out
+ #}
+salt-patch:
+  file:
+    - managed
+    - name: /usr/share/pyshared/salt/states/git.py
+    - source: salt://salt/git.py
+    - user: root
+    - group: root
+    - mode: 644
+
 salt-minion:
   file:
     - managed
@@ -28,6 +40,7 @@ salt-minion:
   service:
     - running
     - watch:
+      - file: salt-patch
       - pkg: salt-minion
       - file: salt-minion
 

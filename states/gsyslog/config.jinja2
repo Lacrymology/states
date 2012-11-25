@@ -1,7 +1,11 @@
 # {{ pillar['message_do_not_modify'] }}
+{% if 'graylog2_address' in pillar %}
+{% if pillar['graylog2_address'] != '127.0.0.1' %}
 [udp]
 address = 127.0.0.1
 port = 514
+{% endif %}
+{% endif %}
 
 [filters]
 # keep this section, even if empty to enable filtering

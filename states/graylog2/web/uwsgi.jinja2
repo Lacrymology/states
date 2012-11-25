@@ -1,0 +1,21 @@
+# {{ pillar['message_do_not_modify'] }}
+[uwsgi]
+master = true
+
+socket = 127.0.0.1:3031
+rack = myapp.ru
+chdir = /usr/local/graylog2-web-interface-{{ pillar['graylog2']['server']['version'] }}
+module = sentry.wsgi
+{#threads = 1#}
+{#enable-threads = true#}
+uid = www-data
+gid = www-data
+threaded-logger = true
+logger = graylog2:{{ pillar['graylog2_address'] }}:12201,uwsgi-graylog2
+carbon-id = uwsgi-graylog2
+carbon = {{ pillar['graphite_address'] }}:2003
+virtualenv = /usr/local/sentry
+chdir = /usr/local/sentry
+procname = sentry
+procname-master = sentry-master
+socket = /var/run/uwsgi/graylog2.sock

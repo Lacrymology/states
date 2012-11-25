@@ -1,0 +1,19 @@
+# {{ pillar['message_do_not_modify'] }}
+[uwsgi]
+
+master = true
+env = DJANGO_SETTINGS_MODULE=graphite.local_settings
+module = graphite.wsgi
+{#threads = {{ pillar['sentry']['workers'] }}#}
+enable-threads = true
+uid = www-data
+gid = graphite
+threaded-logger = true
+logger = graylog2:{{ pillar['graylog2_address'] }}:12201,uwsgi-graphite
+carbon-id = uwsgi-graphite
+carbon = {{ pillar['graphite_address'] }}:2003
+virtualenv = /usr/local/graphite
+chdir = /usr/local/graphite
+procname = graphite
+procname-master = graphite-master
+socket = /var/run/uwsgi/graphite.sock

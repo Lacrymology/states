@@ -1,0 +1,10 @@
+# {{ pillar['message_do_not_modify'] }}
+
+import django.core.handlers.wsgi
+import os
+
+application = django.core.handlers.wsgi.WSGIHandler()
+
+from graphite.logger import log
+log.info("graphite.wsgi - pid %d - reloading search index" % os.getpid())
+import graphite.metrics.search

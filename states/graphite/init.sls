@@ -6,37 +6,39 @@ include:
   - virtualenv
   - nrpe
   - carbon
+  - uwsgi
+  - nginx
 
-graphite_upstart:
+{#graphite_logrotate:#}
+{#  file:#}
+{#    - managed#}
+{#    - name: /etc/logrotate.d/graphite-web#}
+{#    - template: jinja#}
+{#    - user: root#}
+{#    - group: root#}
+{#    - mode: 600#}
+{#    - source: salt://graphite/logrotate.jinja2#}
+
+graphite_root_logdir:
   file:
-    - managed
-    - name: /etc/init/graphite-web.conf
-    - template: jinja
+    - directory
+    - name: /var/log/graphite
     - user: root
     - group: root
-    - mode: 600
-    - source: salt://graphite/upstart.jinja2
-
-graphite_logrotate:
-  file:
-    - managed
-    - name: /etc/logrotate.d/graphite-web
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 600
-    - source: salt://graphite/logrotate.jinja2
+    - mode: 775
+    - makedirs: True
 
 graphite_logdir:
   file:
     - directory
     - name: /var/log/graphite/graphite
-    - user: graphite
-    - group: graphite
-    - mode: 700
+    - user: www-data
+    - group: www-data
+    - mode: 770
     - makedirs: True
     - require:
       - user: carbon
+      - file: graphite_root_logdir
 
 graphite_graph_templates:
   file:
@@ -50,6 +52,18 @@ graphite_graph_templates:
     - require:
       - user: carbon
 
+graphite_wsgi:
+  file:
+    - managed
+    - name: /usr/local/graphite/lib/python2.7/site-packages/graphite/wsgi.py
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 644
+    - source: salt://graphite/wsgi.jinja2
+    - require:
+      - virtualenv: graphite-web
+
 {#graphite_admin_user:#}
 {#  module:#}
 {#    - run#}
@@ -61,7 +75,7 @@ graphite_graph_templates:
 graphite-web:
   virtualenv:
     - manage
-    - name: /usr/local/graphite
+    - name: /usr/local/graphite/
     - requirements: salt://graphite/requirements.txt
     - require:
       - pkg: python-virtualenv
@@ -108,20 +122,28 @@ graphite-web:
     - name: django.syncdb
     - settings_module: graphite.local_settings
     - bin_env: /usr/local/graphite
-  service:
-    - running
+
+graphite_uwsgi:
+  file:
+    - managed
+    - name: /etc/uwsgi/graphite.ini
+    - template: jinja
+    - user: www-data
+    - group: www-data
+    - mode: 600
+    - source: salt://graphite/uwsgi.jinja2
     - require:
+      - service: uwsgi_emperor
       - user: carbon
       - service: postgresql
       - service: memcached
       - service: carbon
       - file: graphite_logdir
       - module: graphite-web
-    - watch:
+{#    - watch:#}
       - virtualenv: graphite-web
       - pip: graphite-web
       - file: graphite-web
-      - file: graphite_upstart
       - postgres_user: graphite-web
       - postgres_database: graphite-web
       - file: graphite_graph_templates

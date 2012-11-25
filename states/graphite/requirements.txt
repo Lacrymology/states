@@ -4,6 +4,5 @@ python-memcached
 pytz
 simplejson
 django-tagging
-gunicorn
 psycopg2
 http://cairographics.org/releases/py2cairo-1.8.10.tar.gz

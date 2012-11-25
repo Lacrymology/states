@@ -19,8 +19,7 @@ def __virtual__():
     if not has_raven:
         logger.warning("Can't find raven client library")
         return False
-    logger.debug("sentry returner loaded")
-    return 'sentry'
+    return False
 
 def returner(ret):
     """

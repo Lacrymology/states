@@ -44,12 +44,18 @@ def list(is_global=True, runas=None):
     if not was_json:
         _npm('set json=false', is_global, runas)
     try:
-        output = json.loads(json_s)['dependencies']
-        log.info("json: '%s' output '%s'", json_s, output)
-        return output
+        unserialized = json.loads(json_s)
     except ValueError:
         if json_s:
             log.error("output of list is invalid: '%s'", json_s)
+        return {}
+
+    try:
+        output = unserialized['dependencies']
+        log.info("json: '%s' output '%s'", json_s, output)
+        return output
+    except KeyError:
+        log.error("unserialized output of list is invalid: '%s'", unserialized)
         return {}
 
 def install(package, is_global=True, runas=None):

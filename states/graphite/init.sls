@@ -118,10 +118,15 @@ graphite-web:
       - postgres_user: graphite-web
       - service: postgresql
   module:
-    - run
+    - wait
     - name: django.syncdb
     - settings_module: graphite.local_settings
     - bin_env: /usr/local/graphite
+    - stateful: False
+    - require:
+      - postgres_database: graphite-web
+    - watch:
+      - file: graphite-web
 
 graphite_uwsgi:
   file:

@@ -53,7 +53,8 @@ graylog2-web:
     - tar_options: z
     - if_missing: {{ web_root_dir }}
   cmd:
-    - run
+    - wait
+    - stateful: False
     - name: bundle install
     - cwd: {{ web_root_dir }}
     - require:

@@ -72,7 +72,8 @@ sentry_uwsgi:
       - service: uwsgi_emperor
       - cmd: sentry_uwsgi
   cmd:
-    - run
+    - wait
+    - stateful: False
     - user: www-data
     - group: www-data
     - name: /usr/local/sentry/bin/sentry --config=/etc/sentry.conf.py upgrade --noinput

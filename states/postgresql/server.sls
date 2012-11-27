@@ -12,7 +12,6 @@ postgresql-server:
     - names:
       - postgresql-{{ pillar['postgresql']['version'] }}
       - postgresql-client-{{ pillar['postgresql']['version'] }}
-    - refresh: True
     - require:
       - apt_repository: postgresql-dev
   service:
@@ -55,7 +54,8 @@ postgresql_diamond_collector:
       - pkg: postgresql-dev
 
 /etc/nagios/nrpe.d/postgresql.cfg:
-  file.managed:
+  file:
+    - managed
     - template: jinja
     - user: nagios
     - group: nagios

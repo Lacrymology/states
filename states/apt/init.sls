@@ -17,6 +17,11 @@ apt_sources:
     - source: salt://apt/sources.jinja2
     - context:
       all_suites: main restricted universe multiverse
+  module:
+    - wait
+    - name: pkg.refresh_db
+    - watch:
+      - file: apt_sources
 
 {# remove packages that requires physical hardware on virtual machines #}
 {% if grains['virtual'] == 'xen' or grains['virtual'] == 'Parallels' or grains['virtual'] == 'openvzve' %}

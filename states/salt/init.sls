@@ -34,7 +34,6 @@ salt-minion:
     - source: salt://salt/config.jinja2
   pkg:
     - latest
-    - refresh: True
     - watch:
       - file: salt-repository
   service:

@@ -43,7 +43,8 @@ openssh-server:
     - source: salt://ssh/server.jinja2
     - require:
       - pkg: openssh-server
-  service.running:
+  service:
+    - running
     - name: ssh
     - watch:
       - pkg: openssh-server

@@ -9,7 +9,8 @@ memcached:
     - running
 
 /etc/nagios/nrpe.d/memcache.cfg:
-  file.managed:
+  file:
+    - managed
     - template: jinja
     - user: nagios
     - group: nagios

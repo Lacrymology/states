@@ -9,7 +9,8 @@ include:
   file.absent
 
 /etc/nagios/nrpe.d/nginx.cfg:
-  file.managed:
+  file:
+    - managed
     - template: jinja
     - user: nagios
     - group: nagios

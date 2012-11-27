@@ -24,7 +24,8 @@ statsd:
       - virtualenv: statsd
 
 /etc/nagios/nrpe.d/statsd.cfg:
-  file.managed:
+  file:
+    - managed
     - template: jinja
     - user: nagios
     - group: nagios

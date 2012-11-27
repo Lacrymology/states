@@ -66,7 +66,8 @@ gsyslog:
       - file: gsyslog_logrotate
 
 /etc/nagios/nrpe.d/gsyslog.cfg:
-  file.managed:
+  file:
+    - managed
     - template: jinja
     - user: nagios
     - group: nagios

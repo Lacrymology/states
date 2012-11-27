@@ -50,7 +50,8 @@ graylog2-server:
       - archive: graylog2-server
 
 /etc/nagios/nrpe.d/graylog2-server.cfg:
-  file.managed:
+  file:
+    - managed
     - template: jinja
     - user: nagios
     - group: nagios

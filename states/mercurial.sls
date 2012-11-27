@@ -1,3 +1,6 @@
+include:
+  - ssh
+
 mercurial:
   apt_repository:
     - ubuntu_ppa
@@ -8,3 +11,4 @@ mercurial:
     - latest
     - require:
       - apt_repository: mercurial
+      - pkg: openssh-client

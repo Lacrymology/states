@@ -1,3 +1,8 @@
+{#
+ using this state the git repo URLs are:
+ ssh://git@{{ address }}/~git/{{ reponame }}.git
+ #}
+
 include:
   - git
 

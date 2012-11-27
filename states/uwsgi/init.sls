@@ -45,9 +45,10 @@ uwsgi_build:
     - require:
       - git: uwsgi_build
   cmd:
-    - run
+    - wait
     - name: python uwsgiconfig.py --build custom
     - cwd: /usr/local/uwsgi
+    - stateful: false
     - watch:
       - pkg: uwsgi_build
       - git: uwsgi_build
@@ -61,14 +62,19 @@ uwsgi_sockets:
     - group: www-data
     - mode:
     - require:
-      - pkg: nginx
+      - pkg: uwsgi_build
+      - git: uwsgi_build
+      - file: uwsgi_build
 
 uwsgi_emperor:
   cmd:
-    - run
+    - wait
     - name: strip /usr/local/uwsgi/uwsgi
+    - stateful: false
     - watch:
-      - cmd: uwsgi_build
+      - pkg: uwsgi_build
+      - git: uwsgi_build
+      - file: uwsgi_build
   service:
     - name: uwsgi
     - running

@@ -45,9 +45,9 @@ graphite_graph_templates:
     - managed
     - name: /etc/graphite/graphTemplates.conf
     - template: jinja
-    - user: graphite
+    - user: www-data
     - group: graphite
-    - mode: 600
+    - mode: 440
     - source: salt://graphite/graph_templates.jinja2
     - require:
       - user: carbon
@@ -57,9 +57,9 @@ graphite_wsgi:
     - managed
     - name: /usr/local/graphite/lib/python2.7/site-packages/graphite/wsgi.py
     - template: jinja
-    - user: root
-    - group: root
-    - mode: 644
+    - user: www-data
+    - group: www-data
+    - mode: 400
     - source: salt://graphite/wsgi.jinja2
     - require:
       - virtualenv: graphite-web
@@ -96,9 +96,9 @@ graphite-web:
     - managed
     - name: /usr/local/graphite/lib/python2.7/site-packages/graphite/local_settings.py
     - template: jinja
-    - user: graphite
+    - user: www-data
     - group: graphite
-    - mode: 600
+    - mode: 440
     - source: salt://graphite/config.jinja2
     - require:
       - user: carbon
@@ -130,7 +130,7 @@ graphite_uwsgi:
     - template: jinja
     - user: www-data
     - group: www-data
-    - mode: 600
+    - mode: 400
     - source: salt://graphite/uwsgi.jinja2
     - require:
       - service: uwsgi_emperor
@@ -140,6 +140,7 @@ graphite_uwsgi:
       - service: carbon
       - file: graphite_logdir
       - module: graphite-web
+      - file: /usr/local/graphite/bin/build-index.sh
 {#    - watch:#}
       - virtualenv: graphite-web
       - pip: graphite-web
@@ -148,12 +149,38 @@ graphite_uwsgi:
       - postgres_database: graphite-web
       - file: graphite_graph_templates
 
+/usr/local/graphite/bin/build-index.sh:
+  file:
+    - managed
+    - template: jinja
+    - source: salt://graphite/build-index.jinja2
+    - user: root
+    - group: root
+    - mode: 555
+    - require:
+      - file: graphite-web
+      - pip: graphite-web
+      - virtualenv: graphite-web
+
+/etc/nginx/conf.d/graphite.conf:
+  file:
+    - managed
+    - template: jinja
+    - source: salt://graphite/nginx.jinja2
+    - user: www-data
+    - group: www-data
+    - mode: 400
+    - require:
+      - file: graphite-web
+      - pip: graphite-web
+      - virtualenv: graphite-web
+
 /etc/nagios/nrpe.d/graphite.cfg:
   file.managed:
     - template: jinja
     - user: nagios
     - group: nagios
-    - mode: 600
+    - mode: 400
     - source: salt://graphite/nrpe.jinja2
 
 extend:
@@ -161,3 +188,11 @@ extend:
     service:
       - watch:
         - file: /etc/nagios/nrpe.d/graphite.cfg
+  nginx:
+    service:
+      - watch:
+        - file: /etc/nginx/conf.d/graphite.conf
+  carbon_storage:
+    file:
+      - group: www-data
+      - mode: 770

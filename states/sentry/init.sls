@@ -79,6 +79,9 @@ sentry_uwsgi:
     - require:
       - postgres_user: sentry
       - service: postgresql-server
+{% if pillar['sentry']['email']['method'] == "amazon_ses" %}
+      - pip: sentry
+{% endif %}
     - watch:
       - virtualenv: sentry
       - file: sentry

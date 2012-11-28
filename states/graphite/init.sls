@@ -25,7 +25,7 @@ graphite_root_logdir:
     - name: /var/log/graphite
     - user: root
     - group: root
-    - mode: 775
+    - mode: 555
     - makedirs: True
 
 graphite_logdir:
@@ -59,7 +59,7 @@ graphite_wsgi:
     - template: jinja
     - user: www-data
     - group: www-data
-    - mode: 400
+    - mode: 440
     - source: salt://graphite/wsgi.jinja2
     - require:
       - virtualenv: graphite-web
@@ -128,14 +128,13 @@ graphite-web:
     - watch:
       - file: graphite-web
 
-graphite_uwsgi:
+/etc/uwsgi/graphite.ini:
   file:
     - managed
-    - name: /etc/uwsgi/graphite.ini
     - template: jinja
     - user: www-data
     - group: www-data
-    - mode: 400
+    - mode: 440
     - source: salt://graphite/uwsgi.jinja2
     - require:
       - service: uwsgi_emperor
@@ -146,13 +145,23 @@ graphite_uwsgi:
       - file: graphite_logdir
       - module: graphite-web
       - file: /usr/local/graphite/bin/build-index.sh
-{#    - watch:#}
       - virtualenv: graphite-web
       - pip: graphite-web
       - file: graphite-web
       - postgres_user: graphite-web
       - postgres_database: graphite-web
       - file: graphite_graph_templates
+  module:
+    - wait
+    - name: file.touch
+    - require:
+      - file: /etc/uwsgi/graphite.ini
+    - m_name: /etc/uwsgi/graphite.ini
+    - watch:
+      - file: graphite_wsgi
+      - file: graphite_graph_templates
+      - pip: graphite-web
+      - file: graphite-web
 
 /usr/local/graphite/bin/build-index.sh:
   file:
@@ -174,7 +183,7 @@ graphite_uwsgi:
     - source: salt://graphite/nginx.jinja2
     - user: www-data
     - group: www-data
-    - mode: 400
+    - mode: 440
     - require:
       - file: graphite-web
       - pip: graphite-web
@@ -185,7 +194,7 @@ graphite_uwsgi:
     - template: jinja
     - user: nagios
     - group: nagios
-    - mode: 400
+    - mode: 440
     - source: salt://graphite/nrpe.jinja2
 
 extend:
@@ -200,4 +209,3 @@ extend:
   carbon_storage:
     file:
       - group: www-data
-      - mode: 770

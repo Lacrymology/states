@@ -33,7 +33,7 @@ git-server-key-{{ user }}:
     - directory
     - user: git
     - group: git
-    - mode: 700
+    - mode: 770
     - makedirs: True
     - require:
       - user: git-server

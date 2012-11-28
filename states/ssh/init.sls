@@ -7,7 +7,7 @@ include:
     - template: jinja
     - user: nagios
     - group: nagios
-    - mode: 600
+    - mode: 440
     - source: salt://ssh/nrpe.jinja2
 
 /root/.ssh/id_dsa:
@@ -16,7 +16,7 @@ include:
     - source: {{ pillar['deployment_key_source'] }}
     - user: root
     - group: root
-    - mode: 600
+    - mode: 400
 
 bitbucket.org:
   ssh_known_hosts:
@@ -39,7 +39,7 @@ openssh-server:
     - template: jinja
     - user: root
     - group: root
-    - mode: 644
+    - mode: 440
     - source: salt://ssh/server.jinja2
     - require:
       - pkg: openssh-server
@@ -63,7 +63,7 @@ openssh-client:
     - template: jinja
     - user: root
     - group: root
-    - mode: 644
+    - mode: 444
     - source: salt://ssh/client.jinja2
     - require:
       - pkg: openssh-client

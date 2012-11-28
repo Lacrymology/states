@@ -9,7 +9,7 @@ salt-repository:
     - name: /etc/apt/sources.list.d/saltstack-salt-{{ grains['lsb_codename'] }}.list
     - user: root
     - group: root
-    - mode: 600
+    - mode: 440
     - source: salt://salt/apt.jinja2
 
 {#
@@ -22,7 +22,7 @@ salt-patch:
     - source: salt://salt/git.py
     - user: root
     - group: root
-    - mode: 644
+    - mode: 444
 
 salt-minion:
   file:
@@ -31,7 +31,7 @@ salt-minion:
     - name: /etc/salt/minion
     - user: root
     - group: root
-    - mode: 600
+    - mode: 440
     - source: salt://salt/config.jinja2
   pkg:
     - latest
@@ -50,7 +50,7 @@ salt-minion:
     - template: jinja
     - user: nagios
     - group: nagios
-    - mode: 600
+    - mode: 440
     - source: salt://salt/nrpe.jinja2
 
 extend:

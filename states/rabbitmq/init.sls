@@ -15,7 +15,7 @@ rabbitmq_erlang_cookie:
     - template: jinja
     - user: rabbitmq
     - group: rabbitmq
-    - mode: 400
+    - mode: 440
     - source: salt://rabbitmq/cookie.jinja2
 
 rabbitmq-server:
@@ -100,7 +100,7 @@ diamond_rabbitmq:
     - name: /etc/diamond/collectors/RabbitMQCollector.conf
     - user: root
     - group: root
-    - mode: 600
+    - mode: 440
     - source: salt://rabbitmq/diamond.jinja2
     - require:
       - pip: diamond_rabbitmq
@@ -124,7 +124,7 @@ host_{{ node }}:
     - template: jinja
     - user: nagios
     - group: nagios
-    - mode: 600
+    - mode: 440
     - source: salt://rabbitmq/nrpe.jinja2
 
 extend:

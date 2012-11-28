@@ -9,7 +9,7 @@ statsd:
     - template: jinja
     - user: root
     - group: root
-    - mode: 600
+    - mode: 440
     - source: salt://statsd/upstart.jinja2
   virtualenv:
     - manage
@@ -29,7 +29,7 @@ statsd:
     - template: jinja
     - user: nagios
     - group: nagios
-    - mode: 600
+    - mode: 440
     - source: salt://statsd/nrpe.jinja2
 
 extend:

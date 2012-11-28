@@ -21,7 +21,7 @@ mongodb:
     - template: jinja
     - user: root
     - group: root
-    - mode: 600
+    - mode: 440
     - source: salt://mongodb/logrotate.jinja2
   service:
      - running
@@ -33,7 +33,7 @@ mongodb:
     - template: jinja
     - user: nagios
     - group: nagios
-    - mode: 600
+    - mode: 440
     - source: salt://mongodb/nrpe.jinja2
 
 extend:

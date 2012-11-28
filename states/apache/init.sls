@@ -5,5 +5,5 @@
     - template: jinja
     - user: root
     - group: root
-    - mode: 644
+    - mode: 444
     - source: salt://apache/config.jinja2

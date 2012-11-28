@@ -14,7 +14,7 @@ include:
     - template: jinja
     - user: nagios
     - group: nagios
-    - mode: 600
+    - mode: 440
     - source: salt://nginx/nrpe.jinja2
 
 nginx:
@@ -36,7 +36,7 @@ nginx:
     - template: jinja
     - user: root
     - group: root
-    - mode: 600
+    - mode: 440
     - source: salt://nginx/config.jinja2
     - require:
       - pkg: nginx
@@ -55,7 +55,7 @@ nginx_diamond_collector:
     - template: jinja
     - user: root
     - group: root
-    - mode: 600
+    - mode: 440
     - source: salt://nginx/diamond.jinja2
     - require:
       - file: nginx

@@ -10,7 +10,7 @@ carbon_upstart:
     - template: jinja
     - user: root
     - group: root
-    - mode: 600
+    - mode: 440
     - source: salt://carbon/upstart.jinja2
 
 carbon_logrotate:
@@ -20,7 +20,7 @@ carbon_logrotate:
     - template: jinja
     - user: root
     - group: root
-    - mode: 600
+    - mode: 440
     - source: salt://carbon/logrotate.jinja2
 
 carbon_logdir:
@@ -41,7 +41,7 @@ carbon_storage-schemas:
     - template: jinja
     - user: graphite
     - group: graphite
-    - mode: 600
+    - mode: 440
     - source: salt://carbon/storage.jinja2
     - require:
       - user: carbon
@@ -52,7 +52,7 @@ carbon_storage:
     - name: /var/lib/graphite
     - user: graphite
     - group: graphite
-    - mode: 700
+    - mode: 770
     - require:
       - user: carbon
 
@@ -91,7 +91,7 @@ carbon:
     - template: jinja
     - user: root
     - group: root
-    - mode: 644
+    - mode: 440
     - source: salt://carbon/config.jinja2
   service:
     - running
@@ -111,7 +111,7 @@ carbon:
     - template: jinja
     - user: nagios
     - group: nagios
-    - mode: 600
+    - mode: 440
     - source: salt://carbon/nrpe.jinja2
 
 extend:

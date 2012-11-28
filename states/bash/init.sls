@@ -7,7 +7,7 @@ bash:
     - template: jinja
     - user: root
     - group: root
-    - mode: 755
+    - mode: 555
     - source: salt://bash/ps1.jinja2
     - require:
       - pkg: bash

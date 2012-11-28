@@ -27,7 +27,7 @@ postgresql_diamond_collector:
     - template: jinja
     - user: root
     - group: root
-    - mode: 600
+    - mode: 440
     - source: salt://postgresql/diamond.jinja2
   postgres_user:
     - present
@@ -59,7 +59,7 @@ postgresql_diamond_collector:
     - template: jinja
     - user: nagios
     - group: nagios
-    - mode: 600
+    - mode: 440
     - source: salt://postgresql/nrpe.jinja2
 
 extend:

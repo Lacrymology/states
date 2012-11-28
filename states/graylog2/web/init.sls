@@ -13,7 +13,7 @@ graylog2-web-{{ filename }}:
     - template: jinja
     - user: root
     - group: root
-    - mode: 600
+    - mode: 440
     - source: salt://graylog2/web/{{ filename }}.jinja2
 {% endfor %}
 
@@ -23,7 +23,7 @@ graylog2-web_logdir:
     - name: /var/log/graylog2/
     - user: root
     - group: root
-    - mode: 700
+    - mode: 770
     - makedirs: True
 
 graylog2-web_logrotate:
@@ -33,7 +33,7 @@ graylog2-web_logrotate:
     - template: jinja
     - user: root
     - group: root
-    - mode: 600
+    - mode: 440
     - source: salt://graylog2/web/logrotate.jinja2
 
 graylog2-web:
@@ -67,7 +67,7 @@ graylog2-web:
     - template: jinja
     - user: root
     - group: root
-    - mode: 600
+    - mode: 440
     - source: salt://graylog2/web/upstart.jinja2
   service:
     - running
@@ -87,7 +87,7 @@ graylog2-web:
     - template: jinja
     - user: nagios
     - group: nagios
-    - mode: 600
+    - mode: 440
     - source: salt://graylog2/web/nrpe.jinja2
 
 extend:

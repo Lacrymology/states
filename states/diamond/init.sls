@@ -11,7 +11,7 @@ diamond_upstart:
     - template: jinja
     - user: root
     - group: root
-    - mode: 600
+    - mode: 440
     - source: salt://diamond/upstart.jinja2
 
 diamond:
@@ -30,7 +30,7 @@ diamond:
     - template: jinja
     - user: root
     - group: root
-    - mode: 644
+    - mode: 440
     - source: salt://diamond/config.jinja2
     - require:
       - virtualenv: diamond
@@ -68,7 +68,7 @@ diamond:
     - template: jinja
     - user: nagios
     - group: nagios
-    - mode: 600
+    - mode: 440
     - source: salt://diamond/nrpe.jinja2
 
 extend:

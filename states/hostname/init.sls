@@ -5,7 +5,7 @@ etc_hostname:
     - name: /etc/hostname
     - user: root
     - group: root
-    - mode: 644
+    - mode: 444
     - source: salt://hostname/hostname.jinja2
   host:
     - present

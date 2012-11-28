@@ -36,7 +36,7 @@ graylog2-server:
     - template: jinja
     - user: root
     - group: root
-    - mode: 600
+    - mode: 440
     - source: salt://graylog2/server/config.jinja2
   pkg:
     - latest
@@ -55,7 +55,7 @@ graylog2-server:
     - template: jinja
     - user: nagios
     - group: nagios
-    - mode: 600
+    - mode: 440
     - source: salt://graylog2/server/nrpe.jinja2
 
 extend:

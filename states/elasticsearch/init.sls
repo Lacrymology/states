@@ -10,7 +10,7 @@ include:
     - template: jinja
     - user: root
     - group: root
-    - mode: 644
+    - mode: 440
     - source: salt://elasticsearch/default.jinja2
     - require:
       - pkg_file: elasticsearch
@@ -21,7 +21,7 @@ include:
     - template: jinja
     - user: root
     - group: elasticsearch
-    - mode: 640
+    - mode: 440
     - source: salt://elasticsearch/logging.jinja2
     - require:
       - pkg_file: elasticsearch
@@ -32,7 +32,7 @@ include:
     - template: jinja
     - user: root
     - group: root
-    - mode: 755
+    - mode: 550
     - source: salt://elasticsearch/cron_daily.jinja2
 
 elasticsearch:
@@ -59,7 +59,7 @@ elasticsearch:
     - template: jinja
     - user: root
     - group: elasticsearch
-    - mode: 640
+    - mode: 440
     - source: salt://elasticsearch/config.jinja2
     - require:
       - pkg_file: elasticsearch
@@ -79,14 +79,14 @@ elasticsearch:
     - template: jinja
     - user: nagios
     - group: nagios
-    - mode: 600
+    - mode: 440
     - source: salt://elasticsearch/nrpe.jinja2
 
 /usr/local/bin/check_elasticsearch_cluster.py:
   file:
     - managed
     - source: salt://elasticsearch/check.py
-    - mode: 755
+    - mode: 555
     - require:
       - pip: nagios-nrpe-server
 
@@ -97,7 +97,7 @@ elasticsearch_diamond_collector:
     - template: jinja
     - user: root
     - group: root
-    - mode: 600
+    - mode: 440
     - source: salt://elasticsearch/diamond.jinja2
 
 extend:

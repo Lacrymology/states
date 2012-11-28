@@ -5,5 +5,5 @@
      - template: jinja
      - user: root
      - group: root
-     - mode: 644
+     - mode: 444
      - source: salt://motd/motd.jinja2

@@ -13,7 +13,7 @@ include:
     - template: jinja
     - user: root
     - group: root
-    - mode: 644
+    - mode: 440
     - source: salt://uwsgi/upstart.jinja2
 
 uwsgitop:
@@ -40,7 +40,7 @@ uwsgi_build:
     - template: jinja
     - user: root
     - group: root
-    - mode: 644
+    - mode: 440
     - source: salt://uwsgi/buildconf.jinja2
     - require:
       - git: uwsgi_build
@@ -60,7 +60,7 @@ uwsgi_sockets:
     - name: /var/run/uwsgi
     - user: www-data
     - group: www-data
-    - mode:
+    - mode: 770
     - require:
       - pkg: uwsgi_build
       - git: uwsgi_build
@@ -98,7 +98,7 @@ uwsgi_emperor:
     - template: jinja
     - user: nagios
     - group: nagios
-    - mode: 600
+    - mode: 440
     - source: salt://uwsgi/nrpe.jinja2
 
 extend:

@@ -4,7 +4,7 @@
     - source: salt://apt/apt.jinja2
     - user: root
     - group: root
-    - mode: 644
+    - mode: 444
 
 apt_sources:
   file:
@@ -13,7 +13,7 @@ apt_sources:
     - template: jinja
     - user: root
     - group: root
-    - mode: 644
+    - mode: 444
     - source: salt://apt/sources.jinja2
     - context:
       all_suites: main restricted universe multiverse

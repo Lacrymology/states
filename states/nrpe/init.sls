@@ -23,7 +23,7 @@ nagios-nrpe-server:
     - template: jinja
     - user: nagios
     - group: nagios
-    - mode: 600
+    - mode: 440
     - source: salt://nrpe/config.jinja2
     - require:
       - pkg: nagios-nrpe-server

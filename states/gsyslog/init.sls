@@ -20,7 +20,7 @@ gsyslog_upstart:
     - template: jinja
     - user: root
     - group: root
-    - mode: 600
+    - mode: 440
     - source: salt://gsyslog/upstart.jinja2
     - require:
       - service: sysklogd
@@ -32,7 +32,7 @@ gsyslog_logrotate:
     - template: jinja
     - user: root
     - group: root
-    - mode: 600
+    - mode: 440
     - source: salt://gsyslog/logrotate.jinja2
 
 gsyslog:
@@ -52,7 +52,7 @@ gsyslog:
     - template: jinja
     - user: root
     - group: root
-    - mode: 644
+    - mode: 440
     - source: salt://gsyslog/config.jinja2
   service:
     - running
@@ -71,7 +71,7 @@ gsyslog:
     - template: jinja
     - user: nagios
     - group: nagios
-    - mode: 600
+    - mode: 440
     - source: salt://gsyslog/nrpe.jinja2
 
 extend:

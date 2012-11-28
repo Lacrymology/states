@@ -18,7 +18,7 @@ include:
     - directory
     - user: shinken
     - group: shinken
-    - mode: 700
+    - mode: 770
     - require:
       - user: shinken
 
@@ -27,7 +27,7 @@ include:
     - directory
     - user: shinken
     - group: shinken
-    - mode: 700
+    - mode: 770
     - require:
       - user: shinken
 
@@ -68,7 +68,7 @@ shinken-{{ role }}:
     - template: jinja
     - user: shinken
     - group: shinken
-    - mode: 600
+    - mode: 440
     - source: salt://shinken/{% if role != 'arbiter' %}non_{% endif %}arbiter.jinja2
     - context:
       shinken_component: {{ role }}
@@ -92,7 +92,7 @@ shinken-{{ role }}:
     - template: jinja
     - user: shinken
     - group: shinken
-    - mode: 600
+    - mode: 440
     - source: salt://shinken/{{ config }}.jinja2
     {% endfor %}
 
@@ -104,7 +104,7 @@ shinken-{{ role }}:
     - template: jinja
     - user: root
     - group: root
-    - mode: 644
+    - mode: 440
     - source: salt://shinken/upstart.jinja2
     - context:
       shinken_component: {{ role }}
@@ -115,7 +115,7 @@ shinken-{{ role }}:
     - template: jinja
     - user: nagios
     - group: nagios
-    - mode: 600
+    - mode: 440
     - source: salt://shinken/nrpe.jinja2
     - context:
       shinken_component: {{ role }}

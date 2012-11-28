@@ -1,11 +1,12 @@
 include:
+  - apt
   - nrpe
 
 salt-repository:
   file:
     - managed
     - template: jinja
-    - name: /etc/apt/sources.list.d/saltstack-salt.list
+    - name: /etc/apt/sources.list.d/saltstack-salt-{{ grains['lsb_codename'] }}.list
     - user: root
     - group: root
     - mode: 600
@@ -34,8 +35,8 @@ salt-minion:
     - source: salt://salt/config.jinja2
   pkg:
     - latest
-    - watch:
-      - file: salt-repository
+    - require:
+      - module: apt_sources
   service:
     - running
     - watch:
@@ -57,3 +58,7 @@ extend:
     service:
       - watch:
         - file: /etc/nagios/nrpe.d/salt-minion.cfg
+  apt_sources:
+    module:
+      - watch:
+        - file: salt-repository

@@ -47,30 +47,6 @@ sentry:
     - require:
       - postgres_user: sentry
       - service: postgresql-server
-
-{% if pillar['sentry']['email']['method'] == "amazon_ses" %}
-  pip:
-    - installed
-    - bin_env: /usr/local/sentry
-    - names:
-      - boto==2.6.0
-      - django_ses==0.4.1
-    - require:
-      - virtualenv: sentry
-{% endif %}
-
-sentry_uwsgi:
-  file:
-    - managed
-    - name: /etc/uwsgi/sentry.ini
-    - template: jinja
-    - user: www-data
-    - group: www-data
-    - mode: 600
-    - source: salt://sentry/uwsgi.jinja2
-    - require:
-      - service: uwsgi_emperor
-      - cmd: sentry_uwsgi
   cmd:
     - wait
     - stateful: False
@@ -86,6 +62,39 @@ sentry_uwsgi:
     - watch:
       - virtualenv: sentry
       - file: sentry
+
+{% if pillar['sentry']['email']['method'] == "amazon_ses" %}
+  pip:
+    - installed
+    - bin_env: /usr/local/sentry
+    - names:
+      - boto==2.6.0
+      - django_ses==0.4.1
+    - require:
+      - virtualenv: sentry
+{% endif %}
+
+/etc/uwsgi/sentry.ini:
+  file:
+    - managed
+    - template: jinja
+    - user: www-data
+    - group: www-data
+    - mode: 600
+    - source: salt://sentry/uwsgi.jinja2
+    - require:
+      - service: uwsgi_emperor
+      - cmd: sentry
+{#  module:#}
+{#    - wait#}
+{#    - name: file.touch#}
+{#    - kwargs:#}
+{#      name: /etc/uwsgi/sentry.ini#}
+{#    - require:#}
+{#      - file: /etc/uwsgi/sentry.ini#}
+{#    - watch:#}
+{#      - file: sentry#}
+{#      - virtualenv: sentry#}
 
 /etc/nagios/nrpe.d/sentry.cfg:
   file:

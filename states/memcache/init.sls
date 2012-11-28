@@ -7,6 +7,8 @@ memcached:
     - latest
   service:
     - running
+    - require:
+      - pkg: memcached
 
 /etc/nagios/nrpe.d/memcache.cfg:
   file:
@@ -14,7 +16,7 @@ memcached:
     - template: jinja
     - user: nagios
     - group: nagios
-    - mode: 600
+    - mode: 440
     - source: salt://memcache/nrpe.jinja2
 
 memcached_diamond_collector:
@@ -24,7 +26,7 @@ memcached_diamond_collector:
     - template: jinja
     - user: root
     - group: root
-    - mode: 600
+    - mode: 440
     - source: salt://memcache/diamond.jinja2
 
 extend:

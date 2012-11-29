@@ -2,8 +2,6 @@ include:
   - diamond
   - nrpe
 
-{# TODO: use elasticsearch as gid and uid #}
-
 /etc/default/elasticsearch:
   file:
     - managed
@@ -19,7 +17,7 @@ include:
   file:
     - managed
     - template: jinja
-    - user: root
+    - user: elasticsearch
     - group: elasticsearch
     - mode: 440
     - source: salt://elasticsearch/logging.jinja2
@@ -57,7 +55,7 @@ elasticsearch:
     - managed
     - name: /etc/elasticsearch/elasticsearch.yml
     - template: jinja
-    - user: root
+    - user: elasticsearch
     - group: elasticsearch
     - mode: 440
     - source: salt://elasticsearch/config.jinja2

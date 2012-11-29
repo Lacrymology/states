@@ -51,6 +51,7 @@ diamond:
       - virtualenv: diamond
       - file: diamond
       - file: diamond_upstart
+      - pip: diamond
 
 {#
 archive of installation trough debian package

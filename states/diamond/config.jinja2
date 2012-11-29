@@ -141,31 +141,17 @@ keys = root
 keys = formatter
 
 [logger_root]
-
 # to increase verbosity, set DEBUG
 level = INFO
-handlers = syslog
+handlers = handler
 
 [handler_handler]
-{% if 'graylog2_address' in pillar %}
-[handler_gelf]
 class=graypy.handler.GELFHandler
 level=DEBUG
-formatter=message_only
+formatter=formatter
 args = ('{{ pillar['graylog2_address'] }}', 12201)
-{% else %}
-class = handlers.SysLogHandler
-level = DEBUG
-formatter = syslog
-args = ('/dev/log',)
-{% endif %}
 
 [formatter_formatter]
-class = logging.Formatter=
-{% if 'graylog2_address' in pillar %}
+class = logging.Formatter
 format = %(message)s
 datefmt =
-{% else %}
-format = %(asctime)-15s diamond[%(process)d] %(message)s
-datefmt = %b %d %H:%M:%S
-{% endif %}

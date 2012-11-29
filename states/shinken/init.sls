@@ -13,7 +13,8 @@ include:
 
 {% set configs = ('architecture',) %}
 
-/var/log/shinken:
+{% for dirname in ('log', 'lib') %}
+/var/{{ dirname }}/shinken:
   file:
     - directory
     - user: shinken
@@ -21,13 +22,14 @@ include:
     - mode: 770
     - require:
       - user: shinken
+{% endfor %}
 
-/var/lib/shinken:
+/etc/shinken:
   file:
     - directory
     - user: shinken
     - group: shinken
-    - mode: 770
+    - mode: 550
     - require:
       - user: shinken
 

@@ -29,7 +29,7 @@ collectors_reload_interval = 3600
 [handlers]
 
 # logging handlers
-keys = syslog
+keys = handler
 
 [[default]]
 
@@ -39,6 +39,8 @@ host = {{ pillar['graphite_address'] }}
 
 # Port to send metrics to
 port = 2003
+
+batch = 256
 
 # Socket timeout (seconds)
 timeout = 15
@@ -136,7 +138,7 @@ keys = root
 
 [formatters]
 
-keys = syslog
+keys = formatter
 
 [logger_root]
 
@@ -144,12 +146,26 @@ keys = syslog
 level = INFO
 handlers = syslog
 
-[handler_syslog]
+[handler_handler]
+{% if 'graylog2_address' in pillar %}
+[handler_gelf]
+class=graypy.handler.GELFHandler
+level=DEBUG
+formatter=message_only
+args = ('{{ pillar['graylog2_address'] }}', 12201)
+{% else %}
 class = handlers.SysLogHandler
 level = DEBUG
 formatter = syslog
 args = ('/dev/log',)
+{% endif %}
 
-[formatter_syslog]
+[formatter_formatter]
+class = logging.Formatter=
+{% if 'graylog2_address' in pillar %}
+format = %(message)s
+datefmt =
+{% else %}
 format = %(asctime)-15s diamond[%(process)d] %(message)s
 datefmt = %b %d %H:%M:%S
+{% endif %}

@@ -5,7 +5,7 @@ raven:
   pip:
     - installed
     - upgrade: True
-    - name: raven
+    - name: ''
     - requirements: salt://raven/requirements.txt
     - require:
       - pkg: python-pip

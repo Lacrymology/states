@@ -32,6 +32,8 @@ sentry:
     - source: salt://sentry/config.jinja2
     - require:
       - pkg: nginx
+      - virtualenv: sentry
+      - postgres_database: sentry
   postgres_user:
     - present
     - name: {{ pillar['sentry']['db']['username'] }}
@@ -54,11 +56,30 @@ sentry:
     - group: www-data
     - name: /usr/local/sentry/bin/sentry --config=/etc/sentry.conf.py upgrade --noinput
     - require:
-      - postgres_user: sentry
-      - service: postgresql-server
+      - cmd: sentry-migrate-fake
     - watch:
       - virtualenv: sentry
       - file: sentry
+
+sentry-syncdb-all:
+  cmd:
+    - wait
+    - name: /usr/local/sentry/bin/sentry --config=/etc/sentry.conf.py syncdb --all --noinput
+    - stateful: False
+    - require:
+      - file: sentry
+    - watch:
+      - postgres_database: sentry
+
+sentry-migrate-fake:
+  cmd:
+    - wait
+    - name: /usr/local/sentry/bin/sentry --config=/etc/sentry.conf.py migrate --fake --noinput
+    - stateful: False
+    - require:
+      - file: sentry
+    - watch:
+      - cmd: sentry-syncdb-all
 
 /etc/uwsgi/sentry.ini:
   file:

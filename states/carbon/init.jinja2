@@ -1,0 +1,5 @@
+#!/bin/sh
+
+/usr/local/graphite/bin/python /usr/local/graphite/bin/carbon-cache.py --config=/etc/graphite/carbon.conf --instance={{ instance }} $1
+
+exit 0

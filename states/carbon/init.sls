@@ -3,16 +3,6 @@ include:
   - virtualenv
   - nrpe
 
-carbon_upstart:
-  file:
-    - managed
-    - name: /etc/init/carbon.conf
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 440
-    - source: salt://carbon/upstart.jinja2
-
 carbon_logrotate:
   file:
     - managed
@@ -60,25 +50,19 @@ carbon:
   virtualenv:
     - managed
     - name: /usr/local/graphite
-    - requirements: salt://carbon/requirements.txt
     - require:
       - pkg: python-virtualenv
-  git:
-    - latest
-    - name: git://github.com/graphite-project/carbon.git
-    - rev: ee5cc3fd3b7db271444d480476468461cda2d34b
-    - target: /usr/local/graphite/src/carbon
   pip:
     - installed
-    - name: /usr/local/graphite/src/carbon
+    - name: ''
     - bin_env: /usr/local/graphite/bin/pip
+    - requirements: salt://carbon/requirements.txt
     - install_options:
       - "--prefix=/usr/local/graphite"
       - "--install-lib=/usr/local/graphite/lib/python2.7/site-packages"
     - require:
       - virtualenv: carbon
       - pkg: python-virtualenv
-      - git: carbon
   user:
     - present
     - name: graphite
@@ -93,18 +77,48 @@ carbon:
     - group: root
     - mode: 440
     - source: salt://carbon/config.jinja2
+
+{#
+ # until https://github.com/graphite-project/carbon/commit/2a6dbe680c973c54c5426eb4248f90ca798595c1
+ # is merged in a stable release
+ #}
+carbon-patch:
+  file:
+    - managed
+    - name: /usr/local/graphite/lib/python2.7/site-packages/carbon/writer.py
+    - user: root
+    - group: root
+    - mode: 644
+    - source: salt://carbon/writer.py
+
+{% for instance in ('a',) %}
+carbon-{{ instance }}:
+  file:
+    - managed
+    - name: /etc/init.d/carbon-{{ instance }}
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 550
+    - source: salt://carbon/init.jinja2
+    - context:
+      instance: a
   service:
     - running
+    - name: carbon-{{ instance }}
     - require:
       - user: carbon
       - file: carbon_logdir
       - file: carbon_storage
-      - file: carbon_upstart
+      - file: carbon-{{ instance }}
+      - file: carbon-patch
     - watch:
       - pip: carbon
       - file: carbon
       - file: carbon_storage-schemas
       - virtualenv: carbon
+      - file: carbon-{{ instance }}
+{% endfor %}
 
 /etc/nagios/nrpe.d/carbon.cfg:
   file.managed:

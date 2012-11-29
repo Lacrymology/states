@@ -15,14 +15,16 @@ salt-repository:
 {#
  this is until 0.16 is out
  #}
-salt-patch:
+{% for patched_file, source in (('states/git', 'git'), ('modules/djangomod', 'djangomod')) %}
+salt-patch-{{ patched_file }}:
   file:
     - managed
-    - name: /usr/share/pyshared/salt/states/git.py
-    - source: salt://salt/git.py
+    - name: /usr/share/pyshared/salt/{{ patched_file }}.py
+    - source: salt://salt/{{ source }}.py
     - user: root
     - group: root
     - mode: 444
+{% endfor %}
 
 salt-minion:
   file:
@@ -40,7 +42,8 @@ salt-minion:
   service:
     - running
     - watch:
-      - file: salt-patch
+      - file: salt-patch-1
+      - file: salt-patch-2
       - pkg: salt-minion
       - file: salt-minion
 

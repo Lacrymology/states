@@ -121,11 +121,15 @@ shinken-{{ role }}:
     - source: salt://shinken/nrpe.jinja2
     - context:
       shinken_component: {{ role }}
+{% endif %}
+{% endfor %}
 
 extend:
   nagios-nrpe-server:
     service:
       - watch:
+{% for role in ('arbiter', 'broker', 'reactionner', 'receiver', 'scheduler', 'poller') %}
+{% if grains['id'] in pillar['shinken']['architecture'][role] %}
         - file: /etc/nagios/nrpe.d/shinken-{{ role }}.cfg
 {% endif %}
 {% endfor %}

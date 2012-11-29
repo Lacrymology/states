@@ -208,4 +208,4 @@ extend:
         - file: /etc/nginx/conf.d/graphite.conf
   carbon_storage:
     file:
-      - group: www-data
+      - user: www-data

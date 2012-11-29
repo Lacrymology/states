@@ -89,6 +89,7 @@ uwsgi_emperor:
     - name: /etc/uwsgi
     - user: www-data
     - group: www-data
+    - mode: 550
     - require:
       - pkg: nginx
 

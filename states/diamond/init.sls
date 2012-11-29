@@ -4,6 +4,13 @@ include:
   - virtualenv
   - nrpe
 
+/etc/diamond/collectors:
+  file:
+    - directory
+    - user: root
+    - group: root
+    - mode: 550
+
 diamond_upstart:
   file:
     - managed
@@ -17,8 +24,12 @@ diamond_upstart:
 diamond:
   virtualenv:
     - manage
+    - upgrade: True
     - name: /usr/local/diamond
-    - no_site_packages: True
+  pip:
+    - installed
+    - name: ''
+    - upgrade: True
     - requirements: salt://diamond/requirements.txt
     - require:
       - pkg: git

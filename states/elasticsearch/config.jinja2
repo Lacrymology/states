@@ -43,6 +43,6 @@ discovery:
       unicast:
         hosts: [
 {%- for node in pillar['elasticsearch']['cluster']['nodes'] -%}
-"{{ pillar['ip_addresses'][node] }}"{% if not loop.last %}, {% endif -%}
+"{{ node }}"{% if not loop.last %}, {% endif -%}
 {%- endfor %}]
 {% endif %}

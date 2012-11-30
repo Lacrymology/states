@@ -1,2 +1,2 @@
 # {{ pillar['message_do_not_modify'] }}
-allowed_hosts={{ pillar['shinken_poller_address'] }}
+allowed_hosts={% for host in pillar['shinken_pollers'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}

@@ -4,6 +4,24 @@ include:
   - pip
   - mercurial
 
+nagiosplugin:
+  hg:
+    - latest
+    - name: https://bitbucket.org/gocept/nagiosplugin
+    - rev: e19416f378f72de7acd6d88068562cef2b4f7119
+    - target: /usr/local/nagiosplugin
+    - require:
+      - pkg: mercurial
+  module:
+    - wait
+    - name: pip.install
+    - pkgs: /usr/local/nagiosplugin
+    - upgrade: True
+    - require:
+      - pkg: python-pip
+    - watch:
+      - hg: nagiosplugin
+
 nagios-nrpe-server:
   pkg:
     - latest
@@ -11,12 +29,6 @@ nagios-nrpe-server:
       - nagios-nrpe-server
       - nagios-plugins-standard
       - nagios-plugins-basic
-  pip:
-    - installed
-    - upgrade: True
-    - repo: hg+https://bitbucket.org/gocept/nagiosplugin#egg=nagiosplugin
-    - require:
-      - pkg: python-pip
   file:
     - managed
     - name: /etc/nagios/nrpe.d/000-nagios-servers.cfg

@@ -21,20 +21,36 @@ diamond_upstart:
     - mode: 440
     - source: salt://diamond/upstart.jinja2
 
+diamond_requirements:
+  file:
+    - managed
+    - name: /usr/local/diamond/salt-requirements.txt
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - source: salt://diamond/requirements.jinja2
+    - require:
+      - virtualenv: diamond
+
 diamond:
   virtualenv:
     - manage
     - upgrade: True
     - name: /usr/local/diamond
-  pip:
-    - installed
-    - name: ''
+  module:
+    - wait
+    - name: pip.install
     - upgrade: True
-    - requirements: salt://diamond/requirements.txt
+    - pkgs: ''
+    - bin_env: /usr/local/diamond
+    - requirements: /usr/local/diamond/salt-requirements.txt
     - require:
       - pkg: git
       - pkg: python-virtualenv
       - file: diamond_upstart
+    - watch:
+      - file: diamond_requirements
   file:
     - managed
     - name: /etc/diamond/diamond.conf
@@ -51,7 +67,7 @@ diamond:
       - virtualenv: diamond
       - file: diamond
       - file: diamond_upstart
-      - pip: diamond
+      - module: diamond
 
 {#
 archive of installation trough debian package

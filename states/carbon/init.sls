@@ -46,23 +46,39 @@ carbon_storage:
     - require:
       - user: carbon
 
+carbon_requirements:
+  file:
+    - managed
+    - name: /usr/local/graphite/salt-requirements.txt
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - source: salt://carbon/requirements.jinja2
+    - require:
+      - virtualenv: carbon
+
 carbon:
   virtualenv:
     - managed
     - name: /usr/local/graphite
     - require:
       - pkg: python-virtualenv
-  pip:
-    - installed
-    - name: ''
+  module:
+    - wait
+    - name: pip.install
+    - pkgs: ''
+    - upgrade: True
     - bin_env: /usr/local/graphite/bin/pip
-    - requirements: salt://carbon/requirements.txt
+    - requirements: /usr/local/graphite/salt-requirements.txt
     - install_options:
       - "--prefix=/usr/local/graphite"
       - "--install-lib=/usr/local/graphite/lib/python2.7/site-packages"
     - require:
       - virtualenv: carbon
       - pkg: python-virtualenv
+    - watch:
+      - file: carbon_requirements
   user:
     - present
     - name: graphite

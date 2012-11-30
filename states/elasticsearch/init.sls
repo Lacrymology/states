@@ -86,7 +86,7 @@ elasticsearch:
     - source: salt://elasticsearch/check.py
     - mode: 555
     - require:
-      - pip: nagios-nrpe-server
+      - module: nagiosplugin
 
 elasticsearch_diamond_collector:
   file:

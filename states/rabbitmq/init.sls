@@ -114,7 +114,7 @@ host_{{ node }}:
   host:
     - present
     - name: {{ node }}
-    - ip: {{ salt['publish.publish'](node, 'grains.item', 'privateIp')[node] }}
+    - ip: {{ pillar['ip_addresses'][node] }}
     {% endif %}
 {% endfor %}
 

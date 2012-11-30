@@ -1,6 +1,6 @@
 {# TODO: add support for GELF logging #}
 
-master: {{ pillar['salt']['master'] }}
+master: {{ pillar['ip_addresses'][pillar['salt']['master']] }}
 id: {{ grains['id'] }}
 
 #log_file: /var/log/salt/minion

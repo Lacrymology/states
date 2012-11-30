@@ -44,7 +44,7 @@ def joined(master, user, password, disk_node=False, env=(),
     if len(listeners) == 1:
         log.info("Only one listener, not in cluster")
         if disk_node:
-            command_add = 'rabbitmqctl join_cluster --disc rabbit@%s' % master
+            command_add = 'rabbitmqctl join_cluster rabbit@%s' % master
         else:
             command_add = 'rabbitmqctl join_cluster --ram rabbit@%s' % master
         commands = (

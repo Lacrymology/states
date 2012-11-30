@@ -4,6 +4,8 @@ useless_kmod:
     - absent
     - names:
       - lp
+      - floppy
+      - parport_pc
       - parport
       - psmouse
       - reiserfs

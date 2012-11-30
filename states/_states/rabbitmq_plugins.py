@@ -31,7 +31,7 @@ def disabled(name, runas=None, env=None):
         return ret
 
     ret = {'name': name, 'result': None, 'comment': '', 'changes': {}}
-    plugins = __salt__['rabbitmq_plugins.list'](env, runas)
+    plugins = __salt__['rabbitmq_plugins.list'](runas, env)
     if name not in plugins:
         ret['result'] = True
         ret['comment'] = 'Plugin is not available to disable.'
@@ -42,7 +42,7 @@ def disabled(name, runas=None, env=None):
         ret['comment'] = 'Plugin is already disabled.'
         return ret
 
-    if __salt__['rabbitmq_plugins.disable'](name, env, runas):
+    if __salt__['rabbitmq_plugins.disable'](name, runas, env):
         ret['result'] = True
         ret['changes'][name] = 'Disabled'
         ret['comment'] = 'Plugin was successfully disabled.'
@@ -64,9 +64,9 @@ def enabled(name, runas=None, env=None):
         ret['comment'] = 'The plugin {0} would have been enabled'.format(name)
         return ret
 
-    plugins = __salt__['rabbitmq_plugins.list'](env, runas)
+    plugins = __salt__['rabbitmq_plugins.list'](runas, env)
     if name not in plugins:
-        ret['result'] = True
+        ret['result'] = False
         ret['comment'] = 'Plugin is not available to enable.'
         return ret
 
@@ -75,7 +75,7 @@ def enabled(name, runas=None, env=None):
         ret['comment'] = 'Plugin is already enabled.'
         return ret
 
-    if __salt__['rabbitmq_plugins.enable'](name, env, runas):
+    if __salt__['rabbitmq_plugins.enable'](name, runas, env):
         ret['result'] = True
         ret['changes'][name] = 'Enabled'
         ret['comment'] = 'Plugin was successfully enabled.'

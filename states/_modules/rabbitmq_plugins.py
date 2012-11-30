@@ -24,9 +24,12 @@ def __virtual__():
 
 def _convert_env(env):
     output = {}
-    for var in env.split():
-        k, v = var.split('=')
-        output[k] = v
+    try:
+        for var in env.split():
+            k, v = var.split('=')
+            output[k] = v
+    except AttributeError:
+        pass
     return output
 
 def _rabbitmq_plugins(command, runas=None, env=()):
@@ -41,7 +44,7 @@ def _rabbitmq_plugins(command, runas=None, env=()):
     else:
         return False
 
-def list(runas=None, env=()):
+def list(runas=None, env=None):
     '''
     Return list of plugins: name, state and version
     '''
@@ -61,13 +64,13 @@ def list(runas=None, env=()):
             log.warning("line '%s' is invalid", line)
     return plugins
 
-def enable(name, runas=None, env=()):
+def enable(name, runas=None, env=None):
     '''
     Turn on a rabbitmq plugin
     '''
     return _rabbitmq_plugins('enable %s' % name, runas=runas, env=env)
 
-def disable(name, runas=None, env=()):
+def disable(name, runas=None, env=None):
     '''
     Turn off a rabbitmq plugin
     '''

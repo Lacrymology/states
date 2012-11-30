@@ -5,6 +5,8 @@ useless_kmod:
     - names:
       - lp
       - floppy
+      - ppdev
+      - serio_raw
       - parport_pc
       - parport
       - psmouse

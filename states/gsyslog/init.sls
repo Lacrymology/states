@@ -54,6 +54,8 @@ gsyslog:
   virtualenv:
     - managed
     - name: /usr/local/gsyslog
+    - require:
+      - pkg: python-virtualenv
   module:
     - wait
     - name: pip.install

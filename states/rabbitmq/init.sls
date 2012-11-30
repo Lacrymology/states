@@ -15,8 +15,10 @@ rabbitmq_erlang_cookie:
     - template: jinja
     - user: rabbitmq
     - group: rabbitmq
-    - mode: 440
+    - mode: 400
     - source: salt://rabbitmq/cookie.jinja2
+    - require:
+      - pkg: rabbitmq-server
 
 rabbitmq-server:
   apt_repository:
@@ -31,7 +33,6 @@ rabbitmq-server:
     - latest
     - require:
       - apt_repository: rabbitmq-server
-      - file: rabbitmq_erlang_cookie
   file:
     - directory
     - name: /etc/rabbitmq/rabbitmq.conf.d

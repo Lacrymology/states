@@ -8,7 +8,19 @@ include:
 
 {% set master_id = pillar['rabbitmq']['cluster']['master'] %}
 
+{#
+ # if the cookie is changed before it's turned off
+ # the shutdown process cannot be performed.
+ # so, do it only 1 time (when the APT repo is added)
+ #}
 rabbitmq_erlang_cookie:
+  service:
+    - dead
+    - name: rabbitmq-server
+    - watch:
+      - apt_repository: rabbitmq-server
+    - require:
+      - pkg: rabbitmq-server
   file:
     - managed
     - name: /var/lib/rabbitmq/.erlang.cookie
@@ -18,6 +30,8 @@ rabbitmq_erlang_cookie:
     - mode: 400
     - source: salt://rabbitmq/cookie.jinja2
     - require:
+      - service: rabbitmq_erlang_cookie
+    - watch:
       - pkg: rabbitmq-server
 
 rabbitmq-server:

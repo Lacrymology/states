@@ -38,7 +38,8 @@ diamond:
     - manage
     - upgrade: True
     - name: /usr/local/diamond
-    - pkg: python-virtualenv
+    - require:
+      - pkg: python-virtualenv
   module:
     - wait
     - name: pip.install

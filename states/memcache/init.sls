@@ -3,11 +3,20 @@ include:
   - nrpe
 
 memcached:
+  file:
+    - managed
+    - name: /etc/memcached.conf
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 444
+    - source: salt://memcache/config.jinja2
   pkg:
     - latest
   service:
     - running
-    - require:
+    - watch:
+      - file: memcached
       - pkg: memcached
 
 /etc/nagios/nrpe.d/memcache.cfg:

@@ -1,16 +1,10 @@
 include:
-  - apt
   - nrpe
 
-salt-repository:
-  file:
-    - managed
-    - template: jinja
-    - name: /etc/apt/sources.list.d/saltstack-salt-{{ grains['lsb_codename'] }}.list
-    - user: root
-    - group: root
-    - mode: 440
-    - source: salt://salt/apt.jinja2
+{#
+ # echo 'deb http://ppa.launchpad.net/saltstack/salt/ubuntu precise main' > /etc/apt/sources.list.d/saltstack-salt-precise.list
+ # apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 0E27C0A6
+ #}
 
 {#
  this is until 0.16 is out
@@ -27,6 +21,11 @@ salt-patch-{{ source }}:
 {% endfor %}
 
 salt-minion:
+  apt_repository:
+    - ubuntu_ppa
+    - user: saltstack
+    - name: salt
+    - key_id: 0E27C0A6
   file:
     - managed
     - template: jinja
@@ -37,8 +36,6 @@ salt-minion:
     - source: salt://salt/config.jinja2
   pkg:
     - latest
-    - require:
-      - module: apt_sources
   service:
     - running
     - watch:
@@ -61,7 +58,4 @@ extend:
     service:
       - watch:
         - file: /etc/nagios/nrpe.d/salt-minion.cfg
-  apt_sources:
-    module:
-      - watch:
-        - file: salt-repository
+

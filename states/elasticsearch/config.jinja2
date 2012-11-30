@@ -34,4 +34,15 @@ indices:
   recovery:
     max_size_per_sec: 0
     concurrent_streams: 5
+{% else %}
+discovery:
+  zen:
+    ping:
+      multicast:
+        enabled: false
+      unicast:
+        hosts: [
+{%- for node in pillar['elasticsearch']['cluster']['nodes'] -%}
+"{{ pillar['ip_addresses'][node] }}"{% if not loop.last %}, {% endif -%}
+{%- endfor %}]
 {% endif %}

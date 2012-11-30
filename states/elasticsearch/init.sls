@@ -1,6 +1,7 @@
 include:
   - diamond
   - nrpe
+  - requests
 
 /etc/default/elasticsearch:
   file:
@@ -33,16 +34,25 @@ include:
     - mode: 550
     - source: salt://elasticsearch/cron_daily.jinja2
 
+{% if grains['cpuarch'] == 'i686' %}
+/usr/lib/jvm/java-7-openjdk:
+  file:
+    - symlink
+    - target: /usr/lib/jvm/java-7-openjdk-i386
+{% endif %}
+
 elasticsearch:
   pkg:
     - latest
     - name: openjdk-7-jre-headless
+{% if 'aws' in pillar['elasticsearch'] %}
   elasticsearch_plugins:
     - installed
     - name: cloud-aws
     - url: elasticsearch/elasticsearch-cloud-aws/{{ pillar['elasticsearch']['elasticsearch-cloud-aws_version'] }}
     - require:
       - pkg_file: elasticsearch
+{% endif %}
   pkg_file:
     - installed
     - name: elasticsearch
@@ -69,7 +79,12 @@ elasticsearch:
       - file: elasticsearch
       - pkg_file: elasticsearch
       - pkg: elasticsearch
+{% if grains['cpuarch'] == 'i686' %}
+      - file: /usr/lib/jvm/java-7-openjdk
+{% endif %}
+{% if 'aws' in pillar['elasticsearch'] %}
       - elasticsearch_plugins: elasticsearch
+{% endif %}
 
 /etc/nagios/nrpe.d/elasticsearch.cfg:
   file:
@@ -87,6 +102,7 @@ elasticsearch:
     - mode: 555
     - require:
       - module: nagiosplugin
+      - pkg: requests
 
 elasticsearch_diamond_collector:
   file:

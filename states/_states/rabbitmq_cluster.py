@@ -40,9 +40,10 @@ def joined(master, user, password, disk_node=False, env=(),
             master)
         return ret
 
-    listeners = __salt__['rabbitmq_cluster.listeners'](host, user, password)
-    if len(listeners) == 1:
-        log.info("Only one listener, not in cluster")
+    cluster_status = 'rabbitmqctl cluster_status | grep -q %s' % master
+    code = __salt__['cmd.retcode'](cluster_status, env=_env)
+    if code == 1:
+        log.info("Not joined")
         if disk_node:
             command_add = 'rabbitmqctl join_cluster rabbit@%s' % master
         else:
@@ -64,8 +65,8 @@ def joined(master, user, password, disk_node=False, env=(),
                 ret['comment'] = sub_ret['stdout']
                 return ret
 
-        listeners = __salt__['rabbitmq_cluster.listeners'](host, user, password)
-        if len(listeners) == 1:
+        code = __salt__['cmd.retcode'](cluster_status, env=_env)
+        if code == 1:
             ret['result'] = False
             ret['comment'] = "Can't add to master %s" % master
         else:
@@ -73,5 +74,5 @@ def joined(master, user, password, disk_node=False, env=(),
             ret['comment'] = "Added to master %s" % master
     else:
         ret['result'] = True
-        ret['comment'] = "%d listener, already in cluster" % len(listeners)
+        ret['comment'] = "already in cluster"
     return ret

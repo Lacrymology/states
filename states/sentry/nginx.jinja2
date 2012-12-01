@@ -1,7 +1,7 @@
 # {{ pillar['message_do_not_modify'] }}
 
 upstream sentry {
-    server unix:///var/run/uwsgi/sentry.sock;
+    server unix:///var/lib/uwsgi/sentry.sock;
 }
 
 server {

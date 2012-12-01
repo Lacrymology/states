@@ -57,7 +57,7 @@ uwsgi_build:
 uwsgi_sockets:
   file:
     - directory
-    - name: /var/run/uwsgi
+    - name: /var/lib/uwsgi
     - user: www-data
     - group: www-data
     - mode: 770

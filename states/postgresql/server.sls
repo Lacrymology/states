@@ -20,6 +20,30 @@ postgresql-server:
     - watch:
       - pkg: postgresql-server
 
+diamond_collector-psycopg2:
+  file:
+    - managed
+    - name: /usr/local/diamond/salt-postgresql-requirements.txt
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - source: salt://postgresql/requirements.jinja2
+    - require:
+      - virtualenv: diamond
+  module:
+    - wait
+    - name: pip.install
+    - upgrade: True
+    - pkgs: ''
+    - bin_env: /usr/local/diamond
+    - requirements: /usr/local/diamond/salt-postgresql-requirements.txt
+    - require:
+      - pkg: postgresql-dev
+      - pkg: python-virtualenv
+    - watch:
+      - file: diamond_collector-psycopg2
+
 postgresql_diamond_collector:
   file:
     - managed
@@ -44,14 +68,6 @@ postgresql_diamond_collector:
     - runas: postgres
     - require:
       - postgres_user: postgresql_diamond_collector
-  pip:
-    - installed
-    - upgrade: True
-    - name: psycopg2
-    - bin_env: /usr/local/diamond/bin/pip
-    - require:
-      - pkg: python-pip
-      - pkg: postgresql-dev
 
 /etc/nagios/nrpe.d/postgresql.cfg:
   file:
@@ -67,8 +83,8 @@ extend:
     service:
       - watch:
         - file: postgresql_diamond_collector
-        - postgres_user: postgresql_diamond_collector
-        - pkg: postgresql-dev
+        - module: diamond_collector-psycopg2
+        - postgres_database: postgresql_diamond_collector
   nagios-nrpe-server:
     service:
       - watch:

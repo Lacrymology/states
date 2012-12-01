@@ -75,6 +75,7 @@ uwsgi_emperor:
       - pkg: uwsgi_build
       - git: uwsgi_build
       - file: uwsgi_build
+      - cmd: uwsgi_build
   service:
     - name: uwsgi
     - running

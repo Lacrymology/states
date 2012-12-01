@@ -2,6 +2,7 @@ include:
   - ruby
   - nrpe
   - mongodb
+  - nginx
 
 {% set web_root_dir = '/usr/local/graylog2-web-interface-' + pillar['graylog2']['web']['version'] %}
 
@@ -82,6 +83,15 @@ graylog2-web:
       - file: graylog2-web-{{ filename }}
 {% endfor %}
 
+/etc/nginx/conf.d/graylog2-web.conf:
+  file:
+    - managed
+    - template: jinja
+    - source: salt://graylog2/web/nginx.jinja2
+    - user: www-data
+    - group: www-data
+    - mode: 440
+
 /etc/nagios/nrpe.d/graylog2-web.cfg:
   file.managed:
     - template: jinja
@@ -95,3 +105,7 @@ extend:
     service:
       - watch:
         - file: /etc/nagios/nrpe.d/graylog2-web.cfg
+  nginx:
+    service:
+      - watch:
+        - file: /etc/nginx/conf.d/graylog2-web.conf

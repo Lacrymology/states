@@ -25,15 +25,9 @@ gsyslog_upstart:
     - require:
       - service: sysklogd
 
-gsyslog_logrotate:
+/etc/logrotate.d/gsyslog:
   file:
-    - managed
-    - name: /etc/logrotate.d/gsyslog
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 440
-    - source: salt://gsyslog/logrotate.jinja2
+    - absent
 
 gsyslog_requirements:
   file:

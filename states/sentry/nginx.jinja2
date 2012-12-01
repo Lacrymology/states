@@ -7,7 +7,7 @@ upstream sentry {
 server {
     listen 80;
 
-    server_name baloney;
+    server_name {{ pillar['sentry']['address'] }};
 
     root /usr/local/sentry;
     keepalive_timeout 5;

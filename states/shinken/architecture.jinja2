@@ -38,14 +38,10 @@ Description: The scheduler is responsible for:
 - Buffering and forwarding results its associated broker
 http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects/scheduler
 #}
-{% for scheduler in pillar['shinken']['architecture']['scheduler'] %}
+{% for id in pillar['shinken']['architecture']['scheduler'] %}
 define scheduler {
-    scheduler_name scheduler-{{ scheduler }}
-{% if scheduler == grains['id'] %}
-    address {{ grains['privateIp'] }}
-{% else %}
-    address {{ salt['publish.publish'](scheduler, 'grains.item', 'privateIp')[scheduler] }}
-{% endif %}
+    scheduler_name scheduler-{{ id }}
+    address {{ pillar['shinken']['architecture']['scheduler'][id] }}
     port 7768
     modules scheduler-retention
     realm All
@@ -69,16 +65,12 @@ Description: The poller is responsible for:
 http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects/poller
 #}
 
-{% for poller in pillar['shinken']['architecture']['poller'] %}
+{% for id in pillar['shinken']['architecture']['poller'] %}
 define poller {
-    poller_name poller-{{ poller }}
-{% if poller == grains['id'] %}
-    address 127.0.0.1
-{% else %}
-    address {{ salt['publish.publish'](poller, 'grains.item', 'privateIp')[poller] }}
-{% endif %}
+    poller_name poller-{{ id }}
+    address {{ pillar['shinken']['architecture']['poller'][id]['address'] }}
     port 7771
-    poller_tags {{ pillar['shinken']['architecture']['poller'][poller] }}
+    poller_tags {{ pillar['shinken']['architecture']['poller'][id]['tag'] }}
     realm All
 }
 {% endfor %}
@@ -95,14 +87,10 @@ Description: The broker is responsible for:
   - Command interface
 http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects/broker
 #}
-{% for broker in pillar['shinken']['architecture']['broker'] %}
+{% for id in pillar['shinken']['architecture']['broker'] %}
 define broker {
-    broker_name broker-{{ broker }}
-{% if broker == grains['id'] %}
-    address 127.0.0.1
-{% else %}
-    address {{ salt['publish.publish'](broker, 'grains.item', 'privateIp')[broker] }}
-{% endif %}
+    broker_name broker-{{ id }}
+    address {{ pillar['shinken']['architecture']['broker'][id] }}
     port 7772
     spare 0
     modules broker-syslog, broker-graphite, broker-retention, broker-webui
@@ -220,14 +208,10 @@ Description: The reactionner is responsible for:
 - Executing event handler actions
 http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects/reactionner
 #}
-{% for reactionner in pillar['shinken']['architecture']['reactionner'] %}
+{% for id in pillar['shinken']['architecture']['reactionner'] %}
 define reactionner {
-    reactionner_name reactionner-{{ reactionner }}
-{% if reactionner == grains['id'] %}
-    address 127.0.0.1
-{% else %}
-    address {{ salt['publish.publish'](reactionner, 'grains.item', 'privateIp')[reactionner] }}
-{% endif %}
+    reactionner_name reactionner-{{ id }}
+    address {{ pillar['shinken']['architecture']['reactionner'][id] }}
     port 7769
     spare 0
     realm All
@@ -249,14 +233,11 @@ define reactionner {
 The receiver manages passive information. It's just a "buffer" which will
 load passive modules (like NSCA) and be read by the arbiter to dispatch data.
 #}
-{% for receiver in pillar['shinken']['architecture']['receiver'] %}
+{% if 'receiver' in pillar['shinken']['architecture'] %}
+{% for id in pillar['shinken']['architecture']['receiver'] %}
 define receiver {
-    receiver_name receiver-{{ receiver }}
-{% if receiver == grains['id'] %}
-    address 127.0.0.1
-{% else %}
-    address {{ salt['publish.publish'](receiver, 'grains.item', 'privateIp')[receiver] }}
-{% endif %}
+    receiver_name receiver-{{ id }}
+    address {{ pillar['shinken']['architecture']['receiver'][id] }}
     port 7773
     spare 0
     modules
@@ -266,3 +247,4 @@ define receiver {
 {#                            ; command.#}
 }
 {% endfor %}
+{% endif %}

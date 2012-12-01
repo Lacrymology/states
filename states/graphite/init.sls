@@ -84,6 +84,9 @@ graphite-web:
       - "--install-lib=/usr/local/graphite/lib/python2.7/site-packages"
     - watch:
       - file: graphite-web
+  pkg:
+    - installed
+    - name: libcairo2-dev
 
 graphite_settings:
   file:
@@ -96,7 +99,7 @@ graphite_settings:
     - source: salt://graphite/config.jinja2
     - require:
       - user: graphite
-      - module: graphite
+      - module: graphite-web
   postgres_user:
     - present
     - name: {{ pillar['graphite']['web']['db']['name'] }}
@@ -120,8 +123,9 @@ graphite_settings:
     - stateful: False
     - require:
       - postgres_database: graphite_settings
-    - watch:
       - file: graphite_settings
+    - watch:
+      - module: graphite-web
 
 /etc/uwsgi/graphite.ini:
   file:

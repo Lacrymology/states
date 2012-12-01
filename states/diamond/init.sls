@@ -10,6 +10,8 @@ include:
     - user: root
     - group: root
     - mode: 550
+    - require:
+      - file: diamond
 
 diamond_upstart:
   file:

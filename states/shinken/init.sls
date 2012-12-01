@@ -61,7 +61,7 @@ shinken:
  - broker
 #}
 
-{% for role in ('arbiter', 'broker', 'reactionner', 'receiver', 'scheduler', 'poller') %}
+{% for role in pillar['shinken']['architecture'] %}
 {% if grains['id'] in pillar['shinken']['architecture'][role] %}
 shinken-{{ role }}:
   file:
@@ -128,7 +128,7 @@ extend:
   nagios-nrpe-server:
     service:
       - watch:
-{% for role in ('arbiter', 'broker', 'reactionner', 'receiver', 'scheduler', 'poller') %}
+{% for role in pillar['shinken']['architecture'] %}
 {% if grains['id'] in pillar['shinken']['architecture'][role] %}
         - file: /etc/nagios/nrpe.d/shinken-{{ role }}.cfg
 {% endif %}

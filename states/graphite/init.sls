@@ -1,11 +1,9 @@
 {# TODO: create initial admin user #}
-{# TODO: send logs straight to GELF #}
 include:
   - postgresql.server
-  - memcache
   - virtualenv
+  - graphite.common
   - nrpe
-  - carbon
   - uwsgi
   - nginx
 
@@ -19,15 +17,6 @@ include:
 {#    - mode: 600#}
 {#    - source: salt://graphite/logrotate.jinja2#}
 
-graphite_root_logdir:
-  file:
-    - directory
-    - name: /var/log/graphite
-    - user: root
-    - group: root
-    - mode: 555
-    - makedirs: True
-
 graphite_logdir:
   file:
     - directory
@@ -37,8 +26,8 @@ graphite_logdir:
     - mode: 770
     - makedirs: True
     - require:
-      - user: carbon
-      - file: graphite_root_logdir
+      - user: graphite
+      - file: /var/log/graphite
 
 graphite_graph_templates:
   file:
@@ -50,7 +39,7 @@ graphite_graph_templates:
     - mode: 440
     - source: salt://graphite/graph_templates.jinja2
     - require:
-      - user: carbon
+      - user: graphite
 
 graphite_wsgi:
   file:
@@ -62,7 +51,7 @@ graphite_wsgi:
     - mode: 440
     - source: salt://graphite/wsgi.jinja2
     - require:
-      - virtualenv: graphite-web
+      - virtualenv: graphite
 
 {#graphite_admin_user:#}
 {#  module:#}
@@ -73,25 +62,30 @@ graphite_wsgi:
 {#    - bin_env: /usr/local/graphite#}
 
 graphite-web:
-  virtualenv:
-    - manage
-    - name: /usr/local/graphite/
-    - requirements: salt://graphite/requirements.txt
+  file:
+    - managed
+    - name: /usr/local/graphite/salt-graphite-web-requirements.txt
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - source: salt://graphite/requirements.jinja2
     - require:
-      - pkg: python-virtualenv
-      - pkg: graphite-web
-      - pkg: postgresql-dev
-  pkg:
-    - latest
-    - name: libcairo2-dev
-  pip:
-    - installed
+      - virtualenv: graphite
+  module:
+    - wait
+    - name: pip.install
+    - pkgs: ''
+    - upgrade: True
     - bin_env: /usr/local/graphite/bin/pip
+    - requirements: /usr/local/graphite/salt-graphite-web-requirements.txt
     - install_options:
       - "--prefix=/usr/local/graphite"
       - "--install-lib=/usr/local/graphite/lib/python2.7/site-packages"
-    - require:
-      - virtualenv: graphite-web
+    - watch:
+      - file: graphite-web
+
+graphite_settings:
   file:
     - managed
     - name: /usr/local/graphite/lib/python2.7/site-packages/graphite/local_settings.py
@@ -101,7 +95,8 @@ graphite-web:
     - mode: 440
     - source: salt://graphite/config.jinja2
     - require:
-      - user: carbon
+      - user: graphite
+      - module: graphite
   postgres_user:
     - present
     - name: {{ pillar['graphite']['web']['db']['name'] }}
@@ -115,7 +110,7 @@ graphite-web:
     - owner: {{ pillar['graphite']['web']['db']['username'] }}
     - runas: postgres
     - require:
-      - postgres_user: graphite-web
+      - postgres_user: graphite_settings
       - service: postgresql
   module:
     - wait
@@ -124,9 +119,9 @@ graphite-web:
     - bin_env: /usr/local/graphite
     - stateful: False
     - require:
-      - postgres_database: graphite-web
+      - postgres_database: graphite_settings
     - watch:
-      - file: graphite-web
+      - file: graphite_settings
 
 /etc/uwsgi/graphite.ini:
   file:
@@ -138,19 +133,9 @@ graphite-web:
     - source: salt://graphite/uwsgi.jinja2
     - require:
       - service: uwsgi_emperor
-      - user: carbon
-      - service: postgresql
-      - service: memcached
-      - service: carbon
       - file: graphite_logdir
-      - module: graphite-web
+      - module: graphite_settings
       - file: /usr/local/graphite/bin/build-index.sh
-      - virtualenv: graphite-web
-      - pip: graphite-web
-      - file: graphite-web
-      - postgres_user: graphite-web
-      - postgres_database: graphite-web
-      - file: graphite_graph_templates
   module:
     - wait
     - name: file.touch
@@ -158,10 +143,10 @@ graphite-web:
       - file: /etc/uwsgi/graphite.ini
     - m_name: /etc/uwsgi/graphite.ini
     - watch:
+      - module: graphite_settings
       - file: graphite_wsgi
       - file: graphite_graph_templates
-      - pip: graphite-web
-      - file: graphite-web
+      - module: graphite-web
 
 /usr/local/graphite/bin/build-index.sh:
   file:
@@ -171,10 +156,6 @@ graphite-web:
     - user: root
     - group: root
     - mode: 555
-    - require:
-      - file: graphite-web
-      - pip: graphite-web
-      - virtualenv: graphite-web
 
 /etc/nginx/conf.d/graphite.conf:
   file:
@@ -185,9 +166,7 @@ graphite-web:
     - group: www-data
     - mode: 440
     - require:
-      - file: graphite-web
-      - pip: graphite-web
-      - virtualenv: graphite-web
+      - module: /etc/uwsgi/graphite.ini
 
 /etc/nagios/nrpe.d/graphite.cfg:
   file.managed:
@@ -206,6 +185,6 @@ extend:
     service:
       - watch:
         - file: /etc/nginx/conf.d/graphite.conf
-  carbon_storage:
+  /var/lib/graphite:
     file:
       - user: www-data

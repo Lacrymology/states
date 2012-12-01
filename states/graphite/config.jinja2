@@ -186,7 +186,12 @@ LOGGING = {
             'level': 'WARN',
             'propagate': False,
             'handlers': ['gelf', 'sentry']
-        }
+        },
+        'sentry.errors': {
+            'level': 'DEBUG',
+            'handlers': ['gelf'],
+            'propagate': False,
+        },
      },
     'root': {
         'handlers': ['gelf', 'sentry'],

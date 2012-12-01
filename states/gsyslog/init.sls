@@ -79,7 +79,6 @@ gsyslog:
       - file: gsyslog
     - require:
       - service: sysklogd
-      - file: gsyslog_logrotate
       - module: gsyslog
 
 /etc/nagios/nrpe.d/gsyslog.cfg:

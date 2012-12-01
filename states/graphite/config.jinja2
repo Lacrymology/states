@@ -36,7 +36,7 @@ LOG_METRIC_ACCESS = True
 # You should not use the loopback address (127.0.0.1) here if using clustering
 # as every webapp in the cluster should use the exact same values to prevent
 # unneeded cache misses. Set to [] to disable caching of images and fetched data
-MEMCACHE_HOSTS = ['127.0.0.1:11211']
+MEMCACHE_HOSTS = [{% for ip in pillar['memcache_servers'] %}'{{ ip }}:11211'{% if not loop.last %},{% endif %}{% endfor %}]
 # Cache images and data for 1 minute
 DEFAULT_CACHE_DURATION = 60
 
@@ -70,21 +70,25 @@ DATA_DIRS = ['/var/lib/graphite/whisper']
 LOG_DIR = '/var/log/graphite/graphite'
 INDEX_FILE = STORAGE_DIR + '/index'
 
-
-#####################################
-# Email Configuration #
-#####################################
-# This is used for emailing rendered Graphs
-# Default backend is SMTP
-#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-#EMAIL_HOST = 'localhost'
-#EMAIL_PORT = 25
-#EMAIL_HOST_USER = ''
-#EMAIL_HOST_PASSWORD = ''
-#EMAIL_USE_TLS = False
-# To drop emails on the floor, enable the Dummy backend:
-#EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
-
+{% if pillar['graphite']['web']['email']['method'] == "amazon_ses" %}
+EMAIL_BACKEND = 'django_ses.SESBackend'
+AWS_SES_REGION_NAME = '{{ grains['region'] }}'
+AWS_SES_REGION_ENDPOINT = 'email.us-east-1.amazonaws.com'
+AWS_ACCESS_KEY_ID = '{{ pillar['amazon-ses']['access-key'] }}'
+AWS_SECRET_ACCESS_KEY = '{{ pillar['amazon-ses']['secret-key'] }}'
+DEFAULT_FROM_EMAIL = '{{ pillar['amazon-ses']['address'] }}'
+{% else %}
+EMAIL_HOST = '{{ pillar['graphite']['web']['email']['server'] }}'
+EMAIL_HOST_PASSWORD = '{{ pillar['graphite']['web']['email']['password'] }}'
+EMAIL_HOST_USER = '{{ pillar['graphite']['web']['email']['user'] }}'
+EMAIL_PORT = {{ pillar['graphite']['web']['email']['port'] }}
+DEFAULT_FROM_EMAIL = '{{ pillar['graphite']['web']['email']['from'] }}'
+{% if pillar['graphite']['web']['email']['tls'] %}
+EMAIL_USE_TLS = True
+{% else %}
+EMAIL_USE_TLS = False
+{% endif %}
+{% endif %}
 
 #####################################
 # Authentication Configuration #
@@ -152,6 +156,45 @@ DATABASES = {
     }
 }
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'formatters': {
+        'message_only': {
+            'format': '[graphite] %(message)s'
+        }
+    },
+    'handlers': {
+        'gelf': {
+            'level': 'NOTSET',
+            'class': 'graypy.handler.GELFHandler',
+            'host': '{{ pillar['graylog2_address'] }}',
+            'formatter': 'message_only'
+        },
+        'sentry': {
+            'level': 'ERROR',
+            'class': 'raven.contrib.django.handlers.SentryHandler'
+        }
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['gelf', 'sentry'],
+            'propagate': True,
+            'level':'DEBUG',
+        },
+        'raven': {
+            'level': 'WARN',
+            'propagate': False,
+            'handlers': ['gelf', 'sentry']
+        }
+     },
+    'root': {
+        'handlers': ['gelf', 'sentry'],
+        'propagate': True,
+        'level': 'NOTSET'
+    }
+}
+
 #########################
 # Cluster Configuration #
 #########################
@@ -197,4 +240,13 @@ CARBONLINK_TIMEOUT = 1.0
 # Uncomment the following line for direct access to Django settings such as
 # MIDDLEWARE_CLASSES or APPS
 from graphite.app_settings import *
-INSTALLED_APPS += ('gunicorn',)
+
+MIDDLEWARE_CLASSES = MIDDLEWARE_CLASSES + (
+    'django_statsd.middleware.GraphiteRequestTimingMiddleware',
+    'django_statsd.middleware.GraphiteMiddleware'
+)
+
+STATSD_PREFIX = 'graphite'
+STATSD_CLIENT = 'django_statsd.clients.normal'
+
+{#INSTALLED_APPS += ('gunicorn',)#}

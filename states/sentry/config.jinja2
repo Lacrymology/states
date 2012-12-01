@@ -19,6 +19,19 @@ DATABASES = {
     }
 }
 
+{#CACHE_PREFIX = 'sentry'#}
+{#CACHE_TIMEOUT = 300#}
+{#MIDDLEWARE_CLASSES.insert(0, 'johnny.middleware.QueryCacheMiddleware')#}
+{#MIDDLEWARE_CLASSES.insert(0, 'johnny.middleware.LocalStoreClearMiddleware')#}
+{#CACHES = {#}
+{#    'default' : dict(#}
+{#        BACKEND = 'johnny.backends.memcached.MemcachedCache',#}
+{#        LOCATION = [{% for ip in pillar['memcache_servers'] %}'{{ ip }}:11211'{% if not loop.last %},{% endif %}{% endfor %}],#}
+{#        JOHNNY_CACHE = True,#}
+{#    )#}
+{#}#}
+{#JOHNNY_MIDDLEWARE_KEY_PREFIX='sentry'#}
+
 SENTRY_KEY = '{{ pillar['sentry']['django_key'] }}'
 
 # Set this to false to require authentication
@@ -72,8 +85,13 @@ LOGGING = {
             'level': 'WARN',
             'propagate': False,
             'handlers': ['gelf', 'sentry']
+        },
+        'sentry.errors': {
+            'level': 'DEBUG',
+            'handlers': ['gelf'],
+            'propagate': False,
         }
-     },
+    },
     'root': {
         'handlers': ['gelf', 'sentry'],
         'propagate': True,

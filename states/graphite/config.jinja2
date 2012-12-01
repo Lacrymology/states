@@ -195,6 +195,10 @@ LOGGING = {
     }
 }
 
+RAVEN_CONFIG = {
+    'dsn': '{{ pillar['graphite']['web']['sentry'] }}',
+}
+
 #########################
 # Cluster Configuration #
 #########################

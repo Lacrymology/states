@@ -14,26 +14,36 @@ sentry:
     - manage
     - name: /usr/local/sentry
     - no_site_packages: True
-    - requirements: salt://sentry/requirements.txt
     - require:
-      - pkg: sentry
-      - pkg: postgresql-dev
       - pkg: python-virtualenv
   pkg:
     - latest
     - name: libevent-dev
   file:
     - managed
-    - name: /etc/sentry.conf.py
+    - name: /usr/local/sentry/salt-requirements.txt
     - template: jinja
-    - user: www-data
-    - group: www-data
+    - user: root
+    - group: root
     - mode: 440
-    - source: salt://sentry/config.jinja2
+    - source: salt://sentry/requirements.jinja2
     - require:
-      - pkg: nginx
       - virtualenv: sentry
-      - postgres_database: sentry
+      - pkg: sentry
+      - pkg: postgresql-dev
+  module:
+    - wait
+    - name: pip.install
+    - pkgs: ''
+    - upgrade: True
+    - bin_env: /usr/local/sentry/bin/pip
+    - requirements: /usr/local/sentry/salt-requirements.txt
+    - require:
+      - virtualenv: sentry
+      - pkg: postgresql-dev
+      - pkg: sentry
+    - watch:
+      - file: sentry
   postgres_user:
     - present
     - name: {{ pillar['sentry']['db']['username'] }}
@@ -49,6 +59,18 @@ sentry:
     - require:
       - postgres_user: sentry
       - service: postgresql-server
+
+sentry_settings:
+  file:
+    - managed
+    - name: /etc/sentry.conf.py
+    - template: jinja
+    - user: www-data
+    - group: www-data
+    - mode: 440
+    - source: salt://sentry/config.jinja2
+{#    - require:#}
+{#      - pkg: nginx#}
   cmd:
     - wait
     - stateful: False
@@ -57,9 +79,11 @@ sentry:
     - name: /usr/local/sentry/bin/sentry --config=/etc/sentry.conf.py upgrade --noinput
     - require:
       - cmd: sentry-migrate-fake
+      - module: sentry
+      - postgres_database: sentry
     - watch:
-      - virtualenv: sentry
-      - file: sentry
+      - module: sentry
+      - file: sentry_settings
 
 sentry-syncdb-all:
   cmd:
@@ -67,7 +91,7 @@ sentry-syncdb-all:
     - name: /usr/local/sentry/bin/sentry --config=/etc/sentry.conf.py syncdb --all --noinput
     - stateful: False
     - require:
-      - file: sentry
+      - file: sentry_settings
     - watch:
       - postgres_database: sentry
 
@@ -77,7 +101,7 @@ sentry-migrate-fake:
     - name: /usr/local/sentry/bin/sentry --config=/etc/sentry.conf.py migrate --fake --noinput
     - stateful: False
     - require:
-      - file: sentry
+      - file: sentry_settings
     - watch:
       - cmd: sentry-syncdb-all
 
@@ -91,7 +115,7 @@ sentry-migrate-fake:
     - source: salt://sentry/uwsgi.jinja2
     - require:
       - service: uwsgi_emperor
-      - cmd: sentry
+      - cmd: sentry_settings
   module:
     - wait
     - name: file.touch
@@ -100,7 +124,7 @@ sentry-migrate-fake:
       - file: /etc/uwsgi/sentry.ini
     - watch:
       - file: sentry
-      - virtualenv: sentry
+      - cmd: sentry_settings
 
 /etc/nagios/nrpe.d/sentry.cfg:
   file:

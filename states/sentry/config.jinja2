@@ -26,14 +26,14 @@ SENTRY_PUBLIC = False
 
 # You should configure the absolute URI to Sentry. It will attempt to guess it if you don't
 # but proxies may interfere with this.
-SENTRY_URL_PREFIX = '{{ pillar['sentry']['url'] }}'  # No trailing slash!
+SENTRY_URL_PREFIX = '{{ pillar['sentry']['protocol'] }}://{{ pillar['sentry']['address'] }}'  # No trailing slash!
 
-SENTRY_WEB_HOST = '0.0.0.0'
-SENTRY_WEB_PORT = 8080
-SENTRY_WEB_OPTIONS = {
-    'workers': {{ pillar['sentry']['workers'] }},  # the number of gunicorn workers
-    'worker_class': 'gevent',
-}
+{#SENTRY_WEB_HOST = '0.0.0.0'#}
+{#SENTRY_WEB_PORT = 8080#}
+{#SENTRY_WEB_OPTIONS = {#}
+{#    'workers': {{ pillar['sentry']['workers'] }},  # the number of gunicorn workers#}
+{#    'worker_class': 'gevent',#}
+{#}#}
 
 INSTALLED_APPS = INSTALLED_APPS + (
     'django_statsd',
@@ -41,6 +41,45 @@ INSTALLED_APPS = INSTALLED_APPS + (
     'django_ses',
 {% endif %}
 )
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'formatters': {
+        'message_only': {
+            'format': '[graphite] %(message)s'
+        }
+    },
+    'handlers': {
+        'gelf': {
+            'level': 'NOTSET',
+            'class': 'graypy.handler.GELFHandler',
+            'host': '{{ pillar['graylog2_address'] }}',
+            'formatter': 'message_only'
+        },
+        'sentry': {
+            'level': 'ERROR',
+            'class': 'raven.contrib.django.handlers.SentryHandler'
+        }
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['gelf', 'sentry'],
+            'propagate': True,
+            'level':'DEBUG',
+        },
+        'raven': {
+            'level': 'WARN',
+            'propagate': False,
+            'handlers': ['gelf', 'sentry']
+        }
+     },
+    'root': {
+        'handlers': ['gelf', 'sentry'],
+        'propagate': True,
+        'level': 'NOTSET'
+    }
+}
 
 {% if pillar['sentry']['email']['method'] == "amazon_ses" %}
 EMAIL_BACKEND = 'django_ses.SESBackend'

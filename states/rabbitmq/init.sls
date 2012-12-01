@@ -107,6 +107,7 @@ diamond_rabbitmq:
     - installed
     - upgrade: True
     - name: pyrabbit
+    - bin_env: /usr/local/diamond
     - require:
       - pkg: python-pip
   file:

@@ -11,6 +11,8 @@ memcached:
     - group: root
     - mode: 444
     - source: salt://memcache/config.jinja2
+    - require:
+      - pkg: memcached
   pkg:
     - latest
   service:
@@ -28,15 +30,17 @@ memcached:
     - mode: 440
     - source: salt://memcache/nrpe.jinja2
 
+{# Fix connection trough unix socket #}
 memcached_diamond_collector:
   file:
-    - managed
+    - absent
+{#    - managed#}
     - name: /etc/diamond/collectors/MemcachedCollector.conf
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 440
-    - source: salt://memcache/diamond.jinja2
+{#    - template: jinja#}
+{#    - user: root#}
+{#    - group: root#}
+{#    - mode: 440#}
+{#    - source: salt://memcache/diamond.jinja2#}
 
 extend:
   diamond:

@@ -6,6 +6,7 @@ include:
   - nrpe
   - uwsgi
   - nginx
+  - memcache
 
 {#graphite_logrotate:#}
 {#  file:#}

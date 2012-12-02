@@ -1,2 +1,2 @@
 # {{ pillar['message_do_not_modify'] }}
-command[check_memcached]=/usr/lib/nagios/plugins/check_procs -a '/usr/bin/memcached -m 64 -p 11211 -u memcache -l 127.0.0.1' -u memcache
+command[check_memcached]=/usr/lib/nagios/plugins/check_procs -C /usr/bin/memcached -w 1:1

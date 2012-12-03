@@ -8,7 +8,7 @@ upstream graphite {
 server {
     listen 80;
 
-    server_name {{ pillar['graphite']['web']['hostname'] }};
+    server_name {% for hostname in pillar['graphite']['web']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
 
     root /usr/local/graphite/webapp/;
     keepalive_timeout 5;

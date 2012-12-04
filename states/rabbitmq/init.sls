@@ -1,10 +1,24 @@
 {# TODO: configure logging to GELF #}
+{# TODO: add HTTPS support #}
+{#
+ # to properly use this state, the user monitor need to be changed
+ # in WebUI to grant read access across all vhost.
+ # as this is not yet implemented in salt.
+ #
+ # and a admin user should be created and the user guest with default
+ # password dropped.
+ # as long as the default guest user and guest password combination is
+ # is the pillar, the WebUI won't be available.
+ #}
 
 include:
   - diamond
   - nrpe
   - pip
   - hostname
+{% if pillar['rabbitmq']['monitor'] != 'guest' %}
+  - nginx
+{% endif %}
 
 {% set master_id = pillar['rabbitmq']['cluster']['master'] %}
 
@@ -73,11 +87,11 @@ rabbitmq-server:
     - require:
       - pkg: rabbitmq-server
 {% if grains['id'] == master_id %}
-  rabbitmq_vhost:
-    - present
-    - name: test
-    - require:
-      - service: rabbitmq-server
+{#  rabbitmq_vhost:#}
+{#    - present#}
+{#    - name: test#}
+{#    - require:#}
+{#      - service: rabbitmq-server#}
   rabbitmq_user:
     - present
     - name: {{ pillar['rabbitmq']['monitor']['user'] }}
@@ -85,6 +99,24 @@ rabbitmq-server:
     - force: True
     - require:
       - service: rabbitmq-server
+
+{% for vhost in pillar['rabbitmq']['vhosts'] %}
+rabbitmq-vhost-{{ vhost }}:
+  rabbitmq_user:
+    - present
+    - name: {{ vhost }}
+    - password: {{ pillar['rabbitmq']['vhosts'][vhost] }}
+    - force: True
+    - require:
+      - service: rabbitmq-server
+  rabbitmq_vhost:
+    - present
+    - name: {{ vhost }}
+    - user: {{ vhost }}
+    - require:
+      - rabbitmq_user: rabbitmq-vhost-{{ vhost }}
+{% endfor %}
+
 {% endif %}
 
 {% if grains['id'] != master_id %}
@@ -134,6 +166,17 @@ host_{{ node }}:
     {% endif %}
 {% endfor %}
 
+{% if pillar['rabbitmq']['monitor'] != 'guest' %}
+/etc/nginx/conf.d/rabbitmq.conf:
+  file:
+    - managed
+    - template: jinja
+    - user: www-data
+    - group: www-data
+    - mode: 400
+    - source: salt://rabbitmq/nginx.jinja2
+{% endif %}
+
 /etc/nagios/nrpe.d/rabbitmq.cfg:
   file:
     - managed
@@ -152,3 +195,9 @@ extend:
     service:
       - watch:
         - file: /etc/nagios/nrpe.d/rabbitmq.cfg
+{% if pillar['rabbitmq']['monitor'] != 'guest' %}
+  nginx:
+    service:
+      - watch:
+        - file: /etc/nginx/conf.d/rabbitmq.conf
+{% endif %}

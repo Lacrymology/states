@@ -81,6 +81,20 @@ gsyslog:
       - service: sysklogd
       - module: gsyslog
 
+rsyslog:
+  pkg:
+    - purged
+    - require:
+      - service: sysklogd
+
+{% for cron in ('weekly', 'daily') %}
+/etc/cron.{{ cron }}/sysklogd:
+  file:
+    - absent
+    - require:
+      - service: sysklogd
+{% endfor %}
+
 /etc/nagios/nrpe.d/gsyslog.cfg:
   file:
     - managed

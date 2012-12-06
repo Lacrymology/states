@@ -131,17 +131,33 @@ in_rabbitmq_cluster:
     - require:
       - rabbitmq_plugins: rabbitmq-server
       - service: rabbitmq-server
-      - pip: diamond_rabbitmq
+      - module: diamond-pyrabbit
 {% endif %}
 
-diamond_rabbitmq:
-  pip:
-    - installed
-    - upgrade: True
-    - name: pyrabbit
-    - bin_env: /usr/local/diamond
+diamond-pyrabbit:
+  file:
+    - managed
+    - name: /usr/local/diamond/salt-pyrabbit-requirements.txt
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - source: salt://rabbitmq/requirements.jinja2
     - require:
-      - pkg: python-pip
+      - virtualenv: diamond
+  module:
+    - wait
+    - name: pip.install
+    - upgrade: True
+    - pkgs: ''
+    - bin_env: /usr/local/diamond
+    - requirements: /usr/local/diamond/salt-pyrabbit-requirements.txt
+    - require:
+      - pkg: python-virtualenv
+    - watch:
+      - file: diamond-pyrabbit
+
+diamond_rabbitmq:
   file:
     - managed
     - template: jinja
@@ -151,7 +167,7 @@ diamond_rabbitmq:
     - mode: 440
     - source: salt://rabbitmq/diamond.jinja2
     - require:
-      - pip: diamond_rabbitmq
+      - module: diamond-pyrabbit
   pkg:
     - latest
     - name: python-httplib2

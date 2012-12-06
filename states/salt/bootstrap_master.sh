@@ -14,4 +14,5 @@ pillar_roots:
 master: 127.0.0.1
 ''' > /etc/salt/minion
 
-salt-call -l all state.sls salt.master
+salt-call -l all --local saltutil.sync_all
+salt-call -l all --local state.sls salt.master

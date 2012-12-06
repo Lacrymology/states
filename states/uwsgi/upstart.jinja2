@@ -10,4 +10,4 @@ umask 022
 env LC_ALL=en_US.UTF-8
 env LANG=en_US.UTF-8
 
-exec /usr/local/uwsgi/uwsgi --uid www-data --gid www-data --threaded-logger --logger graylog2:{{ pillar['graylog2_address'] }}:12201,uwsgi-emperor --carbon-id uwsgi-emperor --carbon {{ pillar['graphite_address'] }}:2003 --emperor /etc/uwsgi/
+exec /usr/local/uwsgi/uwsgi --uid www-data --gid www-data --threaded-logger --logger graylog2:{{ pillar['graylog2_address'] }}:12201,uwsgi-emperor --carbon-id emperor --carbon {{ pillar['graphite_address'] }}:2003 --emperor /etc/uwsgi/

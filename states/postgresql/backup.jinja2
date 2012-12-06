@@ -1,0 +1,9 @@
+#!/bin/sh
+# {{ pillar['message_do_not_modify'] }}
+{# cheap backup script to use when not in Amazon EC2 #}
+
+NOW=`date '+%Y-%m-%d-%H_%M_%S'`
+sudo -u postgres -g postgres pg_dumpall > /tmp/$NOW.sql
+nice -n 20 xz /tmp/$NOW.sql
+nice -n 20 scp -q /tmp/$NOW.sql.xz root@{{ pillar['backup_server']['address'] }}:/var/lib/backup/{{ grains['id'] }}-postgresql-$NOW.sql.xz
+rm -f /tmp/$NOW.sql.xz

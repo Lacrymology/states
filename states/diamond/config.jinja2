@@ -85,6 +85,7 @@ enabled = True
 
 enabled = True
 
+{% if grains['virtual'] != 'openvzve' %}
 [[DiskUsageCollector]]
 
 enabled = True
@@ -93,6 +94,7 @@ enabled = True
 # https://github.com/BrightcoveOS/Diamond/commit/9ac782848dbfb5d25b4fcb7c59ce1228fb975350
 # this is required
 devices = md[0-9]*$|sd[a-z][0-9]*$|xvd[a-z][0-9]*$|dm\-[0-9]*$
+{% endif %}
 
 [[FilestatCollector]]
 

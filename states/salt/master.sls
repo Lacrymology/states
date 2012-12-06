@@ -15,7 +15,7 @@ salt-master:
   cmd:
     - run
     - cwd: /srv/salt
-    - name: git config remote.origin.url {{ pillar['salt']['repository'] }}
+    - name: git config remote.origin.url {{ pillar['salt']['repository'] }}; git config branch.master.merge refs/heads/master
     - require:
       - pkg: git
   git:

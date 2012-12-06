@@ -182,6 +182,10 @@ graphite_settings:
     - source: salt://graphite/nrpe.jinja2
 
 extend:
+  memcached:
+    service:
+      - watch:
+        - module: graphite_settings
   nagios-nrpe-server:
     service:
       - watch:

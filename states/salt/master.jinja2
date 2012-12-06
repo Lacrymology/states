@@ -1,0 +1,12 @@
+
+file_roots:
+  base:
+    - /srv/salt/states
+
+pillar_roots:
+  base:
+    - /etc/salt/pillar
+
+peer:
+  .*:
+    - grains.*

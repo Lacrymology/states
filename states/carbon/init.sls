@@ -58,6 +58,11 @@ carbon:
       - "--install-lib=/usr/local/graphite/lib/python2.7/site-packages"
     - watch:
       - file: carbon
+  cmd:
+    - wait
+    - name: find /usr/local/graphite -name '*.pyc' -delete
+    - watch:
+      - module: carbon
 
 /etc/graphite/carbon.conf:
   file:
@@ -109,6 +114,7 @@ carbon-{{ instance }}:
       - file: carbon_storage-schemas
       - file: carbon-{{ instance }}
       - file: carbon-patch
+      - cmd: carbon
 {% endfor %}
 
 /etc/nagios/nrpe.d/carbon.cfg:

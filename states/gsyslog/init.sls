@@ -77,8 +77,14 @@ gsyslog:
       - file: gsyslog_upstart
       - virtualenv: gsyslog
       - file: gsyslog
+      - cmd: gsyslog
     - require:
       - service: sysklogd
+      - module: gsyslog
+  cmd:
+    - wait
+    - name: find /usr/local/gsyslog -name '*.pyc' -delete
+    - watch:
       - module: gsyslog
 
 rsyslog:

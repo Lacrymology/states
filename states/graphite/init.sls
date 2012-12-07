@@ -88,6 +88,11 @@ graphite-web:
   pkg:
     - installed
     - name: libcairo2-dev
+  cmd:
+    - wait
+    - name: find /usr/local/graphite -name '*.pyc' -delete
+    - watch:
+      - module: graphite-web
 
 graphite_settings:
   file:
@@ -152,6 +157,7 @@ graphite_settings:
       - file: graphite_wsgi
       - file: graphite_graph_templates
       - module: graphite-web
+      - cmd: graphite-web
 
 /usr/local/graphite/bin/build-index.sh:
   file:

@@ -72,6 +72,12 @@ diamond:
       - file: diamond
       - file: diamond_upstart
       - module: diamond
+      - cmd: diamond
+  cmd:
+    - wait
+    - name: find /usr/local/diamond -name '*.pyc' -delete
+    - watch:
+      - module: diamond
 
 {#
 archive of installation trough debian package

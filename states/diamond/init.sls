@@ -76,6 +76,7 @@ diamond:
   cmd:
     - wait
     - name: find /usr/local/diamond -name '*.pyc' -delete
+    - stateful: False
     - watch:
       - module: diamond
 

@@ -84,6 +84,7 @@ gsyslog:
   cmd:
     - wait
     - name: find /usr/local/gsyslog -name '*.pyc' -delete
+    - stateful: False
     - watch:
       - module: gsyslog
 

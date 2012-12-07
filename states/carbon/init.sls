@@ -61,6 +61,7 @@ carbon:
   cmd:
     - wait
     - name: find /usr/local/graphite -name '*.pyc' -delete
+    - stateful: False
     - watch:
       - module: carbon
 

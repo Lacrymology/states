@@ -91,6 +91,7 @@ graphite-web:
   cmd:
     - wait
     - name: find /usr/local/graphite -name '*.pyc' -delete
+    - stateful: False
     - watch:
       - module: graphite-web
 

@@ -97,10 +97,9 @@ graphite-web:
 
 graphite-urls-patch:
   file:
-    - patch
+    - managed
     - name: /usr/local/graphite/lib/python2.7/site-packages/graphite/urls.py
     - source: salt://graphite/urls.patch
-    - hash: md5=a8dd1b8d640d58a1135b98dfe7a1aea1
     - require:
       - module: graphite-web
 

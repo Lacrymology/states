@@ -95,6 +95,15 @@ graphite-web:
     - watch:
       - module: graphite-web
 
+graphite-urls-patch:
+  file:
+    - patch
+    - name: /usr/local/graphite/lib/python2.7/site-packages/graphite/urls.py
+    - source: salt://graphite/urls.patch
+    - hash: md5=a8dd1b8d640d58a1135b98dfe7a1aea1
+    - require:
+      - module: graphite-web
+
 graphite_settings:
   file:
     - managed
@@ -159,6 +168,7 @@ graphite_settings:
       - file: graphite_graph_templates
       - module: graphite-web
       - cmd: graphite-web
+      - file: graphite-urls-patch
 
 /usr/local/graphite/bin/build-index.sh:
   file:

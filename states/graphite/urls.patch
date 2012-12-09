@@ -1,0 +1,31 @@
+17a18,21
+> from django.contrib.auth.decorators import login_required
+>
+> from decorator_include import decorator_include
+> from graphite.browser.views import browser
+24,27c28,31
+<   ('^cli/?', include('graphite.cli.urls')),
+<   ('^composer/?', include('graphite.composer.urls')),
+<   ('^metrics/?', include('graphite.metrics.urls')),
+<   ('^browser/?', include('graphite.browser.urls')),
+---
+>   ('^cli/?', decorator_include(login_required, 'graphite.cli.urls')),
+>   ('^composer/?', decorator_include(login_required, 'graphite.composer.urls')),
+>   ('^metrics/?', decorator_include(login_required, 'graphite.metrics.urls')),
+>   ('^browser/?', decorator_include(login_required, 'graphite.browser.urls')),
+29,30c33,34
+<   ('^dashboard/?', include('graphite.dashboard.urls')),
+<   ('^whitelist/?', include('graphite.whitelist.urls')),
+---
+>   ('^dashboard/?', decorator_include(login_required, 'graphite.dashboard.urls')),
+>   ('^whitelist/?', decorator_include(login_required, 'graphite.whitelist.urls')),
+32,35c36,39
+<   ('graphlot/', include('graphite.graphlot.urls')),
+<   ('^version/', include('graphite.version.urls')),
+<   ('^events/', include('graphite.events.urls')),
+<   ('', 'graphite.browser.views.browser'),
+---
+>   ('graphlot/', decorator_include(login_required, 'graphite.graphlot.urls')),
+>   ('^version/', decorator_include(login_required, 'graphite.version.urls')),
+>   ('^events/', decorator_include(login_required, 'graphite.events.urls')),
+>   ('', login_required(browser)),

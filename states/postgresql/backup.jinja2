@@ -2,8 +2,10 @@
 # {{ pillar['message_do_not_modify'] }}
 {# cheap backup script to use when not in Amazon EC2 #}
 
+{% for db in pillar['postgresql']['backup'] %}
 NOW=`date '+%Y-%m-%d-%H_%M_%S'`
-sudo -u postgres -g postgres pg_dumpall -f /tmp/$NOW.sql
-nice -n 20 xz /tmp/$NOW.sql
-nice -n 20 scp -q /tmp/$NOW.sql.xz root@{{ pillar['backup_server']['address'] }}:/var/lib/backup/{{ grains['id'] }}-postgresql-$NOW.sql.xz
-rm -f /tmp/$NOW.sql.xz
+sudo -u postgres -g postgres pg_dump {{ db }} > /tmp/{{ db }}-$NOW.sql
+nice -n 20 xz /tmp/{{ db }}-$NOW.sql
+nice -n 20 scp -q /tmp/{{ db }}-$NOW.sql.xz root@{{ pillar['backup_server']['address'] }}:/var/lib/backup/{{ grains['id'] }}-{{ db }}-postgresql-$NOW.sql.xz
+rm -f /tmp/{{ db }}-$NOW.sql.xz
+{% endfor %}

@@ -16,7 +16,7 @@ include:
   - nrpe
   - pip
   - hostname
-{% if pillar['rabbitmq']['monitor'] != 'guest' %}
+{% if pillar['rabbitmq']['management'] != 'guest' %}
   - nginx
 {% endif %}
 
@@ -182,7 +182,7 @@ host_{{ node }}:
     {% endif %}
 {% endfor %}
 
-{% if pillar['rabbitmq']['monitor'] != 'guest' %}
+{% if pillar['rabbitmq']['management'] != 'guest' %}
 /etc/nginx/conf.d/rabbitmq.conf:
   file:
     - managed
@@ -211,7 +211,7 @@ extend:
     service:
       - watch:
         - file: /etc/nagios/nrpe.d/rabbitmq.cfg
-{% if pillar['rabbitmq']['monitor'] != 'guest' %}
+{% if pillar['rabbitmq']['management'] != 'guest' %}
   nginx:
     service:
       - watch:

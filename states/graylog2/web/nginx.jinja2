@@ -2,6 +2,9 @@
 
 server {
     listen 80;
+    access_log /var/log/nginx/graylog2-access.log;
+    error_log /var/log/nginx/graylog2-error.log;
+
     server_name {% for hostname in pillar['graylog2']['web']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
     location / {
         proxy_pass http://localhost:8000;

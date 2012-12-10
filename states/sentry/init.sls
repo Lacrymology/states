@@ -1,5 +1,3 @@
-{# TODO: add support for GELF logging #}
-
 include:
   - postgresql
   - postgresql.server
@@ -91,6 +89,7 @@ sentry-syncdb-all:
     - name: /usr/local/sentry/bin/sentry --config=/etc/sentry.conf.py syncdb --all --noinput
     - stateful: False
     - require:
+      - module: sentry
       - file: sentry_settings
     - watch:
       - postgres_database: sentry
@@ -100,8 +99,6 @@ sentry-migrate-fake:
     - wait
     - name: /usr/local/sentry/bin/sentry --config=/etc/sentry.conf.py migrate --fake --noinput
     - stateful: False
-    - require:
-      - file: sentry_settings
     - watch:
       - cmd: sentry-syncdb-all
 

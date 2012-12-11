@@ -85,6 +85,8 @@ graphite-web:
       - "--install-lib=/usr/local/graphite/lib/python2.7/site-packages"
     - watch:
       - file: graphite-web
+    - require:
+      - pkg: graphite-web
   pkg:
     - installed
     - name: libcairo2-dev

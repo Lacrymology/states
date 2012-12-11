@@ -92,16 +92,16 @@ def records_exists(access_key, secret_key, records):
                                 ret['changes']['{0} TTL'.format(record)] =\
                                 '{1} -> {2}'.format(
                                     existing.ttl,
-                                    records_type[record].ttl)
-                                existing.ttl = records_type[record].ttl
+                                    records_type[record]['ttl'])
+                                existing.ttl = records_type[record]['ttl']
                                 same = False
                         # check records (values)
                         if records_type[record]['values'] != existing.records:
                             ret['changes']['{0} records'.format(record)] =\
                             '{1} -> {2}'.format(
                                 existing.records,
-                                records_type[record].values)
-                            existing.records = records_type[record].values
+                                records_type[record]['values'])
+                            existing.records = records_type[record]['values']
                             same = False
 
                         if same:

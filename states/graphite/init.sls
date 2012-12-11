@@ -96,6 +96,11 @@ graphite-web:
     - stateful: False
     - watch:
       - module: graphite-web
+  pip:
+    - installed
+    - name: git+git://github.com/jeffkistler/django-decorator-include.git#egg=django-decorator-include
+    - editable: True
+    - bin_env: /usr/local/graphite/bin/pip
 
 graphite-urls-patch:
   file:
@@ -117,6 +122,7 @@ graphite_settings:
     - require:
       - user: graphite
       - module: graphite-web
+      - pip: graphite-web
   postgres_user:
     - present
     - name: {{ pillar['graphite']['web']['db']['name'] }}

@@ -90,7 +90,7 @@ def records_exists(access_key, secret_key, records):
                         if 'ttl' in records_type[record]:
                             if records_type[record]['ttl'] != existing.ttl:
                                 ret['changes']['{0} TTL'.format(record)] =\
-                                '{1} -> {2}'.format(
+                                '{0} -> {1}'.format(
                                     existing.ttl,
                                     records_type[record]['ttl'])
                                 existing.ttl = records_type[record]['ttl']
@@ -98,7 +98,7 @@ def records_exists(access_key, secret_key, records):
                         # check records (values)
                         if records_type[record]['values'] != existing.records:
                             ret['changes']['{0} records'.format(record)] =\
-                            '{1} -> {2}'.format(
+                            '{0} -> {1}'.format(
                                 existing.records,
                                 records_type[record]['values'])
                             existing.records = records_type[record]['values']

@@ -15,14 +15,16 @@ server {
     access_log /var/log/nginx/sentry-access.log;
     error_log /var/log/nginx/sentry-error.log;
 
-    location /_static/ {
-        rewrite ^/_static/(.+)$ /static/$1 last;
-    }
-
-    location /static/ {
+    location /_admin_media/ {
         expires 1h;
         autoindex off;
-        root /usr/local/sentry/lib/python2.7/site-packages/sentry/;
+        alias /usr/local/sentry/lib/python2.7/site-packages/django/contrib/admin/static/;
+    }
+
+    location /_static/ {
+        expires 1h;
+        autoindex off;
+        alias /usr/local/sentry/lib/python2.7/site-packages/sentry/static/;
     }
 
     location / {

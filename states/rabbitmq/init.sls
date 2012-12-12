@@ -178,7 +178,7 @@ host_{{ node }}:
   host:
     - present
     - name: {{ node }}
-    - ip: {{ pillar['rabbitmq']['cluster']['nodes'][node] }}
+    - ip: {{ pillar['rabbitmq']['cluster']['nodes'][node]['private'] }}
     {% endif %}
 {% endfor %}
 

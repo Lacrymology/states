@@ -109,6 +109,7 @@ carbon-{{ instance }}:
       - file: /var/log/graphite/carbon
       - file: /var/log/graphite
       - file: /var/lib/graphite
+      - file: carbon-{{ instance }}-logdir
     - watch:
       - module: carbon
       - file: /etc/graphite/carbon.conf
@@ -116,6 +117,18 @@ carbon-{{ instance }}:
       - file: carbon-{{ instance }}
       - file: carbon-patch
       - cmd: carbon
+
+carbon-{{ instance }}-logdir:
+  file:
+    - directory
+    - name: /var/log/graphite/carbon/carbon-cache-a
+    - user: graphite
+    - group: graphite
+    - mode: 770
+    - makedirs: True
+    - require:
+      - user: graphite
+
 {% endfor %}
 
 /etc/nagios/nrpe.d/carbon.cfg:

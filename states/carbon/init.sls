@@ -23,6 +23,13 @@ carbon_logrotate:
     - require:
       - user: graphite
 
+{% if 'file-max' in pillar['graphite'] %}
+fs.file-max:
+  sysctl:
+    - present
+    - value: {{ pillar['graphite']['file-max'] }}
+{% endif %}
+
 carbon_storage-schemas:
   file:
     - managed

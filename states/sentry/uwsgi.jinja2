@@ -4,7 +4,7 @@ master = true
 env = DJANGO_SETTINGS_MODULE=my_sentry_conf
 pymodule-alias = my_sentry_conf=/etc/sentry.conf.py
 module = sentry.wsgi
-threads = {{ pillar['sentry']['workers'] }}
+processes = {{ pillar['sentry']['workers'] }}
 enable-threads = true
 uid = www-data
 gid = www-data

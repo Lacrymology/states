@@ -1,2 +1,0 @@
-# {{ pillar['message_do_not_modify'] }}
-command[check_sentry]=/usr/lib/nagios/plugins/check_procs -w {{ pillar['sentry']['workers'] }}:{{ pillar['sentry']['workers'] }} -a "/usr/local/sentry/bin/python /usr/local/sentry/bin/sentry --config=/etc/sentry.conf.py start"

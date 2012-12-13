@@ -217,7 +217,10 @@ graphite_settings:
     - user: nagios
     - group: nagios
     - mode: 440
-    - source: salt://graphite/nrpe.jinja2
+    - source: salt://uwsgi/nrpe_instance.jinja2
+    - context:
+      deployment: graphite
+      workers: {{ pillar['graphite']['web']['workers'] }}
 
 extend:
   memcached:

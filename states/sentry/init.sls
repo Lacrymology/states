@@ -141,7 +141,10 @@ sentry-migrate-fake:
     - user: nagios
     - group: nagios
     - mode: 440
-    - source: salt://sentry/nrpe.jinja2
+    - source: salt://uwsgi/nrpe_instance.jinja2
+    - context:
+      deployment: sentry
+      workers: {{ pillar['sentry']['workers'] }}
 
 /etc/nginx/conf.d/sentry.conf:
   file:

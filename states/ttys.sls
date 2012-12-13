@@ -10,4 +10,3 @@ ttys:
     {% for number in [2, 3, 4, 5, 6] %}
       - tty{{ number }}
     {% endfor %}
-{% endfor %}

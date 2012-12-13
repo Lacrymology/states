@@ -113,7 +113,7 @@ graphite-web:
   pip:
     - installed
     - name: git+git://github.com/jeffkistler/django-decorator-include.git#egg=django-decorator-include
-    - editable: True
+{#    - editable: True#}
     - bin_env: /usr/local/graphite/bin/pip
 
 graphite-urls-patch:

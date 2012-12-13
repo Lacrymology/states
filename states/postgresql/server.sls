@@ -16,6 +16,7 @@ postgresql-server:
       - apt_repository: postgresql-dev
   service:
     - running
+    - enable: True
     - name: postgresql
     - watch:
       - pkg: postgresql-server

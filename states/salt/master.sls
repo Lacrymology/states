@@ -32,5 +32,6 @@ salt-master:
       - apt_repository: salt-minion
   service:
     - running
+    - enable: True
     - watch:
       - pkg: salt-master

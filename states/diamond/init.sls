@@ -67,6 +67,7 @@ diamond:
       - virtualenv: diamond
   service:
     - running
+    - enable: True
     - watch:
       - virtualenv: diamond
       - file: diamond

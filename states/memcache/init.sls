@@ -17,6 +17,7 @@ memcached:
     - latest
   service:
     - running
+    - enable: True
     - watch:
       - file: memcached
       - pkg: memcached

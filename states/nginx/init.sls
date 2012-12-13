@@ -42,6 +42,7 @@ nginx:
       - pkg: nginx
   service:
     - running
+    - enable: True
     - watch:
       - file: nginx
       - file: /etc/nginx/conf.d/default.conf

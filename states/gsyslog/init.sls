@@ -72,6 +72,7 @@ gsyslog:
     - source: salt://gsyslog/config.jinja2
   service:
     - running
+    - enable: True
     - name: gsyslogd
     - watch:
       - file: gsyslog_upstart

@@ -45,6 +45,7 @@ openssh-server:
       - pkg: openssh-server
   service:
     - running
+    - enable: True
     - name: ssh
     - watch:
       - pkg: openssh-server

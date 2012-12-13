@@ -90,6 +90,7 @@ uwsgi_emperor:
   service:
     - name: uwsgi
     - running
+    - enable: True
     - require:
       - file: uwsgi_emperor
       - file: uwsgi_sockets

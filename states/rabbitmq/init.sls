@@ -68,7 +68,7 @@ rabbitmq-server:
       - pkg: rabbitmq-server
   service:
     - running
-    - enabled: true
+    - enable: True
     - require:
       - pkg: rabbitmq-server
     - watch:

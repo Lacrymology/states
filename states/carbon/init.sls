@@ -103,6 +103,7 @@ carbon-{{ instance }}:
       instance: a
   service:
     - running
+    - enable: True
     - name: carbon-{{ instance }}
     - require:
       - user: graphite

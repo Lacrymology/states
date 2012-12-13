@@ -78,6 +78,7 @@ shinken-{{ role }}:
       - virtualenv: shinken
   service:
     - running
+    - enable: True
     - watch:
       - pip: shinken
       - file: /etc/init/shinken-{{ role }}.conf

@@ -40,6 +40,7 @@ salt-minion:
     - latest
   service:
     - running
+    - enable: True
     - watch:
       - file: salt-patch-git
       - file: salt-patch-djangomod

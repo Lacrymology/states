@@ -26,6 +26,7 @@ mongodb:
     - source: salt://mongodb/logrotate.jinja2
   service:
      - running
+     - enable: True
      - watch:
        - pkg: mongodb
 

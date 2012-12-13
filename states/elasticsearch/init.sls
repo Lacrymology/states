@@ -73,6 +73,7 @@ elasticsearch:
       - pkg_file: elasticsearch
   service:
     - running
+    - enable: True
     - watch:
       - file: /etc/default/elasticsearch
       - file: /etc/elasticsearch/logging.yml

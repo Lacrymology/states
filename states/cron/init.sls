@@ -16,6 +16,7 @@ cron:
       - pkg: cron
   service:
     - running
+    - enable: True
     - watch:
       - pkg: cron
       - file: /etc/crontab

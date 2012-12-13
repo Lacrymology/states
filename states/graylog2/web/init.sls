@@ -73,6 +73,7 @@ graylog2-web:
     - source: salt://graylog2/web/upstart.jinja2
   service:
     - running
+    - enable: True
     - require:
       - file: graylog2-web
       - file: graylog2-web_logdir

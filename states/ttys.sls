@@ -1,8 +1,8 @@
 {# tty are useless in most cases #}
-{% for action in ['dead', 'disabled'] %}
-{{ action }}_ttys:
+ttys:
   service:
-    - {{ action }}
+    - dead
+    - enable: False
     - names:
 {% if grains['virtual'] == 'openvzve' %}
       - tty1

@@ -19,6 +19,7 @@ statsd:
       - pkg: python-virtualenv
   service:
     - running
+    - enable: True
     - watch:
       - file: statsd
       - virtualenv: statsd

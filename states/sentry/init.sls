@@ -83,6 +83,17 @@ sentry_settings:
       - module: sentry
       - file: sentry_settings
 
+/usr/local/sentry/manage:
+  file:
+    - managed
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 550
+    - source: salt://sentry/manage.jinja2
+    - require:
+      - virtualenv: sentry
+
 sentry-syncdb-all:
   cmd:
     - wait

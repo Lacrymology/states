@@ -62,6 +62,17 @@ graphite_wsgi:
 {#    - settings_module: graphite.local_settings#}
 {#    - bin_env: /usr/local/graphite#}
 
+/usr/local/graphite/manage:
+  file:
+    - managed
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 550
+    - source: salt://django/manage.jinja2
+    - require:
+      - virtualenv: graphite
+
 graphite-web:
   file:
     - managed

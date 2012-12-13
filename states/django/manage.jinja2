@@ -1,0 +1,6 @@
+#!/bin/sh
+# {{ pillar['message_do_not_modify'] }}
+
+export DJANGO_SETTINGS_MODULE={{ settings }}
+cd {{ virtualenv }}
+{{ virtualenv }}/bin/django-admin.py $*

@@ -21,13 +21,20 @@ server {
         return 404;
     }
 
+    rewrite /media/css/dashboard.css /content/css/dashboard.css last;
+
+    location /media/ {
+        root /usr/local/graphite/lib/python2.7/site-packages/django/contrib/admin;
+        expires 1h;
+        autoindex off;
+    }
+
     location /content/ {
         expires 1h;
         autoindex off;
     }
 
     location / {
-{#        rewrite ^/favicon.ico$ /static/images/favicon.ico last;#}
         uwsgi_pass graphite;
         include uwsgi_params;
     }

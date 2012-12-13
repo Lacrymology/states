@@ -70,6 +70,9 @@ graphite_wsgi:
     - group: root
     - mode: 550
     - source: salt://django/manage.jinja2
+    - context:
+      settings: graphite.local_settings
+      virtualenv: /usr/local/graphite
     - require:
       - virtualenv: graphite
 

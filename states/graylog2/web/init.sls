@@ -97,7 +97,7 @@ graylog2-web:
       web_root_dir: {{ web_root_dir }}
       command: {{ command }}
     - require:
-      pkg: cron
+      - pkg: cron
 {% endfor %}
 
 /etc/nginx/conf.d/graylog2-web.conf:

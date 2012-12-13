@@ -43,7 +43,7 @@ graylog2-server:
     - name: openjdk-7-jre-headless
   service:
     - running
-    - enable
+    - enable: True
     - watch:
       - file: graylog2-server_upstart
       - pkg: graylog2-server

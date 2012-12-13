@@ -3,6 +3,7 @@ include:
   - nrpe
   - mongodb
   - nginx
+  - cron
 
 {% set web_root_dir = '/usr/local/graylog2-web-interface-' + pillar['graylog2']['web']['version'] %}
 
@@ -81,6 +82,22 @@ graylog2-web:
       - archive: graylog2-web
 {% for filename in ('config', 'email', 'indexer', 'mongoid') %}
       - file: graylog2-web-{{ filename }}
+{% endfor %}
+
+{% for command in ('streamalarms', 'subscriptions') %}
+/etc/cron.hourly/graylog2-web-{{ command }}:
+  file:
+    - managed
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 550
+    - source: salt://graylog2/web/cron.jinja2
+    - context:
+      web_root_dir: {{ web_root_dir }}
+      command: {{ command }}
+    - require:
+      pkg: cron
 {% endfor %}
 
 /etc/nginx/conf.d/graylog2-web.conf:

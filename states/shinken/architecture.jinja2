@@ -20,7 +20,9 @@ define arbiter {
     port 7770
     modules arbiter-retention
     {# only the first one is not a spare #}
-    spare {% if loop.first %}0{% else %}1{% endif %}
+    {% if not loop.first %}
+    spare 1
+    {% endif %}
 }
 {% endfor %}
 
@@ -99,7 +101,9 @@ define broker {
     realm All
     # Take data from Arbiter. There should be only one
     manage_arbiters 1
-    spare {% if loop.first %}0{% else %}1{% endif %}
+    {% if not loop.first %}
+    spare 1
+    {% endif %}
 {#                            ; broker for the arbiter.#}
 {#    manage_sub_realms   1   ; Does it take jobs from schedulers of sub-Realms?#}
 {#    timeout             3   ; Ping timeout#}

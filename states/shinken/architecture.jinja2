@@ -152,12 +152,12 @@ define module {
     host 0.0.0.0
     port 7767
     auth_secret CHANGE_ME
+    manage_acl 1
+    login_text Monitoring
 {#    allow_html_output 0       ; Allow or not HTML chars in plugins output.#}
 {#                                ; WARNING: Allowing can be a security issue.#}
 {#    max_output_length   100     ; Maximum output length for plugin output in webui#}
-{#    manage_acl          1       ; Use contacts ACL. 0 allow actions for all.#}
 {#    play_sound          0       ; Play sound on new non-acknowledged problems.#}
-{#    #login_text      Welcome on Shinken WebUI    ; Text in the login form.#}
 
     modules broker-webui-auth, broker-webui-graphite
 

@@ -7,7 +7,7 @@ salt-master:
   file:
     - managed
     - name: /etc/salt/master
-    - source: salt://salt/master.jinja2
+    - source: salt://salt/master/config.jinja2
     - template: jinja
     - user: root
     - group: root

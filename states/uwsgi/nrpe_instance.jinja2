@@ -1,3 +1,3 @@
 # {{ pillar['message_do_not_modify'] }}
 command[check_{{ deployment }}_master]=/usr/lib/nagios/plugins/check_procs -w 1:1 -u www-data -a {{ deployment }}-master
-command[check_{{ deployment }}]=/usr/lib/nagios/plugins/check_procs -w {{ workers + 1}}:{{ workers + 1 }} -u www-data -a {{ deployment }}
+command[check_{{ deployment }}_worker]=/usr/lib/nagios/plugins/check_procs -w {{ workers }}:{{ workers }} -u www-data -a {{ deployment }}-worker -C uwsgi

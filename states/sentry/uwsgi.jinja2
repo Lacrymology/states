@@ -14,6 +14,6 @@ carbon-id = sentry
 carbon = {{ pillar['graphite_address'] }}:2003
 virtualenv = /usr/local/sentry
 chdir = /usr/local/sentry
-procname = sentry
+procname = sentry-worker
 procname-master = sentry-master
 socket = /var/lib/uwsgi/sentry.sock

@@ -1,2 +1,2 @@
 # {{ pillar['message_do_not_modify'] }}
-command[check_statsd]=/usr/lib/nagios/plugins/check_procs -w 1:1 -a "/usr/local/statsd/bin/pystatsd-server --transport graphite --flush-interval 10000 --gauges-prefix 'stats.gauges' --name {{ grains['id'] }} --graphite-host {{ pillar['graphite_address'] }} --counters-prefix '{{ grains['id'] }}.stats' --timers-prefix '{{ grains['id'] }}.stats' --log-file /var/log/statsd.log --pidfile /var/run/pystatsd.pid" -u root
+command[check_statsd]=/usr/lib/nagios/plugins/check_procs -C pystatsd-server -w 1:1 -u root

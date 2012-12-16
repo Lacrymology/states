@@ -7,7 +7,7 @@ memcached:
     - absent
     - name: /etc/memcached.conf
     - require:
-      - file: memcached
+      - pkg: memcached
   pkg:
     - purged
 

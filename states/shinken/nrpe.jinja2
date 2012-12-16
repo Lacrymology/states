@@ -1,2 +1,2 @@
 # {{ pillar['message_do_not_modify'] }}
-command[check_shinken_{{ shinken_component }}]=/usr/lib/nagios/plugins/check_procs -w 1:1 -a '/usr/local/shinken/bin/shinken-{{ shinken_component }} -c /etc/shinken/{{ shinken_component }}.conf'
+command[check_shinken_{{ shinken_component }}]=/usr/lib/nagios/plugins/check_procs -a '/usr/local/shinken/bin/shinken-{{ shinken_component }} -c /etc/shinken/{{ shinken_component }}.conf'

@@ -146,6 +146,7 @@ sentry-migrate-fake:
       deployment: sentry
       workers: {{ pillar['sentry']['workers'] }}
       domain_name: {{ pillar['sentry']['address'] }}
+      uri: /login/
 
 /etc/nginx/conf.d/sentry.conf:
   file:

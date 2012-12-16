@@ -222,6 +222,7 @@ graphite_settings:
       deployment: graphite
       workers: {{ pillar['graphite']['web']['workers'] }}
       domain_name: {{ pillar['graphite']['web']['hostnames'][0] }}
+      uri: /account/login
 
 extend:
   memcached:

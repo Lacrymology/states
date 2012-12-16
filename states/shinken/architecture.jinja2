@@ -12,14 +12,17 @@ Description: The Arbiter is responsible for:
 - Issuing global directives to Shinken daemons (kill, activate-spare, etc.)
 http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects/arbiter
 #}
+{% for id in pillar['shinken']['architecture']['arbiter'] %}
 define arbiter {
     arbiter_name arbiter-{{ grains['id'] }}
-    host_name {{ grains['id'] }}
-    address 127.0.0.1
+    host_name {{ id }}
+    address {{ pillar['shinken']['architecture']['arbiter'][id] }}
     port 7770
-    spare 0
     modules arbiter-retention
+    {# only the first one is not a spare #}
+    spare {% if loop.first %}0{% else %}1{% endif %}
 }
+{% endfor %}
 
 define module {
     module_name arbiter-retention
@@ -31,7 +34,7 @@ define module {
 The scheduler is a "Host manager". It gets the hosts and their services,
 schedules the checks and transmit them to the pollers.
 Description: The scheduler is responsible for:
-- Creating the dependancy tree
+- Creating the dependency tree
 - Scheduling checks
 - Calculating states
 - Requesting actions from a reactionner
@@ -45,10 +48,10 @@ define scheduler {
     port 7768
     modules scheduler-retention
     realm All
-    spare 0
+{#    spare 0#}
 {#    # Skip initial broks creation. Boot fast, but some broker modules won't#}
 {#    # work with it!#}
-    skip_initial_broks 0
+{#    skip_initial_broks 0#}
 }
 {% endfor %}
 
@@ -92,11 +95,11 @@ define broker {
     broker_name broker-{{ id }}
     address {{ pillar['shinken']['architecture']['broker'][id] }}
     port 7772
-    spare 0
     modules broker-syslog, broker-graphite, broker-retention, broker-webui
     realm All
     # Take data from Arbiter. There should be only one
     manage_arbiters 1
+    spare {% if loop.first %}0{% else %}1{% endif %}
 {#                            ; broker for the arbiter.#}
 {#    manage_sub_realms   1   ; Does it take jobs from schedulers of sub-Realms?#}
 {#    timeout             3   ; Ping timeout#}
@@ -160,16 +163,16 @@ define module {
 {#                                     ; paste, tornado, twisted or gevent.#}
 {#                                     ; Leave auto to find the best available.#}
 {#    #remote_user_enable      1       ; If WebUI is behind a web server which#}
-{#                                     ; has already authentified user, enable.#}
+{#                                     ; has already authenticated user, enable.#}
 {#    #remote_user_variable    X_Remote_User  ; Set to the HTTP header containing#}
-{#                                     ; the authentificated user s name, which#}
+{#                                     ; the authenticated user s name, which#}
 {#                                     ; must be a Shinken contact.#}
 }
 
 {### Module:      OpenLDAP_UI#}
 {### Loaded by:   WebUI#}
 {### Usage:       Uncomment and set your value in ldap_uri#}
-{## Check authentification for WebUI using an Open Ldap server.#}
+{## Check authentication for WebUI using an Open Ldap server.#}
 {#define module {#}
 {#    module_name     OpenLDAP_UI#}
 {#    module_type     ad_webui#}
@@ -192,7 +195,7 @@ define module {
 define module {
     module_name broker-webui-graphite
     module_type graphite_webui
-    uri http://YOURSERVERNAME/
+    uri {{ pillar['shinken']['graphite_url'] }}
     templates_path /usr/local/shinken/share/templates/graphite/
     # Optionally specify a source identifier for the metric data sent to
     # Graphite. This can help differentiate data from multiple sources for the
@@ -213,10 +216,10 @@ define reactionner {
     reactionner_name reactionner-{{ id }}
     address {{ pillar['shinken']['architecture']['reactionner'][id] }}
     port 7769
-    spare 0
+{#    spare 0#}
     realm All
 
-{#    ## Optionnal#}
+{#    ## Optional#}
 {#    manage_sub_realms   0   ; Does it take jobs from schedulers of sub-Realms?#}
 {#    min_workers         1   ; Starts with N processes (0 = 1 per CPU)#}
 {#    max_workers         15  ; No more than N processes (0 = 1 per CPU)#}
@@ -239,7 +242,7 @@ define receiver {
     receiver_name receiver-{{ id }}
     address {{ pillar['shinken']['architecture']['receiver'][id] }}
     port 7773
-    spare 0
+{#    spare 0#}
     modules
     realm All
 {#    direct_routing      0   ; If enabled, it will directly send commands to the#}

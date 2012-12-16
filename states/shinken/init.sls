@@ -55,12 +55,6 @@ shinken:
     - home: /var/lib/shinken
     - gid_from_name: True
 
-{#
- Each shinken daemons, valids are:
- - arbiter
- - broker
-#}
-
 {% for role in pillar['shinken']['architecture'] %}
 {% if grains['id'] in pillar['shinken']['architecture'][role] %}
 shinken-{{ role }}:
@@ -87,6 +81,16 @@ shinken-{{ role }}:
     {% for config in configs %}
       - file: /etc/shinken/{{ config }}.conf
     {% endfor %}
+
+/etc/shinken/objects:
+  file:
+    - directory
+    - template: jinja
+    - user: shinken
+    - group: shinken
+    - mode: 550
+    - require:
+      - file: /etc/shinken
 
     {% for config in configs %}
 /etc/shinken/{{ config }}.conf:

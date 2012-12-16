@@ -1,2 +1,2 @@
 # {{ pillar['message_do_not_modify'] }}
-command[check_postgresql_server]=/usr/lib/nagios/plugins/check_procs -w 1:1 -a '/usr/lib/postgresql/{{ pillar['postgresql']['version'] }}/bin/postgres -D /var/lib/postgresql/{{ pillar['postgresql']['version'] }}/main -c config_file=/etc/postgresql/{{ pillar['postgresql']['version'] }}/main/postgresql.conf'
+command[check_postgresql_server]=/usr/lib/nagios/plugins/check_procs -w 1:1 -a '/usr/lib/postgresql/{{ pillar['postgresql']['version'] }}/bin/postgres -D /var/lib/postgresql/{{ pillar['postgresql']['version'] }}/main -c config_file=/etc/postgresql/{{ pillar['postgresql']['version'] }}/main/postgresql.conf' -C postgres -u postgres

@@ -1,2 +1,2 @@
 # {{ pillar['message_do_not_modify'] }}
-command[check_diamond]=/usr/lib/nagios/plugins/check_procs -w 1:1 -u root -a "/usr/bin/python /usr/bin/diamond -p /var/run/diamond.pid"
+command[check_diamond]=/usr/lib/nagios/plugins/check_procs -w 1:1 -u root -a "/usr/local/diamond/bin/python /usr/local/diamond/bin/diamond --foreground"

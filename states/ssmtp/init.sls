@@ -10,7 +10,7 @@ ssmtp:
   file:
     - managed
     - template: jinja
-    - source: salt://smtp/{{ template }}.jinja2
+    - source: salt://ssmtp/{{ template }}.jinja2
     - user: root
     - group: root
     - mode: 644

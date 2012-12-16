@@ -96,7 +96,7 @@ carbon-patch:
     - require:
       - module: carbon
 
-{% for instance in ('a',) %}
+{% for instance in pillar['graphite']['carbon']['instances'] %}
 carbon-{{ instance }}:
   file:
     - managed

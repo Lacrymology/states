@@ -1,0 +1,12 @@
+# {{ pillar['message_do_not_modify'] }}
+
+mailhub={{ pillar['smtp']['server'] }}:{{ pillar['smtp']['port'] }}
+root={{ pillar['smtp']['user'] }}
+hostname={{ pillar['smtp']['user'] }}
+AuthUser={{ pillar['smtp']['user'] }}
+AuthPass={{ pillar['smtp']['password'] }}
+{%- if pillar['smtp']['tls'] %}
+UseSTARTTLS=yes
+UseTLS=yes
+{%- endif %}
+FromLineOverride=yes

@@ -55,8 +55,15 @@ shinken:
     - home: /var/lib/shinken
     - gid_from_name: True
 
-{% for role in pillar['shinken']['architecture'] %}
-{% if grains['id'] in pillar['shinken']['architecture'][role] %}
+{% for role in pillar['shinken']['architecture'] -%}
+{%- if grains['id'] in pillar['shinken']['architecture'][role] -%}
+
+{%- if role == 'poller' %}
+nagios-nrpe-plugin:
+  pkg:
+    - installed
+{% endif %}
+
 shinken-{{ role }}:
   file:
     - managed

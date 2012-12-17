@@ -224,6 +224,18 @@ graphite_settings:
       domain_name: {{ pillar['graphite']['web']['hostnames'][0] }}
       uri: /account/login
 
+/etc/nagios/nrpe.d/postgresql-graphite.cfg:
+  file:
+    - managed
+    - template: jinja
+    - user: nagios
+    - group: nagios
+    - mode: 440
+    - source: salt://postgresql/nrpe.jinja2
+    - context:
+      deployment: graphite
+      password: {{ pillar['graphite']['web']['db']['password'] }}
+
 extend:
   memcached:
     service:
@@ -233,6 +245,7 @@ extend:
     service:
       - watch:
         - file: /etc/nagios/nrpe.d/graphite.cfg
+        - file: /etc/nagios/nrpe.d/postgresql-graphite.cfg
   nginx:
     service:
       - watch:

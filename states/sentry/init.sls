@@ -148,6 +148,18 @@ sentry-migrate-fake:
       domain_name: {{ pillar['sentry']['address'] }}
       uri: /login/
 
+/etc/nagios/nrpe.d/postgresql-sentry.cfg:
+  file:
+    - managed
+    - template: jinja
+    - user: nagios
+    - group: nagios
+    - mode: 440
+    - source: salt://postgresql/nrpe.jinja2
+    - context:
+      deployment: sentry
+      password: {{ pillar['sentry']['db']['password'] }}
+
 /etc/nginx/conf.d/sentry.conf:
   file:
     - managed
@@ -162,6 +174,7 @@ extend:
     service:
       - watch:
         - file: /etc/nagios/nrpe.d/sentry.cfg
+        - file: /etc/nagios/nrpe.d/postgresql-sentry.cfg
   nginx:
     service:
       - watch:

@@ -5,7 +5,7 @@ include:
   - nrpe
 {%- if grains['id'] in pillar['shinken']['architecture']['poller'] %}
   - nginx
-{% endfor -%}
+{% endif -%}
 
 {#{% if 'arbiter' in pillar['shinken']['roles'] %}#}
 {#    {% if pillar['shinken']['arbiter']['use_mongodb'] %}#}

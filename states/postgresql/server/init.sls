@@ -29,7 +29,7 @@ diamond_collector-psycopg2:
     - user: root
     - group: root
     - mode: 440
-    - source: salt://postgresql/requirements.jinja2
+    - source: salt://postgresql/server/requirements.jinja2
     - require:
       - virtualenv: diamond
   module:
@@ -53,7 +53,7 @@ postgresql_diamond_collector:
     - user: root
     - group: root
     - mode: 440
-    - source: salt://postgresql/diamond.jinja2
+    - source: salt://postgresql/server/diamond.jinja2
   postgres_user:
     - present
     - name: diamond
@@ -77,7 +77,7 @@ postgresql_diamond_collector:
     - user: nagios
     - group: nagios
     - mode: 440
-    - source: salt://postgresql/nrpe.jinja2
+    - source: salt://postgresql/server/nrpe.jinja2
 
 {% if 'availabilityZone' not in grains %}
 /etc/cron.daily/backup-postgresql:
@@ -87,7 +87,7 @@ postgresql_diamond_collector:
     - group: root
     - mode: 500
     - template: jinja
-    - source: salt://postgresql/backup.jinja2
+    - source: salt://postgresql/server/backup.jinja2
 {% endif %}
 
 extend:

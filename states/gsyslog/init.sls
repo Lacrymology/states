@@ -13,6 +13,13 @@ sysklogd:
     - dead
     - enable: False
 
+{% if grains['virtual'] == 'openvzve' %}
+klogd:
+  service:
+    - dead
+    - enable: False
+{% endif %}
+
 gsyslog_upstart:
   file:
     - managed

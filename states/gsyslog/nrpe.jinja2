@@ -1,3 +1,7 @@
 # {{ pillar['message_do_not_modify'] }}
 command[check_syslogd]=/usr/lib/nagios/plugins/check_procs -w 1:1 -a '/usr/local/gsyslog/bin/gsyslogd /etc/gsyslogd.conf' -u root
+{% if grains['virtual'] == 'openvzve' %}
+command[check_klogd]=/bin/echo "PROCS OK: No klogd on OpenVZ"
+{% else %}
 command[check_klogd]=/usr/lib/nagios/plugins/check_procs -w 1:1 -C klogd -u klog
+{% endif %}

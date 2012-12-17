@@ -131,13 +131,8 @@ define module {
     host {{ pillar['graphite_address'] }}
     {# Or 2004 if using use_pickle 1 #}
     port 2003
-    # Optionally specify a source identifier for the metric data sent to
-    # Graphite. This can help differentiate data from multiple sources for the
-    # same hosts. HostA.GRAPHITE_DATA_SOURCE.service
-    # You MUST set the same value in the graphite_perfdata and GRAPHITE_UI module
-    # configuration.
     #tick_limit 300 ; Default value 300
-    #graphite_data_source shinken ; default is that the variable is unset
+    graphite_data_source shinken
 }
 
 define module {

@@ -1,0 +1,13 @@
+# {{ pillar['message_do_not_modify'] }}
+
+server {
+    listen 80;
+    access_log /var/log/nginx/shinken-webui-access.log;
+    error_log /var/log/nginx/shinken-webui-error.log;
+
+    server_name {% for hostname in pillar['shinken']['web']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+    location / {
+        proxy_pass http://localhost:7767;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}

@@ -3,6 +3,12 @@
 include:
   - virtualenv
   - nrpe
+{% for role in pillar['shinken']['architecture'] -%}
+{%- if role == 'poller' %}
+  - nginx
+{% endif -%}
+{%- endfor %}
+
 {#{% if 'arbiter' in pillar['shinken']['roles'] %}#}
 {#    {% if pillar['shinken']['arbiter']['use_mongodb'] %}#}
 {#  - mongodb#}
@@ -62,6 +68,17 @@ shinken:
 nagios-nrpe-plugin:
   pkg:
     - installed
+{% endif -%}
+
+{%- if role == 'broker' %}
+/etc/nginx/conf.d/shinken-web.conf:
+  file:
+    - managed
+    - template: jinja
+    - source: salt://shinken/nginx.jinja2
+    - user: www-data
+    - group: www-data
+    - mode: 440
 {% endif %}
 
 shinken-{{ role }}:
@@ -143,5 +160,11 @@ extend:
 {% for role in pillar['shinken']['architecture'] %}
 {% if grains['id'] in pillar['shinken']['architecture'][role] %}
         - file: /etc/nagios/nrpe.d/shinken-{{ role }}.cfg
-{% endif %}
-{% endfor %}
+{% endif -%}
+{%- if role == 'broker' %}
+  nginx:
+    service:
+      - watch:
+        - file: /etc/nginx/conf.d/shinken-web.conf
+{% endif -%}
+{%- endfor %}

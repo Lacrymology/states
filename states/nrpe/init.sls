@@ -45,3 +45,9 @@ nagios-nrpe-server:
     - watch:
       - pkg: nagios-nrpe-server
       - file: nagios-nrpe-server
+
+/usr/local/bin/check_memory.py:
+  file:
+    - managed
+    - source: salt://nrpe/check.py
+    - mode: 555

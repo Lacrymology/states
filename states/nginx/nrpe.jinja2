@@ -1,3 +1,4 @@
 # {{ pillar['message_do_not_modify'] }}
 command[check_nginx_master]=/usr/lib/nagios/plugins/check_procs -w 1:1 -a 'nginx: master process /usr/sbin/nginx -c /etc/nginx/nginx.conf' -u root
 command[check_nginx_worker]=/usr/lib/nagios/plugins/check_procs -a 'nginx: worker process' -u root
+command[check_nginx_status]=/usr/lib/nagios/plugins/check_http -H 127.0.0.1 -I 127.0.0.1 -u /nginx_status -p 80 -e '200 OK'

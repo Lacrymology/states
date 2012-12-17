@@ -5,3 +5,4 @@ command[check_load]=/usr/lib/nagios/plugins/check_load -w 15,10,5 -c 30,25,20
 command[check_all_disks]=/usr/lib/nagios/plugins/check_disk -w 20% -c 10%
 command[check_zombie_procs]=/usr/lib/nagios/plugins/check_procs -w 5 -c 10 -s Z
 command[check_total_procs]=/usr/lib/nagios/plugins/check_procs -w 150 -c 200
+command[check_loopback]=/usr/lib/nagios/plugins/check_ping -H 127.0.0.1 -p 1 -w 100,100% -c 100,100%

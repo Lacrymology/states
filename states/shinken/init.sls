@@ -3,11 +3,9 @@
 include:
   - virtualenv
   - nrpe
-{% for role in pillar['shinken']['architecture'] -%}
-{%- if role == 'poller' %}
+{%- if grains['id'] in pillar['shinken']['architecture']['poller'] %}
   - nginx
-{% endif -%}
-{%- endfor %}
+{% endfor -%}
 
 {#{% if 'arbiter' in pillar['shinken']['roles'] %}#}
 {#    {% if pillar['shinken']['arbiter']['use_mongodb'] %}#}
@@ -160,11 +158,11 @@ extend:
 {% for role in pillar['shinken']['architecture'] %}
 {% if grains['id'] in pillar['shinken']['architecture'][role] %}
         - file: /etc/nagios/nrpe.d/shinken-{{ role }}.cfg
-{% endif -%}
 {%- if role == 'broker' %}
   nginx:
     service:
       - watch:
         - file: /etc/nginx/conf.d/shinken-web.conf
 {% endif -%}
+{%- endif -%}
 {%- endfor %}

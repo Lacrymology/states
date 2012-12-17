@@ -2,3 +2,5 @@
 {% for instance in pillar['graphite']['carbon']['instances'] %}
 command[check_carbon_{{ instance }}]=/usr/lib/nagios/plugins/check_procs -w 1:1 -u graphite -a "/usr/local/graphite/bin/python /usr/local/graphite/bin/carbon-cache.py --config=/etc/graphite/carbon.conf --instance={{ instance }} start"
 {% endfor %}
+command[check_carbon_pickle]=/usr/lib/nagios/plugins/check_tcp -H {{ pillar['graphite_address'] }} -p 2004
+command[check_carbon_port]=/usr/lib/nagios/plugins/check_tcp -H {{ pillar['graphite_address'] }} -p 2003

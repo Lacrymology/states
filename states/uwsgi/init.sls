@@ -1,8 +1,3 @@
-{# TODO: add support for http://projects.unbit.it/uwsgi/wiki/Carbon #}
-{# TODO: add support for http://projects.unbit.it/uwsgi/wiki/Carbon #}
-{# TODO: add support for https://github.com/unbit/uwsgi/tree/master/plugins/graylog2 #}
-{# http://lists.unbit.it/pipermail/uwsgi/2011-December/003152.html #}
-
 include:
   - nrpe
   - git
@@ -21,15 +16,6 @@ uwsgitop:
   pip:
     - installed
 
-uwsgi-carbon-patch:
-  file:
-    - patch
-    - name: /usr/local/uwsgi/plugins/carbon/carbon.c
-    - source: salt://uwsgi/carbon.patch
-    - hash: md5=6c94066fc6d1e5934963239fb68cdfc2
-    - require:
-      - git: uwsgi_build
-
 uwsgi_build:
   pkg:
     - latest
@@ -39,7 +25,7 @@ uwsgi_build:
       - libxml2-dev
   git:
     - latest
-    - name: git://github.com/unbit/uwsgi.git
+    - name: {{ pillar['uwsgi']['repository'] }}
     - target: /usr/local/uwsgi
     - rev: {{ pillar['uwsgi']['version'] }}
     - require:
@@ -63,7 +49,6 @@ uwsgi_build:
       - pkg: uwsgi_build
       - git: uwsgi_build
       - file: uwsgi_build
-      - file: uwsgi-carbon-patch
 
 uwsgi_sockets:
   file:

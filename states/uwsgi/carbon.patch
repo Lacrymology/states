@@ -1,4 +1,0 @@
-163c163
-< 		wok = carbon_write(&fd, "uwsgi.%s.%s.requests %llu %llu\n", uwsgi.hostname, u_carbon.id, (unsigned long long) uwsgi.workers[0].requests, (unsigned long long) uwsgi.current_time);
----
-> 		wok = carbon_write(&fd, "%s.uwsgi.%s.requests %llu %llu\n", uwsgi.hostname, u_carbon.id, (unsigned long long) uwsgi.workers[0].requests, (unsigned long long) uwsgi.current_time);

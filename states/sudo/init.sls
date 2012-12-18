@@ -8,6 +8,6 @@ sudo:
     - mode: 440
     - source: salt://sudo/config.jinja2
     - require:
-      pkg: sudo
+      - pkg: sudo
   pkg:
     - installed

@@ -1,4 +1,5 @@
 # {{ pillar['message_do_not_modify'] }}
+# this file contains the shinken architecture of monitoring
 
 define realm {
     realm_name All
@@ -16,7 +17,7 @@ http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects
 define arbiter {
     arbiter_name arbiter-{{ grains['id'] }}
     host_name {{ id }}
-    address {{ pillar['shinken']['architecture']['arbiter'][id] }}
+    address {{ pillar['shinken']['ip_addresses'][id] }}
     port 7770
     modules arbiter-retention
     {# only the first one is not a spare #}
@@ -46,7 +47,7 @@ http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects
 {% for id in pillar['shinken']['architecture']['scheduler'] %}
 define scheduler {
     scheduler_name scheduler-{{ id }}
-    address {{ pillar['shinken']['architecture']['scheduler'][id] }}
+    address {{ pillar['shinken']['ip_addresses'][id] }}
     port 7768
     modules scheduler-retention
     realm All
@@ -73,9 +74,9 @@ http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects
 {% for id in pillar['shinken']['architecture']['poller'] %}
 define poller {
     poller_name poller-{{ id }}
-    address {{ pillar['shinken']['architecture']['poller'][id]['address'] }}
+    address {{ pillar['shinken']['ip_addresses'][id] }}
     port 7771
-    poller_tags {{ pillar['shinken']['architecture']['poller'][id]['tag'] }}
+    poller_tags {{ pillar['shinken']['architecture']['poller'][id] }}
     realm All
 }
 {% endfor %}
@@ -95,21 +96,20 @@ http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects
 {% for id in pillar['shinken']['architecture']['broker'] %}
 define broker {
     broker_name broker-{{ id }}
-    address {{ pillar['shinken']['architecture']['broker'][id] }}
+    address {{ pillar['shinken']['ip_addresses'][id] }}
     port 7772
     modules broker-syslog, broker-graphite, broker-retention, broker-webui
     realm All
-    # Take data from Arbiter. There should be only one
     manage_arbiters 1
     {% if not loop.first %}
     spare 1
     {% endif %}
-{#                            ; broker for the arbiter.#}
-{#    manage_sub_realms   1   ; Does it take jobs from schedulers of sub-Realms?#}
-{#    timeout             3   ; Ping timeout#}
-{#    data_timeout        120 ; Data send timeout#}
-{#    max_check_attempts  3   ; If ping fails N or more, then the node is dead#}
-{#    check_interval      60  ; Ping node every minutes#}
+{#                            ; broker for the arbiter.
+    manage_sub_realms   1   ; Does it take jobs from schedulers of sub-Realms?
+    timeout             3   ; Ping timeout
+    data_timeout        120 ; Data send timeout
+    max_check_attempts  3   ; If ping fails N or more, then the node is dead
+    check_interval      60  ; Ping node every minutes#}
 }
 {% endfor %}
 
@@ -149,41 +149,41 @@ define module {
     auth_secret CHANGE_ME
     manage_acl 1
     login_text Monitoring
-{#    allow_html_output 0       ; Allow or not HTML chars in plugins output.#}
-{#                                ; WARNING: Allowing can be a security issue.#}
-{#    max_output_length   100     ; Maximum output length for plugin output in webui#}
-{#    play_sound          0       ; Play sound on new non-acknowledged problems.#}
+{#    allow_html_output 0       ; Allow or not HTML chars in plugins output.
+                                ; WARNING: Allowing can be a security issue.
+    max_output_length   100     ; Maximum output length for plugin output in webui
+    play_sound          0       ; Play sound on new non-acknowledged problems.#}
 
     modules broker-webui-auth, broker-webui-graphite
 
-{#    ## Advanced Options#}
-{#    # Don't use them as long as you don't know what you are doing!#}
-{#    #http_backend            auto    ; Choice is: auto, wsgiref, cherrypy,#}
-{#                                     ; paste, tornado, twisted or gevent.#}
-{#                                     ; Leave auto to find the best available.#}
-{#    #remote_user_enable      1       ; If WebUI is behind a web server which#}
-{#                                     ; has already authenticated user, enable.#}
-{#    #remote_user_variable    X_Remote_User  ; Set to the HTTP header containing#}
-{#                                     ; the authenticated user s name, which#}
-{#                                     ; must be a Shinken contact.#}
+{#    ## Advanced Options
+    # Don't use them as long as you don't know what you are doing!
+    #http_backend            auto    ; Choice is: auto, wsgiref, cherrypy,
+                                     ; paste, tornado, twisted or gevent.
+                                     ; Leave auto to find the best available.
+    #remote_user_enable      1       ; If WebUI is behind a web server which
+                                     ; has already authenticated user, enable.
+    #remote_user_variable    X_Remote_User  ; Set to the HTTP header containing
+                                     ; the authenticated user s name, which
+                                     ; must be a Shinken contact.#}
 }
 
-{### Module:      OpenLDAP_UI#}
-{### Loaded by:   WebUI#}
-{### Usage:       Uncomment and set your value in ldap_uri#}
-{## Check authentication for WebUI using an Open Ldap server.#}
-{#define module {#}
-{#    module_name     OpenLDAP_UI#}
-{#    module_type     ad_webui#}
-{#    #ldap_uri        ldaps://myserver#}
-{#    username        user#}
-{#    password        password#}
-{#    basedn          DC=google,DC=com#}
-{##}
-{#    # For mode you can switch between ad (active dir)#}
-{#    # and openldap#}
-{#    mode            openldap#}
-{#}#}
+{## Module:      OpenLDAP_UI
+## Loaded by:   WebUI
+## Usage:       Uncomment and set your value in ldap_uri
+# Check authentication for WebUI using an Open Ldap server.
+define module {
+    module_name     OpenLDAP_UI
+    module_type     ad_webui
+    #ldap_uri        ldaps://myserver
+    username        user
+    password        password
+    basedn          DC=google,DC=com
+
+    # For mode you can switch between ad (active dir)
+    # and openldap
+    mode            openldap
+}#}
 
 # Check authentification using password parameter in contact definition.
 define module {
@@ -199,29 +199,27 @@ define module {
     graphite_data_source shinken
 }
 
-{#
+{#-
 Description: The reactionner is responsible for:
 - Executing notification actions
 - Executing event handler actions
 http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects/reactionner
-#}
+-#}
 {% for id in pillar['shinken']['architecture']['reactionner'] %}
 define reactionner {
     reactionner_name reactionner-{{ id }}
-    address {{ pillar['shinken']['architecture']['reactionner'][id] }}
+    address {{ pillar['shinken']['ip_addresses'][id] }}
     port 7769
-{#    spare 0#}
     realm All
-
-{#    ## Optional#}
-{#    manage_sub_realms   0   ; Does it take jobs from schedulers of sub-Realms?#}
-{#    min_workers         1   ; Starts with N processes (0 = 1 per CPU)#}
-{#    max_workers         15  ; No more than N processes (0 = 1 per CPU)#}
-{#    polling_interval    1   ; Get jobs from schedulers each 1 second#}
-{#    timeout             3   ; Ping timeout#}
-{#    data_timeout        120 ; Data send timeout#}
-{#    max_check_attempts  3   ; If ping fails N or more, then the node is dead#}
-{#    check_interval      60  ; Ping node every minutes#}
+{#  Optional
+    manage_sub_realms   0   ; Does it take jobs from schedulers of sub-Realms?
+    min_workers         1   ; Starts with N processes (0 = 1 per CPU)
+    max_workers         15  ; No more than N processes (0 = 1 per CPU)
+    polling_interval    1   ; Get jobs from schedulers each 1 second
+    timeout             3   ; Ping timeout
+    data_timeout        120 ; Data send timeout
+    max_check_attempts  3   ; If ping fails N or more, then the node is dead
+    check_interval      60  ; Ping node every minutes#}
     modules
 }
 {% endfor %}
@@ -234,14 +232,13 @@ load passive modules (like NSCA) and be read by the arbiter to dispatch data.
 {% for id in pillar['shinken']['architecture']['receiver'] %}
 define receiver {
     receiver_name receiver-{{ id }}
-    address {{ pillar['shinken']['architecture']['receiver'][id] }}
+    address {{ pillar['shinken']['ip_addresses'][id] }}
     port 7773
-{#    spare 0#}
     modules
     realm All
-{#    direct_routing      0   ; If enabled, it will directly send commands to the#}
-{#                            ; schedulers if it know about the hostname in the#}
-{#                            ; command.#}
+{#    direct_routing      0   ; If enabled, it will directly send commands to the
+                            ; schedulers if it know about the hostname in the
+                            ; command.#}
 }
 {% endfor %}
 {% endif %}

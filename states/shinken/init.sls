@@ -15,7 +15,7 @@ include:
 
 {# common to all shinken daemons #}
 
-{% set configs = ('architecture',) %}
+{% set configs = ('architecture', 'infra') %}
 
 {% for dirname in ('log', 'lib') %}
 /var/{{ dirname }}/shinken:
@@ -90,6 +90,9 @@ shinken-{{ role }}:
     - source: salt://shinken/{% if role != 'arbiter' %}non_{% endif %}arbiter.jinja2
     - context:
       shinken_component: {{ role }}
+{%- if role == 'arbiter' %}
+      configs: {{ configs }}
+{% endif -%}
     - require:
       - virtualenv: shinken
   service:
@@ -102,6 +105,7 @@ shinken-{{ role }}:
 {% if role == 'arbiter' %}
     {% for config in configs %}
       - file: /etc/shinken/{{ config }}.conf
+
     {% endfor %}
 
 /etc/shinken/objects:

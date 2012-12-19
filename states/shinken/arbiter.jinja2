@@ -8,7 +8,9 @@ pack_distribution_file=/var/lib/shinken/distribution.pack
 
 execute_host_checks=1
 execute_service_checks=1
-cfg_file=/etc/shinken/architecture.conf
+{%- for config in configs %}
+cfg_file=/etc/shinken/{{ config }}.conf
+{% endfor -%}
 cfg_dir=/etc/shinken/objects/
 
 # if 1, disable all notice and warning messages at

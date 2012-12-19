@@ -81,21 +81,6 @@ carbon:
     - mode: 440
     - source: salt://carbon/config.jinja2
 
-{#
- # until https://github.com/graphite-project/carbon/commit/2a6dbe680c973c54c5426eb4248f90ca798595c1
- # is merged in a stable release
- #}
-carbon-patch:
-  file:
-    - managed
-    - name: /usr/local/graphite/lib/python2.7/site-packages/carbon/writer.py
-    - user: root
-    - group: root
-    - mode: 644
-    - source: salt://carbon/writer.py
-    - require:
-      - module: carbon
-
 {% for instance in pillar['graphite']['carbon']['instances'] %}
 carbon-{{ instance }}:
   file:
@@ -123,7 +108,6 @@ carbon-{{ instance }}:
       - file: /etc/graphite/carbon.conf
       - file: carbon_storage-schemas
       - file: carbon-{{ instance }}
-      - file: carbon-patch
       - cmd: carbon
 
 carbon-{{ instance }}-logdir:

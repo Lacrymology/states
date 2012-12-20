@@ -37,7 +37,7 @@ include:
     - require:
       - user: shinken
 
-{% if ssl in pillar['shinken'] %}
+{% if 'ssl' in pillar['shinken'] %}
 {% for key_file in pillar['shinken']['ssl'] %}
 /usr/local/shinken/{{ key_file }}:
   file:

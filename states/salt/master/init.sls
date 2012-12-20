@@ -2,6 +2,7 @@ include:
   - salt
   - git
   - ssh
+  - nrpe
 
 salt-master:
   file:
@@ -35,3 +36,20 @@ salt-master:
     - enable: True
     - watch:
       - pkg: salt-master
+
+
+/etc/nagios/nrpe.d/salt-master.cfg:
+  file:
+    - managed
+    - template: jinja
+    - user: nagios
+    - group: nagios
+    - mode: 440
+    - source: salt://salt/master/nrpe.jinja2
+
+extend:
+  nagios-nrpe-server:
+    service:
+      - watch:
+        - file: /etc/nagios/nrpe.d/salt-master.cfg
+

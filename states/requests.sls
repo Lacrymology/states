@@ -4,6 +4,6 @@ include:
 requests:
   pip:
     - installed
-    - upgrade: True
+    - version: 0.14.2
   require:
     - pkg: python-pip

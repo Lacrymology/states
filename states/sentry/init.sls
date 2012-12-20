@@ -146,6 +146,7 @@ sentry-migrate-fake:
       deployment: sentry
       workers: {{ pillar['sentry']['workers'] }}
       domain_name: {{ pillar['sentry']['address'] }}
+      protocol: {% if 'ssl' in pillar['sentry'] %}https{% else %}http{% endif %}
       uri: /login/
 
 /etc/nagios/nrpe.d/postgresql-sentry.cfg:

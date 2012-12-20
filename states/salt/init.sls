@@ -8,20 +8,6 @@ include:
  # apt-get install salt-minion
  #}
 
-{#
- this is until 0.16 is out
- #}
-{% for patched_file, source in (('states/git', 'git'), ('modules/djangomod', 'djangomod')) %}
-salt-patch-{{ source }}:
-  file:
-    - managed
-    - name: /usr/share/pyshared/salt/{{ patched_file }}.py
-    - source: salt://salt/{{ source }}.py
-    - user: root
-    - group: root
-    - mode: 444
-{% endfor %}
-
 salt-minion:
   apt_repository:
     - ubuntu_ppa

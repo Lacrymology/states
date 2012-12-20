@@ -4,8 +4,7 @@
 master = true
 env = DJANGO_SETTINGS_MODULE=graphite.local_settings
 module = graphite.wsgi
-{#threads = {{ pillar['sentry']['workers'] }}#}
-{#enable-threads = true#}
+processes = {{ pillar['graphite']['web']['workers'] }}
 uid = www-data
 gid = graphite
 threaded-logger = true

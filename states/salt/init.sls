@@ -28,8 +28,6 @@ salt-minion:
     - running
     - enable: True
     - watch:
-      - file: salt-patch-git
-      - file: salt-patch-djangomod
       - pkg: salt-minion
       - file: salt-minion
 

@@ -1,9 +1,12 @@
 ssmtp:
   pkg:
     - installed
-    - names:
-      - ssmtp
-      - bsd-mailx
+
+bsd-mailx:
+  pkg:
+    - installed
+    - require:
+      - pkg: ssmtp
 
 {% for template, config in (('config', 'ssmtp.conf'), ('revaliases', 'revaliases')) %}
 /etc/ssmtp/{{ config }}:
@@ -15,5 +18,5 @@ ssmtp:
     - group: root
     - mode: 644
     - require:
-      - pkg: ssmtp
+      - pkg: bsd-mailx
 {% endfor %}

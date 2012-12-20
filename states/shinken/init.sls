@@ -37,7 +37,7 @@ include:
     - require:
       - user: shinken
 
-{% if 'ssl' in pillar['shinken'] %}
+{% if 'ssl' in pillar['shinken'] and grains['id'] in pillar['shinken']['architecture']['broker'] %}
 {% for key_file in pillar['shinken']['ssl'] %}
 /usr/local/shinken/{{ key_file }}:
   file:
@@ -181,6 +181,9 @@ extend:
     service:
       - watch:
         - file: /etc/nginx/conf.d/shinken-web.conf
+{% for key_file in pillar['shinken']['ssl'] %}
+        - file: /usr/local/shinken/{{ key_file }}
+{% endfor %}
 {% endif %}
 {% endif %}
 {% endfor %}

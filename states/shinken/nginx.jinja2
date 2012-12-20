@@ -2,6 +2,14 @@
 
 server {
     listen 80;
+{% if 'ssl' in pillar['shinken'] %}
+    listen 443 ssl;
+    ssl_certificate /usr/local/shinken/ssl.pem;
+    ssl_certificate_key /usr/local/shinken/ssl.pem;
+    ssl_client_certificate /usr/local/shinken/ca.crt;
+    ssl_ciphers ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP:+eNULL;
+{% endif %}
+
     access_log /var/log/nginx/shinken-webui-access.log;
     error_log /var/log/nginx/shinken-webui-error.log;
 

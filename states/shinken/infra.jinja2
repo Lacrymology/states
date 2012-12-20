@@ -2,12 +2,12 @@
 # This file contains the checks for the low-level infrastructure components
 # supported by salt.
 
-{% for user in pillar['shinken']['web']['users'] %}
+{% for user in pillar['shinken']['users'] %}
 define contact {
     contact_name {{ user }}
-    email {{ pillar['shinken']['web']['users'][user]['email'] }}
+    email {{ pillar['shinken']['users'][user]['email'] }}
     can_submit_commands 1
-    password {{ pillar['shinken']['web']['users'][user]['password'] }}
+    password {{ pillar['shinken']['users'][user]['password'] }}
     is_admin 1
     host_notification_period 24x7
     host_notification_options d,u,r,f,s
@@ -23,7 +23,7 @@ define contact {
 define contactgroup {
     contactgroup_name admins
     alias admins
-    members ben
+    members {% for user in pillar['shinken']['users'] %}{{ user }}{% if not loop.last %},{% endif %}{% endfor %}
     # host notifications can be sent anytime
     host_notification_period 24x7
     # send notifications for all host states, flapping events (f), and scheduled
@@ -174,7 +174,7 @@ define service {
     use salt-service
 }
 
-{% for service in ('firewall', 'loopback', 'memory', 'cron', 'diamond', 'syslogd', 'klogd', 'salt_minion', 'ssh', 'statsd', 'users', 'load', 'all_disks', 'zombie_procs', 'total_procs') %}
+{% for service in ('loopback', 'memory', 'cron', 'diamond', 'syslogd', 'klogd', 'salt_minion', 'ssh', 'statsd', 'users', 'load', 'all_disks', 'zombie_procs', 'total_procs') %}
 define service {
     host_name {% for host in pillar['shinken']['ip_addresses'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description Infra-{{ service }}

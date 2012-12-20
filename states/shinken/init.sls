@@ -3,9 +3,9 @@
 include:
   - virtualenv
   - nrpe
-{%- if grains['id'] in pillar['shinken']['architecture']['poller'] %}
+{% if grains['id'] in pillar['shinken']['architecture']['broker'] %}
   - nginx
-{% endif -%}
+{% endif %}
 
 {#{% if 'arbiter' in pillar['shinken']['roles'] %}#}
 {#    {% if pillar['shinken']['arbiter']['use_mongodb'] %}#}
@@ -37,6 +37,18 @@ include:
     - require:
       - user: shinken
 
+{% if ssl in pillar['shinken'] %}
+{% for key_file in pillar['shinken']['ssl'] %}
+/usr/local/shinken/{{ key_file }}:
+  file:
+    - managed
+    - source: {{ pillar['shinken']['ssl'][key_file] }}
+    - user: www-data
+    - group: www-data
+    - mode: 440
+{% endfor %}
+{% endif %}
+
 shinken:
   virtualenv:
     - manage
@@ -59,16 +71,16 @@ shinken:
     - home: /var/lib/shinken
     - gid_from_name: True
 
-{% for role in pillar['shinken']['architecture'] -%}
-{%- if grains['id'] in pillar['shinken']['architecture'][role] -%}
+{% for role in pillar['shinken']['architecture'] %}
+{% if grains['id'] in pillar['shinken']['architecture'][role] %}
 
-{%- if role == 'poller' %}
+{% if role == 'poller' %}
 nagios-nrpe-plugin:
   pkg:
     - installed
-{% endif -%}
+{% endif %}
 
-{%- if role == 'broker' %}
+{% if role == 'broker' %}
 /etc/nginx/conf.d/shinken-web.conf:
   file:
     - managed
@@ -90,9 +102,12 @@ shinken-{{ role }}:
     - source: salt://shinken/{% if role != 'arbiter' %}non_{% endif %}arbiter.jinja2
     - context:
       shinken_component: {{ role }}
-{%- if role == 'arbiter' %}
-      configs: {{ configs }}
-{% endif -%}
+{% if role == 'arbiter' %}
+      configs:
+  {% for config in configs %}
+        - {{ config }}
+  {% endfor %}
+{% endif %}
     - require:
       - virtualenv: shinken
   service:
@@ -105,7 +120,6 @@ shinken-{{ role }}:
 {% if role == 'arbiter' %}
     {% for config in configs %}
       - file: /etc/shinken/{{ config }}.conf
-
     {% endfor %}
 
 /etc/shinken/objects:
@@ -162,11 +176,11 @@ extend:
 {% for role in pillar['shinken']['architecture'] %}
 {% if grains['id'] in pillar['shinken']['architecture'][role] %}
         - file: /etc/nagios/nrpe.d/shinken-{{ role }}.cfg
-{%- if role == 'broker' %}
+{% if role == 'broker' %}
   nginx:
     service:
       - watch:
         - file: /etc/nginx/conf.d/shinken-web.conf
-{% endif -%}
-{%- endif -%}
-{%- endfor %}
+{% endif %}
+{% endif %}
+{% endfor %}

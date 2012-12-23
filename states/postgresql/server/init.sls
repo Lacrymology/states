@@ -99,7 +99,7 @@ postgresql_diamond_collector:
     - group: root
     - mode: 500
     - template: jinja
-    - source: salt://deployment/web/backup.jinja2
+    - source: salt://postgresql/server/backup.jinja2
 {% endif %}
 
 extend:

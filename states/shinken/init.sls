@@ -181,9 +181,11 @@ extend:
     service:
       - watch:
         - file: /etc/nginx/conf.d/shinken-web.conf
+{% if 'ssl' in pillar['shinken'] %}
 {% for key_file in pillar['shinken']['ssl'] %}
         - file: /usr/local/shinken/{{ key_file }}
 {% endfor %}
+{% endif %}
 {% endif %}
 {% endif %}
 {% endfor %}

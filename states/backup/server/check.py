@@ -1,4 +1,4 @@
-#!/usr/env/bin python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 """
@@ -69,7 +69,7 @@ class BackupFile(object):
         if format not in items:
             msg = "invalid extension (%s) and type in %s" % (compression,
                                                              filename)
-            logger.error(msg)
+            logger.warning(msg)
             raise ValueError(msg)
         hostname = '-'.join(items[0:items.index(format) - 1])
         name = items[items.index(format) - 1]
@@ -77,21 +77,6 @@ class BackupFile(object):
         return cls(hostname, name, type,
                    datetime.datetime.strptime(date_string, '%Y-%m-%d-%H_%M_%S'),
                    compression)
-#
-#    @classmethod
-#    def type(cls, extension):
-#        """
-#        Return type based on a file extension
-#        :param extension: filename extension
-#        :type extension: basestring
-#        """
-#        for item in cls.format_type:
-#            if cls.format_type[item] == extension:
-#                return item
-#        msg = "bad extension {0}".format(extension)
-#        logger.error(msg)
-#        raise ValueError(msg)
-
 
 class BackupDirectory(UserList):
     """
@@ -164,5 +149,5 @@ def main():
         sys.exit(0)
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.DEBUG, stream=sys.stdout)
+    logging.basicConfig(level=logging.ERROR, stream=sys.stdout)
     main()

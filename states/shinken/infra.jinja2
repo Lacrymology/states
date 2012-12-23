@@ -348,7 +348,7 @@ define service {
  #}
 {% if 'backup' in pillar['shinken'] %}
 define service {
-    host_name {% for host in pillar['shinken']['architecture']['backup'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
+    host_name {% for host in pillar['shinken']['backup'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description Backups
     check_command check_nrpe!check_backups
     use salt-service

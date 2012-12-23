@@ -3,6 +3,6 @@
 
 NOW=`date '+%Y-%m-%d-%H_%M_%S'`
 sudo -u postgres -g postgres pg_dump $1 > /tmp/$1-$NOW.sql
-nice -n 20 xz /tmp/$1-$NOW.sql
+nice -n 20 gzip /tmp/$1-$NOW.sql
 nice -n 20 scp -q /tmp/$1-$NOW.sql.xz root@{{ pillar['backup_server']['address'] }}:/var/lib/backup/{{ grains['id'] }}-$1-postgresql-$NOW.sql.xz
 rm -f /tmp/$1-$NOW.sql.xz

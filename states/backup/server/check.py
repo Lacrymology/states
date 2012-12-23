@@ -32,7 +32,7 @@ class BackupFile(object):
         'sql': 'postgresql'
     }
 
-    def __init__(self, hostname, name, type, date, compression='.xz'):
+    def __init__(self, hostname, name, type, date, compression='.gz'):
         self.hostname = hostname
         self.name = name
         self.type = type

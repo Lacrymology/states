@@ -91,15 +91,15 @@ postgresql_diamond_collector:
     - mode: 440
     - source: salt://postgresql/server/nrpe.jinja2
 
-{% if 'availabilityZone' not in grains %}
-/etc/cron.daily/backup-postgresql:
+{% if 'backup_server' in pillar %}
+/usr/local/bin/backup-postgresql:
   file:
     - managed
     - user: root
     - group: root
     - mode: 500
     - template: jinja
-    - source: salt://postgresql/server/backup.jinja2
+    - source: salt://deployment/web/backup.jinja2
 {% endif %}
 
 extend:

@@ -1,0 +1,24 @@
+# {{ pillar['message_do_not_modify'] }}
+[loggers]
+keys = root
+
+[handlers]
+keys = gelf
+
+[formatters]
+keys = message_only
+
+[logger_root]
+level = DEBUG
+handlers = gelf
+
+[handler_gelf]
+class=graypy.handler.GELFHandler
+level=DEBUG
+formatter=message_only
+args = ('{{ pillar['graylog2_address'] }}', 12201)
+
+[formatter_message_only]
+format = %(message)s
+datefmt =
+class = logging.Formatter

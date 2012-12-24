@@ -1,2 +1,2 @@
 # {{ pillar['message_do_not_modify'] }}
-command[check_salt_minion]=/usr/lib/nagios/plugins/check_procs -c 1:2 -C python -a '/usr/bin/salt-minion' -u root
+command[check_salt_minion]=/usr/lib/nagios/plugins/check_procs -c 1:2 -C salt-minion -u root

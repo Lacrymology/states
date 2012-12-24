@@ -1,6 +1,7 @@
 include:
   - ssh
   - nrpe
+  - sudo
 
 backup-server:
   ssh_auth:
@@ -46,6 +47,16 @@ backup-archiver-dependency:
     - requirements: {{ opts['cachedir'] }}/backup-requirements.txt
     - watch:
       - file: backup-archiver-dependency
+
+/etc/sudoers.d/nrpe_backups:
+  file:
+    - managed
+    - source: salt://backup/server/sudo.jinja2
+    - mode: 440
+    - user: root
+    - group: root
+    - require:
+      - pkg: sudo
 
 /etc/backup-archive.conf:
   file:

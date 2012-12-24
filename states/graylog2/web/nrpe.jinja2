@@ -1,2 +1,2 @@
 # {{ pillar['message_do_not_modify'] }}
-command[check_graylog2_web]=/usr/lib/nagios/plugins/check_procs -w 2:2 -a 'script/rails server -e production -eproduction -p{{ pillar['graylog2']['web']['port'] }}'
+command[check_graylog2_web]=/usr/lib/nagios/plugins/check_procs -c 1:1 -C ruby -a 'script/rails server -e production -eproduction -p{{ pillar['graylog2']['web']['port'] }}'

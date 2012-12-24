@@ -1,2 +1,2 @@
 # {{ pillar['message_do_not_modify'] }}
-command[check_ssh]=/usr/lib/nagios/plugins/check_procs -w 1:1 -a /usr/sbin/sshd -u root
+command[check_ssh]=/usr/lib/nagios/plugins/check_procs -c 1:1 -C sshd -u root -a /usr/sbin/sshd

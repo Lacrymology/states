@@ -1,4 +1,4 @@
 # {{ pillar['message_do_not_modify'] }}
 {% for instance in pillar['graphite']['carbon']['instances'] %}
-command[check_carbon_{{ instance }}]=/usr/lib/nagios/plugins/check_procs -w 1:1 -u graphite -a "/usr/local/graphite/bin/python /usr/local/graphite/bin/carbon-cache.py --config=/etc/graphite/carbon.conf --instance={{ instance }} start"
+command[check_carbon_{{ instance }}]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u graphite -C python  -a "/usr/local/graphite/bin/carbon-cache.py --config=/etc/graphite/carbon.conf --instance={{ instance }} start"
 {% endfor %}

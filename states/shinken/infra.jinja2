@@ -370,6 +370,15 @@ define service {
     check_command check_tcp!{{ listen_port[service] }}
     use salt-service
 }
+
+{% if service == 'broker' %}
+define service {
+    host_name {% for host in pillar['shinken']['architecture'][service] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description Shinken-broker-web
+    check_command check_nrpe!check_broker_web
+    use salt-service
+}
+{% endif %}
 {% endfor %}
 
 {#

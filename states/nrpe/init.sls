@@ -58,6 +58,7 @@ nagios-nrpe-server:
 /etc/gsyslog.d/nrpe.conf:
   file:
     - managed
+    - template: jinja
     - source: salt://nrpe/gsyslog.jinja2
     - user: root
     - group: root

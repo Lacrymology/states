@@ -7,7 +7,6 @@ deny_any =
 
 [filter_nrpe_ssh]
 loggers = syslog.auth
-deny_any =
-{%- for host in pillar['shinken_pollers'] -%}
+deny_any ={% for host in pillar['shinken_pollers'] %}
     ^Connection closed by {{ host }} \[preauth\]$
-{% endfor -%}
+{%- endfor -%}

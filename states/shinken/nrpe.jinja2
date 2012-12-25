@@ -1,8 +1,8 @@
 # {{ pillar['message_do_not_modify'] }}
 {% if shinken_component == 'reactionner' or shinken_component == 'scheduler' %}
-command[check_shinken_{{ shinken_component }}]=/usr/lib/nagios/plugins/check_procs -c 1:10 {% if shinken_component != 'arbiter' %}-u shinken {% endif %}-a 'shinken-{{ shinken_component }} -c /etc/shinken/{{ shinken_component }}.conf'
+command[check_shinken_{{ shinken_component }}]=/usr/lib/nagios/plugins/check_procs -c 1:10 -a 'shinken-{{ shinken_component }} -u shinken -c /etc/shinken/{{ shinken_component }}.conf'
 {% else %}
-command[check_shinken_{{ shinken_component }}]=/usr/lib/nagios/plugins/check_procs -c 1:10 -u shinken -C shinken-{{ shinken_component }}
+command[check_shinken_{{ shinken_component }}]=/usr/lib/nagios/plugins/check_procs -c 1:10 {% if shinken_component != 'arbiter' %}-u shinken {% endif %}-C shinken-{{ shinken_component }}
 {% endif %}
 {% if shinken_component == 'broker' %}
 command[check_broker_web]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 7767

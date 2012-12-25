@@ -89,12 +89,20 @@ gsyslog:
     - require:
       - service: sysklogd
       - module: gsyslog
+      - file: /etc/gsyslog.d
   cmd:
     - wait
     - name: find /usr/local/gsyslog -name '*.pyc' -delete
     - stateful: False
     - watch:
       - module: gsyslog
+
+/etc/gsyslog.d:
+  file:
+    - directory
+    - user: root
+    - group: root
+    - mode: 555
 
 rsyslog:
   pkg:

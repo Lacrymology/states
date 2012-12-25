@@ -1,4 +1,7 @@
 # {{ pillar['message_do_not_modify'] }}
+[logging]
+include = /etc/gsyslog.d/
+
 {% if 'graylog2' not in pillar %}
 [udp]
 address = 127.0.0.1
@@ -15,7 +18,7 @@ keys = root,archive
 
 [handlers]
 keys = {% if 'graylog2_address' in pillar %}gelf,{% endif %}logfile
-{# keys = gelf,logfile,filter_debug #}
+#keys = gelf,logfile,filter_debug
 
 [formatters]
 keys = detailed,debug,message_only,timed_message

@@ -1,0 +1,13 @@
+# {{ pillar['message_do_not_modify'] }}
+
+[filter_nrpe]
+loggers = syslog.daemon
+deny_any =
+    ^Error: Could not complete SSL handshake. 5$
+
+[filter_nrpe_ssh]
+loggers = syslog.auth
+deny_any =
+{%- for host in pillar['shinken_pollers'] -%}
+    ^Connection closed by {{ host }} \[preauth\]$
+{% endfor -%}

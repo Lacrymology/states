@@ -3,6 +3,7 @@
 include:
   - pip
   - mercurial
+  - gsyslog
 
 nagiosplugin:
   hg:
@@ -50,4 +51,20 @@ nagios-nrpe-server:
   file:
     - managed
     - source: salt://nrpe/check.py
+    - user: root
+    - group: root
     - mode: 555
+
+/etc/gsyslog.d/nrpe.conf:
+  file:
+    - managed
+    - source: salt://nrpe/gsyslog.jinja2
+    - user: root
+    - group: root
+    - mode: 555
+
+extend:
+  gsyslog:
+    service:
+      - watch:
+        - file: /etc/gsyslog.d/nrpe.conf

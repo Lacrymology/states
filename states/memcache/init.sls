@@ -2,14 +2,26 @@ include:
   - diamond
   - nrpe
 
+/etc/memcached.conf:
+  file.absent
+
+/etc/init.d/memcached:
+  cmd:
+    - wait
+    - name: killall -9 memcached
+  file:
+    - absent
+    - watch:
+      - cmd: /etc/init.d/memcached
+
 memcached:
   file:
     - managed
-    - name: /etc/memcached.conf
+    - name: /etc/init/memcached.conf
     - template: jinja
     - user: root
     - group: root
-    - mode: 444
+    - mode: 440
     - source: salt://memcache/config.jinja2
     - require:
       - pkg: memcached

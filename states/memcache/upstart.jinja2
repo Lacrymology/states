@@ -1,0 +1,7 @@
+# {{ pillar['message_do_not_modify'] }}
+# memcached upstart script
+
+start on (filesystem and net-device-up IFACE=lo)
+stop on runlevel [!2345]
+
+exec /usr/bin/memcached -m {{ pillar['memcache']['memory'] }} -s /tmp/memcached.sock -p 11211 -u www-data -l 127.0.0.1

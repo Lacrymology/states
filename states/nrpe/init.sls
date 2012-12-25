@@ -62,7 +62,7 @@ nagios-nrpe-server:
     - source: salt://nrpe/gsyslog.jinja2
     - user: root
     - group: root
-    - mode: 555
+    - mode: 440
 
 extend:
   gsyslog:

@@ -22,7 +22,7 @@ memcached:
     - user: root
     - group: root
     - mode: 440
-    - source: salt://memcache/config.jinja2
+    - source: salt://memcache/upstart.jinja2
     - require:
       - pkg: memcached
   pkg:

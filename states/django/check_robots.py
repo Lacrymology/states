@@ -13,9 +13,9 @@ except Exception, err:
     print "ROBOTS WARNING - Can't get %s: %s" % (url, err)
     sys.exit(1)
 
-if rp.can_fetch("*", "/admin/"):
-    print 'ROBOTS WARNING - Can fetch /admin/'
-    sys.exit(1)
+#if rp.can_fetch("*", "/admin/"):
+#    print 'ROBOTS WARNING - Can fetch /admin/'
+#    sys.exit(1)
 
 if not rp.can_fetch("*", "/"):
     print "ROBOTS WARNING - Can't fetch /"

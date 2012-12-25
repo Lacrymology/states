@@ -90,4 +90,4 @@ args = ()
 [filter_pam_unix]
 loggers = syslog.authpriv
 deny_any =
-    ^pam_unix\((sshd|cron):session\): session (opened|closed) for user
+    ^pam_unix\((sshd|cron|sudo):session\): session (opened|closed) for user

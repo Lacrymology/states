@@ -1,5 +1,12 @@
 # {{ pillar['message_do_not_modify'] }}
 
+upstream shinken-backend {
+    ip_hash;
+{% for host in pillar['shinken']['architecture']['broker'] -%}
+    server {{ pillar['shinken']['ip_addresses'][host] }}:7767;
+{% endfor -%}
+}
+
 server {
     listen 80;
 {% if 'ssl' in pillar['shinken'] %}
@@ -15,7 +22,7 @@ server {
 
     server_name {% for hostname in pillar['shinken']['web']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
     location / {
-        proxy_pass http://localhost:7767;
+        proxy_pass http://shinken-webui;
         proxy_set_header X-Real-IP $remote_addr;
     }
 }

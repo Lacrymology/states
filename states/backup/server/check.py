@@ -146,7 +146,7 @@ def main():
     else:
         print 'BACKUP WARNING - {0} missing backup|backups={1}'.format(
             len(missing_backup), number_backups)
-        sys.exit(0)
+        sys.exit(1)
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.ERROR, stream=sys.stdout)

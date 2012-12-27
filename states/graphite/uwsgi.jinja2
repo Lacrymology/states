@@ -5,6 +5,9 @@ master = true
 env = DJANGO_SETTINGS_MODULE=graphite.local_settings
 module = graphite.wsgi
 processes = {{ pillar['graphite']['web']['workers'] }}
+{% if 'cheaper' in pillar['graphite']['web'] %}
+cheaper = {{ pillar['graphite']['web']['cheaper'] }}
+{% endif %}
 uid = www-data
 gid = graphite
 threaded-logger = true

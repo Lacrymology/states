@@ -43,6 +43,15 @@ memcached:
     - mode: 440
     - source: salt://memcache/nrpe.jinja2
 
+memcached_diamond_memory:
+  file:
+    - accumulated
+    - name: processes
+    - filename: /etc/diamond/collectors/ProcessMemoryCollector.conf
+    - text: |
+      [[memcached]]
+      name = ^memcached$
+
 {# Fix connection trough unix socket #}
 memcached_diamond_collector:
   file:

@@ -55,6 +55,16 @@ nagios-nrpe-server:
     - group: root
     - mode: 555
 
+nrpe_diamond_memory:
+  file:
+    - accumulated
+    - name: processes
+    - filename: /etc/diamond/collectors/ProcessMemoryCollector.conf
+    - text: |
+      [[nrpe]]
+      exe = ^\/usr\/sbin\/nrpe$
+      cmdline = ^\/usr\/lib\/nagios\/plugins\/check_
+
 /etc/gsyslog.d/nrpe.conf:
   file:
     - managed

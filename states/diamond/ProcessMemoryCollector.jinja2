@@ -7,4 +7,10 @@ unit = kB
 
 [[diamond]]
 
-exe = ^\/usr\/local\/diamond\/bin\/python$
+cmdline = ^\/usr\/local\/diamond\/bin\/python \/usr\/local\/diamond\/bin\/diamond
+
+{% if accumulator|default(False) %}
+{% for line in accumulator['processes'] %}
+{{ line }}
+{% endfor %}
+{% endif %}

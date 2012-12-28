@@ -24,6 +24,15 @@ statsd:
       - file: statsd
       - virtualenv: statsd
 
+statsd_diamond_memory:
+  file:
+    - accumulated
+    - name: processes
+    - filename: /etc/diamond/collectors/ProcessMemoryCollector.conf
+    - text: |
+      [[statsd]]
+      cmdline = ^\/usr\/local\/statsd\/bin\/python \/usr\/local\/statsd\/bin\/pystatsd\-server
+
 /etc/nagios/nrpe.d/statsd.cfg:
   file:
     - managed

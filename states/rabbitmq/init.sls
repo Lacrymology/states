@@ -100,6 +100,15 @@ rabbitmq-server:
     - require:
       - service: rabbitmq-server
 
+rabbitmq_diamond_memory:
+  file:
+    - accumulated
+    - name: processes
+    - filename: /etc/diamond/collectors/ProcessMemoryCollector.conf
+    - text: |
+      [[graylog2.web]]
+      exe = ^\/usr\/lib\/erlang\/erts-.+\/bin\/inet_gethost$,^\/usr\/lib\/erlang\/erts-.+\/bin\/beam.+rabbitmq.+$,^\/usr\/lib\/erlang\/erts-.+\/bin\/epmd$
+
 {% for vhost in pillar['rabbitmq']['vhosts'] %}
 rabbitmq-vhost-{{ vhost }}:
   rabbitmq_user:

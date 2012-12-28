@@ -31,6 +31,15 @@ salt-minion:
       - pkg: salt-minion
       - file: salt-minion
 
+salt_minion_diamond_memory:
+  file:
+    - accumulated
+    - name: processes
+    - filename: /etc/diamond/collectors/ProcessMemoryCollector.conf
+    - text: |
+      [[salt.minion]]
+      name = ^salt\-minion$
+
 /etc/nagios/nrpe.d/salt-minion.cfg:
   file:
     - managed

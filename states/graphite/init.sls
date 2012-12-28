@@ -54,6 +54,8 @@ graphite_wsgi:
     - require:
       - virtualenv: graphite
 
+{% call uwsgi_app_diamond('graphite') %}
+
 {#graphite_admin_user:#}
 {#  module:#}
 {#    - run#}

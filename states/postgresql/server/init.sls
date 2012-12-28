@@ -102,6 +102,15 @@ postgresql_diamond_collector:
     - source: salt://postgresql/server/backup.jinja2
 {% endif %}
 
+postgresql_diamond_memory:
+  file:
+    - accumulated
+    - name: processes
+    - filename: /etc/diamond/collectors/ProcessMemoryCollector.conf
+    - text: |
+      [[postgresql]]
+      exe = ^\/usr\/lib\/postgresql/\d+\.\d+\/bin\/postgres$
+
 extend:
   diamond:
     service:

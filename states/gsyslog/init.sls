@@ -104,6 +104,15 @@ gsyslog:
     - group: root
     - mode: 555
 
+gsyslog_diamond_memory:
+  file:
+    - accumulated
+    - name: processes
+    - filename: /etc/diamond/collectors/ProcessMemoryCollector.conf
+    - text: |
+      [[gsyslog]]
+      cmdline = ^\/usr\/local\/gsyslog\/bin\/python \/usr\/local\/gsyslog\/bin\/gsyslogd
+
 rsyslog:
   pkg:
     - purged

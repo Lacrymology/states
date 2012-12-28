@@ -49,6 +49,15 @@ nginx:
       - file: /etc/nginx/conf.d/example_ssl.conf
       - pkg: nginx
 
+nginx_diamond_memory:
+  file:
+    - accumulated
+    - name: processes
+    - filename: /etc/diamond/collectors/ProcessMemoryCollector.conf
+    - text: |
+      [[nginx]]
+      exe = ^\/usr\/sbin\/nginx$
+
 nginx_diamond_collector:
   file:
     - managed

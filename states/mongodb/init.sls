@@ -30,6 +30,15 @@ mongodb:
      - watch:
        - pkg: mongodb
 
+mongodb_diamond_memory:
+  file:
+    - accumulated
+    - name: processes
+    - filename: /etc/diamond/collectors/ProcessMemoryCollector.conf
+    - text: |
+      [[mongodb]]
+      exe = ^\/usr\/bin\/mongod$
+
 /etc/nagios/nrpe.d/mongodb.cfg:
   file.managed:
     - template: jinja

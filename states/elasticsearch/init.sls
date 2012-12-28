@@ -87,6 +87,15 @@ elasticsearch:
       - elasticsearch_plugins: elasticsearch
 {% endif %}
 
+elasticsearch_diamond_memory:
+  file:
+    - accumulated
+    - name: processes
+    - filename: /etc/diamond/collectors/ProcessMemoryCollector.conf
+    - text: |
+      [[elasticsearch]]
+      cmdline = .+java.+\-cp \:\/usr\/share\/elasticsearch\/lib\/elasticsearch\-.+\.jar
+
 /etc/nagios/nrpe.d/elasticsearch.cfg:
   file:
     - managed

@@ -55,6 +55,7 @@ diamond:
       - file: diamond_upstart
     - watch:
       - file: diamond_requirements
+      - file: /etc/diamond/collectors/ProcessMemoryCollector.conf
   file:
     - managed
     - name: /etc/diamond/diamond.conf

@@ -103,7 +103,7 @@ def main():
     main loop
     """
     now = datetime.datetime.now()
-    max_time = datetime.timedelta(days=1)
+    max_time = datetime.timedelta(hours=36)
     hosts = {}
     backup = BackupDirectory('/var/lib/backup')
     for file in backup:

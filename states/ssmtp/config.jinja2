@@ -1,7 +1,7 @@
 # {{ pillar['message_do_not_modify'] }}
 
 mailhub={{ pillar['smtp']['server'] }}:{{ pillar['smtp']['port'] }}
-root={{ pillar['smtp']['user'] }}
+root={{ pillar['smtp']['root'] }}
 hostname={{ pillar['smtp']['user'] }}
 AuthUser={{ pillar['smtp']['user'] }}
 AuthPass={{ pillar['smtp']['password'] }}

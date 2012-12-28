@@ -11,7 +11,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
   ('^admin/', include(admin.site.urls)),
-  ('^render/?', decorator_include(login_required, 'graphite.render.urls')),
+  ('^render/?', include('graphite.render.urls')),
   ('^cli/?', decorator_include(login_required, 'graphite.cli.urls')),
   ('^composer/?', decorator_include(login_required, 'graphite.composer.urls')),
   ('^metrics/?', decorator_include(login_required, 'graphite.metrics.urls')),

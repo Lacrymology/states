@@ -81,6 +81,17 @@ diamond:
     - watch:
       - module: diamond
 
+/etc/diamond/collectors/ProcessMemoryCollector.conf:
+  file:
+    - managed
+    - template: jinja
+    - source: salt://diamond/ProcessMemoryCollector.jinja2
+    - user: root
+    - group: root
+    - mode: 440
+    - require:
+      - file: /etc/diamond/collectors
+
 {#
 archive of installation trough debian package
 

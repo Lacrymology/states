@@ -1,5 +1,5 @@
 include:
-  - ssh
+  - ssh.client
 
 mercurial:
   apt_repository:

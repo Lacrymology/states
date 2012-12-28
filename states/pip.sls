@@ -1,5 +1,5 @@
 include:
-  - ssh
+  - ssh.client
   - git
   - mercurial
 

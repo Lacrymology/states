@@ -1,7 +1,7 @@
 include:
   - salt
   - git
-  - ssh
+  - ssh.client
   - nrpe
 
 salt-master:

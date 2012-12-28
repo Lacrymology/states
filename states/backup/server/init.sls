@@ -1,5 +1,5 @@
 include:
-  - ssh
+  - ssh.server
   - nrpe
   - sudo
 

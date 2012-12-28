@@ -1,0 +1,8 @@
+# {{ pillar['message_do_not_modify'] }}
+
+[filter_nrpe_ssh]
+loggers = syslog.auth
+deny_any ={% for host in pillar['shinken_pollers'] %}
+    ^Connection closed by {{ host }} \[preauth\]$
+    ^Did not receive identification string from {{ host }}$
+{%- endfor -%}

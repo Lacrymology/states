@@ -1,4 +1,3 @@
-{# TODO: send logs to GELF #}
 include:
   - git
   - virtualenv

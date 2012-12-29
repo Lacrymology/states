@@ -17,8 +17,16 @@ graphite:
     - require:
       - pkg: python-virtualenv
 
-{% for subdir in ('/var/lib', '/etc') %}
-{{ subdir }}/graphite:
+/var/lib/graphite:
+  file:
+    - directory
+    - user: www-data
+    - group: graphite
+    - mode: 770
+    - require:
+      - user: graphite
+
+/etc/graphite:
   file:
     - directory
     - user: graphite
@@ -26,7 +34,6 @@ graphite:
     - mode: 770
     - require:
       - user: graphite
-{% endfor %}
 
 /var/log/graphite:
   file:

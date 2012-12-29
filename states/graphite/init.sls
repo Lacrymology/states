@@ -263,6 +263,3 @@ extend:
     service:
       - watch:
         - file: /etc/nginx/conf.d/graphite.conf
-  /var/lib/graphite:
-    file:
-      - user: www-data

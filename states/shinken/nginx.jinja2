@@ -22,7 +22,7 @@ server {
 
     server_name {% for hostname in pillar['shinken']['web']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
     location / {
-        proxy_pass http://shinken-webui;
+        proxy_pass http://shinken-backend;
         proxy_set_header X-Real-IP $remote_addr;
     }
 }

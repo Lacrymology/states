@@ -54,8 +54,6 @@ graphite_wsgi:
     - require:
       - virtualenv: graphite
 
-{% call uwsgi_app_diamond('graphite') %}{% endcall %}
-
 {#graphite_admin_user:#}
 {#  module:#}
 {#    - run#}
@@ -228,6 +226,16 @@ graphite_settings:
 {% endif %}
       domain_name: {{ pillar['graphite']['web']['hostnames'][0] }}
       uri: /account/login
+
+uwsgi_diamond_graphite:
+  file:
+    - accumulated
+    - name: processes
+    - filename: /etc/diamond/collectors/ProcessMemoryCollector.conf
+    - text:
+      - |
+        [[uwsgi.graphite]]
+        cmdline = ^graphite-(worker|master)$
 
 /etc/nagios/nrpe.d/postgresql-graphite.cfg:
   file:

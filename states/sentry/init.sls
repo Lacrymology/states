@@ -162,7 +162,15 @@ sentry-migrate-fake:
       deployment: sentry
       password: {{ pillar['sentry']['db']['password'] }}
 
-{% call uwsgi_app_diamond('sentry') %}{% endcall %}
+uwsgi_diamond_sentry:
+  file:
+    - accumulated
+    - name: processes
+    - filename: /etc/diamond/collectors/ProcessMemoryCollector.conf
+    - text:
+      - |
+        [[uwsgi.sentry]]
+        cmdline = ^sentry-(worker|master)$
 
 /etc/nginx/conf.d/sentry.conf:
   file:

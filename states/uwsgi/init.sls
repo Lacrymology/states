@@ -3,18 +3,6 @@ include:
   - git
   - nginx
 
-{% macro uwsgi_app_diamond(name) %}
-uwsgi_diamond_{{ name }}:
-  file:
-    - accumulated
-    - name: processes
-    - filename: /etc/diamond/collectors/ProcessMemoryCollector.conf
-    - text:
-      - |
-        [[uwsgi.{{ name }}]]
-        cmdline = ^{{ master }}-(worker|master)$
-{% endfor %}
-
 /etc/init/uwsgi.conf:
   file:
     - managed

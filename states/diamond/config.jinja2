@@ -117,6 +117,14 @@ enabled = True
 enabled = True
 interfaces = eth, tun, tap, lo, vmbr
 
+[[PingCollector]]
+
+enabled = True
+
+{% for host in pillar['diamond']['ping'] -%}
+target_{{ host }} = {{ pillar['diamond']['ping'][host] }}
+{% endfor -%}
+
 [[ProcessStatCollector]]
 
 enabled = True

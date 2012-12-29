@@ -121,6 +121,12 @@ interfaces = eth, tun, tap, lo, vmbr
 
 enabled = True
 
+{%- if salt['file.file_exists']('/proc/slabinfo') %}
+[[SlabInfoCollector]]
+
+enabled = True
+{% endif -%}
+
 [[SockstatCollector]]
 
 enabled = True

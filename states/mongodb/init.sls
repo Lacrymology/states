@@ -73,7 +73,7 @@ mongodb_diamond_memory:
     - filename: /etc/diamond/collectors/ProcessMemoryCollector.conf
     - require_in:
       - file: /etc/diamond/collectors/ProcessMemoryCollector.conf
-    - text: |
+    - text:
       - |
         [[mongodb]]
         exe = ^\/usr\/bin\/mongod$

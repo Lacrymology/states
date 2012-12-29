@@ -31,6 +31,41 @@ mongodb:
      - watch:
        - pkg: mongodb
 
+diamond-pymongo:
+  file:
+    - managed
+    - name: /usr/local/diamond/salt-pymongo-requirements.txt
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - source: salt://mongodb/requirements.jinja2
+    - require:
+      - virtualenv: diamond
+  module:
+    - wait
+    - name: pip.install
+    - upgrade: True
+    - pkgs: ''
+    - bin_env: /usr/local/diamond
+    - requirements: /usr/local/diamond/salt-pymongo-requirements.txt
+    - require:
+      - pkg: python-virtualenv
+    - watch:
+      - file: diamond-pymongo
+
+diamond_mongodb:
+  file:
+    - managed
+    - template: jinja
+    - name: /etc/diamond/collectors/MongoDBCollector.conf
+    - user: root
+    - group: root
+    - mode: 440
+    - source: salt://mongodb/diamond.jinja2
+    - require:
+      - module: diamond-pymongo
+
 mongodb_diamond_memory:
   file:
     - accumulated

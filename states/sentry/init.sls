@@ -162,7 +162,7 @@ sentry-migrate-fake:
       deployment: sentry
       password: {{ pillar['sentry']['db']['password'] }}
 
-{% call uwsgi_app_diamond('sentry') %}
+{% call uwsgi_app_diamond('sentry') %}{% endcall %}
 
 /etc/nginx/conf.d/sentry.conf:
   file:

@@ -11,6 +11,7 @@ cheaper = {{ pillar['graphite']['web']['cheaper'] }}
 {%- if grains['virtual'] == 'kvm' and salt['file.file_exists']('/sys/kernel/mm/ksm/run') %}
 ksm = 20
 {% endif -%}
+lazy-apps = true
 uid = www-data
 gid = graphite
 threaded-logger = true

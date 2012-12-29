@@ -11,7 +11,7 @@ cheaper = {{ pillar['sentry']['cheaper'] }}
 {%- if grains['virtual'] == 'kvm' and salt['file.file_exists']('/sys/kernel/mm/ksm/run') %}
 ksm = 20
 {% endif -%}
-{#enable-threads = true#}
+lazy-apps = true
 uid = www-data
 gid = www-data
 threaded-logger = true

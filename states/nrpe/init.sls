@@ -60,10 +60,11 @@ nrpe_diamond_memory:
     - accumulated
     - name: processes
     - filename: /etc/diamond/collectors/ProcessMemoryCollector.conf
-    - text: |
-      [[nrpe]]
-      exe = ^\/usr\/sbin\/nrpe$
-      cmdline = ^\/usr\/lib\/nagios\/plugins\/check_
+    - text:
+      - |
+        [[nrpe]]
+        exe = ^\/usr\/sbin\/nrpe$
+        cmdline = ^\/usr\/lib\/nagios\/plugins\/check_
 
 /etc/gsyslog.d/nrpe.conf:
   file:

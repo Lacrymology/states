@@ -48,9 +48,10 @@ memcached_diamond_memory:
     - accumulated
     - name: processes
     - filename: /etc/diamond/collectors/ProcessMemoryCollector.conf
-    - text: |
-      [[memcached]]
-      name = ^memcached$
+    - text:
+      - |
+        [[memcached]]
+        name = ^memcached$
 
 {# Fix connection trough unix socket #}
 memcached_diamond_collector:

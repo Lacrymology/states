@@ -42,9 +42,10 @@ salt_master_diamond_memory:
     - accumulated
     - name: processes
     - filename: /etc/diamond/collectors/ProcessMemoryCollector.conf
-    - text: |
-      [[salt.master]]
-      name = ^salt\-master
+    - text:
+      - |
+        [[salt.master]]
+        name = ^salt\-master
 
 /etc/nagios/nrpe.d/salt-master.cfg:
   file:

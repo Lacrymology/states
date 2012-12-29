@@ -150,9 +150,10 @@ shinken_{{ role }}_diamond_memory:
     - accumulated
     - name: processes
     - filename: /etc/diamond/collectors/ProcessMemoryCollector.conf
-    - text: |
-      [[shinken.{{ role }}]]
-      cmdline = ^\/usr\/local\/shinken\/bin\/python \/usr\/local\/shinken\/bin\/shinken-{{ role }}
+    - text:
+      - |
+        [[shinken.{{ role }}]]
+        cmdline = ^\/usr\/local\/shinken\/bin\/python \/usr\/local\/shinken\/bin\/shinken-{{ role }}
 
 /etc/init/shinken-{{ role }}.conf:
   file:

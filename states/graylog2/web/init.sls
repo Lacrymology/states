@@ -90,9 +90,10 @@ graylog2_web_diamond_memory:
     - accumulated
     - name: processes
     - filename: /etc/diamond/collectors/ProcessMemoryCollector.conf
-    - text: |
-      [[graylog2.web]]
-      cmdline = ^ruby script\/rails
+    - text:
+      - |
+        [[graylog2.web]]
+        cmdline = ^ruby script\/rails
 
 {% for command in ('streamalarms', 'subscriptions') %}
 /etc/cron.hourly/graylog2-web-{{ command }}:

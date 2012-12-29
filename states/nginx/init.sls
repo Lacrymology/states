@@ -54,9 +54,10 @@ nginx_diamond_memory:
     - accumulated
     - name: processes
     - filename: /etc/diamond/collectors/ProcessMemoryCollector.conf
-    - text: |
-      [[nginx]]
-      exe = ^\/usr\/sbin\/nginx$
+    - text:
+      - |
+        [[nginx]]
+        exe = ^\/usr\/sbin\/nginx$
 
 nginx_diamond_collector:
   file:

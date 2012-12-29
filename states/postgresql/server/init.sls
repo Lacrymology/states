@@ -107,9 +107,10 @@ postgresql_diamond_memory:
     - accumulated
     - name: processes
     - filename: /etc/diamond/collectors/ProcessMemoryCollector.conf
-    - text: |
-      [[postgresql]]
-      exe = ^\/usr\/lib\/postgresql/\d+\.\d+\/bin\/postgres$
+    - text:
+      - |
+        [[postgresql]]
+        exe = ^\/usr\/lib\/postgresql/\d+\.\d+\/bin\/postgres$
 
 extend:
   diamond:

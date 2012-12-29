@@ -86,9 +86,10 @@ diamond-carbon:
     - accumulated
     - name: processes
     - filename: /etc/diamond/collectors/ProcessMemoryCollector.conf
-    - text: |
-      [[carbon]]
-      cmdline = ^\/usr\/local\/graphite\/bin\/python \/usr\/local\/graphite\/bin\/carbon\-cache\.py.+start$
+    - text:
+      - |
+        [[carbon]]
+        cmdline = ^\/usr\/local\/graphite\/bin\/python \/usr\/local\/graphite\/bin\/carbon\-cache\.py.+start$
 
 {% for instance in pillar['graphite']['carbon']['instances'] %}
 carbon-{{ instance }}:

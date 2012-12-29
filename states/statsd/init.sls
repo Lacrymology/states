@@ -29,9 +29,10 @@ statsd_diamond_memory:
     - accumulated
     - name: processes
     - filename: /etc/diamond/collectors/ProcessMemoryCollector.conf
-    - text: |
-      [[statsd]]
-      cmdline = ^\/usr\/local\/statsd\/bin\/python \/usr\/local\/statsd\/bin\/pystatsd\-server
+    - text:
+      - |
+        [[statsd]]
+        cmdline = ^\/usr\/local\/statsd\/bin\/python \/usr\/local\/statsd\/bin\/pystatsd\-server
 
 /etc/nagios/nrpe.d/statsd.cfg:
   file:

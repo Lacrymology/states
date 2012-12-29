@@ -36,8 +36,9 @@ mongodb_diamond_memory:
     - name: processes
     - filename: /etc/diamond/collectors/ProcessMemoryCollector.conf
     - text: |
-      [[mongodb]]
-      exe = ^\/usr\/bin\/mongod$
+      - |
+        [[mongodb]]
+        exe = ^\/usr\/bin\/mongod$
 
 /etc/nagios/nrpe.d/mongodb.cfg:
   file.managed:

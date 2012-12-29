@@ -9,9 +9,10 @@ uwsgi_diamond_{{ name }}:
     - accumulated
     - name: processes
     - filename: /etc/diamond/collectors/ProcessMemoryCollector.conf
-    - text: |
-      [[uwsgi.{{ name }}]]
-      cmdline = ^{{ master }}-(worker|master)$
+    - text:
+      - |
+        [[uwsgi.{{ name }}]]
+        cmdline = ^{{ master }}-(worker|master)$
 {% endfor %}
 
 /etc/init/uwsgi.conf:
@@ -119,9 +120,10 @@ uwsgi_diamond:
     - accumulated
     - name: processes
     - filename: /etc/diamond/collectors/ProcessMemoryCollector.conf
-    - text: |
-      [[uwsgi]]
-      cmdline = ^\/usr\/local\/uwsgi\/uwsgi
+    - text:
+      - |
+        [[uwsgi]]
+        cmdline = ^\/usr\/local\/uwsgi\/uwsgi
 
 /etc/nagios/nrpe.d/uwsgi.cfg:
   file:

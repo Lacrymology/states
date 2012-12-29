@@ -61,6 +61,18 @@ uwsgi_build:
       - git: uwsgi_build
       - file: uwsgi_build
 
+{% if grains['virtual'] == 'kvm' and salt['file.file_exists']('/sys/kernel/mm/ksm/run') %}
+diamond_ksm:
+  file:
+    - managed
+    - name: /etc/diamond/collectors/KSMCollector.conf
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - source: salt://uwsgi/diamond.jinja2
+{% endif %}
+
 uwsgi_sockets:
   file:
     - directory
@@ -125,3 +137,9 @@ extend:
     service:
       - watch:
         - file: /etc/nagios/nrpe.d/uwsgi.cfg
+{% if grains['virtual'] == 'kvm' and salt['file.file_exists']('/sys/kernel/mm/ksm/run') %}
+  diamond:
+    service:
+      - watch:
+        - file: diamond_ksm
+{% endif %}

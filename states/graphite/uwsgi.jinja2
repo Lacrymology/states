@@ -7,7 +7,10 @@ module = graphite.wsgi
 processes = {{ pillar['graphite']['web']['workers'] }}
 {% if 'cheaper' in pillar['graphite']['web'] %}
 cheaper = {{ pillar['graphite']['web']['cheaper'] }}
-{% endif %}
+{% endif -%}
+{%- if grains['virtual'] == 'kvm' and salt['file.file_exists']('/sys/kernel/mm/ksm/run') %}
+ksm = 20
+{% endif -%}
 uid = www-data
 gid = graphite
 threaded-logger = true

@@ -86,6 +86,8 @@ diamond-carbon:
     - accumulated
     - name: processes
     - filename: /etc/diamond/collectors/ProcessMemoryCollector.conf
+    - require_in:
+      - file: /etc/diamond/collectors/ProcessMemoryCollector.conf
     - text:
       - |
         [[carbon]]

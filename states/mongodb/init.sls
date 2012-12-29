@@ -1,6 +1,7 @@
 {# TODO : Add diamond support #}
 include:
   - nrpe
+  - diamond
 
 mongodb:
   apt_repository:
@@ -35,6 +36,8 @@ mongodb_diamond_memory:
     - accumulated
     - name: processes
     - filename: /etc/diamond/collectors/ProcessMemoryCollector.conf
+    - require_in:
+      - file: /etc/diamond/collectors/ProcessMemoryCollector.conf
     - text: |
       - |
         [[mongodb]]

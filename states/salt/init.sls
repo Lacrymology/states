@@ -1,5 +1,6 @@
 include:
   - nrpe
+  - diamond
 
 {#
  # echo 'deb http://ppa.launchpad.net/saltstack/salt/ubuntu precise main' > /etc/apt/sources.list.d/saltstack-salt-precise.list
@@ -36,6 +37,8 @@ salt_minion_diamond_memory:
     - accumulated
     - name: processes
     - filename: /etc/diamond/collectors/ProcessMemoryCollector.conf
+    - require_in:
+      - file: /etc/diamond/collectors/ProcessMemoryCollector.conf
     - text:
       - |
         [[salt.minion]]

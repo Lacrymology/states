@@ -3,6 +3,7 @@
 include:
   - virtualenv
   - nrpe
+  - diamond
 {% if grains['id'] in pillar['shinken']['architecture']['broker'] %}
   - nginx
 {% endif %}
@@ -150,6 +151,8 @@ shinken_{{ role }}_diamond_memory:
     - accumulated
     - name: processes
     - filename: /etc/diamond/collectors/ProcessMemoryCollector.conf
+    - require_in:
+      - file: /etc/diamond/collectors/ProcessMemoryCollector.conf
     - text:
       - |
         [[shinken.{{ role }}]]

@@ -4,6 +4,7 @@ include:
   - mongodb
   - nginx
   - cron
+  - diamond
 
 {% set web_root_dir = '/usr/local/graylog2-web-interface-' + pillar['graylog2']['web']['version'] %}
 
@@ -90,6 +91,8 @@ graylog2_web_diamond_memory:
     - accumulated
     - name: processes
     - filename: /etc/diamond/collectors/ProcessMemoryCollector.conf
+    - require_in:
+      - file: /etc/diamond/collectors/ProcessMemoryCollector.conf
     - text:
       - |
         [[graylog2.web]]

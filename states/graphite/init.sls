@@ -7,6 +7,7 @@ include:
   - uwsgi
   - nginx
   - memcache
+  - diamond
 
 {#graphite_logrotate:#}
 {#  file:#}
@@ -232,6 +233,8 @@ uwsgi_diamond_graphite:
     - accumulated
     - name: processes
     - filename: /etc/diamond/collectors/ProcessMemoryCollector.conf
+    - require_in:
+      - file: /etc/diamond/collectors/ProcessMemoryCollector.conf
     - text:
       - |
         [[uwsgi.graphite]]

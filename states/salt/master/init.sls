@@ -3,6 +3,7 @@ include:
   - git
   - ssh.client
   - nrpe
+  - diamond
 
 salt-master:
   file:
@@ -42,6 +43,8 @@ salt_master_diamond_memory:
     - accumulated
     - name: processes
     - filename: /etc/diamond/collectors/ProcessMemoryCollector.conf
+    - require_in:
+      - file: /etc/diamond/collectors/ProcessMemoryCollector.conf
     - text:
       - |
         [[salt.master]]

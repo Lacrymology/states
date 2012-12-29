@@ -1,6 +1,7 @@
 include:
   - virtualenv
   - nrpe
+  - diamond
 
 {# gsyslog depends on klogd to get kernel logs #}
 sysklogd:
@@ -109,6 +110,8 @@ gsyslog_diamond_memory:
     - accumulated
     - name: processes
     - filename: /etc/diamond/collectors/ProcessMemoryCollector.conf
+    - require_in:
+      - file: /etc/diamond/collectors/ProcessMemoryCollector.conf
     - text:
       - |
         [[gsyslog]]

@@ -8,7 +8,7 @@ include:
 /etc/init.d/memcached:
   cmd:
     - wait
-    - name: killall -9 memcached
+    - name: update-rc.d -f memcached remove; killall -9 memcached
   file:
     - absent
     - watch:

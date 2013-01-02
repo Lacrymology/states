@@ -1,2 +1,2 @@
 # {{ pillar['message_do_not_modify'] }}
-command[check_uwsgi]=/usr/lib/nagios/plugins/check_procs -c 2:2 -C uwsgi -a '--uid www-data --gid www-data --threaded-logger --logger graylog2:{{ pillar['graylog2_address'] }}:12201,{{ grains['id'] }} --carbon-id emperor --carbon {{ pillar['graphite_address'] }}:2003 --emperor /etc/uwsgi/' -u www-data
+command[check_uwsgi]=/usr/lib/nagios/plugins/check_procs -c 2:2 -C uwsgi -a '--uid www-data --gid www-data --threaded-logger --logger graylog2:{{ pillar['graylog2_address'] }}:12201,{{ grains['id'] }} --carbon-id emperor --carbon {{ pillar['graphite_address'] }}:2003 --emperor /etc/uwsgi/ --no-orphans' -u www-data

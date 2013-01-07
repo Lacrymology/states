@@ -3,7 +3,8 @@ include:
   - nrpe
 
 /etc/memcached.conf:
-  file.absent
+  file:
+    - absent
 
 /etc/init.d/memcached:
   cmd:

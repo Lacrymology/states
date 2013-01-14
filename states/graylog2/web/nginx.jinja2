@@ -13,7 +13,7 @@ server {
 
     server_name {% for hostname in pillar['graylog2']['web']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
 
-{% for dir in ('stylesheets', 'javascripts', 'images' %}
+{% for dir in ('stylesheets', 'javascripts', 'images') %}
     location /{{ dir }}/ {
         expires max;
         autoindex off;

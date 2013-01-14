@@ -60,7 +60,7 @@ graylog2_server_diamond_memory:
       - file: /etc/diamond/collectors/ProcessMemoryCollector.conf
     - text:
       - |
-        [[graylog2.server]]
+        [[graylog2]]
         cmdline = ^java \-jar \/usr\/local\/graylog2\-server\-.+\/graylog2-server.jar
 
 /etc/nagios/nrpe.d/graylog2-server.cfg:

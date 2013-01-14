@@ -106,8 +106,8 @@ graylog2_web_diamond_memory:
       - file: /etc/diamond/collectors/ProcessMemoryCollector.conf
     - text:
       - |
-        [[graylog2.web]]
-        cmdline = ^ruby script\/rails
+        [[uwsgi.graylog2]]
+        cmdline = cmdline = ^graylog2-(worker|master)$
 
 {% for command in ('streamalarms', 'subscriptions') %}
 /etc/cron.hourly/graylog2-web-{{ command }}:

@@ -39,6 +39,16 @@ graylog2-web_logrotate:
     - mode: 440
     - source: salt://graylog2/web/logrotate.jinja2
 
+graylog2-web-upstart:
+  file:
+    - absent
+    - name: /etc/init/graylog2-web.conf
+  cmd:
+    - wait
+    - name: stop graylog2-web
+    - watch:
+      - file: graylog2-web-upstart
+
 graylog2-web:
   gem:
     - installed
@@ -50,7 +60,7 @@ graylog2-web:
   archive:
     - extracted
     - name: /usr/local/
-    - source: https://github.com/downloads/Graylog2/graylog2-web-interface/graylog2-web-interface-{{ pillar['graylog2']['server']['version'] }}.tar.gz
+    - source: https://github.com/downloads/Graylog2/graylog2-web-interface/graylog2-web-interface-{{ pillar['graylog2']['web']['version'] }}.tar.gz
     - source_hash: {{ pillar['graylog2']['web']['checksum'] }}
     - archive_format: tar
     - tar_options: z
@@ -66,15 +76,16 @@ graylog2-web:
       - archive: graylog2-web
   file:
     - managed
-    - name: /etc/init/graylog2-web.conf
+    - name: /etc/uwsgi/graylog2.ini
     - template: jinja
     - user: root
     - group: root
     - mode: 440
-    - source: salt://graylog2/web/upstart.jinja2
-  service:
-    - running
-    - enable: True
+    - source: salt://graylog2/web/uwsgi.jinja2
+  module:
+    - wait
+    - name: file.touch
+    - m_name: /etc/uwsgi/graylog2.ini
     - require:
       - file: graylog2-web
       - file: graylog2-web_logdir

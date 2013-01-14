@@ -1,22 +1,49 @@
 # {{ pillar['message_do_not_modify'] }}
 [uwsgi]
+{#harakiri = 120#}
+{#max-requests = 5000#}
 master = true
-
-socket = 127.0.0.1:3031
-rack = myapp.ru
-chdir = /usr/local/graylog2-web-interface-{{ pillar['graylog2']['server']['version'] }}
-module = sentry.wsgi
-{#threads = 1#}
-{#enable-threads = true#}
+post-buffering = 4096
+env = RAILS_ENV=production
+processes = {{ pillar['graylog2']['web']['workers'] }}
+{% if 'cheaper' in pillar['graphite']['web'] %}
+cheap = true
+cheaper = {{ pillar['graylog2']['web']['cheaper'] }}
+{% if pillar['graylog2']['web']['workers'] == 1 and pillar['graylog2']['web']['cheaper'] == 0 %}
+idle = {% if 'idle' in pillar['graylog2']['web'] %}{{ pillar['graylog2']['web']['idle'] }}{% else %}300{% endif %}
+cheaper-initial = 0
+{% endif %}
+{% endif -%}
+{%- if grains['virtual'] == 'kvm' and salt['file.file_exists']('/sys/kernel/mm/ksm/run') %}
+ksm = 20
+{% endif -%}
+lazy-apps = true
 uid = www-data
 gid = www-data
+procname = graylog2
+procname-master = graylog2-master
+socket = /var/lib/uwsgi/graylog2.sock
+chdir = /usr/local/graylog2-web-interface-{{ pillar['graylog2']['web']['version'] }}
+rack = /usr/local/graylog2-web-interface-{{ pillar['graylog2']['web']['version'] }}/config.ru
 threaded-logger = true
 logger = graylog2:{{ pillar['graylog2_address'] }}:12201,{{ grains['id'] }}
 carbon-id = graylog2
 carbon = {{ pillar['graphite_address'] }}:2003
-virtualenv = /usr/local/sentry
-chdir = /usr/local/sentry
-procname = sentry
-procname-master = sentry-master
-socket = /var/lib/uwsgi/graylog2.sock
 no-orphans = true
+
+{#
+Original file that seems to work:
+[uwsgi]
+autoload = true
+plugins = rack
+#socket = 127.0.0.1:3031
+http-socket = 127.0.0.1:3031
+chdir = /usr/local/graylog2-web-interface-0.9.6p1
+processes = 1
+master = true
+harakiri = 120
+max-requests = 5000
+rack = /usr/local/graylog2-web-interface-0.9.6p1/config.ru
+post-buffering = 4096
+env = RAILS_ENV=production
+#}

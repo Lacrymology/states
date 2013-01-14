@@ -140,7 +140,15 @@ graylog2_web_diamond_memory:
     - user: nagios
     - group: nagios
     - mode: 440
-    - source: salt://graylog2/web/nrpe.jinja2
+    - source: salt://uwsgi/nrpe_instance.jinja2
+    - context:
+      deployment: graylog2
+      workers: {{ pillar['graylog2']['web']['workers'] }}
+{% if 'cheaper' in pillar['graylog2']['web'] %}
+      cheaper: {{ pillar['graylog2']['web']['cheaper'] }}
+{% endif %}
+      domain_name: {{ pillar['graylog2']['web']['hostnames'][0] }}
+      uri: /login
 
 extend:
   nagios-nrpe-server:

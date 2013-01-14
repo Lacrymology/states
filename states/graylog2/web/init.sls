@@ -52,7 +52,7 @@ graylog2-web-upstart:
 
 {{ web_root_dir }}/log:
   file:
-    - symlinks
+    - symlink
     - target: /var/log/graylog2/
 
 graylog2-web:

@@ -5,6 +5,7 @@ include:
   - nginx
   - cron
   - diamond
+  - uwsgi
 
 {% set web_root_dir = '/usr/local/graylog2-web-interface-' + pillar['graylog2']['web']['version'] %}
 
@@ -82,15 +83,17 @@ graylog2-web:
     - group: root
     - mode: 440
     - source: salt://graylog2/web/uwsgi.jinja2
+    - require:
+      - service: uwsgi_emperor
+      - file: graylog2-web_logdir
+      - service: mongodb
+      - cmd: graylog2-web
   module:
     - wait
     - name: file.touch
     - m_name: /etc/uwsgi/graylog2.ini
     - require:
       - file: graylog2-web
-      - file: graylog2-web_logdir
-      - service: mongodb
-      - cmd: graylog2-web
     - watch:
       - archive: graylog2-web
 {% for filename in ('config', 'email', 'indexer', 'mongoid') %}

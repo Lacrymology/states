@@ -6,7 +6,7 @@ master = true
 post-buffering = 4096
 env = RAILS_ENV=production
 processes = {{ pillar['graylog2']['web']['workers'] }}
-{% if 'cheaper' in pillar['graphite']['web'] %}
+{% if 'cheaper' in pillar['graylog2']['web'] %}
 cheap = true
 cheaper = {{ pillar['graylog2']['web']['cheaper'] }}
 {% if pillar['graylog2']['web']['workers'] == 1 and pillar['graylog2']['web']['cheaper'] == 0 %}

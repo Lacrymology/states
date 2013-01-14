@@ -85,8 +85,8 @@ graylog2-web:
     - managed
     - name: /etc/uwsgi/graylog2.ini
     - template: jinja
-    - user: root
-    - group: root
+    - user: www-data
+    - group: www-data
     - mode: 440
     - source: salt://graylog2/web/uwsgi.jinja2
     - require:

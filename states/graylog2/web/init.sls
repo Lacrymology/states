@@ -15,8 +15,8 @@ graylog2-web-{{ filename }}:
     - managed
     - name: {{ web_root_dir }}/config/{{ filename }}.yml
     - template: jinja
-    - user: root
-    - group: root
+    - user: www-data
+    - group: www-data
     - mode: 440
     - source: salt://graylog2/web/{{ filename }}.jinja2
 {% endfor %}
@@ -26,7 +26,7 @@ graylog2-web_logdir:
     - directory
     - name: /var/log/graylog2/
     - user: root
-    - group: root
+    - group: www-data
     - mode: 770
     - makedirs: True
 
@@ -49,6 +49,11 @@ graylog2-web-upstart:
     - name: stop graylog2-web
     - watch:
       - file: graylog2-web-upstart
+
+{{ web_root_dir }}/log:
+  file:
+    - symlinks
+    - target: /var/log/graylog2/
 
 graylog2-web:
   gem:
@@ -84,6 +89,7 @@ graylog2-web:
     - mode: 440
     - source: salt://graylog2/web/uwsgi.jinja2
     - require:
+      - file: {{ web_root_dir }}/log
       - service: uwsgi_emperor
       - file: graylog2-web_logdir
       - service: mongodb

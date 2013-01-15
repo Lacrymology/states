@@ -301,21 +301,21 @@ define service {
 {#
  # graylog2
  #}
-{%- for service in ('server', 'web') %}
 define service {
     host_name {% for host in pillar['shinken']['graylog2'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description graylog2-{{ service }}
+    service_description graylog2-server
+    check_command check_nrpe!check_graylog2_server
+    use salt-service
+}
+
+{% for service in ('master', 'worker', 'http') %}
+define service {
+    host_name {% for host in pillar['shinken']['graylog2'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description Web-graylog2-{{ service }}
     check_command check_nrpe!check_graylog2_{{ service }}
     use salt-service
 }
 {% endfor %}
-
-define service {
-    host_name {% for host in pillar['shinken']['graylog2'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description graylog2-web-port
-    check_command check_nrpe!check_graylog2_web_port
-    use salt-service
-}
 
 {% for service in ('mongodb', 'mongodb_port', 'nginx_master', 'nginx_worker') %}
 define service {

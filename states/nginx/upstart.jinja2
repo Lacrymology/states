@@ -1,0 +1,9 @@
+# {{ pillar['message_do_not_modify'] }}
+# startup script for Nginx
+
+respawn
+
+stop on stopping nginx-logger-error and nginx-logger-access
+start on started nginx-logger-error and nginx-logger-access
+
+exec /usr/sbin/nginx -c /etc/nginx/nginx.conf

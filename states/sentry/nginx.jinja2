@@ -19,9 +19,6 @@ server {
     root /usr/local/sentry;
     keepalive_timeout 5;
 
-    access_log /var/log/nginx/sentry-access.log;
-    error_log /var/log/nginx/sentry-error.log;
-
     location /_admin_media/ {
         expires 1h;
         autoindex off;

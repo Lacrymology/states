@@ -13,9 +13,6 @@ server {
     root /usr/local/graphite/webapp/;
     keepalive_timeout 5;
 
-    access_log /var/log/nginx/graphite-access.log;
-    error_log /var/log/nginx/graphite-error.log;
-
     location /favicon.ico {
         deny all;
         return 404;

@@ -17,9 +17,6 @@ server {
     ssl_ciphers ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP:+eNULL;
 {% endif %}
 
-    access_log /var/log/nginx/shinken-webui-access.log;
-    error_log /var/log/nginx/shinken-webui-error.log;
-
     server_name {% for hostname in pillar['shinken']['web']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
     location / {
         proxy_pass http://shinken-backend;

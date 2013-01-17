@@ -6,8 +6,6 @@ upstream graylog2 {
 
 server {
     listen 80;
-    access_log /var/log/nginx/graylog2-access.log;
-    error_log /var/log/nginx/graylog2-error.log;
 
     root /usr/local/graylog2-web-interface-{{ pillar['graylog2']['web']['version'] }}/public;
 

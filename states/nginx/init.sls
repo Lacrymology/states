@@ -43,6 +43,8 @@ nginx-old-init:
     - name: dpkg-divert --divert /usr/share/nginx/init.d --add /etc/init.d/nginx
     - watch:
       - file: nginx-old-init
+    - require:
+      - service: nginx-old-init
 {% endif %}
 
 {% set logger_types = ('access', 'error') %}
@@ -91,7 +93,7 @@ nginx:
     - require:
       - pkg: nginx
 {% if not salt['file.file_exists']("/etc/init/nginx.conf") %}
-      - service: nginx-old-init
+      - cmd: nginx-old-init
 {% endif %}
   service:
     - running

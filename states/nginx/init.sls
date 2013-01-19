@@ -32,7 +32,17 @@ include:
 nginx-old-init:
   service:
     - dead
+    - name: nginx
     - enable: False
+  file:
+    - rename
+    - name: /usr/share/nginx/init.d
+    - source: /etc/init.d/nginx
+  cmd:
+    - wait
+    - name: dpkg-divert --divert /usr/share/nginx/init.d --add /etc/init.d/nginx
+    - watch:
+      - file: nginx-old-init
 {% endif %}
 
 {% set logger_types = ('access', 'error') %}

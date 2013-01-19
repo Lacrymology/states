@@ -104,7 +104,7 @@ nginx:
       - pkg: nginx
     - require:
 {% for log_type in logger_types %}
-      - service: logger-{{ log_type }}
+      - service: nginx-logger-{{ log_type }}
 {% endfor %}
 
 nginx_diamond_memory:

@@ -69,6 +69,10 @@ nginx-logger-{{ log_type }}:
       - pkg: nginx
 {% endfor %}
 
+/etc/logrotate.d/nginx:
+  file:
+    - absent
+
 nginx:
   apt_repository:
     - present

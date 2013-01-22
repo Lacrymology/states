@@ -9,7 +9,7 @@ respawn
 {% if shinken_component == 'arbiter' %}
 {% set check_command = "/usr/local/shinken/bin/shinken-arbiter --verify-config -c /etc/shinken/arbiter.conf" %}
 pre-start script
-   {{ check_command }} || { echo "Shinken Arbiter couldn't validate configuration, it contains error. This is urgent!\nLog in {{ pillar['ip_addresses'][grains['id']] }} and run: {{ check_command }}" | mail -s 'Shinken Arbiter Config Error' {% for user in pillar['shinken']['users'] %}{{ pillar['shinken']['users'][user]['email'] }}{% if not loop.last %} {% endif %}{% endfor %}; stop; exit 0; }
+   {{ check_command }} || { echo "Shinken Arbiter on {{ pillar['ip_addresses'][grains['id']] }} contains error(s)! See errors using:\n{{ check_command }}" | mail -s 'Shinken Arbiter Config Error' {% for user in pillar['shinken']['users'] %}{{ pillar['shinken']['users'][user]['email'] }}{% if not loop.last %} {% endif %}{% endfor %}; stop; exit 0; }
 end script
 {% endif %}
 

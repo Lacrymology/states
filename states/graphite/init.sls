@@ -165,6 +165,17 @@ graphite_settings:
     - watch:
       - module: graphite-web
 
+{% if 'backup_server' in pillar %}
+/etc/cron.daily/backup-graphite:
+  file:
+    - managed
+    - user: root
+    - group: root
+    - mode: 500
+    - template: jinja
+    - source: salt://graphite/backup.jinja2
+{% endif %}
+
 /etc/uwsgi/graphite.ini:
   file:
     - managed

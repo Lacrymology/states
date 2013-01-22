@@ -7,13 +7,9 @@ stop on runlevel [!2345]
 respawn
 
 {% if shinken_component == 'arbiter' %}
+{% set check_command = "/usr/local/shinken/bin/shinken-arbiter --verify-config -c /etc/shinken/arbiter.conf" %}
 pre-start script
-  output="`/usr/local/shinken/bin/shinken-arbiter --verify-config -c /etc/shinken/arbiter.conf`"
-  if $1 == 1; then
-    echo $output | mail -s 'Shinken Arbiter Config Error' {% for user in pillar['shinken']['users'] %}{{ pillar['shinken']['users'][user]['email'] }}{% if not loop.last %} {% endif %}{% endfor %}
-    stop
-    exit 0
-  fi
+   {{ check_command }} || { echo "Shinken Arbiter couldn't validate configuration, it contains error. This is urgent!\nLog in {{ pillar['ip_addresses'][grains['id']] }} and run: {{ check_command }}" | mail -s 'Shinken Arbiter Config Error' {% for user in pillar['shinken']['users'] %}{{ pillar['shinken']['users'][user]['email'] }}{% if not loop.last %} {% endif %}{% endfor %}; stop; exit 0; }
 end script
 {% endif %}
 

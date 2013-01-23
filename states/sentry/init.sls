@@ -7,6 +7,7 @@ include:
   - uwsgi
   - nginx
   - diamond
+  - pip
 
 sentry:
   virtualenv:
@@ -41,6 +42,7 @@ sentry:
       - virtualenv: sentry
       - pkg: postgresql-dev
       - pkg: sentry
+      - file: pip-cache
     - watch:
       - file: sentry
   postgres_user:

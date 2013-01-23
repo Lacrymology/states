@@ -7,7 +7,9 @@ include:
   - git
   - mercurial
 
-{{ salt['user.info']('root')['home'] }}/.pip:
+{% set root_user_home = salt['user.info']('root')['home'] %}
+
+{{ root_user_home }}/.pip:
   file:
     - directory
     - user: root
@@ -24,13 +26,13 @@ include:
 pip-cache:
   file:
     - managed
-    - name: {{ salt['user.info']('root')['home'] }}/.pip/pip.conf
+    - name: {{ root_user_home }}/.pip/pip.conf
     - template: jinja
     - source: salt://pip/config.jinja2
     - user: root
     - group: root
     - require:
-      - file: {{ salt['user.info']('root')['home'] }}/.pip
+      - file: {{ root_user_home }}/.pip
       - file: /var/cache/pip
 
 python-pip:

@@ -29,48 +29,56 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 def __virtual__():
+    pillar_data = __salt__['pillar.data']()
     if not has_raven:
         logger.warning("Can't find raven client library")
         return False
+    if 'raven' not in pillar_data:
+        logger.warning("Missing pillar data 'raven'")
+        return False
+    for key in ('project', 'public_key', 'secret_key', 'servers'):
+        if key not in pillar_data['raven']:
+            logger.warning("Missing config '%s' in pillar 'raven'", key)
+            return False
     return 'sentry'
 
 def returner(ret):
     """
     If an error occurs, log it to sentry
     """
-    def connect_sentry():
+    def connect_sentry(message, result):
         pillar_data = __salt__['pillar.data']()
         sentry_data = {
-            'result': ret,
+            'result': result,
+            'returned': ret,
             'pillar': pillar_data,
-            'grains': __salt__['grains.items'](),
-            'highstate': __salt__['state.show_highstate'](),
-            'lowstate': __salt__['state.show_lowstate']()
+            'grains': __salt__['grains.items']()
         }
         servers = []
         for server in pillar_data['raven']['servers']:
             servers.append(server + '/api/store/')
         try:
-            logger.error(pillar_data)
             client = Client(
                 servers=servers,
                 public_key=pillar_data['raven']['public_key'],
                 secret_key=pillar_data['raven']['secret_key'],
                 project=pillar_data['raven']['project'],
             )
-            client.captureMessage(ret['return'], extra=sentry_data)
+            client.captureMessage(message, extra=sentry_data)
         except Exception, err:
             logger.error("Can't send message to sentry: %s", err, exc_info=True)
 
     try:
         if 'success' not in ret:
             logger.debug("no success data, report")
-            connect_sentry()
+            connect_sentry(ret['return'], ret)
         else:
-            if not ret['success'] is not True:
+            if not ret['success']:
                 logger.debug("not a success, report")
-                connect_sentry()
+                connect_sentry(ret['return'], ret)
             else:
-                logger.debug("success, skip")
+                for state in ret['return']:
+                    if not ret['return'][state]['result']:
+                        connect_sentry(state, ret['return'][state])
     except Exception, err:
-        logger.error(err)
+        logger.error("Can't run connect_sentry: %s", err, exc_info=True)

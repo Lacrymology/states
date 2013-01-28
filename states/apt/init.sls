@@ -17,9 +17,11 @@ apt_sources:
     - source: salt://apt/sources.jinja2
     - context:
       all_suites: main restricted universe multiverse
-  module:
+{#  module:
+    - name: pkg.refresh_db#}
+  cmd:
     - wait
-    - name: pkg.refresh_db
+    - name: apt-get update
     - watch:
       - file: apt_sources
 

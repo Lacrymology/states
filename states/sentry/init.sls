@@ -45,6 +45,12 @@ sentry:
       - file: pip-cache
     - watch:
       - file: sentry
+  cmd:
+    - wait
+    - name: find /usr/local/sentry -name '*.pyc' -delete
+    - stateful: False
+    - watch:
+      - module: sentry
   postgres_user:
     - present
     - name: {{ pillar['sentry']['db']['username'] }}

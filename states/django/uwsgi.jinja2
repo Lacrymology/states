@@ -4,7 +4,7 @@
 master = true
 env = DJANGO_SETTINGS_MODULE={{ settings }}
 module = {{ module }}
-processes = {{ processes }}
+processes = {{ workers }}
 uid = {{ uid|default("www-data") }}
 gid = {{ gid|default("www-data") }}
 threaded-logger = true

@@ -27,13 +27,7 @@ include:
     - require:
       - pkg: nginx
 
-{# disable old startup script for nginx, this is only need to run once #}
-{% if not salt['file.file_exists']("/etc/init/nginx.conf") %}
 nginx-old-init:
-  service:
-    - dead
-    - name: nginx
-    - enable: False
   file:
     - rename
     - name: /usr/share/nginx/init.d
@@ -41,11 +35,26 @@ nginx-old-init:
   cmd:
     - wait
     - name: dpkg-divert --divert /usr/share/nginx/init.d --add /etc/init.d/nginx
+    - require:
+      - module: nginx-old-init
     - watch:
       - file: nginx-old-init
+  module:
+    - wait
+    - name: service.stop
+    - m_name: nginx
+    - watch:
+      - file: nginx-old-init
+
+nginx-old-init-disable:
+  module:
+    - wait
+    - name: cmd.run
+    - cmd: update-rc.d -f remove nginx
     - require:
-      - service: nginx-old-init
-{% endif %}
+      - module: nginx-old-init
+    - watch:
+      - file: nginx-old-init
 
 {% set logger_types = ('access', 'error') %}
 
@@ -96,9 +105,7 @@ nginx:
     - source: salt://nginx/upstart.jinja2
     - require:
       - pkg: nginx
-{% if not salt['file.file_exists']("/etc/init/nginx.conf") %}
-      - cmd: nginx-old-init
-{% endif %}
+      - file: nginx-old-init
   service:
     - running
     - enable: True

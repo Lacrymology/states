@@ -1,0 +1,8 @@
+#!/bin/sh
+# {{ pillar['message_do_not_modify'] }}
+
+DEPLOYMENT=`basename $1`
+NOW=`date '+%Y-%m-%d-%H_%M_%S'`
+$1/bin/pip freeze | gzip -9 > /tmp/$DEPLOYMENT-$NOW.pip.gz
+scp -q /tmp/$DEPLOYMENT-$NOW.pip.gz root@{{ pillar['backup_server']['address'] }}:/var/lib/backup/{{ grains['id'] }}-$DEPLOYMENT-$NOW.pip.gz
+rm -f /tmp/$DEPLOYMENT-$NOW.pip.gz

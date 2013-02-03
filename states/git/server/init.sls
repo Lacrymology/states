@@ -46,4 +46,17 @@ git-server-key-{{ user }}:
       user: git
     - watch:
       - file: /var/lib/git-server/{{ repository }}.git
+
+/var/lib/git-server/{{ repository }}.git/description:
+  file:
+    - managed
+    - user: git
+    - group: git
+    - mode: 440
+    - template: jinja
+    - source: salt://git/server/description.jinja2
+    - context:
+      repository: {{ repository }}
+    - require:
+      - module: /var/lib/git-server/{{ repository }}.git
 {% endfor %}

@@ -17,9 +17,9 @@ TIME_ZONE = 'UTC'
 DOCUMENTATION_URL = "http://graphite.readthedocs.org/"
 
 # Logging
-LOG_RENDERING_PERFORMANCE = True
-LOG_CACHE_PERFORMANCE = True
-LOG_METRIC_ACCESS = True
+LOG_RENDERING_PERFORMANCE = {{ pillar['debug'] }}
+LOG_CACHE_PERFORMANCE = {{ pillar['debug'] }}
+LOG_METRIC_ACCESS = {{ pillar['debug'] }}
 
 # Enable full debug page display on exceptions (Internal Server Error pages)
 #DEBUG = True

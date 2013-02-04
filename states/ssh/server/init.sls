@@ -32,6 +32,7 @@ openssh-server:
       - pkg: openssh-server
       - file: openssh-server
 
+{% if not pillar['debug'] %}
 /etc/gsyslog.d/ssh.conf:
   file:
     - managed
@@ -40,12 +41,15 @@ openssh-server:
     - user: root
     - group: root
     - mode: 440
+{% endif %}
 
 extend:
+{% if not pillar['debug'] %}
   gsyslog:
     service:
       - watch:
         - file: /etc/gsyslog.d/ssh.conf
+{% endif %}
   nagios-nrpe-server:
     service:
       - watch:

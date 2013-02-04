@@ -69,6 +69,7 @@ nrpe_diamond_memory:
         exe = ^\/usr\/sbin\/nrpe$
         cmdline = ^\/usr\/lib\/nagios\/plugins\/check_
 
+{% if not pillar['debug'] %}
 /etc/gsyslog.d/nrpe.conf:
   file:
     - managed
@@ -83,3 +84,4 @@ extend:
     service:
       - watch:
         - file: /etc/gsyslog.d/nrpe.conf
+{% endif %}

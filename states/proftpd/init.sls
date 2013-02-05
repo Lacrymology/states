@@ -44,6 +44,7 @@ proftpd-users:
     - template: jinja
     - source: salt://proftpd/sql.jinja2
   cmd:
+    - wait
     - name: psql -f {{ opts['cachedir'] }}/proftpd.sql proftpd
     - user: postgres
     - group: postgres
@@ -93,7 +94,7 @@ proftpd_diamond_memory:
         [[proftpd]]
         exe = ^\/usr\/sbin\/proftpd$
 
-{% for file in ('virtuals', 'tls', 'sql', 'modules', 'ldap' %}
+{% for file in ('virtuals', 'tls', 'sql', 'modules', 'ldap') %}
 /etc/proftpd/{{ file }}.conf:
   file:
     - absent

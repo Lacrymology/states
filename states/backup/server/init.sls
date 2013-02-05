@@ -21,7 +21,7 @@ backup-server:
     - name: /var/lib/backup
     - user: root
     - group: root
-    - mode: 600
+    - mode: 775
 
 /usr/local/bin/check_backups.py:
   file:

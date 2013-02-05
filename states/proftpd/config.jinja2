@@ -1,0 +1,78 @@
+# {{ pillar['message_do_not_modify'] }}
+
+{#
+ Warning on this State:
+
+ FTP is a insecure and crappy protocol, I would ever use that.
+ Please do not use this state.
+
+ But a client wanted to upload stuff from a special software used
+ during sports competitions that upload the results to a FTP server and
+ want it available from client the web server.
+
+ So, I made it as less intrusive as possible in the rest of the system.
+ I wrote this state to depends on already existing PostgreSQL server to not
+ not mess with Unix users/passwords.
+ It's probably more secure this way.
+ #}
+
+# Load SQL and PostgreSQL support
+
+ModulePath /usr/lib/proftpd
+
+ModuleControlsACLs insmod,rmmod allow user root
+ModuleControlsACLs lsmod allow user *
+
+LoadModule mod_sql.c
+LoadModule mod_sql_postgres.c
+
+ServerName "{{ grains['id'] }}"
+UseIPv6 off
+IdentLookups off
+ServerType standalone
+DeferWelcome off
+MultilineRFC2228 on
+
+DefaultServer on
+ShowSymlinks on
+
+TimeoutNoTransfer 600
+TimeoutStalled 600
+TimeoutIdle 1200
+
+{#DisplayLogin welcome.msg#}
+{#DisplayChdir .message true#}
+
+ListOptions "-l"
+DenyFilter \*.*/
+
+# lock user in their home
+DefaultRoot ~
+
+Port 21
+MaxInstances 30
+
+User www-data
+Group www-data
+Umask 022 022
+
+AllowOverwrite on
+
+TransferLog /var/log/proftpd/xferlog
+{#SystemLog /var/log/proftpd/proftpd.log#}
+
+# allow only login trough SQL
+AuthPAM off
+{#AuthPAMConfig ftp#}
+AuthOrder mod_sql.c
+
+SQLAuthenticate users
+SQLAuthTypes Plaintext
+SQLBackend postgres
+SQLConnectInfo proftpd@127.0.0.1 proftpd {{ pillar['proftpd']['password'] }} 120
+SQLDefaultHomedir /var/lib/deployments
+SQLDefaultUID 33
+SQLDefaultGID 33
+SQLEngine auth
+SQLNamedQuery get_user_info SELECT "username, passwd, uid,gid, homedir, shell FROM users WHERE username = '%U' LIMIT 1;"
+SQLUserInfo users userid passwd uid gid homedir shell

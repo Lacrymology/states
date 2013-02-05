@@ -1,0 +1,20 @@
+/* {{ pillar['message_do_not_modify'] }} */
+
+{# I don't care, I recreate it each time #}
+DROP TABLE IF EXISTS users;
+
+CREATE TABLE users (
+ pkid serial PRIMARY KEY,
+ userid text NOT NULL UNIQUE,
+ passwd text,
+ uid int,
+ gid int,
+ homedir text,
+ shell text
+);
+
+GRANT SELECT ON users TO proftpd;
+
+{% for deployment in pillar['proftpd']['deployments'] %}
+INSERT INTO users (userid, passwd, shell, homedir) VALUES ('{{ deployment }}', '{{ pillar['proftpd']['deployments'][deployment] }}', '/bin/bash', '/var/lib/deployments/{{ deployment }}/static/ftp }}');
+{% endfor %}

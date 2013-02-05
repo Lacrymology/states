@@ -317,6 +317,13 @@ define service {
 }
 {% endfor %}
 
+define service {
+    host_name {% for host in pillar['shinken']['proftpd'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description proftpd
+    check_command check_nrpe!check_proftpd
+    use salt-service
+}
+
 {% for service in ('mongodb', 'mongodb_port', 'nginx_master', 'nginx_worker') %}
 define service {
     host_name {% for host in pillar['shinken']['graylog2'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}

@@ -194,6 +194,15 @@ LOGGING = {
             'handlers': ['gelf'],
             'propagate': False,
         },
+{% if not pillar['debug'] %}
+{% for logger in ('cache', 'rendering', 'metric_access') %}
+        '{{ logger }}': {
+            'level': 'ERROR',
+            'propagate': False,
+            'handlers': ['gelf', 'sentry']
+        },
+{% endfor %}
+{% endif %}
      },
     'root': {
         'handlers': ['gelf', 'sentry'],

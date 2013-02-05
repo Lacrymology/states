@@ -6,6 +6,10 @@
     - group: root
     - mode: 444
 
+debconf-utils:
+  pkg:
+    - installed
+
 apt_sources:
   file:
     - managed

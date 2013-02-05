@@ -68,6 +68,7 @@ def returner(ret):
         except Exception, err:
             logger.error("Can't send message to sentry: %s", err, exc_info=True)
 
+    requisite_error = 'One or more requisite failed'
     try:
         if 'success' not in ret:
             logger.debug("no success data, report")
@@ -78,7 +79,8 @@ def returner(ret):
                 connect_sentry(ret['return'], ret)
             else:
                 for state in ret['return']:
-                    if not ret['return'][state]['result']:
+                    if not ret['return'][state]['result'] and \
+                            ret['return'][state]['comment'] != requisite_error:
                         connect_sentry(state, ret['return'][state])
     except Exception, err:
         logger.error("Can't run connect_sentry: %s", err, exc_info=True)

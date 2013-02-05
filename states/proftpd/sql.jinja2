@@ -16,5 +16,5 @@ CREATE TABLE users (
 GRANT SELECT ON users TO proftpd;
 
 {% for deployment in pillar['proftpd']['deployments'] %}
-INSERT INTO users (userid, passwd, shell, homedir) VALUES ('{{ deployment }}', '{{ pillar['proftpd']['deployments'][deployment] }}', '/bin/bash', '/var/lib/deployments/{{ deployment }}/static/ftp }}');
+INSERT INTO users (userid, passwd, shell, homedir) VALUES ('{{ deployment }}', '{{ pillar['proftpd']['deployments'][deployment] }}', '/bin/bash', '/var/lib/deployments/{{ deployment }}/static/ftp/');
 {% endfor %}

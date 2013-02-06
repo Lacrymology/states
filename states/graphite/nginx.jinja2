@@ -11,7 +11,6 @@ server {
     server_name {% for hostname in pillar['graphite']['web']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
 
     root /usr/local/graphite/webapp/;
-    keepalive_timeout 5;
 
     location /favicon.ico {
         deny all;

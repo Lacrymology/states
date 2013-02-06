@@ -17,7 +17,6 @@ server {
     server_name {{ pillar['sentry']['address'] }};
 
     root /usr/local/sentry;
-    keepalive_timeout 5;
 
     location /_admin_media/ {
         expires 1h;

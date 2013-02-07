@@ -96,7 +96,9 @@ class BackupDirectory(UserList):
                 try:
                     data.append(BackupFile.from_filename(filename))
                 except (ValueError, KeyError):
-                    pass
+                    logger.debug("Can't handle %s", absolute_filename)
+            else:
+                logger.debug("%s isn't a file", absolute_filename)
         UserList.__init__(self, data)
 
 def main():
@@ -111,7 +113,6 @@ def main():
         try:
             host = hosts[file.hostname]
         except KeyError:
-#            hosts[file.hostname] = {}
             host = hosts[file.hostname] = {}
         try:
             name = host[file.name]
@@ -132,7 +133,7 @@ def main():
                 dates = hosts[host][name][type].keys()
                 dates.sort()
                 latest = hosts[host][name][type][dates[-1]]
-                logger.debug("Latest backup %s", latest.date.isoformat())
+                logger.debug("Latest backup %s: %s", latest.date.isoformat())
                 if now - latest.date > max_time:
                     logger.debug("Expired backup %s", latest)
                     missing_backup.append('-'.join((host, type)))

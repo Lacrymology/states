@@ -29,6 +29,7 @@ class BackupFile(object):
 
     format_type = {
         #'postgresql': 'sql'
+        'pip': 'virtualenv',
         'sql': 'postgresql'
     }
 

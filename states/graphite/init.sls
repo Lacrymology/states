@@ -157,6 +157,8 @@ graphite_settings:
     - require:
       - postgres_user: graphite_settings
       - service: postgresql
+{#    - lc_collate: en_US.UTF-8#}
+{#    - lc_ctype: en_US.UTF-8#}
   module:
     - wait
     - name: django.syncdb

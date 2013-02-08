@@ -3,4 +3,4 @@
 
 export DJANGO_SETTINGS_MODULE={{ settings }}
 cd {{ virtualenv }}
-sudo -u www-data -g www-data {{ virtualenv }}/bin/django-admin.py $*
+sudo -E -u www-data -g www-data {{ virtualenv }}/bin/django-admin.py $*

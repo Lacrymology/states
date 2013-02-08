@@ -1,8 +1,25 @@
 #!/bin/sh
 # {{ pillar['message_do_not_modify'] }}
 
+if [ -d "$1/.hg/" ]; then
+    echo "Mercurial Virtualenv $1" > /tmp/$DEPLOYMENT-$NOW.pip
+    echo "Status:" >> /tmp/$DEPLOYMENT-$NOW.pip
+    (cd $1; hg status) >> /tmp/$DEPLOYMENT-$NOW.pip
+    echo "Summary:" >> /tmp/$DEPLOYMENT-$NOW.pip
+    (cd $1; hg summary) >> /tmp/$DEPLOYMENT-$NOW.pip
+fi
+
+if [ -d "$1/.git/ ]; then
+    echo "Git Virtualenv $1" > /tmp/$DEPLOYMENT-$NOW.pip
+    echo "Status:" >> /tmp/$DEPLOYMENT-$NOW.pip
+    (cd $1; git status -s) >> /tmp/$DEPLOYMENT-$NOW.pip
+    echo "Show:" >> /tmp/$DEPLOYMENT-$NOW.pip
+    (cd $1; git show) >> /tmp/$DEPLOYMENT-$NOW.pip
+fi
+
 DEPLOYMENT=`basename $1`
 NOW=`date '+%Y-%m-%d-%H_%M_%S'`
-$1/bin/pip freeze | gzip -9 > /tmp/$DEPLOYMENT-$NOW.pip.gz
+$1/bin/pip freeze >> /tmp/$DEPLOYMENT-$NOW.pip
+gzip -9 /tmp/$DEPLOYMENT-$NOW.pip
 scp -q /tmp/$DEPLOYMENT-$NOW.pip.gz root@{{ pillar['backup_server']['address'] }}:/var/lib/backup/{{ grains['id'] }}-$DEPLOYMENT-virtualenv-$NOW.pip.gz
 rm -f /tmp/$DEPLOYMENT-$NOW.pip.gz

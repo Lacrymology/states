@@ -34,6 +34,10 @@ diamond_requirements:
     - require:
       - virtualenv: diamond
 
+/etc/diamond/collectors/ProcessMemoryCollector.conf:
+  file:
+    - absent
+
 diamond:
   virtualenv:
     - manage
@@ -54,7 +58,7 @@ diamond:
       - file: diamond_upstart
     - watch:
       - file: diamond_requirements
-      - file: /etc/diamond/collectors/ProcessMemoryCollector.conf
+      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
   file:
     - managed
     - name: /etc/diamond/diamond.conf
@@ -81,16 +85,17 @@ diamond:
     - watch:
       - module: diamond
 
-/etc/diamond/collectors/ProcessMemoryCollector.conf:
+/etc/diamond/collectors/ProcessResourcesCollector.conf:
   file:
     - managed
     - template: jinja
-    - source: salt://diamond/ProcessMemoryCollector.jinja2
+    - source: salt://diamond/ProcessResourcesCollector.jinja2
     - user: root
     - group: root
     - mode: 440
     - require:
       - file: /etc/diamond/collectors
+      - file: /etc/diamond/collectors/ProcessMemoryCollector.conf
 
 {#
 archive of installation trough debian package

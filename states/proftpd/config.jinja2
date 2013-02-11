@@ -58,8 +58,8 @@ Umask 022 022
 
 AllowOverwrite on
 
-TransferLog /var/log/proftpd/xferlog
-{#SystemLog /var/log/proftpd/proftpd.log#}
+LogFormat xfer "%a %l %u \"%r\" %s %b"
+ExtendedLog syslog:notice AUTH,READ,WRITE,EXIT xfer
 
 # allow only login trough SQL
 AuthPAM off

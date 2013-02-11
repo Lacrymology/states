@@ -100,6 +100,10 @@ proftpd_diamond_memory:
     - absent
 {% endfor %}
 
+/var/log/proftpd/xferlog:
+  file:
+    - absent
+
 {% for deployment in pillar['proftpd']['deployments'] %}
 /var/lib/deployments/{{ deployment }}/static/ftp:
   file:

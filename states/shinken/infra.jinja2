@@ -181,7 +181,7 @@ define service {
     use salt-service
 }
 
-{% for service in ('loopback', 'memory', 'cron', 'diamond', 'syslogd', 'klogd', 'salt_minion', 'ssh', 'statsd', 'users', 'load', 'all_disks', 'zombie_procs', 'total_procs') %}
+{% for service in ('loopback', 'memory', 'cron', 'diamond', 'syslogd', 'klogd', 'salt_minion', 'ssh', 'statsd', 'users', 'load', 'all_disks', 'zombie_procs', 'total_procs', 'apt', 'apt_rc') %}
 define service {
     host_name {% for host in pillar['shinken']['ip_addresses'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description Infra-{{ service }}

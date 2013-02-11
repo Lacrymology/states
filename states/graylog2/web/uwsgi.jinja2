@@ -7,9 +7,10 @@ post-buffering = 4096
 env = RAILS_ENV=production
 processes = {{ pillar['graylog2']['web']['workers'] }}
 {% if 'cheaper' in pillar['graylog2']['web'] %}
-cheap = true
 {% if pillar['graylog2']['web']['cheaper'] > 0 %}
 cheaper = {{ pillar['graylog2']['web']['cheaper'] }}
+{% else %}
+cheap = true
 {% endif %}
 {% if pillar['graylog2']['web']['workers'] == 1 and pillar['graylog2']['web']['cheaper'] == 0 %}
 idle = {% if 'idle' in pillar['graylog2']['web'] %}{{ pillar['graylog2']['web']['idle'] }}{% else %}300{% endif %}

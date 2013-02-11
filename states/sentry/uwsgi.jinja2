@@ -6,9 +6,10 @@ pymodule-alias = my_sentry_conf=/etc/sentry.conf.py
 module = sentry.wsgi
 processes = {{ pillar['sentry']['workers'] }}
 {% if 'cheaper' in pillar['sentry'] %}
-cheap = true
 {% if pillar['sentry']['cheaper'] > 0 %}
 cheaper = {{ pillar['sentry']['cheaper'] }}
+{% else %}
+cheap = true
 {% endif %}
 {% if pillar['sentry']['workers'] == 1 and pillar['sentry']['cheaper'] == 0 %}
 idle = {% if 'idle' in pillar['sentry'] %}{{ pillar['sentry']['idle'] }}{% else %}300{% endif %}

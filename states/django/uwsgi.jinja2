@@ -18,15 +18,14 @@ procname-master = {{ deployment }}-master
 socket = /var/lib/uwsgi/{{ deployment }}.sock
 no-orphans = true
 lazy-apps = true
-{% if cheaper %}
-cheap = true
 {% if cheaper > 0 %}
 cheaper = {{ cheaper }}
+{% else %}
+cheap = true
 {% endif %}
 {% if workers == 1 and cheaper == 0 %}
 idle = {{ idle|default(300) }}
 {% endif %}
-{% endif -%}
 {%- if grains['virtual'] == 'kvm' and salt['file.file_exists']('/sys/kernel/mm/ksm/run') %}
 ksm = {{ ksm|default(20) }}
 {% endif -%}

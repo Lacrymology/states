@@ -6,9 +6,10 @@ env = DJANGO_SETTINGS_MODULE=graphite.local_settings
 module = graphite.wsgi
 processes = {{ pillar['graphite']['web']['workers'] }}
 {% if 'cheaper' in pillar['graphite']['web'] %}
-cheap = true
 {% if pillar['graphite']['web']['cheaper'] > 0 %}
 cheaper = {{ pillar['graphite']['web']['cheaper'] }}
+{% else %}
+cheap = true
 {% endif %}
 {% if pillar['graphite']['web']['workers'] == 1 and pillar['graphite']['web']['cheaper'] == 0 %}
 idle = {% if 'idle' in pillar['graphite']['web'] %}{{ pillar['graphite']['web']['idle'] }}{% else %}300{% endif %}

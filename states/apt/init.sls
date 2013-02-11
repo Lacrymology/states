@@ -52,7 +52,6 @@ apt_cleanup:
     - mode: 555
     - require:
       - module: nagiosplugin
-      - pip: requests
 
 /etc/nagios/nrpe.d/apt.cfg:
   file:

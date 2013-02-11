@@ -1,3 +1,6 @@
+include:
+  - nrpe
+
 /etc/apt/apt.conf.d/99local:
   file:
     - managed
@@ -41,3 +44,27 @@ apt_cleanup:
       - memtest86+
       - usbutils
 {% endif %}
+
+/usr/local/bin/check_apt-rc.py:
+  file:
+    - managed
+    - source: salt://apt/check.py
+    - mode: 555
+    - require:
+      - module: nagiosplugin
+      - pip: requests
+
+/etc/nagios/nrpe.d/apt.cfg:
+  file:
+    - managed
+    - template: jinja
+    - user: nagios
+    - group: nagios
+    - mode: 440
+    - source: salt://apt/nrpe.jinja2
+
+extend:
+  nagios-nrpe-server:
+    service:
+      - watch:
+        - file: /etc/nagios/nrpe.d/apt.cfg

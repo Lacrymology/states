@@ -1,3 +1,20 @@
+{#
+ WARNING
+
+ FTP is a insecure and crappy protocol, I would never use that.
+ Please do not use this state.
+
+ But a client wanted to upload files from a special software used
+ during sports competitions.
+ They wanted to have the results available on their website.
+ And it only support FTP.
+
+ So, I made this state as less intrusive as possible in the rest of the system.
+ I wrote it to depends on already existing PostgreSQL server to not
+ not mess with Unix users/passwords.
+ It's probably more secure this way.
+ #}
+
 include:
   - apt
   - postgresql.server

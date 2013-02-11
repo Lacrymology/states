@@ -1,23 +1,5 @@
 # {{ pillar['message_do_not_modify'] }}
 
-{#
- Warning on this State:
-
- FTP is a insecure and crappy protocol, I would ever use that.
- Please do not use this state.
-
- But a client wanted to upload stuff from a special software used
- during sports competitions that upload the results to a FTP server and
- want it available from client the web server.
-
- So, I made it as less intrusive as possible in the rest of the system.
- I wrote this state to depends on already existing PostgreSQL server to not
- not mess with Unix users/passwords.
- It's probably more secure this way.
- #}
-
-# Load SQL and PostgreSQL support
-
 ModulePath /usr/lib/proftpd
 
 ModuleControlsACLs insmod,rmmod allow user root
@@ -40,9 +22,6 @@ TimeoutNoTransfer 600
 TimeoutStalled 600
 TimeoutIdle 1200
 
-{#DisplayLogin welcome.msg#}
-{#DisplayChdir .message true#}
-
 ListOptions "-l"
 DenyFilter \*.*/
 
@@ -63,7 +42,6 @@ ExtendedLog syslog:notice AUTH,READ,WRITE,EXIT xfer
 
 # allow only login trough SQL
 AuthPAM off
-{#AuthPAMConfig ftp#}
 AuthOrder mod_sql.c
 
 SQLAuthenticate users

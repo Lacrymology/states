@@ -1,2 +1,2 @@
 # {{ pillar['message_do_not_modify'] }}
-command[check_proftpd]=/usr/lib/nagios/plugins/check_procs -C proftpd -w 1:1 -u www-data
+command[check_proftpd]=/usr/lib/nagios/plugins/check_procs -C proftpd -w 1:1 -u www-data -a "proftpd: (accepting connections)"

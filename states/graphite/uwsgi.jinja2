@@ -5,6 +5,8 @@ master = true
 env = DJANGO_SETTINGS_MODULE=graphite.local_settings
 module = graphite.wsgi
 processes = {{ workers }}
+harakiri = {{ harakiri|default(30) }}
+harakiri-verbose = true
 {% if cheaper|default(False) %}
 {% if cheaper > 0 %}
 cheaper = {{ cheaper }}

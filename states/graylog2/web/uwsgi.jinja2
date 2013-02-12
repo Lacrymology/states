@@ -6,6 +6,8 @@ master = true
 post-buffering = 4096
 env = RAILS_ENV=production
 processes = {{ pillar['graylog2']['web']['workers'] }}
+harakiri = {{ harakiri|default(60) }}
+harakiri-verbose = true
 {% if 'cheaper' in pillar['graylog2']['web'] %}
 {% if pillar['graylog2']['web']['cheaper'] > 0 %}
 cheaper = {{ pillar['graylog2']['web']['cheaper'] }}

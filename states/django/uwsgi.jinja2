@@ -5,6 +5,8 @@ master = true
 env = DJANGO_SETTINGS_MODULE={{ settings }}
 module = {{ module }}
 processes = {{ workers }}
+harakiri = {{ harakiri|default(30) }}
+harakiri-verbose = true
 uid = {{ uid|default("www-data") }}
 gid = {{ gid|default("www-data") }}
 threaded-logger = true

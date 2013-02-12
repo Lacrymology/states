@@ -69,6 +69,7 @@ elasticsearch:
     - group: elasticsearch
     - mode: 440
     - source: salt://elasticsearch/config.jinja2
+    - context: {{ pillar['elasticsearch'] }}
     - require:
       - pkg_file: elasticsearch
   service:

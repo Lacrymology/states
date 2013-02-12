@@ -4,18 +4,18 @@ bootstrap:
   mlockall: true
 
 cluster:
-  name: elasticsearch-{{ pillar['elasticsearch']['cluster']['name'] }}
+  name: elasticsearch-{{ cluster['name'] }}
   routing:
     allocation:
       node_concurrent_recoveries: 2
 node:
   name: {{ grains['id'] }}
-{% if 'aws' in pillar['elasticsearch'] %}
+{% if aws|default(False) %}
 cloud:
   region: {{ grains['region'] }}
   aws:
-    access_key: {{ pillar['elasticsearch']['aws']['access_key'] }}
-    secret_key: {{ pillar['elasticsearch']['aws']['secret_key'] }}
+    access_key: {{ aws['access_key'] }}
+    secret_key: {{ aws['secret_key'] }}
   node:
     auto_attributes: true
 discovery:
@@ -45,7 +45,7 @@ discovery:
         enabled: false
       unicast:
         hosts: [
-{%- for node in pillar['elasticsearch']['cluster']['nodes'] -%}
-"{{ pillar['elasticsearch']['cluster']['nodes'][node]['private'] }}"{% if not loop.last %}, {% endif -%}
+{%- for node in cluster['nodes'] -%}
+"{{ cluster['nodes'][node]['private'] }}"{% if not loop.last %}, {% endif -%}
 {%- endfor %}]
 {% endif %}

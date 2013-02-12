@@ -138,6 +138,7 @@ graphite_settings:
     - group: graphite
     - mode: 440
     - source: salt://graphite/config.jinja2
+    - context: {{ pillar['graphite']['web'] }}
     - require:
       - user: graphite
       - module: graphite-web
@@ -190,6 +191,7 @@ graphite_settings:
     - group: www-data
     - mode: 440
     - source: salt://graphite/uwsgi.jinja2
+    - context: {{ pillar['graphite']['web'] }}
     - require:
       - service: uwsgi_emperor
       - file: graphite_logdir
@@ -226,6 +228,7 @@ graphite_settings:
     - user: www-data
     - group: www-data
     - mode: 440
+    - context: {{ pillar['graphite']['web'] }}
     - require:
       - module: /etc/uwsgi/graphite.ini
 

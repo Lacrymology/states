@@ -16,6 +16,7 @@ chdir = {{ root_dir|default("/usr/local/deployments") }}/{{ deployment }}
 procname = {{ deployment }}-worker
 procname-master = {{ deployment }}-master
 socket = /var/lib/uwsgi/{{ deployment }}.sock
+stats = /var/lib/uwsgi/{{ deployment }}-stats.sock
 no-orphans = true
 lazy-apps = true
 {% if cheaper > 0 %}

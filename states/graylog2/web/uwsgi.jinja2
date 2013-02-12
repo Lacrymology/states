@@ -25,6 +25,7 @@ gid = www-data
 procname = graylog2-worker
 procname-master = graylog2-master
 socket = /var/lib/uwsgi/graylog2.sock
+stats = /var/lib/uwsgi/graylog2-stats.sock
 chdir = /usr/local/graylog2-web-interface-{{ pillar['graylog2']['web']['version'] }}
 rack = /usr/local/graylog2-web-interface-{{ pillar['graylog2']['web']['version'] }}/config.ru
 threaded-logger = true
@@ -32,20 +33,3 @@ logger = graylog2:{{ pillar['graylog2_address'] }}:12201,{{ grains['id'] }}
 carbon-id = graylog2
 carbon = {{ pillar['graphite_address'] }}:2003
 no-orphans = true
-
-{#
-Original file that seems to work:
-[uwsgi]
-autoload = true
-plugins = rack
-#socket = 127.0.0.1:3031
-http-socket = 127.0.0.1:3031
-chdir = /usr/local/graylog2-web-interface-0.9.6p1
-processes = 1
-master = true
-harakiri = 120
-max-requests = 5000
-rack = /usr/local/graylog2-web-interface-0.9.6p1/config.ru
-post-buffering = 4096
-env = RAILS_ENV=production
-#}

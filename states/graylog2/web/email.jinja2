@@ -1,12 +1,12 @@
 production:
   via: smtp
-  host: "{{ pillar['graylog2']['web']['email']['server'] }}"
-{% if pillar['graylog2']['web']['email']['tls'] %}
+  host: "{{ email['server'] }}"
+{% if email['tls'] %}
   enable_starttls_auto: true
 {% else %}
   enable_starttls_auto: false
 {% endif %}
-  port: {{ pillar['graylog2']['web']['email']['port'] }}
+  port: {{ email['port'] }}
   auth: login
-  user: {{ pillar['graylog2']['web']['email']['user'] }}
-  password: {{ pillar['graylog2']['web']['email']['password'] }}
+  user: {{ email['user'] }}
+  password: {{ email['password'] }}

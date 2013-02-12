@@ -3,5 +3,5 @@
 enabled = True
 
 host = 127.0.0.1:55672
-user = {{ pillar['rabbitmq']['monitor']['user'] }}
-password = {{ pillar['rabbitmq']['monitor']['password'] }}
+user = {{ monitor['user'] }}
+password = {{ monitor['password'] }}

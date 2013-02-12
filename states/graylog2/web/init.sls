@@ -19,6 +19,7 @@ graylog2-web-{{ filename }}:
     - group: www-data
     - mode: 440
     - source: salt://graylog2/web/{{ filename }}.jinja2
+    - context: {{ pillar['graylog2']['web'] }}
 {% endfor %}
 
 graylog2-web_logdir:
@@ -83,6 +84,7 @@ graylog2-web:
     - group: www-data
     - mode: 440
     - source: salt://graylog2/web/uwsgi.jinja2
+    - context: {{ pillar['graylog2']['web'] }}
     - require:
       - file: {{ web_root_dir }}/log
       - service: uwsgi_emperor
@@ -137,6 +139,7 @@ graylog2_web_diamond_memory:
     - user: www-data
     - group: www-data
     - mode: 440
+    - context: {{ pillar['graylog2']['web'] }}
 
 /etc/nagios/nrpe.d/graylog2-web.cfg:
   file.managed:

@@ -1,12 +1,10 @@
 # {{ pillar['message_do_not_modify'] }}
 [uwsgi]
-{#harakiri = 120#}
-{#max-requests = 5000#}
 master = true
 post-buffering = 4096
 env = RAILS_ENV=production
 processes = {{ pillar['graylog2']['web']['workers'] }}
-harakiri = {{ harakiri|default(60) }}
+harakiri = {{ timeout|default(60) }}
 harakiri-verbose = true
 {% if 'cheaper' in pillar['graylog2']['web'] %}
 {% if pillar['graylog2']['web']['cheaper'] > 0 %}

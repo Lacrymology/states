@@ -211,7 +211,7 @@ define service {
 
 {%- for host in pillar['shinken']['web_servers'] -%}
     {%- for deployment in pillar['shinken']['web_servers'][host] -%}
-        {%- for service in ('master', 'worker', 'http') %}
+        {%- for service in ('master', 'worker', 'http', 'uwsgi') %}
 define service {
     host_name {{ host }}
     service_description Web-{{ deployment }}-{{ service }}

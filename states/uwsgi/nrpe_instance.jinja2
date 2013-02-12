@@ -2,3 +2,4 @@
 command[check_{{ deployment }}_master]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u www-data -a {{ deployment }}-master
 command[check_{{ deployment }}_worker]=/usr/lib/nagios/plugins/check_procs -c {{ cheaper|default(workers) }}:{{ workers }} -u www-data -a {{ deployment }}-worker -C uwsgi
 command[check_{{ deployment }}_http]=/usr/lib/nagios/plugins/check_http -H {{ domain_name }} -u {{ uri|default("/") }} {% if protocol|default('http') == 'https' %}--ssl{% endif %} -e '200 OK'
+command[check_{{ deployment }}_uwsgi]=/usr/local/uwsgi/uwsgi --socket /var/lib/uwsgi/{{ deployment }}.sock --nagios

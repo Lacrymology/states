@@ -6,7 +6,7 @@ upstream sentry {
 
 server {
     listen 80;
-{% if 'ssl' in pillar['sentry'] %}
+{% if ssl|default(False) %}
     listen 443 ssl;
     ssl_certificate /usr/local/sentry/ssl.pem;
     ssl_certificate_key /usr/local/sentry/ssl.pem;
@@ -14,7 +14,7 @@ server {
     ssl_ciphers ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP:+eNULL;
 {% endif %}
 
-    server_name {{ pillar['sentry']['address'] }};
+    server_name {{ address }};
 
     root /usr/local/sentry;
 

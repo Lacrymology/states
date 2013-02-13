@@ -92,6 +92,7 @@ nagios-nrpe-plugin:
     - user: www-data
     - group: www-data
     - mode: 440
+    - context: {{ pillar['shinken'] }}
 {% endif %}
 
 shinken-{{ role }}:
@@ -144,6 +145,7 @@ shinken-{{ role }}:
     - group: shinken
     - mode: 440
     - source: salt://shinken/{{ config }}.jinja2
+    - context: {{ pillar['shinken'] }}
     {% endfor %}
 
 {% endif %}

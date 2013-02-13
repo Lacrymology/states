@@ -122,11 +122,9 @@ interfaces = eth, tun, tap, lo, vmbr
 enabled = True
 
 {% if 'diamond' in pillar -%}
-    {%- if 'ping' in pillar['diamond'] -%}
-        {%- for host in pillar['diamond']['ping'] -%}
+    {%- for host in pillar['diamond']['ping']|default([]) -%}
 target_{{ host }} = {{ pillar['diamond']['ping'][host] }}
-        {% endfor -%}
-    {%- endif -%}
+    {% endfor -%}
 {%- endif %}
 
 [[ProcessStatCollector]]

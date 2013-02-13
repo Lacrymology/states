@@ -2,8 +2,8 @@
 
 upstream shinken-backend {
     ip_hash;
-{% for host in pillar['shinken']['architecture']['broker'] -%}
-    server {{ pillar['shinken']['ip_addresses'][host] }}:7767;
+{% for host in architecture['broker'] -%}
+    server {{ ip_addresses[host] }}:7767;
 {% endfor -%}
 }
 
@@ -17,7 +17,7 @@ server {
     ssl_ciphers ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP:+eNULL;
 {% endif %}
 
-    server_name {% for hostname in pillar['shinken']['web']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+    server_name {% for hostname in web['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
     location / {
         proxy_pass http://shinken-backend;
         proxy_set_header X-Real-IP $remote_addr;

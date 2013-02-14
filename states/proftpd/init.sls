@@ -30,6 +30,8 @@ proftpd-basic:
       - pkg: debconf-utils
   pkg:
     - installed
+    - require:
+      - debconf: proftpd-basic
 
 proftpd-mod-pgsql:
   pkg:

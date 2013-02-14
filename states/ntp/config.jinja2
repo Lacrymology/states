@@ -1,0 +1,32 @@
+# {{ pillar['message_do_not_modify'] }}
+
+{#driftfile /var/lib/ntp/ntp.drift#}
+
+{#statistics loopstats peerstats clockstats#}
+{#filegen loopstats file loopstats type day enable#}
+{#filegen peerstats file peerstats type day enable#}
+{#filegen clockstats file clockstats type day enable#}
+
+{# internal server used to synchronize peers with ourselves #}
+{% if server %}
+server 127.127.1.1
+fudge 127.127.1.1 stratum 3 refid NIST
+{% endif %}
+
+{% for server in servers|default([]) %}
+server {{ server }}
+{% endfor %}
+
+# Access control configuration; see /usr/share/doc/ntp-doc/html/accopt.html for
+# details.  The web page <http://support.ntp.org/bin/view/Support/AccessRestrictions>
+# might also be helpful.
+#
+# Note that "restrict" applies to both servers and clients, so a configuration
+# that might be intended to block requests from certain clients could also end
+# up blocking replies from your own upstream servers.
+
+# By default, exchange time with everybody, but don't allow configuration.
+restrict -4 default kod notrap nomodify nopeer noquery
+restrict -6 default kod notrap nomodify nopeer noquery
+{# loopback is unrestricted for nagios NTP check #}
+restrict 127.0.0.1

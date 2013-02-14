@@ -1,0 +1,5 @@
+# {{ pillar['message_do_not_modify'] }}
+
+enabled = True
+
+instances = {% for name in instances %}{{ instances[name] }}?{{ name }}{% if not loop.last %}, {% endif %}{% endfor %}

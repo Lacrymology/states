@@ -324,6 +324,15 @@ define service {
     use salt-service
 }
 
+{% if pdnsd %}
+define service {
+    host_name {% for host in pdnsd %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description pdnsd
+    check_command check_nrpe!check_pdnsd
+    use salt-service
+}
+{% endif %}
+
 {% for service in ('mongodb', 'mongodb_port', 'nginx_master', 'nginx_worker') %}
 define service {
     host_name {% for host in graylog2 %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}

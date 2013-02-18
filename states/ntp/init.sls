@@ -36,7 +36,7 @@ ntp:
     - group: root
     - mode: 440
     - require:
-      - pkg: ntpd
+      - pkg: ntp
     - context: {{ pillar['ntp'] }}
   service:
     - running

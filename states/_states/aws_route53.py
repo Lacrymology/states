@@ -66,16 +66,18 @@ def records_exists(access_key, secret_key, records):
         log.debug("Process hosted zone %s, name: %s", hosted_zone_id,
                   hosted_zone.name)
         for existing in hosted_zone.record_sets:
-            log.debug("process existing record %s", existing)
             existing_type = existing.__class__.__name__.rstrip(
                 'ResourceRecordSet').lower()
+            log.debug("process existing %s record %s", existing_type,
+                      existing.name)
             try:
                 records_type = records[hosted_zone_id][existing_type]
             except KeyError:
+                # no changes asked for this kind of record
                 pass
             else:
                 for record in records_type:
-                    if existing.name == record:
+                    if existing.name.rstrip('.') == record:
                         # keep a reference to found record to not add them at
                         # the ends
                         try:
@@ -90,17 +92,17 @@ def records_exists(access_key, secret_key, records):
                         if 'ttl' in records_type[record]:
                             if records_type[record]['ttl'] != existing.ttl:
                                 ret['changes']['{0} TTL'.format(record)] =\
-                                '{0} -> {1}'.format(
-                                    existing.ttl,
-                                    records_type[record]['ttl'])
+                                    '{0} -> {1}'.format(
+                                        existing.ttl,
+                                        records_type[record]['ttl'])
                                 existing.ttl = records_type[record]['ttl']
                                 same = False
                         # check records (values)
                         if records_type[record]['values'] != existing.records:
                             ret['changes']['{0} records'.format(record)] =\
-                            '{0} -> {1}'.format(
-                                existing.records,
-                                records_type[record]['values'])
+                                '{0} -> {1}'.format(
+                                    existing.records,
+                                    records_type[record]['values'])
                             existing.records = records_type[record]['values']
                             same = False
 

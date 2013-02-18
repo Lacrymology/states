@@ -44,6 +44,15 @@ pdnsd:
     - mode: 440
     - context: {{ pillar['dns_proxy'] }}
 
+/etc/nagios/nrpe.d/pdnsd.cfg:
+  file:
+    - managed
+    - template: jinja
+    - user: nagios
+    - group: nagios
+    - mode: 440
+    - source: salt://pdnsd/nrpe.jinja2
+
 pdsnd_diamond_memory:
   file:
     - accumulated

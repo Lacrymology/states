@@ -17,6 +17,7 @@ from salt import exceptions, utils
 
 log = logging.getLogger(__name__)
 
+
 def __virtual__():
     '''
     Verify apt is installed.
@@ -26,6 +27,7 @@ def __virtual__():
         return 'apt_repository'
     except exceptions.CommandNotFoundError:
         return False
+
 
 def present(address, components, distribution=None, source=False, key_id=None,
             key_server=None, in_sources_list_d=True, filename=None):
@@ -79,10 +81,12 @@ def present(address, components, distribution=None, source=False, key_id=None,
             return {'name': address, 'result': False, 'changes': {},
                     'comment': "Invalid address '{0}'".format(address)}
         filename = '-'.join((
-            url.netloc.split(':')[0], # address without port
-            url.path.lstrip('/').rstrip('/').replace('/', '_'), # path with _ instead of /
+            # address without port
+            url.netloc.split(':')[0],
+            # path with _ instead of /
+            url.path.lstrip('/').rstrip('/').replace('/', '_'),
             distribution
-            ))
+        ))
 
     # deb http://ppa.launchpad.net/mercurial-ppa/releases/ubuntu precise main
     # without the deb
@@ -139,6 +143,7 @@ def present(address, components, distribution=None, source=False, key_id=None,
         __salt__['pkg.refresh_db']()
     ret['changes'].update(cmd_result['changes'])
     return ret
+
 
 def ubuntu_ppa(user, name, key_id, source=False, distribution=None):
     '''

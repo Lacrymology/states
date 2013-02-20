@@ -9,9 +9,13 @@ Handle Debian, Ubuntu and other Debian based distribution APT repositories
 
 '''
 
+
+import logging
 import urlparse
 
 from salt import exceptions, utils
+
+log = logging.getLogger(__name__)
 
 def __virtual__():
     '''
@@ -67,7 +71,7 @@ def present(address, components, distribution=None, source=False, key_id=None,
         This is used by default.
     '''
     if distribution is None:
-        distribution = __salt__['grains.item']('oscodename')
+        distribution = __salt__['grains.item']('oscodename')['oscodename']
 
     if filename is None:
         url = urlparse.urlparse(address)

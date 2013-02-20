@@ -80,7 +80,7 @@ def present(address, components, distribution=None, source=False, key_id=None,
                     'comment': "Invalid address '{0}'".format(address)}
         filename = '-'.join((
             url.netloc.split(':')[0], # address without port
-            url.path.lstrip('/').replace('/', '_'), # path with _ instead of /
+            url.path.lstrip('/').rstrip('/').replace('/', '_'), # path with _ instead of /
             distribution
             ))
 

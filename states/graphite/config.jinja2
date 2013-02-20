@@ -270,3 +270,5 @@ STATSD_PREFIX = 'graphite'
 STATSD_CLIENT = 'django_statsd.clients.normal'
 
 {#INSTALLED_APPS += ('gunicorn',)#}
+
+ALLOWED_HOSTS = ["{% for hostname in hostnames %}{{ hostname }}{% if not loop.last %}", "{% endif %}{% endfor %}"]

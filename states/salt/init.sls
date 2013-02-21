@@ -26,6 +26,9 @@ salt-minion:
   pkg:
     - installed
     {# ^- use to be latest, but 0.12.x is just broken #}
+    - names:
+      - python-openssl
+      - salt-minion
   service:
     - running
     - enable: True

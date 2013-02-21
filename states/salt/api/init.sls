@@ -30,6 +30,7 @@ user_{{ user }}:
     - user: root
     - group: root
     - mode: 400
+    - context: {{ pillar['salt_master'] }}
 {% if not 'ssl' in pillar['salt_master'] and not salt['file.file_exists']("/etc/pki/tls/certs/" + pillar['salt_master']['hostname'] + ".crt") %}
   module:
     - wait
@@ -59,7 +60,6 @@ salt-api:
     - group: root
     - mode: 440
     - source: salt://salt/api/upstart.jinja2
-    - context: {{ pillar['salt_master'] }}
   service:
     - running
     - watch:

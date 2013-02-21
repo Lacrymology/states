@@ -1,16 +1,25 @@
 # {{ pillar['message_do_not_modify'] }}
 
+{% if ssl|default(False) %}
 server {
     listen 80;
-{#{% if ssl|default(False) %}#}
-{#    listen 443 ssl;#}
-{#    ssl_certificate /usr/local/sentry/ssl.pem;#}
-{#    ssl_certificate_key /usr/local/sentry/ssl.pem;#}
-{#    ssl_client_certificate /usr/local/sentry/ca.crt;#}
-{#    ssl_ciphers ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP:+eNULL;#}
-{#{% endif %}#}
+    server_name {{ hostname }};
+    return 301 https://{{ hostname }}$request_uri;
+}
+{% endif %}
 
-    server_name {{ pillar['salt_master']['hostname'] }};
+server {
+{% if ssl|default(False) %}
+    listen 443 ssl;
+    ssl_certificate {{ ssl['key'] }};
+    ssl_certificate_key {{ ssl['key'] }};
+    ssl_client_certificate {{ ssl['crt'] }};
+    ssl_ciphers ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP:+eNULL;
+{% else %}
+    listen 80;
+{% endif %}
+
+    server_name {{ hostname }};
 
     root /usr/local/salt-ui;
     index index.html;

@@ -1,12 +1,12 @@
-external_auth: {{ pillar['salt_master']['external_auth'] }}
+external_auth: {{ external_auth }}
 
 rest_cherrypy:
   port: 8000
-  debug: False
+  debug: True
   static: /usr/local/salt-ui/
 {% if not 'ssl' in pillar['salt_master'] %}
-  ssl_crt: /etc/pki/tls/certs/salt_api.crt
-  ssl_key: /etc/pki/tls/certs/salt_api.key
+  ssl_crt: /etc/pki/tls/certs/{{ pillar['salt_master']['hostname'] }}.crt
+  ssl_key: /etc/pki/tls/certs/{{ pillar['salt_master']['hostname'] }}.key
 {% else %}
   ssl_crt: {{ pillar['salt_master']['ssl']['crt'] }}
   ssl_key: {{ pillar['salt_master']['ssl']['key'] }}

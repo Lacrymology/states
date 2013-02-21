@@ -30,11 +30,11 @@ user_{{ user }}:
     - user: root
     - group: root
     - mode: 400
-{% if not 'ssl' in pillar['salt_master'] and not salt['file.file_exists']("/etc/pki/tls/certs/salt_api.crt") %}
+{% if not 'ssl' in pillar['salt_master'] and not salt['file.file_exists']("/etc/pki/tls/certs/" + pillar['salt_master']['hostname'] + ".crt") %}
   module:
     - wait
     - name: tls.create_self_signed_cert
-    - ca_name: salt_api
+    - tls_dir: tls
     - CN: {{ pillar['salt_master']['hostname'] }}
     {# 10 years #}
     - days: {{ 365 * 10 }}
@@ -59,6 +59,7 @@ salt-api:
     - group: root
     - mode: 440
     - source: salt://salt/api/upstart.jinja2
+    - context: {{ pillar['salt_master'] }}
   service:
     - running
     - watch:
@@ -81,6 +82,7 @@ salt-ui:
     - user: www-data
     - group: www-data
     - mode: 440
+    - context: {{ pillar['salt_master'] }}
 
 /etc/nagios/nrpe.d/salt-api.cfg:
   file:

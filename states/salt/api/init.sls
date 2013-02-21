@@ -30,6 +30,17 @@ user_{{ user }}:
     - user: root
     - group: root
     - mode: 400
+{% if not 'ssl' in pillar['salt_master'] and not salt['file.file_exists']("/etc/pki/tls/certs/salt_api.crt") %}
+  module:
+    - wait
+    - name: tls.create_self_signed_cert
+    - ca_name: salt_api
+    - CN: {{ pillar['salt_master']['hostname'] }}
+    {# 10 years #}
+    - days: {{ 365 * 10 }}
+    - watch:
+      - file: /etc/salt/master.d/ui.conf
+{% endif %}
 
 salt-api:
   pkg:
@@ -54,6 +65,7 @@ salt-api:
       - file: salt-api
       - pip: salt-api
       - git: salt-ui
+      - file: /etc/salt/master.d/ui.conf
 
 salt-ui:
   git:

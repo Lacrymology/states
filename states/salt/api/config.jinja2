@@ -4,3 +4,10 @@ rest_cherrypy:
   port: 8000
   debug: False
   static: /usr/local/salt-ui/
+{% if not 'ssl' in pillar['salt_master'] %}
+  ssl_crt: /etc/pki/tls/certs/salt_api.crt
+  ssl_key: /etc/pki/tls/certs/salt_api.key
+{% else %}
+  ssl_crt: {{ pillar['salt_master']['ssl']['crt'] }}
+  ssl_key: {{ pillar['salt_master']['ssl']['key'] }}
+{% endif %}

@@ -1,0 +1,6 @@
+external_auth: {{ pillar['salt_master']['external_auth'] }}
+
+rest_cherrypy:
+  port: 8000
+  debug: False
+  static: /usr/local/salt-ui/

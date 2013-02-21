@@ -1,0 +1,27 @@
+# {{ pillar['message_do_not_modify'] }}
+
+server {
+    listen 80;
+{#{% if ssl|default(False) %}#}
+{#    listen 443 ssl;#}
+{#    ssl_certificate /usr/local/sentry/ssl.pem;#}
+{#    ssl_certificate_key /usr/local/sentry/ssl.pem;#}
+{#    ssl_client_certificate /usr/local/sentry/ca.crt;#}
+{#    ssl_ciphers ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP:+eNULL;#}
+{#{% endif %}#}
+
+    server_name {{ pillar['salt_master']['hostname'] }};
+
+    root /usr/local/salt-ui;
+    index index.html;
+
+{#allow 10.10.10.0/24;#}
+{#deny all;#}
+
+{% for location in ('/', '/login') %}
+    location {{ location }} {
+        proxy_pass http://127.0.0.1:8000;
+    {#    proxy_read_timeout 120s;#}
+    }
+{% endfor %}
+}

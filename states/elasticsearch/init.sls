@@ -92,9 +92,9 @@ elasticsearch_diamond_memory:
   file:
     - accumulated
     - name: processes
-    - filename: /etc/diamond/collectors/ProcessMemoryCollector.conf
+    - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
     - require_in:
-      - file: /etc/diamond/collectors/ProcessMemoryCollector.conf
+      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
     - text:
       - |
         [[elasticsearch]]

@@ -24,13 +24,20 @@ server {
     root /usr/local/salt-ui;
     index index.html;
 
-{#allow 10.10.10.0/24;#}
-{#deny all;#}
+    expires max;
+    autoindex off;
 
-{% for location in ('/', '/login') %}
-    location {{ location }} {
+    location = / {
         proxy_pass http://127.0.0.1:8000;
-    {#    proxy_read_timeout 120s;#}
+        proxy_read_timeout 120s;
+        expires 0;
+    }
+
+{% for resource in ('/login', '/minions', '/jobs') %}
+    location {{ resource }} {
+        proxy_pass http://127.0.0.1:8000;
+        proxy_read_timeout 120s;
+        expires 0;
     }
 {% endfor %}
 }

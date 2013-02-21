@@ -32,6 +32,8 @@ nginx-old-init:
     - rename
     - name: /usr/share/nginx/init.d
     - source: /etc/init.d/nginx
+    - require:
+      - pkg: nginx
   cmd:
     - wait
     - name: dpkg-divert --divert /usr/share/nginx/init.d --add /etc/init.d/nginx

@@ -1,2 +1,2 @@
 # {{ pillar['message_do_not_modify'] }}
-command[check_salt_master]=/usr/lib/nagios/plugins/check_procs -c 1:20 -C salt-master -u root
+command[check_salt_master]=/usr/lib/nagios/plugins/check_procs -c 1:20 -C python -a salt-master -u root

@@ -1,0 +1,9 @@
+#!/bin/bash
+# {{ pillar['message_do_not_modify'] }}
+{# the reason this script is used instead of /usr/local/uwsgi/uwsgi
+is because of security reason.
+to force nagios user to only be able to run this check with uwsgi.
+this prevent a user to run uwsgi in a way it overwrite running instance
+or run arbitrary code. #}
+
+/usr/local/uwsgi/uwsgi --socket /var/lib/uwsgi/${1}.sock --nagios

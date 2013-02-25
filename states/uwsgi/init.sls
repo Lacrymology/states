@@ -4,6 +4,7 @@ include:
   - nginx
   - diamond
   - pip
+  - sudo
 
 /etc/init/uwsgi.conf:
   file:
@@ -65,6 +66,26 @@ diamond_ksm:
     - mode: 440
     - source: salt://uwsgi/diamond.jinja2
 {% endif %}
+
+/etc/sudoers.d/nagios_uwsgi:
+  file:
+    - managed
+    - template: jinja
+    - source: salt://uwsgi/sudo.jinja2
+    - mode: 440
+    - user: root
+    - group: root
+    - require:
+      - pkg: sudo
+
+/usr/local/bin/uwsgi-nagios.sh:
+  file:
+    - managed
+    - template: jinja
+    - source: salt://uwsgi/nagios_check.sh
+    - mode: 555
+    - user: root
+    - group: root
 
 uwsgi_sockets:
   file:

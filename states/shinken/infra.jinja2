@@ -324,7 +324,7 @@ define service {
     use salt-service
 }
 
-{% if pdnsd %}
+{% if pdnsd|default(False) %}
 define service {
     host_name {% for host in pdnsd %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description pdnsd

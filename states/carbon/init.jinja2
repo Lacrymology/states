@@ -1,4 +1,5 @@
 #!/bin/sh
+# {{ pillar['message_do_not_modify'] }}
 
 /usr/local/graphite/bin/python /usr/local/graphite/bin/carbon-cache.py --config=/etc/graphite/carbon.conf --instance={{ instance }} $1
 

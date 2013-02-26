@@ -11,7 +11,7 @@ pdnsd:
   debconf:
     - set
     - data:
-      'pdnsd/conf': {'type': 'select', 'value': 'Manual'}
+        'pdnsd/conf': {'type': 'select', 'value': 'Manual'}
     - require:
       - pkg: debconf-utils
   service:

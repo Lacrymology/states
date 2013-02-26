@@ -82,7 +82,7 @@ diamond_ksm:
   file:
     - managed
     - template: jinja
-    - source: salt://uwsgi/nagios_check.sh
+    - source: salt://uwsgi/nagios_check.jinja2
     - mode: 555
     - user: root
     - group: root

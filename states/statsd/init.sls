@@ -15,7 +15,8 @@ statsd:
   virtualenv:
     - manage
     - name: /usr/local/statsd
-    - requirements: salt://statsd/requirements.txt
+    - template: jinja
+    - requirements: salt://statsd/requirements.jinja2
     - require:
       - pkg: python-virtualenv
   service:

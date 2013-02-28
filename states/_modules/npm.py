@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 '''
-RabbitMQ plugins module
+npm (node package manager) module
 '''
 
 import logging

@@ -18,6 +18,17 @@ openvpn:
     - mode: 440
     - source: salt://openvpn/nrpe.jinja2
 
+/etc/default/openvpn:
+  file:
+    - managed
+    - template: jinja
+    - user: nagios
+    - group: nagios
+    - mode: 440
+    - source: salt://openvpn/default.jinja2
+    - require:
+      - pkg: openvpn
+
 {% if 'openvpn' in pillar %}
 openvpn_diamond_collector:
   file:
@@ -28,6 +39,8 @@ openvpn_diamond_collector:
     - group: root
     - mode: 440
     - source: salt://openvpn/diamond.jinja2
+    - context:
+      instances: {{ pillar['openvpn'] }}
 {% endif %}
 
 openvpn_diamond_memory:
@@ -41,6 +54,15 @@ openvpn_diamond_memory:
       - |
         [[openvpn]]
         exe = ^\/usr\/sbin\/openvpn$
+
+{% for type in ('lib', 'log') %}
+/var/{{ type }}/openvpn:
+  file:
+    - directory
+    - user: root
+    - group: root
+    - mode: 770
+{% endfor %}
 
 extend:
   diamond:

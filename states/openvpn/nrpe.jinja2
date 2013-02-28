@@ -1,2 +1,5 @@
 # {{ pillar['message_do_not_modify'] }}
-command[check_openvpn]=/usr/lib/nagios/plugins/check_procs -a /usr/sbin/openvpn -u root
+command[check_openvpn]=/usr/lib/nagios/plugins/check_procs -C openvpn -u root
+{% for deployment in deployments|default([]) %}
+command[check_openvpn_{{ deployment }}]=/usr/lib/nagios/plugins/check_procs -C openvpn -c 1:1 -a '--config /etc/openvpn/{{ identifier }}/config' -u root
+{% endfor %}

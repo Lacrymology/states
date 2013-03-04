@@ -66,11 +66,22 @@ ntp_diamond_memory:
         [[ntp]]
         exe = ^\/usr\/sbin\/ntpd$
 
+diamond_ntp:
+  file:
+    - managed
+    - name: /etc/diamond/collectors/NtpdCollector.conf
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - source: salt://diamond/basic_collector.jinja2
+
 extend:
   diamond:
     service:
       - watch:
         - file: ntp_diamond_memory
+        - file: diamond_ntp
   nagios-nrpe-server:
     service:
       - watch:

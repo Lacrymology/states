@@ -51,7 +51,7 @@ nginx-old-init:
 nginx-old-init-disable:
   cmd:
     - wait
-    - name: update-rc.d -f remove nginx
+    - name: update-rc.d -f nginx remove
     - require:
       - module: nginx-old-init
     - watch:

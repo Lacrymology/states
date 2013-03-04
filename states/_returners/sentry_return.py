@@ -64,7 +64,7 @@ def returner(ret):
                 secret_key=pillar_data['raven']['secret_key'],
                 project=pillar_data['raven']['project'],
             )
-            client.captureMessage(message, extra=sentry_data)
+            client.captureMessage(ret['comment'], extra=sentry_data)
         except Exception, err:
             logger.error("Can't send message to sentry: %s", err, exc_info=True)
 

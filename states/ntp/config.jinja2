@@ -8,7 +8,7 @@
 {#filegen clockstats file clockstats type day enable#}
 
 {# internal server used to synchronize peers with ourselves #}
-{% if server %}
+{% if server|default(False) %}
 server 127.127.1.1
 fudge 127.127.1.1 stratum 3 refid NIST
 {% endif %}

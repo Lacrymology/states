@@ -64,7 +64,7 @@ diamond_ksm:
     - user: root
     - group: root
     - mode: 440
-    - source: salt://uwsgi/diamond.jinja2
+    - source: salt://diamond/basic_collector.jinja2
 {% endif %}
 
 /etc/sudoers.d/nagios_uwsgi:

@@ -6,6 +6,7 @@ include:
   - cron
   - diamond
   - uwsgi
+  - graylog2
 
 {% set web_root_dir = '/usr/local/graylog2-web-interface-' + pillar['graylog2']['web']['version'] %}
 
@@ -21,15 +22,6 @@ graylog2-web-{{ filename }}:
     - source: salt://graylog2/web/{{ filename }}.jinja2
     - context: {{ pillar['graylog2']['web'] }}
 {% endfor %}
-
-graylog2-web_logdir:
-  file:
-    - directory
-    - name: /var/log/graylog2/
-    - user: root
-    - group: www-data
-    - mode: 770
-    - makedirs: True
 
 /etc/logrotate.d/graylog2-web:
   file:
@@ -88,7 +80,6 @@ graylog2-web:
     - require:
       - file: {{ web_root_dir }}/log
       - service: uwsgi_emperor
-      - file: graylog2-web_logdir
       - service: mongodb
       - cmd: graylog2-web
   module:
@@ -101,6 +92,8 @@ graylog2-web:
       - archive: graylog2-web
 {% for filename in ('config', 'email', 'indexer', 'mongoid') %}
       - file: graylog2-web-{{ filename }}
+    - require:
+      - file: /var/log/graylog2
 {% endfor %}
 
 graylog2_web_diamond_memory:

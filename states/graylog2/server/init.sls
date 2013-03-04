@@ -1,6 +1,7 @@
 include:
   - nrpe
   - diamond
+  - graylog2
 
 graylog2-server_upstart:
   file:
@@ -50,6 +51,8 @@ graylog2-server:
       - pkg: graylog2-server
       - file: graylog2-server
       - archive: graylog2-server
+    - require:
+      - file: /var/log/graylog2
 
 graylog2_server_diamond_memory:
   file:

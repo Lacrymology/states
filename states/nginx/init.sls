@@ -44,7 +44,7 @@ nginx-old-init:
   module:
     - wait
     - name: cmd.run
-    - m_name: kill `cat /var/run/nginx.pid`
+    - cmd: kill `cat /var/run/nginx.pid`
     - watch:
       - file: nginx-old-init
 

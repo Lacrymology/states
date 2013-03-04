@@ -60,6 +60,9 @@ nginx-old-init-disable:
 {% set logger_types = ('access', 'error') %}
 
 {% for log_type in logger_types %}
+/var/log/nginx/{{ log_type }}.log:
+  file.absent
+
 nginx-logger-{{ log_type }}:
   file:
     - managed

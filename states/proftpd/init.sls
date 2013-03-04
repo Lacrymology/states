@@ -25,7 +25,7 @@ proftpd-basic:
   debconf:
     - set
     - data:
-      'shared/proftpd/inetd_or_standalone': {'type': 'select', 'value': 'standalone'}
+        'shared/proftpd/inetd_or_standalone': {'type': 'select', 'value': 'standalone'}
     - require:
       - pkg: debconf-utils
   pkg:

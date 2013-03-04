@@ -110,6 +110,7 @@ nginx:
     - require:
       - pkg: nginx
       - file: nginx-old-init
+      - module: nginx-old-init
   service:
     - running
     - enable: True

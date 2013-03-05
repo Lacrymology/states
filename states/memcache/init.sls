@@ -56,19 +56,17 @@ memcached_diamond_memory:
         [[memcached]]
         name = ^memcached$
 
-{# Fix connection trough unix socket #}
 memcached_diamond_collector:
   file:
-    - absent
-{#    - managed#}
+    - managed
     - name: /etc/diamond/collectors/MemcachedCollector.conf
-{#    - template: jinja#}
-{#    - user: root#}
-{#    - group: root#}
-{#    - mode: 440#}
-{#    - source: salt://memcache/diamond.jinja2#}
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - source: salt://memcache/diamond.jinja2
 
-extend:
+extend:`
   diamond:
     service:
       - watch:

@@ -66,7 +66,7 @@ memcached_diamond_collector:
     - mode: 440
     - source: salt://memcache/diamond.jinja2
 
-extend:`
+extend:
   diamond:
     service:
       - watch:

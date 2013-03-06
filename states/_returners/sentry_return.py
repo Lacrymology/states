@@ -29,17 +29,9 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 def __virtual__():
-    pillar_data = __salt__['pillar.data']()
     if not has_raven:
         logger.warning("Can't find raven client library")
         return False
-    if 'raven' not in pillar_data:
-        logger.warning("Missing pillar data 'raven'")
-        return False
-    for key in ('project', 'public_key', 'secret_key', 'servers'):
-        if key not in pillar_data['raven']:
-            logger.warning("Missing config '%s' in pillar 'raven'", key)
-            return False
     return 'sentry'
 
 def returner(ret):

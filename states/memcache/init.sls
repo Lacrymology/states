@@ -24,7 +24,7 @@ memcached:
     - absent
     - name: /etc/init.d/memcached
     - watch:
-      - cmd: /etc/init.d/memcached
+      - cmd: memcached
 
 /etc/memcached.conf:
   file:

@@ -12,7 +12,7 @@ ssmtp:
   debconf:
     - set
     - data:
-        'ssmtp/mailhub': {'type': 'string', 'value': '{{ pillar['smtp']['server'] }}'
+        'ssmtp/mailhub': {'type': 'string', 'value': '{{ pillar['smtp']['server'] }}'}
         'ssmtp/hostname': {'type': 'string', 'value': '{{ pillar['smtp']['user'] }}'}
         'ssmtp/root': {'type': 'string', 'value': '{{ pillar['smtp']['root'] }}'}
         'ssmtp/rewritedomain': {'type': 'string', 'value': ''}

@@ -17,6 +17,15 @@ include:
 
 {# common to all shinken daemons #}
 
+/usr/local/bin/shinken-ctl.sh:
+  file:
+    - managed
+    - user: root
+    - group: root
+    - mode: 500
+    - template: jinja
+    - source: salt://shinken/shinken-ctl.jinja2
+
 {% set configs = ('architecture', 'infra') %}
 
 {% for dirname in ('log', 'lib') %}

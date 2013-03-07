@@ -1,0 +1,8 @@
+#!/bin/sh
+#  {{ pillar['message_do_not_modify'] }}
+
+{% for role in pillar['shinken']['architecture'] %}
+{% if grains['id'] in pillar['shinken']['architecture'][role] %}
+$1 shinken-{{ role }}
+{% endif %}
+{% endfor %}

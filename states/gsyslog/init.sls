@@ -42,7 +42,7 @@ gsyslog_upstart:
     - mode: 440
     - source: salt://gsyslog/upstart.jinja2
     - require:
-      - service: sysklogd
+      - module: sysklogd
 
 /etc/logrotate.d/gsyslog:
   file:
@@ -133,14 +133,14 @@ rsyslog:
   pkg:
     - purged
     - require:
-      - service: sysklogd
+      - module: sysklogd
 
 {% for cron in ('weekly', 'daily') %}
 /etc/cron.{{ cron }}/sysklogd:
   file:
     - absent
     - require:
-      - service: sysklogd
+      - module: sysklogd
 {% endfor %}
 
 /etc/nagios/nrpe.d/gsyslog.cfg:

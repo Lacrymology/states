@@ -24,6 +24,8 @@ apt_sources:
     - source: salt://apt/sources.jinja2
     - context:
       all_suites: main restricted universe multiverse
+    - require:
+      - file: /etc/apt/apt.conf.d/99local
 {#  module:
     - name: pkg.refresh_db#}
   cmd:

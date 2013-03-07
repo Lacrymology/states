@@ -2,20 +2,40 @@ include:
   - diamond
   - nrpe
 
-/etc/memcached.conf:
-  file:
-    - absent
-
-/etc/init.d/memcached:
+{#
+ first: install memcached and get rid of SysV startup script.
+ and remove it's config file.
+#}
+memcached:
+  pkg:
+    - installed
+  module:
+    - wait
+    - cmd.run
+    - m_name: /etc/init.d/memcached stop
+    - watch:
+      - pkg: memcached
   cmd:
     - wait
-    - name: update-rc.d -f memcached remove; killall -9 memcached
+    - name: update-rc.d -f memcached remove
+    - watch:
+      - module: memcached
   file:
     - absent
+    - name: /etc/init.d/memcached
     - watch:
       - cmd: /etc/init.d/memcached
 
-memcached:
+/etc/memcached.conf:
+  file:
+    - absent
+    - require:
+      - pkg: memcached
+
+{#
+ Create upstart config and start from it.
+ #}
+upstart_memcached:
   file:
     - managed
     - name: /etc/init/memcached.conf
@@ -25,15 +45,15 @@ memcached:
     - mode: 440
     - source: salt://memcache/upstart.jinja2
     - require:
-      - pkg: memcached
-  pkg:
-    - latest
+      - file: memcached
   service:
     - running
+    - name: memcached
     - enable: True
-    - watch:
+    - require:
       - file: memcached
-      - pkg: memcached
+    - watch:
+      - file: upstart_memcached
 
 /etc/nagios/nrpe.d/memcache.cfg:
   file:

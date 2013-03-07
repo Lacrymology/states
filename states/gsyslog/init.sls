@@ -11,9 +11,19 @@ sysklogd:
     - names:
       - sysklogd
       - klogd
-  service:
-    - dead
-    - enable: False
+  module:
+    - wait
+    - name: cmd.run
+    - m_name: /etc/init.d/sysklogd stop
+    - watch:
+      - pkg: sysklogd
+  cmd:
+    - wait
+    - name: update-rc.d -f sysklogd remove
+    - require:
+      - module: sysklogd
+    - watch:
+      - pkg: sysklogd
 
 {% if grains['virtual'] == 'openvzve' %}
 klogd:
@@ -90,7 +100,7 @@ gsyslog:
       - file: gsyslog
       - cmd: gsyslog
     - require:
-      - service: sysklogd
+      - module: sysklogd
       - module: gsyslog
       - file: /etc/gsyslog.d
   cmd:

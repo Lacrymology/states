@@ -4,3 +4,6 @@
 master: {{ pillar['salt']['master'] }}
 id: {{ grains['id'] }}
 log_file: file:///dev/log
+log_level: debug
+log_fmt_logfile: '%(asctime)-15s salt-minion[%(process)d] %(name)s: %(message)s'
+log_datefmt_logfile: '%b %d %H:%M:%S'

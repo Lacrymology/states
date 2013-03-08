@@ -14,7 +14,7 @@ sysklogd:
   module:
     - wait
     - name: cmd.run
-    - m_name: /etc/init.d/sysklogd stop
+    - cmd: /etc/init.d/sysklogd stop
     - watch:
       - pkg: sysklogd
   cmd:

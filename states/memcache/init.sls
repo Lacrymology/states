@@ -25,6 +25,14 @@ memcached:
     - name: /etc/init.d/memcached
     - watch:
       - cmd: memcached
+  service:
+    - running
+    - name: memcached
+    - enable: True
+    - require:
+      - file: memcached
+    - watch:
+      - file: upstart_memcached
 
 /etc/memcached.conf:
   file:
@@ -46,14 +54,6 @@ upstart_memcached:
     - source: salt://memcache/upstart.jinja2
     - require:
       - file: memcached
-  service:
-    - running
-    - name: memcached
-    - enable: True
-    - require:
-      - file: memcached
-    - watch:
-      - file: upstart_memcached
 
 /etc/nagios/nrpe.d/memcache.cfg:
   file:

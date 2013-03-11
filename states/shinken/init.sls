@@ -5,7 +5,7 @@ include:
   - nrpe
   - diamond
   - pip
-{% if grains['id'] in pillar['shinken']['architecture']['broker']|default(False) %}
+{% if grains['id'] in pillar['shinken']['architecture']['broker']|default([]) %}
   - nginx
 {% endif %}
 

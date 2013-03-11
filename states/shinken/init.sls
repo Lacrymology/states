@@ -5,7 +5,7 @@ include:
   - nrpe
   - diamond
   - pip
-{% if grains['id'] in pillar['shinken']['architecture']['broker'] %}
+{% if grains['id'] in pillar['shinken']['architecture']['broker']|default(False) %}
   - nginx
 {% endif %}
 
@@ -48,7 +48,7 @@ include:
     - require:
       - user: shinken
 
-{% if 'ssl' in pillar['shinken'] and grains['id'] in pillar['shinken']['architecture']['broker'] %}
+{% if pillar['shinken']['ssl']|default(False) and grains['id'] in pillar['shinken']['architecture']['broker']|default([]) %}
 {% for key_file in pillar['shinken']['ssl'] %}
 /usr/local/shinken/{{ key_file }}:
   file:
@@ -207,7 +207,7 @@ extend:
     service:
       - watch:
         - file: /etc/nginx/conf.d/shinken-web.conf
-{% if 'ssl' in pillar['shinken'] %}
+{% if pillar['shinken']['ssl']|default(False) %}
 {% for key_file in pillar['shinken']['ssl'] %}
         - file: /usr/local/shinken/{{ key_file }}
 {% endfor %}

@@ -21,6 +21,7 @@ socket = /var/lib/uwsgi/{{ deployment }}.sock
 stats = /var/lib/uwsgi/{{ deployment }}-stats.sock
 no-orphans = true
 lazy-apps = true
+{% if cheaper|default(False) %}
 {% if cheaper > 0 %}
 cheaper = {{ cheaper }}
 {% else %}
@@ -29,6 +30,7 @@ cheap = true
 {% if workers == 1 and cheaper == 0 %}
 idle = {{ idle|default(300) }}
 {% endif %}
+{% endif %}{# if cheaper #}
 {%- if grains['virtual'] == 'kvm' and salt['file.file_exists']('/sys/kernel/mm/ksm/run') %}
 ksm = {{ ksm|default(20) }}
 {% endif -%}

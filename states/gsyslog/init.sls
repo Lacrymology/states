@@ -128,6 +128,8 @@ gsyslog_diamond_memory:
       - |
         [[gsyslog]]
         cmdline = ^\/usr\/local\/gsyslog\/bin\/python \/usr\/local\/gsyslog\/bin\/gsyslogd
+        [[klogd]
+        exe = ^\/sbin\/klogd
 
 rsyslog:
   pkg:

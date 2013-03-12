@@ -1,5 +1,6 @@
 include:
 {#  - ssh.keys#}
+  - diamond
   - nrpe
   - gsyslog
 
@@ -31,6 +32,19 @@ openssh-server:
     - watch:
       - pkg: openssh-server
       - file: openssh-server
+
+ssh_diamond_resources:
+  file:
+    - accumulated
+    - name: processes
+    - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
+    - require_in:
+      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
+    - text:
+      - |
+        [[sshd]]
+        exe = ^\/usr\/sbin\/sshd,^\/usr\/lib\/sftp\-server
+
 
 {% if not pillar['debug'] %}
 /etc/gsyslog.d/ssh.conf:

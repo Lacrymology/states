@@ -88,7 +88,7 @@ elasticsearch:
       - elasticsearch_plugins: elasticsearch
 {% endif %}
 
-elasticsearch_diamond_memory:
+elasticsearch_diamond_resources:
   file:
     - accumulated
     - name: processes

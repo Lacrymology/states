@@ -26,7 +26,7 @@ statsd:
       - file: statsd
       - virtualenv: statsd
 
-statsd_diamond_memory:
+statsd_diamond_resources:
   file:
     - accumulated
     - name: processes

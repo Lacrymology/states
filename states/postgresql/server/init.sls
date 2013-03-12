@@ -103,7 +103,7 @@ postgresql_diamond_collector:
     - source: salt://postgresql/server/backup.jinja2
 {% endif %}
 
-postgresql_diamond_memory:
+postgresql_diamond_resources:
   file:
     - accumulated
     - name: processes

@@ -56,7 +56,7 @@ nagios-nrpe-server:
     - group: root
     - mode: 555
 
-nrpe_diamond_memory:
+nrpe_diamond_resources:
   file:
     - accumulated
     - name: processes

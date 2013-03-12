@@ -64,7 +64,7 @@ upstart_memcached:
     - mode: 440
     - source: salt://memcache/nrpe.jinja2
 
-memcached_diamond_memory:
+memcached_diamond_resources:
   file:
     - accumulated
     - name: processes

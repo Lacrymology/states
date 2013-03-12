@@ -11,6 +11,14 @@ path = process
 
 cmdline = ^\/usr\/local\/diamond\/bin\/python \/usr\/local\/diamond\/bin\/diamond
 
+[[upstart]]
+
+cmdline = ^\/sbin\/init
+
+[[udev]]
+
+exe = ^\/sbin\/udevd$
+
 {% if accumulator|default(False) %}
 {% for line in accumulator['processes'] %}
 {{ line }}

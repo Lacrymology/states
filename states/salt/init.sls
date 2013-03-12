@@ -36,7 +36,7 @@ salt-minion:
       - pkg: salt-minion
       - file: salt-minion
 
-salt_minion_diamond_memory:
+salt_minion_diamond_resources:
   file:
     - accumulated
     - name: processes

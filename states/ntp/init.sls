@@ -54,7 +54,7 @@ ntp:
     - mode: 440
     - source: salt://ntp/nrpe.jinja2
 
-ntp_diamond_memory:
+ntp_diamond_resources:
   file:
     - accumulated
     - name: processes

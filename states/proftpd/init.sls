@@ -101,7 +101,7 @@ proftpd:
     - mode: 440
     - source: salt://proftpd/nrpe.jinja2
 
-proftpd_diamond_memory:
+proftpd_diamond_resources:
   file:
     - accumulated
     - name: processes

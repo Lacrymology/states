@@ -53,7 +53,7 @@ pdnsd:
     - mode: 440
     - source: salt://pdnsd/nrpe.jinja2
 
-pdsnd_diamond_memory:
+pdsnd_diamond_resources:
   file:
     - accumulated
     - name: processes

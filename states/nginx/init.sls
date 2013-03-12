@@ -125,7 +125,7 @@ nginx:
       - service: nginx-logger-{{ log_type }}
 {% endfor %}
 
-nginx_diamond_memory:
+nginx_diamond_resources:
   file:
     - accumulated
     - name: processes

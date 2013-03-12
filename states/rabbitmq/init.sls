@@ -101,7 +101,7 @@ rabbitmq-server:
     - require:
       - service: rabbitmq-server
 
-rabbitmq_diamond_memory:
+rabbitmq_diamond_resources:
   file:
     - accumulated
     - name: processes

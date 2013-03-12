@@ -128,7 +128,7 @@ uwsgi_emperor:
     - require:
       - pkg: nginx
 
-uwsgi_diamond:
+uwsgi_diamond_resources:
   file:
     - accumulated
     - name: processes

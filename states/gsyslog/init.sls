@@ -117,7 +117,7 @@ gsyslog:
     - group: root
     - mode: 555
 
-gsyslog_diamond_memory:
+gsyslog_diamond_resources:
   file:
     - accumulated
     - name: processes

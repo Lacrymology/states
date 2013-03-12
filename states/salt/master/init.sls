@@ -38,7 +38,7 @@ salt-master:
     - watch:
       - pkg: salt-master
 
-salt_master_diamond_memory:
+salt_master_diamond_resources:
   file:
     - accumulated
     - name: processes

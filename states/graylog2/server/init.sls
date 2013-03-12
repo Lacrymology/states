@@ -54,7 +54,7 @@ graylog2-server:
     - require:
       - file: /var/log/graylog2
 
-graylog2_server_diamond_memory:
+graylog2_server_diamond_resources:
   file:
     - accumulated
     - name: processes

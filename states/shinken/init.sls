@@ -159,7 +159,7 @@ shinken-{{ role }}:
 
 {% endif %}
 
-shinken_{{ role }}_diamond_memory:
+shinken_{{ role }}_diamond_resources:
   file:
     - accumulated
     - name: processes

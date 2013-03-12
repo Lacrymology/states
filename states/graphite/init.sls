@@ -248,7 +248,7 @@ graphite_settings:
       domain_name: {{ pillar['graphite']['web']['hostnames'][0] }}
       uri: /account/login
 
-uwsgi_diamond_graphite:
+uwsgi_diamond_graphite_resources:
   file:
     - accumulated
     - name: processes

@@ -182,7 +182,7 @@ sentry-migrate-fake:
     - source: salt://sentry/backup.jinja2
 {% endif %}
 
-uwsgi_diamond_sentry:
+uwsgi_diamond_sentry_resources:
   file:
     - accumulated
     - name: processes

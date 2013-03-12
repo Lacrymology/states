@@ -93,7 +93,7 @@ salt-ui:
     - mode: 440
     - source: salt://salt/api/nrpe.jinja2
 
-salt_api_diamond_memory:
+salt_api_diamond_resources:
   file:
     - accumulated
     - name: processes

@@ -68,7 +68,7 @@ diamond_mongodb:
     - require:
       - module: diamond-pymongo
 
-mongodb_diamond_memory:
+mongodb_diamond_resources:
   file:
     - accumulated
     - name: processes

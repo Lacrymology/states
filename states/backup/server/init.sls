@@ -25,6 +25,10 @@ backup-server:
 
 /usr/local/bin/check_backups.py:
   file:
+    - absent
+
+/usr/lib/nagios/plugins/check_backups.py:
+  file:
     - managed
     - user: root
     - group: root

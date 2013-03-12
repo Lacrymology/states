@@ -50,6 +50,10 @@ nagios-nrpe-server:
 
 /usr/local/bin/check_memory.py:
   file:
+    - absent
+
+/usr/lib/nagios/plugins/check_memory.py:
+  file:
     - managed
     - source: salt://nrpe/check.py
     - user: root

@@ -111,6 +111,10 @@ elasticsearch_diamond_resources:
 
 /usr/local/bin/check_elasticsearch_cluster.py:
   file:
+    - absent
+
+/usr/lib/nagios/plugins/check_elasticsearch_cluster.py:
+  file:
     - managed
     - source: salt://elasticsearch/check.py
     - mode: 555

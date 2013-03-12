@@ -49,6 +49,10 @@ apt_cleanup:
 
 /usr/local/bin/check_apt-rc.py:
   file:
+    - absent
+
+/usr/lib/nagios/plugins/check_apt-rc.py:
+  file:
     - managed
     - source: salt://apt/check.py
     - mode: 555

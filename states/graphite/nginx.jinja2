@@ -4,10 +4,15 @@ upstream graphite {
     server unix:///var/lib/uwsgi/graphite.sock;
 }
 
-# real server
 server {
+{% if ssl|default(False) %}
+    listen 443 ssl;
+    ssl_certificate /etc/ssl/{{ ssl }}/chained_ca.crt;
+    ssl_certificate_key /etc/ssl/{{ ssl }}/server.pem;
+    ssl_client_certificate /etc/ssl/{{ ssl }}/ca.crt;
+    ssl_ciphers RC4:HIGH:!aNULL:!MD5;
+{% endif %}
     listen 80;
-
     server_name {% for hostname in hostnames %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
 
     root /usr/local/graphite/webapp/;
@@ -35,3 +40,4 @@ server {
         include uwsgi_params;
     }
 }
+{% endfor %}

@@ -5,6 +5,14 @@ upstream graylog2 {
 }
 
 server {
+{% if ssl|default(False) %}
+    listen 443 ssl;
+    ssl_certificate /etc/ssl/{{ ssl }}/chained_ca.crt;
+    ssl_certificate_key /etc/ssl/{{ ssl }}/server.pem;
+    ssl_client_certificate /etc/ssl/{{ pillar['shinken']['ssl'] }}/ca.crt;
+    ssl_ciphers RC4:HIGH:!aNULL:!MD5;
+{% endif %}
+
     listen 80;
 
     root /usr/local/graylog2-web-interface-{{ version }}/public;

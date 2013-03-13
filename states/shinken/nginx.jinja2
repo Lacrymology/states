@@ -9,12 +9,12 @@ upstream shinken-backend {
 
 server {
     listen 80;
-{% if 'ssl' in pillar['shinken'] %}
+{% if pillar['shinken']['ssl']|default(False) %}
     listen 443 ssl;
-    ssl_certificate /usr/local/shinken/ssl.pem;
-    ssl_certificate_key /usr/local/shinken/ssl.pem;
-    ssl_client_certificate /usr/local/shinken/ca.crt;
-    ssl_ciphers ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP:+eNULL;
+    ssl_certificate /etc/ssl/{{ pillar['shinken']['ssl'] }}/chained_ca.crt;
+    ssl_certificate_key /etc/ssl/{{ pillar['shinken']['ssl'] }}/server.pem;
+    ssl_client_certificate /etc/ssl/{{ pillar['shinken']['ssl'] }}/ca.crt;
+    ssl_ciphers RC4:HIGH:!aNULL:!MD5;
 {% endif %}
 
     server_name {% for hostname in web['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};

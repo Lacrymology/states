@@ -211,9 +211,9 @@ extend:
       - watch:
         - file: /etc/nginx/conf.d/shinken-web.conf
 {% if pillar['shinken']['ssl']|default(False) %}
-{% for key_file in pillar['shinken']['ssl'] %}
-        - file: /usr/local/shinken/{{ key_file }}
-{% endfor %}
+    {% for filename in ('server.key', 'server.crt', 'ca.crt') %}
+        - file: /etc/ssl/{{ pillar['shinken']['ssl'] }}/{{ filename }}
+    {% endofr %}
 {% endif %}
 {% endif %}
 {% endif %}

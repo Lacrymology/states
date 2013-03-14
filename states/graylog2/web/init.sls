@@ -7,6 +7,9 @@ include:
   - diamond
   - uwsgi
   - graylog2
+{% if pillar['graylog2']['web']['ssl']|default(False) %}
+  - ssl
+{% endif %}
 
 {% set web_root_dir = '/usr/local/graylog2-web-interface-' + pillar['graylog2']['web']['version'] %}
 
@@ -159,3 +162,8 @@ extend:
     service:
       - watch:
         - file: /etc/nginx/conf.d/graylog2-web.conf
+{% if pillar['graylog2']['web']['ssl']|default(False) %}
+    {% for filename in ('server.key', 'server.crt', 'ca.crt') %}
+        - file: /etc/ssl/{{ pillar['graylog2']['web']['ssl'] }}/{{ filename }}
+    {% endofr %}
+{% endif %}

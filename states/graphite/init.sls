@@ -9,6 +9,9 @@ include:
   - memcache
   - diamond
   - pip
+{% if pillar['graphite']['web']['ssl']|default(False) %}
+  - ssl
+{% endif %}
 
 {#graphite_logrotate:#}
 {#  file:#}
@@ -286,3 +289,8 @@ extend:
     service:
       - watch:
         - file: /etc/nginx/conf.d/graphite.conf
+{% if pillar['graphite']['web']['ssl']|default(False) %}
+    {% for filename in ('server.key', 'server.crt', 'ca.crt') %}
+        - file: /etc/ssl/{{ pillar['graphite']['web']['ssl'] }}/{{ filename }}
+    {% endofr %}
+{% endif %}

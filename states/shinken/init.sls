@@ -5,6 +5,9 @@ include:
   - nrpe
   - diamond
   - pip
+{% if pillar['shinken']['ssl']|default(False) %}
+  - ssl
+{% endif %}
 {% if grains['id'] in pillar['shinken']['architecture']['broker']|default([]) %}
   - nginx
 {% endif %}

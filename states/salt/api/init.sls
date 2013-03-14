@@ -4,6 +4,9 @@ include:
   - nginx
   - diamond
   - nrpe
+{% if pillar['salt_master']['ssl']|default(False) %}
+  - ssl
+{% endif %}
 
 salt_api:
   group:
@@ -114,6 +117,11 @@ extend:
     service:
       - watch:
         - file: salt-ui
+{% if pillar['salt_master']['ssl']|default(False) %}
+    {% for filename in ('server.key', 'server.crt', 'ca.crt') %}
+        - file: /etc/ssl/{{ pillar['salt_master']['ssl'] }}/{{ filename }}
+    {% endofr %}
+{% endif %}
   salt-master:
     service:
       - watch:

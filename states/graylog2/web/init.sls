@@ -99,7 +99,7 @@ graylog2-web:
       - file: /var/log/graylog2
 {% endfor %}
 
-graylog2_web_diamond_memory:
+graylog2_web_diamond_resource:
   file:
     - accumulated
     - name: processes

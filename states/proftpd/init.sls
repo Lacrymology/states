@@ -134,10 +134,6 @@ proftpd_diamond_resources:
 {% endfor %}
 
 extend:
-  diamond:
-    service:
-      - watch:
-        - file: proftpd_diamond_memory
   nagios-nrpe-server:
     service:
       - watch:

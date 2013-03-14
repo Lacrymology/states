@@ -80,7 +80,6 @@ extend:
   diamond:
     service:
       - watch:
-        - file: ntp_diamond_memory
         - file: diamond_ntp
   nagios-nrpe-server:
     service:

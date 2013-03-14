@@ -66,10 +66,6 @@ pdsnd_diamond_resources:
         exe = ^\/usr\/sbin\/pdnsd$
 
 extend:
-  diamond:
-    service:
-      - watch:
-        - file: pdsnd_diamond_memory
   nagios-nrpe-server:
     service:
       - watch:

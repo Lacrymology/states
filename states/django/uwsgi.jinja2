@@ -21,7 +21,7 @@ socket = /var/lib/uwsgi/{{ deployment }}.sock
 stats = /var/lib/uwsgi/{{ deployment }}-stats.sock
 no-orphans = true
 lazy-apps = true
-{% if cheaper|default(False) %}
+{% if cheaper|default(False) != False %}
 {% if cheaper > 0 %}
 cheaper = {{ cheaper }}
 {% else %}

@@ -8,10 +8,10 @@ server {
     listen 80;
 {% if ssl|default(False) %}
     listen 443 ssl;
-    ssl_certificate /usr/local/sentry/ssl.pem;
-    ssl_certificate_key /usr/local/sentry/ssl.pem;
-    ssl_client_certificate /usr/local/sentry/ca.crt;
-    ssl_ciphers ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP:+eNULL;
+    ssl_certificate /etc/ssl/{{ ssl }}/chained_ca.crt;
+    ssl_certificate_key /etc/ssl/{{ ssl }}/server.pem;
+    ssl_client_certificate /etc/ssl/{{ ssl }}/ca.crt;
+    ssl_ciphers RC4:HIGH:!aNULL:!MD5;
 {% endif %}
 
     server_name {{ address }};

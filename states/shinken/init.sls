@@ -213,7 +213,7 @@ extend:
 {% if pillar['shinken']['ssl']|default(False) %}
     {% for filename in ('server.key', 'server.crt', 'ca.crt') %}
         - file: /etc/ssl/{{ pillar['shinken']['ssl'] }}/{{ filename }}
-    {% endofr %}
+    {% endfor %}
 {% endif %}
 {% endif %}
 {% endif %}

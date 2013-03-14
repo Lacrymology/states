@@ -165,5 +165,5 @@ extend:
 {% if pillar['graylog2']['web']['ssl']|default(False) %}
     {% for filename in ('server.key', 'server.crt', 'ca.crt') %}
         - file: /etc/ssl/{{ pillar['graylog2']['web']['ssl'] }}/{{ filename }}
-    {% endofr %}
+    {% endfor %}
 {% endif %}

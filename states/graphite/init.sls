@@ -292,5 +292,5 @@ extend:
 {% if pillar['graphite']['web']['ssl']|default(False) %}
     {% for filename in ('server.key', 'server.crt', 'ca.crt') %}
         - file: /etc/ssl/{{ pillar['graphite']['web']['ssl'] }}/{{ filename }}
-    {% endofr %}
+    {% endfor %}
 {% endif %}

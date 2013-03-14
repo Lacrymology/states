@@ -120,7 +120,7 @@ extend:
 {% if pillar['salt_master']['ssl']|default(False) %}
     {% for filename in ('server.key', 'server.crt', 'ca.crt') %}
         - file: /etc/ssl/{{ pillar['salt_master']['ssl'] }}/{{ filename }}
-    {% endofr %}
+    {% endfor %}
 {% endif %}
   salt-master:
     service:

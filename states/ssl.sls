@@ -79,7 +79,7 @@ bundle of chained certificates which should be concatenated to the signed server
 certificate. The server certificate must appear before the chained certificates
 in the combined file:
 #}
-    /etc/ssl/{{ name }}/chained_ca.crt:
+/etc/ssl/{{ name }}/chained_ca.crt:
   cmd:
     - wait
     - name: cat /etc/ssl/{{ name }}/server.crt /etc/ssl/{{ name }}/ca.crt > /etc/ssl/{{ name }}/chained_ca.crt

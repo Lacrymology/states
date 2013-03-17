@@ -75,7 +75,7 @@ shinken:
       - file: /var/lib/shinken
   pip:
     - installed
-    - name: -e git+git://github.com/naparuba/shinken.git@{{ pillar['shinken']['revision'] }}#egg=shinken
+    - editable: git+git://github.com/naparuba/shinken.git@{{ pillar['shinken']['revision'] }}#egg=shinken
     - bin_env: /usr/local/shinken
     - require:
       - virtualenv: shinken

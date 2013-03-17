@@ -117,10 +117,10 @@ define service {
     # Re-check the service up to 3 times in order to determine its final (hard)
     # state
     max_check_attempts 2
-    check_interval 2
-    # Re-check the service every two minutes until a hard state can be
+    check_interval 5
+    # Re-check the service every three minutes until a hard state can be
     # determined
-    retry_interval 5
+    retry_interval 3
     contact_groups admins
     # Send notifications about warning, unknown, critical, and recovery events
     notification_options w,u,c,r
@@ -181,12 +181,29 @@ define service {
     use salt-service
 }
 
-{% for service in ('loopback', 'memory', 'cron', 'diamond', 'syslogd', 'klogd', 'salt_minion', 'ssh', 'statsd', 'users', 'load', 'all_disks', 'zombie_procs', 'total_procs', 'apt', 'apt_rc') %}
+{% for service in ('loopback', 'memory', 'cron', 'diamond', 'syslogd', 'klogd', 'salt_minion', 'ssh', 'statsd', 'users', 'load', 'all_disks', 'zombie_procs', 'total_procs') %}
 define service {
     host_name {% for host in ip_addresses %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description Infra-{{ service }}
     check_command check_nrpe!check_{{ service }}
     use salt-service
+}
+{% endfor %}
+
+{#
+Services that don't affect production and that have high cost in CPU, I/O
+and RAM to performs.
+Run them only each few hours.
+#}
+{% for service in ('apt', 'apt_rc') %}
+define service {
+    host_name {% for host in ip_addresses %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description Infra-{{ service }}
+    check_command check_nrpe!check_{{ service }}
+    use salt-service
+    {# each 6 hours #}
+    check_interval 360
+    retry_interval 5
 }
 {% endfor %}
 

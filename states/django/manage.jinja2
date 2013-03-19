@@ -1,6 +1,11 @@
 #!/bin/sh
 # {{ pillar['message_do_not_modify'] }}
 
+TEMP_HOME_DIR=`mktemp -d`
+chown www-data $TEMP_HOME_DIR
+chgrp www-data $TEMP_HOME_DIR
+export HOME=$TEMP_HOME_DIR
 export DJANGO_SETTINGS_MODULE={{ settings }}
 cd {{ virtualenv }}
 sudo -E -u www-data -g www-data {{ virtualenv }}/bin/django-admin.py $*
+rm -rf $TEMP_HOME_DIR

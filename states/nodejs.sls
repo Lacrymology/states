@@ -11,7 +11,6 @@ nodejs:
     - latest
     - names:
       - nodejs
-      - npm
     - require:
       - apt_repository: nodejs
 

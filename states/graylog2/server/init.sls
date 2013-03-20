@@ -24,14 +24,6 @@ graylog2-server_upstart:
 {#    - mode: 600#}
 {#    - source: salt://graylog2/server/logrotate.jinja2#}
 
-/etc/graylog2-elasticsearch.yml:
-  file.managed:
-    - source: salt://graylog2/server/elasticsearch.jinja2
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 440
-
 graylog2-server:
   archive:
     - extracted

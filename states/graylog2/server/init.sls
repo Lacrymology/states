@@ -2,7 +2,6 @@ include:
   - graylog2
   - nrpe
   - diamond
-  - graylog2
 
 graylog2-server_upstart:
   file:

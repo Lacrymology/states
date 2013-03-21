@@ -26,7 +26,7 @@ graylog2-server_upstart:
 
 /etc/graylog2-elasticsearch.yml:
   file.managed:
-    - source: salt://graylog2/elasticsearch.jinja2
+    - source: salt://graylog2/server/elasticsearch.jinja2
     - template: jinja
     - user: root
     - group: root

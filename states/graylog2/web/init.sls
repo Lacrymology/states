@@ -98,7 +98,7 @@ graylog2-web:
       - file: graylog2-web
     - watch:
       - archive: graylog2-web
-{% for filename in ('config', 'email', 'indexer', 'mongoid') %}
+{% for filename in ('general', 'email', 'indexer', 'mongoid') %}
       - file: graylog2-web-{{ filename }}
     - require:
       - file: /var/log/graylog2

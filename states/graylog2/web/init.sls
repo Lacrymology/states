@@ -29,6 +29,7 @@ graylog2-web-{{ filename }}:
 graylog2-web-{{ filename }}:
   file:
     - absent
+    - name: {{ web_root_dir }}/config/{{ filename }}.yml
 {% endfor %}
 
 graylog2-web-config:

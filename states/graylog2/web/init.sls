@@ -67,7 +67,7 @@ graylog2-web:
   archive:
     - extracted
     - name: /usr/local/
-    - source: https://github.com/downloads/Graylog2/graylog2-web-interface/graylog2-web-interface-{{ pillar['graylog2']['web']['version'] }}.tar.gz
+    - source: http://download.graylog2.org/graylog2-web-interface/graylog2-web-interface-{{ pillar['graylog2']['web']['version'] }}.tar.gz
     - source_hash: {{ pillar['graylog2']['web']['checksum'] }}
     - archive_format: tar
     - tar_options: z

@@ -1,4 +1,4 @@
 # {{ pillar['message_do_not_modify'] }}
 production:
   url: http://{{ pillar['graylog2']['elasticsearch'] }}:9200/
-  index_name: graylog2-{{ grains['id'] }}
+  index_prefix: graylog2-{{ grains['id'] }}

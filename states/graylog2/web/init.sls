@@ -13,7 +13,7 @@ include:
 
 {% set web_root_dir = '/usr/local/graylog2-web-interface-' + pillar['graylog2']['web']['version'] %}
 
-{% for filename in ('general', 'email', 'indexer', 'mongoid') %}
+{% for filename in ('general', 'indexer', 'mongoid') %}
 graylog2-web-{{ filename }}:
   file:
     - managed
@@ -23,7 +23,12 @@ graylog2-web-{{ filename }}:
     - group: www-data
     - mode: 440
     - source: salt://graylog2/web/{{ filename }}.jinja2
-    - context: {{ pillar['graylog2']['web'] }}
+{% endfor %}
+
+{% for filename in ('config', 'email') %}
+graylog2-web-{{ filename }}:
+  file:
+    - absent
 {% endfor %}
 
 graylog2-web-config:
@@ -98,7 +103,7 @@ graylog2-web:
       - file: graylog2-web
     - watch:
       - archive: graylog2-web
-{% for filename in ('general', 'email', 'indexer', 'mongoid') %}
+{% for filename in ('general', 'indexer', 'mongoid') %}
       - file: graylog2-web-{{ filename }}
     - require:
       - file: /var/log/graylog2

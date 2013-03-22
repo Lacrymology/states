@@ -3,6 +3,9 @@ include:
   - nrpe
   - diamond
 
+{% set version = '0.11.0' %}
+{% set checksum = 'md5=135c9eb384a03839e6f2eca82fd03502' %}
+
 graylog2-server_upstart:
   file:
     - managed
@@ -12,6 +15,8 @@ graylog2-server_upstart:
     - group: root
     - mode: 600
     - source: salt://graylog2/server/upstart.jinja2
+    - context: 
+      version: {{ version }}
 
 {#graylog2-server_logrotate:#}
 {#  file:#}
@@ -30,16 +35,17 @@ graylog2-server_upstart:
     - user: root
     - group: root
     - mode: 440
+    - context: {{ pillar['elasticsearch'] }}
 
 graylog2-server:
   archive:
     - extracted
     - name: /usr/local/
-    - source: http://download.graylog2.org/graylog2-server/graylog2-server-{{ pillar['graylog2']['server']['version'] }}.tar.gz
-    - source_hash: {{ pillar['graylog2']['server']['checksum'] }}
+    - source: http://download.graylog2.org/graylog2-server/graylog2-server-{{ version }}.tar.gz
+    - source_hash: {{ checksum }}
     - archive_format: tar
     - tar_options: z
-    - if_missing: /usr/local/graylog2-server-{{ pillar['graylog2']['server']['version'] }}/
+    - if_missing: /usr/local/graylog2-server-{{ version }}/
   file:
     - managed
     - name: /etc/graylog2.conf
@@ -84,6 +90,8 @@ graylog2_server_diamond_resources:
     - group: nagios
     - mode: 440
     - source: salt://graylog2/server/nrpe.jinja2
+    - context:
+      version: {{ version }}
 
 extend:
   nagios-nrpe-server:

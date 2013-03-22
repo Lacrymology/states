@@ -11,7 +11,11 @@ include:
   - ssl
 {% endif %}
 
-{% set web_root_dir = '/usr/local/graylog2-web-interface-' + pillar['graylog2']['web']['version'] %}
+{% set version = '0.11.0' %}
+{% set checksum = 'md5=35d20002dbc7f192a1adbcd9b53b2732' %}
+
+
+{% set web_root_dir = '/usr/local/graylog2-web-interface-' + version %}
 
 {% for filename in ('general', 'indexer', 'mongoid') %}
 graylog2-web-{{ filename }}:
@@ -68,8 +72,8 @@ graylog2-web:
   archive:
     - extracted
     - name: /usr/local/
-    - source: http://download.graylog2.org/graylog2-web-interface/graylog2-web-interface-{{ pillar['graylog2']['web']['version'] }}.tar.gz
-    - source_hash: {{ pillar['graylog2']['web']['checksum'] }}
+    - source: http://download.graylog2.org/graylog2-web-interface/graylog2-web-interface-{{ version }}.tar.gz
+    - source_hash: {{ checksum }}
     - archive_format: tar
     - tar_options: z
     - if_missing: {{ web_root_dir }}
@@ -90,7 +94,8 @@ graylog2-web:
     - group: www-data
     - mode: 440
     - source: salt://graylog2/web/uwsgi.jinja2
-    - context: {{ pillar['graylog2']['web'] }}
+    - context: 
+      version: {{ version }}
     - require:
       - file: {{ web_root_dir }}/log
       - service: uwsgi_emperor
@@ -146,7 +151,8 @@ graylog2_web_diamond_resource:
     - user: www-data
     - group: www-data
     - mode: 440
-    - context: {{ pillar['graylog2']['web'] }}
+    - context: 
+      version: {{ version }}
 
 /etc/nagios/nrpe.d/graylog2-web.cfg:
   file.managed:

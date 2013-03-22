@@ -8,8 +8,14 @@ cluster:
   routing:
     allocation:
       node_concurrent_recoveries: 2
+
+http:
+  enabled: {{ cluster['nodes'][grains['id']]['http']|default(True) }}
+
 node:
   name: {{ grains['id'] }}
+  master: {{ cluster['nodes'][grains['id']]['master']|default(True) }}
+  data: {{ cluster['nodes'][grains['id']]['data']|default(True) }}
 {% if aws|default(False) %}
 cloud:
   region: {{ grains['region'] }}

@@ -66,7 +66,6 @@ graylog2-server:
       - file: graylog2-server
       - file: /etc/graylog2-elasticsearch.yml
       - archive: graylog2-server
-      - file: /etc/graylog2-elasticsearch.yml
     - require:
       - file: /var/log/graylog2
 

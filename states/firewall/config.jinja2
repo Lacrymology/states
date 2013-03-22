@@ -1,0 +1,42 @@
+# {{ pillar['message_do_not_modify'] }}
+*nat
+:PREROUTING ACCEPT [0:0]
+:POSTROUTING ACCEPT [0:0]
+{% if grains['virtual'] != 'openvzve' %}
+:INPUT ACCEPT [0:0]
+{% endif %}
+:OUTPUT ACCEPT [0:0]
+COMMIT
+*mangle
+:PREROUTING ACCEPT [0:0]
+:INPUT ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+:POSTROUTING ACCEPT [0:0]
+:FORWARD ACCEPT [0:0]
+COMMIT
+*filter
+:OUTPUT ACCEPT [0:0]
+{%- if 'filter' in pillar['firewall'] %}
+:INPUT {% if grains['virtual'] == 'openvzve' %}ACCEPT{% else %}DROP{% endif %} [0:0]
+:FORWARD {% if grains['virtual'] == 'openvzve' %}ACCEPT{% else %}DROP{% endif %} [0:0]
+-A INPUT -i lo -j ACCEPT
+-A INPUT -i {% if grains['virtual'] == 'openvzve' %}venet0{% else %}eth0{% endif %} -m state --state RELATED,ESTABLISHED -j ACCEPT
+{%- for host in pillar['ip_addresses'] %}
+-A INPUT -i {% if grains['virtual'] == 'openvzve' %}venet0{% else %}eth0{% endif %} -s {{ pillar['ip_addresses'][host] }}/32 -j ACCEPT
+{% endfor -%}
+{%- for protocol in pillar['firewall']['filter'] -%}
+{%- if pillar['firewall']['filter'][protocol]|length == 1 %}
+-A INPUT -i {% if grains['virtual'] == 'openvzve' %}venet0{% else %}eth0{% endif %} -p {{ protocol }} -m {{ protocol }} --dport {{ pillar['firewall']['filter'][protocol][0] }} -j ACCEPT
+{% else -%}
+-A INPUT -i {% if grains['virtual'] == 'openvzve' %}venet0{% else %}eth0{% endif %} -p {{ protocol }} -m multiport --dports {% for port in pillar['firewall']['filter'][protocol] %}{{ port }}{% if not loop.last %},{% endif %}{% endfor %} -j ACCEPT
+{% endif -%}{# if length == 1 #}
+{% if grains['virtual'] == 'openvzve' %}
+-A INPUT -i venet0 -j DROP
+{% endif %}
+{% endfor %}
+{%- else %}{# if filter at all#}
+:INPUT ACCEPT [0:0]
+:FORWARD ACCEPT [0:0]
+{% endif %}
+COMMIT
+

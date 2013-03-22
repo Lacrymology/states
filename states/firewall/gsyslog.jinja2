@@ -1,0 +1,4 @@
+[filter_firewall]
+loggers = syslog.authpriv
+deny_any =
+    ^nagios : TTY=unknown ; PWD=/ ; USER=root ; COMMAND=/usr/local/bin/check_firewall.py -c 1:{{ critical }}$

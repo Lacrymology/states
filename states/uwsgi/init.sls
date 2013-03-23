@@ -5,6 +5,7 @@ include:
   - diamond
   - pip
   - sudo
+  - ruby
 
 /etc/init/uwsgi.conf:
   file:
@@ -54,6 +55,7 @@ uwsgi_build:
       - pkg: uwsgi_build
       - git: uwsgi_build
       - file: uwsgi_build
+      - pkg: ruby
 
 {% if grains['virtual'] == 'kvm' and salt['file.file_exists']('/sys/kernel/mm/ksm/run') %}
 diamond_ksm:

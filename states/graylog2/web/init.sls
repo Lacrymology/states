@@ -65,6 +65,7 @@ graylog2-web:
   gem:
     - installed
     - name: bundler
+    - version: 1.3.1
     - require:
       - pkg: ruby
     - watch:

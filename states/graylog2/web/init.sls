@@ -116,6 +116,13 @@ graylog2-web:
       - file: /var/log/graylog2
 {% endfor %}
 
+change_webdir_permission:
+  cmd.wait:
+    - watch:
+      - archive: graylog2-web
+    - name: chown -R www-data:www-data .
+    - cwd: {{ web_root_dir }}
+
 graylog2_web_diamond_resource:
   file:
     - accumulated

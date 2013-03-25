@@ -48,7 +48,7 @@ uwsgi_build:
       - git: uwsgi_build
   cmd:
     - wait
-    - name: python uwsgiconfig.py --build custom
+    - name: python uwsgiconfig.py --clean; python uwsgiconfig.py --build custom
     - cwd: /usr/local/uwsgi
     - stateful: false
     - watch:

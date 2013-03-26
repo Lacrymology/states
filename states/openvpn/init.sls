@@ -29,7 +29,6 @@ openvpn:
     - require:
       - pkg: openvpn
 
-{% if 'openvpn' in pillar %}
 openvpn_diamond_collector:
   file:
     - managed
@@ -40,8 +39,7 @@ openvpn_diamond_collector:
     - mode: 440
     - source: salt://openvpn/diamond.jinja2
     - context:
-      instances: {{ pillar['openvpn'] }}
-{% endif %}
+      instances: {{ pillar['openvpn']|default({}) }}
 
 openvpn_diamond_resources:
   file:

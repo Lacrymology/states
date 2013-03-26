@@ -1,5 +1,5 @@
 # {{ pillar['message_do_not_modify'] }}
 
-enabled = True
+enabled = {% if instances %}True{% else %}False{% endif %}
 
-instances = {% for name in instances %}{{ instances[name] }}?{{ name }}{% if not loop.last %}, {% endif %}{% endfor %}
+{% for name in instances %}{% if loop.first %}instances = {% endif %}{{ instances[name] }}?{{ name }}{% if not loop.last %}, {% endif %}{% endfor %}

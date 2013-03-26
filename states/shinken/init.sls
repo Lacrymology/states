@@ -145,7 +145,7 @@ shinken-{{ role }}:
     - running
     - enable: True
     - watch:
-      - pip: shinken
+      - module: shinken
       - file: /etc/init/shinken-{{ role }}.conf
       - file: shinken-{{ role }}
 {% if role == 'arbiter' %}

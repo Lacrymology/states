@@ -1,10 +1,11 @@
 # {{ pillar['message_do_not_modify'] }}
 # If you are running more than one instances of graylog2-server you have to select one of these
 # instances as master. The master will perform some periodical tasks that non-masters won't perform.
+{% set email = pillar['graylog2']['server']['email'] %}
 is_master = true
 
 # Set plugin directory here (relative or absolute)
-plugin_dir = plugin
+plugin_dir = /usr/local/graylog2-server-{{ version }}/plugin
 
 syslog_listen_port = 514
 syslog_listen_address = 0.0.0.0

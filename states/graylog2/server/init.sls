@@ -5,6 +5,7 @@ include:
 
 {% set version = '0.11.0' %}
 {% set checksum = 'md5=135c9eb384a03839e6f2eca82fd03502' %}
+{% set server_root_dir = '/usr/local/graylog2-server-' + version %}
 
 graylog2-server_upstart:
   file:
@@ -45,7 +46,7 @@ graylog2-server:
     - source_hash: {{ checksum }}
     - archive_format: tar
     - tar_options: z
-    - if_missing: /usr/local/graylog2-server-{{ version }}/
+    - if_missing: {{ server_root_dir }}
   file:
     - managed
     - name: /etc/graylog2.conf
@@ -54,6 +55,8 @@ graylog2-server:
     - group: root
     - mode: 440
     - source: salt://graylog2/server/config.jinja2
+    - context: 
+      version: {{ version }}
   pkg:
     - latest
     - name: openjdk-7-jre-headless

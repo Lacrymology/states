@@ -73,13 +73,28 @@ shinken:
       - user: shinken
       - file: /var/log/shinken
       - file: /var/lib/shinken
-  pip:
-    - installed
-    - editable: git+git://github.com/naparuba/shinken.git@{{ pillar['shinken']['revision'] }}#egg=shinken
-    - bin_env: /usr/local/shinken
+  file:
+    - managed
+    - name: /usr/local/shinken/salt-requirements.txt
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - source: salt://shinken/requirements.jinja2
+    - require:
+      - virtualenv: shinken
+  module:
+    - wait
+    - name: pip.install
+    - pkgs: ''
+    - upgrade: True
+    - bin_env: /usr/local/shinken/bin/pip
+    - requirements: /usr/local/shinken/salt-requirements.txt
     - require:
       - virtualenv: shinken
       - file: pip-cache
+    - watch:
+      - file: shinken
   user:
     - present
     - shell: /bin/false

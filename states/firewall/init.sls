@@ -47,7 +47,7 @@ iptables:
     - watch:
       - file: iptables
 
-{% if 'filter' in pillar['firewall'] %}
+{% if 'filter' in pillar['firewall']|default(False) %}
 {% if 21 in pillar['firewall']['filter']['tcp']|default([]) %}
 nf_conntrack_ftp:
    kmod:

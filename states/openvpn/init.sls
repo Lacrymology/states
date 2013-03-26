@@ -65,12 +65,10 @@ openvpn_diamond_resources:
 {% endfor %}
 
 extend:
-{% if 'openvpn' in pillar %}
   diamond:
     service:
       - watch:
         - file: openvpn_diamond_collector
-{% endif %}
   nagios-nrpe-server:
     service:
       - watch:

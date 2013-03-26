@@ -10,12 +10,12 @@ cluster:
       node_concurrent_recoveries: 2
 
 http:
-  enabled: {{ cluster['nodes'][grains['id']]['http']|default(True) }}
+  enabled: {{ cluster['nodes'][grains['id']]['http']|default('true') }}
 
 node:
   name: {{ grains['id'] }}
-  master: {{ cluster['nodes'][grains['id']]['master']|default(True) }}
-  data: {{ cluster['nodes'][grains['id']]['data']|default(True) }}
+  master: {{ cluster['nodes'][grains['id']]['master']|default('true') }}
+  data: {{ cluster['nodes'][grains['id']]['data']|default('true') }}
 {% if aws|default(False) %}
 cloud:
   region: {{ grains['region'] }}

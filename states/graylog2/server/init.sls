@@ -29,8 +29,7 @@ graylog2-server_upstart:
 {#    - mode: 600#}
 {#    - source: salt://graylog2/server/logrotate.jinja2#}
 
-{# This use ES config template file, which uses grains as node name, so it doesn't work #} 
-{# for ALL_ON_ONE host. This state assumes that ES and GL2 installed of different nodes #}
+{# For cluster using, all node's data should be explicit: http,master,data,port and/or name #}
 /etc/graylog2-elasticsearch.yml:
   file.managed:
     - source: salt://elasticsearch/config.jinja2
@@ -38,7 +37,11 @@ graylog2-server_upstart:
     - user: root
     - group: root
     - mode: 440
-    - context: {{ pillar['elasticsearch'] }}
+    - context:
+      http: 'false'
+      master: 'false'
+      data: 'false'
+      port: '9350'
 
 graylog2-server:
   archive:

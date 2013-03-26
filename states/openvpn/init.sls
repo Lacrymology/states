@@ -22,8 +22,8 @@ openvpn:
   file:
     - managed
     - template: jinja
-    - user: nagios
-    - group: nagios
+    - user: root
+    - group: root
     - mode: 440
     - source: salt://openvpn/default.jinja2
     - require:

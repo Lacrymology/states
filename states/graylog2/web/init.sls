@@ -153,7 +153,8 @@ graylog2_web_diamond_resource:
       version: {{ version }}
 
 /etc/nagios/nrpe.d/graylog2-web.cfg:
-  file.managed:
+  file:
+    - managed
     - template: jinja
     - user: nagios
     - group: nagios

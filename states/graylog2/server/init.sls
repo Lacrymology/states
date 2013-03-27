@@ -31,7 +31,8 @@ graylog2-server_upstart:
 
 {# For cluster using, all node's data should be explicit: http,master,data,port and/or name #}
 /etc/graylog2-elasticsearch.yml:
-  file.managed:
+  file:
+    - managed
     - source: salt://elasticsearch/config.jinja2
     - template: jinja
     - user: root
@@ -79,8 +80,9 @@ graylog2-server:
       - file: /var/log/graylog2
 
 graylog2_email_output_plugin:
-  cmd.run:
-    - name: java -jar graylog2-server.jar --install-plugin email_output --plugin-version 0.10.0 
+  cmd:
+    - run
+    - name: java -jar graylog2-server.jar --install-plugin email_output --plugin-version 0.10.0
     - cwd: {{ server_root_dir }}
     - unless: test -e {{ server_root_dir }}/plugin/outputs/org.graylog2.emailoutput.output.EmailOutput_gl2plugin.jar
 

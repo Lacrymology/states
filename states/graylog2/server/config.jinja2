@@ -140,7 +140,7 @@ transport_email_from_email = {{ email['from'] }}
 transport_email_from_name = Graylog2
 transport_email_web_interface_url = http{% if web['ssl']|default(False) %}s:{% endif %}://{{ pillar['graylog2']['web']['hostnames'][0] }}
 
-# Jabber/XMPP transport
+{# Jabber/XMPP transport
 transport_jabber_enabled = false
 transport_jabber_hostname = jabber.example.com
 transport_jabber_port = 5222
@@ -148,7 +148,7 @@ transport_jabber_use_sasl_auth = true
 transport_jabber_allow_selfsigned_certs = false
 transport_jabber_auth_username = your_user
 transport_jabber_auth_password = secret
-transport_jabber_message_prefix = [graylog2]
+transport_jabber_message_prefix = [graylog2]#}
 
 # Filters
 # Enable the filter that tries to extract additional fields from k=v values in the log message?
@@ -160,13 +160,3 @@ enable_tokenizer_filter = true
 #graphite_carbon_host = 127.0.0.1
 #graphite_carbon_tcp_port = 2003
 #graphite_prefix = logs
-
-# Librato Metrics (http://support.torch.sh/help/kb/graylog2-server/using-librato-metrics-with-graylog2)
-#enable_libratometrics_output = false
-#enable_libratometrics_system_metrics = false
-#libratometrics_api_user = you@example.com
-#libratometrics_api_token = abcdefg12345
-#libratometrics_prefix = gl2-
-#libratometrics_interval = 60
-#libratometrics_stream_filter =
-#libratometrics_host_filter =

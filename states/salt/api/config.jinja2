@@ -1,6 +1,19 @@
 # {{ pillar['message_do_not_modify'] }}
 
-external_auth: {{ external_auth }}
+{#
+ There is a security issue with salt:
+ https://github.com/saltstack/salt/issues/4281
+ the permissions application is pretty much random.
+ Until that issue is fixed, each users will have access to everything.
+ #}
+external_auth:
+{% for auth_type in external_auth %}
+  {{ auth_type }}:
+ {% for username in external_auth[external_auth] %}
+    {{ username }}:
+      - .*
+ {% endfor %}
+{% endfor %}
 
 rest_cherrypy:
   port: 8000

@@ -10,8 +10,10 @@ cluster:
     allocation:
       node_concurrent_recoveries: 2
 
+{#
 http:
   enabled: {{ es['cluster']['nodes'][grains['id']]['http']|default(http) }}
+#}
 
 node:
   name: {{ es['cluster']['nodes'][grains['id']]['name']|default(grains['id']) }}

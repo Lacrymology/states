@@ -43,7 +43,6 @@ graylog2-server_upstart:
       http: 'false'
       master: 'false'
       data: 'false'
-      port: '9350'
 
 graylog2-server:
   archive:

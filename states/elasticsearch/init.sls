@@ -75,7 +75,6 @@ elasticsearch:
       http: 'true'
       master: 'true'
       data: 'true'
-      port: '9300'
     - require:
       - pkg_file: elasticsearch
   service:

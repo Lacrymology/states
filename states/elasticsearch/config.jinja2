@@ -18,8 +18,6 @@ node:
   master: {{ es['cluster']['nodes'][grains['id']]['master']|default(master) }}
   data: {{ es['cluster']['nodes'][grains['id']]['data']|default(data) }}
 
-transport.tcp.port: {{ es['cluster']['nodes'][grains['id']]['port']|default(port) }}
-
 {% if es['aws']|default(false) %}
 cloud:
   region: {{ grains['region'] }}

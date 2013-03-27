@@ -2,6 +2,7 @@ include:
   - graylog2
   - nrpe
   - diamond
+  - mongodb
 
 {% set version = '0.11.0' %}
 {% set checksum = 'md5=135c9eb384a03839e6f2eca82fd03502' %}
@@ -78,6 +79,7 @@ graylog2-server:
       - cmd: graylog2_email_output_plugin
     - require:
       - file: /var/log/graylog2
+      - service: mongodb
 
 graylog2_email_output_plugin:
   cmd:
@@ -87,6 +89,7 @@ graylog2_email_output_plugin:
     - unless: test -e {{ server_root_dir }}/plugin/outputs/org.graylog2.emailoutput.output.EmailOutput_gl2plugin.jar
     - require:
       - archive: graylog2-server
+      - service: mongodb
 
 graylog2_server_diamond_resources:
   file:

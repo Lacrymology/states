@@ -17,8 +17,8 @@ http:
 
 node:
   name: {{ es['cluster']['nodes'][grains['id']]['name']|default(grains['id']) }}
-  master: {{ es['cluster']['nodes'][grains['id']]['master']|default('true') }}
-  data: {{ es['cluster']['nodes'][grains['id']]['data']|default('true') }}
+  master: {{ es['cluster']['nodes'][grains['id']]['master']|default(master) }}
+  data: {{ es['cluster']['nodes'][grains['id']]['data']|default(data) }}
 
 {% if es['aws']|default(false) %}
 cloud:

@@ -85,6 +85,8 @@ graylog2_email_output_plugin:
     - name: java -jar graylog2-server.jar --install-plugin email_output --plugin-version 0.10.0
     - cwd: {{ server_root_dir }}
     - unless: test -e {{ server_root_dir }}/plugin/outputs/org.graylog2.emailoutput.output.EmailOutput_gl2plugin.jar
+    - require:
+      - archive: graylog2-server
 
 graylog2_server_diamond_resources:
   file:

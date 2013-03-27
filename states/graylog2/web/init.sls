@@ -11,9 +11,13 @@ include:
   - ssl
 {% endif %}
 
-{% set web_root_dir = '/usr/local/graylog2-web-interface-' + pillar['graylog2']['web']['version'] %}
+{% set version = '0.11.0' %}
+{% set checksum = 'md5=35d20002dbc7f192a1adbcd9b53b2732' %}
 
-{% for filename in ('general', 'email', 'indexer', 'mongoid') %}
+
+{% set web_root_dir = '/usr/local/graylog2-web-interface-' + version %}
+
+{% for filename in ('general', 'indexer', 'mongoid') %}
 graylog2-web-{{ filename }}:
   file:
     - managed
@@ -23,7 +27,13 @@ graylog2-web-{{ filename }}:
     - group: www-data
     - mode: 440
     - source: salt://graylog2/web/{{ filename }}.jinja2
-    - context: {{ pillar['graylog2']['web'] }}
+{% endfor %}
+
+{% for filename in ('config', 'email') %}
+graylog2-web-{{ filename }}:
+  file:
+    - absent
+    - name: {{ web_root_dir }}/config/{{ filename }}.yml
 {% endfor %}
 
 graylog2-web-config:
@@ -55,6 +65,7 @@ graylog2-web:
   gem:
     - installed
     - name: bundler
+    - version: 1.3.1
     - require:
       - pkg: ruby
     - watch:
@@ -62,8 +73,8 @@ graylog2-web:
   archive:
     - extracted
     - name: /usr/local/
-    - source: https://github.com/downloads/Graylog2/graylog2-web-interface/graylog2-web-interface-{{ pillar['graylog2']['web']['version'] }}.tar.gz
-    - source_hash: {{ pillar['graylog2']['web']['checksum'] }}
+    - source: http://download.graylog2.org/graylog2-web-interface/graylog2-web-interface-{{ version }}.tar.gz
+    - source_hash: {{ checksum }}
     - archive_format: tar
     - tar_options: z
     - if_missing: {{ web_root_dir }}
@@ -84,7 +95,8 @@ graylog2-web:
     - group: www-data
     - mode: 440
     - source: salt://graylog2/web/uwsgi.jinja2
-    - context: {{ pillar['graylog2']['web'] }}
+    - context: 
+      version: {{ version }}
     - require:
       - file: {{ web_root_dir }}/log
       - service: uwsgi_emperor
@@ -98,11 +110,18 @@ graylog2-web:
       - file: graylog2-web
     - watch:
       - archive: graylog2-web
-{% for filename in ('general', 'email', 'indexer', 'mongoid') %}
+{% for filename in ('general', 'indexer', 'mongoid') %}
       - file: graylog2-web-{{ filename }}
     - require:
       - file: /var/log/graylog2
 {% endfor %}
+
+change_graylog2_web_dir_permission:
+  cmd:
+    - wait
+    - watch:
+      - archive: graylog2-web
+    - name: chown -R www-data:www-data {{ web_root_dir }}
 
 graylog2_web_diamond_resource:
   file:
@@ -140,7 +159,8 @@ graylog2_web_diamond_resource:
     - user: www-data
     - group: www-data
     - mode: 440
-    - context: {{ pillar['graylog2']['web'] }}
+    - context: 
+      version: {{ version }}
 
 /etc/nagios/nrpe.d/graylog2-web.cfg:
   file.managed:

@@ -2,6 +2,8 @@ include:
   - diamond
   - nrpe
   - requests
+{% set version = '0.20.5'%}
+{% set checksum = 'md5=e244c5a39515983ba81006a3186843f4' %}
 
 /etc/default/elasticsearch:
   file:
@@ -56,9 +58,9 @@ elasticsearch:
   pkg_file:
     - installed
     - name: elasticsearch
-    - version: {{ pillar['elasticsearch']['version'] }}
-    - source: http://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-{{ pillar['elasticsearch']['version'] }}.deb
-    - source_hash: md5={{ pillar['elasticsearch']['md5'] }}
+    - version: {{ version }}
+    - source: http://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-{{ version }}.deb
+    - source_hash: {{ checksum }}
     - require:
       - pkg: elasticsearch
   file:
@@ -69,7 +71,11 @@ elasticsearch:
     - group: elasticsearch
     - mode: 440
     - source: salt://elasticsearch/config.jinja2
-    - context: {{ pillar['elasticsearch'] }}
+    - context:
+      http: 'true'
+      master: 'true'
+      data: 'true'
+      port: '9300'
     - require:
       - pkg_file: elasticsearch
   service:

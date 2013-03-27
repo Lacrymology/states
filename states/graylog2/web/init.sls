@@ -58,6 +58,8 @@ graylog2-web-upstart:
     - symlink
     - force: True
     - target: /var/log/graylog2/
+    - require:
+      - archive: graylog2-web
 
 graylog2-web:
   gem:

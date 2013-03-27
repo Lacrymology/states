@@ -13,8 +13,6 @@ include:
 
 {% set version = '0.11.0' %}
 {% set checksum = 'md5=35d20002dbc7f192a1adbcd9b53b2732' %}
-
-
 {% set web_root_dir = '/usr/local/graylog2-web-interface-' + version %}
 
 {% for filename in ('general', 'indexer', 'mongoid') %}

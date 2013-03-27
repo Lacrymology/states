@@ -138,17 +138,7 @@ graylog2_web_diamond_resource:
 {% for command in ('streamalarms', 'subscriptions') %}
 /etc/cron.hourly/graylog2-web-{{ command }}:
   file:
-    - managed
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 550
-    - source: salt://graylog2/web/cron.jinja2
-    - context:
-      web_root_dir: {{ web_root_dir }}
-      command: {{ command }}
-    - require:
-      - pkg: cron
+    - absent
 {% endfor %}
 
 /etc/nginx/conf.d/graylog2-web.conf:

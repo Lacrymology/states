@@ -7,7 +7,7 @@ include:
   - diamond
   - uwsgi
   - graylog2
-{% if pillar['graylog2']['web']['ssl']|default(False) %}
+{% if pillar['graylog2']['ssl']|default(False) %}
   - ssl
 {% endif %}
 
@@ -162,11 +162,11 @@ graylog2_web_diamond_resource:
     - source: salt://uwsgi/nrpe_instance.jinja2
     - context:
       deployment: graylog2
-      workers: {{ pillar['graylog2']['web']['workers'] }}
-{% if 'cheaper' in pillar['graylog2']['web'] %}
-      cheaper: {{ pillar['graylog2']['web']['cheaper'] }}
+      workers: {{ pillar['graylog2']['workers'] }}
+{% if 'cheaper' in pillar['graylog2'] %}
+      cheaper: {{ pillar['graylog2']['cheaper'] }}
 {% endif %}
-      domain_name: {{ pillar['graylog2']['web']['hostnames'][0] }}
+      domain_name: {{ pillar['graylog2']['hostnames'][0] }}
       uri: /login
 
 extend:
@@ -178,8 +178,8 @@ extend:
     service:
       - watch:
         - file: /etc/nginx/conf.d/graylog2-web.conf
-{% if pillar['graylog2']['web']['ssl']|default(False) %}
+{% if pillar['graylog2']['ssl']|default(False) %}
     {% for filename in ('server.key', 'server.crt', 'ca.crt') %}
-        - file: /etc/ssl/{{ pillar['graylog2']['web']['ssl'] }}/{{ filename }}
+        - file: /etc/ssl/{{ pillar['graylog2']['ssl'] }}/{{ filename }}
     {% endfor %}
 {% endif %}

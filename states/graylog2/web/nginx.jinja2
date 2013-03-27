@@ -4,14 +4,12 @@ upstream graylog2 {
     server unix:///var/lib/uwsgi/graylog2.sock;
 }
 
-{% set web = pillar['graylog2']['web'] %}
-
 server {
-{% if web['ssl']|default(False) %}
+{% if pillar['graylog2']['ssl']|default(False) %}
     listen 443 ssl;
-    ssl_certificate /etc/ssl/{{ web['ssl'] }}/chained_ca.crt;
-    ssl_certificate_key /etc/ssl/{{ web['ssl'] }}/server.pem;
-    ssl_client_certificate /etc/ssl/{{ pillar['shinken']['ssl'] }}/ca.crt;
+    ssl_certificate /etc/ssl/{{ pillar['graylog2']['ssl'] }}/chained_ca.crt;
+    ssl_certificate_key /etc/ssl/{{ pillar['graylog2']['ssl'] }}/server.pem;
+    ssl_client_certificate /etc/ssl/{{ pillar['graylog2']['ssl'] }}/ca.crt;
     ssl_ciphers RC4:HIGH:!aNULL:!MD5;
     ssl_prefer_server_ciphers on;
     ssl_session_cache shared:SSL:10m;
@@ -22,7 +20,7 @@ server {
 
     root /usr/local/graylog2-web-interface-{{ version }}/public;
 
-    server_name {% for hostname in web['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+    server_name {% for hostname in pillar['graylog2']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
 
 {% for dir in ('stylesheets', 'javascripts', 'images') %}
     location /{{ dir }}/ {

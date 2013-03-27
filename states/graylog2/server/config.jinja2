@@ -1,7 +1,7 @@
 # {{ pillar['message_do_not_modify'] }}
 # If you are running more than one instances of graylog2-server you have to select one of these
 # instances as master. The master will perform some periodical tasks that non-masters won't perform.
-{% set email = pillar['graylog2']['server']['email'] %}
+{% set email = pillar['graylog2']['email'] %}
 is_master = true
 
 # Set plugin directory here (relative or absolute)
@@ -138,7 +138,7 @@ transport_email_auth_password = {{ email['password'] }}
 transport_email_subject_prefix = [graylog2]
 transport_email_from_email = {{ email['from'] }}
 transport_email_from_name = Graylog2
-transport_email_web_interface_url = http{% if web['ssl']|default(False) %}s:{% endif %}://{{ pillar['graylog2']['web']['hostnames'][0] }}
+transport_email_web_interface_url = http{% if ssl|default(False) %}s:{% endif %}://{{ pillar['graylog2']['hostnames'][0] }}
 
 enable_graphite_output = true
 graphite_carbon_host = {{ pillar['graphite_address'] }}

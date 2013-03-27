@@ -123,7 +123,7 @@ http_listen_address = 0.0.0.0
 http_listen_port = 12202
 
 # Email transport
-transport_email_enabled = false
+transport_email_enabled = true
 transport_email_protocol = smtp
 transport_email_hostname = "{{ email['server'] }}"
 transport_email_port = {{ email['port'] }}
@@ -136,9 +136,9 @@ transport_email_use_tls = false
 transport_email_auth_username = {{ email['user'] }}
 transport_email_auth_password = {{ email['password'] }}
 transport_email_subject_prefix = [graylog2]
-transport_email_from_email = graylog2@example.com
+transport_email_from_email = {{ email['from'] }}
 transport_email_from_name = Graylog2
-transport_email_web_interface_url = http://your-graylog2.example.org
+transport_email_web_interface_url = http{% if web['ssl']|default(False) %}s:{% endif %}://{{ pillar['graylog2']['web']['hostnames'][0] }}
 
 # Jabber/XMPP transport
 transport_jabber_enabled = false

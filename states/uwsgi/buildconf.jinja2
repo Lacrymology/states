@@ -25,9 +25,7 @@ debug = false
 unbit = false
 graylog2 = true
 {% if 'graylog2' in pillar %}
-{% if 'web' in pillar['graylog2'] %}
 rack = true
-{% endif %}
 {% endif %}
 xml_implementation = libxml2
 yaml_implementation = auto
@@ -37,7 +35,7 @@ plugins =
 bin_name = uwsgi
 append_version =
 plugin_dir = .
-embedded_plugins = {% if 'graylog2' in pillar %}{% if 'web' in pillar['graylog2'] %}rack, {% endif %}{% endif %}python, gevent, ping, nagios, carbon, signal, graylog2
+embedded_plugins = {% if 'graylog2' in pillar %}rack, {% endif %}python, gevent, ping, nagios, carbon, signal, graylog2
 as_shared_library = false
 
 locking = auto

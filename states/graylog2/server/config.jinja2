@@ -140,6 +140,15 @@ transport_email_from_email = {{ email['from'] }}
 transport_email_from_name = Graylog2
 transport_email_web_interface_url = http{% if web['ssl']|default(False) %}s:{% endif %}://{{ pillar['graylog2']['web']['hostnames'][0] }}
 
+enable_graphite_output = true
+graphite_carbon_host = {{ pillar['graphite_address'] }}
+graphite_carbon_tcp_port = 2003
+graphite_prefix = {{ grains['id'] }}.logs
+
+# Filters
+# Enable the filter that tries to extract additional fields from k=v values in the log message?
+enable_tokenizer_filter = true
+
 {# Jabber/XMPP transport
 transport_jabber_enabled = false
 transport_jabber_hostname = jabber.example.com
@@ -149,14 +158,3 @@ transport_jabber_allow_selfsigned_certs = false
 transport_jabber_auth_username = your_user
 transport_jabber_auth_password = secret
 transport_jabber_message_prefix = [graylog2]#}
-
-# Filters
-# Enable the filter that tries to extract additional fields from k=v values in the log message?
-enable_tokenizer_filter = true
-
-# Additional modules
-# Graphite
-#enable_graphite_output = false
-#graphite_carbon_host = 127.0.0.1
-#graphite_carbon_tcp_port = 2003
-#graphite_prefix = logs

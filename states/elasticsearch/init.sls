@@ -71,10 +71,6 @@ elasticsearch:
     - group: elasticsearch
     - mode: 440
     - source: salt://elasticsearch/config.jinja2
-    - context:
-      http: 'true'
-      master: 'true'
-      data: 'true'
     - require:
       - pkg_file: elasticsearch
   service:

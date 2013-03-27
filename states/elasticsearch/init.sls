@@ -71,7 +71,11 @@ elasticsearch:
     - group: elasticsearch
     - mode: 440
     - source: salt://elasticsearch/config.jinja2
-    - context: {{ pillar['elasticsearch'] }}
+    - context:
+      http: 'true'
+      master: 'true'
+      data: 'true'
+      port: '9300'
     - require:
       - pkg_file: elasticsearch
   service:

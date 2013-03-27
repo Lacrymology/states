@@ -1,27 +1,33 @@
 # {{ pillar['message_do_not_modify'] }}
 
+{% set es = pillar['elasticsearch'] %}
 bootstrap:
   mlockall: true
 
 cluster:
-  name: {{ cluster['name'] }}
+  name: {{ es['cluster']['name'] }}
   routing:
     allocation:
       node_concurrent_recoveries: 2
 
 http:
-  enabled: {{ cluster['nodes'][grains['id']]['http']|default('true') }}
+  enabled: {{ es['cluster']['nodes'][grains['id']]['http']|default(http) }}
 
 node:
-  name: {{ grains['id'] }}
-  master: {{ cluster['nodes'][grains['id']]['master']|default('true') }}
-  data: {{ cluster['nodes'][grains['id']]['data']|default('true') }}
-{% if aws|default(False) %}
+{% if 'name' in es['cluster']['nodes'][grains['id']] %}
+  name: {{ es['cluster']['nodes'][grains['id']]['name'] }}
+{% endif %}
+  master: {{ es['cluster']['nodes'][grains['id']]['master']|default(master) }}
+  data: {{ es['cluster']['nodes'][grains['id']]['data']|default(data) }}
+
+transport.tcp.port: {{ es['cluster']['nodes'][grains['id']]['port']|default(port) }}
+
+{% if es['aws']|default(false) %}
 cloud:
   region: {{ grains['region'] }}
   aws:
-    access_key: {{ aws['access_key'] }}
-    secret_key: {{ aws['secret_key'] }}
+    access_key: {{ es['aws']['access_key'] }}
+    secret_key: {{ es['aws']['secret_key'] }}
   node:
     auto_attributes: true
 discovery:
@@ -51,7 +57,7 @@ discovery:
         enabled: false
       unicast:
         hosts: [
-{%- for node in cluster['nodes'] -%}
-"{{ cluster['nodes'][node]['private'] }}"{% if not loop.last %}, {% endif -%}
+{%- for node in es['cluster']['nodes'] -%}
+"{{ es['cluster']['nodes'][node]['private'] }}"{% if not loop.last %}, {% endif -%}
 {%- endfor %}]
 {% endif %}

@@ -1,3 +1,3 @@
 # {{ pillar['message_do_not_modify'] }}
-command[check_postgresql_server]=/usr/lib/nagios/plugins/check_procs -c 1:2 -a '/usr/lib/postgresql/{{ pillar['postgresql']['version'] }}/bin/postgres -D /var/lib/postgresql/{{ pillar['postgresql']['version'] }}/main -c config_file=/etc/postgresql/{{ pillar['postgresql']['version'] }}/main/postgresql.conf' -C postgres -u postgres
+command[check_postgresql_server]=/usr/lib/nagios/plugins/check_procs -c 1:2 -a '/usr/lib/postgresql/{{ version }}/bin/postgres -D /var/lib/postgresql/{{ version }}/main -c config_file=/etc/postgresql/{{ version }}/main/postgresql.conf' -C postgres -u postgres
 command[check_postgresql_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 5432

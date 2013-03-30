@@ -6,12 +6,18 @@ include:
   - nrpe
   - pip
 
+{% set version="9.2" %}
+
+/etc/cron.daily/backup-postgresql:
+  file:
+    - absent
+
 postgresql-server:
   pkg:
     - latest
     - names:
-      - postgresql-{{ pillar['postgresql']['version'] }}
-      - postgresql-client-{{ pillar['postgresql']['version'] }}
+      - postgresql-{{ version }}
+      - postgresql-client-{{ version }}
     - require:
       - apt_repository: postgresql-dev
   service:
@@ -81,6 +87,7 @@ postgresql_diamond_collector:
     - source: salt://postgresql/nrpe.jinja2
     - context:
       deployment: diamond
+      version: {{ version }}
       password: {{ pillar['postgresql']['diamond'] }}
 
 /etc/nagios/nrpe.d/postgresql.cfg:

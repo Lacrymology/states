@@ -1,5 +1,5 @@
 include:
-  - salt
+  - salt.minion
   - git
   - ssh.client
   - nrpe

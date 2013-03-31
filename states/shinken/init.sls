@@ -173,6 +173,8 @@ shinken-{{ role }}:
     - mode: 440
     - source: salt://shinken/{{ config }}.jinja2
     - context: {{ pillar['shinken'] }}
+    - require:
+      - file: /etc/shinken
     {% endfor %}
 
 {% endif %}

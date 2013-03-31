@@ -62,6 +62,8 @@ proftpd-users:
     - mode: 440
     - template: jinja
     - source: salt://proftpd/sql.jinja2
+    - require:
+      - pkg: postgresql-server
   cmd:
     - wait
     - name: psql -f {{ opts['cachedir'] }}/proftpd.sql proftpd

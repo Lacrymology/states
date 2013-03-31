@@ -217,6 +217,8 @@ host_{{ node }}:
     - group: nagios
     - mode: 440
     - source: salt://rabbitmq/nrpe.jinja2
+    - require:
+      - pkg: nagios-nrpe-server
 
 extend:
   diamond:

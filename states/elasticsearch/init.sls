@@ -113,6 +113,8 @@ elasticsearch_diamond_resources:
     - group: nagios
     - mode: 440
     - source: salt://elasticsearch/nrpe.jinja2
+    - require:
+      - pkg: nagios-nrpe-server
 
 /usr/local/bin/check_elasticsearch_cluster.py:
   file:

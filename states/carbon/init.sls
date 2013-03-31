@@ -140,12 +140,15 @@ carbon-{{ instance }}-logdir:
 {% endfor %}
 
 /etc/nagios/nrpe.d/carbon.cfg:
-  file.managed:
+  file:
+    - managed
     - template: jinja
     - user: nagios
     - group: nagios
     - mode: 440
     - source: salt://carbon/nrpe.jinja2
+    - require:
+      - pkg: nagios-nrpe-server
 
 extend:
   nagios-nrpe-server:

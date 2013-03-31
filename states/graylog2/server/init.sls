@@ -122,6 +122,8 @@ graylog2_server_diamond_resources:
     - group: nagios
     - mode: 440
     - source: salt://graylog2/server/nrpe.jinja2
+    - require:
+      - pkg: nagios-nrpe-server
     - context:
       version: {{ version }}
 

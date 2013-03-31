@@ -35,12 +35,15 @@ cron_diamond_resources:
         exe = ^\/usr\/sbin\/cron$
 
 /etc/nagios/nrpe.d/cron.cfg:
-  file.managed:
+  file:
+    - managed
     - template: jinja
     - user: nagios
     - group: nagios
     - mode: 440
     - source: salt://cron/nrpe.jinja2
+    - require:
+      - pkg: nagios-nrpe-server
 
 extend:
   nagios-nrpe-server:

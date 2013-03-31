@@ -63,6 +63,8 @@ upstart_memcached:
     - group: nagios
     - mode: 440
     - source: salt://memcache/nrpe.jinja2
+    - require:
+      - pkg: nagios-nrpe-server
 
 memcached_diamond_resources:
   file:

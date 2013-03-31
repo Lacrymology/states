@@ -166,6 +166,8 @@ graylog2_web_diamond_resource:
     - group: nagios
     - mode: 440
     - source: salt://uwsgi/nrpe_instance.jinja2
+    - require:
+      - pkg: nagios-nrpe-server
     - context:
       deployment: graylog2
       workers: {{ pillar['graylog2']['workers'] }}

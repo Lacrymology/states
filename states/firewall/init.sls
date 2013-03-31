@@ -98,6 +98,8 @@ nf_conntrack_ftp:
     - group: nagios
     - mode: 440
     - source: salt://firewall/nrpe.jinja2
+    - require:
+      - pkg: nagios-nrpe-server
     - context:
       critical: {{ critical }}
 

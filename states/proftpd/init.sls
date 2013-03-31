@@ -100,6 +100,8 @@ proftpd:
     - group: nagios
     - mode: 440
     - source: salt://proftpd/nrpe.jinja2
+    - require:
+      - pkg: nagios-nrpe-server
 
 proftpd_diamond_resources:
   file:

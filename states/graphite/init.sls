@@ -235,12 +235,15 @@ graphite_settings:
       - module: /etc/uwsgi/graphite.ini
 
 /etc/nagios/nrpe.d/graphite.cfg:
-  file.managed:
+  file:
+    - managed
     - template: jinja
     - user: nagios
     - group: nagios
     - mode: 440
     - source: salt://uwsgi/nrpe_instance.jinja2
+    - require:
+      - pkg: nagios-nrpe-server
     - context:
       deployment: graphite
       workers: {{ pillar['graphite']['web']['workers'] }}
@@ -270,6 +273,8 @@ uwsgi_diamond_graphite_resources:
     - group: nagios
     - mode: 440
     - source: salt://postgresql/nrpe.jinja2
+    - require:
+      - pkg: nagios-nrpe-server
     - context:
       deployment: graphite
       password: {{ pillar['graphite']['web']['db']['password'] }}

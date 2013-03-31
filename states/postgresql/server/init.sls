@@ -85,6 +85,8 @@ postgresql_diamond_collector:
     - group: nagios
     - mode: 440
     - source: salt://postgresql/nrpe.jinja2
+    - require:
+      - pkg: nagios-nrpe-server
     - context:
       deployment: diamond
       password: {{ pillar['postgresql']['diamond'] }}
@@ -97,6 +99,8 @@ postgresql_diamond_collector:
     - group: nagios
     - mode: 440
     - source: salt://postgresql/server/nrpe.jinja2
+    - require:
+      - pkg: nagios-nrpe-server
     - context:
       version: {{ version }}
 

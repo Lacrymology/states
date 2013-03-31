@@ -58,6 +58,8 @@ salt_master_diamond_resources:
     - group: nagios
     - mode: 440
     - source: salt://salt/master/nrpe.jinja2
+    - require:
+      - pkg: nagios-nrpe-server
 
 extend:
   nagios-nrpe-server:

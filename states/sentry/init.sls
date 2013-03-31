@@ -154,6 +154,8 @@ sentry-migrate-fake:
     - group: nagios
     - mode: 440
     - source: salt://uwsgi/nrpe_instance.jinja2
+    - require:
+      - pkg: nagios-nrpe-server
     - context:
       deployment: sentry
       workers: {{ pillar['sentry']['workers'] }}
@@ -170,6 +172,8 @@ sentry-migrate-fake:
     - group: nagios
     - mode: 440
     - source: salt://postgresql/nrpe.jinja2
+    - require:
+      - pkg: nagios-nrpe-server
     - context:
       deployment: sentry
       password: {{ pillar['sentry']['db']['password'] }}

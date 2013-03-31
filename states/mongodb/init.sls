@@ -81,12 +81,15 @@ mongodb_diamond_resources:
         exe = ^\/usr\/bin\/mongod$
 
 /etc/nagios/nrpe.d/mongodb.cfg:
-  file.managed:
+  file:
+    - managed
     - template: jinja
     - user: nagios
     - group: nagios
     - mode: 440
     - source: salt://mongodb/nrpe.jinja2
+    - require:
+      - pkg: nagios-nrpe-server
 
 extend:
   nagios-nrpe-server:

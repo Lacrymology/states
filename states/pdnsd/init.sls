@@ -52,6 +52,8 @@ pdnsd:
     - group: nagios
     - mode: 440
     - source: salt://pdnsd/nrpe.jinja2
+    - require:
+      - pkg: nagios-nrpe-server
 
 pdsnd_diamond_resources:
   file:

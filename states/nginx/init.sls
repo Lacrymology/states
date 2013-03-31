@@ -15,6 +15,8 @@ include:
     - group: nagios
     - mode: 440
     - source: salt://nginx/nrpe.jinja2
+    - require:
+      - pkg: nagios-nrpe-server
 
 /etc/nginx/nginx.conf:
   file:

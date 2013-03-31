@@ -17,6 +17,8 @@ openvpn:
     - group: nagios
     - mode: 440
     - source: salt://openvpn/nrpe.jinja2
+    - require:
+      - pkg: nagios-nrpe-server
     - context:
       instances: {{ pillar['openvpn']|default({}) }}
 

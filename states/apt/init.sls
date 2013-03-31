@@ -67,6 +67,8 @@ apt_cleanup:
     - group: nagios
     - mode: 440
     - source: salt://apt/nrpe.jinja2
+    - require:
+      - pkg: nagios-nrpe-server
 
 extend:
   nagios-nrpe-server:

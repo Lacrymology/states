@@ -86,12 +86,15 @@ backup-archiver-dependency:
       - module: backup-archiver-dependency
 
 /etc/nagios/nrpe.d/backups.cfg:
-  file.managed:
+  file:
+    - managed
     - template: jinja
     - user: nagios
     - group: nagios
     - mode: 440
     - source: salt://backup/server/nrpe.jinja2
+    - require:
+      - pkg: nagios-nrpe-server
 
 extend:
   nagios-nrpe-server:

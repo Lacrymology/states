@@ -154,6 +154,8 @@ uwsgi_diamond_resources:
     - group: nagios
     - mode: 440
     - source: salt://uwsgi/nrpe.jinja2
+    - require:
+      - pkg: nagios-nrpe-server
 
 extend:
   nagios-nrpe-server:

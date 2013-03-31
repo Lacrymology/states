@@ -210,6 +210,8 @@ shinken_{{ role }}_diamond_resources:
     - source: salt://shinken/nrpe.jinja2
     - context:
       shinken_component: {{ role }}
+    - require:
+      - pkg: nagios-nrpe-server
 {% endif %}
 {% endfor %}
 

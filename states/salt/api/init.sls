@@ -95,6 +95,8 @@ salt-ui:
     - group: nagios
     - mode: 440
     - source: salt://salt/api/nrpe.jinja2
+    - require:
+      - pkg: nagios-nrpe-server
 
 salt_api_diamond_resources:
   file:

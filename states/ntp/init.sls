@@ -53,6 +53,8 @@ ntp:
     - group: nagios
     - mode: 440
     - source: salt://ntp/nrpe.jinja2
+    - require:
+      - pkg: nagios-nrpe-server
 
 ntp_diamond_resources:
   file:

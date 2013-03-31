@@ -12,7 +12,7 @@ memcached:
   module:
     - wait
     - name: cmd.run
-    - m_name: /etc/init.d/memcached stop
+    - cmd: /etc/init.d/memcached stop
     - watch:
       - pkg: memcached
   cmd:

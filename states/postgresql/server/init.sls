@@ -87,7 +87,6 @@ postgresql_diamond_collector:
     - source: salt://postgresql/nrpe.jinja2
     - context:
       deployment: diamond
-      version: {{ version }}
       password: {{ pillar['postgresql']['diamond'] }}
 
 /etc/nagios/nrpe.d/postgresql.cfg:
@@ -98,6 +97,8 @@ postgresql_diamond_collector:
     - group: nagios
     - mode: 440
     - source: salt://postgresql/server/nrpe.jinja2
+    - context:
+      version: {{ version }}
 
 {% if 'backup_server' in pillar %}
 /usr/local/bin/backup-postgresql:

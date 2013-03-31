@@ -127,7 +127,7 @@ elasticsearch_diamond_resources:
     - mode: 555
     - require:
       - module: nagiosplugin
-      - pip: requests
+      - module: requests
 
 elasticsearch_diamond_collector:
   file:

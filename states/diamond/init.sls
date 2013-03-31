@@ -58,7 +58,6 @@ diamond:
       - file: diamond_upstart
     - watch:
       - file: diamond_requirements
-      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
   file:
     - managed
     - name: /etc/diamond/diamond.conf
@@ -78,6 +77,7 @@ diamond:
       - file: diamond_upstart
       - module: diamond
       - cmd: diamond
+      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
   cmd:
     - wait
     - name: find /usr/local/diamond -name '*.pyc' -delete

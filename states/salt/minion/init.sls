@@ -22,7 +22,7 @@ salt-minion:
     - user: root
     - group: root
     - mode: 440
-    - source: salt://salt/config.jinja2
+    - source: salt://salt/minion/config.jinja2
   pkg:
     - installed
     {# ^- use to be latest, but 0.12.x is just broken #}
@@ -55,7 +55,7 @@ salt_minion_diamond_resources:
     - user: nagios
     - group: nagios
     - mode: 440
-    - source: salt://salt/nrpe.jinja2
+    - source: salt://salt/minion/nrpe.jinja2
 
 extend:
   nagios-nrpe-server:

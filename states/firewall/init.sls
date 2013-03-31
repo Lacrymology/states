@@ -70,6 +70,9 @@ nf_conntrack_ftp:
 
 /usr/local/bin/check_firewall.py:
   file:
+    - absent
+
+/usr/lib/nagios/plugins/check_firewall.py:
     - managed
     - source: salt://firewall/check.py
     - mode: 550

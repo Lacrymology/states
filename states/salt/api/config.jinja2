@@ -9,7 +9,7 @@
 external_auth:
 {% for auth_type in external_auth %}
   {{ auth_type }}:
- {% for username in external_auth[external_auth] %}
+ {% for username in external_auth[auth_type] %}
     {{ username }}:
       - .*
  {% endfor %}

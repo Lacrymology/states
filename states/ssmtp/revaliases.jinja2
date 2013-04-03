@@ -1,4 +1,4 @@
 # {{ pillar['message_do_not_modify'] }}
-{% for user in salt['user.list_users']() %}
+{% for user in salt['user.list_users']() -%}
 {{ user }}:{{ pillar['smtp']['from'] }}:{{ pillar['smtp']['server'] }}:{{ pillar['smtp']['port'] }}
 {% endfor %}

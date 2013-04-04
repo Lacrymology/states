@@ -1,5 +1,6 @@
 # {{ pillar['message_do_not_modify'] }}
-command[check_openvpn]=/usr/lib/nagios/plugins/check_procs -C openvpn -u root
-{% for instance in instances|default([]) %}
+{% set vpns = instances|default([]) %}
+command[check_openvpn]=/usr/lib/nagios/plugins/check_procs -c {{ vpns|length }}:{{ vpns|length }} -C openvpn -u root
+{% for instance in vpns %}
 command[check_openvpn_{{ instance }}]=/usr/lib/nagios/plugins/check_procs -C openvpn -c 1:1 -a '--config /etc/openvpn/{{ instance }}/config' -u root
 {% endfor %}

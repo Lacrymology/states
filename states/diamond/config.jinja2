@@ -1,4 +1,5 @@
 # {{ pillar['message_do_not_modify'] }}
+{% set diamond = pillar['diamond']|default({}) %}
 [server]
 
 # Handlers for published metrics.
@@ -117,13 +118,14 @@ enabled = True
 enabled = True
 interfaces = eth, tun, tap, lo, vmbr
 
+{% set ping_hosts = diamond['ping']|default({}) %}
+{% if ping_hosts %}
 [[PingCollector]]
 
 enabled = True
 
-{% if 'diamond' in pillar -%}
-{%- for host in pillar['diamond']['ping']|default([]) %}
-target_{{ host }} = {{ pillar['diamond']['ping'][host] }}
+{%- for host in ping_hosts %}
+target_{{ host }} = {{ ping_hosts[host] }}
 {%- endfor -%}
 {%- endif %}
 

@@ -404,15 +404,32 @@ define service {
     use salt-service
 }
 
+{#
+ TODO: If there is more than one broker, don't notify if service goes down.
+ Only consider Shinken-broker-web important.
+ #}
 {% if service == 'broker' %}
 define service {
     host_name {% for host in architecture[service] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description Shinken-broker-web
+    service_description Shinken-broker-web-node
     check_command check_nrpe!check_broker_web
     use salt-service
 }
 {% endif %}
 {% endfor %}
+
+{#
+ There can only be a single one running web node.
+ If there's more than one broker, check that at least one is up to consider.
+ #}
+{% if service == 'arbiter' and architecture['broker']|length > 1 %}
+define service {
+    use salt-service
+    host_name {{ grains['id'] }}
+    service_description Shinken-broker-web
+    check_command bp_rule!({% for host in architecture['broker'] %}{{ host }},Shinken-broker-web-node{% if not loop.last %} | {% endif %}{% if not loop.last %},{% endif %}{% endfor %})
+}
+{% endif %}
 
 {#
  # Backups

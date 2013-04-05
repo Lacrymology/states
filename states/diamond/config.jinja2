@@ -116,7 +116,7 @@ enabled = True
 [[NetworkCollector]]
 
 enabled = True
-interfaces = eth, tun, tap, lo, vmbr
+interfaces = {% for interface in diamond['interfaces']|default('eth', 'lo') %}{{ interface }}{% if not loop.last %}, {% endif %}{% endfor %}
 
 {% set ping_hosts = diamond['ping']|default({}) %}
 {% if ping_hosts %}

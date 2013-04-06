@@ -422,12 +422,12 @@ define service {
  There can only be a single one running web node.
  If there's more than one broker, check that at least one is up to consider.
  #}
-{% if service == 'arbiter' and architecture['broker']|length > 1 %}
+{% if architecture['broker']|length > 1 %}
 define service {
     use salt-service
-    host_name {{ grains['id'] }}
+    host_name {{ architecture['arbiter'][0] }}
     service_description Shinken-broker-web
-    check_command bp_rule!({% for host in architecture['broker'] %}{{ host }},Shinken-broker-web-node{% if not loop.last %} | {% endif %}{% if not loop.last %},{% endif %}{% endfor %})
+    check_command bp_rule!({% for host in architecture['broker'] %}{{ host }},Shinken-broker-web-node{% if not loop.last %} | {% endif %}{% endfor %})
 }
 {% endif %}
 

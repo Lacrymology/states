@@ -89,6 +89,7 @@ postgresql_diamond_collector:
       - pkg: nagios-nrpe-server
     - context:
       deployment: diamond
+      version: {{ version }}
       password: {{ pillar['postgresql']['diamond'] }}
 
 /etc/nagios/nrpe.d/postgresql.cfg:

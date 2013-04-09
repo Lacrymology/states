@@ -16,7 +16,7 @@ class ClusterNodes(nagiosplugin.Resource):
 def main():
     argp = argparse.ArgumentParser(description=__doc__)
     argp.add_argument('-c', '--critical', metavar='VALUE', default='2',
-                      help='critical if number of nodes no in range VALUE')
+                      help='critical if number of nodes not in range VALUE')
     args = argp.parse_args()
     check = nagiosplugin.Check(
         ClusterNodes(),

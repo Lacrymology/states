@@ -122,7 +122,7 @@ interfaces = eth0, lo
 interfaces = {% for interface in diamond['interfaces'] %}{{ interface }}{% if not loop.last %}, {% endif %}{% endfor %}
 {% endif %}
 
-{% for host in ping_hosts -%}
+{% for host in ping_hosts|default({}) -%}
 {%- if loop.first %}
 [[PingCollector]]
 

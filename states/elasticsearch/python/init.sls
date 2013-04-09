@@ -1,5 +1,6 @@
 include:
   - pip
+  - requests
 
 pyelasticsearch:
   file:
@@ -18,5 +19,6 @@ pyelasticsearch:
     - requirements: {{ opts['cachedir'] }}/pyelasticsearch-requirements.txt
     - require:
       - pkg: python-pip
+      - module: requests
     - watch:
       - file: pyelasticsearch

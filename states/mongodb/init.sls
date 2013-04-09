@@ -1,4 +1,3 @@
-{# TODO : Add diamond support #}
 include:
   - nrpe
   - diamond

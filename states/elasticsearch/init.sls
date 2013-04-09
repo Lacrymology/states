@@ -1,3 +1,4 @@
+{# TODO: Diamond + http://www.elasticsearch.org/guide/reference/modules/jmx/ #}
 include:
   - diamond
   - nrpe

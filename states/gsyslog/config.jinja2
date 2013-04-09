@@ -13,15 +13,14 @@ port = 514
 #debug_handler = filter_debug
 
 [loggers]
-keys = root,archive
-#keys = root,archive,filter_debug
+keys = root,archive,syslog_auth,syslog_authpriv
 
 [handlers]
-keys = {% if 'graylog2_address' in pillar %}gelf,{% endif %}logfile
+keys = {% if 'graylog2_address' in pillar %}gelf,{% endif %}logfile,auth
 #keys = gelf,logfile,filter_debug
 
 [formatters]
-keys = detailed,debug,message_only,timed_message
+keys = detailed,debug,message_only,timed_message,syslog
 
 [logger_root]
 level = DEBUG
@@ -38,6 +37,13 @@ qualname = filter_debug
 level = DEBUG
 handlers = filter_debug
 propagate = 0
+
+{% for facility in ('auth', 'authpriv') %}
+[logger_syslog_{{ facility }}]
+qualname = syslog.{{ facility }}
+level = DEBUG
+handlers = gelf,logfile,auth
+{% endfor %}
 
 {%- if 'graylog2_address' in pillar %}
 [handler_gelf]
@@ -59,9 +65,22 @@ level = INFO
 formatter = message_only
 args = ('/var/log/filter.log', 'a', 20000000, 5)
 
+{# rsyslog compatible auth.log #}
+[handler_auth]
+class = handlers.TimedRotatingFileHandler
+level = DEBUG
+formatter = syslog
+args = ('/var/log/auth.log', 'midnight')
+
 [formatter_detailed]
 format = %(realtimestamp)s %(facility)s:%(priority)s %(progname)s[%(pid)d] %(message)s
 datefmt =
+class = logging.Formatter
+
+{# something as close as possible to regular rsyslog output #}
+[formatter_syslog]
+format = %(asctime)-15s dev %(progname)s[%(pid)d]: %(message)s
+datefmt = %b %d %H:%M:%S
 class = logging.Formatter
 
 [formatter_timed_message]

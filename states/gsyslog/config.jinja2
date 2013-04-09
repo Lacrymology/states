@@ -42,7 +42,7 @@ propagate = 0
 [logger_syslog_{{ facility }}]
 qualname = syslog.{{ facility }}
 level = DEBUG
-handlers = gelf,logfile,auth
+handlers = auth
 {% endfor %}
 
 {%- if 'graylog2_address' in pillar %}

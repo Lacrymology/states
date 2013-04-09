@@ -318,12 +318,14 @@ define service {
 {#
  # graylog2
  #}
+{% for service in ('server', 'logs') %}
 define service {
     host_name {% for host in graylog2 %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description graylog2-server
-    check_command check_nrpe!check_graylog2_server
+    service_description graylog2-{{ service }}
+    check_command check_nrpe!check_graylog2_{{ service }}
     use salt-service
 }
+{% endfor %}
 
 {% for service in ('master', 'worker', 'http') %}
 define service {

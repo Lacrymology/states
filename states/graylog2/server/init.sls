@@ -3,6 +3,7 @@ include:
   - nrpe
   - diamond
   - mongodb
+  - elasticsearch.python
 
 {# TODO: set Email output plugin settings straight into MongoDB from salt #}
 
@@ -91,6 +92,14 @@ graylog2-server:
     - require:
       - file: /var/log/graylog2
       - service: mongodb
+
+/usr/lib/nagios/plugins/check_new_logs.py:
+  file:
+    - managed
+    - source: salt://graylog2/server/check.py
+    - mode: 555
+    - require:
+      - module: nagiosplugin
 
 graylog2_email_output_plugin:
   cmd:

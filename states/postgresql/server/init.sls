@@ -1,5 +1,4 @@
-{# TODO: configure syslog logging only #}
-
+{# TODO: setup SSL #}
 include:
   - diamond
   - postgresql
@@ -20,11 +19,36 @@ postgresql-server:
       - postgresql-client-{{ version }}
     - require:
       - apt_repository: postgresql-dev
+  file:
+    - managed
+    - name: /etc/postgresql/{{ version }}/main/postgresql.conf
+    - source: salt://postgresql/server/config.jinja2
+    - user: postgres
+    - group: postgres
+    - mode: 440
+    - template: jinja
+    - require:
+      - pkg: postgresql-server
+    - context:
+      version: {{ version }}
   service:
     - running
     - enable: True
     - name: postgresql
     - watch:
+      - pkg: postgresql-server
+      - file: postgresql-server
+
+/etc/logrotate.d/postgresql-common:
+  file:
+    - absent
+    - require:
+      - pkg: postgresql-server
+
+/var/log/postgresql/postgresql-{{ version }}-main.log:
+  file:
+    - absent
+    - require:
       - pkg: postgresql-server
 
 diamond_collector-psycopg2:

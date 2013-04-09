@@ -79,7 +79,7 @@ class = logging.Formatter
 
 {# something as close as possible to regular rsyslog output #}
 [formatter_syslog]
-format = %(asctime)-15s dev %(progname)s[%(pid)d]: %(message)s
+format = %(asctime)-15s {{ grains['id'] }} %(progname)s[%(pid)d]: %(message)s
 datefmt = %b %d %H:%M:%S
 class = logging.Formatter
 

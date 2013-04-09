@@ -2,27 +2,32 @@
 
 include:
   - pip
-  - mercurial
   - gsyslog
   - diamond
 
+/usr/local/nagiosplugin:
+  file:
+    - absent
+
 nagiosplugin:
-  hg:
-    - latest
-    - name: https://bitbucket.org/gocept/nagiosplugin
-    - rev: e19416f378f72de7acd6d88068562cef2b4f7119
-    - target: /usr/local/nagiosplugin
-    - require:
-      - pkg: mercurial
+  file:
+    - managed
+    - name: {{ opts['cachedir'] }}/nagiosplugin-requirements.txt
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - source: salt://nrpe/requirements.jinja2
   module:
     - wait
     - name: pip.install
-    - pkgs: /usr/local/nagiosplugin
+    - pkgs: ''
     - upgrade: True
+    - requirements: {{ opts['cachedir'] }}/nagiosplugin-requirements.txt
     - require:
       - pkg: python-pip
     - watch:
-      - hg: nagiosplugin
+      - file: nagiosplugin
 
 nagios-nrpe-server:
   pkg:

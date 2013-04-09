@@ -127,7 +127,7 @@ elasticsearch_diamond_resources:
     - source: salt://elasticsearch/check.py
     - mode: 555
     - require:
-      - module: nagiosplugin
+      - pip: nagiosplugin
       - module: requests
 
 elasticsearch_diamond_collector:

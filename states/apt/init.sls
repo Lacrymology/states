@@ -57,7 +57,7 @@ apt_cleanup:
     - source: salt://apt/check.py
     - mode: 555
     - require:
-      - module: nagiosplugin
+      - pip: nagiosplugin
 
 /etc/nagios/nrpe.d/apt.cfg:
   file:

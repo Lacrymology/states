@@ -60,7 +60,7 @@ temp_buffers = {{ pillar['postgresql']['temp_buffers']|default('8MB') }}
 #}
 
 log_destination = 'syslog'
-syslog_facility = 'daemon'
+syslog_facility = 'local0'
 syslog_ident = 'postgres'
 client_min_messages = notice
 log_min_messages = warning

@@ -68,6 +68,10 @@ diamond:
     - source: salt://diamond/config.jinja2
     - require:
       - virtualenv: diamond
+{% if 'ping' in pillar['diamond'] %}
+    - context:
+      ping_hosts: {{ diamond['ping'] }}
+{% endif %}
   service:
     - running
     - enable: True

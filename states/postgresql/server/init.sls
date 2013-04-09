@@ -11,7 +11,7 @@ include:
   file:
     - absent
 
-postgresql-server:
+postgresql:
   pkg:
     - latest
     - names:
@@ -28,7 +28,7 @@ postgresql-server:
     - mode: 440
     - template: jinja
     - require:
-      - pkg: postgresql-server
+      - pkg: postgresql
     - context:
       version: {{ version }}
   service:
@@ -36,20 +36,20 @@ postgresql-server:
     - enable: True
     - name: postgresql
     - watch:
-      - pkg: postgresql-server
-      - file: postgresql-server
+      - pkg: postgresql
+      - file: postgresql
 
 /etc/logrotate.d/postgresql-common:
   file:
     - absent
     - require:
-      - pkg: postgresql-server
+      - pkg: postgresql
 
 /var/log/postgresql/postgresql-{{ version }}-main.log:
   file:
     - absent
     - require:
-      - pkg: postgresql-server
+      - pkg: postgresql
 
 diamond_collector-psycopg2:
   file:

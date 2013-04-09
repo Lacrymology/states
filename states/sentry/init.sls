@@ -60,7 +60,7 @@ sentry:
     - password: {{ pillar['sentry']['db']['password'] }}
     - runas: postgres
     - require:
-      - service: postgresql-server
+      - service: postgresql
   postgres_database:
     - present
     - name: {{ pillar['sentry']['db']['name'] }}
@@ -68,7 +68,7 @@ sentry:
     - runas: postgres
     - require:
       - postgres_user: sentry
-      - service: postgresql-server
+      - service: postgresql
 
 sentry_settings:
   file:

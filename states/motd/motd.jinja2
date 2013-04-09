@@ -1,6 +1,4 @@
 Welcome to host {{ grains['id'] }}:
- - Architecture: {{ grains['cpuarch'] }}
- - OS: {{ grains['lsb_description'] }}
  - CPU: {{ grains['num_cpus'] }}
  - Memory: {{ grains['mem_total'] }} Mb
 {%- if 'availabilityZone' in grains %}

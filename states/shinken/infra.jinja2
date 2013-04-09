@@ -379,6 +379,18 @@ define service {
 {% endfor %}
 
 {#
+ # Denyhosts
+ #}
+{% if denyhosts|default(False) %}
+define service {
+    host_name {% for host in denyhosts|default([]) %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description denyhosts
+    check_command check_nrpe!check_denyhosts
+    use salt-service
+}
+{% endif %}
+
+{#
  # Shinken monitoring itself
  #}
 {% set listen_port = {

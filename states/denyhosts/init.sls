@@ -54,7 +54,7 @@ extend:
       - watch:
         - file: /etc/nagios/nrpe.d/denyhosts.cfg
 
-{% for file in ('/etc/logrotate.d/denyhosts', '/var/log/denyhosts' %}
+{% for file in ('/etc/logrotate.d/denyhosts', '/var/log/denyhosts') %}
 {{ file }}:
   file:
     - absent

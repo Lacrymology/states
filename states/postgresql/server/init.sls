@@ -42,7 +42,7 @@ postgresql:
       - file: postgresql
 {% if pillar['postgresql']['ssl']|default(False) %}
     {% for filename in ('chained_ca.crt', 'server.pem', 'ca.crt') %}
-        - file: /etc/ssl/{{ pillar['postgresql']['ssl'] }}/{{ filename }}
+      - file: /etc/ssl/{{ pillar['postgresql']['ssl'] }}/{{ filename }}
     {% endfor %}
 {% endif %}
 

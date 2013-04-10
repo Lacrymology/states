@@ -138,7 +138,7 @@ shinken-{{ role }}:
       - file: shinken-{{ role }}
 {% if pillar['shinken']['ssl']|default(False) %}
     {% for filename in ssl_files %}
-        - file: /etc/ssl/{{ pillar['shinken']['ssl'] }}/{{ filename }}
+      - file: /etc/ssl/{{ pillar['shinken']['ssl'] }}/{{ filename }}
     {% endfor %}
 {% endif %}
 {% if role == 'arbiter' %}

@@ -1,5 +1,4 @@
 {# TODO: add support for GELF logging #}
-
 include:
   - virtualenv
   - nrpe
@@ -12,6 +11,7 @@ include:
   - nginx
 {% endif %}
 
+{% set ssl_files = ('chained_ca.crt', 'server.pem', 'ca.crt') %}
 {#{% if 'arbiter' in pillar['shinken']['roles'] %}#}
 {#    {% if pillar['shinken']['arbiter']['use_mongodb'] %}#}
 {#  - mongodb#}
@@ -50,18 +50,6 @@ include:
     - mode: 550
     - require:
       - user: shinken
-
-{% if pillar['shinken']['ssl']|default(False) and grains['id'] in pillar['shinken']['architecture']['broker']|default([]) %}
-{% for key_file in pillar['shinken']['ssl'] %}
-/usr/local/shinken/{{ key_file }}:
-  file:
-    - managed
-    - source: {{ pillar['shinken']['ssl'][key_file] }}
-    - user: www-data
-    - group: www-data
-    - mode: 440
-{% endfor %}
-{% endif %}
 
 shinken:
   virtualenv:
@@ -148,6 +136,11 @@ shinken-{{ role }}:
       - module: shinken
       - file: /etc/init/shinken-{{ role }}.conf
       - file: shinken-{{ role }}
+{% if pillar['shinken']['ssl']|default(False) %}
+    {% for filename in ssl_files %}
+        - file: /etc/ssl/{{ pillar['shinken']['ssl'] }}/{{ filename }}
+    {% endfor %}
+{% endif %}
 {% if role == 'arbiter' %}
     {% for config in configs %}
       - file: /etc/shinken/{{ config }}.conf
@@ -230,7 +223,7 @@ extend:
       - watch:
         - file: /etc/nginx/conf.d/shinken-web.conf
 {% if pillar['shinken']['ssl']|default(False) %}
-    {% for filename in ('server.key', 'server.crt', 'ca.crt') %}
+    {% for filename in ssl_files %}
         - file: /etc/ssl/{{ pillar['shinken']['ssl'] }}/{{ filename }}
     {% endfor %}
 {% endif %}

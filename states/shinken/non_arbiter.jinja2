@@ -18,9 +18,12 @@ daemon_enabled=1
 {#maxfd=1024#}
 idontcareaboutsecurity=0
 
+{% if pillar['shinken']['ssl']|default(False) %}
+use_ssl=1
+certs_dir=/etc/ssl/{{ pillar['shinken']['ssl'] }}
+ca_cert=/etc/ssl/{{ pillar['shinken']['ssl'] }}/chained_ca.crt
+server_cert=/etc/ssl/{{ pillar['shinken']['ssl'] }}/server.pem
+#hard_ssl_name_check=0
+{% else %}
 use_ssl=0
-{#certs_dir=etc/certs#}
-{#ca_cert=etc/certs/ca.pem#}
-{#server_cert=etc/certs/server.pem#}
-{#hard_ssl_name_check=0#}
-
+{% endif %}

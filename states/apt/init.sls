@@ -8,6 +8,7 @@ include:
     - user: root
     - group: root
     - mode: 444
+    - template: jinja
 
 debconf-utils:
   pkg:

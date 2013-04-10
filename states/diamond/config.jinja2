@@ -129,7 +129,7 @@ interfaces = {% for interface in diamond['interfaces'] %}{{ interface }}{% if no
 enabled = True
 {% endif %}
 target_{{ host }} = {{ ping_hosts[host] }}
-{%- endfor -%}
+{%- endfor %}
 
 [[ProcessStatCollector]]
 

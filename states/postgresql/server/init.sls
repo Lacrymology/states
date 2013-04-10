@@ -1,9 +1,11 @@
-{# TODO: setup SSL #}
 include:
   - diamond
   - postgresql
   - nrpe
   - pip
+{% if pillar['postgresql']['ssl']|default(False) %}
+  - ssl
+{% endif %}
 
 {% set version="9.2" %}
 
@@ -38,6 +40,11 @@ postgresql:
     - watch:
       - pkg: postgresql
       - file: postgresql
+{% if pillar['postgresql']['ssl']|default(False) %}
+    {% for filename in ('chained_ca.crt', 'server.pem', 'ca.crt') %}
+        - file: /etc/ssl/{{ pillar['postgresql']['ssl'] }}/{{ filename }}
+    {% endfor %}
+{% endif %}
 
 /etc/logrotate.d/postgresql-common:
   file:

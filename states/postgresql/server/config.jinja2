@@ -37,13 +37,17 @@ max_connections = {{ pillar['postgresql']['listen_addresses']|default(100) }}
 {# force bonjour to be off #}
 bonjour = off
 {#authentication_timeout = 1min#}
-ssl = false
-{#
-ssl_ciphers = 'ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH'
+
+{% if pillar['postgresql']['ssl']|default(False) %}
+ssl = true
 ssl_renegotiation_limit = 512MB
-ssl_cert_file = '/etc/ssl/certs/ssl-cert-snakeoil.pem'
-ssl_key_file = '/etc/ssl/private/ssl-cert-snakeoil.key'
-#}
+ssl_ciphers = 'RC4:HIGH:!aNULL:!MD5'
+ssl_cert_file = '/etc/ssl/{{ pillar['postgresql']['ssl'] }}/chained_ca.crt'
+ssl_certificate_key = ' /etc/ssl/{{ pillar['postgresql']['ssl'] }}/server.pem'
+{% else %}
+ssl = false
+{% endif %}
+
 {# TCP Keepalives: use all system default #}
 tcp_keepalives_idle = 0
 tcp_keepalives_interval = 0

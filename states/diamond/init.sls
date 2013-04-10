@@ -70,7 +70,7 @@ diamond:
       - virtualenv: diamond
 {% if 'ping' in pillar['diamond'] %}
     - context:
-      ping_hosts: {{ diamond['ping'] }}
+      ping_hosts: {{ pillar['diamond']['ping'] }}
 {% endif %}
   service:
     - running

@@ -31,6 +31,8 @@
    Default: Google DNS server.
 #}
 
+{# cache directory is dynamically created from hostnames, http port and https
+   ports arguments #}
 {% if cache_size|default(False) %}
 proxy_cache_path /var/cache/nginx/{{ hostnames[0] }}_{{ http_port|default(80) }}_{{ ssl|default('') }} levels=2:2:2 keys_zone=cache_{{ hostnames[0] }}_{{ http_port|default(80) }}_{{ ssl|default('') }}:{{ cache_size }} inactive={{ cache_inactive|default('10m') }} max_size={{ cache_size }};
 {% eneif %}

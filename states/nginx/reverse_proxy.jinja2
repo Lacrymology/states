@@ -1,8 +1,34 @@
 # {{ pillar['message_do_not_modify'] }}
 {#
- A generic purpose HTTP/HTTPS reverse proxy template.
- It's not currently used by nginx state, but it can be used by other state
- to redirect traffic to specified IP and port.
+ A generic purpose HTTP/HTTPS proxy template.
+ It's not currently used by Nginx state, but it can be used by other state.
+
+ Arguments:
+
+ - cache_size: Size of cache on disk.
+   Default: No cache
+   Check here http://nginx.org/en/docs/syntax.html for size format.
+ - hostnames: list of hostname bind to this virtual host
+   Default: No default it's REQUIRED.
+ - allowed: list of allowed hosts/network in CIDR format:
+            http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing
+   Default: empty list, so nothing is blocked.
+   If allowed list is empty and destination is forward proxy, only 127.0.0.1/32
+    is allowed.
+ - destination: Upstream peer.
+   Default: act as a forward proxy (like default Squid behaviour).
+   Value should be http://1.2.3.4 or http://5.6.7.8:1011 format.
+   If this is not defined and it's a forward proxy, the allowed argument must be
+   set for obvious security reasons. Unless that, only 127.0.0.1/32 is allowed.
+ - http_port: which port the server listen on.
+   Default: 80
+ - ssl: SSL key pair name. See ssl state for more details.
+   Default: None
+ - https_port: which port the HTTPS server listen on.
+   Default: 443
+   This is ignored if ssl argument is not used.
+ - dns_server: a single IP of a DNS server.
+   Default: Google DNS server.
 #}
 
 {% if cache_size|default(False) %}
@@ -33,11 +59,19 @@ server {
         resolver_timeout 5s;
         proxy_cache STATIC;
 {% endif %}
-        proxy_pass {{ destination_protocol|default('http') }}://{{ destination_ip }}:{{ destination_port|default(80) }};
+        proxy_pass {{ destination|default('$scheme://$http_host$uri$is_args$args') }};
         proxy_set_header X-Real-IP $remote_addr;
 {% for source in allowed|default([]) %}
         allow {{ source }};
     {% if loop.last %}
+        deny all;
+    {% endif %}
+{% else -%}
+    {#
+     If there is now allowed network/hosts and this is a forward proxy
+     #}
+    {%- if not destination|default(False) %}
+        allow 127.0.0.1/32;
         deny all;
     {% endif %}
 {% endfor %}

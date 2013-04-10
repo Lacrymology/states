@@ -116,8 +116,7 @@ elasticsearch:
     - mode: 400
     - source: salt://nginx/reverse_proxy.jinja2
     - context:
-      destination_ip: 127.0.0.1
-      destination_port: 9200
+      destination: http://127.0.0.1:9200
       http_port: False
       ssl: {{ pillar['elasticsearch']['ssl']|default(False) }}
       hostnames: {{ pillar['elasticsearch']['hostnames'] }}

@@ -1,8 +1,20 @@
 {# TODO: Diamond + http://www.elasticsearch.org/guide/reference/modules/jmx/ #}
+{#
+ Elasticsearch State
+
+ Elasticsearch don't support HTTP over SSL/HTTPS.
+ The only way to secure access to admin interface over HTTPS is to proxy
+ a SSL frontend in front of Elasticsearch HTTP interface.
+ This is why nginx is used if SSL is in pillar.
+ #}
 include:
   - diamond
   - nrpe
   - requests
+{% if pillar['elasticsearch']['ssl']|default(False) %}
+  - ssl
+  - nginx
+{% endif %}
 {% set version = '0.20.5'%}
 {% set checksum = 'md5=e244c5a39515983ba81006a3186843f4' %}
 
@@ -94,6 +106,23 @@ elasticsearch:
       - elasticsearch_plugins: elasticsearch
 {% endif %}
 
+{% if pillar['elasticsearch']['ssl']|default(False) %}
+/etc/nginx/conf.d/elasticsearch.conf:
+  file:
+    - managed
+    - template: jinja
+    - user: www-data
+    - group: www-data
+    - mode: 400
+    - source: salt://nginx/reverse_proxy.jinja2
+    - context:
+      destination_ip: 127.0.0.1
+      destination_port: 9200
+      http_port: False
+      ssl: {{ pillar['elasticsearch']['ssl']|default(False) }}
+      hostnames: {{ pillar['elasticsearch']['hostnames'] }}
+{% endif %}
+
 elasticsearch_diamond_resources:
   file:
     - accumulated
@@ -149,3 +178,12 @@ extend:
     service:
       - watch:
         - file: /etc/nagios/nrpe.d/elasticsearch.cfg
+{% if pillar['elasticsearch']['ssl']|default(False) %}
+  nginx:
+    service:
+      - watch:
+        - file: /etc/nginx/conf.d/elasticsearch.conf
+    {% for filename in ('chained_ca.crt', 'server.pem', 'ca.crt') %}
+        - file: /etc/ssl/{{ pillar['rabbitmq']['ssl'] }}/{{ filename }}
+    {% endfor %}
+{% endif %}

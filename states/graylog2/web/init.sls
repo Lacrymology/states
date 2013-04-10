@@ -187,7 +187,7 @@ extend:
       - watch:
         - file: /etc/nginx/conf.d/graylog2-web.conf
 {% if pillar['graylog2']['ssl']|default(False) %}
-    {% for filename in ('server.key', 'server.crt', 'ca.crt') %}
+    {% for filename in ('chained_ca.crt', 'server.pem', 'ca.crt') %}
         - file: /etc/ssl/{{ pillar['graylog2']['ssl'] }}/{{ filename }}
     {% endfor %}
 {% endif %}

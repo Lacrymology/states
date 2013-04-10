@@ -120,7 +120,7 @@ extend:
       - watch:
         - file: salt-ui
 {% if pillar['salt_master']['ssl']|default(False) %}
-    {% for filename in ('server.key', 'server.crt', 'ca.crt') %}
+    {% for filename in ('chained_ca.crt', 'server.pem', 'ca.crt') %}
         - file: /etc/ssl/{{ pillar['salt_master']['ssl'] }}/{{ filename }}
     {% endfor %}
 {% endif %}

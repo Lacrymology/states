@@ -222,7 +222,7 @@ extend:
       - watch:
         - file: /etc/nginx/conf.d/sentry.conf
 {% if pillar['sentry']['ssl']|default(False) %}
-    {% for filename in ('server.key', 'server.crt', 'ca.crt') %}
+    {% for filename in ('chained_ca.crt', 'server.pem', 'ca.crt') %}
         - file: /etc/ssl/{{ pillar['sentry']['ssl'] }}/{{ filename }}
     {% endfor %}
 {% endif %}

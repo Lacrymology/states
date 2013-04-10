@@ -5,6 +5,10 @@
  to redirect traffic to specified IP and port.
 #}
 
+{% if cache_size|default(False) %}
+proxy_cache_path /var/cache/nginx levels=2:2:2 keys_zone=STATIC:{{ cache_size }} inactive={{ cache_inactive|default('10m') }} max_size={{ cache_size }};
+{% eneif %}
+
 server {
 {% if http_port|default(80) %}
     listen {{ http_port|default(80) }};
@@ -19,9 +23,23 @@ server {
     ssl_session_cache shared:SSL:10m;
     ssl_session_timeout 10m;
 {% endif %}
+
     server_name {% for hostname in hostnames %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+
     location / {
+{% if cache_size|default(False) %}
+        {# default: Google DNS #}
+        resolver {{ dns_server|default('8.8.8.8') }};
+        resolver_timeout 5s;
+        proxy_cache STATIC;
+{% endif %}
         proxy_pass {{ destination_protocol|default('http') }}://{{ destination_ip }}:{{ destination_port|default(80) }};
         proxy_set_header X-Real-IP $remote_addr;
+{% for source in allowed|default([]) %}
+        allow {{ source }};
+    {% if loop.last %}
+        deny all;
+    {% endif %}
+{% endfor %}
     }
 }

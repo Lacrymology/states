@@ -1,7 +1,7 @@
 # {{ pillar['message_do_not_modify'] }}
 
-user  www-data www-data;
-worker_processes  1;
+user www-data www-data;
+worker_processes 1;
 
 error_log /var/log/nginx/error.fifo warn;
 pid /var/run/nginx.pid;
@@ -13,7 +13,7 @@ events {
 
 http {
     include /etc/nginx/mime.types;
-    default_type  application/octet-stream;
+    default_type application/octet-stream;
     log_format main '{{ pillar['nginx']['log_format']|default('$scheme://$host:$server_port$uri$is_args$args $remote_addr:$remote_user "$request" $request_time $request_length:$bytes_sent $status "$http_referer" "$http_user_agent" "$http_x_forwarded_for"') }}';
     access_log /var/log/nginx/access.fifo main;
     sendfile on;

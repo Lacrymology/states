@@ -1,0 +1,25 @@
+# {{ pillar['message_do_not_modify'] }}
+{#
+ A generic purpose HTTP/HTTPS reverse proxy template.
+ It's not currently used by nginx state, but it can be used by other state
+ to redirect traffic to specified IP and port.
+#}
+
+server {
+    listen 80;
+{% if ssl|default(False) %}
+    listen 443 ssl;
+    ssl_certificate /etc/ssl/{{ ssl }}/chained_ca.crt;
+    ssl_certificate_key /etc/ssl/{{ ssl }}/server.pem;
+    ssl_client_certificate /etc/ssl/{{ ssl }}/ca.crt;
+    ssl_ciphers RC4:HIGH:!aNULL:!MD5;
+    ssl_prefer_server_ciphers on;
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout 10m;
+{% endif %}
+    server_name {% for hostname in hostnames %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+    location / {
+        proxy_pass http://{{ destination_ip }}:{{ destination_port|default(80) }};
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}

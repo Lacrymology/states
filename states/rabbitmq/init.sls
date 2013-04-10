@@ -205,8 +205,12 @@ host_{{ node }}:
     - user: www-data
     - group: www-data
     - mode: 400
-    - source: salt://rabbitmq/nginx.jinja2
-    - context: {{ pillar['rabbitmq'] }}
+    - source: salt://nginx/reverse_proxy.jinja2
+    - context:
+      destination_ip: 127.0.0.1
+      destination_port: 15672
+      ssl: {{ pillar['rabbitmq']['ssl']|default(False) }}
+      hostnames: {{ pillar['rabbitmq']['hostnames'] }}
 {% endif %}
 
 /etc/nagios/nrpe.d/rabbitmq.cfg:

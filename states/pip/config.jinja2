@@ -2,3 +2,6 @@
 [global]
 
 download-cache = /var/cache/pip
+{% if pillar['proxy_server']|default(False) %}
+proxy = {{ pillar['proxy_server'] }}
+{% endif %}

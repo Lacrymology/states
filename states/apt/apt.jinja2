@@ -1,2 +1,5 @@
 # {{ pillar['message_do_not_modify'] }}
 APT::Install-Recommends "0";
+{% if pillar['proxy_server']|default(False) %}
+Acquire::http::Proxy "http://{{ pillar['proxy_server'] }}";
+{% endif %}

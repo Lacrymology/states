@@ -1,3 +1,9 @@
+{#
+ MongoDB state.
+
+ If one day MongoDB support SSL in free distribution, do this:
+ http://docs.mongodb.org/manual/tutorial/configure-ssl/
+ #}
 include:
   - nrpe
   - diamond

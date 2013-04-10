@@ -32,7 +32,7 @@
 #}
 
 {% if cache_size|default(False) %}
-proxy_cache_path /var/cache/nginx levels=2:2:2 keys_zone=STATIC:{{ cache_size }} inactive={{ cache_inactive|default('10m') }} max_size={{ cache_size }};
+proxy_cache_path /var/cache/nginx/{{ hostnames[0] }}_{{ http_port|default(80) }}_{{ ssl|default('') }} levels=2:2:2 keys_zone=cache_{{ hostnames[0] }}_{{ http_port|default(80) }}_{{ ssl|default('') }}:{{ cache_size }} inactive={{ cache_inactive|default('10m') }} max_size={{ cache_size }};
 {% eneif %}
 
 server {
@@ -57,7 +57,7 @@ server {
         {# default: Google DNS #}
         resolver {{ dns_server|default('8.8.8.8') }};
         resolver_timeout 5s;
-        proxy_cache STATIC;
+        proxy_cache cache_{{ hostnames[0] }}_{{ http_port|default(80) }}_{{ ssl|default('') }};
 {% endif %}
         proxy_pass {{ destination|default('$scheme://$http_host$uri$is_args$args') }};
         proxy_set_header X-Real-IP $remote_addr;

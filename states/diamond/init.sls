@@ -101,28 +101,6 @@ diamond:
       - file: /etc/diamond/collectors
       - file: /etc/diamond/collectors/ProcessMemoryCollector.conf
 
-{#
-archive of installation trough debian package
-
-diamond:
-  pkg:
-    - installed
-  file.managed:
-    - name: /etc/diamond/diamond.conf
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 644
-    - source: salt://diamond/config.jinja2
-    - require:
-      - pkg: diamond
-  service:
-    - running
-    - watch:
-      - pkg: diamond
-      - file: /etc/diamond/diamond.conf
-#}
-
 /etc/nagios/nrpe.d/diamond.cfg:
   file:
     - managed

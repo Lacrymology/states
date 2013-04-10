@@ -4,7 +4,8 @@ include:
 
 {% for filename in ('default', 'example_ssl') %}
 /etc/nginx/conf.d/{{ filename }}.conf:
-  file.absent
+  file:
+    - absent
 {% endfor %}
 
 /etc/nagios/nrpe.d/nginx.cfg:
@@ -63,7 +64,8 @@ nginx-old-init-disable:
 
 {% for log_type in logger_types %}
 /var/log/nginx/{{ log_type }}.log:
-  file.absent
+  file:
+    - absent
 
 nginx-logger-{{ log_type }}:
   file:

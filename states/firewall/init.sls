@@ -22,7 +22,8 @@ iptables-persistent:
       - debconf: iptables-persistent
 
 /etc/network/iptables.conf:
-  file.absent
+  file:
+    - absent
 
 iptables:
   file:

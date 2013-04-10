@@ -1,5 +1,6 @@
 old_ruby:
-  pkg.purged:
+  pkg:
+    - purged
     - names:
       - ruby1.8 
       - rubygems
@@ -10,7 +11,8 @@ old_ruby:
       - ruby1.8-dev
 
 ruby:
-  pkg.installed:
+  pkg:
+    - installed
     - names:
       - ruby1.9.3
       - ruby1.9.1-dev 

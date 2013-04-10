@@ -8,6 +8,8 @@
  - cache_size: Size of cache on disk.
    Default: No cache
    Check here http://nginx.org/en/docs/syntax.html for size format.
+ - aggressive_cache: Turn on some settings to be sure content is cached on disk.
+   Default: Not used
  - hostnames: list of hostname bind to this virtual host
    Default: No default it's REQUIRED.
  - allowed: list of allowed hosts/network in CIDR format:
@@ -34,7 +36,7 @@
 {# cache directory is dynamically created from hostnames, http port and https
    ports arguments #}
 {% if cache_size|default(False) %}
-proxy_cache_path /var/cache/nginx/{{ hostnames[0] }}_{{ http_port|default(80) }}_{{ ssl|default('') }} levels=2:2:2 keys_zone=cache_{{ hostnames[0] }}_{{ http_port|default(80) }}_{{ ssl|default('') }}:{{ cache_size }} inactive={{ cache_inactive|default('10m') }} max_size={{ cache_size }};
+proxy_cache_path /var/cache/nginx/{{ hostnames[0] }}_{{ http_port|default(80) }}_{{ ssl|default('') }} levels=2:2:2 keys_zone=cache_{{ hostnames[0] }}_{{ http_port|default(80) }}_{{ ssl|default('') }}:1M inactive=1y max_size={{ cache_size }};
 {% endif %}
 
 server {
@@ -60,10 +62,21 @@ server {
         resolver {{ dns_server|default('8.8.8.8') }};
         resolver_timeout 5s;
         proxy_cache cache_{{ hostnames[0] }}_{{ http_port|default(80) }}_{{ ssl|default('') }};
+        proxy_temp_file_write_size {{ cache_size }};
+    {% if aggressive_cache|default(False) %}
+        proxy_cache_use_stale error timeout invalid_header updating http_500 http_502 http_503 http_504 http_404;
+        {# proxy_cache_valid 200 302 1d; #}
+        proxy_cookie_domain off;
+        proxy_cookie_path off;
+        proxy_http_version 1.1;
+        proxy_ignore_client_abort on;
+        proxy_ignore_headers X-Accel-Redirect X-Accel-Expires X-Accel-Limit-Rate X-Accel-Buffering X-Accel-Charset Expires Cache-Control Set-Cookie;
+        proxy_pass_request_headers off;
+    {% endif %}
 {% endif %}
         proxy_pass {{ destination|default('$scheme://$http_host$uri$is_args$args') }};
         proxy_set_header X-Real-IP $remote_addr;
-{% for source in allowed|default([]) %}
+{% for source in allowed|default([]) -%}
         allow {{ source }};
     {% if loop.last %}
         deny all;
@@ -75,7 +88,7 @@ server {
     {%- if not destination|default(False) %}
         allow 127.0.0.1/32;
         deny all;
-    {% endif %}
-{% endfor %}
+    {% endif -%}
+{%- endfor %}
     }
 }

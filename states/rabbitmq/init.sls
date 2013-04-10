@@ -1,5 +1,5 @@
 {# TODO: configure logging to GELF #}
-{# TODO: add HTTPS support #}
+{# TODO: SSL support http://www.rabbitmq.com/ssl.html #}
 {#
  # to properly use this state, the user monitor need to be changed
  # in WebUI to grant read access across all vhost.
@@ -16,7 +16,10 @@ include:
   - nrpe
   - pip
   - hostname
-{% if pillar['rabbitmq']['management'] != 'guest' %}
+{% if pillar['rabbitmq']['management'] != 'guest' -%}
+  {%- if pillar['rabbitmq']['ssl']|default(False) %}
+  - ssl
+  {%- endif %}
   - nginx
 {% endif %}
 
@@ -238,4 +241,9 @@ extend:
     service:
       - watch:
         - file: /etc/nginx/conf.d/rabbitmq.conf
+  {% if pillar['rabbitmq']['ssl']|default(False) %}
+    {% for filename in ('chained_ca.crt', 'server.pem', 'ca.crt') %}
+        - file: /etc/ssl/{{ pillar['rabbitmq']['ssl'] }}/{{ filename }}
+    {% endfor %}
+  {% endif %}
 {% endif %}

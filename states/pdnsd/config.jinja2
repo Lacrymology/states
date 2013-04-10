@@ -1,15 +1,15 @@
 // {{ pillar['message_do_not_modify'] }}
 
 global {
-	perm_cache = 2048;
-	cache_dir = "/var/cache/pdnsd";
-	run_as = "pdnsd";
-	server_ip = {{ ip_address|default("0.0.0.0") }};
-	status_ctl = {% if dns_server == 'resolv.conf' %}on{% else %}off{% endif %};
-  	paranoid = on;
-	min_ttl = {{ minimum_ttl|default(900) }};
-	max_ttl = {{ maximum_ttl|default(604800) }};
-	timeout = 10;
+    perm_cache = 2048;
+    cache_dir = "/var/cache/pdnsd";
+    run_as = "pdnsd";
+    server_ip = {{ ip_address|default("0.0.0.0") }};
+    status_ctl = {% if dns_server == 'resolv.conf' %}on{% else %}off{% endif %};
+    paranoid = on;
+    min_ttl = {{ minimum_ttl|default(900) }};
+    max_ttl = {{ maximum_ttl|default(604800) }};
+    timeout = 10;
     {#
     Don't enable if you don't recurse yourself, can lead to problems
     delegation_only="com","net";
@@ -19,15 +19,15 @@ global {
 server {
     label="{{ dns_server }}";
 {% if dns_server != 'resolv.conf' %}
-	root_server=on;
-	ip = {{ dns_server }};
-	timeout = 5;
-	uptest = query;
-	interval = 30m;
-	ping_timeout = 300;
-	purge_cache = off;
-	exclude = .localdomain;
-	policy = included;
-	preset = off;
+    root_server=on;
+    ip = {{ dns_server }};
+    timeout = 5;
+    uptest = query;
+    interval = 30m;
+    ping_timeout = 300;
+    purge_cache = off;
+    exclude = .localdomain;
+    policy = included;
+    preset = off;
 {% endif %}
 }

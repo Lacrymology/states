@@ -65,7 +65,7 @@ nf_conntrack_ftp:
     - user: root
     - group: root
     - require:
-      - pip: nagiosplugin
+      - module: nagiosplugin
       - pkg: sudo
 
 /usr/local/bin/check_firewall.py:
@@ -80,7 +80,7 @@ nf_conntrack_ftp:
     - user: root
     - group: root
     - require:
-      - pip: nagiosplugin
+      - module: nagiosplugin
       - file: /etc/sudoers.d/nrpe_firewall
 
 /etc/gsyslog.d/firewall.conf:

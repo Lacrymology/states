@@ -6,9 +6,11 @@
 #}
 
 server {
-    listen 80;
+{% if http_port|default(80) %}
+    listen {{ http_port|default(80) }};
+{% endif %}
 {% if ssl|default(False) %}
-    listen 443 ssl;
+    listen {{ https_port|default(443) }} ssl;
     ssl_certificate /etc/ssl/{{ ssl }}/chained_ca.crt;
     ssl_certificate_key /etc/ssl/{{ ssl }}/server.pem;
     ssl_client_certificate /etc/ssl/{{ ssl }}/ca.crt;
@@ -19,7 +21,7 @@ server {
 {% endif %}
     server_name {% for hostname in hostnames %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
     location / {
-        proxy_pass http://{{ destination_ip }}:{{ destination_port|default(80) }};
+        proxy_pass {{ destination_protocol|default('http') }}://{{ destination_ip }}:{{ destination_port|default(80) }};
         proxy_set_header X-Real-IP $remote_addr;
     }
 }

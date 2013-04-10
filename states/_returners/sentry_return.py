@@ -59,6 +59,7 @@ def returner(ret):
             client.captureMessage(ret['comment'], extra=sentry_data)
         except Exception, err:
             logger.error("Can't send message to sentry: %s", err, exc_info=True)
+            logger.debug("Content of ret: %s", str(ret))
 
     requisite_error = 'One or more requisite failed'
     try:

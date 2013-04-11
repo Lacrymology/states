@@ -8,6 +8,7 @@ pdnsd:
     - installed
     - require:
       - cmd: apt_sources
+      - debconf: pdnsd
   debconf:
     - set
     - data:

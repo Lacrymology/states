@@ -93,6 +93,7 @@ proftpd:
     - watch:
       - file: proftpd
       - pkg: proftpd-mod-pgsql
+      - pkg: proftpd-basic
 
 /etc/nagios/nrpe.d/proftpd.cfg:
   file:

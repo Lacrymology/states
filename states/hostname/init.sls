@@ -1,4 +1,4 @@
-etc_hostname:
+hostname:
   file:
     - managed
     - template: jinja
@@ -16,4 +16,4 @@ etc_hostname:
     - stateful: False
     - name: hostname `cat /etc/hostname`
     - watch:
-      - file: etc_hostname
+      - file: hostname

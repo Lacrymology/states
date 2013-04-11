@@ -8,8 +8,8 @@ ssmtp:
     - installed
     - require:
       - debconf: ssmtp
-      - cmd: etc_hostname
-      - host: etc_hostname
+      - cmd: hostname
+      - host: hostname
   debconf:
     - set
     - data:

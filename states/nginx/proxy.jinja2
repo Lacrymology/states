@@ -65,7 +65,7 @@ server {
         proxy_temp_file_write_size {{ cache_size }};
     {% if aggressive_cache|default(False) %}
         proxy_cache_use_stale error timeout invalid_header updating http_500 http_502 http_503 http_504 http_404;
-        {# proxy_cache_valid 200 302 1d; #}
+        proxy_cache_valid 200 302 1y;
         proxy_cookie_domain off;
         proxy_cookie_path off;
         proxy_http_version 1.1;

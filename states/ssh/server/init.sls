@@ -2,7 +2,6 @@
  Install an OpenSSH secure shell server
  #}
 include:
-{#  - ssh.keys#}
   - diamond
   - nrpe
   - gsyslog
@@ -51,6 +50,15 @@ ssh_diamond_resources:
         [[sshd]]
         exe = ^\/usr\/sbin\/sshd,^\/usr\/lib\/sftp\-server
 
+{% if 'root_keys' in pillar %}
+{% for key in pillar['root_keys'] %}
+{{ key }}:
+  ssh_auth:
+    - present
+    - user: root
+    - enc: {{ pillar['root_keys'][key] }}
+{% endfor -%}
+{%- endif %}
 
 {% if not pillar['debug'] %}
 /etc/gsyslog.d/ssh.conf:

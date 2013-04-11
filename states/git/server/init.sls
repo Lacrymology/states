@@ -19,15 +19,14 @@ git-server:
     - require:
       - pkg: git
 
-{% for user in pillar['git-server']['keys'] %}
-git-server-key-{{ user }}:
+{% for key in pillar['git-server']['keys'] %}
+{{ key }}:
   ssh_auth:
     - present
     - user: git
     - require:
       - user: git-server
-    - enc: {{ pillar['git-server']['keys'][user]['enc'] }}
-    - name: {{ pillar['git-server']['keys'][user]['key'] }}
+    - enc: {{ pillar['git-server']['keys'][key] }}
 {% endfor %}
 
 {% for repository in pillar['git-server']['repositories'] %}

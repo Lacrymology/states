@@ -8,11 +8,6 @@ include:
   - pip
 
 backup-server:
-  ssh_auth:
-    - present
-    - name: {{ pillar['backup']['client']['key'] }}
-    - user: root
-    - enc: {{ pillar['backup']['client']['enc'] }}
   pkg:
     - installed
     - name: rsync

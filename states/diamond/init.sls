@@ -80,7 +80,7 @@ diamond:
     - source: salt://diamond/config.jinja2
     - require:
       - virtualenv: diamond
-{% if 'ping' in pillar['diamond'] %}
+{% if 'ping' in pillar['diamond']|default([]) %}
     - context:
       ping_hosts: {{ pillar['diamond']['ping'] }}
 {% endif %}

@@ -9,7 +9,7 @@ etc_hostname:
     - source: salt://hostname/hostname.jinja2
   host:
     - present
-    - name: {{ pillar['hostname'] }}
+    - name: {{ grains['id'] }}
     - ip: 127.0.0.1
   cmd:
     - wait

@@ -269,7 +269,7 @@ define service {
 {#
  # carbon
  #}
-{% for instance in carbon['instances'] %}
+{% for instance in pillar['shinken']['carbon']['instances'] %}
 define service {
     host_name {% for host in pillar['shinken']['carbon']['instances'][instance] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description carbon-{{ instance }}

@@ -76,7 +76,7 @@ server {
 {% endif %}
         proxy_pass {{ destination|default('$scheme://$http_host$uri$is_args$args') }};
         proxy_set_header X-Real-IP $remote_addr;
-{% for source in allowed|default([]) -%}
+{% for source in allowed|default([]) %}
         allow {{ source }};
     {% if loop.last %}
         deny all;

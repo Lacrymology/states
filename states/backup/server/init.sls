@@ -77,8 +77,7 @@ backup-archiver-dependency:
 /etc/cron.weekly/backup-archiver:
   file:
     - managed
-    - template: jinja
-    - source: salt://backup/server/archive.jinja2
+    - source: salt://backup/server/archive.py
     - mode: 500
     - user: root
     - group: root

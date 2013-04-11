@@ -30,8 +30,9 @@ include:
     - source: salt://shinken/shinken-ctl.jinja2
 
 {% set configs = ('architecture', 'infra') %}
+{% set var_directories = ('log', 'lib') %}
 
-{% for dirname in ('log', 'lib') %}
+{% for dirname in var_directories %}
 /var/{{ dirname }}/shinken:
   file:
     - directory
@@ -132,6 +133,10 @@ shinken-{{ role }}:
   service:
     - running
     - enable: True
+    - require:
+{% for dirname in var_directories %}
+      - file: /var/{{ dirname }}/shinken
+{% endfor %}
     - watch:
       - module: shinken
       - file: /etc/init/shinken-{{ role }}.conf

@@ -21,6 +21,7 @@ pdnsd:
     - watch:
       - file: /etc/default/pdnsd
       - file: /etc/pdnsd.conf
+      - pkg: pdnsd
 
 /etc/default/pdnsd:
   file:

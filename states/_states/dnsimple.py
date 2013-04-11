@@ -43,6 +43,13 @@ def created(name, email, token):
             'result': False,
             'comment': ''}
 
+    if __opts__['test']:
+        return {'name': name,
+                'changes': {},
+                'result': None,
+                'comment': 'Domain {0} is set to be created'.format(
+                    name)}
+
     path = "/domains"
     ses = auth_session(email, token)
     data = {"domain": {"name": domain}}
@@ -64,7 +71,7 @@ def created(name, email, token):
 
 
 def normalise(records):
-    """Return a data with structure same as which returned from API"""
+    '''Return a data with structure same as which returned from API'''
     ret = {}
     for domain in records:
         li = []
@@ -81,7 +88,7 @@ def normalise(records):
 
 
 def records_existed(name, email, token, records):
-    """
+    '''
     Use returning ASAP when have any error happen. So if nothing change,
     result is true
 
@@ -91,7 +98,7 @@ def records_existed(name, email, token, records):
       email:
       token:
       records:
-        hwng.info:
+        blahblah.com:
           A:
             www:
               content: 123.11.1.11
@@ -99,17 +106,18 @@ def records_existed(name, email, token, records):
               prio: 2
             blog:
               content: 122.2.2.2
-        familug.org:
+        adomain.org:
           A:
             www:
               content: 12.1.1.2
               ...
-    """
+    '''
 
     ret = {'name': 'existed',
             'changes': {},
             'result': True,
             'comment': ''}
+
     ses = auth_session(email, token)
     existing_records = {}
     for domain in records:
@@ -146,6 +154,13 @@ def records_existed(name, email, token, records):
                 to_create[domain].append(nrc)
     log.info("To create: {0}".format(to_create))
     log.info("To update: {0}".format(to_update))
+
+    if __opts__['test']:
+        return {'name': name,
+                'changes': {},
+                'result': None,
+                'comment': 'Records {0} is set to be created\nRecords {1} is \
+                            set to be updated'.format(to_create, to_update)}
 
     for domain in to_create:
         for r in to_create[domain]:

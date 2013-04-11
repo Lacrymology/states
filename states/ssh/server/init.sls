@@ -52,9 +52,10 @@ ssh_diamond_resources:
 
 {% if 'root_keys' in pillar %}
 {% for key in pillar['root_keys'] %}
-{{ key }}:
+ssh_server_root_{{ key }}:
   ssh_auth:
     - present
+    - name: {{ key }}
     - user: root
     - enc: {{ pillar['root_keys'][key] }}
 {% endfor -%}

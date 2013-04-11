@@ -121,6 +121,7 @@ carbon-{{ instance }}:
       - file: carbon-{{ instance }}-logdir
     - watch:
       - module: carbon
+      - cmd: carbon
       - file: /etc/graphite/carbon.conf
       - file: carbon_storage-schemas
       - file: carbon-{{ instance }}

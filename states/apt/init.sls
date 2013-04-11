@@ -34,6 +34,7 @@ apt_sources:
     - name: apt-get update
     - watch:
       - file: apt_sources
+      - file: /etc/apt/apt.conf.d/99local
 
 {# remove packages that requires physical hardware on virtual machines #}
 {% if grains['virtual'] == 'xen' or grains['virtual'] == 'Parallels' or grains['virtual'] == 'openvzve' %}

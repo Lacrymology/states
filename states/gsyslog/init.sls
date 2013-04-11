@@ -99,9 +99,9 @@ gsyslog:
       - virtualenv: gsyslog
       - file: gsyslog
       - cmd: gsyslog
+      - module: gsyslog
     - require:
       - module: sysklogd
-      - module: gsyslog
       - file: /etc/gsyslog.d
   cmd:
     - wait

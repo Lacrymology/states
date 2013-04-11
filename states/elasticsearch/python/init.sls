@@ -13,7 +13,7 @@ pyelasticsearch:
     - user: root
     - group: root
     - mode: 440
-    - source: salt://elasticsearch/python/requirements.jinja2.jinja2
+    - source: salt://elasticsearch/python/requirements.jinja2
   module:
     - wait
     - name: pip.install

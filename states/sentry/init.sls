@@ -79,7 +79,6 @@ sentry_settings:
     - group: www-data
     - mode: 440
     - source: salt://sentry/config.jinja2
-    - context: {{ pillar['sentry'] }}
   cmd:
     - wait
     - stateful: False
@@ -132,7 +131,6 @@ sentry-migrate-fake:
     - group: www-data
     - mode: 440
     - source: salt://sentry/uwsgi.jinja2
-    - context: {{ pillar['sentry'] }}
     - require:
       - service: uwsgi_emperor
       - cmd: sentry_settings
@@ -209,7 +207,6 @@ uwsgi_diamond_sentry_resources:
     - group: www-data
     - mode: 440
     - source: salt://sentry/nginx.jinja2
-    - context: {{ pillar['sentry'] }}
 
 extend:
   nagios-nrpe-server:

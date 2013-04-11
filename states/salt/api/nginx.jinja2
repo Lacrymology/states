@@ -1,19 +1,19 @@
 # {{ pillar['message_do_not_modify'] }}
 
-{% if ssl|default(False) %}
+{% if pillar['salt_master']['ssl']|default(False) %}
 server {
     listen 80;
-    server_name {{ hostname }};
-    return 301 https://{{ hostname }}$request_uri;
+    server_name {{ pillar['salt_master']['hostname'] }};
+    return 301 https://{{ pillar['salt_master']['hostname'] }}$request_uri;
 }
 {% endif %}
 
 server {
-{% if ssl|default(False) %}
+{% if pillar['salt_master']['ssl']|default(False) %}
     listen 443 ssl;
-    ssl_certificate /etc/ssl/{{ ssl }}/chained_ca.crt;
-    ssl_certificate_key /etc/ssl/{{ ssl }}/server.pem;
-    ssl_client_certificate /etc/ssl/{{ ssl }}/ca.crt;
+    ssl_certificate /etc/ssl/{{ pillar['salt_master']['ssl'] }}/chained_ca.crt;
+    ssl_certificate_key /etc/ssl/{{ pillar['salt_master']['ssl'] }}/server.pem;
+    ssl_client_certificate /etc/ssl/{{ pillar['salt_master']['ssl'] }}/ca.crt;
     ssl_ciphers RC4:HIGH:!aNULL:!MD5;
     ssl_prefer_server_ciphers on;
     ssl_session_cache shared:SSL:10m;
@@ -22,7 +22,7 @@ server {
     listen 80;
 {% endif %}
 
-    server_name {{ hostname }};
+    server_name {{ pillar['salt_master']['hostname'] }};
 
     root /usr/local/salt-ui;
     index index.html;

@@ -13,11 +13,11 @@ Description: The Arbiter is responsible for:
 - Issuing global directives to Shinken daemons (kill, activate-spare, etc.)
 http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects/arbiter
 #}
-{% for id in architecture['arbiter'] %}
+{% for id in pillar['shinken']['architecture']['arbiter'] %}
 define arbiter {
     arbiter_name arbiter-{{ grains['id'] }}
     host_name {{ id }}
-    address {{ ip_addresses[id] }}
+    address {{ pillar['shinken']['ip_addresses'][id] }}
     port 7770
     modules arbiter-retention
     {# only the first one is not a spare #}
@@ -44,10 +44,10 @@ Description: The scheduler is responsible for:
 - Buffering and forwarding results its associated broker
 http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects/scheduler
 #}
-{% for id in architecture['scheduler'] %}
+{% for id in pillar['shinken']['architecture']['scheduler'] %}
 define scheduler {
     scheduler_name scheduler-{{ id }}
-    address {{ ip_addresses[id] }}
+    address {{ pillar['shinken']['ip_addresses'][id] }}
     port 7768
     modules scheduler-retention
     realm All
@@ -71,12 +71,12 @@ Description: The poller is responsible for:
 http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects/poller
 #}
 
-{% for id in architecture['poller'] %}
+{% for id in pillar['shinken']['architecture']['poller'] %}
 define poller {
     poller_name poller-{{ id }}
-    address {{ ip_addresses[id] }}
+    address {{ pillar['shinken']['ip_addresses'][id] }}
     port 7771
-    poller_tags {{ architecture['poller'][id] }}
+    poller_tags {{ pillar['shinken']['architecture']['poller'][id] }}
     realm All
 }
 {% endfor %}
@@ -93,10 +93,10 @@ Description: The broker is responsible for:
   - Command interface
 http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects/broker
 #}
-{% for id in architecture['broker'] %}
+{% for id in pillar['shinken']['architecture']['broker'] %}
 define broker {
     broker_name broker-{{ id }}
-    address {{ ip_addresses[id] }}
+    address {{ pillar['shinken']['ip_addresses'][id] }}
     port 7772
     modules broker-syslog, broker-graphite, broker-retention, broker-webui
     realm All
@@ -194,7 +194,7 @@ define module {
 define module {
     module_name broker-webui-graphite
     module_type graphite_webui
-    uri {{ graphite_url }}
+    uri {{ pillar['shinken']['graphite_url'] }}
     templates_path /usr/local/shinken/share/templates/graphite/
     graphite_data_source shinken
 }
@@ -205,10 +205,10 @@ Description: The reactionner is responsible for:
 - Executing event handler actions
 http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects/reactionner
 -#}
-{% for id in architecture['reactionner'] %}
+{% for id in pillar['shinken']['architecture']['reactionner'] %}
 define reactionner {
     reactionner_name reactionner-{{ id }}
-    address {{ ip_addresses[id] }}
+    address {{ pillar['shinken']['ip_addresses'][id] }}
     port 7769
     realm All
 {#  Optional
@@ -228,10 +228,10 @@ define reactionner {
 The receiver manages passive information. It's just a "buffer" which will
 load passive modules (like NSCA) and be read by the arbiter to dispatch data.
 #}
-{% for id in architecture['receiver']|default([]) %}
+{% for id in pillar['shinken']['architecture']['receiver']|default([]) %}
 define receiver {
     receiver_name receiver-{{ id }}
-    address {{ ip_addresses[id] }}
+    address {{ pillar['shinken']['ip_addresses'][id] }}
     port 7773
     modules
     realm All

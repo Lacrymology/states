@@ -5,18 +5,18 @@ upstream graphite {
 }
 
 server {
-{% if ssl|default(False) %}
+{% if pillar['graphite']['web']['ssl']|default(False) %}
     listen 443 ssl;
-    ssl_certificate /etc/ssl/{{ ssl }}/chained_ca.crt;
-    ssl_certificate_key /etc/ssl/{{ ssl }}/server.pem;
-    ssl_client_certificate /etc/ssl/{{ ssl }}/ca.crt;
+    ssl_certificate /etc/ssl/{{ pillar['graphite']['web']['ssl'] }}/chained_ca.crt;
+    ssl_certificate_key /etc/ssl/{{ pillar['graphite']['web']['ssl'] }}/server.pem;
+    ssl_client_certificate /etc/ssl/{{ pillar['graphite']['web']['ssl'] }}/ca.crt;
     ssl_ciphers RC4:HIGH:!aNULL:!MD5;
     ssl_prefer_server_ciphers on;
     ssl_session_cache shared:SSL:10m;
     ssl_session_timeout 10m;
 {% endif %}
     listen 80;
-    server_name {% for hostname in hostnames %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+    server_name {% for hostname in pillar['graphite']['web']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
 
     root /usr/local/graphite/webapp/;
 

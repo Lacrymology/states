@@ -44,7 +44,6 @@ pdnsd:
     - user: root
     - group: root
     - mode: 440
-    - context: {{ pillar['dns_proxy'] }}
 
 /etc/nagios/nrpe.d/pdnsd.cfg:
   file:

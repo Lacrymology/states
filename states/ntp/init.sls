@@ -19,7 +19,6 @@ ntpdate:
     - mode: 440
     - require:
       - pkg: ntpdate
-    - context: {{ pillar['ntp'] }}
 {% endif %}
 
 ntp:
@@ -37,7 +36,6 @@ ntp:
     - mode: 440
     - require:
       - pkg: ntp
-    - context: {{ pillar['ntp'] }}
   service:
     - running
     - require:

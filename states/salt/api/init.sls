@@ -33,7 +33,6 @@ user_{{ user }}:
     - user: root
     - group: root
     - mode: 400
-    - context: {{ pillar['salt_master'] }}
 {% if not 'ssl' in pillar['salt_master'] and not salt['file.file_exists']("/etc/pki/tls/certs/" + pillar['salt_master']['hostname'] + ".crt") %}
   module:
     - wait
@@ -85,7 +84,6 @@ salt-ui:
     - user: www-data
     - group: www-data
     - mode: 440
-    - context: {{ pillar['salt_master'] }}
 
 /etc/nagios/nrpe.d/salt-api.cfg:
   file:

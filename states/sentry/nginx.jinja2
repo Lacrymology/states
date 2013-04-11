@@ -6,18 +6,18 @@ upstream sentry {
 
 server {
     listen 80;
-{% if ssl|default(False) %}
+{% if pillar['sentry']['ssl']|default(False) %}
     listen 443 ssl;
-    ssl_certificate /etc/ssl/{{ ssl }}/chained_ca.crt;
-    ssl_certificate_key /etc/ssl/{{ ssl }}/server.pem;
-    ssl_client_certificate /etc/ssl/{{ ssl }}/ca.crt;
+    ssl_certificate /etc/ssl/{{ pillar['sentry']['ssl'] }}/chained_ca.crt;
+    ssl_certificate_key /etc/ssl/{{ pillar['sentry']['ssl'] }}/server.pem;
+    ssl_client_certificate /etc/ssl/{{ pillar['sentry']['ssl'] }}/ca.crt;
     ssl_ciphers RC4:HIGH:!aNULL:!MD5;
     ssl_prefer_server_ciphers on;
     ssl_session_cache shared:SSL:10m;
     ssl_session_timeout 10m;
 {% endif %}
 
-    server_name {{ address }};
+    server_name {{ pillar['sentry']['address'] }};
 
     root /usr/local/sentry;
 

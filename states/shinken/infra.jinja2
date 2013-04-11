@@ -2,12 +2,12 @@
 # This file contains the checks for the low-level infrastructure components
 # supported by salt.
 
-{% for user in users %}
+{% for user in pillar['shinken']['users'] %}
 define contact {
     contact_name {{ user }}
-    email {{ users[user]['email'] }}
+    email {{ pillar['shinken']['users'][user]['email'] }}
     can_submit_commands 1
-    password {{ users[user]['password'] }}
+    password {{ pillar['shinken']['users'][user]['password'] }}
     is_admin 1
     host_notification_period 24x7
     host_notification_options d,u,r,f,s
@@ -23,7 +23,7 @@ define contact {
 define contactgroup {
     contactgroup_name admins
     alias admins
-    members {% for user in users %}{{ user }}{% if not loop.last %},{% endif %}{% endfor %}
+    members {% for user in pillar['shinken']['users'] %}{{ user }}{% if not loop.last %},{% endif %}{% endfor %}
     # host notifications can be sent anytime
     host_notification_period 24x7
     # send notifications for all host states, flapping events (f), and scheduled
@@ -130,10 +130,10 @@ define service {
     _httpstink NO
 }
 
-{% for host in ip_addresses %}
+{% for host in pillar['shinken']['ip_addresses'] %}
 define host {
     host_name {{ host }}
-    address {{ ip_addresses[host] }}
+    address {{ pillar['shinken']['ip_addresses'][host] }}
     alias {{ host }}
     contact_groups admins
     notification_interval 0
@@ -161,21 +161,21 @@ define host {
  # the following services need to be checked on ALL hosts
  #}
 define service {
-    host_name {% for host in ip_addresses %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
+    host_name {% for host in pillar['shinken']['ip_addresses'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description SSH
     check_command check_ssh
     use salt-service
 }
 
 define service {
-    host_name {% for host in ip_addresses %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
+    host_name {% for host in pillar['shinken']['ip_addresses'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description SSH Port
     check_command check_tcp!22022
     use salt-service
 }
 
 define service {
-    host_name {% for host in ip_addresses %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
+    host_name {% for host in pillar['shinken']['ip_addresses'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description NRPE
     check_command check_tcp!5666
     use salt-service
@@ -183,7 +183,7 @@ define service {
 
 {% for service in ('loopback', 'memory', 'cron', 'diamond', 'syslogd', 'klogd', 'salt_minion', 'ssh', 'statsd', 'users', 'load', 'all_disks', 'zombie_procs', 'total_procs') %}
 define service {
-    host_name {% for host in ip_addresses %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
+    host_name {% for host in pillar['shinken']['ip_addresses'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description Infra-{{ service }}
     check_command check_nrpe!check_{{ service }}
     use salt-service
@@ -197,7 +197,7 @@ Run them only each few hours.
 #}
 {% for service in ('apt', 'apt_rc') %}
 define service {
-    host_name {% for host in ip_addresses %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
+    host_name {% for host in pillar['shinken']['ip_addresses'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description Infra-{{ service }}
     check_command check_nrpe!check_{{ service }}
     use salt-service
@@ -212,7 +212,7 @@ define service {
  #}
 {% for service in ('memcached', 'nginx_master', 'nginx_worker', 'nginx_status', 'uwsgi', 'postgresql_server', 'postgresql_port', 'postgresql_diamond') %}
 define service {
-    host_name {% for host in web_servers %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
+    host_name {% for host in pillar['shinken']['web_servers'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description WebServer-{{ service }}
     check_command check_nrpe!check_{{ service }}
     use salt-service
@@ -220,14 +220,14 @@ define service {
 {% endfor %}
 
 define service {
-    host_name {% for host in web_servers %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
+    host_name {% for host in pillar['shinken']['web_servers'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description http-port
     check_command check_tcp!80
     use salt-service
 }
 
-{%- for host in web_servers -%}
-    {%- for deployment in web_servers[host] -%}
+{%- for host in pillar['shinken']['web_servers'] -%}
+    {%- for deployment in pillar['shinken']['web_servers'][host] -%}
         {%- for service in ('master', 'worker', 'http', 'uwsgi') %}
 define service {
     host_name {{ host }}
@@ -250,7 +250,7 @@ define service {
  #}
 {%- for cluster in ('', '_cluster', '_http') %}
 define service {
-    host_name {% for host in elasticsearch %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
+    host_name {% for host in pillar['shinken']['elasticsearch'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description elasticsearch{{ cluster }}
     check_command check_nrpe!check_elasticsearch{{ cluster }}
     use salt-service
@@ -259,7 +259,7 @@ define service {
 
 {% for port in (9200, 9300) %}
 define service {
-    host_name {% for host in elasticsearch %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
+    host_name {% for host in pillar['shinken']['elasticsearch'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description elasticsearch-{{ port }}
     check_command check_tcp!{{ port }}
     use salt-service
@@ -271,7 +271,7 @@ define service {
  #}
 {% for instance in carbon['instances'] %}
 define service {
-    host_name {% for host in carbon['instances'][instance] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
+    host_name {% for host in pillar['shinken']['carbon']['instances'][instance] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description carbon-{{ instance }}
     check_command check_nrpe!check_carbon_{{ instance }}
     use salt-service
@@ -280,7 +280,7 @@ define service {
 
 {% for port in (2003, 2004) %}
 define service {
-    host_name {% for host in carbon['hosts'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
+    host_name {% for host in pillar['shinken']['carbon']['hosts'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description carbon-port-{{ port }}
     check_command check_tcp!{{ port }}
     use salt-service
@@ -292,7 +292,7 @@ define service {
  #}
 {%- for service in ('', '_webui') %}
 define service {
-    host_name {% for host in rabbitmq %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
+    host_name {% for host in pillar['shinken']['rabbitmq'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description {{ service }}
     check_command check_nrpe!check_rabbitmq{{ service }}
     use salt-service
@@ -300,7 +300,7 @@ define service {
 {% endfor %}
 
 define service {
-    host_name {% for host in rabbitmq %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
+    host_name {% for host in pillar['shinken']['rabbitmq'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description rabbitmq-port
     check_command check_tcp!55672
     use salt-service
@@ -308,7 +308,7 @@ define service {
 
 {% for service in ('master', 'worker') %}
 define service {
-    host_name {% for host in rabbitmq %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
+    host_name {% for host in pillar['shinken']['rabbitmq'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description rabbitmq-nginx-{{ service }}
     check_command check_nrpe!check_nginx_{{ service }}
     use salt-service
@@ -320,7 +320,7 @@ define service {
  #}
 {% for service in ('server', 'logs') %}
 define service {
-    host_name {% for host in graylog2 %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
+    host_name {% for host in pillar['shinken']['graylog2'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description graylog2-{{ service }}
     check_command check_nrpe!check_graylog2_{{ service }}
     use salt-service
@@ -329,7 +329,7 @@ define service {
 
 {% for service in ('master', 'worker', 'http') %}
 define service {
-    host_name {% for host in graylog2 %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
+    host_name {% for host in pillar['shinken']['graylog2'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description Web-graylog2-{{ service }}
     check_command check_nrpe!check_graylog2_{{ service }}
     use salt-service
@@ -337,15 +337,15 @@ define service {
 {% endfor %}
 
 define service {
-    host_name {% for host in proftpd %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
+    host_name {% for host in pillar['shinken']['proftpd'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description proftpd
     check_command check_nrpe!check_proftpd
     use salt-service
 }
 
-{% if pdnsd|default(False) %}
+{% if pillar['shinken']['pdnsd']|default(False) %}
 define service {
-    host_name {% for host in pdnsd %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
+    host_name {% for host in pillar['shinken']['pdnsd'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description pdnsd
     check_command check_nrpe!check_pdnsd
     use salt-service
@@ -354,7 +354,7 @@ define service {
 
 {% for service in ('mongodb', 'mongodb_port', 'nginx_master', 'nginx_worker') %}
 define service {
-    host_name {% for host in graylog2 %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
+    host_name {% for host in pillar['shinken']['graylog2'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description graylog2-{{ service }}
     check_command check_nrpe!check_{{ service }}
     use salt-service
@@ -365,7 +365,7 @@ define service {
  # Salt Master
  #}
 define service {
-    host_name {% for host in salt_master %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
+    host_name {% for host in pillar['shinken']['salt_master'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description salt-master
     check_command check_nrpe!check_salt_master
     use salt-service
@@ -373,7 +373,7 @@ define service {
 
 {% for port in (4505, 4506) %}
 define service {
-    host_name {% for host in salt_master %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
+    host_name {% for host in pillar['shinken']['salt_master'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description salt-master-{{ port }}
     check_command check_tcp!{{ port }}
     use salt-service
@@ -383,9 +383,9 @@ define service {
 {#
  # Denyhosts
  #}
-{% if denyhosts|default(False) %}
+{% if pillar['shinken']['denyhosts']|default(False) %}
 define service {
-    host_name {% for host in denyhosts|default([]) %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
+    host_name {% for host in pillar['shinken']['denyhosts']|default([]) %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description denyhosts
     check_command check_nrpe!check_denyhosts
     use salt-service
@@ -403,16 +403,16 @@ define service {
     'reactionner': 7769
 } %}
 
-{% for service in architecture %}
+{% for service in pillar['shinken']['architecture'] %}
 define service {
-    host_name {% for host in architecture[service] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
+    host_name {% for host in pillar['shinken']['architecture'][service] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description Shinken-{{ service }}
     check_command check_nrpe!check_shinken_{{ service }}
     use salt-service
 }
 
 define service {
-    host_name {% for host in architecture[service] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
+    host_name {% for host in pillar['shinken']['architecture'][service] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description Shinken-{{ service }}-port
     check_command check_tcp!{{ listen_port[service] }}
     use salt-service
@@ -424,7 +424,7 @@ define service {
  #}
 {% if service == 'broker' %}
 define service {
-    host_name {% for host in architecture[service] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
+    host_name {% for host in pillar['shinken']['architecture'][service] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description Shinken-broker-web-node
     check_command check_nrpe!check_broker_web
     use salt-service
@@ -436,21 +436,21 @@ define service {
  There can only be a single one running web node.
  If there's more than one broker, check that at least one is up to consider.
  #}
-{% if architecture['broker']|length > 1 %}
+{% if pillar['shinken']['architecture']['broker']|length > 1 %}
 define service {
     use salt-service
-    host_name {{ architecture['arbiter'][0] }}
+    host_name {{ pillar['shinken']['architecture']['arbiter'][0] }}
     service_description Shinken-broker-web
-    check_command bp_rule!({% for host in architecture['broker'] %}{{ host }},Shinken-broker-web-node{% if not loop.last %} | {% endif %}{% endfor %})
+    check_command bp_rule!({% for host in pillar['shinken']['architecture']['broker'] %}{{ host }},Shinken-broker-web-node{% if not loop.last %} | {% endif %}{% endfor %})
 }
 {% endif %}
 
 {#
  # Backups
  #}
-{% if backup|default(False) %}
+{% if pillar['shinken']['backup']|default(False) %}
 define service {
-    host_name {% for host in backup %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
+    host_name {% for host in pillar['shinken']['backup'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description Backups
     check_command check_nrpe!check_backups
     use salt-service

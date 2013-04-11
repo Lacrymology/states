@@ -31,17 +31,17 @@ MAX_UPDATES_PER_SECOND = 500
 # the files quickly but at the risk of slowing I/O down considerably for a while.
 MAX_CREATES_PER_MINUTE = 50
 
-LINE_RECEIVER_INTERFACE = {{ interface }}
+LINE_RECEIVER_INTERFACE = {{ pillar['graphite']['carbon']['interface'] }}
 LINE_RECEIVER_PORT = 2003
 
 # Set this to True to enable the UDP listener. By default this is off
 # because it is very common to run multiple carbon daemons and managing
 # another (rarely used) port for every carbon instance is not fun.
 ENABLE_UDP_LISTENER = False
-UDP_RECEIVER_INTERFACE = {{ interface }}
+UDP_RECEIVER_INTERFACE = {{ pillar['graphite']['carbon']['interface'] }}
 UDP_RECEIVER_PORT = 2003
 
-PICKLE_RECEIVER_INTERFACE = {{ interface }}
+PICKLE_RECEIVER_INTERFACE = {{ pillar['graphite']['carbon']['interface'] }}
 PICKLE_RECEIVER_PORT = 2004
 
 # Per security concerns outlined in Bug #817247 the pickle receiver
@@ -138,9 +138,9 @@ WHISPER_AUTOFLUSH = False
 # You can then specify the --instance=b option to manage this instance
 
 [relay]
-LINE_RECEIVER_INTERFACE = {{ interface }}
+LINE_RECEIVER_INTERFACE = {{ pillar['graphite']['carbon']['interface'] }}
 LINE_RECEIVER_PORT = 2013
-PICKLE_RECEIVER_INTERFACE = {{ interface }}
+PICKLE_RECEIVER_INTERFACE = {{ pillar['graphite']['carbon']['interface'] }}
 PICKLE_RECEIVER_PORT = 2014
 
 # To use consistent hashing instead of the user defined relay-rules.conf,
@@ -194,8 +194,8 @@ USE_FLOW_CONTROL = True
 # CARBON_METRIC_INTERVAL = 60
 
 [aggregator]
-LINE_RECEIVER_INTERFACE = {{ interface }}
+LINE_RECEIVER_INTERFACE = {{ pillar['graphite']['carbon']['interface'] }}
 LINE_RECEIVER_PORT = 2023
 
-PICKLE_RECEIVER_INTERFACE = {{ interface }}
+PICKLE_RECEIVER_INTERFACE = {{ pillar['graphite']['carbon']['interface'] }}
 PICKLE_RECEIVER_PORT = 2024

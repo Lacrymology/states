@@ -83,7 +83,6 @@ carbon:
     - group: root
     - mode: 440
     - source: salt://carbon/config.jinja2
-    - context: {{ pillar['graphite']['carbon'] }}
 
 diamond-carbon:
   file:

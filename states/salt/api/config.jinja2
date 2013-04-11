@@ -7,9 +7,9 @@
  Until that issue is fixed, each users will have access to everything.
  #}
 external_auth:
-{% for auth_type in external_auth %}
+{% for auth_type in pillar['salt_master']['external_auth'] %}
   {{ auth_type }}:
- {% for username in external_auth[auth_type] %}
+ {% for username in pillar['salt_master']['external_auth'][auth_type] %}
     {{ username }}:
       - .*
  {% endfor %}

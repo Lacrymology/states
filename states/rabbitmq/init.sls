@@ -46,7 +46,6 @@ rabbitmq_erlang_cookie:
     - group: rabbitmq
     - mode: 400
     - source: salt://rabbitmq/cookie.jinja2
-    - context: {{ pillar['rabbitmq'] }}
     - require:
       - service: rabbitmq_erlang_cookie
     - watch:
@@ -183,7 +182,6 @@ diamond_rabbitmq:
     - group: root
     - mode: 440
     - source: salt://rabbitmq/diamond.jinja2
-    - context: {{ pillar['rabbitmq'] }}
     - require:
       - module: diamond-pyrabbit
   pkg:

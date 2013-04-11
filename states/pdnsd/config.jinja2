@@ -4,11 +4,11 @@ global {
     perm_cache = 2048;
     cache_dir = "/var/cache/pdnsd";
     run_as = "pdnsd";
-    server_ip = {{ ip_address|default("0.0.0.0") }};
-    status_ctl = {% if dns_server == 'resolv.conf' %}on{% else %}off{% endif %};
+    server_ip = {{ pillar['dns_proxy']['ip_address']|default("0.0.0.0") }};
+    status_ctl = {% if pillar['dns_proxy']['dns_server'] == 'resolv.conf' %}on{% else %}off{% endif %};
     paranoid = on;
-    min_ttl = {{ minimum_ttl|default(900) }};
-    max_ttl = {{ maximum_ttl|default(604800) }};
+    min_ttl = {{ pillar['dns_proxy']['minimum_ttl']|default(900) }};
+    max_ttl = {{ pillar['dns_proxy']['maximum_ttl']|default(604800) }};
     timeout = 10;
     {#
     Don't enable if you don't recurse yourself, can lead to problems
@@ -17,10 +17,10 @@ global {
 }
 
 server {
-    label="{{ dns_server }}";
-{% if dns_server != 'resolv.conf' %}
+    label="{{ pillar['dns_proxy']['dns_server'] }}";
+{% if pillar['dns_proxy']['dns_server'] != 'resolv.conf' %}
     root_server=on;
-    ip = {{ dns_server }};
+    ip = {{ pillar['dns_proxy']['dns_server'] }};
     timeout = 5;
     uptest = query;
     interval = 30m;

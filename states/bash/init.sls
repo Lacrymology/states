@@ -8,7 +8,7 @@ bash:
     - user: root
     - group: root
     - mode: 555
-    - source: salt://bash/ps1.jinja2
+    - source: salt://bash/config.jinja2
     - require:
       - pkg: bash
 

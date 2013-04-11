@@ -1,3 +1,6 @@
+{#
+ Uninstall memcache
+ #}
 include:
   - diamond
   - nrpe

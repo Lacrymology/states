@@ -1,6 +1,6 @@
 {# TODO: Diamond + http://www.elasticsearch.org/guide/reference/modules/jmx/ #}
 {#
- Elasticsearch State
+ Install an Elasticsearch NoSQL server or cluster
 
  Elasticsearch don't support HTTP over SSL/HTTPS.
  The only way to secure access to admin interface over HTTPS is to proxy

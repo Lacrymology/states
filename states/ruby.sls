@@ -1,3 +1,6 @@
+{#
+ Install Ruby interpreter.
+ #}
 old_ruby:
   pkg:
     - purged

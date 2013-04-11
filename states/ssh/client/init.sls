@@ -1,4 +1,6 @@
-
+{#
+ Configure an OpenSSH client
+ #}
 /root/.ssh:
   file:
     - directory

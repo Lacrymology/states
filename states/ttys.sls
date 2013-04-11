@@ -1,4 +1,6 @@
-{# tty are useless in most cases #}
+{#
+ cleanup useless login prompt on virtual consoles
+#}
 ttys:
   service:
     - dead

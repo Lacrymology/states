@@ -1,3 +1,6 @@
+{#
+ Install Mercurial source control management client.
+ #}
 include:
   - ssh.client
 

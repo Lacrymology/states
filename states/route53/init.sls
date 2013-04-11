@@ -1,3 +1,7 @@
+{#
+ Install Route53 (Amazon Route53 client-side python library) into OS/root
+ site-packages.
+ #}
 include:
   - pip
 

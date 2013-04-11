@@ -1,10 +1,16 @@
+{#
+ Install a gsyslogd server, it's a sysklogd/rsyslog replacement
+#}
 include:
   - virtualenv
   - nrpe
   - diamond
   - pip
 
-{# gsyslog depends on klogd to get kernel logs #}
+{#
+ gsyslog depends on klogd to get kernel logs, which is in sysklogd.
+ install sysklogd, but disable everything except klogd.
+#}
 sysklogd:
   pkg:
     - latest

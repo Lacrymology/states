@@ -1,9 +1,18 @@
+{#
+ Set a simple iptables based firewall
+ #}
 include:
   - nrpe
   - sudo
   - gsyslog
   - apt
 
+{#
+ this is a constant used to define the -c flag of nagios check that set the
+ maximal number of iptables rules before it's considered critical.
+ the number is high because we only care about 0 iptables, where there is just
+ no rules applied.
+ #}
 {% set critical=300 %}
 
 {% if 'firewall' in pillar %}

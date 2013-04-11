@@ -1,13 +1,17 @@
+{#
+ Install Carbon, daemon that store on disk statistics database used by Graphite
+ to render graphics.
+ #}
+
 {# TODO: send logs to GELF #}
 include:
   - graphite.common
   - nrpe
   - pip
 
-carbon_logrotate:
+/etc/logrotate.d/carbon:
   file:
     - managed
-    - name: /etc/logrotate.d/carbon
     - template: jinja
     - user: root
     - group: root
@@ -31,10 +35,9 @@ fs.file-max:
     - value: {{ pillar['graphite']['file-max'] }}
 {% endif %}
 
-carbon_storage-schemas:
+/etc/graphite/storage-schemas.conf:
   file:
     - managed
-    - name: /etc/graphite/storage-schemas.conf
     - template: jinja
     - user: graphite
     - group: graphite
@@ -122,7 +125,7 @@ carbon-{{ instance }}:
       - module: carbon
       - cmd: carbon
       - file: /etc/graphite/carbon.conf
-      - file: carbon_storage-schemas
+      - file: /etc/graphite/storage-schemas.conf
       - file: carbon-{{ instance }}
       - cmd: carbon
 

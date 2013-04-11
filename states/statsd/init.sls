@@ -1,3 +1,6 @@
+{#
+ Install PyStatsD daemon, a statsd nodejs equivalent in python
+ #}
 include:
   - virtualenv
   - nrpe

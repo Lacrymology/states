@@ -1,3 +1,6 @@
+{#
+ Install a graylog2 web interface server
+#}
 include:
   - ruby
   - nrpe

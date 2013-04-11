@@ -1,3 +1,6 @@
+{#
+ Install a PostgreSQL database server.
+ #}
 include:
   - diamond
   - postgresql

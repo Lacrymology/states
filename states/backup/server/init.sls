@@ -1,3 +1,6 @@
+{#
+ Install poor man backup server used for rsync and scp to store files.
+#}
 include:
   - ssh.server
   - nrpe

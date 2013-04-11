@@ -1,3 +1,6 @@
+{#
+ Install Denyhosts used to block SSH brute-force attack
+ #}
 include:
   - apt
   - gsyslog

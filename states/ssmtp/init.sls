@@ -1,3 +1,6 @@
+{#
+ Install SSMTP a simple interface to send mail to remote SMTP server
+ #}
 include:
   - apt
   - hostname

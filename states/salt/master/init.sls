@@ -1,3 +1,6 @@
+{#
+ Install a Salt Management Master (server)
+ #}
 include:
   - salt.minion
   - git

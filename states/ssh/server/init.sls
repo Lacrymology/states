@@ -1,3 +1,6 @@
+{#
+ Install an OpenSSH secure shell server
+ #}
 include:
 {#  - ssh.keys#}
   - diamond

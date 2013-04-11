@@ -1,3 +1,6 @@
+{#
+ Install NTP (Network time protocol) server and/or client.
+ #}
 include:
   - apt
   - diamond

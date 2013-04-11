@@ -1,13 +1,9 @@
+{#
+ Install Salt Minion (client)
+ #}
 include:
   - nrpe
   - diamond
-
-{#
- # echo 'deb http://ppa.launchpad.net/saltstack/salt/ubuntu precise main' > /etc/apt/sources.list.d/saltstack-salt-precise.list
- # apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 0E27C0A6
- # apt-get update
- # apt-get install salt-minion
- #}
 
 salt-minion:
   apt_repository:

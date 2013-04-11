@@ -1,3 +1,6 @@
+{#
+ Install a Graylog2 logging server backend
+ #}
 include:
   - graylog2
   - nrpe

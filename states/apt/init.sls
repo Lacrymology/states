@@ -1,6 +1,10 @@
+{#
+ Configure APT minimal configuration to get Debian packages from repositories.
+ #}
 include:
   - nrpe
 
+{# 99 prefix is to make sure the config file is the last one to be applied #}
 /etc/apt/apt.conf.d/99local:
   file:
     - managed
@@ -27,8 +31,15 @@ apt_sources:
       all_suites: main restricted universe multiverse
     - require:
       - file: /etc/apt/apt.conf.d/99local
-{#  module:
-    - name: pkg.refresh_db#}
+{#
+  cmd.wait is used instead of:
+
+  module:
+    - name: pkg.refresh_db
+
+  because the watch directive didn't seem to be respected back in older version.
+  this should be test to switch back to module.name instead.
+#}
   cmd:
     - wait
     - name: apt-get update

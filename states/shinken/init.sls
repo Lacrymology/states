@@ -1,3 +1,7 @@
+{#
+ Install all or some of the components required to have a complete Shinken
+ Monitoring cluster.
+ #}
 {# TODO: add support for GELF logging #}
 include:
   - virtualenv

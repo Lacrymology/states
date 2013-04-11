@@ -1,3 +1,6 @@
+{#
+ Install uWSGI Web app server.
+ #}
 include:
   - nrpe
   - git

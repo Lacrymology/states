@@ -1,3 +1,6 @@
+{#
+ Install all dependencies to create Python's virtualenv.
+ #}
 include:
   - pip
   - git

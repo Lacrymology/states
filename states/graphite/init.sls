@@ -1,3 +1,6 @@
+{#
+ Install the web interface component of graphite
+ #}
 {# TODO: create initial admin user #}
 include:
   - postgresql.server

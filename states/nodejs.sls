@@ -1,3 +1,6 @@
+{#
+ Install NodeJS platform for Javascript.
+ #}
 include:
   - diamond
 

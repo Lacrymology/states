@@ -1,3 +1,6 @@
+{#
+ Install pyelasticsearch python module in root OS python site-packages
+ #}
 include:
   - pip
   - requests

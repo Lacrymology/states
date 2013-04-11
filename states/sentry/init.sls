@@ -1,3 +1,6 @@
+{#
+ Install a Sentry (error management and reporting tool) web server.
+ #}
 include:
   - postgresql
   - postgresql.server

@@ -1,3 +1,6 @@
+{#
+ Install a DNS cache server
+ #}
 include:
   - apt
   - nrpe

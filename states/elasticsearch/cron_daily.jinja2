@@ -1,4 +1,4 @@
 #!/bin/sh
 # {{ pillar['message_do_not_modify'] }}
-
+{# flush old logs of one week old #}
 find /var/log/elasticsearch -type f -mtime +7 -exec rm -f {} \;

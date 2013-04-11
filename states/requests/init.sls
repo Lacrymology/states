@@ -1,3 +1,6 @@
+{#
+ Install Requests (HTTP library) into OS/root site-packages.
+ #}
 include:
   - pip
 

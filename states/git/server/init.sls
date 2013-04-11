@@ -1,5 +1,7 @@
 {#
- using this state the git repo URLs are:
+ Install a simple Git source control management server.
+
+ using this state git repo URLs are:
  ssh://git@{{ address }}:~git/{{ reponame }}.git
  #}
 

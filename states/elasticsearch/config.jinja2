@@ -20,6 +20,7 @@ node:
   master: {{ es['cluster']['nodes'][grains['id']]['master']|default(master) }}
   data: {{ es['cluster']['nodes'][grains['id']]['data']|default(data) }}
 
+{# configure amazon ec2 cloud auto-discovery #}
 {% if es['aws']|default(false) %}
 cloud:
   region: {{ grains['region'] }}
@@ -48,6 +49,7 @@ indices:
     max_size_per_sec: 0
     concurrent_streams: 5
 {% else %}
+{# standard static list of cluster nodes #}
 discovery:
   zen:
     ping:

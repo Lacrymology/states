@@ -1,4 +1,6 @@
 {#
+ Install a ProFTPd FTP server.
+
  WARNING
 
  FTP is a insecure and crappy protocol, I would never use that.

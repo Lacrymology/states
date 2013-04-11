@@ -1,3 +1,6 @@
+{#
+ Install Raven (Sentry client-side python library) into OS/root site-packages.
+ #}
 include:
   - pip
 

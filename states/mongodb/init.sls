@@ -1,5 +1,5 @@
 {#
- MongoDB state.
+ Install a MongoDB NoSQL server.
 
  If one day MongoDB support SSL in free distribution, do this:
  http://docs.mongodb.org/manual/tutorial/configure-ssl/

@@ -1,3 +1,6 @@
+{#
+ Configure host name
+ #}
 hostname:
   file:
     - managed

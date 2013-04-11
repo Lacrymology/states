@@ -1,5 +1,6 @@
-{# Nagios NRPE Agent #}
-
+{#
+ Install Nagios NRPE Agent
+#}
 include:
   - pip
   - gsyslog

@@ -1,3 +1,6 @@
+{#
+ cleanup Linux kernel modules
+ #}
 {% if grains['virtual'] != 'openvzve' %}
 useless_kmod:
   kmod:

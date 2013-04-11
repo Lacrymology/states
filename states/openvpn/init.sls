@@ -1,3 +1,6 @@
+{#
+ Install and run one or multiple OpenVPN servers
+ #}
 include:
   - apt
   - diamond

@@ -1,3 +1,6 @@
+{#
+ Install the Nginx web server
+ #}
 include:
   - diamond
   - nrpe

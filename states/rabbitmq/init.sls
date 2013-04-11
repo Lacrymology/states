@@ -1,3 +1,7 @@
+{#
+ Install a server or cluster of RabbitMQ message queue servers.
+ #}
+
 {# TODO: configure logging to GELF #}
 {# TODO: SSL support http://www.rabbitmq.com/ssl.html #}
 {#

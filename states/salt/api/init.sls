@@ -1,3 +1,6 @@
+{#
+ Setup a Salt API REST server.
+ #}
 include:
   - salt.master
   - git

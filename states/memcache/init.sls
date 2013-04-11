@@ -1,3 +1,6 @@
+{#
+ Install a memcache server
+ #}
 include:
   - diamond
   - nrpe

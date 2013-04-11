@@ -1,3 +1,6 @@
+{#
+ Install VIM a vi compatible editor.
+ #}
 vim:
   pkg:
     - latest

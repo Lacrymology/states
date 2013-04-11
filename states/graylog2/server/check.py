@@ -30,7 +30,6 @@ def main():
     argp.add_argument('-t', '--time', metavar='VALUE', default='30', type=int,
                       help='critical if no message since VALUE seconds')
     argp.add_argument('-w', '--warning', metavar='RANGE', default='1:10000',
-                      type=int,
                       help='critical if message numbers is outside RANGE')
     args = argp.parse_args()
     check = nagiosplugin.Check(

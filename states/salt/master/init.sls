@@ -37,6 +37,7 @@ salt-master:
     - enable: True
     - watch:
       - pkg: salt-master
+      - file: salt-master
 
 salt_master_diamond_resources:
   file:

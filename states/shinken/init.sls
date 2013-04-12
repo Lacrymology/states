@@ -15,7 +15,6 @@ include:
   - nginx
 {% endif %}
 
-{% set ssl_files = ('chained_ca.crt', 'server.pem', 'ca.crt') %}
 {#{% if 'arbiter' in pillar['shinken']['roles'] %}#}
 {#    {% if pillar['shinken']['arbiter']['use_mongodb'] %}#}
 {#  - mongodb#}
@@ -145,9 +144,9 @@ shinken-{{ role }}:
       - file: /etc/init/shinken-{{ role }}.conf
       - file: shinken-{{ role }}
 {% if pillar['shinken']['ssl']|default(False) %}
-    {% for filename in ssl_files %}
-      - file: /etc/ssl/{{ pillar['shinken']['ssl'] }}/{{ filename }}
-    {% endfor %}
+      - cmd: /etc/ssl/{{ pillar['shinken']['ssl'] }}/chained_ca.crt
+      - cmd: /etc/ssl/{{ pillar['shinken']['ssl'] }}/server.pem
+      - file: /etc/ssl/{{ pillar['shinken']['ssl'] }}/ca.crt
 {% endif %}
 {% if role == 'arbiter' %}
     {% for config in configs %}
@@ -230,9 +229,9 @@ extend:
       - watch:
         - file: /etc/nginx/conf.d/shinken-web.conf
 {% if pillar['shinken']['ssl']|default(False) %}
-    {% for filename in ssl_files %}
-        - file: /etc/ssl/{{ pillar['shinken']['ssl'] }}/{{ filename }}
-    {% endfor %}
+        - cmd: /etc/ssl/{{ pillar['shinken']['ssl'] }}/chained_ca.crt
+        - cmd: /etc/ssl/{{ pillar['shinken']['ssl'] }}/server.pem
+        - file: /etc/ssl/{{ pillar['shinken']['ssl'] }}/ca.crt
 {% endif %}
 {% endif %}
 {% endif %}

@@ -294,7 +294,7 @@ extend:
       - watch:
         - file: /etc/nginx/conf.d/graphite.conf
 {% if pillar['graphite']['web']['ssl']|default(False) %}
-    {% for filename in ('chained_ca.crt', 'server.pem', 'ca.crt') %}
-        - file: /etc/ssl/{{ pillar['graphite']['web']['ssl'] }}/{{ filename }}
-    {% endfor %}
+        - cmd: /etc/ssl/{{ pillar['graphite']['web']['ssl'] }}/chained_ca.crt
+        - cmd: /etc/ssl/{{ pillar['graphite']['web']['ssl'] }}/server.pem
+        - file: /etc/ssl/{{ pillar['graphite']['web']['ssl'] }}/ca.crt
 {% endif %}

@@ -243,8 +243,8 @@ extend:
       - watch:
         - file: /etc/nginx/conf.d/rabbitmq.conf
   {% if pillar['rabbitmq']['ssl']|default(False) %}
-    {% for filename in ('chained_ca.crt', 'server.pem', 'ca.crt') %}
-        - file: /etc/ssl/{{ pillar['rabbitmq']['ssl'] }}/{{ filename }}
-    {% endfor %}
+        - cmd: /etc/ssl/{{ pillar['rabbitmq']['ssl'] }}/chained_ca.crt
+        - cmd: /etc/ssl/{{ pillar['rabbitmq']['ssl'] }}/server.pem
+        - file: /etc/ssl/{{ pillar['rabbitmq']['ssl'] }}/ca.crt
   {% endif %}
 {% endif %}

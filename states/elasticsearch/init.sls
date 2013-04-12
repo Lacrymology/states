@@ -182,7 +182,7 @@ extend:
     service:
       - watch:
         - file: /etc/nginx/conf.d/elasticsearch.conf
-    {% for filename in ('chained_ca.crt', 'server.pem', 'ca.crt') %}
-        - file: /etc/ssl/{{ pillar['rabbitmq']['ssl'] }}/{{ filename }}
-    {% endfor %}
+        - cmd: /etc/ssl/{{ pillar['elasticsearch']['ssl'] }}/chained_ca.crt
+        - cmd: /etc/ssl/{{ pillar['elasticsearch']['ssl'] }}/server.pem
+        - file: /etc/ssl/{{ pillar['elasticsearch']['ssl'] }}/ca.crt
 {% endif %}

@@ -228,7 +228,7 @@ define reactionner {
 The receiver manages passive information. It's just a "buffer" which will
 load passive modules (like NSCA) and be read by the arbiter to dispatch data.
 #}
-{% for id in pillar['shinken']['architecture']['receiver']|default([]) %}
+{% for id in salt['pillar.get']('shinken:architecture:receiver', []) %}
 define receiver {
     receiver_name receiver-{{ id }}
     address {{ pillar['shinken']['ip_addresses'][id] }}

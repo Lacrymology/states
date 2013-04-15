@@ -16,7 +16,7 @@ COMMIT
 COMMIT
 *filter
 :OUTPUT ACCEPT [0:0]
-{% if pillar['firewall']['filter']|default(False) %}
+{% if salt['pillar.get']('firewall:filter', False) %}
 :INPUT {% if grains['virtual'] == 'openvzve' %}ACCEPT{% else %}DROP{% endif %} [0:0]
 :FORWARD {% if grains['virtual'] == 'openvzve' %}ACCEPT{% else %}DROP{% endif %} [0:0]
 -A INPUT -i lo -j ACCEPT

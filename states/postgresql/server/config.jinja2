@@ -26,19 +26,19 @@ unix_socket_directory = '/var/run/postgresql'
  Network and Security
 #}
 password_encryption = on
-listen_addresses = '{{ pillar['postgresql']['listen_addresses']|default('localhost') }}'
-port = {{ pillar['postgresql']['listen_port']|default(5432) }}
+listen_addresses = '{{ salt['pillar.get']('postgresql:listen_addresses', 'localhost') }}'
+port = {{ salt['pillar.get']('postgresql:listen_port', 5432) }}
 {#
  Increasing max_connections costs ~400 bytes of shared memory per
  connection slot, plus lock space (see max_locks_per_transaction).
 #}
-max_connections = {{ pillar['postgresql']['listen_addresses']|default(100) }}
+max_connections = {{ salt['pillar.get']('postgresql:listen_addresses', 100) }}
 {#superuser_reserved_connections = 3#}
 {# force bonjour to be off #}
 bonjour = off
 {#authentication_timeout = 1min#}
 
-{% if pillar['postgresql']['ssl']|default(False) %}
+{% if salt['pillar.data']('postgresql:ssl', False) %}
 ssl = true
 ssl_renegotiation_limit = 512MB
 ssl_ciphers = 'RC4:HIGH:!aNULL:!MD5'
@@ -56,8 +56,8 @@ tcp_keepalives_count = 0
 {#
  Resource Usage except WAL
  #}
-shared_buffers = {{ pillar['postgresql']['shared_buffers']|default('24MB') }}
-temp_buffers = {{ pillar['postgresql']['temp_buffers']|default('8MB') }}
+shared_buffers = {{ salt['pillar.get']('postgresql:shared_buffers', '24MB') }}
+temp_buffers = {{ salt['pillar.get']('postgresql:temp_buffers', '8MB') }}
 
 {#
  Logging
@@ -74,7 +74,7 @@ log_min_error_statement = error
  0 logs all statements
  > 0 logs only statements running at least this number of milliseconds
 #}
-log_min_duration_statement = {{ pillar['postgresql']['log_slow_query']|default(-1) }}
+log_min_duration_statement = {{ salt['pillar.get']('postgresql:log_slow_query', -1) }}
 
 {# What to Log #}
 

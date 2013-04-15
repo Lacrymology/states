@@ -43,7 +43,7 @@ ssl = true
 ssl_renegotiation_limit = 512MB
 ssl_ciphers = 'RC4:HIGH:!aNULL:!MD5'
 ssl_cert_file = '/etc/ssl/{{ pillar['postgresql']['ssl'] }}/chained_ca.crt'
-ssl_certificate_key = '/etc/ssl/{{ pillar['postgresql']['ssl'] }}/server.pem'
+ssl_key_file = '/etc/ssl/{{ pillar['postgresql']['ssl'] }}/server.pem'
 {% else %}
 ssl = false
 {% endif %}

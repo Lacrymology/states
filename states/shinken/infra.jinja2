@@ -336,12 +336,14 @@ define service {
 }
 {% endfor %}
 
+{% if pillar['shinken']['proftpd']|default(False) %}
 define service {
     host_name {% for host in pillar['shinken']['proftpd'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description proftpd
     check_command check_nrpe!check_proftpd
     use salt-service
 }
+{% endif %}
 
 {% if pillar['shinken']['pdnsd']|default(False) %}
 define service {

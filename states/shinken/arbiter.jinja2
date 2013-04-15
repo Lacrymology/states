@@ -17,6 +17,8 @@ cfg_dir=/etc/shinken/objects/
 # configuration checking
 disable_old_nagios_parameters_whining=0
 
+{# until shinken 1.4 isn't out, can't use SSL #}
+{#
 {% if pillar['shinken']['ssl']|default(False) %}
 use_ssl=1
 certs_dir=/etc/ssl/{{ pillar['shinken']['ssl'] }}
@@ -24,8 +26,9 @@ ca_cert=/etc/ssl/{{ pillar['shinken']['ssl'] }}/chained_ca.crt
 server_cert=/etc/ssl/{{ pillar['shinken']['ssl'] }}/server.pem
 #hard_ssl_name_check=0
 {% else %}
+#}
 use_ssl=0
-{% endif %}
+{#{% endif %}#}
 
 # If in the log you want to see
 # [Fri Apr 15 15:43:19 2011] instead of

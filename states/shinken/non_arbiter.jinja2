@@ -18,6 +18,8 @@ daemon_enabled=1
 {#maxfd=1024#}
 idontcareaboutsecurity=0
 
+{# until shinken 1.4 isn't out, can't use SSL #}
+{#
 {% if pillar['shinken']['ssl']|default(False) %}
 use_ssl=1
 certs_dir=/etc/ssl/{{ pillar['shinken']['ssl'] }}
@@ -25,5 +27,6 @@ ca_cert=/etc/ssl/{{ pillar['shinken']['ssl'] }}/chained_ca.crt
 server_cert=/etc/ssl/{{ pillar['shinken']['ssl'] }}/server.pem
 #hard_ssl_name_check=0
 {% else %}
+#}
 use_ssl=0
-{% endif %}
+{#{% endif %}#}

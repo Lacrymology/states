@@ -13,7 +13,7 @@ graphite:
     - present
     - shell: /bin/false
     - home: /usr/local/graphite
-    - password: *
+    - password: "*"
     - enforce_password: True
     - gid_from_name: True
     - groups:

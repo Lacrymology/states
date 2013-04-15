@@ -14,7 +14,7 @@ web:
     - fullname: www-data
     - shell: /bin/false
     - home: /var/www
-    - password: *
+    - password: "*"
     - enforce_password: True
     - require:
       - group: web

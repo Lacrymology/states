@@ -9,6 +9,7 @@ include:
   - pip
   - sudo
   - ruby
+  - web
 
 /etc/init/uwsgi.conf:
   file:
@@ -104,6 +105,7 @@ uwsgi_sockets:
     - group: www-data
     - mode: 770
     - require:
+      - user: web
       - pkg: uwsgi_build
       - git: uwsgi_build
       - file: uwsgi_build
@@ -135,7 +137,7 @@ uwsgi_emperor:
     - group: www-data
     - mode: 550
     - require:
-      - pkg: nginx
+      - user: web
 
 uwsgi_diamond_resources:
   file:

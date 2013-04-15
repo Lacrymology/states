@@ -4,6 +4,7 @@
 include:
   - diamond
   - nrpe
+  - web
 
 {#
  first: install memcached and get rid of SysV startup script.
@@ -57,6 +58,7 @@ upstart_memcached:
     - source: salt://memcache/upstart.jinja2
     - require:
       - file: memcached
+      - user: web
 
 /etc/nagios/nrpe.d/memcache.cfg:
   file:

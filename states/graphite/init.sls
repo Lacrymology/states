@@ -12,6 +12,7 @@ include:
   - memcache
   - diamond
   - pip
+  - web
 {% if pillar['graphite']['web']['ssl']|default(False) %}
   - ssl
 {% endif %}
@@ -31,11 +32,12 @@ graphite_logdir:
     - directory
     - name: /var/log/graphite/graphite
     - user: www-data
-    - group: www-data
+    - group: graphite
     - mode: 770
     - makedirs: True
     - require:
-      - user: graphite
+      - user: web
+      - group: graphite
       - file: /var/log/graphite
 
 graphite_graph_templates:
@@ -48,7 +50,8 @@ graphite_graph_templates:
     - mode: 440
     - source: salt://graphite/graph_templates.jinja2
     - require:
-      - user: graphite
+      - user: web
+      - group: graphite
 
 graphite_wsgi:
   file:
@@ -61,6 +64,7 @@ graphite_wsgi:
     - source: salt://graphite/wsgi.jinja2
     - require:
       - virtualenv: graphite
+      - user: web
 
 {#graphite_admin_user:#}
 {#  module:#}
@@ -144,7 +148,8 @@ graphite_settings:
     - mode: 440
     - source: salt://graphite/config.jinja2
     - require:
-      - user: graphite
+      - user: web
+      - group: graphite
       - module: graphite-web
       - pip: graphite-web
   postgres_user:
@@ -200,6 +205,7 @@ graphite_settings:
       - file: graphite_logdir
       - module: graphite_settings
       - file: /usr/local/graphite/bin/build-index.sh
+      - user: web
   module:
     - wait
     - name: file.touch

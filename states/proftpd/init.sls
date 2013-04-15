@@ -22,6 +22,7 @@ include:
   - postgresql.server
   - nrpe
   - diamond
+  - web
 
 proftpd-basic:
   debconf:
@@ -138,6 +139,8 @@ proftpd_diamond_resources:
     - group: www-data
     - mode: 770
     - makedirs: True
+    - require:
+      - user: web
 {% endfor %}
 
 extend:

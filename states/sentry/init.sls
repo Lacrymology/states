@@ -11,6 +11,7 @@ include:
   - nginx
   - diamond
   - pip
+  - web
 {% if pillar['sentry']['ssl']|default(False) %}
   - ssl
 {% endif %}
@@ -80,6 +81,8 @@ sentry_settings:
     - template: jinja
     - user: www-data
     - group: www-data
+    - require:
+      - user: web
     - mode: 440
     - source: salt://sentry/config.jinja2
   cmd:

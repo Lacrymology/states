@@ -10,6 +10,7 @@ include:
   - diamond
   - uwsgi
   - graylog2
+  - web
 {% if pillar['graylog2']['ssl']|default(False) %}
   - ssl
 {% endif %}
@@ -34,6 +35,8 @@ graylog2-web-{{ filename }}:
     - group: www-data
     - mode: 440
     - source: salt://graylog2/web/{{ filename }}.jinja2
+    - require:
+      - user: web
 {% endfor %}
 
 {% for filename in ('config', 'email') %}
@@ -107,6 +110,7 @@ graylog2-web:
     - context: 
       version: {{ version }}
     - require:
+      - user: web
       - file: {{ web_root_dir }}/log
       - service: uwsgi_emperor
       - service: mongodb
@@ -131,6 +135,8 @@ change_graylog2_web_dir_permission:
     - watch:
       - archive: graylog2-web
     - name: chown -R www-data:www-data {{ web_root_dir }}
+    - require:
+      - user: web
 
 graylog2_web_diamond_resource:
   file:

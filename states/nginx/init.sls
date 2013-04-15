@@ -4,6 +4,9 @@
 include:
   - diamond
   - nrpe
+  - web
+
+{% set bad_configs = ('default', 'example_ssl') %}
 
 {% for filename in bad_configs %}
 /etc/nginx/conf.d/{{ filename }}.conf:
@@ -108,6 +111,7 @@ nginx:
     - name: nginx
     - require:
       - apt_repository: nginx
+      - user: web
   file:
     - managed
     - name: /etc/init/nginx.conf
@@ -126,8 +130,9 @@ nginx:
     - watch:
       - file: nginx
       - file: /etc/nginx/nginx.conf
-      - file: /etc/nginx/conf.d/default.conf
-      - file: /etc/nginx/conf.d/example_ssl.conf
+{% for filename in bad_configs %}
+      - file: /etc/nginx/conf.d/{{ filename }}.conf
+{% endfor %}
       - pkg: nginx
     - require:
 {% for log_type in logger_types %}

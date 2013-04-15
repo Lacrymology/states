@@ -2,6 +2,9 @@
  State(s) common to graylog2 web and server
  #}
 
+include:
+  - web
+
 /var/log/graylog2:
   file:
     - directory
@@ -9,3 +12,5 @@
     - group: www-data
     - mode: 770
     - makedirs: True
+    - require:
+      - group: web

@@ -4,13 +4,23 @@
 
 include:
   - virtualenv
+  - web
 
 graphite:
+  group:
+    - present
   user:
     - present
     - shell: /bin/false
     - home: /usr/local/graphite
+    - password: *
+    - enforce_password: True
     - gid_from_name: True
+    - groups:
+      - www-data
+    - require:
+      - group: web
+      - group: graphite
   virtualenv:
     - managed
     - name: /usr/local/graphite
@@ -24,7 +34,8 @@ graphite:
     - group: graphite
     - mode: 770
     - require:
-      - user: graphite
+      - user: web
+      - group: graphite
 
 /etc/graphite:
   file:

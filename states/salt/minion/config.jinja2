@@ -16,3 +16,5 @@ log_file: file:///dev/log
 log_level: debug
 log_fmt_logfile: '%(asctime)-15s salt-minion[%(process)d] %(name)s: %(message)s'
 log_datefmt_logfile: '%b %d %H:%M:%S'
+carbon.host: {{ salt['pillar.get']('graphite_address', '127.0.0.1') }}
+carbon.port: 2003

@@ -88,6 +88,8 @@ nrpe_diamond_resources:
     - user: root
     - group: root
     - mode: 440
+    - require:
+      - file: /etc/gsyslog.d
 
 extend:
   gsyslog:

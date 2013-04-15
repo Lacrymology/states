@@ -38,6 +38,13 @@ klogd:
     - enable: False
 {% endif %}
 
+/etc/gsyslog.d:
+  file:
+    - directory
+    - user: root
+    - group: root
+    - mode: 550
+
 gsyslog_upstart:
   file:
     - managed
@@ -96,6 +103,8 @@ gsyslog:
     - group: root
     - mode: 440
     - source: salt://gsyslog/config.jinja2
+    - require:
+      - file: /etc/gsyslog.d
   service:
     - running
     - enable: True

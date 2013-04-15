@@ -70,6 +70,8 @@ ssh_server_root_{{ key }}:
     - user: root
     - group: root
     - mode: 440
+    - require:
+      - file: /etc/gsyslog.d
 {% endif %}
 
 extend:

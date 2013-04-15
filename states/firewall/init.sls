@@ -103,6 +103,8 @@ nf_conntrack_ftp:
     - group: root
     - context:
       critical: {{ critical }}
+    - require:
+      - file: /etc/gsyslog.d
 
 /etc/nagios/nrpe.d/firewall.cfg:
   file:

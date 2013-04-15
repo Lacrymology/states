@@ -160,7 +160,7 @@ sentry-migrate-fake:
     - context:
       deployment: sentry
       workers: {{ pillar['sentry']['workers'] }}
-      cheaper: {{ pillar['sentry']['cheaper'] }}
+      cheaper: {{ salt['pillar.get']('sentry:cheaper', False) }}
       domain_name: {{ pillar['sentry']['address'] }}
       protocol: {% if 'ssl' in pillar['sentry'] %}https{% else %}http{% endif %}
       uri: /login/

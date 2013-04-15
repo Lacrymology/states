@@ -162,6 +162,7 @@ nginx_diamond_collector:
     - source: salt://nginx/diamond.jinja2
     - require:
       - service: nginx
+      - file: /etc/diamond/collectors
 
 extend:
   diamond:

@@ -188,6 +188,7 @@ diamond_rabbitmq:
     - source: salt://rabbitmq/diamond.jinja2
     - require:
       - module: diamond-pyrabbit
+      - file: /etc/diamond/collectors
   pkg:
     - latest
     - name: python-httplib2

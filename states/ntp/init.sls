@@ -78,6 +78,8 @@ diamond_ntp:
     - group: root
     - mode: 440
     - source: salt://diamond/basic_collector.jinja2
+    - require:
+      - file: /etc/diamond/collectors
 
 extend:
   diamond:

@@ -47,6 +47,8 @@ openvpn_diamond_collector:
     - source: salt://openvpn/diamond.jinja2
     - context:
       instances: {{ pillar['openvpn']|default({}) }}
+    - require:
+      - file: /etc/diamond/collectors
 
 openvpn_diamond_resources:
   file:

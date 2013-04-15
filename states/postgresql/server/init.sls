@@ -95,6 +95,8 @@ postgresql_diamond_collector:
     - group: root
     - mode: 440
     - source: salt://postgresql/server/diamond.jinja2
+    - require:
+      - file: /etc/diamond/collectors
   postgres_user:
     - present
     - name: diamond

@@ -72,6 +72,7 @@ diamond_mongodb:
     - source: salt://mongodb/diamond.jinja2
     - require:
       - module: diamond-pymongo
+      - file: /etc/diamond/collectors
 
 mongodb_diamond_resources:
   file:

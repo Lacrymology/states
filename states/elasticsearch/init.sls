@@ -169,6 +169,8 @@ elasticsearch_diamond_collector:
     - group: root
     - mode: 440
     - source: salt://elasticsearch/diamond.jinja2
+    - require:
+      - file: /etc/diamond/collectors
 
 extend:
   diamond:

@@ -7,7 +7,7 @@ module = sentry.wsgi
 processes = {{ pillar['sentry']['workers'] }}
 harakiri = {{ pillar['sentry']['timeout']|default(45) }}
 harakiri-verbose = true
-{% if pillar['sentry']['cheaper'] %}
+{% if pillar['sentry']['cheaper']|default(False) %}
 {% if pillar['sentry']['cheaper'] > 0 %}
 cheaper = {{ pillar['sentry']['cheaper'] }}
 {% else %}

@@ -10,6 +10,7 @@ ssmtp:
   pkg:
     - installed
     - require:
+      - cmd: apt_sources
       - debconf: ssmtp
       - cmd: hostname
       - host: hostname
@@ -45,6 +46,7 @@ bsd-mailx:
     - installed
     - require:
       - pkg: ssmtp
+      - cmd: apt_sources
 
 {% for template, config in (('config', 'ssmtp.conf'), ('revaliases', 'revaliases')) %}
 /etc/ssmtp/{{ config }}:

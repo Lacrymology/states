@@ -1,3 +1,6 @@
+include:
+  - apt
+
 bash:
   pkg:
     - latest
@@ -11,6 +14,7 @@ bash:
     - source: salt://bash/config.jinja2
     - require:
       - pkg: bash
+      - cmd: apt_sources
 
 root_profile:
   file:

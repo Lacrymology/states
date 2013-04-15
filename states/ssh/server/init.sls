@@ -5,6 +5,7 @@ include:
   - diamond
   - nrpe
   - gsyslog
+  - apt
 
 /etc/nagios/nrpe.d/ssh.cfg:
   file:
@@ -20,6 +21,8 @@ include:
 openssh-server:
   pkg:
     - latest
+    - require:
+      - cmd: apt_sources
   file:
     - managed
     - name: /etc/ssh/sshd_config

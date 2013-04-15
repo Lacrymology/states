@@ -2,6 +2,10 @@
 list of useful packages we really want to have everywhere
 tools for troubleshooting
 #}
+
+include:
+  - apt
+
 basic:
   pkg:
     - latest
@@ -17,3 +21,5 @@ basic:
       - pciutils
       - dmidecode
     - skip_verify: True
+    - require:
+      - cmd: apt_sources

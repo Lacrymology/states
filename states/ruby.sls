@@ -1,6 +1,9 @@
 {#
  Install Ruby interpreter.
  #}
+include:
+  - apt
+
 old_ruby:
   pkg:
     - purged
@@ -21,3 +24,4 @@ ruby:
       - ruby1.9.1-dev 
     - require:
       - pkg: old_ruby
+      - cmd: apt_sources

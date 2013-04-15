@@ -10,6 +10,7 @@ include:
   - sudo
   - ruby
   - web
+  - apt
 
 /etc/init/uwsgi.conf:
   file:
@@ -33,6 +34,8 @@ uwsgi_build:
       - build-essential
       - python-dev
       - libxml2-dev
+    - require:
+      - cmd: apt_sources
   git:
     - latest
     - name: {{ pillar['uwsgi']['repository'] }}

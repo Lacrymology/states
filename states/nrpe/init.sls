@@ -5,6 +5,7 @@ include:
   - pip
   - gsyslog
   - diamond
+  - apt
 
 /usr/local/nagiosplugin:
   file:
@@ -37,6 +38,8 @@ nagios-nrpe-server:
       - nagios-nrpe-server
       - nagios-plugins-standard
       - nagios-plugins-basic
+    - require:
+      - cmd: apt_sources
   file:
     - managed
     - name: /etc/nagios/nrpe.d/000-nagios-servers.cfg

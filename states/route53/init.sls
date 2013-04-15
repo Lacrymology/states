@@ -4,13 +4,15 @@
  #}
 include:
   - pip
+  - apt
 
 route53:
   pkg:
     - installed
     - names:
-      - libxml2-dev
-      - libxslt1-dev
+      - python-lxml
+    - require:
+      - cmd: apt_sources
   file:
     - managed
     - name: {{ opts['cachedir'] }}/salt-route53-requirements.txt

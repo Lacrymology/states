@@ -6,6 +6,7 @@ include:
   - ssh.client
   - git
   - mercurial
+  - apt
 
 {% set root_user_home = salt['user.info']('root')['home'] %}
 
@@ -39,6 +40,7 @@ python-pip:
   pkg:
     - latest
     - require:
+      - cmd: apt_sources
       - pkg: openssh-client
       - pkg: git
       - pkg: mercurial

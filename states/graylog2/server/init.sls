@@ -7,6 +7,7 @@ include:
   - diamond
   - mongodb
   - elasticsearch.python
+  - apt
 
 {# TODO: set Email output plugin settings straight into MongoDB from salt #}
 
@@ -77,6 +78,8 @@ graylog2-server:
   pkg:
     - latest
     - name: openjdk-7-jre-headless
+    - require:
+      - cmd: apt_sources
 {#
  IMPORTANT:
  graylog2-server need to be restarted after any change in

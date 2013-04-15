@@ -5,6 +5,7 @@ include:
   - pip
   - git
   - mercurial
+  - apt
 
 python-virtualenv:
   pkg:
@@ -17,6 +18,7 @@ python-virtualenv:
       - pkg: python-pip
       - pkg: git
       - pkg: mercurial
+      - cmd: apt_sources
 
 {% if 'backup_server' in pillar %}
 /usr/local/bin/backup-pip:

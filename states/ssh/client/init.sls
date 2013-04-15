@@ -1,6 +1,9 @@
 {#
  Configure an OpenSSH client
  #}
+include:
+  - apt
+
 /root/.ssh:
   file:
     - directory
@@ -38,6 +41,7 @@ openssh-client:
   pkg:
     - latest
     - require:
+      - cmd: apt_sources
       - ssh_known_hosts: bitbucket.org
       - ssh_known_hosts: github.com
 {% if pillar['deployment_key_source']|default(False) %}

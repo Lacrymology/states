@@ -8,6 +8,7 @@ include:
   - nrpe
   - diamond
   - pip
+  - apt
 {% if pillar['shinken']['ssl']|default(False) %}
   - ssl
 {% endif %}
@@ -100,6 +101,8 @@ shinken:
 nagios-nrpe-plugin:
   pkg:
     - installed
+    - require:
+      - cmd: apt_sources
 {% endif %}
 
 {% if role == 'broker' %}

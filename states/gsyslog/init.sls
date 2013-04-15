@@ -6,6 +6,7 @@ include:
   - nrpe
   - diamond
   - pip
+  - apt
 
 {#
  gsyslog depends on klogd to get kernel logs, which is in sysklogd.
@@ -17,6 +18,8 @@ sysklogd:
     - names:
       - sysklogd
       - klogd
+    - require:
+      - cmd: apt_sources
   module:
     - wait
     - name: cmd.run
@@ -77,6 +80,8 @@ gsyslog:
   pkg:
     - latest
     - name: libevent-dev
+    - require:
+      - cmd: apt_sources
   virtualenv:
     - managed
     - name: /usr/local/gsyslog

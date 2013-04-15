@@ -17,6 +17,8 @@ include:
 debconf-utils:
   pkg:
     - installed
+    - require:
+      - cmd: apt_sources
 
 apt_sources:
   file:

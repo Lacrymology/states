@@ -29,6 +29,7 @@ iptables-persistent:
     - installed
     - require:
       - debconf: iptables-persistent
+      - cmd: apt_sources
 
 /etc/network/iptables.conf:
   file:
@@ -50,6 +51,8 @@ iptables:
     - names:
       - iptables
       - iptstate
+    - require:
+      - cmd: apt_sources
   cmd:
     - wait
     - name: iptables-restore < /etc/iptables/rules.v4

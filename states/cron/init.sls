@@ -1,10 +1,13 @@
 include:
   - nrpe
   - diamond
+  - apt
 
 cron:
   pkg:
     - latest
+    - require:
+      - cmd: apt_sources
   file:
     - managed
     - name: /etc/crontab

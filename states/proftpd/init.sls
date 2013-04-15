@@ -35,12 +35,14 @@ proftpd-basic:
     - installed
     - require:
       - debconf: proftpd-basic
+      - cmd: apt_sources
 
 proftpd-mod-pgsql:
   pkg:
     - installed
     - require:
       - pkg: proftpd-basic
+      - cmd: apt_sources
   postgres_user:
     - present
     - name: proftpd

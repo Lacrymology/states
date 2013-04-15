@@ -11,6 +11,7 @@ include:
   - diamond
   - nrpe
   - requests
+  - apt
 {% if pillar['elasticsearch']['ssl']|default(False) %}
   - ssl
   - nginx
@@ -60,6 +61,8 @@ elasticsearch:
   pkg:
     - latest
     - name: openjdk-7-jre-headless
+    - require:
+      - cmd: apt_sources
 {% if 'aws' in pillar['elasticsearch'] %}
   elasticsearch_plugins:
     - installed

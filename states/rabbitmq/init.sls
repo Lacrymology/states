@@ -19,6 +19,7 @@ include:
   - diamond
   - nrpe
   - pip
+  - apt
   - hostname
 {% if pillar['rabbitmq']['management'] != 'guest' -%}
   {%- if pillar['rabbitmq']['ssl']|default(False) %}
@@ -192,6 +193,8 @@ diamond_rabbitmq:
   pkg:
     - latest
     - name: python-httplib2
+    - require:
+      - cmd: apt_sources
 
 {% for node in pillar['rabbitmq']['cluster']['nodes'] -%}
     {% if node != grains['id'] -%}

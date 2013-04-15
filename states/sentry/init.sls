@@ -12,6 +12,7 @@ include:
   - diamond
   - pip
   - web
+  - apt
 {% if pillar['sentry']['ssl']|default(False) %}
   - ssl
 {% endif %}
@@ -26,6 +27,8 @@ sentry:
   pkg:
     - latest
     - name: libevent-dev
+    - require:
+      - cmd: apt_sources
   file:
     - managed
     - name: /usr/local/sentry/salt-requirements.txt

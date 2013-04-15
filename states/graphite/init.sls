@@ -13,6 +13,7 @@ include:
   - diamond
   - pip
   - web
+  - apt
 {% if pillar['graphite']['web']['ssl']|default(False) %}
   - ssl
 {% endif %}
@@ -117,6 +118,8 @@ graphite-web:
   pkg:
     - installed
     - name: libcairo2-dev
+    - require:
+      - cmd: apt_sources
   cmd:
     - wait
     - name: find /usr/local/graphite -name '*.pyc' -delete

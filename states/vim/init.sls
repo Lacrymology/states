@@ -1,6 +1,9 @@
 {#
  Install VIM a vi compatible editor.
  #}
+include:
+  - apt
+
 vim:
   pkg:
     - latest
@@ -14,6 +17,7 @@ vim:
     - source: salt://vim/vimrc.jinja2
     - require:
       - pkg: cron
+      - cmd: apt_sources
 
 vim-tiny:
   pkg:

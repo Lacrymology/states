@@ -15,6 +15,13 @@ include:
   - virtualenv
   - nrpe
 
+/etc/diamond:
+  file:
+    - directory
+    - user: root
+    - group: root
+    - mode: 550
+
 /etc/diamond/collectors:
   file:
     - directory
@@ -22,7 +29,7 @@ include:
     - group: root
     - mode: 550
     - require:
-      - file: diamond
+      - file: /etc/diamond
 
 diamond_upstart:
   file:
@@ -80,7 +87,7 @@ diamond:
     - source: salt://diamond/config.jinja2
     - require:
       - virtualenv: diamond
-      - file: /etc/diamond/collectors
+      - file: /etc/diamond
 {% if 'ping' in pillar['diamond']|default([]) %}
     - context:
       ping_hosts: {{ pillar['diamond']['ping'] }}

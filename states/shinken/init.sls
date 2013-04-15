@@ -111,6 +111,8 @@ nagios-nrpe-plugin:
     - user: www-data
     - group: www-data
     - mode: 440
+    - require:
+      - pkg: nginx
 {% endif %}
 
 shinken-{{ role }}:

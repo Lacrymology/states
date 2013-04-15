@@ -158,6 +158,8 @@ graylog2_web_diamond_resource:
     - user: www-data
     - group: www-data
     - mode: 440
+    - require:
+      - pkg: nginx
     - context: 
       version: {{ version }}
 

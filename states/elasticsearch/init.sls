@@ -113,6 +113,8 @@ elasticsearch:
     - template: jinja
     - user: www-data
     - group: www-data
+    - require:
+      - pkg: nginx
     - mode: 400
     - source: salt://nginx/proxy.jinja2
     - context:

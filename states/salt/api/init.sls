@@ -76,6 +76,8 @@ salt-ui:
     - user: www-data
     - group: www-data
     - mode: 440
+    - require:
+      - pkg: nginx
 
 /etc/nagios/nrpe.d/salt-api.cfg:
   file:

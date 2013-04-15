@@ -210,6 +210,8 @@ uwsgi_diamond_sentry_resources:
     - group: www-data
     - mode: 440
     - source: salt://sentry/nginx.jinja2
+    - require:
+      - pkg: nginx
 
 extend:
   nagios-nrpe-server:

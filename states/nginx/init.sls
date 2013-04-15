@@ -5,10 +5,12 @@ include:
   - diamond
   - nrpe
 
-{% for filename in ('default', 'example_ssl') %}
+{% for filename in bad_configs %}
 /etc/nginx/conf.d/{{ filename }}.conf:
   file:
     - absent
+    - require:
+      - pkg: nginx
 {% endfor %}
 
 /etc/nagios/nrpe.d/nginx.cfg:

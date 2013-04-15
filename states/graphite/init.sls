@@ -233,6 +233,7 @@ graphite_settings:
     - mode: 440
     - require:
       - module: /etc/uwsgi/graphite.ini
+      - pkg: nginx
 
 /etc/nagios/nrpe.d/graphite.cfg:
   file:

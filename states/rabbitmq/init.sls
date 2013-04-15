@@ -211,6 +211,8 @@ host_{{ node }}:
     - group: www-data
     - mode: 400
     - source: salt://nginx/proxy.jinja2
+    - require:
+      - pkg: nginx
     - context:
       destination: http://127.0.0.1:15672
       ssl: {{ pillar['rabbitmq']['ssl']|default(False) }}

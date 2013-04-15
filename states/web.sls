@@ -20,6 +20,7 @@ web:
       - group: web
   file:
     - directory
+    - name: /var/www
     - user: www-data
     - group: www-data
     - mode: 775

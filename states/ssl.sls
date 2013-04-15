@@ -35,6 +35,13 @@ Requires files in source:
     openssl req -in server.csr -noout -text
  #}
 
+{# ssl-certs debian package use ssl-cert group to easily give access to
+   private key on some process #}
+ssl-cert:
+  group:
+    - present
+    - system: True
+
 {% for name in pillar['ssl'] %}
 
 /etc/ssl/{{ name }}:
@@ -67,6 +74,18 @@ that support SSL.
     - watch:
       - file: /etc/ssl/{{ name }}/server.crt
       - file: /etc/ssl/{{ name }}/server.key
+  module:
+    - wait
+    - name: file.check_perms
+    - m_name: /etc/ssl/{{ name }}/server.pem
+    - ret: {}
+    - mode: "440"
+    - user: root
+    - group: ssl-cert
+    - require:
+      - group: ssl-cert
+    - watch:
+      - cmd: /etc/ssl/{{ name }}/server.pem
 
 {#
 Some browsers may complain about a certificate signed by a well-known

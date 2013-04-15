@@ -147,7 +147,7 @@ shinken-{{ role }}:
       - file: shinken-{{ role }}
 {% if pillar['shinken']['ssl']|default(False) %}
       - cmd: /etc/ssl/{{ pillar['shinken']['ssl'] }}/chained_ca.crt
-      - cmd: /etc/ssl/{{ pillar['shinken']['ssl'] }}/server.pem
+      - module: /etc/ssl/{{ pillar['shinken']['ssl'] }}/server.pem
       - file: /etc/ssl/{{ pillar['shinken']['ssl'] }}/ca.crt
 {% endif %}
 {% if role == 'arbiter' %}
@@ -232,7 +232,7 @@ extend:
         - file: /etc/nginx/conf.d/shinken-web.conf
 {% if pillar['shinken']['ssl']|default(False) %}
         - cmd: /etc/ssl/{{ pillar['shinken']['ssl'] }}/chained_ca.crt
-        - cmd: /etc/ssl/{{ pillar['shinken']['ssl'] }}/server.pem
+        - module: /etc/ssl/{{ pillar['shinken']['ssl'] }}/server.pem
         - file: /etc/ssl/{{ pillar['shinken']['ssl'] }}/ca.crt
 {% endif %}
 {% endif %}

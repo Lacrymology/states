@@ -45,7 +45,7 @@ postgresql:
       - file: postgresql
 {% if pillar['postgresql']['ssl']|default(False) %}
       - cmd: /etc/ssl/{{ pillar['postgresql']['ssl'] }}/chained_ca.crt
-      - cmd: /etc/ssl/{{ pillar['postgresql']['ssl'] }}/server.pem
+      - module: /etc/ssl/{{ pillar['postgresql']['ssl'] }}/server.pem
       - file: /etc/ssl/{{ pillar['postgresql']['ssl'] }}/ca.crt
 {% endif %}
 

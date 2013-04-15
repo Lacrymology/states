@@ -113,7 +113,7 @@ extend:
         - file: salt-ui
 {% if pillar['salt_master']['ssl']|default(False) %}
         - cmd: /etc/ssl/{{ pillar['salt_master']['ssl'] }}/chained_ca.crt
-        - cmd: /etc/ssl/{{ pillar['salt_master']['ssl'] }}/server.pem
+        - module: /etc/ssl/{{ pillar['salt_master']['ssl'] }}/server.pem
         - file: /etc/ssl/{{ pillar['salt_master']['ssl'] }}/ca.crt
 {% endif %}
   salt-master:

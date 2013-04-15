@@ -302,6 +302,6 @@ extend:
         - file: /etc/nginx/conf.d/graphite.conf
 {% if pillar['graphite']['web']['ssl']|default(False) %}
         - cmd: /etc/ssl/{{ pillar['graphite']['web']['ssl'] }}/chained_ca.crt
-        - cmd: /etc/ssl/{{ pillar['graphite']['web']['ssl'] }}/server.pem
+        - module: /etc/ssl/{{ pillar['graphite']['web']['ssl'] }}/server.pem
         - file: /etc/ssl/{{ pillar['graphite']['web']['ssl'] }}/ca.crt
 {% endif %}

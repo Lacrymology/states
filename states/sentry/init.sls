@@ -228,6 +228,6 @@ extend:
         - file: /etc/nginx/conf.d/sentry.conf
 {% if pillar['sentry']['ssl']|default(False) %}
         - cmd: /etc/ssl/{{ pillar['sentry']['ssl'] }}/chained_ca.crt
-        - cmd: /etc/ssl/{{ pillar['sentry']['ssl'] }}/server.pem
+        - module: /etc/ssl/{{ pillar['sentry']['ssl'] }}/server.pem
         - file: /etc/ssl/{{ pillar['sentry']['ssl'] }}/ca.crt
 {% endif %}

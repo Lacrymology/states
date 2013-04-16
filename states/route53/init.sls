@@ -6,13 +6,19 @@ include:
   - pip
   - apt
 
+python-lxml:
+  pkg:
+    - purged
+
 route53:
   pkg:
     - installed
     - names:
-      - python-lxml
+      - libxml2-dev
+      - libxslt1-dev
     - require:
       - cmd: apt_sources
+      - pkg: python-lxml
   file:
     - managed
     - name: {{ opts['cachedir'] }}/salt-route53-requirements.txt

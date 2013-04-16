@@ -125,7 +125,6 @@ elasticsearch:
       http_port: False
       ssl: {{ pillar['elasticsearch']['ssl']|default(False) }}
       hostnames: {{ pillar['elasticsearch']['hostnames'] }}
-{% if pillar['elasticsearch']['ssl']|default(False) %}
       allowed:
         - 127.0.0.1/32
 {% for allowed in pillar['elasticsearch']['https_allowed'] %}

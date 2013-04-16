@@ -92,6 +92,9 @@ def records_exists(access_key, secret_key, records):
                         # check ttl
                         if 'ttl' in records_type[record]:
                             if records_type[record]['ttl'] != existing.ttl:
+                                log.debug("TTL is changing %s -> %s",
+                                          existing.ttl,
+                                          records_type[record]['ttl'])
                                 ret['changes']['{0} TTL'.format(record)] =\
                                     '{0} -> {1}'.format(
                                         existing.ttl,
@@ -100,6 +103,9 @@ def records_exists(access_key, secret_key, records):
                                 same = False
                         # check records (values)
                         if records_type[record]['values'] != existing.records:
+                            log.debug("Record is changing %s -> %s",
+                                      existing.records,
+                                      records_type[record]['values'])
                             ret['changes']['{0} records'.format(record)] =\
                                 '{0} -> {1}'.format(
                                     existing.records,
@@ -135,3 +141,22 @@ def records_exists(access_key, secret_key, records):
                     ret['changes'][change_name] = kwargs
     ret['result'] = True
     return ret
+
+if __name__ == '__main__':
+    logging.basicConfig(level=logging.DEBUG)
+    records_exists(
+        'AKIAJ6LQJSG6QMTYK7BA',
+        'a+2uXD5mWdi6m2JUQ1gbk8Jrhfb47G24Wq+2GOeo',
+        {
+            'Z2ESDHL401N3AQ': {
+                'a': {
+                    'logs.microsignage.com': {
+                        'values': [
+                            '50.19.158.93'
+                        ],
+                        'ttl': 900
+                    }
+                }
+            }
+        }
+    )

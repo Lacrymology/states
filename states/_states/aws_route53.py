@@ -56,6 +56,7 @@ def records_exists(access_key, secret_key, records):
                   - www.google.com
                 ttl: 1200
     '''
+    logger.debug("Run records_exists: %s", records)
     ret = {'name': 'records_exists', 'result': None, 'comment': '',
            'changes': {}}
     conn = _connect(access_key, secret_key)

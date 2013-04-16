@@ -338,7 +338,7 @@ define service {
 }
 {% endfor %}
 
-{% for service in ('master', 'worker', 'http') %}
+{% for service in ('master', 'worker', 'http', 'uwsgi') %}
 define service {
     host_name {% for host in pillar['shinken']['graylog2'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description Web-graylog2-{{ service }}
@@ -383,6 +383,7 @@ define service {
     check_command check_nrpe!check_salt_master
     use salt-service
 }
+{# TODO: add check_salt_api if required #}
 
 {% for port in (4505, 4506) %}
 define service {

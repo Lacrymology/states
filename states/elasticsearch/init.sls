@@ -12,7 +12,7 @@ include:
   - nrpe
   - requests
   - apt
-{% if pillar['elasticsearch']['ssl']|default(False) %}
+{% if pillar['elasticsearch']['ssl']|default(False) and 'public' in pillar['elasticsearch']['cluster']['nodes'][grains['id']] %}
   - ssl
   - nginx
 {% endif %}
@@ -109,7 +109,7 @@ elasticsearch:
       - elasticsearch_plugins: elasticsearch
 {% endif %}
 
-{% if pillar['elasticsearch']['ssl']|default(False) %}
+{% if pillar['elasticsearch']['ssl']|default(False) and 'public' in pillar['elasticsearch']['cluster']['nodes'][grains['id']] %}
 /etc/nginx/conf.d/elasticsearch.conf:
   file:
     - managed
@@ -189,7 +189,7 @@ extend:
     service:
       - watch:
         - file: /etc/nagios/nrpe.d/elasticsearch.cfg
-{% if pillar['elasticsearch']['ssl']|default(False) %}
+{% if pillar['elasticsearch']['ssl']|default(False) and 'public' in pillar['elasticsearch']['cluster']['nodes'][grains['id']] %}
   nginx:
     service:
       - watch:

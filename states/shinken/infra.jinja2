@@ -190,6 +190,17 @@ define service {
 }
 {% endfor %}
 
+{% if not pillar['shinken']['ntp']|default(False) %}
+{% for service in ('ntp', 'ntp_sync') %}
+define service {
+    host_name {% for host in pillar['shinken']['ntp'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description Infra-{{ service }}
+    check_command check_nrpe!check_{{ service }}
+    use salt-service
+}
+{% endfor %}
+{% endif %}
+
 {#
 Services that don't affect production and that have high cost in CPU, I/O
 and RAM to performs.

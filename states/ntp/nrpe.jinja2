@@ -1,2 +1,3 @@
 # {{ pillar['message_do_not_modify'] }}
-command[check_ntp]=/usr/lib/nagios/plugins/check_ntp_peer -H 127.0.0.1
+command[check_ntp_sync]=/usr/lib/nagios/plugins/check_ntp_peer -H 127.0.0.1 -w 2 -C 5
+command[check_ntp]=/usr/lib/nagios/plugins/check_procs -C ntpd -u ntp -w 1:1

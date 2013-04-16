@@ -141,22 +141,3 @@ def records_exists(access_key, secret_key, records):
                     ret['changes'][change_name] = kwargs
     ret['result'] = True
     return ret
-
-if __name__ == '__main__':
-    logging.basicConfig(level=logging.DEBUG)
-    records_exists(
-        'AKIAJ6LQJSG6QMTYK7BA',
-        'a+2uXD5mWdi6m2JUQ1gbk8Jrhfb47G24Wq+2GOeo',
-        {
-            'Z2ESDHL401N3AQ': {
-                'a': {
-                    'logs.microsignage.com': {
-                        'values': [
-                            '50.19.158.93'
-                        ],
-                        'ttl': 900
-                    }
-                }
-            }
-        }
-    )

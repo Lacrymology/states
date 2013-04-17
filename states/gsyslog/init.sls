@@ -41,13 +41,6 @@ klogd:
     - enable: False
 {% endif %}
 
-/etc/gsyslog.d:
-  file:
-    - directory
-    - user: root
-    - group: root
-    - mode: 550
-
 gsyslog_upstart:
   file:
     - managed

@@ -325,7 +325,7 @@ define service {
     use salt-service
 }
 
-{% for service in ('master', 'worker') %}
+{% for service in ('master', 'worker', 'status') %}
 define service {
     host_name {% for host in pillar['shinken']['rabbitmq'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description rabbitmq-nginx-{{ service }}
@@ -377,7 +377,7 @@ define service {
 }
 {% endif %}
 
-{% for service in ('mongodb', 'mongodb_port', 'nginx_master', 'nginx_worker') %}
+{% for service in ('mongodb', 'mongodb_port', 'nginx_master', 'nginx_worker', 'nginx_status') %}
 define service {
     host_name {% for host in pillar['shinken']['graylog2'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description graylog2-{{ service }}

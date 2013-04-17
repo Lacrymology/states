@@ -7,7 +7,7 @@ command[check_{{ deployment }}_http]=/usr/lib/nagios/plugins/check_http -H {{ do
 command[check_{{ deployment }}_http]=/bin/echo "HTTP OK: No HTTP for {{ deployment }}"
 {% endif %}
 {% if https|default(False) -%}
-    {%- for name in ('https', 'https_certificate'] %}
+    {%- for name in ('https', 'https_certificate') %}
 command[check_{{ deployment }}_{{ name }}]=/bin/echo "HTTP OK: No HTTPS for {{ deployment }}"
     {%- endfor -%}
 {%- else %}

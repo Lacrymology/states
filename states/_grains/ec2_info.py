@@ -125,7 +125,7 @@ def ec2_info():
     try:
         mtime = datetime.datetime.fromtimestamp(
             os.stat(cache_filename).st_mtime)
-        if mtime > boot_datetime():
+        if mtime < boot_datetime():
             return _cache_ec2_info(cache_filename)
         with open(cache_filename, 'rb') as file_handler:
             data = pickle.load(file_handler)

@@ -1,3 +1,4 @@
+# {{ pillar['message_do_not_modify'] }}
 
 from django.conf.urls.defaults import *
 from django.conf import settings
@@ -11,7 +12,11 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
   ('^admin/', include(admin.site.urls)),
+{% if pillar['graphite']['web']['render_noauth']|default(False) %}
   ('^render/?', include('graphite.render.urls')),
+{% else %}
+  ('^render/?', decorator_include(login_required, 'graphite.render.urls')),
+{% endif %}
   ('^cli/?', decorator_include(login_required, 'graphite.cli.urls')),
   ('^composer/?', decorator_include(login_required, 'graphite.composer.urls')),
   ('^metrics/?', decorator_include(login_required, 'graphite.metrics.urls')),

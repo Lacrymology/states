@@ -137,8 +137,14 @@ graphite-urls-patch:
   file:
     - managed
     - name: /usr/local/graphite/lib/python2.7/site-packages/graphite/urls.py
-    - source: salt://graphite/urls.patch
+    - source: salt://graphite/urls.jinja2
+    - template: jinja
+    - user: www-data
+    - group: graphite
+    - mode: 440
     - require:
+      - user: web
+      - group: graphite
       - module: graphite-web
 
 graphite_settings:

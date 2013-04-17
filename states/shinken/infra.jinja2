@@ -264,7 +264,7 @@ define service {
     host_name {% for host in pillar['shinken']['elasticsearch'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description elasticsearch{{ name }}
     check_command check_nrpe!check_elasticsearch{{ name }}
-{% if cluster == '_https_certificate' %}
+{% if name == '_https_certificate' %}
     {# only need to check https certificate each day #}
     check_interval 1440
 {% endif %}

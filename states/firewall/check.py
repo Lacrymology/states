@@ -23,7 +23,7 @@ class Rules(nagiosplugin.Resource):
 @nagiosplugin.guarded
 def main():
     argp = argparse.ArgumentParser(description=__doc__)
-    argp.add_argument('-c', '--critical', metavar='VALUE', default='2',
+    argp.add_argument('-c', '--warning', metavar='VALUE', default='2',
                       help='critical if number of rules no in range VALUE')
     args = argp.parse_args()
     check = nagiosplugin.Check(

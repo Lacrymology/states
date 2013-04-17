@@ -32,13 +32,13 @@ class HalfInstalled(nagiosplugin.Resource):
 def main():
     argp = argparse.ArgumentParser(description=__doc__)
     argp.add_argument(
-        '-c', '--critical', metavar='VALUE', default='0',
-        help='critical if number of half-installed packages not in range VALUE')
+        '-w', '--warning', metavar='VALUE', default='0',
+        help='warning if number of half-installed packages not in range VALUE')
     args = argp.parse_args()
     check = nagiosplugin.Check(
         HalfInstalled(),
         nagiosplugin.ScalarContext(
-            'halfinstalled', args.critical, args.critical,
+            'halfinstalled', args.warning, args.warning,
             fmt_metric='{value} half-installed packages'))
     check.main()
 

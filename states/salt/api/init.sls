@@ -90,6 +90,21 @@ salt-ui:
     - require:
       - pkg: nagios-nrpe-server
 
+/etc/nagios/nrpe.d/salt-api-nginx.cfg:
+  file:
+    - managed
+    - template: jinja
+    - user: nagios
+    - group: nagios
+    - mode: 440
+    - source: salt://nginx/nrpe_instance.jinja2
+    - require:
+      - pkg: nagios-nrpe-server
+    - context:
+      deployment: salt_api
+      domain_name: {{ pillar['salt_master']['hostname'] }}
+      https: {{ pillar['salt_master']['ssl']|default(False) }}
+
 salt_api_diamond_resources:
   file:
     - accumulated
@@ -107,6 +122,7 @@ extend:
     service:
       - watch:
         - file: /etc/nagios/nrpe.d/salt-api.cfg
+        - file: /etc/nagios/nrpe.d/salt-api-nginx.cfg
   nginx:
     service:
       - watch:

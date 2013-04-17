@@ -239,7 +239,7 @@ define service {
 
 {%- for host in pillar['shinken']['web_servers'] -%}
     {%- for deployment in pillar['shinken']['web_servers'][host] -%}
-        {%- for service in ('master', 'worker', 'http', 'uwsgi') %}
+        {%- for service in ('master', 'worker', 'http', 'uwsgi', 'https', 'https_certificate') %}
 define service {
     host_name {{ host }}
     service_description Web-{{ deployment }}-{{ service }}
@@ -259,11 +259,15 @@ define service {
 {#
  # elastic search checks
  #}
-{%- for cluster in ('', '_cluster', '_http') %}
+{%- for name in ('', '_cluster', '_http', '_https', '_https_certificate') %}
 define service {
     host_name {% for host in pillar['shinken']['elasticsearch'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description elasticsearch{{ cluster }}
-    check_command check_nrpe!check_elasticsearch{{ cluster }}
+    service_description elasticsearch{{ name }}
+    check_command check_nrpe!check_elasticsearch{{ name }}
+{% if cluster == '_https_certificate' %}
+    {# only need to check https certificate each day #}
+    check_interval 1440
+{% endif %}
     use salt-service
 }
 {% endfor %}
@@ -301,11 +305,15 @@ define service {
 {#
  # rabbitmq
  #}
-{%- for service in ('', '_webui') %}
+{%- for service in ('', '_http', '_https', '_https_certificate') %}
 define service {
     host_name {% for host in pillar['shinken']['rabbitmq'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description {{ service }}
     check_command check_nrpe!check_rabbitmq{{ service }}
+{% if cluster == '_https_certificate' %}
+    {# only need to check https certificate each day #}
+    check_interval 1440
+{% endif %}
     use salt-service
 }
 {% endfor %}
@@ -338,11 +346,15 @@ define service {
 }
 {% endfor %}
 
-{% for service in ('master', 'worker', 'http', 'uwsgi') %}
+{% for service in ('master', 'worker', 'uwsgi', 'http', 'https', 'https_certificate') %}
 define service {
     host_name {% for host in pillar['shinken']['graylog2'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description Web-graylog2-{{ service }}
     check_command check_nrpe!check_graylog2_{{ service }}
+{% if cluster == 'https_certificate' %}
+    {# only need to check https certificate each day #}
+    check_interval 1440
+{% endif %}
     use salt-service
 }
 {% endfor %}
@@ -437,14 +449,19 @@ define service {
  Only consider Shinken-broker-web important.
  #}
 {% if service == 'broker' %}
+{% for name in ('http', 'https', 'https_certificate') %}
 define service {
-    host_name {% for host in pillar['shinken']['architecture'][service] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description Shinken-broker-web-node
-    check_command check_nrpe!check_broker_web
+    host_name {% for host in pillar['shinken']['architecture']['broker'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description Shinken-broker-{{ name }}
+    check_command check_nrpe!check_shinken_broker_{{ name }}
+{% if cluster == 'https_certificate' %}
+    {# only need to check https certificate each day #}
+    check_interval 1440
+{% endif %}
     use salt-service
 }
-{% endif %}
 {% endfor %}
+{% endif %}
 
 {#
  There can only be a single one running web node.
@@ -455,7 +472,7 @@ define service {
     use salt-service
     host_name {{ pillar['shinken']['architecture']['arbiter'][0] }}
     service_description Shinken-broker-web
-    check_command bp_rule!({% for host in pillar['shinken']['architecture']['broker'] %}{{ host }},Shinken-broker-web-node{% if not loop.last %} | {% endif %}{% endfor %})
+    check_command bp_rule!({% for host in pillar['shinken']['architecture']['broker'] %}{{ host }},Shinken-broker-http{% if not loop.last %} | {% endif %}{% endfor %})
 }
 {% endif %}
 

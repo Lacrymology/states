@@ -1,0 +1,16 @@
+# {{ pillar['message_do_not_modify'] }}
+{% set effective_http_uri = http_uri|default("/") -%}
+{%- set effective_http_result = http_result|default("200 OK") -%}
+{%- if http|default(True) %}
+command[check_{{ deployment }}_http]=/usr/lib/nagios/plugins/check_http -H {{ domain_name }} -u {{ effective_http_uri }} -p {{ http_port|default(80) }} -e '{{ effective_http_result }}'
+{% else %}
+command[check_{{ deployment }}_http]=/bin/echo "HTTP OK: No HTTP for {{ deployment }}"
+{% endif %}
+{% if https|default(False) -%}
+    {%- for name in ('https', 'https_certificate'] %}
+command[check_{{ deployment }}_{{ name }}]=/bin/echo "HTTP OK: No HTTPS for {{ deployment }}"
+    {%- endfor -%}
+{%- else %}
+command[check_{{ deployment }}_https_certificate]=/usr/lib/nagios/plugins/check_http -S -H {{ domain_name }} -C {{ https_max_age|default(60) }}
+command[check_{{ deployment }}_https]=/usr/lib/nagios/plugins/check_http -S -H {{ domain_name }} -u {{ https_uri|default(effective_http_uri) }} -e '{{ https_result|default(effective_http_result) }}'
+{% endif %}

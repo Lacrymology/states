@@ -167,9 +167,22 @@ sentry-migrate-fake:
       deployment: sentry
       workers: {{ pillar['sentry']['workers'] }}
       cheaper: {{ salt['pillar.get']('sentry:cheaper', False) }}
+
+/etc/nagios/nrpe.d/sentry-nginx.cfg:
+  file:
+    - managed
+    - template: jinja
+    - user: nagios
+    - group: nagios
+    - mode: 440
+    - source: salt://nginx/nrpe_instance.jinja2
+    - require:
+      - pkg: nagios-nrpe-server
+    - context:
+      deployment: sentry
       domain_name: {{ pillar['sentry']['address'] }}
-      protocol: {% if 'ssl' in pillar['sentry'] %}https{% else %}http{% endif %}
-      uri: /login/
+      http_uri: /login/
+      https: {{ pillar['sentry']['ssl']|default(False) }}
 
 /etc/nagios/nrpe.d/postgresql-sentry.cfg:
   file:
@@ -224,6 +237,7 @@ extend:
     service:
       - watch:
         - file: /etc/nagios/nrpe.d/sentry.cfg
+        - file: /etc/nagios/nrpe.d/sentry-nginx.cfg
         - file: /etc/nagios/nrpe.d/postgresql-sentry.cfg
   nginx:
     service:

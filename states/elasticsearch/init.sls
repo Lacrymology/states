@@ -156,6 +156,22 @@ elasticsearch_diamond_resources:
     - require:
       - pkg: nagios-nrpe-server
 
+/etc/nagios/nrpe.d/elasticsearch-nginx.cfg:
+  file:
+    - managed
+    - template: jinja
+    - user: nagios
+    - group: nagios
+    - mode: 440
+    - source: salt://nginx/nrpe_instance.jinja2
+    - require:
+      - pkg: nagios-nrpe-server
+    - context:
+      deployment: elasticsearch
+      http_port: 9200
+      domain_name: 127.0.0.1
+      https: {{ ssl }}
+
 /usr/local/bin/check_elasticsearch_cluster.py:
   file:
     - absent
@@ -190,6 +206,7 @@ extend:
     service:
       - watch:
         - file: /etc/nagios/nrpe.d/elasticsearch.cfg
+        - file: /etc/nagios/nrpe.d/elasticsearch-nginx.cfg
 {% if ssl %}
   nginx:
     service:

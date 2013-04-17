@@ -185,14 +185,29 @@ graylog2_web_diamond_resource:
 {% if 'cheaper' in pillar['graylog2'] %}
       cheaper: {{ pillar['graylog2']['cheaper'] }}
 {% endif %}
+
+/etc/nagios/nrpe.d/graylog2-nginx.cfg:
+  file:
+    - managed
+    - template: jinja
+    - user: nagios
+    - group: nagios
+    - mode: 440
+    - source: salt://nginx/nrpe_instance.jinja2
+    - require:
+      - pkg: nagios-nrpe-server
+    - context:
+      deployment: graylog2
       domain_name: {{ pillar['graylog2']['hostnames'][0] }}
-      uri: /login
+      http_uri: /login
+      https: {{ pillar['graylog2']['ssl']|default(False) }}
 
 extend:
   nagios-nrpe-server:
     service:
       - watch:
         - file: /etc/nagios/nrpe.d/graylog2-web.cfg
+        - file: /etc/nagios/nrpe.d/graylog2-nginx.cfg
   nginx:
     service:
       - watch:

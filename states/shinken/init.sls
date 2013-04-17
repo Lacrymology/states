@@ -116,6 +116,22 @@ nagios-nrpe-plugin:
     - mode: 440
     - require:
       - pkg: nginx
+
+/etc/nagios/nrpe.d/shinken-nginx.cfg:
+  file:
+    - managed
+    - template: jinja
+    - user: nagios
+    - group: nagios
+    - mode: 440
+    - source: salt://nginx/nrpe_instance.jinja2
+    - require:
+      - pkg: nagios-nrpe-server
+    - context:
+      deployment: shinken_broker
+      domain_name: {{ pillar['shinken']['web']['hostnames'][0] }}
+      http_port: 7767
+      https: {{ pillar['shinken']['ssl']|default(False) }}
 {% endif %}
 
 shinken-{{ role }}:
@@ -229,6 +245,7 @@ extend:
 {% if grains['id'] in pillar['shinken']['architecture'][role] %}
         - file: /etc/nagios/nrpe.d/shinken-{{ role }}.cfg
 {% if role == 'broker' %}
+        - file: /etc/nagios/nrpe.d/shinken-nginx.cfg
   nginx:
     service:
       - watch:

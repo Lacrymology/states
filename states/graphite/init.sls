@@ -260,8 +260,22 @@ graphite_settings:
 {% if 'cheaper' in pillar['graphite']['web'] %}
       cheaper: {{ pillar['graphite']['web']['cheaper'] }}
 {% endif %}
+
+/etc/nagios/nrpe.d/graphite-nginx.cfg:
+  file:
+    - managed
+    - template: jinja
+    - user: nagios
+    - group: nagios
+    - mode: 440
+    - source: salt://nginx/nrpe_instance.jinja2
+    - require:
+      - pkg: nagios-nrpe-server
+    - context:
+      deployment: graphite
       domain_name: {{ pillar['graphite']['web']['hostnames'][0] }}
-      uri: /account/login
+      http_uri: /account/login
+      https: {{ pillar['graphite']['web']['ssl']|default(False) }}
 
 uwsgi_diamond_graphite_resources:
   file:
@@ -298,6 +312,7 @@ extend:
     service:
       - watch:
         - file: /etc/nagios/nrpe.d/graphite.cfg
+        - file: /etc/nagios/nrpe.d/graphite-nginx.cfg
         - file: /etc/nagios/nrpe.d/postgresql-graphite.cfg
   nginx:
     service:

@@ -25,6 +25,15 @@ server {
         return 404;
     }
 
+{% if 'render_allow' in pillar['graphite']['web'] %}
+    location /render/ {
+{% for network in pillar['graphite']['web']['render_allow'] %}
+        allow {{ network }};
+{% endfor %}
+        deny all;
+    }
+{% endif %}
+
     rewrite /media/css/dashboard.css /content/css/dashboard.css last;
 
     location /media/ {

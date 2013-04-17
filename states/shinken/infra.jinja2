@@ -308,7 +308,7 @@ define service {
 {%- for service in ('', '_http', '_https', '_https_certificate') %}
 define service {
     host_name {% for host in pillar['shinken']['rabbitmq'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description {{ service }}
+    service_description RabbitMQ{{ service }}
     check_command check_nrpe!check_rabbitmq{{ service }}
 {% if cluster == '_https_certificate' %}
     {# only need to check https certificate each day #}

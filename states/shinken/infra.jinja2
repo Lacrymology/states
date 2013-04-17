@@ -395,7 +395,6 @@ define service {
     check_command check_nrpe!check_salt_master
     use salt-service
 }
-{# TODO: add check_salt_api if required #}
 
 {% for port in (4505, 4506) %}
 define service {
@@ -405,6 +404,20 @@ define service {
     use salt-service
 }
 {% endfor %}
+
+{#
+ # Salt API
+ #}
+{% if pillar['shinken']['salt_api']|default(False) %}
+{% for name in ('', '_http', '_https', '_https_certificate') %}
+define service {
+    host_name {% for host in pillar['shinken']['salt_api'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description Salt-API{{ name }}
+    check_command check_nrpe!check_salt_api{{ name }}
+    use salt-service
+}
+{% endfor %}
+{% endif %}
 
 {#
  # Denyhosts

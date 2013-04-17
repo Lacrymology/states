@@ -476,6 +476,8 @@ define service {
 {% endfor %}
 {% endif %}
 
+{% endfor %}{# for service in pillar['shinken']['architecture'] %} #}
+
 {#
  There can only be a single one running web node.
  If there's more than one broker, check that at least one is up to consider.

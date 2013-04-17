@@ -7,12 +7,13 @@
  a SSL frontend in front of Elasticsearch HTTP interface.
  This is why nginx is used if SSL is in pillar.
  #}
+{% set ssl = pillar['elasticsearch']['ssl']|default(False) and 'public' in pillar['elasticsearch']['cluster']['nodes'][grains['id']] %}
 include:
   - diamond
   - nrpe
   - requests
   - apt
-{% if pillar['elasticsearch']['ssl']|default(False) and 'public' in pillar['elasticsearch']['cluster']['nodes'][grains['id']] %}
+{% if ssl %}
   - ssl
   - nginx
 {% endif %}
@@ -109,7 +110,7 @@ elasticsearch:
       - elasticsearch_plugins: elasticsearch
 {% endif %}
 
-{% if pillar['elasticsearch']['ssl']|default(False) and 'public' in pillar['elasticsearch']['cluster']['nodes'][grains['id']] %}
+{% if ssl %}
 /etc/nginx/conf.d/elasticsearch.conf:
   file:
     - managed
@@ -123,7 +124,7 @@ elasticsearch:
     - context:
       destination: http://127.0.0.1:9200
       http_port: False
-      ssl: {{ pillar['elasticsearch']['ssl']|default(False) }}
+      ssl: {{ ssl }}
       hostnames: {{ pillar['elasticsearch']['hostnames'] }}
       allowed:
         - 127.0.0.1/32
@@ -189,7 +190,7 @@ extend:
     service:
       - watch:
         - file: /etc/nagios/nrpe.d/elasticsearch.cfg
-{% if pillar['elasticsearch']['ssl']|default(False) and 'public' in pillar['elasticsearch']['cluster']['nodes'][grains['id']] %}
+{% if ssl %}
   nginx:
     service:
       - watch:

@@ -102,6 +102,8 @@ salt-ui:
       - pkg: nagios-nrpe-server
     - context:
       deployment: salt_api
+      http_result: 301 Moved
+      https_result: 401 Unauthorized
       domain_name: {{ pillar['salt_master']['hostname'] }}
       https: {{ pillar['salt_master']['ssl']|default(False) }}
 

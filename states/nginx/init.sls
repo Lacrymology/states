@@ -150,6 +150,7 @@ nginx_diamond_resources:
       - |
         [[nginx]]
         exe = ^\/usr\/sbin\/nginx$
+        cmdline = ^logger \-f \/var\/log\/nginx
 
 nginx_diamond_collector:
   file:

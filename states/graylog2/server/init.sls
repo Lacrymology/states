@@ -128,7 +128,7 @@ graylog2_server_diamond_resources:
     - text:
       - |
         [[graylog2]]
-        cmdline = ^java \-jar \/usr\/local\/graylog2\-server\-.+\/graylog2-server.jar
+        cmdline = ^java.+\-jar \/usr\/local\/graylog2\-server\-.+\/graylog2-server.jar
 
 /etc/nagios/nrpe.d/graylog2-server.cfg:
   file:

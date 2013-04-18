@@ -148,7 +148,7 @@ graylog2_web_diamond_resource:
     - text:
       - |
         [[uwsgi.graylog2]]
-        cmdline = cmdline = ^graylog2-(worker|master)$
+        cmdline = ^graylog2-(worker|master)$
 
 {% for command in ('streamalarms', 'subscriptions') %}
 /etc/cron.hourly/graylog2-web-{{ command }}:

@@ -2,3 +2,6 @@
 command[check_nginx_master]=/usr/lib/nagios/plugins/check_procs -c 1:1 -a 'nginx: master process /usr/sbin/nginx -c /etc/nginx/nginx.conf' -u root
 command[check_nginx_worker]=/usr/lib/nagios/plugins/check_procs -c 1:1 -a 'nginx: worker process' -u www-data
 command[check_nginx_status]=/usr/lib/nagios/plugins/check_http -H 127.0.0.1 -I 127.0.0.1 -u /nginx_status -p 80 -e '200 OK'
+{% for log_type in ('access', 'error') %}
+command[check_nginx_logger_{{ log_type }}]=/usr/lib/nagios/plugins/check_procs -c 1:1 -C logger -a "-f /var/log/nginx/{{ log_type }}.fifo"
+{% endfor %}

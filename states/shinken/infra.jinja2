@@ -225,7 +225,7 @@ define service {
 {#
  # check for all web servers
  #}
-{% for service in ('memcached', 'nginx_master', 'nginx_worker', 'nginx_status', 'uwsgi', 'postgresql_server', 'postgresql_port', 'postgresql_diamond') %}
+{% for service in ('memcached', 'nginx_master', 'nginx_worker', 'nginx_status', 'nginx_logger_access', 'nginx_logger_error', 'uwsgi', 'postgresql_server', 'postgresql_port', 'postgresql_diamond') %}
 define service {
     host_name {% for host in pillar['shinken']['web_servers'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description WebServer-{{ service }}
@@ -329,7 +329,7 @@ define service {
     use salt-service
 }
 
-{% for service in ('master', 'worker', 'status') %}
+{% for service in ('master', 'worker', 'status', 'logger_access', 'logger_error') %}
 define service {
     host_name {% for host in pillar['shinken']['rabbitmq'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description rabbitmq-nginx-{{ service }}

@@ -305,12 +305,12 @@ define service {
 {#
  # rabbitmq
  #}
-{%- for service in ('', '_http', '_https', '_https_certificate') %}
+{%- for service in ('rabbitmq', 'rabbitmq_port_management', 'check_rabbitmq_port_console', 'rabbitmq_port_amqp', 'erlang', 'erlang_port', 'rabbitmq_http', 'rabbitmq_https', 'rabbitmq_https_certificate') %}
 define service {
     host_name {% for host in pillar['shinken']['rabbitmq'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description RabbitMQ{{ service }}
-    check_command check_nrpe!check_rabbitmq{{ service }}
-{% if service == '_https_certificate' %}
+    service_description RabbitMQ-{{ service }}
+    check_command check_nrpe!check_{{ service }}
+{% if service == 'rabbitmq_https_certificate' %}
     {# only need to check https certificate each day #}
     check_interval 1440
 {% endif %}

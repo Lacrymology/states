@@ -1,2 +1,8 @@
 # {{ pillar['message_do_not_modify'] }}
 command[check_rabbitmq]=/usr/lib/nagios/plugins/check_procs -c 1:1 -C beam{% if grains['num_cpus'] > 1 %}.smp{% endif %} -u rabbitmq
+command[check_rabbitmq_port_management]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 15672
+command[check_rabbitmq_port_console]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 55672
+command[check_rabbitmq_port_amqp]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 5672
+{# epmd is Erlang Port Mapper Daemon #}
+command[check_erlang]=/usr/lib/nagios/plugins/check_procs -c 1:1 -C epmd -u rabbitmq
+command[check_erlang_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 4369

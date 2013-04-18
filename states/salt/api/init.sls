@@ -117,7 +117,7 @@ salt_api_diamond_resources:
     - text:
       - |
         [[salt.api]]
-        name = ^salt\-api
+        cmdline = ^python \/usr\/bin\/salt\-api$
 
 extend:
   nagios-nrpe-server:

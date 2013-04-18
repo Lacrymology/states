@@ -42,7 +42,7 @@ salt_minion_diamond_resources:
     - text:
       - |
         [[salt.minion]]
-        name = ^salt\-minion$
+        cmdline = ^python \/usr\/bin\/salt\-minion$
 
 /etc/nagios/nrpe.d/salt-minion.cfg:
   file:

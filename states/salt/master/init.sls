@@ -52,7 +52,7 @@ salt_master_diamond_resources:
     - text:
       - |
         [[salt.master]]
-        name = ^salt\-master
+        cmdline = ^python \/usr\/bin\/salt\-master$
 
 /etc/nagios/nrpe.d/salt-master.cfg:
   file:

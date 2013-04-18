@@ -2,10 +2,6 @@
 # This file contains the checks for the low-level infrastructure components
 # supported by salt.
 
-{#
- TODO: Check port 5432 on localhost for postgresql server
- #}
-
 {% for user in pillar['shinken']['users'] %}
 define contact {
     contact_name {{ user }}

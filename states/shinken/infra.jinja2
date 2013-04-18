@@ -377,7 +377,7 @@ define service {
 }
 {% endif %}
 
-{% for service in ('mongodb', 'mongodb_port', 'nginx_master', 'nginx_worker', 'nginx_status') %}
+{% for service in ('mongodb', 'mongodb_port', 'mongodb_http', 'mongodb_http_port', 'nginx_master', 'nginx_worker', 'nginx_status') %}
 define service {
     host_name {% for host in pillar['shinken']['graylog2'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description graylog2-{{ service }}

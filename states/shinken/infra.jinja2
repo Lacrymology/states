@@ -305,7 +305,7 @@ define service {
 {#
  # rabbitmq
  #}
-{%- for service in ('rabbitmq', 'rabbitmq_port_management', 'check_rabbitmq_port_console', 'rabbitmq_port_amqp', 'erlang', 'erlang_port', 'rabbitmq_http', 'rabbitmq_https', 'rabbitmq_https_certificate') %}
+{%- for service in ('rabbitmq', 'rabbitmq_port_management', 'rabbitmq_port_console', 'rabbitmq_port_amqp', 'erlang', 'erlang_port', 'rabbitmq_http', 'rabbitmq_https', 'rabbitmq_https_certificate') %}
 define service {
     host_name {% for host in pillar['shinken']['rabbitmq'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description RabbitMQ-{{ service }}

@@ -119,6 +119,7 @@ rabbitmq_diamond_resources:
       - |
         [[rabbitmq]]
         exe = ^\/usr\/lib\/erlang\/erts-.+\/bin\/inet_gethost$,^\/usr\/lib\/erlang\/erts-.+\/bin\/beam.+rabbitmq.+$,^\/usr\/lib\/erlang\/erts-.+\/bin\/epmd$
+        cmdline = ^inet_gethost 4$
 
 {% for vhost in pillar['rabbitmq']['vhosts'] %}
 rabbitmq-vhost-{{ vhost }}:

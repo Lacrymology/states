@@ -127,7 +127,9 @@ elasticsearch:
       ssl: {{ pillar['elasticsearch']['ssl'] }}
       hostnames: {{ pillar['elasticsearch']['hostnames'] }}
       allowed:
-        - 127.0.0.1/32
+{% for ip_address in grains['ipv4'] %}
+        - {{ ip_address }}/32
+{% endfor %}
 {% for allowed in pillar['elasticsearch']['https_allowed'] %}
         - {{ allowed }}
 {% endfor %}

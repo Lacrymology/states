@@ -117,7 +117,7 @@ rabbitmq_diamond_resources:
       - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
     - text:
       - |
-        [[graylog2.web]]
+        [[rabbitmq]]
         exe = ^\/usr\/lib\/erlang\/erts-.+\/bin\/inet_gethost$,^\/usr\/lib\/erlang\/erts-.+\/bin\/beam.+rabbitmq.+$,^\/usr\/lib\/erlang\/erts-.+\/bin\/epmd$
 
 {% for vhost in pillar['rabbitmq']['vhosts'] %}

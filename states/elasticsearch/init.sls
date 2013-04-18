@@ -124,7 +124,7 @@ elasticsearch:
     - context:
       destination: http://127.0.0.1:9200
       http_port: False
-      ssl: {{ ssl }}
+      ssl: {{ pillar['elasticsearch']['ssl'] }}
       hostnames: {{ pillar['elasticsearch']['hostnames'] }}
       allowed:
         - 127.0.0.1/32

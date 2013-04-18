@@ -141,7 +141,7 @@ gsyslog_diamond_resources:
       - |
         [[gsyslog]]
         cmdline = ^\/usr\/local\/gsyslog\/bin\/python \/usr\/local\/gsyslog\/bin\/gsyslogd
-        [[klogd]
+        [[klogd]]
         exe = ^\/sbin\/klogd
 
 rsyslog:

@@ -132,11 +132,13 @@ target_{{ host }} = {{ ping_hosts[host] }}
 
 enabled = True
 
+{#
 {% if salt['file.file_exists']('/proc/slabinfo') %}
 [[SlabInfoCollector]]
 
 enabled = True
 {% endif -%}
+#}
 
 [[SockstatCollector]]
 

@@ -11,20 +11,11 @@ import nagiosplugin
 class HalfInstalled(nagiosplugin.Resource):
     def probe(self):
         pkgs = []
-        try:
-            #noinspection PyUnresolvedReferences
-            import apt
-            cache = apt.Cache()
-            for pkg in cache:
-                if not pkg.isInstalled:
-                    if len(pkg.installedFiles):
-                        pkgs.append(pkg.name)
-        except ImportError:
-            dpkg = os.popen('dpkg -l')
-            for line in dpkg.readlines():
-                cols = line.split()
-                if cols[0] == 'rc':
-                    pkgs.append(cols[1])
+        dpkg = os.popen('dpkg -l')
+        for line in dpkg.readlines():
+            cols = line.split()
+            if cols[0] == 'rc':
+                pkgs.append(cols[1])
 
         return [nagiosplugin.Metric('halfinstalled', len(pkgs), min=0)]
 

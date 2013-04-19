@@ -162,7 +162,6 @@ graphite_settings:
       - user: web
       - group: graphite
       - module: graphite-web
-      - pip: graphite-web
   postgres_user:
     - present
     - name: {{ pillar['graphite']['web']['db']['name'] }}

@@ -48,11 +48,12 @@ pip:
     - source_hash: cbb27a191cebc58997c4da8513863153
     - archive_format: tar
     - tar_options: z
-    - if_missing: {{ opts['cachedir'] }}/pip-{{ version }}
+    - if_missing: md5={{ opts['cachedir'] }}/pip-{{ version }}
   module:
     - wait
     - name: cmd.run
-    - cmd: /usr/bin/python {{ opts['cachedir'] }}/pip-{{ version }}/setup.py install
+    - cmd: /usr/bin/python setup.py install
+    - cwd: {{ opts['cachedir'] }}/pip-{{ version }}
     - require:
       - pkg: python-pip
       - file: pip-cache

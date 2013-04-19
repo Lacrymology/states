@@ -23,12 +23,12 @@ class Rules(nagiosplugin.Resource):
 @nagiosplugin.guarded
 def main():
     argp = argparse.ArgumentParser(description=__doc__)
-    argp.add_argument('-c', '--warning', metavar='VALUE', default='2',
-                      help='critical if number of rules no in range VALUE')
+    argp.add_argument('-w', '--warning', metavar='VALUE', default='2',
+                      help='warning if number of rules no in range VALUE')
     args = argp.parse_args()
     check = nagiosplugin.Check(
         Rules(),
-        nagiosplugin.ScalarContext('rules', args.critical, args.critical,
+        nagiosplugin.ScalarContext('rules', args.warning, args.warning,
                                    fmt_metric='{value} rules in iptables'))
     check.main()
 

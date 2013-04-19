@@ -45,10 +45,10 @@ pip:
     - extracted
     - name: {{ opts['cachedir'] }}
     - source: https://pypi.python.org/packages/source/p/pip/pip-{{ version }}.tar.gz
-    - source_hash: cbb27a191cebc58997c4da8513863153
+    - source_hash: md5=cbb27a191cebc58997c4da8513863153
     - archive_format: tar
     - tar_options: z
-    - if_missing: md5={{ opts['cachedir'] }}/pip-{{ version }}
+    - if_missing: {{ opts['cachedir'] }}/pip-{{ version }}
   module:
     - wait
     - name: cmd.run

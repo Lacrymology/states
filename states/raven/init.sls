@@ -20,6 +20,6 @@ raven:
     - upgrade: True
     - requirements: {{ opts['cachedir'] }}/raven-requirements.txt
     - require:
-      - pkg: python-pip
+      - module: pip
     - watch:
       - file: raven

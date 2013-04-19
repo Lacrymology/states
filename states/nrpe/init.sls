@@ -27,7 +27,7 @@ nagiosplugin:
     - upgrade: True
     - requirements: {{ opts['cachedir'] }}/nagiosplugin-requirements.txt
     - require:
-      - pkg: python-pip
+      - module: pip
     - watch:
       - file: nagiosplugin
 

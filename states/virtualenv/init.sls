@@ -5,20 +5,30 @@ include:
   - pip
   - git
   - mercurial
-  - apt
 
 python-virtualenv:
   pkg:
-    - latest
-    - names:
-      - python-virtualenv
-      - build-essential
-      - python-dev
+    - purged
+
+virtualenv:
+  file:
+    - managed
+    - name: {{ opts['cachedir'] }}/salt-virtualenv-requirements.txt
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+  module:
+    - wait
+    - name: pip.install
+    - pkgs: ''
+    - requirements: {{ opts['cachedir'] }}/salt-virtualenv-requirements.txt
+    - watch:
+      - file: virtualenv
     - require:
-      - pkg: python-pip
+      - module: pip
       - pkg: git
       - pkg: mercurial
-      - cmd: apt_sources
 
 {% if 'backup_server' in pillar %}
 /usr/local/bin/backup-pip:

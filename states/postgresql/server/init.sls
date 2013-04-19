@@ -5,7 +5,6 @@ include:
   - diamond
   - postgresql
   - nrpe
-  - pip
 {% if pillar['postgresql']['ssl']|default(False) %}
   - ssl
 {% endif %}
@@ -81,8 +80,7 @@ diamond_collector-psycopg2:
     - requirements: /usr/local/diamond/salt-postgresql-requirements.txt
     - require:
       - pkg: postgresql-dev
-      - pkg: python-virtualenv
-      - file: pip-cache
+      - virtualenv: diamond
     - watch:
       - file: diamond_collector-psycopg2
 

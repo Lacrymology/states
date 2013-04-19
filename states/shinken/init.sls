@@ -62,7 +62,7 @@ shinken:
     - name: /usr/local/shinken
     - no_site_packages: True
     - require:
-      - pkg: python-virtualenv
+      - module: virtualenv
       - user: shinken
       - file: /var/log/shinken
       - file: /var/lib/shinken
@@ -85,7 +85,6 @@ shinken:
     - requirements: /usr/local/shinken/salt-requirements.txt
     - require:
       - virtualenv: shinken
-      - file: pip-cache
     - watch:
       - file: shinken
   user:

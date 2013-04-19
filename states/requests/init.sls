@@ -22,4 +22,4 @@ requests:
     - watch:
       - file: requests
     - require:
-      - pkg: python-pip
+      - module: pip

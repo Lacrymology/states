@@ -34,7 +34,7 @@ route53:
     - pkgs: ''
     - requirements: {{ opts['cachedir'] }}/salt-route53-requirements.txt
     - require:
-      - pkg: python-pip
+      - module: pip
       - pkg: route53
     - watch:
       - file: route53

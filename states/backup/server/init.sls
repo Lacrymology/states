@@ -51,7 +51,7 @@ backup-archiver-dependency:
     - watch:
       - file: backup-archiver-dependency
     - require:
-      - pkg: python-pip
+      - module: pip
 
 /etc/sudoers.d/nrpe_backups:
   file:

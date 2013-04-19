@@ -21,7 +21,7 @@ pyelasticsearch:
     - upgrade: True
     - requirements: {{ opts['cachedir'] }}/pyelasticsearch-requirements.txt
     - require:
-      - pkg: python-pip
+      - module: pip
       - module: requests
     - watch:
       - file: pyelasticsearch

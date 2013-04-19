@@ -25,7 +25,7 @@ graphite:
     - managed
     - name: /usr/local/graphite
     - require:
-      - pkg: python-virtualenv
+      - module: virtualenv
 
 /var/lib/graphite:
   file:

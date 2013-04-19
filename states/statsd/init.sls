@@ -21,7 +21,7 @@ statsd:
     - template: jinja
     - requirements: salt://statsd/requirements.jinja2
     - require:
-      - pkg: python-virtualenv
+      - module: virtualenv
   service:
     - running
     - enable: True

@@ -6,7 +6,6 @@ include:
   - ssh.client
   - git
   - mercurial
-  - apt
 
 {% set root_user_home = salt['user.info']('root')['home'] %}
 
@@ -38,10 +37,25 @@ pip-cache:
 
 python-pip:
   pkg:
-    - latest
+    - purged
+
+{% set version='1.3.1' %}
+pip:
+  archive:
+    - extracted
+    - name: {{ opts['cachedir'] }}
+    - source: https://pypi.python.org/packages/source/p/pip/pip-{{ version }}.tar.gz
+    - source_hash: cbb27a191cebc58997c4da8513863153
+    - archive_format: tar
+    - tar_options: z
+    - if_missing: {{ opts['cachedir'] }}/pip-{{ version }}
+  module:
+    - wait
+    - name: cmd.run
+    - cmd: /usr/bin/python {{ opts['cachedir'] }}/pip-{{ version }}/setup.py install
     - require:
-      - cmd: apt_sources
-      - pkg: openssh-client
-      - pkg: git
-      - pkg: mercurial
+      - pkg: python-pip
       - file: pip-cache
+    - watch:
+      - archive: pip
+

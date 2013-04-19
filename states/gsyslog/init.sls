@@ -79,7 +79,7 @@ gsyslog:
     - managed
     - name: /usr/local/gsyslog
     - require:
-      - pkg: python-virtualenv
+      - module: virtualenv
   module:
     - wait
     - name: pip.install
@@ -88,9 +88,7 @@ gsyslog:
     - bin_env: /usr/local/gsyslog
     - require:
       - virtualenv: gsyslog
-      - pkg: python-virtualenv
       - pkg: gsyslog
-      - file: pip-cache
     - watch:
       - file: gsyslog_requirements
   file:

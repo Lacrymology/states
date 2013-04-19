@@ -63,7 +63,7 @@ diamond:
     - upgrade: True
     - name: /usr/local/diamond
     - require:
-      - pkg: python-virtualenv
+      - module: virtualenv
   module:
     - wait
     - name: pip.install
@@ -73,8 +73,7 @@ diamond:
     - requirements: /usr/local/diamond/salt-requirements.txt
     - require:
       - pkg: git
-      - pkg: python-virtualenv
-      - file: diamond_upstart
+      - virtualenv: diamond
     - watch:
       - file: diamond_requirements
   file:
@@ -86,7 +85,6 @@ diamond:
     - mode: 440
     - source: salt://diamond/config.jinja2
     - require:
-      - virtualenv: diamond
       - file: /etc/diamond
 {% if 'ping' in pillar['diamond']|default([]) %}
     - context:

@@ -23,7 +23,7 @@ sentry:
     - name: /usr/local/sentry
     - no_site_packages: True
     - require:
-      - pkg: python-virtualenv
+      - module: virtualenv
   pkg:
     - latest
     - name: libevent-dev
@@ -52,7 +52,6 @@ sentry:
       - virtualenv: sentry
       - pkg: postgresql-dev
       - pkg: sentry
-      - file: pip-cache
     - watch:
       - file: sentry
   cmd:

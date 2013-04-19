@@ -56,8 +56,7 @@ diamond-pymongo:
     - bin_env: /usr/local/diamond
     - requirements: /usr/local/diamond/salt-pymongo-requirements.txt
     - require:
-      - pkg: python-virtualenv
-      - file: pip-cache
+      - virtualenv: diamond
     - watch:
       - file: diamond-pymongo
 

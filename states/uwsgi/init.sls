@@ -25,7 +25,7 @@ uwsgitop:
   pip:
     - installed
     - require:
-      - pkg: python-pip
+      - module: pip
 
 uwsgi_build:
   pkg:

@@ -7,6 +7,8 @@ include:
 screen:
   pkg:
     - latest
+    - require:
+      - cmd: apt_sources
   file:
     - managed
     - name: /etc/screenrc
@@ -15,5 +17,3 @@ screen:
     - group: root
     - mode: 444
     - source: salt://screen/config.jinja2
-    - require:
-      - cmd: apt_sources

@@ -4,6 +4,8 @@ slapd:
   service:
     - running
     - enable: False
+    - require: 
+      - pkg: slapd
 
 ldap-utils:
   pkg:
@@ -18,17 +20,21 @@ slapd_change_log_level:
   cmd:
     - run
     - name: 'ldapmodify -Y EXTERNAL -H ldapi:/// -f /tmp/logging.ldif'
-    - unless: 'grep olcLogLevel /etc/ldap/slapd.d/cn=config.ldif'
+    - unless: 'grep "olcLogLevel: 16383" /etc/ldap/slapd.d/cn=config.ldif'
     - require:
       - file: /tmp/logging.ldif
+      - service: slapd
 
 {% for i in ('cacert.pem', 'servercrt.pem', 'serverkey.pem') %}
 /etc/ldap/tls/{{ i }}:
   file:
     - managed
     - source: salt://openldap/{{ i }}
-    - uid: openldap
-    - gid: openldap
+    - user: openldap
+    - group: openldap
+    - makedirs: true
+    - require:
+      - pkg: slapd
 {% endfor %}
 
 /tmp/tls.ldif:
@@ -41,6 +47,8 @@ slapd_set_tls_directives:
     - run
     - name: 'ldapmodify -Y EXTERNAL -H ldapi:/// -f /tmp/tls.ldif'
     - require:
+      - pkg: ldap-utils
+      - service: slapd
       - file: /tmp/tls.ldif
 {% for i in ('cacert.pem', 'servercrt.pem', 'serverkey.pem') %}
       - file: /etc/ldap/tls/{{ i }}

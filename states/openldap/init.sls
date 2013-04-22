@@ -50,6 +50,9 @@ slapd_set_tls_directives:
       - pkg: ldap-utils
       - service: slapd
       - file: /tmp/tls.ldif
+
+{# Cert/key must be created use GNUTLS
+openssl is not compatible with ubuntu ldap #}
 {% for i in ('cacert.pem', 'servercrt.pem', 'serverkey.pem') %}
       - file: /etc/ldap/tls/{{ i }}
 {% endfor %}

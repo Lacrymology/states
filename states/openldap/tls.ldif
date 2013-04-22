@@ -14,3 +14,7 @@ olcSecurity: tls=1
 -
 replace: olcTLSVerifyClient
 olcTLSVerifyClient: never
+-
+replace: olcTLSCipherSuite
+olcTLSCipherSuite: SECURE256:!AES-128-CBC
+# use openssl CipherSuite here cause a segfault

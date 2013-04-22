@@ -11,3 +11,6 @@ olcTLSCertificateKeyFile: /etc/ldap/tls/serverkey.pem
 -
 replace: olcSecurity
 olcSecurity: tls=1
+-
+replace: olcTLSVerifyClient
+olcTLSVerifyClient: never

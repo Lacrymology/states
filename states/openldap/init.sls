@@ -53,3 +53,8 @@ slapd_set_tls_directives:
 {% for i in ('cacert.pem', 'servercrt.pem', 'serverkey.pem') %}
       - file: /etc/ldap/tls/{{ i }}
 {% endfor %}
+
+/etc/ldap/ldap.conf:
+  file:
+    - managed
+    - source: salt://openldap/ldap.conf

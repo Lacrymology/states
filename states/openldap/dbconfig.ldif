@@ -10,7 +10,7 @@ replace: olcRootDN
 olcRootDN: cn=admin,dc=familug,dc=org
 -
 replace: olcRootPW
-olcRootPW:: e1NTSEF9S01oYUZrSXo2NFhCazBqVGQ0WEQ4VnNJbFpUTGFobm8=
+olcRootPW: {MD5}/+VTaU9QlkcVkDQ0MjWeAg==
 -
 delete: olcAccess
 -

@@ -1,0 +1,22 @@
+dn: cn=config
+changetype: modify
+
+dn: olcDatabase={1}hdb,cn=config
+changetype: modify
+replace: olcSuffix
+olcSuffix: dc=familug,dc=org
+-
+replace: olcRootDN
+olcRootDN: cn=admin,dc=familug,dc=org
+-
+replace: olcRootPW
+olcRootPW:: e1NTSEF9S01oYUZrSXo2NFhCazBqVGQ0WEQ4VnNJbFpUTGFobm8=
+-
+delete: olcAccess
+-
+add: olcAccess
+olcAccess: {0}to attrs=userPassword,shadowLastChange by self write by anonymou
+ s auth by dn="cn=admin,dc=familug,dc=org" write by * none
+olcAccess: {1}to dn.base="" by * read
+olcAccess: {2}to * by self write by dn="cn=admin,dc=familug,dc=org" write by *
+  read

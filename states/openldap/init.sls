@@ -11,6 +11,19 @@ ldap-utils:
   pkg:
     - installed
 
+/tmp/dbconfig.ldif:
+  file:
+    - managed
+    - source: salt://openldap/dbconfig.ldif
+
+slapd_change_root_dn:
+  cmd:
+    - run
+    - name: 'ldapmodify -Y EXTERNAL -H ldapi:/// -f /tmp/dbconfig.ldif'
+    - require:
+      - file: /tmp/dbconfig.ldif
+      - service: slapd
+
 /tmp/logging.ldif:
   file:
     - managed
@@ -18,9 +31,11 @@ ldap-utils:
 
 slapd_change_log_level:
   cmd:
-    - run
+    - wait
     - name: 'ldapmodify -Y EXTERNAL -H ldapi:/// -f /tmp/logging.ldif'
     - unless: 'grep "olcLogLevel: 16383" /etc/ldap/slapd.d/cn=config.ldif'
+    - watch:
+      - cmd: slapd_change_root_dn
     - require:
       - file: /tmp/logging.ldif
       - service: slapd

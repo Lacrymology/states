@@ -1,0 +1,29 @@
+# familug.org
+dn: dc=familug,dc=org
+objectClass: top
+objectClass: dcObject
+objectClass: organization
+o: admin
+dc: familug
+
+dn: ou=people,dc=familug,dc=org
+ou: people
+description: All people in FML
+objectClass: organizationalUnit
+
+dn: cn=hungnv,dc=familug,dc=org
+objectClass: inetOrgPerson
+cn: Nguyen Viet Hung
+sn: Nguyen
+userPassword: hehehe
+mail: hvn@familug.org
+description: indescribable
+
+dn: uid=lamdt,ou=people,dc=familug,dc=org
+objectClass: inetOrgPerson
+cn: Dang Tung Lam
+sn: Dang
+uid: lamdt
+userPassword: hehehe
+mail: lamdt@familug.org
+description: lam thon

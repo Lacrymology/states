@@ -1,14 +1,12 @@
 {#
  Configure APT minimal configuration to get Debian packages from repositories.
  #}
-include:
-  - nrpe
 
 {# 99 prefix is to make sure the config file is the last one to be applied #}
 /etc/apt/apt.conf.d/99local:
   file:
     - managed
-    - source: salt://apt/apt.jinja2
+    - source: salt://apt/config.jinja2
     - user: root
     - group: root
     - mode: 444
@@ -61,32 +59,3 @@ apt_cleanup:
       - memtest86+
       - usbutils
 {% endif %}
-
-/usr/local/bin/check_apt-rc.py:
-  file:
-    - absent
-
-/usr/lib/nagios/plugins/check_apt-rc.py:
-  file:
-    - managed
-    - source: salt://apt/check.py
-    - mode: 555
-    - require:
-      - module: nagiosplugin
-
-/etc/nagios/nrpe.d/apt.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://apt/nrpe.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-
-extend:
-  nagios-nrpe-server:
-    service:
-      - watch:
-        - file: /etc/nagios/nrpe.d/apt.cfg

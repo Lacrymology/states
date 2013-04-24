@@ -3,8 +3,6 @@
 #}
 include:
   - pip
-  - gsyslog
-  - diamond
   - apt
 
 /usr/local/nagiosplugin:
@@ -68,35 +66,3 @@ nagios-nrpe-server:
     - user: root
     - group: root
     - mode: 555
-
-nrpe_diamond_resources:
-  file:
-    - accumulated
-    - name: processes
-    - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - require_in:
-      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - text:
-      - |
-        [[nrpe]]
-        exe = ^\/usr\/sbin\/nrpe$
-        cmdline = ^\/usr\/lib\/nagios\/plugins\/check_
-
-{% if not pillar['debug'] %}
-/etc/gsyslog.d/nrpe.conf:
-  file:
-    - managed
-    - template: jinja
-    - source: salt://nrpe/gsyslog.jinja2
-    - user: root
-    - group: root
-    - mode: 440
-    - require:
-      - file: /etc/gsyslog.d
-
-extend:
-  gsyslog:
-    service:
-      - watch:
-        - file: /etc/gsyslog.d/nrpe.conf
-{% endif %}

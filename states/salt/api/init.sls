@@ -5,8 +5,6 @@ include:
   - salt.master
   - git
   - nginx
-  - diamond
-  - nrpe
 {% if pillar['salt_master']['ssl']|default(False) %}
   - ssl
 {% endif %}
@@ -79,52 +77,7 @@ salt-ui:
     - require:
       - pkg: nginx
 
-/etc/nagios/nrpe.d/salt-api.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://salt/api/nrpe.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-
-/etc/nagios/nrpe.d/salt-api-nginx.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://nginx/nrpe_instance.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-    - context:
-      deployment: salt_api
-      http_result: 301 Moved
-      https_result: 401 Unauthorized
-      domain_name: {{ pillar['salt_master']['hostname'] }}
-      https: {{ pillar['salt_master']['ssl']|default(False) }}
-
-salt_api_diamond_resources:
-  file:
-    - accumulated
-    - name: processes
-    - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - require_in:
-      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - text:
-      - |
-        [[salt.api]]
-        cmdline = ^python \/usr\/bin\/salt\-api$
-
 extend:
-  nagios-nrpe-server:
-    service:
-      - watch:
-        - file: /etc/nagios/nrpe.d/salt-api.cfg
-        - file: /etc/nagios/nrpe.d/salt-api-nginx.cfg
   nginx:
     service:
       - watch:

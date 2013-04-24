@@ -6,7 +6,6 @@
 {# TODO: send logs to GELF #}
 include:
   - graphite.common
-  - nrpe
   - pip
 
 /etc/logrotate.d/carbon:
@@ -85,18 +84,6 @@ carbon:
     - mode: 440
     - source: salt://carbon/config.jinja2
 
-diamond-carbon:
-  file:
-    - accumulated
-    - name: processes
-    - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - require_in:
-      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - text:
-      - |
-        [[carbon]]
-        cmdline = ^\/usr\/local\/graphite\/bin\/python \/usr\/local\/graphite\/bin\/carbon\-cache\.py.+start$
-
 {% for instance in pillar['graphite']['carbon']['instances'] %}
 carbon-{{ instance }}:
   file:
@@ -137,22 +124,4 @@ carbon-{{ instance }}-logdir:
     - makedirs: True
     - require:
       - user: graphite
-
 {% endfor %}
-
-/etc/nagios/nrpe.d/carbon.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://carbon/nrpe.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-
-extend:
-  nagios-nrpe-server:
-    service:
-      - watch:
-        - file: /etc/nagios/nrpe.d/carbon.cfg

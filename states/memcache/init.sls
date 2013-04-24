@@ -2,8 +2,6 @@
  Install a memcache server
  #}
 include:
-  - diamond
-  - nrpe
   - web
 
 {#
@@ -59,48 +57,3 @@ upstart_memcached:
     - require:
       - file: memcached
       - user: web
-
-/etc/nagios/nrpe.d/memcache.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://memcache/nrpe.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-
-memcached_diamond_resources:
-  file:
-    - accumulated
-    - name: processes
-    - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - require_in:
-      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - text:
-      - |
-        [[memcached]]
-        name = ^memcached$
-
-memcached_diamond_collector:
-  file:
-    - managed
-    - name: /etc/diamond/collectors/MemcachedCollector.conf
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 440
-    - source: salt://memcache/diamond.jinja2
-    - require:
-      - file: /etc/diamond/collectors
-
-extend:
-  diamond:
-    service:
-      - watch:
-        - file: memcached_diamond_collector
-  nagios-nrpe-server:
-    service:
-      - watch:
-        - file: /etc/nagios/nrpe.d/memcache.cfg

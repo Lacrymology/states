@@ -3,8 +3,6 @@
 #}
 include:
   - virtualenv
-  - nrpe
-  - diamond
   - pip
   - apt
 
@@ -128,20 +126,6 @@ gsyslog:
     - group: root
     - mode: 555
 
-gsyslog_diamond_resources:
-  file:
-    - accumulated
-    - name: processes
-    - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - require_in:
-      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - text:
-      - |
-        [[gsyslog]]
-        cmdline = ^\/usr\/local\/gsyslog\/bin\/python \/usr\/local\/gsyslog\/bin\/gsyslogd
-        [[klogd]]
-        exe = ^\/sbin\/klogd
-
 rsyslog:
   pkg:
     - purged
@@ -155,20 +139,3 @@ rsyslog:
     - require:
       - module: sysklogd
 {% endfor %}
-
-/etc/nagios/nrpe.d/gsyslog.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://gsyslog/nrpe.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-
-extend:
-  nagios-nrpe-server:
-    service:
-      - watch:
-        - file: /etc/nagios/nrpe.d/gsyslog.cfg

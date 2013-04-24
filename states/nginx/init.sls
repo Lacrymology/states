@@ -2,8 +2,6 @@
  Install the Nginx web server
  #}
 include:
-  - diamond
-  - nrpe
   - web
 
 {% set bad_configs = ('default', 'example_ssl') %}
@@ -15,17 +13,6 @@ include:
     - require:
       - pkg: nginx
 {% endfor %}
-
-/etc/nagios/nrpe.d/nginx.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://nginx/nrpe.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
 
 /etc/nginx/nginx.conf:
   file:
@@ -138,39 +125,3 @@ nginx:
 {% for log_type in logger_types %}
       - service: nginx-logger-{{ log_type }}
 {% endfor %}
-
-nginx_diamond_resources:
-  file:
-    - accumulated
-    - name: processes
-    - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - require_in:
-      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - text:
-      - |
-        [[nginx]]
-        exe = ^\/usr\/sbin\/nginx$
-        cmdline = ^logger \-f \/var\/log\/nginx
-
-nginx_diamond_collector:
-  file:
-    - managed
-    - name: /etc/diamond/collectors/NginxCollector.conf
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 440
-    - source: salt://nginx/diamond.jinja2
-    - require:
-      - service: nginx
-      - file: /etc/diamond/collectors
-
-extend:
-  diamond:
-    service:
-      - watch:
-        - file: nginx_diamond_collector
-  nagios-nrpe-server:
-    service:
-      - watch:
-        - file: /etc/nagios/nrpe.d/nginx.cfg

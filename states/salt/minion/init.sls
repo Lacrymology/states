@@ -1,10 +1,6 @@
 {#
  Install Salt Minion (client)
  #}
-include:
-  - nrpe
-  - diamond
-
 salt-minion:
   apt_repository:
     - ubuntu_ppa
@@ -31,33 +27,3 @@ salt-minion:
     - watch:
       - pkg: salt-minion
       - file: salt-minion
-
-salt_minion_diamond_resources:
-  file:
-    - accumulated
-    - name: processes
-    - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - require_in:
-      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - text:
-      - |
-        [[salt.minion]]
-        cmdline = ^python \/usr\/bin\/salt\-minion$
-
-/etc/nagios/nrpe.d/salt-minion.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://salt/minion/nrpe.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-
-extend:
-  nagios-nrpe-server:
-    service:
-      - watch:
-        - file: /etc/nagios/nrpe.d/salt-minion.cfg
-

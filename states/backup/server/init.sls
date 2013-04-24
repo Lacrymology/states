@@ -3,8 +3,6 @@
 #}
 include:
   - ssh.server
-  - nrpe
-  - sudo
   - pip
 
 backup-server:
@@ -20,18 +18,6 @@ backup-server:
     - user: root
     - group: root
     - mode: 775
-
-/usr/local/bin/check_backups.py:
-  file:
-    - absent
-
-/usr/lib/nagios/plugins/check_backups.py:
-  file:
-    - managed
-    - user: root
-    - group: root
-    - mode: 550
-    - source: salt://backup/server/check.py
 
 backup-archiver-dependency:
   file:
@@ -53,16 +39,6 @@ backup-archiver-dependency:
     - require:
       - module: pip
 
-/etc/sudoers.d/nrpe_backups:
-  file:
-    - managed
-    - source: salt://backup/server/sudo.jinja2
-    - mode: 440
-    - user: root
-    - group: root
-    - require:
-      - pkg: sudo
-
 /etc/backup-archive.conf:
   file:
     - managed
@@ -81,20 +57,3 @@ backup-archiver-dependency:
     - group: root
     - require:
       - module: backup-archiver-dependency
-
-/etc/nagios/nrpe.d/backups.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://backup/server/nrpe.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-
-extend:
-  nagios-nrpe-server:
-    service:
-      - watch:
-        - file: /etc/nagios/nrpe.d/backups.cfg

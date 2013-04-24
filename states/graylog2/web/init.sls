@@ -3,11 +3,9 @@
 #}
 include:
   - ruby
-  - nrpe
   - mongodb
   - nginx
   - cron
-  - diamond
   - uwsgi
   - graylog2
   - web
@@ -138,18 +136,6 @@ change_graylog2_web_dir_permission:
     - require:
       - user: web
 
-graylog2_web_diamond_resource:
-  file:
-    - accumulated
-    - name: processes
-    - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - require_in:
-      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - text:
-      - |
-        [[uwsgi.graylog2]]
-        cmdline = ^graylog2-(worker|master)$
-
 {% for command in ('streamalarms', 'subscriptions') %}
 /etc/cron.hourly/graylog2-web-{{ command }}:
   file:
@@ -169,45 +155,7 @@ graylog2_web_diamond_resource:
     - context: 
       version: {{ version }}
 
-/etc/nagios/nrpe.d/graylog2-web.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://uwsgi/nrpe_instance.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-    - context:
-      deployment: graylog2
-      workers: {{ pillar['graylog2']['workers'] }}
-{% if 'cheaper' in pillar['graylog2'] %}
-      cheaper: {{ pillar['graylog2']['cheaper'] }}
-{% endif %}
-
-/etc/nagios/nrpe.d/graylog2-nginx.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://nginx/nrpe_instance.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-    - context:
-      deployment: graylog2
-      domain_name: {{ pillar['graylog2']['hostnames'][0] }}
-      http_uri: /login
-      https: {{ pillar['graylog2']['ssl']|default(False) }}
-
 extend:
-  nagios-nrpe-server:
-    service:
-      - watch:
-        - file: /etc/nagios/nrpe.d/graylog2-web.cfg
-        - file: /etc/nagios/nrpe.d/graylog2-nginx.cfg
   nginx:
     service:
       - watch:

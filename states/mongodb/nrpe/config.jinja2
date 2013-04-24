@@ -3,5 +3,3 @@ command[check_mongodb]=/usr/lib/nagios/plugins/check_procs -c 1:1 -C mongod -u m
 command[check_mongodb_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 27017
 command[check_mongodb_http]=/usr/lib/nagios/plugins/check_http -I 127.0.0.1 -p 28017
 command[check_mongodb_http_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 28017
-
-

@@ -20,8 +20,6 @@
 include:
   - apt
   - postgresql.server
-  - nrpe
-  - diamond
   - web
 
 proftpd-basic:
@@ -100,29 +98,6 @@ proftpd:
       - pkg: proftpd-mod-pgsql
       - pkg: proftpd-basic
 
-/etc/nagios/nrpe.d/proftpd.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://proftpd/nrpe.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-
-proftpd_diamond_resources:
-  file:
-    - accumulated
-    - name: processes
-    - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - require_in:
-      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - text:
-      - |
-        [[proftpd]]
-        exe = ^\/usr\/sbin\/proftpd$
-
 {% for file in ('virtuals', 'tls', 'sql', 'modules', 'ldap') %}
 /etc/proftpd/{{ file }}.conf:
   file:
@@ -144,9 +119,3 @@ proftpd_diamond_resources:
     - require:
       - user: web
 {% endfor %}
-
-extend:
-  nagios-nrpe-server:
-    service:
-      - watch:
-        - file: /etc/nagios/nrpe.d/proftpd.cfg

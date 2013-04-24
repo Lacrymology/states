@@ -6,11 +6,9 @@ include:
   - postgresql.server
   - virtualenv
   - graphite.common
-  - nrpe
   - uwsgi
   - nginx
   - memcache
-  - diamond
   - pip
   - web
   - apt
@@ -191,17 +189,6 @@ graphite_settings:
     - watch:
       - module: graphite-web
 
-{% if 'backup_server' in pillar %}
-/etc/cron.daily/backup-graphite:
-  file:
-    - managed
-    - user: root
-    - group: root
-    - mode: 500
-    - template: jinja
-    - source: salt://graphite/backup.jinja2
-{% endif %}
-
 /etc/uwsgi/graphite.ini:
   file:
     - managed
@@ -251,76 +238,11 @@ graphite_settings:
       - module: /etc/uwsgi/graphite.ini
       - pkg: nginx
 
-/etc/nagios/nrpe.d/graphite.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://uwsgi/nrpe_instance.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-    - context:
-      deployment: graphite
-      workers: {{ pillar['graphite']['web']['workers'] }}
-{% if 'cheaper' in pillar['graphite']['web'] %}
-      cheaper: {{ pillar['graphite']['web']['cheaper'] }}
-{% endif %}
-
-/etc/nagios/nrpe.d/graphite-nginx.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://nginx/nrpe_instance.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-    - context:
-      deployment: graphite
-      domain_name: {{ pillar['graphite']['web']['hostnames'][0] }}
-      http_uri: /account/login
-      https: {{ pillar['graphite']['web']['ssl']|default(False) }}
-
-uwsgi_diamond_graphite_resources:
-  file:
-    - accumulated
-    - name: processes
-    - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - require_in:
-      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - text:
-      - |
-        [[uwsgi.graphite]]
-        cmdline = ^graphite-(worker|master)$
-
-/etc/nagios/nrpe.d/postgresql-graphite.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://postgresql/nrpe.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-    - context:
-      deployment: graphite
-      password: {{ pillar['graphite']['web']['db']['password'] }}
-
 extend:
   memcached:
     service:
       - watch:
         - module: graphite_settings
-  nagios-nrpe-server:
-    service:
-      - watch:
-        - file: /etc/nagios/nrpe.d/graphite.cfg
-        - file: /etc/nagios/nrpe.d/graphite-nginx.cfg
-        - file: /etc/nagios/nrpe.d/postgresql-graphite.cfg
   nginx:
     service:
       - watch:

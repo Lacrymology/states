@@ -1,16 +1,8 @@
 {#
- # poor man backup using rsync and scp
- #}
-
+ Diamond statistics for backup client
+#}
 include:
   - diamond
-
-backup-client:
-  ssh_known_hosts:
-    - present
-    - name: {{ pillar['backup_server']['address'] }}
-    - user: root
-    - fingerprint: {{ pillar['backup_server']['fingerprint'] }}
 
 backup_diamond_resources:
   file:

@@ -3,16 +3,13 @@
  #}
 include:
   - graylog2
-  - nrpe
-  - diamond
   - mongodb
-  - elasticsearch.python
   - apt
 
 {# TODO: set Email output plugin settings straight into MongoDB from salt #}
 
 {% set version = '0.11.0' %}
-{% set checksum = 'md5=135c9eb384a03839e6f2eca82fd03502' %}
+{% set checksum = 'amd5=135c9eb384a03839e6f2eca82fd03502' %}
 {% set server_root_dir = '/usr/local/graylog2-server-' + version %}
 
 graylog2-server_upstart:
@@ -99,14 +96,6 @@ graylog2-server:
       - file: /var/log/graylog2
       - service: mongodb
 
-/usr/lib/nagios/plugins/check_new_logs.py:
-  file:
-    - managed
-    - source: salt://graylog2/server/check.py
-    - mode: 555
-    - require:
-      - module: nagiosplugin
-
 graylog2_email_output_plugin:
   cmd:
     - run
@@ -117,34 +106,3 @@ graylog2_email_output_plugin:
       - archive: graylog2-server
       - pkg: graylog2-server
       - service: mongodb
-
-graylog2_server_diamond_resources:
-  file:
-    - accumulated
-    - name: processes
-    - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - require_in:
-      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - text:
-      - |
-        [[graylog2]]
-        cmdline = ^java.+\-jar \/usr\/local\/graylog2\-server\-.+\/graylog2-server.jar
-
-/etc/nagios/nrpe.d/graylog2-server.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://graylog2/server/nrpe.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-    - context:
-      version: {{ version }}
-
-extend:
-  nagios-nrpe-server:
-    service:
-      - watch:
-        - file: /etc/nagios/nrpe.d/graylog2-server.cfg

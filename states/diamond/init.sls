@@ -13,7 +13,6 @@
 include:
   - git
   - virtualenv
-  - nrpe
 
 /etc/diamond:
   file:
@@ -118,20 +117,3 @@ diamond:
     - require:
       - file: /etc/diamond/collectors
       - file: /etc/diamond/collectors/ProcessMemoryCollector.conf
-
-/etc/nagios/nrpe.d/diamond.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://diamond/nrpe.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-
-extend:
-  nagios-nrpe-server:
-    service:
-      - watch:
-        - file: /etc/nagios/nrpe.d/diamond.cfg

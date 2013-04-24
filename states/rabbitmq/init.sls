@@ -16,10 +16,6 @@
  #}
 
 include:
-  - diamond
-  - nrpe
-  - pip
-  - apt
   - hostname
 {% if pillar['rabbitmq']['management'] != 'guest' -%}
   {%- if pillar['rabbitmq']['ssl']|default(False) %}
@@ -108,19 +104,6 @@ rabbitmq-server:
     - require:
       - service: rabbitmq-server
 
-rabbitmq_diamond_resources:
-  file:
-    - accumulated
-    - name: processes
-    - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - require_in:
-      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - text:
-      - |
-        [[rabbitmq]]
-        exe = ^\/usr\/lib\/erlang\/erts-.+\/bin\/inet_gethost$,^\/usr\/lib\/erlang\/erts-.+\/bin\/beam.+rabbitmq.+$,^\/usr\/lib\/erlang\/erts-.+\/bin\/epmd$
-        cmdline = ^inet_gethost 4$
-
 {% for vhost in pillar['rabbitmq']['vhosts'] %}
 rabbitmq-vhost-{{ vhost }}:
   rabbitmq_user:
@@ -152,49 +135,7 @@ in_rabbitmq_cluster:
     - require:
       - rabbitmq_plugins: rabbitmq-server
       - service: rabbitmq-server
-      - module: diamond-pyrabbit
 {% endif %}
-
-diamond-pyrabbit:
-  file:
-    - managed
-    - name: /usr/local/diamond/salt-pyrabbit-requirements.txt
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 440
-    - source: salt://rabbitmq/requirements.jinja2
-    - require:
-      - virtualenv: diamond
-  module:
-    - wait
-    - name: pip.install
-    - upgrade: True
-    - pkgs: ''
-    - bin_env: /usr/local/diamond
-    - requirements: /usr/local/diamond/salt-pyrabbit-requirements.txt
-    - require:
-      - virtualenv: diamond
-    - watch:
-      - file: diamond-pyrabbit
-
-diamond_rabbitmq:
-  file:
-    - managed
-    - template: jinja
-    - name: /etc/diamond/collectors/RabbitMQCollector.conf
-    - user: root
-    - group: root
-    - mode: 440
-    - source: salt://rabbitmq/diamond.jinja2
-    - require:
-      - module: diamond-pyrabbit
-      - file: /etc/diamond/collectors
-  pkg:
-    - latest
-    - name: python-httplib2
-    - require:
-      - cmd: apt_sources
 
 {% for node in pillar['rabbitmq']['cluster']['nodes'] -%}
     {% if node != grains['id'] -%}
@@ -223,48 +164,8 @@ host_{{ node }}:
       hostnames: {{ pillar['rabbitmq']['hostnames'] }}
 {% endif %}
 
-/etc/nagios/nrpe.d/rabbitmq-web.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://nginx/nrpe_instance.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-    - context:
-      deployment: rabbitmq
-      http_port: 15672
-      domain_name: 127.0.0.1
 {% if pillar['rabbitmq']['management'] != 'guest' %}
-      https: {{ pillar['rabbitmq']['ssl']|default(False) }}
-{% else %}
-      https: False
-{% endif %}
-
-/etc/nagios/nrpe.d/rabbitmq.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://rabbitmq/nrpe.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-
 extend:
-  diamond:
-    service:
-      - watch:
-        - file: diamond_rabbitmq
-  nagios-nrpe-server:
-    service:
-      - watch:
-        - file: /etc/nagios/nrpe.d/rabbitmq.cfg
-        - file: /etc/nagios/nrpe.d/rabbitmq-web.cfg
-{% if pillar['rabbitmq']['management'] != 'guest' %}
   nginx:
     service:
       - watch:

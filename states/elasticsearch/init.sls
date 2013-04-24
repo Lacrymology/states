@@ -9,9 +9,6 @@
  #}
 {% set ssl = pillar['elasticsearch']['ssl']|default(False) and 'public' in pillar['elasticsearch']['cluster']['nodes'][grains['id']] %}
 include:
-  - diamond
-  - nrpe
-  - requests
   - apt
 {% if ssl %}
   - ssl
@@ -135,80 +132,7 @@ elasticsearch:
 {% endfor %}
 {% endif %}
 
-elasticsearch_diamond_resources:
-  file:
-    - accumulated
-    - name: processes
-    - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - require_in:
-      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - text:
-      - |
-        [[elasticsearch]]
-        cmdline = .+java.+\-cp \:\/usr\/share\/elasticsearch\/lib\/elasticsearch\-.+\.jar
-
-/etc/nagios/nrpe.d/elasticsearch.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://elasticsearch/nrpe.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-
-/etc/nagios/nrpe.d/elasticsearch-nginx.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://nginx/nrpe_instance.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-    - context:
-      deployment: elasticsearch
-      http_port: 9200
-      domain_name: 127.0.0.1
-      https: {{ ssl }}
-
-/usr/local/bin/check_elasticsearch_cluster.py:
-  file:
-    - absent
-
-/usr/lib/nagios/plugins/check_elasticsearch_cluster.py:
-  file:
-    - managed
-    - source: salt://elasticsearch/check.py
-    - mode: 555
-    - require:
-      - module: nagiosplugin
-      - module: requests
-
-elasticsearch_diamond_collector:
-  file:
-    - managed
-    - name: /etc/diamond/collectors/ElasticSearchCollector.conf
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 440
-    - source: salt://elasticsearch/diamond.jinja2
-    - require:
-      - file: /etc/diamond/collectors
-
 extend:
-  diamond:
-    service:
-      - watch:
-        - file: elasticsearch_diamond_collector
-  nagios-nrpe-server:
-    service:
-      - watch:
-        - file: /etc/nagios/nrpe.d/elasticsearch.cfg
-        - file: /etc/nagios/nrpe.d/elasticsearch-nginx.cfg
 {% if ssl %}
   nginx:
     service:

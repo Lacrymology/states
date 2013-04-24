@@ -5,8 +5,6 @@
 {# TODO: add support for GELF logging #}
 include:
   - virtualenv
-  - nrpe
-  - diamond
   - pip
   - apt
 {% if pillar['shinken']['ssl']|default(False) %}
@@ -115,23 +113,6 @@ nagios-nrpe-plugin:
     - mode: 440
     - require:
       - pkg: nginx
-
-/etc/nagios/nrpe.d/shinken-nginx.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://nginx/nrpe_instance.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-    - context:
-      deployment: shinken_broker
-      http_uri: /user/login
-      domain_name: {{ pillar['shinken']['web']['hostnames'][0] }}
-      http_port: 7767
-      https: {{ pillar['shinken']['ssl']|default(False) }}
 {% endif %}
 
 shinken-{{ role }}:
@@ -199,18 +180,6 @@ shinken-{{ role }}:
 
 {% endif %}
 
-shinken_{{ role }}_diamond_resources:
-  file:
-    - accumulated
-    - name: processes
-    - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - require_in:
-      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - text:
-      - |
-        [[shinken.{{ role }}]]
-        cmdline = ^\/usr\/local\/shinken\/bin\/python \/usr\/local\/shinken\/bin\/shinken-{{ role }}
-
 /etc/init/shinken-{{ role }}.conf:
   file:
     - managed
@@ -221,40 +190,18 @@ shinken_{{ role }}_diamond_resources:
     - source: salt://shinken/upstart.jinja2
     - context:
       shinken_component: {{ role }}
-
-/etc/nagios/nrpe.d/shinken-{{ role }}.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://shinken/nrpe.jinja2
-    - context:
-      shinken_component: {{ role }}
-    - require:
-      - pkg: nagios-nrpe-server
 {% endif %}
 {% endfor %}
 
+{% if grains['id'] in pillar['shinken']['architecture']['broker'] %}
 extend:
-  nagios-nrpe-server:
-    service:
-      - watch:
-{% for role in pillar['shinken']['architecture'] %}
-{% if grains['id'] in pillar['shinken']['architecture'][role] %}
-        - file: /etc/nagios/nrpe.d/shinken-{{ role }}.cfg
-{% if role == 'broker' %}
-        - file: /etc/nagios/nrpe.d/shinken-nginx.cfg
   nginx:
     service:
       - watch:
         - file: /etc/nginx/conf.d/shinken-web.conf
-{% if pillar['shinken']['ssl']|default(False) %}
+{% if and pillar['shinken']['ssl']|default(False) %}
         - cmd: /etc/ssl/{{ pillar['shinken']['ssl'] }}/chained_ca.crt
         - module: /etc/ssl/{{ pillar['shinken']['ssl'] }}/server.pem
         - file: /etc/ssl/{{ pillar['shinken']['ssl'] }}/ca.crt
 {% endif %}
 {% endif %}
-{% endif %}
-{% endfor %}

@@ -5,11 +5,9 @@ include:
   - postgresql
   - postgresql.server
   - virtualenv
-  - nrpe
   - statsd
   - uwsgi
   - nginx
-  - diamond
   - pip
   - web
   - apt
@@ -152,74 +150,6 @@ sentry-migrate-fake:
       - file: sentry
       - cmd: sentry_settings
 
-/etc/nagios/nrpe.d/sentry.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://uwsgi/nrpe_instance.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-    - context:
-      deployment: sentry
-      workers: {{ pillar['sentry']['workers'] }}
-      cheaper: {{ salt['pillar.get']('sentry:cheaper', False) }}
-
-/etc/nagios/nrpe.d/sentry-nginx.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://nginx/nrpe_instance.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-    - context:
-      deployment: sentry
-      domain_name: {{ pillar['sentry']['address'] }}
-      http_uri: /login/
-      https: {{ pillar['sentry']['ssl']|default(False) }}
-
-/etc/nagios/nrpe.d/postgresql-sentry.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://postgresql/nrpe.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-    - context:
-      deployment: sentry
-      password: {{ pillar['sentry']['db']['password'] }}
-
-{% if 'backup_server' in pillar %}
-/etc/cron.daily/backup-sentry:
-  file:
-    - managed
-    - user: root
-    - group: root
-    - mode: 500
-    - template: jinja
-    - source: salt://sentry/backup.jinja2
-{% endif %}
-
-uwsgi_diamond_sentry_resources:
-  file:
-    - accumulated
-    - name: processes
-    - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - require_in:
-      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - text:
-      - |
-        [[uwsgi.sentry]]
-        cmdline = ^sentry-(worker|master)$
-
 /etc/nginx/conf.d/sentry.conf:
   file:
     - managed
@@ -232,12 +162,6 @@ uwsgi_diamond_sentry_resources:
       - pkg: nginx
 
 extend:
-  nagios-nrpe-server:
-    service:
-      - watch:
-        - file: /etc/nagios/nrpe.d/sentry.cfg
-        - file: /etc/nagios/nrpe.d/sentry-nginx.cfg
-        - file: /etc/nagios/nrpe.d/postgresql-sentry.cfg
   nginx:
     service:
       - watch:

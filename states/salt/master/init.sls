@@ -5,8 +5,6 @@ include:
   - salt.minion
   - git
   - ssh.client
-  - nrpe
-  - diamond
 
 salt-master:
   file:
@@ -41,33 +39,3 @@ salt-master:
     - watch:
       - pkg: salt-master
       - file: salt-master
-
-salt_master_diamond_resources:
-  file:
-    - accumulated
-    - name: processes
-    - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - require_in:
-      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - text:
-      - |
-        [[salt.master]]
-        cmdline = ^python \/usr\/bin\/salt\-master$
-
-/etc/nagios/nrpe.d/salt-master.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://salt/master/nrpe.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-
-extend:
-  nagios-nrpe-server:
-    service:
-      - watch:
-        - file: /etc/nagios/nrpe.d/salt-master.cfg
-

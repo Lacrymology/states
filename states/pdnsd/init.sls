@@ -3,8 +3,6 @@
  #}
 include:
   - apt
-  - nrpe
-  - diamond
 
 pdnsd:
   pkg:
@@ -47,32 +45,3 @@ pdnsd:
     - user: root
     - group: root
     - mode: 440
-
-/etc/nagios/nrpe.d/pdnsd.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://pdnsd/nrpe.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-
-pdsnd_diamond_resources:
-  file:
-    - accumulated
-    - name: processes
-    - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - require_in:
-      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - text:
-      - |
-        [[pdnsd]]
-        exe = ^\/usr\/sbin\/pdnsd$
-
-extend:
-  nagios-nrpe-server:
-    service:
-      - watch:
-        - file: /etc/nagios/nrpe.d/pdnsd.cfg

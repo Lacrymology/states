@@ -6,18 +6,18 @@
  #}
 mongodb:
   apt_repository:
-     - present
-     - address: http://downloads-distro.mongodb.org/repo/ubuntu-upstart
-     - components:
-       - 10gen
-     - distribution: dist
-     - key_id: 7F0CEB10
-     - key_server: keyserver.ubuntu.com
+    - present
+    - address: http://downloads-distro.mongodb.org/repo/ubuntu-upstart
+    - components:
+      - 10gen
+    - distribution: dist
+    - key_id: 7F0CEB10
+    - key_server: keyserver.ubuntu.com
   pkg:
-     - latest
-     - name: mongodb-10gen
-     - require:
-       - apt_repository: mongodb
+    - latest
+    - name: mongodb-10gen
+    - require:
+      - apt_repository: mongodb
   file:
     - managed
     - name: /etc/logrotate.d/mongodb
@@ -27,7 +27,7 @@ mongodb:
     - mode: 440
     - source: salt://mongodb/logrotate.jinja2
   service:
-     - running
-     - enable: True
-     - watch:
-       - pkg: mongodb
+    - running
+    - enable: True
+    - watch:
+      - pkg: mongodb

@@ -1,3 +1,6 @@
+{#
+ pDNSd Nagios NRPE checks
+ #}
 include:
   - nrpe
 

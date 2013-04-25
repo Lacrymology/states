@@ -1,3 +1,6 @@
+{#
+ State to configure bash
+ #}
 include:
   - apt
 

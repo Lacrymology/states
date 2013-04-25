@@ -31,6 +31,7 @@ denyhosts:
     - template: jinja
   service:
     - running
+    - enable: True
     - watch:
       - file: denyhosts
       - pkg: denyhosts

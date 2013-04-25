@@ -10,12 +10,25 @@ dovecot:
     - enable: False
     - watch:
       - file: /etc/dovecot/conf.d/10-mail.conf
+      {% for i in ('10-auth.conf','10-mail.conf',) %}
+      - file: /etc/dovecot/conf.d/{{ i }}
+      {% endfor %}
 
-/etc/dovecot/conf.d/10-mail.conf:
+{% for i in ('10-auth.conf','10-mail.conf',) %}
+/etc/dovecot/conf.d/{{ i }}:
   file:
     - managed
-    - source: salt://dovecot/10-mail.jinja2
+    - source: salt://dovecot/{{ i }}.jinja2
     - mode: 644
+    - user: root
+    - group: root
+{% endfor %}
+
+/etc/dovecot/dovecot-ldap.conf.ext:
+  file:
+    - managed
+    - source: salt://dovecot/dovecot-ldap.conf.ext.jinja2
+    - mode: 600
     - user: root
     - group: root
 

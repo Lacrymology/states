@@ -117,7 +117,7 @@ carbon-{{ instance }}:
 carbon-{{ instance }}-logdir:
   file:
     - directory
-    - name: /var/log/graphite/carbon/carbon-cache-a
+    - name: /var/log/graphite/carbon/carbon-cache-{{ instance }}
     - user: graphite
     - group: graphite
     - mode: 770

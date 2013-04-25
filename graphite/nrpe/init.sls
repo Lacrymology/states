@@ -1,5 +1,5 @@
 {#
- Nagios NRPE check for Graphaite
+ Nagios NRPE check for Graphite
 #}
 include:
   - nrpe

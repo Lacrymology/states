@@ -1,5 +1,5 @@
 {#
- Install a graylog2 web interface server
+ Install a graylog2 web Nagios NRPE checks
 #}
 include:
   - nrpe

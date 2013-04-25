@@ -52,3 +52,9 @@ mongodb_diamond_resources:
       - |
         [[mongodb]]
         exe = ^\/usr\/bin\/mongod$
+
+extend:
+  diamond:
+    service:
+      - watch:
+        - file: diamond_mongodb

@@ -1,0 +1,3 @@
+libpq-dev:
+  pkg:
+    - purged

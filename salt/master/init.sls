@@ -29,7 +29,7 @@ GitPython:
     - user: root
     - group: root
     - mode: 440
-    - source: salt://master/top.jinja2
+    - source: salt://salt/master/top.jinja2
     - require:
       - file: {{ opts['cachedir'] }}/role-based-states
 

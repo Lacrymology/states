@@ -54,6 +54,7 @@ salt-api:
     - source: salt://salt/api/upstart.jinja2
   service:
     - running
+    - enable: True
     - watch:
       - file: salt-api
       - pip: salt-api

@@ -39,6 +39,7 @@ ntp:
       - pkg: ntp
   service:
     - running
+    - enable: True
     - require:
       - pkg: ntp
     - watch:

@@ -89,6 +89,7 @@ proftpd:
     - mode: 644
   service:
     - running
+    - enable: True
     - require:
       - postgres_database: proftpd-mod-pgsql
       - cmd: proftpd-users

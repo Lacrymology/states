@@ -18,12 +18,13 @@ iptables:
     - mode: 440
     - source: salt://firewall/config.jinja2
     - require:
-      - pkg: iptables-persistent
+      - pkg: iptables
   pkg:
     - installed
     - names:
       - iptables
       - iptstate
+      - iptables-persistent
     - require:
       - cmd: apt_sources
   cmd:

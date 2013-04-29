@@ -26,7 +26,7 @@ apt_sources:
     - user: root
     - group: root
     - mode: 444
-    - source: salt://apt/sources.jinja2
+    - source: {{ pillar['apt_source'] }}
     - context:
       all_suites: main restricted universe multiverse
     - require:

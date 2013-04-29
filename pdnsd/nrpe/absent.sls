@@ -1,7 +1,7 @@
 {#
  Remove pDNSd Nagios NRPE checks
  #}
-{% if 'shinken_pollers' in pillars %}
+{% if 'shinken_pollers' in pillar %}
 include:
   - nrpe
 

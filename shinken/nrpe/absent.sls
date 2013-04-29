@@ -1,7 +1,7 @@
 {#
  Remove Nagios NRPE check for Shinken
 #}
-{% if 'shinken_pollers' in pillars %}
+{% if 'shinken_pollers' in pillar %}
 include:
   - nrpe
 

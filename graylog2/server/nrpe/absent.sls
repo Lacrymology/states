@@ -1,7 +1,7 @@
 {#
  Remove NRPE check for Graylog2 Server
 #}
-{% if 'shinken_pollers' in pillars %}
+{% if 'shinken_pollers' in pillar %}
 include:
   - nrpe
 

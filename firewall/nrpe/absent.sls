@@ -1,7 +1,7 @@
 {#
  Remove Nagios NRPE check for iptables
 #}
-{% if 'shinken_pollers' in pillars %}
+{% if 'shinken_pollers' in pillar %}
 include:
   - nrpe
 

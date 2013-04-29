@@ -5,6 +5,11 @@ include:
   - salt.minion
   - git
   - ssh.client
+  - pip
+
+GitPython:
+  pip:
+    - installed
 
 /srv/salt:
   file:
@@ -55,3 +60,4 @@ salt-master:
     - watch:
       - pkg: salt-master
       - file: salt-master
+      - pip: GitPython

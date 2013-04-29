@@ -1,7 +1,7 @@
 {#
  Nagios NRPE check for uWSGI
 #}
-{% if 'shinken_pollers' in pillars %}
+{% if 'shinken_pollers' in pillar %}
 include:
   - nrpe
 

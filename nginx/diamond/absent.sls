@@ -1,7 +1,7 @@
 {#
  Remove Diamond statistics for Nginx
 #}
-{% if 'graphite_address' in pillars %}
+{% if 'graphite_address' in pillar %}
 include:
   - diamond
 

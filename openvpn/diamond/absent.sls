@@ -1,7 +1,7 @@
 {#
  Turn off Diamond statistics for OpenVPN
 #}
-{% if 'graphite_address' in pillars %}
+{% if 'graphite_address' in pillar %}
 include:
   - diamond
 

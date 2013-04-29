@@ -1,0 +1,3 @@
+/etc/screenrc:
+  file:
+    - absent

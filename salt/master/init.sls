@@ -49,7 +49,6 @@ salt-master:
     - require:
       - pkg: openssh-client
       - pkg: git
-      - cmd: salt-master
   pkg:
     - latest
     - require:

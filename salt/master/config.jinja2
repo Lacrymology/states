@@ -2,11 +2,16 @@
 
 file_roots:
   base:
-    - /srv/salt/states
+    - {{ opts['cachedir'] }}/role-based-states
 
-pillar_roots:
-  base:
-    - /srv/salt/pillar
+fileserver_backend:
+  - git
+  - roots
+
+gitfs_remotes:
+{% for repo in pillar['salt_master']['gitfs_remotes'] %}
+  - {{ repo }}
+{%- endfor %}
 
 peer:
   .*:

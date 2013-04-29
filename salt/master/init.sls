@@ -6,6 +6,28 @@ include:
   - git
   - ssh.client
 
+/srv/salt:
+  file:
+    - absent
+
+{{ opts['cachedir'] }}/role-based-states:
+  file:
+    - directory
+    - user: root
+    - group: root
+    - mode: 550
+
+{{ opts['cachedir'] }}/role-based-states/top.sls:
+  file:
+    - managed
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - source: salt://master/top.jinja2
+    - require:
+      - file: {{ opts['cachedir'] }}/role-based-states
+
 salt-master:
   file:
     - managed
@@ -15,16 +37,10 @@ salt-master:
     - user: root
     - group: root
     - mode: 400
-  cmd:
-    - run
-    - cwd: /srv/salt
-    - name: git config remote.origin.url {{ pillar['salt']['repository'] }}; git config branch.master.merge refs/heads/master
-    - require:
-      - pkg: git
   git:
     - latest
-    - name: {{ pillar['salt']['repository'] }}
-    - target: /srv/salt/
+    - name: {{ pillar['salt']['pillar_remote'] }}
+    - target: /srv/pillar
     - require:
       - pkg: openssh-client
       - pkg: git

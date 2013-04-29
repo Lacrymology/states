@@ -44,7 +44,7 @@ salt-master:
     - mode: 400
   git:
     - latest
-    - name: {{ pillar['salt']['pillar_remote'] }}
+    - name: {{ pillar['salt_master']['pillar_remote'] }}
     - target: /srv/pillar
     - require:
       - pkg: openssh-client

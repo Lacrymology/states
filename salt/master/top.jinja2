@@ -6,4 +6,5 @@
     - roles.{{ role }}
 {% else %}
     - roles.{{ role }}.absent
+{% endif %}
 {% endfor %}

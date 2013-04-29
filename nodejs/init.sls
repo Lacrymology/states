@@ -9,7 +9,5 @@ nodejs:
     - key_id: C7917B12
   pkg:
     - latest
-    - names:
-      - nodejs
     - require:
       - apt_repository: nodejs

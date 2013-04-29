@@ -6,7 +6,7 @@ include:
   file:
     - managed
     - template: jinja
-    - source: salt://ssh/server/gsyslog.jinja2
+    - source: salt://ssh/server/gsyslog/config.jinja2
     - user: root
     - group: root
     - mode: 440

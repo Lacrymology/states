@@ -8,8 +8,8 @@
   file:
     - absent
 
-{% for file in ('/etc/nginx/conf.d/graylog2-web.conf', web_root_dir) %}
-/etc/init/graylog2-web.conf:
+{% for file in ('/etc/nginx/conf.d/graylog2-web.conf', web_root_dir, '/etc/init/graylog2-web.conf') %}
+{{ file }}:
   file:
     - absent
     - require:

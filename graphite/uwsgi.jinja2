@@ -24,9 +24,6 @@ lazy-apps = true
 uid = www-data
 gid = graphite
 threaded-logger = true
-logger = graylog2:{{ pillar['graylog2_address'] }}:12201,{{ grains['id'] }}
-carbon-id = graphite
-carbon = {{ pillar['graphite_address'] }}:2003
 virtualenv = /usr/local/graphite
 chdir = /usr/local/graphite
 procname = graphite-worker
@@ -34,3 +31,12 @@ procname-master = graphite-master
 socket = /var/lib/uwsgi/graphite.sock
 stats = /var/lib/uwsgi/graphite-stats.sock
 no-orphans = true
+{% if 'graylog2_address' in pillar %}
+logger = graylog2:{{ pillar['graylog2_address'] }}:12201,{{ grains['id'] }}
+{% else %}
+log-syslog = uwsgi-graphite
+{% endif %}
+{% if 'graphite_address' in pillar %}
+carbon-id = graphite
+carbon = {{ pillar['graphite_address'] }}:2003
+{% endif %}

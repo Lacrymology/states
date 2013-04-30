@@ -37,7 +37,13 @@ stats = /var/lib/uwsgi/graylog2-stats.sock
 chdir = /usr/local/graylog2-web-interface-{{ version }}
 rack = /usr/local/graylog2-web-interface-{{ version }}/config.ru
 threaded-logger = true
+no-orphans = true
+{% if 'graylog2_address' in pillar %}
 logger = graylog2:{{ pillar['graylog2_address'] }}:12201,{{ grains['id'] }}
+{% else %}
+log-syslog = uwsgi-graylog2
+{% endif %}
+{% if 'graphite_address' in pillar %}
 carbon-id = graylog2
 carbon = {{ pillar['graphite_address'] }}:2003
-no-orphans = true
+{% endif %}

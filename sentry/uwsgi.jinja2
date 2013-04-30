@@ -24,9 +24,6 @@ lazy-apps = true
 uid = www-data
 gid = www-data
 threaded-logger = true
-logger = graylog2:{{ pillar['graylog2_address'] }}:12201,{{ grains['id'] }}
-carbon-id = sentry
-carbon = {{ pillar['graphite_address'] }}:2003
 virtualenv = /usr/local/sentry
 chdir = /usr/local/sentry
 procname = sentry-worker
@@ -34,3 +31,12 @@ procname-master = sentry-master
 socket = /var/lib/uwsgi/sentry.sock
 stats = /var/lib/uwsgi/sentry-stats.sock
 no-orphans = true
+{% if 'graylog2_address' in pillar %}
+logger = graylog2:{{ pillar['graylog2_address'] }}:12201,{{ grains['id'] }}
+{% else %}
+log-syslog = uwsgi-sentry
+{% endif %}
+{% if 'graphite_address' in pillar %}
+carbon-id = sentry
+carbon = {{ pillar['graphite_address'] }}:2003
+{% endif %}

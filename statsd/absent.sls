@@ -15,4 +15,4 @@ statsd:
   file:
     - absent
     - require:
-      - service: stastd
+      - service: statsd

@@ -199,7 +199,7 @@ extend:
     service:
       - watch:
         - file: /etc/nginx/conf.d/shinken-web.conf
-{% if and pillar['shinken']['ssl']|default(False) %}
+{% if pillar['shinken']['ssl']|default(False) %}
         - cmd: /etc/ssl/{{ pillar['shinken']['ssl'] }}/chained_ca.crt
         - module: /etc/ssl/{{ pillar['shinken']['ssl'] }}/server.pem
         - file: /etc/ssl/{{ pillar['shinken']['ssl'] }}/ca.crt

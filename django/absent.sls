@@ -1,3 +1,6 @@
+{#
+ Remove Django specifics
+#}
 /usr/local/bin/check_robots.py:
   file:
     - absent

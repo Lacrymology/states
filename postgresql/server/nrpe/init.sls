@@ -13,7 +13,7 @@ include:
     - user: nagios
     - group: nagios
     - mode: 440
-    - source: salt://postgresql/nrpe/config.jinja2
+    - source: salt://postgresql/nrpe.jinja2
     - require:
       - pkg: nagios-nrpe-server
     - context:

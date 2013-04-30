@@ -16,7 +16,7 @@ port = 514
 keys = root,archive,syslog_auth,syslog_authpriv
 
 [handlers]
-keys = {% if 'graylog2_address' in pillar %}gelf,{% endif %}logfile,auth
+keys = logfile,auth{% if 'graylog2_address' in pillar %},gelf{% endif %}
 #keys = gelf,logfile,filter_debug
 
 [formatters]
@@ -24,7 +24,7 @@ keys = detailed,debug,message_only,timed_message,syslog
 
 [logger_root]
 level = DEBUG
-handlers = {% if 'graylog2_address' in pillar %}gelf,{% endif %}logfile
+handlers = logfile{% if 'graylog2_address' in pillar %},gelf{% endif %}
 
 [logger_archive]
 level = DEBUG
@@ -47,9 +47,9 @@ handlers = auth
 
 {%- if 'graylog2_address' in pillar %}
 [handler_gelf]
-class=graypy.handler.GELFHandler
-level=DEBUG
-formatter=message_only
+class = graypy.handler.GELFHandler
+level = DEBUG
+formatter = message_only
 args = ('{{ pillar['graylog2_address'] }}', 12201)
 {% endif -%}
 

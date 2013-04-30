@@ -19,6 +19,7 @@ extend:
 
 postgresql_diamond_collector:
   file:
+    - name: /etc/diamond/collectors/PostgresqlCollector.conf
     - absent
   postgres_user:
     - absent

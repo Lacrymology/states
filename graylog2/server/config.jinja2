@@ -194,9 +194,11 @@ transport_email_from_name = Graylog2
 transport_email_web_interface_url = http{% if ssl|default(False) %}s:{% endif %}://{{ pillar['graylog2']['hostnames'][0] }}
 
 enable_graphite_output = true
+{% if 'graphite_address' in pillar %}
 graphite_carbon_host = {{ pillar['graphite_address'] }}
 graphite_carbon_tcp_port = 2003
 graphite_prefix = {{ grains['id'] }}.logs
+{% endif %}
 
 # Filters
 # Enable the filter that tries to extract additional fields from k=v values in the log message?

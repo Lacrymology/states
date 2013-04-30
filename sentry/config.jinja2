@@ -46,12 +46,9 @@ SENTRY_URL_PREFIX = '{% if pillar['sentry']['ssl']|default(False) %}https{% else
 {#    'worker_class': 'gevent',#}
 {#}#}
 
-INSTALLED_APPS = INSTALLED_APPS + (
-    'django_statsd',
 {% if pillar['sentry']['email']['method'] == "amazon_ses" %}
-    'django_ses',
+INSTALLED_APPS.insert('django_ses')
 {% endif %}
-)
 
 LOGGING = {
     'version': 1,
@@ -120,12 +117,14 @@ EMAIL_USE_TLS = False
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 SENTRY_SERVER_EMAIL = SERVER_EMAIL
 
+{% if 'graphite_address' in pillar %}
 MIDDLEWARE_CLASSES = MIDDLEWARE_CLASSES + (
     'django_statsd.middleware.GraphiteRequestTimingMiddleware',
     'django_statsd.middleware.GraphiteMiddleware'
 )
-
+INSTALLED_APPS.insert('django_statsd')
 STATSD_PREFIX = 'sentry'
 STATSD_CLIENT = 'django_statsd.clients.normal'
+{% endif %}
 
 ALLOWED_HOSTS = ["{{ pillar['sentry']['address'] }}"]

@@ -9,10 +9,6 @@ harakiri = {{ timeout|default(30) }}
 harakiri-verbose = true
 uid = {{ uid|default("www-data") }}
 gid = {{ gid|default("www-data") }}
-threaded-logger = true
-logger = graylog2:{{ pillar['graylog2_address'] }}:12201,{{ grains['id'] }}
-carbon-id = {{ deployment }}
-carbon = {{ pillar['graphite_address'] }}:2003
 virtualenv = {{ root_dir|default("/usr/local/deployments") }}/{{ deployment }}
 chdir = {{ root_dir|default("/usr/local/deployments") }}/{{ deployment }}
 procname = {{ deployment }}-worker
@@ -37,3 +33,13 @@ ksm = {{ ksm|default(20) }}
 {%- for option in options|default({}) %}
 {{ option }} = {{ options[option] }}
 {% endfor -%}
+threaded-logger = true
+{% if 'graylog2_address' in pillar %}
+logger = graylog2:{{ pillar['graylog2_address'] }}:12201,{{ grains['id'] }}
+{% else %}
+log-syslog = uwsgi-{{ deployment }}
+{% endif %}
+{% if 'graphite_address' in pillar %}
+carbon-id = {{ deployment }}
+carbon = {{ pillar['graphite_address'] }}:2003
+{% endif %}

@@ -98,7 +98,7 @@ define broker {
     broker_name broker-{{ id }}
     address {{ pillar['shinken']['ip_addresses'][id] }}
     port 7772
-    modules broker-syslog, broker-graphite, broker-retention, broker-webui
+    modules broker-syslog, broker-retention, broker-webui{% if 'graphite_address' in pillar %}, broker-graphite{% endif %}
     realm All
     manage_arbiters 1
     {% if not loop.first %}
@@ -125,6 +125,7 @@ define module {
     module_type syslog
 }
 
+{% if 'graphite_address' in pillar %}
 define module {
     module_name broker-graphite
     module_type graphite_perfdata
@@ -134,6 +135,15 @@ define module {
     #tick_limit 300 ; Default value 300
     graphite_data_source shinken
 }
+
+define module {
+    module_name broker-webui-graphite
+    module_type graphite_webui
+    uri {{ pillar['shinken']['graphite_url'] }}
+    templates_path /usr/local/shinken/share/templates/graphite/
+    graphite_data_source shinken
+}
+{% endif %}
 
 define module {
     module_name broker-retention
@@ -154,7 +164,7 @@ define module {
     max_output_length   100     ; Maximum output length for plugin output in webui
     play_sound          0       ; Play sound on new non-acknowledged problems.#}
 
-    modules broker-webui-auth, broker-webui-graphite
+    modules broker-webui-auth{% if 'graphite_address' in pillar %}, broker-webui-graphite{% endif %}
 
 {#    ## Advanced Options
     # Don't use them as long as you don't know what you are doing!
@@ -189,14 +199,6 @@ define module {
 define module {
     module_name broker-webui-auth
     module_type cfg_password_webui
-}
-
-define module {
-    module_name broker-webui-graphite
-    module_type graphite_webui
-    uri {{ pillar['shinken']['graphite_url'] }}
-    templates_path /usr/local/shinken/share/templates/graphite/
-    graphite_data_source shinken
 }
 
 {#-

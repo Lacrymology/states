@@ -5,7 +5,6 @@ include:
   - postgresql
   - postgresql.server
   - virtualenv
-  - statsd
   - uwsgi
   - nginx
   - pip
@@ -13,6 +12,9 @@ include:
   - apt
 {% if pillar['sentry']['ssl']|default(False) %}
   - ssl
+{% endif %}
+{% if 'graphite_address' in pillar %}
+  - statsd
 {% endif %}
 
 sentry:

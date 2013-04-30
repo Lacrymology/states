@@ -11,4 +11,4 @@ salt-master:
   pkg:
     - purged
     - require:
-      - pkg: salt-master
+      - service: salt-master

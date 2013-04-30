@@ -6,13 +6,15 @@
 salt_api:
   group:
     - absent
+{% for user in salt['pillar.get']('salt_master:external_auth:pam', []) %}
+{% if loop.first %}
     - require:
-{% for user in pillar['salt_master']['external_auth']['pam'] %}
+{% endif %}
       - user: user_{{ user }}
 {% endfor %}
 
 {# You need to set the password for each of those users #}
-{% for user in pillar['salt_master']['external_auth']['pam'] %}
+{% for user in salt['pillar.get']('salt_master:external_auth:pam', []) %}
 user_{{ user }}:
   user:
     - absent

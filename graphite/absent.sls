@@ -3,8 +3,7 @@
  #}
 include:
   - nginx
-{% if pillar['destructive_absent']|default(False) %}
-include:
+{% if pillar['destructive_absent']|default(False) and salt['pillar.get']('graphite:web:db:name', False) %}
   - postgresql.server
 
 graphite-database:
@@ -15,12 +14,14 @@ graphite-database:
     - require:
       - service: postgresql
       - postgres_database: graphite-database
+      - file: /etc/uwsgi/graphite.ini
   postgres_database:
     - present
     - name: {{ pillar['graphite']['web']['db']['name'] }}
     - runas: postgres
     - require:
       - service: postgresql
+      - file: /etc/uwsgi/graphite.ini
 {% endif %}
 
 /etc/uwsgi/graphite.ini:
@@ -28,6 +29,7 @@ graphite-database:
     - absent
 
 {% for file in ('/var/log/graphite/graphite', '/etc/graphite/graphTemplates.conf', '/etc/nginx/conf.d/graphite.conf') %}
+{{ file }}:
   file:
     - absent
     - require:

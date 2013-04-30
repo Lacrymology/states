@@ -26,7 +26,7 @@ proftpd:
       - pkg: proftpd
 
 {% if pillar['destructive_absent']|default(False) %}
-{% for deployment in pillar['proftpd']['deployments'] %}
+{% for deployment in salt['pillar.get']('proftpd:deployments', []) %}
 /var/lib/deployments/{{ deployment }}/static/ftp:
   file:
     - absent

@@ -1,8 +1,9 @@
 {#
  Turn off Diamond statistics for PostgreSQL Server
 #}
-{% if 'graphite_address' in pillar %}
 include:
+  - postgresql.server
+{% if 'graphite_address' in pillar %}
   - diamond
 
 extend:
@@ -24,7 +25,10 @@ postgresql_diamond_collector:
     - runas: postgres
     - require:
       - postgres_database: postgresql_diamond_collector
+      - service: postgresql
   postgres_database:
     - absent
     - name: diamond
     - runas: postgres
+    - require:
+      - service: postgresql

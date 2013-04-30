@@ -17,7 +17,7 @@
   file:
     - absent
 
-{% for instance in pillar['graphite']['carbon']['instances'] %}
+{% for instance in salt['pillar.get']('graphite:carbon:instances', []) %}
 carbon-{{ instance }}:
   file:
     - absent

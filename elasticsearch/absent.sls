@@ -1,7 +1,7 @@
 {#
  Uninstall an Elasticsearch NoSQL server
  #}
-{% set ssl = pillar['elasticsearch']['ssl']|default(False) and 'public' in pillar['elasticsearch']['cluster']['nodes'][grains['id']] %}
+{% set ssl = salt['pillar.get']('elasticsearch:ssl', False) and 'public' in salt['pillar.get']('elasticsearch:cluster:nodes', []) %}
 include:
   - apt
 {% if ssl %}
@@ -26,6 +26,8 @@ extend:
 /usr/lib/jvm/java-7-openjdk:
   file:
     - absent
+    - require:
+      - pkg: elasticsearch
 {% endif %}
 
 elasticsearch:
@@ -35,6 +37,8 @@ elasticsearch:
 {% else %}
     - removed
 {% endif %}
+    - require:
+      - service: elasticsearch
   service:
     - dead
     - enable: False

@@ -4,3 +4,9 @@
 vim:
   pkg:
     - purged
+
+/etc/vim/vimrc:
+  file:
+    - absent
+    - require:
+      - pkg: vim

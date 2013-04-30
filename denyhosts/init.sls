@@ -5,17 +5,6 @@ include:
   - apt
   - gsyslog
 
-/var/lib/denyhosts/allowed-hosts:
-  file:
-    - managed
-    - source: salt://denyhosts/allowed.jinja2
-    - user: root
-    - group: root
-    - mode: 440
-    - template: jinja
-    - require:
-      - pkg: denyhosts
-
 denyhosts:
   pkg:
     - installed
@@ -35,7 +24,6 @@ denyhosts:
     - watch:
       - file: denyhosts
       - pkg: denyhosts
-      - file: /var/lib/denyhosts/allowed-hosts
     - require:
       - service: gsyslog
 

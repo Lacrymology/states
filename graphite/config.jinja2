@@ -164,14 +164,27 @@ LOGGING = {
     'formatters': {
         'message_only': {
             'format': '[graphite] %(message)s'
+        },
+        'syslog': {
+            'format': '%(asctime)-15s graphite[%(process)d] %(levelname)s %(name)s %(module)s.%(funcName)s:%(lineno)d %(message)s',
+            'datefmt': '%b %d %H:%M:%S'
         }
     },
     'handlers': {
+{% if 'graylog2_address' in pillar %}
         'gelf': {
             'level': 'NOTSET',
             'class': 'graypy.handler.GELFHandler',
             'host': '{{ pillar['graylog2_address'] }}',
             'formatter': 'message_only'
+        },
+{% endif %}
+        'syslog': {
+            'level': 'NOTSET',
+            'formatter': 'syslog',
+            'class': 'handlers.SysLogHandler',
+            'address': '/dev/log',
+            'facility': 'local0'
         },
         'sentry': {
             'level': 'ERROR',
@@ -180,32 +193,32 @@ LOGGING = {
     },
     'loggers': {
         'django': {
-            'handlers': ['gelf', 'sentry'],
+            'handlers': ['sentry', 'syslog', {% if 'graylog2_address' in pillar %}, 'gelf'{% endif %}],
             'propagate': True,
-            'level':'DEBUG',
+            'level':'DEBUG'
         },
         'raven': {
+            'handlers': ['sentry', 'syslog', {% if 'graylog2_address' in pillar %}, 'gelf'{% endif %}],
             'level': 'WARN',
-            'propagate': False,
-            'handlers': ['gelf', 'sentry']
+            'propagate': False
         },
         'sentry.errors': {
+            'handlers': ['syslog', {% if 'graylog2_address' in pillar %}, 'gelf'{% endif %}],
             'level': 'DEBUG',
-            'handlers': ['gelf'],
-            'propagate': False,
+            'propagate': False
         },
 {% if not pillar['debug'] %}
 {% for logger in ('cache', 'rendering', 'metric_access') %}
         '{{ logger }}': {
+            'handlers': ['sentry', 'syslog', {% if 'graylog2_address' in pillar %}, 'gelf'{% endif %}],
             'level': 'ERROR',
-            'propagate': False,
-            'handlers': ['gelf', 'sentry']
+            'propagate': False
         },
 {% endfor %}
 {% endif %}
      },
     'root': {
-        'handlers': ['gelf', 'sentry'],
+        'handlers': ['sentry', 'syslog', {% if 'graylog2_address' in pillar %}, 'gelf'{% endif %}],
         'propagate': True,
         'level': 'NOTSET'
     }

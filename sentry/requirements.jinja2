@@ -5,8 +5,10 @@ sentry<5.1
 psycopg2==2.4.5
 boto==2.6.0
 django_ses==0.4.1
-graypy
 ipython
+{% if 'graylog2_address' in pillar %}
+graypy
+{% endif %}
 {% if 'graphite_address' in pillar %}
 django-statsd-mozilla
 {% endif %}

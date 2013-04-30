@@ -11,7 +11,9 @@ http://cairographics.org/releases/py2cairo-1.8.10.tar.gz
 graphite-web==0.9.10
 django-statsd-mozilla==0.3.8.3
 raven
-graypy
 statsd
 ipython
 -e git+git://github.com/jeffkistler/django-decorator-include.git@1cce01ee0130156e8fde5c46e61287bea37c5c7f#egg=django-decorator-include
+{% if 'graylog2_address' in pillar %}
+graypy
+{% endif %}

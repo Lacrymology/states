@@ -3,22 +3,35 @@
 keys = root
 
 [handlers]
-keys = gelf
+keys = syslog{% if 'graylog2_address' in pillar %},gelf{% endif %}
 
 [formatters]
-keys = message_only
+keys = message_only,syslog
 
 [logger_root]
 level = DEBUG
-handlers = gelf
+handlers = syslog{% if 'graylog2_address' in pillar %},gelf{% endif %}
 
+{% if 'graylog2_address' in pillar %}
 [handler_gelf]
-class=graypy.handler.GELFHandler
-level=DEBUG
-formatter=message_only
+class = graypy.GELFHandler
+level = DEBUG
+formatter = message_only
 args = ('{{ pillar['graylog2_address'] }}', 12201)
+{% endif %}
+
+[handler_syslog]
+class = handlers.SysLogHandler
+level = DEBUG
+formatter = syslog
+args = ('/dev/log', 'local7')
 
 [formatter_message_only]
 format = %(message)s
 datefmt =
+class = logging.Formatter
+
+[formatter_syslog]
+format = %(asctime)-15s backup[%(process)d] %(levelname)s %(name)s %(module)s.%(funcName)s:%(lineno)d %(message)s
+datefmt = %b %d %H:%M:%S
 class = logging.Formatter

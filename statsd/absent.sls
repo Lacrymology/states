@@ -5,6 +5,8 @@ statsd:
   file:
     - absent
     - name: /etc/init/statsd.conf
+    - require:
+      - service: statsd
   service:
     - dead
     - enable: False

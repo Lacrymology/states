@@ -1,6 +1,7 @@
 {#
  Diamond statistics for RabbitMQ
 #}
+{% set master_id = pillar['rabbitmq']['cluster']['master'] %}
 include:
   - diamond
   - pip

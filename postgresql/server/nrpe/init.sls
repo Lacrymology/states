@@ -1,6 +1,8 @@
 {#
  Nagios NRPE check for PostgreSQL Server
 #}
+{% set version="9.2" %}
+
 include:
   - nrpe
 

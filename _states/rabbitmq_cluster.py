@@ -35,14 +35,14 @@ def joined(master, user, password, disk_node=False, env=(),
     ret = {'name': 'rabbitmq cluster join master %s' % master, 'result': None,
            'comment': '', 'changes': {}}
     _env = _convert_env(env)
-    if __opts__['test']:
-        ret['comment'] = 'Would have been in cluster with master {0}'.format(
-            master)
-        return ret
 
     cluster_status = 'rabbitmqctl cluster_status | grep -q %s' % master
     code = __salt__['cmd.retcode'](cluster_status, env=_env)
     if code == 1:
+        if __opts__['test']:
+            ret['comment'] = \
+                'Would have been in cluster with master {0}'.format(master)
+            return ret
         log.info("Not joined")
         if disk_node:
             command_add = 'rabbitmqctl join_cluster rabbit@%s' % master

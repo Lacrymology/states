@@ -38,15 +38,15 @@ def uninstalled(name, is_global=True, runas=None):
         User which run the command, Minion user by default.
     '''
     ret = {'name': name, 'result': None, 'comment': '', 'changes': {}}
-    if __opts__['test']:
-        ret['comment'] = 'The package {0} would have been uninstalled'.format(
-            name)
-        return ret
-
     packages = __salt__['npm.list'](is_global, runas)
     if name not in packages:
         ret['result'] = True
         ret['comment'] = 'Package is not installed.'
+        return ret
+
+    if __opts__['test']:
+        ret['comment'] = 'The package {0} would have been uninstalled'.format(
+            name)
         return ret
 
     __salt__['npm.uninstall'](name, is_global, runas)
@@ -78,15 +78,15 @@ def installed(name, is_global=True, runas=None):
     '''
     ret = {'name': name, 'result': None, 'comment': '', 'changes': {}}
 
-    if __opts__['test']:
-        ret['comment'] = 'The package {0} would have been installed'.format(
-            name)
-        return ret
-
     packages = __salt__['npm.list'](is_global, runas)
     if name in packages:
         ret['result'] = True
         ret['comment'] = 'Package is already installed.'
+        return ret
+
+    if __opts__['test']:
+        ret['comment'] = 'The package {0} would have been installed'.format(
+            name)
         return ret
 
     __salt__['npm.install'](name, is_global, runas)

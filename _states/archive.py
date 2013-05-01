@@ -53,11 +53,6 @@ def extracted(name, source, archive_format, tar_options=None, source_hash=None,
     ret = {'name': name, 'result': None, 'changes': {}, 'comment': ''}
     valid_archives = ('tar', 'rar', 'zip')
 
-    if __opts__['test']:
-        ret['comment'] = 'Archive {0} would have been extracted in {1}'.format(
-            source, name)
-        return ret
-
     if archive_format not in valid_archives:
         ret['result'] = False
         ret['comment'] = '{0} is not supported, valids: {1}'.format(
@@ -81,6 +76,12 @@ def extracted(name, source, archive_format, tar_options=None, source_hash=None,
                             '{0}.{1}'.format(if_missing.replace('/', '_'),
                                              archive_format))
     if not os.path.exists(filename):
+        if __opts__['test']:
+            ret['comment'] = \
+                'Archive {0} would have been downloaded in cache'.format(source,
+                                                                         name)
+            return ret
+
         log.debug("Archive file %s is not in cache, download it", source)
         data = {
             filename: {
@@ -102,6 +103,11 @@ def extracted(name, source, archive_format, tar_options=None, source_hash=None,
             return file_result
     else:
         log.debug("Archive file %s is already in cache", name)
+
+    if __opts__['test']:
+        ret['comment'] = 'Archive {0} would have been extracted in {1}'.format(
+            source, name)
+        return ret
 
     __salt__['file.makedirs'](name)
 

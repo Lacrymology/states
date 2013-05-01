@@ -26,9 +26,6 @@ def disabled(name, runas=None, env=None):
         The name of the plugin to disable
     '''
     ret = {'name': name, 'result': None, 'comment': '', 'changes': {}}
-    if __opts__['test']:
-        ret['comment'] = 'The plugin {0} would have been disabled'.format(name)
-        return ret
 
     plugins = __salt__['rabbitmq_plugins.list'](runas, env)
     if name not in plugins:
@@ -39,6 +36,10 @@ def disabled(name, runas=None, env=None):
     if plugins[name]['state'] == ' ':
         ret['result'] = True
         ret['comment'] = 'Plugin is already disabled.'
+        return ret
+
+    if __opts__['test']:
+        ret['comment'] = 'The plugin {0} would have been disabled'.format(name)
         return ret
 
     if __salt__['rabbitmq_plugins.disable'](name, runas, env):

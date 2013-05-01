@@ -193,24 +193,24 @@ LOGGING = {
     },
     'loggers': {
         'django': {
-            'handlers': ['sentry', 'syslog', {% if 'graylog2_address' in pillar %}, 'gelf'{% endif %}],
+            'handlers': ['sentry', 'syslog'{% if 'graylog2_address' in pillar %}, 'gelf'{% endif %}],
             'propagate': True,
             'level':'DEBUG'
         },
         'raven': {
-            'handlers': ['sentry', 'syslog', {% if 'graylog2_address' in pillar %}, 'gelf'{% endif %}],
+            'handlers': ['sentry', 'syslog'{% if 'graylog2_address' in pillar %}, 'gelf'{% endif %}],
             'level': 'WARN',
             'propagate': False
         },
         'sentry.errors': {
-            'handlers': ['syslog', {% if 'graylog2_address' in pillar %}, 'gelf'{% endif %}],
+            'handlers': ['syslog'{% if 'graylog2_address' in pillar %}, 'gelf'{% endif %}],
             'level': 'DEBUG',
             'propagate': False
         },
 {% if not pillar['debug'] %}
 {% for logger in ('cache', 'rendering', 'metric_access') %}
         '{{ logger }}': {
-            'handlers': ['sentry', 'syslog', {% if 'graylog2_address' in pillar %}, 'gelf'{% endif %}],
+            'handlers': ['sentry', 'syslog'{% if 'graylog2_address' in pillar %}, 'gelf'{% endif %}],
             'level': 'ERROR',
             'propagate': False
         },
@@ -218,7 +218,7 @@ LOGGING = {
 {% endif %}
      },
     'root': {
-        'handlers': ['sentry', 'syslog', {% if 'graylog2_address' in pillar %}, 'gelf'{% endif %}],
+        'handlers': ['sentry', 'syslog'{% if 'graylog2_address' in pillar %}, 'gelf'{% endif %}],
         'propagate': True,
         'level': 'NOTSET'
     }

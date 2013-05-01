@@ -26,7 +26,7 @@ graylog2 = true
 {% if 'graylog2' in pillar %}
 rack = true
 {% endif %}
-{% if 'graylog2_address' in pillar %}
+{% if 'graylog2_address' not in pillar %}
 syslog = true
 {% endif %}
 xml_implementation = libxml2

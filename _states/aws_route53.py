@@ -117,7 +117,8 @@ def records_exists(access_key, secret_key, records):
                             log.debug("Record set already have good values")
                         else:
                             log.info("Record set don't have the good values")
-                            existing.save()
+                            if not __opts__['test']:
+                                existing.save()
 
         # loop into each records for this zone and check if they had been
         # previously found
@@ -135,7 +136,8 @@ def records_exists(access_key, secret_key, records):
                                           'create_{0}_record'.format(
                                               record_type))
                     kwargs = records[hosted_zone_id][record_type][record]
-                    create_func(record, **kwargs)
+                    if not __opts__['test']:
+                        create_func(record, **kwargs)
                     change_name = '{0} {1} created'.format(record,
                                                            record_type.upper())
                     ret['changes'][change_name] = kwargs

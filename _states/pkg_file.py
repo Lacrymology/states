@@ -22,6 +22,10 @@ def installed(name, version, source, source_hash):
         filename = os.path.join(__opts__['cachedir'],
                                 'pkg_file-{0}-{1}'.format(name, version))
         if not os.path.exists(filename):
+            if __opts__['test']:
+                ret['comment'] = \
+                    'Package {0} would have been downloaded'.format(source)
+                return ret
             log.debug("Package file for %s(%s) is not in cache, download it",
                       name, version)
             data = {
@@ -46,6 +50,11 @@ def installed(name, version, source, source_hash):
         else:
             log.debug("Package file for %s(%s) is already in cache", name,
                       version)
+
+        if __opts__['test']:
+            ret['comment'] = \
+                'Package file {0} would have been installed'.format(filename)
+            return ret
 
         os.environ.update({
             'APT_LISTBUGS_FRONTEND': 'none',

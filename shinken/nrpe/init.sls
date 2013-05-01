@@ -21,7 +21,7 @@ include:
 {% endif %}
 {% endfor %}
 
-{% if grains['id'] in pillar['shinken']['architecture']['broker'] %}
+{% if grains['id'] in salt['pillar.get']('shinken:architecture:broker', []) %}
 /etc/nagios/nrpe.d/shinken-nginx.cfg:
   file:
     - managed
@@ -49,6 +49,6 @@ extend:
         - file: /etc/nagios/nrpe.d/shinken-{{ role }}.cfg
 {% endif %}
 {% endfor %}
-{% if grains['id'] in pillar['shinken']['architecture']['broker'] %}
+{% if grains['id'] in salt['pillar.get']('shinken:architecture:broker', []) %}
         - file: /etc/nagios/nrpe.d/shinken-nginx.cfg
 {% endif %}

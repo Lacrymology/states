@@ -193,7 +193,7 @@ shinken-{{ role }}:
 {% endif %}
 {% endfor %}
 
-{% if grains['id'] in pillar['shinken']['architecture']['broker'] %}
+{% if grains['id'] in salt['pillar.get']('shinken:architecture:broker', []) %}
 extend:
   nginx:
     service:

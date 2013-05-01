@@ -23,6 +23,7 @@ def installed(name, version, source, source_hash):
                                 'pkg_file-{0}-{1}'.format(name, version))
         if not os.path.exists(filename):
             if __opts__['test']:
+                ret['result'] = None
                 ret['comment'] = \
                     'Package {0} would have been downloaded'.format(source)
                 return ret
@@ -52,6 +53,7 @@ def installed(name, version, source, source_hash):
                       version)
 
         if __opts__['test']:
+            ret['result'] = None
             ret['comment'] = \
                 'Package file {0} would have been installed'.format(filename)
             return ret

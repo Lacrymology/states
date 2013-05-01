@@ -39,6 +39,7 @@ def disabled(name, runas=None, env=None):
         return ret
 
     if __opts__['test']:
+        ret['result'] = None
         ret['comment'] = 'The plugin {0} would have been disabled'.format(name)
         return ret
 
@@ -61,6 +62,7 @@ def enabled(name, runas=None, env=None):
     ret = {'name': name, 'result': None, 'comment': '', 'changes': {}}
 
     if __opts__['test']:
+        ret['result'] = None
         ret['comment'] = 'The plugin {0} would have been enabled'.format(name)
         return ret
 

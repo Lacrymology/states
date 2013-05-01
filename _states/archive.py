@@ -77,6 +77,7 @@ def extracted(name, source, archive_format, tar_options=None, source_hash=None,
                                              archive_format))
     if not os.path.exists(filename):
         if __opts__['test']:
+            ret['result'] = None
             ret['comment'] = \
                 'Archive {0} would have been downloaded in cache'.format(source,
                                                                          name)
@@ -105,6 +106,7 @@ def extracted(name, source, archive_format, tar_options=None, source_hash=None,
         log.debug("Archive file %s is already in cache", name)
 
     if __opts__['test']:
+        ret['result'] = None
         ret['comment'] = 'Archive {0} would have been extracted in {1}'.format(
             source, name)
         return ret

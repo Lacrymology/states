@@ -45,6 +45,7 @@ def uninstalled(name, is_global=True, runas=None):
         return ret
 
     if __opts__['test']:
+        ret['result'] = None
         ret['comment'] = 'The package {0} would have been uninstalled'.format(
             name)
         return ret
@@ -85,6 +86,7 @@ def installed(name, is_global=True, runas=None):
         return ret
 
     if __opts__['test']:
+        ret['result'] = None
         ret['comment'] = 'The package {0} would have been installed'.format(
             name)
         return ret

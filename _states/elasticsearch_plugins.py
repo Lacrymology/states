@@ -20,6 +20,7 @@ def uninstalled(name, es_home=None):
         return ret
 
     if __opts__['test']:
+        ret['result'] = None
         ret['comment'] = 'The plugin {0} would have been uninstalled'.format(
             name)
         return ret
@@ -49,6 +50,7 @@ def installed(name, url, es_home=None):
         return ret
 
     if __opts__['test']:
+        ret['result'] = None
         ret['comment'] = 'The plugin {0} would have been installed'.format(name)
         return ret
 

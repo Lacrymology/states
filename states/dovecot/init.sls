@@ -1,3 +1,4 @@
+{% set cfgfiles = ('10-auth.conf','10-mail.conf','10-master.conf') %}
 dovecot:
   pkg:
     - installed
@@ -9,12 +10,11 @@ dovecot:
     - running
     - enable: False
     - watch:
-      - file: /etc/dovecot/conf.d/10-mail.conf
-      {% for i in ('10-auth.conf','10-mail.conf',) %}
+      {% for i in cfgfiles %}
       - file: /etc/dovecot/conf.d/{{ i }}
       {% endfor %}
 
-{% for i in ('10-auth.conf','10-mail.conf',) %}
+{% for i in cfgfiles %}
 /etc/dovecot/conf.d/{{ i }}:
   file:
     - managed

@@ -1,26 +1,22 @@
 {#
  Uninstall an Elasticsearch NoSQL server
  #}
-{% set ssl = salt['pillar.get']('elasticsearch:ssl', False) and 'public' in salt['pillar.get']('elasticsearch:cluster:nodes', []) %}
 include:
   - apt
-{% if ssl %}
-  - nginx
 
-extend:
-  nginx:
-    service:
-      - watch:
-        - file: /etc/nginx/conf.d/elasticsearch.conf
-{% endif %}
-
-{% for filename in ('/etc/default/elasticsearch', '/etc/elasticsearch', '/etc/cron.daily/elasticsearch-cleanu', '/etc/nginx/conf.d/elasticsearch.conf') %}
+{% for filename in ('/etc/default/elasticsearch', '/etc/elasticsearch', '/etc/cron.daily/elasticsearch-cleanu') %}
 {{ filename }}:
   file:
     - absent
     - require:
       - service: elasticsearch
 {% endfor %}
+
+/etc/nginx/conf.d/elasticsearch.conf:
+  file:
+    - absent
+    - require:
+      - service: elasticsearch
 
 {% if grains['cpuarch'] == 'i686' %}
 /usr/lib/jvm/java-7-openjdk:

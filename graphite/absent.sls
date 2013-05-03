@@ -1,9 +1,8 @@
 {#
  Uninstall the web interface component of graphite
  #}
-include:
-  - nginx
 {% if pillar['destructive_absent']|default(False) and salt['pillar.get']('graphite:web:db:name', False) %}
+include:
   - postgresql.server
 
 graphite-database:

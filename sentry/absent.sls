@@ -1,9 +1,8 @@
 {#
  Uninstall a Sentry web server.
  #}
-include:
-  - nginx
 {% if pillar['destructive_absent']|default(False) and salt['pillar.get']('sentry:db', False) %}
+include:
   - postgresql.server
 
 sentry:
@@ -42,9 +41,3 @@ sentry:
 /etc/nginx/conf.d/sentry.conf:
   file:
     - absent
-
-extend:
-  nginx:
-    service:
-      - watch:
-        - file: /etc/nginx/conf.d/sentry.conf

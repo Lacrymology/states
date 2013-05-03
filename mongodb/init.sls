@@ -4,6 +4,9 @@
  If one day MongoDB support SSL in free distribution, do this:
  http://docs.mongodb.org/manual/tutorial/configure-ssl/
  #}
+include:
+  - logrotate
+
 mongodb:
   apt_repository:
     - present
@@ -26,6 +29,8 @@ mongodb:
     - group: root
     - mode: 440
     - source: salt://mongodb/logrotate.jinja2
+    - require:
+      - pkg: logrotate
   service:
     - running
     - enable: True

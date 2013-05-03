@@ -7,6 +7,7 @@
 include:
   - graphite.common
   - pip
+  - logrotate
 
 /etc/logrotate.d/carbon:
   file:
@@ -16,6 +17,8 @@ include:
     - group: root
     - mode: 440
     - source: salt://carbon/logrotate.jinja2
+    - require:
+      - pkg: logrotate
 
 /var/log/graphite/carbon:
   file:

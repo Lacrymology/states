@@ -12,9 +12,12 @@ include:
   file:
     - managed
     - source: salt://apt/nrpe/check.py
-    - mode: 555
+    - user: nagios
+    - group: nagios
+    - mode: 550
     - require:
       - module: nagiosplugin
+      - pkg: nagios-nrpe-server
 
 /etc/nagios/nrpe.d/apt.cfg:
   file:

@@ -41,10 +41,13 @@ include:
   file:
     - managed
     - source: salt://elasticsearch/nrpe/check.py
-    - mode: 555
+    - user: nagios
+    - group: nagios
+    - mode: 550
     - require:
       - module: nagiosplugin
       - module: requests
+      - pkg: nagios-nrpe-server
 
 extend:
   nagios-nrpe-server:

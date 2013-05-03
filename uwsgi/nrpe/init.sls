@@ -40,9 +40,11 @@ include:
     - managed
     - template: jinja
     - source: salt://uwsgi/nrpe/check.jinja2
-    - mode: 555
-    - user: root
-    - group: root
+    - mode: 550
+    - user: nagios
+    - group: nagios
+    - require:
+      - pkg: nagios-nrpe-server
 
 extend:
   nagios-nrpe-server:

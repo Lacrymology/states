@@ -63,6 +63,8 @@ nagios-nrpe-server:
   file:
     - managed
     - source: salt://nrpe/check.py
-    - user: root
-    - group: root
-    - mode: 555
+    - user: nagios
+    - group: nagios
+    - mode: 550
+    - require:
+      - pkg: nagios-nrpe-server

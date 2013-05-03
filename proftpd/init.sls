@@ -86,7 +86,9 @@ proftpd:
     - source: salt://proftpd/config.jinja2
     - user: root
     - group: root
-    - mode: 644
+    - mode: 440
+    - require:
+      - pkg: proftpd-basic
   service:
     - running
     - enable: True
@@ -103,11 +105,15 @@ proftpd:
 /etc/proftpd/{{ file }}.conf:
   file:
     - absent
+    - require:
+      - service: proftpd
 {% endfor %}
 
 /var/log/proftpd/xferlog:
   file:
     - absent
+    - require:
+      - service: proftpd
 
 {% for deployment in pillar['proftpd']['deployments'] %}
 /var/lib/deployments/{{ deployment }}/static/ftp:

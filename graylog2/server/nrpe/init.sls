@@ -11,10 +11,13 @@ include:
   file:
     - managed
     - source: salt://graylog2/server/nrpe/check.py
-    - mode: 555
+    - user: nagios
+    - group: nagios
+    - mode: 550
     - require:
       - module: nagiosplugin
       - module: pyelasticsearch
+      - pkg: nagios-nrpe-server
 
 /etc/nagios/nrpe.d/graylog2-server.cfg:
   file:

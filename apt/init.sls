@@ -9,7 +9,7 @@
     - source: salt://apt/config.jinja2
     - user: root
     - group: root
-    - mode: 444
+    - mode: 440
     - template: jinja
 
 debconf-utils:

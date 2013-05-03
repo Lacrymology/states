@@ -7,6 +7,8 @@ include:
 vim:
   pkg:
     - latest
+    - require:
+      - cmd: apt_sources
   file:
     - managed
     - name: /etc/vim/vimrc
@@ -17,7 +19,6 @@ vim:
     - source: salt://vim/vimrc.jinja2
     - require:
       - pkg: cron
-      - cmd: apt_sources
 
 vim-tiny:
   pkg:

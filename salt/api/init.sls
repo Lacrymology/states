@@ -44,6 +44,7 @@ salt-api:
     - require:
       - pkg: salt-master
       - pip: salt-api
+      - apt_repository: salt-minion
   pip:
     - installed
     - name: cherrypy

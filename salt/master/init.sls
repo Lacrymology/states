@@ -23,7 +23,6 @@ GitPython:
 /srv/salt/top.sls:
   file:
     - managed
-    - template: jinja
     - user: root
     - group: root
     - mode: 440

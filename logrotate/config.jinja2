@@ -1,0 +1,19 @@
+# {{ pillar['message_do_not_modify'] }}
+{# rotate log files weekly #}
+weekly
+{# keep 4 weeks worth of backlogs #}
+rotate 4
+{# create new (empty) log files after rotating old ones #}
+create
+compress
+include /etc/logrotate.d
+{# no packages own wtmp, or btmp -- we'll rotate them here #}
+{% set logs = {'wtmp': '0664', 'btmp': '0660'} %}
+{% for log in logs %}
+/var/log/{{ log }} {
+    missingok
+    monthly
+    create {{ logs[log] }} root utmp
+    rotate 1
+}
+{% endfor %}

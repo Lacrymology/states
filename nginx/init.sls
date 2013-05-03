@@ -84,6 +84,8 @@ nginx-logger-{{ log_type }}:
 /etc/logrotate.d/nginx:
   file:
     - absent
+    - require:
+      - pkg: nginx
 
 nginx:
   apt_repository:

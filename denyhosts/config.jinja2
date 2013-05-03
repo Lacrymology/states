@@ -8,7 +8,7 @@
 WORK_DIR = /var/lib/denyhosts
 SECURE_LOG = /var/log/auth.log
 HOSTS_DENY = /etc/hosts.deny
-LOCK_FILE = /run/denyhosts.pid
+LOCK_FILE = {% if grains['lsb_release'] == '10.10' %}/var{% endif %}/run/denyhosts.pid
 DAEMON_LOG = /var/log/denyhosts
 ADMIN_EMAIL =
 SYSLOG_REPORT = YES

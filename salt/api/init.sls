@@ -5,6 +5,7 @@ include:
   - salt.master
   - git
   - nginx
+  - pip
 {% if pillar['salt_master']['ssl']|default(False) %}
   - ssl
 {% endif %}
@@ -44,6 +45,8 @@ salt-api:
   pip:
     - installed
     - name: cherrypy
+    - require:
+      - module: pip
   file:
     - managed
     - name: /etc/init/salt-api.conf

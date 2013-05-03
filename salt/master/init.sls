@@ -10,6 +10,8 @@ include:
 GitPython:
   pip:
     - installed
+    - require:
+      - module: pip
 
 /srv/salt:
   file:

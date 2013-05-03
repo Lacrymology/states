@@ -4,19 +4,13 @@
 include:
   - apt
 
-{% for filename in ('/etc/default/elasticsearch', '/etc/elasticsearch', '/etc/cron.daily/elasticsearch-cleanu') %}
+{% for filename in ('/etc/default/elasticsearch', '/etc/elasticsearch', '/etc/cron.daily/elasticsearch-cleanu', '/etc/nginx/conf.d/elasticsearch.conf') %}
 {{ filename }}:
   file:
     - absent
     - require:
       - service: elasticsearch
 {% endfor %}
-
-/etc/nginx/conf.d/elasticsearch.conf:
-  file:
-    - absent
-    - require:
-      - service: elasticsearch
 
 {% if grains['cpuarch'] == 'i686' %}
 /usr/lib/jvm/java-7-openjdk:

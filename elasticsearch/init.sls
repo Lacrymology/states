@@ -137,8 +137,8 @@ elasticsearch:
 {% endfor %}
 {% endif %}
 
-extend:
 {% if ssl %}
+extend:
   nginx:
     service:
       - watch:

@@ -15,16 +15,12 @@ GitPython:
 
 /srv/salt:
   file:
-    - absent
-
-{{ opts['cachedir'] }}/role-based-states:
-  file:
     - directory
     - user: root
     - group: root
     - mode: 550
 
-{{ opts['cachedir'] }}/role-based-states/top.sls:
+/srv/salt/top.sls:
   file:
     - managed
     - template: jinja
@@ -33,7 +29,7 @@ GitPython:
     - mode: 440
     - source: salt://salt/master/top.jinja2
     - require:
-      - file: {{ opts['cachedir'] }}/role-based-states
+      - file: /srv/salt
 
 salt-master:
   file:

@@ -51,6 +51,7 @@ graphite_graph_templates:
     - require:
       - user: web
       - group: graphite
+      - file: /etc/graphite
 
 graphite_wsgi:
   file:
@@ -225,6 +226,8 @@ graphite_settings:
     - user: root
     - group: root
     - mode: 555
+    - require:
+      - virtualenv: graphite
 
 /etc/nginx/conf.d/graphite.conf:
   file:

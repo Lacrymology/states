@@ -44,12 +44,13 @@ salt-master:
     - user: root
     - group: root
     - mode: 400
+    - require:
+      - pkg: salt-master
   git:
     - latest
     - name: {{ pillar['salt_master']['pillar_remote'] }}
     - target: /srv/pillar
     - require:
-      - pkg: openssh-client
       - pkg: git
   pkg:
     - latest

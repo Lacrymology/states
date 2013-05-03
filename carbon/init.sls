@@ -29,6 +29,7 @@ include:
     - makedirs: True
     - require:
       - user: graphite
+      - file: /var/log/graphite
 
 {% if 'file-max' in pillar['graphite'] %}
 fs.file-max:
@@ -47,6 +48,7 @@ fs.file-max:
     - source: salt://carbon/storage.jinja2
     - require:
       - user: graphite
+      - file: /etc/graphite
 
 carbon:
   file:
@@ -86,6 +88,8 @@ carbon:
     - group: root
     - mode: 440
     - source: salt://carbon/config.jinja2
+    - require:
+      - file: /etc/graphite
 
 {% for instance in pillar['graphite']['carbon']['instances'] %}
 carbon-{{ instance }}:
@@ -127,4 +131,5 @@ carbon-{{ instance }}-logdir:
     - makedirs: True
     - require:
       - user: graphite
+      - file: /var/log/graphite/carbon
 {% endfor %}

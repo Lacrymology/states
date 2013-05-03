@@ -52,4 +52,4 @@ postgresql:
   file:
     - absent
     - require:
-      - pkg: postgresql
+      - service: postgresql

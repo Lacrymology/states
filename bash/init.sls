@@ -7,6 +7,8 @@ include:
 bash:
   pkg:
     - latest
+    - require:
+      - cmd: apt_sources
   file:
     - managed
     - name: /etc/profile.d/bash_prompt.sh
@@ -17,7 +19,6 @@ bash:
     - source: salt://bash/config.jinja2
     - require:
       - pkg: bash
-      - cmd: apt_sources
 
 root_profile:
   file:

@@ -15,12 +15,15 @@ salt-minion:
     - group: root
     - mode: 440
     - source: salt://salt/minion/config.jinja2
+    - require:
+      - pkg: salt-minion
   pkg:
     - installed
-    {# ^- use to be latest, but 0.12.x is just broken #}
     - names:
       - python-openssl
       - salt-minion
+    - require:
+      - apt_repository: salt-minion
   service:
     - running
     - enable: True

@@ -18,6 +18,8 @@ denyhosts:
     - group: root
     - mode: 440
     - template: jinja
+    - require:
+      - pkg: denyhosts
   service:
     - running
     - enable: True

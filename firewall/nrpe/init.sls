@@ -39,6 +39,7 @@ include:
     - require:
       - module: nagiosplugin
       - file: /etc/sudoers.d/nrpe_firewall
+      - pkg: nagios-nrpe-server
 
 /etc/nagios/nrpe.d/firewall.cfg:
   file:

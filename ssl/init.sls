@@ -37,10 +37,20 @@ Requires files in source:
 
 {# ssl-certs debian package use ssl-cert group to easily give access to
    private key on some process #}
+
+include:
+  - apt
+
 ssl-cert:
   group:
     - present
     - system: True
+    - require:
+      - pkg: ssl-cert
+  pkg:
+    - latest
+    - require:
+      - cmd: apt_sources
 
 {% for name in pillar['ssl'] %}
 
@@ -50,6 +60,8 @@ ssl-cert:
     - user: root
     - group: root
     - mode: 775
+    - require:
+      - pkg: ssl-cert
 
 {% for filename in ('server.key', 'server.crt', 'ca.crt') %}
 /etc/ssl/{{ name }}/{{ filename }}:

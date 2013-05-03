@@ -2,8 +2,10 @@
  Install poor man backup server used for rsync and scp to store files.
 #}
 include:
+  - apt
   - ssh.server
   - pip
+  - cron
 
 backup-server:
   pkg:
@@ -12,6 +14,7 @@ backup-server:
     - required:
       - pkg: openssh-server
       - service: openssh-server
+      - cmd: apt_sources
   file:
     - directory
     - name: /var/lib/backup
@@ -57,3 +60,4 @@ backup-archiver-dependency:
     - group: root
     - require:
       - module: backup-archiver-dependency
+      - pkg: cron

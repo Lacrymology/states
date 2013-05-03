@@ -17,3 +17,5 @@ screen:
     - group: root
     - mode: 444
     - source: salt://screen/config.jinja2
+    - require:
+      - pkg: screen

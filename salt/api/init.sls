@@ -35,6 +35,8 @@ user_{{ user }}:
     - user: root
     - group: root
     - mode: 400
+    - require:
+      - pkg: salt-master
 
 salt-api:
   pkg:
@@ -70,6 +72,8 @@ salt-ui:
     - rev: {{ pillar['salt_master']['ui'] }}
     - name: git://github.com/saltstack/salt-ui.git
     - target: /usr/local/salt-ui/
+    - require:
+      - pkg: git
   file:
     - managed
     - name: /etc/nginx/conf.d/salt.conf

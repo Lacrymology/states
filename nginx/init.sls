@@ -61,6 +61,8 @@ nginx-old-init-disable:
 /var/log/nginx/{{ log_type }}.log:
   file:
     - absent
+    - require:
+      - service: nginx
 
 nginx-logger-{{ log_type }}:
   file:

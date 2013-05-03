@@ -18,6 +18,8 @@ include:
       deployment: sentry
       workers: {{ pillar['sentry']['workers'] }}
       cheaper: {{ salt['pillar.get']('sentry:cheaper', False) }}
+    - require:
+      - pkg: nagios-nrpe-server
 
 /etc/nagios/nrpe.d/sentry-nginx.cfg:
   file:

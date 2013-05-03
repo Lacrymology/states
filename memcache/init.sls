@@ -3,6 +3,7 @@
  #}
 include:
   - web
+  - apt
 
 {#
  first: install memcached and get rid of SysV startup script.
@@ -11,6 +12,8 @@ include:
 memcached:
   pkg:
     - installed
+    - require:
+      - cmd: apt_sources
   module:
     - wait
     - name: cmd.run

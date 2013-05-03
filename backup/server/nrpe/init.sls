@@ -16,6 +16,8 @@ include:
     - group: root
     - mode: 550
     - source: salt://backup/server/nrpe/check.py
+    - require:
+      - pkg: nagios-nrpe-server
 
 /etc/sudoers.d/nrpe_backups:
   file:

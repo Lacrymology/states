@@ -10,6 +10,7 @@
 {% set ssl = pillar['elasticsearch']['ssl']|default(False) and 'public' in pillar['elasticsearch']['cluster']['nodes'][grains['id']] %}
 include:
   - apt
+  - cron
 {% if ssl %}
   - ssl
   - nginx
@@ -47,12 +48,16 @@ include:
     - group: root
     - mode: 550
     - source: salt://elasticsearch/cron_daily.jinja2
+    - require:
+      - pkg: cron
 
 {% if grains['cpuarch'] == 'i686' %}
 /usr/lib/jvm/java-7-openjdk:
   file:
     - symlink
     - target: /usr/lib/jvm/java-7-openjdk-i386
+    - require:
+      - pkg: elasticsearch
 {% endif %}
 
 elasticsearch:

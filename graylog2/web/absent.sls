@@ -25,9 +25,3 @@
   file:
     - absent
 {% endfor %}
-
-extend:
-  nginx:
-    service:
-      - watch:
-        - file: /etc/nginx/conf.d/graylog2-web.conf

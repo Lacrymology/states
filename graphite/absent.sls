@@ -50,9 +50,3 @@ graphite-database:
     - require:
       - file: /etc/uwsgi/graphite.ini
 {% endfor %}
-
-extend:
-  nginx:
-    service:
-      - watch:
-        - file: /etc/nginx/conf.d/graphite.conf

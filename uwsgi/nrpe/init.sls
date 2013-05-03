@@ -41,8 +41,8 @@ include:
     - template: jinja
     - source: salt://uwsgi/nrpe/check.jinja2
     - mode: 550
-    - user: nagios
-    - group: nagios
+    - user: www-data
+    - group: www-data
     - require:
       - pkg: nagios-nrpe-server
 

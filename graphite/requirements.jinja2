@@ -1,5 +1,4 @@
 # {{ pillar['message_do_not_modify'] }}
-pip>=1.3.1
 django==1.3.7
 txamqp
 python-memcached
@@ -13,7 +12,6 @@ django-statsd-mozilla==0.3.8.3
 raven
 statsd
 ipython
--e git+git://github.com/jeffkistler/django-decorator-include.git@1cce01ee0130156e8fde5c46e61287bea37c5c7f#egg=django-decorator-include
 {% if 'graylog2_address' in pillar %}
 graypy
 {% endif %}

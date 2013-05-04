@@ -1,10 +1,9 @@
 {#
  Uninstall Nagios NRPE Agent
 #}
-nagiosplugin:
+{{ opts['cachedir'] }}/nagiosplugin-requirements.txt:
   file:
     - absent
-    - name: {{ opts['cachedir'] }}/nagiosplugin-requirements.txt
 
 nagios-nrpe-server:
   pkg:
@@ -25,6 +24,10 @@ nagios-nrpe-server:
     - enable: False
 
 /usr/local/nagiosplugin:
+  file:
+    - absent
+
+/usr/local/nagios:
   file:
     - absent
 

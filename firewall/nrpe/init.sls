@@ -22,7 +22,7 @@ include:
     - user: root
     - group: root
     - require:
-      - module: nagiosplugin
+      - module: nrpe-virtualenv
       - pkg: sudo
 
 /usr/local/bin/check_firewall.py:
@@ -37,7 +37,7 @@ include:
     - user: root
     - group: root
     - require:
-      - module: nagiosplugin
+      - module: nrpe-virtualenv
       - file: /etc/sudoers.d/nrpe_firewall
       - pkg: nagios-nrpe-server
 

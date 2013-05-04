@@ -15,7 +15,7 @@ include:
     - group: nagios
     - mode: 550
     - require:
-      - module: nagiosplugin
+      - module: nrpe-virtualenv
       - module: pyelasticsearch
       - pkg: nagios-nrpe-server
 

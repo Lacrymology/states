@@ -3,31 +3,50 @@
 #}
 include:
   - pip
+  - virtualenv
   - apt
 
 /usr/local/nagiosplugin:
   file:
     - absent
 
-nagiosplugin:
+{{ opts['cachedir'] }}/nagiosplugin-requirements.txt:
+  file:
+    - absent
+
+nrpe-virtualenv:
+  virtualenv:
+    - manage
+    - upgrade: True
+    - name: /usr/local/nagios
+    - require:
+      - module: virtualenv
   file:
     - managed
-    - name: {{ opts['cachedir'] }}/nagiosplugin-requirements.txt
+    - name: /usr/local/nagios/nagiosplugin-requirements.txt
     - template: jinja
     - user: root
     - group: root
     - mode: 440
     - source: salt://nrpe/requirements.jinja2
+    - require:
+      - virtualenv: nrpe-virtualenv
   module:
     - wait
     - name: pip.install
     - pkgs: ''
     - upgrade: True
-    - requirements: {{ opts['cachedir'] }}/nagiosplugin-requirements.txt
+    - bin_env: /usr/local/nagios
+    - requirements: /usr/local/nagios/nagiosplugin-requirements.txt
+    - require:
+      - virtualenv: nrpe-virtualenv
+    - watch:
+      - file: nrpe-virtualenv
+  pip:
+    - removed
+    - name: nagiosplugin
     - require:
       - module: pip
-    - watch:
-      - file: nagiosplugin
 
 nagios-nrpe-server:
   pkg:

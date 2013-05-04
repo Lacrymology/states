@@ -1,9 +1,8 @@
-#!/usr/bin/env python
+#!/usr/local/nagios/bin/python
 # -*- coding: utf-8 -*-
 
 """Nagios plugin to check if new log messages indexed by Graylog2 server."""
 
-import sys
 import time
 import argparse
 

@@ -4,7 +4,6 @@
 {% set ssl = pillar['elasticsearch']['ssl']|default(False) and 'public' in pillar['elasticsearch']['cluster']['nodes'][grains['id']] %}
 include:
   - nrpe
-  - requests
 
 /etc/nagios/nrpe.d/elasticsearch.cfg:
   file:
@@ -37,6 +36,29 @@ include:
   file:
     - absent
 
+pyelasticsearch:
+  file:
+    - managed
+    - name: /usr/local/nagios/elasticsearch-requirements.txt
+    - source: salt://elasticsearch/nrpe/requirements.jinja2
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - require:
+      - module: nrpe-virtualenv
+  module:
+    - wait
+    - name: pip.install
+    - pkgs: ''
+    - upgrade: True
+    - bin_env: /usr/local/nagios
+    - requirements: /usr/local/nagios/elasticsearch-requirements.txt
+    - require:
+      - virtualenv: nrpe-virtualenv
+    - watch:
+      - file: pyelasticsearch
+
 /usr/lib/nagios/plugins/check_elasticsearch_cluster.py:
   file:
     - managed
@@ -45,8 +67,7 @@ include:
     - group: nagios
     - mode: 550
     - require:
-      - module: nagiosplugin
-      - module: requests
+      - module: pyelasticsearch
       - pkg: nagios-nrpe-server
 
 extend:

@@ -25,3 +25,7 @@ pyelasticsearch:
       - module: requests
     - watch:
       - file: pyelasticsearch
+  pip:
+    - removed
+    - require:
+      - module: pip

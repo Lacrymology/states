@@ -16,7 +16,7 @@ include:
     - group: nagios
     - mode: 550
     - require:
-      - module: nagiosplugin
+      - module: nrpe-virtualenv
       - pkg: nagios-nrpe-server
 
 /etc/nagios/nrpe.d/apt.cfg:

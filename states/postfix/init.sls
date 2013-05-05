@@ -22,6 +22,12 @@ postfix-ldap:
     - installed
 
 
+/var/mail/vhosts:
+  file:
+    - directory
+    - user: dovecot-agent
+    - makedirs: True
+
 #sasl2-bin:
 #  pkg:
 #    - installed

@@ -13,6 +13,8 @@ dovecot:
       {% for i in cfgfiles %}
       - file: /etc/dovecot/conf.d/{{ i }}
       {% endfor %}
+    - require:
+      - user: dovecot-agent
 
 {% for i in cfgfiles %}
 /etc/dovecot/conf.d/{{ i }}:
@@ -23,6 +25,13 @@ dovecot:
     - user: root
     - group: root
 {% endfor %}
+
+dovecot-agent:
+  user:
+    - present
+    - uid: 4000
+    - groups:
+      - mail
 
 /etc/dovecot/dovecot-ldap.conf.ext:
   file:

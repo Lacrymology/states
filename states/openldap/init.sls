@@ -51,7 +51,7 @@ slapd_change_log_level:
       - pkg: slapd
 {% endfor %}
 
-/etc/ssl/private/ldap.pem:
+/etc/ssl/certs/ldap.pem:
   file:
     - managed
     - source: salt://openldap/cacert.pem

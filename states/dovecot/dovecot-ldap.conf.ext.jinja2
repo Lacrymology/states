@@ -53,7 +53,7 @@ tls_ca_cert_file = /etc/ssl/certs/ldap.pem
 # is still used, only the password field is ignored in it. Before doing any
 # search, the binding is switched back to the default DN.
 auth_bind = yes
-auth_bind_userdn = uid=%u,ou=people,dc=familug,dc=org
+auth_bind_userdn = uid=%n,ou=people,dc=familug,dc=org
 #auth_bind_userdn = cn=%u,dc=familug,dc=org
 ldap_version = 3
 
@@ -84,7 +84,7 @@ base = ou=people,dc=familug,dc=org
 #   %n - user part in user@domain, same as %u if there's no domain
 #   %d - domain part in user@domain, empty if user there's no domain
 #user_filter = (&(objectClass=posixAccount)(uid=%u))
-user_filter = (&(objectClass=inetOrgPerson)(uid=%u))
+user_filter = (&(objectClass=inetOrgPerson)(uid=%n))
 
 # Password checking attributes:
 #  user: Virtual user name (user@domain), if you wish to change the

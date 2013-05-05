@@ -3,7 +3,7 @@ smtpd_banner = $myhostname ESMTP $mail_name (Ubuntu)
 biff = no
 
 myorigin = $myhostname
-mydestination = $myhostname, grains['id'], localhost.localdomain, localhost
+mydestination = grains['id'], localhost.localdomain, localhost
 mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128
 relayhost = 
 alias_maps = hash:/etc/aliases
@@ -33,3 +33,10 @@ smtpd_sasl_type = dovecot
 smtpd_sasl_path = private/auth
 smtpd_sasl_security_options = noanonymous
 smtpd_recipient_restrictions = permit_mynetworks, permit_sasl_authenticated, reject_unauth_destination
+
+virtual_mailbox_domains = $myhostname
+virtual_mailbox_base = /var/mail/vhosts
+virtual_mailbox_maps = hash:/etc/postfix/vmailbox
+virtual_minimum_uid = 100
+virtual_uid_maps = static:4000
+virtual_gid_maps = static:4000

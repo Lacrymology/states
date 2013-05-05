@@ -1,15 +1,14 @@
 slapd:
   pkg:
     - installed
+    - pkgs:
+      - slapd
+      - ldap-utils
   service:
     - running
     - enable: False
     - require: 
       - pkg: slapd
-
-ldap-utils:
-  pkg:
-    - installed
 
 /tmp/dbconfig.ldif:
   file:
@@ -52,6 +51,14 @@ slapd_change_log_level:
       - pkg: slapd
 {% endfor %}
 
+/etc/ssl/private/ldap.pem:
+  file:
+    - managed
+    - source: salt://openldap/cacert.pem
+    - user: openldap
+    - group: openldap
+    - makedirs: true
+
 /tmp/tls.ldif:
   file:
     - managed
@@ -62,7 +69,6 @@ slapd_set_tls_directives:
     - run
     - name: 'ldapmodify -Y EXTERNAL -H ldapi:/// -f /tmp/tls.ldif'
     - require:
-      - pkg: ldap-utils
       - service: slapd
       - file: /tmp/tls.ldif
 

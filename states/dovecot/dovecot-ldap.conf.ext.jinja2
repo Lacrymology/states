@@ -1,0 +1,113 @@
+# This file is opened as root, so it should be owned by root and mode 0600.
+#
+# http://wiki2.dovecot.org/AuthDatabase/LDAP
+#
+# NOTE: If you're not using authentication binds, you'll need to give
+# dovecot-auth read access to userPassword field in the LDAP server.
+# With OpenLDAP this is done by modifying /etc/ldap/slapd.conf. There should
+# already be something like this:
+
+# access to attribute=userPassword
+#        by dn="<dovecot's dn>" read # add this
+#        by anonymous auth
+#        by self write
+#        by * none
+
+# Space separated list of LDAP hosts to use. host:port is allowed too.
+#hosts =
+
+# LDAP URIs to use. You can use this instead of hosts list. Note that this
+# setting isn't supported by all LDAP libraries.
+uris = ldap://familug.org
+
+# Distinguished Name - the username used to login to the LDAP server.
+# Leave it commented out to bind anonymously (useful with auth_bind=yes).
+#dn = 
+
+# Password for LDAP server, if dn is specified.
+#dnpass = 
+
+# Use TLS to connect to the LDAP server.
+tls = yes
+# TLS options, currently supported only with OpenLDAP:
+tls_ca_cert_file = /etc/ssl/certs/ldap.pem
+#tls_ca_cert_dir =
+#tls_cipher_suite =
+# TLS cert/key is used only if LDAP server requires a client certificate.
+#tls_cert_file =
+#tls_key_file =
+# Valid values: never, hard, demand, allow, try
+#tls_require_cert =
+
+# Use the given ldaprc path.
+#ldaprc_path =
+
+# LDAP library debug level as specified by LDAP_DEBUG_* in ldap_log.h.
+# -1 = everything. You may need to recompile OpenLDAP with debugging enabled
+# to get enough output.
+#debug_level = 0
+
+# Use authentication binding for verifying password's validity. This works by
+# logging into LDAP server using the username and password given by client.
+# The pass_filter is used to find the DN for the user. Note that the pass_attrs
+# is still used, only the password field is ignored in it. Before doing any
+# search, the binding is switched back to the default DN.
+auth_bind = yes
+auth_bind_userdn = uid=%u,ou=people,dc=familug,dc=org
+#auth_bind_userdn = cn=%u,dc=familug,dc=org
+ldap_version = 3
+
+# LDAP base. %variables can be used here.
+# For example: dc=mail, dc=example, dc=org
+base = ou=people,dc=familug,dc=org
+
+# Dereference: never, searching, finding, always
+#deref = never
+
+# Search scope: base, onelevel, subtree
+#scope = subtree
+
+# User attributes are given in LDAP-name=dovecot-internal-name list. The
+# internal names are:
+#   uid - System UID
+#   gid - System GID
+#   home - Home directory
+#   mail - Mail location
+#
+# There are also other special fields which can be returned, see
+# http://wiki2.dovecot.org/UserDatabase/ExtraFields
+#user_attrs = homeDirectory=home,uidNumber=uid,gidNumber=gid
+
+# Filter for user lookup. Some variables can be used (see
+# http://wiki2.dovecot.org/Variables for full list):
+#   %u - username
+#   %n - user part in user@domain, same as %u if there's no domain
+#   %d - domain part in user@domain, empty if user there's no domain
+#user_filter = (&(objectClass=posixAccount)(uid=%u))
+user_filter = (&(objectClass=inetOrgPerson)(uid=%u))
+
+# Password checking attributes:
+#  user: Virtual user name (user@domain), if you wish to change the
+#        user-given username to something else
+#  password: Password, may optionally start with {type}, eg. {crypt}
+#pass_attrs = uid=user
+ #,userPassword=password
+
+# If you wish to avoid two LDAP lookups (passdb + userdb), you can use
+# userdb prefetch instead of userdb ldap in dovecot.conf. In that case you'll
+# also have to include user_attrs in pass_attrs field prefixed with "userdb_
+# string. For example:
+#pass_attrs = uid=user,userPassword=password,\
+#  homeDirectory=userdb_home,uidNumber=userdb_uid,gidNumber=userdb_gid
+
+# Filter for password lookups
+#pass_filter = (&(objectClass=posixAccount)(uid=%u))
+#pass_filter = (&(objectClass=inetOrgPerson)(uid=%u))
+
+# Attributes and filter to get a list of all users
+#iterate_attrs = uid=user
+#iterate_filter = (objectClass=inetOrgPerson)
+
+# Default password scheme. "{scheme}" before password overrides this.
+# List of supported schemes is in: http://wiki2.dovecot.org/Authentication
+#default_pass_scheme = CRYPT

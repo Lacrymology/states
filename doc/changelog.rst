@@ -2,11 +2,6 @@
 Changelog
 =========
 
-2013-05-01 18:00:00 GMT+8
--------------------------
-
-- Initial release of Salt Common States Beta.
-
 2013-05-03 22:10:00 GMT+8
 -------------------------
 
@@ -16,3 +11,8 @@ Changelog
 - Fixes a LOT of requirements
 - Fix few permissions
 - minor fixes
+
+2013-05-01 18:00:00 GMT+8
+-------------------------
+
+- Initial release of Salt Common States Beta.

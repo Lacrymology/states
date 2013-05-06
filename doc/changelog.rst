@@ -2,6 +2,12 @@
 Changelog
 =========
 
+2013-05-04 18:28:39 GMT+8
+-------------------------
+
+Move all Python based nagios plugin to use a virtualenv (/usr/local/nagios)
+instead of root python path.
+
 2013-05-03 22:10:00 GMT+8
 -------------------------
 

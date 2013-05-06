@@ -6,6 +6,7 @@ include:
   - ssh.client
   - git
   - mercurial
+  - apt
 
 {% set root_user_home = salt['user.info']('root')['home'] %}
 
@@ -39,6 +40,12 @@ python-pip:
   pkg:
     - purged
 
+python-setuptools:
+  pkg:
+    - installed
+    - require:
+      - cmd: apt_sources
+
 {% set version='1.3.1' %}
 pip:
   archive:
@@ -57,6 +64,6 @@ pip:
     - require:
       - pkg: python-pip
       - file: pip-cache
+      - pkg: python-setuptools
     - watch:
       - archive: pip
-

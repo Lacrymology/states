@@ -1,3 +1,3 @@
 {{ opts['cachedir'] }}/salt-virtualenv-requirements.txt:
-  - file:
+  file:
       - absent

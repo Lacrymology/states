@@ -5,7 +5,7 @@
 salt_minion_master_key:
   module:
     - wait
-    - name: file.absent
+    - name: file.remove
     - m_name: /etc/salt/pki/minion/minion_master.pub
     - watch:
       - file: salt-minion

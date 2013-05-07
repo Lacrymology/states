@@ -43,11 +43,6 @@ include:
   - apt
 #}
 ssl-cert:
-  group:
-    - present
-    - system: True
-    - require:
-      - pkg: ssl-cert
   pkg:
     - latest
 {#
@@ -97,7 +92,7 @@ that support SSL.
     - user: root
     - group: ssl-cert
     - require:
-      - group: ssl-cert
+      - pkg: ssl-cert
     - watch:
       - cmd: /etc/ssl/{{ name }}/server.pem
 

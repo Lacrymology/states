@@ -1,9 +1,10 @@
 {#
  Install a PostgreSQL database server.
  #}
+{% set ssl = salt['pillar.get']('postgresql:ssl', False) %}
 include:
   - postgresql
-{% if pillar['postgresql']['ssl']|default(False) %}
+{% if ssl %}
   - ssl
 {% endif %}
 
@@ -36,10 +37,10 @@ postgresql:
     - watch:
       - pkg: postgresql
       - file: postgresql
-{% if pillar['postgresql']['ssl']|default(False) %}
-      - cmd: /etc/ssl/{{ pillar['postgresql']['ssl'] }}/chained_ca.crt
-      - module: /etc/ssl/{{ pillar['postgresql']['ssl'] }}/server.pem
-      - file: /etc/ssl/{{ pillar['postgresql']['ssl'] }}/ca.crt
+{% if ssl %}
+      - cmd: /etc/ssl/{{ ssl }}/chained_ca.crt
+      - module: /etc/ssl/{{ ssl }}/server.pem
+      - file: /etc/ssl/{{ ssl }}/ca.crt
 {% endif %}
 
 /etc/logrotate.d/postgresql-common:

@@ -4,10 +4,14 @@
 include:
   - pip
 
+{{ opts['cachedir'] }}/raven-requirements.txt:
+ file:
+   - absent
+
 raven:
   file:
     - managed
-    - name: {{ opts['cachedir'] }}/raven-requirements.txt
+    - name: {{ opts['cachedir'] }}/salt-raven-requirements.txt
     - template: jinja
     - user: root
     - group: root

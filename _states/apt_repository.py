@@ -140,7 +140,7 @@ def present(address, components, distribution=None, source=False, key_id=None,
         'comment': ' and '.join((file_result['comment'], cmd_result['comment']))
     }
 
-    if __opts__['test'] and ret['changes']:
+    if __opts__['test']:
         ret['result'] = None
     elif ret['result'] and ret['changes']:
         __salt__['pkg.refresh_db']()

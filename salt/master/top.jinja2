@@ -2,7 +2,7 @@
 {% if pillar['branch'] == 'master' %}base{% else %}{{ pillar['branch']|default('base') }}{% endif %}:
   '*':
 {% for role in pillar['global_roles'] %}
-{% if role in pillar['roles'] %}
+{% if role in pillar['roles']|default([]) %}
     - roles.{{ role }}
 {% else %}
     - roles.{{ role }}.absent

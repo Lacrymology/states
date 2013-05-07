@@ -22,11 +22,16 @@ useless_kmod:
       - ntfs
       - vfat
       - msdos
-      - fat
       - jfs
       - isofs
 {% if 'availabilityZone' in grains %}
       - acpiphp
       - ext2
 {% endif %}
+
+fat:
+  kmod:
+    - absent
+    - require:
+      - kmod: useless_kmod
 {% endif %}

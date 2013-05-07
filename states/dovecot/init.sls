@@ -33,6 +33,14 @@ dovecot-agent:
     - groups:
       - mail
 
+/var/mail/vhosts/indexes:
+  file:
+    - directory
+    - user: dovecot-agent
+    - makedirs: True
+    - require:
+      - user: dovecot-agent
+
 /etc/dovecot/dovecot-ldap.conf.ext:
   file:
     - managed

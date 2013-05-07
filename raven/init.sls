@@ -22,7 +22,7 @@ raven:
     - name: pip.install
     - pkgs: ''
     - upgrade: True
-    - requirements: {{ opts['cachedir'] }}/raven-requirements.txt
+    - requirements: {{ opts['cachedir'] }}/salt-raven-requirements.txt
     - require:
       - module: pip
     - watch:

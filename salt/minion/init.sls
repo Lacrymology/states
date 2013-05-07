@@ -1,6 +1,13 @@
 {#
  Install Salt Minion (client)
  #}
+
+/etc/salt/pki/minion/minion_master.pub:
+  module.wait:
+    - name: file.absent
+    - watch:
+      - file: salt-minion
+
 salt-minion:
   apt_repository:
     - ubuntu_ppa
@@ -30,3 +37,4 @@ salt-minion:
     - watch:
       - pkg: salt-minion
       - file: salt-minion
+      - file: /etc/salt/pki/minion/minion_master.pub

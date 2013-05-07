@@ -14,4 +14,4 @@ mercurial:
     - latest
     - require:
       - apt_repository: mercurial
-      - pkg: openssh-client
+      - ssh_known_hosts: bitbucket.org

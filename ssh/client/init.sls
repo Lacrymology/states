@@ -18,6 +18,7 @@ bitbucket.org:
     - fingerprint: 97:8c:1b:f2:6f:14:6b:5c:3b:ec:aa:46:46:74:7c:40
     - require:
       - file: /root/.ssh
+      - pkg: openssh-client
 
 github.com:
   ssh_known_hosts:
@@ -26,6 +27,7 @@ github.com:
     - fingerprint: 16:27:ac:a5:76:28:2d:36:63:1b:56:4d:eb:df:a6:48
     - require:
       - file: /root/.ssh
+      - pkg: openssh-client
 
 openssh-client:
   file:
@@ -42,8 +44,6 @@ openssh-client:
     - latest
     - require:
       - cmd: apt_sources
-      - ssh_known_hosts: bitbucket.org
-      - ssh_known_hosts: github.com
 {% if pillar['deployment_key_source']|default(False) %}
       - file: /root/.ssh/id_dsa
 

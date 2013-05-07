@@ -2,9 +2,11 @@
  Install Salt Minion (client)
  #}
 
-/etc/salt/pki/minion/minion_master.pub:
-  module.wait:
+salt_minion_master_key:
+  module:
+    - wait:
     - name: file.absent
+    - m_name: /etc/salt/pki/minion/minion_master.pub
     - watch:
       - file: salt-minion
 
@@ -37,4 +39,4 @@ salt-minion:
     - watch:
       - pkg: salt-minion
       - file: salt-minion
-      - file: /etc/salt/pki/minion/minion_master.pub
+      - module: salt_minion_master_key

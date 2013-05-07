@@ -3,7 +3,7 @@
 #}
 include:
   - nrpe
-  - elasticsearch.python
+  - elasticsearch.nrpe
 
 {% set version = '0.11.0' %}
 

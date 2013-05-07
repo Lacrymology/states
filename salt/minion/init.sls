@@ -27,10 +27,11 @@ salt-minion:
     - require:
       - pkg: salt-minion
   pkg:
-    - installed
+    - latest
     - names:
       - python-openssl
       - salt-minion
+      - python-software-properties
     - require:
       - apt_repository: salt-minion
   service:

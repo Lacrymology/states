@@ -104,7 +104,7 @@ rabbitmq-server:
     - require:
       - service: rabbitmq-server
 
-{% for vhost in pillar['rabbitmq']['vhosts'] %}
+{% for vhost in salt['pillar.get']('rabbitmq:vhosts', []) %}
 rabbitmq-vhost-{{ vhost }}:
   rabbitmq_user:
     - present

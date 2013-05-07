@@ -12,6 +12,7 @@ include:
   - pip
   - web
   - apt
+  - python.dev
 {% if pillar['graphite']['web']['ssl']|default(False) %}
   - ssl
 {% endif %}
@@ -109,11 +110,12 @@ graphite-web:
     - install_options:
       - "--prefix=/usr/local/graphite"
       - "--install-lib=/usr/local/graphite/lib/python2.7/site-packages"
+    - require:
+      - virtualenv: graphite
     - watch:
       - file: graphite-web
-    - require:
       - pkg: graphite-web
-      - virtualenv: graphite
+      - pkg: python-dev
   pkg:
     - installed
     - name: libcairo2-dev
@@ -131,6 +133,7 @@ graphite-web:
     - bin_env: /usr/local/graphite/bin/pip
     - require:
       - file: pip-cache
+      - module: pip
 
 graphite-urls-patch:
   file:

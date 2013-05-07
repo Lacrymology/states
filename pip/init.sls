@@ -7,6 +7,7 @@ include:
   - git
   - mercurial
   - apt
+  - python
 
 {% set root_user_home = salt['user.info']('root')['home'] %}
 
@@ -64,6 +65,7 @@ pip:
     - require:
       - pkg: python-pip
       - file: pip-cache
+      - pkg: python
       - pkg: python-setuptools
     - watch:
       - archive: pip

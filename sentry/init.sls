@@ -9,6 +9,7 @@ include:
   - nginx
   - pip
   - web
+  - python.dev
   - apt
 {% if pillar['sentry']['ssl']|default(False) %}
   - ssl
@@ -50,9 +51,10 @@ sentry:
     - requirements: /usr/local/sentry/salt-requirements.txt
     - require:
       - virtualenv: sentry
-      - pkg: postgresql-dev
-      - pkg: sentry
     - watch:
+      - pkg: sentry
+      - pkg: python-dev
+      - pkg: postgresql-dev
       - file: sentry
   cmd:
     - wait

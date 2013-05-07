@@ -3,6 +3,7 @@
 #}
 include:
   - diamond
+  - python.dev
   - postgresql.server
   - postgresql
 
@@ -25,9 +26,10 @@ diamond_collector-psycopg2:
     - bin_env: /usr/local/diamond
     - requirements: /usr/local/diamond/salt-postgresql-requirements.txt
     - require:
-      - pkg: postgresql-dev
       - virtualenv: diamond
     - watch:
+      - pkg: python-dev
+      - pkg: postgresql-dev
       - file: diamond_collector-psycopg2
 
 postgresql_diamond_collector:

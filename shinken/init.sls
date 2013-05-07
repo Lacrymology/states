@@ -6,6 +6,7 @@
 include:
   - virtualenv
   - pip
+  - python.dev
   - apt
 {% if pillar['shinken']['ssl']|default(False) %}
   - ssl
@@ -85,6 +86,7 @@ shinken:
       - virtualenv: shinken
     - watch:
       - file: shinken
+      - pkg: python-dev
   user:
     - present
     - shell: /bin/false

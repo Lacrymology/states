@@ -5,6 +5,7 @@ include:
   - virtualenv
   - pip
   - apt
+  - python.dev
 
 {#
  gsyslog depends on klogd to get kernel logs, which is in sysklogd.
@@ -86,8 +87,9 @@ gsyslog:
     - bin_env: /usr/local/gsyslog
     - require:
       - virtualenv: gsyslog
-      - pkg: gsyslog
     - watch:
+      - pkg: gsyslog
+      - pkg: python-dev
       - file: gsyslog_requirements
   file:
     - managed

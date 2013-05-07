@@ -8,6 +8,7 @@ include:
   - ruby
   - web
   - apt
+  - python.dev
 
 /etc/init/uwsgi.conf:
   file:
@@ -28,9 +29,8 @@ uwsgi_build:
   pkg:
     - latest
     - names:
-      - build-essential
-      - python-dev
       - libxml2-dev
+      - libxslt1-dev
     - require:
       - cmd: apt_sources
   git:
@@ -60,6 +60,7 @@ uwsgi_build:
       - git: uwsgi_build
       - file: uwsgi_build
       - pkg: ruby
+      - pkg: python-dev
 
 uwsgi_sockets:
   file:

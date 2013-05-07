@@ -5,6 +5,7 @@
 include:
   - pip
   - apt
+  - python.dev
 
 python-lxml:
   pkg:
@@ -35,6 +36,7 @@ route53:
     - requirements: {{ opts['cachedir'] }}/salt-route53-requirements.txt
     - require:
       - module: pip
-      - pkg: route53
     - watch:
+      - pkg: route53
       - file: route53
+      - pkg: python-dev

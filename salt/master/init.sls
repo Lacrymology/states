@@ -6,12 +6,15 @@ include:
   - git
   - ssh.client
   - pip
+  - python.dev
 
 GitPython:
   pip:
     - installed
     - require:
       - module: pip
+    - watch:
+      - pkg: python-dev
 
 /srv/salt:
   file:

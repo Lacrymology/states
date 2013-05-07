@@ -12,6 +12,7 @@
 #}
 include:
   - git
+  - python.dev
   - virtualenv
 
 /etc/diamond:
@@ -74,6 +75,7 @@ diamond:
       - pkg: git
       - virtualenv: diamond
     - watch:
+      - pkg: python-dev
       - file: diamond_requirements
   file:
     - managed

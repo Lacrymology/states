@@ -73,6 +73,7 @@ carbon:
       - "--install-lib=/usr/local/graphite/lib/python2.7/site-packages"
     - watch:
       - file: carbon
+      - pkg: python-dev
   cmd:
     - wait
     - name: find /usr/local/graphite -name '*.pyc' -delete

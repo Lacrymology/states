@@ -1,0 +1,7 @@
+# {{ pillar['message_do_not_modify'] }}
+{% for distro in pillar['salt_ppa_mirror']['distributions'] %}
+Codename: {{ distro }}
+Components: main
+Architectures: i386 amd64
+Update: ppa
+{% endfor %}

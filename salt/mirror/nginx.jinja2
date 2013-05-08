@@ -21,4 +21,12 @@ server {
         deny all;
         return 404;
     }
+{% for dirname in ('conf', 'db', 'lists') %}
+{% for version in pillar['salt_ppa_mirror']['versions'] %}
+    location /ubuntu/{{ version }}/
+        deny all;
+        return 404;
+    }
+{% endfor %}
+{% endfor %}
 }

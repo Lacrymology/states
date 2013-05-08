@@ -12,7 +12,7 @@ include:
     - group: www-data
     - mode: 750
     - require:
-      - /var/lib/reprepro
+      - file: /var/lib/reprepro
 
 /var/lib/reprepro/salt/ubuntu:
   file:
@@ -21,7 +21,7 @@ include:
     - group: www-data
     - mode: 750
     - require:
-      - /var/lib/reprepro/salt
+      - file: /var/lib/reprepro/salt
 
 {% set filenames = ('distributions', 'updates') %}
 {% for version in pillar['salt_ppa_mirror']['versions'] %}

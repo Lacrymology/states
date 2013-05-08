@@ -25,7 +25,7 @@ include:
 
 {% set filenames = ('distributions', 'updates') %}
 {% for version in pillar['salt_ppa_mirror']['versions'] %}
-{% set root="/var/lib/reprepro/salt/ubuntu/" + version + "/" %}
+{% set root="/var/lib/reprepro/salt/ubuntu/" + version %}
 {{ root }}:
   file:
     - directory

@@ -18,14 +18,12 @@ server {
     autoindex on;
 
     location /favicon.ico {
-        deny all;
         return 404;
     }
 {% for dirname in ('conf', 'db', 'lists') %}
 {% for version in pillar['salt_ppa_mirror']['versions'] %}
-    location /ubuntu/{{ version }}/{{ dirname }}/
-        deny all;
-        return 404;
+    location /ubuntu/{{ version }}/{{ dirname }}/ {
+        return 403;
     }
 {% endfor %}
 {% endfor %}

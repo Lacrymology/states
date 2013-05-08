@@ -7,7 +7,7 @@ reprepro:
   pkg:
     - latest
     - require:
-      - cmd: apt_repository
+      - cmd: apt_sources
   file:
     - directory
     - name: /var/lib/reprepro

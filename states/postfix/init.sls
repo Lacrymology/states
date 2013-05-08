@@ -12,6 +12,7 @@ postfix:
     - managed
     - name: /etc/postfix/main.cf
     - source: salt://postfix/main.cf
+    - template: jinja
     - user: root
     - group: root
     - mode: 644
@@ -28,10 +29,15 @@ postfix:
     - require:
       - pkg: postfix
 
+/etc/mailname:
+  file:
+    - managed
+    - source: salt://postfix/mailname.jinja2
+    - template: jinja
+
 postfix-ldap:
   pkg:
     - installed
-
 
 /var/mail/vhosts:
   file:

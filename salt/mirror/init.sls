@@ -66,6 +66,7 @@ reprepro-update-{{ version }}-{{ distribution }}:
     - watch:
       - file: {{ root }}
     - require:
+      - pkg: reprepro
 {% for filename in filenames %}
       - file: {{ root }}/conf/{{ filename }}
 {% endfor %}

@@ -4,6 +4,10 @@ amavis: # make sure that /etc/mailname exists
     - name: amavisd-new
   service:
     - running
+  file:
+    - managed
+    - name: /etc/amavis/conf.d/15-content_filter_mode
+    - source: salt://amavis/15-content_filter_mode
     
 spamassassin:
   pkg:
@@ -22,6 +26,3 @@ clamav-daemon:
     - managed
     - name: /etc/clamav/clamd.conf
     - source: salt://amavis/clamd.conf
-
-
-

@@ -7,6 +7,7 @@ include:
   - ssh.client
   - pip
   - python.dev
+  - apt
 
 GitPython:
   pip:
@@ -54,6 +55,7 @@ salt-master:
     - latest
     - require:
       - apt_repository: salt-minion
+      - cmd: apt_sources
   service:
     - running
     - enable: True

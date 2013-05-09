@@ -6,6 +6,7 @@
  #}
 include:
   - logrotate
+  - apt
 
 mongodb:
   apt_repository:
@@ -21,6 +22,7 @@ mongodb:
     - name: mongodb-10gen
     - require:
       - apt_repository: mongodb
+      - cmd: apt_sources
   file:
     - managed
     - name: /etc/logrotate.d/mongodb

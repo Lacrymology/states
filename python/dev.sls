@@ -4,7 +4,9 @@ include:
 
 build-essential:
   pkg:
-     - installed
+    - installed
+    - require:
+      - cmd: apt_sources
 
 python-dev:
   pkg:

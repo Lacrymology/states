@@ -1,5 +1,8 @@
 {#
  Install a Salt Management Master (server)
+
+ If you install a salt master from scratch, check and run bootstrap_archive.py
+ and use it to install the master.
  #}
 include:
   - salt.minion

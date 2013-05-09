@@ -76,6 +76,9 @@ def main():
                 tar.add(os.path.join(state_dir, filename),
                         'srv/salt/' + filename)
 
+    tar.add(os.path.join(common_root, 'salt', 'master', 'top.jinja2'),
+            'srv/salt/top.sls')
+
     # bootstrap script
     tar.add(os.path.join(common_root, 'salt', 'master', 'bootstrap_master.sh'),
             'tmp/bootstrap_master.sh')

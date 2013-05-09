@@ -4,7 +4,7 @@
 include:
   - apt
 
-{% for filename in ('/etc/default/elasticsearch', '/etc/elasticsearch', '/etc/cron.daily/elasticsearch-cleanu', '/etc/nginx/conf.d/elasticsearch.conf') %}
+{% for filename in ('/etc/default/elasticsearch', '/etc/elasticsearch', '/etc/cron.daily/elasticsearch-cleanup', '/etc/nginx/conf.d/elasticsearch.conf') %}
 {{ filename }}:
   file:
     - absent

@@ -39,4 +39,4 @@ virtual_mailbox_maps = hash:/etc/postfix/vmailbox
 virtual_minimum_uid = 100
 virtual_uid_maps = static:4000
 virtual_gid_maps = static:4000
-soft_bounce = yes
+content_filter=amavisfeed:[127.0.0.1]:10024

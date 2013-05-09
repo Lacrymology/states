@@ -3,6 +3,7 @@
  #}
 include:
   - web
+  - apt
 
 {% set bad_configs = ('default', 'example_ssl') %}
 
@@ -103,6 +104,7 @@ nginx:
     - require:
       - apt_repository: nginx
       - user: web
+      - cmd: apt_sources
   file:
     - managed
     - name: /etc/init/nginx.conf

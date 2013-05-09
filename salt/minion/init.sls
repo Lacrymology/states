@@ -2,6 +2,9 @@
  Install Salt Minion (client)
  #}
 
+include:
+  - apt
+
 salt_minion_master_key:
   module:
     - wait
@@ -34,6 +37,7 @@ salt-minion:
       - python-software-properties
     - require:
       - apt_repository: salt-minion
+      - cmd: apt_sources
   service:
     - running
     - enable: True

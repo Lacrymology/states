@@ -4,6 +4,7 @@
 {% set ssl = salt['pillar.get']('postgresql:ssl', False) %}
 include:
   - postgresql
+  - apt
 {% if ssl %}
   - ssl
 {% endif %}
@@ -18,6 +19,7 @@ postgresql:
       - postgresql-client-{{ version }}
     - require:
       - apt_repository: postgresql-dev
+      - cmd: apt_sources
   file:
     - managed
     - name: /etc/postgresql/{{ version }}/main/postgresql.conf

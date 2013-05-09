@@ -1,3 +1,6 @@
+include:
+  - apt
+
 postgresql-dev:
   apt_repository:
     - ubuntu_ppa
@@ -9,3 +12,4 @@ postgresql-dev:
     - name: libpq-dev
     - require:
       - apt_repository: postgresql-dev
+      - cmd: apt_sources

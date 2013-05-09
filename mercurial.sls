@@ -2,6 +2,7 @@
  Install Mercurial source control management client.
  #}
 include:
+  - apt
   - ssh.client
 
 mercurial:
@@ -15,3 +16,4 @@ mercurial:
     - require:
       - apt_repository: mercurial
       - ssh_known_hosts: bitbucket.org
+      - cmd: apt_sources

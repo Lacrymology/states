@@ -16,6 +16,7 @@
  #}
 
 include:
+  - apt
   - hostname
 {% if pillar['rabbitmq']['management'] != 'guest' -%}
   {%- if pillar['rabbitmq']['ssl']|default(False) %}
@@ -65,6 +66,7 @@ rabbitmq-server:
     - latest
     - require:
       - apt_repository: rabbitmq-server
+      - cmd: apt_sources
   file:
     - directory
     - name: /etc/rabbitmq/rabbitmq.conf.d

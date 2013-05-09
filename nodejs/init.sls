@@ -1,6 +1,9 @@
 {#
  Install NodeJS platform for Javascript.
  #}
+include:
+  - apt
+
 nodejs:
   apt_repository:
     - ubuntu_ppa
@@ -11,3 +14,4 @@ nodejs:
     - latest
     - require:
       - apt_repository: nodejs
+      - cmd: apt_sources

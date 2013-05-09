@@ -4,6 +4,7 @@
 include:
   - salt.master
   - git
+  - apt
   - nginx
   - pip
 {% if pillar['salt_master']['ssl']|default(False) %}
@@ -45,6 +46,7 @@ salt-api:
       - pkg: salt-master
       - pip: salt-api
       - apt_repository: salt-minion
+      - cmd: apt_sources
   pip:
     - installed
     - name: cherrypy

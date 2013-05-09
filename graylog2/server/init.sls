@@ -9,7 +9,7 @@ include:
 {# TODO: set Email output plugin settings straight into MongoDB from salt #}
 
 {% set version = '0.11.0' %}
-{% set checksum = 'amd5=135c9eb384a03839e6f2eca82fd03502' %}
+{% set checksum = 'md5=135c9eb384a03839e6f2eca82fd03502' %}
 {% set server_root_dir = '/usr/local/graylog2-server-' + version %}
 
 graylog2-server_upstart:

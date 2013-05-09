@@ -7,6 +7,9 @@ apt-get update
 apt-get install -y salt-minion
 
 salt-call -l all --local saltutil.sync_all
-salt-call -l all --local state.sls salt.master
 
-find /srv/salt ! -name top.sls -delete
+echo "Please edit /etc/salt/minion"
+echo "Add a line 'id: hostid' and replace hostid by proper id"
+echo "then execute: salt-call -l all --local state.highstate"
+
+#find /srv/salt ! -name top.sls -delete

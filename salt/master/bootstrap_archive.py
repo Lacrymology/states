@@ -74,7 +74,7 @@ def main():
         for filename in os.listdir(state_dir):
             if filename != '.git':
                 tar.add(os.path.join(state_dir, filename),
-                        'srv/states/' + filename)
+                        'srv/salt/' + filename)
 
     # bootstrap script
     tar.add(os.path.join(common_root, 'salt', 'master', 'bootstrap_master.sh'),

@@ -45,10 +45,9 @@ include:
 ssl-cert:
   pkg:
     - latest
-{#
     - require:
       - cmd: apt_sources
-#}
+
 {% for name in pillar['ssl'] %}
 
 /etc/ssl/{{ name }}:

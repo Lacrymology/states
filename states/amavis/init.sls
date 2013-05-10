@@ -6,6 +6,8 @@ amavis: # make sure that /etc/mailname exists
     - running
     - watch:
       - user: amavis
+      - file: /etc/amavis/conf.d/22-max_servers
+      - file: amavis
   file:
     - managed
     - name: /etc/amavis/conf.d/15-content_filter_mode
@@ -18,6 +20,13 @@ amavis: # make sure that /etc/mailname exists
     - require:
       - pkg: amavis
       - pkg: clamav-daemon
+
+/etc/amavis/conf.d/22-max_servers:
+  file:
+    - managed
+    - source: salt://amavis/22-max_servers
+    - template: jinja
+    - makedirs: True
 
 spamassassin:
   pkg:

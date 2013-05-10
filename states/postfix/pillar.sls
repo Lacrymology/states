@@ -1,1 +1,3 @@
-mailname: hvnsweeting.com
+mail:
+  mailname: hvnsweeting.com
+  maxproc: 5

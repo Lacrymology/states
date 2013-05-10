@@ -11,7 +11,7 @@ postfix:
   file:
     - managed
     - name: /etc/postfix/main.cf
-    - source: salt://postfix/main.cf
+    - source: salt://postfix/main.cf.jinja2
     - template: jinja
     - user: root
     - group: root
@@ -22,7 +22,8 @@ postfix:
 /etc/postfix/master.cf:
   file:
     - managed
-    - source: salt://postfix/master.cf
+    - source: salt://postfix/master.cf.jinja2
+    - template: jinja
     - user: root
     - group: root
     - mode: 644

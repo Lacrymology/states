@@ -129,10 +129,17 @@ gsyslog:
     - mode: 555
 
 rsyslog:
+  cmd:
+    - wait
+    - name: dpkg -P rsyslog
+    - watch:
+      - module: sysklogd
+{#
   pkg:
     - purged
     - require:
       - module: sysklogd
+#}
 
 {% for cron in ('weekly', 'daily') %}
 /etc/cron.{{ cron }}/sysklogd:

@@ -42,8 +42,13 @@ clamav-daemon:
       - clamav-freshclam
     - watch:
       - user: clamav-daemon
+      - file: clamav-daemon
     - require:
       - pkg: amavis
+  file:
+    - managed
+    - name: /etc/clamav/freshclam.conf
+    - source: salt://amavis/freshclam.conf
   user:
     - present
     - name: clamav

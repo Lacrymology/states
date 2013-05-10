@@ -9,8 +9,8 @@ server {
 {% if pillar['sentry']['ssl']|default(False) %}
 {% if pillar['sentry']['ssl_redirect']|default(False) %}
     {# if https, redirect http port 80 to https port 443 #}
-    server_name {{ pillar['sentry']['address'] }};
-    return 301 https://{{ pillar['sentry']['address'] }}$request_uri;
+    server_name {% for hostname in pillar['sentry']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+    return 301 https://{{ pillar['sentry']['hostnames'][0] }}$request_uri;
 }
 
 server {
@@ -25,7 +25,7 @@ server {
     ssl_session_timeout 10m;
 {% endif %}
 
-    server_name {{ pillar['sentry']['address'] }};
+    server_name {% for hostname in pillar['sentry']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
 
     root /usr/local/sentry;
 

@@ -33,7 +33,7 @@ include:
       - pkg: nagios-nrpe-server
     - context:
       deployment: sentry
-      domain_name: {{ pillar['sentry']['address'] }}
+      domain_name: {{ pillar['sentry']['hostnames'][0] }}
       http_uri: /login/
       https: {{ pillar['sentry']['ssl']|default(False) }}
 

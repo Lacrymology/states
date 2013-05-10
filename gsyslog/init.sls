@@ -129,9 +129,11 @@ gsyslog:
     - mode: 555
 
 rsyslog:
+{# as soon as https://github.com/saltstack/salt/issues/4972 is fixed
+   the following is unnecessary #}
   cmd:
     - wait
-    - name: dpkg -P rsyslog
+    - name: dpkg --purge rsyslog
     - watch:
       - module: sysklogd
 {#

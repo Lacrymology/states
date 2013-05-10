@@ -8,4 +8,4 @@
 /root/.bashrc:
   file:
     - comment
-    - regex: ^source \/etc\/profile\.d\/bash_prompt\.sh
+    - regex: bash_prompt

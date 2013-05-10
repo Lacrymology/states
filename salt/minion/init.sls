@@ -5,6 +5,7 @@
 include:
   - apt
 
+{# it's mandatory to remove this file if the master is changed #}
 salt_minion_master_key:
   module:
     - wait

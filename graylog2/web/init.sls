@@ -9,6 +9,7 @@ include:
   - uwsgi
   - graylog2
   - web
+  - build
 {% if pillar['graylog2']['ssl']|default(False) %}
   - ssl
 {% endif %}
@@ -78,6 +79,7 @@ graylog2-web:
     - version: 1.3.1
     - require:
       - pkg: ruby
+      - pkg: build
     - watch:
       - archive: graylog2-web
   archive:

@@ -1,12 +1,7 @@
 include:
   - python
   - apt
-
-build-essential:
-  pkg:
-    - installed
-    - require:
-      - cmd: apt_sources
+  - build
 
 python-dev:
   pkg:
@@ -14,6 +9,6 @@ python-dev:
     - name:
       - python2.7-dev
     - require:
-      - pkg: build-essential
+      - pkg: build
       - cmd: apt_sources
       - pkg: python

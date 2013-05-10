@@ -134,7 +134,7 @@ graphite-web:
     - editable: git+git://github.com/jeffkistler/django-decorator-include.git#egg=django-decorator-include
     - bin_env: /usr/local/graphite/bin/pip
     - require:
-      - module: pip
+      - module: graphite-web
 
 graphite-urls-patch:
   file:
@@ -219,6 +219,7 @@ graphite_settings:
       - module: graphite-web
       - cmd: graphite-web
       - file: graphite-urls-patch
+      - pip: graphite-web
 
 /usr/local/graphite/bin/build-index.sh:
   file:

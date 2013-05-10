@@ -41,7 +41,6 @@ sentry:
     - require:
       - virtualenv: sentry
       - pkg: sentry
-      - pkg: postgresql-dev
   module:
     - wait
     - name: pip.install

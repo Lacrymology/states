@@ -8,7 +8,8 @@ include:
 tmpreaper:
   pkg:
     - latest
-    - cmd: apt_sources
+    - require:
+      - cmd: apt_sources
   file:
     - managed
     - name: /etc/tmpreaper.conf

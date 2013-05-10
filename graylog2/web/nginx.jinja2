@@ -5,7 +5,16 @@ upstream graylog2 {
 }
 
 server {
+    listen 80;
 {% if pillar['graylog2']['ssl']|default(False) %}
+{% if pillar['graylog2']['ssl_redirect']|default(False) %}
+    {# if https, redirect http port 80 to https port 443 #}
+    server_name {% for hostname in pillar['graylog2']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+    return 301 https://{{ pillar['graylog2']['hostnames'][0] }}$request_uri;
+}
+{# https server #}
+server {
+{% endif %}{# redirect http to https #}
     listen 443 ssl;
     ssl_certificate /etc/ssl/{{ pillar['graylog2']['ssl'] }}/chained_ca.crt;
     ssl_certificate_key /etc/ssl/{{ pillar['graylog2']['ssl'] }}/server.pem;
@@ -15,13 +24,9 @@ server {
     ssl_session_cache shared:SSL:10m;
     ssl_session_timeout 10m;
 {% endif %}
-
-    listen 80;
-
-    root /usr/local/graylog2-web-interface-{{ version }}/public;
-
+{# web app logic #}
     server_name {% for hostname in pillar['graylog2']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
-
+    root /usr/local/graylog2-web-interface-{{ version }}/public;
 {% for dir in ('stylesheets', 'javascripts', 'images') %}
     location /{{ dir }}/ {
         expires max;

@@ -1,15 +1,16 @@
 # {{ pillar['message_do_not_modify'] }}
 
-{% if pillar['salt_master']['ssl']|default(False) %}
 server {
     listen 80;
+{% if pillar['salt_master']['ssl']|default(False) %}
+{% if pillar['salt_master']['ssl_redirect']|default(False) %}
+    {# if https, redirect http port 80 to https port 443 #}
     server_name {{ pillar['salt_master']['hostname'] }};
     return 301 https://{{ pillar['salt_master']['hostname'] }}$request_uri;
 }
-{% endif %}
-
+{# https server #}
 server {
-{% if pillar['salt_master']['ssl']|default(False) %}
+{% endif %}{# redirect http to https #}
     listen 443 ssl;
     ssl_certificate /etc/ssl/{{ pillar['salt_master']['ssl'] }}/chained_ca.crt;
     ssl_certificate_key /etc/ssl/{{ pillar['salt_master']['ssl'] }}/server.pem;
@@ -18,10 +19,8 @@ server {
     ssl_prefer_server_ciphers on;
     ssl_session_cache shared:SSL:10m;
     ssl_session_timeout 10m;
-{% else %}
-    listen 80;
 {% endif %}
-
+{# web app logic #}
     server_name {{ pillar['salt_master']['hostname'] }};
 
     root /usr/local/salt-ui;

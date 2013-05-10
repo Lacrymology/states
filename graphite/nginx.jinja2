@@ -5,7 +5,16 @@ upstream graphite {
 }
 
 server {
+    listen 80;
 {% if pillar['graphite']['web']['ssl']|default(False) %}
+{% if pillar['graphite']['web']['ssl_redirect']|default(False) %}
+    {# if https, redirect http port 80 to https port 443 #}
+    server_name {% for hostname in pillar['graphite']['web']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+    return 301 https://{{ pillar['graphite']['web']['hostnames'][0] }}$request_uri;
+}
+{# https server #}
+server {
+{% endif %}{# redirect http to https #}
     listen 443 ssl;
     ssl_certificate /etc/ssl/{{ pillar['graphite']['web']['ssl'] }}/chained_ca.crt;
     ssl_certificate_key /etc/ssl/{{ pillar['graphite']['web']['ssl'] }}/server.pem;
@@ -15,7 +24,7 @@ server {
     ssl_session_cache shared:SSL:10m;
     ssl_session_timeout 10m;
 {% endif %}
-    listen 80;
+{# web app logic #}
     server_name {% for hostname in pillar['graphite']['web']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
 
     root /usr/local/graphite/webapp/;

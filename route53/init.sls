@@ -4,22 +4,14 @@
  #}
 include:
   - pip
-  - apt
   - python.dev
+  - xml.dev
 
 python-lxml:
   pkg:
     - purged
 
 route53:
-  pkg:
-    - installed
-    - names:
-      - libxml2-dev
-      - libxslt1-dev
-    - require:
-      - cmd: apt_sources
-      - pkg: python-lxml
   file:
     - managed
     - name: {{ opts['cachedir'] }}/salt-route53-requirements.txt
@@ -36,7 +28,8 @@ route53:
     - requirements: {{ opts['cachedir'] }}/salt-route53-requirements.txt
     - require:
       - module: pip
+      - pkg: python-lxml
     - watch:
-      - pkg: route53
+      - pkg: xml-dev
       - file: route53
       - pkg: python-dev

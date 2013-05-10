@@ -7,7 +7,7 @@ include:
   - pip
   - ruby
   - web
-  - apt
+  - xml.dev
   - python.dev
 
 /etc/init/uwsgi.conf:
@@ -26,13 +26,6 @@ uwsgitop:
       - module: pip
 
 uwsgi_build:
-  pkg:
-    - latest
-    - names:
-      - libxml2-dev
-      - libxslt1-dev
-    - require:
-      - cmd: apt_sources
   git:
     - latest
     - name: {{ pillar['uwsgi']['repository'] }}
@@ -56,7 +49,7 @@ uwsgi_build:
     - cwd: /usr/local/uwsgi
     - stateful: false
     - watch:
-      - pkg: uwsgi_build
+      - pkg: xml-dev
       - git: uwsgi_build
       - file: uwsgi_build
       - pkg: ruby
@@ -71,7 +64,7 @@ uwsgi_sockets:
     - mode: 770
     - require:
       - user: web
-      - pkg: uwsgi_build
+      - cmd: uwsgi_build
       - git: uwsgi_build
       - file: uwsgi_build
 
@@ -81,7 +74,6 @@ uwsgi_emperor:
     - name: strip /usr/local/uwsgi/uwsgi
     - stateful: false
     - watch:
-      - pkg: uwsgi_build
       - git: uwsgi_build
       - file: uwsgi_build
       - cmd: uwsgi_build

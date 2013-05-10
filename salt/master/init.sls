@@ -62,6 +62,8 @@ salt-master:
   service:
     - running
     - enable: True
+    - require:
+      - pkg: git
     - watch:
       - pkg: salt-master
       - file: salt-master

@@ -3,6 +3,7 @@
  #}
 {# TODO: create initial admin user #}
 include:
+  - postgresql
   - postgresql.server
   - virtualenv
   - graphite.common
@@ -116,6 +117,7 @@ graphite-web:
       - file: graphite-web
       - pkg: graphite-web
       - pkg: python-dev
+      - pkg: postgresql-dev
   pkg:
     - installed
     - name: libcairo2-dev

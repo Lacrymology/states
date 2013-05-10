@@ -20,6 +20,12 @@ postgresql:
     - require:
       - apt_repository: postgresql-dev
       - cmd: apt_sources
+{% set encoding = pillar['encoding']|default("en_US.UTF-8") %}
+    - env:
+        LANG: {{ encoding }}
+        LC_CTYPE: {{ encoding }}
+        LC_COLLATE: {{ encoding }}
+        LC_ALL: {{ encoding }}
   file:
     - managed
     - name: /etc/postgresql/{{ version }}/main/postgresql.conf

@@ -111,7 +111,6 @@ carbon-{{ instance }}:
     - require:
       - user: graphite
       - file: /var/log/graphite/carbon
-      - file: /var/log/graphite
       - file: /var/lib/graphite
       - file: carbon-{{ instance }}-logdir
     - watch:

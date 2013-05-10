@@ -31,6 +31,10 @@ amavis: # make sure that /etc/mailname exists
 spamassassin:
   pkg:
     - installed
+    - pkgs:
+      - spamassassin
+      - pyzor
+      - razor
 
 clamav-daemon:
   pkg:

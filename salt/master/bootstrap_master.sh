@@ -1,5 +1,10 @@
 #!/bin/sh
 
+if [ -z "$1" ]; then
+    echo "Missing argument: minion id"
+    exit 1
+fi
+
 export HOME=/root
 
 apt-add-repository -y ppa:saltstack/salt
@@ -8,8 +13,9 @@ apt-get install -y salt-minion
 
 salt-call -l all --local saltutil.sync_all
 
-echo "Please edit /etc/salt/minion"
-echo "Add a line 'id: hostid' and replace hostid by proper id"
-echo "then execute: salt-call -l all --local state.highstate"
+echo "log_level: debug" > /etc/salt/minion
+echo "id: $1" >> /etc/salt/minion
 
-#find /srv/salt ! -name top.sls -delete
+salt-call -l all --local state.highstate
+
+echo "If everthing went fine, please run 'find /srv/salt ! -name top.sls -delete'"

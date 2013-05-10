@@ -23,7 +23,7 @@ Then on the server run::
 
   cd /
   tar -xvzf /whereis/copied/archive.tar.gz
-  sh /tmp/bootstrap_master.sh
+  sh /tmp/bootstrap_master.sh [minion id]
 
 """
 

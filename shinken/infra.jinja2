@@ -302,6 +302,7 @@ define service {
 }
 {% endfor %}
 
+{% if 'rabbitmq' in pillar['shinken'] %}
 {#
  # rabbitmq
  #}
@@ -333,6 +334,7 @@ define service {
     use salt-service
 }
 {% endfor %}
+{% endif %}{# if rabbitmq is in shinken pillar #}
 
 {#
  # graylog2

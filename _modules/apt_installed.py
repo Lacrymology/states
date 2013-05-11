@@ -60,41 +60,9 @@ def unfreeze():
         ret['comment'] = "Nothing to change"
         return ret
 
-    data = {}
+    ret['comment'] = '%d changes' % len(install) + len(purge)
     if install:
-        data['install'] = {
-            'pkg': [
-                'installed',
-                {
-                    'names': install
-                }
-            ]
-        }
-
+        ret['changes'].update(__salt__['pkg.install'](pkgs=install))
     if purge:
-        data['purge'] = {
-            'pkg': [
-                'purged',
-                {
-                    'names': purge
-                }
-            ]
-        }
-
-    # execute that
-    output = __salt__['state.high'](data)
-
-    if install and purge:
-        install_result, purge_result = output.values()
-        ret['result'] = install_result['result'] == \
-                            purge_result['result'] is True
-        ret['changes'] = install_result['changes'] + purge_result['changes']
-        ret['comment'] = ' and '.join((install_result['comment'],
-                                       purge_result['comment']))
-    else:
-        result = output.values()
-        ret['result'] = result['result'] is True
-        ret['changes'] = result['changes']
-        ret['comment'] = result['comment']
-
+        ret['changes'].update(__salt__['pkg.purge'](pkgs=purge))
     return ret

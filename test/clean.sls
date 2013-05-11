@@ -1,7 +1,24 @@
 {#
  This state take a salt-minion and remove all debian packages that aren't
- required to run a
+ required to run only it.
+ Useful to identify if dependencies are missing.
 #}
+
+{#
+ You can't uninstall sudo, if no root password
+ #}
+user_root:
+  user:
+    - present
+    - name: root
+    - shell: /bin/bash
+    - home: /root
+    - uid: 0
+    - gid: 0
+    - enforce_password: True
+    {# password: root #}
+    - password: $6$FAsR0aKa$JoJGdUhaFGY1YxNEBDc8CEJig4L2GpAuAD8mP9UHhjViiJxJC2BTm9vFceEFDbB/yru5dEzLGHAssXthWNvON.
+
 clean_pkg:
   pkg:
     - purged
@@ -18,6 +35,7 @@ clean_pkg:
       - at
       - bc
       - busybox-static
+      - bind9-host
       - byobu
       - cloud-init
       - cloud-initramfs-growroot
@@ -46,16 +64,20 @@ clean_pkg:
       - landscape-common
       - language-selector-common
       - laptop-detect
+      - libjs-jquery
+      - lockfile-progs
       - lshw
       - lsof
       - ltrace
       - manpages
+      - man-db
       - memtest86+
       - mtr-tiny
       - nano
       - netcat-openbsd
       - ntfs-3g
       - ntpdate
+      - patch
       - popularity-contest
       - powermgmt-base
       - ppp
@@ -65,6 +87,7 @@ clean_pkg:
       - python-chardet
       - python-cheetah
       - python-configobj
+      - python-pycurl
       - python-dbus
       - python-dbus-dev
       - python-debian
@@ -98,20 +121,25 @@ clean_pkg:
       - tasksel-data
       - tcpdump
       - telnet
+      - time
       - tmux
       - ubuntu-minimal
       - ubuntu-standard
       - ufw
-      - update-manager-core
-      - update-notifier-common
       - ubuntu-minimal
       - ubuntu-standard
+      - unattended-upgrades
+      - update-manager-core
+      - update-notifier-common
+      - usbutils
       - whoopsie
       - w3m
       - wireless-tools
       - wpasupplicant
       - xauth
       - xkb-data
+    - require:
+      - user_root
 
 deborphan:
   pkg:

@@ -18,6 +18,12 @@ debconf-utils:
     - require:
       - cmd: apt_sources
 
+apt_sources_backup:
+  file:
+    - rename
+    - name: /etc/apt/sources.list.bak
+    - source: /etc/apt/sources.list
+
 apt_sources:
   file:
     - managed
@@ -31,6 +37,7 @@ apt_sources:
       all_suites: main restricted universe multiverse
     - require:
       - file: /etc/apt/apt.conf.d/99local
+      - file: apt_sources_backup
 {#
   cmd.wait is used instead of:
 

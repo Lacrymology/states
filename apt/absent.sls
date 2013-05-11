@@ -11,6 +11,7 @@ apt_sources:
     - rename
     - name: /etc/apt/sources.list
     - source: /etc/apt/sources.list.bak
+    - force: True
   cmd:
     - wait
     - name: apt-get update

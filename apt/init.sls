@@ -39,7 +39,7 @@ apt_sources:
       all_suites: main restricted universe multiverse
     - require:
       - file: /etc/apt/apt.conf.d/99local
-      - file: apt_sources_backup
+{#      - file: apt_sources_backup#}
 {#
   cmd.wait is used instead of:
 

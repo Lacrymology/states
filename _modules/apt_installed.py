@@ -37,17 +37,64 @@ def unfreeze():
     Take a list of packages, uninstall from the OS packages not in the list
     and install those that are missing.
     '''
+    ret = {
+        'name': 'unfreeze',
+        'changes': {},
+        'result': True
+    }
     filename = _filename()
     try:
         with open(filename, 'rb') as handler:
             frozen = set(pickle.load(handler))
             log.debug("Found %d packages frozen", len(frozen))
     except IOError:
-        log.fatal("You need to call apt_installed.freeze first!")
-        return False
+        ret['comment'] = "You need to call apt_installed.freeze first!"
+        ret['result'] = False
+        return ret
+
     installed = set(_installed())
     install = frozen - installed
     purge = installed - frozen
-    log.info("Going to install: %s", ', '.join(install))
-    log.info("Going to purge: %s", ', '.join(purge))
-    return True
+
+    if not install and not purge:
+        ret['comment'] = "Nothing to change"
+        return ret
+
+    data = {}
+    if install:
+        data['install'] = {
+            'pkg': [
+                'installed',
+                {
+                    'names': install
+                }
+            ]
+        }
+
+    if purge:
+        data['purge'] = {
+            'pkg': [
+                'purged',
+                {
+                    'names': purge
+                }
+            ]
+        }
+
+    # execute that
+    output = __salt__['state.high'](data)
+
+    if install and purge:
+        install_result, purge_result = output.values()
+        ret['result'] = install_result['result'] == \
+                            purge_result['result'] is True
+        ret['changes'] = install_result['changes'] + purge_result['changes']
+        ret['comment'] = ' and '.join((install_result['comment'],
+                                       purge_result['comment']))
+    else:
+        result = output.values()
+        ret['result'] = result['result'] is True
+        ret['changes'] = result['changes']
+        ret['comment'] = result['comment']
+
+    return ret

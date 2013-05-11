@@ -1,29 +1,11 @@
 {#
  Uninstall a gsyslogd server, it's a sysklogd/rsyslog replacement
 #}
-include:
-  - apt
 
 gsyslog:
   service:
     - dead
     - enable: False
-
-rsyslog:
-  pkg:
-    - installed
-    - require:
-      - service: gsyslog
-
-sysklogd:
-  pkg:
-    - purged
-    - names:
-      - sysklogd
-      - klogd
-    - require:
-      - pkg: rsyslog
-      - service: gsyslog
 
 /etc/logrotate.d/gsyslog:
   file:

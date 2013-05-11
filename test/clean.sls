@@ -43,12 +43,14 @@ clean_pkg:
       - command-not-found-data
       - console-setup
       - dnsutils
+      - ed
       - eject
       - fonts-ubuntu-font-family-console
       - friendly-recovery
       - ftp
       - fuse
       - fuse-utils
+      - groff-base
       - hdparm
       - info
       - installation-report
@@ -92,6 +94,7 @@ clean_pkg:
       - python-debian
       - python-gdbm
       - python-gi
+      - python-gnupginterface
       - python-httplib2
       - python-keyring
       - python-launchpadlib
@@ -137,9 +140,58 @@ clean_pkg:
       - wpasupplicant
       - xauth
       - xkb-data
+      - ca-certificates
+      - cloud-utils
+      - cron
+      - curl
+      - dbus
+      - dosfstools
+      - dmidecode
+      - euca2ools
+      - geoip-database
+      - install-info
+      - iso-codes
+      - krb5-locales
+      - less
+      - libclass-accessor-perl
+      - libcurl3
+      - libcurl3-gnutls
+      - libio-string-perl
+      - libparse-debianchangelog-perl
+      - libsub-name-perl
+      - libswitch-perl
+      - libtimedate-perl
+      - locales
+      - logrotate
+      - lsb-release
+      - openssh-server
+      - openssl
+      - os-prober
+      - parted
+      - pciutils
+      - perl-modules
+      - perl
+      - python-apt
+      - python-apt-common
+      - python-boto
+      - rsyslog
+      - sgml-base
+      - ssh-import-id
+      - tcpd
+      - ureadahead
+      - uuid-runtime
+      - vim
+      - vim-common
+      - vim-runtime
+      - vim-tiny
+      - wget
+      - whiptail
+      - xml-core
     - require:
       - user: root
 
 deborphan:
   pkg:
     - installed
+
+

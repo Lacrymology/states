@@ -4,16 +4,20 @@
  Useful to identify if dependencies are missing.
 #}
 
+include:
+  - deborphan
+
 {#
  You can't uninstall sudo, if no root password
  #}
+{% set root_info = salt['user.info']('root') %}
 root:
   user:
     - present
-    - shell: /bin/bash
-    - home: /root
-    - uid: 0
-    - gid: 0
+    - shell: {{ root_info['shell'] }}
+    - home: {{ root_info['home'] }}
+    - uid: {{ root_info['uid'] }}
+    - gid: {{ root_info['gid'] }}
     - enforce_password: True
     {# password: root #}
     - password: $6$FAsR0aKa$JoJGdUhaFGY1YxNEBDc8CEJig4L2GpAuAD8mP9UHhjViiJxJC2BTm9vFceEFDbB/yru5dEzLGHAssXthWNvON.
@@ -197,10 +201,6 @@ clean_pkg:
       - xml-core
     - require:
       - user: root
-
-deborphan:
-  pkg:
-    - installed
 
 {% if salt['cmd.has_exec']('deborphan') %}
 {% for pkg in salt['cmd.run']('deborphan').split("\n") %}

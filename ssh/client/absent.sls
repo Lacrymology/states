@@ -10,10 +10,11 @@ openssh-client:
   pkg:
     - purged
 
-/root/.ssh/id_dsa:
+{% set root_home = salt['user.info']('root')['home'] %}
+{{ root_home }}/.ssh/id_dsa:
   file:
     - absent
 
-/root/.ssh/known_hosts:
+{{ root_home }}/.ssh/known_hosts:
   file:
     - absent

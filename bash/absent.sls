@@ -5,7 +5,7 @@
   file:
     - absent
 
-/root/.bashrc:
+{{ salt['user.info']('root')['home'] }}/.bashrc:
   file:
     - comment
     - regex: ^source.*bash_prompt.*

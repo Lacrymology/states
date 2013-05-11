@@ -23,5 +23,5 @@ bash:
 root_profile:
   file:
     - append
-    - name: /root/.bashrc
+    - name: {{ salt['user.info']('root')['home'] }}/.bashrc
     - text: source /etc/profile.d/bash_prompt.sh

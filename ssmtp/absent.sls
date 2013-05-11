@@ -9,3 +9,7 @@ ssmtp:
     - name: /etc/ssmtp
     - require:
       - pkg: ssmtp
+
+bsd-mailx:
+  pkg:
+    - purged

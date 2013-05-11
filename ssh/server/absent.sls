@@ -16,11 +16,6 @@ openssh-server:
     - enable: False
     - name: ssh
 
-{% for key in salt['pillar.get']('root_keys', []) %}
-ssh_server_root_{{ key }}:
-  ssh_auth:
+{{ salt['user.info']('root')['home'] }}/.ssh/authorized_keys:
+  file:
     - absent
-    - name: {{ key }}
-    - user: root
-    - enc: {{ pillar['root_keys'][key] }}
-{% endfor -%}

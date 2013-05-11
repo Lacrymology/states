@@ -2,10 +2,14 @@
  Uninstall memcache
  #}
 memcached:
+  service:
+    - dead
   file:
     - absent
-    - name: /etc/memcached.conf
+    - name: /etc/init/memcached.conf
     - require:
-      - pkg: memcached
+      - service: memcached
   pkg:
     - purged
+    - require:
+      - service: memcached

@@ -22,6 +22,10 @@ sentry:
       - postgres_database: sentry
 {% endif %}
 
+libevent-dev:
+  pkg:
+    - purged
+
 /etc/uwsgi/sentry.ini:
   file:
     - absent

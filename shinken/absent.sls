@@ -17,6 +17,14 @@ shinken-{{ role }}:
     - enable: False
 {% endfor %}
 
+shinken:
+  user:
+    - absent
+
+nagios-nrpe-plugin:
+  pkg:
+    - purged
+
 {% for rootdir in ('etc', 'usr/local', 'var/log', 'var/lib') %}
 /{{ rootdir }}/shinken:
   file:

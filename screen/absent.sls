@@ -4,3 +4,7 @@
 /etc/screenrc:
   file:
     - absent
+
+screen:
+  pkg:
+    - purged

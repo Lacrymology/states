@@ -6,3 +6,7 @@
   file:
     - absent
 {% endfor %}
+
+ssl-cert:
+  pkg:
+    - purged

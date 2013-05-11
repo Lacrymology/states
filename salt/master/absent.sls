@@ -12,3 +12,11 @@ salt-master:
     - purged
     - require:
       - service: salt-master
+
+GitPython:
+  pip:
+    - removed
+
+/srv/salt:
+  file:
+    - absent

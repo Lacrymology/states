@@ -1,0 +1,3 @@
+cron:
+  pkg:
+    - purged

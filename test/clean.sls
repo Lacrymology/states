@@ -24,6 +24,7 @@ clean_pkg:
     - names:
       - accountsservice
       - acpid
+      - anacron
       - apparmor
       - apparmor-utils
       - apport
@@ -59,6 +60,7 @@ clean_pkg:
       - fuse
       - fuse-utils
       - geoip-database
+      - gir1.2-glib-2.0
       - groff-base
       - hdparm
       - info
@@ -79,14 +81,17 @@ clean_pkg:
       - laptop-detect
       - less
       - libclass-accessor-perl
+      - libclass-isa-perl
       - libcurl3
       - libcurl3-gnutls
       - libio-string-perl
       - libjs-jquery
+      - liblockfile-bin
       - libparse-debianchangelog-perl
       - libsub-name-perl
       - libswitch-perl
       - libtimedate-perl
+      - libx11-data
       - locales
       - lockfile-progs
       - logrotate
@@ -139,6 +144,7 @@ clean_pkg:
       - python-oauth
       - python-openssl
       - python-pam
+      - python-paramiko
       - python-problem-report
       - python-pycurl
       - python-serial
@@ -198,6 +204,7 @@ deborphan:
 
 {% if salt['cmd.has_exec']('deborphan') %}
 {% for pkg in salt['cmd.run']('deborphan').split("\n") %}
+{% if pkg != '' %}
 {% if loop.first %}
 orphans:
   pkg:
@@ -208,4 +215,5 @@ orphans:
 {% endif %}
       -  {{ pkg }}
 {% endfor %}
+{% endif %}
 {% endif %}

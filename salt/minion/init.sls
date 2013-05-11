@@ -33,9 +33,13 @@ salt-minion:
   pkg:
     - latest
     - names:
-      - python-openssl
       - salt-minion
       - python-software-properties
+      - debconf-utils
+{% if grains['virtual'] != 'openvzve' %}
+      - pciutils
+      - dmidecode
+{% endif %}
     - require:
       - apt_repository: salt-minion
       - cmd: apt_sources

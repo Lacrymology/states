@@ -1,6 +1,18 @@
 {#
  Uninstall Salt Minion (client)
  #}
+
+salt-minion-dependencies:
+  pkg:
+    - purged
+    - names:
+      - python-software-properties
+      - debconf-utils
+      - pciutils
+      - dmidecode
+    - require:
+      - pkg: salt-minion
+
 salt-minion:
   file:
     - absent

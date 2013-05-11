@@ -1,10 +1,6 @@
 {#
  Uninstall Denyhosts used to block SSH brute-force attack
  #}
-/var/lib/denyhosts:
-  file:
-    - absent
-
 denyhosts:
   pkg:
     - purged
@@ -19,7 +15,7 @@ denyhosts:
     - dead
     - enable: False
 
-{% for file in ('/etc/logrotate.d/denyhosts', '/var/log/denyhosts') %}
+{% for file in ('/etc/logrotate.d/denyhosts', '/var/log/denyhosts', '/var/lib/denyhosts') %}
 {{ file }}:
   file:
     - absent

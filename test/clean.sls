@@ -7,10 +7,9 @@
 {#
  You can't uninstall sudo, if no root password
  #}
-user_root:
+root:
   user:
     - present
-    - name: root
     - shell: /bin/bash
     - home: /root
     - uid: 0
@@ -139,7 +138,7 @@ clean_pkg:
       - xauth
       - xkb-data
     - require:
-      - user_root
+      - user: root
 
 deborphan:
   pkg:

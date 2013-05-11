@@ -33,62 +33,97 @@ clean_pkg:
       - aptitude
       - at
       - bc
-      - busybox-static
       - bind9-host
+      - busybox-static
       - byobu
+      - ca-certificates
       - cloud-init
       - cloud-initramfs-growroot
       - cloud-initramfs-rescuevol
+      - cloud-utils
       - command-not-found
       - command-not-found-data
       - console-setup
+      - cron
+      - curl
+      - dbus
+      - dmidecode
       - dnsutils
+      - dosfstools
       - ed
       - eject
+      - euca2ools
       - fonts-ubuntu-font-family-console
       - friendly-recovery
       - ftp
       - fuse
       - fuse-utils
+      - geoip-database
       - groff-base
       - hdparm
       - info
+      - install-info
       - installation-report
       - iptables
       - iputils-ping
       - iputils-tracepath
       - irqbalance
+      - iso-codes
       - iw
       - kbd
       - keyboard-configuration
+      - krb5-locales
       - landscape-client
       - landscape-common
       - language-selector-common
       - laptop-detect
+      - less
+      - libclass-accessor-perl
+      - libcurl3
+      - libcurl3-gnutls
+      - libio-string-perl
       - libjs-jquery
+      - libparse-debianchangelog-perl
+      - libsub-name-perl
+      - libswitch-perl
+      - libtimedate-perl
+      - locales
       - lockfile-progs
+      - logrotate
+      - lsb-release
       - lshw
       - lsof
       - ltrace
-      - manpages
       - man-db
+      - manpages
       - memtest86+
+      - mlocate
       - mtr-tiny
       - nano
       - netcat-openbsd
       - ntfs-3g
       - ntpdate
+      - openssh-client
+      - openssh-server
+      - openssl
+      - os-prober
+      - parted
       - patch
+      - pciutils
+      - perl
+      - perl-modules
       - popularity-contest
       - powermgmt-base
       - ppp
       - pppconfig
       - pppoeconf
       - python-apport
+      - python-apt
+      - python-apt-common
+      - python-boto
       - python-chardet
       - python-cheetah
       - python-configobj
-      - python-pycurl
       - python-dbus
       - python-dbus-dev
       - python-debian
@@ -105,6 +140,7 @@ clean_pkg:
       - python-openssl
       - python-pam
       - python-problem-report
+      - python-pycurl
       - python-serial
       - python-simplejson
       - python-software-properties
@@ -116,76 +152,42 @@ clean_pkg:
       - python-xapian
       - python-zope.interface
       - rsync
+      - rsyslog
       - screen
+      - sgml-base
+      - ssh-import-id
       - strace
       - sudo
       - tasksel
       - tasksel-data
+      - tcpd
       - tcpdump
       - telnet
       - time
       - tmux
       - ubuntu-minimal
-      - ubuntu-standard
-      - ufw
       - ubuntu-minimal
       - ubuntu-standard
+      - ubuntu-standard
+      - ufw
       - unattended-upgrades
       - update-manager-core
       - update-notifier-common
-      - usbutils
-      - whoopsie
-      - w3m
-      - wireless-tools
-      - wpasupplicant
-      - xauth
-      - xkb-data
-      - ca-certificates
-      - cloud-utils
-      - cron
-      - curl
-      - dbus
-      - dosfstools
-      - dmidecode
-      - euca2ools
-      - geoip-database
-      - install-info
-      - iso-codes
-      - krb5-locales
-      - less
-      - libclass-accessor-perl
-      - libcurl3
-      - libcurl3-gnutls
-      - libio-string-perl
-      - libparse-debianchangelog-perl
-      - libsub-name-perl
-      - libswitch-perl
-      - libtimedate-perl
-      - locales
-      - logrotate
-      - lsb-release
-      - openssh-server
-      - openssl
-      - os-prober
-      - parted
-      - pciutils
-      - perl-modules
-      - perl
-      - python-apt
-      - python-apt-common
-      - python-boto
-      - rsyslog
-      - sgml-base
-      - ssh-import-id
-      - tcpd
       - ureadahead
+      - usbutils
       - uuid-runtime
       - vim
       - vim-common
       - vim-runtime
       - vim-tiny
+      - w3m
       - wget
       - whiptail
+      - whoopsie
+      - wireless-tools
+      - wpasupplicant
+      - xauth
+      - xkb-data
       - xml-core
     - require:
       - user: root
@@ -194,4 +196,15 @@ deborphan:
   pkg:
     - installed
 
-
+{% for pkg in salt['cmd.run']('deborphan') %}
+{% if loop.first %}
+orphans:
+  pkg:
+    - purged
+    - require:
+      - pkg: deborphan
+      - pkg: clean_pkg
+    - names:
+{% endif %}
+      -  {{ pkg }}
+{% endfor %}

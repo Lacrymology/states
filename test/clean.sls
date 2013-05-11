@@ -1,12 +1,18 @@
+{#
+ This state take a salt-minion and remove all debian packages that aren't
+ required to run a
+#}
 clean_pkg:
   pkg:
     - purged
     - names:
       - accountsservice
+      - acpid
       - apparmor
       - apparmor-utils
       - apport
       - apport-symptoms
+      - apt-transport-https
       - apt-xapian-index
       - aptitude
       - at
@@ -17,15 +23,22 @@ clean_pkg:
       - cloud-initramfs-growroot
       - cloud-initramfs-rescuevol
       - command-not-found
+      - command-not-found-data
       - console-setup
+      - dnsutils
       - eject
       - fonts-ubuntu-font-family-console
       - friendly-recovery
       - ftp
       - fuse
       - fuse-utils
+      - hdparm
       - info
       - installation-report
+      - iptables
+      - iputils-ping
+      - iputils-tracepath
+      - irqbalance
       - iw
       - kbd
       - keyboard-configuration
@@ -33,26 +46,43 @@ clean_pkg:
       - landscape-common
       - language-selector-common
       - laptop-detect
+      - lshw
+      - lsof
+      - ltrace
+      - manpages
+      - memtest86+
+      - mtr-tiny
       - nano
+      - netcat-openbsd
       - ntfs-3g
+      - ntpdate
       - popularity-contest
       - powermgmt-base
       - ppp
       - pppconfig
       - pppoeconf
       - python-apport
+      - python-chardet
       - python-cheetah
+      - python-configobj
       - python-dbus
       - python-dbus-dev
       - python-debian
+      - python-gdbm
       - python-gi
+      - python-httplib2
       - python-keyring
       - python-launchpadlib
       - python-lazr.restfulclient
       - python-lazr.uri
       - python-newt
+      - python-oauth
+      - python-openssl
+      - python-pam
       - python-problem-report
       - python-serial
+      - python-simplejson
+      - python-software-properties
       - python-twisted-bin
       - python-twisted-core
       - python-twisted-names
@@ -60,8 +90,15 @@ clean_pkg:
       - python-wadllib
       - python-xapian
       - python-zope.interface
+      - rsync
+      - screen
+      - strace
+      - sudo
       - tasksel
       - tasksel-data
+      - tcpdump
+      - telnet
+      - tmux
       - ubuntu-minimal
       - ubuntu-standard
       - ufw
@@ -75,3 +112,7 @@ clean_pkg:
       - wpasupplicant
       - xauth
       - xkb-data
+
+deborphan:
+  pkg:
+    - installed

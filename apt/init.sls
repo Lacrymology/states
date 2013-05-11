@@ -18,11 +18,13 @@ debconf-utils:
     - require:
       - cmd: apt_sources
 
+{#
 apt_sources_backup:
   file:
     - rename
     - name: /etc/apt/sources.list.bak
     - source: /etc/apt/sources.list
+#}
 
 apt_sources:
   file:

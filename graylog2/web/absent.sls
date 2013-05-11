@@ -4,6 +4,8 @@
 {% set version = '0.11.0' %}
 {% set web_root_dir = '/usr/local/graylog2-web-interface-' + version %}
 
+{# TODO: uninstall ruby stuff #}
+
 /etc/logrotate.d/graylog2-web:
   file:
     - absent

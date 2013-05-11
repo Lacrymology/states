@@ -6,6 +6,8 @@ include:
 {% if 'graphite_address' in pillar %}
   - diamond
 
+{# TODO: uninstall psycopg2 from diamond virtualenv #}
+
 extend:
   diamond:
     service:

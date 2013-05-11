@@ -1,6 +1,9 @@
 {#
  Uninstall a MongoDB NoSQL server.
 #}
+
+{# TODO: remove apt_repository #}
+
 mongodb:
   pkg:
 {% if pillar['destructive_absent']|default(False) %}

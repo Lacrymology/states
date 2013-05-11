@@ -27,8 +27,10 @@ def freeze():
         log.debug("Freeze data already exists, overwrite")
     with open(filename, 'wb') as handler:
         pickle.dump(installed, handler)
-    log.info("Frozen %d packages", len(installed))
-    return True
+    return {'name': 'freeze',
+            'changes': {},
+            'comment': "Frozen %d packages" % len(installed),
+            'result': True}
 
 def unfreeze():
     '''

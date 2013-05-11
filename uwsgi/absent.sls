@@ -4,7 +4,7 @@
 
 uwsgitop:
   pip:
-    - uninstalled
+    - removed
 
 uwsgi:
   service:

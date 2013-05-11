@@ -6,7 +6,6 @@ debconf-utils:
   pkg:
     - purged
 
-{#
 apt_sources:
   file:
     - rename
@@ -19,4 +18,3 @@ apt_sources:
     - watch:
       - file: apt_sources
       - file: /etc/apt/apt.conf.d/99local
-#}

@@ -60,7 +60,7 @@ def unfreeze():
         ret['comment'] = "Nothing to change"
         return ret
 
-    ret['comment'] = '%d changes' % len(install) + len(purge)
+    ret['comment'] = '%d install %d purge' % (len(install), len(purge))
     if install:
         ret['changes'].update(__salt__['pkg.install'](pkgs=install))
     if purge:

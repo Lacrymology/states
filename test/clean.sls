@@ -196,15 +196,16 @@ deborphan:
   pkg:
     - installed
 
+{% if salt['cmd.has_exec']('deborphan') %}
 {% for pkg in salt['cmd.run']('deborphan').split("\n") %}
 {% if loop.first %}
 orphans:
   pkg:
     - purged
     - require:
-      - pkg: deborphan
       - pkg: clean_pkg
     - names:
 {% endif %}
       -  {{ pkg }}
 {% endfor %}
+{% endif %}

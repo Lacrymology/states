@@ -1,0 +1,4 @@
+
+deborphan:
+  pkg:
+    - installed

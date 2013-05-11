@@ -8,4 +8,4 @@
 /root/.bashrc:
   file:
     - comment
-    - regex: bash_prompt
+    - regex: ^source.*bash_prompt.*

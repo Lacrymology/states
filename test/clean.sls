@@ -196,7 +196,7 @@ deborphan:
   pkg:
     - installed
 
-{% for pkg in salt['cmd.run']('deborphan') %}
+{% for pkg in salt['cmd.run']('deborphan').split("\n") %}
 {% if loop.first %}
 orphans:
   pkg:

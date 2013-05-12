@@ -1,6 +1,8 @@
 {#
  Uninstall a Sentry web server.
  #}
+
+{#
 {% if pillar['destructive_absent']|default(False) and salt['pillar.get']('sentry:db', False) %}
 include:
   - postgresql.server
@@ -21,6 +23,7 @@ sentry:
       - service: postgresql
       - postgres_database: sentry
 {% endif %}
+#}
 
 libevent-dev:
   pkg:

@@ -4,8 +4,28 @@
 Common integration tests
 """
 
+import unittest
+
 import salt.client
 
+minion_id = 'integration-all'
+
+def setUpModule():
+    """
+    Prepare minion for tests
+    """
+    client = salt.client.LocalClient()
+    client.cmd(minion_id, 'saltutil.sync_all', timeout=3600)
+    # first run is to uninstall packages we know and install deborphan
+    client.cmd(minion_id, 'state.sls', ['test.clean'])
+    # run with deborphan
+    ret = client.cmd(minion_id, 'state.sls', ['test.clean'])
+    while if_change(ret):
+        ret = client.cmd(minion_id, 'state.sls', ['test.clean'])
+    # uninstall deborphan
+    client.cmd(minion_id, 'state.sls', ['deborphan.absent'])
+    # save state of currently installed packages
+    client.cmd(minion_id, 'apt_installed.freeze')
 
 def if_change(result):
     """
@@ -22,52 +42,152 @@ def if_change(result):
     return False
 
 
-class Integration(object):
+class BaseIntegration(unittest.TestCase):
     """
-    Perform integration state of all common states
+    Common logic to all Integration test class
     """
 
-    def __init__(self, minion, timeout=8000):
-        self.timeout = timeout
-        self.minion = minion
-        self.client = salt.client.LocalClient()
-        self.cmd('saltutil.sync_all')
-        self._states_tested = {}
+    client = None
+    timeout = 3600
+    states_tested = {}
+    # list of absent state (without .absent suffix)
+    # commented state aren't necessary as an other absent state will clean
+    # it as well (such as nrpe.absent erase stuff from carbon.nrpe.absent) or
+    # by rm -rf /usr/local and /usr/lib/nagios/plugins/
+    absent = [
+        # 'apt.nrpe',
+        'apt',
+        'backup.client',
+        # 'backup.server.nrpe',
+        'backup.server',
+        'bash',
+        'build',
+        # 'carbon.nrpe',
+        'carbon',
+        # 'cron.nrpe',
+        'cron',
+        'deborphan',
+        # 'denyhosts.nrpe',
+        'denyhosts',
+        # 'diamond.nrpe',
+        'diamond',
+        'django',
+        # 'elasticsearch.diamond',
+        # 'elasticsearch.nrpe',
+        'elasticsearch',
+        # 'firewall.gsyslog',
+        # 'firewall.nrpe',
+        'firewall',
+        'git.server',
+        'git',
+        'graphite.backup',
+        'graphite.common',
+        # 'graphite.nrpe',
+        'graphite',
+        # 'graylog2.server.nrpe',
+        'graylog2.server',
+        # 'graylog2.web.nrpe',
+        'graylog2.web',
+        # 'gsyslog.nrpe',
+        'gsyslog',
+        'logrotate',
+        # 'memcache.diamond',
+        # 'memcache.nrpe',
+        'memcache',
+        'mercurial',
+        # 'mongodb.diamond',
+        # 'mongodb.nrpe',
+        'mongodb',
+        'motd',
+        # 'nginx.diamond',
+        # 'nginx.nrpe',
+        'nginx',
+        'nodejs',
+        # 'nrpe.gsyslog',
+        'nrpe',
+        # 'ntp.nrpe',
+        'ntp',
+        # 'openvpn.diamond',
+        # 'openvpn.nrpe',
+        'openvpn',
+        # 'pdnsd.nrpe',
+        'pdnsd',
+        'pip',
+        'postgresql.server.backup',
+        # 'postgresql.server.diamond',
+        # 'postgresql.server.nrpe',
+        'postgresql.server',
+        'postgresql',
+        # 'proftpd.nrpe',
+        'proftpd',
+        'python',
+        # 'rabbitmq.diamond',
+        # 'rabbitmq.nrpe',
+        'rabbitmq',
+        'raven',
+        'reprepro',
+        'requests',
+        'route53',
+        'ruby',
+        # 'salt.api.nrpe',
+        'salt.api',
+        # 'salt.master.nrpe',
+        'salt.master',
+        # 'salt.minion.nrpe',
+        # 'salt.minion', <--- Don't want to uninstall the minion
+        'salt.mirror',
+        'screen',
+        'sentry.backup',
+        # 'sentry.nrpe',
+        'sentry',
+        # 'shinken.nrpe',
+        'shinken',
+        'ssh.client',
+        # 'ssh.server.gsyslog',
+        # 'ssh.server.nrpe',
+        'ssh.server',
+        'ssl',
+        'ssmtp',
+        # 'statsd.nrpe',
+        'statsd',
+        'sudo',
+        'tmpreaper',
+        'tools',
+        # 'uwsgi.nrpe',
+        'uwsgi',
+        'vim',
+        'virtualenv.backup',
+        'virtualenv',
+        'web',
+        'xml'
+    ]
+
+    @classmethod
+    def setUpClass(cls):
+        cls.client = salt.client.LocalClient()
+
+    def setUp(self):
+        self.sls_absent(self.absent)
+        # Go back on the same installed packages as after :func:`setUpClass`
+        self.cmd('apt_installed.unfreeze')
+        self.cmd('file.remove', '/usr/local')
+        self.cmd('file.remove', '/usr/lib/nagios/plugins')
 
     def cmd(self, *args, **kwargs):
         kwargs['timeout'] = self.timeout
-        return self.cmd(self.minion, *args, **kwargs)
-
-    def clean(self):
-        """
-        Clean the minion OS
-        :return: None
-        """
-        # first run is to uninstall packages we know and install deborphan
-        self.cmd('state.sls', ['test.clean'])
-        # run with deborphan
-        ret = self.cmd('state.sls', ['test.clean'])
-        while if_change(ret):
-            ret = self.cmd('state.sls', ['test.clean'])
-        # uninstall deborphan
-        self.cmd('state.sls', ['deborphan.absent'])
-        self.cmd('apt_installed.freeze')
-
-    def packages_uninstallation(self):
-        """
-        Go back on the same installed packages as after
-        :func:`Integration.clean`.
-        :return: None
-        """
-        self.cmd('apt_installed.unfreeze')
+        return self.client.cmd(minion_id, *args, **kwargs)
 
     def sls(self, states):
         for state in states:
             try:
-                self._states_tested[state] += 1
+                self.states_tested[state] += 1
             except KeyError:
-                self._states_tested[state] = 1
-        return self.cmd('state.sls', [','.join(states)])
+                self.states_tested[state] = 1
+        output = self.cmd('state.sls', [','.join(states)])
+        # check that all state had been executed properly
+        for state in output[minion_id]:
+            self.assertTrue(state['result'], state['comment'])
+        return output
 
     def sls_absent(self, states):
         absent = []
@@ -75,326 +195,294 @@ class Integration(object):
             absent.append(state + '.absent')
         return self.sls(states)
 
-    def state_and_absent(self, states, extra_absent=None):
-        self.sls(states)
-        self.sls_absent(states)
-        if extra_absent is not None:
-            self.sls_absent(states)
-        self.packages_uninstallation()
 
-    def test(self):
-        # no apt requisite
-        self.test_web()
-        self.test_deborphan()
-        self.test_hostname()
-        self.test_motd()
-        # apt requisite
-        self.test_apt()
-        self.test_bash()
-        self.test_build()
-        self.test_logrotate()
-        self.test_postgresql()
-        self.test_ruby()
-        self.test_screen()
-        self.test_ssh_client()
-        self.test_ssl()
-        self.test_sudo()
-        self.test_tools()
-        self.test_vim()
-        self.test_xml()
-        # apt, web
-        self.test_reprepro()
-        # apt, build
-        self.test_python()
-        # apt, ssh.client
-        self.test_git()
-        self.test_mercurial()
-
-        # test core states that are used by most of the others
-        self.test_pip()
-        self.test_virtualenv()
-        self.test_nrpe()
-        self.test_apt_full()
-        self.test_graphite_common()
-
-        # depends mostly on nrpe
-        self.test_diamond()
-        # diamond
-        self.test_nodejs()
-
-        # depends on nrpe + diamond
-        self.test_cron()
-        self.test_ntp()
-        self.test_carbon()
-        self.test_pdnsd()
-        self.test_git_server()
-        self.test_memcache()
-        self.test_nginx()
-        self.test_tmpreaper()
-        self.test_uwsgi()
+class Integration(BaseIntegration):
+    """
+    Only test each state without any integration
+    """
 
     def test_apt(self):
-        self.state_and_absent(['apt'])
-
-    def test_apt_full(self):
-        self.sls(['apt', 'apt.nrpe'])
-        self.sls_absent(['apt', 'apt.nrpe', 'apt', 'ssh.client', 'git', 'pip',
-                         'mercurial', 'python', 'build', 'virtualenv', 'nrpe'])
-        self.packages_uninstallation()
-
-    # def test_backup_client(self):
-    #     pass
-
-    # def test_backup_server(self):
-    #     pass
+        self.sls(['apt'])
 
     def test_bash(self):
-        self.state_and_absent(['bash'], ['apt'])
+        self.sls(['bash'])
+
+    def test_backup_client(self):
+        self.sls(['backup.client'])
+
+    def test_backup_server(self):
+        self.sls(['backup.server'])
 
     def test_build(self):
-        self.state_and_absent(['build'], ['apt'])
+        self.sls(['build'])
 
     def test_carbon(self):
-        self.sls(['carbon', 'carbon.nrpe'])
-        self.sls_absent(['apt', 'apt.nrpe', 'apt', 'ssh.client', 'git', 'pip',
-                         'mercurial', 'python', 'build', 'virtualenv',
-                         'diamond', 'diamond.nrpe', 'logrotate',
-                         'graphite.common', 'carbon', 'carbon.nrpe', 'nrpe'])
-        self.packages_uninstallation()
+        self.sls(['carbon'])
 
     def test_cron(self):
-        self.sls(['cron', 'cron.nrpe'])
-        self.sls_absent(['apt', 'apt.nrpe', 'apt', 'ssh.client', 'git', 'pip',
-                         'mercurial', 'python', 'build', 'virtualenv',
-                         'diamond', 'diamond.nrpe', 'cron', 'cron.nrpe',
-                         'nrpe'])
-        self.packages_uninstallation()
+        self.sls(['cron'])
 
     def test_deborphan(self):
-        self.state_and_absent(['deborphan'])
+        self.sls(['deborphan'])
 
-    # def test_denyhosts(self):
-    #     pass
+    def test_denyhosts(self):
+        self.sls(['denyhosts'])
 
     def test_diamond(self):
-        self.sls(['diamond', 'diamond.nrpe'])
-        self.sls_absent(['apt', 'apt.nrpe', 'apt', 'ssh.client', 'git', 'pip',
-                         'mercurial', 'python', 'build', 'virtualenv',
-                         'diamond', 'diamond.nrpe', 'nrpe'])
-        self.packages_uninstallation()
+        self.sls(['diamond'])
 
-    # def test_elasticsearch(self):
-    #     pass
+    def test_elasticsearch(self):
+        self.sls(['elasticsearch'])
 
-    # def test_firewall(self):
-    #     pass
+    def test_firewall(self):
+        self.sls(['firewall'])
 
     def test_git(self):
-        self.state_and_absent(['git'], ['apt', 'ssh.client'])
+        self.sls(['git'])
 
     def test_git_server(self):
-        self.sls(['git.server', 'git.server.diamond'])
-        self.sls_absent(['apt', 'apt.nrpe', 'apt', 'ssh.client', 'git', 'pip',
-                         'mercurial', 'python', 'build', 'virtualenv',
-                         'diamond', 'diamond.nrpe', 'git.server', 'nrpe'])
-        self.packages_uninstallation()
+        self.sls(['git.server'])
 
     def test_graphite_common(self):
-        self.state_and_absent(['graphite.common'],
-                              ['apt', 'ssh.client', 'git', 'pip', 'mercurial',
-                               'python', 'build', 'virtualenv'])
+        self.sls(['graphite.common'])
 
-    # def test_graphite(self):
-    #     pass
+    def test_graphite(self):
+        self.sls(['graphite'])
 
-    # def test_graylog2(self):
-    #     pass
+    def test_graylog2(self):
+        self.sls(['graylog2.server', 'graylog2.web'])
 
-    # def test_gsyslog(self):
-    #     pass
+    def test_gsyslog(self):
+        self.sls(['gsyslog'])
 
     def test_hostname(self):
         self.sls(['hostname'])
 
     def test_logrotate(self):
-        self.state_and_absent(['logrotate'], ['apt'])
+        self.sls(['logrotate'])
 
     def test_memcache(self):
-        self.sls(['memcache', 'memcache.nrpe', 'memcache.diamond'])
-        self.sls_absent(['apt', 'apt.nrpe', 'apt', 'ssh.client', 'git', 'pip',
-                         'mercurial', 'python', 'build', 'virtualenv',
-                         'diamond', 'diamond.nrpe', 'memcache', 'memcache.nrpe',
-                         'memcache.diamond', 'nrpe'])
-        self.packages_uninstallation()
+        self.sls(['memcache'])
 
     def test_mercurial(self):
-        self.state_and_absent(['mercurial'], ['apt', 'ssh.client'])
+        self.sls(['mercurial'])
 
-    # def test_mongodb(self):
-    #     pass
+    def test_mongodb(self):
+        self.sls(['mongodb'])
 
     def test_motd(self):
-        self.state_and_absent(['motd'])
+        self.sls(['motd'])
 
     def test_nginx(self):
-        self.sls(['nginx', 'nginx.nrpe', 'nginx.diamond'])
-        self.sls_absent(['apt', 'apt.nrpe', 'apt', 'ssh.client', 'git', 'pip',
-                         'mercurial', 'python', 'build', 'virtualenv',
-                         'diamond', 'diamond.nrpe', 'nginx', 'nginx.nrpe',
-                         'nginx.diamond', 'nrpe'])
-        self.packages_uninstallation()
+        self.sls(['nginx'])
 
     def test_nodejs(self):
-        self.sls(['nodejs', 'nodejs.diamond'])
-        self.sls_absent(['apt', 'apt.nrpe', 'apt', 'ssh.client', 'git', 'pip',
-                         'mercurial', 'python', 'build', 'virtualenv',
-                         'diamond', 'diamond.nrpe', 'nodejs', 'nrpe'])
-        self.packages_uninstallation()
+        self.sls(['nodejs'])
 
     def test_nrpe(self):
-        self.state_and_absent(['nrpe'],
-                              ['apt', 'ssh.client', 'git', 'pip', 'mercurial',
-                               'python', 'build', 'virtualenv'])
-
-    # def test_nrpe_full(self):
-    #     pass
+        self.sls(['nrpe'])
 
     def test_ntp(self):
-        self.sls(['ntp', 'ntp.nrpe', 'ntp.diamond'])
-        self.sls_absent(['apt', 'apt.nrpe', 'apt', 'ssh.client', 'git', 'pip',
-                         'mercurial', 'python', 'build', 'virtualenv', 'nrpe',
-                         'diamond', 'diamond.nrpe', 'ntp', 'nginx.nrpe'])
-        self.packages_uninstallation()
+        self.sls(['ntp'])
 
-    # def test_openvpn(self):
-    #     pass
+    def test_openvpn(self):
+        self.sls(['openvpn'])
 
     def test_pdnsd(self):
-        self.sls(['pdnsd', 'pdnsd.nrpe', 'pdnsd.diamond'])
-        self.sls_absent(['apt', 'apt.nrpe', 'apt', 'ssh.client', 'git', 'pip',
-                         'mercurial', 'python', 'build', 'virtualenv', 'nrpe',
-                         'diamond', 'diamond.nrpe', 'pdnsd', 'pdnsd.nrpe'])
-        self.packages_uninstallation()
+        self.sls(['pdnsd'])
 
     def test_pip(self):
-        self.state_and_absent(['pip'], ['apt', 'ssh.client', 'git', 'mercurial',
-                                        'python', 'build'])
-
-    # def test_python_dev(self):
-    #     pass
+        self.sls(['pip'])
 
     def test_postgresql(self):
-        self.state_and_absent(['postgresql'], ['apt'])
+        self.sls(['postgresql'])
 
-    # def test_postgresql_server(self):
-    #     pass
+    def test_postgresql_server(self):
+        self.sls(['postgresql.server'])
 
-    # def test_proftpd(self):
-    #     pass
+    def test_proftpd(self):
+        self.sls(['protftpd'])
 
     def test_python(self):
         self.sls(['python.dev'])
-        self.sls_absent(['python', 'apt', 'build', 'python.dev'])
-        self.packages_uninstallation()
 
-    # def test_rabbitmq(self):
-    #     pass
-
-    # def test_raven(self):
-    #     pass
+    def test_raven(self):
+        self.sls(['raven'])
 
     def test_reprepro(self):
-        self.state_and_absent(['reprepro'], ['apt', 'web'])
+        self.sls(['reprepro'])
 
-    # def test_requests(self):
-    #     pass
+    def test_requests(self):
+        self.sls(['requests'])
 
-    # def test_route53(self):
-    #     pass
+    def test_route53(self):
+        self.sls(['route53'])
 
     def test_ruby(self):
-        self.state_and_absent(['ruby'], ['apt'])
+        self.sls(['ruby'])
 
-    # def test_salt_api(self):
-    #     pass
+    def test_salt_api(self):
+        self.sls(['salt.api'])
 
-    # def test_salt_master(self):
-    #     pass
+    def test_salt_master(self):
+        self.sls(['salt.master'])
 
-    # def test_salt_minion(self):
-    #     pass
-
-    # def test_salt_mirror(self):
-    #     pass
+    def test_salt_mirror(self):
+        self.sls(['salt.mirror'])
 
     def test_screen(self):
-        self.state_and_absent(['screen'], ['apt'])
+        self.sls(['screen'])
 
-    # def test_shinken(self):
-    #     pass
+    def test_shinken(self):
+        self.sls(['shinken'])
+
+    def test_ssh_server(self):
+        self.sls(['ssh.server'])
 
     def test_ssh_client(self):
-        self.state_and_absent(['ssh.client'], ['apt'])
-
-    # def test_ssh_server(self):
-    #     pass
+        self.sls(['ssh.client'])
 
     def test_ssl(self):
-        self.state_and_absent(['ssl'], ['apt'])
+        self.sls(['ssl'])
 
-    # def test_ssmtp(self):
-    #     pass
+    def test_ssmtp(self):
+        self.sls(['ssmtp'])
 
-    # def test_statsd(self):
-    #     pass
+    def test_statsd(self):
+        self.sls(['statsd'])
 
     def test_sudo(self):
-        self.state_and_absent(['sudo'], ['apt'])
+        self.sls(['sudo'])
 
     def test_tmpreaper(self):
         self.sls(['tmpreaper'])
-        self.sls_absent(['apt', 'apt.nrpe', 'apt', 'ssh.client', 'git', 'pip',
-                         'mercurial', 'python', 'build', 'virtualenv', 'nrpe',
-                         'diamond', 'diamond.nrpe', 'cron', 'cron.nrpe'])
-        self.packages_uninstallation()
 
     def test_tools(self):
-        self.state_and_absent(['tools'], ['apt'])
+        self.sls(['tools'])
+
+    def test_uwsgi(self):
+        self.sls(['uwsgi'])
+
+    def test_vim(self):
+        self.sls(['vim'])
+
+    def test_virtualenv(self):
+        self.sls(['virtualenv'])
+
+    def test_web(self):
+        self.sls(['web'])
+
+    def test_xml(self):
+        self.sls(['xml'])
+
+
+class IntegrationFull(BaseIntegration):
+    """
+    Test with complete integration
+    """
+
+    def test_apt(self):
+        self.sls(['apt', 'apt.nrpe'])
+
+    def test_backup_client(self):
+        self.sls(['backup.client', 'backup.client.diamond'])
+
+    def test_backup_server(self):
+        self.sls(['backup.server', 'backup.server.diamond',
+                  'backup.server.nrpe'])
+
+    def test_carbon(self):
+        self.sls(['carbon', 'carbon.nrpe'])
+
+    def test_cron(self):
+        self.sls(['cron', 'cron.diamond', 'cron.nrpe'])
+
+    def test_denyhosts(self):
+        self.sls(['denyhosts', 'denyhosts.diamond', 'denyhosts.nrpe'])
+
+    def test_diamond(self):
+        self.sls(['diamond', 'diamond.nrpe'])
+
+    def test_elasticsearch(self):
+        self.sls(['elasticsearch', 'elasticsearch.diamond',
+                  'elasticsearch.nrpe'])
+
+    def test_firewall(self):
+        self.sls(['firewall', 'firewall.gsyslog', 'firewall.nrpe'])
+
+    def test_git_server(self):
+        self.sls(['git.server', 'git.server.diamond'])
+
+    def test_graphite(self):
+        self.sls(['graphite', 'graphite.backup', 'graphite.nrpe',
+                  'graphite.diamond'])
+
+    def test_graylog2(self):
+        self.sls(['graylog2.server', 'graylog2.server.nrpe',
+                  'graylog2.server.diamond', 'graylog2.web',
+                  'graylog2.web.diamond', 'graylog2.web.nrpe'])
+
+    def test_gsyslog(self):
+        self.sls(['gsyslog', 'gsyslog.diamond', 'gsyslog.nrpe'])
+
+    def test_memcache(self):
+        self.sls(['memcache', 'memcache.nrpe', 'memcache.diamond'])
+
+    def test_mongodb(self):
+        self.sls(['mongodb', 'mongodb.diamond', 'mongodb.nrpe'])
+
+    def test_nginx(self):
+        self.sls(['nginx', 'nginx.nrpe', 'nginx.diamond'])
+
+    def test_nodejs(self):
+        self.sls(['nodejs', 'nodejs.diamond'])
+
+    def test_nrpe(self):
+        self.sls(['nrpe', 'nrpe.gsyslog', 'nrpe.diamond'])
+
+    def test_ntp(self):
+        self.sls(['ntp', 'ntp.nrpe', 'ntp.diamond'])
+
+    def test_openvpn(self):
+        self.sls(['openvpn', 'openvpn.nrpe', 'openvpn.diamond'])
+
+    def test_pdnsd(self):
+        self.sls(['pdnsd', 'pdnsd.nrpe', 'pdnsd.diamond'])
+
+    def test_postgresql_server(self):
+        self.sls(['postgresql.server', 'postgresql.server.backup',
+                  'postgresql.server.diamond', 'postgresql.server.nrpe'])
+
+    def test_proftpd(self):
+        self.sls(['protftpd', 'proftpd.nrpe', 'proftpd.diamond'])
+
+    def test_rabbitmq(self):
+        self.sls(['rabbitmq', 'rabbitmq.nrpe', 'rabbitmq.diamond'])
+
+    def test_salt_api(self):
+        self.sls(['salt.api', 'salt.api.nrpe', 'salt.api.diamond',
+                  'salt.master.nrpe', 'salt.master.diamond'])
+
+    def test_salt_master(self):
+        self.sls(['salt.master', 'salt.master.nrpe', 'salt.master.diamond'])
+
+    def test_shinken(self):
+        self.sls(['shinken', 'shinken.nrpe', 'shinken.diamond'])
+
+    def test_ssh_server(self):
+        self.sls(['ssh.server', 'ssh.server.gsyslog', 'ssh.server.nrpe'])
+
+    def test_ssmtp(self):
+        self.sls(['ssmtp', 'ssmtp.diamond'])
+
+    def test_statsd(self):
+        self.sls(['statsd', 'statsd.nrpe', 'statsd.diamond'])
 
     def test_uwsgi(self):
         self.sls(['uwsgi', 'uwsgi.nrpe', 'uwsgi.diamond'])
-        self.sls_absent(['apt', 'apt.nrpe', 'apt', 'ssh.client', 'git', 'pip',
-                         'mercurial', 'python', 'build', 'virtualenv', 'nrpe',
-                         'diamond', 'diamond.nrpe', 'nginx', 'nginx.nrpe',
-                         'nginx.diamond', 'ruby', 'web', 'xml', 'xml.dev',
-                         'python', 'python.dev', 'sudo'])
-        self.packages_uninstallation()
-
-    def test_vim(self):
-        self.state_and_absent(['vim'], ['apt'])
 
     def test_virtualenv(self):
-        self.state_and_absent(['virtualenv'],
-                              ['apt', 'ssh.client', 'git', 'pip', 'mercurial',
-                               'python', 'build'])
-
-    # def test_virtualenv_full(self):
-    #     pass
-
-    def test_web(self):
-        self.state_and_absent(['web'])
-
-    def test_xml(self):
-        self.sls(['xml.dev'])
-        self.sls_absent(['xml', 'apt', 'xml.dev'])
-        self.packages_uninstallation()
+        self.sls(['virtualenv', 'virtualenv.backup'])
 
 if __name__ == '__main__':
-    import sys
-    try:
-        test = Integration(sys.argv[1])
-    except IndexError:
-        print 'Missing argument: minion id'
-    else:
-        test.clean()
-        test.test()
+    unittest.main()

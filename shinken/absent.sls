@@ -20,6 +20,10 @@ shinken-{{ role }}:
 shinken:
   user:
     - absent
+    - require:
+{% for role in roles %}
+      - service: shinken-{{ role }}
+{% endfor %}
 
 nagios-nrpe-plugin:
   pkg:

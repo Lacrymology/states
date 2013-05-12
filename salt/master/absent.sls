@@ -13,9 +13,11 @@ salt-master:
     - require:
       - service: salt-master
 
+{% if salt['cmd.has_exec']('pip') %}
 GitPython:
   pip:
     - removed
+{% endif %}
 
 /srv/salt:
   file:

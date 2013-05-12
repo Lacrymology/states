@@ -2,9 +2,11 @@
  Uninstall uWSGI Web app server.
  #}
 
+{% if salt['cmd.has_exec']('pip') %}
 uwsgitop:
   pip:
     - removed
+{% endif %}
 
 uwsgi:
   service:

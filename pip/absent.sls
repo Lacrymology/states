@@ -8,17 +8,18 @@
   file:
     - absent
 
-python-setuptools:
-  pkg:
-    - purged
-    - require:
-      - pip: pip
-
 {{ salt['user.info']('root')['home'] }}/.pip:
   file:
     - absent
 
+python-setuptools:
+  pkg:
+    - purged
+{% if salt['cmd.has_exec']('pip') %}
+    - require:
+      - pip: pip
+
 pip:
   pip:
     - removed
-
+{% endif %}

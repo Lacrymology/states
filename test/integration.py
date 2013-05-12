@@ -37,8 +37,11 @@ def if_change(result):
     """
     minion = result.keys()[0]
     for key in result[minion]:
-        if result[minion][key]['changes'] != {}:
-            return True
+        try:
+            if result[minion][key]['changes'] != {}:
+                return True
+        except TypeError:
+            raise ValueError(result)
     return False
 
 

@@ -214,6 +214,6 @@ orphans:
     - names:
 {% endif %}
       -  {{ pkg }}
-{% endfor %}
 {% endif %}
+{% endfor %}
 {% endif %}

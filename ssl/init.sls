@@ -38,10 +38,9 @@ Requires files in source:
 {# ssl-certs debian package use ssl-cert group to easily give access to
    private key on some process #}
 
-{#
 include:
   - apt
-#}
+
 ssl-cert:
   pkg:
     - latest

@@ -11,7 +11,7 @@ pdnsd:
     - enable: False
 
 {% for file in ('default/pdnsd', 'pdnsd.conf') %}
-/etc/:
+/etc/{{ file }}:
   file:
     - absent
     - require:

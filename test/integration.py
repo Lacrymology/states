@@ -14,18 +14,20 @@ def setUpModule():
     """
     Prepare minion for tests
     """
+    timeout = 3600
     client = salt.client.LocalClient()
-    client.cmd(minion_id, 'saltutil.sync_all', timeout=3600)
+    client.cmd(minion_id, 'saltutil.sync_all', timeout=timeout)
     # first run is to uninstall packages we know and install deborphan
-    client.cmd(minion_id, 'state.sls', ['test.clean'])
+    ret = client.cmd(minion_id, 'state.sls', ['test.clean'], timeout=timeout)
     # run with deborphan
-    ret = client.cmd(minion_id, 'state.sls', ['test.clean'])
+    ret = client.cmd(minion_id, 'state.sls', ['test.clean'], timeout=timeout)
     while if_change(ret):
-        ret = client.cmd(minion_id, 'state.sls', ['test.clean'])
+        ret = client.cmd(minion_id, 'state.sls', ['test.clean'],
+                         timeout=timeout)
     # uninstall deborphan
-    client.cmd(minion_id, 'state.sls', ['deborphan.absent'])
+    client.cmd(minion_id, 'state.sls', ['deborphan.absent'], timeout=timeout)
     # save state of currently installed packages
-    client.cmd(minion_id, 'apt_installed.freeze')
+    client.cmd(minion_id, 'apt_installed.freeze', timeout=timeout)
 
 def if_change(result):
     """

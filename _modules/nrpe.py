@@ -9,6 +9,7 @@ import re
 
 logger = logging.getLogger(__name__)
 
+__NRPE_RE = re.compile('^command\[([^\]]+)\]=(.+)$')
 
 def _check_list(config_dir='/etc/nagios/nrpe.d'):
     '''
@@ -16,12 +17,11 @@ def _check_list(config_dir='/etc/nagios/nrpe.d'):
     :param config_dir: path where config files are
     :return: dict of command name and their command line
     '''
-    output = []
-    regex = re.compile('^command\[([^\]]+)\]=(.+)$')
+    output = {}
     for filename in __salt__['file.find'](config_dir, type="f"):
         with open(filename, 'r') as input_fh:
             for line in input_fh:
-                match = regex.match(line)
+                match = __NRPE_RE.match(line)
                 if match:
                     output[match.group(1)] = match.group(2)
     return output
@@ -29,8 +29,14 @@ def _check_list(config_dir='/etc/nagios/nrpe.d'):
 def run_check(check_name):
     '''
     Run a specific nagios check
+
+    CLI Example::
+
+        salt '*' nrpe.run_check <check name>
+
     '''
     checks = _check_list()
+    log.debug("Found %d checks", len(checks.keys()))
     ret = {
         'name': 'run_check',
         'changes': {},

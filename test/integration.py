@@ -26,6 +26,8 @@ minion_id = 'integration-all'
 # there is no good reasons to test if the minion isn't back to it's original
 # state.
 clean_up_failed = False
+# just to keep some stats
+states_tested = {}
 
 logger = logging.getLogger()
 
@@ -93,6 +95,17 @@ def setUpModule():
                            timeout=timeout))
 
 
+def tearDownModule():
+    global states_tested
+    print ''
+    print "Tested sls file: number of execution"
+    print "------------------------------------"
+    states = states_tested.keys()
+    states.sort()
+    for state_name in states:
+        print "%s: %d" % (state_name, states_tested[state_name])
+
+
 class BaseIntegration(unittest.TestCase):
     """
     Common logic to all Integration test class
@@ -100,7 +113,6 @@ class BaseIntegration(unittest.TestCase):
 
     client = None
     timeout = 3600
-    states_tested = {}
 
     # list of absent state (without .absent suffix)
     # commented state aren't necessary as an other absent state will clean
@@ -275,12 +287,13 @@ class BaseIntegration(unittest.TestCase):
         """
         Apply specified list of states
         """
+        global states_tested
         logger.debug("Run states: %s", ', '.join(states))
         for state in states:
             try:
-                self.states_tested[state] += 1
+                states_tested[state] += 1
             except KeyError:
-                self.states_tested[state] = 1
+                states_tested[state] = 1
         output = self.cmd('state.sls', [','.join(states)])
         # if it's not a list, it's an error
         self.assertEqual(type(output[minion_id]), dict, output[minion_id])
@@ -329,17 +342,17 @@ class Integration(BaseIntegration):
     # def test_build(self):
     #     self.top(['build'])
 
-    def test_carbon(self):
-        self.top(['carbon'])
-
-    def test_cron(self):
-        self.top(['cron'])
-
-    def test_deborphan(self):
-        self.top(['deborphan'])
-
-    def test_denyhosts(self):
-        self.top(['denyhosts'])
+    # def test_carbon(self):
+    #     self.top(['carbon'])
+    #
+    # def test_cron(self):
+    #     self.top(['cron'])
+    #
+    # def test_deborphan(self):
+    #     self.top(['deborphan'])
+    #
+    # def test_denyhosts(self):
+    #     self.top(['denyhosts'])
 
     def test_diamond(self):
         self.top(['diamond'])
@@ -506,6 +519,7 @@ class IntegrationFull(BaseIntegration):
 
     def test_carbon(self):
         self.top(['carbon', 'carbon.nrpe'])
+        # use check_nrpe to verify that carbon is running
 
     def test_cron(self):
         self.top(['cron', 'cron.diamond', 'cron.nrpe'])

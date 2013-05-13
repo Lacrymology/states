@@ -12,3 +12,11 @@ ruby:
       - ruby1.8-dev
       - ruby1.9.3
       - ruby1.9.1-dev
+
+/.gem:
+  file:
+    - absent
+
+/var/lib/gems:
+  file:
+    - absent

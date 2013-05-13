@@ -7,7 +7,6 @@
 graylog2-server:
   service:
     - dead
-    - enable: False
 
 {% for file in ('/etc/graylog2.conf', server_root_dir, '/etc/graylog2-elasticsearch.yml', '/etc/init/graylog2-server.conf') %}
 {{ file }}:

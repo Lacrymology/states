@@ -7,7 +7,6 @@ include:
 salt-master:
   service:
     - dead
-    - enable: False
   pkg:
     - purged
     - require:

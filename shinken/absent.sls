@@ -14,7 +14,6 @@
 shinken-{{ role }}:
   service:
     - dead
-    - enable: False
 {% endfor %}
 
 shinken:

@@ -29,4 +29,3 @@ salt-minion:
       - service: salt-minion
   service:
     - dead
-    - enabe: False

@@ -39,7 +39,6 @@ salt-api:
       - service: salt-api
   service:
     - dead
-    - enable: False
 
 /etc/salt/master.d/ui.conf:
   file:

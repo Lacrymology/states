@@ -14,7 +14,6 @@ nginx:
       - service: nginx
   service:
     - dead
-    - enable: False
 
 {% for type in ('etc', 'var/log', 'etc/logrotate.d') %}
 /{{ type }}/nginx:
@@ -33,5 +32,4 @@ nginx-logger-{{ log_type }}:
       - service: nginx-logger-{{ log_type }}
   service:
     - dead
-    - enable: False
 {% endfor %}

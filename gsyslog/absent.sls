@@ -5,7 +5,6 @@
 gsyslog:
   service:
     - dead
-    - enable: False
 
 /etc/logrotate.d/gsyslog:
   file:

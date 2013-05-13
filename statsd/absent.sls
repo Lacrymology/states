@@ -9,7 +9,6 @@ statsd:
       - service: statsd
   service:
     - dead
-    - enable: False
 
 /usr/local/statsd:
   file:

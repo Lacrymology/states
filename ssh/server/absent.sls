@@ -13,7 +13,6 @@ openssh-server:
       - pkg: openssh-server
   service:
     - dead
-    - enable: False
     - name: ssh
 
 {{ salt['user.info']('root')['home'] }}/.ssh/authorized_keys:

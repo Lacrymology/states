@@ -4,7 +4,6 @@
 ttys:
   service:
     - dead
-    - enable: False
     - names:
 {% if grains['virtual'] == 'openvzve' %}
       - tty1

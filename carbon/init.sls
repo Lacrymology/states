@@ -8,6 +8,7 @@ include:
   - graphite.common
   - pip
   - logrotate
+  - python.dev
 
 /etc/logrotate.d/carbon:
   file:

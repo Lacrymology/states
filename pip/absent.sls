@@ -4,9 +4,11 @@
   file:
     - absent
 
+{% if pillar['pip_no_purge_cache']|default(False) %}
 /var/cache/pip:
   file:
     - absent
+{% endif %}
 
 {{ salt['user.info']('root')['home'] }}/.pip:
   file:

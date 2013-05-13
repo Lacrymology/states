@@ -19,4 +19,3 @@ mongodb:
     - name: /etc/logrotate.d/mongodb
   service:
     - dead
-    - enable: False

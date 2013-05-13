@@ -11,10 +11,11 @@ and uninstall. The only deamon that isn't killed in the process is Salt Minion.
 import logging
 import unittest
 import sys
+import os
 
 # until https://github.com/saltstack/salt/issues/4994 is fixed this is
 # required there
-logging.basicConfig(stream=sys.stdout, level=logging.INFO,
+logging.basicConfig(stream=sys.stdout, level=logging.WARN,
                     format="> %(message)s")
 
 import salt.client
@@ -65,6 +66,7 @@ def setUpModule():
     """
     Prepare minion for tests
     """
+    return None
     timeout = 3600
     client = salt.client.LocalClient()
     logger.info("Synchronize minion: pillar, states, modules, returners, etc")
@@ -282,11 +284,19 @@ class BaseIntegration(unittest.TestCase):
         output = self.cmd('state.sls', [','.join(states)])
         # if it's not a list, it's an error
         self.assertEqual(type(output[minion_id]), dict, output[minion_id])
+
         # logger.debug("Output: %s", output)
-        # check that all state had been executed properly
+
+        # check that all state had been executed properly.
+        # build a list of comment of all failed state.
+        errors = {}
         for state in output[minion_id]:
-            self.assertTrue(output[minion_id][state]['result'],
-                            output[minion_id][state]['comment'])
+            if not output[minion_id][state]['result']:
+                errors[output[minion_id][state]['comment']] = True
+        error_list = errors.keys()
+        if error_list:
+            self.fail("Failure to apply: %s%s" % (os.linesep,
+                                                  os.linesep.join(error_list)))
         return output
 
     def top(self, states):
@@ -304,20 +314,20 @@ class Integration(BaseIntegration):
         """
         pass
 
-    def test_apt(self):
-        self.top(['apt'])
-
-    def test_bash(self):
-        self.top(['bash'])
-
-    def test_backup_client(self):
-        self.top(['backup.client'])
-
-    def test_backup_server(self):
-        self.top(['backup.server'])
-
-    def test_build(self):
-        self.top(['build'])
+    # def test_apt(self):
+    #     self.top(['apt'])
+    #
+    # def test_bash(self):
+    #     self.top(['bash'])
+    #
+    # def test_backup_client(self):
+    #     self.top(['backup.client'])
+    #
+    # def test_backup_server(self):
+    #     self.top(['backup.server'])
+    #
+    # def test_build(self):
+    #     self.top(['build'])
 
     def test_carbon(self):
         self.top(['carbon'])

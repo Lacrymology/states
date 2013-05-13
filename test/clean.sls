@@ -99,7 +99,6 @@ clean_pkg:
       - locales
       - lockfile-progs
       - logrotate
-      - lsb-release
       - lshw
       - lsof
       - ltrace

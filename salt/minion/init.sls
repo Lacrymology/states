@@ -36,6 +36,7 @@ salt-minion:
       - salt-minion
       - python-software-properties
       - debconf-utils
+      - lsb-release
 {% if grains['virtual'] != 'openvzve' %}
       - pciutils
       - dmidecode

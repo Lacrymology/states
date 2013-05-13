@@ -15,11 +15,6 @@ salt_minion_master_key:
       - file: salt-minion
 
 salt-minion:
-  apt_repository:
-    - ubuntu_ppa
-    - user: saltstack
-    - name: salt
-    - key_id: 0E27C0A6
   file:
     - managed
     - template: jinja
@@ -42,7 +37,7 @@ salt-minion:
       - dmidecode
 {% endif %}
     - require:
-      - apt_repository: salt-minion
+      - apt_repository: salt
       - cmd: apt_sources
   service:
     - running

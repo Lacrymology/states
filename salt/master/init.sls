@@ -5,7 +5,7 @@
  and use it to install the master.
  #}
 include:
-  - salt.minion
+  - salt
   - git
   - ssh.client
   - pip
@@ -57,7 +57,7 @@ salt-master:
   pkg:
     - latest
     - require:
-      - apt_repository: salt-minion
+      - apt_repository: salt
       - cmd: apt_sources
   service:
     - running

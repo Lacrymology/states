@@ -7,6 +7,7 @@ include:
   - apt
   - nginx
   - pip
+  - salt
 {% if pillar['salt_master']['ssl']|default(False) %}
   - ssl
 {% endif %}
@@ -45,7 +46,7 @@ salt-api:
     - require:
       - pkg: salt-master
       - pip: salt-api
-      - apt_repository: salt-minion
+      - apt_repository: salt
       - cmd: apt_sources
   pip:
     - installed

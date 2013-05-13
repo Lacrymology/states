@@ -7,7 +7,7 @@
 graphite:
   group:
     - absent
+    - require:
+      - user: graphite
   user:
     - absent
-    - require:
-      - group: graphite

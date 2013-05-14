@@ -46,6 +46,12 @@ salt-api:
     - require:
       - pkg: salt-api
 
+/var/log/upstart/salt-api.log:
+  file:
+    - absent
+    - require:
+      - service: salt-api
+
 /usr/local/salt-ui:
   file:
     - absent

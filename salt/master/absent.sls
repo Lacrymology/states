@@ -18,6 +18,10 @@ GitPython:
     - removed
 {% endif %}
 
-/srv/salt:
+{% for file in ('/var/log/upstart/salt-master.log', '/srv/salt', '/srv/pillar') %}
+{{ file }}:
   file:
     - absent
+    - require:
+      - service: salt-master
+{% endfor %}

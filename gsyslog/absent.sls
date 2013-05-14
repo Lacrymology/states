@@ -10,7 +10,7 @@ gsyslog:
   file:
     - absent
 
-{% for file in ('/etc/gsyslog.d', '/etc/gsyslogd.conf', '/usr/local/gsyslog', '/etc/init/gsyslogd.conf') %}
+{% for file in ('/etc/gsyslog.d', '/etc/gsyslogd.conf', '/usr/local/gsyslog', '/etc/init/gsyslogd.conf', '/var/log/upstart/gsyslogd.log') %}
 {{ file }}:
   file:
     - absent

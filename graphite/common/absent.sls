@@ -4,6 +4,12 @@
     - absent
 {% endfor %}
 
+{% if pillar['destructive_absent']|default(False) %}
+/var/lib/graphite:
+  file:
+    - absent
+{% endif %}
+
 graphite:
   user:
     - absent

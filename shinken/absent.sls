@@ -14,6 +14,11 @@
 shinken-{{ role }}:
   service:
     - dead
+  file:
+    - absent
+    - name: /var/log/upstart/shinken-{{ role }}.log
+    - require:
+      - service: shinken-{{ role }}
 {% endfor %}
 
 shinken:

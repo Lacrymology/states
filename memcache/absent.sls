@@ -13,3 +13,9 @@ memcached:
     - purged
     - require:
       - service: memcached
+
+/tmp/memcached.sock:
+  file:
+    - absent
+    - require:
+      - service: memcached

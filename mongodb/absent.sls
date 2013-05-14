@@ -19,3 +19,19 @@ mongodb:
     - name: /etc/logrotate.d/mongodb
   service:
     - dead
+
+{% if pillar['destructive_absent']|default(False) %}
+/var/lib/mongodb:
+  file:
+    - absent
+    - require:
+      - pkg: mongodb
+{% endif %}
+
+{% for log in ('mongodb', 'upstart/mongodb.log') %}
+/var/log/{{ log }}:
+  file:
+    - absent
+    - pkg:
+      - pkg: mongodb
+{% endfor %}

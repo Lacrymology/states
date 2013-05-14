@@ -29,3 +29,9 @@ salt-minion:
       - service: salt-minion
   service:
     - dead
+
+/var/log/upstart/salt-minion.log:
+  file:
+    - absent
+    - require:
+      - service: salt-minion

@@ -98,6 +98,7 @@ sentry_settings:
       - cmd: sentry-migrate-fake
       - module: sentry
       - postgres_database: sentry
+      - user: web
     - watch:
       - module: sentry
       - file: sentry_settings

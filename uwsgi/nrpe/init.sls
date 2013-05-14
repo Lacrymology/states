@@ -45,6 +45,7 @@ include:
     - group: www-data
     - require:
       - pkg: nagios-nrpe-server
+      - user: web
 
 extend:
   nagios-nrpe-server:

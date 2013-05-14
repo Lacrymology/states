@@ -1,6 +1,7 @@
 include:
   - reprepro
   - nginx
+  - web
 {% if pillar['salt_ppa_mirror']['ssl']|default(False) %}
   - ssl
 {% endif %}
@@ -13,6 +14,7 @@ include:
     - mode: 750
     - require:
       - file: /var/lib/reprepro
+      - user: web
 
 /var/lib/reprepro/salt/ubuntu:
   file:
@@ -22,6 +24,7 @@ include:
     - mode: 750
     - require:
       - file: /var/lib/reprepro/salt
+      - user: web
 
 {% set filenames = ('distributions', 'updates') %}
 {% for version in pillar['salt_ppa_mirror']['versions'] %}
@@ -34,6 +37,7 @@ include:
     - mode: 750
     - require:
       - file: /var/lib/reprepro/salt/ubuntu
+      - user: web
 
 {{ root }}/conf:
   file:
@@ -43,6 +47,7 @@ include:
     - mode: 750
     - require:
       - file: {{ root }}
+      - user: web
 
 {% for filename in filenames %}
 {{ root }}/conf/{{ filename }}:

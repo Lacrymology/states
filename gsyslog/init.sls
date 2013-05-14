@@ -142,6 +142,12 @@ rsyslog:
     - require:
       - module: sysklogd
 #}
+ file:
+    - absent
+    - name: /var/log/upstart/rsyslog.log
+    - require:
+      - cmd: rsyslog
+{#      - pkg: rsyslog#}
 
 {% for cron in ('weekly', 'daily') %}
 /etc/cron.{{ cron }}/sysklogd:

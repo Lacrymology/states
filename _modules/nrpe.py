@@ -48,7 +48,7 @@ def run_check(check_name):
         return ret
 
     output = __salt__['cmd.run_all'](checks[check_name], runas='nagios')
-    ret['content'] = "stdout: '{0}' stderr: '{1}'".format(output['stdout'],
+    ret['comment'] = "stdout: '{0}' stderr: '{1}'".format(output['stdout'],
                                                           output['stderr'])
     ret['result'] = output['retcode'] == 0
     return ret

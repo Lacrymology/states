@@ -142,7 +142,7 @@ rsyslog:
     - require:
       - module: sysklogd
 #}
- file:
+  file:
     - absent
     - name: /var/log/upstart/rsyslog.log
     - require:

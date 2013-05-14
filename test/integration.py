@@ -23,12 +23,20 @@ logging.basicConfig(stream=sys.stdout, level=logging.WARN,
 
 import salt.client
 
+# global variables
+
 # minion of id of tested host
 minion_id = 'integration-all'
-# global variable used to skip all test if the cleanup process had failed
+# used to skip all test if the cleanup process had failed
 # there is no good reasons to test if the minion isn't back to it's original
 # state.
 clean_up_failed = False
+# prevent to run clean() twice
+is_clean = False
+# list of process built after the initial cleanup, this is list is used
+# to compare subsequent cleanup to see if there is still remaining running
+# processes
+process_list = None
 
 logger = logging.getLogger()
 
@@ -69,7 +77,8 @@ def setUpModule():
     """
     Prepare minion for tests
     """
-    # return None
+    if 'SKIP_SETUPMODULE' in os.environ:
+        return
     timeout = 3600
     client = salt.client.LocalClient()
     logger.info("Synchronize minion: pillar, states, modules, returners, etc")
@@ -103,7 +112,6 @@ class BaseIntegration(unittest.TestCase):
 
     client = None
     timeout = 3600
-    initial_running_procs = []
 
     # list of absent state (without .absent suffix)
     # commented state aren't necessary as an other absent state will clean
@@ -236,12 +244,19 @@ class BaseIntegration(unittest.TestCase):
         """
         Clean up the minion before each test.
         """
-        global clean_up_failed
+        global clean_up_failed, is_clean, process_list
+
         if clean_up_failed:
             logger.info("Skip test because it previously failed")
             self.skipTest("Previous cleanup failed")
         else:
             logger.debug("Go ahead, cleanup never failed before")
+
+        if is_clean:
+            logger.debug("Don't cleanup, it's already done")
+            return
+        else:
+            logger.debug("Not clean, run cleanup")
 
         logger.info("Run absent for all states")
         try:
@@ -268,6 +283,18 @@ class BaseIntegration(unittest.TestCase):
                         '/tmp/pip-build-root'):
             logger.info("Cleanup %s", dirname)
             self.cmd('file.remove', dirname)
+
+        if process_list is None:
+            process_list = self.list_user_space_processes()
+            logger.debug("First cleanup, keep list of %d process",
+                         len(process_list))
+        else:
+            actual = self.list_user_space_processes()
+            logger.debug("Check %d proccess", len(actual))
+            for process in actual:
+                if process not in process_list:
+                    clean_up_failed = True
+                    self.skipTest("Process '%s' is still running after cleanup")
 
     def cmd(self, *args, **kwargs):
         """
@@ -300,8 +327,10 @@ class BaseIntegration(unittest.TestCase):
         return output
 
     def top(self, states):
+        global is_clean
         logger.info("Run top: %s", ', '.join(states))
         self.sls(states)
+        is_clean = False
 
     def check_nrpe(self, check_name):
         """
@@ -637,84 +666,3 @@ class IntegrationFull(BaseIntegration):
 
 if __name__ == '__main__':
     unittest.main()
-
-# integration-all:
-#     ----------
-#     1:
-#         ----------
-#         cmd:
-#             /sbin/init
-#         user:
-#             root
-#     10556:
-#         ----------
-#         cmd:
-#             [flush-202:1]
-#         user:
-#             root
-#     12261:
-#         ----------
-#         cmd:
-#             python /usr/bin/salt-minion
-#         user:
-#             root
-#     15851:
-#         ----------
-#         cmd:
-#             upstart-udev-bridge --daemon
-#         user:
-#             root
-#     15853:
-#         ----------
-#         cmd:
-#             /sbin/udevd --daemon
-#         user:
-#             root
-#     15859:
-#         ----------
-#         cmd:
-#             python /usr/bin/salt-minion
-#         user:
-#             root
-#     15860:
-#         ----------
-#         cmd:
-#             /bin/sh -c ps -efH
-#         user:
-#             root
-#     15861:
-#         ----------
-#         cmd:
-#             ps -efH
-#         user:
-#             root
-#     436:
-#         ----------
-#         cmd:
-#             upstart-socket-bridge --daemon
-#         user:
-#             root
-#     470:
-#         ----------
-#         cmd:
-#             dhclient3 -e IF_METRIC=100 -pf /var/run/dhclient.eth0.pid -lf /var/lib/dhcp/dhclient.eth0.leases -1 eth0
-#         user:
-#             root
-#     813:
-#         ----------
-#         cmd:
-#             /sbin/getty -8 38400 tty1
-#         user:
-#             root
-#     9961:
-#         ----------
-#         cmd:
-#             sshd: root@pts/5
-#         user:
-#             root
-#     9971:
-#         ----------
-#         cmd:
-#             -bash
-#         user:
-#             root

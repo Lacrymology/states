@@ -7,6 +7,7 @@
 
 include:
   - git
+  - ssh.server
 
 git-server:
   user:

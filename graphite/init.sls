@@ -38,7 +38,7 @@ graphite_logdir:
     - makedirs: True
     - require:
       - user: web
-      - group: graphite
+      - user: graphite
       - file: /var/log/graphite
 
 graphite_graph_templates:
@@ -52,7 +52,7 @@ graphite_graph_templates:
     - source: salt://graphite/graph_templates.jinja2
     - require:
       - user: web
-      - group: graphite
+      - user: graphite
       - file: /etc/graphite
 
 graphite_wsgi:
@@ -148,7 +148,7 @@ graphite-urls-patch:
     - mode: 440
     - require:
       - user: web
-      - group: graphite
+      - user: graphite
       - module: graphite-web
 
 graphite_settings:
@@ -162,7 +162,7 @@ graphite_settings:
     - source: salt://graphite/config.jinja2
     - require:
       - user: web
-      - group: graphite
+      - user: graphite
       - module: graphite-web
   postgres_user:
     - present

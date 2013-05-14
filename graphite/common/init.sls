@@ -7,8 +7,6 @@ include:
   - web
 
 graphite:
-  group:
-    - present
   user:
     - present
     - shell: /bin/false
@@ -19,8 +17,7 @@ graphite:
     - groups:
       - www-data
     - require:
-      - group: web
-      - group: graphite
+      - user: web
   virtualenv:
     - managed
     - name: /usr/local/graphite
@@ -35,7 +32,7 @@ graphite:
     - mode: 770
     - require:
       - user: web
-      - group: graphite
+      - user: graphite
 
 /etc/graphite:
   file:

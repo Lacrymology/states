@@ -20,8 +20,6 @@ bash:
     - require:
       - pkg: bash
 
-root_profile:
+{{ salt['user.info']('root')['home'] }}/.bashrc:
   file:
-    - append
-    - name: {{ salt['user.info']('root')['home'] }}/.bashrc
-    - text: source /etc/profile.d/bash_prompt.sh
+    - absent

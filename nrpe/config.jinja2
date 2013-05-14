@@ -7,3 +7,4 @@ command[check_zombie_procs]=/usr/lib/nagios/plugins/check_procs -w 5 -c 10 -s Z
 command[check_total_procs]=/usr/lib/nagios/plugins/check_procs -w 150 -c 200
 command[check_memory]=/usr/lib/nagios/plugins/check_memory.py -w 90 -c 95
 command[check_loopback]=/usr/lib/nagios/plugins/check_ping -H 127.0.0.1 -p 1 -w 100,100% -c 100,100%
+command[check_nrpe]=/usr/lib/nagios/plugins/check_procs -u nagios -C nrpe -c 1:1

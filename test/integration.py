@@ -8,6 +8,9 @@ and uninstall. The only deamon that isn't killed in the process is Salt Minion.
 
 """
 
+# TODO: faire une liste de fichier AVANT et APRES les tests pour
+# afficher les differences
+
 import logging
 import unittest
 import sys
@@ -26,8 +29,6 @@ minion_id = 'integration-all'
 # there is no good reasons to test if the minion isn't back to it's original
 # state.
 clean_up_failed = False
-# just to keep some stats
-states_tested = {}
 
 logger = logging.getLogger()
 
@@ -68,7 +69,7 @@ def setUpModule():
     """
     Prepare minion for tests
     """
-    return None
+    # return None
     timeout = 3600
     client = salt.client.LocalClient()
     logger.info("Synchronize minion: pillar, states, modules, returners, etc")
@@ -95,17 +96,6 @@ def setUpModule():
                            timeout=timeout))
 
 
-def tearDownModule():
-    global states_tested
-    print ''
-    print "Tested sls file: number of execution"
-    print "------------------------------------"
-    states = states_tested.keys()
-    states.sort()
-    for state_name in states:
-        print "%s: %d" % (state_name, states_tested[state_name])
-
-
 class BaseIntegration(unittest.TestCase):
     """
     Common logic to all Integration test class
@@ -113,6 +103,7 @@ class BaseIntegration(unittest.TestCase):
 
     client = None
     timeout = 3600
+    initial_running_procs = []
 
     # list of absent state (without .absent suffix)
     # commented state aren't necessary as an other absent state will clean
@@ -153,6 +144,7 @@ class BaseIntegration(unittest.TestCase):
         # 'graylog2.web.nrpe',
         'graylog2.web',
         # 'gsyslog.nrpe',
+        'graylog2',
         'gsyslog',
         'logrotate',
         # 'memcache.diamond',
@@ -272,7 +264,8 @@ class BaseIntegration(unittest.TestCase):
         # stuff. as there is no way to keep a list of installed dependencies of
         # what we install in state, it's better to just wipe out those
         # directories
-        for dirname in ('/usr/local', '/usr/lib/nagios/plugins'):
+        for dirname in ('/usr/local', '/usr/lib/nagios/plugins',
+                        '/tmp/pip-build-root'):
             logger.info("Cleanup %s", dirname)
             self.cmd('file.remove', dirname)
 
@@ -281,31 +274,25 @@ class BaseIntegration(unittest.TestCase):
         Run specified cmd to this minion with a pre-defined timeout
         """
         kwargs['timeout'] = self.timeout
-        return self.client.cmd(minion_id, *args, **kwargs)
+        return self.client.cmd(minion_id, *args, **kwargs)[minion_id]
 
     def sls(self, states):
         """
         Apply specified list of states
         """
-        global states_tested
         logger.debug("Run states: %s", ', '.join(states))
-        for state in states:
-            try:
-                states_tested[state] += 1
-            except KeyError:
-                states_tested[state] = 1
         output = self.cmd('state.sls', [','.join(states)])
         # if it's not a list, it's an error
-        self.assertEqual(type(output[minion_id]), dict, output[minion_id])
+        self.assertEqual(type(output), dict, output)
 
         # logger.debug("Output: %s", output)
 
         # check that all state had been executed properly.
         # build a list of comment of all failed state.
         errors = {}
-        for state in output[minion_id]:
-            if not output[minion_id][state]['result']:
-                errors[output[minion_id][state]['comment']] = True
+        for state in output:
+            if not output[state]['result']:
+                errors[output[state]['comment']] = True
         error_list = errors.keys()
         if error_list:
             self.fail("Failure to apply: %s%s" % (os.linesep,
@@ -315,6 +302,28 @@ class BaseIntegration(unittest.TestCase):
     def top(self, states):
         logger.info("Run top: %s", ', '.join(states))
         self.sls(states)
+
+    def check_nrpe(self, check_name):
+        """
+        Run a Nagios NRPE check as a test
+        """
+        logger.debug("Run NRPE check '%s'", check_name)
+        output = self.cmd('nrpe.run_check', [check_name])
+        self.assertTrue(output['result'], output['comment'])
+
+    def list_user_space_processes(self):
+        """
+        return the process name of all running on minion
+        """
+        result = self.cmd('status.procs')
+        output = []
+        for pid in result:
+            name = result[pid]['name']
+            if not name.startswith('['):
+                output.append(name)
+            else:
+                logger.debug("skip kernel process %s: %s", pid, name)
+        return output
 
 
 class Integration(BaseIntegration):
@@ -327,32 +336,32 @@ class Integration(BaseIntegration):
         """
         pass
 
-    # def test_apt(self):
-    #     self.top(['apt'])
-    #
-    # def test_bash(self):
-    #     self.top(['bash'])
-    #
-    # def test_backup_client(self):
-    #     self.top(['backup.client'])
-    #
-    # def test_backup_server(self):
-    #     self.top(['backup.server'])
-    #
-    # def test_build(self):
-    #     self.top(['build'])
+    def test_apt(self):
+        self.top(['apt'])
 
-    # def test_carbon(self):
-    #     self.top(['carbon'])
-    #
-    # def test_cron(self):
-    #     self.top(['cron'])
-    #
-    # def test_deborphan(self):
-    #     self.top(['deborphan'])
-    #
-    # def test_denyhosts(self):
-    #     self.top(['denyhosts'])
+    def test_bash(self):
+        self.top(['bash'])
+
+    def test_backup_client(self):
+        self.top(['backup.client'])
+
+    def test_backup_server(self):
+        self.top(['backup.server'])
+
+    def test_build(self):
+        self.top(['build'])
+
+    def test_carbon(self):
+        self.top(['carbon'])
+
+    def test_cron(self):
+        self.top(['cron'])
+
+    def test_deborphan(self):
+        self.top(['deborphan'])
+
+    def test_denyhosts(self):
+        self.top(['denyhosts'])
 
     def test_diamond(self):
         self.top(['diamond'])
@@ -509,6 +518,8 @@ class IntegrationFull(BaseIntegration):
 
     def test_apt(self):
         self.top(['apt', 'apt.nrpe'])
+        self.check_nrpe('check_apt_rc')
+        self.check_nrpe('check_apt')
 
     def test_backup_client(self):
         self.top(['backup.client', 'backup.client.diamond'])
@@ -519,23 +530,29 @@ class IntegrationFull(BaseIntegration):
 
     def test_carbon(self):
         self.top(['carbon', 'carbon.nrpe'])
-        # use check_nrpe to verify that carbon is running
+        self.check_nrpe('check_carbon_a')
 
     def test_cron(self):
         self.top(['cron', 'cron.diamond', 'cron.nrpe'])
+        self.check_nrpe('check_cron')
 
     def test_denyhosts(self):
         self.top(['denyhosts', 'denyhosts.diamond', 'denyhosts.nrpe'])
+        self.check_nrpe('check_denyhosts')
 
     def test_diamond(self):
         self.top(['diamond', 'diamond.nrpe'])
+        self.check_nrpe('check_diamond')
 
     def test_elasticsearch(self):
         self.top(['elasticsearch', 'elasticsearch.diamond',
                   'elasticsearch.nrpe'])
+        self.check_nrpe('check_elasticsearch')
+        self.check_nrpe('check_elasticsearch_cluster')
 
     def test_firewall(self):
         self.top(['firewall', 'firewall.gsyslog', 'firewall.nrpe'])
+        self.check_nrpe('check_firewall')
 
     def test_git_server(self):
         self.top(['git.server', 'git.server.diamond'])
@@ -543,6 +560,13 @@ class IntegrationFull(BaseIntegration):
     def test_graphite(self):
         self.top(['graphite', 'graphite.backup', 'graphite.nrpe',
                   'graphite.diamond'])
+        self.check_nrpe('check_graphite_master')
+        self.check_nrpe('check_graphite_worker')
+        self.check_nrpe('check_graphite_uwsgi')
+        self.check_nrpe('check_graphite_http')
+        self.check_nrpe('check_graphite_https')
+        self.check_nrpe('check_graphite_https_certificate')
+        self.check_nrpe('check_postgresql_graphite')
 
     def test_graylog2(self):
         self.top(['graylog2.server', 'graylog2.server.nrpe',
@@ -613,3 +637,84 @@ class IntegrationFull(BaseIntegration):
 
 if __name__ == '__main__':
     unittest.main()
+
+# integration-all:
+#     ----------
+#     1:
+#         ----------
+#         cmd:
+#             /sbin/init
+#         user:
+#             root
+#     10556:
+#         ----------
+#         cmd:
+#             [flush-202:1]
+#         user:
+#             root
+#     12261:
+#         ----------
+#         cmd:
+#             python /usr/bin/salt-minion
+#         user:
+#             root
+#     15851:
+#         ----------
+#         cmd:
+#             upstart-udev-bridge --daemon
+#         user:
+#             root
+#     15853:
+#         ----------
+#         cmd:
+#             /sbin/udevd --daemon
+#         user:
+#             root
+#     15859:
+#         ----------
+#         cmd:
+#             python /usr/bin/salt-minion
+#         user:
+#             root
+#     15860:
+#         ----------
+#         cmd:
+#             /bin/sh -c ps -efH
+#         user:
+#             root
+#     15861:
+#         ----------
+#         cmd:
+#             ps -efH
+#         user:
+#             root
+#     436:
+#         ----------
+#         cmd:
+#             upstart-socket-bridge --daemon
+#         user:
+#             root
+#     470:
+#         ----------
+#         cmd:
+#             dhclient3 -e IF_METRIC=100 -pf /var/run/dhclient.eth0.pid -lf /var/lib/dhcp/dhclient.eth0.leases -1 eth0
+#         user:
+#             root
+#     813:
+#         ----------
+#         cmd:
+#             /sbin/getty -8 38400 tty1
+#         user:
+#             root
+#     9961:
+#         ----------
+#         cmd:
+#             sshd: root@pts/5
+#         user:
+#             root
+#     9971:
+#         ----------
+#         cmd:
+#             -bash
+#         user:
+#             root

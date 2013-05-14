@@ -36,6 +36,7 @@ clean_pkg:
       - apport
       - apport-symptoms
       - apt-transport-https
+      - apt-utils
       - apt-xapian-index
       - aptitude
       - at
@@ -51,12 +52,15 @@ clean_pkg:
       - command-not-found
       - command-not-found-data
       - console-setup
+      - cpp
+      - cpp-4.6
       - cron
       - curl
       - dbus
       - dmidecode
       - dnsutils
       - dosfstools
+      - dpkg-dev
       - ed
       - eject
       - euca2ools
@@ -65,6 +69,8 @@ clean_pkg:
       - ftp
       - fuse
       - fuse-utils
+      - g++
+      - gcc
       - geoip-database
       - gir1.2-glib-2.0
       - groff-base
@@ -90,6 +96,8 @@ clean_pkg:
       - libclass-isa-perl
       - libcurl3
       - libcurl3-gnutls
+      - libdpkg-perl
+      - liberror-perl
       - libio-string-perl
       - libjs-jquery
       - liblockfile-bin
@@ -127,6 +135,7 @@ clean_pkg:
       - ppp
       - pppconfig
       - pppoeconf
+      - psmisc
       - python-apport
       - python-apt
       - python-apt-common

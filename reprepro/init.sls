@@ -15,4 +15,4 @@ reprepro:
     - group: www-data
     - mode: 750
     - require:
-      - group: www-data
+      - user: web

@@ -2,7 +2,7 @@
  Uninstall a gsyslogd server, it's a sysklogd/rsyslog replacement
 #}
 
-gsyslog:
+gsyslogd:
   service:
     - dead
 

@@ -18,7 +18,7 @@ import os
 
 # until https://github.com/saltstack/salt/issues/4994 is fixed this is
 # required there
-logging.basicConfig(stream=sys.stdout, level=logging.WARN,
+logging.basicConfig(stream=sys.stdout, level=logging.DEBUG,
                     format="> %(message)s")
 
 import salt.client
@@ -59,26 +59,26 @@ def if_change(result):
     return False
 
 
-def check_error(ret):
-    """
-    Check if any state failed
-    """
-    if type(ret[minion_id]) != dict:
-        raise ValueError(ret[minion_id])
-    try:
-        for change in ret[minion_id]:
-            if not ret[change]['result']:
-                raise ValueError(ret[change])
-    except Exception, err:
-        raise ValueError("%s: %s" % (err, ret))
-
-
 def setUpModule():
     """
     Prepare minion for tests
     """
     if 'SKIP_SETUPMODULE' in os.environ:
         return
+
+    def check_error(ret):
+        """
+        Check if any state failed in setUpModule
+        """
+        if type(ret[minion_id]) != dict:
+            raise ValueError(ret[minion_id])
+        try:
+            for change in ret[minion_id]:
+                if not ret[change]['result']:
+                    raise ValueError(ret[change])
+        except Exception, err:
+            raise ValueError("%s: %s" % (err, ret))
+
     timeout = 3600
     client = salt.client.LocalClient()
     logger.info("Synchronize minion: pillar, states, modules, returners, etc")
@@ -247,7 +247,6 @@ class BaseIntegration(unittest.TestCase):
         global clean_up_failed, is_clean, process_list
 
         if clean_up_failed:
-            logger.info("Skip test because it previously failed")
             self.skipTest("Previous cleanup failed")
         else:
             logger.debug("Go ahead, cleanup never failed before")
@@ -255,34 +254,34 @@ class BaseIntegration(unittest.TestCase):
         if is_clean:
             logger.debug("Don't cleanup, it's already done")
             return
-        else:
-            logger.debug("Not clean, run cleanup")
 
         logger.info("Run absent for all states")
-        try:
-            self.sls(self.absent)
-        except Exception, err:
-            clean_up_failed = True
-            logger.error("Fail to run absent: %s", err)
-            self.skipTest(err)
+        self.sls(self.absent)
 
         # Go back on the same installed packages as after :func:`setUpClass`
         logger.info("Unfreeze installed packages")
         try:
-            self.cmd('apt_installed.unfreeze')
+            output = self.cmd('apt_installed.unfreeze')
         except Exception, err:
-            logger.error(err)
             clean_up_failed = True
-            self.skipTest(err)
+            self.fail(err)
+        else:
+            try:
+                if not output['result']:
+                    clean_up_failed = True
+                    self.fail(output['result'])
+            except TypeError:
+                clean_up_failed = True
+                self.fail(output)
 
-        # wipe /usr/local because it mostly contains pip and gems installed
+        # wipe /usr/local because it mostly contains pip installed
         # stuff. as there is no way to keep a list of installed dependencies of
         # what we install in state, it's better to just wipe out those
         # directories
         for dirname in ('/usr/local', '/usr/lib/nagios/plugins',
                         '/tmp/pip-build-root'):
             logger.info("Cleanup %s", dirname)
-            self.cmd('file.remove', dirname)
+            self.cmd('file.remove', [dirname])
 
         if process_list is None:
             process_list = self.list_user_space_processes()
@@ -291,10 +290,17 @@ class BaseIntegration(unittest.TestCase):
         else:
             actual = self.list_user_space_processes()
             logger.debug("Check %d proccess", len(actual))
+            unclean = []
             for process in actual:
                 if process not in process_list:
-                    clean_up_failed = True
-                    self.skipTest("Process '%s' is still running after cleanup")
+                    unclean.append(process)
+
+            if unclean:
+                clean_up_failed = True
+                self.fail("Process that still run after cleanup: %s" % (
+                          os.linesep.join(unclean)))
+
+        is_clean = True
 
     def cmd(self, *args, **kwargs):
         """
@@ -308,11 +314,12 @@ class BaseIntegration(unittest.TestCase):
         Apply specified list of states
         """
         logger.debug("Run states: %s", ', '.join(states))
-        output = self.cmd('state.sls', [','.join(states)])
-        # if it's not a list, it's an error
+        try:
+            output = self.cmd('state.sls', [','.join(states)])
+        except Exception, err:
+            self.fail(err)
+        # if it's not a dict, it's an error
         self.assertEqual(type(output), dict, output)
-
-        # logger.debug("Output: %s", output)
 
         # check that all state had been executed properly.
         # build a list of comment of all failed state.
@@ -328,9 +335,9 @@ class BaseIntegration(unittest.TestCase):
 
     def top(self, states):
         global is_clean
+        is_clean = False
         logger.info("Run top: %s", ', '.join(states))
         self.sls(states)
-        is_clean = False
 
     def check_nrpe(self, check_name):
         """
@@ -342,16 +349,15 @@ class BaseIntegration(unittest.TestCase):
 
     def list_user_space_processes(self):
         """
-        return the process name of all running on minion
+        return the command name of all running processes on minion
         """
         result = self.cmd('status.procs')
         output = []
         for pid in result:
-            name = result[pid]['name']
+            name = result[pid]['cmd']
+            # kernel process are like this: [xfs]
             if not name.startswith('['):
                 output.append(name)
-            else:
-                logger.debug("skip kernel process %s: %s", pid, name)
         return output
 
 

@@ -2,10 +2,6 @@
  Minimal state for any web-based running apps
  #}
 web:
-  group:
-    - present
-    - name: www-data
-    - system: True
   user:
     - present
     - name: www-data
@@ -16,8 +12,6 @@ web:
     - home: /var/www
     - password: "*"
     - enforce_password: True
-    - require:
-      - group: web
   file:
     - directory
     - name: /var/www
@@ -26,4 +20,3 @@ web:
     - mode: 775
     - require:
       - user: web
-      - group: web

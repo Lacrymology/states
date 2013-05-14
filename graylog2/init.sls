@@ -13,4 +13,4 @@ include:
     - mode: 770
     - makedirs: True
     - require:
-      - group: web
+      - user: web

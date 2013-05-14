@@ -15,5 +15,5 @@ gsyslogd:
   file:
     - absent
     - require:
-      - service: gsyslog
+      - service: gsyslogd
 {% endfor %}

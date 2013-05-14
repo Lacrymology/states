@@ -1,4 +1,8 @@
 build:
   pkg:
     - purged
-    - name: build-essential
+    - names:
+      - g++
+      - gcc
+      - libc-dev
+      - make

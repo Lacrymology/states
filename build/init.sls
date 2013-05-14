@@ -4,6 +4,10 @@ include:
 build:
   pkg:
     - installed
-    - name: build-essential
+    - names:
+      - g++
+      - gcc
+      - libc-dev
+      - make
     - require:
       - cmd: apt_sources

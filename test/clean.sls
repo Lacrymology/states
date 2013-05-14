@@ -6,6 +6,8 @@
 
 include:
   - deborphan
+  - ttys
+  - kernel_modules
 
 {#
  You can't uninstall sudo, if no root password
@@ -200,6 +202,30 @@ clean_pkg:
       - xml-core
     - require:
       - user: root
+
+{% for service in ('acpid', 'console-setup', 'dbus', 'whoopsie') %}
+/var/log/upstart/{{ service }}.log:
+  file:
+    - absent
+    - require:
+      - pkg: clean_pkg
+{% endfor %}
+
+{% for pkg in ('cloud-init', 'ufw') %}
+/var/log/{{ pkg }}.log:
+  file:
+    - absent
+    - require:
+      - pkg: clean_pkg
+{% endfor %}
+
+{% for file in ('/tmp/bootstrap-salt.log', '/var/lib/cloud', '/var/cache/apt-xapian-index') %}
+{{ file }}:
+  file:
+    - absent
+    - require:
+      - pkg: clean_pkg
+{% endfor %}
 
 {% if salt['cmd.has_exec']('deborphan') %}
 {% for pkg in salt['cmd.run']('deborphan').split("\n") %}

@@ -24,14 +24,20 @@ useless_kmod:
       - msdos
       - jfs
       - isofs
+      - xfs
+      - btrfs
 {% if 'availabilityZone' in grains %}
       - acpiphp
       - ext2
 {% endif %}
 
-fat:
+dependencies_kmod:
   kmod:
     - absent
+    - names:
+      - fat
+      - libcrc32c
+      - zlib_deflate
     - require:
       - kmod: useless_kmod
 {% endif %}

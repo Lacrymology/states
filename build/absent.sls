@@ -4,5 +4,4 @@ build:
     - names:
       - g++
       - gcc
-      - libc-dev
       - make

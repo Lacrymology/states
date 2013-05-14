@@ -4,6 +4,10 @@
 include:
   - virtualenv
 
+/var/log/statsd.log:
+  file:
+    - absent
+
 statsd:
   file:
     - managed

@@ -92,6 +92,7 @@ clean_pkg:
       - language-selector-common
       - laptop-detect
       - less
+      - libapt-inst1.4
       - libclass-accessor-perl
       - libclass-isa-perl
       - libcurl3

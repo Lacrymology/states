@@ -3,6 +3,7 @@
  #}
 {% set ssl = salt['pillar.get']('postgresql:ssl', False) %}
 include:
+  - hostname
   - postgresql
   - apt
 {% if ssl %}

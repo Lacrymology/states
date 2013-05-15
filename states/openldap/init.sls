@@ -39,19 +39,24 @@ slapd_change_log_level:
       - file: /tmp/logging.ldif
       - service: slapd
 
-{% for i in ('cacert.pem', 'servercrt.pem', 'serverkey.pem') %}
-/etc/ldap/tls/{{ i }}:
+/etc/ssl/private/ldap.pem:
   file:
     - managed
-    - source: salt://openldap/{{ i }}
+    - source: salt://openldap/serverkey.pem
+    - user: openldap
+    - group: openldap
+    - mode: 600
+    - makedirs: true
+
+/etc/ssl/certs/ldap.pem:
+  file:
+    - managed
+    - source: salt://openldap/servercrt.pem
     - user: openldap
     - group: openldap
     - makedirs: true
-    - require:
-      - pkg: slapd
-{% endfor %}
 
-/etc/ssl/certs/ldap.pem:
+/etc/ssl/certs/ldapca.pem:
   file:
     - managed
     - source: salt://openldap/cacert.pem
@@ -71,12 +76,11 @@ slapd_set_tls_directives:
     - require:
       - service: slapd
       - file: /tmp/tls.ldif
-
 {# Cert/key must be created use GNUTLS
 openssl is not compatible with ubuntu ldap #}
-{% for i in ('cacert.pem', 'servercrt.pem', 'serverkey.pem') %}
-      - file: /etc/ldap/tls/{{ i }}
-{% endfor %}
+      - file: /etc/ssl/private/ldap.pem
+      - file: /etc/ssl/certs/ldap.pem
+      - file: /etc/ssl/certs/ldapca.pem
 
 /etc/ldap/ldap.conf:
   file:

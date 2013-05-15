@@ -5,8 +5,10 @@
 {{ file }}:
   file:
     - absent
-    - require:
 {% for instance in salt['pillar.get']('graphite:carbon:instances', []) %}
+{% if loop.first %}
+    - require:
+{% endif %}
       - service: carbon-{{ instance }}
 {% endfor %}
 {% endfor %}

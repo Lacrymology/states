@@ -108,6 +108,7 @@ carbon-{{ instance }}:
   service:
     - running
     - enable: True
+{# until https://github.com/saltstack/salt/issues/5027 is fixed, this is required #}
     - sig: /usr/local/graphite/bin/python /usr/local/graphite/bin/carbon-cache.py --config=/etc/graphite/carbon.conf --instance={{ instance }} start
     - name: carbon-{{ instance }}
     - require:

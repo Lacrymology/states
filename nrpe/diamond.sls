@@ -3,6 +3,7 @@
 #}
 include:
   - diamond
+  - diamond.nrpe
 
 nrpe_diamond_resources:
   file:

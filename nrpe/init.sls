@@ -5,6 +5,7 @@ include:
   - pip
   - virtualenv
   - apt
+  - apt.nrpe
 
 /usr/local/nagiosplugin:
   file:

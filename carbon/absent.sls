@@ -27,6 +27,8 @@ carbon-{{ instance }}:
   service:
     - dead
     - enable: False
+{# until https://github.com/saltstack/salt/issues/5027 is fixed, this is required #}
+    - sig: /usr/local/graphite/bin/python /usr/local/graphite/bin/carbon-cache.py --config=/etc/graphite/carbon.conf --instance={{ instance }} start
 
 carbon-{{ instance }}-logdir:
   file:

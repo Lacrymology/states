@@ -14,6 +14,9 @@ include:
   - git
   - python.dev
   - virtualenv
+{% if 'shinken_pollers' in pillar %}
+  - diamond.nrpe
+{% endif %}
 
 /etc/diamond:
   file:

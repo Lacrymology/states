@@ -8,6 +8,9 @@ include:
   - virtualenv.nrpe
   - apt
   - apt.nrpe
+{% if 'graphite_address' in pillar %}
+  - nrpe.diamond
+{% endif %}
 
 /usr/local/nagiosplugin:
   file:

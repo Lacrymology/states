@@ -14,6 +14,7 @@ include:
   - web
   - apt
   - python.dev
+  - statsd
 {% if pillar['graphite']['web']['ssl']|default(False) %}
   - ssl
 {% endif %}

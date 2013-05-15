@@ -2,7 +2,7 @@
  Remove carbon
  #}
 {% for file in ('/etc/logrotate.d/carbon', '/var/log/graphite/carbon', '/etc/graphite/storage-schemas.conf', '/etc/graphite/carbon.conf') %}
-:
+{{ file }}:
   file:
     - absent
     - require:

@@ -108,6 +108,7 @@ carbon-{{ instance }}:
   service:
     - running
     - enable: True
+    - sig: /usr/local/graphite/bin/python /usr/local/graphite/bin/carbon-cache.py --config=/etc/graphite/carbon.conf --instance={{ instance }} start
     - name: carbon-{{ instance }}
     - require:
       - user: graphite

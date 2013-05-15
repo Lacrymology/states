@@ -3,6 +3,20 @@
 #}
 include:
   - nrpe
+  - postgresql.nrpe
+  - postgresql.server.nrpe
+  - virtualenv.nrpe
+  - graphite.common.nrpe
+  - uwsgi.nrpe
+  - nginx.nrpe
+  - memcache.nrpe
+  - pip.nrpe
+  - apt.nrpe
+  - python.dev.nrpe
+  - statsd.nrpe
+{% if pillar['graphite']['web']['ssl']|default(False) %}
+  - ssl.nrpe
+{% endif %}
 
 /etc/nagios/nrpe.d/graphite.cfg:
   file:

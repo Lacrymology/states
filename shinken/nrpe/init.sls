@@ -3,6 +3,16 @@
 #}
 include:
   - nrpe
+  - virtualenv.nrpe
+  - pip.nrpe
+  - python.dev.nrpe
+  - apt.nrpe
+{% if pillar['shinken']['ssl']|default(False) %}
+  - ssl.nrpe
+{% endif %}
+{% if grains['id'] in pillar['shinken']['architecture']['broker']|default([]) %}
+  - nginx.nrpe
+{% endif %}
 
 {% for role in pillar['shinken']['architecture'] %}
 {% if grains['id'] in pillar['shinken']['architecture'][role] %}

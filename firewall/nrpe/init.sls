@@ -4,6 +4,8 @@
 include:
   - nrpe
   - sudo
+  - sudo.nrpe
+  - apt.nrpe
 
 {#
  this is a constant used to define the -c flag of nagios check that set the

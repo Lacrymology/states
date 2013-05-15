@@ -4,6 +4,12 @@
 {% set ssl = pillar['elasticsearch']['ssl']|default(False) and 'public' in pillar['elasticsearch']['cluster']['nodes'][grains['id']] %}
 include:
   - nrpe
+  - apt.nrpe
+  - cron.nrpe
+{% if ssl %}
+  - ssl.nrpe
+  - nginx.nrpe
+{% endif %}
 
 /etc/nagios/nrpe.d/elasticsearch.cfg:
   file:

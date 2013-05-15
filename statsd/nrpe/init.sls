@@ -3,6 +3,7 @@
 #}
 include:
   - nrpe
+  - virtualenv.nrpe
 
 /etc/nagios/nrpe.d/statsd.cfg:
   file:

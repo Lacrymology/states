@@ -3,6 +3,8 @@
 #}
 include:
   - nrpe
+  - apt.nrpe
+  - postgresql.server.nrpe
 
 /etc/nagios/nrpe.d/proftpd.cfg:
   file:

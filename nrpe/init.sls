@@ -3,7 +3,9 @@
 #}
 include:
   - pip
+  - pip.nrpe
   - virtualenv
+  - virtualenv.nrpe
   - apt
   - apt.nrpe
 

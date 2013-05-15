@@ -3,6 +3,9 @@
 #}
 include:
   - nrpe
+  - pip.nrpe
+  - logrotate.nrpe
+  - python.dev.nrpe
 
 /etc/nagios/nrpe.d/carbon.cfg:
   file:

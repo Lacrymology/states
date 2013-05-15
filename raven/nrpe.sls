@@ -1,0 +1,2 @@
+include:
+  - pip.nrpe

@@ -4,6 +4,8 @@
 include:
   - nrpe
   - elasticsearch.nrpe
+  - mongodb.nrpe
+  - apt.nrpe
 
 {% set version = '0.11.0' %}
 

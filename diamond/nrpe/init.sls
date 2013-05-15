@@ -4,6 +4,9 @@
 include:
   - nrpe
   - nrpe.diamond
+  - git.nrpe
+  - python.dev.nrpe
+  - virtualenv.nrpe
 
 /etc/nagios/nrpe.d/diamond.cfg:
   file:

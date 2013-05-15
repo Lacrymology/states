@@ -3,6 +3,7 @@
  #}
 include:
   - diamond
+  - gsyslog.diamond
 
 denyhosts_diamond_resources:
   file:

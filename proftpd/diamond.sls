@@ -3,6 +3,7 @@
 #}
 include:
   - diamond
+  - postgresql.server.diamond
 
 proftpd_diamond_resources:
   file:

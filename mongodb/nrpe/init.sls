@@ -3,6 +3,8 @@
 #}
 include:
   - nrpe
+  - apt.nrpe
+  - logrotate.nrpe
 
 /etc/nagios/nrpe.d/mongodb.cfg:
   file:

@@ -3,6 +3,7 @@
  #}
 include:
   - nrpe
+  - apt.nrpe
 
 /etc/nagios/nrpe.d/pdnsd.cfg:
   file:

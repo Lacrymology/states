@@ -3,6 +3,11 @@
 #}
 include:
   - nrpe
+  - git.nrpe
+  - ssh.client.nrpe
+  - pip.nrpe
+  - python.dev.nrpe
+  - apt.nrpe
 
 /etc/nagios/nrpe.d/salt-master.cfg:
   file:

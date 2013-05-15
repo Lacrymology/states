@@ -4,6 +4,8 @@
  #}
 include:
   - diamond
+  - cron.diamond
+  - nginx.diamond
 
 elasticsearch_diamond_resources:
   file:

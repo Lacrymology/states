@@ -3,6 +3,9 @@
 #}
 include:
   - diamond
+{% if grains['id'] in pillar['shinken']['architecture']['broker']|default([]) %}
+  - nginx.diamond
+{% endif %}
 
 {% for role in pillar['shinken']['architecture'] %}
 {% if grains['id'] in pillar['shinken']['architecture'][role] %}

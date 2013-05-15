@@ -5,6 +5,11 @@
 
 include:
   - nrpe
+  - postgresql.nrpe
+  - apt.nrpe
+{% if salt['pillar.get']('postgresql:ssl', False) %}
+  - ssl.nrpe
+{% endif %}
 
 /etc/nagios/nrpe.d/postgresql-diamond.cfg:
   file:

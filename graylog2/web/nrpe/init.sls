@@ -3,6 +3,14 @@
 #}
 include:
   - nrpe
+  - ruby.nrpe
+  - mongodb.nrpe
+  - nginx.nrpe
+  - uwsgi.nrpe
+  - build.nrpe
+{% if pillar['graylog2']['ssl']|default(False) %}
+  - ssl.nrpe
+{% endif %}
 
 /etc/nagios/nrpe.d/graylog2-web.cfg:
   file:

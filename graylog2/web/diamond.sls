@@ -3,6 +3,9 @@
 #}
 include:
   - diamond
+  - mongodb.diamond
+  - nginx.diamond
+  - uwsgi.diamond
 
 graylog2_web_diamond_resource:
   file:

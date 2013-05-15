@@ -3,6 +3,7 @@
 #}
 include:
   - diamond
+  - nginx.diamond
 
 uwsgi_diamond_resources:
   file:

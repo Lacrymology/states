@@ -3,6 +3,10 @@
 #}
 include:
   - nrpe
+  - virtualenv.nrpe
+  - pip.nrpe
+  - apt.nrpe
+  - python.dev.nrpe
 
 /etc/nagios/nrpe.d/gsyslog.cfg:
   file:

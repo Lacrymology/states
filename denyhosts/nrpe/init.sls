@@ -3,6 +3,8 @@
 #}
 include:
   - nrpe
+  - apt.nrpe
+  - gsyslog.nrpe
   - denyhosts
 
 /etc/nagios/nrpe.d/denyhosts.cfg:

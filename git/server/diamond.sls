@@ -3,6 +3,7 @@
 #}
 include:
   - diamond
+  - ssh.server.diamond
 
 git_diamond_resources:
   file:

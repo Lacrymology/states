@@ -3,6 +3,7 @@
 #}
 include:
   - diamond
+  - mongodb.diamond
 
 graylog2_server_diamond_resources:
   file:

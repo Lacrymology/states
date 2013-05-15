@@ -3,6 +3,8 @@
 #}
 include:
   - diamond
+  - salt.master.diamond
+  - nginx.diamond
 
 salt_api_diamond_resources:
   file:

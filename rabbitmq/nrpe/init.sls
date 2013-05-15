@@ -3,6 +3,13 @@
 #}
 include:
   - nrpe
+  - apt.nrpe
+{% if pillar['rabbitmq']['management'] != 'guest' -%}
+  {%- if pillar['rabbitmq']['ssl']|default(False) %}
+  - ssl.nrpe
+  {%- endif %}
+  - nginx.nrpe
+{% endif %}
 
 /etc/nagios/nrpe.d/rabbitmq-web.cfg:
   file:

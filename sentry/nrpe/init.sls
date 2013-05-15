@@ -3,6 +3,11 @@
 #}
 include:
   - nrpe
+  - uwsgi.nrpe
+  - nginx.nrpe
+{% if 'graphite_address' in pillar %}
+  - statsd.nrpe
+{% endif %}
 
 /etc/nagios/nrpe.d/sentry.cfg:
   file:

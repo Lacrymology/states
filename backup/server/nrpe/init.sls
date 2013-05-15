@@ -4,6 +4,11 @@
 include:
   - nrpe
   - sudo
+  - sudo.nrpe
+  - apt.nrpe
+  - ssh.server.nrpe
+  - pip.nrpe
+  - cron.nrpe
 
 /usr/local/bin/check_backups.py:
   file:

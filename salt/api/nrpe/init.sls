@@ -3,6 +3,14 @@
 #}
 include:
   - nrpe
+  - salt.master.nrpe
+  - git.nrpe
+  - apt.nrpe
+  - nginx.nrpe
+  - pip.nrpe
+{% if pillar['salt_master']['ssl']|default(False) %}
+  - ssl.nrpe
+{% endif %}
 
 /etc/nagios/nrpe.d/salt-api.cfg:
   file:

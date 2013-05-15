@@ -3,6 +3,11 @@
 #}
 include:
   - diamond
+  - postgresql.server.diamond
+  - uwsgi.diamond
+  - nginx.diamond
+  - memcache.diamond
+  - statsd.diamond
 
 uwsgi_diamond_graphite_resources:
   file:

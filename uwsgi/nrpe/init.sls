@@ -4,6 +4,12 @@
 include:
   - nrpe
   - sudo
+  - git.nrpe
+  - nginx.nrpe
+  - pip.nrpe
+  - ruby.nrpe
+  - xml.nrpe
+  - python.dev.nrpe
 
 /etc/nagios/nrpe.d/uwsgi.cfg:
   file:

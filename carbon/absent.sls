@@ -1,21 +1,15 @@
 {#
  Remove carbon
  #}
-/etc/logrotate.d/carbon:
+{% for file in ('/etc/logrotate.d/carbon', '/var/log/graphite/carbon', '/etc/graphite/storage-schemas.conf', '/etc/graphite/carbon.conf') %}
+:
   file:
     - absent
-
-/var/log/graphite/carbon:
-  file:
-    - absent
-
-/etc/graphite/storage-schemas.conf:
-  file:
-    - absent
-
-/etc/graphite/carbon.conf:
-  file:
-    - absent
+    - require:
+{% for instance in salt['pillar.get']('graphite:carbon:instances', []) %}
+      - service: carbon-{{ instance }}
+{% endfor %}
+{% endfor %}
 
 {% for instance in salt['pillar.get']('graphite:carbon:instances', []) %}
 carbon-{{ instance }}:

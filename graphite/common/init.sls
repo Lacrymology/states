@@ -5,6 +5,7 @@
 include:
   - virtualenv
   - web
+  - local
 
 graphite:
   user:
@@ -18,6 +19,7 @@ graphite:
       - www-data
     - require:
       - user: web
+      - file: local
   virtualenv:
     - managed
     - name: /usr/local/graphite

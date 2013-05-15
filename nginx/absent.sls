@@ -15,6 +15,13 @@ nginx:
   service:
     - dead
 
+{# dpkg: warning: while removing nginx, directory '/usr/share/nginx' not empty so not removed. #}
+/usr/share/nginx:
+  file:
+    - absent
+    - require:
+      - pkg: nginx
+
 {% for type in ('etc', 'var/log', 'etc/logrotate.d') %}
 /{{ type }}/nginx:
   file:

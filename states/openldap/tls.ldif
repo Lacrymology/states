@@ -10,7 +10,7 @@ replace: olcTLSCertificateKeyFile
 olcTLSCertificateKeyFile: /etc/ssl/private/ldap.pem
 -
 replace: olcSecurity
-olcSecurity: tls=1
+olcSecurity: tls=0
 -
 replace: olcTLSVerifyClient
 olcTLSVerifyClient: never
@@ -18,3 +18,6 @@ olcTLSVerifyClient: never
 replace: olcTLSCipherSuite
 olcTLSCipherSuite: SECURE256:!AES-128-CBC
 # use openssl CipherSuite here cause a segfault
+-
+replace: olcLocalSSF
+olcLocalSSF: 256

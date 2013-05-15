@@ -44,11 +44,6 @@ graylog2-web-{{ filename }}:
     - name: {{ web_root_dir }}/config/{{ filename }}.yml
 {% endfor %}
 
-graylog2-web-config:
-  file:
-    - absent
-    - name: {{ web_root_dir }}/config/config.yml
-
 /etc/logrotate.d/graylog2-web:
   file:
     - absent

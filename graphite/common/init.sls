@@ -23,6 +23,8 @@ graphite:
     - name: /usr/local/graphite
     - require:
       - module: virtualenv
+      - require:
+        - user: graphite
 
 /var/lib/graphite:
   file:

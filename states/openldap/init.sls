@@ -39,13 +39,22 @@ slapd_change_log_level:
       - file: /tmp/logging.ldif
       - service: slapd
 
+openldap:
+  user:
+    - present
+    - groups:
+      - openldap
+      - ssl-cert
+    - require:
+      - pkg: slapd
+
 /etc/ssl/private/ldap.pem:
   file:
     - managed
     - source: salt://openldap/serverkey.pem
     - user: openldap
     - group: openldap
-    - mode: 600
+    - mode: 640
     - makedirs: true
 
 /etc/ssl/certs/ldap.pem:
@@ -81,6 +90,7 @@ openssl is not compatible with ubuntu ldap #}
       - file: /etc/ssl/private/ldap.pem
       - file: /etc/ssl/certs/ldap.pem
       - file: /etc/ssl/certs/ldapca.pem
+      - user: openldap
 
 /etc/ldap/ldap.conf:
   file:

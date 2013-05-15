@@ -19,7 +19,7 @@ graphite:
       - www-data
     - require:
       - user: web
-      - file: local
+      - file: /usr/local
   virtualenv:
     - managed
     - name: /usr/local/graphite

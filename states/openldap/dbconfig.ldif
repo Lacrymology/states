@@ -1,6 +1,3 @@
-dn: cn=config
-changetype: modify
-
 dn: olcDatabase={1}hdb,cn=config
 changetype: modify
 replace: olcSuffix
@@ -20,3 +17,6 @@ olcAccess: {0}to attrs=userPassword,shadowLastChange by self write by anonymou
 olcAccess: {1}to dn.base="" by * read
 olcAccess: {2}to * by self write by dn="cn=admin,dc=familug,dc=org" write by *
   read
+-
+replace: olcSecurity
+olcSecurity: ssf=128 update_tls=128

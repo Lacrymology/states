@@ -5,7 +5,6 @@ include:
   - ruby
   - mongodb
   - nginx
-  - cron
   - uwsgi
   - graylog2
   - web

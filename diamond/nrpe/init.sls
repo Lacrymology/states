@@ -3,6 +3,7 @@
 #}
 include:
   - nrpe
+  - nrpe.diamond
 
 /etc/nagios/nrpe.d/diamond.cfg:
   file:

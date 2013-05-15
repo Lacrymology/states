@@ -21,6 +21,10 @@ python-setuptools:
     - require:
       - pip: pip
 
+/tmp/pip-build-root:
+  file:
+    - absent
+
 pip:
   pip:
     - removed

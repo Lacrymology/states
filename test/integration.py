@@ -168,6 +168,7 @@ class BaseIntegration(unittest.TestCase):
         # 'gsyslog.nrpe',
         'graylog2',
         'gsyslog',
+        'local',
         'logrotate',
         # 'memcache.diamond',
         # 'memcache.nrpe',
@@ -287,15 +288,6 @@ class BaseIntegration(unittest.TestCase):
             except TypeError:
                 clean_up_failed = True
                 self.fail(output)
-
-        # wipe /usr/local because it mostly contains pip installed
-        # stuff. as there is no way to keep a list of installed dependencies of
-        # what we install in state, it's better to just wipe out those
-        # directories
-        for dirname in ('/usr/local', '/usr/lib/nagios/plugins',
-                        '/tmp/pip-build-root'):
-            logger.info("Cleanup %s", dirname)
-            self.cmd('file.remove', [dirname])
 
         if process_list is None:
             process_list = self.list_user_space_processes()

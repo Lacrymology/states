@@ -103,6 +103,7 @@ graylog2_email_output_plugin:
     - cwd: {{ server_root_dir }}
     - unless: test -e {{ server_root_dir }}/plugin/outputs/org.graylog2.emailoutput.output.EmailOutput_gl2plugin.jar
     - require:
+      - file: graylog2-server
       - archive: graylog2-server
       - pkg: graylog2-server
       - service: mongodb

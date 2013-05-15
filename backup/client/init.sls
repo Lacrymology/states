@@ -2,6 +2,9 @@
  Poor man backup using rsync and scp
  #}
 
+include:
+  - ssh.client
+
 backup-client:
   ssh_known_hosts:
     - present

@@ -9,6 +9,9 @@ include:
 {% if grains['id'] != master_id %}
   - rabbitmq
 {% endif %}
+{% if pillar['rabbitmq']['management'] != 'guest' -%}
+  - nginx.diamond
+{% endif %}
 
 rabbitmq_diamond_resources:
   file:

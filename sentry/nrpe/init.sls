@@ -3,8 +3,16 @@
 #}
 include:
   - nrpe
+  - postgresql.server.nrpe
+  - virtualenv.nrpe
   - uwsgi.nrpe
   - nginx.nrpe
+  - pip.nrpe
+  - python.dev.nrpe
+  - apt.nrpe
+{% if pillar['sentry']['ssl']|default(False) %}
+  - ssl.nrpe
+{% endif %}
 {% if 'graphite_address' in pillar %}
   - statsd.nrpe
 {% endif %}

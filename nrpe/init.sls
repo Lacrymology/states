@@ -11,6 +11,7 @@ include:
 {% if 'graphite_address' in pillar %}
   - nrpe.diamond
 {% endif %}
+  - nrpe.gsyslog
 
 /usr/local/nagiosplugin:
   file:

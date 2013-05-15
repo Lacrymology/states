@@ -4,6 +4,7 @@
 {% if not pillar['debug'] %}
 include:
   - gsyslog
+  - gsyslog.nrpe
 
 /etc/gsyslog.d/nrpe.conf:
   file:

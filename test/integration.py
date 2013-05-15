@@ -763,7 +763,7 @@ class IntegrationFull(BaseIntegration):
         self.check_integration()
 
     def test_nrpe(self):
-        self.top(['nrpe', 'nrpe.gsyslog', 'nrpe.diamond'])
+        self.top(['nrpe', 'nrpe.diamond'])
         self.check_integration()
 
     def check_nrpe(self):

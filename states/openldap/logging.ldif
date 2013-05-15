@@ -1,4 +1,4 @@
 dn: cn=config
 changetype: modify
 replace: olcLogLevel
-olcLogLevel: 16383
+olcLogLevel: 256

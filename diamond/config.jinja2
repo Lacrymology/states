@@ -158,18 +158,29 @@ keys = root
 
 [formatters]
 
-keys = formatter
+keys = message_only,syslog
 
 [logger_root]
 # to increase verbosity, set DEBUG
 level = INFO
-handlers = handler
+handlers = gelf,syslog
 
-[handler_handler]
-class=graypy.handler.GELFHandler
-level=DEBUG
-formatter=formatter
+[handler_gelf]
+class = graypy.handler.GELFHandler
+level = DEBUG
+formatter = message_only
 args = ('{{ pillar['graylog2_address'] }}', 12201)
+
+[handler_syslog]
+level = NOTSET
+formatter = syslog
+class = logging.handlers.SysLogHandler
+args = ('/dev/log', 'local0')
+
+[formatter_message_only]
+class = logging.Formatter
+format = %(asctime)-15s graphite[%(process)d] %(levelname)s %(name)s %(module)s.%(funcName)s:%(lineno)d %(message)s
+datefmt = %b %d %H:%M:%S
 
 [formatter_formatter]
 class = logging.Formatter

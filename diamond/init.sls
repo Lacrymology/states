@@ -10,10 +10,13 @@
  that are put in /etc/diamond/collectors, directory check at startup for
  additional configurations.
 #}
+{# TODO: sentry/raven integration #}
 include:
   - git
   - python.dev
   - virtualenv
+  - gsyslog
+  - gsyslog.diamond
 {% if 'shinken_pollers' in pillar %}
   - diamond.nrpe
 {% endif %}
@@ -97,6 +100,8 @@ diamond:
   service:
     - running
     - enable: True
+    - require:
+      - service: gsyslog
     - watch:
       - virtualenv: diamond
       - file: diamond

@@ -61,3 +61,16 @@ postfix-ldap:
     - mode: 600
     - user: root
     - group: root
+
+/etc/postfix/vmailbox:
+  file:
+    - managed
+    - source: salt://postfix/vmailbox
+
+postmap /etc/postfix/vmailbox:
+  cmd:
+    - run
+    - require:
+      - file: /etc/postfix/vmailbox
+      - pkg: postfix
+

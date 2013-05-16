@@ -4,11 +4,13 @@
 include:
   - apt
   - hostname
+  - gsyslog
 
 ssmtp:
   pkg:
     - installed
     - require:
+      - service: gsyslog
       - cmd: apt_sources
       - debconf: ssmtp
       - cmd: hostname

@@ -1,5 +1,6 @@
 include:
   - apt
+  - gsyslog
 
 cron:
   pkg:
@@ -19,6 +20,8 @@ cron:
   service:
     - running
     - enable: True
+    - require:
+      - service: gsyslog
     - watch:
       - pkg: cron
       - file: /etc/crontab

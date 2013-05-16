@@ -11,6 +11,7 @@ include:
   - web
   - python.dev
   - apt
+  - gsyslog
 {% if pillar['sentry']['ssl']|default(False) %}
   - ssl
 {% endif %}
@@ -122,6 +123,7 @@ sentry-syncdb-all:
     - require:
       - module: sentry
       - file: sentry_settings
+      - service: gsyslog
     - watch:
       - postgres_database: sentry
 
@@ -144,6 +146,7 @@ sentry-migrate-fake:
     - require:
       - service: uwsgi_emperor
       - cmd: sentry_settings
+      - service: gsyslog
   module:
     - wait
     - name: file.touch

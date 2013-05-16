@@ -4,6 +4,7 @@
 include:
   - nrpe
   - apt.nrpe
+  - gsyslog.nrpe
 
 /etc/nagios/nrpe.d/cron.cfg:
   file:

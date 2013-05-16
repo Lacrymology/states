@@ -9,6 +9,7 @@ include:
   - web
   - xml.dev
   - python.dev
+  - gsyslog
 
 /etc/init/uwsgi.conf:
   file:
@@ -84,6 +85,7 @@ uwsgi_emperor:
     - require:
       - file: uwsgi_emperor
       - file: uwsgi_sockets
+      - service: gsyslog
     - watch:
       - cmd: uwsgi_emperor
       - file: /etc/init/uwsgi.conf

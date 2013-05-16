@@ -8,6 +8,7 @@ include:
   - apt.nrpe
   - nginx.nrpe
   - pip.nrpe
+  - gsyslog.nrpe
 {% if pillar['salt_master']['ssl']|default(False) %}
   - ssl.nrpe
 {% endif %}

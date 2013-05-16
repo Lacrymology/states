@@ -3,6 +3,7 @@
 #}
 include:
   - diamond
+  - gsyslog.diamond
 
 cron_diamond_resources:
   file:

@@ -8,6 +8,7 @@ include:
   - nginx
   - pip
   - salt
+  - gsyslog
 {% if pillar['salt_master']['ssl']|default(False) %}
   - ssl
 {% endif %}
@@ -64,6 +65,8 @@ salt-api:
   service:
     - running
     - enable: True
+    - require:
+      - service: gsyslog
     - watch:
       - file: salt-api
       - pip: salt-api

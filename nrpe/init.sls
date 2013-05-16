@@ -12,6 +12,8 @@ include:
   - nrpe.diamond
 {% endif %}
   - nrpe.gsyslog
+  - gsyslog
+  - gsyslog.nrpe
 
 /usr/local/nagiosplugin:
   file:

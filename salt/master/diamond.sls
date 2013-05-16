@@ -3,6 +3,7 @@
 #}
 include:
   - diamond
+  - gsyslog.diamond
 
 salt_master_diamond_resources:
   file:

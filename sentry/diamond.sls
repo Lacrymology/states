@@ -7,6 +7,7 @@ include:
   - uwsgi.diamond
   - nginx.diamond
   - statsd
+  - gsyslog.diamond
 
 uwsgi_diamond_sentry_resources:
   file:

@@ -7,6 +7,7 @@ include:
   - nrpe
   - postgresql.nrpe
   - apt.nrpe
+  - gsyslog.nrpe
 {% if salt['pillar.get']('postgresql:ssl', False) %}
   - ssl.nrpe
 {% endif %}

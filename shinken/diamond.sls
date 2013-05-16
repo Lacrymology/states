@@ -5,6 +5,7 @@ include:
   - diamond
 {% if grains['id'] in pillar['shinken']['architecture']['broker']|default([]) %}
   - nginx.diamond
+  - gsyslog.diamond
 {% endif %}
 
 {% for role in pillar['shinken']['architecture'] %}

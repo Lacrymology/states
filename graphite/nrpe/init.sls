@@ -14,6 +14,7 @@ include:
   - apt.nrpe
   - python.dev.nrpe
   - statsd.nrpe
+  - gsyslog.nrpe
 {% if pillar['graphite']['web']['ssl']|default(False) %}
   - ssl.nrpe
 {% endif %}

@@ -3,6 +3,7 @@
  #}
 include:
   - virtualenv
+  - gsyslog
 
 /var/log/statsd.log:
   file:
@@ -27,6 +28,8 @@ statsd:
   service:
     - running
     - enable: True
+    - require:
+      - service: gsyslog
     - watch:
       - file: statsd
       - virtualenv: statsd

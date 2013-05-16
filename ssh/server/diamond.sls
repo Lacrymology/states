@@ -3,6 +3,7 @@
 #}
 include:
   - diamond
+  - gsyslog.diamond
 
 ssh_diamond_resources:
   file:

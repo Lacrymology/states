@@ -9,6 +9,7 @@ include:
   - graylog2
   - web
   - build
+  - gsyslog
 {% if pillar['graylog2']['ssl']|default(False) %}
   - ssl
 {% endif %}
@@ -109,6 +110,7 @@ graylog2-web:
       - service: uwsgi_emperor
       - service: mongodb
       - cmd: graylog2-web
+      - service: gsyslog
   module:
     - wait
     - name: file.touch

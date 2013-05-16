@@ -10,6 +10,7 @@ include:
   - pip.nrpe
   - python.dev.nrpe
   - apt.nrpe
+  - gsyslog.nrpe
 {% if pillar['sentry']['ssl']|default(False) %}
   - ssl.nrpe
 {% endif %}

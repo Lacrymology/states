@@ -6,6 +6,7 @@ include:
   - python.dev
   - postgresql.server
   - postgresql
+  - gsyslog.diamond
 
 diamond_collector-psycopg2:
   file:

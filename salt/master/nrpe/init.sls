@@ -8,6 +8,7 @@ include:
   - pip.nrpe
   - python.dev.nrpe
   - apt.nrpe
+  - gsyslog.nrpe
 
 /etc/nagios/nrpe.d/salt-master.cfg:
   file:

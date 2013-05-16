@@ -15,6 +15,7 @@ include:
   - apt
   - python.dev
   - statsd
+  - gsyslog
 {% if pillar['graphite']['web']['ssl']|default(False) %}
   - ssl
 {% endif %}
@@ -191,6 +192,7 @@ graphite_settings:
     - require:
       - postgres_database: graphite_settings
       - file: graphite_settings
+      - service: gsyslog
     - watch:
       - module: graphite-web
 
@@ -208,6 +210,7 @@ graphite_settings:
       - module: graphite_settings
       - file: /usr/local/graphite/bin/build-index.sh
       - user: web
+      - service: gsyslog
   module:
     - wait
     - name: file.touch

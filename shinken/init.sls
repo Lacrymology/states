@@ -13,6 +13,7 @@ include:
 {% endif %}
 {% if grains['id'] in pillar['shinken']['architecture']['broker']|default([]) %}
   - nginx
+  - gsyslog
 {% endif %}
 
 {#{% if 'arbiter' in pillar['shinken']['roles'] %}#}
@@ -151,6 +152,9 @@ shinken-{{ role }}:
       - cmd: /etc/ssl/{{ pillar['shinken']['ssl'] }}/chained_ca.crt
       - module: /etc/ssl/{{ pillar['shinken']['ssl'] }}/server.pem
       - file: /etc/ssl/{{ pillar['shinken']['ssl'] }}/ca.crt
+{% endif -%}
+{% if role == 'broker' %}
+      - service: gsyslog
 {% endif %}
 {% if role == 'arbiter' %}
     {% for config in configs %}

@@ -8,6 +8,7 @@ include:
   - nginx.nrpe
   - uwsgi.nrpe
   - build.nrpe
+  - gsyslog.nrpe
 {% if pillar['graylog2']['ssl']|default(False) %}
   - ssl.nrpe
 {% endif %}

@@ -4,6 +4,7 @@
 include:
   - web
   - apt
+  - gsyslog
 
 {% set bad_configs = ('default', 'example_ssl') %}
 
@@ -80,6 +81,7 @@ nginx-logger-{{ log_type }}:
     - running
     - enable: True
     - require:
+      - service: gsyslog
       - file: nginx-logger-{{ log_type }}
       - pkg: nginx
 {% endfor %}

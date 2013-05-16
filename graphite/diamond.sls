@@ -8,6 +8,7 @@ include:
   - nginx.diamond
   - memcache.diamond
   - statsd.diamond
+  - gsyslog.diamond
 
 uwsgi_diamond_graphite_resources:
   file:

@@ -4,6 +4,7 @@
 
 include:
   - apt
+  - gsyslog
 
 {# it's mandatory to remove this file if the master is changed #}
 salt_minion_master_key:
@@ -42,6 +43,8 @@ salt-minion:
   service:
     - running
     - enable: True
+    - require:
+      - service: gsyslog
     - watch:
       - pkg: salt-minion
       - file: salt-minion

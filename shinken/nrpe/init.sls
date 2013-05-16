@@ -12,6 +12,7 @@ include:
 {% endif %}
 {% if grains['id'] in pillar['shinken']['architecture']['broker']|default([]) %}
   - nginx.nrpe
+  - gsyslog.nrpe
 {% endif %}
 
 {% for role in pillar['shinken']['architecture'] %}

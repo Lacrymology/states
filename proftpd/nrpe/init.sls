@@ -6,6 +6,7 @@ include:
   - apt.nrpe
   - postgresql.server.nrpe
   - web
+  - gsyslog.nrpe
 
 /etc/nagios/nrpe.d/proftpd.cfg:
   file:

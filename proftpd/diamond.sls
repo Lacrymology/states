@@ -4,6 +4,7 @@
 include:
   - diamond
   - postgresql.server.diamond
+  - gsyslog.diamond
 
 proftpd_diamond_resources:
   file:

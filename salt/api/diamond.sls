@@ -5,6 +5,7 @@ include:
   - diamond
   - salt.master.diamond
   - nginx.diamond
+  - gsyslog.diamond
 
 salt_api_diamond_resources:
   file:

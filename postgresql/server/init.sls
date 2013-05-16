@@ -6,6 +6,7 @@ include:
   - hostname
   - postgresql
   - apt
+  - gsyslog
 {% if ssl %}
   - ssl
 {% endif %}
@@ -43,6 +44,8 @@ postgresql:
     - running
     - enable: True
     - name: postgresql
+    - require:
+      - service: gsyslog
     - watch:
       - pkg: postgresql
       - file: postgresql

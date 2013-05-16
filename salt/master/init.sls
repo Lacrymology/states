@@ -11,6 +11,7 @@ include:
   - pip
   - python.dev
   - apt
+  - gsyslog
 
 GitPython:
   pip:
@@ -64,6 +65,7 @@ salt-master:
     - enable: True
     - require:
       - pkg: git
+      - service: gsyslog
     - watch:
       - pkg: salt-master
       - file: salt-master

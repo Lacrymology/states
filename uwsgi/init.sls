@@ -7,7 +7,7 @@ include:
   - pip
   - ruby
   - web
-  - xml.dev
+  - xml
   - python.dev
   - gsyslog
 

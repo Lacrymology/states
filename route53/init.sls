@@ -5,7 +5,7 @@
 include:
   - pip
   - python.dev
-  - xml.dev
+  - xml
 
 python-lxml:
   pkg:

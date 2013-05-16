@@ -21,7 +21,7 @@ udp_recvbuffer_sizes = 1048576
 
 # Embedded elasticsearch
 elasticsearch_config_file = /etc/graylog2-elasticsearch.yml
-elasticsearch_max_docs_per_index = {{ pillar['graylog2']['max_indices']|default(20000000) }}
+elasticsearch_max_docs_per_index = {{ pillar['graylog2']['max_docs']|default(20000000) }}
 elasticsearch_index_prefix = graylog2-{{ grains['id'] }}
 {#
  How many indices do you want to keep? If the number of indices exceeds this

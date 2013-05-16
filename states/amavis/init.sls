@@ -36,6 +36,12 @@ spamassassin:
       - pyzor
       - razor
 
+pyzor discover:
+  cmd:
+    - wait
+    - watch:
+      - pkg: spamassassin
+
 clamav-daemon:
   pkg:
     - installed

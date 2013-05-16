@@ -29,7 +29,7 @@ collectors_reload_interval = 3600
 [handlers]
 
 # logging handlers
-keys = handler
+keys = gelf,syslog
 
 [[default]]
 
@@ -175,14 +175,14 @@ args = ('{{ pillar['graylog2_address'] }}', 12201)
 level = NOTSET
 formatter = syslog
 class = logging.handlers.SysLogHandler
-args = ('/dev/log', 'local0')
+args = ('/dev/log', handlers.SysLogHandler.LOG_LOCAL7)
 
-[formatter_message_only]
+[formatter_syslog]
 class = logging.Formatter
-format = %(asctime)-15s graphite[%(process)d] %(levelname)s %(name)s %(module)s.%(funcName)s:%(lineno)d %(message)s
+format = %(asctime)-15s diamond[%(process)d] %(levelname)s %(name)s %(module)s.%(funcName)s:%(lineno)d %(message)s
 datefmt = %b %d %H:%M:%S
 
-[formatter_formatter]
+[formatter_message_only]
 class = logging.Formatter
 format = %(message)s
 datefmt =

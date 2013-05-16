@@ -5,6 +5,7 @@ include:
   - nrpe
   - apt.nrpe
   - postgresql.server.nrpe
+  - web
 
 /etc/nagios/nrpe.d/proftpd.cfg:
   file:
@@ -16,6 +17,7 @@ include:
     - source: salt://proftpd/nrpe/config.jinja2
     - require:
       - pkg: nagios-nrpe-server
+      - user: web
 
 extend:
   nagios-nrpe-server:

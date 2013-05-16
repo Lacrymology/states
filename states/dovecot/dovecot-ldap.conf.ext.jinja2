@@ -18,7 +18,7 @@
 
 # LDAP URIs to use. You can use this instead of hosts list. Note that this
 # setting isn't supported by all LDAP libraries.
-uris = ldap://familug.org
+uris = ldap://127.0.0.1
 
 # Distinguished Name - the username used to login to the LDAP server.
 # Leave it commented out to bind anonymously (useful with auth_bind=yes).
@@ -30,7 +30,7 @@ uris = ldap://familug.org
 # Use TLS to connect to the LDAP server.
 tls = yes
 # TLS options, currently supported only with OpenLDAP:
-tls_ca_cert_file = /etc/ssl/certs/ldap.pem
+tls_ca_cert_file = /etc/ssl/certs/ldapca.pem
 #tls_ca_cert_dir =
 #tls_cipher_suite =
 # TLS cert/key is used only if LDAP server requires a client certificate.
@@ -53,13 +53,13 @@ tls_ca_cert_file = /etc/ssl/certs/ldap.pem
 # is still used, only the password field is ignored in it. Before doing any
 # search, the binding is switched back to the default DN.
 auth_bind = yes
-auth_bind_userdn = uid=%n,ou=people,dc=familug,dc=org
-#auth_bind_userdn = cn=%u,dc=familug,dc=org
+auth_bind_userdn = uid=%n,ou=people,dc=bit-flippers,dc=com
+#auth_bind_userdn = cn=%u,dc=bit-flippers,dc=com
 ldap_version = 3
 
 # LDAP base. %variables can be used here.
 # For example: dc=mail, dc=example, dc=org
-base = ou=people,dc=familug,dc=org
+base = ou=people,dc=bit-flippers,dc=com
 
 # Dereference: never, searching, finding, always
 #deref = never

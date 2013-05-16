@@ -2,7 +2,7 @@ myhostname = {{ pillar['mail']['mailname'] }}
 smtpd_banner = $myhostname ESMTP $mail_name (Ubuntu)
 biff = no
 
-mydestination = grains['id'], localhost.localdomain, localhost
+mydestination = {{ grains['id'] }}, localhost.localdomain, localhost
 mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128
 relayhost = 
 alias_maps = hash:/etc/aliases

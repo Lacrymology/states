@@ -11,6 +11,7 @@ include:
   - xml.nrpe
   - python.dev.nrpe
   - gsyslog.nrpe
+  - web
 
 /etc/nagios/nrpe.d/uwsgi.cfg:
   file:

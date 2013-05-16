@@ -11,7 +11,7 @@ ou: people
 description: All people in FML
 objectClass: organizationalUnit
 
-dn: cn=hvn,ou=people,dc=bit-flippers,dc=com
+dn: uid=hvn,ou=people,dc=bit-flippers,dc=com
 objectClass: inetOrgPerson
 cn: Nguyen Viet Hung
 sn: Nguyen

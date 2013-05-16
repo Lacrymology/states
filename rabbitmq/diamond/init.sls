@@ -8,8 +8,8 @@ include:
   - apt
 {% if grains['id'] != master_id %}
   - rabbitmq
-{% endif %}
-{% if pillar['rabbitmq']['management'] != 'guest' -%}
+{% endif -%}
+{%- if pillar['rabbitmq']['management'] != 'guest' %}
   - nginx.diamond
 {% endif %}
 

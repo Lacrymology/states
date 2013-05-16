@@ -96,6 +96,7 @@ proftpd:
       - postgres_database: proftpd-mod-pgsql
       - cmd: proftpd-users
       - service: postgresql
+      - user: web
     - watch:
       - file: proftpd
       - pkg: proftpd-mod-pgsql

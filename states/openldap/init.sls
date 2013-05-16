@@ -10,34 +10,11 @@ slapd:
     - require: 
       - pkg: slapd
 
-/tmp/dbconfig.ldif:
+/etc/ldap/dbconfig.ldif:
   file:
     - managed
     - source: salt://openldap/dbconfig.ldif
-
-slapd_change_root_dn:
-  cmd:
-    - run
-    - name: 'ldapmodify -Y EXTERNAL -H ldapi:/// -f /tmp/dbconfig.ldif'
-    - require:
-      - file: /tmp/dbconfig.ldif
-      - service: slapd
-
-/tmp/logging.ldif:
-  file:
-    - managed
-    - source: salt://openldap/logging.ldif
-
-slapd_change_log_level:
-  cmd:
-    - wait
-    - name: 'ldapmodify -Y EXTERNAL -H ldapi:/// -f /tmp/logging.ldif'
-    - unless: 'grep "olcLogLevel: 16383" /etc/ldap/slapd.d/cn=config.ldif'
-    - watch:
-      - cmd: slapd_change_root_dn
-    - require:
-      - file: /tmp/logging.ldif
-      - service: slapd
+    - mode: 600
 
 openldap:
   user:
@@ -75,22 +52,40 @@ openldap:
 
 /tmp/tls.ldif:
   file:
-    - managed
-    - source: salt://openldap/tls.ldif
+    - absent
 
-slapd_set_tls_directives:
+/tmp/logging.ldif:
+  file:
+    - absent
+
+slapd_config_dbs:
   cmd:
     - run
-    - name: 'ldapmodify -Y EXTERNAL -H ldapi:/// -f /tmp/tls.ldif'
+    - name: 'ldapmodify -Y EXTERNAL -H ldapi:/// -f /etc/ldap/dbconfig.ldif'
     - require:
+      - file: /etc/ldap/dbconfig.ldif
       - service: slapd
-      - file: /tmp/tls.ldif
 {# Cert/key must be created use GNUTLS
 openssl is not compatible with ubuntu ldap #}
       - file: /etc/ssl/private/ldap.pem
       - file: /etc/ssl/certs/ldap.pem
       - file: /etc/ssl/certs/ldapca.pem
       - user: openldap
+
+/etc/ldap/bitflippers.ldif:
+  file:
+    - managed
+    - source: salt://openldap/bitflippers.ldif
+    - mode: 600
+
+ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/ldap/bitflippers.ldif:
+  cmd:
+    - wait
+    - watch:
+      - file: /etc/ldap/bitflippers.ldif
+    - require:
+      - service: slapd
+      - cmd: slapd_config_dbs
 
 /etc/ldap/ldap.conf:
   file:

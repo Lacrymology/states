@@ -17,15 +17,27 @@ def _filename():
 def _installed():
     return __salt__['pkg.list_pkgs']().keys()
 
+def exists():
+    '''
+    Return True/False if there is a frozen state.
+    '''
+    return __salt__['file.file_exists'](filename())
+
+def forget():
+    '''
+    Forget any frozen state.
+    '''
+    if exists():
+        __salt__['file.remove'](_filename())
+
 def freeze():
     '''
     Save the list of installed packages for apt_installed.unfreeze
     '''
     installed = _installed()
-    filename = _filename()
-    if os.path.exists(filename):
+    if exists():
         log.debug("Freeze data already exists, overwrite")
-    with open(filename, 'wb') as handler:
+    with open(_filename(), 'wb') as handler:
         pickle.dump(installed, handler)
     return {'name': 'freeze',
             'changes': {},
@@ -42,15 +54,14 @@ def unfreeze():
         'changes': {},
         'result': True
     }
-    filename = _filename()
-    try:
-        with open(filename, 'rb') as handler:
-            frozen = set(pickle.load(handler))
-            log.debug("Found %d packages frozen", len(frozen))
-    except IOError:
+    if not exists():
         ret['comment'] = "You need to call apt_installed.freeze first!"
         ret['result'] = False
         return ret
+
+    with open(_filename(), 'rb') as handler:
+        frozen = set(pickle.load(handler))
+        log.debug("Found %d packages frozen", len(frozen))
 
     installed = set(_installed())
     install = frozen - installed

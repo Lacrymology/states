@@ -97,7 +97,7 @@ def get_client():
     """
     Return connected client instance
     """
-    # if this environment is defined, that mean it's run from the master
+    # if this environment variable exists, that means it run from the master
     if 'INTEGRATION_MINION' in os.environ.keys():
         return ClientMaster(os.environ.get('INTEGRATION_MINION'))
     return ClientLocal()
@@ -142,8 +142,11 @@ def setUpModule():
     Prepare minion for tests, this is executed only once time.
     """
     global client
-    # way to skip this process, used only to develop this test suite.
-    if 'SKIP_SETUPMODULE' in os.environ:
+
+    if client('apt_installed.exists'):
+        logger.info(
+            "apt_installed state was found, skip setUpModule(). If you want to"
+            "repeat the cleanup process, run 'apt_installed.forget'")
         return
 
     def check_error(changes):

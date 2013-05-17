@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 '''
-Apt list module
+Module that allow to save the currently installed list of packages and revert
+later to that list.
 '''
 
 

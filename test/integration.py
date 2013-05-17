@@ -11,8 +11,8 @@ Check file docs/tests.rst for details.
 
 """
 
-# TODO: faire une liste de fichier AVANT et APRES les tests pour
-# afficher les differences
+# TODO: faire une liste de fichiers AVANT et APRÈS les tests pour
+# afficher les différences et failer si un fichier est de trop.
 
 import logging
 import unittest
@@ -22,7 +22,6 @@ import os
 # until https://github.com/saltstack/salt/issues/4994 is fixed this is
 # required there
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG,
-# logging.basicConfig(stream=sys.stdout, level=logging.WARN,
                     format="> %(message)s")
 
 import salt.client
@@ -44,6 +43,15 @@ class ClientMaster(object):
         self.client = salt.client.LocalClient()
 
     def __call__(self, func, args=None):
+        """
+        Execute salt module.func.
+
+        Example::
+
+          client = ClientMaster()
+          client('state.highstate')
+          client('state.sls', 'bash')
+        """
         if args is not None:
             output = self.client.cmd(self.minion_id, func, [args],
                                      timeout=self.timeout)
@@ -70,10 +78,20 @@ class ClientLocal(object):
         self.client = salt.client.Caller()
 
     def __call__(self, func, args=None):
+        """
+        Execute salt module.func.
+
+        Example::
+
+          client = ClientLocal()
+          client('state.highstate')
+          client('state.sls', 'bash')
+        """
         if args is not None:
             return self.client.function(func, args)
         else:
             return self.client.function(func)
+
 
 def get_client():
     """
@@ -144,7 +162,7 @@ def setUpModule():
     logger.info("Synchronize minion: pillar, states, modules, returners, etc")
     client('saltutil.sync_all')
 
-    logger.info("Uninstall packages we know and install deborphan.")
+    logger.info("Uninstall packages we don't want and install deborphan.")
     check_error(client('state.sls', 'test.clean'))
 
     logger.info("Uninstall more packages, with deborphan.")
@@ -184,7 +202,7 @@ class BaseIntegration(unittest.TestCase):
     timeout = 3600
 
     # incomplete list of absent state, as some absent state will clean
-    # everything, such as nrpe.absent erase stuff that carbon.nrpe.absent.
+    # everything, such as nrpe.absent erase stuff also in carbon.nrpe.absent.
     absent = [
         'apt.absent',
         'backup.client.absent',
@@ -253,16 +271,11 @@ class BaseIntegration(unittest.TestCase):
         'xml.absent'
     ]
 
-    @classmethod
-    def setUpClass(cls):
-        global client
-        cls.client = client
-
     def setUp(self):
         """
         Clean up the minion before each test.
         """
-        global clean_up_failed, is_clean, process_list
+        global clean_up_failed, is_clean, process_list, client
 
         if clean_up_failed:
             self.skipTest("Previous cleanup failed")
@@ -279,7 +292,7 @@ class BaseIntegration(unittest.TestCase):
         # Go back on the same installed packages as after :func:`setUpClass`
         logger.info("Unfreeze installed packages")
         try:
-            output = self.client('apt_installed.unfreeze')
+            output = client('apt_installed.unfreeze')
         except Exception, err:
             clean_up_failed = True
             self.fail(err)
@@ -313,11 +326,12 @@ class BaseIntegration(unittest.TestCase):
 
     def sls(self, states):
         """
-        Apply specified list of states
+        Apply specified list of states.
         """
+        global client
         logger.debug("Run states: %s", ', '.join(states))
         try:
-            output = self.client('state.sls', ','.join(states))
+            output = client('state.sls', ','.join(states))
         except Exception, err:
             self.fail('states: %s. error: %s' % (states, err))
         # if it's not a dict, it's an error
@@ -336,6 +350,11 @@ class BaseIntegration(unittest.TestCase):
         return output
 
     def top(self, states):
+        """
+        Somekind of top.sls
+        Mostly, just a wrapper around :func:`sls` to specify that the state is
+        not clean.
+        """
         global is_clean
         is_clean = False
         logger.info("Run top: %s", ', '.join(states))
@@ -345,7 +364,8 @@ class BaseIntegration(unittest.TestCase):
         """
         return the command name of all running processes on minion
         """
-        result = self.client('status.procs')
+        global client
+        result = client('status.procs')
         output = []
         for pid in result:
             name = result[pid]['cmd']
@@ -469,7 +489,6 @@ class Integration(BaseIntegration):
 
     def test_postgresql_server(self):
         self.top(['postgresql.server'])
-        # TODO: test UTF8
 
     def test_proftpd(self):
         self.top(['proftpd'])
@@ -575,7 +594,7 @@ class IntegrationAbsentEmpty(Integration):
 
 class IntegrationWithAbsent(Integration):
     """
-    Run all Integration tests, but run all the absent states just after
+    Run all Integration tests, but run all the absent states just after them.
     """
 
     def top(self, states):
@@ -683,6 +702,9 @@ class IntegrationNRPE(BaseIntegration):
 
 
 class IntegrationNRPEAbsent(IntegrationNRPE):
+    """
+    Same as :class:`IntegrationNRPE` but run the .absent instead
+    """
     def top(self, states):
         absent_states = []
         for state in states:
@@ -691,12 +713,19 @@ class IntegrationNRPEAbsent(IntegrationNRPE):
 
 
 class IntegrationNRPEWithAbsent(IntegrationNRPEAbsent):
+    """
+    Same as :class:`IntegrationNRPE` but run the .absent just after
+    """
     def top(self, states):
         IntegrationNRPE.top(self, states)
         IntegrationNRPEAbsent.top(self, states)
 
 
 class IntegrationDiamondBase(BaseIntegration):
+    """
+    Execute diamond integration only
+    """
+
     def test_backup_client(self):
         self.top(['backup.client.diamond'])
 
@@ -784,7 +813,11 @@ class IntegrationDiamondBase(BaseIntegration):
     def test_uwsgi(self):
         self.top(['uwsgi.diamond'])
 
+
 class IntegrationDiamondAbsent(BaseIntegration):
+    """
+    Same as :class:`IntegrationDiamond` but run only .absent states
+    """
 
     def top(self, states):
         absent_states = []
@@ -818,7 +851,9 @@ class IntegrationDiamondAbsent(BaseIntegration):
 
 
 class IntegrationDiamondWithAbsent(IntegrationDiamondAbsent):
-
+    """
+    Same as :class:`IntegrationDiamond` but run .absent states after
+    """
     def top(self, states):
         BaseIntegration.top(self, states)
         IntegrationDiamondAbsent.top(self, states)
@@ -843,8 +878,9 @@ class IntegrationFull(BaseIntegration):
         """
         Run a Nagios NRPE check as a test
         """
+        global client
         logger.debug("Run NRPE check '%s'", check_name)
-        output = self.client('nrpe.run_check', check_name)
+        output = client('nrpe.run_check', check_name)
         if not output['result']:
             self._check_failed.append('%s: %s' % (check_name,
                                                   output['comment']))
@@ -925,15 +961,7 @@ class IntegrationFull(BaseIntegration):
         self.run_check('check_elasticsearch_http')
         self.run_check('check_elasticsearch_https')
         self.run_check('check_elasticsearch_https_certificate')
-        # {% for port in (9200, 9300) %}
-        # define service {
-        #     host_name {% for host in pillar['shinken']['elasticsearch'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
-        #     service_description elasticsearch-{{ port }}
-        #     check_command check_tcp!{{ port }}
-        #     use salt-service
-        # }
-        # {% endfor %}
-        # optional: nginx
+        # TODO: Check port in 9200 & 9300
 
     def test_firewall(self):
         self.top(['firewall', 'firewall.gsyslog', 'firewall.nrpe'])
@@ -1073,6 +1101,7 @@ class IntegrationFull(BaseIntegration):
                   'postgresql.server.diamond', 'postgresql.server.nrpe'])
         self.check_integration()
         self.check_postgresql_server()
+        # TODO: test UTF8
 
     def check_postgresql_server(self):
         self.run_check('check_postgresql_server')
@@ -1139,14 +1168,7 @@ class IntegrationFull(BaseIntegration):
 
     def check_salt_master(self):
         self.run_check('check_salt_master')
-        # {% for port in (4505, 4506) %}
-        # define service {
-        #     host_name {% for host in pillar['shinken']['salt_master'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
-        #     service_description salt-master-{{ port }}
-        #     check_command check_tcp!{{ port }}
-        #     use salt-service
-        # }
-        # {% endfor %}
+        # TODO: check port 4505 and 4506
 
     def test_salt_mirror(self):
         self.top(['salt.mirror', 'salt.mirror.diamond', 'salt.mirror.nrpe'])
@@ -1189,12 +1211,7 @@ class IntegrationFull(BaseIntegration):
 
     def check_ssh_server(self):
         self.run_check('check_ssh')
-        # define service {
-        #     host_name {% for host in pillar['shinken']['ip_addresses'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
-        #     service_description SSH Port
-        #     check_command check_tcp!22022
-        #     use salt-service
-        # }
+        # TODO check port SSH
 
     def test_ssl(self):
         self.top(['ssl', 'ssl.nrpe'])

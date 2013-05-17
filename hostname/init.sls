@@ -14,6 +14,8 @@ hostname:
     - present
     - name: {{ grains['id'] }}
     - ip: 127.0.0.1
+    - require:
+      - cmd: hostname
   cmd:
     - wait
     - stateful: False

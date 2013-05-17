@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 """
@@ -24,10 +25,62 @@ logging.basicConfig(stream=sys.stdout, level=logging.DEBUG,
 
 import salt.client
 
+
+class ClientMaster(object):
+    """
+    Salt client that run on the master itself and execute command remotely.
+    Slowest way to perform tests as all the files are download from the master
+    to the minion.
+    But this method requires only a salt minion and a master.
+    If one of the states repository is updated during execution, the changes
+    will be available.
+    """
+
+    def __init__(self, minion_id=None, timeout=3600):
+        if minion_id is None:
+            self.minion_id = os.environ.get('INTEGRATION_MINION')
+        else:
+            self.minion_id = minion_id
+        self.timeout = timeout
+        self.client = salt.client.LocalClient()
+
+    def __call__(self, func, args=None):
+        if args is not None:
+            output = self.client.cmd(self.minion_id, func, [args],
+                                     timeout=self.timeout)
+        else:
+            output = self.client.cmd(self.minion_id, func, [args],
+                                     timeout=self.timeout)
+        try:
+            return output[self.minion_id]
+        except KeyError, err:
+            raise ValueError("%s: %s: %s" % (func, args, err))
+
+
+class ClientLocal(object):
+    """
+    Salt client that run on the salt minion itself, no need for a master
+    Fastest way to perform tests as the files are already on the local
+    filesystem.
+    To use this method, you need to use the bootstrap_archive.py script to copy
+    the content of the states repositories and pillars to the minion.
+    If a repos is updated, the change won't be available unless a new archive
+    is copied and extracted.
+    """
+
+    def __init__(self):
+        self.client = salt.client.Caller()
+
+    def __call__(self, func, args=None):
+        if args is not None:
+            return self.client.function(func, args)
+        else:
+            return self.client.function(func)
+
 # global variables
 
-# minion of id of tested host, default is 'integration'
-minion_id = os.environ.get('INTEGRATION_MINION', 'integration')
+# which way to execute test: ClientMaster or ClientLocal
+client_class = ClientLocal
 # used to skip all test if the cleanup process had failed
 # there is no good reasons to test if the minion isn't back to it's original
 # state.
@@ -50,10 +103,9 @@ def if_change(result):
     :return: True if any change
     :rtype: bool
     """
-    minion = result.keys()[0]
-    for key in result[minion]:
+    for key in result:
         try:
-            if result[minion][key]['changes'] != {}:
+            if result[key]['changes'] != {}:
                 return True
         except TypeError:
             raise ValueError(result)
@@ -64,15 +116,15 @@ def setUpModule():
     """
     Prepare minion for tests, this is executed only once time.
     """
+    global client_class
     # way to skip this process, used only to develop this test suite.
     if 'SKIP_SETUPMODULE' in os.environ:
         return
 
-    def check_error(ret):
+    def check_error(changes):
         """
         Check if any state failed in setUpModule
         """
-        changes = ret[minion_id]
         if type(changes) != dict:
             raise ValueError(changes)
         try:
@@ -82,41 +134,37 @@ def setUpModule():
         except Exception, err:
             raise ValueError("%s: %s" % (err, ret))
 
-    timeout = 3600
-    client = salt.client.LocalClient()
+    client = client_class()
     logger.info("Synchronize minion: pillar, states, modules, returners, etc")
-    client.cmd(minion_id, 'saltutil.sync_all', timeout=timeout)
+    client('saltutil.sync_all')
 
     logger.info("Uninstall packages we know and install deborphan.")
-    ret = client.cmd(minion_id, 'state.sls', ['test.clean'], timeout=timeout)
-    check_error(ret)
+    check_error(client('state.sls', 'test.clean'))
 
     logger.info("Uninstall more packages, with deborphan.")
-    ret = client.cmd(minion_id, 'state.sls', ['test.clean'], timeout=timeout)
+    ret = client('state.sls', 'test.clean')
     check_error(ret)
     while if_change(ret):
         logger.info("Still more packages to uninstall.")
-        ret = client.cmd(minion_id, 'state.sls', ['test.clean'],
-                         timeout=timeout)
+        ret = client('state.sls', 'test.clean')
         check_error(ret)
 
     logger.info("Uninstall deborphan.")
-    check_error(client.cmd(minion_id, 'state.sls', ['deborphan.absent'],
-                           timeout=timeout))
+    check_error(client('state.sls', 'deborphan.absent'))
 
     logger.info("Upgrade all installed packages, if necessary.")
-    output = client.cmd(minion_id, 'pkg.upgrade', timeout=timeout)
+    output = client('pkg.upgrade')
     logger.debug(output)
-    for pkg_name in output[minion_id]:
+    for pkg_name in output:
         logger.debug("%s upgrade %s -> %s", pkg_name,
-                     output[minion_id][pkg_name]['old'],
-                     output[minion_id][pkg_name]['new'])
+                     output[pkg_name]['old'],
+                     output[pkg_name]['new'])
 
     logger.info("Save state of currently installed packages.")
-    output = client.cmd(minion_id, 'apt_installed.freeze', timeout=timeout)
+    output = client('apt_installed.freeze')
     try:
-        if not output[minion_id]['result']:
-            raise ValueError(output[minion_id]['comment'])
+        if not output['result']:
+            raise ValueError(output['comment'])
     except KeyError:
         raise ValueError(output)
 
@@ -201,7 +249,8 @@ class BaseIntegration(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.client = salt.client.LocalClient()
+        global client_class
+        cls.client = client_class()
 
     def setUp(self):
         """
@@ -224,7 +273,7 @@ class BaseIntegration(unittest.TestCase):
         # Go back on the same installed packages as after :func:`setUpClass`
         logger.info("Unfreeze installed packages")
         try:
-            output = self.cmd('apt_installed.unfreeze')
+            output = self.client('apt_installed.unfreeze')
         except Exception, err:
             clean_up_failed = True
             self.fail(err)
@@ -256,20 +305,13 @@ class BaseIntegration(unittest.TestCase):
 
         is_clean = True
 
-    def cmd(self, *args, **kwargs):
-        """
-        Run specified cmd to this minion with a pre-defined timeout
-        """
-        kwargs['timeout'] = self.timeout
-        return self.client.cmd(minion_id, *args, **kwargs)[minion_id]
-
     def sls(self, states):
         """
         Apply specified list of states
         """
         logger.debug("Run states: %s", ', '.join(states))
         try:
-            output = self.cmd('state.sls', [','.join(states)])
+            output = self.client('state.sls', ','.join(states))
         except Exception, err:
             self.fail('states: %s. error: %s' % (states, err))
         # if it's not a dict, it's an error
@@ -297,7 +339,7 @@ class BaseIntegration(unittest.TestCase):
         """
         return the command name of all running processes on minion
         """
-        result = self.cmd('status.procs')
+        result = self.client('status.procs')
         output = []
         for pid in result:
             name = result[pid]['cmd']
@@ -796,7 +838,7 @@ class IntegrationFull(BaseIntegration):
         Run a Nagios NRPE check as a test
         """
         logger.debug("Run NRPE check '%s'", check_name)
-        output = self.cmd('nrpe.run_check', [check_name])
+        output = self.client('nrpe.run_check', check_name)
         if not output['result']:
             self._check_failed.append('%s: %s' % (check_name,
                                                   output['comment']))

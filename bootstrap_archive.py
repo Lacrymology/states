@@ -1,7 +1,8 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 """
-Salt master bootstrap creator.
+Salt master or test bootstrap creator.
 
 To use it you need checkout the following 3 repositories into your own
 workstation:
@@ -12,7 +13,7 @@ workstation:
 
 To use it run this script::
 
-  cd ~/somewhere/common-checkout/salt/master
+  cd ~/somewhere/common-checkout/
   ./boostrap_archive.py /path/to/pillars ~/somewhere/client-checkout > /path/to/archive.tar.gz
 
 Note: first argument is always the pillar path
@@ -23,13 +24,21 @@ Then on the server run::
 
   cd /
   tar -xvzf /whereis/copied/archive.tar.gz
-  sh /tmp/bootstrap_master.sh [minion id]
+
+To install a salt-master:
+
+  sh /srv/salt/master/bootstrap.sh [minion id]
+
+To launch tests:
+
+  sh /srv/salt/minion/bootstrap.sh [minion id]
 
 """
 
 import sys
 import os
 import tarfile
+
 
 def validate_git_dir(dirname):
     """
@@ -49,6 +58,7 @@ def validate_git_dir(dirname):
         sys.exit(1)
     return abs_path
 
+
 def main():
     """
     main loop.
@@ -58,7 +68,7 @@ def main():
         print '%s: [path to pillar] [path to states]' % sys.argv[0]
         sys.exit(1)
     # guess the common repository from the path to reach this file
-    common_root = os.sep.join(os.path.abspath(__file__).split(os.sep)[:-3])
+    common_root = os.path.dirname(os.path.abspath(__file__))
     pillar_root = validate_git_dir(sys.argv[1])
     states_root = validate_git_dir(sys.argv[2])
 
@@ -78,10 +88,6 @@ def main():
 
     tar.add(os.path.join(common_root, 'salt', 'master', 'top.jinja2'),
             'srv/salt/top.sls')
-
-    # bootstrap script
-    tar.add(os.path.join(common_root, 'salt', 'master', 'bootstrap_master.sh'),
-            'tmp/bootstrap_master.sh')
     tar.close()
 
 if __name__ == '__main__':

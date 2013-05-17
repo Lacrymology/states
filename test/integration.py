@@ -143,10 +143,10 @@ def setUpModule():
     """
     global client
 
-    if client('apt_installed.exists'):
+    if client('pkg_installed.exists'):
         logger.info(
-            "apt_installed state was found, skip setUpModule(). If you want to"
-            "repeat the cleanup process, run 'apt_installed.forget'")
+            "pkg_installed snapshot was found, skip setUpModule(). If you want"
+            " to repeat the cleanup process, run 'pkg_installed.forget'")
         return
 
     def check_error(changes):
@@ -188,7 +188,7 @@ def setUpModule():
                      output[pkg_name]['new'])
 
     logger.info("Save state of currently installed packages.")
-    output = client('apt_installed.freeze')
+    output = client('pkg_installed.snapshot')
     try:
         if not output['result']:
             raise ValueError(output['comment'])
@@ -295,7 +295,7 @@ class BaseIntegration(unittest.TestCase):
         # Go back on the same installed packages as after :func:`setUpClass`
         logger.info("Unfreeze installed packages")
         try:
-            output = client('apt_installed.unfreeze')
+            output = client('pkg_installed.revert')
         except Exception, err:
             clean_up_failed = True
             self.fail(err)

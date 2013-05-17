@@ -11,8 +11,12 @@ import logging
 
 log = logging.getLogger(__name__)
 
+def __virtual__():
+    return 'pkg_installed'
+
 def _filename():
-    return os.path.join(__opts__['cachedir'], 'apt_installed.pickle')
+    return os.path.join(__opts__['cachedir'],
+                        '{0}.pickle'.format(__virtual__()))
 
 def _installed():
     return __salt__['pkg.list_pkgs']().keys()
@@ -21,7 +25,7 @@ def exists():
     '''
     Return True/False if there is a frozen state.
     '''
-    return __salt__['file.file_exists'](filename())
+    return __salt__['file.file_exists'](_filename())
 
 def forget():
     '''
@@ -30,42 +34,43 @@ def forget():
     if exists():
         __salt__['file.remove'](_filename())
 
-def freeze():
+def snapshot():
     '''
-    Save the list of installed packages for apt_installed.unfreeze
+    Save the list of installed packages for :func:`revert`
     '''
     installed = _installed()
     if exists():
-        log.debug("Freeze data already exists, overwrite")
+        log.debug("Packages data already exists, overwrite")
     with open(_filename(), 'wb') as handler:
         pickle.dump(installed, handler)
-    return {'name': 'freeze',
+    return {'name': 'snapshot',
             'changes': {},
-            'comment': "Frozen %d packages" % len(installed),
+            'comment': "%d saved packages" % len(installed),
             'result': True}
 
-def unfreeze():
+def revert():
     '''
     Take a list of packages, uninstall from the OS packages not in the list
     and install those that are missing.
     '''
     ret = {
-        'name': 'unfreeze',
+        'name': 'revert',
         'changes': {},
         'result': True
     }
     if not exists():
-        ret['comment'] = "You need to call apt_installed.freeze first!"
+        ret['comment'] = "You need to call {0}.snapshot first!".format(
+            __virtual__())
         ret['result'] = False
         return ret
 
     with open(_filename(), 'rb') as handler:
-        frozen = set(pickle.load(handler))
-        log.debug("Found %d packages frozen", len(frozen))
+        saved = set(pickle.load(handler))
+        log.debug("Found %d packages", len(saved))
 
     installed = set(_installed())
-    install = frozen - installed
-    purge = installed - frozen
+    install = saved - installed
+    purge = installed - saved
 
     if not install and not purge:
         ret['comment'] = "Nothing to change"

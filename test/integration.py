@@ -143,11 +143,15 @@ def setUpModule():
     """
     global client
 
-    if client('pkg_installed.exists'):
-        logger.info(
-            "pkg_installed snapshot was found, skip setUpModule(). If you want"
-            " to repeat the cleanup process, run 'pkg_installed.forget'")
-        return
+    try:
+        if client('pkg_installed.exists'):
+            logger.info(
+                "pkg_installed snapshot was found, skip setUpModule(). If you "
+                "want to repeat the cleanup process, run 'pkg_installed.forget'")
+            return
+    except KeyError:
+        # first time it run, can't find pkg_installed module
+        pass
 
     def check_error(changes):
         """

@@ -7,6 +7,8 @@ Common repository integration tests
 These unittest run on the salt master because the SSH server get installed
 and uninstall. The only deamon that isn't killed in the process is Salt Minion.
 
+Check file docs/tests.rst for details.
+
 """
 
 # TODO: faire une liste de fichier AVANT et APRES les tests pour
@@ -36,11 +38,8 @@ class ClientMaster(object):
     will be available.
     """
 
-    def __init__(self, minion_id=None, timeout=3600):
-        if minion_id is None:
-            self.minion_id = os.environ.get('INTEGRATION_MINION')
-        else:
-            self.minion_id = minion_id
+    def __init__(self, minion_id, timeout=3600):
+        self.minion_id = minion_id
         self.timeout = timeout
         self.client = salt.client.LocalClient()
 
@@ -49,8 +48,7 @@ class ClientMaster(object):
             output = self.client.cmd(self.minion_id, func, [args],
                                      timeout=self.timeout)
         else:
-            output = self.client.cmd(self.minion_id, func, [args],
-                                     timeout=self.timeout)
+            output = self.client.cmd(self.minion_id, func, timeout=self.timeout)
         try:
             return output[self.minion_id]
         except KeyError, err:
@@ -77,10 +75,19 @@ class ClientLocal(object):
         else:
             return self.client.function(func)
 
+def get_client():
+    """
+    Return connected client instance
+    """
+    # if this environment is defined, that mean it's run from the master
+    if 'INTEGRATION_MINION' in os.environ.keys():
+        return ClientMaster(os.environ.get('INTEGRATION_MINION'))
+    return ClientLocal()
+
 # global variables
 
 # which way to execute test: ClientMaster or ClientLocal
-client_class = ClientLocal
+client = get_client()
 # used to skip all test if the cleanup process had failed
 # there is no good reasons to test if the minion isn't back to it's original
 # state.
@@ -116,7 +123,7 @@ def setUpModule():
     """
     Prepare minion for tests, this is executed only once time.
     """
-    global client_class
+    global client
     # way to skip this process, used only to develop this test suite.
     if 'SKIP_SETUPMODULE' in os.environ:
         return
@@ -134,7 +141,6 @@ def setUpModule():
         except Exception, err:
             raise ValueError("%s: %s" % (err, ret))
 
-    client = client_class()
     logger.info("Synchronize minion: pillar, states, modules, returners, etc")
     client('saltutil.sync_all')
 
@@ -249,8 +255,8 @@ class BaseIntegration(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        global client_class
-        cls.client = client_class()
+        global client
+        cls.client = client
 
     def setUp(self):
         """

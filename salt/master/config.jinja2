@@ -4,6 +4,7 @@ fileserver_backend:
   - git
   - roots
 
+worker_threads: {{ pillar['salt_master']['workers']|default(5) }}
 gitfs_remotes:
 {% for repo in pillar['salt_master']['gitfs_remotes'] %}
   - {{ repo }}

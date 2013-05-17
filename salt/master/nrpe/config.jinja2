@@ -1,2 +1,3 @@
 # {{ pillar['message_do_not_modify'] }}
-command[check_salt_master]=/usr/lib/nagios/plugins/check_procs -c 1:20 -C python -a salt-master -u root
+{% set workers = pillar['salt_master']['workers']|default("5") %}
+command[check_salt_master]=/usr/lib/nagios/plugins/check_procs -c {{ workers }}:{{ workers|int + 10 }} -C python -a salt-master -u root

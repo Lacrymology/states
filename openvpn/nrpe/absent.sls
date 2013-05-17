@@ -9,7 +9,7 @@ extend:
   diamond:
     service:
       - watch:
-        - file: openvpn_diamond_collector
+        - file: /etc/nagios/nrpe.d/openvpn.cfg
 {% endif %}
 
 /etc/nagios/nrpe.d/openvpn.cfg:

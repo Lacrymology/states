@@ -19,7 +19,7 @@ include:
       instances: {{ pillar['openvpn']|default({}) }}
 
 extend:
-  diamond:
+  nagios-nrpe-server:
     service:
       - watch:
-        - file: openvpn_diamond_collector
+        - file: /etc/nagios/nrpe.d/openvpn.cfg

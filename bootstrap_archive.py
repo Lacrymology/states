@@ -17,22 +17,6 @@ To use it run this script::
   ./boostrap_archive.py /path/to/pillars ~/somewhere/client-checkout > /path/to/archive.tar.gz
 
 Note: first argument is always the pillar path
-
-Take /path/to/archive.tar.gz and copy it to remote salt master.
-
-Then on the server run::
-
-  cd /
-  tar -xvzf /whereis/copied/archive.tar.gz
-
-To install a salt-master:
-
-  sh /srv/salt/master/bootstrap.sh [minion id]
-
-To launch tests:
-
-  sh /srv/salt/minion/bootstrap.sh [minion id]
-
 """
 
 import sys

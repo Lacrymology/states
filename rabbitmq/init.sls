@@ -67,6 +67,7 @@ rabbitmq-server:
     - require:
       - apt_repository: rabbitmq-server
       - cmd: apt_sources
+      - host: hostname
   file:
     - directory
     - name: /etc/rabbitmq/rabbitmq.conf.d

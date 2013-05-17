@@ -19,6 +19,7 @@ import os
 # until https://github.com/saltstack/salt/issues/4994 is fixed this is
 # required there
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG,
+# logging.basicConfig(stream=sys.stdout, level=logging.WARN,
                     format="> %(message)s")
 
 import salt.client
@@ -61,8 +62,9 @@ def if_change(result):
 
 def setUpModule():
     """
-    Prepare minion for tests
+    Prepare minion for tests, this is executed only once time.
     """
+    # way to skip this process, used only to develop this test suite.
     if 'SKIP_SETUPMODULE' in os.environ:
         return
 
@@ -103,12 +105,12 @@ def setUpModule():
                            timeout=timeout))
 
     logger.info("Upgrade all installed packages, if necessary.")
-    output = client.cmd(minion_id, 'pkg.upgrade')
+    output = client.cmd(minion_id, 'pkg.upgrade', timeout=timeout)
     logger.debug(output)
-    for change in output[minion_id]:
-        pkg_name = change.keys()[0]
-        logger.debug("%s upgrade %s -> %s", pkg_name, change[pkg_name]['old'],
-                     change[pkg_name]['new'])
+    for pkg_name in output[minion_id]:
+        logger.debug("%s upgrade %s -> %s", pkg_name,
+                     output[minion_id][pkg_name]['old'],
+                     output[minion_id][pkg_name]['new'])
 
     logger.info("Save state of currently installed packages.")
     output = client.cmd(minion_id, 'apt_installed.freeze', timeout=timeout)
@@ -127,129 +129,75 @@ class BaseIntegration(unittest.TestCase):
     client = None
     timeout = 3600
 
-    # list of absent state (without .absent suffix)
-    # commented state aren't necessary as an other absent state will clean
-    # it as well (such as nrpe.absent erase stuff from carbon.nrpe.absent) or
-    # by rm -rf /usr/local and /usr/lib/nagios/plugins/
-    _absent = [
-        # 'apt.nrpe',
-        'apt',
-        'backup.client',
-        # 'backup.server.nrpe',
-        'backup.server',
-        'bash',
-        'build',
-        # 'carbon.nrpe',
-        # 'carbon', <-- graphite.common include this
-        # 'cron.nrpe',
-        'cron',
-        'deborphan',
-        # 'denyhosts.nrpe',
-        'denyhosts',
-        # 'diamond.nrpe',
-        'diamond',
-        'django',
-        # 'elasticsearch.diamond',
-        # 'elasticsearch.nrpe',
-        'elasticsearch',
-        # 'firewall.gsyslog',
-        # 'firewall.nrpe',
-        'firewall',
-        'git.server',
-        'git',
-        'graphite.backup',
-        'graphite.common',
-        # 'graphite.nrpe',
-        # 'graphite', <-- graphite.common include this
-        # 'graylog2.server.nrpe',
-        'graylog2.server',
-        # 'graylog2.web.nrpe',
-        'graylog2.web',
-        # 'gsyslog.nrpe',
-        'graylog2',
-        'gsyslog',
-        'local',
-        'logrotate',
-        # 'memcache.diamond',
-        # 'memcache.nrpe',
-        'memcache',
-        'mercurial',
-        # 'mongodb.diamond',
-        # 'mongodb.nrpe',
-        'mongodb',
-        'motd',
-        # 'nginx.diamond',
-        # 'nginx.nrpe',
-        'nginx',
-        'nodejs',
-        # 'nrpe.gsyslog',
-        'nrpe',
-        # 'ntp.nrpe',
-        'ntp',
-        # 'openvpn.diamond',
-        # 'openvpn.nrpe',
-        'openvpn',
-        # 'pdnsd.nrpe',
-        'pdnsd',
-        'pip',
-        'postgresql.server.backup',
-        # 'postgresql.server.diamond',
-        # 'postgresql.server.nrpe',
-        'postgresql.server',
-        'postgresql',
-        # 'proftpd.nrpe',
-        'proftpd',
-        'python',
-        # 'rabbitmq.diamond',
-        # 'rabbitmq.nrpe',
-        'rabbitmq',
-        'raven',
-        'reprepro',
-        'requests',
-        'route53',
-        'ruby',
-        # 'salt.api.nrpe',
-        'salt.api',
-        # 'salt.master.nrpe',
-        'salt.master',
-        # 'salt.minion.nrpe',
-        # 'salt.minion', <--- Don't want to uninstall the minion
-        'salt.mirror',
-        'screen',
-        'sentry.backup',
-        # 'sentry.nrpe',
-        'sentry',
-        # 'shinken.nrpe',
-        'shinken',
-        'ssh.client',
-        # 'ssh.server.gsyslog',
-        # 'ssh.server.nrpe',
-        'ssh.server',
-        'ssl',
-        'ssmtp',
-        # 'statsd.nrpe',
-        'statsd',
-        'sudo',
-        'tmpreaper',
-        'tools',
-        # 'uwsgi.nrpe',
-        'uwsgi',
-        'vim',
-        'virtualenv.backup',
-        'virtualenv',
-        'web',
-        'xml'
+    # incomplete list of absent state, as some absent state will clean
+    # everything, such as nrpe.absent erase stuff that carbon.nrpe.absent.
+    absent = [
+        'apt.absent',
+        'backup.client.absent',
+        'backup.server.absent',
+        'bash.absent',
+        'build.absent',
+        'cron.absent',
+        'deborphan.absent',
+        'denyhosts.absent',
+        'diamond.absent',
+        'django.absent',
+        'elasticsearch.absent',
+        'firewall.absent',
+        'git.server.absent',
+        'git.absent',
+        'graphite.backup.absent',
+        'graphite.common.absent',
+        'graylog2.server.absent',
+        'graylog2.web.absent',
+        'graylog2.absent',
+        'gsyslog.absent',
+        'local.absent',
+        'logrotate.absent',
+        'memcache.absent',
+        'mercurial.absent',
+        'mongodb.absent',
+        'motd.absent',
+        'nginx.absent',
+        'nodejs.absent',
+        'nrpe.absent',
+        'ntp.absent',
+        'openvpn.absent',
+        'pdnsd.absent',
+        'pip.absent',
+        'postgresql.server.backup.absent',
+        'postgresql.server.absent',
+        'postgresql.absent',
+        'proftpd.absent',
+        'python.absent',
+        'rabbitmq.absent',
+        'raven.absent',
+        'reprepro.absent',
+        'requests.absent',
+        'route53.absent',
+        'ruby.absent',
+        'salt.api.absent',
+        'salt.master.absent',
+        'salt.mirror.absent',
+        'screen.absent',
+        'sentry.backup.absent',
+        'sentry.absent',
+        'shinken.absent',
+        'ssh.client.absent',
+        'ssh.server.absent',
+        'ssl.absent',
+        'ssmtp.absent',
+        'statsd.absent',
+        'sudo.absent',
+        'tmpreaper.absent',
+        'tools.absent',
+        'uwsgi.absent',
+        'vim.absent',
+        'virtualenv.backup.absent',
+        'virtualenv.absent',
+        'web.absent',
+        'xml.absent'
     ]
-
-    @property
-    def absent(self):
-        """
-        return list of all absent states to apply before each test
-        """
-        output = []
-        for state in self._absent:
-            output.append(state + '.absent')
-        return output
 
     @classmethod
     def setUpClass(cls):
@@ -323,7 +271,7 @@ class BaseIntegration(unittest.TestCase):
         try:
             output = self.cmd('state.sls', [','.join(states)])
         except Exception, err:
-            self.fail(err)
+            self.fail('states: %s. error: %s' % (states, err))
         # if it's not a dict, it's an error
         self.assertEqual(type(output), dict, output)
 
@@ -332,7 +280,7 @@ class BaseIntegration(unittest.TestCase):
         errors = {}
         for state in output:
             if not output[state]['result']:
-                errors[output[state]['comment']] = True
+                errors['%s: %s' % (state, output[state]['comment'])] = True
         error_list = errors.keys()
         if error_list:
             self.fail("Failure to apply: %s%s" % (os.linesep,
@@ -418,6 +366,9 @@ class Integration(BaseIntegration):
         self.top(['graphite'])
 
     def test_graylog2(self):
+        self.top(['graylog2'])
+
+    def test_graylog2_combined(self):
         self.top(['graylog2.server', 'graylog2.web'])
 
     def test_gsyslog(self):
@@ -425,6 +376,9 @@ class Integration(BaseIntegration):
 
     def test_hostname(self):
         self.top(['hostname'])
+
+    def test_kernel_modules(self):
+        self.top(['kernel_modules'])
 
     def test_logrotate(self):
         self.top(['logrotate'])
@@ -467,9 +421,10 @@ class Integration(BaseIntegration):
 
     def test_postgresql_server(self):
         self.top(['postgresql.server'])
+        # TODO: test UTF8
 
     def test_proftpd(self):
-        self.top(['protftpd'])
+        self.top(['proftpd'])
 
     def test_python(self):
         self.top(['python.dev'])
@@ -504,14 +459,17 @@ class Integration(BaseIntegration):
     def test_screen(self):
         self.top(['screen'])
 
+    def test_sentry(self):
+        self.top(['sentry'])
+
     def test_shinken(self):
         self.top(['shinken'])
 
-    def test_ssh_server(self):
-        self.top(['ssh.server'])
-
     def test_ssh_client(self):
         self.top(['ssh.client'])
+
+    def test_ssh_server(self):
+        self.top(['ssh.server'])
 
     def test_ssl(self):
         self.top(['ssl'])
@@ -531,6 +489,9 @@ class Integration(BaseIntegration):
     def test_tools(self):
         self.top(['tools'])
 
+    def test_ttys(self):
+        self.top(['ttys'])
+
     def test_uwsgi(self):
         self.top(['uwsgi'])
 
@@ -545,6 +506,274 @@ class Integration(BaseIntegration):
 
     def test_xml(self):
         self.top(['xml'])
+
+class IntegrationAbsentEmpty(Integration):
+    """
+    Run all Integration tests, but run all the states with .absent instead
+    """
+
+    def top(self, states):
+        absent_states = []
+        for state in states:
+            absent_states.append(state + '.absent')
+        Integration.top(self, absent_states)
+
+    def test_django(self):
+        self.top(['django'])
+
+    def test_local(self):
+        self.top(['local'])
+
+
+class IntegrationWithAbsent(Integration):
+    """
+    Run all Integration tests, but run all the absent states just after
+    """
+
+    def top(self, states):
+        absent_states = []
+        for state in states:
+            absent_states.append(state + '.absent')
+        Integration.top(self, states)
+        Integration.top(self, absent_states)
+
+    def test_local(self):
+        self.top(['local'])
+
+
+class IntegrationNRPE(BaseIntegration):
+    """
+    Only Install NRPE states
+    """
+
+    def test_apt(self):
+        self.top(['apt.nrpe'])
+
+    def test_backup_server(self):
+        self.top(['backup.server.nrpe'])
+
+    def test_carbon(self):
+        self.top(['carbon.nrpe'])
+
+    def test_cron(self):
+        self.top(['cron.nrpe'])
+
+    def test_denyhosts(self):
+        self.top(['denyhosts.nrpe'])
+
+    def test_diamond(self):
+        self.top(['diamond.nrpe'])
+
+    def test_django(self):
+        self.top(['django.nrpe'])
+
+    def test_elasticsearch(self):
+        self.top(['elasticsearch.nrpe'])
+
+    def test_firewall(self):
+        self.top(['firewall.nrpe'])
+
+    def test_graphite(self):
+        self.top(['graphite.nrpe'])
+
+    def test_graylog2_server(self):
+        self.top(['graylog2.server.nrpe'])
+
+    def test_graylog2_web(self):
+        self.top(['graylog2.web.nrpe'])
+
+    def test_gsyslog(self):
+        self.top(['gsyslog.nrpe'])
+
+    def test_memcache(self):
+        self.top(['memcache.nrpe'])
+
+    def test_mongodb(self):
+        self.top(['mongodb.nrpe'])
+
+    def test_nginx(self):
+        self.top(['nginx.nrpe'])
+
+    def test_ntp(self):
+        self.top(['ntp.nrpe'])
+
+    def test_openvpn(self):
+        self.top(['openvpn.nrpe'])
+
+    def test_pdnsd(self):
+        self.top(['pdnsd.nrpe'])
+
+    def test_postgresql_server(self):
+        self.top(['postgresql.server.nrpe'])
+
+    def test_proftpd(self):
+        self.top(['proftpd.nrpe'])
+
+    def test_rabbitmq(self):
+        self.top(['rabbitmq.nrpe'])
+
+    def test_salt_api(self):
+        self.top(['salt.api.nrpe'])
+
+    def test_salt_master(self):
+        self.top(['salt.master.nrpe'])
+
+    def test_sentry(self):
+        self.top(['sentry.nrpe'])
+
+    def test_shinken(self):
+        self.top(['shinken.nrpe'])
+
+    def test_ssh_server(self):
+        self.top(['ssh.server.nrpe'])
+
+    def test_statsd(self):
+        self.top(['statsd.nrpe'])
+
+    def test_uwsgi(self):
+        self.top(['uwsgi.nrpe'])
+
+
+class IntegrationNRPEAbsent(IntegrationNRPE):
+    def top(self, states):
+        absent_states = []
+        for state in states:
+            absent_states.append(state + '.absent')
+        IntegrationNRPE.top(self, absent_states)
+
+
+class IntegrationNRPEWithAbsent(IntegrationNRPEAbsent):
+    def top(self, states):
+        IntegrationNRPE.top(self, states)
+        IntegrationNRPEAbsent.top(self, states)
+
+
+class IntegrationDiamondBase(BaseIntegration):
+    def test_backup_client(self):
+        self.top(['backup.client.diamond'])
+
+    def test_carbon(self):
+        self.top(['carbon.diamond'])
+
+    def test_cron(self):
+        self.top(['cron.diamond'])
+
+    def test_denyhosts(self):
+        self.top(['denyhosts.diamond'])
+
+    def test_elasticsearch(self):
+        self.top(['elasticsearch.diamond'])
+
+    def test_git_server(self):
+        self.top(['git.server.diamond'])
+
+    def test_graphite(self):
+        self.top(['graphite.diamond'])
+
+    def test_graylog2_diamond(self):
+        self.top(['graylog2.server.diamond'])
+
+    def test_graylog2_web(self):
+        self.top(['graylog2.web.diamond'])
+
+    def test_gsyslog(self):
+        self.top(['gsyslog.diamond'])
+
+    def test_memcache(self):
+        self.top(['memcache.diamond'])
+
+    def test_mongodb(self):
+        self.top(['mongodb.diamond'])
+
+    def test_nginx(self):
+        self.top(['nginx.diamond'])
+
+    def test_nodejs(self):
+        self.top(['nodejs.diamond'])
+
+    def test_nrpe(self):
+        self.top(['nrpe.diamond'])
+
+    def test_ntp(self):
+        self.top(['ntp.diamond'])
+
+    def test_openvpn(self):
+        self.top(['openvpn.diamond'])
+
+    def test_pdnsd(self):
+        self.top(['pdnsd.diamond'])
+
+    def test_postgresql_server(self):
+        self.top(['postgresql.server.diamond'])
+
+    def test_proftpd(self):
+        self.top(['proftpd.diamond'])
+
+    def test_rabbitmq(self):
+        self.top(['rabbitmq.diamond'])
+
+    def test_salt_api(self):
+        self.top(['salt.api.diamond'])
+
+    def test_salt_master(self):
+        self.top(['salt.master.diamond'])
+
+    def test_sentry(self):
+        self.top(['sentry.diamond'])
+
+    def test_shinken(self):
+        self.top(['shinken.diamond'])
+
+    def test_ssh_server(self):
+        self.top(['ssh.server.diamond'])
+
+    def test_ssmtp(self):
+        self.top(['ssmtp.diamond'])
+
+    def test_statsd(self):
+        self.top(['statsd.diamond'])
+
+    def test_uwsgi(self):
+        self.top(['uwsgi.diamond'])
+
+class IntegrationDiamondAbsent(BaseIntegration):
+
+    def top(self, states):
+        absent_states = []
+        for state in states:
+            absent_states.append(state + '.absent')
+        BaseIntegration.top(self, absent_states)
+
+    def test_elasticsearch(self):
+        self.top(['elasticsearch.diamond'])
+
+    def test_memcache(self):
+        self.top(['memcache.diamond'])
+
+    def test_mongodb(self):
+        self.top(['mongodb.diamond'])
+
+    def test_nginx(self):
+        self.top(['nginx.diamond'])
+
+    def test_ntp(self):
+        self.top(['ntp.diamond'])
+
+    def test_openvpn(self):
+        self.top(['openvpn.diamond'])
+
+    def test_postgresql_server(self):
+        self.top(['postgresql.server.diamond'])
+
+    def test_rabbitmq(self):
+        self.top(['rabbitmq.diamond'])
+
+
+class IntegrationDiamondWithAbsent(IntegrationDiamondAbsent):
+
+    def top(self, states):
+        BaseIntegration.top(self, states)
+        IntegrationDiamondAbsent.top(self, states)
 
 
 class IntegrationFull(BaseIntegration):
@@ -569,8 +798,8 @@ class IntegrationFull(BaseIntegration):
         logger.debug("Run NRPE check '%s'", check_name)
         output = self.cmd('nrpe.run_check', [check_name])
         if not output['result']:
-            self._check_failed.append(output['comment'])
-        # self.assertTrue(output['result'], output['comment'])
+            self._check_failed.append('%s: %s' % (check_name,
+                                                  output['comment']))
 
     def check_integration(self):
         """
@@ -639,7 +868,11 @@ class IntegrationFull(BaseIntegration):
                   'elasticsearch.nrpe'])
         self.check_integration()
         self.check_cron()
+        self.check_nginx()
+        self.check_elasticsearch()
         self.run_check('check_elasticsearch')
+
+    def check_elasticsearch(self):
         self.run_check('check_elasticsearch_cluster')
         self.run_check('check_elasticsearch_http')
         self.run_check('check_elasticsearch_https')
@@ -693,6 +926,7 @@ class IntegrationFull(BaseIntegration):
         self.check_nginx()
         self.check_mongodb()
         self.check_uwsgi()
+        self.check_elasticsearch()
         self.run_check('check_graylog2_server')
         self.run_check('check_graylog2_logs')
         self.run_check('check_graylog2_master')
@@ -701,7 +935,6 @@ class IntegrationFull(BaseIntegration):
         self.run_check('check_graylog2_http')
         self.run_check('check_graylog2_https')
         self.run_check('check_graylog2_https_certificate')
-        self.run_check('check_elasticsearch_cluster')
 
     def test_gsyslog(self):
         self.top(['gsyslog', 'gsyslog.diamond', 'gsyslog.nrpe'])
@@ -798,7 +1031,7 @@ class IntegrationFull(BaseIntegration):
         self.run_check('check_postgresql_port')
 
     def test_proftpd(self):
-        self.top(['protftpd', 'proftpd.nrpe', 'proftpd.diamond'])
+        self.top(['proftpd', 'proftpd.nrpe', 'proftpd.diamond'])
         self.check_integration()
         self.check_postgresql_server()
         self.run_check('check_proftpd')
@@ -815,12 +1048,13 @@ class IntegrationFull(BaseIntegration):
         self.top(['rabbitmq', 'rabbitmq.nrpe', 'rabbitmq.diamond'])
         self.check_integration()
         self.run_check('check_rabbitmq')
+        self.run_check('check_rabbitmq_http')
+        self.run_check('check_rabbitmq_https')
         self.run_check('check_rabbitmq_port_management')
         self.run_check('check_rabbitmq_port_console')
         self.run_check('check_rabbitmq_port_amqp')
         self.run_check('check_erlang')
         self.run_check('check_erlang_port')
-        # optional nginx
 
     def test_raven(self):
         self.top(['raven', 'raven.nrpe'])
@@ -931,7 +1165,7 @@ class IntegrationFull(BaseIntegration):
         self.run_check('check_statsd')
 
     def test_sudo(self):
-        self.top(['sudo', 'sudo.nrpe'])
+        self.top(['sudo', 'sudo.nrpe', 'sudo.diamond'])
         self.check_integration()
 
     def test_tmpreaper(self):
@@ -960,7 +1194,7 @@ class IntegrationFull(BaseIntegration):
         # check if virtualenv is executable
 
     def test_xml(self):
-        self.top(['xml.dev', 'xml.nrpe'])
+        self.top(['xml', 'xml.nrpe'])
         self.check_integration()
 
 if __name__ == '__main__':

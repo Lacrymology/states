@@ -1,8 +1,10 @@
 #!/bin/bash
 
-set -x
 PASSWORD=hvnhvn
 USERNAME=roundcube
-su - postgres -c "createuser -R -S -d $USERNAME && createdb -O $USERNAME roundcubedb"
+DBNAME=roundcubedb
+su - postgres -c "createuser -R -S -d $USERNAME; createdb -O $USERNAME $DBNAME"
 su - postgres -c "psql -c \"ALTER USER $USERNAME WITH PASSWORD '$PASSWORD';\""
-set +x
+#su - postgres -c "psql -d $DBNAME -f /var/www/webmail/SQL/postgres.initial.sql"
+su - postgres -c "echo '127.0.0.1:*:*:'$USERNAME:$PASSWORD > ~/.pgpass; chmod 600 ~/.pgpass"
+su - postgres -c "psql -d roundcubedb -U roundcube -f /var/www/webmail/SQL/postgres.initial.sql -h 127.0.0.1 -w"

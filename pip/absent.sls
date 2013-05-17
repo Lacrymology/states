@@ -7,7 +7,7 @@
 {#
  Only during integration test, we don't want to wipe PIP cache for future usage.
  #}
-{% if pillar['integration_test']|default(False) %}
+{% if not pillar['integration_test']|default(False) %}
 /var/cache/pip:
   file:
     - absent

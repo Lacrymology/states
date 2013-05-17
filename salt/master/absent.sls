@@ -21,7 +21,7 @@ GitPython:
 {#
  Only during integration test, we don't want to wipe salt states and pillars.
  #}
-{% if pillar['integration_test']|default(False) %}
+{% if not pillar['integration_test']|default(False) %}
 {% for file in ('/srv/salt', '/srv/pillar') %}
 {{ file }}:
   file:

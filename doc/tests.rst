@@ -32,7 +32,7 @@ Then on the server run::
 
 Install minion::
 
-  /srv/salt/minion/bootstrap.sh [minion id]
+  /srv/salt/salt/minion/bootstrap.sh [minion id]
 
 Integration Tests
 -----------------

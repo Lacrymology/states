@@ -32,4 +32,4 @@ Then on the server run::
 
 To install a salt-master::
 
-  /srv/salt/master/bootstrap.sh [minion id]
+  /srv/salt/salt/master/bootstrap.sh [minion id]

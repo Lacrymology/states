@@ -118,7 +118,7 @@ proftpd:
     - require:
       - service: proftpd
 
-{% for deployment in pillar['proftpd']['deployments'] %}
+{% for deployment in pillar['proftpd']['deployments']|default([]) %}
 /var/lib/deployments/{{ deployment }}/static/ftp:
   file:
     - directory

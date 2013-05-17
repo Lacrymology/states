@@ -37,6 +37,17 @@ graphite:
       - user: web
       - user: graphite
 
+/var/lib/graphite/whisper:
+  file:
+    - directory
+    - user: www-data
+    - group: graphite
+    - mode: 770
+    - require:
+      - user: web
+      - user: graphite
+      - file: /var/lib/graphite
+
 /etc/graphite:
   file:
     - directory

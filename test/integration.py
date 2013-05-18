@@ -18,6 +18,7 @@ import logging
 import unittest
 import sys
 import os
+import time
 
 # until https://github.com/saltstack/salt/issues/4994 is fixed this is
 # required there
@@ -964,11 +965,15 @@ class IntegrationFull(BaseIntegration):
         self.run_check('check_diamond')
 
     def test_elasticsearch(self):
+        sleep_time = 60
         self.top(['elasticsearch', 'elasticsearch.diamond',
                   'elasticsearch.nrpe'])
         self.check_integration()
         self.check_cron()
         self.check_nginx()
+        logger.debug("Sleep %d seconds to let Elasticsearch time to start",
+                     sleep_time)
+        time.sleep(sleep_time)
         self.check_elasticsearch()
         self.run_check('check_elasticsearch')
 

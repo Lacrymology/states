@@ -207,10 +207,15 @@ graphite_settings:
     - require:
       - service: uwsgi_emperor
       - file: graphite_logdir
+      - file: graphite_wsgi
       - module: graphite_settings
+      - file: graphite_graph_templates
       - file: /usr/local/graphite/bin/build-index.sh
       - user: web
+      - file: graphite-urls-patch
       - service: gsyslog
+      - module: graphite-web
+      - pip: graphite-web
   module:
     - wait
     - name: file.touch

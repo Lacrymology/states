@@ -27,19 +27,31 @@ include:
 
 {% set master_id = pillar['rabbitmq']['cluster']['master'] %}
 
+rabbitmq:
+  user:
+    - present
+    - shell: /bin/false
+    - home: /var/lib/rabbitmq
+    - password: "*"
+    - enforce_password: True
+    - gid_from_name: True
+
+/var/lib/rabbitmq:
+  file:
+    - directory
+    - user: rabbitmq
+    - group: rabbitmq
+    - mode: 700
+    - require:
+      - user: rabbitmq
+
 {#
- # if the cookie is changed before it's turned off
- # the shutdown process cannot be performed.
- # so, do it only 1 time (when the APT repo is added)
+ Clustering requires the same cookie to be the same on all nodes.
+ It need to be created BEFORE rabbitmq-server package is installed.
+ If the cookie is changed while the daemon is running, it cannot be stopped
+ using regular startup script and need to be manually killed.
  #}
 rabbitmq_erlang_cookie:
-  service:
-    - dead
-    - name: rabbitmq-server
-    - watch:
-      - apt_repository: rabbitmq-server
-    - require:
-      - pkg: rabbitmq-server
   file:
     - managed
     - name: /var/lib/rabbitmq/.erlang.cookie
@@ -49,9 +61,7 @@ rabbitmq_erlang_cookie:
     - mode: 400
     - source: salt://rabbitmq/cookie.jinja2
     - require:
-      - service: rabbitmq_erlang_cookie
-    - watch:
-      - pkg: rabbitmq-server
+      - file: /var/lib/rabbitmq
 
 rabbitmq-server:
   apt_repository:
@@ -68,6 +78,7 @@ rabbitmq-server:
       - apt_repository: rabbitmq-server
       - cmd: apt_sources
       - host: hostname
+      - file: rabbitmq_erlang_cookie
   file:
     - directory
     - name: /etc/rabbitmq/rabbitmq.conf.d

@@ -22,3 +22,10 @@ rabbitmq-server:
     - sig: beam{% if grains['num_cpus'] > 1 %}.smp{% endif %}
     - require:
       - pkg: rabbitmq-server
+
+rabbitmq:
+  user:
+    - absent
+    - require:
+      - service: rabbitmq-server
+      - file: /etc/rabbitmq

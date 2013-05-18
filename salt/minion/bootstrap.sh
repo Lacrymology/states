@@ -11,8 +11,8 @@ apt-add-repository -y ppa:saltstack/salt
 apt-get update
 apt-get install -y salt-minion
 
-echo "log_level: debug" > /etc/salt/minion
-echo "file_client: local" >> /etc/salt/minion
+cp /tmp/salt/states/salt/minion/bootstrap.conf /etc/salt/minion
 echo "id: $1" >> /etc/salt/minion
-
 restart salt-minion
+
+salt-call saltutil.sync_all

@@ -5,9 +5,9 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-/salt/srv/salt/minion/bootstrap.sh
+/tmp/salt/states/salt/minion/bootstrap.sh
 
 salt-call -l all --local saltutil.sync_all
 salt-call -l all --local state.highstate
 
-echo "If everthing went fine, please run 'find /srv/salt ! -name top.sls -delete'"
+echo "If everthing went fine, please run 'rm -rf /tmp/salt'"

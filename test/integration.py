@@ -137,6 +137,12 @@ def if_change(result):
     return False
 
 
+def _sync_all():
+    global client
+    logger.info("Synchronize minion: pillar, states, modules, returners, etc")
+    client('saltutil.sync_all')
+
+
 def setUpModule():
     """
     Prepare minion for tests, this is executed only once time.
@@ -150,8 +156,12 @@ def setUpModule():
                 "want to repeat the cleanup process, run 'pkg_installed.forget'")
             return
     except KeyError:
-        # first time it run, can't find pkg_installed module
-        pass
+        if client.__class__ == ClientLocal:
+            # salt.client.Caller don't refresh the list of available modules
+            # after running saltutil.sync_all, exit after doing it.
+            _sync_all()
+            logger.warning("Please re-execute: '%s'", ' '.join(sys.argv))
+            sys.exit(1)
 
     def check_error(changes):
         """
@@ -166,8 +176,7 @@ def setUpModule():
         except Exception, err:
             raise ValueError("%s: %s" % (err, ret))
 
-    logger.info("Synchronize minion: pillar, states, modules, returners, etc")
-    client('saltutil.sync_all')
+    _sync_all()
 
     logger.info("Uninstall packages we don't want and install deborphan.")
     check_error(client('state.sls', 'test.clean'))

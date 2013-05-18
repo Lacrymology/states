@@ -60,18 +60,19 @@ def main():
 
     # pillar
     for filename in os.listdir(pillar_root):
-        tar.add(os.path.join(pillar_root, filename),
-                'srv/pillar/' + filename)
+        if filename != '.git':
+            tar.add(os.path.join(pillar_root, filename),
+                    'tmp/salt/pillar/' + filename)
 
     # states
     for state_dir in (common_root, states_root):
         for filename in os.listdir(state_dir):
             if filename != '.git':
                 tar.add(os.path.join(state_dir, filename),
-                        'srv/salt/' + filename)
+                        'tmp/salt/states/' + filename)
 
     tar.add(os.path.join(common_root, 'salt', 'master', 'top.jinja2'),
-            'srv/salt/top.sls')
+            'tmp/salt/states/top.sls')
     tar.close()
 
 if __name__ == '__main__':

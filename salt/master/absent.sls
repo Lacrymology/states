@@ -18,21 +18,10 @@ GitPython:
     - removed
 {% endif %}
 
-{#
- Only during integration test, we don't want to wipe salt states and pillars.
- #}
-{% if not pillar['integration_test']|default(False) %}
-{% for file in ('/srv/salt', '/srv/pillar') %}
+{% for file in ('/srv/salt', '/srv/pillar', '/var/log/upstart/salt-master.log') %}
 {{ file }}:
   file:
     - absent
     - require:
       - service: salt-master
 {% endfor %}
-{% endif %}
-
-/var/log/upstart/salt-master.log:
-  file:
-    - absent
-    - require:
-      - service: salt-master

@@ -241,6 +241,7 @@ graphite_settings:
     - mode: 555
     - require:
       - virtualenv: graphite
+      - file: /var/lib/graphite/whisper
 
 /etc/nginx/conf.d/graphite.conf:
   file:

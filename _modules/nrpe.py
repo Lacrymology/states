@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 __NRPE_RE = re.compile('^command\[([^\]]+)\]=(.+)$')
 
-def _check_list(config_dir='/etc/nagios/nrpe.d'):
+def list_checks(config_dir='/etc/nagios/nrpe.d'):
     '''
     List all available NRPE check
     :param config_dir: path where config files are
@@ -35,7 +35,7 @@ def run_check(check_name):
         salt '*' nrpe.run_check <check name>
 
     '''
-    checks = _check_list()
+    checks = list_checks()
     logger.debug("Found %d checks", len(checks.keys()))
     ret = {
         'name': 'run_check',

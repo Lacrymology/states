@@ -18,9 +18,6 @@ Check file docs/tests.rst for details.
 # lister les groups, users et autre cossins
 # et comparer si y'a eu des changements apres l'execution du clean
 
-# lister les check NRPE avant de rouler le test et verifier a la fin
-# s'ils ont tous ete executer
-
 # permettre que ES et Graylog soit sur la meme VM
 
 # faire un test ALL avec tout les states loader en meme temps
@@ -893,12 +890,23 @@ class IntegrationFull(BaseIntegration):
     """
 
     _check_failed = []
+    _check_total = {}
 
     def setUp(self):
         BaseIntegration.setUp(self)
         self._check_failed = []
+        self._check_total = {}
 
     def tearDown(self):
+        global client
+        skipped = []
+        executed_checks = self._check_total.keys()
+        for check in client('nrpe.list_check'):
+            if check not in executed_checks:
+                skipped.append(check)
+        if skipped:
+            logger.warning("The following NRPE checks weren't executed: %s",
+                           ','.join(skipped))
         if self._check_failed:
             self.fail(os.linesep.join(self._check_failed))
 
@@ -909,6 +917,7 @@ class IntegrationFull(BaseIntegration):
         global client
         logger.debug("Run NRPE check '%s'", check_name)
         output = client('nrpe.run_check', check_name)
+        self._check_total[check_name] = True
         if not output['result']:
             self._check_failed.append('%s: %s' % (check_name,
                                                   output['comment']))

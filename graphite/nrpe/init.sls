@@ -50,7 +50,10 @@ include:
       deployment: graphite
       domain_name: {{ pillar['graphite']['web']['hostnames'][0] }}
       http_uri: /account/login
-      https: {{ pillar['graphite']['web']['ssl']|default(False) }}
+{% if pillar['graphite']['web']['ssl']|default(False) %}
+      https: True
+      http_result: 301 Moved Permanently
+{% endif %}
 
 /etc/nagios/nrpe.d/postgresql-graphite.cfg:
   file:

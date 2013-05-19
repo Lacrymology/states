@@ -5,14 +5,13 @@
  #}
 {% set first_ip = salt['network.ip_addrs']()[0] %}
 {% set effective_http_uri = http_uri|default("/") -%}
-{%- set effective_http_result = http_result|default("200 OK") -%}
 {%- if http|default(True) %}
-command[check_{{ deployment }}_http]=/usr/lib/nagios/plugins/check_http -H {{ domain_name }} -u {{ effective_http_uri }} -p {{ http_port|default(80) }} -e '{{ effective_http_result }}' -I {{ first_ip }}
+command[check_{{ deployment }}_http]=/usr/lib/nagios/plugins/check_http -H {{ domain_name }} -u {{ effective_http_uri }} -p {{ http_port|default(80) }} -e '{{ http_result|default("200 OK") }}' -I {{ first_ip }}
 {% else %}
 command[check_{{ deployment }}_http]=/bin/echo "HTTP OK: No HTTP for {{ deployment }}"
 {% endif %}
 {% if https|default(False) -%}
-command[check_{{ deployment }}_https]=/usr/lib/nagios/plugins/check_http -S -H {{ domain_name }} -u {{ https_uri|default(effective_http_uri) }} -e '{{ https_result|default(effective_http_result) }}' -I {{ first_ip }}
+command[check_{{ deployment }}_https]=/usr/lib/nagios/plugins/check_http -S -H {{ domain_name }} -u {{ https_uri|default(effective_http_uri) }} -e '{{ https_result|default("200 OK") }}' -I {{ first_ip }}
 command[check_{{ deployment }}_https_certificate]=/usr/lib/nagios/plugins/check_http -S -H {{ domain_name }} -C {{ https_max_age|default(60) }} -I {{ first_ip }}
 {% else -%}
     {%- for name in ('https', 'https_certificate') %}

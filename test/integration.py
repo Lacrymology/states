@@ -901,7 +901,7 @@ class IntegrationFull(BaseIntegration):
         global client
         skipped = []
         executed_checks = self._check_total.keys()
-        for check in client('nrpe.list_check'):
+        for check in client('nrpe.list_checks'):
             if check not in executed_checks:
                 skipped.append(check)
         if skipped:

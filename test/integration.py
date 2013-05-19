@@ -13,6 +13,17 @@ Check file docs/tests.rst for details.
 
 # TODO: faire une liste de fichiers AVANT et APRÈS les tests pour
 # afficher les différences et failer si un fichier est de trop.
+# compare /etc en RAM
+
+# lister les groups, users et autre cossins
+# et comparer si y'a eu des changements apres l'execution du clean
+
+# lister les check NRPE avant de rouler le test et verifier a la fin
+# s'ils ont tous ete executer
+
+# permettre que ES et Graylog soit sur la meme VM
+
+# faire un test ALL avec tout les states loader en meme temps
 
 import logging
 import unittest
@@ -1285,3 +1296,5 @@ class IntegrationFull(BaseIntegration):
 
 if __name__ == '__main__':
     unittest.main()
+    logger.info("Install SSH Server to give access to host")
+    client('state.sls', 'ssh.server')

@@ -32,24 +32,24 @@ Then on the server run::
 
 Install minion::
 
-  /tmp/salt/states/salt/minion/bootstrap.sh integration-[whatever]
+  /root/salt/states/salt/minion/bootstrap.sh integration-[whatever]
 
 Integration Tests
 -----------------
 
 To launch tests::
 
-  /tmp/salt/states/test/integration.py
+  /root/salt/states/test/integration.py
 
 There is almost 400 tests, it takes time and generate a lot of logs, so I
 suggest:
 
-  nohup /tmp/salt/states//test/integration.py -c > /tmp/test.log
+  nohup /root/salt/states/test/integration.py -c > /tmp/test.log
 
 You can launch specific test such as::
 
-  nohup /tmp/salt/states/test/integration.py -c Integration > /tmp/test.log
+  nohup /root/salt/states/test/integration.py -c Integration > /tmp/test.log
 
 or::
 
-  nohup /tmp/salt/states/test/integration.py -c Integration.test_apt > /tmp/test.log
+  nohup /root/salt/states/test/integration.py -c Integration.test_apt > /tmp/test.log

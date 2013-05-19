@@ -8,7 +8,6 @@ dovecot:
       - dovecot-ldap
   service:
     - running
-    - enable: False
     - watch:
       {% for i in cfgfiles %}
       - file: /etc/dovecot/conf.d/{{ i }}

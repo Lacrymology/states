@@ -1,6 +1,6 @@
 # {{ pillar['message_do_not_modify'] }}
 {% if shinken_component in ('reactionner', 'scheduler') %}
-command[check_shinken_{{ shinken_component }}]=/usr/lib/nagios/plugins/check_procs -c 1:10 -a 'shinken-{{ shinken_component }} -u shinken -c /etc/shinken/{{ shinken_component }}.conf'
+command[check_shinken_{{ shinken_component }}]=/usr/lib/nagios/plugins/check_procs -c 1:10 -u shinken -a 'shinken-{{ shinken_component }} -c /etc/shinken/{{ shinken_component }}.conf'
 {% else %}
 command[check_shinken_{{ shinken_component }}]=/usr/lib/nagios/plugins/check_procs -c 1:10 {% if shinken_component != 'arbiter' %}-u shinken {% endif %}-C shinken-{{ shinken_component }}
 {% endif %}

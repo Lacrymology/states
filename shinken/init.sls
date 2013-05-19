@@ -4,6 +4,7 @@
  #}
 {# TODO: add support for GELF logging #}
 include:
+  - hostname
   - virtualenv
   - pip
   - python.dev
@@ -196,6 +197,10 @@ shinken-{{ role }}:
     - source: salt://shinken/upstart.jinja2
     - context:
       shinken_component: {{ role }}
+{% if role == 'arbiter' %}
+    - require:
+      - host: hostname
+{% endif %}
 {% endif %}
 {% endfor %}
 

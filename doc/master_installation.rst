@@ -16,7 +16,7 @@ Bootstrap Archive
 
 Create an archive for salt-master bootstrap purpose.
 
-Check the `bootstrap_archive.py` script at the root of the common repository
+Check the ``bootstrap_archive.py`` script at the root of the common repository
 for instruction.
 
 Copy the output of the archive to the server you want to install the

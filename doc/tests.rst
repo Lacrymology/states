@@ -16,7 +16,7 @@ Bootstrap Archive
 
 Create an archive for salt-master bootstrap purpose.
 
-Check the `bootstrap_archive.py` script at the root of the common repository
+Check the ``bootstrap_archive.py`` script at the root of the common repository
 for instruction.
 
 Copy the output of the archive to the server you want to install the
@@ -39,7 +39,7 @@ Integration Tests
 
 To launch tests::
 
-  /root/salt/states/test/integration.py
+  /root/salt/states/test/integration.py -c
 
 There is almost 400 tests, it takes time and generate a lot of logs, so I
 suggest:
@@ -53,3 +53,17 @@ You can launch specific test such as::
 or::
 
   nohup /root/salt/states/test/integration.py -c Integration.test_apt > /tmp/test.log
+
+Non-Common Tests
+----------------
+
+Roles and non-common low-level states should also be tested. For that, create a
+``tests/client.py`` file in the other repositories.
+
+The file need to have::
+
+  from integration import *
+
+At the top and then you can create an other test class that perform test on
+those states and roles. Just follow the instruction but invoke ``client.py``
+instead of ``integration.py``.

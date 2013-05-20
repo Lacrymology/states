@@ -30,7 +30,6 @@ dovecot-agent:
     - present
     - uid: 4000
     - groups:
-      - dovecot-agent
       - mail
 
 /var/mail/vhosts/indexes:

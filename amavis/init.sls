@@ -15,7 +15,6 @@ amavis: # make sure that /etc/mailname exists
   user:
     - present
     - groups:
-      - amavis
       - clamav
     - require:
       - pkg: amavis
@@ -63,7 +62,6 @@ clamav-daemon:
     - present
     - name: clamav
     - groups:
-      - clamav
       - amavis
     - require:
       - pkg: clamav-daemon

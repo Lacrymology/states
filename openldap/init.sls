@@ -20,7 +20,6 @@ openldap:
   user:
     - present
     - groups:
-      - openldap
       - ssl-cert
     - require:
       - pkg: slapd

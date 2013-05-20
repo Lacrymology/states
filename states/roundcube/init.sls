@@ -4,6 +4,8 @@
 #    - pkgs:
 #      - apache2
 #      - libapache2-mod-php5
+include:
+  - nginx
 
 php5-fpm:
   pkg:
@@ -67,3 +69,12 @@ tar xzf /usr/local/src/roundcubemail-{{ version }}.tar.gz:
     - require:
       - file: /usr/local/src/roundcubemail-{{ version }}
 {% endfor %}
+
+/etc/nginx/conf.d/roundcube.conf:
+  file:
+    - managed
+    - template: jinja
+    - source: salt://roundcube/nginx.jinja2
+    - user: www-data
+    - group: www-data
+    - mode: 440

@@ -250,6 +250,15 @@ The following states will soon have HA and HP support:
 
 Once Salt Master will support properly multi-master, the state will support it.
 
+Evolution
+---------
+
+The states in this repository are continously improved, fixed, updated (to catch
+new version of OSS release). Each states regularly gains additional monitor
+checks to verify the health of the application.
+
+The list of states increase as well.
+
 Uninstallation of components
 ----------------------------
 

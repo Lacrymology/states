@@ -3,12 +3,12 @@ Introduction to this repository
 
 Welcome to **Common** repository.
 
-This repository target Linux only. It actually only support Ubuntu 12.04 Precise
-LTS. But support for other release of Ubuntu or Debian based distribution can
-be easily added.
+This repository targets Linux only. It actually only supports Ubuntu 12.04
+Precise LTS but support for other releases of Ubuntu or Debian based 
+distributions can be easily added.
 
-It hold the low-level salt states for various operating-system services, such
-as:
+It contains the low-level salt states for various operating-system services,
+such as:
 
 - logging daemon
 - package manager
@@ -21,12 +21,11 @@ as:
 - Simple SMTP client
 - screen
 
-Also numerous states for tools used by itself to deploy applications, such as:
+and numerous states for tools used by itself to deploy applications, such as:
 
 - Git
 - Mercurial
 - SSH client
-- sudo
 - Python PIP
 - Python virtualenv
 - SSL keys
@@ -71,62 +70,63 @@ Standalone daemon state, such as:
 - ProFTPd
 - Git server
 
-States for integration between operating system:
+States for integration between operating system: #TODO
 
-- Diamond, a daemon that gather statistics on thousands of metrics and send it
+- Diamond, a daemon that gathers statistics on thousands of metrics and sends it
   to Graphite server.
 - NRPE (Nagios Remote Plugin Executor), the only Nagios component in a state.
+  #TODO ???
   It's called by Shinken server to perform checks.
 - Raven client to report error to Sentry
-- StatsD, a daemon that receive stats from some application and periodically
-  send them to Graphite server.
+- StatsD, a daemon that receives stats from some applications and periodically
+  sends them to Graphite server.
 
-Others states, such as:
+Other states, such as:
 
 - Salt web UI
 - Salt REST API
-- Reprepro an APT repository server
+- Reprepro an APT repository server #TODO Reprepro ???
 
-States for testing and it's requirements.
+States for testing and its requirements.
 More details on this topic in file testing document.
 
 Philosophy
 ----------
 
-This repository deploy only Open-Source software (OSS), so far. By building a
+This repository deploys only Open-Source software (OSS), so far. By building a
 complete infrastructure on top of OSS guarantee that these states don't
-depends on a specific individual or company. The deployed software can be
+depend on a specific individual or company. The deployed software can be
 troubleshoot and fixed internally. If an OSS community still exists around any
-software that cause an issue, the community can fix the bug and help to improve
+software that causes an issue, the community can fix the bug and help to improve
 the running infrastructure for free.
 
 If the authors and/or maintainers of that repository aren't available anymore
 to support it, anybody can take over it.
 
-All the states had been designed to configure themselves from Salt Pillars data.
-Some configuration are hardcoded because they're linked to a specific release of
-the component it deploy, as it's still unknown what the upcoming new release
-will requires.
+All the states had been designed to configure themselves from Salt Pillar data.
+Some configuration are hardcoded because they link to a specific release of
+the component it deploy #TODO they-it???, as it's still unknown what upcoming 
+releases will require.
 
-The limitation of those states are the limit of the deployed software. Example:
-If a component is known to not scale on more than 100 servers. The state will
-only be able to achieve a scalable deployment to 100 servers.
+The limitations of those states are the limitations of the deployed software.
+Example: if a component is known to not scale on more than 100 servers.
+The state will only be able to achieve a scalable deployment to 100 servers.
 If an OSS application contains a bug that affect the infrastructure, the state
-can't be blame for it. It's just a recipe that deploy and infrastructure and
-manage the configurations.
+can't be blamed for it. It's just a recipe that deploys infrastructure and
+manages configurations.
 
 The states come with highly polished integration between themselves and the
 infrastructure support tools. The integration is optional but highly
 recommended.
 
-The states and pillars are the documentation! These states try to do everything
+The states and pillars are documentations! These states try to do everything
 requires to have a fully working application. Human intervention is avoided at
 all costs.
-This allow to only backup the data that is produced by the application, example:
-In PostgreSQL it's the dump of all databases. As the configuration files are
-managed by the states and pillars, they don't need to be backup. Nor the
-binaries, as they're available trough the package manager.
-So, well documented states and pillars, can document what the infrastructure is
+This allow to only backup the data that is produced by the application, for
+example: In PostgreSQL, it's the dump of all databases. As the configuration 
+files are managed by the states and pillars, they don't need to be backup. Nor 
+the binaries, as they're available through the package manager.
+So, well documented states and pillars can document what the infrastructure is
 and how global pieces are plugged together. Thus eliminate most of the documents
 requirements and make it very easy to plan a disaster recovery plan.
 By eliminating all human intervention on the servers themselves, except for
@@ -136,15 +136,15 @@ server.
 This repository contains only low-levels states. Low-level means that they only
 perform changes on the server itself on specific applications or the operating
 system itself. This repository alone with pillars, can't even execute salt
-``state.highstate`` function. But, each states can be executed trough ``state.sls``.
+``state.highstate`` function. But, each state can be executed through ``state.sls``.
 This repository don't contains business logic, orchestration or integration. It
-need to be into an other repository. This allow this **common** repository to
-never contains client's specific changes and stays generic and usuable by
-everyone. No need to merge changes from one repo to an other one. These states
-don't contains undisclosable information.
+need to be into another repository. This allows this **common** repository to
+never contains client's specific changes and stays generic and usable by
+everyone. No need to merge changes from one repo to another. These states
+don't contain undisclosable information.
 If a low-level state requires a client's change that can't be shared to everyone
 it's kept in the client's specific repository (or repositories).
-GitFS feature of Salt allow to have multiple repositories plugged together
+GitFS feature of Salt allows to have multiple repositories plugged together
 without causing any potential conflicts. All repositories content are then,
 considered as a single flat merged file-system.
 
@@ -155,53 +155,53 @@ Most of the states of that repository are there to fill the requirements to
 deploy web application, internal developed software or any commercial closed
 source application.
 
-But some of them exists only to support the other components:
+But some of them exists only to support other components:
 
 - Monitoring:
   - Check that components run as expected.
-  - Perform additional validation that are mostly useful when a component don't
-    work as expected and someone try to troubleshoot the issue.
-  - Notification by email of any problem and their recovery.
-  - Web interface to see the actuals problems, check history of a service or an
-    host. Or a dashboard that show the status of various system.
-  - Business health status, example: a cluster is working as expected if at
-    least 2 out of 3 nodes are working. If 2 nodes don't work and only 1 do,
+  - Perform additional validation that are mostly useful when a component doesn't
+    work as expected and someone tries to troubleshoot the issue.
+  - Notify by email about any problem and its recovery.
+  - Web interface to see actual problems, check history of a service or a
+    host. Or a dashboard that shows status of various system.
+  - Business health status, for example: a cluster is working as expected if at
+    least 2 out of 3 nodes are working. If 2 nodes don't work and only 1 does,
     the status is at Warning and only support team get notification.
-    If 3 nodes are down, every one get a notification that the status is Error.
-- Centralize into a single place all the logs from all hosts:
-  - To provide a single place to look for the information.
+    If 3 nodes are down, everyone will get a notification that the status is Error.
+- Centralize into a single place all logs from all hosts:
+  - To provide a single place to look for information.
   - Create alert based on some rules, such as Linux OOM (Out of Memory).
   - Give access to developers or tester to logs of some hosts.
-  - Limit human requirements to log in a server to read the logs, which limit
+  - Limit human requirements to log into a server to read logs, which limits
     the risks for someone to perform live changes on the server that aren't
     tracked by configuration management system.
 - Metrics Statistics and graphics:
   - A central dashboard that show graphics on thousands of metrics generated by
-    each components of the infrastructure. The most basics one are CPU usage of
-    an host. Or individual process memory usage.
-  - This complete the monitoring. Monitoring server even use the stats and
+    each component of the infrastructure. The most basic one are CPU usage of
+    a host, or a process memory usage.
+  - This complete the monitoring. Monitoring server even uses stats and
     graphs component to store and display it's own performance data.
   - Any internally developed application can be changed to send internal metrics
     too and embedded graphics into it.
 - Error reporting:
   - Many states come with integration to an error reporting server, if the
-    application allows it. If an internal error happens, the error is reported
+    application allows it. When an internal error happens, the error is reported
     immediately instead of silently lost in the logs.
   - A Linux based infrastructure with a lot of OSS components often come with
     multiple ways to get notification if something goes wrong, such as logs in
-    it's own file, logs trough syslog, local email, email trough a remote SMTP
+    its own file, logs through syslog, local email, email through a remote SMTP
     server, etc. The states in this repository are built to limit those
     communications channels and send them to the error report server to make
-    sure that multiple persons can all receive the same error message.
+    sure that multiple people can all receive the same error message.
     If an error happens 1000 times in a row, only a single notification is sent
     The error can be acknowledge.
 - Configuration Management:
-  - Everything is done trough states,
+  - Everything is done through states,
     **even the first salt-master installation!**. No surprise, no undocumented
     installation steps, no results that can't be reproduce.
   - States life-cycles: this repository support multiple version of the states
     to be usable at the same time. A single host can execute the stable version
-    of the states, while an testing host can execute an other version that just
+    of the states, while an testing host can execute another version that just
     went out of development.
 
 Integration

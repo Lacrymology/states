@@ -143,7 +143,7 @@ never contains client's specific changes and stays generic and usable by
 everyone. No need to merge changes from one repo to another. These states
 don't contain undisclosable information.
 If a low-level state requires a client's change that can't be shared to everyone
-it's kept in the client's specific repository (or repositories).
+its kept in the client's specific repository (or repositories).
 GitFS feature of Salt allows to have multiple repositories plugged together
 without causing any potential conflicts. All repositories content are then,
 considered as a single flat merged file-system.
@@ -180,7 +180,7 @@ But some of them exists only to support other components:
     each component of the infrastructure. The most basic one are CPU usage of
     a host, or a process memory usage.
   - This complete the monitoring. Monitoring server even uses stats and
-    graphs component to store and display it's own performance data.
+    graphs component to store and display its own performance data.
   - Any internally developed application can be changed to send internal metrics
     too and embedded graphics into it.
 - Error reporting:
@@ -201,15 +201,15 @@ But some of them exists only to support other components:
     installation steps, no results that can't be reproduce.
   - States life-cycles: this repository support multiple version of the states
     to be usable at the same time. A single host can execute the stable version
-    of the states, while an testing host can execute another version that just
+    of the states, while a testing host can execute another version that just
     went out of development.
 
 Integration
 -----------
 
 Most of the states come with a sub-state that integrate themselves with other
-components, such as monitoring (trough Nagios NRPE), statistics and graphs
-(trough Diamond) and logging (to filter noise out of logs).
+components, such as monitoring (through Nagios NRPE), statistics and graphs
+(through Diamond) and logging (to filter noise out of logs).
 
 Those sub-states with integration aren't required to install the parent state.
 Such as PostgreSQL server state can be deployed without NRPE monitoring checks,
@@ -217,9 +217,9 @@ Diamond plugin configuration or client-side backup script.
 
 A lot of other states also directly integrate themselves when they have
 native support for technologies, such as built-in Graylog2 support in uWSGI
-trough it's GELF plugin. Or trough third party library, such as GrayPY for
+through its GELF plugin. Or through third party library, such as GrayPY for
 Python based application. In those cases, the integration is turned on only
-when Salt pillars data contains an expected value.
+when Salt pillar data contains an expected value.
 
 High-Availability and High-Performance
 --------------------------------------
@@ -228,7 +228,7 @@ Many states support clustering and the support infrastructure components had
 been chosen because they support some form or an other of high-availability
 (HA) or high-performance (HP).
 
-Actually, thee HA and/or HP features aren't all turned on in current version of
+Actually, the HA and/or HP features aren't all turned on in current version of
 the states in that repository.
 
 Only the following support both HA and HP:
@@ -248,7 +248,7 @@ The following states will soon have HA and HP support:
 - MongoDB NoSQL database
 - Sentry: error notification and reporting
 
-Once Salt Master will support properly multi-master, the state will support it.
+Once Salt Master supports properly multi-master, the state will support it.
 
 Evolution
 ---------
@@ -257,12 +257,12 @@ The states in this repository are continously improved, fixed, updated (to catch
 new version of OSS release). Each states regularly gains additional monitor
 checks to verify the health of the application.
 
-The list of states increase as well.
+New states will be added as well.
 
 Uninstallation of components
 ----------------------------
 
-All the states come with it's uninstall equivalent. These are required for
+All the states come with its uninstall equivalent. These are required for
 testing purpose. But they're also useful to undo some changes. They're called
 "absent" states and they have the standard absent name. Example: PostgreSQL
 database server state is ``postgresql.server`` and the uninstallation state is
@@ -270,18 +270,18 @@ database server state is ``postgresql.server`` and the uninstallation state is
 
 Unlike the states that install or create something that often include and
 requires other state, the absent only remove itself. I don't try to uninstall
-it's dependencies. To revert entirely a server into it's original form before
-a component had been installed might requires to run a lot of other absent
+its dependencies. To revert entirely a server into its original form before
+a component had been installed might require to run a lot of other absent
 states.
 
 Roles
 -----
 
-As explained in the philosophy section, the states of that repository don't
+As explained in the philosophy section, states of that repository don't
 hold any business specifics logic.
 
-Who's in charge of integrate that states repository need todefine it's own
-*roles* list in it's own state repository.
+Who's in charge of integrate that states repository need to define its own
+*roles* list in its own state repository.
 
 Roles are simple human understandable definition of what servers can do in,
 here is an example list:
@@ -294,21 +294,21 @@ here is an example list:
 - Developer ``sandbox``
 - ``infra`` server that run all the infrastructure support tools
 
-Or simply borrow the name of the low-level state:
+Or simply borrows the name of the low-level state:
 
 - ``shinken`` monitoring host
 - ``elasticsearch`` node
 
-Then, for each roles, who's responsible to integration this repository states
+Then, for each role, who's responsible to integration this repository states
 to the business requirements need to create one state file per role.
 And they need to be under the ``roles`` folder, so the ``frontend`` role will be
 in ``roles/frontend/init.sls`` file.
 Why not ``roles/frontend.sls`` file? Because it might need additional
-configuration files and all roles need to have it's ``absent.sls`` file too. So,
+configuration files and all roles need to have its ``absent.sls`` file too. So,
 there will be a ``roles/frontend/absent.sls`` file as well.
 
-The role state file contains the specific such as: change DNS value of
-``www.example.com`` to point to this server IP address if all the lower-level
+Role state file contains the specific such as: change DNS value of
+``www.example.com`` to point to this server IP address if all lower-level
 states had been applied succesfully.
 Or use this other config file instead of the one that was in **common**
 repository.

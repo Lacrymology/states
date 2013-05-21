@@ -23,6 +23,12 @@ nagios-nrpe-server:
     - dead
     - enable: False
 
+nagios:
+  user:
+    - absent
+    - require:
+      - pkg: nagios-nrpe-server
+
 /usr/lib/nagios/plugins:
   file:
     - absent

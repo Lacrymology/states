@@ -28,12 +28,12 @@ reduced a lot without performance penalty (or DoS github.com).
 A good balance can be repositories on the salt master **and** an 2nd remote in
 elsewhere for backup purpose.
 
-An other good reasons to have host git repositories in the salt master, is that
+Another good reason to have host git repositories in the salt master, is that
 Salt don't support GitFS for pillars. Thus, a git-hook for push can be turned
 on that will make pillars ``git pull``'ed each time new changes are pushed.
 
-Unless an other mecanism to trigger a git pull on the master is implemented,
-such as a cronjob, the pillars need to be updated manually on the salt
+Unless another mechanism to trigger a git pull on the master is implemented,
+such as a cronjob, the pillar need to be updated manually on the salt
 master.
 
 States
@@ -41,7 +41,7 @@ States
 
 With a new state git repository, roles can be created.
 
-But role can also refer to low-level state that aren't in **common** states
+But role can also refer to low-level states that aren't in **common** states
 repository. Such as if a closed-source or commercial application depends on
 a library or third party dependency, a ``somelib/init.sls`` and
 ``somelib/absent.sls`` can exists in the additional state repositories and be
@@ -55,7 +55,7 @@ Multiple versions of states
 As Salt don't support GitFS for pillars, there is only a single branch checked
 out on the salt master.
 
-But states can have multiple version in separate branches. By default, it's the
+But states can have multiple versions in separate branches. By default, it's the
 master branch.
 
 To specify which branch to use, the pillar data for a host need to contains the
@@ -63,14 +63,14 @@ branch key, such as::
 
     branch: develop
 
-The only limitation with that, is that the branch name need to exists in all
-git repositories (except the one for pillars).
+The only limitation with that, is that the branch name need to exist in all
+git repositories (except the one for pillar).
 
 Deployment
 ----------
 
-Once pillars had been created to feed data to states and roles created, the next
-step is to run the tests. For that check tests document.
+Once pillar had been created to feed data to states and roles created, the next
+step is to run tests. For that check tests document.
 
 Once states are applied successfully, the salt master can bootstrap itself and
 be available to configure all minions. For that, check the master installation

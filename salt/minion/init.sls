@@ -5,6 +5,7 @@
 include:
   - apt
   - gsyslog
+  - salt
 
 {# it's mandatory to remove this file if the master is changed #}
 salt_minion_master_key:

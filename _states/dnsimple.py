@@ -138,6 +138,13 @@ def records_existed(name, email, token, records):
             need_create = True
             for erc in ex_records:
                 if nrc['name'] == erc['name']:
+                    # some records have same name, check their type for makeing 
+                    # sure correct update/create
+                    # (DNSimple default have 4 NS record with name '')
+                    if erc['name'] == '':
+                        if erc['record_type'] != nrc['record_type']:
+                            continue
+
                     id2erc[erc['id']] = erc
                     diff = {}
                     for k, v in nrc.items():

@@ -70,14 +70,13 @@ Standalone daemon state, such as:
 - ProFTPd
 - Git server
 
-States for integration between operating system: #TODO
+States for integration of various components at operating system level:
 
 - Diamond, a daemon that gathers statistics on thousands of metrics and sends it
   to Graphite server.
-- NRPE (Nagios Remote Plugin Executor), the only Nagios component in a state.
-  #TODO ???
-  It's called by Shinken server to perform checks.
-- Raven client to report error to Sentry
+- NRPE (Nagios Remote Plugin Executor), called by Shinken server to perform
+  checks.
+- Raven client to report error to Sentry.
 - StatsD, a daemon that receives stats from some applications and periodically
   sends them to Graphite server.
 
@@ -85,7 +84,7 @@ Other states, such as:
 
 - Salt web UI
 - Salt REST API
-- Reprepro an APT repository server #TODO Reprepro ???
+- An APT repository server to host your own Debian packages
 
 States for testing and its requirements.
 More details on this topic in file testing document.
@@ -104,9 +103,9 @@ If the authors and/or maintainers of that repository aren't available anymore
 to support it, anybody can take over it.
 
 All the states had been designed to configure themselves from Salt Pillar data.
-Some configuration are hardcoded because they link to a specific release of
-the component it deploy #TODO they-it???, as it's still unknown what upcoming 
-releases will require.
+Some configuration are hardcoded because they're linked to a specific release of
+the component the state deploy. As it's still unknown what upcoming
+releases will require, the state lock itself on specific version.
 
 The limitations of those states are the limitations of the deployed software.
 Example: if a component is known to not scale on more than 100 servers.

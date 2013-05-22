@@ -26,6 +26,7 @@ def list_checks(config_dir='/etc/nagios/nrpe.d'):
                     output[match.group(1)] = match.group(2)
     return output
 
+
 def run_check(check_name):
     '''
     Run a specific nagios check
@@ -52,3 +53,17 @@ def run_check(check_name):
                                                           output['stderr'])
     ret['result'] = output['retcode'] == 0
     return ret
+
+
+def run_all_checks():
+    '''
+    Run all available nagios check, usefull to check if everything is fine
+    before monitoring system find it.
+
+    CLI Example::
+
+        salt '*' nrpe.run_all_checks
+
+    '''
+    for check_name in list_checks():
+        run_check(check_name)

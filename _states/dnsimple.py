@@ -39,9 +39,9 @@ def _auth_session(email, token):
 def _created(name, email, token):
     domain = name
     ret = {'name': domain,
-            'changes': {},
-            'result': False,
-            'comment': ''}
+           'changes': {},
+           'result': False,
+           'comment': ''}
 
     if __opts__['test']:
         return {'name': name,
@@ -76,8 +76,7 @@ def _normalize(records):
     for domain in records:
         li = []
         for rectype in records[domain]:
-            data = {}
-            data['record_type'] = rectype
+            data = {'record_type': rectype}
             recs = records[domain][rectype]
             for recname in recs:
                 data['name'] = recname
@@ -114,9 +113,9 @@ def records_exists(name, email, token, records):
     '''
 
     ret = {'name': 'existed',
-            'changes': {},
-            'result': True,
-            'comment': ''}
+           'changes': {},
+           'result': True,
+           'comment': ''}
 
     ses = _auth_session(email, token)
     existing_records = {}
@@ -138,7 +137,7 @@ def records_exists(name, email, token, records):
             need_create = True
             for erc in ex_records:
                 if nrc['name'] == erc['name']:
-                    # some records have same name, check their type for makeing 
+                    # some records have same name, check their type for making
                     # sure correct update/create
                     # (DNSimple default have 4 NS record with name '')
                     if erc['name'] == '':

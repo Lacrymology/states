@@ -13,8 +13,6 @@ import os
 import logging
 import logging.handlers
 
-log = configure_logging()
-
 def configure_logging():
     log = logging.getLogger('sentry.errors')
     fmt = logging.Formatter("%(asctime)-15s mail[%(process)d] %(message)s",
@@ -23,6 +21,8 @@ def configure_logging():
     handler.setFormatter(fmt)
     log.addHandler(handler)
     return log
+
+log = configure_logging()
 
 def main():
     """

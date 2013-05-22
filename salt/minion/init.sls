@@ -28,7 +28,7 @@ salt-minion:
     - require:
       - pkg: salt-minion
   pkg:
-    - latest
+    - installed
     - names:
       - salt-minion
       - python-software-properties

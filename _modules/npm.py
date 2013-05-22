@@ -43,6 +43,10 @@ def list(is_global=True, runas=None):
     json_s = _npm('list', is_global, runas)
     if not was_json:
         _npm('set json=false', is_global, runas)
+    if json_s[0] != '{':
+        json_start = json_s.index('{')
+        log.warning("Strip npm logs: %s", json_s[:json_start - 1])
+        json_s = json_s[json_start:]
     try:
         unserialized = json.loads(json_s)
     except ValueError:

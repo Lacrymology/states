@@ -69,3 +69,21 @@ pip:
       - pkg: python-setuptools
     - watch:
       - archive: pip
+
+{#
+ Upgrade distribute to avoid the following error:
+ $ pip freeze
+ Warning: cannot find svn location for distribute==0.6.24dev-r0
+ [snip]
+ ## FIXME: could not find svn URL in dependency_links for this package:
+ distribute==0.6.24dev-r0
+ [snip]
+#}
+distribute:
+  module:
+    - wait
+    - name: pip.install
+    - pkgs: distribute
+    - upgrade: True
+    - watch:
+      - module: pip

@@ -36,7 +36,18 @@ def _auth_session(email, token):
     return ses
 
 
-def _created(name, email, token):
+def created(name, email, token):
+    '''
+    Create/Register domain name.
+
+    sls example
+
+    example.com:
+      dnssimple:
+        - registered
+        - email: xxx
+        - token: xxx
+    '''
     domain = name
     ret = {'name': domain,
            'changes': {},

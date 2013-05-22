@@ -1,6 +1,8 @@
 {#
  Install Nagios NRPE Agent
 #}
+#TODO: set nagios user shell to /bin/false
+
 include:
   - pip
   - pip.nrpe

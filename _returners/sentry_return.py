@@ -46,16 +46,8 @@ def returner(ret):
             'pillar': pillar_data,
             'grains': __salt__['grains.items']()
         }
-        servers = []
-        for server in pillar_data['raven']['servers']:
-            servers.append(server + '/api/store/')
         try:
-            client = Client(
-                servers=servers,
-                public_key=pillar_data['raven']['public_key'],
-                secret_key=pillar_data['raven']['secret_key'],
-                project=pillar_data['raven']['project'],
-            )
+            client = Client(pillar_data['sentry_dsn'])
             client.captureMessage(ret['comment'], extra=sentry_data)
         except Exception, err:
             logger.error("Can't send message to sentry: %s", err, exc_info=True)

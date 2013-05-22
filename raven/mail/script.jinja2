@@ -41,7 +41,7 @@ def main():
         msg = body
 
     os.environ.pop('SENTRY_DSN', None)
-    client.captureMessage(msg, extra={'environ': os.environ})
+    client.captureMessage(msg, extra=dict(os.environ))
 
 
 def syslog_exception(exception):

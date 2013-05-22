@@ -74,10 +74,12 @@ def created(name, email, token):
         if comment in resp.content:
             ret['result'] = True
             ret['comment'] = comment
-    elif resp.status_code == 401:
-        ret['result'] = False
     else:
-        raise Exception("{0} {1}".format(resp.status_code, resp.content))
+        ret['result'] = False
+        if resp.status_code == 401:
+            ret['comment'] = 'Unauthorized: bad email and/or token'
+        else:
+            ret['comment'] = "{0} {1}".format(resp.status_code, resp.content)
     return ret
 
 
@@ -99,8 +101,8 @@ def _normalize(records):
 
 def records_exists(name, email, token, records):
     '''
-    Use returning ASAP when have any error happen. So if nothing change,
-    result is true
+    Update records.
+    If any error happens, no changes are applied.
 
     sls example
 
@@ -198,7 +200,7 @@ def records_exists(name, email, token, records):
                     ret['comment'] = "Couldn't find domain {0}".format(domain)
                     return ret
             else:
-                assert resp.status_code != 422
+                ret['result'] = False
                 ret['comment'] = "{0} {1} {2}".format(domain, r,
                                                       resp.status_code)
                 return ret

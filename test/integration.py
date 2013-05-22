@@ -14,12 +14,7 @@ Check file docs/tests.rst for details.
 # TODO: faire une liste de fichiers AVANT et APRÈS les tests pour
 # afficher les différences et failer si un fichier est de trop.
 # compare /etc en RAM
-
-# lister les groups, users et autre cossins
-# et comparer si y'a eu des changements apres l'execution du clean
-
 # permettre que ES et Graylog soit sur la meme VM
-
 # faire un test ALL avec tout les states loader en meme temps
 
 import logging
@@ -125,6 +120,12 @@ is_clean = False
 # to compare subsequent cleanup to see if there is still remaining running
 # processes
 process_list = None
+# list of groups built after the initial cleanup, this is list is used
+# to compare subsequent cleanup to see if there is extra group
+group_list = None
+# list of users built after the initial cleanup, this is list is used
+# to compare subsequent cleanup to see if there is extra user
+user_list = None
 
 logger = logging.getLogger()
 
@@ -300,7 +301,8 @@ class BaseIntegration(unittest.TestCase):
         """
         Clean up the minion before each test.
         """
-        global clean_up_failed, is_clean, process_list, client
+        global clean_up_failed, is_clean, process_list, client, user_list,\
+            group_list
 
         if clean_up_failed:
             self.skipTest("Previous cleanup failed")
@@ -330,6 +332,7 @@ class BaseIntegration(unittest.TestCase):
                 clean_up_failed = True
                 self.fail(output)
 
+        # check processes
         if process_list is None:
             process_list = self.list_user_space_processes()
             logger.debug("First cleanup, keep list of %d process",
@@ -346,6 +349,30 @@ class BaseIntegration(unittest.TestCase):
                 clean_up_failed = True
                 self.fail("Process that still run after cleanup: %s" % (
                           os.linesep.join(unclean)))
+
+        # check unix groups
+        if group_list is None:
+            group_list = self.list_groups()
+            logger.debug("First cleanup, keep list of %d groups",
+                         len(group_list))
+        else:
+            extra = set(self.list_groups()) - set(group_list)
+            if extra:
+                clean_up_failed = True
+                self.fail("New group that still exists after cleanup: %s" % (
+                          ','.join(extra)))
+
+        # check unix users
+        if user_list is None:
+            user_list = client('user.list_users')
+            logger.debug("First cleanup, keep list of %d users",
+                         len(user_list))
+        else:
+            extra = set(client('user.list_users')) - set(user_list)
+            if extra:
+                clean_up_failed = True
+                self.fail("New user that still exists after cleanup: %s" % (
+                          ','.join(extra)))
 
         is_clean = True
 
@@ -397,6 +424,16 @@ class BaseIntegration(unittest.TestCase):
             # kernel process are like this: [xfs]
             if not name.startswith('['):
                 output.append(name)
+        return output
+
+    def list_groups(self):
+        """
+        return the list of groups
+        """
+        global client
+        output = []
+        for group in client('group.getent'):
+            output.append(group['name'])
         return output
 
 
@@ -599,25 +636,8 @@ class Integration(BaseIntegration):
     def test_xml(self):
         self.top(['xml'])
 
-class IntegrationAbsentEmpty(Integration):
-    """
-    Run all Integration tests, but run all the states with .absent instead
-    """
 
-    def top(self, states):
-        absent_states = []
-        for state in states:
-            absent_states.append(state + '.absent')
-        Integration.top(self, absent_states)
-
-    def test_django(self):
-        self.top(['django'])
-
-    def test_local(self):
-        self.top(['local'])
-
-
-class IntegrationWithAbsent(Integration):
+class IntegrationAbsent(Integration):
     """
     Run all Integration tests, but run all the absent states just after them.
     """
@@ -626,7 +646,6 @@ class IntegrationWithAbsent(Integration):
         absent_states = []
         for state in states:
             absent_states.append(state + '.absent')
-        Integration.top(self, states)
         Integration.top(self, absent_states)
 
     def test_local(self):
@@ -737,15 +756,6 @@ class IntegrationNRPEAbsent(IntegrationNRPE):
         IntegrationNRPE.top(self, absent_states)
 
 
-class IntegrationNRPEWithAbsent(IntegrationNRPEAbsent):
-    """
-    Same as :class:`IntegrationNRPE` but run the .absent just after
-    """
-    def top(self, states):
-        IntegrationNRPE.top(self, states)
-        IntegrationNRPEAbsent.top(self, states)
-
-
 class IntegrationDiamondBase(BaseIntegration):
     """
     Execute diamond integration only
@@ -839,7 +849,7 @@ class IntegrationDiamondBase(BaseIntegration):
         self.top(['uwsgi.diamond'])
 
 
-class IntegrationDiamondAbsent(BaseIntegration):
+class IntegrationDiamond(BaseIntegration):
     """
     Same as :class:`IntegrationDiamond` but run only .absent states
     """
@@ -873,15 +883,6 @@ class IntegrationDiamondAbsent(BaseIntegration):
 
     def test_rabbitmq(self):
         self.top(['rabbitmq.diamond'])
-
-
-class IntegrationDiamondWithAbsent(IntegrationDiamondAbsent):
-    """
-    Same as :class:`IntegrationDiamond` but run .absent states after
-    """
-    def top(self, states):
-        BaseIntegration.top(self, states)
-        IntegrationDiamondAbsent.top(self, states)
 
 
 class IntegrationFull(BaseIntegration):
@@ -1235,8 +1236,12 @@ class IntegrationFull(BaseIntegration):
         self.run_check('check_postgresql_sentry')
 
     def test_shinken(self):
+        sleep_time = 60
         self.top(['shinken', 'shinken.nrpe', 'shinken.diamond'])
         self.check_integration()
+        logger.debug("Sleep %d seconds to let Arbiter synchronize the others",
+                     sleep_time)
+        time.sleep(sleep_time)
         self.run_check('check_shinken_arbiter')
         self.run_check('check_shinken_broker')
         self.run_check('check_shinken_poller')
@@ -1305,5 +1310,5 @@ class IntegrationFull(BaseIntegration):
 
 if __name__ == '__main__':
     unittest.main()
-    logger.info("Install SSH Server to give access to host")
-    client('state.sls', 'ssh.server')
+    # logger.info("Install SSH Server to give access to host")
+    # client('state.sls', 'ssh.server')

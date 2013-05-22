@@ -93,10 +93,11 @@ def records_exists(name, email, token, records):
 
     sls example
 
-    records_exists:
-      email:
-      token:
-      records:
+    state_name:
+      - records_exists
+      - email: xxx
+      - token: xxx
+      - records:
         blahblah.com:
           A:
             www:

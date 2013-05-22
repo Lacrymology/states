@@ -10,7 +10,19 @@ To overwrite default Sentry DSN, set environment variable SENTRY_DSN.
 
 import sys
 import os
+import logging
+import logging.handlers
 
+log = configure_logging()
+
+def configure_logging():
+    log = logging.getLogger('sentry.errors')
+    fmt = logging.Formatter("%(asctime)-15s mail[%(process)d] %(message)s",
+                            datefmt='%b %d %H:%M:%S')
+    handler = logging.handlers.SysLogHandler('/dev/log')
+    handler.setFormatter(fmt)
+    log.addHandler(handler)
+    return log
 
 def main():
     """
@@ -43,24 +55,8 @@ def main():
     os.environ.pop('SENTRY_DSN', None)
     client.captureMessage(msg, extra=dict(os.environ))
 
-
-def syslog_exception(exception):
-    """
-    Report an exception to syslog
-    """
-    # configure logging, only if an exception occurs
-    import logging
-    import logging.handlers
-    log = logging.getLogger('sentry.errors')
-    fmt = logging.Formatter("%(asctime)-15s mail[%(process)d] %(message)s",
-                            datefmt='%b %d %H:%M:%S')
-    handler = logging.handlers.SysLogHandler('/dev/log')
-    handler.setFormatter(fmt)
-    log.addHandler(handler)
-    log.critical(e)
-
 if __name__ == "__main__":
     try:
         main()
     except Exception as e:
-        syslog_exception(e)
+        log.critical(e)

@@ -111,25 +111,31 @@ def records_exists(name, email, token, records):
       - email: xxx
       - token: xxx
       - records:
-        blahblah.com:
-          A:
-            www:
-              content: 123.11.1.11
-              ttl: 123
-              prio: 2
-            blog:
-              content: 122.2.2.2
-        adomain.org:
-          A:
-            www:
-              content: 12.1.1.2
-              ...
+          blahblah.com:
+            A:
+              www:
+                content: 123.11.1.11
+                ttl: 123
+                prio: 2
+              blog:
+                content: 122.2.2.2
+          adomain.org:
+            A:
+              www:
+                content: 12.1.1.2
+                ...
     '''
 
     ret = {'name': 'existed',
            'changes': {},
            'result': True,
            'comment': ''}
+
+    if records is None:
+        ret['result'] = False
+        ret['comment'] = "jinja indentation for records argument need more " \
+                         "than 2 spaces indentation"
+        return ret
 
     ses = _auth_session(email, token)
     existing_records = {}

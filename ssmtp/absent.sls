@@ -4,12 +4,11 @@
 ssmtp:
   pkg:
     - purged
+    - names:
+      - ssmtp
+      - bsd-mailx
   file:
     - absent
     - name: /etc/ssmtp
     - require:
       - pkg: ssmtp
-
-bsd-mailx:
-  pkg:
-    - purged

@@ -105,7 +105,7 @@ def records_exists(name, email, token, records):
     sls example
 
     state_name:
-      - records_exists
+      dnssimple.records_exists:
       - email: xxx
       - token: xxx
       - records:

@@ -34,5 +34,5 @@ To install a salt-master::
   /root/salt/states/salt/master/bootstrap.sh [minion id]
 
 Note that it's really the minion ID that is required to install the Salt Master.
-As it first install a Salt Minion and use it to install Salt Minion. This step
+As it first install a Salt Minion and use it to install Salt Master. This step
 install both minion and master.

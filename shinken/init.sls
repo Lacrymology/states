@@ -16,6 +16,10 @@ include:
   - nginx
   - gsyslog
 {% endif %}
+{% if grains['id'] in pillar['shinken']['architecture']['reactionner']|default([]) or
+      grains['id'] in pillar['shinken']['architecture']['arbiter']|default([]) %}
+  - ssmtp
+{% endif %}
 
 {#{% if 'arbiter' in pillar['shinken']['roles'] %}#}
 {#    {% if pillar['shinken']['arbiter']['use_mongodb'] %}#}
@@ -200,6 +204,9 @@ shinken-{{ role }}:
 {% if role == 'arbiter' %}
     - require:
       - host: hostname
+{% endif -%}
+{%- if role in ('reactionner', 'arbiter') %}
+      - pkg: ssmtp
 {% endif %}
 {% endif %}
 {% endfor %}

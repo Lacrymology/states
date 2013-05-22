@@ -1,0 +1,58 @@
+#!/usr/bin/env python
+
+"""
+RavenMail: Emulate /usr/bin/mail(x) but send mail to a Sentry server instead.
+
+To overwrite default Sentry DSN, set environment variable SENTRY_DSN.
+"""
+
+import sys
+import os
+
+def main():
+    # consume stdin early
+    body = os.linesep.join(sys.stdin.readlines())
+    if not len(body):
+        sys.stderr.write("Empty stdin, nothing to report")
+        sys.stderr.write(os.linesep)
+        sys.exit(1)
+
+    # init raven quickly, so if something is wrong it get logged early
+    from raven import Client
+    if 'SENTRY_DSN' not in os.environ.keys():
+        os.environ['SENTRY_DSN'] = "{{ pillar['sentry_dsn'] }}"
+    client = Client()
+
+    # process command line
+    from argparse import ArgumentParser
+    argpsr = ArgumentParser()
+    argpsr.add_argument('-s', help="Subject")
+    args = argpsr.parse_args()
+
+    if args.s:
+        msg = os.linesep.join((args.s, body))
+    else:
+        msg = body
+
+    os.environ.pop('SENTRY_DSN', None)
+    client.captureMessage(msg, extra={'environ': os.environ})
+
+def syslog_exception(exception):
+    """
+    Report an exception to syslog
+    """
+    # configure loging, only if an exception occurs
+    import logging
+    import logging.handlers
+    log = logging.getLogger("RavenMail")
+    fmt = logging.Formatter("%(name)s %(levelname)s %(message)s")
+    handler = logging.handlers.SysLogHandler(address='/dev/log')
+    handler.setFormatter(fmt)
+    log.addHandler(handler)
+    log.critical(e)
+
+if __name__ == "__main__":
+    try:
+        main()
+    except Exception as e:
+        syslog_exception(e)

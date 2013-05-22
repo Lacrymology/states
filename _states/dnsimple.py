@@ -87,7 +87,7 @@ def normalise(records):
     return ret
 
 
-def records_existed(name, email, token, records):
+def records_exists(name, email, token, records):
     '''
     Use returning ASAP when have any error happen. So if nothing change,
     result is true

@@ -28,7 +28,7 @@ def __virtual__():
     return 'dnsimple'
 
 
-def auth_session(email, token):
+def _auth_session(email, token):
     ses = requests.Session()
     ses.auth = (email, token)
     ses.headers.update(COMMON_HEADER)
@@ -36,7 +36,7 @@ def auth_session(email, token):
     return ses
 
 
-def created(name, email, token):
+def _created(name, email, token):
     domain = name
     ret = {'name': domain,
             'changes': {},
@@ -51,7 +51,7 @@ def created(name, email, token):
                     name)}
 
     path = "/domains"
-    ses = auth_session(email, token)
+    ses = _auth_session(email, token)
     data = {"domain": {"name": domain}}
     resp = ses.post(BASE_URL + path, json.dumps(data))
     log.info("{0} {1}".format(resp.status_code, resp.content))
@@ -70,7 +70,7 @@ def created(name, email, token):
     return ret
 
 
-def normalise(records):
+def _normalize(records):
     '''Return a data with structure same as which returned from API'''
     ret = {}
     for domain in records:
@@ -118,7 +118,7 @@ def records_exists(name, email, token, records):
             'result': True,
             'comment': ''}
 
-    ses = auth_session(email, token)
+    ses = _auth_session(email, token)
     existing_records = {}
     for domain in records:
         path = "/domains/{0}/records".format(domain)
@@ -128,7 +128,7 @@ def records_exists(name, email, token, records):
 
     to_update = {}
     to_create = {}
-    new_records = normalise(records)
+    new_records = _normalize(records)
     id2erc = {}
     for domain in records:
         ex_records = existing_records[domain]

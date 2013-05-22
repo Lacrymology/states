@@ -51,7 +51,7 @@ def syslog_exception(exception):
     # configure logging, only if an exception occurs
     import logging
     import logging.handlers
-    log = logging.getLogger()
+    log = logging.getLogger('sentry.errors')
     fmt = logging.Formatter("%(asctime)-15s mail[%(process)d] %(message)s",
                             datefmt='%b %d %H:%M:%S')
     handler = logging.handlers.SysLogHandler('/dev/log')

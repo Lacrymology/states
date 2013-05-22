@@ -6,18 +6,12 @@ later to that list.
 '''
 
 
-import os
-import pickle
 import logging
 
 log = logging.getLogger(__name__)
 
 def __virtual__():
     return 'pkg_installed'
-
-def _filename():
-    return os.path.join(__opts__['cachedir'],
-                        '{0}.pickle'.format(__virtual__()))
 
 def _installed():
     return __salt__['pkg.list_pkgs']().keys()
@@ -26,24 +20,26 @@ def exists():
     '''
     Return True/False if there is a frozen state.
     '''
-    return __salt__['file.file_exists'](_filename())
+    try:
+        saved = __salt__['data.getval'](__virtual__())
+        if saved:
+            return True
+    except KeyError:
+        pass
+    return False
 
 def forget():
     '''
     Forget any frozen state.
     '''
-    if exists():
-        __salt__['file.remove'](_filename())
+    __salt__['data.update'](__virtual__(), [])
 
 def snapshot():
     '''
     Save the list of installed packages for :func:`revert`
     '''
     installed = _installed()
-    if exists():
-        log.debug("Packages data already exists, overwrite")
-    with open(_filename(), 'wb') as handler:
-        pickle.dump(installed, handler)
+    __salt__['data.update'](__virtual__(), installed)
     return {'name': 'snapshot',
             'changes': {},
             'comment': "%d saved packages" % len(installed),
@@ -59,15 +55,15 @@ def revert():
         'changes': {},
         'result': True
     }
-    if not exists():
+
+    try:
+        saved = __salt__['data.getval'](__virtual__())
+        log.debug("Found %d packages", len(saved))
+    except KeyError:
         ret['comment'] = "You need to call {0}.snapshot first!".format(
             __virtual__())
         ret['result'] = False
         return ret
-
-    with open(_filename(), 'rb') as handler:
-        saved = set(pickle.load(handler))
-        log.debug("Found %d packages", len(saved))
 
     installed = set(_installed())
     install = saved - installed

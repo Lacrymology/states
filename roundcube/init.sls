@@ -7,6 +7,9 @@
 include:
   - nginx
 
+{% set version = "0.9.0" %}
+{% set roundcubedir = "/usr/local/roundcubemail-" + version %}
+
 php5-fpm:
   pkg:
     - installed
@@ -27,21 +30,27 @@ roundcube_create_db:
   cmd:
     - script
     - source: salt://roundcube/pgsqluser.sh
+    - template: jinja
+    - require:
+      - pkg: postgresql-9.1
 
-{% set version = "0.9.0" %}
-/usr/local/src/roundcubemail-{{ version }}.tar.gz:
+roundcubemail_archive:
   file:
     - managed
+    - name: /usr/local/src/roundcubemail-{{ version }}.tar.gz
     - source: http://downloads.sourceforge.net/project/roundcubemail/roundcubemail/{{ version }}/roundcubemail-{{ version }}.tar.gz?r=&ts=1368775962&use_mirror=ncu
     - source_hash: md5=843de3439886c2dddb0f09e9bb6a4d04
 
-tar xzf /usr/local/src/roundcubemail-{{ version }}.tar.gz:
+untar_roundcube_archive:
   cmd:
     - run
     - cwd: /usr/local
-    - unless: test -d /usr/local/roundcubemail-{{ version }}/
+    - name: cd /usr/local && tar xzf /usr/local/src/roundcubemail-{{ version }}.tar.gz
+    - unless: test -e /usr/local/roundcubemail-{{ version }}/index.php
+    - require:
+      - file: roundcubemail_archive
 
-/usr/local/src/roundcubemail-{{ version }}:
+{{ roundcubedir }}:
   file:
     - directory
     - user: root
@@ -49,9 +58,11 @@ tar xzf /usr/local/src/roundcubemail-{{ version }}.tar.gz:
     - recurse:
       - user
       - group
+    - require:
+      - cmd: untar_roundcube_archive
 
 {% for file in ('db.inc.php','main.inc.php') %}
-/usr/local/roundcubemail-0.9.0/config/{{ file }}:
+{{ roundcubedir}}/config/{{ file }}:
   file:
     - managed
     - source: salt://roundcube/{{ file }}
@@ -60,21 +71,23 @@ tar xzf /usr/local/src/roundcubemail-{{ version }}.tar.gz:
 {% endfor %}
 
 {% for dir in 'logs','temp' %}
-/usr/local/roundcubemail-0.9.0/{{ dir }}:
+{{ roundcubedir }}/{{ dir }}:
   file:
     - directory
     - user: www-data
     - recurse:
       - user
     - require:
-      - file: /usr/local/src/roundcubemail-{{ version }}
+      - file: {{ roundcubedir }}
 {% endfor %}
 
 /etc/nginx/conf.d/roundcube.conf:
   file:
     - managed
-    - template: jinja
     - source: salt://roundcube/nginx.jinja2
+    - template: jinja
     - user: www-data
     - group: www-data
     - mode: 440
+    - context:
+      dir: {{ roundcubedir }}

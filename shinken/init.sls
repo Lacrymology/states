@@ -201,12 +201,12 @@ shinken-{{ role }}:
     - source: salt://shinken/upstart.jinja2
     - context:
       shinken_component: {{ role }}
-{% if role == 'arbiter' %}
+{%- if role in ('reactionner', 'arbiter') %}
     - require:
+      - pkg: ssmtp
+{% if role == 'arbiter' %}
       - host: hostname
 {% endif -%}
-{%- if role in ('reactionner', 'arbiter') %}
-      - pkg: ssmtp
 {% endif %}
 {% endif %}
 {% endfor %}

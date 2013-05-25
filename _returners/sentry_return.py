@@ -32,7 +32,7 @@ def __virtual__():
     if not has_raven:
         logger.warning("Can't find raven client library")
         return False
-    return 'sentry'
+    return 'sentry_common'
 
 def returner(ret):
     """
@@ -69,3 +69,4 @@ def returner(ret):
                         connect_sentry(state, ret['return'][state])
     except Exception, err:
         logger.error("Can't run connect_sentry: %s", err, exc_info=True)
+        logger.debug("Ret: %s", ret)

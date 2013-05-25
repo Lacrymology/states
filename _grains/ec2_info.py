@@ -9,7 +9,9 @@ https://github.com/saltstack/salt/issues/1825
 import ast
 import logging
 import httplib
+import pickle
 import socket
+import os
 import datetime
 
 # Set up logging
@@ -106,23 +108,30 @@ def boot_datetime(proc_filename='/proc/uptime'):
     delta = datetime.timedelta(seconds=uptime_seconds)
     return now - delta
 
-def _cache_ec2_info(key_name):
-    data = {
-        'grains': _ec2_info(),
-        'timestamp': boot_datetime()
-    }
-    __salt__['data.update'](key_name, data)
-    return data['grains']
+def _cache_ec2_info(cache_filename):
+    data = _ec2_info()
+    with open(cache_filename, 'wb') as file_handler:
+        pickle.dump(data, file_handler)
+    return data
 
 def ec2_info():
-    key_name = 'ec2_info'
+    """
+    Wrapper around :func:`_ec2_info` that cache result on disk.
+
+    :return: EC2 info
+    :rtype: dict
+    """
+    cache_filename = os.path.join(__opts__['cachedir'], 'ec2.pickle')
     try:
-        data = __salt__['data.getval'](key_name)
-    except KeyError:
-        return _cache_ec2_info(key_name)
-    if data['timestamp'] < boot_datetime():
-        return _cache_ec2_info(key_name)
-    return data['grains']
+        mtime = datetime.datetime.fromtimestamp(
+            os.stat(cache_filename).st_mtime)
+        if mtime < boot_datetime():
+            return _cache_ec2_info(cache_filename)
+        with open(cache_filename, 'rb') as file_handler:
+            data = pickle.load(file_handler)
+        return data
+    except (IOError, OSError):
+        return _cache_ec2_info(cache_filename)
 
 if __name__ == "__main__":
-    print _ec2_info()
+    print ec2_info()

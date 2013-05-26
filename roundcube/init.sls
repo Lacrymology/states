@@ -13,6 +13,16 @@ include:
 php5-fpm:
   pkg:
     - installed
+  service:
+    - running
+    - watch:
+      - file: php5-fpm
+  file:
+    - managed
+    - template: jinja
+    - name: /etc/php5/fpm/pool.d/www.conf
+    - require:
+      - pkg: php5-fpm
 
 php5:
   pkg:

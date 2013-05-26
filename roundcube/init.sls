@@ -1,48 +1,28 @@
-#apache2:
-#  pkg:
-#    - installed
-#    - pkgs:
-#      - apache2
-#      - libapache2-mod-php5
 include:
   - nginx
+  - php
+  - apt
+  - php5-fpm
+  - postgresql.server
 
 {% set version = "0.9.0" %}
 {% set roundcubedir = "/usr/local/roundcubemail-" + version %}
 
-php5-fpm:
-  pkg:
-    - installed
-  service:
-    - running
-    - watch:
-      - file: php5-fpm
-  file:
-    - managed
-    - template: jinja
-    - name: /etc/php5/fpm/pool.d/www.conf
-    - require:
-      - pkg: php5-fpm
-
-php5:
-  pkg:
-    - installed
-
 php5-pgsql:
   pkg:
     - installed
-
-postgresql-9.1:
-  pkg:
-    - installed
+    - require:
+      - cmd: apt_sources
 
 roundcube_create_db:
   cmd:
     - script
     - source: salt://roundcube/pgsqluser.sh
     - template: jinja
+    - context:
+      dir: {{ roundcubedir }}
     - require:
-      - pkg: postgresql-9.1
+      - pkg: postgresql
 
 roundcubemail_archive:
   file:
@@ -101,3 +81,5 @@ untar_roundcube_archive:
     - mode: 440
     - context:
       dir: {{ roundcubedir }}
+    - require:
+      - pkg: nginx

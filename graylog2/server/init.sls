@@ -7,6 +7,7 @@ include:
   - apt
 
 {# TODO: set Email output plugin settings straight into MongoDB from salt #}
+{# TODO: run graylog2 server as a non-root user #}
 
 {% set version = '0.11.0' %}
 {% set checksum = 'md5=135c9eb384a03839e6f2eca82fd03502' %}
@@ -92,6 +93,7 @@ graylog2-server:
       - file: /etc/graylog2-elasticsearch.yml
       - archive: graylog2-server
       - cmd: graylog2_email_output_plugin
+      - file: graylog2_sentry_output_plugin
     - require:
       - file: /var/log/graylog2
       - service: mongodb
@@ -108,3 +110,16 @@ graylog2_email_output_plugin:
       - archive: graylog2-server
       - pkg: graylog2-server
       - service: mongodb
+
+graylog2_sentry_output_plugin:
+  file:
+    - managed
+    - name: {{ server_root_dir }}/plugin/outputs/com.bitflippers.sentryoutput.output.SentryOutput_gl2plugin.jar
+    - source: http://saltinwound.org/graylog2-plugin-sentry-output-0.11.jar
+    - source_hash: md5=9f8305a17af8bf6ab80dcab252489ec6
+    - require:
+      - file: graylog2-server
+      - archive: graylog2-server
+    - user: root
+    - group: root
+    - mode: 440

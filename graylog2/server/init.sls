@@ -94,6 +94,7 @@ graylog2-server:
       - archive: graylog2-server
       - cmd: graylog2_email_output_plugin
       - file: graylog2_sentry_output_plugin
+      - file: graylog2_sentry_transport_plugin
     - require:
       - file: /var/log/graylog2
       - service: mongodb
@@ -117,6 +118,19 @@ graylog2_sentry_output_plugin:
     - name: {{ server_root_dir }}/plugin/outputs/com.bitflippers.sentryoutput.output.SentryOutput_gl2plugin.jar
     - source: http://saltinwound.org/graylog2-plugin-sentry-output-0.11.jar
     - source_hash: md5=9f8305a17af8bf6ab80dcab252489ec6
+    - require:
+      - file: graylog2-server
+      - archive: graylog2-server
+    - user: root
+    - group: root
+    - mode: 440
+
+graylog2_sentry_transport_plugin:
+  file:
+    - managed
+    - name: {{ server_root_dir }}/plugin/transports/com.bitflippers.sentrytransport.transport.SentryTransport_gl2plugin.jar
+    - source: http://saltinwound.org/graylog2-plugin-sentry-transport-0.11.jar
+    - source_hash: md5=85787e51e355bf3e68ed70a14f959b06
     - require:
       - file: graylog2-server
       - archive: graylog2-server

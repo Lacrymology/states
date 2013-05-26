@@ -1,5 +1,6 @@
 include:
   - apt
+  - web
 
 php5-fpm:
   pkg:
@@ -11,6 +12,8 @@ php5-fpm:
     - watch:
       - file: php5-fpm
       - file: /etc/php5/fpm/php-fpm.conf
+    - require:
+      - user: web
   file:
     - managed
     - template: jinja

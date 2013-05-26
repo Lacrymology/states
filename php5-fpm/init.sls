@@ -12,7 +12,7 @@ php5-fpm:
     - managed
     - template: jinja
     - name: /etc/php5/fpm/pool.d/www.conf
-    - source: salt://php5-fpm/fpmsock.jinja2
+    - source: salt://php5-fpm/pool.jinja2
     - require:
       - pkg: php5-fpm
 
@@ -20,6 +20,6 @@ php5-fpm:
   file:
     - managed
     - template: jinja
-    - source: salt://php5-fpm/php-fpm.jinja2
+    - source: salt://php5-fpm/config.jinja2
     - require:
       - pkg: php5-fpm

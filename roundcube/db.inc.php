@@ -22,14 +22,14 @@ $rcmail_config = array();
 // For examples see http://pear.php.net/manual/en/package.database.mdb2.intro-dsn.php
 // currently supported db_providers: mysql, mysqli, pgsql, sqlite, mssql or sqlsrv
 
-$rcmail_config['db_dsnw'] = 'pgsql://roundcube:hvnhvn@127.0.0.1/roundcubedb';
+$rcmail_config['db_dsnw'] = '{{ salt["pillar.get"]("mail:rc_dsn") }}';
 // postgres example: 'pgsql://roundcube:pass@localhost/roundcubemail';
 // Warning: for SQLite use absolute path in DSN:
 // sqlite example: 'sqlite:////full/path/to/sqlite.db?mode=0646';
 
 // PEAR database DSN for read only operations (if empty write database will be used)
 // useful for database replication
-$rcmail_config['db_dsnr'] = 'pgsql://roundcube:hvnhvn@127.0.0.1/roundcubedb';
+$rcmail_config['db_dsnr'] = '{{ salt["pillar.get"]("mail:rc_dsn") }}';
 
 // use persistent db-connections
 // beware this will not "always" work as expected

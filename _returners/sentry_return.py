@@ -32,13 +32,16 @@ def __virtual__():
     if not has_raven:
         logger.warning("Can't find raven client library")
         return False
-    return 'sentry'
+    if not 'sentry_dsn' in __salt__['pillar.data']():
+        logger.warning("Missing 'sentry_dsn' value in pillar")
+        return False
+    return 'sentry_common'
 
 def returner(ret):
     """
     If an error occurs, log it to sentry
     """
-    def connect_sentry(message, result):
+    def send_sentry(message, result=None):
         pillar_data = __salt__['pillar.data']()
         sentry_data = {
             'result': result,
@@ -48,24 +51,25 @@ def returner(ret):
         }
         try:
             client = Client(pillar_data['sentry_dsn'])
-            client.captureMessage(ret['comment'], extra=sentry_data)
+            client.captureMessage(message, extra=sentry_data)
         except Exception, err:
-            logger.error("Can't send message to sentry: %s", err, exc_info=True)
-            logger.debug("Content of ret: %s", str(ret))
+            logger.error("Can't send message '%s' extra '%s' to sentry: %s",
+                         message, sentry_data, err)
 
     requisite_error = 'One or more requisite failed'
     try:
-        if 'success' not in ret:
-            logger.debug("no success data, report")
-            connect_sentry(ret['return'], ret)
-        else:
-            if not ret['success']:
-                logger.debug("not a success, report")
-                connect_sentry(ret['return'], ret)
+        is_failed = not ret.get('success', True) or ret.get('retcode') != 0
+    except KeyError:
+        send_sentry('No success or retcode returned')
+    else:
+        if is_failed:
+            try:
+                returned = ret['return']
+            except KeyError:
+                send_sentry("Can't find 'return'")
             else:
-                for state in ret['return']:
+                for state in returned:
                     if not ret['return'][state]['result'] and \
-                            ret['return'][state]['comment'] != requisite_error:
-                        connect_sentry(state, ret['return'][state])
-    except Exception, err:
-        logger.error("Can't run connect_sentry: %s", err, exc_info=True)
+                       ret['return'][state]['comment'] != requisite_error:
+                        send_sentry(ret['return'][state]['comment'],
+                                    ret['return'][state])

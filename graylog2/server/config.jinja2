@@ -178,7 +178,7 @@ http_listen_port = 12202
  #}
 transport_email_enabled = true
 transport_email_protocol = smtp
-transport_email_hostname = "{{ email['server'] }}"
+transport_email_hostname = {{ email['server'] }}
 transport_email_port = {{ email['port'] }}
 transport_email_use_auth = true
 {% if email['tls'] %}

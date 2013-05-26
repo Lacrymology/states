@@ -1,3 +1,6 @@
+include:
+  - apt
+
 php5-fpm:
   pkg:
     - installed

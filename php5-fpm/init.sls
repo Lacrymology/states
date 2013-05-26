@@ -23,3 +23,6 @@ php5-fpm:
     - source: salt://php5-fpm/config.jinja2
     - require:
       - pkg: php5-fpm
+    - user: root
+    - group: root
+    - mode: 444

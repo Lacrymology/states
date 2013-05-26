@@ -16,7 +16,7 @@ ssl:
 
 Requires files in source:
 - ca.crt
-  RapidSSL bundled certificate
+  Bundled certificate
 - server.crt
   Server certificate
 - server.key
@@ -33,10 +33,25 @@ Requires files in source:
     openssl req -new -keyout server.key -out server.csr
   How to decode a CSR:
     openssl req -in server.csr -noout -text
- #}
 
-{# ssl-certs debian package use ssl-cert group to easily give access to
-   private key on some process #}
+To use those SSL files in your states, you need to do the following:
+
+- Add a pillar key for your state that hold the name of the SSL key name
+  defined in pillar['ssl'], such as example_com in previous example.
+  It can be:
+    my_app:
+      ssl: example_com
+- If the daemon isn't running as root, add the group ssl-cert to the user with
+  which that daemon run.
+- Add ssl to the list of included sls file
+- Requires the following three condition before starting your service:
+    - cmd: /etc/ssl/{{ pillar['my_app']['ssl'] }}/chained_ca.crt
+    - module: /etc/ssl/{{ pillar['my_app']['ssl'] }}/server.pem
+    - file: /etc/ssl/{{ pillar['my_app']['ssl'] }}/ca.crt
+- In the config file you point to the same path to reach those files, like:
+    tls_cert = /etc/ssl/{{ pillar['my_app']['ssl'] }}/chained_ca.crt;
+    tls_key = /etc/ssl/{{ pillar['my_app']['ssl'] }}/server.pem;
+ #}
 
 include:
   - apt

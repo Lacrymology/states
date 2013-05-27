@@ -129,8 +129,8 @@ graylog2_sentry_transport_plugin:
   file:
     - managed
     - name: {{ server_root_dir }}/plugin/transports/com.bitflippers.sentrytransport.transport.SentryTransport_gl2plugin.jar
-    - source: http://saltinwound.org/graylog2-plugin-sentry-transport-0.11.jar
-    - source_hash: md5=85787e51e355bf3e68ed70a14f959b06
+    - source: http://saltinwound.org/graylog2-plugin-sentry-transport-0.11-1.jar
+    - source_hash: md5=7b7982643577aed239efaea62e78104a
     - require:
       - file: graylog2-server
       - archive: graylog2-server

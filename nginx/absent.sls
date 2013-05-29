@@ -2,9 +2,14 @@
  Uninstall the Nginx web server
  #}
 nginx-old-init:
+  cmd:
+    - wait
+    - name: dpkg-divert --rename --remove /etc/init.d/nginx
   file:
     - absent
     - name: /usr/share/nginx/init.d
+    - require:
+     - cmd: nginx-old-init
 
 nginx:
   file:

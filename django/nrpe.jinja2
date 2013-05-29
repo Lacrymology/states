@@ -1,2 +1,4 @@
 # {{ pillar['message_do_not_modify'] }}
 command[check_{{ deployment }}_robots]=/usr/lib/nagios/plugins/check_robots.py {{ domain_name }}
+command[check_{{ deployment }}_django_admin]=/usr/lib/nagios/plugins/check_http {% if https|default(False) -%}-S{% endif %} -H {{ domain_name }} -u /admin/ -e '200 OK' -I {{ salt['network.ip_addrs']()[0] }}
+command[check_{{ deployment }}_sitemap]=/usr/lib/nagios/plugins/check_sitemap.py {{ domain_name }}

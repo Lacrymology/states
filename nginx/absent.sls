@@ -9,7 +9,7 @@ nginx-old-init:
     - absent
     - name: /usr/share/nginx/init.d
     - require:
-     - cmd: nginx-old-init
+      - cmd: nginx-old-init
 
 nginx:
   file:

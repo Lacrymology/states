@@ -3,7 +3,7 @@
  #}
 nginx-old-init:
   cmd:
-    - wait
+    - run
     - name: dpkg-divert --rename --remove /etc/init.d/nginx
   file:
     - absent

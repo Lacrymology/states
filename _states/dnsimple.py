@@ -89,12 +89,14 @@ def _normalize(records):
     for domain in records:
         li = []
         for rectype in records[domain]:
-            data = {'record_type': rectype}
             recs = records[domain][rectype]
             for recname in recs:
-                data['name'] = recname
+                data = {
+                    'record_type': rectype,
+                    'name': recname
+                }
                 data.update(recs[recname])
-            li.append(data)
+                li.append(data)
         ret[domain] = li
     return ret
 

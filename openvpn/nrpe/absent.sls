@@ -6,7 +6,7 @@ include:
   - nrpe
 
 extend:
-  diamond:
+  nagios-nrpe-server:
     service:
       - watch:
         - file: /etc/nagios/nrpe.d/openvpn.cfg

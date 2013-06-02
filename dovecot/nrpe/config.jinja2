@@ -1,0 +1,9 @@
+# {{ pillar['message_do_not_modify'] }}
+command[check_dovecot]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u root -a '/usr/sbin/dovecot -F -c /etc/dovecot/dovecot.conf'
+command[check_dovecot_anvil]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u dovecot -a 'dovecot/anvil'
+command[check_dovecot_log]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u root -a 'dovecot/log'
+command[check_dovecot_config]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u root -a 'dovecot/config'
+command[check_dovecot_imap_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 143
+command[check_dovecot_pop3_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 110
+command[check_dovecot_imaps_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 993
+command[check_dovecot_pop3s_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 995

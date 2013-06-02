@@ -1,2 +1,7 @@
-hvn@hvn.bit-flippers.com hvn.bit-flippers.com/hvn
-bclermont@hvn.bit-flippers.com hvn.bit-flippers.com/bclermont
+# {{ pillar['message_do_not_modify'] }}
+{% set mdata = salt['pillar.get']('ldap:data') %}
+{% for dom in mdata %}
+  {% for user in mdata[dom] %}
+{{ user }}@{{ dom }} {{ dom }}/{{ user }}
+  {% endfor %}
+{% endfor %}

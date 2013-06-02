@@ -1,0 +1,4 @@
+# {{ pillar['message_do_not_modify'] }}
+command[check_openldap]=/usr/lib/nagios/plugins/check_procs -u openldap -a '/usr/sbin/slapd -h ldap:/// ldapi:/// -g openldap -u openldap -F /etc/ldap/slapd.d'
+command[check_openldap_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 389
+command[check_openldap_base]=/usr/lib/nagios/plugins/check_ldap -H 127.0.0.1 -p 389 -b '{{ salt["pillar.get"]("ldap:suffix") }}' -T

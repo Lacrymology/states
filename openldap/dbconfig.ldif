@@ -1,13 +1,14 @@
+{% set rootdn = salt['pillar.get']('ldap:rootdn') %}
 dn: olcDatabase={1}hdb,cn=config
 changetype: modify
 replace: olcSuffix
-olcSuffix: dc=bit-flippers,dc=com
+olcSuffix: {{ salt['pillar.get']('ldap:suffix') }}
 -
 replace: olcRootDN
-olcRootDN: cn=admin,dc=bit-flippers,dc=com
+olcRootDN: {{ rootdn }}
 -
 replace: olcRootPW
-olcRootPW: {MD5}/+VTaU9QlkcVkDQ0MjWeAg==
+olcRootPW: {{ salt['pillar.get']('ldap:rootpw') }}
 -
 delete: olcAccess
 -
@@ -15,24 +16,25 @@ add: olcAccess
 olcAccess: {0}to * by dn.exact=gidNumber=0+uidNumber=0,cn=peercred,cn=external
  ,cn=auth manage by * break
 olcAccess: {1}to attrs=userPassword,shadowLastChange by self write by anonymou
- s auth by dn="cn=admin,dc=bit-flippers,dc=com" write by * none
+ s auth by dn="{{ rootdn }}" write by * none
 olcAccess: {2}to dn.base="" by * read
-olcAccess: {3}to * by self write by dn="cn=admin,dc=bit-flippers,dc=com" write
+olcAccess: {3}to * by self write by dn="{{ rootdn }}" write
   by * read
 
 dn: cn=config
 changetype: modify
 replace: olcLogLevel
-olcLogLevel: 256
+olcLogLevel: {{ salt['pillar.get']('ldap:log_level', 256) }}
+{% if salt['pillar.get']('ldap:ssl', False) -%}
 -
 replace: olcTLSCACertificateFile
-olcTLSCACertificateFile: /etc/ssl/certs/ldapca.pem
+olcTLSCACertificateFile: /etc/ssl/{{ salt['pillar.get']('ldap:ssl') }}/ca.crt
 -
 replace: olcTLSCertificateFile
-olcTLSCertificateFile: /etc/ssl/certs/ldap.pem
+olcTLSCertificateFile: /etc/ssl/{{ salt['pillar.get']('ldap:ssl') }}/server.crt
 -
 replace: olcTLSCertificateKeyFile
-olcTLSCertificateKeyFile: /etc/ssl/private/ldap.pem
+olcTLSCertificateKeyFile: /etc/ssl/{{ salt['pillar.get']('ldap:ssl') }}/server.pem
 -
 replace: olcSecurity
 olcSecurity: ssf=128
@@ -41,8 +43,9 @@ replace: olcTLSVerifyClient
 olcTLSVerifyClient: never
 -
 replace: olcTLSCipherSuite
+{# use openssl CipherSuite here cause a segfault -#}
 olcTLSCipherSuite: SECURE256:!AES-128-CBC
 -
 replace: olcLocalSSF
 olcLocalSSF: 128
-# use openssl CipherSuite here cause a segfault
+{% endif -%}

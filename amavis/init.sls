@@ -1,68 +1,26 @@
-amavis: # make sure that /etc/mailname exists
+include:
+  - apt
+  - spamassassin
+
+amavis:
   pkg:
-    - installed
+    - latest
     - name: amavisd-new
+    - require:
+      - cmd: apt_sources
   service:
     - running
     - watch:
-      - user: amavis
-      - file: /etc/amavis/conf.d/22-max_servers
-      - file: amavis
-  file:
-    - managed
-    - name: /etc/amavis/conf.d/15-content_filter_mode
-    - source: salt://amavis/15-content_filter_mode
-  user:
-    - present
-    - groups:
-      - clamav
-    - require:
       - pkg: amavis
-      - pkg: clamav-daemon
-
-/etc/amavis/conf.d/22-max_servers:
-  file:
-    - managed
-    - source: salt://amavis/22-max_servers
-    - template: jinja
-    - makedirs: True
-
-spamassassin:
-  pkg:
-    - installed
-    - pkgs:
-      - spamassassin
-      - pyzor
-      - razor
-
-pyzor discover:
-  cmd:
-    - wait
-    - watch:
+    - require:
       - pkg: spamassassin
 
-clamav-daemon:
-  pkg:
-    - installed
-  service:
-    - running
-    - names:
-      - clamav-daemon
-      - clamav-freshclam
-    - watch:
-      - user: clamav-daemon
-      - file: clamav-daemon
-    - require:
-      - pkg: amavis
+{% for cfg in ('05-node_id', '15-content_filter_mode', '22-max_servers') %}
+/etc/amavis/conf.d/{{ cfg }}:
   file:
     - managed
-    - name: /etc/clamav/freshclam.conf
-    - source: salt://amavis/freshclam.conf
-  user:
-    - present
-    - name: clamav
-    - groups:
-      - amavis
-    - require:
-      - pkg: clamav-daemon
-      - pkg: amavis
+    - source: salt://amavis/{{ cfg }}.jinja2
+    - template: jinja
+    - watch_in:
+      - service: amavis
+{% endfor %}

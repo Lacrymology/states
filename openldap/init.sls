@@ -1,53 +1,41 @@
+{% set ssl = salt['pillar.get']('ldap:ssl', False) %}
+include:
+  - apt
+{% if ssl %}
+  - ssl
+{% endif %}
+
 slapd:
   pkg:
-    - installed
+    - latest
     - pkgs:
       - slapd
       - ldap-utils
+    - require:
+      - cmd: apt_sources
   service:
     - running
-    - enable: False
-    - require: 
+    - enable: True
+    - watch:
       - pkg: slapd
-
-/etc/ldap/dbconfig.ldif:
   file:
     - managed
-    - source: salt://openldap/dbconfig.ldif
-    - mode: 600
+    - name: /etc/ldap/ldap.conf
+    - source: salt://openldap/ldap.conf
+    - template: jinja
 
+
+{% if ssl %}
 openldap:
   user:
     - present
     - groups:
       - ssl-cert
+      - openldap
     - require:
       - pkg: slapd
-
-/etc/ssl/private/ldap.pem:
-  file:
-    - managed
-    - source: salt://openldap/serverkey.pem
-    - user: openldap
-    - group: openldap
-    - mode: 640
-    - makedirs: true
-
-/etc/ssl/certs/ldap.pem:
-  file:
-    - managed
-    - source: salt://openldap/servercrt.pem
-    - user: openldap
-    - group: openldap
-    - makedirs: true
-
-/etc/ssl/certs/ldapca.pem:
-  file:
-    - managed
-    - source: salt://openldap/cacert.pem
-    - user: openldap
-    - group: openldap
-    - makedirs: true
+      - pkg: ssl-cert
+{% endif %}
 
 /tmp/tls.ldif:
   file:
@@ -57,36 +45,46 @@ openldap:
   file:
     - absent
 
-slapd_config_dbs:
-  cmd:
-    - run
-    - name: 'ldapmodify -Y EXTERNAL -H ldapi:/// -f /etc/ldap/dbconfig.ldif'
-    - require:
-      - file: /etc/ldap/dbconfig.ldif
-      - service: slapd
-{# Cert/key must be created use GNUTLS
-openssl is not compatible with ubuntu ldap #}
-      - file: /etc/ssl/private/ldap.pem
-      - file: /etc/ssl/certs/ldap.pem
-      - file: /etc/ssl/certs/ldapca.pem
-      - user: openldap
-
-/etc/ldap/bitflippers.ldif:
+{{ opts['cachedir'] }}/dbconfig.ldif:
   file:
     - managed
-    - source: salt://openldap/bitflippers.ldif
-    - mode: 600
+    - source: salt://openldap/dbconfig.ldif
+    - template: jinja
+    - mode: 400
 
-ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/ldap/bitflippers.ldif:
+slapd_config_dbs:
   cmd:
     - wait
     - watch:
-      - file: /etc/ldap/bitflippers.ldif
+      - pkg: slapd
+    - name: 'ldapmodify -Y EXTERNAL -H ldapi:/// -f {{ opts['cachedir'] }}/dbconfig.ldif'
     - require:
+      - file: {{ opts['cachedir'] }}/dbconfig.ldif
       - service: slapd
-      - cmd: slapd_config_dbs
+{% if ssl %}
+{# Cert/key must be created use GNUTLS
+openssl is not compatible with ubuntu ldap #}
+      - cmd: /etc/ssl/{{ pillar['dovecot']['ssl'] }}/chained_ca.crt
+      - module: /etc/ssl/{{ pillar['dovecot']['ssl'] }}/server.pem
+      - file: /etc/ssl/{{ pillar['dovecot']['ssl'] }}/ca.crt
+      - user: openldap
+{% endif %}
 
-/etc/ldap/ldap.conf:
+{% if salt['pillar.get']('ldap:usertree') %}
+{{ opts['cachedir'] }}/usertree.ldif:
   file:
     - managed
-    - source: salt://openldap/ldap.conf
+    - template: jinja
+    - source: salt://{{ salt['pillar.get']('ldap:usertree') }}
+    - mode: 400
+
+ldapadd -Y EXTERNAL -H ldapi:/// -f {{ opts['cachedir'] }}/usertree.ldif:
+  cmd:
+    - wait
+    - watch:
+      - pkg: slapd
+    - require:
+      - file: {{ opts['cachedir'] }}/usertree.ldif
+      - service: slapd
+      - cmd: slapd_config_dbs
+{% endif %}

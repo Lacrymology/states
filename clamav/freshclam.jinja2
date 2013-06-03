@@ -22,5 +22,6 @@ CompressLocalDatabase no
 Bytecode true
 {# Check for new database 24 times a day #}
 Checks {{ salt['pillar.get']('clamav:times_of_check', 24) }}
-DatabaseMirror db.local.clamav.net
-DatabaseMirror database.clamav.net
+{% for mirror in salt['pillar.get']('clamav:db_mirrors', ('db.local.clamav.net', 'database.clamav.net')) %}
+DatabaseMirror {{ mirror }}
+{% endfor %}

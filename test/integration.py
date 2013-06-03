@@ -447,6 +447,12 @@ class Integration(BaseIntegration):
         """
         pass
 
+    def test_amavis(self):
+        self.top(['amavis'])
+
+    # def test_amavis_clamav(self):
+    #     self.top(['amavis_clamav'])
+
     def test_apt(self):
         self.top(['apt'])
 
@@ -656,6 +662,9 @@ class IntegrationNRPE(BaseIntegration):
     """
     Only Install NRPE states
     """
+
+    def test_amavis(self):
+        self.top(['amavis.nrpe'])
 
     def test_apt(self):
         self.top(['apt.nrpe'])
@@ -931,6 +940,17 @@ class IntegrationFull(BaseIntegration):
         self.check_diamond()
         self.check_nrpe()
         self.check_gsyslog()
+
+    def test_amavis(self):
+        # TODO: add diamond
+        self.top(['amavis', 'amavis.nrpe'])
+        self.check_integration()
+        self.check_amavis()
+
+    def check_amavis(self):
+        self.run_check('check_amavis_master')
+        self.run_check('check_amavis_child')
+        self.run_check('check_amavis_port')
 
     def test_apt(self):
         self.top(['apt', 'apt.nrpe'])

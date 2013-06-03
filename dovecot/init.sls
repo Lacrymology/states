@@ -24,6 +24,11 @@ dovecot:
       - pkg: dovecot
       - file: /etc/dovecot/dovecot-ldap.conf.ext
       - file: /var/mail/vhosts/indexes
+{% if ssl %}
+      - cmd: /etc/ssl/{{ pillar['dovecot']['ssl'] }}/chained_ca.crt
+      - module: /etc/ssl/{{ pillar['dovecot']['ssl'] }}/server.pem
+      - file: /etc/ssl/{{ pillar['dovecot']['ssl'] }}/ca.crt
+{% endif %}
     - require:
       - user: dovecot-agent
 
@@ -67,13 +72,3 @@ dovecot:
     - makedirs: True
     - require:
       - user: dovecot-agent
-
-{% if ssl %}
-extend:
-  dovecot:
-    service:
-      - watch:
-        - cmd: /etc/ssl/{{ pillar['dovecot']['ssl'] }}/chained_ca.crt
-        - module: /etc/ssl/{{ pillar['dovecot']['ssl'] }}/server.pem
-        - file: /etc/ssl/{{ pillar['dovecot']['ssl'] }}/ca.crt
-{% endif %}

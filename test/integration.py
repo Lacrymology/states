@@ -450,8 +450,8 @@ class Integration(BaseIntegration):
     def test_amavis(self):
         self.top(['amavis'])
 
-    # def test_amavis_clamav(self):
-    #     self.top(['amavis_clamav'])
+    def test_amavis_clamav(self):
+        self.top(['amavis.clamav'])
 
     def test_apt(self):
         self.top(['apt'])
@@ -470,6 +470,9 @@ class Integration(BaseIntegration):
 
     def test_carbon(self):
         self.top(['carbon'])
+
+    def test_clamav(self):
+        self.top(['clamav'])
 
     def test_cron(self):
         self.top(['cron'])
@@ -674,6 +677,9 @@ class IntegrationNRPE(BaseIntegration):
 
     def test_carbon(self):
         self.top(['carbon.nrpe'])
+
+    def test_clamav(self):
+        self.top(['clamav.nrpe'])
 
     def test_cron(self):
         self.top(['cron.nrpe'])
@@ -952,6 +958,12 @@ class IntegrationFull(BaseIntegration):
         self.run_check('check_amavis_child')
         self.run_check('check_amavis_port')
 
+    def test_amavis_clamav(self):
+        self.top(['clamav.amavis', 'clamav.nrpe', 'amavis.nrpe'])
+        self.check_integration()
+        self.check_amavis()
+        self.check_clamav()
+
     def test_apt(self):
         self.top(['apt', 'apt.nrpe'])
         self.check_integration()
@@ -984,6 +996,15 @@ class IntegrationFull(BaseIntegration):
         self.top(['carbon', 'carbon.nrpe', 'carbon.diamond'])
         self.check_integration()
         self.run_check('check_carbon_a')
+
+    def test_clamav(self):
+        self.top(['clamav', 'clamav.nrpe'])
+        self.check_integration()
+        self.check_clamav()
+
+    def check_clamav(self):
+        self.run_check('check_freshclam')
+        self.run_check('check_clamav')
 
     def test_cron(self):
         self.top(['cron', 'cron.diamond', 'cron.nrpe'])

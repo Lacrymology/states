@@ -483,6 +483,9 @@ class Integration(BaseIntegration):
     def test_denyhosts(self):
         self.top(['denyhosts'])
 
+    def test_dovecot(self):
+        self.top(['dovecot'])
+
     def test_diamond(self):
         self.top(['diamond'])
 
@@ -692,6 +695,9 @@ class IntegrationNRPE(BaseIntegration):
 
     def test_django(self):
         self.top(['django.nrpe'])
+
+    def test_dovecot(self):
+        self.top(['dovecot.nrpe'])
 
     def test_elasticsearch(self):
         self.top(['elasticsearch.nrpe'])
@@ -1013,6 +1019,18 @@ class IntegrationFull(BaseIntegration):
 
     def check_cron(self):
         self.run_check('check_cron')
+
+    def test_dovecot(self):
+        self.top(['dovecot', 'dovecot.nrpe'])
+        self.check_integration()
+        self.run_check('check_dovecot')
+        self.run_check('check_dovecot_anvil')
+        self.run_check('check_dovecot_log')
+        self.run_check('check_dovecot_config')
+        self.run_check('check_dovecot_imap_port')
+        self.run_check('check_dovecot_pop3_port')
+        self.run_check('check_dovecot_imaps_port')
+        self.run_check('check_dovecot_pop3s_port')
 
     def test_denyhosts(self):
         self.top(['denyhosts', 'denyhosts.diamond', 'denyhosts.nrpe'])

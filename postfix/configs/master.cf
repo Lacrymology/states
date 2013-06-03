@@ -9,7 +9,7 @@
 # service type  private unpriv  chroot  wakeup  maxproc command + args
 #               (yes)   (yes)   (yes)   (never) (100)
 # ==========================================================================
-smtp      inet  n       -       -       -       -       smtpd 
+smtp      inet  n       -       -       -       -       smtpd
 #smtp      inet  n       -       -       -       1       postscreen
 #smtpd     pass  -       -       -       -       -       smtpd
 #dnsblog   unix  -       -       -       -       0       dnsblog
@@ -111,7 +111,7 @@ scalemail-backend unix	-	n	n	-	2	pipe
 mailman   unix  -       n       n       -       -       pipe
   flags=FR user=list argv=/usr/lib/mailman/bin/postfix-to-mailman.py
   ${nexthop} ${user}
-amavisfeed unix    -       -       n       -       {{ pillar['mail']['maxproc'] }}     smtp
+amavisfeed unix    -       -       n       -       {{ salt['pillar.get']('mail:maxproc', 2) }}     smtp
     -o smtp_data_done_timeout=1200
     -o smtp_send_xforward_command=yes
     -o smtp_tls_note_starttls_offer=no

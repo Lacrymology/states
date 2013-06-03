@@ -18,6 +18,11 @@ postfix:
     - watch:
       - pkg: postfix
       - file: /etc/postfix
+{% if ssl %}
+      - cmd: /etc/ssl/{{ ssl }}/chained_ca.crt
+      - module: /etc/ssl/{{ ssl }}/server.pem
+      - file: /etc/ssl/{{ ssl }}/ca.crt
+{% endif %}
 
 /var/mail/vhosts:
   file:
@@ -74,13 +79,3 @@ postmap /etc/postfix/vmailbox:
       - file: /etc/postfix/vmailbox
     - run
     {% endif %}
-
-{% if ssl %}
-extend:
-  postfix:
-    service:
-      - watch:
-        - cmd: /etc/ssl/{{ pillar['postfix']['ssl'] }}/chained_ca.crt
-        - module: /etc/ssl/{{ pillar['postfix']['ssl'] }}/server.pem
-        - file: /etc/ssl/{{ pillar['postfix']['ssl'] }}/ca.crt
-{% endif %}

@@ -21,9 +21,8 @@ slapd:
   file:
     - managed
     - name: /etc/ldap/ldap.conf
-    - source: salt://openldap/ldap.conf
+    - source: salt://openldap/ldap.jinja2
     - template: jinja
-
 
 {% if ssl %}
 openldap:
@@ -48,7 +47,7 @@ openldap:
 {{ opts['cachedir'] }}/dbconfig.ldif:
   file:
     - managed
-    - source: salt://openldap/dbconfig.ldif
+    - source: salt://openldap/dbconfig.ldif.jinja2
     - template: jinja
     - mode: 400
 

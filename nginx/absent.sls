@@ -1,6 +1,15 @@
 {#
  Uninstall the Nginx web server
  #}
+nginx-old-init:
+  cmd:
+    - run
+    - name: dpkg-divert --rename --remove /etc/init.d/nginx
+  file:
+    - absent
+    - name: /usr/share/nginx/init.d
+    - require:
+      - cmd: nginx-old-init
 
 nginx:
   file:
@@ -12,15 +21,9 @@ nginx:
     - purged
     - require:
       - service: nginx
+      - file: nginx-old-init
   service:
     - dead
-
-{# dpkg: warning: while removing nginx, directory '/usr/share/nginx' not empty so not removed. #}
-/usr/share/nginx:
-  file:
-    - absent
-    - require:
-      - pkg: nginx
 
 {% for type in ('etc', 'var/log', 'etc/logrotate.d') %}
 /{{ type }}/nginx:

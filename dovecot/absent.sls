@@ -1,5 +1,3 @@
-{% set ssl = salt['pillar.get']('dovecot:ssl', False) %}
-
 /var/mail/vhosts/indexes:
   file:
     - absent
@@ -18,8 +16,3 @@ dovecot:
     - absent
     - require:
       - pkg: dovecot
-
-
-/etc/ssl/{{ pillar['dovecot']['ssl'] }}:
-  file:
-    - absent

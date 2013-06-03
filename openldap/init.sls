@@ -63,9 +63,9 @@ slapd_config_dbs:
 {% if ssl %}
 {# Cert/key must be created use GNUTLS
 openssl is not compatible with ubuntu ldap #}
-      - cmd: /etc/ssl/{{ pillar['dovecot']['ssl'] }}/chained_ca.crt
-      - module: /etc/ssl/{{ pillar['dovecot']['ssl'] }}/server.pem
-      - file: /etc/ssl/{{ pillar['dovecot']['ssl'] }}/ca.crt
+      - cmd: /etc/ssl/{{ ssl }}/chained_ca.crt
+      - module: /etc/ssl/{{ ssl }}/server.pem
+      - file: /etc/ssl/{{ ssl }}/ca.crt
       - user: openldap
 {% endif %}
 

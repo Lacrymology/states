@@ -1,3 +1,4 @@
+{# ldiff simple example #}
 {% set suffix = salt['pillar.get']('ldap:suffix') %}
 dn: {{ suffix }}
 objectClass: top

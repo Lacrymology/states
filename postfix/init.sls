@@ -53,7 +53,7 @@ postfix-ldap:
 /etc/postfix/vmailbox:
   file:
     - managed
-    - source: salt://postfix/vmailbox
+    - source: salt://postfix/vmailbox.jinja2
     - template: jinja
     - mode: 400
     - user: postfix

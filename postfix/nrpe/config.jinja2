@@ -1,7 +1,12 @@
 # {{ pillar['message_do_not_modify'] }}
+{% set ssl = salt['pillar.get']('postfix:ssl', False) %}
 command[check_postfix]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u root -a '/usr/lib/postfix/master'
 command[check_postfix_pickup]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u postfix -a 'pickup -l -t fifo -u -c'
 command[check_postfix_qmgr]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u postfix -a 'qmgr -l -t fifo -u'
 command[check_postfix_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 25
 command[check_postfix_spam_handler_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 10025
-command[check_postfix_ssl_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 465
+{% if ssl %}
+command[check_postfix_smtps_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 465
+{% else %}
+command[check_postfix_smtps_port]=/bin/echo "TCP OK: SSL not configured for SMTP"
+{% endif %}

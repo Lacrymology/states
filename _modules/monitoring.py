@@ -29,3 +29,4 @@ def data():
             output['ip_addrs']['public'] = __salt__['network.ip_addrs']()
         output['ip_addrs']['private'] = output['ip_addrs']['public']
 
+    return output

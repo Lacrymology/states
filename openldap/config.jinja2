@@ -15,7 +15,7 @@
 
 # TLS certificates (needed for GnuTLS)
 SSL ON
-TLS_CACERT      /etc/ssl/certs/ldapca.pem
+TLS_CACERT      /etc/ssl/{{ salt['pillar.get']('ldap:ssl') }}/ca.crt
 HOST {{ grains['id'] }}
 PORT 389
 TLS_REQCERT never

@@ -1,2 +1,2 @@
 # {{ pillar['message_do_not_modify'] }}
-command[check_postgresql_{{ deployment }}]=/usr/lib/nagios/plugins/check_pgsql -H 127.0.0.1 -P 5432 -d {{ deployment }} -l {{ deployment }} -p {{ password }}
+command[check_{{ deployment }}_postgresql]=/usr/lib/nagios/plugins/check_pgsql -H 127.0.0.1 -P 5432 -d {{ deployment }} -l {{ deployment }} -p {{ password }}

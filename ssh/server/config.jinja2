@@ -1,7 +1,8 @@
 # {{ pillar['message_do_not_modify'] }}
 
-Port 22
-Port 22022
+{% for port in salt['pillar.get']('ssh:ports', [22]) %}
+Port {{ port }}
+{% endfor %}
 
 Protocol 2
 

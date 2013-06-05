@@ -1,9 +1,8 @@
 include:
   - nginx
-  - php
   - apt
-  - php5-fpm
   - postgresql.server
+  - uwsgi
 
 {% set version = "0.9.0" %}
 {% set roundcubedir = "/usr/local/roundcubemail-" + version %}
@@ -81,5 +80,5 @@ untar_roundcube_archive:
     - mode: 440
     - context:
       dir: {{ roundcubedir }}
-    - require:
-      - pkg: nginx
+    - watch_in:
+      - service: nginx

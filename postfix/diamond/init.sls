@@ -28,8 +28,32 @@ postfix_diamond_resources:
         [[postfix]]
         exe = ^\/usr\/lib\/postfix\/master$
 
+postfix_stats:
+  file:
+    - managed
+    - name: /usr/local/diamond/postfix-requirements.txt
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - source: salt://postfix/diamond/requirements.jinja2
+    - require:
+      - virtualenv: diamond
+  module:
+    - wait
+    - name: pip.install
+    - pkgs: ''
+    - upgrade: True
+    - bin_env: /usr/local/diamond
+    - requirements: /usr/local/diamond/postfix-requirements.txt
+    - require:
+      - virtualenv: diamond
+    - watch:
+      - file: postfix_stats
+
 extend:
   diamond:
     service:
       - watch:
         - file: postfix_diamond_collector
+        - module: postfix_stats

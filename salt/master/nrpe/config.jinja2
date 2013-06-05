@@ -1,3 +1,5 @@
 # {{ pillar['message_do_not_modify'] }}
 {% set workers = pillar['salt_master']['workers']|default("5") %}
 command[check_salt_master]=/usr/lib/nagios/plugins/check_procs -c {{ workers }}:{{ workers|int + 10 }} -C python -a salt-master -u root
+command[check_salt_master_port_4005]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 4005
+command[check_salt_master_port_4006]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 4006

@@ -964,6 +964,8 @@ class IntegrationFull(BaseIntegration):
         self.top(['carbon', 'carbon.nrpe', 'carbon.diamond'])
         self.check_integration()
         self.run_check('check_carbon_a')
+        self.run_check('check_carbon_port_2003')
+        self.run_check('check_carbon_port_2004')
 
     def test_cron(self):
         self.top(['cron', 'cron.diamond', 'cron.nrpe'])
@@ -999,11 +1001,12 @@ class IntegrationFull(BaseIntegration):
         self.run_check('check_elasticsearch')
 
     def check_elasticsearch(self):
+        self.run_check('check_elasticsearch_http_port')
+        self.run_check('check_elasticsearch_transport_port')
         self.run_check('check_elasticsearch_cluster')
         self.run_check('check_elasticsearch_http')
         self.run_check('check_elasticsearch_https')
         self.run_check('check_elasticsearch_https_certificate')
-        # TODO: Check port in 9200 & 9300
 
     def test_firewall(self):
         self.top(['firewall', 'firewall.gsyslog', 'firewall.nrpe'])
@@ -1210,7 +1213,8 @@ class IntegrationFull(BaseIntegration):
 
     def check_salt_master(self):
         self.run_check('check_salt_master')
-        # TODO: check port 4505 and 4506
+        self.run_check('check_salt_master_port_4005')
+        self.run_check('check_salt_master_port_4006')
 
     def test_salt_mirror(self):
         self.top(['salt.mirror', 'salt.mirror.diamond', 'salt.mirror.nrpe'])

@@ -1,3 +1,5 @@
 # {{ pillar['message_do_not_modify'] }}
 command[check_elasticsearch]=/usr/lib/nagios/plugins/check_procs -u elasticsearch -c 1:1 -C java -a org.elasticsearch.bootstrap.ElasticSearch
 command[check_elasticsearch_cluster]=/usr/lib/nagios/plugins/check_elasticsearch_cluster.py -c {{ pillar['elasticsearch']['cluster']['nodes']|length }}:{{ pillar['elasticsearch']['cluster']['nodes']|length }}
+command[check_elasticsearch_http_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 9200
+command[check_elasticsearch_transport_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 9300

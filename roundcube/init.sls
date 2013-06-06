@@ -31,7 +31,7 @@ roundcubemail_archive:
     - source_hash: md5=843de3439886c2dddb0f09e9bb6a4d04
     - archive_format: tar
     - tar_options: z
-    - if_missing: /usr/local/roundcubemail-{{ version }}/index.php
+    - if_missing: /usr/local/roundcubemail-{{ version }}
 
 {{ roundcubedir }}:
   file:

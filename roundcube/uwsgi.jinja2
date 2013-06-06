@@ -2,7 +2,7 @@
 {% set web = pillar['roundcube'] %}
 [uwsgi]
 master = true
-processes = {{ web['workers'] }}
+processes = {{ web['workers']|default(2) }}
 harakiri = {{ web['timeout']|default(60) }}
 harakiri-verbose = true
 {% if web['cheaper']|default(False) %}

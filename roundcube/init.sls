@@ -24,20 +24,14 @@ roundcube_create_db:
       - pkg: postgresql
 
 roundcubemail_archive:
-  file:
-    - managed
-    - name: /usr/local/src/roundcubemail-{{ version }}.tar.gz
+  archive:
+    - extracted
+    - name: /usr/local/
     - source: http://downloads.sourceforge.net/project/roundcubemail/roundcubemail/{{ version }}/roundcubemail-{{ version }}.tar.gz?r=&ts=1368775962&use_mirror=ncu
     - source_hash: md5=843de3439886c2dddb0f09e9bb6a4d04
-
-untar_roundcube_archive:
-  cmd:
-    - run
-    - cwd: /usr/local
-    - name: cd /usr/local && tar xzf /usr/local/src/roundcubemail-{{ version }}.tar.gz
-    - unless: test -e /usr/local/roundcubemail-{{ version }}/index.php
-    - require:
-      - file: roundcubemail_archive
+    - archive_format: tar
+    - tar_options: z
+    - if_missing: /usr/local/roundcubemail-{{ version }}/index.php
 
 {{ roundcubedir }}:
   file:
@@ -48,7 +42,7 @@ untar_roundcube_archive:
       - user
       - group
     - require:
-      - cmd: untar_roundcube_archive
+      - archive: roundcubemail_archive
 
 {% for file in ('db.inc.php','main.inc.php') %}
 {{ roundcubedir}}/config/{{ file }}:

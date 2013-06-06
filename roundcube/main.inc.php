@@ -2,11 +2,11 @@
 // {{ pillar['message_do_not_modify'] }}
 $rcmail_config = array();
 $rcmail_config['debug_level'] = 1;
-$rcmail_config['log_driver'] = 'file';
+$rcmail_config['log_driver'] = 'syslog';
 $rcmail_config['log_date_format'] = 'd-M-Y H:i:s O';
 $rcmail_config['syslog_id'] = 'roundcube';
 $rcmail_config['syslog_facility'] = LOG_USER;
-$rcmail_config['smtp_log'] = true;
+$rcmail_config['smtp_log'] = false;
 $rcmail_config['log_logins'] = false;
 $rcmail_config['log_session'] = false;
 $rcmail_config['sql_debug'] = false;

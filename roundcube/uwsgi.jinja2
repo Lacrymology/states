@@ -29,7 +29,7 @@ chdir = {{ dir }}
 threaded-logger = true
 no-orphans = true
 {% if 'graylog2_address' in pillar %}
-logger = roundcube:{{ pillar['graylog2_address'] }}:12201,{{ grains['id'] }}
+logger = graylog2:{{ pillar['graylog2_address'] }}:12201,{{ grains['id'] }}
 {% else %}
 log-syslog = uwsgi-roundcube
 {% endif %}

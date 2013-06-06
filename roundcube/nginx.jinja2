@@ -1,5 +1,4 @@
 # {{ pillar['message_do_not_modify'] }}
-
 upstream roundcube {
     server unix:///var/lib/uwsgi/roundcube.sock;
 }
@@ -26,16 +25,15 @@ server {
 {% endif %}
 
 {# web app logic #}
-    server_name {% for hostname in pillar['roundcube']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+    server_name {% for hostname in pillar['roundcube']['hostnames'] -%}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
 		root {{ dir }};
-{#
-{% for dir in ('skins') %}
+
+{% for dir in ('skins',) %}
     location /{{ dir }}/ {
         expires max;
         autoindex off;
     }
 {% endfor %}
-#}
 
 	index index.php index.html index.htm;
 	location / {

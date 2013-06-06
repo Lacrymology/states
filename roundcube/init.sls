@@ -82,3 +82,14 @@ untar_roundcube_archive:
       dir: {{ roundcubedir }}
     - watch_in:
       - service: nginx
+
+/etc/uwsgi/roundcube.ini:
+  file:
+    - managed
+    - source: salt://roundcube/uwsgi.jinja2
+    - template: jinja
+    - user: www-data
+    - group: www-data
+    - mode: 440
+    - context:
+      dir: {{ roundcubedir }}

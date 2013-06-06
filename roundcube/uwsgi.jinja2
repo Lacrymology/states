@@ -1,0 +1,39 @@
+# {{ pillar['message_do_not_modify'] }}
+{% set web = pillar['roundcube'] %}
+[uwsgi]
+master = true
+processes = {{ web['workers'] }}
+harakiri = {{ web['timeout']|default(60) }}
+harakiri-verbose = true
+{% if web['cheaper']|default(False) %}
+{% if web['cheaper'] > 0 %}
+cheaper = {{ web['cheaper'] }}
+{% else %}
+cheap = true
+{% endif %}
+{% if web['workers'] == 1 and web['cheaper'] == 0 %}
+idle = {{ web['idle']|default(300) }}
+{% endif %}
+{% endif -%}
+{%- if grains['virtual'] == 'kvm' and salt['file.file_exists']('/sys/kernel/mm/ksm/run') %}
+ksm = 20
+{% endif -%}
+lazy-apps = true
+uid = www-data
+gid = www-data
+procname = roundcube-worker
+procname-master = roundcube-master
+socket = /var/lib/uwsgi/roundcube.sock
+stats = /var/lib/uwsgi/roundcube-stats.sock
+chdir = {{ dir }}
+threaded-logger = true
+no-orphans = true
+{% if 'graylog2_address' in pillar %}
+logger = roundcube:{{ pillar['graylog2_address'] }}:12201,{{ grains['id'] }}
+{% else %}
+log-syslog = uwsgi-roundcube
+{% endif %}
+{% if 'graphite_address' in pillar %}
+carbon-id = roundcube
+carbon = {{ pillar['graphite_address'] }}:2003
+{% endif %}

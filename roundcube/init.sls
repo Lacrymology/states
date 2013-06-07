@@ -47,6 +47,10 @@ roundcubemail_archive:
     - makedirs: True
     - user: root
     - group: root
+    - context:
+      pguser: {{ pguser }}
+      pgpass: {{ pgpass }}
+      pgdb: {{ pgdb }}
     - require:
       - archive: roundcubemail_archive
 

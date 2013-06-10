@@ -14,14 +14,26 @@ nagios-nrpe-server:
       - nagios-plugins-basic
     - require:
       - service: nagios-nrpe-server
-  file:
-    - absent
-    - name: /etc/nagios
-    - require:
-      - pkg: nagios-nrpe-server
   service:
     - dead
     - enable: False
+
+{#
+ For some reason, purge nagios-nrpe-server Ubuntu package don't clean these.
+ /var/run/nagios is $HOME of user nagios.
+ So, when nagios-nrpe-server is uninstalled the first time the UID of this
+ directory is changed to something else, once userdel nagios is executed.
+ When nagios-nrpe-server is installed again, it can't write the PID file in
+ /var/run/nagios. As the ownership is not for itself, it can't write the PID.
+ This cause stopping the service to fail, as it can't find a PID.
+#}
+{% for dirname in ('/etc', '/var/run') %}
+{{ dirname }}/nagios:
+  file:
+    - absent
+    - require:
+      - user: nagios
+{% endfor %}
 
 nagios:
   user:

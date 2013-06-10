@@ -9,9 +9,6 @@ include:
 ssmtp:
   pkg:
     - installed
-    - names:
-      - ssmtp
-      - bsd-mailx
     - require:
       - service: gsyslog
       - cmd: apt_sources
@@ -32,6 +29,13 @@ ssmtp:
         'ssmtp/fromoverride': {'type': 'boolean', 'value': False}
     - require:
       - pkg: debconf-utils
+
+bsd-mailx:
+  pkg:
+    - installed
+    - require:
+      - pkg: ssmtp
+      - cmd: apt_sources
 
 {% for template, config in (('config', 'ssmtp.conf'), ('revaliases', 'revaliases')) %}
 /etc/ssmtp/{{ config }}:

@@ -23,7 +23,6 @@ postgresql:
   service:
     - dead
     - enable: False
-    - name: postgresql
 
 /etc/logrotate.d/postgresql-common:
   file:

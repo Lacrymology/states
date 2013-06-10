@@ -78,7 +78,6 @@ pip:
  ## FIXME: could not find svn URL in dependency_links for this package:
  distribute==0.6.24dev-r0
  [snip]
-#}
 distribute:
   module:
     - wait
@@ -87,3 +86,4 @@ distribute:
     - upgrade: True
     - watch:
       - module: pip
+#}

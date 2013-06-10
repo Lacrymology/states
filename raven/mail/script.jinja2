@@ -46,7 +46,7 @@ def main():
     from argparse import ArgumentParser
     argpsr = ArgumentParser()
     argpsr.add_argument('-s', help="Subject")
-    argpsr.add_argument('recipients', nargs='?', default='')
+    argpsr.add_argument('recipients', nargs='*', default='')
     args = argpsr.parse_args()
 
     if args.s:

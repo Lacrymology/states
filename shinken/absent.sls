@@ -3,22 +3,9 @@
  #}
 
 {% set roles = ('broker', 'arbiter', 'reactionner', 'poller', 'scheduler') %}
-
+include:
 {% for role in roles %}
-/etc/init/shinken-{{ role }}.conf:
-  file:
-    - absent
-    - require:
-      - service: shinken-{{ role }}
-
-shinken-{{ role }}:
-  service:
-    - dead
-  file:
-    - absent
-    - name: /var/log/upstart/shinken-{{ role }}.log
-    - require:
-      - service: shinken-{{ role }}
+  - shinken.{{ role }}.absent
 {% endfor %}
 
 shinken:
@@ -28,10 +15,6 @@ shinken:
 {% for role in roles %}
       - service: shinken-{{ role }}
 {% endfor %}
-
-nagios-nrpe-plugin:
-  pkg:
-    - purged
 
 {% for rootdir in ('etc', 'usr/local', 'var/log', 'var/lib') %}
 /{{ rootdir }}/shinken:
@@ -44,9 +27,5 @@ nagios-nrpe-plugin:
 {% endfor %}
 
 /usr/local/bin/shinken-ctl.sh:
-  file:
-    - absent
-
-/etc/nginx/conf.d/shinken-web.conf:
   file:
     - absent

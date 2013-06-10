@@ -1,8 +1,10 @@
 # {{ pillar['message_do_not_modify'] }}
-# This file contains the checks for the low-level infrastructure components
-# supported by salt.
+{#-
+ This file contains the checks for the low-level infrastructure components
+ supported by salt.
+-#}
 
-{% for user in pillar['shinken']['users'] %}
+{%- for user in pillar['shinken']['users'] %}
 define contact {
     contact_name {{ user }}
     email {{ pillar['shinken']['users'][user]['email'] }}
@@ -18,7 +20,7 @@ define contact {
     service_notification_commands notify-service-by-email
     service_notifications_enabled 1
 }
-{% endfor %}
+{% endfor -%}
 
 define contactgroup {
     contactgroup_name admins
@@ -74,9 +76,9 @@ define command {
 define timeperiod {
     timeperiod_name 24x7
     alias 24_Hours_A_Day,_7_Days_A_Week
-{% for day in ('sun', 'mon', 'tues', 'wednes', 'thurs', 'fri', 'satur') %}
+{%- for day in ('sun', 'mon', 'tues', 'wednes', 'thurs', 'fri', 'satur') %}
     {{ day }}day 00:00-24:00
-{% endfor %}
+{% endfor -%}
 }
 
 define service {
@@ -99,7 +101,7 @@ define service {
     notifications_enabled 1
     event_handler_enabled 0
     # Service event handler is enabled
-{#    event_handler super_event_kill_everyone!DIE#}
+{#    event_handler super_event_kill_everyone!DIE-#}
     # Flap detection is enabled
     flap_detection_enabled 1
     # Failure prediction is enabled
@@ -130,11 +132,27 @@ define service {
     _httpstink NO
 }
 
-{% for host in pillar['shinken']['ip_addresses'] %}
+{%- for role in pillar['global_roles'] %}
+define hostgroup {
+    hostgroup_name Role_{{ role }}
+    alias {{ role|capitalize }} Role
+{#
+    members hosts
+    hostgroup_members hostgroups
+    notes	note_string
+    notes_url	url
+    action_url	url
+    realm	realm
+-#}
+}
+{% endfor -%}
+
+{%- for host in pillar['monitoring']['hosts'] %}
 define host {
     host_name {{ host }}
-    address {{ pillar['shinken']['ip_addresses'][host] }}
+    address {{ pillar['monitoring']['hosts'][host]['address'] }}
     alias {{ host }}
+    hostgroup_name {% for role in pillar['monitoring']['hosts'][host]['roles'] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     contact_groups admins
     notification_interval 0
     first_notification_delay 0
@@ -155,335 +173,681 @@ define host {
     business_impact 5
     poller_tag all
 }
-{% endfor %}
+{% endfor -%}
 
-{#
- # the following services need to be checked on ALL hosts
- #}
+{#-
+ ########
+ The following monitoring checks cover all common states that do have monitoring
+ checks defined.
+
+ TODO: add doc on pillar, hosts, roles and states structure expected in shinken
+    pillar
+ ########
+ -#}
+
+{#-
+ Jinja2 macro for template nginx/nrpe/instance.jinja2
+-#}
+{%- set nginx_instances_checks = {'http': 'HTTP protocol', 'https': 'HTTPs Protocol', 'https_certificate': 'HTTPs Certificate Expiration'} -%}
+{%- macro nginx_instance(deployment, state) -%}
+    {%- for check in nginx_instances_checks %}
 define service {
-    host_name {% for host in pillar['shinken']['ip_addresses'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description SSH
-    check_command check_ssh
+    hostgroup_name {% for role in pillar['monitoring']['states'][state] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description nginx-{{ deployment }}-{{ check }}
+    display_name {{ deployment|capitalize }} {{ nginx_instances_checks[check] }}
+    check_command check_nrpe!check_{{ deployment }}_{{ check }}
+{%- if check == 'https_certificate' %}
+    check_interval 1440 {#- only need to check https certificate each day -#}
+{%- endif %}
     use salt-service
 }
+{% endfor -%}
+{%- endmacro -%}
 
+{#-
+ Jinja2 macro for template uwsgi/nrpe/instance.jinja2
+ -#}
+{%- set uwsgi_instances_checks = {'master': 'uWSGI Master Process', 'worker': 'uWSGI Workers Process', 'uwsgi': 'uWSGI Ping'} -%}
+{%- macro uwsgi_instance(deployment, state) -%}
+    {%- for check in uwsgi_instances_checks %}
 define service {
-    host_name {% for host in pillar['shinken']['ip_addresses'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description SSH Port
-    check_command check_tcp!22022
+    hostgroup_name {% for role in pillar['monitoring']['states'][state] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description uwsgi-{{ deployment }}-{{ check }}
+    display_name {{ deployment|capitalize }} {{ uwsgi_instances_checks[check] }}
+    check_command check_nrpe!check_{{ deployment }}_{{ check }}
     use salt-service
 }
+{% endfor -%}
+{%- endmacro -%}
 
+{#-
+ Jinja2 macro for template postgresql/nrpe.jinja2
+ -#}
+{%- set postgresql_client_checks = {'postgresql': 'PostgreSQL database'} -%}
+{%- macro postgresql_client(deployment, state) -%}
+    {%- for check in postgresql_client_checks %}
 define service {
-    host_name {% for host in pillar['shinken']['ip_addresses'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description NRPE
-    check_command check_tcp!5666
+    hostgroup_name {% for role in pillar['monitoring']['states'][state] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description {{ deployment }}-{{ check }}
+    display_name {{ deployment|capitalize }} {{ postgresql_client_checks[check] }}
+    check_command check_nrpe!check_{{ deployment }}_{{ check }}
     use salt-service
 }
+{% endfor -%}
+{%- endmacro -%}
 
-{% for service in ('loopback', 'memory', 'cron', 'diamond', 'syslogd', 'klogd', 'salt_minion', 'ssh', 'statsd', 'users', 'load', 'all_disks', 'zombie_procs', 'total_procs') %}
+{#-
+  Jinja2 macro to perform simple series of check_nrpe
+-#}
+{%- macro check_nrpe(prefix, data, state) -%}
+{%- for check in data %}
 define service {
-    host_name {% for host in pillar['shinken']['ip_addresses'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description Infra-{{ service }}
-    check_command check_nrpe!check_{{ service }}
+    hostgroup_name {% for role in pillar['monitoring']['states'][state] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description {{ prefix }}-{{ check }}
+    display_name {{ prefix }} {{ data[check] }}
+    check_command check_nrpe!check_{{ check }}
     use salt-service
 }
-{% endfor %}
+{% endfor -%}
+{%- endmacro -%}
 
-{% if not pillar['shinken']['ntp']|default(False) %}
-{% for service in ('ntp', 'ntp_sync') %}
+{#-
+ State: amavis
+ -#}
+
+{%- if 'amavis' in pillar['monitoring']['states'] -%}
+{%- set amavis_checks = {'master': 'Master Process', 'child': 'Child Processes', 'port': 'Listen Port'} -%}
+{%- for check in amavis_checks %}
 define service {
-    host_name {% for host in pillar['shinken']['ntp'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description Infra-{{ service }}
-    check_command check_nrpe!check_{{ service }}
+    hostgroup_name {% for role in pillar['monitoring']['states']['amavis'] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description amavis-{{ check }}
+    display_name Amavis {{ amavis_checks[check] }}
+    check_command check_nrpe!check_amavis_{{ check }}
     use salt-service
 }
-{% endfor %}
-{% endif %}
+{% endfor -%}
+{%- endif -%}
 
-{#
-Services that don't affect production and that have high cost in CPU, I/O
-and RAM to performs.
-Run them only each few hours.
-#}
-{% for service in ('apt', 'apt_rc') %}
+{#-
+ State: apt
+ -#}
+
+{%- if 'apt' in pillar['monitoring']['states'] -%}
+{%- set apt_checks = {'apt': 'APT Updates', 'apt_rc': 'APT Not-Purged'} -%}
+{%- for check in apt_checks %}
 define service {
-    host_name {% for host in pillar['shinken']['ip_addresses'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description Infra-{{ service }}
-    check_command check_nrpe!check_{{ service }}
+    hostgroup_name {% for role in pillar['monitoring']['states']['apt'] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description {{ check }}
+    display_name {{ apt_checks[check] }}
+    check_command check_nrpe!check_{{ check }}
     use salt-service
-    {# each 6 hours #}
+    {#-
+    Services that don't affect production and that have high cost in CPU, I/O
+    and RAM to performs.
+    Run them only each 6 hours.
+    #}
     check_interval 360
     retry_interval 5
 }
-{% endfor %}
+{% endfor -%}
+{%- endif -%}
 
-{#
- # check for all web servers
- #}
-{% for service in ('memcached', 'nginx_master', 'nginx_worker', 'nginx_status', 'nginx_logger_access', 'nginx_logger_error', 'uwsgi', 'postgresql_server', 'postgresql_port', 'postgresql_diamond') %}
+{#-
+ State: backup.server
+ -#}
+
+{%- if 'backup.server' in pillar['monitoring']['states'] %}
 define service {
-    host_name {% for host in pillar['shinken']['web_servers'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description WebServer-{{ service }}
-    check_command check_nrpe!check_{{ service }}
+    hostgroup_name {% for role in pillar['monitoring']['states']['backup.server'] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description backups
+    display_name Backups
+    check_command check_nrpe!check_backups
     use salt-service
 }
-{% endfor %}
+{% endif -%}
 
+{#-
+ state: carbon
+ -#}
+
+{%- if 'carbon' in pillar['monitoring']['states'] %}
 define service {
-    host_name {% for host in pillar['shinken']['web_servers'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description http-port
-    check_command check_tcp!80
+    hostgroup_name {% for role in pillar['monitoring']['states']['carbon'] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description carbon-instances
+    display_name Carbon Instances
+    check_command check_nrpe!check_carbon_instances
     use salt-service
 }
 
-{%- for host in pillar['shinken']['web_servers'] -%}
-    {%- for deployment in pillar['shinken']['web_servers'][host] -%}
-        {%- for service in ('master', 'worker', 'http', 'uwsgi', 'https', 'https_certificate') %}
+{%- for port in (2003, 2004) %}
 define service {
-    host_name {{ host }}
-    service_description Web-{{ deployment }}-{{ service }}
-    check_command check_nrpe!check_{{ deployment }}_{{ service }}
-    use salt-service
-}
-        {% endfor %}
-define service {
-    host_name {{ host }}
-    service_description PostgreSQL-{{ deployment }}
-    check_command check_nrpe!check_postgresql_{{ deployment }}
-    use salt-service
-}
-    {%- endfor -%}
-{%- endfor %}
-
-{#
- # elastic search checks
- #}
-{%- for name in ('', '_cluster', '_http', '_https', '_https_certificate') %}
-define service {
-    host_name {% for host in pillar['shinken']['elasticsearch'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description elasticsearch{{ name }}
-    check_command check_nrpe!check_elasticsearch{{ name }}
-{% if name == '_https_certificate' %}
-    {# only need to check https certificate each day #}
-    check_interval 1440
-{% endif %}
-    use salt-service
-}
-{% endfor %}
-
-{% for port in (9200, 9300) %}
-define service {
-    host_name {% for host in pillar['shinken']['elasticsearch'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description elasticsearch-{{ port }}
+    hostgroup_name {% for role in pillar['monitoring']['states']['carbon'] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description carbon-remote-port-{{ port }}
+    display_name Carbon Remote Port {{ port }}
     check_command check_tcp!{{ port }}
     use salt-service
 }
-{% endfor %}
-
-{#
- # carbon
- #}
-{% for instance in pillar['shinken']['carbon']['instances'] %}
 define service {
-    host_name {% for host in pillar['shinken']['carbon']['instances'][instance] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description carbon-{{ instance }}
-    check_command check_nrpe!check_carbon_{{ instance }}
+    hostgroup_name {% for role in pillar['monitoring']['states']['carbon'] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description carbon-local-port-{{ port }}
+    display_name Carbon Local Port {{ port }}
+    check_command check_nrpe!check_carbon_port_{{ port}}
     use salt-service
 }
-{% endfor %}
+{% endfor -%}
+{%- endif %}
 
-{% for port in (2003, 2004) %}
+{#-
+ State: clamav
+ -#}
+
+{%- if 'clamav' in pillar['monitoring']['states'] -%}
+{%- for procname in ('freshclam', 'clamav') %}
 define service {
-    host_name {% for host in pillar['shinken']['carbon']['hosts'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description carbon-port-{{ port }}
-    check_command check_tcp!{{ port }}
+    hostgroup_name {% for role in pillar['monitoring']['states']['clamav'] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description {{ procname }}-daemon
+    display_name {{ procname|capitalize }} Daemon
+    check_command check_nrpe!check_{{ procname }}
     use salt-service
 }
-{% endfor %}
+{% endfor -%}
+{%- endif -%}
 
-{% if 'rabbitmq' in pillar['shinken'] %}
-{#
- # rabbitmq
- #}
-{%- for service in ('rabbitmq', 'rabbitmq_port_management', 'rabbitmq_port_console', 'rabbitmq_port_amqp', 'erlang', 'erlang_port', 'rabbitmq_http', 'rabbitmq_https', 'rabbitmq_https_certificate') %}
+{#-
+ State: cron
+ -#}
+
+{%- if 'cron' in pillar['monitoring']['states'] -%}
+{#-{{ check_nrpe("Cron", {'cron': 'Daemon'}, 'cron') }}#}
 define service {
-    host_name {% for host in pillar['shinken']['rabbitmq'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description RabbitMQ-{{ service }}
-    check_command check_nrpe!check_{{ service }}
-{% if service == 'rabbitmq_https_certificate' %}
-    {# only need to check https certificate each day #}
-    check_interval 1440
-{% endif %}
+    hostgroup_name {% for role in pillar['monitoring']['states']['cron'] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description cron-daemon
+    display_name Cron Daemon
+    check_command check_nrpe!check_cron
     use salt-service
 }
-{% endfor %}
+{% endif -%}
 
+{#-
+ State: denyhosts
+ -#}
+
+{%- if 'denyhosts' in pillar['monitoring']['states'] %}
 define service {
-    host_name {% for host in pillar['shinken']['rabbitmq'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description rabbitmq-port
-    check_command check_tcp!55672
+    hostgroup_name {% for role in pillar['monitoring']['states']['denyhosts'] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description denyhosts-daemon
+    display_name Denyhosts Daemon
+    check_command check_nrpe!check_denyhosts
+    use salt-service
+}
+{% endif -%}
+
+{#-
+ State: diamond
+ -#}
+
+{%- if 'diamond' in pillar['monitoring']['states'] %}
+define service {
+    hostgroup_name {% for role in pillar['monitoring']['states']['diamond'] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description diamond-daemon
+    display_name Diamond Daemon
+    check_command check_nrpe!check_diamond
+    use salt-service
+}
+{% endif -%}
+
+{#- TODO: django? -#}
+
+{#-
+ State: dovecot
+ -#}
+
+{%- if 'dovecot' in pillar['monitoring']['states'] -%}
+{%- for daemon in ('', 'anvil', 'log', 'config') %}
+define service {
+    hostgroup_name {% for role in pillar['monitoring']['states']['dovecot'] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description dovecot{% if daemon %}-{{ daemon }}-{% endif %}daemon
+    display_name Dovecot {% if daemon %}{{ daemon }} {% endif %}Daemon
+    check_command check_nrpe!check_dovecot{% if daemon %}_{{ daemon }}{% endif %}
+    use salt-service
+}
+{% endfor -%}
+
+{#- TODO: check remote port? -#}
+{%- for port in ('imap', 'pop3', 'imaps', 'pop3s') %}
+define service {
+    hostgroup_name {% for role in pillar['monitoring']['states']['dovecot'] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description dovecot-{{ port }}-port
+    display_name Dovecot {{ port|upper }} Port
+    check_command check_nrpe!check_dovecot_{{ port }}_port
+    use salt-service
+}
+{% endfor -%}
+{%- endif -%}
+
+{#-
+ State: elasticsearch
+ -#}
+
+{%- if 'elasticsearch' in pillar['monitoring']['states'] %}
+define service {
+    hostgroup_name {% for role in pillar['monitoring']['states']['elasticsearch'] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description elasticsearch-daemon
+    display_name Elasticsearch Daemon
+    check_command check_nrpe!check_elasticsearch
     use salt-service
 }
 
-{% for service in ('master', 'worker', 'status', 'logger_access', 'logger_error') %}
 define service {
-    host_name {% for host in pillar['shinken']['rabbitmq'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description rabbitmq-nginx-{{ service }}
-    check_command check_nrpe!check_nginx_{{ service }}
+    hostgroup_name {% for role in pillar['monitoring']['states']['elasticsearch'] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description elasticsearch-cluster
+    display_name Elasticsearch Cluster
+    check_command check_nrpe!check_elasticsearch_cluster
     use salt-service
 }
-{% endfor %}
-{% endif %}{# if rabbitmq is in shinken pillar #}
 
-{#
- # graylog2
- #}
-{% for service in ('server', 'logs') %}
+{%- set elasticsearch_checks = {'http': 9200, 'transport': 9300} -%}
+{%- for check in elasticsearch_checks %}
 define service {
-    host_name {% for host in pillar['shinken']['graylog2'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description graylog2-{{ service }}
-    check_command check_nrpe!check_graylog2_{{ service }}
+    hostgroup_name {% for role in pillar['monitoring']['states']['elasticsearch'] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description elasticsearch-remote-{{ check }}-port
+    display_name Elasticsearch Remote {{ check|capitalize }} Port
+    check_command check_tcp!{{ elasticsearch_checks[check] }}
     use salt-service
 }
-{% endfor %}
 
-{% for service in ('master', 'worker', 'uwsgi', 'http', 'https', 'https_certificate') %}
 define service {
-    host_name {% for host in pillar['shinken']['graylog2'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description Web-graylog2-{{ service }}
-    check_command check_nrpe!check_graylog2_{{ service }}
-{% if service == 'https_certificate' %}
-    {# only need to check https certificate each day #}
-    check_interval 1440
-{% endif %}
+    hostgroup_name {% for role in pillar['monitoring']['states']['elasticsearch'] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description elasticsearch-local-{{ check }}-port
+    display_name Elasticsearch Local {{ check|capitalize }} Port
+    check_command check_nrpe!check_dovecot_{{ check }}_port
     use salt-service
 }
-{% endfor %}
+{% endfor -%}
+{{ nginx_instance('elasticsearch', 'elasticsearch') }}
+{%- endif -%}
 
-{% if pillar['shinken']['proftpd']|default(False) %}
+{#-
+ State: firewall
+ -#}
+
+{%- if 'firewall' in pillar['monitoring']['states'] -%}
 define service {
-    host_name {% for host in pillar['shinken']['proftpd'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description proftpd
-    check_command check_nrpe!check_proftpd
+    hostgroup_name {% for role in pillar['monitoring']['states']['firewall'] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description firewall-rules
+    display_name Firewall Rules
+    check_command check_nrpe!check_firewall
     use salt-service
 }
-{% endif %}
+{% endif -%}
 
-{% if pillar['shinken']['pdnsd']|default(False) %}
+{#-
+ State: graphite
+ -#}
+{%- if 'graphite' in pillar['monitoring']['states'] -%}
+{{ postgresql_client('graphite', 'graphite') }}
+{{ nginx_instance('graphite', 'graphite') }}
+{{ uwsgi_instance('graphite', 'graphite') }}
+{%- endif -%}
+
+{#-
+ State: graylog2.server
+ -#}
+{%- if 'graylog2.server' in pillar['monitoring']['states'] -%}
+{%- set graylog2_server_checks = {'server': 'Server', 'logs': 'Logs Rate'} -%}
+{%- for check in graylog2_server_checks %}
 define service {
-    host_name {% for host in pillar['shinken']['pdnsd'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description pdnsd
+    hostgroup_name {% for role in pillar['monitoring']['states']['graylog2.server'] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description graylog2-{{ check }}
+    display_name Graylog2 {{ graylog2_server_checks[check] }}
+    check_command check_nrpe!check_graylog2_{{ check }}
+    use salt-service
+}
+{% endfor -%}
+{%- endif -%}
+
+{#-
+ State: graylog2.web
+ -#}
+{%- if 'graylog2.web' in pillar['monitoring']['states'] -%}
+{{ nginx_instance('graylog2', 'graylog2.web') }}
+{{ uwsgi_instance('graylog2', 'graylog2.web') }}
+{%- endif -%}
+
+{#-
+ State: gsyslog
+ -#}
+{%- if 'gsyslog' in pillar['monitoring']['states'] -%}
+{%- for check in ('syslogd', 'klogd') %}
+define service {
+    hostgroup_name {% for role in pillar['monitoring']['states']['gsyslog'] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description gsyslog-{{ check }}
+    display_name Gsyslog {{ check }}
+    check_command check_nrpe!check_{{ check }}
+    use salt-service
+}
+{% endfor -%}
+{%- endif -%}
+
+{#-
+ State: memcache
+ -#}
+
+{%- if 'memcache' in pillar['monitoring']['states'] -%}
+define service {
+    hostgroup_name {% for role in pillar['monitoring']['states']['memcache'] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description memcache-daemon
+    display_name Memcache Daemon
+    check_command check_nrpe!check_memcached
+    use salt-service
+}
+{% endif -%}
+
+{#-
+ State: mongodb
+ -#}
+
+{%- if 'mongodb' in pillar['monitoring']['states'] -%}
+{%- set mongodb_checks = {'': 'Daemon', '_port': 'Port', '_http': 'HTTP Interface', '_http_port': 'HTTP Port'} -%}
+{%- for check in mongodb_checks %}
+define service {
+    hostgroup_name {% for role in pillar['monitoring']['states']['mongodb'] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description mongodb{{ check|default('_daemon') }}
+    display_name MongoDB {{ mongodb_checks[check] }}
+    check_command check_nrpe!check_mongdb{{ check }}
+    use salt-service
+}
+{% endfor -%}
+{#- TODO: remote port check? -#}
+{%- endif -%}
+
+{#-
+ State: nginx
+ -#}
+
+{%- if 'nginx' in pillar['monitoring']['states'] -%}
+{%- set nginx_checks = {'master': 'Master Process', 'worker': 'Worker Processes', 'status': 'Status Page', 'logger_access': 'Access Logger', 'logger_error': 'Error Logger'} -%}
+{%- for check in nginx_checks %}
+define service {
+    hostgroup_name {% for role in pillar['monitoring']['states']['nginx'] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description nginx-{{ check }}
+    display_name Nginx {{ nginx_checks[check] }}
+    check_command check_nrpe!check_nginx_{{ check }}
+    use salt-service
+}
+{% endfor -%}
+{%- endif -%}
+
+{#-
+ State: nrpe
+ -#}
+
+{%- if 'nrpe' in pillar['monitoring']['states'] -%}
+{%- set nrpe_checks = {'loopback': 'Loopback Interface', 'memory': 'Memory Usage', 'users': 'Logged Users', 'load': 'Load Average', 'all_disks': 'All Disks', 'zombie_procs': 'Zombie Processes', 'total_procs': 'Total Processes'} -%}
+{%- for check in nrpe_checks %}
+define service {
+    hostgroup_name {% for role in pillar['monitoring']['states']['nrpe'] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description linux-{{ check }}
+    display_name Linux {{ nrpe_checks[check] }}
+    check_command check_nrpe!check_{{ check }}
+    use salt-service
+}
+{% endfor -%}
+define service {
+    hostgroup_name Linux
+    service_description remote-nrpe-port
+    display_name Remote NRPE Port
+    check_command check_tcp!5666
+    use salt-service
+}
+{% endif -%}
+
+{#-
+ State: ntp
+ -#}
+
+{%- if 'ntp' in pillar['monitoring']['states'] -%}
+{%- set ntp_checks = {'ntp': 'NTP Daemon', 'ntp_sync': 'NTP Synchronization'} -%}
+{%- for check in ntp_checks %}
+define service {
+    hostgroup_name {% for role in pillar['monitoring']['states']['ntp'] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description {{ check }}
+    display_name {{ ntp_checks[check] }}
+    check_command check_nrpe!check_{{ check }}
+    use salt-service
+}
+{% endfor -%}
+{%- endif -%}
+
+{#-
+ State: openldap
+ -#}
+
+{%- if 'openldap' in pillar['monitoring']['states'] -%}
+{%- set openldap_checks = {'openldap': 'OpenLDAP Daemon (slapd)', 'openldap_port': 'LDAP Port', 'openldap_base': 'LDAP Base'} -%}
+{%- for check in openldap_checks %}
+define service {
+    hostgroup_name {% for role in pillar['monitoring']['states']['openldap'] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description {{ check }}
+    display_name {{ openldap_checks[check] }}
+    check_command check_nrpe!check_{{ check }}
+    use salt-service
+}
+{% endfor -%}
+{%- endif -%}
+
+{#- TODO: openvpn -#}
+
+{#-
+ State: pdnsd
+ -#}
+
+{%- if 'pdnsd' in pillar['monitoring']['states'] %}
+define service {
+    hostgroup_name {% for role in pillar['monitoring']['states']['pdnsd'] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description pdnsd-daemon
+    display_name Proxy DNS Daemon
     check_command check_nrpe!check_pdnsd
     use salt-service
 }
-{% endif %}
+{% endif -%}
 
-{% for service in ('mongodb', 'mongodb_port', 'mongodb_http', 'mongodb_http_port', 'nginx_master', 'nginx_worker', 'nginx_status') %}
+{#-
+ State: postfix
+ -#}
+{#- TODO: postfix -#}
+
+{#-
+ State: postgresql.server
+ -#}
+
+{%- if 'postgresql.server' in pillar['monitoring']['states'] -%}
+{%- set postgresql_server_checks = {'server': 'Daemon', 'port': 'Port'} -%}
+{%- for check in postgresql_server_checks %}
 define service {
-    host_name {% for host in pillar['shinken']['graylog2'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description graylog2-{{ service }}
-    check_command check_nrpe!check_{{ service }}
+    hostgroup_name {% for role in pillar['monitoring']['states']['postgresql.server'] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description postgresql-{{ check }}
+    display_name PostgreSQL {{ postgresql_server_checks[check] }}
+    check_command check_nrpe!check_postgresql_{{ check }}
     use salt-service
 }
-{% endfor %}
+{% endfor -%}
+{{ postgresql_client('diamond', 'postgresql.server') }}
+{%- endif -%}
 
-{#
- # Salt Master
- #}
+{#-
+ State: proftpd
+ -#}
+
+{%- if 'proftpd' in pillar['monitoring']['states'] %}
 define service {
-    host_name {% for host in pillar['shinken']['salt_master'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
+    hostgroup_name {% for role in pillar['monitoring']['states']['proftpd'] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description proftpd-daemon
+    display_name ProFTPD Daemon
+    check_command check_nrpe!check_proftpd
+    use salt-service
+}
+{{ postgresql_client('proftpd', 'proftpd') }}
+{% endif -%}
+
+{#-
+ State: rabbitmq
+ -#}
+
+{%- if 'rabbitmq' in pillar['monitoring']['states'] -%}
+{%- set rabbitmq_checks = {'rabbitmq': 'Daemon', 'rabbitmq_port_management': 'Management Port', 'rabbitmq_port_console': 'Console Port', 'rabbitmq_port_amqp': 'Local AMQP Port', 'erlang': 'Erlang', 'erlang_port': 'Erlang Port'} -%}
+{%- for check in rabbitmq_checks %}
+define service {
+    hostgroup_name {% for role in pillar['monitoring']['states']['rabbitmq'] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description {{ check }}
+    display_name RabbitMQ {{ rabbitmq_checks[check] }}
+    check_command check_nrpe!check_{{ check }}
+{%- if check == 'rabbitmq_https_certificate' %}
+    {# only need to check https certificate each day #}
+    check_interval 1440
+{% endif -%}
+    use salt-service
+}
+{% endfor -%}
+
+{{ nginx_instance('rabbitmq', 'rabbitmq') }}
+
+define service {
+    hostgroup_name {% for role in pillar['monitoring']['states']['rabbitmq'] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description remote-rabbitmq-amqp-port
+    display_name Remote RabbitMQ AMQP Port
+    check_command check_tcp!55672
+    use salt-service
+}
+{% endif -%}
+
+{#-
+ State: salt.api
+ -#}
+
+{%- if 'salt.api' in pillar['monitoring']['states'] -%}
+define service {
+    hostgroup_name {% for role in pillar['monitoring']['states']['salt.api'] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description salt-api-daemon
+    display_name Salt API Daemon
+    check_command check_nrpe!check_salt_api
+    use salt-service
+}
+{{ nginx_instance('salt_api', 'salt.api') }}
+{%- endif -%}
+
+{#-
+ State: salt.master
+ -#}
+
+{%- if 'salt.master' in pillar['monitoring']['states'] -%}
+define service {
+    hostgroup_name {% for role in pillar['monitoring']['states']['salt.master'] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description salt-master
+    display_name Salt Master Daemon
     check_command check_nrpe!check_salt_master
     use salt-service
 }
 
-{% for port in (4505, 4506) %}
+{%- for port in (4505, 4506) %}
 define service {
-    host_name {% for host in pillar['shinken']['salt_master'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description salt-master-{{ port }}
+    hostgroup_name {% for role in pillar['monitoring']['states']['salt.master'] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description salt-master-remote-port-{{ port }}
+    display_name Salt Master Remote Port {{ port }}
     check_command check_tcp!{{ port }}
     use salt-service
 }
-{% endfor %}
-
-{#
- # Salt API
- #}
-{% if pillar['shinken']['salt_api']|default(False) %}
-{% for name in ('', '_http', '_https', '_https_certificate') %}
 define service {
-    host_name {% for host in pillar['shinken']['salt_api'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description Salt-API{{ name }}
-    check_command check_nrpe!check_salt_api{{ name }}
+    hostgroup_name {% for role in pillar['monitoring']['states']['salt.master'] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description salt-master-local-port-{{ port }}
+    display_name Salt Master Local Port {{ port }}
+    check_command check_nrpe!check_salt_master_port_{{ port }}
     use salt-service
 }
-{% endfor %}
-{% endif %}
+{% endfor -%}
+{%- endif -%}
 
-{#
- # Denyhosts
- #}
-{% if pillar['shinken']['denyhosts']|default(False) %}
+{#-
+ State: salt.minion
+ -#}
+
+{%- if 'salt.minion' in pillar['monitoring']['states'] -%}
 define service {
-    host_name {% for host in pillar['shinken']['denyhosts']|default([]) %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description denyhosts
-    check_command check_nrpe!check_denyhosts
+    hostgroup_name {% for role in pillar['monitoring']['states']['salt.minion'] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description salt-minion
+    display_name Salt Minion Daemon
+    check_command check_nrpe!check_salt_minion
     use salt-service
-}
-{% endif %}
+}}
+{%- endif -%}
 
-{#
- # Shinken monitoring itself
- #}
-{% set listen_port = {
+{#-
+ State: sentry
+ -#}
+
+{%- if 'sentry' in pillar['monitoring']['states'] -%}
+{{ postgresql_client('sentry', 'sentry') }}
+{{ nginx_instance('sentry', 'sentry') }}
+{{ uwsgi_instance('sentry', 'sentry') }}
+{%- endif -%}
+
+{#-
+ State: all shinken states
+ -#}
+
+{%- set shinken_listen_port = {
     'arbiter': 7770,
     'broker': 7772,
     'scheduler': 7768,
     'poller': 7771,
     'reactionner': 7769
-} %}
+} -%}
 
-{% for service in pillar['shinken']['architecture'] %}
+{%- for shinken_role in shinken_listen_port -%}
+{%- set state_name = 'shinken.' + shinken_role -%}
+{%- if state_name in pillar['monitoring']['states'] %}
 define service {
-    host_name {% for host in pillar['shinken']['architecture'][service] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description Shinken-{{ service }}
-    check_command check_nrpe!check_shinken_{{ service }}
+    hostgroup_name {% for role in pillar['monitoring']['states'][state_name] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description shinken-{{ shinken_role }}-deamon
+    display_name Shinken {{ shinken_role|capitalize }} Deamon
+    check_command check_shinken_{{ shinken_role }}
     use salt-service
 }
 
 define service {
-    host_name {% for host in pillar['shinken']['architecture'][service] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description Shinken-{{ service }}-port
-    check_command check_tcp!{{ listen_port[service] }}
+    hostgroup_name {% for role in pillar['monitoring']['states'][state_name] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description shinken-{{ shinken_role }}-local-port
+    display_name Shinken {{ shinken_role|capitalize }} Local Port
+    check_command check_shinken_{{ shinken_role }}_port
     use salt-service
 }
 
-{#
- TODO: If there is more than one broker, don't notify if service goes down.
- Only consider Shinken-broker-web important.
- #}
-{% if service == 'broker' %}
-{% for name in ('http', 'https', 'https_certificate') %}
 define service {
-    host_name {% for host in pillar['shinken']['architecture']['broker'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description Shinken-broker-{{ name }}
-    check_command check_nrpe!check_shinken_broker_{{ name }}
-{% if service == 'https_certificate' %}
-    {# only need to check https certificate each day #}
-    check_interval 1440
-{% endif %}
+    hostgroup_name {% for role in pillar['monitoring']['states'][state_name] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description shinken-{{ shinken_role }}-remote-port
+    display_name Shinken {{ shinken_role|capitalize }} Remote Port
+    check_command check_tcp!{{ shinken_listen_port[shinken_role] }}
     use salt-service
 }
-{% endfor %}
-{% endif %}
 
-{% endfor %}{# for service in pillar['shinken']['architecture'] %} #}
+{%- if state_name == 'broker' %}
+define service {
+    hostgroup_name {% for role in pillar['monitoring']['states'][state_name] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description shinken-broker-web
+    display_name Shinken Broker Web UI Port
+    check_command check_shinken_broker_web
+    use salt-service
+}
+{% endif -%}
+{%- endif -%}
+{%- endfor -%}
 
 {#
  There can only be a single one running web node.
  If there's more than one broker, check that at least one is up to consider.
  #}
+{#
+TODO: go back at doing this
 {% if pillar['shinken']['architecture']['broker']|length > 1 %}
 define service {
     use salt-service
@@ -492,15 +856,63 @@ define service {
     check_command bp_rule!({% for host in pillar['shinken']['architecture']['broker'] %}{{ host }},Shinken-broker-http{% if not loop.last %} | {% endif %}{% endfor %})
 }
 {% endif %}
+#}
 
-{#
- # Backups
- #}
-{% if pillar['shinken']['backup']|default(False) %}
+{#-
+ State: ssh.server
+ -#}
+
+{%- if 'ssh.server' in pillar['monitoring']['states'] %}
 define service {
-    host_name {% for host in pillar['shinken']['backup'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description Backups
-    check_command check_nrpe!check_backups
+    hostgroup_name {% for role in pillar['monitoring']['states']['ssh.server'] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description ssh-daemon
+    display_name SSH Daemon
+    check_command check_ssh
     use salt-service
 }
-{% endif %}
+
+define service {
+    hostgroup_name {% for role in pillar['monitoring']['states']['ssh.server'] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description ssh-daemon-local-port
+    display_name SSH Daemon Local Port
+    check_command check_ssh_port
+    use salt-service
+}
+{#
+TODO: do something?
+define service {
+    hostgroup_name Linux
+    service_description SSH Port
+    check_command check_tcp!22022
+    use salt-service
+}
+-#}
+{% endif -%}
+
+{#-
+ State: statsd
+ -#}
+
+{%- if 'statsd' in pillar['monitoring']['states'] %}
+define service {
+    hostgroup_name {% for role in pillar['monitoring']['states']['statsd'] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description statsd-daemon
+    display_name StatsD Daemon
+    check_command check_statsd
+    use salt-service
+}
+{% endif -%}
+
+{#-
+ State: uwsgi
+ -#}
+
+{%- if 'uwsgi' in pillar['monitoring']['states'] %}
+define service {
+    hostgroup_name {% for role in pillar['monitoring']['states']['uwsgi'] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description uWSGI-emperor
+    display_name uWSGI Emperor
+    check_command check_uwsgi
+    use salt-service
+}
+{% endif -%}

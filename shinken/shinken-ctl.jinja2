@@ -1,8 +1,7 @@
 #!/bin/sh
 #  {{ pillar['message_do_not_modify'] }}
-
-{% for role in pillar['shinken']['architecture'] %}
-{% if grains['id'] in pillar['shinken']['architecture'][role] %}
-$1 shinken-{{ role }}
-{% endif %}
-{% endfor %}
+{% for role in ('broker', 'arbiter', 'reactionner', 'poller', 'scheduler') %}
+if [ -r /etc/init/shinken-{{ role }}.conf ]; then
+    $1 shinken-{{ role }}
+fi
+{% endfor -%}

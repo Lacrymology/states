@@ -57,7 +57,7 @@ def revert():
     }
 
     try:
-        saved = __salt__['data.getval'](__virtual__())
+        saved = set(__salt__['data.getval'](__virtual__()))
         log.debug("Found %d packages", len(saved))
     except KeyError:
         ret['comment'] = "You need to call {0}.snapshot first!".format(

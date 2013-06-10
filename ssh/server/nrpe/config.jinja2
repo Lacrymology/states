@@ -1,2 +1,3 @@
 # {{ pillar['message_do_not_modify'] }}
 command[check_ssh]=/usr/lib/nagios/plugins/check_procs -c 1:1 -C sshd -u root -a /usr/sbin/sshd
+command[check_ssh_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p {{ salt['pillar.get']('ssh:ports', [22])[0] }}

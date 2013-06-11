@@ -153,6 +153,12 @@ def _sync_all():
     client('saltutil.sync_all')
 
 
+def tearDownModule():
+    global client
+    logger.info("Install SSH Server to give access to host after tests.")
+    client('state.sls', 'ssh.server')
+
+
 def setUpModule():
     """
     Prepare minion for tests, this is executed only once time.
@@ -351,28 +357,28 @@ class BaseIntegration(unittest.TestCase):
                           os.linesep.join(unclean)))
 
         # check unix groups
-        if group_list is None:
-            group_list = self.list_groups()
-            logger.debug("First cleanup, keep list of %d groups",
-                         len(group_list))
-        else:
-            extra = set(self.list_groups()) - set(group_list)
-            if extra:
-                clean_up_failed = True
-                self.fail("New group that still exists after cleanup: %s" % (
-                          ','.join(extra)))
+        # if group_list is None:
+        #     group_list = self.list_groups()
+        #     logger.debug("First cleanup, keep list of %d groups",
+        #                  len(group_list))
+        # else:
+        #     extra = set(self.list_groups()) - set(group_list)
+        #     if extra:
+        #         clean_up_failed = True
+        #         self.fail("New group that still exists after cleanup: %s" % (
+        #                   ','.join(extra)))
 
         # check unix users
-        if user_list is None:
-            user_list = client('user.list_users')
-            logger.debug("First cleanup, keep list of %d users",
-                         len(user_list))
-        else:
-            extra = set(client('user.list_users')) - set(user_list)
-            if extra:
-                clean_up_failed = True
-                self.fail("New user that still exists after cleanup: %s" % (
-                          ','.join(extra)))
+        # if user_list is None:
+        #     user_list = client('user.list_users')
+        #     logger.debug("First cleanup, keep list of %d users",
+        #                  len(user_list))
+        # else:
+        #     extra = set(client('user.list_users')) - set(user_list)
+        #     if extra:
+        #         clean_up_failed = True
+        #         self.fail("New user that still exists after cleanup: %s" % (
+        #                   ','.join(extra)))
 
         is_clean = True
 
@@ -435,6 +441,25 @@ class BaseIntegration(unittest.TestCase):
         for group in client('group.getent'):
             output.append(group['name'])
         return output
+
+
+class IntegrationSimple(BaseIntegration):
+    """
+    Only tests the most very simple states that don't have an .absent
+    counterpart.
+    """
+
+    def test_hostname(self):
+        self.top(['hostname'])
+
+    def test_ttys(self):
+        self.top(['ttys'])
+
+    def test_kernel_modules(self):
+        self.top(['kernel_modules'])
+
+    def test_django_nrpe(self):
+        self.top(['django.nrpe'])
 
 
 class Integration(BaseIntegration):
@@ -504,12 +529,6 @@ class Integration(BaseIntegration):
     def test_gsyslog(self):
         self.top(['gsyslog'])
 
-    def test_hostname(self):
-        self.top(['hostname'])
-
-    def test_kernel_modules(self):
-        self.top(['kernel_modules'])
-
     def test_logrotate(self):
         self.top(['logrotate'])
 
@@ -564,6 +583,12 @@ class Integration(BaseIntegration):
     def test_raven(self):
         self.top(['raven'])
 
+    def test_raven_mail(self):
+        global client
+        self.top(['raven.mail'])
+        client('cmd.run',
+               'echo unittest | /usr/bin/mail -s unittest root@localhost')
+
     def test_reprepro(self):
         self.top(['reprepro'])
 
@@ -594,6 +619,21 @@ class Integration(BaseIntegration):
     def test_shinken(self):
         self.top(['shinken'])
 
+    def test_shinken_arbiter(self):
+        self.top(['shinken.arbiter'])
+
+    def test_shinken_broker(self):
+        self.top(['shinken.broker'])
+
+    def test_shinken_poller(self):
+        self.top(['shinken.poller'])
+
+    def test_shinken_reactionner(self):
+        self.top(['shinken.reactionner'])
+
+    def test_shinken_scheduler(self):
+        self.top(['shinken.scheduler'])
+
     def test_ssh_client(self):
         self.top(['ssh.client'])
 
@@ -617,9 +657,6 @@ class Integration(BaseIntegration):
 
     def test_tools(self):
         self.top(['tools'])
-
-    def test_ttys(self):
-        self.top(['ttys'])
 
     def test_uwsgi(self):
         self.top(['uwsgi'])
@@ -675,9 +712,6 @@ class IntegrationNRPE(BaseIntegration):
     def test_diamond(self):
         self.top(['diamond.nrpe'])
 
-    def test_django(self):
-        self.top(['django.nrpe'])
-
     def test_elasticsearch(self):
         self.top(['elasticsearch.nrpe'])
 
@@ -732,8 +766,20 @@ class IntegrationNRPE(BaseIntegration):
     def test_sentry(self):
         self.top(['sentry.nrpe'])
 
-    def test_shinken(self):
-        self.top(['shinken.nrpe'])
+    def test_shinken_arbiter(self):
+        self.top(['shinken.arbiter.nrpe'])
+
+    def test_shinken_broker(self):
+        self.top(['shinken.broker.nrpe'])
+
+    def test_shinken_poller(self):
+        self.top(['shinken.poller.nrpe'])
+
+    def test_shinken_reactionner(self):
+        self.top(['shinken.reactionner.nrpe'])
+
+    def test_shinken_scheduler(self):
+        self.top(['shinken.scheduler.nrpe'])
 
     def test_ssh_server(self):
         self.top(['ssh.server.nrpe'])
@@ -833,8 +879,20 @@ class IntegrationDiamondBase(BaseIntegration):
     def test_sentry(self):
         self.top(['sentry.diamond'])
 
-    def test_shinken(self):
-        self.top(['shinken.diamond'])
+    def test_shinken_arbiter(self):
+        self.top(['shinken.arbiter.diamond'])
+
+    def test_shinken_broker(self):
+        self.top(['shinken.broker.diamond'])
+
+    def test_shinken_poller(self):
+        self.top(['shinken.poller.diamond'])
+
+    def test_shinken_reactionner(self):
+        self.top(['shinken.reactionner.diamond'])
+
+    def test_shinken_scheduler(self):
+        self.top(['shinken.scheduler.diamond'])
 
     def test_ssh_server(self):
         self.top(['ssh.server.diamond'])
@@ -911,6 +969,11 @@ class IntegrationFull(BaseIntegration):
         if self._check_failed:
             self.fail(os.linesep.join(self._check_failed))
 
+    def sleep(self, reason, seconds=60):
+        logger.debug("Sleep %d seconds to let %s time to start", reason,
+                     seconds)
+        time.sleep(seconds)
+
     def run_check(self, check_name):
         """
         Run a Nagios NRPE check as a test
@@ -978,6 +1041,9 @@ class IntegrationFull(BaseIntegration):
     def test_denyhosts(self):
         self.top(['denyhosts', 'denyhosts.diamond', 'denyhosts.nrpe'])
         self.check_integration()
+        self.check_denyhosts()
+
+    def check_denyhosts(self):
         self.run_check('check_denyhosts')
 
     def test_diamond(self):
@@ -988,15 +1054,11 @@ class IntegrationFull(BaseIntegration):
         self.run_check('check_diamond')
 
     def test_elasticsearch(self):
-        sleep_time = 60
         self.top(['elasticsearch', 'elasticsearch.diamond',
                   'elasticsearch.nrpe'])
         self.check_integration()
         self.check_cron()
-        self.check_nginx()
-        logger.debug("Sleep %d seconds to let Elasticsearch time to start",
-                     sleep_time)
-        time.sleep(sleep_time)
+        self.sleep('Elasticsearch')
         self.check_elasticsearch()
         self.run_check('check_elasticsearch')
 
@@ -1004,6 +1066,16 @@ class IntegrationFull(BaseIntegration):
         self.run_check('check_elasticsearch_http_port')
         self.run_check('check_elasticsearch_transport_port')
         self.run_check('check_elasticsearch_cluster')
+
+    def test_elasticsearch_nginx(self):
+        self.top(['elasticsearch', 'elasticsearch.diamond',
+                  'elasticsearch.nrpe', 'nginx', 'nginx.nrpe', 'nginx.diamond'])
+        self.check_integration()
+        self.check_cron()
+        self.check_nginx()
+        self.sleep('Elasticsearch')
+        self.check_elasticsearch()
+        self.run_check('check_elasticsearch')
         self.run_check('check_elasticsearch_http')
         self.run_check('check_elasticsearch_https')
         self.run_check('check_elasticsearch_https_certificate')
@@ -1030,24 +1102,34 @@ class IntegrationFull(BaseIntegration):
         self.check_postgresql_server()
         self.check_uwsgi()
         self.check_memcache()
+        self.check_cron()
         self.check_statsd()
+        self.check_graphite()
+
+    def check_graphite(self):
         self.run_check('check_graphite_master')
         self.run_check('check_graphite_worker')
         self.run_check('check_graphite_uwsgi')
         self.run_check('check_graphite_http')
         self.run_check('check_graphite_https')
         self.run_check('check_graphite_https_certificate')
-        self.run_check('check_postgresql_graphite')
+        self.run_check('check_graphite_postgresql')
 
     def test_graylog2(self):
         self.top(['graylog2.server', 'graylog2.server.nrpe',
                   'graylog2.server.diamond', 'graylog2.web',
-                  'graylog2.web.diamond', 'graylog2.web.nrpe'])
+                  'graylog2.web.diamond', 'graylog2.web.nrpe',
+                  'elasticsearch', 'elasticsearch.nrpe',
+                  'elasticsearch.diamond'])
         self.check_integration()
-        self.check_nginx()
         self.check_mongodb()
+        self.check_nginx()
         self.check_uwsgi()
+        self.sleep('Elasticsearch')
         self.check_elasticsearch()
+        self.check_graylog2()
+
+    def check_graylog2(self):
         self.run_check('check_graylog2_server')
         self.run_check('check_graylog2_logs')
         self.run_check('check_graylog2_master')
@@ -1078,7 +1160,7 @@ class IntegrationFull(BaseIntegration):
         self.run_check('check_memcached')
 
     def test_mercurial(self):
-        self.top(['mercurial', 'mercurial.diamond', 'mercurial.nrpe'])
+        self.top(['mercurial', 'mercurial.nrpe'])
         self.check_integration()
 
     def test_mongodb(self):
@@ -1125,6 +1207,9 @@ class IntegrationFull(BaseIntegration):
     def test_ntp(self):
         self.top(['ntp', 'ntp.nrpe', 'ntp.diamond'])
         self.check_integration()
+        self.check_ntp()
+
+    def check_ntp(self):
         self.run_check('check_ntp_sync')
         self.run_check('check_ntp')
 
@@ -1151,6 +1236,7 @@ class IntegrationFull(BaseIntegration):
     def check_postgresql_server(self):
         self.run_check('check_postgresql_server')
         self.run_check('check_postgresql_port')
+        self.run_check('check_diamond_postgresql')
 
     def test_proftpd(self):
         self.top(['proftpd', 'proftpd.nrpe', 'proftpd.diamond'])
@@ -1169,6 +1255,10 @@ class IntegrationFull(BaseIntegration):
     def test_rabbitmq(self):
         self.top(['rabbitmq', 'rabbitmq.nrpe', 'rabbitmq.diamond'])
         self.check_integration()
+        self.check_nginx()
+        self.check_rabbitmq()
+
+    def check_rabbitmq(self):
         self.run_check('check_rabbitmq')
         self.run_check('check_rabbitmq_http')
         self.run_check('check_rabbitmq_https')
@@ -1213,8 +1303,8 @@ class IntegrationFull(BaseIntegration):
 
     def check_salt_master(self):
         self.run_check('check_salt_master')
-        self.run_check('check_salt_master_port_4005')
-        self.run_check('check_salt_master_port_4006')
+        self.run_check('check_salt_master_port_4505')
+        self.run_check('check_salt_master_port_4506')
 
     def test_salt_mirror(self):
         self.top(['salt.mirror', 'salt.mirror.diamond', 'salt.mirror.nrpe'])
@@ -1227,31 +1317,93 @@ class IntegrationFull(BaseIntegration):
     def test_sentry(self):
         self.top(['sentry', 'sentry.diamond', 'sentry.backup', 'sentry.nrpe'])
         self.check_integration()
+        self.check_memcache()
         self.check_postgresql_server()
         self.check_uwsgi()
         self.check_nginx()
         self.check_statsd()
+        self.check_sentry()
+
+    def check_sentry(self):
         self.run_check('check_sentry_master')
         self.run_check('check_sentry_worker')
         self.run_check('check_sentry_uwsgi')
         self.run_check('check_sentry_http')
         self.run_check('check_sentry_https')
         self.run_check('check_sentry_https_certificate')
-        self.run_check('check_postgresql_sentry')
+        self.run_check('check_sentry_postgresql')
+
+    def test_shinken_arbiter(self):
+        self.top(['shinken.arbiter', 'shinken.arbiter.nrpe',
+                  'shinken.arbiter.diamond'])
+        self.check_integration()
+        self.check_shinken_arbiter()
+
+    def check_shinken_arbiter(self):
+        self.run_check('check_shinken_arbiter')
+        self.run_check('check_shinken_arbiter_port')
+
+    def test_shinken_broker(self):
+        self.top(['shinken.broker', 'shinken.broker.diamond',
+                  'shinken.broker.nrpe'])
+        self.check_integration()
+        self.check_shinken_broker()
+
+    def check_shinken_broker(self):
+        self.run_check('check_shinken_broker')
+        self.run_check('check_shinken_broker_port')
+
+    def test_shinken_poller(self):
+        self.top(['shinken.poller', 'shinken.poller.nrpe',
+                  'shinken.poller.diamond'])
+        self.check_integration()
+        self.check_shinken_poller()
+
+    def check_shinken_poller(self):
+        self.run_check('check_shinken_poller')
+        self.run_check('check_shinken_poller_port')
+
+    def test_shinken_reactionner(self):
+        self.top(['shinken.reactionner', 'shinken.reactionner.nrpe',
+                  'shinken.reactionner.diamond'])
+        self.check_integration()
+        self.check_shinken_reactionner()
+
+    def check_shinken_reactionner(self):
+        self.run_check('check_shinken_reactionner')
+        self.run_check('check_shinken_reactionner_port')
+
+    def test_shinken_scheduler(self):
+        self.top(['shinken.scheduler', 'shinken.scheduler.nrpe',
+                  'shinken.scheduler.diamond'])
+        self.check_integration()
+        self.check_shinken_scheduler()
+
+    def check_shinken_scheduler(self):
+        self.run_check('check_shinken_scheduler')
+        self.run_check('check_shinken_scheduler_port')
 
     def test_shinken(self):
-        sleep_time = 60
-        self.top(['shinken', 'shinken.nrpe', 'shinken.diamond'])
+        files = []
+        for role in ('arbiter', 'broker', 'poller', 'reactionner', 'scheduler'):
+            files.extend(['shinken.%s' % role,
+                          'shinken.%s.nrpe' % role,
+                          'shinken.%s.diamond' % role])
+        self.top(files)
         self.check_integration()
-        logger.debug("Sleep %d seconds to let Arbiter synchronize the others",
-                     sleep_time)
-        time.sleep(sleep_time)
-        self.run_check('check_shinken_arbiter')
-        self.run_check('check_shinken_broker')
-        self.run_check('check_shinken_poller')
-        self.run_check('check_shinken_reactionner')
-        self.run_check('check_shinken_scheduler')
-        # optional: nginx
+        self.sleep('Arbiter')
+        self.check_shinken_arbiter()
+        self.check_shinken_broker()
+        self.check_shinken_poller()
+        self.check_shinken_reactionner()
+        self.check_shinken_scheduler()
+        self.check_nginx()
+        self.check_shinken()
+
+    def check_shinken(self):
+        self.run_check('check_shinken_broker_web')
+        client('cmd.run', '/usr/local/bin/shinken-ctl.sh stop')
+        client('cmd.run', '/usr/local/bin/shinken-ctl.sh start')
 
     def test_ssh_server(self):
         self.top(['ssh.server', 'ssh.server.gsyslog', 'ssh.server.nrpe',
@@ -1314,5 +1466,3 @@ class IntegrationFull(BaseIntegration):
 
 if __name__ == '__main__':
     unittest.main()
-    # logger.info("Install SSH Server to give access to host")
-    # client('state.sls', 'ssh.server')

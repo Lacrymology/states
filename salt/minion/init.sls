@@ -51,9 +51,6 @@ salt-minion:
       - file: salt-minion
       - module: salt_minion_master_key
 
-{# remove obsolete cache file #}
-{% for basename in ('ec2', 'pkg_installed') %}
-{{ opts['cachedir'] }}/{{ basename }}.pickle:
+{{ opts['cachedir'] }}/pkg_installed.pickle:
   file:
     - absent
-{% endfor %}

@@ -17,7 +17,7 @@ http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects
 define arbiter {
     arbiter_name arbiter-{{ grains['id'] }}
     host_name {{ id }}
-    address {{ pillar['shinken']['ip_addresses'][id] }}
+    address {{ pillar['monitoring']['hosts'][id] }}
     port 7770
     modules arbiter-retention
     {# only the first one is not a spare #}
@@ -47,7 +47,7 @@ http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects
 {% for id in pillar['shinken']['architecture']['scheduler'] %}
 define scheduler {
     scheduler_name scheduler-{{ id }}
-    address {{ pillar['shinken']['ip_addresses'][id] }}
+    address {{ pillar['monitoring']['hosts'][id] }}
     port 7768
     modules scheduler-retention
     realm All
@@ -74,7 +74,7 @@ http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects
 {% for id in pillar['shinken']['architecture']['poller'] %}
 define poller {
     poller_name poller-{{ id }}
-    address {{ pillar['shinken']['ip_addresses'][id] }}
+    address {{ pillar['monitoring']['hosts'][id] }}
     port 7771
     poller_tags {{ pillar['shinken']['architecture']['poller'][id] }}
     realm All
@@ -96,7 +96,7 @@ http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects
 {% for id in pillar['shinken']['architecture']['broker'] %}
 define broker {
     broker_name broker-{{ id }}
-    address {{ pillar['shinken']['ip_addresses'][id] }}
+    address {{ pillar['monitoring']['hosts'][id] }}
     port 7772
     modules broker-syslog, broker-retention, broker-webui{% if 'graphite_address' in pillar %}, broker-graphite{% endif %}
     realm All
@@ -210,7 +210,7 @@ http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects
 {% for id in pillar['shinken']['architecture']['reactionner'] %}
 define reactionner {
     reactionner_name reactionner-{{ id }}
-    address {{ pillar['shinken']['ip_addresses'][id] }}
+    address {{ pillar['monitoring']['hosts'][id] }}
     port 7769
     realm All
 {#  Optional
@@ -233,7 +233,7 @@ load passive modules (like NSCA) and be read by the arbiter to dispatch data.
 {% for id in salt['pillar.get']('shinken:architecture:receiver', []) %}
 define receiver {
     receiver_name receiver-{{ id }}
-    address {{ pillar['shinken']['ip_addresses'][id] }}
+    address {{ pillar['monitoring']['hosts'][id] }}
     port 7773
     modules
     realm All

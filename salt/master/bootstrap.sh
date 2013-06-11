@@ -5,7 +5,7 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-/root/salt/states/salt/minion/bootstrap.sh
+/root/salt/states/salt/minion/bootstrap.sh $1
 
 salt-call -l all --local saltutil.sync_all
 salt-call -l all --local state.highstate

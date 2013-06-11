@@ -47,12 +47,12 @@ openssh-client:
     - require:
       - cmd: apt_sources
 {% if pillar['deployment_key_source']|default(False) %}
-      - file: {{ root_home }}/.ssh/id_dsa
+      - file: {{ root_home }}/.ssh/id_{{ pillar['deployment_key_source']['type'] }}
 
-{{ root_home }}/.ssh/id_dsa:
+{{ root_home }}/.ssh/id_{{ pillar['deployment_key_source']['type'] }}:
   file:
     - managed
-    - source: {{ pillar['deployment_key_source'] }}
+    - source: {{ pillar['deployment_key_source']['source'] }}
     - user: root
     - group: root
     - mode: 400

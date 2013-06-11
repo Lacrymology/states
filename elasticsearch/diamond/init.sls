@@ -2,7 +2,7 @@
  Diamond statistics for Elasticsearch
  TODO: Diamond + http://www.elasticsearch.org/guide/reference/modules/jmx/
  #}
-{% set ssl = pillar['elasticsearch']['ssl']|default(False) and 'public' in pillar['elasticsearch']['cluster']['nodes'][grains['id']] %}
+{% set ssl = pillar['elasticsearch']['ssl']|default(False) %}
 include:
   - diamond
   - cron.diamond

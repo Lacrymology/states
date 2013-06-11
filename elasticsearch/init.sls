@@ -7,7 +7,7 @@
  a SSL frontend in front of Elasticsearch HTTP interface.
  This is why nginx is used if SSL is in pillar.
  #}
-{% set ssl = pillar['elasticsearch']['ssl']|default(False) and 'public' in pillar['elasticsearch']['cluster']['nodes'][grains['id']] %}
+{% set ssl = pillar['elasticsearch']['ssl']|default(False) %}
 include:
   - apt
   - cron
@@ -91,9 +91,9 @@ elasticsearch:
     - mode: 440
     - source: salt://elasticsearch/config.jinja2
     - context:
-      http: 'true'
       master: 'true'
       data: 'true'
+      origin_state: elasticsearch
     - require:
       - pkg_file: elasticsearch
   service:

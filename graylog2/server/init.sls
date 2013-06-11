@@ -47,12 +47,7 @@ graylog2-server_upstart:
     - context:
       master: 'false'
       data: 'false'
-{#
- Graylog2 documentation says that the http interface should be turned off in the
- built-in Elasticsearch instance.
- But, until that we have multiple graylog2 server, we won't do that.
-      http: 'false'
-#}
+      origin_state: graylog2.server
 
 graylog2-server:
   archive:

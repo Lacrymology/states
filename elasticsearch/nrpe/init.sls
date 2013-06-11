@@ -1,7 +1,7 @@
 {#
  Nagios NRPE checks for elasticsearch
  #}
-{% set ssl = pillar['elasticsearch']['ssl']|default(False) and 'public' in pillar['elasticsearch']['cluster']['nodes'][grains['id']] %}
+{% set ssl = pillar['elasticsearch']['ssl']|default(False) %}
 include:
   - nrpe
   - apt.nrpe

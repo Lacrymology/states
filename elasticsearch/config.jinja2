@@ -10,15 +10,18 @@ cluster:
     allocation:
       node_concurrent_recoveries: 2
 
-{#
 http:
-  enabled: {{ es['cluster']['nodes'][grains['id']]['http']|default(http) }}
-#}
+  port: 9200
+  enabled: {% if es['cluster']['nodes'][grains['id']][origin_state]['http']|default(True) %}true{% else %}false{% endif %}
+
+transport:
+  tcp:
+    port: {{ es['cluster']['nodes'][grains['id']][origin_state]['port']|default(9300) }}
 
 node:
-  name: {{ es['cluster']['nodes'][grains['id']]['name']|default(grains['id']) }}
-  master: {{ es['cluster']['nodes'][grains['id']]['master']|default(master) }}
-  data: {{ es['cluster']['nodes'][grains['id']]['data']|default(data) }}
+  name: {{ es['cluster']['nodes'][grains['id']][origin_state]['name']|default(grains['id']) }}
+  master: {{ es['cluster']['nodes'][grains['id']][origin_state]['master']|default(master) }}
+  data: {{ es['cluster']['nodes'][grains['id']][origin_state]['data']|default(data) }}
 
 {# configure amazon ec2 cloud auto-discovery #}
 {% if es['aws']|default(false) %}
@@ -58,6 +61,10 @@ discovery:
       unicast:
         hosts: [
 {%- for node in es['cluster']['nodes'] -%}
-"{{ es['cluster']['nodes'][node]['private'] }}"{% if not loop.last %}, {% endif -%}
+    {%- for origin_state in es['cluster']['nodes'][node] -%}
+        {%- if origin_state != '_network' -%}
+"{{ es['cluster']['nodes'][node]['_network']['private'] }}:{{ es['cluster']['nodes'][node][origin_state]['port']|default(9300) }}"{% if not loop.last %}, {% endif -%}
+        {%- endif -%}
+    {%- endfor -%}
 {%- endfor %}]
 {% endif %}

@@ -831,7 +831,7 @@ define service {
 }
 
 {%- if state_name == 'shinken.broker' %}
-{{ nginx_instance('shinken', 'shinken.broke') }}
+{{ nginx_instance('shinken', 'shinken.broker') }}
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states'][state_name] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description shinken-broker-web

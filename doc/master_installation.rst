@@ -40,3 +40,9 @@ install both minion and master.
 If your pillar source is a git repository that didn't existed while master state
 is executed (such as salt itself create the git repository), you need to go to
 ``/srv/pillar`` and run ``git pull`` once you pushed into new repository.
+
+Once the master and minion are running, run::
+
+  salt-key -A
+
+To allow minion to connect to master.

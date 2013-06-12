@@ -1,4 +1,6 @@
 # {{ pillar['message_do_not_modify'] }}
+# the following check only work if ES is installed and this is not called for
+# Graylog2
 command[check_elasticsearch]=/usr/lib/nagios/plugins/check_procs -u elasticsearch -c 1:1 -C java -a org.elasticsearch.bootstrap.ElasticSearch
 {% set nodes_total = 0 -%}
 {#- this ugly hack is required to get the total number of nodes -#}

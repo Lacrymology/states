@@ -24,6 +24,7 @@ def show():
         'pkg.list_upgrades',
         'user.getent',
         'group.getent',
+        'pip.freeze',
         'nrpe.run_all_checks',
         'state.show_highstate',
         'status.all_status',

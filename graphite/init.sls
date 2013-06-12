@@ -1,7 +1,13 @@
 {#
  Install the web interface component of graphite
+
+ Once this state is installed, you need to create initial admin user:
+
+ /usr/local/graphite/manage createsuperuser
+
  #}
-{# TODO: create initial admin user #}
+
+{# TODO: create initial admin user from pillar #}
 include:
   - postgresql
   - postgresql.server

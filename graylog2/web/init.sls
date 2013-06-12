@@ -1,5 +1,16 @@
 {#
  Install a graylog2 web interface server
+
+ Once this state is installed, you need to:
+
+ - Create initial admin user.
+   You can do it with your web browser by opening the Graylog2 Web interface
+   of your deployed instance at URL:
+   /users/first
+ - Configure the Sentry DSN to receive alerts, in URL:
+   /plugin_configuration/configure/transport/com.bitflippers.sentrytransport.transport.SentryTransport
+ - Add a Sentry DSN to each of your users (can be the same) at:
+   /users/
 #}
 include:
   - ruby

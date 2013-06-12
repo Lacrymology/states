@@ -1,5 +1,10 @@
 {#
  Install a Sentry (error management and reporting tool) web server.
+
+ Once this state is installed, you need to create initial admin user:
+
+ /usr/local/sentry/manage createsuperuser
+
  #}
 include:
   - postgresql

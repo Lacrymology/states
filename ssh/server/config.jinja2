@@ -31,7 +31,7 @@ PermitEmptyPasswords no
 ChallengeResponseAuthentication no
 
 # Change to no to disable tunnelled clear text passwords
-PasswordAuthentication yes
+PasswordAuthentication {% if salt['pillar.get']('ssh:password_authentication', True) %}yes{% else %}no{% endif %}
 
 X11Forwarding no
 X11DisplayOffset 10

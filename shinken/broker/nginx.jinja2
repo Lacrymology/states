@@ -2,9 +2,13 @@
 
 upstream shinken-backend {
     ip_hash;
+{%- if pillar['shinken']['architecture']['broker']|length == 1 %}
+    server 127.0.0.1:7767;
+{% else -%}
 {%- for host in pillar['shinken']['architecture']['broker'] %}
     server {{ pillar['monitoring']['hosts'][host]['address'] }}:7767;
 {% endfor -%}
+{%- endif -%}
 }
 
 server {

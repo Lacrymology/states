@@ -55,7 +55,7 @@ def run_check(check_name):
     return ret
 
 
-def run_all_checks():
+def run_all_checks(return_only_failure=False):
     '''
     Run all available nagios check, usefull to check if everything is fine
     before monitoring system find it.
@@ -67,7 +67,12 @@ def run_all_checks():
     '''
     output = {}
     for check_name in list_checks():
-        output[check_name] = run_check(check_name)
-        del output[check_name]['changes']
-        del output[check_name]['name']
+        check_result = run_check(check_name)
+        del check_result['changes']
+        del check_result['name']
+        if return_only_failure:
+            if not check_result['result']:
+                output[check_name] = check_result
+        else:
+            output[check_name] = check_result
     return output

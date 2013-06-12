@@ -24,13 +24,14 @@ def show():
         'pkg.list_upgrades',
         'user.getent',
         'group.getent',
+        'run_all_checks',
         'state.show_highstate',
         'status.all_status',
         'status.procs',
         'status.uptime',
         'timezone.get_offset',
         'timezone.get_zone',
-        'sys.list_functions',
+        'sys.list_functions'
     ):
         output[func] = __salt__[func]()
     return output

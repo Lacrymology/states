@@ -38,7 +38,6 @@ include:
       deployment: shinken
       http_uri: /user/login
       domain_name: {{ pillar['shinken']['web']['hostnames'][0] }}
-      http_port: 7767
       https: {{ pillar['shinken']['ssl']|default(False) }}
 
 extend:

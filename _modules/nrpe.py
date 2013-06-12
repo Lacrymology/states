@@ -68,6 +68,6 @@ def run_all_checks():
     output = []
     for check_name in list_checks():
         result = run_check(check_name)
-        del result[check_name]['changes']
+        del result['changes']
         output.append(result)
     return output

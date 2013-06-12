@@ -68,11 +68,6 @@ define command {
     command_line /usr/lib/nagios/plugins/check_tcp -H $HOSTADDRESS$ -p $ARG1$
 }
 
-define command {
-    command_name check_ssh
-    command_line /usr/lib/nagios/plugins/check_ssh -4 -p 22022 $HOSTADDRESS$
-}
-
 define timeperiod {
     timeperiod_name 24x7
     alias 24_Hours_A_Day,_7_Days_A_Week
@@ -874,28 +869,11 @@ define service {
 {%- if 'ssh.server' in pillar['monitoring']['states'] %}
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states']['ssh.server'] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description ssh-daemon
-    display_name SSH Daemon
-    check_command check_ssh
-    use salt-service
-}
-
-define service {
-    hostgroup_name {% for role in pillar['monitoring']['states']['ssh.server'] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description ssh-daemon-local-port
     display_name SSH Daemon Local Port
     check_command check_nrpe!check_ssh_port
     use salt-service
 }
-{#
-TODO: do something?
-define service {
-    hostgroup_name Linux
-    service_description SSH Port
-    check_command check_tcp!22022
-    use salt-service
-}
--#}
 {% endif -%}
 
 {#-

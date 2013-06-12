@@ -2,3 +2,4 @@
 command[check_shinken_broker]=/usr/lib/nagios/plugins/check_procs -c 1:10 -C shinken-broker
 command[check_shinken_broker_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 7772
 command[check_shinken_broker_web]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 7767
+command[check_shinken_broker_http]=/usr/lib/nagios/plugins/check_http -H 127.0.0.1 -u /user/login -p 7767 -e '200 OK' -I 127.0.0.1

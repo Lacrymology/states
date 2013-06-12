@@ -831,11 +831,20 @@ define service {
 }
 
 {%- if state_name == 'broker' %}
+{{ nginx_instance('shinken', 'broker') }}
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states'][state_name] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description shinken-broker-web
     display_name Shinken Broker Web UI Port
     check_command check_shinken_broker_web
+    use salt-service
+}
+
+define service {
+    hostgroup_name {% for role in pillar['monitoring']['states'][state_name] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description shinken-broker-http
+    display_name Shinken Broker Web UI HTTP
+    check_command check_shinken_broker_http
     use salt-service
 }
 {% endif -%}

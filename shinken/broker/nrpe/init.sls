@@ -35,7 +35,7 @@ include:
     - require:
       - pkg: nagios-nrpe-server
     - context:
-      deployment: shinken_broker
+      deployment: shinken
       http_uri: /user/login
       domain_name: {{ pillar['shinken']['web']['hostnames'][0] }}
       http_port: 7767

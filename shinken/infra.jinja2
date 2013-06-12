@@ -830,8 +830,8 @@ define service {
     use salt-service
 }
 
-{%- if state_name == 'broker' %}
-{{ nginx_instance('shinken', 'broker') }}
+{%- if state_name == 'shinken.broker' %}
+{{ nginx_instance('shinken', 'shinken.broke') }}
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states'][state_name] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description shinken-broker-web

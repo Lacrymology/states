@@ -24,7 +24,7 @@ def show():
         'pkg.list_upgrades',
         'user.getent',
         'group.getent',
-        'run_all_checks',
+        'nrpe.run_all_checks',
         'state.show_highstate',
         'status.all_status',
         'status.procs',

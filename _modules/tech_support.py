@@ -15,7 +15,7 @@ def show():
     for service in __salt__['service.get_all']():
         output['services'][service] = __salt__['service.status'](service)
     for func in (
-        'data.load'
+        'data.load',
         'grains.items',
         'network.interfaces',
         'pillar.raw',

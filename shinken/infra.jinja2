@@ -460,7 +460,7 @@ define service {
     hostgroup_name {% for role in pillar['monitoring']['states']['elasticsearch'] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description elasticsearch-local-{{ check }}-port
     display_name Elasticsearch Local {{ check|capitalize }} Port
-    check_command check_nrpe!check_dovecot_{{ check }}_port
+    check_command check_nrpe!check_elasticsearch_{{ check }}_port
     use salt-service
 }
 {% endfor -%}
@@ -554,7 +554,7 @@ define service {
     hostgroup_name {% for role in pillar['monitoring']['states']['mongodb'] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description mongodb{{ check|default('_daemon') }}
     display_name MongoDB {{ mongodb_checks[check] }}
-    check_command check_nrpe!check_mongdb{{ check }}
+    check_command check_nrpe!check_mongodb{{ check }}
     use salt-service
 }
 {% endfor -%}
@@ -810,7 +810,7 @@ define service {
     hostgroup_name {% for role in pillar['monitoring']['states'][state_name] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description shinken-{{ shinken_role }}-deamon
     display_name Shinken {{ shinken_role|capitalize }} Deamon
-    check_command check_shinken_{{ shinken_role }}
+    check_command check_nrpe!check_shinken_{{ shinken_role }}
     use salt-service
 }
 
@@ -818,7 +818,7 @@ define service {
     hostgroup_name {% for role in pillar['monitoring']['states'][state_name] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description shinken-{{ shinken_role }}-local-port
     display_name Shinken {{ shinken_role|capitalize }} Local Port
-    check_command check_shinken_{{ shinken_role }}_port
+    check_command check_nrpe!check_shinken_{{ shinken_role }}_port
     use salt-service
 }
 
@@ -836,7 +836,7 @@ define service {
     hostgroup_name {% for role in pillar['monitoring']['states'][state_name] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description shinken-broker-web
     display_name Shinken Broker Web UI Port
-    check_command check_shinken_broker_web
+    check_command check_nrpe!check_shinken_broker_web
     use salt-service
 }
 
@@ -844,7 +844,7 @@ define service {
     hostgroup_name {% for role in pillar['monitoring']['states'][state_name] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description shinken-broker-http
     display_name Shinken Broker Web UI HTTP
-    check_command check_shinken_broker_http
+    check_command check_nrpe!check_shinken_broker_http
     use salt-service
 }
 {% endif -%}
@@ -884,7 +884,7 @@ define service {
     hostgroup_name {% for role in pillar['monitoring']['states']['ssh.server'] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description ssh-daemon-local-port
     display_name SSH Daemon Local Port
-    check_command check_ssh_port
+    check_command check_nrpe!check_ssh_port
     use salt-service
 }
 {#
@@ -907,7 +907,7 @@ define service {
     hostgroup_name {% for role in pillar['monitoring']['states']['statsd'] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description statsd-daemon
     display_name StatsD Daemon
-    check_command check_statsd
+    check_command check_nrpe!check_statsd
     use salt-service
 }
 {% endif -%}
@@ -921,7 +921,7 @@ define service {
     hostgroup_name {% for role in pillar['monitoring']['states']['uwsgi'] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description uWSGI-emperor
     display_name uWSGI Emperor
-    check_command check_uwsgi
+    check_command check_nrpe!check_uwsgi
     use salt-service
 }
 {% endif -%}

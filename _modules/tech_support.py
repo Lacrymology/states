@@ -23,7 +23,7 @@ def show():
         'pkg.list_repos',
         'pkg.list_upgrades',
         'user.getent',
-        'user.list_groups',
+        'group.getent',
         'state.show_highstate',
         'status.all_status',
         'status.procs',

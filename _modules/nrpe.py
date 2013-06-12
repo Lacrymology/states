@@ -65,9 +65,9 @@ def run_all_checks():
         salt '*' nrpe.run_all_checks
 
     '''
-    output = []
+    output = {}
     for check_name in list_checks():
-        result = run_check(check_name)
-        del result['changes']
-        output.append(result)
+        output[check_name] = run_check(check_name)
+        del output[check_name]['changes']
+        del output[check_name]['name']
     return output

@@ -15,4 +15,4 @@ salt_minion_diamond_resources:
     - text:
       - |
         [[salt.minion]]
-        cmdline = ^python \/usr\/bin\/salt\-minion$
+        cmdline = ^\/usr\/bin\/python \/usr\/bin\/salt\-minion$

@@ -16,7 +16,7 @@ cfg_dir=/etc/shinken/objects/
 
 disable_old_nagios_parameters_whining=1
 
-{#- until shinken 1.4 isn't out, can't use SSL -#}
+{# until shinken 1.4 isn't out, can't use SSL -#}
 {#-
 {% if pillar['shinken']['ssl']|default(False) %}
 use_ssl=1

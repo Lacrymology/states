@@ -6,13 +6,7 @@ Salt returner that report error back to sentry
 
 Pillar need something like:
 
-raven:
-  servers:
-    - http://192.168.1.1
-    - https://sentry.example.com
-  public_key: deadbeefdeadbeefdeadbeefdeadbeef
-  secret_key: beefdeadbeefdeadbeefdeadbeefdead
-  project: 1
+sentry_dsn: http://deadbeef:beefdead@sentry.example.com/1
 
 and http://pypi.python.org/pypi/raven installed
 

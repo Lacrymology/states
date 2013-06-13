@@ -40,5 +40,6 @@ extend:
       - watch:
         - file: /etc/nagios/nrpe.d/graylog2-server.cfg
   /etc/nagios/nrpe.d/elasticsearch.cfg:
-    context:
-      origin_state: graylog2
+    file:
+      - context:
+        origin_state: graylog2

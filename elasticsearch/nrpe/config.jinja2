@@ -9,9 +9,9 @@ command[elasticsearch_procs]=/usr/lib/nagios/plugins/check_procs -u elasticsearc
 {%- set nodes_total = nodes_total - 1 + item[1]|length -%}
 {%- if loop.last -%}
 {%- if origin_state|default("elasticsearch") == 'graylog2' -%}
-command[elasticsearch_cluster]=/usr/lib/nagios/plugins/check_elasticsearch_cluster.py -c {{ nodes_total }}:{{ nodes_total }}
-{%- else -%}
 command[graylog2_elasticsearch_cluster]=/usr/lib/nagios/plugins/check_elasticsearch_cluster.py -c {{ nodes_total }}:{{ nodes_total }}
+{%- else -%}
+command[elasticsearch_cluster]=/usr/lib/nagios/plugins/check_elasticsearch_cluster.py -c {{ nodes_total }}:{{ nodes_total }}
 {%- endif -%}
 {%- endif -%}
 {%- endfor %}

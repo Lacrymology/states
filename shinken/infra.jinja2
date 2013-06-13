@@ -328,21 +328,22 @@ define service {
     use salt-service
 }
 
-{%- for port in (2003, 2004) %}
+{% set carbon_ports = {'plaintext': 2003, 'pickle': 2004 } %}
+{%- for protocol in carbon_ports %}
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states']['carbon'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     servicegroups {% for role in pillar['monitoring']['states']['carbon'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description carbon-remote-port-{{ port }}
-    display_name Carbon Remote Port {{ port }}
-    check_command check_tcp!{{ port }}
+    service_description carbon-remote-port-{{ protocol }}
+    display_name Carbon Remote Port {{ protocol|capitalize }} Protocol
+    check_command check_tcp!{{ carbon_ports[protocol] }}
     use salt-service
 }
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states']['carbon'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     servicegroups {% for role in pillar['monitoring']['states']['carbon'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description carbon_port_{{ port }}
-    display_name Carbon Local Port {{ port }}
-    check_command check_nrpe!carbon_port_{{ port}}
+    service_description carbon_port_{{ protocol }}
+    display_name Carbon Local Port {{ protocol|capitalize }} Protocol
+    check_command check_nrpe!carbon_port_{{ protocol}}
     use salt-service
 }
 {% endfor -%}

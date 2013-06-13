@@ -1027,8 +1027,8 @@ class IntegrationFull(BaseIntegration):
         self.top(['carbon', 'carbon.nrpe', 'carbon.diamond'])
         self.check_integration()
         self.run_check('carbon_procs')
-        self.run_check('carbon_port_2003')
-        self.run_check('carbon_port_2004')
+        self.run_check('carbon_port_plaintext')
+        self.run_check('carbon_port_pickle')
 
     def test_cron(self):
         self.top(['cron', 'cron.diamond', 'cron.nrpe'])

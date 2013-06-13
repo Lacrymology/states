@@ -737,10 +737,6 @@ define service {
     service_description {{ check }}
     display_name RabbitMQ {{ rabbitmq_checks[check] }}
     check_command check_nrpe!check_{{ check }}
-{%- if check == 'rabbitmq_https_certificate' %}
-    {# only need to check https certificate each day #}
-    check_interval 1440
-{% endif -%}
     use salt-service
 }
 {% endfor -%}

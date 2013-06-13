@@ -1076,9 +1076,9 @@ class IntegrationFull(BaseIntegration):
         self.sleep('Elasticsearch')
         self.check_elasticsearch()
         self.run_check('check_elasticsearch')
-        self.run_check('check_elasticsearch_http')
-        self.run_check('check_elasticsearch_https')
-        self.run_check('check_elasticsearch_https_certificate')
+        self.run_check('check_elasticsearch_nginx_http')
+        self.run_check('check_elasticsearch_nginx_https')
+        self.run_check('check_elasticsearch_nginx_https_certificate')
 
     def test_firewall(self):
         self.top(['firewall', 'firewall.gsyslog', 'firewall.nrpe'])
@@ -1110,9 +1110,9 @@ class IntegrationFull(BaseIntegration):
         self.run_check('check_graphite_master')
         self.run_check('check_graphite_worker')
         self.run_check('check_graphite_uwsgi')
-        self.run_check('check_graphite_http')
-        self.run_check('check_graphite_https')
-        self.run_check('check_graphite_https_certificate')
+        self.run_check('check_nginx_graphite_http')
+        self.run_check('check_nginx_graphite_https')
+        self.run_check('check_nginx_graphite_https_certificate')
         self.run_check('check_graphite_postgresql')
 
     def test_graylog2(self):
@@ -1135,9 +1135,9 @@ class IntegrationFull(BaseIntegration):
         self.run_check('check_graylog2_master')
         self.run_check('check_graylog2_worker')
         self.run_check('check_graylog2_uwsgi')
-        self.run_check('check_graylog2_http')
-        self.run_check('check_graylog2_https')
-        self.run_check('check_graylog2_https_certificate')
+        self.run_check('check_graylog2_nginx_http')
+        self.run_check('check_graylog2_nginx_https')
+        self.run_check('check_graylog2_nginx_https_certificate')
 
     def test_gsyslog(self):
         self.top(['gsyslog', 'gsyslog.diamond', 'gsyslog.nrpe'])
@@ -1260,8 +1260,9 @@ class IntegrationFull(BaseIntegration):
 
     def check_rabbitmq(self):
         self.run_check('check_rabbitmq')
-        self.run_check('check_rabbitmq_http')
-        self.run_check('check_rabbitmq_https')
+        self.run_check('check_rabbitmq_nginx_http')
+        self.run_check('check_rabbitmq_nginx_https')
+        self.run_check('check_rabbitmq_nginx_https_certificate')
         self.run_check('check_rabbitmq_port_management')
         self.run_check('check_rabbitmq_port_console')
         self.run_check('check_rabbitmq_port_amqp')
@@ -1328,9 +1329,9 @@ class IntegrationFull(BaseIntegration):
         self.run_check('check_sentry_master')
         self.run_check('check_sentry_worker')
         self.run_check('check_sentry_uwsgi')
-        self.run_check('check_sentry_http')
-        self.run_check('check_sentry_https')
-        self.run_check('check_sentry_https_certificate')
+        self.run_check('check_sentry_nginx_http')
+        self.run_check('check_sentry_nginx_https')
+        self.run_check('check_sentry_nginx_https_certificate')
         self.run_check('check_sentry_postgresql')
 
     def test_shinken_arbiter(self):

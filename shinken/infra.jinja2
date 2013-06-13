@@ -194,9 +194,9 @@ define host {
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states'][state] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     servicegroups {% for role in pillar['monitoring']['states'][state] %}Role_{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description nginx-{{ deployment }}-{{ check }}
+    service_description {{ deployment }}_nginx_{{ check }}
     display_name {{ deployment|capitalize }} {{ nginx_instances_checks[check] }}
-    check_command check_nrpe!check_{{ deployment }}_{{ check }}
+    check_command check_nrpe!check_{{ deployment }}_nginx_{{ check }}
 {%- if check == 'https_certificate' %}
     check_interval 1440 {#- only need to check https certificate each day -#}
 {%- endif %}

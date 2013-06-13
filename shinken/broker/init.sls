@@ -1,3 +1,9 @@
+{#
+ Shinken Broker state.
+
+ The broker daemon exports and manages data from schedulers. The broker uses
+ modules exclusively to get the job done.
+ #}
 include:
   - shinken
   - nginx

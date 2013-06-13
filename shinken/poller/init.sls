@@ -1,3 +1,12 @@
+{#
+ Shinken Poller state.
+
+ The poller daemon launches check plugins as requested by schedulers. When the
+ check is finished it returns the result to the schedulers. Pollers can be
+ tagged for specialized checks (ex. Windows versus Unix, customer A versus
+ customer B, DMZ) There can be many pollers for load-balancing or hot standby
+ spare roles.
+ #}
 include:
   - shinken
   - apt

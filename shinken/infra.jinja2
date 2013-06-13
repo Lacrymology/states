@@ -446,6 +446,7 @@ define service {
  State: elasticsearch
  -#}
 
+{%- set elasticsearch_checks = {'http': 9200, 'transport': 9300} -%}
 {%- if 'elasticsearch' in pillar['monitoring']['states'] %}
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states']['elasticsearch'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
@@ -465,7 +466,6 @@ define service {
     use salt-service
 }
 
-{%- set elasticsearch_checks = {'http': 9200, 'transport': 9300} -%}
 {%- for check in elasticsearch_checks %}
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states']['elasticsearch'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
@@ -524,6 +524,24 @@ define service {
     service_description graylog2_{{ check }}
     display_name Graylog2 {{ graylog2_server_checks[check] }}
     check_command check_nrpe!graylog2_{{ check }}
+    use salt-service
+}
+{% endfor -%}
+define service {
+    hostgroup_name {% for role in pillar['monitoring']['states']['graylog2.server'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    servicegroups {% for role in pillar['monitoring']['states']['graylog2.server'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description graylog2_elasticsearch_cluster
+    display_name Graylog2 Elasticsearch Cluster
+    check_command check_nrpe!graylog2_elasticsearch_cluster
+    use salt-service
+}
+{%- for check in elasticsearch_checks %}
+define service {
+    hostgroup_name {% for role in pillar['monitoring']['states']['graylog2.server'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    servicegroups {% for role in pillar['monitoring']['states']['graylog2.server'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description graylog2_elasticsearch_port_{{ check }}
+    display_name Graylog2 Elasticsearch Local {{ check|capitalize }} Port
+    check_command check_nrpe!graylog2_elasticsearch_port_{{ check }}
     use salt-service
 }
 {% endfor -%}

@@ -13,6 +13,7 @@ command[elasticsearch_cluster]=/usr/lib/nagios/plugins/check_elasticsearch_clust
 {%- else -%}
 command[graylog2_elasticsearch_cluster]=/usr/lib/nagios/plugins/check_elasticsearch_cluster.py -c {{ nodes_total }}:{{ nodes_total }}
 {%- endif -%}
+{%- endif -%}
 {%- endfor %}
 {%- if origin_state|default("elasticsearch") == 'graylog2' %}
 command[graylog2_elasticsearch_port_http]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 9200

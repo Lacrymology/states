@@ -9,7 +9,7 @@ First set it, as root, you might need to run ``sudo bash`` first::
 
 Then install salt::
 
-    wget -O - https://raw.github.com/saltstack/salt-bootstrap/stable/bootstrap-salt.sh | sudo sh
+    wget -q -O - https://raw.github.com/saltstack/salt-bootstrap/stable/bootstrap-salt.sh | sudo sh
     stop salt-minion
     rm -f /var/log/salt/minion
 

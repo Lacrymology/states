@@ -1,2 +1,2 @@
 # {{ pillar['message_do_not_modify'] }}
-command[check_denyhosts]=/usr/lib/nagios/plugins/check_procs -c 1:1 -C python -a "/usr/sbin/denyhosts --daemon --purge --config=/etc/denyhosts.conf" -u root
+command[denyhosts_procs]=/usr/lib/nagios/plugins/check_procs -c 1:1 -C python -a "/usr/sbin/denyhosts --daemon --purge --config=/etc/denyhosts.conf" -u root

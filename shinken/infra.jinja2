@@ -196,7 +196,7 @@ define service {
     servicegroups {% for role in pillar['monitoring']['states'][state] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description {{ deployment }}_nginx_{{ check }}
     display_name {{ deployment|capitalize }} {{ nginx_instances_checks[check] }}
-    check_command check_nrpe!check_{{ deployment }}_nginx_{{ check }}
+    check_command check_nrpe!{{ deployment }}_nginx_{{ check }}
 {%- if check == 'https_certificate' %}
     check_interval 1440 {#- only need to check https certificate each day -#}
 {%- endif %}
@@ -208,15 +208,15 @@ define service {
 {#-
  Jinja2 macro for template uwsgi/nrpe/instance.jinja2
  -#}
-{%- set uwsgi_instances_checks = {'master': 'uWSGI Master Process', 'worker': 'uWSGI Workers Process', 'uwsgi': 'uWSGI Ping'} -%}
+{%- set uwsgi_instances_checks = {'master': 'uWSGI Master Process', 'worker': 'uWSGI Workers Process', 'ping': 'uWSGI Ping'} -%}
 {%- macro uwsgi_instance(deployment, state) -%}
     {%- for check in uwsgi_instances_checks %}
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states'][state] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     servicegroups {% for role in pillar['monitoring']['states'][state] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description uwsgi-{{ deployment }}-{{ check }}
+    service_description {{ deployment }}_uwsgi_{{ check }}
     display_name {{ deployment|capitalize }} {{ uwsgi_instances_checks[check] }}
-    check_command check_nrpe!check_{{ deployment }}_{{ check }}
+    check_command check_nrpe!{{ deployment }}_uwsgi_{{ check }}
     use salt-service
 }
 {% endfor -%}
@@ -231,9 +231,9 @@ define service {
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states'][state] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     servicegroups {% for role in pillar['monitoring']['states'][state] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description {{ deployment }}-{{ check }}
+    service_description {{ deployment }}_{{ check }}
     display_name {{ deployment|capitalize }} {{ postgresql_client_checks[check] }}
-    check_command check_nrpe!check_{{ deployment }}_{{ check }}
+    check_command check_nrpe!{{ deployment }}_{{ check }}
     use salt-service
 }
 {% endfor -%}
@@ -247,9 +247,9 @@ define service {
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states'][state] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     servicegroups {% for role in pillar['monitoring']['states'][state] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description {{ prefix }}-{{ check }}
+    service_description {{ prefix }}_{{ check }}
     display_name {{ prefix }} {{ data[check] }}
-    check_command check_nrpe!check_{{ check }}
+    check_command check_nrpe!{{ check }}
     use salt-service
 }
 {% endfor -%}
@@ -265,9 +265,9 @@ define service {
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states']['amavis'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     servicegroups {% for role in pillar['monitoring']['states']['amavis'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description amavis-{{ check }}
+    service_description amavis_{{ check }}
     display_name Amavis {{ amavis_checks[check] }}
-    check_command check_nrpe!check_amavis_{{ check }}
+    check_command check_nrpe!amavis_{{ check }}
     use salt-service
 }
 {% endfor -%}
@@ -285,7 +285,7 @@ define service {
     servicegroups {% for role in pillar['monitoring']['states']['apt'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description {{ check }}
     display_name {{ apt_checks[check] }}
-    check_command check_nrpe!check_{{ check }}
+    check_command check_nrpe!{{ check }}
     use salt-service
     {#-
     Services that don't affect production and that have high cost in CPU, I/O
@@ -309,7 +309,7 @@ define service {
     servicegroups {% for role in pillar['monitoring']['states']['backup.server'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description backups
     display_name Backups
-    check_command check_nrpe!check_backups
+    check_command check_nrpe!backups_last
     use salt-service
 }
 {% endif -%}
@@ -322,9 +322,9 @@ define service {
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states']['carbon'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     servicegroups {% for role in pillar['monitoring']['states']['carbon'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description carbon-instances
+    service_description carbon_procs
     display_name Carbon Instances
-    check_command check_nrpe!check_carbon_instances
+    check_command check_nrpe!carbon_procs
     use salt-service
 }
 
@@ -340,9 +340,9 @@ define service {
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states']['carbon'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     servicegroups {% for role in pillar['monitoring']['states']['carbon'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description carbon-local-port-{{ port }}
+    service_description carbon_port_{{ port }}
     display_name Carbon Local Port {{ port }}
-    check_command check_nrpe!check_carbon_port_{{ port}}
+    check_command check_nrpe!carbon_port_{{ port}}
     use salt-service
 }
 {% endfor -%}
@@ -357,9 +357,9 @@ define service {
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states']['clamav'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     servicegroups {% for role in pillar['monitoring']['states']['clamav'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description {{ procname }}-daemon
+    service_description {{ procname }}_procs
     display_name {{ procname|capitalize }} Daemon
-    check_command check_nrpe!check_{{ procname }}
+    check_command check_nrpe!{{ procname }}_procs
     use salt-service
 }
 {% endfor -%}
@@ -374,9 +374,9 @@ define service {
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states']['cron'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     servicegroups {% for role in pillar['monitoring']['states']['cron'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description cron-daemon
+    service_description cron_procs
     display_name Cron Daemon
-    check_command check_nrpe!check_cron
+    check_command check_nrpe!cron_procs
     use salt-service
 }
 {% endif -%}
@@ -389,9 +389,9 @@ define service {
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states']['denyhosts'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     servicegroups {% for role in pillar['monitoring']['states']['denyhosts'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description denyhosts-daemon
+    service_description denyhosts_procs
     display_name Denyhosts Daemon
-    check_command check_nrpe!check_denyhosts
+    check_command check_nrpe!denyhosts_procs
     use salt-service
 }
 {% endif -%}
@@ -404,9 +404,9 @@ define service {
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states']['diamond'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     servicegroups {% for role in pillar['monitoring']['states']['diamond'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description diamond-daemon
+    service_description diamond_procs
     display_name Diamond Daemon
-    check_command check_nrpe!check_diamond
+    check_command check_nrpe!diamond_procs
     use salt-service
 }
 {% endif -%}
@@ -424,7 +424,7 @@ define service {
     servicegroups {% for role in pillar['monitoring']['states']['dovecot'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description dovecot{% if daemon %}-{{ daemon }}-{% endif %}daemon
     display_name Dovecot {% if daemon %}{{ daemon }} {% endif %}Daemon
-    check_command check_nrpe!check_dovecot{% if daemon %}_{{ daemon }}{% endif %}
+    check_command check_nrpe!dovecot{% if daemon %}_{{ daemon }}{% endif %}
     use salt-service
 }
 {% endfor -%}
@@ -434,9 +434,9 @@ define service {
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states']['dovecot'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     servicegroups {% for role in pillar['monitoring']['states']['dovecot'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description dovecot-{{ port }}-port
+    service_description dovecot_{{ port }}_port
     display_name Dovecot {{ port|upper }} Port
-    check_command check_nrpe!check_dovecot_{{ port }}_port
+    check_command check_nrpe!dovecot_port_{{ port }}
     use salt-service
 }
 {% endfor -%}
@@ -450,18 +450,18 @@ define service {
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states']['elasticsearch'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     servicegroups {% for role in pillar['monitoring']['states']['elasticsearch'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description elasticsearch-daemon
+    service_description elasticsearch_procs
     display_name Elasticsearch Daemon
-    check_command check_nrpe!check_elasticsearch
+    check_command check_nrpe!elasticsearch_procs
     use salt-service
 }
 
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states']['elasticsearch'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     servicegroups {% for role in pillar['monitoring']['states']['elasticsearch'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description elasticsearch-cluster
+    service_description elasticsearch_cluster
     display_name Elasticsearch Cluster
-    check_command check_nrpe!check_elasticsearch_cluster
+    check_command check_nrpe!elasticsearch_cluster
     use salt-service
 }
 
@@ -470,7 +470,7 @@ define service {
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states']['elasticsearch'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     servicegroups {% for role in pillar['monitoring']['states']['elasticsearch'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description elasticsearch-remote-{{ check }}-port
+    service_description elasticsearch-remote-port-{{ check }}
     display_name Elasticsearch Remote {{ check|capitalize }} Port
     check_command check_tcp!{{ elasticsearch_checks[check] }}
     use salt-service
@@ -479,9 +479,9 @@ define service {
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states']['elasticsearch'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     servicegroups {% for role in pillar['monitoring']['states']['elasticsearch'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description elasticsearch-local-{{ check }}-port
+    service_description elasticsearch_port_{{ check }}
     display_name Elasticsearch Local {{ check|capitalize }} Port
-    check_command check_nrpe!check_elasticsearch_{{ check }}_port
+    check_command check_nrpe!elasticsearch_port_{{ check }}
     use salt-service
 }
 {% endfor -%}
@@ -496,9 +496,9 @@ define service {
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states']['firewall'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     servicegroups {% for role in pillar['monitoring']['states']['firewall'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description firewall-rules
+    service_description firewall_rules
     display_name Firewall Rules
-    check_command check_nrpe!check_firewall
+    check_command check_nrpe!firewall_rules
     use salt-service
 }
 {% endif -%}
@@ -516,14 +516,14 @@ define service {
  State: graylog2.server
  -#}
 {%- if 'graylog2.server' in pillar['monitoring']['states'] -%}
-{%- set graylog2_server_checks = {'server': 'Server', 'logs': 'Logs Rate'} -%}
+{%- set graylog2_server_checks = {'procs': 'Daemon', 'incoming_logs': 'Incoming Logs Rate'} -%}
 {%- for check in graylog2_server_checks %}
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states']['graylog2.server'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     servicegroups {% for role in pillar['monitoring']['states']['graylog2.server'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description graylog2-{{ check }}
+    service_description graylog2_{{ check }}
     display_name Graylog2 {{ graylog2_server_checks[check] }}
-    check_command check_nrpe!check_graylog2_{{ check }}
+    check_command check_nrpe!graylog2_{{ check }}
     use salt-service
 }
 {% endfor -%}
@@ -545,9 +545,9 @@ define service {
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states']['gsyslog'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     servicegroups {% for role in pillar['monitoring']['states']['gsyslog'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description gsyslog-{{ check }}
-    display_name Gsyslog {{ check }}
-    check_command check_nrpe!check_{{ check }}
+    service_description {{ check }}_procs
+    display_name Gsyslog {{ check }} Daemon
+    check_command check_nrpe!{{ check }}_procs
     use salt-service
 }
 {% endfor -%}
@@ -561,9 +561,9 @@ define service {
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states']['memcache'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     servicegroups {% for role in pillar['monitoring']['states']['memcache'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description memcache-daemon
+    service_description memcached_procs
     display_name Memcache Daemon
-    check_command check_nrpe!check_memcached
+    check_command check_nrpe!memcached_procs
     use salt-service
 }
 {% endif -%}
@@ -573,14 +573,14 @@ define service {
  -#}
 
 {%- if 'mongodb' in pillar['monitoring']['states'] -%}
-{%- set mongodb_checks = {'': 'Daemon', '_port': 'Port', '_http': 'HTTP Interface', '_http_port': 'HTTP Port'} -%}
+{%- set mongodb_checks = {'procs': 'Daemon', 'port': 'Port', 'http': 'HTTP Interface', 'port_http': 'HTTP Port'} -%}
 {%- for check in mongodb_checks %}
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states']['mongodb'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     servicegroups {% for role in pillar['monitoring']['states']['mongodb'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description mongodb{{ check|default('_daemon') }}
+    service_description mongodb_{{ check }}
     display_name MongoDB {{ mongodb_checks[check] }}
-    check_command check_nrpe!check_mongodb{{ check }}
+    check_command check_nrpe!mongodb_{{ check }}
     use salt-service
 }
 {% endfor -%}
@@ -597,9 +597,9 @@ define service {
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states']['nginx'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     servicegroups {% for role in pillar['monitoring']['states']['nginx'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description nginx-{{ check }}
+    service_description nginx_{{ check }}
     display_name Nginx {{ nginx_checks[check] }}
-    check_command check_nrpe!check_nginx_{{ check }}
+    check_command check_nrpe!nginx_{{ check }}
     use salt-service
 }
 {% endfor -%}
@@ -610,21 +610,30 @@ define service {
  -#}
 
 {%- if 'nrpe' in pillar['monitoring']['states'] -%}
-{%- set nrpe_checks = {'loopback': 'Loopback Interface', 'memory': 'Memory Usage', 'users': 'Logged Users', 'load': 'Load Average', 'all_disks': 'All Disks', 'zombie_procs': 'Zombie Processes', 'total_procs': 'Total Processes'} -%}
+{%- set nrpe_checks = {
+    'free_disks_space': 'All Disks',
+    'free_memory': 'Memory Usage',
+    'load_average': 'Load Average',
+    'logged_users': 'Logged Users',
+    'loopback_interface': 'Loopback Interface',
+    'nrpe_procs': 'NRPE Processes',
+    'total_procs': 'Total Processes',
+    'zombie_procs': 'Zombie Processes',
+} -%}
 {%- for check in nrpe_checks %}
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states']['nrpe'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     servicegroups {% for role in pillar['monitoring']['states']['nrpe'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description linux-{{ check }}
-    display_name Linux {{ nrpe_checks[check] }}
-    check_command check_nrpe!check_{{ check }}
+    service_description {{ check }}
+    display_name {{ nrpe_checks[check] }}
+    check_command check_nrpe!{{ check }}
     use salt-service
 }
 {% endfor -%}
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states']['nrpe'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     servicegroups {% for role in pillar['monitoring']['states']['nrpe'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description remote-nrpe-port
+    service_description nrpe-remote-port
     display_name Remote NRPE Port
     check_command check_tcp!5666
     use salt-service
@@ -636,14 +645,14 @@ define service {
  -#}
 
 {%- if 'ntp' in pillar['monitoring']['states'] -%}
-{%- set ntp_checks = {'ntp': 'NTP Daemon', 'ntp_sync': 'NTP Synchronization'} -%}
+{%- set ntp_checks = {'ntp_procs': 'NTP Daemon', 'ntp_sync': 'NTP Synchronization'} -%}
 {%- for check in ntp_checks %}
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states']['ntp'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     servicegroups {% for role in pillar['monitoring']['states']['ntp'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description {{ check }}
     display_name {{ ntp_checks[check] }}
-    check_command check_nrpe!check_{{ check }}
+    check_command check_nrpe!{{ check }}
     use salt-service
 }
 {% endfor -%}
@@ -654,14 +663,14 @@ define service {
  -#}
 
 {%- if 'openldap' in pillar['monitoring']['states'] -%}
-{%- set openldap_checks = {'openldap': 'OpenLDAP Daemon (slapd)', 'openldap_port': 'LDAP Port', 'openldap_base': 'LDAP Base'} -%}
+{%- set openldap_checks = {'openldap_procs': 'OpenLDAP Daemon (slapd)', 'openldap_port': 'LDAP Port', 'openldap_base': 'LDAP Base'} -%}
 {%- for check in openldap_checks %}
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states']['openldap'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     servicegroups {% for role in pillar['monitoring']['states']['openldap'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description {{ check }}
     display_name {{ openldap_checks[check] }}
-    check_command check_nrpe!check_{{ check }}
+    check_command check_nrpe!{{ check }}
     use salt-service
 }
 {% endfor -%}
@@ -677,9 +686,9 @@ define service {
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states']['pdnsd'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     servicegroups {% for role in pillar['monitoring']['states']['pdnsd'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description pdnsd-daemon
+    service_description pdnsd_procs
     display_name Proxy DNS Daemon
-    check_command check_nrpe!check_pdnsd
+    check_command check_nrpe!pdnsd_procs
     use salt-service
 }
 {% endif -%}
@@ -694,14 +703,14 @@ define service {
  -#}
 
 {%- if 'postgresql.server' in pillar['monitoring']['states'] -%}
-{%- set postgresql_server_checks = {'server': 'Daemon', 'port': 'Port'} -%}
+{%- set postgresql_server_checks = {'procs': 'Daemon', 'port': 'Port'} -%}
 {%- for check in postgresql_server_checks %}
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states']['postgresql.server'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     servicegroups {% for role in pillar['monitoring']['states']['postgresql.server'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description postgresql-{{ check }}
+    service_description postgresql_{{ check }}
     display_name PostgreSQL {{ postgresql_server_checks[check] }}
-    check_command check_nrpe!check_postgresql_{{ check }}
+    check_command check_nrpe!postgresql_{{ check }}
     use salt-service
 }
 {% endfor -%}
@@ -712,31 +721,34 @@ define service {
  State: proftpd
  -#}
 
-{%- if 'proftpd' in pillar['monitoring']['states'] %}
+{%- if 'proftpd' in pillar['monitoring']['states'] -%}
+{%- set proftpd_checks = {'procs': 'Daemon', 'port': 'Port'} -%}
+{%- for check in proftpd_checks %}
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states']['proftpd'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     servicegroups {% for role in pillar['monitoring']['states']['proftpd'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description proftpd-daemon
-    display_name ProFTPD Daemon
-    check_command check_nrpe!check_proftpd
+    service_description proftpd_{{ check }}
+    display_name ProFTPD {{ proftpd_checks[check] }}
+    check_command check_nrpe!proftpd_{{ check }}
     use salt-service
 }
+{% endfor -%}
 {{ postgresql_client('proftpd', 'proftpd') }}
-{% endif -%}
+{%- endif -%}
 
 {#-
  State: rabbitmq
  -#}
 
 {%- if 'rabbitmq' in pillar['monitoring']['states'] -%}
-{%- set rabbitmq_checks = {'rabbitmq': 'Daemon', 'rabbitmq_port_management': 'Management Port', 'rabbitmq_port_console': 'Console Port', 'rabbitmq_port_amqp': 'Local AMQP Port', 'erlang': 'Erlang', 'erlang_port': 'Erlang Port'} -%}
+{%- set rabbitmq_checks = {'rabbitmq_procs': 'Daemon', 'rabbitmq_port_management': 'Management Port', 'rabbitmq_port_console': 'Console Port', 'rabbitmq_port_amqp': 'Local AMQP Port', 'erlang_procs': 'Erlang', 'erlang_port': 'Erlang Port'} -%}
 {%- for check in rabbitmq_checks %}
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states']['rabbitmq'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     servicegroups {% for role in pillar['monitoring']['states']['rabbitmq'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description {{ check }}
     display_name RabbitMQ {{ rabbitmq_checks[check] }}
-    check_command check_nrpe!check_{{ check }}
+    check_command check_nrpe!{{ check }}
     use salt-service
 }
 {% endfor -%}
@@ -746,7 +758,7 @@ define service {
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states']['rabbitmq'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     servicegroups {% for role in pillar['monitoring']['states']['rabbitmq'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description remote-rabbitmq-amqp-port
+    service_description rabbitmq-remote-amqp-port
     display_name Remote RabbitMQ AMQP Port
     check_command check_tcp!55672
     use salt-service
@@ -761,9 +773,9 @@ define service {
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states']['salt.api'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     servicegroups {% for role in pillar['monitoring']['states']['salt.api'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description salt-api-daemon
+    service_description salt_api_procs
     display_name Salt API Daemon
-    check_command check_nrpe!check_salt_api
+    check_command check_nrpe!salt_api_procs
     use salt-service
 }
 {{ nginx_instance('salt_api', 'salt.api') }}
@@ -777,27 +789,28 @@ define service {
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states']['salt.master'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     servicegroups {% for role in pillar['monitoring']['states']['salt.master'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description salt-master
+    service_description salt_master
     display_name Salt Master Daemon
-    check_command check_nrpe!check_salt_master
+    check_command check_nrpe!salt_master_procs
     use salt-service
 }
 
-{%- for port in (4505, 4506) %}
+{%- set salt_master_ports = {'publish': 4505, 'ret': 4506} -%}
+{%- for port in salt_master_ports %}
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states']['salt.master'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     servicegroups {% for role in pillar['monitoring']['states']['salt.master'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description salt-master-remote-port-{{ port }}
-    display_name Salt Master Remote Port {{ port }}
-    check_command check_tcp!{{ port }}
+    display_name Salt Master Remote Port {{ port|capitalize }}
+    check_command check_tcp!{{ salt_master_ports[port] }}
     use salt-service
 }
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states']['salt.master'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     servicegroups {% for role in pillar['monitoring']['states']['salt.master'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description salt-master-local-port-{{ port }}
+    service_description salt_master_port_{{ port }}
     display_name Salt Master Local Port {{ port }}
-    check_command check_nrpe!check_salt_master_port_{{ port }}
+    check_command check_nrpe!salt_master_port_{{ port }}
     use salt-service
 }
 {% endfor -%}
@@ -811,9 +824,9 @@ define service {
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states']['salt.minion'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     servicegroups {% for role in pillar['monitoring']['states']['salt.minion'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description salt-minion
+    service_description salt_minion_procs
     display_name Salt Minion Daemon
-    check_command check_nrpe!check_salt_minion
+    check_command check_nrpe!salt_minion_procs
     use salt-service
 }}
 {%- endif -%}
@@ -846,18 +859,18 @@ define service {
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states'][state_name] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     servicegroups {% for role in pillar['monitoring']['states'][state_name] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description shinken-{{ shinken_role }}-deamon
+    service_description shinken_{{ shinken_role }}_procs
     display_name Shinken {{ shinken_role|capitalize }} Deamon
-    check_command check_nrpe!check_shinken_{{ shinken_role }}
+    check_command check_nrpe!shinken_{{ shinken_role }}_procs
     use salt-service
 }
 
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states'][state_name] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     servicegroups {% for role in pillar['monitoring']['states'][state_name] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description shinken-{{ shinken_role }}-local-port
+    service_description shinken_{{ shinken_role }}_port
     display_name Shinken {{ shinken_role|capitalize }} Local Port
-    check_command check_nrpe!check_shinken_{{ shinken_role }}_port
+    check_command check_nrpe!shinken_{{ shinken_role }}_port
     use salt-service
 }
 
@@ -875,18 +888,18 @@ define service {
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states'][state_name] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     servicegroups {% for role in pillar['monitoring']['states'][state_name] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description shinken-broker-web
+    service_description shinken_broker_web
     display_name Shinken Broker Web UI Port
-    check_command check_nrpe!check_shinken_broker_web
+    check_command check_nrpe!shinken_broker_web
     use salt-service
 }
 
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states'][state_name] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     servicegroups {% for role in pillar['monitoring']['states'][state_name] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description shinken-broker-http
+    service_description shinken_broker_http
     display_name Shinken Broker Web UI HTTP
-    check_command check_nrpe!check_shinken_broker_http
+    check_command check_nrpe!shinken_broker_http
     use salt-service
 }
 {% endif -%}
@@ -913,16 +926,19 @@ define service {
  State: ssh.server
  -#}
 
-{%- if 'ssh.server' in pillar['monitoring']['states'] %}
+{%- if 'ssh.server' in pillar['monitoring']['states'] -%}
+{%- set ssh_server_checks = {'procs': 'Daemon', 'port': 'Local Port'} -%}
+{%- for check in ssh_server_checks %}
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states']['ssh.server'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     servicegroups {% for role in pillar['monitoring']['states']['ssh.server'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description ssh-daemon-local-port
-    display_name SSH Daemon Local Port
-    check_command check_nrpe!check_ssh_port
+    service_description ssh_{{ check }}
+    display_name SSH Server {{ ssh_server_checks[check] }}
+    check_command check_nrpe!ssh_{{ check }}
     use salt-service
 }
-{% endif -%}
+{% endfor -%}
+{%- endif -%}
 
 {#-
  State: statsd
@@ -932,9 +948,9 @@ define service {
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states']['statsd'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     servicegroups {% for role in pillar['monitoring']['states']['statsd'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description statsd-daemon
+    service_description statsd_procs
     display_name StatsD Daemon
-    check_command check_nrpe!check_statsd
+    check_command check_nrpe!statsd_procs
     use salt-service
 }
 {% endif -%}
@@ -947,9 +963,9 @@ define service {
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states']['uwsgi'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     servicegroups {% for role in pillar['monitoring']['states']['uwsgi'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description uWSGI-emperor
+    service_description uwsgi_emperor
     display_name uWSGI Emperor
-    check_command check_nrpe!check_uwsgi
+    check_command check_nrpe!uwsgi_emperor
     use salt-service
 }
 {% endif -%}

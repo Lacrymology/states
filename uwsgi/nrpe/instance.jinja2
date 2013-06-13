@@ -1,4 +1,4 @@
 # {{ pillar['message_do_not_modify'] }}
-command[check_{{ deployment }}_master]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u www-data -a {{ deployment }}-master
-command[check_{{ deployment }}_worker]=/usr/lib/nagios/plugins/check_procs -c {% if cheaper|default(False) %}{{ cheaper }}{% else %}{{ workers }}{% endif %}:{{ workers }} -u www-data -a {{ deployment }}-worker -C uwsgi
-command[check_{{ deployment }}_uwsgi]=sudo -u www-data /usr/lib/nagios/plugins/check_uwsgi {{ deployment }}
+command[{{ deployment }}_master]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u www-data -a {{ deployment }}-master
+command[{{ deployment }}_worker]=/usr/lib/nagios/plugins/check_procs -c {% if cheaper|default(False) %}{{ cheaper }}{% else %}{{ workers }}{% endif %}:{{ workers }} -u www-data -a {{ deployment }}-worker -C uwsgi
+command[{{ deployment }}_uwsgi]=sudo -u www-data /usr/lib/nagios/plugins/check_uwsgi {{ deployment }}

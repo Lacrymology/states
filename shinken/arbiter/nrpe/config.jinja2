@@ -1,4 +1,4 @@
 # {{ pillar['message_do_not_modify'] }}
 {# for some reason arbiter don't change it's user id to shinken -#}
-command[check_shinken_arbiter]=/usr/lib/nagios/plugins/check_procs -c 1:10 -u root -C shinken-arbiter
-command[check_shinken_arbiter_port]=/usr/lib/nagios/plugins/check_tcp -H {{ salt['network.ip_addrs']()[0] }} -p 7770
+command[shinken_arbiter_procs]=/usr/lib/nagios/plugins/check_procs -c 1:10 -u root -C shinken-arbiter
+command[shinken_arbiter_port]=/usr/lib/nagios/plugins/check_tcp -H {{ salt['network.ip_addrs']()[0] }} -p 7770

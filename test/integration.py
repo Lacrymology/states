@@ -1000,8 +1000,8 @@ class IntegrationFull(BaseIntegration):
         self.check_integration()
 
     def check_apt(self):
-        self.run_check('check_apt_rc')
-        self.run_check('check_apt')
+        self.run_check('apt')
+        self.run_check('apt_rc')
 
     def test_backup_client(self):
         self.top(['backup.client', 'backup.client.nrpe',
@@ -1026,9 +1026,9 @@ class IntegrationFull(BaseIntegration):
     def test_carbon(self):
         self.top(['carbon', 'carbon.nrpe', 'carbon.diamond'])
         self.check_integration()
-        self.run_check('check_carbon_a')
-        self.run_check('check_carbon_port_2003')
-        self.run_check('check_carbon_port_2004')
+        self.run_check('carbon_procs')
+        self.run_check('carbon_port_2003')
+        self.run_check('carbon_port_2004')
 
     def test_cron(self):
         self.top(['cron', 'cron.diamond', 'cron.nrpe'])
@@ -1036,7 +1036,7 @@ class IntegrationFull(BaseIntegration):
         self.check_cron()
 
     def check_cron(self):
-        self.run_check('check_cron')
+        self.run_check('cron_procs')
 
     def test_denyhosts(self):
         self.top(['denyhosts', 'denyhosts.diamond', 'denyhosts.nrpe'])
@@ -1044,14 +1044,14 @@ class IntegrationFull(BaseIntegration):
         self.check_denyhosts()
 
     def check_denyhosts(self):
-        self.run_check('check_denyhosts')
+        self.run_check('denyhosts_procs')
 
     def test_diamond(self):
         self.top(['diamond', 'diamond.nrpe'])
         self.check_integration()
 
     def check_diamond(self):
-        self.run_check('check_diamond')
+        self.run_check('diamond_procs')
 
     def test_elasticsearch(self):
         self.top(['elasticsearch', 'elasticsearch.diamond',
@@ -1060,12 +1060,12 @@ class IntegrationFull(BaseIntegration):
         self.check_cron()
         self.sleep('Elasticsearch')
         self.check_elasticsearch()
-        self.run_check('check_elasticsearch')
+        self.run_check('elasticsearch_procs')
 
     def check_elasticsearch(self):
-        self.run_check('check_elasticsearch_http_port')
-        self.run_check('check_elasticsearch_transport_port')
-        self.run_check('check_elasticsearch_cluster')
+        self.run_check('elasticsearch_port_http')
+        self.run_check('elasticsearch_port_transport')
+        self.run_check('elasticsearch_cluster')
 
     def test_elasticsearch_nginx(self):
         self.top(['elasticsearch', 'elasticsearch.diamond',
@@ -1075,15 +1075,15 @@ class IntegrationFull(BaseIntegration):
         self.check_nginx()
         self.sleep('Elasticsearch')
         self.check_elasticsearch()
-        self.run_check('check_elasticsearch')
-        self.run_check('check_elasticsearch_nginx_http')
-        self.run_check('check_elasticsearch_nginx_https')
-        self.run_check('check_elasticsearch_nginx_https_certificate')
+        self.run_check('elasticsearch_procs')
+        self.run_check('elasticsearch_nginx_http')
+        self.run_check('elasticsearch_nginx_https')
+        self.run_check('elasticsearch_nginx_https_certificate')
 
     def test_firewall(self):
         self.top(['firewall', 'firewall.gsyslog', 'firewall.nrpe'])
         self.check_integration()
-        self.run_check('check_firewall')
+        self.run_check('firewall')
 
     def test_git_server(self):
         self.top(['git.server', 'git.server.nrpe', 'git.server.diamond'])
@@ -1107,13 +1107,13 @@ class IntegrationFull(BaseIntegration):
         self.check_graphite()
 
     def check_graphite(self):
-        self.run_check('check_graphite_master')
-        self.run_check('check_graphite_worker')
-        self.run_check('check_graphite_uwsgi')
-        self.run_check('check_nginx_graphite_http')
-        self.run_check('check_nginx_graphite_https')
-        self.run_check('check_nginx_graphite_https_certificate')
-        self.run_check('check_graphite_postgresql')
+        self.run_check('graphite_uwsgi_master')
+        self.run_check('graphite_uwsgi_worker')
+        self.run_check('graphite_uwsgi_ping')
+        self.run_check('nginx_graphite_http')
+        self.run_check('nginx_graphite_https')
+        self.run_check('nginx_graphite_https_certificate')
+        self.run_check('graphite_postgresql')
 
     def test_graylog2(self):
         self.top(['graylog2.server', 'graylog2.server.nrpe',
@@ -1130,22 +1130,22 @@ class IntegrationFull(BaseIntegration):
         self.check_graylog2()
 
     def check_graylog2(self):
-        self.run_check('check_graylog2_server')
-        self.run_check('check_graylog2_logs')
-        self.run_check('check_graylog2_master')
-        self.run_check('check_graylog2_worker')
-        self.run_check('check_graylog2_uwsgi')
-        self.run_check('check_graylog2_nginx_http')
-        self.run_check('check_graylog2_nginx_https')
-        self.run_check('check_graylog2_nginx_https_certificate')
+        self.run_check('graylog2_procs')
+        self.run_check('graylog2_incoming_logs')
+        self.run_check('graylog2_uwsgi_master')
+        self.run_check('graylog2_uwsgi_worker')
+        self.run_check('graylog2_uwsgi_ping')
+        self.run_check('graylog2_nginx_http')
+        self.run_check('graylog2_nginx_https')
+        self.run_check('graylog2_nginx_https_certificate')
 
     def test_gsyslog(self):
         self.top(['gsyslog', 'gsyslog.diamond', 'gsyslog.nrpe'])
         self.check_integration()
 
     def check_gsyslog(self):
-        self.run_check('check_syslogd')
-        self.run_check('check_klogd')
+        self.run_check('syslogd_procs')
+        self.run_check('klogd_procs')
 
     def check_logrotate(self):
         self.top(['logrotate', 'logrotate.nrpe'])
@@ -1157,7 +1157,7 @@ class IntegrationFull(BaseIntegration):
         self.check_memcache()
 
     def check_memcache(self):
-        self.run_check('check_memcached')
+        self.run_check('memcached_procs')
 
     def test_mercurial(self):
         self.top(['mercurial', 'mercurial.nrpe'])
@@ -1169,10 +1169,10 @@ class IntegrationFull(BaseIntegration):
         self.check_mongodb()
 
     def check_mongodb(self):
-        self.run_check('check_mongodb')
-        self.run_check('check_mongodb_port')
-        self.run_check('check_mongodb_http')
-        self.run_check('check_mongodb_http_port')
+        self.run_check('mongodb_procs')
+        self.run_check('mongodb_port')
+        self.run_check('mongodb_http')
+        self.run_check('mongodb_port_http')
 
     def test_nginx(self):
         self.top(['nginx', 'nginx.nrpe', 'nginx.diamond'])
@@ -1180,11 +1180,11 @@ class IntegrationFull(BaseIntegration):
         self.check_nginx()
 
     def check_nginx(self):
-        self.run_check('check_nginx_master')
-        self.run_check('check_nginx_worker')
-        self.run_check('check_nginx_status')
-        self.run_check('check_nginx_logger_error')
-        self.run_check('check_nginx_logger_access')
+        self.run_check('nginx_master')
+        self.run_check('nginx_worker')
+        self.run_check('nginx_status')
+        self.run_check('nginx_logger_error')
+        self.run_check('nginx_logger_access')
 
     def test_nodejs(self):
         self.top(['nodejs', 'nodejs.diamond', 'nodejs.nrpe'])
@@ -1195,14 +1195,14 @@ class IntegrationFull(BaseIntegration):
         self.check_integration()
 
     def check_nrpe(self):
-        self.run_check('check_users')
-        self.run_check('check_load')
-        self.run_check('check_all_disks')
-        self.run_check('check_zombie_procs')
-        self.run_check('check_total_procs')
-        self.run_check('check_memory')
-        self.run_check('check_loopback')
-        self.run_check('check_nrpe')
+        self.run_check('free_disks_space')
+        self.run_check('free_memory')
+        self.run_check('load_average')
+        self.run_check('logged_users')
+        self.run_check('loopback_interface')
+        self.run_check('nrpe_procs')
+        self.run_check('total_procs')
+        self.run_check('zombie_procs')
 
     def test_ntp(self):
         self.top(['ntp', 'ntp.nrpe', 'ntp.diamond'])
@@ -1210,8 +1210,8 @@ class IntegrationFull(BaseIntegration):
         self.check_ntp()
 
     def check_ntp(self):
-        self.run_check('check_ntp_sync')
-        self.run_check('check_ntp')
+        self.run_check('ntp_sync')
+        self.run_check('ntp_procs')
 
     def test_openvpn(self):
         self.top(['openvpn', 'openvpn.nrpe', 'openvpn.diamond'])
@@ -1220,7 +1220,7 @@ class IntegrationFull(BaseIntegration):
     def test_pdnsd(self):
         self.top(['pdnsd', 'pdnsd.nrpe', 'pdnsd.diamond'])
         self.check_integration()
-        self.run_check('check_pdsnd')
+        self.run_check('pdsnd_procs')
 
     def test_pip(self):
         self.top(['pip', 'pip.nrpe'])
@@ -1234,15 +1234,17 @@ class IntegrationFull(BaseIntegration):
         # TODO: test UTF8
 
     def check_postgresql_server(self):
-        self.run_check('check_postgresql_server')
-        self.run_check('check_postgresql_port')
-        self.run_check('check_diamond_postgresql')
+        self.run_check('postgresql_procs')
+        self.run_check('postgresql_port')
+        self.run_check('diamond_postgresql')
 
     def test_proftpd(self):
         self.top(['proftpd', 'proftpd.nrpe', 'proftpd.diamond'])
         self.check_integration()
         self.check_postgresql_server()
-        self.run_check('check_proftpd')
+        self.run_check('proftpd_procs')
+        self.run_check('proftpd_port')
+        self.run_check('proftpd_postgresql')
 
     def test_python(self):
         self.top(['python', 'python.nrpe'])
@@ -1259,15 +1261,15 @@ class IntegrationFull(BaseIntegration):
         self.check_rabbitmq()
 
     def check_rabbitmq(self):
-        self.run_check('check_rabbitmq')
-        self.run_check('check_rabbitmq_nginx_http')
-        self.run_check('check_rabbitmq_nginx_https')
-        self.run_check('check_rabbitmq_nginx_https_certificate')
-        self.run_check('check_rabbitmq_port_management')
-        self.run_check('check_rabbitmq_port_console')
-        self.run_check('check_rabbitmq_port_amqp')
-        self.run_check('check_erlang')
-        self.run_check('check_erlang_port')
+        self.run_check('rabbitmq_procs')
+        self.run_check('rabbitmq_nginx_http')
+        self.run_check('rabbitmq_nginx_https')
+        self.run_check('rabbitmq_nginx_https_certificate')
+        self.run_check('rabbitmq_port_management')
+        self.run_check('rabbitmq_port_console')
+        self.run_check('rabbitmq_port_amqp')
+        self.run_check('erlang_procs')
+        self.run_check('erlang_port')
 
     def test_raven(self):
         self.top(['raven', 'raven.nrpe'])
@@ -1295,7 +1297,7 @@ class IntegrationFull(BaseIntegration):
         self.check_integration()
         self.check_nginx()
         self.check_salt_master()
-        self.run_check('check_salt_api')
+        self.run_check('salt_api_procs')
 
     def test_salt_master(self):
         self.top(['salt.master', 'salt.master.nrpe', 'salt.master.diamond'])
@@ -1303,9 +1305,9 @@ class IntegrationFull(BaseIntegration):
         self.check_salt_master()
 
     def check_salt_master(self):
-        self.run_check('check_salt_master')
-        self.run_check('check_salt_master_port_4505')
-        self.run_check('check_salt_master_port_4506')
+        self.run_check('salt_master_procs')
+        self.run_check('salt_master_port_publish')
+        self.run_check('salt_master_port_ret')
 
     def test_salt_mirror(self):
         self.top(['salt.mirror', 'salt.mirror.diamond', 'salt.mirror.nrpe'])
@@ -1326,13 +1328,13 @@ class IntegrationFull(BaseIntegration):
         self.check_sentry()
 
     def check_sentry(self):
-        self.run_check('check_sentry_master')
-        self.run_check('check_sentry_worker')
-        self.run_check('check_sentry_uwsgi')
-        self.run_check('check_sentry_nginx_http')
-        self.run_check('check_sentry_nginx_https')
-        self.run_check('check_sentry_nginx_https_certificate')
-        self.run_check('check_sentry_postgresql')
+        self.run_check('sentry_uwsgi_master')
+        self.run_check('sentry_uwsgi_worker')
+        self.run_check('sentry_uwsgi_ping')
+        self.run_check('sentry_nginx_http')
+        self.run_check('sentry_nginx_https')
+        self.run_check('sentry_nginx_https_certificate')
+        self.run_check('sentry_postgresql')
 
     def test_shinken_arbiter(self):
         self.top(['shinken.arbiter', 'shinken.arbiter.nrpe',
@@ -1341,8 +1343,8 @@ class IntegrationFull(BaseIntegration):
         self.check_shinken_arbiter()
 
     def check_shinken_arbiter(self):
-        self.run_check('check_shinken_arbiter')
-        self.run_check('check_shinken_arbiter_port')
+        self.run_check('shinken_arbiter_procs')
+        self.run_check('shinken_arbiter_port')
 
     def test_shinken_broker(self):
         self.top(['shinken.broker', 'shinken.broker.diamond',
@@ -1351,8 +1353,8 @@ class IntegrationFull(BaseIntegration):
         self.check_shinken_broker()
 
     def check_shinken_broker(self):
-        self.run_check('check_shinken_broker')
-        self.run_check('check_shinken_broker_port')
+        self.run_check('shinken_broker_procs')
+        self.run_check('shinken_broker_port')
 
     def test_shinken_poller(self):
         self.top(['shinken.poller', 'shinken.poller.nrpe',
@@ -1361,8 +1363,8 @@ class IntegrationFull(BaseIntegration):
         self.check_shinken_poller()
 
     def check_shinken_poller(self):
-        self.run_check('check_shinken_poller')
-        self.run_check('check_shinken_poller_port')
+        self.run_check('shinken_poller_procs')
+        self.run_check('shinken_poller_port')
 
     def test_shinken_reactionner(self):
         self.top(['shinken.reactionner', 'shinken.reactionner.nrpe',
@@ -1371,8 +1373,8 @@ class IntegrationFull(BaseIntegration):
         self.check_shinken_reactionner()
 
     def check_shinken_reactionner(self):
-        self.run_check('check_shinken_reactionner')
-        self.run_check('check_shinken_reactionner_port')
+        self.run_check('shinken_reactionner_procs')
+        self.run_check('shinken_reactionner_port')
 
     def test_shinken_scheduler(self):
         self.top(['shinken.scheduler', 'shinken.scheduler.nrpe',
@@ -1381,8 +1383,8 @@ class IntegrationFull(BaseIntegration):
         self.check_shinken_scheduler()
 
     def check_shinken_scheduler(self):
-        self.run_check('check_shinken_scheduler')
-        self.run_check('check_shinken_scheduler_port')
+        self.run_check('shinken_scheduler_procs')
+        self.run_check('shinken_scheduler_port')
 
     def test_shinken(self):
         files = []
@@ -1402,7 +1404,8 @@ class IntegrationFull(BaseIntegration):
         self.check_shinken()
 
     def check_shinken(self):
-        self.run_check('check_shinken_broker_web')
+        self.run_check('shinken_broker_web')
+        self.run_check('shinken_broker_http')
         client('cmd.run', '/usr/local/bin/shinken-ctl.sh stop')
         client('cmd.run', '/usr/local/bin/shinken-ctl.sh start')
 
@@ -1413,8 +1416,8 @@ class IntegrationFull(BaseIntegration):
         self.check_ssh_server()
 
     def check_ssh_server(self):
-        self.run_check('check_ssh')
-        # TODO check port SSH
+        self.run_check('ssh_procs')
+        self.run_check('ssh_port')
 
     def test_ssl(self):
         self.top(['ssl', 'ssl.nrpe'])
@@ -1430,7 +1433,7 @@ class IntegrationFull(BaseIntegration):
         self.check_statsd()
 
     def check_statsd(self):
-        self.run_check('check_statsd')
+        self.run_check('statsd_procs')
 
     def test_sudo(self):
         self.top(['sudo', 'sudo.nrpe', 'sudo.diamond'])
@@ -1450,7 +1453,7 @@ class IntegrationFull(BaseIntegration):
         self.check_uwsgi()
 
     def check_uwsgi(self):
-        self.run_check('check_uwsgi')
+        self.run_check('uwsgi_emperor')
 
     def test_vim(self):
         self.top(['vim', 'vim.nrpe'])

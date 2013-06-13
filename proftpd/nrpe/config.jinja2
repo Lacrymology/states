@@ -1,3 +1,4 @@
 # {{ pillar['message_do_not_modify'] }}
-command[check_proftpd]=/usr/lib/nagios/plugins/check_procs -C proftpd -w 1:1 -u www-data -a "proftpd: (accepting connections)"
-{# TODO: Check port 21? #}
+command[proftpd_procs]=/usr/lib/nagios/plugins/check_procs -C proftpd -w 1:1 -u www-data -a "proftpd: (accepting connections)"
+command[proftpd_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 21
+{# TODO: use check_ftp #}

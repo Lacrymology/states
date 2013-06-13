@@ -1,3 +1,3 @@
 # {{ pillar['message_do_not_modify'] }}
-command[check_shinken_reactionner]=/usr/lib/nagios/plugins/check_procs -c 1:10 -u shinken -a 'shinken-reactionner -c /etc/shinken/reactionner.conf'
-command[check_shinken_reactionner_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 7769
+command[shinken_reactionner_procs]=/usr/lib/nagios/plugins/check_procs -c 1:10 -u shinken -a 'shinken-reactionner -c /etc/shinken/reactionner.conf'
+command[shinken_reactionner_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 7769

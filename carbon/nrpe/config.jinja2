@@ -1,6 +1,6 @@
 # {{ pillar['message_do_not_modify'] }}
 {% for instance in pillar['graphite']['carbon']['instances'] %}
-command[check_carbon_{{ instance }}]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u graphite -C python  -a "/usr/local/graphite/bin/carbon-cache.py --config=/etc/graphite/carbon.conf --instance={{ instance }} start"
+command[carbon_procs]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u graphite -C python  -a "/usr/local/graphite/bin/carbon-cache.py --config=/etc/graphite/carbon.conf --instance={{ instance }} start"
 {% endfor %}
-command[check_carbon_port_2003]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 2003
-command[check_carbon_port_2004]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 2004
+command[carbon_port_2003]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 2003
+command[carbon_port_2004]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 2004

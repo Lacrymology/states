@@ -1,2 +1,2 @@
 # {{ pillar['message_do_not_modify'] }}
-command[check_firewall]=sudo /usr/lib/nagios/plugins/check_firewall.py -w 1:{{ critical }}
+command[firewall_rules]=sudo /usr/lib/nagios/plugins/check_firewall.py -w 1:{{ critical }}

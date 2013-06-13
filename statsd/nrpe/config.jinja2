@@ -1,2 +1,2 @@
 # {{ pillar['message_do_not_modify'] }}
-command[check_statsd]=/usr/lib/nagios/plugins/check_procs -C pystatsd-server -c 1:1 -u root
+command[statsd_procs]=/usr/lib/nagios/plugins/check_procs -C pystatsd-server -c 1:1 -u root

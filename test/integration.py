@@ -236,16 +236,20 @@ class BaseIntegration(unittest.TestCase):
     # incomplete list of absent state, as some absent state will clean
     # everything, such as nrpe.absent erase stuff also in carbon.nrpe.absent.
     absent = [
+        'amavis.absent',
         'apt.absent',
         'backup.client.absent',
         'backup.server.absent',
         'bash.absent',
         'build.absent',
+        'clamav.absent',
         'cron.absent',
         'deborphan.absent',
         'denyhosts.absent',
         'diamond.absent',
         'django.absent',
+        'dovecot.absent',
+        'dovecot.agent.absent'
         'elasticsearch.absent',
         'firewall.absent',
         'git.server.absent',
@@ -266,9 +270,11 @@ class BaseIntegration(unittest.TestCase):
         'nodejs.absent',
         'nrpe.absent',
         'ntp.absent',
+        'openldap.absent',
         'openvpn.absent',
         'pdnsd.absent',
         'pip.absent',
+        'postfix.absent',
         'postgresql.server.backup.absent',
         'postgresql.server.absent',
         'postgresql.absent',
@@ -287,6 +293,7 @@ class BaseIntegration(unittest.TestCase):
         'sentry.backup.absent',
         'sentry.absent',
         'shinken.absent',
+        'spamassassin.absent',
         'ssh.client.absent',
         'ssh.server.absent',
         'ssl.absent',
@@ -568,6 +575,9 @@ class Integration(BaseIntegration):
     def test_ntp(self):
         self.top(['ntp'])
 
+    def test_openldap(self):
+        self.top(['openldap'])
+
     def test_openvpn(self):
         self.top(['openvpn'])
 
@@ -576,6 +586,9 @@ class Integration(BaseIntegration):
 
     def test_pip(self):
         self.top(['pip'])
+
+    def test_postfix(self):
+        self.top(['postfix'])
 
     def test_postgresql(self):
         self.top(['postgresql'])
@@ -606,6 +619,9 @@ class Integration(BaseIntegration):
 
     def test_requests(self):
         self.top(['requests'])
+
+    def test_roundcube(self):
+        self.top(['roundcube'])
 
     def test_route53(self):
         self.top(['route53'])
@@ -645,6 +661,9 @@ class Integration(BaseIntegration):
 
     def test_shinken_scheduler(self):
         self.top(['shinken.scheduler'])
+
+    def test_spamassassin(self):
+        self.top(['spamassassin'])
 
     def test_ssh_client(self):
         self.top(['ssh.client'])
@@ -763,11 +782,17 @@ class IntegrationNRPE(BaseIntegration):
     def test_ntp(self):
         self.top(['ntp.nrpe'])
 
+    def test_openldap(self):
+        self.top(['openldap.nrpe'])
+
     def test_openvpn(self):
         self.top(['openvpn.nrpe'])
 
     def test_pdnsd(self):
         self.top(['pdnsd.nrpe'])
+
+    def test_postfix(self):
+        self.top(['postfix.nrpe'])
 
     def test_postgresql_server(self):
         self.top(['postgresql.server.nrpe'])
@@ -828,17 +853,26 @@ class IntegrationDiamondBase(BaseIntegration):
     Execute diamond integration only
     """
 
+    def test_amavis(self):
+        self.top(['amavis.diamond'])
+
     def test_backup_client(self):
         self.top(['backup.client.diamond'])
 
     def test_carbon(self):
         self.top(['carbon.diamond'])
 
+    def test_clamav(self):
+        self.top(['clamav.diamond'])
+
     def test_cron(self):
         self.top(['cron.diamond'])
 
     def test_denyhosts(self):
         self.top(['denyhosts.diamond'])
+
+    def test_dovecot(self):
+        self.top(['dovecot.diamond'])
 
     def test_elasticsearch(self):
         self.top(['elasticsearch.diamond'])
@@ -876,11 +910,17 @@ class IntegrationDiamondBase(BaseIntegration):
     def test_ntp(self):
         self.top(['ntp.diamond'])
 
+    def test_openldap(self):
+        self.top(['openldap.diamond'])
+
     def test_openvpn(self):
         self.top(['openvpn.diamond'])
 
     def test_pdnsd(self):
         self.top(['pdnsd.diamond'])
+
+    def test_postfix(self):
+        self.top(['postfix.diamond'])
 
     def test_postgresql_server(self):
         self.top(['postgresql.server.diamond'])
@@ -890,6 +930,9 @@ class IntegrationDiamondBase(BaseIntegration):
 
     def test_rabbitmq(self):
         self.top(['rabbitmq.diamond'])
+
+    def test_roundcube(self):
+        self.top(['roundcube.diamond'])
 
     def test_salt_api(self):
         self.top(['salt.api.diamond'])
@@ -957,6 +1000,9 @@ class IntegrationDiamond(BaseIntegration):
     def test_openvpn(self):
         self.top(['openvpn.diamond'])
 
+    def test_postfix(self):
+        self.top(['postfix.diamond'])
+
     def test_postgresql_server(self):
         self.top(['postgresql.server.diamond'])
 
@@ -1017,18 +1063,18 @@ class IntegrationFull(BaseIntegration):
         self.check_gsyslog()
 
     def test_amavis(self):
-        # TODO: add diamond
-        self.top(['amavis', 'amavis.nrpe'])
+        self.top(['amavis', 'amavis.nrpe', 'amavis.diamond'])
         self.check_integration()
         self.check_amavis()
 
     def check_amavis(self):
-        self.run_check('check_amavis_master')
-        self.run_check('check_amavis_child')
-        self.run_check('check_amavis_port')
+        self.run_check('amavis_master')
+        self.run_check('amavis_child')
+        self.run_check('amavis_port')
 
     def test_amavis_clamav(self):
-        self.top(['clamav.amavis', 'clamav.nrpe', 'amavis.nrpe'])
+        self.top(['clamav.amavis', 'clamav.nrpe', 'amavis.nrpe',
+                  'amavis.diamond', 'amavis.nrpe'])
         self.check_integration()
         self.check_amavis()
         self.check_clamav()
@@ -1074,8 +1120,8 @@ class IntegrationFull(BaseIntegration):
         self.check_clamav()
 
     def check_clamav(self):
-        self.run_check('check_freshclam')
-        self.run_check('check_clamav')
+        self.run_check('freshclam_procs')
+        self.run_check('clamav_procs')
 
     def test_cron(self):
         self.top(['cron', 'cron.diamond', 'cron.nrpe'])
@@ -1086,16 +1132,20 @@ class IntegrationFull(BaseIntegration):
         self.run_check('cron_procs')
 
     def test_dovecot(self):
-        self.top(['dovecot', 'dovecot.nrpe'])
+        self.top(['dovecot', 'dovecot.nrpe', 'dovecot.diamond',
+                  'postfix.nrpe', 'postfix.diamond',
+                  'openldap', 'openldap.nrpe', 'openldap.diamond'])
         self.check_integration()
-        self.run_check('check_dovecot')
-        self.run_check('check_dovecot_anvil')
-        self.run_check('check_dovecot_log')
-        self.run_check('check_dovecot_config')
-        self.run_check('check_dovecot_imap_port')
-        self.run_check('check_dovecot_pop3_port')
-        self.run_check('check_dovecot_imaps_port')
-        self.run_check('check_dovecot_pop3s_port')
+        self.run_check('dovecot_procs')
+        self.run_check('dovecot_anvil')
+        self.run_check('dovecot_log')
+        self.run_check('dovecot_config')
+        self.run_check('dovecot_imap_port')
+        self.run_check('dovecot_pop3_port')
+        self.run_check('dovecot_imaps_port')
+        self.run_check('dovecot_pop3s_port')
+        self.check_postfix()
+        self.check_openldap()
 
     def test_denyhosts(self):
         self.top(['denyhosts', 'denyhosts.diamond', 'denyhosts.nrpe'])
@@ -1272,6 +1322,15 @@ class IntegrationFull(BaseIntegration):
         self.run_check('ntp_sync')
         self.run_check('ntp_procs')
 
+    def test_openldap(self):
+        self.top(['openldap', 'openldap.nrpe', 'openldap.diamond'])
+        self.check_openldap()
+
+    def check_openldap(self):
+        self.run_check('openldap_procs')
+        self.run_check('openldap_port')
+        self.run_check('openldap_base')
+
     def test_openvpn(self):
         self.top(['openvpn', 'openvpn.nrpe', 'openvpn.diamond'])
         self.check_integration()
@@ -1284,6 +1343,20 @@ class IntegrationFull(BaseIntegration):
     def test_pip(self):
         self.top(['pip', 'pip.nrpe'])
         self.check_integration()
+
+    def test_postfix(self):
+        self.top(['postfix', 'postfix.diamond', 'postfix.nrpe',
+                  'openldap', 'openldap.diamond', 'openldap.nrpe'])
+        self.check_openldap()
+        self.check_postfix()
+
+    def check_postfix(self):
+        self.run_check('postfix_master')
+        self.run_check('postfix_pickup')
+        self.run_check('postfix_qmgr')
+        self.run_check('postfix_port_smtp')
+        self.run_check('postfix_port_smtps')
+        self.run_check('postfix_port_spam_handler')
 
     def test_postgresql_server(self):
         self.top(['postgresql.server', 'postgresql.server.backup',

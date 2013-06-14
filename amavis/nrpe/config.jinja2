@@ -1,5 +1,5 @@
 # {{ pillar['message_do_not_modify'] }}
 {%- set max_proc = salt['pillar.get']('mail:maxproc', 2) %}
-command[check_amavis_master]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u amavis -a 'amavisd (master)' -C amavisd
-command[check_amavis_child]=/usr/lib/nagios/plugins/check_procs -c {{ max_proc }}:{{ max_proc }} -u amavis -a 'amavisd (virgin child)' -C amavisd
-command[check_amavis_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 10024
+command[amavis_master]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u amavis -a 'amavisd (master)' -C amavisd
+command[amavis_child]=/usr/lib/nagios/plugins/check_procs -c {{ max_proc }}:{{ max_proc }} -u amavis -a 'amavisd (virgin child)' -C amavisd
+command[amavis_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 10024

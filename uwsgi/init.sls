@@ -10,6 +10,9 @@ include:
   - xml
   - python.dev
   - gsyslog
+{% if 'roundcube' in pillar %}
+  - uwsgi.php
+{% endif %}
 
 /etc/init/uwsgi.conf:
   file:

@@ -1,5 +1,5 @@
 {% set pguser = salt['pillar.get']('roundcube:pguser', 'roundcube') %}
-{% set pgdb = salt['pillar.get']('roundcube:pgdb', 'roundcubedb') %}
+{% set pgdb = salt['pillar.get']('roundcube:pgdb', 'roundcube') %}
 {% set version = "0.9.0" %}
 {% set roundcubedir = "/usr/local/roundcubemail-" + version %}
 

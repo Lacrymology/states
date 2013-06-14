@@ -419,13 +419,19 @@ define service {
  -#}
 
 {%- if 'dovecot' in pillar['monitoring']['states'] -%}
-{%- for daemon in ('', 'anvil', 'log', 'config') %}
+{%- set dovecot_checks = {
+    'procs': 'Master',
+    'anvil': 'Users connection tracker',
+    'log': 'Logger',
+    'config': 'Config daemon'
+} -%}
+{%- for check in dovecot_checks %}
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states']['dovecot'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     servicegroups {% for role in pillar['monitoring']['states']['dovecot'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description dovecot{% if daemon %}-{{ daemon }}-{% endif %}daemon
-    display_name Dovecot {% if daemon %}{{ daemon }} {% endif %}Daemon
-    check_command check_nrpe!dovecot{% if daemon %}_{{ daemon }}{% endif %}
+    service_description dovecot_{{ check }}
+    display_name Dovecot {{ dovecot_checks[check] }}
+    check_command check_nrpe!dovecot_{{ check }}
     use salt-service
 }
 {% endfor -%}
@@ -435,7 +441,7 @@ define service {
 define service {
     hostgroup_name {% for role in pillar['monitoring']['states']['dovecot'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     servicegroups {% for role in pillar['monitoring']['states']['dovecot'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
-    service_description dovecot_{{ port }}_port
+    service_description dovecot_port_{{ port }}
     display_name Dovecot {{ port|upper }} Port
     check_command check_nrpe!dovecot_port_{{ port }}
     use salt-service
@@ -715,7 +721,27 @@ define service {
 {#-
  State: postfix
  -#}
-{#- TODO: postfix -#}
+
+{%- if 'postfix' in pillar['monitoring']['states'] -%}
+{%- set postfix_checks = {
+    'postfix_master': 'Master',
+    'postfix_pickup': 'Local mail pickup',
+    'postfix_qmgr': 'Queue manager',
+    'postfix_port_spam_handler': 'Port SPAM handler',
+    'postfix_port_smtp': 'SMTP Port',
+    'postfix_port_smtps': 'SMTP over SSL Port',
+} -%}
+{%- for check in postfix_checks %}
+define service {
+    hostgroup_name {% for role in pillar['monitoring']['states']['postfix'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    servicegroups {% for role in pillar['monitoring']['states']['postfix'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description postfix_{{ check }}
+    display_name Postfix {{ postfix_checks[check] }}
+    check_command check_nrpe!postfix_{{ check }}
+    use salt-service
+}
+{% endfor -%}
+{%- endif -%}
 
 {#-
  State: postgresql.server

@@ -12,6 +12,18 @@ Recommended to open the following to all monitored hosts:
 - TCP 2003: carbon plaintext protocol
 - TCP 2004: carbon pickle protocol
 
+dovecot
+-------
+
+The IMAP/POP server need to get the following port open to anyone, based on your
+security requirements (don't want cleartext):
+
+- TCP 143: IMAP
+- TCP 110: POP3
+- TCP 993: IMAP over SSL
+- TCP 995: POP3 over SSL
+
+
 elasticsearch
 -------------
 
@@ -88,6 +100,14 @@ If the pillar ask NTP state to act as a NTP server, the following ports need to
 be open to all NTP clients:
 
 - UDP 123: NTP
+
+openldap
+--------
+
+SSL or not, SSL client need to be allowed to reach OpenLDAP server trough the
+following ports:
+
+- TCP 389: OpenLDAP
 
 pdnsd
 -----

@@ -26,7 +26,7 @@ server {
 
 {# web app logic #}
     server_name {% for hostname in pillar['roundcube']['hostnames'] -%}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
-		root {{ dir }};
+	root {{ dir }};
 
 {% for dir in ('skins',) %}
     location /{{ dir }}/ {
@@ -40,10 +40,10 @@ server {
 		try_files $uri $uri/ /index.html;
 	}
 
-  location ~ .php$ {
-		gzip off;
-    include uwsgi_params;
-    uwsgi_modifier1 14;
-    uwsgi_pass roundcube;
-	}
+    location ~ .php$ {
+        gzip off;
+        include uwsgi_params;
+        uwsgi_modifier1 14;
+        uwsgi_pass roundcube;
+    }
 }

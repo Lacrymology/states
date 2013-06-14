@@ -39,7 +39,7 @@ roundcubemail_archive:
     - require:
       - archive: roundcubemail_archive
 
-{{ roundcubedir}}/config/db.inc.php:
+{{ roundcubedir }}/config/db.inc.php:
   file:
     - managed
     - source: salt://roundcube/database.jinja2
@@ -54,7 +54,7 @@ roundcubemail_archive:
     - require:
       - archive: roundcubemail_archive
 
-{{ roundcubedir}}/config/main.inc.php:
+{{ roundcubedir }}/config/main.inc.php:
   file:
     - managed
     - source: salt://roundcube/config.jinja2

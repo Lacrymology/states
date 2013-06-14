@@ -6,6 +6,7 @@ include:
   - nginx.diamond
   - uwsgi.diamond
   - gsyslog.diamond
+  - postgresql.server.diamond
 
 roundcube_web_diamond_resource:
   file:

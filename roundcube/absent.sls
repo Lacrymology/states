@@ -1,16 +1,14 @@
-{% set pguser = salt['pillar.get']('roundcube:pguser', 'roundcube') %}
-{% set pgdb = salt['pillar.get']('roundcube:pgdb', 'roundcube') %}
 {% set version = "0.9.0" %}
 {% set roundcubedir = "/usr/local/roundcubemail-" + version %}
 
 remove_roundcube_pgsql:
   postgres_user:
     - absent
-    - name: {{ pguser }}
+    - name: roundcube
     - runas: postgres
   postgres_database:
     - absent
-    - name: {{ pgdb }}
+    - name: roundcube
     - runas: postgres
 
 php5-pgsql:

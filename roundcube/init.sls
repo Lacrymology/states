@@ -6,9 +6,6 @@ include:
 
 {% set version = "0.9.0" %}
 {% set roundcubedir = "/usr/local/roundcubemail-" + version %}
-{% set pguser = salt['pillar.get']('roundcube:pguser', 'roundcube') %}
-{% set pgpass = salt['pillar.get']('roundcube:pgpass') %}
-{% set pgdb = salt['pillar.get']('roundcube:pgdb', 'roundcubedb') %}
 
 php5-pgsql:
   pkg:
@@ -47,10 +44,6 @@ roundcubemail_archive:
     - makedirs: True
     - user: root
     - group: root
-    - context:
-      pguser: {{ pguser }}
-      pgpass: {{ pgpass }}
-      pgdb: {{ pgdb }}
     - require:
       - archive: roundcubemail_archive
 
@@ -103,15 +96,15 @@ roundcubemail_archive:
 roundcube_pgsql:
   postgres_user:
     - present
-    - name: {{ pguser }}
-    - password: {{ pgpass }}
+    - name: roundcube
+    - password: {{ pillar['roundcube']['password'] }}
     - runas: postgres
     - require:
       - service: postgresql
   postgres_database:
     - present
-    - name: {{ pgdb }}
-    - owner: {{ pguser }}
+    - name: roundcube
+    - owner: roundcube
     - runas: postgres
     - require:
       - postgres_user: roundcube_pgsql
@@ -119,8 +112,8 @@ roundcube_pgsql:
 roundcube_initial:
   cmd:
     - run
-    - name: psql -f {{ roundcubedir }}/SQL/postgres.initial.sql -d {{ pgdb }}
-    - unless: psql {{ pgdb }} -c 'select * from users'
+    - name: psql -f {{ roundcubedir }}/SQL/postgres.initial.sql -d roundcube
+    - unless: psql roundcube -c 'select * from users'
     - user: postgres
     - group: postgres
     - require:
@@ -130,8 +123,8 @@ roundcube_initial:
   module:
     - wait
     - name: postgres.owner_to
-    - dbname: {{ pgdb }}
-    - ownername: {{ pguser }}
+    - dbname: roundcube
+    - ownername: roundcube
     - runas: postgres
     - watch:
       - cmd: roundcube_initial

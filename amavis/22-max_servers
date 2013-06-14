@@ -1,2 +1,0 @@
-$max_servers = {{ pillar['mail']['maxproc'] }};      # number of pre-forked children
-

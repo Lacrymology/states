@@ -1,0 +1,3 @@
+# {{ pillar['message_do_not_modify'] }}
+command[check_freshclam]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u clamav -C freshclam -a '-d --quiet'
+command[check_clamav]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u clamav -C clamd

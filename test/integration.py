@@ -472,6 +472,12 @@ class Integration(BaseIntegration):
         """
         pass
 
+    def test_amavis(self):
+        self.top(['amavis'])
+
+    def test_amavis_clamav(self):
+        self.top(['amavis.clamav'])
+
     def test_apt(self):
         self.top(['apt'])
 
@@ -490,6 +496,9 @@ class Integration(BaseIntegration):
     def test_carbon(self):
         self.top(['carbon'])
 
+    def test_clamav(self):
+        self.top(['clamav'])
+
     def test_cron(self):
         self.top(['cron'])
 
@@ -498,6 +507,9 @@ class Integration(BaseIntegration):
 
     def test_denyhosts(self):
         self.top(['denyhosts'])
+
+    def test_dovecot(self):
+        self.top(['dovecot'])
 
     def test_diamond(self):
         self.top(['diamond'])
@@ -694,6 +706,9 @@ class IntegrationNRPE(BaseIntegration):
     Only Install NRPE states
     """
 
+    def test_amavis(self):
+        self.top(['amavis.nrpe'])
+
     def test_apt(self):
         self.top(['apt.nrpe'])
 
@@ -703,6 +718,9 @@ class IntegrationNRPE(BaseIntegration):
     def test_carbon(self):
         self.top(['carbon.nrpe'])
 
+    def test_clamav(self):
+        self.top(['clamav.nrpe'])
+
     def test_cron(self):
         self.top(['cron.nrpe'])
 
@@ -711,6 +729,9 @@ class IntegrationNRPE(BaseIntegration):
 
     def test_diamond(self):
         self.top(['diamond.nrpe'])
+
+    def test_dovecot(self):
+        self.top(['dovecot.nrpe'])
 
     def test_elasticsearch(self):
         self.top(['elasticsearch.nrpe'])
@@ -995,6 +1016,23 @@ class IntegrationFull(BaseIntegration):
         self.check_nrpe()
         self.check_gsyslog()
 
+    def test_amavis(self):
+        # TODO: add diamond
+        self.top(['amavis', 'amavis.nrpe'])
+        self.check_integration()
+        self.check_amavis()
+
+    def check_amavis(self):
+        self.run_check('check_amavis_master')
+        self.run_check('check_amavis_child')
+        self.run_check('check_amavis_port')
+
+    def test_amavis_clamav(self):
+        self.top(['clamav.amavis', 'clamav.nrpe', 'amavis.nrpe'])
+        self.check_integration()
+        self.check_amavis()
+        self.check_clamav()
+
     def test_apt(self):
         self.top(['apt', 'apt.nrpe'])
         self.check_integration()
@@ -1030,6 +1068,15 @@ class IntegrationFull(BaseIntegration):
         self.run_check('carbon_port_plaintext')
         self.run_check('carbon_port_pickle')
 
+    def test_clamav(self):
+        self.top(['clamav', 'clamav.nrpe'])
+        self.check_integration()
+        self.check_clamav()
+
+    def check_clamav(self):
+        self.run_check('check_freshclam')
+        self.run_check('check_clamav')
+
     def test_cron(self):
         self.top(['cron', 'cron.diamond', 'cron.nrpe'])
         self.check_integration()
@@ -1037,6 +1084,18 @@ class IntegrationFull(BaseIntegration):
 
     def check_cron(self):
         self.run_check('cron_procs')
+
+    def test_dovecot(self):
+        self.top(['dovecot', 'dovecot.nrpe'])
+        self.check_integration()
+        self.run_check('check_dovecot')
+        self.run_check('check_dovecot_anvil')
+        self.run_check('check_dovecot_log')
+        self.run_check('check_dovecot_config')
+        self.run_check('check_dovecot_imap_port')
+        self.run_check('check_dovecot_pop3_port')
+        self.run_check('check_dovecot_imaps_port')
+        self.run_check('check_dovecot_pop3s_port')
 
     def test_denyhosts(self):
         self.top(['denyhosts', 'denyhosts.diamond', 'denyhosts.nrpe'])

@@ -1,0 +1,9 @@
+# {{ pillar['message_do_not_modify'] }}
+{% set ssl = salt['pillar.get']('ldap:ssl', False) %}
+command[check_openldap]=/usr/lib/nagios/plugins/check_procs -u openldap -C slapd
+command[check_openldap_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 389
+{% if ssl %}
+command[check_openldap_base]=/usr/lib/nagios/plugins/check_ldap -H 127.0.0.1 -p 389 -b '{{ salt["pillar.get"]("ldap:suffix") }}' -T
+{% else %}
+command[check_openldap_base]=/usr/lib/nagios/plugins/check_ldap -H 127.0.0.1 -p 389 -b '{{ salt["pillar.get"]("ldap:suffix") }}'
+{% endif %}

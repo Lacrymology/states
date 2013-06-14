@@ -1,3 +1,4 @@
 # {{ pillar['message_do_not_modify'] }}
-$max_servers = {{ salt['pillar.get']('mail:maxproc', 2) }}; {#     # number of pre-forked children #}
+{#- number of pre-forked children #}
+$max_servers = {{ salt['pillar.get']('mail:maxproc', 2) }};
 

@@ -1415,6 +1415,22 @@ class IntegrationFull(BaseIntegration):
         self.top(['requests', 'requests.nrpe'])
         self.check_integration()
 
+    def test_roundcube(self):
+        self.top(['roundcube', 'roundcube.nrpe', 'roundcube.diamond'])
+        self.check_integration()
+        self.check_nginx()
+        self.check_uwsgi()
+        self.check_roundcube()
+
+    def check_roundcube(self):
+        self.run_check('roundcube_uwsgi_master')
+        self.run_check('roundcube_uwsgi_worker')
+        self.run_check('roundcube_uwsgi_ping')
+        self.run_check('nginx_roundcube_http')
+        self.run_check('nginx_roundcube_https')
+        self.run_check('nginx_roundcube_https_certificate')
+        self.run_check('roundcube_postgresql')
+
     def test_route53(self):
         self.top(['route53', 'route53.nrpe'])
         self.check_integration()

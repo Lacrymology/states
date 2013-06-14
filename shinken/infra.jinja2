@@ -810,6 +810,12 @@ define service {
 }
 {% endif -%}
 
+{% if 'roundcube' in pillar['monitoring']['states'] %}
+{{ nginx_instance('roundcube', 'roundcube') }}
+{{ postgresql_client('roundcube', 'roundcube') }}
+{{ uwsgi_instance('roundcube', 'roundcube') }}
+{% endif %}
+
 {#-
  State: salt.api
  -#}

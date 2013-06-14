@@ -27,6 +27,6 @@ uwsgi_require_for_php:
 /usr/lib/i386-linux-gnu/libphp5.so:
   file:
     - symlink
-    - target: /usr/lib/php5/libphp5-5.4.3-5uwsgi1.so
+    - target: /usr/lib/php5/libphp5.so
     - require:
       - pkg: uwsgi_require_for_php

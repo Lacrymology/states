@@ -1,4 +1,11 @@
 # {{ pillar['message_do_not_modify'] }}
 pip>=1.3.1
+
+{% if 'file_proxy' in pillar -%}
+    {% for p in ('Pyro-3.16', 'shinken-1.2.4') -%}
+{{ pillar['file_proxy'] }}/{{ '-'.join(p.split('-')[:-1]) }}/{{ p }}.tar.gz
+    {% endfor -%}
+{% else -%}
 {# 1.2.4 #}
 -e git+git://github.com/naparuba/shinken.git@5851f10b836017f1af778636964fcc296f13dc80#egg=shinken
+{% endif -%}

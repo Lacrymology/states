@@ -9,7 +9,7 @@ $rcmail_config = array();
  For examples see http:pear.php.net/manual/en/package.database.mdb2.intro-dsn.php
  currently supported db_providers: mysql, mysqli, pgsql, sqlite, mssql or sqlsrv
 -#}
-{% set dsn = 'pgsql:{0}:{1}@{2}/{3}'.format(pguser, pgpass, salt['pillar.get']('roundcube:pghost','127.0.0.1'), pgdb) %}
+{% set dsn = 'pgsql://{0}:{1}@{2}/{3}'.format(pguser, pgpass, salt['pillar.get']('roundcube:pghost','127.0.0.1'), pgdb) %}
 $rcmail_config['db_dsnw'] = '{{ dsn }}';
 {#
  postgres example: 'pgsql:roundcube:pass@localhost/roundcubemail';

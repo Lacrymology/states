@@ -2,9 +2,9 @@
 pip>=1.3.1
 
 {% if 'file_proxy' in pillar %}
-{% for p in ('greenlet', 'gevent', 'graypy', 'setproctitle', 'gsyslog') %}
--f {{ pillar['file_proxy'] }}/{{ p }}/{{ p }}.tar.gz
-{% endfor %}
+{% for p in ('greenlet-0.4.1', 'gevent-0.13.8', 'graypy-0.2.9', 'setproctitle-1.1.7', 'gsyslog-0.6.3') -%}
+{{ pillar['file_proxy'] }}/{{ '-'.join(p.split('-')[:-1]) }}/{{ p }}.tar.gz
+{% endfor -%}
 {% else %}
 -e git+git://github.com/bclermont/gsyslog.git#egg=gsyslog
 {% endif %}

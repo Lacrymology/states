@@ -249,7 +249,7 @@ class BaseIntegration(unittest.TestCase):
         'diamond.absent',
         'django.absent',
         'dovecot.absent',
-        'dovecot.agent.absent'
+        'dovecot.agent.absent',
         'elasticsearch.absent',
         'firewall.absent',
         'git.server.absent',

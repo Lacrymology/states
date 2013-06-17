@@ -12,11 +12,13 @@
     - mode: 444
     - template: jinja
 
-debconf-utils:
+{% for pkg in ('debconf-utils', 'python-apt', 'python-software-properties') %}
+{{ pkg }}:
   pkg:
     - installed
     - require:
       - cmd: apt_sources
+{% endfor %}
 
 {% set backup = '/etc/apt/sources.list.salt-backup' %}
 

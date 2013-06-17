@@ -31,8 +31,6 @@ salt-minion:
     - installed
     - names:
       - salt-minion
-      - python-software-properties
-      - debconf-utils
       - lsb-release
 {% if grains['virtual'] != 'openvzve' %}
       - pciutils
@@ -41,6 +39,8 @@ salt-minion:
     - require:
       - apt_repository: salt
       - cmd: apt_sources
+      - pkg: debconf-utils
+      - pkg: python-software-properties
   service:
     - running
     - enable: True

@@ -19,7 +19,7 @@ roundcubemail_archive:
   archive:
     - extracted
     - name: /usr/local/
-    - source: http://downloads.sourceforge.net/project/roundcubemail/roundcubemail/{{ version }}/roundcubemail-{{ version }}.tar.gz?r=&ts=1368775962&use_mirror=ncu
+    - source: http://jaist.dl.sourceforge.net/project/roundcubemail/roundcubemail/{{ version }}/roundcubemail-{{ version }}.tar.gz
     - source_hash: md5=843de3439886c2dddb0f09e9bb6a4d04
     - archive_format: tar
     - tar_options: z

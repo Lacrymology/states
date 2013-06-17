@@ -2,10 +2,6 @@ postfix:
   pkg:
     - purged
 
-/etc/mailname:
-  file:
-    - absent
-
 postfix-ldap:
   pkg:
     - purged

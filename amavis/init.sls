@@ -1,6 +1,7 @@
 include:
   - apt
   - spamassassin
+  - mail
 
 amavis:
   pkg:
@@ -8,6 +9,7 @@ amavis:
     - name: amavisd-new
     - require:
       - cmd: apt_sources
+      - file: /etc/mailname
   service:
     - running
     - watch:

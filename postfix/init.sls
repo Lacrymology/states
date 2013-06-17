@@ -2,15 +2,24 @@
 include:
   - dovecot.agent
   - apt
+  - mail
 {% if ssl %}
   - ssl
 {% endif %}
+
+apt-utils:
+  pkg:
+    - installed
+    - require:
+      - cmd: apt_sources
 
 postfix:
   pkg:
     - installed
     - require:
       - cmd: apt_sources
+      - file: /etc/mailname
+      - pkg: apt-utils
   service:
     - running
     - require:
@@ -37,14 +46,6 @@ postfix:
     - user: postfix
     - group: postfix
     - file_mode: 400
-    - require:
-      - pkg: postfix
-
-/etc/mailname:
-  file:
-    - managed
-    - source: salt://postfix/mailname.jinja2
-    - template: jinja
     - require:
       - pkg: postfix
 

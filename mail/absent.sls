@@ -1,0 +1,3 @@
+/etc/mailname:
+  file:
+    - absent

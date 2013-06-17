@@ -21,7 +21,7 @@ slapd:
   file:
     - managed
     - name: /etc/ldap/ldap.conf
-    - source: salt://openldap/ldap.jinja2
+    - source: salt://openldap/config.jinja2
     - template: jinja
 
 {% if ssl %}

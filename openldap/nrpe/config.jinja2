@@ -3,9 +3,8 @@
 command[openldap_procs]=/usr/lib/nagios/plugins/check_procs -u openldap -C slapd
 command[openldap_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 389
 {% if ssl %}
-command[openldap_base]=/usr/lib/nagios/plugins/check_ldap -H 127.0.0.1 -p 389 -b '{{ salt["pillar.get"]("ldap:suffix") }}' -T
+command[openldap_base]=/usr/lib/nagios/plugins/check_ldap -H 127.0.0.1 -p 389 -b '{{ salt["pillar.get"]("ldap:suffix") }}' -T -3
 {% else %}
-command[openldap_base]=/usr/lib/nagios/plugins/check_ldap -H 127.0.0.1 -p 389 -b '{{ salt["pillar.get"]("ldap:suffix") }}'
+command[openldap_base]=/usr/lib/nagios/plugins/check_ldap -H 127.0.0.1 -p 389 -b '{{ salt["pillar.get"]("ldap:suffix") }}' -3
 {% endif %}
 {# TODO: use /usr/lib/nagios/plugins/check_ldaps #}
-{# TODO: use /usr/lib/nagios/plugins/check_ldap #}

@@ -28,11 +28,15 @@ Salt-Minion Installation
 Then on the server run::
 
   cd /
-  tar -xvzf /whereis/copied/archive.tar.gz
+  tar -xvzf /tmp/archive.tar.gz
 
 Install minion::
 
   /root/salt/states/salt/minion/bootstrap.sh integration-[whatever]
+
+Quick shortcut:
+
+  cd /; tar -xzf /tmp/archive.tar.gz; /root/salt/states/salt/minion/bootstrap.sh integration
 
 Integration Tests
 -----------------

@@ -38,6 +38,11 @@ Quick shortcut:
 
   cd /; tar -xzf /tmp/archive.tar.gz; /root/salt/states/salt/minion/bootstrap.sh integration
 
+If you need to troubleshoot something between, you might ends with vim
+uninstalled, to install it run::
+
+  salt-call state.sls vim
+
 Integration Tests
 -----------------
 

@@ -1482,7 +1482,7 @@ class IntegrationFull(BaseIntegration):
         self.run_check('salt_master_port_publish')
         self.run_check('salt_master_port_ret')
 
-    def test_salt_minon(self):
+    def test_salt_minion(self):
         self.top(['salt.minion', 'salt.minion.nrpe', 'salt.minion.diamond'])
         self.check_integration()
         self.check_salt_minion()

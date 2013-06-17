@@ -126,6 +126,9 @@ group_list = None
 # list of users built after the initial cleanup, this is list is used
 # to compare subsequent cleanup to see if there is extra user
 user_list = None
+# content of /etc/salt/minion file, as salt.minion state overwrite it.
+# the file is reverted after all tests excuted
+minion_configuration = None
 
 logger = logging.getLogger()
 
@@ -154,16 +157,22 @@ def _sync_all():
 
 
 def tearDownModule():
-    global client
+    global client, minion_configuration
     logger.info("Install SSH Server to give access to host after tests.")
     client('state.sls', 'ssh.server')
+    logger.info("Revert /etc/salt/minion to original value.")
+    with open('/etc/salt/minion', 'w') as minion_fh:
+        minion_fh.write(minion_configuration)
 
 
 def setUpModule():
     """
     Prepare minion for tests, this is executed only once time.
     """
-    global client
+    global client, minion_configuration
+
+    with open('/etc/salt/minion', 'r') as minion_fh:
+        minion_configuration = minion_fh.read()
 
     try:
         if client('pkg_installed.exists'):
@@ -468,6 +477,12 @@ class IntegrationSimple(BaseIntegration):
     def test_django_nrpe(self):
         self.top(['django.nrpe'])
 
+    def test_uwsgi_php(self):
+        self.top(['uwsgi.php'])
+
+    def test_uwsgi_ruby(self):
+        self.top(['uwsgi.ruby'])
+
 
 class Integration(BaseIntegration):
     """
@@ -550,6 +565,9 @@ class Integration(BaseIntegration):
 
     def test_logrotate(self):
         self.top(['logrotate'])
+
+    def test_mail(self):
+        self.top(['mail'])
 
     def test_memcache(self):
         self.top(['memcache'])
@@ -634,6 +652,9 @@ class Integration(BaseIntegration):
 
     def test_salt_master(self):
         self.top(['salt.master'])
+
+    def test_salt_minion(self):
+        self.top(['salt.minion'])
 
     def test_salt_mirror(self):
         self.top(['salt.mirror'])
@@ -940,6 +961,9 @@ class IntegrationDiamondBase(BaseIntegration):
     def test_salt_master(self):
         self.top(['salt.master.diamond'])
 
+    def test_salt_minion(self):
+        self.top(['salt.minion.diamond'])
+
     def test_sentry(self):
         self.top(['sentry.diamond'])
 
@@ -1037,8 +1061,8 @@ class IntegrationFull(BaseIntegration):
             self.fail(os.linesep.join(self._check_failed))
 
     def sleep(self, reason, seconds=60):
-        logger.debug("Sleep %d seconds to let %s time to start", reason,
-                     seconds)
+        logger.debug("Sleep %d seconds to let %s time to start", seconds,
+                     reason)
         time.sleep(seconds)
 
     def run_check(self, check_name):
@@ -1065,6 +1089,7 @@ class IntegrationFull(BaseIntegration):
     def test_amavis(self):
         self.top(['amavis', 'amavis.nrpe', 'amavis.diamond'])
         self.check_integration()
+        self.sleep('Amavis', 30)
         self.check_amavis()
 
     def check_amavis(self):
@@ -1073,7 +1098,7 @@ class IntegrationFull(BaseIntegration):
         self.run_check('amavis_port')
 
     def test_amavis_clamav(self):
-        self.top(['clamav.amavis', 'clamav.nrpe', 'amavis.nrpe',
+        self.top(['amavis.clamav', 'clamav.nrpe', 'amavis.nrpe',
                   'amavis.diamond', 'amavis.nrpe'])
         self.check_integration()
         self.check_amavis()
@@ -1456,6 +1481,14 @@ class IntegrationFull(BaseIntegration):
         self.run_check('salt_master_procs')
         self.run_check('salt_master_port_publish')
         self.run_check('salt_master_port_ret')
+
+    def test_salt_minon(self):
+        self.top(['salt.minion', 'salt.minion.nrpe', 'salt.minion.diamond'])
+        self.check_integration()
+        self.check_salt_minion()
+
+    def check_salt_minion(self):
+        self.run_check('salt_minion_procs')
 
     def test_salt_mirror(self):
         self.top(['salt.mirror', 'salt.mirror.diamond', 'salt.mirror.nrpe'])

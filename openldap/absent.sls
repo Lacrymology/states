@@ -3,7 +3,6 @@ slapd:
     - purged
     - pkgs:
       - slapd
-      - ldap-utils
     - require:
       - service: slapd
   service:
@@ -11,6 +10,14 @@ slapd:
   file:
     - absent
     - name: /etc/ldap/ldap.conf
+    - require:
+      - pkg: slapd
+
+{# as long as https://github.com/saltstack/salt/issues/5572 isn't fixed
+   the following is required: #}
+ldap-utils:
+  pkg:
+    - purged
     - require:
       - pkg: slapd
 

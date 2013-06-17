@@ -1451,9 +1451,9 @@ class IntegrationFull(BaseIntegration):
         self.run_check('roundcube_uwsgi_master')
         self.run_check('roundcube_uwsgi_worker')
         self.run_check('roundcube_uwsgi_ping')
-        self.run_check('nginx_roundcube_http')
-        self.run_check('nginx_roundcube_https')
-        self.run_check('nginx_roundcube_https_certificate')
+        self.run_check('roundcube_nginx_http')
+        self.run_check('roundcube_nginx_https')
+        self.run_check('roundcube_nginx_https_certificate')
         self.run_check('roundcube_postgresql')
 
     def test_route53(self):

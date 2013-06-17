@@ -1,10 +1,13 @@
-libphp5_embed_repo:
-  pkgrepo:
-    - managed
-    - ppa: l-mierzwa/lucid-php5
-    - name: deb http://ppa.launchpad.net/l-mierzwa/lucid-php5/ubuntu precise main
+include:
+  - apt
+  - uwsgi
 
-uwsgi_require_for_php:
+php-dev:
+  apt_repository:
+    - ubuntu_ppa
+    - user: l-mierzwa
+    - name: lucid-php5
+    - key_id: 67E15F46
   pkg:
     - installed
     - pkgs:
@@ -22,11 +25,24 @@ uwsgi_require_for_php:
       - php5-dev
       - php-config
     - require:
-      - pkgrepo: libphp5_embed_repo
+      - apt_repository: php-dev
 
+{% if grains['cpuarch'] == 'i686' %}
 /usr/lib/i386-linux-gnu/libphp5.so:
   file:
     - symlink
     - target: /usr/lib/php5/libphp5.so
     - require:
-      - pkg: uwsgi_require_for_php
+      - pkg: php-dev
+{% endif %}
+
+extend:
+  uwsgi_build:
+    file:
+      - require:
+        - pkg: php-dev
+{% if grains['cpuarch'] == 'i686' %}
+    cmd:
+      - watch:
+        - file: /usr/lib/i386-linux-gnu/libphp5.so
+{% endif %}

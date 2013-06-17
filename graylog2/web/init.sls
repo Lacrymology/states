@@ -16,7 +16,7 @@ include:
   - ruby
   - mongodb
   - nginx
-  - uwsgi
+  - uwsgi.ruby
   - graylog2
   - web
   - build

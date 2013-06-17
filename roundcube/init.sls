@@ -2,7 +2,7 @@ include:
   - nginx
   - apt
   - postgresql.server
-  - uwsgi
+  - uwsgi.php
 
 {% set version = "0.9.0" %}
 {% set roundcubedir = "/usr/local/roundcubemail-" + version %}

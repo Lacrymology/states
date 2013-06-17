@@ -1,18 +1,19 @@
 {#
  Install uWSGI Web app server.
+ This build come with only Python support.
+
+ To turn on Ruby support, include uwsgi.ruby instead of this file.
+ For PHP include uwsgi.php instead.
+ You can include both uwsgi.php and uwsgi.ruby.
  #}
 include:
   - git
   - nginx
   - pip
-  - ruby
   - web
   - xml
   - python.dev
   - gsyslog
-{% if 'roundcube' in pillar %}
-  - uwsgi.php
-{% endif %}
 
 /etc/init/uwsgi.conf:
   file:
@@ -45,6 +46,8 @@ uwsgi_build:
     - group: root
     - mode: 440
     - source: salt://uwsgi/buildconf.jinja2
+    - context:
+      python: True
     - require:
       - git: uwsgi_build
   cmd:
@@ -56,7 +59,6 @@ uwsgi_build:
       - pkg: xml-dev
       - git: uwsgi_build
       - file: uwsgi_build
-      - pkg: ruby
       - pkg: python-dev
 
 uwsgi_sockets:

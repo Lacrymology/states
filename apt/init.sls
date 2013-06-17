@@ -35,14 +35,7 @@ apt_sources:
       - file: /etc/apt/apt.conf.d/99local
 {% if salt['file.file_exists'](backup) %}
       - file: apt_sources_backup
-
-apt_sources_backup:
-  file:
-    - rename
-    - name: {{ backup }}
-    - source: /etc/apt/sources.list
 {% endif %}
-
 {#
   cmd.wait is used instead of:
 
@@ -58,6 +51,14 @@ apt_sources_backup:
     - watch:
       - file: apt_sources
       - file: /etc/apt/apt.conf.d/99local
+
+{% if salt['file.file_exists'](backup) %}
+apt_sources_backup:
+  file:
+    - rename
+    - name: {{ backup }}
+    - source: /etc/apt/sources.list
+{% endif %}
 
 {# remove packages that requires physical hardware on virtual machines #}
 {% if grains['virtual'] == 'xen' or grains['virtual'] == 'Parallels' or grains['virtual'] == 'openvzve' %}

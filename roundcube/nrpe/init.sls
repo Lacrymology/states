@@ -59,7 +59,7 @@ include:
       - pkg: nagios-nrpe-server
     - context:
       deployment: roundcube
-      password: {{ pillar['graphite']['web']['db']['password'] }}
+      password: {{ pillar['roundcube']['password'] }}
 
 extend:
   nagios-nrpe-server:

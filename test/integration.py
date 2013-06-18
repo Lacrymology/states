@@ -160,6 +160,8 @@ def tearDownModule():
     global client, minion_configuration
     logger.info("Install SSH Server to give access to host after tests.")
     client('state.sls', 'ssh.server')
+    logger.info("Install sudo to give a way to switch to root")
+    client('state.sls', 'sudo')
     logger.info("Revert /etc/salt/minion to original value.")
     with open('/etc/salt/minion', 'w') as minion_fh:
         minion_fh.write(minion_configuration)
@@ -1046,6 +1048,11 @@ class IntegrationFull(BaseIntegration):
         BaseIntegration.setUp(self)
         self._check_failed = []
         self._check_total = {}
+        self._previous_top = []
+
+    def top(self, states):
+        self._previous_top = states
+        return BaseIntegration.top(self, states)
 
     def tearDown(self):
         global client
@@ -1055,8 +1062,9 @@ class IntegrationFull(BaseIntegration):
             if check not in executed_checks:
                 skipped.append(check)
         if skipped:
-            logger.warning("The following NRPE checks weren't executed: %s",
-                           ','.join(skipped))
+            logger.warning(
+                "For top '%s', the following NRPE checks weren't executed: %s",
+                ','.join(self._previous_top), ','.join(skipped))
         if self._check_failed:
             self.fail(os.linesep.join(self._check_failed))
 

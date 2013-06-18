@@ -32,11 +32,16 @@ uris = {{ salt['pillar.get']('ldap:host', 'ldap://127.0.0.1') }}
 #dnpass =
 
 # Use TLS to connect to the LDAP server.
-#}
+-#}
+{%- ldap_ssl = salt['pillar.get']('ldap:ssl', False) -%}
+{%- if ldap_ssl %}
 tls = yes
 tls_ca_cert_file = /etc/ssl/{{ salt['pillar.get']('ldap:ssl') }}/ca.crt
+{%- else %}
+tls = false
+{%- endif -%}
 
-{#
+{#-
 #tls_ca_cert_dir =
 #tls_cipher_suite =
 # TLS cert/key is used only if LDAP server requires a client certificate.

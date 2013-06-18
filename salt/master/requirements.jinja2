@@ -1,0 +1,9 @@
+# {{ pillar['message_do_not_modify'] }}
+{% if 'file_proxy' in pillar %}
+{{ pillar['file_proxy'] }}/smmap/0.8.2.tar.gz
+{{ pillar['file_proxy'] }}/async/0.6.1.tar.gz
+{{ pillar['file_proxy'] }}/gitdb/0.5.4.tar.gz
+{{ pillar['file_proxy'] }}/GitPython/0.3.2.RC1.tar.gz
+{% else %}
+GitPython
+{% endif %}

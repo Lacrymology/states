@@ -1,3 +1,8 @@
 # {{ pillar['message_do_not_modify'] }}
+{% if 'file_proxy' in pillar %}
+{{ pillar['file_proxy'] }}/nagiosplugin/1.0.0.tar.gz
+{{ pillar['file_proxy'] }}/argparse/1.2.1.tar.gz
+{% else %}
 nagiosplugin==1.0.0
 argparse
+{% endif %}

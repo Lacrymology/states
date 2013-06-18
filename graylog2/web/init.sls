@@ -92,7 +92,7 @@ graylog2-web:
     - extracted
     - name: /usr/local/
 {% if 'file_proxy' in pillar %}
-    - source: {{ pillar['file_proxy'] }}/graylog2-web-interface/graylog2-web-interface-{{ version }}.tar.gz
+    - source: {{ pillar['file_proxy'] }}/graylog2-web-interface/{{ version }}.tar.gz
 {% else %}
     - source: http://download.graylog2.org/graylog2-web-interface/graylog2-web-interface-{{ version }}.tar.gz
 {% endif %}
@@ -117,7 +117,7 @@ graylog2-web:
     - group: www-data
     - mode: 440
     - source: salt://graylog2/web/uwsgi.jinja2
-    - context: 
+    - context:
       version: {{ version }}
     - require:
       - user: web
@@ -165,7 +165,7 @@ change_graylog2_web_dir_permission:
     - mode: 440
     - require:
       - pkg: nginx
-    - context: 
+    - context:
       version: {{ version }}
 
 extend:

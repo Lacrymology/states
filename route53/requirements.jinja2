@@ -1,5 +1,12 @@
 # {{ pillar['message_do_not_modify'] }}
+{% if 'file_proxy' in pillar -%}
+{{ pillar['file_proxy'] }}/lxml/3.2.1.tar.gz
+{{ pillar['file_proxy'] }}/requests/0.14.2.tar.gz
+{{ pillar['file_proxy'] }}/pytz/2013b.tar.gz
+{{ pillar['file_proxy'] }}/route53/1.0.tar.gz
+{% else -%}
 lxml
 requests==0.14.2
 route53==1.0
 pytz
+{% endif -%}

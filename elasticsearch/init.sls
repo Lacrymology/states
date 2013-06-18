@@ -79,7 +79,7 @@ elasticsearch:
     - name: elasticsearch
     - version: {{ version }}
 {% if 'file_proxy' in pillar %}
-    - source: {{ pillar['file_proxy'] }}/elasticsearch/elasticsearch-{{ version }}.deb
+    - source: {{ pillar['file_proxy'] }}/elasticsearch/{{ version }}.deb
 {% else %}
     - source: http://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-{{ version }}.deb
 {% endif %}

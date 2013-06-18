@@ -1,61 +1,54 @@
 # {{ pillar['message_do_not_modify'] }}
-pip>=1.3.1
-
 {% if 'file_proxy' in pillar %}
-{% set eggs = (
-'python-dateutil-1.5',
-'cssutils-0.9.10',
-'BeautifulSoup-3.2.1',
-'pytz-2013b',
-'billiard-2.7.3.28',
-'anyjson-0.3.3',
-'amqp-1.0.11',
-'kombu-2.5.10',
-'celery-3.0.19',
-'Django-1.4.5',
-'django-celery-3.0.17',
-'django-crispy-forms-1.3.1',
-'django-indexer-0.3.0',
-'django-paging-0.2.5',
-'six-1.3.0',
-'django-picklefield-0.3.0',
-'django-templatetag-sugar-0.1',
-'gunicorn-0.17.4',
-'logan-0.5.6',
-'mock-1.0.1',
-'pynliner-0.5.0',
-'raven-3.3.9',
-'simplejson-3.3.0',
-'South-0.8.1',
-'httpagentparser-1.2.2',
-'httplib2-0.8',
-'oauth2-1.5.211',
-'python-openid-2.2.5',
-'django-social-auth-0.7.23',
-'django-social-auth-trello-1.0.3',
-'sentry-5.0.21',
-'psycopg2-2.4.5',
-'boto-2.6.0',
-'django-ses-0.4.1',
-'ipython-0.13.2') %}
-
-{% for p in eggs -%}
-{{ pillar['file_proxy'] }}/{{ '-'.join(p.split('-')[:-1]) }}/{{ p }}.tar.gz
-{% endfor -%}
+{{ pillar['file_proxy'] }}/pip/1.3.1.tar.gz
+{{ pillar['file_proxy'] }}/python-dateutil/1.5.tar.gz
+{{ pillar['file_proxy'] }}/cssutils/0.9.10.tar.gz
+{{ pillar['file_proxy'] }}/BeautifulSoup/3.2.1.tar.gz
+{{ pillar['file_proxy'] }}/pytz/2013b.tar.gz
+{{ pillar['file_proxy'] }}/billiard/2.7.3.28.tar.gz
+{{ pillar['file_proxy'] }}/anyjson/0.3.3.tar.gz
+{{ pillar['file_proxy'] }}/amqp/1.0.11.tar.gz
+{{ pillar['file_proxy'] }}/kombu/2.5.10.tar.gz
+{{ pillar['file_proxy'] }}/celery/3.0.19.tar.gz
+{{ pillar['file_proxy'] }}/Django/1.4.5.tar.gz
+{{ pillar['file_proxy'] }}/django-celery/3.0.17.tar.gz
+{{ pillar['file_proxy'] }}/django-crispy-forms/1.3.1.tar.gz
+{{ pillar['file_proxy'] }}/django-indexer/0.3.0.tar.gz
+{{ pillar['file_proxy'] }}/django-paging/0.2.5.tar.gz
+{{ pillar['file_proxy'] }}/six/1.3.0.tar.gz
+{{ pillar['file_proxy'] }}/django-picklefield/0.3.0.tar.gz
+{{ pillar['file_proxy'] }}/django-templatetag-sugar/0.1.tar.gz
+{{ pillar['file_proxy'] }}/gunicorn/0.17.4.tar.gz
+{{ pillar['file_proxy'] }}/logan/0.5.6.tar.gz
+{{ pillar['file_proxy'] }}/mock/1.0.1.tar.gz
+{{ pillar['file_proxy'] }}/pynliner/0.5.0.tar.gz
+{{ pillar['file_proxy'] }}/raven/3.3.9.tar.gz
+{{ pillar['file_proxy'] }}/simplejson/3.3.0.tar.gz
+{{ pillar['file_proxy'] }}/South/0.8.1.tar.gz
+{{ pillar['file_proxy'] }}/httpagentparser/1.2.2.tar.gz
+{{ pillar['file_proxy'] }}/httplib2/0.8.tar.gz
+{{ pillar['file_proxy'] }}/oauth2/1.5.211.tar.gz
+{{ pillar['file_proxy'] }}/python-openid/2.2.5.tar.gz
+{{ pillar['file_proxy'] }}/django-social-auth/0.7.23.tar.gz
+{{ pillar['file_proxy'] }}/django-social-auth-trello/1.0.3.tar.gz
+{{ pillar['file_proxy'] }}/sentry/5.0.21.tar.gz
+{{ pillar['file_proxy'] }}/psycopg2/2.4.5.tar.gz
+{{ pillar['file_proxy'] }}/boto/2.6.0.tar.gz
+{{ pillar['file_proxy'] }}/django-ses/0.4.1.tar.gz
+{{ pillar['file_proxy'] }}/ipython/0.13.2.tar.gz
 
 {% if 'graylog2_address' in pillar %}
-{% set p = 'graypy-0.2.9' %}
-{{ pillar['file_proxy'] }}/{{ '-'.join(p.split('-')[:-1]) }}/{{ p }}.tar.gz
+{{ pillar['file_proxy'] }}/graypy/0.2.9.tar.gz
 {% endif %}
 
 {% if 'graphite_address' in pillar %}
-{% for p in ('statsd-1.0.0', 'django-statsd-mozilla-0.3.8.7', ) -%}
-{{ pillar['file_proxy'] }}/{{ '-'.join(p.split('-')[:-1]) }}/{{ p }}.tar.gz
-{% endfor -%}
+{{ pillar['file_proxy'] }}/statsd/1.0.0.tar.gz
+{{ pillar['file_proxy'] }}/django-statsd-mozilla/0.3.8.7.tar.gz
 {% endif %}
 
 
 {% else %}
+pip>=1.3.1
 Django==1.4.5
 sentry<5.1
 psycopg2==2.4.5

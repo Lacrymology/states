@@ -22,7 +22,7 @@ graylog2-server_upstart:
     - group: root
     - mode: 600
     - source: salt://graylog2/server/upstart.jinja2
-    - context: 
+    - context:
       version: {{ version }}
 
 {#graylog2-server_logrotate:#}
@@ -54,7 +54,7 @@ graylog2-server:
     - extracted
     - name: /usr/local/
 {% if 'file_proxy' in pillar %}
-    - source: {{ pillar['file_proxy'] }}/graylog2-server/graylog2-server-{{ version }}.tar.gz
+    - source: {{ pillar['file_proxy'] }}/graylog2-server/{{ version }}.tar.gz
 {% else %}
     - source: http://download.graylog2.org/graylog2-server/graylog2-server-{{ version }}.tar.gz
 {% endif %}
@@ -70,7 +70,7 @@ graylog2-server:
     - group: root
     - mode: 440
     - source: salt://graylog2/server/config.jinja2
-    - context: 
+    - context:
       version: {{ version }}
   pkg:
     - latest
@@ -116,7 +116,7 @@ graylog2_sentry_output_plugin:
     - managed
     - name: {{ server_root_dir }}/plugin/outputs/com.bitflippers.sentryoutput.output.SentryOutput_gl2plugin.jar
 {% if 'file_proxy' in pillar %}
-    - source: {{ pillar['file_proxy'] }}/graylog2-plugin-sentry-output/graylog2-plugin-sentry-output-0.11.jar
+    - source: {{ pillar['file_proxy'] }}/graylog2-plugin-sentry-output/0.11.jar
 {% else %}
     - source: http://saltinwound.org/graylog2-plugin-sentry-output-0.11.jar
 {% endif %}
@@ -133,7 +133,7 @@ graylog2_sentry_transport_plugin:
     - managed
     - name: {{ server_root_dir }}/plugin/transports/com.bitflippers.sentrytransport.transport.SentryTransport_gl2plugin.jar
 {% if 'file_proxy' in pillar %}
-    - source: {{ pillar['file_proxy'] }}/graylog2-plugin-sentry-transport/graylog2-plugin-sentry-transport-0.11-1.jar
+    - source: {{ pillar['file_proxy'] }}/graylog2-plugin-sentry-transport/0.11-1.jar
 {% else %}
     - source: http://saltinwound.org/graylog2-plugin-sentry-transport-0.11-1.jar
 {% endif %}

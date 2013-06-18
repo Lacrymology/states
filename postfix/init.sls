@@ -37,6 +37,8 @@ postfix:
   file:
     - directory
     - user: dovecot-agent
+    - require:
+      - user: dovecot-agent
 
 /etc/postfix:
   file:
@@ -48,6 +50,7 @@ postfix:
     - file_mode: 400
     - require:
       - pkg: postfix
+      - user: dovecot-agent
 
 postfix-ldap:
   pkg:

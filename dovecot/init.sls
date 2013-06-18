@@ -53,6 +53,7 @@ dovecot:
     - group: dovecot
     - require:
       - pkg: dovecot
+      - user: dovecot-agent
 
 /etc/dovecot/dovecot-ldap.conf.ext:
   file:

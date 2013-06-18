@@ -485,6 +485,9 @@ class IntegrationSimple(BaseIntegration):
     def test_uwsgi_ruby(self):
         self.top(['uwsgi.ruby'])
 
+    def test_salt_minion(self):
+        self.top(['salt.minion'])
+
 
 class Integration(BaseIntegration):
     """
@@ -654,9 +657,6 @@ class Integration(BaseIntegration):
 
     def test_salt_master(self):
         self.top(['salt.master'])
-
-    def test_salt_minion(self):
-        self.top(['salt.minion'])
 
     def test_salt_mirror(self):
         self.top(['salt.mirror'])
@@ -1153,6 +1153,9 @@ class IntegrationFull(BaseIntegration):
     def test_carbon(self):
         self.top(['carbon', 'carbon.nrpe', 'carbon.diamond'])
         self.check_integration()
+        self.check_carbon()
+
+    def check_carbon(self):
         self.run_check('carbon_procs')
         self.run_check('carbon_port_plaintext')
         self.run_check('carbon_port_pickle')
@@ -1183,10 +1186,10 @@ class IntegrationFull(BaseIntegration):
         self.run_check('dovecot_anvil')
         self.run_check('dovecot_log')
         self.run_check('dovecot_config')
-        self.run_check('dovecot_imap_port')
-        self.run_check('dovecot_pop3_port')
-        self.run_check('dovecot_imaps_port')
-        self.run_check('dovecot_pop3s_port')
+        self.run_check('dovecot_port_imap')
+        self.run_check('dovecot_port_pop3')
+        self.run_check('dovecot_port_imaps')
+        self.run_check('dovecot_port_pop3s')
         self.check_postfix()
         self.check_openldap()
 
@@ -1276,7 +1279,6 @@ class IntegrationFull(BaseIntegration):
         self.check_nginx()
         self.check_uwsgi()
         self.sleep('Elasticsearch')
-        self.check_elasticsearch()
         self.check_elasticsearch_nginx()
         self.check_graylog2()
         self.check_cron()

@@ -1217,6 +1217,9 @@ class IntegrationFull(BaseIntegration):
         self.check_nginx()
         self.sleep('Elasticsearch')
         self.check_elasticsearch()
+        self.check_elasticsearch_nginx()
+
+    def check_elasticsearch_nginx(self):
         self.run_check('elasticsearch_procs')
         self.run_check('elasticsearch_nginx_http')
         self.run_check('elasticsearch_nginx_https')
@@ -1230,6 +1233,7 @@ class IntegrationFull(BaseIntegration):
     def test_git_server(self):
         self.top(['git.server', 'git.server.nrpe', 'git.server.diamond'])
         self.check_integration()
+        self.check_ssh_server()
 
     def test_git(self):
         self.top(['git', 'git.nrpe'])
@@ -1269,7 +1273,15 @@ class IntegrationFull(BaseIntegration):
         self.check_uwsgi()
         self.sleep('Elasticsearch')
         self.check_elasticsearch()
+        self.check_elasticsearch_nginx()
         self.check_graylog2()
+        self.check_cron()
+        self.check_graylog2_elasticsearch()
+
+    def check_graylog2_elasticsearch(self):
+        self.run_check('graylog2_elasticsearch_port_http')
+        self.run_check('graylog2_elasticsearch_port_transport')
+        self.run_check('graylog2_elasticsearch_cluster')
 
     def check_graylog2(self):
         self.run_check('graylog2_procs')
@@ -1357,6 +1369,7 @@ class IntegrationFull(BaseIntegration):
 
     def test_openldap(self):
         self.top(['openldap', 'openldap.nrpe', 'openldap.diamond'])
+        self.check_integration()
         self.check_openldap()
 
     def check_openldap(self):
@@ -1454,6 +1467,7 @@ class IntegrationFull(BaseIntegration):
         self.check_nginx()
         self.check_uwsgi()
         self.check_roundcube()
+        self.check_postgresql_server()
 
     def check_roundcube(self):
         self.run_check('roundcube_uwsgi_master')
@@ -1478,7 +1492,13 @@ class IntegrationFull(BaseIntegration):
         self.check_integration()
         self.check_nginx()
         self.check_salt_master()
+        self.check_salt_api()
+
+    def check_salt_api(self):
         self.run_check('salt_api_procs')
+        self.run_check('salt_api_nginx_https')
+        self.run_check('salt_api_nginx_https_certificate')
+        self.run_check('salt_api_nginx_http,nginx_worker')
 
     def test_salt_master(self):
         self.top(['salt.master', 'salt.master.nrpe', 'salt.master.diamond'])
@@ -1501,6 +1521,7 @@ class IntegrationFull(BaseIntegration):
     def test_salt_mirror(self):
         self.top(['salt.mirror', 'salt.mirror.diamond', 'salt.mirror.nrpe'])
         self.check_integration()
+        self.check_nginx()
 
     def test_screen(self):
         self.top(['screen', 'screen.nrpe'])
@@ -1540,10 +1561,16 @@ class IntegrationFull(BaseIntegration):
                   'shinken.broker.nrpe'])
         self.check_integration()
         self.check_shinken_broker()
+        self.check_nginx()
 
     def check_shinken_broker(self):
+        self.run_check('shinken_broker_web')
+        self.run_check('shinken_broker_http')
         self.run_check('shinken_broker_procs')
         self.run_check('shinken_broker_port')
+        self.run_check('shinken_nginx_https_certificate')
+        self.run_check('shinken_nginx_https')
+        self.run_check('shinken_nginx_http')
 
     def test_shinken_poller(self):
         self.top(['shinken.poller', 'shinken.poller.nrpe',
@@ -1593,8 +1620,8 @@ class IntegrationFull(BaseIntegration):
         self.check_shinken()
 
     def check_shinken(self):
-        self.run_check('shinken_broker_web')
-        self.run_check('shinken_broker_http')
+        # self.run_check('shinken_broker_web')
+        # self.run_check('shinken_broker_http')
         client('cmd.run', '/usr/local/bin/shinken-ctl.sh stop')
         client('cmd.run', '/usr/local/bin/shinken-ctl.sh start')
 
@@ -1631,6 +1658,7 @@ class IntegrationFull(BaseIntegration):
     def test_tmpreaper(self):
         self.top(['tmpreaper', 'tmpreaper.diamond', 'tmpreaper.nrpe'])
         self.check_integration()
+        self.check_cron()
 
     def test_tools(self):
         self.top(['tools', 'tools.nrpe'])
@@ -1640,6 +1668,7 @@ class IntegrationFull(BaseIntegration):
         self.top(['uwsgi', 'uwsgi.nrpe', 'uwsgi.diamond'])
         self.check_integration()
         self.check_uwsgi()
+        self.check_nginx()
 
     def check_uwsgi(self):
         self.run_check('uwsgi_emperor')

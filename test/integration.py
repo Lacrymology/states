@@ -1393,6 +1393,7 @@ class IntegrationFull(BaseIntegration):
     def test_postfix(self):
         self.top(['postfix', 'postfix.diamond', 'postfix.nrpe',
                   'openldap', 'openldap.diamond', 'openldap.nrpe'])
+        self.check_integration()
         self.check_openldap()
         self.check_postfix()
 

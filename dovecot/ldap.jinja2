@@ -33,10 +33,10 @@ uris = {{ salt['pillar.get']('ldap:host', 'ldap://127.0.0.1') }}
 
 # Use TLS to connect to the LDAP server.
 -#}
-{%- ldap_ssl = salt['pillar.get']('ldap:ssl', False) -%}
+{%- set ldap_ssl = salt['pillar.get']('ldap:ssl', False) -%}
 {%- if ldap_ssl %}
 tls = yes
-tls_ca_cert_file = /etc/ssl/{{ salt['pillar.get']('ldap:ssl') }}/ca.crt
+tls_ca_cert_file = /etc/ssl/{{ ldap_ssl }}/ca.crt
 {%- else %}
 tls = false
 {%- endif -%}

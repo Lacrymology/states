@@ -21,4 +21,4 @@ dovecot-core:
   file:
     - absent
     - require:
-      - pkg: dovecot
+      - pkg: dovecot-core

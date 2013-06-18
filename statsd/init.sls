@@ -21,8 +21,6 @@ statsd:
   virtualenv:
     - manage
     - name: /usr/local/statsd
-    - template: jinja
-    - requirements: salt://statsd/requirements.jinja2
     - require:
       - module: virtualenv
   service:
@@ -32,4 +30,27 @@ statsd:
       - service: gsyslog
     - watch:
       - file: statsd
+      - virtualenv: statsd
+  module:
+    - wait
+    - name: pip.install
+    - pkgs: ''
+    - requirements: /usr/local/statsd/salt-requirements.txt
+    - bin_env: /usr/local/statsd
+    - require:
+      - virtualenv: statsd
+    - watch:
+      - pkg: python-dev
+      - file: statsd_requirements
+
+statsd_requirements:
+  file:
+    - managed
+    - name: /usr/local/statsd/salt-requirements.txt
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - source: salt://statsd/requirements.jinja2
+    - require:
       - virtualenv: statsd

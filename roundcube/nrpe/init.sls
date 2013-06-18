@@ -45,7 +45,12 @@ include:
       deployment: roundcube
       domain_name: {{ pillar['roundcube']['hostnames'][0] }}
       http_uri: /
-      https: {{ pillar['roundcube']['ssl']|default(False) }}
+{%- if pillar['roundcube']['ssl']|default(False) %}
+      https: True
+    {%- if pillar['roundcube']['ssl_redirect']|default(False) %}
+      http_result: 301 Moved Permanently
+    {%- endif -%}
+{%- endif %}
 
 /etc/nagios/nrpe.d/postgresql-roundcube.cfg:
   file:

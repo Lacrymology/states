@@ -1440,7 +1440,7 @@ class IntegrationFull(BaseIntegration):
         self.check_rabbitmq()
 
     def check_rabbitmq(self):
-        self.check_nginx_instnace('rabbitmq')
+        self.check_nginx_instance('rabbitmq')
         self.run_check('rabbitmq_procs')
         self.run_check('rabbitmq_port_management')
         self.run_check('rabbitmq_port_console')

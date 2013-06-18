@@ -1,0 +1,7 @@
+# {{ pillar['message_do_not_modify'] }}
+{% if 'file_proxy' in pillar %}
+{{ pillar['file_proxy'] }}/simplejson/3.3.0.tar.gz
+{{ pillar['file_proxy'] }}/uwsgitop/0.6.2.tar.gz
+{% else %}
+uwsgitop
+{% endif %}

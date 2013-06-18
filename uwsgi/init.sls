@@ -23,19 +23,6 @@ include:
     - mode: 440
     - source: salt://uwsgi/upstart.jinja2
 
-uwsgitop:
-  pip:
-    - installed
-    - require:
-      - module: pip
-{% if 'file_proxy' in pillar %}
-    - name: {{ pillar['file_proxy'] }}/uwsgitop/0.6.2.tar.gz
-
-{{ pillar['file_proxy'] }}/simplejson/3.3.0.tar.gz:
-  pip:
-    - installed
-{% endif %}
-
 uwsgi_build:
   git:
     - latest

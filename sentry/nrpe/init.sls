@@ -11,6 +11,7 @@ include:
   - python.dev.nrpe
   - apt.nrpe
   - gsyslog.nrpe
+  - memcache.nrpe
 {% if pillar['sentry']['ssl']|default(False) %}
   - ssl.nrpe
 {% endif %}

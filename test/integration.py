@@ -1094,6 +1094,16 @@ class IntegrationFull(BaseIntegration):
         self.check_nrpe()
         self.check_gsyslog()
 
+    def check_uwsgi_instance(self, deployment):
+        self.run_check(deployment + '_uwsgi_master')
+        self.run_check(deployment + '_uwsgi_worker')
+        self.run_check(deployment + '_uwsgi_ping')
+
+    def check_nginx_instance(self, deployment):
+        self.run_check(deployment + '_nginx_http')
+        self.run_check(deployment + '_nginx_https')
+        self.run_check(deployment + '_nginx_https_certificate')
+
     def test_amavis(self):
         self.top(['amavis', 'amavis.nrpe', 'amavis.diamond'])
         self.check_integration()
@@ -1221,9 +1231,7 @@ class IntegrationFull(BaseIntegration):
 
     def check_elasticsearch_nginx(self):
         self.run_check('elasticsearch_procs')
-        self.run_check('elasticsearch_nginx_http')
-        self.run_check('elasticsearch_nginx_https')
-        self.run_check('elasticsearch_nginx_https_certificate')
+        self.check_nginx_instance('elasticsearch')
 
     def test_firewall(self):
         self.top(['firewall', 'firewall.gsyslog', 'firewall.nrpe'])
@@ -1253,12 +1261,8 @@ class IntegrationFull(BaseIntegration):
         self.check_graphite()
 
     def check_graphite(self):
-        self.run_check('graphite_uwsgi_master')
-        self.run_check('graphite_uwsgi_worker')
-        self.run_check('graphite_uwsgi_ping')
-        self.run_check('graphite_nginx_http')
-        self.run_check('graphite_nginx_https')
-        self.run_check('graphite_nginx_https_certificate')
+        self.check_uwsgi_instance('graphite')
+        self.check_nginx_instance('graphite')
         self.run_check('graphite_postgresql')
 
     def test_graylog2(self):
@@ -1286,12 +1290,8 @@ class IntegrationFull(BaseIntegration):
     def check_graylog2(self):
         self.run_check('graylog2_procs')
         self.run_check('graylog2_incoming_logs')
-        self.run_check('graylog2_uwsgi_master')
-        self.run_check('graylog2_uwsgi_worker')
-        self.run_check('graylog2_uwsgi_ping')
-        self.run_check('graylog2_nginx_http')
-        self.run_check('graylog2_nginx_https')
-        self.run_check('graylog2_nginx_https_certificate')
+        self.check_uwsgi_instance('graylog2')
+        self.check_nginx_instance('graylog2')
 
     def test_gsyslog(self):
         self.top(['gsyslog', 'gsyslog.diamond', 'gsyslog.nrpe'])
@@ -1440,10 +1440,8 @@ class IntegrationFull(BaseIntegration):
         self.check_rabbitmq()
 
     def check_rabbitmq(self):
+        self.check_nginx_instnace('rabbitmq')
         self.run_check('rabbitmq_procs')
-        self.run_check('rabbitmq_nginx_http')
-        self.run_check('rabbitmq_nginx_https')
-        self.run_check('rabbitmq_nginx_https_certificate')
         self.run_check('rabbitmq_port_management')
         self.run_check('rabbitmq_port_console')
         self.run_check('rabbitmq_port_amqp')
@@ -1471,12 +1469,8 @@ class IntegrationFull(BaseIntegration):
         self.check_postgresql_server()
 
     def check_roundcube(self):
-        self.run_check('roundcube_uwsgi_master')
-        self.run_check('roundcube_uwsgi_worker')
-        self.run_check('roundcube_uwsgi_ping')
-        self.run_check('roundcube_nginx_http')
-        self.run_check('roundcube_nginx_https')
-        self.run_check('roundcube_nginx_https_certificate')
+        self.check_uwsgi_instance('roundcube')
+        self.check_nginx_instance('roundcube')
         self.run_check('roundcube_postgresql')
 
     def test_route53(self):
@@ -1497,9 +1491,7 @@ class IntegrationFull(BaseIntegration):
 
     def check_salt_api(self):
         self.run_check('salt_api_procs')
-        self.run_check('salt_api_nginx_https')
-        self.run_check('salt_api_nginx_https_certificate')
-        self.run_check('salt_api_nginx_http,nginx_worker')
+        self.check_nginx_instance('salt_api')
 
     def test_salt_master(self):
         self.top(['salt.master', 'salt.master.nrpe', 'salt.master.diamond'])
@@ -1539,12 +1531,8 @@ class IntegrationFull(BaseIntegration):
         self.check_sentry()
 
     def check_sentry(self):
-        self.run_check('sentry_uwsgi_master')
-        self.run_check('sentry_uwsgi_worker')
-        self.run_check('sentry_uwsgi_ping')
-        self.run_check('sentry_nginx_http')
-        self.run_check('sentry_nginx_https')
-        self.run_check('sentry_nginx_https_certificate')
+        self.check_uwsgi_instance('sentry')
+        self.check_nginx_instance('sentry')
         self.run_check('sentry_postgresql')
 
     def test_shinken_arbiter(self):
@@ -1569,9 +1557,7 @@ class IntegrationFull(BaseIntegration):
         self.run_check('shinken_broker_http')
         self.run_check('shinken_broker_procs')
         self.run_check('shinken_broker_port')
-        self.run_check('shinken_nginx_https_certificate')
-        self.run_check('shinken_nginx_https')
-        self.run_check('shinken_nginx_http')
+        self.check_nginx_instance('shinken')
 
     def test_shinken_poller(self):
         self.top(['shinken.poller', 'shinken.poller.nrpe',

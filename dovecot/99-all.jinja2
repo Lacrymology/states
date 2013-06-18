@@ -20,7 +20,7 @@ ssl = true
 ssl_cert = </etc/ssl/{{ ssl }}/ca.crt
 ssl_key = </etc/ssl/{{ ssl }}/server.pem
 {%- else %}
-ssl = false
+ssl = no
 {%- endif %}
 userdb {
   args = /etc/dovecot/dovecot-ldap.conf.ext

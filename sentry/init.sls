@@ -16,6 +16,7 @@ include:
   - web
   - python.dev
   - apt
+  - memcache
   - gsyslog
 {% if pillar['sentry']['ssl']|default(False) %}
   - ssl
@@ -149,6 +150,7 @@ sentry-migrate-fake:
     - mode: 440
     - source: salt://sentry/uwsgi.jinja2
     - require:
+      - service: memcached
       - service: uwsgi_emperor
       - cmd: sentry_settings
       - service: gsyslog
@@ -158,6 +160,7 @@ sentry-migrate-fake:
     - m_name: /etc/uwsgi/sentry.ini
     - require:
       - file: /etc/uwsgi/sentry.ini
+      - service: memcached
     - watch:
       - file: sentry
       - cmd: sentry_settings
@@ -174,6 +177,11 @@ sentry-migrate-fake:
       - pkg: nginx
 
 extend:
+  memcached:
+    service:
+      - watch:
+        - module: sentry
+        - cmd: sentry_settings
   nginx:
     service:
       - watch:

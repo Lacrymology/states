@@ -222,12 +222,15 @@ graphite_settings:
       - service: gsyslog
       - module: graphite-web
       - pip: graphite-web
+      - service: memcached
   module:
     - wait
     - name: file.touch
     - require:
       - file: /etc/uwsgi/graphite.ini
     - m_name: /etc/uwsgi/graphite.ini
+    - require:
+      - service: memcached
     - watch:
       - module: graphite_settings
       - file: graphite_wsgi
@@ -266,6 +269,8 @@ extend:
     service:
       - watch:
         - module: graphite_settings
+        - file: graphite_settings
+        - module: graphite-web
   nginx:
     service:
       - watch:

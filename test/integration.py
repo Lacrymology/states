@@ -1225,7 +1225,7 @@ class IntegrationFull(BaseIntegration):
     def test_firewall(self):
         self.top(['firewall', 'firewall.gsyslog', 'firewall.nrpe'])
         self.check_integration()
-        self.run_check('firewall')
+        self.run_check('firewall_rules')
 
     def test_git_server(self):
         self.top(['git.server', 'git.server.nrpe', 'git.server.diamond'])
@@ -1252,9 +1252,9 @@ class IntegrationFull(BaseIntegration):
         self.run_check('graphite_uwsgi_master')
         self.run_check('graphite_uwsgi_worker')
         self.run_check('graphite_uwsgi_ping')
-        self.run_check('nginx_graphite_http')
-        self.run_check('nginx_graphite_https')
-        self.run_check('nginx_graphite_https_certificate')
+        self.run_check('graphite_nginx_http')
+        self.run_check('graphite_nginx_https')
+        self.run_check('graphite_nginx_https_certificate')
         self.run_check('graphite_postgresql')
 
     def test_graylog2(self):

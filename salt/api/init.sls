@@ -41,19 +41,34 @@ user_{{ user }}:
     - require:
       - pkg: salt-master
 
+cherrypy:
+  file:
+    - managed
+    - name: {{ opts['cachedir'] }}/salt-cherrypy-requirements.txt
+    - source: salt://salt/api/requirements.jinja2
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+  module:
+    - wait
+    - name: pip.install
+    - pkgs: ''
+    - requirements: {{ opts['cachedir'] }}/salt-cherrypy-requirements.txt
+    - watch:
+      - file: cherrypy
+    - require:
+      - module: pip
+
+
 salt-api:
   pkg:
     - installed
     - require:
       - pkg: salt-master
-      - pip: salt-api
+      - module: cherrypy
       - apt_repository: salt
       - cmd: apt_sources
-  pip:
-    - installed
-    - name: cherrypy
-    - require:
-      - module: pip
   file:
     - managed
     - name: /etc/init/salt-api.conf
@@ -69,7 +84,7 @@ salt-api:
       - service: gsyslog
     - watch:
       - file: salt-api
-      - pip: salt-api
+      - module: cherrypy
       - git: salt-ui
       - file: /etc/salt/master.d/ui.conf
 

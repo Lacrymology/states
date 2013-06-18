@@ -486,6 +486,8 @@ class IntegrationSimple(BaseIntegration):
         self.top(['uwsgi.ruby'])
 
     def test_salt_minion(self):
+        # well it do have a .absent counterpart, but we don't want it to
+        # be executed
         self.top(['salt.minion'])
 
 

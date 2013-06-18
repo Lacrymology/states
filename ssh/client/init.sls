@@ -49,9 +49,10 @@ openssh-client:
 {% if pillar['deployment_key_source']|default(False) %}
       - file: {{ root_home }}/.ssh/id_{{ pillar['deployment_key_source']['type'] }}
 
-{{ root_home }}/.ssh/id_{{ pillar['deployment_key_source']['type'] }}:
+root_ssh_private_key:
   file:
     - managed
+    - name: {{ root_home }}/.ssh/id_{{ pillar['deployment_key_source']['type'] }}
     - source: {{ pillar['deployment_key_source']['source'] }}
     - user: root
     - group: root

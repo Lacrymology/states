@@ -85,17 +85,34 @@ salt-api:
     - watch:
       - file: salt-api
       - module: cherrypy
-      - git: salt-ui
       - file: /etc/salt/master.d/ui.conf
+{% if 'file_proxy' in pillar %}
+      - archive: salt-ui
+{% else %}
+      - git: salt-ui
+{% endif %}
 
 salt-ui:
+{% if 'file_proxy' in pillar %}
+  archive:
+    - extracted
+    - name: /usr/local
+    - source: {{ pillar['file_proxy'] }}/salt-ui/6e8eee0477fdb0edaa9432f1beb5003aeda56ae6.tar.gz
+    - source_hash: md5=2b7e581d0134c5f5dc29b5fca7a2df5b
+    - archive_format: tar
+    - tar_options: z
+    - if_missing: /usr/local/salt-ui/
+{% else %}
   git:
     - latest
-    - rev: {{ pillar['salt_master']['ui'] }}
+    {# - rev: {{ pillar['salt_master']['ui'] }} #}
+    - rev: 6e8eee0477fdb0edaa9432f1beb5003aeda56ae6
     - name: git://github.com/saltstack/salt-ui.git
     - target: /usr/local/salt-ui/
     - require:
       - pkg: git
+{% endif %}
+
   file:
     - managed
     - name: /etc/nginx/conf.d/salt.conf

@@ -1,9 +1,48 @@
-{#
- Install Carbon, daemon that store on disk statistics database used by Graphite
- to render graphics.
- #}
+{#-
+Carbon Daemon
+=============
 
-{# TODO: send logs to GELF #}
+Install Carbon, daemon that store on disk statistics database used by Graphite
+to render graphics.
+
+Mandatory Pillar
+----------------
+
+message_do_not_modify: Warning message to not modify file.
+
+graphite:
+  carbon:
+    instances:
+      - a
+  retentions:
+    - three_month:
+      name: default_1min_for_1_month
+      pattern: .*
+      retentions: 60s:30d
+
+graphite:carbon:instances: list of instance to deploy. (leave 'a')
+graphite:retentions: list of data retention rules, see the following for
+    details:
+    http://graphite.readthedocs.org/en/latest/config-carbon.html#storage-schemas-conf
+
+Optional Pillar
+---------------
+
+graphite:
+  file-max: 65535
+  carbon:
+    interface: 0.0.0.0
+shinken_pollers:
+  - 192.168.1.1
+
+graphite:file-max: maximum of open files for the daemon. Default: not used.
+graphite:carbon:interface: Network interface to bind the Carbon daemon.
+    Default: 0.0.0.0.
+shinken_pollers: IP address of monitoring poller that check this server.
+    Default: not used.
+-#}
+
+{#- TODO: send logs to GELF -#}
 include:
   - graphite.common
   - pip

@@ -1,8 +1,27 @@
-{#
- Configure APT minimal configuration to get Debian packages from repositories.
- #}
+{#-
+APT Configuration
+=================
 
-{# 99 prefix is to make sure the config file is the last one to be applied #}
+Configure APT minimal configuration to get Debian packages from repositories.
+
+Mandatory Pillar
+----------------
+
+apt_source: salt://path/to/apt.template.jinja2
+message_do_not_modify: Warning message to not modify file
+
+apt_source: Path to get the /etc/apt/sources.list template.
+
+Optional Pillar
+---------------
+
+proxy_server: False
+
+proxy_server: If True, the specific HTTP proxy server (without authentication)
+    is used to download .deb and reach APT server. Default: False.
+-#}
+
+{#- 99 prefix is to make sure the config file is the last one to be applied -#}
 /etc/apt/apt.conf.d/99local:
   file:
     - managed

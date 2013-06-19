@@ -2,19 +2,20 @@
  Nagios NRPE check for Graphite
 #}
 include:
-  - nrpe
-  - postgresql.nrpe
-  - postgresql.server.nrpe
-  - virtualenv.nrpe
+  - apt.nrpe
   - graphite.common.nrpe
-  - uwsgi.nrpe
+  - gsyslog.nrpe
   - nginx.nrpe
   - memcache.nrpe
+  - nginx.nrpe
+  - nrpe
   - pip.nrpe
-  - apt.nrpe
+  - postgresql.nrpe
+  - postgresql.server.nrpe
   - python.dev.nrpe
   - statsd.nrpe
-  - gsyslog.nrpe
+  - uwsgi.nrpe
+  - virtualenv.nrpe
 {% if pillar['graphite']['web']['ssl']|default(False) %}
   - ssl.nrpe
 {% endif %}

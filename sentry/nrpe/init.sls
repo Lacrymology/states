@@ -2,22 +2,23 @@
  Nagios NRPE check for Sentry
 #}
 include:
-  - nrpe
-  - postgresql.server.nrpe
-  - virtualenv.nrpe
-  - uwsgi.nrpe
-  - nginx.nrpe
-  - pip.nrpe
-  - python.dev.nrpe
   - apt.nrpe
   - gsyslog.nrpe
+  - nginx.nrpe
   - memcache.nrpe
+  - nginx.nrpe
+  - nrpe
+  - pip.nrpe
+  - python.dev.nrpe
+  - postgresql.server.nrpe
 {% if pillar['sentry']['ssl']|default(False) %}
   - ssl.nrpe
 {% endif %}
 {% if 'graphite_address' in pillar %}
   - statsd.nrpe
 {% endif %}
+  - uwsgi.nrpe
+  - virtualenv.nrpe
 
 /etc/nagios/nrpe.d/sentry.cfg:
   file:

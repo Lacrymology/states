@@ -3,11 +3,12 @@
 #}
 include:
   - diamond
-  - postgresql.server.diamond
-  - uwsgi.diamond
-  - nginx.diamond
-  - statsd
   - gsyslog.diamond
+  - memcache.diamond
+  - nginx.diamond
+  - postgresql.server.diamond
+  - statsd
+  - uwsgi.diamond
 
 uwsgi_diamond_sentry_resources:
   file:

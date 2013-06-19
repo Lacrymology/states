@@ -122,7 +122,6 @@ roundcube_initial:
   cmd:
     - wait
     - name: psql -f {{ roundcubedir }}/SQL/postgres.initial.sql -d roundcube
-    - unless: psql roundcube -c 'select * from users'
     - user: postgres
     - group: postgres
     - require:

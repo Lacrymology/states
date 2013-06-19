@@ -1,5 +1,4 @@
 # {{ pillar['message_do_not_modify'] }}
-{% set diamond = pillar['diamond']|default({}) %}
 [server]
 
 # Handlers for published metrics.
@@ -113,11 +112,7 @@ enabled = True
 [[NetworkCollector]]
 
 enabled = True
-{% if 'interfaces' not in diamond %}
-interfaces = eth0, lo
-{% else %}
-interfaces = {% for interface in diamond['interfaces'] %}{{ interface }}{% if not loop.last %}, {% endif %}{% endfor %}
-{% endif %}
+interfaces = {% for interface in salt['pillar.get']('diamond:interfaces', ('eth0', 'lo')) %}{{ interface }}{% if not loop.last %}, {% endif %}{% endfor %}
 
 {% for host in ping_hosts|default({}) -%}
 {%- if loop.first %}

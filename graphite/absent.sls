@@ -1,29 +1,6 @@
 {#
  Uninstall the web interface component of graphite
  #}
-{#
-{% if pillar['destructive_absent']|default(False) and salt['pillar.get']('graphite:web:db:name', False) %}
-include:
-  - postgresql.server
-
-graphite-database:
-  postgres_user:
-    - absent
-    - name: {{ pillar['graphite']['web']['db']['name'] }}
-    - runas: postgres
-    - require:
-      - service: postgresql
-      - postgres_database: graphite-database
-      - file: /etc/uwsgi/graphite.ini
-  postgres_database:
-    - present
-    - name: {{ pillar['graphite']['web']['db']['name'] }}
-    - runas: postgres
-    - require:
-      - service: postgresql
-      - file: /etc/uwsgi/graphite.ini
-{% endif %}
-#}
 
 /etc/uwsgi/graphite.ini:
   file:

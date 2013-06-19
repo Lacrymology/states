@@ -15,20 +15,20 @@ Mandatory Pillar
 elasticsearch:
   cluster:
     name: xxx
-  nodes:
-    server-alpha:
-      _network:
-        public: 204.168.1.1
-        private: 192.168.1.1
-      graylog2.server:
-        name: graylog2
-        port: 9400
-        http: false
-    server-beta:
-      _network:
-        public: 204.168.1.1
-        private: 192.168.1.1
-      elasticsearch: {}
+    nodes:
+      server-alpha:
+        _network:
+          public: 204.168.1.1
+          private: 192.168.1.1
+        graylog2.server:
+          name: graylog2
+          port: 9400
+          http: false
+      server-beta:
+        _network:
+          public: 204.168.1.1
+          private: 192.168.1.1
+        elasticsearch: {}
   hostnames:
     - search.example.com
 message_do_not_modify: Warning message to not modify file.

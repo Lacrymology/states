@@ -17,9 +17,9 @@ TIME_ZONE = 'UTC'
 DOCUMENTATION_URL = "http://graphite.readthedocs.org/"
 
 # Logging
-LOG_RENDERING_PERFORMANCE = {{ pillar['debug'] }}
-LOG_CACHE_PERFORMANCE = {{ pillar['debug'] }}
-LOG_METRIC_ACCESS = {{ pillar['debug'] }}
+LOG_RENDERING_PERFORMANCE = {{ pillar['graphite']['web']['debug']|default(False) }}
+LOG_CACHE_PERFORMANCE = {{ pillar['graphite']['web']['debug']|default(False) }}
+LOG_METRIC_ACCESS = {{ pillar['graphite']['web']['debug']|default(False) }}
 
 # Enable full debug page display on exceptions (Internal Server Error pages)
 #DEBUG = True
@@ -153,7 +153,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'USER': '{{ pillar['graphite']['web']['db']['username'] }}',
         'PASSWORD': '{{ pillar['graphite']['web']['db']['password'] }}',
-        'HOST': '{{ pillar['graphite']['web']['db']['host'] }}',
+{#        'HOST': '{{ pillar['graphite']['web']['db']['host'] }}',#}
+        'HOST': '127.0.0.1',
         'PORT': ''
     }
 }
@@ -207,7 +208,7 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': False
         },
-{% if not pillar['debug'] %}
+{% if not pillar['graphite']['web']['debug']|default(False) %}
 {% for logger in ('cache', 'rendering', 'metric_access') %}
         '{{ logger }}': {
             'handlers': ['sentry', 'syslog'{% if 'graylog2_address' in pillar %}, 'gelf'{% endif %}],

@@ -127,7 +127,7 @@ diamond:
     - context:
       ping_hosts:
     {%- endif %}
-        - {{ host }}
+        {{ host }}: {{ pillar['diamond']['ping'][host] }}
 {%- endfor %}
   service:
     - running

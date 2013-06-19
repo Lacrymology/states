@@ -13,17 +13,17 @@
    /users/
 #}
 include:
-  - ruby
+  - build
+  - graylog2
+  - gsyslog
   - mongodb
   - nginx
-  - uwsgi.ruby
-  - graylog2
-  - web
-  - build
-  - gsyslog
+  - ruby
 {% if pillar['graylog2']['ssl']|default(False) %}
   - ssl
 {% endif %}
+  - uwsgi.ruby
+  - web
 
 {% set version = '0.11.0' %}
 {% set checksum = 'md5=35d20002dbc7f192a1adbcd9b53b2732' %}

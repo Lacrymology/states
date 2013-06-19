@@ -2,16 +2,16 @@
  Install a graylog2 web Nagios NRPE checks
 #}
 include:
-  - nrpe
-  - ruby.nrpe
-  - mongodb.nrpe
-  - nginx.nrpe
-  - uwsgi.nrpe
   - build.nrpe
   - gsyslog.nrpe
+  - mongodb.nrpe
+  - nginx.nrpe
+  - nrpe
+  - ruby.nrpe
 {% if pillar['graylog2']['ssl']|default(False) %}
   - ssl.nrpe
 {% endif %}
+  - uwsgi.nrpe
 
 /etc/nagios/nrpe.d/graylog2-web.cfg:
   file:

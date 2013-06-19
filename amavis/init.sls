@@ -1,3 +1,20 @@
+{#-
+Amavis: A Email Virus Scanner
+=============================
+
+Mandatory Pillar
+----------------
+
+mail:
+  mailname: somehost.fqdn.com
+
+Optional Pillar
+---------------
+
+mail:
+  maxproc: 2
+
+-#}
 include:
   - apt
   - spamassassin

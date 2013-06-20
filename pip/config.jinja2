@@ -1,7 +1,10 @@
 # {{ pillar['message_do_not_modify'] }}
 [global]
 
+{%- if 'files_archive' not in pillar %}
 download-cache = /var/cache/pip
-{% if pillar['proxy_server']|default(False) %}
+{%- endif -%}
+
+{%- if pillar['proxy_server']|default(False) %}
 proxy = {{ pillar['proxy_server'] }}
-{% endif %}
+{%- endif -%}

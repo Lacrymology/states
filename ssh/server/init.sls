@@ -30,8 +30,7 @@ openssh-server:
       - pkg: openssh-server
       - file: openssh-server
 
-{% if 'root_keys' in pillar %}
-{% for key in pillar['root_keys'] %}
+{% for key in salt['pillar.get']('root_keys', []) -%}
 ssh_server_root_{{ key }}:
   ssh_auth:
     - present
@@ -39,4 +38,3 @@ ssh_server_root_{{ key }}:
     - user: root
     - enc: {{ pillar['root_keys'][key] }}
 {% endfor -%}
-{%- endif %}

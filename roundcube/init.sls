@@ -33,8 +33,8 @@ roundcube:
   archive:
     - extracted
     - name: /usr/local/
-{%- if 'file_proxy' in pillar %}
-    - source: {{ pillar['file_proxy'] }}/roundcubemail/{{ version }}.tar.gz
+{%- if 'files_archive' in pillar %}
+    - source: {{ pillar['files_archive'] }}/roundcubemail/{{ version }}.tar.gz
 {%- else %}
     - source: http://jaist.dl.sourceforge.net/project/roundcubemail/roundcubemail/{{ version }}/roundcubemail-{{ version }}.tar.gz
 {%- endif %}

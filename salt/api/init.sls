@@ -85,18 +85,18 @@ salt-api:
       - file: salt-api
       - module: salt-api-requirements
       - file: /etc/salt/master.d/ui.conf
-{%- if 'file_proxy' in pillar %}
+{%- if 'files_archive' in pillar %}
       - archive: salt-ui
 {%- else %}
       - git: salt-ui
 {%- endif %}
 
 salt-ui:
-{%- if 'file_proxy' in pillar %}
+{%- if 'files_archive' in pillar %}
   archive:
     - extracted
     - name: /usr/local
-    - source: {{ pillar['file_proxy'] }}/salt-ui/6e8eee0477fdb0edaa9432f1beb5003aeda56ae6.tar.gz
+    - source: {{ pillar['files_archive'] }}/salt-ui/6e8eee0477fdb0edaa9432f1beb5003aeda56ae6.tar.gz
     - source_hash: md5=2b7e581d0134c5f5dc29b5fca7a2df5b
     - archive_format: tar
     - tar_options: z

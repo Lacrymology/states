@@ -1,7 +1,7 @@
 # {{ pillar['message_do_not_modify'] }}
 
-{%- if 'file_proxy' in pillar %}
-{{ pillar['file_proxy'] }}/postfix-stats/0.3.1.tar.gz
+{%- if 'files_archive' in pillar %}
+{{ pillar['files_archive'] }}/postfix-stats/0.3.1.tar.gz
 {%- else %}
 postfix-stats==0.3.1
 {%- endif -%}

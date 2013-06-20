@@ -147,8 +147,8 @@ elasticsearch:
     - installed
     - name: elasticsearch
     - version: {{ version }}
-{%- if 'file_proxy' in pillar %}
-    - source: {{ pillar['file_proxy'] }}/elasticsearch/{{ version }}.deb
+{%- if 'files_archive' in pillar %}
+    - source: {{ pillar['files_archive'] }}/elasticsearch/{{ version }}.deb
 {%- else %}
     - source: http://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-{{ version }}.deb
 {%- endif %}

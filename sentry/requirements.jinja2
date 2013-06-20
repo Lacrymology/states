@@ -1,50 +1,50 @@
 # {{ pillar['message_do_not_modify'] }}
 
-{%- if 'file_proxy' in pillar %}
-{{ pillar['file_proxy'] }}/amqp/1.0.11.tar.gz
-{{ pillar['file_proxy'] }}/anyjson/0.3.3.tar.gz
-{{ pillar['file_proxy'] }}/BeautifulSoup/3.2.1.tar.gz
-{{ pillar['file_proxy'] }}/billiard/2.7.3.28.tar.gz
-{{ pillar['file_proxy'] }}/boto/2.6.0.tar.gz
-{{ pillar['file_proxy'] }}/celery/3.0.19.tar.gz
-{{ pillar['file_proxy'] }}/cssutils/0.9.10.tar.gz
-{{ pillar['file_proxy'] }}/Django/1.4.5.tar.gz
-{{ pillar['file_proxy'] }}/django-celery/3.0.17.tar.gz
-{{ pillar['file_proxy'] }}/django-crispy-forms/1.3.1.tar.gz
-{{ pillar['file_proxy'] }}/django-indexer/0.3.0.tar.gz
-{{ pillar['file_proxy'] }}/django-paging/0.2.5.tar.gz
-{{ pillar['file_proxy'] }}/django-picklefield/0.3.0.tar.gz
+{%- if 'files_archive' in pillar %}
+{{ pillar['files_archive'] }}/amqp/1.0.11.tar.gz
+{{ pillar['files_archive'] }}/anyjson/0.3.3.tar.gz
+{{ pillar['files_archive'] }}/BeautifulSoup/3.2.1.tar.gz
+{{ pillar['files_archive'] }}/billiard/2.7.3.28.tar.gz
+{{ pillar['files_archive'] }}/boto/2.6.0.tar.gz
+{{ pillar['files_archive'] }}/celery/3.0.19.tar.gz
+{{ pillar['files_archive'] }}/cssutils/0.9.10.tar.gz
+{{ pillar['files_archive'] }}/Django/1.4.5.tar.gz
+{{ pillar['files_archive'] }}/django-celery/3.0.17.tar.gz
+{{ pillar['files_archive'] }}/django-crispy-forms/1.3.1.tar.gz
+{{ pillar['files_archive'] }}/django-indexer/0.3.0.tar.gz
+{{ pillar['files_archive'] }}/django-paging/0.2.5.tar.gz
+{{ pillar['files_archive'] }}/django-picklefield/0.3.0.tar.gz
     {%- if pillar['sentry']['email']['method'] == "amazon_ses" %}
-{{ pillar['file_proxy'] }}/django-ses/0.4.1.tar.gz
+{{ pillar['files_archive'] }}/django-ses/0.4.1.tar.gz
     {%- endif %}
-{{ pillar['file_proxy'] }}/django-social-auth-trello/1.0.3.tar.gz
-{{ pillar['file_proxy'] }}/django-social-auth/0.7.23.tar.gz
-{{ pillar['file_proxy'] }}/django-templatetag-sugar/0.1.tar.gz
+{{ pillar['files_archive'] }}/django-social-auth-trello/1.0.3.tar.gz
+{{ pillar['files_archive'] }}/django-social-auth/0.7.23.tar.gz
+{{ pillar['files_archive'] }}/django-templatetag-sugar/0.1.tar.gz
     {%- if 'graylog2_address' in pillar %}
-{{ pillar['file_proxy'] }}/graypy/0.2.9.tar.gz
+{{ pillar['files_archive'] }}/graypy/0.2.9.tar.gz
     {%- endif %}
-{{ pillar['file_proxy'] }}/gunicorn/0.17.4.tar.gz
-{{ pillar['file_proxy'] }}/httpagentparser/1.2.2.tar.gz
-{{ pillar['file_proxy'] }}/httplib2/0.8.tar.gz
-{{ pillar['file_proxy'] }}/ipython/0.13.2.tar.gz
-{{ pillar['file_proxy'] }}/kombu/2.5.10.tar.gz
-{{ pillar['file_proxy'] }}/logan/0.5.6.tar.gz
-{{ pillar['file_proxy'] }}/mock/1.0.1.tar.gz
-{{ pillar['file_proxy'] }}/oauth2/1.5.211.tar.gz
-{{ pillar['file_proxy'] }}/pip/1.3.1.tar.gz
-{{ pillar['file_proxy'] }}/psycopg2/2.4.5.tar.gz
-{{ pillar['file_proxy'] }}/pynliner/0.5.0.tar.gz
-{{ pillar['file_proxy'] }}/python-dateutil/1.5.tar.gz
-{{ pillar['file_proxy'] }}/python-openid/2.2.5.tar.gz
-{{ pillar['file_proxy'] }}/pytz/2013b.tar.gz
-{{ pillar['file_proxy'] }}/raven/3.3.9.tar.gz
-{{ pillar['file_proxy'] }}/sentry/5.0.21.tar.gz
-{{ pillar['file_proxy'] }}/simplejson/3.3.0.tar.gz
-{{ pillar['file_proxy'] }}/six/1.3.0.tar.gz
-{{ pillar['file_proxy'] }}/South/0.8.1.tar.gz
+{{ pillar['files_archive'] }}/gunicorn/0.17.4.tar.gz
+{{ pillar['files_archive'] }}/httpagentparser/1.2.2.tar.gz
+{{ pillar['files_archive'] }}/httplib2/0.8.tar.gz
+{{ pillar['files_archive'] }}/ipython/0.13.2.tar.gz
+{{ pillar['files_archive'] }}/kombu/2.5.10.tar.gz
+{{ pillar['files_archive'] }}/logan/0.5.6.tar.gz
+{{ pillar['files_archive'] }}/mock/1.0.1.tar.gz
+{{ pillar['files_archive'] }}/oauth2/1.5.211.tar.gz
+{{ pillar['files_archive'] }}/pip/1.3.1.tar.gz
+{{ pillar['files_archive'] }}/psycopg2/2.4.5.tar.gz
+{{ pillar['files_archive'] }}/pynliner/0.5.0.tar.gz
+{{ pillar['files_archive'] }}/python-dateutil/1.5.tar.gz
+{{ pillar['files_archive'] }}/python-openid/2.2.5.tar.gz
+{{ pillar['files_archive'] }}/pytz/2013b.tar.gz
+{{ pillar['files_archive'] }}/raven/3.3.9.tar.gz
+{{ pillar['files_archive'] }}/sentry/5.0.21.tar.gz
+{{ pillar['files_archive'] }}/simplejson/3.3.0.tar.gz
+{{ pillar['files_archive'] }}/six/1.3.0.tar.gz
+{{ pillar['files_archive'] }}/South/0.8.1.tar.gz
     {%- if 'graphite_address' in pillar %}
-{{ pillar['file_proxy'] }}/django-statsd-mozilla/0.3.8.7.tar.gz
-{{ pillar['file_proxy'] }}/statsd/1.0.0.tar.gz
+{{ pillar['files_archive'] }}/django-statsd-mozilla/0.3.8.7.tar.gz
+{{ pillar['files_archive'] }}/statsd/1.0.0.tar.gz
     {%- endif -%}
 {%- else %}
 boto==2.6.0

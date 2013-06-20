@@ -1,13 +1,13 @@
 # {{ pillar['message_do_not_modify'] }}
 
-{%- if 'file_proxy' in pillar %}
-{{ pillar['file_proxy'] }}/carbon/0.9.10.tar.gz
-{{ pillar['file_proxy'] }}/distribute/0.6.45.tar.gz
-{{ pillar['file_proxy'] }}/pip/1.3.1.tar.gz
-{{ pillar['file_proxy'] }}/txAMQP/0.6.2.tar.gz
-{{ pillar['file_proxy'] }}/Twisted/13.0.0.tar.gz
-{{ pillar['file_proxy'] }}/whisper/0.9.10.tar.gz
-{{ pillar['file_proxy'] }}/zope.interface/4.0.5.tar.gz
+{%- if 'files_archive' in pillar %}
+{{ pillar['files_archive'] }}/carbon/0.9.10.tar.gz
+{{ pillar['files_archive'] }}/distribute/0.6.45.tar.gz
+{{ pillar['files_archive'] }}/pip/1.3.1.tar.gz
+{{ pillar['files_archive'] }}/txAMQP/0.6.2.tar.gz
+{{ pillar['files_archive'] }}/Twisted/13.0.0.tar.gz
+{{ pillar['files_archive'] }}/whisper/0.9.10.tar.gz
+{{ pillar['files_archive'] }}/zope.interface/4.0.5.tar.gz
 {%- else %}
 -e git+git://github.com/graphite-project/carbon.git@7928d76b3f4b30155bd1eb87b525a3b6b0db8380#egg=carbon
 pip>=1.3.1

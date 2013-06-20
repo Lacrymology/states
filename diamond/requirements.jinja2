@@ -1,13 +1,13 @@
 # {{ pillar['message_do_not_modify'] }}
 
-{%- if 'file_proxy' in pillar %}
-{{ pillar['file_proxy'] }}/configobj/4.7.2.tar.gz
-{{ pillar['file_proxy'] }}/diamond/archive.tar.gz
+{%- if 'files_archive' in pillar %}
+{{ pillar['files_archive'] }}/configobj/4.7.2.tar.gz
+{{ pillar['files_archive'] }}/diamond/archive.tar.gz
     {%- if 'graylog2_address' in pillar %}
-{{ pillar['file_proxy'] }}/graypy/0.2.9.tar.gz
+{{ pillar['files_archive'] }}/graypy/0.2.9.tar.gz
     {%- endif %}
-{{ pillar['file_proxy'] }}/pip/1.3.1.tar.gz
-{{ pillar['file_proxy'] }}/psutil/0.7.1.tar.gz
+{{ pillar['files_archive'] }}/pip/1.3.1.tar.gz
+{{ pillar['files_archive'] }}/psutil/0.7.1.tar.gz
 {%- else %}
 -e git+git://github.com/BrightcoveOS/Diamond.git@2d1149fb9d419a3016f5fe8e0830fa0015fbda06#egg=diamond
     {%- if 'graylog2_address' in pillar %}

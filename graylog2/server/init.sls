@@ -53,8 +53,8 @@ graylog2-server:
   archive:
     - extracted
     - name: /usr/local/
-{%- if 'file_proxy' in pillar %}
-    - source: {{ pillar['file_proxy'] }}/graylog2-server/{{ version }}.tar.gz
+{%- if 'files_archive' in pillar %}
+    - source: {{ pillar['files_archive'] }}/graylog2-server/{{ version }}.tar.gz
 {%- else %}
     - source: http://download.graylog2.org/graylog2-server/graylog2-server-{{ version }}.tar.gz
 {%- endif %}
@@ -115,8 +115,8 @@ graylog2_sentry_output_plugin:
   file:
     - managed
     - name: {{ server_root_dir }}/plugin/outputs/com.bitflippers.sentryoutput.output.SentryOutput_gl2plugin.jar
-{% if 'file_proxy' in pillar %}
-    - source: {{ pillar['file_proxy'] }}/graylog2-plugin-sentry-output/0.11.jar
+{% if 'files_archive' in pillar %}
+    - source: {{ pillar['files_archive'] }}/graylog2-plugin-sentry-output/0.11.jar
 {% else %}
     - source: http://saltinwound.org/graylog2-plugin-sentry-output-0.11.jar
 {% endif %}
@@ -132,8 +132,8 @@ graylog2_sentry_transport_plugin:
   file:
     - managed
     - name: {{ server_root_dir }}/plugin/transports/com.bitflippers.sentrytransport.transport.SentryTransport_gl2plugin.jar
-{% if 'file_proxy' in pillar %}
-    - source: {{ pillar['file_proxy'] }}/graylog2-plugin-sentry-transport/0.11-1.jar
+{% if 'files_archive' in pillar %}
+    - source: {{ pillar['files_archive'] }}/graylog2-plugin-sentry-transport/0.11-1.jar
 {% else %}
     - source: http://saltinwound.org/graylog2-plugin-sentry-transport-0.11-1.jar
 {% endif %}

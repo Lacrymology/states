@@ -1,8 +1,8 @@
 # {{ pillar['message_do_not_modify'] }}
 
-{%- if 'file_proxy' in pillar %}
-{{ pillar['file_proxy'] }}/pyelasticsearch/0.2.tar.gz
-{{ pillar['file_proxy'] }}/requests/0.14.2.tar.gz
+{%- if 'files_archive' in pillar %}
+{{ pillar['files_archive'] }}/pyelasticsearch/0.2.tar.gz
+{{ pillar['files_archive'] }}/requests/0.14.2.tar.gz
 {%- else %}
 pyelasticsearch==0.2
 requests==0.14.2

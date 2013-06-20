@@ -1,0 +1,10 @@
+#!/bin/sh
+# {{ pillar['message_do_not_modify'] }}
+{%- set home = salt['user.info']('salt_archive')['home'] -%}
+{#- make sure everything is owner root:salt_archive #}
+find {{ home }} ! -user root -exec chown root {} \;
+find {{ home }} ! -group salt_archive -exec chgrp salt_archive {} \;
+{#- make sure file are 644 #}
+find {{ hoe }} -type f ! -perm 644 -exec chmod 644 {} \;
+{#- make sure directory are 775 #}
+find {{ home }} -type d ! -perm 775 -exec chmod 775 {} \;

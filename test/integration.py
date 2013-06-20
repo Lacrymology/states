@@ -298,6 +298,8 @@ class BaseIntegration(unittest.TestCase):
         'route53.absent',
         'ruby.absent',
         'salt.api.absent',
+        'salt.archive.absent',
+        'salt.archive.server.http.absent',
         'salt.master.absent',
         'salt.mirror.absent',
         'screen.absent',
@@ -657,6 +659,12 @@ class Integration(BaseIntegration):
     def test_salt_api(self):
         self.top(['salt.api'])
 
+    def test_salt_archive(self):
+        self.top(['salt.archive'])
+
+    def test_salt_archive_server_http(self):
+        self.top(['salt.archive.server.http'])
+
     def test_salt_master(self):
         self.top(['salt.master'])
 
@@ -830,6 +838,9 @@ class IntegrationNRPE(BaseIntegration):
 
     def test_salt_api(self):
         self.top(['salt.api.nrpe'])
+
+    def test_salt_archive_server_http(self):
+        self.top(['salt.archive.server.http.nrpe'])
 
     def test_salt_master(self):
         self.top(['salt.master.nrpe'])
@@ -1496,6 +1507,11 @@ class IntegrationFull(BaseIntegration):
     def check_salt_api(self):
         self.run_check('salt_api_procs')
         self.check_nginx_instance('salt_api')
+
+    def test_salt_archive_server_http(self):
+        self.top(['salt.archive.server.http', 'salt.archive.server.http.nrpe'])
+        self.check_nginx()
+        self.check_nginx_instance('salt_archive')
 
     def test_salt_master(self):
         self.top(['salt.master', 'salt.master.nrpe', 'salt.master.diamond'])

@@ -973,6 +973,9 @@ class IntegrationDiamondBase(BaseIntegration):
     def test_salt_api(self):
         self.top(['salt.api.diamond'])
 
+    def test_salt_archive_server_http(self):
+        self.top(['salt.archive.server.http.diamond'])
+
     def test_salt_master(self):
         self.top(['salt.master.diamond'])
 

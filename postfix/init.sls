@@ -1,3 +1,41 @@
+{#-
+Postfix: An Email Server (SMTP Server)
+=============================
+
+Mandatory Pillar
+----------------
+
+mail:
+  mailname: somehost.fqdn.com
+
+mail:mailname: fully qualified domain (if possible) of the mail server hostname.
+
+Optional Pillar
+---------------
+
+mail:
+  maxproc: 2
+
+ldap:
+  data:
+    mailname:
+      user1:
+        cn: CN user1
+        sn: SN user1
+        passwd: password of user1 (plaintext or created by ldappasswd)
+        desc: description for user1
+        email: other email of user1
+      user2:
+        cn: CN user2
+        sn: SN user2
+        passwd: password of user2
+        desc:
+        email:
+
+
+mail:maxproc: number of processes for passing email to amavis.  This value is used for amavis, too.
+ldap:data: nested dict contain user infomation, that will be used for create LDAP users and mapping emails (user@mailname) to mailboxes
+-#}
 {% set ssl = salt['pillar.get']('postfix:ssl', False) %}
 include:
   - dovecot.agent

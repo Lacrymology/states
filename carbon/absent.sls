@@ -33,3 +33,7 @@ carbon-{{ instance }}-logdir:
     - require:
       - service: carbon-{{ instance }}
 {% endfor %}
+
+/usr/local/graphite/salt-carbon-requirements.txt:
+  file:
+    - absent

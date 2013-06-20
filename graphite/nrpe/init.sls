@@ -5,7 +5,6 @@ include:
   - apt.nrpe
   - graphite.common.nrpe
   - gsyslog.nrpe
-  - nginx.nrpe
   - memcache.nrpe
   - nginx.nrpe
   - nrpe

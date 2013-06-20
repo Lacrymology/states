@@ -831,6 +831,7 @@ define service {
     check_command check_nrpe!{{ check }}
     use salt-service
 }
+{% endfor -%}
 {%- endif -%}
 
 {#-

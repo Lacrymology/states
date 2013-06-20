@@ -300,7 +300,7 @@ class BaseIntegration(unittest.TestCase):
         'rsync.absent',
         'salt.api.absent',
         'salt.archive.absent',
-        'salt.archive.server.http.absent',
+        'salt.archive.server.absent',
         'salt.master.absent',
         'salt.mirror.absent',
         'screen.absent',
@@ -666,8 +666,8 @@ class Integration(BaseIntegration):
     def test_salt_archive(self):
         self.top(['salt.archive'])
 
-    def test_salt_archive_server_http(self):
-        self.top(['salt.archive.server.http'])
+    def test_salt_archive_server(self):
+        self.top(['salt.archive.server'])
 
     def test_salt_master(self):
         self.top(['salt.master'])
@@ -847,7 +847,7 @@ class IntegrationNRPE(BaseIntegration):
         self.top(['salt.api.nrpe'])
 
     def test_salt_archive_server_http(self):
-        self.top(['salt.archive.server.http.nrpe'])
+        self.top(['salt.archive.server.nrpe'])
 
     def test_salt_master(self):
         self.top(['salt.master.nrpe'])
@@ -984,7 +984,7 @@ class IntegrationDiamondBase(BaseIntegration):
         self.top(['salt.api.diamond'])
 
     def test_salt_archive_server_http(self):
-        self.top(['salt.archive.server.http.diamond'])
+        self.top(['salt.archive.server.diamond'])
 
     def test_salt_master(self):
         self.top(['salt.master.diamond'])
@@ -1531,7 +1531,7 @@ class IntegrationFull(BaseIntegration):
         self.check_nginx_instance('salt_api')
 
     def test_salt_archive_server_http(self):
-        self.top(['salt.archive.server.http', 'salt.archive.server.http.nrpe'])
+        self.top(['salt.archive.server', 'salt.archive.server.nrpe'])
         self.check_nginx()
         self.check_nginx_instance('salt_archive')
 

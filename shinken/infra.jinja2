@@ -834,11 +834,11 @@ define service {
 {%- endif -%}
 
 {#-
- State: salt.archive.server.http
+ State: salt.archive.server
  -#}
 
-{%- if 'salt.archive.server.http' in pillar['monitoring']['states'] -%}
-{{ nginx_instance('salt_archive', 'salt.archive.server.http') }}
+{%- if 'salt.archive.server' in pillar['monitoring']['states'] -%}
+{{ nginx_instance('salt_archive', 'salt.archive.server') }}
 {%- endif -%}
 
 {#-

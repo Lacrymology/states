@@ -19,4 +19,9 @@ log_datefmt_logfile: '%b %d %H:%M:%S'
 {%- if 'graphite_address' in pillar %}
 carbon.host: {{ pillar['graphite_address'] }}
 carbon.port: 2003
-{%- endif %}
+{%- endif -%}
+
+{%- if 'shinken_pollers' in pillar %}
+mine_functions:
+  monitoring.data: []
+{%- endif -%}

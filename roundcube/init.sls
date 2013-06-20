@@ -136,6 +136,15 @@ roundcube:
       - cmd:
     - context:
       dir: {{ roundcubedir }}
+  module:
+    - wait
+    - name: file.touch
+    - m_name: /etc/uwsgi/roundcube.ini
+    - watch:
+      - file: {{ roundcubedir }}/config/main.inc.php
+      - file: {{ roundcubedir }}/config/db.inc.php
+      - archive: roundcubemail_archive
+      - pkg: php5-pgsql
 
 roundcube_initial:
   cmd:

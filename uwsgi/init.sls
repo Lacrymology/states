@@ -23,9 +23,9 @@ include:
     - mode: 440
     - source: salt://uwsgi/upstart.jinja2
 
-
 uwsgi_build:
-{% if 'file_proxy' in pillar %}
+{%- if 'file_proxy' in pillar -%}
+  {%- set uwsgi_download_requirement = "archive" %}
   archive:
     - extracted
     - name: /usr/local
@@ -34,17 +34,16 @@ uwsgi_build:
     - archive_format: tar
     - tar_options: z
     - if_missing: /usr/local/uwsgi
-{% else %}
+{%- else -%}
+  {%- set uwsgi_download_requirement = "git" %}
   git:
     - latest
-    {#- name: {{ pillar['uwsgi']['repository'] }}#}
-    {#- rev: {{ pillar['uwsgi']['version'] }}#}
     - name: git://github.com/bclermont/uwsgi.git
     - rev: 1.4.3-patched
     - target: /usr/local/uwsgi
     - require:
       - pkg: git
-{% endif %}
+{%- endif %}
   file:
     - managed
     - name: /usr/local/uwsgi/buildconf/custom.ini
@@ -54,11 +53,7 @@ uwsgi_build:
     - mode: 440
     - source: salt://uwsgi/buildconf.jinja2
     - require:
-{% if 'file_proxy' in pillar %}
-      - archive: uwsgi_build
-{% else %}
-      - git: uwsgi_build
-{% endif %}
+      - {{ uwsgi_download_module }}: uwsgi_build
   cmd:
     - wait
     - name: python uwsgiconfig.py --clean; python uwsgiconfig.py --build custom
@@ -66,11 +61,7 @@ uwsgi_build:
     - stateful: false
     - watch:
       - pkg: xml-dev
-{% if 'file_proxy' in pillar %}
-      - archive: uwsgi_build
-{% else %}
-      - git: uwsgi_build
-{% endif %}
+      - {{ uwsgi_download_module }}: uwsgi_build
       - file: uwsgi_build
       - pkg: ruby
       - pkg: python-dev
@@ -85,11 +76,7 @@ uwsgi_sockets:
     - require:
       - user: web
       - cmd: uwsgi_build
-{% if 'file_proxy' in pillar %}
-      - archive: uwsgi_build
-{% else %}
-      - git: uwsgi_build
-{% endif %}
+      - {{ uwsgi_download_module }}: uwsgi_build
       - file: uwsgi_build
 
 uwsgi_emperor:
@@ -98,11 +85,7 @@ uwsgi_emperor:
     - name: strip /usr/local/uwsgi/uwsgi
     - stateful: false
     - watch:
-{% if 'file_proxy' in pillar %}
-      - archive: uwsgi_build
-{% else %}
-      - git: uwsgi_build
-{% endif %}
+      - {{ uwsgi_download_module }}: uwsgi_build
       - file: uwsgi_build
       - cmd: uwsgi_build
   service:

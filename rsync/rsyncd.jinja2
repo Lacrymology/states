@@ -1,0 +1,14 @@
+#{{ pillar['message_do_not_modify'] }}
+{%- set rsync = salt['pillar.get']('rsync') %}
+{%- for e in rsync %}
+    {%- if rsync[e] is mapping %}
+    {# config dict for modules #}
+[{{ e }}]
+        {%- for att in rsync[e] %}
+{{ att }} = {{ rsync[e][att] }}
+        {%- endfor %}
+    {%- else %}
+    {#- global config #}
+{{ e }} = {{ rsync[e] }}
+    {%- endif %}
+{%- endfor %}

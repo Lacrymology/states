@@ -1,8 +1,9 @@
 # {{ pillar['message_do_not_modify'] }}
-{% if 'file_proxy' in pillar -%}
-{{ pillar['file_proxy'] }}/simplejson/3.3.0.tar.gz
+
+{%- if 'file_proxy' in pillar %}
 {{ pillar['file_proxy'] }}/raven/3.3.9.tar.gz
-{% else -%}
-simplejson
-raven
-{% endif -%}
+{{ pillar['file_proxy'] }}/simplejson/3.3.0.tar.gz
+{%- else %}
+raven==3.3.9
+simplejson==3.3.0
+{%- endif -%}

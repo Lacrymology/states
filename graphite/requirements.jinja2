@@ -1,47 +1,44 @@
 # {{ pillar['message_do_not_modify'] }}
 
-{% if 'file_proxy' in pillar %}
-{{ pillar['file_proxy'] }}/pip/1.3.1.tar.gz
-{{ pillar['file_proxy'] }}/py2cairo/1.8.10.tar.gz
+{%- if 'file_proxy' in pillar %}
+{{ pillar['file_proxy'] }}/distribute/0.6.45.tar.gz
 {{ pillar['file_proxy'] }}/Django/1.3.7.tar.gz
+{{ pillar['file_proxy'] }}/django-statsd-mozilla/0.3.8.3.tar.gz
+{{ pillar['file_proxy'] }}/django-tagging/0.3.1.tar.gz
+{{ pillar['file_proxy'] }}/graphite-web/0.9.10.tar.gz
+    {%- if 'graylog2_address' in pillar %}
+{{ pillar['file_proxy'] }}/graypy/0.2.9.tar.gz
+    {%- endif %}
+{{ pillar['file_proxy'] }}/ipython/0.13.2.tar.gz
+{{ pillar['file_proxy'] }}/pip/1.3.1.tar.gz
+{{ pillar['file_proxy'] }}/psycopg2/2.4.5.tar.gz
+{{ pillar['file_proxy'] }}/py2cairo/1.8.10.tar.gz
 {{ pillar['file_proxy'] }}/python-memcached/1.53.tar.gz
 {{ pillar['file_proxy'] }}/pytz/2013b.tar.gz
-{{ pillar['file_proxy'] }}/simplejson/3.3.0.tar.gz
-{{ pillar['file_proxy'] }}/django-tagging/0.3.1.tar.gz
-{{ pillar['file_proxy'] }}/psycopg2/2.4.5.tar.gz
-{{ pillar['file_proxy'] }}/graphite-web/0.9.10.tar.gz
-{{ pillar['file_proxy'] }}/django-statsd-mozilla/0.3.8.3.tar.gz
 {{ pillar['file_proxy'] }}/raven/3.3.9.tar.gz
+{{ pillar['file_proxy'] }}/simplejson/3.3.0.tar.gz
 {{ pillar['file_proxy'] }}/statsd/2.0.1.tar.gz
-{{ pillar['file_proxy'] }}/ipython/0.13.2.tar.gz
-
-{{ pillar['file_proxy'] }}/distribute/0.6.45.tar.gz
-{{ pillar['file_proxy'] }}/zope.interface/4.0.5.tar.gz
 {{ pillar['file_proxy'] }}/Twisted/13.0.0.tar.gz
 {{ pillar['file_proxy'] }}/txAMQP/0.6.2.tar.gz
 {{ pillar['file_proxy'] }}/whisper/0.9.10.tar.gz
-
-    {% if 'graylog2_address' in pillar %}
-{{ pillar['file_proxy'] }}/graypy/0.2.9.tar.gz
-    {% endif %}
-
-{% else %}
-pip>=1.3.1
+{{ pillar['file_proxy'] }}/zope.interface/4.0.5.tar.gz
+{%- else %}
 django==1.3.7
-txamqp
-python-memcached
-pytz
-simplejson
-django-tagging
-psycopg2
-http://cairographics.org/releases/py2cairo-1.8.10.tar.gz
-graphite-web==0.9.10
 django-statsd-mozilla==0.3.8.3
-raven
-statsd
-ipython
+django-tagging==0.3.1
+graphite-web==0.9.10
+    {%- if 'graylog2_address' in pillar %}
+graypy==0.2.9
+    {%- endif %}
+ipython==0.13.2
+pip==1.3.1
+http://cairographics.org/releases/py2cairo-1.8.10.tar.gz
+psycopg2==2.4.5
+python-memcached==1.53
+pytz==2013b
+raven==3.3.9
+simplejson==3.3.0
+statsd==2.0.1
+txamqp==0.6.2
 -e git+git://github.com/graphite-project/whisper.git@4a8396520a76c5b5e2b18036c20446e4832731b9#egg=whisper
-    {% if 'graylog2_address' in pillar %}
-graypy
-    {% endif %}
-{% endif %}
+{%- endif -%}

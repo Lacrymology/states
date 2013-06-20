@@ -1,6 +1,7 @@
 # {{ pillar['message_do_not_modify'] }}
-{% if 'file_proxy' in pillar %}
+
+{%- if 'file_proxy' in pillar %}
 {{ pillar['file_proxy'] }}/CherryPy/3.2.4.tar.gz
-{% else %}
-cherrypy
-{% endif %}
+{%- else -%}
+cherrypy==3.2.4
+{%- endif -%}

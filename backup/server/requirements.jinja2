@@ -1,13 +1,12 @@
 # {{ pillar['message_do_not_modify'] }}
-
-{% if 'file_proxy' in pillar %}
-{{ pillar['file_proxy'] }}/raven/3.3.9.tar.gz
-    {% if 'graylog2_address' in pillar %}
+{%- if 'file_proxy' in pillar -%}
+    {%- if 'graylog2_address' in pillar %}
 {{ pillar['file_proxy'] }}/graypy/0.2.9.tar.gz
-    {% endif %}
-{% else %}
-raven
-    {% if 'graylog2_address' in pillar %}
-graypy
-    {% endif %}
-{% endif %}
+    {%- endif %}
+{{ pillar['file_proxy'] }}/raven/3.3.9.tar.gz
+{%- else -%}
+    {%- if 'graylog2_address' in pillar %}
+graypy==0.2.9
+    {%- endif %}
+raven==3.3.9
+{%- endif -%}

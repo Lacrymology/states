@@ -1,6 +1,7 @@
 # {{ pillar['message_do_not_modify'] }}
-{% if 'file_proxy' in pillar %}
+
+{%- if 'file_proxy' in pillar %}
 {{ pillar['file_proxy'] }}/virtualenv/1.9.1.tar.gz
-{% else %}
+{%- else %}
 virtualenv==1.9.1
-{% endif %}
+{%- endif -%}

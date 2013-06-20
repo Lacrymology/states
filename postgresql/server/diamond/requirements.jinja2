@@ -1,8 +1,9 @@
 # {{ pillar['message_do_not_modify'] }}
-{% if 'file_proxy' in pillar %}
+
+{%- if 'file_proxy' in pillar %}
 {{ pillar['file_proxy'] }}/pip/1.3.1.tar.gz
 {{ pillar['file_proxy'] }}/psycopg2/2.4.5.tar.gz
-{% else %}
-pip>=1.3.1
+{%- else %}
+pip==1.3.1
 psycopg2==2.4.5
-{% endif %}
+{%- endif -%}

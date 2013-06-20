@@ -63,7 +63,7 @@ include:
       - pkg: nginx
 
 {% for key in salt['pillar.get']('salt_archive:keys', []) -%}
-salt_archive_{ key }}:
+salt_archive_{{ key }}:
   ssh_auth:
     - present
     - name: {{ key }}

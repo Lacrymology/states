@@ -817,6 +817,23 @@ define service {
 {% endif %}
 
 {#-
+ State: rsync
+ -#}
+
+{%- if 'rsync' in pillar['monitoring']['states'] -%}
+{%- set rsync_check = {'procs': 'Daemon', 'port': 'Port'} -%}
+{%- for check in rsync_check %}
+define service {
+    hostgroup_name {% for role in pillar['monitoring']['states']['rsync'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    servicegroups {% for role in pillar['monitoring']['states']['rsync'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    service_description rsync_{{ check }}
+    display_name Rsync {{ rsync_check[check] }}
+    check_command check_nrpe!{{ check }}
+    use salt-service
+}
+{%- endif -%}
+
+{#-
  State: salt.api
  -#}
 

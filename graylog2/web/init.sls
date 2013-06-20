@@ -91,11 +91,11 @@ graylog2-web:
   archive:
     - extracted
     - name: /usr/local/
-{% if 'file_proxy' in pillar %}
+{%- if 'file_proxy' in pillar %}
     - source: {{ pillar['file_proxy'] }}/graylog2-web-interface/{{ version }}.tar.gz
-{% else %}
+{%- else %}
     - source: http://download.graylog2.org/graylog2-web-interface/graylog2-web-interface-{{ version }}.tar.gz
-{% endif %}
+{%- endif %}
     - source_hash: {{ checksum }}
     - archive_format: tar
     - tar_options: z

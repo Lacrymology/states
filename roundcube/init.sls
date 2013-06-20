@@ -22,11 +22,11 @@ roundcubemail_archive:
   archive:
     - extracted
     - name: /usr/local/
-{% if 'file_proxy' in pillar %}
+{%- if 'file_proxy' in pillar %}
     - source: {{ pillar['file_proxy'] }}/roundcubemail/{{ version }}.tar.gz
-{% else %}
+{%- else %}
     - source: http://jaist.dl.sourceforge.net/project/roundcubemail/roundcubemail/{{ version }}/roundcubemail-{{ version }}.tar.gz
-{% endif %}
+{%- endif %}
     - source_hash: md5=843de3439886c2dddb0f09e9bb6a4d04
     - archive_format: tar
     - tar_options: z

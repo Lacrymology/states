@@ -1,7 +1,9 @@
 # {{ pillar['message_do_not_modify'] }}
-requests==0.14.2
+
+{%- if 'file_proxy' in pillar %}
+{{ pillar['file_proxy'] }}/pyelasticsearch/0.2.tar.gz
+{{ pillar['file_proxy'] }}/requests/0.14.2.tar.gz
+{%- else %}
 pyelasticsearch==0.2
-{# the following are already in nrpe state
-nagiosplugin==1.0.0
-argparse
-#}
+requests==0.14.2
+{%- endif -%}

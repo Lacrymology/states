@@ -24,20 +24,27 @@ include:
     - mode: 440
     - source: salt://uwsgi/upstart.jinja2
 
-uwsgitop:
-  pip:
-    - installed
-    - require:
-      - module: pip
-
 uwsgi_build:
+{%- if 'file_proxy' in pillar -%}
+  {%- set uwsgi_download_requirement = "archive" %}
+  archive:
+    - extracted
+    - name: /usr/local
+    - source: {{ pillar['file_proxy'] }}/uwsgi/1.4.3-patched.tar.gz
+    - source_hash: md5=7e906d84fd576bccd1a3bb7ab308ec3c
+    - archive_format: tar
+    - tar_options: z
+    - if_missing: /usr/local/uwsgi
+{%- else -%}
+  {%- set uwsgi_download_requirement = "git" %}
   git:
     - latest
-    - name: {{ pillar['uwsgi']['repository'] }}
+    - name: git://github.com/bclermont/uwsgi.git
+    - rev: 1.4.3-patched
     - target: /usr/local/uwsgi
-    - rev: {{ pillar['uwsgi']['version'] }}
     - require:
       - pkg: git
+{%- endif %}
   file:
     - managed
     - name: /usr/local/uwsgi/buildconf/custom.ini
@@ -49,7 +56,7 @@ uwsgi_build:
     - context:
       python: True
     - require:
-      - git: uwsgi_build
+      - {{ uwsgi_download_module }}: uwsgi_build
   cmd:
     - wait
     - name: python uwsgiconfig.py --clean; python uwsgiconfig.py --build custom
@@ -57,7 +64,7 @@ uwsgi_build:
     - stateful: false
     - watch:
       - pkg: xml-dev
-      - git: uwsgi_build
+      - {{ uwsgi_download_module }}: uwsgi_build
       - file: uwsgi_build
       - pkg: python-dev
 
@@ -71,7 +78,7 @@ uwsgi_sockets:
     - require:
       - user: web
       - cmd: uwsgi_build
-      - git: uwsgi_build
+      - {{ uwsgi_download_module }}: uwsgi_build
       - file: uwsgi_build
 
 uwsgi_emperor:
@@ -80,7 +87,7 @@ uwsgi_emperor:
     - name: strip /usr/local/uwsgi/uwsgi
     - stateful: false
     - watch:
-      - git: uwsgi_build
+      - {{ uwsgi_download_module }}: uwsgi_build
       - file: uwsgi_build
       - cmd: uwsgi_build
   service:

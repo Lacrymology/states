@@ -1,3 +1,9 @@
 # {{ pillar['message_do_not_modify'] }}
-pip>=1.3.1
+
+{%- if 'file_proxy' in pillar %}
+{{ pillar['file_proxy'] }}/pip/1.3.1.tar.gz
+{{ pillar['file_proxy'] }}/pymongo/2.4.1.tar.gz
+{%- else %}
+pip==1.3.1
 pymongo==2.4.1
+{%- endif -%}

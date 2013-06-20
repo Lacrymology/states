@@ -41,19 +41,33 @@ user_{{ user }}:
     - require:
       - pkg: salt-master
 
+salt-api-requirements:
+  file:
+    - managed
+    - name: {{ opts['cachedir'] }}/salt-api-requirements.txt
+    - source: salt://salt/api/requirements.jinja2
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+  module:
+    - wait
+    - name: pip.install
+    - pkgs: ''
+    - requirements: {{ opts['cachedir'] }}/salt-api-requirements.txt
+    - watch:
+      - file: salt-api-requirements
+    - require:
+      - module: pip
+
 salt-api:
   pkg:
     - installed
     - require:
       - pkg: salt-master
-      - pip: salt-api
+      - module: salt-api-requirements
       - apt_repository: salt
       - cmd: apt_sources
-  pip:
-    - installed
-    - name: cherrypy
-    - require:
-      - module: pip
   file:
     - managed
     - name: /etc/init/salt-api.conf
@@ -69,18 +83,33 @@ salt-api:
       - service: gsyslog
     - watch:
       - file: salt-api
-      - pip: salt-api
-      - git: salt-ui
+      - module: salt-api-requirements
       - file: /etc/salt/master.d/ui.conf
+{%- if 'file_proxy' in pillar %}
+      - archive: salt-ui
+{%- else %}
+      - git: salt-ui
+{%- endif %}
 
 salt-ui:
+{%- if 'file_proxy' in pillar %}
+  archive:
+    - extracted
+    - name: /usr/local
+    - source: {{ pillar['file_proxy'] }}/salt-ui/6e8eee0477fdb0edaa9432f1beb5003aeda56ae6.tar.gz
+    - source_hash: md5=2b7e581d0134c5f5dc29b5fca7a2df5b
+    - archive_format: tar
+    - tar_options: z
+    - if_missing: /usr/local/salt-ui/
+{%- else %}
   git:
     - latest
-    - rev: {{ pillar['salt_master']['ui'] }}
+    - rev: 6e8eee0477fdb0edaa9432f1beb5003aeda56ae6
     - name: git://github.com/saltstack/salt-ui.git
     - target: /usr/local/salt-ui/
     - require:
       - pkg: git
+{%- endif %}
   file:
     - managed
     - name: /etc/nginx/conf.d/salt.conf

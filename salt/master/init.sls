@@ -13,13 +13,25 @@ include:
   - apt
   - gsyslog
 
-GitPython:
-  pip:
-    - installed
+salt-master-requirements:
+  file:
+    - managed
+    - name: {{ opts['cachedir'] }}/salt-master-requirements.txt
+    - source: salt://salt/master/requirements.jinja2
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+  module:
+    - wait
+    - name: pip.install
+    - pkgs: ''
+    - requirements: {{ opts['cachedir'] }}/salt-master-requirements.txt
+    - watch:
+      - file: salt-master-requirements
+      - pkg: python-dev
     - require:
       - module: pip
-    - watch:
-      - pkg: python-dev
 
 /srv/salt:
   file:
@@ -69,4 +81,4 @@ salt-master:
     - watch:
       - pkg: salt-master
       - file: salt-master
-      - pip: GitPython
+      - module: salt-master-requirements

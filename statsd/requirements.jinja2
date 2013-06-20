@@ -1,2 +1,8 @@
 # {{ pillar['message_do_not_modify'] }}
+
+{%- if 'file_proxy' in pillar -%}
+{{ pillar['file_proxy'] }}/argparse/1.2.1.tar.gz
+{{ pillar['file_proxy'] }}/py-statsd/0.1.7.tar.gz
+{%- else %}
 -e git://github.com/Jonty/py-statsd.git@750c395ad56b314083145b1a1b825dda8ed05653#egg=py-statsd
+{%- endif -%}

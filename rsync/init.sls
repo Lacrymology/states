@@ -56,6 +56,6 @@ rsync:
     - group: root
     - mode: 440
     - template: jinja
-    - source: salt://rsync/rsyncd.jinja2
+    - source: salt://rsync/config.jinja2
     - require:
       - pkg: rsync

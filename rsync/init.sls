@@ -10,7 +10,7 @@ Optional Pillar
 
 rsync:
   attribute: value
-  'other attrib": other value
+  'other attrib': other value
   module_name:
     'mod attrib 2': value
     attrib: value
@@ -56,6 +56,6 @@ rsync:
     - group: root
     - mode: 440
     - template: jinja
-    - source: salt://rsync/rsyncd.jinja2
+    - source: salt://rsync/config.jinja2
     - require:
       - pkg: rsync

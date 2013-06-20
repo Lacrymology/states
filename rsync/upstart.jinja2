@@ -1,0 +1,9 @@
+# {{ pillar['message_do_not_modify'] }}
+description "Rsync daemon"
+start on runlevel [2345]
+stop on runlevel [!2345]
+
+expect fork
+respawn
+
+exec /usr/bin/rsync --daemon

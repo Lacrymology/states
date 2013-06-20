@@ -297,6 +297,7 @@ class BaseIntegration(unittest.TestCase):
         'requests.absent',
         'route53.absent',
         'ruby.absent',
+        'rsync.absent',
         'salt.api.absent',
         'salt.archive.absent',
         'salt.archive.server.http.absent',
@@ -656,6 +657,9 @@ class Integration(BaseIntegration):
     def test_ruby(self):
         self.top(['ruby'])
 
+    def test_rsync(self):
+        self.top(['rsync'])
+
     def test_salt_api(self):
         self.top(['salt.api'])
 
@@ -836,6 +840,9 @@ class IntegrationNRPE(BaseIntegration):
     def test_rabbitmq(self):
         self.top(['rabbitmq.nrpe'])
 
+    def test_rsync(self):
+        self.top(['rsync.nrpe'])
+
     def test_salt_api(self):
         self.top(['salt.api.nrpe'])
 
@@ -969,6 +976,9 @@ class IntegrationDiamondBase(BaseIntegration):
 
     def test_roundcube(self):
         self.top(['roundcube.diamond'])
+
+    def test_rsync(self):
+        self.top(['rsync.diamond'])
 
     def test_salt_api(self):
         self.top(['salt.api.diamond'])
@@ -1498,6 +1508,15 @@ class IntegrationFull(BaseIntegration):
     def test_ruby(self):
         self.top(['ruby', 'ruby.nrpe'])
         self.check_integration()
+
+    def test_rsync(self):
+        self.top(['rsync', 'rsync.nrpe'])
+        self.check_integration()
+        self.check_rsync()
+
+    def check_rsync(self):
+        self.run_check('rsync_procs')
+        self.run_check('rsync_port')
 
     def test_salt_api(self):
         self.top(['salt.api', 'salt.api.nrpe', 'salt.api.diamond',

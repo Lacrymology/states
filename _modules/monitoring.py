@@ -64,6 +64,6 @@ def data():
                 extra_data[key_name] = True
         else:
             logger.error()
-    output['data'] = extra_data
+    output['extra'] = extra_data
 
     return output

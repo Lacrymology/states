@@ -26,7 +26,7 @@ include:
 
 uwsgi_build:
 {%- if 'files_archive' in pillar -%}
-  {%- set uwsgi_download_requirement = "archive" %}
+  {%- set uwsgi_download_module = "archive" %}
   archive:
     - extracted
     - name: /usr/local

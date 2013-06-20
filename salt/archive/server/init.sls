@@ -45,7 +45,7 @@ include:
     - user: root
     - group: root
     - mode: 550
-    - source: salt://salt/archive/server/http/cron.jinja2
+    - source: salt://salt/archive/server/cron.jinja2
     - require:
       - pkg: cron
       - user: salt_archive
@@ -54,7 +54,7 @@ include:
   file:
     - managed
     - template: jinja
-    - source: salt://salt/archive/server/http/nginx.jinja2
+    - source: salt://salt/archive/server/nginx.jinja2
     - user: www-data
     - group: www-data
     - mode: 440

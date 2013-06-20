@@ -36,7 +36,7 @@ uwsgi_build:
     - tar_options: z
     - if_missing: /usr/local/uwsgi
 {%- else -%}
-  {%- set uwsgi_download_requirement = "git" %}
+  {%- set uwsgi_download_module = "git" %}
   git:
     - latest
     - name: git://github.com/bclermont/uwsgi.git

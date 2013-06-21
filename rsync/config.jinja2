@@ -1,4 +1,5 @@
 # {{ pillar['message_do_not_modify'] }}
+
 {%- set rsync = salt['pillar.get']('rsync', []) -%}
 {%- for e in rsync -%}
     {%- if rsync[e] is mapping -%}
@@ -12,3 +13,8 @@
 {{ e }} = {{ rsync[e] }}
     {%- endif -%}
 {%- endfor -%}
+
+{#- overwrite previously defined key for the following #}
+log file =
+syslog facility = daemon
+pid file = /var/run/rsyncd.pid

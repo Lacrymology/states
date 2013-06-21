@@ -12,3 +12,8 @@
 /etc/cron.weekly/backup-archiver:
   file:
     - absent
+
+
+{{ opts['cachedir'] }}/backup-requirements.txt:
+  file:
+    - absent

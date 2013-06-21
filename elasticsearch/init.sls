@@ -148,7 +148,7 @@ elasticsearch:
     - name: elasticsearch
     - version: {{ version }}
 {%- if 'files_archive' in pillar %}
-    - source: {{ pillar['files_archive'] }}/elasticsearch/{{ version }}.deb
+    - source: {{ pillar['files_archive'] }}/mirror/elasticsearch-{{ version }}.deb
 {%- else %}
     - source: http://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-{{ version }}.deb
 {%- endif %}

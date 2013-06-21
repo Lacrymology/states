@@ -1,13 +1,6 @@
 # {{ pillar['message_do_not_modify'] }}
 
-{%- if 'files_archive' in pillar %}
-{{ pillar['files_archive'] }}/lxml/3.2.1.tar.gz
-{{ pillar['files_archive'] }}/pytz/2013b.tar.gz
-{{ pillar['files_archive'] }}/requests/0.14.2.tar.gz
-{{ pillar['files_archive'] }}/route53/1.0.tar.gz
-{%- else %}
 lxml==3.2.1
 pytz==2013b
 requests==0.14.2
 route53==1.0
-{%- endif -%}

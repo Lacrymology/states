@@ -56,7 +56,10 @@ pyelasticsearch:
   module:
     - wait
     - name: pip.install
-    - pkgs: ''
+{%- if 'files_archive' in pillar %}
+    - no_index: True
+    - find_links: {{ pillar['files_archive'] }}/pip/
+{%- endif %}
     - upgrade: True
     - bin_env: /usr/local/nagios
     - requirements: /usr/local/nagios/elasticsearch-requirements.txt

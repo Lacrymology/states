@@ -1,7 +1,3 @@
 # {{ pillar['message_do_not_modify'] }}
 
-{%- if 'files_archive' in pillar %}
-{{ pillar['files_archive'] }}/requests/0.14.2.tar.gz
-{%- else %}
 requests==0.14.2
-{%- endif -%}

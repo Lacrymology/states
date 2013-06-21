@@ -19,7 +19,11 @@ def data():
     }
 
     # figure how monitoring can reach this host
+    if __salt__['grains.get']('ip_addrs', False):
+        # from pillar data
+        output['ip_addrs'] = __salt__['grains.get']('ip_addrs')
     if 'availabilityZone' in __salt__['grains.ls']():
+        # from ec2_info grains
         output['amazon_ec2'] = {
             'availability_zone': __salt__['grains.get']('availabilityZone'),
             'region':  __salt__['grains.get']('region')
@@ -29,6 +33,7 @@ def data():
             'private': [__salt__['grains.get']('privateIp')],
         }
     else:
+        # from network interface
         interface = __salt__['pillar.get']('network_interface', 'eth0')
         output['ip_addrs'] = {
             'public': __salt__['network.ip_addrs'](interface)[0]

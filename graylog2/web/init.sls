@@ -92,7 +92,7 @@ graylog2-web:
     - extracted
     - name: /usr/local/
 {%- if 'files_archive' in pillar %}
-    - source: {{ pillar['files_archive'] }}/graylog2-web-interface/{{ version }}.tar.gz
+    - source: {{ pillar['files_archive'] }}/mirror/graylog2-web-interface-{{ version }}.tar.gz
 {%- else %}
     - source: http://download.graylog2.org/graylog2-web-interface/graylog2-web-interface-{{ version }}.tar.gz
 {%- endif %}

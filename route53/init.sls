@@ -24,7 +24,10 @@ route53:
     - wait
     - name: pip.install
     - upgrade: True
-    - pkgs: ''
+{%- if 'files_archive' in pillar %}
+    - no_index: True
+    - find_links: {{ pillar['files_archive'] }}/pip/
+{%- endif %}
     - requirements: {{ opts['cachedir'] }}/salt-route53-requirements.txt
     - require:
       - module: pip

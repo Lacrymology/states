@@ -1,38 +1,14 @@
 # {{ pillar['message_do_not_modify'] }}
 
-{%- if 'files_archive' in pillar %}
-{{ pillar['files_archive'] }}/distribute/0.6.45.tar.gz
-{{ pillar['files_archive'] }}/Django/1.3.7.tar.gz
-{{ pillar['files_archive'] }}/django-statsd-mozilla/0.3.8.3.tar.gz
-{{ pillar['files_archive'] }}/django-tagging/0.3.1.tar.gz
-{{ pillar['files_archive'] }}/graphite-web/0.9.10.tar.gz
-    {%- if 'graylog2_address' in pillar %}
-{{ pillar['files_archive'] }}/graypy/0.2.9.tar.gz
-    {%- endif %}
-{{ pillar['files_archive'] }}/ipython/0.13.2.tar.gz
-{{ pillar['files_archive'] }}/pip/1.3.1.tar.gz
-{{ pillar['files_archive'] }}/psycopg2/2.4.5.tar.gz
-{{ pillar['files_archive'] }}/py2cairo/1.8.10.tar.gz
-{{ pillar['files_archive'] }}/python-memcached/1.53.tar.gz
-{{ pillar['files_archive'] }}/pytz/2013b.tar.gz
-{{ pillar['files_archive'] }}/raven/3.3.9.tar.gz
-{{ pillar['files_archive'] }}/simplejson/3.3.0.tar.gz
-{{ pillar['files_archive'] }}/statsd/2.0.1.tar.gz
-{{ pillar['files_archive'] }}/Twisted/13.0.0.tar.gz
-{{ pillar['files_archive'] }}/txAMQP/0.6.2.tar.gz
-{{ pillar['files_archive'] }}/whisper/0.9.10.tar.gz
-{{ pillar['files_archive'] }}/zope.interface/4.0.5.tar.gz
-{%- else %}
 django==1.3.7
 django-statsd-mozilla==0.3.8.3
 django-tagging==0.3.1
 graphite-web==0.9.10
-    {%- if 'graylog2_address' in pillar %}
+{%- if 'graylog2_address' in pillar %}
 graypy==0.2.9
-    {%- endif %}
+{%- endif %}
 ipython==0.13.2
 pip==1.3.1
-http://cairographics.org/releases/py2cairo-1.8.10.tar.gz
 psycopg2==2.4.5
 python-memcached==1.53
 pytz==2013b
@@ -40,5 +16,11 @@ raven==3.3.9
 simplejson==3.3.0
 statsd==2.0.1
 txamqp==0.6.2
+
+{%- if 'files_archive' in pillar %}
+{{ pillar['files_archive'] }}/pip/py2cairo-1.8.10.tar.gz
+{{ pillar['files_archive'] }}/pip/whisper-0.9.10.zip
+{%- else %}
+http://cairographics.org/releases/py2cairo-1.8.10.tar.gz
 -e git+git://github.com/graphite-project/whisper.git@4a8396520a76c5b5e2b18036c20446e4832731b9#egg=whisper
-{%- endif -%}
+{%- endif %}

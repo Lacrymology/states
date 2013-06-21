@@ -103,7 +103,10 @@ diamond:
     - wait
     - name: pip.install
     - upgrade: True
-    - pkgs: ''
+{%- if 'files_archive' in pillar %}
+    - no_index: True
+    - find_links: {{ pillar['files_archive'] }}/pip/
+{%- endif %}
     - bin_env: /usr/local/diamond
     - requirements: /usr/local/diamond/salt-requirements.txt
     - require:

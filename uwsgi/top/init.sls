@@ -13,7 +13,10 @@ uwsgitop:
   module:
     - wait
     - name: pip.install
-    - pkgs: ''
+{%- if 'files_archive' in pillar %}
+    - no_index: True
+    - find_links: {{ pillar['files_archive'] }}/pip/
+{%- endif %}
     - requirements: {{ opts['cachedir'] }}/salt-uwsgitop-requirements.txt
     - watch:
       - file: uwsgitop

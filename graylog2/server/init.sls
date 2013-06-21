@@ -54,7 +54,7 @@ graylog2-server:
     - extracted
     - name: /usr/local/
 {%- if 'files_archive' in pillar %}
-    - source: {{ pillar['files_archive'] }}/graylog2-server/{{ version }}.tar.gz
+    - source: {{ pillar['files_archive'] }}/mirror/graylog2-server-{{ version }}.tar.gz
 {%- else %}
     - source: http://download.graylog2.org/graylog2-server/graylog2-server-{{ version }}.tar.gz
 {%- endif %}

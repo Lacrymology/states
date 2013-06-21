@@ -1,8 +1,3 @@
 # {{ pillar['message_do_not_modify'] }}
 
-{%- if 'files_archive' in pillar %}
-{{ pillar['files_archive'] }}/simplejson/3.3.0.tar.gz
-{{ pillar['files_archive'] }}/uwsgitop/0.6.2.tar.gz
-{%- else %}
 uwsgitop==0.6.2
-{%- endif -%}

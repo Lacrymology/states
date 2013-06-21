@@ -1,7 +1,3 @@
 # {{ pillar['message_do_not_modify'] }}
 
-{%- if 'files_archive' in pillar %}
-{{ pillar['files_archive'] }}/virtualenv/1.9.1.tar.gz
-{%- else %}
 virtualenv==1.9.1
-{%- endif -%}

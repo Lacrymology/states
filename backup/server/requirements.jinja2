@@ -1,12 +1,6 @@
 # {{ pillar['message_do_not_modify'] }}
-{%- if 'files_archive' in pillar -%}
-    {%- if 'graylog2_address' in pillar %}
-{{ pillar['files_archive'] }}/graypy/0.2.9.tar.gz
-    {%- endif %}
-{{ pillar['files_archive'] }}/raven/3.3.9.tar.gz
-{%- else -%}
-    {%- if 'graylog2_address' in pillar %}
+
+{%- if 'graylog2_address' in pillar %}
 graypy==0.2.9
-    {%- endif %}
+{%- endif %}
 raven==3.3.9
-{%- endif -%}

@@ -1,9 +1,4 @@
 # {{ pillar['message_do_not_modify'] }}
 
-{%- if 'files_archive' in pillar %}
-{{ pillar['files_archive'] }}/pip/1.3.1.tar.gz
-{{ pillar['files_archive'] }}/psycopg2/2.4.5.tar.gz
-{%- else %}
 pip==1.3.1
 psycopg2==2.4.5
-{%- endif -%}

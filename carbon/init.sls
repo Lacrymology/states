@@ -104,7 +104,10 @@ carbon:
   module:
     - wait
     - name: pip.install
-    - pkgs: ''
+{%- if 'files_archive' in pillar %}
+    - no_index: True
+    - find_links: {{ pillar['files_archive'] }}/pip/
+{%- endif %}
     - upgrade: True
     - bin_env: /usr/local/graphite/bin/pip
     - requirements: /usr/local/graphite/salt-carbon-requirements.txt

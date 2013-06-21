@@ -1,9 +1,4 @@
 # {{ pillar['message_do_not_modify'] }}
 
-{%- if 'files_archive' in pillar %}
-{{ pillar['files_archive'] }}/argparse/1.2.1.tar.gz
-{{ pillar['files_archive'] }}/nagiosplugin/1.0.0.tar.gz
-{%- else %}
 argparse==1.2.1
 nagiosplugin==1.0.0
-{%- endif -%}

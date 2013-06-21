@@ -53,7 +53,7 @@ pip:
     - extracted
     - name: {{ opts['cachedir'] }}
 {%- if 'files_archive' in pillar %}
-    - source: {{ pillar['files_archive'] }}/pip/{{ version }}.tar.gz
+    - source: {{ pillar['files_archive'] }}/pip/pip-{{ version }}.tar.gz
 {%- else %}
     - source: https://pypi.python.org/packages/source/p/pip/pip-{{ version }}.tar.gz
 {%- endif %}

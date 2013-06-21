@@ -1,7 +1,8 @@
 # {{ pillar['message_do_not_modify'] }}
 {%- set mine = salt['mine.get']('*', 'monitoring.data') -%}
 
-{%- for host in mine %}
+{%- for host in mine -%}
+{%- if mine[host]['monitor'] %}
 define host {
     host_name {{ host }}
     address {{ mine[host]['ip_addrs']['private'] }}
@@ -27,7 +28,8 @@ define host {
     business_impact 5
     poller_tag all
 }
-{% endfor -%}
+{% endif -%}
+{%- endfor -%}
 
 {#-
  This file contains the checks for the low-level infrastructure components

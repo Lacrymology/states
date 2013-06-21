@@ -16,6 +16,7 @@ def data():
     output = {
         'shinken_pollers': __salt__['pillar.get']('shinken_pollers', []),
         'roles': __salt__['pillar.get']('roles', []),
+        'monitor': __salt__['pillar.get']('monitor', True)
     }
 
     # figure how monitoring can reach this host

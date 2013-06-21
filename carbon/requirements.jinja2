@@ -2,7 +2,7 @@
 
 pip==1.3.1
 {%- if 'files_archive' in pillar %}
-{{ pillar['files_archive'] }}/pip/diamond-..0github-archive.zip
+{{ pillar['files_archive'] }}/pip/carbon-0.9.10.zip
 {{ pillar['files_archive'] }}/pip/whisper-0.9.10.zip
 {%- else %}
 -e git+git://github.com/graphite-project/carbon.git@7928d76b3f4b30155bd1eb87b525a3b6b0db8380#egg=carbon

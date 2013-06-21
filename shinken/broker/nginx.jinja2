@@ -1,4 +1,5 @@
 # {{ pillar['message_do_not_modify'] }}
+{%- set mine = salt['mine.get']('*', 'monitoring.data') -%}
 
 upstream shinken-backend {
     ip_hash;
@@ -6,7 +7,7 @@ upstream shinken-backend {
     server 127.0.0.1:7767;
 {% else -%}
 {%- for host in pillar['shinken']['architecture']['broker'] %}
-    server {{ pillar['monitoring']['hosts'][host]['address'] }}:7767;
+    server {{ mine[host]['ip_addrs']['private'] }}:7767;
 {% endfor -%}
 {%- endif -%}
 }

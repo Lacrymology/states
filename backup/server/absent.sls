@@ -13,7 +13,6 @@
   file:
     - absent
 
-
 {{ opts['cachedir'] }}/backup-requirements.txt:
   file:
     - absent

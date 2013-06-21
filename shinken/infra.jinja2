@@ -1,4 +1,34 @@
 # {{ pillar['message_do_not_modify'] }}
+{%- set mine = salt['mine.get']('*', 'monitoring.data') -%}
+
+{%- for host in mine %}
+define host {
+    host_name {{ host }}
+    address {{ mine[host]['ip_addrs']['private'] }}
+    alias {{ host }}
+    hostgroups {% for role in mine[host]['roles'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    contact_groups admins
+    notification_interval 0
+    first_notification_delay 0
+    notification_options d,u,r
+    notification_period 24x7
+    notifications_enabled 1
+    active_checks_enabled 1
+    check_period 24x7
+    check_interval 2
+    retry_interval 1
+    max_check_attempts 2
+    check_command check_ping
+    event_handler_enabled 0
+    flap_detection_enabled 1
+    process_perf_data 1
+    retain_status_information 1
+    retain_nonstatus_information 1
+    business_impact 5
+    poller_tag all
+}
+{% endfor -%}
+
 {#-
  This file contains the checks for the low-level infrastructure components
  supported by salt.
@@ -144,34 +174,6 @@ define hostgroup {
 define servicegroup {
     servicegroup_name {{ role }}
     alias {{ role|capitalize }} Role
-}
-{% endfor -%}
-
-{%- for host in pillar['monitoring']['hosts'] %}
-define host {
-    host_name {{ host }}
-    address {{ pillar['monitoring']['hosts'][host]['address'] }}
-    alias {{ host }}
-    hostgroups {% for role in pillar['monitoring']['hosts'][host]['roles'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
-    contact_groups admins
-    notification_interval 0
-    first_notification_delay 0
-    notification_options d,u,r
-    notification_period 24x7
-    notifications_enabled 1
-    active_checks_enabled 1
-    check_period 24x7
-    check_interval 2
-    retry_interval 1
-    max_check_attempts 2
-    check_command check_ping
-    event_handler_enabled 0
-    flap_detection_enabled 1
-    process_perf_data 1
-    retain_status_information 1
-    retain_nonstatus_information 1
-    business_impact 5
-    poller_tag all
 }
 {% endfor -%}
 

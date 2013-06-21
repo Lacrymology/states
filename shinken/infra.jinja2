@@ -832,7 +832,7 @@ define service {
     servicegroups {% for role in pillar['monitoring']['states']['rsync'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description rsync_{{ check }}
     display_name Rsync {{ rsync_check[check] }}
-    check_command check_nrpe!{{ check }}
+    check_command check_nrpe!rsync_{{ check }}
     use salt-service
 }
 {% endfor -%}

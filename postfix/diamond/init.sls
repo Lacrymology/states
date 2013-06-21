@@ -49,10 +49,6 @@ postfix_stats:
   module:
     - wait
     - name: pip.install
-{%- if 'files_archive' in pillar %}
-    - no_index: True
-    - find_links: {{ pillar['files_archive'] }}/pip/
-{%- endif %}
     - upgrade: True
     - bin_env: /usr/local/diamond
     - requirements: /usr/local/diamond/postfix-requirements.txt

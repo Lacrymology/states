@@ -1,20 +1,20 @@
 # {{ pillar['message_do_not_modify'] }}
 
 {%- set rsync = salt['pillar.get']('rsync', []) -%}
-{%- for e in rsync -%}
-    {%- if rsync[e] is mapping -%}
-    {#- config dict for modules #}
-[{{ e }}]
-        {%- for att in rsync[e] %}
-{{ att }} = {{ rsync[e][att] }}
-        {%- endfor -%}
-    {%- else -%}
-    {#- global config #}
-{{ e }} = {{ rsync[e] }}
-    {%- endif -%}
+{#- global settings -#}
+{%- for key in rsync -%}
+{%- if key != 'shares' %}
+{{ key }} = {{ rsync[key] }}
+{%- endif -%}
 {%- endfor -%}
-
 {#- overwrite previously defined key for the following #}
 log file =
 syslog facility = daemon
 pid file = /var/run/rsyncd.pid
+
+{% for share in rsync['shares']|default([]) %}
+[{{ share }}]
+{% for key in rsync['shares'][share] %}
+{{ key }} = {{ rsync['shares'][share][key] }}
+{% endfor -%}
+{% endfor -%}

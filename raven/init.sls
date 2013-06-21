@@ -20,10 +20,6 @@ raven:
   module:
     - wait
     - name: pip.install
-{%- if 'files_archive' in pillar %}
-    - no_index: True
-    - find_links: {{ pillar['files_archive'] }}/pip/
-{%- endif %}
     - upgrade: True
     - requirements: {{ opts['cachedir'] }}/salt-raven-requirements.txt
     - require:

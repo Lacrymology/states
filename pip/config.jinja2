@@ -1,7 +1,11 @@
 # {{ pillar['message_do_not_modify'] }}
 [global]
 
-{%- if 'files_archive' not in pillar %}
+{%- if 'files_archive' in pillar %}
+no-index = true
+find-links =
+    {{ pillar['files_archive'] }}
+{%- else %}
 download-cache = /var/cache/pip
 {%- endif -%}
 

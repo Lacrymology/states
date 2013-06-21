@@ -53,10 +53,6 @@ salt-api-requirements:
   module:
     - wait
     - name: pip.install
-{%- if 'files_archive' in pillar %}
-    - no_index: True
-    - find_links: {{ pillar['files_archive'] }}/pip/
-{%- endif %}
     - requirements: {{ opts['cachedir'] }}/salt-api-requirements.txt
     - watch:
       - file: salt-api-requirements

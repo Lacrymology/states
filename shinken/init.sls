@@ -58,10 +58,6 @@ shinken:
   module:
     - wait
     - name: pip.install
-{%- if 'files_archive' in pillar %}
-    - no_index: True
-    - find_links: {{ pillar['files_archive'] }}/pip/
-{%- endif %}
     - upgrade: True
     - bin_env: /usr/local/shinken/bin/pip
     - requirements: /usr/local/shinken/salt-requirements.txt

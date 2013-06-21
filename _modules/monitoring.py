@@ -29,13 +29,13 @@ def data():
             'private': [__salt__['grains.get']('privateIp')],
         }
     else:
-        # for now, just use eth0
+        interface = __salt__['pillar.get']('network_interface', 'eth0')
         output['ip_addrs'] = {
-            'public': __salt__['network.ip_addrs']('eth0')
+            'public': __salt__['network.ip_addrs'](interface)[0]
         }
         if not output['ip_addrs']['public']:
             # if nothing was found, just grab all IP address
-            output['ip_addrs']['public'] = __salt__['network.ip_addrs']()
+            output['ip_addrs']['public'] = __salt__['network.ip_addrs']()[0]
         output['ip_addrs']['private'] = output['ip_addrs']['public']
 
     # check monitoring_data pillar for extra values to return

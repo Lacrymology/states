@@ -35,12 +35,15 @@ def data():
     else:
         # from network interface
         interface = __salt__['pillar.get']('network_interface', 'eth0')
-        output['ip_addrs'] = {
-            'public': __salt__['network.ip_addrs'](interface)[0]
-        }
-        if not output['ip_addrs']['public']:
+        try:
+            output['ip_addrs'] = {
+                'public': __salt__['network.ip_addrs'](interface)[0]
+            }
+        except IndexError:
             # if nothing was found, just grab all IP address
-            output['ip_addrs']['public'] = __salt__['network.ip_addrs']()[0]
+            output['ip_addrs'] = {
+                'public': __salt__['network.ip_addrs']()[0]
+            }
         output['ip_addrs']['private'] = output['ip_addrs']['public']
 
     # check monitoring_data pillar for extra values to return

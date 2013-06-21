@@ -30,7 +30,7 @@ uwsgi_build:
   archive:
     - extracted
     - name: /usr/local
-    - source: {{ pillar['files_archive'] }}/uwsgi/1.4.3-patched.tar.gz
+    - source: {{ pillar['files_archive'] }}/mirror/uwsgi-1.4.3-patched.tar.gz
     - source_hash: md5=7e906d84fd576bccd1a3bb7ab308ec3c
     - archive_format: tar
     - tar_options: z

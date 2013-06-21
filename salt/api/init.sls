@@ -99,7 +99,7 @@ salt-ui:
   archive:
     - extracted
     - name: /usr/local
-    - source: {{ pillar['files_archive'] }}/salt-ui/6e8eee0477fdb0edaa9432f1beb5003aeda56ae6.tar.gz
+    - source: {{ pillar['files_archive'] }}/mirror/salt-ui-6e8eee0477fdb0edaa9432f1beb5003aeda56ae6.tar.gz
     - source_hash: md5=2b7e581d0134c5f5dc29b5fca7a2df5b
     - archive_format: tar
     - tar_options: z

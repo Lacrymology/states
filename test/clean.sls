@@ -28,14 +28,14 @@ include:
     - name: pkg.install
     - m_name: rsync
     - watch:
-      file: {{ archive_dir }}
+      - file: {{ archive_dir }}
   cmd:
     - wait
     - name: rsync -av {{ pillar['salt_archive']['source'] }} {{ archive_dir }}/
     - watch:
       - file: {{ archive_dir }}
     - require:
-      - moduel: {{ archive_dir }}
+      - module: {{ archive_dir }}
 {% endif %}
 
 {#

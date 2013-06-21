@@ -660,6 +660,9 @@ class Integration(BaseIntegration):
     def test_rsync(self):
         self.top(['rsync'])
 
+    def test_rssh(self):
+        self.top(['rssh'])
+
     def test_salt_api(self):
         self.top(['salt.api'])
 

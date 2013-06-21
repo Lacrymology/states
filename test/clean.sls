@@ -9,10 +9,38 @@ include:
   - ttys
   - kernel_modules
 
+{% set root_info = salt['user.info']('root') %}
+
+{#
+ Copy files archive if necessary.
+ #}
+
+{% set archive_dir = root_info['home'] + '/salt/archive' %}
+{% if 'files_archive' in pillar %}
+{{ archive_dir }}:
+  file:
+    - directory
+    - user: root
+    - group: root
+    - mode: 775
+  module:
+    - wait
+    - name: pkg.install
+    - m_name: rsync
+    - watch:
+      file: {{ archive_dir }}
+  cmd:
+    - wait
+    - name: rsync -av {{ pillar['salt_archive']['source'] }} {{ archive_dir }}/
+    - watch:
+      - file: {{ archive_dir }}
+    - require:
+      - moduel: {{ archive_dir }}
+{% endif %}
+
 {#
  You can't uninstall sudo, if no root password
  #}
-{% set root_info = salt['user.info']('root') %}
 root:
   user:
     - present
@@ -212,6 +240,9 @@ clean_pkg:
       - xml-core
     - require:
       - user: root
+{% if 'files_archive' in pillar %}
+      - cmd: {{ archive_dir }}
+{% endif %}
 
 {% for service in ('acpid', 'console-setup', 'dbus', 'whoopsie') %}
 /var/log/upstart/{{ service }}.log:

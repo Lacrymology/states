@@ -22,7 +22,7 @@ def data():
     if __salt__['grains.get']('ip_addrs', False):
         # from pillar data
         output['ip_addrs'] = __salt__['grains.get']('ip_addrs')
-    if 'availabilityZone' in __salt__['grains.ls']():
+    elif 'availabilityZone' in __salt__['grains.ls']():
         # from ec2_info grains
         output['amazon_ec2'] = {
             'availability_zone': __salt__['grains.get']('availabilityZone'),

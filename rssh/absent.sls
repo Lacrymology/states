@@ -2,7 +2,7 @@ rssh:
   pkg:
     - purged
   file:
-    - absent:
+    - absent
     - name: /etc/rssh.conf
     - require:
       - pkg: rssh

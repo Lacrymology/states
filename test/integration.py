@@ -203,7 +203,14 @@ def setUpModule():
         except Exception, err:
             raise ValueError("%s: %s" % (err, ret))
 
+    if client.__class__ == ClientLocal:
+        logger.info("Install fake mine module")
+        check_error(client('state.sls', 'test.fake_mine'))
+
     _sync_all()
+
+    logger.info("Sync archive")
+    check_error(client('state.sls', 'test.sync'))
 
     logger.info("Uninstall packages we don't want and install deborphan.")
     check_error(client('state.sls', 'test.clean'))
@@ -296,6 +303,7 @@ class BaseIntegration(unittest.TestCase):
         'reprepro.absent',
         'requests.absent',
         'route53.absent',
+        'rssh.absent',
         'ruby.absent',
         'rsync.absent',
         'salt.api.absent',
@@ -731,6 +739,9 @@ class Integration(BaseIntegration):
 
     def test_uwsgi(self):
         self.top(['uwsgi'])
+
+    def test_uwsgitop(self):
+        self.top(['uwsgi.top'])
 
     def test_vim(self):
         self.top(['vim'])

@@ -5,6 +5,7 @@
 include:
   - ssh.client
   - git
+  - local
   - mercurial
   - apt
   - python
@@ -67,6 +68,8 @@ pip:
     - archive_format: tar
     - tar_options: z
     - if_missing: {{ opts['cachedir'] }}/pip-{{ version }}
+    - require:
+      - file: /usr/local
   module:
     - wait
     - name: cmd.run

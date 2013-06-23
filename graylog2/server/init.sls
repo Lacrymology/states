@@ -5,6 +5,7 @@ include:
   - graylog2
   - mongodb
   - apt
+  - local
 
 {# TODO: set Email output plugin settings straight into MongoDB from salt #}
 {# TODO: run graylog2 server as a non-root user #}
@@ -62,6 +63,8 @@ graylog2-server:
     - archive_format: tar
     - tar_options: z
     - if_missing: {{ server_root_dir }}
+    - require:
+      - file: /usr/local
   file:
     - managed
     - name: /etc/graylog2.conf

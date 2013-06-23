@@ -5,6 +5,7 @@ include:
   - salt.master
   - git
   - apt
+  - local
   - nginx
   - pip
   - salt
@@ -100,6 +101,8 @@ salt-ui:
     - archive_format: tar
     - tar_options: z
     - if_missing: /usr/local/salt-ui/
+    - require:
+      - file: /usr/local
 {%- else %}
   git:
     - latest

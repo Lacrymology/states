@@ -16,6 +16,7 @@ include:
   - build
   - graylog2
   - gsyslog
+  - local
   - mongodb
   - nginx
   - ruby
@@ -100,6 +101,8 @@ graylog2-web:
     - archive_format: tar
     - tar_options: z
     - if_missing: {{ web_root_dir }}
+    - require:
+      - file: /usr/local
   cmd:
     - wait
     - stateful: False

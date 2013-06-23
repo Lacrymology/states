@@ -8,6 +8,7 @@
  #}
 include:
   - git
+  - local
   - nginx
   - pip
   - web
@@ -35,6 +36,8 @@ uwsgi_build:
     - archive_format: tar
     - tar_options: z
     - if_missing: /usr/local/uwsgi
+    - require:
+      - file: /usr/local
 {%- else -%}
   {%- set uwsgi_download_module = "git" %}
   git:
@@ -44,6 +47,7 @@ uwsgi_build:
     - target: /usr/local/uwsgi
     - require:
       - pkg: git
+      - file: /usr/local
 {%- endif %}
   file:
     - managed

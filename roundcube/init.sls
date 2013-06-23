@@ -16,6 +16,7 @@ Optional Pillar
 include:
   - nginx
   - apt
+  - local
   - postgresql.server
   - uwsgi.php
   - web
@@ -42,6 +43,8 @@ roundcube:
     - archive_format: tar
     - tar_options: z
     - if_missing: /usr/local/roundcubemail-{{ version }}
+    - require:
+      - file: /usr/local
   postgres_user:
     - present
     - name: roundcube
@@ -133,7 +136,7 @@ roundcube:
     - require:
       - file: uwsgi_emperor
       - postgres_database: roundcube
-      - cmd:
+      - cmd: roundcube_initial
     - context:
       dir: {{ roundcubedir }}
   module:
@@ -143,7 +146,7 @@ roundcube:
     - watch:
       - file: {{ roundcubedir }}/config/main.inc.php
       - file: {{ roundcubedir }}/config/db.inc.php
-      - archive: roundcubemail_archive
+      - archive: roundcube
       - pkg: php5-pgsql
 
 roundcube_initial:

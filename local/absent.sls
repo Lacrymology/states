@@ -13,6 +13,7 @@ include:
   - sentry.absent
   - statsd.absent
   - uwsgi.absent
+  - uwsgi.top.absent
   - virtualenv.absent
 
 /usr/local:

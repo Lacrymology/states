@@ -110,6 +110,7 @@ salt_archive_incoming:
 {% for type in ('pip', 'mirror') %}
 /var/lib/salt_archive/incoming/{{ type }}:
   file:
+    - directory
     - user: salt_archive
     - group: salt_archive
     - mode: 770

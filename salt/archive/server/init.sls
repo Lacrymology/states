@@ -60,6 +60,10 @@ include:
 
 /etc/cron.hourly/salt_archive:
   file:
+    - absent
+
+/etc/cron.d/salt-archive:
+  file:
     - managed
     - template: jinja
     - user: root
@@ -67,8 +71,8 @@ include:
     - mode: 550
     - source: salt://salt/archive/server/cron.jinja2
     - require:
-      - pkg: cron
       - user: salt_archive
+      - file: /usr/local/bin/salt_archive_incoming.py
 
 /etc/nginx/conf.d/salt_archive.conf:
   file:
@@ -121,12 +125,12 @@ salt_archive_incoming:
     - group: root
     - source: salt://salt/archive/server/incoming.py
     - mode: 550
-  cron:
-    - present
-    - user: root
-    - minute: */5
 
 extend:
+  cron:
+    service:
+      - watch:
+        - file: /etc/cron.d/salt-archive
   nginx:
     service:
       - watch:

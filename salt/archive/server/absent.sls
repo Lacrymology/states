@@ -2,6 +2,7 @@
   file:
     - absent
 
+{#- old version of states -#}
 /etc/cron.hourly/salt_archive:
   file:
     - absent
@@ -9,6 +10,7 @@
 /usr/local/bin/salt_archive_incoming.py:
   file:
     - absent
-  cron:
+
+/etc/cron.d/salt-archive:
+  file:
     - absent
-    - user: root

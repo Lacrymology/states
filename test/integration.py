@@ -18,6 +18,7 @@ Check file docs/tests.rst for details.
 # faire un test ALL avec tout les states loader en meme temps
 
 import logging
+import pwd
 import unittest
 import sys
 import os
@@ -162,6 +163,8 @@ def tearDownModule():
     client('state.sls', 'ssh.server')
     logger.info("Install sudo to give a way to switch to root")
     client('state.sls', 'sudo')
+    logger.info("Install vim")
+    client('state.sls', 'vim')
     logger.info("Revert /etc/salt/minion to original value.")
     with open('/etc/salt/minion', 'w') as minion_fh:
         minion_fh.write(minion_configuration)
@@ -172,6 +175,9 @@ def setUpModule():
     Prepare minion for tests, this is executed only once time.
     """
     global client, minion_configuration
+
+    # force HOME to be root directory
+    os.environ['HOME'] = pwd.getpwnam('root').pw_dir
 
     with open('/etc/salt/minion', 'r') as minion_fh:
         minion_configuration = minion_fh.read()

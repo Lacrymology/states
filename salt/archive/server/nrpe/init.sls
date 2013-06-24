@@ -30,4 +30,4 @@ extend:
   nagios-nrpe-server:
     service:
       - watch:
-        - file: /etc/nagios/nrpe.d/graphite-nginx.cfg
+        - file: /etc/nagios/nrpe.d/salt_archive-nginx.cfg

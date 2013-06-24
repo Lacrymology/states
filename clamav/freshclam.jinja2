@@ -14,7 +14,9 @@ Foreground false
 Debug false
 MaxAttempts 5
 DatabaseDirectory /var/lib/clamav
-DNSDatabaseInfo {{ salt['pillar.get']('clamav:dns_db', 'current.cvd.clamav.net') }}
+{%- for mirror in salt['pillar.get']('clamav:dns_db', ('current.cvd.clamav.net',)) %}
+DNSDatabaseInfo {{ mirror }}
+{%- endfor %}
 AllowSupplementaryGroups false
 PidFile /var/run/clamav/freshclam.pid
 ConnectTimeout {{ salt['pillar.get']('clamav:connect_timeout', 30) }}

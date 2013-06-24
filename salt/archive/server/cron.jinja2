@@ -7,4 +7,4 @@ find {{ home }}/* ! -group salt_archive -exec chgrp salt_archive {} \;
 {#- make sure file are 644 #}
 find {{ home }}/* -type f ! -perm 644 -exec chmod 644 {} \;
 {#- make sure directory are 775 #}
-find {{ home }}/* -type d ! -perm 775 -exec chmod 775 {} \;
+find {{ home }}/* -type d ! -perm 755 -exec chmod 775 {} \;

@@ -20,12 +20,31 @@ Optional Pillar
 ---------------
 
 salt_archive:
+  source: rsync://salt.bit-flippers.com/archive/
   web:
     ssl: mykeyname
     ssl_redirect: True
 
+salt_archive:source: rsync server used as the source for archived files.
 salt_archive:web:ssl: SSL key to use to secure this server archive
-salt_archive:web:ssl_redirect: if True, redirect all HTTP traffic to HTTPs
+salt_archive:web:ssl_redirect: if True, redirect all HTTP traffic to HTTPs.
+
+This state also need the following pillar for rsync state:
+
+rsync:
+  uid: salt_archive
+  gid: salt_archive
+  'use chroot': yes
+  shares:
+    archive:
+      path: /var/lib/salt_archive
+      'read only': true
+      'only read': true
+      'dont compress': true
+      exclude: .* incoming
+
+You can change the name 'archive' by something else. but you need to change your
+files_archive pillar value accordingly.
 -#}
 
 {%- set ssl = pillar['salt_archive']['web']['ssl']|default(False) -%}
@@ -34,6 +53,7 @@ include:
   - cron
   - nginx
   - salt.archive
+  - ssh.server
 {%- if ssl %}
   - ssl
 {%- endif %}
@@ -71,7 +91,40 @@ salt_archive_{{ key }}:
     - enc: {{ pillar['salt_archive']['keys'][key] }}
     - require:
       - user: salt_archive
+      - service: openssh-server
 {% endfor -%}
+
+salt_archive_incoming:
+  file:
+    - name: /var/lib/salt_archive/incoming
+    - user: salt_archive
+    - group: salt_archive
+    - mode: 550
+    - require:
+      - user: salt_archive
+
+{% for type in ('pip', 'mirror') %}
+/var/lib/salt_archive/incoming/{{ type }}:
+  file:
+    - user: salt_archive
+    - group: salt_archive
+    - mode: 770
+    - require:
+      - user: salt_archive
+      - file: salt_archive_incoming
+{% endfor %}
+
+/usr/local/bin/salt_archive_incoming.py:
+  file:
+    - managed
+    - user: root
+    - group: root
+    - source: salt://salt/archive/server/incoming.py
+    - mode: 550
+  cron:
+    - present
+    - user: root
+    - minute: */5
 
 extend:
   nginx:

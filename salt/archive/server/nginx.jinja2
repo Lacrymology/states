@@ -24,14 +24,14 @@ server {
 
     root /var/lib/salt_archive;
 
-{%- for location in ('favicon.ico', '.ssh') %}
+{%- for location in ('favicon.ico', '.ssh', 'incoming') %}
     location /{{ location }} {
         deny all;
         return 404;
     }
 {%- endfor %}
 
-    location ~* \.(gz|txt)$ {
+    location ~* \.(gz|txt|zip)$ {
         expires max;
     }
 

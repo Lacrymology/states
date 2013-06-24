@@ -14,7 +14,11 @@ group =
 pid_file = /var/run/diamond.pid
 
 # Directory to load collector modules from
+{%- if 'files_archive' in pillar %}
+collectors_path = /usr/local/diamond/share/diamond/collectors
+{%- else %}
 collectors_path = /usr/local/diamond/src/diamond/src/collectors/
+{%- endif %}
 
 # Directory to load collector config from
 collectors_config_path = /etc/diamond/collectors/

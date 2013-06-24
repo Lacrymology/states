@@ -4,7 +4,7 @@
 {%- if 'files_archive' in pillar %}
 no-index = true
 find-links =
-    {{ pillar['files_archive'] }}
+    {{ pillar['files_archive'] }}/pip/
 {%- else %}
 download-cache = /var/cache/pip
 {%- endif -%}

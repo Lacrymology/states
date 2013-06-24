@@ -30,8 +30,8 @@ def data():
             'region':  __salt__['grains.get']('region')
         }
         output['ip_addrs'] = {
-            'public': [__salt__['grains.get']('public-ipv4')],
-            'private': [__salt__['grains.get']('privateIp')],
+            'public': __salt__['grains.get']('public-ipv4'),
+            'private': __salt__['grains.get']('privateIp'),
         }
     else:
         # from network interface

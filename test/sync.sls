@@ -14,7 +14,7 @@ include:
     - mode: 775
   cmd:
     - run
-    - name: rsync -av {{ pillar['salt_archive']['source'] }} {{ archive_dir }}/
+    - name: rsync -av --delete {{ pillar['salt_archive']['source'] }} {{ archive_dir }}/
     - require:
       - pkg: rsync
       - file: {{ archive_dir }}

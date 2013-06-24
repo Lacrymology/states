@@ -81,6 +81,7 @@ roundcube:
     - group: www-data
     - mode: 440
     - require:
+      - file: {{ roundcubedir }}
       - archive: roundcube
       - user: web
 
@@ -94,6 +95,7 @@ roundcube:
     - group: www-data
     - mode: 440
     - require:
+      - file: {{ roundcubedir }}
       - user: web
       - archive: roundcube
 

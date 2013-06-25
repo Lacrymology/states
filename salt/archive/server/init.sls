@@ -100,6 +100,7 @@ salt_archive_{{ key }}:
 
 salt_archive_incoming:
   file:
+    - directory
     - name: /var/lib/salt_archive/incoming
     - user: salt_archive
     - group: salt_archive

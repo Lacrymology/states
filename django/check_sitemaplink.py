@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/local/nagios/bin/python
 # -*- coding: utf-8 -*-
 
 import argparse

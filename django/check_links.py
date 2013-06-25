@@ -5,7 +5,6 @@ import argparse
 import pickle
 import sitemap
 import socket
-import sys
 import os
 import urllib2
 

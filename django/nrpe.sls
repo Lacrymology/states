@@ -28,9 +28,10 @@ python-sitemap:
       - file: python-sitemap
 
 {%- for check in ('robots', 'sitemap', 'links', 'sitemaplink') %}
-/usr/lib/nagios/plugins/check_{{ check }}.py:
+check_{{ check }}:
   file:
     - managed
+    - name: /usr/lib/nagios/plugins/check_{{ check }}.py
     - user: nagios
     - group: nagios
     - mode: 550
@@ -39,3 +40,17 @@ python-sitemap:
       - pkg: nagios-nrpe-server
       - module: python-sitemap
 {%- endfor %}
+
+django-nrpe:
+  file:
+    - directory
+    - name: /var/lib/nrpe
+    - user: nagios
+    - group: nagios
+    - mode: 770
+    - require:
+      - file: check_robots
+      - file: check_sitemap
+      - file: check_links
+      - file: check_sitemaplink
+      - pkg: nagios-nrpe-server

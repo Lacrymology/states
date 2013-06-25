@@ -9,7 +9,7 @@ import sitemap
 import sys
 
 
-RESULT_PREFIX = '/tmp'
+RESULT_PREFIX = '/var/lib/nrpe'
 
 
 def sitemap_to_path(sitemap):

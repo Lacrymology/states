@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 
+import salt.modules.cmdmod
 
-def architecture():
+
+def arch():
     return {
-        'debian_architecture': __salt__['cmd.run']('dpkg --print-architecture')
+        'debian_arch': salt.modules.cmdmod._run_quiet(
+            'dpkg --print-architecture')
     }

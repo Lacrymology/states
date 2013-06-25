@@ -1,11 +1,24 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+"""
+Check if robots.txt exists and contains values.
+
+Usage::
+
+  check_robots.py [hostname|or IP]
+"""
+
 import robotparser
 import sys
 
 rp = robotparser.RobotFileParser()
-url = "http://%s/robots.txt" % sys.argv[1]
+try:
+    url = "http://%s/robots.txt" % sys.argv[1]
+except IndexError:
+    print "ROBOTS WARNING - missing argument hostname or IP"
+    sys.exit(1)
+
 rp.set_url(url)
 try:
     rp.read()

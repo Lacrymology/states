@@ -4,14 +4,21 @@
 include:
   - apt
 
-nodejs:
-  apt_repository:
-    - ubuntu_ppa
-    - user: chris-lea
-    - name: node.js
-    - key_id: C7917B12
+{% set version = '0.10.12' %}
+rlwrap:
   pkg:
-    - latest
+    - installed
     - require:
-      - apt_repository: nodejs
       - cmd: apt_sources
+
+nodejs:
+  pkg:
+    - installed
+    - sources:
+{%- if 'files_archive' in pillar %}
+      - nodejs: {{ pillar['files_archive'] }}/mirror/nodejs_{{ version }}-1chl1~precise1_{{ grains['debian_arch'] }}.deb
+{%- else %}
+      - nodejs: http://ppa.launchpad.net/chris-lea/node.js/ubuntu/pool/main/n/nodejs/nodejs_{{ version }}-1chl1~precise1_{{ grains['debian_arch'] }}.deb
+{%- endif %}
+    - require:
+      - pkg: rlwrap

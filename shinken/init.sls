@@ -45,6 +45,8 @@ include:
     - user: root
     - group: root
     - mode: 755
+    - require:
+      - virtualenv: shinken
 
 shinken:
   virtualenv:

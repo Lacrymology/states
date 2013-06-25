@@ -1,5 +1,5 @@
 # {{ pillar['message_do_not_modify'] }}
 command[{{ deployment }}_robots]=/usr/lib/nagios/plugins/check_robots.py {{ domain_name }}
 command[{{ deployment }}_django_admin]=/usr/lib/nagios/plugins/check_http {% if https|default(False) -%}-S{% endif %} -H {{ domain_name }} -u /admin/ -e '200 OK' -I {{ salt['network.ip_addrs']()[0] }}
-command[{{ deployment }}_sitemap]=/usr/lib/nagios/plugins/check_sitemap.py http://{{ domain_name }}/sitemap.xml
+command[{{ deployment }}_sitemap]=/usr/lib/nagios/plugins/check_sitemap.py -w 1:1 -c 2:65535 -s http://{{ domain_name }}/sitemap.xml
 command[{{ deployment }}_sitemaplink]=/usr/lib/nagios/plugins/check_sitemaplink.py http://{{ domain_name }}/sitemap.xml

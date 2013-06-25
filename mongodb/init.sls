@@ -6,8 +6,9 @@
  #}
 include:
   - logrotate
-  - apt
 
+{% set version = '2.4.4' %}
+{% set filename = 'mongodb-10gen_' + version + '_' + grains['debian_arch'] + '.deb' %}
 
 mongodb:
   file:
@@ -25,31 +26,16 @@ mongodb:
     - enable: True
     - watch:
       - pkg: mongodb
-{%- if 'files_archive' not in pillar %}
-  pkg:
-    - installed
-    - name: mongodb-10gen
-    - require:
-      - cmd: apt_sources
-      - pkgrepo: mongodb
-  pkgrepo:
-    - managed
-    - name: deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen
-    - file: /etc/apt/sources.list.d/downloads-distro.mongodb.org-repo_ubuntu-upstart-dist.list
-    - keyid: 7F0CEB10
-    - keyserver: keyserver.ubuntu.com
-{%- else %}
   pkg:
     - installed
     - sources:
-      {%- if grains['cpuarch'] == 'x86_64' %}
-      - mongodb-10gen: {{ pillar['files_archive'] }}/mirror/mongodb-10gen_2.4.4_amd64.deb
-      {%- else %}
-      - mongodb-10gen: {{ pillar['files_archive'] }}/mirror/mongodb-10gen_2.4.4_i386.deb
-      {%- endif %}
+{%- if 'files_archive' in pillar %}
+      - mongodb-10gen: {{ pillar['files_archive'] }}/mirror/{{ filename }}
+{%- else %}
+      - mongodb-10gen: http://downloads-distro.mongodb.org/repo/ubuntu-upstart/dists/dist/10gen/binary-{{ grains['debian_arch'] }}/{{ filename }}
+{%- endif %}
 
 mongodb_old_apt_repo:
   file:
     - name: /etc/apt/sources.list.d/downloads-distro.mongodb.org-repo_ubuntu-upstart-dist.list
     - absent
-{%- endif %}

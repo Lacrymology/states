@@ -3,7 +3,6 @@
  #}
 include:
   - web
-  - apt
   - gsyslog
 
 {% set bad_configs = ('default', 'example_ssl') %}
@@ -92,21 +91,18 @@ nginx-logger-{{ log_type }}:
     - require:
       - pkg: nginx
 
+{% set version = '1.4.1' %}
 nginx:
-  apt_repository:
-    - present
-    - address: http://nginx.org/packages/ubuntu/
-    - components:
-      - nginx
-    - key_server: subkeys.pgp.net
-    - key_id: 7BD9BF62
   pkg:
-    - latest
-    - name: nginx
+    - installed
+    - sources:
+{%- if 'files_archive' in pillar %}
+      - nginx: {{ pillar['files_archive'] }}/mirror/nginx_{{ version }}-1~precise_{{ grains['debian_arch'] }}.deb
+{%- else %}
+      - nginx: http://nginx.org/packages/ubuntu/pool/nginx/n/nginx/nginx_{{ version }}-1~precise_{{ grains['debian_arch'] }}.deb
+{%- endif %}
     - require:
-      - apt_repository: nginx
       - user: web
-      - cmd: apt_sources
   file:
     - managed
     - name: /etc/init/nginx.conf
@@ -133,3 +129,8 @@ nginx:
 {% for log_type in logger_types %}
       - service: nginx-logger-{{ log_type }}
 {% endfor %}
+
+
+/etc/apt/sources.list.d/nginx.org-packages_ubuntu-precise.list:
+  file:
+    - absent

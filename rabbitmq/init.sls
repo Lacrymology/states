@@ -73,6 +73,7 @@ destructive_absent: If True (not default), RabbitMQ data saved on disk is purged
 
 include:
   - hostname
+  - apt
 {% if pillar['rabbitmq']['management'] != 'guest' -%}
   {%- if pillar['rabbitmq']['ssl']|default(False) %}
   - ssl
@@ -119,6 +120,39 @@ rabbitmq_erlang_cookie:
     - source: salt://rabbitmq/cookie.jinja2
     - require:
       - file: /var/lib/rabbitmq
+rabbitmq_dependencies:
+  pkg:
+    - installed
+    - pkgs:
+      - erlang-base
+      - erlang-syntax-tools
+      - erlang-asn1
+      - erlang-mnesia
+      - erlang-runtime-tools
+      - erlang-crypto
+      - erlang-public-key
+      - erlang-ssl
+      - erlang-inets
+      - erlang-corba
+      - erlang-diameter
+      - erlang-xmerl
+      - erlang-edoc
+      - erlang-docbuilder
+      - erlang-erl-docgen
+      - erlang-eunit
+      - erlang-ic
+      - erlang-inviso
+      - erlang-odbc
+      - erlang-snmp
+      - erlang-os-mon
+      - erlang-parsetools
+      - erlang-percept
+      - erlang-ssh
+      - erlang-webtool
+      - erlang-tools
+      - erlang-nox
+    - require:
+      - cmd: apt_sources
 
 rabbitmq-server:
   pkg:
@@ -130,6 +164,7 @@ rabbitmq-server:
       - rabbitmq-server: http://www.rabbitmq.com/releases/rabbitmq-server/v{{ version }}/rabbitmq-server_{{ version }}-1_all.deb
 {%- endif %}
     - require:
+      - pkg: rabbitmq_dependencies
       - host: hostname
       - file: rabbitmq_erlang_cookie
   file:

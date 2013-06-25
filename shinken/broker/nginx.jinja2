@@ -1,5 +1,5 @@
 # {{ pillar['message_do_not_modify'] }}
-{%- set mine = salt['mine.get']('*', 'monitoring.data') -%}
+{%- set mine = salt['mine.get']('*', 'monitoring.data') %}
 
 upstream shinken-backend {
     ip_hash;

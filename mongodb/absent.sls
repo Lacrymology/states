@@ -2,7 +2,10 @@
  Uninstall a MongoDB NoSQL server.
 #}
 
-{# TODO: remove apt_repository #}
+mongodb_old_apt_repo:
+  file:
+    - name: /etc/apt/sources.list.d/downloads-distro.mongodb.org-repo_ubuntu-upstart-dist.list
+    - absent
 
 mongodb:
   pkg:

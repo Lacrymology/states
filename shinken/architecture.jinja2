@@ -17,7 +17,7 @@ http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects
 define arbiter {
     arbiter_name arbiter-{{ grains['id'] }}
     host_name {{ id }}
-    address {{ mine[id]['ip_addrs']['public'] }}
+    address {{ mine[id]['ip_addrs']['private'] }}
     port 7770
     modules arbiter-retention
     {# only the first one is not a spare #}

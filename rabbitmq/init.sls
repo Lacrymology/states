@@ -72,7 +72,6 @@ destructive_absent: If True (not default), RabbitMQ data saved on disk is purged
 {#- TODO: SSL support http://www.rabbitmq.com/ssl.html -#}
 
 include:
-  - apt
   - hostname
 {% if pillar['rabbitmq']['management'] != 'guest' -%}
   {%- if pillar['rabbitmq']['ssl']|default(False) %}
@@ -107,6 +106,8 @@ rabbitmq:
  If the cookie is changed while the daemon is running, it cannot be stopped
  using regular startup script and need to be manually killed.
  #}
+
+{% set version = '3.1.2' %}
 rabbitmq_erlang_cookie:
   file:
     - managed
@@ -120,19 +121,15 @@ rabbitmq_erlang_cookie:
       - file: /var/lib/rabbitmq
 
 rabbitmq-server:
-  apt_repository:
-    - present
-    - address: http://www.rabbitmq.com/debian/
-    - components:
-      - main
-    - distribution: testing
-    - key_server: pgp.mit.edu
-    - key_id: 056E8E56
   pkg:
-    - latest
+    - installed
+    - sources:
+{%- if 'files_archive' in pillar %}
+      - rabbitmq-server: {{ pillar['files_archive'] }}/mirror/rabbitmq-server_{{ version }}-1_all.deb
+{%- else %}
+      - rabbitmq-server: http://www.rabbitmq.com/releases/rabbitmq-server/v{{ version }}/rabbitmq-server_{{ version }}-1_all.deb
+{%- endif %}
     - require:
-      - apt_repository: rabbitmq-server
-      - cmd: apt_sources
       - host: hostname
       - file: rabbitmq_erlang_cookie
   file:
@@ -148,7 +145,6 @@ rabbitmq-server:
     - require:
       - pkg: rabbitmq-server
     - watch:
-      - apt_repository: rabbitmq-server
       - file: rabbitmq-server
       - rabbitmq_plugins: rabbitmq-server
 {% for node in pillar['rabbitmq']['cluster']['nodes'] %}
@@ -248,3 +244,8 @@ extend:
         - file: /etc/ssl/{{ pillar['rabbitmq']['ssl'] }}/ca.crt
   {% endif %}
 {% endif %}
+
+
+/etc/apt/sources.list.d/www.rabbitmq.com-debian-testing.list:
+  file:
+    - absent

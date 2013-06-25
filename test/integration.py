@@ -1102,15 +1102,11 @@ class IntegrationFull(BaseIntegration):
 
     def tearDown(self):
         global client
-        skipped = []
         executed_checks = self._check_total.keys()
         for check in client('nrpe.list_checks'):
             if check not in executed_checks:
-                skipped.append(check)
-        if skipped:
-            logger.warning(
-                "For top '%s', the following NRPE checks weren't executed: %s",
-                ','.join(self._previous_top), ','.join(skipped))
+                self._check_failed.append("NRPE check '%s' wasn't executed" %
+                                          check)
         if self._check_failed:
             self.fail(os.linesep.join(self._check_failed))
 
@@ -1119,7 +1115,7 @@ class IntegrationFull(BaseIntegration):
                      reason)
         time.sleep(seconds)
 
-    def run_check(self, check_name):
+    def run_check(self, check_name, accepted_failure=None):
         """
         Run a Nagios NRPE check as a test
         """
@@ -1128,6 +1124,9 @@ class IntegrationFull(BaseIntegration):
         output = client('nrpe.run_check', check_name)
         self._check_total[check_name] = True
         if not output['result']:
+            if accepted_failure is not None:
+                if accepted_failure in output['comment']:
+                    return
             self._check_failed.append('%s: %s' % (check_name,
                                                   output['comment']))
 
@@ -1266,7 +1265,8 @@ class IntegrationFull(BaseIntegration):
     def check_elasticsearch(self):
         self.run_check('elasticsearch_port_http')
         self.run_check('elasticsearch_port_transport')
-        self.run_check('elasticsearch_cluster')
+        self.run_check('elasticsearch_cluster',
+                       '1 nodes in cluster (outside 2:2)')
 
     def test_elasticsearch_nginx(self):
         self.top(['elasticsearch', 'elasticsearch.diamond',
@@ -1277,9 +1277,9 @@ class IntegrationFull(BaseIntegration):
         self.sleep('Elasticsearch')
         self.check_elasticsearch()
         self.check_elasticsearch_nginx()
+        self.run_check('elasticsearch_procs')
 
     def check_elasticsearch_nginx(self):
-        self.run_check('elasticsearch_procs')
         self.check_nginx_instance('elasticsearch')
 
     def test_firewall(self):

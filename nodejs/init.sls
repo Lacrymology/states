@@ -22,3 +22,7 @@ nodejs:
 {%- endif %}
     - require:
       - pkg: rlwrap
+
+/etc/apt/sources.list.d/chris-lea-node.js-precise.lis:
+  file:
+    - absent

@@ -9,11 +9,14 @@ Optional Pillar
 ---------------
 
 clamav:
-  dns_db: 'current.cvd.clamav.net'
+  dns_db:
+    - current.cvd.clamav.net
   connect_timeout: 30
   receive_timeout: 30
   times_of_check: 24
-  db_mirrors: ('db.local.clamav.net', 'database.clamav.net')
+  db_mirrors:
+    - db.local.clamav.net
+    - database.clamav.net
 
 
 clamav:dns_db: database verification domain, DNS used to verify virus database version.

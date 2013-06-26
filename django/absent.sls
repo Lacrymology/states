@@ -8,3 +8,7 @@
 /usr/lib/nagios/plugins/check_robots.py:
   file:
     - absent
+
+/var/lib/nrpe:
+  file:
+    - absent

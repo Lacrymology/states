@@ -43,16 +43,6 @@ check_{{ check }}:
       - module: python-sitemap
 {%- endfor %}
 
-django-nrpe:
+/var/lib/nrpe:
   file:
-    - directory
-    - name: /var/lib/nrpe
-    - user: nagios
-    - group: nagios
-    - mode: 770
-    - require:
-      - file: check_robots
-      - file: check_sitemap
-      - file: check_links
-      - file: check_sitemaplink
-      - pkg: nagios-nrpe-server
+    - absent

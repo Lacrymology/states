@@ -1,0 +1,3 @@
+#!/bin/sh
+# {{ pillar['message_do_not_modify'] }}
+{{ minute }} {{ hour }} * * * nagios /usr/lib/nagios/check_links.py http://{{ domain_name }}/sitemap.xml > /dev/null 2> /dev/null

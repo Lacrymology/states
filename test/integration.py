@@ -1186,6 +1186,7 @@ class IntegrationFull(BaseIntegration):
         self.check_integration()
         self.check_cron()
         self.check_ssh_server()
+        self.run_check('backups_last')
 
     def test_bash(self):
         self.top(['bash', 'bash.nrpe'])
@@ -1258,9 +1259,12 @@ class IntegrationFull(BaseIntegration):
                   'elasticsearch.nrpe'])
         self.check_integration()
         self.check_cron()
+        self.check_nginx()
         self.sleep('Elasticsearch')
         self.check_elasticsearch()
-        self.run_check('elasticsearch_procs')
+        # this is turned on only if SSL is in pillar
+        self.check_nginx_instance('elasticsearch')
+        self.check_elasticsearch_nginx()
 
     def check_elasticsearch(self):
         self.run_check('elasticsearch_port_http')
@@ -1268,16 +1272,16 @@ class IntegrationFull(BaseIntegration):
         self.run_check('elasticsearch_cluster',
                        '1 nodes in cluster (outside 2:2)')
 
-    def test_elasticsearch_nginx(self):
-        self.top(['elasticsearch', 'elasticsearch.diamond',
-                  'elasticsearch.nrpe', 'nginx', 'nginx.nrpe', 'nginx.diamond'])
-        self.check_integration()
-        self.check_cron()
-        self.check_nginx()
-        self.sleep('Elasticsearch')
-        self.check_elasticsearch()
-        self.check_elasticsearch_nginx()
-        self.run_check('elasticsearch_procs')
+    # def test_elasticsearch_nginx(self):
+    #     self.top(['elasticsearch', 'elasticsearch.diamond',
+    #               'elasticsearch.nrpe', 'nginx', 'nginx.nrpe', 'nginx.diamond'])
+    #     self.check_integration()
+    #     self.check_cron()
+    #     self.check_nginx()
+    #     self.sleep('Elasticsearch')
+    #     self.check_elasticsearch()
+    #     self.check_elasticsearch_nginx()
+    #     self.run_check('elasticsearch_procs')
 
     def check_elasticsearch_nginx(self):
         self.check_nginx_instance('elasticsearch')
@@ -1428,6 +1432,7 @@ class IntegrationFull(BaseIntegration):
     def test_openvpn(self):
         self.top(['openvpn', 'openvpn.nrpe', 'openvpn.diamond'])
         self.check_integration()
+        self.run_check('openvpn_procs')
 
     def test_pdnsd(self):
         self.top(['pdnsd', 'pdnsd.nrpe', 'pdnsd.diamond'])
@@ -1552,6 +1557,7 @@ class IntegrationFull(BaseIntegration):
 
     def test_salt_archive_server_http(self):
         self.top(['salt.archive.server', 'salt.archive.server.nrpe'])
+        self.check_integration()
         self.check_nginx()
         self.check_nginx_instance('salt_archive')
 
@@ -1613,13 +1619,13 @@ class IntegrationFull(BaseIntegration):
         self.check_integration()
         self.check_shinken_broker()
         self.check_nginx()
+        self.run_check('shinken_broker_web', 'Connection refused')
+        self.run_check('shinken_broker_http', 'Connection refused')
+        self.run_check('shinken_nginx_http', 'Invalid HTTP response')
+        self.run_check('shinken_nginx_https', 'Invalid HTTP response')
 
-    def check_shinken_broker(self):
-        self.run_check('shinken_broker_web')
-        self.run_check('shinken_broker_http')
+    def check_shinken_broker(self, init_failed=False):
         self.run_check('shinken_broker_procs')
-        self.run_check('shinken_broker_port')
-        self.check_nginx_instance('shinken')
 
     def test_shinken_poller(self):
         self.top(['shinken.poller', 'shinken.poller.nrpe',
@@ -1661,12 +1667,16 @@ class IntegrationFull(BaseIntegration):
         self.check_integration()
         self.sleep('Arbiter')
         self.check_shinken_arbiter()
-        self.check_shinken_broker()
         self.check_shinken_poller()
         self.check_shinken_reactionner()
         self.check_shinken_scheduler()
         self.check_nginx()
         self.check_shinken()
+        # broker
+        self.run_check('shinken_broker_web')
+        self.run_check('shinken_broker_http')
+        self.run_check('shinken_broker_port')
+        self.check_nginx_instance('shinken')
 
     def check_shinken(self):
         # self.run_check('shinken_broker_web')

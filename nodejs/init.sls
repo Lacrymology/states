@@ -5,6 +5,8 @@ include:
   - apt
 
 {% set version = '0.10.12' %}
+{% set filename = "nodejs_" +  version  + "-1chl1~" +  grains['lsb_codename']  + "1_" +  grains['debian_arch']  + ".deb" %}
+
 rlwrap:
   pkg:
     - installed
@@ -16,9 +18,9 @@ nodejs:
     - installed
     - sources:
 {%- if 'files_archive' in pillar %}
-      - nodejs: {{ pillar['files_archive'] }}/mirror/nodejs_{{ version }}-1chl1~precise1_{{ grains['debian_arch'] }}.deb
+      - nodejs: {{ pillar['files_archive'] }}/mirror/{{ filename }}
 {%- else %}
-      - nodejs: http://ppa.launchpad.net/chris-lea/node.js/ubuntu/pool/main/n/nodejs/nodejs_{{ version }}-1chl1~precise1_{{ grains['debian_arch'] }}.deb
+      - nodejs: http://ppa.launchpad.net/chris-lea/node.js/ubuntu/pool/main/n/nodejs/{{ filename }}
 {%- endif %}
     - require:
       - pkg: rlwrap

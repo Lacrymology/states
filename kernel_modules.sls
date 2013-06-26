@@ -10,7 +10,7 @@ useless_kmod:
       - floppy
       - ppdev
       - serio_raw
-      - parport
+      - parport_pc
       - psmouse
       - reiserfs
       - ufs
@@ -34,10 +34,10 @@ dependencies_kmod:
   kmod:
     - absent
     - names:
+      - parport
       - fat
       - libcrc32c
       - zlib_deflate
-      - parport_pc
     - require:
       - kmod: useless_kmod
 {% endif %}

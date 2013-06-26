@@ -28,8 +28,8 @@ class SiteMapLink(nagiosplugin.Resource):
                 check_ret = pickle.load(f)
 
             if check_ret['success']:
-                for link in check_ret['dead_links']:
-                    print link
+                # for link in check_ret['dead_links']:
+                #     print link
                 return len(check_ret['dead_links'])
             else:
                 print 'SITEMAPLINK WARNING - %s' % check_ret['errors']

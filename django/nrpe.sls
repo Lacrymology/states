@@ -1,5 +1,6 @@
 include:
   - nrpe
+  - xml
 
 /usr/local/bin/check_robots.py:
   file:
@@ -24,6 +25,7 @@ python-sitemap:
     - requirements: /usr/local/nagios/salt-sitemap-requirements.txt
     - require:
       - virtualenv: nrpe-virtualenv
+      - πkg: xml-dev
     - watch:
       - file: python-sitemap
 

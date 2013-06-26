@@ -43,6 +43,18 @@ check_{{ check }}:
       - module: python-sitemap
 {%- endfor %}
 
+/var/lib/nagios:
+  file:
+    - directory
+    - user: nagios
+    - group: nagios
+    - mode: 755
+    - require:
+      - file: check_robots
+      - file: check_sitemap
+      - file: check_links
+      - file: check_sitemaplink
+
 /var/lib/nrpe:
   file:
     - absent

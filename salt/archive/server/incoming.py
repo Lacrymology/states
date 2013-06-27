@@ -25,15 +25,16 @@ def move_incoming(directory, category, incoming_sub_directory='incoming',
                                          category)
     for filename in os.listdir(source_directory):
         destination_file = os.path.join(destination_directory, filename)
+        source_file = os.path.join(source_directory, filename)
         if not os.path.exists(destination_file):
             logger.info("Move %s file %s to rsync server", category,
                         filename)
-            source_file = os.path.join(source_directory, filename)
             logger.debug("Rename %s to %s", source_file, destination_file)
             os.rename(source_file, destination_file)
         else:
             logger.error("File %s already exists for %s, don't import it",
                          filename, category)
+            os.unlink(source_file)
 
 
 def main():

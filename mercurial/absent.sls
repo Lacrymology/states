@@ -1,9 +1,9 @@
+{{ opts['cachedir'] }}/salt-mercurial-requirements.txt:
+  file:
+      - absent
+
+{% if salt['cmd.has_exec']('pip') %}
 mercurial:
-  pkg:
-    - purged
-{# TODO:
-  apt_repository:
-    - ubuntu_ppa_absent
-    - user: mercurial-ppa
-    - name: releases
-#}
+  pip:
+    - removed
+{% endif %}

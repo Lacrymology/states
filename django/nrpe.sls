@@ -1,5 +1,6 @@
 include:
   - nrpe
+  - xml
 
 /usr/local/bin/check_robots.py:
   file:
@@ -24,6 +25,7 @@ python-sitemap:
     - requirements: /usr/local/nagios/salt-sitemap-requirements.txt
     - require:
       - virtualenv: nrpe-virtualenv
+      - pkg: xml-dev
     - watch:
       - file: python-sitemap
 
@@ -41,16 +43,18 @@ check_{{ check }}:
       - module: python-sitemap
 {%- endfor %}
 
-django-nrpe:
+/var/lib/nagios:
   file:
     - directory
-    - name: /var/lib/nrpe
     - user: nagios
     - group: nagios
-    - mode: 770
+    - mode: 755
     - require:
       - file: check_robots
       - file: check_sitemap
       - file: check_links
       - file: check_sitemaplink
-      - pkg: nagios-nrpe-server
+
+/var/lib/nrpe:
+  file:
+    - absent

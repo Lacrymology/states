@@ -19,7 +19,7 @@ def installed(name, version, source, source_hash):
         ret['result'] = True
         ret['comment'] = '{0} is already at version {1}'.format(name, version)
     else:
-        filename = os.path.join(__opts__['cachedir'],
+        filename = os.path.join('/var/cache/apt/archives',
                                 'pkg_file-{0}-{1}'.format(name, version))
         if not os.path.exists(filename):
             if __opts__['test']:

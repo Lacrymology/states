@@ -8,7 +8,7 @@ import socket
 import os
 import urllib2
 
-RESULT_PREFIX = '/var/lib/nrpe'
+RESULT_PREFIX = '/var/lib/nagios'
 
 
 def sitemap_to_path(sitemap):

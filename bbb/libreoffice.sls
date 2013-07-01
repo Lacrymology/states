@@ -20,7 +20,7 @@ libreoffice:
   pkgrepo:
     - managed
     - name: deb http://ppa.launchpad.net/libreoffice/libreoffice-4-0/ubuntu grains['lsb_codename'] main
-    - ppa: wolfnet/logstash
+    - ppa: libreoffice/libreoffice-4-0
     - keyid: 1378B444
     - keyserver: keyserver.ubuntu.com
     - file: /etc/apt/sources.list.d/libreoffice.list

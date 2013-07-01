@@ -20,6 +20,7 @@ include:
 libreoffice:
   pkgrepo:
     - managed
+    - name: deb http://ppa.launchpad.net/libreoffice/libreoffice-4-0/ubuntu lucid main
     - ppa: wolfnet/logstash
     - keyid: 1378B444
     - keyserver: keyserver.ubuntu.com

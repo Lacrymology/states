@@ -19,10 +19,10 @@ rest_cherrypy:
   port: 8000
   debug: True
   static: /usr/local/salt-ui/
-{% if not 'ssl' in pillar['salt_master']['ssl']|default(False) %}
-  ssl_crt: /etc/pki/tls/certs/{{ pillar['salt_master']['hostnames'][0] }}.crt
-  ssl_key: /etc/pki/tls/certs/{{ pillar['salt_master']['hostnames'][0] }}.key
-{% else %}
+{%- if pillar['salt_master']['ssl']|default(False) %}
   ssl_crt: /etc/ssl/{{ pillar['salt_master']['ssl'] }}/ca.crt
   ssl_key: /etc/ssl/{{ pillar['salt_master']['ssl'] }}/server.ssl
-{% endif %}
+{%- else %}
+  ssl_crt: /etc/pki/tls/certs/{{ pillar['salt_master']['hostnames'][0] }}.crt
+  ssl_key: /etc/pki/tls/certs/{{ pillar['salt_master']['hostnames'][0] }}.key
+{%- endif -%}

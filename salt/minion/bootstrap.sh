@@ -8,7 +8,7 @@ fi
 export HOME=/root
 
 apt-get install -y python-software-properties
-apt-add-repository -y ppa:saltstack/salt
+apt-add-repository ppa:saltstack/salt
 apt-get update
 apt-get install -y salt-minion
 

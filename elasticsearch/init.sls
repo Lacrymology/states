@@ -83,6 +83,7 @@ include:
 {% if ssl %}
   - ssl
   - nginx
+  - java
 {% endif %}
 {% set version = '0.20.5'%}
 {% set checksum = 'md5=e244c5a39515983ba81006a3186843f4' %}
@@ -126,15 +127,10 @@ include:
     - symlink
     - target: /usr/lib/jvm/java-7-openjdk-i386
     - require:
-      - pkg: elasticsearch
+      - pkg: openjdk_jre_headless
 {% endif %}
 
 elasticsearch:
-  pkg:
-    - latest
-    - name: openjdk-7-jre-headless
-    - require:
-      - cmd: apt_sources
 {% if 'aws' in pillar['elasticsearch'] %}
   elasticsearch_plugins:
     - installed
@@ -154,7 +150,7 @@ elasticsearch:
 {%- endif %}
     - source_hash: {{ checksum }}
     - require:
-      - pkg: elasticsearch
+      - pkg: openjdk_jre_headless
   file:
     - managed
     - name: /etc/elasticsearch/elasticsearch.yml
@@ -177,7 +173,7 @@ elasticsearch:
       - file: /etc/elasticsearch/logging.yml
       - file: elasticsearch
       - pkg_file: elasticsearch
-      - pkg: elasticsearch
+      - pkg: openjdk_jre_headless
 {% if grains['cpuarch'] == 'i686' %}
       - file: /usr/lib/jvm/java-7-openjdk
 {% endif %}

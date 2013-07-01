@@ -3,6 +3,7 @@
  #}
 include:
   - graylog2
+  - java
   - mongodb
   - apt
   - local
@@ -75,11 +76,6 @@ graylog2-server:
     - source: salt://graylog2/server/config.jinja2
     - context:
       version: {{ version }}
-  pkg:
-    - latest
-    - name: openjdk-7-jre-headless
-    - require:
-      - cmd: apt_sources
 {#
  IMPORTANT:
  graylog2-server need to be restarted after any change in
@@ -90,7 +86,7 @@ graylog2-server:
     - enable: True
     - watch:
       - file: graylog2-server_upstart
-      - pkg: graylog2-server
+      - pkg: openjdk_jre_headless
       - file: graylog2-server
       - file: /etc/graylog2-elasticsearch.yml
       - archive: graylog2-server
@@ -111,7 +107,7 @@ graylog2_email_output_plugin:
       - file: graylog2-server
       - file: /etc/graylog2-elasticsearch.yml
       - archive: graylog2-server
-      - pkg: graylog2-server
+      - pkg: openjdk_jre_headless
       - service: mongodb
 
 graylog2_sentry_output_plugin:

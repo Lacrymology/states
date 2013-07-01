@@ -19,7 +19,10 @@ Check file docs/tests.rst for details.
 
 import logging
 import pwd
-import unittest
+try:
+    import unittest2 as unittest
+except ImportError:
+    import unittest
 import sys
 import os
 import time

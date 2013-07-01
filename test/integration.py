@@ -210,7 +210,7 @@ def setUpModule():
                 if not changes[change]['result']:
                     raise ValueError(changes[change]['comment'])
         except Exception, err:
-            raise ValueError("%s: %s" % (err, ret))
+            raise ValueError("%s: %s" % (err, changes))
 
     if client.__class__ == ClientLocal:
         logger.info("Install fake mine module")

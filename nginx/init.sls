@@ -91,6 +91,16 @@ nginx-logger-{{ log_type }}:
     - require:
       - pkg: nginx
 
+nginx_dependencies:
+  pkg:
+    - installed
+    - pkgs:
+      - libpcre3
+      - libssl1.0.0
+      - zlib1g
+      - lsb-base
+      - adduser
+
 {% set version = '1.4.1' %}
 nginx:
   pkg:
@@ -103,6 +113,7 @@ nginx:
 {%- endif %}
     - require:
       - user: web
+      - pkg: nginx_dependencies
   file:
     - managed
     - name: /etc/init/nginx.conf

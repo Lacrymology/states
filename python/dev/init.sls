@@ -7,7 +7,7 @@ python-dev:
   pkg:
     - latest
     - name:
-      - python2.7-dev
+      - python{{ grains['pythonversion'][0] }}.{{ grains['pythonversion'][1] }}-dev
     - require:
       - pkg: build
       - cmd: apt_sources

@@ -109,7 +109,7 @@ carbon:
     - requirements: /usr/local/graphite/salt-carbon-requirements.txt
     - install_options:
       - "--prefix=/usr/local/graphite"
-      - "--install-lib=/usr/local/graphite/lib/python2.7/site-packages"
+      - "--install-lib=/usr/local/graphite/lib/python{{ grains['pythonversion'][0] }}.{{ grains['pythonversion'][1] }}/site-packages"
     - watch:
       - file: carbon
       - pkg: python-dev

@@ -1,4 +1,4 @@
 python:
   pkg:
     - purged
-    - name: python2.7-dev
+    - name: python{{ grains['pythonversion'][0] }}.{{ grains['pythonversion'][1] }}-dev

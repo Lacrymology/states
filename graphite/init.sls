@@ -79,6 +79,8 @@ graylog2_address: IP/Hostname of centralized Graylog2 server
 shinken_pollers: IP address of monitoring poller that check this server.
 -#}
 
+{%- set python_version = '.'.join(grains['pythonversion'][0], grains['pythonversion'][1]) -%}
+
 {#- TODO: create initial admin user from pillar -#}
 include:
   - postgresql
@@ -138,7 +140,7 @@ graphite_graph_templates:
 graphite_wsgi:
   file:
     - managed
-    - name: /usr/local/graphite/lib/python2.7/site-packages/graphite/wsgi.py
+    - name: /usr/local/graphite/lib/python{{ python_version }}/site-packages/graphite/wsgi.py
     - template: jinja
     - user: www-data
     - group: www-data
@@ -189,7 +191,7 @@ graphite-web:
     - requirements: /usr/local/graphite/salt-graphite-web-requirements.txt
     - install_options:
       - "--prefix=/usr/local/graphite"
-      - "--install-lib=/usr/local/graphite/lib/python2.7/site-packages"
+      - "--install-lib=/usr/local/graphite/lib/python{{ python_version }}/site-packages"
     - require:
       - virtualenv: graphite
     - watch:
@@ -223,7 +225,7 @@ graphite-web:
 graphite-urls-patch:
   file:
     - managed
-    - name: /usr/local/graphite/lib/python2.7/site-packages/graphite/urls.py
+    - name: /usr/local/graphite/lib/python{{ python_version }}/site-packages/graphite/urls.py
     - source: salt://graphite/urls.jinja2
     - template: jinja
     - user: www-data
@@ -237,7 +239,7 @@ graphite-urls-patch:
 graphite_settings:
   file:
     - managed
-    - name: /usr/local/graphite/lib/python2.7/site-packages/graphite/local_settings.py
+    - name: /usr/local/graphite/lib/python{{ python_version }}/site-packages/graphite/local_settings.py
     - template: jinja
     - user: www-data
     - group: graphite

@@ -7,8 +7,7 @@ include:
 mercurial:
   pkg:
     - purged
-    - pkgs:
-      - mercurial-common
+    - name: mercurial-common
   file:
     - managed
     - name: {{ opts['cachedir'] }}/salt-mercurial-requirements.txt

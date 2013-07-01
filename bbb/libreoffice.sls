@@ -14,12 +14,8 @@ sudo apt-get install libreoffice
 #}
 include:
   - apt
+  - java
 
-openjdk-7:-jre-headless:
-  pkg:
-    - installed
-    - require:
-      - cmd: apt_sources
 
 libreoffice:
   pkgrepo:
@@ -32,3 +28,4 @@ libreoffice:
     - installed
     - require:
       - pkgrepo: libreoffice
+      - pkg: openjdk_jre_headless

@@ -128,7 +128,7 @@ group_list = None
 # to compare subsequent cleanup to see if there is extra user
 user_list = None
 # content of /etc/salt/minion file, as salt.minion state overwrite it.
-# the file is reverted after all tests excuted
+# the file is reverted after all tests executed
 minion_configuration = None
 
 logger = logging.getLogger()

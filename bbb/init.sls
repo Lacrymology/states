@@ -71,3 +71,10 @@ bigbluebutton:
 {% for i in ('ruby', 'ri', 'irb', 'erb', 'rdoc', 'gem') %}
       - file: /usr/bin/{{ i }}
 {% endfor %}
+
+bbb-conf --setip {{ pillar['bbb:hostnames'][0] }}:
+  cmd:
+    - run
+    - unless: grep -q {{ pillar['bbb:hostnames'][0] }} /var/www/bigbluebutton/client/conf/config.xml
+    - require:
+      - pkg: bigbluebutton

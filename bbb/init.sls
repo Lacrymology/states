@@ -58,7 +58,7 @@ ffmpeg:
     - if_missing: {{ ffmpeg_dir }}
   cmd:
     - run
-    - pwd: {{ ffmpeg_dir }}
+    - cwd: {{ ffmpeg_dir }}
     - name: ./configure  --enable-version3 --enable-postproc  --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libtheora --enable-libvorbis  --enable-libvpx && make && checkinstall --pkgname=ffmpeg --pkgversion="5:$(./version.sh)" --backup=no --deldoc=yes --default
     - unless: test -e {{ ffmpeg_dir }}/ffmpeg
     - require:
@@ -74,7 +74,7 @@ libvpx:
   cmd:
     - run
     - name: ./configure && make && make install
-    - pwd: /usr/local/src/libvpx
+    - cwd: /usr/local/src/libvpx
     - unless: test -e /usr/local/src/libvpx/test_libvpx
     - require:
       - git: libvpx
@@ -123,6 +123,6 @@ bigbluebutton:
       - pkg: ffmpeg_build
       - pkg: libreoffice
 {% for i in ('ruby', 'ri', 'irb', 'erb', 'rdoc', 'gem') %}
-      - symlink: /usr/bin/{{ i }}
+      - file: /usr/bin/{{ i }}
 {% endfor %}
 

@@ -124,6 +124,7 @@ bigbluebutton:
 {% set encoding = pillar['encoding']|default("en_US.UTF-8") %}
     - env:
         LANG: {{ encoding }}
+        LC_ALL: {{ encoding }}
     - require:
       - pkgrepo: bigbluebutton
       - pkg: bigbluebutton_ruby

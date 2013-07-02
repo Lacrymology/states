@@ -2,16 +2,7 @@ include:
   - apt
   - java
   - build
-
-language-pack-en:
-  pkg:
-    - installed
-
-{{ salt['pillar.get']('encoding', 'en_US.UTF-8') }}:
-  locale:
-    - system
-    - require:
-      - pkg: language-pack-en
+  - locale
 
 libreoffice:
   apt_repository:
@@ -113,6 +104,7 @@ bigbluebutton_ruby:
 
 {% endfor %}
 
+{% set encoding = pillar['encoding']|default("en_US.UTF-8") %}
 bigbluebutton:
   pkgrepo:
     - managed
@@ -121,7 +113,6 @@ bigbluebutton:
     - file: /etc/apt/sources.list.d/bigbluebutton.list
   pkg:
     - installed
-{% set encoding = pillar['encoding']|default("en_US.UTF-8") %}
     - env:
         LANG: {{ encoding }}
         LC_ALL: {{ encoding }}
@@ -136,4 +127,3 @@ bigbluebutton:
 {% for i in ('ruby', 'ri', 'irb', 'erb', 'rdoc', 'gem') %}
       - file: /usr/bin/{{ i }}
 {% endfor %}
-

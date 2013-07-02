@@ -92,7 +92,7 @@ bigbluebutton_ruby:
     - sources:
       - ruby1.9.2: https://bigbluebutton.googlecode.com/files/ruby1.9.2_1.9.2-p290-1_amd64.deb
     - require:
-      - pkg: libffi5
+      - pkg: ruby_dependencies
 
 {% for i in ('ruby', 'ri', 'irb', 'erb', 'rdoc', 'gem') %}
 /usr/bin/{{ i }}:

@@ -28,6 +28,12 @@ libreoffice:
       - apt_repository: libreoffice
       - pkg: openjdk_jre_headless
 
+openoffice:
+  pkg:
+    - installed
+    - sources:
+      - openoffice.org: http://bigbluebutton.googlecode.com/files/openoffice.org_1.0.4_all.deb
+
 ffmpeg_build:
   pkg:
     - installed
@@ -125,6 +131,7 @@ bigbluebutton:
       - cmd: ffmpeg
       - pkg: ffmpeg_build
       - pkg: libreoffice
+      - pkg: openoffice
 {% for i in ('ruby', 'ri', 'irb', 'erb', 'rdoc', 'gem') %}
       - file: /usr/bin/{{ i }}
 {% endfor %}

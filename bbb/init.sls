@@ -1,6 +1,7 @@
 include:
   - apt
   - java
+  - build
 
 language-pack-en:
   pkg:
@@ -31,8 +32,8 @@ ffmpeg_build:
   pkg:
     - installed
     - pkgs:
-      - build-essential
       - git-core
+      {# todo change this to git state#}
       - checkinstall
       - yasm
       - texi2html
@@ -63,6 +64,7 @@ ffmpeg:
     - unless: test -e {{ ffmpeg_dir }}/ffmpeg
     - require:
       - archive: ffmpeg
+      - pkg: build
     - watch:
       - cmd: libvpx
 
@@ -77,6 +79,7 @@ libvpx:
     - cwd: /usr/local/src/libvpx
     - unless: test -e /usr/local/src/libvpx/test_libvpx
     - require:
+      - pkg: build
       - git: libvpx
 
 ruby_dependencies:

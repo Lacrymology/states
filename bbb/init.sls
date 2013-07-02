@@ -3,6 +3,7 @@ include:
   - java
   - build
   - locale
+  - ffmpeg
 
 libreoffice:
   apt_repository:
@@ -24,60 +25,6 @@ openoffice:
     - installed
     - sources:
       - openoffice.org: http://bigbluebutton.googlecode.com/files/openoffice.org_1.0.4_all.deb
-
-ffmpeg_build:
-  pkg:
-    - installed
-    - pkgs:
-      - git-core
-      {# todo change this to git state#}
-      - checkinstall
-      - yasm
-      - texi2html
-      - libopencore-amrnb-dev
-      - libopencore-amrwb-dev
-      - libsdl1.2-dev
-      - libtheora-dev
-      - libvorbis-dev
-      - libx11-dev
-      - libxfixes-dev
-      - libxvidcore-dev
-      - zlib1g-dev
-
-{% set ffmpeg_dir = "/usr/local/src/ffmpeg-0.11.2" %}
-ffmpeg:
-  archive:
-    - extracted
-    - name: /usr/local/src
-    - source: http://ffmpeg.org/releases/ffmpeg-0.11.2.tar.gz
-    - source_hash: md5=a6a86d54ffa81b9e1fc036a8d3a79a60
-    - archive_format: tar
-    - tar_options: z
-    - if_missing: {{ ffmpeg_dir }}
-  cmd:
-    - run
-    - cwd: {{ ffmpeg_dir }}
-    - name: ./configure  --enable-version3 --enable-postproc  --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libtheora --enable-libvorbis  --enable-libvpx && make && checkinstall --pkgname=ffmpeg --pkgversion="5:$(./version.sh)" --backup=no --deldoc=yes --default
-    - unless: test -e {{ ffmpeg_dir }}/ffmpeg
-    - require:
-      - archive: ffmpeg
-      - pkg: build
-    - watch:
-      - cmd: libvpx
-
-libvpx:
-  git:
-    - latest
-    - target: /usr/local/src/libvpx
-    - name: http://git.chromium.org/webm/libvpx.git
-  cmd:
-    - run
-    - name: ./configure && make && make install
-    - cwd: /usr/local/src/libvpx
-    - unless: test -e /usr/local/src/libvpx/test_libvpx
-    - require:
-      - pkg: build
-      - git: libvpx
 
 ruby_dependencies:
   pkg:
@@ -119,11 +66,9 @@ bigbluebutton:
     - require:
       - pkgrepo: bigbluebutton
       - pkg: bigbluebutton_ruby
-      - cmd: libvpx
-      - cmd: ffmpeg
-      - pkg: ffmpeg_build
       - pkg: libreoffice
       - pkg: openoffice
+      - archive: ffmpeg
 {% for i in ('ruby', 'ri', 'irb', 'erb', 'rdoc', 'gem') %}
       - file: /usr/bin/{{ i }}
 {% endfor %}

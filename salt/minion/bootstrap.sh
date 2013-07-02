@@ -9,7 +9,7 @@ export HOME=/root
 
 apt-get update
 apt-get install -y python-software-properties
-if [ "`lsb_release -r -s`" == "10.04" ]; then
+if [ "`lsb_release -r -s`" = "10.04" ]; then
     apt-add-repository ppa:saltstack/salt
 else
     apt-add-repository -y ppa:saltstack/salt

@@ -72,9 +72,9 @@ bigbluebutton:
       - file: /usr/bin/{{ i }}
 {% endfor %}
 
-bbb-conf --setip {{ pillar['bbb:hostnames'][0] }}:
+bbb-conf --setip {{ salt['pillar.get']('bbb:hostname') }}:
   cmd:
     - run
-    - unless: grep -q {{ pillar['bbb:hostnames'][0] }} /var/www/bigbluebutton/client/conf/config.xml
+    - unless: grep -q {{ salt['pillar.get']('bbb:hostname') }} /var/www/bigbluebutton/client/conf/config.xml
     - require:
       - pkg: bigbluebutton

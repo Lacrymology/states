@@ -91,6 +91,16 @@ bigbluebutton_ruby:
     - require:
       - pkg: libffi5
 
+{% for i in ('ruby', 'ri', 'irb', 'erb', 'rdoc', 'gem') %}
+/usr/bin/{{ i }}:
+  file:
+    - symlink
+    - target: /usr/bin/{{ i }}1.9.2
+    - require:
+      - pkg: bigbluebutton_ruby
+
+{% endfor %}
+
 bigbluebutton:
   pkgrepo:
     - managed
@@ -109,3 +119,7 @@ bigbluebutton:
       - cmd: ffmpeg
       - pkg: ffmpeg_build
       - pkg: libreoffice
+{% for i in ('ruby', 'ri', 'irb', 'erb', 'rdoc', 'gem') %}
+      - symlink: /usr/bin/{{ i }}
+{% endfor %}
+

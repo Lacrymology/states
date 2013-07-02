@@ -7,6 +7,7 @@ include:
   - postgresql
   - apt
   - gsyslog
+  - locale
 {% if ssl %}
   - ssl
 {% endif %}

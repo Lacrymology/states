@@ -97,10 +97,8 @@ bigbluebutton:
     - key_url: http://ubuntu.bigbluebutton.org/bigbluebutton.asc
     - name: deb http://ubuntu.bigbluebutton.org/lucid_dev_081/ bigbluebutton-{{ grains['lsb_codename'] }} main
     - file: /etc/apt/sources.list.d/bigbluebutton.list
-
   pkg:
     - installed
-    - require:
 {% set encoding = pillar['encoding']|default("en_US.UTF-8") %}
     - env:
         LANG: {{ encoding }}

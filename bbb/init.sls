@@ -79,9 +79,12 @@ libvpx:
     - require:
       - git: libvpx
 
-libffi5:
+ruby_dependencies:
   pkg:
     - installed
+    - pkgs:
+      - libffi5
+      - libreadline5
 
 bigbluebutton_ruby:
   pkg:

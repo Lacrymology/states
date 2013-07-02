@@ -1,7 +1,6 @@
 include:
   - apt
   - java
-  - build
   - locale
   - ffmpeg
 

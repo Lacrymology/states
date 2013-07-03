@@ -5,14 +5,15 @@ libreoffice:
     - name: /etc/apt/sources.list.d/ppa.launchpad.net-libreoffice_libreoffice-4-0_ubuntu-precise.list
     - absent
 
-ruby_dependencies:
+libffi5:
   pkg:
     - purged
-    - pkgs:
-      - libffi5
-      - libreadline5
     - require:
       - pkg: ruby1.9.2
+
+libreadline5:
+  pkg:
+    - purged
 
 ruby1.9.2:
   pkg:

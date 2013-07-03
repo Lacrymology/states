@@ -1,12 +1,6 @@
 {#
  Install Tomcat6
  #}
-
-{#
- TODO: add Nagios NRPE state + absent state
- TODO: add Diamond integration + it's absent state if required
- #}
-
 include:
   - apt
 

@@ -21,12 +21,18 @@ include:
     - absent
 {% if salt['cmd.has_exec']('pip') %}
     - require:
-      - pip: cherrypy
-      - pip: GitPython
       - pip: pip
-      - pip: raven
-      - pip: requests
-      - pip: route53
-      - pip: uwsgitop
-      - pip: virtualenv
+
+extend:
+  pip:
+    pip:
+      - removed
+      - require:
+        - pip: cherrypy
+        - pip: GitPython
+        - pip: raven
+        - pip: requests
+        - pip: route53
+        - pip: uwsgitop
+        - pip: virtualenv
 {% endif %}

@@ -72,9 +72,19 @@ bigbluebutton:
       - file: /usr/bin/{{ i }}
 {% endfor %}
 
-bbb-conf --setip {{ salt['pillar.get']('bbb:hostname') }}:
+bbb-conf-wrap:
+  file:
+    - managed
+    - name: /usr/local/bin/bbb-conf-wrap.sh
+    - source: salt://bbb/bbb-conf-wrap.sh
+    - user: root
+    - group: root
+    - mode: 755
+
+/usr/local/bin/bbb-conf-wrap.sh --setip {{ salt['pillar.get']('bbb:hostname') }}:
   cmd:
     - run
     - unless: grep -q {{ salt['pillar.get']('bbb:hostname') }} /var/www/bigbluebutton/client/conf/config.xml
     - require:
       - pkg: bigbluebutton
+      - file: bbb-conf-wrap

@@ -26,7 +26,7 @@ ruby1.9.2:
 {% endfor %}
 
 bigbluebutton:
-  pkgrepo:
+  pkg:
     - purged
 
 /etc/apt/sources.list.d/bigbluebutton.list:

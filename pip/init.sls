@@ -32,7 +32,7 @@ include:
     - mode: 700
 {%- endif %}
 
-pip-cache:
+pip-config:
   file:
     - managed
     - name: {{ root_user_home }}/.pip/pip.conf
@@ -81,7 +81,7 @@ pip:
     - cwd: {{ opts['cachedir'] }}/pip-{{ version }}
     - require:
       - pkg: python-pip
-      - file: pip-cache
+      - file: pip-config
       - pkg: python
       - pkg: python-setuptools
       - file: pip

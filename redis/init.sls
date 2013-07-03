@@ -1,55 +1,35 @@
-include:
-  - build
+{#
+Install Redis
+#}
 
-{% set version = '2.6.14' %}
-{% set redis_dir = '/usr/local/redis-' + version %}
+{% set jemalloc_dev = "libjemalloc-dev_3.4.0-1chl1~{0}1_{1}.deb".format(grains['lsb_codename'], grains['debian_arch']) %}
+{% set jemalloc = "libjemalloc1_3.4.0-1chl1~{0}1_{1}.deb".format(grains['lsb_codename'], grains['debian_arch']) %}
+{% set filename = "redis-server_2.6.14-1chl1~{0}1_{1}.deb".format(grains['lsb_codename'], grains['debian_arch']) %}
+
 redis:
-  archive:
-    - extracted
-    - source: http://redis.googlecode.com/files/redis-2.6.14.tar.gz
-    - name: /usr/local
-    - tar_options: z
-    - archive_format: tar
-    - source_hash: md5=02e0c06e953413017ff64862953e2756
-    - if_missing: {{ redis_dir }}
-  cmd:
-    - run
-    - cwd: {{ redis_dir }}
-    - name: make install 2>&1 > /dev/null
-    - unless: test -e /usr/local/bin/redis-server
-    - require:
-      - archive: redis
-      - pkg: build
+  pkg:
+    - installed
+    - sources:
+{%- if 'files_archive' in pillar %}
+      - libjemalloc1: {{ pillar['files_archive'] }}/mirror/{{ jemalloc }}
+      - libjemalloc-dev: {{ pillar['files_archive'] }}/mirror/{{ jemalloc_dev }}
+      - redis-server: {{ pillar['files_archive'] }}/mirror/{{ filename }}
+{%- else %}
+      - libjemalloc1: http://ppa.launchpad.net/chris-lea/redis-server/ubuntu/pool/main/j/jemalloc/{{ jemalloc }}
+      - libjemalloc-dev: http://ppa.launchpad.net/chris-lea/redis-server/ubuntu/pool/main/j/jemalloc/{{ jemalloc_dev }}
+      - redis-server: http://ppa.launchpad.net/chris-lea/redis-server/ubuntu/pool/main/r/redis/{{ filename }}
+{%- endif %}
   file:
     - managed
     - template: jinja
     - source: salt://redis/config.jinja2
-    - name: /etc/redis.conf
+    - name: /etc/redis/redis.conf
     - makedirs: True
+    - require:
+      - pkg: redis
   service:
     - name: redis-server
     - running
     - watch:
       - file: redis
-      - cmd: redis
-      - file: redis_upstart
-    - require:
-      - file: /var/lib/redis
-
-redis_upstart:
-  file:
-    - managed
-    - name: /etc/init/redis-server.conf
-    - source: salt://redis/upstart.jinja2
-    - user: root
-    - group: root
-    - mode: 600
-    - template: jinja
-
-/var/lib/redis:
-  file:
-    - directory
-    - makedirs: True
-    - user: root
-    - group: root
-    - mode: 550
+      - pkg: redis

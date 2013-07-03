@@ -79,7 +79,7 @@ graylog2_address: IP/Hostname of centralized Graylog2 server
 shinken_pollers: IP address of monitoring poller that check this server.
 -#}
 
-{%- set python_version = '.'.join(grains['pythonversion'][0], grains['pythonversion'][1]) -%}
+{%- set python_version = '%d.%d' % (grains['pythonversion'][0], grains['pythonversion'][1]) %}
 
 {#- TODO: create initial admin user from pillar -#}
 include:

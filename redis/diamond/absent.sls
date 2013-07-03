@@ -1,5 +1,5 @@
 {#
- Turn off Diamond statistics for Elasticsearch
+ Turn off Diamond statistics for Redis
  #}
 {% if 'graphite_address' in pillar %}
 include:
@@ -9,9 +9,9 @@ extend:
   diamond:
     service:
       - watch:
-        - file: /etc/diamond/collectors/ElasticSearchCollector.conf
+        - file: /etc/diamond/collectors/RedisCollector.conf
 {% endif %}
 
-/etc/diamond/collectors/ElasticSearchCollector.conf:
+/etc/diamond/collectors/RedisCollector.conf:
   file:
     - absent

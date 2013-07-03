@@ -7,6 +7,7 @@ include:
   - postgresql
   - apt
   - gsyslog
+  - locale
 {% if ssl %}
   - ssl
 {% endif %}
@@ -53,6 +54,7 @@ postgresql:
       - cmd: /etc/ssl/{{ ssl }}/chained_ca.crt
       - module: /etc/ssl/{{ ssl }}/server.pem
       - file: /etc/ssl/{{ ssl }}/ca.crt
+      - locale: system_locale
 {% endif %}
 
 /etc/logrotate.d/postgresql-common:

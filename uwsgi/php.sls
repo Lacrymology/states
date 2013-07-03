@@ -27,22 +27,20 @@ php-dev:
     - require:
       - apt_repository: php-dev
 
-{% if grains['cpuarch'] == 'i686' %}
+extend:
+  uwsgi_build:
+    file:
+      - require:
+        - pkg: php-dev
+{% if grains['cpuarch'] == 'i686' and grains['osrelease']|float == 12.04 %}
+    cmd:
+      - watch:
+        - file: /usr/lib/i386-linux-gnu/libphp5.so
+
 /usr/lib/i386-linux-gnu/libphp5.so:
   file:
     - symlink
     - target: /usr/lib/php5/libphp5.so
     - require:
       - pkg: php-dev
-{% endif %}
-
-extend:
-  uwsgi_build:
-    file:
-      - require:
-        - pkg: php-dev
-{% if grains['cpuarch'] == 'i686' %}
-    cmd:
-      - watch:
-        - file: /usr/lib/i386-linux-gnu/libphp5.so
 {% endif %}

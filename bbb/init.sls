@@ -3,6 +3,8 @@ include:
   - java
   - locale
   - ffmpeg
+  - redis
+  - tomcat
 
 libreoffice:
   apt_repository:
@@ -68,6 +70,8 @@ bigbluebutton:
       - pkg: libreoffice
       - pkg: openoffice
       - archive: ffmpeg
+      - service: tomcat6
+      - service: redis
 {% for i in ('ruby', 'ri', 'irb', 'erb', 'rdoc', 'gem') %}
       - file: /usr/bin/{{ i }}
 {% endfor %}

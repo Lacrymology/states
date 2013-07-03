@@ -2,9 +2,9 @@
 *nat
 :PREROUTING ACCEPT [0:0]
 :POSTROUTING ACCEPT [0:0]
-{% if grains['virtual'] != 'openvzve' %}
+{%- if grains['osrelease']|float < 12.04 %}
 :INPUT ACCEPT [0:0]
-{% endif %}
+{%- endif %}
 :OUTPUT ACCEPT [0:0]
 COMMIT
 *mangle

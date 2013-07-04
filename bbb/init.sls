@@ -71,7 +71,7 @@ bigbluebutton:
         LANG: {{ encoding }}
         LC_ALL: {{ encoding }}
     - watch:
-      - bigbluebutton_ruby
+      - pkg: bigbluebutton_ruby
   pkgrepo:
     - managed
     - key_url: http://ubuntu.bigbluebutton.org/bigbluebutton.asc

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/local/nagios/bin/python
 #
 #   Autors: David Hannequin <david.hannequin@gmail.com>,
 #           Hartmut Goebel <h.goebel@crazy-compilers.com>

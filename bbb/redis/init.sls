@@ -34,9 +34,9 @@ redis_package:
     - watch:
 {%- for filename in filenames %}
       - file: {{ redis_dir }}/debian/{{ filename }}
+{%- endfor %}
     - require:
       - pkg: package_build
-{%- endfor %}
   module:
     - wait
     - name: pkg.install

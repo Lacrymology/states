@@ -1,6 +1,7 @@
 {#
 Set the locale for machine
 #}
-{{ salt['pillar.get']('encoding', 'en_US.UTF-8') }}:
+system_locale:
   locale:
     - system
+    - name: {{ salt['pillar.get']('encoding', 'en_US.UTF-8') }}

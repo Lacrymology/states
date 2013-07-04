@@ -1,5 +1,6 @@
 include:
   - apt
+  - build
 
 package_build:
   pkg:
@@ -7,5 +8,6 @@ package_build:
     - pkgs:
       - debhelper
       - dpkg-dev
+      - build-essential
     - require:
       - cmd: apt_sources

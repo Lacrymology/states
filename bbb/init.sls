@@ -64,6 +64,14 @@ bigbluebutton_ruby:
 
 {% set encoding = pillar['encoding']|default("en_US.UTF-8") %}
 bigbluebutton:
+  cmd:
+    - wait
+    - name: gem install god builder bundler
+    - env:
+        LANG: {{ encoding }}
+        LC_ALL: {{ encoding }}
+    - watch:
+      - bigbluebutton_ruby
   pkgrepo:
     - managed
     - key_url: http://ubuntu.bigbluebutton.org/bigbluebutton.asc
@@ -75,6 +83,7 @@ bigbluebutton:
         LANG: {{ encoding }}
         LC_ALL: {{ encoding }}
     - require:
+      - cmd: bigbluebutton
       - pkgrepo: bigbluebutton
       - pkg: bigbluebutton_ruby
       - pkg: libreoffice

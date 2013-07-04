@@ -1,12 +1,12 @@
 include:
   - apt
   - bbb.redis
+  - ffmpeg
   - java
   - locale
-  - ffmpeg
+  - mscorefonts
   - redis
   - tomcat
-  - mscorefonts
 
 libreoffice:
   apt_repository:
@@ -27,7 +27,11 @@ openoffice:
   pkg:
     - installed
     - sources:
+  {%- if 'files_archive' in pillar %}
+      - openoffice.org: {{ pillar['files_archive'] }}/mirror/openoffice.org_1.0.4_all.deb
+  {%- else %}
       - openoffice.org: http://bigbluebutton.googlecode.com/files/openoffice.org_1.0.4_all.deb
+  {%- endif %}
 
 ruby_dependencies:
   pkg:
@@ -40,7 +44,11 @@ bigbluebutton_ruby:
   pkg:
     - installed
     - sources:
+  {%- if 'files_archive' in pillar %}
+      - ruby1.9.2: {{ pillar['files_archive'] }}/mirror/ruby1.9.2_1.9.2-p290-1_amd64.deb
+  {%- else %}
       - ruby1.9.2: https://bigbluebutton.googlecode.com/files/ruby1.9.2_1.9.2-p290-1_amd64.deb
+  {%- endif %}
     - require:
       - pkg: ruby_dependencies
 

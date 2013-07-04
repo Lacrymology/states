@@ -23,7 +23,7 @@ ipv6 = false
 debug = false
 unbit = false
 graylog2 = true
-{% if salt['pkg.version']('ruby1.9.1-dev') %}
+{% if salt['pkg.version']('ruby1.9.1-dev') and salt['cmd.has_exec']('ruby') %}
 rack = true
 {% endif %}
 {% if salt['cmd.has_exec']('php-config') %}
@@ -40,7 +40,19 @@ plugins =
 bin_name = uwsgi
 append_version =
 plugin_dir = .
-embedded_plugins = {% if salt['pkg.version']('ruby1.9.1-dev') %}rack, {% endif %}{% if salt['cmd.has_exec']('php-config') %}php, {% endif %}python, gevent, ping, nagios, carbon, signal, {% if 'graylog2_address' in pillar %}graylog2{% else %}syslog{% endif %}
+embedded_plugins = python,
+{%- if salt['pkg.version']('ruby1.9.1-dev') and salt['cmd.has_exec']('ruby') -%}
+    rack,
+{%- endif -%}
+{%- if salt['cmd.has_exec']('php-config') -%}
+    php,
+{%- endif -%},
+{%- if 'graylog2_address' in pillar -%}
+    graylog2
+{%- else -%}
+    syslog
+{%- endif -%}
+    gevent, ping, nagios, carbon, signal
 as_shared_library = false
 
 locking = auto

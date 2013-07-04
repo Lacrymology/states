@@ -28,3 +28,7 @@ bigbluebutton:
 /etc/apt/sources.list.d/bigbluebutton.list:
   file:
     - absent
+
+/usr/local/bin/bbb-conf-wrap.sh:
+  file:
+    - absent

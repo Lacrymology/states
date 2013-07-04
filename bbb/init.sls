@@ -5,6 +5,7 @@ include:
   - ffmpeg
   - redis
   - tomcat
+  - mscorefonts
 
 libreoffice:
   apt_repository:
@@ -72,6 +73,7 @@ bigbluebutton:
       - archive: ffmpeg
       - service: tomcat6
       - service: redis
+      - pkg: mscorefonts
 {% for i in ('ruby', 'ri', 'irb', 'erb', 'rdoc', 'gem') %}
       - file: /usr/bin/{{ i }}
 {% endfor %}

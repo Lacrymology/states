@@ -11,7 +11,7 @@ kill_soffice:
     - name: killall -9 /usr/bin/soffice || true
   file:
     - absent
-    - name: /var/run/bbb-openoffice-headless.pid
+    - name: /var/run/bbb-openoffice-server.pid
     - require:
       - cmd: kill_soffice
 

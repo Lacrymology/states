@@ -23,7 +23,7 @@ shinken-{{ role }}:
 shinken-killall:
   cmd:
     - run
-    - name: killall -9 /usr/local/shinken/bin/python || :
+    - name: killall -9 /usr/local/shinken/bin/python || /bin/true
     - require:
 {%- for role in roles -%}
     {%- if salt['file.file_exists']('/etc/init/shinken-' + role + '.conf') %}

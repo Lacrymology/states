@@ -14,7 +14,18 @@ def __virtual__():
     return 'pkg_installed'
 
 def _installed():
-    return __salt__['pkg.list_pkgs']().keys()
+    # for some reasons, if dctrl-tools is installed, salt.modules.apt.list_pkgs
+    # return virtual packages as well.
+    if __salt__['cmd.has_exec']('grep-available'):
+        output = []
+        packages = __salt__['pkg.list_pkgs']()
+        for pkg_name in packages:
+            # virtual packages always have version '1', ignore them
+            if packages[pkg_name] != '1':
+                output.append(pkg_name)
+        return output
+    else:
+        return __salt__['pkg.list_pkgs']().keys()
 
 def exists():
     '''

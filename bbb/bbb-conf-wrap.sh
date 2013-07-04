@@ -14,5 +14,5 @@ ps awwx | log
 echo "Environment:" | log
 set | log
 echo "Run:" | log
-/usr/local/bin/bbb-conf $* 2>&1 | log
+/usr/local/bin/bbb-conf $* 2>&1
 echo "End of run" | log

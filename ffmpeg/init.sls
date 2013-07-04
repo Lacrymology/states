@@ -1,15 +1,18 @@
+{%- set version = "2013-06-28" %}
+{%- set bits = {'amd64': 64, 'i386': 32} %}
+{%- set hashes = {'amd64': '482b360988fbef2b0fb68739e32c70e6' , 'i386': 'a9ed67250d19900be86ee8059d944b14' } %}
+{%- set filename = 'ffmpeg.static.{0}bit.{1}.tar.gz'.format(bits[grains['debian_arch']], version) %}
+
 ffmpeg:
   archive:
     - extracted
     - name: /usr/local/bin
     - archive_format: tar
     - tar_options: z
-{%- set version = "2013-04-24" -%}
-{%- if grains['debian_arch'] == 'amd64' %}
-    - source: http://ffmpeg.gusari.org/static/64bit/ffmpeg.static.64bit.{{ version }}.tar.gz
-    - source_hash: md5=ae465ac9514106f36f712ac1b8ec95be
-{%- else %}
-    - source: http://ffmpeg.gusari.org/static/32bit/ffmpeg.static.32bit.{{ version }}.tar.gz
-    - source_hash: md5=873786aa9fabe7c24cce014e99120815
-{%- endif %}
+    - source_hash: md5={{ hashes[grains['debian_arch']] }}
+  {%- if 'files_archive' in pillar %}
+    - source: {{ pillar['files_archive'] }}/mirror/{{ filename }}
+  {%- else %}
+    - source: http://ffmpeg.gusari.org/static/{{ bits[grains['debian_arch']] }}bit/{{ filename }}
+  {%- endif %}
     - if_missing: /usr/local/bin/ffmpeg

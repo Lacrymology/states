@@ -52,26 +52,26 @@ bigbluebutton_ruby:
     - require:
       - pkg: ruby_dependencies
 
-{% for i in ('ruby', 'ri', 'irb', 'erb', 'rdoc', 'gem') %}
+{%- for i in ('ruby', 'ri', 'irb', 'erb', 'rdoc', 'gem') %}
 /usr/bin/{{ i }}:
   file:
     - symlink
     - target: /usr/bin/{{ i }}1.9.2
     - require:
       - pkg: bigbluebutton_ruby
-
-{% endfor %}
+    - require_in:
+      - cmd: bigbluebutton
+{%- endfor %}
 
 {% set encoding = pillar['encoding']|default("en_US.UTF-8") %}
 bigbluebutton:
   cmd:
-    - wait
+    - run
     - name: gem install god builder bundler
     - env:
         LANG: {{ encoding }}
         LC_ALL: {{ encoding }}
-    - watch:
-      - bigbluebutton_ruby
+    - unless: gem list --local | grep -q '^builder '
   pkgrepo:
     - managed
     - key_url: http://ubuntu.bigbluebutton.org/bigbluebutton.asc

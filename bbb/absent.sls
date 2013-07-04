@@ -11,10 +11,6 @@ libffi5:
     - require:
       - pkg: ruby1.9.2
 
-libreadline5:
-  pkg:
-    - purged
-
 ruby1.9.2:
   pkg:
     - purged

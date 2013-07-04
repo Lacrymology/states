@@ -17,7 +17,7 @@ shinken-{{ role }}:
     - require:
       - cmd: shinken-killall
     {% endif -%}
-{%- endfor -%}
+{%- endfor %}
 
 shinken-killall:
   cmd:

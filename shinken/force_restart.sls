@@ -11,7 +11,7 @@ shinken-{{ role }}-dead:
   service:
     - dead
 
-shinken-{{ role }}-running:
+shinken-{{ role }}:
   service:
     - running
     - require:

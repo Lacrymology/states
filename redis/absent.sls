@@ -7,7 +7,6 @@ redis-server:
     - purged
     - pkgs:
       - libjemalloc1
-      - libjemalloc-dev
       - redis-server
     - require:
       - service: redis-server

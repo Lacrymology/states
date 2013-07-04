@@ -57,8 +57,6 @@ uwsgi_build:
     - group: root
     - mode: 440
     - source: salt://uwsgi/buildconf.jinja2
-    - context:
-      python: True
     - require:
       - {{ uwsgi_download_module }}: uwsgi_build
   cmd:

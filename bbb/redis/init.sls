@@ -34,6 +34,8 @@ redis_package:
     - watch:
 {%- for filename in filenames %}
       - file: {{ redis_dir }}/debian/{{ filename }}
+    - require:
+      - pkg: package_build
 {%- endfor %}
   module:
     - wait
@@ -43,3 +45,4 @@ redis_package:
       - redis-server-{{ version }}: {{ bbb_dir }}/redis-server-{{ version }}_{{ version }}_all.deb
     - watch:
       - cmd: redis_package
+

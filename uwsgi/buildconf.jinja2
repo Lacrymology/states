@@ -46,11 +46,11 @@ embedded_plugins = python,
 {%- endif -%}
 {%- if salt['cmd.has_exec']('php-config') -%}
     php,
-{%- endif -%},
+{%- endif -%}
 {%- if 'graylog2_address' in pillar -%}
-    graylog2
+    graylog2,
 {%- else -%}
-    syslog
+    syslog,
 {%- endif -%}
     gevent, ping, nagios, carbon, signal
 as_shared_library = false

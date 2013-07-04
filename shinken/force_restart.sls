@@ -16,7 +16,7 @@ shinken-{{ role }}-running:
     - running
     - require:
       - cmd: shinken-killall
-    {%- endif %}
+    {% endif -%}
 {%- endfor -%}
 
 shinken-killall:
@@ -27,5 +27,5 @@ shinken-killall:
 {%- for role in roles -%}
     {%- if salt['file.file_exists']('/etc/init/shinken-' + role + '.conf') %}
       - service: shinken-{{ role }}-dead
-    {%- endif %}
+    {% endif -%}
 {%- endfor -%}

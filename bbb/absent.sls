@@ -5,6 +5,14 @@ libreoffice:
     - name: /etc/apt/sources.list.d/ppa.launchpad.net-libreoffice_libreoffice-4-0_ubuntu-precise.list
     - absent
 
+{% for i in ('bigbluebutton', 'bbb-config', 'bbb-web', 'bbb-openoffice-headless', 'red5', 'bbb-record-core', 'bbb-freeswitch', 'bbb-apps', 'bbb-client', 'bbb-apps-sip', 'bbb-common', 'bbb-playback-presentation', 'bbb-apps-deskshare', 'bbb-apps-video') %}
+{{ i }}:
+  pkg:
+    - purged
+    - require_in:
+      - pkg: ruby1.9.2
+{% endfor %}
+
 libffi5:
   pkg:
     - purged
@@ -20,10 +28,6 @@ ruby1.9.2:
   file:
     - absent
 {% endfor %}
-
-bigbluebutton:
-  pkg:
-    - purged
 
 /etc/apt/sources.list.d/bigbluebutton.list:
   file:

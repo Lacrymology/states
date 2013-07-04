@@ -19,8 +19,6 @@ kill_soffice:
 {{ i }}:
   pkg:
     - purged
-    - require_in:
-      - pkg: ruby1.9.2
     - require:
       - file: kill_soffice
 {% endfor %}

@@ -1,5 +1,6 @@
 include:
   - apt
+  - bbb.redis
   - java
   - locale
   - ffmpeg
@@ -72,6 +73,7 @@ bigbluebutton:
       - pkg: openoffice
       - archive: ffmpeg
       - service: tomcat6
+      - module: redis_package
       - service: redis
       - pkg: mscorefonts
 {% for i in ('ruby', 'ri', 'irb', 'erb', 'rdoc', 'gem') %}
@@ -94,3 +96,9 @@ bbb-conf-wrap:
     - require:
       - pkg: bigbluebutton
       - file: bbb-conf-wrap
+
+extend:
+  redis_package:
+    module:
+      - require:
+      - pkg: redis

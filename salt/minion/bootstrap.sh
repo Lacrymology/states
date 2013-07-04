@@ -9,6 +9,9 @@ export HOME=/root
 
 apt-get install -y python-software-properties
 apt-add-repository -y ppa:saltstack/salt
+
+echo "deb http://saltinwound.org/ubuntu/0.15.3/ `lsb_release -c -s` main" > /etc/apt/sources.list.d/saltstack-salt-`lsb_release -c -s`.list
+apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0E27C0A6
 apt-get update
 apt-get install -y salt-minion
 

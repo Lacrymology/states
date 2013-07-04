@@ -3,6 +3,7 @@ include:
   - java
   - locale
   - ffmpeg
+  - mscorefonts
 
 libreoffice:
   apt_repository:
@@ -68,6 +69,7 @@ bigbluebutton:
       - pkg: libreoffice
       - pkg: openoffice
       - archive: ffmpeg
+      - pkg: mscorefonts
 {% for i in ('ruby', 'ri', 'irb', 'erb', 'rdoc', 'gem') %}
       - file: /usr/bin/{{ i }}
 {% endfor %}

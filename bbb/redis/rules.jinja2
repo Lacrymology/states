@@ -1,0 +1,40 @@
+#!/usr/bin/make -f
+
+# Verbose mode
+#export DH_VERBOSE=1
+
+clean:
+	dh_testdir
+	dh_testroot
+
+	dh_clean
+
+build:
+	dh_testdir
+
+install:
+	dh_testdir
+	dh_installdirs
+
+binary-indep: install
+
+binary-arch: install
+	dh_testdir
+	dh_testroot
+	dh_installdocs
+	dh_installdebconf
+	dh_installchangelogs
+	dh_installman
+	dh_install
+	dh_link
+	dh_strip
+	dh_compress
+	dh_fixperms
+	dh_installdeb
+	dh_shlibdeps
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+binary: binary-indep binary-arch
+.PHONY: build clean binary-indep binary-arch binary

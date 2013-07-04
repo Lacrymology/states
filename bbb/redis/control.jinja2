@@ -1,0 +1,22 @@
+Source: {{ package_name }}
+Section: utils
+Priority: optional
+Maintainer: No one <fake@example.com>
+Build-Depends: debhelper
+
+Package: {{ package_name }}
+Architecture: all
+Depends: {{ depends }}
+{%- if conflicts|default(False) %}
+Conflicts: {{ conflicts }}
+{%- endif %}
+{%- if suggests|default(False) %}
+Suggests: {{ suggests }}
+{%- endif %}
+{%- if replaces|default(False) %}
+Replaces: {{ replaces }}
+{%- endif %}
+{%- if provides|default(False) %}
+Provides: {{ provides }}
+{%- endif %}
+Description: {{ description }}

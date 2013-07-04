@@ -101,4 +101,4 @@ extend:
   redis_package:
     module:
       - require:
-      - pkg: redis
+        - pkg: redis

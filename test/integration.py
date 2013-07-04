@@ -19,7 +19,10 @@ Check file docs/tests.rst for details.
 
 import logging
 import pwd
-import unittest
+try:
+    import unittest2 as unittest
+except ImportError:
+    import unittest
 import sys
 import os
 import time
@@ -207,7 +210,7 @@ def setUpModule():
                 if not changes[change]['result']:
                     raise ValueError(changes[change]['comment'])
         except Exception, err:
-            raise ValueError("%s: %s" % (err, ret))
+            raise ValueError("%s: %s" % (err, changes))
 
     if client.__class__ == ClientLocal:
         logger.info("Install fake mine module")

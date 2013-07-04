@@ -8,6 +8,9 @@ include:
 git:
   pkg:
     - latest
+{%- if grains['osrelease']|float < 12.04 %}
+    - name: git-core
+{%- endif %}
     - require:
       - pkg: openssh-client
       - cmd: apt_sources

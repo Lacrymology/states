@@ -46,7 +46,7 @@ server {
     rewrite /media/css/dashboard.css /content/css/dashboard.css last;
 
     location /media/ {
-        root /usr/local/graphite/lib/python2.7/site-packages/django/contrib/admin;
+        root /usr/local/graphite/lib/python{{ grains['pythonversion'][0] }}.{{ grains['pythonversion'][1] }}/site-packages/django/contrib/admin;
         expires 1h;
         autoindex off;
     }

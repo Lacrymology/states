@@ -1,4 +1,5 @@
 # {{ pillar['message_do_not_modify'] }}
+{%- set python_version = '%d.%d' % (grains['pythonversion'][0], grains['pythonversion'][1]) %}
 
 upstream sentry {
     server unix:///var/lib/uwsgi/sentry.sock;
@@ -32,13 +33,13 @@ server {
     location /_admin_media/ {
         expires 1h;
         autoindex off;
-        alias /usr/local/sentry/lib/python2.7/site-packages/django/contrib/admin/static/;
+        alias /usr/local/sentry/lib/python{{ python_version }}/site-packages/django/contrib/admin/static/;
     }
 
     location /_static/ {
         expires 1h;
         autoindex off;
-        alias /usr/local/sentry/lib/python2.7/site-packages/sentry/static/;
+        alias /usr/local/sentry/lib/python{{ python_version }}/site-packages/sentry/static/;
     }
 
     location / {

@@ -23,7 +23,7 @@
 {% endfor %}
 
 {% for module in ('wsgi.py', 'local_settings.py') %}
-/usr/local/graphite/lib/python2.7/site-packages/graphite/{{ module }}:
+/usr/local/graphite/lib/python{{ grains['pythonversion'][0] }}.{{ grains['pythonversion'][1] }}/site-packages/graphite/{{ module }}:
   file:
     - absent
     - require:

@@ -32,7 +32,7 @@ include:
     - mode: 700
 {%- endif %}
 
-pip-cache:
+pip-config:
   file:
     - managed
     - name: {{ root_user_home }}/.pip/pip.conf
@@ -56,6 +56,10 @@ python-setuptools:
 
 {% set version='1.3.1' %}
 pip:
+  file:
+    - directory
+    - name: /usr/local/lib/python{{ grains['pythonversion'][0] }}.{{ grains['pythonversion'][1] }}/dist-packages
+    - makedirs: True
   archive:
     - extracted
     - name: {{ opts['cachedir'] }}
@@ -77,9 +81,10 @@ pip:
     - cwd: {{ opts['cachedir'] }}/pip-{{ version }}
     - require:
       - pkg: python-pip
-      - file: pip-cache
+      - file: pip-config
       - pkg: python
       - pkg: python-setuptools
+      - file: pip
     - watch:
       - archive: pip
 

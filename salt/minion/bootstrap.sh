@@ -7,8 +7,13 @@ fi
 
 export HOME=/root
 
+apt-get update
 apt-get install -y python-software-properties
-apt-add-repository -y ppa:saltstack/salt
+if [ "`lsb_release -r -s`" = "10.04" ]; then
+    apt-add-repository ppa:saltstack/salt
+else
+    apt-add-repository -y ppa:saltstack/salt
+fi
 apt-get update
 apt-get install -y salt-minion
 

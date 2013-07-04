@@ -11,6 +11,6 @@ include:
 python:
   pkg:
     - latest
-    - name: python2.7
+    - name: python{{ grains['pythonversion'][0] }}.{{ grains['pythonversion'][1] }}
     - require:
       - cmd: apt_sources

@@ -10,6 +10,7 @@
 shinken-{{ role }}-dead:
   service:
     - dead
+    - name: shinken-{{ role }}
 
 shinken-{{ role }}:
   service:

@@ -67,7 +67,7 @@ bigbluebutton_ruby:
 bigbluebutton:
   cmd:
     - run
-    - name: gem install god builder bundler
+    - name: gem install builder bundler
     - env:
         LANG: {{ encoding }}
         LC_ALL: {{ encoding }}

@@ -39,6 +39,8 @@ ruby_dependencies:
     - pkgs:
       - libffi5
       - libreadline5
+    - require:
+      - cmd: apt_sources
 
 bigbluebutton_ruby:
   pkg:

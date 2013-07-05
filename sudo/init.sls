@@ -7,6 +7,7 @@ sudo:
     - managed
     - name: /etc/sudoers
     - source: salt://sudo/config.jinja2
+    - template: jinja
     - user: root
     - group: root
     - mode: 440

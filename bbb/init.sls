@@ -5,6 +5,7 @@ include:
   - java
   - locale
   - mscorefonts
+  - nginx
   - redis
   - tomcat
 
@@ -92,11 +93,13 @@ bigbluebutton:
       - pkg: bigbluebutton_ruby
       - pkg: libreoffice
       - pkg: openoffice
+      - pkg: mscorefonts
       - archive: ffmpeg
-      - service: tomcat6
       - module: redis_package
       - service: redis
-      - pkg: mscorefonts
+      - service: tomcat6
+      - service: nginx
+      - file: nginx_sysv_upstart
 {% for i in ('ruby', 'ri', 'irb', 'erb', 'rdoc', 'gem') %}
       - file: /usr/bin/{{ i }}
 {% endfor %}
@@ -118,7 +121,27 @@ bbb-conf-wrap:
       - pkg: bigbluebutton
       - file: bbb-conf-wrap
 
+nginx_sysv_upstart:
+  file:
+    - symlink
+    - target: /lib/init/upstart-job
+    - name: /etc/init.d/nginx
+    - require:
+      - pkg: nginx
+
+/etc/nginx/conf.d/bigbluebutton.conf:
+  file:
+    - symlink
+    - target: /etc/nginx/sites-available/bigbluebutton
+    - require:
+      - pkg: nginx
+
 extend:
+  nginx:
+    service:
+      - watch:
+        - file: /etc/nginx/conf.d/bigbluebutton.conf
+
   redis_package:
     module:
       - require:

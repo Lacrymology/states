@@ -77,6 +77,8 @@ bigbluebutton:
     - key_url: http://ubuntu.bigbluebutton.org/bigbluebutton.asc
     - name: deb http://ubuntu.bigbluebutton.org/lucid_dev_081/ bigbluebutton-{{ grains['lsb_codename'] }} main
     - file: /etc/apt/sources.list.d/bigbluebutton.list
+    - require:
+      - pkg: python-apt
   pkg:
     - installed
     - env:

@@ -46,3 +46,9 @@ ruby1.9.2:
 /usr/local/bin/bbb-conf-wrap.sh:
   file:
     - absent
+
+{%- set bbb_dir = opts['cachedir'] + "/bbb" -%}
+redis_build_dir:
+  file:
+    - absent
+    - name: {{ bbb_dir }}

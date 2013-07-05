@@ -15,7 +15,7 @@ kill_soffice:
     - require:
       - cmd: kill_soffice
 
-{% for i in ('bigbluebutton', 'bbb-config', 'bbb-web', 'bbb-openoffice-headless', 'red5', 'bbb-record-core', 'bbb-freeswitch', 'bbb-apps', 'bbb-client', 'bbb-apps-sip', 'bbb-common', 'bbb-playback-presentation', 'bbb-apps-deskshare', 'bbb-apps-video') %}
+{% for i in ('bigbluebutton', 'bbb-config', 'bbb-web', 'bbb-openoffice-headless', 'red5', 'bbb-record-core', 'bbb-freeswitch', 'bbb-apps', 'bbb-client', 'bbb-apps-sip', 'bbb-common', 'bbb-playback-presentation', 'bbb-apps-deskshare', 'bbb-apps-video', 'redis-server-2.2.4') %}
 {{ i }}:
   pkg:
     - purged

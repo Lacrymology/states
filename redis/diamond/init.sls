@@ -28,6 +28,28 @@ Redis_diamond_resources:
     - require:
       - file: /etc/diamond/collectors
 
+redis:
+  file:
+    - managed
+    - name: /usr/local/diamond/redis-requirements.txt
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - source: salt://redis/diamond/requirements.jinja2
+    - require:
+      - virtualenv: diamond
+  module:
+    - wait
+    - name: pip.install
+    - upgrade: True
+    - bin_env: /usr/local/diamond
+    - requirements: /usr/local/diamond/redis-requirements.txt
+    - require:
+      - virtualenv: diamond
+    - watch:
+      - file: redis
+
 extend:
   diamond:
     service:

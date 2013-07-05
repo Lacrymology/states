@@ -5,6 +5,7 @@ include:
   - java
   - locale
   - mscorefonts
+  - nginx
   - redis
   - tomcat
 
@@ -39,6 +40,8 @@ ruby_dependencies:
     - pkgs:
       - libffi5
       - libreadline5
+    - require:
+      - cmd: apt_sources
 
 bigbluebutton_ruby:
   pkg:
@@ -52,31 +55,33 @@ bigbluebutton_ruby:
     - require:
       - pkg: ruby_dependencies
 
-{% for i in ('ruby', 'ri', 'irb', 'erb', 'rdoc', 'gem') %}
+{%- for i in ('ruby', 'ri', 'irb', 'erb', 'rdoc', 'gem') %}
 /usr/bin/{{ i }}:
   file:
     - symlink
     - target: /usr/bin/{{ i }}1.9.2
     - require:
       - pkg: bigbluebutton_ruby
-
-{% endfor %}
+    - require_in:
+      - cmd: bigbluebutton
+{%- endfor %}
 
 {% set encoding = pillar['encoding']|default("en_US.UTF-8") %}
 bigbluebutton:
   cmd:
-    - wait
-    - name: gem install god builder bundler
+    - run
+    - name: gem install builder bundler
     - env:
         LANG: {{ encoding }}
         LC_ALL: {{ encoding }}
-    - watch:
-      - pkg: bigbluebutton_ruby
+    - unless: gem list --local | grep -q '^builder '
   pkgrepo:
     - managed
     - key_url: http://ubuntu.bigbluebutton.org/bigbluebutton.asc
     - name: deb http://ubuntu.bigbluebutton.org/lucid_dev_081/ bigbluebutton-{{ grains['lsb_codename'] }} main
     - file: /etc/apt/sources.list.d/bigbluebutton.list
+    - require:
+      - pkg: python-apt
   pkg:
     - installed
     - env:
@@ -88,11 +93,13 @@ bigbluebutton:
       - pkg: bigbluebutton_ruby
       - pkg: libreoffice
       - pkg: openoffice
+      - pkg: mscorefonts
       - archive: ffmpeg
-      - service: tomcat6
       - module: redis_package
       - service: redis
-      - pkg: mscorefonts
+      - service: tomcat6
+      - service: nginx
+      - file: nginx_sysv_upstart
 {% for i in ('ruby', 'ri', 'irb', 'erb', 'rdoc', 'gem') %}
       - file: /usr/bin/{{ i }}
 {% endfor %}
@@ -114,7 +121,27 @@ bbb-conf-wrap:
       - pkg: bigbluebutton
       - file: bbb-conf-wrap
 
+nginx_sysv_upstart:
+  file:
+    - symlink
+    - target: /lib/init/upstart-job
+    - name: /etc/init.d/nginx
+    - require:
+      - pkg: nginx
+
+/etc/nginx/conf.d/bigbluebutton.conf:
+  file:
+    - symlink
+    - target: /etc/nginx/sites-available/bigbluebutton
+    - require:
+      - pkg: nginx
+
 extend:
+  nginx:
+    service:
+      - watch:
+        - file: /etc/nginx/conf.d/bigbluebutton.conf
+
   redis_package:
     module:
       - require:

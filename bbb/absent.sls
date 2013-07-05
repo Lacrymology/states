@@ -15,7 +15,7 @@ kill_soffice:
     - require:
       - cmd: kill_soffice
 
-{% for i in ('bigbluebutton', 'bbb-config', 'bbb-web', 'bbb-openoffice-headless', 'red5', 'bbb-record-core', 'bbb-freeswitch', 'bbb-apps', 'bbb-client', 'bbb-apps-sip', 'bbb-common', 'bbb-playback-presentation', 'bbb-apps-deskshare', 'bbb-apps-video') %}
+{% for i in ('bigbluebutton', 'bbb-config', 'bbb-web', 'bbb-openoffice-headless', 'red5', 'bbb-record-core', 'bbb-freeswitch', 'bbb-apps', 'bbb-client', 'bbb-apps-sip', 'bbb-common', 'bbb-playback-presentation', 'bbb-apps-deskshare', 'bbb-apps-video', 'redis-server-2.2.4') %}
 {{ i }}:
   pkg:
     - purged
@@ -46,3 +46,9 @@ ruby1.9.2:
 /usr/local/bin/bbb-conf-wrap.sh:
   file:
     - absent
+
+{%- set bbb_dir = opts['cachedir'] + "/bbb" -%}
+redis_build_dir:
+  file:
+    - absent
+    - name: {{ bbb_dir }}

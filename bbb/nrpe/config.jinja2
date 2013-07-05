@@ -1,0 +1,13 @@
+# {{ pillar['message_do_not_modify'] }}
+command[openoffice_procs]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u root -C oosplash -a '--headless'
+command[openoffice_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 8100
+
+command[freeswitch_procs]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u freeswitch -C 'freeswitch' -a '-nc'
+command[freeswitch_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 8021
+
+command[red5_procs]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u root -C java -a '/usr/share/red5/red5-server-bootstrap.jar'
+command[red5_rmtp_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 1935
+command[red5_rmi_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 9999
+command[red5_desktop_sharing_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 9123
+
+command[god_procs]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u root -C ruby1.9.2 -a '/usr/bin/god'

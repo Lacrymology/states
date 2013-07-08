@@ -3,6 +3,7 @@ include:
   - gsyslog.nrpe
   - nginx.nrpe
   - nrpe
+  - rsync.nrpe
 {% if pillar['salt_archive']['web']['ssl']|default(False) %}
   - ssl.nrpe
 {% endif %}

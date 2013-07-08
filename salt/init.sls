@@ -1,13 +1,12 @@
-salt:
-  apt_repository:
-    - present
+{%- set version = salt['pillar.get']('salt:version', '0.15.3') -%}
+{%- set common_path = '{0}/pool/main/s/salt/salt-common_{0}-1{1}_all.deb'.format(version, grains['lsb_codename']) %}
+
+salt-common:
+  pkg:
+    - installed
+    - sources:
 {%- if 'files_archive' in pillar %}
-    - address: {{ pillar['files_archive'] }}/mirror/salt/{{ salt['pillar.get']('salt:version', '0.15.3') }}
+      - salt-common: {{ pillar['files_archive'] }}/mirror/salt/{{ common_path }}
 {%- else %}
-    - address: http://saltinwound.org/ubuntu/{{ salt['pillar.get']('salt:version', '0.15.3') }}
+      - salt-common: http://saltinwound.org/ubuntu/{{ common_path }}
 {%- endif %}
-    - filename: saltstack-salt-{{ grains['lsb_release'] }}
-    - components:
-      - main
-    - key_server: keyserver.ubuntu.com
-    - key_id: 0E27C0A6

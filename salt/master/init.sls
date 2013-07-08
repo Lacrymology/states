@@ -10,7 +10,6 @@ include:
   - ssh.client
   - pip
   - python.dev
-  - apt
   - gsyslog
 
 salt-master-requirements:
@@ -49,6 +48,8 @@ salt-master-requirements:
     - require:
       - file: /srv/salt
 
+{%- set version = salt['pillar.get']('salt:version', '0.15.3') -%}
+{%- set master_path = '{0}/pool/main/s/salt/salt-master_{0}-1{1}_all.deb'.format(version, grains['lsb_codename']) %}
 salt-master:
   file:
     - managed
@@ -67,10 +68,15 @@ salt-master:
     - require:
       - pkg: git
   pkg:
-    - latest
+    - installed
+    - sources:
+{%- if 'files_archive' in pillar %}
+      - salt-master: {{ pillar['files_archive'] }}/mirror/salt/{{ master_path }}
+{%- else %}
+      - salt-master: http://saltinwound.org/ubuntu/{{ master_path }}
+{%- endif %}
     - require:
-      - apt_repository: salt
-      - cmd: apt_sources
+      - pkg: salt-common
   service:
     - running
     - enable: True

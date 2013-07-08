@@ -16,6 +16,21 @@ salt_minion_master_key:
     - watch:
       - file: salt-minion
 
+salt_minion_dependencies:
+  pkg:
+    - installed
+    - pkgs:
+      - lsb-release
+{% if grains['virtual'] != 'openvzve' %}
+      - pciutils
+      - dmidecode
+{% endif %}
+    - require:
+      - cmd: apt_sources
+
+{%- set version = salt['pillar.get']('salt:version', '0.15.3') -%}
+{%- set minion_path = '{0}/pool/main/s/salt/salt-minion_{0}-1{1}_all.deb'.format(version, grains['lsb_codename']) %}
+
 salt-minion:
   file:
     - managed
@@ -29,18 +44,17 @@ salt-minion:
       - pkg: salt-minion
   pkg:
     - installed
-    - names:
-      - salt-minion
-      - lsb-release
-{% if grains['virtual'] != 'openvzve' %}
-      - pciutils
-      - dmidecode
-{% endif %}
+    - sources:
+{%- if 'files_archive' in pillar %}
+      - salt-minion: {{ pillar['files_archive'] }}/mirror/salt/{{ minion_path }}
+{%- else %}
+      - salt-minion: http://saltinwound.org/ubuntu/{{ minion_path }}
+{%- endif %}
     - require:
-      - apt_repository: salt
-      - cmd: apt_sources
+      - pkg: salt-common
       - pkg: debconf-utils
       - pkg: python-software-properties
+      - pkg: salt_minion_dependencies
   service:
     - running
     - enable: True

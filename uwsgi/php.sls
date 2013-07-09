@@ -3,11 +3,16 @@ include:
   - uwsgi
 
 php-dev:
-  apt_repository:
-    - ubuntu_ppa
-    - user: l-mierzwa
-    - name: lucid-php5
-    - key_id: 67E15F46
+  pkgrepo:
+    - managed
+{%- if 'files_archive' in pillar %}
+    - name: deb {{ pillar['files_archive'] }}/mirror/lucid-php5 {{ grains['lsb_codename'] }} main
+{%- else %}
+    - ppa: l-mierzwa/lucid-php5
+{%- endif %}
+    - require:
+      - pkg: python-apt
+      - pkg: python-software-properties
   pkg:
     - installed
     - pkgs:
@@ -25,7 +30,7 @@ php-dev:
       - php5-dev
       - php-config
     - require:
-      - apt_repository: php-dev
+      - pkgrepo: php-dev
 
 extend:
   uwsgi_build:

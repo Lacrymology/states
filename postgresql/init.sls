@@ -2,9 +2,9 @@ include:
   - apt
 
 postgresql-dev:
-{%- if 'files_archive' in pillar %}
   pkgrepo:
     - managed
+{%- if 'files_archive' in pillar %}
     - name: deb http://archive.bit-flippers.com/mirror/postgresql/ {{ grains['lsb_codename'] }} main
 {%- else %}
     - keyid: 8683D8A2

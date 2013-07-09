@@ -2,6 +2,7 @@
  Install the Nginx web server
  #}
 include:
+  - apt
   - web
   - gsyslog
 
@@ -100,6 +101,8 @@ nginx_dependencies:
       - zlib1g
       - lsb-base
       - adduser
+    - require:
+      - cmd: apt_sources 
 
 {% set version = '1.4.1' %}
 nginx:

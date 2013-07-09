@@ -126,6 +126,7 @@ rabbitmq_dependencies:
     - installed
     - pkgs:
       - erlang-nox
+      - logrotate
     - require:
       - cmd: apt_sources
 

@@ -18,7 +18,7 @@ nodejs:
     - installed
     - sources:
 {%- if 'files_archive' in pillar %}
-      - nodejs: {{ pillar['files_archive'] }}/mirror/{{ filename }}
+      - nodejs: {{ pillar['files_archive']|replace('file://', '') }}/mirror/{{ filename }}
 {%- else %}
       - nodejs: http://ppa.launchpad.net/chris-lea/node.js/ubuntu/pool/main/n/nodejs/{{ filename }}
 {%- endif %}

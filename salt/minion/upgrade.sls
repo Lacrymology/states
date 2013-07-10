@@ -1,0 +1,46 @@
+{#-
+ This state is the most simple way to upgrade to restart a minion.
+ It don't requires on any other state (sls) file except salt
+ (for the repository).
+
+ It's kept at the minion to make sure it don't change anything else during the
+ upgrade process.
+-#}
+
+include:
+  - salt
+
+salt-minion:
+  file:
+    - managed
+    - template: jinja
+    - name: /etc/salt/minion
+    - user: root
+    - group: root
+    - mode: 440
+    - source: salt://salt/minion/config.jinja2
+    - require:
+      - pkg: salt-minion
+  pkg:
+    - latest
+    - names:
+      - salt-minion
+      - lsb-release
+{% if grains['virtual'] != 'openvzve' %}
+      - pciutils
+      - dmidecode
+{% endif %}
+    - require:
+      - apt_repository: salt
+      - cmd: apt_sources
+      - pkg: debconf-utils
+      - pkg: python-software-properties
+  service:
+    - running
+    - enable: True
+    - require:
+      - service: gsyslog
+    - watch:
+      - pkg: salt-minion
+      - file: salt-minion
+      - module: salt_minion_master_key

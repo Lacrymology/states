@@ -24,18 +24,6 @@ salt-minion:
       - pkg: salt-minion
   pkg:
     - latest
-    - names:
-      - salt-minion
-      - lsb-release
-{% if grains['virtual'] != 'openvzve' %}
-      - pciutils
-      - dmidecode
-{% endif %}
-    - require:
-      - apt_repository: salt
-      - cmd: apt_sources
-      - pkg: debconf-utils
-      - pkg: python-software-properties
   service:
     - running
     - enable: True

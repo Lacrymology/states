@@ -102,7 +102,7 @@ def present(address, components, distribution=None, source=False, key_id=None,
         data = {
             filename: {
                 'file': [
-                    'append',
+                    'managed',
                     {
                         'name': '/etc/apt/sources.list.d/{0}.list'.format(
                             filename)

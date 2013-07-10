@@ -52,6 +52,7 @@ files_archive pillar value accordingly.
 include:
   - cron
   - nginx
+  - rsync
   - salt.archive
   - ssh.server
 {%- if ssl %}

@@ -235,14 +235,6 @@ def setUpModule():
     logger.info("Uninstall deborphan.")
     check_error(client('state.sls', 'deborphan.absent'))
 
-    logger.info("Upgrade all installed packages, if necessary.")
-    output = client('pkg.upgrade')
-    logger.debug(output)
-    for pkg_name in output:
-        logger.debug("%s upgrade %s -> %s", pkg_name,
-                     output[pkg_name]['old'],
-                     output[pkg_name]['new'])
-
     logger.info("Save state of currently installed packages.")
     output = client('pkg_installed.snapshot')
     try:

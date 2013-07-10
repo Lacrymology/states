@@ -10,8 +10,8 @@ redis:
     - installed
     - sources:
 {%- if 'files_archive' in pillar %}
-      - libjemalloc1: {{ pillar['files_archive'] }}/mirror/{{ jemalloc }}
-      - redis-server: {{ pillar['files_archive'] }}/mirror/{{ filename }}
+      - libjemalloc1: {{ pillar['files_archive']|replace('file://', '') }}/mirror/{{ jemalloc }}
+      - redis-server: {{ pillar['files_archive']|replace('file://', '') }}/mirror/{{ filename }}
 {%- else %}
       - libjemalloc1: http://ppa.launchpad.net/chris-lea/redis-server/ubuntu/pool/main/j/jemalloc/{{ jemalloc }}
       - redis-server: http://ppa.launchpad.net/chris-lea/redis-server/ubuntu/pool/main/r/redis/{{ filename }}

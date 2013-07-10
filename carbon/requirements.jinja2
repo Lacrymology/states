@@ -5,6 +5,6 @@ pip==1.3.1
 {{ pillar['files_archive'] }}/pip/carbon-0.9.10.zip
 {{ pillar['files_archive'] }}/pip/whisper-0.9.10.zip
 {%- else %}
--e git+git://github.com/graphite-project/carbon.git@7928d76b3f4b30155bd1eb87b525a3b6b0db8380#egg=carbon
--e git+git://github.com/graphite-project/whisper.git@4a8396520a76c5b5e2b18036c20446e4832731b9#egg=whisper
+git+git://github.com/graphite-project/carbon.git@7928d76b3f4b30155bd1eb87b525a3b6b0db8380#egg=carbon
+git+git://github.com/graphite-project/whisper.git@4a8396520a76c5b5e2b18036c20446e4832731b9#egg=whisper
 {%- endif %}

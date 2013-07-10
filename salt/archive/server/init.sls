@@ -73,7 +73,59 @@ include:
     - source: salt://salt/archive/server/cron.jinja2
     - require:
       - user: salt_archive
+{%- if not salt['pillar.get']('salt_archive:source', False) %}
       - file: /usr/local/bin/salt_archive_incoming.py
+    {#-
+     if pillar['salt_archive']['source'] is not defined, create an incoming
+     directory.
+    -#}
+
+salt_archive_incoming:
+  file:
+    - directory
+    - name: /var/lib/salt_archive/incoming
+    - user: salt_archive
+    - group: salt_archive
+    - mode: 550
+    - require:
+      - user: salt_archive
+
+    {%- for type in ('pip', 'mirror') %}
+/var/lib/salt_archive/incoming/{{ type }}:
+  file:
+    - directory
+    - user: salt_archive
+    - group: salt_archive
+    - mode: 770
+    - require:
+      - user: salt_archive
+      - file: salt_archive_incoming
+    {%- endfor %}
+
+/usr/local/bin/salt_archive_incoming.py:
+  file:
+    - managed
+    - user: root
+    - group: root
+    - source: salt://salt/archive/server/incoming.py
+    - mode: 550
+{%- else %}
+    {#-
+     if pillar['salt_archive']['source'] is defined, can't have an incoming
+     directory.
+    -#}
+/var/lib/salt_archive/incoming:
+  file:
+    - absent
+
+archive_rsync:
+  cmd:
+    - run
+    - name: rsync -av --delete --exclude ".*" {{ pillar['salt_archive']['source'] }} /var/lib/salt_archive/
+    - require:
+      - pkg: rsync
+      - user: salt_archive
+{%- endif %}
 
 /etc/nginx/conf.d/salt_archive.conf:
   file:
@@ -98,36 +150,6 @@ salt_archive_{{ key }}:
       - user: salt_archive
       - service: openssh-server
 {% endfor -%}
-
-salt_archive_incoming:
-  file:
-    - directory
-    - name: /var/lib/salt_archive/incoming
-    - user: salt_archive
-    - group: salt_archive
-    - mode: 550
-    - require:
-      - user: salt_archive
-
-{% for type in ('pip', 'mirror') %}
-/var/lib/salt_archive/incoming/{{ type }}:
-  file:
-    - directory
-    - user: salt_archive
-    - group: salt_archive
-    - mode: 770
-    - require:
-      - user: salt_archive
-      - file: salt_archive_incoming
-{% endfor %}
-
-/usr/local/bin/salt_archive_incoming.py:
-  file:
-    - managed
-    - user: root
-    - group: root
-    - source: salt://salt/archive/server/incoming.py
-    - mode: 550
 
 extend:
   cron:

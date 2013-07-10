@@ -109,11 +109,11 @@ salt_archive_incoming:
     - group: root
     - source: salt://salt/archive/server/incoming.py
     - mode: 550
-{%- else %}
+{%- else -%}
     {#-
      if pillar['salt_archive']['source'] is defined, can't have an incoming
      directory.
-    -#}
+    #}
 /var/lib/salt_archive/incoming:
   file:
     - absent

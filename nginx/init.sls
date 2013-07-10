@@ -112,7 +112,7 @@ nginx:
     - installed
     - sources:
 {%- if 'files_archive' in pillar %}
-      - nginx: {{ pillar['files_archive'] }}/mirror/{{ filename }}
+      - nginx: {{ pillar['files_archive']|replace('file://', '') }}/mirror/{{ filename }}
 {%- else %}
       - nginx: http://nginx.org/packages/ubuntu/pool/nginx/n/nginx/{{ filename }}
 {%- endif %}

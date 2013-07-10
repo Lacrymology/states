@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 
 """
@@ -43,6 +43,17 @@ def validate_git_dir(dirname):
     return abs_path
 
 
+def add_symlink(tar, src, dst):
+    tmpfile = '/tmp/{0}_{1}'.format(os.getpid(), src.replace('/', '_'))
+    try:
+        os.symlink(src, tmpfile)
+    except OSError, e:
+        pass
+    tar.add(tmpfile, dst)
+    os.remove(tmpfile)
+    return 
+
+
 def main():
     """
     main loop.
@@ -73,6 +84,13 @@ def main():
 
     tar.add(os.path.join(common_root, 'salt', 'master', 'top.jinja2'),
             'root/salt/states/top.sls')
+
+    # symlinks
+    add_symlink(tar, os.path.join('/root', 'salt', 'states', 'test',
+                                  'integration.py'), 'usr/bin/integration')
+    add_symlink(tar, os.path.join('/root', 'salt', 'states', 'salt', 'minion',
+                                  'bootstrap.sh'), 'usr/bin/bootstrap')
+
     tar.close()
 
 if __name__ == '__main__':

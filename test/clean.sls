@@ -52,6 +52,7 @@ clean_pkg:
       - cloud-utils
       - command-not-found
       - command-not-found-data
+      - console-data
       - console-setup
       - cpp
       - cpp-4.6

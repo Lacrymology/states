@@ -1619,9 +1619,11 @@ class IntegrationFull(BaseIntegration):
         self.run_check('shinken_broker_http', 'Connection refused')
         self.run_check('shinken_nginx_http', 'Invalid HTTP response')
         self.run_check('shinken_nginx_https', 'Invalid HTTP response')
+        self.run_check('shinken_nginx_https_certificate')
 
     def check_shinken_broker(self, init_failed=False):
         self.run_check('shinken_broker_procs')
+        self.run_check('shinken_broker_port')
 
     def test_shinken_poller(self):
         self.top(['shinken.poller', 'shinken.poller.nrpe',

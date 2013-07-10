@@ -8,6 +8,7 @@
 -#}
 
 include:
+  - apt
   - salt
 
 salt-minion:
@@ -38,9 +39,6 @@ salt-minion:
   service:
     - running
     - enable: True
-    - require:
-      - service: gsyslog
     - watch:
       - pkg: salt-minion
       - file: salt-minion
-      - module: salt_minion_master_key

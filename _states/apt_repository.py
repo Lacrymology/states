@@ -99,13 +99,13 @@ def present(address, components, distribution=None, source=False, key_id=None,
         text.append(' '.join(['deb-src'] + line_content))
 
     if in_sources_list_d:
-        apt_file = '/etc/apt/sources.list.d/{0}.list'.format(filename)
         data = {
             filename: {
                 'file': [
                     'append',
                     {
-                        'name': apt_file
+                        'name': '/etc/apt/sources.list.d/{0}.list'.format(
+                            filename)
                     },
                     {
                         'contents': os.linesep.join(text)
@@ -117,13 +117,12 @@ def present(address, components, distribution=None, source=False, key_id=None,
             }
         }
     else:
-        apt_file = '/etc/apt/sources.list'
         data = {
             filename: {
                 'file': [
                     'append',
                     {
-                        'name': apt_file
+                        'name': '/etc/apt/sources.list'
                     },
                     {
                         'text': text

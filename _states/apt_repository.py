@@ -12,6 +12,7 @@ Handle Debian, Ubuntu and other Debian based distribution APT repositories
 
 import logging
 import urlparse
+import os
 
 from salt import exceptions, utils
 
@@ -93,31 +94,46 @@ def present(address, components, distribution=None, source=False, key_id=None,
     line_content = [address, distribution]
     line_content.extend(components)
 
-    if in_sources_list_d:
-        apt_file = '/etc/apt/sources.list.d/{0}.list'.format(filename)
-    else:
-        apt_file = '/etc/apt/sources.list'
-
     text = [' '.join(['deb'] + line_content)]
     if source:
         text.append(' '.join(['deb-src'] + line_content))
 
-    data = {
-        filename: {
-            'file': [
-                'append',
-                {
-                    'name': apt_file
-                },
-                {
-                    'text': text
-                },
-                {
-                    'makedirs': True
-                }
-            ]
+    if in_sources_list_d:
+        apt_file = '/etc/apt/sources.list.d/{0}.list'.format(filename)
+        data = {
+            filename: {
+                'file': [
+                    'append',
+                    {
+                        'name': apt_file
+                    },
+                    {
+                        'contents': os.linesep.join(text)
+                    },
+                    {
+                        'makedirs': True
+                    }
+                ]
+            }
         }
-    }
+    else:
+        apt_file = '/etc/apt/sources.list'
+        data = {
+            filename: {
+                'file': [
+                    'append',
+                    {
+                        'name': apt_file
+                    },
+                    {
+                        'text': text
+                    },
+                    {
+                        'makedirs': True
+                    }
+                ]
+            }
+        }
 
     if key_id:
         add_command = ['apt-key', 'adv', '--recv-keys']

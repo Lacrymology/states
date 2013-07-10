@@ -63,6 +63,7 @@ include:
   file:
     - absent
 
+{%- if not salt['pillar.get']('salt_archive:source', False) %}
 /etc/cron.d/salt-archive:
   file:
     - managed
@@ -73,7 +74,6 @@ include:
     - source: salt://salt/archive/server/cron.jinja2
     - require:
       - user: salt_archive
-{%- if not salt['pillar.get']('salt_archive:source', False) %}
       - file: /usr/local/bin/salt_archive_incoming.py
     {#-
      if pillar['salt_archive']['source'] is not defined, create an incoming
@@ -114,6 +114,10 @@ salt_archive_incoming:
      if pillar['salt_archive']['source'] is defined, can't have an incoming
      directory.
     #}
+/etc/cron.d/salt-archive:
+  file:
+    - absent
+
 /var/lib/salt_archive/incoming:
   file:
     - absent

@@ -1,7 +1,7 @@
 salt:
   file:
     - absent
-    - name: /etc/apt/sources.list.d/saltstack-salt-{{ grains['lsb_release'] }}
+    - name: /etc/apt/sources.list.d/saltstack-salt-{{ grains['lsb_release'] }}.list
   apt_repository:
     - present
 {%- if 'files_archive' in pillar %}

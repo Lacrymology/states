@@ -2,7 +2,7 @@
 {%- set mine = salt['mine.get']('*', 'monitoring.data') %}
 
 define host {
-    host_name salt-host
+    name salt-host
     contact_groups admins
     notification_interval 0
     first_notification_delay 0

@@ -235,14 +235,6 @@ def setUpModule():
     logger.info("Uninstall deborphan.")
     check_error(client('state.sls', 'deborphan.absent'))
 
-    logger.info("Upgrade all installed packages, if necessary.")
-    output = client('pkg.upgrade')
-    logger.debug(output)
-    for pkg_name in output:
-        logger.debug("%s upgrade %s -> %s", pkg_name,
-                     output[pkg_name]['old'],
-                     output[pkg_name]['new'])
-
     logger.info("Save state of currently installed packages.")
     output = client('pkg_installed.snapshot')
     try:
@@ -1415,6 +1407,7 @@ class IntegrationFull(BaseIntegration):
 
     def test_ntp(self):
         self.top(['ntp', 'ntp.nrpe', 'ntp.diamond'])
+        self.sleep('NTP')
         self.check_integration()
         self.check_ntp()
 
@@ -1626,9 +1619,11 @@ class IntegrationFull(BaseIntegration):
         self.run_check('shinken_broker_http', 'Connection refused')
         self.run_check('shinken_nginx_http', 'Invalid HTTP response')
         self.run_check('shinken_nginx_https', 'Invalid HTTP response')
+        self.run_check('shinken_nginx_https_certificate')
 
     def check_shinken_broker(self, init_failed=False):
         self.run_check('shinken_broker_procs')
+        self.run_check('shinken_broker_port')
 
     def test_shinken_poller(self):
         self.top(['shinken.poller', 'shinken.poller.nrpe',

@@ -1407,6 +1407,7 @@ class IntegrationFull(BaseIntegration):
 
     def test_ntp(self):
         self.top(['ntp', 'ntp.nrpe', 'ntp.diamond'])
+        self.sleep('NTP')
         self.check_integration()
         self.check_ntp()
 

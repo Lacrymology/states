@@ -96,23 +96,25 @@ nginx_dependencies:
   pkg:
     - installed
     - pkgs:
-      - libpcre3
-      - libssl1.0.0
-      - zlib1g
+      - libpcre3-dev
+      - libssl-dev
+      - zlib1g-dev
       - lsb-base
       - adduser
     - require:
       - cmd: apt_sources 
 
-{% set version = '1.4.1' %}
+{%- set version = '1.4.1' %}
+{%- set filename = 'nginx_{0}-1~{1}_{2}.deb'.format(version, grains['lsb_codename'], grains['debian_arch']) %}
+
 nginx:
   pkg:
     - installed
     - sources:
 {%- if 'files_archive' in pillar %}
-      - nginx: {{ pillar['files_archive'] }}/mirror/nginx_{{ version }}-1~precise_{{ grains['debian_arch'] }}.deb
+      - nginx: {{ pillar['files_archive'] }}/mirror/{{ filename }}
 {%- else %}
-      - nginx: http://nginx.org/packages/ubuntu/pool/nginx/n/nginx/nginx_{{ version }}-1~precise_{{ grains['debian_arch'] }}.deb
+      - nginx: http://nginx.org/packages/ubuntu/pool/nginx/n/nginx/{{ filename }}
 {%- endif %}
     - require:
       - user: web

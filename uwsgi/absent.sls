@@ -13,3 +13,8 @@ uwsgi:
     - require:
       - service: uwsgi
 {% endfor %}
+
+apt-key del 67E15F46:
+  cmd:
+    - run
+    - onlyif: apt-key list | grep -q 67E15F46

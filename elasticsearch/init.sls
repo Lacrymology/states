@@ -80,10 +80,10 @@ TODO: document AWS pillars
 include:
   - apt
   - cron
+  - java
 {% if ssl %}
   - ssl
   - nginx
-  - java
 {% endif %}
 {% set version = '0.20.5'%}
 {% set checksum = 'md5=e244c5a39515983ba81006a3186843f4' %}

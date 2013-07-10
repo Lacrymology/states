@@ -4,6 +4,7 @@
 include:
   - nrpe
   - apt.nrpe
+  - logrotate.nrpe
 {% if pillar['rabbitmq']['management'] != 'guest' -%}
   {%- if pillar['rabbitmq']['ssl']|default(False) %}
   - ssl.nrpe

@@ -72,8 +72,9 @@ destructive_absent: If True (not default), RabbitMQ data saved on disk is purged
 {#- TODO: SSL support http://www.rabbitmq.com/ssl.html -#}
 
 include:
-  - hostname
   - apt
+  - hostname
+  - logrotate
 {% if pillar['rabbitmq']['management'] != 'guest' -%}
   {%- if pillar['rabbitmq']['ssl']|default(False) %}
   - ssl
@@ -126,9 +127,9 @@ rabbitmq_dependencies:
     - installed
     - pkgs:
       - erlang-nox
-      - logrotate
     - require:
       - cmd: apt_sources
+      - pkg: logrotate
 
 rabbitmq-server:
   pkg:

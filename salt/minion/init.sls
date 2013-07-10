@@ -3,7 +3,6 @@
  #}
 
 include:
-  - apt
   - gsyslog
   - salt.minion.upgrade
 
@@ -19,3 +18,11 @@ salt_minion_master_key:
 {{ opts['cachedir'] }}/pkg_installed.pickle:
   file:
     - absent
+
+extend:
+  salt-minion:
+    service:
+      - require:
+        - service: gsyslog
+      - watch:
+        - module: salt_minion_master_key

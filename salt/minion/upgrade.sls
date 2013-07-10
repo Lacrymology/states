@@ -27,6 +27,7 @@ salt-minion:
   service:
     - running
     - enable: True
+    - skip_verify: True
     - watch:
       - pkg: salt-minion
       - file: salt-minion

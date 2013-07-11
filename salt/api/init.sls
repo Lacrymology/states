@@ -66,7 +66,7 @@ salt-api:
     - installed
     - sources:
 {%- if 'files_archive' in pillar %}
-      - salt-api: {{ pillar['files_archive'] }}/mirror/salt/{{ api_path }}
+      - salt-api: {{ pillar['files_archive']|replace('file://', '') }}/mirror/salt/{{ api_path }}
 {%- else %}
       - salt-api: http://saltinwound.org/ubuntu/{{ api_path }}
 {%- endif %}

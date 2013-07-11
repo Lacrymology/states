@@ -76,7 +76,7 @@ salt-master:
       - salt-master: http://saltinwound.org/ubuntu/{{ master_path }}
 {%- endif %}
     - require:
-      - pkg: salt-common
+      - pkg: salt
   service:
     - running
     - enable: True

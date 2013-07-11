@@ -2,14 +2,21 @@ include:
   - apt
 
 postgresql-dev:
-  apt_repository:
-    - ubuntu_ppa
-    - user: pitti
-    - name: postgresql
-    - key_id: 8683D8A2
+  pkgrepo:
+    - managed
+{%- if 'files_archive' in pillar %}
+    - name: deb {{ pillar['files_archive'] }}/mirror/postgresql/ {{ grains['lsb_codename'] }} main
+    - keyid: 8683D8A2
+    - keyserver: keyserver.ubuntu.com
+{%- else %}
+    - ppa: pitti/postgresql
+{%- endif %}
+    - require:
+      - pkg: python-apt
+      - pkg: python-software-properties
   pkg:
-    - latest
+    - installed
     - name: libpq-dev
     - require:
-      - apt_repository: postgresql-dev
+      - pkgrepo: postgresql-dev
       - cmd: apt_sources

@@ -1,13 +1,8 @@
 # {{ pillar['message_do_not_modify'] }}
-{%- set mine = salt['mine.get']('*', 'monitoring.data') -%}
+{%- set mine = salt['mine.get']('*', 'monitoring.data') %}
 
-{%- for host in mine -%}
-{%- if mine[host]['monitor'] %}
 define host {
-    host_name {{ host }}
-    address {{ mine[host]['ip_addrs']['private'] }}
-    alias {{ host }}
-    hostgroups {% for role in mine[host]['roles'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    name salt-host
     contact_groups admins
     notification_interval 0
     first_notification_delay 0
@@ -26,6 +21,17 @@ define host {
     retain_status_information 1
     retain_nonstatus_information 1
     business_impact 5
+    register 0
+}
+
+{%- for host in mine -%}
+{%- if mine[host]['monitor'] %}
+define host {
+    use salt-host
+    host_name {{ host }}
+    address {{ mine[host]['ip_addrs']['private'] }}
+    alias {{ host }}
+    hostgroups {% for role in mine[host]['roles'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     poller_tag all
 }
 {% endif -%}
@@ -299,6 +305,8 @@ define service {
     check_interval 360
     retry_interval 5
     notifications_enabled 0
+    {#- enable only notification for real error #}
+    notification_options c
 }
 {% endfor -%}
 {%- endif -%}

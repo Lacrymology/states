@@ -4,14 +4,27 @@
 include:
   - apt
 
-nodejs:
-  apt_repository:
-    - ubuntu_ppa
-    - user: chris-lea
-    - name: node.js
-    - key_id: C7917B12
+{% set version = '0.10.12' %}
+{% set filename = "nodejs_" +  version  + "-1chl1~" +  grains['lsb_codename']  + "1_" +  grains['debian_arch']  + ".deb" %}
+
+rlwrap:
   pkg:
-    - latest
+    - installed
     - require:
-      - apt_repository: nodejs
       - cmd: apt_sources
+
+nodejs:
+  pkg:
+    - installed
+    - sources:
+{%- if 'files_archive' in pillar %}
+      - nodejs: {{ pillar['files_archive']|replace('file://', '') }}/mirror/{{ filename }}
+{%- else %}
+      - nodejs: http://ppa.launchpad.net/chris-lea/node.js/ubuntu/pool/main/n/nodejs/{{ filename }}
+{%- endif %}
+    - require:
+      - pkg: rlwrap
+
+/etc/apt/sources.list.d/chris-lea-node.js-precise.lis:
+  file:
+    - absent

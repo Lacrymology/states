@@ -25,13 +25,13 @@ salt-api:
     - purged
     - require:
       - service: salt-api
-{% if salt['cmd.has_exec']('pip') %}
+{#{% if salt['cmd.has_exec']('pip') %}
   pip:
     - removed
     - name: cherrypy
     - require:
       - pkg: salt-api
-{% endif %}
+{% endif %}#}
   file:
     - absent
     - name: /etc/init/salt-api.conf

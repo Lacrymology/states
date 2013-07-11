@@ -12,6 +12,7 @@ salt-master:
     - require:
       - service: salt-master
 
+{#
 {% if salt['cmd.has_exec']('pip') %}
 GitPython:
   pip:
@@ -25,3 +26,4 @@ GitPython:
     - require:
       - service: salt-master
 {% endfor %}
+#}

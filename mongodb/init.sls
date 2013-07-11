@@ -6,23 +6,11 @@
  #}
 include:
   - logrotate
-  - apt
+
+{% set version = '2.4.4' %}
+{% set filename = 'mongodb-10gen_' + version + '_' + grains['debian_arch'] + '.deb' %}
 
 mongodb:
-  apt_repository:
-    - present
-    - address: http://downloads-distro.mongodb.org/repo/ubuntu-upstart
-    - components:
-      - 10gen
-    - distribution: dist
-    - key_id: 7F0CEB10
-    - key_server: keyserver.ubuntu.com
-  pkg:
-    - latest
-    - name: mongodb-10gen
-    - require:
-      - apt_repository: mongodb
-      - cmd: apt_sources
   file:
     - managed
     - name: /etc/logrotate.d/mongodb
@@ -38,3 +26,16 @@ mongodb:
     - enable: True
     - watch:
       - pkg: mongodb
+  pkg:
+    - installed
+    - sources:
+{%- if 'files_archive' in pillar %}
+      - mongodb-10gen: {{ pillar['files_archive']|replace('file://', '') }}/mirror/{{ filename }}
+{%- else %}
+      - mongodb-10gen: http://downloads-distro.mongodb.org/repo/ubuntu-upstart/dists/dist/10gen/binary-{{ grains['debian_arch'] }}/{{ filename }}
+{%- endif %}
+
+mongodb_old_apt_repo:
+  file:
+    - name: /etc/apt/sources.list.d/downloads-distro.mongodb.org-repo_ubuntu-upstart-dist.list
+    - absent

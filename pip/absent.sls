@@ -20,6 +20,7 @@
 python-setuptools:
   pkg:
     - purged
+{#
 {% if salt['cmd.has_exec']('pip') %}
     - require:
       - pip: pip
@@ -32,3 +33,4 @@ pip:
   pip:
     - removed
 {% endif %}
+#}

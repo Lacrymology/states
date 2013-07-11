@@ -71,7 +71,7 @@ salt-master:
     - installed
     - sources:
 {%- if 'files_archive' in pillar %}
-      - salt-master: {{ pillar['files_archive'] }}/mirror/salt/{{ master_path }}
+      - salt-master: {{ pillar['files_archive']|replace('file://', '') }}/mirror/salt/{{ master_path }}
 {%- else %}
       - salt-master: http://saltinwound.org/ubuntu/{{ master_path }}
 {%- endif %}

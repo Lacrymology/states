@@ -111,6 +111,7 @@ graylog2-web:
     - require:
       - gem: graylog2-web
     - watch:
+      - pkg: ruby
       - archive: graylog2-web
   file:
     - managed

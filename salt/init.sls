@@ -16,3 +16,6 @@ salt:
     - key_id: 0E27C0A6
     - require:
       - file: salt
+  pkg:
+    - installed
+    - name: salt-common

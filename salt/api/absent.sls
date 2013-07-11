@@ -59,3 +59,7 @@ salt-api:
 /etc/nginx/conf.d/salt.conf:
   file:
     - absent
+
+{{ opts['cachedir'] }}/salt-api-requirements.txt:
+  file:
+    - absent

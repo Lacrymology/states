@@ -11,7 +11,7 @@ def __virtual__():
     return 'nrpe'
 
 
-def sleep(seconds):
+def wait(seconds):
     '''
     Wait for a while.
     '''

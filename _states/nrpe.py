@@ -25,18 +25,18 @@ def wait(seconds):
     return ret
 
 
-def run_all_checks(exception=None):
+def run_all_checks(exclude=None):
     '''
     Run all NRPE check, excepted listed.
     '''
-    ret = {'name': '{0} exception(s)'.format(len(exception)), 'result': None,
+    ret = {'name': '{0} exception(s)'.format(len(exclude)), 'result': None,
            'changes': {}, 'comment': ''}
 
-    if exception is None:
-        exception = []
+    if exclude is None:
+        exclude = []
 
     # all checks without check in exception list
-    checks_name = list(set(__salt__['nrpe.list_checks']()) - set(exception))
+    checks_name = list(set(__salt__['nrpe.list_checks']()) - set(exclude))
 
     if __opts__['test']:
         ret['comment'] = 'would have run following checks: {0}'.format(

@@ -196,9 +196,6 @@ class BaseIntegration(unittest.TestCase):
     Common logic to all Integration test class
     """
 
-    client = None
-    timeout = 3600
-
     # incomplete list of absent state, as some absent state will clean
     # everything, such as nrpe.absent erase stuff also in carbon.nrpe.absent.
     absent = [

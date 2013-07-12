@@ -1,7 +1,15 @@
+debhelper:
+  pkg:
+    - purged
+
+build-essential:
+  pkg:
+    - purged
+
 package_build:
   pkg:
     - purged
-    - pkgs:
-      - debhelper
-      - dpkg-dev
-      - build-essential
+    - name: dpkg-dev
+    - require:
+      - pkg: debhelper
+      - pkg: build-essential

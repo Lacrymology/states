@@ -14,7 +14,7 @@ include:
     - user: nagios
     - group: nagios
     - mode: 440
-    - source: salt://bigbluebutton/nrpe/config.jinja2
+    - source: salt://bbb/nrpe/config.jinja2
     - require:
       - pkg: nagios-nrpe-server
 

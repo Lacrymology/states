@@ -2,12 +2,9 @@
 # coding: utf-8
 
 import os
-import itertools
 
 
-def get_absent_states(filters=None, common_path='..'):
-    if filters is None:
-        filters = ['.sls']
+def get_absent_states(common_path='..'):
     '''Return list of all `expect` states inside `common_path` directory.
     `expect`, for example,  can be 'absent.sls' or 'init.sls' ...
 
@@ -15,8 +12,7 @@ def get_absent_states(filters=None, common_path='..'):
     all_files = []
     for root, _, files in os.walk(common_path):
         li = [os.path.join(root, f) for f in files]
-        all_files.extend([path for path in li
-                         if all(itertools.imap(lambda x, y: x in y, filters, itertools.repeat(f)))])
+        all_files.extend([path for path in li if '.sls' in path])
 
     # format output to saltstack DSL
     all_files = [f.replace('/', '.')[:f.rfind('.sls')].lstrip('.')
@@ -29,8 +25,4 @@ def get_absent_states(filters=None, common_path='..'):
 if __name__ == "__main__":
     print 'all:', 10 * '*'
     for i in get_absent_states():
-        print i
-
-    print 'absent', 10 * '*'
-    for i in get_absent_states(['absent']):
         print i

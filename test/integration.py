@@ -41,29 +41,6 @@ client = salt.client.Caller().function
 logger = logging.getLogger()
 
 
-def list_states():
-    """
-    :return: list of all states
-    """
-    output = []
-    test_dirname = os.path.dirname(os.path.abspath(__file__))
-    states_path = os.path.abspath(os.path.join(test_dirname, '..'))
-    for root, dirname, files in os.walk(states_path):
-        relative_path = root[len(states_path) + 1:]  # add 1 to remove /
-        state_name = relative_path.replace(os.sep, '.')
-        for filename in files:
-            if filename.endswith('.sls'):
-                prefix = os.path.splitext(filename)[0]
-                if prefix == 'init':
-                    output.append(state_name)
-                else:
-                    if not state_name:
-                        output.append(prefix)
-                    else:
-                        output.append('.'.join((state_name, prefix)))
-    return output
-
-
 def if_change(result):
     """
     Check if changed occured in :func:`test_clean`
@@ -171,7 +148,8 @@ class TestStateMeta(type):
     nrpe_test_all_state = 'test.nrpe'
 
     def __new__(mcs, name, bases, attrs):
-        all_states = list_states()
+        global client
+        all_states = client('cp.list_states')
         # don't play with salt.minion.absent
         all_states.remove('salt.minion.absent')
 

@@ -1,0 +1,8 @@
+#!/bin/sh
+# {{ pillar['message_do_not_modify'] }}
+bkp_fname=$(basename $1)
+dbname=$(echo $bkp_fname | cut -d'-' -f1)
+NOW=$(echo $bkp_fname | cut -d'-' -f2)
+
+scp -q $1 root@{{ pillar['backup_server']['address'] }}:/var/lib/backup/{{ grains['id'] }}-$dbname-postgresql-$NOW.sql.gz
+rm -f $1

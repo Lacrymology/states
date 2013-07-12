@@ -35,51 +35,9 @@ logging.basicConfig(stream=sys.stdout, level=logging.DEBUG,
 import salt.client
 
 
-class ClientMaster(object):
-    """
-    Salt client that run on the master itself and execute command remotely.
-    Slowest way to perform tests as all the files are download from the master
-    to the minion.
-    But this method requires only a salt minion and a master.
-    If one of the states repository is updated during execution, the changes
-    will be available.
-    """
-
-    def __init__(self, minion_id, timeout=3600):
-        self.minion_id = minion_id
-        self.timeout = timeout
-        self.client = salt.client.LocalClient()
-
-    def __call__(self, func, args=None):
-        """
-        Execute salt module.func.
-
-        Example::
-
-          client = ClientMaster()
-          client('state.highstate')
-          client('state.sls', 'bash')
-        """
-        if args is not None:
-            output = self.client.cmd(self.minion_id, func, [args],
-                                     timeout=self.timeout)
-        else:
-            output = self.client.cmd(self.minion_id, func, timeout=self.timeout)
-        try:
-            return output[self.minion_id]
-        except KeyError, err:
-            raise ValueError("%s: %s: %s" % (func, args, err))
-
-
 class ClientLocal(object):
     """
-    Salt client that run on the salt minion itself, no need for a master
-    Fastest way to perform tests as the files are already on the local
-    filesystem.
-    To use this method, you need to use the bootstrap_archive.py script to copy
-    the content of the states repositories and pillars to the minion.
-    If a repos is updated, the change won't be available unless a new archive
-    is copied and extracted.
+    Salt client that run on the salt minion itself, no need for a master.
     """
 
     def __init__(self):
@@ -100,20 +58,8 @@ class ClientLocal(object):
         else:
             return self.client.function(func)
 
-
-def get_client():
-    """
-    Return connected client instance
-    """
-    # if this environment variable exists, that means it run from the master
-    if 'INTEGRATION_MINION' in os.environ.keys():
-        return ClientMaster(os.environ.get('INTEGRATION_MINION'))
-    return ClientLocal()
-
 # global variables
 
-# which way to execute test: ClientMaster or ClientLocal
-client = get_client()
 # used to skip all test if the cleanup process had failed
 # there is no good reasons to test if the minion isn't back to it's original
 # state.
@@ -155,13 +101,13 @@ def if_change(result):
 
 
 def _sync_all():
-    global client
     logger.info("Synchronize minion: pillar, states, modules, returners, etc")
-    client('saltutil.sync_all')
+    ClientLocal()('saltutil.sync_all')
 
 
 def tearDownModule():
-    global client, minion_configuration
+    global minion_configuration
+    client = ClientLocal()
     logger.info("Install SSH Server to give access to host after tests.")
     client('state.sls', 'ssh.server')
     logger.info("Install sudo to give a way to switch to root")
@@ -177,7 +123,8 @@ def setUpModule():
     """
     Prepare minion for tests, this is executed only once time.
     """
-    global client, minion_configuration
+    global minion_configuration
+    client = ClientLocal()
 
     # force HOME to be root directory
     os.environ['HOME'] = pwd.getpwnam('root').pw_dir
@@ -337,8 +284,7 @@ class BaseIntegration(unittest.TestCase):
         """
         Clean up the minion before each test.
         """
-        global clean_up_failed, is_clean, process_list, client, user_list,\
-            group_list
+        global clean_up_failed, is_clean, process_list, user_list, group_list
 
         if clean_up_failed:
             self.skipTest("Previous cleanup failed")
@@ -355,7 +301,7 @@ class BaseIntegration(unittest.TestCase):
         # Go back on the same installed packages as after :func:`setUpClass`
         logger.info("Unfreeze installed packages")
         try:
-            output = client('pkg_installed.revert')
+            output = ClientLocal()('pkg_installed.revert')
         except Exception, err:
             clean_up_failed = True
             self.fail(err)
@@ -416,10 +362,9 @@ class BaseIntegration(unittest.TestCase):
         """
         Apply specified list of states.
         """
-        global client
         logger.debug("Run states: %s", ', '.join(states))
         try:
-            output = client('state.sls', ','.join(states))
+            output = ClientLocal()('state.sls', ','.join(states))
         except Exception, err:
             self.fail('states: %s. error: %s' % (states, err))
         # if it's not a dict, it's an error
@@ -452,8 +397,7 @@ class BaseIntegration(unittest.TestCase):
         """
         return the command name of all running processes on minion
         """
-        global client
-        result = client('status.procs')
+        result = ClientLocal()('status.procs')
         output = []
         for pid in result:
             name = result[pid]['cmd']
@@ -466,9 +410,8 @@ class BaseIntegration(unittest.TestCase):
         """
         return the list of groups
         """
-        global client
         output = []
-        for group in client('group.getent'):
+        for group in ClientLocal()('group.getent'):
             output.append(group['name'])
         return output
 
@@ -646,10 +589,10 @@ class Integration(BaseIntegration):
         self.top(['raven'])
 
     def test_raven_mail(self):
-        global client
         self.top(['raven.mail'])
-        client('cmd.run',
-               'echo unittest | /usr/bin/mail -s unittest root@localhost')
+        ClientLocal()(
+            'cmd.run',
+            'echo unittest | /usr/bin/mail -s unittest root@localhost')
 
     def test_reprepro(self):
         self.top(['reprepro'])
@@ -1096,9 +1039,8 @@ class IntegrationFull(BaseIntegration):
         return BaseIntegration.top(self, states)
 
     def tearDown(self):
-        global client
         executed_checks = self._check_total.keys()
-        for check in client('nrpe.list_checks'):
+        for check in ClientLocal()('nrpe.list_checks'):
             if check not in executed_checks:
                 self._check_failed.append("NRPE check '%s' wasn't executed" %
                                           check)
@@ -1114,9 +1056,8 @@ class IntegrationFull(BaseIntegration):
         """
         Run a Nagios NRPE check as a test
         """
-        global client
         logger.debug("Run NRPE check '%s'", check_name)
-        output = client('nrpe.run_check', check_name)
+        output = ClientLocal()('nrpe.run_check', check_name)
         self._check_total[check_name] = True
         if not output['result']:
             if accepted_failure is not None:
@@ -1680,6 +1621,7 @@ class IntegrationFull(BaseIntegration):
         self.check_shinken()
 
     def check_shinken(self):
+        client = ClientLocal()
         # self.run_check('shinken_broker_web')
         # self.run_check('shinken_broker_http')
         client('cmd.run', '/usr/local/bin/shinken-ctl.sh stop')

@@ -159,12 +159,6 @@ def run_states(states):
     return output_func
 
 
-def run_state_absent(state):
-    def output_func(self):
-        self.top(state)
-        self.top('.'.join((state, 'absent')))
-    return output_func
-
 def func_name(state_name):
     return 'test_%s' % state_name.replace('.', '_')
 

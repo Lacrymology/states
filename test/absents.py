@@ -5,10 +5,7 @@ import os
 
 
 def get_absent_states(common_path='..'):
-    '''Return list of all `expect` states inside `common_path` directory.
-    `expect`, for example,  can be 'absent.sls' or 'init.sls' ...
-
-    '''
+    '''Return list of all states inside `common_path` directory.'''
     all_files = []
     for root, _, files in os.walk(common_path):
         li = [os.path.join(root, f) for f in files]

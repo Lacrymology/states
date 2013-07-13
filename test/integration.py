@@ -18,6 +18,8 @@ Check file docs/tests.rst for details.
 
 import logging
 import pwd
+import StringIO
+import pprint
 try:
     import unittest2 as unittest
 except ImportError:
@@ -317,14 +319,24 @@ class States(unittest.TestCase):
 
         # check that all state had been executed properly.
         # build a list of comment of all failed state.
-        errors = {}
+        errors = StringIO.StringIO()
         for state in output:
             if not output[state]['result']:
-                errors['%s: %s' % (state, output[state]['comment'])] = True
-        error_list = errors.keys()
-        if error_list:
-            self.fail("Failure to apply states '%s': %s%s" % (
-                ','.join(states), os.linesep, os.linesep.join(error_list)))
+                # remove not useful keys
+                try:
+                    del output[state]['result']
+                    del output[state]['__run_num__']
+                except KeyError:
+                    pass
+                pprint.pprint(output[state], errors)
+        if errors:
+            errors.seek(0)
+            self.fail("Failure to apply states '%s': %s%s" %
+                      (','.join(states), os.linesep, errors.read()))
+        # error_list = errors.keys()
+        # if error_list:
+        #     self.fail("Failure to apply states '%s': %s%s" % (
+        #         ','.join(states), os.linesep, os.linesep.join(error_list)))
         return output
 
     def top(self, states):

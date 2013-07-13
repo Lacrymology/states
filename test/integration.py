@@ -20,12 +20,15 @@ import logging
 import pwd
 import StringIO
 import pprint
+import tempfile
 try:
     import unittest2 as unittest
 except ImportError:
     import unittest
 import sys
 import os
+
+import yaml
 
 # until https://github.com/saltstack/salt/issues/4994 is fixed this is
 # required there
@@ -34,13 +37,19 @@ logging.basicConfig(stream=sys.stdout, level=logging.DEBUG,
 
 import salt.client
 
+# global variables
+logger = logging.getLogger()
 # content of /etc/salt/minion file, as salt.minion state overwrite it.
 # the file is reverted after all tests executed
 minion_configuration = None
 # salt client
 client = salt.client.Caller().function
-
-logger = logging.getLogger()
+# is a cleanup required before next test
+is_clean = False
+# has previous cleanup failed
+clean_up_failed = False
+# list of process before tests ran
+process_list = None
 
 
 def if_change(result):
@@ -131,37 +140,83 @@ def setUpModule():
         raise ValueError(output)
 
 
-def run_states(attrs, func_name, states):
-    """
-    Return a function that run self.top([state_name])
-    """
-    def output_func(self):
-        self.top(states)
-    output_func.__name__ = func_name
-    attrs[func_name] = output_func
-
-
-def func_name(state_name):
-    return 'test_%s' % state_name.replace('.', '_')
-
-
 class TestStateMeta(type):
     """
     Metaclass that create all the test_ methods based on
     state files auto-discovery.
     """
+
     nrpe_test_all_state = 'test.nrpe'
+
+    @classmethod
+    def func_name(mcs, state_name):
+        return 'test_%s' % state_name.replace('.', '_')
+
+    @classmethod
+    def run_test_func(mcs, attrs, test_func_name, func_name, *args, **kwargs):
+        """
+        Return a function that run self.{{ test_func_name }}(*args, **kwargs)
+        """
+        def output_func(self):
+            func = getattr(self, test_func_name)
+            func(*args, **kwargs)
+        output_func.__name__ = func_name
+        logger.debug("Add method %s that run self.%s(...)", func_name,
+                     test_func_name)
+        attrs[func_name] = output_func
+
+    @classmethod
+    def add_test_integration(mcs, attrs, state):
+        """
+        add test for integration
+        """
+        state_test = '.'.join((state, 'test'))
+        state_diamond = '.'.join((state, 'diamond'))
+        state_nrpe = '.'.join((state, 'nrpe'))
+
+        # check if state also have diamond and/or NRPE
+        # integration
+        states = [state]
+        if state_diamond in attrs['all_states']:
+            logger.debug("State %s got diamond integration, add check "
+                         "for include", state)
+            mcs.run_test_func(attrs, 'check_integration_include',
+                              mcs.func_name(state_diamond + '_include'),
+                              state, state_diamond)
+            states.append(state_diamond)
+        if state_nrpe in attrs['all_states']:
+            logger.debug("State %s got NRPE integration add check for include",
+                         state)
+            mcs.run_test_func(attrs, 'check_integration_include',
+                              mcs.func_name(state_nrpe + '_include'), state,
+                              state_nrpe)
+            states.append(state_nrpe)
+
+        if len(states) > 1:
+            logger.debug("State %s got diamond/NRPE integration", state)
+            if state_test in attrs['all_states']:
+                logger.debug("State %s do have a custom test state", state)
+                mcs.run_test_func(attrs, 'top', mcs.func_name(state), [state])
+            else:
+                logger.debug("State %s don't have custom test state", state)
+                states.append(mcs.nrpe_test_all_state)
+                mcs.run_test_func(attrs, 'top',
+                                  mcs.func_name(state) + '_with_checks',
+                                  [state])
+        else:
+            logger.debug("No diamond/NRPE integration for state %s", state)
+            mcs.run_test_func(attrs, 'top', mcs.func_name(state), [state])
 
     def __new__(mcs, name, bases, attrs):
         global client
-        all_states = client('cp.list_states')
+        attrs['all_states'] = client('cp.list_states')
         # don't play with salt.minion.absent
-        all_states.remove('salt.minion.absent')
+        attrs['all_states'].remove('salt.minion.absent')
 
         attrs['absent'] = []
-        for state in all_states:
+        for state in attrs['all_states']:
             # ignore all test.*
-            if state.startswith('test.'):
+            if state.startswith('test.') or state == 'top':
                 logger.debug("Ignore state %s", state)
             else:
                 # absent states
@@ -170,44 +225,16 @@ class TestStateMeta(type):
                     # build a list of all absent states
                     attrs['absent'].append(state)
                     # create test_$state_name.absent
-                    run_states(attrs, func_name(state), [state])
+                    mcs.run_test_func(attrs, 'top', mcs.func_name(state), [state])
                 else:
                     logger.debug("%s is not an absent state", state)
 
                     if state.endswith('.nrpe') or state.endswith('.diamond'):
                         logger.debug("Add single test for %s", state)
-                        run_states(attrs, func_name(state), [state])
+                        mcs.run_test_func(attrs, 'top', mcs.func_name(state),
+                                          [state])
                     else:
-                        state_test = '.'.join((state, 'test'))
-                        state_diamond = '.'.join((state, 'diamond'))
-                        state_nrpe = '.'.join((state, 'nrpe'))
-
-                        # check if state also have diamond and/or NRPE
-                        # integration
-                        states = [state]
-                        if state_diamond in all_states:
-                            states.append(state_diamond)
-                        if state_nrpe in all_states:
-                            states.append(state_nrpe)
-
-                        if len(states) > 1:
-                            logger.debug("State %s do have diamond and/or NRPE "
-                                         "integration", state)
-                            if state_test in all_states:
-                                logger.debug("State %s do have a custom "
-                                             "test state", state)
-                                run_states(attrs, func_name(state), [state])
-                            else:
-                                logger.debug("State %s don't have custom "
-                                             "test state", state)
-                                states.append(mcs.nrpe_test_all_state)
-                                run_states(attrs,
-                                           func_name(state) + '_with_checks',
-                                           [state])
-                        else:
-                            logger.debug("State %s don't have diamond or "
-                                         "NRPE integration", state)
-                            run_states(attrs, func_name(state), [state])
+                        mcs.add_test_integration(attrs, state)
 
         return super(TestStateMeta, mcs).__new__(mcs, name, bases, attrs)
 
@@ -219,26 +246,17 @@ class States(unittest.TestCase):
 
     __metaclass__ = TestStateMeta
 
-    def __init__(self, *args, **kwargs):
-        global client
-        self.client = client
-        self.is_clean = False
-        self.clean_up_failed = False
-        self.process_list = None
-        # self.group_list = None
-        # self.user_list = None
-        unittest.TestCase.__init__(self, *args, **kwargs)
-
     def setUp(self):
         """
         Clean up the minion before each test.
         """
-        if self.clean_up_failed:
+        global is_clean, clean_up_failed, process_list
+        if clean_up_failed:
             self.skipTest("Previous cleanup failed")
         else:
             logger.debug("Go ahead, cleanup never failed before")
 
-        if self.is_clean:
+        if is_clean:
             logger.debug("Don't cleanup, it's already done")
             return
 
@@ -248,34 +266,34 @@ class States(unittest.TestCase):
         # Go back on the same installed packages as after :func:`setUpClass`
         logger.info("Unfreeze installed packages")
         try:
-            output = self.client('pkg_installed.revert')
+            output = client('pkg_installed.revert')
         except Exception, err:
             clean_up_failed = True
             self.fail(err)
         else:
             try:
                 if not output['result']:
-                    self.clean_up_failed = True
+                    clean_up_failed = True
                     self.fail(output['result'])
             except TypeError:
-                self.clean_up_failed = True
+                clean_up_failed = True
                 self.fail(output)
 
         # check processes
-        if self.process_list is None:
-            self.process_list = self.list_user_space_processes()
+        if process_list is None:
+            process_list = self.list_user_space_processes()
             logger.debug("First cleanup, keep list of %d process",
-                         len(self.process_list))
+                         len(process_list))
         else:
             actual = self.list_user_space_processes()
             logger.debug("Check %d proccess", len(actual))
             unclean = []
             for process in actual:
-                if process not in self.process_list:
+                if process not in process_list:
                     unclean.append(process)
 
             if unclean:
-                self.clean_up_failed = True
+                clean_up_failed = True
                 self.fail("Process that still run after cleanup: %s" % (
                           os.linesep.join(unclean)))
 
@@ -303,7 +321,7 @@ class States(unittest.TestCase):
         #         self.fail("New user that still exists after cleanup: %s" % (
         #                   ','.join(extra)))
 
-        self.is_clean = True
+        is_clean = True
 
     def sls(self, states):
         """
@@ -311,7 +329,7 @@ class States(unittest.TestCase):
         """
         logger.debug("Run states: %s", ', '.join(states))
         try:
-            output = self.client('state.sls', ','.join(states))
+            output = client('state.sls', ','.join(states))
         except Exception, err:
             self.fail('states: %s. error: %s' % ('.'.join(states), err))
         # if it's not a dict, it's an error
@@ -336,10 +354,6 @@ class States(unittest.TestCase):
         if str_errors:
             self.fail("Failure to apply states '%s': %s%s" %
                       (','.join(states), os.linesep, str_errors))
-        # error_list = errors.keys()
-        # if error_list:
-        #     self.fail("Failure to apply states '%s': %s%s" % (
-        #         ','.join(states), os.linesep, os.linesep.join(error_list)))
         return output
 
     def top(self, states):
@@ -348,15 +362,98 @@ class States(unittest.TestCase):
         Mostly, just a wrapper around :func:`sls` to specify that the state is
         not clean.
         """
-        self.is_clean = False
+        global is_clean
+        is_clean = False
         logger.info("Run top: %s", ', '.join(states))
         self.sls(states)
+
+    def render_state_template(self, state):
+        """
+        Return de-serialized data of specified state name
+        """
+        tmp = tempfile.NamedTemporaryFile(delete=False)
+        tmp.close()
+        state_path = state.replace('.', '/')
+        for path_template in ('salt://{0}.sls', 'salt://{0}/init.sls'):
+            source = path_template.format(state_path)
+            client('cp.get_template', source, tmp.name)
+            with open(tmp.name, 'r') as yaml_fh:
+                try:
+                    data = yaml.safe_load(yaml_fh)
+                    if data:
+                        logger.debug("Found state %s, return dict size %d",
+                                     source, len(data))
+                        os.unlink(tmp.name)
+                        return data
+                    logger.debug("%s don't seem to exists", source)
+                except Exception:
+                    logger.error("Can't parse YAML %s", source, exc_info=True)
+        logger.error("Couldn't get content of %s", state)
+        os.unlink(tmp.name)
+        return {}
+
+    def check_integration_include(self, state, integration):
+        """
+        Check that Integration state (abc.nrpe) include the integration state
+        of all state (abc) includes, such as def.nrpe.
+        """
+        integration_type = integration.split('.')[-1]
+        logger.debug("Check integration include for %s (%s)", state,
+                     integration_type)
+
+        # list state include
+        try:
+            state_include = self.render_state_template(state)['include']
+            logger.debug("State %s got %d include(s)", state,
+                         len(state_include))
+        except KeyError:
+            logger.warn("State %s got no include", state)
+            state_include = []
+
+        # list integration include
+        try:
+            integration_include = self.render_state_template(
+                integration)['include']
+            logger.debug("Integration state %s got %d include(s)", integration,
+                         len(integration_include))
+        except KeyError:
+            logger.warn("Integration state %s got no include", integration)
+            integration_include = []
+
+        # convert list of ['abc.nrpe, 'def.nrpe'] into ['abc', 'def']
+        integration_state_include = []
+        integration_suffix = '.' + integration_type
+        for include in integration_include:
+            integration_state_include.append(
+                include.replace(integration_suffix, ''))
+        logger.debug("Non-integration include in %s is %s", integration,
+                     ','.join(integration_state_include))
+
+        missing = []
+        for potential_missing_include_state in set(state_include) - \
+                set(integration_state_include):
+            state_integration_include = '.'.join((
+                potential_missing_include_state, integration_type))
+            if state_integration_include in self.all_states:
+                missing.append(state_integration_include)
+                logger.error("State %s include %s while %s don't include %s",
+                             state, potential_missing_include_state,
+                             integration, state_integration_include)
+            else:
+                logger.debug("State %s include %s, but %s don't exists. OK.",
+                             state, potential_missing_include_state,
+                             state_integration_include)
+
+        if missing:
+            self.fail("Integration state %s of %s miss %d include: %s" % (
+                      state, integration, len(missing), ','.join(missing)))
 
     def list_user_space_processes(self):
         """
         return the command name of all running processes on minion
         """
-        result = self.client('status.procs')
+        global client
+        result = client('status.procs')
         output = []
         for pid in result:
             name = result[pid]['cmd']
@@ -369,8 +466,9 @@ class States(unittest.TestCase):
         """
         return the list of groups
         """
+        global client
         output = []
-        for group in self.client('group.getent'):
+        for group in client('group.getent'):
             output.append(group['name'])
         return output
 

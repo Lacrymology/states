@@ -127,13 +127,14 @@ def setUpModule():
         raise ValueError(output)
 
 
-def run_states(states):
+def run_states(attrs, func_name, states):
     """
     Return a function that run self.top([state_name])
     """
     def output_func(self):
         self.top(states)
-    return output_func
+    output_func.__name__ = func_name
+    attrs[func_name] = output_func
 
 
 def func_name(state_name):
@@ -165,13 +166,13 @@ class TestStateMeta(type):
                     # build a list of all absent states
                     attrs['absent'].append(state)
                     # create test_$state_name.absent
-                    attrs[func_name(state)] = run_states([state])
+                    run_states(attrs, func_name(state), [state])
                 else:
                     logger.debug("%s is not an absent state", state)
 
                     if state.endswith('.nrpe') or state.endswith('.diamond'):
                         logger.debug("Add single test for %s", state)
-                        attrs[func_name(state)] = run_states([state])
+                        run_states(attrs, func_name(state), [state])
                     else:
                         state_test = '.'.join((state, 'test'))
                         state_diamond = '.'.join((state, 'diamond'))
@@ -191,17 +192,18 @@ class TestStateMeta(type):
                             if state_test in all_states:
                                 logger.debug("State %s do have a custom "
                                              "test state", state)
-                                attrs[func_name(state)] = run_states([state])
+                                run_states(attrs, func_name(state), [state])
                             else:
                                 logger.debug("State %s don't have custom "
                                              "test state", state)
                                 states.append(mcs.nrpe_test_all_state)
-                                attrs[func_name(state) + '_with_checks'] = \
-                                    run_states(states)
+                                run_states(attrs,
+                                           func_name(state) + '_with_checks',
+                                           [state])
                         else:
                             logger.debug("State %s don't have diamond or "
                                          "NRPE integration", state)
-                            attrs[func_name(state)] = run_states([state])
+                            run_states(attrs, func_name(state), [state])
 
         return super(TestStateMeta, mcs).__new__(mcs, name, bases, attrs)
 

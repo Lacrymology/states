@@ -25,10 +25,17 @@ def wait(seconds):
     return ret
 
 
-def run_all_checks(exclude=None):
+def run_all_checks(**kwargs):
     '''
     Run all NRPE check, excepted listed.
+
+    exclude:
+        List of check to skip.
     '''
+    try:
+        exclude = kwargs['exclude']
+    except KeyError:
+        exclude = []
     ret = {'name': '{0} exception(s)'.format(len(exclude)), 'result': None,
            'changes': {}, 'comment': ''}
 

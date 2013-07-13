@@ -36,7 +36,7 @@ def run_all_checks(**kwargs):
         exclude = kwargs['exclude']
     except KeyError:
         exclude = []
-    ret = {'name': '{0} exception(s)'.format(len(exclude)), 'result': None,
+    ret = {'name': '{0} excluded'.format(len(exclude)), 'result': None,
            'changes': {}, 'comment': ''}
 
     if exclude is None:

@@ -7,7 +7,7 @@ Common repository integration tests
 These unittest run on the salt master because the SSH server get installed
 and uninstall. The only deamon that isn't killed in the process is Salt Minion.
 
-Check file docs/tests.rst for details.
+Check file docs/run_tests.rst for details.
 
 """
 

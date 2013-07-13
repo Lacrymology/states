@@ -1,5 +1,5 @@
-Integration Tests
-=================
+Running Integration Tests
+=========================
 
 Git Repositories
 ----------------
@@ -57,22 +57,4 @@ suggest:
 
 You can launch specific test such as::
 
-  nohup /root/salt/states/test/integration.py -c Integration > /tmp/test.log
-
-or::
-
-  nohup /root/salt/states/test/integration.py -c Integration.test_apt > /tmp/test.log
-
-Non-Common Tests
-----------------
-
-Roles and non-common low-level states should also be tested. For that, create a
-``tests/client.py`` file in the other repositories.
-
-The file need to have::
-
-  from integration import *
-
-At the top and then you can create an other test class that perform test on
-those states and roles. Just follow the instruction but invoke ``client.py``
-instead of ``integration.py``.
+  nohup /root/salt/states/test/integration.py -c States.test_apt > /tmp/test.log

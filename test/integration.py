@@ -329,10 +329,13 @@ class States(unittest.TestCase):
                 except KeyError:
                     pass
                 pprint.pprint(output[state], errors)
-        if errors:
-            errors.seek(0)
+        errors.seek(0)
+        str_errors = errors.read()
+        errors.close()
+
+        if str_errors:
             self.fail("Failure to apply states '%s': %s%s" %
-                      (','.join(states), os.linesep, errors.read()))
+                      (','.join(states), os.linesep, str_errors))
         # error_list = errors.keys()
         # if error_list:
         #     self.fail("Failure to apply states '%s': %s%s" % (

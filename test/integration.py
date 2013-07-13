@@ -60,6 +60,7 @@ def if_change(result):
 
 def tearDownModule():
     global minion_configuration, client
+    logger.debug("Running tearDownModule")
     client('state.sls', 'test.teardown')
     logger.info("Revert /etc/salt/minion to original value.")
     with open('/etc/salt/minion', 'w') as minion_fh:
@@ -71,6 +72,7 @@ def setUpModule():
     Prepare minion for tests, this is executed only once time.
     """
     global minion_configuration, client
+    logger.debug("Running setUpModule")
 
     # force HOME to be root directory
     os.environ['HOME'] = pwd.getpwnam('root').pw_dir
@@ -309,7 +311,7 @@ class States(unittest.TestCase):
         try:
             output = self.client('state.sls', ','.join(states))
         except Exception, err:
-            self.fail('states: %s. error: %s' % (states, err))
+            self.fail('states: %s. error: %s' % ('.'.join(states), err))
         # if it's not a dict, it's an error
         self.assertEqual(type(output), dict, output)
 
@@ -321,8 +323,8 @@ class States(unittest.TestCase):
                 errors['%s: %s' % (state, output[state]['comment'])] = True
         error_list = errors.keys()
         if error_list:
-            self.fail("Failure to apply: %s%s" % (os.linesep,
-                                                  os.linesep.join(error_list)))
+            self.fail("Failure to apply states '%s': %s%s" % (
+                ','.join(states), os.linesep, os.linesep.join(error_list)))
         return output
 
     def top(self, states):

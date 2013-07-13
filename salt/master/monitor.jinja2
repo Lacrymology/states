@@ -1,0 +1,16 @@
+salt_master:
+  description: Salt Master Daemon
+  check: check_nrpe!salt_master_procs
+
+
+{%- set salt_master_ports = {'publish': 4505, 'ret': 4506} -%}
+{%- for port in salt_master_ports %}
+salt-master-remote-port-{{ port }}:
+  description: Salt Master Remote Port {{ port|capitalize }}
+  check: check_tcp!{{ salt_master_ports[port] }}
+
+salt_master_port_{{ port }}:
+  description: Salt Master Local Port {{ port }}
+  check: check_nrpe!salt_master_port_{{ port }}
+
+{% endfor -%}

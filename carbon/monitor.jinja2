@@ -1,0 +1,16 @@
+carbon_procs:
+  description: Carbon Instances
+  check: check_nrpe!carbon_procs
+
+
+{% set carbon_ports = {'plaintext': 2003, 'pickle': 2004 } %}
+{%- for protocol in carbon_ports %}
+carbon-remote-port-{{ protocol }}:
+  description: Carbon Remote Port {{ protocol|capitalize }} Protocol
+  check: check_tcp!{{ carbon_ports[protocol] }}
+
+carbon_port_{{ protocol }}:
+  description: Carbon Local Port {{ protocol|capitalize }} Protocol
+  check: check_nrpe!carbon_port_{{ protocol}}
+
+{% endfor -%}

@@ -1,0 +1,8 @@
+openvpn_procs:
+  description: Openvpn Daemon
+
+{% set vpns = pillar['openvpn']|default({}) %}
+{% for instance in vpns %}
+openvpn_{{ instance }}:
+  description: Openvpn instance {{ instance }}
+{% endfor %}

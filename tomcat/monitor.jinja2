@@ -1,0 +1,12 @@
+tomcat_procs:
+  description: Tomcat Daemon
+
+tomcat_port:
+  check: check_tcp!8080
+  description: Tomcat HTTP Remote Port
+
+tomcat_port:
+  description: Tomcat HTTP Local Port
+
+tomcat_command_port:
+  description: Tomcat Command Port

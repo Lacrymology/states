@@ -1,0 +1,10 @@
+redis_procs:
+  description: Redis Daemon
+
+redis_port:
+  description: Redis Local Port
+
+redis_remote_port:
+  check: check_tcp!6379
+  description: Redis Remote Port
+

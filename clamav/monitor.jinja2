@@ -1,0 +1,6 @@
+{%- for procname in ('freshclam', 'clamav') %}
+{{ procname }}_procs:
+  description: {{ procname|capitalize }} Daemon
+  check: check_nrpe!{{ procname }}_procs
+
+{% endfor -%}

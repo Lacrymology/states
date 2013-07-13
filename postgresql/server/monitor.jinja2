@@ -1,0 +1,7 @@
+{%- set postgresql_server_checks = {'procs': 'Daemon', 'port': 'Port'} -%}
+{%- for check in postgresql_server_checks %}
+postgresql_{{ check }}:
+  description: PostgreSQL {{ postgresql_server_checks[check] }}
+  check: check_nrpe!postgresql_{{ check }}
+
+{% endfor -%}

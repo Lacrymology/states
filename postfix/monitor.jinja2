@@ -1,0 +1,14 @@
+{%- set postfix_checks = {
+  'postfix_master': 'Master',
+  'postfix_pickup': 'Local mail pickup',
+  'postfix_qmgr': 'Queue manager',
+  'postfix_port_spam_handler': 'Port SPAM handler',
+  'postfix_port_smtp': 'SMTP Port',
+  'postfix_port_smtps': 'SMTP over SSL Port',
+ -%}
+{%- for check in postfix_checks %}
+postfix_{{ check }}:
+  description: Postfix {{ postfix_checks[check] }}
+  check: check_nrpe!postfix_{{ check }}
+
+{% endfor -%}

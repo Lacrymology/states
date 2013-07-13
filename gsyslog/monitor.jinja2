@@ -1,0 +1,6 @@
+{%- for check in ('syslogd', 'klogd') %}
+{{ check }}_procs:
+  description: Gsyslog {{ check }} Daemon
+  check: check_nrpe!{{ check }}_procs
+
+{% endfor -%}

@@ -1,0 +1,45 @@
+{%- set shinken_listen_port = {
+    'arbiter': 7770,
+    'broker': 7772,
+    'scheduler': 7768,
+    'poller': 7771,
+    'reactionner': 7769
+} -%}
+
+{%- for shinken_role in shinken_listen_port -%}
+{%- set state_name = 'shinken.' + shinken_role -%}
+shinken_{{ shinken_role }}_procs:
+  description: Shinken {{ shinken_role|capitalize }} Deamon
+  check: check_nrpe!shinken_{{ shinken_role }}_procs
+
+
+shinken_{{ shinken_role }}_port:
+  description: Shinken {{ shinken_role|capitalize }} Local Port
+  check: check_nrpe!shinken_{{ shinken_role }}_port
+
+
+shinken-{{ shinken_role }}-remote-port:
+  description: Shinken {{ shinken_role|capitalize }} Remote Port
+  check: check_tcp!{{ shinken_listen_port[shinken_role] }}
+
+
+{%- if state_name == 'shinken.broker' %}
+{%- set deployment = 'shinken' %}
+{%- set nginx_instances_checks = {'http': 'HTTP protocol', 'https': 'HTTPs Protocol', 'https_certificate': 'HTTPs Certificate Expiration'} -%}
+{%- for check in nginx_instances_checks %}
+{{ deployment }}_nginx_{{ check }}:
+  description: {{ deployment|capitalize }} {{ nginx_instances_checks[check] }}
+  check: check_nrpe!{{ deployment }}_nginx_{{ check }}
+{%- if check == 'https_certificate' %}
+  check_interval: 1440 {#- only need to check https certificate each day -#}
+{%- endif %}
+{% endfor -%}
+
+shinken_broker_web:
+  description: Shinken Broker Web UI Port
+  check: check_nrpe!shinken_broker_web
+
+
+shinken_broker_http:
+  description: Shinken Broker Web UI HTTP
+  check: check_nrpe!shinken_broker_http

@@ -194,7 +194,7 @@ define servicegroup {
 {%- set reserved_keys = ('check', 'description') -%}
 {%- for state in pillar['monitoring']['states'] -%}
     {%- set state_checks = salt['monitoring.discover_checks'](state) -%}
-    {%- if state_checks %}
+    {%- if not state_checks %}
 # ERROR: state {{ state }} don't have monitor.jinja2 file
     {%- else -%}
         {%- for name in state_checks %}

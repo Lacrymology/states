@@ -1,3 +1,4 @@
+{%- if grains['lsb_codename'] == 'lucid' %}
 include:
   - apt
   - bbb.redis
@@ -146,3 +147,4 @@ extend:
     module:
       - require:
         - pkg: redis
+{%- endif -%}

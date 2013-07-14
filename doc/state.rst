@@ -153,9 +153,9 @@ Here is the file format with Jinja comment inline for explaination::
      {# Shinken command to perform, by default it's a NRPE check in the
         following format: check_nrpe!{{ check_name }}.
         Available shinken command:
-          - check_nrpe!{{ check_name }}
-          - check_ping
-          - check_tcp!{{ port_number }} #}
+          * check_nrpe!{{ check_name }}
+          * check_ping
+          * check_tcp!{{ port_number }} #}
 
      description: Check BigDaemon process
      {# Human readable description of this check. Must be very clear as it will
@@ -163,11 +163,11 @@ Here is the file format with Jinja comment inline for explaination::
 
      {# Addition optional Shinken parameters.
         Frequently used  Shinken service options:
-          - check_interval: how many seconds before each check
-          - retry_interval: how long in seconds before retry a check after a
+          * check_interval: how many seconds before each check
+          * retry_interval: how long in seconds before retry a check after a
             failure.
-          - notifications_enabled: if non OK status ends with notification
-          - notification_options: which kind of error send notification for:
+          * notifications_enabled: if non OK status ends with notification
+          * notification_options: which kind of error send notification for:
             ``c`` such as critical
         More information on this in
         http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects/service

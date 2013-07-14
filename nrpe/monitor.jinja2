@@ -7,13 +7,14 @@
   'nrpe_procs': 'NRPE Processes',
   'total_procs': 'Total Processes',
   'zombie_procs': 'Zombie Processes',
- -%}
+}
+-%}
+
 {%- for check in nrpe_checks %}
 {{ check }}:
   description: {{ nrpe_checks[check] }}
-  check: check_nrpe!{{ check }}
-
 {% endfor -%}
+
 nrpe-remote-port:
   description: Remote NRPE Port
   check: check_tcp!5666

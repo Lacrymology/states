@@ -1,10 +1,9 @@
-{%- set deployment = 'salt_archive' %}
-{%- set nginx_instances_checks = {'http': 'HTTP protocol', 'https': 'HTTPs Protocol', 'https_certificate': 'HTTPs Certificate Expiration'} -%}
-{%- for check in nginx_instances_checks %}
-{{ deployment }}_nginx_{{ check }}:
-  description: {{ deployment|capitalize }} {{ nginx_instances_checks[check] }}
-  check: check_nrpe!{{ deployment }}_nginx_{{ check }}
-{%- if check == 'https_certificate' %}
+salt_archive_nginx_http:
+  description: Salt Archive HTTP Protocol
+
+salt_archive_nginx_https:
+  description: Salt Archive HTTPS Protocol
+
+salt_archive_nginx_https_certificate:
+  description: HTTPS Certificate Expiration
   check_interval: 1440 {#- only need to check https certificate each day -#}
-{%- endif %}
-{% endfor -%}

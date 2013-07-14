@@ -1,34 +1,29 @@
-{%- set elasticsearch_checks = {'http': 9200, 'transport': 9300} -%}
-
 elasticsearch_procs:
   description: Elasticsearch Daemon
-  check: check_nrpe!elasticsearch_procs
-
 
 elasticsearch_cluster:
   description: Elasticsearch Cluster
-  check: check_nrpe!elasticsearch_cluster
 
+elasticsearch-remote-port-http:
+  description: Elasticsearch Remote HTTP Port
+  check: check_tcp!9200
 
-{%- for check in elasticsearch_checks %}
-elasticsearch-remote-port-{{ check }}:
-  description: Elasticsearch Remote {{ check|capitalize }} Port
-  check: check_tcp!{{ elasticsearch_checks[check] }}
+elasticsearch-remote-port-transport:
+  description: Elasticsearch Remote Transport Port
+  check: check_tcp!9300
 
+elasticsearch_port_http:
+  description: Elasticsearch Local HTTP Port
 
-elasticsearch_port_{{ check }}:
-  description: Elasticsearch Local {{ check|capitalize }} Port
-  check: check_nrpe!elasticsearch_port_{{ check }}
+elasticsearch_port_transport:
+  description: Elasticsearch Local Transport Port
 
-{% endfor -%}
+elasticsearch_nginx_http:
+  description: Elasticsearch HTTP Protocol
 
-{%- set deployment = 'elasticsearch' %}
-{%- set nginx_instances_checks = {'http': 'HTTP protocol', 'https': 'HTTPs Protocol', 'https_certificate': 'HTTPs Certificate Expiration'} -%}
-{%- for check in nginx_instances_checks %}
-{{ deployment }}_nginx_{{ check }}:
-  description: {{ deployment|capitalize }} {{ nginx_instances_checks[check] }}
-  check: check_nrpe!{{ deployment }}_nginx_{{ check }}
-{%- if check == 'https_certificate' %}
+elasticsearch_nginx_https:
+  description: Elasticsearch HTTPS Protocol
+
+elasticsearch_nginx_https_certificate:
+  description: Elasticsearch HTTPS Certificate Expiration
   check_interval: 1440 {#- only need to check https certificate each day -#}
-{%- endif %}
-{% endfor -%}

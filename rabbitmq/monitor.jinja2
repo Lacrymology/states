@@ -2,20 +2,17 @@
 {%- for check in rabbitmq_checks %}
 {{ check }}:
   description: RabbitMQ {{ rabbitmq_checks[check] }}
-  check: check_nrpe!{{ check }}
-
 {% endfor -%}
 
-{%- set deployment = 'rabbitmq' %}
-{%- set nginx_instances_checks = {'http': 'HTTP protocol', 'https': 'HTTPs Protocol', 'https_certificate': 'HTTPs Certificate Expiration'} -%}
-{%- for check in nginx_instances_checks %}
-{{ deployment }}_nginx_{{ check }}:
-  description: {{ deployment|capitalize }} {{ nginx_instances_checks[check] }}
-  check: check_nrpe!{{ deployment }}_nginx_{{ check }}
-{%- if check == 'https_certificate' %}
+rabbitmq_nginx_http:
+  description: RabbitMQ HTTP Protocol
+
+rabbitmq_nginx_https:
+  description: RabbitMQ HTTPS Protocol
+
+rabbitmq_nginx_https_certificate:
+  description: RabbitMQ HTTPS Certificate Expiration
   check_interval: 1440 {#- only need to check https certificate each day -#}
-{%- endif %}
-{% endfor -%}
 
 rabbitmq-remote-amqp-port:
   description: Remote RabbitMQ AMQP Port

@@ -1,7 +1,5 @@
-{%- set proftpd_checks = {'procs': 'Daemon', 'port': 'Port'} -%}
-{%- for check in proftpd_checks %}
-proftpd_{{ check }}:
-  description: ProFTPD {{ proftpd_checks[check] }}
-  check: check_nrpe!proftpd_{{ check }}
+proftpd_procs:
+  description: ProFTPD Daemon
 
-{% endfor -%}
+proftpd_port:
+  description: ProFTPD Port

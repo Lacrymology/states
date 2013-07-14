@@ -1,8 +1,5 @@
-{%- set apt_checks = {'apt': 'APT Updates', 'apt_rc': 'APT Not-Purged'} -%}
-{%- for check in apt_checks %}
-{{ check }}:
-  description: {{ apt_checks[check] }}
-  check: check_nrpe!{{ check }}
+apt:
+  description: APT Updates
   {#-
   Services that don't affect production and that have high cost in CPU, I/O
   and RAM to performs.
@@ -14,4 +11,9 @@
   {#- enable only notification for real error #}
   notification_options: c
 
-{% endfor -%}
+apt_rc:
+  description: APT Not-Purged
+  check_interval: 360
+  retry_interval: 5
+  notifications_enabled: 0
+  notification_options: c

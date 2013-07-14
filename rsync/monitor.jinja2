@@ -1,7 +1,5 @@
-{%- set rsync_check = {'procs': 'Daemon', 'port': 'Port'} -%}
-{%- for check in rsync_check %}
-rsync_{{ check }}:
-  description: Rsync {{ rsync_check[check] }}
-  check: check_nrpe!rsync_{{ check }}
-
-{% endfor -%}
+rsync_procs:
+  description: Rsync Daemon
+  
+rsync_port:
+  description: Rsync Port

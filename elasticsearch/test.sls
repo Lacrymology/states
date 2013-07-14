@@ -1,9 +1,7 @@
 include:
-{%- for state in ('graylog2.server', 'graylog2.web', 'elasticsearch') %}
-  - {{ state }}
-  - {{ state }}.diamond
-  - {{ state }}.nrpe
-{%- endfor %}
+  - elasticsearch
+  - elasticsearch.diamond
+  - elasticsearch.nrpe
 
 test:
   module:

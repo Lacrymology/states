@@ -3,5 +3,5 @@
 amavis_{{ check }}:
   description: Amavis {{ amavis_checks[check] }}
   check: check_nrpe!amavis_{{ check }}
-}
+
 {% endfor -%}

@@ -8,10 +8,10 @@
   and RAM to performs.
   Run them only each 6 hours.
   #}
-  check_interval 360
-  retry_interval 5
-  notifications_enabled 0
+  check_interval: 360
+  retry_interval: 5
+  notifications_enabled: 0
   {#- enable only notification for real error #}
-  notification_options c
-}
+  notification_options: c
+
 {% endfor -%}

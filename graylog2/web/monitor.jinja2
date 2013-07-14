@@ -1,7 +1,8 @@
-{%- set deployment = 'graylog2' -%}
-{%- set uwsgi_instances_checks = {'master': 'uWSGI Master Process', 'worker': 'uWSGI Workers Process', 'ping': 'uWSGI Ping'} -%}
-  {%- for check in uwsgi_instances_checks %}
-{{ deployment }}_uwsgi_{{ check }}:
-  description: {{ deployment|capitalize }} {{ uwsgi_instances_checks[check] }}
-  check: check_nrpe!{{ deployment }}_uwsgi_{{ check }}
-{% endfor -%}
+graylog2_uwsgi_master:
+  description: Graylog2 uWSGI Master Process
+
+graylog2_uwsgi_worker:
+  description: Graylog2 uWSGI Workers Process
+
+graylog2_uwsgi_ping:
+  description: Graylog2 uWSGI Ping

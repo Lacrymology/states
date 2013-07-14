@@ -1,17 +1,14 @@
-{%- set graylog2_server_checks = {'procs': 'Daemon', 'incoming_logs': 'Incoming Logs Rate'} -%}
-{%- for check in graylog2_server_checks %}
-graylog2_{{ check }}:
-  description: Graylog2 {{ graylog2_server_checks[check] }}
-  check: check_nrpe!graylog2_{{ check }}
+graylog2_procs:
+  description: Graylog2 Daemon
 
-{% endfor -%}
+graylog2_incoming_logs:
+  description: Incoming Logs Rate
+
 graylog2_elasticsearch_cluster:
   description: Graylog2 Elasticsearch Cluster
-  check: check_nrpe!graylog2_elasticsearch_cluster
 
-{%- for check in elasticsearch_checks %}
-graylog2_elasticsearch_port_{{ check }}:
-  description: Graylog2 Elasticsearch Local {{ check|capitalize }} Port
-  check: check_nrpe!graylog2_elasticsearch_port_{{ check }}
+graylog2_elasticsearch_port_http:
+  description: Graylog2 Elasticsearch Local HTTP Port
 
-{% endfor -%}
+graylog2_elasticsearch_port_:
+  description: Graylog2 Elasticsearch Local Transport Port

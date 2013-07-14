@@ -1,7 +1,5 @@
-{%- set ssh_server_checks = {'procs': 'Daemon', 'port': 'Local Port'} -%}
-{%- for check in ssh_server_checks %}
-ssh_{{ check }}:
-  description: SSH Server {{ ssh_server_checks[check] }}
-  check: check_nrpe!ssh_{{ check }}
+ssh_procs:
+  description: SSH Server Daemon
 
-{% endfor -%}
+ssh_port:
+  description: SSH Server Local Port

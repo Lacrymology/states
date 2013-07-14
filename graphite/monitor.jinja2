@@ -1,25 +1,21 @@
-{%- set deployment = 'graphite' %}
+graphite_nginx_http:
+  description: Graphite HTTP protocol
 
-{%- set nginx_instances_checks = {'http': 'HTTP protocol', 'https': 'HTTPs Protocol', 'https_certificate': 'HTTPs Certificate Expiration'} -%}
-{%- for check in nginx_instances_checks %}
-{{ deployment }}_nginx_{{ check }}:
-  description: {{ deployment|capitalize }} {{ nginx_instances_checks[check] }}
-  check: check_nrpe!{{ deployment }}_nginx_{{ check }}
-{%- if check == 'https_certificate' %}
+graphite_nginx_https:
+  description: Graphite HTTPS protocol
+
+graphite_nginx_https_certificate:
+  description: HTTPS Certificate Expiration
   check_interval: 1440 {#- only need to check https certificate each day -#}
-{%- endif %}
-{% endfor -%}
 
-{%- set postgresql_client_checks = {'postgresql': 'PostgreSQL database'} -%}
-{%- for check in postgresql_client_checks %}
-{{ deployment }}_{{ check }}:
-  display_name {{ deployment|capitalize }} {{ postgresql_client_checks[check] }}
-  check: check_nrpe!{{ deployment }}_{{ check }}
-{% endfor -%}
+graphite_postgresql:
+  description: PostgreSQL database
 
-{%- set uwsgi_instances_checks = {'master': 'uWSGI Master Process', 'worker': 'uWSGI Workers Process', 'ping': 'uWSGI Ping'} -%}
-  {%- for check in uwsgi_instances_checks %}
-{{ deployment }}_uwsgi_{{ check }}:
-  display_name {{ deployment|capitalize }} {{ uwsgi_instances_checks[check] }}
-  check: check_nrpe!{{ deployment }}_uwsgi_{{ check }}
-{% endfor -%}
+graphite_uwsgi_{{ check }}:
+  description: uWSGI Master Process
+
+graphite_uwsgi_worker:
+  description: uWSGI Workers Process
+
+graphite_uwsgi_ping:
+  description: uWSGI Ping

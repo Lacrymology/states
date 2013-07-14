@@ -1,7 +1,8 @@
-{%- set openldap_checks = {'openldap_procs': 'OpenLDAP Daemon (slapd)', 'openldap_port': 'LDAP Port', 'openldap_base': 'LDAP Base'} -%}
-{%- for check in openldap_checks %}
-{{ check }}:
-  description: {{ openldap_checks[check] }}
-  check: check_nrpe!{{ check }}
+openldap_procs:
+  description: OpenLDAP Daemon (slapd)
 
-{% endfor -%}
+openldap_port:
+  description: LDAP Port
+
+openldap_base:
+  description: LDAP Base

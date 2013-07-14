@@ -2,7 +2,6 @@
 {%- for check in mongodb_checks %}
 mongodb_{{ check }}:
   description: MongoDB {{ mongodb_checks[check] }}
-  check: check_nrpe!mongodb_{{ check }}
 
 {% endfor -%}
 {#- TODO: remote port check? -#}

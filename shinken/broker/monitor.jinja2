@@ -1,0 +1,25 @@
+shinken_broker_procs:
+  description: Shinken Broker Deamon
+
+shinken_broker_port:
+  description: Shinken Broker Local Port
+
+shinken-broker-remote-port:
+  description: Shinken Broker Remote Port
+  check: check_tcp!7772
+
+shinken_nginx_http:
+  description: Shinken HTTP Protocol
+
+shinken_nginx_https:
+  description: Shinken HTTPS Protocol
+
+shinken_nginx_https_certificate:
+  description: Shinken HTTPS Certificate Expiration
+  check_interval: 1440 {#- only need to check https certificate each day -#}
+
+shinken_broker_web:
+  description: Shinken Broker Web UI Port
+
+shinken_broker_http:
+  description: Shinken Broker Web UI HTTP

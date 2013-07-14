@@ -1,7 +1,8 @@
-{%- set amavis_checks = {'master': 'Master Process', 'child': 'Child Processes', 'port': 'Listen Port'} -%}
-{%- for check in amavis_checks %}
-amavis_{{ check }}:
-  description: Amavis {{ amavis_checks[check] }}
-  check: check_nrpe!amavis_{{ check }}
+amavis_master:
+  description: Amavis Master Process
 
-{% endfor -%}
+amavis_child:
+  description: Amavis Child Processes
+
+amavis_port:
+  description: Amavis Listen Port

@@ -7,14 +7,10 @@
 {%- for check in dovecot_checks %}
 dovecot_{{ check }}:
   description: Dovecot {{ dovecot_checks[check] }}
-  check: check_nrpe!dovecot_{{ check }}
-
 {% endfor -%}
 
 {#- TODO: check remote port? -#}
 {%- for port in ('imap', 'pop3', 'imaps', 'pop3s') %}
 dovecot_port_{{ port }}:
   description: Dovecot {{ port|upper }} Port
-  check: check_nrpe!dovecot_port_{{ port }}
-
 {% endfor -%}

@@ -2,6 +2,4 @@
 {%- for check in nginx_checks %}
 nginx_{{ check }}:
   description: Nginx {{ nginx_checks[check] }}
-  check: check_nrpe!nginx_{{ check }}
-
 {% endfor -%}

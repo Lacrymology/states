@@ -1,7 +1,5 @@
-{%- set ntp_checks = {'ntp_procs': 'NTP Daemon', 'ntp_sync': 'NTP Synchronization'} -%}
-{%- for check in ntp_checks %}
-{{ check }}:
-  description: {{ ntp_checks[check] }}
-  check: check_nrpe!{{ check }}
+ntp_procs:
+  description: NTP Daemon
 
-{% endfor -%}
+ntp_sync:
+  description: NTP Synchronization

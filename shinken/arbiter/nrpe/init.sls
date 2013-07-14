@@ -2,14 +2,15 @@
  Nagios NRPE check for Shinken Arbiter
 #}
 include:
+  - apt.nrpe
   - nrpe
-  - virtualenv.nrpe
   - pip.nrpe
   - python.dev.nrpe
-  - apt.nrpe
 {% if pillar['shinken']['ssl']|default(False) %}
   - ssl.nrpe
 {% endif %}
+  - ssmtp.nrpe
+  - virtualenv.nrpe
 
 /etc/nagios/nrpe.d/shinken-arbiter.cfg:
   file:

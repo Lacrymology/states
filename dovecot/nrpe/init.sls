@@ -2,8 +2,9 @@
  Nagios NRPE check for Dovecot
 #}
 include:
-  - nrpe
   - apt.nrpe
+  - nrpe
+  - postfix.nrpe
 
 /etc/nagios/nrpe.d/dovecot.cfg:
   file:

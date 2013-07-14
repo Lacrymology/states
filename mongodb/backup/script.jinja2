@@ -1,0 +1,11 @@
+#!/bin/sh
+# {{ pillar['message_do_not_modify'] }}
+
+dbname=$1
+NOW=`date '+%Y-%m-%d-%H_%M_%S'`
+export TERM=dumb
+workdir=$$_$1_dump
+mkdir -p $workdir && cd $workdir
+mongodump -d $dbname
+tar cvzf $dbname-$NOW.tar.gz dump
+mv $dbname-$NOW.tar.gz /tmp

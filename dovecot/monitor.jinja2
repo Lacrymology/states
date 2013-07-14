@@ -3,7 +3,9 @@
   'anvil': 'Users connection tracker',
   'log': 'Logger',
   'config': 'Config daemon'
- -%}
+}
+-%}
+
 {%- for check in dovecot_checks %}
 dovecot_{{ check }}:
   description: Dovecot {{ dovecot_checks[check] }}

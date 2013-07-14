@@ -1,7 +1,13 @@
+{%- set ssl = pillar['elasticsearch']['ssl']|default(False) %}
 include:
   - elasticsearch
   - elasticsearch.diamond
   - elasticsearch.nrpe
+{% if ssl %}
+  - ssl.nrpe
+  - nginx.diamond
+  - nginx.nrpe
+{% endif %}
 
 test:
   module:

@@ -142,9 +142,4 @@ extend:
     service:
       - watch:
         - file: /etc/nginx/conf.d/bigbluebutton.conf
-
-  redis_package:
-    module:
-      - require:
-        - pkg: redis
 {%- endif -%}

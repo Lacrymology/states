@@ -6,7 +6,7 @@
 ffmpeg:
   archive:
     - extracted
-    - name: /usr/local/bin
+    - name: /usr/bin
     - archive_format: tar
     - tar_options: z
     - source_hash: md5={{ hashes[grains['debian_arch']] }}
@@ -15,4 +15,4 @@ ffmpeg:
   {%- else %}
     - source: http://ffmpeg.gusari.org/static/{{ bits[grains['debian_arch']] }}bit/{{ filename }}
   {%- endif %}
-    - if_missing: /usr/local/bin/ffmpeg
+    - if_missing: /usr/bin/ffmpeg

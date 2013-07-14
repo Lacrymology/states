@@ -1,4 +1,11 @@
-{%- set rabbitmq_checks = {'rabbitmq_procs': 'Daemon', 'rabbitmq_port_management': 'Management Port', 'rabbitmq_port_console': 'Console Port', 'rabbitmq_port_amqp': 'Local AMQP Port', 'erlang_procs': 'Erlang', 'erlang_port': 'Erlang Port'} -%}
+{%- set rabbitmq_checks = {
+    'rabbitmq_procs': 'Daemon',
+    'rabbitmq_port_management': 'Management Port',
+    'rabbitmq_port_console': 'Console Port',
+    'rabbitmq_port_amqp': 'Local AMQP Port',
+    'erlang_procs': 'Erlang',
+    'erlang_port': 'Erlang Port'
+} -%}
 {%- for check in rabbitmq_checks %}
 {{ check }}:
   description: RabbitMQ {{ rabbitmq_checks[check] }}
@@ -12,7 +19,7 @@ rabbitmq_nginx_https:
 
 rabbitmq_nginx_https_certificate:
   description: RabbitMQ HTTPS Certificate Expiration
-  check_interval: 1440 {#- only need to check https certificate each day -#}
+  check_interval: 1440 {#- only need to check https certificate each day #}
 
 rabbitmq-remote-amqp-port:
   description: Remote RabbitMQ AMQP Port

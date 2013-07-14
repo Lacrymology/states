@@ -1,4 +1,9 @@
-{%- set nginx_checks = {'master': 'Master Process', 'worker': 'Worker Processes', 'status': 'Status Page', 'logger_access': 'Access Logger', 'logger_error': 'Error Logger'} -%}
+{%- set nginx_checks = {
+    'master': 'Master Process',
+    'worker': 'Worker Processes',
+    'status': 'Status Page',
+    'logger_access': 'Access Logger',
+    'logger_error': 'Error Logger'} -%}
 {%- for check in nginx_checks %}
 nginx_{{ check }}:
   description: Nginx {{ nginx_checks[check] }}

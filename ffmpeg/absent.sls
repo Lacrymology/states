@@ -1,7 +1,7 @@
-/usr/local/bin/ffmpeg:
+/usr/bin/ffmpeg:
   file:
     - absent
 
-/usr/local/bin/ffprobe:
+/usr/bin/ffprobe:
   file:
     - absent

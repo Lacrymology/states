@@ -11,7 +11,7 @@ include:
 test:
   nrpe:
     - run_all_checks
-    - exception:
+    - exclude:
   {%- for name, _ in check_set %}
       - {{ name }}
   {%- endfor %}

@@ -11,7 +11,7 @@ test:
     - order: last
   nrpe:
     - run_all_checks
-    - exception:
+    - exclude:
       - elasticsearch_cluster
     - require:
       - module: test

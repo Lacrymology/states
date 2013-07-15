@@ -15,7 +15,7 @@ def wait(seconds):
     '''
     Wait for a while.
     '''
-    ret = {'name': str(sleep), 'result': None, 'changes': {}, 'comment': ''}
+    ret = {'name': str(seconds), 'result': None, 'changes': {}, 'comment': ''}
     if __opts__['test']:
         ret['comment'] = 'would have waited'
         return ret

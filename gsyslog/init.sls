@@ -2,10 +2,11 @@
  Install a gsyslogd server, it's a sysklogd/rsyslog replacement
 #}
 include:
-  - virtualenv
-  - pip
   - apt
+  - local
+  - pip
   - python.dev
+  - virtualenv
 
 {#
  gsyslog depends on klogd to get kernel logs, which is in sysklogd.
@@ -86,6 +87,7 @@ gsyslog:
     - bin_env: /usr/local/gsyslog
     - require:
       - virtualenv: gsyslog
+      - file: /usr/local
     - watch:
       - pkg: gsyslog
       - pkg: python-dev

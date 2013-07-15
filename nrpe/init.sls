@@ -4,6 +4,7 @@
 #TODO: set nagios user shell to /bin/false
 
 include:
+  - local
   - pip
   - pip.nrpe
   - virtualenv
@@ -32,6 +33,7 @@ nrpe-virtualenv:
     - name: /usr/local/nagios
     - require:
       - module: virtualenv
+      - file: /usr/local
   file:
     - managed
     - name: /usr/local/nagios/nagiosplugin-requirements.txt

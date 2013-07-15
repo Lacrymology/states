@@ -196,13 +196,13 @@ class TestStateMeta(type):
             logger.debug("State %s got diamond/NRPE integration", state)
             if state_test in attrs['all_states']:
                 logger.debug("State %s do have a custom test state", state)
-                mcs.run_test_func(attrs, 'top', mcs.func_name(state), [state])
+                mcs.run_test_func(attrs, 'top', mcs.func_name(state_test),
+                                  [state_test])
             else:
                 logger.debug("State %s don't have custom test state", state)
                 states.append(mcs.nrpe_test_all_state)
                 mcs.run_test_func(attrs, 'top',
-                                  mcs.func_name(state) + '_with_checks',
-                                  [state])
+                                  mcs.func_name(state) + '_with_checks', states)
         else:
             logger.debug("No diamond/NRPE integration for state %s", state)
             mcs.run_test_func(attrs, 'top', mcs.func_name(state), [state])

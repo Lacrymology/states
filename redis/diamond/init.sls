@@ -48,7 +48,7 @@ diamond_redis:
     - require:
       - virtualenv: diamond
     - watch:
-      - file: redis
+      - file: diamond_redis
 
 extend:
   diamond:

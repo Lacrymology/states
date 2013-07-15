@@ -78,7 +78,7 @@ def data():
     return output
 
 
-def update(self):
+def update():
     '''
     Run a salt function specified in pillar data.
     Pass specified kwargs to it.

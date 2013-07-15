@@ -39,7 +39,6 @@ rsync:
     archive:
       path: /var/lib/salt_archive
       'read only': true
-      'only read': true
       'dont compress': true
       exclude: .* incoming
 

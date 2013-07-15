@@ -28,7 +28,7 @@ Redis_diamond_resources:
     - require:
       - file: /etc/diamond/collectors
 
-redis:
+diamond_redis:
   file:
     - managed
     - name: /usr/local/diamond/redis-requirements.txt

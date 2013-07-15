@@ -43,6 +43,7 @@ shinken_pollers: IP address of monitoring poller that check this server.
 include:
   - git
   - python.dev
+  - local
   - virtualenv
   - gsyslog
   - gsyslog.diamond
@@ -99,6 +100,7 @@ diamond:
     - name: /usr/local/diamond
     - require:
       - module: virtualenv
+      - file: /usr/local
   module:
     - wait
     - name: pip.install

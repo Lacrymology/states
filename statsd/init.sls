@@ -4,6 +4,7 @@
 include:
   - virtualenv
   - gsyslog
+  - local
 
 /var/log/statsd.log:
   file:
@@ -23,6 +24,7 @@ statsd:
     - name: /usr/local/statsd
     - require:
       - module: virtualenv
+      - file: /usr/local
   service:
     - running
     - enable: True

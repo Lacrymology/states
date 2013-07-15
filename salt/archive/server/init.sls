@@ -51,6 +51,7 @@ files_archive pillar value accordingly.
 
 include:
   - cron
+  - local
   - nginx
   - rsync
   - salt.archive
@@ -109,6 +110,8 @@ salt_archive_incoming:
     - group: root
     - source: salt://salt/archive/server/incoming.py
     - mode: 550
+    - require:
+      - file: /usr/local
 {%- else -%}
     {#-
      if pillar['salt_archive']['source'] is defined, can't have an incoming

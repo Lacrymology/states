@@ -1,0 +1,9 @@
+mariadb_procs:
+  description: Mariadb Daemon
+
+mariadb_port:
+  description: Mariadb Local Port
+
+mariadb_remote_port:
+  check: check_tcp!3306
+  description: Mariadb Remote Port

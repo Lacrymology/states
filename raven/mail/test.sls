@@ -12,3 +12,4 @@ send_unittest_mail:
     - name:  echo unittest | /usr/bin/mail -s unittest root@localhost
     - require: 
       - nrpe: test
+      - file: /usr/bin/mail

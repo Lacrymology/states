@@ -1,5 +1,5 @@
 # {{ pillar['message_do_not_modify'] }}
-{#
+{#-
 MariaDB database server configuration file.
 
 You can copy this file to one of:
@@ -17,22 +17,22 @@ This will be passed to all mysql clients
 It has been reported that passwords should be enclosed with ticks/quotes
 escpecially if they contain "#" chars...
 Remember to edit /etc/mysql/debian.cnf when changing the socket location.
-#}
+-#}
 {#-
 * Character sets
-Default is Latin1, if you need UTF-8 set all this (in both client and server sections)
-#}
-
+Default is Latin1, if you need UTF-8 set all this (in both client and server
+sections)
+-#}
 
 [client]
 port		= 3306
 socket		= /var/run/mysqld/mysqld.sock
 {%- if salt['pillar.get']('mysql:utf8', False) %}
 default-character-set = utf8
-{%- endif %}
+{%- endif -%}
 
 
-{#
+{#-
 Here is entries for some specific programs
 The following values assume you have at least 32M ram
 
@@ -70,7 +70,7 @@ sort_buffer_size	= 4M
 bulk_insert_buffer_size	= 16M
 tmp_table_size		= 32M
 max_heap_table_size	= 32M
-{#
+{#-
 * MyISAM
 
 This replaces the startup script and checks MyISAM tables if needed
@@ -78,7 +78,7 @@ the first time they are touched. On error, make copy and try a repair.
 #}
 myisam_recover          = BACKUP
 key_buffer_size		= 128M
-{#
+{#-
 open-files-limit	= 2000
 #}
 table_open_cache	= 400
@@ -86,14 +86,14 @@ myisam_sort_buffer_size	= 512M
 concurrent_insert	= 2
 read_buffer_size	= 2M
 read_rnd_buffer_size	= 1M
-{#
-# * Query Cache Configuration
-#
-# Cache only tiny result sets, so we can fit more in the query cache.
+{#-
+ * Query Cache Configuration
+
+ Cache only tiny result sets, so we can fit more in the query cache.
 #}
 query_cache_limit		= 128K
 query_cache_size		= 64M
-{#
+{#-
  for more write intensive setups, set to DEMAND or OFF
 query_cache_type		= DEMAND
 
@@ -110,15 +110,14 @@ general_log             = 1
  we do want to know about network errors and such
 #}
 log_warnings		= 2
-{#
-#
-# Enable the slow query log to see queries with especially long duration
-#slow_query_log[={0|1}]
+{#-
+ Enable the slow query log to see queries with especially long duration
+ slow_query_log[={0|1}]
 #}
 slow_query_log_file	= /var/log/mysql/mariadb-slow.log
 long_query_time = 10
 log_slow_verbosity	= query_plan
-{#
+{#-
 log_slow_rate_limit	= 1000
 log-queries-not-using-indexes
 log_slow_admin_statements
@@ -135,7 +134,7 @@ log_bin			= /var/log/mysql/mariadb-bin
 log_bin_index		= /var/log/mysql/mariadb-bin.index
 expire_logs_days	= 10
 max_binlog_size         = 100M
-{#
+{#-
  not fab for performance, but safer
 sync_binlog		= 1
  slaves
@@ -163,7 +162,7 @@ innodb_file_per_table	= 1
 innodb_open_files	= 400
 innodb_io_capacity	= 400
 innodb_flush_method	= O_DIRECT
-{#
+{#-
 * Security Features
 
 Read the manual, too, if you want chroot!
@@ -182,16 +181,14 @@ quote-names
 max_allowed_packet	= 16M
 
 [mysql]
-{# no-auto-rehash	# faster start of mysql but no tab completition #}
+{#- no-auto-rehash	# faster start of mysql but no tab completion #}
 
 [isamchk]
 key_buffer		= 16M
 
-{#
-#
-# * IMPORTANT: Additional settings that can override those from this file!
-#   The files must end with '.cnf', otherwise they'll be ignored.
-#
+{#-
+ * IMPORTANT: Additional settings that can override those from this file!
+   The files must end with '.cnf', otherwise they'll be ignored.
 #}
 
 !includedir /etc/mysql/conf.d/

@@ -50,7 +50,7 @@ To launch tests::
 
   /root/salt/states/test/integration.py -c
 
-There is almost 400 tests, it takes time and generate a lot of logs, so I
+There is more than 500 tests, it takes time and generate a lot of logs, so I
 suggest:
 
   nohup /root/salt/states/test/integration.py -c > /tmp/test.log
@@ -58,3 +58,7 @@ suggest:
 You can launch specific test such as::
 
   nohup /root/salt/states/test/integration.py -c States.test_apt > /tmp/test.log
+
+To get the list of available tests run::
+
+  /root/salt/states/test/integraiton.py --list

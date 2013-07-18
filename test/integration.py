@@ -153,7 +153,8 @@ class TestStateMeta(type):
         return 'test_%s' % state_name.replace('.', '_')
 
     @classmethod
-    def run_test_func(mcs, attrs, test_func_name, func_name, *args, **kwargs):
+    def run_test_func(mcs, attrs, test_func_name, func_name, doc,
+                      *args, **kwargs):
         """
         Return a function that run self.{{ test_func_name }}(*args, **kwargs)
         """
@@ -161,6 +162,7 @@ class TestStateMeta(type):
             func = getattr(self, test_func_name)
             func(*args, **kwargs)
         output_func.__name__ = func_name
+        output_func.__doc__ = doc
         logger.debug("Add method %s that run self.%s(...)", func_name,
                      test_func_name)
         attrs[func_name] = output_func
@@ -180,16 +182,18 @@ class TestStateMeta(type):
         if state_diamond in attrs['all_states']:
             logger.debug("State %s got diamond integration, add check "
                          "for include", state)
+            doc = 'Check includes for Diamond integration for ' + state
             mcs.run_test_func(attrs, 'check_integration_include',
                               mcs.func_name(state_diamond + '_include'),
-                              state, state_diamond)
+                              doc, state, state_diamond)
             states.append(state_diamond)
         if state_nrpe in attrs['all_states']:
             logger.debug("State %s got NRPE integration add check for include",
                          state)
+            doc = 'Check includes for NRPE integration for ' + state
             mcs.run_test_func(attrs, 'check_integration_include',
-                              mcs.func_name(state_nrpe + '_include'), state,
-                              state_nrpe)
+                              mcs.func_name(state_nrpe + '_include'), doc,
+                              state, state_nrpe)
             states.append(state_nrpe)
 
         if len(states) > 1:
@@ -197,15 +201,20 @@ class TestStateMeta(type):
             if state_test in attrs['all_states']:
                 logger.debug("State %s do have a custom test state, "
                              "don't create automatically one", state)
-                mcs.run_test_func(attrs, 'top', mcs.func_name(state), [state])
+                mcs.run_test_func(attrs, 'top', mcs.func_name(state),
+                                  'Test state %s' % state, [state])
             else:
                 logger.debug("State %s don't have custom test state", state)
+                doc = 'Test states %s and run all NRPE checks after' % \
+                      ', '.join(states)
                 states.append(mcs.nrpe_test_all_state)
                 mcs.run_test_func(attrs, 'top',
-                                  mcs.func_name(state) + '_with_checks', states)
+                                  mcs.func_name(state) + '_with_checks',
+                                  doc, states)
         else:
             logger.debug("No diamond/NRPE integration for state %s", state)
-            mcs.run_test_func(attrs, 'top', mcs.func_name(state), [state])
+            mcs.run_test_func(attrs, 'top', mcs.func_name(state),
+                              'Test state %s' % state, [state])
 
     def __new__(mcs, name, bases, attrs):
         global client
@@ -224,8 +233,11 @@ class TestStateMeta(type):
                     logger.debug("Add test for absent state %s", state)
                     # build a list of all absent states
                     attrs['absent'].append(state)
+                    doc = 'Run absent state for %s' % state.replace('.absent',
+                                                                    '')
                     # create test_$state_name.absent
-                    mcs.run_test_func(attrs, 'top', mcs.func_name(state), [state])
+                    mcs.run_test_func(attrs, 'top', mcs.func_name(state),
+                                      doc, [state])
                 else:
                     logger.debug("%s is not an absent state", state)
 
@@ -233,7 +245,7 @@ class TestStateMeta(type):
                        or state.endswith('.test'):
                         logger.debug("Add single test for %s", state)
                         mcs.run_test_func(attrs, 'top', mcs.func_name(state),
-                                          [state])
+                                          'Run test %s' % state, [state])
                     else:
                         mcs.add_test_integration(attrs, state)
 
@@ -475,9 +487,23 @@ class States(unittest.TestCase):
 
     def test_absent(self):
         """
-        just an empty run to test the absent states
+        Just an empty run to test the absent states
         """
         pass
 
+    @classmethod
+    def list_tests(cls):
+        """
+        Display all available tests and what they do.
+        """
+        for item in dir(cls):
+            if item.startswith('test_'):
+                func = getattr(cls, item)
+                print '%s.%s: %s ' % (cls.__name__, item,
+                                      func.__doc__.lstrip(" \n").rstrip(" \n"))
+
 if __name__ == '__main__':
-    unittest.main()
+    if '--list' in sys.argv:
+        States.list_tests()
+    else:
+        unittest.main()

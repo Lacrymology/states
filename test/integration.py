@@ -499,8 +499,8 @@ class States(unittest.TestCase):
         for item in dir(cls):
             if item.startswith('test_'):
                 func = getattr(cls, item)
-                print '%s: %s ' % (item,
-                                   func.__doc__.lstrip(" \n").rstrip(" \n"))
+                print '%s.%s: %s ' % (cls.__name__, item,
+                                      func.__doc__.lstrip(" \n").rstrip(" \n"))
 
 if __name__ == '__main__':
     if '--list' in sys.argv:

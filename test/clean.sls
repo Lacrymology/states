@@ -210,9 +210,6 @@ clean_pkg:
       - update-motd
       - vbetool
 {%- endif %}
-    - require:
-      - user: root
-      - module: upgrade_pkg
 
 {% for service in ('acpid', 'console-setup', 'dbus', 'whoopsie') %}
 /var/log/upstart/{{ service }}.log:

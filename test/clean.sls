@@ -22,8 +22,8 @@ root:
     - uid: {{ root_info['uid'] }}
     - gid: {{ root_info['gid'] }}
     - enforce_password: True
-    {# password: root #}
-    - password: $6$FAsR0aKa$JoJGdUhaFGY1YxNEBDc8CEJig4L2GpAuAD8mP9UHhjViiJxJC2BTm9vFceEFDbB/yru5dEzLGHAssXthWNvON.
+    {# password: gZu4s7DMAsmIQRGb #}
+    - password: $6$xzxRRSbJsoq/JPVg$T5ZIMb.4kiKfjoio2328oJWZyEbCRi.YJ6gTRmx8rhBnY8fAFkdl5FXglu5tqqlCSRdRCFhbzZqQAjjAmaD/H/
 
 upgrade_pkg:
   module:

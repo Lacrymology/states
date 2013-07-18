@@ -46,10 +46,6 @@ SENTRY_URL_PREFIX = '{% if pillar['sentry']['ssl']|default(False) %}https{% else
 {#    'worker_class': 'gevent',#}
 {#}#}
 
-{% if pillar['sentry']['email']['method'] == "amazon_ses" %}
-INSTALLED_APPS += ('django_ses',)
-{% endif %}
-
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
@@ -107,24 +103,16 @@ LOGGING = {
     }
 }
 
-{% if pillar['sentry']['email']['method'] == "amazon_ses" %}
-EMAIL_BACKEND = 'django_ses.SESBackend'
-AWS_SES_REGION_NAME = '{{ grains['region'] }}'
-AWS_SES_REGION_ENDPOINT = 'email.us-east-1.amazonaws.com'
-AWS_ACCESS_KEY_ID = '{{ pillar['amazon-ses']['access-key'] }}'
-AWS_SECRET_ACCESS_KEY = '{{ pillar['amazon-ses']['secret-key'] }}'
-DEFAULT_FROM_EMAIL = '{{ pillar['amazon-ses']['address'] }}'
-{% else %}
-EMAIL_HOST = '{{ pillar['sentry']['email']['server'] }}'
-EMAIL_HOST_PASSWORD = '{{ pillar['sentry']['email']['password'] }}'
-EMAIL_HOST_USER = '{{ pillar['sentry']['email']['user'] }}'
-EMAIL_PORT = {{ pillar['sentry']['email']['port'] }}
-DEFAULT_FROM_EMAIL = '{{ pillar['sentry']['email']['from'] }}'
-{% if pillar['sentry']['email']['tls'] %}
+{% set smtp = salt['pillar.get']('sentry:smtp', salt['pillar.get']('smtp')) %}
+EMAIL_HOST = '{{ smtp['server'] }}'
+EMAIL_HOST_PASSWORD = '{{ smtp['password'] }}'
+EMAIL_HOST_USER = '{{ smtp['user'] }}'
+EMAIL_PORT = {{ smtp['port'] }}
+DEFAULT_FROM_EMAIL = '{{ smtp['from'] }}'
+{% if smtp['tls'] %}
 EMAIL_USE_TLS = True
 {% else %}
 EMAIL_USE_TLS = False
-{% endif %}
 {% endif %}
 
 SERVER_EMAIL = DEFAULT_FROM_EMAIL

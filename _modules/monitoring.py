@@ -76,3 +76,32 @@ def data():
     output['extra'] = extra_data
 
     return output
+
+
+def update():
+    '''
+    Run a salt function specified in pillar data.
+    Pass specified kwargs to it.
+
+    This intead to be used to run arbitrary salt module and any kwargs to work
+    around a limitation of salt regarding the scheduler.
+
+    example of pillar data:
+        monitoring:
+          update:
+            state.sls:
+              mods: whatever
+              test: True
+
+    or:
+
+        monitoring:
+           update: state.highstate
+    '''
+    pillar = __salt__['pillar.get']('monitoring:update')
+    if isinstance(pillar, basestring):
+        return __salt__[pillar]()
+    elif isinstance(pillar, dict):
+        func_name = pillar.keys()[0]
+        return __salt__['state.sls'](**pillar[func_name])
+    logger.error("Invalid update value %s", pillar)

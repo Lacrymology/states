@@ -21,6 +21,7 @@ postgresql:
       - postgresql-{{ version }}
       - postgresql-client-{{ version }}
     - require:
+      - cmd: system_locale
       - apt_repository: postgresql-dev
       - cmd: apt_sources
 {% set encoding = pillar['encoding']|default("en_US.UTF-8") %}

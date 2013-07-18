@@ -84,10 +84,7 @@ nfs-kernel-server:
   service:
     - running
     - enable: True
-    - require:
-      - pkg: nfs-kernel-server
     - watch:
+      - pkg: nfs-kernel-server
       - file: /etc/default/nfs-kernel-server
       - file: /etc/exports
-      - file: /etc/hosts.allow
-      - file: /etc/hosts.deny

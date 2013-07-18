@@ -1,9 +1,9 @@
 include:
   - local
 
-{%- set version = "2013-06-28" %}
-{%- set bits = {'amd64': 64, 'i386': 32} %}
-{%- set hashes = {'amd64': '482b360988fbef2b0fb68739e32c70e6' , 'i386': 'a9ed67250d19900be86ee8059d944b14' } %}
+{%- set version = "2013-06-28" -%}
+{%- set bits = {'amd64': 64, 'i386': 32} -%}
+{%- set hashes = {'amd64': '482b360988fbef2b0fb68739e32c70e6' , 'i386': 'a9ed67250d19900be86ee8059d944b14' } -%}
 {%- set filename = 'ffmpeg.static.{0}bit.{1}.tar.gz'.format(bits[grains['debian_arch']], version) %}
 
 ffmpeg:

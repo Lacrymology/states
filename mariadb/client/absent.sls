@@ -1,4 +1,3 @@
-absent_mariadb_client:
+mariadb-client:
   pkg:
     - purged
-    - name: mariadb-client

@@ -1,6 +1,6 @@
-{#
- Nagios NRPE checks for mariadb
-#}
+{#-
+ Nagios NRPE checks for MariaDB
+-#}
 include:
   - nrpe
   - apt.nrpe

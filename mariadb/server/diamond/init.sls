@@ -1,6 +1,6 @@
-{#
- Diamond statistics for mariadb
-#}
+{#-
+ Diamond statistics for MariaDB
+-#}
 
 include:
   - diamond

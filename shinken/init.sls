@@ -1,7 +1,7 @@
 {#
  Common stuff for all shinken components
  #}
-{% set version = "1.2.4" %}
+{% set version = "1.4" %}
 include:
   - virtualenv
   - pip
@@ -60,7 +60,7 @@ shinken:
     - extracted
     - name: /usr/local/shinken/src
     - source: {{ pillar['files_archive'] }}/mirror/shinken-{{ version }}.tar.gz
-    - source_hash: md5=f674ee59a627342925d79b36a143a488
+    - source_hash: md5=2623699ef25f807c038ffc10692c856f
     - archive_format: tar
     - tar_options: z
     - if_missing: /usr/local/shinken/src/shinken-{{ version }}
@@ -86,11 +86,11 @@ shinken:
     - bin_env: /usr/local/shinken/bin/pip
     - requirements: /usr/local/shinken/salt-requirements.txt
     - require:
+      - virtualenv: shinken
+    - watch:
 {%- if 'files_archive' in pillar %}
       - archive: shinken
 {%- endif %}
-      - virtualenv: shinken
-    - watch:
       - file: shinken
       - pkg: python-dev
       - user: shinken
@@ -99,3 +99,10 @@ shinken:
     - shell: /bin/false
     - home: /var/lib/shinken
     - gid_from_name: True
+
+/usr/local/shinken/src/shinken-1.2.4:
+  file:
+    - absent
+    - require_in:
+      - module: shinken
+

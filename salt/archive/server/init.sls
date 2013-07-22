@@ -10,11 +10,8 @@ salt_archive:
   web:
     hostnames:
       - archive.example.com
-  keys:
-    00daedbeef: ssh-dss
 
 salt_archive:web:hostnames: list of hostname of the web archive
-salt_archive:keys: dict of keys allowed to log in user
 
 Optional Pillar
 ---------------
@@ -24,10 +21,13 @@ salt_archive:
   web:
     ssl: mykeyname
     ssl_redirect: True
+  keys:
+    00daedbeef: ssh-dss
 
 salt_archive:source: rsync server used as the source for archived files.
 salt_archive:web:ssl: SSL key to use to secure this server archive
 salt_archive:web:ssl_redirect: if True, redirect all HTTP traffic to HTTPs.
+salt_archive:keys: dict of keys allowed to log in user
 
 This state also need the following pillar for rsync state:
 
@@ -78,7 +78,7 @@ include:
     {#-
      if pillar['salt_archive']['source'] is not defined, create an incoming
      directory.
-    -#}
+    #}
 
 salt_archive_incoming:
   file:
@@ -109,7 +109,7 @@ salt_archive_incoming:
     - group: root
     - source: salt://salt/archive/server/incoming.py
     - mode: 550
-{%- else -%}
+{%- else %}
     {#-
      if pillar['salt_archive']['source'] is defined, can't have an incoming
      directory.

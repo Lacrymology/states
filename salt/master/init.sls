@@ -68,6 +68,7 @@ salt-master:
       - pkg: git
   pkg:
     - latest
+    - skip_verify: True
     - require:
       - apt_repository: salt
       - cmd: apt_sources

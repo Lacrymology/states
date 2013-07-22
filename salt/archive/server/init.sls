@@ -78,7 +78,7 @@ include:
     {#-
      if pillar['salt_archive']['source'] is not defined, create an incoming
      directory.
-    -#}
+    #}
 
 salt_archive_incoming:
   file:

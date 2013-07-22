@@ -81,11 +81,11 @@ AWS_SECRET_ACCESS_KEY = '{{ pillar['amazon-ses']['secret-key'] }}'
 DEFAULT_FROM_EMAIL = '{{ pillar['amazon-ses']['address'] }}'
 {% else %}
 EMAIL_HOST = '{{ pillar['graphite']['web']['email']['server'] }}'
-EMAIL_HOST_PASSWORD = '{{ pillar['graphite']['web']['email']['password'] }}'
-EMAIL_HOST_USER = '{{ pillar['graphite']['web']['email']['user'] }}'
+EMAIL_HOST_PASSWORD = '{{ salt['pillar.get']('graphite:web:email:password', '') }}'
+EMAIL_HOST_USER = '{{ salt['pillar.get']('graphite:web:email:user', '') }}'
 EMAIL_PORT = {{ pillar['graphite']['web']['email']['port'] }}
 DEFAULT_FROM_EMAIL = '{{ pillar['graphite']['web']['email']['from'] }}'
-{% if pillar['graphite']['web']['email']['tls'] %}
+{% if pillar['graphite']['web']['email']['tls']|default(False) %}
 EMAIL_USE_TLS = True
 {% else %}
 EMAIL_USE_TLS = False

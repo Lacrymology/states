@@ -116,11 +116,11 @@ AWS_SECRET_ACCESS_KEY = '{{ pillar['amazon-ses']['secret-key'] }}'
 DEFAULT_FROM_EMAIL = '{{ pillar['amazon-ses']['address'] }}'
 {% else %}
 EMAIL_HOST = '{{ pillar['sentry']['email']['server'] }}'
-EMAIL_HOST_PASSWORD = '{{ pillar['sentry']['email']['password'] }}'
-EMAIL_HOST_USER = '{{ pillar['sentry']['email']['user'] }}'
+EMAIL_HOST_PASSWORD = '{{ salt['pillar.get']('sentry:email:password', '') }}'
+EMAIL_HOST_USER = '{{ salt['pillar.get']('sentry:email:user', '') }}'
 EMAIL_PORT = {{ pillar['sentry']['email']['port'] }}
 DEFAULT_FROM_EMAIL = '{{ pillar['sentry']['email']['from'] }}'
-{% if pillar['sentry']['email']['tls'] %}
+{% if pillar['sentry']['email']['tls']|default(False) %}
 EMAIL_USE_TLS = True
 {% else %}
 EMAIL_USE_TLS = False

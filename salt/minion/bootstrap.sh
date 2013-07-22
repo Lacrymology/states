@@ -33,13 +33,12 @@ apt-get install -y --force-yes salt-minion
 
 # create salt minion config
 echo """id: $1
-log_level: debug
-file_client: local""" > $CONFIG
+log_level: debug""" > $CONFIG
 
 if [ $LOCAL_MODE -eq 1 ]; then
     echo "Salt master-less (local) mode"
-    echo "master: 127.0.0.1" >> $CONFIG
-    echo """
+    echo """master: 127.0.0.1
+file_client: local
 file_roots:
    base:
      - /root/salt/states

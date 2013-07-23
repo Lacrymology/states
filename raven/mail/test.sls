@@ -1,5 +1,7 @@
 include:
   - raven.mail
+  - raven.mail.nrpe
+  - raven.mail.diamond
 
 test:
   nrpe:

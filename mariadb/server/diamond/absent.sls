@@ -5,6 +5,6 @@
   file:
     - absent
 
-/usr/local/diamond/mysql-requirements.txt:
+/usr/local/diamond/salt-mysql-requirements.txt:
   file:
     - absent

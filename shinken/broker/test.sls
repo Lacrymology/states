@@ -15,13 +15,15 @@ test:
   {%- for name, _ in check_set %}
       - {{ name }}
   {%- endfor %}
-    - order: last
+    - require:
+{% for name, failure in check_set %}
+      - nrpe: {{ name }}
+{%- endfor %}
 
 {% for name, failure in check_set %}
 {{ name }}:
   nrpe:
     - run_check
+    - order: last
     - accepted_failure: {{ failure }}
-    - require:
-      - nrpe: test
 {%- endfor %}

@@ -10,22 +10,21 @@ test:
     - run
     - name: nrpe.wait
     - seconds: 60
-    - order: last
+    - require:
+      - nrpe: test
   nrpe:
     - run_all_checks
-    - require:
-      - module: test
+    - order: last
 
 stop_shinken:
   cmd:
     - run
     - name: /usr/local/bin/shinken-ctl.sh stop
-    - require: 
-      - nrpe: test
+    - require:
+      - cmd: start_shinken
 
 start_shinken:
   cmd:
     - run
     - name: /usr/local/bin/shinken-ctl.sh start
-    - require: 
-      - cmd: stop_shinken
+    - order: last

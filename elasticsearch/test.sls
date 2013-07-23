@@ -14,17 +14,17 @@ test:
     - run
     - name: nrpe.wait
     - seconds: 60
-    - order: last
+    - require:
+      - nrpe: test
+      - nrpe: elasticsearch_cluster
   nrpe:
     - run_all_checks
+    - order: last
     - exclude:
       - elasticsearch_cluster
-    - require:
-      - module: test
 
 elasticsearch_cluster:
   nrpe:
     - run_check
+    - order: last
     - accepted_failure: 1 nodes in cluster (outside 2:2)
-    - require:
-      - module: test

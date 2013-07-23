@@ -10,8 +10,8 @@ test:
     - run
     - name: nrpe.wait
     - seconds: 60
-    - order: last
+    - require:
+      - nrpe: test
   nrpe:
     - run_all_checks
-    - require:
-      - module: test
+    - order: last

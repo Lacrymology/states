@@ -127,5 +127,5 @@ proftpd:
     - mode: 770
     - makedirs: True
     - require:
-      - user: web
+      - file: web
 {% endfor %}

@@ -21,6 +21,7 @@ postgresql:
       - postgresql-{{ version }}
       - postgresql-client-{{ version }}
     - require:
+      - cmd: system_locale
       - pkgrepo: postgresql-dev
       - cmd: apt_sources
 {% set encoding = pillar['encoding']|default("en_US.UTF-8") %}
@@ -54,7 +55,6 @@ postgresql:
       - cmd: /etc/ssl/{{ ssl }}/chained_ca.crt
       - module: /etc/ssl/{{ ssl }}/server.pem
       - file: /etc/ssl/{{ ssl }}/ca.crt
-      - cmd: system_locale
 {% endif %}
 
 /etc/logrotate.d/postgresql-common:

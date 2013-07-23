@@ -10,18 +10,19 @@ cluster:
     allocation:
       node_concurrent_recoveries: 2
 
+{%- set state_pillar = salt['pillar.get']('cluster:nodes:{0}:{1}'.format(grains['id'], origin_state), {}) %}
 http:
   port: 9200
-  enabled: {% if es['cluster']['nodes'][grains['id']][origin_state]['http']|default(True) %}true{% else %}false{% endif %}
+  enabled: {% if state_pillar['http']|default(True) %}true{% else %}false{% endif %}
 
 transport:
   tcp:
-    port: {{ es['cluster']['nodes'][grains['id']][origin_state]['port']|default(9300) }}
+    port: {{ state_pillar['port']|default(9300) }}
 
 node:
-  name: {{ es['cluster']['nodes'][grains['id']][origin_state]['name']|default(grains['id']) }}
-  master: {{ es['cluster']['nodes'][grains['id']][origin_state]['master']|default(master) }}
-  data: {{ es['cluster']['nodes'][grains['id']][origin_state]['data']|default(data) }}
+  name: {{ state_pillar['name']|default(grains['id']) }}
+  master: {{ state_pillar['master']|default(master) }}
+  data: {{ state_pillar['data']|default(data) }}
 
 {# configure amazon ec2 cloud auto-discovery #}
 {% if es['aws']|default(false) %}

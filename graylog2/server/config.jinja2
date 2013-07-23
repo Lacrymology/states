@@ -181,13 +181,13 @@ transport_email_protocol = smtp
 transport_email_hostname = {{ email['server'] }}
 transport_email_port = {{ email['port'] }}
 transport_email_use_auth = true
-{% if email['tls'] %}
+{% if email['tls']|default(False) %}
 transport_email_use_tls = true
 {% else %}
 transport_email_use_tls = false
 {% endif %}
-transport_email_auth_username = {{ email['user'] }}
-transport_email_auth_password = {{ email['password'] }}
+transport_email_auth_username = {{ email['user']|default("null") }}
+transport_email_auth_password = {{ email['password']|default("null") }}
 transport_email_subject_prefix = [graylog2]
 transport_email_from_email = {{ email['from'] }}
 transport_email_from_name = Graylog2

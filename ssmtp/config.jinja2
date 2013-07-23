@@ -2,10 +2,12 @@
 
 mailhub={{ pillar['smtp']['server'] }}:{{ pillar['smtp']['port'] }}
 root={{ pillar['smtp']['root'] }}
-hostname={{ pillar['smtp']['user'] }}
+hostname={{ pillar['mail']['mailname'] }}
+{%- if pillar['smtp']['user']|default(False) %}
 AuthUser={{ pillar['smtp']['user'] }}
 AuthPass={{ pillar['smtp']['password'] }}
-{%- if pillar['smtp']['tls'] %}
+{%- endif %}
+{%- if pillar['smtp']['tls']|default(False) %}
 UseSTARTTLS=yes
 UseTLS=yes
 {%- endif %}

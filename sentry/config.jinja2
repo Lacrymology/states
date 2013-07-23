@@ -105,11 +105,11 @@ LOGGING = {
 
 {% set smtp = salt['pillar.get']('sentry:smtp', salt['pillar.get']('smtp')) %}
 EMAIL_HOST = '{{ smtp['server'] }}'
-EMAIL_HOST_PASSWORD = '{{ smtp['password'] }}'
-EMAIL_HOST_USER = '{{ smtp['user'] }}'
+EMAIL_HOST_PASSWORD = '{{ smtp['password']|default('') }}'
+EMAIL_HOST_USER = '{{ smtp['user']|default('') }}'
 EMAIL_PORT = {{ smtp['port'] }}
 DEFAULT_FROM_EMAIL = '{{ smtp['from'] }}'
-{% if smtp['tls'] %}
+{% if smtp['tls']|default(False) %}
 EMAIL_USE_TLS = True
 {% else %}
 EMAIL_USE_TLS = False

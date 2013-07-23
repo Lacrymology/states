@@ -1,24 +1,10 @@
 Salt-Minion Installation
 ========================
 
-By default, salt minion take the hostname of the host as the minion ID.
-First set it, as root, you might need to run ``sudo bash`` first::
+Copy the file ``salt/minion/bootstrap.sh`` to target and run it with it's ID
+followed by the IP or hostname of the Salt master::
 
-  sudo bash
-  hostname mysuperminion
-
-Then install salt::
-
-    wget -q -O - https://raw.github.com/saltstack/salt-bootstrap/stable/bootstrap-salt.sh | sudo sh
-    stop salt-minion
-    rm -f /var/log/salt/minion
-
-Configure your minion to connect to your master, replace 1.2.3.4 with your
-Salt Master IP::
-
-  echo 'master: 1.2.3.4' > /etc/salt/minion
-  echo 'log_level: debug' >> /etc/salt/minion
-  start salt-minion
+  ./bootstrap.sh mysuperminion 192.168.1.2
 
 Then on salt master::
 

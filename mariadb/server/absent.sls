@@ -2,7 +2,7 @@
   file:
     - absent
 
-mariadb-server:
+mysql-server:
   service:
     - name: mysql
     - dead

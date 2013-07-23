@@ -53,16 +53,6 @@ include:
     - require:
       - pkg: mysql-server
 
-mariadb_debconf:
-  debconf:
-    - set
-    - name: mariadb-server-5.5
-    - data:
-        'mysql-server/root_password': {'type': 'password', 'value': {{ salt['pillar.get']('mysql:password') }}}
-        'mysql-server/root_password_again': {'type': 'password', 'value': {{ salt['pillar.get']('mysql:password') }}}
-    - require:
-      - pkg: debconf-utils
-
 python-mysqldb:
   pkg:
     - installed
@@ -76,7 +66,7 @@ mysql-server:
     - require:
       - pkgrepo: mariadb
       - file: /etc/mysql/my.cnf
-      - debconf: mariadb_debconf
+      - debconf: mysql-server
   service:
     - name: mysql
     - running
@@ -85,8 +75,16 @@ mysql-server:
       - file: /etc/mysql/my.cnf
     - require:
       - pkg: mysql-server
+  debconf:
+    - set
+    - name: mariadb-server-5.5
+    - data:
+        'mysql-server/root_password': {'type': 'password', 'value': {{ salt['pillar.get']('mysql:password') }}}
+        'mysql-server/root_password_again': {'type': 'password', 'value': {{ salt['pillar.get']('mysql:password') }}}
+    - require:
+      - pkg: debconf-utils
 
-/etc/salt/minion.d/mariadb.conf:
+/etc/salt/minion.d/mysql.conf:
   file:
     - managed
     - source: salt://mariadb/server/minion.jinja2
@@ -97,5 +95,5 @@ extend:
   salt-minion:
     service:
       - watch:
-        - file: /etc/salt/minion.d/mariadb.conf
+        - file: /etc/salt/minion.d/mysql.conf
         - pkg: python-mysqldb

@@ -7,7 +7,7 @@ include:
   - python.dev
   - apt
 
-mariadb_diamond_collector:
+mysql_diamond_collector:
   file:
     - managed
     - name: /etc/diamond/collectors/MySQLCollector.conf
@@ -19,7 +19,7 @@ mariadb_diamond_collector:
     - require:
       - file: /etc/diamond/collectors
 
-mariadb_diamond_resources:
+mysql_diamond_resources:
   file:
     - accumulated
     - name: processes
@@ -65,5 +65,5 @@ extend:
   diamond:
     service:
       - watch:
-        - file: mariadb_diamond_collector
+        - file: mysql_diamond_collector
         - module: diamond_mysql_python

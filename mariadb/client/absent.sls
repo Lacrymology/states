@@ -1,3 +1,4 @@
-mariadb-client:
+mysql-client:
   pkg:
     - purged
+    - name: mariadb-client

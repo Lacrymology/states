@@ -5,7 +5,7 @@ test:
   nrpe:
     - run_all_checks
     - require:
-      - nrpe: test
+      - cmd: send_unittest_mail
       - file: /usr/bin/mail
 
 send_unittest_mail:

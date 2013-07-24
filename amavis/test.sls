@@ -3,13 +3,14 @@ include:
   - amavis.nrpe
   - amavis.diamond
 
-test:
-  module:
-    - run
-    - name: nrpe.wait
+test_wait:
+  nrpe:
+    - wait
     - seconds: 60
     - require:
       - nrpe: test
+
+test:
   nrpe:
     - run_all_checks
     - order: last

@@ -9,14 +9,15 @@ include:
   - nginx.nrpe
 {% endif %}
 
-test:
-  module:
-    - run
-    - name: nrpe.wait
+test_wait:
+  nrpe:
+    - wait
     - seconds: 60
     - require:
       - nrpe: test
       - nrpe: elasticsearch_cluster
+
+test:
   nrpe:
     - run_all_checks
     - order: last

@@ -1,7 +1,7 @@
 include:
   - apt
-  - uwsgi
   - php.dev
+  - uwsgi
 
 extend:
   uwsgi_build:

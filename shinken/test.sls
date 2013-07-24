@@ -1,5 +1,5 @@
 include:
-{%- for role in ('arbiter', 'broker', 'poller', 'reactionner', 'scheduler' %}
+{%- for role in ('arbiter', 'broker', 'poller', 'reactionner', 'scheduler') %}
   - shinken.{{ role }}
   - shinken.{{ role }}.nrpe
   - shinken.{{ role }}.diamond

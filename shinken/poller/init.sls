@@ -31,6 +31,7 @@ shinken-poller:
   service:
     - running
     - enable: True
+    - order: 50
     - require:
       - file: /var/lib/shinken
       - file: /var/log/shinken

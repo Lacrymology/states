@@ -82,6 +82,7 @@ nagios-nrpe-server:
   service:
     - running
     - enable: True
+    - order: 50
     - watch:
       - pkg: nagios-nrpe-server
       - file: nagios-nrpe-server

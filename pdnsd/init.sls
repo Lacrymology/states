@@ -19,6 +19,7 @@ pdnsd:
   service:
     - running
     - enable: True
+    - order: 50
     - watch:
       - file: /etc/default/pdnsd
       - file: /etc/pdnsd.conf

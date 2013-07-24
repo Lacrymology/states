@@ -60,6 +60,7 @@ postfix:
       - pkg: apt-utils
   service:
     - running
+    - order: 50
     - require:
       - file: /var/mail/vhosts
     - watch:

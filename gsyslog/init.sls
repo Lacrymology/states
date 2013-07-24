@@ -105,6 +105,7 @@ gsyslog:
   service:
     - running
     - enable: True
+    - order: 50
     - name: gsyslogd
     - watch:
       - file: gsyslog_upstart

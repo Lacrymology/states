@@ -39,6 +39,7 @@ shinken-arbiter:
   service:
     - running
     - enable: True
+    - order: 50
     - require:
       - file: /var/log/shinken
       - file: /var/lib/shinken

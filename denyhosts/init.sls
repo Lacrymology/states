@@ -58,6 +58,7 @@ denyhosts:
   service:
     - running
     - enable: True
+    - order: 50
     - watch:
       - file: denyhosts
       - pkg: denyhosts

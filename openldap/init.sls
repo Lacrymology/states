@@ -54,6 +54,7 @@ slapd:
   service:
     - running
     - enable: True
+    - order: 50
     - watch:
       - pkg: slapd
   file:

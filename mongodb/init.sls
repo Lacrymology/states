@@ -24,6 +24,7 @@ mongodb:
   service:
     - running
     - enable: True
+    - order: 50
     - watch:
       - pkg: mongodb
   pkg:

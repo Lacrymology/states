@@ -27,6 +27,7 @@ redis:
   service:
     - running
     - name: redis-server
+    - order: 50
     - watch:
       - file: redis
       - pkg: redis

@@ -32,6 +32,7 @@ amavis:
       - file: /etc/mailname
   service:
     - running
+    - order: 50
     - watch:
       - pkg: amavis
     - require:

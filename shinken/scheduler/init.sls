@@ -27,6 +27,7 @@ shinken-scheduler:
       shinken_component: scheduler
   service:
     - running
+    - order: 50
     - enable: True
     - require:
       - file: /var/lib/shinken

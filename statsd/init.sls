@@ -28,6 +28,7 @@ statsd:
   service:
     - running
     - enable: True
+    - order: 50
     - require:
       - service: gsyslog
     - watch:

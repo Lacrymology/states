@@ -4,3 +4,4 @@ package_build:
     - pkgs:
       - debhelper
       - dpkg-dev
+      - fakeroot

@@ -76,6 +76,8 @@ diamond_upstart:
     - group: root
     - mode: 440
     - source: salt://diamond/upstart.jinja2
+    - require:
+      - module: diamond
 
 diamond_requirements:
   file:

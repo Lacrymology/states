@@ -168,7 +168,7 @@ define module {
     max_output_length   100     ; Maximum output length for plugin output in webui
     play_sound          0       ; Play sound on new non-acknowledged problems.#}
 
-    modules broker-webui-auth{% if 'graphite_address' in pillar %}, broker-webui-graphite{% endif %}
+    modules broker-webui-sqlite, broker-webui-auth{% if 'graphite_address' in pillar %}, broker-webui-graphite{% endif %}
 
 {#    ## Advanced Options
     # Don't use them as long as you don't know what you are doing!
@@ -246,3 +246,14 @@ define receiver {
                             ; command.#}
 }
 {% endfor %}
+
+{#-
+Module: broker-webui-sqlite
+Loaded by: broker-webui
+In broker-webui: Save/read user preferences
+#}
+define module {
+    module_name broker-webui-sqlite
+    module_type sqlitedb
+    uri /var/lib/shinken/webui.sqlite
+}

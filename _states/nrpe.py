@@ -79,7 +79,7 @@ def run_check(name, accepted_failure=None):
         ret['comment'] = 'Would have run check'
         return ret
 
-    output = __salt['nrpe.run_check'](name)
+    output = __salt__['nrpe.run_check'](name)
     if not output['result']:
         if accepted_failure is not None:
             if accepted_failure in output['comment']:

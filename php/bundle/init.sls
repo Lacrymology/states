@@ -5,10 +5,10 @@ php_bundle:
   pkg:
     - installed
     - pkgs:
-      - php5_gd
-      - php5_mysql
-      - php5_mcrypt
-      - php5_curl
-      - php5_cli
+      - php5-gd
+      - php5-mysql
+      - php5-mcrypt
+      - php5-curl
+      - php5-cli
     - require:
       - pkgrepo: php

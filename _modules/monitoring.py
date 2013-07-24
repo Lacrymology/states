@@ -89,19 +89,27 @@ def update():
     example of pillar data:
         monitoring:
           update:
-            state.sls:
-              mods: whatever
-              test: True
+            - salutil.refresh_pillar
+            - state.sls:
+                mods: whatever
+                test: True
 
     or:
 
         monitoring:
-           update: state.highstate
+           update:
+             - state.highstate
     '''
-    pillar = __salt__['pillar.get']('monitoring:update')
-    if isinstance(pillar, basestring):
-        return __salt__[pillar]()
-    elif isinstance(pillar, dict):
-        func_name = pillar.keys()[0]
-        return __salt__['state.sls'](**pillar[func_name])
-    logger.error("Invalid update value %s", pillar)
+    pillar = __salt__['pillar.get']('monitoring:update', [])
+    if not pillar:
+        logger.warn("Not pillar key defined, do nothing.")
+    else:
+        for mod in pillar:
+            if isinstance(mod, basestring):
+                logger.debug("output of %s: %s", mod, str(__salt__[mod]()))
+            elif isinstance(mod, dict):
+                func_name = mod.keys()[0]
+                logger.debug("output of %s: %s", str(mod),
+                             __salt__[func_name](**mod[func_name]))
+            else:
+                logger.error("Invalid update value %s", str(mod))

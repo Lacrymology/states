@@ -20,7 +20,7 @@ test:
     - exclude:
       - elasticsearch_cluster
 
-elasticsearch_cluster:
+graylog2_elasticsearch_cluster:
   nrpe:
     - run_check
     - order: last

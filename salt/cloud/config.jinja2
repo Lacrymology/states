@@ -1,0 +1,37 @@
+# {{ pillar['message_do_not_modify'] }}
+script: bootstrap_salt
+
+providers:
+  {%- set providers = salt['pillar.get']('salt:cloud:providers', []) %}
+  {%- for alias in providers %}
+  {{ alias }}:
+    {%- for attr in providers[alias] %}
+    {%- if providers[alias][attr] is mapping %}
+    {{ attr }}:
+      {%- for i in providers[alias][attr] %}
+      {{ i }}: {{ providers[alias][attr][i] }}
+      {%- endfor %}
+    {%- else %}
+    {{ attr }}: {{ providers[alias][attr] }}
+    {%- endif %}
+    {%- endfor %}
+  {% endfor %}
+
+log_file: file:///dev/log
+
+log_level_logfile: debug
+log_fmt_logfile: '%(asctime)-15s salt-cloud %(name)s: %(message)s'
+log_datefmt_logfile: '%b %d %H:%M:%S'
+
+log_level: warning
+log_datefmt: '%b %d %H:%M:%S'
+log_fmt_console: '%(asctime)-15s salt-cloud %(name)s: %(message)s'
+
+{#
+ Whether or not to remove the accompnaying SSH key from the known_hosts file
+ when an instance is destroyed.
+
+ Default: 'False'
+
+delete_sshkeys: False
+#}

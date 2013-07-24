@@ -1,0 +1,16 @@
+# {{ pillar['message_do_not_modify'] }}
+
+{%- set profiles = salt['pillar.get']('salt:cloud:profiles', []) %}
+{%- for profile in profiles %}
+{{ profile }}:
+  {%- for attr in profiles[profile] %}
+  {%- if profiles[profile][attr] is mapping %}
+  {{ attr }}:
+    {%- for i in profiles[profile][attr] %}
+    {{ i }}: {{ profiles[profile][attr][i] }}
+    {%- endfor %}
+  {%- else %}
+  {{ attr }}: {{ profiles[profile][attr] }}
+  {%- endif %}
+  {%- endfor %}
+{% endfor %}

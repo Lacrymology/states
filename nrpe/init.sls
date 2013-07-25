@@ -60,14 +60,18 @@ nrpe-virtualenv:
     - require:
       - module: pip
 
+nagios-plugins:
+  pkg:
+    - installed
+    - names:
+      - nagios-plugins-standard
+      - nagios-plugins-basic
+
 nagios-nrpe-server:
   pkg:
     - latest
-    - names:
-      - nagios-nrpe-server
-      - nagios-plugins-standard
-      - nagios-plugins-basic
     - require:
+      - pkg: nagios-plugins
       - cmd: apt_sources
   file:
     - managed

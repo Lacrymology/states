@@ -50,6 +50,7 @@ include:
     - mode: 755
     - require:
       - virtualenv: shinken
+      - file: /usr/local/bin/shinken-ctl.sh
 
 shinken:
   virtualenv:

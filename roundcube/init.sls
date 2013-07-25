@@ -122,6 +122,7 @@ roundcube:
     - require:
       - pkg: nginx
       - user: web
+      - file: /etc/uwsgi/roundcube.ini
     - context:
       dir: {{ roundcubedir }}
     - watch_in:
@@ -137,14 +138,17 @@ roundcube:
     - mode: 440
     - require:
       - file: uwsgi_emperor
-      - postgres_database: roundcube
-      - cmd: roundcube_initial
+      - module: roundcube_initial
+      - file: {{ roundcubedir }}/config/main.inc.php
+      - file: {{ roundcubedir }}/config/db.inc.php
     - context:
       dir: {{ roundcubedir }}
   module:
     - wait
     - name: file.touch
     - m_name: /etc/uwsgi/roundcube.ini
+    - require:
+      - module: roundcube_initial
     - watch:
       - file: {{ roundcubedir }}/config/main.inc.php
       - file: {{ roundcubedir }}/config/db.inc.php

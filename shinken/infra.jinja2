@@ -204,7 +204,7 @@ define service {
     use salt-service
     service_description {{ name }}
     display_name Amavis {{ state_checks[name]['description'] }}
-    check_command {{ state_checks[name]['check']|default(name) }}
+    check_command {{ state_checks[name]['check']|default('check_nrpe!' + name) }}
             {%- for key_name in state_checks[name] %}
                 {%- if key_name not in reserved_keys %}
     {{ key_name }} {{ state_checks[name][key_name] }}

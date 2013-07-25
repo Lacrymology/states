@@ -179,9 +179,7 @@ rabbitmq-server:
   rabbitmq_user:
     - present
     - name: {{ salt['pillar.get']('rabbitmq:monitor:user', salt['pillar.get']('salt_monitor') )}} 
-    {% if grains['id'] == pillar['rabbitmq']['cluster']['master'] -%}
     - password: {{ salt['password.pillar']('rabbitmq:monitor:password') }}
-    {%- endif %}
     - force: True
     - require:
       - service: rabbitmq-server

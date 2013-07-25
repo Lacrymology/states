@@ -1,3 +1,3 @@
 include:
   - gsyslog.nrpe
-  - ravent.nrpe
+  - raven.nrpe

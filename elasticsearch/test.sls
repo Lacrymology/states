@@ -9,23 +9,17 @@ include:
   - nginx.nrpe
 {% endif %}
 
-test_wait:
-  nrpe:
-    - wait
-    - seconds: 60
-    - require:
-      - nrpe: test
-      - nrpe: elasticsearch_cluster
-
 test:
   nrpe:
     - run_all_checks
     - order: last
+    - wait: 60
     - exclude:
       - elasticsearch_cluster
 
 elasticsearch_cluster:
   nrpe:
     - run_check
+    - wait: 60
     - order: last
     - accepted_failure: 1 nodes in cluster (outside 2:2)

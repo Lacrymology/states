@@ -11,20 +11,6 @@ def __virtual__():
     return 'nrpe'
 
 
-def wait(seconds):
-    '''
-    Wait for a while.
-    '''
-    ret = {'name': str(seconds), 'result': None, 'changes': {}, 'comment': ''}
-    if __opts__['test']:
-        ret['comment'] = 'would have waited'
-        return ret
-    time.sleep(seconds)
-    ret['result'] = True
-    ret['comment'] = 'waited'.format(seconds)
-    return ret
-
-
 def run_all_checks(**kwargs):
     '''
     Run all NRPE check, excepted listed.
@@ -38,6 +24,11 @@ def run_all_checks(**kwargs):
         exclude = []
     ret = {'name': '{0} excluded'.format(len(exclude)), 'result': None,
            'changes': {}, 'comment': ''}
+
+    try:
+        time.sleep(kwargs['wait'])
+    except KeyError:
+        pass
 
     if exclude is None:
         exclude = []
@@ -68,12 +59,15 @@ def run_all_checks(**kwargs):
     return ret
 
 
-def run_check(name, accepted_failure=None):
+def run_check(name, accepted_failure=None, wait=-1):
     '''
     Run a Nagios NRPE check as a test
     '''
     ret = {'name': name, 'result': None, 'changes': {},
            'comment': ''}
+
+    if wait != -1:
+        time.sleep(wait)
 
     if __opts__['test']:
         ret['comment'] = 'Would have run check'

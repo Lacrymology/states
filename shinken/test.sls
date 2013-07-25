@@ -5,16 +5,10 @@ include:
   - shinken.{{ role }}.diamond
 {%- endfor %}
 
-test_wait:
-  nrpe:
-    - wait
-    - seconds: 60
-    - require:
-      - nrpe: test
-
 test:
   nrpe:
     - run_all_checks
+    - wait: 60
     - order: last
 
 stop_shinken:

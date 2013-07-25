@@ -11,6 +11,7 @@ php:
 {%- else %}
     - ppa: l-mierzwa/lucid-php5
 {%- endif %}
+    - file: /etc/apt/sources.list.d/lucid-php5.list
     - require:
       - pkg: python-apt
       - pkg: python-software-properties

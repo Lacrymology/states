@@ -1,0 +1,7 @@
+# {{ pillar['message_do_not_modify'] }}
+{% set allow = salt['pillar.get']('nfs:allow') -%}
+portmap: {{ allow }}
+lockd: {{ allow }}
+rquotad: {{ allow }}
+mountd: {{ allow }}
+statd: {{ allow }}

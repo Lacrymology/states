@@ -1,0 +1,15 @@
+nfsd4_procs:
+  description: Nfsd4 Daemon
+
+nfsd4_callbacks_procs:
+  description: Nfsd4 Callbacks Daemon
+
+nfsd_procs:
+  description: Nfsd Daemon
+
+nfs_rpcbind_port:
+  description: NFS Local Port
+
+nfs_rpcbind_remote_port:
+  check: check_tcp!111
+  description: NFS Remote Port

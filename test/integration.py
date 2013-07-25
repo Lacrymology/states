@@ -208,6 +208,10 @@ class TestStateMeta(type):
                 doc = 'Test states %s and run all NRPE checks after' % \
                       ', '.join(states)
                 states.append(mcs.nrpe_test_all_state)
+                # add test for the .sls file
+                mcs.run_test_func(attrs, 'top', mcs.func_name(state),
+                                  'Test state %s' % state, [state])
+                # and one for the automatically created one
                 mcs.run_test_func(attrs, 'top',
                                   mcs.func_name(state) + '_with_checks',
                                   doc, states)

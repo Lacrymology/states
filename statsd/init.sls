@@ -19,6 +19,8 @@ statsd:
     - group: root
     - mode: 440
     - source: salt://statsd/upstart.jinja2
+    - require:
+      - module: statsd
   virtualenv:
     - manage
     - name: /usr/local/statsd
@@ -34,6 +36,7 @@ statsd:
     - watch:
       - file: statsd
       - virtualenv: statsd
+      - module: statsd
   module:
     - wait
     - name: pip.install

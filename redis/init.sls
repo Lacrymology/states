@@ -25,8 +25,9 @@ redis:
     - require:
       - pkg: redis
   service:
-    - name: redis-server
     - running
+    - name: redis-server
+    - order: 50
     - watch:
       - file: redis
       - pkg: redis

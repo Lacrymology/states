@@ -10,7 +10,7 @@ cluster:
     allocation:
       node_concurrent_recoveries: 2
 
-{%- set state_pillar = salt['pillar.get']('cluster:nodes:{0}:{1}'.format(grains['id'], origin_state), {}) %}
+{%- set state_pillar = salt['pillar.get']('elasticsearch:cluster:nodes:{0}:{1}'.format(grains['id'], origin_state), {}) %}
 http:
   port: 9200
   enabled: {% if state_pillar['http']|default(True) %}true{% else %}false{% endif %}

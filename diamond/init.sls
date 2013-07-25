@@ -43,6 +43,7 @@ shinken_pollers: IP address of monitoring poller that check this server.
 include:
   - git
   - python.dev
+  - local
   - virtualenv
   - gsyslog
   - gsyslog.diamond
@@ -75,6 +76,8 @@ diamond_upstart:
     - group: root
     - mode: 440
     - source: salt://diamond/upstart.jinja2
+    - require:
+      - module: diamond
 
 diamond_requirements:
   file:
@@ -99,6 +102,7 @@ diamond:
     - name: /usr/local/diamond
     - require:
       - module: virtualenv
+      - file: /usr/local
   module:
     - wait
     - name: pip.install
@@ -131,6 +135,7 @@ diamond:
   service:
     - running
     - enable: True
+    - order: 50
     - require:
       - service: gsyslog
     - watch:

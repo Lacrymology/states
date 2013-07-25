@@ -2,7 +2,7 @@
   file:
     - absent
 
-{#- old version of states -#}
+{#- old version of states #}
 /etc/cron.hourly/salt_archive:
   file:
     - absent

@@ -13,7 +13,7 @@ include:
     - user: nagios
     - group: nagios
     - mode: 440
-    - source: salt://tomcat6/nrpe/config.jinja2
+    - source: salt://tomcat/nrpe/config.jinja2
     - require:
       - pkg: nagios-nrpe-server
 

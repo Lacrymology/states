@@ -80,6 +80,7 @@ nginx-logger-{{ log_type }}:
   service:
     - running
     - enable: True
+    - order: 50
     - require:
       - service: gsyslog
       - file: nginx-logger-{{ log_type }}

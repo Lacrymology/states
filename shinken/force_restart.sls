@@ -5,8 +5,9 @@
 
 {%- set roles = ('broker', 'arbiter', 'reactionner', 'poller', 'scheduler') -%}
 
-{%- for role in roles -%}
-    {%- if salt['file.file_exists']('/etc/init/shinken-' + role + '.conf') %}
+{% if salt['file.file_exists']('/usr/local/shinken') %}
+    {%- for role in roles -%}
+        {%- if salt['file.file_exists']('/etc/init/shinken-' + role + '.conf') %}
 shinken-{{ role }}-dead:
   service:
     - dead
@@ -17,16 +18,17 @@ shinken-{{ role }}:
     - running
     - require:
       - cmd: shinken-killall
-    {% endif -%}
-{%- endfor %}
+        {% endif -%}
+    {%- endfor %}
 
 shinken-killall:
   cmd:
     - run
     - name: killall -9 /usr/local/shinken/bin/python || /bin/true
     - require:
-{%- for role in roles -%}
-    {%- if salt['file.file_exists']('/etc/init/shinken-' + role + '.conf') %}
+    {%- for role in roles -%}
+        {%- if salt['file.file_exists']('/etc/init/shinken-' + role + '.conf') %}
       - service: shinken-{{ role }}-dead
-    {% endif -%}
-{%- endfor -%}
+        {% endif -%}
+    {%- endfor -%}
+{%- endif -%}

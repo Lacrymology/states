@@ -146,7 +146,7 @@ DATABASES = {
         'NAME': '{{ pillar['graphite']['web']['db']['name'] }}',
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'USER': '{{ pillar['graphite']['web']['db']['username'] }}',
-        'PASSWORD': '{{ pillar['graphite']['web']['db']['password'] }}',
+        'PASSWORD': '{{ salt['password.pillar']('graphite:web:db:password') }}',
 {#        'HOST': '{{ pillar['graphite']['web']['db']['host'] }}',#}
         'HOST': '127.0.0.1',
         'PORT': ''

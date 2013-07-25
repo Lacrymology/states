@@ -17,6 +17,8 @@ DATABASES = {
     }
 }
 
+SENTRY_KEY = '{{ salt['password.pillar']('sentry:django_key', 50) }}'
+
 {#CACHE_PREFIX = 'sentry'#}
 {#CACHE_TIMEOUT = 300#}
 {#MIDDLEWARE_CLASSES.insert(0, 'johnny.middleware.QueryCacheMiddleware')#}
@@ -30,7 +32,6 @@ DATABASES = {
 {#}#}
 {#JOHNNY_MIDDLEWARE_KEY_PREFIX='sentry'#}
 
-SENTRY_KEY = '{{ pillar['sentry']['django_key'] }}'
 
 # Set this to false to require authentication
 SENTRY_PUBLIC = False

@@ -152,14 +152,16 @@ gelf_listen_port = 12201
 # rules_file = /etc/graylog2.d/rules/graylog2.drl
 #}
 
-{# AMQP
+{% if pillar['graylog2']['amqp']|default(False) %}
+amqp_enabled = true
+amqp_host = {{ pillar['amqp']['host'] }}
+amqp_port = {{ pillar['amqp']['port'] }}
+amqp_username = {{ pillar['graylog2']['rabbitmq']['user'] }}
+amqp_password = {{ pillar['graylog2']['rabbitmq']['password'] }}
+amqp_virtualhost = {{ pillar['graylog2']['rabbitmq']['vhost'] }}
+{% else %}
 amqp_enabled = false
-amqp_host = localhost
-amqp_port = 5672
-amqp_username = guest
-amqp_password = guest
-amqp_virtualhost = /
-#}
+{% endif %}
 
 {# HTTP input
 # http://support.torch.sh/help/kb/graylog2-server/using-the-gelf-http-input

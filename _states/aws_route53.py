@@ -15,6 +15,7 @@ except ImportError:
 
 log = logging.getLogger(__name__)
 
+
 def __virtual__():
     '''
     Verify python-route53 is installed.
@@ -23,8 +24,55 @@ def __virtual__():
         return False
     return 'route53'
 
+
 def _connect(access_key, secret_key):
-    return route53.connect(aws_access_key_id=access_key, aws_secret_access_key=secret_key)
+    return route53.connect(aws_access_key_id=access_key,
+                           aws_secret_access_key=secret_key)
+
+
+def _record_type(record_set):
+    return record_set.__class__.__name__.rstrip('ResourceRecordSet').lower()
+
+
+def record_absent(name, record_type, zone_id, access_key, secret_key):
+    '''
+    Make sure an Amazon Route53 DNS record is absent.
+
+    Example:
+
+    www.google.com:
+      route53.record_absent:
+        - type: a
+        - zone_id: Z2ESDHL3365N3AQ
+        - access_key: xxx
+        - secret_key: yyy
+    '''
+
+    ret = {'name': 'Record {0} type {1}'.format(name, record_type.upper()),
+           'result': None, 'comment': '', 'changes': {}}
+    conn = _connect(access_key, secret_key)
+    try:
+        hosted_zone = conn.get_hosted_zone_by_id(zone_id)
+    except Exception, err:
+        log.error("Can't get zone info: %s", str(err))
+        ret['result'] = False
+        ret['comment'] = "Can't connect to Amazon Route 53 (bad user/pass?)"
+        return ret
+    for record_set in hosted_zone.record_sets:
+        if record_set.name.rstrip('.') == name and \
+           _record_type(record_set) == record_type:
+            if __opts__['test']:
+                ret['comment'] = 'Found and is set to be deleted'
+            else:
+                record_set.delete()
+                ret['changes'][ret['name']] = 'Deleted'
+                ret['result'] = True
+                ret['comment'] = 'Deleted succesfully'
+            return ret
+    ret['comment'] = 'Record is already absent'
+    ret['result'] = True
+    return ret
+
 
 def records_exists(access_key, secret_key, records):
     '''
@@ -59,6 +107,7 @@ def records_exists(access_key, secret_key, records):
     log.debug("Run records_exists: %s", records)
     ret = {'name': 'records_exists', 'result': None, 'comment': '',
            'changes': {}}
+    opposite_types = {'a': 'cname', 'cname': 'a'}
 
     if records is None:
         ret['result'] = False
@@ -70,12 +119,18 @@ def records_exists(access_key, secret_key, records):
 
     for hosted_zone_id in records:
         records_found = {}
-        hosted_zone = conn.get_hosted_zone_by_id(hosted_zone_id)
+        try:
+            hosted_zone = conn.get_hosted_zone_by_id(hosted_zone_id)
+        except Exception, err:
+            log.error("Can't get zone info: %s", str(err))
+            ret['result'] = False
+            ret['comment'] = "Can't connect to Amazon Route 53 (bad user/pass?)"
+            return ret
+
         log.debug("Process hosted zone %s, name: %s", hosted_zone_id,
                   hosted_zone.name)
         for existing in hosted_zone.record_sets:
-            existing_type = existing.__class__.__name__.rstrip(
-                'ResourceRecordSet').lower()
+            existing_type = _record_type(existing)
             log.debug("process existing %s record %s", existing_type,
                       existing.name)
             try:
@@ -144,11 +199,41 @@ def records_exists(access_key, secret_key, records):
                                               record_type))
                     kwargs = records[hosted_zone_id][record_type][record]
                     if not __opts__['test']:
-                        create_func(record, **kwargs)
+                        try:
+                            create_func(record, **kwargs)
+                        except Exception:
+                            if record_type in opposite_types:
+                                # delete the opposite record type format
+                                # and try to create it one last time
+                                delete = record_absent(
+                                    record,
+                                    opposite_types[record_type],
+                                    hosted_zone_id,
+                                    access_key,
+                                    secret_key
+                                )
+                                if delete['result']:
+                                    ret['changes'].update(delete['changes'])
+                                    try:
+                                        create_func(record, **kwargs)
+                                    except Exception:
+                                        ret['comment'] = \
+                                            "Can't create record %s" % record
+                                        ret['result'] = False
+                                        return ret
+                                else:
+                                    ret['result'] = False
+                                    ret['comment'] = delete['comment']
+                                    return ret
+                            else:
+                                ret['result'] = False
+                                ret['comment'] = "Can't create record %s" % \
+                                                 record
+                                return ret
                     change_name = '{0} {1} created'.format(record,
                                                            record_type.upper())
                     ret['changes'][change_name] = kwargs
-    if __opts__['test']:
+    if __opts__['test'] and not ret['changes']:
         ret['result'] = None
     else:
         ret['result'] = True

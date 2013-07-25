@@ -1,0 +1,46 @@
+openoffice_procs:
+  description: Openoffice Daemon
+
+openoffice_port:
+  description: Openoffice Local Port
+
+openoffice_remote_port:
+  check: check_tcp!8100
+  description: Openoffice Remote Port
+
+freeswitch_procs:
+  description: Freeswitch Daemon
+
+freeswitch_port:
+  description: Freeswitch Local Port
+
+freeswitch_remote_port:
+  check: check_tcp!8021
+  description: Freeswitch Remote Port
+
+red5_procs:
+  description: Red5 Daemon
+
+red5_rmtp_port:
+  description: Red5 RMTP Local Port
+
+red5_rmtp_remote_port:
+  check: check_tcp!1935
+  description: Red5 RMTP Remote Port
+
+red5_rmi_port:
+  description: Red5 RMI Local Port
+
+red5_rmi_remote_port:
+  check: check_tcp!9999
+  description: Red5 RMI Remote Port
+
+red5_desktop_sharing_port:
+  description: Red5 Desktop Sharing Local Port
+
+red5_desktop_sharing_remote_port:
+  check: check_tcp!9123
+  description: Red5 Desktop Sharing Remote Port
+
+god_procs:
+  description: God Daemon

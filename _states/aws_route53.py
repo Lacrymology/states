@@ -233,7 +233,7 @@ def records_exists(access_key, secret_key, records):
                     change_name = '{0} {1} created'.format(record,
                                                            record_type.upper())
                     ret['changes'][change_name] = kwargs
-    if __opts__['test']:
+    if __opts__['test'] and not ret['changes']:
         ret['result'] = None
     else:
         ret['result'] = True

@@ -28,10 +28,6 @@
       - pkg: nfs-kernel-server
       #}
 
-/etc/default/nfs-common:
-  file:
-    - absent
-
 /etc/default/nfs-kernel-server:
   file:
     - absent
@@ -46,11 +42,3 @@ nfs-kernel-server:
   service:
     - dead
     - enable: False
-
-{% for pkg in 'libnfsidmap2', 'libgssglue1', 'libtirpc1', 'rpcbind' %}
-{{ pkg }}:
-  pkg:
-    - purged
-    - require:
-      - pkg: nfs-kernel-server
-{% endfor %}

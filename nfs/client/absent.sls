@@ -1,5 +1,7 @@
-{% for pkg in 'libnfsidmap2', 'libgssglue1', 'libtirpc1', 'rpcbind' %}
-{{ pkg }}:
+/etc/default/nfs-common:
+  file:
+    - absent
+
+nfs-common:
   pkg:
     - purged
-{% endfor %}

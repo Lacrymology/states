@@ -59,7 +59,7 @@ def record_absent(name, record_type, zone_id, access_key, secret_key):
         ret['comment'] = "Can't connect to Amazon Route 53 (bad user/pass?)"
         return ret
     for record_set in hosted_zone.record_sets:
-        if record_set.name.rstrip('.') == name and \
+        if record_set.name.rstrip('.').lower() == name.lower() and \
            _record_type(record_set) == record_type:
             if __opts__['test']:
                 ret['comment'] = 'Found and is set to be deleted'
@@ -140,7 +140,7 @@ def records_exists(access_key, secret_key, records):
                 pass
             else:
                 for record in records_type:
-                    if existing.name.rstrip('.') == record:
+                    if existing.name.rstrip('.').lower() == record.lower():
                         # keep a reference to found record to not add them at
                         # the ends
                         try:

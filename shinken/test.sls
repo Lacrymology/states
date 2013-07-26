@@ -15,11 +15,11 @@ stop_shinken:
   cmd:
     - run
     - name: /usr/local/bin/shinken-ctl.sh stop
-    - require:
-      - cmd: start_shinken
 
 start_shinken:
   cmd:
     - run
     - name: /usr/local/bin/shinken-ctl.sh start
     - order: last
+    - require:
+      - cmd: stop_shinken

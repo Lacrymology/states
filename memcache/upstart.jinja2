@@ -6,5 +6,8 @@ stop on runlevel [!2345]
 
 respawn
 respawn limit 10 5
-
+{%- if 'memory' in pillar['memcache'] %}
 exec /usr/bin/memcached -m {{ pillar['memcache']['memory'] }} -s /tmp/memcached.sock -p 11211 -u www-data -l 127.0.0.1
+{%- else %}
+exec /usr/bin/memcached -s /tmp/memcached.sock -p 11211 -u www-data -l 127.0.0.1
+{%- endif %}

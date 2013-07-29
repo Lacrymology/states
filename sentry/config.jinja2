@@ -9,10 +9,10 @@ CONF_ROOT = os.path.dirname(__file__)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': '{{ pillar['sentry']['db']['name'] }}',
-        'USER': '{{ pillar['sentry']['db']['username'] }}',
+        'NAME': '{{ salt['pillar.get']('sentry:db:name', 'sentry') }}',
+        'USER': '{{ salt['pillar.get']('sentry:db:username', 'sentry') }}',
         'PASSWORD': '{{ salt['password.pillar']('sentry:db:password') }}',
-        'HOST': '{{ pillar['sentry']['db']['host'] }}',
+        'HOST': '{{ salt['pillar.get']('sentry:db:host') }}',
         'PORT': '5432',
     }
 }

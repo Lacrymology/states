@@ -143,9 +143,9 @@ EMAIL_USE_TLS = False
 # specification as the old database specification style is removed in 1.4
 DATABASES = {
     'default': {
-        'NAME': '{{ pillar['graphite']['web']['db']['name'] }}',
+        'NAME': '{{ salt['pillar.get']('graphite:web:db:name', 'graphite') }}',
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'USER': '{{ pillar['graphite']['web']['db']['username'] }}',
+        'USER': '{{ salt['pillar.get']('graphite:web:db:username', 'graphite') }}',
         'PASSWORD': '{{ salt['password.pillar']('graphite:web:db:password') }}',
 {#        'HOST': '{{ pillar['graphite']['web']['db']['host'] }}',#}
         'HOST': '127.0.0.1',

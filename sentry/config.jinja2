@@ -11,7 +11,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': '{{ pillar['sentry']['db']['name'] }}',
         'USER': '{{ pillar['sentry']['db']['username'] }}',
-        'PASSWORD': '{{ pillar['sentry']['db']['password'] }}',
+        'PASSWORD': '{{ salt['password.pillar']('sentry:db:password') }}',
         'HOST': '{{ pillar['sentry']['db']['host'] }}',
         'PORT': '5432',
     }

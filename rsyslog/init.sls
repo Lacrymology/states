@@ -7,7 +7,7 @@ rsyslog:
     - require:
       - cmd: apt_sources
       - pkg: remove_klogd_if_exist
-      - pkg: remove_syslogd_if_exist
+      - pkg: gsyslog
   file:
     - managed
     - name: /etc/rsyslog.conf
@@ -24,11 +24,23 @@ remove_klogd_if_exist:
   pkg:
     - purged
     - name: klogd
+    - require:
+      - service: gsyslog
 
-remove_syslogd_if_exist:
+gsyslog:
+  service:
+    - dead
+    - name: gsyslog
+  file:
+    - absent
+    - name: /etc/init/gsyslogd.conf
+    - require:
+      - service: gsyslog
   pkg:
     - purged
     - name: syslogd
+    - require:
+      - service: gsyslog
 
 /etc/rsyslog.d:
   file:

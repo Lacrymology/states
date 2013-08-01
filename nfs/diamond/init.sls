@@ -23,7 +23,7 @@ nfs_diamond_resources:
     - user: root
     - group: root
     - mode: 440
-    - source: salt://nfs/server/diamond/config.jinja2
+    - source: salt://nfs/diamond/config.jinja2
     - require:
       - file: /etc/diamond/collectors
 

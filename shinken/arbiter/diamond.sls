@@ -1,5 +1,6 @@
 include:
   - diamond
+  - ssmtp.diamond
 
 shinken_arbiter_diamond_resources:
   file:

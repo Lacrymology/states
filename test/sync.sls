@@ -6,9 +6,10 @@ include:
   - rsync
 
 {%- set archive_dir = salt['user.info']('root')['home'] + '/salt/archive' %}
-{{ archive_dir }}:
+salt_archive:
   file:
     - directory
+    - name: {{ archive_dir }}
     - user: root
     - group: root
     - mode: 775
@@ -17,4 +18,4 @@ include:
     - name: rsync -av --delete {{ pillar['salt_archive']['source'] }} {{ archive_dir }}/
     - require:
       - pkg: rsync
-      - file: {{ archive_dir }}
+      - file: salt_archive

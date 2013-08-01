@@ -1,17 +1,6 @@
 {#
  Turn off  Diamond statistics for MongoDB
 #}
-{% if 'graphite_address' in pillar %}
-include:
-  - diamond
-
-extend:
-  diamond:
-    service:
-      - watch:
-        - file: /etc/diamond/collectors/MongoDBCollector.conf
-{% endif %}
-
 /usr/local/diamond/salt-pymongo-requirements.txt:
   file:
     - absent

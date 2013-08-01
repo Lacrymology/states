@@ -41,6 +41,7 @@ ntp:
   service:
     - running
     - enable: True
+    - order: 50
     - require:
       - pkg: ntp
       - service: rsyslog

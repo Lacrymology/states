@@ -45,6 +45,7 @@ postgresql:
   service:
     - running
     - enable: True
+    - order: 50
     - name: postgresql
     - require:
       - service: rsyslog

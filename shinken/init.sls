@@ -6,6 +6,7 @@ include:
   - virtualenv
   - pip
   - python.dev
+  - local
   - apt
 
 {# common to all shinken daemons #}
@@ -18,6 +19,8 @@ include:
     - mode: 500
     - template: jinja
     - source: salt://shinken/shinken-ctl.jinja2
+    - require:
+      - file: /usr/local
 
 {% for dirname in ('log', 'lib') %}
 /var/{{ dirname }}/shinken:
@@ -47,6 +50,7 @@ include:
     - mode: 755
     - require:
       - virtualenv: shinken
+      - file: /usr/local/bin/shinken-ctl.sh
 
 shinken:
   virtualenv:
@@ -55,6 +59,7 @@ shinken:
     - no_site_packages: True
     - require:
       - module: virtualenv
+      - file: /usr/local
 {%- if 'files_archive' in pillar %}
   archive:
     - extracted

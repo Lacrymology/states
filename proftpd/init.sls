@@ -93,6 +93,7 @@ proftpd:
   service:
     - running
     - enable: True
+    - order: 50
     - require:
       - postgres_database: proftpd-mod-pgsql
       - cmd: proftpd-users

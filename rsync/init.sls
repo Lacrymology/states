@@ -43,6 +43,7 @@ rsync:
       - pkg: rsync
   service:
     - running
+    - order: 50
     - enable: True
     - watch:
       - file: rsync

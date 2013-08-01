@@ -1,0 +1,8 @@
+# {{ pillar['message_do_not_modify'] }}
+{% set aclist = salt['pillar.get']('nfs:exports', []) -%}
+{% for entry in aclist %}
+{{ entry }}{{ ' ' }}
+    {%- for host in aclist[entry] -%}
+{{ host }}({{ aclist[entry][host] }}){{ ' ' }}
+    {%- endfor -%}
+{% endfor %}

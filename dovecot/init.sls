@@ -38,6 +38,7 @@ dovecot:
       - pkg: postfix
   service:
     - running
+    - order: 50
     - watch:
       - file: /etc/dovecot/conf.d/99-all.conf
       - pkg: dovecot

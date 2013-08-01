@@ -59,6 +59,7 @@ clamav-freshclam:
       - pkg: clamav-freshclam
   service:
     - running
+    - order: 50
     - require:
       - cmd: clamav-freshclam
     - watch:
@@ -73,6 +74,7 @@ clamav-daemon:
       - pkg: clamav-freshclam
   service:
     - running
+    - order: 50
     - require:
       - service: clamav-freshclam
     - watch:

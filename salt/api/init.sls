@@ -85,7 +85,7 @@ salt-api:
     - running
     - enable: True
     - require:
-      - service: rsyslog
+      - service: gsyslog
     - watch:
       - file: salt-api
       - module: salt-api-requirements
@@ -108,6 +108,7 @@ salt-ui:
     - if_missing: /usr/local/salt-ui/
     - require:
       - file: /usr/local
+  {%- set salt_ui_module = 'archive' %}
 {%- else %}
   git:
     - latest
@@ -116,6 +117,7 @@ salt-ui:
     - target: /usr/local/salt-ui/
     - require:
       - pkg: git
+    {%- set salt_ui_module = 'git' %}
 {%- endif %}
   file:
     - managed
@@ -127,6 +129,42 @@ salt-ui:
     - mode: 440
     - require:
       - pkg: nginx
+      - {{ salt_ui_module }}: salt-ui
+
+salt-api:
+  pkg:
+    - installed
+    - sources:
+{%- if 'files_archive' in pillar %}
+      - salt-api: {{ pillar['files_archive']|replace('file://', '') }}/mirror/salt/{{ api_path }}
+{%- else %}
+      - salt-api: http://saltinwound.org/ubuntu/{{ api_path }}
+{%- endif %}
+    - require:
+      - pkg: salt-master
+      - module: salt-api-requirements
+  file:
+    - managed
+    - name: /etc/init/salt-api.conf
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - source: salt://salt/api/upstart.jinja2
+    - require:
+      - pkg: salt-api
+  service:
+    - running
+    - enable: True
+    - order: 50
+    - require:
+      - service: gsyslog
+    - watch:
+      - file: salt-api
+      - module: salt-api-requirements
+      - file: /etc/salt/master.d/ui.conf
+      - pkg: salt-api
+      - {{ salt_ui_module }}: salt-ui
 
 extend:
   nginx:

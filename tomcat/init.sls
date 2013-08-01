@@ -12,5 +12,6 @@ tomcat6:
   service:
     - running
     - enable: True
+    - order: 50
     - watch:
       - pkg: tomcat6

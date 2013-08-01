@@ -10,12 +10,14 @@
 include:
   - shinken
   - apt
+  - nrpe
 
 nagios-nrpe-plugin:
   pkg:
     - installed
     - require:
       - cmd: apt_sources
+      - pkg: nagios-plugins
 
 shinken-poller:
   file:
@@ -31,6 +33,7 @@ shinken-poller:
   service:
     - running
     - enable: True
+    - order: 50
     - require:
       - file: /var/lib/shinken
       - file: /var/log/shinken

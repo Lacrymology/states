@@ -1,0 +1,4 @@
+# {{ pillar['message_do_not_modify'] }}
+enabled = True
+hosts = root:{{ salt['pillar.get']('mysql:password') }}@127.0.0.1:3306/mysql
+innodb = True

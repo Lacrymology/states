@@ -38,6 +38,7 @@ shinken-broker:
       shinken_component: broker
   service:
     - running
+    - order: 50
     - enable: True
     - require:
       - file: /var/log/shinken

@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 
 import logging
+import tempfile
+import os
+
+import yaml
 
 logger = logging.getLogger(__name__)
 
@@ -76,6 +80,32 @@ def data():
     output['extra'] = extra_data
 
     return output
+
+
+def discover_checks(state_name):
+    '''
+    Return dict of all data in salt://$statename/monitor.jinja2.
+    Check ``doc/state.rst`` for details on this file.
+    '''
+    source = 'salt://{0}/monitor.jinja2'.format(state_name.replace('.', '/'))
+
+    logger.debug("Try to fetch %s", source)
+    temp_dest = tempfile.NamedTemporaryFile(delete=False)
+    temp_dest.close()
+    __salt__['cp.get_template'](source, temp_dest.name)
+
+    with open(temp_dest.name, 'r') as rendered_template:
+        try:
+            unserialized = yaml.safe_load(rendered_template)
+        except Exception:
+            os.unlink(temp_dest.name)
+            logger.critical('YAML data from failed to parse', exc_info=True)
+            return {}
+    os.unlink(temp_dest.name)
+    if not unserialized:
+        logger.critical("File %s don't exists", source)
+        return {}
+    return unserialized
 
 
 def update():

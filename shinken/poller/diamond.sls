@@ -1,5 +1,6 @@
 include:
   - diamond
+  - nrpe.diamond
 
 shinken_poller_diamond_resources:
   file:

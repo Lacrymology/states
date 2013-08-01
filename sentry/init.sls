@@ -11,6 +11,7 @@ include:
   - postgresql.server
   - virtualenv
   - uwsgi
+  - local
   - nginx
   - pip
   - web
@@ -32,6 +33,7 @@ sentry:
     - no_site_packages: True
     - require:
       - module: virtualenv
+      - file: /usr/local
   pkg:
     - latest
     - name: libevent-dev

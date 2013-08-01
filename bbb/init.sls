@@ -1,8 +1,10 @@
+{%- if grains['lsb_codename'] == 'lucid' %}
 include:
   - apt
   - bbb.redis
   - ffmpeg
   - java
+  - local
   - locale
   - mscorefonts
   - nginx
@@ -112,6 +114,8 @@ bbb-conf-wrap:
     - user: root
     - group: root
     - mode: 755
+    - require:
+      - file: /usr/local
 
 /usr/local/bin/bbb-conf-wrap.sh --setip {{ salt['pillar.get']('bbb:hostname') }}:
   cmd:
@@ -141,8 +145,4 @@ extend:
     service:
       - watch:
         - file: /etc/nginx/conf.d/bigbluebutton.conf
-
-  redis_package:
-    module:
-      - require:
-        - pkg: redis
+{%- endif -%}

@@ -41,6 +41,14 @@ gsyslogd:
     - require:
       - service: gsyslogd
 
+{%- for filename in ('/usr/local/gsyslog', '/etc/gsyslog.d', '/etc/gsyslogd.conf') %}
+{{ filename }}:
+  file:
+    - absent
+    - require:
+      - file: gsyslogd
+{%- endfor %}
+
 /etc/rsyslog.d:
   file:
     - directory

@@ -45,3 +45,8 @@ gsyslogd:
   file:
     - directory
     - clean: True
+    - user: root
+    - group: root
+    - mode: 555
+    - require:
+      - pkg: rsyslog

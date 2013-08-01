@@ -96,6 +96,7 @@ uwsgi_emperor:
     - name: uwsgi
     - running
     - enable: True
+    - order: 50
     - require:
       - file: uwsgi_emperor
       - file: uwsgi_sockets

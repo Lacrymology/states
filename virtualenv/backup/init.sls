@@ -1,6 +1,9 @@
 {#
  virtualenv backup state
  #}
+include:
+  - local
+
 /usr/local/bin/backup-pip:
   file:
     - managed
@@ -9,3 +12,5 @@
     - mode: 500
     - template: jinja
     - source: salt://virtualenv/backup/config.jinja2
+    - require:
+      - file: /usr/local

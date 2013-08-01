@@ -61,6 +61,41 @@ salt-api-requirements:
 {%- set api_version = salt['pillar.get']('salt:api:version', '0.8.1') -%}
 {%- set api_path = '{0}/pool/main/s/salt-api/salt-api_{1}_all.deb'.format(version, api_version) %}
 
+salt-ui:
+{%- if 'files_archive' in pillar %}
+  archive:
+    - extracted
+    - name: /usr/local
+    - source: {{ pillar['files_archive'] }}/mirror/salt-ui-6e8eee0477fdb0edaa9432f1beb5003aeda56ae6.tar.gz
+    - source_hash: md5=2b7e581d0134c5f5dc29b5fca7a2df5b
+    - archive_format: tar
+    - tar_options: z
+    - if_missing: /usr/local/salt-ui/
+    - require:
+      - file: /usr/local
+  {%- set salt_ui_module = 'archive' %}
+{%- else %}
+  git:
+    - latest
+    - rev: 6e8eee0477fdb0edaa9432f1beb5003aeda56ae6
+    - name: git://github.com/saltstack/salt-ui.git
+    - target: /usr/local/salt-ui/
+    - require:
+      - pkg: git
+    {%- set salt_ui_module = 'git' %}
+{%- endif %}
+  file:
+    - managed
+    - name: /etc/nginx/conf.d/salt.conf
+    - template: jinja
+    - source: salt://salt/api/nginx.jinja2
+    - user: www-data
+    - group: www-data
+    - mode: 440
+    - require:
+      - pkg: nginx
+      - {{ salt_ui_module }}: salt-ui
+
 salt-api:
   pkg:
     - installed
@@ -81,52 +116,20 @@ salt-api:
     - group: root
     - mode: 440
     - source: salt://salt/api/upstart.jinja2
+    - require:
+      - pkg: salt-api
   service:
     - running
     - enable: True
+    - order: 50
     - require:
       - service: gsyslog
     - watch:
       - file: salt-api
       - module: salt-api-requirements
       - file: /etc/salt/master.d/ui.conf
-{%- if 'files_archive' in pillar %}
-      - archive: salt-ui
-{%- else %}
-      - git: salt-ui
-{%- endif %}
-
-salt-ui:
-{%- if 'files_archive' in pillar %}
-  archive:
-    - extracted
-    - name: /usr/local
-    - source: {{ pillar['files_archive'] }}/mirror/salt-ui-6e8eee0477fdb0edaa9432f1beb5003aeda56ae6.tar.gz
-    - source_hash: md5=2b7e581d0134c5f5dc29b5fca7a2df5b
-    - archive_format: tar
-    - tar_options: z
-    - if_missing: /usr/local/salt-ui/
-    - require:
-      - file: /usr/local
-{%- else %}
-  git:
-    - latest
-    - rev: 6e8eee0477fdb0edaa9432f1beb5003aeda56ae6
-    - name: git://github.com/saltstack/salt-ui.git
-    - target: /usr/local/salt-ui/
-    - require:
-      - pkg: git
-{%- endif %}
-  file:
-    - managed
-    - name: /etc/nginx/conf.d/salt.conf
-    - template: jinja
-    - source: salt://salt/api/nginx.jinja2
-    - user: www-data
-    - group: www-data
-    - mode: 440
-    - require:
-      - pkg: nginx
+      - pkg: salt-api
+      - {{ salt_ui_module }}: salt-ui
 
 extend:
   nginx:

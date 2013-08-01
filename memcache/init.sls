@@ -34,6 +34,7 @@ memcached:
     - running
     - name: memcached
     - enable: True
+    - order: 50
     - require:
       - file: memcached
     - watch:

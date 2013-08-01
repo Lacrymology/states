@@ -1,0 +1,10 @@
+{%- set mongodb_checks = {
+    'procs': 'Daemon',
+    'port': 'Port',
+    'http': 'HTTP Interface',
+    'port_http': 'HTTP Port'} -%}
+{%- for check in mongodb_checks %}
+mongodb_{{ check }}:
+  description: MongoDB {{ mongodb_checks[check] }}
+{% endfor -%}
+{#- TODO: remote port check? -#}

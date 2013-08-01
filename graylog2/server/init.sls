@@ -84,6 +84,7 @@ graylog2-server:
   service:
     - running
     - enable: True
+    - order: 50
     - watch:
       - file: graylog2-server_upstart
       - pkg: openjdk_jre_headless

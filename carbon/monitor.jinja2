@@ -1,0 +1,16 @@
+carbon_procs:
+  description: Carbon Instances
+
+carbon-remote-port-plaintext:
+  description: Carbon Remote Port PlainText Protocol
+  check: check_tcp!2003
+
+carbon-remote-port-pickle:
+  description: Carbon Remote Port Pickle Protocol
+  check: check_tcp!2004
+
+carbon_port_plaintext:
+  description: Carbon Local Port PlainText Protocol
+
+carbon_port_pickle:
+  description: Carbon Local Port Pickle Protocol

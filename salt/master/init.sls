@@ -81,6 +81,7 @@ salt-master:
   service:
     - running
     - enable: True
+    - order: 50
     - require:
       - pkg: git
       - service: gsyslog

@@ -9,5 +9,6 @@ package_build:
       - debhelper
       - dpkg-dev
       - build-essential
+      - fakeroot
     - require:
       - cmd: apt_sources

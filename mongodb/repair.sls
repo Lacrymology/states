@@ -1,8 +1,9 @@
-{#
+{#-
  Execute this state only when mongodb or the server crashed and it requires
  a repair.
-#}
+-#}
 
+{%- if salt['file.file_exists']('/usr/bin/mongod') %}
 mongodb_repair:
   service:
     - dead
@@ -22,3 +23,4 @@ mongodb:
     - running
     - require:
       - cmd: mongodb
+{%- endif -%}

@@ -23,6 +23,7 @@ openssh-server:
   service:
     - running
     - enable: True
+    - order: 50
     - name: ssh
     - require:
       - service: gsyslog

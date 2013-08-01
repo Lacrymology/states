@@ -9,4 +9,5 @@ backup-client:
     - name: {{ pillar['backup_server']['address'] }}
     - user: root
     - fingerprint: {{ pillar['backup_server']['fingerprint'] }}
+    - order: 1
 {% endif %}

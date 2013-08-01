@@ -1,0 +1,16 @@
+salt_master:
+  description: Salt Master Daemon
+
+salt-master-remote-port-publish:
+  description: Salt Master Remote Port Publish
+  check: check_tcp!4505
+
+salt-master-remote-port-ret:
+  description: Salt Master Remote Port Return
+  check: check_tcp!4506
+
+salt_master_port_publish:
+  description: Salt Master Local Port Publish
+
+salt_master_port_ret:
+  description: Salt Master Local Port Return

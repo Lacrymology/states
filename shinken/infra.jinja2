@@ -583,7 +583,7 @@ define service {
     hostgroup_name {% for role in pillar['monitoring']['states']['rsyslog'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     servicegroups {% for role in pillar['monitoring']['states']['rsyslog'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description {{ check }}_procs
-    display_name Gsyslog {{ check }} Daemon
+    display_name rsyslog {{ check }} Daemon
     check_command check_nrpe!{{ check }}_procs
     use salt-service
 }

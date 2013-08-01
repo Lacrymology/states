@@ -35,6 +35,7 @@ libmariadbclient-dev:
   pkg:
     - installed
     - require:
+      - pkgrepo: mariadb
       - cmd: apt_sources
 
 diamond_mysql_python:

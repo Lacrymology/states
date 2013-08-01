@@ -130,11 +130,6 @@ daemon.*;mail.*;\
 #}
 
 *.*         		-/var/log/syslog
-{%- set use_tcp = salt['pillar.get']('rsyslog:tcp', False) %}
 {%- if 'graylog2_address' in pillar %}
-    {%- if use_tcp %}
-*.*;local7.none @@{{ pillar['graylog2_address'] }}:514
-    {%- else %}
-*.*;local7.none @{{ pillar['graylog2_address'] }}:514
-    {%- endif %}
-{%- endif %}
+*.*;local7.none {% if salt['pillar.get']('rsyslog:tcp', False) %}@{% endif %}@{{ pillar['graylog2_address'] }}:514
+{%- endif -%}

@@ -1,0 +1,6 @@
+# {{ pillar['message_do_not_modify'] }}
+
+{% for host in pillar['shinken_pollers'] %}
+:msg, contains, "Connection closed by {{ host }} [preauth]" ~
+:msg, contains, "Did not receive identification string from {{ host }}" ~
+{%- endfor -%}

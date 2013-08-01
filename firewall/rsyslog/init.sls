@@ -1,8 +1,8 @@
 {#
- Gsyslog configuration for iptables
+ rsyslog configuration for iptables
 #}
 include:
-  - gsyslog
+  - rsyslog
 
 {#
  this is a constant used to define the -c flag of nagios check that set the
@@ -12,10 +12,10 @@ include:
  #}
 {% set critical=300 %}
 
-/etc/gsyslog.d/firewall.conf:
+/etc/rsyslog.d/firewall.conf:
   file:
     - managed
-    - source: salt://firewall/gsyslog/config.jinja2
+    - source: salt://firewall/rsyslog/config.jinja2
     - template: jinja
     - mode: 440
     - user: root
@@ -23,10 +23,10 @@ include:
     - context:
       critical: {{ critical }}
     - require:
-      - file: /etc/gsyslog.d
+      - file: /etc/rsyslog.d
 
 extend:
-  gsyslog:
+  rsyslog:
     service:
       - watch:
-        - file: /etc/gsyslog.d/firewall.conf
+        - file: /etc/rsyslog.d/firewall.conf

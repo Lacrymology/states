@@ -10,7 +10,7 @@ include:
   - ssh.client
   - pip
   - python.dev
-  - gsyslog
+  - rsyslog
 
 salt-master-requirements:
   file:
@@ -83,7 +83,7 @@ salt-master:
     - enable: True
     - require:
       - pkg: git
-      - service: gsyslog
+      - service: rsyslog
     - watch:
       - pkg: salt-master
       - file: salt-master

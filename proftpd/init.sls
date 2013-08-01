@@ -21,7 +21,7 @@ include:
   - apt
   - postgresql.server
   - web
-  - gsyslog
+  - rsyslog
 
 proftpd-basic:
   debconf:
@@ -98,7 +98,7 @@ proftpd:
       - cmd: proftpd-users
       - service: postgresql
       - user: web
-      - service: gsyslog
+      - service: rsyslog
     - watch:
       - file: proftpd
       - pkg: proftpd-mod-pgsql

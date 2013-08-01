@@ -3,7 +3,7 @@
  #}
 include:
   - apt
-  - gsyslog
+  - rsyslog
 
 {% if 'servers' in pillar['ntp'] %}
 ntpdate:
@@ -43,6 +43,6 @@ ntp:
     - enable: True
     - require:
       - pkg: ntp
-      - service: gsyslog
+      - service: rsyslog
     - watch:
       - file: ntp

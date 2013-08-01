@@ -4,7 +4,7 @@
 include:
   - nrpe
   - apt.nrpe
-  - gsyslog.nrpe
+  - rsyslog.nrpe
 
 /etc/nagios/nrpe.d/tomcat6.cfg:
   file:

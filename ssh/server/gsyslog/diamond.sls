@@ -1,2 +1,2 @@
 include:
-  - gsyslog.diamond
+  - rsyslog.diamond

@@ -1,5 +1,5 @@
 include:
   - diamond
-  - gsyslog.diamond
+  - rsyslog.diamond
   - nginx.diamond
   - rsync.diamond

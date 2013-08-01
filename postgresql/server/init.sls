@@ -6,7 +6,7 @@ include:
   - hostname
   - postgresql
   - apt
-  - gsyslog
+  - rsyslog
   - locale
 {% if ssl %}
   - ssl
@@ -47,7 +47,7 @@ postgresql:
     - enable: True
     - name: postgresql
     - require:
-      - service: gsyslog
+      - service: rsyslog
     - watch:
       - pkg: postgresql
       - file: postgresql

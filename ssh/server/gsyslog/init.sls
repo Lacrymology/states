@@ -1,23 +1,23 @@
 include:
-  - gsyslog
+  - rsyslog
 
-/etc/gsyslog.d/ssh.conf:
+/etc/rsyslog.d/ssh.conf:
   file:
 {% if not pillar['debug'] and 'shinken_pollers' in pillar %}
     - managed
     - template: jinja
-    - source: salt://ssh/server/gsyslog/config.jinja2
+    - source: salt://ssh/server/rsyslog/config.jinja2
     - user: root
     - group: root
     - mode: 440
     - require:
-      - file: /etc/gsyslog.d
+      - file: /etc/rsyslog.d
 {% else %}
     - absent
 {% endif %}
 
 extend:
-  gsyslog:
+  rsyslog:
     service:
       - watch:
-        - file: /etc/gsyslog.d/ssh.conf
+        - file: /etc/rsyslog.d/ssh.conf

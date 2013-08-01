@@ -95,7 +95,7 @@ include:
   - apt
   - python.dev
   - statsd
-  - gsyslog
+  - rsyslog
 {% if pillar['graphite']['web']['ssl']|default(False) %}
   - ssl
 {% endif %}
@@ -275,7 +275,7 @@ graphite_settings:
     - require:
       - postgres_database: graphite_settings
       - file: graphite_settings
-      - service: gsyslog
+      - service: rsyslog
     - watch:
       - module: graphite-web
 
@@ -296,7 +296,7 @@ graphite_settings:
       - file: /usr/local/graphite/bin/build-index.sh
       - user: web
       - file: graphite-urls-patch
-      - service: gsyslog
+      - service: rsyslog
       - module: graphite-web
       - pip: graphite-web
       - service: memcached

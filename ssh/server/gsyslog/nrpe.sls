@@ -1,2 +1,2 @@
 include:
-  - gsyslog.nrpe
+  - rsyslog.nrpe

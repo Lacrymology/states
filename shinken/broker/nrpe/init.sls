@@ -11,7 +11,7 @@ include:
   - ssl.nrpe
 {% endif %}
   - nginx.nrpe
-  - gsyslog.nrpe
+  - rsyslog.nrpe
 
 /etc/nagios/nrpe.d/shinken-broker.cfg:
   file:

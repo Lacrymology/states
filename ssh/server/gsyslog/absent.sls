@@ -1,14 +1,14 @@
 {% if not pillar['debug'] %}
 include:
-  - gsyslog
+  - rsyslog
 
 extend:
-  gsyslog:
+  rsyslog:
     service:
       - watch:
-        - file: /etc/gsyslog.d/ssh.conf
+        - file: /etc/rsyslog.d/ssh.conf
 {% endif %}
 
-/etc/gsyslog.d/ssh.conf:
+/etc/rsyslog.d/ssh.conf:
   file:
     - absent

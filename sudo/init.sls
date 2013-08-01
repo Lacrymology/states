@@ -1,6 +1,6 @@
 include:
   - apt
-  - gsyslog
+  - rsyslog
 
 sudo:
   file:
@@ -17,4 +17,4 @@ sudo:
     - installed
     - require:
       - cmd: apt_sources
-      - service: gsyslog
+      - service: rsyslog

@@ -3,7 +3,7 @@
  #}
 
 include:
-  - gsyslog
+  - rsyslog
   - salt.minion.upgrade
 
 {# it's mandatory to remove this file if the master is changed #}
@@ -23,7 +23,7 @@ extend:
   salt-minion:
     service:
       - require:
-        - service: gsyslog
+        - service: rsyslog
       - watch:
         - module: salt_minion_master_key
     pkg:

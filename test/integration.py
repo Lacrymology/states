@@ -278,7 +278,7 @@ class BaseIntegration(unittest.TestCase):
         'graylog2.server.absent',
         'graylog2.web.absent',
         'graylog2.absent',
-        'gsyslog.absent',
+        'rsyslog.absent',
         'local.absent',
         'logrotate.absent',
         'memcache.absent',
@@ -579,8 +579,8 @@ class Integration(BaseIntegration):
     def test_graylog2_combined(self):
         self.top(['graylog2.server', 'graylog2.web'])
 
-    def test_gsyslog(self):
-        self.top(['gsyslog'])
+    def test_rsyslog(self):
+        self.top(['rsyslog'])
 
     def test_logrotate(self):
         self.top(['logrotate'])
@@ -819,8 +819,8 @@ class IntegrationNRPE(BaseIntegration):
     def test_graylog2_web(self):
         self.top(['graylog2.web.nrpe'])
 
-    def test_gsyslog(self):
-        self.top(['gsyslog.nrpe'])
+    def test_rsyslog(self):
+        self.top(['rsyslog.nrpe'])
 
     def test_memcache(self):
         self.top(['memcache.nrpe'])
@@ -947,8 +947,8 @@ class IntegrationDiamondBase(BaseIntegration):
     def test_graylog2_web(self):
         self.top(['graylog2.web.diamond'])
 
-    def test_gsyslog(self):
-        self.top(['gsyslog.diamond'])
+    def test_rsyslog(self):
+        self.top(['rsyslog.diamond'])
 
     def test_memcache(self):
         self.top(['memcache.diamond'])
@@ -1132,7 +1132,7 @@ class IntegrationFull(BaseIntegration):
         self.check_apt()
         self.check_diamond()
         self.check_nrpe()
-        self.check_gsyslog()
+        self.check_rsyslog()
 
     def check_uwsgi_instance(self, deployment):
         self.run_check(deployment + '_uwsgi_master')
@@ -1282,7 +1282,7 @@ class IntegrationFull(BaseIntegration):
         self.check_nginx_instance('elasticsearch')
 
     def test_firewall(self):
-        self.top(['firewall', 'firewall.gsyslog', 'firewall.nrpe'])
+        self.top(['firewall', 'firewall.rsyslog', 'firewall.nrpe'])
         self.check_integration()
         self.run_check('firewall_rules')
 
@@ -1340,11 +1340,11 @@ class IntegrationFull(BaseIntegration):
         self.check_uwsgi_instance('graylog2')
         self.check_nginx_instance('graylog2')
 
-    def test_gsyslog(self):
-        self.top(['gsyslog', 'gsyslog.diamond', 'gsyslog.nrpe'])
+    def test_rsyslog(self):
+        self.top(['rsyslog', 'rsyslog.diamond', 'rsyslog.nrpe'])
         self.check_integration()
 
-    def check_gsyslog(self):
+    def check_rsyslog(self):
         self.run_check('syslogd_procs')
         self.run_check('klogd_procs')
 
@@ -1686,7 +1686,7 @@ class IntegrationFull(BaseIntegration):
         client('cmd.run', '/usr/local/bin/shinken-ctl.sh start')
 
     def test_ssh_server(self):
-        self.top(['ssh.server', 'ssh.server.gsyslog', 'ssh.server.nrpe',
+        self.top(['ssh.server', 'ssh.server.rsyslog', 'ssh.server.nrpe',
                   'ssh.server.diamond'])
         self.check_integration()
         self.check_ssh_server()

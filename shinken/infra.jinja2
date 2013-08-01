@@ -575,13 +575,13 @@ define service {
 {%- endif -%}
 
 {#-
- State: gsyslog
+ State: rsyslog
  -#}
-{%- if 'gsyslog' in pillar['monitoring']['states'] -%}
+{%- if 'rsyslog' in pillar['monitoring']['states'] -%}
 {%- for check in ('syslogd', 'klogd') %}
 define service {
-    hostgroup_name {% for role in pillar['monitoring']['states']['gsyslog'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
-    servicegroups {% for role in pillar['monitoring']['states']['gsyslog'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    hostgroup_name {% for role in pillar['monitoring']['states']['rsyslog'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    servicegroups {% for role in pillar['monitoring']['states']['rsyslog'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     service_description {{ check }}_procs
     display_name Gsyslog {{ check }} Daemon
     check_command check_nrpe!{{ check }}_procs

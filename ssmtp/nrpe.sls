@@ -1,3 +1,3 @@
 include:
   - apt.nrpe
-  - gsyslog.nrpe
+  - rsyslog.nrpe

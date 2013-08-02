@@ -1,4 +1,0 @@
-# {{ pillar['message_do_not_modify'] }}
-command[tomcat_procs]=/usr/lib/nagios/plugins/check_procs -c 1:1 -C java -u tomcat6
-command[tomcat_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 8080
-command[tomcat_command_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 8005

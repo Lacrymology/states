@@ -5,7 +5,7 @@ include:
   - nrpe
   - nginx.nrpe
   - redis.nrpe
-  - tomcat.nrpe
+  - tomcat.6.nrpe
 
 /etc/nagios/nrpe.d/bigbluebutton.cfg:
   file:

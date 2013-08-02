@@ -9,7 +9,7 @@ include:
   - mscorefonts
   - nginx
   - redis
-  - tomcat
+  - tomcat.6
 
 libreoffice:
   apt_repository:
@@ -99,7 +99,7 @@ bigbluebutton:
       - archive: ffmpeg
       - module: redis_package
       - service: redis
-      - service: tomcat6
+      - service: tomcat
       - service: nginx
       - file: nginx_sysv_upstart
 {% for i in ('ruby', 'ri', 'irb', 'erb', 'rdoc', 'gem') %}

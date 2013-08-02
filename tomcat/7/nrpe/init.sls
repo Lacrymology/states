@@ -1,5 +1,5 @@
 {#
- Nagios NRPE check for Tomcat6
+ Nagios NRPE check for Tomcat7
 #}
 include:
   - nrpe

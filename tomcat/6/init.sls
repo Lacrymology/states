@@ -7,9 +7,10 @@ tomcat:
     - installed
     - name: tomcat6
     - require:
-     - cmd: apt_sources
+      - cmd: apt_sources
   service:
     - running
+    - order: 50
     - name: tomcat6
     - require:
       - pkg: tomcat

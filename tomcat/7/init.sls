@@ -7,17 +7,19 @@ tomcat:
     - installed
     - name: tomcat7
     - require:
-     - cmd: apt_sources
+      - cmd: apt_sources
   service:
     - running
     - name: tomcat7
+    - order: 50
     - require:
       - pkg: tomcat
       - file: add_catalina_env
       - file: tomcat
   file:
     - managed
-    - source: salt://tomcat7/config.jinja2
+    - source: salt://tomcat/7/config.jinja2
+    - template: jinja
     - name: /etc/default/tomcat7
     - require:
       - pkg: tomcat

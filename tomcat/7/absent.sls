@@ -1,9 +1,9 @@
 tomcat:
   pkg:
     - purged
-    - name: tomcat7
+    - name: tomcat7-common
     - require:
-     - service: tomcat
+      - service: tomcat
   service:
     - dead
     - name: tomcat7

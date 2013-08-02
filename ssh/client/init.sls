@@ -53,7 +53,8 @@ root_ssh_private_key:
   file:
     - managed
     - name: {{ root_home }}/.ssh/id_{{ pillar['deployment_key_source']['type'] }}
-    - source: {{ pillar['deployment_key_source']['source'] }}
+    - contents: |
+        {{ pillar['deployment_key_source']['contents'] | indent(8) }}
     - user: root
     - group: root
     - mode: 400

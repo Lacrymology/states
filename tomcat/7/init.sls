@@ -1,7 +1,13 @@
+include:
+  - apt
+
+{#- dont include java, let user decide it #}
 tomcat:
   pkg:
     - installed
     - name: tomcat7
+    - require:
+     - cmd: apt_sources
   service:
     - running
     - name: tomcat7

@@ -3,7 +3,11 @@
  #}
 include:
   - graylog2
-  - java
+{% if grains['osrelease']|float < 12.04 %}
+  - java.6
+{% else %}
+  - java.7
+{% endif %}
   - mongodb
   - apt
   - local

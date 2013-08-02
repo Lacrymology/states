@@ -80,7 +80,7 @@ TODO: document AWS pillars
 include:
   - apt
   - cron
-  - java
+  - java.7
 {% if ssl %}
   - ssl
   - nginx

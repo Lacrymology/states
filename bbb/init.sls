@@ -3,7 +3,11 @@ include:
   - apt
   - bbb.redis
   - ffmpeg
-  - java
+{% if grains['osrelease']|float < 12.04 %}
+  - java.6
+{% else %}
+  - java.7
+{% endif %}
   - local
   - locale
   - mscorefonts

@@ -76,10 +76,12 @@ ssl-cert:
       - pkg: ssl-cert
 
 {% for filename in ('server.key', 'server.crt', 'ca.crt') %}
+{%- set pillar_key = filename.replace('.', '_') %}
 /etc/ssl/{{ name }}/{{ filename }}:
   file:
     - managed
-    - source: {{ pillar['ssl'][name] }}/{{ filename }}
+    - contents: |
+        {{ pillar['ssl'][name][pillar_key] | indent(8) }}
     - user: root
     - group: root
     - mode: 444

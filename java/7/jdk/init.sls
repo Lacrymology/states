@@ -1,11 +1,11 @@
 include:
   - apt
-  - java.6
+  - java.7
 
 openjdk_jdk:
   pkg:
     - installed
-    - name: openjdk-6-jdk
+    - name: openjdk-7-jdk
     - require:
       - pkg: openjdk_jre_headless
       - pkg: openjdk_jre
@@ -14,7 +14,7 @@ openjdk_jdk:
 openjdk_jre:
   pkg:
     - installed
-    - name: openjdk-6-jre
+    - name: openjdk-7-jre
     - require:
       - pkg: openjdk_jre_headless
       - cmd: apt_sources

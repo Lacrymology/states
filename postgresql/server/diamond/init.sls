@@ -46,7 +46,7 @@ postgresql_diamond_collector:
   postgres_user:
     - present
     - name: diamond
-    - password: {{ pillar['postgresql']['diamond'] }}
+    - password: {{ salt['password.pillar']('postgresql:diamond') }}
     - superuser: True
     - runas: postgres
     - require:

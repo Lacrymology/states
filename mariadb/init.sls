@@ -12,3 +12,6 @@ mariadb:
     - name: deb http://repo.maxindo.net.id/mariadb/repo/5.5/ubuntu precise main
 {%- endif %}
     - file: /etc/apt/sources.list.d/mariadb.list
+    - require:
+      - pkg: python-apt
+      - pkg: python-software-properties

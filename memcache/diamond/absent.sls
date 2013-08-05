@@ -1,6 +1,7 @@
 {#
  Turn off Diamond statistics for Memcache
 #}
-/etc/diamond/collectors/MemcachedCollector.conf:
+memcached_diamond_collector:
   file:
     - absent
+    - name: /etc/diamond/collectors/MemcachedCollector.conf

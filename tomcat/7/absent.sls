@@ -1,9 +1,9 @@
-tomcat:
+tomcat7:
   pkg:
     - purged
     - name: tomcat7-common
     - require:
-      - service: tomcat
+      - service: tomcat7
   service:
     - dead
     - name: tomcat7
@@ -11,15 +11,13 @@ tomcat:
     - absent
     - name: /etc/default/tomcat7
     - require:
-      - pkg: tomcat
+      - pkg: tomcat7
+  cmd:
+    - run
+    - name: sed -i '\:tomcat7:d' /etc/environment
 
 /etc/tomcat7:
   file:
     - absent
     - require:
-      - pkg: tomcat
-
-rm_catalina_env:
-  cmd:
-    - run
-    - name: sed -i '\:tomcat7:d' /etc/environment
+      - pkg: tomcat7

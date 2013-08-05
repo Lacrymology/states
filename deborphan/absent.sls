@@ -1,6 +1,9 @@
 deborphan:
   pkg:
     - purged
-    - names:
-      - deborphan
-      - dialog
+
+dialog:
+  pkg:
+    - purged
+    - require:
+      - pkg: deborphan

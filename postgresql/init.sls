@@ -11,6 +11,7 @@ postgresql-dev:
 {%- else %}
     - ppa: pitti/postgresql
 {%- endif %}
+    - file: /etc/apt/sources.list.d/postgresql.list
     - require:
       - pkg: python-apt
       - pkg: python-software-properties

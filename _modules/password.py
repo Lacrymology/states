@@ -43,7 +43,7 @@ def generate(name, length=20):
     '''
     key_name = '-'.join((__virtual__(), name))
     try:
-        return __salt__['data.value'](key_name)
+        return __salt__['data.getval'](key_name)
     except KeyError:
         pass
     password = _generate_random_password(length)

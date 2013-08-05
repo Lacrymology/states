@@ -4,6 +4,8 @@
 include:
   - nrpe
   - apt.nrpe
+  - mariadb.nrpe
+  - salt.minion.nrpe
 
 /etc/nagios/nrpe.d/mysql.cfg:
   file:

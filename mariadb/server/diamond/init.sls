@@ -3,9 +3,11 @@
 -#}
 
 include:
-  - diamond
-  - python.dev
   - apt
+  - diamond
+  - mariadb
+  - python.dev
+  - salt.minion.diamond
 
 mysql_diamond_collector:
   file:

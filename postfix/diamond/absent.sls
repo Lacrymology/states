@@ -1,6 +1,7 @@
 {#
  Turn off Diamond statistics for postfix
 #}
-/etc/diamond/collectors/PostfixCollector.conf:
+postfix_diamond_collector:
   file:
     - absent
+    - name: /etc/diamond/collectors/PostfixCollector.conf

@@ -1,10 +1,10 @@
-{{ opts['cachedir'] }}/salt-raven-requirements.txt:
+raven:
   file:
     - absent
-
+    - name: {{ opts['cachedir'] }}/salt-raven-requirements.txt
 {% if salt['cmd.has_exec']('pip') %}
-raven:
   pip:
+    - name: raven
     - removed
     - order: 1
 {% endif %}

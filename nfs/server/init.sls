@@ -67,7 +67,7 @@ nfs-kernel-server:
       - file: /etc/default/nfs-kernel-server
       - file: /etc/exports
 
-{%- set allow = salt['pillar.get']('nfs:allow', []) -%}
+{%- set allow = salt['pillar.get']('nfs:allow') -%}
 {%- set deny = salt['pillar.get']('nfs:deny', 'ALL') -%}
 {%- set type2clients = {'allow': allow,
                         'deny': deny} %}

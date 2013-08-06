@@ -2,13 +2,15 @@ include:
   - salt
   - apt
 
-/etc/salt/cloud.profiles:
+{%- for type in ('profiles', 'providers') %}
+/etc/salt/cloud.{{ type }}:
   file:
     - managed
     - template: jinja
-    - source: salt://salt/cloud/profiles.jinja2
+    - source: salt://salt/cloud/{{ type }}.jinja2
     - require:
       - pkg: salt-cloud
+{%- endfor %}
 
 /etc/salt/cloud:
   file:

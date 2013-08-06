@@ -7,10 +7,8 @@ Configure APT minimal configuration to get Debian packages from repositories.
 Mandatory Pillar
 ----------------
 
-apt_source: salt://path/to/apt.template.jinja2
 message_do_not_modify: Warning message to not modify file
-
-apt_source: Path to get the /etc/apt/sources.list template.
+ubuntu_mirror: ubuntu mirror will be used. Default: mirror.anl.gov/pub/ubuntu
 
 Optional Pillar
 ---------------
@@ -41,6 +39,8 @@ proxy_server: If True, the specific HTTP proxy server (without authentication)
 
 {% set backup = '/etc/apt/sources.list.salt-backup' %}
 
+{%- set all_suites = 'main restricted universe multiverse' %}
+{%- set mirror = salt['pillar.get']('ubuntu_mirror', 'mirror.anl.gov/pub/ubuntu') %}
 apt_sources:
   file:
     - managed
@@ -49,9 +49,14 @@ apt_sources:
     - user: root
     - group: root
     - mode: 444
-    - source: {{ pillar['apt_source'] }}
-    - context:
-      all_suites: main restricted universe multiverse
+    - contents: |
+        # {{ pillar['message_do_not_modify'] }}
+        deb http://{{ mirror }}/ {{ grains['oscodename'] }} {{ all_suites }}
+        deb http://{{ mirror }}/ {{ grains['oscodename'] }}-updates {{ all_suites }}
+        deb http://{{ mirror }}/ {{ grains['oscodename'] }}-backports {{ all_suites }}
+        deb http://security.ubuntu.com/ubuntu {{ grains['oscodename'] }}-security {{ all_suites }}
+        deb http://archive.canonical.com/ubuntu {{ grains['oscodename'] }} partner
+        {{ salt['pillar.get']('apt:extend', '') | indent(8) }}
     - require:
       - file: /etc/apt/apt.conf.d/99local
 {% if salt['file.file_exists'](backup) %}

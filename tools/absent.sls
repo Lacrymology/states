@@ -1,6 +1,3 @@
-include:
-  - screen
-
 basic:
   pkg:
     - purged

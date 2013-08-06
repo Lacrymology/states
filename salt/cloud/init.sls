@@ -32,7 +32,7 @@ deploy_script:
   file:
     - managed
     - name: /etc/salt/cloud.deploy.d/bootstrap_salt.sh
-    - source: salt://salt/minion/bootstrap.sh
+    - source: salt://salt/cloud/bootstrap.sh
     - mode: 500
     - user: root
     - group: root

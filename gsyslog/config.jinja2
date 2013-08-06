@@ -104,7 +104,7 @@ level = DEBUG
 formatter = debug
 args = ()
 
-{% if not pillar['debug'] %}
+{% if not pillar['debug']|default(False) %}
 # filter noisy (and useless) cron & ssh PAM session handling
 # SSH still log properly who get in
 [filter_pam_unix]

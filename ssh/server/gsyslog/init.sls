@@ -3,7 +3,7 @@ include:
 
 /etc/gsyslog.d/ssh.conf:
   file:
-{% if not pillar['debug'] and 'shinken_pollers' in pillar %}
+{% if not pillar['debug']|default(False) and 'shinken_pollers' in pillar %}
     - managed
     - template: jinja
     - source: salt://ssh/server/gsyslog/config.jinja2

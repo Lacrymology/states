@@ -15,3 +15,9 @@ mariadb:
     - require:
       - pkg: python-apt
       - pkg: python-software-properties
+  pkg:
+    - installed
+    - name: mysql-common
+    - version: 5.5.31+maria-1~precise
+    - require:
+      - pkgrepo: mariadb

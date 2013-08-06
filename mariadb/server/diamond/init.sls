@@ -33,12 +33,22 @@ mysql_diamond_resources:
         [[mysql]]
         exe = ^\/usr\/sbin\/mysqld
 
+libmysqlclient18:
+  pkg:
+    - installed
+    - version: 5.5.31+maria-1~precise
+    - require:
+      - pkgrepo: mariadb
+      - cmd: apt_sources
+      - pkg: mariadb
+
 libmariadbclient-dev:
   pkg:
     - installed
     - require:
       - pkgrepo: mariadb
       - cmd: apt_sources
+      - pkg: libmysqlclient18
 
 diamond_mysql_python:
   file:

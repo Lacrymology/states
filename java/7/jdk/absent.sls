@@ -5,3 +5,5 @@ openjdk-7-jdk:
 openjdk-7-jre:
   pkg:
     - purged
+    - require:
+      - pkg: openjdk-7-jdk

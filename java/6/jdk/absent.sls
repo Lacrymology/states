@@ -8,3 +8,5 @@ openjdk_jre:
   pkg:
     - purged
     - name: openjdk-6-jre
+    - require:
+      - pkg: openjdk_jdk

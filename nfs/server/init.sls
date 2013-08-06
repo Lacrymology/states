@@ -43,28 +43,6 @@ include:
     - require:
       - pkg: nfs-kernel-server
 
-/etc/hosts.allow:
-  file:
-    - managed
-    - user: root
-    - group: root
-    - mode: 400
-    - template: jinja
-    - source: salt://nfs/server/allow.jinja2
-    - require:
-      - pkg: nfs-kernel-server
-
-/etc/hosts.deny:
-  file:
-    - managed
-    - user: root
-    - group: root
-    - mode: 400
-    - template: jinja
-    - source: salt://nfs/server/deny.jinja2
-    - require:
-      - pkg: nfs-kernel-server
-
 /etc/default/nfs-kernel-server:
   file:
     - managed
@@ -88,3 +66,21 @@ nfs-kernel-server:
       - pkg: nfs-kernel-server
       - file: /etc/default/nfs-kernel-server
       - file: /etc/exports
+
+{%- set allow = salt['pillar.get']('nfs:allow', []) -%}
+{%- set deny = salt['pillar.get']('nfs:deny', 'ALL') -%}
+{%- set type2clients = {'allow': allow,
+                        'deny': deny} %}
+
+{%- for t in type2clients %}
+  {%- for service in 'portmap', 'lockd', 'rquotad', 'mountd', 'statd' %}
+nfs_{{ service }}_{{ t }}:
+  tcp_wrappers:
+    - present
+    - type: {{ t }}
+    - name: {{ type2clients[t] }}
+    - service: {{ service }}
+    - require:
+      - pkg: nfs-kernel-server
+  {%- endfor %}
+{%- endfor %}

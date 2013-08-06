@@ -21,3 +21,12 @@ mariadb:
     - version: 5.5.31+maria-1~precise
     - require:
       - pkgrepo: mariadb
+      - pkg: libmysqlclient18
+
+{#- specify version to prevent conflict with mysql #}
+libmysqlclient18:
+  pkg:
+    - installed
+    - version: 5.5.31+maria-1~precise
+    - require:
+      - pkgrepo: mariadb

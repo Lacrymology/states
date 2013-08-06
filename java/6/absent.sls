@@ -1,6 +1,3 @@
-include:
-  - java.absent
-
 remove_java_6_env:
   cmd:
     - run

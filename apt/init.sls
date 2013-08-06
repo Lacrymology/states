@@ -8,7 +8,11 @@ Mandatory Pillar
 ----------------
 
 message_do_not_modify: Warning message to not modify file
-ubuntu_mirror: ubuntu mirror will be used. Default: mirror.anl.gov/pub/ubuntu
+apt:
+  sources: |
+    deb http://mirror.anl.gov/pub/ubuntu/ {{ grains['oscodename'] }} main restricted universe multiverse
+    deb http://security.ubuntu.com/ubuntu {{ grains['oscodename'] }}-security main restricted universe multiverse
+    deb http://archive.canonical.com/ubuntu {{ grains['oscodename'] }} partner
 
 Optional Pillar
 ---------------
@@ -39,8 +43,6 @@ proxy_server: If True, the specific HTTP proxy server (without authentication)
 
 {% set backup = '/etc/apt/sources.list.salt-backup' %}
 
-{%- set all_suites = 'main restricted universe multiverse' %}
-{%- set mirror = salt['pillar.get']('ubuntu_mirror', 'mirror.anl.gov/pub/ubuntu') %}
 apt_sources:
   file:
     - managed
@@ -51,12 +53,7 @@ apt_sources:
     - mode: 444
     - contents: |
         # {{ pillar['message_do_not_modify'] }}
-        deb http://{{ mirror }}/ {{ grains['oscodename'] }} {{ all_suites }}
-        deb http://{{ mirror }}/ {{ grains['oscodename'] }}-updates {{ all_suites }}
-        deb http://{{ mirror }}/ {{ grains['oscodename'] }}-backports {{ all_suites }}
-        deb http://security.ubuntu.com/ubuntu {{ grains['oscodename'] }}-security {{ all_suites }}
-        deb http://archive.canonical.com/ubuntu {{ grains['oscodename'] }} partner
-        {{ salt['pillar.get']('apt:extend', '') | indent(8) }}
+        {{ pillar['apt']['sources'] | indent(8) }}
     - require:
       - file: /etc/apt/apt.conf.d/99local
 {% if salt['file.file_exists'](backup) %}

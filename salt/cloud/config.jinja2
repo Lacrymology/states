@@ -1,7 +1,7 @@
 # {{ pillar['message_do_not_modify'] }}
 script: bootstrap_salt
 minion:
-  master: {{ salt['master'] }}
+  master: {{ pillar['salt']['master'] }}
 
 log_file: file:///dev/log
 

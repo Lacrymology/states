@@ -65,6 +65,7 @@ mysql-server:
     - name: mariadb-server
     - require:
       - pkgrepo: mariadb
+      - pkg: mariadb
       - file: /etc/mysql/my.cnf
       - debconf: mysql-server
   service:

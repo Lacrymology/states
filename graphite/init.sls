@@ -251,15 +251,15 @@ graphite_settings:
       - module: graphite-web
   postgres_user:
     - present
-    - name: {{ pillar['graphite']['web']['db']['name'] }}
+    - name: {{ salt['pillar.get']('graphite:web:db:name', 'graphite') }}
     - password: {{ pillar['graphite']['web']['db']['password'] }}
     - runas: postgres
     - require:
       - service: postgresql
   postgres_database:
     - present
-    - name: {{ pillar['graphite']['web']['db']['name'] }}
-    - owner: {{ pillar['graphite']['web']['db']['username'] }}
+    - name: {{ salt['pillar.get']('graphite:web:db:name', 'graphite') }}
+    - owner: {{ salt['pillar.get']('graphite:web:db:username', 'graphite') }}
     - runas: postgres
     - require:
       - postgres_user: graphite_settings

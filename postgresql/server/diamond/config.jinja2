@@ -3,5 +3,5 @@
 enabled = True
 
 user = diamond
-password = {{ pillar['postgresql']['diamond'] }}
+password = {{ salt['password.pillar']('postgresql:diamond') }}
 host = 127.0.0.1

@@ -46,14 +46,15 @@ openssh-client:
     - latest
     - require:
       - cmd: apt_sources
-{% if pillar['deployment_key_source']|default(False) %}
-      - file: {{ root_home }}/.ssh/id_{{ pillar['deployment_key_source']['type'] }}
+{% if pillar['deployment_key']|default(False) %}
+      - file: {{ root_home }}/.ssh/id_{{ pillar['deployment_key']['type'] }}
 
 root_ssh_private_key:
   file:
     - managed
-    - name: {{ root_home }}/.ssh/id_{{ pillar['deployment_key_source']['type'] }}
-    - source: {{ pillar['deployment_key_source']['source'] }}
+    - name: {{ root_home }}/.ssh/id_{{ pillar['deployment_key']['type'] }}
+    - contents: |
+        {{ pillar['deployment_key']['contents'] | indent(8) }}
     - user: root
     - group: root
     - mode: 400

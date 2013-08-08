@@ -1,6 +1,7 @@
-/usr/local/bin/ffmpeg:
+ffmpeg:
   file:
     - absent
+    - name: /usr/local/bin/ffmpeg
 
 /usr/local/bin/ffprobe:
   file:

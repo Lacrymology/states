@@ -2,9 +2,10 @@
  Uninstall uWSGI Web app server.
  #}
 
-uwsgi:
+uwsgi_emperor:
   service:
     - dead
+    - name: uwsgi
 
 {% for file in ('/etc/uwsgi', '/etc/init/uwsgi.conf', '/var/lib/uwsgi', '/usr/local/uwsgi') %}
 {{ file }}:

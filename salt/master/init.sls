@@ -81,7 +81,7 @@ salt-master:
   service:
     - running
     - enable: True
-    - order: 50
+    - order: 90
     - require:
       - pkg: git
       - service: rsyslog

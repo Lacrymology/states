@@ -1,9 +1,10 @@
 {#
  Diamond statistics for RabbitMQ
 #}
-/etc/diamond/collectors/RabbitMQCollector.conf:
+diamond_rabbitmq:
   file:
     - absent
+    - name: /etc/diamond/collectors/RabbitMQCollector.conf
 
 /usr/local/diamond/salt-pyrabbit-requirements.txt:
   file:

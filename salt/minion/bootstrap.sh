@@ -23,13 +23,15 @@ fi
 # force HOME to be root user one
 export HOME=`cat /etc/passwd | grep ^root\: | cut -d ':' -f 6`
 
+# if you change the following section, please also change
+# salt/cloud/bootstrap.sh
 apt-get install -y python-software-properties
 apt-add-repository -y ppa:saltstack/salt
-
 echo "deb http://saltinwound.org/ubuntu/0.15.3/ `lsb_release -c -s` main" > /etc/apt/sources.list.d/saltstack-salt-`lsb_release -c -s`.list
 apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0E27C0A6
 apt-get update
 apt-get install -y --force-yes salt-minion
+# end of section
 
 # create salt minion config
 echo """id: $1

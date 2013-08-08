@@ -9,3 +9,4 @@ mysql-client:
     - require:
       - cmd: apt_sources
       - pkgrepo: mariadb
+      - pkg: mariadb

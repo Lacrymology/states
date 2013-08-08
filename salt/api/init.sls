@@ -21,6 +21,7 @@ salt_api:
 user_{{ user }}:
   user:
     - present
+    - name: {{ user }}
     - groups:
       - salt_api
     - home: /home/{{ user }}

@@ -4,6 +4,10 @@ libreoffice:
   file:
     - absent
     - name: /etc/apt/sources.list.d/ppa.launchpad.net-libreoffice_libreoffice-4-0_ubuntu-precise.list
+  cmd:
+    - run
+    - name: 'apt-key del 1378B444'
+    - onlyif: apt-key list | grep -q 1378B444
 
 kill_soffice:
   cmd:

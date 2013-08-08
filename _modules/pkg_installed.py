@@ -91,7 +91,8 @@ def revert():
     if purge:
         # until 0.16 is stable, we have to use that dirty trick
         ret['changes']['purged'] = []
-        purge_cmd = 'apt-get -q -y purge {0}'.format(' '.join(purge))
+        purge_cmd = 'apt-get -q -y --force-yes purge {0}'.format(
+            ' '.join(purge))
         out = __salt__['cmd.run_all'](purge_cmd)
         if out['retcode'] != 0:
             ret['result'] = False

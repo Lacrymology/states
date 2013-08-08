@@ -1,3 +1,4 @@
-/etc/diamond/collectors/NtpdCollector.conf:
+diamond_ntp:
   file:
     - absent
+    - name: /etc/diamond/collectors/NtpdCollector.conf

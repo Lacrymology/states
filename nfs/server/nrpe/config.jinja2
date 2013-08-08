@@ -1,5 +1,6 @@
 # {{ pillar['message_do_not_modify'] }}
+{%- set procs = salt['pillar.get']('nfs:procs', 8) %}
 command[nfsd4_procs]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u root -C nfsd4
 command[nfsd4_callbacks_procs]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u root -C nfsd4_callbacks
-command[nfsd_procs]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u root -C nfsd
+command[nfsd_procs]=/usr/lib/nagios/plugins/check_procs -c {{ procs }}:{{ procs }} -u root -C nfsd
 command[nfs_rpcbind_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 111

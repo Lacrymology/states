@@ -3,9 +3,11 @@
 -#}
 
 include:
-  - diamond
-  - python.dev
   - apt
+  - diamond
+  - mariadb
+  - python.dev
+  - salt.minion.diamond
 
 mysql_diamond_collector:
   file:
@@ -35,7 +37,9 @@ libmariadbclient-dev:
   pkg:
     - installed
     - require:
+      - pkgrepo: mariadb
       - cmd: apt_sources
+      - pkg: mariadb
 
 diamond_mysql_python:
   file:

@@ -1,6 +1,7 @@
-{#
+{#-
  Nagios NRPE check for Salt-API Server
-#}
+-#}
+{%- set ssl = pillar['salt_master']['ssl']|default(False) -%}
 include:
   - nrpe
   - salt.master.nrpe
@@ -9,9 +10,9 @@ include:
   - nginx.nrpe
   - pip.nrpe
   - rsyslog.nrpe
-{% if pillar['salt_master']['ssl']|default(False) %}
+{%- if ssl %}
   - ssl.nrpe
-{% endif %}
+{%- endif %}
 
 /etc/nagios/nrpe.d/salt-api.cfg:
   file:
@@ -36,10 +37,14 @@ include:
       - pkg: nagios-nrpe-server
     - context:
       deployment: salt_api
+{%- if ssl %}
       http_result: 301 Moved
       https_result: 401 Unauthorized
+{%- else %}
+      http_result: 401 Unauthorized
+{%- endif %}
       domain_name: {{ pillar['salt_master']['hostnames'][0] }}
-      https: {{ pillar['salt_master']['ssl']|default(False) }}
+      https: {{ ssl }}
 
 extend:
   nagios-nrpe-server:

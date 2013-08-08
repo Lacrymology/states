@@ -11,6 +11,7 @@ Run postfix-stats as syslog destination
 
 include:
   - diamond
+
 postfix_diamond_collector:
   file:
     - managed

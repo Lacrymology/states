@@ -1,6 +1,7 @@
 {#
  Remove Diamond statistics for Nginx
 #}
-/etc/diamond/collectors/NginxCollector.conf:
+nginx_diamond_collector:
   file:
     - absent
+    - name: /etc/diamond/collectors/NginxCollector.conf

@@ -1,10 +1,9 @@
-{{ opts['cachedir'] }}/requests-requirements.txt:
+requests:
   file:
     - absent
-
-{% if salt['cmd.has_exec']('pip') %}
-requests:
+    - name: {{ opts['cachedir'] }}/requests-requirements.txt
+{%- if salt['cmd.has_exec']('pip') %}
   pip:
     - removed
     - order: 1
-{% endif %}
+{%- endif %}

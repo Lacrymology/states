@@ -3,13 +3,17 @@ include:
   - apt
   - bbb.redis
   - ffmpeg
-  - java
+{% if grains['osrelease']|float < 12.04 %}
+  - java.6
+{% else %}
+  - java.7
+{% endif %}
   - local
   - locale
   - mscorefonts
   - nginx
   - redis
-  - tomcat
+  - tomcat.6
 
 libreoffice:
   apt_repository:
@@ -99,7 +103,7 @@ bigbluebutton:
       - archive: ffmpeg
       - module: redis_package
       - service: redis
-      - service: tomcat6
+      - service: tomcat
       - service: nginx
       - file: nginx_sysv_upstart
 {% for i in ('ruby', 'ri', 'irb', 'erb', 'rdoc', 'gem') %}

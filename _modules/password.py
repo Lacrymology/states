@@ -43,7 +43,7 @@ def generate(name, length=20):
     '''
     key_name = '-'.join((__virtual__(), name))
     try:
-        return __salt__['data.value'](key_name)
+        return __salt__['data.getval'](key_name)
     except KeyError:
         pass
     password = _generate_random_password(length)
@@ -55,4 +55,7 @@ def pillar(pillar_path, length=20):
     '''
     Return a random password if `pillar_path` does not exist.
     '''
-    return __salt__['pillar.get'](pillar_path, generate(pillar_path, length))
+    pwd = __salt__['pillar.get'](pillar_path, None)
+    if pwd is not None:
+        return pwd
+    return generate(pillar_path, length)

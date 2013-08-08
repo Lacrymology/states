@@ -9,13 +9,15 @@ CONF_ROOT = os.path.dirname(__file__)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': '{{ pillar['sentry']['db']['name'] }}',
-        'USER': '{{ pillar['sentry']['db']['username'] }}',
-        'PASSWORD': '{{ pillar['sentry']['db']['password'] }}',
-        'HOST': '{{ pillar['sentry']['db']['host'] }}',
+        'NAME': '{{ salt['pillar.get']('sentry:db:name', 'sentry') }}',
+        'USER': '{{ salt['pillar.get']('sentry:db:username', 'sentry') }}',
+        'PASSWORD': '{{ salt['password.pillar']('sentry:db:password') }}',
+        'HOST': '{{ salt['pillar.get']('sentry:db:host') }}',
         'PORT': '5432',
     }
 }
+
+SENTRY_KEY = '{{ salt['password.pillar']('sentry:django_key', 50) }}'
 
 {#CACHE_PREFIX = 'sentry'#}
 {#CACHE_TIMEOUT = 300#}
@@ -30,7 +32,6 @@ DATABASES = {
 {#}#}
 {#JOHNNY_MIDDLEWARE_KEY_PREFIX='sentry'#}
 
-SENTRY_KEY = '{{ pillar['sentry']['django_key'] }}'
 
 # Set this to false to require authentication
 SENTRY_PUBLIC = False

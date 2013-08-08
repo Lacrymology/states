@@ -179,8 +179,8 @@ rabbitmq-server:
 {#      - service: rabbitmq-server#}
   rabbitmq_user:
     - present
-    - name: {{ pillar['rabbitmq']['monitor']['user'] }}
-    - password: {{ pillar['rabbitmq']['monitor']['password'] }}
+    - name: {{ salt['pillar.get']('rabbitmq:monitor:user', salt['pillar.get']('salt_monitor') )}} 
+    - password: {{ salt['password.pillar']('rabbitmq:monitor:password') }}
     - force: True
     - require:
       - service: rabbitmq-server

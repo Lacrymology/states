@@ -8,14 +8,14 @@ command[elasticsearch_procs]=/usr/lib/nagios/plugins/check_procs -u elasticsearc
     {#- take 1 off the length to remove the _network key -#}
     {%- set nodes_total = nodes_total - 1 + item[1]|length -%}
     {%- if loop.last -%}
-        {%- if origin_state|default("elasticsearch") == 'graylog2' -%}
+        {%- if origin_state|default("elasticsearch") == 'graylog2' %}
 command[graylog2_elasticsearch_cluster]=/usr/lib/nagios/plugins/check_elasticsearch_cluster.py -c {{ nodes_total }}:{{ nodes_total }}
-        {%- else -%}
+        {%- else %}
 command[elasticsearch_cluster]=/usr/lib/nagios/plugins/check_elasticsearch_cluster.py -c {{ nodes_total }}:{{ nodes_total }}
         {%- endif -%}
     {%- endif -%}
-{%- endfor %}
-{%- set state_pillar = salt['pillar.get']('elasticsearch:cluster:nodes:{0}:{1}'.format(grains['id'], origin_state|default("elasticsearch")), {}) %}
+{%- endfor -%}
+{%- set state_pillar = salt['pillar.get']('elasticsearch:cluster:nodes:{0}:{1}'.format(grains['id'], origin_state|default("elasticsearch")), {}) -%}
 {%- if origin_state|default("elasticsearch") == 'graylog2.server' -%}
     {%- if state_pillar['http']|default(True) %}
 command[graylog2_elasticsearch_port_http]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 9200
@@ -23,7 +23,7 @@ command[graylog2_elasticsearch_port_http]=/usr/lib/nagios/plugins/check_tcp -H 1
 command[graylog2_elasticsearch_port_http]=/bin/echo "HTTP OK: Graylog2 is configured to not serve HTTP."
     {%- endif %}
 command[graylog2_elasticsearch_port_transport]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p {{ state_pillar['port']|default(9300) }}
-{%- else %}
+{%- else -%}
     {%- if state_pillar['http']|default(True) %}
 command[elasticsearch_port_http]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 9200
     {%- else %}

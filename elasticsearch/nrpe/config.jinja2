@@ -8,7 +8,7 @@ command[elasticsearch_procs]=/usr/lib/nagios/plugins/check_procs -u elasticsearc
     {#- take 1 off the length to remove the _network key -#}
     {%- set nodes_total = nodes_total - 1 + item[1]|length -%}
     {%- if loop.last -%}
-        {%- if origin_state|default("elasticsearch") == 'graylog2' %}
+        {%- if origin_state|default("elasticsearch") == 'graylog2.server' %}
 command[graylog2_elasticsearch_cluster]=/usr/lib/nagios/plugins/check_elasticsearch_cluster.py -c {{ nodes_total }}:{{ nodes_total }}
         {%- else %}
 command[elasticsearch_cluster]=/usr/lib/nagios/plugins/check_elasticsearch_cluster.py -c {{ nodes_total }}:{{ nodes_total }}

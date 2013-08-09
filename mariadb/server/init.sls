@@ -67,6 +67,7 @@ mysql-server:
       - pkg: mariadb
       - file: /etc/mysql/my.cnf
       - debconf: mysql-server
+      - pkg: python-mysqldb
   service:
     - name: mysql
     - running

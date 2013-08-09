@@ -98,3 +98,5 @@ extend:
       - watch:
         - file: /etc/salt/minion.d/mysql.conf
         - pkg: python-mysqldb
+      - require:
+        - service: mysql-server

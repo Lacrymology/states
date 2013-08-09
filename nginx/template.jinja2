@@ -4,6 +4,9 @@
 {%- set root_path= root %}
 {%- set static_dirs = statics|default([]) %}
 
+{%- block header %}
+{%- endblock %}
+
 {%- block upstream %}
 upstream {{ name }} {
     server unix:///var/lib/uwsgi/{{ name }}.sock;
@@ -34,7 +37,11 @@ server {
     server_name {% for hostname in pillar[name]['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
     root {{ root_path }};
 
-{%- block static %}
+{#- reserve for directives should go before all other location #}
+{%- block first_location %}
+{%- endblock %}
+
+{%- block static_location %}
 {% for dir in static_dirs %}
     location /{{ dir }}/ {
         expires max;
@@ -43,7 +50,7 @@ server {
 {%- endfor %}
 {%- endblock %}
 
-{%- block location_root %}
+{%- block root_location  %}
 {#- magic number: php(14), ruby(7) #}
     location / {
         gzip off;

@@ -3,13 +3,14 @@
 To use this template, extends it and define blocks that you want to replace,
 This template need:
 - pillar data for this app
-- context variable(s): chdir, appname, [wsgi_file]
+- context variable(s): chdir, appname, [wsgi_file], [virtualenv]
 [something] means optional
 #}
 {%- set dir = chdir %}
 {%- set wsgi = wsgi_file|default(False) %}
 {%- set name = appname %}
 {%- set web = pillar[name] %}
+{%- set venv = virtualenv %}
 [uwsgi]
 {%- block header %}
 {%- endblock %}
@@ -41,6 +42,9 @@ stats = /var/lib/uwsgi/{{ name }}-stats.sock
 chdir = {{ dir }}
 {%- if wsgi %}
 wsgi-file = {{ wsgi }}
+{%- endif %}
+{%- if venv %}
+virtualenv = {{ venv }}
 {%- endif %}
 threaded-logger = true
 no-orphans = true

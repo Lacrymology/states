@@ -1,0 +1,18 @@
+sentry_nginx_http:
+  description: Sentry HTTP Protocol
+
+sentry_nginx_https:
+  description: Sentry HTTPS Protocol
+
+sentry_nginx_https_certificate:
+  description: Sentry HTTPS Certificate Expiration
+  check_interval: 1440 {#- only need to check https certificate each day #}
+
+sentry_uwsgi_master:
+  description: Sentry uWSGI Master Process
+
+sentry_uwsgi_worker:
+  description: Sentry uWSGI Workers Process
+
+sentry_uwsgi_ping:
+  description: Sentry uWSGI Ping

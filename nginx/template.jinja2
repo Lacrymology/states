@@ -1,0 +1,65 @@
+# {{ pillar['message_do_not_modify'] }}
+{#- var passed by context #}
+{%- set name = appname %}
+{%- set root_path= root %}
+
+{%- set static_dirs = statics|default('') %}
+{%- if static_dirs %}
+{%- set static_dirs = static_dirs|replace(' ','') %}
+{%- set static_dirs = static_dirs.split(',') %}
+{%- endif %}
+
+{%- block upstream %}
+upstream {{ name }} {
+    server unix:///var/lib/uwsgi/{{ name }}.sock;
+}
+{%- endblock %}
+
+server {
+    listen 80;
+{% if pillar[name]['ssl']|default(False) %}
+{% if pillar[name]['ssl_redirect']|default(False) %}
+    {# if https, redirect http port 80 to https port 443 #}
+    server_name {% for hostname in pillar[name]['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+    return 301 https://{{ pillar[name]['hostnames'][0] }}$request_uri;
+}
+{# https server #}
+server {
+{% endif %}{# redirect http to https #}
+    listen 443 ssl;
+    ssl_certificate /etc/ssl/{{ pillar[name]['ssl'] }}/chained_ca.crt;
+    ssl_certificate_key /etc/ssl/{{ pillar[name]['ssl'] }}/server.pem;
+    ssl_client_certificate /etc/ssl/{{ pillar[name]['ssl'] }}/ca.crt;
+    ssl_ciphers RC4:HIGH:!aNULL:!MD5;
+    ssl_prefer_server_ciphers on;
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout 10m;
+{% endif %}
+{# web app logic #}
+    server_name {% for hostname in pillar[name]['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+    root {{ root_path }};
+
+{%- block static %}
+{% for dir in static_dirs %}
+    location /{{ dir }}/ {
+        expires max;
+        autoindex off;
+    }
+{%- endfor %}
+{%- endblock %}
+
+{%- block location_root %}
+{#- magic number: php(14), ruby(7) #}
+    location / {
+        gzip off;
+        include uwsgi_params;
+        uwsgi_pass {{ name }};
+        {%- if uwsgi|default(False) %}
+        uwsgi_modifier1 {{ uwsgi }};
+        {%- endif %}
+    }
+{%- endblock %}
+
+{%- block footer %}
+{%- endblock %}
+}

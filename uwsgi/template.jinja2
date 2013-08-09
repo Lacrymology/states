@@ -40,7 +40,7 @@ socket = /var/lib/uwsgi/{{ name }}.sock
 stats = /var/lib/uwsgi/{{ name }}-stats.sock
 chdir = {{ dir }}
 {%- if wsgi %}
-wsgi_file = {{ wsgi }}
+wsgi-file = {{ wsgi }}
 {%- endif %}
 threaded-logger = true
 no-orphans = true

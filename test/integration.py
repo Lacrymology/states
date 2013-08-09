@@ -253,6 +253,7 @@ class TestStateMeta(type):
                     else:
                         mcs.add_test_integration(attrs, state)
 
+        attrs['absent'].sort()
         return super(TestStateMeta, mcs).__new__(mcs, name, bases, attrs)
 
 

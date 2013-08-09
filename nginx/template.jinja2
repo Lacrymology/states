@@ -2,12 +2,7 @@
 {#- var passed by context #}
 {%- set name = appname %}
 {%- set root_path= root %}
-
-{%- set static_dirs = statics|default('') %}
-{%- if static_dirs %}
-{%- set static_dirs = static_dirs|replace(' ','') %}
-{%- set static_dirs = static_dirs.split(',') %}
-{%- endif %}
+{%- set static_dirs = statics|default([]) %}
 
 {%- block upstream %}
 upstream {{ name }} {

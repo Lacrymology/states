@@ -93,7 +93,7 @@ moinmoin_config:
     - user: www-data
     - group: www-data
     - mode: 440
-    - source: salt://moinmoin/uwsgi.jinja2
+    - source: salt://uwsgi/template.jinja2
     - context:
       chdir: /usr/local/moinmoin/share/moin/
       appname: moinmoin
@@ -120,7 +120,7 @@ moinmoin_config:
     - user: www-data
     - group: www-data
     - mode: 440
-    - source: salt://moinmoin/nginx.jinja2
+    - source: salt://nginx/template.jinja2
     - context:
       appname: moinmoin
       root: {{ root_dir }}/share/moin

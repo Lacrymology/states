@@ -4,7 +4,9 @@ optional pillar:
 
 moinmoin:
   sitename: Your company name
-  superusers: ['spidermand', 'batman']
+  superusers:
+    - spiderman
+    - batman
 
 #}
 include:

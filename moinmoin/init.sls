@@ -7,6 +7,11 @@ moinmoin:
   superusers:
     - spiderman
     - batman
+  openldap:
+    uri: 'ldap://example.com
+    binddn: 'cn=admin,dc=example,dc=com'
+    bindpw: 'passwordhere'
+    basedn: 'dc=example,dc=com'
 
 #}
 include:
@@ -15,6 +20,9 @@ include:
   - local
   - nginx
   - pip
+{%- if salt['pillar.get']('moinmoin:openldap', False) %}
+  - python.dev
+{%- endif %}
   - web
 
 {%- set root_dir = '/usr/local/moinmoin' %}
@@ -37,22 +45,32 @@ moinmoin:
     - source: salt://moinmoin/requirements.jinja2
     - require:
       - virtualenv: moinmoin
-  module:
-    - wait
-    - name: pip.install
-    - upgrade: True
-    - bin_env: /usr/local/moinmoin/bin/pip
-    - requirements: /usr/local/moinmoin/salt-requirements.txt
-    - require:
-      - virtualenv: moinmoin
-    - watch:
-      - file: moinmoin
   cmd:
     - wait
     - name: find /usr/local/moinmoin -name '*.pyc' -delete
     - stateful: False
     - watch:
       - module: moinmoin
+  module:
+    - wait
+    - name: pip.install
+    - upgrade: True
+    - bin_env: /usr/local/moinmoin/bin/pip
+    - requirements: /usr/local/moinmoin/salt-requirements.txt
+    - watch:
+      - file: moinmoin
+    - require:
+      - virtualenv: moinmoin
+{%- if salt['pillar.get']('moinmoin:openldap', False) %}
+      - pkg: moinmoin
+      - pkg: python-dev
+  pkg:
+    - installed
+    - pkgs:
+      - libldap2-dev
+      - libsasl2-dev
+      - libssl-dev
+{%- endif %}
 
 {{ root_dir }}/share/moin:
   file:

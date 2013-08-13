@@ -3,5 +3,4 @@
 
 NOW=`date '+%Y-%m-%d-%H_%M_%S'`
 export TERM=dumb
-sudo -H -i -u postgres -g postgres pg_dumpall > /tmp/all-$NOW.sql
-gzip /tmp/all-$NOW.sql
+sudo -H -i -u postgres -g postgres pg_dumpall | xz > /tmp/all-$NOW.sql.xz

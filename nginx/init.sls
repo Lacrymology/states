@@ -106,7 +106,7 @@ nginx_dependencies:
       - cmd: apt_sources 
 
 {%- set version = '1.4.1' %}
-{%- set filename = 'nginx_{0}-1~{1}_{2}.deb'.format(version, grains['lsb_codename'], grains['debian_arch']) %}
+{%- set filename = 'nginx_{0}-1~{1}_{2}.deb'.format(version, grains['lsb_codename'], salt['grains.get']('debian_arch')) %}
 
 nginx:
   pkg:

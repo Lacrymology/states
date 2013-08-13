@@ -27,7 +27,7 @@ node:
 {# configure amazon ec2 cloud auto-discovery #}
 {% if es['aws']|default(false) %}
 cloud:
-  region: {{ grains['region'] }}
+  region: {{ salt['grains.get']('region') }}
   aws:
     access_key: {{ es['aws']['access_key'] }}
     secret_key: {{ es['aws']['secret_key'] }}
@@ -40,13 +40,13 @@ discovery:
   ec2:
     host_type: private_ip
     any_group: true
-    availability_zones: {{ grains['availabilityZone'] }}
+    availability_zones: {{ salt['grains.get']('availabilityZone') }}
 gateway:
   recover_after_time: 1m
   recover_after_nodes: 1
   type: s3
   s3:
-    bucket: microsigns-{{ grains['region'] }}
+    bucket: microsigns-{{ salt['grains.get']('region') }}
     concurrent_streams: 5
 indices:
   recovery:

@@ -31,6 +31,7 @@ backup-client:
     - managed
     - user: root
     - group: root
+    - mode: 550
     - template: jinja
     - source: salt://backup/client/copy.jinja2
     - require:

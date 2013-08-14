@@ -26,7 +26,7 @@ salt-cloud:
     - skip_verify: True
     - require:
       - pkg: salt
-      - cmd: apt_sources
+      - apt_repository: salt
 
 deploy_script:
   file:

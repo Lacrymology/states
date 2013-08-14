@@ -1,5 +1,6 @@
 include:
   - debian.package_build
+  - redis
 
 {%- set bbb_dir = opts['cachedir'] + "/bbb" -%}
 {%- set redis_dir = bbb_dir + "/redis" -%}
@@ -43,6 +44,7 @@ redis_package:
     - m_name: redis-server-{{ version }}
     - sources:
       - redis-server-{{ version }}: {{ bbb_dir }}/redis-server-{{ version }}_{{ version }}_all.deb
+    - require:
+      - pkg: redis
     - watch:
       - cmd: redis_package
-

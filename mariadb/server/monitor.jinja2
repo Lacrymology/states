@@ -1,0 +1,9 @@
+mysql_procs:
+  description: MariaDB Daemon
+
+mysql_port:
+  description: MariaDB Local Port
+
+mysql_remote_port:
+  check: check_tcp!3306
+  description: MariaDB Remote Port

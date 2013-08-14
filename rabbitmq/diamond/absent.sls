@@ -1,20 +1,10 @@
 {#
  Diamond statistics for RabbitMQ
 #}
-{% if 'graphite_address' in pillar %}
-include:
-  - diamond
-
-extend:
-  diamond:
-    service:
-      - watch:
-        - file: /etc/diamond/collectors/RabbitMQCollector.conf
-{% endif %}
-
-/etc/diamond/collectors/RabbitMQCollector.conf:
+diamond_rabbitmq:
   file:
     - absent
+    - name: /etc/diamond/collectors/RabbitMQCollector.conf
 
 /usr/local/diamond/salt-pyrabbit-requirements.txt:
   file:

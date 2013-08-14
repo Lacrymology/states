@@ -1,3 +1,2 @@
 include:
-  - apt.nrpe
-  - ssh.client.nrpe
+  - pip.nrpe

@@ -7,10 +7,12 @@ Configure APT minimal configuration to get Debian packages from repositories.
 Mandatory Pillar
 ----------------
 
-apt_source: salt://path/to/apt.template.jinja2
 message_do_not_modify: Warning message to not modify file
-
-apt_source: Path to get the /etc/apt/sources.list template.
+apt:
+  sources: |
+    deb http://mirror.anl.gov/pub/ubuntu/ {{ grains['oscodename'] }} main restricted universe multiverse
+    deb http://security.ubuntu.com/ubuntu {{ grains['oscodename'] }}-security main restricted universe multiverse
+    deb http://archive.canonical.com/ubuntu {{ grains['oscodename'] }} partner
 
 Optional Pillar
 ---------------
@@ -49,9 +51,9 @@ apt_sources:
     - user: root
     - group: root
     - mode: 444
-    - source: {{ pillar['apt_source'] }}
-    - context:
-      all_suites: main restricted universe multiverse
+    - contents: |
+        # {{ pillar['message_do_not_modify'] }}
+        {{ pillar['apt']['sources'] | indent(8) }}
     - require:
       - file: /etc/apt/apt.conf.d/99local
 {% if salt['file.file_exists'](backup) %}

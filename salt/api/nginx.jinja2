@@ -29,7 +29,7 @@ server {
     expires max;
     autoindex off;
 
-    location = / {
+    location / {
         proxy_pass http://127.0.0.1:8000;
         proxy_read_timeout 120s;
         expires 0;

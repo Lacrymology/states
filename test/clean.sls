@@ -9,30 +9,6 @@ include:
   - ttys
   - kernel_modules
 
-{%- set root_info = salt['user.info']('root') -%}
-
-{#-
- You can't uninstall sudo, if no root password
- #}
-root:
-  user:
-    - present
-    - shell: {{ root_info['shell'] }}
-    - home: {{ root_info['home'] }}
-    - uid: {{ root_info['uid'] }}
-    - gid: {{ root_info['gid'] }}
-    - enforce_password: True
-    {# password: root #}
-    - password: $6$FAsR0aKa$JoJGdUhaFGY1YxNEBDc8CEJig4L2GpAuAD8mP9UHhjViiJxJC2BTm9vFceEFDbB/yru5dEzLGHAssXthWNvON.
-
-upgrade_pkg:
-  module:
-    - wait
-    - name: pkg.upgrade
-    - refresh: True
-    - watch:
-      - user: root
-
 clean_pkg:
   pkg:
     - purged
@@ -234,9 +210,6 @@ clean_pkg:
       - update-motd
       - vbetool
 {%- endif %}
-    - require:
-      - user: root
-      - module: upgrade_pkg
 
 {% for service in ('acpid', 'console-setup', 'dbus', 'whoopsie') %}
 /var/log/upstart/{{ service }}.log:

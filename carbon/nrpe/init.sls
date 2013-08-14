@@ -2,6 +2,7 @@
  Nagios NRPE check for Carbon
 #}
 include:
+  - graphite.common.nrpe
   - nrpe
   - pip.nrpe
   - logrotate.nrpe

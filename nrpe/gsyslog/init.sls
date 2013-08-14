@@ -1,7 +1,7 @@
 {#
  Gsyslog configuration for Nagios NRPE
 #}
-{% if not pillar['debug'] %}
+{% if not pillar['debug']|default(False) %}
 include:
   - gsyslog
   - gsyslog.nrpe

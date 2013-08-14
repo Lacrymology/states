@@ -1,11 +1,9 @@
-{{ opts['cachedir'] }}/salt-route53-requirements.txt:
+route53:
   file:
     - absent
-{#
-
-{% if salt['cmd.has_exec']('pip') %}
-route53:
+    - name: {{ opts['cachedir'] }}/salt-route53-requirements.txt
+{%- if salt['cmd.has_exec']('pip') %}
   pip:
     - removed
-{% endif %}
-#}
+    - order: 1
+{%- endif %}

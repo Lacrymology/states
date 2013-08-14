@@ -5,7 +5,7 @@ include:
   - apt
 
 {% set version = '0.10.12' %}
-{% set filename = "nodejs_" +  version  + "-1chl1~" +  grains['lsb_codename']  + "1_" +  grains['debian_arch']  + ".deb" %}
+{% set filename = "nodejs_" +  version  + "-1chl1~" +  grains['lsb_codename']  + "1_" + salt['grains.get']('debian_arch') + ".deb" %}
 
 rlwrap:
   pkg:

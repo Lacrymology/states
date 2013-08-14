@@ -93,6 +93,7 @@ proftpd:
   service:
     - running
     - enable: True
+    - order: 50
     - require:
       - postgres_database: proftpd-mod-pgsql
       - cmd: proftpd-users
@@ -127,5 +128,5 @@ proftpd:
     - mode: 770
     - makedirs: True
     - require:
-      - user: web
+      - file: web
 {% endfor %}

@@ -1,11 +1,9 @@
-{{ opts['cachedir'] }}/salt-virtualenv-requirements.txt:
-  file:
-      - absent
-{#
-
-{% if salt['cmd.has_exec']('pip') %}
 virtualenv:
+  file:
+    - absent
+    - name: {{ opts['cachedir'] }}/salt-virtualenv-requirements.txt
+{% if salt['cmd.has_exec']('pip') %}
   pip:
     - removed
+    - order: 1
 {% endif %}
-#}

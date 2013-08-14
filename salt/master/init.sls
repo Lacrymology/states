@@ -69,6 +69,7 @@ salt-master:
       - pkg: git
   pkg:
     - installed
+    - skip_verify: True
     - sources:
 {%- if 'files_archive' in pillar %}
       - salt-master: {{ pillar['files_archive']|replace('file://', '') }}/mirror/salt/{{ master_path }}
@@ -80,6 +81,7 @@ salt-master:
   service:
     - running
     - enable: True
+    - order: 90
     - require:
       - pkg: git
       - service: gsyslog

@@ -1,0 +1,15 @@
+# {{ pillar['message_do_not_modify'] }}
+{%- set providers = salt['pillar.get']('salt:cloud:providers', []) %}
+{%- for alias in providers %}
+{{ alias }}:
+  {%- for attr in providers[alias] %}
+  {%- if providers[alias][attr] is mapping %}
+  {{ attr }}:
+    {%- for i in providers[alias][attr] %}
+    {{ i }}: {{ providers[alias][attr][i] }}
+    {%- endfor %}
+  {%- else %}
+  {{ attr }}: {{ providers[alias][attr] }}
+  {%- endif %}
+  {%- endfor %}
+{% endfor %}

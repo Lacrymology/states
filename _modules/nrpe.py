@@ -39,7 +39,7 @@ def run_check(check_name):
     checks = list_checks()
     logger.debug("Found %d checks", len(checks.keys()))
     ret = {
-        'name': 'run_check',
+        'name': check_name,
         'changes': {},
     }
 

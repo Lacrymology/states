@@ -152,6 +152,7 @@ rabbitmq-server:
   service:
     - running
     - enable: True
+    - order: 50
 {# until https://github.com/saltstack/salt/issues/5027 is fixed, this is required #}
     - sig: beam{% if grains['num_cpus'] > 1 %}.smp{% endif %}
     - require:
@@ -178,8 +179,8 @@ rabbitmq-server:
 {#      - service: rabbitmq-server#}
   rabbitmq_user:
     - present
-    - name: {{ pillar['rabbitmq']['monitor']['user'] }}
-    - password: {{ pillar['rabbitmq']['monitor']['password'] }}
+    - name: {{ salt['pillar.get']('rabbitmq:monitor:user', salt['pillar.get']('salt_monitor') )}} 
+    - password: {{ salt['password.pillar']('rabbitmq:monitor:password') }}
     - force: True
     - require:
       - service: rabbitmq-server

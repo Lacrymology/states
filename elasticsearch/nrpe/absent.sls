@@ -1,18 +1,6 @@
 {#
  Remove Nagios NRPE checks for elasticsearch
  #}
-{% if 'shinken_pollers' in pillar %}
-include:
-  - nrpe
-
-extend:
-  nagios-nrpe-server:
-    service:
-      - watch:
-        - file: /etc/nagios/nrpe.d/elasticsearch.cfg
-        - file: /etc/nagios/nrpe.d/elasticsearch-nginx.cfg
-{% endif %}
-
 /etc/nagios/nrpe.d/elasticsearch.cfg:
   file:
     - absent

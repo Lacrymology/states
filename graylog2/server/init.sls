@@ -3,7 +3,11 @@
  #}
 include:
   - graylog2
-  - java
+{% if grains['osrelease']|float < 12.04 %}
+  - java.6
+{% else %}
+  - java.7
+{% endif %}
   - mongodb
   - apt
   - local
@@ -84,6 +88,7 @@ graylog2-server:
   service:
     - running
     - enable: True
+    - order: 50
     - watch:
       - file: graylog2-server_upstart
       - pkg: openjdk_jre_headless

@@ -1,0 +1,20 @@
+{%- set nrpe_checks = {
+  'free_disks_space': 'All Disks',
+  'free_memory': 'Memory Usage',
+  'load_average': 'Load Average',
+  'logged_users': 'Logged Users',
+  'loopback_interface': 'Loopback Interface',
+  'nrpe_procs': 'NRPE Processes',
+  'total_procs': 'Total Processes',
+  'zombie_procs': 'Zombie Processes',
+}
+-%}
+
+{%- for check in nrpe_checks %}
+{{ check }}:
+  description: {{ nrpe_checks[check] }}
+{% endfor -%}
+
+nrpe-remote-port:
+  description: Remote NRPE Port
+  check: check_tcp!5666

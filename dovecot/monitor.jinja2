@@ -1,0 +1,18 @@
+{%- set dovecot_checks = {
+  'procs': 'Master',
+  'anvil': 'Users connection tracker',
+  'log': 'Logger',
+  'config': 'Config daemon'
+}
+-%}
+
+{%- for check in dovecot_checks %}
+dovecot_{{ check }}:
+  description: Dovecot {{ dovecot_checks[check] }}
+{% endfor -%}
+
+{#- TODO: check remote port? -#}
+{%- for port in ('imap', 'pop3', 'imaps', 'pop3s') %}
+dovecot_port_{{ port }}:
+  description: Dovecot {{ port|upper }} Port
+{% endfor -%}

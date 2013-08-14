@@ -2,9 +2,6 @@
 
 boto==2.6.0
 Django==1.4.5
-    {%- if pillar['sentry']['email']['method'] == "amazon_ses" %}
-django_ses==0.4.1
-    {%- endif -%}
     {%- if 'graphite_address' in pillar %}
 django-statsd-mozilla==0.3.8.7
     {%- endif -%}

@@ -80,7 +80,7 @@ TODO: document AWS pillars
 include:
   - apt
   - cron
-  - java
+  - java.7
 {% if ssl %}
   - ssl
   - nginx
@@ -168,6 +168,7 @@ elasticsearch:
   service:
     - running
     - enable: True
+    - order: 50
     - watch:
       - file: /etc/default/elasticsearch
       - file: /etc/elasticsearch/logging.yml

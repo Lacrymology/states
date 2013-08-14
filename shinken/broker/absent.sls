@@ -14,3 +14,7 @@ shinken-broker:
 /etc/shinken/broker.conf:
   file:
     - absent
+
+/var/lib/shinken/webui.sqlite:
+  file:
+    - absent

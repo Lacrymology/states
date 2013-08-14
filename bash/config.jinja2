@@ -1,6 +1,6 @@
 # {{ pillar['message_do_not_modify'] }}
 export PS1="\[$(tput bold)\]\[$(tput setaf 4)\][\[$(tput setaf 8)\]\t\[$(tput setaf 4)\]] \u\[$(tput setaf 8)\]@\[$(tput setaf 4)\]\h\[$(tput setaf 1)\]
-{%- if 'availabilityZone' in grains -%}
-(\[$(tput setaf 2)\]{{ grains['availabilityZone'] }}:{{ grains['instanceId'] }}\[$(tput setaf 1)\])
+{%- if salt['grains.get']('availabilityZone', False) -%}
+(\[$(tput setaf 2)\]{{ salt['grains.get']('availabilityZone') }}:{{ salt['grains.get']('instanceId') }}\[$(tput setaf 1)\])
 {%- endif -%}
 \[$(tput setaf 8)\]:\[$(tput setaf 4)\]\w\[$(tput setaf 7)\] \[$(tput sgr0)\]"

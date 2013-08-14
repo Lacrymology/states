@@ -27,7 +27,6 @@ mysql:bind: what IP does MariaDB server will bind to. Default: 0.0.0.0
 
 include:
   - apt
-  - salt.minion
   - mariadb
 
 /etc/mysql:
@@ -68,6 +67,7 @@ mysql-server:
       - pkg: mariadb
       - file: /etc/mysql/my.cnf
       - debconf: mysql-server
+      - pkg: python-mysqldb
   service:
     - name: mysql
     - running
@@ -84,19 +84,3 @@ mysql-server:
         'mysql-server/root_password_again': {'type': 'password', 'value': {{ salt['pillar.get']('mysql:password') }}}
     - require:
       - pkg: debconf-utils
-
-/etc/salt/minion.d/mysql.conf:
-  file:
-    - managed
-    - source: salt://mariadb/server/minion.jinja2
-    - template: jinja
-    - mode: 440
-
-extend:
-  salt-minion:
-    service:
-      - watch:
-        - file: /etc/salt/minion.d/mysql.conf
-        - pkg: python-mysqldb
-      - require:
-        - service: mysql-server

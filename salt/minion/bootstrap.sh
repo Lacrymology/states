@@ -40,6 +40,7 @@ log_level: debug""" > $CONFIG
 if [ $LOCAL_MODE -eq 1 ]; then
     echo "Salt master-less (local) mode"
     echo """master: 127.0.0.1
+mysql.default_file: '/etc/mysql/debian.cnf'
 file_client: local
 file_roots:
    base:

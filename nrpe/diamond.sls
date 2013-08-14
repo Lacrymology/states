@@ -19,3 +19,5 @@ nrpe_diamond_resources:
         [[nrpe]]
         exe = ^\/usr\/sbin\/nrpe$
         cmdline = ^\/usr\/lib\/nagios\/plugins\/check_
+        [[init]]
+        exec = ^\/sbin\/init$

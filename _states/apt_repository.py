@@ -155,6 +155,7 @@ def present(address, components, distribution=None, source=False, key_id=None,
         'changes': file_result['changes'],
         'comment': ' and '.join((file_result['comment'], cmd_result['comment']))
     }
+    ret['changes'].update(cmd_result['changes'])
 
     if __opts__['test']:
         ret['result'] = None
@@ -165,7 +166,6 @@ def present(address, components, distribution=None, source=False, key_id=None,
     else:
         log.warning("No changes, don't refresh APT DB.")
 
-    ret['changes'].update(cmd_result['changes'])
     return ret
 
 

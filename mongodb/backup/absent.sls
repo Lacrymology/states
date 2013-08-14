@@ -6,10 +6,6 @@
   file:
     - absent
 
-/usr/local/bin/backup-mongodb-copy:
-  file:
-    - absent
-
 /usr/local/bin/backup-mongodb-all:
   file:
     - absent

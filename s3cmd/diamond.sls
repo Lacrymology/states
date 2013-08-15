@@ -15,4 +15,4 @@ s3cmd_diamond_resources:
     - text:
       - |
         [[s3cmd]]
-        cmdline = ^\/usr\/bin\/python \/usr\/local\/local\/bin\/s3cmd$
+        cmdline = ^\/usr\/bin\/python \/usr\/local\/local\/bin\/s3cmd

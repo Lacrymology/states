@@ -14,6 +14,6 @@ s3cmd:
     - user: root
     - group: root
     - mode: 440
-    - source: salt://s3cmd/s3cfg.jinja
+    - source: salt://s3cmd/config.jinja2
     - require:
       - pkg: s3cmd

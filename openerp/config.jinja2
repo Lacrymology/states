@@ -1,0 +1,11 @@
+# {{ pillar['message_do_not_modify'] }}
+[options]
+{#- 
+WARNING: default master password is 'admin', CHANGE IT after done installing 
+-#}
+db_host = {{ pillar['openerp']['database']['host'] }}
+db_port = {{ pillar['openerp']['database']['port'] }}
+
+
+db_user = {{ pillar['openerp']['database']['user'] }}
+db_password = {{ pillar['openerp']['database']['password'] }}

@@ -8,7 +8,7 @@ s3cmd:
       - cmd: apt_sources
 
 /root/.s3cfg:
-	file:
+  file:
     - managed
     - template: jinja
     - user: root

@@ -30,13 +30,13 @@ openerp-server:
     - require:
       - pkg: libjs-underscore
       - service: postgresql
+      - pip: pil
   service:
     - running
     - name: openerp-server
     - enable: True
     - require:
       - pkg: openerp-server
-      - pip: pil
     - watch:
       - file: /etc/openerp/openerp-server.conf
 

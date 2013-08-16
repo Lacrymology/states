@@ -146,7 +146,7 @@ def records_exists(name, email, token, records):
         data = json.loads(ses.get(BASE_URL + path).content)
         if 'error' in data:
             ret['result'] = False
-            ret['comment'] = data['error']
+            ret['comment'] = '{0}: {1}'.format(domain, data['error'])
             return ret
         data = [i['record'] for i in data]
         existing_records[domain] = data

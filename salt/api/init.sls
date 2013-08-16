@@ -16,7 +16,6 @@ salt_api:
   group:
     - present
 
-{# You need to set the password for each of those users #}
 {% for user in pillar['salt_master']['external_auth']['pam'] %}
 user_{{ user }}:
   user:
@@ -28,6 +27,13 @@ user_{{ user }}:
     - shell: /bin/false
     - require:
       - group: salt_api
+  module:
+    - wait
+    - name: shadow.set_password
+    - m_name: {{ user }}
+    - password: {{ salt['password.encrypt_shadow'](pillar['salt_master']['external_auth']['pam'][user]) }}
+    - watch:
+      - user: user_{{ user }}
 {% endfor %}
 
 /etc/salt/master.d/ui.conf:

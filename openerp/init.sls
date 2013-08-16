@@ -16,10 +16,10 @@ openerp:
 
 -#}
 include:
-  - python.dev
   - nginx
-  - pip
+  - pip  
   - postgresql.server
+  - python.dev
   - underscore
 
 {%- set version= pillar['openerp']['version']|default(6.1) %}

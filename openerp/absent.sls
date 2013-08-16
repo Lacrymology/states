@@ -25,6 +25,8 @@ openerp:
     - require:
       - pkg: openerp6.1-full
 
-/etc/nginx/conf.d/openerp.conf:
+{%- for file in ('/etc/nginx/conf.d/openerp.conf', '/var/log/nginx/openerp_access.log', '/var/log/openerp-server.log') %}
+{{ file }}:
   file:
     - absent
+{%- endfor %}

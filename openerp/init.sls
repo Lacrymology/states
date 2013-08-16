@@ -2,24 +2,22 @@
 Installing OpenERP
 ===============
 
-Mandatory Pillar
-----------------
-
-message_do_not_modify: Warning message to not modify file
-
+Pillar (optional)
+------
 openerp:
   version: 6.1
   nginx:
     server_name: localhost
   database:
-    host: 127.0.0.1
-    port: 5432
+    host: False     # set 'False' if run postgresql in local
+    port: False
     user: openerp
     password: False
 
 -#}
 include:
   - nginx
+  - pip
   - postgresql.server
   - underscore
 
@@ -33,19 +31,27 @@ openerp-server:
       - service: postgresql
   service:
     - running
+    - name: openerp-server
     - enable: True
     - require:
       - pkg: openerp-server
+      - pip: pil
     - watch:
       - file: /etc/openerp/openerp-server.conf
+
+pil:
+  pip:
+    - installed
+    - require:
+      - module: pip
 
 /etc/openerp/openerp-server.conf:
   file:
     - managed
     - source: salt://openerp/config.jinja2
-    - user: root
-    - group: root
-    - mode: 440
+    - user: openerp
+    - group: openerp
+    - mode: 640
     - template: jinja
     - require:
       - pkg: openerp-server

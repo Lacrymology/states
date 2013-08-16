@@ -151,7 +151,6 @@ gitlab:
     {%- else %}
     - source: salt://gitlab/gitlab-{{ version }}.tar.gz
     {%- endif %}
-
     - source_hash: md5=151be72dc60179254c58120098f2a84e
     - archive_format: tar
     - tar_options: z
@@ -202,13 +201,13 @@ rename_gitlab:
       - user: git
       - group: git
 
-{# {%- for dir in 'log', 'tmp', 'tmp/pids', 'tmp/sockets', 'public/uploads' %} #}
+{#{%- for dir in 'log', 'tmp', 'tmp/pids', 'tmp/sockets', 'public/uploads' %} #}
 {%- for dir in ('log', 'tmp', 'public/uploads') %}
 /home/git/gitlab/{{ dir }}:
   file:
     - directory
-    - user: git
-    - group: git
+    - user: www-data
+    - group: ww-data
     - dir_mode: 777
     - file_mode: 777
     - recurse:
@@ -221,7 +220,7 @@ rename_gitlab:
       - file: /home/git/gitlab-satellites
 {%- endfor %}
 
-{%- for file in 'unicorn.rb', 'gitlab.yml', 'database.yml' %}
+{%- for file in ('gitlab.yml', 'database.yml') %}
 /home/git/gitlab/config/{{ file }}:
   file:
     - managed
@@ -278,6 +277,12 @@ gitlab_upstart:
     - require:
       - file: gitlab_upstart
       #}
+
+rack:
+  gem:
+    - installed
+    - version: 1.4.5
+
 /etc/uwsgi/gitlab.ini:
   file:
     - managed
@@ -288,6 +293,9 @@ gitlab_upstart:
     - mode: 640 # set mode to 440 after write done
     - require:
       - cmd: gitlab
+      - file: uwsgi_emperor
+      - gem: rack
+    - watch_in:
       - service: uwsgi
 
 /etc/nginx/conf.d/gitlab.conf:
@@ -301,5 +309,6 @@ gitlab_upstart:
     - require:
       - pkg: nginx
       - user: web
+      - file: /etc/uwsgi/gitlab.ini
     - watch_in:
       - service: nginx

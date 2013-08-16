@@ -1,4 +1,6 @@
-{%- for pkg in 'openerp6.1-full', 'openerp6.1-core' %}
+{%- set version = pillar['openerp']['version']|default(6.1) %}
+
+{%- for pkg in ('openerp6.1-full', 'openerp6.1-core') %}
 {{ pkg }}:
   pkg:
     - purged
@@ -23,10 +25,6 @@ openerp:
     - require:
       - pkg: openerp6.1-full
 
-/etc/nginx/sites-enabled/openerp:
-  file:
-    - absent
-
-/etc/nginx/sites-available/openerp:
+/etc/nginx/conf.d/openerp.conf:
   file:
     - absent

@@ -16,6 +16,7 @@ openerp:
 
 -#}
 include:
+  - python.dev
   - nginx
   - pip
   - postgresql.server
@@ -43,6 +44,7 @@ pil:
   pip:
     - installed
     - require:
+      - pkg: python-dev
       - module: pip
 
 /etc/openerp/openerp-server.conf:

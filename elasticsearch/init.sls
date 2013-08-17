@@ -202,7 +202,7 @@ elasticsearch:
 {% for ip_address in grains['ipv4'] %}
         - {{ ip_address }}/32
 {% endfor %}
-{% for allowed in pillar['elasticsearch']['https_allowed'] %}
+{% for allowed in pillar['elasticsearch']['https_allowed']|default([]) %}
         - {{ allowed }}
 {% endfor %}
 {% endif %}

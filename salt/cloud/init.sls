@@ -32,10 +32,11 @@ deploy_script:
   file:
     - managed
     - name: /etc/salt/cloud.deploy.d/bootstrap_salt.sh
-    - source: salt://salt/cloud/bootstrap.sh
+    - source: salt://salt/cloud/bootstrap.jinja2
     - mode: 500
     - user: root
     - group: root
     - mkdirs: True
+    - template: jinja
     - require:
       - pkg: salt-cloud

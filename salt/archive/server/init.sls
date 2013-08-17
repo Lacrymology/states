@@ -18,6 +18,7 @@ Optional Pillar
 
 salt_archive:
   source: rsync://salt.bit-flippers.com/archive/
+  delete: True
   web:
     ssl: mykeyname
     ssl_redirect: True
@@ -127,7 +128,7 @@ salt_archive_incoming:
 archive_rsync:
   cmd:
     - run
-    - name: rsync -av --delete --exclude ".*" {{ pillar['salt_archive']['source'] }} /var/lib/salt_archive/
+    - name: rsync -av {% if salt['pillar.get']('salt_archive:delete', False) %} --delete{% endif %} --exclude ".*" {{ pillar['salt_archive']['source'] }} /var/lib/salt_archive/
     - require:
       - pkg: rsync
       - user: salt_archive

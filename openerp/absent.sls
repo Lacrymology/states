@@ -1,12 +1,16 @@
 {%- set version = pillar['openerp']['version']|default(6.1) %}
 
-{%- for pkg in ('openerp6.1-full', 'openerp6.1-core') %}
-{{ pkg }}:
+openerp{{ version }}-full:
   pkg:
     - purged
     - require:
       - service: openerp-server
-{%- endfor %}
+
+openerp{{ version }}-core:
+  pkg:
+    - purged
+    - require:
+      - service: openerp-server
 
 openerp-server:
   service:
@@ -23,7 +27,7 @@ openerp:
   file:
     - absent
     - require:
-      - pkg: openerp6.1-full
+      - pkg: openerp{{ version }}-full
 
 {%- for file in ('/etc/nginx/conf.d/openerp.conf', '/var/log/nginx/openerp_access.log', '/var/log/openerp-server.log') %}
 {{ file }}:

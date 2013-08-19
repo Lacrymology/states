@@ -1,9 +1,13 @@
 {#-
 Installing OpenERP
-===============
+==================
 
-Pillar (optional)
-------
+Mandatory Pillar
+----------------
+
+Optional Pillar
+---------------
+
 openerp:
   version: 6.1
   nginx:

@@ -1,5 +1,5 @@
 # {{ pillar['message_do_not_modify'] }}
 moin==1.9.7
-{% if salt['pillar.get']('moinmoin:openldap', False) -%}
+{% if salt['pillar.get']('moinmoin:ldap', False) -%}
 python-ldap==2.4.13
 {%- endif %}

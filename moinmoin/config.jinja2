@@ -175,15 +175,15 @@ class Config(multiconfig.DefaultConfig):
     # Enable graphical charts, requires gdchart.
     #chart_options = {'width': 600, 'height': 300}
 
-    {% if salt['pillar.get']('moinmoin:openldap', False) -%}
+    {% if salt['pillar.get']('moinmoin:ldap', False) -%}
     ldap_authenticator1 = LDAPAuth(
         # the values shown below are the DEFAULT values (you may remove them if you are happy with them),
         # the examples shown in the comments are typical for Active Directory (AD) or OpenLDAP.
-        server_uri='{{ salt['pillar.get']('moinmoin:openldap:uri') }}',  # ldap / active directory server URI
+        server_uri='{{ salt['pillar.get']('moinmoin:ldap:uri') }}',  # ldap / active directory server URI
                                         # use ldaps://server:636 url for ldaps,
                                         # use  ldap://server for ldap without tls (and set start_tls to 0),
                                         # use  ldap://server for ldap with tls (and set start_tls to 1 or 2).
-        bind_dn='{{ salt['pillar.get']('moinmoin:openldap:binddn') }}',  # We can either use some fixed user and password for binding to LDAP.
+        bind_dn='{{ salt['pillar.get']('moinmoin:ldap:binddn') }}',  # We can either use some fixed user and password for binding to LDAP.
                      # Be careful if you need a % char in those strings - as they are used as
                      # a format string, you have to write %% to get a single % in the end.
                      #bind_dn = 'binduser@example.org' # (AD)
@@ -194,8 +194,8 @@ class Config(multiconfig.DefaultConfig):
                      #bind_pw = '%(password)s' # password we use for first bind
                      # or we can bind anonymously (if that is supported by your directory).
                      # In any case, bind_dn and bind_pw must be defined.
-        bind_pw='{{ salt['pillar.get']('moinmoin:openldap:bindpw') }}',
-        base_dn='{{ salt['pillar.get']('moinmoin:openldap:basedn') }}',  # base DN we use for searching
+        bind_pw='{{ salt['pillar.get']('moinmoin:ldap:bindpw') }}',
+        base_dn='{{ salt['pillar.get']('moinmoin:ldap:basedn') }}',  # base DN we use for searching
                      #base_dn = 'ou=SOMEUNIT,dc=example,dc=org'
         scope=2, # scope of the search we do (2 == ldap.SCOPE_SUBTREE)
         referrals=0, # LDAP REFERRALS (0 needed for AD)
@@ -213,7 +213,7 @@ class Config(multiconfig.DefaultConfig):
         email_callback=None, # callback function called to make up email address
         coding='utf-8', # coding used for ldap queries and result values
         timeout=10, # how long we wait for the ldap server [s]
-{%- set ssl = salt['pillar.get']('moinmoin:openldap:ssl', False) %}
+{%- set ssl = salt['pillar.get']('moinmoin:ldap:ssl', False) %}
 {%- if ssl %}
         start_tls=2, # usage of Transport Layer Security 0 = No, 1 = Try, 2 = Required
         tls_cacertdir='/etc/ssl/{{ ssl }}',

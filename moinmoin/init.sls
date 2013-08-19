@@ -21,7 +21,7 @@ include:
   - local
   - nginx
   - pip
-{%- if salt['pillar.get']('moinmoin:openldap', False) %}
+{%- if salt['pillar.get']('moinmoin:ldap', False) %}
   - python.dev
 {%- endif %}
   - web
@@ -62,7 +62,7 @@ moinmoin:
       - file: moinmoin
     - require:
       - virtualenv: moinmoin
-{%- if salt['pillar.get']('moinmoin:openldap', False) %}
+{%- if salt['pillar.get']('moinmoin:ldap', False) %}
       - pkg: moinmoin
       - pkg: python-dev
   pkg:

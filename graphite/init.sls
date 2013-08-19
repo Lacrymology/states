@@ -83,19 +83,20 @@ shinken_pollers: IP address of monitoring poller that check this server.
 
 {#- TODO: create initial admin user from pillar -#}
 include:
+  - apt
+  - graphite.common
+  - local
+  - memcache
+  - nginx
+  - pip
   - postgresql
   - postgresql.server
-  - virtualenv
-  - graphite.common
-  - uwsgi
-  - nginx
-  - memcache
-  - pip
-  - web
-  - apt
   - python.dev
-  - statsd
   - rsyslog
+  - statsd
+  - uwsgi
+  - virtualenv
+  - web
 {% if pillar['graphite']['web']['ssl']|default(False) %}
   - ssl
 {% endif %}

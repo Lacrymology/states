@@ -12,15 +12,14 @@ message_do_not_modify: Warning message to not modify file.
 
 graphite:
   carbon:
-    instances:
-      - a
+    instances: 2
   retentions:
     - three_month:
       name: default_1min_for_1_month
       pattern: .*
       retentions: 60s:30d
 
-graphite:carbon:instances: list of instance to deploy. (leave 'a')
+graphite:carbon:instances: number of instances to deploy, should <= numbers of CPU cores
 graphite:retentions: list of data retention rules, see the following for
     details:
     http://graphite.readthedocs.org/en/latest/config-carbon.html#storage-schemas-conf
@@ -36,7 +35,7 @@ shinken_pollers:
   - 192.168.1.1
 
 graphite:file-max: maximum of open files for the daemon. Default: not used.
-graphite:carbon:interface: Network interface to bind the Carbon daemon.
+graphite:carbon:interface: Network interface to bind Carbon-relay daemon.
     Default: 0.0.0.0.
 shinken_pollers: IP address of monitoring poller that check this server.
     Default: not used.
@@ -131,7 +130,11 @@ carbon:
     - require:
       - file: /etc/graphite
 
-{% for instance in pillar['graphite']['carbon']['instances'] %}
+{%- set names = 'abcdefgh' %}
+{# We don't need > 8 instance #}
+{%- set instances_count = pillar['graphite']['carbon']['instances'] %}
+
+{% for instance in names[:instances_count] %}
 carbon-{{ instance }}:
   file:
     - managed
@@ -142,7 +145,7 @@ carbon-{{ instance }}:
     - mode: 550
     - source: salt://carbon/init.jinja2
     - context:
-      instance: a
+      instance: {{ instance }}
   service:
     - running
     - enable: True
@@ -175,3 +178,71 @@ carbon-{{ instance }}-logdir:
       - user: graphite
       - file: /var/log/graphite/carbon
 {% endfor %}
+
+{%- for i in names[instances_count:] %}
+remove_not_in_use_instance_{{ i }}:
+  cmd:
+    - run
+    - name: service carbon-{{ i }} stop || true && rm /etc/init.d/carbon-{{ i }} || true && rm -rf /var/log/graphite/carbon/carbon-cache-{{ i }} || true
+    - require:
+    {% for j in names[:instances_count] %}
+      - service: carbon-{{ j }}
+    {% endfor %}
+{%- endfor %}
+
+{%- set instance = 'a' %}
+carbon-relay-{{ instance }}:
+  file:
+    - managed
+    - name: /etc/init.d/carbon-relay-{{ instance }}
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 550
+    - source: salt://carbon/relay.jinja2
+    - context:
+      instance: {{ instance }}
+  service:
+    - running
+    - enable: True
+    - order: 50
+{# until https://github.com/saltstack/salt/issues/5027 is fixed, this is required #}
+    - sig: /usr/local/graphite/bin/python /usr/local/graphite/bin/carbon-relay.py --config=/etc/graphite/carbon.conf --instance={{ instance }} start
+    - name: carbon-relay-{{ instance }}
+    - require:
+      - user: graphite
+      - file: /var/log/graphite/carbon
+      - file: /var/lib/graphite
+      - file: carbon-relay-{{ instance }}-logdir
+    - watch:
+      - module: carbon
+      - cmd: carbon
+      - file: /etc/graphite/carbon.conf
+      - file: /etc/graphite/storage-schemas.conf
+      - file: carbon-relay-{{ instance }}
+      - file: /etc/graphite/relay-rules.conf
+      - cmd: carbon
+
+carbon-relay-{{ instance }}-logdir:
+  file:
+    - directory
+    - name: /var/log/graphite/carbon/carbon-relay-{{ instance }}
+    - user: graphite
+    - group: graphite
+    - mode: 770
+    - makedirs: True
+    - require:
+      - user: graphite
+      - file: /var/log/graphite/carbon
+
+/etc/graphite/relay-rules.conf:
+  file:
+    - managed
+    - source: salt://carbon/relay-rules.jinja2
+    - template: jinja
+    - user: graphite
+    - group: graphite
+    - mode: 440
+    - require:
+      - user: graphite
+      - file: /etc/graphite

@@ -1,19 +1,10 @@
 {#
  Remove carbon
  #}
-{% for file in ('/etc/logrotate.d/carbon', '/var/log/graphite/carbon', '/etc/graphite/storage-schemas.conf', '/etc/graphite/carbon.conf') %}
-{{ file }}:
-  file:
-    - absent
-{% for instance in salt['pillar.get']('graphite:carbon:instances', []) %}
-{% if loop.first %}
-    - require:
-{% endif %}
-      - service: carbon-{{ instance }}
-{% endfor %}
-{% endfor %}
+{%- set names = 'abcdefgh' %}
+{%- set instances_count = pillar['graphite']['carbon']['instances'] %}
 
-{% for instance in salt['pillar.get']('graphite:carbon:instances', []) %}
+{% for instance in names[:instances_count] %}
 carbon-{{ instance }}:
   file:
     - absent
@@ -37,3 +28,39 @@ carbon-{{ instance }}-logdir:
 /usr/local/graphite/salt-carbon-requirements.txt:
   file:
     - absent
+
+{%- set relay_instance = 'a' %}
+carbon-relay-{{ relay_instance }}:
+  file:
+    - absent
+    - name: /etc/init.d/carbon-relay-{{ relay_instance }}
+    - require:
+      - service: carbon-relay-{{ relay_instance }}
+  service:
+    - dead
+    - enable: False
+    - sig: /usr/local/graphite/bin/python /usr/local/graphite/bin/carbon-relay.py --config=/etc/graphite/carbon.conf --instance={{ relay_instance }} start
+
+carbon-relay-{{ relay_instance }}-logdir:
+  file:
+    - absent
+    - name: /var/log/graphite/carbon/carbon-relay-{{ relay_instance }}
+    - require:
+      - service: carbon-relay-{{ relay_instance }}
+
+/etc/graphite/relay-rules.conf:
+  file:
+    - absent
+    - require:
+      - service: carbon-relay-{{ relay_instance }}
+
+{% for file in ('/etc/logrotate.d/carbon', '/var/log/graphite/carbon', '/etc/graphite/storage-schemas.conf', '/etc/graphite/carbon.conf') %}
+{{ file }}:
+  file:
+    - absent
+    - require:
+  {% for instance in names[:instances_count] %}
+      - service: carbon-{{ instance }}
+  {% endfor %}
+      - service: carbon-relay-{{ relay_instance }}
+{% endfor %}

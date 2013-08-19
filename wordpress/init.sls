@@ -50,6 +50,7 @@ wordpress:
     - mode: 440
     - require:
       - archive: wordpress
+      - user: web
   mysql_database:
     - present
     - name: wordpress

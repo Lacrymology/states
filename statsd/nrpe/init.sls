@@ -4,7 +4,7 @@
 include:
   - nrpe
   - virtualenv.nrpe
-  - gsyslog.nrpe
+  - rsyslog.nrpe
 
 /etc/nagios/nrpe.d/statsd.cfg:
   file:

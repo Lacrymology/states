@@ -3,7 +3,6 @@ include:
   - graphite.common.absent
   - graylog2.server.absent
   - graylog2.web.absent
-  - gsyslog.absent
   - pip.absent
   - raven.absent
   - requests.absent
@@ -19,20 +18,3 @@ include:
 /usr/local:
   file:
     - absent
-{% if salt['cmd.has_exec']('pip') %}
-    - require:
-      - pip: pip
-
-extend:
-  pip:
-    pip:
-      - removed
-      - require:
-        - pip: cherrypy
-        - pip: GitPython
-        - pip: raven
-        - pip: requests
-        - pip: route53
-        - pip: uwsgitop
-        - pip: virtualenv
-{% endif %}

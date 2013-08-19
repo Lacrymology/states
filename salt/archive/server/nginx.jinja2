@@ -24,12 +24,19 @@ server {
 
     root /var/lib/salt_archive;
 
-{%- for location in ('favicon.ico', '.ssh', 'incoming') %}
+{%- for location in ('favicon.ico', '.ssh') %}
     location /{{ location }} {
         deny all;
         return 404;
     }
 {%- endfor %}
+
+{%- if not salt['pillar.get']('salt_archive:source', False) %}
+    location /incoming {
+        deny all;
+        return 404;
+    }
+{%- endif %}
 
     location ~* \.(gz|txt|zip)$ {
         expires max;

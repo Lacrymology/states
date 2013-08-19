@@ -1,13 +1,19 @@
+{%- if grains['lsb_codename'] == 'lucid' %}
 include:
   - apt
   - bbb.redis
   - ffmpeg
-  - java
+{% if grains['osrelease']|float < 12.04 %}
+  - java.6
+{% else %}
+  - java.7
+{% endif %}
+  - local
   - locale
   - mscorefonts
   - nginx
   - redis
-  - tomcat
+  - tomcat.6
 
 libreoffice:
   apt_repository:
@@ -29,7 +35,7 @@ openoffice:
     - installed
     - sources:
   {%- if 'files_archive' in pillar %}
-      - openoffice.org: {{ pillar['files_archive'] }}/mirror/openoffice.org_1.0.4_all.deb
+      - openoffice.org: {{ pillar['files_archive']|replace('file://', '') }}/mirror/openoffice.org_1.0.4_all.deb
   {%- else %}
       - openoffice.org: http://bigbluebutton.googlecode.com/files/openoffice.org_1.0.4_all.deb
   {%- endif %}
@@ -48,7 +54,7 @@ bigbluebutton_ruby:
     - installed
     - sources:
   {%- if 'files_archive' in pillar %}
-      - ruby1.9.2: {{ pillar['files_archive'] }}/mirror/ruby1.9.2_1.9.2-p290-1_amd64.deb
+      - ruby1.9.2: {{ pillar['files_archive']|replace('file://', '') }}/mirror/ruby1.9.2_1.9.2-p290-1_amd64.deb
   {%- else %}
       - ruby1.9.2: https://bigbluebutton.googlecode.com/files/ruby1.9.2_1.9.2-p290-1_amd64.deb
   {%- endif %}
@@ -97,7 +103,7 @@ bigbluebutton:
       - archive: ffmpeg
       - module: redis_package
       - service: redis
-      - service: tomcat6
+      - service: tomcat
       - service: nginx
       - file: nginx_sysv_upstart
 {% for i in ('ruby', 'ri', 'irb', 'erb', 'rdoc', 'gem') %}
@@ -112,6 +118,8 @@ bbb-conf-wrap:
     - user: root
     - group: root
     - mode: 755
+    - require:
+      - file: /usr/local
 
 /usr/local/bin/bbb-conf-wrap.sh --setip {{ salt['pillar.get']('bbb:hostname') }}:
   cmd:
@@ -141,8 +149,4 @@ extend:
     service:
       - watch:
         - file: /etc/nginx/conf.d/bigbluebutton.conf
-
-  redis_package:
-    module:
-      - require:
-        - pkg: redis
+{%- endif -%}

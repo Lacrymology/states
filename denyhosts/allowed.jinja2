@@ -1,0 +1,8 @@
+# {{ pillar['message_do_not_modify'] }}
+{%- for host in salt['pillar.get']('denyhosts:whitelist', []) %}
+{{ host }}
+{%- endfor %}
+{#- The following is specific NRPE integration. -#}
+{%- for host in pillar['shinken_pollers']|default([]) %}
+{{ host }}
+{%- endfor %}

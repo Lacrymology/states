@@ -54,6 +54,7 @@ slapd:
   service:
     - running
     - enable: True
+    - order: 50
     - watch:
       - pkg: slapd
   file:
@@ -105,6 +106,13 @@ openssl is not compatible with ubuntu ldap #}
       - module: /etc/ssl/{{ ssl }}/server.pem
       - file: /etc/ssl/{{ ssl }}/ca.crt
       - user: openldap
+
+restart_after_ssl:
+  cmd:
+    - wait
+    - name: service slapd restart
+    - watch:
+      - cmd: slapd_config_dbs
 {% endif %}
 
 {% if salt['pillar.get']('ldap:usertree') %}

@@ -2,19 +2,26 @@
 Uninstall Redis
 #}
 
-redis-server:
+redis:
   pkg:
     - purged
-    - pkgs:
-      - libjemalloc1
-      - redis-server
+    - name: redis-server
     - require:
-      - service: redis-server
+      - service: redis
   service:
     - dead
+    - name: redis-server
 
-/etc/redis:
+libjemalloc1:
+  pkg:
+    - purged
+    - require:
+      - pkg: redis
+
+{% for filename in ('/var/log', '/etc') %}
+{{ filename }}/redis:
   file:
     - absent
     - require:
-      - pkg: redis-server
+      - pkg: redis
+{% endfor %}

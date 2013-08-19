@@ -9,7 +9,7 @@ include:
   - ssh.server.nrpe
   - pip.nrpe
   - cron.nrpe
-  - gsyslog.nrpe
+  - rsyslog.nrpe
 
 /usr/local/bin/check_backups.py:
   file:

@@ -42,4 +42,4 @@ extend:
   /etc/nagios/nrpe.d/elasticsearch.cfg:
     file:
       - context:
-        origin_state: graylog2
+        origin_state: graylog2.server

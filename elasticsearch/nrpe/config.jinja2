@@ -1,24 +1,33 @@
 # {{ pillar['message_do_not_modify'] }}
 {%- if origin_state|default("elasticsearch") == 'elasticsearch' %}
 command[elasticsearch_procs]=/usr/lib/nagios/plugins/check_procs -u elasticsearch -c 1:1 -C java -a org.elasticsearch.bootstrap.ElasticSearch
-{%- endif %}
-{% set nodes_total = 0 -%}
+{%- endif -%}
+{%- set nodes_total = 0 -%}
 {#- this ugly hack is required to get the total number of nodes -#}
 {%- for item in pillar['elasticsearch']['cluster']['nodes'].viewitems() -%}
-{#- take 1 off the length to remove the _network key -#}
-{%- set nodes_total = nodes_total - 1 + item[1]|length -%}
-{%- if loop.last -%}
-{%- if origin_state|default("elasticsearch") == 'graylog2' -%}
+    {#- take 1 off the length to remove the _network key -#}
+    {%- set nodes_total = nodes_total - 1 + item[1]|length -%}
+    {%- if loop.last -%}
+        {%- if origin_state|default("elasticsearch") == 'graylog2.server' %}
 command[graylog2_elasticsearch_cluster]=/usr/lib/nagios/plugins/check_elasticsearch_cluster.py -c {{ nodes_total }}:{{ nodes_total }}
-{%- else -%}
+        {%- else %}
 command[elasticsearch_cluster]=/usr/lib/nagios/plugins/check_elasticsearch_cluster.py -c {{ nodes_total }}:{{ nodes_total }}
-{%- endif -%}
-{%- endif -%}
-{%- endfor %}
-{%- if origin_state|default("elasticsearch") == 'graylog2' %}
+        {%- endif -%}
+    {%- endif -%}
+{%- endfor -%}
+{%- set state_pillar = salt['pillar.get']('elasticsearch:cluster:nodes:{0}:{1}'.format(grains['id'], origin_state|default("elasticsearch")), {}) -%}
+{%- if origin_state|default("elasticsearch") == 'graylog2.server' -%}
+    {%- if state_pillar['http']|default(True) %}
 command[graylog2_elasticsearch_port_http]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 9200
-command[graylog2_elasticsearch_port_transport]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 9300
-{%- else %}
+    {%- else %}
+command[graylog2_elasticsearch_port_http]=/bin/echo "HTTP OK: Graylog2 is configured to not serve HTTP."
+    {%- endif %}
+command[graylog2_elasticsearch_port_transport]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p {{ state_pillar['port']|default(9300) }}
+{%- else -%}
+    {%- if state_pillar['http']|default(True) %}
 command[elasticsearch_port_http]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 9200
-command[elasticsearch_port_transport]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 9300
+    {%- else %}
+command[elasticsearch_port_http]=/bin/echo "HTTP OK: Elasticsearch is configured to not serve HTTP."
+    {%- endif %}
+command[elasticsearch_port_transport]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p {{ state_pillar['port']|default(9300) }}
 {%- endif -%}

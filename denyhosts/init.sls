@@ -29,6 +29,8 @@ denyhosts:
     download: yes
     download_threshold: 3
     download_resiliency: 5h
+  whitelist:
+    - 127.0.0.1
 shinken_pollers:
   - 192.168.1.1
 
@@ -38,7 +40,19 @@ denyhosts:purge: each of these pillar are documented in
 -#}
 include:
   - apt
-  - gsyslog
+  - rsyslog
+
+denyhosts-allowed:
+  file:
+    - managed
+    - name: /var/lib/denyhosts/allowed-hosts
+    - source: salt://denyhosts/allowed.jinja2
+    - user: root
+    - group: root
+    - mode: 440
+    - template: jinja
+    - require:
+      - pkg: denyhosts
 
 denyhosts:
   pkg:
@@ -58,11 +72,13 @@ denyhosts:
   service:
     - running
     - enable: True
+    - order: 50
     - watch:
       - file: denyhosts
       - pkg: denyhosts
+      - file: denyhosts-allowed
     - require:
-      - service: gsyslog
+      - service: rsyslog
 
 {% for file in ('/etc/logrotate.d/denyhosts', '/var/log/denyhosts') %}
 {{ file }}:

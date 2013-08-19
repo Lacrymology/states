@@ -2,9 +2,10 @@
  Uninstall uWSGI Web app server.
  #}
 
-uwsgi:
+uwsgi_emperor:
   service:
     - dead
+    - name: uwsgi
 
 {% for file in ('/etc/uwsgi', '/etc/init/uwsgi.conf', '/var/lib/uwsgi', '/usr/local/uwsgi') %}
 {{ file }}:
@@ -13,3 +14,8 @@ uwsgi:
     - require:
       - service: uwsgi
 {% endfor %}
+
+apt-key del 67E15F46:
+  cmd:
+    - run
+    - onlyif: apt-key list | grep -q 67E15F46

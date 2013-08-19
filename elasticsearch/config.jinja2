@@ -10,23 +10,24 @@ cluster:
     allocation:
       node_concurrent_recoveries: 2
 
+{%- set state_pillar = salt['pillar.get']('elasticsearch:cluster:nodes:{0}:{1}'.format(grains['id'], origin_state), {}) %}
 http:
   port: 9200
-  enabled: {% if es['cluster']['nodes'][grains['id']][origin_state]['http']|default(True) %}true{% else %}false{% endif %}
+  enabled: {% if state_pillar['http']|default(True) %}true{% else %}false{% endif %}
 
 transport:
   tcp:
-    port: {{ es['cluster']['nodes'][grains['id']][origin_state]['port']|default(9300) }}
+    port: {{ state_pillar['port']|default(9300) }}
 
 node:
-  name: {{ es['cluster']['nodes'][grains['id']][origin_state]['name']|default(grains['id']) }}
-  master: {{ es['cluster']['nodes'][grains['id']][origin_state]['master']|default(master) }}
-  data: {{ es['cluster']['nodes'][grains['id']][origin_state]['data']|default(data) }}
+  name: {{ state_pillar['name']|default(grains['id']) }}
+  master: {{ state_pillar['master']|default(master) }}
+  data: {{ state_pillar['data']|default(data) }}
 
 {# configure amazon ec2 cloud auto-discovery #}
 {% if es['aws']|default(false) %}
 cloud:
-  region: {{ grains['region'] }}
+  region: {{ salt['grains.get']('region') }}
   aws:
     access_key: {{ es['aws']['access_key'] }}
     secret_key: {{ es['aws']['secret_key'] }}
@@ -39,13 +40,13 @@ discovery:
   ec2:
     host_type: private_ip
     any_group: true
-    availability_zones: {{ grains['availabilityZone'] }}
+    availability_zones: {{ salt['grains.get']('availabilityZone') }}
 gateway:
   recover_after_time: 1m
   recover_after_nodes: 1
   type: s3
   s3:
-    bucket: microsigns-{{ grains['region'] }}
+    bucket: microsigns-{{ salt['grains.get']('region') }}
     concurrent_streams: 5
 indices:
   recovery:

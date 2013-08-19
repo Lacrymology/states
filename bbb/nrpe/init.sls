@@ -5,7 +5,7 @@ include:
   - nrpe
   - nginx.nrpe
   - redis.nrpe
-  - tomcat.nrpe
+  - tomcat.6.nrpe
 
 /etc/nagios/nrpe.d/bigbluebutton.cfg:
   file:
@@ -14,7 +14,7 @@ include:
     - user: nagios
     - group: nagios
     - mode: 440
-    - source: salt://bigbluebutton/nrpe/config.jinja2
+    - source: salt://bbb/nrpe/config.jinja2
     - require:
       - pkg: nagios-nrpe-server
 

@@ -7,3 +7,4 @@
 redis-server-{{ version }}:
   pkg:
     - purged
+    - order: 1

@@ -80,10 +80,10 @@ TODO: document AWS pillars
 include:
   - apt
   - cron
+  - java.7
 {% if ssl %}
   - ssl
   - nginx
-  - java
 {% endif %}
 {% set version = '0.20.5'%}
 {% set checksum = 'md5=e244c5a39515983ba81006a3186843f4' %}
@@ -168,6 +168,7 @@ elasticsearch:
   service:
     - running
     - enable: True
+    - order: 50
     - watch:
       - file: /etc/default/elasticsearch
       - file: /etc/elasticsearch/logging.yml

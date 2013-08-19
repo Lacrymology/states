@@ -3,14 +3,15 @@
 #}
 include:
   - apt.nrpe
-  - gsyslog.nrpe
+  - rsyslog.nrpe
   - nginx.nrpe
   - memcache.nrpe
   - nginx.nrpe
   - nrpe
   - pip.nrpe
-  - python.dev.nrpe
+  - postgresql.nrpe
   - postgresql.server.nrpe
+  - python.dev.nrpe
 {% if pillar['sentry']['ssl']|default(False) %}
   - ssl.nrpe
 {% endif %}

@@ -2,9 +2,9 @@
  Install the Nginx web server
  #}
 include:
-  - web
   - apt
-  - gsyslog
+  - web
+  - rsyslog
 
 {% set bad_configs = ('default', 'example_ssl') %}
 
@@ -80,8 +80,9 @@ nginx-logger-{{ log_type }}:
   service:
     - running
     - enable: True
+    - order: 50
     - require:
-      - service: gsyslog
+      - service: rsyslog
       - file: nginx-logger-{{ log_type }}
       - pkg: nginx
 {% endfor %}
@@ -92,21 +93,33 @@ nginx-logger-{{ log_type }}:
     - require:
       - pkg: nginx
 
-nginx:
-  apt_repository:
-    - present
-    - address: http://nginx.org/packages/ubuntu/
-    - components:
-      - nginx
-    - key_server: subkeys.pgp.net
-    - key_id: 7BD9BF62
+nginx_dependencies:
   pkg:
-    - latest
-    - name: nginx
+    - installed
+    - pkgs:
+      - libpcre3-dev
+      - libssl-dev
+      - zlib1g-dev
+      - lsb-base
+      - adduser
     - require:
-      - apt_repository: nginx
+      - cmd: apt_sources 
+
+{%- set version = '1.4.1' %}
+{%- set filename = 'nginx_{0}-1~{1}_{2}.deb'.format(version, grains['lsb_codename'], salt['grains.get']('debian_arch')) %}
+
+nginx:
+  pkg:
+    - installed
+    - sources:
+{%- if 'files_archive' in pillar %}
+      - nginx: {{ pillar['files_archive']|replace('file://', '') }}/mirror/{{ filename }}
+{%- else %}
+      - nginx: http://nginx.org/packages/ubuntu/pool/nginx/n/nginx/{{ filename }}
+{%- endif %}
+    - require:
       - user: web
-      - cmd: apt_sources
+      - pkg: nginx_dependencies
   file:
     - managed
     - name: /etc/init/nginx.conf
@@ -133,3 +146,8 @@ nginx:
 {% for log_type in logger_types %}
       - service: nginx-logger-{{ log_type }}
 {% endfor %}
+
+
+/etc/apt/sources.list.d/nginx.org-packages_ubuntu-precise.list:
+  file:
+    - absent

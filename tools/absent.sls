@@ -3,8 +3,9 @@ basic:
     - purged
     - names:
       - htop
-      - iftop
-      - iotop
-      - nmap
-      - screen
-      - tshark
+
+{%- for i in 'iftop', 'iotop', 'nmap', 'tshark' %}
+{{ i }}:
+  pkg:
+    - purged
+{%- endfor %}

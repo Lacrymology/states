@@ -72,8 +72,9 @@ destructive_absent: If True (not default), RabbitMQ data saved on disk is purged
 {#- TODO: SSL support http://www.rabbitmq.com/ssl.html -#}
 
 include:
-  - hostname
   - apt
+  - hostname
+  - logrotate
 {% if pillar['rabbitmq']['management'] != 'guest' -%}
   {%- if pillar['rabbitmq']['ssl']|default(False) %}
   - ssl
@@ -126,16 +127,16 @@ rabbitmq_dependencies:
     - installed
     - pkgs:
       - erlang-nox
-      - logrotate
     - require:
       - cmd: apt_sources
+      - pkg: logrotate
 
 rabbitmq-server:
   pkg:
     - installed
     - sources:
 {%- if 'files_archive' in pillar %}
-      - rabbitmq-server: {{ pillar['files_archive'] }}/mirror/rabbitmq-server_{{ version }}-1_all.deb
+      - rabbitmq-server: {{ pillar['files_archive']|replace('file://', '') }}/mirror/rabbitmq-server_{{ version }}-1_all.deb
 {%- else %}
       - rabbitmq-server: http://www.rabbitmq.com/releases/rabbitmq-server/v{{ version }}/rabbitmq-server_{{ version }}-1_all.deb
 {%- endif %}
@@ -151,6 +152,7 @@ rabbitmq-server:
   service:
     - running
     - enable: True
+    - order: 50
 {# until https://github.com/saltstack/salt/issues/5027 is fixed, this is required #}
     - sig: beam{% if grains['num_cpus'] > 1 %}.smp{% endif %}
     - require:
@@ -177,8 +179,8 @@ rabbitmq-server:
 {#      - service: rabbitmq-server#}
   rabbitmq_user:
     - present
-    - name: {{ pillar['rabbitmq']['monitor']['user'] }}
-    - password: {{ pillar['rabbitmq']['monitor']['password'] }}
+    - name: {{ salt['pillar.get']('rabbitmq:monitor:user', salt['pillar.get']('salt_monitor') )}} 
+    - password: {{ salt['password.pillar']('rabbitmq:monitor:password') }}
     - force: True
     - require:
       - service: rabbitmq-server

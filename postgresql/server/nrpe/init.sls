@@ -7,7 +7,7 @@ include:
   - nrpe
   - postgresql.nrpe
   - apt.nrpe
-  - gsyslog.nrpe
+  - rsyslog.nrpe
 {% if salt['pillar.get']('postgresql:ssl', False) %}
   - ssl.nrpe
 {% endif %}
@@ -25,7 +25,7 @@ include:
     - context:
       deployment: diamond
       version: {{ version }}
-      password: {{ pillar['postgresql']['diamond'] }}
+      password: {{ salt['password.pillar']('postgresql:diamond') }}
 
 /etc/nagios/nrpe.d/postgresql.cfg:
   file:

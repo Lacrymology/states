@@ -95,7 +95,7 @@ include:
   - apt
   - python.dev
   - statsd
-  - gsyslog
+  - rsyslog
 {% if pillar['graphite']['web']['ssl']|default(False) %}
   - ssl
 {% endif %}
@@ -251,15 +251,15 @@ graphite_settings:
       - module: graphite-web
   postgres_user:
     - present
-    - name: {{ pillar['graphite']['web']['db']['name'] }}
+    - name: {{ salt['pillar.get']('graphite:web:db:name', 'graphite') }}
     - password: {{ pillar['graphite']['web']['db']['password'] }}
     - runas: postgres
     - require:
       - service: postgresql
   postgres_database:
     - present
-    - name: {{ pillar['graphite']['web']['db']['name'] }}
-    - owner: {{ pillar['graphite']['web']['db']['username'] }}
+    - name: {{ salt['pillar.get']('graphite:web:db:name', 'graphite') }}
+    - owner: {{ salt['pillar.get']('graphite:web:db:username', 'graphite') }}
     - runas: postgres
     - require:
       - postgres_user: graphite_settings
@@ -275,7 +275,7 @@ graphite_settings:
     - require:
       - postgres_database: graphite_settings
       - file: graphite_settings
-      - service: gsyslog
+      - service: rsyslog
     - watch:
       - module: graphite-web
 
@@ -296,7 +296,7 @@ graphite_settings:
       - file: /usr/local/graphite/bin/build-index.sh
       - user: web
       - file: graphite-urls-patch
-      - service: gsyslog
+      - service: rsyslog
       - module: graphite-web
       - pip: graphite-web
       - service: memcached

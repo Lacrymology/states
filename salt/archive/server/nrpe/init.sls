@@ -1,8 +1,11 @@
 include:
   - apt.nrpe
-  - gsyslog.nrpe
+  - cron.nrpe
+  - rsyslog.nrpe
   - nginx.nrpe
   - nrpe
+  - rsync.nrpe
+  - ssh.server.nrpe
 {% if pillar['salt_archive']['web']['ssl']|default(False) %}
   - ssl.nrpe
 {% endif %}

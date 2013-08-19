@@ -76,7 +76,8 @@ def revert():
         ret['result'] = False
         return ret
 
-    installed = set(_installed())
+    installed_list = _installed()
+    installed = set(installed_list)
     install = saved - installed
     purge = installed - saved
 
@@ -88,7 +89,20 @@ def revert():
     if install:
         ret['changes'].update(__salt__['pkg.install'](pkgs=list(install)))
     if purge:
+        # until 0.16 is stable, we have to use that dirty trick
         ret['changes']['purged'] = []
-        for pkg in purge:
-            ret['changes']['purged'].extend(__salt__['pkg.purge'](pkg))
+        purge_cmd = 'apt-get -q -y --force-yes purge {0}'.format(
+            ' '.join(purge))
+        out = __salt__['cmd.run_all'](purge_cmd)
+        if out['retcode'] != 0:
+            ret['result'] = False
+            ret['changes']['purged'] = out['stderr']
+        else:
+            new_pkgs = _installed()
+            for pkg in installed_list:
+                if pkg not in new_pkgs:
+                    ret['changes']['purged'].append(pkg)
+        # the following will be used in 0.16
+        # ret['changes']['purged'] = __salt__['pkg.purge'](
+        # pkgs=list(purge)))
     return ret

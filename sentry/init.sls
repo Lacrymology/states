@@ -11,13 +11,14 @@ include:
   - postgresql.server
   - virtualenv
   - uwsgi
+  - local
   - nginx
   - pip
   - web
   - python.dev
   - apt
   - memcache
-  - gsyslog
+  - rsyslog
 {% if pillar['sentry']['ssl']|default(False) %}
   - ssl
 {% endif %}
@@ -32,6 +33,7 @@ sentry:
     - no_site_packages: True
     - require:
       - module: virtualenv
+      - file: /usr/local
   pkg:
     - latest
     - name: libevent-dev
@@ -128,7 +130,7 @@ sentry-syncdb-all:
     - require:
       - module: sentry
       - file: sentry_settings
-      - service: gsyslog
+      - service: rsyslog
     - watch:
       - postgres_database: sentry
 
@@ -152,7 +154,7 @@ sentry-migrate-fake:
       - service: memcached
       - service: uwsgi_emperor
       - cmd: sentry_settings
-      - service: gsyslog
+      - service: rsyslog
   module:
     - wait
     - name: file.touch

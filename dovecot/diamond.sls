@@ -4,6 +4,7 @@
 
 include:
   - diamond
+  - postfix.diamond
 
 dovecot_diamond_resources:
   file:

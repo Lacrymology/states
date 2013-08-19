@@ -1,11 +1,11 @@
  - CPU: {{ grains['num_cpus'] }}
  - Memory: {{ grains['mem_total'] }} Mb
-{%- if 'availabilityZone' in grains %}
- - Availability Zone: {{ grains['availabilityZone'] }}
- - Instance ID: {{ grains['instanceId'] }}
- - Instance Type: {{ grains['instanceType'] }}
- - AMI: {{ grains['imageId'] }}
- - Private IP: {{ grains ['local-ipv4'] }}
- - Public IP: {{ grains['public-ipv4'] }}
- - Public hostname: {{ grains['public-hostname'] }}
+{%- if salt['grains.get']('availabilityZone', False) %}
+ - Availability Zone: {{ salt['grains.get']('availabilityZone') }}
+ - Instance ID: {{ salt['grains.get']('instanceId') }}
+ - Instance Type: {{ salt['grains.get']('instanceType') }}
+ - AMI: {{ salt['grains.get']('imageId') }}
+ - Private IP: {{ salt['grains.get']('local-ipv4') }}
+ - Public IP: {{ salt['grains.get']('public-ipv4') }}
+ - Public hostname: {{ salt['grains.get']('public-hostname') }}
 {% endif %}

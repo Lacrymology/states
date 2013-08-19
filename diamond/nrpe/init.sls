@@ -7,7 +7,7 @@ include:
   - git.nrpe
   - python.dev.nrpe
   - virtualenv.nrpe
-  - gsyslog.nrpe
+  - rsyslog.nrpe
 
 /etc/nagios/nrpe.d/diamond.cfg:
   file:

@@ -7,7 +7,7 @@
 include:
   - shinken
   - nginx
-  - gsyslog
+  - rsyslog
   - web
 {% if pillar['shinken']['ssl']|default(False) %}
   - ssl
@@ -38,6 +38,7 @@ shinken-broker:
       shinken_component: broker
   service:
     - running
+    - order: 50
     - enable: True
     - require:
       - file: /var/log/shinken
@@ -46,7 +47,7 @@ shinken-broker:
       - module: shinken
       - file: /etc/shinken/broker.conf
       - file: shinken-broker
-      - service: gsyslog
+      - service: rsyslog
 
 /etc/shinken/broker.conf:
   file:

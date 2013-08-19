@@ -23,7 +23,7 @@ include:
   - ssh.server
   - pip
   - cron
-  - gsyslog
+  - rsyslog
 
 backup-server:
   pkg:
@@ -78,4 +78,4 @@ backup-archiver-dependency:
     - require:
       - module: backup-archiver-dependency
       - pkg: cron
-      - service: gsyslog
+      - service: rsyslog

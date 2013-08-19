@@ -1,0 +1,3 @@
+maven:
+  pkg:
+    - purged

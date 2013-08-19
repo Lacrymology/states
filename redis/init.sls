@@ -2,16 +2,16 @@
 Install Redis
 #}
 
-{% set jemalloc = "libjemalloc1_3.4.0-1chl1~{0}1_{1}.deb".format(grains['lsb_codename'], grains['debian_arch']) %}
-{% set filename = "redis-server_2.6.14-1chl1~{0}1_{1}.deb".format(grains['lsb_codename'], grains['debian_arch']) %}
+{% set jemalloc = "libjemalloc1_3.4.0-1chl1~{0}1_{1}.deb".format(grains['lsb_codename'], salt['grains.get']('debian_arch')) %}
+{% set filename = "redis-server_2.6.14-1chl1~{0}1_{1}.deb".format(grains['lsb_codename'], salt['grains.get']('debian_arch')) %}
 
 redis:
   pkg:
     - installed
     - sources:
 {%- if 'files_archive' in pillar %}
-      - libjemalloc1: {{ pillar['files_archive'] }}/mirror/{{ jemalloc }}
-      - redis-server: {{ pillar['files_archive'] }}/mirror/{{ filename }}
+      - libjemalloc1: {{ pillar['files_archive']|replace('file://', '') }}/mirror/{{ jemalloc }}
+      - redis-server: {{ pillar['files_archive']|replace('file://', '') }}/mirror/{{ filename }}
 {%- else %}
       - libjemalloc1: http://ppa.launchpad.net/chris-lea/redis-server/ubuntu/pool/main/j/jemalloc/{{ jemalloc }}
       - redis-server: http://ppa.launchpad.net/chris-lea/redis-server/ubuntu/pool/main/r/redis/{{ filename }}
@@ -25,8 +25,9 @@ redis:
     - require:
       - pkg: redis
   service:
-    - name: redis-server
     - running
+    - name: redis-server
+    - order: 50
     - watch:
       - file: redis
       - pkg: redis

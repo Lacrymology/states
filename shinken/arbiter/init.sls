@@ -36,12 +36,16 @@ shinken-arbiter:
     - require:
       - pkg: ssmtp
       - host: hostname
+      - module: shinken
   service:
     - running
     - enable: True
+    - order: 50
     - require:
       - file: /var/log/shinken
       - file: /var/lib/shinken
+      - file: /etc/shinken/objects
+      - pkg: ssmtp
     - watch:
       - module: shinken
       - file: shinken-arbiter

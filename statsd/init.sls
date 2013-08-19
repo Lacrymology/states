@@ -3,7 +3,8 @@
  #}
 include:
   - virtualenv
-  - gsyslog
+  - rsyslog
+  - local
 
 /var/log/statsd.log:
   file:
@@ -18,19 +19,24 @@ statsd:
     - group: root
     - mode: 440
     - source: salt://statsd/upstart.jinja2
+    - require:
+      - module: statsd
   virtualenv:
     - manage
     - name: /usr/local/statsd
     - require:
       - module: virtualenv
+      - file: /usr/local
   service:
     - running
     - enable: True
+    - order: 50
     - require:
-      - service: gsyslog
+      - service: rsyslog
     - watch:
       - file: statsd
       - virtualenv: statsd
+      - module: statsd
   module:
     - wait
     - name: pip.install

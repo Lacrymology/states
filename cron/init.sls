@@ -25,7 +25,7 @@ shinken_pollers: IP address of monitoring poller that check this server.
 
 include:
   - apt
-  - gsyslog
+  - rsyslog
 
 cron:
   pkg:
@@ -45,8 +45,9 @@ cron:
   service:
     - running
     - enable: True
+    - order: 50
     - require:
-      - service: gsyslog
+      - service: rsyslog
     - watch:
       - pkg: cron
       - file: /etc/crontab

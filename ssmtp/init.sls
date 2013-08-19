@@ -4,13 +4,13 @@
 include:
   - apt
   - hostname
-  - gsyslog
+  - rsyslog
 
 ssmtp:
   pkg:
     - installed
     - require:
-      - service: gsyslog
+      - service: rsyslog
       - cmd: apt_sources
       - debconf: ssmtp
       - cmd: hostname
@@ -19,12 +19,12 @@ ssmtp:
     - set
     - data:
         'ssmtp/mailhub': {'type': 'string', 'value': '{{ pillar['smtp']['server'] }}'}
-        'ssmtp/hostname': {'type': 'string', 'value': '{{ pillar['smtp']['user'] }}'}
+        'ssmtp/hostname': {'type': 'string', 'value': '{{ pillar['mail']['mailname'] }}'}
         'ssmtp/root': {'type': 'string', 'value': '{{ pillar['smtp']['root'] }}'}
         'ssmtp/rewritedomain': {'type': 'string', 'value': ''}
         {# unused by the package itself, why? #}
         'ssmtp/overwriteconfig': {'type': 'boolean', 'value': False}
-        'ssmtp/mailname': {'type': 'string', 'value': '{{ grains['id'] }}'}
+        'ssmtp/mailname': {'type': 'string', 'value': '{{ pillar['mail']['mailname'] }}'}
         'ssmtp/port': {'type': 'string', 'value': '{{ pillar['smtp']['port'] }}'}
         'ssmtp/fromoverride': {'type': 'boolean', 'value': False}
     - require:

@@ -8,7 +8,7 @@ include:
   - logrotate
 
 {% set version = '2.4.4' %}
-{% set filename = 'mongodb-10gen_' + version + '_' + grains['debian_arch'] + '.deb' %}
+{% set filename = 'mongodb-10gen_' + version + '_' + salt['grains.get']('debian_arch') + '.deb' %}
 
 mongodb:
   file:
@@ -24,15 +24,16 @@ mongodb:
   service:
     - running
     - enable: True
+    - order: 50
     - watch:
       - pkg: mongodb
   pkg:
     - installed
     - sources:
 {%- if 'files_archive' in pillar %}
-      - mongodb-10gen: {{ pillar['files_archive'] }}/mirror/{{ filename }}
+      - mongodb-10gen: {{ pillar['files_archive']|replace('file://', '') }}/mirror/{{ filename }}
 {%- else %}
-      - mongodb-10gen: http://downloads-distro.mongodb.org/repo/ubuntu-upstart/dists/dist/10gen/binary-{{ grains['debian_arch'] }}/{{ filename }}
+      - mongodb-10gen: http://downloads-distro.mongodb.org/repo/ubuntu-upstart/dists/dist/10gen/binary-{{ salt['grains.get']('debian_arch') }}/{{ filename }}
 {%- endif %}
 
 mongodb_old_apt_repo:

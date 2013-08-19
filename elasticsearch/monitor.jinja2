@@ -1,0 +1,29 @@
+elasticsearch_procs:
+  description: Elasticsearch Daemon
+
+elasticsearch_cluster:
+  description: Elasticsearch Cluster
+
+elasticsearch-remote-port-http:
+  description: Elasticsearch Remote HTTP Port
+  check: check_tcp!9200
+
+elasticsearch-remote-port-transport:
+  description: Elasticsearch Remote Transport Port
+  check: check_tcp!9300
+
+elasticsearch_port_http:
+  description: Elasticsearch Local HTTP Port
+
+elasticsearch_port_transport:
+  description: Elasticsearch Local Transport Port
+
+elasticsearch_nginx_http:
+  description: Elasticsearch HTTP Protocol
+
+elasticsearch_nginx_https:
+  description: Elasticsearch HTTPS Protocol
+
+elasticsearch_nginx_https_certificate:
+  description: Elasticsearch HTTPS Certificate Expiration
+  check_interval: 1440 {#- only need to check https certificate each day -#}

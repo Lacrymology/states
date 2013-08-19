@@ -6,7 +6,7 @@ include:
   - ffmpeg.diamond
   - nginx.diamond
   - redis.diamond
-  - tomcat.diamond
+  - tomcat.6.diamond
 
 bbb_server_diamond_resources:
   file:

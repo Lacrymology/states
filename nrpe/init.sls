@@ -4,6 +4,7 @@
 #TODO: set nagios user shell to /bin/false
 
 include:
+  - local
   - pip
   - pip.nrpe
   - virtualenv
@@ -13,9 +14,9 @@ include:
 {% if 'graphite_address' in pillar %}
   - nrpe.diamond
 {% endif %}
-  - nrpe.gsyslog
-  - gsyslog
-  - gsyslog.nrpe
+  - nrpe.rsyslog
+  - rsyslog
+  - rsyslog.nrpe
 
 /usr/local/nagiosplugin:
   file:
@@ -32,6 +33,7 @@ nrpe-virtualenv:
     - name: /usr/local/nagios
     - require:
       - module: virtualenv
+      - file: /usr/local
   file:
     - managed
     - name: /usr/local/nagios/nagiosplugin-requirements.txt
@@ -58,14 +60,18 @@ nrpe-virtualenv:
     - require:
       - module: pip
 
+nagios-plugins:
+  pkg:
+    - installed
+    - names:
+      - nagios-plugins-standard
+      - nagios-plugins-basic
+
 nagios-nrpe-server:
   pkg:
     - latest
-    - names:
-      - nagios-nrpe-server
-      - nagios-plugins-standard
-      - nagios-plugins-basic
     - require:
+      - pkg: nagios-plugins
       - cmd: apt_sources
   file:
     - managed
@@ -80,6 +86,7 @@ nagios-nrpe-server:
   service:
     - running
     - enable: True
+    - order: 50
     - watch:
       - pkg: nagios-nrpe-server
       - file: nagios-nrpe-server

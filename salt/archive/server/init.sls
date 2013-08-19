@@ -10,11 +10,8 @@ salt_archive:
   web:
     hostnames:
       - archive.example.com
-  keys:
-    00daedbeef: ssh-dss
 
 salt_archive:web:hostnames: list of hostname of the web archive
-salt_archive:keys: dict of keys allowed to log in user
 
 Optional Pillar
 ---------------
@@ -24,10 +21,13 @@ salt_archive:
   web:
     ssl: mykeyname
     ssl_redirect: True
+  keys:
+    00daedbeef: ssh-dss
 
 salt_archive:source: rsync server used as the source for archived files.
 salt_archive:web:ssl: SSL key to use to secure this server archive
 salt_archive:web:ssl_redirect: if True, redirect all HTTP traffic to HTTPs.
+salt_archive:keys: dict of keys allowed to log in user
 
 This state also need the following pillar for rsync state:
 
@@ -39,7 +39,6 @@ rsync:
     archive:
       path: /var/lib/salt_archive
       'read only': true
-      'only read': true
       'dont compress': true
       exclude: .* incoming
 
@@ -51,7 +50,9 @@ files_archive pillar value accordingly.
 
 include:
   - cron
+  - local
   - nginx
+  - rsync
   - salt.archive
   - ssh.server
 {%- if ssl %}
@@ -62,6 +63,7 @@ include:
   file:
     - absent
 
+{%- if not salt['pillar.get']('salt_archive:source', False) %}
 /etc/cron.d/salt-archive:
   file:
     - managed
@@ -73,6 +75,63 @@ include:
     - require:
       - user: salt_archive
       - file: /usr/local/bin/salt_archive_incoming.py
+    {#-
+     if pillar['salt_archive']['source'] is not defined, create an incoming
+     directory.
+    #}
+
+salt_archive_incoming:
+  file:
+    - directory
+    - name: /var/lib/salt_archive/incoming
+    - user: salt_archive
+    - group: salt_archive
+    - mode: 550
+    - require:
+      - user: salt_archive
+
+    {%- for type in ('pip', 'mirror') %}
+/var/lib/salt_archive/incoming/{{ type }}:
+  file:
+    - directory
+    - user: salt_archive
+    - group: salt_archive
+    - mode: 770
+    - require:
+      - user: salt_archive
+      - file: salt_archive_incoming
+    {%- endfor %}
+
+/usr/local/bin/salt_archive_incoming.py:
+  file:
+    - managed
+    - user: root
+    - group: root
+    - source: salt://salt/archive/server/incoming.py
+    - mode: 550
+    - require:
+      - file: /usr/local
+{%- else %}
+    {#-
+     if pillar['salt_archive']['source'] is defined, can't have an incoming
+     directory.
+    #}
+/etc/cron.d/salt-archive:
+  file:
+    - absent
+
+/var/lib/salt_archive/incoming:
+  file:
+    - absent
+
+archive_rsync:
+  cmd:
+    - run
+    - name: rsync -av --delete --exclude ".*" {{ pillar['salt_archive']['source'] }} /var/lib/salt_archive/
+    - require:
+      - pkg: rsync
+      - user: salt_archive
+{%- endif %}
 
 /etc/nginx/conf.d/salt_archive.conf:
   file:
@@ -97,36 +156,6 @@ salt_archive_{{ key }}:
       - user: salt_archive
       - service: openssh-server
 {% endfor -%}
-
-salt_archive_incoming:
-  file:
-    - directory
-    - name: /var/lib/salt_archive/incoming
-    - user: salt_archive
-    - group: salt_archive
-    - mode: 550
-    - require:
-      - user: salt_archive
-
-{% for type in ('pip', 'mirror') %}
-/var/lib/salt_archive/incoming/{{ type }}:
-  file:
-    - directory
-    - user: salt_archive
-    - group: salt_archive
-    - mode: 770
-    - require:
-      - user: salt_archive
-      - file: salt_archive_incoming
-{% endfor %}
-
-/usr/local/bin/salt_archive_incoming.py:
-  file:
-    - managed
-    - user: root
-    - group: root
-    - source: salt://salt/archive/server/incoming.py
-    - mode: 550
 
 extend:
   cron:

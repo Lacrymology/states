@@ -11,6 +11,11 @@ system_locale:
     - name: {{ encoding }}
     - require:
       - pkg: language_pack
+  cmd:
+    - wait
+    - name: locale-gen {{ encoding }}
+    - watch:
+      - locale: system_locale
 
 language_pack:
   pkg:

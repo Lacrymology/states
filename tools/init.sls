@@ -5,6 +5,7 @@ tools for troubleshooting
 
 include:
   - apt
+  - screen
 
 basic:
   pkg:
@@ -14,7 +15,6 @@ basic:
       - iftop
       - iotop
       - nmap
-      - screen
       - tshark
     - skip_verify: True
     - require:

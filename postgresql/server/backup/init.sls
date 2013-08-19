@@ -1,6 +1,9 @@
 {#
  Backup client for PostgreSQL
  #}
+include:
+  - local
+
 /etc/cron.daily/backup-postgresql:
   file:
     - absent
@@ -13,3 +16,5 @@
     - mode: 500
     - template: jinja
     - source: salt://postgresql/server/backup/script.jinja2
+    - require:
+      - file: /usr/local

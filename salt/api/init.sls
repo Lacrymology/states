@@ -4,12 +4,10 @@
 include:
   - salt.master
   - git
-  - apt
   - local
   - nginx
   - pip
-  - salt
-  - gsyslog
+  - rsyslog
 {% if pillar['salt_master']['ssl']|default(False) %}
   - ssl
 {% endif %}
@@ -23,6 +21,7 @@ salt_api:
 user_{{ user }}:
   user:
     - present
+    - name: {{ user }}
     - groups:
       - salt_api
     - home: /home/{{ user }}
@@ -59,15 +58,22 @@ salt-api-requirements:
       - file: salt-api-requirements
     - require:
       - module: pip
+{%- set version = salt['pillar.get']('salt:version', '0.15.3') -%}
+{%- set api_version = salt['pillar.get']('salt:api:version', '0.8.1') -%}
+{%- set api_path = '{0}/pool/main/s/salt-api/salt-api_{1}_all.deb'.format(version, api_version) %}
 
 salt-api:
   pkg:
     - installed
+    - sources:
+{%- if 'files_archive' in pillar %}
+      - salt-api: {{ pillar['files_archive']|replace('file://', '') }}/mirror/salt/{{ api_path }}
+{%- else %}
+      - salt-api: http://saltinwound.org/ubuntu/{{ api_path }}
+{%- endif %}
     - require:
       - pkg: salt-master
       - module: salt-api-requirements
-      - apt_repository: salt
-      - cmd: apt_sources
   file:
     - managed
     - name: /etc/init/salt-api.conf
@@ -103,6 +109,7 @@ salt-ui:
     - if_missing: /usr/local/salt-ui/
     - require:
       - file: /usr/local
+  {%- set salt_ui_module = 'archive' %}
 {%- else %}
   git:
     - latest
@@ -111,6 +118,7 @@ salt-ui:
     - target: /usr/local/salt-ui/
     - require:
       - pkg: git
+    {%- set salt_ui_module = 'git' %}
 {%- endif %}
   file:
     - managed
@@ -122,6 +130,42 @@ salt-ui:
     - mode: 440
     - require:
       - pkg: nginx
+      - {{ salt_ui_module }}: salt-ui
+
+salt-api:
+  pkg:
+    - installed
+    - sources:
+{%- if 'files_archive' in pillar %}
+      - salt-api: {{ pillar['files_archive']|replace('file://', '') }}/mirror/salt/{{ api_path }}
+{%- else %}
+      - salt-api: http://saltinwound.org/ubuntu/{{ api_path }}
+{%- endif %}
+    - require:
+      - pkg: salt-master
+      - module: salt-api-requirements
+  file:
+    - managed
+    - name: /etc/init/salt-api.conf
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - source: salt://salt/api/upstart.jinja2
+    - require:
+      - pkg: salt-api
+  service:
+    - running
+    - enable: True
+    - order: 50
+    - require:
+      - service: gsyslog
+    - watch:
+      - file: salt-api
+      - module: salt-api-requirements
+      - file: /etc/salt/master.d/ui.conf
+      - pkg: salt-api
+      - {{ salt_ui_module }}: salt-ui
 
 extend:
   nginx:

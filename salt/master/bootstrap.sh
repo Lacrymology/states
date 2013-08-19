@@ -7,7 +7,4 @@ fi
 
 /root/salt/states/salt/minion/bootstrap.sh $1
 
-salt-call -l all --local saltutil.sync_all
-salt-call -l all --local state.highstate
-
-echo "If everthing went fine, please run 'rm -rf /root/salt'"
+salt-call state.highstate

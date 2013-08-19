@@ -14,7 +14,7 @@ web:
     - enforce_password: True
   file:
     - directory
-    - name: /var/www
+    - name: /var/lib/deployments
     - user: www-data
     - group: www-data
     - mode: 775

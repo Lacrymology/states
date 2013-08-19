@@ -4,8 +4,8 @@
 include:
   - diamond
   - diamond.nrpe
-  - gsyslog.diamond
-  - nrpe.gsyslog.diamond
+  - rsyslog.diamond
+  - nrpe.rsyslog.diamond
 
 nrpe_diamond_resources:
   file:
@@ -19,3 +19,5 @@ nrpe_diamond_resources:
         [[nrpe]]
         exe = ^\/usr\/sbin\/nrpe$
         cmdline = ^\/usr\/lib\/nagios\/plugins\/check_
+        [[init]]
+        exec = ^\/sbin\/init$

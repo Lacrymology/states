@@ -3,7 +3,7 @@
  #}
 include:
   - apt
-  - gsyslog
+  - rsyslog
 
 openssh-server:
   pkg:
@@ -23,9 +23,10 @@ openssh-server:
   service:
     - running
     - enable: True
+    - order: 50
     - name: ssh
     - require:
-      - service: gsyslog
+      - service: rsyslog
     - watch:
       - pkg: openssh-server
       - file: openssh-server

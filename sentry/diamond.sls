@@ -3,7 +3,7 @@
 #}
 include:
   - diamond
-  - gsyslog.diamond
+  - rsyslog.diamond
   - memcache.diamond
   - nginx.diamond
   - postgresql.server.diamond

@@ -1,0 +1,4 @@
+# {{ pillar['message_do_not_modify'] }}
+command[openerp_procs]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u openerp -C openerp-server
+command[openerp_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 8069
+

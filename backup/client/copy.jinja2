@@ -1,0 +1,6 @@
+#!/bin/sh
+# {{ pillar['message_do_not_modify'] }}
+archive_path=$1
+archive_name=`basename $archive_path`
+scp -q $archive_path root@{{ pillar['backup_server']['address'] }}:/var/lib/backup/{{ grains['id'] }}-$archive_name
+rm -f $archive_path

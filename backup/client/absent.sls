@@ -11,3 +11,7 @@ backup-client:
     - fingerprint: {{ pillar['backup_server']['fingerprint'] }}
     - order: 1
 {% endif %}
+
+/usr/local/bin/backup_store:
+  file:
+    - absent

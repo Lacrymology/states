@@ -1,0 +1,41 @@
+#!/usr/bin/env python
+
+"""
+Stores data files on Amazon S3
+"""
+
+__email__ = 'nicolasp@microsigns.com'
+__author__ = 'Nicolas Plessis <%s>' % __email__
+
+import argparse
+import os
+import sys
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('file')
+    arg = parser.parse_args()
+    filename = arg.file
+
+    if(not os.path.exists(filename)):
+        print "File %s does not exist" % filename
+        sys.exit()
+    else:
+        print "Upload '%s' in progress..." % filename
+
+    return filename
+
+
+def upload(data):
+    """
+    Upload data on AWS S3
+    """
+    bucket = "{{ pillar['aws']['s3']['bucket'] }/pillar['aws']['s3']['path'] } }}"
+    cmd = "s3cmd put %s s3://%s" % (data, bucket)
+    os.system(cmd)
+
+
+if __name__ == '__main__':
+    file = main()
+    upload(file)

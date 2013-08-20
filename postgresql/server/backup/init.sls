@@ -16,5 +16,14 @@ include:
     - mode: 500
     - template: jinja
     - source: salt://postgresql/server/backup/script.jinja2
+
+/usr/local/bin/backup-postgresql-all:
+  file:
+    - managed
+    - user: root
+    - group: root
+    - mode: 500
+    - template: jinja
+    - source: salt://postgresql/server/backup/dump_all.jinja2
     - require:
       - file: /usr/local

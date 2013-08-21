@@ -15,8 +15,6 @@ openerp{{ version }}-core:
 openerp-server:
   service:
     - dead
-    - require:
-      - user: openerp
 
 openerp:
   user:

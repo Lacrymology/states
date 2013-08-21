@@ -2,8 +2,8 @@
 
 server {
     listen 80;
-    server_name {{ pillar['openerp']['nginx']['server_name']|default('localhost') }};
-    
+    server_name {%- for hostname in salt['pillar.get']('openerp:nginx:server_names') %}{{ hostname }}{%- if not loop.last %} {%- endif %}{%- endfor %}
+
     access_log  /var/log/nginx/openerp_access.log;
 
     location / {

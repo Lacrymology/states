@@ -4,19 +4,21 @@ Installing OpenERP
 
 Mandatory Pillar
 ----------------
+openerp:
+  nginx:
+    server_names:
+      - localhost
 
 Optional Pillar
 ---------------
 
 openerp:
-  version: 6.1
-  nginx:
-    server_name: localhost
+  version: 6.1          # Default is 6.1
   database:
-    host: False     # set 'False' if run postgresql in local
-    port: False
-    user: openerp
-    password: False
+    host: 127.0.0.1     # if run postgresql in local
+    port: 5432          # Default port for postgresql server
+    user: openerp       
+    password: False     # `False` is no password
 
 -#}
 include:
@@ -25,8 +27,9 @@ include:
   - postgresql.server
   - python.dev
   - underscore
+  - uwsgi
 
-{%- set version= pillar['openerp']['version']|default(6.1) %}
+{%- set version=  salt[pillar.get]('openerp:version','6.1') %}
 openerp-server:
   pkg:
     - installed
@@ -35,6 +38,16 @@ openerp-server:
       - pkg: libjs-underscore
       - service: postgresql
       - pip: pil
+  file:
+    - managed
+    - name: /etc/openerp/openerp-server.conf
+    - source: salt://openerp/config.jinja2
+    - user: openerp
+    - group: openerp
+    - mode: 640
+    - template: jinja
+    - require:
+      - pkg: openerp-server
   service:
     - running
     - name: openerp-server
@@ -42,7 +55,7 @@ openerp-server:
     - require:
       - pkg: openerp-server
     - watch:
-      - file: /etc/openerp/openerp-server.conf
+      - file: openerp-server
 
 pil:
   pip:
@@ -51,17 +64,7 @@ pil:
       - pkg: python-dev
       - module: pip
 
-/etc/openerp/openerp-server.conf:
-  file:
-    - managed
-    - source: salt://openerp/config.jinja2
-    - user: openerp
-    - group: openerp
-    - mode: 640
-    - template: jinja
-    - require:
-      - pkg: openerp-server
-
+      {#
 /etc/nginx/conf.d/openerp.conf:
   file:
     - managed
@@ -74,3 +77,5 @@ pil:
       - service: openerp-server
     - watch_in:
       - service: nginx
+
+#}

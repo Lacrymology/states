@@ -5,6 +5,9 @@ Nagios NRPE check for OpenERP
 include:
   - nrpe
   - apt.nrpe
+  - nginx.nrpe
+  - postgresql.nrpe
+  - postgresql.server.nrpe
 
 /etc/nagios/nrpe.d/openerp-server.cfg:
   file:

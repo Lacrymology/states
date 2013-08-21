@@ -96,6 +96,65 @@ Pillars
   - mail:mailname the SMTP mail hostname (many states)
 
 
+2013-08-16 00:00:00 GMT+08:00
+-----------------------------
+
+bfb575a777b7dcc282e48f2d1389585fa620fc5d
+
+New Additions
+=============
+
+- Add grains debian module
+- Totally new way to handle monitoring configuration.
+- Modules:
+  - monitoring
+  - nrpe
+  - password
+  - pkg_installed
+  - tech_support
+- States:
+  - amavis
+  - build
+  - clamav
+  - debian.package_build
+  - java 6/7
+  - tomcat 6/7
+  - local
+  - mail
+  - mariadb (MySQL)
+  - nfs server and client
+  - openldap
+  - postfix
+  - dovecot
+  - salt.archive
+  - s3cmd
+  - rsync
+  - rssh
+  - roundcube
+  - raven.mail
+  - python and python.dev
+  - uwsgi.top
+  - web
+  - xml
+- support for backup in amazon S3
+
+Update
+======
+
+- simplify shinken state: split it into smaller states, one per shinken component
+- improve route 53 state module
+- add many absent states
+- backup client and server, implement a simple way to use different backend storage for archive
+- lot's of bugfixes
+
+Fixes
+=====
+
+- npm module: support new version of npm
+- better test mode handling
+- few fixes in dnsimple state module
+- pkg_file.installed use APT cache directory instead of Salt minion cache
+
 2013-05-04 18:28:39 GMT+08:00
 -----------------------------
 

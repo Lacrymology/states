@@ -197,11 +197,10 @@ remove_not_in_use_instance_{{ instance }}:
   {%- endif %}
 {% endfor %}
 
-{%- set instance = '1' %}
-carbon-relay-{{ instance }}:
+carbon-relay:
   file:
     - managed
-    - name: /etc/init.d/carbon-relay-{{ instance }}
+    - name: /etc/init.d/carbon-relay
     - template: jinja
     - user: root
     - group: root
@@ -214,8 +213,8 @@ carbon-relay-{{ instance }}:
     - enable: True
     - order: 50
 {# until https://github.com/saltstack/salt/issues/5027 is fixed, this is required #}
-    - sig: /usr/local/graphite/bin/python /usr/local/graphite/bin/carbon-relay.py --config=/etc/graphite/carbon.conf --instance={{ instance }} start
-    - name: carbon-relay-{{ instance }}
+    - sig: /usr/local/graphite/bin/python /usr/local/graphite/bin/carbon-relay.py --config=/etc/graphite/carbon.conf start
+    - name: carbon-relay
     - require:
       - user: graphite
       - file: /var/log/graphite/carbon
@@ -225,7 +224,7 @@ carbon-relay-{{ instance }}:
       - cmd: carbon
       - file: /etc/graphite/carbon.conf
       - file: /etc/graphite/storage-schemas.conf
-      - file: carbon-relay-{{ instance }}
+      - file: carbon-relay
       - file: /etc/graphite/relay-rules.conf
       - cmd: carbon
 

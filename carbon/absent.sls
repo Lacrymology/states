@@ -21,23 +21,22 @@ carbon-cache-{{ instance }}:
   file:
     - absent
 
-{%- set relay_instance = '1' %}
-carbon-relay-{{ relay_instance }}:
+carbon-relay:
   file:
     - absent
-    - name: /etc/init.d/carbon-relay-{{ relay_instance }}
+    - name: /etc/init.d/carbon-relay
     - require:
-      - service: carbon-relay-{{ relay_instance }}
+      - service: carbon-relay
   service:
     - dead
     - enable: False
-    - sig: /usr/local/graphite/bin/python /usr/local/graphite/bin/carbon-relay.py --config=/etc/graphite/carbon.conf --instance={{ relay_instance }} start
+    - sig: /usr/local/graphite/bin/python /usr/local/graphite/bin/carbon-relay.py --config=/etc/graphite/carbon.conf start
 
 /etc/graphite/relay-rules.conf:
   file:
     - absent
     - require:
-      - service: carbon-relay-{{ relay_instance }}
+      - service: carbon-relay
 
 {% for file in ('/etc/logrotate.d/carbon', '/var/log/graphite/carbon', '/etc/graphite/storage-schemas.conf', '/etc/graphite/carbon.conf', '/var/lib/graphite/whisper') %}
 {{ file }}:
@@ -47,5 +46,5 @@ carbon-relay-{{ relay_instance }}:
   {% for instance in range(instances_count) %}
       - service: carbon-cache-{{ instance }}
   {% endfor %}
-      - service: carbon-relay-{{ relay_instance }}
+      - service: carbon-relay
 {% endfor %}

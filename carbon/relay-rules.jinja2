@@ -18,7 +18,8 @@
 # in the DESTINATIONS setting in the [relay] section
 [default]
 default = true
-{%- set names = 'abcdefgh' %}
-destinations = {%- for i in names[:pillar['graphite']['carbon']['instances']] -%}
+{%- set instances_count = pillar['graphite']['carbon']['instances'] %}
+
+destinations = {%- for i in range(instances_count) -%}
 127.0.0.1:20{{ loop.index }}4:{{ i }}{% if not loop.last %}, {% endif %}
 {%- endfor %}

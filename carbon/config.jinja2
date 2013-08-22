@@ -137,9 +137,8 @@ WHISPER_AUTOFLUSH = False
  BIND_PATTERNS = #
 #}
 
-{%- set names = 'abcdefgh' %}
-{# We don't need > 8 instance #}
-{% for instance in names[:pillar['graphite']['carbon']['instances']] %}
+{%- set instances_count = salt['pillar.get']('graphite:carbon:instances') %}
+{% for instance in range(instances_count) %}
 [cache:{{ instance }}]
 LINE_RECEIVER_PORT = 20{{ loop.index }}3
 PICKLE_RECEIVER_PORT = 20{{ loop.index }}4
@@ -174,7 +173,7 @@ RELAY_METHOD = consistent-hashing
  of your data by replicating every datapoint to more than
  one machine.
 #}
-REPLICATION_FACTOR = 1
+REPLICATION_FACTOR = {{ salt['pillar.get']('graphite:carbon:replication', 1) }}
 
 {#-
  This is a list of carbon daemons we will send any relayed or
@@ -195,10 +194,7 @@ REPLICATION_FACTOR = 1
  must be defined in this list
 DESTINATIONS = 127.0.0.1:2004
 #}
-
-{%- set names = 'abcdefgh' %}
-{# We don't need > 8 instance #}
-DESTINATIONS = {%- for i in names[:pillar['graphite']['carbon']['instances']] -%}
+DESTINATIONS = {%- for i in range(instances_count) -%}
 127.0.0.1:20{{ loop.index }}4:{{ i }}{% if not loop.last %}, {% endif %}
 {%- endfor %}
 

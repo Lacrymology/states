@@ -30,6 +30,7 @@ Optional Pillar
 graphite:
   file-max: 65535
   carbon:
+    replication: 2
     interface: 0.0.0.0
 shinken_pollers:
   - 192.168.1.1
@@ -37,6 +38,8 @@ shinken_pollers:
 graphite:file-max: maximum of open files for the daemon. Default: not used.
 graphite:carbon:interface: Network interface to bind Carbon-relay daemon.
     Default: 0.0.0.0.
+graphite:carbon:replication: add redundancy of your data by replicating
+    every data point and relaying to N caches. Default: 1
 shinken_pollers: IP address of monitoring poller that check this server.
     Default: not used.
 -#}
@@ -130,15 +133,13 @@ carbon:
     - require:
       - file: /etc/graphite
 
-{%- set names = 'abcdefgh' %}
-{# We don't need > 8 instance #}
 {%- set instances_count = pillar['graphite']['carbon']['instances'] %}
 
-{% for instance in names[:instances_count] %}
-carbon-{{ instance }}:
+{% for instance in range(instances_count) %}
+carbon-cache-{{ instance }}:
   file:
     - managed
-    - name: /etc/init.d/carbon-{{ instance }}
+    - name: /etc/init.d/carbon-cache-{{ instance }}
     - template: jinja
     - user: root
     - group: root
@@ -152,7 +153,7 @@ carbon-{{ instance }}:
     - order: 50
 {# until https://github.com/saltstack/salt/issues/5027 is fixed, this is required #}
     - sig: /usr/local/graphite/bin/python /usr/local/graphite/bin/carbon-cache.py --config=/etc/graphite/carbon.conf --instance={{ instance }} start
-    - name: carbon-{{ instance }}
+    - name: carbon-cache-{{ instance }}
     - require:
       - user: graphite
       - file: /var/log/graphite/carbon
@@ -163,7 +164,7 @@ carbon-{{ instance }}:
       - cmd: carbon
       - file: /etc/graphite/carbon.conf
       - file: /etc/graphite/storage-schemas.conf
-      - file: carbon-{{ instance }}
+      - file: carbon-cache-{{ instance }}
       - cmd: carbon
 
 carbon-{{ instance }}-logdir:
@@ -179,16 +180,34 @@ carbon-{{ instance }}-logdir:
       - file: /var/log/graphite/carbon
 {% endfor %}
 
-{%- for i in names[instances_count:] %}
-remove_not_in_use_instance_{{ i }}:
-  cmd:
-    - run
-    - name: service carbon-{{ i }} stop || true && rm /etc/init.d/carbon-{{ i }} || true && rm -rf /var/log/graphite/carbon/carbon-cache-{{ i }} || true
+{% set prefix = '/etc/init.d/' %}
+{% for filename in salt['file.find'](prefix, name='carbon-cache-*', type='f') %}
+  {% set instance = filename.replace(prefix + 'carbon-cache-', '') %}
+  # get not_in_use_instance
+  {%- if instance|int >= instances_count|int %}
+remove_not_in_use_instance_{{ instance }}:
+  service:
+    - dead
+    - name: carbon-cache-{{ instance }}
+  file:
+    - absent
+    - name: {{ prefix }}carbon-cache-{{ instance }}
     - require:
-    {% for j in names[:instances_count] %}
-      - service: carbon-{{ j }}
-    {% endfor %}
-{%- endfor %}
+      - service: remove_not_in_use_instance_{{ instance }}
+
+/var/log/graphite/carbon/carbon-cache-{{ instance }}:
+  file:
+    - absent
+    - require:
+      - service: remove_not_in_use_instance_{{ instance }}
+
+/var/lib/graphite/whisper/{{ instance }}:
+  file:
+    - absent
+    - require:
+      - service: remove_not_in_use_instance_{{ instance }}
+  {%- endif %}
+{% endfor %}
 
 {%- set instance = 'a' %}
 carbon-relay-{{ instance }}:

@@ -1,5 +1,4 @@
 # {{ pillar['message_do_not_modify'] }}
-{%- set names = 'abcdefgh' %}
 
 # Edit this file to customize the default Graphite webapp settings
 #
@@ -71,7 +70,8 @@ CSS_DIR = GRAPHITE_ROOT + '/webapp/content/css/'
 #RRD_DIR = '/opt/graphite/storage/rrd'
 #DATA_DIRS = ['/var/lib/graphite/whisper']
 DATA_DIRS = [
-{%- for instance in names[:pillar['graphite']['carbon']['instances']] -%}
+{%- set instances_count = salt['pillar.get']('graphite:carbon:instances') %}
+{%- for instance in range(instances_count) -%}
 "/var/lib/graphite/whisper/{{ instance }}"{% if not loop.last %}, {% endif %}
 {%- endfor -%}]
 LOG_DIR = '/var/log/graphite/graphite'
@@ -238,7 +238,7 @@ RAVEN_CONFIG = {
 
 {%- set nodes = salt['pillar.get']('graphite:nodes', []) %}
 {%- if nodes|length > 0 %}
-CLUSTER_SERVERS = ["{% for node in nodes %}{{ node }}{% if not loop.last %}", "{% endif %}{% endfor %}"]
+CLUSTER_SERVERS = ["{% for node in nodes -%}{{ node }}{% if not loop.last %}", "{% endif %}{%- endfor %}"]
 {%- else %}
 CLUSTER_SERVERS = []
 {%- endif %}
@@ -270,9 +270,8 @@ REMOTE_RENDERING = False
 # You *should* use 127.0.0.1 here in most cases
 #CARBONLINK_HOSTS = ["127.0.0.1:7002:a"]
 CARBONLINK_HOSTS = [
-{%- for instance in names[:pillar['graphite']['carbon']['instances']] -%}
-"127.0.0.1:70{{ loop.index }}2:{{ instance }}"{% if not loop.last %}, {% endif %}
-{%- endfor -%}]
+{%- for instance in range(instances_count) -%}
+"127.0.0.1:70{{ loop.index }}2:{{ instance }}"{% if not loop.last %}, {% endif %} {%- endfor -%}]
 CARBONLINK_TIMEOUT = 1.0
 #####################################
 # Additional Django Settings #

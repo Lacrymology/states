@@ -21,7 +21,7 @@ carbon-cache-{{ instance }}:
   file:
     - absent
 
-{%- set relay_instance = 'a' %}
+{%- set relay_instance = '1' %}
 carbon-relay-{{ relay_instance }}:
   file:
     - absent

@@ -30,7 +30,7 @@ Optional Pillar
 graphite:
   file-max: 65535
   carbon:
-    replication: 2
+    replication: 1
     interface: 0.0.0.0
 shinken_pollers:
   - 192.168.1.1
@@ -39,7 +39,8 @@ graphite:file-max: maximum of open files for the daemon. Default: not used.
 graphite:carbon:interface: Network interface to bind Carbon-relay daemon.
     Default: 0.0.0.0.
 graphite:carbon:replication: add redundancy of your data by replicating
-    every data point and relaying to N caches. Default: 1
+    every data point and relaying it to N other caches (N < number of instances). 
+    Default: 0 (Mean you have only one copy for each metric)
 shinken_pollers: IP address of monitoring poller that check this server.
     Default: not used.
 -#}
@@ -158,7 +159,6 @@ carbon-cache-{{ instance }}:
       - user: graphite
       - file: /var/log/graphite/carbon
       - file: /var/lib/graphite
-      - file: carbon-{{ instance }}-logdir
     - watch:
       - module: carbon
       - cmd: carbon
@@ -166,18 +166,6 @@ carbon-cache-{{ instance }}:
       - file: /etc/graphite/storage-schemas.conf
       - file: carbon-cache-{{ instance }}
       - cmd: carbon
-
-carbon-{{ instance }}-logdir:
-  file:
-    - directory
-    - name: /var/log/graphite/carbon/carbon-cache-{{ instance }}
-    - user: graphite
-    - group: graphite
-    - mode: 770
-    - makedirs: True
-    - require:
-      - user: graphite
-      - file: /var/log/graphite/carbon
 {% endfor %}
 
 {% set prefix = '/etc/init.d/' %}
@@ -209,7 +197,7 @@ remove_not_in_use_instance_{{ instance }}:
   {%- endif %}
 {% endfor %}
 
-{%- set instance = 'a' %}
+{%- set instance = '1' %}
 carbon-relay-{{ instance }}:
   file:
     - managed
@@ -232,7 +220,6 @@ carbon-relay-{{ instance }}:
       - user: graphite
       - file: /var/log/graphite/carbon
       - file: /var/lib/graphite
-      - file: carbon-relay-{{ instance }}-logdir
     - watch:
       - module: carbon
       - cmd: carbon
@@ -241,18 +228,6 @@ carbon-relay-{{ instance }}:
       - file: carbon-relay-{{ instance }}
       - file: /etc/graphite/relay-rules.conf
       - cmd: carbon
-
-carbon-relay-{{ instance }}-logdir:
-  file:
-    - directory
-    - name: /var/log/graphite/carbon/carbon-relay-{{ instance }}
-    - user: graphite
-    - group: graphite
-    - mode: 770
-    - makedirs: True
-    - require:
-      - user: graphite
-      - file: /var/log/graphite/carbon
 
 /etc/graphite/relay-rules.conf:
   file:

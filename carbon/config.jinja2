@@ -173,7 +173,7 @@ RELAY_METHOD = consistent-hashing
  of your data by replicating every datapoint to more than
  one machine.
 #}
-REPLICATION_FACTOR = {{ salt['pillar.get']('graphite:carbon:replication', 1) }}
+REPLICATION_FACTOR = {{ salt['pillar.get']('graphite:carbon:replication', 0) }}
 
 {#-
  This is a list of carbon daemons we will send any relayed or

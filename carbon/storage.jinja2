@@ -4,7 +4,7 @@
 # CARBON_METRIC_PREFIX and CARBON_METRIC_INTERVAL settings
 
 [carbon]
-pattern = ^carbon\.
+pattern = ^{{ grains['id']}}\.carbon\.
 retentions = 60:90d
 
 {% for retention in pillar['graphite']['retentions'] %}

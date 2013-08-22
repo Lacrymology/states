@@ -155,6 +155,7 @@ To configure special settings for the carbon-cache instance 'b', uncomment this:
 #}
 
 [relay]
+USER = graphite
 {%- set receiver_interface = salt['pillar.get']('graphite:carbon:interface', '0.0.0.0') %}
 LINE_RECEIVER_INTERFACE = {{ receiver_interface }}
 LINE_RECEIVER_PORT = 2003

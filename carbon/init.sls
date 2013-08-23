@@ -39,8 +39,8 @@ graphite:file-max: maximum of open files for the daemon. Default: not used.
 graphite:carbon:interface: Network interface to bind Carbon-relay daemon.
     Default: 0.0.0.0.
 graphite:carbon:replication: add redundancy of your data by replicating
-    every data point and relaying it to N other caches (N < number of instances). 
-    Default: 0 (Mean you have only one copy for each metric)
+    every data point and relaying it to N caches (0 < N <= number of cache instances).
+    Default: 1 (Mean you have only one copy for each metric = No replication)
 shinken_pollers: IP address of monitoring poller that check this server.
     Default: not used.
 -#}

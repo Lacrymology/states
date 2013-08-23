@@ -7,6 +7,7 @@ PID_DIR = /var/run/
 CONF_DIR = /etc/graphite
 LOCAL_DATA_DIR = /var/lib/graphite/whisper
 WHITELISTS_DIR = /var/lib/graphite/lists
+CARBON_METRIC_PREFIX = {{ grains['id'] }}.carbon
 
 USER = graphite
 
@@ -161,6 +162,7 @@ LINE_RECEIVER_INTERFACE = {{ receiver_interface }}
 LINE_RECEIVER_PORT = 2003
 PICKLE_RECEIVER_INTERFACE = {{ receiver_interface }}
 PICKLE_RECEIVER_PORT = 2004
+LOG_DIR = /var/log/graphite/carbon
 
 {#-
  To use the user defined relay-rules.conf,
@@ -220,7 +222,7 @@ metricsReceived) with the top level prefix of 'carbon' at an interval of 60
 seconds. Set CARBON_METRIC_INTERVAL to 0 to disable instrumentation
 CARBON_METRIC_INTERVAL = 60
  #}
-CARBON_METRIC_PREFIX = {{ grains['id']}}.carbon
+CARBON_METRIC_PREFIX = {{ grains['id'] }}.carbon
 
 {#-
 Set this to True to enable whitelisting and blacklisting of metrics in

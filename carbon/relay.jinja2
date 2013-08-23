@@ -6,7 +6,7 @@ cmd="/usr/local/graphite/bin/python /usr/local/graphite/bin/carbon-relay.py --co
 cntr=0
 if [ "$1" = "restart" ] ; then
     while [ $cntr -lt 10 ]; do
-        $cmd stop | grep "Pidfile" -q && $cmd start && exit 0;
+        $cmd stop | grep "No process" -q && $cmd start && exit 0;
         sleep 0.1
         cntr=`expr $cntr + 1`
     done

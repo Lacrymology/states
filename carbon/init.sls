@@ -93,6 +93,39 @@ fs.file-max:
       - user: graphite
       - file: /etc/graphite
 
+stop_old_instance:
+  service:
+    - name: carbon-a
+    - dead
+    - enable: False
+  file:
+    - name: /etc/init.d/carbon-a
+    - absent
+    - require:
+      - service: stop_old_instance
+  cmd:
+    - run
+    - name: mv * /var/lib/graphite/whisper/0
+    - cwd: /var/lib/graphite/whisper
+    - onlyif: test -d /var/lib/graphite/whisper/carbon
+    - user: graphite
+    - group: graphite
+    - require:
+      - file: stop_old_instance
+      - file: /var/lib/graphite/whisper/0
+    - require_in:
+      - file: carbon
+
+/var/lib/graphite/whisper/0:
+  file:
+    - directory
+    - user: graphite
+    - group: graphite
+    - makedirs: True
+    - require:
+      - user: graphite
+      - file: /var/lib/graphite
+
 carbon:
   file:
     - managed

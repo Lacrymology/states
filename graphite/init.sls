@@ -280,6 +280,19 @@ graphite_settings:
     - watch:
       - module: graphite-web
 
+graphite_admin_user:
+  module:
+    - wait
+    - name: django.command
+    - command: createsuperuser_plus --username={{ pillar['graphite']['web']['initial_admin_user']['username'] }} --email={{ salt['pillar.get']('graphite:web:initial_admin_user:email', 'root@example.com') }} --password={{ pillar['graphite']['web']['initial_admin_user']['password'] }}
+    - settings_module: graphite.local_settings
+    - bin_env: /usr/local/graphite
+    - stateful: False
+    - require:
+      - module: graphite_settings
+    - watch:
+      - postgres_database: graphite_settings
+
 /etc/uwsgi/graphite.ini:
   file:
     - managed

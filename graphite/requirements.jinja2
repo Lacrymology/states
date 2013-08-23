@@ -20,7 +20,9 @@ txamqp==0.6.2
 {%- if 'files_archive' in pillar %}
 {{ pillar['files_archive'] }}/pip/py2cairo-1.8.10.tar.gz
 {{ pillar['files_archive'] }}/pip/whisper-0.9.12.tar.gz
+{{ pillar['files_archive'] }}/pip/django-insecure-0.1.zip
 {%- else %}
 http://cairographics.org/releases/py2cairo-1.8.10.tar.gz
 whisper==0.9.12
+-e git+git@github.com:bclermont/django-insecure.git@ce529583fc02db20a5ea2b34f1ee8f3d4538a14e#egg=django-insecure
 {%- endif %}

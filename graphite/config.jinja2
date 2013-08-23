@@ -303,7 +303,7 @@ MIDDLEWARE_CLASSES = MIDDLEWARE_CLASSES + (
 SECRET_KEY = "{{ salt['password.pillar']('graphite:web:django_key') }}"
 STATSD_PREFIX = 'graphite'
 STATSD_CLIENT = 'django_statsd.clients.normal'
-
-{#INSTALLED_APPS += ('gunicorn',)#}
+INSTALLED_APPS = list(INSTALLED_APPS)
+INSTALLED_APPS.extend(['django_insecure'])
 
 ALLOWED_HOSTS = ["{% for hostname in pillar['graphite']['web']['hostnames'] %}{{ hostname }}{% if not loop.last %}", "{% endif %}{% endfor %}"]

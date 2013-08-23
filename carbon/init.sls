@@ -205,9 +205,7 @@ carbon-relay:
     - user: root
     - group: root
     - mode: 550
-    - source: salt://carbon/relay.jinja2
-    - context:
-      instance: {{ instance }}
+    - source: salt://carbon/init.jinja2
   service:
     - running
     - enable: True

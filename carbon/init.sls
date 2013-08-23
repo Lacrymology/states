@@ -105,16 +105,12 @@ stop_old_instance:
       - service: stop_old_instance
   cmd:
     - run
-    - name: mv * /var/lib/graphite/whisper/0
-    - cwd: /var/lib/graphite/whisper
+    - name: mv /var/lib/graphite/whisper/ /var/lib/graphite/old
     - onlyif: test -d /var/lib/graphite/whisper/carbon
     - user: graphite
     - group: graphite
     - require:
       - file: stop_old_instance
-      - file: /var/lib/graphite/whisper/0
-    - require_in:
-      - file: carbon
 
 /var/lib/graphite/whisper/0:
   file:
@@ -125,6 +121,15 @@ stop_old_instance:
     - require:
       - user: graphite
       - file: /var/lib/graphite
+      - cmd: stop_old_instance
+  cmd:
+    - run
+    - name: mv /var/lib/graphite/old /var/lib/graphite/whisper/0
+    - onlyif: test -d /var/lib/graphite/old
+    - require:
+      - file: /var/lib/graphite/whisper/0
+    - require_in:
+      - file: carbon
 
 carbon:
   file:

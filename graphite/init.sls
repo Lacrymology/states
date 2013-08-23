@@ -319,9 +319,8 @@ graphite_admin_user:
     - name: file.touch
     - require:
       - file: /etc/uwsgi/graphite.ini
-    - m_name: /etc/uwsgi/graphite.ini
-    - require:
       - service: memcached
+    - m_name: /etc/uwsgi/graphite.ini
     - watch:
       - module: graphite_settings
       - file: graphite_wsgi
@@ -330,6 +329,7 @@ graphite_admin_user:
       - cmd: graphite-web
       - file: graphite-urls-patch
       - pip: graphite-web
+      - module: graphite_admin_user
 
 /usr/local/graphite/bin/build-index.sh:
   file:

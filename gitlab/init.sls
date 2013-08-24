@@ -2,12 +2,18 @@
 GitLab: self hosted Git management software
 ===========================================
 
+Mandatory Pillar
+----------------
+
+gitlab:
+  hostnames:
+    - localhost
+
 Optional Pillar
 ---------------
 
 gitlab:
   config:
-    host: localhost
     port: 80
     https: false
     email_from: email_from@localhost
@@ -18,8 +24,6 @@ gitlab:
     port: 5432
     username: git
     password: pass    # default password is `pass`
-  nginx:
-    server_name: localhost
 
   ldap:
     enabled: false
@@ -55,13 +59,6 @@ gitlab_dependencies:
     - require:
       - cmd: apt_sources
 
-git:
-  user:
-    - present
-    - shell: /bin/false
-    - require:
-      - pkg: gitlab_dependencies
-
 gitlab-shell:
   archive:
     - extracted
@@ -77,7 +74,7 @@ gitlab-shell:
     - tar_options: z
     - if_missing: /home/git/gitlab-shell
     - require:
-      - user: git
+      - user: gitlab
   file:
     - directory
     - name: /home/git/gitlab-shell
@@ -103,14 +100,21 @@ gitlab-shell:
     - template: jinja
     - user: git
     - group: git
+    - mode: 440
     - require:
       - file: gitlab-shell
       - pkg: ruby
 
 {%- set database_username = salt['pillar.get']('gitlab:database:username','git') %}
 {%- set database_password = salt['pillar.get']('gitlab:database:password','pass') %}
-{%- version = '6.0' %}
+{%- set version = '6.0' %}
 gitlab:
+  user:
+    - present
+    - name: git
+    - shell: /bin/false
+    - require:
+      - pkg: gitlab_dependencies
   postgres_user:
     - present
     - name: {{ database_username }}
@@ -149,6 +153,22 @@ gitlab:
       - group
     - require:
       - archive: gitlab
+  cmd:
+    - run
+    - name: bundle exec rake gitlab:setup RAILS_ENV=production
+    - env:
+      force: yes
+    - user: git
+    - cwd: /home/git/gitlab
+    - require:
+      - cmd: bundler
+      - service: redis-server
+  service:
+    - running
+    - name: gitlab
+    - require:
+      - pkg: nodejs
+      - cmd: gitlab_upstart
 
 /home/git/gitlab-satellites:
     file:
@@ -162,8 +182,8 @@ gitlab:
     - directory
     - user: git
     - group: git
-    - dir_mode: 700
-    - file_mode: 700
+    - dir_mode: 766
+    - file_mode: 766
     - recurse:
       - user
       - group
@@ -189,25 +209,15 @@ gitlab:
       - file: /home/git/gitlab-satellites
  {%- endfor %}
 
-{#
-gem_depends:
-  pkg:
-    - installed
-    - pkgs:
-      {%- for pkg in 'libpq-dev', 'libicu-dev', 'libxml2-dev', 'libxslt1-dev' %}
-      - {{ pkg }}
-      {%- endfor %}
-    - require:
-      - file: /home/git/gitlab-satellites
-      #}
 charlock_holmes:
   gem:
     - installed
     - version: 0.6.9.4
     - require:
       - file: gitlab
+      - file: /home/git/gitlab-satellites
 
-bundle:
+bundler:
   gem:
     - installed
     - version: 1.3.5
@@ -219,52 +229,36 @@ bundle:
     - cwd: /home/git/gitlab
     - user: git
     - require:
-      - gem: bundle
+      - gem: bundler
 
-create_database:
-  cmd:
-    - run
-    - name: export force="yes"; bundle exec rake gitlab:setup RAILS_ENV=production
-    - user: git
-    - cwd: /home/git/gitlab
-    - require:
-      - cmd: bundle
-      - service: redis-server
-
-gitlab:
+gitlab_upstart:
   file:
     - managed
     - name: /etc/init.d/gitlab
-    - source: salt://gitlab/gitlab.init.jinja2
+    - source: salt://gitlab/init.jinja2
     - template: jinja
-    - mode: 500
+    - user: root
+    - group: root
+    - mode: 440
     - require:
-      - cmd: create_database
+      - cmd: gitlab
   cmd:
     - run
     - name: update-rc.d gitlab defaults 21
     - require:
-      - file: gitlab
-  service:
-    - running
-    - require:
-      - pkg: nodejs
-      - cmd: gitlab
-
+      - file: gitlab_upstart
 
 /etc/nginx/conf.d/gitlab.conf:
   file:
     - managed
     - source: salt://gitlab/nginx.jinja2
     - template: jinja
+    - group: www-data
+    - user: www-data
+    - mode: 440
     - require:
       - pkg: nginx
       - service: gitlab
-
-extend:
-  nginx:
-    service:
-      - watch:
-        - file: /etc/nginx/conf.d/gitlab.conf
-
-#}
+      - user: web
+    - watch_in:
+      - service: nginx

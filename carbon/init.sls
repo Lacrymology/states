@@ -112,22 +112,14 @@ stop_old_instance:
     - require:
       - file: stop_old_instance
 
-/var/lib/graphite/whisper/0:
-  file:
-    - directory
-    - user: graphite
-    - group: graphite
-    - makedirs: True
-    - require:
-      - user: graphite
-      - file: /var/lib/graphite
-      - cmd: stop_old_instance
+move_old_data_to_first_instance:
   cmd:
     - run
     - name: mv /var/lib/graphite/old /var/lib/graphite/whisper/0
     - onlyif: test -d /var/lib/graphite/old
     - require:
       - file: /var/lib/graphite/whisper/0
+      - cmd: stop_old_instance
     - require_in:
       - file: carbon
 

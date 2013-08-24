@@ -15,7 +15,7 @@ production: &base
     #}
     host: {{ salt['pillar.get']('gitlab:hostnames')[0] }}
     port: {{ salt['pillar.get']('gitlab:config:port','80') }}
-    https: {{ salt['pillar.get']('gitlab:config:https','false') }}
+    https: {{ salt['pillar.get']('gitlab:config:ssl','false') }}
 
     {#-
      WARNING: This feature is no longer supported

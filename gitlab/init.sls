@@ -13,9 +13,10 @@ Optional Pillar
 ---------------
 
 gitlab:
+  workers: 2
   config:
     port: 80
-    https: false
+    ssl: false
     email_from: email_from@localhost
     support_email: support_email@localhost
     default_projects_limit: 10
@@ -72,9 +73,9 @@ gitlab-shell:
     {%- if 'files_archive' in pillar %}
     - source: https://github.com/gitlabhq/gitlab-shell/archive/master.tar.gz
     {%- else %}
-    - source: {{ pillar['files_archive'] }}/gitlab-shell.tar.gz
+    - source: {{ salt['pillar.get']('files_archive') }}/gitlab-shell.tar.gz
     {%- endif %}
-    - source_hash: md5=fc2b58dec1ba032f6ec7feadf366b1e4
+    - source_hash: md5=e852ac69b13ad055424442368282774e
     - archive_format: tar
     - tar_options: z
     - if_missing: /home/git/gitlab-shell
@@ -82,7 +83,7 @@ gitlab-shell:
       - user: gitlab
   file:
     - directory
-    - name: /home/git/gitlab-shell
+    - name: /home/git
     - user: git
     - group: git
     - recurse:
@@ -90,6 +91,7 @@ gitlab-shell:
       - group
     - require:
       - cmd: gitlab-shell
+      - user: web
   cmd:
     - run
     - name: mv gitlab-shell-master gitlab-shell
@@ -151,7 +153,7 @@ gitlab:
     {%- else %}
     - source: salt://gitlab/gitlab-{{ version }}.tar.gz
     {%- endif %}
-    - source_hash: md5=151be72dc60179254c58120098f2a84e
+    - source_hash: md5=ae96d3ed872e664ae9d1d796e3a4efee
     - archive_format: tar
     - tar_options: z
     - if_missing: /home/git/gitlab
@@ -177,13 +179,7 @@ gitlab:
     - require:
       - cmd: bundler
       - service: redis-server
-{#  service:
-    - running
-    - name: gitlab
-    - require:
-      - pkg: nodejs
-      - cmd: gitlab_upstart
-      #}
+
 rename_gitlab:
   cmd:
     - run
@@ -195,21 +191,30 @@ rename_gitlab:
     - require_in:
       - file: gitlab
 
+change_gitlab_dir_permission:
+  cmd:
+    - wait
+    - name: chown -R www-data:www-data /home/git/gitlab
+    - watch:
+      - cmd: gitlab
+    - require:
+      - user: web
+
+
 /home/git/gitlab-satellites:
     file:
       - directory
       - user: git
       - group: git
 
-{#{%- for dir in 'log', 'tmp', 'tmp/pids', 'tmp/sockets', 'public/uploads' %} #}
 {%- for dir in ('log', 'tmp', 'public/uploads') %}
 /home/git/gitlab/{{ dir }}:
   file:
     - directory
-    - user: www-data
-    - group: ww-data
-    - dir_mode: 777
-    - file_mode: 777
+    - user: git
+    - group: git
+    - dir_mode: 755
+    - file_mode: 755
     - recurse:
       - user
       - group
@@ -258,25 +263,6 @@ bundler:
     - user: git
     - require:
       - gem: bundler
-      {#
-gitlab_upstart:
-  file:
-    - managed
-    - name: /etc/init.d/gitlab
-    - source: salt://gitlab/init.jinja2
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 540
-    - require:
-      - cmd: gitlab
-  cmd:
-    - run
-    - name: update-rc.d gitlab defaults 21
-    - user: root
-    - require:
-      - file: gitlab_upstart
-      #}
 
 rack:
   gem:
@@ -293,10 +279,11 @@ rack:
     - mode: 640 # set mode to 440 after write done
     - require:
       - cmd: gitlab
-      - file: uwsgi_emperor
+      - service: uwsgi_emperor
       - gem: rack
-    - watch_in:
-      - service: uwsgi
+      - cmd: change_gitlab_dir_permission
+      #- watch_in:
+        #- service: uwsgi
 
 /etc/nginx/conf.d/gitlab.conf:
   file:

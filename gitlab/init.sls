@@ -35,12 +35,11 @@ gitlab:
     bind_dn: xxx
     password: xxx
     allow_username_or_email_login: true
-
-
 #}
 
 include:
   - apt
+  - build
   - nginx
   - nodejs
   - postgresql.server
@@ -56,8 +55,10 @@ gitlab_dependencies:
       - libpq-dev
       - libicu-dev
       - libxslt1-dev
+      - libcurl4-openssl-dev
     - require:
       - cmd: apt_sources
+      - pkg: build
 
 gitlab-shell:
   archive:
@@ -65,11 +66,11 @@ gitlab-shell:
     - name: /home/git/
     {#- need move to archive!! #}
     {%- if 'files_archive' in pillar %}
-    - source: {{ pillar['files_archive'] }}/gitlab-shell.tar.gz
+    - source: https://github.com/gitlabhq/gitlab-shell/archive/master.tar.gz
     {%- else %}
-    - source: salt://gitlab/gitlab-shell.tar.gz
+    - source: {{ pillar['files_archive'] }}/gitlab-shell.tar.gz
     {%- endif %}
-    - source_hash: md5=a0a6fa03552891f002f4f7995995acdd
+    - source_hash: md5=fc2b58dec1ba032f6ec7feadf366b1e4
     - archive_format: tar
     - tar_options: z
     - if_missing: /home/git/gitlab-shell
@@ -84,7 +85,16 @@ gitlab-shell:
       - user
       - group
     - require:
+      - cmd: gitlab-shell
+  cmd:
+    - run
+    - name: mv gitlab-shell-master gitlab-shell
+    - cwd: /home/git
+    - onlyif: ls /home/git/ | grep gitlab-shell-master
+    - require:
       - archive: gitlab-shell
+
+install_gitlab_shell:
   cmd:
     - run
     - name: /home/git/gitlab-shell/bin/install
@@ -107,7 +117,7 @@ gitlab-shell:
 
 {%- set database_username = salt['pillar.get']('gitlab:database:username','git') %}
 {%- set database_password = salt['pillar.get']('gitlab:database:password','pass') %}
-{%- set version = '6.0' %}
+{%- set version = '6-0' %}
 gitlab:
   user:
     - present
@@ -121,7 +131,7 @@ gitlab:
     - password: {{ database_password }}
     - require:
       - service: postgresql
-      - cmd: gitlab-shell
+      - cmd: install_gitlab_shell
   postgres_database:
     - present
     - name: gitlab
@@ -133,11 +143,12 @@ gitlab:
     - name: /home/git/
     {#- need move to archive!! #}
     {%- if 'files_archive' in pillar %}
-    - source: {{ pillar['files_archive'] }}/gitlab-{{ version }}.tar.gz
+    - source: https://github.com/gitlabhq/gitlabhq/archive/6-0-stable.tar.gz
     {%- else %}
     - source: salt://gitlab/gitlab-{{ version }}.tar.gz
     {%- endif %}
-    - source_hash: md5=be9dba08988aa5ae1108bbdf76359896
+
+    - source_hash: md5=962093cbf4ce80ed166dff94855b53dc
     - archive_format: tar
     - tar_options: z
     - if_missing: /home/git/gitlab
@@ -155,9 +166,9 @@ gitlab:
       - archive: gitlab
   cmd:
     - run
-    - name: export force="yes"; bundle exec rake gitlab:setup RAILS_ENV=production
+    - name: bundle exec rake gitlab:setup RAILS_ENV=production
     - env:
-      force: yes
+        force: yes
     - user: git
     - cwd: /home/git/gitlab
     - require:
@@ -169,6 +180,17 @@ gitlab:
     - require:
       - pkg: nodejs
       - cmd: gitlab_upstart
+
+rename_gitlab:
+  cmd:
+    - run
+    - name: mv gitlabhq-{{ version }}-stable gitlab
+    - cwd: /home/git
+    - onlyif: ls /home/git | grep gitlabhq-{{ version }}-stable
+    - require:
+      - archive: gitlab
+    - require_in:
+      - file: gitlab
 
 /home/git/gitlab-satellites:
     file:
@@ -213,6 +235,7 @@ charlock_holmes:
   gem:
     - installed
     - version: 0.6.9.4
+    - runas: root
     - require:
       - file: gitlab
       - file: /home/git/gitlab-satellites
@@ -221,11 +244,12 @@ bundler:
   gem:
     - installed
     - version: 1.3.5
+    - runas: root
     - require:
       - gem: charlock_holmes
   cmd:
     - run
-    - name: bundle install --deployment --without development test mysql unicorn aws
+    - name: bundle install --deployment --without development test mysql aws
     - cwd: /home/git/gitlab
     - user: git
     - require:

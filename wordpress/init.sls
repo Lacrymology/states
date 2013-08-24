@@ -15,15 +15,15 @@ Optional Pillar
 
 -#}
 include:
-  - nginx
   - apt
+  - nginx
   - local
   - {{ salt['pillar.get']('wordpress:mysql_variant', 'mariadb') }}.server
   - uwsgi.php
   - web
 
 {%- set version = "3.5.2" %}
-{%- set wordpressdir = "/usr/local/wordpress-" + version %}
+{%- set wordpressdir = "/usr/local/wordpress" %}
 {%- set password = salt['password.pillar']('wordpress:password', 10) %}
 
 wordpress:
@@ -31,7 +31,8 @@ wordpress:
     - extracted
     - name: /usr/local/
 {%- if 'files_archive' in pillar %}
-    - source: {{ salt['pillar.get']('files_archive') }}/mirror/wordpress-{{ version }}.tar.gz
+#- source: {{ salt['pillar.get']('files_archive') }}/mirror/wordpress-{{ version }}.tar.gz
+    - source: http://wordpress.org/wordpress-{{ version }}.tar.gz
 {%- else %}
     - source: http://wordpress.org/wordpress-{{ version }}.tar.gz
 {%- endif %}
@@ -42,6 +43,17 @@ wordpress:
     - require:
       - file: /usr/local
   file:
+    - directory
+    - name: {{ wordpressdir }}
+    - user: www-data
+    - grouP: www-data
+    - recurse:
+      - user
+      - group
+    - require:
+      - archive: wordpress
+
+      {#-  file:
     - managed
     - name: {{ wordpressdir }}/wp-config.php
     - template: jinja
@@ -76,3 +88,35 @@ wordpress:
     - require:
       - mysql_user: wordpress
       - mysql_database: wordpress
+      #}
+/etc/nginx/conf.d/wordpress.conf:
+  file:
+    - managed
+    - source: salt://wordpress/nginx.jinja2
+    - user: www-data
+    - group: www-data
+    - mode: 640
+    - template: jinja
+    - require:
+      - pkg: nginx
+      - file: /etc/uwsgi/wordpress.ini
+    - watch_in:
+      - service: nginx
+    - context:
+      dir: {{ wordpressdir }}
+
+/etc/uwsgi/wordpress.ini:
+  file:
+    - managed
+    - source: salt://wordpress/uwsgi.jinja2
+    - user: www-data
+    - group: www-data
+    - mode: 640
+    - template: jinja
+    - require:
+      - file: uwsgi_sockets
+      - archive: wordpress
+    - watch_in:
+      - service: uwsgi_emperor
+    - context:
+      dir: {{ wordpressdir }}

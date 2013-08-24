@@ -39,10 +39,10 @@ To generate a secret key::
 include:
   - openvpn
 
-{%- for tunnel in pillars['openvpn']|default({}) -%}
+{%- for tunnel in pillar['openvpn']|default({}) -%}
     {%- set config_dir = '/etc/openvpn/' + tunnel -%}
     {#- only 2 remotes are supported -#}
-    {%- if pillars['openvpn'][tunnel]['peers']|length == 2 %}
+    {%- if pillar['openvpn'][tunnel]['peers']|length == 2 %}
 {{ config_dir }}:
   file:
     - directory
@@ -55,7 +55,7 @@ include:
 {{ tunnel }}-secret:
   file:
     - managed
-    - name: {{ config }}/secret.key:
+    - name: {{ config_dir }}/secret.key
     - contents: |
         {{ pillar['openvpn'][tunnel]['secret'] | indent(8) }}
     - user: nobody
@@ -66,11 +66,13 @@ include:
     - watch_in:
       - service: openvpn-{{ tunnel }}
 
-{{ config }}/config:
+{{ config_dir }}/config:
   file:
     - managed
     - user: nobody
     - group: nogroup
+    - source: salt://openvpn/static/config.jinja2
+    - template: jinja
     - mode: 400
     - context:
       tunnel: {{ tunnel }}

@@ -21,7 +21,7 @@ openvpn:
     - require:
       - pkg: openvpn
 
-{%- for tunnel in pillars['openvpn'] %}
+{%- for tunnel in pillar['openvpn'] %}
 openvpn-{{ tunnel }}:
   file:
     - managed

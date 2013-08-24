@@ -17,7 +17,7 @@ openerp:
     host: 127.0.0.1     # if run postgresql in local
     port: 5432          # Default port for postgresql server
     user: openerp       
-    password: False     # `False` is no password
+    password:      # set `False` is no password
 
 -#}
 include:
@@ -55,6 +55,14 @@ openerp-server:
       - pkg: openerp-server
     - watch:
       - file: openerp-server
+  postgre_user:
+    - present
+    - name: openerp
+    - password: {{ salt['pillar.get']('openerp:database:password', 'pass') }}
+    - require:
+      - pkg: openerp-server
+    - watch_in:
+      - service: openerp-server
   pip:
     - installed
     - name: pil

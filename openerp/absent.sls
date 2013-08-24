@@ -1,4 +1,4 @@
-{%- set version = pillar['openerp']['version']|default(6.1) %}
+{%- set version = "6.1" %}
 
 openerp{{ version }}-full:
   pkg:

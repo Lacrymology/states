@@ -6,14 +6,13 @@ Mandatory Pillar
 ----------------
 openerp:
   nginx:
-    server_names:
+    hostnames:
       - localhost       # list of hostname, used for nginx config
 
 Optional Pillar
 ---------------
 
 openerp:
-  version: 6.1          # Default is 6.1
   database:
     host: 127.0.0.1     # if run postgresql in local
     port: 5432          # Default port for postgresql server
@@ -28,7 +27,7 @@ include:
   - python.dev
   - underscore
 
-{%- set version =  salt[pillar.get]('openerp:version','6.1') %}
+{%- set version = "6.1" %}
 openerp-server:
   pkg:
     - installed

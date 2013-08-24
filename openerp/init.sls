@@ -7,7 +7,7 @@ Mandatory Pillar
 openerp:
   nginx:
     server_names:
-      - localhost
+      - localhost       # list of hostname, used for nginx config
 
 Optional Pillar
 ---------------
@@ -27,9 +27,8 @@ include:
   - postgresql.server
   - python.dev
   - underscore
-  - uwsgi
 
-{%- set version=  salt[pillar.get]('openerp:version','6.1') %}
+{%- set version =  salt[pillar.get]('openerp:version','6.1') %}
 openerp-server:
   pkg:
     - installed
@@ -37,14 +36,14 @@ openerp-server:
     - require:
       - pkg: libjs-underscore
       - service: postgresql
-      - pip: pil
+      - pip: openerp-server
   file:
     - managed
     - name: /etc/openerp/openerp-server.conf
     - source: salt://openerp/config.jinja2
     - user: openerp
     - group: openerp
-    - mode: 640
+    - mode: 440
     - template: jinja
     - require:
       - pkg: openerp-server
@@ -52,30 +51,27 @@ openerp-server:
     - running
     - name: openerp-server
     - enable: True
+    - order: 50
     - require:
       - pkg: openerp-server
     - watch:
       - file: openerp-server
-
-pil:
   pip:
     - installed
+    - name: pil
     - require:
       - pkg: python-dev
       - module: pip
 
-      {#
 /etc/nginx/conf.d/openerp.conf:
   file:
     - managed
     - source: salt://openerp/nginx.jinja2
-    - user: root
-    - group: root
+    - user: www-data
+    - group: www-data
     - mode: 440
     - template: jinja
     - require:
       - service: openerp-server
     - watch_in:
       - service: nginx
-
-#}

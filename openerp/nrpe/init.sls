@@ -6,8 +6,9 @@ include:
   - nrpe
   - apt.nrpe
   - nginx.nrpe
-  - postgresql.nrpe
+  - pip.nrpe
   - postgresql.server.nrpe
+  - underscore.nrpe
 
 /etc/nagios/nrpe.d/openerp-server.cfg:
   file:
@@ -25,4 +26,3 @@ extend:
     service:
       - watch:
         - file: /etc/nagios/nrpe.d/openerp-server.cfg
-

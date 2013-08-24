@@ -8,4 +8,4 @@ db_port = {{ salt['pillar.get']('openerp:database:port','5432') }}
 
 
 db_user = openerp
-db_password = {{ salt['pillar.get']('openerp:database:password','False') }}
+db_password = {{ salt['pillar.get']('openerp:database:password','pass') }}

@@ -1,0 +1,28 @@
+# {{ pillar['message_do_not_modify'] }}
+{%- set reserved_keys = ('secret', 'user', 'group', 'syslog', 'writepid', 'port', 'ifconfig', 'remote') -%}
+{%- set blocked_keys = ('log', 'log-append') -%}
+{%- set configs = pillar['openvpn'][tunnel]['config']|default({}) %}
+secret /etc/openvpn/{{ tunnel }}/static.key
+user nobody
+group nogroup
+writepid /var/run/openvnp-{{ tunnel }}.pid
+syslog vpn-{{ tunnel }}
+{%- for key in configs -%}
+    {%- if key not in reserved_keys -%}
+        {%- if key not in blocked_keys %}
+{{ key }} {{ configs[key] }}
+        {%- else %}
+# ignore "{{ key }}: {{ configs[key] }}" {{ key }} is a blocked key!
+        {%- endif -%}
+    {%- else %}
+# ignore "{{ key }}: {{ configs[key] }}" {{ key }} is a reserved key!
+    {%- endif -%}
+{%- endfor -%}
+{%- if 'port' in pillars['openvpn'][tunnel]['peers'][grains['id']] %}
+port {{ pillars['openvpn'][tunnel]['peers'][grains['id']]['port'] }}
+{%- for peer in pillars['openvpn'][tunnel]['peers'] -%}
+    {%- if peer != grains['id'] %}
+ifconfig {{ pillars['openvpn'][tunnel]['peers'][grains['id']]['vpn_address'] }} {{ pillars['openvpn'][tunnel]['peers'][peer]['vpn_address'] }}
+remote {{ pillars['openvpn'][tunnel]['peers'][peer]['address'] }} {{ pillars['openvpn'][tunnel]['remotes'][other_remote]['port']|default('') }}
+    {%- endif -%}
+{%- endfor -%}

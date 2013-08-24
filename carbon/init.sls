@@ -111,6 +111,8 @@ stop_old_instance:
     - group: graphite
     - require:
       - file: stop_old_instance
+    - require_in:
+      - file: /var/lib/graphite/whisper
 
 move_old_data_to_first_instance:
   cmd:

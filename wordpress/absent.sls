@@ -1,8 +1,8 @@
 {#-
   Uninstall Wordpress
 #}
-{%- set version = "3.5.2" %}
-{%- set wordpressdir = "/usr/local/wordpress-" + version %}
+
+{%- set wordpressdir = "/usr/local/wordpress" %}
 
 wordpress:
   file:

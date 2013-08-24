@@ -7,9 +7,8 @@ include:
   - nginx.nrpe
   - uwsgi.nrpe
   - build.nrpe
-  - gsyslog.nrpe
-  - postgresql.nrpe
-  - postgresql.server.nrpe
+  - mariadb.nrpe
+  - mariadb.server.nrpe
 {% if pillar['wordpress']['ssl']|default(False) %}
   - ssl.nrpe
 {% endif %}
@@ -30,6 +29,8 @@ include:
 {% if 'cheaper' in pillar['wordpress'] %}
       cheaper: {{ pillar['wordpress']['cheaper'] }}
 {% endif %}
+    - watch_in:
+      - service: nagios-nrpe-server
 
 /etc/nagios/nrpe.d/wordpress-nginx.cfg:
   file:
@@ -51,25 +52,6 @@ include:
       http_result: 301 Moved Permanently
     {%- endif -%}
 {%- endif %}
+    - watch_in:
+      - service: nagios-nrpe-server
 
-/etc/nagios/nrpe.d/postgresql-wordpress.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://postgresql/nrpe.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-    - context:
-      deployment: wordpress
-      password: {{ pillar['wordpress']['password'] }}
-
-extend:
-  nagios-nrpe-server:
-    service:
-      - watch:
-        - file: /etc/nagios/nrpe.d/wordpress.cfg
-        - file: /etc/nagios/nrpe.d/wordpress-nginx.cfg
-        - file: /etc/nagios/nrpe.d/postgresql-wordpress.cfg

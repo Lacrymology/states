@@ -5,8 +5,7 @@ include:
   - diamond
   - nginx.diamond
   - uwsgi.diamond
-  - gsyslog.diamond
-  - postgresql.server.diamond
+  - mariadb.server.diamond
 
 wordpress_web_diamond_resource:
   file:

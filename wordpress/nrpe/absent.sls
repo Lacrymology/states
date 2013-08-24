@@ -1,14 +1,11 @@
 {#
- Remove roundcube web Nagios NRPE checks
+ Remove Wordpress Nagios NRPE checks
 #}
-/etc/nagios/nrpe.d/roundcube.cfg:
+/etc/nagios/nrpe.d/wordpress.cfg:
   file:
     - absent
 
-/etc/nagios/nrpe.d/roundcube-nginx.cfg:
+/etc/nagios/nrpe.d/wordpress-nginx.cfg:
   file:
     - absent
 
-/etc/nagios/nrpe.d/postgresql-roundcube.cfg:
-  file:
-    - absent

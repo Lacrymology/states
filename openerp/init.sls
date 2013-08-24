@@ -55,12 +55,13 @@ openerp-server:
       - pkg: openerp-server
     - watch:
       - file: openerp-server
-  postgre_user:
+  postgres_user:
     - present
     - name: openerp
     - password: {{ salt['pillar.get']('openerp:database:password', 'pass') }}
     - require:
       - pkg: openerp-server
+      - service: postgresql
     - watch_in:
       - service: openerp-server
   pip:

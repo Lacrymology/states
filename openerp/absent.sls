@@ -20,7 +20,7 @@ openerp:
   user:
     - absent
     - force: True
-  postgre_user:
+  postgres_user:
     - absent
 
 /etc/openerp:

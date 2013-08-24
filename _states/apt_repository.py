@@ -150,17 +150,22 @@ def present(address, components, distribution=None, source=False, key_id=None,
 
     ret = {
         'name': filename,
-        'result': file_result['result'] == cmd_result['result'] is True,
+        'result': file_result['result'] is True and
+                  cmd_result['result'] is True,
         'changes': file_result['changes'],
         'comment': ' and '.join((file_result['comment'], cmd_result['comment']))
     }
+    ret['changes'].update(cmd_result['changes'])
 
     if __opts__['test']:
         ret['result'] = None
     elif ret['result'] and ret['changes']:
         __salt__['pkg.refresh_db']()
+    elif not ret['result']:
+        log.warning("State failed, don't refresh APT DB.")
+    else:
+        log.warning("No changes, don't refresh APT DB.")
 
-    ret['changes'].update(cmd_result['changes'])
     return ret
 
 

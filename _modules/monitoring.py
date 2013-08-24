@@ -92,7 +92,13 @@ def discover_checks(state_name):
     logger.debug("Try to fetch %s", source)
     temp_dest = tempfile.NamedTemporaryFile(delete=False)
     temp_dest.close()
-    __salt__['cp.get_template'](source, temp_dest.name)
+
+    # until a better way to get the value of the environment, do that
+    env = __salt__['pillar.get']('branch', 'base')
+    if env == 'master':
+        env = 'base'
+
+    __salt__['cp.get_template'](source, temp_dest.name, env=env)
 
     with open(temp_dest.name, 'r') as rendered_template:
         try:

@@ -144,6 +144,10 @@ def records_exists(name, email, token, records):
     for domain in records:
         path = "/domains/{0}/records".format(domain)
         data = json.loads(ses.get(BASE_URL + path).content)
+        if 'error' in data:
+            ret['result'] = False
+            ret['comment'] = '{0}: {1}'.format(domain, data['error'])
+            return ret
         data = [i['record'] for i in data]
         existing_records[domain] = data
 

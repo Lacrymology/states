@@ -1,10 +1,13 @@
 {#
- Diamond statistics for backup client
+ Diamond statistics for moinmoin
 #}
 include:
   - diamond
+  - rsyslog.diamond
+  - nginx.diamond
+  - uwsgi.diamond
 
-backup_diamond_resources:
+uwsgi_diamond_moinmoin_resources:
   file:
     - accumulated
     - name: processes
@@ -13,5 +16,5 @@ backup_diamond_resources:
       - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
     - text:
       - |
-        [[backup]]
-        cmdline = ^\/usr\/local\/bin\/backup_
+        [[uwsgi.moinmoin]]
+        cmdline = ^moinmoin-(worker|master)$

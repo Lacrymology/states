@@ -21,6 +21,26 @@ openvpn:
     - require:
       - pkg: openvpn
 
+{%- for tunnel in pillar['openvpn'] %}
+openvpn-{{ tunnel }}:
+  file:
+    - managed
+    - name: /etc/init/openvpn-{{ tunnel }}.conf
+    - user: root
+    - group: root
+    - mode: 440
+    - source: salt://openvpn/upstart.jinja2
+    - template: jinja
+    - require:
+      - file: /etc/openvpn/{{ tunnel }}/config
+    - context:
+      identifier: {{ tunnel }}
+  service:
+    - running
+    - watch:
+      - file: openvpn-{{ tunnel }}
+{%- endfor %}
+
 {% for type in ('lib', 'log') %}
 /var/{{ type }}/openvpn:
   file:

@@ -48,6 +48,20 @@ graphite:
       - user: graphite
       - file: /var/lib/graphite
 
+{%- set instances_count = pillar['graphite']['carbon']['instances'] %}
+{% for instance in range(instances_count) %}
+/var/lib/graphite/whisper/{{ instance }}:
+  file:
+    - directory
+    - user: www-data
+    - group: graphite
+    - mode: 770
+    - require:
+      - user: web
+      - user: graphite
+      - file: /var/lib/graphite/whisper
+{%- endfor %}
+
 /etc/graphite:
   file:
     - directory

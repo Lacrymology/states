@@ -1,0 +1,25 @@
+{%- macro monitor(appname, check_postgresql=True) %}
+{{ appname }}_nginx_http:
+  description: {{ appname|title }} HTTP protocol
+
+{{ appname }}_nginx_https:
+  description: {{ appname|title }} HTTPS protocol
+
+{{ appname }}_nginx_https_certificate:
+  description: HTTPS Certificate Expiration
+  check_interval: 1440 {#- only need to check https certificate each day #}
+
+{{ appname }}_uwsgi_master:
+  description: {{ appname|title }} uWSGI Master Process
+
+{{ appname }}_uwsgi_worker:
+  description: {{ appname|title }} uWSGI Workers Process
+
+{{ appname }}_uwsgi_ping:
+  description: uWSGI Ping
+
+{%- if check_postgresql == True %}
+{{ appname }}_postgresql:
+  description: PostgreSQL database
+{%- endif %}
+{%- endmacro %}

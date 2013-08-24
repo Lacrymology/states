@@ -13,9 +13,12 @@ __NRPE_RE = re.compile('^command\[([^\]]+)\]=(.+)$')
 
 def list_checks(config_dir='/etc/nagios/nrpe.d'):
     '''
-    List all available NRPE check
-    :param config_dir: path where config files are
-    :return: dict of command name and their command line
+    List all available NRPE check.
+
+    CLI Exaple::
+
+        salt '*' nrpe.list_checks
+
     '''
     output = {}
     for filename in __salt__['file.find'](config_dir, type="f"):

@@ -17,6 +17,7 @@ backup_server:fingerprint: SSH fingerprint of backup SSH server.
 
 include:
   - ssh.client
+  - local
 
 backup-client:
   ssh_known_hosts:
@@ -24,3 +25,14 @@ backup-client:
     - name: {{ pillar['backup_server']['address'] }}
     - user: root
     - fingerprint: {{ pillar['backup_server']['fingerprint'] }}
+
+/usr/local/bin/backup_store:
+  file:
+    - managed
+    - user: root
+    - group: root
+    - mode: 550
+    - template: jinja
+    - source: salt://backup/scp/copy.jinja2
+    - require:
+      - file: /usr/local

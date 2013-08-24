@@ -15,8 +15,3 @@ php:
     - require:
       - pkg: python-apt
       - pkg: python-software-properties
-  pkg:
-    - installed
-    - name: php5
-    - require:
-      - pkgrepo: php

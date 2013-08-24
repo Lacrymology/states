@@ -155,7 +155,7 @@ gitlab:
       - archive: gitlab
   cmd:
     - run
-    - name: bundle exec rake gitlab:setup RAILS_ENV=production
+    - name: export force="yes"; bundle exec rake gitlab:setup RAILS_ENV=production
     - env:
       force: yes
     - user: git
@@ -239,12 +239,13 @@ gitlab_upstart:
     - template: jinja
     - user: root
     - group: root
-    - mode: 440
+    - mode: 540
     - require:
       - cmd: gitlab
   cmd:
     - run
     - name: update-rc.d gitlab defaults 21
+    - user: root
     - require:
       - file: gitlab_upstart
 

@@ -169,6 +169,15 @@ carbon:
 {%- set instances_count = pillar['graphite']['carbon']['instances'] %}
 
 {% for instance in range(instances_count) %}
+/var/lib/graphite/whisper/{{ instance }}:
+  file:
+    - directory
+    - user: www-data
+    - group: graphite
+    - mode: 770
+    - require:
+      - file: /var/lib/graphite/whisper
+
 carbon-cache-{{ instance }}:
   file:
     - managed
@@ -190,7 +199,7 @@ carbon-cache-{{ instance }}:
     - require:
       - user: graphite
       - file: /var/log/graphite/carbon
-      - file: /var/lib/graphite
+      - file: /var/lib/graphite/whisper/{{ instance }}
     - watch:
       - module: carbon
       - cmd: carbon

@@ -16,7 +16,7 @@ USER = graphite
  Sorts and serving cache queries gets more expensive as the cache grows.
  Use the value "inf" (infinity) for an unlimited cache size.
 #}
-MAX_CACHE_SIZE = inf
+MAX_CACHE_SIZE = {{ salt['grains.get']('graphite:carbon:max_cache_size', 'inf') }}
 
 {#-
  Limits the number of whisper update_many() calls per second, which effectively
@@ -36,7 +36,7 @@ MAX_UPDATES_PER_SECOND = 500
  Setting this value high (like "inf" for infinity) will cause graphite to create
  the files quickly but at the risk of slowing I/O down considerably for a while.
 #}
-MAX_CREATES_PER_MINUTE = 50
+MAX_CREATES_PER_MINUTE = inf
 
 {#
  Set this to True to enable the UDP listener. By default this is off
@@ -225,15 +225,21 @@ CARBON_METRIC_INTERVAL = 60
 CARBON_METRIC_PREFIX = {{ grains['id'] }}.carbon
 
 {#-
-Set this to True to enable whitelisting and blacklisting of metrics in
-CONF_DIR/whitelist and CONF_DIR/blacklist. If the whitelist is missing or
-empty, all metrics will pass through
+ Set this to True to enable whitelisting and blacklisting of metrics in
+ CONF_DIR/whitelist and CONF_DIR/blacklist. If the whitelist is missing or
+ empty, all metrics will pass through
+#}
+{%- if 'whitelist' in pillars['graphite']['carbon']['whitelist']|default(False) %}
+USE_WHITELIST = True
+{%- else %}
 USE_WHITELIST = False
+{%- endif -%}
 
+{#-
 [aggregator]
 LINE_RECEIVER_INTERFACE = {{ salt['pillar.get']('graphite:carbon:interface', '0.0.0.0') }}
 LINE_RECEIVER_PORT = 2023
 
 PICKLE_RECEIVER_INTERFACE = {{ salt['pillar.get']('graphite:carbon:interface', '0.0.0.0') }}
 PICKLE_RECEIVER_PORT = 2024
-#}
+-#}

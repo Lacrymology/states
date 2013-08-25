@@ -168,7 +168,7 @@ graphite_wsgi:
     - mode: 550
     - source: salt://django/manage.jinja2
     - context:
-      settings: graphite.local_settings
+      settings: graphite.settings
       virtualenv: /usr/local/graphite
     - require:
       - virtualenv: graphite
@@ -270,7 +270,7 @@ graphite_settings:
   module:
     - wait
     - name: django.syncdb
-    - settings_module: graphite.local_settings
+    - settings_module: graphite.settings
     - bin_env: /usr/local/graphite
     - stateful: False
     - require:
@@ -285,7 +285,7 @@ graphite_admin_user:
     - wait
     - name: django.command
     - command: createsuperuser_plus --username={{ pillar['graphite']['web']['initial_admin_user']['username'] }} --email={{ salt['pillar.get']('graphite:web:initial_admin_user:email', 'root@example.com') }} --password={{ pillar['graphite']['web']['initial_admin_user']['password'] }}
-    - settings_module: graphite.local_settings
+    - settings_module: graphite.settings
     - bin_env: /usr/local/graphite
     - stateful: False
     - require:

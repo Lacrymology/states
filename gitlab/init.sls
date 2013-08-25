@@ -205,7 +205,7 @@ gitlab:
     - watch:
       - cmd: bundler
 
-precompile_assets:
+gitlab_precompile_assets:
   cmd:
     - wait
     - name: bundle exec rake assets:precompile RAILS_ENV=production
@@ -214,7 +214,7 @@ precompile_assets:
     - watch:
       - cmd: gitlab
 
-start_sidekiq_service:
+gitlab_start_sidekiq_service:
   cmd:
     - wait
     - name: bundle exec rake sidekiq:start RAILS_ENV=production
@@ -331,8 +331,8 @@ add_web_user_to_group:
     - mode: 440
     - require:
       - cmd: gitlab
-      - cmd: start_sidekiq_service
-      - cmd: precompile_assets
+      - cmd: gitlab_start_sidekiq_service
+      - cmd: gitlab_precompile_assets
       - file: uwsgi_sockets
       - file: gitlab_upstart
       - gem: rack

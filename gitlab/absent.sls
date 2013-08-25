@@ -4,7 +4,7 @@
 {%- set version = '6-0' %}
 {%- set web_dir = "/usr/local/gitlabhq-" + version + "-stable"  %}
 
-git:
+gitlab:
   user:
     - absent
     - force: True
@@ -20,14 +20,8 @@ git:
     - user: git
     - cwd: {{ web_dir }}
 
-/etc/uwsgi/gitlab.ini:
-  file:
-    - absent
-
-{%- for file in ('/etc/nginx/conf.d/gitlab.conf', web_dir, '/home/git', '/etc/init/gitlab.conf') %}
+{%- for file in ('/etc/nginx/conf.d/gitlab.conf', web_dir, '/home/git', '/etc/init/gitlab.conf', '/etc/uwsgi/gitlab.ini') %}
 {{ file }}:
   file:
     - absent
-    - require:
-      - file: /etc/uwsgi/gitlab.ini
 {%- endfor %}

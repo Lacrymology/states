@@ -12,15 +12,14 @@ message_do_not_modify: Warning message to not modify file.
 
 graphite:
   carbon:
-    instances:
-      - a
+    instances: 2
   retentions:
     - three_month:
       name: default_1min_for_1_month
       pattern: .*
       retentions: 60s:30d
 
-graphite:carbon:instances: list of instance to deploy. (leave 'a')
+graphite:carbon:instances: number of instances to deploy, should <= numbers of CPU cores
 graphite:retentions: list of data retention rules, see the following for
     details:
     http://graphite.readthedocs.org/en/latest/config-carbon.html#storage-schemas-conf
@@ -31,13 +30,17 @@ Optional Pillar
 graphite:
   file-max: 65535
   carbon:
+    replication: 1
     interface: 0.0.0.0
 shinken_pollers:
   - 192.168.1.1
 
 graphite:file-max: maximum of open files for the daemon. Default: not used.
-graphite:carbon:interface: Network interface to bind the Carbon daemon.
+graphite:carbon:interface: Network interface to bind Carbon-relay daemon.
     Default: 0.0.0.0.
+graphite:carbon:replication: add redundancy of your data by replicating
+    every data point and relaying it to N caches (0 < N <= number of cache instances).
+    Default: 1 (Mean you have only one copy for each metric = No replication)
 shinken_pollers: IP address of monitoring poller that check this server.
     Default: not used.
 -#}
@@ -90,6 +93,38 @@ fs.file-max:
       - user: graphite
       - file: /etc/graphite
 
+stop_old_instance:
+  service:
+    - name: carbon-a
+    - dead
+    - enable: False
+  file:
+    - name: /etc/init.d/carbon-a
+    - absent
+    - require:
+      - service: stop_old_instance
+  cmd:
+    - run
+    - name: mv /var/lib/graphite/whisper/ /var/lib/graphite/old
+    - onlyif: test -d /var/lib/graphite/whisper/carbon
+    - user: graphite
+    - group: graphite
+    - require:
+      - file: stop_old_instance
+    - require_in:
+      - file: /var/lib/graphite/whisper
+
+move_old_data_to_first_instance:
+  cmd:
+    - run
+    - name: mv /var/lib/graphite/old /var/lib/graphite/whisper/0
+    - onlyif: test -d /var/lib/graphite/old
+    - require:
+      - file: /var/lib/graphite/whisper/0
+      - cmd: stop_old_instance
+    - require_in:
+      - file: carbon
+
 carbon:
   file:
     - managed
@@ -131,47 +166,135 @@ carbon:
     - require:
       - file: /etc/graphite
 
-{% for instance in pillar['graphite']['carbon']['instances'] %}
-carbon-{{ instance }}:
+{%- set instances_count = pillar['graphite']['carbon']['instances'] %}
+
+{% for instance in range(instances_count) %}
+/var/lib/graphite/whisper/{{ instance }}:
+  file:
+    - directory
+    - user: www-data
+    - group: graphite
+    - mode: 770
+    - require:
+      - file: /var/lib/graphite/whisper
+
+carbon-cache-{{ instance }}:
   file:
     - managed
-    - name: /etc/init.d/carbon-{{ instance }}
+    - name: /etc/init.d/carbon-cache-{{ instance }}
     - template: jinja
     - user: root
     - group: root
     - mode: 550
     - source: salt://carbon/init.jinja2
     - context:
-      instance: a
+      instance: {{ instance }}
   service:
     - running
     - enable: True
     - order: 50
 {# until https://github.com/saltstack/salt/issues/5027 is fixed, this is required #}
     - sig: /usr/local/graphite/bin/python /usr/local/graphite/bin/carbon-cache.py --config=/etc/graphite/carbon.conf --instance={{ instance }} start
-    - name: carbon-{{ instance }}
+    - name: carbon-cache-{{ instance }}
     - require:
       - user: graphite
       - file: /var/log/graphite/carbon
-      - file: /var/lib/graphite
-      - file: carbon-{{ instance }}-logdir
+      - file: /var/lib/graphite/whisper/{{ instance }}
     - watch:
       - module: carbon
       - cmd: carbon
       - file: /etc/graphite/carbon.conf
       - file: /etc/graphite/storage-schemas.conf
-      - file: carbon-{{ instance }}
+      - file: carbon-cache-{{ instance }}
       - cmd: carbon
+{% endfor %}
 
-carbon-{{ instance }}-logdir:
+{% set prefix = '/etc/init.d/' %}
+{% for filename in salt['file.find'](prefix, name='carbon-cache-*', type='f') %}
+  {% set instance = filename.replace(prefix + 'carbon-cache-', '') %}
+  # get not_in_use_instance
+  {%- if instance|int >= instances_count|int %}
+remove_not_in_use_instance_{{ instance }}:
+  service:
+    - dead
+    - name: carbon-cache-{{ instance }}
   file:
-    - directory
-    - name: /var/log/graphite/carbon/carbon-cache-{{ instance }}
-    - user: graphite
-    - group: graphite
-    - mode: 770
-    - makedirs: True
+    - absent
+    - name: {{ prefix }}carbon-cache-{{ instance }}
+    - require:
+      - service: remove_not_in_use_instance_{{ instance }}
+
+/var/log/graphite/carbon/carbon-cache-{{ instance }}:
+  file:
+    - absent
+    - require:
+      - service: remove_not_in_use_instance_{{ instance }}
+
+/var/lib/graphite/whisper/{{ instance }}:
+  file:
+    - absent
+    - require:
+      - service: remove_not_in_use_instance_{{ instance }}
+  {%- endif %}
+{% endfor %}
+
+carbon-relay:
+  file:
+    - managed
+    - name: /etc/init.d/carbon-relay
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 550
+    - source: salt://carbon/init.jinja2
+  service:
+    - running
+    - enable: True
+    - order: 50
+{# until https://github.com/saltstack/salt/issues/5027 is fixed, this is required #}
+    - sig: /usr/local/graphite/bin/python /usr/local/graphite/bin/carbon-relay.py --config=/etc/graphite/carbon.conf start
+    - name: carbon-relay
     - require:
       - user: graphite
       - file: /var/log/graphite/carbon
-{% endfor %}
+      - file: /var/lib/graphite
+    - watch:
+      - module: carbon
+      - cmd: carbon
+      - file: /etc/graphite/carbon.conf
+      - file: /etc/graphite/storage-schemas.conf
+      - file: carbon-relay
+      - file: /etc/graphite/relay-rules.conf
+      - cmd: carbon
+
+/etc/graphite/relay-rules.conf:
+  file:
+    - managed
+    - source: salt://carbon/relay-rules.jinja2
+    - template: jinja
+    - user: graphite
+    - group: graphite
+    - mode: 440
+    - require:
+      - user: graphite
+      - file: /etc/graphite
+
+{%- if 'whitelist' in pillars['graphite']['carbon']['whitelist']|default(False) %}
+/etc/graphite/whitelist.conf:
+  file:
+    - managed
+    - user: graphite
+    - group: graphite
+    - mode: 440
+    - contents: |
+    {%- for rule in pillars['graphite']['carbon']['whitelist'] %}
+        {{ rule }}
+    {%- endfor %}
+    - require:
+      - user: graphite
+      - file: /etc/graphite
+    - watch_in:
+    {%- for instance in range(instances_count) %}
+      - service: carbon-cache-{{ instance }}
+    {%- endfor -%}
+{%- endif %}

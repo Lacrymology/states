@@ -4,9 +4,6 @@ Graphite
 
 Install the web interface component of graphite
 
-Once this state is installed, you need to create initial admin user:
-    /usr/local/graphite/manage createsuperuser
-
 Mandatory Pillar
 ----------------
 
@@ -81,21 +78,21 @@ shinken_pollers: IP address of monitoring poller that check this server.
 
 {%- set python_version = '%d.%d' % (grains['pythonversion'][0], grains['pythonversion'][1]) %}
 
-{#- TODO: create initial admin user from pillar -#}
 include:
+  - apt
+  - graphite.common
+  - local
+  - memcache
+  - nginx
+  - pip
   - postgresql
   - postgresql.server
-  - virtualenv
-  - graphite.common
-  - uwsgi
-  - nginx
-  - memcache
-  - pip
-  - web
-  - apt
   - python.dev
-  - statsd
   - rsyslog
+  - statsd
+  - uwsgi
+  - virtualenv
+  - web
 {% if pillar['graphite']['web']['ssl']|default(False) %}
   - ssl
 {% endif %}
@@ -150,14 +147,6 @@ graphite_wsgi:
       - virtualenv: graphite
       - user: web
 
-{#graphite_admin_user:#}
-{#  module:#}
-{#    - run#}
-{#    - name: django.loaddata#}
-{#    - fixtures: {{ opts['cache_dir']/graphite.yaml }}#}
-{#    - settings_module: graphite.local_settings#}
-{#    - bin_env: /usr/local/graphite#}
-
 /usr/local/graphite/manage:
   file:
     - managed
@@ -167,7 +156,7 @@ graphite_wsgi:
     - mode: 550
     - source: salt://django/manage.jinja2
     - context:
-      settings: graphite.local_settings
+      settings: graphite.settings
       virtualenv: /usr/local/graphite
     - require:
       - virtualenv: graphite
@@ -269,7 +258,7 @@ graphite_settings:
   module:
     - wait
     - name: django.syncdb
-    - settings_module: graphite.local_settings
+    - settings_module: graphite.settings
     - bin_env: /usr/local/graphite
     - stateful: False
     - require:
@@ -278,6 +267,47 @@ graphite_settings:
       - service: rsyslog
     - watch:
       - module: graphite-web
+
+{#-
+ load default user this way to prevent race condition between uWSGI process
+ #}
+graphite_initial_fixture:
+  file:
+    - managed
+    - name: /usr/local/graphite/salt-initial-fixture.xml
+    - user: www-data
+    - group: graphite
+    - mode: 440
+    - source: salt://graphite/initial-fixture.xml
+    - require:
+      - user: web
+      - user: graphite
+      - virtualenv: graphite
+  module:
+    - wait
+    - name: django.command
+    - command: loaddata /usr/local/graphite/salt-initial-fixture.xml
+    - settings_module: graphite.settings
+    - bin_env: /usr/local/graphite
+    - stateful: False
+    - require:
+      - module: graphite_settings
+      - file: graphite_initial_fixture
+    - watch:
+      - postgres_database: graphite_settings
+
+graphite_admin_user:
+  module:
+    - wait
+    - name: django.command
+    - command: createsuperuser_plus --username={{ pillar['graphite']['web']['initial_admin_user']['username'] }} --email={{ salt['pillar.get']('graphite:web:initial_admin_user:email', 'root@example.com') }} --password={{ pillar['graphite']['web']['initial_admin_user']['password'] }}
+    - settings_module: graphite.settings
+    - bin_env: /usr/local/graphite
+    - stateful: False
+    - require:
+      - module: graphite_settings
+    - watch:
+      - postgres_database: graphite_settings
 
 /etc/uwsgi/graphite.ini:
   file:
@@ -288,6 +318,7 @@ graphite_settings:
     - mode: 440
     - source: salt://graphite/uwsgi.jinja2
     - require:
+      - module: graphite_initial_fixture
       - service: uwsgi_emperor
       - file: graphite_logdir
       - file: graphite_wsgi
@@ -305,9 +336,8 @@ graphite_settings:
     - name: file.touch
     - require:
       - file: /etc/uwsgi/graphite.ini
-    - m_name: /etc/uwsgi/graphite.ini
-    - require:
       - service: memcached
+    - m_name: /etc/uwsgi/graphite.ini
     - watch:
       - module: graphite_settings
       - file: graphite_wsgi
@@ -316,6 +346,7 @@ graphite_settings:
       - cmd: graphite-web
       - file: graphite-urls-patch
       - pip: graphite-web
+      - module: graphite_admin_user
 
 /usr/local/graphite/bin/build-index.sh:
   file:

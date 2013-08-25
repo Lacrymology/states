@@ -4,9 +4,6 @@ Graphite
 
 Install the web interface component of graphite
 
-Once this state is installed, you need to create initial admin user:
-    /usr/local/graphite/manage createsuperuser
-
 Mandatory Pillar
 ----------------
 
@@ -81,7 +78,6 @@ shinken_pollers: IP address of monitoring poller that check this server.
 
 {%- set python_version = '%d.%d' % (grains['pythonversion'][0], grains['pythonversion'][1]) %}
 
-{#- TODO: create initial admin user from pillar -#}
 include:
   - apt
   - graphite.common
@@ -150,14 +146,6 @@ graphite_wsgi:
     - require:
       - virtualenv: graphite
       - user: web
-
-{#graphite_admin_user:#}
-{#  module:#}
-{#    - run#}
-{#    - name: django.loaddata#}
-{#    - fixtures: {{ opts['cache_dir']/graphite.yaml }}#}
-{#    - settings_module: graphite.local_settings#}
-{#    - bin_env: /usr/local/graphite#}
 
 /usr/local/graphite/manage:
   file:

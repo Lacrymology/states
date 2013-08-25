@@ -19,21 +19,25 @@ LOG_METRIC_ACCESS = {{ pillar['graphite']['web']['debug']|default(False) }}
 {#- Enable full debug page display on exceptions (Internal Server Error pages)
 #DEBUG = True
 
-# If using RRD files and rrdcached, set to the address or socket of the daemon
-#FLUSHRRDCACHED = 'unix:/var/run/rrdcached.sock'
+ If using RRD files and rrdcached, set to the address or socket of the daemon
+ FLUSHRRDCACHED = 'unix:/var/run/rrdcached.sock'
 
-# This lists the memcached servers that will be used by this webapp.
-# If you have a cluster of webapps you should ensure all of them
-# have the *exact* same value for this setting. That will maximize cache
-# efficiency. Setting MEMCACHE_HOSTS to be empty will turn off use of
-# memcached entirely.
-#
-# You should not use the loopback address (127.0.0.1) here if using clustering
-# as every webapp in the cluster should use the exact same values to prevent
-# unneeded cache misses. Set to [] to disable caching of images and fetched data
+ This lists the memcached servers that will be used by this webapp.
+ If you have a cluster of webapps you should ensure all of them
+ have the *exact* same value for this setting. That will maximize cache
+ efficiency. Setting MEMCACHE_HOSTS to be empty will turn off use of
+ memcached entirely.
+
+ You should not use the loopback address (127.0.0.1) here if using clustering
+ as every webapp in the cluster should use the exact same values to prevent
+ unneeded cache misses. Set to [] to disable caching of images and fetched data
 #}
-MEMCACHE_HOSTS = 'unix://tmp/memcached.sock'
-
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': 'unix:/tmp/memcached.sock',
+    }
+}
 {#- Cache images and data for 1 minute #}
 DEFAULT_CACHE_DURATION = 60
 

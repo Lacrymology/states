@@ -268,6 +268,34 @@ graphite_settings:
     - watch:
       - module: graphite-web
 
+{#-
+ load default user this way to prevent race condition between uWSGI process
+ #}
+graphite_initial_fixture:
+  file:
+    - managed
+    - name: /usr/local/graphite/salt-initial-fixture.xml
+    - user: www-data
+    - group: graphite
+    - mode: 440
+    - source: salt://graphite/initial-fixture.xml
+    - require:
+      - user: web
+      - user: graphite
+      - virtualenv: graphite
+  module:
+    - wait
+    - name: django.command
+    - command: loaddata /usr/local/graphite/salt-initial-fixture.xml
+    - settings_module: graphite.settings
+    - bin_env: /usr/local/graphite
+    - stateful: False
+    - require:
+      - module: graphite_settings
+      - file: graphite_initial_fixture
+    - watch:
+      - postgres_database: graphite_settings
+
 graphite_admin_user:
   module:
     - wait
@@ -290,6 +318,7 @@ graphite_admin_user:
     - mode: 440
     - source: salt://graphite/uwsgi.jinja2
     - require:
+      - module: graphite_initial_fixture
       - service: uwsgi_emperor
       - file: graphite_logdir
       - file: graphite_wsgi

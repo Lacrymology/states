@@ -1,15 +1,12 @@
 # {{ pillar['message_do_not_modify'] }}
 
-# Carbon's internal metrics. This entry should match what is specified in
-# CARBON_METRIC_PREFIX and CARBON_METRIC_INTERVAL settings
-
 [carbon]
 pattern = ^{{ grains['id']}}\.carbon\.
 retentions = 60:90d
 
-{% for retention in pillar['graphite']['retentions'] %}
-[{{ retention['name'] }}]
-pattern = {{ retention['pattern'] }}
-retentions = {{ retention['retentions'] }}
+{%- for name in pillar['graphite']['retentions'] %}
+[name]
+pattern = {{ pillar['graphite']['retentions'][name]['pattern'] }}
+retentions = {{ pillar['graphite']['retentions'][name]['retentions'] }}
 
-{% endfor %}
+{%- endfor -%}

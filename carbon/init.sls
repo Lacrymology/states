@@ -278,3 +278,23 @@ carbon-relay:
     - require:
       - user: graphite
       - file: /etc/graphite
+
+{%- if 'whitelist' in pillars['graphite']['carbon']['whitelist']|default(False) %}
+/etc/graphite/whitelist.conf:
+  file:
+    - managed
+    - user: graphite
+    - group: graphite
+    - mode: 440
+    - contents: |
+    {%- for rule in pillars['graphite']['carbon']['whitelist'] %}
+        {{ rule }}
+    {%- endfor %}
+    - require:
+      - user: graphite
+      - file: /etc/graphite
+    - watch_in:
+    {%- for instance in range(instances_count) %}
+      - service: carbon-cache-{{ instance }}
+    {%- endfor -%}
+{%- endif %}

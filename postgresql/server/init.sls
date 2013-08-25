@@ -1,6 +1,40 @@
 {#
  Install a PostgreSQL database server.
- #}
+
+Sample config:
+postgresql:
+  listen_addresses: '*'
+  replication:
+    password: mypass
+    hot_standby: True
+    master: 10.0.0.5
+    standby:
+      - 10.0.0.7
+  password: pass
+  diamond: pass
+
+Mandatory Pillar
+----------------
+
+None
+
+Optional Pillar
+---------------
+
+postgresql:
+  listen_addresses: '*' # Default: localhost
+  diamond: password for diamond # Default: auto-generate by salt
+  replication: # only used for cluster setup
+    username: usr name used for replication # Default replication_agent
+    hot_standby: True # Default: True
+    # bellow is manadatory if you are setup a cluster
+    master: 10.0.0.5 # address of master server
+    standby:
+      - 10.0.0.7 
+      - other_standby_address
+
+
+#}
 {% set ssl = salt['pillar.get']('postgresql:ssl', False) %}
 include:
   - hostname

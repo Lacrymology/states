@@ -33,6 +33,6 @@ backup-client:
     - group: root
     - mode: 550
     - template: jinja
-    - source: salt://backup/client/copy.jinja2
+    - source: salt://backup/scp/copy.jinja2
     - require:
       - file: /usr/local

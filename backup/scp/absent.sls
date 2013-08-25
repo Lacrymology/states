@@ -1,6 +1,8 @@
 {#
  Remove Poor man backup client NRPE check
  #}
+include:
+  - backup.absent
 
 {% if salt['pillar.get']('backup_server:address', False) %}
 backup-client:
@@ -11,7 +13,3 @@ backup-client:
     - fingerprint: {{ pillar['backup_server']['fingerprint'] }}
     - order: 1
 {% endif %}
-
-/usr/local/bin/backup_store:
-  file:
-    - absent

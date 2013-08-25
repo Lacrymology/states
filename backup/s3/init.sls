@@ -1,4 +1,5 @@
 include:
+  - local
   - s3cmd
 
 /usr/local/bin/backup_store:
@@ -11,3 +12,4 @@ include:
     - source: salt://backup/s3/backup_store.jinja
     - require:
       - pkg: s3cmd
+      - file: /usr/local

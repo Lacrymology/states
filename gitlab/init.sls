@@ -43,6 +43,7 @@ include:
   - nginx
   - nodejs
   - postgresql.server
+  - python
   - ruby
   - redis
   - web
@@ -59,6 +60,7 @@ gitlab_dependencies:
     - require:
       - cmd: apt_sources
       - pkg: build
+      - pkg: python
 
 gitlab-shell:
   archive:
@@ -148,7 +150,7 @@ gitlab:
     - source: salt://gitlab/gitlab-{{ version }}.tar.gz
     {%- endif %}
 
-    - source_hash: md5=962093cbf4ce80ed166dff94855b53dc
+    - source_hash: md5=151be72dc60179254c58120098f2a84e
     - archive_format: tar
     - tar_options: z
     - if_missing: /home/git/gitlab
@@ -166,9 +168,9 @@ gitlab:
       - archive: gitlab
   cmd:
     - run
-    - name: bundle exec rake gitlab:setup RAILS_ENV=production
-    - env:
-        force: yes
+    - name: export force="yes"; bundle exec rake gitlab:setup RAILS_ENV=production
+    #- env:
+      #force: yes
     - user: git
     - cwd: /home/git/gitlab
     - require:
@@ -204,8 +206,8 @@ rename_gitlab:
     - directory
     - user: git
     - group: git
-    - dir_mode: 766
-    - file_mode: 766
+    - dir_mode: 777
+    - file_mode: 777
     - recurse:
       - user
       - group
@@ -216,7 +218,7 @@ rename_gitlab:
       - file: /home/git/gitlab-satellites
 {%- endfor %}
 
-{%- for file in 'unicorn.rb', 'gitlab.yml', 'database.yml', 'puma.rb' %}
+{%- for file in 'unicorn.rb', 'gitlab.yml', 'database.yml' %}
 /home/git/gitlab/config/{{ file }}:
   file:
     - managed

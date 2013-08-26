@@ -3,8 +3,11 @@
 
 {%- if 'files_archive' in pillar %}
 no-index = true
-find-links =
-    {{ pillar['files_archive'] }}/pip/
+find-links = {{ pillar['files_archive'] }}/pip/
+    {%- if salt['pillar.get']('pip:mirrors', False) %}
+use-mirrors = true
+mirrors =  https://pypi.python.org/simple/
+    {%- endif %}
 {%- else %}
 download-cache = /var/cache/pip
 {%- endif -%}

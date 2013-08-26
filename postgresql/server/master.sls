@@ -27,7 +27,7 @@ Master servers need to setup before standby servers to provide basebackup for st
 include:
   - postgresql.server
 
-{% set version="9.2" %}
+{%- set version="9.2" %}
 extend:
   postgresql:
     file:

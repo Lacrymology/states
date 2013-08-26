@@ -110,4 +110,4 @@ local   replication     postgres                                peer
 
 {%- for standby in salt['pillar.get']('postgresql:replication:standby', []) %}
 host 	replication 	replication_agent     	{{ standby }}/32      	trust
-{%- endfor %}
+{%- endfor -%}

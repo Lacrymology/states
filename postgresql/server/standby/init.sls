@@ -1,7 +1,7 @@
 include:
   - postgresql.server
 
-{% set version="9.2" %}
+{%- set version="9.2" %}
 extend:
   postgresql:
     file:
@@ -9,9 +9,9 @@ extend:
         version: {{ version }}
         role: standby
 
-{%- if not salt['file.file_exists']('/var/lib/postgresql/' + version + '/main/recovery.done') %}
-{%- set pillar = salt['pillar.get']('postgresql:replication') %}
-{%- set password = salt['password.pillar']('postgresql:replication:password') %}
+{%- if not salt['file.file_exists']('/var/lib/postgresql/' + version + '/main/recovery.done') -%}
+{%- set pillar = salt['pillar.get']('postgresql:replication') -%}
+{%- set password = salt['password.pillar']('postgresql:replication:password') -%}
 {%- set username = salt['pillar.get']('postgresql:replication:username', 'replication_agent') %}
 recovery_from_master_base_backup:
   service:

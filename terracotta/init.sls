@@ -1,3 +1,6 @@
+include:
+  - local 
+  - java.7.jdk
 {% set version = '3.7.0' %}
 
 terracotta:
@@ -24,6 +27,8 @@ terracotta:
       version: {{ version }}
   service:
     - running
+    - require:
+      - pkg: openjdk_jdk
     - watch:
       - file: terracotta
       - archive: terracotta

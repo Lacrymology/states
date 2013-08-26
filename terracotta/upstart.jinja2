@@ -5,9 +5,9 @@ stop  on shutdown
 
 env TC_INSTALL_DIR=/usr/local/terracotta-{{ version }}
 {%- if grains['cpuarch'] == 'amd64' %}
-{%- set config = "-d64 -server -XX:MaxDirectMemorySize=9223372036854775807"
+{%- set config = "-d64 -server -XX:MaxDirectMemorySize=9223372036854775807" %}
 {%- else %}
-{%- set config = "-server -XX:MaxDirectMemorySize=2147483647"
+{%- set config = "-server -XX:MaxDirectMemorySize=2147483647" %}
 {%- endif %}
 exec java {{ config }} -Xms512m -Xmx512m -XX:+HeapDumpOnOutOfMemoryError \
    -Dcom.sun.management.jmxremote \
@@ -16,3 +16,4 @@ exec java {{ config }} -Xms512m -Xmx512m -XX:+HeapDumpOnOutOfMemoryError \
    ${JAVA_OPTS} \
    -cp "${TC_INSTALL_DIR}/lib/tc.jar" \
    com.tc.server.TCServerMain "$@"
+

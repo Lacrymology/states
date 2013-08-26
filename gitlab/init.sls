@@ -46,6 +46,7 @@ include:
   - python
   - ruby
   - redis
+  - uwsgi.ruby
   - web
 
 gitlab_dependencies:
@@ -61,6 +62,7 @@ gitlab_dependencies:
       - cmd: apt_sources
       - pkg: build
       - pkg: python
+      - pkg: nodejs
 
 gitlab-shell:
   archive:
@@ -176,13 +178,13 @@ gitlab:
     - require:
       - cmd: bundler
       - service: redis-server
-  service:
+{#  service:
     - running
     - name: gitlab
     - require:
       - pkg: nodejs
       - cmd: gitlab_upstart
-
+      #}
 rename_gitlab:
   cmd:
     - run
@@ -200,7 +202,8 @@ rename_gitlab:
       - user: git
       - group: git
 
-{%- for dir in 'log', 'tmp', 'tmp/pids', 'tmp/sockets', 'public/uploads' %}
+{# {%- for dir in 'log', 'tmp', 'tmp/pids', 'tmp/sockets', 'public/uploads' %} #}
+{%- for dir in ('log', 'tmp', 'public/uploads') %}
 /home/git/gitlab/{{ dir }}:
   file:
     - directory
@@ -256,7 +259,7 @@ bundler:
     - user: git
     - require:
       - gem: bundler
-
+      {#
 gitlab_upstart:
   file:
     - managed
@@ -274,6 +277,18 @@ gitlab_upstart:
     - user: root
     - require:
       - file: gitlab_upstart
+      #}
+/etc/uwsgi/gitlab.ini:
+  file:
+    - managed
+    - source: salt://gitlab/uwsgi.jinja2
+    - group: www-data
+    - user: www-data
+    - template: jinja
+    - mode: 640 # set mode to 440 after write done
+    - require:
+      - cmd: gitlab
+      - service: uwsgi
 
 /etc/nginx/conf.d/gitlab.conf:
   file:
@@ -282,10 +297,9 @@ gitlab_upstart:
     - template: jinja
     - group: www-data
     - user: www-data
-    - mode: 440
+    - mode: 640 # set mode to 440 after write done
     - require:
       - pkg: nginx
-      - service: gitlab
       - user: web
     - watch_in:
       - service: nginx

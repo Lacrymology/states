@@ -1,0 +1,22 @@
+[uwsgi]
+master = true
+post-buffering = 4096
+env = RAILS_ENV=production
+processes = 2
+harakiri = 60
+harakiri-verbose = true
+
+
+lazy-apps = true
+uid = www-data
+gid = www-data
+procname = gitlab-worker
+procname-master = gitlab-master
+socket = /var/lib/uwsgi/gitlab.sock
+stats = /var/lib/uwsgi/gitlab-stats.sock
+chdir = /home/git/gitlab
+rack = /home/git/gtilab/config.ru
+threaded-logger = true
+no-orphans = true
+
+#log-syslog = uwsgi-gitlab

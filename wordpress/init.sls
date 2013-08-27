@@ -46,26 +46,12 @@ wordpress:
     - directory
     - name: {{ wordpressdir }}
     - user: www-data
-    - grouP: www-data
+    - group: www-data
     - recurse:
       - user
       - group
     - require:
       - archive: wordpress
-
-      {#-  file:
-    - managed
-    - name: {{ wordpressdir }}/wp-config.php
-    - template: jinja
-    - source: salt://wordpress/config.jinja2
-    - user: www-data
-    - group: www-data
-    - mode: 440
-    - require:
-      - archive: wordpress
-      - user: web
-    - context:
-      password: {{ password }}
   mysql_database:
     - present
     - name: wordpress
@@ -82,13 +68,30 @@ wordpress:
       - pkg: python-mysqldb
   mysql_grants:
     - present
+    - grant: all privileges
     - user: wordpress
     - database: wordpress.*
     - host: localhost
     - require:
       - mysql_user: wordpress
       - mysql_database: wordpress
-      #}
+
+
+{{ wordpressdir }}/wp-config.php:
+  file:
+    - managed
+    - name: {{ wordpressdir }}/wp-config.php
+    - template: jinja
+    - source: salt://wordpress/config.jinja2
+    - user: www-data
+    - group: www-data
+    - mode: 440
+    - require:
+      - archive: wordpress
+      - user: web
+    - context:
+      password: {{ password }}
+
 /etc/nginx/conf.d/wordpress.conf:
   file:
     - managed

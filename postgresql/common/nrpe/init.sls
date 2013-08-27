@@ -6,6 +6,7 @@
 include:
   - nrpe
   - postgresql.nrpe
+  - postgresql.common.user
   - apt.nrpe
   - rsyslog.nrpe
 {% if salt['pillar.get']('postgresql:ssl', False) %}
@@ -66,3 +67,5 @@ extend:
       - watch:
         - file: /etc/nagios/nrpe.d/postgresql.cfg
         - file: /etc/nagios/nrpe.d/postgresql-diamond.cfg
+      - require:
+        - postgres_user: postgresql_monitoring

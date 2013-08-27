@@ -8,8 +8,6 @@ Mandatory Pillar
 gitlab:
   hostnames:
     - localhost
-  database:
-    password: postgres_user_pass
 Optional Pillar
 ---------------
 
@@ -25,6 +23,7 @@ gitlab:
     host: localhost
     port: 5432
     username: git
+    password: postgres_user_pass
   ldap:
     enabled: false
     host: xxx
@@ -48,6 +47,8 @@ include:
   - redis
   - uwsgi.ruby
   - web
+
+{%- set root_dir = "/usr/local/gitlab"  %}
 
 gitlab_dependencies:
   pkg:
@@ -121,7 +122,7 @@ install_gitlab_shell:
       - pkg: ruby
 
 {%- set database_username = salt['pillar.get']('gitlab:database:username','git') %}
-{%- set database_password = salt['pillar.get']('gitlab:database:password') %}
+{%- set database_password = salt['password.pillar']('gitlab:database:password', 10) %}
 {%- set version = '6.0' %}
 gitlab:
   user:
@@ -145,22 +146,22 @@ gitlab:
       - postgres_user: gitlab
   archive:
     - extracted
-    - name: /home/git/
+    - name: /usr/local
     {#- need move to archive!! #}
     {%- if 'files_archive' in pillar %}
-    - source: {{ pillar['files_archive'] }}/mirror/gitlab/6.0.tar.gz
+    - source: {{ pillar['files_archive'] }}/mirror/gitlab/{{ version }}.tar.gz
     {%- else %}
     - source: salt://gitlab/gitlab-{{ version }}.tar.gz
     {%- endif %}
     - source_hash: md5=151be72dc60179254c58120098f2a84e
     - archive_format: tar
     - tar_options: z
-    - if_missing: /home/git/gitlab
+    - if_missing: {{ root_dir }}
     - require:
       - postgres_database: gitlab
   file:
     - directory
-    - name: /home/git/gitlab
+    - name: {{ root_dir }}
     - user: git
     - group: git
     - recurse:
@@ -174,7 +175,7 @@ gitlab:
     #- env:
       #force: yes
     - user: git
-    - cwd: /home/git/gitlab
+    - cwd: {{ root_dir }}
     - require:
       - cmd: bundler
       - service: redis-server
@@ -182,32 +183,41 @@ gitlab:
 rename_gitlab:
   cmd:
     - run
-    - name: mv gitlabhq-6-0-stable gitlab
-    - cwd: /home/git
-    - onlyif: ls /home/git | grep gitlabhq-6-0-stable
+    - name: mv gitlabhq-{{ version|replace(".","-") }}-stable gitlab
+    - cwd: /usr/local
+    - onlyif: ls /usr/local | grep gitlabhq-{{ version|replace(".","-") }}-stable
     - require:
       - archive: gitlab
     - require_in:
       - file: gitlab
 
 change_gitlab_dir_permission:
-  cmd:
-    - wait
-    - name: chown -R www-data:www-data /home/git/gitlab
-    - watch:
-      - cmd: gitlab
+  {#
+  module:
+    - run
+    - name: file
+    - path: {{ root_dir }}
+    - user: www-data
+    - group: www-data
     - require:
       - user: web
-
+      - cmd: gitlab
+      #}
+  cmd:
+    - run
+    - name: chown -R www-data:www-data {{ root_dir }}
+    - require:
+      - user: web
+      - cmd: gitlab
 
 /home/git/gitlab-satellites:
-    file:
-      - directory
-      - user: git
-      - group: git
+  file:
+    - directory
+    - user: git
+    - group: git
 
 {%- for dir in ('log', 'tmp', 'public/uploads') %}
-/home/git/gitlab/{{ dir }}:
+{{ root_dir }}/{{ dir }}:
   file:
     - directory
     - user: git
@@ -225,7 +235,7 @@ change_gitlab_dir_permission:
 {%- endfor %}
 
 {%- for file in ('gitlab.yml', 'database.yml') %}
-/home/git/gitlab/config/{{ file }}:
+{{ root_dir }}/config/{{ file }}:
   file:
     - managed
     - source: salt://gitlab/{{ file }}.jinja2
@@ -258,7 +268,7 @@ bundler:
   cmd:
     - run
     - name: bundle install --deployment --without development test mysql aws
-    - cwd: /home/git/gitlab
+    - cwd: {{ root_dir }}
     - user: git
     - require:
       - gem: bundler
@@ -273,12 +283,13 @@ rack:
     #- version: 1.4.5
   file:
     - managed
+    - name: /tmp/rack-1.4.5.gem
     - source: http://rubygems.org/downloads/rack-1.4.5.gem
     - source_hash: md5=6661d225210f6b48f83fb279aba0a149
     - user: root
   cmd:
     - wait
-    - name: 
+    - name: gem install /tmp/rack-1.4.5.gem
     - watch:
       - file: rack
     - require:
@@ -295,11 +306,14 @@ rack:
     - mode: 640 # set mode to 440 after write done
     - require:
       - cmd: gitlab
-      - service: uwsgi_emperor
+      - file: uwsgi_sockets
+      - file: uwsgi_emperor
       - cmd: rack
       - cmd: change_gitlab_dir_permission
-      #- watch_in:
-        #- service: uwsgi
+    - watch_in:
+      - service: uwsgi_emperor
+    - context:
+      root_dir: {{ root_dir }}
 
 /etc/nginx/conf.d/gitlab.conf:
   file:
@@ -315,3 +329,5 @@ rack:
       - file: /etc/uwsgi/gitlab.ini
     - watch_in:
       - service: nginx
+    - context:
+      root_dir: {{ root_dir }}

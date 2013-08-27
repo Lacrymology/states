@@ -7,9 +7,11 @@ server {
 
 
     server_name localhost;
-    root /home/git/gitlab/public;
+    root {{ root_dir }}/public;
 
     location / {
+        gzip off;
+        uwsgi_modifier1 7;
         include uwsgi_params;
         uwsgi_pass gitlab;
     }

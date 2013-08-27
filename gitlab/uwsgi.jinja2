@@ -15,8 +15,8 @@ procname = gitlab-worker
 procname-master = gitlab-master
 socket = /var/lib/uwsgi/gitlab.sock
 stats = /var/lib/uwsgi/gitlab-stats.sock
-chdir = /home/git/gitlab
-rack = /home/git/gitlab/config.ru
+chdir = {{ root_dir }}
+rack = {{ root_dir }}/config.ru
 threaded-logger = true
 no-orphans = true
 

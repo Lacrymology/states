@@ -4,8 +4,8 @@
 include:
   - diamond
   - python.dev
-  - postgresql.server
   - postgresql
+  - postgresql.common.user
   - rsyslog.diamond
 
 diamond_collector-psycopg2:
@@ -16,7 +16,7 @@ diamond_collector-psycopg2:
     - user: root
     - group: root
     - mode: 440
-    - source: salt://postgresql/server/diamond/requirements.jinja2
+    - source: salt://postgresql/common/diamond/requirements.jinja2
     - require:
       - virtualenv: diamond
   module:
@@ -32,33 +32,6 @@ diamond_collector-psycopg2:
       - pkg: postgresql-dev
       - file: diamond_collector-psycopg2
 
-postgresql_diamond_collector:
-  file:
-    - managed
-    - name: /etc/diamond/collectors/PostgresqlCollector.conf
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 440
-    - source: salt://postgresql/server/diamond/config.jinja2
-    - require:
-      - file: /etc/diamond/collectors
-  postgres_user:
-    - present
-    - name: diamond
-    - password: {{ salt['password.pillar']('postgresql:diamond') }}
-    - superuser: True
-    - runas: postgres
-    - require:
-      - service: postgresql
-  postgres_database:
-    - present
-    - name: diamond
-    - owner: diamond
-    - runas: postgres
-    - require:
-      - postgres_user: postgresql_diamond_collector
-
 postgresql_diamond_resources:
   file:
     - accumulated
@@ -71,10 +44,22 @@ postgresql_diamond_resources:
         [[postgresql]]
         exe = ^\/usr\/lib\/postgresql/\d+\.\d+\/bin\/postgres$
 
+postgresql_diamond_collector:
+  file:
+    - managed
+    - name: /etc/diamond/collectors/PostgresqlCollector.conf
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - source: salt://postgresql/common/diamond/config.jinja2
+    - require:
+      - file: /etc/diamond/collectors
+
 extend:
   diamond:
     service:
       - watch:
         - file: postgresql_diamond_collector
         - module: diamond_collector-psycopg2
-        - postgres_database: postgresql_diamond_collector
+        - postgres_database: postgresql_monitoring

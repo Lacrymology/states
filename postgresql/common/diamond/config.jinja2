@@ -1,0 +1,7 @@
+# {{ pillar['message_do_not_modify'] }}
+
+enabled = True
+extended = True
+user = monitoring
+password = {{ salt['password.pillar']('postgresql:monitoring') }}
+host = 127.0.0.1

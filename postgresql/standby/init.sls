@@ -39,7 +39,7 @@ recovery_from_master_base_backup:
 /var/lib/postgresql/{{ version }}/main/recovery.conf:
   file:
     - managed
-    - source: salt://postgresql/server/standby/recovery.jinja2
+    - source: salt://postgresql/standby/recovery.jinja2
     - user: postgres
     - group: postgres
     - mode: 440

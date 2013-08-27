@@ -41,7 +41,7 @@ extend:
   file:
     - managed
     - template: jinja
-    - source: salt://postgresql/server/pg_hba.jinja2
+    - source: salt://postgresql/master/pg_hba.jinja2
     - user: postgres
     - group: postgres
     - mode: 440

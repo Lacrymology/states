@@ -6,7 +6,7 @@ production:
   database: gitlab
   pool: 10
   username: {{ salt['pillar.get']('gitlab:database:username','git') }}
-  password: {{ salt['pillar.get']('gitlab:database:password','pass') }}
+  password: {{ salt['pillar.get']('gitlab:database:password') }}
   host: {{ salt['pillar.get']('gitlab:database:host','localhost') }}
   port: {{ salt['pillar.get']('gitlab:database:port','5432') }}
   {#- socket: /tmp/postgresql.sock #}

@@ -3,5 +3,5 @@
 enabled = True
 extended = True
 user = monitoring
-password = {{ salt['password.pillar']('postgresql:monitoring') }}
+password = {{ salt['password.pillar']('postgresql:monitoring:password') }}
 host = 127.0.0.1

@@ -29,17 +29,17 @@ password_encryption = on
 {#- master server (need to be connected from standby servers)
 and hot standby servers (hot_standby means serving read only requests)
 should are public server - expose to world#}
-{%- if role == 'master' %}
-listen_addresses = '*'
-{%- elif role == 'standby' %}
-	{%- if salt['pillar.get']('postgresql:replication:hot_standby', True) %}
-listen_addresses = '*'
-	{%- else %}
-listen_addresses = '{{ salt['pillar.get']('postgresql:listen_addresses', 'localhost') }}'
-	{%- endif %}
-{%- else %}
-listen_addresses = '{{ salt['pillar.get']('postgresql:listen_addresses', 'localhost') }}'
+{%- set listen_addresses  = salt['pillar.get']('postgresql:listen_addresses', 'localhost') %}
+{%- if role is defined %}
+    {%- if role == 'master' %}
+        {%- set listen_addresses = '*' %}
+    {%- elif role == 'standby' %}
+        {%- if salt['pillar.get']('postgresql:replication:hot_standby', True) %}
+            {%- set listen_addresses = '*' %}
+        {%- endif %}
+    {%- endif %}
 {%- endif %}
+listen_addresses = '{{ listen_addresses }}'
 port = {{ salt['pillar.get']('postgresql:listen_port', 5432) }}
 {#
  Increasing max_connections costs ~400 bytes of shared memory per

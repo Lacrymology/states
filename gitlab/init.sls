@@ -8,7 +8,8 @@ Mandatory Pillar
 gitlab:
   hostnames:
     - localhost
-
+  database:
+    password: postgres_user_pass
 Optional Pillar
 ---------------
 
@@ -24,8 +25,6 @@ gitlab:
     host: localhost
     port: 5432
     username: git
-    password: pass    # default password is `pass`
-
   ldap:
     enabled: false
     host: xxx
@@ -122,8 +121,8 @@ install_gitlab_shell:
       - pkg: ruby
 
 {%- set database_username = salt['pillar.get']('gitlab:database:username','git') %}
-{%- set database_password = salt['pillar.get']('gitlab:database:password','pass') %}
-{%- set version = '6-0' %}
+{%- set database_password = salt['pillar.get']('gitlab:database:password') %}
+{%- set version = '6.0' %}
 gitlab:
   user:
     - present
@@ -149,11 +148,11 @@ gitlab:
     - name: /home/git/
     {#- need move to archive!! #}
     {%- if 'files_archive' in pillar %}
-    - source: https://github.com/gitlabhq/gitlabhq/archive/6-0-stable.tar.gz
+    - source: {{ pillar['files_archive'] }}/mirror/gitlab/6.0.tar.gz
     {%- else %}
     - source: salt://gitlab/gitlab-{{ version }}.tar.gz
     {%- endif %}
-    - source_hash: md5=ae96d3ed872e664ae9d1d796e3a4efee
+    - source_hash: md5=151be72dc60179254c58120098f2a84e
     - archive_format: tar
     - tar_options: z
     - if_missing: /home/git/gitlab
@@ -183,9 +182,9 @@ gitlab:
 rename_gitlab:
   cmd:
     - run
-    - name: mv gitlabhq-{{ version }}-stable gitlab
+    - name: mv gitlabhq-6-0-stable gitlab
     - cwd: /home/git
-    - onlyif: ls /home/git | grep gitlabhq-{{ version }}-stable
+    - onlyif: ls /home/git | grep gitlabhq-6-0-stable
     - require:
       - archive: gitlab
     - require_in:
@@ -243,7 +242,7 @@ change_gitlab_dir_permission:
 charlock_holmes:
   gem:
     - installed
-    - version: 0.6.9.4
+    - version: 0.6.9
     - runas: root
     - require:
       - file: gitlab
@@ -264,10 +263,27 @@ bundler:
     - require:
       - gem: bundler
 
+{#- 
+sometime, couldn't connect to gem source
+install rack gem by manually
+#}
 rack:
-  gem:
-    - installed
-    - version: 1.4.5
+  #gem:
+    #- installed
+    #- version: 1.4.5
+  file:
+    - managed
+    - source: http://rubygems.org/downloads/rack-1.4.5.gem
+    - source_hash: md5=6661d225210f6b48f83fb279aba0a149
+    - user: root
+  cmd:
+    - wait
+    - name: 
+    - watch:
+      - file: rack
+    - require:
+      - pkg: ruby
+      - pkg: build
 
 /etc/uwsgi/gitlab.ini:
   file:
@@ -280,7 +296,7 @@ rack:
     - require:
       - cmd: gitlab
       - service: uwsgi_emperor
-      - gem: rack
+      - cmd: rack
       - cmd: change_gitlab_dir_permission
       #- watch_in:
         #- service: uwsgi

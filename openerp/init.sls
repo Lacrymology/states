@@ -17,8 +17,7 @@ openerp:
     host: 127.0.0.1     # if run postgresql in local
     port: 5432          # Default port for postgresql server
     user: openerp       
-    password:      # set `False` is no password
-
+    password: postgres_user_password 
 -#}
 include:
   - nginx
@@ -28,6 +27,7 @@ include:
   - underscore
 
 {%- set version = "6.1" %}
+{%- set password = salt['password.pillar']('openerp:database:password', 10)  %}
 openerp-server:
   pkg:
     - installed
@@ -43,6 +43,8 @@ openerp-server:
     - user: openerp
     - group: openerp
     - mode: 440
+    - context:
+      password: {{ password }}
     - template: jinja
     - require:
       - pkg: openerp-server
@@ -58,7 +60,7 @@ openerp-server:
   postgres_user:
     - present
     - name: openerp
-    - password: {{ salt['pillar.get']('openerp:database:password', 'pass') }}
+    - password: {{ password }}
     - require:
       - pkg: openerp-server
       - service: postgresql

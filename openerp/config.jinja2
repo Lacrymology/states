@@ -2,10 +2,10 @@
 [options]
 {#- 
 WARNING: default master password is 'admin', CHANGE IT after done installing 
--#}
+#}
 db_host = {{ salt['pillar.get']('openerp:database:host','127.0.0.1') }}
 db_port = {{ salt['pillar.get']('openerp:database:port','5432') }}
 
 
 db_user = openerp
-db_password = {{ salt['pillar.get']('openerp:database:password','pass') }}
+db_password = {{ password }}

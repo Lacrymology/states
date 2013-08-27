@@ -131,6 +131,7 @@ wordpress_initial:
     - user: www-data
     - require:
       - pkg: php-dev
+      - pkg: php5-mysql
       - user: web
       - mysql_grants: wordpress
     - watch:

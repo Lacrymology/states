@@ -21,8 +21,10 @@ match: to match the minion-id that will run state specified in sls
 sls: list of states to run on matched minions
 require: require other "over" state run before it. In above example,
   sls postgresql.server.master will be ran on minion that have id 'pgmaster'
-  then sls postgresql.server.standby will run on all minion that match '*standby'.
-Master servers need to setup before standby servers to provide basebackup for standby servers
+  then sls postgresql.server.standby will run on all minion that match
+  '*standby'.
+Master servers need to setup before standby servers to provide basebackup for
+standby servers
 #}
 include:
   - postgresql.server

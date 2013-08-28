@@ -5,7 +5,7 @@ include:
 
 terracotta:
   archive:
-    - name: /usr/local/terracotta
+    - name: /usr/local
     - extracted
     - source: http://d2zwv9pap9ylyd.cloudfront.net/terracotta-3.7.0.tar.gz
     #- source: {{ pillar['files_archive'] }}/mirror/terracotta-{{ version }}.tar.gz
@@ -29,6 +29,31 @@ terracotta:
     - running
     - require:
       - pkg: openjdk_jdk
+      - archive: terracotta
+      - file: /var/lib/terracotta/server-statistics
+      - file: /var/log/terracotta/server-logs
+      - file: /var/lib/terracotta/server-data
     - watch:
       - file: terracotta
-      - archive: terracotta
+      - file: /etc/terracotta.conf
+
+/etc/terracotta.conf:
+  file:
+    - managed
+    - template: jinja
+    - source: salt://terracotta/config.jinja2
+
+/var/lib/terracotta/server-data:
+  file:
+    - directory
+    - makedirs: True
+
+/var/log/terracotta/server-logs:
+  file:
+    - directory
+    - makedirs: True
+
+/var/lib/terracotta/server-statistics:
+  file:
+    - directory
+    - makedirs: True

@@ -10,6 +10,7 @@ env TC_INSTALL_DIR=/usr/local/terracotta-{{ version }}
 {%- set config = "-server -XX:MaxDirectMemorySize=2147483647" %}
 {%- endif %}
 exec java {{ config }} -Xms512m -Xmx512m -XX:+HeapDumpOnOutOfMemoryError \
+   -Dtc.config=/etc/terracotta.conf \
    -Dcom.sun.management.jmxremote \
    -Dtc.install-root="${TC_INSTALL_DIR}" \
    -Dsun.rmi.dgc.server.gcInterval=31536000 \

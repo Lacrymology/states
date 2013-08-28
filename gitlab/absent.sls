@@ -1,31 +1,23 @@
 {#-
  Unistalling GitLab
 #}
+{%- set version = '6-0' %}
+{%- set root_dir = "/usr/local/gitlabhq-" + version + "-stable"  %}
 
 gitlab:
   user:
     - absent
     - name: git
-  file:
-    - absent
-    - name: /home/git
-    {#
-    -postgre_user:
-    - absent
-    - runas: postgres
-  postgre_database:
-    - absent
-    - runas: postgres
-    #}
   
 /etc/uwsgi/gitlab.ini:
   file:
     - absent
 
-/etc/nginx/conf.d/gitlab.conf:
+{%- for file in ('/etc/nginx/conf.d/gitlab.conf', root_dir, '/home/git') %}
+{{ file }}:
   file:
     - absent
+    - require:
+      - file: /etc/uwsgi/gitlab.ini
 
-/usr/local/gitlab:
-  file:
-    - absent
+{%- endfor %}

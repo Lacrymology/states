@@ -31,6 +31,8 @@ include:
 {% if 'cheaper' in salt['pillar.get']('gitlab') %}
       cheaper: {{ salt['pillar.get']('gitlab:cheaper')  }}
 {% endif %}
+    - watch_in:
+      - service: nagios-nrpe-server
 
 /etc/nagios/nrpe.d/gitlab-nginx.cfg:
   file:
@@ -50,11 +52,5 @@ include:
       https: True
       http_result: 301 Moved Permanently
 {%- endif %}
-
-extend:
-  nagios-nrpe-server:
-    service:
-      - watch:
-        - file: /etc/nagios/nrpe.d/gitlab.cfg
-        - file: /etc/nagios/nrpe.d/gitlab-nginx.cfg
-
+    - watch_in:
+      - service: nagios-nrpe-server

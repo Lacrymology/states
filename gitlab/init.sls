@@ -8,6 +8,7 @@ Mandatory Pillar
 gitlab:
   hostnames:
     - localhost
+
 Optional Pillar
 ---------------
 
@@ -34,6 +35,9 @@ gitlab:
     bind_dn: xxx
     password: xxx
     allow_username_or_email_login: true
+
+Note: Before run bundle `git` is root_dir owner
+Only `git` user be allowed to run the bundle and setup task
 #}
 
 include:
@@ -45,10 +49,12 @@ include:
   - python
   - ruby
   - redis
+{% if salt['pillar.get']('gitlab:config:ssl')|default(False) %}
+  - ssl
+{% endif %}
   - uwsgi.ruby
   - web
 
-{%- set root_dir = "/usr/local/gitlab"  %}
 
 gitlab_dependencies:
   pkg:
@@ -69,13 +75,13 @@ gitlab-shell:
   archive:
     - extracted
     - name: /home/git/
-    {#- need move to archive!! #}
     {%- if 'files_archive' in pillar %}
-    - source: https://github.com/gitlabhq/gitlab-shell/archive/master.tar.gz
+    - source: {{ salt['pillar.get']('files_archive') }}/mirror/gitlab/shell-fbaf8d8c12dcb9d820d250b9f9589318dbc36616.tar.gz
+    - source_hash: md5=fa679c88f382211b34ecd35bfbb54ea6
     {%- else %}
-    - source: {{ salt['pillar.get']('files_archive') }}/gitlab-shell.tar.gz
-    {%- endif %}
+    - source: https://github.com/gitlabhq/gitlab-shell/archive/master.tar.gz
     - source_hash: md5=e852ac69b13ad055424442368282774e
+    {%- endif %}
     - archive_format: tar
     - tar_options: z
     - if_missing: /home/git/gitlab-shell
@@ -91,7 +97,6 @@ gitlab-shell:
       - group
     - require:
       - cmd: gitlab-shell
-      - user: web
   cmd:
     - run
     - name: mv gitlab-shell-master gitlab-shell
@@ -123,7 +128,9 @@ install_gitlab_shell:
 
 {%- set database_username = salt['pillar.get']('gitlab:database:username','git') %}
 {%- set database_password = salt['password.pillar']('gitlab:database:password', 10) %}
-{%- set version = '6.0' %}
+{%- set version = '6-0' %}
+{%- set root_dir = "/usr/local/gitlabhq-" + version + "-stable"  %}
+
 gitlab:
   user:
     - present
@@ -147,13 +154,13 @@ gitlab:
   archive:
     - extracted
     - name: /usr/local
-    {#- need move to archive!! #}
     {%- if 'files_archive' in pillar %}
-    - source: {{ pillar['files_archive'] }}/mirror/gitlab/{{ version }}.tar.gz
+    - source: {{ pillar['files_archive'] }}/mirror/gitlab/{{ version|replace("-", ".") }}.tar.gz
+    - source_hash: md5=151be72dc60179254c58120098f2a84e
     {%- else %}
     - source: salt://gitlab/gitlab-{{ version }}.tar.gz
-    {%- endif %}
     - source_hash: md5=151be72dc60179254c58120098f2a84e
+    {%- endif %}
     - archive_format: tar
     - tar_options: z
     - if_missing: {{ root_dir }}
@@ -164,9 +171,11 @@ gitlab:
     - name: {{ root_dir }}
     - user: git
     - group: git
+    - mode: 774
     - recurse:
       - user
       - group
+      - mode
     - require:
       - archive: gitlab
   cmd:
@@ -180,16 +189,25 @@ gitlab:
       - cmd: bundler
       - service: redis-server
 
-rename_gitlab:
+precompile_assets:
   cmd:
-    - run
-    - name: mv gitlabhq-{{ version|replace(".","-") }}-stable gitlab
-    - cwd: /usr/local
-    - onlyif: ls /usr/local | grep gitlabhq-{{ version|replace(".","-") }}-stable
+    - wait
+    - name: bundle exec rake assets:precompile RAILS_ENV=production
+    - user: git
+    - cwd: {{ root_dir }}
+    - watch:
+      - cmd: gitlab
+
+{{ root_dir }}/config.ru:
+  file:
+    - managed
+    - source: salt://gitlab/config.jinja2
+    - user: git
+    - group: git
+    - template: jinja
+    - mode: 440
     - require:
-      - archive: gitlab
-    - require_in:
-      - file: gitlab
+      - cmd: gitlab
 
 change_gitlab_dir_permission:
   {#
@@ -203,11 +221,12 @@ change_gitlab_dir_permission:
       - user: web
       - cmd: gitlab
       #}
-  cmd:
+  cmd: # will remove after done
     - run
-    - name: chown -R www-data:www-data {{ root_dir }}
+    - name: chown -R git:git {{ root_dir }}
     - require:
       - user: web
+      - cmd: precompile_assets
       - cmd: gitlab
 
 /home/git/gitlab-satellites:
@@ -222,8 +241,8 @@ change_gitlab_dir_permission:
     - directory
     - user: git
     - group: git
-    - dir_mode: 755
-    - file_mode: 755
+    - dir_mode: 764
+    - file_mode: 764
     - recurse:
       - user
       - group
@@ -252,7 +271,7 @@ change_gitlab_dir_permission:
 charlock_holmes:
   gem:
     - installed
-    - version: 0.6.9
+    - version: 0.6.9.4
     - runas: root
     - require:
       - file: gitlab
@@ -273,28 +292,24 @@ bundler:
     - require:
       - gem: bundler
 
-{#- 
-sometime, couldn't connect to gem source
-install rack gem by manually
-#}
 rack:
-  #gem:
-    #- installed
-    #- version: 1.4.5
-  file:
-    - managed
-    - name: /tmp/rack-1.4.5.gem
-    - source: http://rubygems.org/downloads/rack-1.4.5.gem
-    - source_hash: md5=6661d225210f6b48f83fb279aba0a149
-    - user: root
-  cmd:
-    - wait
-    - name: gem install /tmp/rack-1.4.5.gem
-    - watch:
-      - file: rack
+  gem:
+    - installed
+    - version: 1.4.5
+    - runas: root
     - require:
       - pkg: ruby
       - pkg: build
+
+add_web_user_to_group:
+  user:
+    - present
+    - name: www-data
+    - groups:
+      - git
+    - require:
+      - user: web
+      - user: git
 
 /etc/uwsgi/gitlab.ini:
   file:
@@ -303,13 +318,15 @@ rack:
     - group: www-data
     - user: www-data
     - template: jinja
-    - mode: 640 # set mode to 440 after write done
+    - mode: 440
     - require:
       - cmd: gitlab
       - file: uwsgi_sockets
       - file: uwsgi_emperor
-      - cmd: rack
+      - gem: rack
       - cmd: change_gitlab_dir_permission
+      - file: {{ root_dir }}/config.ru
+      - user: add_web_user_to_group
     - watch_in:
       - service: uwsgi_emperor
     - context:
@@ -322,11 +339,16 @@ rack:
     - template: jinja
     - group: www-data
     - user: www-data
-    - mode: 640 # set mode to 440 after write done
+    - mode: 440
     - require:
       - pkg: nginx
       - user: web
       - file: /etc/uwsgi/gitlab.ini
+{% if salt['pillar.get']('gitlab:config:ssl')|default(False) %}
+      - cmd: /etc/ssl/{{ salt['pillar.get']('gitlab:config:ssl') }}/chained_ca.crt
+      - module: /etc/ssl/{{ salt['pillar.get']('gitlab:config:ssl') }}/server.pem
+      - file: /etc/ssl/{{ salt['pillar.get']('gitlab:config:ssl') }}/ca.crt
+{% endif %}
     - watch_in:
       - service: nginx
     - context:

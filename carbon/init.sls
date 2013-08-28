@@ -14,8 +14,7 @@ graphite:
   carbon:
     instances: 2
   retentions:
-    - three_month:
-      name: default_1min_for_1_month
+    default_1min_for_1_month:
       pattern: .*
       retentions: 60s:30d
 
@@ -169,15 +168,6 @@ carbon:
 {%- set instances_count = pillar['graphite']['carbon']['instances'] %}
 
 {% for instance in range(instances_count) %}
-/var/lib/graphite/whisper/{{ instance }}:
-  file:
-    - directory
-    - user: www-data
-    - group: graphite
-    - mode: 770
-    - require:
-      - file: /var/lib/graphite/whisper
-
 carbon-cache-{{ instance }}:
   file:
     - managed
@@ -279,7 +269,7 @@ carbon-relay:
       - user: graphite
       - file: /etc/graphite
 
-{%- if 'whitelist' in pillars['graphite']['carbon']['whitelist']|default(False) %}
+{%- if 'whitelist' in pillar['graphite']['carbon']|default(False) %}
 /etc/graphite/whitelist.conf:
   file:
     - managed
@@ -287,7 +277,7 @@ carbon-relay:
     - group: graphite
     - mode: 440
     - contents: |
-    {%- for rule in pillars['graphite']['carbon']['whitelist'] %}
+    {%- for rule in pillar['graphite']['carbon']['whitelist'] %}
         {{ rule }}
     {%- endfor %}
     - require:

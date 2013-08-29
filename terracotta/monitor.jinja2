@@ -1,0 +1,23 @@
+terracotta_procs:
+  description: Terracotta Daemon
+
+terracotta_dso_local_port:
+  description: Terracotta DSO Local Port
+
+terracotta_dso_remote_port:
+  check: check_tcp!9510
+  description: Terracotta DSO Remote Port
+
+terracotta_jmx_local_port:
+  description: Terracotta JMX Local Port
+
+terracotta_jmx_remote_port:
+  check: check_tcp!9520
+  description: Terracotta JMX Remote Port
+
+terracotta_communicate_local_port:
+  description: Terracotta Communicate Local Port
+
+terracotta_communicate_remote_port:
+  check: check_tcp!9530
+  description: Terracotta Communicate Remote Port

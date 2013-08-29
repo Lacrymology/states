@@ -43,6 +43,7 @@ Only `git` user be allowed to run the bundle and setup task
 include:
   - apt
   - build
+  - git
   - nginx
   - nodejs
   - postgresql.server
@@ -68,6 +69,7 @@ gitlab_dependencies:
     - require:
       - cmd: apt_sources
       - pkg: build
+      - pkg: git
       - pkg: python
       - pkg: nodejs
 
@@ -92,6 +94,7 @@ gitlab-shell:
     - name: /home/git
     - user: git
     - group: git
+    - mode: 775
     - recurse:
       - user
       - group
@@ -101,9 +104,20 @@ gitlab-shell:
     - run
     - name: mv gitlab-shell-master gitlab-shell
     - cwd: /home/git
+    - user: git
     - onlyif: ls /home/git/ | grep gitlab-shell-master
     - require:
       - archive: gitlab-shell
+    - require_in:
+      - file: change_permission_git_home
+
+change_permission_git_home:
+  file:
+    - directory
+    - name: /home/git
+    - mode: 775
+    - recurse:
+      - mode
 
 install_gitlab_shell:
   cmd:
@@ -135,7 +149,7 @@ gitlab:
   user:
     - present
     - name: git
-    - shell: /bin/false
+    - shell: /bin/bash
     - require:
       - pkg: gitlab_dependencies
   postgres_user:
@@ -171,7 +185,7 @@ gitlab:
     - name: {{ root_dir }}
     - user: git
     - group: git
-    - mode: 774
+    - mode: 775
     - recurse:
       - user
       - group
@@ -196,7 +210,16 @@ precompile_assets:
     - user: git
     - cwd: {{ root_dir }}
     - watch:
-      - cmd: gitlab
+      - file: /etc/nginx/conf.d/gitlab.conf
+
+start_sidekiq_service:
+  cmd:
+    - wait
+    - name: bundle exec rake sidekiq:start RAILS_ENV=production
+    - user: git
+    - cwd: {{ root_dir }}
+    - watch:
+      - cmd: precompile_assets
 
 {{ root_dir }}/config.ru:
   file:
@@ -209,40 +232,21 @@ precompile_assets:
     - require:
       - cmd: gitlab
 
-change_gitlab_dir_permission:
-  {#
-  module:
-    - run
-    - name: file
-    - path: {{ root_dir }}
-    - user: www-data
-    - group: www-data
-    - require:
-      - user: web
-      - cmd: gitlab
-      #}
-  cmd: # will remove after done
-    - run
-    - name: chown -R git:git {{ root_dir }}
-    - require:
-      - user: web
-      - cmd: precompile_assets
-      - cmd: gitlab
-
 /home/git/gitlab-satellites:
   file:
     - directory
     - user: git
     - group: git
+    - mode: 775
 
-{%- for dir in ('log', 'tmp', 'public/uploads') %}
+{%- for dir in ('log', 'tmp', 'public/uploads', 'tmp/pids', 'tmp/cache') %}
 {{ root_dir }}/{{ dir }}:
   file:
     - directory
     - user: git
     - group: git
-    - dir_mode: 764
-    - file_mode: 764
+    - dir_mode: 775
+    - file_mode: 775
     - recurse:
       - user
       - group
@@ -324,7 +328,6 @@ add_web_user_to_group:
       - file: uwsgi_sockets
       - file: uwsgi_emperor
       - gem: rack
-      - cmd: change_gitlab_dir_permission
       - file: {{ root_dir }}/config.ru
       - user: add_web_user_to_group
     - watch_in:
@@ -353,3 +356,14 @@ add_web_user_to_group:
       - service: nginx
     - context:
       root_dir: {{ root_dir }}
+
+/home/git/.gitconfig:
+  file:
+    - managed
+    - source: salt://gitlab/gitconfig.jinja2
+    - template: jinja
+    - user: git
+    - group: git
+    - mode: 644
+    - require:
+      - user: git

@@ -62,7 +62,7 @@ gitlab_dependencies:
     - installed
     - pkgs:
       - adduser
-      - libpq-dev
+      #- libpq-dev
       - libicu-dev
       - libxslt1-dev
       - libcurl4-openssl-dev
@@ -94,7 +94,7 @@ gitlab-shell:
     - name: /home/git
     - user: git
     - group: git
-    - mode: 775
+    - mode: 755
     - recurse:
       - user
       - group
@@ -108,16 +108,16 @@ gitlab-shell:
     - onlyif: ls /home/git/ | grep gitlab-shell-master
     - require:
       - archive: gitlab-shell
-    - require_in:
-      - file: change_permission_git_home
+      #- require_in:
+        #- file: change_permission_git_home
 
-change_permission_git_home:
-  file:
-    - directory
-    - name: /home/git
-    - mode: 775
-    - recurse:
-      - mode
+#change_permission_git_home:
+  #  file:
+    #  - directory
+    #- name: /home/git
+    #- mode: 775
+    #- recurse:
+      #  - mode
 
 install_gitlab_shell:
   cmd:
@@ -185,7 +185,7 @@ gitlab:
     - name: {{ root_dir }}
     - user: git
     - group: git
-    - mode: 775
+    - mode: 755
     - recurse:
       - user
       - group
@@ -205,20 +205,20 @@ gitlab:
 
 precompile_assets:
   cmd:
-    - wait
+    - run
     - name: bundle exec rake assets:precompile RAILS_ENV=production
     - user: git
     - cwd: {{ root_dir }}
-    - watch:
-      - file: /etc/nginx/conf.d/gitlab.conf
+    - require:
+      - cmd: gitlab
 
 start_sidekiq_service:
   cmd:
-    - wait
+    - run
     - name: bundle exec rake sidekiq:start RAILS_ENV=production
     - user: git
     - cwd: {{ root_dir }}
-    - watch:
+    - require:
       - cmd: precompile_assets
 
 {{ root_dir }}/config.ru:
@@ -237,7 +237,7 @@ start_sidekiq_service:
     - directory
     - user: git
     - group: git
-    - mode: 775
+    - mode: 755
 
 {%- for dir in ('log', 'tmp', 'public/uploads', 'tmp/pids', 'tmp/cache') %}
 {{ root_dir }}/{{ dir }}:
@@ -305,12 +305,12 @@ rack:
       - pkg: ruby
       - pkg: build
 
-add_web_user_to_group:
+add_git_user_to_group:
   user:
     - present
-    - name: www-data
+    - name: git
     - groups:
-      - git
+      - www-data
     - require:
       - user: web
       - user: git
@@ -325,11 +325,12 @@ add_web_user_to_group:
     - mode: 440
     - require:
       - cmd: gitlab
+      - cmd: start_sidekiq_service
       - file: uwsgi_sockets
       - file: uwsgi_emperor
       - gem: rack
       - file: {{ root_dir }}/config.ru
-      - user: add_web_user_to_group
+      - user: add_git_user_to_group
     - watch_in:
       - service: uwsgi_emperor
     - context:
@@ -356,7 +357,18 @@ add_web_user_to_group:
       - service: nginx
     - context:
       root_dir: {{ root_dir }}
-
+      {#
+permission:
+  file:
+    - directory
+    - user: www-data
+    - group: www-data
+    - recurse:
+      - user
+      - group
+    - require:
+      - file: /etc/nginx/conf.d/gitlab.conf
+      #}
 /home/git/.gitconfig:
   file:
     - managed

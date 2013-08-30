@@ -8,6 +8,7 @@ gitlab:
   user:
     - absent
     - name: git
+    - force: True
   
 /etc/uwsgi/gitlab.ini:
   file:

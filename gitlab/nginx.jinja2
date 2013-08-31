@@ -1,7 +1,8 @@
 # {{ pillar['message_do_not_modify'] }}
 
 upstream gitlab {
-    server unix:///var/lib/uwsgi/gitlab.sock;
+    #server unix:///var/lib/uwsgi/gitlab.sock;
+    server 127.0.0.1:1357;
 }
 
 server {
@@ -26,13 +27,8 @@ server {
 {% endif %}
 {# web app logic #}
     server_name {% for hostname in  salt['pillar.get']('gitlab:hostnames') %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
-    root {{ root_dir }}/public;
-{% for dir in ('stylesheets', 'javascripts', 'images') %}
-    location /{{ dir }}/ {
-        expires max;
-        autoindex off;
-    }
-{% endfor %}
+    root {{ web_dir }}/public;
+
 
     location / {
         gzip off;

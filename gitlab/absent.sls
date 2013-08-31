@@ -2,14 +2,18 @@
  Unistalling GitLab
 #}
 {%- set version = '6-0' %}
-{%- set root_dir = "/usr/local/gitlabhq-" + version + "-stable"  %}
+{%- set root_dir = "/usr/local/gitlab"  %}
+{%- set web_dir = root_dir + "/gitlabhq-" + version + "-stable"  %}
 
-gitlab:
+git:
   user:
     - absent
-    - name: git
     - force: True
-  
+  group:
+    - absent
+    - require:
+      - user: git
+
 /etc/uwsgi/gitlab.ini:
   file:
     - absent

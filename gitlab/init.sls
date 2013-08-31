@@ -7,7 +7,7 @@ Mandatory Pillar
 
 gitlab:
   hostnames:
-    - localhost
+    - 192.241.189.78
 
 Optional Pillar
 ---------------
@@ -36,8 +36,6 @@ gitlab:
     password: xxx
     allow_username_or_email_login: true
 
-Note: Before run bundle `git` is root_dir owner
-Only `git` user be allowed to run the bundle and setup task
 #}
 
 include:
@@ -56,13 +54,21 @@ include:
   - uwsgi.ruby
   - web
 
+{%- set database_username = salt['pillar.get']('gitlab:database:username', 'git') %}
+{%- set database_password = salt['password.pillar']('gitlab:database:password', 10) %}
+
+{%- set version = '6-0' %}
+{%- set root_dir = "/usr/local/gitlab" %}
+{%- set home_dir = "/home/git" %}
+{%- set web_dir = root_dir +  "/gitlabhq-" + version + "-stable"  %}
+{%- set repos_dir = home_dir + "/repositories" %}
+{%- set shell_dir = home_dir + "/gitlab-shell" %}
 
 gitlab_dependencies:
   pkg:
     - installed
     - pkgs:
       - adduser
-      #- libpq-dev
       - libicu-dev
       - libxslt1-dev
       - libcurl4-openssl-dev
@@ -73,10 +79,20 @@ gitlab_dependencies:
       - pkg: python
       - pkg: nodejs
 
+{{ root_dir }}:
+  file:
+    - directory
+    - user: git
+    - group: git
+    - require:
+      - user: gitlab
+    - require_in:
+      - archive: gitlab-shell
+
 gitlab-shell:
   archive:
     - extracted
-    - name: /home/git/
+    - name: {{ home_dir }}/
     {%- if 'files_archive' in pillar %}
     - source: {{ salt['pillar.get']('files_archive') }}/mirror/gitlab/shell-fbaf8d8c12dcb9d820d250b9f9589318dbc36616.tar.gz
     - source_hash: md5=fa679c88f382211b34ecd35bfbb54ea6
@@ -86,15 +102,15 @@ gitlab-shell:
     {%- endif %}
     - archive_format: tar
     - tar_options: z
-    - if_missing: /home/git/gitlab-shell
+    - if_missing: {{ shell_dir }}
     - require:
       - user: gitlab
   file:
     - directory
-    - name: /home/git
+    - name: {{ shell_dir }}
     - user: git
     - group: git
-    - mode: 755
+    #- mode: 755
     - recurse:
       - user
       - group
@@ -103,32 +119,22 @@ gitlab-shell:
   cmd:
     - run
     - name: mv gitlab-shell-master gitlab-shell
-    - cwd: /home/git
+    - cwd: {{ home_dir }}
     - user: git
-    - onlyif: ls /home/git/ | grep gitlab-shell-master
+    - onlyif: ls {{ home_dir }} | grep gitlab-shell-master
     - require:
       - archive: gitlab-shell
-      #- require_in:
-        #- file: change_permission_git_home
-
-#change_permission_git_home:
-  #  file:
-    #  - directory
-    #- name: /home/git
-    #- mode: 775
-    #- recurse:
-      #  - mode
 
 install_gitlab_shell:
   cmd:
     - run
-    - name: /home/git/gitlab-shell/bin/install
+    - name: {{ shell_dir }}/bin/install
     - user: git
     - require:
-      - file: /home/git/gitlab-shell/config.yml
+      - file: {{ shell_dir }}/config.yml
       - pkg: ruby
 
-/home/git/gitlab-shell/config.yml:
+{{ shell_dir }}/config.yml:
   file:
     - managed
     - source: salt://gitlab/gitlab-shell.jinja2
@@ -139,11 +145,9 @@ install_gitlab_shell:
     - require:
       - file: gitlab-shell
       - pkg: ruby
-
-{%- set database_username = salt['pillar.get']('gitlab:database:username','git') %}
-{%- set database_password = salt['password.pillar']('gitlab:database:password', 10) %}
-{%- set version = '6-0' %}
-{%- set root_dir = "/usr/local/gitlabhq-" + version + "-stable"  %}
+    - context:
+      repos_dir: {{ repos_dir }}
+      shell_dir: {{ shell_dir }}
 
 gitlab:
   user:
@@ -167,7 +171,7 @@ gitlab:
       - postgres_user: gitlab
   archive:
     - extracted
-    - name: /usr/local
+    - name: {{ root_dir }}/
     {%- if 'files_archive' in pillar %}
     - source: {{ pillar['files_archive'] }}/mirror/gitlab/{{ version|replace("-", ".") }}.tar.gz
     - source_hash: md5=151be72dc60179254c58120098f2a84e
@@ -177,51 +181,60 @@ gitlab:
     {%- endif %}
     - archive_format: tar
     - tar_options: z
-    - if_missing: {{ root_dir }}
+    - if_missing: {{ web_dir }}
     - require:
       - postgres_database: gitlab
   file:
     - directory
-    - name: {{ root_dir }}
+    - name: {{ web_dir }}
     - user: git
     - group: git
-    - mode: 755
+    #- mode: 755
     - recurse:
       - user
       - group
-      - mode
     - require:
       - archive: gitlab
   cmd:
-    - run
-    - name: export force="yes"; bundle exec rake gitlab:setup RAILS_ENV=production
+    - wait
+    - name: force=yes bundle exec rake gitlab:setup RAILS_ENV=production
     #- env:
       #force: yes
     - user: git
-    - cwd: {{ root_dir }}
+    - cwd: {{ web_dir }}
     - require:
-      - cmd: bundler
       - service: redis-server
+    - watch:
+      - cmd: bundler
 
 precompile_assets:
   cmd:
-    - run
+    - wait
     - name: bundle exec rake assets:precompile RAILS_ENV=production
     - user: git
-    - cwd: {{ root_dir }}
-    - require:
+    - cwd: {{ web_dir }}
+    - watch:
       - cmd: gitlab
 
 start_sidekiq_service:
   cmd:
-    - run
+    - wait
     - name: bundle exec rake sidekiq:start RAILS_ENV=production
     - user: git
-    - cwd: {{ root_dir }}
-    - require:
-      - cmd: precompile_assets
+    - cwd: {{ web_dir }}
+    - watch:
+      - cmd: gitlab
+    - watch_in:
+      - file: {{ web_dir }}/log
 
-{{ root_dir }}/config.ru:
+{{ web_dir }}/log 
+  file:
+    - directory
+    - file_mode: 664
+    - recurse:
+      - mode
+
+{{ web_dir }}/config.ru:
   file:
     - managed
     - source: salt://gitlab/config.jinja2
@@ -232,7 +245,7 @@ start_sidekiq_service:
     - require:
       - cmd: gitlab
 
-/home/git/gitlab-satellites:
+{{ home_dir }}/gitlab-satellites:
   file:
     - directory
     - user: git
@@ -240,13 +253,13 @@ start_sidekiq_service:
     - mode: 755
 
 {%- for dir in ('log', 'tmp', 'public/uploads', 'tmp/pids', 'tmp/cache') %}
-{{ root_dir }}/{{ dir }}:
+{{ web_dir }}/{{ dir }}:
   file:
     - directory
     - user: git
     - group: git
     - dir_mode: 775
-    - file_mode: 775
+    - file_mode: 644
     - recurse:
       - user
       - group
@@ -254,11 +267,11 @@ start_sidekiq_service:
     - require:
       - file: gitlab
     - require_in:
-      - file: /home/git/gitlab-satellites
+      - file: {{ home_dir }}/gitlab-satellites
 {%- endfor %}
 
 {%- for file in ('gitlab.yml', 'database.yml') %}
-{{ root_dir }}/config/{{ file }}:
+{{ web_dir }}/config/{{ file }}:
   file:
     - managed
     - source: salt://gitlab/{{ file }}.jinja2
@@ -269,7 +282,11 @@ start_sidekiq_service:
     - require:
       - file: gitlab
     - require_in:
-      - file: /home/git/gitlab-satellites
+      - file: {{ home_dir }}/gitlab-satellites
+    - context:
+      home_dir: {{ home_dir }}
+      repos_dir: {{ repos_dir }}
+      shell_dir: {{ shell_dir }}
  {%- endfor %}
 
 charlock_holmes:
@@ -279,7 +296,7 @@ charlock_holmes:
     - runas: root
     - require:
       - file: gitlab
-      - file: /home/git/gitlab-satellites
+      - file: {{ home_dir }}/gitlab-satellites
 
 bundler:
   gem:
@@ -291,7 +308,7 @@ bundler:
   cmd:
     - run
     - name: bundle install --deployment --without development test mysql aws
-    - cwd: {{ root_dir }}
+    - cwd: {{ web_dir }}
     - user: git
     - require:
       - gem: bundler
@@ -308,12 +325,12 @@ rack:
 add_git_user_to_group:
   user:
     - present
-    - name: git
+    - name: www-data
     - groups:
-      - www-data
+      - git
     - require:
       - user: web
-      - user: git
+      - user: gitlab
 
 /etc/uwsgi/gitlab.ini:
   file:
@@ -326,15 +343,15 @@ add_git_user_to_group:
     - require:
       - cmd: gitlab
       - cmd: start_sidekiq_service
+      - cmd: precompile_assets
       - file: uwsgi_sockets
-      - file: uwsgi_emperor
       - gem: rack
-      - file: {{ root_dir }}/config.ru
+      - file: {{ web_dir }}/config.ru
       - user: add_git_user_to_group
     - watch_in:
       - service: uwsgi_emperor
     - context:
-      root_dir: {{ root_dir }}
+      web_dir: {{ web_dir }}
 
 /etc/nginx/conf.d/gitlab.conf:
   file:
@@ -356,19 +373,8 @@ add_git_user_to_group:
     - watch_in:
       - service: nginx
     - context:
-      root_dir: {{ root_dir }}
-      {#
-permission:
-  file:
-    - directory
-    - user: www-data
-    - group: www-data
-    - recurse:
-      - user
-      - group
-    - require:
-      - file: /etc/nginx/conf.d/gitlab.conf
-      #}
+      web_dir: {{ web_dir }}
+
 /home/git/.gitconfig:
   file:
     - managed

@@ -5,8 +5,8 @@ production:
   encoding: unicode
   database: gitlab
   pool: 10
-  username: {{ salt['pillar.get']('gitlab:database:username','git') }}
+  username: {{ salt['pillar.get']('gitlab:database:username', 'git') }}
   password: "{{ salt['password.pillar']('gitlab:database:password', 10) }}"
-  host: {{ salt['pillar.get']('gitlab:database:host','localhost') }}
-  port: {{ salt['pillar.get']('gitlab:database:port','5432') }}
+  host: {{ salt['pillar.get']('gitlab:database:host', 'localhost') }}
+  port: {{ salt['pillar.get']('gitlab:database:port', '5432') }}
   {#- socket: /tmp/postgresql.sock #}

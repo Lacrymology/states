@@ -7,8 +7,11 @@ terracotta:
   archive:
     - name: /usr/local
     - extracted
+{%- if 'files_archive' in pillar %}
+    - source: {{ pillar['files_archive'] }}/mirror/terracotta-{{ version }}.tar.gz
+{%- else %}
     - source: http://d2zwv9pap9ylyd.cloudfront.net/terracotta-3.7.0.tar.gz
-    #- source: {{ pillar['files_archive'] }}/mirror/terracotta-{{ version }}.tar.gz
+{%- endif %}
     - source_hash: md5=ff54cad0febeb8a0c17154cac838c2cb
     - archive_format: tar
     - tar_options: z
@@ -25,6 +28,8 @@ terracotta:
     - mode: 440
     - context:
       version: {{ version }}
+  user:
+    - present
   service:
     - running
     - require:
@@ -33,6 +38,7 @@ terracotta:
       - file: /var/lib/terracotta/server-statistics
       - file: /var/log/terracotta/server-logs
       - file: /var/lib/terracotta/server-data
+      - user: terracotta
     - watch:
       - file: terracotta
       - file: /etc/terracotta.conf
@@ -47,13 +53,25 @@ terracotta:
   file:
     - directory
     - makedirs: True
+    - user: terracotta
+    - group: terracotta
+    - require:
+      - user: terracotta
 
 /var/log/terracotta/server-logs:
   file:
     - directory
     - makedirs: True
+    - user: terracotta
+    - group: terracotta
+    - require:
+      - user: terracotta
 
 /var/lib/terracotta/server-statistics:
   file:
     - directory
     - makedirs: True
+    - user: terracotta
+    - group: terracotta
+    - require:
+      - user: terracotta

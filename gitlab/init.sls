@@ -44,7 +44,6 @@ gitlab:
     bind_dn: xxx
     password: xxx
     allow_username_or_email_login: true
-
 #}
 
 include:
@@ -109,7 +108,6 @@ gitlab-shell:
     - name: {{ shell_dir }}
     - user: git
     - group: git
-    #- mode: 755
     - recurse:
       - user
       - group
@@ -188,7 +186,6 @@ gitlab:
     - name: {{ web_dir }}
     - user: git
     - group: git
-    #- mode: 755
     - recurse:
       - user
       - group
@@ -225,22 +222,14 @@ start_sidekiq_service:
       - cmd: gitlab
 
 change_log_permission:
-  {#file:
-    - directory
-    - name: {{ web_dir }}/log
-    - file_mode: 664
-    - recurse:
-      - mode
-    - watch:
-      - cmd: start_sidekiq_service#}
   cmd:
     - wait
     - name: chmod 664 *
-    - cwd: {{ web_dir }}/log 
+    - cwd: {{ web_dir }}/log
     - watch:
       - cmd: start_sidekiq_service
     - user: git
-      
+
 {{ web_dir }}/config.ru:
   file:
     - managed

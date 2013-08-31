@@ -13,6 +13,15 @@ Optional Pillar
 ---------------
 
 gitlab:
+  smtp:
+    - enabled: True
+    - address: smtp.gmail.com
+    - port: 465
+    - domain: gmail.com
+    - user_name: youruser@yourdomain.com
+    - password: password
+    - authentication: plain
+    - enable_starttls_auto: true
   workers: 2
   config:
     port: 80
@@ -58,7 +67,7 @@ include:
 {%- set database_password = salt['password.pillar']('gitlab:database:password', 10) %}
 
 {%- set version = '6-0' %}
-{%- set root_dir = "/usr/local/gitlab" %}
+{%- set root_dir = "/usr/local" %}
 {%- set home_dir = "/home/git" %}
 {%- set web_dir = root_dir +  "/gitlabhq-" + version + "-stable"  %}
 {%- set repos_dir = home_dir + "/repositories" %}
@@ -78,16 +87,6 @@ gitlab_dependencies:
       - pkg: git
       - pkg: python
       - pkg: nodejs
-
-{{ root_dir }}:
-  file:
-    - directory
-    - user: git
-    - group: git
-    - require:
-      - user: gitlab
-    - require_in:
-      - archive: gitlab-shell
 
 gitlab-shell:
   archive:
@@ -224,16 +223,24 @@ start_sidekiq_service:
     - cwd: {{ web_dir }}
     - watch:
       - cmd: gitlab
-    - watch_in:
-      - file: {{ web_dir }}/log
 
-{{ web_dir }}/log 
-  file:
+change_log_permission:
+  {#file:
     - directory
+    - name: {{ web_dir }}/log
     - file_mode: 664
     - recurse:
       - mode
-
+    - watch:
+      - cmd: start_sidekiq_service#}
+  cmd:
+    - wait
+    - name: chmod 664 *
+    - cwd: {{ web_dir }}/log 
+    - watch:
+      - cmd: start_sidekiq_service
+    - user: git
+      
 {{ web_dir }}/config.ru:
   file:
     - managed
@@ -322,7 +329,7 @@ rack:
       - pkg: ruby
       - pkg: build
 
-add_git_user_to_group:
+add_web_user_to_group:
   user:
     - present
     - name: www-data
@@ -345,9 +352,10 @@ add_git_user_to_group:
       - cmd: start_sidekiq_service
       - cmd: precompile_assets
       - file: uwsgi_sockets
+      - file: gitlab_upstart
       - gem: rack
       - file: {{ web_dir }}/config.ru
-      - user: add_git_user_to_group
+      - user: add_web_user_to_group
     - watch_in:
       - service: uwsgi_emperor
     - context:
@@ -385,3 +393,16 @@ add_git_user_to_group:
     - mode: 644
     - require:
       - user: git
+
+gitlab_upstart:
+  file:
+    - managed
+    - name: /etc/init/gitlab.conf
+    - user: root
+    - mode: 440
+    - source: salt://gitlab/upstart.jinja2
+    - template: jinja
+    - require:
+      - cmd: gitlab
+    - context:
+      web_dir: {{ web_dir }}

@@ -1,8 +1,8 @@
 # {{ pillar['message_do_not_modify'] }}
 
 upstream gitlab {
-    #server unix:///var/lib/uwsgi/gitlab.sock;
-    server 127.0.0.1:1357;
+    server unix:///var/lib/uwsgi/gitlab.sock;
+    #server 127.0.0.1:1357;
 }
 
 server {

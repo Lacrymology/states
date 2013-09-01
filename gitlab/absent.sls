@@ -2,13 +2,14 @@
  Unistalling GitLab
 #}
 {%- set version = '6-0' %}
-{%- set root_dir = "/usr/local"  %}
-{%- set web_dir = root_dir + "/gitlabhq-" + version + "-stable"  %}
+{%- set web_dir = "/usr/local/gitlabhq-" + version + "-stable"  %}
 
 git:
   user:
     - absent
     - force: True
+    - require:
+      - cmd: git
   group:
     - absent
     - require:
@@ -16,13 +17,14 @@ git:
   cmd:
     - run
     - name: RAILS_ENV=production bundle exec rake sidekiq:stop
+    - user: git
     - cwd: {{ web_dir }}
 
 /etc/uwsgi/gitlab.ini:
   file:
     - absent
 
-{%- for file in ('/etc/nginx/conf.d/gitlab.conf', root_dir, '/home/git', '/etc/init/gitlab.conf') %}
+{%- for file in ('/etc/nginx/conf.d/gitlab.conf', web_dir, '/home/git', '/etc/init/gitlab.conf') %}
 {{ file }}:
   file:
     - absent

@@ -17,5 +17,5 @@ append_java_path:
     - append
     - name: /etc/environment
     - text: |
-        export JAVA_HOME="/usr/lib/jvm/java-6-openjdk-{{ salt['grains.get']('debian_arch') }}"
-        export JRE_HOME="/usr/lib/jvm/java-6-openjdk-{{ salt['grains.get']('debian_arch') }}/jre"
+        export JAVA_HOME="/usr/lib/jvm/java-6-openjdk-{{ grains['debian_arch'] }}"
+        export JRE_HOME="/usr/lib/jvm/java-6-openjdk-{{ grains['debian_arch'] }}/jre"

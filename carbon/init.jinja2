@@ -1,6 +1,24 @@
 #!/bin/sh
 # {{ pillar['message_do_not_modify'] }}
 
-/usr/local/graphite/bin/python /usr/local/graphite/bin/carbon-cache.py --config=/etc/graphite/carbon.conf --instance={{ instance }} $1
+{%- if instance is defined %}
+cmd="/usr/local/graphite/bin/python /usr/local/graphite/bin/carbon-cache.py --config=/etc/graphite/carbon.conf --instance={{ instance }}"
+{%- else %}
+cmd="/usr/local/graphite/bin/python /usr/local/graphite/bin/carbon-relay.py --config=/etc/graphite/carbon.conf"
+{%- endif %}
+
+cntr=0
+if [ "$1" = "restart" ] ; then
+    while [ $cntr -lt 10 ]; do
+        $cmd stop | grep "No process with pid" -q && $cmd start && exit 0;
+        sleep 0.1
+        cntr=`expr $cntr + 1`
+    done
+    # script running too long, exit as error
+    exit 1
+else
+    $cmd $1
+    exit 0
+fi
 
 exit 0

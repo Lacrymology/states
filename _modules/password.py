@@ -6,6 +6,7 @@ Generate random password
 
 import string
 import random
+import crypt
 
 
 def __virtual__():
@@ -59,3 +60,24 @@ def pillar(pillar_path, length=20):
     if pwd is not None:
         return pwd
     return generate(pillar_path, length)
+
+
+def encrypt_shadow(unencrypted_password, salt_key=None, hash_type='6'):
+    '''
+    Encrypt a password consumable by shadow.set_password.
+
+    salt_key: up to 16 characters.
+    hash_type:
+        ID  | Method
+        ---------------------------------------------------------
+        1   | MD5
+        2a  | Blowfish (not in mainline glibc; added in some
+            | Linux distributions)
+        5   | SHA-256 (since glibc 2.7)
+        6   | SHA-512 (since glibc 2.7)
+    '''
+    if salt_key is None:
+        salt_key = _generate_random_password(16)
+    return crypt.crypt(unencrypted_password,
+                       "$%s$%s%s" % (hash_type, salt_key,
+                                     unencrypted_password))

@@ -1,10 +1,11 @@
 {#
- Diamond statistics for Carbon
+ Diamond statistics for s3cmd
 #}
+
 include:
   - diamond
 
-diamond-carbon:
+s3cmd_diamond_resources:
   file:
     - accumulated
     - name: processes
@@ -13,5 +14,5 @@ diamond-carbon:
       - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
     - text:
       - |
-        [[carbon]]
-        cmdline = ^\/usr\/local\/graphite\/bin\/python \/usr\/local\/graphite\/bin\/carbon\-cache\.py.+start$
+        [[s3cmd]]
+        cmdline = ^\/usr\/bin\/python \/usr\/local\/local\/bin\/s3cmd

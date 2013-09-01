@@ -2,7 +2,7 @@
 [uwsgi]
 
 master = true
-env = DJANGO_SETTINGS_MODULE=graphite.local_settings
+env = DJANGO_SETTINGS_MODULE=graphite.settings
 module = graphite.wsgi
 processes = {{ pillar['graphite']['web']['workers'] }}
 harakiri = {{ pillar['graphite']['web']['timeout']|default(30) }}

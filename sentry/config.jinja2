@@ -12,7 +12,7 @@ DATABASES = {
         'NAME': '{{ salt['pillar.get']('sentry:db:name', 'sentry') }}',
         'USER': '{{ salt['pillar.get']('sentry:db:username', 'sentry') }}',
         'PASSWORD': '{{ salt['password.pillar']('sentry:db:password') }}',
-        'HOST': '{{ salt['pillar.get']('sentry:db:host') }}',
+        'HOST': '{{ salt['pillar.get']('sentry:db:host', '127.0.0.1') }}',
         'PORT': '5432',
     }
 }

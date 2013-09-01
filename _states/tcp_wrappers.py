@@ -7,14 +7,21 @@ manage part of content in hosts.allow and hosts.deny
 
 import logging
 
-
 ALLOW_PATH = '/etc/hosts.allow'
 DENY_PATH = '/etc/deny.allow'
 log = logging.getLogger(__name__)
 
-def __virtual__():
-    '''Explicit return name of state module'''
-    return 'tcp_wrappers'
+
+def _process_args(name, type, service):
+    ret = {'name': name, 'changes': {}, 'result': None, 'comment': ''}
+    service_clients = "{0} : {1}".format(service, name)
+    if type not in (DENY_PATH, ALLOW_PATH):
+        ret['result'] = False
+        ret['comment'] = 'Invalid type {0}'.format(type)
+        path = None
+    else:
+        path = ALLOW_PATH if type == 'allow' else DENY_PATH
+    return path, service_clients, ret
 
 
 def present(name, type, service):
@@ -36,38 +43,22 @@ def present(name, type, service):
         - service: http
 
     '''
-    clients = name
-    ret = {'name': clients,
-           'changes': {},
-           'result': False,
-           'comment': ''}
+    path, service_clients, ret = _process_args(name, type, service)
+    if not ret['result']:
+        return ret
 
-    if __opts__['test']:
-        return {'name': name,
-                'changes': {},
-                'result': None,
-                'comment': 'client[s] {0} is managed'.format(
-                    name)}
-
-    service_clients = "{0} : {1}".format(service, clients)
-    path = ALLOW_PATH if type == 'allow' else DENY_PATH
-
-    with open(path, 'a+') as f:
-        for line in f.readlines():
-            if service_clients == line.strip():
-                ret['result'] = True
-                ret['comment'] = '{0} is already in {1}'.format(
-                        service_clients,
-                        path,
-                        )
-                return ret
-        f.write(service_clients + '\n')
+    if __salt__['file.contains'](path, service_clients):
         ret['result'] = True
-        ret['changes'] = {service_clients: 'appended to {0}'.format(
-            path
-            )
-            }
+        ret['comment'] = '{0} is already {1}'.format(service_clients, type)
+    elif __opts__['test']:
+        ret['comment'] = '{0} would have been {1}'.format(name, type)
+    else:
+        __salt__['file.append'](path, service_clients)
+        ret['changes'] = {service_clients: 'removed from {0}'.format(path)}
+        ret['comment'] = '{0} is now {1} for {2}'.format(name, type, service)
+        ret['result'] = True
     return ret
+
 
 def absent(name, type, service):
     '''
@@ -80,34 +71,23 @@ def absent(name, type, service):
             - type: allow
             - service: ftp
     '''
-    ret = {'name': name,
-           'changes': {},
-           'result': True,
-           'comment': ''}
+    path, service_clients, ret = _process_args(name, type, service)
+    if not ret['result']:
+        return ret
 
-    if __opts__['test']:
-        return {'name': name,
-                'changes': {},
-                'result': None,
-                'comment': 'client[s] {0} is managed'.format(
-                    name)}
-
-    service_clients = "{0} : {1}".format(service, name)
-    path = ALLOW_PATH if type == 'allow' else DENY_PATH
-
-    lines = []
-    with open(path) as f:
-        lines = f.readlines()
-
-    ret['comment'] = '{0} is not in {1}'.format(service_clients, path)
-    with open(path, 'w') as f:
-        for line in lines:
-            if line.strip() != service_clients:
-                f.write(line)
-            else:
-                ret['changes'] = {service_clients: 'is removed from {0}'.format(
-                    path)}
-                ret['result'] = True
-                ret['comment'] = ''
-
+    if not __salt__['file.contains'](path, service_clients):
+        ret['result'] = True
+        ret['comment'] = "{0} isn't already {1}".format(service_clients, type)
+    elif __opts__['test']:
+        ret['comment'] = '{0} would have been {1}'.format(name, type)
+    else:
+        lines = open(path).readlines()
+        with open(path, 'w') as f:
+            for line in lines:
+                if line.strip() != service_clients:
+                    f.write(line)
+        ret['result'] = True
+        ret['changes'] = {service_clients: 'removed from {0}'.format(path)}
+        ret['comment'] = '{0} is not {1} anymore for {2}'.format(name, type,
+                                                                 service)
     return ret

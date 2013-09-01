@@ -1,7 +1,6 @@
 {#
  Uninstall the web interface component of graphite
  #}
-
 /etc/uwsgi/graphite.ini:
   file:
     - absent

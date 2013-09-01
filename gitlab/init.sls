@@ -6,7 +6,7 @@ Mandatory Pillar
 ----------------
 
 gitlab:
-  hostnames:
+  hostnames:                # Should not use `localhost`
     - 192.241.189.78
 
 Optional Pillar
@@ -150,9 +150,12 @@ gitlab:
   user:
     - present
     - name: git
+    - groups:
+      - www-data
     - shell: /bin/bash
     - require:
       - pkg: gitlab_dependencies
+      - user: web
   postgres_user:
     - present
     - name: {{ database_username }}
@@ -195,8 +198,6 @@ gitlab:
   cmd:
     - wait
     - name: force=yes bundle exec rake gitlab:setup RAILS_ENV=production
-    #- env:
-      #force: yes
     - user: git
     - cwd: {{ web_dir }}
     - require:
@@ -222,15 +223,6 @@ start_sidekiq_service:
     - watch:
       - cmd: gitlab
 
-change_log_permission:
-  cmd:
-    - wait
-    - name: chmod 664 *
-    - cwd: {{ web_dir }}/log
-    - watch:
-      - cmd: start_sidekiq_service
-    - user: git
-
 {{ web_dir }}/config.ru:
   file:
     - managed
@@ -255,7 +247,7 @@ change_log_permission:
     - directory
     - user: git
     - group: git
-    - dir_mode: 775
+    - dir_mode: 755
     - file_mode: 644
     - recurse:
       - user

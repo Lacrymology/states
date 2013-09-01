@@ -54,3 +54,19 @@ include:
 {%- endif %}
     - watch_in:
       - service: nagios-nrpe-server
+
+/etc/nagios/nrpe.d/postgresql-gitlab.cfg:
+  file:
+    - managed
+    - template: jinja
+    - user: nagios
+    - group: nagios
+    - mode: 440
+    - source: salt://postgresql/nrpe.jinja2
+    - require:
+      - pkg: nagios-nrpe-server
+    - context:
+      deployment: gitlab
+      password: {{  salt['password.pillar']('gitlab:database:password') }}
+    - watch_in:
+      - service: nagios-nrpe-server

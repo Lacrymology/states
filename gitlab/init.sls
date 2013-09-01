@@ -181,6 +181,7 @@ gitlab:
     - if_missing: {{ web_dir }}
     - require:
       - postgres_database: gitlab
+      - file: /usr/local
   file:
     - directory
     - name: {{ web_dir }}

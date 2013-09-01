@@ -8,10 +8,10 @@ Mandatory Pillar
 wordpress:
   hostnames:
     - list of hostname, used for nginx config
-  password:  password for mysql user "wordpress"
 
 Optional Pillar
 ---------------
+  password:  password for mysql user "wordpress"
 
 -#}
 include:
@@ -22,22 +22,23 @@ include:
   - uwsgi.php
   - web
 
-{% set version = "3.5.2" %}
-{% set wordpressdir = "/usr/local/wordpress-" + version %}
+{%- set version = "3.5.2" %}
+{%- set wordpressdir = "/usr/local/wordpress-" + version %}
+{%- set password = salt['password.pillar']('wordpress:password', 10) %}
 
 wordpress:
   archive:
     - extracted
     - name: /usr/local/
 {%- if 'files_archive' in pillar %}
-    - source: {{ pillar['files_archive'] }}/mirror/wordpress-{{ version }}.tar.gz
+    - source: {{ salt['pillar.get']('files_archive') }}/mirror/wordpress-{{ version }}.tar.gz
 {%- else %}
     - source: http://wordpress.org/wordpress-{{ version }}.tar.gz
 {%- endif %}
     - source_hash: md5=90acae65199db7b33084ef36860d7f22
     - archive_format: tar
     - tar_options: z
-    - if_missing: /usr/local/wordpress-{{ version }}
+    - if_missing: {{ wordpressdir }}
     - require:
       - file: /usr/local
   file:
@@ -51,6 +52,8 @@ wordpress:
     - require:
       - archive: wordpress
       - user: web
+    - context:
+      password: {{ password }}
   mysql_database:
     - present
     - name: wordpress
@@ -61,7 +64,7 @@ wordpress:
   mysql_user:
     - present
     - host: localhost
-    - password: {{ salt['pillar.get']('wordpress:password') }}
+    - password: {{ password }}
     - require:
       - service: mysql-server
       - pkg: python-mysqldb

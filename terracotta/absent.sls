@@ -7,6 +7,14 @@ terracotta:
       - service: terracotta
   service:
     - dead
+  group:
+    - absent
+    - require:
+      - service: terracotta
+  user:
+    - absent
+    - require:
+      - group: terracotta
 
 /usr/local/terracotta-{{ version }}:
   file:

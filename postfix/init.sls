@@ -2,6 +2,8 @@
 Postfix: An Email Server (SMTP Server)
 =============================
 
+All pillar default data is configurate for postfix work with  virtual mailbox, dovecot and spam filter amavis. Other ways to use postfix should disable these configurations.
+
 Mandatory Pillar
 ----------------
 
@@ -38,7 +40,6 @@ ldap:data: nested dict contain user infomation, that will be used for create LDA
 -#}
 {% set ssl = salt['pillar.get']('postfix:ssl', False) %}
 include:
-  - dovecot.agent
   - apt
   - mail
 {% if ssl %}
@@ -58,46 +59,41 @@ postfix:
       - cmd: apt_sources
       - file: /etc/mailname
       - pkg: apt-utils
-  service:
-    - running
-    - order: 50
-    - require:
-      - file: /var/mail/vhosts
-    - watch:
-      - pkg: postfix
-      - file: /etc/postfix
-{% if ssl %}
-      - cmd: /etc/ssl/{{ ssl }}/chained_ca.crt
-      - module: /etc/ssl/{{ ssl }}/server.pem
-      - file: /etc/ssl/{{ ssl }}/ca.crt
-{% endif %}
-
-/var/mail/vhosts:
   file:
-    - directory
-    - user: dovecot-agent
-    - require:
-      - user: dovecot-agent
-
-/etc/postfix:
-  file:
-    - recurse
-    - source: salt://postfix/configs
+    - managed
+    - name: /etc/postfix/main.cf
+    - source: salt://postfix/main.jinja2
     - template: jinja
     - user: postfix
     - group: postfix
     - file_mode: 400
     - require:
       - pkg: postfix
-      - user: dovecot-agent
+  service:
+    - running
+    - order: 50
+    - watch:
+      - pkg: postfix
+      - file: /etc/postfix/master.cf
+      - file: postfix
+{% if ssl %}
+      - cmd: /etc/ssl/{{ ssl }}/chained_ca.crt
+      - module: /etc/ssl/{{ ssl }}/server.pem
+      - file: /etc/ssl/{{ ssl }}/ca.crt
+{% endif %}
 
-postfix-ldap:
-  pkg:
-    - installed
+/etc/postfix/master.cf:
+  file:
+    - managed
+    - source: salt://postfix/master.jinja2
+    - template: jinja
+    - user: postfix
+    - group: postfix
+    - file_mode: 400
     - require:
-      - cmd: apt_sources
       - pkg: postfix
 
+{%- if salt['pillar.get']('postfix:virtual_mailbox', True) %}
 /etc/postfix/vmailbox:
   file:
     - managed
@@ -113,7 +109,6 @@ postmap /etc/postfix/vmailbox:
   cmd:
     - require:
       - pkg: postfix
-      - file: /etc/postfix
     {% if salt['file.file_exists']('/etc/postfix/vmailbox.db') %}
     - wait
     - watch:
@@ -122,3 +117,4 @@ postmap /etc/postfix/vmailbox:
       - file: /etc/postfix/vmailbox
     - run
     {% endif %}
+{%- endif %}

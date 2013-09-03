@@ -22,7 +22,9 @@ postfix:
   spam_filter: False
   sasl: False
   virtual_mailbox: False
-  mynetworks: 127.0.0.0/8 192.168.122.0/24
+  mynetworks:
+    - 127.0.0.0/8
+    - 192.168.122.0/24
 
 ldap:
   data:
@@ -46,7 +48,7 @@ ldap:data: nested dict contain user infomation, that will be used for create LDA
 postfix:spam_filter: set configuration for amavis spam filter. Default: True
 postfix:sasl: set configuration for authentication by dovecot sasl. Default: True
 postfix:virtual_mailbox: enable using virtual mailbox. Default: True
-postfix:mynetworks: trusted networks that postfix will relay mail from. Default: values for localhost
+postfix:mynetworks: list of trusted networks that postfix will relay mail from. Default: values for localhost
 postfix:mydestination: host that this mail server will be final destination. Default: values for localhost, its domain
 postfix:relayhost: the next-hop destination of non-local mail; overrides non-local domains in recipient addresses. Default: ''
 postfix:relay_domains: domains that this mail server will relay mail to. Default: all values defined in mydestination

@@ -4,7 +4,8 @@ smtpd_banner = $myhostname ESMTP $mail_name
 biff = no
 
 mydestination = {{ salt['pillar.get']('postfix:mydestination', '')}} {{ grains['id'] }}, localhost.localdomain, localhost
-mynetworks = {{ salt['pillar.get']('postfix:mynetworks', '127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128') }}
+{%- set mynetworks = salt['pillar.get']('postfix:mynetworks', '127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128') %}
+mynetworks = {%- for i in mynetworks %} {{ i }}{%- endfor %}
 relayhost = {{ salt['pillar.get']('postfix:relayhost', '') }}
 relay_domains = {{ salt['pillar.get']('postfix:relay_domains', '$mydestination') }}
 alias_maps = hash:/etc/aliases

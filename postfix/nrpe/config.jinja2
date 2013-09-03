@@ -4,7 +4,9 @@ command[postfix_master]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u root -C ma
 command[postfix_pickup]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u postfix -C pickup -a '-l -t fifo -u -c'
 command[postfix_qmgr]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u postfix -C qmgr -a '-l -t fifo -u'
 command[postfix_port_smtp]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 25
+{%- if salt['pillar.get']('postfix:spam_filter', False) %}
 command[postfix_port_spam_handler]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 10025
+{%- endif %}
 {% if ssl %}
 command[postfix_port_smtps]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 465
 {% else %}

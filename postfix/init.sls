@@ -2,8 +2,6 @@
 Postfix: An Email Server (SMTP Server)
 =============================
 
-All pillar default data is configurate for postfix work with  virtual mailbox, dovecot and spam filter amavis. Other ways to use postfix should disable these configurations.
-
 Mandatory Pillar
 ----------------
 
@@ -19,9 +17,9 @@ mail:
   maxproc: 2
 
 postfix:
-  spam_filter: False
-  sasl: False
-  virtual_mailbox: False
+  spam_filter: True
+  sasl: True
+  virtual_mailbox: True
   mynetworks:
     - 127.0.0.0/8
     - 192.168.122.0/24
@@ -45,9 +43,9 @@ ldap:
 
 mail:maxproc: number of processes for passing email to amavis.  This value is used for amavis, too.
 ldap:data: nested dict contain user infomation, that will be used for create LDAP users and mapping emails (user@mailname) to mailboxes
-postfix:spam_filter: set configuration for amavis spam filter. Default: True
-postfix:sasl: set configuration for authentication by dovecot sasl. Default: True
-postfix:virtual_mailbox: enable using virtual mailbox. Default: True
+postfix:spam_filter: set configuration for amavis spam filter. Default: False
+postfix:sasl: set configuration for authentication by dovecot sasl. Default:False
+postfix:virtual_mailbox: enable using virtual mailbox. Default: False
 postfix:mynetworks: list of trusted networks that postfix will relay mail from. Default: values for localhost
 postfix:mydestination: host that this mail server will be final destination. Default: values for localhost, its domain
 postfix:relayhost: the next-hop destination of non-local mail; overrides non-local domains in recipient addresses. Default: ''
@@ -109,7 +107,7 @@ postfix:
     - require:
       - pkg: postfix
 
-{%- if salt['pillar.get']('postfix:virtual_mailbox', True) %}
+{%- if salt['pillar.get']('postfix:virtual_mailbox', False) %}
 /etc/postfix/vmailbox:
   file:
     - managed

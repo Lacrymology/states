@@ -3,18 +3,19 @@ myhostname = {{ pillar['mail']['mailname'] }}
 smtpd_banner = $myhostname ESMTP $mail_name
 biff = no
 
-mydestination = {{ grains['id'] }}, localhost.localdomain, localhost
-mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128
-relayhost =
+mydestination = {{ salt['pillar.get']('postfix:mydestination', '')}} {{ grains['id'] }}, localhost.localdomain, localhost
+mynetworks = {{ salt['pillar.get']('postfix:mynetworks', '127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128') }}
+relayhost = {{ salt['pillar.get']('postfix:relayhost', '') }}
+relay_domains = {{ salt['pillar.get']('postfix:relay_domains', '$mydestination') }}
 alias_maps = hash:/etc/aliases
 alias_database = hash:/etc/aliases
 mailbox_size_limit = 0
 recipient_delimiter = +
-inet_interfaces = all
+inet_interfaces = {{ salt['pillar.get']('postfix:inet_interfaces', 'all') }}
 append_dot_mydomain = no
-{#
-# Uncomment the next line to generate "delayed mail" warnings
-#delay_warning_time = 4h
+{#-
+ Uncomment the next line to generate "delayed mail" warnings
+delay_warning_time = 4h
 #}
 readme_directory = no
 {# TLS parameters #}
@@ -26,13 +27,15 @@ smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
 smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
 {% endif %}
 
+{%- if salt['pillar.get']('postfix:sasl', True) %}
 smtpd_sasl_auth_enable = yes
 broken_sasl_auth_clients = yes
 smtpd_sasl_type = dovecot
 smtpd_sasl_path = private/auth
 smtpd_sasl_security_options = noanonymous
 smtpd_recipient_restrictions = permit_mynetworks, permit_sasl_authenticated, reject_unauth_destination
-
+{%- endif %}
+{%- if salt['pillar.get']('postfix:virtual_mailbox', True) %}
 virtual_mailbox_domains = $myhostname
 virtual_mailbox_base = /var/mail/vhosts
 virtual_mailbox_maps = hash:/etc/postfix/vmailbox
@@ -40,3 +43,4 @@ virtual_minimum_uid = 100
 virtual_uid_maps = static:{{ salt['user.info']('dovecot-agent')['uid'] }}
 virtual_gid_maps = static:{{ salt['user.info']('dovecot-agent')['gid'] }}
 content_filter=amavisfeed:[127.0.0.1]:10024
+{%- endif %}

@@ -9,18 +9,20 @@ gitlab:
     - absent
     - force: True
     - require:
-      - cmd: git
+      - cmd: gitlab
   group:
     - absent
     - require:
-      - user: git
+      - user: gitlab
   cmd:
     - run
-    - name: RAILS_ENV=production bundle exec rake sidekiq:stop
+    - name: bundle exec rake sidekiq:stop
+    - env:
+        RAILS_ENV: production
     - user: git
     - cwd: {{ web_dir }}
 
-{%- for file in ('/etc/nginx/conf.d/gitlab.conf', web_dir, '/home/git', '/etc/init/gitlab.conf', '/etc/uwsgi/gitlab.ini') %}
+{%- for file in ('/etc/nginx/conf.d/gitlab.conf', web_dir, '/home/git', '/etc/init/gitlab.conf', '/etc/uwsgi/gitlab.ini', '/etc/logrotate.d/gitlab') %}
 {{ file }}:
   file:
     - absent

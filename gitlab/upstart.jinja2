@@ -1,11 +1,24 @@
 # {{ pillar['message_do_not_modify'] }}
+# /etc/init/gitlab.conf - Sidekiq config for gitlab
+# use:
+# sudo initctl {start,stop} gitlab
 
-respawn
+description "Sidekiq Background Worker for Gitlab"
 
-start on startup
-stop on shutdown
-
-env RAILS_ENV=production
+start on runlevel [2345]
+stop on runlevel [!2345]
 
 chdir {{ web_dir }}
-exec sudo -u git -H bundle exec rake sidekiq:start
+
+setuid git
+setgid git
+
+env RAILS_ENV="production"
+
+post-start script
+  exec bundle exec rake sidekiq:start
+end script
+
+post-stop script
+  exec bundle exec rake sidekiq:stop
+end script

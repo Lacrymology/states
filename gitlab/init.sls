@@ -14,7 +14,7 @@ Optional Pillar
 
 gitlab:
   smtp:
-    - enabled: Default is False
+    enabled: Default is False
 
   workers: 2
   ssl: enable ssl. Default: False
@@ -25,8 +25,8 @@ gitlab:
   database:
     host: localhost
     port: 5432
-    username: git
-    password: password for postgre user `git`
+    username: postgre user. Default is git
+    password: password for postgre user
   ldap:
     enabled: enable ldap auth, Default: False
 
@@ -43,14 +43,16 @@ gitlab:
     allow_username_or_email_login: use name instead of email for login. Default: true
 
 If you set gitlab:smtp:enabled is True, you must define: 
-    - server: your smtp server. Ex: smtp.yourdomain.com
-    - port: smtp server port
-    - domain: your domain
-    - from: smtp account will sent email to users
-    - user: account login
-    - password: password for account login
-    - authentication: Default is: `:login`
-    - tls: Default is: true
+gitlab
+  smtp:
+    server: your smtp server. Ex: smtp.yourdomain.com
+    port: smtp server port
+    domain: your domain
+    from: smtp account will sent email to users
+    user: account login
+    password: password for account login
+    authentication: Default is: `:login`
+    tls: Default is: False
 #}
 
 include:
@@ -60,6 +62,7 @@ include:
   - logrotate
   - nginx
   - nodejs
+  #- postgresql
   - postgresql.server
   - python
   - ruby
@@ -94,6 +97,7 @@ gitlab_dependencies:
       - pkg: git
       - pkg: python
       - pkg: nodejs
+      - pkg: postgresql-dev
 
 gitlab-shell:
   archive:
@@ -216,7 +220,9 @@ gitlab:
 gitlab_precompile_assets:
   cmd:
     - wait
-    - name: bundle exec rake assets:precompile RAILS_ENV=production
+    - name: bundle exec rake assets:precompile #RAILS_ENV=production
+    - env:
+        RAILS_ENV: production
     - user: git
     - cwd: {{ web_dir }}
     - watch:
@@ -225,7 +231,9 @@ gitlab_precompile_assets:
 gitlab_start_sidekiq_service:
   cmd:
     - wait
-    - name: bundle exec rake sidekiq:start RAILS_ENV=production
+    - name: bundle exec rake sidekiq:start #RAILS_ENV=production
+    - env:
+         RAILS_ENV: production
     - user: git
     - cwd: {{ web_dir }}
     - watch:
@@ -284,7 +292,7 @@ gitlab_start_sidekiq_service:
       home_dir: {{ home_dir }}
       repos_dir: {{ repos_dir }}
       shell_dir: {{ shell_dir }}
- {%- endfor %}
+{%- endfor %}
 
 /etc/logrotate.d/gitlab:
   file:
@@ -296,8 +304,9 @@ gitlab_start_sidekiq_service:
     - mode: 440
     - require:
       - pkg: logrotate
+      - file: gitlab_upstart
     - context:
-      dir: {{ web_dir }}
+      web_dir: {{ web_dir }}
 
 charlock_holmes:
   gem:
@@ -368,8 +377,12 @@ add_web_user_to_git_group:
     - name: file.touch
     - m_name: /etc/uwsgi/gitlab.ini
     - watch:
-      - {{ web_dir }}/config/gitlab.yml
-      - {{ web_dir }}/config/database.yml
+      - file: {{ web_dir }}/config/gitlab.yml
+      - file: {{ web_dir }}/config/database.yml
+{%- if salt['pillar.get']('gitlab:smtp:enabled', False) %}
+      - file: {{ web_dir }}/config/environments/production.rb
+      - file: {{ web_dir }}/config/initializers/smtp_settings.rb
+{%- endif %}
       - archive: gitlab
 
 /etc/nginx/conf.d/gitlab.conf:
@@ -417,3 +430,33 @@ gitlab_upstart:
       - cmd: gitlab
     - context:
       web_dir: {{ web_dir }}
+
+{%- if salt['pillar.get']('gitlab:smtp:enabled', False) %}
+{{ web_dir }}/config/environments/production.rb:
+  file:
+    - managed
+    - source: salt://gitlab/production.jinja2
+    - user: git
+    - group: git
+    - template: jinja
+    - mode: 440
+    - require:
+      - user: gitlab
+      - file: gitlab
+    - require_in:
+      - cmd: bundler
+
+{{ web_dir }}/config/initializers/smtp_settings.rb:
+  file:
+    - managed
+    - source: salt://gitlab/smtp.jinja2
+    - user: git
+    - group: git
+    - template: jinja
+    - mode: 440
+    - require:
+      - user: gitlab
+      - file: gitlab
+    - require_in:
+      - cmd: bundler
+{%- endif %}

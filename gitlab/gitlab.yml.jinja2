@@ -15,11 +15,11 @@ production: &base
     #}
     host: {{ salt['pillar.get']('gitlab:hostnames')[0] }}
     port: {{ salt['pillar.get']('gitlab:port', '80') }}
-    {% if salt['pillar.get']('gitlab:ssl', False) %}
+    {%- if salt['pillar.get']('gitlab:ssl', False) %}
     https: true
-    {% else %}
+    {%- else %}
     https: false
-    {% endif %}
+    {%- endif %}
 
     {#-
      WARNING: This feature is no longer supported
@@ -35,11 +35,10 @@ production: &base
     #}
 
     {#- Email settings #}
-    {% if salt['pillar.get']('gitlab:smtp:enabled', False) %}    
-    {% set smtp = salt['pillar.get']('gitlab:smtp', salt['pillar.get']('smtp')) %}
-    email_from: {{ smtp['from'] }}
-    {% endif %}
-
+    {%- if salt['pillar.get']('gitlab:smtp:enabled', False) %}    
+    {%- set smtp = salt['pillar.get']('gitlab:smtp', salt['pillar.get']('smtp')) %}
+    email_from: {{ smtp['from']|default(salt['pillar.get']('smtp:from')) }}
+    {%- endif %}
     support_email: {{ salt['pillar.get']('gitlab:support_email', '') }}
 
     {#- User settings #}
@@ -108,10 +107,9 @@ production: &base
 
   {#- LDAP settings #}
   ldap:
-    {% if salt['pillar.get']('gitlab:ldap:enabled', False)  %}
-    {% set ldap =  salt['pillar.get']('gitlab:ldap') }}
+    {%- if salt['pillar.get']('gitlab:ldap:enabled', False)  %}
+    {%- set ldap =  salt['pillar.get']('gitlab:ldap') %}
     enabled: true
-
     host: '{{ ldap['host'] }}'
     base: '{{ ldap['base'] }}'
     port: {{ ldap['port'] }}
@@ -120,10 +118,9 @@ production: &base
     bind_dn: '{{ ldap['bind_dn'] }}'
     password: '{{ ldap['password'] }}'
     allow_username_or_email_login: {{ ldap['allow_username_or_email_login']|default('true') }}
-  
-    {% else %}
+    {%- else %}
     enabled: false
-    {% endif %}
+    {%- endif %}
 
   {#- OmniAuth settings #}
   omniauth:

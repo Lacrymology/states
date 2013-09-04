@@ -4,6 +4,7 @@
 include:
   - apt.nrpe
   - build.nrpe
+  - logrotate.nrpe
   - nginx.nrpe
   - nrpe
   - postgresql.server.nrpe

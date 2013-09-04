@@ -86,6 +86,7 @@ and ``/path/to``)::
   id: minion
   multiprocessing: False
   worker_threads: 1
+  pillar_opts: False
   log_file: file:///dev/stdout
   log_level: garbage
   log_datefmt_logfile: '%Y-%m-%d %H:%M:%S'

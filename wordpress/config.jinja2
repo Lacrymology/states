@@ -53,16 +53,15 @@ define('DB_COLLATE', '');
  
  @since 2.6.0 
 #}
- 
-define('AUTH_KEY',         'lK51IBT}$_YaR3;^EH+[_U|9X74H<xic?=NFE1|Q8>5J!d?g$dAJrj[aN;j0R*SC');
-define('SECURE_AUTH_KEY',  '3@N+|B8K#)hM^NG)&4IaX>TX3Gz%:AF8Ug_1|em&b+W8ZVO]:{.h_th_;%y@_CP>');
-define('LOGGED_IN_KEY',    'tIY{DNaxW`)-qy!d+pe-CkP(|L^.nB d>kqKB_VL>cA_8F8Q2+|AGu~{11R2m7iu');
-define('NONCE_KEY',        '0i+!OUYf1K&jSYNi=2T8:]4uB,CnhsU(-cZUaG]~|U<j}+_4-*>V8)mG0=O/WC|b');
-define('AUTH_SALT',        'H:fU~nIZ6$^- Zg3[3 RmDL_v>*Ll51|/a?Iv7Yh.ZhhpVBMuI7ufcv;Jm6^sE[6');
-define('SECURE_AUTH_SALT', ',X.blL_1+vbk7AzHqQ.}oyf`2eIe&].1ju0+/@;ORCh|)YdO<(Ij|XNn5CvET//;');
-define('LOGGED_IN_SALT',   '&6tCkMdqOx^Qlv%qQYLJ[4iQi?YCGsq{lrWiJ)/gkM0|p>%F*Oc5jK}[y:BW<T5d');
-define('NONCE_SALT',       'a98XE}>O=[pEQgHYY5-cmZLyDew0mNc&R%E{xN-)/{-{ 1yCnb-:1iV=B4F4g2fj');
 
+define('AUTH_KEY',         '{{ salt['password.generate']('wp_auth_key', 64) }}');
+define('SECURE_AUTH_KEY',  '{{ salt['password.generate']('wp_secure_auth_key', 64) }}');
+define('LOGGED_IN_KEY',    '{{ salt['password.generate']('wp_logged_in_key', 64) }}');
+define('NONCE_KEY',        '{{ salt['password.generate']('wp_nonce_key', 64) }}');
+define('AUTH_SALT',        '{{ salt['password.generate']('wp_auth_salt', 64) }}');
+define('SECURE_AUTH_SALT', '{{ salt['password.generate']('wp_secure_auth_salt', 64) }}');
+define('LOGGED_IN_SALT',   '{{ salt['password.generate']('wp_logged_in_salt', 64) }}');
+define('NONCE_SALT',       '{{ salt['password.generate']('wp_nonce_salt', 64) }}');
 
 {#-
  WordPress Database Table prefix.

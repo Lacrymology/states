@@ -5,15 +5,28 @@
 include:
   - apt
   - nginx
+  - java.7.jdk
 {% if pillar['jenkins']['web']['ssl']|default(False) %}
   - ssl
 {% endif %}
 
 jenkins:
+  pkgrepo:
+    - managed
+    - name: deb http://pkg.jenkins-ci.org/debian binary/
+    #TODO mirror
+    - file: /etc/apt/sources.list.d/jenkins.list
+    - key_url: http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key
   pkg:
-    - latest
+    - installed
     - require:
       - cmd: apt_sources
+      - pkgrepo: jenkins
+      - pkg: openjdk_jdk
+  service:
+    - running
+    - require:
+      - pkg: jenkins
 
 /etc/nginx/conf.d/jenkins.conf:
   file:

@@ -14,42 +14,50 @@ Optional Pillar
 
 gitlab:
   smtp:
-    - enabled: True
-    - address: smtp.gmail.com
-    - port: 465
-    - domain: gmail.com
-    - user_name: youruser@yourdomain.com
-    - password: password
-    - authentication: plain
-    - enable_starttls_auto: true
+    - enabled: Default is False
+
   workers: 2
-  config:
-    port: 80
-    ssl: false
-    email_from: email_from@localhost
-    support_email: support_email@localhost
-    default_projects_limit: 10
+  ssl: enable ssl. Default: False
+  port: port to run gitlab web. Default: 80
+  support_email: your support email
+  default_projects_limit: 10
+
   database:
     host: localhost
     port: 5432
     username: git
-    password: postgres_user_pass
+    password: password for postgre user `git`
   ldap:
-    enabled: false
-    host: xxx
-    base: xxx
-    port: 636
-    uid: xxx
+    enabled: enable ldap auth, Default: False
+
+If you set gitlab:ldap:enabled is True, you must define:
+gitlab:
+  ldap:
+    host: ldap ldap server, Ex: ldap.yourdomain.com
+    base: the base where your search for users. Ex: dc=yourdomain,dc=com
+    port: Default is 636 for `plain` method
+    uid: sAMAccountName
     method: plain    # `plain` or `ssl`
-    bind_dn: xxx
-    password: xxx
-    allow_username_or_email_login: true
+    bind_dn: binddn of user your will bind with. Ex: cn=vmail,dc=yourdomain,dc=com
+    password: password of bind user
+    allow_username_or_email_login: use name instead of email for login. Default: true
+
+If you set gitlab:smtp:enabled is True, you must define: 
+    - server: your smtp server. Ex: smtp.yourdomain.com
+    - port: smtp server port
+    - domain: your domain
+    - from: smtp account will sent email to users
+    - user: account login
+    - password: password for account login
+    - authentication: Default is: `:login`
+    - tls: Default is: true
 #}
 
 include:
   - apt
   - build
   - git
+  - logrotate
   - nginx
   - nodejs
   - postgresql.server
@@ -278,6 +286,19 @@ gitlab_start_sidekiq_service:
       shell_dir: {{ shell_dir }}
  {%- endfor %}
 
+/etc/logrotate.d/gitlab:
+  file:
+    - managed
+    - source: salt://gitlab/logrotate.jinja2
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - require:
+      - pkg: logrotate
+    - context:
+      dir: {{ web_dir }}
+
 charlock_holmes:
   gem:
     - installed
@@ -311,7 +332,7 @@ rack:
       - pkg: ruby
       - pkg: build
 
-add_web_user_to_group:
+add_web_user_to_git_group:
   user:
     - present
     - name: www-data
@@ -337,11 +358,19 @@ add_web_user_to_group:
       - file: gitlab_upstart
       - gem: rack
       - file: {{ web_dir }}/config.ru
-      - user: add_web_user_to_group
+      - user: add_web_user_to_git_group
     - watch_in:
       - service: uwsgi_emperor
     - context:
       web_dir: {{ web_dir }}
+  module:
+    - wait
+    - name: file.touch
+    - m_name: /etc/uwsgi/gitlab.ini
+    - watch:
+      - {{ web_dir }}/config/gitlab.yml
+      - {{ web_dir }}/config/database.yml
+      - archive: gitlab
 
 /etc/nginx/conf.d/gitlab.conf:
   file:

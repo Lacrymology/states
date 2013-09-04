@@ -1,0 +1,13 @@
+# pillar['message_do_not_modify'] }}
+{{ dir }}/log/*.log {
+    daily
+    missingok
+    rotate 7
+    compress
+    delaycompress
+    notifempty
+    sharedscripts
+    postrotate
+       initctl start gitlab
+    endscript
+}

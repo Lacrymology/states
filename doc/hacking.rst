@@ -41,7 +41,6 @@ Create configuration file ``conf/master`` (replace $YOURUSERNAME and /path/to)::
   auto_accept: True
   log_file: file:///dev/stdout
   log_level: garbage
-  user: $YOURUSERNAME
   log_datefmt_logfile: '%Y-%m-%d %H:%M:%S'
   pidfile: /path/to/salt/run/master/pid
   sock_dir: /path/to/salt/run/master
@@ -60,6 +59,7 @@ Create configuration file ``conf/master`` (replace $YOURUSERNAME and /path/to)::
     pam:
       $YOURUSERNAME:
         - .*
+  user: $YOURUSERNAME
 
 You can now run the master::
 
@@ -79,7 +79,8 @@ Now for salt-minion::
   $ mkdir cache/minion
   $ mkdir run/minion
 
-Create configuration file ``conf/minion``(replace $YOURUSERNAME and /path/to)::
+Create configuration file ``conf/minion`` (replace ``$YOURUSERNAME``
+and ``/path/to``)::
 
   master: 127.0.0.1
   id: minion
@@ -116,7 +117,8 @@ Run salt-api::
 
   $ salt-api -c /path/to/salt/conf
 
-You can test salt-api using curl (replace user pass)::
+You can test salt-api using curl (replace ``$YOURUSERNAME`` and
+``$YOURUNIXPASSWORD``)::
 
   $ curl -sS localhost:8000/run \
     -H 'Accept: application/x-yaml' \

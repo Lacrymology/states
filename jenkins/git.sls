@@ -1,13 +1,16 @@
 include:
   - git
   - jenkins
+  - ssh.client
 
 jenkins_set_git_email:
   cmd:
     - run
     - name: git config --global user.email "{{ salt['pillar.get']('jenkins:git:email', 'jenkins@localhost') }}"
+    - user: jenkins
     - require:
       - pkg: git
+      - pkg: jenkins
     - require_in:
       - service: jenkins
 
@@ -15,8 +18,10 @@ jenkins_set_git_user:
   cmd:
     - run
     - name: git config --global user.name "{{ salt['pillar.get']('jenkins:git:name', 'Jenkins') }}"
+    - user: jenkins
     - require:
       - pkg: git
+      - pkg: jenkins
     - require_in:
       - service: jenkins
 
@@ -31,7 +36,7 @@ jenkins_set_git_user:
     - require:
       - pkg: git
       - pkg: jenkins
-    - require_in:
+    - watch_in:
       - service: jenkins
 
 /var/lib/jenkins/plugins/git.hpi:
@@ -42,8 +47,17 @@ jenkins_set_git_user:
     - source_hash: md5=6cbad4214729056ea62d93b69fb5c05e
     - user: jenkins
     - group: nogroup
-    - require_in:
+    - watch_in:
       - service: jenkins
     - require:
       - pkg: git
       - pkg: jenkins
+
+extend:
+  github.com:
+    ssh_known_hosts:
+      - user: jenkins
+      - require:
+        - pkg: jenkins
+      - watch_in:
+        - service: jenkins

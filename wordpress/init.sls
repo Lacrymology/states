@@ -8,7 +8,7 @@ Mandatory Pillar
 wordpress:
   hostnames:
     - list of hostname, used for nginx config
-  title: Site tile
+  title: Site title
   username: admin username
   admin_password: admin's password
   email: admin email

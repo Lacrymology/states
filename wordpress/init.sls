@@ -45,8 +45,7 @@ wordpress:
     - extracted
     - name: /usr/local/
 {%- if 'files_archive' in pillar %}
-    #- source: {{ salt['pillar.get']('files_archive') }}/mirror/wordpress-{{ version }}.tar.gz
-    - source: http://wordpress.org/wordpress-{{ version }}.tar.gz
+    - source: {{ salt['pillar.get']('files_archive') }}/mirror/wordpress-{{ version }}.tar.gz
 {%- else %}
     - source: http://wordpress.org/wordpress-{{ version }}.tar.gz
 {%- endif %}

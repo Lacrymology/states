@@ -10,6 +10,6 @@ Remove Nagios NRPE check for OpenERP
   file:
     - absent
 
-/etc/nagios/nrpe.d/roundcube-nginx.cfg:
+/etc/nagios/nrpe.d/openerp-nginx.cfg:
   file:
     - absent

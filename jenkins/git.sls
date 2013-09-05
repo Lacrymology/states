@@ -53,24 +53,13 @@ jenkins_set_git_user:
       - pkg: git
       - pkg: jenkins
 
-{%- macro github(user) %}
-{% set user_home = salt['user.info'](user)['home'] %}
-{{ user }}_github.com:
+{%- macro knownhost(domain, fingerprint, user) %}
+{{ user }}_{{ domain }}:
   ssh_known_hosts:
-    - name: github.com
+    - name: {{ domain }}
     - present
     - user: {{ user }}
-    - fingerprint: 16:27:ac:a5:76:28:2d:36:63:1b:56:4d:eb:df:a6:48
-{%- endmacro %}
-
-{%- macro bitbucket(user) %}
-{% set user_home = salt['user.info'](user)['home'] %}
-{{ user }}_bitbucket.org:
-  ssh_known_hosts:
-    - name: bitbucket.org
-    - present
-    - user: {{ user }}
-    - fingerprint: 97:8c:1b:f2:6f:14:6b:5c:3b:ec:aa:46:46:74:7c:40
+    - fingerprint: {{ fingerprint }}
 {%- endmacro %}
 
 {% macro ssh_private_key(user, pillar_path) %}
@@ -86,14 +75,14 @@ jenkins_set_git_user:
     - mode: 400
 {%- endmacro %}
 
-{{ bitbucket('jenkins') }}
+{{ knownhost('bitbucket.org', '97:8c:1b:f2:6f:14:6b:5c:3b:ec:aa:46:46:74:7c:40', 'jenkins') }}
     - require:
       - pkg: openssh-client
       - pkg: jenkins
     - watch_in:
       - service: jenkins
 
-{{ github('jenkins') }}
+{{ knownhost('github.com', '16:27:ac:a5:76:28:2d:36:63:1b:56:4d:eb:df:a6:48', 'jenkins') }}
     - require:
       - pkg: openssh-client
       - pkg: jenkins
@@ -105,3 +94,17 @@ jenkins_set_git_user:
     - require:
       - ssh_known_hosts: jenkins_github.com
 {%- endif %}
+
+{{ salt['user.info']('jenkins')['home'] }}/.ssh/config:
+  file:
+    - managed
+    - user: jenkins
+    - group: nogroup
+    - contents: |
+        {{ salt['pillar.get']('jenkins:ssh_config') | indent(8) }}
+
+{%- for domain in salt['pillar.get']('jenkins:fingerprints', []) %}
+{{ knownhost(domain, pillar['jenkins']['fingerprints'][domain], 'jenkins') }}
+    - require:
+      - file: {{ salt['user.info']('jenkins')['home'] }}/.ssh/config
+{%- endfor %}

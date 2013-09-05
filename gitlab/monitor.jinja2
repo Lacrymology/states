@@ -6,3 +6,16 @@ gitlab_uwsgi_worker:
 
 gitlab_uwsgi_ping:
   description: GitLab uWSGI Ping
+
+gitlab_nginx_http:
+  description: GitLab HTTP protocol
+
+gitlab_nginx_https:
+  description: GitLab HTTPS protocol
+
+gitlab_nginx_https_certificate:
+  description: HTTPS Certificate Expiration
+  check_interval: 1440 {#- only need to check https certificate each day #}
+
+gitlab_postgresql:
+  description: GitLab PostgreSQL database

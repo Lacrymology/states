@@ -188,8 +188,8 @@ gitlab:
     - source: {{ pillar['files_archive'] }}/mirror/gitlab/{{ version|replace("-", ".") }}.tar.gz
     - source_hash: md5=151be72dc60179254c58120098f2a84e
     {%- else %}
-    - source: salt://gitlab/gitlab-{{ version }}.tar.gz
-    - source_hash: md5=151be72dc60179254c58120098f2a84e
+    - source: https://github.com/gitlabhq/gitlabhq/archive/{{ version }}-stable.tar.gz
+    - source_hash: md5=31906bf7066b7c5270dc4cf6b5623c6b
     {%- endif %}
     - archive_format: tar
     - tar_options: z
@@ -209,7 +209,9 @@ gitlab:
       - archive: gitlab
   cmd:
     - wait
-    - name: force=yes bundle exec rake gitlab:setup RAILS_ENV=production
+    - name: force=yes bundle exec rake gitlab:setup
+    - env:
+        RAILS_ENV: production
     - user: git
     - cwd: {{ web_dir }}
     - require:
@@ -220,7 +222,7 @@ gitlab:
 gitlab_precompile_assets:
   cmd:
     - wait
-    - name: bundle exec rake assets:precompile #RAILS_ENV=production
+    - name: bundle exec rake assets:precompile
     - env:
         RAILS_ENV: production
     - user: git
@@ -231,7 +233,7 @@ gitlab_precompile_assets:
 gitlab_start_sidekiq_service:
   cmd:
     - wait
-    - name: bundle exec rake sidekiq:start #RAILS_ENV=production
+    - name: bundle exec rake sidekiq:start 
     - env:
          RAILS_ENV: production
     - user: git

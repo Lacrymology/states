@@ -61,3 +61,13 @@ root_ssh_private_key:
     - require:
       - file: {{ root_home }}/.ssh
 {% endif %}
+
+{%- macro knownhost(domain, fingerprint, user, port='22') %}
+{{ user }}_{{ domain }}:
+  ssh_known_hosts:
+    - name: {{ domain }}
+    - present
+    - user: {{ user }}
+    - fingerprint: {{ fingerprint }}
+    - port: {{ port }}
+{%- endmacro %}

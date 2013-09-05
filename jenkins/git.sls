@@ -53,28 +53,7 @@ jenkins_set_git_user:
       - pkg: git
       - pkg: jenkins
 
-{%- macro knownhost(domain, fingerprint, user) %}
-{{ user }}_{{ domain }}:
-  ssh_known_hosts:
-    - name: {{ domain }}
-    - present
-    - user: {{ user }}
-    - fingerprint: {{ fingerprint }}
-{%- endmacro %}
-
-{% macro ssh_private_key(user, pillar_path) %}
-{% set user_home = salt['user.info'](user)['home'] %}
-{{ user }}_ssh_private_key:
-  file:
-    - managed
-    - name: {{ user_home }}/.ssh/id_{{ salt['pillar.get']("{0}:{1}".format(pillar_path, 'type')) }}
-    - contents: |
-        {{ salt['pillar.get']("{0}:{1}".format(pillar_path, 'contents')) | indent(8) }}
-    - user: {{ user }}
-    - group: {{ salt['user.list_groups'](user)[0] }}
-    - mode: 400
-{%- endmacro %}
-
+{%- from 'ssh/client/init.sls' import knownhost with context %}
 {{ knownhost('bitbucket.org', '97:8c:1b:f2:6f:14:6b:5c:3b:ec:aa:46:46:74:7c:40', 'jenkins') }}
     - require:
       - pkg: openssh-client
@@ -89,22 +68,40 @@ jenkins_set_git_user:
     - watch_in:
       - service: jenkins
 
+{% set user_home = '/var/lib/jenkins' %}
 {%- if 'ssh_private_key' in pillar['jenkins'] %}
-{{ ssh_private_key('jenkins','jenkins:ssh_private_key') }}
+jenkins_ssh_private_key:
+  file:
+    - managed
+    - name: {{ user_home }}/.ssh/id_{{ salt['pillar.get']('jenkins:ssh_private_key:type') }}
+    - contents: |
+        {{ salt['pillar.get']('jenkins:ssh_private_key:contents') | indent(8) }}
+    - user: jenkins
+    - group: nogroup
+    - mode: 400
     - require:
+      - pkg: jenkins
       - ssh_known_hosts: jenkins_github.com
 {%- endif %}
 
-{{ salt['user.info']('jenkins')['home'] }}/.ssh/config:
+{%- if 'ssh_config' in pillar['jenkins'] %}
+{{ user_home }}/.ssh/config:
   file:
     - managed
     - user: jenkins
     - group: nogroup
     - contents: |
         {{ salt['pillar.get']('jenkins:ssh_config') | indent(8) }}
-
-{%- for domain in salt['pillar.get']('jenkins:fingerprints', []) %}
-{{ knownhost(domain, pillar['jenkins']['fingerprints'][domain], 'jenkins') }}
     - require:
-      - file: {{ salt['user.info']('jenkins')['home'] }}/.ssh/config
+      - ssh_known_hosts: jenkins_github.com
+      - pkg: jenkins
+{%- endif %}
+
+{%- for domain in salt['pillar.get']('jenkins:git_servers', []) %}
+{{ knownhost(domain, pillar['jenkins']['git_servers'][domain]['fingerprint'], 'jenkins', pillar['jenkins']['git_servers'][domain]['port']) }}
+    - require:
+      - pkg: openssh-client
+      - pkg: jenkins
+    - watch_in:
+      - service: jenkins
 {%- endfor %}

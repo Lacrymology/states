@@ -23,7 +23,7 @@ include:
     - watch_in:
       - service: nagios-nrpe-server
 
-/etc/nagios/nrpe.d/roundcube-nginx.cfg:
+/etc/nagios/nrpe.d/openerp-nginx.cfg:
   file:
     - managed
     - template: jinja

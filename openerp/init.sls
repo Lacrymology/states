@@ -4,10 +4,9 @@ Installing OpenERP
 
 Mandatory Pillar
 ----------------
-openerp:
-  nginx:
-    hostnames:
-      - localhost       # list of hostname, used for nginx config
+openerp:  
+  hostnames:
+    - localhost       # list of hostname, used for nginx config
 
 Optional Pillar
 ---------------

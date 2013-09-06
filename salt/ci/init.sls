@@ -95,3 +95,24 @@ Run test suite
   - run /root/salt/states/test/integration.py
 -#}
 
+include:
+  - salt.cloud
+  - salt.master
+  - jenkins.git
+  - ssh.client
+  - sudo
+
+extend:
+  /etc/salt/cloud.deploy.d/bootstrap_salt.sh:
+    file:
+      - source: salt://salt/ci/bootstrap.jinja2
+
+/etc/sudoers.d/jenkins:
+  file:
+    - managed
+    - source: salt://salt/ci/sudo.jinja2
+    - mode: 440
+    - user: root
+    - group: root
+    - require:
+      - pkg: sudo

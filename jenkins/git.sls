@@ -53,6 +53,20 @@ jenkins_set_git_user:
       - pkg: git
       - pkg: jenkins
 
+/var/lib/jenkins/plugins/multiple-scms.hpi:
+  file:
+    - managed
+    - source: http://updates.jenkins-ci.org/download/plugins/multiple-scms/0.2/multiple-scms.hpi
+    #TODO mirror
+    - source_hash: md5=3acb6aa3fe20684a97bb1839df213edf
+    - user: jenkins
+    - group: nogroup
+    - watch_in:
+      - service: jenkins
+    - require:
+      - pkg: git
+      - pkg: jenkins
+
 {%- from 'ssh/client/init.sls' import knownhost with context %}
 {{ knownhost('bitbucket.org', '97:8c:1b:f2:6f:14:6b:5c:3b:ec:aa:46:46:74:7c:40', 'jenkins') }}
     - require:

@@ -2,6 +2,26 @@
 
 server {
     listen 80;
+
+    {%- if pillar['openerp']['ssl']|default(False) %}
+    {%- if pillar['openerp']['ssl_redirect']|default(False) %}
+    {# if https, redirect http port 80 to https port 443 #}
+
+    server_name {% for hostname in salt['pillar.get']('openerp:hostnames') %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+    return 301 https://{{ pillar['openerp']['hostnames'][0] }}$request_uri;
+}
+server {
+{%- endif %}{# redirect http to https #}
+    listen 443 ssl;
+    ssl_certificate /etc/ssl/{{ pillar['openerp']['ssl'] }}/chained_ca.crt;
+    ssl_certificate_key /etc/ssl/{{ pillar['openerp']['ssl'] }}/server.pem;
+    ssl_client_certificate /etc/ssl/{{ pillar['openerp']['ssl'] }}/ca.crt;
+    ssl_ciphers RC4:HIGH:!aNULL:!MD5;
+    ssl_prefer_server_ciphers on;
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout 10m;
+{%- endif %}
+
     server_name {% for hostname in salt['pillar.get']('openerp:hostnames') %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
 
     access_log  /var/log/nginx/openerp_access.log;

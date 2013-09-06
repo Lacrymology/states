@@ -8,6 +8,9 @@ include:
   - nginx.nrpe
   - pip.nrpe
   - postgresql.server.nrpe
+{%- if pillar['openerp']['ssl']|default(False) %}
+  - ssl.nrpe
+{%- endif %} 
   - underscore.nrpe
 
 /etc/nagios/nrpe.d/openerp-server.cfg:
@@ -37,6 +40,10 @@ include:
       deployment: openerp
       domain_name: {{ salt['pillar.get']('openerp:hostnames)[0] }}
       http_uri: /
+{%- if pillar['openerp']['ssl']|default(False) %}
+      https: True
+      http_result: 301 Moved Permanently
+{%- endif %}
 
 /etc/nagios/nrpe.d/postgresql-openerp.cfg:
   file:

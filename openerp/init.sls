@@ -12,6 +12,7 @@ Optional Pillar
 ---------------
 
 openerp:
+  ssl: False            # Enable SSL
   database:
     host: 127.0.0.1     # if run postgresql in local
     port: 5432          # Default port for postgresql server
@@ -23,6 +24,9 @@ include:
   - pip  
   - postgresql.server
   - python.dev
+{%- if pillar['openerp']['ssl']|default(False) %}
+  - ssl
+{%- endif %}
   - underscore
 
 {%- set version = "6.1" %}
@@ -84,3 +88,13 @@ openerp-server:
       - service: openerp-server
     - watch_in:
       - service: nginx
+
+{%- if pillar['openerp']['ssl']|default(False) %}
+extend:
+  nginx:
+    service:
+      - watch:
+        - cmd: /etc/ssl/{{ pillar['openerp']['ssl'] }}/chained_ca.crt
+        - module: /etc/ssl/{{ pillar['openerp']['ssl'] }}/server.pem
+        - file: /etc/ssl/{{ pillar['openerp']['ssl'] }}/ca.crt
+{%- endif %}

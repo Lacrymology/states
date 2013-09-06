@@ -28,10 +28,9 @@ salt-cloud:
       - pkg: salt
       - apt_repository: salt
 
-deploy_script:
+/etc/salt/cloud.deploy.d/bootstrap_salt.sh:
   file:
     - managed
-    - name: /etc/salt/cloud.deploy.d/bootstrap_salt.sh
     - source: salt://salt/cloud/bootstrap.jinja2
     - mode: 500
     - user: root

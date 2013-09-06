@@ -9,9 +9,9 @@ include:
   - build.nrpe
   - mariadb.nrpe
   - mariadb.server.nrpe
-{% if pillar['wordpress']['ssl']|default(False) %}
+{%- if pillar['wordpress']['ssl']|default(False) %}
   - ssl.nrpe
-{% endif %}
+{%- endif %}
 
 /etc/nagios/nrpe.d/wordpress.cfg:
   file:
@@ -26,9 +26,9 @@ include:
     - context:
       deployment: wordpress
       workers: {{ pillar['wordpress']['workers'] }}
-{% if 'cheaper' in pillar['wordpress'] %}
+{%- if 'cheaper' in pillar['wordpress'] %}
       cheaper: {{ pillar['wordpress']['cheaper'] }}
-{% endif %}
+{%- endif %}
     - watch_in:
       - service: nagios-nrpe-server
 

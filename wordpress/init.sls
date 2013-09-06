@@ -26,6 +26,9 @@ include:
   - {{ salt['pillar.get']('wordpress:mysql_variant', 'mariadb') }}.server
   - php.dev
   - uwsgi.php
+{%- if pillar['wordpress']['ssl']|default(False) %}
+  - ssl
+{%- endif %}
   - web
 
 {%- set version = "3.5.2" %}
@@ -190,3 +193,13 @@ wordpress_initial:
       - file: {{ wordpressdir }}/wp-config.php
       - archive: wordpress
       - pkg: php5-mysql
+
+{%- if pillar['wordpress']['ssl']|default(False) %}
+extend:
+  nginx:
+    service:
+      - watch:
+       - cmd: /etc/ssl/{{ pillar['wordpress']['ssl'] }}/chained_ca.crt
+        - module: /etc/ssl/{{ pillar['wordpress']['ssl'] }}/server.pem
+        - file: /etc/ssl/{{ pillar['wordpress']['ssl'] }}/ca.crt
+{%- endif %}

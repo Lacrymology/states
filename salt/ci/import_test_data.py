@@ -48,7 +48,7 @@ def move_logs(job_id, job_name, minion_id, workspace, username='jenkins',
 
     for log_type in ('stdout', 'stderr'):
         move_file(
-            '{0}-{1}-{2}.log.xz'.format(job_name, job_id, log_type),
+            '{0}.log.xz'.format(log_type),
             '{0}-{1}.log.xz'.format(job_id, log_type),
             source_dir, workspace, user
         )

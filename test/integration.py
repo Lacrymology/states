@@ -97,7 +97,7 @@ def setUpModule():
         # after running saltutil.sync_all, exit after doing it.
         client('saltutil.sync_all')
         logger.warning("Please re-execute: '%s'", ' '.join(sys.argv))
-        sys.exit(1)
+        sys.exit(0)
 
     def check_error(changes):
         """

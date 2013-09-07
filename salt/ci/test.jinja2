@@ -14,7 +14,7 @@ sudo salt "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "xz /r
 sudo salt "integration-$JOB_NAME-$BUILD_NUMBER" cp.push /root/salt/test-reports.xml
 sudo salt "integration-$JOB_NAME-$BUILD_NUMBER" cp.push /root/salt/stderr.log.xz
 sudo salt "integration-$JOB_NAME-$BUILD_NUMBER" cp.push /root/salt/stdout.log.xz
-sudo salt-cloud --destroy --assume-yes integration-$JOB_NAME-$BUILD_NUMBER
 sudo /usr/local/bin/import_test_data.py $BUILD_NUMBER $JOB_NAME integration-$JOB_NAME-$BUILD_NUMBER $WORKSPACE
+sudo salt-cloud --destroy --assume-yes integration-$JOB_NAME-$BUILD_NUMBER
 xz -d -c $WORKSPACE/$BUILD_NUMBER-stderr.log.xz
 mv /srv/salt/jenkins_archives/bootstrap-archive-$BUILD_NUMBER.tar.gz .

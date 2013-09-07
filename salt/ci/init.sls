@@ -137,6 +137,7 @@ extend:
   file:
     - managed
     - source: salt://salt/ci/sudo.jinja2
+    - template: jinja
     - mode: 440
     - user: root
     - group: root

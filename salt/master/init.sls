@@ -36,7 +36,7 @@ salt-master-requirements:
     - directory
     - user: root
     - group: root
-    - mode: 550
+    - mode: 555
 
 /srv/salt/top.sls:
   file:

@@ -39,3 +39,8 @@ extend:
         - cmd: apt_sources
         - pkg: debconf-utils
         - pkg: python-software-properties
+  salt-common-modules-cp:
+    file:
+      - patch
+      - require:
+        - pkg: salt-minion

@@ -23,6 +23,7 @@ result = data[keys[0]]
 
 def write_output(output_type):
     handler = getattr(sys, output_type)
+    handler.write(os.linesep)
     handler.write(output_type.upper())
     handler.write(os.linesep)
     handler.write("-" * 79)

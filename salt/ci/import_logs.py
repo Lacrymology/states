@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 
 """
-This script import log file upload by cp.push to jenkins workspace
+This script import test data output uploaded by cp.push
+to jenkins workspace
 """
 
 import os
@@ -10,13 +11,13 @@ import sys
 import pwd
 
 
-def move_logs(job_id, job_name, minion_id, workspace, user='jenkins',
+def move_logs(job_id, job_name, minion_id, workspace, username='jenkins',
               log_dir='/root/salt',
               minions_dir='/var/cache/salt/master/minions'):
     try:
-        user = pwd.getpwnam(user)
+        user = pwd.getpwnam(username)
     except KeyError:
-        raise OSError('missing user %s' % user)
+        raise OSError('missing user %s' % username)
 
     if not os.path.exists(minions_dir):
         raise OSError("Can't find salt master cache minions directory %s"

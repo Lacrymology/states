@@ -52,8 +52,8 @@ def move_logs(job_id, job_name, minion_id, workspace, username='jenkins',
             '{0}-{1}.log.xz'.format(job_id, log_type),
             source_dir, workspace, user
         )
-    test_report = 'test-reports.xml'
-    move_file(test_report, test_report, source_dir, workspace, user)
+    move_file('TEST-States.xml', 'test-reports.xml',
+              source_dir, workspace, user)
 
 
 def main():

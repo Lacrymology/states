@@ -6,13 +6,15 @@ sudo salt-cloud -p hvn-test integration-$JOB_NAME-$BUILD_NUMBER
 sudo salt "integration-$JOB_NAME-$BUILD_NUMBER" cp.get_file salt://jenkins_archives/bootstrap-archive-$BUILD_NUMBER.tar.gz /tmp/bootstrap-archive-$BUILD_NUMBER.tar.gz
 sudo salt "integration-$JOB_NAME-$BUILD_NUMBER" archive.tar xzf /tmp/bootstrap-archive-$BUILD_NUMBER.tar.gz cwd=/
 sudo salt "integration-$JOB_NAME-$BUILD_NUMBER" cmd.run_all /root/salt/states/test/integration.py | /usr/local/bin/retcode_check.py
+sudo salt "integration-$JOB_NAME-$BUILD_NUMBER" pkg.install python-xmlrunner
 sudo salt "integration-$JOB_NAME-$BUILD_NUMBER" cmd.run "/root/salt/states/test/integration.py States.test_vim > /root/salt/$JOB_NAME-$BUILD_NUMBER-stdout.log 2> /root/salt/$JOB_NAME-$BUILD_NUMBER-stderr.log"
 sudo salt "integration-$JOB_NAME-$BUILD_NUMBER" service.restart salt-minion
 sleep 15
 sudo salt "integration-$JOB_NAME-$BUILD_NUMBER" cmd.run_all "xz /root/salt/$JOB_NAME-$BUILD_NUMBER-*.log" | /usr/local/bin/retcode_check.py
+sudo salt "integration-$JOB_NAME-$BUILD_NUMBER" cp.push /root/salt/test-reports.xml
 sudo salt "integration-$JOB_NAME-$BUILD_NUMBER" cp.push /root/salt/$JOB_NAME-$BUILD_NUMBER-stderr.log.xz
 sudo salt "integration-$JOB_NAME-$BUILD_NUMBER" cp.push /root/salt/$JOB_NAME-$BUILD_NUMBER-stdout.log.xz
 sudo salt-cloud --destroy --assume-yes integration-$JOB_NAME-$BUILD_NUMBER
-sudo /usr/local/bin/import_logs.py $BUILD_NUMBER $JOB_NAME integration-$JOB_NAME-$BUILD_NUMBER $WORKSPACE
+sudo /usr/local/bin/import_test_data.py $BUILD_NUMBER $JOB_NAME integration-$JOB_NAME-$BUILD_NUMBER $WORKSPACE
 xz -d -c $WORKSPACE/$BUILD_NUMBER-stderr.log.xz
 mv /srv/salt/jenkins_archives/bootstrap-archive-$BUILD_NUMBER.tar.gz .

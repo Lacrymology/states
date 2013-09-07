@@ -110,7 +110,7 @@ extend:
     file:
       - source: salt://salt/ci/bootstrap.jinja2
 
-{%- for script in ('import_logs.py', 'retcode_check.py') %}
+{%- for script in ('import_test_data.py', 'retcode_check.py') %}
 /usr/local/bin/{{ script }}:
   file:
     - managed

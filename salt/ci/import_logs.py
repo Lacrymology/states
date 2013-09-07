@@ -11,8 +11,19 @@ import sys
 import pwd
 
 
+def move_file(source_basename, destination_basename, source_dir, workspace,
+              user):
+    source_filename = os.path.join(source_dir, source_basename)
+    if not os.path.exists(source_filename):
+        raise OSError("Can't find %s file %s" % (source_basename,
+                                                 source_filename))
+    destination_filename = os.path.join(workspace, destination_basename)
+    os.rename(source_filename, destination_filename)
+    os.chown(destination_filename, user.pw_uid, user.pw_gid)
+
+
 def move_logs(job_id, job_name, minion_id, workspace, username='jenkins',
-              log_dir='/root/salt',
+              remote_dir='/root/salt',
               minions_dir='/var/cache/salt/master/minions'):
     try:
         user = pwd.getpwnam(username)
@@ -30,22 +41,19 @@ def move_logs(job_id, job_name, minion_id, workspace, username='jenkins',
         raise OSError("minion %s didn't pushed a file yet, can't find %s" % (
             minion_id, minion_dir))
 
-    log_directory = os.path.join(minion_dir, 'files') + log_dir
-    if not os.path.exists(log_directory):
+    source_dir = os.path.join(minion_dir, 'files') + remote_dir
+    if not os.path.exists(source_dir):
         raise OSError("minion %s didn't pushed log files yet, can't find %s" % (
-            minion_id, log_directory))
+            minion_id, source_dir))
 
     for log_type in ('stdout', 'stderr'):
-        source_basename = '{0}-{1}-{2}.log.xz'.format(job_name, job_id,
-                                                      log_type)
-        source_filename = os.path.join(log_directory, source_basename)
-        if not os.path.exists(source_filename):
-            raise OSError("Can't find log type %s file %s" % (log_type,
-                                                              source_filename))
-        destination_basename = '{0}-{1}.log.xz'.format(job_id, log_type)
-        destination_filename = os.path.join(workspace, destination_basename)
-        os.rename(source_filename, destination_filename)
-        os.chown(destination_filename, user.pw_uid, user.pw_gid)
+        move_file(
+            '{0}-{1}-{2}.log.xz'.format(job_name, job_id, log_type),
+            '{0}-{1}.log.xz'.format(job_id, log_type),
+            source_dir, workspace, user
+        )
+    test_report = 'test-reports.xml'
+    move_file(test_report, test_report, source_dir, workspace, user)
 
 
 def main():

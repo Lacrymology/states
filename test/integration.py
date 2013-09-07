@@ -508,6 +508,6 @@ if __name__ == '__main__':
     else:
         if xmlrunner is not None:
             unittest.main(testRunner=xmlrunner.XMLTestRunner(
-                output='/root/salt/test-reports.xml'))
+                output='/root/salt'))
         else:
             unittest.main()

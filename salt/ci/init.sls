@@ -119,6 +119,16 @@ extend:
     - require:
       - pkg: sudo
 
+/var/lib/jenkins/salt-test.sh:
+  file:
+    - managed
+    - user: jenkins
+    - group: nogroup
+    - source: salt://salt/ci/test.jinja2
+    - template: jinja
+    - require:
+      - pkg: jenkins
+
 /etc/cron.d/salt-archive-ci:
   file:
     - managed

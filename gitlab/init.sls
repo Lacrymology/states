@@ -462,3 +462,13 @@ gitlab_upstart:
     - require_in:
       - cmd: bundler
 {%- endif %}
+
+{% if pillar['gitlab']['ssl']|default(False) %}
+extend:
+  nginx:
+    service:
+      - watch:
+        - cmd: /etc/ssl/{{ pillar['gitlab']['ssl'] }}/chained_ca.crt
+        - module: /etc/ssl/{{ pillar['gitlab']['ssl'] }}/server.pem
+        - file: /etc/ssl/{{ pillar['gitlab']['ssl'] }}/ca.crt
+{% endif %}

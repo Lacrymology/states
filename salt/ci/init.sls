@@ -97,6 +97,7 @@ Run test suite
 
 include:
   - jenkins.git
+  - local
   - rsync
   - salt.cloud
   - salt.archive
@@ -108,6 +109,16 @@ extend:
   /etc/salt/cloud.deploy.d/bootstrap_salt.sh:
     file:
       - source: salt://salt/ci/bootstrap.jinja2
+
+/usr/local/bin/import_log.py:
+  file:
+    - managed
+    - source: salt://salt/ci/import_logs.sh
+    - user: root
+    - group: 755
+    - mode: 755
+    - require:
+      - file: /usr/local
 
 /etc/salt/master.d/ci.conf:
   file:

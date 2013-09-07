@@ -27,6 +27,10 @@ except ImportError:
     import unittest
 import sys
 import os
+try:
+    import xmlrunner
+except ImportError:
+    xmlrunner = None
 
 import yaml
 
@@ -502,4 +506,8 @@ if __name__ == '__main__':
     if '--list' in sys.argv:
         States.list_tests()
     else:
-        unittest.main()
+        if xmlrunner is not None:
+            unittest.main(testRunner=xmlrunner.XMLTestRunner(
+                output='/root/salt/test-reports.xml'))
+        else:
+            unittest.main()

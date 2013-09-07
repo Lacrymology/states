@@ -15,8 +15,7 @@ salt_archive:
     - mode: 775
   cmd:
     - run
-    - name: /bin/true
-{#    - name: rsync -av --delete {{ pillar['salt_archive']['source'] }} {{ archive_dir }}/#}
+    - name: rsync -av --delete {{ pillar['salt_archive']['source'] }} {{ archive_dir }}/
     - require:
       - pkg: rsync
       - file: salt_archive

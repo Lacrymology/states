@@ -5,6 +5,7 @@
 include:
   - deborphan
   - test.sync
+  - salt.minion.patch.0_15_3
 
 {#-
  Fake the mine module, this let a minion to run without a master.

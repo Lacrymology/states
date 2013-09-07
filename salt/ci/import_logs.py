@@ -6,15 +6,13 @@ This script import log file upload by cp.push to jenkins workspace
 """
 
 import os
-import shutil
 import sys
 import pwd
 
 
 def move_logs(job_id, job_name, minion_id, workspace, user='jenkins',
               log_dir='/root/salt',
-              minions_dir='/var/cache/salt/master/minions',
-              clear_minion_dir=True):
+              minions_dir='/var/cache/salt/master/minions'):
     try:
         user = pwd.getpwnam(user)
     except KeyError:
@@ -46,10 +44,7 @@ def move_logs(job_id, job_name, minion_id, workspace, user='jenkins',
         destination_basename = '{0}-{1}.log.xz'.format(job_id, log_type)
         destination_filename = os.path.join(workspace, destination_basename)
         os.rename(source_filename, destination_filename)
-        os.chown(destination_basename, user.pw_uid, user.pw_gid)
-
-    if clear_minion_dir:
-        shutil.rmtree(minion_dir)
+        os.chown(destination_filename, user.pw_uid, user.pw_gid)
 
 
 def main():

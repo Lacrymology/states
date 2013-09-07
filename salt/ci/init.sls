@@ -96,9 +96,11 @@ Run test suite
 -#}
 
 include:
-  - salt.cloud
-  - salt.master
   - jenkins.git
+  - rsync
+  - salt.cloud
+  - salt.archive
+  - salt.master
   - ssh.client
   - sudo
 
@@ -116,3 +118,24 @@ extend:
     - group: root
     - require:
       - pkg: sudo
+
+/etc/cron.d/salt-archive-ci:
+  file:
+    - managed
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 550
+    - source: salt://salt/ci/cron.jinja2
+    - require:
+      - pkg: rsync
+      - user: salt_archive
+
+/srv/salt/jenkins_archives:
+  file:
+    - directory
+    - user: jenkins
+    - group: root
+    - require:
+      - pkg: jenkins
+      - file: /srv/salt

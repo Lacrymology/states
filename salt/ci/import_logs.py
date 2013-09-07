@@ -10,9 +10,9 @@ import shutil
 import sys
 import pwd
 
-# /var/cache/salt/master/minions/integration-common_testing-1/files/root/salt/
 
-def move_logs(job_id, minion_id, workspace, user='jenkins', log_dir='/root/salt',
+def move_logs(job_id, job_name, minion_id, workspace, user='jenkins',
+              log_dir='/root/salt',
               minions_dir='/var/cache/salt/master/minions',
               clear_minion_dir=True):
     try:
@@ -37,12 +37,13 @@ def move_logs(job_id, minion_id, workspace, user='jenkins', log_dir='/root/salt'
             minion_id, log_directory))
 
     for log_type in ('stdout', 'stderr'):
-        source_basename = '{0}-{1}.log.xz'.format(minion_id, log_type)
+        source_basename = '{0}-{1}-{2}.log.xz'.format(job_name, job_id,
+                                                      log_type)
         source_filename = os.path.join(log_directory, source_basename)
         if not os.path.exists(source_filename):
             raise OSError("Can't find log type %s file %s" % (log_type,
                                                               source_filename))
-        destination_basename = '{0}.log.xz'.format(job_id)
+        destination_basename = '{0}-{1}.log.xz'.format(job_id, log_type)
         destination_filename = os.path.join(workspace, destination_basename)
         os.rename(source_filename, destination_filename)
         os.chown(destination_basename, user.pw_uid, user.pw_gid)
@@ -50,16 +51,17 @@ def move_logs(job_id, minion_id, workspace, user='jenkins', log_dir='/root/salt'
     if clear_minion_dir:
         shutil.rmtree(minion_dir)
 
+
 def main():
-    if len(sys.argv) != 3:
-        print 'Invalid arguments, syntax: %s [jobid] [minion-id] [workspace]'\
-              % sys.argv[0]
+    if len(sys.argv) != 5:
+        print 'Invalid arguments, syntax: %s [job-id] [job-name] ' \
+              '[minion-id] [workspace]' % sys.argv[0]
         sys.exit(1)
 
-    job_id, minion_id, workspace = sys.argv[1:4]
+    job_id, job_name, minion_id, workspace = sys.argv[1:5]
 
     try:
-        move_logs(job_id, minion_id, workspace, clear_minion_dir=False)
+        move_logs(job_id, job_name, minion_id, workspace)
     except Exception, err:
         print str(err)
         sys.exit(1)

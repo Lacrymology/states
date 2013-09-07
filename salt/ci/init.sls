@@ -109,6 +109,19 @@ extend:
     file:
       - source: salt://salt/ci/bootstrap.jinja2
 
+/etc/salt/master.d/ci.conf:
+  file:
+    - managed
+    - source: salt://salt/ci/master.jinja2
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - require:
+      - pkg: salt-master
+    - watch_in:
+      - service: salt-master
+
 /etc/sudoers.d/jenkins:
   file:
     - managed

@@ -29,6 +29,7 @@ discourse_deps:
       - curl
       - pngcrush
       - imagemagick
+      - postgresql-contrib-9.2
     - require:
       - pkg: xml-dev
       - pkg: postgresql-dev
@@ -62,10 +63,12 @@ discourse_tar:
       - user: discourse
       - archive: discourse_tar
 
+{%- set ruby_version = "1.9.3" %}
 discourse:
   user:
     - present
     - name: discourse
+    - shell: /bin/bash
     - require:
       - pkg: discourse_deps
   postgres_user:
@@ -82,6 +85,23 @@ discourse:
     - runas: postgres
     - require:
       - postgres_user: discourse
+  cmd:
+    - wait
+    - name: rake{{ ruby_version }} db:migrate
+    - cwd: {{ web_root_dir }}
+    - user: discourse
+    - env:
+        RAILS_ENV: production
+        RUBY_GC_MALLOC_LIMIT: "90000000"
+    - require:
+      - file: discourse_tar
+      - file: {{ web_root_dir }}/config/database.yml
+      - user: discourse
+      - service: postgresql
+      - postgres_database: discourse
+    - watch:
+      - cmd: discourse_add_psql_extension_hstore
+      - cmd: discourse_add_psql_extension_pg_trgm
 
 {{ web_root_dir }}/config/database.yml:
   file:
@@ -108,3 +128,59 @@ discourse:
     - require:
       - user: discourse
       - file: discourse_tar
+
+discourse_bundler:
+  gem:
+    - installed
+    - name: bundler
+    - require:
+      - pkg: ruby
+  cmd:
+    - run
+    - name: bundle install --deployment --without test
+    - user: discourse
+    - cwd: {{ web_root_dir }}
+    - require:
+      - gem: discourse_bundler
+      - file: discourse_tar
+      - user: discourse
+
+discourse_add_psql_extension_hstore:
+  cmd:
+    - run
+    - name: psql discourse -c "CREATE EXTENSION IF NOT EXISTS hstore;"
+    - user: postgres
+    - require:
+      - service: postgresql
+
+discourse_add_psql_extension_pg_trgm:
+  cmd:
+    - run
+    - name: psql discourse -c "CREATE EXTENSION IF NOT EXISTS pg_trgm;"
+    - user: postgres
+    - require: 
+      - service: postgresql
+
+discourse_assets_precompile:
+  cmd:
+    - wait
+    - name: rake{{ ruby_version }} assets:precompile
+    - cwd: {{ web_root_dir }}
+    - user: discourse
+    - env:
+        RAILS_ENV: production
+        RUBY_GC_MALLOC_LIMIT: "90000000"
+    - require:
+      - user: discourse
+      - file: discourse_tar
+    - watch:
+      - cmd: discourse
+
+install_bluepill:
+  gem:
+    - installed
+    - name: bluepill
+    - version: 0.0.66
+    - runas: root
+    - require:
+      - pkg: ruby

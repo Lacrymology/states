@@ -2,7 +2,7 @@
 [server]
 
 # Handlers for published metrics.
-handlers = diamond.handler.graphite.GraphiteHandler
+handlers = diamond.handler.graphitepickle.GraphitePickleHandler 
 #diamond.handler.stats_d.StatsdHandler
 
 # Leave empty to use the current user
@@ -36,12 +36,12 @@ keys = gelf,syslog
 
 [[default]]
 
-[[GraphiteHandler]]
+[[GraphitePickleHandler]]
 
 host = {{ pillar['graphite_address'] }}
 
 # Port to send metrics to
-port = 2003
+port = 2004
 
 batch = 256
 

@@ -20,12 +20,10 @@ php-dev:
       - php-config
     - require:
       - pkgrepo: php
-
-{% if grains['cpuarch'] == 'i686' and grains['osrelease']|float == 12.04 %}
-/usr/lib/i386-linux-gnu/libphp5.so:
   file:
-    - symlink
-    - target: /usr/lib/php5/libphp5.so
+    - managed
+    - name: /etc/php5/embed/conf.d/salt.ini
+    - source: salt://php/config.jinja2
+    - template: jinja
     - require:
       - pkg: php-dev
-{% endif %}

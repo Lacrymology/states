@@ -33,17 +33,14 @@ import yaml
 # until https://github.com/saltstack/salt/issues/4994 is fixed this is
 # required there
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG,
-                    format="%(asctime)s %(message)s")
+                    format="%(message)s")
 
 import salt.client
 
 # global variables
 logger = logging.getLogger()
-# content of /etc/salt/minion file, as salt.minion state overwrite it.
-# the file is reverted after all tests executed
-minion_configuration = None
 # salt client
-client = salt.client.Caller().function
+client = salt.client.Caller('/root/salt/states/test/minion').function
 # is a cleanup required before next test
 is_clean = False
 # has previous cleanup failed
@@ -70,26 +67,20 @@ def if_change(result):
 
 
 def tearDownModule():
-    global minion_configuration, client
+    global client
     logger.debug("Running tearDownModule")
     client('state.sls', 'test.teardown')
-    logger.info("Revert /etc/salt/minion to original value.")
-    with open('/etc/salt/minion', 'w') as minion_fh:
-        minion_fh.write(minion_configuration)
 
 
 def setUpModule():
     """
     Prepare minion for tests, this is executed only once time.
     """
-    global minion_configuration, client
+    global client
     logger.debug("Running setUpModule")
 
     # force HOME to be root directory
     os.environ['HOME'] = pwd.getpwnam('root').pw_dir
-
-    with open('/etc/salt/minion', 'r') as minion_fh:
-        minion_configuration = minion_fh.read()
 
     try:
         if client('pkg_installed.exists'):

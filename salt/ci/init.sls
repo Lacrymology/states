@@ -116,11 +116,11 @@ extend:
     - managed
     - source: salt://salt/ci/{{ script }}
     - user: root
-    - group: 755
+    - group: root
     - mode: 755
     - require:
       - file: /usr/local
-{%- endif %}
+{%- endfor %}
 
 /etc/salt/master.d/ci.conf:
   file:

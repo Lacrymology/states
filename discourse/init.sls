@@ -2,6 +2,16 @@
 Install Discourse - Discussion Platform
 =================
 
+Mandatory Pillar
+----------------
+discourse:
+  hostnames:
+    - list of hostname, used for nginx config
+
+Optional Pillar
+---------------
+discourse:
+  smtp: False
 
 #}
 
@@ -41,7 +51,7 @@ discourse_tar:
     - name: /usr/local/
 {%- if 'files_archive' in pillar %}
     - source: https://github.com/discourse/discourse/archive/master.tar.gz
-    - source_hash: md5=ecfb01f1756faa5cd8df25b66f2205c2
+    - source_hash: md5=8061aa8f716e9e264d47a1600174488a
 {%- else %}
     - source: https://github.com/discourse/discourse/archive/master.tar.gz
     - source_hash: md5=5ea1b394f08131267d92c6bb8f5693e5
@@ -102,6 +112,16 @@ discourse:
     - watch:
       - cmd: discourse_add_psql_extension_hstore
       - cmd: discourse_add_psql_extension_pg_trgm
+  file:
+    - managed
+    - user: discourse
+    - group: discourse
+    - mode: 440
+    - source: salt://discourse/config.jinja2
+    - template: jinja
+    - require:
+      - file: discourse_tar
+      - user: discourse
 
 {{ web_root_dir }}/config/database.yml:
   file:
@@ -116,6 +136,18 @@ discourse:
       - file: discourse_tar
     - context:
       password: {{ password }}
+
+{{ web_root_dir }}/config/environments/production.rb:
+  file:
+    - managed
+    - user: discourse
+    - group: discourse
+    - mode: 440
+    - template: jinja
+    - source: salt://discourse/production.jinja2
+    - require:
+      - user: discourse
+      - file: discourse_tar
 
 {{ web_root_dir }}/config/redis.yml:
   file:
@@ -152,6 +184,7 @@ discourse_add_psql_extension_hstore:
     - user: postgres
     - require:
       - service: postgresql
+      - postgres_database: discourse
 
 discourse_add_psql_extension_pg_trgm:
   cmd:
@@ -160,6 +193,7 @@ discourse_add_psql_extension_pg_trgm:
     - user: postgres
     - require: 
       - service: postgresql
+      - postgres_database: discourse
 
 discourse_assets_precompile:
   cmd:

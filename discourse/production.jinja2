@@ -48,21 +48,21 @@ Discourse::Application.configure do
   {#-
    you may use other configuration here for mail eg: sendgrid
   #}
-{%- if salt['pillar.get']('discourse:smtp:enabled', False)
+{%- if salt['pillar.get']('discourse:smtp:enabled', False) %}
 {%- set smtp = salt['pillar.get']('discourse:smtp') %}
 {%- if salt['pillar.get']('discourse:smtp:server') == '' %}
-{%- smtp = salt['pillar.get']('smtp');
+{%- set smtp = salt['pillar.get']('smtp') %}
 {%- endif %}
 
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-     :address              => "{{ salt['pillar.get']('smtp.server') }}",
-     :port                 => 25,
-     :domain               => 'vccloud.vn',
-     :user_name            => 'no-reply',
-     :password             => 'no-reply',
+     :address              => "{{ smtp['server'] }}",
+     :port                 => {{ smtp['port'] }},
+     :domain               => "{{ smtp['domain']|default('') }}",
+     :user_name            => "{{ smtp['user'] }}",
+     :password             => "{{ smtp['password'] }}",
      :authentication       => 'login',
-{%- if salt['pillar.get']('discourse:smtp:tls', False)
+{%- if smtp['tls']|default(False) %}
      :enable_starttls_auto => true
 {%- else %}
     :enable_starttls_auto => false
@@ -104,7 +104,7 @@ Discourse::Application.configure do
 
    Discourse strongly recommend you use a CDN.
    For origin pull cdns all you need to do is register an account and configure
-   config.action_controller.asset_host = "http://YOUR_CDN_HERE"
+   config.action_controller.asset_host = "http://{{ salt['pillar.get']('discourse:hostnames')[0] }}"
 
    a comma delimited list of emails your devs have
    developers have god like rights and may impersonate anyone in the system

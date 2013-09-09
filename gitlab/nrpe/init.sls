@@ -11,7 +11,7 @@ include:
   - python.nrpe
   - redis.nrpe
   - ruby.nrpe
-{%- if salt['pillar.get']('gitlab:config:ssl', False) %}
+{%- if salt['pillar.get']('gitlab:ssl', False) %}
   - ssl.nrpe
 {%- endif %}
   - uwsgi.nrpe
@@ -49,7 +49,7 @@ include:
       deployment: gitlab
       domain_name: {{ salt['pillar.get']('gitlab:hostnames')[0] }}
       http_uri: /login
-{%- if salt['pillar.get']('gitlab:config:ssl', False) %}
+{%- if salt['pillar.get']('gitlab:ssl', False) %}
       https: True
       http_result: 301 Moved Permanently
 {%- endif %}

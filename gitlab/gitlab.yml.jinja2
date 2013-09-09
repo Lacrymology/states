@@ -35,10 +35,7 @@ production: &base
     #}
 
     {#- Email settings #}
-    {%- if salt['pillar.get']('gitlab:smtp:enabled', False) %}    
-    {%- set smtp = salt['pillar.get']('gitlab:smtp', salt['pillar.get']('smtp')) %}
-    email_from: {{ smtp['from']|default(salt['pillar.get']('smtp:from')) }}
-    {%- endif %}
+    email_from: {{ salt['pillar.get']('gitlab:smtp:from', salt['pillar.get']('smtp:from')) }}
     support_email: {{ salt['pillar.get']('gitlab:support_email', '') }}
 
     {#- User settings #}

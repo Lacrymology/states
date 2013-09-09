@@ -67,7 +67,7 @@ include:
   - python
   - ruby
   - redis
-{% if salt['pillar.get']('gitlab:config:ssl')|default(False) %}
+{% if salt['pillar.get']('gitlab:ssl')|default(False) %}
   - ssl
 {% endif %}
   - uwsgi.ruby

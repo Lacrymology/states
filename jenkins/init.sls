@@ -10,19 +10,24 @@ include:
   - ssl
 {% endif %}
 
-jenkins:
-  pkgrepo:
-    - managed
-    - name: deb http://pkg.jenkins-ci.org/debian binary/
-    #TODO mirror
-    - file: /etc/apt/sources.list.d/jenkins.list
-    - key_url: http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key
+jenkins_dependencies:
   pkg:
     - installed
+    - name: daemon
+
+jenkins:
+  pkg:
+    - installed
+    - sources:
+{%- if 'files_archive' in pillar %}
+      - jenkins: {{ pillar['files_archive']|replace('file://', '') }}/mirror/jenkins_1.529_all.deb
+{%- else %}
+      - jenkins: http://pkg.jenkins-ci.org/debian/binary/jenkins_1.529_all.deb
+{%- endif %}
     - require:
       - cmd: apt_sources
-      - pkgrepo: jenkins
       - pkg: openjdk_jdk
+      - pkg: jenkins_dependencies
   service:
     - running
     - require:

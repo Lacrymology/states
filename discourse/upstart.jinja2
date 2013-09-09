@@ -1,0 +1,25 @@
+# {{ pillar['message_do_not_modify'] }}
+# /etc/init/discourse.conf - Sidekiq config for Discourse
+# use:
+# sudo initctl {start,stop} discourse
+
+description "Sidekiq Background Worker for Discourse"
+
+start on runlevel [2345]
+stop on runlevel [!2345]
+
+chdir {{ web_root_dir }}
+
+setuid discourse
+setgid discourse
+
+env RAILS_ENV="production"
+env PIDFILE="{{ web_root_dir }}/tmp/pids/sidekiq.pid"
+
+post-start script
+  exec bundle exec sidekiq -L {{ web_root_dir }}/log/sidekiq.log -d
+end script
+
+post-stop script
+  exec bundle exec sidekiqctl stop {{ web_root_dir }}/tmp/pids/sidekiq.pid
+end script

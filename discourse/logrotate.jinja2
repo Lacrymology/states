@@ -1,0 +1,15 @@
+# pillar['message_do_not_modify'] }}
+{{ web_root_dir }}/log/*.log
+{
+    daily
+    missingok
+    rotate 7
+    compress
+    delaycompress
+    notifempty
+    sharedscripts
+    postrotate
+       initctl start discourse
+    endscript
+}
+

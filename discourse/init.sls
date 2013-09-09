@@ -11,14 +11,30 @@ discourse:
 Optional Pillar
 ---------------
 discourse:
-  smtp: False
+  smtp: 
+    enabled: False
   ssl: False
+  database:
+    password: password for postgre user
+
+If you set discourse:smtp:enabled is True, you must define:
+discourse
+  smtp:
+    server: your smtp server. Ex: smtp.yourdomain.com
+    port: smtp server port
+    domain: your domain
+    from: smtp account will sent email to users
+    user: account login
+    password: password for account login
+    authentication: Default is: `plain`
+    tls: Default is: False
 
 #}
 
 include:
   - apt
   - build
+  - logrotate
   - nginx
   - postgresql
   - postgresql.server
@@ -143,7 +159,6 @@ discourse_rack:
       - pkg: ruby
       - pkg: build
 
-
 {{ web_root_dir }}/config/database.yml:
   file:
     - managed
@@ -198,6 +213,44 @@ discourse_bundler:
       - gem: discourse_bundler
       - file: discourse_tar
       - user: discourse
+
+discourse_upstart:
+  cmd:
+    - run
+    - name: bundle exec sidekiq -L {{ web_root_dir }}/log/sidekiq.log -d
+    - env:
+        RAILS_ENV: production
+        PIDFILE: {{ web_root_dir }}/tmp/pids/sidekiq.pid
+    - user: discourse
+    - cwd: {{ web_root_dir }}
+    - require:
+      - file: /etc/uwsgi/discourse.ini
+  file:
+    - managed
+    - name: /etc/init/discourse.conf
+    - source: salt://discourse/upstart.jinja2
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - require:
+      - cmd: discourse_upstart
+    - context:
+      web_root_dir: {{ web_root_dir }}
+
+/etc/logrotate.d/discourse:
+  file:
+    - managed
+    - source: salt://discourse/logrotate.jinja2
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - require:
+      - pkg: logrotate
+      - file: discourse_upstart
+    - context:
+      web_root_dir: {{ web_root_dir }}
 
 /etc/uwsgi/discourse.ini:
   file:
@@ -281,7 +334,7 @@ discourse_add_psql_extension_pg_trgm:
     - require: 
       - service: postgresql
       - postgres_database: discourse
-      {#-
+
 discourse_assets_precompile:
   cmd:
     - wait
@@ -296,7 +349,7 @@ discourse_assets_precompile:
       - file: discourse_tar
     - watch:
       - cmd: discourse
-      #}
+
 {%- if salt['pillar.get']('discourse:ssl', False) %}
 extend:
   nginx:

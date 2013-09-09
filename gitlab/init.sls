@@ -399,10 +399,10 @@ add_web_user_to_git_group:
       - pkg: nginx
       - user: web
       - file: /etc/uwsgi/gitlab.ini
-{% if salt['pillar.get']('gitlab:config:ssl')|default(False) %}
-      - cmd: /etc/ssl/{{ salt['pillar.get']('gitlab:config:ssl') }}/chained_ca.crt
-      - module: /etc/ssl/{{ salt['pillar.get']('gitlab:config:ssl') }}/server.pem
-      - file: /etc/ssl/{{ salt['pillar.get']('gitlab:config:ssl') }}/ca.crt
+{% if salt['pillar.get']('gitlab:ssl')|default(False) %}
+      - cmd: /etc/ssl/{{ salt['pillar.get']('gitlab:ssl') }}/chained_ca.crt
+      - module: /etc/ssl/{{ salt['pillar.get']('gitlab:ssl') }}/server.pem
+      - file: /etc/ssl/{{ salt['pillar.get']('gitlab:ssl') }}/ca.crt
 {% endif %}
     - watch_in:
       - service: nginx

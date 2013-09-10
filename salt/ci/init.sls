@@ -96,7 +96,6 @@ Run test suite
 -#}
 
 include:
-  - jenkins.git
   - local
   - rsync
   - salt.cloud

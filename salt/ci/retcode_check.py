@@ -20,6 +20,12 @@ if len(keys) != 1:
 
 result = data[keys[0]]
 
+if type(result) == bool:
+    if result:
+        sys.exit(0)
+    else:
+        sys.exit(1)
+
 
 def write_output(output_type):
     handler = getattr(sys, output_type)

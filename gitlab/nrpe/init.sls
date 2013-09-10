@@ -29,9 +29,9 @@ include:
     - context:
       deployment: gitlab
       workers: {{ salt['pillar.get']('gitlab:workers', "2") }}
-{% if 'cheaper' in salt['pillar.get']('gitlab') %}
+{%- if 'cheaper' in salt['pillar.get']('gitlab') %}
       cheaper: {{ salt['pillar.get']('gitlab:cheaper')  }}
-{% endif %}
+{%- endif %}
     - watch_in:
       - service: nagios-nrpe-server
 

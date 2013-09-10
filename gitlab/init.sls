@@ -67,9 +67,9 @@ include:
   - python
   - ruby
   - redis
-{% if salt['pillar.get']('gitlab:ssl')|default(False) %}
+{%- if salt['pillar.get']('gitlab:ssl', False) %}
   - ssl
-{% endif %}
+{%- endif %}
   - uwsgi.ruby
   - web
 
@@ -399,11 +399,11 @@ add_web_user_to_git_group:
       - pkg: nginx
       - user: web
       - file: /etc/uwsgi/gitlab.ini
-{% if salt['pillar.get']('gitlab:ssl')|default(False) %}
+{%- if salt['pillar.get']('gitlab:ssl', False) %}
       - cmd: /etc/ssl/{{ salt['pillar.get']('gitlab:ssl') }}/chained_ca.crt
       - module: /etc/ssl/{{ salt['pillar.get']('gitlab:ssl') }}/server.pem
       - file: /etc/ssl/{{ salt['pillar.get']('gitlab:ssl') }}/ca.crt
-{% endif %}
+{%- endif %}
     - watch_in:
       - service: nginx
     - context:
@@ -463,12 +463,12 @@ gitlab_upstart:
       - cmd: bundler
 {%- endif %}
 
-{% if pillar['gitlab']['ssl']|default(False) %}
+{%- if salt['pillar.get']('gitlab:ssl', False) %}
 extend:
   nginx:
     service:
       - watch:
-        - cmd: /etc/ssl/{{ pillar['gitlab']['ssl'] }}/chained_ca.crt
-        - module: /etc/ssl/{{ pillar['gitlab']['ssl'] }}/server.pem
-        - file: /etc/ssl/{{ pillar['gitlab']['ssl'] }}/ca.crt
-{% endif %}
+        - cmd: /etc/ssl/{{ salt['pillar.get']('gitlab:ssl') }}/chained_ca.crt
+        - module: /etc/ssl/{{ salt['pillar.get']('gitlab:ssl') }}/server.pem
+        - file: /etc/ssl/{{ salt['pillar.get']('gitlab:ssl') }}/ca.crt
+{%- endif %}

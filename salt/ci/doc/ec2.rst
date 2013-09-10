@@ -87,7 +87,7 @@ Create a new security group for Salt CI server, set it's name to
 
 Create a key pair for minions that perform tests, set it's name to
 ``salt:cloud:providers:amazon_ec2:keyname``. Take the content of the private
-key and put it into ``deployment_key:contents` this way::
+key and put it into ``deployment_key:contents`` this way::
 
   deployment_key:
     type: rsa
@@ -96,4 +96,24 @@ key and put it into ``deployment_key:contents` this way::
         {# followed by the content #}
         -----END RSA PRIVATE KEY-----
 
-Then, give access to that SSH key to you're Git/Bitbucket repositories.
+Choose a EC2 image in http://cloud-images.ubuntu.com/releases/precise/release/
+in the region you choosed. Set the ``ami-XXX`` value to
+``salt:cloud:profiles:ci-minion:image``.
+
+Pick VM size in
+https://github.com/saltstack/salt-cloud/blob/0.8.9/saltcloud/clouds/ec2.py#L99
+such as ``Micro Instance`` and set it to
+``salt:cloud:profiles:ci-minion:size``
+
+
+External Git Repositories
+-------------------------
+
+Skip this step if you use git repository hosted on the CI server itself.
+
+Grant access to the key pair you created to you're Git/Bitbucket repositories.
+If you need the OpenSSH compatible public key value, do the following::
+
+  chmod 400 $keyfile.pem
+  ssh-keygen -y -f $keyfile.pem
+

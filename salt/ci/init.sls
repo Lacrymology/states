@@ -1,4 +1,5 @@
 include:
+  - jenkins
   - local
   - rsync
   - salt.cloud

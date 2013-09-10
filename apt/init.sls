@@ -75,10 +75,10 @@ apt_sources:
       - file: apt_sources
       - file: /etc/apt/apt.conf.d/99local
     - require:
-      - pkg: apt-transport-https
+      - pkg: apt_sources
   pkg:
     - installed
-    - name: apt_sources
+    - name: apt-transport-https
 
 {% if salt['file.file_exists'](backup) %}
 apt_sources_backup:

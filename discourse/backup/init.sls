@@ -3,7 +3,7 @@
  #}
 include:
   - cron
-
+{%- set web_root_dir = "/usr/local/discourse" }}
 /etc/cron.daily/backup-discourse:
   file:
     - managed
@@ -14,3 +14,5 @@ include:
     - source: salt://discourse/backup/cron.jinja2
     - require:
       - pkg: cron
+    - context:
+      web_root_dir: {{ web_root_dir }}

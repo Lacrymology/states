@@ -32,6 +32,7 @@ apt-get install -y --force-yes salt-minion
 if [ $LOCAL_MODE -eq 1 ]; then
     echo "Salt master-less (local) mode"
     echo $1 > /etc/hostname
+    hostname `cat /etc/hostname`
     salt-call saltutil.sync_all
 else
     echo """id: $1

@@ -54,6 +54,7 @@ extend:
     - managed
     - user: jenkins
     - group: nogroup
+    - mode: 500
     - source: salt://salt/ci/test.jinja2
     - template: jinja
     - require:

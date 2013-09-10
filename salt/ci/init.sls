@@ -99,7 +99,7 @@ include:
   - local
   - rsync
   - salt.cloud
-  - salt.archive
+  - salt.archive.server
   - salt.master
   - ssh.client
   - sudo

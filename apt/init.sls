@@ -74,11 +74,6 @@ apt_sources:
     - watch:
       - file: apt_sources
       - file: /etc/apt/apt.conf.d/99local
-    - require:
-      - pkg: apt-transport-https
-  pkg:
-    - installed
-    - name: apt_sources
 
 {% if salt['file.file_exists'](backup) %}
 apt_sources_backup:

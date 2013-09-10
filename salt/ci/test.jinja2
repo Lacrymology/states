@@ -12,12 +12,12 @@ sudo salt -t 600 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all
 sleep 15
 sudo salt -t 86400 "integration-$JOB_NAME-$BUILD_NUMBER" cmd.run "/root/salt/states/test/integration.py $* > /root/salt/stdout.log 2> /root/salt/stderr.log"
 sudo salt "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "xz /root/salt/*.log" | /usr/local/bin/retcode_check.py
-sudo salt "integration-$JOB_NAME-$BUILD_NUMBER" --output json cp.push /root/salt/stderr.log.xz | /usr/local/bin/retcode_check.py
+sudo salt "integration-$JOB_NAME-$BUILD_NUMBER" cp.push /root/salt/stderr.log.xz
 sudo /usr/local/bin/import_test_data.py stderr.log.xz integration-$JOB_NAME-$BUILD_NUMBER $WORKSPACE
 xz -d -c $WORKSPACE/stderr.log.xz
-sudo salt "integration-$JOB_NAME-$BUILD_NUMBER" --output json cp.push /root/salt/stdout.log.xz | /usr/local/bin/retcode_check.py
+sudo salt "integration-$JOB_NAME-$BUILD_NUMBER" cp.push /root/salt/stdout.log.xz
 sudo /usr/local/bin/import_test_data.py stdout.log.xz integration-$JOB_NAME-$BUILD_NUMBER $WORKSPACE
-sudo salt "integration-$JOB_NAME-$BUILD_NUMBER" --output json cp.push /root/salt/TEST-States-salt.xml | /usr/local/bin/retcode_check.py
+sudo salt "integration-$JOB_NAME-$BUILD_NUMBER" cp.push /root/salt/TEST-States-salt.xml
 sudo /usr/local/bin/import_test_data.py TEST-States-salt.xml integration-$JOB_NAME-$BUILD_NUMBER $WORKSPACE
 sudo salt-cloud --destroy --assume-yes integration-$JOB_NAME-$BUILD_NUMBER
 mv /srv/salt/jenkins_archives/$JOB_NAME-$BUILD_NUMBER.tar.gz $WORKSPACE/bootstrap-archive-$BUILD_NUMBER.tar.gz

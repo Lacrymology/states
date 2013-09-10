@@ -117,3 +117,17 @@ If you need the OpenSSH compatible public key value, do the following::
   chmod 400 $keyfile.pem
   ssh-keygen -y -f $keyfile.pem
 
+Server Installation
+-------------------
+
+Create a security only for the C.I. server. Allow in SSH, HTTP and HTTPs (if
+you turned on SSL).
+Allow all TCP, UDP and ICMP traffic from security group
+``salt:cloud:providers:amazon_ec2:securitygroup`` in.
+
+Create a VM in the same region and availabilty zone as in
+``salt:cloud:providers:availability_zone:location``. You don't have to use the
+same keypair previously created.
+
+A **t1.micro** instance is probably enough for you.
+

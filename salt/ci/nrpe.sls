@@ -1,4 +1,5 @@
 include:
+{#  - jenkins.nrpe#}
   - rsync.nrpe
   - salt.cloud.nrpe
   - salt.archive.server.nrpe

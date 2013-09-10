@@ -14,7 +14,7 @@ sudo salt -t 86400 "integration-$JOB_NAME-$BUILD_NUMBER" cmd.run "/root/salt/sta
 sudo salt "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "xz /root/salt/*.log" | /usr/local/bin/retcode_check.py
 sudo salt "integration-$JOB_NAME-$BUILD_NUMBER" --output json cp.push /root/salt/stderr.log.xz | /usr/local/bin/retcode_check.py
 sudo /usr/local/bin/import_test_data.py stderr.log.xz integration-$JOB_NAME-$BUILD_NUMBER $WORKSPACE
-xz -d -c $WORKSPACE/$BUILD_NUMBER-stderr.log.xz
+xz -d -c $WORKSPACE/stderr.log.xz
 sudo salt "integration-$JOB_NAME-$BUILD_NUMBER" --output json cp.push /root/salt/stdout.log.xz | /usr/local/bin/retcode_check.py
 sudo /usr/local/bin/import_test_data.py stdout.log.xz integration-$JOB_NAME-$BUILD_NUMBER $WORKSPACE
 sudo salt "integration-$JOB_NAME-$BUILD_NUMBER" --output json cp.push /root/salt/TEST-States.xml | /usr/local/bin/retcode_check.py

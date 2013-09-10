@@ -13,7 +13,12 @@ import json
 import sys
 import os
 
-data = json.load(sys.stdin)
+json_text = sys.stdin.read()
+try:
+    data = json.loads(json_text)
+except ValueError:
+    sys.stderr.write(json_text)
+    sys.exit(1)
 keys = data.keys()
 if len(keys) != 1:
     print 'More than 1 key: %d: %s' % (len(data), keys)

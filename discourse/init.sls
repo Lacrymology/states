@@ -11,6 +11,7 @@ discourse:
 Optional Pillar
 ---------------
 discourse:
+  upload_size: maximum file upload size. Default is: `2m` (this mean 2 megabyte)
   smtp: 
     enabled: False
   ssl: False
@@ -18,7 +19,7 @@ discourse:
     password: password for postgre user
 
 If you set discourse:smtp:enabled is True, you must define:
-discourse
+discourse:
   smtp:
     server: your smtp server. Ex: smtp.yourdomain.com
     port: smtp server port
@@ -46,7 +47,7 @@ include:
   - uwsgi.ruby
   - web
 
-{%- set web_root_dir = "/usr/local/discourse-master" %}
+{%- set web_root_dir = "/usr/local/discourse" %}
 {%- set password = salt['password.pillar']('discourse:database:password', 10) %}
 
 discourse_deps:
@@ -71,8 +72,8 @@ discourse_tar:
     - extracted
     - name: /usr/local/
 {%- if 'files_archive' in pillar %}
-    - source: https://github.com/discourse/discourse/archive/master.tar.gz
-    - source_hash: md5=8061aa8f716e9e264d47a1600174488a
+    - source: http://archive.robotinfra.com/mirror/discourse/df5f9d66e5782159201d62590b4368a59a08885f.tar.gz
+    - source_hash: md5=cc188c7055b1e8a265f7826d03df5970
 {%- else %}
     - source: https://github.com/discourse/discourse/archive/master.tar.gz
     - source_hash: md5=5ea1b394f08131267d92c6bb8f5693e5

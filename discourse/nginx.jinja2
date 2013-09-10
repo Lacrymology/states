@@ -1,7 +1,7 @@
 # {{ pillar['message_do_not_modify'] }}
 
 types {
-    text/csv                    csv;
+  text/csv csv;
 }
 
 upstream discourse {
@@ -13,21 +13,21 @@ server {
 
 {%- if salt['pillar.get']('discourse:ssl', False) %}
 {%- if salt['pillar.get']('discourse:ssl_redirect', False) %}
-    {# if https, redirect http port 80 to https port 443 #}
-    server_name {% for hostname in salt['pillar.get']('discourse:hostnames') %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
-    return 301 https://{{ salt['pillar.get']('discourse:hostnames')[0] }}$request_uri;
+  {# if https, redirect http port 80 to https port 443 #}
+  server_name {% for hostname in salt['pillar.get']('discourse:hostnames') %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+  return 301 https://{{ salt['pillar.get']('discourse:hostnames')[0] }}$request_uri;
 }
 {# https server #}
 server {
 {% endif %}{# redirect http to https #}
-    listen 443 ssl;
-    ssl_certificate /etc/ssl/{{ salt['pillar.get']('discourse:ssl') }}/chained_ca.crt;
-    ssl_certificate_key /etc/ssl/{{ salt['pillar.get']('discourse:ssl') }}/server.pem;
-    ssl_client_certificate /etc/ssl/{{ salt['pillar.get']('discourse:ssl') }}/ca.crt;
-    ssl_ciphers RC4:HIGH:!aNULL:!MD5;
-    ssl_prefer_server_ciphers on;
-    ssl_session_cache shared:SSL:10m;
-    ssl_session_timeout 10m;
+  listen 443 ssl;
+  ssl_certificate /etc/ssl/{{ salt['pillar.get']('discourse:ssl') }}/chained_ca.crt;
+  ssl_certificate_key /etc/ssl/{{ salt['pillar.get']('discourse:ssl') }}/server.pem;
+  ssl_client_certificate /etc/ssl/{{ salt['pillar.get']('discourse:ssl') }}/ca.crt;
+  ssl_ciphers RC4:HIGH:!aNULL:!MD5;
+  ssl_prefer_server_ciphers on;
+  ssl_session_cache shared:SSL:10m;
+  ssl_session_timeout 10m;
 {%- endif %}
 {#- web app logic #}
 
@@ -44,7 +44,7 @@ server {
   {#-
    maximum file upload size (keep up to date when changing the corresponding site setting)
   #}
-  client_max_body_size 2m;
+  client_max_body_size {{ salt['pillar.get']('discourse:upload_size', '2m') }};
 
   {#-
    path to discourse's public directory

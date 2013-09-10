@@ -8,18 +8,5 @@ defaults: &defaults
   db: 0
   cache_db: 2
 
-development:
-  <<: *defaults
-
-profile:
-  <<: *defaults
-
-test:
-  <<: *defaults
-  db: 1
-
-staging:
-  <<: *defaults
-
 production:
   <<: *defaults

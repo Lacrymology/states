@@ -2,12 +2,12 @@
 # {{ pillar['message_do_not_modify'] }}
 cd common
 ./bootstrap_archive.py ../pillar . > /srv/salt/jenkins_archives/$JOB_NAME-$BUILD_NUMBER.tar.gz
-sudo salt-cloud -p hvn-test integration-$JOB_NAME-$BUILD_NUMBER
+sudo salt-cloud -p ci-minion integration-$JOB_NAME-$BUILD_NUMBER
 sudo salt "integration-$JOB_NAME-$BUILD_NUMBER" cp.get_file salt://jenkins_archives/$JOB_NAME-$BUILD_NUMBER.tar.gz /tmp/bootstrap-archive.tar.gz
 sudo salt "integration-$JOB_NAME-$BUILD_NUMBER" archive.tar xzf /tmp/bootstrap-archive.tar.gz cwd=/
 sudo salt "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all /root/salt/states/test/integration.py | /usr/local/bin/retcode_check.py
 sudo salt "integration-$JOB_NAME-$BUILD_NUMBER" pkg.install python-xmlrunner
-sudo salt "integration-$JOB_NAME-$BUILD_NUMBER" cmd.run "/root/salt/states/test/integration.py States.test_vim > /root/salt/stdout.log 2> /root/salt/stderr.log"
+sudo salt "integration-$JOB_NAME-$BUILD_NUMBER" cmd.run "/root/salt/states/test/integration.py $* > /root/salt/stdout.log 2> /root/salt/stderr.log"
 sudo salt "integration-$JOB_NAME-$BUILD_NUMBER" service.restart salt-minion
 sleep 15
 sudo salt "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "xz /root/salt/*.log" | /usr/local/bin/retcode_check.py

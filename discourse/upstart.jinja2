@@ -10,16 +10,13 @@ stop on runlevel [!2345]
 
 chdir {{ web_root_dir }}
 
-setuid discourse
-setgid discourse
-
-env RAILS_ENV="production"
-env PIDFILE="{{ web_root_dir }}/tmp/pids/sidekiq.pid"
+setuid root
+setgid root
 
 post-start script
-  exec bundle exec sidekiq -L {{ web_root_dir }}/log/sidekiq.log -d
+  exec bundle exec sidekiq -e production -P /var/run/sidekiq.pid >> /var/log/sidekiq.log 2>&1 &
 end script
 
 post-stop script
-  exec bundle exec sidekiqctl stop {{ web_root_dir }}/tmp/pids/sidekiq.pid
+  exec bundle exec sidekiqctl stop /var/run/sidekiq.pid
 end script

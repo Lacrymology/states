@@ -216,12 +216,10 @@ discourse_bundler:
 discourse_upstart:
   cmd:
     - run
-    - name: bundle exec sidekiq -L {{ web_root_dir }}/log/sidekiq.log -d
-    - env:
-        RAILS_ENV: production
-        PIDFILE: {{ web_root_dir }}/tmp/pids/sidekiq.pid
-    - user: discourse
+    - name: bundle exec sidekiq -e production -P /var/run/sidekiq.pid >> /var/log/sidekiq.log 2>&1 &
+    - user: root
     - cwd: {{ web_root_dir }}
+    - unless: ps -ef | grep side | grep -v grep
     - require:
       - file: /etc/uwsgi/discourse.ini
   file:

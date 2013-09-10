@@ -76,7 +76,7 @@ extend:
     - directory
     - user: jenkins
     - group: root
-    - mode: 550
+    - mode: 750
     - require:
       - pkg: jenkins
       - file: /srv/salt

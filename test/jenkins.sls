@@ -1,6 +1,10 @@
 include:
   - salt.minion.patch.0_15_3
 
+patch:
+  pkg:
+    - installed
+
 salt-minion:
   module:
     - run
@@ -21,3 +25,9 @@ unittest-xml-reporting:
     - installed
     - require:
       - pkg: python-pip
+
+extend:
+  salt-common-modules-cp:
+    file:
+      - require:
+        - pkg: patch

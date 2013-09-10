@@ -129,5 +129,6 @@ Create a VM in the same region and availabilty zone as in
 ``salt:cloud:providers:availability_zone:location``. You don't have to use the
 same keypair previously created.
 
-A **t1.micro** instance is probably enough for you.
+A **t1.micro** instance is not enough for you, as salt-cloud leak memory you
+you should take a **m1.medium**.
 

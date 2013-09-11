@@ -1,0 +1,11 @@
+--- salt/modules/cp.orig	2013-09-07 12:23:55.866392441 +0000
++++ salt/modules/cp.py	2013-06-03 02:08:11.000000000 +0000
+@@ -395,7 +395,7 @@
+     path = os.path.realpath(path)
+     if not os.path.isfile(path):
+         return False
++    auth = _auth()
+-    auth = auth()
+
+     load = {'cmd': '_file_recv',
+             'id': __opts__['id'],

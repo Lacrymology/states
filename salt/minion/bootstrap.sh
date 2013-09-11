@@ -6,17 +6,13 @@ if [ -d /root/salt/states/salt/minion ]; then
 else
     LOCAL_MODE=0
 fi
-USAGE="Usage: bootstrap.sh minion-id master-host-or-addr"
-CONFIG=/etc/salt/minion
 
 if [ -z "$1" ]; then
-    echo "Missing argument Minion ID"
-    echo $USAGE
+    echo "Usage: bootstrap.sh minion-id"
     exit 1
 fi
 if [ $LOCAL_MODE -eq 0 ] && [ -z "$2" ]; then
-    echo "Missing argument Master IP/hostname"
-    echo $USAGE
+    echo "Usage: bootstrap.sh minion-id master-host-or-addr"
     exit 1
 fi
 
@@ -33,23 +29,14 @@ apt-get update
 apt-get install -y --force-yes salt-minion
 # end of section
 
-# create salt minion config
-echo """id: $1
-log_level: debug""" > $CONFIG
-
 if [ $LOCAL_MODE -eq 1 ]; then
     echo "Salt master-less (local) mode"
-    echo """master: 127.0.0.1
-mysql.default_file: '/etc/mysql/debian.cnf'
-file_client: local
-file_roots:
-   base:
-     - /root/salt/states
-pillar_roots:
-  base:
-    - /root/salt/pillar""" >> $CONFIG
+    echo $1 > /etc/hostname
+    hostname `cat /etc/hostname`
     salt-call saltutil.sync_all
 else
-    echo "master: $2" >> $CONFIG
+    echo """id: $1
+log_level: debug
+master: $2""" > /etc/salt/minion
     restart salt-minion
 fi

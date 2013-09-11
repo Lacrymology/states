@@ -1,4 +1,5 @@
 # {{ pillar['message_do_not_modify'] }}
+# {{ pillar['message_do_not_modify'] }}
 {%- for host in salt['pillar.get']('denyhosts:whitelist', []) %}
 {{ host }}
 {%- endfor %}
@@ -6,3 +7,4 @@
 {%- for host in pillar['shinken_pollers']|default([]) %}
 {{ host }}
 {%- endfor %}
+127.0.0.1

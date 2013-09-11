@@ -1,10 +1,13 @@
 {#
- Diamond statistics for Carbon
+ Diamond statistics for moinmoin
 #}
 include:
   - diamond
+  - rsyslog.diamond
+  - nginx.diamond
+  - uwsgi.diamond
 
-diamond-carbon:
+uwsgi_diamond_moinmoin_resources:
   file:
     - accumulated
     - name: processes
@@ -13,5 +16,5 @@ diamond-carbon:
       - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
     - text:
       - |
-        [[carbon]]
-        cmdline = ^\/usr\/local\/graphite\/bin\/python \/usr\/local\/graphite\/bin\/carbon\-cache\.py.+start$
+        [[uwsgi.moinmoin]]
+        cmdline = ^moinmoin-(worker|master)$

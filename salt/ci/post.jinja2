@@ -1,0 +1,6 @@
+#!/bin/bash
+# {{ pillar['message_do_not_modify'] }}
+set -e
+set -x
+sudo salt-cloud --destroy --assume-yes integration-$JOB_NAME-$BUILD_NUMBER
+rm -f /srv/salt/jenkins_archives/$JOB_NAME-$BUILD_NUMBER.tar.gz

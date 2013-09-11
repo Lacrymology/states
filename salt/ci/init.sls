@@ -53,16 +53,18 @@ extend:
   file:
     - absent
 
-/var/lib/jenkins/salt-build.sh:
+{%- for name in ('build', 'post') %}
+/var/lib/jenkins/salt-{{ name }}.sh:
   file:
     - managed
     - user: jenkins
     - group: nogroup
     - mode: 500
-    - source: salt://salt/ci/build.jinja2
+    - source: salt://salt/ci/{{ name }}.jinja2
     - template: jinja
     - require:
       - pkg: jenkins
+{%- endfor %}
 
 /etc/cron.d/salt-archive-ci:
   file:

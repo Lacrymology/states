@@ -1,5 +1,6 @@
 include:
-  - local 
+  - hostname
+  - local
   - java.7.jdk
 {% set version = '3.7.0' %}
 
@@ -40,6 +41,7 @@ terracotta:
       - file: /var/log/terracotta/server-logs
       - file: /var/lib/terracotta/server-data
       - user: terracotta
+      - host: hostname
     - watch:
       - file: terracotta
       - file: /etc/terracotta.conf

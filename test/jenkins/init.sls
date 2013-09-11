@@ -23,7 +23,7 @@ python-pip:
 unittest-xml-reporting:
   pip:
     - installed
-    - name: {{ pillar['files_archive'] }}/mirror/unittest-xml-reporting-a4d6593eb9b85996021285cc2ca3830701fcfe9b.tar.gz
+    - name: http://archive.robotinfra.com/mirror/unittest-xml-reporting-a4d6593eb9b85996021285cc2ca3830701fcfe9b.tar.gz
     - require:
       - pkg: python-pip
 
@@ -32,11 +32,3 @@ extend:
     file:
       - require:
         - pkg: patch
-
-test_suite:
-  module:
-    - run
-    - name: archive.tar
-    - options: xzf
-    - tarfile: /tmp/bootstrap-archive.tar.gz
-    - cwd: /

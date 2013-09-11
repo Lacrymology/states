@@ -6,6 +6,7 @@ include:
   - diamond
   - nginx.diamond
   - postgresql.server.diamond
+  - uwsgi.diamond
 
 openerp_diamond_resources:
   file:
@@ -16,6 +17,6 @@ openerp_diamond_resources:
       - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
     - text:
       - |
-        [[openerp]]
-        exe = ^\/usr\/bin\/openerp\-server$
+        [[uwsgi.openerp]]
+        cmdline = ^openerp-(worker|master)$
 

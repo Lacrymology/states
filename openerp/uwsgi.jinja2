@@ -1,0 +1,50 @@
+# {{ pillar['message_do_not_modify'] }}
+{%- set web = salt['pillar.get']('openerp') %}
+[uwsgi]
+
+master = true
+wsgi-file = {{ web_root_dir }}/openerp.wsgi
+processes = {{ web['workers']|default(2) }}
+harakiri = {{ web['timeout']|default(30) }}
+harakiri-verbose = true
+{%- if web['cheaper']|default(False) %}
+{%- if web['cheaper'] > 0 %}
+cheaper = {{ web['cheaper'] }}
+{%- else %}
+cheap = true
+{%- endif %}
+
+{%- if web['workers'] == 1 and web['cheaper'] == 0 %}
+idle = {{ web['idle']|default(300) }}
+{%- endif %}
+{%- endif %}
+{%- if grains['virtual'] == 'kvm' and salt['file.file_exists']('/sys/kernel/mm/ksm/run') %}
+ksm = 20
+{%- endif %}
+
+lazy-apps = true
+uid = openerp
+gid = openerp
+threaded-logger = true
+virtualenv = {{ web_root_dir }}
+chdir = {{ web_root_dir }}/openerp
+
+procname = openerp-worker
+procname-master = openerp-master
+socket = /var/lib/uwsgi/openerp.sock
+stats = /var/lib/uwsgi/openerp-stats.sock
+no-orphans = true
+
+{%- if 'graylog2_address' in pillar %}
+logger = graylog2:{{ salt['pillar.get']('graylog2_address') }}:12201,{{ grains['id'] }}
+{%- else %}
+log-syslog = uwsgi-openerp
+{%- endif %}
+
+{%- if 'graphite_address' in pillar %}
+carbon-id = openerp
+carbon = {{ salt['pillar.get']('graphite_address') }}:2003
+{%- endif %}
+
+chmod-socket = 775
+chown-socket = openerp:openerp

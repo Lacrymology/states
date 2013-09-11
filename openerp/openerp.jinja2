@@ -1,0 +1,34 @@
+# {{ pillar['message_do_not_modify'] }}
+
+import os, sys
+full_path = os.path.realpath(__file__)
+current_dir = os.path.dirname(full_path) + "/"
+sys.path.append(current_dir)
+
+import openerp
+
+openerp.conf.server_wide_modules = ['web']
+openerp.service.wsgi_server
+
+conf = openerp.tools.config
+
+conf['addons_path'] = '{{ web_root_dir }}/openerp/addons/'
+
+conf['db_host'] = 'localhost'
+conf['db_user'] = 'openerp'
+conf['db_port'] = 5432
+conf['db_password'] = '{{ password }}'
+
+{#-
+ OpenERP Log Level
+ DEBUG=10, DEBUG_RPC=8, DEBUG_RPC_ANSWER=6, DEBUG_SQL=5, INFO=20,
+ WARNING=30, ERROR=40, CRITICAL=50
+#}
+conf['log_level'] = 10
+
+{#-
+ If --static-http-enable is used, path for the static web directory
+#}
+conf['static_http_document_root'] = '{{ web_root_dir }}/openerp'
+
+application = openerp.service.wsgi_server.application

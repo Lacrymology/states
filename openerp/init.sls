@@ -1,100 +1,185 @@
-{#-
-Installing OpenERP
-==================
+{#- 
+Install OpenERP
+===============
+
 
 Mandatory Pillar
 ----------------
-openerp:  
-  hostnames:
-    - localhost       # list of hostname, used for nginx config
+openerp:
+  hostnames: 
+    - list of hostname, used for nginx config
 
 Optional Pillar
 ---------------
-
 openerp:
-  ssl: False            # Enable SSL
+  ssl: - enable ssl. Default: False
   database:
-    host: 127.0.0.1     # if run postgresql in local
-    port: 5432          # Default port for postgresql server
-    user: openerp       
-    password: postgres_user_password 
--#}
+    password: password for postgres user
+
+#}
+
 include:
+  - apt
+  - build
   - nginx
-  - pip  
+  - pip
   - postgresql.server
   - python.dev
 {%- if pillar['openerp']['ssl']|default(False) %}
   - ssl
 {%- endif %}
   - underscore
+  - uwsgi
+  - virtualenv
+  - web
 
-{%- set version = "6.1" %}
+{%- set web_root_dir = "/usr/local/openerp" %}
 {%- set password = salt['password.pillar']('openerp:database:password', 10)  %}
-openerp-server:
+
+openerp_depends:
   pkg:
     - installed
-    - name: openerp{{ version }}-full
+    - pkgs:
+      - python-libxslt1
     - require:
+      - cmd: apt_sources
+      - pkg: build
       - pkg: libjs-underscore
-      - service: postgresql
-      - pip: openerp-server
   file:
     - managed
-    - name: /etc/openerp/openerp-server.conf
-    - source: salt://openerp/config.jinja2
-    - user: openerp
-    - group: openerp
-    - mode: 440
-    - context:
-      password: {{ password }}
+    - name: {{ web_root_dir }}/salt-openerp-requirements.txt
     - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - source: salt://openerp/requirements.jinja2
     - require:
-      - pkg: openerp-server
-  service:
-    - running
-    - name: openerp-server
-    - enable: True
-    - order: 50
+      - file: /usr/local
+  module:
+    - wait
+    - name: pip.install
+    - upgrade: True
+    - bin_env: {{ web_root_dir }}/bin/pip
+    - requirements: {{ web_root_dir }}/salt-openerp-requirements.txt
+    - install_options:
+      - "--prefix={{ web_root_dir }}"
+      - "--install-lib={{ web_root_dir }}/lib/python{{ grains['pythonversion'][0] }}.{{ grains['pythonversion'][1] }}/site-packages"
     - require:
-      - pkg: openerp-server
+      - virtualenv: openerp
     - watch:
-      - file: openerp-server
+      - file: openerp_depends
+      - pkg: python-dev
+  cmd:
+    - wait
+    - name: find ./ -name '*.pyc' -delete
+    - cwd: {{ web_root_dir }}
+    - stateful: False
+    - user: root
+    - watch:
+      - module: openerp_depends
+
+openerp:
+  user:
+    - present
+    - shell: /bin/false
+    - home: {{ web_root_dir }}
+    - groups:
+      - www-data
+    - require:
+      - user: web
+      - file: /usr/local
+  virtualenv:
+    - managed
+    - name: {{ web_root_dir }}
+    - require:
+      - user: openerp
+      - module: virtualenv
   postgres_user:
     - present
     - name: openerp
     - password: {{ password }}
+    - createdb: True
     - require:
-      - pkg: openerp-server
       - service: postgresql
-    - watch_in:
-      - service: openerp-server
-  pip:
-    - installed
-    - name: pil
+  file:
+    - directory
+    - name: {{ web_root_dir }}
+    - user: openerp
+    - group: openerp
+    - recurse:
+      - user
+      - group
     - require:
-      - pkg: python-dev
-      - module: pip
+      - user: openerp
+      - cmd: openerp_depends
+      - module: openerp_depends
+
+{{ web_root_dir }}/openerp.wsgi:
+  file:
+    - managed
+    - user: openerp
+    - group: openerp
+    - mode: 440
+    - template: jinja
+    - source: salt://openerp/openerp.jinja2
+    - require:
+      - file: openerp
+      - postgres_user: openerp
+    - context:
+      password: {{ password }}
+      web_root_dir: {{ web_root_dir }}
+
+add_web_user_to_openerp_group:
+  user:
+    - present
+    - name: www-data
+    - groups:
+      - openerp
+    - require:
+      - user: web
+      - user: openerp
+
+/etc/uwsgi/openerp.ini:
+  file:
+    - managed
+    - template: jinja
+    - source: salt://openerp/uwsgi.jinja2
+    - user: www-data
+    - group: www-data
+    - mode: 440
+    - require:
+      - file: {{ web_root_dir }}/openerp.wsgi
+      - user: add_web_user_to_openerp_group
+      - service: uwsgi_emperor
+    - context:
+      web_root_dir: {{ web_root_dir }}
+  module:
+    - wait
+    - name: file.touch
+    - m_name: /etc/uwsgi/openerp.ini
+    - require:
+      - file: openerp
+    - watch:
+      - file: {{ web_root_dir }}/openerp.wsgi
+      - module: openerp_depends
 
 /etc/nginx/conf.d/openerp.conf:
   file:
     - managed
     - source: salt://openerp/nginx.jinja2
-    - user: www-data
-    - group: www-data
-    - mode: 440
     - template: jinja
+    - group: www-data
+    - user: www-data
+    - mode: 440
     - require:
-      - service: openerp-server
+      - pkg: nginx
+      - file: /etc/uwsgi/openerp.ini
+{%- if salt['pillar.get']('openerp:ssl', False) %}
+      - cmd: /etc/ssl/{{ salt['pillar.get']('openerp:ssl') }}/chained_ca.crt
+      - module: /etc/ssl/{{ salt['pillar.get']('openerp:ssl') }}/server.pem
+      - file: /etc/ssl/{{ salt['pillar.get']('openerp:ssl') }}/ca.crt
+{%- endif %}
     - watch_in:
       - service: nginx
-
-{%- if pillar['openerp']['ssl']|default(False) %}
-extend:
-  nginx:
-    service:
-      - watch:
-        - cmd: /etc/ssl/{{ pillar['openerp']['ssl'] }}/chained_ca.crt
-        - module: /etc/ssl/{{ pillar['openerp']['ssl'] }}/server.pem
-        - file: /etc/ssl/{{ pillar['openerp']['ssl'] }}/ca.crt
-{%- endif %}
+    - context:
+      web_root_dir: {{ web_root_dir }}

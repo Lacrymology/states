@@ -2,7 +2,7 @@
 Remove Nagios NRPE check for OpenERP
 #}
 
-/etc/nagios/nrpe.d/openerp-server.cfg:
+/etc/nagios/nrpe.d/openerp.cfg:
   file:
     - absent
 

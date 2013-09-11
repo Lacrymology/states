@@ -2,31 +2,23 @@
 Uninstall OpenERP
 =================
 #}
-{%- set version = "6.1" %}
+{%- set web_root_dir = "/usr/local/openerp" %}
 
-openerp{{ version }}-core:
-  pkg:
-    - purged
+openerp:
+  group:
+    - absent
     - require:
-      - service: openerp-server
-
-openerp-server:
-  pkg:
-    - purged
-    - name: openerp{{ version }}-full
-    - require:
-      - service: openerp-server
-  service:
-    - dead
+      - user: openerp
   user:
     - absent
     - name: openerp
     - force: True
   file:
     - absent
+    - name: {{ web_root_dir }}
     - name: /etc/openerp
 
-{%- for file in ('/etc/nginx/conf.d/openerp.conf', '/var/log/nginx/openerp_access.log', '/var/log/openerp-server.log') %}
+{%- for file in ('/etc/nginx/conf.d/openerp.conf', '/etc/uwsgi/openerp.ini') %}
 {{ file }}:
   file:
     - absent

@@ -1,10 +1,11 @@
 {#
- Diamond statistics for backup client
+ Diamond statistics for s3cmd
 #}
+
 include:
   - diamond
 
-backup_diamond_resources:
+s3cmd_diamond_resources:
   file:
     - accumulated
     - name: processes
@@ -13,5 +14,5 @@ backup_diamond_resources:
       - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
     - text:
       - |
-        [[backup]]
-        cmdline = ^\/usr\/local\/bin\/backup_
+        [[s3cmd]]
+        cmdline = ^\/usr\/bin\/python \/usr\/local\/local\/bin\/s3cmd

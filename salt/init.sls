@@ -37,3 +37,5 @@ salt:
   pkg:
     - installed
     - name: salt-common
+    - require:
+      - apt_repository: salt

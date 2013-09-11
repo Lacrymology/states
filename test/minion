@@ -1,0 +1,11 @@
+# minion configuration used during tests
+master: 127.0.0.1
+log_level: debug
+mysql.default_file: '/etc/mysql/debian.cnf'
+file_client: local
+file_roots:
+   base:
+     - /root/salt/states
+pillar_roots:
+  base:
+    - /root/salt/pillar

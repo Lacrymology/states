@@ -1,6 +1,8 @@
 {#
  Remove Poor man backup client NRPE check
  #}
+include:
+  - backup.absent
 
 {% if salt['pillar.get']('backup_server:address', False) %}
 backup-client:

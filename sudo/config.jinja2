@@ -17,7 +17,7 @@ root ALL=(ALL:ALL) ALL
 
 {#- ubuntu user is default user in ec2-images.
     It needs passwordless sudo functionality. -#}
-{%- if salt['grains.get']('availabilityZone', False) in grains %}
+{%- if 'availabilityZone' in grains %}
 ubuntu ALL=(ALL) NOPASSWD:ALL
 {%- endif -%}
 

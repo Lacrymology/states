@@ -85,12 +85,6 @@ def main():
     tar.add(os.path.join(common_root, 'salt', 'master', 'top.jinja2'),
             'root/salt/states/top.sls')
 
-    # symlinks
-    add_symlink(tar, os.path.join('/root', 'salt', 'states', 'test',
-                                  'integration.py'), 'usr/bin/integration')
-    add_symlink(tar, os.path.join('/root', 'salt', 'states', 'salt', 'minion',
-                                  'bootstrap.sh'), 'usr/bin/bootstrap')
-
     tar.close()
 
 if __name__ == '__main__':

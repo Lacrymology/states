@@ -219,6 +219,8 @@ discourse_upstart:
     - run
     - name: bundle exec sidekiq -e production -P /var/run/sidekiq.pid >> /var/log/sidekiq.log 2>&1 &
     - user: root
+    - env:
+        RUBY_GC_MALLOC_LIMIT: "90000000"
     - cwd: {{ web_root_dir }}
     - unless: ps -ef | grep side | grep -v grep
     - require:

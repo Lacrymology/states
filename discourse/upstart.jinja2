@@ -13,6 +13,9 @@ chdir {{ web_root_dir }}
 setuid root
 setgid root
 
+env RAILS_ENV="production"
+env RUBY_GC_MALLOC_LIMIT="90000000"
+
 post-start script
   exec bundle exec sidekiq -e production -P /var/run/sidekiq.pid >> /var/log/sidekiq.log 2>&1 &
 end script

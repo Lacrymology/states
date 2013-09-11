@@ -51,6 +51,10 @@ extend:
 
 /var/lib/jenkins/salt-build.sh:
   file:
+    - absent
+
+/var/lib/jenkins/salt-build.sh:
+  file:
     - managed
     - user: jenkins
     - group: nogroup

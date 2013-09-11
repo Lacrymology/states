@@ -27,6 +27,10 @@ except ImportError:
     import unittest
 import sys
 import os
+try:
+    import xmlrunner
+except ImportError:
+    xmlrunner = None
 
 import yaml
 
@@ -93,7 +97,7 @@ def setUpModule():
         # after running saltutil.sync_all, exit after doing it.
         client('saltutil.sync_all')
         logger.warning("Please re-execute: '%s'", ' '.join(sys.argv))
-        sys.exit(1)
+        sys.exit(0)
 
     def check_error(changes):
         """
@@ -502,4 +506,8 @@ if __name__ == '__main__':
     if '--list' in sys.argv:
         States.list_tests()
     else:
-        unittest.main()
+        if xmlrunner is not None:
+            unittest.main(testRunner=xmlrunner.XMLTestRunner(
+                output='/root/salt', outsuffix='salt'))
+        else:
+            unittest.main()

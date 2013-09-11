@@ -49,7 +49,7 @@ extend:
     - require:
       - pkg: sudo
 
-/var/lib/jenkins/salt-build.sh:
+/var/lib/jenkins/salt-test.sh:
   file:
     - absent
 

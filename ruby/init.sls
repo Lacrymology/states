@@ -8,7 +8,7 @@ include:
 old_ruby:
   pkg:
     - purged
-    - names:
+    - pkgs:
       - ruby1.8
       - rubygems
       - rake
@@ -20,7 +20,7 @@ old_ruby:
 ruby:
   pkg:
     - installed
-    - names:
+    - pkgs:
       - ruby1.9.3
       - ruby1.9.1-dev
     - require:

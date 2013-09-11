@@ -10,7 +10,7 @@ postgresql:
 {% else %}
     - removed
 {% endif %}
-    - names:
+    - pkgs:
       - postgresql-{{ version }}
       - postgresql-client-{{ version }}
     - require:

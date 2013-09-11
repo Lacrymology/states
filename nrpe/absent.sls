@@ -8,7 +8,7 @@
 nagios-nrpe-server:
   pkg:
     - purged
-    - names:
+    - pkgs:
       - nagios-nrpe-server
       - nagios-plugins-standard
       - nagios-plugins-basic

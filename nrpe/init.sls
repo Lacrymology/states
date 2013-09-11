@@ -64,7 +64,7 @@ nrpe-virtualenv:
 nagios-plugins:
   pkg:
     - installed
-    - names:
+    - pkgs:
       - nagios-plugins-standard
       - nagios-plugins-basic
 

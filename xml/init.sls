@@ -4,7 +4,7 @@ include:
 xml-dev:
   pkg:
     - installed
-    - names:
+    - pkgs:
       - libxslt1-dev
       - libxml2-dev
     - require:

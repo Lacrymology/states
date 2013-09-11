@@ -33,13 +33,6 @@ proxy_server: If True, the specific HTTP proxy server (without authentication)
     - mode: 444
     - template: jinja
 
-{% for pkg in ('debconf-utils', 'python-apt', 'python-software-properties') %}
-{{ pkg }}:
-  pkg:
-    - installed
-    - require:
-      - cmd: apt_sources
-{% endfor %}
 
 {% set backup = '/etc/apt/sources.list.salt-backup' %}
 
@@ -59,6 +52,14 @@ apt_sources:
 {% if salt['file.file_exists'](backup) %}
       - file: apt_sources_backup
 {% endif %}
+  pkg:
+    - installed
+    - pkgs:
+        - debconf-utils
+        - python-apt
+        - python-software-properties
+    - require:
+      - cmd: apt_sources
 {#
   cmd.wait is used instead of:
 
@@ -88,7 +89,7 @@ apt_sources_backup:
 apt_cleanup:
   pkg:
     - purged
-    - names:
+    - pkgs:
       - acpid
       - eject
       - hdparm

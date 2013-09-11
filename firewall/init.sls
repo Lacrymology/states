@@ -49,7 +49,7 @@ iptables:
       - pkg: iptables
   pkg:
     - installed
-    - names:
+    - pkgs:
       - iptables
       - iptstate
       - iptables-persistent

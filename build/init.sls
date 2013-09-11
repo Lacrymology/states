@@ -10,7 +10,7 @@ include:
 build:
   pkg:
     - installed
-    - names:
+    - pkgs:
       - g++
       - gcc
       - make

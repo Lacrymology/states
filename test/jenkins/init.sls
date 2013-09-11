@@ -32,11 +32,3 @@ extend:
     file:
       - require:
         - pkg: patch
-
-test_suite:
-  module:
-    - run
-    - name: archive.tar
-    - options: xzf
-    - tarfile: /tmp/bootstrap-archive.tar.gz
-    - cwd: /

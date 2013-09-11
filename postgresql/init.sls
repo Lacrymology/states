@@ -5,7 +5,7 @@ postgresql-dev:
   pkgrepo:
     - managed
 {%- if 'files_archive' in pillar %}
-    - name: deb {{ pillar['files_archive'] }}/mirror/postgresql/ {{ grains['lsb_codename'] }} main
+    - name: deb {{ pillar['files_archive'] }}/mirror/postgresql/ {{ grains['lsb_distrib_codename'] }} main
     - keyid: 8683D8A2
     - keyserver: keyserver.ubuntu.com
 {%- else %}

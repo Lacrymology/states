@@ -17,7 +17,7 @@ postgresql-dev:
   pkgrepo:
     - absent
 {%- if 'files_archive' in pillar %}
-    - name: deb {{ pillar['files_archive'] }}/mirror/postgresql/ {{ grains['lsb_codename'] }} main
+    - name: deb {{ pillar['files_archive'] }}/mirror/postgresql/ {{ grains['lsb_distrib_codename'] }} main
 {%- else %}
     - ppa: pitti/postgresql
 {%- endif %}

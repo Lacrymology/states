@@ -12,7 +12,7 @@ mariadb:
   pkgrepo:
     - absent
 {%- if 'files_archive' in pillar %}
-    - name: deb {{ pillar['files_archive'] }}/mirror/mariadb/5.5.31 {{ grains['lsb_codename'] }} main
+    - name: deb {{ pillar['files_archive'] }}/mirror/mariadb/5.5.31 {{ grains['lsb_distrib_codename'] }} main
 {%- else %}
     - name: deb http://repo.maxindo.net.id/mariadb/repo/5.5/ubuntu precise main
 {%- endif %}

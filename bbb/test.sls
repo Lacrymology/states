@@ -1,5 +1,5 @@
 {#- BBB don't work on != lucid -#}
-{%- if grains['lsb_codename'] == 'lucid' %}
+{%- if grains['lsb_distrib_codename'] == 'lucid' %}
 include:
   - bbb
 

@@ -75,7 +75,7 @@ Good::
     salt:
       file:
         - absent
-        - name: /etc/apt/sources.list.d/saltstack-salt-{{ grains['lsb_release'] }}.list
+        - name: /etc/apt/sources.list.d/saltstack-salt-{{ grains['lsb_distrib_release'] }}.list
 
 Bad::
 

@@ -203,7 +203,7 @@ def ubuntu_ppa(user, name, key_id, source=False, distribution=None):
     address = 'http://ppa.launchpad.net/{0}/{1}/ubuntu'.format(user, name)
     filename = '{0}-{1}-{2}'.format(
         user, name,
-        __salt__['grains.item']('lsb_codename')['lsb_codename']
+        __salt__['grains.item']('lsb_distrib_codename')['lsb_distrib_codename']
     )
     return present(address, ('main',), distribution, source, key_id,
                    'keyserver.ubuntu.com', True, filename)

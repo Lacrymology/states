@@ -1,4 +1,4 @@
-{%- if grains['lsb_codename'] == 'lucid' %}
+{%- if grains['lsb_distrib_codename'] == 'lucid' %}
 include:
   - apt
   - bbb.redis
@@ -21,7 +21,7 @@ libreoffice:
     - address: http://ppa.launchpad.net/libreoffice/libreoffice-4-0/ubuntu
     - components:
       - main
-    - distribution: {{ grains['lsb_codename'] }}
+    - distribution: {{ grains['lsb_distrib_codename'] }}
     - key_id: 1378B444
     - key_server: keyserver.ubuntu.com
   pkg:
@@ -84,7 +84,7 @@ bigbluebutton:
   pkgrepo:
     - managed
     - key_url: http://ubuntu.bigbluebutton.org/bigbluebutton.asc
-    - name: deb http://ubuntu.bigbluebutton.org/lucid_dev_081/ bigbluebutton-{{ grains['lsb_codename'] }} main
+    - name: deb http://ubuntu.bigbluebutton.org/lucid_dev_081/ bigbluebutton-{{ grains['lsb_distrib_codename'] }} main
     - file: /etc/apt/sources.list.d/bigbluebutton.list
     - require:
       - pkg: python-apt

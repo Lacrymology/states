@@ -2,3 +2,5 @@
 # {{ pillar['message_do_not_modify'] }}
 
 /usr/local/bin/backup-postgresql gitlab
+tar czvf /tmp/gitlab_backup.tar.gz ~git/repositories ~git/.ssh/ ~git/gitlab-satellites
+/usr/local/bin/backup_store /tmp/gitlab_backup.tar.gz

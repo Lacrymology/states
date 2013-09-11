@@ -7,6 +7,7 @@ terracotta:
       - service: terracotta
   service:
     - dead
+    - order: first
   user:
     - absent
     - require:
@@ -20,6 +21,18 @@ terracotta:
       - service: terracotta
 
 /etc/terracotta.conf:
+  file:
+    - absent
+    - require:
+      - service: terracotta
+
+/var/lib/terracotta:
+  file:
+    - absent
+    - require:
+      - service: terracotta
+
+/var/log/terracotta:
   file:
     - absent
     - require:

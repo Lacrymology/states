@@ -4,4 +4,4 @@ set -e
 set -x
 sudo salt-cloud --destroy --assume-yes integration-$JOB_NAME-$BUILD_NUMBER
 rm -f /srv/salt/jenkins_archives/$JOB_NAME-$BUILD_NUMBER.tar.gz
-rm -rf /var/cache/salt/master/minions/integration-$JOB_NAME-$BUILD_NUMBER
+sudo salt `hostname` file.remove /var/cache/salt/master/minions/integration-$JOB_NAME-$BUILD_NUMBER

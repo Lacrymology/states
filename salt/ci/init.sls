@@ -49,13 +49,13 @@ extend:
     - require:
       - pkg: sudo
 
-/var/lib/jenkins/salt-test.sh:
+/var/lib/jenkins/salt-build.sh:
   file:
     - managed
     - user: jenkins
     - group: nogroup
     - mode: 500
-    - source: salt://salt/ci/test.jinja2
+    - source: salt://salt/ci/build.jinja2
     - template: jinja
     - require:
       - pkg: jenkins

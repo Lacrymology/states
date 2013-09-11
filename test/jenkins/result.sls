@@ -20,7 +20,7 @@ test_result:
   module:
     - run
     - name: cp.push
-    - path: /root/salt/{{ type }}.log
+    - path: /root/salt/{{ type }}.log.xz
     - require:
       - cmd: {{ type }}
 {%- endfor %}

@@ -37,7 +37,7 @@ import yaml
 # until https://github.com/saltstack/salt/issues/4994 is fixed this is
 # required there
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG,
-                    format="%(message)s")
+                    format="%(asctime)s %(message)s")
 
 import salt.client
 

@@ -166,9 +166,10 @@ ssl-cert:
     - contents: |
         {{ pillar['ssl'][name][pillar_key] | indent(8) }}
     - user: root
-    - group: root
-    - mode: 444
+    - group: ssl-cert
+    - mode: 440
     - require:
+      - pkg: ssl-cert
       - file: /etc/ssl/{{ name }}
 {% endfor %}
 

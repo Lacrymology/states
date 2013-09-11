@@ -2,7 +2,7 @@
 # {{ pillar['message_do_not_modify'] }}
 set -e
 set -x
-rm -f $WORKSPACE/bootstrap-archive.tar.gz $WORKSPACE/stderr.log.xz $WORKSPACE/stdout.log.xz	$WORKSPACE/TEST-States-salt.xml
+rm -f $WORKSPACE/bootstrap-archive.tar.gz $WORKSPACE/stderr.log.xz $WORKSPACE/stdout.log.xz	$WORKSPACE/result.xml
 cd common
 ./bootstrap_archive.py ../pillar ../non-common > /srv/salt/jenkins_archives/$JOB_NAME-$BUILD_NUMBER.tar.gz
 sudo salt-cloud -p ci-minion integration-$JOB_NAME-$BUILD_NUMBER

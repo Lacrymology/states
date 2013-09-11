@@ -3,7 +3,7 @@
 #}
 include:
   - diamond
-  - gsyslog.diamond
+  - rsyslog.diamond
 
 nginx_diamond_resources:
   file:

@@ -4,7 +4,7 @@
 include:
   - diamond
   - nginx.diamond
-  - gsyslog.diamond
+  - rsyslog.diamond
 
 shinken_broker_diamond_resources:
   file:

@@ -45,8 +45,8 @@ include:
   - python.dev
   - local
   - virtualenv
-  - gsyslog
-  - gsyslog.diamond
+  - rsyslog
+  - rsyslog.diamond
 {% if 'shinken_pollers' in pillar %}
   - diamond.nrpe
 {% endif %}
@@ -137,7 +137,7 @@ diamond:
     - enable: True
     - order: 50
     - require:
-      - service: gsyslog
+      - service: rsyslog
     - watch:
       - virtualenv: diamond
       - file: diamond

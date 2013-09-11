@@ -1,0 +1,2 @@
+{%- from 'uwsgi/monitor_template.jinja2' import monitor  %}
+{{ monitor('moinmoin', check_postgresql=False) }}

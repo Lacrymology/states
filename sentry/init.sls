@@ -18,7 +18,7 @@ include:
   - python.dev
   - apt
   - memcache
-  - gsyslog
+  - rsyslog
 {% if pillar['sentry']['ssl']|default(False) %}
   - ssl
 {% endif %}
@@ -130,7 +130,7 @@ sentry-syncdb-all:
     - require:
       - module: sentry
       - file: sentry_settings
-      - service: gsyslog
+      - service: rsyslog
     - watch:
       - postgres_database: sentry
 
@@ -154,7 +154,7 @@ sentry-migrate-fake:
       - service: memcached
       - service: uwsgi_emperor
       - cmd: sentry_settings
-      - service: gsyslog
+      - service: rsyslog
   module:
     - wait
     - name: file.touch

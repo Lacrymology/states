@@ -14,7 +14,7 @@ include:
   - web
   - xml
   - python.dev
-  - gsyslog
+  - rsyslog
 
 /etc/init/uwsgi.conf:
   file:
@@ -100,7 +100,7 @@ uwsgi_emperor:
     - require:
       - file: uwsgi_emperor
       - file: uwsgi_sockets
-      - service: gsyslog
+      - service: rsyslog
     - watch:
       - cmd: uwsgi_emperor
       - file: /etc/init/uwsgi.conf

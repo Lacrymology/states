@@ -15,7 +15,7 @@
 include:
   - build
   - graylog2
-  - gsyslog
+  - rsyslog
   - local
   - mongodb
   - nginx
@@ -129,7 +129,7 @@ graylog2-web:
       - service: uwsgi_emperor
       - service: mongodb
       - cmd: graylog2-web
-      - service: gsyslog
+      - service: rsyslog
   module:
     - wait
     - name: file.touch

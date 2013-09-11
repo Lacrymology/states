@@ -3,7 +3,7 @@
  #}
 
 include:
-  - gsyslog
+  - rsyslog
   - salt.minion.upgrade
   - salt.minion.patch.0_15_3
 
@@ -24,7 +24,7 @@ extend:
   salt-minion:
     service:
       - require:
-        - service: gsyslog
+        - service: rsyslog
       - watch:
         - module: salt_minion_master_key
     pkg:

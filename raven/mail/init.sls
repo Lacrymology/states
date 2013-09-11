@@ -1,6 +1,6 @@
 include:
   - raven
-  - gsyslog
+  - rsyslog
 
 /usr/bin/mail:
   file:
@@ -12,4 +12,4 @@ include:
     - source: salt://raven/mail/script.jinja2
     - require:
       - module: raven
-      - service: gsyslog
+      - service: rsyslog

@@ -3,7 +3,7 @@
 #}
 include:
   - diamond
-  - gsyslog.diamond
+  - rsyslog.diamond
 
 ssmtp_diamond_resources:
   file:

@@ -10,7 +10,7 @@ include:
   - ruby.nrpe
   - xml.nrpe
   - python.dev.nrpe
-  - gsyslog.nrpe
+  - rsyslog.nrpe
   - web
 
 /etc/nagios/nrpe.d/uwsgi.cfg:

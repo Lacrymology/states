@@ -4,7 +4,7 @@
 include:
   - nrpe
   - apt.nrpe
-  - gsyslog.nrpe
+  - rsyslog.nrpe
 
 /etc/nagios/nrpe.d/salt-minion.cfg:
   file:

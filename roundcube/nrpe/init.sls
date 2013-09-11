@@ -7,7 +7,7 @@ include:
   - nginx.nrpe
   - uwsgi.nrpe
   - build.nrpe
-  - gsyslog.nrpe
+  - rsyslog.nrpe
   - postgresql.nrpe
   - postgresql.server.nrpe
 {% if pillar['roundcube']['ssl']|default(False) %}

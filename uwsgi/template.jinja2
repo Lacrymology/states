@@ -1,0 +1,61 @@
+# {{ pillar['message_do_not_modify'] }}
+{#-
+To use this template, extends it and define blocks that you want to replace,
+This template need:
+- pillar data for this app
+- context variable(s): chdir, appname, [wsgi_file], [virtualenv]
+[something] means optional
+#}
+{%- set dir = chdir %}
+{%- set wsgi = wsgi_file|default(False) %}
+{%- set name = appname %}
+{%- set web = pillar[name] %}
+{%- set venv = virtualenv %}
+[uwsgi]
+{%- block header %}
+{%- endblock %}
+
+master = true
+processes = {{ web['workers']|default(2) }}
+harakiri = {{ web['timeout']|default(60) }}
+harakiri-verbose = true
+{%- if web['cheaper']|default(False) %}
+{%- if web['cheaper'] > 0 %}
+cheaper = {{ web['cheaper'] }}
+{%- else %}
+cheap = true
+{%- endif %}
+{%- if web['workers'] == 1 and web['cheaper'] == 0 %}
+idle = {{ web['idle']|default(300) }}
+{%- endif %}
+{%- endif %}
+{%- if grains['virtual'] == 'kvm' and salt['file.file_exists']('/sys/kernel/mm/ksm/run') %}
+ksm = 20
+{%- endif %}
+lazy-apps = true
+uid = www-data
+gid = www-data
+procname = {{ name }}-worker
+procname-master = {{ name }}-master
+socket = /var/lib/uwsgi/{{ name }}.sock
+stats = /var/lib/uwsgi/{{ name }}-stats.sock
+chdir = {{ dir }}
+{%- if wsgi %}
+wsgi-file = {{ wsgi }}
+{%- endif %}
+{%- if venv %}
+virtualenv = {{ venv }}
+{%- endif %}
+threaded-logger = true
+no-orphans = true
+{%- if 'graylog2_address' in pillar %}
+logger = graylog2:{{ pillar['graylog2_address'] }}:12201,{{ grains['id'] }}
+{%- else %}
+log-syslog = uwsgi-{{ name }}
+{%- endif %}
+{%- if 'graphite_address' in pillar %}
+carbon-id = {{ name }}
+carbon = {{ pillar['graphite_address'] }}:2003
+{%- endif %}
+{%- block footer %}
+{%- endblock %}

@@ -40,7 +40,7 @@ denyhosts:purge: each of these pillar are documented in
 -#}
 include:
   - apt
-  - gsyslog
+  - rsyslog
 
 denyhosts-allowed:
   file:
@@ -78,7 +78,7 @@ denyhosts:
       - pkg: denyhosts
       - file: denyhosts-allowed
     - require:
-      - service: gsyslog
+      - service: rsyslog
 
 {% for file in ('/etc/logrotate.d/denyhosts', '/var/log/denyhosts') %}
 {{ file }}:

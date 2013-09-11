@@ -3,7 +3,6 @@ include:
   - graphite.common.absent
   - graylog2.server.absent
   - graylog2.web.absent
-  - gsyslog.absent
   - pip.absent
   - raven.absent
   - requests.absent

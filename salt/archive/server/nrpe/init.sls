@@ -1,7 +1,7 @@
 include:
   - apt.nrpe
   - cron.nrpe
-  - gsyslog.nrpe
+  - rsyslog.nrpe
   - nginx.nrpe
   - nrpe
   - rsync.nrpe

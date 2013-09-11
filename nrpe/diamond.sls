@@ -4,8 +4,8 @@
 include:
   - diamond
   - diamond.nrpe
-  - gsyslog.diamond
-  - nrpe.gsyslog.diamond
+  - rsyslog.diamond
+  - nrpe.rsyslog.diamond
 
 nrpe_diamond_resources:
   file:

@@ -3,7 +3,7 @@
 #}
 include:
   - build.nrpe
-  - gsyslog.nrpe
+  - rsyslog.nrpe
   - mongodb.nrpe
   - nginx.nrpe
   - nrpe

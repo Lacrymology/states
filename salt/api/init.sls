@@ -7,7 +7,7 @@ include:
   - local
   - nginx
   - pip
-  - gsyslog
+  - rsyslog
 {% if pillar['salt_master']['ssl']|default(False) %}
   - ssl
 {% endif %}
@@ -67,6 +67,41 @@ salt-api-requirements:
 {%- set version = salt['pillar.get']('salt:version', '0.15.3') -%}
 {%- set api_version = salt['pillar.get']('salt:api:version', '0.8.1') -%}
 {%- set api_path = '{0}/pool/main/s/salt-api/salt-api_{1}_all.deb'.format(version, api_version) %}
+
+salt-api:
+  pkg:
+    - installed
+    - sources:
+{%- if 'files_archive' in pillar %}
+      - salt-api: {{ pillar['files_archive']|replace('file://', '') }}/mirror/salt/{{ api_path }}
+{%- else %}
+      - salt-api: http://saltinwound.org/ubuntu/{{ api_path }}
+{%- endif %}
+    - require:
+      - pkg: salt-master
+      - module: salt-api-requirements
+  file:
+    - managed
+    - name: /etc/init/salt-api.conf
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - source: salt://salt/api/upstart.jinja2
+  service:
+    - running
+    - enable: True
+    - require:
+      - service: gsyslog
+    - watch:
+      - file: salt-api
+      - module: salt-api-requirements
+      - file: /etc/salt/master.d/ui.conf
+{%- if 'files_archive' in pillar %}
+      - archive: salt-ui
+{%- else %}
+      - git: salt-ui
+{%- endif %}
 
 salt-ui:
 {%- if 'files_archive' in pillar %}

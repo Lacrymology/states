@@ -1,7 +1,7 @@
 include:
   - cron.diamond
   - diamond
-  - gsyslog.diamond
+  - rsyslog.diamond
   - nginx.diamond
   - rsync.diamond
   - ssh.server.diamond

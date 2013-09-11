@@ -9,7 +9,7 @@ include:
   - apt.nrpe
   - nginx.nrpe
   - pip.nrpe
-  - gsyslog.nrpe
+  - rsyslog.nrpe
 {%- if ssl %}
   - ssl.nrpe
 {%- endif %}

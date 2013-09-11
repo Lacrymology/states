@@ -1,6 +1,6 @@
 {#
  Remove Backup for Gitlab
  #}
-/etc/cron.daily/backup-discourse:
+/etc/cron.daily/backup-gitlab:
   file:
     - absent

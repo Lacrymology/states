@@ -6,14 +6,14 @@ include:
 
 {%- set version = '6-0' %}
 {%- set web_dir = "/usr/local/gitlabhq-" + version + "-stable"  %}
-/etc/cron.daily/backup-discourse:
+/etc/cron.daily/backup-gitlab:
   file:
     - managed
     - user: root
     - group: root
     - mode: 500
     - template: jinja
-    - source: salt://discourse/backup/cron.jinja2
+    - source: salt://gitlab/backup/cron.jinja2
     - require:
       - pkg: cron
     - context:

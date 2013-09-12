@@ -177,10 +177,9 @@ wordpress_initial:
     - template: jinja
     - require:
       - file: uwsgi_emperor
+      - file: {{ wordpressdir }}/wp-config.php
       - archive: wordpress
-      - file: {{ wordpressdir }}/wp-config.php 
-    - watch_in:
-      - service: uwsgi_emperor
+      - pkg: php5-mysql
     - context:
       dir: {{ wordpressdir }}
   module:
@@ -190,6 +189,7 @@ wordpress_initial:
     - require:
       - module: wordpress_initial
     - watch:
+      - file: /etc/uwsgi/wordpress.ini
       - file: {{ wordpressdir }}/wp-config.php
       - archive: wordpress
       - pkg: php5-mysql

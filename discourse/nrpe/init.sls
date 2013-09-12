@@ -4,9 +4,11 @@
 include:
   - apt.nrpe
   - build.nrpe
+  - git.nrpe
   - logrotate.nrpe
   - nginx.nrpe
   - nrpe
+  - postgresql.nrpe
   - postgresql.server.nrpe
   - redis.nrpe
   - ruby.nrpe

@@ -3,7 +3,7 @@
  #}
 include:
   - cron
-{%- set web_root_dir = "/usr/local/discourse" }}
+{%- set web_root_dir = "/usr/local/discourse" %}
 /etc/cron.daily/backup-discourse:
   file:
     - managed

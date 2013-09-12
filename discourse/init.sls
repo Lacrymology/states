@@ -34,6 +34,7 @@ discourse:
 include:
   - apt
   - build
+  - git
   - logrotate
   - nginx
   - postgresql
@@ -66,6 +67,7 @@ discourse_deps:
       - pkg: xml-dev
       - pkg: postgresql-dev
       - pkg: ruby
+      - pkg: git
 
 discourse_tar:
   archive:

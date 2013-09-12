@@ -33,7 +33,9 @@ include:
   - virtualenv
   - web
 
-{%- set web_root_dir = "/usr/local/openerp" %}
+{%- set home = "/usr/local/openerp" %}
+{%- set filename = "openerp-7.0-20130909-231057" %}
+{%- set web_root_dir =  home +"/"+ filename %}
 {%- set password = salt['password.pillar']('openerp:database:password', 10)  %}
 
 openerp_depends:
@@ -47,7 +49,7 @@ openerp_depends:
       - pkg: libjs-underscore
   file:
     - managed
-    - name: {{ web_root_dir }}/salt-openerp-requirements.txt
+    - name: {{ home }}/salt-openerp-requirements.txt
     - template: jinja
     - user: root
     - group: root
@@ -59,11 +61,11 @@ openerp_depends:
     - wait
     - name: pip.install
     - upgrade: True
-    - bin_env: {{ web_root_dir }}/bin/pip
-    - requirements: {{ web_root_dir }}/salt-openerp-requirements.txt
+    - bin_env: {{ home }}/bin/pip
+    - requirements: {{ home }}/salt-openerp-requirements.txt
     - install_options:
-      - "--prefix={{ web_root_dir }}"
-      - "--install-lib={{ web_root_dir }}/lib/python{{ grains['pythonversion'][0] }}.{{ grains['pythonversion'][1] }}/site-packages"
+      - "--prefix={{ home }}"
+      - "--install-lib={{ home }}/lib/python{{ grains['pythonversion'][0] }}.{{ grains['pythonversion'][1] }}/site-packages"
     - require:
       - virtualenv: openerp
     - watch:
@@ -72,7 +74,7 @@ openerp_depends:
   cmd:
     - wait
     - name: find ./ -name '*.pyc' -delete
-    - cwd: {{ web_root_dir }}
+    - cwd: {{ home }}
     - stateful: False
     - user: root
     - watch:
@@ -82,7 +84,7 @@ openerp:
   user:
     - present
     - shell: /bin/false
-    - home: {{ web_root_dir }}
+    - home: {{ home }}
     - groups:
       - www-data
     - require:
@@ -90,7 +92,7 @@ openerp:
       - file: /usr/local
   virtualenv:
     - managed
-    - name: {{ web_root_dir }}
+    - name: {{ home }}
     - require:
       - user: openerp
       - module: virtualenv
@@ -103,16 +105,31 @@ openerp:
       - service: postgresql
   file:
     - directory
-    - name: {{ web_root_dir }}
+    - name: {{ home }}
     - user: openerp
     - group: openerp
     - recurse:
       - user
       - group
     - require:
+      - archive: openerp
       - user: openerp
       - cmd: openerp_depends
       - module: openerp_depends
+  archive:
+    - extracted
+    - name: {{ home }}/
+{%- if 'files_archive' in pillar %}
+    - source: {{ pillar['files_archive'] }}/mirror/openerp/{{ filename }}.tar.gz
+{%- else %}
+    - source: http://nightly.openerp.com/7.0/nightly/src/{{ filename }}.tar.gz
+{%- endif %}
+    - source_hash: md5=0e139452d2f0bcd8f09b0a494b3ac839
+    - archive_format: tar
+    - tar_options: z
+    - if_missing: {{ web_root_dir }}
+    - require:
+      - file: /usr/local
 
 {{ web_root_dir }}/openerp.wsgi:
   file:
@@ -153,6 +170,7 @@ add_web_user_to_openerp_group:
       - service: uwsgi_emperor
     - context:
       web_root_dir: {{ web_root_dir }}
+      home: {{ home }}
   module:
     - wait
     - name: file.touch
@@ -183,3 +201,13 @@ add_web_user_to_openerp_group:
       - service: nginx
     - context:
       web_root_dir: {{ web_root_dir }}
+
+{%- if salt['pillar.get']('openerp:ssl', False) %}
+extend:
+  nginx:
+    service:
+      - watch:
+        - cmd: /etc/ssl/{{ salt['pillar.get']('openerp:ssl') }}/chained_ca.crt
+        - module: /etc/ssl/{{ salt['pillar.get']('openerp:ssl') }}/server.pem
+        - file: /etc/ssl/{{ salt['pillar.get']('openerp:ssl') }}/ca.crt
+{% endif %}

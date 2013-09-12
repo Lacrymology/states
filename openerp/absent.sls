@@ -16,7 +16,6 @@ openerp:
   file:
     - absent
     - name: {{ web_root_dir }}
-    - name: /etc/openerp
 
 {%- for file in ('/etc/nginx/conf.d/openerp.conf', '/etc/uwsgi/openerp.ini') %}
 {{ file }}:

@@ -33,7 +33,17 @@ if [ $LOCAL_MODE -eq 1 ]; then
     echo "Salt master-less (local) mode"
     echo $1 > /etc/hostname
     hostname `cat /etc/hostname`
-    salt-call saltutil.sync_all
+    echo """master: 127.0.0.1
+mysql.default_file: '/etc/mysql/debian.cnf'
+file_log_level: debug
+file_client: local
+file_roots:
+   base:
+     - /root/salt/states
+pillar_roots:
+  base:
+    - /root/salt/pillar""" >> /etc/salt/minion
+    salt-call --local saltutil.sync_all
 else
     echo """id: $1
 log_level: debug

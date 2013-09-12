@@ -48,13 +48,14 @@ include:
       - pkg: nagios-nrpe-server
     - context:
       deployment: openerp
-      domain_name: {{ salt['pillar.get']('openerp:hostnames')[0] }}
+      domain_name: {{ alt['pillar.get']('openerp:hostnames')[0] }}
       http_uri: /
 {%- if salt['pillar.get']('openerp:ssl', False) %}
       https: True
       http_result: 301 Moved Permanently
 {%- endif %}
 
+{#-
 /etc/nagios/nrpe.d/postgresql-openerp.cfg:
   file:
     - managed
@@ -70,3 +71,4 @@ include:
       password: {{ salt['password.pillar']('openerp:database:password', 10) }}
     - watch_in:
       - service: nagios-nrpe-server
+#}

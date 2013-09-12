@@ -26,7 +26,7 @@ include:
       - pkg: nagios-nrpe-server
     - context:
       deployment: moinmoin
-      workers: {{ pillar['moinmoin']['workers'] }}
+      workers: {{ pillar['moinmoin']['workers']|default(2) }}
       cheaper: {{ salt['pillar.get']('moinmoin:cheaper', False) }}
     - require:
       - pkg: nagios-nrpe-server

@@ -90,9 +90,10 @@ salt-api:
     - source: salt://salt/api/upstart.jinja2
   service:
     - running
+    - order: 50
     - enable: True
     - require:
-      - service: gsyslog
+      - service: rsyslog
     - watch:
       - file: salt-api
       - module: salt-api-requirements
@@ -165,7 +166,7 @@ salt-api:
     - enable: True
     - order: 50
     - require:
-      - service: gsyslog
+      - service: rsyslog
     - watch:
       - file: salt-api
       - module: salt-api-requirements

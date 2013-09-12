@@ -18,7 +18,7 @@ def main():
     arg = parser.parse_args()
     filename = arg.file
 
-    if(not os.path.exists(filename)):
+    if not os.path.exists(filename):
         print "File %s does not exist" % filename
         sys.exit()
     else:
@@ -31,7 +31,7 @@ def upload(data):
     """
     Upload data on AWS S3
     """
-    bucket = "{{ pillar['aws']['s3']['bucket'] }/pillar['aws']['s3']['path'] } }}"
+    bucket = "{{ pillar['aws']['s3']['bucket'] }}/{{ pillar['aws']['s3']['path'] }}"
     cmd = "s3cmd put %s s3://%s" % (data, bucket)
     os.system(cmd)
 

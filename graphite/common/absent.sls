@@ -14,15 +14,17 @@ include:
     - absent
 {% endif %}
 
+{%- set prefix = '/etc/init.d/' %}
+{%- set init_files = salt['file.find'](prefix, name='carbon-cache-*', type='f') %}
 graphite:
   user:
     - absent
-{% for instance in salt['pillar.get']('graphite:carbon:instances', []) %}
-{% if loop.first %}
     - require:
-{% endif %}
-      - service: carbon-{{ instance }}
+{% for filename in init_files %}
+  {% set instance = filename.replace(prefix + 'carbon-cache-', '') %}
+      - service: carbon-cache-{{ instance }}
 {% endfor %}
+      - service: carbon-relay
 
 {# as long as https://github.com/saltstack/salt/issues/5001 isn't fixed #}
 {#

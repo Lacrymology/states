@@ -8,14 +8,14 @@ manage part of content in hosts.allow and hosts.deny
 import logging
 
 ALLOW_PATH = '/etc/hosts.allow'
-DENY_PATH = '/etc/deny.allow'
+DENY_PATH = '/etc/hosts.deny'
 log = logging.getLogger(__name__)
 
 
 def _process_args(name, type, service):
     ret = {'name': name, 'changes': {}, 'result': None, 'comment': ''}
     service_clients = "{0} : {1}".format(service, name)
-    if type not in (DENY_PATH, ALLOW_PATH):
+    if type not in ('allow', 'deny'):
         ret['result'] = False
         ret['comment'] = 'Invalid type {0}'.format(type)
         path = None

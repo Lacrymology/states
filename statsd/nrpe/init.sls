@@ -3,8 +3,9 @@
 #}
 include:
   - nrpe
-  - virtualenv.nrpe
+  - python.dev.nrpe
   - rsyslog.nrpe
+  - virtualenv.nrpe
 
 /etc/nagios/nrpe.d/statsd.cfg:
   file:

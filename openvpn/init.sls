@@ -21,7 +21,17 @@ openvpn:
     - require:
       - pkg: openvpn
 
-{%- for tunnel in pillar['openvpn']|default([]) %}
+{%- for type in ('lib', 'log') %}
+/var/{{ type }}/openvpn:
+  file:
+    - directory
+    - user: root
+    - group: root
+    - mode: 770
+{%- endfor -%}
+
+{%- macro service_openvpn(tunnels) -%}
+    {%- for tunnel in tunnels %}
 openvpn-{{ tunnel }}:
   file:
     - managed
@@ -40,13 +50,5 @@ openvpn-{{ tunnel }}:
     - order: 50
     - watch:
       - file: openvpn-{{ tunnel }}
-{%- endfor %}
-
-{% for type in ('lib', 'log') %}
-/var/{{ type }}/openvpn:
-  file:
-    - directory
-    - user: root
-    - group: root
-    - mode: 770
-{% endfor %}
+    {%- endfor -%}
+{%- endmacro -%}

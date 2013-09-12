@@ -48,7 +48,7 @@ include:
       - pkg: nagios-nrpe-server
     - context:
       deployment: openerp
-      domain_name: {{ salt['pillar.get']('openerp:hostnames)[0] }}
+      domain_name: {{ salt['pillar.get']('openerp:hostnames')[0] }}
       http_uri: /
 {%- if salt['pillar.get']('openerp:ssl', False) %}
       https: True

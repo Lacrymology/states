@@ -78,6 +78,7 @@ salt-master:
 {%- endif %}
     - require:
       - pkg: salt
+      - module: salt-master-requirements
   service:
     - running
     - enable: True

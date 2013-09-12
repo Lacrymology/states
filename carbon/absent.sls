@@ -1,9 +1,10 @@
 {#
  Remove carbon
  #}
-{%- set instances_count = pillar['graphite']['carbon']['instances'] %}
-
-{% for instance in range(instances_count) %}
+{%- set prefix = '/etc/init.d/' %}
+{%- set init_files = salt['file.find'](prefix, name='carbon-cache-*', type='f') %}
+{%- for filename in init_files %}
+  {% set instance = filename.replace(prefix + 'carbon-cache-', '') %}
 carbon-cache-{{ instance }}:
   file:
     - absent
@@ -43,7 +44,8 @@ carbon-relay:
   file:
     - absent
     - require:
-  {% for instance in range(instances_count) %}
+{% for filename in init_files %}
+  {% set instance = filename.replace(prefix + 'carbon-cache-', '') %}
       - service: carbon-cache-{{ instance }}
   {% endfor %}
       - service: carbon-relay

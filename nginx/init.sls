@@ -135,6 +135,7 @@ nginx:
   service:
     - running
     - enable: True
+    - order: 50
     - watch:
       - file: nginx
       - file: /etc/nginx/nginx.conf

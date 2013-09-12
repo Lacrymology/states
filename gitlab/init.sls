@@ -365,13 +365,11 @@ add_web_user_to_git_group:
       - cmd: gitlab
       - cmd: gitlab_start_sidekiq_service
       - cmd: gitlab_precompile_assets
-      - file: uwsgi_sockets
+      - service: uwsgi_emperor
       - file: gitlab_upstart
       - gem: rack
       - file: {{ web_dir }}/config.ru
       - user: add_web_user_to_git_group
-    - watch_in:
-      - service: uwsgi_emperor
     - context:
       web_dir: {{ web_dir }}
   module:

@@ -1,7 +1,7 @@
 include:
   - firewall
   - firewall.nrpe
-  - firewall.gsyslog
+  - firewall.rsyslog
 
 test:
   nrpe:

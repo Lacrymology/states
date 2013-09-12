@@ -8,7 +8,7 @@ manage part of content in hosts.allow and hosts.deny
 import logging
 
 ALLOW_PATH = '/etc/hosts.allow'
-DENY_PATH = '/etc/deny.allow'
+DENY_PATH = '/etc/hosts.deny'
 log = logging.getLogger(__name__)
 
 

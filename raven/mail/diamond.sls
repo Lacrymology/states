@@ -1,3 +1,3 @@
 include:
   - raven.diamond
-  - gsyslog.diamond
+  - rsyslog.diamond

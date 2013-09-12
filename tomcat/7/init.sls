@@ -8,6 +8,11 @@ tomcat:
     - name: tomcat7
     - require:
       - cmd: apt_sources
+  user:
+    - present
+    - name: tomcat7
+    - require:
+      - pkg: tomcat
   service:
     - running
     - name: tomcat7

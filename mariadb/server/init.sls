@@ -72,6 +72,7 @@ mysql-server:
     - name: mysql
     - running
     - enable: True
+    - order: 50
     - watch:
       - file: /etc/mysql/my.cnf
     - require:

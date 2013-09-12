@@ -9,11 +9,13 @@ include:
   - nginx.nrpe
   - pip.nrpe
   - postgresql.server.nrpe
+  - python.dev.nrpe
 {%- if salt['pillar.get']('openerp:ssl', False) %}
   - ssl.nrpe
-{%- endif %} 
+{%- endif %}
   - underscore.nrpe
   - uwsgi.nrpe
+  - virtualenv.nrpe
 
 /etc/nagios/nrpe.d/openerp.cfg:
   file:

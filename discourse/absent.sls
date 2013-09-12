@@ -18,12 +18,12 @@ discourse:
     - env:
         RAILS_ENV: production
     - cwd: {{ web_root_dir }}
-    - onlyif: ps -ef | grep side | grep -v grep
-    - require_in:
-      - file: {{ web_root_dir }}
+    - onlyif: ps -ef | grep sidekiqctl | grep -v grep
 
 {%- for file in (web_root_dir, '/home/discourse', '/etc/uwsgi/discourse.ini', '/etc/nginx/conf.d/discourse.conf', '/etc/logrotate.d/discourse', '/etc/init/discourse.conf', '/var/log/sidekiq.log') %}
 {{ file }}:
   file:
     - absent
+    - require:
+      - cmd: discourse
 {%- endfor %}

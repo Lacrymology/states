@@ -5,6 +5,7 @@ include:
   - virtualenv
   - rsyslog
   - local
+  - python.dev
 
 /var/log/statsd.log:
   file:

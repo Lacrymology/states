@@ -218,8 +218,18 @@ class TestStateMeta(type):
     def __new__(mcs, name, bases, attrs):
         global client
         attrs['all_states'] = client('cp.list_states')
-        # don't play with salt.minion.absent
-        attrs['all_states'].remove('salt.minion.absent')
+        # don't play with salt.minion
+        salt_minion_states = []
+        for state in attrs['all_states']:
+            if state.startswith('salt.minion'):
+                salt_minion_states.append(state)
+        # except diamond and nrpe
+        salt_minion_states.remove('salt.minion.nrpe')
+        salt_minion_states.remove('salt.minion.diamond')
+        logger.debug("Don't run tests for salt minion, as it can interfer: %s",
+                     ','.join(salt_minion_states))
+        attrs['all_states'] = list(set(attrs['all_states']) -
+                                   set(salt_minion_states))
 
         attrs['absent'] = []
         for state in attrs['all_states']:

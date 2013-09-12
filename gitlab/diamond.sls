@@ -3,8 +3,9 @@
 #}
 include:
   - diamond
-  - postgresql.server.diamond
   - nginx.diamond
+  - nodejs.diamond
+  - postgresql.server.diamond
   - redis.diamond
   - uwsgi.diamond
 

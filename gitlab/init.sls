@@ -62,7 +62,7 @@ include:
   - logrotate
   - nginx
   - nodejs
-  #- postgresql
+  - postgresql
   - postgresql.server
   - python
   - ruby

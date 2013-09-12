@@ -37,6 +37,7 @@ openvpn-{{ tunnel }}:
       identifier: {{ tunnel }}
   service:
     - running
+    - order: 50
     - watch:
       - file: openvpn-{{ tunnel }}
 {%- endfor %}

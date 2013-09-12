@@ -35,6 +35,7 @@ To generate a secret key::
 
   openvpn --genkey --secret /dev/stdout
  -#}
+{%- from 'openvpn/init.sls' import service_openvpn -%}
 
 include:
   - openvpn
@@ -82,3 +83,5 @@ include:
       - file: {{ config_dir }}
     {%- endif -%}
 {%- endfor -%}
+
+{{ service_openvpn(salt['pillar.get']('openvpn', {})) }}

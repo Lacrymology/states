@@ -90,6 +90,7 @@ salt-api:
     - source: salt://salt/api/upstart.jinja2
   service:
     - running
+    - order: 50
     - enable: True
     - require:
       - service: rsyslog

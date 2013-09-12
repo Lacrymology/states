@@ -1,5 +1,5 @@
 # {{ pillar['message_do_not_modify'] }}
-command[terracotta_procs]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u root -C java -a 'com.tc.server.TCServerMain'
+command[terracotta_procs]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u terracotta -C java -a 'com.tc.server.TCServerMain'
 command[terracotta_dso_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 9510
 command[terracotta_jmx_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 9520
 command[terracotta_communicate_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 9530

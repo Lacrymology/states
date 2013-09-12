@@ -1,6 +1,6 @@
 include:
   - ssh.server
-  - ssh.server.gsyslog
+  - ssh.server.rsyslog
   - ssh.server.nrpe
   - ssh.server.diamond
 

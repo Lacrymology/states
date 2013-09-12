@@ -9,7 +9,7 @@
     - group: root
     - mode: 500
     - template: jinja
-    - source: salt://mongodb/server/backup/script.jinja2
+    - source: salt://mongodb/backup/script.jinja2
 
 /usr/local/bin/backup-mongodb-all:
   file:
@@ -18,4 +18,4 @@
     - group: root
     - mode: 500
     - template: jinja
-    - source: salt://mongodb/server/backup/dump_all.jinja2
+    - source: salt://mongodb/backup/dump_all.jinja2

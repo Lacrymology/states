@@ -32,6 +32,7 @@ terracotta:
     - present
   service:
     - running
+    - order: 50
     - require:
       - pkg: openjdk_jdk
       - archive: terracotta

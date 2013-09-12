@@ -273,8 +273,6 @@ discourse_upstart:
       - cmd: discourse_bundler
       - cmd: discourse
       - gem: discourse_rack
-    - watch_in:
-      - service: uwsgi_emperor
     - context:
       web_root_dir: {{ web_root_dir }}
   module:

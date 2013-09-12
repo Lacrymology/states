@@ -4,14 +4,15 @@
 include:
   - nrpe
   - apt.nrpe
-  - nginx.nrpe
-  - uwsgi.nrpe
   - build.nrpe
   - mariadb.nrpe
   - mariadb.server.nrpe
-{%- if pillar['wordpress']['ssl']|default(False) %}
+  - nginx.nrpe
+  - php.nrpe
+{%- if salt['pillar.get']('wordpress:ssl', False) %}
   - ssl.nrpe
 {%- endif %}
+  - uwsgi.nrpe
 
 /etc/nagios/nrpe.d/wordpress.cfg:
   file:
@@ -25,9 +26,9 @@ include:
       - pkg: nagios-nrpe-server
     - context:
       deployment: wordpress
-      workers: {{ pillar['wordpress']['workers'] }}
+      workers: {{ salt['pillar.get']('wordpress:workers', '2') }}
 {%- if 'cheaper' in pillar['wordpress'] %}
-      cheaper: {{ pillar['wordpress']['cheaper'] }}
+      cheaper: {{ salt['pillar.get']('wordpress:cheaper') }}
 {%- endif %}
     - watch_in:
       - service: nagios-nrpe-server
@@ -44,11 +45,11 @@ include:
       - pkg: nagios-nrpe-server
     - context:
       deployment: wordpress
-      domain_name: {{ pillar['wordpress']['hostnames'][0] }}
+      domain_name: {{ salt['pillar.get']('wordpress:hostnames')[0] }}
       http_uri: /
-{%- if pillar['wordpress']['ssl']|default(False) %}
+{%- if salt['pillar.get']('wordpress:ssl', False) %}
       https: True
-    {%- if pillar['wordpress']['ssl_redirect']|default(False) %}
+    {%- if salt['pillar.get']('wordpress:ssl_redirect', False) %}
       http_result: 301 Moved Permanently
     {%- endif -%}
 {%- endif %}

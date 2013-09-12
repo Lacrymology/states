@@ -3,9 +3,9 @@
 #}
 include:
   - diamond
+  - mariadb.server.diamond
   - nginx.diamond
   - uwsgi.diamond
-  - mariadb.server.diamond
 
 wordpress_web_diamond_resource:
   file:

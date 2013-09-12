@@ -1,8 +1,8 @@
 # {{ pillar['message_do_not_modify'] }}
 
 [default]
-access_key = {{ pillar['aws']['s3']['access_key'] }}
-secret_key = {{ pillar['aws']['s3']['secret_key'] }}
+access_key = {{ pillar['aws']['access_key'] }}
+secret_key = {{ pillar['aws']['secret_key'] }}
 bucket_location = US
 cloudfront_host = cloudfront.amazonaws.com
 cloudfront_resource = /2010-07-15/distribution

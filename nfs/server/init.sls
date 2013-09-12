@@ -61,6 +61,7 @@ nfs-kernel-server:
   service:
     - running
     - enable: True
+    - order: 50
     - watch:
       - pkg: nfs-kernel-server
       - file: /etc/default/nfs-kernel-server

@@ -15,6 +15,7 @@ rsyslog:
     - source: salt://rsyslog/config.jinja2
   service:
     - running
+    - order: 50
     - watch:
       - pkg: rsyslog
       - file: rsyslog

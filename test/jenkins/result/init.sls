@@ -1,10 +1,18 @@
 {%- set result_file = '/root/salt/result.xml' -%}
+{%- set test_files = salt['file.find']('/root/salt/', name='TEST-*-salt.xml') %}
 
 test_result:
   file:
+{%- test_files -%}
+    {#- integration.py worked #}
     - rename
+    - source: {{ test_files[0] }}
+{%- else -%}
+    {#- integration.py failed #}
+    - managed
+    - source: salt://test/jenkins/result/failure.xml
+{%- endif %}
     - name: {{ result_file }}
-    - source: {{ salt['file.find']('/root/salt/', name='TEST-*-salt.xml')[0] }}
   module:
     - run
     - name: cp.push

@@ -7,6 +7,7 @@ include:
   - git.nrpe
   - logrotate.nrpe
   - nginx.nrpe
+  - nodejs.nrpe
   - nrpe
   - postgresql.nrpe
   - postgresql.server.nrpe

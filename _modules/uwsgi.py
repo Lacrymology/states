@@ -22,16 +22,20 @@ def __virtual__():
         return 'uwsgi'
     return False
 
+_enabled_path = os.path.join(UWSGI_ROOT, 'apps-enabled')
+
+def _applist(dir):
+    return [os.path.splitext(x)[0] for x in os.listdir(dir) if os.path.isfile(os.path.join(dir, x))]
+
 def list_enabled():
     '''
     List uWSGI application that are enabled.
     '''
+    return _applist(_enabled_path)
     # IMPLEMENT:
     # list in $UWSGI_ROOT/apps-enabled all the symlink to
     # $UWSGI_ROOT/apps-available
     # for '/etc/uwsgi/apps-enabled/bleh.ini' return only 'bleh'
-    pass
-
 
 def list_available():
     '''

@@ -122,7 +122,7 @@ graylog2_sentry_output_plugin:
 {% if 'files_archive' in pillar %}
     - source: {{ pillar['files_archive'] }}/mirror/graylog2-plugin-sentry-output-0.11.jar
 {% else %}
-    - source: http://archive.bit-flippers.com/mirror/graylog2-plugin-sentry-output-0.11.jar
+    - source: http://archive.robotinfra.com/mirror/graylog2-plugin-sentry-output-0.11.jar
 {% endif %}
     - source_hash: md5=9f8305a17af8bf6ab80dcab252489ec6
     - require:
@@ -139,7 +139,7 @@ graylog2_sentry_transport_plugin:
 {% if 'files_archive' in pillar %}
     - source: {{ pillar['files_archive'] }}/mirror/graylog2-plugin-sentry-transport-0.11-1.jar
 {% else %}
-    - source: http://archive.bit-flippers.com/mirror/graylog2-plugin-sentry-transport-0.11-1.jar
+    - source: http://archive.robotinfra.com/mirror/graylog2-plugin-sentry-transport-0.11-1.jar
 {% endif %}
     - source_hash: md5=7b7982643577aed239efaea62e78104a
     - require:

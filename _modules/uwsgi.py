@@ -26,6 +26,18 @@ _enabled_path = os.path.join(UWSGI_ROOT, 'apps-enabled')
 
 _available_path = os.path.join(UWSGI_ROOT, 'apps-available')
 
+def _get_app_paths(app=None):
+    '''
+    using ``uwsgi_base`` config path, return the paths to the app's config
+    in apps-available as well as the expected symlink in apps-enabled
+
+    '''
+    app_file = os.path.join(app, '.ini')
+    # define our app config/symlink paths
+    config = os.path.join(_available_path, app_file)
+    symlink = os.path.join(_enabled_path, app_file)
+    return config, symlink, app_file
+
 def _applist(dir):
     return [os.path.splitext(x)[0] for x in os.listdir(dir) if os.path.isfile(os.path.join(dir, x))]
 
@@ -58,7 +70,9 @@ def enable(app_name):
     # and missing app in apps-enabled.
     # in case of failure use logger.error
     # return {$filename: 'symlink created to $destination'}
-    pass
+    app_config, app_symlink, app_file = _get_app_paths(app_name)
+    salt.states.file.symlink(app_symlink, app_config)
+    return {app_file: "symlink created in {destination}".format(dict(destination=app_symlink))}
 
 
 def disable(app_name):

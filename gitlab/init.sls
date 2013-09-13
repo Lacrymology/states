@@ -215,7 +215,7 @@ gitlab:
     - user: git
     - cwd: {{ web_dir }}
     - require:
-      - service: redis-server
+      - service: redis
     - watch:
       - cmd: bundler
 

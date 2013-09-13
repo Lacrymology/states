@@ -3,7 +3,7 @@
 
 test_result:
   file:
-{%- test_files -%}
+{%- if test_files -%}
     {#- integration.py worked #}
     - rename
     - source: {{ test_files[0] }}

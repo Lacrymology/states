@@ -24,6 +24,8 @@ def __virtual__():
 
 _enabled_path = os.path.join(UWSGI_ROOT, 'apps-enabled')
 
+_available_path = os.path.join(UWSGI_ROOT, 'apps-available')
+
 def _applist(dir):
     return [os.path.splitext(x)[0] for x in os.listdir(dir) if os.path.isfile(os.path.join(dir, x))]
 
@@ -43,7 +45,7 @@ def list_available():
     '''
     # IMPLEMENT:
     # like list_enabled() bur return file in apps-available
-    pass
+    return _applist(_available_path)
 
 
 def enable(app_name):

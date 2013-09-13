@@ -46,6 +46,9 @@ github.com:
     - require:
       - file: {{ root_home }}/.ssh
       - pkg: openssh-client
+    - require_in:
+      - ssh_known_hosts: github.com
+      - ssh_known_hosts: bitbucket.org
 {%- endfor %}
 
 openssh-client:

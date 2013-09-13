@@ -13,5 +13,4 @@ php:
 {%- endif %}
     - file: /etc/apt/sources.list.d/lucid-php5.list
     - require:
-      - pkg: python-apt
-      - pkg: python-software-properties
+      - pkg: apt_sources

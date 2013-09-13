@@ -28,7 +28,7 @@ ssmtp:
         'ssmtp/port': {'type': 'string', 'value': '{{ pillar['smtp']['port'] }}'}
         'ssmtp/fromoverride': {'type': 'boolean', 'value': False}
     - require:
-      - pkg: debconf-utils
+      - pkg: apt_sources
 
 bsd-mailx:
   pkg:

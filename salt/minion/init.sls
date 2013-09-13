@@ -38,8 +38,7 @@ extend:
       - require:
         - apt_repository: salt
         - cmd: apt_sources
-        - pkg: debconf-utils
-        - pkg: python-software-properties
+        - pkg: apt_sources
   salt-common-modules-cp:
     file:
       - require:

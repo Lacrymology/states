@@ -29,7 +29,7 @@ proftpd-basic:
     - data:
         'shared/proftpd/inetd_or_standalone': {'type': 'select', 'value': 'standalone'}
     - require:
-      - pkg: debconf-utils
+      - pkg: apt_sources
   pkg:
     - installed
     - require:

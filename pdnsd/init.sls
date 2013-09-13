@@ -15,7 +15,7 @@ pdnsd:
     - data:
         'pdnsd/conf': {'type': 'select', 'value': 'Manual'}
     - require:
-      - pkg: debconf-utils
+      - pkg: apt_sources
   service:
     - running
     - enable: True

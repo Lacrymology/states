@@ -13,8 +13,7 @@ postgresql-dev:
 {%- endif %}
     - file: /etc/apt/sources.list.d/postgresql.list
     - require:
-      - pkg: python-apt
-      - pkg: python-software-properties
+      - pkg: apt_sources
   pkg:
     - installed
     - name: libpq-dev

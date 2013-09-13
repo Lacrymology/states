@@ -7,7 +7,7 @@ moinmoin:
   superusers:
     - spiderman
     - batman
-  openldap: # config ldap as backend authenticate for moinmoin
+  ldap: # config ldap as backend authenticate for moinmoin
     uri: 'ldap://example.com
     binddn: 'cn=admin,dc=example,dc=com'
     bindpw: 'passwordhere'

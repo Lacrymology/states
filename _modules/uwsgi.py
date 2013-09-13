@@ -7,10 +7,20 @@ uWSGI module
 import logging
 import os
 
+import salt
 
 logger = logging.getLogger(__name__)
 
 UWSGI_ROOT = os.path.join('/', 'etc', 'uwsgi')
+def __virtual__():
+    '''
+    Only load the module if uwsgi is installed/available on $PATH
+
+    '''
+    cmd = 'uwsgi'
+    if salt.utils.which(cmd):
+        return 'uwsgi'
+    return False
 
 def list_enabled():
     '''

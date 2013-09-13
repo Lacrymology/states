@@ -33,6 +33,7 @@ include:
   - uwsgi
   - virtualenv
   - web
+  - xml
 
 {%- set home = "/usr/local/openerp" %}
 {%- set filename = "openerp-7.0-20130909-231057" %}
@@ -74,6 +75,7 @@ openerp_depends:
       - pkg: python-dev
       - pkg: ldap-dev
       - pkg: postgresql-dev
+      - pkg: xml-dev
   cmd:
     - wait
     - name: find ./ -name '*.pyc' -delete

@@ -1,184 +1,150 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!-- {{ pillar['message_do_not_modify'] }} -->
-{#-
-<!--
-
-All content copyright Terracotta, Inc., unless otherwise indicated. All rights reserved.
-
--->
-<!--
-  tc-config-server-reference.xml
-
-  This is a sample Terracotta configuration file. In it, you will find an
-  example of every permitted element, along with a brief description of each.
-  As such, it's a good reference, but vastly more than you need to get started.
-  Very few of the elements in this configuration file are required; they are
-  marked with a (REQUIRED) notation.
--->
-#}
 <tc:tc-config xmlns:tc="http://www.terracotta.org/config"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.terracotta.org/schema/terracotta-6.xsd">
-
   <tc-properties>
+{#-
+  The optional <tc-properties> block contains various tuning
+  properties for the Terracotta cluster. This block is inserted at the
+  beginning of the Terracotta configuration file.
+  The properties defined here override default tc.properties but they
+  are overridden by those found in a local tc.properties file and by
+  those defined using system properties. The order of precedence, 
+  beginning with the source having least precedence, is:
 
-      {#-
-        <!--    
-          The optional <tc-properties> block contains various tuning
-          properties for the Terracotta cluster. This block is inserted at the
-          beginning of the Terracotta configuration file.
-          The properties defined here override default tc.properties but they
-          are overridden by those found in a local tc.properties file and by
-          those defined using system properties. The order of precedence, 
-          beginning with the source having least precedence, is:
-
-          1. Default tc.properties file located in tc.jar
-          2. <tc-properties> block in the Terracotta configuration file
-          3. Local tc.properties file
-          4. Properties defined using Java system properties
-        -->     
-
-        #}
+  1. Default tc.properties file located in tc.jar
+  2. <tc-properties> block in the Terracotta configuration file
+  3. Local tc.properties file
+  4. Properties defined using Java system properties
+#}
     <property name="l2.nha.dirtydb.autoDelete" value="true"/>
     <property name="l1.cachemanager.enabled" value="true"/>
     <property name="logging.maxLogFileSize" value="1024"/>
   </tc-properties>
   
-  {#-
-  <!-- The 'system' section contains configuration data that affects the
-     entire Terracotta system as a whole; things like whether to activate
-     DSO services go here. -->
- #}
-
+{#-
+ The 'system' section contains configuration data that affects the
+ entire Terracotta system as a whole; things like whether to activate
+ DSO services go here. -->
+#}
   <system>
-      {#-
-    <!-- The configuration model: 'development' or 'production'.
+{#-
+ The configuration model: 'development' or 'production'.
 
-    The configuration-model element is for informational purposes. The two
-    configuration-model options are 'development' and 'production'. These values
-    have no effect on the functioning of Terracotta servers or clients, but
-    instead allow you to designate the intended use of a configuration file
-    using one of two recommended modes.
+ The configuration-model element is for informational purposes. The two
+ configuration-model options are 'development' and 'production'. These values
+ have no effect on the functioning of Terracotta servers or clients, but
+ instead allow you to designate the intended use of a configuration file
+ using one of two recommended modes.
 
-    In development, you may want each client to have its own configuration,
-    independent of the server or any other client. This approach is useful for
-    development, but should not be used in production as it can result in shared
-    data being corrupted or lost if, for instance, two different clients specify
-    roots of different types. To note that a configuration file is intended for
-    direct use by a client, set the configuration-model to 'development'.
+ In development, you may want each client to have its own configuration,
+ independent of the server or any other client. This approach is useful for
+ development, but should not be used in production as it can result in shared
+ data being corrupted or lost if, for instance, two different clients specify
+ roots of different types. To note that a configuration file is intended for
+ direct use by a client, set the configuration-model to 'development'.
 
-    In production, each client should obtain its configuration from a Terracotta
-    server instance. To note that a configuration file is intended be be fetched
-    from a server, set the configuration-model to 'production'.
+ In production, each client should obtain its configuration from a Terracotta
+ server instance. To note that a configuration file is intended be be fetched
+ from a server, set the configuration-model to 'production'.
 
-    In general, a client can specify that its configuration come from a server
-    by setting the tc.config system propery:
+ In general, a client can specify that its configuration come from a server
+ by setting the tc.config system propery:
 
-        -Dtc.config=serverHost:dsoPort
+    -Dtc.config=serverHost:dsoPort
 
-    Default: 'development'. -->
-    #}
+ Default: 'development'.
+#}
     <configuration-model>{{ salt['pillar.get']('terracotta:environment', 'production') }}</configuration-model>
   </system>
+{#-
+ This section defines the servers present in your Terracotta system. You can
+ omit this section entirely, in which case it behaves as if there's a
+ single server with all values set at their default. You can include exactly
+ one server entry here (the common case), or, if you're going to run multiple
+ servers for failover, you can include multiple servers here.
 
-  {#-
-  <!--
-    This section defines the servers present in your Terracotta system. You can
-    omit this section entirely, in which case it behaves as if there's a
-    single server with all values set at their default. You can include exactly
-    one server entry here (the common case), or, if you're going to run multiple
-    servers for failover, you can include multiple servers here.
+ If you include more than one server here, note that each server will need to know
+ which configuration it should use as it starts up. If you name your servers
+ according to the host that they run on (and no host contains more than
+ one server), then they will find the hostname themselves and work
+ automatically.
 
-    If you include more than one server here, note that each server will need to know
-    which configuration it should use as it starts up. If you name your servers
-    according to the host that they run on (and no host contains more than
-    one server), then they will find the hostname themselves and work
-    automatically.
-
-    If you name your servers in any other fashion (and, again, only if there is
-    more than one 'server' element present here), then you will need to pass the
-    command-line option "-n <name>" to the start-tc-server script, passing it
-    the name of a server configuration from this file.
-  -->
-  #}
+ If you name your servers in any other fashion (and, again, only if there is
+ more than one 'server' element present here), then you will need to pass the
+ command-line option "-n <name>" to the start-tc-server script, passing it
+ the name of a server configuration from this file.
+#}
   <servers>
-      <server>
+    <server>
+{#-
+ The host, symbolic name and bind address of the server; host defaults to "%i" (the machine's
+ IP address), name defaults to "host:dso-port" and bind address defaults to "0.0.0.0".
+ Expansion parameters may be used in all attributes. -->
+ <server host="my.host.name" name="My Server Name" bind="0.0.0.0">
 
-      {#-
-    <!-- The host, symbolic name and bind address of the server; host defaults to "%i" (the machine's
-       IP address), name defaults to "host:dso-port" and bind address defaults to "0.0.0.0".
-       Expansion parameters may be used in all attributes. -->
-    <server host="my.host.name" name="My Server Name" bind="0.0.0.0">
+ Where should the server store its persistent data? (This includes
+ stored object data for DSO.) This value undergoes parameter substitution
+ before being used; this allows you to use placeholders like '%h' (for the hostname)
+ or '%(com.mycompany.propname)' (to substitute in the value of
+ Java system property 'com.mycompany.propname'). Thus, a value
+ of 'server-data-%h' would expand to 'server-data-my.host.name' if 
+ running on host 'my.host.name'.
 
+ If this is a relative path, then it is interpreted relative to
+ the current working directory of the server (that is, the directory
+ you were in when you started the server). It is thus recommended that
+ you specify an absolute path here.
 
-      <!-- Where should the server store its persistent data? (This includes
-         stored object data for DSO.) This value undergoes parameter substitution
-         before being used; this allows you to use placeholders like '%h' (for the hostname)
-         or '%(com.mycompany.propname)' (to substitute in the value of
-         Java system property 'com.mycompany.propname'). Thus, a value
-         of 'server-data-%h' would expand to 'server-data-my.host.name' if 
-         running on host 'my.host.name'.
-
-         If this is a relative path, then it is interpreted relative to
-         the current working directory of the server (that is, the directory
-         you were in when you started the server). It is thus recommended that
-         you specify an absolute path here.
-
-         Default: 'data'; this places the 'data' directory in the
-         directory you were in when you invoked 'start-tc-server'.
-      -->
-      <data>/opt/terracotta/server-data</data>
-    #}
+ Default: 'data'; this places the 'data' directory in the
+ directory you were in when you invoked 'start-tc-server'.
+<data>/opt/terracotta/server-data</data>
+#}
       <data>/var/lib/terracotta/server-data</data>
+{#-
+ In which directory should the server store its log files? Again,
+ this value undergoes parameter substitution before being used;
+ thus, a value like 'server-logs-%h' would expand to
+'server-logs-my.host.name' if running on host 'my.host.names'.
 
-      {#-
-      <!-- In which directory should the server store its log files? Again,
-         this value undergoes parameter substitution before being used;
-         thus, a value like 'server-logs-%h' would expand to
-         'server-logs-my.host.name' if running on host 'my.host.names'.
+ If this is a relative path, then it is interpreted relative to
+ the current working directory of the server (that is, the directory
+ you were in when you started server). It is thus recommended that
+ you specify an absolute path here.
 
-         If this is a relative path, then it is interpreted relative to
-         the current working directory of the server (that is, the directory
-         you were in when you started server). It is thus recommended that
-         you specify an absolute path here.
-
-         Default: 'logs'; this places the 'logs' directory in the
-         directory you were in when you invoked 'start-tc-server'.
-      -->
-      <logs>/opt/terracotta/server-logs</logs>
-      #}
+ Default: 'logs'; this places the 'logs' directory in the
+ directory you were in when you invoked 'start-tc-server'.
+<logs>/opt/terracotta/server-logs</logs>
+#}
       <logs>/var/log/terracotta/server-logs</logs>
+{#-
+ Where should the server store its search index data? This value
+ undergoes parameter substitution like <data> and <logs>
 
-      {#-
-      <!-- Where should the server store its search index data? This value
-         undergoes parameter substitution like <data> and <logs>
+ If this is a relative path, then it is interpreted relative to
+ the current working directory of the server (that is, the directory
+ you were in when you started the server). It is thus recommended that
+ you specify an absolute path here.
 
-         If this is a relative path, then it is interpreted relative to
-         the current working directory of the server (that is, the directory
-         you were in when you started the server). It is thus recommended that
-         you specify an absolute path here.
+ Default: (none); the index will be stored in the same directory
+ as the configured <data> location
+<index>/opt/terracotta/server-index</index>
 
-         Default: (none); the index will be stored in the same directory
-         as the configured <data> location
-      -->
-      <index>/opt/terracotta/server-index</index>
-      #}
+ In which directory should the server store statistics data that is
+ being buffered? Again, this value undergoes parameter substitution
+ before being used; thus, a value like 'statistics-data-%h' would
+ expand to 'statistics-data' if running on host 'artichoke'.
 
-      {#-
-      <!-- In which directory should the server store statistics data that is
-         being buffered? Again, this value undergoes parameter substitution
-         before being used; thus, a value like 'statistics-data-%h' would
-         expand to 'statistics-data' if running on host 'artichoke'.
-        
-         If this is a relative path, then it is interpreted relative to the
-         current working directory of the server (that is, the directory you
-         were in when you started server). It is thus recommended that you
-         specify an absolute path here.
-        
-         Default: 'statistics' This places the 'statistics' directory in the
-         directory you were in when you invoked 'start-tc-server'. -->
-      <statistics>/opt/terracotta/server-statistics</statistics>
-      #}
+ If this is a relative path, then it is interpreted relative to the
+ current working directory of the server (that is, the directory you
+ were in when you started server). It is thus recommended that you
+ specify an absolute path here.
+
+ Default: 'statistics' This places the 'statistics' directory in the
+ directory you were in when you invoked 'start-tc-server'.
+<statistics>/opt/terracotta/server-statistics</statistics>
+#}
       <statistics>/var/lib/terracotta/server-statistics</statistics>
 
          {#-

@@ -71,6 +71,8 @@ moinmoin:
       - libldap2-dev
       - libsasl2-dev
       - libssl-dev
+    - require:
+      - cmd: apt_sources
 {%- endif %}
 
 {{ root_dir }}/share/moin:

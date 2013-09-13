@@ -1,6 +1,16 @@
 {#
  Configure an OpenSSH client
- #}
+
+Optional Pillar
+==============
+
+ssh:
+  known_hosts:
+    git.bit-flippers.com:
+      fingerprint: c9:fb:62:8b:d3:b6:c8:7d:33:6b:65:9f:e2:9d:a2:71
+      port: 22022
+
+#}
 include:
   - apt
 
@@ -30,6 +40,13 @@ github.com:
     - require:
       - file: {{ root_home }}/.ssh
       - pkg: openssh-client
+
+{%- for domain in salt['pillar.get']('ssh:known_hosts', []) %}
+{{ knownhost(domain, pillar['ssh']['known_hosts'][domain]['fingerprint'], 'root', pillar['ssh']['known_hosts'][domain]['port']) }}
+    - require:
+      - file: {{ root_home }}/.ssh
+      - pkg: openssh-client
+{%- endfor %}
 
 openssh-client:
   file:
@@ -61,3 +78,13 @@ root_ssh_private_key:
     - require:
       - file: {{ root_home }}/.ssh
 {% endif %}
+
+{%- macro knownhost(domain, fingerprint, user, port='22') %}
+{{ user }}_{{ domain }}:
+  ssh_known_hosts:
+    - name: {{ domain }}
+    - present
+    - user: {{ user }}
+    - fingerprint: {{ fingerprint }}
+    - port: {{ port }}
+{%- endmacro %}

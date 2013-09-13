@@ -84,8 +84,9 @@ def disable(app_name):
     # the code need to be resilient to non-existing symlink
     # if symlink don't exist, just logger.debug about it
     # return {$filename: 'removed'}
-    pass
-
+    _, app_symlink, app_file = _get_app_paths(app_name)
+    __salt__['file.remove'](app_symlink)
+    return {app_file: 'removed'}
 
 def remove(app_name):
     '''

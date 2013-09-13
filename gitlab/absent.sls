@@ -8,8 +8,6 @@ gitlab:
   user:
     - absent
     - force: True
-    - require:
-      - cmd: gitlab
   group:
     - absent
     - require:

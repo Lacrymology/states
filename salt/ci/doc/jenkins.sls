@@ -13,6 +13,8 @@ Things you **should** do
   have read-only access to Jenkins.
 - Install https://wiki.jenkins-ci.org/display/JENKINS/Timestamper and turn it
   on to all jobs.
+- Set ``[a-zA-Z0-9\-]*`` as regular expression for job name. As job name are
+  used to create VM hostname, this need to be a valid hostname.
 
 Things you **must** do
 ----------------------

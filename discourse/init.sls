@@ -135,6 +135,7 @@ discourse:
       - file: {{ web_root_dir }}/config/database.yml
       - user: discourse
       - service: postgresql
+      - service: redis
       - postgres_database: discourse
     - watch:
       - cmd: discourse_add_psql_extension_hstore

@@ -21,6 +21,7 @@ openerp:
 include:
   - apt
   - build
+  - ldap.dev
   - nginx
   - pip
   - postgresql.server
@@ -71,6 +72,8 @@ openerp_depends:
     - watch:
       - file: openerp_depends
       - pkg: python-dev
+      - pkg: ldap-dev
+      - pkg: postgresql-dev
   cmd:
     - wait
     - name: find ./ -name '*.pyc' -delete

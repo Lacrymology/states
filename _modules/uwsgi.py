@@ -95,8 +95,9 @@ def remove(app_name):
     # IMPLEMENT:
     # use file.remove to remove /etc/uwsgi/apps-available/$app_name.ini
     # return {$filename: 'removed'}
-    pass
-
+    app_config, _, app_file = _get_app_paths(app_name)
+    __salt__['file.remove'](app_config)
+    return {app_file: 'removed'}
 
 def clean():
     '''

@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<testsuite errors="1" failures="0" name="States-salt" tests="1" time="0.0">
+  <testcase classname="States" name="run" time="0.0">
+    <error message="integration.py could not execute any test" type="SystemError"><![CDATA[]]></error>
+  </testcase>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

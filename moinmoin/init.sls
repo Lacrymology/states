@@ -22,7 +22,7 @@ include:
   - nginx
   - pip
 {%- if salt['pillar.get']('moinmoin:ldap', False) %}
-  - ldap.dev
+  - openldap.dev
   - python.dev
 {%- endif %}
   - web

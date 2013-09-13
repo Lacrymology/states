@@ -21,7 +21,7 @@ openerp:
 include:
   - apt
   - build
-  - ldap.dev
+  - openldap.dev
   - nginx
   - pip
   - postgresql.server

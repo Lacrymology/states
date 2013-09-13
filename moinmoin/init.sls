@@ -22,6 +22,7 @@ include:
   - nginx
   - pip
 {%- if salt['pillar.get']('moinmoin:ldap', False) %}
+  - ldap.dev
   - python.dev
 {%- endif %}
   - web
@@ -63,16 +64,8 @@ moinmoin:
     - require:
       - virtualenv: moinmoin
 {%- if salt['pillar.get']('moinmoin:ldap', False) %}
-      - pkg: moinmoin
+      - pkg: ldap-dev
       - pkg: python-dev
-  pkg:
-    - installed
-    - pkgs:
-      - libldap2-dev
-      - libsasl2-dev
-      - libssl-dev
-    - require:
-      - cmd: apt_sources
 {%- endif %}
 
 {{ root_dir }}/share/moin:

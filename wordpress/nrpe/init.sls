@@ -3,7 +3,6 @@
 #}
 include:
   - nrpe
-  - apt.nrpe
   - build.nrpe
   - mariadb.nrpe
   - mariadb.server.nrpe

@@ -20,7 +20,6 @@ Optional Pillar
 
 -#}
 include:
-  - apt
   - nginx
   - local
   - {{ salt['pillar.get']('wordpress:mysql_variant', 'mariadb') }}.server
@@ -97,7 +96,7 @@ php5-mysql:
   pkg:
     - installed
     - require:
-      - cmd: apt_sources
+      - pkg: php-dev
 
 {{ wordpressdir }}/wp-config.php:
   file:

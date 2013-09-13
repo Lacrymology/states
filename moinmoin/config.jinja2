@@ -29,7 +29,9 @@
 import os
 
 from MoinMoin.config import multiconfig, url_prefix_static
+{%- if salt['pillar.get']('moinmoin:ldap', False) %}
 from MoinMoin.auth.ldap_login import LDAPAuth
+{%- endif %}
 
 
 class Config(multiconfig.DefaultConfig):

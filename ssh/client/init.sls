@@ -1,4 +1,4 @@
-{#
+{#-
  Configure an OpenSSH client
 
 Optional Pillar
@@ -6,7 +6,7 @@ Optional Pillar
 
 ssh:
   known_hosts:
-    git.bit-flippers.com:
+    git.robotinfra.com:
       fingerprint: c9:fb:62:8b:d3:b6:c8:7d:33:6b:65:9f:e2:9d:a2:71
       port: 22022
 
@@ -14,7 +14,17 @@ ssh:
 include:
   - apt
 
-{% set root_home = salt['user.info']('root')['home'] %}
+{%- set root_home = salt['user.info']('root')['home'] -%}
+
+{%- macro knownhost(domain, fingerprint, user, port='22') %}
+{{ user }}_{{ domain }}:
+  ssh_known_hosts:
+    - name: {{ domain }}
+    - present
+    - user: {{ user }}
+    - fingerprint: {{ fingerprint }}
+    - port: {{ port }}
+{%- endmacro %}
 
 {{ root_home }}/.ssh:
   file:
@@ -46,6 +56,9 @@ github.com:
     - require:
       - file: {{ root_home }}/.ssh
       - pkg: openssh-client
+    - require_in:
+      - ssh_known_hosts: github.com
+      - ssh_known_hosts: bitbucket.org
 {%- endfor %}
 
 openssh-client:
@@ -63,7 +76,7 @@ openssh-client:
     - latest
     - require:
       - cmd: apt_sources
-{% if pillar['deployment_key']|default(False) %}
+{%- if pillar['deployment_key']|default(False) %}
       - file: {{ root_home }}/.ssh/id_{{ pillar['deployment_key']['type'] }}
 
 root_ssh_private_key:
@@ -77,14 +90,4 @@ root_ssh_private_key:
     - mode: 400
     - require:
       - file: {{ root_home }}/.ssh
-{% endif %}
-
-{%- macro knownhost(domain, fingerprint, user, port='22') %}
-{{ user }}_{{ domain }}:
-  ssh_known_hosts:
-    - name: {{ domain }}
-    - present
-    - user: {{ user }}
-    - fingerprint: {{ fingerprint }}
-    - port: {{ port }}
-{%- endmacro %}
+{%- endif -%}

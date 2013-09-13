@@ -51,6 +51,7 @@ def present(name, type, service):
         ret['result'] = True
         ret['comment'] = '{0} is already {1}'.format(service_clients, type)
     elif __opts__['test']:
+        ret['result'] = None
         ret['comment'] = '{0} would have been {1}'.format(name, type)
     else:
         __salt__['file.append'](path, service_clients)

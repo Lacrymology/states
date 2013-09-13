@@ -5,11 +5,12 @@ uWSGI module
 '''
 
 import logging
+import os
 
-UWSGI_ROOT = '/etc/uwsgi'
 
 logger = logging.getLogger(__name__)
 
+UWSGI_ROOT = os.path.join('/', 'etc', 'uwsgi')
 
 def list_enabled():
     '''

@@ -16,6 +16,7 @@ include:
   - underscore.nrpe
   - uwsgi.nrpe
   - virtualenv.nrpe
+  - xml.nrpe
 
 /etc/nagios/nrpe.d/openerp.cfg:
   file:

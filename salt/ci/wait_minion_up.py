@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import salt.client
 import sys
 import logging
 import datetime
 
-logging.basicConfig(stream=sys.stdout, level=logging.INFO,
+logging.basicConfig(stream=sys.stdout, level=logging.DEBUG,
                     format="%(asctime)s %(message)s")
+
+import salt.client
 
 client = salt.client.LocalClient()
 logger = logging.getLogger(__name__)
@@ -16,8 +17,8 @@ logger = logging.getLogger(__name__)
 def wait_minion_up(minion_id, max_wait):
     output = {}
     start = datetime.datetime.now()
-    while not output:
-        output = client.cmd_async(minion_id, 'test.ping', timeout=2)
+    while minion_id not in output:
+        output = client.cmd_full_return(minion_id, 'test.ping', timeout=2)
         delta = datetime.datetime.now() - start
         if not output:
             logger.info("Minion %s is still not up after %d seconds", minion_id,

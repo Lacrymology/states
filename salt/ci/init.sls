@@ -13,11 +13,11 @@ extend:
     file:
       - source: salt://salt/ci/bootstrap.jinja2
 
-{%- for script in ('import_test_data.py', 'retcode_check.py') %}
-/usr/local/bin/{{ script }}:
+{%- for script in ('import_test_data', 'retcode_check', 'wait_minion_up') %}
+/usr/local/bin/{{ script }}.py:
   file:
     - managed
-    - source: salt://salt/ci/{{ script }}
+    - source: salt://salt/ci/{{ script }}.py
     - user: root
     - group: root
     - mode: 755

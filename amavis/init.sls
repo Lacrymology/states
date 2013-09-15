@@ -1,22 +1,6 @@
 {#-
 Amavis: A Email Virus Scanner
 =============================
-
-Mandatory Pillar
-----------------
-
-mail:
-  mailname: somehost.fqdn.com
-
-mail:mailname: fully qualified domain (if possible) of the mail server hostname.
-
-Optional Pillar
----------------
-
-mail:
-  maxproc: 2
-
-mail:maxproc: maximum number of process.
 -#}
 include:
   - apt

@@ -1,6 +1,9 @@
-{#
- Nagios NRPE check for APT
-#}
+{#-
+ Nagios NRPE check for APT.
+
+ Author: Bruno Clermont <patate@fastmail.cn>
+ Maintainer: Bruno Clermont <patate@fastmail.cn>
+-#}
 include:
   - nrpe
 

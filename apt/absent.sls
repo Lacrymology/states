@@ -1,3 +1,7 @@
+{#-
+ Author: Bruno Clermont <patate@fastmail.cn>
+ Maintainer: Bruno Clermont <patate@fastmail.cn>
+ -#}
 /etc/apt/apt.conf.d/99local:
   file:
     - absent

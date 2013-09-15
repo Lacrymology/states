@@ -91,6 +91,7 @@ gitlab_dependencies:
       - libicu-dev
       - libxslt1-dev
       - libcurl4-openssl-dev
+      - libicu-dev
     - require:
       - cmd: apt_sources
       - pkg: build

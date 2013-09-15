@@ -14,9 +14,9 @@ discourse:
       - user: discourse
   cmd:
     - run
-    - name: kill -9 $(cat /var/run/sidekiq.pid)
+    - name: kill -9 $(ps -ef | grep sidekiq | grep -v grep | awk  '{print $2}')
     - user: root
-    - onlyif: cat /var/run/sidekiq.pid
+    - onlyif: ps -ef | grep sidekiq | grep -v grep
     {#-
     - env:
         RAILS_ENV: production

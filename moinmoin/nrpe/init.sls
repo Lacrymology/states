@@ -26,7 +26,6 @@ include:
       - pkg: nagios-nrpe-server
     - context:
       deployment: moinmoin
-      http_uri: /StartingPage?action=login
       workers: {{ pillar['moinmoin']['workers']|default(2) }}
       cheaper: {{ salt['pillar.get']('moinmoin:cheaper', False) }}
     - require:
@@ -44,6 +43,7 @@ include:
       - pkg: nagios-nrpe-server
     - context:
       deployment: moinmoin
+      http_uri: /StartingPage?action=login
       domain_name: {{ pillar['moinmoin']['hostnames'][0] }}
 {% if pillar['moinmoin']['ssl']|default(False) %}
       https: True

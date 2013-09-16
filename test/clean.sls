@@ -12,7 +12,7 @@ include:
 clean_pkg:
   pkg:
     - purged
-    - names:
+    - pkgs:
       - accountsservice
       - acpid
       - anacron
@@ -244,7 +244,7 @@ orphans:
     - purged
     - require:
       - pkg: clean_pkg
-    - names:
+    - pkgs:
 {% endif %}
       -  {{ pkg }}
 {% endif %}

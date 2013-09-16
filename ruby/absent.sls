@@ -2,7 +2,7 @@
 ruby:
   pkg:
     - purged
-    - names:
+    - pkgs:
       - ruby1.8
       - rubygems
       - rake

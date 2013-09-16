@@ -10,7 +10,7 @@ include:
 basic:
   pkg:
     - latest
-    - names:
+    - pkgs:
       - htop
       - iftop
       - iotop

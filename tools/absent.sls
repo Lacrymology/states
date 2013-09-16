@@ -1,7 +1,7 @@
 basic:
   pkg:
     - purged
-    - names:
+    - pkgs:
       - htop
 
 {%- for i in 'iftop', 'iotop', 'nmap', 'tshark' %}

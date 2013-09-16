@@ -11,7 +11,7 @@ iptables:
     - name: /etc/iptables/rules.v4
   pkg:
     - purged
-    - names:
+    - pkgs:
       - iptables
       - iptstate
       - iptables-persistent

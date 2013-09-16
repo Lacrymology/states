@@ -4,7 +4,7 @@
 proftpd:
   pkg:
     - purged
-    - names:
+    - pkgs:
       - proftpd-basic
       - proftpd-mod-pgsql
     - require:

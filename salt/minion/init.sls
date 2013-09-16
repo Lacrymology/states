@@ -28,7 +28,7 @@ extend:
       - watch:
         - module: salt_minion_master_key
     pkg:
-      - names:
+      - pkgs:
         - salt-minion
         - lsb-release
 {%- if grains['virtual'] != 'openvzve' %}

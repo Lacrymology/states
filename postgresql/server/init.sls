@@ -17,7 +17,7 @@ include:
 postgresql:
   pkg:
     - latest
-    - names:
+    - pkgs:
       - postgresql-{{ version }}
       - postgresql-client-{{ version }}
     - require:

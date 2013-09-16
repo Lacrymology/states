@@ -13,8 +13,7 @@ mariadb:
 {%- endif %}
     - file: /etc/apt/sources.list.d/mariadb.list
     - require:
-      - pkg: python-apt
-      - pkg: python-software-properties
+      - pkg: apt_sources
   pkg:
     - installed
     - name: libmysqlclient18

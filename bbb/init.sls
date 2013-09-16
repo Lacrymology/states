@@ -87,7 +87,7 @@ bigbluebutton:
     - name: deb http://ubuntu.bigbluebutton.org/lucid_dev_081/ bigbluebutton-{{ grains['lsb_distrib_codename'] }} main
     - file: /etc/apt/sources.list.d/bigbluebutton.list
     - require:
-      - pkg: python-apt
+      - pkg: apt_sources
   pkg:
     - installed
     - env:

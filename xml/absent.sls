@@ -1,6 +1,6 @@
 xml-dev:
   pkg:
     - purged
-    - names:
+    - pkgs:
       - libxslt1-dev
       - libxml2-dev

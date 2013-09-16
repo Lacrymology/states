@@ -1,3 +1,7 @@
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+ -#}
 # {{ pillar['message_do_not_modify'] }}
 
 user=shinken
@@ -16,7 +20,7 @@ cfg_dir=/etc/shinken/objects/
 
 disable_old_nagios_parameters_whining=1
 
-{# until shinken 1.4 isn't out, can't use SSL -#}
+{#- until shinken 1.4 isn't out, can't use SSL -#}
 {#-
 {% if pillar['shinken']['ssl']|default(False) %}
 use_ssl=1
@@ -49,7 +53,7 @@ daemon_enabled=1
 {#- max_host_check_spread=5 -#}
 
 {## after 10s, checks are killed (RIP)#}
-{#service_check_timeout=10#}
+{#-service_check_timeout=10-#}
 
 {#- flap_history is the lengh of history states we keep to look for
  flapping.

@@ -1,3 +1,7 @@
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+ -#}
 # {{ pillar['message_do_not_modify'] }}
 {%- set vpns = instances|default([]) %}
 command[openvpn_procs]=/usr/lib/nagios/plugins/check_procs -c {{ vpns|length }}:{{ vpns|length }} -C openvpn

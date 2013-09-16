@@ -1,3 +1,7 @@
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+ -#}
 # {{ pillar['message_do_not_modify'] }}
 {% set workers = pillar['salt_master']['workers']|default("5") %}
 command[salt_master_procs]=/usr/lib/nagios/plugins/check_procs -c {{ workers }}:{{ workers|int + 10 }} -C salt-master -u root

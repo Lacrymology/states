@@ -1,3 +1,7 @@
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+ -#}
 {%- macro monitor(appname, check_postgresql=True) %}
 {{ appname }}_nginx_http:
   description: {{ appname|title }} HTTP protocol

@@ -1,3 +1,7 @@
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+ -#}
 # {{ pillar['message_do_not_modify'] }}
 {%- set mine = salt['mine.get']('*', 'monitoring.data') %}
 
@@ -140,7 +144,7 @@ define service {
     notifications_enabled 1
     event_handler_enabled 0
     # Service event handler is enabled
-{#    event_handler super_event_kill_everyone!DIE-#}
+{#-    event_handler super_event_kill_everyone!DIE-#}
     # Flap detection is enabled
     flap_detection_enabled 1
     # Failure prediction is enabled
@@ -175,7 +179,7 @@ define service {
 define hostgroup {
     hostgroup_name {{ role }}
     alias {{ role|capitalize }} Role
-{#
+{#-
     members hosts
     hostgroup_members hostgroups
     notes note_string

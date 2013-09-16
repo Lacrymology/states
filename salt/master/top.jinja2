@@ -1,4 +1,8 @@
-{# salt gitfs rename master branch into base. which is also the default value #}
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+ -#}
+{#- salt gitfs rename master branch into base. which is also the default value -#}
 {% if pillar['branch']|default('base') == 'master' %}base{% else %}{{ pillar['branch']|default('base') }}{% endif %}:
   '*':
 {% for role in pillar['global_roles'] %}

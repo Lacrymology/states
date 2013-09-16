@@ -1,3 +1,6 @@
+__author__ = 'Bruno Clermont'
+__maintainer__ = 'Bruno Clermont'
+__email__ = 'patate@fastmail.cn'
 #!/usr/local/nagios/bin/python
 # -*- coding: utf-8 -*-
 

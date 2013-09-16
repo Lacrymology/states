@@ -1,3 +1,7 @@
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+ -#}
 # {{ pillar['message_do_not_modify'] }}
 [server]
 
@@ -138,14 +142,6 @@ enabled = True
 [[IPVSCollector]]
 
 enabled = False
-
-{#
-{% if salt['file.file_exists']('/proc/slabinfo') %}
-[[SlabInfoCollector]]
-
-enabled = True
-{% endif -%}
-#}
 
 [[SockstatCollector]]
 

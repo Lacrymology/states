@@ -1,3 +1,7 @@
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+ -#}
 # {{ pillar['message_do_not_modify'] }}
 {#-
 To use this template, extends it and define blocks that you want to replace,
@@ -5,7 +9,7 @@ This template need:
 - pillar data for this app
 - context variable(s): chdir, appname, [wsgi_file], [virtualenv], [django_settings], [module]
 [something] means optional
-#}
+-#}
 {%- set dir = chdir %}
 {%- set wsgi = wsgi_file|default(False) %}
 {%- set django_settings = django_settings|default(False) %}

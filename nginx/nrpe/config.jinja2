@@ -1,3 +1,7 @@
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+ -#}
 # {{ pillar['message_do_not_modify'] }}
 command[nginx_master]=/usr/lib/nagios/plugins/check_procs -c 1:1 -a 'nginx: master process /usr/sbin/nginx -c /etc/nginx/nginx.conf' -u root
 command[nginx_worker]=/usr/lib/nagios/plugins/check_procs -c 1:1 -a 'nginx: worker process' -u www-data

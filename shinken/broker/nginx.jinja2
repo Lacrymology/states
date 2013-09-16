@@ -1,3 +1,7 @@
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+ -#}
 # {{ pillar['message_do_not_modify'] }}
 {%- set mine = salt['mine.get']('*', 'monitoring.data') %}
 
@@ -20,7 +24,7 @@ server {
     server_name {% for hostname in pillar['shinken']['web']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
     return 301 https://{{ pillar['shinken']['web']['hostnames'][0] }}$request_uri;
 }
-{# https server #}
+{#- https server -#}
 server {
 {% endif %}{# redirect http to https #}
     listen 443 ssl;
@@ -32,7 +36,7 @@ server {
     ssl_session_cache shared:SSL:10m;
     ssl_session_timeout 10m;
 {% endif %}
-{# web app logic #}
+{#- web app logic -#}
     server_name {% for hostname in pillar['shinken']['web']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
     location / {
         proxy_pass http://shinken-backend;

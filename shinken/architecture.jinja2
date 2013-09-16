@@ -1,3 +1,7 @@
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+ -#}
 # {{ pillar['message_do_not_modify'] }}
 {%- set mine = salt['mine.get']('*', 'monitoring.data') %}
 
@@ -6,13 +10,13 @@ define realm {
     default 1
 }
 
-{#
+{#-
 Description: The Arbiter is responsible for:
 - Loading, manipulating and dispatching the configuration
 - Validating the health of all other Shinken daemons
 - Issuing global directives to Shinken daemons (kill, activate-spare, etc.)
 http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects/arbiter
-#}
+-#}
 {% for id in pillar['shinken']['architecture']['arbiter'] %}
 define arbiter {
     arbiter_name arbiter-{{ grains['id'] }}
@@ -33,7 +37,7 @@ define module {
     path /var/lib/shinken/arbiter.retention
 }
 
-{#
+{#-
 The scheduler is a "Host manager". It gets the hosts and their services,
 schedules the checks and transmit them to the pollers.
 Description: The scheduler is responsible for:
@@ -43,7 +47,7 @@ Description: The scheduler is responsible for:
 - Requesting actions from a reactionner
 - Buffering and forwarding results its associated broker
 http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects/scheduler
-#}
+-#}
 {% for id in pillar['shinken']['architecture']['scheduler'] %}
 define scheduler {
     scheduler_name scheduler-{{ id }}
@@ -51,10 +55,10 @@ define scheduler {
     port 7768
     modules scheduler-retention
     realm All
-{#    spare 0#}
-{#    # Skip initial broks creation. Boot fast, but some broker modules won't#}
-{#    # work with it!#}
-{#    skip_initial_broks 0#}
+{#-    spare 0-#}
+{#-    # Skip initial broks creation. Boot fast, but some broker modules won't-#}
+{#-    # work with it!-#}
+{#-   skip_initial_broks 0-#}
 }
 {% endfor %}
 
@@ -64,12 +68,12 @@ define module {
     path /var/lib/shinken/scheduler.retention
 }
 
-{#
+{#-
 Description: The poller is responsible for:
 - Active data acquisition
 - Local passive data acquisition
 http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects/poller
-#}
+-#}
 
 {% for id in pillar['shinken']['architecture']['poller'] %}
 define poller {
@@ -81,7 +85,7 @@ define poller {
 }
 {% endfor %}
 
-{#
+{#-
 Description: The broker is responsible for:
 - Exporting centralized logs of all Shinken daemon processes
 - Exporting status data
@@ -92,7 +96,7 @@ Description: The broker is responsible for:
   - Configuration data
   - Command interface
 http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects/broker
-#}
+-#}
 {% for id in pillar['shinken']['architecture']['broker'] %}
 define broker {
     broker_name broker-{{ id }}
@@ -104,22 +108,22 @@ define broker {
     {% if not loop.first %}
     spare 1
     {% endif %}
-{#                            ; broker for the arbiter.
+{#-                            ; broker for the arbiter.
     manage_sub_realms   1   ; Does it take jobs from schedulers of sub-Realms?
     timeout             3   ; Ping timeout
     data_timeout        120 ; Data send timeout
     max_check_attempts  3   ; If ping fails N or more, then the node is dead
-    check_interval      60  ; Ping node every minutes#}
+    check_interval      60  ; Ping node every minutes-#}
 }
 {% endfor %}
 
-{#
+{#-
 Send all logs to system's Syslog
 Send all logs to a local syslog server. Support for remote syslog can be
 implemented if requested. Just lookup the syslog module source code, it's
 easy to modify. Use for example with Splunk Molog, Logstash or other log
 management and analysis system.
-#}
+-#}
 define module {
     module_name broker-syslog
     module_type syslog
@@ -163,14 +167,14 @@ define module {
     auth_secret CHANGE_ME
     manage_acl 1
     login_text Monitoring
-{#    allow_html_output 0       ; Allow or not HTML chars in plugins output.
+{#-    allow_html_output 0       ; Allow or not HTML chars in plugins output.
                                 ; WARNING: Allowing can be a security issue.
     max_output_length   100     ; Maximum output length for plugin output in webui
-    play_sound          0       ; Play sound on new non-acknowledged problems.#}
+    play_sound          0       ; Play sound on new non-acknowledged problems.-#}
 
     modules broker-webui-sqlite, broker-webui-auth{% if 'graphite_address' in pillar %}, broker-webui-graphite{% endif %}
 
-{#    ## Advanced Options
+{#-    ## Advanced Options
     # Don't use them as long as you don't know what you are doing!
     #http_backend            auto    ; Choice is: auto, wsgiref, cherrypy,
                                      ; paste, tornado, twisted or gevent.
@@ -179,7 +183,7 @@ define module {
                                      ; has already authenticated user, enable.
     #remote_user_variable    X_Remote_User  ; Set to the HTTP header containing
                                      ; the authenticated user s name, which
-                                     ; must be a Shinken contact.#}
+                                     ; must be a Shinken contact.-#}
 }
 
 {## Module:      OpenLDAP_UI
@@ -217,7 +221,7 @@ define reactionner {
     address {{ mine[id]['ip_addrs']['public'] }}
     port 7769
     realm All
-{#  Optional
+{#-  Optional
     manage_sub_realms   0   ; Does it take jobs from schedulers of sub-Realms?
     min_workers         1   ; Starts with N processes (0 = 1 per CPU)
     max_workers         15  ; No more than N processes (0 = 1 per CPU)
@@ -225,15 +229,15 @@ define reactionner {
     timeout             3   ; Ping timeout
     data_timeout        120 ; Data send timeout
     max_check_attempts  3   ; If ping fails N or more, then the node is dead
-    check_interval      60  ; Ping node every minutes#}
+    check_interval      60  ; Ping node every minutes-#}
     modules
 }
 {% endfor %}
 
-{#
+{#-
 The receiver manages passive information. It's just a "buffer" which will
 load passive modules (like NSCA) and be read by the arbiter to dispatch data.
-#}
+-#}
 {% for id in salt['pillar.get']('shinken:architecture:receiver', []) %}
 define receiver {
     receiver_name receiver-{{ id }}
@@ -241,9 +245,9 @@ define receiver {
     port 7773
     modules
     realm All
-{#    direct_routing      0   ; If enabled, it will directly send commands to the
+{#-    direct_routing      0   ; If enabled, it will directly send commands to the
                             ; schedulers if it know about the hostname in the
-                            ; command.#}
+                            ; command.-#}
 }
 {% endfor %}
 
@@ -251,7 +255,7 @@ define receiver {
 Module: broker-webui-sqlite
 Loaded by: broker-webui
 In broker-webui: Save/read user preferences
-#}
+-#}
 define module {
     module_name broker-webui-sqlite
     module_type sqlitedb

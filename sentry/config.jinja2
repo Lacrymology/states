@@ -1,3 +1,7 @@
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+ -#}
 # {{ pillar['message_do_not_modify'] }}
 
 import os.path
@@ -19,18 +23,18 @@ DATABASES = {
 
 SENTRY_KEY = '{{ salt['password.pillar']('sentry:django_key', 50) }}'
 
-{#CACHE_PREFIX = 'sentry'#}
-{#CACHE_TIMEOUT = 300#}
-{#MIDDLEWARE_CLASSES.insert(0, 'johnny.middleware.QueryCacheMiddleware')#}
-{#MIDDLEWARE_CLASSES.insert(0, 'johnny.middleware.LocalStoreClearMiddleware')#}
-{#CACHES = {#}
-{#    'default' : dict(#}
-{#        BACKEND = 'johnny.backends.memcached.MemcachedCache',#}
-{#        LOCATION = [{% for ip in pillar['memcache_servers'] %}'{{ ip }}:11211'{% if not loop.last %},{% endif %}{% endfor %}],#}
-{#        JOHNNY_CACHE = True,#}
-{#    )#}
-{#}#}
-{#JOHNNY_MIDDLEWARE_KEY_PREFIX='sentry'#}
+{#-CACHE_PREFIX = 'sentry'-#}
+{#-CACHE_TIMEOUT = 300-#}
+{#-MIDDLEWARE_CLASSES.insert(0, 'johnny.middleware.QueryCacheMiddleware')-#}
+{#-MIDDLEWARE_CLASSES.insert(0, 'johnny.middleware.LocalStoreClearMiddleware')-#}
+{#-CACHES = {-#}
+{#-    'default' : dict(-#}
+{#-        BACKEND = 'johnny.backends.memcached.MemcachedCache',-#}
+{#-        LOCATION = [{% for ip in pillar['memcache_servers'] %}'{{ ip }}:11211'{% if not loop.last %},{% endif %}{% endfor %}],-#}
+{#-        JOHNNY_CACHE = True,-#}
+{#-    )-#}
+{#-}-#}
+{#-JOHNNY_MIDDLEWARE_KEY_PREFIX='sentry'-#}
 
 
 # Set this to false to require authentication
@@ -40,12 +44,12 @@ SENTRY_PUBLIC = False
 # but proxies may interfere with this.
 SENTRY_URL_PREFIX = '{% if pillar['sentry']['ssl']|default(False) %}https{% else %}http{% endif %}://{{ pillar['sentry']['hostnames'][0] }}'  # No trailing slash!
 
-{#SENTRY_WEB_HOST = '0.0.0.0'#}
-{#SENTRY_WEB_PORT = 8080#}
-{#SENTRY_WEB_OPTIONS = {#}
-{#    'workers': {{ pillar['sentry']['workers'] }},  # the number of gunicorn workers#}
-{#    'worker_class': 'gevent',#}
-{#}#}
+{#-SENTRY_WEB_HOST = '0.0.0.0'-#}
+{#-SENTRY_WEB_PORT = 8080-#}
+{#-SENTRY_WEB_OPTIONS = {-#}
+{#-    'workers': {{ pillar['sentry']['workers'] }},  # the number of gunicorn workers-#}
+{#-    'worker_class': 'gevent',-#}
+{#-}-#}
 
 LOGGING = {
     'version': 1,

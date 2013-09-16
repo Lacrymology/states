@@ -50,7 +50,7 @@ include:
     - context:
       deployment: discourse
       domain_name: {{ salt['pillar.get']('discourse:hostnames')[0] }}
-      http_uri: /login
+      http_uri: /
 {%- if salt['pillar.get']('discourse:ssl', False) %}
       https: True
       http_result: 301 Moved Permanently

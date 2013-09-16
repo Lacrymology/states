@@ -2,7 +2,7 @@
 [server]
 
 # Handlers for published metrics.
-handlers = diamond.handler.graphitepickle.GraphitePickleHandler 
+handlers = diamond.handler.graphitepickle.GraphitePickleHandler
 #diamond.handler.stats_d.StatsdHandler
 
 # Leave empty to use the current user
@@ -43,7 +43,7 @@ host = {{ pillar['graphite_address'] }}
 # Port to send metrics to
 port = 2004
 
-batch = 256
+batch = {{ salt['pillar.get']('diamond:batch', 256) }}
 
 # Socket timeout (seconds)
 timeout = 15

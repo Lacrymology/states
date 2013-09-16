@@ -1,3 +1,7 @@
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
+ -#}
 # {{ pillar['message_do_not_modify'] }}
 {%- set instances_count = pillar['graphite']['carbon']['instances'] %}
 command[carbon_relay_procs]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u graphite -C python -a "/usr/local/graphite/bin/carbon-relay.py --config=/etc/graphite/carbon.conf start"

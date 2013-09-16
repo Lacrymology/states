@@ -25,7 +25,7 @@ gitlab:
   database:
     host: localhost
     port: 5432
-    username: postgre user. Default is git
+    username: postgre user. Default is gitlab
     password: password for postgre user
   ldap:
     enabled: enable ldap auth, Default: False
@@ -73,7 +73,7 @@ include:
   - uwsgi.ruby
   - web
 
-{%- set database_username = salt['pillar.get']('gitlab:database:username', 'git') %}
+{%- set database_username = salt['pillar.get']('gitlab:database:username', 'gitlab') %}
 {%- set database_password = salt['password.pillar']('gitlab:database:password', 10) %}
 
 {%- set version = '6-0' %}

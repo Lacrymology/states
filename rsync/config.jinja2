@@ -1,3 +1,7 @@
+{#-
+ Author: Hung Nguyen Viet hvnsweeting@gmail.com
+ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
+ -#}
 # {{ pillar['message_do_not_modify'] }}
 
 {%- set rsync = salt['pillar.get']('rsync', []) -%}
@@ -7,7 +11,7 @@
 {{ key }} = {{ rsync[key] }}
 {%- endif -%}
 {%- endfor -%}
-{#- overwrite previously defined key for the following #}
+{#- overwrite previously defined key for the following -#}
 log file =
 syslog facility = daemon
 pid file = /var/run/rsyncd.pid

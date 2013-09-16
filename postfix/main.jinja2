@@ -1,3 +1,4 @@
+
 # {{ pillar['message_do_not_modify'] }}
 myhostname = {{ pillar['mail']['mailname'] }}
 smtpd_banner = $myhostname ESMTP $mail_name
@@ -15,9 +16,9 @@ append_dot_mydomain = no
 {#-
  Uncomment the next line to generate "delayed mail" warnings
 delay_warning_time = 4h
-#}
+-#}
 readme_directory = no
-{# TLS parameters #}
+{#- TLS parameters -#}
 {% if salt['pillar.get']('postfix:ssl', False) %}
 smtpd_tls_cert_file=/etc/ssl/{{ salt['pillar.get']('postfix:ssl') }}/ca.crt
 smtpd_tls_key_file=/etc/ssl/{{ salt['pillar.get']('postfix:ssl') }}/server.pem

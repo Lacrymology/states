@@ -1,3 +1,7 @@
+{#-
+ Author: Hung Nguyen Viet hvnsweeting@gmail.com
+ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
+ -#}
 {% set rootdn = salt['pillar.get']('ldap:rootdn') %}
 dn: olcDatabase={1}hdb,cn=config
 changetype: modify

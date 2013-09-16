@@ -1,7 +1,11 @@
+{#-
+ Author: Hung Nguyen Viet hvnsweeting@gmail.com
+ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
+ -#}
 # {{ pillar['message_do_not_modify'] }}
 {#-
  Check http://www.clamav.net/mirrors.html for a list of Clamav mirrors
- #}
+ -#}
 DatabaseOwner clamav
 UpdateLogFile /var/log/clamav/freshclam.log
 NotifyClamd /etc/clamav/clamd.conf
@@ -25,7 +29,7 @@ TestDatabases yes
 ScriptedUpdates yes
 CompressLocalDatabase no
 Bytecode true
-{# Check for new database 24 times a day #}
+{#- Check for new database 24 times a day -#}
 Checks {{ salt['pillar.get']('clamav:times_of_check', 24) }}
 {%- for mirror in salt['pillar.get']('clamav:db_mirrors', ('db.local.clamav.net', 'database.clamav.net')) %}
 DatabaseMirror {{ mirror }}

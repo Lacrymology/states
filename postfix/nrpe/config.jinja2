@@ -1,3 +1,7 @@
+{#-
+ Author: Hung Nguyen Viet hvnsweeting@gmail.com
+ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
+ -#}
 # {{ pillar['message_do_not_modify'] }}
 {% set ssl = salt['pillar.get']('postfix:ssl', False) %}
 command[postfix_master]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u root -C master

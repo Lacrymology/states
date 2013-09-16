@@ -1,5 +1,9 @@
+{#-
+ Author: Hung Nguyen Viet hvnsweeting@gmail.com
+ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
+ -#}
 use strict;
-{#
+{#-
 # You can modify this file to re-enable SPAM checking through spamassassin
 # and to re-enable antivirus checking.
 
@@ -12,7 +16,7 @@ use strict;
 -#}
 @bypass_virus_checks_maps = (
    \%bypass_virus_checks, \@bypass_virus_checks_acl, \$bypass_virus_checks_re);
-{#
+{#-
 
 #
 # Default SPAM checking mode
@@ -24,4 +28,4 @@ use strict;
 @bypass_spam_checks_maps = (
    \%bypass_spam_checks, \@bypass_spam_checks_acl, \$bypass_spam_checks_re);
 
-1; {#  # ensure a defined return #}
+1; {#-  # ensure a defined return -#}

@@ -1,3 +1,7 @@
+{#-
+ Author: Hung Nguyen Viet hvnsweeting@gmail.com
+ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
+ -#}
 # {{ pillar['message_do_not_modify'] }}
 upstream roundcube {
     server unix:///var/lib/uwsgi/roundcube.sock;
@@ -11,7 +15,7 @@ server {
     server_name {% for hostname in pillar['roundcube']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
     return 301 https://{{ pillar['roundcube']['hostnames'][0] }}$request_uri;
 }
-{# https server #}
+{#- https server -#}
 server {
 {% endif %}{# redirect http to https #}
     listen 443 ssl;
@@ -24,7 +28,7 @@ server {
     ssl_session_timeout 10m;
 {% endif %}
 
-{# web app logic #}
+{#- web app logic -#}
     server_name {% for hostname in pillar['roundcube']['hostnames'] -%}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
     root {{ dir }};
 

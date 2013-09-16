@@ -1,3 +1,7 @@
+{#-
+ Author: Hung Nguyen Viet hvnsweeting@gmail.com
+ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
+ -#}
 # {{ pillar['message_do_not_modify'] }}
 {#- TODO config all in pillar, production -#}
 {#-
@@ -17,7 +21,7 @@
 
  By default Redis does not run as a daemon. Use 'yes' if you need it.
  Note that Redis will write a pid file in /var/run/redis.pid when daemonized.
-#}
+-#}
 daemonize yes
 
 pidfile /var/run/redis/redis-server.pid
@@ -25,7 +29,7 @@ pidfile /var/run/redis/redis-server.pid
 {#-
  Accept connections on the specified port, default is 6379.
  If port 0 is specified Redis will not listen on a TCP socket.
-#}
+-#}
 port {{ salt['pillar.get']('redis:port', 6379) }}
 
 {#-
@@ -42,7 +46,7 @@ port {{ salt['pillar.get']('redis:port', 6379) }}
  unixsocketperm 755
 
  Close the connection after a client is idle for N seconds (0 to disable)
-#}
+-#}
 timeout {{ salt['pillar.get']('redis:timeout', 0) }}
 
 {#-
@@ -60,17 +64,17 @@ timeout {{ salt['pillar.get']('redis:timeout', 0) }}
  On other kernels the period depends on the kernel configuration.
 
  A reasonable value for this option is 60 seconds.
-#}
+-#}
 tcp-keepalive {{ salt['pillar.get']('redis:keepalive', 60) }}
 
-{#
+{#-
  Specify the server verbosity level.
  This can be one of:
  debug (a lot of information, useful for development/testing)
  verbose (many rarely useful info, but not a mess like the debug level)
  notice (moderately verbose, what you want in production probably)
  warning (only very important / critical messages are logged)
-#}
+-#}
 loglevel {{ salt['pillar.get']('redis:loglevel', 'notice') }}
 
 {#-
@@ -82,24 +86,24 @@ loglevel {{ salt['pillar.get']('redis:loglevel', 'notice') }}
  To enable logging to the system logger, just set 'syslog-enabled' to yes,
  and optionally update the other syslog parameters to suit your needs.
  syslog-enabled no
-#}
+-#}
 syslog-enabled yes
 
 {#-
  Specify the syslog identity.
-#}
+-#}
 syslog-ident redis
 
 {#-
  Specify the syslog facility. Must be USER or between LOCAL0-LOCAL7.
-#}
+-#}
 syslog-facility local0
 
 {#-
  Set the number of databases. The default database is DB 0, you can select
  a different one on a per-connection basis using SELECT <dbid> where
  dbid is a number between 0 and 'databases'-1
-#}
+-#}
 databases {{ salt['pillar.get']('redis:number_of_dbs', 16) }}
 
 {#-
@@ -124,7 +128,7 @@ databases {{ salt['pillar.get']('redis:number_of_dbs', 16) }}
    like in the following example:
 
    save ""
-#}
+-#}
 {%- set save = salt['pillar.get']('redis:save', None) %}
 {%- if save %}
     {%- for numbs in salt['pillar.get']('redis:save', []) %}
@@ -156,7 +160,7 @@ stop-writes-on-bgsave-error yes
  For default that's set to 'yes' as it's almost always a win.
  If you want to save some CPU in the saving child set it to 'no' but
  the dataset will likely be bigger if you have compressible values or keys.
-#}
+-#}
 rdbcompression yes
 
 {#-
@@ -167,12 +171,12 @@ rdbcompression yes
 
  RDB files created with checksum disabled have a checksum of zero that will
  tell the loading code to skip the check.
-#}
+-#}
 rdbchecksum yes
 
 {#-
  The filename where to dump the DB
-#}
+-#}
 dbfilename dump.rdb
 
 {#-
@@ -184,7 +188,7 @@ dbfilename dump.rdb
  The Append Only File will also be created inside this directory.
 
  Note that you must specify a directory here, not a file name.
-#}
+-#}
 dir /var/lib/redis
 
 
@@ -222,9 +226,9 @@ dir /var/lib/redis
 #
 # Please note that changing the name of commands that are logged into the
 # AOF file or transmitted to slaves may cause problems.
-#}
+-#}
 
-{#
+{#-
 ################################### LIMITS ####################################
 
 # Set the max number of connected clients at the same time. By default
@@ -236,10 +240,10 @@ dir /var/lib/redis
 # Once the limit is reached Redis will close all the new connections sending
 # an error 'max number of clients reached'.
 #
-#}
+-#}
 maxclients {{ salt['pillar.get']('redis:maxclients', 10000) }}
 
-{#
+{#-
 # Don't use more memory than the specified amount of bytes.
 # When the memory limit is reached Redis will try to remove keys
 # accordingly to the eviction policy selected (see maxmemmory-policy).
@@ -263,10 +267,10 @@ maxclients {{ salt['pillar.get']('redis:maxclients', 10000) }}
 # limit for maxmemory so that there is some free RAM on the system for slave
 # output buffers (but this is not needed if the policy is 'noeviction').
 #
-#}
+-#}
 maxmemory {{ salt['pillar.get']('redis:maxmemory', '300mb') }}
 
-{#
+{#-
  MAXMEMORY POLICY: how Redis will select what to remove when maxmemory
  is reached. You can select among five behaviors:
 
@@ -285,20 +289,20 @@ maxmemory {{ salt['pillar.get']('redis:maxmemory', '300mb') }}
        sinter sinterstore sunion sunionstore sdiff sdiffstore zadd zincrby
        zunionstore zinterstore hset hsetnx hmset hincrby incrby decrby
        getset mset msetnx exec sort
-#}
+-#}
 maxmemory-policy {{ salt['pillar.get']('redis:policy', 'volatile-lru') }}
 
-{#
+{#-
 # LRU and minimal TTL algorithms are not precise algorithms but approximated
 # algorithms (in order to save memory), so you can select as well the sample
 # size to check. For instance for default Redis will check three keys and
 # pick the one that was used less recently, you can change the sample size
 # using the following configuration directive.
 #
-#}
+-#}
 maxmemory-samples {{ salt['pillar.get']('redis:samples', 3) }}
 
-{#
+{#-
 ############################## APPEND ONLY MODE ###############################
 
 # By default Redis asynchronously dumps the dataset on disk. This mode is
@@ -318,10 +322,10 @@ maxmemory-samples {{ salt['pillar.get']('redis:samples', 3) }}
 # with the better durability guarantees.
 #
 # Please check http://redis.io/topics/persistence for more information.
-#}
+-#}
 appendonly no
 
-{#
+{#-
 # The name of the append only file (default: "appendonly.aof")
 # appendfilename appendonly.aof
 
@@ -349,9 +353,9 @@ appendonly no
 # If unsure, use "everysec".
 
 # appendfsync always
-#}
+-#}
 appendfsync everysec
-{#
+{#-
 # appendfsync no
 
 # When the AOF fsync policy is set to always or everysec, and a background
@@ -372,10 +376,10 @@ appendfsync everysec
 #
 # If you have latency problems turn this to "yes". Otherwise leave it as
 # "no" that is the safest pick from the point of view of durability.
-#}
+-#}
 no-appendfsync-on-rewrite no
 
-{#
+{#-
 # Automatic rewrite of the append only file.
 # Redis is able to automatically rewrite the log file implicitly calling
 # BGREWRITEAOF when the AOF log size grows by the specified percentage.
@@ -393,11 +397,11 @@ no-appendfsync-on-rewrite no
 # Specify a percentage of zero in order to disable the automatic AOF
 # rewrite feature.
 
-#}
+-#}
 auto-aof-rewrite-percentage 100
 auto-aof-rewrite-min-size 64mb
 
-{#
+{#-
  Max execution time of a Lua script in milliseconds.
 
  If the maximum execution time is reached Redis will log that a script is
@@ -412,10 +416,10 @@ auto-aof-rewrite-min-size 64mb
  termination of the script.
 
  Set it to 0 or a negative value for unlimited execution without warnings.
-#}
+-#}
 lua-time-limit 5000
 
-{#
+{#-
  The Redis Slow Log is a system to log queries that exceeded a specified
  execution time. The execution time does not include the I/O operations
  like talking with the client, sending the reply and so forth,
@@ -432,16 +436,16 @@ lua-time-limit 5000
  The following time is expressed in microseconds, so 1000000 is equivalent
  to one second. Note that a negative number disables the slow log, while
  a value of zero forces the logging of every command.
-#}
+-#}
 slowlog-log-slower-than 10000
 
-{#
+{#-
 # There is no limit to this length. Just be aware that it will consume memory.
 # You can reclaim memory used by the slow log with SLOWLOG RESET.
-#}
+-#}
 slowlog-max-len 128
 
-{#
+{#-
 ############################### ADVANCED CONFIG ###############################
 
 # Hashes are encoded using a memory efficient data structure when they have a
@@ -558,4 +562,4 @@ aof-rewrite-incremental-fsync yes
 #
 # include /path/to/local.conf
 # include /path/to/other.conf
-#}
+-#}

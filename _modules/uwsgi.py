@@ -45,11 +45,11 @@ def list_enabled():
     '''
     List uWSGI application that are enabled.
     '''
-    return _applist(_enabled_path)
     # IMPLEMENT:
     # list in $UWSGI_ROOT/apps-enabled all the symlink to
     # $UWSGI_ROOT/apps-available
     # for '/etc/uwsgi/apps-enabled/bleh.ini' return only 'bleh'
+    return _applist(_enabled_path)
 
 def list_available():
     '''

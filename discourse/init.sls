@@ -29,6 +29,8 @@ discourse:
     password: password for account login
     authentication: Default is: `plain`
     tls: Default is: False
+
+    
 #}
 
 include:

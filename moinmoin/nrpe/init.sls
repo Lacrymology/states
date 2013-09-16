@@ -43,6 +43,7 @@ include:
       - pkg: nagios-nrpe-server
     - context:
       deployment: moinmoin
+      http_uri: /StartingPage?action=login
       domain_name: {{ pillar['moinmoin']['hostnames'][0] }}
 {% if pillar['moinmoin']['ssl']|default(False) %}
       https: True

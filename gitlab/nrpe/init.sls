@@ -51,7 +51,7 @@ include:
     - context:
       deployment: gitlab
       domain_name: {{ salt['pillar.get']('gitlab:hostnames')[0] }}
-      http_uri: /login
+      http_uri: /users/sign_in
 {%- if salt['pillar.get']('gitlab:ssl', False) %}
       https: True
       http_result: 301 Moved Permanently

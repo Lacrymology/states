@@ -1,7 +1,8 @@
+#!/usr/bin/env python
+
 __author__ = 'Bruno Clermont'
 __maintainer__ = 'Bruno Clermont'
 __email__ = 'patate@fastmail.cn'
-#!/usr/bin/env python
 
 import tarfile
 import os

@@ -7,7 +7,17 @@ uWSGI module
 import logging
 import os
 
-import salt
+import salt, salt.version
+if salt.version.__version_info__ >= (0, 16):
+    # use file.symlink module
+    def symlink(name, target):
+        """
+        modules.file.symlink takes src, link and salt.states.file.symlink takes name, target (i.e., link, src)
+        This makes it compatible
+        """
+        return __salt__['file.symlink'](target, name)
+else:
+    from salt.states.file import symlink
 
 logger = logging.getLogger(__name__)
 
@@ -35,8 +45,8 @@ def _get_app_paths(app=None):
     app_file = os.path.join(app, '.ini')
     # define our app config/symlink paths
     config = os.path.join(_available_path, app_file)
-    symlink = os.path.join(_enabled_path, app_file)
-    return config, symlink, app_file
+    link = os.path.join(_enabled_path, app_file)
+    return config, link, app_file
 
 def _applist(dir):
     return [os.path.splitext(x)[0] for x in os.listdir(dir) if os.path.isfile(os.path.join(dir, x))]
@@ -71,7 +81,7 @@ def enable(app_name):
     # in case of failure use logger.error
     # return {$filename: 'symlink created to $destination'}
     app_config, app_symlink, app_file = _get_app_paths(app_name)
-    salt.states.file.symlink(app_symlink, app_config)
+    symlink(app_symlink, app_config)
     return {app_file: "symlink created in {destination}".format(dict(destination=app_symlink))}
 
 

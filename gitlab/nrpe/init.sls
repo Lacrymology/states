@@ -71,6 +71,6 @@ include:
       - pkg: nagios-nrpe-server
     - context:
       deployment: gitlab
-      password: {{  salt['password.pillar']('gitlab:database:password') }}
+      password: {{  salt['password.pillar']('gitlab:database:password', 10) }}
     - watch_in:
       - service: nagios-nrpe-server

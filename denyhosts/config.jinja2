@@ -21,74 +21,74 @@ DAEMON_PURGE = 1h
 {#-
  Removed HOSTS_DENY entries that are older than this time when DenyHosts is
  invoked with the --purge flag
--#}
+#}
 PURGE_DENY = {{ salt['pillar.get']('denyhosts:purge', '1d') }}
 {#-
  Defines the maximum times a host will be purged. Once this value has been
  exceeded then this host will not be purged. Setting this parameter to 0 (the
  default) disables this feature. default: a denied host can be purged/re-added
  indefinitely
--#}
+#}
 PURGE_THRESHOLD = 0
 {#-
  The service name that should be blocked in HOSTS_DENY man 5 hosts_access for
  details.
--#}
+#}
 BLOCK_SERVICE = sshd
 {#-
  Block each host after the number of failed login attempts has exceeded this
  value.  This value applies to invalid user login attempts (eg. non-existent
  user accounts)
--#}
+#}
 DENY_THRESHOLD_INVALID = {{ salt['pillar.get']('denyhosts:deny_threshold_invalid_user', 5) }}
 {#-
  Block each host after the number of failed login attempts has exceeded this
  value.  This value applies to valid  user login attempts (eg. user accounts
  that exist in /etc/passwd) except for the "root" user.
--#}
+#}
 DENY_THRESHOLD_VALID = {{ salt['pillar.get']('denyhosts:deny_threshold_valid_user', 10) }}
 {#-
  Block each host after the number of failed login attempts has exceeded this
  value.  This value applies to "root" user login attempts only.
--#}
+#}
 DENY_THRESHOLD_ROOT = {{ salt['pillar.get']('denyhosts:deny_threshold_root', 1) }}
 {#-
  Block each host after the number of failed login attempts has exceeded this
  value.  This value applies to usernames that appear in the
  WORK_DIR/restricted-usernames file only.
--#}
+#}
 DENY_THRESHOLD_RESTRICTED = 1
 {#-
  If set to YES, if a suspicious login attempt results from an allowed-host then
  it is considered suspicious.  If this is NO, then suspicious logins from
  allowed-hosts will not be reported.  All suspicious logins from ip addresses
  that are not in allowed-hosts will always be reported.
--#}
+#}
 SUSPICIOUS_LOGIN_REPORT_ALLOWED_HOSTS = YES
 {#-
  If set to YES, for each IP address that is reported by Denyhosts, the
  corresponding hostname will be looked up and reported as well (if available).
--#}
+#}
 HOSTNAME_LOOKUP = YES
 {#-
  If set to YES, for each entry in the WORK_DIR/allowed-hosts file, the hostname
  will be looked up.  If your versions of tcp_wrappers and sshd sometimes log
  hostnames in addition to ip addresses then you may wish to specify this option.
 -#}
-{#ALLOWED_HOSTS_HOSTNAME_LOOKUP = NO#}
+{#-ALLOWED_HOSTS_HOSTNAME_LOOKUP = NO-#}
 {#-
  Specifies the period of time between failed login attempts that, when exceeded
  will result in the failed count for this host to be reset to 0.  This value
  applies to login attempts to all valid users (those within /etc/passwd) with
  the exception of root.  If not defined, this count will never be reset.
--#}
+#}
 AGE_RESET_VALID = {{ salt['pillar.get']('denyhosts:reset_valid', '5d') }}
 {#-
  Specifies the period of time between failed login attempts that, when exceeded
  will result in the failed count for this host to be reset to 0.  This value
  applies to all login attempts to the "root" user account. If not defined, this
  count will never be reset.
--#}
+#}
 AGE_RESET_ROOT = {{ salt['pillar.get']('denyhosts:reset_root', '5d') }}
 {#-
  Specifies the period of time between failed login attempts that, when exceeded
@@ -96,19 +96,19 @@ AGE_RESET_ROOT = {{ salt['pillar.get']('denyhosts:reset_root', '5d') }}
  applies to all login attempts to entries found in the
  WORK_DIR/restricted-usernames file.
  If not defined, the count will never be reset.
--#}
+#}
 AGE_RESET_RESTRICTED = {{ salt['pillar.get']('denyhosts:reset_restricted', '25d') }}
 {#-
  Specifies the period of time between failed login attempts that, when exceeded
  will result in the failed count for this host to be reset to 0.  This value
  applies to login attempts made to any invalid username (those that do not
  appear in /etc/passwd). If not defined, count will never be reset.
--#}
+#}
 AGE_RESET_INVALID = {{ salt['pillar.get']('denyhosts:reset_invalid', '10d') }}
 {#-
  If this parameter is set to "yes" then the failed count for the respective ip
  address will be reset to 0 if the login is successful.
--#}
+#}
 RESET_ON_SUCCESS = {{ salt['pillar.get']('denyhosts:reset_on_success', 'no') }}
 {#-
  Synchronization mode allows the DenyHosts daemon the ability to periodically
@@ -123,27 +123,27 @@ RESET_ON_SUCCESS = {{ salt['pillar.get']('denyhosts:reset_on_success', 'no') }}
  synchronization.
 -#}
 {#- to set sync you need to set this to http://xmlrpc.denyhosts.net:9911
-   in your pillar. -#}
+   in your pillar. #}
 {% if salt['pillar.get']('denyhosts:sync', False) %}
 SYNC_SERVER = {{ pillar['denyhosts']['sync']['server'] }}
 {#-
  The interval of time to perform synchronizations.
--#}
+#}
 SYNC_INTERVAL = {{ salt['pillar.get']('denyhosts:sync:interval', '1h') }}
 {#-
  Allow your DenyHosts daemon to transmit hosts that have been denied?
--#}
+#}
 SYNC_UPLOAD = {{ salt['pillar.get']('denyhosts:sync:upload', 'yes') }}
 {#-
  allow your DenyHosts daemon to receive hosts that have been denied by others?
--#}
+#}
 SYNC_DOWNLOAD = {{ salt['pillar.get']('denyhosts:sync:download', 'yes') }}
 {#-
  If SYNC_DOWNLOAD is enabled this parameter filters the returned hosts to those
  that have been blocked this many times by others. That is, if set to 1, then if
  a single DenyHosts server has denied an ip address then you will receive the
  denied host.
--#}
+#}
 SYNC_DOWNLOAD_THRESHOLD = {{ salt['pillar.get']('denyhosts:sync:download_threshold', 3) }}
 {#-
  If SYNC_DOWNLOAD is enabled then the value specified for this option limits the
@@ -157,6 +157,6 @@ SYNC_DOWNLOAD_THRESHOLD = {{ salt['pillar.get']('denyhosts:sync:download_thresho
  be downloaded by your DenyHosts instance.
  This value is used in conjunction with the SYNC_DOWNLOAD_THRESHOLD
  and only hosts that satisfy both values will be downloaded.
--#}
+#}
 SYNC_DOWNLOAD_RESILIENCY = {{ salt['pillar.get']('denyhosts:sync:download_resiliency', '5h') }}
 {% endif %}

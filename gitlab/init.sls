@@ -319,6 +319,7 @@ charlock_holmes:
     - require:
       - file: gitlab
       - file: {{ home_dir }}/gitlab-satellites
+      - pkg: gitlab_dependencies
 
 bundler:
   gem:

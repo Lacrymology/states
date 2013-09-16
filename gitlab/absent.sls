@@ -16,8 +16,9 @@ gitlab:
       - user: gitlab
   cmd:
     - run
-    - name: initctl stop gitlab
+    - name: kill -9 $(ps -ef | grep sidekiq | grep -v grep | awk  '{print $2}')
     - user: root
+    - onlyif: ps -ef | grep sidekiq | grep -v grep
 
 {%- for file in ('/etc/nginx/conf.d/gitlab.conf', web_dir, '/home/git', '/etc/init/gitlab.conf', '/etc/uwsgi/gitlab.ini', '/etc/logrotate.d/gitlab') %}
 {{ file }}:

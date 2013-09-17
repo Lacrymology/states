@@ -5,14 +5,6 @@ import sys
 import urlparse
 from . import user_settings
 
-def ensure_directory(path):
-    try:
-        os.makedirs(path)
-    except OSError, os_error:
-        if os_error.errno != errno.EEXIST:
-            raise
-    return path
-
 PROJECT_ROOT = "/var/lib/djangopypi2"
 USER_SETTINGS = user_settings.load(PROJECT_ROOT)
 
@@ -44,10 +36,10 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-MEDIA_ROOT = ensure_directory(os.path.join(PROJECT_ROOT, 'media'))
+MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media')
 MEDIA_URL = USER_SETTINGS['WEB_ROOT'].rstrip('/') + '/media/'
 
-STATIC_ROOT = ensure_directory(os.path.join(PROJECT_ROOT, 'static'))
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 STATIC_URL = USER_SETTINGS['WEB_ROOT'].rstrip('/') + '/static/'
 
 STATICFILES_FINDERS = (

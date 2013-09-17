@@ -5,7 +5,7 @@ import sys
 import urlparse
 from . import user_settings
 
-PROJECT_ROOT = "/var/lib/djangopypi2"
+PROJECT_ROOT = "/var/lib/deployments/djangopypi2"
 USER_SETTINGS = user_settings.load(PROJECT_ROOT)
 
 DEBUG = USER_SETTINGS['DEBUG']

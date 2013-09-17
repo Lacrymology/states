@@ -1,6 +1,9 @@
-{#
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+
  Uninstall a Graylog2 logging server backend
- #}
+ -#}
 {% set version = '0.11.0' %}
 {% set server_root_dir = '/usr/local/graylog2-server-' + version %}
 

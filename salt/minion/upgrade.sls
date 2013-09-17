@@ -1,4 +1,7 @@
 {#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+
  This state is the most simple way to upgrade to restart a minion.
  It don't requires on any other state (sls) file except salt
  (for the repository).

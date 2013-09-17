@@ -1,4 +1,7 @@
-{#
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+ 
  Install a Salt Management Master (server)
 
  If you install a salt master from scratch, check and run bootstrap_archive.py

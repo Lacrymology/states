@@ -1,6 +1,9 @@
-{#
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+ 
  Install the Nginx web server
- #}
+ -#}
 include:
   - apt
   - web

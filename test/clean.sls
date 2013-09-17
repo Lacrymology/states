@@ -1,8 +1,11 @@
-{#
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+ 
  This state take a salt-minion and remove all debian packages that aren't
  required to run only it.
  Useful to identify if dependencies are missing.
-#}
+-#}
 
 include:
   - deborphan

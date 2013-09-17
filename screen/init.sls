@@ -1,6 +1,9 @@
-{#
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+
  Enable mouse scrolling in screen.
- #}
+ -#}
 include:
   - apt
 

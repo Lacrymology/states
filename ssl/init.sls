@@ -1,4 +1,7 @@
-{#
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+
 This state process SSL key self-signed or signed by a third party CA and make
 them available or usable by the rest of these states.
 
@@ -136,7 +139,7 @@ To use those SSL files in your states, you need to do the following:
 - In the config file you point to the same path to reach those files, like:
     tls_cert = /etc/ssl/{{ pillar['my_app']['ssl'] }}/chained_ca.crt;
     tls_key = /etc/ssl/{{ pillar['my_app']['ssl'] }}/server.pem;
- #}
+ -#}
 
 include:
   - apt

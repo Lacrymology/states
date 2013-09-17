@@ -1,6 +1,9 @@
-{#
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+ 
  Install PyStatsD daemon, a statsd nodejs equivalent in python
- #}
+ -#}
 include:
   - virtualenv
   - rsyslog

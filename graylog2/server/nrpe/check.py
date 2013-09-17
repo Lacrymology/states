@@ -1,9 +1,10 @@
-__author__ = 'Bruno Clermont'
-__maintainer__ = 'Bruno Clermont'
-__email__ = 'patate@fastmail.cn'
+
 #!/usr/local/nagios/bin/python
 # -*- coding: utf-8 -*-
 
+__author__ = 'Bruno Clermont'
+__maintainer__ = 'Bruno Clermont'
+__email__ = 'patate@fastmail.cn'
 """Nagios plugin to check if new log messages indexed by Graylog2 server."""
 
 import time

@@ -1,6 +1,9 @@
-{#
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+ 
  Uninstall an OpenSSH secure shell server
- #}
+ -#}
 openssh-server:
   pkg:
     - purged

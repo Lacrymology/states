@@ -1,6 +1,9 @@
-{#
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+ 
  Uninstall Denyhosts used to block SSH brute-force attack
- #}
+ -#}
 denyhosts:
   pkg:
     - purged

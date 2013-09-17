@@ -59,7 +59,7 @@ define contact {
 {#-
  This file contains the checks for the low-level infrastructure components
  supported by salt.
--#}
+#}
 
 {%- for user in pillar['shinken']['users'] %}
 define contact {
@@ -144,7 +144,7 @@ define service {
     notifications_enabled 1
     event_handler_enabled 0
     # Service event handler is enabled
-{#-    event_handler super_event_kill_everyone!DIE-#}
+{#-    event_handler super_event_kill_everyone!DIE#}
     # Flap detection is enabled
     flap_detection_enabled 1
     # Failure prediction is enabled
@@ -186,7 +186,7 @@ define hostgroup {
     notes_url url
     action_url url
     realm realm
--#}
+#}
 }
 
 define servicegroup {

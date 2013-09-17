@@ -1,6 +1,9 @@
-{#
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+
  rsyslog configuration for Nagios NRPE
-#}
+-#}
 {% if not salt['pillar.get']('debug', False) %}
 include:
   - rsyslog

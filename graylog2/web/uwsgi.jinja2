@@ -12,7 +12,7 @@ post-buffering = 4096
  Especially automatically-generated URL queries in message details.
  The following prevent errors such as:
   invalid request block size: 7776 (max 4096)...skip
- -#}
+ #}
 buffer-size = 32768
 env = RAILS_ENV=production
 processes = {{ web['workers'] }}

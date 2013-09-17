@@ -1,6 +1,9 @@
-{#
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+ 
  Common stuff for all shinken components
- #}
+ -#}
 {% set version = "1.4" %}
 include:
   - virtualenv

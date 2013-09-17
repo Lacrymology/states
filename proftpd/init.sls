@@ -1,4 +1,7 @@
-{#
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+ 
  Install a ProFTPd FTP server.
 
  WARNING
@@ -15,7 +18,7 @@
  I wrote it to depends on already existing PostgreSQL server to not
  not mess with Unix users/passwords.
  It's probably more secure this way.
- #}
+ -#}
 
 include:
   - apt

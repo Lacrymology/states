@@ -1,6 +1,9 @@
-{#
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+ 
  Turn off Iptables firewall
- #}
+ -#}
 /etc/network/iptables.conf:
   file:
     - absent

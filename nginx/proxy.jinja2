@@ -35,10 +35,10 @@
    This is ignored if ssl argument is not used.
  - dns_server: a single IP of a DNS server.
    Default: Google DNS server.
--#}
+#}
 
 {#- cache directory is dynamically created from hostnames, http port and https
-   ports arguments -#}
+   ports arguments #}
 {% if cache_size|default(False) %}
 proxy_cache_path /var/cache/nginx/{{ hostnames[0] }}_{{ http_port|default(80) }}_{{ ssl|default('') }} levels=2:2:2 keys_zone=cache_{{ hostnames[0] }}_{{ http_port|default(80) }}_{{ ssl|default('') }}:1M inactive=1y max_size={{ cache_size }};
 {% endif %}

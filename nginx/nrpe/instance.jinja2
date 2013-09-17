@@ -6,7 +6,7 @@
 {#-
  This file isn't used directly by nginx NRPE state but it's reused by other
  states that requires on Nginx.
- -#}
+ #}
 {%- set first_ip = salt['network.ip_addrs']()[0] -%}
 {%- set effective_http_uri = http_uri|default("/") -%}
 {%- if http|default(True) %}

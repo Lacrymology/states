@@ -1,7 +1,10 @@
-{#
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+ 
  Setup motd (message of the day)
  http://en.wikipedia.org/wiki/Motd_(Unix)
- #}
+ -#}
 /etc/update-motd.d/10-help-text:
   file:
      - absent

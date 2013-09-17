@@ -1,6 +1,10 @@
-{#
+{#-
+
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+
  Nagios NRPE check for cron
-#}
+-#}
 include:
   - nrpe
   - apt.nrpe

@@ -1,6 +1,9 @@
-{#
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+ 
  Install NTP (Network time protocol) server and/or client.
- #}
+ -#}
 include:
   - apt
   - rsyslog

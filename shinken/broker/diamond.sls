@@ -1,6 +1,9 @@
-{#
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+ 
  Diamond statistics for Shinken Broker
-#}
+-#}
 include:
   - diamond
   - nginx.diamond

@@ -3,7 +3,7 @@
  Maintainer: Bruno Clermont patate@fastmail.cn
  -#}
 # {{ pillar['message_do_not_modify'] }}
-{#- TODO: add support for GELF logging -#}
+{#- TODO: add support for GELF logging #}
 
 {%- if pillar['salt']['master']|default(False) %}
 master: {{ pillar['salt']['master'] }}

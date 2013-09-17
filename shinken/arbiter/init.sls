@@ -1,4 +1,7 @@
-{#
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+ 
  State for Shinken Arbiter.
 
  A daemon reads the configuration, divides it into parts
@@ -10,7 +13,7 @@
  to the appropriate daemon. Passive check results are forwarded to the Scheduler
  responsible for the check. There can only be one active arbiter with other
  arbiters acting as hot standby spares in the architecture.
- #}
+ -#}
 include:
   - hostname
   - shinken

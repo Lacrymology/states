@@ -1,6 +1,9 @@
-{#
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+ 
  Uninstall a RabbtiMQ server
- #}
+ -#}
 
 rabbitmq-server:
   pkg:

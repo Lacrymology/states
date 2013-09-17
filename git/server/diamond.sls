@@ -1,6 +1,9 @@
-{#
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+
  Diamond statistics for Git Server
-#}
+-#}
 include:
   - diamond
   - ssh.server.diamond

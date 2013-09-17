@@ -1,5 +1,9 @@
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+__author__ = 'Bruno Clermont'
+__maintainer__ = 'Bruno Clermont'
+__email__ = 'patate@fastmail.cn'
 
 """
 This script import test data output uploaded by cp.push
@@ -63,3 +67,8 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+__author__ = 'Hung Nguyen Viet'
+__maintainer__ = 'Bruno Clermont, Hung Nguyen Viet'
+__email__ = 'patate@fastmail.cn, hvnsweeting@gmail.com'

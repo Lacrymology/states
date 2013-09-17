@@ -1,6 +1,9 @@
-{#
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+ 
  Uninstall a Salt Management Master (server)
- #}
+ -#}
 include:
   - salt.api.absent
 

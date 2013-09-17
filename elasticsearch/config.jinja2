@@ -27,7 +27,7 @@ node:
   master: {{ state_pillar['master']|default(master) }}
   data: {{ state_pillar['data']|default(data) }}
 
-{#- configure amazon ec2 cloud auto-discovery -#}
+{#- configure amazon ec2 cloud auto-discovery #}
 {% if es['aws']|default(false) %}
 cloud:
   region: {{ grains['region'] }}

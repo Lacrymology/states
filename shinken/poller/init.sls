@@ -1,4 +1,7 @@
-{#
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+ 
  Shinken Poller state.
 
  The poller daemon launches check plugins as requested by schedulers. When the
@@ -6,7 +9,7 @@
  tagged for specialized checks (ex. Windows versus Unix, customer A versus
  customer B, DMZ) There can be many pollers for load-balancing or hot standby
  spare roles.
- #}
+ -#}
 include:
   - shinken
   - apt

@@ -1,6 +1,9 @@
-{#
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+
  Install a Graylog2 logging server backend
- #}
+ -#}
 include:
   - graylog2
 {% if grains['osrelease']|float < 12.04 %}

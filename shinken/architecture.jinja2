@@ -16,7 +16,7 @@ Description: The Arbiter is responsible for:
 - Validating the health of all other Shinken daemons
 - Issuing global directives to Shinken daemons (kill, activate-spare, etc.)
 http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects/arbiter
--#}
+#}
 {% for id in pillar['shinken']['architecture']['arbiter'] %}
 define arbiter {
     arbiter_name arbiter-{{ grains['id'] }}
@@ -47,7 +47,7 @@ Description: The scheduler is responsible for:
 - Requesting actions from a reactionner
 - Buffering and forwarding results its associated broker
 http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects/scheduler
--#}
+#}
 {% for id in pillar['shinken']['architecture']['scheduler'] %}
 define scheduler {
     scheduler_name scheduler-{{ id }}
@@ -55,10 +55,10 @@ define scheduler {
     port 7768
     modules scheduler-retention
     realm All
-{#-    spare 0-#}
-{#-    # Skip initial broks creation. Boot fast, but some broker modules won't-#}
-{#-    # work with it!-#}
-{#-   skip_initial_broks 0-#}
+{#-    spare 0#}
+{#-    # Skip initial broks creation. Boot fast, but some broker modules won't#}
+{#-    # work with it!#}
+{#-   skip_initial_broks 0#}
 }
 {% endfor %}
 
@@ -73,7 +73,7 @@ Description: The poller is responsible for:
 - Active data acquisition
 - Local passive data acquisition
 http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects/poller
--#}
+#}
 
 {% for id in pillar['shinken']['architecture']['poller'] %}
 define poller {
@@ -96,7 +96,7 @@ Description: The broker is responsible for:
   - Configuration data
   - Command interface
 http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects/broker
--#}
+#}
 {% for id in pillar['shinken']['architecture']['broker'] %}
 define broker {
     broker_name broker-{{ id }}
@@ -113,7 +113,7 @@ define broker {
     timeout             3   ; Ping timeout
     data_timeout        120 ; Data send timeout
     max_check_attempts  3   ; If ping fails N or more, then the node is dead
-    check_interval      60  ; Ping node every minutes-#}
+    check_interval      60  ; Ping node every minutes#}
 }
 {% endfor %}
 
@@ -123,7 +123,7 @@ Send all logs to a local syslog server. Support for remote syslog can be
 implemented if requested. Just lookup the syslog module source code, it's
 easy to modify. Use for example with Splunk Molog, Logstash or other log
 management and analysis system.
--#}
+#}
 define module {
     module_name broker-syslog
     module_type syslog
@@ -170,7 +170,7 @@ define module {
 {#-    allow_html_output 0       ; Allow or not HTML chars in plugins output.
                                 ; WARNING: Allowing can be a security issue.
     max_output_length   100     ; Maximum output length for plugin output in webui
-    play_sound          0       ; Play sound on new non-acknowledged problems.-#}
+    play_sound          0       ; Play sound on new non-acknowledged problems.#}
 
     modules broker-webui-sqlite, broker-webui-auth{% if 'graphite_address' in pillar %}, broker-webui-graphite{% endif %}
 
@@ -183,7 +183,7 @@ define module {
                                      ; has already authenticated user, enable.
     #remote_user_variable    X_Remote_User  ; Set to the HTTP header containing
                                      ; the authenticated user s name, which
-                                     ; must be a Shinken contact.-#}
+                                     ; must be a Shinken contact.#}
 }
 
 {## Module:      OpenLDAP_UI
@@ -214,7 +214,7 @@ Description: The reactionner is responsible for:
 - Executing notification actions
 - Executing event handler actions
 http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects/reactionner
--#}
+#}
 {% for id in pillar['shinken']['architecture']['reactionner'] %}
 define reactionner {
     reactionner_name reactionner-{{ id }}
@@ -229,7 +229,7 @@ define reactionner {
     timeout             3   ; Ping timeout
     data_timeout        120 ; Data send timeout
     max_check_attempts  3   ; If ping fails N or more, then the node is dead
-    check_interval      60  ; Ping node every minutes-#}
+    check_interval      60  ; Ping node every minutes#}
     modules
 }
 {% endfor %}
@@ -237,7 +237,7 @@ define reactionner {
 {#-
 The receiver manages passive information. It's just a "buffer" which will
 load passive modules (like NSCA) and be read by the arbiter to dispatch data.
--#}
+#}
 {% for id in salt['pillar.get']('shinken:architecture:receiver', []) %}
 define receiver {
     receiver_name receiver-{{ id }}
@@ -247,7 +247,7 @@ define receiver {
     realm All
 {#-    direct_routing      0   ; If enabled, it will directly send commands to the
                             ; schedulers if it know about the hostname in the
-                            ; command.-#}
+                            ; command.#}
 }
 {% endfor %}
 
@@ -255,7 +255,7 @@ define receiver {
 Module: broker-webui-sqlite
 Loaded by: broker-webui
 In broker-webui: Save/read user preferences
--#}
+#}
 define module {
     module_name broker-webui-sqlite
     module_type sqlitedb

@@ -1,6 +1,9 @@
-{#
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+
  Nagios NRPE check for Graylog2 Server
-#}
+-#}
 include:
   - nrpe
   - elasticsearch.nrpe

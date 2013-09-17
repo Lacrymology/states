@@ -1,6 +1,9 @@
-{#
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+ 
  rsyslog configuration for iptables
-#}
+-#}
 include:
   - rsyslog
 

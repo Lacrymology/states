@@ -1,6 +1,9 @@
-{#
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+ 
  Uninstall a Sentry web server.
- #}
+ -#}
 
 {#
 {% if pillar['destructive_absent']|default(False) and salt['pillar.get']('sentry:db', False) %}

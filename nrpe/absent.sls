@@ -1,6 +1,9 @@
-{#
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+ 
  Uninstall Nagios NRPE Agent
-#}
+-#}
 {{ opts['cachedir'] }}/nagiosplugin-requirements.txt:
   file:
     - absent

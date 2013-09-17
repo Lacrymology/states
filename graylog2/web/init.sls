@@ -1,4 +1,7 @@
-{#
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+
  Install a graylog2 web interface server
 
  Once this state is installed, you need to:
@@ -11,7 +14,7 @@
    /plugin_configuration/configure/transport/com.bitflippers.sentrytransport.transport.SentryTransport
  - Add a Sentry DSN to each of your users (can be the same) at:
    /users/
-#}
+-#}
 include:
   - build
   - graylog2

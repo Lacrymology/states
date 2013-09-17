@@ -1,6 +1,9 @@
-{#
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+ 
  Install Requests (HTTP library) into OS/root site-packages.
- #}
+ -#}
 include:
   - pip
 

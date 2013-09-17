@@ -1,11 +1,14 @@
-{#
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+ 
  Shinken reactionner state.
 
  The reactionner daemon issues notifications and launches event_handlers. This
  centralizes communication channels with external systems in order to simplify
  SMTP authorizations or RSS feed sources (only one for all hosts/services).
  There can be many reactionners for load-balancing and spare roles
- #}
+ -#}
 include:
   - shinken
 

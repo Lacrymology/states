@@ -1,6 +1,9 @@
-{#
- Nagios NRPE check for Backup Server
-#}
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+ 
+  Nagios NRPE check for Backup Server
+-#}
 include:
   - nrpe
   - sudo

@@ -1,4 +1,7 @@
 {#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+ 
  Nagios NRPE check for Salt-API Server
 -#}
 {%- set ssl = pillar['salt_master']['ssl']|default(False) -%}

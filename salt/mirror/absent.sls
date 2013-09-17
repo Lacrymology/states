@@ -1,4 +1,7 @@
-
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+ -#}
 /var/lib/reprepro/salt/ubuntu:
   file:
     - absent

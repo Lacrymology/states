@@ -1,6 +1,9 @@
-{#
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+ 
  Remove Nagios NRPE check for iptables
-#}
+-#}
 /etc/sudoers.d/nrpe_firewall:
   file:
     - absent

@@ -1,3 +1,7 @@
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+ -#}
 {%- set result_file = '/root/salt/result.xml' -%}
 {%- set test_files = salt['file.find']('/root/salt/', name='TEST-*-salt.xml') %}
 

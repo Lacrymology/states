@@ -1,6 +1,3 @@
-__author__ = 'Bruno Clermont'
-__maintainer__ = 'Bruno Clermont'
-__email__ = 'patate@fastmail.cn'
 #!/usr/local/nagios/bin/python
 #
 #   Autors: David Hannequin <david.hannequin@gmail.com>,
@@ -10,6 +7,9 @@ __email__ = 'patate@fastmail.cn'
 # Requires: Python >= 2.7 or Python plus argparse
 # Platform: Linux
 #
+__author__ = 'Bruno Clermont'
+__maintainer__ = 'Bruno Clermont'
+__email__ = 'patate@fastmail.cn'
 
 import argparse
 

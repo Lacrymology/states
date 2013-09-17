@@ -1,6 +1,9 @@
-{#
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+ 
  Turn off  Diamond statistics for MongoDB
-#}
+-#}
 diamond-pymongo:
   file:
     - absent

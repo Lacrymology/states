@@ -3,7 +3,7 @@ djangopypi2:
     - absent
     - name: /usr/local/djangopypi2
 
-/var/lib/djangopypi2:
+/var/lib/deployments/djangopypi2:
   file:
     - absent
 

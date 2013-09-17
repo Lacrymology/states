@@ -27,8 +27,6 @@ USE_HTTPS = USER_SETTINGS['USE_HTTPS']
 
 MANAGERS = ADMINS
 
-ALLOWED_HOSTS = ['*']
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -107,18 +105,22 @@ INSTALLED_APPS = (
     'djangopypi2.apps.pypi_metadata',
     'djangopypi2.apps.pypi_packages',
     'djangopypi2.apps.pypi_frontend',
+    'django_insecure',
 )
 
 ACCOUNT_ACTIVATION_DAYS = 7
 
-email_server = urlparse.urlparse(USER_SETTINGS['EMAIL_SERVER'])
-EMAIL_HOST = email_server.hostname or 'localhost'
-EMAIL_PORT = email_server.port or '1025'
-EMAIL_HOST_USER = email_server.username or ''
-EMAIL_HOST_PASSWORD = email_server.password or ''
-
-EMAIL_USE_TLS = USER_SETTINGS['EMAIL_USE_TLS']
-DEFAULT_FROM_EMAIL = USER_SETTINGS['EMAIL_DEFAULT_SENDER']
+{%- set smtp = salt['pillar.get']('djangopypi2:web:email', salt['pillar.get']('smtp')) %}
+EMAIL_HOST = '{{ smtp['server'] }}'
+EMAIL_HOST_PASSWORD = '{{ smtp['password']|default('') }}'
+EMAIL_HOST_USER = '{{ smtp['user']|default('') }}'
+EMAIL_PORT = {{ smtp['port'] }}
+DEFAULT_FROM_EMAIL = '{{ smtp['from'] }}'
+{% if smtp['tls']|default(False) %}
+EMAIL_USE_TLS = True
+{% else %}
+EMAIL_USE_TLS = False
+{% endif %}
 
 if USE_HTTPS:
     SESSION_COOKIE_SECURE = True
@@ -132,12 +134,37 @@ LOGGING = {
             '()': 'django.utils.log.RequireDebugFalse'
         }
     },
+    'formatters': {
+        'syslog': {
+            'format': '%(asctime)-15s djangopypi2[%(process)d] %(levelname)s %(name)s %(module)s.%(funcName)s:%(lineno)d %(message)s',
+            'datefmt': '%b %d %H:%M:%S'
+        }
+    },
     'handlers': {
+{% if 'graylog2_address' in pillar %}
+        'gelf': {
+            'level': 'NOTSET',
+            'class': 'graypy.handler.GELFHandler',
+            'host': '{{ pillar['graylog2_address'] }}',
+            'formatter': 'message_only'
+        },
+{% endif %}
         'mail_admins': {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
-        }
+        },
+        'sentry': {
+            'level': 'ERROR',
+            'class': 'raven.contrib.django.handlers.SentryHandler'
+        },
+        'syslog': {
+            'level': 'NOTSET',
+            'formatter': 'syslog',
+            'class': 'logging.handlers.SysLogHandler',
+            'address': '/dev/log',
+            'facility': 'local7'
+        },
     },
     'loggers': {
         'django.request': {
@@ -145,5 +172,40 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
-    }
+        'django': {
+            'handlers': ['sentry', 'syslog'{% if 'graylog2_address' in pillar %}, 'gelf'{% endif %}],
+            'propagate': True,
+            'level':'DEBUG'
+        },
+        'raven': {
+            'handlers': ['sentry', 'syslog'{% if 'graylog2_address' in pillar %}, 'gelf'{% endif %}],
+            'level': 'WARN',
+            'propagate': False
+        },
+        'sentry.errors': {
+            'handlers': ['syslog'{% if 'graylog2_address' in pillar %}, 'gelf'{% endif %}],
+            'level': 'DEBUG',
+            'propagate': False
+        },
+     },
+    'root': {
+        'handlers': ['sentry', 'syslog'{% if 'graylog2_address' in pillar %}, 'gelf'{% endif %}],
+        'propagate': True,
+        'level': 'NOTSET'
+    },
 }
+RAVEN_CONFIG = {
+    'dsn': '{{ pillar['djangopypi2']['web']['sentry'] }}',
+}
+
+{%- if 'graphite_address' in pillar %}
+MIDDLEWARE_CLASSES = MIDDLEWARE_CLASSES + (
+    'django_statsd.middleware.GraphiteRequestTimingMiddleware',
+    'django_statsd.middleware.GraphiteMiddleware'
+)
+INSTALLED_APPS += ('django_statsd',)
+STATSD_PREFIX = 'djangopypi2'
+STATSD_CLIENT = 'django_statsd.clients.normal'
+{%- endif %}
+
+ALLOWED_HOSTS = [{% for hostname in pillar['djangopypi2']['hostnames'] %}"{{ hostname }}"{% if not loop.last %} , {% endif %}{% endfor %}]

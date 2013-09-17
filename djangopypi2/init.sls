@@ -124,11 +124,24 @@ djangopypi2_loaddata:
     - watch:
       - module: djangopypi2_collectstatic
 
-/var/lib/djangopypi2:
+djangopypi2_admin_user:
+  module:
+    - wait
+    - name: django.command
+    - command: createsuperuser_plus --username={{ pillar['djangopypi2']['web']['initial_admin_user']['username'] }} --email={{ salt['pillar.get']('djangopypi2:web:initial_admin_user:email', 'root@example.com') }} --password={{ pillar['djangopypi2']['web']['initial_admin_user']['password'] }}
+    - settings_module: djangopypi2.website.settings
+    - bin_env: {{ root_dir }}
+    - require:
+      - module: djangopypi2_loaddata
+    - watch:
+      - postgres_database: djangopypi2
+
+/var/lib/djangopypi2/media:
   file:
     - directory
     - user: www-data
     - group: www-data
+    - makedirs: True
 
 /etc/uwsgi/djangopypi2.ini:
   file:
@@ -155,7 +168,7 @@ djangopypi2_loaddata:
       - cmd: djangopypi2
       - file: djangopypi2_settings
       - file: /etc/uwsgi/djangopypi2.ini
-      - file: /var/lib/djangopypi2
+      - file: /var/lib/djangopypi2/media
       - module: djangopypi2_loaddata
 
 /etc/nginx/conf.d/djangopypi2.conf:

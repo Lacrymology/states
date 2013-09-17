@@ -57,3 +57,5 @@ extend:
     service:
       - watch:
         - file: diamond_mongodb
+      - require:
+        - service: mongodb

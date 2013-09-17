@@ -35,3 +35,5 @@ extend:
     service:
       - watch:
         - file: nginx_diamond_collector
+      - require:
+        - service: nginx

@@ -7,5 +7,5 @@ include:
 test:
   nrpe:
     - run_all_checks
-    - wait: 60
+    - wait: 120
     - order: last

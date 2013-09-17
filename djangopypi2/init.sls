@@ -1,10 +1,3 @@
-{#
-
- Once this state is installed, you need to create initial admin user:
-
- /usr/local/djangopypi2/manage createsuperuser
-
-#}
 include:
   - postgresql
   - postgresql.server
@@ -100,7 +93,6 @@ djangopypi2_settings:
     - watch:
       - file: djangopypi2_settings
 
-
 djangopypi2_collectstatic:
   module:
     - wait
@@ -136,7 +128,7 @@ djangopypi2_admin_user:
     - watch:
       - postgres_database: djangopypi2
 
-/var/lib/djangopypi2/media:
+/var/lib/deployments/djangopypi2/media:
   file:
     - directory
     - user: www-data
@@ -160,6 +152,7 @@ djangopypi2_admin_user:
     - require:
       - service: uwsgi_emperor
       - postgres_database: djangopypi2
+      - service: memcached
   module:
     - wait
     - name: file.touch
@@ -168,8 +161,12 @@ djangopypi2_admin_user:
       - cmd: djangopypi2
       - file: djangopypi2_settings
       - file: /etc/uwsgi/djangopypi2.ini
-      - file: /var/lib/djangopypi2/media
+      - file: /var/lib/deployments/djangopypi2/media
       - module: djangopypi2_loaddata
+    - require:
+      - service: uwsgi_emperor
+      - postgres_database: djangopypi2
+      - service: memcached
 
 /etc/nginx/conf.d/djangopypi2.conf:
   file:
@@ -181,7 +178,7 @@ djangopypi2_admin_user:
     - source: salt://nginx/template.jinja2
     - context:
       appname: djangopypi2
-      root: /var/lib/djangopypi2
+      root: /var/lib/deployments/djangopypi2
       statics:
         - static
     - require:

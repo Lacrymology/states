@@ -13,3 +13,10 @@ djangopypi2==0.6.1
 docutils==0.11
 pkginfo==1.1b1
 psycopg2==2.5.1
+raven==3.3.10
+
+{%- if 'files_archive' in pillar %}
+{{ pillar['files_archive'] }}/pip/django-insecure-0.1.zip
+{%- else %}
+-e git+git@github.com:bclermont/django-insecure.git@ce529583fc02db20a5ea2b34f1ee8f3d4538a14e#egg=django-insecure
+{%- endif %}

@@ -8,14 +8,14 @@ manage part of content in hosts.allow and hosts.deny
 import logging
 
 ALLOW_PATH = '/etc/hosts.allow'
-DENY_PATH = '/etc/deny.allow'
+DENY_PATH = '/etc/hosts.deny'
 log = logging.getLogger(__name__)
 
 
 def _process_args(name, type, service):
-    ret = {'name': name, 'changes': {}, 'result': None, 'comment': ''}
+    ret = {'name': name, 'changes': {}, 'result': True, 'comment': ''}
     service_clients = "{0} : {1}".format(service, name)
-    if type not in (DENY_PATH, ALLOW_PATH):
+    if type not in ('allow', 'deny'):
         ret['result'] = False
         ret['comment'] = 'Invalid type {0}'.format(type)
         path = None
@@ -51,10 +51,11 @@ def present(name, type, service):
         ret['result'] = True
         ret['comment'] = '{0} is already {1}'.format(service_clients, type)
     elif __opts__['test']:
+        ret['result'] = None
         ret['comment'] = '{0} would have been {1}'.format(name, type)
     else:
         __salt__['file.append'](path, service_clients)
-        ret['changes'] = {service_clients: 'removed from {0}'.format(path)}
+        ret['changes'] = {service_clients: 'presented in {0}'.format(path)}
         ret['comment'] = '{0} is now {1} for {2}'.format(name, type, service)
         ret['result'] = True
     return ret

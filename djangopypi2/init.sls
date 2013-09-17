@@ -72,6 +72,18 @@ djangopypi2:
       - postgres_user: djangopypi2
       - service: postgresql
 
+djangopypi2_urls:
+  file:
+    - managed
+    - name: {{ root_dir }}/lib/python2.7/site-packages/djangopypi2/website/urls.py
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 644
+    - require:
+      - module: djangopypi2
+    - source: salt://djangopypi2/urls.jinja2
+
 djangopypi2_settings:
   file:
     - managed
@@ -88,11 +100,12 @@ djangopypi2_settings:
     - name: django.syncdb
     - settings_module: djangopypi2.website.settings
     - bin_env: {{ root_dir }}
-    - require: 
+    - require:
       - module: djangopypi2
       - service: rsyslog
     - watch:
       - file: djangopypi2_settings
+      - file: djangopypi2_urls
 
 djangopypi2_collectstatic:
   module:
@@ -100,10 +113,11 @@ djangopypi2_collectstatic:
     - name: django.collectstatic
     - settings_module: djangopypi2.website.settings
     - bin_env: {{ root_dir }}
-    - require: 
+    - require:
       - module: djangopypi2_settings
     - watch:
       - file: djangopypi2_settings
+      - file: djangopypi2_urls
 
 djangopypi2_loaddata:
   module:
@@ -112,7 +126,7 @@ djangopypi2_loaddata:
     - settings_module: djangopypi2.website.settings
     - fixtures: initial
     - bin_env: {{ root_dir }}
-    - require: 
+    - require:
       - module: djangopypi2_settings
     - watch:
       - module: djangopypi2_collectstatic
@@ -162,6 +176,7 @@ djangopypi2_admin_user:
     - watch:
       - cmd: djangopypi2
       - file: djangopypi2_settings
+      - file: djangopypi2_urls
       - file: /etc/uwsgi/djangopypi2.ini
       - file: /var/lib/deployments/djangopypi2/media
       - module: djangopypi2_loaddata

@@ -90,6 +90,7 @@ djangopypi2_settings:
     - bin_env: {{ root_dir }}
     - require: 
       - module: djangopypi2
+      - service: rsyslog
     - watch:
       - file: djangopypi2_settings
 
@@ -153,6 +154,7 @@ djangopypi2_admin_user:
       - service: uwsgi_emperor
       - postgres_database: djangopypi2
       - service: memcached
+      - service: rsyslog
   module:
     - wait
     - name: file.touch

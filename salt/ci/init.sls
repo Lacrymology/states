@@ -9,7 +9,7 @@ include:
   - sudo
 
 extend:
-  /etc/salt/cloud.deploy.d/bootstrap_salt.sh:
+  salt-cloud-boostrap-script:
     file:
       - source: salt://salt/ci/bootstrap.jinja2
 

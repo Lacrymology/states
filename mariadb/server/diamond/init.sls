@@ -72,3 +72,4 @@ extend:
       - watch:
         - file: mysql_diamond_collector
         - module: diamond_mysql_python
+        - server: mysql-server

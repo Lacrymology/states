@@ -131,6 +131,10 @@ target_{{ host }} = {{ ping_hosts[host] }}
 
 enabled = True
 
+[[IPVSCollector]]
+
+enabled = False
+
 {#
 {% if salt['file.file_exists']('/proc/slabinfo') %}
 [[SlabInfoCollector]]

@@ -146,7 +146,7 @@ nginx:
 {% for log_type in logger_types %}
       - service: nginx-logger-{{ log_type }}
 {% endfor %}
-
+      - service: ntp
 
 /etc/apt/sources.list.d/nginx.org-packages_ubuntu-precise.list:
   file:

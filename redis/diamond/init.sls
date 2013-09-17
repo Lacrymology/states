@@ -5,7 +5,7 @@
 include:
   - diamond
 
-Redis_diamond_resources:
+redis_diamond_resources:
   file:
     - accumulated
     - name: processes
@@ -55,3 +55,4 @@ extend:
     service:
       - watch:
         - file: /etc/diamond/collectors/RedisCollector.conf
+        - module: diamond_redis

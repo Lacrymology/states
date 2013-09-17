@@ -5,7 +5,7 @@
 include:
   - apt
   - diamond
-  - mariadb
+  - mariadb.server
   - python.dev
   - salt.minion.diamond
 
@@ -20,6 +20,7 @@ mysql_diamond_collector:
     - source: salt://mariadb/server/diamond/config.jinja2
     - require:
       - file: /etc/diamond/collectors
+      - service: mysql-server
 
 mysql_diamond_resources:
   file:

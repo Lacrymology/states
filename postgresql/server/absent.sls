@@ -1,6 +1,9 @@
-{#
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
+ 
  Uninstall a PostgreSQL database server.
- #}
+ -#}
 {% set version="9.2" %}
 
 postgresql:

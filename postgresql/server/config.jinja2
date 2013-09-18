@@ -15,11 +15,11 @@
  min = minutes
  h = hours
  d = days
--#}
+#}
 
 {#-
  File system
--#}
+#}
 data_directory = '/var/lib/postgresql/{{ version }}/main'
 hba_file = '/etc/postgresql/{{ version }}/main/pg_hba.conf'
 ident_file = '/etc/postgresql/{{ version }}/main/pg_ident.conf'
@@ -28,11 +28,11 @@ unix_socket_directory = '/var/run/postgresql'
 
 {#-
  Network and Security
--#}
+#}
 password_encryption = on
 {#- master server (need to be connected from standby servers)
 and hot standby servers (hot_standby means serving read only requests)
-should are public server - expose to world-#}
+should are public server - expose to world#}
 {%- set listen_addresses  = salt['pillar.get']('postgresql:listen_addresses', 'localhost') %}
 {%- if role is defined %}
     {%- if role == 'master' %}
@@ -48,12 +48,12 @@ port = {{ salt['pillar.get']('postgresql:listen_port', 5432) }}
 {#-
  Increasing max_connections costs ~400 bytes of shared memory per
  connection slot, plus lock space (see max_locks_per_transaction).
--#}
+#}
 max_connections = {{ salt['pillar.get']('postgresql:max_connections', 100) }}
-{#-superuser_reserved_connections = 3-#}
-{#- force bonjour to be off -#}
+{#-superuser_reserved_connections = 3#}
+{#- force bonjour to be off #}
 bonjour = off
-{#-authentication_timeout = 1min-#}
+{#-authentication_timeout = 1min#}
 
 {% if salt['pillar.get']('postgresql:ssl', False) %}
 ssl = true
@@ -65,20 +65,20 @@ ssl_key_file = '/etc/ssl/{{ pillar['postgresql']['ssl'] }}/server.pem'
 ssl = false
 {% endif %}
 
-{#- TCP Keepalives: use all system default -#}
+{#- TCP Keepalives: use all system default #}
 tcp_keepalives_idle = 0
 tcp_keepalives_interval = 0
 tcp_keepalives_count = 0
 
 {#-
  Resource Usage except WAL
- -#}
+ #}
 shared_buffers = {{ salt['pillar.get']('postgresql:shared_buffers', '24MB') }}
 temp_buffers = {{ salt['pillar.get']('postgresql:temp_buffers', '8MB') }}
 
 {#-
  Logging
--#}
+#}
 
 log_destination = 'syslog'
 syslog_facility = 'local0'
@@ -90,10 +90,10 @@ log_min_error_statement = error
  -1 is disabled
  0 logs all statements
  > 0 logs only statements running at least this number of milliseconds
--#}
+#}
 log_min_duration_statement = {{ salt['pillar.get']('postgresql:log_slow_query', -1) }}
 
-{#- What to Log -#}
+{#- What to Log #}
 
 debug_print_parse = off
 debug_print_rewritten = off
@@ -124,32 +124,32 @@ log_hostname = off
  %x = transaction ID (0 if none)
  %q = stop here in non-session processes
  %% = '%'
--#}
+#}
 log_line_prefix = ''
 
-{#- log lock waits >= deadlock_timeout -#}
+{#- log lock waits >= deadlock_timeout #}
 #log_lock_waits = off
-{#- none, ddl, mod, all -#}
+{#- none, ddl, mod, all #}
 #log_statement = 'none'
 log_timezone = 'UTC'
 log_checkpoints = on
 
 {#-
  Locale and Formatting
--#}
+#}
 timezone = 'UTC'
-{#- These settings are initialized by initdb, but they can be changed.-#}
+{#- These settings are initialized by initdb, but they can be changed.#}
 {#-lc_messages = 'C'
 lc_monetary = 'C'
 lc_numeric = 'C'
-lc_time = 'C'-#}
+lc_time = 'C'#}
 
 {%- if role is defined %}
 max_wal_senders = 10		{#- max number of walsender processes #}
-wal_keep_segments = 4		{#- in logfile segments, 16MB each; 0 disables -#}
+wal_keep_segments = 4		{#- in logfile segments, 16MB each; 0 disables #}
 	{%- if salt['pillar.get']('postgresql:replication:hot_standby', True) %}
-wal_level = hot_standby			{#- minimal, archive, or hot_standby -#}
-hot_standby = on			{#- "on" allows queries during recovery -#}
+wal_level = hot_standby			{#- minimal, archive, or hot_standby #}
+hot_standby = on			{#- "on" allows queries during recovery #}
 	{%- else %}
 wal_level = archive
 hot_standby = off
@@ -215,4 +215,4 @@ wal_keep_segments = 4		# in logfile segments, 16MB each; 0 disables
 					# 0 disables
 #hot_standby_feedback = off		# send info from standby to prevent
 					# query conflicts
--#}
+#}

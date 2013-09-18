@@ -1,6 +1,9 @@
-{#
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
+ 
  # common stuff between carbon and graphite
- #}
+ -#}
 
 include:
   - virtualenv

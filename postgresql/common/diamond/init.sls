@@ -1,6 +1,9 @@
-{#
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
+ 
  Diamond statistics for PostgreSQL Server
-#}
+-#}
 include:
   - diamond
   - python.dev

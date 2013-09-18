@@ -1,3 +1,7 @@
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
+ -#}
 include:
   - postgresql.master
   - postgresql.common.diamond

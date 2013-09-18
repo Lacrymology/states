@@ -1,6 +1,9 @@
-{#
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
+ 
  Uninstall the web interface component of graphite
- #}
+ -#}
 /etc/uwsgi/graphite.ini:
   file:
     - absent

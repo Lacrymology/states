@@ -1,4 +1,7 @@
-{#
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
+ 
  Install a PostgreSQL database server.
 
 Sample config:
@@ -34,7 +37,7 @@ postgresql:
       - other_standby_address
 
 
-#}
+-#}
 {% set ssl = salt['pillar.get']('postgresql:ssl', False) %}
 include:
   - hostname

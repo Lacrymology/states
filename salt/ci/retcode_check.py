@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+__author__ = 'Hung Nguyen Viet'
+__maintainer__ = 'Bruno Clermont, Hung Nguyen viet'
+__email__ = 'patate@fastmail.cn, hvnsweeting@gmail.com'
 """
 Take output of salt cmd.run_all --out json
 and sys.exit it's value

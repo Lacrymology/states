@@ -19,7 +19,7 @@ USER = graphite
  Limit the size of the cache to avoid swapping or becoming CPU bound.
  Sorts and serving cache queries gets more expensive as the cache grows.
  Use the value "inf" (infinity) for an unlimited cache size.
--#}
+#}
 MAX_CACHE_SIZE = {{ salt['grains.get']('graphite:carbon:max_cache_size', 'inf') }}
 
 {#-
@@ -28,7 +28,7 @@ MAX_CACHE_SIZE = {{ salt['grains.get']('graphite:carbon:max_cache_size', 'inf') 
  prevent over-utilizing the disk and thus starving the rest of the system.
  When the rate of required updates exceeds this, then carbon's caching will
  take effect and increase the overall throughput accordingly.
--#}
+#}
 MAX_UPDATES_PER_SECOND = 500
 
 {#-
@@ -39,14 +39,14 @@ MAX_UPDATES_PER_SECOND = 500
  database files to all get created and thus longer until the data becomes usable.
  Setting this value high (like "inf" for infinity) will cause graphite to create
  the files quickly but at the risk of slowing I/O down considerably for a while.
--#}
+#}
 MAX_CREATES_PER_MINUTE = inf
 
 {#-
  Set this to True to enable the UDP listener. By default this is off
  because it is very common to run multiple carbon daemons and managing
  another (rarely used) port for every carbon instance is not fun.
--#}
+#}
 ENABLE_UDP_LISTENER = False
 {#-
 UDP_RECEIVER_INTERFACE = {{ salt['pillar.get']('graphite:carbon:interface', '0.0.0.0') }}
@@ -55,13 +55,13 @@ UDP_RECEIVER_PORT = 2013
  Per security concerns outlined in Bug #817247 the pickle receiver
  will use a more secure and slightly less efficient unpickler.
  Set this to True to revert to the old-fashioned insecure unpickler.
--#}
+#}
 USE_INSECURE_UNPICKLER = False
 
-{#- cache-daemon only listen locally, relay will listen all and relay to them -#}
+{#- cache-daemon only listen locally, relay will listen all and relay to them #}
 LINE_RECEIVER_INTERFACE = 127.0.0.1
 PICKLE_RECEIVER_INTERFACE = 127.0.0.1
-{#- cache query only listen locally, webapp always on same host -#}
+{#- cache query only listen locally, webapp always on same host #}
 CACHE_QUERY_INTERFACE = 127.0.0.1
 
 {#-
@@ -69,20 +69,20 @@ CACHE_QUERY_INTERFACE = 127.0.0.1
  reaches MAX_CACHE_SIZE. If this is True (the default) then sockets
  over which metrics are received will temporarily stop accepting
  data until the cache size falls below 95% MAX_CACHE_SIZE.
--#}
+#}
 USE_FLOW_CONTROL = True
 
 {#-
  By default, carbon-cache will log every whisper update. This can be excessive and
  degrade performance if logging on the same volume as the whisper data is stored.
--#}
+#}
 LOG_UPDATES = False
 
 {#-
  On some systems it is desirable for whisper to write synchronously.
  Set this option to True if you'd like to try this. Basically it will
  shift the onus of buffering writes from the kernel into carbon's cache.
--#}
+#}
 WHISPER_AUTOFLUSH = False
 
 {#-
@@ -140,7 +140,7 @@ WHISPER_AUTOFLUSH = False
 
  Example: store everything
  BIND_PATTERNS = #
--#}
+#}
 
 {%- set instances_count = salt['pillar.get']('graphite:carbon:instances') %}
 {% for instance in range(instances_count) %}
@@ -157,7 +157,7 @@ To configure special settings for the carbon-cache instance 'b', uncomment this:
  and any other settings you want to customize, defaults are inherited
  from [carbon] section.
  You can then specify the --instance=b option to manage this instance
--#}
+#}
 
 [relay]
 USER = graphite
@@ -172,14 +172,14 @@ LOG_DIR = /var/log/graphite/carbon
  To use the user defined relay-rules.conf,
  change this to:
  RELAY_METHOD = rules
--#}
+#}
 RELAY_METHOD = consistent-hashing
 
 {#-
  If you use consistent-hashing you may want to add redundancy
  of your data by replicating every datapoint to more than
  one machine.
--#}
+#}
 REPLICATION_FACTOR = {{ salt['pillar.get']('graphite:carbon:replication', 1) }}
 
 {#-
@@ -200,7 +200,7 @@ REPLICATION_FACTOR = {{ salt['pillar.get']('graphite:carbon:replication', 1) }}
  If using RELAY_METHOD = rules, all destinations used in relay-rules.conf
  must be defined in this list
 DESTINATIONS = 127.0.0.1:2004
--#}
+#}
 DESTINATIONS = {%- for i in range(instances_count) -%}
 127.0.0.1:20{{ loop.index }}4:{{ i }}{% if not loop.last %}, {% endif %}
 {%- endfor %}
@@ -208,7 +208,7 @@ DESTINATIONS = {%- for i in range(instances_count) -%}
 {#-
  This defines the maximum "message size" between carbon daemons.
  You shouldn't need to tune this unless you really know what you're doing.
--#}
+#}
 MAX_DATAPOINTS_PER_MESSAGE = 500
 MAX_QUEUE_SIZE = 10000
 
@@ -217,7 +217,7 @@ Set this to False to drop datapoints when any send queue (sending datapoints
 to a downstream carbon daemon) hits MAX_QUEUE_SIZE. If this is True (the
 default) then sockets over which metrics are received will temporarily stop accepting
 data until the send queues fall below 80% MAX_QUEUE_SIZE.
--#}
+#}
 USE_FLOW_CONTROL = True
 
 {#-
@@ -225,14 +225,14 @@ USE_FLOW_CONTROL = True
 metricsReceived) with the top level prefix of 'carbon' at an interval of 60
 seconds. Set CARBON_METRIC_INTERVAL to 0 to disable instrumentation
 CARBON_METRIC_INTERVAL = 60
- -#}
+ #}
 CARBON_METRIC_PREFIX = {{ grains['id'] }}.carbon
 
 {#-
  Set this to True to enable whitelisting and blacklisting of metrics in
  CONF_DIR/whitelist and CONF_DIR/blacklist. If the whitelist is missing or
  empty, all metrics will pass through
--#}
+#}
 {%- if 'whitelist' in pillar['graphite']['carbon']|default(False) %}
 USE_WHITELIST = True
 {%- else %}
@@ -246,4 +246,4 @@ LINE_RECEIVER_PORT = 2023
 
 PICKLE_RECEIVER_INTERFACE = {{ salt['pillar.get']('graphite:carbon:interface', '0.0.0.0') }}
 PICKLE_RECEIVER_PORT = 2024
--#}
+#}

@@ -9,13 +9,13 @@
  Set your local timezone (Django's default is America/Chicago)
  If your graphs appear to be offset by a couple hours then this probably
  needs to be explicitly set to your local timezone.
--#}
+#}
 TIME_ZONE = 'UTC'
 
-{#- Override this to provide documentation specific to your Graphite deployment -#}
+{#- Override this to provide documentation specific to your Graphite deployment #}
 DOCUMENTATION_URL = "http://graphite.readthedocs.org/"
 
-{#- Logging -#}
+{#- Logging #}
 LOG_RENDERING_PERFORMANCE = {{ pillar['graphite']['web']['debug']|default(False) }}
 LOG_CACHE_PERFORMANCE = {{ pillar['graphite']['web']['debug']|default(False) }}
 LOG_METRIC_ACCESS = {{ pillar['graphite']['web']['debug']|default(False) }}
@@ -35,14 +35,14 @@ LOG_METRIC_ACCESS = {{ pillar['graphite']['web']['debug']|default(False) }}
  You should not use the loopback address (127.0.0.1) here if using clustering
  as every webapp in the cluster should use the exact same values to prevent
  unneeded cache misses. Set to [] to disable caching of images and fetched data
--#}
+#}
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
         'LOCATION': 'unix:/tmp/memcached.sock',
     }
 }
-{#- Cache images and data for 1 minute -#}
+{#- Cache images and data for 1 minute #}
 DEFAULT_CACHE_DURATION = 60
 
 
@@ -50,14 +50,14 @@ DEFAULT_CACHE_DURATION = 60
     Filesystem Paths 
  Change only GRAPHITE_ROOT if your install is merely shifted from /opt/graphite
  to somewhere else
--#}
+#}
 GRAPHITE_ROOT = '/usr/local/graphite'
 
 {#-
  Most installs done outside of a separate tree such as /opt/graphite will only
  need to change these three settings. Note that the default settings for each
  of these is relative to GRAPHITE_ROOT
--#}
+#}
 CONF_DIR = '/etc/graphite/'
 STORAGE_DIR = '/var/lib/graphite'
 CONTENT_DIR = '/usr/local/graphite/webapp/content'
@@ -68,7 +68,7 @@ CONTENT_DIR = '/usr/local/graphite/webapp/content'
 
  Webapp config files
 DASHBOARD_CONF = '/opt/graphite/conf/dashboard.conf'
--#}
+#}
 GRAPHTEMPLATES_CONF = CONF_DIR + '/graphTemplates.conf'
 
 CSS_DIR = GRAPHITE_ROOT + '/webapp/content/css/'
@@ -79,7 +79,7 @@ CSS_DIR = GRAPHITE_ROOT + '/webapp/content/css/'
 WHISPER_DIR = '/opt/graphite/storage/whisper'
 RRD_DIR = '/opt/graphite/storage/rrd'
 DATA_DIRS = ['/var/lib/graphite/whisper']
--#}
+#}
 DATA_DIRS = [
 {%- set instances_count = salt['pillar.get']('graphite:carbon:instances') %}
 {%- for instance in range(instances_count) -%}
@@ -151,7 +151,7 @@ LOGIN_URL = '/account/login'
 
  Users with Django 1.2 or greater should use the new dictionary
  specification as the old database specification style is removed in 1.4
--#}
+#}
 
 DATABASES = {
     'default': {
@@ -243,7 +243,7 @@ RAVEN_CONFIG = {
  metric data. Note that the first server to return a match for a query will be
  used.
  ["10.0.2.2:80", "10.0.2.3:80"]
--#}
+#}
 
 {%- set nodes = salt['pillar.get']('graphite:nodes', []) %}
 {%- if nodes|length > 0 %}
@@ -255,19 +255,19 @@ CLUSTER_SERVERS = []
 {#-
  These are timeout values (in seconds) for requests to remote webapps
  Timeout to fetch series data
--#}
+#}
 REMOTE_STORE_FETCH_TIMEOUT = 6
-{#- Timeout for metric find requests -#}
+{#- Timeout for metric find requests #}
 REMOTE_STORE_FIND_TIMEOUT = 2.5
-{#- Time before retrying a failed remote webapp -#}
+{#- Time before retrying a failed remote webapp #}
 REMOTE_STORE_RETRY_DELAY = 60
-{#- Time to cache remote metric find results -#}
+{#- Time to cache remote metric find results #}
 REMOTE_FIND_CACHE_DURATION = 300
 
 {#-
  Remote rendering settings
  Set to True to enable rendering of Graphs on a remote webapp
--#}
+#}
 REMOTE_RENDERING = False
 {#-
  List of IP (and optionally port) of the webapp on each remote server that
@@ -283,7 +283,7 @@ REMOTE_RENDER_CONNECT_TIMEOUT = 1.0
 
  You *should* use 127.0.0.1 here in most cases
 CARBONLINK_HOSTS = ["127.0.0.1:7002:a"]
--#}
+#}
 
 CARBONLINK_HOSTS = [
 {%- for instance in range(instances_count) -%}
@@ -294,7 +294,7 @@ CARBONLINK_TIMEOUT = 1.0
  Additional Django Settings #
  Uncomment the following line for direct access to Django settings such as
  MIDDLEWARE_CLASSES or APPS
--#}
+#}
 from graphite.app_settings import *
 
 MIDDLEWARE_CLASSES = MIDDLEWARE_CLASSES + (

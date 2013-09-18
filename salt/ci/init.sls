@@ -1,3 +1,8 @@
+{#-
+ Author: Hung Nguyen Viet hvnsweeting@gmail.com
+ Maintainer: Bruno Clermont patate@fastmail.cn
+       Hung Nguyen Viet hvnsweeting@gmail.com
+ -#}
 include:
   - jenkins
   - local

@@ -1,6 +1,9 @@
-{#
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
+ 
  Nagios NRPE check for PostgreSQL Server
-#}
+-#}
 {% set version="9.2" %}
 
 include:

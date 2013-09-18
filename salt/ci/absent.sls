@@ -1,3 +1,8 @@
+{#-
+ Author: Hung Nguyen Viet hvnsweeting@gmail.com
+ Maintainer: Bruno Clermont patate@fastmail.cn
+       Hung Nguyen Viet hvnsweeting@gmail.com
+ -#}
 {%- for script in ('import_test_data.py', 'retcode_check.py') %}
 /usr/local/bin/{{ script }}:
   file:

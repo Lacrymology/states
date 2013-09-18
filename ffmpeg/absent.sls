@@ -1,3 +1,7 @@
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
+ -#}
 ffmpeg:
   file:
     - absent

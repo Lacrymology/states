@@ -1,6 +1,9 @@
-{#
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
+ 
  Nagios NRPE check for Graphite
-#}
+-#}
 include:
   - apt.nrpe
   - graphite.common.nrpe

@@ -1,6 +1,9 @@
-{#
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+ 
 Set the locale for machine
-#}
+-#}
 include:
   - apt
 {% set encoding = salt['pillar.get']('encoding', 'en_US.UTF-8') %}

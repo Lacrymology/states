@@ -1,3 +1,7 @@
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+ -#}
 apt-key del 0E27C0A6:
   cmd:
     - run

@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 
+__author__ = 'Bruno Clermont'
+__maintainer__ = 'Bruno Clermont'
+__email__ = 'patate@fastmail.cn'
+
 '''
 Module that allow to save the currently installed list of packages and revert
 later to that list.

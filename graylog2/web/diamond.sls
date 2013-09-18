@@ -1,6 +1,9 @@
-{#
+{#-
+ Author: Bruno Clermont patate@fastmail.cn
+ Maintainer: Bruno Clermont patate@fastmail.cn
+ 
  Diamond statistics for Graylog2 Web Interface
-#}
+-#}
 include:
   - diamond
   - rsyslog.diamond

@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+__author__ = 'Bruno Clermont'
+__maintainer__ = 'Bruno Clermont'
+__email__ = 'patate@fastmail.cn'
+
 """
 Salt returner that report error back to sentry
 

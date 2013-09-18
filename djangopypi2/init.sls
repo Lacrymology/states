@@ -117,7 +117,7 @@ djangopypi2_settings:
     - source: salt://django/manage.jinja2
     - context:
       settings: djangopypi2.website.settings
-      virtualenv: {{ root }}
+      virtualenv: {{ root_dir }}
     - require:
       - virtualenv: djangopypi2
 

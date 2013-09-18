@@ -1,0 +1,21 @@
+djangopypi2_nginx_http:
+  description: djangopypi2 HTTP Protocol
+
+djangopypi2_nginx_https:
+  description: djangopypi2 HTTPS Protocol
+
+djangopypi2_nginx_https_certificate:
+  description: djangopypi2 HTTPS Certificate Expiration
+  check_interval: 1440 {#- only need to check https certificate each day #}
+
+djangopypi2_postgresql:
+  description: djangopypi2 PostgreSQL database
+
+djangopypi2_uwsgi_master:
+  description: djangopypi2 uWSGI Master Process
+
+djangopypi2_uwsgi_worker:
+  description: djangopypi2 uWSGI Workers Process
+
+djangopypi2_uwsgi_ping:
+  description: djangopypi2 uWSGI Ping

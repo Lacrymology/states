@@ -107,6 +107,20 @@ djangopypi2_settings:
       - file: djangopypi2_settings
       - file: djangopypi2_urls
 
+{{ root_dir }}/manage:
+  file:
+    - managed
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 550
+    - source: salt://django/manage.jinja2
+    - context:
+      settings: djangopypi2.website.settings
+      virtualenv: {{ root }}
+    - require:
+      - virtualenv: djangopypi2
+
 djangopypi2_collectstatic:
   module:
     - wait

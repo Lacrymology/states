@@ -4,6 +4,7 @@
 
 include:
   - diamond
+  - redis
 
 redis_diamond_resources:
   file:
@@ -56,3 +57,5 @@ extend:
       - watch:
         - file: /etc/diamond/collectors/RedisCollector.conf
         - module: diamond_redis
+    require:
+      - service: redis

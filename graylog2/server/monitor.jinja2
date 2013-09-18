@@ -1,8 +1,11 @@
 graylog2_procs:
   description: Graylog2 Daemon
 
+{#- if graylog2_address isn't 127.0.0.1 test fail -#}
+{%- if not pillar['__test__']|default(False) or pillar['graylog2_address'] == '127.0.0.1' %}
 graylog2_incoming_logs:
   description: Incoming Logs Rate
+{%- endif %}
 
 graylog2_elasticsearch_cluster:
   description: Graylog2 Elasticsearch Cluster

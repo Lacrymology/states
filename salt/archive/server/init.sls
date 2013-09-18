@@ -17,7 +17,7 @@ Optional Pillar
 ---------------
 
 salt_archive:
-  source: rsync://salt.bit-flippers.com/archive/
+  source: rsync://archive.robotinfra.com/archive/
   delete: True
   web:
     ssl: mykeyname

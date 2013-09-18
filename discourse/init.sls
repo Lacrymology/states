@@ -264,7 +264,7 @@ discourse_upstart:
     - source: salt://discourse/uwsgi.jinja2
     - mode: 440
     - require:
-      - file: uwsgi_sockets
+      - service: uwsgi_emperor
       - file: discourse_tar
       - file: discourse
       - file: {{ web_root_dir }}/config/environments/production.rb

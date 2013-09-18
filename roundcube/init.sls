@@ -149,6 +149,7 @@ roundcube:
     - m_name: /etc/uwsgi/roundcube.ini
     - require:
       - module: roundcube_initial
+      - service: uwsgi_emperor
     - watch:
       - file: {{ roundcubedir }}/config/main.inc.php
       - file: {{ roundcubedir }}/config/db.inc.php

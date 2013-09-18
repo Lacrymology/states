@@ -1,6 +1,9 @@
-{#
+{#-
+ Author: Hung Nguyen Viet hvnsweeting@gmail.com
+ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
+ 
  Nagios NRPE check for Rsync
-#}
+-#}
 include:
   - nrpe
   - apt.nrpe

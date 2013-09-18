@@ -21,7 +21,7 @@
   2. <tc-properties> block in the Terracotta configuration file
   3. Local tc.properties file
   4. Properties defined using Java system properties
--#}
+#}
     <property name="l2.nha.dirtydb.autoDelete" value="true"/>
     <property name="l1.cachemanager.enabled" value="true"/>
     <property name="logging.maxLogFileSize" value="1024"/>
@@ -31,7 +31,7 @@
  The 'system' section contains configuration data that affects the
  entire Terracotta system as a whole; things like whether to activate
  DSO services go here. -->
--#}
+#}
   <system>
 {#-
  The configuration model: 'development' or 'production'.
@@ -59,7 +59,7 @@
     -Dtc.config=serverHost:dsoPort
 
  Default: 'development'.
--#}
+#}
     <configuration-model>{{ salt['pillar.get']('terracotta:environment', 'production') }}</configuration-model>
   </system>
 {#-
@@ -79,7 +79,7 @@
  more than one 'server' element present here), then you will need to pass the
  command-line option "-n <name>" to the start-tc-server script, passing it
  the name of a server configuration from this file.
--#}
+#}
   <servers>
     <server>
 {#-
@@ -104,7 +104,7 @@
  Default: 'data'; this places the 'data' directory in the
  directory you were in when you invoked 'start-tc-server'.
 <data>/opt/terracotta/server-data</data>
--#}
+#}
       <data>/var/lib/terracotta/server-data</data>
 {#-
  In which directory should the server store its log files? Again,
@@ -120,7 +120,7 @@
  Default: 'logs'; this places the 'logs' directory in the
  directory you were in when you invoked 'start-tc-server'.
 <logs>/opt/terracotta/server-logs</logs>
--#}
+#}
       <logs>/var/log/terracotta/server-logs</logs>
 {#-
  Where should the server store its search index data? This value
@@ -148,7 +148,7 @@
  Default: 'statistics' This places the 'statistics' directory in the
  directory you were in when you invoked 'start-tc-server'.
 <statistics>/opt/terracotta/server-statistics</statistics>
--#}
+#}
       <statistics>/var/lib/terracotta/server-statistics</statistics>
 
          {#-
@@ -226,7 +226,7 @@
       </http-authentication>
 
       <!-- Configuration data for DSO that's specific to the DSO server. -->
-      -#}
+      #}
       <dso>
 
           {#-
@@ -236,12 +236,12 @@
 
              Default: 120 seconds
         -->
-      -#}
+      #}
         <client-reconnect-window>120</client-reconnect-window>
 
         {#-
         <!-- Information about how DSO should persist shared data to disk. -->
-      -#}
+      #}
         <persistence>
             {#-
           <!-- How should DSO persist shared data to disk? This can be one
@@ -266,7 +266,7 @@
 
              Default: 'temporary-swap-only'
           -->
-          -#}
+          #}
           <mode>temporary-swap-only</mode>
         </persistence>
 
@@ -274,7 +274,7 @@
         <!-- Information about how DSO should perform distributed
            garbage collection on the data underneath your
            application's roots. -->
-      -#}
+      #}
         <garbage-collection>
 
             {#-
@@ -292,7 +292,7 @@
 
              Default: true
           -->
-      -#}
+      #}
           <enabled>true</enabled>
 
           {#-
@@ -303,7 +303,7 @@
 
              Default: false
           -->
-          -#}
+          #}
           <verbose>true</verbose>
 
           {#-
@@ -312,7 +312,7 @@
 
              Default: 3600 (60 minutes)
           -->
-          -#}
+          #}
           <interval>3600</interval>
         </garbage-collection>
 
@@ -433,7 +433,7 @@
       -->
       <period-days>10</period-days>
     </update-check>
-  -#}
+  #}
   </servers>
 
   {#-
@@ -473,6 +473,6 @@
     -->
     <logs>logs-%i</logs>
   </clients>
-  -#}
+  #}
 
 </tc:tc-config>

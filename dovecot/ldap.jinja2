@@ -24,7 +24,7 @@
 
 # LDAP URIs to use. You can use this instead of hosts list. Note that this
 # setting isn't supported by all LDAP libraries.
--#}
+#}
 uris = {{ salt['pillar.get']('ldap:host', 'ldap://127.0.0.1') }}
 
 {#-
@@ -36,7 +36,7 @@ uris = {{ salt['pillar.get']('ldap:host', 'ldap://127.0.0.1') }}
 #dnpass =
 
 # Use TLS to connect to the LDAP server.
--#}
+#}
 {%- set ldap_ssl = salt['pillar.get']('ldap:ssl', False) -%}
 {%- if ldap_ssl %}
 tls = yes
@@ -67,7 +67,7 @@ tls = false
 # The pass_filter is used to find the DN for the user. Note that the pass_attrs
 # is still used, only the password field is ignored in it. Before doing any
 # search, the binding is switched back to the default DN.
--#}
+#}
 auth_bind = yes
 auth_bind_userdn = uid=%n,ou=people,{{ salt['pillar.get']('ldap:suffix') }}
 ldap_version = 3
@@ -75,7 +75,7 @@ ldap_version = 3
 {#-
 # LDAP base. %variables can be used here.
 # For example: dc=mail, dc=example, dc=org
--#}
+#}
 base = ou=people,{{ salt['pillar.get']('ldap:suffix') }}
 
 {#-
@@ -102,7 +102,7 @@ base = ou=people,{{ salt['pillar.get']('ldap:suffix') }}
 #   %n - user part in user@domain, same as %u if there's no domain
 #   %d - domain part in user@domain, empty if user there's no domain
 #user_filter = (&(objectClass=posixAccount)(uid=%u))
--#}
+#}
 user_filter = (&(objectClass=inetOrgPerson)(uid=%n))
 {#-
 # Password checking attributes:
@@ -130,4 +130,4 @@ user_filter = (&(objectClass=inetOrgPerson)(uid=%n))
 # Default password scheme. "{scheme}" before password overrides this.
 # List of supported schemes is in: http://wiki2.dovecot.org/Authentication
 #default_pass_scheme = CRYPT
--#}
+#}

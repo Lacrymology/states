@@ -1,4 +1,7 @@
 {#-
+ Author: Hung Nguyen Viet hvnsweeting@gmail.com
+ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
+ 
 NFS: Network File System
 =============================
 
@@ -26,7 +29,7 @@ nfs:
 nfs:deny: list of deny hosts. Default: ALL
 nfs:exports: files to share and hosts that can access to it with specified options
 nfs:procs: numbers of nfs processes. Default: 8
-#}
+-#}
 
 include:
   - apt

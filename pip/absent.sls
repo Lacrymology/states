@@ -1,3 +1,7 @@
+{#-
+ Author: Hung Nguyen Viet hvnsweeting@gmail.com
+ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
+ -#}
 {% set version='1.3.1' %}
 
 {{ opts['cachedir'] }}/pip-{{ version }}:

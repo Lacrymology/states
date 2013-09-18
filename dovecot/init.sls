@@ -1,4 +1,7 @@
 {#-
+ Author: Hung Nguyen Viet hvnsweeting@gmail.com
+ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
+ 
 Dovecot: A POP3/IMAP server
 =============================
 

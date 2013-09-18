@@ -3,6 +3,6 @@
  Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
  -#}
 # {{ pillar['message_do_not_modify'] }}
-{#- number of pre-forked children -#}
+{#- number of pre-forked children #}
 $max_servers = {{ salt['pillar.get']('mail:maxproc', 2) }};
 

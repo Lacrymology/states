@@ -1,6 +1,9 @@
-{#
+{#-
+ Author: Hung Nguyen Viet hvnsweeting@gmail.com
+ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
+ 
  Remove Poor man backup client NRPE check
- #}
+ -#}
 include:
   - backup.absent
 

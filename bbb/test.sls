@@ -1,3 +1,7 @@
+{#-
+ Author: Hung Nguyen Viet hvnsweeting@gmail.com
+ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
+ -#}
 {#- BBB don't work on != lucid -#}
 {%- if grains['lsb_distrib_codename'] == 'lucid' %}
 include:

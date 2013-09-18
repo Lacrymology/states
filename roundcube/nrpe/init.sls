@@ -1,6 +1,9 @@
-{#
+{#-
+ Author: Hung Nguyen Viet hvnsweeting@gmail.com
+ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
+ 
  Install a roundcube Nagios NRPE checks
-#}
+-#}
 include:
   - nrpe
   - apt.nrpe

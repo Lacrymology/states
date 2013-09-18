@@ -3,7 +3,7 @@
  Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
  -#}
 # {{ pillar['message_do_not_modify'] }}
-{#- TODO config all in pillar, production -#}
+{#- TODO config all in pillar, production #}
 {#-
  Redis configuration file example
 
@@ -21,7 +21,7 @@
 
  By default Redis does not run as a daemon. Use 'yes' if you need it.
  Note that Redis will write a pid file in /var/run/redis.pid when daemonized.
--#}
+#}
 daemonize yes
 
 pidfile /var/run/redis/redis-server.pid
@@ -29,7 +29,7 @@ pidfile /var/run/redis/redis-server.pid
 {#-
  Accept connections on the specified port, default is 6379.
  If port 0 is specified Redis will not listen on a TCP socket.
--#}
+#}
 port {{ salt['pillar.get']('redis:port', 6379) }}
 
 {#-
@@ -46,7 +46,7 @@ port {{ salt['pillar.get']('redis:port', 6379) }}
  unixsocketperm 755
 
  Close the connection after a client is idle for N seconds (0 to disable)
--#}
+#}
 timeout {{ salt['pillar.get']('redis:timeout', 0) }}
 
 {#-
@@ -64,7 +64,7 @@ timeout {{ salt['pillar.get']('redis:timeout', 0) }}
  On other kernels the period depends on the kernel configuration.
 
  A reasonable value for this option is 60 seconds.
--#}
+#}
 tcp-keepalive {{ salt['pillar.get']('redis:keepalive', 60) }}
 
 {#-
@@ -74,7 +74,7 @@ tcp-keepalive {{ salt['pillar.get']('redis:keepalive', 60) }}
  verbose (many rarely useful info, but not a mess like the debug level)
  notice (moderately verbose, what you want in production probably)
  warning (only very important / critical messages are logged)
--#}
+#}
 loglevel {{ salt['pillar.get']('redis:loglevel', 'notice') }}
 
 {#-
@@ -86,24 +86,24 @@ loglevel {{ salt['pillar.get']('redis:loglevel', 'notice') }}
  To enable logging to the system logger, just set 'syslog-enabled' to yes,
  and optionally update the other syslog parameters to suit your needs.
  syslog-enabled no
--#}
+#}
 syslog-enabled yes
 
 {#-
  Specify the syslog identity.
--#}
+#}
 syslog-ident redis
 
 {#-
  Specify the syslog facility. Must be USER or between LOCAL0-LOCAL7.
--#}
+#}
 syslog-facility local0
 
 {#-
  Set the number of databases. The default database is DB 0, you can select
  a different one on a per-connection basis using SELECT <dbid> where
  dbid is a number between 0 and 'databases'-1
--#}
+#}
 databases {{ salt['pillar.get']('redis:number_of_dbs', 16) }}
 
 {#-
@@ -128,7 +128,7 @@ databases {{ salt['pillar.get']('redis:number_of_dbs', 16) }}
    like in the following example:
 
    save ""
--#}
+#}
 {%- set save = salt['pillar.get']('redis:save', None) %}
 {%- if save %}
     {%- for numbs in salt['pillar.get']('redis:save', []) %}
@@ -160,7 +160,7 @@ stop-writes-on-bgsave-error yes
  For default that's set to 'yes' as it's almost always a win.
  If you want to save some CPU in the saving child set it to 'no' but
  the dataset will likely be bigger if you have compressible values or keys.
--#}
+#}
 rdbcompression yes
 
 {#-
@@ -171,12 +171,12 @@ rdbcompression yes
 
  RDB files created with checksum disabled have a checksum of zero that will
  tell the loading code to skip the check.
--#}
+#}
 rdbchecksum yes
 
 {#-
  The filename where to dump the DB
--#}
+#}
 dbfilename dump.rdb
 
 {#-
@@ -188,7 +188,7 @@ dbfilename dump.rdb
  The Append Only File will also be created inside this directory.
 
  Note that you must specify a directory here, not a file name.
--#}
+#}
 dir /var/lib/redis
 
 
@@ -226,7 +226,7 @@ dir /var/lib/redis
 #
 # Please note that changing the name of commands that are logged into the
 # AOF file or transmitted to slaves may cause problems.
--#}
+#}
 
 {#-
 ################################### LIMITS ####################################
@@ -240,7 +240,7 @@ dir /var/lib/redis
 # Once the limit is reached Redis will close all the new connections sending
 # an error 'max number of clients reached'.
 #
--#}
+#}
 maxclients {{ salt['pillar.get']('redis:maxclients', 10000) }}
 
 {#-
@@ -267,7 +267,7 @@ maxclients {{ salt['pillar.get']('redis:maxclients', 10000) }}
 # limit for maxmemory so that there is some free RAM on the system for slave
 # output buffers (but this is not needed if the policy is 'noeviction').
 #
--#}
+#}
 maxmemory {{ salt['pillar.get']('redis:maxmemory', '300mb') }}
 
 {#-
@@ -289,7 +289,7 @@ maxmemory {{ salt['pillar.get']('redis:maxmemory', '300mb') }}
        sinter sinterstore sunion sunionstore sdiff sdiffstore zadd zincrby
        zunionstore zinterstore hset hsetnx hmset hincrby incrby decrby
        getset mset msetnx exec sort
--#}
+#}
 maxmemory-policy {{ salt['pillar.get']('redis:policy', 'volatile-lru') }}
 
 {#-
@@ -299,7 +299,7 @@ maxmemory-policy {{ salt['pillar.get']('redis:policy', 'volatile-lru') }}
 # pick the one that was used less recently, you can change the sample size
 # using the following configuration directive.
 #
--#}
+#}
 maxmemory-samples {{ salt['pillar.get']('redis:samples', 3) }}
 
 {#-
@@ -322,7 +322,7 @@ maxmemory-samples {{ salt['pillar.get']('redis:samples', 3) }}
 # with the better durability guarantees.
 #
 # Please check http://redis.io/topics/persistence for more information.
--#}
+#}
 appendonly no
 
 {#-
@@ -353,7 +353,7 @@ appendonly no
 # If unsure, use "everysec".
 
 # appendfsync always
--#}
+#}
 appendfsync everysec
 {#-
 # appendfsync no
@@ -376,7 +376,7 @@ appendfsync everysec
 #
 # If you have latency problems turn this to "yes". Otherwise leave it as
 # "no" that is the safest pick from the point of view of durability.
--#}
+#}
 no-appendfsync-on-rewrite no
 
 {#-
@@ -397,7 +397,7 @@ no-appendfsync-on-rewrite no
 # Specify a percentage of zero in order to disable the automatic AOF
 # rewrite feature.
 
--#}
+#}
 auto-aof-rewrite-percentage 100
 auto-aof-rewrite-min-size 64mb
 
@@ -416,7 +416,7 @@ auto-aof-rewrite-min-size 64mb
  termination of the script.
 
  Set it to 0 or a negative value for unlimited execution without warnings.
--#}
+#}
 lua-time-limit 5000
 
 {#-
@@ -436,13 +436,13 @@ lua-time-limit 5000
  The following time is expressed in microseconds, so 1000000 is equivalent
  to one second. Note that a negative number disables the slow log, while
  a value of zero forces the logging of every command.
--#}
+#}
 slowlog-log-slower-than 10000
 
 {#-
 # There is no limit to this length. Just be aware that it will consume memory.
 # You can reclaim memory used by the slow log with SLOWLOG RESET.
--#}
+#}
 slowlog-max-len 128
 
 {#-
@@ -562,4 +562,4 @@ aof-rewrite-incremental-fsync yes
 #
 # include /path/to/local.conf
 # include /path/to/other.conf
--#}
+#}

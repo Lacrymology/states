@@ -25,7 +25,7 @@ Remember to edit /etc/mysql/debian.cnf when changing the socket location.
 * Character sets
 Default is Latin1, if you need UTF-8 set all this (in both client and server
 sections)
--#}
+#}
 
 [client]
 port		= 3306
@@ -40,7 +40,7 @@ Here is entries for some specific programs
 The following values assume you have at least 32M ram
 
 This was formally known as [safe_mysqld]. Both versions are currently parsed.
--#}
+#}
 [mysqld_safe]
 socket		= /var/run/mysqld/mysqld.sock
 nice		= 0
@@ -78,12 +78,12 @@ max_heap_table_size	= 32M
 
 This replaces the startup script and checks MyISAM tables if needed
 the first time they are touched. On error, make copy and try a repair.
--#}
+#}
 myisam_recover          = BACKUP
 key_buffer_size		= 128M
 {#-
 open-files-limit	= 2000
--#}
+#}
 table_open_cache	= 400
 myisam_sort_buffer_size	= 512M
 concurrent_insert	= 2
@@ -93,7 +93,7 @@ read_rnd_buffer_size	= 1M
  * Query Cache Configuration
 
  Cache only tiny result sets, so we can fit more in the query cache.
--#}
+#}
 query_cache_limit		= 128K
 query_cache_size		= 64M
 {#-
@@ -111,12 +111,12 @@ general_log             = 1
  Error logging goes to syslog due to /etc/mysql/conf.d/mysqld_safe_syslog.cnf.
 
  we do want to know about network errors and such
--#}
+#}
 log_warnings		= 2
 {#-
  Enable the slow query log to see queries with especially long duration
  slow_query_log[={0|1}]
--#}
+#}
 slow_query_log_file	= /var/log/mysql/mariadb-slow.log
 long_query_time = 10
 log_slow_verbosity	= query_plan
@@ -132,7 +132,7 @@ server-id		= 1
 report_host		= master1
 auto_increment_increment = 2
 auto_increment_offset	= 1
--#}
+#}
 log_bin			= /var/log/mysql/mariadb-bin
 log_bin_index		= /var/log/mysql/mariadb-bin.index
 expire_logs_days	= 10
@@ -158,7 +158,7 @@ sql_mode		= NO_ENGINE_SUBSTITUTION,TRADITIONAL
 efault_storage_engine	= InnoDB
  you can't just change log file size, requires special procedure
 innodb_log_file_size	= 50M
--#}
+#}
 innodb_buffer_pool_size	= 256M
 innodb_log_buffer_size	= 8M
 innodb_file_per_table	= 1
@@ -176,7 +176,7 @@ For generating SSL certificates I recommend the OpenSSL GUI "tinyca".
 ssl-ca=/etc/mysql/cacert.pem
 ssl-cert=/etc/mysql/server-cert.pem
 ssl-key=/etc/mysql/server-key.pem
--#}
+#}
 
 [mysqldump]
 quick
@@ -184,7 +184,7 @@ quote-names
 max_allowed_packet	= 16M
 
 [mysql]
-{#- no-auto-rehash	# faster start of mysql but no tab completion -#}
+{#- no-auto-rehash	# faster start of mysql but no tab completion #}
 
 [isamchk]
 key_buffer		= 16M
@@ -192,6 +192,6 @@ key_buffer		= 16M
 {#-
  * IMPORTANT: Additional settings that can override those from this file!
    The files must end with '.cnf', otherwise they'll be ignored.
--#}
+#}
 
 !includedir /etc/mysql/conf.d/

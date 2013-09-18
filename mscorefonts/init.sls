@@ -1,6 +1,9 @@
-{#
+{#-
+ Author: Hung Nguyen Viet hvnsweeting@gmail.com
+ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
+ 
 Installing MS core fonts
-#}
+-#}
 mscorefonts:
   pkg:
     - installed

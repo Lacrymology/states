@@ -10,6 +10,7 @@ salt_archive:
   file:
     - directory
     - name: {{ archive_dir }}
+    - makedirs: True
     - user: root
     - group: root
     - mode: 775

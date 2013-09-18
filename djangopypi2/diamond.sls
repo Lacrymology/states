@@ -1,5 +1,5 @@
 {#
- Diamond statistics for Sentry
+ Diamond statistics for djangopypi2
 #}
 include:
   - diamond
@@ -10,7 +10,7 @@ include:
   - statsd.diamond
   - uwsgi.diamond
 
-uwsgi_diamond_sentry_resources:
+uwsgi_diamond_djangopypi2_resources:
   file:
     - accumulated
     - name: processes
@@ -19,5 +19,5 @@ uwsgi_diamond_sentry_resources:
       - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
     - text:
       - |
-        [[uwsgi.sentry]]
-        cmdline = ^sentry-(worker|master)$
+        [[uwsgi.djangopypi2]]
+        cmdline = ^djangopypi2-(worker|master)$

@@ -161,7 +161,6 @@ sentry-migrate-fake:
     - m_name: /etc/uwsgi/sentry.ini
     - require:
       - file: /etc/uwsgi/sentry.ini
-      - service: memcached
     - watch:
       - file: sentry
       - cmd: sentry_settings

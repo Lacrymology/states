@@ -3,6 +3,7 @@
 #}
 include:
   - diamond
+  - memcache
 
 memcached_diamond_resources:
   file:

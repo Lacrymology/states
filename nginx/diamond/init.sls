@@ -4,6 +4,7 @@
 include:
   - diamond
   - gsyslog.diamond
+  - nginx
 
 nginx_diamond_resources:
   file:

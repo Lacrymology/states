@@ -3,6 +3,7 @@
 #}
 include:
   - diamond
+  - memcache
 
 memcached_diamond_resources:
   file:
@@ -33,3 +34,5 @@ extend:
     service:
       - watch:
         - file: memcached_diamond_collector
+      - require:
+        - service: memcached

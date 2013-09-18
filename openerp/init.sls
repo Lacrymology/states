@@ -19,7 +19,6 @@ openerp:
 #}
 
 include:
-  - apt
   - build
   - openldap.dev
   - nginx
@@ -41,14 +40,6 @@ include:
 {%- set password = salt['password.pillar']('openerp:database:password', 10)  %}
 
 openerp_depends:
-  pkg:
-    - installed
-    - pkgs:
-      - python-libxslt1
-    - require:
-      - cmd: apt_sources
-      - pkg: build
-      - pkg: libjs-underscore
   file:
     - managed
     - name: {{ home }}/salt-openerp-requirements.txt
@@ -75,6 +66,8 @@ openerp_depends:
       - pkg: python-dev
       - pkg: ldap-dev
       - pkg: postgresql-dev
+      - pkg: build
+      - pkg: libjs-underscore
       - pkg: xml-dev
   cmd:
     - wait

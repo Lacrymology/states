@@ -7,7 +7,7 @@ and publishing them to graphite.
 
 Mostly operating system related such as CPU, memory.
 
-but it's often plug with third party daemon such as PostgreSQL to gather
+but its often plug with third party daemon such as PostgreSQL to gather
 those stats as well.
 Each of those other daemons state come with their own configuration file
 that are put in /etc/diamond/collectors, directory check at startup for
@@ -47,6 +47,7 @@ include:
   - virtualenv
   - gsyslog
   - gsyslog.diamond
+  - ntp
 {% if 'shinken_pollers' in pillar %}
   - diamond.nrpe
 {% endif %}
@@ -138,6 +139,7 @@ diamond:
     - order: 50
     - require:
       - service: gsyslog
+      - service: ntp
     - watch:
       - virtualenv: diamond
       - file: diamond

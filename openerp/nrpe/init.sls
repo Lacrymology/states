@@ -1,6 +1,9 @@
 {#-
+ Author: Lam Dang Tung lamdt@familug.org
+ Maintainer: Lam Dang Tung lamdt@familug.org
+
 Nagios NRPE check for OpenERP
-#}
+-#}
 
 include:
   - nrpe

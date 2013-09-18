@@ -1,4 +1,7 @@
 {#-
+ Author: Lam Dang Tung lamdt@familug.org
+ Maintainer: Lam Dang Tung lamdt@familug.org
+ 
 GitLab: self hosted Git management software
 ===========================================
 

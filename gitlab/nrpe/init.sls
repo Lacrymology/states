@@ -1,6 +1,9 @@
 {#-
+ Author: Lam Dang Tung lamdt@familug.org
+ Maintainer: Lam Dang Tung lamdt@familug.org
+ 
  Install a GitLab Nagios NRPE checks
-#}
+-#}
 include:
   - apt.nrpe
   - build.nrpe

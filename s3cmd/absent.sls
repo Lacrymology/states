@@ -1,3 +1,7 @@
+{#-
+ Author: Nicolas Plessis nicolas@microsigns.com
+ Maintainer: Nicolas Plessis nicolas@microsigns.com
+ -#}
 s3cmd:
   pkg:
     - purged

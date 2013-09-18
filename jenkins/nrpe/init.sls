@@ -1,6 +1,9 @@
-{#
+{#-
+ Author: Nicolas Plessis nicolas@microsigns.com
+ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
+ 
  Nagios NRPE check for jenkins
-#}
+-#}
 include:
   - java.7.jdk
   - apt.nrpe

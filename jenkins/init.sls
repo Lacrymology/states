@@ -1,6 +1,9 @@
-{#
+{#-
+ Author: Nicolas Plessis nicolas@microsigns.com
+ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
+ 
   TODO: add SSL through nginx
-#}
+-#}
 
 include:
   - apt

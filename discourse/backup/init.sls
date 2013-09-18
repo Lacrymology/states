@@ -1,6 +1,9 @@
-{#
+{#-
+ Author: Lam Dang Tung lamdt@familug.org
+ Maintainer: Lam Dang Tung lamdt@familug.org
+
  Backup client for Discourse
- #}
+ -#}
 include:
   - cron
 {%- set web_root_dir = "/usr/local/discourse" %}

@@ -1,6 +1,9 @@
-{#
+{#-
+ Author: Nicolas Plessis nicolas@microsigns.com
+ Maintainer: Nicolas Plessis nicolas@microsigns.com
+ 
  Diamond statistics for s3cmd
-#}
+-#}
 
 include:
   - diamond

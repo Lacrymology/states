@@ -1,5 +1,8 @@
 # {{ pillar['message_do_not_modify'] }}
-
+{#-
+ Author: Lam Dang Tung lamdt@familug.org
+ Maintainer: Lam Dang Tung lamdt@familug.org
+ -#}
 [user]
     name = GitLab
     email = {{ salt['pillar.get']('gitlab:smtp:from', salt['pillar.get']('smtp:from')) }}

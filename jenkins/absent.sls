@@ -1,3 +1,7 @@
+{#-
+ Author: Nicolas Plessis nicolas@microsigns.com
+ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
+ -#}
 jenkins:
   pkg:
     - purged

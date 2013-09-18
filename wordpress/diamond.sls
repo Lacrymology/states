@@ -1,6 +1,9 @@
-{#
+{#-
+ Author: Lam Dang Tung lamdt@familug.org
+ Maintainer: Lam Dang Tung lamdt@familug.org
+ 
  Diamond statistics for wordpress
-#}
+-#}
 include:
   - diamond
   - mariadb.server.diamond

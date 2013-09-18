@@ -1,6 +1,9 @@
-{#
+{#-
+ Author: Lam Dang Tung lamdt@familug.org
+ Maintainer: Lam Dang Tung lamdt@familug.org
+ 
  Install a wordpress Nagios NRPE checks
-#}
+-#}
 include:
   - nrpe
   - build.nrpe

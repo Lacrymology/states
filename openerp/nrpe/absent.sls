@@ -1,6 +1,9 @@
 {#-
+ Author: Lam Dang Tung lamdt@familug.org
+ Maintainer: Lam Dang Tung lamdt@familug.org
+ 
 Remove Nagios NRPE check for OpenERP
-#}
+-#}
 
 /etc/nagios/nrpe.d/openerp.cfg:
   file:

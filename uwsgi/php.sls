@@ -15,21 +15,6 @@ symlink-libphp5.so:
     - target: /usr/lib/php5/libphp5.so
     - require:
       - pkg: php-dev
-
-/usr/local/uwsgi/plugins/php/uwsgiplugin.py:
-  file:
-    - managed
-    - source: salt://uwsgi/php_uwsgiplugin.jinja2
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 644
-    - require:
-{%- if 'files_archive' in pillar -%}
-      - archive: uwsgi_build
-{%- else -%}
-      - git: uwsgi_build
-{%- endif %}
 {%- endif %}
 
 extend:
@@ -41,5 +26,4 @@ extend:
     cmd:
       - watch:
         - file: symlink-libphp5.so
-        - file: /usr/local/uwsgi/plugins/php/uwsgiplugin.py
 {% endif %}

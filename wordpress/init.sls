@@ -174,12 +174,12 @@ wordpress_initial:
     - mode: 440
     - template: jinja
     - require:
-      - file: uwsgi_emperor
       - file: {{ wordpressdir }}/wp-config.php
       - archive: wordpress
       - pkg: php5-mysql
       - module: wordpress_initial
       - service: uwsgi_emperor
+      - service: mysql-server
     - context:
       dir: {{ wordpressdir }}
   module:
@@ -187,10 +187,8 @@ wordpress_initial:
     - name: file.touch
     - m_name: /etc/uwsgi/wordpress.ini
     - require:
-      - module: wordpress_initial
-      - service: mysql-server
-    - watch:
       - file: /etc/uwsgi/wordpress.ini
+    - watch:
       - file: {{ wordpressdir }}/wp-config.php
       - archive: wordpress
       - pkg: php5-mysql

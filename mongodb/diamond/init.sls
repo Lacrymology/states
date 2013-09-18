@@ -4,6 +4,7 @@
 include:
   - diamond
   - pip
+  - mongodb
 
 diamond-pymongo:
   file:

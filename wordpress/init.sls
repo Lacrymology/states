@@ -179,6 +179,7 @@ wordpress_initial:
       - archive: wordpress
       - pkg: php5-mysql
       - module: wordpress_initial
+      - service: uwsgi_emperor
     - context:
       dir: {{ wordpressdir }}
   module:

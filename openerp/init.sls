@@ -112,7 +112,6 @@ openerp:
       - archive: openerp
       - user: openerp
       - cmd: openerp_depends
-      - module: openerp_depends
   archive:
     - extracted
     - name: {{ home }}/
@@ -138,7 +137,6 @@ openerp:
     - source: salt://openerp/openerp.jinja2
     - require:
       - file: openerp
-      - postgres_user: openerp
     - context:
       password: {{ password }}
       web_root_dir: {{ web_root_dir }}
@@ -165,6 +163,8 @@ add_web_user_to_openerp_group:
       - file: {{ web_root_dir }}/openerp.wsgi
       - user: add_web_user_to_openerp_group
       - service: uwsgi_emperor
+      - postgres_user: openerp
+      - file: openerp
     - context:
       web_root_dir: {{ web_root_dir }}
       home: {{ home }}
@@ -173,10 +173,12 @@ add_web_user_to_openerp_group:
     - name: file.touch
     - m_name: /etc/uwsgi/openerp.ini
     - require:
-      - file: openerp
+      - file: /etc/uwsgi/openerp.ini
     - watch:
-      - file: {{ web_root_dir }}/openerp.wsgi
       - module: openerp_depends
+      - archive: openerp
+      - file: {{ web_root_dir }}/openerp.wsgi
+      - cmd: openerp_depends
 
 /etc/nginx/conf.d/openerp.conf:
   file:

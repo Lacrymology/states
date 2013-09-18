@@ -159,7 +159,6 @@ wordpress_initial:
     - template: jinja
     - require:
       - pkg: nginx
-    - watch:
       - file: /etc/uwsgi/wordpress.ini
     - watch_in:
       - service: nginx
@@ -179,6 +178,7 @@ wordpress_initial:
       - file: {{ wordpressdir }}/wp-config.php
       - archive: wordpress
       - pkg: php5-mysql
+      - module: wordpress_initial
     - context:
       dir: {{ wordpressdir }}
   module:
@@ -187,6 +187,7 @@ wordpress_initial:
     - m_name: /etc/uwsgi/wordpress.ini
     - require:
       - module: wordpress_initial
+      - service: mysql-server
     - watch:
       - file: /etc/uwsgi/wordpress.ini
       - file: {{ wordpressdir }}/wp-config.php

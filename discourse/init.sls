@@ -274,16 +274,20 @@ discourse_upstart:
       - cmd: discourse_bundler
       - cmd: discourse
       - gem: discourse_rack
+      - postgres_database: discourse
+      - cmd: discourse_assets_precompile
     - context:
       web_root_dir: {{ web_root_dir }}
   module:
     - wait
     - name: file.touch
     - m_name: /etc/uwsgi/discourse.ini
+    - require:
+      - file: /etc/uwsgi/discourse.ini
     - watch:
       - file: discourse
-      - file: {{ web_root_dir }}/config/database.yml
       - file: {{ web_root_dir }}/config/environments/production.rb
+      - file: {{ web_root_dir }}/config/database.yml
       - file: {{ web_root_dir }}/config/redis.yml
       - file: discourse_tar
 

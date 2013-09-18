@@ -1,14 +1,25 @@
 include:
-  - salt.minion.upgrade
+  - salt
 
 salt-minion:
+  pkg:
+    - latest
+    - require:
+      - apt_repository: salt
+  service:
+    - running
+    - enable: True
+    - skip_verify: True
+    - require:
+      - module: sync_all
+      - pip: unittest-xml-reporting
+    - watch:
+      - pkg: salt-minion
+
+sync_all:
   module:
     - run
     - name: saltutil.sync_all
-  service:
-    - running
-    - require:
-      - module: salt-minion
 
 python-pip:
   pkg:
@@ -20,10 +31,3 @@ unittest-xml-reporting:
     - name: http://archive.robotinfra.com/mirror/unittest-xml-reporting-a4d6593eb9b85996021285cc2ca3830701fcfe9b.tar.gz
     - require:
       - pkg: python-pip
-
-extend:
-  salt-minion:
-    pkg:
-      - require:
-        - module: sync_all
-        - pip: unittest-xml-reporting

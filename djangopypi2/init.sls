@@ -157,6 +157,29 @@ djangopypi2_admin_user:
     - watch:
       - postgres_database: djangopypi2
 
+{# set django.contrib.sites.models.Site id=1 #}
+djangopypi2-django_contrib_sites:
+  file:
+    - managed
+    - name: {{ root_dir }}/django_contrib_sites.yaml
+    - source: salt://django/site.jinja2
+    - template: jinja
+    - context:
+      domain_name: {{ pillar['djangopypi2']['hostnames'][0] }}
+    - user: root
+    - group: root
+    - mode: 440
+  module:
+    - wait
+    - name: django.loaddata
+    - settings_module: djangopypi2.website.settings
+    - fixtures: {{ root_dir }}/django_contrib_sites.yaml
+    - bin_env: {{ root_dir }}
+    - require:
+      - module: djangopypi2_settings
+    - watch:
+      - postgres_database: djangopypi2
+
 /var/lib/deployments/djangopypi2/media:
   file:
     - directory
@@ -183,6 +206,7 @@ djangopypi2_admin_user:
       - postgres_database: djangopypi2
       - service: memcached
       - service: rsyslog
+      - module: djangopypi2-django_contrib_sites
   module:
     - wait
     - name: file.touch

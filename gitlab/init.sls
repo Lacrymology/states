@@ -374,12 +374,15 @@ add_web_user_to_git_group:
       - gem: rack
       - file: {{ web_dir }}/config.ru
       - user: add_web_user_to_git_group
+      - postgres_database: gitlab
     - context:
       web_dir: {{ web_dir }}
   module:
     - wait
     - name: file.touch
     - m_name: /etc/uwsgi/gitlab.ini
+    - require:
+      - file: /etc/uwsgi/gitlab.ini
     - watch:
       - file: {{ web_dir }}/config/gitlab.yml
       - file: {{ web_dir }}/config/database.yml

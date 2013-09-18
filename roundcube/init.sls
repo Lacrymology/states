@@ -109,6 +109,8 @@ roundcube:
     - require:
       - file: {{ roundcubedir }}
       - user: web
+    - require_in:
+      - file: /etc/uwsgi/roundcube.ini
 {% endfor %}
 
 /etc/nginx/conf.d/roundcube.conf:
@@ -137,10 +139,12 @@ roundcube:
     - group: www-data
     - mode: 440
     - require:
-      - file: uwsgi_emperor
+      - service: uwsgi_emperor
       - module: roundcube_initial
       - file: {{ roundcubedir }}/config/main.inc.php
       - file: {{ roundcubedir }}/config/db.inc.php
+      - archive: roundcube
+      - pkg: php5-pgsql
     - context:
       dir: {{ roundcubedir }}
   module:
@@ -148,8 +152,7 @@ roundcube:
     - name: file.touch
     - m_name: /etc/uwsgi/roundcube.ini
     - require:
-      - module: roundcube_initial
-      - service: uwsgi_emperor
+      - file: /etc/uwsgi/roundcube.ini
     - watch:
       - file: {{ roundcubedir }}/config/main.inc.php
       - file: {{ roundcubedir }}/config/db.inc.php

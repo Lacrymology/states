@@ -18,6 +18,7 @@ include:
   - ssl.nrpe
 {%- endif %}
   - uwsgi.nrpe
+  - xml.nrpe
 
 /etc/nagios/nrpe.d/gitlab.cfg:
   file:

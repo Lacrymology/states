@@ -72,6 +72,7 @@ include:
 {%- endif %}
   - uwsgi.ruby
   - web
+  - xml
 
 {%- set database_username = salt['pillar.get']('gitlab:database:username', 'gitlab') %}
 {%- set database_password = salt['password.pillar']('gitlab:database:password', 10) %}
@@ -89,7 +90,6 @@ gitlab_dependencies:
     - pkgs:
       - adduser
       - libicu-dev
-      - libxslt1-dev
       - libcurl4-openssl-dev
       - libicu-dev
       - build-essential
@@ -100,6 +100,7 @@ gitlab_dependencies:
       - pkg: python
       - pkg: nodejs
       - pkg: postgresql-dev
+      - pkg: xml-dev
 
 gitlab-shell:
   archive:

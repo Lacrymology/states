@@ -115,6 +115,10 @@ moinmoin_config:
       virtualenv: {{ root_dir }}
     - require:
       - service: uwsgi_emperor
+      - file: moinmoin
+      - file: moinmoin_config
+      - file: {{ root_dir }}/share/moin
+      - file: {{ root_dir }}/share/moin/moin.wsgi
   module:
     - wait
     - name: file.touch

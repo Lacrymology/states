@@ -57,5 +57,5 @@ extend:
       - watch:
         - file: /etc/diamond/collectors/RedisCollector.conf
         - module: diamond_redis
-    require:
-      - service: redis
+      - require:
+        - service: redis

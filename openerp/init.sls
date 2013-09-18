@@ -78,8 +78,7 @@ openerp_depends:
       - pkg: xml-dev
   cmd:
     - wait
-    - name: find ./ -name '*.pyc' -delete
-    - cwd: {{ home }}
+    - name: find {{ home }} -name '*.pyc' -delete
     - stateful: False
     - user: root
     - watch:

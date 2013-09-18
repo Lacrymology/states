@@ -187,13 +187,13 @@ gitlab:
   archive:
     - extracted
     - name: {{ root_dir }}/
-    {%- if 'files_archive' in pillar %}
+{%- if 'files_archive' in pillar %}
     - source: {{ pillar['files_archive'] }}/mirror/gitlab/{{ version|replace("-", ".") }}.tar.gz
     - source_hash: md5=151be72dc60179254c58120098f2a84e
-    {%- else %}
+{%- else %}
     - source: https://github.com/gitlabhq/gitlabhq/archive/{{ version }}-stable.tar.gz
     - source_hash: md5=31906bf7066b7c5270dc4cf6b5623c6b
-    {%- endif %}
+{%- endif %}
     - archive_format: tar
     - tar_options: z
     - if_missing: {{ web_dir }}

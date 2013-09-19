@@ -57,6 +57,9 @@ include:
       https: True
       http_result: 301 Moved Permanently
 {%- endif %}
+{%- if pillar['__test__']|default(False) %}
+      timeout: 120
+{%- endif %}
     - watch_in:
       - service: nagios-nrpe-server
 

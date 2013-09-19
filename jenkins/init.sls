@@ -45,6 +45,7 @@ jenkins:
     - mode: 440
     - require:
       - pkg: nginx
+      - service: jenkins
 
 extend:
   nginx:

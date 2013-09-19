@@ -157,11 +157,15 @@ djangopypi2_admin_user:
     - watch:
       - postgres_database: djangopypi2
 
+{{ root_dir }}/django_contrib_sites.yaml:
+  file:
+    - absent
+
 {# set django.contrib.sites.models.Site id=1 #}
 djangopypi2-django_contrib_sites:
   file:
     - managed
-    - name: {{ root_dir }}/django_contrib_sites.yaml
+    - name: {{ root_dir }}/django_contrib_sites.xml
     - source: salt://django/site.jinja2
     - template: jinja
     - context:
@@ -173,7 +177,7 @@ djangopypi2-django_contrib_sites:
     - wait
     - name: django.loaddata
     - settings_module: djangopypi2.website.settings
-    - fixtures: {{ root_dir }}/django_contrib_sites.yaml
+    - fixtures: {{ root_dir }}/django_contrib_sites.xml
     - bin_env: {{ root_dir }}
     - require:
       - module: djangopypi2_settings

@@ -6,26 +6,32 @@ upstream jenkins {
 
 server {
     listen 80;
-{% if pillar['jenkins']['web']['ssl']|default(False) %}
-{% if pillar['jenkins']['web']['ssl_redirect']|default(False) %}
+{% if pillar['jenkins']['ssl']|default(False) %}
+{% if pillar['jenkins']['ssl_redirect']|default(False) %}
     {# if https, redirect http port 80 to https port 443 #}
-    server_name {% for hostname in pillar['jenkins']['web']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
-    return 301 https://{{ pillar['jenkins']['web']['hostnames'][0] }}$request_uri;
+    server_name {% for hostname in pillar['jenkins']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+    return 301 https://{{ pillar['jenkins']['hostnames'][0] }}$request_uri;
 }
 {# https server #}
 server {
 {% endif %}{# redirect http to https #}
     listen 443 ssl;
-    ssl_certificate /etc/ssl/{{ pillar['jenkins']['web']['ssl'] }}/chained_ca.crt;
-    ssl_certificate_key /etc/ssl/{{ pillar['jenkins']['web']['ssl'] }}/server.pem;
-    ssl_client_certificate /etc/ssl/{{ pillar['jenkins']['web']['ssl'] }}/ca.crt;
+    ssl_certificate /etc/ssl/{{ pillar['jenkins']['ssl'] }}/chained_ca.crt;
+    ssl_certificate_key /etc/ssl/{{ pillar['jenkins']['ssl'] }}/server.pem;
+    ssl_client_certificate /etc/ssl/{{ pillar['jenkins']['ssl'] }}/ca.crt;
     ssl_ciphers RC4:HIGH:!aNULL:!MD5;
     ssl_prefer_server_ciphers on;
     ssl_session_cache shared:SSL:10m;
     ssl_session_timeout 10m;
 {% endif %}
 {# web app logic #}
-    server_name {% for hostname in pillar['jenkins']['web']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+    server_name {% for hostname in pillar['jenkins']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+
+    root /var/cache/jenkins/war/;
+
+    location ~ "^/static/[0-9a-fA-F]{8}\/(.*)$" {
+        rewrite "^/static/[0-9a-fA-F]{8}\/(.*)" /$1 last;
+    }
 
     location / {
         proxy_set_header X-Real-IP $remote_addr;
@@ -34,7 +40,7 @@ server {
         proxy_set_header Host $http_host;
         proxy_next_upstream error;
         proxy_pass http://jenkins;
-  }
+    }
 
     location /favicon.ico {
         deny all;

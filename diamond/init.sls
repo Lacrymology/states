@@ -47,7 +47,6 @@ include:
   - virtualenv
   - gsyslog
   - gsyslog.diamond
-  - ntp
 {% if 'shinken_pollers' in pillar %}
   - diamond.nrpe
 {% endif %}
@@ -139,7 +138,6 @@ diamond:
     - order: 50
     - require:
       - service: gsyslog
-      - service: ntp
     - watch:
       - virtualenv: diamond
       - file: diamond

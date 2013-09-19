@@ -148,7 +148,6 @@ nginx:
       - service: nginx-logger-{{ log_type }}
 {% endfor %}
 
-
 /etc/apt/sources.list.d/nginx.org-packages_ubuntu-precise.list:
   file:
     - absent

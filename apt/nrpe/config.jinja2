@@ -1,3 +1,5 @@
 # {{ pillar['message_do_not_modify'] }}
 command[apt_rc]=/usr/lib/nagios/plugins/check_apt-rc.py
+{%- if not pillar['__test__']|default(False) %}
 command[apt]=/usr/lib/nagios/plugins/check_apt
+{%- endif -%}

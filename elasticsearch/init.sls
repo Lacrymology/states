@@ -97,7 +97,7 @@ include:
     - mode: 440
     - source: salt://elasticsearch/default.jinja2
     - require:
-      - pkg_file: elasticsearch
+      - pkg: elasticsearch
 
 /etc/elasticsearch/logging.yml:
   file:
@@ -108,7 +108,7 @@ include:
     - mode: 440
     - source: salt://elasticsearch/logging.jinja2
     - require:
-      - pkg_file: elasticsearch
+      - pkg: elasticsearch
 
 /etc/cron.daily/elasticsearch-cleanup:
   file:
@@ -137,18 +137,16 @@ elasticsearch:
     - name: cloud-aws
     - url: elasticsearch/elasticsearch-cloud-aws/{{ pillar['elasticsearch']['elasticsearch-cloud-aws_version'] }}
     - require:
-      - pkg_file: elasticsearch
+      - pkg: elasticsearch
 {% endif %}
-  pkg_file:
+  pkg:
     - installed
-    - name: elasticsearch
-    - version: {{ version }}
+    - sources:
 {%- if 'files_archive' in pillar %}
-    - source: {{ pillar['files_archive'] }}/mirror/elasticsearch-{{ version }}.deb
+        - elasticsearch: {{ pillar['files_archive']|replace('file://', '') }}/mirror/elasticsearch-{{ version }}.deb
 {%- else %}
-    - source: http://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-{{ version }}.deb
+        - elasticsearch: http://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-{{ version }}.deb
 {%- endif %}
-    - source_hash: {{ checksum }}
     - require:
       - pkg: openjdk_jre_headless
   file:
@@ -164,7 +162,7 @@ elasticsearch:
       data: 'true'
       origin_state: elasticsearch
     - require:
-      - pkg_file: elasticsearch
+      - pkg: elasticsearch
   service:
     - running
     - enable: True
@@ -173,7 +171,7 @@ elasticsearch:
       - file: /etc/default/elasticsearch
       - file: /etc/elasticsearch/logging.yml
       - file: elasticsearch
-      - pkg_file: elasticsearch
+      - pkg: elasticsearch
       - pkg: openjdk_jre_headless
 {% if grains['cpuarch'] == 'i686' %}
       - file: /usr/lib/jvm/java-7-openjdk

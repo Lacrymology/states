@@ -3,8 +3,6 @@
 #}
 include:
   - apt.nrpe
-  - rsyslog.nrpe
-  - nginx.nrpe
   - memcache.nrpe
   - nginx.nrpe
   - nrpe
@@ -12,6 +10,7 @@ include:
   - postgresql.nrpe
   - postgresql.server.nrpe
   - python.dev.nrpe
+  - rsyslog.nrpe
 {% if pillar['djangopypi2']['ssl']|default(False) %}
   - ssl.nrpe
 {% endif %}

@@ -8,6 +8,16 @@ include:
 {% if pillar['jenkins']['ssl']|default(False) %}
   - ssl.nrpe
 {% endif %}
+/etc/nagios/nrpe.d/jenkins.cfg:
+  file:
+    - managed
+    - template: jinja
+    - user: nagios
+    - group: nagios
+    - mode: 440
+    - source: salt://jenkins/nrpe/config.jinja2
+    - require:
+      - pkg: nagios-nrpe-server
 
 /etc/nagios/nrpe.d/jenkins-nginx.cfg:
   file:
@@ -31,4 +41,5 @@ extend:
   nagios-nrpe-server:
     service:
       - watch:
+        - file: /etc/nagios/nrpe.d/jenkins.cfg
         - file: /etc/nagios/nrpe.d/jenkins-nginx.cfg

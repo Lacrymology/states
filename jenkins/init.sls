@@ -6,7 +6,7 @@ include:
   - apt
   - nginx
   - java.7.jdk
-{% if pillar['jenkins']['web']['ssl']|default(False) %}
+{% if pillar['jenkins']['ssl']|default(False) %}
   - ssl
 {% endif %}
 
@@ -51,8 +51,8 @@ extend:
     service:
       - watch:
         - file: /etc/nginx/conf.d/jenkins.conf
-{% if pillar['jenkins']['web']['ssl']|default(False) %}
-        - cmd: /etc/ssl/{{ pillar['jenkins']['web']['ssl'] }}/chained_ca.crt
-        - module: /etc/ssl/{{ pillar['jenkins']['web']['ssl'] }}/server.pem
-        - file: /etc/ssl/{{ pillar['jenkins']['web']['ssl'] }}/ca.crt
+{% if pillar['jenkins']['ssl']|default(False) %}
+        - cmd: /etc/ssl/{{ pillar['jenkins']['ssl'] }}/chained_ca.crt
+        - module: /etc/ssl/{{ pillar['jenkins']['ssl'] }}/server.pem
+        - file: /etc/ssl/{{ pillar['jenkins']['ssl'] }}/ca.crt
 {% endif %}

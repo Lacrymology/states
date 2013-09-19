@@ -5,7 +5,7 @@ include:
   - java.7.jdk
   - apt.nrpe
   - nginx.nrpe
-{% if pillar['jenkins']['web']['ssl']|default(False) %}
+{% if pillar['jenkins']['ssl']|default(False) %}
   - ssl.nrpe
 {% endif %}
 
@@ -21,8 +21,8 @@ include:
       - pkg: nagios-nrpe-server
     - context:
       deployment: jenkins
-      domain_name: {{ salt['pillar.get']('jenkins:web:hostnames') }}
-{% if pillar['jenkins']['web']['ssl']|default(False) %}
+      domain_name: {{ salt['pillar.get']('jenkins:hostnames') }}
+{% if pillar['jenkins']['ssl']|default(False) %}
       https: True
       http_result: 301 Moved Permanently
 {% endif %}

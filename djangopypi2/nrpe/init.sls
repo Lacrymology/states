@@ -50,7 +50,7 @@ include:
     - context:
       deployment: djangopypi2
       domain_name: {{ pillar['djangopypi2']['hostnames'][0] }}
-      http_uri: /login/
+      http_uri: /packages/
 {% if pillar['djangopypi2']['ssl']|default(False) %}
       https: True
       http_result: 301 Moved Permanently

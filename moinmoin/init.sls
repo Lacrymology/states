@@ -7,7 +7,7 @@ moinmoin:
   superusers:
     - spiderman
     - batman
-  openldap: # config ldap as backend authenticate for moinmoin
+  ldap: # config ldap as backend authenticate for moinmoin
     uri: 'ldap://example.com
     binddn: 'cn=admin,dc=example,dc=com'
     bindpw: 'passwordhere'
@@ -120,6 +120,10 @@ moinmoin_config:
       virtualenv: {{ root_dir }}
     - require:
       - service: uwsgi_emperor
+      - file: moinmoin
+      - file: moinmoin_config
+      - file: {{ root_dir }}/share/moin
+      - file: {{ root_dir }}/share/moin/moin.wsgi
   module:
     - wait
     - name: file.touch

@@ -11,6 +11,7 @@ Run postfix-stats as syslog destination
 
 include:
   - diamond
+  - postfix
 
 postfix_diamond_collector:
   file:
@@ -64,3 +65,5 @@ extend:
       - watch:
         - file: postfix_diamond_collector
         - module: postfix_stats
+      - require:
+        - service: postfix

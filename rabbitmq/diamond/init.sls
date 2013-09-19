@@ -72,6 +72,8 @@ extend:
       - watch:
         - file: diamond_rabbitmq
 {% if grains['id'] != master_id %}
+      - require:
+        - service: rabbitmq-server
   in_rabbitmq_cluster:
     rabbitmq_cluster:
       - require:

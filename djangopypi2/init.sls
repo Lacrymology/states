@@ -129,9 +129,10 @@ djangopypi2_collectstatic:
     - bin_env: {{ root_dir }}
     - require:
       - module: djangopypi2_settings
+      - cmd: djangopypi2
     - watch:
       - file: djangopypi2_settings
-      - file: djangopypi2_urls
+      - module: djangopypi2
 
 djangopypi2_loaddata:
   module:
@@ -143,7 +144,7 @@ djangopypi2_loaddata:
     - require:
       - module: djangopypi2_settings
     - watch:
-      - module: djangopypi2_collectstatic
+      - postgres_database: djangopypi2
 
 djangopypi2_admin_user:
   module:
@@ -223,9 +224,7 @@ djangopypi2-django_contrib_sites:
       - file: /var/lib/deployments/djangopypi2/media
       - module: djangopypi2_loaddata
     - require:
-      - service: uwsgi_emperor
-      - postgres_database: djangopypi2
-      - service: memcached
+      - file: /etc/uwsgi/djangopypi2.ini
 
 /etc/nginx/conf.d/djangopypi2.conf:
   file:

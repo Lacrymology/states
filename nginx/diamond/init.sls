@@ -4,6 +4,7 @@
 include:
   - diamond
   - gsyslog.diamond
+  - nginx
 
 nginx_diamond_resources:
   file:
@@ -35,3 +36,5 @@ extend:
     service:
       - watch:
         - file: nginx_diamond_collector
+      - require:
+        - service: nginx

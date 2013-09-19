@@ -42,8 +42,8 @@ file_roots:
      - /root/salt/states
 pillar_roots:
   base:
-    - /root/salt/pillar""" >> /etc/salt/minion
-    salt-call --local saltutil.sync_all
+    - /root/salt/pillar""" > /etc/salt/minion
+    salt-call saltutil.sync_all
 else
     echo """id: $1
 log_level: debug

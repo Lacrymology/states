@@ -13,7 +13,9 @@ include:
 jenkins_dependencies:
   pkg:
     - installed
-    - name: daemon
+    - names:
+      - daemon
+      - psmisc
 
 jenkins:
   pkg:

@@ -4,6 +4,7 @@
 include:
   - diamond
   - rsyslog.diamond
+  - ntp
 
 ntp_diamond_resources:
   file:
@@ -32,5 +33,7 @@ diamond_ntp:
 extend:
   diamond:
     service:
+      - require:
+        - service: ntp
       - watch:
         - file: diamond_ntp

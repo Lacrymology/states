@@ -182,6 +182,7 @@ djangopypi2-django_contrib_sites:
     - bin_env: {{ root_dir }}
     - require:
       - module: djangopypi2_settings
+      - file: djangopypi2-django_contrib_sites
     - watch:
       - postgres_database: djangopypi2
 

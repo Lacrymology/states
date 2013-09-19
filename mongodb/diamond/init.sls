@@ -4,6 +4,7 @@
 include:
   - diamond
   - pip
+  - mongodb
 
 diamond-pymongo:
   file:
@@ -57,3 +58,5 @@ extend:
     service:
       - watch:
         - file: diamond_mongodb
+      - require:
+        - service: mongodb

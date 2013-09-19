@@ -6,7 +6,7 @@ TEMPLATE_DEBUG = False
 ADMINS = ()
 TIME_ZONE = 'UTC'
 LANGUAGE_CODE = 'en_US'
-ALLOW_VERSION_OVERWRITE = {{ salt["pillar.get"]("djangopypi2:web:allow_version_overwrite", False) }}
+ALLOW_VERSION_OVERWRITE = {{ salt["pillar.get"]("djangopypi2:allow_version_overwrite", False) }}
 
 MANAGERS = ()
 
@@ -45,7 +45,7 @@ CACHES = {
     }
 }
 
-SECRET_KEY = '{{ salt['password.pillar']('djangopypi2:web:django_key', 32) }}'
+SECRET_KEY = '{{ salt['password.pillar']('djangopypi2:django_key', 32) }}'
 
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
@@ -186,7 +186,7 @@ LOGGING = {
     },
 }
 RAVEN_CONFIG = {
-    'dsn': '{{ pillar['djangopypi2']['web']['sentry'] }}',
+    'dsn': '{{ pillar['djangopypi2']['sentry'] }}',
 }
 
 {%- if 'graphite_address' in pillar %}

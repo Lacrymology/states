@@ -150,7 +150,7 @@ djangopypi2_admin_user:
   module:
     - wait
     - name: django.command
-    - command: createsuperuser_plus --username={{ pillar['djangopypi2']['web']['initial_admin_user']['username'] }} --email={{ salt['pillar.get']('djangopypi2:web:initial_admin_user:email', 'root@example.com') }} --password={{ pillar['djangopypi2']['web']['initial_admin_user']['password'] }}
+    - command: createsuperuser_plus --username={{ pillar['djangopypi2']['initial_admin_user']['username'] }} --email={{ salt['pillar.get']('djangopypi2:initial_admin_user:email', 'root@example.com') }} --password={{ pillar['djangopypi2']['initial_admin_user']['password'] }}
     - settings_module: djangopypi2.website.settings
     - bin_env: {{ root_dir }}
     - require:

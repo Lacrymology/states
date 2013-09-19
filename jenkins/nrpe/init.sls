@@ -21,7 +21,7 @@ include:
       - pkg: nagios-nrpe-server
     - context:
       deployment: jenkins
-      domain_name: {{ pillar['jenkins']['hostnames'][0] }}
+      domain_name: {{ salt['pillar.get']('jenkins:web:hostnames') }}
 {% if pillar['jenkins']['web']['ssl']|default(False) %}
       https: True
       http_result: 301 Moved Permanently

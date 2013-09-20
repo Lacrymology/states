@@ -49,7 +49,8 @@ def _get_app_paths(app=None):
     return config, link, app_file
 
 def _applist(dir):
-    return [os.path.splitext(x)[0] for x in os.listdir(dir) if os.path.isfile(os.path.join(dir, x))]
+    return [os.path.splitext(x)[0] for x in os.listdir(dir) if (os.path.isfile(os.path.join(dir, x)) and
+                                                                x.endswith('.ini'))]
 
 def list_enabled():
     '''

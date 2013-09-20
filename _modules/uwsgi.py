@@ -10,7 +10,8 @@ import os
 import salt, salt.version
 if salt.version.__version_info__ >= (0, 16):
     # use file.symlink module
-    symlink = __salt__['file.symlink']
+    def symlink(target, name):
+        return __salt__['file.symlink'](target, name)
 else:
     def symlink(target, name):
         return __salt__['cmd.run']('ln -s {} {}'.format(target, name))

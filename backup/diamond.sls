@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, <BRUNO CLERMONT>
+Copyright (c) 2013, Bruno Clermont
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met: 
@@ -21,8 +21,8 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
- Author: Bruno Clermont patate@fastmail.cn
- Maintainer: Bruno Clermont patate@fastmail.cn
+Author: Bruno Clermont patate@fastmail.cn
+Maintainer: Bruno Clermont patate@fastmail.cn
  
  Diamond statistics for backup client
 -#}

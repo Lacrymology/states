@@ -2,7 +2,7 @@
  Install Fluxbox - Windows Manager
 #}
 
-{% set root_home = salt['user.info']('root')['home'] %}
+{%- set root_home = salt['user.info']('root')['home'] %}
 
 include:
   - apt
@@ -10,6 +10,9 @@ include:
 fluxbox:
   pkg:
     - latest
+    - pkgs:
+      - eterm
+      - fluxbox
     - require:
       - cmd: apt_sources
   file:
@@ -20,5 +23,5 @@ fluxbox:
     - mode: 444
     - source: salt://fluxbox/menu.jinja2
     - template: jinja
-    - require:
-      - pkg: fluxbox
+    #- require:
+      #- pkg: fluxbox

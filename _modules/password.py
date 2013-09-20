@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 
+__author__ = 'Hung Nguyen Viet'
+__maintainer__ = 'Hung Nguyen Viet'
+__email__ = 'hvnsweeting@gmail.com'
+
 '''
 Generate random password
 '''

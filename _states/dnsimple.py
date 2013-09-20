@@ -1,5 +1,8 @@
 #-*- encoding: utf-8 -*-
 
+__author__ = 'Bruno Clermont'
+__maintainer__ = 'Bruno Clermont'
+__email__ = 'patate@fastmail.cn'
 '''
 DNSimple state
 requires: requests==1.2.0

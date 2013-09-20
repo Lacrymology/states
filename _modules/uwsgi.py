@@ -51,9 +51,10 @@ def _get_app_paths(app=None):
     link = os.path.join(_enabled_path, app_file)
     return config, link, app_file
 
-def _applist(dir):
-    return [os.path.splitext(x)[0] for x in os.listdir(dir) if (os.path.isfile(os.path.join(dir, x)) and
-                                                                x.endswith('.ini'))]
+
+def _applist(dir, test):
+    return [os.path.splitext(x)[0] for x in os.listdir(dir) if test(os.path.join(dir, x)) and x.endswith('.ini')]
+
 
 def list_enabled():
     '''
@@ -63,7 +64,8 @@ def list_enabled():
     # list in $UWSGI_ROOT/apps-enabled all the symlink to
     # $UWSGI_ROOT/apps-available
     # for '/etc/uwsgi/apps-enabled/bleh.ini' return only 'bleh'
-    return _applist(_enabled_path)
+    return _applist(_enabled_path, lambda x: os.path.isfile(x) or os.path.islink(x))
+
 
 def list_available():
     '''
@@ -71,7 +73,7 @@ def list_available():
     '''
     # IMPLEMENT:
     # like list_enabled() bur return file in apps-available
-    return _applist(_available_path)
+    return _applist(_available_path, os.path.isfile)
 
 
 def enable(app_name):

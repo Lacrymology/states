@@ -76,7 +76,7 @@ def list_available():
     return _applist(_available_path, os.path.isfile)
 
 
-def enable(app_name):
+def enable(*app_names):
     '''
     Enable specified uWSGI application.
     '''
@@ -86,25 +86,27 @@ def enable(app_name):
     # and missing app in apps-enabled.
     # in case of failure use logger.error
     # return {$filename: 'symlink created to $destination'}
-    app_config, app_symlink, app_file = _get_app_paths(app_name)
+    def enable_app(app_name):
+        app_config, app_symlink, app_file = _get_app_paths(app_name)
 
-    if app_name not in list_available():
-        logger.error("%s is not an available app", app_name)
-        return {}
-    if app_name in list_enabled():
-        logger.error("%s already exists", app_symlink)
-        return {}
+        if app_name not in list_available():
+            logger.error("%s is not an available app", app_name)
+            return {}
+        if app_name in list_enabled():
+            logger.error("%s already exists", app_symlink)
+            return {}
 
-    try:
-        symlink(app_config, app_symlink)
-    except CommandExecutionError, e:
-        logger.error("Error enabling apps: %s", e)
-        return {}
+        try:
+            symlink(app_config, app_symlink)
+        except CommandExecutionError, e:
+            logger.error("Error enabling apps: %s", e)
+            return {}
 
-    return {app_file: "symlink created in {destination}".format(destination=app_symlink)}
+        return {app_file: "symlink created in {destination}".format(destination=app_symlink)}
+    return filter(None, [enable_app(app_name) for app_name in app_names])
 
 
-def disable(app_name):
+def disable(*app_names):
     '''
     Disable specified uWSGI application.
     '''
@@ -113,20 +115,30 @@ def disable(app_name):
     # the code need to be resilient to non-existing symlink
     # if symlink don't exist, just logger.debug about it
     # return {$filename: 'removed'}
-    _, app_symlink, app_file = _get_app_paths(app_name)
-    __salt__['file.remove'](app_symlink)
-    return {app_file: 'removed'}
+    def disable_app(app_name):
+        _, app_symlink, app_file = _get_app_paths(app_name)
+        if not __salt__['file.remove'](app_symlink):
+            logger.debug("%s could not be removed", app_symlink)
+            return {}
+        return {app_file: 'removed'}
+    return filter(None, [disable_app(app_name) for app_name in app_names])
 
-def remove(app_name):
+
+def remove(*app_names):
     '''
     Remove specified uWSGI application.
     '''
     # IMPLEMENT:
     # use file.remove to remove /etc/uwsgi/apps-available/$app_name.ini
     # return {$filename: 'removed'}
-    app_config, _, app_file = _get_app_paths(app_name)
-    __salt__['file.remove'](app_config)
-    return {app_file: 'removed'}
+    def remove_app(app_name):
+        app_config, _, app_file = _get_app_paths(app_name)
+        if not __salt__['file.remove'](app_config):
+            logger.debug("%s could not be removed", app_config)
+            return {}
+        return {app_file: 'removed'}
+    return filter(None, [remove_app(app_name) for app_name in app_names])
+
 
 def clean():
     '''

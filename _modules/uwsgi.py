@@ -86,6 +86,9 @@ def enable(app_name):
     # return {$filename: 'symlink created to $destination'}
     app_config, app_symlink, app_file = _get_app_paths(app_name)
 
+    if app_name not in list_available():
+        logger.error("%s is not an available app", app_name)
+        return {}
     try:
         symlink(app_config, app_symlink)
     except CommandExecutionError, e:

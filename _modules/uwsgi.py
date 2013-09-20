@@ -42,7 +42,7 @@ def _get_app_paths(app=None):
     in apps-available as well as the expected symlink in apps-enabled
 
     '''
-    app_file = os.path.join(app, '.ini')
+    app_file = '{}.ini'.format(app)
     # define our app config/symlink paths
     config = os.path.join(_available_path, app_file)
     link = os.path.join(_enabled_path, app_file)

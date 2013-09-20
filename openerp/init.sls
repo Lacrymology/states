@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, <LAM DANG TUNG>
+Copyright (c) 2013, Lam Dang Tung
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without

@@ -1,4 +1,4 @@
-{#-Copyright (c) 2013, <BRUNO CLERMONT>
+{#-Copyright (c) 2013, Bruno Clermont
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without

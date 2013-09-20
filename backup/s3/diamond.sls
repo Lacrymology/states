@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, <NICOLAS PLESSIS>
+Copyright (c) 2013, Nicolas Plessis
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without

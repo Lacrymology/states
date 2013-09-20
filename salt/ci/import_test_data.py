@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 '''
-Copyright (c) 2013, <HUNG NGUYEN VIET>
+Copyright (c) 2013, Hung Nguyen Viet
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without

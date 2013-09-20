@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013 <HUNG NGUYEN VIET>
+Copyright (c) 2013 Hung Nguyen Viet
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

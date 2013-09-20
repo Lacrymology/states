@@ -10,14 +10,10 @@ import os
 import salt, salt.version
 if salt.version.__version_info__ >= (0, 16):
     # use file.symlink module
-    def symlink(name, target):
-        """
-        modules.file.symlink takes src, link and salt.states.file.symlink takes name, target (i.e., link, src)
-        This makes it compatible
-        """
-        return __salt__['file.symlink'](target, name)
+    symlink = __salt__['file.symlink']
 else:
-    from salt.states.file import symlink
+    def symlink(target, name):
+        return __salt__['cmd.run']('ln -s {} {}'.format(target, name))
 
 logger = logging.getLogger(__name__)
 
@@ -82,8 +78,8 @@ def enable(app_name):
     # in case of failure use logger.error
     # return {$filename: 'symlink created to $destination'}
     app_config, app_symlink, app_file = _get_app_paths(app_name)
-    symlink(app_symlink, app_config)
-    return {app_file: "symlink created in {destination}".format(dict(destination=app_symlink))}
+    symlink(app_config, app_symlink)
+    return {app_file: "symlink created in {destination}".format(destination=app_symlink)}
 
 
 def disable(app_name):

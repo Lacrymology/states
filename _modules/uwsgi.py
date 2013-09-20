@@ -8,13 +8,19 @@ import logging
 import os
 
 import salt, salt.version
+from salt.exceptions import CommandExecutionError
+
 if salt.version.__version_info__ >= (0, 16):
     # use file.symlink module
     def symlink(target, name):
         return __salt__['file.symlink'](target, name)
 else:
     def symlink(target, name):
-        return __salt__['cmd.run']('ln -s {} {}'.format(target, name))
+        ret = __salt__['cmd.run']('ln -s {} {}'.format(target, name))
+        if ret == '':
+            return True
+        else:
+            raise CommandExecutionError('Could not create {0}'.format(name))
 
 logger = logging.getLogger(__name__)
 
@@ -79,7 +85,13 @@ def enable(app_name):
     # in case of failure use logger.error
     # return {$filename: 'symlink created to $destination'}
     app_config, app_symlink, app_file = _get_app_paths(app_name)
-    symlink(app_config, app_symlink)
+
+    try:
+        symlink(app_config, app_symlink)
+    except CommandExecutionError, e:
+        logger.error("Error enabling apps: %s", e)
+        return {}
+
     return {app_file: "symlink created in {destination}".format(destination=app_symlink)}
 
 

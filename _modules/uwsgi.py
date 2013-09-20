@@ -89,6 +89,10 @@ def enable(app_name):
     if app_name not in list_available():
         logger.error("%s is not an available app", app_name)
         return {}
+    if app_name in list_enabled():
+        logger.error("%s already exists", app_symlink)
+        return {}
+
     try:
         symlink(app_config, app_symlink)
     except CommandExecutionError, e:

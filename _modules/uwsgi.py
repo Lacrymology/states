@@ -8,7 +8,7 @@ import logging
 import os
 
 import salt, salt.version
-from salt.exceptions import CommandExecutionError
+from salt.exceptions import CommandExecutionError, SaltInvocationError
 
 if salt.version.__version_info__ >= (0, 16):
     # use file.symlink module
@@ -86,6 +86,8 @@ def enable(*app_names):
     # and missing app in apps-enabled.
     # in case of failure use logger.error
     # return {$filename: 'symlink created to $destination'}
+    if not app_names:
+        raise SaltInvocationError("Please select at least one app")
     def enable_app(app_name):
         app_config, app_symlink, app_file = _get_app_paths(app_name)
 
@@ -115,6 +117,8 @@ def disable(*app_names):
     # the code need to be resilient to non-existing symlink
     # if symlink don't exist, just logger.debug about it
     # return {$filename: 'removed'}
+    if not app_names:
+        raise SaltInvocationError("Please select at least one app")
     def disable_app(app_name):
         _, app_symlink, app_file = _get_app_paths(app_name)
         if not __salt__['file.remove'](app_symlink):
@@ -131,6 +135,8 @@ def remove(*app_names):
     # IMPLEMENT:
     # use file.remove to remove /etc/uwsgi/apps-available/$app_name.ini
     # return {$filename: 'removed'}
+    if not app_names:
+        raise SaltInvocationError("Please select at least one app")
     def remove_app(app_name):
         app_config, _, app_file = _get_app_paths(app_name)
         if not __salt__['file.remove'](app_config):

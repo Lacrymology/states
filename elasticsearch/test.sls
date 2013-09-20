@@ -1,6 +1,6 @@
 {#-
- Author: Bruno Clermont patate@fastmail.cn
- Maintainer: Bruno Clermont patate@fastmail.cn
+Author: Bruno Clermont patate@fastmail.cn
+Maintainer: Bruno Clermont patate@fastmail.cn
  -#}
 {%- set ssl = pillar['elasticsearch']['ssl']|default(False) %}
 include:

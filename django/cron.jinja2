@@ -1,7 +1,7 @@
 #!/bin/sh
 # {{ pillar['message_do_not_modify'] }}
 {#-
- Author: Bruno Clermont patate@fastmail.cn
- Maintainer: Bruno Clermont patate@fastmail.cn
+Author: Bruno Clermont patate@fastmail.cn
+Maintainer: Bruno Clermont patate@fastmail.cn
  #}
 {{ minute }} {{ hour }} * * * nagios /usr/lib/nagios/plugins/check_links.py http://{{ domain_name }}/sitemap.xml > /dev/null 2> /dev/null

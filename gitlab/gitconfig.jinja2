@@ -1,0 +1,3 @@
+[user]
+    name = GitLab
+    email = {{ salt['pillar.get']('gitlab:smtp:from', salt['pillar.get']('smtp:from')) }}

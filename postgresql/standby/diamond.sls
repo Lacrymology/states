@@ -4,6 +4,6 @@ include:
 
 extend:
   postgresql_monitoring:
-    postgres_database:
+    postgres_user:
       - require:
         - service: postgresql

@@ -1,0 +1,35 @@
+# {{ pillar['message_do_not_modify'] }}
+upstream openerp {
+    server unix:///var/lib/uwsgi/openerp.sock;
+}
+server {
+    listen 80;
+
+    {%- if salt['pillar.get']('openerp:ssl', False) %}
+    {%- if salt['pillar.get']('openerp:ssl_redirect', False) %}
+    {# if https, redirect http port 80 to https port 443 #}
+
+    server_name {% for hostname in salt['pillar.get']('openerp:hostnames') %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+    return 301 https://{{ salt['pillar.get']('openerp:hostnames')[0] }}$request_uri;
+}
+server {
+{%- endif %}{# redirect http to https #}
+    listen 443 ssl;
+    ssl_certificate /etc/ssl/{{ salt['pillar.get']('openerp:ssl') }}/chained_ca.crt;
+    ssl_certificate_key /etc/ssl/{{ salt['pillar.get']('openerp:ssl') }}/server.pem;
+    ssl_client_certificate /etc/ssl/{{ salt['pillar.get']('openerp:ssl') }}/ca.crt;
+    ssl_ciphers RC4:HIGH:!aNULL:!MD5;
+    ssl_prefer_server_ciphers on;
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout 10m;
+{%- endif %}
+
+    server_name {% for hostname in salt['pillar.get']('openerp:hostnames') %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+
+    root {{ web_root_dir }}/openerp;
+
+    location / {
+        uwsgi_pass openerp;
+        include uwsgi_params;
+    }
+}

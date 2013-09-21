@@ -13,7 +13,7 @@ include:
   - ssl.nrpe
 {% endif %}
 
-/etc/nagios/nrpe.d/postgresql-diamond.cfg:
+/etc/nagios/nrpe.d/postgresql-monitoring.cfg:
   file:
     - managed
     - template: jinja
@@ -24,9 +24,9 @@ include:
     - require:
       - pkg: nagios-nrpe-server
     - context:
-      deployment: diamond
+      deployment: monitoring
       version: {{ version }}
-      password: {{ salt['password.pillar']('postgresql:diamond') }}
+      password: {{ salt['password.pillar']('postgresql:monitoring:password') }}
 
 /etc/nagios/nrpe.d/postgresql.cfg:
   file:
@@ -66,6 +66,6 @@ extend:
     service:
       - watch:
         - file: /etc/nagios/nrpe.d/postgresql.cfg
-        - file: /etc/nagios/nrpe.d/postgresql-diamond.cfg
+        - file: /etc/nagios/nrpe.d/postgresql-monitoring.cfg
       - require:
         - postgres_user: postgresql_monitoring

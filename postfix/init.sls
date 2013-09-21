@@ -16,6 +16,18 @@ Optional Pillar
 mail:
   maxproc: 2
 
+postfix:
+  spam_filter: True
+  sasl: True
+  virtual_mailbox: True
+  mydestination:
+    - saltlab.com
+    - localhost.localdomain
+    - localhost
+  mynetworks:
+    - 127.0.0.0/8
+    - 192.168.122.0/24
+
 ldap:
   data:
     mailname:
@@ -35,10 +47,17 @@ ldap:
 
 mail:maxproc: number of processes for passing email to amavis.  This value is used for amavis, too.
 ldap:data: nested dict contain user infomation, that will be used for create LDAP users and mapping emails (user@mailname) to mailboxes
+postfix:spam_filter: set configuration for amavis spam filter. Default: False
+postfix:sasl: set configuration for authentication by dovecot sasl. Default:False
+postfix:virtual_mailbox: enable using virtual mailbox. Default: False
+postfix:mynetworks: list of trusted networks that postfix will relay mail from. Default: ["127.0.0.0/8"]
+postfix:mydestination: host that this mail server will be final destination. Default: []
+postfix:relayhost: the next-hop destination of non-local mail; overrides non-local domains in recipient addresses. Default: ''
+postfix:relay_domains: domains that this mail server will relay mail to. Default: all values defined in mydestination
+postfix:inet_interfaces: intefaces that this mail server listen to. Default: all
 -#}
 {% set ssl = salt['pillar.get']('postfix:ssl', False) %}
 include:
-  - dovecot.agent
   - apt
   - mail
 {% if ssl %}
@@ -58,46 +77,41 @@ postfix:
       - cmd: apt_sources
       - file: /etc/mailname
       - pkg: apt-utils
-  service:
-    - running
-    - order: 50
-    - require:
-      - file: /var/mail/vhosts
-    - watch:
-      - pkg: postfix
-      - file: /etc/postfix
-{% if ssl %}
-      - cmd: /etc/ssl/{{ ssl }}/chained_ca.crt
-      - module: /etc/ssl/{{ ssl }}/server.pem
-      - file: /etc/ssl/{{ ssl }}/ca.crt
-{% endif %}
-
-/var/mail/vhosts:
   file:
-    - directory
-    - user: dovecot-agent
-    - require:
-      - user: dovecot-agent
-
-/etc/postfix:
-  file:
-    - recurse
-    - source: salt://postfix/configs
+    - managed
+    - name: /etc/postfix/main.cf
+    - source: salt://postfix/main.jinja2
     - template: jinja
     - user: postfix
     - group: postfix
     - file_mode: 400
     - require:
       - pkg: postfix
-      - user: dovecot-agent
+  service:
+    - running
+    - order: 50
+    - watch:
+      - pkg: postfix
+      - file: /etc/postfix/master.cf
+      - file: postfix
+{% if ssl %}
+      - cmd: /etc/ssl/{{ ssl }}/chained_ca.crt
+      - module: /etc/ssl/{{ ssl }}/server.pem
+      - file: /etc/ssl/{{ ssl }}/ca.crt
+{% endif %}
 
-postfix-ldap:
-  pkg:
-    - installed
+/etc/postfix/master.cf:
+  file:
+    - managed
+    - source: salt://postfix/master.jinja2
+    - template: jinja
+    - user: postfix
+    - group: postfix
+    - file_mode: 400
     - require:
-      - cmd: apt_sources
       - pkg: postfix
 
+{%- if salt['pillar.get']('postfix:virtual_mailbox', False) %}
 /etc/postfix/vmailbox:
   file:
     - managed
@@ -113,7 +127,6 @@ postmap /etc/postfix/vmailbox:
   cmd:
     - require:
       - pkg: postfix
-      - file: /etc/postfix
     {% if salt['file.file_exists']('/etc/postfix/vmailbox.db') %}
     - wait
     - watch:
@@ -122,3 +135,4 @@ postmap /etc/postfix/vmailbox:
       - file: /etc/postfix/vmailbox
     - run
     {% endif %}
+{%- endif %}

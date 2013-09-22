@@ -1,9 +1,9 @@
 {#-
-Author: Bruno Clermont patate@fastmail.cn
-Maintainer: Bruno Clermont patate@fastmail.cn
+Author: Bruno Clermont <patate@fastmail.cn>
+Maintainer: Bruno Clermont <patate@fastmail.cn>
  
  Nagios NRPE checks for elasticsearch
- -#}
+-#}
 {% set ssl = pillar['elasticsearch']['ssl']|default(False) %}
 include:
   - nrpe

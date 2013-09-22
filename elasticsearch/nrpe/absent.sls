@@ -1,9 +1,9 @@
 {#-
-Author: Bruno Clermont patate@fastmail.cn
-Maintainer: Bruno Clermont patate@fastmail.cn
+Author: Bruno Clermont <patate@fastmail.cn>
+Maintainer: Bruno Clermont <patate@fastmail.cn>
 
  Remove Nagios NRPE checks for elasticsearch
- -#}
+-#}
 /etc/nagios/nrpe.d/elasticsearch.cfg:
   file:
     - absent

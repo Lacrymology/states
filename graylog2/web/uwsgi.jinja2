@@ -22,9 +22,9 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Bruno Clermont patate@fastmail.cn
-Maintainer: Bruno Clermont patate@fastmail.cn
- -#}
+Author: Bruno Clermont <patate@fastmail.cn>
+Maintainer: Bruno Clermont <patate@fastmail.cn>
+-#}
 # {{ pillar['message_do_not_modify'] }}
 {% set web = pillar['graylog2'] %}
 [uwsgi]
@@ -35,7 +35,7 @@ post-buffering = 4096
  Especially automatically-generated URL queries in message details.
  The following prevent errors such as:
   invalid request block size: 7776 (max 4096)...skip
- #}
+#}
 buffer-size = 32768
 env = RAILS_ENV=production
 processes = {{ web['workers'] }}

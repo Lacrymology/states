@@ -22,8 +22,8 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Bruno Clermont patate@fastmail.cn
-Maintainer: Bruno Clermont patate@fastmail.cn
+Author: Bruno Clermont <patate@fastmail.cn>
+Maintainer: Bruno Clermont <patate@fastmail.cn>
  
  State for Shinken Scheduler.
 
@@ -36,7 +36,7 @@ Maintainer: Bruno Clermont patate@fastmail.cn
  (like pollers or reactionners). This permits distributing load equally across
  many pollers. There can be many schedulers for load-balancing or hot standby
  roles.
- -#}
+-#}
 include:
   - shinken
 

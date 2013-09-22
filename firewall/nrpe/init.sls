@@ -22,8 +22,8 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Bruno Clermont patate@fastmail.cn
-Maintainer: Bruno Clermont patate@fastmail.cn
+Author: Bruno Clermont <patate@fastmail.cn>
+Maintainer: Bruno Clermont <patate@fastmail.cn>
 
  Nagios NRPE check for iptables
 -#}
@@ -38,7 +38,7 @@ include:
  maximal number of iptables rules before it's considered critical.
  the number is high because we only care about 0 iptables, where there is just
  no rules applied.
- #}
+#}
 {% set critical=300 %}
 
 /etc/sudoers.d/nrpe_firewall:

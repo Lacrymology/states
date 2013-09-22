@@ -22,9 +22,9 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Bruno Clermont patate@fastmail.cn
-Maintainer: Bruno Clermont patate@fastmail.cn
- -#}
+Author: Bruno Clermont <patate@fastmail.cn>
+Maintainer: Bruno Clermont <patate@fastmail.cn>
+-#}
 # {{ pillar['message_do_not_modify'] }}
 command[graylog2_procs]=/usr/lib/nagios/plugins/check_procs -c 1:1 -C java -a '-jar /usr/local/graylog2-server-{{ version }}/graylog2-server.jar'
 {#- if graylog2_address isn't 127.0.0.1 test fail -#}

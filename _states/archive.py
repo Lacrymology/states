@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-# author: Bruno Clermont <patate@fastmail.cn>
 
 __author__ = 'Bruno Clermont'
 __maintainer__ = 'Bruno Clermont'

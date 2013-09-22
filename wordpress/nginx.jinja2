@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013 Lam Dang Tung
+Copyright (c) 2013, Lam Dang Tung
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -19,9 +19,9 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
-Author: Lam Dang Tung lamdt@familug.org
-Maintainer: Lam Dang Tung lamdt@familug.org
- -#}
+Author: Lam Dang Tung <lamdt@familug.org>
+Maintainer: Lam Dang Tung <lamdt@familug.org>
+-#}
 # {{ pillar['message_do_not_modify'] }}
 upstream wordpress {
     server unix:///var/lib/uwsgi/wordpress.sock;
@@ -50,7 +50,7 @@ server {
 
 {# web app logic #}
     server_name {% for hostname in pillar['wordpress']['hostnames'] -%}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
-	root {{ dir }};
+    root {{ dir }};
 
 {% for dir in ('skins',) %}
     location /{{ dir }}/ {
@@ -59,10 +59,10 @@ server {
     }
 {% endfor %}
 
-	index index.php index.html index.htm;
-	location / {
-		try_files $uri $uri/ /index.html;
-	}
+    index index.php index.html index.htm;
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
 
     location ~ .php$ {
         gzip off;

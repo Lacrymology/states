@@ -22,9 +22,9 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Hung Nguyen Viet hvnsweeting@gmail.com
-Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
- -#}
+Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
+Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
+-#}
 {% set version='1.3.1' %}
 
 {{ opts['cachedir'] }}/pip-{{ version }}:
@@ -33,8 +33,8 @@ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
 
 {#
  Only during integration test, we don't want to wipe PIP cache for future usage.
- #}
-{% if not pillar['__test__']|default(False) %}
+#}
+{% if not pillar['integration_test']|default(False) %}
 /var/cache/pip:
   file:
     - absent

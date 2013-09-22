@@ -22,9 +22,9 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Bruno Clermont patate@fastmail.cn
-Maintainer: Bruno Clermont patate@fastmail.cn
- -#}
+Author: Bruno Clermont <patate@fastmail.cn>
+Maintainer: Bruno Clermont <patate@fastmail.cn>
+-#}
 # {{ pillar['message_do_not_modify'] }}
 {#-
  If you are running more than one instances of graylog2-server you have to
@@ -204,7 +204,7 @@ http_listen_port = 12202
  section.
  IMPORTANT: graylog2-server need to be restarted after any change in
   mail output plugin settings.
- #}
+#}
 transport_email_enabled = true
 transport_email_protocol = smtp
 transport_email_hostname = {{ email['server'] }}

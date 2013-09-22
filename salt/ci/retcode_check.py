@@ -1,6 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-'''
+
+"""
+Take output of salt cmd.run_all --out json
+and sys.exit it's value
+
+This is only used to make a jenkins job fail if something bad happened
+during execution.
+
 Copyright (c) 2013, Hung Nguyen Viet
 All rights reserved.
 
@@ -23,17 +30,11 @@ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-'''
+"""
+
 __author__ = 'Hung Nguyen Viet'
 __maintainer__ = 'Bruno Clermont, Hung Nguyen viet'
 __email__ = 'patate@fastmail.cn, hvnsweeting@gmail.com'
-"""
-Take output of salt cmd.run_all --out json
-and sys.exit it's value
-
-This is only used to make a jenkins job fail if something bad happened
-during execution
-"""
 
 import json
 import sys

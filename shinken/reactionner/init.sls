@@ -22,8 +22,8 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Bruno Clermont patate@fastmail.cn
-Maintainer: Bruno Clermont patate@fastmail.cn
+Author: Bruno Clermont <patate@fastmail.cn>
+Maintainer: Bruno Clermont <patate@fastmail.cn>
  
  Shinken reactionner state.
 
@@ -31,7 +31,7 @@ Maintainer: Bruno Clermont patate@fastmail.cn
  centralizes communication channels with external systems in order to simplify
  SMTP authorizations or RSS feed sources (only one for all hosts/services).
  There can be many reactionners for load-balancing and spare roles
- -#}
+-#}
 include:
   - shinken
 

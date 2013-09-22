@@ -1,6 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-'''
+
+"""
+Common repository integration tests
+
+These unittest run on the salt master because the SSH server get installed
+and uninstall. The only deamon that isn't killed in the process is Salt Minion.
+
+Check file docs/run_tests.rst for details.
+
 Copyright (c) 2013, Bruno Clermont
 All rights reserved.
 
@@ -23,20 +31,11 @@ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-'''
+"""
+
 __author__ = 'Bruno Clermont'
 __maintainer__ = 'Bruno Clermont'
 __email__ = 'patate@fastmail.cn'
-
-"""
-Common repository integration tests
-
-These unittest run on the salt master because the SSH server get installed
-and uninstall. The only deamon that isn't killed in the process is Salt Minion.
-
-Check file docs/run_tests.rst for details.
-
-"""
 
 # TODO: faire une liste de fichiers AVANT et APRÈS les tests pour
 # afficher les différences et failer si un fichier est de trop.

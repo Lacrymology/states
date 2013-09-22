@@ -22,14 +22,14 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Bruno Clermont patate@fastmail.cn
-Maintainer: Bruno Clermont patate@fastmail.cn
- -#}
+Author: Bruno Clermont <patate@fastmail.cn>
+Maintainer: Bruno Clermont <patate@fastmail.cn>
+-#}
 # {{ pillar['message_do_not_modify'] }}
 {#-
  This file isn't used directly by nginx NRPE state but it's reused by other
  states that requires on Nginx.
- #}
+#}
 {%- set first_ip = salt['network.ip_addrs']()[0] -%}
 {%- set effective_http_uri = http_uri|default("/") -%}
 {%- if http|default(True) %}

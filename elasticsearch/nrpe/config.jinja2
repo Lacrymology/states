@@ -1,7 +1,7 @@
 {#-
-Author: Bruno Clermont patate@fastmail.cn
-Maintainer: Bruno Clermont patate@fastmail.cn
- -#}
+Author: Bruno Clermont <patate@fastmail.cn>
+Maintainer: Bruno Clermont <patate@fastmail.cn>
+-#}
 # {{ pillar['message_do_not_modify'] }}
 {%- if origin_state|default("elasticsearch") == 'elasticsearch' %}
 command[elasticsearch_procs]=/usr/lib/nagios/plugins/check_procs -u elasticsearch -c 1:1 -C java -a org.elasticsearch.bootstrap.ElasticSearch

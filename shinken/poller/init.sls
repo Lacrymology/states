@@ -22,8 +22,8 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Bruno Clermont patate@fastmail.cn
-Maintainer: Bruno Clermont patate@fastmail.cn
+Author: Bruno Clermont <patate@fastmail.cn>
+Maintainer: Bruno Clermont <patate@fastmail.cn>
  
  Shinken Poller state.
 
@@ -32,7 +32,7 @@ Maintainer: Bruno Clermont patate@fastmail.cn
  tagged for specialized checks (ex. Windows versus Unix, customer A versus
  customer B, DMZ) There can be many pollers for load-balancing or hot standby
  spare roles.
- -#}
+-#}
 include:
   - shinken
   - apt

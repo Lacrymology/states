@@ -3,6 +3,7 @@
 __author__ = 'Bruno Clermont'
 __maintainer__ = 'Bruno Clermont'
 __email__ = 'patate@fastmail.cn'
+
 """
 Get some grains information that is only available in Amazon AWS
 

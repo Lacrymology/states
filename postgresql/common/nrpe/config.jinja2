@@ -22,9 +22,9 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Bruno Clermont patate@fastmail.cn
-Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
- -#}
+Author: Bruno Clermont <patate@fastmail.cn>
+Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
+-#}
 # {{ pillar['message_do_not_modify'] }}
 command[postgresql_procs]=/usr/lib/nagios/plugins/check_procs -c 1:2 -a '/usr/lib/postgresql/{{ version }}/bin/postgres -D /var/lib/postgresql/{{ version }}/main -c config_file=/etc/postgresql/{{ version }}/main/postgresql.conf' -C postgres -u postgres
 command[postgresql_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 5432

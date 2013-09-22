@@ -22,8 +22,8 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Bruno Clermont patate@fastmail.cn
-Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
+Author: Bruno Clermont <patate@fastmail.cn>
+Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
  
 Graphite
 ========
@@ -296,7 +296,7 @@ graphite_settings:
 
 {#-
  load default user this way to prevent race condition between uWSGI process
- #}
+#}
 graphite_initial_fixture:
   file:
     - managed

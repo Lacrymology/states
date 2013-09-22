@@ -1,9 +1,9 @@
 {#-
-Author: Bruno Clermont patate@fastmail.cn
-Maintainer: Bruno Clermont patate@fastmail.cn
+Author: Bruno Clermont <patate@fastmail.cn>
+Maintainer: Bruno Clermont <patate@fastmail.cn>
  
  cleanup Linux kernel modules
- -#}
+-#}
 {% if grains['virtual'] != 'openvzve' %}
 useless_kmod:
   kmod:

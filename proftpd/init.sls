@@ -22,8 +22,8 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Bruno Clermont patate@fastmail.cn
-Maintainer: Bruno Clermont patate@fastmail.cn
+Author: Bruno Clermont <patate@fastmail.cn>
+Maintainer: Bruno Clermont <patate@fastmail.cn>
  
  Install a ProFTPd FTP server.
 
@@ -41,7 +41,7 @@ Maintainer: Bruno Clermont patate@fastmail.cn
  I wrote it to depends on already existing PostgreSQL server to not
  not mess with Unix users/passwords.
  It's probably more secure this way.
- -#}
+-#}
 
 include:
   - apt

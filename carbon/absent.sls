@@ -22,11 +22,11 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Bruno Clermont patate@fastmail.cn
-Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
+Author: Bruno Clermont <patate@fastmail.cn>
+Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
  
  Remove carbon
- -#}
+-#}
 {%- set prefix = '/etc/init.d/' %}
 {%- set init_files = salt['file.find'](prefix, name='carbon-cache-*', type='f') %}
 {%- for filename in init_files %}

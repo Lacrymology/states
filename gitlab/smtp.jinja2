@@ -7,22 +7,25 @@
  3. Edit settings inside this file
  4. Restart GitLab instance
 #}
-{%- set smtp = salt['pillar.get']('gitlab:smtp', salt['pillar.get']('smtp')) %}
-{%- if salt['pillar.get']('gitlab:smtp:server') == '' %}
+
+{%- if salt['pillar.get']('gitlab:smtp:default', True) %}
 {%- set smtp = salt['pillar.get']('smtp') %}
+{%- else %}
+{%- set smtp = salt['pillar.get']('gitlab:smtp') %}
 {%- endif %}
+
 if Gitlab::Application.config.action_mailer.delivery_method == :smtp
   ActionMailer::Base.smtp_settings = {
     address: "{{ smtp['server'] }}",
     port: {{ smtp['port'] }},
     user_name: "{{ smtp['user'] }}",
     password: "{{ smtp['password'] }}",
-    domain: "{{ smtp['domain']|default('') }}",
-    authentication: {{ smtp['authentication']|default(':login') }},
-    {%- if  smtp['tls']|default(False) %}
+    domain: "{{ smtp['domain']|default( smtp['user'].split('@', 1)[1] ) }}",
+    authentication: {{ smtp['authentication']|default('plain') }},
+{%- if smtp['tls']|default(False) %}
     enable_starttls_auto: true,
-    {%- else %}
+{%- else %}
     enable_starttls_auto: false,
-    {%- endif %}
+{%- endif %}
   }
 end

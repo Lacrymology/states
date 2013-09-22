@@ -74,8 +74,8 @@ discourse_tar:
     - extracted
     - name: /usr/local/
 {%- if 'files_archive' in pillar %}
-    - source: http://archive.robotinfra.com/mirror/discourse/df5f9d66e5782159201d62590b4368a59a08885f.tar.gz
-    - source_hash: md5=cc188c7055b1e8a265f7826d03df5970
+    - source: http://archive.robotinfra.com/mirror/discourse/v0.9.6.3.tar.gz
+    - source_hash: md5=7e608572bfa2902aaa53cb229cf56516
 {%- else %}
     - source: https://github.com/discourse/discourse/archive/master.tar.gz
     - source_hash: md5=5ea1b394f08131267d92c6bb8f5693e5

@@ -1,0 +1,12 @@
+# {{ pillar['message_do_not_modify'] }}
+
+defaults: &defaults
+  uri: <%= uri = URI.parse(ENV['REDIS_PROVIDER_URL'] || "redis://localhost:6379") %>
+  host: <%= uri.host %>
+  port: <%= uri.port %>
+  password: <%= uri.password %>
+  db: 0
+  cache_db: 2
+
+production:
+  <<: *defaults

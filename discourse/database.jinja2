@@ -1,0 +1,14 @@
+# {{ pillar['message_do_not_modify'] }}
+
+production:
+  adapter: postgresql
+  database: discourse
+  username: discourse
+  password: "{{ password }}"
+  host: localhost
+  pool: 5
+  timeout: 5000
+  host_names:
+{%- for hostname in salt['pillar.get']('discourse:hostnames') %}
+    - {{ hostname }}
+{%- endfor %}

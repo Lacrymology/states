@@ -2,7 +2,8 @@
 Uninstall Discourse
 #}
 
-{%- set web_root_dir = "/usr/local/discourse" %}
+{%- set version = "0.9.6.3" %}
+{%- set web_root_dir = "/usr/local/discourse-" + version %}
 
 discourse:
   user:

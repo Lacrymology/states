@@ -48,7 +48,8 @@ include:
   - uwsgi.ruby
   - web
 
-{%- set web_root_dir = "/usr/local/discourse" %}
+{%- set version = "0.9.6.3" %}
+{%- set web_root_dir = "/usr/local/discourse-" + version %}
 {%- set password = salt['password.pillar']('discourse:database:password', 10) %}
 
 discourse_deps:
@@ -74,7 +75,7 @@ discourse_tar:
     - extracted
     - name: /usr/local/
 {%- if 'files_archive' in pillar %}
-    - source: http://archive.robotinfra.com/mirror/discourse/v0.9.6.3.tar.gz
+    - source: http://archive.robotinfra.com/mirror/discourse/v{{ version }}.tar.gz
     - source_hash: md5=7e608572bfa2902aaa53cb229cf56516
 {%- else %}
     - source: https://github.com/discourse/discourse/archive/master.tar.gz

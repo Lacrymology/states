@@ -45,13 +45,14 @@ gitlab:
 If you set gitlab:smtp:enabled is True, you must define: 
 gitlab
   smtp:
+    default: use default settings, it mean that you don't need declare all values below. Default is True
     server: your smtp server. Ex: smtp.yourdomain.com
     port: smtp server port
-    domain: your domain
+    domain: your email domain
     from: smtp account will sent email to users
     user: account login
     password: password for account login
-    authentication: Default is: `:login`
+    authentication: Default is: `plain`  for most smtp servers (like Gmail...)
     tls: Default is: False
 #}
 

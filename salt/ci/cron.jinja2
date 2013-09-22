@@ -1,0 +1,3 @@
+#!/bin/sh
+# {{ pillar['message_do_not_modify'] }}
+*/5 * * * * root rsync -aq --delete {{ pillar['salt_archive']['source'] }} /var/lib/salt_archive/

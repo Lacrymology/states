@@ -84,37 +84,58 @@ def enable(app_name):
     '''
     Enable specified uWSGI application.
     '''
+    ret = {
+        'result': False,
+        'comment': '',
+    }
     app_config, app_symlink, app_file = _get_app_paths(app_name)
 
     if app_name not in list_available():
-        logger.error("%s is not an available app", app_name)
-        return False
+        message = "{0} is not an available app".format(app_name)
+        logger.error(message)
+        ret['comment'] = message
+        return ret
     if app_name in list_enabled():
-        logger.error("%s already exists", app_symlink)
-        return False
+        message = "%s already exists".format(app_symlink)
+        logger.error(message)
+        ret['comment'] = message
+        return ret
 
     try:
         symlink(app_config, app_symlink)
     except CommandExecutionError, e:
-        logger.error("Error enabling apps: %s", e)
-        return False
+        message = "Error enabling apps: {0}".format(e)
+        logger.error(message)
+        ret['comment'] = message
+        return ret
 
-    return {app_symlink: 'symlink to {0}'.format(app_config)}
+    return {
+        'result': True,
+        'message': "{0}: symlink to {1}".format(app_symlink, app_config),
+    }
 
 
 def disable(app_name, orphan=False):
     '''
     Disable specified uWSGI application.
     '''
+    ret = {
+        'result': False,
+        'comment': ''
+    }
     if not orphan:
         if app_name not in list_enabled():
-            logger.info("%s isn't available", app_name)
-            return False
+            message = "{0} isn't available".format(app_name)
+            logger.info(message)
+            ret['comment'] = message
+            return ret
     _, app_symlink, app_file = _get_app_paths(app_name)
     if not __salt__['file.remove'](app_symlink):
-        logger.debug("%s could not be removed", app_symlink)
-        return False
-    return {app_symlink: 'deleted'}
+        message = "{0} could not be removed".format(app_symlink)
+        logger.debug(message)
+        ret['comment'] = message
+        return ret
+    return {'result': True, 'comment': "{0} deleted".format(app_symlink)}
 
 
 def remove(app_name):
@@ -123,15 +144,26 @@ def remove(app_name):
     '''
     app_config, _, app_file = _get_app_paths(app_name)
     if not __salt__['file.remove'](app_config):
-        logger.debug("%s could not be removed", app_config)
-        return False
-    return {app_config: 'deleted'}
+        message = "{0} could not be removed".format(app_config)
+        logger.debug(message)
+        return {'result': False, 'comment': message}
+    return {'result': True, 'comment': '{0} deleted'.format(app_config)}
 
 
 def clean():
     '''
-    Remove apps that are enabled but that don't exists anymore.
+    Remove apps that are enabled but that don't exist anymore.
     '''
+    results = []
+    comments = []
     for app_name in _applist(_enabled_path, lambda x: not os.path.exists(x)):
-        if not disable(app_name, True):
-            return False
+        disabled = disable(app_name)
+        if not disabled['result']:
+            results.append(False)
+            comments.append("{0} not removed: {1}".format(app_name,
+                                                          disabled['comment']))
+        else:
+            results.append(True)
+            comments.append("{0} removed")
+
+    return {'result': any(results), 'comment': '|'.join(comments)}

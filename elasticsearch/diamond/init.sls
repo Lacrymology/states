@@ -6,6 +6,7 @@
 include:
   - diamond
   - cron.diamond
+  - elasticsearch
 {% if ssl %}
   - nginx.diamond
 {% endif %}
@@ -36,5 +37,7 @@ elasticsearch_diamond_resources:
 extend:
   diamond:
     service:
+      - require:
+        - service: elasticsearch
       - watch:
         - file: /etc/diamond/collectors/ElasticSearchCollector.conf

@@ -7,7 +7,7 @@ include:
   - memcache.diamond
   - nginx.diamond
   - postgresql.server.diamond
-  - statsd
+  - statsd.diamond
   - uwsgi.diamond
 
 uwsgi_diamond_sentry_resources:

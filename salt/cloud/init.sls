@@ -28,7 +28,7 @@ salt-cloud:
       - pkg: salt
       - apt_repository: salt
 
-deploy_script:
+salt-cloud-boostrap-script:
   file:
     - managed
     - name: /etc/salt/cloud.deploy.d/bootstrap_salt.sh

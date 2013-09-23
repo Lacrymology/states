@@ -1,0 +1,6 @@
+{%- extends "salt/cloud/bootstrap.jinja2" -%}
+
+{%- block post %}
+sleep {{ salt['pillar.get']('salt_cloud:sleep', 60) }}
+{{ super() }}
+{%- endblock -%}

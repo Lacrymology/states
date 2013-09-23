@@ -111,7 +111,7 @@ def enable(app_name):
 
     return {
         'result': True,
-        'message': "{0}: symlink to {1}".format(app_symlink, app_config),
+        'comment': "{0}: symlink to {1}".format(app_symlink, app_config),
     }
 
 

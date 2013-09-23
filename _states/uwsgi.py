@@ -110,7 +110,7 @@ def absent(name):
             ret['changes']['removed'] = True
             ret['result'] = True
         else:
-            comment.append('[not removed: ({0})]'.format(disabled['comment']))
+            comment.append('[not removed: ({0})]'.format(removed['comment']))
             ret['changes']['removed'] = False
 
     ret['comment'] = " ".join(comment)

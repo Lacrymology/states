@@ -25,6 +25,8 @@ else:
 logger = logging.getLogger(__name__)
 
 UWSGI_ROOT = os.path.join('/', 'etc', 'uwsgi')
+
+
 def __virtual__():
     '''
     Only load the module if uwsgi is installed/available on $PATH
@@ -39,6 +41,7 @@ _enabled_path = os.path.join(UWSGI_ROOT, 'apps-enabled')
 
 _available_path = os.path.join(UWSGI_ROOT, 'apps-available')
 
+
 def _get_app_paths(app=None):
     '''
     using ``uwsgi_base`` config path, return the paths to the app's config
@@ -52,15 +55,17 @@ def _get_app_paths(app=None):
     return config, link, app_file
 
 
-def _applist(dir, test):
-    return [os.path.splitext(x)[0] for x in os.listdir(dir) if test(os.path.join(dir, x)) and x.endswith('.ini')]
+def _applist(dirname, test):
+    return [os.path.splitext(x)[0] for x in os.listdir(dirname)
+            if test(os.path.join(dirname, x)) and x.endswith('.ini')]
 
 
 def list_enabled():
     '''
     List uWSGI application that are enabled.
     '''
-    return _applist(_enabled_path, lambda x: os.path.isfile(x) or os.path.islink(x))
+    return _applist(_enabled_path, lambda x: os.path.isfile(x) or
+                    os.path.islink(x))
 
 
 def list_available():
@@ -70,30 +75,41 @@ def list_available():
     return _applist(_available_path, os.path.isfile)
 
 
+def _enable_app(app_name):
+    app_config, app_symlink, app_file = _get_app_paths(app_name)
+
+    if app_name not in list_available():
+        logger.error("%s is not an available app", app_name)
+        return {}
+    if app_name in list_enabled():
+        logger.error("%s already exists", app_symlink)
+        return {}
+
+    try:
+        symlink(app_config, app_symlink)
+    except CommandExecutionError, e:
+        logger.error("Error enabling apps: %s", e)
+        return {}
+
+    return {app_file: "symlink created in {destination}".format(
+        destination=app_symlink)}
+
+
 def enable(*app_names):
     '''
     Enable specified uWSGI application.
     '''
     if not app_names:
         raise SaltInvocationError("Please select at least one app")
-    def enable_app(app_name):
-        app_config, app_symlink, app_file = _get_app_paths(app_name)
+    return filter(None, [_enable_app(app_name) for app_name in app_names])
 
-        if app_name not in list_available():
-            logger.error("%s is not an available app", app_name)
-            return {}
-        if app_name in list_enabled():
-            logger.error("%s already exists", app_symlink)
-            return {}
 
-        try:
-            symlink(app_config, app_symlink)
-        except CommandExecutionError, e:
-            logger.error("Error enabling apps: %s", e)
-            return {}
-
-        return {app_file: "symlink created in {destination}".format(destination=app_symlink)}
-    return filter(None, [enable_app(app_name) for app_name in app_names])
+def _disable_app(app_name):
+    _, app_symlink, app_file = _get_app_paths(app_name)
+    if not __salt__['file.remove'](app_symlink):
+        logger.debug("%s could not be removed", app_symlink)
+        return {}
+    return {app_file: 'removed'}
 
 
 def disable(*app_names):
@@ -102,13 +118,16 @@ def disable(*app_names):
     '''
     if not app_names:
         raise SaltInvocationError("Please select at least one app")
-    def disable_app(app_name):
-        _, app_symlink, app_file = _get_app_paths(app_name)
-        if not __salt__['file.remove'](app_symlink):
-            logger.debug("%s could not be removed", app_symlink)
-            return {}
-        return {app_file: 'removed'}
-    return filter(None, [disable_app(app_name) for app_name in app_names])
+
+    return filter(None, [_disable_app(app_name) for app_name in app_names])
+
+
+def _remove_app(app_name):
+    app_config, _, app_file = _get_app_paths(app_name)
+    if not __salt__['file.remove'](app_config):
+        logger.debug("%s could not be removed", app_config)
+        return {}
+    return {app_file: 'removed'}
 
 
 def remove(*app_names):
@@ -117,13 +136,7 @@ def remove(*app_names):
     '''
     if not app_names:
         raise SaltInvocationError("Please select at least one app")
-    def remove_app(app_name):
-        app_config, _, app_file = _get_app_paths(app_name)
-        if not __salt__['file.remove'](app_config):
-            logger.debug("%s could not be removed", app_config)
-            return {}
-        return {app_file: 'removed'}
-    return filter(None, [remove_app(app_name) for app_name in app_names])
+    return filter(None, [_remove_app(app_name) for app_name in app_names])
 
 
 def clean():

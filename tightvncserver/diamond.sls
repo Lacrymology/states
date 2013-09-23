@@ -16,4 +16,4 @@ tightvncserver_diamond_resources:
     - text:
       - |
         [[tightvncserver]]
-        name = ^tightvncserver$
+        exec = ^\/usr\/bin\/tightvncserver$

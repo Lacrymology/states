@@ -47,7 +47,7 @@ check_postgres:
     - extracted
     - name: /usr/local
     - source: http://bucardo.org/downloads/check_postgres.tar.gz
-    - source_hash: md5=58b949ab92c7bfc7dab7914e8ecb76b3 
+    - source_hash: md5=58b949ab92c7bfc7dab7914e8ecb76b3
     - archive_format: tar
     - tar_options: z
     - if_missing: /usr/local/check_postgres-{{ check_pg_version }}
@@ -68,4 +68,4 @@ extend:
         - file: /etc/nagios/nrpe.d/postgresql.cfg
         - file: /etc/nagios/nrpe.d/postgresql-monitoring.cfg
       - require:
-        - postgres_user: postgresql_monitoring
+        - postgres_database: postgresql_monitoring

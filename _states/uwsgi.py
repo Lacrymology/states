@@ -159,28 +159,24 @@ def disabled(name):
     Make sure existing uWSGI application is disabled.
     '''
     ret = {'name': name, 'comment': '', 'changes': {}, 'result': False}
-    comment = [name]
 
     if __opts__['test']:
-        apps_enabled = __salt__['uwsgi.list_enabled']()
-        comment.append('would have been:')
-        if name in apps_enabled:
-            comment.append('disabled')
-        else:
-            comment.append("not disabled: wasn't enabled")
         ret['result'] = None
-
-    else:
-        comment.append('was:')
-
-        disabled = __salt__['uwsgi.disable'](name)
-        if disabled['result']:
-            comment.append('disabled')
-            ret['changes'][name] = 'Disabled'
-            ret['result'] = True
+        apps_enabled = __salt__['uwsgi.list_enabled']()
+        if name in apps_enabled:
+            ret['comment'] = '{0} would have been disabled'.format(name)
         else:
-            ret['changes']['disabled'] = False
-            comment.append('not disabled: ({0})'.format(disabled['comment']))
+            ret['comment'] = ("{0} wouldn't have been disabled: "
+                              "wasn't enabled").format(name)
+        return ret
 
-    ret['comment'] = " ".join(comment)
+    disabled = __salt__['uwsgi.disable'](name)
+    if disabled['result']:
+        ret['comment'] = "{0} was disabled".format(name)
+        ret['changes'][name] = 'Disabled'
+        ret['result'] = True
+    else:
+        ret['comment'] = "{0} was not disabled: ({1})".format(
+            disabled['comment'])
+
     return ret

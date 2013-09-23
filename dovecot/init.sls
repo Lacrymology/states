@@ -28,20 +28,6 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Dovecot: A POP3/IMAP server
 =============================
 
-Mandatory Pillar
-----------------
-
-ldap:
-  suffix: Domain component entry # Example: dc=example,dc=com
-
-Optional Pillar
----------------
-
-ldap:
-  host: ldap://127.0.0.1
-
-ldap:host: LDAP URIs that be used for authentication
-
 -#}
 {% set ssl = salt['pillar.get']('dovecot:ssl', False) %}
 include:

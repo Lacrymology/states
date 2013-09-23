@@ -29,11 +29,6 @@ Bash
 ====
 
 State to configure bash.
-
-Mandatory Pillar
-----------------
-
-message_do_not_modify: Warning message to not modify file.
 -#}
 include:
   - apt

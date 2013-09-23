@@ -30,19 +30,6 @@ Backup Server
 
 Install poor man backup server used for rsync and scp to store files.
 
-Mandatory Pillar
-----------------
-
-message_do_not_modify: Warning message to not modify file.
-
-Optional Pillar
----------------
-
-shinken_pollers:
-  - 192.168.1.1
-
-shinken_pollers: IP address of monitoring poller that check this server.
-    Default: not used.
 -#}
 include:
   - apt

@@ -23,37 +23,7 @@ Author: Lam Dang Tung <lamdt@familug.org>
 Maintainer: Lam Dang Tung <lamdt@familug.org>
 
 Install Discourse - Discussion Platform
-=================
-
-Mandatory Pillar
-----------------
-discourse:
-  hostnames:
-    - list of hostname, used for nginx config
-
-Optional Pillar
----------------
-discourse:
-  upload_size: maximum file upload size. Default is: `2m` (this mean 2 megabyte)
-  smtp: 
-    enabled: False
-  ssl: False
-  database:
-    password: password for postgre user
-
-If you set discourse:smtp:enabled is True, you must define:
-discourse:
-  smtp:
-    server: your smtp server. Ex: smtp.yourdomain.com
-    port: smtp server port
-    domain: your domain
-    from: smtp account will sent email to users
-    user: account login
-    password: password for account login
-    authentication: Default is: `plain`
-    tls: Default is: False
-
-    
+=================    
 #}
 
 include:

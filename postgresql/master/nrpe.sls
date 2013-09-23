@@ -1,4 +1,9 @@
 include:
   - postgresql.master
   - postgresql.common.nrpe
-  - postgresql.master.nrpe
+
+extend:
+  postgresql_monitoring:
+    postgres_user:
+      - require:
+        - service: postgresql

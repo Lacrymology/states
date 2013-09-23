@@ -83,75 +83,58 @@ def list_available():
         return []
 
 
-def _enable_app(app_name):
+def enable(app_name):
+    '''
+    Enable specified uWSGI application.
+    '''
     app_config, app_symlink, app_file = _get_app_paths(app_name)
 
     if app_name not in list_available():
         logger.error("%s is not an available app", app_name)
-        return {}
+        return False
     if app_name in list_enabled():
         logger.error("%s already exists", app_symlink)
-        return {}
+        return False
 
     try:
         symlink(app_config, app_symlink)
     except CommandExecutionError, e:
         logger.error("Error enabling apps: %s", e)
-        return {}
+        return False
 
-    return {app_file: "symlink created in {destination}".format(
-        destination=app_symlink)}
-
-
-def enable(*app_names):
-    '''
-    Enable specified uWSGI application.
-    '''
-    if not app_names:
-        raise SaltInvocationError("Please select at least one app")
-    return filter(None, [_enable_app(app_name) for app_name in app_names])
+    return True
 
 
-def _disable_app(app_name):
-    _, app_symlink, app_file = _get_app_paths(app_name)
-    if not __salt__['file.remove'](app_symlink):
-        logger.debug("%s could not be removed", app_symlink)
-        return {}
-    return {app_file: 'removed'}
-
-
-def disable(*app_names):
+def disable(app_name, force=False):
     '''
     Disable specified uWSGI application.
     '''
-    if not app_names:
-        raise SaltInvocationError("Please select at least one app")
-
-    return filter(None, [_disable_app(app_name) for app_name in app_names])
-
-
-def _remove_app(app_name):
-    app_config, _, app_file = _get_app_paths(app_name)
-    if not __salt__['file.remove'](app_config):
-        logger.debug("%s could not be removed", app_config)
-        return {}
-    return {app_file: 'removed'}
+    if not force:
+        if app_name not in list_enabled():
+            logger.info("%s isn't available", app_name)
+            return False
+    _, app_symlink, app_file = _get_app_paths(app_name)
+    if not __salt__['file.remove'](app_symlink):
+        logger.debug("%s could not be removed", app_symlink)
+        return False
+    return True
 
 
-def remove(*app_names):
+def remove(app_name):
     '''
     Remove specified uWSGI application.
     '''
-    if not app_names:
-        raise SaltInvocationError("Please select at least one app")
-    return filter(None, [_remove_app(app_name) for app_name in app_names])
+    app_config, _, app_file = _get_app_paths(app_name)
+    if not __salt__['file.remove'](app_config):
+        logger.debug("%s could not be removed", app_config)
+        return False
+    return True
 
 
 def clean():
     '''
     Remove apps that are enabled but that don't exists anymore.
     '''
-    invalid = _applist(_enabled_path, lambda x: not os.path.exists(x))
-    if invalid:
-        return disable(*invalid)
+    for app_name in _applist(_enabled_path, lambda x: not os.path.exists(x)):
+        return disable(app_name, True)
     return []

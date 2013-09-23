@@ -75,7 +75,7 @@ discourse_tar:
     - extracted
     - name: /usr/local/
 {%- if 'files_archive' in pillar %}
-    - source: {{ pillar['files_archive']|replace('file://', '') }}/mirror/discourse/v{{ version }}.tar.gz
+    - source: {{ pillar['files_archive'] }}/mirror/discourse/v{{ version }}.tar.gz
 {%- else %}
     - source: http://archive.robotinfra.com/mirror/discourse/v{{ version }}.tar.gz
 {%- endif %}

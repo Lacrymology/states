@@ -140,7 +140,29 @@ def disabled(name):
     '''
     Make sure existing uWSGI application is disabled.
     '''
-    # IMPLEMENT:
-    # uwsgi.absent state can be directly copied and removed from the remove
-    # part of it.
-    pass
+    ret = {'name': name, 'comment': '', 'changes': {}, 'result': False}
+    comment = [name]
+
+    if __opts__['test']:
+        apps_enabled = __salt__['uwsgi.list_enabled']()
+        comment.append('would have been:')
+        if name in apps_enabled:
+            comment.append('disabled')
+        else:
+            comment.append("not disabled: wasn't enabled")
+        ret['result'] = None
+
+    else:
+        comment.append('was:')
+
+        disabled = __salt__['uwsgi.disable'](name)
+        if disabled['result']:
+            comment.append('disabled')
+            ret['changes']['disabled'] = True
+            ret['result'] = True
+        else:
+            ret['changes']['disabled'] = False
+            comment.append('not disabled: ({0})'.format(disabled['comment']))
+
+    ret['comment'] = " ".join(comment)
+    return ret

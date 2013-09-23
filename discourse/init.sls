@@ -12,7 +12,7 @@ Optional Pillar
 ---------------
 discourse:
   upload_size: maximum file upload size. Default is: `2m` (this mean 2 megabyte)
-  smtp: 
+  smtp:
     enabled: False
   ssl: False
   database:
@@ -71,21 +71,29 @@ discourse_deps:
       - pkg: git
 
 discourse_tar:
+{%- if 'files_archive' in pillar %}
+{%- set discourse_download_module = "archive" %}
   archive:
     - extracted
     - name: /usr/local/
-{%- if 'files_archive' in pillar %}
     - source: http://archive.robotinfra.com/mirror/discourse/v{{ version }}.tar.gz
     - source_hash: md5=7e608572bfa2902aaa53cb229cf56516
-{%- else %}
-    - source: https://github.com/discourse/discourse/archive/master.tar.gz
-    - source_hash: md5=5ea1b394f08131267d92c6bb8f5693e5
-{%- endif %}
     - archive_format: tar
     - tar_options: z
     - if_missing: {{ web_root_dir }}
     - require:
       - file: /usr/local
+{%- else %}
+{%- set discourse_download_module = "git" %}
+  git:
+    - lastest
+    - rev: v0.9.6.3
+    - name: git@github.com:discourse/discourse.git
+    - target: {{ web_root_dir }}
+    - require:
+      - pkg: git
+      - file: /user/local
+{%- endif %}
   file:
     - directory
     - name: {{ web_root_dir }}
@@ -96,7 +104,7 @@ discourse_tar:
       - group
     - require:
       - user: discourse
-      - archive: discourse_tar
+      - {{ discourse_download_module }}: discourse_tar
 
 {%- set ruby_version = "1.9.3" %}
 discourse:
@@ -337,7 +345,7 @@ discourse_add_psql_extension_pg_trgm:
     - run
     - name: psql discourse -c "CREATE EXTENSION IF NOT EXISTS pg_trgm;"
     - user: postgres
-    - require: 
+    - require:
       - service: postgresql
       - postgres_database: discourse
 

@@ -16,9 +16,6 @@ tightvncserver:
 
  tightvncserver:password - Password for vnc client login, it will be truncated if more than 8 characters
 
-
- This command with generatevnc password
- echo -n `echo "12345678" | tightvncpasswd -f` > ~/.vnc/passwd
 #}
 {%- set wm = salt['pillar.get']('tightvncserver:wm', 'fluxbox') %}
 {%- set user = salt['pillar.get']('tightvncserver:user', 'vnc') %}
@@ -41,13 +38,20 @@ tightvncserver_depends:
 tightvncserver:
   user:
     - present
-    - name: vnc
+    - name: {{ user }}
+    - home: /home/{{ user }}
 {%- if salt['pillar.get']('tightvncserver:sudo', False) %}
     - groups:
       - sudo
 {%- endif %}
-    - password: {{ user_passwd }}
     - shell: /bin/bash
+  module:
+    - wait
+    - name: shadow.set_password
+    - m_name: {{ user }}
+    - password: {{ salt['password.encrypt_shadow'](user_passwd) }}
+    - watch:
+      - user: tightvncserver
   pkg:
     - installed
     - require:
@@ -85,10 +89,18 @@ tightvncserver:
       - file: /etc/init.d/tightvncserver
       - pkg: tightvncserver
     - watch:
+      - debconf: tightvncserver
       - cmd: tightvncserver
       - file: tightvncserver
-      - file: /etc/X11/Xwrapper.config
       - file: {{ home }}/.vnc/passwd
+  debconf:
+    - set
+    - name: x11-common
+    - data:
+        'x11-common/xwrapper/allowed_users': {'type': 'string', 'value': 'console' }
+    - require:
+      - pkg: debconf-utils
+      - pkg: tightvncserver
 
 /etc/init.d/tightvncserver:
   file:
@@ -116,17 +128,6 @@ tightvncserver:
     - require:
       - user: tightvncserver
 
-/etc/X11/Xwrapper.config:
-  file:
-    - managed
-    - mode: 644
-    - user: root
-    - group: root
-    - source: salt://tightvncserver/config.jinja2
-    - template: jinja
-    - require:
-      - pkg: tightvncserver
-
 /etc/logrotate.d/tightvncserver:
   file:
     - managed
@@ -146,7 +147,7 @@ tightvncserver:
   file:
     - managed
     - user: {{ user }}
-    - grouP: {{ user }}
+    - group: {{ user }}
     - mode: 444
     - source: salt://fluxbox/menu.jinja2
     - template: jinja

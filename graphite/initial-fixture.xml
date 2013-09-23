@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 Copyright (c) 2013, Bruno Clermont
 All rights reserved.
@@ -13,7 +14,6 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -->
-<?xml version="1.0" encoding="utf-8"?>
 <django-objects version="1.0">
   <object pk="1" model="auth.user">
     <field type="CharField" name="username">default</field>

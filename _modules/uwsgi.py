@@ -133,5 +133,5 @@ def clean():
     Remove apps that are enabled but that don't exists anymore.
     '''
     for app_name in _applist(_enabled_path, lambda x: not os.path.exists(x)):
-        return disable(app_name, True)
-    return []
+        if not disable(app_name, True):
+            return False

@@ -125,7 +125,7 @@ def remove(app_name):
     if not __salt__['file.remove'](app_config):
         logger.debug("%s could not be removed", app_config)
         return False
-    return {app_file: 'deleted'}
+    return {app_config: 'deleted'}
 
 
 def clean():

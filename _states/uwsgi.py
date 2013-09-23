@@ -124,10 +124,16 @@ def enabled(name):
     This require the uWSGI application to had been previously created trough
     uwsgi.available state.
     '''
-    # IMPLEMENT:
-    # check uwsgi.absent state for example on how to do that using uwsgi module
-    # make sure to respect __opts__['test'] == True condition
-    pass
+    ret = {'name': name, 'comment': '', 'result': False}
+    was_enabled = __salt__['uwsgi.enable'](name)
+    if was_enabled['result']:
+        ret['result'] = True
+        ret['comment'] = "{0} was enabled ({1})".format(name,
+                                                        was_enabled['comment'])
+    else:
+        ret['comment'] = "{0} was not enabled ({1})".format(
+            name, was_enabled['comment'])
+    return ret
 
 
 def disabled(name):

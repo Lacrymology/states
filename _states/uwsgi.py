@@ -81,7 +81,7 @@ def absent(name):
     else:
         # default value if success
         ret.update({'changes': {name: 'is absent'}, 'result': True})
-    apps_enabled = __salt['uwsgi.list_enabled']()
+    apps_enabled = __salt__['uwsgi.list_enabled']()
     apps_avail = __salt__['uwsgi.list_available']()
 
     if name in apps_enabled and name in apps_avail:

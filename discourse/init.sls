@@ -75,12 +75,11 @@ discourse_tar:
     - extracted
     - name: /usr/local/
 {%- if 'files_archive' in pillar %}
-    - source: http://archive.robotinfra.com/mirror/discourse/v{{ version }}.tar.gz
-    - source_hash: md5=7e608572bfa2902aaa53cb229cf56516
+    - source: {{ pillar['files_archive']|replace('file://', '') }}/mirror/discourse/v{{ version }}.tar.gz
 {%- else %}
-    - source: https://github.com/discourse/discourse/archive/master.tar.gz
-    - source_hash: md5=5ea1b394f08131267d92c6bb8f5693e5
+    - source: http://archive.robotinfra.com/mirror/discourse/v{{ version }}.tar.gz
 {%- endif %}
+    - source_hash: md5=7e608572bfa2902aaa53cb229cf56516
     - archive_format: tar
     - tar_options: z
     - if_missing: {{ web_root_dir }}

@@ -64,15 +64,23 @@ def list_enabled():
     '''
     List uWSGI application that are enabled.
     '''
-    return _applist(_enabled_path, lambda x: os.path.isfile(x) or
-                    os.path.islink(x))
+    try:
+        return _applist(_enabled_path, lambda x: os.path.isfile(x) or
+                        os.path.islink(x))
+    except OSError, err:
+        logger.error("Can't list enabled: %s", err, exc_info=True)
+        return []
 
 
 def list_available():
     '''
     List available uWSGI application.
     '''
-    return _applist(_available_path, os.path.isfile)
+    try:
+        return _applist(_available_path, os.path.isfile)
+    except OSError, err:
+        logger.error("Can't list available: %s", err, exc_info=True)
+        return []
 
 
 def _enable_app(app_name):

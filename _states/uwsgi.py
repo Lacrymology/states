@@ -100,6 +100,7 @@ def absent(name):
             return ret
 
         ret['changes'].update(removed)
+        ret['comment'] = "{0} was enabled and is absent".format(name)
     elif name in apps_enabled:
         if __opts__['test']:
             ret['comment'] = '{0} is orphan and need to be removed'.format(
@@ -114,6 +115,7 @@ def absent(name):
             return ret
 
         ret['changes'] = disabled
+        ret['comment'] = "{0} was orphan".format(name)
     elif name in apps_avail:
         if __opts__['test']:
             ret['commment'] = '{0} is would have been removed'.format(name)
@@ -127,15 +129,10 @@ def absent(name):
             return ret
 
         ret['changes'] = removed
+        ret['comment'] = "{0} is absent".format(name)
     else:
-        # nothing to do
         ret['comment'] = '{0} already absent'.format(name)
-        ret['result'] = True
-        return ret
 
-    # a change occurs and it's a success
-    # we only expect changes to be set in ret['changes']
-    ret['comment'] = "{0} is absent".format(name)
     ret['result'] = True
     return ret
 

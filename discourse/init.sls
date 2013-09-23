@@ -218,21 +218,10 @@ discourse_bundler:
       - user: discourse
 
 discourse_upstart:
-  cmd:
-    - wait
-    #- run
-    #- name: bundle exec sidekiq -e production -P /var/run/sidekiq.pid >> /var/log/sidekiq.log 2>&1 &
-    - name: start discourse
-    - user: root
-    {#-
-    - env:
-      RUBY_GC_MALLOC_LIMIT: "90000000"
-    - cwd: {{ web_root_dir }}
-    - unless: ps -ef | grep side | grep -v grep
-    #}
+  service:
+    - running
+    - name: discourse
     - watch:
-    #- require:
-      #- file: /etc/uwsgi/discourse.ini
       - file: discourse_upstart
   file:
     - managed
@@ -243,7 +232,6 @@ discourse_upstart:
     - group: root
     - mode: 440
     - require:
-      #- cmd: discourse_upstart
       - file: /etc/uwsgi/discourse.ini
     - context:
       web_root_dir: {{ web_root_dir }}

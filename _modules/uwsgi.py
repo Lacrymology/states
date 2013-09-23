@@ -25,6 +25,8 @@ else:
 logger = logging.getLogger(__name__)
 
 UWSGI_ROOT = os.path.join('/', 'etc', 'uwsgi')
+_enabled_path = os.path.join(UWSGI_ROOT, 'apps-enabled')
+_available_path = os.path.join(UWSGI_ROOT, 'apps-available')
 
 
 def __virtual__():
@@ -32,14 +34,9 @@ def __virtual__():
     Only load the module if uwsgi is installed/available on $PATH
 
     '''
-    cmd = 'uwsgi'
-    if salt.utils.which(cmd):
+    if os.path.exists(_enabled_path) and os.path.exists(_available_path):
         return 'uwsgi'
     return False
-
-_enabled_path = os.path.join(UWSGI_ROOT, 'apps-enabled')
-
-_available_path = os.path.join(UWSGI_ROOT, 'apps-available')
 
 
 def _get_app_paths(app=None):

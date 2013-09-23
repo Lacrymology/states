@@ -78,62 +78,42 @@ def absent(name):
     ret = {'name': name, 'comment': '', 'changes': {}}
     apps_enabled = __salt__['uwsgi.list_enabled']()
     apps_avail = __salt__['uwsgi.list_available']()
+    comment = [name]
 
-    if name in apps_enabled and name in apps_avail:
-        if __opts__['test']:
-            ret['result'] = None
-            ret['comment'] = '{0} would have been disable and removed'.format(
-                name)
-            return ret
+    if __opts__['test']:
+        comment.append('would have been:')
+        if name in apps_enabled:
+            comment.append('[disabled]')
+        else:
+            comment.append("[not disabled: wasn't enabled")
+        if name in apps_avail:
+            comment.append('[removed]')
+        else:
+            comment.append("[not removed: wasn't available")
+        ret['result'] = None
+
+    else:
+        comment.append('was:')
 
         disabled = __salt__['uwsgi.disable'](name)
-        if not disabled:
-            ret['comment'] = "Can't disable {0}".format(name)
-            ret['result'] = False
-            return ret
-
-        ret['changes'] = disabled
-        removed = __salt__['uwsgi.remove'](name)
-        if not removed:
-            ret['comment'] = "Can't remove {0}".format(name)
-            ret['result'] = False
-            return ret
-
-        ret['changes'].update(removed)
-        ret['comment'] = "{0} was enabled and is absent".format(name)
-    elif name in apps_enabled:
-        if __opts__['test']:
-            ret['comment'] = '{0} is orphan and need to be removed'.format(
-                name)
-            ret['result'] = None
-            return ret
-
-        disabled = __salt__['uwsgi.disable'](name, True)
-        if not disabled:
-            ret['comment'] = "Can't disable {0}".format(name)
-            ret['result'] = False
-            return ret
-
-        ret['changes'] = disabled
-        ret['comment'] = "{0} was orphan".format(name)
-    elif name in apps_avail:
-        if __opts__['test']:
-            ret['commment'] = '{0} is would have been removed'.format(name)
-            ret['result'] = None
-            return ret
+        if disabled['result']:
+            comment.append('[disabled]')
+            ret['changes']['disabled'] = True
+            ret['result'] = True
+        else:
+            ret['changes']['disabled'] = False
+            comment.append('[not disabled: ({0})]'.format(disabled['comment']))
 
         removed = __salt__['uwsgi.remove'](name)
-        if not removed:
-            ret['comment'] = "Can't remove {0}".format(name)
-            ret['result'] = False
-            return ret
+        if removed['result']:
+            comment.append('[removed]')
+            ret['changes']['removed'] = True
+            ret['result'] = True
+        else:
+            comment.append('[not removed: ({0})]'.format(disabled['comment']))
+            ret['changes']['removed'] = False
 
-        ret['changes'] = removed
-        ret['comment'] = "{0} is absent".format(name)
-    else:
-        ret['comment'] = '{0} already absent'.format(name)
-
-    ret['result'] = True
+    ret['comment'] = "|".join(comment)
     return ret
 
 

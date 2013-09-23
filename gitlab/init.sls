@@ -108,7 +108,7 @@ gitlab-shell:
     - extracted
     - name: {{ home_dir }}/
     {%- if 'files_archive' in pillar %}
-    - source: {{ salt['pillar.get']('files_archive')|replace('file://', '') }}/mirror/gitlab/shell-fbaf8d8c12dcb9d820d250b9f9589318dbc36616.tar.gz
+    - source: {{ salt['pillar.get']('files_archive') }}/mirror/gitlab/shell-fbaf8d8c12dcb9d820d250b9f9589318dbc36616.tar.gz
     {%- else %}
     - source:  http://archive.robotinfra.com/mirror/gitlab/shell-fbaf8d8c12dcb9d820d250b9f9589318dbc36616.tar.gz
     {%- endif %}
@@ -188,7 +188,7 @@ gitlab:
     - extracted
     - name: {{ root_dir }}/
 {%- if 'files_archive' in pillar %}
-    - source: {{ pillar['files_archive']|replace('file://', '') }}/mirror/gitlab/{{ version|replace("-", ".") }}.tar.gz
+    - source: {{ pillar['files_archive'] }}/mirror/gitlab/{{ version|replace("-", ".") }}.tar.gz
 {%- else %}
     - source: http://archive.robotinfra.com/mirror/gitlab/{{ version|replace("-", ".") }}.tar.gz
 {%- endif %}

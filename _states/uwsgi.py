@@ -124,12 +124,13 @@ def enabled(name):
     This require the uWSGI application to had been previously created trough
     uwsgi.available state.
     '''
-    ret = {'name': name, 'comment': '', 'result': False}
+    ret = {'name': name, 'comment': '', 'result': False, 'changes': {}}
     was_enabled = __salt__['uwsgi.enable'](name)
     if was_enabled['result']:
         ret['result'] = True
         ret['comment'] = "{0} was enabled ({1})".format(name,
                                                         was_enabled['comment'])
+        ret['changes'][name] = "Enabled"
     else:
         ret['comment'] = "{0} was not enabled ({1})".format(
             name, was_enabled['comment'])
@@ -158,7 +159,7 @@ def disabled(name):
         disabled = __salt__['uwsgi.disable'](name)
         if disabled['result']:
             comment.append('disabled')
-            ret['changes']['disabled'] = True
+            ret['changes'][name] = 'Disabled'
             ret['result'] = True
         else:
             ret['changes']['disabled'] = False

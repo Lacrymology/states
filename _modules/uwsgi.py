@@ -56,20 +56,20 @@ def _get_app_paths(app=None):
 
 
 def _applist(dirname, test):
-    return [os.path.splitext(x)[0] for x in os.listdir(dirname)
-            if test(os.path.join(dirname, x)) and x.endswith('.ini')]
+    try:
+        return [os.path.splitext(x)[0] for x in os.listdir(dirname)
+                if test(os.path.join(dirname, x)) and x.endswith('.ini')]
+    except OSError, err:
+        logger.error("Can't list enabled: %s", err, exc_info=True)
+        return []
 
 
 def list_enabled():
     '''
     List uWSGI application that are enabled.
     '''
-    try:
-        return _applist(_enabled_path, lambda x: os.path.isfile(x) or
-                        os.path.islink(x))
-    except OSError, err:
-        logger.error("Can't list enabled: %s", err, exc_info=True)
-        return []
+    return _applist(_enabled_path, lambda x: os.path.isfile(x) or
+                    os.path.islink(x))
 
 
 def list_available():

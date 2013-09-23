@@ -1,6 +1,8 @@
 Coding Style Guide
 ==================
 
+:authors: - Bruno Clermont
+
 PIP
 ---
 

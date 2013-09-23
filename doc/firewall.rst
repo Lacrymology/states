@@ -1,6 +1,8 @@
 Firewall Settings
 =================
 
+:authors: - Bruno Clermont
+
 The following ports need to be open for the following states to make some
 services work:
 

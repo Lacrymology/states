@@ -1,6 +1,8 @@
 Hack Salt in your Sandbox
 =========================
 
+:authors: - Bruno Clermont
+
 Installation
 ------------
 

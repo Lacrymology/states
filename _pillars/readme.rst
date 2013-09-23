@@ -1,3 +1,4 @@
+:authors: - Bruno Clermont
 -------------------
 Why? ``_pillars/``?
 -------------------

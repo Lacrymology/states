@@ -1,6 +1,8 @@
 Monitoring
 ==========
 
+:authors: - Bruno Clermont
+
 Monitoring is one of the most important aspects of these states, as it's not
 only used to reports on the health of a deployed infrastructure. It's also an
 important part of the integration tests and it help administrator the ability to

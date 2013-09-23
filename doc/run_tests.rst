@@ -1,6 +1,8 @@
 Running Integration Tests
 =========================
 
+:authors: - Bruno Clermont
+
 Git Repositories
 ----------------
 

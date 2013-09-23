@@ -1,6 +1,8 @@
 Integration Tests
 =================
 
+:authors: - Bruno Clermont
+
 Unittests
 ---------
 

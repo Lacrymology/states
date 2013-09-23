@@ -1,6 +1,8 @@
 Salt-Minion Installation
 ========================
 
+:authors: - Bruno Clermont
+
 Copy the file ``salt/minion/bootstrap.sh`` to target and run it with it's ID
 followed by the IP or hostname of the Salt master::
 

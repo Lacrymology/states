@@ -1,6 +1,8 @@
 Salt-Master Installation
 ========================
 
+:authors: - Bruno Clermont
+
 Git Repositories
 ----------------
 

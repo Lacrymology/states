@@ -1,6 +1,8 @@
 Introduction to this repository
 ===============================
 
+:authors: - Bruno Clermont
+
 Welcome to **Common** repository.
 
 This repository targets Linux only. It actually only supports Ubuntu 12.04

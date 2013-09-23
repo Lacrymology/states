@@ -1,6 +1,8 @@
 Common Repository Usage
 =======================
 
+:authors: - Bruno Clermont
+
 Git Repositories
 ----------------
 

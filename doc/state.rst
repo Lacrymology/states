@@ -1,6 +1,8 @@
 Salt State
 ==========
 
+:authors: - Bruno Clermont
+
 This document define the standard structure of the states.
 
 As the states are applied automatically in various way, there is a requirements

@@ -1,6 +1,8 @@
 Troubleshooting
 ===============
 
+:authors: - Bruno Clermont
+
 Tech Support
 ------------
 

@@ -15,6 +15,11 @@ symlink-libphp5.so:
     - target: /usr/lib/php5/libphp5.so
     - require:
       - pkg: php-dev
+  cmd:
+    - wait
+    - name: /sbin/ldconfig
+    - watch:
+      - file: symlink-libphp5.so
 {%- endif %}
 
 extend:
@@ -25,5 +30,5 @@ extend:
 {% if grains['osrelease']|float == 12.04 %}
     cmd:
       - watch:
-        - file: symlink-libphp5.so
+        - cmd: symlink-libphp5.so
 {% endif %}

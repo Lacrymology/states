@@ -42,7 +42,7 @@ gitlab:
     password: password of bind user
     allow_username_or_email_login: use name instead of email for login. Default: true
 
-If you set gitlab:smtp:enabled is True, you must define: 
+If you set gitlab:smtp:enabled is True, you must define:
 gitlab
   smtp:
     default: use default settings, it mean that you don't need declare all values below. Default is True
@@ -108,12 +108,11 @@ gitlab-shell:
     - extracted
     - name: {{ home_dir }}/
     {%- if 'files_archive' in pillar %}
-    - source: {{ salt['pillar.get']('files_archive') }}/mirror/gitlab/shell-fbaf8d8c12dcb9d820d250b9f9589318dbc36616.tar.gz
-    - source_hash: md5=fa679c88f382211b34ecd35bfbb54ea6
+    - source: {{ salt['pillar.get']('files_archive')|replace('file://', '') }}/mirror/gitlab/shell-fbaf8d8c12dcb9d820d250b9f9589318dbc36616.tar.gz
     {%- else %}
-    - source: https://github.com/gitlabhq/gitlab-shell/archive/master.tar.gz
-    - source_hash: md5=e852ac69b13ad055424442368282774e
+    - source:  http://archive.robotinfra.com/mirror/gitlab/shell-fbaf8d8c12dcb9d820d250b9f9589318dbc36616.tar.gz
     {%- endif %}
+    - source_hash: md5=fa679c88f382211b34ecd35bfbb54ea6
     - archive_format: tar
     - tar_options: z
     - if_missing: {{ shell_dir }}
@@ -189,12 +188,11 @@ gitlab:
     - extracted
     - name: {{ root_dir }}/
 {%- if 'files_archive' in pillar %}
-    - source: {{ pillar['files_archive'] }}/mirror/gitlab/{{ version|replace("-", ".") }}.tar.gz
-    - source_hash: md5=151be72dc60179254c58120098f2a84e
+    - source: {{ pillar['files_archive']|replace('file://', '') }}/mirror/gitlab/{{ version|replace("-", ".") }}.tar.gz
 {%- else %}
-    - source: https://github.com/gitlabhq/gitlabhq/archive/{{ version }}-stable.tar.gz
-    - source_hash: md5=31906bf7066b7c5270dc4cf6b5623c6b
+    - source: http://archive.robotinfra.com/mirror/gitlab/{{ version|replace("-", ".") }}.tar.gz
 {%- endif %}
+    - source_hash: md5=151be72dc60179254c58120098f2a84e
     - archive_format: tar
     - tar_options: z
     - if_missing: {{ web_dir }}
@@ -237,7 +235,7 @@ gitlab_precompile_assets:
 gitlab_start_sidekiq_service:
   cmd:
     - wait
-    - name: bundle exec rake sidekiq:start 
+    - name: bundle exec rake sidekiq:start
     - env:
          RAILS_ENV: production
     - user: git

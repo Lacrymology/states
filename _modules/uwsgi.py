@@ -125,7 +125,7 @@ def disable(app_name, orphan=False):
     }
     if not orphan:
         if app_name not in list_enabled():
-            message = "{0} isn't available".format(app_name)
+            message = "{0} isn't enabled".format(app_name)
             logger.info(message)
             ret['comment'] = message
             return ret

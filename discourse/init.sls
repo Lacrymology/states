@@ -75,12 +75,11 @@ discourse_tar:
     - extracted
     - name: /usr/local/
 {%- if 'files_archive' in pillar %}
-    - source: http://archive.robotinfra.com/mirror/discourse/v{{ version }}.tar.gz
-    - source_hash: md5=7e608572bfa2902aaa53cb229cf56516
+    - source: {{ pillar['files_archive'] }}/mirror/discourse/v{{ version }}.tar.gz
 {%- else %}
-    - source: https://github.com/discourse/discourse/archive/master.tar.gz
-    - source_hash: md5=5ea1b394f08131267d92c6bb8f5693e5
+    - source: http://archive.robotinfra.com/mirror/discourse/v{{ version }}.tar.gz
 {%- endif %}
+    - source_hash: md5=7e608572bfa2902aaa53cb229cf56516
     - archive_format: tar
     - tar_options: z
     - if_missing: {{ web_root_dir }}
@@ -219,16 +218,11 @@ discourse_bundler:
       - user: discourse
 
 discourse_upstart:
-  cmd:
-    - run
-    - name: bundle exec sidekiq -e production -P /var/run/sidekiq.pid >> /var/log/sidekiq.log 2>&1 &
-    - user: root
-    - env:
-        RUBY_GC_MALLOC_LIMIT: "90000000"
-    - cwd: {{ web_root_dir }}
-    - unless: ps -ef | grep side | grep -v grep
-    - require:
-      - file: /etc/uwsgi/discourse.ini
+  service:
+    - running
+    - name: discourse
+    - watch:
+      - file: discourse_upstart
   file:
     - managed
     - name: /etc/init/discourse.conf
@@ -238,7 +232,7 @@ discourse_upstart:
     - group: root
     - mode: 440
     - require:
-      - cmd: discourse_upstart
+      - file: /etc/uwsgi/discourse.ini
     - context:
       web_root_dir: {{ web_root_dir }}
 

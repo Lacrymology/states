@@ -96,7 +96,7 @@ def enable(app_name):
         ret['comment'] = message
         return ret
     if app_name in list_enabled():
-        message = "%s already exists".format(app_symlink)
+        message = "{0} already exists".format(app_symlink)
         logger.error(message)
         ret['comment'] = message
         return ret

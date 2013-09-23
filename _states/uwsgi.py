@@ -125,6 +125,23 @@ def enabled(name):
     uwsgi.available state.
     '''
     ret = {'name': name, 'comment': '', 'result': False, 'changes': {}}
+
+    if __opts__['test']:
+        apps_enabled = __salt__['uwsgi.list_enabled']()
+        ret['result'] = None
+
+        if name in apps_enabled:
+            ret['comment'] = "{0} is already enabled".format(name)
+            return ret
+
+        apps_avail = __salt__['uwsgi.list_available']()
+        if name not in apps_avail:
+            ret['comment'] = "{0} is not available".format(name)
+            return ret
+
+        ret['comment'] = "{0} would have been enabled".format(name)
+        return ret
+
     was_enabled = __salt__['uwsgi.enable'](name)
     if was_enabled['result']:
         ret['result'] = True

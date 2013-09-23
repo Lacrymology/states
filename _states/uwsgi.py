@@ -75,7 +75,12 @@ def absent(name):
     '''
     Make uWSGI application isn't there and not running.
     '''
-    ret = {'name': name, 'result': None, 'comment': '', 'changes': {}}
+    ret = {'name': name, 'comment': ''}
+    if __opts__['test']:
+        ret.update({'changes': {}, 'result': None})
+    else:
+        # default value if success
+        ret.update({'changes': {name: 'is absent'}, 'result': True})
     apps_enabled = __salt['uwsgi.list_enabled']()
     apps_avail = __salt__['uwsgi.list_available']()
 
@@ -84,25 +89,27 @@ def absent(name):
             ret['result'] = '{0} would have been disable and removed'.format(
                 name)
         else:
-            ret['changes'].update(__salt__['uwsgi.disable'](name))
-            ret['changes'].update(__salt__['uwsgi.remove'](name))
-            ret['result'] = True
+            for func_name in ('disable', 'remove'):
+                if not __salt__['uwsgi.' + func_name](name):
+                    ret['changes'] = {name: "Can't " + func_name}
+                    ret['result'] = False
     elif name in apps_enabled:
         if __opts__['test']:
             ret['result'] = '{0} is orphan and need to be removed'.format(
                 name)
-        else:
-            ret['changes'].update(__salt__['uwsgi.disable'](name))
-            ret['result'] = True
+        elif not __salt__['uwsgi.disable'](name):
+            ret['changes'] = {name: "Can't disable"}
+            ret['result'] = False
     elif name in apps_avail:
         if __opts__['test']:
             ret['result'] = '{0} is would have been removed'.format(name)
-        else:
-            ret['changes'].update(__salt__['uwsgi.remove'](name))
-            ret['result'] = True
+        elif not __salt__['uwsgi.remove'](name):
+            ret['changes'] = {name: "Can't remove"}
+            ret['result'] = False
     else:
         ret['comment'] = '{0} already absent'.format(name)
         ret['result'] = True
+
     return ret
 
 

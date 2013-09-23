@@ -99,14 +99,14 @@ def enable(app_name):
         logger.error("Error enabling apps: %s", e)
         return False
 
-    return True
+    return {app_symlink: 'symlink to {0}'.format(app_config)}
 
 
-def disable(app_name, force=False):
+def disable(app_name, orphan=False):
     '''
     Disable specified uWSGI application.
     '''
-    if not force:
+    if not orphan:
         if app_name not in list_enabled():
             logger.info("%s isn't available", app_name)
             return False
@@ -114,7 +114,7 @@ def disable(app_name, force=False):
     if not __salt__['file.remove'](app_symlink):
         logger.debug("%s could not be removed", app_symlink)
         return False
-    return True
+    return {app_symlink: 'deleted'}
 
 
 def remove(app_name):
@@ -125,7 +125,7 @@ def remove(app_name):
     if not __salt__['file.remove'](app_config):
         logger.debug("%s could not be removed", app_config)
         return False
-    return True
+    return {app_file: 'deleted'}
 
 
 def clean():

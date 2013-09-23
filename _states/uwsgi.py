@@ -76,11 +76,11 @@ def absent(name):
     Make uWSGI application isn't there and not running.
     '''
     ret = {'name': name, 'comment': '', 'changes': {}, 'result': False}
-    apps_enabled = __salt__['uwsgi.list_enabled']()
-    apps_avail = __salt__['uwsgi.list_available']()
     comment = [name]
 
     if __opts__['test']:
+        apps_enabled = __salt__['uwsgi.list_enabled']()
+        apps_avail = __salt__['uwsgi.list_available']()
         comment.append('would have been:')
         if name in apps_enabled:
             comment.append('[disabled]')

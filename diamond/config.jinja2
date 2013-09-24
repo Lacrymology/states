@@ -32,7 +32,11 @@ collectors_reload_interval = 3600
 [handlers]
 
 # logging handlers
+{%- if 'graylog2_address' in pillar %}
 keys = gelf,syslog
+{% else %}
+keys = syslog
+{%- endif %}
 
 [[default]]
 
@@ -166,6 +170,7 @@ keys = message_only,syslog
 [logger_root]
 # to increase verbosity, set DEBUG
 level = INFO
+{%- if 'graylog2_address' in pillar %}
 handlers = gelf,syslog
 
 [handler_gelf]
@@ -173,6 +178,9 @@ class = graypy.handler.GELFHandler
 level = DEBUG
 formatter = message_only
 args = ('{{ pillar['graylog2_address'] }}', 12201)
+{% else %}
+handlers = syslog
+{%- endif %}
 
 [handler_syslog]
 level = NOTSET

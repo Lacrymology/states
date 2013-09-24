@@ -25,16 +25,19 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet hvnsweeting@gmail.com
 Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
 -#}
-/etc/uwsgi/moinmoin.ini:
-  file:
-    - absent
+{#
+ Backup client for moinmoin
+ #}
+include:
+  - cron
 
-/usr/local/moinmoin:
+/etc/cron.daily/backup-moinmoin:
   file:
-    - absent
+    - managed
+    - user: root
+    - group: root
+    - mode: 500
+    - template: jinja
+    - source: salt://moinmoin/backup/cron.jinja2
     - require:
-      - file: /etc/uwsgi/moinmoin.ini
-
-/etc/nginx/conf.d/moinmoin.conf:
-  file:
-    - absent
+      - pkg: cron

@@ -25,16 +25,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet hvnsweeting@gmail.com
 Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
 -#}
-/etc/uwsgi/moinmoin.ini:
-  file:
-    - absent
+#!/bin/sh
+# {{ pillar['message_do_not_modify'] }}
 
-/usr/local/moinmoin:
-  file:
-    - absent
-    - require:
-      - file: /etc/uwsgi/moinmoin.ini
-
-/etc/nginx/conf.d/moinmoin.conf:
-  file:
-    - absent
+/usr/local/bin/backup-pip /usr/local/moinmoin
+NOW=`/bin/date '+%Y-%m-%d-%H_%M_%S'`
+/bin/tar --xz -cf /tmp/moinmoin-data-$NOW.tar.xz -C /usr/local/moinmoin/share/moin data
+/usr/local/bin/backup_store /tmp/moinmoin-data-$NOW.tar.xz

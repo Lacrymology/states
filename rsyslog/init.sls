@@ -19,7 +19,7 @@ rsyslog:
     - watch:
       - pkg: rsyslog
       - file: rsyslog
-      - file: /etc/rsyslog.d
+      - cmd: clear_rsyslog_default_config
 
 remove_klogd_if_exist:
   pkg:
@@ -50,12 +50,9 @@ gsyslogd:
       - file: gsyslogd
 {%- endfor %}
 
-/etc/rsyslog.d:
-  file:
-    - directory
-    - clean: True
-    - user: root
-    - group: root
-    - mode: 555
-    - require:
+clear_rsyslog_default_config:
+  cmd:
+    - wait
+    - name: rm -f /etc/rsyslog.d/*
+    - watch:
       - pkg: rsyslog

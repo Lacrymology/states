@@ -52,7 +52,8 @@ gsyslogd:
 
 clear_rsyslog_default_config:
   cmd:
-    - wait
+    - run
     - name: rm -f /etc/rsyslog.d/*
-    - watch:
+    - onlyif: test -e /etc/rsyslog.d/50-default.conf
+    - require:
       - pkg: rsyslog

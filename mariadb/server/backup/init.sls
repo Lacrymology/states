@@ -15,7 +15,7 @@ include:
     - group: root
     - mode: 500
     - template: jinja
-    - source: salt://mysql/server/backup/script.jinja2
+    - source: salt://mariadb/server/backup/script.jinja2
 
 /usr/local/bin/backup-mysql-all:
   file:
@@ -24,6 +24,6 @@ include:
     - group: root
     - mode: 500
     - template: jinja
-    - source: salt://mysql/server/backup/dump_all.jinja2
+    - source: salt://mariadb/server/backup/dump_all.jinja2
     - require:
       - file: /usr/local

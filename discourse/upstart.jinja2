@@ -22,10 +22,10 @@ env RAILS_ENV="production"
 env RUBY_GC_MALLOC_LIMIT="90000000"
 
 post-start script
-  exec bundle exec sidekiq -P /var/run/sidekiq.pid | logger -t discourse-sidekiq
+  exec bundle exec sidekiq -P /tmp/sidekiq.pid | logger -t discourse-sidekiq
   emit discourse_running
 end script
 
 post-stop script
-  exec bundle exec sidekiqctl stop /var/run/sidekiq.pid
+  exec bundle exec sidekiqctl stop /tmp/sidekiq.pid
 end script

@@ -22,7 +22,6 @@ alarm = false
 ipv6 = false
 debug = false
 unbit = false
-graylog2 = true
 {% if salt['pkg.version']('ruby1.9.1-dev') and salt['cmd.has_exec']('ruby') %}
 rack = true
 {% endif %}
@@ -31,6 +30,8 @@ php = true
 {% endif %}
 {% if 'graylog2_address' not in pillar %}
 syslog = true
+{% else %}
+graylog2 = true
 {% endif %}
 xml_implementation = libxml2
 yaml_implementation = auto

@@ -1,6 +1,7 @@
 include:
-  - postgresql.common.nrpe
   - postgresql.standby
+  - postgresql.common.nrpe
+  - postgresql.server.nrpe
 
 extend:
   postgresql_monitoring:

@@ -1,6 +1,7 @@
 include:
   - postgresql.standby
   - postgresql.common.diamond
+  - postgresql.server.diamond
 
 extend:
   postgresql_monitoring:

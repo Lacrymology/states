@@ -1,4 +1,5 @@
 include:
+  - nrpe
   - apt.nrpe
   - postgresql.common.nrpe
   - postgresql.server

@@ -14,3 +14,4 @@ log_file: file:///dev/log
 log_level: debug
 log_fmt_logfile: '%(asctime)-15s salt-master[%(process)d] %(name)s: %(message)s'
 log_datefmt_logfile: '%b %d %H:%M:%S'
+loop_interval: {{ salt['pillar.get']('salt_master:loop_interval', 60) }}

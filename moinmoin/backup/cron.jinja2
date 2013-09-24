@@ -30,5 +30,5 @@ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
 
 /usr/local/bin/backup-pip /usr/local/moinmoin
 NOW=`/bin/date '+%Y-%m-%d-%H_%M_%S'`
-/bin/tar --xz -cf /tmp/moinmoin-data-$NOW.tar.xz -C /usr/local/moinmoin/share/moin data
+/bin/tar --xz -cf /tmp/moinmoin-data-$NOW.tar.xz -C /var/lib moinmoin
 /usr/local/bin/backup_store /tmp/moinmoin-data-$NOW.tar.xz

@@ -38,3 +38,7 @@ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
 /etc/nginx/conf.d/moinmoin.conf:
   file:
     - absent
+
+/var/lib/moinmoin:
+  file:
+    - absent

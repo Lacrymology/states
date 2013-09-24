@@ -27,16 +27,6 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
  
  Install python-pip, a cache for downloaded archive and a config file
  to force root user to use the cache folder.
-
-Optional pillar
----------------
-pip:
-  mirrors: True
-
-pip:mirrors: when file_archives is defined in pillar, this pillar item 
-  specify whether or not to use Pypi as a failover if pkg is not available
-  in using files_archive.
- 
 -#}
 include:
   - ssh.client

@@ -26,25 +26,6 @@ MariaDB Daemon
 =============
 
 Install MariaDB, a database server which is a drop-in replacement for MySQL
-
-Mandatory Pillar
-----------------
-
-mysql:
-  password: root_plaintext_password
-
-mysql:password: root password used for installation process, change this after
-    MariaDB installed does not make sense.
-
-Optional Pillar
----------------
-mysql:
-  utf8: True/False
-  bind: 0.0.0.0
-
-mysql:utf8: Enable or disable charset utf8. If disable, Latin1 charset will be
-            used. Default: False
-mysql:bind: what IP does MariaDB server will bind to. Default: 0.0.0.0
 -#}
 
 include:
@@ -103,7 +84,7 @@ mysql-server:
     - set
     - name: mariadb-server-5.5
     - data:
-        'mysql-server/root_password': {'type': 'password', 'value': '{{ salt['password.pillar']('mysql:password') }}'}
-        'mysql-server/root_password_again': {'type': 'password', 'value': '{{ salt['password.pillar']('mysql:password') }}'}
+        'mysql-server/root_password': {'type': 'password', 'value': {{ salt['pillar.get']('mysql:password') }}}
+        'mysql-server/root_password_again': {'type': 'password', 'value': {{ salt['pillar.get']('mysql:password') }}}
     - require:
-      - pkg: apt_sources
+      - pkg: debconf-utils

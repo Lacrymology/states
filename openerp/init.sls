@@ -27,21 +27,6 @@ Maintainer: Lam Dang Tung <lamdt@familug.org>
   
 Install OpenERP
 ===============
-
-
-Mandatory Pillar
-----------------
-openerp:
-  hostnames: 
-    - list of hostname, used for nginx config
-
-Optional Pillar
----------------
-openerp:
-  ssl: - enable ssl. Default: False
-  database:
-    password: password for postgres user
-
 #}
 
 include:

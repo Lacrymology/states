@@ -26,16 +26,6 @@ Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
  
  Configure an OpenSSH client
-
-Optional Pillar
-==============
-
-ssh:
-  known_hosts:
-    git.robotinfra.com:
-      fingerprint: c9:fb:62:8b:d3:b6:c8:7d:33:6b:65:9f:e2:9d:a2:71
-      port: 22022
-
 -#}
 include:
   - apt

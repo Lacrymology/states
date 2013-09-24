@@ -56,7 +56,7 @@ postgresql:
     # bellow is manadatory if you are setup a cluster
     master: 10.0.0.5 # address of master server
     standby:
-      - 10.0.0.7
+      - 10.0.0.7 
       - other_standby_address
 
 

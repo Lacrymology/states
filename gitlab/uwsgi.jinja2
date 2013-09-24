@@ -1,0 +1,50 @@
+# {{ pillar['message_do_not_modify'] }}
+{% set web = pillar['gitlab'] %}
+[uwsgi]
+master = true
+post-buffering = 4096
+env = RAILS_ENV=production
+processes = {{ web['workers']|default(2) }}
+harakiri = {{ web['timeout']|default(120) }}
+harakiri-verbose = true
+
+{% if web['cheaper']|default(False) %}
+{% if web['cheaper'] > 0 %}
+cheaper = {{ web['cheaper'] }}
+{% else %}
+cheap = true
+{% endif %}
+{% if web['workers'] == 1 and web['cheaper'] == 0 %}
+idle = {{ web['idle']|default(300) }}
+{% endif %}
+{% endif -%}
+{%- if grains['virtual'] == 'kvm' and salt['file.file_exists']('/sys/kernel/mm/ksm/run') %}
+ksm = 20
+{% endif -%}
+
+buffer-size = 32768
+
+lazy-apps = true
+uid = git
+gid = git
+procname = gitlab-worker
+procname-master = gitlab-master
+socket = /var/lib/uwsgi/gitlab.sock
+stats = /var/lib/uwsgi/gitlab-stats.sock
+chdir = {{ web_dir }}
+rack = {{ web_dir }}/config.ru
+threaded-logger = true
+no-orphans = true
+
+{% if 'graylog2_address' in pillar %}
+logger = graylog2:{{ pillar['graylog2_address'] }}:12201,{{ grains['id'] }}
+{% else %}
+log-syslog = uwsgi-gitlab
+{% endif %}
+{% if 'graphite_address' in pillar %}
+carbon-id = graylog2
+carbon = {{ pillar['graphite_address'] }}:2003
+{% endif %}
+
+chmod-socket = 775
+chown-socket = git:git

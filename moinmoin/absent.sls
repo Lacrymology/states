@@ -39,6 +39,6 @@ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
   file:
     - absent
 
-/var/lib/moinmoin:
+/var/lib/deployments/moinmoin:
   file:
     - absent

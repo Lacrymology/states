@@ -149,7 +149,7 @@ moinmoin_config:
       - file: moinmoin_config
       - file: {{ root_dir }}/share/moin
       - file: {{ root_dir }}/share/moin/moin.wsgi
-      - file: /var/lib/moinmoin
+      - file: /var/lib/deployments/moinmoin
       - user: web
   module:
     - wait
@@ -178,13 +178,36 @@ moinmoin_config:
       - pkg: nginx
       - user: web
 
-/var/lib/moinmoin:
+/var/lib/deployments:
   file:
     - directory
     - user: www-data
     - group: www-data
+    - makedirs: True
     - require:
       - user: web
+
+moinmoin_move_data_to_right_place:
+  cmd:
+    - wait
+    - name: mv /usr/local/moinmoin/share/moin/data /var/lib/deployments/moinmoin
+    - watch:
+      - module: moinmoin
+    - require:
+      - file: /var/lib/deployments
+
+/var/lib/deployments/moinmoin:
+  file:
+    - directory
+    - user: www-data
+    - group: www-data
+    - makedirs: True
+    - recurse:
+      - user
+      - group
+    - require:
+      - user: web
+      - cmd: moinmoin_move_data_to_right_place
 
 extend:
   nginx:

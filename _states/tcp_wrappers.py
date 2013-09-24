@@ -23,15 +23,14 @@ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+tcp_wrappers state
+manage part of content in hosts.allow and hosts.deny
 """
+
 __author__ = 'Bruno Clermont'
 __maintainer__ = 'Hung Nguyen Viet'
 __email__ = 'hvnsweeting@gmail.com'
-
-'''
-tcp_wrappers state
-manage part of content in hosts.allow and hosts.deny
-'''
 
 import logging
 

@@ -23,18 +23,16 @@ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+Get some grains information that is only available in Amazon AWS
+
+Source: https://github.com/saltstack/salt/issues/1825
 """
-__author__ = 'Bruno Clermont'
+
+__author__ = 'Erik Günther'
 __maintainer__ = 'Bruno Clermont'
 __email__ = 'patate@fastmail.cn'
 
-"""
-Get some grains information that is only available in Amazon AWS
-
-Author: Erik Günther
-https://github.com/saltstack/salt/issues/1825
-
-"""
 import ast
 import logging
 import httplib

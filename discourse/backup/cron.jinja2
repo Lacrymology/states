@@ -1,0 +1,6 @@
+#!/bin/sh
+# {{ pillar['message_do_not_modify'] }}
+
+/usr/local/bin/backup-postgresql discourse
+tar czvf /tmp/discourse_upload.tar.gz {{ web_root_dir }}/public/uploads/
+/usr/local/bin/backup_store /tmp/discourse_upload.tar.gz

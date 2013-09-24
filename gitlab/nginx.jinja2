@@ -1,0 +1,38 @@
+# {{ pillar['message_do_not_modify'] }}
+
+upstream gitlab {
+    server unix:///var/lib/uwsgi/gitlab.sock;
+}
+
+server {
+    listen 80;
+{% if salt['pillar.get']('gitlab:ssl')|default(False) %}
+{% if salt['pillar.get']('gitlab:ssl_redirect')|default(False) %}
+    {# if https, redirect http port 80 to https port 443 #}
+    server_name {% for hostname in salt['pillar.get']('gitlab:hostnames') %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+    return 301 https://{{ salt['pillar.get']('gitlab:hostnames')[0] }}$request_uri;
+}
+{# https server #}
+server {
+{% endif %}{# redirect http to https #}
+    listen 443 ssl;
+    ssl_certificate /etc/ssl/{{ salt['pillar.get']('gitlab:ssl') }}/chained_ca.crt;
+    ssl_certificate_key /etc/ssl/{{ salt['pillar.get']('gitlab:ssl') }}/server.pem;
+    ssl_client_certificate /etc/ssl/{{ salt['pillar.get']('gitlab:ssl') }}/ca.crt;
+    ssl_ciphers RC4:HIGH:!aNULL:!MD5;
+    ssl_prefer_server_ciphers on;
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout 10m;
+{% endif %}
+{# web app logic #}
+    server_name {% for hostname in  salt['pillar.get']('gitlab:hostnames') %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+    root {{ web_dir }}/public;
+
+
+    location / {
+        gzip off;
+        uwsgi_modifier1 7;
+        include uwsgi_params;
+        uwsgi_pass gitlab;
+    }
+}

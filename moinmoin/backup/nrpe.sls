@@ -25,16 +25,5 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet hvnsweeting@gmail.com
 Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
 -#}
-/etc/uwsgi/moinmoin.ini:
-  file:
-    - absent
-
-/usr/local/moinmoin:
-  file:
-    - absent
-    - require:
-      - file: /etc/uwsgi/moinmoin.ini
-
-/etc/nginx/conf.d/moinmoin.conf:
-  file:
-    - absent
+include:
+  - cron.nrpe

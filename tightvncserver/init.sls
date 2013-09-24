@@ -82,38 +82,36 @@ tightvncserver:
       - pkg: tightvncserver
   service:
     - running
-    - enable: True
-    - order: 50
-    - sig: su vnc -c "/usr/bin/vncserver -depth 16 -geometry 1024x768 :1 "
+    - name: tightvncserver
+    - sig: su {{ user }} -c "/usr/bin/vncserver -depth 16 -geometry {{ salt['pillar.get']('tightvncserver:resolution', '1024x768') }} :1 "
     - require:
-      - file: /etc/init.d/tightvncserver
       - pkg: tightvncserver
     - watch:
       - debconf: tightvncserver
       - cmd: tightvncserver
       - file: tightvncserver
       - file: {{ home }}/.vnc/passwd
+      - file: /etc/init/tightvncserver.conf
   debconf:
     - set
     - name: x11-common
     - data:
-        'x11-common/xwrapper/allowed_users': {'type': 'string', 'value': 'console' }
+        'x11-common/xwrapper/allowed_users': {'type': 'string', 'value': 'console'}
     - require:
       - pkg: debconf-utils
       - pkg: tightvncserver
 
-/etc/init.d/tightvncserver:
+/etc/init/tightvncserver.conf:
   file:
     - managed
-    - name: /etc/init.d/tightvncserver
     - user: root
     - group: root
-    - mode: 555
+    - mode: 440
     - source: salt://tightvncserver/upstart.jinja2
     - template: jinja
     - context:
-      home: {{ home }}
       user: {{ user }}
+      home: {{ home }}
     - require:
       - user: {{ user }}
 

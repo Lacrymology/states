@@ -20,7 +20,7 @@ tightvncserver:
   service:
     - dead
 
-/etc/init.d/tightvncserver:
+/etc/init/tightvncserver.conf:
   file:
     - absent
     - require:

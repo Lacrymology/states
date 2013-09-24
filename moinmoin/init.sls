@@ -105,6 +105,7 @@ moinmoin:
       - group
     - require:
       - cmd: moinmoin
+      - user: web
 
 {{ root_dir }}/share/moin/moin.wsgi:
   file:
@@ -114,6 +115,7 @@ moinmoin:
     - group: www-data
     - require:
       - cmd: moinmoin
+      - user: web
 
 moinmoin_config:
   file:
@@ -126,6 +128,7 @@ moinmoin_config:
     - source: salt://moinmoin/config.jinja2
     - require:
       - virtualenv: moinmoin
+      - user: web
 
 /etc/uwsgi/moinmoin.ini:
   file:
@@ -146,6 +149,8 @@ moinmoin_config:
       - file: moinmoin_config
       - file: {{ root_dir }}/share/moin
       - file: {{ root_dir }}/share/moin/moin.wsgi
+      - file: /var/lib/deployments/moinmoin
+      - user: web
   module:
     - wait
     - name: file.touch
@@ -171,6 +176,38 @@ moinmoin_config:
       root: {{ root_dir }}/share/moin
     - require:
       - pkg: nginx
+      - user: web
+
+/var/lib/deployments:
+  file:
+    - directory
+    - user: www-data
+    - group: www-data
+    - makedirs: True
+    - require:
+      - user: web
+
+moinmoin_move_data_to_right_place:
+  cmd:
+    - wait
+    - name: mv /usr/local/moinmoin/share/moin/data /var/lib/deployments/moinmoin
+    - watch:
+      - module: moinmoin
+    - require:
+      - file: /var/lib/deployments
+
+/var/lib/deployments/moinmoin:
+  file:
+    - directory
+    - user: www-data
+    - group: www-data
+    - makedirs: True
+    - recurse:
+      - user
+      - group
+    - require:
+      - user: web
+      - cmd: moinmoin_move_data_to_right_place
 
 extend:
   nginx:

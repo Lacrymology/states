@@ -16,8 +16,6 @@ discourse:
     enabled: False
   ssl: False
   database:
-    name: PostgreSQL database name
-    username: PostgreSQL username for discourse
     password: password for postgre user
 
 If you set discourse:smtp:enabled is True, you must define:
@@ -52,9 +50,7 @@ include:
 
 {%- set version = "0.9.6.3" %}
 {%- set web_root_dir = "/usr/local/discourse-" + version %}
-{%- set db_username = salt['pillar.get']('discourse:database:username', 'discourse') %}
-{%- set db_name = salt['pillar.get']('discourse:database:name', 'discourse') %}
-{%- set db_password = salt['password.pillar']('discourse:database:password', 10) %}
+{%- set password = salt['password.pillar']('discourse:database:password', 10) %}
 
 discourse_deps:
   pkg:
@@ -107,7 +103,6 @@ discourse:
     - present
     - name: discourse
     - shell: /bin/bash
-    - home: /home/discourse
     - groups:
       - www-data
     - require:
@@ -115,15 +110,15 @@ discourse:
       - user: web
   postgres_user:
     - present
-    - name: {{ db_username }}
-    - password: {{ db_password }}
+    - name: discourse
+    - password: {{ password }}
     - runas: postgres
     - require:
       - service: postgresql
   postgres_database:
     - present
-    - name: {{ db_name }}
-    - owner: {{ db_username }}
+    - name: discourse
+    - owner: discourse
     - runas: postgres
     - require:
       - postgres_user: discourse
@@ -179,9 +174,7 @@ discourse_rack:
       - user: discourse
       - file: discourse_tar
     - context:
-      password: {{ db_password }}
-      username: {{ db_username }}
-      name: {{ db_name }}
+      password: {{ password }}
 
 {{ web_root_dir }}/config/environments/production.rb:
   file:
@@ -242,8 +235,6 @@ discourse_upstart:
       - file: /etc/uwsgi/discourse.ini
     - context:
       web_root_dir: {{ web_root_dir }}
-      home: /home/discourse
-      user: discourse
 
 /etc/logrotate.d/discourse:
   file:

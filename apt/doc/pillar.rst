@@ -4,9 +4,6 @@ Pillar
 Mandatory 
 ---------
 
-message_do_not_modify: Warning message to not modify file
-~~~~~~~~~~~~~~~~~~~~~
-
 apt:
   sources: |
     deb http://mirror.anl.gov/pub/ubuntu/ {{ grains['oscodename'] }} main restricted universe multiverse

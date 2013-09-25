@@ -9,7 +9,7 @@ Optional
 message_do_not_modify
 ~~~~~~~~~~~~~~~~~~~~~
 
-INSERT DESCRIPTION
+Warning message to not modify file.
 
 files_archive
 ~~~~~~~~~~~~~
@@ -19,11 +19,11 @@ INSERT DESCRIPTION
 graylog2_address
 ~~~~~~~~~~~~~~~~
 
-INSERT DESCRIPTION
+IP/Hostname of centralized Graylog2 server
 
 graphite_address
 ~~~~~~~~~~~~~~~~
 
-INSERT DESCRIPTION
+IP/Hostname of carbon/graphite server.
 NOTE: don't undocument this in diamond and pystatsd. as those 2 states are
 only used for graphite.

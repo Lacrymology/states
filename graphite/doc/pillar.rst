@@ -95,11 +95,6 @@ graphite:web:workers
 
 number of uWSGI worker that will run the webapp.
 
-message_do_not_modify
-~~~~~~~~~~~~~~~~~~~~~ 
-
-Warning message to not modify file.
-
 Optional 
 --------
 
@@ -152,11 +147,6 @@ graphite:web:idle
 ~~~~~~~~~~~~~~~~~
 
 number of seconds before uWSGI switch to cheap mode.
-
-graylog2_address
-~~~~~~~~~~~~~~~~
-
-IP/Hostname of centralized Graylog2 server
 
 shinken_pollers
 ~~~~~~~~~~~~~~~

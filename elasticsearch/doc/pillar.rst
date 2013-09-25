@@ -23,7 +23,6 @@ elasticsearch:
         elasticsearch: {}
   hostnames:
     - search.example.com
-message_do_not_modify: Warning message to not modify file.
 
 elasticsearch:cluster:name
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -101,11 +100,6 @@ List of CIDR format network where ES over HTTPS is allowed.
 destructive_absent
 ~~~~~~~~~~~~~~~~~~
 If True (not default), ES data saved on disk is purged when elasticsearch.absent is executed.
-
-graphite_address 
-~~~~~~~~~~~~~~~~
-
-IP/Hostname of carbon/graphite server.
 
 shinken_pollers
 ~~~~~~~~~~~~~~~ 

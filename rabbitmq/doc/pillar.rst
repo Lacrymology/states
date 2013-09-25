@@ -76,8 +76,6 @@ rabbitmq:hostnames
 
 list of hostnames that RabbitMQ management console is reachable.
 
-message_do_not_modify: Warning message to not modify file.
-
 Optional 
 --------
 
@@ -86,16 +84,6 @@ rabbitmq:
 shinken_pollers:
   - 192.168.1.1
 destructive_absent: False
-
-graphite_address
-~~~~~~~~~~~~~~~~
-
-IP/Hostname of carbon/graphite server.
-
-graylog2_address
-~~~~~~~~~~~~~~~~
-
-IP/Hostname of centralized Graylog2 server
 
 shinken_pollers
 ~~~~~~~~~~~~~~~

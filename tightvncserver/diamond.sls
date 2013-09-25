@@ -24,10 +24,12 @@ Maintainer: Lam Dang Tung <lamdt@familug.org>
 
  Diamond statistics for tightvncserver
 -#}
+{%- set wm = salt['pillar.get']('tightvncserver:wm', 'fluxbox') %}
 
 include:
   - apt.diamond
   - diamond
+  - {{ wm }}.diamond
 
 tightvncserver_diamond_resources:
   file:

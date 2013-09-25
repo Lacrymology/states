@@ -24,7 +24,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author: Nicolas Plessis <nicolasp@microsigns.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
- 
+
  Remove Nagios NRPE check for jenkins
 -#}
 /etc/nagios/nrpe.d/jenkins-nginx.cfg:

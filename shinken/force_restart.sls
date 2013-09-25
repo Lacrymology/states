@@ -24,7 +24,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
- 
+
  Sometimes some processes get crazy (most of the time, the reactionner)
  and it need to be manually kill. This state force a restart.
 -#}

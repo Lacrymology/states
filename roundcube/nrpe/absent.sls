@@ -24,7 +24,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
- 
+
  Remove roundcube web Nagios NRPE checks
 -#}
 /etc/nagios/nrpe.d/roundcube.cfg:

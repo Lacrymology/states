@@ -16,7 +16,7 @@ Salt Continuous Integration (CI)
              LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 :authors: - Hung Nguyen Viet
           - Bruno Clermont 
-          
+
 This is like a role, it's a mash-up of multiple low-level states to create a new
 dedicated state to serve a single purpose.
 

@@ -109,7 +109,7 @@ server {
       #}
       uwsgi_param X-Sendfile-Type X-Accel-Redirect;
       uwsgi_param X-Accel-Mapping $public/=/downloads/;
-      
+
       uwsgi_modifier1 7;
       include uwsgi_params;
       uwsgi_pass discourse;

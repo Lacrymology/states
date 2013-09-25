@@ -40,7 +40,7 @@ graphite:carbon:interface: Network interface to bind Carbon-relay daemon.
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
     Default: 0.0.0.0.
-    
+
 graphite:carbon:replication: add redundancy of your data by replicating
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

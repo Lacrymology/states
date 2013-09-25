@@ -49,7 +49,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
     <property name="l1.cachemanager.enabled" value="true"/>
     <property name="logging.maxLogFileSize" value="1024"/>
   </tc-properties>
-  
+
 {#-
  The 'system' section contains configuration data that affects the
  entire Terracotta system as a whole; things like whether to activate
@@ -205,42 +205,42 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
          Default: dso port + 20
       -->
       <l2-group-port bind="12.345.678.9">9530</l2-group-port>
-      
+
       <!-- Turn on authentication for the Terracotta server. An empty tag
          <authentication> defaults to the standard Java JMX authentication
          mechanism referring to password and access files in:
          $JAVA_HOME/jre/lib/management.
          - $JAVA_HOME/jre/lib/management/jmxremote.password
          - $JAVA_HOME/jre/lib/management/jmxremote.access
-        
+
          You must modify these files as such (if none exist create them):
-        
+
          - jmxremote.password: add a line to the end of the file declaring
            your username and password followed by a caridge return:
            secretusername secretpassword
-        
+
          - jmxremote.access: add the following line (with a caridge return)
            to the end of your file:
            secretusername readwrite
-        
+
          You must also do:
          $ chmod 500 jmxremote.password
          $ chown <user who will execute the tc-server> jmxremote.password
       -->
       <authentication/>
-      
+
       <!-- Turn on authentication for the embedded Terracotta HTTP Server.
          This requires a properties file that contains the users and passwords
          that have access to the HTTP server.
-        
+
          The format of the properties file is:
          username: password [,rolename ...]
-        
+
          The supported roles and protected sections are: 
          - statistics: for the statistics gatherer at /statistics-gatherer
-        
+
          Passwords may be clear text, obfuscated or checksummed.
-         
+
          The class com.mortbay.Util.Password should be used to generate
          obfuscated passwords or password checksums.
       -->
@@ -416,7 +416,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
          Default: 'networked-active-passive'
       -->
       <mode>networked-active-passive</mode>
-      
+
       <!-- This section allows you to declare the election time window, 
          which is used when servers run in network-based active-passive mode. 
          An active server is elected from the servers that cast a vote within 
@@ -446,7 +446,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
          Default: 'false'
       -->
       <enabled>true</enabled>
-      
+
       <!-- This element controls the period, in days, between update checks
          given that update checking is enabled. When checking is enabled, each
          time the server starts an update check is performed as well as at

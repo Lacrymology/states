@@ -21,7 +21,7 @@ THE SOFTWARE.
 
 Author: Lam Dang Tung <lamdt@familug.org>
 Maintainer: Lam Dang Tung <lamdt@familug.org>
- 
+
 Wordpress: a blogging tool and content management system
 =============================
 -#}

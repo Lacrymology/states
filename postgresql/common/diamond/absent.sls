@@ -24,7 +24,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
- 
+
  Turn off Diamond statistics for PostgreSQL Server
 -#}
 /usr/local/diamond/salt-postgresql-requirements.txt:

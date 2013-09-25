@@ -79,7 +79,8 @@ class Config(multiconfig.DefaultConfig):
     instance_dir = wikiconfig_dir
 
     # Where your own wiki pages are (make regular backups of this directory):
-    data_dir = os.path.join(instance_dir, 'data', '') # path with trailing /
+    # data_dir = os.path.join(instance_dir, 'data', '') # path with trailing /
+    data_dir = '/var/lib/deployments/moinmoin/'
 
     # Where system and help pages are (you may exclude this from backup):
     data_underlay_dir = os.path.join(instance_dir, 'underlay', '') # path with trailing /

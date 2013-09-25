@@ -19,7 +19,6 @@ rsyslog:
     - watch:
       - pkg: rsyslog
       - file: rsyslog
-      - cmd: clear_rsyslog_default_config
 
 remove_klogd_if_exist:
   pkg:
@@ -50,10 +49,18 @@ gsyslogd:
       - file: gsyslogd
 {%- endfor %}
 
-clear_rsyslog_default_config:
-  cmd:
-    - run
-    - name: rm -f /etc/rsyslog.d/*
-    - onlyif: test -e /etc/rsyslog.d/50-default.conf
+/etc/rsyslog.d/50-default.conf:
+  file:
+    - absent
     - require:
       - pkg: rsyslog
+    - watch_in:
+      - service: rsyslog
+
+/etc/rsyslog.d/20-ufw.conf:
+  file:
+    - absent
+    - require:
+      - pkg: rsyslog
+    - watch_in:
+      - service: rsyslog

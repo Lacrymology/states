@@ -22,11 +22,22 @@ THE SOFTWARE.
 Author: Lam Dang Tung <lamdt@familug.org>
 Maintainer: Lam Dang Tung <lamdt@familug.org>
 
+ Nagios NRPE check for Fluxbox
+-#}
 
-Remove Fluxbox
-==============
-#}
+include:
+  - apt.nrpe
+  - nrpe
 
-fluxbox:
-  pkg:
-    - purged
+/etc/nagios/nrpe.d/fluxbox.cfg:
+  file:
+    - managed
+    - template: jinja
+    - user: nagios
+    - group: nagios
+    - mode: 440
+    - source: salt://fluxbox/nrpe/config.jinja2
+    - require:
+      - pkg: nagios-nrpe-server
+    - watch_in:
+      - service: nagios-nrpe-server

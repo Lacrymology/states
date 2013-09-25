@@ -22,11 +22,19 @@ THE SOFTWARE.
 Author: Lam Dang Tung <lamdt@familug.org>
 Maintainer: Lam Dang Tung <lamdt@familug.org>
 
+Diamond statistics for Fluxbox - Windows Manager
+-#}
+include:
+  - diamond
 
-Remove Fluxbox
-==============
-#}
-
-fluxbox:
-  pkg:
-    - purged
+fluxbox_diamond_resource:
+  file:
+    - accumulated
+    - name: processes
+    - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
+    - require_in:
+      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
+    - text:
+      - |
+        [[fluxbox]]
+        cmdline = ^fluxbox$

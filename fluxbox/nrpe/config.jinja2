@@ -21,12 +21,7 @@ THE SOFTWARE.
 
 Author: Lam Dang Tung <lamdt@familug.org>
 Maintainer: Lam Dang Tung <lamdt@familug.org>
+-#}
 
-
-Remove Fluxbox
-==============
-#}
-
-fluxbox:
-  pkg:
-    - purged
+# {{ pillar['message_do_not_modify'] }}
+command[fluxbox_procs]=/usr/lib/nagios/plugins/check_procs -c 1:1 -C fluxbox

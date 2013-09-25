@@ -40,7 +40,7 @@ tightvncserver:
 
  tightvncserver:password - Password for vnc client login, it will be truncated if more than 8 characters
 
-#}
+-#}
 {%- set wm = salt['pillar.get']('tightvncserver:wm', 'fluxbox') %}
 {%- set user = salt['pillar.get']('tightvncserver:user', 'vnc') %}
 {%- set user_passwd = salt['pillar.get']('tightvncserver:user_passwd', 'vnc') %}

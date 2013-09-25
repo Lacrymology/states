@@ -37,8 +37,7 @@ tightvncserver:
   user: - user name will run vnc
   user_passwd: - password for user
   sudo: - make vnc user as sudoer. Default False
-
- tightvncserver:password - Password for vnc client login, it will be truncated if more than 8 characters
+  password: - Password for vnc client login, it will be truncated if more than 8 characters
 
 -#}
 {%- set wm = salt['pillar.get']('tightvncserver:wm', 'fluxbox') %}

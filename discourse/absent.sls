@@ -13,22 +13,13 @@ discourse:
     - absent
     - require:
       - user: discourse
-  cmd:
-    - run
-    - name: kill -9 $(ps -ef | grep sidekiq | grep -v grep | awk  '{print $2}')
-    - user: root
-    - onlyif: ps -ef | grep sidekiq | grep -v grep
-    {#-
-    - env:
-        RAILS_ENV: production
-    - cwd: {{ web_root_dir }}
-    - onlyif: ps -ef | grep sidekiqctl | grep -v grep
-    #}
+  service:
+    - dead
 
-{%- for file in (web_root_dir, '/home/discourse', '/etc/uwsgi/discourse.ini', '/etc/nginx/conf.d/discourse.conf', '/etc/logrotate.d/discourse', '/etc/init/discourse.conf', '/var/log/sidekiq.log') %}
+{%- for file in (web_root_dir, '/home/discourse', '/etc/uwsgi/discourse.ini', '/etc/nginx/conf.d/discourse.conf', '/etc/logrotate.d/discourse', '/etc/init/discourse.conf') %}
 {{ file }}:
   file:
     - absent
     - require:
-      - cmd: discourse
+      - service: discourse
 {%- endfor %}

@@ -235,6 +235,8 @@ discourse_upstart:
       - file: /etc/uwsgi/discourse.ini
     - context:
       web_root_dir: {{ web_root_dir }}
+      user: discourse
+      home: /home/discourse
 
 /etc/logrotate.d/discourse:
   file:

@@ -4,7 +4,7 @@
 {%- if 'files_archive' in pillar %}
 no-index = true
 find-links = {{ pillar['files_archive'] }}/pip/
-    {%- if salt['pillar.get']('pip:mirrors', False) %}
+    {%- if salt['pillar.get']('pip:mirrors', True) %}
 use-mirrors = true
 mirrors =  https://pypi.python.org/simple/
     {%- endif %}

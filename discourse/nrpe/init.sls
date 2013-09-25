@@ -53,8 +53,8 @@ include:
     - context:
       deployment: discourse
       workers: {{ salt['pillar.get']('discourse:workers', '2') }}
-{%- if 'cheaper' in salt['pillar.get']('discourse') %}
-      cheaper: {{ salt['pillar.get']('discourse:cheaper') }}
+{%- if 'cheaper' in pillar['discourse'] %}
+      cheaper: {{ pillar['discourse']['cheaper'] }}
 {%- endif %}
     - watch_in:
       - service: nagios-nrpe-server
@@ -71,7 +71,7 @@ include:
       - pkg: nagios-nrpe-server
     - context:
       deployment: discourse
-      domain_name: {{ salt['pillar.get']('discourse:hostnames')[0] }}
+      domain_name: {{ pillar['discourse']['hostnames'][0] }}
       http_uri: /
 {%- if salt['pillar.get']('discourse:ssl', False) %}
       https: True

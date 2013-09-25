@@ -56,8 +56,8 @@ include:
     - context:
       deployment: gitlab
       workers: {{ salt['pillar.get']('gitlab:workers', "2") }}
-{%- if 'cheaper' in salt['pillar.get']('gitlab') %}
-      cheaper: {{ salt['pillar.get']('gitlab:cheaper')  }}
+{%- if 'cheaper' in pillar['gitlab'] %}
+      cheaper: {{ pillar['gitlab']['cheaper']  }}
 {%- endif %}
     - watch_in:
       - service: nagios-nrpe-server
@@ -74,7 +74,7 @@ include:
       - pkg: nagios-nrpe-server
     - context:
       deployment: gitlab
-      domain_name: {{ salt['pillar.get']('gitlab:hostnames')[0] }}
+      domain_name: {{ pillar['gitlab']['hostnames'][0] }}
       http_uri: /users/sign_in
 {%- if salt['pillar.get']('gitlab:ssl', False) %}
       https: True

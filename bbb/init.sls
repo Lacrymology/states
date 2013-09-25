@@ -96,7 +96,7 @@ bigbluebutton_ruby:
       - cmd: bigbluebutton
 {%- endfor %}
 
-{% set encoding = pillar['encoding']|default('en_US.UTF-8') %}
+{% set encoding = salt['pillar.get']('encoding', 'en_US.UTF-8') %}
 bigbluebutton:
   cmd:
     - run
@@ -145,10 +145,10 @@ bbb-conf-wrap:
     - require:
       - file: /usr/local
 
-/usr/local/bin/bbb-conf-wrap.sh --setip {{ salt['pillar.get']('bbb:hostname') }}:
+/usr/local/bin/bbb-conf-wrap.sh --setip {{ pillar['bbb']['hostname'] }}:
   cmd:
     - run
-    - unless: grep -q {{ salt['pillar.get']('bbb:hostname') }} /var/www/bigbluebutton/client/conf/config.xml
+    - unless: grep -q {{ pillar['bbb']['hostname'] }} /var/www/bigbluebutton/client/conf/config.xml
     - require:
       - pkg: bigbluebutton
       - file: bbb-conf-wrap

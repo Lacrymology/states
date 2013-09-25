@@ -295,9 +295,9 @@ discourse_upstart:
       - pkg: nginx
       - file: /etc/uwsgi/discourse.ini
 {%- if salt['pillar.get']('discourse:ssl', False) %}
-      - cmd: /etc/ssl/{{ salt['pillar.get']('discourse:ssl') }}/chained_ca.crt
-      - module: /etc/ssl/{{ salt['pillar.get']('discourse:ssl') }}/server.pem
-      - file: /etc/ssl/{{ salt['pillar.get']('discourse:ssl') }}/ca.crt
+      - cmd: /etc/ssl/{{ pillar['discourse']['ssl'] }}/chained_ca.crt
+      - module: /etc/ssl/{{ pillar['discourse']['ssl'] }}/server.pem
+      - file: /etc/ssl/{{ pillar['discourse']['ssl'] }}/ca.crt
 {%- endif %}
     - watch_in:
       - service: nginx
@@ -352,7 +352,7 @@ extend:
   nginx:
     service:
       - watch:
-        - cmd: /etc/ssl/{{ salt['pillar.get']('discourse:ssl') }}/chained_ca.crt
-        - module: /etc/ssl/{{ salt['pillar.get']('discourse:ssl') }}/server.pem
-        - file: /etc/ssl/{{ salt['pillar.get']('discourse:ssl') }}/ca.crt
+        - cmd: /etc/ssl/{{ pillar['discourse']['ssl'] }}/chained_ca.crt
+        - module: /etc/ssl/{{ pillar['discourse']['ssl'] }}/server.pem
+        - file: /etc/ssl/{{ pillar['discourse']['ssl'] }}/ca.crt
 {%- endif %}

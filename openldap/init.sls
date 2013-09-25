@@ -107,12 +107,12 @@ restart_after_ssl:
       - cmd: slapd_config_dbs
 {% endif %}
 
-{% if salt['pillar.get']('ldap:usertree') %}
+{% if pillar['ldap']['usertree'] %}
 {{ opts['cachedir'] }}/usertree.ldif:
   file:
     - managed
     - template: jinja
-    - source: salt://{{ salt['pillar.get']('ldap:usertree') }}
+    - source: salt://{{ pillar['ldap']['usertree'] }}
     - mode: 400
 
 ldapadd -Y EXTERNAL -H ldapi:/// -f {{ opts['cachedir'] }}/usertree.ldif:

@@ -50,7 +50,7 @@ include:
       deployment: wordpress
       workers: {{ salt['pillar.get']('wordpress:workers', '2') }}
 {%- if 'cheaper' in pillar['wordpress'] %}
-      cheaper: {{ salt['pillar.get']('wordpress:cheaper') }}
+      cheaper: {{ pillar['wordpress']['cheaper'] }}
 {%- endif %}
     - watch_in:
       - service: nagios-nrpe-server
@@ -67,7 +67,7 @@ include:
       - pkg: nagios-nrpe-server
     - context:
       deployment: wordpress
-      domain_name: {{ salt['pillar.get']('wordpress:hostnames')[0] }}
+      domain_name: {{ pillar['wordpress']['hostnames'][0] }}
       http_uri: /
 {%- if salt['pillar.get']('wordpress:ssl', False) %}
       https: True

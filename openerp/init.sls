@@ -205,9 +205,9 @@ add_web_user_to_openerp_group:
       - pkg: nginx
       - file: /etc/uwsgi/openerp.ini
 {%- if salt['pillar.get']('openerp:ssl', False) %}
-      - cmd: /etc/ssl/{{ salt['pillar.get']('openerp:ssl') }}/chained_ca.crt
-      - module: /etc/ssl/{{ salt['pillar.get']('openerp:ssl') }}/server.pem
-      - file: /etc/ssl/{{ salt['pillar.get']('openerp:ssl') }}/ca.crt
+      - cmd: /etc/ssl/{{ pillar['openerp']['ssl'] }}/chained_ca.crt
+      - module: /etc/ssl/{{ pillar['openerp']['ssl'] }}/server.pem
+      - file: /etc/ssl/{{ pillar['openerp']['ssl'] }}/ca.crt
 {%- endif %}
     - watch_in:
       - service: nginx
@@ -219,7 +219,7 @@ extend:
   nginx:
     service:
       - watch:
-        - cmd: /etc/ssl/{{ salt['pillar.get']('openerp:ssl') }}/chained_ca.crt
-        - module: /etc/ssl/{{ salt['pillar.get']('openerp:ssl') }}/server.pem
-        - file: /etc/ssl/{{ salt['pillar.get']('openerp:ssl') }}/ca.crt
+        - cmd: /etc/ssl/{{ pillar['openerp']['ssl'] }}/chained_ca.crt
+        - module: /etc/ssl/{{ pillar['openerp']['ssl'] }}/server.pem
+        - file: /etc/ssl/{{ pillar['openerp']['ssl'] }}/ca.crt
 {% endif %}

@@ -12,7 +12,7 @@ Optional Pillar
 ---------------
 discourse:
   upload_size: maximum file upload size. Default is: `2m` (this mean 2 megabyte)
-  smtp:
+  smtp: 
     enabled: False
   ssl: False
   database:
@@ -181,7 +181,7 @@ discourse_rack:
     - context:
       password: {{ db_password }}
       username: {{ db_username }}
-      dbname: {{ db_name }}
+      name: {{ db_name }}
 
 {{ web_root_dir }}/config/environments/production.rb:
   file:
@@ -340,7 +340,7 @@ discourse_add_psql_extension_pg_trgm:
     - run
     - name: psql discourse -c "CREATE EXTENSION IF NOT EXISTS pg_trgm;"
     - user: postgres
-    - require:
+    - require: 
       - service: postgresql
       - postgres_database: discourse
 

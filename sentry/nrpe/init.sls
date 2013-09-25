@@ -38,7 +38,7 @@ include:
   - postgresql.nrpe
   - postgresql.server.nrpe
   - python.dev.nrpe
-{% if pillar['sentry']['ssl']|default(False) %}
+{% if salt['pillar.get']('sentry:ssl', False) %}
   - ssl.nrpe
 {% endif %}
 {% if 'graphite_address' in pillar %}
@@ -78,7 +78,7 @@ include:
       deployment: sentry
       domain_name: {{ pillar['sentry']['hostnames'][0] }}
       http_uri: /login/
-{% if pillar['sentry']['ssl']|default(False) %}
+{% if salt['pillar.get']('sentry:ssl', False) %}
       https: True
       http_result: 301 Moved Permanently
 {% endif %}

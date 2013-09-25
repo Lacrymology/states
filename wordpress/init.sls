@@ -31,7 +31,7 @@ include:
   - {{ salt['pillar.get']('wordpress:mysql_variant', 'mariadb') }}.server
   - php.dev
   - uwsgi.php
-{%- if pillar['wordpress']['ssl']|default(False) %}
+{%- if salt['pillar.get']('wordpress:ssl', False) %}
   - ssl
 {%- endif %}
   - web
@@ -199,7 +199,7 @@ wordpress_initial:
       - archive: wordpress
       - pkg: php5-mysql
 
-{%- if pillar['wordpress']['ssl']|default(False) %}
+{%- if salt['pillar.get']('wordpress:ssl', False) %}
 extend:
   nginx:
     service:

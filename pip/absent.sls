@@ -33,8 +33,8 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 {#
  Only during integration test, we don't want to wipe PIP cache for future usage.
-#}
-{% if not pillar['integration_test']|default(False) %}
+ #}
+{% if not salt['pillar.get']('__test__', False) %}
 /var/cache/pip:
   file:
     - absent

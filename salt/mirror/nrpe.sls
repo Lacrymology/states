@@ -28,7 +28,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 include:
   - reprepro.nrpe
   - nginx.nrpe
-{% if pillar['salt_ppa_mirror']['ssl']|default(False) %}
+{% if salt['pillar.get']('salt_ppa_mirror:ssl', False) %}
   - ssl.nrpe
 {% endif %}
 

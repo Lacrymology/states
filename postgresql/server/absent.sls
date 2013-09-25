@@ -31,7 +31,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 postgresql:
   pkg:
-{% if pillar['destructive_absent']|default(False) %}
+{% if salt['pillar.get']('destructive_absent', False) %}
     - purged
 {% else %}
     - removed

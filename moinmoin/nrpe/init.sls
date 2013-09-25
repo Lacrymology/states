@@ -31,7 +31,7 @@ include:
   - nrpe
   - pip.nrpe
   - python.dev.nrpe
-{% if pillar['moinmoin']['ssl']|default(False) %}
+{% if salt['pillar.get']('moinmoin:ssl', False) %}
   - ssl.nrpe
 {% endif %}
   - uwsgi.nrpe
@@ -49,7 +49,7 @@ include:
       - pkg: nagios-nrpe-server
     - context:
       deployment: moinmoin
-      workers: {{ pillar['moinmoin']['workers']|default(2) }}
+      workers: {{ salt['pillar.get']('moinmoin:workers', '2') }}
       cheaper: {{ salt['pillar.get']('moinmoin:cheaper', False) }}
     - require:
       - pkg: nagios-nrpe-server
@@ -67,7 +67,7 @@ include:
     - context:
       deployment: moinmoin
       domain_name: {{ pillar['moinmoin']['hostnames'][0] }}
-{% if pillar['moinmoin']['ssl']|default(False) %}
+{% if salt['pillar.get']('moinmoin:ssl', False) %}
       https: True
       http_result: 301 Moved Permanently
 {% endif %}

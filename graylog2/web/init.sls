@@ -46,7 +46,7 @@ include:
   - mongodb
   - nginx
   - ruby
-{% if pillar['graylog2']['ssl']|default(False) %}
+{% if salt['pillar.get']('graylog2:ssl', False) %}
   - ssl
 {% endif %}
   - uwsgi.ruby
@@ -203,7 +203,7 @@ extend:
     service:
       - watch:
         - file: /etc/nginx/conf.d/graylog2-web.conf
-{% if pillar['graylog2']['ssl']|default(False) %}
+{% if salt['pillar.get']('graylog2:ssl', False) %}
         - cmd: /etc/ssl/{{ pillar['graylog2']['ssl'] }}/chained_ca.crt
         - module: /etc/ssl/{{ pillar['graylog2']['ssl'] }}/server.pem
         - file: /etc/ssl/{{ pillar['graylog2']['ssl'] }}/ca.crt

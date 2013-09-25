@@ -77,7 +77,7 @@ include:
       https: True
       http_result: 301 Moved Permanently
 {%- endif %}
-{%- if pillar['__test__']|default(False) %}
+{%- if salt['pillar.get']('__test__', False) %}
       timeout: 120
 {%- endif %}
     - watch_in:

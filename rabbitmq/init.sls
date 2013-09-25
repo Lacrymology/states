@@ -47,7 +47,7 @@ include:
   - hostname
   - logrotate
 {% if pillar['rabbitmq']['management'] != 'guest' -%}
-  {%- if pillar['rabbitmq']['ssl']|default(False) %}
+  {%- if salt['pillar.get']('rabbitmq:ssl', False) %}
   - ssl
   {%- endif %}
   - nginx
@@ -212,7 +212,7 @@ host_{{ node }}:
       - pkg: nginx
     - context:
       destination: http://127.0.0.1:15672
-      ssl: {{ pillar['rabbitmq']['ssl']|default(False) }}
+      ssl: {{ salt['pillar.get']('rabbitmq:ssl', False) }}
       hostnames: {{ pillar['rabbitmq']['hostnames'] }}
 {% endif %}
 
@@ -222,7 +222,7 @@ extend:
     service:
       - watch:
         - file: /etc/nginx/conf.d/rabbitmq.conf
-  {% if pillar['rabbitmq']['ssl']|default(False) %}
+  {% if salt['pillar.get']('rabbitmq:ssl', False) %}
         - cmd: /etc/ssl/{{ pillar['rabbitmq']['ssl'] }}/chained_ca.crt
         - module: /etc/ssl/{{ pillar['rabbitmq']['ssl'] }}/server.pem
         - file: /etc/ssl/{{ pillar['rabbitmq']['ssl'] }}/ca.crt

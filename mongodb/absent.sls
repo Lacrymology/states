@@ -30,7 +30,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 mongodb:
   pkg:
-{% if pillar['destructive_absent']|default(False) %}
+{% if salt['pillar.get']('destructive_absent', False) %}
     - purged
 {% else %}
     - removed
@@ -44,7 +44,7 @@ mongodb:
   service:
     - dead
 
-{% if pillar['destructive_absent']|default(False) %}
+{% if salt['pillar.get']('destructive_absent', False) %}
 /var/lib/mongodb:
   file:
     - absent

@@ -27,7 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
  Diamond statistics for Elasticsearch
  TODO: Diamond + http://www.elasticsearch.org/guide/reference/modules/jmx/
 -#}
-{% set ssl = pillar['elasticsearch']['ssl']|default(False) %}
+{% set ssl = salt['pillar.get']('elasticsearch:ssl', False) %}
 include:
   - diamond
   - cron.diamond

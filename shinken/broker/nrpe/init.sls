@@ -33,7 +33,7 @@ include:
   - pip.nrpe
   - python.dev.nrpe
   - apt.nrpe
-{% if pillar['shinken']['ssl']|default(False) %}
+{% if salt['pillar.get']('shinken:ssl', False) %}
   - ssl.nrpe
 {% endif %}
   - nginx.nrpe
@@ -64,7 +64,7 @@ include:
       deployment: shinken
       http_uri: /user/login
       domain_name: {{ pillar['shinken']['web']['hostnames'][0] }}
-      https: {{ pillar['shinken']['ssl']|default(False) }}
+      https: {{ salt['pillar.get']('shinken:ssl', False) }}
 
 extend:
   nagios-nrpe-server:

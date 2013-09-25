@@ -36,7 +36,7 @@ include:
   - pip
   - postgresql.server
   - python.dev
-{%- if pillar['openerp']['ssl']|default(False) %}
+{%- if salt['pillar.get']('openerp:ssl', False) %}
   - ssl
 {%- endif %}
   - underscore

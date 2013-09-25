@@ -38,7 +38,7 @@ include:
   - postgresql.server.nrpe
   - python.dev.nrpe
   - rsyslog.nrpe
-{% if pillar['djangopypi2']['ssl']|default(False) %}
+{% if salt['pillar.get']('djangopypi2:ssl', False) %}
   - ssl.nrpe
 {% endif %}
 {% if 'graphite_address' in pillar %}
@@ -78,7 +78,7 @@ include:
       deployment: djangopypi2
       domain_name: {{ pillar['djangopypi2']['hostnames'][0] }}
       http_uri: /packages/
-{% if pillar['djangopypi2']['ssl']|default(False) %}
+{% if salt['pillar.get']('djangopypi2:ssl', False) %}
       https: True
       http_result: 301 Moved Permanently
 {% endif %}

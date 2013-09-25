@@ -96,7 +96,7 @@ bigbluebutton_ruby:
       - cmd: bigbluebutton
 {%- endfor %}
 
-{% set encoding = pillar['encoding']|default("en_US.UTF-8") %}
+{% set encoding = pillar['encoding']|default('en_US.UTF-8') %}
 bigbluebutton:
   cmd:
     - run

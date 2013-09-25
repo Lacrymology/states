@@ -29,7 +29,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 
 {#
-{% if pillar['destructive_absent']|default(False) and salt['pillar.get']('sentry:db', False) %}
+{% if salt['pillar.get']('destructive_absent', 'False) and salt['pillar.get']('sentry:db', False') %}
 include:
   - postgresql.server
 

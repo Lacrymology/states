@@ -35,7 +35,7 @@ salt-minion:
     - require:
       - pkg: salt-minion
   pkg:
-{% if pillar['destructive_absent']|default(False) %}
+{% if salt['pillar.get']('destructive_absent', False) %}
     - purged
 {% else %}
     - removed

@@ -51,7 +51,7 @@ proftpd:
     - require:
       - pkg: proftpd
 
-{% if pillar['destructive_absent']|default(False) %}
+{% if salt['pillar.get']('destructive_absent', False) %}
 {% for deployment in salt['pillar.get']('proftpd:deployments', []) %}
 /var/lib/deployments/{{ deployment }}/static/ftp:
   file:

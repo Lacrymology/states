@@ -36,7 +36,7 @@ a SSL frontend in front of Elasticsearch HTTP interface.
 This is why nginx is used if SSL is in pillar.
 -#}
 {#- TODO: Diamond + http://www.elasticsearch.org/guide/reference/modules/jmx/ -#}
-{%- set ssl = pillar['elasticsearch']['ssl']|default(False) %}
+{%- set ssl = salt['pillar.get']('elasticsearch:ssl', False) %}
 include:
   - apt
   - cron
@@ -160,7 +160,7 @@ elasticsearch:
 {% for ip_address in grains['ipv4'] %}
         - {{ ip_address }}/32
 {% endfor %}
-{% for allowed in pillar['elasticsearch']['https_allowed']|default([]) %}
+{% for allowed in salt['pillar.get']('elasticsearch:https_allowed', []) %}
         - {{ allowed }}
 {% endfor %}
 {% endif %}

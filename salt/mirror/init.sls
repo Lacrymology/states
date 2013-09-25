@@ -29,7 +29,7 @@ include:
   - reprepro
   - nginx
   - web
-{% if pillar['salt_ppa_mirror']['ssl']|default(False) %}
+{% if salt['pillar.get']('salt_ppa_mirror:ssl', False) %}
   - ssl
 {% endif %}
 
@@ -121,7 +121,7 @@ extend:
     service:
       - watch:
         - file: /etc/nginx/conf.d/salt_mirror_ppa.conf
-{% if pillar['salt_ppa_mirror']['ssl']|default(False) %}
+{% if salt['pillar.get']('salt_ppa_mirror:ssl', False) %}
         - cmd: /etc/ssl/{{ pillar['salt_ppa_mirror']['ssl'] }}/chained_ca.crt
         - module: /etc/ssl/{{ pillar['salt_ppa_mirror']['ssl'] }}/server.pem
         - file: /etc/ssl/{{ pillar['salt_ppa_mirror']['ssl'] }}/ca.crt

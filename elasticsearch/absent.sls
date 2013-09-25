@@ -46,7 +46,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 elasticsearch:
   pkg:
-{% if pillar['destructive_absent']|default(False) %}
+{% if salt['pillar.get']('destructive_absent', False) %}
     - purged
 {% else %}
     - removed

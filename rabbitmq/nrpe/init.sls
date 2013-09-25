@@ -32,7 +32,7 @@ include:
   - apt.nrpe
   - logrotate.nrpe
 {% if pillar['rabbitmq']['management'] != 'guest' -%}
-  {%- if pillar['rabbitmq']['ssl']|default(False) %}
+  {%- if salt['pillar.get']('rabbitmq:ssl', False) %}
   - ssl.nrpe
   {%- endif %}
   - nginx.nrpe
@@ -53,7 +53,7 @@ include:
       http_port: 15672
       domain_name: 127.0.0.1
 {% if pillar['rabbitmq']['management'] != 'guest' %}
-      https: {{ pillar['rabbitmq']['ssl']|default(False) }}
+      https: {{ salt['pillar.get']('rabbitmq:ssl', False) }}
 {% else %}
       https: False
 {% endif %}

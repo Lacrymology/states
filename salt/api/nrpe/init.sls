@@ -27,7 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
  Nagios NRPE check for Salt-API Server
 -#}
-{%- set ssl = pillar['salt_master']['ssl']|default(False) -%}
+{%- set ssl = salt['pillar.get']('salt_master:ssl', False) -%}
 include:
   - nrpe
   - salt.master.nrpe

@@ -84,7 +84,7 @@ postgresql:
       - cmd: system_locale
       - pkgrepo: postgresql-dev
       - cmd: apt_sources
-{% set encoding = pillar['encoding']|default("en_US.UTF-8") %}
+{% set encoding = pillar['encoding']|default('en_US.UTF-8') %}
     - env:
         LANG: {{ encoding }}
         LC_CTYPE: {{ encoding }}

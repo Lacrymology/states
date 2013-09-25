@@ -42,7 +42,7 @@ include:
     - require:
       - pkg: nagios-nrpe-server
     - context:
-      instances: {{ pillar['openvpn']|default({}) }}
+      instances: {{ salt['pillar.get']('openvpn', {}) }}
 
 extend:
   nagios-nrpe-server:

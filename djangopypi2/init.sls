@@ -38,7 +38,7 @@ include:
   - apt
   - memcache
   - rsyslog
-{% if pillar['djangopypi2']['ssl']|default(False) %}
+{% if salt['pillar.get']('djangopypi2:ssl', False) %}
   - ssl
 {% endif %}
 {% if 'graphite_address' in pillar %}
@@ -275,7 +275,7 @@ extend:
     service:
       - watch:
         - file: /etc/nginx/conf.d/djangopypi2.conf
-{% if pillar['djangopypi2']['ssl']|default(False) %}
+{% if salt['pillar.get']('djangopypi2:ssl', False) %}
         - cmd: /etc/ssl/{{ pillar['djangopypi2']['ssl'] }}/chained_ca.crt
         - module: /etc/ssl/{{ pillar['djangopypi2']['ssl'] }}/server.pem
         - file: /etc/ssl/{{ pillar['djangopypi2']['ssl'] }}/ca.crt

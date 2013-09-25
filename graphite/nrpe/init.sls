@@ -41,7 +41,7 @@ include:
   - statsd.nrpe
   - uwsgi.nrpe
   - virtualenv.nrpe
-{% if pillar['graphite']['web']['ssl']|default(False) %}
+{% if salt['pillar.get']('graphite:web:ssl', False) %}
   - ssl.nrpe
 {% endif %}
 
@@ -76,7 +76,7 @@ include:
       deployment: graphite
       domain_name: {{ pillar['graphite']['web']['hostnames'][0] }}
       http_uri: /account/login
-{% if pillar['graphite']['web']['ssl']|default(False) %}
+{% if salt['pillar.get']('graphite:web:ssl', False) %}
       https: True
       http_result: 301 Moved Permanently
 {% endif %}

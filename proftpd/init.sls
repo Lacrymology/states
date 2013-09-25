@@ -145,7 +145,7 @@ proftpd:
     - require:
       - service: proftpd
 
-{% for deployment in pillar['proftpd']['deployments']|default([]) %}
+{% for deployment in salt['pillar.get']('proftpd:deployments', []) %}
 /var/lib/deployments/{{ deployment }}/static/ftp:
   file:
     - directory

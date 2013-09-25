@@ -48,7 +48,7 @@ include:
   - uwsgi
   - virtualenv
   - web
-{% if pillar['graphite']['web']['ssl']|default(False) %}
+{% if salt['pillar.get']('graphite:web:ssl', False) %}
   - ssl
 {% endif %}
 
@@ -338,7 +338,7 @@ extend:
     service:
       - watch:
         - file: /etc/nginx/conf.d/graphite.conf
-{% if pillar['graphite']['web']['ssl']|default(False) %}
+{% if salt['pillar.get']('graphite:web:ssl', False) %}
         - cmd: /etc/ssl/{{ pillar['graphite']['web']['ssl'] }}/chained_ca.crt
         - module: /etc/ssl/{{ pillar['graphite']['web']['ssl'] }}/server.pem
         - file: /etc/ssl/{{ pillar['graphite']['web']['ssl'] }}/ca.crt

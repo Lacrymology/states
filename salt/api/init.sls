@@ -34,7 +34,7 @@ include:
   - nginx
   - pip
   - rsyslog
-{% if pillar['salt_master']['ssl']|default(False) %}
+{% if salt['pillar.get']('salt_master:ssl', False) %}
   - ssl
 {% endif %}
 
@@ -203,7 +203,7 @@ extend:
     service:
       - watch:
         - file: salt-ui
-{% if pillar['salt_master']['ssl']|default(False) %}
+{% if salt['pillar.get']('salt_master:ssl', False) %}
         - cmd: /etc/ssl/{{ pillar['salt_master']['ssl'] }}/chained_ca.crt
         - module: /etc/ssl/{{ pillar['salt_master']['ssl'] }}/server.pem
         - file: /etc/ssl/{{ pillar['salt_master']['ssl'] }}/ca.crt

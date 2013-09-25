@@ -83,7 +83,7 @@ openssh-client:
     - latest
     - require:
       - cmd: apt_sources
-{%- if pillar['deployment_key']|default(False) %}
+{%- if salt['pillar.get']('deployment_key', False) %}
       - file: {{ root_home }}/.ssh/id_{{ pillar['deployment_key']['type'] }}
 
 root_ssh_private_key:

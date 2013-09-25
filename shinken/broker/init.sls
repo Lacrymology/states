@@ -35,7 +35,7 @@ include:
   - nginx
   - rsyslog
   - web
-{% if pillar['shinken']['ssl']|default(False) %}
+{% if salt['pillar.get']('shinken:ssl', False) %}
   - ssl
 {% endif %}
 
@@ -94,7 +94,7 @@ extend:
     service:
       - watch:
         - file: /etc/nginx/conf.d/shinken-web.conf
-{% if pillar['shinken']['ssl']|default(False) %}
+{% if salt['pillar.get']('shinken:ssl', False) %}
         - cmd: /etc/ssl/{{ pillar['shinken']['ssl'] }}/chained_ca.crt
         - module: /etc/ssl/{{ pillar['shinken']['ssl'] }}/server.pem
         - file: /etc/ssl/{{ pillar['shinken']['ssl'] }}/ca.crt

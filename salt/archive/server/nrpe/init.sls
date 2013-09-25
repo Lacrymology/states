@@ -33,7 +33,7 @@ include:
   - nrpe
   - rsync.nrpe
   - ssh.server.nrpe
-{% if pillar['salt_archive']['web']['ssl']|default(False) %}
+{% if salt['pillar.get']('salt_archive:web:ssl', False) %}
   - ssl.nrpe
 {% endif %}
 
@@ -51,7 +51,7 @@ include:
       deployment: salt_archive
       domain_name: {{ pillar['salt_archive']['web']['hostnames'][0] }}
       http_uri: /
-{% if pillar['salt_archive']['web']['ssl']|default(False) %}
+{% if salt['pillar.get']('salt_archive:web:ssl', False) %}
       https: True
       http_result: 301 Moved Permanently
 {% endif %}

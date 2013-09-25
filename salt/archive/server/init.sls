@@ -29,7 +29,7 @@ Salt Archive Server HTTP/HTTPS
 ==============================
 -#}
 
-{%- set ssl = pillar['salt_archive']['web']['ssl']|default(False) -%}
+{%- set ssl = salt['pillar.get']('salt_archive:web:ssl', False) -%}
 
 include:
   - cron

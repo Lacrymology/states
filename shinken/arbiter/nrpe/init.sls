@@ -32,7 +32,7 @@ include:
   - nrpe
   - pip.nrpe
   - python.dev.nrpe
-{% if pillar['shinken']['ssl']|default(False) %}
+{% if salt['pillar.get']('shinken:ssl', False) %}
   - ssl.nrpe
 {% endif %}
   - ssmtp.nrpe

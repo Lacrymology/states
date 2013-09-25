@@ -27,7 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
  Undo SSL state
 -#}
-{% for name in pillar['ssl']|default([]) %}
+{% for name in salt['pillar.get']('ssl', []) %}
 /etc/ssl/{{ name }}:
   file:
     - absent

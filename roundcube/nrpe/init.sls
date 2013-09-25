@@ -36,7 +36,7 @@ include:
   - rsyslog.nrpe
   - postgresql.nrpe
   - postgresql.server.nrpe
-{% if pillar['roundcube']['ssl']|default(False) %}
+{% if salt['pillar.get']('roundcube:ssl', False) %}
   - ssl.nrpe
 {% endif %}
 
@@ -71,9 +71,9 @@ include:
       deployment: roundcube
       domain_name: {{ pillar['roundcube']['hostnames'][0] }}
       http_uri: /
-{%- if pillar['roundcube']['ssl']|default(False) %}
+{%- if salt['pillar.get']('roundcube:ssl', False) %}
       https: True
-    {%- if pillar['roundcube']['ssl_redirect']|default(False) %}
+    {%- if salt['pillar.get']('roundcube:ssl_redirect', False) %}
       http_result: 301 Moved Permanently
     {%- endif -%}
 {%- endif %}

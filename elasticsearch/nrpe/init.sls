@@ -27,7 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
  Nagios NRPE checks for elasticsearch
 -#}
-{% set ssl = pillar['elasticsearch']['ssl']|default(False) %}
+{% set ssl = salt['pillar.get']('elasticsearch:ssl', False) %}
 include:
   - nrpe
   - apt.nrpe

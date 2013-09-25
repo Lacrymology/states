@@ -35,7 +35,7 @@ include:
     - absent
 {% endfor %}
 
-{% if pillar['destructive_absent']|default(False) %}
+{% if salt['pillar.get']('destructive_absent', False) %}
 /var/lib/graphite:
   file:
     - absent

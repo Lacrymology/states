@@ -45,7 +45,7 @@ include:
   - apt
   - memcache
   - rsyslog
-{% if pillar['sentry']['ssl']|default(False) %}
+{% if salt['pillar.get']('sentry:ssl', False) %}
   - ssl
 {% endif %}
 {% if 'graphite_address' in pillar %}
@@ -212,7 +212,7 @@ extend:
     service:
       - watch:
         - file: /etc/nginx/conf.d/sentry.conf
-{% if pillar['sentry']['ssl']|default(False) %}
+{% if salt['pillar.get']('sentry:ssl', False) %}
         - cmd: /etc/ssl/{{ pillar['sentry']['ssl'] }}/chained_ca.crt
         - module: /etc/ssl/{{ pillar['sentry']['ssl'] }}/server.pem
         - file: /etc/ssl/{{ pillar['sentry']['ssl'] }}/ca.crt

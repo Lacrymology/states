@@ -34,7 +34,7 @@ include:
   - nginx.nrpe
   - nrpe
   - ruby.nrpe
-{% if pillar['graylog2']['ssl']|default(False) %}
+{% if salt['pillar.get']('graylog2:ssl', False) %}
   - ssl.nrpe
 {% endif %}
   - uwsgi.nrpe
@@ -70,7 +70,7 @@ include:
       deployment: graylog2
       domain_name: {{ pillar['graylog2']['hostnames'][0] }}
       http_uri: /login
-{% if pillar['graylog2']['ssl']|default(False) %}
+{% if salt['pillar.get']('graylog2:ssl', False) %}
       https: True
       http_result: 301 Moved Permanently
 {% endif %}

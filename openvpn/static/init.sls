@@ -65,7 +65,7 @@ To generate a secret key::
 include:
   - openvpn
 
-{%- for tunnel in pillar['openvpn']|default({}) -%}
+{%- for tunnel in salt['pillar.get']('openvpn', {}) -%}
     {%- set config_dir = '/etc/openvpn/' + tunnel -%}
     {#- only 2 remotes are supported -#}
     {%- if pillar['openvpn'][tunnel]['peers']|length == 2 %}

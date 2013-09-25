@@ -257,7 +257,7 @@ carbon-relay:
       - user: graphite
       - file: /etc/graphite
 
-{%- if 'whitelist' in pillar['graphite']['carbon']|default(False) %}
+{%- if 'whitelist' in salt['pillar.get']('graphite:carbon', False) %}
 /etc/graphite/whitelist.conf:
   file:
     - managed

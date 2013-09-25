@@ -72,10 +72,11 @@ include:
     - require:
       - pkg: nagios-nrpe-server
     - context:
-      deployment: {{ salt['pillar.get']('discourse:database:name') }}
-      {#- name and user for infra-476 #}
+      deployment: {{ salt['pillar.get']('discourse:database:name', 'discourse') }}
+      {#- name and user for infra-476
       name: {{ salt['pillar.get']('discourse:database:name') }}
       username: {{ salt['pillar.get']('discourse:database:username') }}
+      #}
       password: {{ salt['password.pillar']('discourse:database:password', 10) }}
     - watch_in:
       - service: nagios-nrpe-server

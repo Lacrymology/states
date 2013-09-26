@@ -38,6 +38,8 @@ include:
     - group: root
     - require:
       - pkg: sudo
+    - require_in:
+      - pkg: nagios-nrpe-server
 
 /usr/local/bin/uwsgi-nagios.sh:
   file:

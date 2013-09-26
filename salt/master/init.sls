@@ -48,7 +48,7 @@ salt-master-requirements:
     - require:
       - file: /srv/salt
 
-{%- set version = salt['pillar.get']('salt:version', '0.15.3') -%}
+{%- set version = '0.16.4' -%}
 {%- set master_path = '{0}/pool/main/s/salt/salt-master_{0}-1{1}_all.deb'.format(version, grains['lsb_distrib_codename']) %}
 salt-master:
   file:

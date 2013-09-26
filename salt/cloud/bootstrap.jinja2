@@ -16,9 +16,9 @@ chmod 400 /etc/salt/pki/minion/minion.pem
 apt-get install -y python-software-properties
 apt-add-repository -y ppa:saltstack/salt
     {%- if 'files_archive' in pillar %}
-echo "deb {{ pillar['files_archive'].rstrip('/') }}/mirror/salt/0.15.3/ `lsb_release -c -s` main" > /etc/apt/sources.list.d/saltstack-salt-`lsb_release -c -s`.list
+echo "deb {{ pillar['files_archive'].rstrip('/') }}/mirror/salt/0.16.4/ `lsb_release -c -s` main" > /etc/apt/sources.list.d/saltstack-salt-`lsb_release -c -s`.list
     {%- else %}
-echo "deb http://saltinwound.org/ubuntu/0.15.3/ `lsb_release -c -s` main" > /etc/apt/sources.list.d/saltstack-salt-`lsb_release -c -s`.list
+echo "deb http://saltinwound.org/ubuntu/0.16.4/ `lsb_release -c -s` main" > /etc/apt/sources.list.d/saltstack-salt-`lsb_release -c -s`.list
     {%- endif  %}
 apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0E27C0A6
 apt-get update

@@ -23,7 +23,7 @@ export HOME=`cat /etc/passwd | grep ^root\: | cut -d ':' -f 6`
 # salt/cloud/bootstrap.sh
 apt-get install -y python-software-properties
 apt-add-repository -y ppa:saltstack/salt
-echo "deb http://saltinwound.org/ubuntu/0.15.3/ `lsb_distrib_release -c -s` main" > /etc/apt/sources.list.d/saltstack-salt-`lsb_distrib_release -c -s`.list
+echo "deb http://saltinwound.org/ubuntu/0.16.4/ `lsb_distrib_release -c -s` main" > /etc/apt/sources.list.d/saltstack-salt-`lsb_distrib_release -c -s`.list
 apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0E27C0A6
 apt-get update
 apt-get install -y --force-yes salt-minion

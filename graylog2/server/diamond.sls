@@ -3,7 +3,7 @@
 #}
 include:
   - diamond
-  - elasticsearch.diamond
+{#  - elasticsearch.diamond #}
   - mongodb.diamond
 
 graylog2_server_diamond_resources:

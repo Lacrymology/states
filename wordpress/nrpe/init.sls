@@ -55,3 +55,17 @@ include:
     - watch_in:
       - service: nagios-nrpe-server
 
+/etc/nagios/nrpe.d/wordpress-mysql.cfg:
+  file:
+    - managed
+    - template: jinja
+    - user: nagios
+    - group: nagios
+    - mode: 440
+    - source: salt://mariadb/nrpe.jinja2
+    - require:
+      - pkg: nagios-nrpe-server
+    - context:
+      deployment: wordpress
+      username: wordpress
+      password: {{ salt['password.pillar']('wordpress:password', 10) }}

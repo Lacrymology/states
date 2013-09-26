@@ -9,3 +9,6 @@
   file:
     - absent
 
+/etc/nagios/nrpe.d/wordpress-mysql.cfg:
+  file:
+    - absent

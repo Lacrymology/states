@@ -15,7 +15,7 @@ Optional Pillar
 -#}
 include:
   - nginx
-  - apt
+  - php.dev
   - local
   - postgresql.server
   - uwsgi.php
@@ -28,7 +28,7 @@ php5-pgsql:
   pkg:
     - installed
     - require:
-      - cmd: apt_sources
+      - pkg: php-dev
 
 roundcube:
   archive:

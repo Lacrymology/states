@@ -64,14 +64,12 @@ salt-api-requirements:
       - file: salt-api-requirements
     - require:
       - module: pip
-{%- set version = salt['pillar.get']('salt:version', '0.15.3') -%}
-{%- set api_version = salt['pillar.get']('salt:api:version', '0.8.1') -%}
-{%- set api_path = '{0}/pool/main/s/salt-api/salt-api_{1}_all.deb'.format(version, api_version) %}
 
 salt-api:
   pkg:
     - installed
     - sources:
+{%- set api_path = '0.16.4/pool/main/s/salt-api/salt-api_0.8.2_all.deb' -%}
 {%- if 'files_archive' in pillar %}
       - salt-api: {{ pillar['files_archive']|replace('file://', '') }}/mirror/salt/{{ api_path }}
 {%- else %}

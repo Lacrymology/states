@@ -9,12 +9,10 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def _sanitize_kwargs(kwargs):
+def _get_default_kwargs(kwargs):
     defaults = {'user': 'www-data', 'group': 'www-data', 'mode': '440'}
-    for key in defaults:
-        if key not in kwargs:
-            kwargs[key] = defaults[key]
-
+    defaults.update(kwargs)
+    return defaults
 
 def available(name, enabled=False, **kwargs):
     '''
@@ -40,7 +38,7 @@ def available(name, enabled=False, **kwargs):
               - file: /etc/config.conf
     '''
     ret = {'name': name, 'result': None, 'comment': '', 'changes': {}}
-    _sanitize_kwargs(kwargs)
+    kwargs = _get_default_kwargs(kwargs)
     # IMPLEMENT:
     # this is a wrapper around file.managed and module.wait(file.touch)
     #

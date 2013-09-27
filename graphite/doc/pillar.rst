@@ -1,7 +1,7 @@
 Pillar
 ======
 
-Mandatory 
+Mandatory
 ---------
 
 graphite:
@@ -23,6 +23,12 @@ graphite:
       tls: True
     sentry: http://XXX:YYY@sentry.example.com/0
     workers: 2
+  carbon:
+    instances: 2
+  retentions:
+    default_1min_for_1_month:
+      pattern: .*
+      retentions: 60s:30d
 
 graphite:web:hostnames
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -91,11 +97,11 @@ graphite:web:sentry
 DSN of sentry server.
 
 graphite:web:workers
-~~~~~~~~~~~~~~~~~~~~ 
+~~~~~~~~~~~~~~~~~~~~
 
 number of uWSGI worker that will run the webapp.
 
-Optional 
+Optional
 --------
 
 graphite:
@@ -119,7 +125,7 @@ If True, graphite run with extra logging.
 graphite:web:render_noauth
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-if set to True, the rendered graphics can be directly GET by anyone 
+if set to True, the rendered graphics can be directly GET by anyone
 without user authentication.
 
 graphite:web:ssl
@@ -140,7 +146,7 @@ how long in seconds until a uWSGI worker is killed while running a single reques
 graphite:web:cheaper
 ~~~~~~~~~~~~~~~~~~~~
 
-number of process in uWSGI cheaper mode. Default no cheaper mode. 
+number of process in uWSGI cheaper mode. Default no cheaper mode.
 See: http://uwsgi-docs.readthedocs.org/en/latest/Cheaper.html
 
 graphite:web:idle
@@ -152,3 +158,14 @@ shinken_pollers
 ~~~~~~~~~~~~~~~
 
 IP address of monitoring poller that check this server.
+
+graphite:carbon
+~~~~~~~~~~~~~~~
+
+consult carbon/doc/pillar.rst for more information.
+
+destructive_absent
+~~~~~~~~~~~~~~~~~~
+
+Remove graphite data when run absent.
+

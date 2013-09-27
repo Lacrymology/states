@@ -1,7 +1,7 @@
 Pillar
 ======
 
-Mandatory 
+Mandatory
 ---------
 
 Optional
@@ -16,9 +16,14 @@ rsync:
   module_name2:
     ...
 
-Attributes and values is mapping to rsync daemon's attributes and values
+Attributes and values is mapped to rsync daemon's attributes and values. If
+attribute contains space, wrap quotes about it. All attributes and values
+are available here http://rsync.samba.org/documentation.html
 
-Example:
+Example
+-------
+
+::
 
   rsync:
     'max connections': 4

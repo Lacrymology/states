@@ -23,7 +23,7 @@ include:
     - context:
       critical: {{ critical }}
     - require:
-      - file: /etc/rsyslog.d
+      - pkg: rsyslog
 
 extend:
   rsyslog:

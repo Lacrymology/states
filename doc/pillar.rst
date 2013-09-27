@@ -14,7 +14,8 @@ Warning message to not modify file.
 files_archive
 ~~~~~~~~~~~~~
 
-INSERT DESCRIPTION
+Path to mirror/archive server where download most files (archives, packages,
+pip) to apply states.
 
 graylog2_address
 ~~~~~~~~~~~~~~~~
@@ -25,5 +26,3 @@ graphite_address
 ~~~~~~~~~~~~~~~~
 
 IP/Hostname of carbon/graphite server.
-NOTE: don't undocument this in diamond and pystatsd. as those 2 states are
-only used for graphite.

@@ -2,23 +2,16 @@
   file:
     - absent
 
-{% set dovecot_non_core = ('imapd', 'pop3d', 'ldap') %}
-{% for pkg in dovecot_non_core %}
-dovecot-{{ pkg }}:
+dovecot:
   pkg:
     - purged
-{% endfor %}
-
-dovecot-core:
-  pkg:
-    - purged
-    - require:
-{% for pkg in dovecot_non_core %}
-      - pkg: dovecot-{{ pkg }}
-{% endfor %}
-
-/etc/dovecot/:
+    - pkgs:
+      - dovecot-imapd
+      - dovecot-pop3d
+      - dovecot-ldap
+      - dovecot-core
   file:
     - absent
+    - name: /etc/dovecot
     - require:
-      - pkg: dovecot-core
+      - pkg: dovecot

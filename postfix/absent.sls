@@ -1,10 +1,9 @@
 postfix:
   pkg:
     - purged
-
-postfix-ldap:
-  pkg:
-    - purged
+    - pkgs:
+      - postfix
+      - postfix-ldap
 
 /var/mail/vhosts:
   file:

@@ -22,13 +22,6 @@ rsyslog:
       - pkg: rsyslog
       - file: rsyslog
 
-remove_klogd_if_exist:
-  pkg:
-    - purged
-    - name: klogd
-    - require:
-      - service: gsyslogd
-
 gsyslogd:
   service:
     - dead
@@ -39,7 +32,9 @@ gsyslogd:
       - service: gsyslogd
   pkg:
     - purged
-    - name: syslogd
+    - pkgs:
+      - klogd
+      - syslogd
     - require:
       - service: gsyslogd
 

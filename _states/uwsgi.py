@@ -59,6 +59,53 @@ def available(name, enabled=False, **kwargs):
     # to leave all -require arguments passed to file.managed name=$filename.ini
     # state
 
+    state = [
+        {'file': [
+            'managed',
+            {'template': 'jinja'},
+            {'user': 'www-data'},
+            {'group': 'www-data'},
+            {'mode': 440},
+            {'source': 'salt://graphite/uwsgi.jinja2'},
+            {'require': [
+                {'module': 'graphite_initial_fixture'},
+                {'service': 'uwsgi_emperor'},
+                {'file': 'graphite_logdir'},
+                {'module': 'graphite_settings'},
+                {'file': 'graphite_graph_templates'},
+                {'file': '/usr/local/graphite/bin/build-index.sh'},
+                {'user': 'web'},
+                {'file': 'graphite-urls-patch'},
+                {'service': 'rsyslog'},
+                {'module': 'graphite-web'},
+                {'pip': 'graphite-web'},
+                {'service': 'memcached'},
+                ]},
+            ],
+        },
+        {'module': [
+            'wait',
+            {'name': 'file.touch'},
+            {'require': [
+                {'file': '/etc/uwsgi/graphite.ini'},
+                {'service': 'memcached'},
+                ]
+            },
+            {'m_name': '/etc/uwsgi/graphite.ini'},
+            {'watch': [
+                {'module': 'graphite_settings'},
+                {'file': 'graphite_wsgi'},
+                {'file': 'graphite_graph_templates'},
+                {'module': 'graphite-web'},
+                {'cmd': 'graphite-web'},
+                {'file': 'graphite-urls-patch'},
+                {'pip': 'graphite-web'},
+                {'module': 'graphite_admin_user'},
+                ]},
+            ],
+         },
+    ]
+
     if enabled:
         if name not in __salt__['uwsgi.list_enabled']():
             if __opts__['test']:

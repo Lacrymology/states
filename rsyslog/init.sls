@@ -6,7 +6,6 @@ rsyslog:
     - installed
     - require:
       - cmd: apt_sources
-      - pkg: remove_klogd_if_exist
       - pkg: gsyslogd
   file:
     - managed

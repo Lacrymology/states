@@ -59,27 +59,29 @@ def available(name, enabled=False, **kwargs):
     # to leave all -require arguments passed to file.managed name=$filename.ini
     # state
 
+    filename = '/etc/uwsgi/apps-available/{0}.ini'.format(name)
+
     state = [
         {'file': [
             'managed',
-            {'name': '/etc/uwsgi/apps-available/{0}.ini'.format(name)},
+            {'name': filename},
             {'template': 'jinja'},
             {'user': 'www-data'},
             {'group': 'www-data'},
             {'mode': 440},
-            {'source': 'salt://graphite/uwsgi.jinja2'},
+            {'source': 'salt://{0}/uwsgi.jinja2'.format(name)},
             {'require': [
-                {'module': 'graphite_initial_fixture'},
+                {'module': '{0}_initial_fixture'.format(name)},
                 {'service': 'uwsgi_emperor'},
-                {'file': 'graphite_logdir'},
-                {'module': 'graphite_settings'},
+                {'file': '{0}_logdir'.format(name)},
+                {'module': '{0}_settings'.format(name)},
                 {'file': 'graphite_graph_templates'},
-                {'file': '/usr/local/graphite/bin/build-index.sh'},
+                {'file': '/usr/local/{0}/bin/build-index.sh'.format(name)},
                 {'user': 'web'},
-                {'file': 'graphite-urls-patch'},
+                {'file': '{0}-urls-patch'.format(name)},
                 {'service': 'rsyslog'},
-                {'module': 'graphite-web'},
-                {'pip': 'graphite-web'},
+                {'module': '{0}-web'.format(name)},
+                {'pip': '{0}-web'.format(name)},
                 {'service': 'memcached'},
                 ]},
             ],
@@ -88,14 +90,14 @@ def available(name, enabled=False, **kwargs):
             'wait',
             {'name': 'file.touch'},
             {'require': [
-                {'file': '/etc/uwsgi/graphite.ini'},
+                {'file': filename},
                 {'service': 'memcached'},
                 ]
             },
-            {'m_name': '/etc/uwsgi/graphite.ini'},
+            {'m_name': filename},
             {'watch': [
-                {'module': 'graphite_settings'},
-                {'file': 'graphite_wsgi'},
+                {'module': '{0}_settings'.format(name)},
+                {'file': '{0}_wsgi'.format(name)},
                 {'file': 'graphite_graph_templates'},
                 {'module': 'graphite-web'},
                 {'cmd': 'graphite-web'},

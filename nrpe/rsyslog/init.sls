@@ -15,7 +15,7 @@ include:
     - group: root
     - mode: 440
     - require:
-      - file: /etc/rsyslog.d
+      - pkg: rsyslog
 
 extend:
   rsyslog:

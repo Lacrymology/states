@@ -21,7 +21,6 @@ rsyslog:
     - watch:
       - pkg: rsyslog
       - file: rsyslog
-      - file: /etc/rsyslog.d
 
 remove_klogd_if_exist:
   pkg:
@@ -52,12 +51,18 @@ gsyslogd:
       - file: gsyslogd
 {%- endfor %}
 
-/etc/rsyslog.d:
+/etc/rsyslog.d/50-default.conf:
   file:
-    - directory
-    - clean: True
-    - user: root
-    - group: root
-    - mode: 555
+    - absent
     - require:
       - pkg: rsyslog
+    - watch_in:
+      - service: rsyslog
+
+/etc/rsyslog.d/20-ufw.conf:
+  file:
+    - absent
+    - require:
+      - pkg: rsyslog
+    - watch_in:
+      - service: rsyslog

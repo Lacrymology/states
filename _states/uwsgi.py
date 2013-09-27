@@ -62,6 +62,7 @@ def available(name, enabled=False, **kwargs):
     state = [
         {'file': [
             'managed',
+            {'name': '/etc/uwsgi/apps-available/{0}.ini'.format(name)},
             {'template': 'jinja'},
             {'user': 'www-data'},
             {'group': 'www-data'},

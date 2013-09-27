@@ -1,0 +1,10 @@
+redis:port
+redis:timeout
+redis:keepalive
+redis:loglevel
+redis:number_of_dbs
+redis:save
+redis:maxclients
+redis:maxmemory
+redis:policy
+redis:samples

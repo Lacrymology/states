@@ -1,13 +1,20 @@
 Pillar
 ======
 
-Mandatory 
+Mandatory
 ---------
 
-message_do_not_modify: Warning message to not modify file.
-graphite_address: IP/Hostname of carbon/graphite server.
+message_do_not_modify
+~~~~~~~~~~~~~~~~~~~~~
 
-Optional 
+Warning message to not modify file.
+
+graphite_address
+~~~~~~~~~~~~~~~~
+
+IP/Hostname of carbon/graphite server.
+
+Optional
 --------
 
 diamond:
@@ -27,7 +34,7 @@ diamond:interfaces
 list of network interface check for I/O stats.
 default show in example.
 
-diamond:ping 
+diamond:ping
 ~~~~~~~~~~~~
 
 list of IP/hostname ping to monitor latency and availability.

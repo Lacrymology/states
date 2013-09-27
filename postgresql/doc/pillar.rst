@@ -1,0 +1,8 @@
+lsb_codename
+postgresql:replication:username
+replication_agent
+postgresql:replication:standby
+replication
+postgresql:replication:password
+master
+replication_agent

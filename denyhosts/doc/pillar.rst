@@ -1,10 +1,10 @@
 Pillar
 ======
 
-Mandatory 
+Mandatory
 ---------
 
-Optional 
+Optional
 --------
 
 denyhosts:
@@ -34,7 +34,7 @@ shinken_pollers
 
 IP address of monitoring poller that check this server.
 
-denyhosts:purge 
+denyhosts:purge
 ~~~~~~~~~~~~~~~
 
 each of these pillar are documented in

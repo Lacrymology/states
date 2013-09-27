@@ -1,0 +1,13 @@
+destructive_absent
+sentry:db:name
+sentry:db:username
+sentry:db:password
+sentry:db:host
+sentry:django_key
+memcache_servers
+sentry:ssl
+hostnames
+workers
+cheapers
+timeout
+idle

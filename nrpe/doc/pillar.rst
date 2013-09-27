@@ -1,0 +1,2 @@
+shinken_pollers
+debug

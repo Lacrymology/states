@@ -1,0 +1,20 @@
+max_docs
+max_indices
+shards
+replicas
+recent_index_ttl_minutes
+processbuffer_processors
+outputbuffer_processors
+processor_wait_strategy
+ring_size
+amqp
+rabbitmq
+	user
+	password
+	vhost
+hostnames
+heap_size
+graylog2:ssl
+ssl_redirect
+workers
+cheapres

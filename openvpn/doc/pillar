@@ -1,0 +1,10 @@
+openvpn
+	tunnel
+		config
+		peers
+			grains
+				id
+					port
+						vpn_address
+			address
+		secret

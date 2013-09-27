@@ -1,7 +1,7 @@
 Pillar
 ======
 
-Mandatory 
+Mandatory
 ---------
 
 git-server:
@@ -13,7 +13,7 @@ git-server:
 git-server:keys
 ~~~~~~~~~~~~~~~
 
-dict of all users that can access the git repository. Each key is a dict of the SSH 
+dict of all users that can access the git repository. Each key is a dict of the SSH
 public key and the value is the key format.
 
 git-server:repositories
@@ -25,7 +25,13 @@ On first run, repo are created as "bare" and need to be pushed into.
 Optional
 --------
 
-destructive_absent: False
+destructive_absent
+~~~~~~~~~~~~~~~~~~
 
-destructive_absent: If True (not default), git repositories will be wiped if
+False
+
+destructive_absent
+~~~~~~~~~~~~~~~~~~
+
+If True (not default), git repositories will be wiped if
 git.server.absent state is executed.

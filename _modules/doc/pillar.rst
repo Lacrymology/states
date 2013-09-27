@@ -1,0 +1,8 @@
+roles
+monitor
+ip_addrs
+network_interface
+monitoring_data
+branch
+monitoring:update
+pillar_path

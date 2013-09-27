@@ -1,7 +1,7 @@
 Pillar
 ======
 
-Mandatory 
+Mandatory
 ---------
 
 apt:
@@ -10,11 +10,16 @@ apt:
     deb http://security.ubuntu.com/ubuntu {{ grains['oscodename'] }}-security main restricted universe multiverse
     deb http://archive.canonical.com/ubuntu {{ grains['oscodename'] }} partner
 
-Optional 
+Optional
 --------
 
-proxy_server: False
+apt:proxy_server
 ~~~~~~~~~~~~
 
-proxy_server: If True, the specific HTTP proxy server (without authentication) is used to download .deb and reach APT server. Default: False.
+Default: False
+
+proxy_server
 ~~~~~~~~~~~~
+
+If True, the specific HTTP proxy server (without authentication) is used to download .deb and reach APT server.
+Default: False

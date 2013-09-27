@@ -1,6 +1,7 @@
 Pillar
 ======
-Mandatory 
+
+Mandatory
 ---------
 
 wordpress:

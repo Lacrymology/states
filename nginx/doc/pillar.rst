@@ -1,0 +1,5 @@
+nginx:worker_processes
+nginx:log_format
+nginx:redirect_numeric_ip
+hostnames
+ssl

@@ -1,0 +1,12 @@
+djangopypi2:allow_version_overwrite
+djangopypi2:db:name
+djangopypi2:db:username
+djangopypi2:db:password
+djangopypi2:db:host
+djangopypi2:django_key
+djangopypi2:email
+sentry
+hostnames
+djangopypi2:ssl
+worker
+djangopypi2:cheaper

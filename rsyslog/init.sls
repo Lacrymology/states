@@ -13,6 +13,8 @@ rsyslog:
     - name: /etc/rsyslog.conf
     - template: jinja
     - source: salt://rsyslog/config.jinja2
+    - require:
+      - pkg: rsyslog
   service:
     - running
     - order: 50

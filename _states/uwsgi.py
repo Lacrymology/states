@@ -98,20 +98,18 @@ def absent(name):
         disabled = __salt__['uwsgi.disable'](name)
         if disabled['result']:
             comment.append('[disabled]')
-            ret['changes']['disabled'] = True
+            ret['changes']['disabled'] = {'new': True, 'old': False}
             ret['result'] = True
         else:
-            ret['changes']['disabled'] = False
             comment.append('[not disabled: ({0})]'.format(disabled['comment']))
 
         removed = __salt__['uwsgi.remove'](name)
         if removed['result']:
             comment.append('[removed]')
-            ret['changes']['removed'] = True
+            ret['changes']['removed'] = {'old': False, 'new': True}
             ret['result'] = True
         else:
             comment.append('[not removed: ({0})]'.format(removed['comment']))
-            ret['changes']['removed'] = False
 
     ret['comment'] = " ".join(comment)
     return ret
@@ -147,7 +145,7 @@ def enabled(name):
         ret['result'] = True
         ret['comment'] = "{0} was enabled ({1})".format(name,
                                                         was_enabled['comment'])
-        ret['changes'][name] = "Enabled"
+        ret['changes'][name] = {'new': 'Enabled', 'old': 'Disabled'}
     else:
         ret['comment'] = "{0} was not enabled ({1})".format(
             name, was_enabled['comment'])
@@ -173,7 +171,7 @@ def disabled(name):
     disabled = __salt__['uwsgi.disable'](name)
     if disabled['result']:
         ret['comment'] = "{0} was disabled".format(name)
-        ret['changes'][name] = 'Disabled'
+        ret['changes'][name] = {'new': 'Disabled', 'old': 'Enabled'}
         ret['result'] = True
     else:
         ret['comment'] = "{0} was not disabled: ({1})".format(

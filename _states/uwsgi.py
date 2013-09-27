@@ -10,7 +10,12 @@ logger = logging.getLogger(__name__)
 
 
 def _get_default_kwargs(kwargs):
-    defaults = {'user': 'www-data', 'group': 'www-data', 'mode': '440'}
+    defaults = {'user': __salt__['pillar.get']('uwsgi:user',
+                               'www-data'),
+                'group': __salt__['pillar.get']('uwsgi:group',
+                               'www-data'),
+                'mode': __salt__['pillar.get']('uwsgi:mode',
+                               '440')}
     defaults.update(kwargs)
     return defaults
 

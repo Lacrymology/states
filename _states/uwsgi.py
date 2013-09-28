@@ -68,49 +68,48 @@ def available(name, enabled=False, **kwargs):
         {'file': [
             'managed',
             {'name': filename},
-            {'template': 'jinja'},
-            {'user': 'www-data'},
-            {'group': 'www-data'},
-            {'mode': 440},
-            {'source': 'salt://{0}/uwsgi.jinja2'.format(name)},
-            {'require': [
-                {'module': '{0}_initial_fixture'.format(name)},
-                {'service': 'uwsgi_emperor'},
-                {'file': '{0}_logdir'.format(name)},
-                {'module': '{0}_settings'.format(name)},
-                {'file': 'graphite_graph_templates'},
-                {'file': '/usr/local/{0}/bin/build-index.sh'.format(name)},
-                {'user': 'web'},
-                {'file': '{0}-urls-patch'.format(name)},
-                {'service': 'rsyslog'},
-                {'module': '{0}-web'.format(name)},
-                {'pip': '{0}-web'.format(name)},
-                {'service': 'memcached'},
-                ]},
-            ],
-        },
-        {'module': [
-            'wait',
-            {'name': 'file.touch'},
-            {'require': [
-                {'file': filename},
-                {'service': 'memcached'},
-                ]
-            },
-            {'m_name': filename},
-            {'watch': [
-                {'module': '{0}_settings'.format(name)},
-                {'file': '{0}_wsgi'.format(name)},
-                {'file': 'graphite_graph_templates'},
-                {'module': 'graphite-web'},
-                {'cmd': 'graphite-web'},
-                {'file': 'graphite-urls-patch'},
-                {'pip': 'graphite-web'},
-                {'module': 'graphite_admin_user'},
-                ]},
-            ],
-         },
-    ]
+            ]
+        }]
+    state['file'].extend([{key: value} for key, value in kwargs.items()])
+
+    #         {'require': [
+    #             {'module': '{0}_initial_fixture'.format(name)},
+    #             {'service': 'uwsgi_emperor'},
+    #             {'file': '{0}_logdir'.format(name)},
+    #             {'module': '{0}_settings'.format(name)},
+    #             {'file': 'graphite_graph_templates'},
+    #             {'file': '/usr/local/{0}/bin/build-index.sh'.format(name)},
+    #             {'user': 'web'},
+    #             {'file': '{0}-urls-patch'.format(name)},
+    #             {'service': 'rsyslog'},
+    #             {'module': '{0}-web'.format(name)},
+    #             {'pip': '{0}-web'.format(name)},
+    #             {'service': 'memcached'},
+    #             ]},
+    #         ],
+    #     },
+    #     {'module': [
+    #         'wait',
+    #         {'name': 'file.touch'},
+    #         {'require': [
+    #             {'file': filename},
+    #             {'service': 'memcached'},
+    #             ]
+    #         },
+    #         {'m_name': filename},
+    #         {'watch': [
+    #             {'module': '{0}_settings'.format(name)},
+    #             {'file': '{0}_wsgi'.format(name)},
+    #             {'file': 'graphite_graph_templates'},
+    #             {'module': 'graphite-web'},
+    #             {'cmd': 'graphite-web'},
+    #             {'file': 'graphite-urls-patch'},
+    #             {'pip': 'graphite-web'},
+    #             {'module': 'graphite_admin_user'},
+    #             ]},
+    #         ],
+    #      },
+    # ]
 
     if enabled:
         if name not in __salt__['uwsgi.list_enabled']():

@@ -63,7 +63,7 @@ def available(name, enabled=False, **kwargs):
     # state
 
     filename = '/etc/uwsgi/apps-available/{0}.ini'.format(name)
-
+    watch = kwargs.pop('watch')
     state = [
         {'file': [
             'managed',
@@ -71,6 +71,15 @@ def available(name, enabled=False, **kwargs):
             ]
         }]
     state['file'].extend([{key: value} for key, value in kwargs.items()])
+
+    # module.wait(file.touch, filename)
+    state.append({
+        'module': [
+            'wait',
+            {'name': 'file.touch'},
+            {'name': watch['file']},
+        ]
+    })
 
     #         {'require': [
     #             {'module': '{0}_initial_fixture'.format(name)},

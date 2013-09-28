@@ -24,10 +24,16 @@ else:
 
 logger = logging.getLogger(__name__)
 
-UWSGI_ROOT = os.path.join('/', 'etc', 'uwsgi')
-_enabled_path = os.path.join(UWSGI_ROOT, 'apps-enabled')
-_available_path = os.path.join(UWSGI_ROOT, 'apps-available')
+def _uwsgi_root():
+    return __salt__['pillar.get']('uwsgi:directory', os.path.join('/', 'etc', 'uwsgi'))
 
+def _enabled_path():
+    return __salt__['pillar.get']('uwsgi:enabled_path', os.path.join(_uwsgi_root(),
+                                                         'apps-enabled'))
+
+def _available_path():
+    return __salt__['pillar.get']('uwsgi:available_path', os.path.join(_uwsgi_root(),
+                                                           'apps-available'))
 
 def __virtual__():
     '''
@@ -47,8 +53,8 @@ def _get_app_paths(app=None):
     '''
     app_file = '{}.ini'.format(app)
     # define our app config/symlink paths
-    config = os.path.join(_available_path, app_file)
-    link = os.path.join(_enabled_path, app_file)
+    config = os.path.join(_available_path(), app_file)
+    link = os.path.join(_enabled_path(), app_file)
     return config, link, app_file
 
 
@@ -65,7 +71,7 @@ def list_enabled():
     '''
     List uWSGI application that are enabled.
     '''
-    return _applist(_enabled_path, lambda x: os.path.isfile(x) or
+    return _applist(_enabled_path(), lambda x: os.path.isfile(x) or
                     os.path.islink(x))
 
 
@@ -74,7 +80,7 @@ def list_available():
     List available uWSGI application.
     '''
     try:
-        return _applist(_available_path, os.path.isfile)
+        return _applist(_available_path(), os.path.isfile)
     except OSError, err:
         logger.error("Can't list available: %s", err, exc_info=True)
         return []
@@ -156,7 +162,7 @@ def clean():
     '''
     results = []
     comments = []
-    for app_name in _applist(_enabled_path, lambda x: not os.path.exists(x)):
+    for app_name in _applist(_enabled_path(), lambda x: not os.path.exists(x)):
         disabled = disable(app_name)
         if not disabled['result']:
             results.append(False)

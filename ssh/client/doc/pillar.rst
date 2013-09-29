@@ -18,3 +18,30 @@ deployment_key:
       MIIEdsfadsfsdaXXXXXXXXXXX...
       -----END RSA PRIVATE KEY-----
   type: rsa
+
+
+ssh:known_hosts
+~~~~~~~~~~~~~~~
+
+List host that will added to know_hosts ssh
+
+ssh:known_hosts:fingerprint
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Host's fingerprint
+
+ssh:known_hosts:port
+~~~~~~~~~~~~~~~~~~~~
+
+Host's port for ssh access
+
+deployment_key:contents
+~~~~~~~~~~~~~~~~~~~~~~~
+
+SSH private key content
+
+deployment_key:type
+~~~~~~~~~~~~~~~~~~~
+
+Type of SSH private key
+

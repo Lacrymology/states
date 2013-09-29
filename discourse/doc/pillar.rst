@@ -1,23 +1,24 @@
 Pillar
 ======
 
-Mandatory 
+Mandatory
 ---------
 
 discourse:
   hostnames:
     - list of hostname, used for nginx config
 
-Optional 
+Optional
 --------
 
 discourse:
   upload_size: maximum file upload size. Default is: `2m` (this mean 2 megabyte)
-  smtp: 
+  smtp:
     enabled: False
   ssl: False
   database:
     password: password for postgre user
+  workers: the number of worker for running web service
 
 discourse:smtp
 ~~~~~~~~~~~~~~

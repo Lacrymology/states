@@ -1,6 +1,9 @@
 #!/bin/sh
 # {{ pillar['message_do_not_modify'] }}
+NOW=`/bin/date '+%Y-%m-%d-%H_%M_%S'`
 
 /usr/local/bin/backup-postgresql gitlab
-tar czvf /tmp/gitlab_backup.tar.gz ~git/repositories ~git/.ssh/ ~git/gitlab-satellites
-/usr/local/bin/backup_store /tmp/gitlab_backup.tar.gz
+
+tar --xz -cf /tmp/gitlab_backup_$NOW.tar.xz -C /home/git repositories .ssh gitlab-satellites
+/usr/local/bin/backup_store /tmp/gitlab_backup_$NOW.tar.xz
+

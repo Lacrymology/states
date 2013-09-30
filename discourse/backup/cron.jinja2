@@ -2,5 +2,8 @@
 # {{ pillar['message_do_not_modify'] }}
 
 /usr/local/bin/backup-postgresql discourse
-tar czf /tmp/discourse_upload.tar.gz -C {{ web_root_dir }}/public uploads
-/usr/local/bin/backup_store /tmp/discourse_upload.tar.gz
+
+NOW=`/bin/date '+%Y-%m-%d-%H_%M_%S'`
+tar --xz -cf /tmp/discourse_upload_$NOW.tar.xz -C {{ web_root_dir }}/public uploads
+/usr/local/bin/backup_store /tmp/discourse_upload_$NOW.tar.xz
+

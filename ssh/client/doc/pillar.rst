@@ -23,7 +23,7 @@ deployment_key:
 ssh:known_hosts
 ~~~~~~~~~~~~~~~
 
-List host that will added to know_hosts ssh
+List known hosts that will added to .ssh/known_hosts
 
 ssh:known_hosts:fingerprint
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~

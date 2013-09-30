@@ -6,19 +6,54 @@ Mandatory
 
 discourse:
   hostnames:
-    - list of hostname, used for nginx config
+    - discourse.example.com
+
+discourse:hostnames
+~~~~~~~~~~~~~~~~~~~
+
+List of HTTP hostname that ends in graphite webapp.
 
 Optional
 --------
 
 discourse:
-  upload_size: maximum file upload size. Default is: `2m` (this mean 2 megabyte)
+  upload_size: 2m
   smtp:
-    enabled: False
-  ssl: False
+    enabled: True
+  ssl: microsigns
+  ssl_redirect: True
   database:
-    password: password for postgre user
-  workers: the number of worker for running web service
+    password: psqluserpass
+  workers: 2
+  cheaper: 1
+
+discourse:upload_size
+~~~~~~~~~~~~~~~~~~~~~
+
+Max file size for upload to server
+In megabyte. Example: 2m
+
+discourse:ssl
+~~~~~~~~~~~~~
+
+Name of the SSL key to use for HTTPS.
+
+discourse:ssl_redirect
+~~~~~~~~~~~~~~~~~~~~~~
+
+If set to True and SSL is turned on, this will force all HTTP traffic to be
+redirected to HTTPS.
+
+discourse:workers
+~~~~~~~~~~~~~~~~~
+
+Number of uWSGI worker that will run the webapp.
+
+discourse:cheaper
+~~~~~~~~~~~~~~~~~
+
+Number of process in uWSGI cheaper mode. Default no cheaper mode.
+See: http://uwsgi-docs.readthedocs.org/en/latest/Cheaper.html
 
 discourse:smtp
 ~~~~~~~~~~~~~~

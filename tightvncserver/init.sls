@@ -29,6 +29,9 @@ Install TightVNC - Virtual Network Computing
 Mandatory Pillar
 ----------------
 
+tightvncserver:
+  password:
+
 Optional Pillar
 ---------------
 tightvncserver:
@@ -44,7 +47,7 @@ tightvncserver:
 {%- set user = salt['pillar.get']('tightvncserver:user', 'vnc') %}
 {%- set user_passwd = salt['pillar.get']('tightvncserver:user_passwd', 'vnc') %}
 {%- set home = "/home/" + user %}
-{%- set vnc_passwd = salt['pillar.get']('tightvncserver:password', '12345678') %}
+{%- set vnc_passwd = salt['pillar.get']('tightvncserver:password') %}
 
 include:
   - apt

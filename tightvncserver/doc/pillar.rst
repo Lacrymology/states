@@ -4,8 +4,17 @@ Pillar
 Mandatory
 ---------
 
+tightvncserver:
+  password: vncpassword
+
+tightvncserver:password
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Password to login server ia VNC viewer
+
 Optional
 --------
+
 tightvncserver:
   wm: fluxbox
   resolution: 1024x768
@@ -32,12 +41,6 @@ tightvncserver:user_passwd
 
 Password of VNC user
 
-
-tightvncserver:password
-~~~~~~~~~~~~~~~~~~~~~~~
-
-Password to login via VNC viewer
-
 tightvncserver:sudo
 ~~~~~~~~~~~~~~~~~~~
 
@@ -46,4 +49,4 @@ VNC user is a sudoer?
 tightvncserver:resolution
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Screen resolution when VNC run
+Screen resolution that show in VNC viewer when access to VNC server

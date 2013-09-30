@@ -33,6 +33,7 @@ include:
   - virtualenv
   - web
   - xml
+  - yaml
 
 {%- set home = "/usr/local/openerp" %}
 {%- set filename = "openerp-7.0-20130909-231057" %}
@@ -69,6 +70,7 @@ openerp_depends:
       - pkg: build
       - pkg: libjs-underscore
       - pkg: xml-dev
+      - pkg: yaml
   cmd:
     - wait
     - name: find {{ home }} -name '*.pyc' -delete

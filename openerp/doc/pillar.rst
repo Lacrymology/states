@@ -6,13 +6,48 @@ Mandatory
 
 openerp:
   hostnames:
-    - list of hostname, used for nginx config
+    - openerp.example.com
+
+openerp:hostnames
+~~~~~~~~~~~~~~~~~
+
+List of HTTP hostname that ends in graphite webapp.
 
 Optional
 --------
 
 openerp:
-  ssl: - enable ssl. Default: False
+  ssl: microsigns
+  ssl_redirect: True
   database:
-    password: password for postgres user
-  workers: the number of worker for running web service
+    password: psqluserpass
+  workers: 2
+  cheaper: 1
+
+openerp:ssl
+~~~~~~~~~~~
+
+Name of the SSL key to use for HTTPS.
+
+openerp:ssl_redirect
+~~~~~~~~~~~~~~~~~~~~
+
+If set to True and SSL is turned on, this will force all HTTP traffic to be
+redirected to HTTPS.
+
+openerp:database:password
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+PostgreSQL user password.
+
+openerp:workers
+~~~~~~~~~~~~~~~
+
+Number of uWSGI worker that will run the webapp.
+
+openerp:cheaper
+~~~~~~~~~~~~~~~
+
+Number of process in uWSGI cheaper mode. Default no cheaper mode.
+See: http://uwsgi-docs.readthedocs.org/en/latest/Cheaper.html
+

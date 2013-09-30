@@ -6,19 +6,83 @@ Mandatory
 
 wordpress:
   hostnames:
-    - list of hostname, used for nginx config
-  title: Site title
-  username: admin username
-  admin_password: admin's password
-  email: admin email
+    - mydomain.com
+  title: My Site
+  username: admin
+  admin_password: mypassword
+  email: admin@mydomain.com
+
+wordpress:hostnames
+~~~~~~~~~~~~~~~~~~~
+
+List of hostname, used for nginx config
+
+wordpress:title
+~~~~~~~~~~~~~~~
+
+Site's title
+
+wordpress:username
+~~~~~~~~~~~~~~~~~~
+
+Administrator's username
+
+wordpress:admin_password
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Administrator's password
+
+wordpress:email
+~~~~~~~~~~~~~~~
+
+Administrator's email
 
 Optional
 --------
 
 wordpress:
-  password: password for mysql user "wordpress"
-  public: site appear in search engines. Default is: 1 (yes)
-  mysql_variant: Variation of the MySQL that you use. Default is MariaDB
-  ssl: enabled ssl
-  ssl_redirect: force redirect to ssl
-  workers: the number of worker for running web service
+  password: dbpassword
+  public: 1
+  mysql_variant: mariadb
+  ssl: False
+  ssl_redirect: True
+  workers: 2
+  cheaper: 1
+
+wordpress:password
+~~~~~~~~~~~~~~~~~~
+
+MySQL user password
+
+wordpress:mysql_variant
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Variation of the MySQL that you use. Default is MariaDB
+
+wordpress:public
+~~~~~~~~~~~~~~~~
+
+Site appear in search engines. Default is: 1 (yes)
+
+wordpress:ssl
+~~~~~~~~~~~~~
+
+Name of the SSL key to use for HTTPS.
+
+wordpress:ssl_redirect
+~~~~~~~~~~~~~~~~~~~~~~
+
+If set to True and SSL is turned on, this will force all HTTP traffic to be
+redirected to HTTPS.
+
+wordpress:workers
+~~~~~~~~~~~~~~~~~
+
+Number of uWSGI worker that will run the webapp.
+
+wordpress:cheaper
+~~~~~~~~~~~~~~~~~
+
+Number of process in uWSGI cheaper mode. Default no cheaper mode.
+See: http://uwsgi-docs.readthedocs.org/en/latest/Cheaper.html
+

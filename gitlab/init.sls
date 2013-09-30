@@ -7,7 +7,9 @@ Mandatory Pillar
 
 gitlab:
   hostnames:                # Should not use `localhost`
-    - 192.241.189.78
+    - 192.241.189.782
+  admin:
+    password: admin's login password
 
 Optional Pillar
 ---------------
@@ -29,6 +31,11 @@ gitlab:
     password: password for postgre user
   ldap:
     enabled: enable ldap auth, Default: False
+  admin:
+    email:  email of administrator. Default is: admin@local.host
+    name: name of administrator
+    username: admin username
+    projects_limit: max projects that administrator can create
 
 If you set gitlab:ldap:enabled is True, you must define:
 gitlab:
@@ -55,6 +62,8 @@ gitlab
     authentication: Default is: `plain`  for most smtp servers (like Gmail...)
     tls: Default is: False
 #}
+
+{#- TODO: make gitlab:admin:password is mandatory #}
 
 include:
   - apt
@@ -297,6 +306,19 @@ gitlab_start_sidekiq_service:
       repos_dir: {{ repos_dir }}
       shell_dir: {{ shell_dir }}
 {%- endfor %}
+
+{{ web_dir }}/db/fixtures/production/001_admin.rb:
+  file:
+    - managed
+    - source: salt://gitlab/admin.jinja2
+    - template: jinja
+    - user: git
+    - group: git
+    - mode: 644
+    - require:
+      - file: gitlab
+    - require_in:
+      - file: {{ home_dir }}/gitlab-satellites
 
 /etc/logrotate.d/gitlab:
   file:

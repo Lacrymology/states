@@ -23,14 +23,17 @@ discourse:
 discourse:smtp
 ~~~~~~~~~~~~~~
 
-enabled is True, you must define:
-discourse:
-  smtp:
-    server: your smtp server. Ex: smtp.yourdomain.com
-    port: smtp server port
-    domain: your domain
-    from: smtp account will sent email to users
-    user: account login
-    password: password for account login
-    authentication: Default is: `plain`
-    tls: Default is: False
+To enable it, you must define::
+
+  discourse:
+    smtp:
+      server: your smtp server. Ex: smtp.yourdomain.com
+      port: smtp server port
+      domain: your domain
+      from: smtp account will sent email to users
+      user: account login
+      password: password for account login
+      authentication: Default is: `plain`
+      tls: Default is: False
+
+Please see `doc/pillar.rst` for details.

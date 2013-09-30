@@ -14,11 +14,11 @@ wordpress:
 
 Optional
 --------
+
 wordpress:
-  password:  password for mysql user "wordpress"
+  password: password for mysql user "wordpress"
   public: site appear in search engines. Default is: 1 (yes)
   mysql_variant: Variation of the MySQL that you use. Default is MariaDB
   ssl: enabled ssl
   ssl_redirect: force redirect to ssl
   workers: the number of worker for running web service
-

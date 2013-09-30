@@ -173,7 +173,7 @@ SYNC_DOWNLOAD_THRESHOLD = {{ salt['pillar.get']('denyhosts:sync:download_thresho
  downloaded data to this resiliency period or greater.
  Resiliency is defined as the timespan between a hackers first known attack and
  its most recent attack.  Example:
- If the centralized   denyhosts.net server records an attack at 2 PM and then
+ If the centralized denyhosts.net server records an attack at 2 PM and then
  again at 5 PM, specifying a SYNC_DOWNLOAD_RESILIENCY = 4h will not download
  this ip address.
  However, if the attacker is recorded again at 6:15 PM then the ip address will

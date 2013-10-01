@@ -28,7 +28,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 # {{ pillar['message_do_not_modify'] }}
 
 {#-
- General Configuration 
+ General Configuration
  Set your local timezone (Django's default is America/Chicago)
  If your graphs appear to be offset by a couple hours then this probably
  needs to be explicitly set to your local timezone.
@@ -69,8 +69,8 @@ CACHES = {
 DEFAULT_CACHE_DURATION = 60
 
 
-{#- 
-    Filesystem Paths 
+{#-
+    Filesystem Paths
  Change only GRAPHITE_ROOT if your install is merely shifted from /opt/graphite
  to somewhere else
 #}
@@ -124,7 +124,7 @@ EMAIL_USE_TLS = False
 {% endif %}
 
 {#-
- Authentication Configuration 
+ Authentication Configuration
  LDAP / ActiveDirectory authentication setup
 USE_LDAP_AUTH = True
 LDAP_SERVER = "ldap.mycompany.com"
@@ -153,7 +153,7 @@ USE_REMOTE_USER_AUTHENTICATION = True
  Override the URL for the login link (e.g. for django_openid_auth)
 LOGIN_URL = '/account/login'
 
- Database Configuration 
+ Database Configuration
  By default sqlite is used. If you cluster multiple webapps you will need
  to setup an external database (such as MySQL) and configure all of the webapp
  instances to use the same database. Note that this database is only used to store
@@ -181,7 +181,7 @@ DATABASES = {
         'NAME': '{{ salt['pillar.get']('graphite:web:db:name', 'graphite') }}',
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'USER': '{{ salt['pillar.get']('graphite:web:db:username', 'graphite') }}',
-        'PASSWORD': '{{ salt['password.pillar']('graphite:web:db:password') }}',
+        'PASSWORD': '{{ salt['password.pillar']('graphite:web:db:password', 10) }}',
         'HOST': '{{ salt['pillar.get']('graphite:web:db:host', '127.0.0.1') }}',
         'PORT': ''
     }

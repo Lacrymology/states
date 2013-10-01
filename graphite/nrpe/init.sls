@@ -92,8 +92,9 @@ include:
     - require:
       - pkg: nagios-nrpe-server
     - context:
-      deployment: graphite
-      password: {{ pillar['graphite']['web']['db']['password'] }}
+      psqldbname: {{ salt['pillar.get']('graphite:web:db:name', 'graphite') }}
+      psqldbuser: {{ salt['pillar.get']('graphite:web:db:username', 'graphite') }}
+      psqluserpass: {{ salt['password.pillar']('graphite:web:db:password', 10) }}
 
 extend:
   nagios-nrpe-server:

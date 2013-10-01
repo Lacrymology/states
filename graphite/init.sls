@@ -192,8 +192,8 @@ graphite_settings:
       - module: graphite-web
   postgres_user:
     - present
-    - name: {{ salt['pillar.get']('graphite:web:db:name', 'graphite') }}
-    - password: {{ pillar['graphite']['web']['db']['password'] }}
+    - name: {{ salt['pillar.get']('graphite:web:db:username', 'graphite') }}
+    - password: {{ salt['password.pillar']('graphite:web:db:password', 10) }}
     - runas: postgres
     - require:
       - service: postgresql

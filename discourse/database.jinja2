@@ -26,8 +26,8 @@ Maintainer: Lam Dang Tung <lamdt@familug.org>
 
 production:
   adapter: postgresql
-  database: discourse
-  username: discourse
+  database: {{ dbname }}
+  username: {{ username }}
   password: "{{ password }}"
   host: localhost
   pool: 5

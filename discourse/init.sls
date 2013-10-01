@@ -45,6 +45,8 @@ include:
 {%- set version = "0.9.6.3" %}
 {%- set web_root_dir = "/usr/local/discourse-" + version %}
 {%- set password = salt['password.pillar']('discourse:database:password', 10) %}
+{%- set username = salt['pillar.get']('discourse:database:username', 'discourse') %}
+{%- set dbname = salt['pillar.get']('discourse:database:name', 'discourse') %}
 
 discourse_deps:
   pkg:
@@ -104,15 +106,15 @@ discourse:
       - user: web
   postgres_user:
     - present
-    - name: discourse
+    - name: {{ username }}
     - password: {{ password }}
     - runas: postgres
     - require:
       - service: postgresql
   postgres_database:
     - present
-    - name: discourse
-    - owner: discourse
+    - name: {{ dbname }}
+    - owner: {{ username }}
     - runas: postgres
     - require:
       - postgres_user: discourse
@@ -169,6 +171,8 @@ discourse_rack:
       - file: discourse_tar
     - context:
       password: {{ password }}
+      dbname: {{ dbname }}
+      username: {{ username }}
 
 {{ web_root_dir }}/config/environments/production.rb:
   file:
@@ -327,7 +331,7 @@ discourse_add_psql_extension_pg_trgm:
     - run
     - name: psql discourse -c "CREATE EXTENSION IF NOT EXISTS pg_trgm;"
     - user: postgres
-    - require: 
+    - require:
       - service: postgresql
       - postgres_database: discourse
 

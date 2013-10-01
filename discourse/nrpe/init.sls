@@ -95,8 +95,9 @@ include:
     - require:
       - pkg: nagios-nrpe-server
     - context:
-      deployment: discourse
-      password: {{  salt['password.pillar']('discourse:database:password') }}
+      psqldbname: {{ salt['pillar.get']('discourse:database:name', 'discourse') }}
+      psqluser: {{ salt['pillar.get']('discourse:database:username', 'discourse') }}
+      psqluserpass: {{ salt['password.pillar']('discourse:database:password', 10) }}
     - watch_in:
       - service: nagios-nrpe-server
 

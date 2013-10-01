@@ -42,7 +42,7 @@ conf = openerp.tools.config
 conf['addons_path'] = '{{ web_root_dir }}/openerp/addons/'
 
 conf['db_host'] = 'localhost'
-conf['db_user'] = 'openerp'
+conf['db_user'] = '{{ username }}'
 conf['db_port'] = 5432
 conf['db_password'] = '{{ password }}'
 

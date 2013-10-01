@@ -35,8 +35,11 @@ include:
   - uwsgi.php
   - web
 
-{% set version = "0.9.0" %}
-{% set roundcubedir = "/usr/local/roundcubemail-" + version %}
+{%- set version = "0.9.0" %}
+{%- set roundcubedir = "/usr/local/roundcubemail-" + version %}
+{%- set dbname = salt['pillar.get']('roundcube:dbname', 'roundcube') %}
+{%- set username = salt['pillar.get']('roundcube:username', 'roundcube') %}
+{%- set password = salt['password.pillar']('roundcube:password', 10) %}
 
 php5-pgsql:
   pkg:
@@ -61,15 +64,15 @@ roundcube:
       - file: /usr/local
   postgres_user:
     - present
-    - name: roundcube
-    - password: {{ pillar['roundcube']['password'] }}
+    - name: {{ username }}
+    - password: {{ password }}
     - runas: postgres
     - require:
       - service: postgresql
   postgres_database:
     - present
-    - name: roundcube
-    - owner: roundcube
+    - name: {{ dbname }}
+    - owner: {{ username }}
     - runas: postgres
     - require:
       - postgres_user: roundcube
@@ -98,6 +101,10 @@ roundcube:
       - file: {{ roundcubedir }}
       - archive: roundcube
       - user: web
+    - context:
+      password: {{ password }}
+      dbname: {{ dbname }}
+      username: {{ username }}
 
 {{ roundcubedir }}/config/main.inc.php:
   file:

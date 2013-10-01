@@ -59,6 +59,9 @@ include:
     - context:
       deployment: proftpd
       password: {{ pillar['proftpd']['password'] }}
+      psqldbname: {{ salt['pillar.get']('proftpd:dbname', 'proftpd') }}
+      psqluser: {{ salt['pillar.get']('proftpd:username', 'proftpd') }}
+      psqluserpass: {{ salt['password.pillar']('proftpd:password', 10) }}
 
 extend:
   nagios-nrpe-server:

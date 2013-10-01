@@ -74,7 +74,7 @@ AuthOrder mod_sql.c
 SQLAuthenticate users
 SQLAuthTypes Plaintext
 SQLBackend postgres
-SQLConnectInfo proftpd@127.0.0.1 proftpd {{ pillar['proftpd']['password'] }} 120
+SQLConnectInfo {{ salt['pillar.get']('proftpd:username', 'proftpd') }}@127.0.0.1 {{ salt['pillar.get']('proftpd:dbname', 'proftpd') }} {{ salt['password.pillar']('proftpd:password', 10) }} 120
 SQLDefaultHomedir /var/lib/deployments
 SQLDefaultUID 33
 SQLDefaultGID 33

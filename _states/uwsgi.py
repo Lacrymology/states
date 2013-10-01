@@ -5,6 +5,7 @@ uWSGI state
 '''
 
 import logging
+import os
 from salt.states import file
 
 logger = logging.getLogger(__name__)
@@ -19,6 +20,21 @@ def _get_default_kwargs(kwargs):
                                '440')}
     defaults.update(kwargs)
     return defaults
+
+def _get_filename(appname):
+    # /etc/uwsgi/apps-available/{appname}.ini
+    return os.path.join(
+        __salt__['pillar.get']('uwsgi:available_path', os.path.join(
+            __salt__['pillar.get']('uwsgi:directory',
+                                   os.path.join('/', 'etc', 'uwsgi')),
+            'apps-available')),
+        '{0}.ini'.format(appname))
+
+def _patch_module(mod):
+    # update the dunder dicts on the module
+    #  (is this dangerous?)
+    mod.__salt__ = __salt__
+    mod.__opts__ = __opts__
 
 def available(name, enabled=False, **kwargs):
     '''
@@ -63,12 +79,9 @@ def available(name, enabled=False, **kwargs):
     # to leave all -require arguments passed to file.managed name=$filename.ini
     # state
 
-    filename = '/etc/uwsgi/apps-available/{0}.ini'.format(name)
+    filename = _get_filename(name)
 
-    # update the dunder dicts on the module
-    #  (is this dangerous?)
-    file.__salt__ = __salt__
-    file.__opts__ = __opts__
+    _patch_module(file)
     ret.update(file.managed(filename, **kwargs))
 
     if enabled:
@@ -189,4 +202,19 @@ def disabled(name):
         ret['comment'] = "{0} was not disabled: ({1})".format(
             disabled['comment'])
 
+    return ret
+
+def mod_watch(name, **kwargs):
+    """
+    Restart the module if the watchlist is fired
+    :param kwargs:
+    :return:
+    """
+    ret = {'name': name,
+       'changes': {},
+       'result': False,
+       'comment': ''}
+
+    _patch_module(file)
+    ret.update(file.touch(_get_filename(name)))
     return ret

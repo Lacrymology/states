@@ -53,6 +53,8 @@ include:
     - source: salt://firewall/nrpe/config.jinja2
     - require:
       - pkg: nagios-nrpe-server
+      - file: /usr/lib/nagios/plugins/check_firewall.py
+      - file: /etc/sudoers.d/nrpe_firewall
     - context:
       critical: {{ critical }}
 

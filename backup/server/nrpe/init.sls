@@ -45,6 +45,8 @@ include:
     - source: salt://backup/server/nrpe/config.jinja2
     - require:
       - pkg: nagios-nrpe-server
+      - file: /etc/sudoers.d/nrpe_backups
+      - file: /usr/lib/nagios/plugins/check_backups.py
 
 extend:
   nagios-nrpe-server:

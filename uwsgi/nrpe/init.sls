@@ -23,6 +23,8 @@ include:
     - source: salt://uwsgi/nrpe/config.jinja2
     - require:
       - pkg: nagios-nrpe-server
+      - file: /usr/lib/nagios/plugins/check_uwsgi
+      - file: /etc/sudoers.d/nrpe_uwsgi
 
 /etc/sudoers.d/nagios_uwsgi:
   file:

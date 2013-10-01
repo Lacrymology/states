@@ -32,6 +32,7 @@ include:
     - source: salt://nginx/nrpe/instance.jinja2
     - require:
       - pkg: nagios-nrpe-server
+      - file: /usr/lib/nagios/plugins/check_elasticsearch_cluster.py
     - context:
       deployment: elasticsearch
       http_port: 9200

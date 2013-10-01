@@ -31,6 +31,7 @@ include:
     - source: salt://graylog2/server/nrpe/config.jinja2
     - require:
       - pkg: nagios-nrpe-server
+      - file: /usr/lib/nagios/plugins/check_new_logs.py
     - context:
       version: {{ version }}
 

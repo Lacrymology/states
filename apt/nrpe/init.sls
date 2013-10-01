@@ -29,6 +29,7 @@ include:
     - source: salt://apt/nrpe/config.jinja2
     - require:
       - pkg: nagios-nrpe-server
+      - file: /usr/lib/nagios/plugins/check_apt-rc.py
 
 extend:
   nagios-nrpe-server:

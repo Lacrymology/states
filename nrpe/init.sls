@@ -84,6 +84,7 @@ nagios-nrpe-server:
     - source: salt://nrpe/config.jinja2
     - require:
       - pkg: nagios-nrpe-server
+      - file: /usr/lib/nagios/plugins/check_memory.py
   service:
     - running
     - enable: True

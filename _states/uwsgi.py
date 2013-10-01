@@ -64,28 +64,12 @@ def available(name, enabled=False, **kwargs):
     # state
 
     filename = '/etc/uwsgi/apps-available/{0}.ini'.format(name)
-    watch = kwargs.pop('watch', None)
-    state = { filename: [
-        { 'file': ['managed']},
-    ]}
-    state[filename][0]['file'].extend([{key: value} for key, value in kwargs.items()])
 
     # update the dunder dicts on the module
     #  (is this dangerous?)
     file.__salt__ = __salt__
     file.__opts__ = __opts__
     ret.update(file.managed(filename, **kwargs))
-
-    if watch:
-        # module.wait(file.touch, filename)
-        state[filename].append({
-            'module': [
-                'wait',
-                {'name': 'file.touch'},
-                {'name': watch['file']},
-            ]
-        })
-
 
     #         {'require': [
     #             {'module': '{0}_initial_fixture'.format(name)},

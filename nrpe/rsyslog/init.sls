@@ -1,7 +1,7 @@
 {#
  rsyslog configuration for Nagios NRPE
 #}
-{% if not pillar['debug'] %}
+{% if not salt['pillar.get']('debug', False) %}
 include:
   - rsyslog
   - rsyslog.nrpe

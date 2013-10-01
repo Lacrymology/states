@@ -18,12 +18,26 @@ Optional Pillar
 ---------------
 
 proxy_server: False
+packages:
+  blacklist:
+    - more
+    - vi
+  whitelist:
+    - vim
+    - cmon
+    - nmap
 
 proxy_server: If True, the specific HTTP proxy server (without authentication)
     is used to download .deb and reach APT server. Default: False.
+
+packages:blacklist: list of packages to remove
+packages:whitelist: list of packages to install
 -#}
 
-{#- 99 prefix is to make sure the config file is the last one to be applied -#}
+include:
+  - packages
+
+{#- 99 prefix is to make sure the config file is the last one to be applied #}
 /etc/apt/apt.conf.d/99local:
   file:
     - managed
@@ -33,8 +47,7 @@ proxy_server: If True, the specific HTTP proxy server (without authentication)
     - mode: 444
     - template: jinja
 
-
-{% set backup = '/etc/apt/sources.list.salt-backup' %}
+{%- set backup = '/etc/apt/sources.list.salt-backup' %}
 
 apt_sources:
   file:
@@ -49,9 +62,9 @@ apt_sources:
         {{ pillar['apt']['sources'] | indent(8) }}
     - require:
       - file: /etc/apt/apt.conf.d/99local
-{% if salt['file.file_exists'](backup) %}
+{%- if salt['file.file_exists'](backup) %}
       - file: apt_sources_backup
-{% endif %}
+{%- endif %}
   pkg:
     - installed
     - pkgs:
@@ -60,7 +73,7 @@ apt_sources:
         - python-software-properties
     - require:
       - cmd: apt_sources
-{#
+{#-
   cmd.wait is used instead of:
 
   module:
@@ -75,24 +88,22 @@ apt_sources:
     - watch:
       - file: apt_sources
       - file: /etc/apt/apt.conf.d/99local
+{%- set packages_blacklist = salt['pillar.get']('packages:blacklist', False) -%}
+{%- set packages_whitelist = salt['pillar.get']('packages:whitelist', False) -%}
+{%- if packages_blacklist or packages_whitelist %}
+    - require_in:
+    {%- if packages_blacklist %}
+      - pkg: packages_blacklist
+    {%- endif -%}
+    {%- if packages_whitelist %}
+      - pkg: packages_whitelist
+    {%- endif -%}
+{%- endif -%}
 
-{% if salt['file.file_exists'](backup) %}
+{%- if salt['file.file_exists'](backup) %}
 apt_sources_backup:
   file:
     - rename
     - name: {{ backup }}
     - source: /etc/apt/sources.list
-{% endif %}
-
-{# remove packages that requires physical hardware on virtual machines #}
-{% if grains['virtual'] == 'xen' or grains['virtual'] == 'Parallels' or grains['virtual'] == 'openvzve' %}
-apt_cleanup:
-  pkg:
-    - purged
-    - pkgs:
-      - acpid
-      - eject
-      - hdparm
-      - memtest86+
-      - usbutils
-{% endif %}
+{%- endif -%}

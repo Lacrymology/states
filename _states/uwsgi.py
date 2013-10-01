@@ -5,6 +5,7 @@ uWSGI state
 '''
 
 import logging
+from salt.states import file
 
 logger = logging.getLogger(__name__)
 
@@ -68,6 +69,12 @@ def available(name, enabled=False, **kwargs):
         { 'file': ['managed']},
     ]}
     state[filename][0]['file'].extend([{key: value} for key, value in kwargs.items()])
+
+    # update the dunder dicts on the module
+    #  (is this dangerous?)
+    file.__salt__ = __salt__
+    file.__opts__ = __opts__
+    ret.update(file.managed(filename, **kwargs))
 
     if watch:
         # module.wait(file.touch, filename)

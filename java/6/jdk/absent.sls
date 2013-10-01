@@ -4,9 +4,8 @@ openjdk_jdk:
     - name: openjdk-6-jdk
 
 {#- this pkg need to be removed, or openjdk_jre_headless cannot be removed #}
-openjdk_jre:
+openjdk-6-jre:
   pkg:
     - purged
-    - name: openjdk-6-jre
     - require:
       - pkg: openjdk_jdk

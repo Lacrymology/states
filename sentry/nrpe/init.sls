@@ -94,8 +94,9 @@ include:
     - require:
       - pkg: nagios-nrpe-server
     - context:
-      deployment: sentry
-      password: {{ pillar['sentry']['db']['password'] }}
+      psqldbname: {{ salt['pillar.get']('sentry:db:name', 'sentry') }}
+      psqluser: {{ salt['pillar.get']('sentry:db:username', 'sentry') }}
+      psqluserpass: {{ salt['password.pillar']('sentry:db:password', 10) }}
 
 extend:
   nagios-nrpe-server:

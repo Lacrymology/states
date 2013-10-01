@@ -85,8 +85,6 @@ gitlab
     tls: Default is: False
 #}
 
-{#- TODO: make gitlab:admin:password is mandatory #}
-
 include:
   - apt
   - build
@@ -106,6 +104,7 @@ include:
   - web
   - xml
 
+{%- set database_name = salt['pillar.get']('gitlab:database:name', 'gitlab') %}
 {%- set database_username = salt['pillar.get']('gitlab:database:username', 'gitlab') %}
 {%- set database_password = salt['password.pillar']('gitlab:database:password', 10) %}
 
@@ -211,7 +210,7 @@ gitlab:
       - cmd: install_gitlab_shell
   postgres_database:
     - present
-    - name: gitlab
+    - name: {{ database_name }}
     - owner: {{ database_username }}
     - require:
       - postgres_user: gitlab

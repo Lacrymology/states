@@ -27,7 +27,7 @@ Maintainer: Lam Dang Tung <lamdt@familug.org>
 production:
   adapter: postgresql
   encoding: unicode
-  database: gitlab
+  database: {{ salt['pillar.get']('gitlab:database:name', 'gitlab') }}
   pool: 10
   username: {{ salt['pillar.get']('gitlab:database:username', 'gitlab') }}
   password: "{{ salt['password.pillar']('gitlab:database:password', 10) }}"

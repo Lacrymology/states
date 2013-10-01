@@ -26,4 +26,5 @@ Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
 # {{ pillar['message_do_not_modify'] }}
-command[{{ deployment }}_postgresql]=/usr/lib/nagios/plugins/check_pgsql -H 127.0.0.1 -P 5432 -d {{ deployment }} -l {{ deployment }} -p {{ password }}
+{#- TODO remove deployment key #}
+command[{{ psqldbname|default(deployment) }}_postgresql]=/usr/lib/nagios/plugins/check_pgsql -H 127.0.0.1 -P 5432 -d {{ psqldbname|default(deployment) }} -l {{ psqluser|default(deployment) }} -p {{ psqluserpass|default(password) }}

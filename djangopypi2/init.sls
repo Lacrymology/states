@@ -86,7 +86,7 @@ djangopypi2:
   postgres_user:
     - present
     - name: {{ salt['pillar.get']('djangopypi2:db:username', 'djangopypi2') }}
-    - password: {{ pillar['djangopypi2']['db']['password'] }}
+    - password: {{ salt['password.pillar']('djangopypi2:db:password', 10) }}
     - runas: postgres
     - require:
       - service: postgresql

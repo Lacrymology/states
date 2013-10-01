@@ -42,7 +42,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': '{{ salt["pillar.get"]("djangopypi2:db:name", "djangopypi2") }}',
         'USER': '{{ salt["pillar.get"]("djangopypi2:db:username", "djangopypi2") }}',
-        'PASSWORD': '{{ salt["password.pillar"]("djangopypi2:db:password") }}',
+        'PASSWORD': '{{ salt["password.pillar"]("djangopypi2:db:password", 10) }}',
         'HOST': '{{ salt["pillar.get"]("djangopypi2:db:host", "127.0.0.1") }}',
         'PORT': '5432',
     }

@@ -27,8 +27,8 @@ Maintainer: Lam Dang Tung <lamdt@familug.org>
 production:
   adapter: postgresql
   database: {{ dbname }}
-  username: {{ username }}
-  password: "{{ password }}"
+  username: {{ dbuser }}
+  password: "{{ dbuserpass }}"
   host: localhost
   pool: 5
   timeout: 5000

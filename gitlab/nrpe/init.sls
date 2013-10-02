@@ -97,8 +97,8 @@ include:
     - require:
       - pkg: nagios-nrpe-server
     - context:
-      psqldbname: {{ salt['pillar.get']('gitlab:database:name', 'gitlab') }}
-      psqluser: {{ salt['pillar.get']('gitlab:database:username', 'gitlab') }}
-      psqluserpass: {{ salt['password.pillar']('gitlab:database:password', 10) }}
+      database: {{ salt['pillar.get']('gitlab:db:name', 'gitlab') }}
+      username: {{ salt['pillar.get']('gitlab:db:username', 'gitlab') }}
+      password: {{ salt['password.pillar']('gitlab:db:password', 10) }}
     - watch_in:
       - service: nagios-nrpe-server

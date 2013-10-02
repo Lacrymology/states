@@ -104,9 +104,9 @@ include:
   - web
   - xml
 
-{%- set database_name = salt['pillar.get']('gitlab:database:name', 'gitlab') %}
-{%- set database_username = salt['pillar.get']('gitlab:database:username', 'gitlab') %}
-{%- set database_password = salt['password.pillar']('gitlab:database:password', 10) %}
+{%- set database_name = salt['pillar.get']('gitlab:db:name', 'gitlab') %}
+{%- set database_username = salt['pillar.get']('gitlab:db:username', 'gitlab') %}
+{%- set database_password = salt['password.pillar']('gitlab:db:password', 10) %}
 
 {%- set version = '6-0' %}
 {%- set root_dir = "/usr/local" %}

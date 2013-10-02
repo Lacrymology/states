@@ -44,9 +44,9 @@ include:
 
 {%- set version = "0.9.6.3" %}
 {%- set web_root_dir = "/usr/local/discourse-" + version %}
-{%- set password = salt['password.pillar']('discourse:database:password', 10) %}
-{%- set username = salt['pillar.get']('discourse:database:username', 'discourse') %}
-{%- set dbname = salt['pillar.get']('discourse:database:name', 'discourse') %}
+{%- set dbuserpass = salt['password.pillar']('discourse:db:password', 10) %}
+{%- set dbuser = salt['pillar.get']('discourse:db:username', 'discourse') %}
+{%- set dbname = salt['pillar.get']('discourse:db:name', 'discourse') %}
 
 discourse_deps:
   pkg:
@@ -106,15 +106,15 @@ discourse:
       - user: web
   postgres_user:
     - present
-    - name: {{ username }}
-    - password: {{ password }}
+    - name: {{ dbuser }}
+    - password: {{ dbuserpass }}
     - runas: postgres
     - require:
       - service: postgresql
   postgres_database:
     - present
     - name: {{ dbname }}
-    - owner: {{ username }}
+    - owner: {{ dbuser }}
     - runas: postgres
     - require:
       - postgres_user: discourse
@@ -170,9 +170,9 @@ discourse_rack:
       - user: discourse
       - file: discourse_tar
     - context:
-      password: {{ password }}
+      dbuserpass: {{ dbuserpass }}
       dbname: {{ dbname }}
-      username: {{ username }}
+      dbuser: {{ dbuser }}
 
 {{ web_root_dir }}/config/environments/production.rb:
   file:

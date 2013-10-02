@@ -37,9 +37,9 @@ include:
 
 {%- set version = "0.9.0" %}
 {%- set roundcubedir = "/usr/local/roundcubemail-" + version %}
-{%- set dbname = salt['pillar.get']('roundcube:dbname', 'roundcube') %}
-{%- set username = salt['pillar.get']('roundcube:username', 'roundcube') %}
-{%- set password = salt['password.pillar']('roundcube:password', 10) %}
+{%- set dbname = salt['pillar.get']('roundcube:db:name', 'roundcube') %}
+{%- set dbuser = salt['pillar.get']('roundcube:db:username', 'roundcube') %}
+{%- set dbuserpass = salt['password.pillar']('roundcube:db:password', 10) %}
 
 php5-pgsql:
   pkg:
@@ -64,15 +64,15 @@ roundcube:
       - file: /usr/local
   postgres_user:
     - present
-    - name: {{ username }}
-    - password: {{ password }}
+    - name: {{ dbuser }}
+    - password: {{ dbuserpass }}
     - runas: postgres
     - require:
       - service: postgresql
   postgres_database:
     - present
     - name: {{ dbname }}
-    - owner: {{ username }}
+    - owner: {{ dbuser }}
     - runas: postgres
     - require:
       - postgres_user: roundcube
@@ -102,9 +102,9 @@ roundcube:
       - archive: roundcube
       - user: web
     - context:
-      password: {{ password }}
+      password: {{ dbuserpass }}
       dbname: {{ dbname }}
-      username: {{ username }}
+      dbuser: {{ dbuser }}
 
 {{ roundcubedir }}/config/main.inc.php:
   file:

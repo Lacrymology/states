@@ -89,9 +89,9 @@ include:
     - require:
       - pkg: nagios-nrpe-server
     - context:
-      psqldbname: {{ salt['pillar.get']('roundcube:dbname', 'roundcube') }}
-      psqluser: {{ salt['pillar.get']('roundcube:username', 'roundcube') }}
-      psqluserpass: {{ salt['password.pillar']('roundcube:password', 10) }}
+      database: {{ salt['pillar.get']('roundcube:db:name', 'roundcube') }}
+      username: {{ salt['pillar.get']('roundcube:db:username', 'roundcube') }}
+      password: {{ salt['password.pillar']('roundcube:db:password', 10) }}
 
 extend:
   nagios-nrpe-server:

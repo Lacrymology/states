@@ -37,9 +37,9 @@ include:
 
 {%- set version = "3.5.2" %}
 {%- set wordpressdir = "/usr/local/wordpress" %}
-{%- set username = salt['pillar.get']('wordpress:username', 'wordpress') %}
-{%- set password = salt['password.pillar']('wordpress:password', 10) %}
-{%- set dbname = salt['pillar.get']('wordpress:dbname', 'wordpress') %}
+{%- set dbuser = salt['pillar.get']('wordpress:db:username', 'wordpress') %}
+{%- set dbuserpass = salt['password.pillar']('wordpress:db:password', 10) %}
+{%- set dbname = salt['pillar.get']('wordpress:db:name', 'wordpress') %}
 
 wordpress_drop_old_db:
   mysql_database:
@@ -85,15 +85,15 @@ wordpress:
   mysql_user:
     - present
     - host: localhost
-    - name: {{ username }}
-    - password: {{ password }}
+    - name: {{ dbuser }}
+    - password: {{ dbuserpass }}
     - require:
       - service: mysql-server
       - pkg: python-mysqldb
   mysql_grants:
     - present
     - grant: all privileges
-    - user: {{ username }}
+    - user: {{ dbuser }}
     - database: {{ dbname }}.*
     - host: localhost
     - require:
@@ -119,9 +119,9 @@ php5-mysql:
       - archive: wordpress
       - user: web
     - context:
-      password: {{ password }}
+      dbuserpass: {{ dbuserpass }}
       dbname: {{ dbname }}
-      username: {{ username }}
+      dbuser: {{ dbuser }}
 
 wordpress_initial:
   file:

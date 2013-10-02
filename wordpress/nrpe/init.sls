@@ -89,6 +89,6 @@ include:
     - require:
       - pkg: nagios-nrpe-server
     - context:
-      database: {{ salt['pillar.get']('wordpress:dbname', 'wordpress') }}
-      username: {{ salt['pillar.get']('wordpress:username', 'wordpress') }}
-      password: {{ salt['password.pillar']('wordpress:password', 10) }}
+      database: {{ salt['pillar.get']('wordpress:db:name', 'wordpress') }}
+      username: {{ salt['pillar.get']('wordpress:db:username', 'wordpress') }}
+      password: {{ salt['password.pillar']('wordpress:db:password', 10) }}

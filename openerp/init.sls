@@ -46,8 +46,8 @@ include:
 {%- set home = "/usr/local/openerp" %}
 {%- set filename = "openerp-7.0-20130909-231057" %}
 {%- set web_root_dir =  home +"/"+ filename %}
-{%- set password = salt['password.pillar']('openerp:database:password', 10)  %}
-{%- set username = salt['pillar.get']('openerp:database:username', 'openerp') %}
+{%- set password = salt['password.pillar']('openerp:db:password', 10)  %}
+{%- set username = salt['pillar.get']('openerp:db:username', 'openerp') %}
 
 openerp_depends:
   file:

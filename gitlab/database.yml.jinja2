@@ -27,10 +27,10 @@ Maintainer: Lam Dang Tung <lamdt@familug.org>
 production:
   adapter: postgresql
   encoding: unicode
-  database: {{ salt['pillar.get']('gitlab:database:name', 'gitlab') }}
+  database: {{ salt['pillar.get']('gitlab:db:name', 'gitlab') }}
   pool: 10
-  username: {{ salt['pillar.get']('gitlab:database:username', 'gitlab') }}
-  password: "{{ salt['password.pillar']('gitlab:database:password', 10) }}"
-  host: {{ salt['pillar.get']('gitlab:database:host', 'localhost') }}
-  port: {{ salt['pillar.get']('gitlab:database:port', '5432') }}
+  username: {{ salt['pillar.get']('gitlab:db:username', 'gitlab') }}
+  password: "{{ salt['password.pillar']('gitlab:db:password', 10) }}"
+  host: {{ salt['pillar.get']('gitlab:db:host', 'localhost') }}
+  port: {{ salt['pillar.get']('gitlab:db:port', '5432') }}
   {#- socket: /tmp/postgresql.sock #}

@@ -70,15 +70,15 @@ proftpd-mod-pgsql:
       - cmd: apt_sources
   postgres_user:
     - present
-    - name: {{ salt['pillar.get']('proftpd:username', 'proftpd') }}
-    - password: {{ salt['password.pillar']('proftpd:password', 10) }}
+    - name: {{ salt['pillar.get']('proftpd:db:username', 'proftpd') }}
+    - password: {{ salt['password.pillar']('proftpd:db:password', 10) }}
     - runas: postgres
     - require:
       - service: postgresql
   postgres_database:
     - present
-    - name: {{ salt['pillar.get']('proftpd:dbname', 'proftpd') }}
-    - owner: {{ salt['pillar.get']('proftpd:username', 'proftpd') }}
+    - name: {{ salt['pillar.get']('proftpd:db:name', 'proftpd') }}
+    - owner: {{ salt['pillar.get']('proftpd:db:username', 'proftpd') }}
     - runas: postgres
     - require:
       - postgres_user: proftpd-mod-pgsql

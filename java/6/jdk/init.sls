@@ -7,7 +7,6 @@ openjdk_jdk:
     - installed
     - pkgs:
       - openjdk-6-jdk
-      - openjdk-6-jre
     - require:
       - pkg: openjdk_jre_headless
       - cmd: apt_sources

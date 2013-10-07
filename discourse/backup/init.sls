@@ -22,7 +22,7 @@ THE SOFTWARE.
 Author: Lam Dang Tung <lamdt@familug.org>
 Maintainer: Lam Dang Tung <lamdt@familug.org>
 
- Backup client for Discourse
+Backup client for Discourse.
 -#}
 include:
   - cron

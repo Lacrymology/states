@@ -22,7 +22,7 @@ THE SOFTWARE.
 Author: Lam Dang Tung <lamdt@familug.org>
 Maintainer: Lam Dang Tung <lamdt@familug.org>
 
- Remove GitLab NRPE checks
+Remove GitLab NRPE checks.
 -#}
 /etc/nagios/nrpe.d/gitlab.cfg:
   file:

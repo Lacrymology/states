@@ -137,6 +137,29 @@ To overwrite default behavior of test and checks, you need to create a
 For more details on that file content, look at ``doc/tests.rst`` section
 *Test Validation*.
 
+Ordering
+--------
+
+*Status: Mandatory*
+
+All services should have the ``order`` argument specified with value ``50``:
+http://docs.saltstack.com/ref/states/ordering.html?highlight=order#the-order-option
+such as::
+
+  cron:
+    pkg:
+      - latest
+    service:
+      - running
+      - enable: True
+      - order: 50
+      - watch:
+        - pkg: cron
+
+Ordering is only used for testing framework, this make sure that test are run
+with order ``last`` while all services are started with an order that make sure
+everything is deployed and running before test run.
+
 Monitoring Auto-Discovery
 -------------------------
 

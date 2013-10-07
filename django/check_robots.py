@@ -24,18 +24,17 @@ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-"""
-__author__ = 'Bruno Clermont'
-__maintainer__ = 'Bruno Clermont'
-__email__ = 'patate@fastmail.cn'
 
-"""
 Check if robots.txt exists and contains values.
 
 Usage::
 
   check_robots.py [hostname|or IP]
 """
+
+__author__ = 'Bruno Clermont'
+__maintainer__ = 'Bruno Clermont'
+__email__ = 'patate@fastmail.cn'
 
 import robotparser
 import sys

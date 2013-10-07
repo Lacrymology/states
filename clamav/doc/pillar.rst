@@ -1,22 +1,20 @@
 Pillar
 ======
 
-Mandatory 
----------
-
 Optional 
 --------
 
-clamav:
-  dns_db:
-    - current.cvd.clamav.net
-  connect_timeout: 30
-  receive_timeout: 30
-  times_of_check: 24
-  db_mirrors:
-    - db.local.clamav.net
-    - database.clamav.net
+Example::
 
+    clamav:
+      dns_db:
+        - current.cvd.clamav.net
+      connect_timeout: 30
+      receive_timeout: 30
+      times_of_check: 24
+      db_mirrors:
+        - db.local.clamav.net
+        - database.clamav.net
 
 clamav:dns_db
 ~~~~~~~~~~~~~

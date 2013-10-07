@@ -25,9 +25,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
- Diamond statistics for ffmpeg
+Diamond statistics for ffmpeg.
 -#}
-
 include:
   - diamond
 

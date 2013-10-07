@@ -4,13 +4,15 @@ Pillar
 Mandatory 
 ---------
 
-graphite:
-  carbon:
-    instances: 2
-  retentions:
-    default_1min_for_1_month:
-      pattern: .*
-      retentions: 60s:30d
+Example::
+
+  graphite:
+    carbon:
+      instances: 2
+    retentions:
+      default_1min_for_1_month:
+        pattern: .*
+        retentions: 60s:30d
 
 graphite:carbon:instances
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -43,18 +45,22 @@ graphite:carbon:interface
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Network interface to bind Carbon-relay daemon.
-    Default: 0.0.0.0.
+
+Default: 0.0.0.0.
 
 graphite:carbon:replication 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 add redundancy of your data by replicating
 
-every data point and relaying it to N caches (0 < N <= number of cache instances).
+every data point and relaying it to N caches (0 < N <= number of cache
+instances).
+
 Default: 1 (Mean you have only one copy for each metric = No replication)
 
 shinken_pollers
 ~~~~~~~~~~~~~~~
 
 IP address of monitoring poller that check this server.
+
 Default: not used.

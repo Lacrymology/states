@@ -24,16 +24,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
-
-Elasticsearch Daemon
-====================
-
-Install an Elasticsearch NoSQL server or cluster.
-
-Elasticsearch don't support HTTP over SSL/HTTPS.
-The only way to secure access to admin interface over HTTPS is to proxy
-a SSL frontend in front of Elasticsearch HTTP interface.
-This is why nginx is used if SSL is in pillar.
 -#}
 {#- TODO: Diamond + http://www.elasticsearch.org/guide/reference/modules/jmx/ -#}
 {%- set ssl = salt['pillar.get']('elasticsearch:ssl', False) %}

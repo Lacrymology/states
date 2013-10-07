@@ -24,10 +24,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author: Hung Nguyen Viet hvnsweeting@gmail.com
 Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
+
+Nagios NRPE check for djangopypi2.
 -#}
-{#
- Nagios NRPE check for djangopypi2
-#}
 include:
   - apt.nrpe
   - memcache.nrpe

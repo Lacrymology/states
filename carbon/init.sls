@@ -25,9 +25,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
-Carbon Daemon
-=============
-
 Install Carbon, daemon that store on disk statistics database used by Graphite
 to render graphics.
 -#}

@@ -1,6 +1,0 @@
-Pillar
-======
-
-Mandatory
----------
-

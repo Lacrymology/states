@@ -1,5 +1,3 @@
-#!/bin/sh
-# {{ pillar['message_do_not_modify'] }}
 {#-
 Copyright (c) 2013, Lam Dang Tung
 
@@ -23,7 +21,9 @@ THE SOFTWARE.
 
 Author: Lam Dang Tung <lamdt@familug.org>
 Maintainer: Lam Dang Tung <lamdt@familug.org>
-#}
+-#}
+#!/bin/sh
+# {{ pillar['message_do_not_modify'] }}
 /usr/local/bin/backup-postgresql discourse
 
 NOW=`/bin/date '+%Y-%m-%d-%H_%M_%S'`

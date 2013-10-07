@@ -25,9 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 
-Deborphan
-=========
-
+Deborphan.
 List Debian packages that aren't used required by others.
 -#}
 deborphan:

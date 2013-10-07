@@ -4,25 +4,25 @@ Pillar
 Mandatory 
 ---------
 
-elasticsearch:
-  cluster:
-    name: xxx
-    nodes:
-      server-alpha:
-        _network:
-          public: 204.168.1.1
-          private: 192.168.1.1
-        graylog2.server:
-          name: graylog2
-          port: 9400
-          http: false
-      server-beta:
-        _network:
-          public: 204.168.1.1
-          private: 192.168.1.1
-        elasticsearch: {}
-  hostnames:
-    - search.example.com
+Example::
+
+  elasticsearch:
+    cluster:
+      name: xxx
+      nodes:
+        server-alpha:
+          _network:
+            public: 204.168.1.1
+            private: 192.168.1.1
+          graylog2.server:
+            name: graylog2
+        server-beta:
+          _network:
+            public: 204.168.1.1
+            private: 192.168.1.1
+          elasticsearch: {}
+    hostnames:
+      - search.example.com
 
 elasticsearch:cluster:name
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -54,31 +54,35 @@ elasticsearch:nodes:{{ node minion ID }}:{{ state }}:name
 
 node ID, must be unique across all node instances.
 
+
+Optional
+--------
+
+Example::
+
+  elasticsearch:
+    heap_size: 512M
+    ssl: example.com
+    https_allowed:
+      - 192.168.0.0/24
+  destructive_absent: False
+
 elasticsearch:nodes:{{ node minion ID }}:{{ state }}:port
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ES transport port.
 if multiple instances of ES run on the same host, the port must be
-    different. Default: 9300.
+different.
+
+Default: 9300.
 
 elasticsearch:nodes:{{ node minion ID }}:{{ state }}:http
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-if this instance handle ES HTTP API port. only one HTTP API instance is required for each
-host. Default: True.
+if this instance handle ES HTTP API port. only one HTTP API instance is required
+for each host.
 
-Optional 
---------
-
-elasticsearch:
-  heap_size: 512M
-  ssl: example.com
-  https_allowed:
-    - 192.168.0.0/24
-destructive_absent: False
-shinken_pollers:
-  - 192.168.1.1
-graphite_address: 192.168.1.1
+Default: True.
 
 elasticsearch:heap_size
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -99,11 +103,7 @@ List of CIDR format network where ES over HTTPS is allowed.
 
 destructive_absent
 ~~~~~~~~~~~~~~~~~~
-If True (not default), ES data saved on disk is purged when elasticsearch.absent is executed.
 
-shinken_pollers
-~~~~~~~~~~~~~~~ 
+If True, ES data saved on disk is purged when elasticsearch.absent is executed.
 
-IP address of monitoring poller that check this server.
-
-TODO: document AWS pillars
+Default: False.

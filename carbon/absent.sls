@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
- Remove carbon
+Remove carbon.
 -#}
 {%- set prefix = '/etc/init.d/' %}
 {%- set init_files = salt['file.find'](prefix, name='carbon-cache-*', type='f') %}

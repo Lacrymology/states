@@ -25,9 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
-Dovecot: A POP3/IMAP server
-=============================
-
+Dovecot: A POP3/IMAP server.
 -#}
 {% set ssl = salt['pillar.get']('dovecot:ssl', False) %}
 include:

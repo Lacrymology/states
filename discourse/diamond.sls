@@ -22,7 +22,7 @@ THE SOFTWARE.
 Author: Lam Dang Tung <lamdt@familug.org>
 Maintainer: Lam Dang Tung <lamdt@familug.org>
 
- Diamond statistics for Discourse
+Diamond statistics for Discourse.
 -#}
 include:
   - diamond

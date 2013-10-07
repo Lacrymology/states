@@ -25,9 +25,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 
-CRON Daemon
-===========
-
 Install daemon to execute scheduled commands (Vixie Cron).
 -#}
 

@@ -25,8 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
-Clamav: A virus scanner
-=======================
+Clamav: A virus scanner.
 -#}
 include:
   - apt

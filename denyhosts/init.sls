@@ -25,11 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 
-Denyhosts
-=========
-
 Install Denyhosts used to block SSH brute-force attack.
-
 -#}
 include:
   - apt

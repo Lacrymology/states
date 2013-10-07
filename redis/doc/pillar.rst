@@ -1,11 +1,6 @@
 Pillar
 ======
 
-Mandatory
----------
-
-None
-
 Optional
 --------
 
@@ -18,19 +13,21 @@ If port 0 is specified Redis will not listen on a TCP socket.
 Default: 6379
 
 redis:timeout
-~~~~~~~~~~
+~~~~~~~~~~~~~
 
 Close the connection after a client is idle for N seconds (0 to disable)
 
 Default: 0
 
 redis:keepalive
-~~~~~~~~~~
+~~~~~~~~~~~~~~~
 
-TCP keepalive. Period to send ACKs (in seconds). Default: 60
+TCP keepalive. Period to send ACKs (in seconds).
+
+Default: 60
 
 redis:loglevel
-~~~~~~~~~~
+~~~~~~~~~~~~~~
 
 Specify the server verbosity level.
 
@@ -82,7 +79,7 @@ Save the DB on disk:
 Default: None
 
 redis:maxclients
-~~~~~~~~~~
+~~~~~~~~~~~~~~~~
 
 Set the max number of connected clients at the same time. By default
 this limit is set to 10000 clients, however if the Redis server is not
@@ -93,7 +90,7 @@ minus 32 (as Redis reserves a few file descriptors for internal uses).
 Default: 10000
 
 redis:maxmemory
-~~~~~~~~~~
+~~~~~~~~~~~~~~~
 
 Don't use more memory than the specified amount of bytes.
 When the memory limit is reached Redis will try to remove keys
@@ -102,7 +99,7 @@ accordingly to the eviction policy selected (see maxmemmory-policy).
 Default: '300mb'
 
 redis:policy
-~~~~~~~~~~
+~~~~~~~~~~~~
 
 MAXMEMORY POLICY: how Redis will select what to remove when maxmemory
 is reached. You can select among five behaviors:
@@ -126,7 +123,7 @@ Note: with any of the above policies, Redis will return an error on write
 Default: 'volatile-lru'
 
 redis:samples
-~~~~~~~~~~
+~~~~~~~~~~~~~
 
 LRU and minimal TTL algorithms are not precise algorithms but approximated
 algorithms (in order to save memory), so you can select as well the sample

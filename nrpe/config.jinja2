@@ -13,3 +13,4 @@ command[free_swap_space]=/usr/lib/nagios/plugins/check_swap -w 30% -c 10%
 {%- else %}
 command[free_swap_space]=/bin/echo "SWAP OK: No swap on this host"
 {%- endif %}
+command[oom_messages]=sudo /usr/lib/nagios/plugins/check_oom.py

@@ -63,7 +63,7 @@ $IncludeConfig /etc/rsyslog.d/*.conf
 auth,authpriv.*			/var/log/auth.log
 *.*;auth,authpriv.none		-/var/log/syslog
 #}
-{% if not pillar['debug'] %}
+{% if not salt['pillar.get']('debug', False) %}
 {%- for f in 'sshd', 'cron', 'sudo' %}
     {%- for act in 'opened', 'closed' %}
 :msg, contains, "pam_unix({{ f }}:session): session {{ act }} for user" ~

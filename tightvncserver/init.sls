@@ -22,26 +22,7 @@ THE SOFTWARE.
 Author: Lam Dang Tung <lamdt@familug.org>
 Maintainer: Lam Dang Tung <lamdt@familug.org>
 
-
-Install TightVNC - Virtual Network Computing
-================
-
-Mandatory Pillar
-----------------
-
-tightvncserver:
-  password:
-
-Optional Pillar
----------------
-tightvncserver:
-  wm:
-  resolution:
-  user: - user name will run vnc
-  user_passwd: - password for user
-  sudo: - make vnc user as sudoer. Default False
-  password: - Password for vnc client login, it will be truncated if more than 8 characters
-
+Install TightVNC - Virtual Network Computing.
 -#}
 {%- set wm = salt['pillar.get']('tightvncserver:wm', 'fluxbox') %}
 {%- set user = salt['pillar.get']('tightvncserver:user', 'vnc') %}

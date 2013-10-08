@@ -62,3 +62,11 @@ nagios:
 /usr/lib/nagios/plugins/check_memory.py:
   file:
     - absent
+
+/usr/lib/nagios/plugins/check_oom.py:
+  file:
+    - absent
+
+/etc/sudoers.d/nrpe_oom:
+  file:
+    - absent

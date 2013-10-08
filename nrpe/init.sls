@@ -17,6 +17,7 @@ include:
   - nrpe.rsyslog
   - rsyslog
   - rsyslog.nrpe
+  - sudo
 
 /usr/local/nagiosplugin:
   file:
@@ -104,3 +105,24 @@ nagios-nrpe-server:
     - mode: 550
     - require:
       - pkg: nagios-nrpe-server
+
+/usr/lib/nagios/plugins/check_oom.py:
+  file:
+    - managed
+    - source: salt://nrpe/check_oom.py
+    - user: nagios
+    - group: nagios
+    - mode: 550
+    - require:
+      - pkg: nagios-nrpe-server
+
+/etc/sudoers.d/nrpe_oom:
+  file:
+    - managed
+    - template: jinja
+    - source: salt://nrpe/sudo.jinja2
+    - mode: 440
+    - user: root
+    - group: root
+    - require:
+      - pkg: sudo

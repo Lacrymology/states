@@ -4,9 +4,6 @@ Pillar
 Mandatory
 ---------
 
-None
-
-
 postgresql:replication:master
 ~~~~~~~~~~~~~~~~~~~~~~
 

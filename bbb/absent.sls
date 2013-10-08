@@ -12,7 +12,7 @@ libreoffice:
 kill_soffice:
   cmd:
     - run
-    - name: killall -9 /usr/bin/soffice || true
+    - name: pkill -9 -f '/usr/bin/soffice' || true
   file:
     - absent
     - name: /var/run/bbb-openoffice-server.pid

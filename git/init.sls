@@ -14,5 +14,4 @@ git:
     - require:
       - pkg: openssh-client
       - cmd: apt_sources
-      - ssh_known_hosts: github.com
-      - ssh_known_hosts: bitbucket.org
+      - file: known_hosts

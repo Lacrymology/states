@@ -22,10 +22,7 @@ THE SOFTWARE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
-MariaDB Daemon
-=============
-
-Install MariaDB, a database server which is a drop-in replacement for MySQL
+Install MariaDB, a database server which is a drop-in replacement for MySQL.
 -#}
 
 include:

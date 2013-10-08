@@ -22,7 +22,7 @@ THE SOFTWARE.
 Author: Lam Dang Tung <lamdt@familug.org>
 Maintainer: Lam Dang Tung <lamdt@familug.org>
 
-  Uninstall Wordpress
+Uninstall Wordpress.
 -#}
 
 {%- set wordpressdir = "/usr/local/wordpress" %}

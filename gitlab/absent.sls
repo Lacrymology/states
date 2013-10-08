@@ -22,7 +22,7 @@ THE SOFTWARE.
 Author: Lam Dang Tung <lamdt@familug.org>
 Maintainer: Lam Dang Tung <lamdt@familug.org>
 
- Unistalling GitLab
+Unistalling GitLab.
 -#}
 {%- set version = '6-0' %}
 {%- set web_dir = "/usr/local/gitlabhq-" + version + "-stable"  %}

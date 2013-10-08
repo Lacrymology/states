@@ -21,7 +21,7 @@ THE SOFTWARE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
- Nagios NRPE check for Tomcat6
+Nagios NRPE check for Tomcat6.
 -#}
 include:
   - nrpe

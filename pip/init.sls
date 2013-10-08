@@ -25,8 +25,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
- Install python-pip, a cache for downloaded archive and a config file
- to force root user to use the cache folder.
+Install python-pip, a cache for downloaded archive and a config file
+to force root user to use the cache folder.
 -#}
 include:
   - ssh.client

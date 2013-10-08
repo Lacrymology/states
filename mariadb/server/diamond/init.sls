@@ -22,7 +22,7 @@ THE SOFTWARE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
- Diamond statistics for MariaDB
+Diamond statistics for MariaDB.
 -#}
 
 include:

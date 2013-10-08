@@ -1,5 +1,36 @@
-dns_proxy
-	ip_address
-	dns_server
-	minimum_ttl
+Pillar
+======
 
+Mandaroty
+---------
+
+dns_proxy:
+  dns_server: resolv.conf
+
+dns_proxy:dns_server
+~~~~~~~~~~~~~~~~~~~~~
+
+To enable status control if you are using resolv.conf.
+
+Optional
+--------
+
+dns_proxy:
+  ip_address: 0.0.0.0  
+  minimum_ttl: 900
+  maximum_ttl: 604800
+
+dns_proxy:ip_address
+~~~~~~~~~~~~~~~~~~~~~
+
+The IP address pdnsd listens on for requests.
+
+dns_proxy:minimum_ttl
+~~~~~~~~~~~~~~~~~~~~~
+
+The minimum time a record is held in cache.
+
+dns_proxy:maximum_ttl
+~~~~~~~~~~~~~~~~~~~~~
+
+The maximum time a record is held in cache.

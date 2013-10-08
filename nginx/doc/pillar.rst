@@ -1,5 +1,33 @@
+Pillar
+======
+
+Mandatory
+---------
+
+Optional
+--------
+
+Example:
+
+  nginx:
+    worker_processes: 1
+    redirect_numeric_ip: False
+    log_format: $scheme://$host:$server_port$uri$is_args$args $remote_addr:$remote_user "$request" $request_time $request_length:$bytes_sent $status "$http_referer" "$http_user_agent" "$http_x_forwarded_for
+
+
 nginx:worker_processes
+~~~~~~~~~~~~~~~~~~~~~~
+
+number of nginx worker.
+
 nginx:log_format
+~~~~~~~~~~~~~~~~
+
+The format of log in nginx log file.
+Default: $scheme://$host:$server_port$uri$is_args$args $remote_addr:$remote_user
+"$request" $request_time $request_length:$bytes_sent $status "$http_referer"
+"$http_user_agent" "$http_x_forwarded_for
+
 nginx:redirect_numeric_ip
-hostnames
-ssl
+~~~~~~~~~~~~~~~~~~~~~~~~~
+

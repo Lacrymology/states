@@ -27,6 +27,8 @@ On first run, repo are created as "bare" and need to be pushed into.
 Optional
 --------
 
+git-server
+
 destructive_absent
 ~~~~~~~~~~~~~~~~~~
 

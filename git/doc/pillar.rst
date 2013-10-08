@@ -1,3 +1,0 @@
-destructive_absent
-git-server
-repositories

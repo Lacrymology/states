@@ -1,10 +1,21 @@
-openvpn
-	tunnel
-		config
-		peers
-			grains
-				id
-					port
-						vpn_address
-			address
-		secret
+Pillar
+======
+
+Mandatory
+---------
+
+Optional
+--------
+
+Example:
+
+  openvpn:
+    tunnel:
+      config:
+      peers:
+        grains:
+          id:
+            port:
+              vpn_address:
+        address:
+      secret:

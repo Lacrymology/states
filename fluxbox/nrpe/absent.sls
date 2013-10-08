@@ -22,7 +22,7 @@ THE SOFTWARE.
 Author: Lam Dang Tung <lamdt@familug.org>
 Maintainer: Lam Dang Tung <lamdt@familug.org>
 
- Remove Nagios NRPE check for Fluxbox
+Remove Nagios NRPE check for Fluxbox.
 -#}
 
 /etc/nagios/nrpe.d/fluxbox.cfg:

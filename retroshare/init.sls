@@ -22,8 +22,7 @@ THE SOFTWARE.
 Author: Lam Dang Tung <lamdt@familug.org>
 Maintainer: Lam Dang Tung <lamdt@familug.org>
 
-Install RetroShare - commmunication and sharing platform
-==================
+Install RetroShare - commmunication and sharing platform.
 -#}
 
 include:

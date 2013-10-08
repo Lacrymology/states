@@ -22,9 +22,7 @@ THE SOFTWARE.
 Author: Lam Dang Tung <lamdt@familug.org>
 Maintainer: Lam Dang Tung <lamdt@familug.org>
 
-
-Remove Fluxbox
-==============
+Remove Fluxbox.
 #}
 
 fluxbox:

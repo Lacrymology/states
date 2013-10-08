@@ -22,8 +22,7 @@ THE SOFTWARE.
 Author: Lam Dang Tung <lamdt@familug.org>
 Maintainer: Lam Dang Tung <lamdt@familug.org>
 
-Install Fluxbox - Windows Manager
-=================================
+Install Fluxbox - Windows Manager.
 #}
 
 include:

@@ -22,7 +22,7 @@ THE SOFTWARE.
 Author: Lam Dang Tung <lamdt@familug.org>
 Maintainer: Lam Dang Tung <lamdt@familug.org>
 
- Uninstall VNC server
+Uninstall VNC server.
 -#}
 
 {%- set user = salt['pillar.get']('tightvncserver:user', 'vnc') %}

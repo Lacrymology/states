@@ -209,28 +209,10 @@ redirected to HTTPS.
 
 Default: ``False`` by default of that pillar key.
 
-graylog2:timeout
-~~~~~~~~~~~~~~~~
+graylog2:(workers|cheapers|idle|timeout)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-How long in seconds until a uWSGI worker is killed.
-while running a single request.
-
-Default: ``60`` by default of that pillar key.
-
-graylog2:cheaper
-~~~~~~~~~~~~~~~~
-
-Number of process in uWSGI cheaper mode. Default no cheaper mode.
-See: http://uwsgi-docs.readthedocs.org/en/latest/Cheaper.html
-
-Default: ``1`` by default of that pillar key.
-
-graylog2:idle
-~~~~~~~~~~~~~
-
-Number of seconds before uWSGI switch to cheap mode.
-
-Default: ``300`` by default of that pillar key.
+See uwsgi/doc/instance.rst for more details
 
 graylog2:email
 ~~~~~~~~~~~~~~

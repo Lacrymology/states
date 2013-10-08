@@ -70,14 +70,7 @@ moinmoin:ldap
 
 Data for binding with ldap.
 
-moinmoin:workers
-~~~~~~~~~~~~~~~~
+moinmoin:(workers|cheapers|idle|timeout)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Number of workers to use for uwsgi.
-
-Default: 2
-
-moinmoin:cheaper
-~~~~~~~~~~~~~~~~
-
-Use uwsgi cheaper mode or not.
+See uwsgi/doc/instance.rst for more details

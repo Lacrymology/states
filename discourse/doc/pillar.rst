@@ -107,53 +107,13 @@ redirected to HTTPS.
 
 Default: ``False`` by default of that pillar key.
 
-discourse:workers
-~~~~~~~~~~~~~~~~~
+discourse:(workers|cheapers|idle|timeout)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Number of uWSGI worker that will run the webapp.
-
-Default: ``2`` by default of that pillar key.
-
-discourse:cheaper
-~~~~~~~~~~~~~~~~~
-
-Number of process in uWSGI cheaper mode.
-
-Default: ``no cheaper mode``.
-
-See: http://uwsgi-docs.readthedocs.org/en/latest/Cheaper.html.
-
-Default: ``1`` by default of that pillar key.
-
-discourse:idle
-~~~~~~~~~~~~~~
-
-Number of seconds before uWSGI switch to cheap mode.
-
-Default: ``300`` by default of that pillar key.
-
-discourse:timeout
-~~~~~~~~~~~~~~~~~
-
-How long in seconds until a uWSGI worker is killed while running
-a single request.
-
-Default: ``120`` by default of that pillar key.
+See uwsgi/doc/instance.rst for more details
 
 discourse:smtp
 ~~~~~~~~~~~~~~
 
-To enable it, you must define::
-
-  discourse:
-    smtp:
-      server: your smtp server. Ex: smtp.yourdomain.com
-      port: smtp server port
-      domain: your domain
-      from: smtp account will sent email to users
-      user: account login
-      password: password for account login
-      authentication: Default is: `plain`
-      tls: Default is: False
-
-Please see `doc/pillar.rst` for details.
+The global `smtp` can be overrided for this particular formula.
+For details on its format, please see `smtp` section in doc/pillar.rst.

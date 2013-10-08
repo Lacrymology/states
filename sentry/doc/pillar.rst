@@ -105,7 +105,7 @@ PostgreSQL database name. it will be created.
 Default: ``sentry`` by default of that pillar key.
 
 sentry:db:host
-~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~
 
 PostgreSQL address.
 
@@ -132,25 +132,7 @@ this will force all HTTP traffic to be redirected to HTTPS.
 
 Default: ``False`` by default of that pillar key.
 
-sentry:idle
-~~~~~~~~~~~
+sentry:(workers|cheapers|idle|timeout)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Number of seconds before uWSGI switch to cheap mode.
-
-Default: ``300`` by default of that pillar key.
-
-sentry:timeout
-~~~~~~~~~~~~~~
-
-How long in seconds until a uWSGI worker is killed
-while running a single request.
-
-Default: ``45`` by default of that pillar key.
-
-sentry:cheaper
-~~~~~~~~~~~~~~
-
-Number of process in uWSGI cheaper mode. Default no cheaper mode.
-See: http://uwsgi-docs.readthedocs.org/en/latest/Cheaper.html
-
-Default: ``1`` by default of that pillar key.
+See uwsgi/doc/instance.rst for more details

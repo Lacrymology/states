@@ -184,19 +184,14 @@ gitlab:
     password: password of bind user
     allow_username_or_email_login: use name instead of email for login.
 
-gitlab:smtp:enabled
-~~~~~~~~~~~~~~~~~~~
 
-If it's true, you must define:
-gitlab
-  smtp:
-    server: your smtp server. Ex: smtp.yourdomain.com
-    port: smtp server port
-    domain: your domain
-    from: smtp account will sent email to users
-    user: account login
-    password: password for account login
-    authentication: Default is: `:login`
-    tls: Default is: False
+gitlab:smtp
+~~~~~~~~~~~~~~~~
+
+The global `smtp` can be overrided for this particular state.
+For details on its format, please see `smtp` section in doc/pillar.rst.
+
+gitlab:(workers|cheapers|idle|timeout)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Please see `doc/pillar.rst` for details.

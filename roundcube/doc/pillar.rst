@@ -56,17 +56,7 @@ Name of SSL used for HTTPS.
 
 Default: ``False``.
 
-roundcube:workers
-~~~~~~~~~~~~~~~~~
+roundcube:(workers|cheapers|idle|timeout)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Number or uwsgi workers.
-
-Default: ``2``.
-
-roundcube:cheaper
-~~~~~~~~~~~~~~~~
-
-Set uwsgi cheaper mode or not.
-
-Default: ``not use``.
-
+See uwsgi/doc/instance.rst for more details

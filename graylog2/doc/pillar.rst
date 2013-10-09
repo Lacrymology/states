@@ -64,17 +64,17 @@ If this number is reached, the oldest index will be deleted.
 graylog2:shards
 ~~~~~~~~~~~~~~~
 
-The number of shards for your indices
+The number of shards for your indices.
 
 graylog2:replicas
 ~~~~~~~~~~~~~~~~~
 
-The number of replicas for your indices
+The number of replicas for your indices.
 
 graylog2:recent_index_ttl_minutes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The number of minutes to show recent index
+The number of minutes to show recent index.
 
 graylog2:processbuffer_processors
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -89,7 +89,7 @@ The number of parallel running processors.
 graylog2:processor_wait_strategy
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Wait strategy describing how buffer processors wait on a cursor sequence
+Wait strategy describing how buffer processors wait on a cursor sequence.
 
 graylog2:ring_size
 ~~~~~~~~~~~~~~~~~~
@@ -100,7 +100,7 @@ does not help anymore.
 graylog2:amqp
 ~~~~~~~~~~~~~
 
-Enable AMQP (Advanced Message Queuing Protocol)
+Enable AMQP (Advanced Message Queuing Protocol).
 It set it True, you must define:
 
   graylog2:
@@ -140,7 +140,7 @@ Rabitmq virtual host.
 graylog2:heap_size
 ~~~~~~~~~~~~~~~~~~
 
-The size of heap give for JVM
+The size of heap give for JVM.
 
 graylog2:ssl
 ~~~~~~~~~~~~
@@ -156,7 +156,7 @@ redirected to HTTPS.
 graylog2:timeout
 ~~~~~~~~~~~~~~~~
 
-How long in seconds until a uWSGI worker is killed
+How long in seconds until a uWSGI worker is killed.
 while running a single request. Default 30.
 
 graylog2:cheaper

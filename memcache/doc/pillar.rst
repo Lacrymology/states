@@ -1,9 +1,6 @@
 Pillar
 ======
 
-Mandatory
----------
-
 Optional
 --------
 
@@ -15,4 +12,4 @@ Example:
 memcache:memory
 ~~~~~~~~~~~~~~~
 
-Set the amount of memory allocated to memcached for object storage. Unit is MB
+Set the amount of memory allocated to memcached for object storage. Unit is MB.

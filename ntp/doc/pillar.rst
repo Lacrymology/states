@@ -1,9 +1,6 @@
 Pillar
 ======
 
-Mandatory
----------
-
 Optional
 --------
 
@@ -16,5 +13,6 @@ Example:
 ntp:server
 ~~~~~~~~~~
 
-The list of NTP servers
-Default is empty
+The list of NTP servers.
+
+Default is empty.

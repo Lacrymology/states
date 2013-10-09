@@ -1,9 +1,6 @@
 Pillar
 ======
 
-Mandatory
----------
-
 Optional
 --------
 
@@ -14,4 +11,6 @@ Example:
 destructive_absent
 ~~~~~~~~~~~~~~~~~~
 
-remove data directory when run absent SLS. Default: False
+Remove data directory when run absent SLS.
+
+Default: False.

@@ -1,8 +1,4 @@
 Pillar
 ======
 
-Mandatory
----------
 
-Optional
---------

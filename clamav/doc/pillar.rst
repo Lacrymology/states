@@ -1,7 +1,7 @@
 Pillar
 ======
 
-Optional 
+Optional
 --------
 
 Example::
@@ -19,24 +19,24 @@ Example::
 clamav:dns_db
 ~~~~~~~~~~~~~
 
-database verification domain, DNS used to verify virus database version.
+Database verification domain, DNS used to verify virus database version.
 
 clamav:connect_timeout
 ~~~~~~~~~~~~~~~~~~~~~~
 
-timeout in seconds when connecting to database server.
+Timeout in seconds when connecting to database server.
 
 clamav:receive_timeout
 ~~~~~~~~~~~~~~~~~~~~~~
 
-timeout in seconds when reading from database server.
+Timeout in seconds when reading from database server.
 
 clamav:times_of_check
 ~~~~~~~~~~~~~~~~~~~~~
 
-numbers of database checks per day
+Numbers of database checks per day.
 
 clamav:db_mirrors
 ~~~~~~~~~~~~~~~~~
 
-tuple of spam database servers
+Tuple of spam database servers.

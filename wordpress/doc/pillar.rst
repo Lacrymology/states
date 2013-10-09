@@ -4,65 +4,73 @@ Pillar
 Mandatory
 ---------
 
-wordpress:
-  hostnames:
-    - mydomain.com
-  title: My Site
-  username: admin
-  admin_password: mypassword
-  email: admin@mydomain.com
+Example::
+
+  wordpress:
+    hostnames:
+      - mydomain.com
+    title: My Site
+    username: admin
+    admin_password: mypassword
+    email: admin@mydomain.com
 
 wordpress:hostnames
 ~~~~~~~~~~~~~~~~~~~
 
-List of hostname, used for nginx config
+List of hostname, used for nginx config.
 
 wordpress:title
 ~~~~~~~~~~~~~~~
 
-Site's title
+Site's title.
 
 wordpress:username
 ~~~~~~~~~~~~~~~~~~
 
-Administrator's username
+Administrator's username.
 
 wordpress:admin_password
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-Administrator's password
+Administrator's password.
 
 wordpress:email
 ~~~~~~~~~~~~~~~
 
-Administrator's email
+Administrator's email.
 
 Optional
 --------
 
-wordpress:
-  password: dbpassword
-  public: 1
-  mysql_variant: mariadb
-  ssl: False
-  ssl_redirect: True
-  workers: 2
-  cheaper: 1
+Example::
+
+  wordpress:
+    password: dbpassword
+    public: 1
+    mysql_variant: mariadb
+    ssl: False
+    ssl_redirect: True
+    workers: 2
+    cheaper: 1
 
 wordpress:password
 ~~~~~~~~~~~~~~~~~~
 
-MySQL user password
+MySQL user password.
 
 wordpress:mysql_variant
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-Variation of the MySQL that you use. Default is MariaDB
+Variation of the MySQL that you use.
+
+Default: ``MariaDB``.
 
 wordpress:public
 ~~~~~~~~~~~~~~~~
 
-Site appear in search engines. Default is: 1 (yes)
+Site appear in search engines.
+
+Default: ``1`` (yes).
 
 wordpress:ssl
 ~~~~~~~~~~~~~
@@ -84,5 +92,6 @@ wordpress:cheaper
 ~~~~~~~~~~~~~~~~~
 
 Number of process in uWSGI cheaper mode. Default no cheaper mode.
-See: http://uwsgi-docs.readthedocs.org/en/latest/Cheaper.html
+
+See: http://uwsgi-docs.readthedocs.org/en/latest/Cheaper.html.
 

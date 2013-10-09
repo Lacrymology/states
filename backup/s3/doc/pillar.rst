@@ -4,6 +4,8 @@ Pillar
 Mandatory
 ---------
 
+Example::
+
 aws:
   s3:
     bucket: example

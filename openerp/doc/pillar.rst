@@ -4,9 +4,11 @@ Pillar
 Mandatory
 ---------
 
-openerp:
-  hostnames:
-    - openerp.example.com
+Example::
+
+	openerp:
+  	hostnames:
+    	- openerp.example.com
 
 openerp:hostnames
 ~~~~~~~~~~~~~~~~~
@@ -16,13 +18,15 @@ List of HTTP hostname that ends in graphite webapp.
 Optional
 --------
 
-openerp:
-  ssl: microsigns
-  ssl_redirect: True
-  database:
-    password: psqluserpass
-  workers: 2
-  cheaper: 1
+Example::
+
+	openerp:
+  	ssl: microsigns
+  	ssl_redirect: True
+  	database:
+    	password: psqluserpass
+  	workers: 2
+  	cheaper: 1
 
 openerp:ssl
 ~~~~~~~~~~~
@@ -49,5 +53,6 @@ openerp:cheaper
 ~~~~~~~~~~~~~~~
 
 Number of process in uWSGI cheaper mode. Default no cheaper mode.
-See: http://uwsgi-docs.readthedocs.org/en/latest/Cheaper.html
+
+See: http://uwsgi-docs.readthedocs.org/en/latest/Cheaper.html.
 

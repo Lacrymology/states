@@ -1,8 +1,10 @@
 Pillar
 ======
 
-Mandatory 
+Mandatory
 ---------
+
+Example::
 
 salt_archive:
   web:
@@ -12,10 +14,12 @@ salt_archive:
 salt_archive:web:hostnames
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-list of hostname of the web archive
+List of hostname of the web archive.
 
-Optional 
+Optional
 --------
+
+Example::
 
 salt_archive:
   source: rsync://archive.robotinfra.com/archive/
@@ -29,22 +33,22 @@ salt_archive:
 salt_archive:source
 ~~~~~~~~~~~~~~~~~~~
 
-rsync server used as the source for archived files.
+Rsync server used as the source for archived files.
 
 salt_archive:web:ssl
 ~~~~~~~~~~~~~~~~~~~~
 
-SSL key to use to secure this server archive
+SSL key to use to secure this server archive.
 
 salt_archive:web:ssl_redirect
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-if True, redirect all HTTP traffic to HTTPs.
+If True, redirect all HTTP traffic to HTTPs.
 
 salt_archive:keys
 ~~~~~~~~~~~~~~~~~
 
-dict of keys allowed to log in user
+Dict of keys allowed to log in user.
 
 This state also need the following pillar for rsync state:
 

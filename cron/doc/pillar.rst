@@ -1,7 +1,7 @@
 Pillar
 ======
 
-Optional 
+Optional
 --------
 
 Example::
@@ -11,6 +11,9 @@ Example::
 crontab_hour
 ~~~~~~~~~~~~
 
-Each days cron launch a daily group of tasks, they are located in /etc/cron.daily/. 
+Each days cron launch a daily group of tasks, they are located
+/etc/cron.daily/.
+
 This is the time of the day when they're executed.
-Default: 6 hours in the morning, local time.
+
+Default: ``6 hours in the morning, local time``.

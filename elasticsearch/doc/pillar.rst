@@ -1,7 +1,7 @@
 Pillar
 ======
 
-Mandatory 
+Mandatory
 ---------
 
 Example::
@@ -29,31 +29,30 @@ elasticsearch:cluster:name
 
 Name of this ES cluster for all listed nodes.
 
-elasticsearch:nodes 
+elasticsearch:nodes
 ~~~~~~~~~~~~~~~~~~~
 
-dict of nodes part of the cluster.
+Dict of nodes part of the cluster.
 
 elasticsearch:nodes:{{ node minion ID }}:_network:public
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-this node hostname or public IP to reach it from Internet.
+This node hostname or public IP to reach it from Internet.
 
-elasticsearch:nodes:{{ node minion ID }}:_network:private 
+elasticsearch:nodes:{{ node minion ID }}:_network:private
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-this node hostname or public IP to reach it from internal network.
+This node hostname or public IP to reach it from internal network.
 
 elasticsearch:nodes:{{ node minion ID }}:{{ state }}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-a node can only actual run a ES standalone node, or a graylog2.server state.
+A node can only actual run a ES standalone node, or a graylog2.server state.
 
 elasticsearch:nodes:{{ node minion ID }}:{{ state }}:name
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-node ID, must be unique across all node instances.
-
+Node ID, must be unique across all node instances.
 
 Optional
 --------
@@ -71,18 +70,19 @@ elasticsearch:nodes:{{ node minion ID }}:{{ state }}:port
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ES transport port.
-if multiple instances of ES run on the same host, the port must be
+
+If multiple instances of ES run on the same host, the port must be
 different.
 
-Default: 9300.
+Default: ``9300``.
 
 elasticsearch:nodes:{{ node minion ID }}:{{ state }}:http
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-if this instance handle ES HTTP API port. only one HTTP API instance is required
+If this instance handle ES HTTP API port. Only one HTTP API instance is required
 for each host.
 
-Default: True.
+Default: ``True``.
 
 elasticsearch:heap_size
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -98,7 +98,8 @@ SSL key set to use to publish ES trough HTTPS.
 elasticsearch:https_allowed
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-only used if elasticsearch:ssl is defined.
+Only used if elasticsearch:ssl is defined.
+
 List of CIDR format network where ES over HTTPS is allowed.
 
 destructive_absent
@@ -106,4 +107,4 @@ destructive_absent
 
 If True, ES data saved on disk is purged when elasticsearch.absent is executed.
 
-Default: False.
+Default: ``False``.

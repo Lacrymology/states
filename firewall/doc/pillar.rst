@@ -1,7 +1,7 @@
 Pillar
 ======
 
-Optional 
+Optional
 --------
 
 Example::
@@ -18,10 +18,10 @@ Example::
 ip_addresses
 ~~~~~~~~~~~~
 
-list of host inside internal network that will get full access to this server.
+List of host inside internal network that will get full access to this server.
 
-firewall:filter 
+firewall:filter
 ~~~~~~~~~~~~~~~
 
-dict of protocol (tcp/udp) with inside it the list of port that are allowed from
+Dict of protocol (tcp/udp) with inside it the list of port that are allowed from
 external networks.

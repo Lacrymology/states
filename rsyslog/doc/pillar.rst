@@ -18,4 +18,5 @@ rsyslog:tcp
 ~~~~~~~~~~~
 
 Use TCP for transfering log to remote destination.
-Default: False
+
+Default: ``False``.

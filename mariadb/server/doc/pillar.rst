@@ -1,8 +1,10 @@
 Pillar
 ======
 
-Mandatory 
+Mandatory
 ---------
+
+Example::
 
 mysql:
   password: root_plaintext_password
@@ -10,23 +12,29 @@ mysql:
 mysql:password
 ~~~~~~~~~~~~~~
 
-root password used for installation process, change this after
+Root password used for installation process, change this after
 MariaDB installed does not make sense.
 
-Optional 
+Optional
 --------
 
-mysql:
-  utf8: True/False
-  bind: 0.0.0.0
+Example::
+
+	mysql:
+  	utf8: True/False
+  	bind: 0.0.0.0
 
 mysql:utf8
 ~~~~~~~~~~
 
 Enable or disable charset utf8. If disable, Latin1 charset will be
-used. Default: False
+used.
+
+Default: ``False``.
 
 mysql:bind
 ~~~~~~~~~~
 
-what IP does MariaDB server will bind to. Default: 0.0.0.0
+what IP does MariaDB server will bind to.
+
+Default: ``0.0.0.0``

@@ -1,14 +1,6 @@
 Pillar
 ======
 
-Mandatory
----------
-
-graphite_address
-~~~~~~~~~~~~~~~~
-
-IP/Hostname of carbon/graphite server.
-
 Optional
 --------
 
@@ -25,10 +17,11 @@ Example::
 diamond:interfaces
 ~~~~~~~~~~~~~~~~~~
 
-list of network interface check for I/O stats.
-default show in example.
+List of network interface check for I/O stats.
+
+Default show in example.
 
 diamond:ping
 ~~~~~~~~~~~~
 
-list of IP/hostname ping to monitor latency and availability.
+List of IP/hostname ping to monitor latency and availability.

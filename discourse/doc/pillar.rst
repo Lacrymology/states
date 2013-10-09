@@ -4,9 +4,11 @@ Pillar
 Mandatory
 ---------
 
-discourse:
-  hostnames:
-    - discourse.example.com
+Example::
+
+  discourse:
+    hostnames:
+      - discourse.example.com
 
 discourse:hostnames
 ~~~~~~~~~~~~~~~~~~~
@@ -16,22 +18,25 @@ List of HTTP hostname that ends in graphite webapp.
 Optional
 --------
 
-discourse:
-  upload_size: 2m
-  smtp:
-    enabled: True
-  ssl: microsigns
-  ssl_redirect: True
-  database:
-    password: psqluserpass
-  workers: 2
-  cheaper: 1
+Example::
+
+  discourse:
+    upload_size: 2m
+    smtp:
+     enabled: True
+    ssl: microsigns
+    ssl_redirect: True
+    database:
+      password: psqluserpass
+    workers: 2
+    cheaper: 1
 
 discourse:upload_size
 ~~~~~~~~~~~~~~~~~~~~~
 
-Max file size for upload to server
-In megabyte. Example: 2m
+Max file size for upload to server.
+
+In megabyte. Example: 2m.
 
 discourse:ssl
 ~~~~~~~~~~~~~
@@ -52,8 +57,11 @@ Number of uWSGI worker that will run the webapp.
 discourse:cheaper
 ~~~~~~~~~~~~~~~~~
 
-Number of process in uWSGI cheaper mode. Default no cheaper mode.
-See: http://uwsgi-docs.readthedocs.org/en/latest/Cheaper.html
+Number of process in uWSGI cheaper mode.
+
+Default: ``no cheaper mode``.
+
+See: http://uwsgi-docs.readthedocs.org/en/latest/Cheaper.html.
 
 discourse:smtp
 ~~~~~~~~~~~~~~

@@ -7,4 +7,4 @@ Mandatory
 bbb:hostname
 ~~~~~~~~~~~~
 
-hostname of this site.
+Hostname of this site.

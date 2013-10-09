@@ -10,12 +10,36 @@ Optional
 Example:
 
   openvpn:
-    tunnel:
+    <tunnelname>:
       config:
       peers:
-        grains:
-          id:
-            port:
-              vpn_address:
-        address:
+        {{ grains['id'] }}:
+          vpn_address: 1.1.1.1
+          address: 2.2.2.1
+          port:
+        <peername>:
+          vpn_address: 1.1.1.1
+          address: 2.2.2.2
+          port:
       secret:
+
+openvpn:<tunnelname>
+~~~~~~~~~~~~~~~~~~~~
+
+openvpn:<tunnelname>:config
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+openvpn:<tunnelname>:serect
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+openvpn:<tunnelname>:peers:<peername>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+openvpn:<tunnelname>:peers:<peername>:vpn_address
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+openvpn:<tunnelname>:peers:<peername>:address
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+openvpn:<tunnelname>:peers:<peername>:port
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

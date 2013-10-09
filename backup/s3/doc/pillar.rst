@@ -6,10 +6,10 @@ Mandatory
 
 Example::
 
-aws:
-  s3:
-    bucket: example
-    path: /path/to/backup
+  aws:
+    s3:
+      bucket: example
+      path: /path/to/backup
 
 aws:s3:bucket
 ~~~~~~~~~~~~~

@@ -6,8 +6,8 @@ Mandatory
 
 Example::
 
-mysql:
-  password: root_plaintext_password
+  mysql:
+    password: root_plaintext_password
 
 mysql:password
 ~~~~~~~~~~~~~~
@@ -20,9 +20,9 @@ Optional
 
 Example::
 
-	mysql:
-  	utf8: True/False
-  	bind: 0.0.0.0
+  mysql:
+    utf8: True/False
+    bind: 0.0.0.0
 
 mysql:utf8
 ~~~~~~~~~~

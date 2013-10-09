@@ -6,10 +6,10 @@ Mandatory
 
 Example::
 
-salt_archive:
-  web:
-    hostnames:
-      - archive.example.com
+  salt_archive:
+    web:
+      hostnames:
+      -   archive.example.com
 
 salt_archive:web:hostnames
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -21,14 +21,14 @@ Optional
 
 Example::
 
-salt_archive:
-  source: rsync://archive.robotinfra.com/archive/
-  delete: True
-  web:
-    ssl: mykeyname
-    ssl_redirect: True
-  keys:
-    00daedbeef: ssh-dss
+  salt_archive:
+    source: rsync://archive.robotinfra.com/archive/
+    delete: True
+    web:
+      ssl: mykeyname
+      ssl_redirect: True
+    keys:
+      00daedbeef: ssh-dss
 
 salt_archive:source
 ~~~~~~~~~~~~~~~~~~~

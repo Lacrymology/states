@@ -4,8 +4,10 @@ Pillar
 Mandatory
 ---------
 
-mail:
-  mailname: somehost.fqdn.com
+Example::
+
+  mail:
+    mailname: somehost.fqdn.com
 
 mail:mailname
 ~~~~~~~~~~~~~

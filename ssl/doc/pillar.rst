@@ -14,11 +14,11 @@ ssl:
     server_crt: other ssl cert content
     ca_crt: other ssl ca cert content
 
-such as:
+Example::
 
-ssl:
-  example_com:
-    server_crt: |
+  ssl:
+    example_com:
+      server_crt: |
       -----BEGIN CERTIFICATE-----
       MIIDjjCCAnYCCQD2WzRbbzkiZDANBgkqhkiG9w0BAQUFADCBiDELMAkGA1UEBhMC
       Vk4xDjAMBgNVBAgMBUhhbm9pMQ4wDAYDVQQHDAVIYW5vaTEQMA4GA1UECgwHRkFN

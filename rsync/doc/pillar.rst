@@ -7,9 +7,9 @@ Optional
 Example::
 
   rsync:
-   attribute: value
-   'other attrib': other value
-   module_name:
+    attribute: value
+      'other attrib': other value
+    module_name:
       'mod attrib 2': value
       attrib: value
     module_name2:

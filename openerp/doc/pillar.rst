@@ -6,9 +6,9 @@ Mandatory
 
 Example::
 
-	openerp:
-  	hostnames:
-    	- openerp.example.com
+  openerp:
+    hostnames:
+      - openerp.example.com
 
 openerp:hostnames
 ~~~~~~~~~~~~~~~~~
@@ -20,13 +20,13 @@ Optional
 
 Example::
 
-	openerp:
-  	ssl: microsigns
-  	ssl_redirect: True
-  	database:
-    	password: psqluserpass
-  	workers: 2
-  	cheaper: 1
+  openerp:
+    ssl: microsigns
+    ssl_redirect: True
+    database:
+      password: psqluserpass
+    workers: 2
+    cheaper: 1
 
 openerp:ssl
 ~~~~~~~~~~~

@@ -6,8 +6,8 @@ Mandatory
 
 Example::
 
-	nfs:
-  	allow: 192.168.122.1, 192.168.122.8
+  nfs:
+    allow: 192.168.122.1, 192.168.122.8
 
 nfs:allow
 ~~~~~~~~~
@@ -19,15 +19,15 @@ Optional
 
 Example::
 
-	nfs:
-  	deny: ALL
-  	procs: 8
-  	exports:
-    	/srv/salt:
-      	192.168.122.0/24: rw,sync,no_subtree_check,no_root_squash
-      	192.168.32.21: ro
-    	/tmp:
-      	192.168.122.1: rw,sync,no_subtree_check,no_root_squash
+  nfs:
+    deny: ALL
+    procs: 8
+    exports:
+      /srv/salt:
+        192.168.122.0/24: rw,sync,no_subtree_check,no_root_squash
+        192.168.32.21: ro
+      /tmp:
+        192.168.122.1: rw,sync,no_subtree_check,no_root_squash
 
 nfs:deny
 ~~~~~~~~

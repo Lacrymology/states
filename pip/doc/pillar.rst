@@ -4,8 +4,10 @@ Pillar
 Optional
 --------
 
-pip:
-  mirrors: True # Default: False, 
+Example::
+
+  pip:
+    mirrors: True
 
 pip:mirrors
 ~~~~~~~~~~~

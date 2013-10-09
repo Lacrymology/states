@@ -55,11 +55,11 @@ List of save config.
 
 Example::
 
-   redis:
-     save:
-       - '900 1'
-       - '300 10'
-       - '60 10000'
+  redis:
+    save:
+      - '900 1'
+      - '300 10'
+      - '60 10000'
 
 Save the DB on disk:
 

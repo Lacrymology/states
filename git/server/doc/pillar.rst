@@ -6,11 +6,11 @@ Mandatory
 
 Example::
 
-	git-server:
-  	keys:
-   	 00deadbeefsshkey: ssh-dss
-  	repositories:
-    	- myreponame
+  git-server:
+    keys:
+      00deadbeefsshkey: ssh-dss
+    repositories:
+      - myreponame
 
 git-server:keys
 ~~~~~~~~~~~~~~~

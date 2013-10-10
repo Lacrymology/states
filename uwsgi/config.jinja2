@@ -17,7 +17,7 @@ req-logger = syslog:uwsgi
 carbon-id = emperor
 carbon = {{ pillar['graphite_address'] }}:2003
 {%- endif %}
-emperor = /etc/uwsgi/
+emperor = /etc/uwsgi/apps-enabled
 no-orphans = True
 die-on-term = True
 {%- if ksm %}

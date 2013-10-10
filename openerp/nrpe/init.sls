@@ -94,7 +94,7 @@ include:
     - require:
       - pkg: nagios-nrpe-server
     - context:
-      name: {{ salt['pillar.get']('openerp:db:name', 'openerp') }}
+      database: {{ salt['pillar.get']('openerp:db:name', 'openerp') }}
       username: {{ salt['pillar.get']('openerp:db:username', 'openerp') }}
       password: {{ salt['password.pillar']('openerp:db:password', 10) }}
     - watch_in:

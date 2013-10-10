@@ -104,7 +104,7 @@ roundcube:
     - context:
       password: {{ dbuserpass }}
       dbname: {{ dbname }}
-      dbuser: {{ dbuser }}
+      username: {{ dbuser }}
 
 {{ roundcubedir }}/config/main.inc.php:
   file:

@@ -6,4 +6,4 @@
 {%- set username = deployment %}
 {%- endif %}
 # Just run a stupid query to make sure connection work
-command[{{ deployment }}_mysql]=/usr/lib/nagios/plugins/check_mysql_query -H localhost -P 3306 -q 'select @@max_connections;' -d {{ database }} -u {{ username }} -p{{ password }}
+command[{{ database }}_mysql]=/usr/lib/nagios/plugins/check_mysql_query -H localhost -P 3306 -q 'select @@max_connections;' -d {{ database }} -u {{ username }} -p{{ password }}

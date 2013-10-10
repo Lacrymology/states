@@ -4,6 +4,11 @@ Pillar
 Mandatory
 ---------
 
+Example:
+  
+  mail:
+    mailname: xxxx
+
 mail:mailname
 ~~~~~~~~~~~~~
 

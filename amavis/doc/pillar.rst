@@ -26,3 +26,5 @@ mail:maxproc
 ~~~~~~~~~~~~
 
 Maximum number of process.
+
+Default: ``2`` by default of that pillar key.

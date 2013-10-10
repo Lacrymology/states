@@ -4,6 +4,23 @@ Pillar
 Optional
 --------
 
+Example:
+
+  redis:
+    port: 6379
+    timeout: 0
+    keepalive: 60
+    loglevel: notice
+    number_of_dbs: 16
+    save:
+      - '900 1'
+      - '300 10'
+      - '60 10000'
+    maxclients: 10000
+    maxmemory: 300mb
+    policy: volatile-lru
+    samples: 3
+
 redis:port
 ~~~~~~~~~~
 
@@ -79,7 +96,7 @@ Save the DB on disk:
   points by adding a save directive with a single empty string argument
   like in the following example:
 
-Default: ``None``.
+Default: None
 
 redis:maxclients
 ~~~~~~~~~~~~~~~~

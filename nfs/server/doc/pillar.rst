@@ -41,6 +41,8 @@ nfs:exports
 
 Files to share and hosts that can access to it with specified options.
 
+Default: ``empty`` by default of that pillar key.
+
 nfs:procs
 ~~~~~~~~~
 

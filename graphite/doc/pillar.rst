@@ -115,17 +115,19 @@ Example::
       ssl: microsigns
       ssl_redirect: True
       render_noauth: False
-     timeout: 30
+      timeout: 30
       cheaper: 1
-     idle: 240
+      idle: 240
   graylog2_address: 192.168.1.1
   shinken_pollers:
-  - 192.168.1.1
+    - 192.168.1.1
 
 graphite:web:debug
 ~~~~~~~~~~~~~~~~~~
 
 If True, graphite run with extra logging.
+
+Default: ``False`` by default of that pillar key.
 
 graphite:web:render_noauth
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -133,21 +135,27 @@ graphite:web:render_noauth
 If set to True, the rendered graphics can be directly GET by anyone
 without user authentication.
 
+Default: ``False`` by default of that pillar key.
+
 graphite:web:ssl
 ~~~~~~~~~~~~~~~~
 
 Name of the SSL key to use for HTTPS.
 
+Default: ``False`` by default of that pillar key.
+
 graphite:web:ssl_redirect
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If set to True and SSL is turned on, this will force all HTTP traffic to be
+If set to True and SSL is turned on, this will force all HTTP traffic to be 
 redirected to HTTPS.
+
+Default: ``False`` by default of that pillar key.
 
 graphite:web:timeout
 ~~~~~~~~~~~~~~~~~~~~
 
-How long in seconds until a uWSGI worker is killed while running a single
+How long in seconds until a uWSGI worker is killed while running a single 
 request.
 
 Default: ``30``.
@@ -155,16 +163,17 @@ Default: ``30``.
 graphite:web:cheaper
 ~~~~~~~~~~~~~~~~~~~~
 
-Number of process in uWSGI cheaper mode.
+Number of process in uWSGI cheaper mode. Default no cheaper mode.
+See: http://uwsgi-docs.readthedocs.org/en/latest/Cheaper.html
 
-Default: ``no cheaper mode``.
-
-See: http://uwsgi-docs.readthedocs.org/en/latest/Cheaper.html.
+Default: ``1`` by default of that pillar key.
 
 graphite:web:idle
 ~~~~~~~~~~~~~~~~~
 
 Number of seconds before uWSGI switch to cheap mode.
+
+Default: ``240`` by default of that pillar key.
 
 graphite:carbon
 ~~~~~~~~~~~~~~~
@@ -176,3 +185,4 @@ destructive_absent
 
 Remove graphite data when run absent.
 
+Default: ``False`` by default of that pillar key.

@@ -92,5 +92,7 @@ Example::
 destructive_absent
 ~~~~~~~~~~~~~~~~~~
 
-If True (not default), RabbitMQ data saved on disk is purged
+If True, RabbitMQ data saved on disk is purged
 when rabbitmq.absent is executed.
+
+Default: ``False`` by default of that pillar key.

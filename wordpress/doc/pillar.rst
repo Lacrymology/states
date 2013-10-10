@@ -52,6 +52,8 @@ Example::
     ssl_redirect: True
     workers: 2
     cheaper: 1
+    timeout: 60
+    idle: 300
 
 wordpress:password
 ~~~~~~~~~~~~~~~~~~
@@ -77,16 +79,22 @@ wordpress:ssl
 
 Name of the SSL key to use for HTTPS.
 
+Default: ``False`` by default of that pillar key.
+
 wordpress:ssl_redirect
 ~~~~~~~~~~~~~~~~~~~~~~
 
 If set to True and SSL is turned on, this will force all HTTP traffic to be
 redirected to HTTPS.
 
+Default: ``False`` by default of that pillar key.
+
 wordpress:workers
 ~~~~~~~~~~~~~~~~~
 
 Number of uWSGI worker that will run the webapp.
+
+Default: ``2`` by default of that pillar key.
 
 wordpress:cheaper
 ~~~~~~~~~~~~~~~~~
@@ -95,3 +103,19 @@ Number of process in uWSGI cheaper mode. Default no cheaper mode.
 
 See: http://uwsgi-docs.readthedocs.org/en/latest/Cheaper.html.
 
+Default: ``1`` by default of that pillar key.
+
+wordpress:idle
+~~~~~~~~~~~~~~
+
+Number of seconds before uWSGI switch to cheap mode.
+
+Default: ``300`` by default of that pillar key.
+
+wordpress:timeout
+~~~~~~~~~~~~~~~~~
+
+How long in seconds until a uWSGI worker is killed while running 
+a single request. Default 30.
+
+Default: ``60`` by default of that pillar key.

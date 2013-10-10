@@ -43,9 +43,11 @@ Example::
 graphite:file-max
 ~~~~~~~~~~~~~~~~~
 
-Maximum of open files for the daemon. Default: not used.
+Maximum of open files for the daemon.
 
-graphite:carbon:interface
+Default: ``False`` by default of that pillar key.
+
+graphite:carbon:interface 
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Network interface to bind Carbon-relay daemon.
@@ -61,6 +63,3 @@ Every data point and relaying it to N caches (0 < N <= number of cache
 instances).
 
 Default: ``1``. (Mean you have only one copy for each metric = No replication)
-
-
-

@@ -27,15 +27,10 @@ On first run, repo are created as "bare" and need to be pushed into.
 Optional
 --------
 
-git-server
-
-destructive_absent
-~~~~~~~~~~~~~~~~~~
-
-False
-
 destructive_absent
 ~~~~~~~~~~~~~~~~~~
 
 If True (not default), git repositories will be wiped if
 git.server.absent state is executed.
+
+Default: ``False`` by default of that pillar key.

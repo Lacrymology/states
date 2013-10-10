@@ -25,22 +25,20 @@ else:
 logger = logging.getLogger(__name__)
 
 def _uwsgi_root():
-    return __salt__['pillar.get']('uwsgi:directory', os.path.join('/', 'etc', 'uwsgi'))
+    return os.path.join('/', 'etc', 'uwsgi')
 
 def _enabled_path():
-    return __salt__['pillar.get']('uwsgi:enabled_path', os.path.join(_uwsgi_root(),
-                                                         'apps-enabled'))
+    return os.path.join(_uwsgi_root(), 'apps-enabled')
 
 def _available_path():
-    return __salt__['pillar.get']('uwsgi:available_path', os.path.join(_uwsgi_root(),
-                                                           'apps-available'))
+    return os.path.join(_uwsgi_root(), 'apps-available')
 
 def __virtual__():
     '''
     Only load the module if uwsgi is installed/available on $PATH
 
     '''
-    if os.path.exists(_enabled_path) and os.path.exists(_available_path):
+    if os.path.exists(_enabled_path()) and os.path.exists(_available_path()):
         return 'uwsgi'
     return False
 
@@ -103,9 +101,10 @@ def enable(app_name):
         return ret
     if app_name in list_enabled():
         message = "{0} already exists".format(app_symlink)
-        logger.error(message)
-        ret['comment'] = message
-        return ret
+        logger.warning(message)
+        return {'result': True,
+                'comment': message,
+               }
 
     try:
         symlink(app_config, app_symlink)
@@ -166,10 +165,14 @@ def clean():
         disabled = disable(app_name)
         if not disabled['result']:
             results.append(False)
-            comments.append("{0} not removed: {1}".format(app_name,
+            comments.append("Cannot remove webapp {0}: {1}".format(app_name,
                                                           disabled['comment']))
         else:
             results.append(True)
-            comments.append("{0} removed")
+            comments.append("Removed webapp {0}".format(app_name))
 
-    return {'result': any(results), 'comment': '|'.join(comments)}
+    if results == []:
+        return {'result': True,
+                'comment': 'There is no app need to be removed'}
+    else:
+        return {'result': any(results), 'comment': '|'.join(comments)}

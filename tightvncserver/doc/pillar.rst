@@ -26,6 +26,7 @@ Example::
     user_passwd: vnc
     sudo: False
     password: 12345678
+    display: 1
 
 tightvncserver:wm
 ~~~~~~~~~~~~~~~~~
@@ -62,3 +63,10 @@ tightvncserver:resolution
 Screen resolution that show in VNC viewer when access to VNC server.
 
 Default: ``1024x768``.
+
+tightvncserver:display
+~~~~~~~~~~~~~~~~~~~~~~
+
+Which X display to use.
+
+Default: ``1``.

@@ -24,4 +24,4 @@ Maintainer: Lam Dang Tung <lamdt@familug.org>
 -#}
 # {{ pillar['message_do_not_modify'] }}
 command[tightvncserver_procs]=/usr/lib/nagios/plugins/check_procs -c 1:1 -C Xtightvnc -u vnc
-command[tightvncserver_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 5901
+command[tightvncserver_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p {{ salt['pillar.get']('tightvncserver:display', "1")|int + 5900 }}

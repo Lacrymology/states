@@ -70,3 +70,12 @@ sentry:
 /etc/nginx/conf.d/sentry.conf:
   file:
     - absent
+
+/etc/apps-available/sentry.ini:
+  file:
+    - absent
+
+/etc/apps-enabled/sentry.ini:
+  file:
+    - absent
+

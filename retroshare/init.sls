@@ -32,10 +32,11 @@ include:
 retroshare:
   pkgrepo:
     - managed
+{%- set version = salt['pillar.get']('retroshare:version', '0.5.5-0.6732') -%}
 {%- if 'files_archive' in pillar %}
-    - name: deb {{ pillar['files_archive'] }}/mirror/retroshare/0.5.5-0.6732 {{ grains['lsb_codename'] }} main
+    - name: deb {{ pillar['files_archive'] }}/mirror/retroshare/{{ version }} {{ grains['lsb_codename'] }} main
 {%- else %}
-    - name: deb http://archive.robotinfra.com/mirror/retroshare/0.5.5-0.6732 {{ grains['lsb_codename'] }} main
+    - name: deb http://archive.robotinfra.com/mirror/retroshare/{{ version }} {{ grains['lsb_codename'] }} main
 {%- endif %}
     - keyid: 2E10C9E3
     - keyserver: keyserver.ubuntu.com

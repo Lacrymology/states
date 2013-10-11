@@ -7,7 +7,7 @@ Mandatory
 Optional
 --------
 
-Example:
+Example::
 
   openvpn:
     <tunnelname>:

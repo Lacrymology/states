@@ -17,7 +17,7 @@ Example::
 wordpress:hostnames
 ~~~~~~~~~~~~~~~~~~~
 
-List of hostname, used for nginx config.
+List of http hostname.
 
 wordpress:title
 ~~~~~~~~~~~~~~~
@@ -116,6 +116,6 @@ wordpress:timeout
 ~~~~~~~~~~~~~~~~~
 
 How long in seconds until a uWSGI worker is killed while running 
-a single request. Default 30.
+a single request.
 
 Default: ``60`` by default of that pillar key.

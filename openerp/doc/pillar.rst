@@ -27,6 +27,8 @@ Example::
       password: psqluserpass
     workers: 2
     cheaper: 1
+    timeout: 30
+    idle: 300
 
 openerp:ssl
 ~~~~~~~~~~~
@@ -63,3 +65,18 @@ Number of process in uWSGI cheaper mode. Default no cheaper mode.
 See: http://uwsgi-docs.readthedocs.org/en/latest/Cheaper.html.
 
 Default: ``1`` by default of that pillar key.
+
+openerp:idle
+~~~~~~~~~~~~~~
+
+Number of seconds before uWSGI switch to cheap mode.
+
+Default: ``300`` by default of that pillar key.
+
+openerp:timeout
+~~~~~~~~~~~~~~~~~
+
+How long in seconds until a uWSGI worker is killed while running 
+a single request.
+
+Default: ``30`` by default of that pillar key.

@@ -4,9 +4,9 @@ Pillar
 Mandatory
 ---------
 
-Example:
+Example::
 
 Optional
 --------
 
-Example:
+Example::

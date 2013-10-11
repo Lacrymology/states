@@ -4,7 +4,7 @@ Pillar
 Optional
 --------
 
-Example:
+Example::
 
   memcache:
     memory: False

@@ -4,7 +4,7 @@ Pillar
 Optional
 --------
 
-Example:
+Example::
 
   ntp:
     server:
@@ -15,4 +15,4 @@ ntp:server
 
 The list of NTP servers.
 
-Default: ``empty` by default of that pillar key.
+Default: [] by default of that pillar key.

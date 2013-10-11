@@ -34,7 +34,7 @@ Pillar
 Mandatory
 ---------
 
-Example:
+Example::
 
   graylog2:
     hostnames:
@@ -54,7 +54,7 @@ Number of uWSGI worker that will run the webapp.
 Optional
 --------
 
-Example:
+Example::
 
   graylog2:
     max_docs: 20000000

@@ -4,7 +4,7 @@ Pillar
 Optional
 --------
 
-Example:
+Example::
 
   redis:
     port: 6379

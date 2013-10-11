@@ -68,7 +68,7 @@ denyhosts:whitelist
 
 List white-list hosts.
 
-Default: empty list.
+Default: [] by default of that pillar key.
 
 timedenyhosts:deny_threshold_invalid_user
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

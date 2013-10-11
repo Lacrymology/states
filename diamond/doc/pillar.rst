@@ -55,3 +55,6 @@ diamond:ping
 ~~~~~~~~~~~~
 
 List of IP/hostname ping to monitor latency and availability.
+
+Default: ``empty`` by default of that pillar key.
+

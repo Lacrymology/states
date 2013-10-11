@@ -14,7 +14,8 @@ Pillar
 Mandatory
 ---------
 
-Example:
+Example::
+
   memcache_servers:
    - 127.0.0.1
   sentry:
@@ -49,7 +50,7 @@ Number of uWSGI worker that will run the webapp.
 Optional
 --------
 
-Example:
+Example::
 
   sentry:
     db:

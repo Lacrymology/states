@@ -4,7 +4,7 @@ Pillar
 Mandatory
 ---------
 
-Example:
+Example::
 
   proftpd:
     - list
@@ -18,7 +18,7 @@ PostgreSQL user password.
 Optional
 --------
 
-Example:
+Example::
 
   proftpd:
     deployments:
@@ -29,7 +29,7 @@ proftpd:deployments
 
 List deployments of proftpd.
 
-Default: ``empty`` by default of that pillar key.
+Default: [] by default of that pillar key.
 
 destructive_absent
 ~~~~~~~~~~~~~~~~~~

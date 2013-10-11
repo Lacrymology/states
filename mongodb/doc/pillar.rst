@@ -4,7 +4,7 @@ Pillar
 Optional
 --------
 
-Example:
+Example::
 
   destructive_absent: False
 

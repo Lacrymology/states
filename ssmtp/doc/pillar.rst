@@ -4,7 +4,7 @@ Pillar
 Mandatory
 ---------
 
-Example:
+Example::
 
   smtp:
     server: smtp.yourdomain.com
@@ -33,7 +33,7 @@ The system mail name should be your fully qualified domain name.
 Optional
 --------
 
-Example:
+Example::
   
   smtp:
     user: joe@example.com

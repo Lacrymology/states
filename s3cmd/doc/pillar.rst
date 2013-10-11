@@ -4,7 +4,7 @@ Pillar
 Mandatory
 ---------
 
-Example:
+Example::
 
   aws:
     access_key: XXXX

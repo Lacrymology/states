@@ -4,7 +4,7 @@ Pillar
 Optional
 --------
 
-Example:
+Example::
 
   nginx:
     worker_processes: 1

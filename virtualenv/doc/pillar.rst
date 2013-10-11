@@ -4,7 +4,7 @@ Pillar
 Mandatory
 ---------
 
-Example:
+Example::
 
   backup_server:
     address: bitbucket.org

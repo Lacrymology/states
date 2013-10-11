@@ -49,7 +49,7 @@ gitlab:support_email
 
 Email for supporting
 
-Default: ``empty`` by default of that pillar key.
+Default: [] by default of that pillar key.
 
 gitlab:default_projects_limit
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

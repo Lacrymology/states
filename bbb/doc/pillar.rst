@@ -4,7 +4,7 @@ Pillar
 Mandatory
 ---------
 
-Example:
+Example::
   
   bbb:
     hostname: bbb.example.com

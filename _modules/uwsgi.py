@@ -98,91 +98,73 @@ def enable(app_name):
     '''
     Enable specified uWSGI application.
     '''
-    ret = {
-        'result': False,
-        'comment': '',
-    }
     app_config, app_symlink, app_file = _get_app_paths(app_name)
 
     if app_name not in list_available():
         message = "{0} is not an available app".format(app_name)
         logger.error(message)
-        ret['comment'] = message
-        return ret
+        return False
     if app_name in list_enabled():
         message = "{0} already exists".format(app_symlink)
         logger.warning(message)
-        return {'result': True,
-                'comment': message,
-                }
+        return False
 
     try:
         symlink(app_config, app_symlink)
-    except CommandExecutionError, e:
-        message = "Error enabling apps: {0}".format(e)
+    except CommandExecutionError as e:
+        message = "Error enabling app: {0}".format(e)
         logger.error(message)
-        ret['comment'] = message
-        return ret
-
-    return {
-        'result': True,
-        'comment': "{0}: symlink to {1}".format(app_symlink, app_config),
-    }
+        return False
+    else:
+        return True
 
 
-def disable(app_name, orphan=False):
+def disable(app_name, remove_orphan=False):
     '''
     Disable specified uWSGI application.
     '''
-    ret = {
-        'result': False,
-        'comment': ''
-    }
-    if not orphan:
+    if not remove_orphan:
         if app_name not in list_enabled():
-            message = "{0} isn't enabled".format(app_name)
-            logger.info(message)
-            ret['comment'] = message
-            return ret
-    _, app_symlink, app_file = _get_app_paths(app_name)
-    if not __salt__['file.remove'](app_symlink):
-        message = "{0} could not be removed".format(app_symlink)
-        logger.debug(message)
-        ret['comment'] = message
-        return ret
-    return {'result': True, 'comment': "{0} deleted".format(app_symlink)}
+            message = "Webapp {0} isn't enabled".format(app_name)
+            logger.error(message)
+            return False
+
+    _, app_symlink, __ = _get_app_paths(app_name)
+    try:
+        __salt__['file.remove'](app_symlink)
+    except CommandExecutionError as e:
+        message = "{0} could not be removed: {1}".format(app_symlink, e)
+        logger.error(message)
+        return False
+    else:
+        return True
 
 
 def remove(app_name):
     '''
     Remove specified uWSGI application.
     '''
-    app_config, _, app_file = _get_app_paths(app_name)
-    if not __salt__['file.remove'](app_config):
-        message = "{0} could not be removed".format(app_config)
-        logger.debug(message)
-        return {'result': False, 'comment': message}
-    return {'result': True, 'comment': '{0} deleted'.format(app_config)}
+    app_config, _, __ = _get_app_paths(app_name)
+    try:
+        __salt__['file.remove'](app_config)
+    except CommandExecutionError as e:
+        message = '{0} could not be removed: {1}'.format(app_config, e)
+        logger.error(message)
+        return False
+    else:
+        return True
 
 
 def clean():
     '''
     Remove apps that are enabled but that don't exist anymore.
     '''
-    results = []
-    comments = []
+    results = {}
     for app_name in _applist(_enabled_path(), lambda x: not os.path.exists(x)):
-        disabled = disable(app_name)
-        if not disabled['result']:
-            results.append(False)
-            comments.append("Cannot remove webapp {0}: {1}".format(
-                            app_name, disabled['comment']))
+        disabled = disable(app_name, remove_orphan=True)
+        if not disabled:
+            results[app_name] = 'cannot be removed'
         else:
-            results.append(True)
-            comments.append("Removed webapp {0}".format(app_name))
+            results[app_name] = 'has been removed'
 
-    if results == []:
-        return {'result': True,
-                'comment': 'There is no app need to be removed'}
-    else:
-        return {'result': any(results), 'comment': '|'.join(comments)}
+    return results

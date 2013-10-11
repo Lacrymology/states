@@ -4,6 +4,9 @@ fileserver_backend:
   - git
   - roots
 
+ext_pillar:
+  - git: develop git@git.bit-flippers.com:~git/pillars.git
+
 worker_threads: {{ pillar['salt_master']['workers']|default(5) }}
 gitfs_remotes:
 {% for repo in pillar['salt_master']['gitfs_remotes'] %}

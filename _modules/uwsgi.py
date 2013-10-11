@@ -116,6 +116,8 @@ def enable(app_name):
         logger.error(message)
         return False
     else:
+        logger.info('Created {0} symlink target to {1}\
+                    '.format(app_symlink, app_config))
         return True
 
 
@@ -137,6 +139,7 @@ def disable(app_name, remove_orphan=False):
         logger.error(message)
         return False
     else:
+        logger.info('removed {0}'.format(app_symlink))
         return True
 
 
@@ -152,6 +155,7 @@ def remove(app_name):
         logger.error(message)
         return False
     else:
+        logger.info('removed {0}'.format(app_config))
         return True
 
 

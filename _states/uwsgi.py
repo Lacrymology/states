@@ -27,6 +27,30 @@ def _get_filename(appname):
             'apps-available')),
         '{0}.ini'.format(appname))
 
+def _uwsgi_root():
+    return os.path.join('/', 'etc', 'uwsgi')
+
+
+def _enabled_path():
+    return os.path.join(_uwsgi_root(), 'apps-enabled')
+
+
+def _available_path():
+    return os.path.join(_uwsgi_root(), 'apps-available')
+
+def _get_app_paths(app=None):
+    '''
+    using ``uwsgi_base`` config path, return the paths to the app's config
+    in apps-available as well as the expected symlink in apps-enabled
+
+    '''
+    app_file = '{}.ini'.format(app)
+    # define our app config/symlink paths
+    config = os.path.join(_available_path(), app_file)
+    link = os.path.join(_enabled_path(), app_file)
+    return config, link, app_file
+
+
 def _patch_module(mod):
     # update the dunder dicts on the module
     #  (is this dangerous?)
@@ -81,24 +105,48 @@ def available(name, enabled=False, **kwargs):
     _patch_module(file)
     ret.update(file.managed(filename, **kwargs))
 
-    if enabled:
-        if name not in __salt__['uwsgi.list_enabled']():
-            if __opts__['test']:
-                if ret['comment']:
-                    ret['comment'] += ' and enabled'
+    if ret['result'] == False:
+        return ret
+    else:
+        if enabled:
+            if name not in __salt__['uwsgi.list_enabled']():
+                if __opts__['test']:
+                    if ret['comment']:
+                        ret['comment'] += ' and enabled'
+                    else:
+                        ret['comment'] = ('{0} would have been enabled'
+                                          '').format(name)
                 else:
-                    ret['comment'] = '{0} would have been enabled'.format(name)
+                    enable_output = __salt__['uwsgi.enable'](name)
+
+                    ret['result'] = enable_output
+                    changes = {'uwsgi': 'Webapp {0} has been enabled'.format(
+                               name)}
+                    ret['changes'].update(changes)
             else:
-                ret['changes'].update(__salt__['uwsgi.enable'](name))
-    return ret
+                ret['comment'] = ('{0}\nWebapp {1} is already '
+                                  'enabled'.format(ret['comment'], name))
+
+        else:
+            if name not in __salt__['uwsgi.list_enabled']():
+                ret['comment'] = ('{0}\nwebapp {1} is already '
+                                  'disabled'.format(ret['comment'], name))
+            else:
+                disable_ret = __salt__['uwsgi.disable'](name)
+                if disable_ret == True:
+                    disable_data = {'result': disable_ret,
+                            'changes': {'uwsgi': '{0} is disabled'.format(name)}
+                            }
+                    ret.update(disable_data)
+        return ret
 
 
 def absent(name):
     '''
     Make uWSGI application isn't there and not running.
     '''
-    ret = {'name': name, 'comment': '', 'changes': {}, 'result': False}
-    comment = [name]
+    ret = {'name': name, 'comment': '', 'changes': {}, 'result': True}
+    comment = []
 
     if __opts__['test']:
         apps_enabled = __salt__['uwsgi.list_enabled']()
@@ -115,24 +163,37 @@ def absent(name):
         ret['result'] = None
 
     else:
-        comment.append('was:')
-
-        disabled = __salt__['uwsgi.disable'](name)
-        if disabled['result']:
-            comment.append('[disabled]')
-            ret['changes']['disabled'] = {'new': True, 'old': False}
-            ret['result'] = True
+        config, link, _ = _get_app_paths(name)
+        changes = {}
+        if os.path.islink(link):
+            disabled = __salt__['uwsgi.disable'](name)
+            if disabled:
+                changes.update({name: 'is disabled'})
+                ret['result'] = True
+            else:
+                comment.append('[not disabled]')
+                ret['result'] = False
         else:
-            comment.append('[not disabled: ({0})]'.format(disabled['comment']))
+            comment = []
+            ret['result'] = False
 
-        removed = __salt__['uwsgi.remove'](name)
-        if removed['result']:
-            comment.append('[removed]')
-            ret['changes']['removed'] = {'old': False, 'new': True}
-            ret['result'] = True
+        if os.path.isfile(config):
+            removed = __salt__['uwsgi.remove'](name)
+            if removed:
+                if name in changes:
+                    changes[name] = ('{0} and removed'
+                                     '').format(changes[name])
+                else:
+                    changes.update({name: '{0} is removed'.format(name)})
+                ret['result'] = True
+            else:
+                comment.append('[not removed]')
+                ret['result'] = False
         else:
-            comment.append('[not removed: ({0})]'.format(removed['comment']))
+            comment = []
+            ret['result'] = True
 
+    ret['changes'].update(changes)
     ret['comment'] = " ".join(comment)
     return ret
 
@@ -163,14 +224,12 @@ def enabled(name):
         return ret
 
     was_enabled = __salt__['uwsgi.enable'](name)
-    if was_enabled['result']:
+    if was_enabled:
         ret['result'] = True
-        ret['comment'] = "{0} was enabled ({1})".format(name,
-                                                        was_enabled['comment'])
+        ret['comment'] = "{0} was enabled".format(name)
         ret['changes'][name] = {'new': 'Enabled', 'old': 'Disabled'}
     else:
-        ret['comment'] = "{0} was not enabled ({1})".format(
-            name, was_enabled['comment'])
+        ret['comment'] = "{0} was not enabled".format(name)
     return ret
 
 
@@ -191,13 +250,12 @@ def disabled(name):
         return ret
 
     disabled = __salt__['uwsgi.disable'](name)
-    if disabled['result']:
+    if disabled:
         ret['comment'] = "{0} was disabled".format(name)
         ret['changes'][name] = {'new': 'Disabled', 'old': 'Enabled'}
         ret['result'] = True
     else:
-        ret['comment'] = "{0} was not disabled: ({1})".format(
-            disabled['comment'])
+        ret['comment'] = "{0} was not disabled".format(name)
 
     return ret
 

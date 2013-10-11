@@ -7,8 +7,11 @@ uWSGI module
 import logging
 import os
 
-import salt, salt.version
+import salt
 from salt.exceptions import CommandExecutionError, SaltInvocationError
+
+logger = logging.getLogger(__name__)
+
 
 if salt.version.__version_info__ >= (0, 16):
     # use file.symlink module
@@ -22,25 +25,32 @@ else:
         else:
             raise CommandExecutionError('Could not create {0}'.format(name))
 
-logger = logging.getLogger(__name__)
 
 def _uwsgi_root():
     return os.path.join('/', 'etc', 'uwsgi')
 
+
 def _enabled_path():
     return os.path.join(_uwsgi_root(), 'apps-enabled')
 
+
 def _available_path():
     return os.path.join(_uwsgi_root(), 'apps-available')
+
 
 def __virtual__():
     '''
     Only load the module if uwsgi is installed/available on $PATH
 
     '''
-    if os.path.exists(_enabled_path()) and os.path.exists(_available_path()):
+    if not os.path.exists(_enabled_path()):
+        logger.error("Not found {0}".format(_enabled_path()))
+        return False
+    elif not os.path.exists(_available_path()):
+        logger.error("Not found {0}".format(_available_path()))
+        return False
+    else:
         return 'uwsgi'
-    return False
 
 
 def _get_app_paths(app=None):
@@ -104,7 +114,7 @@ def enable(app_name):
         logger.warning(message)
         return {'result': True,
                 'comment': message,
-               }
+                }
 
     try:
         symlink(app_config, app_symlink)
@@ -165,8 +175,8 @@ def clean():
         disabled = disable(app_name)
         if not disabled['result']:
             results.append(False)
-            comments.append("Cannot remove webapp {0}: {1}".format(app_name,
-                                                          disabled['comment']))
+            comments.append("Cannot remove webapp {0}: {1}".format(
+                            app_name, disabled['comment']))
         else:
             results.append(True)
             comments.append("Removed webapp {0}".format(app_name))

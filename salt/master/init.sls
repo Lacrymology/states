@@ -61,12 +61,6 @@ salt-master:
     - mode: 400
     - require:
       - pkg: salt-master
-  git:
-    - latest
-    - name: {{ pillar['salt_master']['pillar_remote'] }}
-    - target: /srv/pillar
-    - require:
-      - pkg: git
   pkg:
     - installed
     - skip_verify: True

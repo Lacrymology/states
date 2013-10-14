@@ -50,7 +50,7 @@ include:
     - require:
       - pkg: nagios-nrpe-server
     - context:
-      deployment: monitoring
+      database: monitoring
       version: {{ version }}
       password: {{ salt['password.pillar']('postgresql:monitoring:password') }}
 

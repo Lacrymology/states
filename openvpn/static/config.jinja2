@@ -59,3 +59,8 @@ ifconfig {{ pillar['openvpn'][tunnel]['peers'][grains['id']]['vpn_address'] }} {
 remote {{ pillar['openvpn'][tunnel]['peers'][peer]['address'] }} {{ pillar['openvpn'][tunnel]['peers'][peer]['port']|default('') }}
     {%- endif -%}
 {%- endfor -%}
+{%- if pillar['debug']|default(False) %}
+verb 15
+{%- else %}
+verb 4
+{%- endif %}

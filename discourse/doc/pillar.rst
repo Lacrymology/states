@@ -65,22 +65,22 @@ Example::
     timeout: 60
     idle: 300
 
-discourse:database:username
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+discourse:db:username
+~~~~~~~~~~~~~~~~~~~~~
 
 PostgreSQL username for discourse. it will be created.
 
 Default: ``discourse`` by default of that pillar key.
 
-discourse:database:name
-~~~~~~~~~~~~~~~~~~~~~~~
+discourse:db:name
+~~~~~~~~~~~~~~~~~
 
 PostgreSQL database name. it will be created.
 
 Default: ``discourse`` by default of that pillar key.
 
-discourse:database:password
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+discourse:db:password
+~~~~~~~~~~~~~~~~~~~~~
 
 PostgreSQL user password. it will be created.
 

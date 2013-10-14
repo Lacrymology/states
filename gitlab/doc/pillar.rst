@@ -95,27 +95,27 @@ Port listen on web
 
 Default: ``80`` by default of that pillar key. You should not change it.
 
-gitlab:database:username
-~~~~~~~~~~~~~~~~~~~~~~~~
+gitlab:db:username
+~~~~~~~~~~~~~~~~~~
 
 PostgreSQL username for gitlab. it will be created.
 
 Default: ``gitlab`` by default of that pillar key.
 
-gitlab:database:name
-~~~~~~~~~~~~~~~~~~~~
+gitlab:db:name
+~~~~~~~~~~~~~~
 
 PostgreSQL database name. it will be created.
 
 Default: ``gitlab`` by default of that pillar key.
 
-gitlab:database:password
-~~~~~~~~~~~~~~~~~~~~~~~~
+gitlab:db:password
+~~~~~~~~~~~~~~~~~~
 
 PostgreSQL user password. it will be created.
 
-gitlab:database:hostnames
-~~~~~~~~~~~~~~~~~~~~~~~~~
+gitlab:db:hostname
+~~~~~~~~~~~~~~~~~~
 
 PostgreSQL hostname.
 

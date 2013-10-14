@@ -23,7 +23,7 @@ Example::
   openerp:
     ssl: microsigns
     ssl_redirect: True
-    database:
+    db:
       password: psqluserpass
     workers: 2
     cheaper: 1
@@ -45,8 +45,8 @@ redirected to HTTPS.
 
 Default: ``False`` by default of that pillar key.
 
-openerp:database:password
-~~~~~~~~~~~~~~~~~~~~~~~~~
+openerp:db:password
+~~~~~~~~~~~~~~~~~~~
 
 PostgreSQL user password.
 

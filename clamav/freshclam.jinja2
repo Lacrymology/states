@@ -31,13 +31,18 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 #}
 DatabaseOwner clamav
 NotifyClamd /etc/clamav/clamd.conf
-LogVerbose false
 LogSyslog true
 LogFacility LOG_DAEMON
 LogFileMaxSize 0
 LogTime true
 Foreground false
+{%- if pillar['debug']|default(False) %}
+Debug true
+LogVerbose true
+{%- else %}
+LogVerbose false
 Debug false
+{%- endif %}
 MaxAttempts 5
 DatabaseDirectory /var/lib/clamav
 {%- for mirror in salt['pillar.get']('clamav:dns_db', ('current.cvd.clamav.net',)) %}

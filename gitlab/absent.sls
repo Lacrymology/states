@@ -54,3 +54,4 @@ gitlab:
 uwsgi_gitlab:
   uwsgi:
     - absent
+    - name: gitlab

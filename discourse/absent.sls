@@ -50,3 +50,4 @@ discourse:
 uwsgi_discourse:
   uwsgi:
     - absent
+    - name: discourse

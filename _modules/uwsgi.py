@@ -39,18 +39,11 @@ def _available_path():
 
 
 def __virtual__():
-    '''
-    Only load the module if uwsgi is installed/available on $PATH
-
-    '''
     if not os.path.exists(_enabled_path()):
         logger.error("Not found {0}".format(_enabled_path()))
-        return False
     elif not os.path.exists(_available_path()):
         logger.error("Not found {0}".format(_available_path()))
-        return False
-    else:
-        return 'uwsgi'
+    return 'uwsgi'
 
 
 def _get_app_paths(app=None):

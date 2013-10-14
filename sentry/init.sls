@@ -189,7 +189,6 @@ uwsgi_sentry:
     - require:
       - service: memcached
       - service: uwsgi_emperor
-      - cmd: sentry_settings
       - service: rsyslog
     - watch:
       - file: sentry
@@ -221,3 +220,5 @@ extend:
         - module: /etc/ssl/{{ pillar['sentry']['ssl'] }}/server.pem
         - file: /etc/ssl/{{ pillar['sentry']['ssl'] }}/ca.crt
 {% endif %}
+      - require:
+        - uwsgi: uwsgi_sentry

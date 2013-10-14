@@ -64,6 +64,10 @@ salt-master-requirements:
     - group: root
     - mode: 555
 
+/srv/pillars:
+  file:
+    - absent
+
 /srv/salt/top.sls:
   file:
     - managed

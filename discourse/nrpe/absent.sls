@@ -24,7 +24,7 @@ Maintainer: Lam Dang Tung <lamdt@familug.org>
 
 Remove GitLab NRPE checks.
 -#}
-/etc/nagios/nrpe.d/gitlab.cfg:
+/etc/nagios/nrpe.d/discourse.cfg:
   file:
     - absent
 

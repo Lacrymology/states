@@ -40,7 +40,6 @@ Example::
     port: 6379
     timeout: 0
     keepalive: 60
-    loglevel: notice
     number_of_dbs: 16
     save:
       - '900 1'
@@ -73,20 +72,6 @@ redis:keepalive
 TCP keepalive. Period to send ACKs (in seconds).
 
 Default: ``60``.
-
-redis:loglevel
-~~~~~~~~~~~~~~
-
-Specify the server verbosity level.
-
-This can be one of:
-
-- debug (a lot of information, useful for development/testing).
-- verbose (many rarely useful info, but not a mess like the debug level).
-- notice (moderately verbose, what you want in production probably).
-- warning (only very important / critical messages are logged).
-
-Default: ``notice``.
 
 redis:number_of_dbs
 ~~~~~~~~~~~~~~~~~~~

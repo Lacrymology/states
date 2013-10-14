@@ -169,35 +169,28 @@ wordpress_initial:
     - template: jinja
     - require:
       - pkg: nginx
-      - file: /etc/uwsgi/wordpress.ini
+      - uwsgi: uwsgi_wordpress
     - watch_in:
       - service: nginx
     - context:
       dir: {{ wordpressdir }}
 
-/etc/uwsgi/wordpress.ini:
-  file:
-    - managed
+uwsgi_wordpress:
+  uwsgi:
+    - available
+    - enabled: True
+    - name: wordpress
     - source: salt://wordpress/uwsgi.jinja2
     - user: www-data
     - group: www-data
     - mode: 440
     - template: jinja
+    - context:
+      dir: {{ wordpressdir }}
     - require:
-      - file: {{ wordpressdir }}/wp-config.php
-      - archive: wordpress
-      - pkg: php5-mysql
       - module: wordpress_initial
       - service: uwsgi_emperor
       - service: mysql-server
-    - context:
-      dir: {{ wordpressdir }}
-  module:
-    - wait
-    - name: file.touch
-    - m_name: /etc/uwsgi/wordpress.ini
-    - require:
-      - file: /etc/uwsgi/wordpress.ini
     - watch:
       - file: {{ wordpressdir }}/wp-config.php
       - archive: wordpress

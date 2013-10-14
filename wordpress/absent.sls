@@ -32,8 +32,11 @@ wordpress:
     - absent
     - name: {{ wordpressdir }}
 
-{%- for file in ('/etc/nginx/conf.d/wordpress.conf', '/etc/uwsgi/wordpress.ini')  %}
-{{ file }}:
+/etc/nginx/conf.d/wordpress.conf:
   file:
     - absent
-{%- endfor %}
+
+uwsgi_wordpress:
+  uwsgi:
+    - absent
+    - name: wordpress

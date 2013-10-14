@@ -141,9 +141,29 @@ uwsgi_emperor:
       - file: uwsgi_upgrade_remove_old_version
       - file: /etc/init/uwsgi.conf
       - file: /etc/uwsgi.ini
+      - file: /etc/uwsgi/apps-available
+      - file: /etc/uwsgi/apps-enabled
   file:
     - directory
     - name: /etc/uwsgi
+    - user: www-data
+    - group: www-data
+    - mode: 550
+    - require:
+      - user: web
+
+/etc/uwsgi/apps-available:
+  file:
+    - directory
+    - user: www-data
+    - group: www-data
+    - mode: 550
+    - require:
+      - user: web
+
+/etc/uwsgi/apps-enabled:
+  file:
+    - directory
     - user: www-data
     - group: www-data
     - mode: 550

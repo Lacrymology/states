@@ -94,7 +94,7 @@ salt-master:
 {%- if 'files_archive' in pillar %}
       - salt-master: {{ pillar['files_archive']|replace('file://', '') }}/mirror/salt/{{ master_path }}
 {%- else %}
-      - salt-master: http://saltinwound.org/ubuntu/{{ master_path }}
+      - salt-master: http://archive.robotinfra.com/mirror/salt/{{ master_path }}
 {%- endif %}
     - require:
       - pkg: salt

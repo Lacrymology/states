@@ -386,14 +386,18 @@ add_web_user_to_git_group:
       - user: web
       - user: gitlab
 
-/etc/uwsgi/gitlab.ini:
-  file:
-    - managed
+uwsgi_gitlab:
+  uwsgi:
+    - available
+    - enabled: True
+    - name: gitlab
     - source: salt://gitlab/uwsgi.jinja2
     - group: www-data
     - user: www-data
     - template: jinja
     - mode: 440
+    - context:
+      web_dir: {{ web_dir }}
     - require:
       - cmd: gitlab
       - cmd: gitlab_start_sidekiq_service
@@ -404,14 +408,6 @@ add_web_user_to_git_group:
       - file: {{ web_dir }}/config.ru
       - user: add_web_user_to_git_group
       - postgres_database: gitlab
-    - context:
-      web_dir: {{ web_dir }}
-  module:
-    - wait
-    - name: file.touch
-    - m_name: /etc/uwsgi/gitlab.ini
-    - require:
-      - file: /etc/uwsgi/gitlab.ini
     - watch:
       - file: {{ web_dir }}/config/gitlab.yml
       - file: {{ web_dir }}/config/database.yml
@@ -432,7 +428,7 @@ add_web_user_to_git_group:
     - require:
       - pkg: nginx
       - user: web
-      - file: /etc/uwsgi/gitlab.ini
+      - uwsgi: uwsgi_gitlab
 {%- if salt['pillar.get']('gitlab:ssl', False) %}
       - cmd: /etc/ssl/{{ pillar['gitlab']['ssl'] }}/chained_ca.crt
       - module: /etc/ssl/{{ pillar['gitlab']['ssl'] }}/server.pem

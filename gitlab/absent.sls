@@ -43,10 +43,14 @@ gitlab:
     - user: root
     - onlyif: ps -ef | grep sidekiq | grep -v grep
 
-{%- for file in ('/etc/nginx/conf.d/gitlab.conf', web_dir, '/home/git', '/etc/init/gitlab.conf', '/etc/uwsgi/gitlab.ini', '/etc/logrotate.d/gitlab') %}
+{%- for file in ('/etc/nginx/conf.d/gitlab.conf', web_dir, '/home/git', '/etc/init/gitlab.conf', '/etc/logrotate.d/gitlab') %}
 {{ file }}:
   file:
     - absent
     - require:
       - cmd: gitlab
 {%- endfor %}
+
+uwsgi_gitlab:
+  uwsgi:
+    - absent

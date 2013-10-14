@@ -40,7 +40,11 @@ pillar_roots:
 {%- endif %}
 id: {{ grains['id'] }}
 log_file: file:///dev/log
+{%- if pillar['debug']|default(False) %}
 log_level: debug
+{%- else %}
+log_level: warning
+{%- endif %}
 log_fmt_logfile: '%(asctime)-15s salt-minion[%(process)d] %(name)s: %(message)s'
 log_datefmt_logfile: '%b %d %H:%M:%S'
 {%- if 'graphite_address' in pillar %}

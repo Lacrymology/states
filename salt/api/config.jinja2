@@ -44,6 +44,10 @@ external_auth:
 
 rest_cherrypy:
   port: 8000
+{%- if pillar['debug']|default(False) %}
   debug: True
+{%- else %}
+  debug: False
+{%- endif %}
   static: /usr/local/salt-ui/
   disable_ssl: True

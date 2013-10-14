@@ -35,7 +35,11 @@ log_level_logfile: debug
 log_fmt_logfile: '%(asctime)-15s salt-cloud %(name)s: %(message)s'
 log_datefmt_logfile: '%b %d %H:%M:%S'
 
+{%- if pillar['debug']|default(False) %}
+log_level: debug
+{%- else %}
 log_level: warning
+{%- endif %}
 log_datefmt: '%b %d %H:%M:%S'
 log_fmt_console: '%(asctime)-15s salt-cloud %(name)s: %(message)s'
 

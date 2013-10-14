@@ -40,8 +40,10 @@ openerp:
     - absent
     - name: {{ web_root_dir }}
 
-{%- for file in ('/etc/nginx/conf.d/openerp.conf', '/etc/uwsgi/openerp.ini') %}
-{{ file }}:
+/etc/nginx/conf.d/openerp.conf:
   file:
     - absent
-{%- endfor %}
+
+uwsgi_openerp:
+  uwsgi:
+    - absent

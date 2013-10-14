@@ -163,29 +163,24 @@ add_web_user_to_openerp_group:
       - user: web
       - user: openerp
 
-/etc/uwsgi/openerp.ini:
-  file:
-    - managed
+uwsgi_openerp:
+  uwsgi:
+    - available
+    - enabled: True
+    - name: openerp
     - template: jinja
     - source: salt://openerp/uwsgi.jinja2
     - user: www-data
     - group: www-data
     - mode: 440
+    - context:
+      web_root_dir: {{ web_root_dir }}
+      home: {{ home }}
     - require:
-      - file: {{ web_root_dir }}/openerp.wsgi
       - user: add_web_user_to_openerp_group
       - service: uwsgi_emperor
       - postgres_user: openerp
       - file: openerp
-    - context:
-      web_root_dir: {{ web_root_dir }}
-      home: {{ home }}
-  module:
-    - wait
-    - name: file.touch
-    - m_name: /etc/uwsgi/openerp.ini
-    - require:
-      - file: /etc/uwsgi/openerp.ini
     - watch:
       - module: openerp_depends
       - archive: openerp
@@ -202,7 +197,7 @@ add_web_user_to_openerp_group:
     - mode: 440
     - require:
       - pkg: nginx
-      - file: /etc/uwsgi/openerp.ini
+      - uwsgi: uwsgi_openerp
 {%- if salt['pillar.get']('openerp:ssl', False) %}
       - cmd: /etc/ssl/{{ pillar['openerp']['ssl'] }}/chained_ca.crt
       - module: /etc/ssl/{{ pillar['openerp']['ssl'] }}/server.pem

@@ -52,6 +52,17 @@ Content of sources.list file as multiline pillar.
 Optional
 --------
 
+Example::
+
+  packages:
+    blacklist:
+      - more
+      - vi
+    whitelist:
+      - vim
+      - cmon
+      - nmap
+
 proxy_server
 ~~~~~~~~~~~~
 
@@ -60,3 +71,16 @@ download .deb and reach APT server.
 
 Default: ``False``.
 
+packages:blacklist
+~~~~~~~~~~~~~~~~~~
+
+List of packages to keep uninstalled.
+
+Default: None (``[]``).
+
+packages:whitelist
+~~~~~~~~~~~~~~~~~~
+
+List of packages to keep installed.
+
+Default: None (``[]``).

@@ -110,9 +110,11 @@ moinmoin_config:
       - virtualenv: moinmoin
       - user: web
 
-/etc/uwsgi/moinmoin.ini:
-  file:
-    - managed
+uwsgi_moinmoin:
+  uwsgi:
+    - available
+    - enabled: True
+    - name: moinmoin
     - template: jinja
     - user: www-data
     - group: www-data
@@ -131,12 +133,6 @@ moinmoin_config:
       - file: {{ root_dir }}/share/moin/moin.wsgi
       - file: /var/lib/deployments/moinmoin
       - user: web
-  module:
-    - wait
-    - name: file.touch
-    - m_name: /etc/uwsgi/moinmoin.ini
-    - require:
-      - file: /etc/uwsgi/moinmoin.ini
     - watch:
       - file: moinmoin
       - file: moinmoin_config

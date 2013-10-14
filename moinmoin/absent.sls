@@ -22,15 +22,16 @@ THE SOFTWARE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
-/etc/uwsgi/moinmoin.ini:
-  file:
+uwsgi_moinmoin:
+  uwsgi:
     - absent
+    - name: moinmoin
 
 /usr/local/moinmoin:
   file:
     - absent
     - require:
-      - file: /etc/uwsgi/moinmoin.ini
+      - uwsgi: uwsgi_moinmoin
 
 /etc/nginx/conf.d/moinmoin.conf:
   file:

@@ -39,10 +39,14 @@ discourse:
   service:
     - dead
 
-{%- for file in (web_root_dir, '/home/discourse', '/etc/uwsgi/discourse.ini', '/etc/nginx/conf.d/discourse.conf', '/etc/logrotate.d/discourse', '/etc/init/discourse.conf') %}
+{%- for file in (web_root_dir, '/home/discourse', '/etc/nginx/conf.d/discourse.conf', '/etc/logrotate.d/discourse', '/etc/init/discourse.conf') %}
 {{ file }}:
   file:
     - absent
     - require:
       - service: discourse
 {%- endfor %}
+
+uwsgi_discourse:
+  uwsgi:
+    - absent

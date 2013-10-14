@@ -230,7 +230,7 @@ discourse_upstart:
     - group: root
     - mode: 440
     - require:
-      - file: /etc/uwsgi/discourse.ini
+      - uwsgi: uwsgi_discourse
     - context:
       web_root_dir: {{ web_root_dir }}
       user: discourse
@@ -250,9 +250,11 @@ discourse_upstart:
     - context:
       web_root_dir: {{ web_root_dir }}
 
-/etc/uwsgi/discourse.ini:
-  file:
-    - managed
+uwsgi_discourse:
+  uwsgi:
+    - available
+    - enabled: True
+    - name: discourse
     - user: www-data
     - group: www-data
     - template: jinja
@@ -260,11 +262,6 @@ discourse_upstart:
     - mode: 440
     - require:
       - service: uwsgi_emperor
-      - file: discourse_tar
-      - file: discourse
-      - file: {{ web_root_dir }}/config/environments/production.rb
-      - file: {{ web_root_dir }}/config/database.yml
-      - file: {{ web_root_dir }}/config/redis.yml
       - user: add_web_user_to_discourse_group
       - cmd: discourse_bundler
       - cmd: discourse
@@ -273,12 +270,6 @@ discourse_upstart:
       - cmd: discourse_assets_precompile
     - context:
       web_root_dir: {{ web_root_dir }}
-  module:
-    - wait
-    - name: file.touch
-    - m_name: /etc/uwsgi/discourse.ini
-    - require:
-      - file: /etc/uwsgi/discourse.ini
     - watch:
       - file: discourse
       - file: {{ web_root_dir }}/config/environments/production.rb
@@ -296,7 +287,7 @@ discourse_upstart:
     - mode: 440
     - require:
       - pkg: nginx
-      - file: /etc/uwsgi/discourse.ini
+      - uwsgi: uwsgi_discourse
 {%- if salt['pillar.get']('discourse:ssl', False) %}
       - cmd: /etc/ssl/{{ pillar['discourse']['ssl'] }}/chained_ca.crt
       - module: /etc/ssl/{{ pillar['discourse']['ssl'] }}/server.pem

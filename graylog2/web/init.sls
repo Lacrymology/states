@@ -139,9 +139,10 @@ graylog2-web:
     - watch:
       - pkg: ruby
       - archive: graylog2-web
-  file:
-    - managed
-    - name: /etc/uwsgi/graylog2.ini
+  uwsgi:
+    - available
+    - name: graylog2
+    - enabled: True
     - template: jinja
     - user: www-data
     - group: www-data
@@ -156,18 +157,11 @@ graylog2-web:
       - service: mongodb
       - cmd: graylog2-web
       - service: rsyslog
-  module:
-    - wait
-    - name: file.touch
-    - m_name: /etc/uwsgi/graylog2.ini
-    - require:
-      - file: graylog2-web
+      - file: /var/log/graylog2
     - watch:
       - archive: graylog2-web
 {% for filename in ('general', 'indexer', 'mongoid') %}
       - file: graylog2-web-{{ filename }}
-    - require:
-      - file: /var/log/graylog2
 {% endfor %}
 
 change_graylog2_web_dir_permission:

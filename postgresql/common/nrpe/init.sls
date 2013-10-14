@@ -73,9 +73,9 @@ check_postgres:
     - extracted
     - name: /usr/local
 {%- if 'files_archive' in pillar %}
-    - source: {{ pillar['files_archive'] }}/mirror/check_postgres-{{ version }}.tar.gz
+    - source: {{ pillar['files_archive'] }}/mirror/check_postgres-{{ check_pg_version }}.tar.gz
 {%- else %}
-    - source: http://bucardo.org/downloads/check_postgres-{{ version }}.tar.gz
+    - source: http://bucardo.org/downloads/check_postgres-{{ check_pg_version }}.tar.gz
 {%- endif %}
     - source_hash: md5=c27dc6daaf75de32fc4f6e8cc3502116
     - archive_format: tar

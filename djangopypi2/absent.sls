@@ -25,18 +25,22 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet hvnsweeting@gmail.com
 Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
 -#}
+uwsgi_djangopypi2:
+  uwsgi:
+    - absent
+
 djangopypi2:
   file:
     - absent
     - name: /usr/local/djangopypi2
+    - require:
+      - uwsgi: uwsgi_djangopypi2
 
 /var/lib/deployments/djangopypi2:
   file:
     - absent
-
-/etc/uwsgi/djangopypi2.ini:
-  file:
-    - absent
+    - require:
+      - uwsgi: uwsgi_djangopypi2
 
 /etc/nginx/conf.d/djangopypi2.conf:
   file:

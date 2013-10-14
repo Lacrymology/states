@@ -128,11 +128,12 @@ djangopypi2_settings:
     - settings_module: djangopypi2.website.settings
     - bin_env: {{ root_dir }}
     - require:
-      - module: djangopypi2
+      - cmd: djangopypi2
       - service: rsyslog
     - watch:
       - file: djangopypi2_settings
       - file: djangopypi2_urls
+      - postgres_database: djangopypi2
 
 {{ root_dir }}/manage:
   file:
@@ -220,9 +221,11 @@ djangopypi2-django_contrib_sites:
     - group: www-data
     - makedirs: True
 
-/etc/uwsgi/djangopypi2.ini:
-  file:
-    - managed
+uwsgi_djangopypi2:
+  uwsgi:
+    - available
+    - enabled: True
+    - name: djangopypi2
     - template: jinja
     - user: www-data
     - group: www-data
@@ -240,19 +243,12 @@ djangopypi2-django_contrib_sites:
       - service: memcached
       - service: rsyslog
       - module: djangopypi2-django_contrib_sites
-  module:
-    - wait
-    - name: file.touch
-    - m_name: /etc/uwsgi/djangopypi2.ini
     - watch:
       - cmd: djangopypi2
       - file: djangopypi2_settings
       - file: djangopypi2_urls
-      - file: /etc/uwsgi/djangopypi2.ini
       - file: /var/lib/deployments/djangopypi2/media
       - module: djangopypi2_loaddata
-    - require:
-      - file: /etc/uwsgi/djangopypi2.ini
 
 /etc/nginx/conf.d/djangopypi2.conf:
   file:

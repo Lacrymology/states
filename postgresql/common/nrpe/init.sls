@@ -67,13 +67,17 @@ include:
     - context:
       version: {{ version }}
 
-{%- set check_pg_version = "2.20.1" %}
+{%- set check_pg_version = "2.21.0" %}
 check_postgres:
   archive:
     - extracted
     - name: /usr/local
-    - source: http://bucardo.org/downloads/check_postgres.tar.gz
-    - source_hash: md5=58b949ab92c7bfc7dab7914e8ecb76b3
+{%- if 'files_archive' in pillar %}
+    - source: {{ pillar['files_archive'] }}/mirror/check_postgres-{{ version }}.tar.gz
+{%- else %}
+    - source: http://bucardo.org/downloads/check_postgres-{{ version }}.tar.gz
+{%- endif %}
+    - source_hash: md5=c27dc6daaf75de32fc4f6e8cc3502116
     - archive_format: tar
     - tar_options: z
     - if_missing: /usr/local/check_postgres-{{ check_pg_version }}

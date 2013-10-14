@@ -37,7 +37,12 @@ local_log=/var/log/shinken/{{ shinken_component }}.log
 workdir=/var/lib/shinken
 
 use_local_log=1
-log_level={{ pillar['shinken']['log_level']|default("INFO") }}
+{%- if pillar['debug']|default(False) %}
+log_level=DEBUG
+{%- else %}
+log_level=WARNING
+{%- endif %}
+
 
 host=0.0.0.0
 daemon_enabled=1

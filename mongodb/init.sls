@@ -53,6 +53,7 @@ mongodb:
     - order: 50
     - watch:
       - pkg: mongodb
+      - file: /etc/mongodb.conf
   pkg:
     - installed
     - sources:
@@ -75,3 +76,14 @@ mongodb_old_apt_repo:
   file:
     - name: /etc/apt/sources.list.d/downloads-distro.mongodb.org-repo_ubuntu-upstart-dist.list
     - absent
+
+/etc/mongodb.conf:
+  file:
+    - managed
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - source: salt://mongodb/config.jinja2
+    - require:
+      - pkg: mongodb

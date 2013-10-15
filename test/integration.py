@@ -382,11 +382,9 @@ class TestStateMeta(type):
 
         attrs['absent'] = []
         for state in attrs['all_states']:
-            # ignore all test.*
-            if state.startswith('test.') or state == 'top':
+            if state.startswith('test.') or state in ('top', 'overstate'):
                 logger.debug("Ignore state %s", state)
             else:
-                # absent states
                 if state.endswith('.absent'):
                     logger.debug("Add test for absent state %s", state)
                     # build a list of all absent states

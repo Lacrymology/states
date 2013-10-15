@@ -209,6 +209,7 @@ uwsgi_wordpress:
       - archive: wordpress
       - pkg: php5-mysql
 
+{%- if salt['pillar.get']('debug', False) %}
 /etc/logrotate.d/wordpress:
   file:
     - managed
@@ -221,6 +222,7 @@ uwsgi_wordpress:
       - pkg: logrotate
     - context:
       web_dir: {{ wordpressdir }}
+{%- endif %}
 
 {%- if salt['pillar.get']('wordpress:ssl', False) %}
 extend:

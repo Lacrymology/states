@@ -5,7 +5,6 @@
 include:
   - rsyslog
   - salt.minion.upgrade
-  - salt.minion.patch.0_15_3
 
 {# it's mandatory to remove this file if the master is changed #}
 salt_minion_master_key:
@@ -40,7 +39,3 @@ extend:
         - cmd: apt_sources
         - pkg: debconf-utils
         - pkg: python-software-properties
-  salt-common-modules-cp:
-    file:
-      - require:
-        - pkg: salt-minion

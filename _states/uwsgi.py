@@ -52,8 +52,7 @@ def _get_app_paths(app=None):
 
 
 def _patch_module(mod):
-    # update the dunder dicts on the module
-    #  (is this dangerous?)
+    # hack to make use of other state.
     mod.__salt__ = __salt__
     mod.__opts__ = __opts__
 
@@ -260,16 +259,8 @@ def disabled(name):
     return ret
 
 def mod_watch(name, **kwargs):
-    """
-    Restart the module if the watchlist is fired
-    :param kwargs:
-    :return:
-    """
-    ret = {'name': name,
-       'changes': {},
-       'result': False,
-       'comment': ''}
-
+    '''
+    Touch uwsgi config file based on a watch call
+    '''
     _patch_module(file)
-    ret.update(file.touch(_get_filename(name)))
-    return ret
+    return file.touch(_get_filename(name))

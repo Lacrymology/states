@@ -17,7 +17,7 @@ tomcat:
     - running
     - order: 50
     - name: tomcat6
-    - require:
+    - watch:
       - pkg: tomcat
       - file: add_catalina_env
       - file: /usr/share/tomcat6/shared

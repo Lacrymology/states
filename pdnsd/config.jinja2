@@ -37,6 +37,11 @@ global {
     min_ttl = {{ pillar['dns_proxy']['minimum_ttl']|default(900) }};
     max_ttl = {{ pillar['dns_proxy']['maximum_ttl']|default(604800) }};
     timeout = 10;
+{%- if salt['pillar.get']('debug', False) %}
+    debug = on
+{%- else %}
+    debug = off
+{%- endif %}
     {#
     Don't enable if you don't recurse yourself, can lead to problems
     delegation_only="com","net";

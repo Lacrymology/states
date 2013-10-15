@@ -83,7 +83,7 @@ mongodb_old_apt_repo:
     - template: jinja
     - user: root
     - group: root
-    - mode: 440
+    - mode: 444
     - source: salt://mongodb/config.jinja2
     - require:
       - pkg: mongodb

@@ -38,9 +38,9 @@ global {
     max_ttl = {{ pillar['dns_proxy']['maximum_ttl']|default(604800) }};
     timeout = 10;
 {%- if salt['pillar.get']('debug', False) %}
-    debug = on
+    debug = on;
 {%- else %}
-    debug = off
+    debug = off;
 {%- endif %}
     {#
     Don't enable if you don't recurse yourself, can lead to problems

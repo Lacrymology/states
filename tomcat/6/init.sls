@@ -37,11 +37,11 @@ add_catalina_env:
     - symlink
     - target: /var/lib/tomcat6/shared
     - require:
-      - pkg: tomcat6
+      - pkg: tomcat
 
 /usr/share/tomcat6/server:
   file:
     - symlink
     - target: /var/lib/tomcat6/server
     - require:
-      - pkg: tomcat6
+      - pkg: tomcat

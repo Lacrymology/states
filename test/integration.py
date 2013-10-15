@@ -467,30 +467,6 @@ class States(unittest.TestCase):
                 self.fail("Process that still run after cleanup: %s" % (
                           os.linesep.join(unclean)))
 
-        # check unix groups
-        # if group_list is None:
-        #     group_list = self.list_groups()
-        #     logger.debug("First cleanup, keep list of %d groups",
-        #                  len(group_list))
-        # else:
-        #     extra = set(self.list_groups()) - set(group_list)
-        #     if extra:
-        #         clean_up_failed = True
-        #         self.fail("New group that still exists after cleanup: %s" % (
-        #                   ','.join(extra)))
-
-        # check unix users
-        # if user_list is None:
-        #     user_list = client('user.list_users')
-        #     logger.debug("First cleanup, keep list of %d users",
-        #                  len(user_list))
-        # else:
-        #     extra = set(client('user.list_users')) - set(user_list)
-        #     if extra:
-        #         clean_up_failed = True
-        #         self.fail("New user that still exists after cleanup: %s" % (
-        #                   ','.join(extra)))
-
         is_clean = True
 
     def sls(self, states):

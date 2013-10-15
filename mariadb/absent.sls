@@ -20,7 +20,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
-Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
+Maintainer: Dang Tung Lam <lamdt@familug.org>
 -#}
 /etc/apt/sources.list.d/mariadb.list:
   file:

@@ -23,7 +23,7 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author: Bruno Clermont <patate@fastmail.cn>
-Maintainer: Bruno Clermont <patate@fastmail.cn>
+Maintainer: Dang Tung Lam <lamdt@familug.org>
 -#}
 ruby:
   pkg:

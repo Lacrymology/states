@@ -26,7 +26,7 @@ Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 # {{ pillar['message_do_not_modify'] }}
-{%- if pillar['debug']|default(False) %}
+{%- if salt['pillar.get']('debug', False) %}
 rootLogger: DEBUG, console, file
 {%- else %}
 rootLogger: WARN, console, file

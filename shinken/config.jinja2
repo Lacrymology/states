@@ -37,7 +37,7 @@ local_log=/var/log/shinken/{{ shinken_component }}.log
 workdir=/var/lib/shinken
 
 use_local_log=1
-{%- if pillar['debug']|default(False) %}
+{%- if salt['pillar.get']('debug', False) %}
 log_level=DEBUG
 {%- else %}
 log_level=WARNING

@@ -36,7 +36,7 @@ LogFacility LOG_DAEMON
 LogFileMaxSize 0
 LogTime true
 Foreground false
-{%- if pillar['debug']|default(False) %}
+{%- if salt['pillar.get']('debug', False) %}
 Debug true
 LogVerbose true
 {%- else %}

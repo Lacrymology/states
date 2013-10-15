@@ -38,7 +38,7 @@ gitfs_remotes:
 {%- endfor %}
 
 log_file: file:///dev/log
-{%- if pillar['debug']|default(False) %}
+{%- if salt['pillar.get']('debug', False) %}
 log_level: debug
 {%- else %}
 log_level: warning

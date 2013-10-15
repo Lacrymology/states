@@ -44,7 +44,7 @@ external_auth:
 
 rest_cherrypy:
   port: 8000
-{%- if pillar['debug']|default(False) %}
+{%- if salt['pillar.get']('debug', False) %}
   debug: True
 {%- else %}
   debug: False

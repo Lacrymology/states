@@ -35,7 +35,7 @@ log_level_logfile: debug
 log_fmt_logfile: '%(asctime)-15s salt-cloud %(name)s: %(message)s'
 log_datefmt_logfile: '%b %d %H:%M:%S'
 
-{%- if pillar['debug']|default(False) %}
+{%- if salt['pillar.get']('debug', False) %}
 log_level: debug
 {%- else %}
 log_level: warning

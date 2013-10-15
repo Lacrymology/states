@@ -88,6 +88,11 @@ Gitlab::Application.configure do
 
    Use a different cache store in production
   #}
+{%- if salt['pillar.get']('debug', False) %}
+  config.log_level = :debug
+{%- else %}
+  config.log_level = :warn
+{%- endif %}}
   config_file = Rails.root.join('config', 'resque.yml')
 
   resque_url = if File.exists?(config_file)

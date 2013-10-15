@@ -268,8 +268,18 @@ carbon-relay:
     - require:
       - user: graphite
       - file: /etc/graphite
+      - file: /var/lib/graphite/lists
     - watch_in:
     {%- for instance in range(instances_count) %}
       - service: carbon-cache-{{ instance }}
     {%- endfor -%}
+
+/var/lib/graphite/lists:
+  file:
+    - directory
+    - user: graphite
+    - group: graphite
+    - mode: 550
+    - require:
+      - file: /var/lib/graphite
 {%- endif %}

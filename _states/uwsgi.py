@@ -260,7 +260,10 @@ def disabled(name):
 
 def mod_watch(name, **kwargs):
     '''
-    Touch uwsgi config file based on a watch call
+    Touch uwsgi config link based on a watch call
     '''
-    _patch_module(file)
-    return file.touch(_get_filename(name))
+    apps_enabled = __salt__['uwsgi.list_enabled']()
+    if name in apps_enabled:
+        _patch_module(file)
+        _, link, _ = _get_app_paths(name)
+        return file.touch(link)

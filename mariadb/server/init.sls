@@ -84,4 +84,4 @@ mysql-server:
         'mysql-server/root_password': {'type': 'password', 'value': {{ salt['pillar.get']('mysql:password') }}}
         'mysql-server/root_password_again': {'type': 'password', 'value': {{ salt['pillar.get']('mysql:password') }}}
     - require:
-      - pkg: debconf-utils
+      - pkg: apt_pkgs_for_state_modules

@@ -58,7 +58,7 @@ include:
       - pkg: nagios-nrpe-server
     - context:
       deployment: djangopypi2
-      workers: {{ pillar['djangopypi2']['workers'] }}
+      workers: {{ salt['pillar.get']('djangopypi2:workers', 2) }}
       cheaper: {{ salt['pillar.get']('djangopypi2:cheaper', False) }}
     - require:
       - pkg: nagios-nrpe-server

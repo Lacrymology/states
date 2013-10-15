@@ -29,10 +29,6 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
   file:
     - absent
 
-debconf-utils:
-  pkg:
-    - purged
-
 apt_sources:
   file:
     - rename
@@ -45,3 +41,9 @@ apt_sources:
     - watch:
       - file: apt_sources
       - file: /etc/apt/apt.conf.d/99local
+  pkg:
+    - purged
+    - pkgs:
+      - debconf-utils
+      - python-apt
+      - python-software-properties

@@ -101,14 +101,3 @@ apt_sources_backup:
     - name: {{ backup }}
     - source: /etc/apt/sources.list
 {%- endif -%}
-
-{#- Required pkgs for state modules #}
-apt_pkgs_for_state_modules:
-  pkg:
-    - installed
-    - pkgs:
-      - debconf-utils
-      - python-apt
-      - python-software-properties
-    - require:
-      - cmd: apt_sources

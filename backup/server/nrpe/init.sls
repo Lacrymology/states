@@ -58,6 +58,7 @@ include:
     - mode: 440
     - user: root
     - group: root
+    - template: jinja
     - require:
       - pkg: sudo
 

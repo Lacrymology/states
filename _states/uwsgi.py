@@ -266,4 +266,9 @@ def mod_watch(name, **kwargs):
     if name in apps_enabled:
         _patch_module(file)
         _, link, _ = _get_app_paths(name)
-        return file.touch(link)
+        ret = file.touch(link)
+        if ret['result'] == True:
+            # use module output comment as state changes
+            ret['changes'] = {name: ret['comment']}
+            ret['comment'] = ''
+        return ret

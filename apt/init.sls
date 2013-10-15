@@ -62,9 +62,9 @@ apt_sources:
   pkg:
     - installed
     - pkgs:
-        - debconf-utils
-        - python-apt
-        - python-software-properties
+      - debconf-utils
+      - python-apt
+      - python-software-properties
     - require:
       - cmd: apt_sources
 {#-

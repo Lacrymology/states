@@ -271,4 +271,11 @@ def mod_watch(name, **kwargs):
             # use module output comment as state changes
             ret['changes'] = {name: ret['comment']}
             ret['comment'] = ''
-        return ret
+    else:
+        ret = {'comment': ('Webapp {0} is disabled,'
+                           'it will not be restarted').format(name),
+               'result': True,
+               'changes': {},
+               'name': name,
+              }
+    return ret

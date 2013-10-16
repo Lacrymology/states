@@ -67,6 +67,7 @@ include:
     - context:
       deployment: moinmoin
       domain_name: {{ pillar['moinmoin']['hostnames'][0] }}
+      http_uri: /StartingPage?action=login
 {% if salt['pillar.get']('moinmoin:ssl', False) %}
       https: True
       http_result: 301 Moved Permanently

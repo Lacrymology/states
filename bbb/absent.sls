@@ -34,7 +34,8 @@ libreoffice:
 kill_soffice:
   cmd:
     - run
-    - name: pkill -9 -f '/usr/bin/soffice' || true
+    - name: kill -9 `pgrep '/usr/bin/soffice'` || true
+    - onlyif: pgrep '/usr/bin/soffice'
   file:
     - absent
     - name: /var/run/bbb-openoffice-server.pid

@@ -92,7 +92,7 @@ Gitlab::Application.configure do
   config.log_level = :debug
 {%- else %}
   config.log_level = :warn
-{%- endif %}}
+{%- endif %}
   config_file = Rails.root.join('config', 'resque.yml')
 
   resque_url = if File.exists?(config_file)

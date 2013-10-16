@@ -18,6 +18,7 @@ def _get_default_kwargs(kwargs):
     defaults.update(kwargs)
     return defaults
 
+
 def _get_filename(appname):
     # /etc/uwsgi/apps-available/{appname}.ini
     return os.path.join(
@@ -26,6 +27,7 @@ def _get_filename(appname):
                                    os.path.join('/', 'etc', 'uwsgi')),
             'apps-available')),
         '{0}.ini'.format(appname))
+
 
 def _uwsgi_root():
     return os.path.join('/', 'etc', 'uwsgi')
@@ -37,6 +39,7 @@ def _enabled_path():
 
 def _available_path():
     return os.path.join(_uwsgi_root(), 'apps-available')
+
 
 def _get_app_paths(app=None):
     '''
@@ -55,6 +58,7 @@ def _patch_module(mod):
     # hack to make use of other state.
     mod.__salt__ = __salt__
     mod.__opts__ = __opts__
+
 
 def available(name, enabled=False, **kwargs):
     '''
@@ -95,8 +99,10 @@ def available(name, enabled=False, **kwargs):
     # file.managed name is /etc/uwsgi/apps-available/$name.ini
     # you need to track if any changes had been performed by the state.
     #
-    # module.wait file.touch require argument must only be {file: $filename.ini}
-    # to leave all -require arguments passed to file.managed name=$filename.ini
+    # module.wait file.touch require argument must only be
+    # {file: $filename.ini}
+    # to leave all -require arguments passed to file.managed
+    # name=$filename.ini
     # state
 
     filename = _get_filename(name)
@@ -104,7 +110,7 @@ def available(name, enabled=False, **kwargs):
     _patch_module(file)
     ret.update(file.managed(filename, **kwargs))
 
-    if ret['result'] == False:
+    if ret['result'] is False:
         return ret
     else:
         if enabled:
@@ -132,10 +138,10 @@ def available(name, enabled=False, **kwargs):
                                   'disabled'.format(ret['comment'], name))
             else:
                 disable_ret = __salt__['uwsgi.disable'](name)
-                if disable_ret == True:
+                if disable_ret is True:
                     disable_data = {'result': disable_ret,
-                            'changes': {'uwsgi': '{0} is disabled'.format(name)}
-                            }
+                                    'changes': {'uwsgi': ('{0} is disabled'
+                                                          '').format(name)}}
                     ret.update(disable_data)
         return ret
 
@@ -258,6 +264,7 @@ def disabled(name):
 
     return ret
 
+
 def mod_watch(name, **kwargs):
     '''
     Touch uwsgi config link based on a watch call
@@ -267,7 +274,7 @@ def mod_watch(name, **kwargs):
         _patch_module(file)
         _, link, _ = _get_app_paths(name)
         ret = file.touch(link)
-        if ret['result'] == True:
+        if ret['result'] is True:
             # use module output comment as state changes
             ret['changes'] = {name: ret['comment']}
             ret['comment'] = ''
@@ -276,6 +283,5 @@ def mod_watch(name, **kwargs):
                            'it will not be restarted').format(name),
                'result': True,
                'changes': {},
-               'name': name,
-              }
+               'name': name}
     return ret

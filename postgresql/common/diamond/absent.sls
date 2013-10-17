@@ -1,4 +1,6 @@
 {#-
+-*- ci-automatic-discovery: off -*-
+
 Copyright (c) 2013, Bruno Clermont
 All rights reserved.
 

@@ -320,26 +320,28 @@ class TestStateMeta(type):
                                                  ('test', 'diamond', 'nrpe'))
         states = [state]
 
-        def _add_include_check(state_integration):
+        def _add_include_check(state_integration, itype):
             '''
             Check whether a state has diamond and/or NRPE integration,
             If yes, add checks for missing `include` statement in these
             integration.
             '''
-            itype = 'NRPE' if 'nrpe' in state_integration else 'Diamond'
-
             if state_integration in attrs['all_states']:
                 logger.debug("State {0} got {1} integration, add check "
                              "for include".format(state, itype))
                 doc = ('Check includes for {0} integration for {1}'
                        '').format(itype, state)
-                mcs.wrap_test_func(attrs, 'check_integration_include',
-                                  mcs.func_name(state_integration + '_include'),
-                                  doc, state, state_integration)
+                mcs.wrap_test_func(attrs,
+                                   'check_integration_include',
+                                   mcs.func_name(state_integration +
+                                                 '_include'),
+                                   doc,
+                                   state,
+                                   state_integration)
                 states.append(state_integration)
 
-        _add_include_check(state_diamond)
-        _add_include_check(state_nrpe)
+        _add_include_check(state_diamond, 'Diamond')
+        _add_include_check(state_nrpe, 'NRPE')
 
         if len(states) > 1:
             logger.debug("State %s got diamond/NRPE integration", state)
@@ -366,6 +368,9 @@ class TestStateMeta(type):
                               'Test state %s' % state, [state])
 
     def __new__(mcs, name, bases, attrs):
+        '''
+        Return a class which consist of all needed test state functions
+        '''
         global client
         attrs['all_states'] = client('cp.list_states')
         # don't play with salt.minion

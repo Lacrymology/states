@@ -129,6 +129,8 @@ discourse:
     - require:
       - file: discourse_tar
       - file: {{ web_root_dir }}/config/database.yml
+      - file: {{ web_root_dir }}/config/redis.yml
+      - file: {{ web_root_dir }}/config/environments/production.rb
       - user: discourse
       - service: postgresql
       - service: redis

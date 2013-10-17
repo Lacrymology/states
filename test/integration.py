@@ -78,6 +78,8 @@ clean_up_failed = False
 # list of process before tests ran
 process_list = None
 
+NO_TEST_STRING = '-*- ci-automatic-discovery: off -*-'
+
 
 def if_change(result):
     """
@@ -283,6 +285,14 @@ def render_state_template(state):
     return {}
 
 
+def run_salt_module(module_name, *args, **kwargs):
+    try:
+        output = client(module_name, *args, **kwargs)
+    except Exception as err:
+        raise Exception('Module:{0} error: {1}'.format(module_name, err))
+    return output
+
+
 class TestStateMeta(type):
     """
     Metaclass that create all the test_ methods based on
@@ -358,7 +368,7 @@ class TestStateMeta(type):
                 # add test for the .sls file
                 mcs.wrap_test_func(attrs, 'top', mcs.func_name(state),
                                   'Test state %s' % state, [state])
-                # and one for the automatically created one
+                # and test for SLS file, and all corresponding integrations
                 mcs.wrap_test_func(attrs, 'top',
                                   mcs.func_name(state) + '_with_checks',
                                   doc, states)
@@ -372,6 +382,7 @@ class TestStateMeta(type):
         Return a class which consist of all needed test state functions
         '''
         global client
+        # Get all SLSes to test
         attrs['all_states'] = client('cp.list_states')
         # don't play with salt.minion
         salt_minion_states = []
@@ -387,17 +398,36 @@ class TestStateMeta(type):
                                    set(salt_minion_states))
 
         attrs['absent'] = []
+
+        # map SLSes to test methods then add to this class
         for state in attrs['all_states']:
             if state.startswith('test.') or state in ('top', 'overstate'):
                 logger.debug("Ignore state %s", state)
             else:
+                # skip SLS contains string that indicate NO-TEST
+                logger.debug('salt://{0}.sls'.format(state.replace('.', '/')))
+
+                try:
+                    content = run_salt_module('cp.get_file_str',
+                                          'salt://{0}.sls'.format(state.replace('.', '/')))
+                except Exception:
+                    try:
+                        content = run_salt_module('cp.get_file_str',
+                                          'salt://{0}/init.sls'.format(state.replace('.', '/')))
+                    except Exception:
+                        raise
+
+                if NO_TEST_STRING in content:
+                    logger.debug('Explicit ignore state %s', state)
+                    continue
+
                 if state.endswith('.absent'):
                     logger.debug("Add test for absent state %s", state)
                     # build a list of all absent states
                     attrs['absent'].append(state)
                     doc = 'Run absent state for %s' % state.replace('.absent',
                                                                     '')
-                    # create test_$state_name.absent
+                    # create test_$(SLS_name)_absent
                     mcs.wrap_test_func(attrs, 'top', mcs.func_name(state),
                                       doc, [state])
                 else:
@@ -409,6 +439,7 @@ class TestStateMeta(type):
                         mcs.wrap_test_func(attrs, 'top', mcs.func_name(state),
                                           'Run test %s' % state, [state])
                     else:
+                        # all remaining SLSes
                         mcs.add_test_integration(attrs, state)
 
         attrs['absent'].sort()
@@ -474,6 +505,7 @@ class States(unittest.TestCase):
                           os.linesep.join(unclean)))
 
         is_clean = True
+
 
     def sls(self, states):
         """

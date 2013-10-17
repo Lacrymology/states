@@ -296,20 +296,20 @@ class TestStateMeta(type):
         return 'test_%s' % state_name.replace('.', '_')
 
     @classmethod
-    def run_test_func(mcs, attrs, test_func_name, func_name, doc,
+    def wrap_test_func(mcs, attrs, test_func_name, new_func_name, doc,
                       *args, **kwargs):
         """
-        Return a function that run self.{{ test_func_name }}(*args, **kwargs)
+        Wrap function ``self.test_func_name`` and put in into ``attrs`` dict
         """
         def output_func(self):
             func = getattr(self, test_func_name)
             logger.debug("Run unit %s", test_func_name)
             func(*args, **kwargs)
-        output_func.__name__ = func_name
+        output_func.__name__ = new_func_name
         output_func.__doc__ = doc
-        logger.debug("Add method %s that run self.%s(...)", func_name,
+        logger.debug("Add method %s that run self.%s(...)", new_func_name,
                      test_func_name)
-        attrs[func_name] = output_func
+        attrs[new_func_name] = output_func
 
     @classmethod
     def add_test_integration(mcs, attrs, state):
@@ -318,23 +318,26 @@ class TestStateMeta(type):
         """
         state_test, state_diamond, state_nrpe = ('.'.join((state, s)) for s in
                                                  ('test', 'diamond', 'nrpe'))
-
-        # check if state also have diamond and/or NRPE
-        # integration
         states = [state]
-        def _add_include_check(state_integration):
-            itype = 'NRPE' if 'nrpe' in state_integration else 'Diamond'
 
+        def _add_include_check(state_integration):
+            '''
+            Check whether a state has diamond and/or NRPE integration,
+            If yes, add checks for missing `include` statement in these
+            integration.
+            '''
+            itype = 'NRPE' if 'nrpe' in state_integration else 'Diamond'
 
             if state_integration in attrs['all_states']:
                 logger.debug("State {0} got {1} integration, add check "
                              "for include".format(state, itype))
                 doc = ('Check includes for {0} integration for {1}'
                        '').format(itype, state)
-                mcs.run_test_func(attrs, 'check_integration_include',
+                mcs.wrap_test_func(attrs, 'check_integration_include',
                                   mcs.func_name(state_integration + '_include'),
                                   doc, state, state_integration)
                 states.append(state_integration)
+
         _add_include_check(state_diamond)
         _add_include_check(state_nrpe)
 
@@ -343,7 +346,7 @@ class TestStateMeta(type):
             if state_test in attrs['all_states']:
                 logger.debug("State %s do have a custom test state, "
                              "don't create automatically one", state)
-                mcs.run_test_func(attrs, 'top', mcs.func_name(state),
+                mcs.wrap_test_func(attrs, 'top', mcs.func_name(state),
                                   'Test state %s' % state, [state])
             else:
                 logger.debug("State %s don't have custom test state", state)
@@ -351,15 +354,15 @@ class TestStateMeta(type):
                       ', '.join(states)
                 states.append(mcs.nrpe_test_all_state)
                 # add test for the .sls file
-                mcs.run_test_func(attrs, 'top', mcs.func_name(state),
+                mcs.wrap_test_func(attrs, 'top', mcs.func_name(state),
                                   'Test state %s' % state, [state])
                 # and one for the automatically created one
-                mcs.run_test_func(attrs, 'top',
+                mcs.wrap_test_func(attrs, 'top',
                                   mcs.func_name(state) + '_with_checks',
                                   doc, states)
         else:
             logger.debug("No diamond/NRPE integration for state %s", state)
-            mcs.run_test_func(attrs, 'top', mcs.func_name(state),
+            mcs.wrap_test_func(attrs, 'top', mcs.func_name(state),
                               'Test state %s' % state, [state])
 
     def __new__(mcs, name, bases, attrs):
@@ -390,7 +393,7 @@ class TestStateMeta(type):
                     doc = 'Run absent state for %s' % state.replace('.absent',
                                                                     '')
                     # create test_$state_name.absent
-                    mcs.run_test_func(attrs, 'top', mcs.func_name(state),
+                    mcs.wrap_test_func(attrs, 'top', mcs.func_name(state),
                                       doc, [state])
                 else:
                     logger.debug("%s is not an absent state", state)
@@ -398,7 +401,7 @@ class TestStateMeta(type):
                     if state.endswith('.nrpe') or state.endswith('.diamond') \
                        or state.endswith('.test'):
                         logger.debug("Add single test for %s", state)
-                        mcs.run_test_func(attrs, 'top', mcs.func_name(state),
+                        mcs.wrap_test_func(attrs, 'top', mcs.func_name(state),
                                           'Run test %s' % state, [state])
                     else:
                         mcs.add_test_integration(attrs, state)

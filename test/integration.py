@@ -316,29 +316,27 @@ class TestStateMeta(type):
         """
         add test for integration
         """
-        state_test = '.'.join((state, 'test'))
-        state_diamond = '.'.join((state, 'diamond'))
-        state_nrpe = '.'.join((state, 'nrpe'))
+        state_test, state_diamond, state_nrpe = ('.'.join((state, s)) for s in
+                                                 ('test', 'diamond', 'nrpe'))
 
         # check if state also have diamond and/or NRPE
         # integration
         states = [state]
-        if state_diamond in attrs['all_states']:
-            logger.debug("State %s got diamond integration, add check "
-                         "for include", state)
-            doc = 'Check includes for Diamond integration for ' + state
-            mcs.run_test_func(attrs, 'check_integration_include',
-                              mcs.func_name(state_diamond + '_include'),
-                              doc, state, state_diamond)
-            states.append(state_diamond)
-        if state_nrpe in attrs['all_states']:
-            logger.debug("State %s got NRPE integration add check for include",
-                         state)
-            doc = 'Check includes for NRPE integration for ' + state
-            mcs.run_test_func(attrs, 'check_integration_include',
-                              mcs.func_name(state_nrpe + '_include'), doc,
-                              state, state_nrpe)
-            states.append(state_nrpe)
+        def _add_include_check(state_integration):
+            itype = 'NRPE' if 'nrpe' in state_integration else 'Diamond'
+
+
+            if state_integration in attrs['all_states']:
+                logger.debug("State {0} got {1} integration, add check "
+                             "for include".format(state, itype))
+                doc = ('Check includes for {0} integration for {1}'
+                       '').format(itype, state)
+                mcs.run_test_func(attrs, 'check_integration_include',
+                                  mcs.func_name(state_integration + '_include'),
+                                  doc, state, state_integration)
+                states.append(state_integration)
+        _add_include_check(state_diamond)
+        _add_include_check(state_nrpe)
 
         if len(states) > 1:
             logger.debug("State %s got diamond/NRPE integration", state)

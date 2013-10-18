@@ -38,7 +38,7 @@ ssl-cert:
     - require:
       - cmd: apt_sources
 
-{%- for name in salt['pillar.get']('ssl', []) -%}
+{% for name in salt['pillar.get']('ssl', []) -%}
 /etc/ssl/{{ name }}:
   file:
     - directory

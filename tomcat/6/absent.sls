@@ -46,12 +46,6 @@ tomcat6:
     - require:
       - pkg: tomcat6
 
-add_catalina_env:
-  file:
-    - absent
-    - require:
-      - pkg: tomcat6
-
 /usr/share/tomcat6/shared:
   file:
     - absent

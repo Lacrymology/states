@@ -31,7 +31,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
  select one of these instances as master. The master will perform some
  periodical tasks that non-masters won't perform.
 #}
-{% set email = pillar['graylog2']['email'] %}
+{% set email = salt['pillar.get']('graylog2:email', pillar['smtp']) %}
 is_master = true
 
 plugin_dir = /usr/local/graylog2-server-{{ version }}/plugin

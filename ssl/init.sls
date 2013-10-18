@@ -38,8 +38,7 @@ ssl-cert:
     - require:
       - cmd: apt_sources
 
-{% for name in pillar['ssl'] %}
-
+{%- for name in salt['pillar.get']('ssl', []) -%}
 /etc/ssl/{{ name }}:
   file:
     - directory
@@ -49,8 +48,8 @@ ssl-cert:
     - require:
       - pkg: ssl-cert
 
-{% for filename in ('server.key', 'server.crt', 'ca.crt') %}
-{%- set pillar_key = filename.replace('.', '_') %}
+    {%- for filename in ('server.key', 'server.crt', 'ca.crt') -%}
+        {%- set pillar_key = filename.replace('.', '_') %}
 /etc/ssl/{{ name }}/{{ filename }}:
   file:
     - managed
@@ -62,9 +61,9 @@ ssl-cert:
     - require:
       - pkg: ssl-cert
       - file: /etc/ssl/{{ name }}
-{% endfor %}
+    {%- endfor -%}
 
-{#
+{#-
 Create from server private key and certificate a PEM used by most daemon
 that support SSL.
 #}
@@ -88,7 +87,7 @@ that support SSL.
     - watch:
       - cmd: /etc/ssl/{{ name }}/server.pem
 
-{#
+{#-
 Some browsers may complain about a certificate signed by a well-known
 certificate authority, while other browsers may accept the certificate without
 issues. This occurs because the issuing authority has signed the server
@@ -106,4 +105,4 @@ in the combined file:
     - watch:
       - file: /etc/ssl/{{ name }}/server.crt
       - file: /etc/ssl/{{ name }}/ca.crt
-{% endfor %}
+{%- endfor -%}

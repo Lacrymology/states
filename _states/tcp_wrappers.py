@@ -5,13 +5,13 @@ Copyright (c) 2013, Bruno Clermont
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met: 
+modification, are permitted provided that the following conditions are met:
 
 1. Redistributions of source code must retain the above copyright notice, this
-   list of conditions and the following disclaimer. 
+   list of conditions and the following disclaimer.
 2. Redistributions in binary form must reproduce the above copyright notice,
    this list of conditions and the following disclaimer in the documentation
-   and/or other materials provided with the distribution. 
+   and/or other materials provided with the distribution.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -63,7 +63,7 @@ def present(name, type, service):
         - type: allow
         - service: ftp
 
-    3.3.3.3:
+    3.3.3.3, 3.4.5.6:
       tcp_wrappers:
         - present
         - type: deny
@@ -74,14 +74,20 @@ def present(name, type, service):
     if not ret['result']:
         return ret
 
-    if __salt__['file.contains'](path, service_clients):
+    if __salt__['file.contains'](path, '{0}\n'.format(service_clients)):
         ret['result'] = True
         ret['comment'] = '{0} is already {1}'.format(service_clients, type)
     elif __opts__['test']:
         ret['result'] = None
         ret['comment'] = '{0} would have been {1}'.format(name, type)
     else:
-        __salt__['file.append'](path, service_clients)
+        if __salt__['file.contains'](path, '{0} :'.format(service)):
+            # TODO this will be changed to file.search in salt 0.17
+            __salt__['file.psed'](path,
+                                  '{0} : .*'.format(service),
+                                  '{0}\n'.format(service_clients))
+        else:
+            __salt__['file.append'](path, service_clients)
         ret['changes'] = {service_clients: 'presented in {0}'.format(path)}
         ret['comment'] = '{0} is now {1} for {2}'.format(name, type, service)
         ret['result'] = True

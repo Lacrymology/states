@@ -54,4 +54,4 @@ virtualenv:
     - require:
       - module: pip
       - pkg: git
-      - pkg: mercurial
+      - module: mercurial

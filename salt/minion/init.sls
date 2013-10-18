@@ -64,7 +64,3 @@ extend:
         - apt_repository: salt
         - cmd: apt_sources
         - pkg: apt_sources
-  salt-common-modules-cp:
-    file:
-      - require:
-        - pkg: salt-minion

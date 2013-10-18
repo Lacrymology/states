@@ -162,7 +162,7 @@ sentry-syncdb-all:
 sentry_admin_user:
   cmd:
     - wait
-    - name: /usr/local/sentry/bin/sentry --config=/etc/sentry.conf.py createsuperuser_plus --username={{ pillar['sentry']['initial_admin_user']['username'] }} --email={{ salt['pillar.get']('sentry:initial_admin_user:email', 'root@example.com') }} --password={{ pillar['sentry']['initial_admin_user']['password'] }}
+    - name: /usr/local/sentry/bin/sentry --config=/etc/sentry.conf.py createsuperuser_plus --username={{ pillar['sentry']['initial_admin_user']['username'] }} --email={{ pillar['sentry']['initial_admin_user']['email'] }} --password={{ pillar['sentry']['initial_admin_user']['password'] }}
     - require:
       - cmd: sentry-syncdb-all
     - watch:

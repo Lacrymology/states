@@ -48,6 +48,7 @@ Example::
     initial_admin_user:
       username: joe
       password: test
+      email: joe@test.com
 
 sentry:initial_admin_user:username
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -80,6 +81,11 @@ sentry:worker
 
 Number of uWSGI worker that will run the webapp.
 
+sentry:initial_admin_user:email
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Email address of initial administrative user created at installation.
+
 Optional
 --------
 
@@ -101,13 +107,6 @@ Example::
       user: user@example.com
       from: user@example.com
       tls: False
-
-sentry:initial_admin_user:email
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Email address of initial administrative user created at installation.
-
-Default: ``root@example.com``.
 
 sentry:db:username
 ~~~~~~~~~~~~~~~~~~

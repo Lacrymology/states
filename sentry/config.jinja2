@@ -151,7 +151,7 @@ MIDDLEWARE_CLASSES = MIDDLEWARE_CLASSES + (
     'django_statsd.middleware.GraphiteRequestTimingMiddleware',
     'django_statsd.middleware.GraphiteMiddleware'
 )
-INSTALLED_APPS += ('django_statsd',)
+INSTALLED_APPS += ('django_statsd', 'django_insecure')
 STATSD_PREFIX = 'sentry'
 STATSD_CLIENT = 'django_statsd.clients.normal'
 {% endif %}

@@ -45,6 +45,19 @@ Example::
     hostnames:
       - sentry.example.com
     django_key: randomstring
+    initial_admin_user:
+      username: joe
+      password: test
+
+sentry:initial_admin_user:username
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Username of initial administrative user created at installation.
+
+sentry:initial_admin_user:password
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Password of initial administrative user created at installation.
 
 sentry:hostnames
 ~~~~~~~~~~~~~~~~
@@ -89,6 +102,12 @@ Example::
       from: user@example.com
       tls: False
 
+sentry:initial_admin_user:email
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Email address of initial administrative user created at installation.
+
+Default: ``root@example.com``.
 
 sentry:db:username
 ~~~~~~~~~~~~~~~~~~

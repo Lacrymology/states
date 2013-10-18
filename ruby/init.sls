@@ -31,6 +31,7 @@ Install Ruby interpreter.
 include:
   - apt
   - locale
+  - ssl
 
 old_ruby:
   pkg:
@@ -53,3 +54,5 @@ ruby:
     - require:
       - pkg: old_ruby
       - cmd: apt_sources
+      {#- gem requires SSL to works when packages are available trough https #}
+      - pkg: ssl-cert

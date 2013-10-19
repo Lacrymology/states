@@ -81,3 +81,8 @@ SQLDefaultGID 33
 SQLEngine auth
 SQLNamedQuery get_user_info SELECT "username, passwd, uid,gid, homedir, shell FROM users WHERE username = '%U' LIMIT 1;"
 SQLUserInfo users userid passwd uid gid homedir shell
+
+{%- if salt['pillar.get']('debug', False) %}
+{# The highest debugging level #}
+DebugLevel 10
+{%- endif %}

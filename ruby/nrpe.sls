@@ -27,3 +27,4 @@ Maintainer: Dang Tung Lam <lamdt@familug.org>
 -#}
 include:
   - apt.nrpe
+  - ssl.nrpe

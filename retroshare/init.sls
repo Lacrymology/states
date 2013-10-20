@@ -34,9 +34,9 @@ retroshare:
     - managed
 {%- if 'files_archive' in pillar -%}
     {%- set version = salt['pillar.get']('retroshare:version', '0.5.5-0.6732') %}
-    - name: deb {{ pillar['files_archive'] }}/mirror/retroshare/{{ version }} {{ grains['lsb_codename'] }} main
+    - name: deb {{ pillar['files_archive'] }}/mirror/retroshare/{{ version }} {{ grains['lsb_distrib_codename'] }} main
 {%- else %}
-    - deb http://ppa.launchpad.net/csoler-users/retroshare/ubuntu {{ grains['lsb_codename'] }} main
+    - deb http://ppa.launchpad.net/csoler-users/retroshare/ubuntu {{ grains['lsb_distrib_codename'] }} main
 {%- endif %}
     - keyid: 2E10C9E3
     - keyserver: keyserver.ubuntu.com

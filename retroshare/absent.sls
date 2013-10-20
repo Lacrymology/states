@@ -39,8 +39,8 @@ retroshare:
   pkgrepo:
     - absent
 {%- if 'files_archive' in pillar %}
-    - name: deb {{ pillar['files_archive'] }}/mirror/retroshare/0.5.5-0.6732 {{ grains['lsb_codename'] }} main
+    - name: deb {{ pillar['files_archive'] }}/mirror/retroshare/0.5.5-0.6732 {{ grains['lsb_distrib_codename'] }} main
 {%- else %}
-    - name: deb http://archive.robotinfra.com/mirror/retroshare/0.5.5-0.6732 {{ grains['lsb_codename'] }} main
+    - name: deb http://archive.robotinfra.com/mirror/retroshare/0.5.5-0.6732 {{ grains['lsb_distrib_codename'] }} main
 {%- endif %}
 

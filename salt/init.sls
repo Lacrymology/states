@@ -44,7 +44,11 @@ To only keep lucid/precise::
 salt:
   file:
     - absent
+{%- if grains['saltversion'] == '0.15.3' %}
+    - name: /etc/apt/sources.list.d/saltstack-salt-{{ grains['lsb_release'] }}.list
+{%- else %}
     - name: /etc/apt/sources.list.d/saltstack-salt-{{ grains['lsb_distrib_release'] }}.list
+{%- endif %}
   apt_repository:
     - present
 {%- if 'files_archive' in pillar %}
@@ -53,7 +57,11 @@ salt:
 {%- else %}
     - address: http://archive.robotinfra.com/mirror/salt/{{ salt['pillar.get']('salt:version', '0.16.4') }}
 {%- endif %}
+{%- if grains['saltversion'] == '0.15.3' %}
+    - filename: saltstack-salt-{{ grains['lsb_codename'] }}
+{%- else %}
     - filename: saltstack-salt-{{ grains['lsb_distrib_codename'] }}
+{%- endif %}
     - components:
       - main
     - key_server: keyserver.ubuntu.com

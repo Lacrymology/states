@@ -24,41 +24,37 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
--#}
-# {{ pillar['message_do_not_modify'] }}
-{#-
+
 To use this template, extends it and define blocks that you want to replace,
 This template need:
 - pillar data for this app
 - context variable(s): chdir, appname, [wsgi_file], [virtualenv], [django_settings], [module]
 [something] means optional
-#}
-{%- set dir = chdir %}
-{%- set wsgi = wsgi_file|default(False) %}
-{%- set django_settings = django_settings|default(False) %}
-{%- set module = module|default(False) %}
-{%- set name = appname %}
-{%- set web = pillar[name] %}
-{%- set venv = virtualenv %}
+-#}
+# {{ pillar['message_do_not_modify'] }}
+{%- set web = pillar[appname] -%}
 [uwsgi]
 {%- block header %}
 {%- endblock %}
-
 master = true
 processes = {{ web['workers']|default(2) }}
 harakiri = {{ web['timeout']|default(60) }}
 harakiri-verbose = true
-{% if django_settings %}env = DJANGO_SETTINGS_MODULE={{ django_settings }}{%- endif %}
-{% if module %}module = {{ module }}{%- endif %}
-{%- if web['cheaper']|default(False) %}
-{%- if web['cheaper'] > 0 %}
+{%- if django_settings|default(False) %}
+env = DJANGO_SETTINGS_MODULE={{ django_settings }}
+{%- endif -%}
+{%- if module|default(False) -%}
+module = {{ module }}
+{%- endif -%}
+{%- if web['cheaper']|default(False) -%}
+    {%- if web['cheaper'] > 0 %}
 cheaper = {{ web['cheaper'] }}
-{%- else %}
+    {%- else %}
 cheap = true
-{%- endif %}
-{%- if web['workers'] == 1 and web['cheaper'] == 0 %}
+    {%- endif -%}
+    {%- if web['workers'] == 1 and web['cheaper'] == 0 %}
 idle = {{ web['idle']|default(300) }}
-{%- endif %}
+    {%- endif -%}
 {%- endif %}
 {%- if grains['virtual'] == 'kvm' and salt['file.file_exists']('/sys/kernel/mm/ksm/run') %}
 ksm = 20
@@ -66,26 +62,32 @@ ksm = 20
 lazy-apps = true
 uid = www-data
 gid = www-data
-procname = {{ name }}-worker
-procname-master = {{ name }}-master
-socket = /var/lib/uwsgi/{{ name }}.sock
-stats = /var/lib/uwsgi/{{ name }}-stats.sock
-chdir = {{ dir }}
-{%- if wsgi %}
+procname = {{ appname }}-worker
+procname-master = {{ appname }}-master
+socket = /var/lib/uwsgi/{{ appname }}.sock
+stats = /var/lib/uwsgi/{{ appname }}-stats.sock
+chdir = {{ chdir }}
+{%- if wsgi|default(False) %}
 wsgi-file = {{ wsgi }}
 {%- endif %}
-{%- if venv %}
-virtualenv = {{ venv }}
+{%- if virtualenv|default(False) %}
+virtualenv = {{ virtualenv }}
 {%- endif %}
 threaded-logger = true
 no-orphans = true
 {%- if 'graylog2_address' in pillar %}
 logger = graylog2:{{ pillar['graylog2_address'] }}:12201,{{ grains['id'] }}
+    {%- if pillar['debug'] %}
+req-logger = graylog2:{{ pillar['graylog2_address'] }}:12201,{{ grains['id'] }}
+    {%- endif %}
 {%- else %}
-log-syslog = uwsgi-{{ name }}
+logger = syslog:uwsgi-{{ appname }}
+    {%- if pillar['debug'] %}
+req-logger = syslog:uwsgi-{{ appname }}
+    {%- endif %}
 {%- endif %}
 {%- if 'graphite_address' in pillar %}
-carbon-id = {{ name }}
+carbon-id = {{ appname }}
 carbon = {{ pillar['graphite_address'] }}:2003
 {%- endif %}
 {%- block footer %}

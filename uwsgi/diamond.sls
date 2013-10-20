@@ -42,9 +42,9 @@ uwsgi_diamond_resources:
     - text:
       - |
         [[uwsgi]]
-        cmdline = ^\/usr\/local\/uwsgi\/uwsgi
+        cmdline = ^\/usr\/local\/uwsgi.*\/uwsgi
 
-{% if grains['virtual'] == 'kvm' and salt['file.file_exists']('/sys/kernel/mm/ksm/run') %}
+{%- if grains['virtual'] == 'kvm' and salt['file.file_exists']('/sys/kernel/mm/ksm/run') %}
 diamond_ksm:
   file:
     - managed
@@ -62,4 +62,4 @@ extend:
     service:
       - watch:
         - file: diamond_ksm
-{% endif %}
+{%- endif -%}

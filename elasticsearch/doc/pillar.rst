@@ -125,7 +125,7 @@ elasticsearch:ssl
 
 SSL key set to use to publish ES trough HTTPS.
 
-Default: ``False`` by default of that pillar key.
+Default: ``False``.
 
 elasticsearch:https_allowed
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -134,7 +134,7 @@ Only used if elasticsearch:ssl is defined.
 
 List of CIDR format network where ES over HTTPS is allowed.
 
-Default: [] by default of that pillar key.
+Default: Empty list.
 
 destructive_absent
 ~~~~~~~~~~~~~~~~~~

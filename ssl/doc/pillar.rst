@@ -27,22 +27,25 @@
              ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
              POSSIBILITY OF SUCH DAMAGE.
 :Authors: - Bruno Clermont
+
 Pillar
 ======
 
 Optional
 --------
 
-ssl:
-  [key_name]:
-    server_key: ssl key content
-    server_crt: ssl cert content
-    ca_crt: ssl ca cert content
-  [other_key_name]:
-    server_key: other ssl key content
-    server_crt: other ssl cert content
-    ca_crt: other ssl ca cert content
+Format::
 
+  ssl:
+    [key_name]:
+      server_key: ssl key content
+      server_crt: ssl cert content
+      ca_crt: ssl ca cert content
+    [other_key_name]:
+      server_key: other ssl key content
+      server_crt: other ssl cert content
+      ca_crt: other ssl ca cert content
+    
 Example::
 
   ssl:

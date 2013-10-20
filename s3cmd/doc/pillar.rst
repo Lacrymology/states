@@ -40,9 +40,6 @@ Example::
     access_key: XXXX
     secret_key: YYYY
 
-Optional
---------
-
 aws:access_key
 ~~~~~~~~~~~~~~
 

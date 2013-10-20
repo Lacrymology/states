@@ -24,8 +24,7 @@ graphite:retentions
 
 List of data retention rules, see the following for details:
 
-http://graphite.readthedocs.org/en/latest/config-carbon.html#storage
--schemas-conf
+http://graphite.readthedocs.org/en/latest/config-carbon.html#storage-schemas-conf
 
 Optional
 --------
@@ -45,7 +44,7 @@ graphite:file-max
 
 Maximum of open files for the daemon.
 
-Default: ``False`` by default of that pillar key.
+Default: ``False``.
 
 graphite:carbon:interface 
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -62,4 +61,4 @@ Add redundancy of your data by replicating.
 Every data point and relaying it to N caches (0 < N <= number of cache
 instances).
 
-Default: ``1``. (Mean you have only one copy for each metric = No replication)
+Default: ``1``. Which is only one copy for each metric, thus no replication.

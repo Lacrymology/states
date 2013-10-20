@@ -40,7 +40,6 @@ debug
 Set to True/False. If False, drop all noisy log (Eg: sudo open/close
 session), otherwise, keep all that logs.
 
-
 Optional
 --------
 

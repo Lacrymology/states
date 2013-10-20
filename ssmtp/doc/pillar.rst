@@ -84,4 +84,4 @@ smtp:tls
 
 Use TLS or Not.
 
-Default: ``False`` by default of that pillar key.
+Default: ``False``.

@@ -1,6 +1,19 @@
 Pillar
 ======
 
+Example::
+
+  postgresql:
+    listen_addresses: '*'
+    replication:
+      hot_standby: True
+       master: 10.0.0.2
+       standby:
+         - 10.0.0.5
+         - 10.0.0.6
+    monitoring:
+      password: mypassword
+
 Mandatory
 ---------
 
@@ -118,17 +131,3 @@ postgresql:replication:standby
 List of addresses of standby nodes in cluster.
 
 Default: [].
-
-
-Example::
-
-   postgresql:
-    listen_addresses: '*'
-    replication:
-      hot_standby: True
-       master: 10.0.0.2
-       standby:
-         - 10.0.0.5
-         - 10.0.0.6
-    monitoring:
-      password: mypassword

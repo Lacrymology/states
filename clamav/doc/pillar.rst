@@ -51,33 +51,32 @@ clamav:dns_db
 
 Database verification domain, DNS used to verify virus database version.
 
-Default: ``(current.cvd.clamav.net)`` by default of that pillar key.
+Default: ``(current.cvd.clamav.net)``.
 
 clamav:connect_timeout
 ~~~~~~~~~~~~~~~~~~~~~~
 
 Timeout in seconds when connecting to database server.
 
-Default: ``30`` by default of that pillar key.
+Default: ``30``.
 
 clamav:receive_timeout
 ~~~~~~~~~~~~~~~~~~~~~~
 
 Timeout in seconds when reading from database server.
 
-Default: ``30`` by default of that pillar key.
+Default: ``30``.
 
 clamav:times_of_check
 ~~~~~~~~~~~~~~~~~~~~~
 
 Numbers of database checks per day.
 
-Default: ``24`` by default of that pillar key.
+Default: ``24``.
 
 clamav:db_mirrors
 ~~~~~~~~~~~~~~~~~
 
 Tuple of spam database servers.
 
-Default: ``('db.local.clamav.net', 'database.clamav.net')``
-by default of that pillar key.
+Default: ``('db.local.clamav.net', 'database.clamav.net')``.

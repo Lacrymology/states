@@ -79,7 +79,7 @@ wordpress:ssl
 
 Name of the SSL key to use for HTTPS.
 
-Default: ``False`` by default of that pillar key.
+Default: ``False``.
 
 wordpress:ssl_redirect
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -87,7 +87,7 @@ wordpress:ssl_redirect
 If set to True and SSL is turned on, this will force all HTTP traffic to be
 redirected to HTTPS.
 
-Default: ``False`` by default of that pillar key.
+Default: ``False``.
 
 wordpress:(workers|cheapers|idle|timeout)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

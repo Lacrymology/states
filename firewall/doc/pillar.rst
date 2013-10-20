@@ -37,7 +37,7 @@ Optional
 Example::
 
   ip_addresses:
-   - 192.168.1.1
+    - 192.168.1.1
   firewall:
     filter:
       tcp:

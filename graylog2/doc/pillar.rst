@@ -73,7 +73,7 @@ Example::
     cheaper: 1
     idle: 300
     timeout: 60
-    email:
+    smtp:
       server: smtp.yourdomain.com
       port: 25
       tls: False
@@ -86,7 +86,7 @@ graylog2:max_docs
 
 How many log messages to keep per index.
 
-Default: ``20000000`` by default of that pillar key.
+Default: ``20000000``.
 
 graylog2:max_indices
 ~~~~~~~~~~~~~~~~~~~~
@@ -94,56 +94,56 @@ graylog2:max_indices
 How many indices to have in total.
 If this number is reached, the oldest index will be deleted.
 
-Default: ``20`` by default of that pillar key.
+Default: ``20``.
 
 graylog2:shards
 ~~~~~~~~~~~~~~~
 
 The number of shards for your indices.
 
-Default: ``4`` by default of that pillar key.
+Default: ``4``.
 
 graylog2:replicas
 ~~~~~~~~~~~~~~~~~
 
 The number of replicas for your indices.
 
-Default: ``0`` by default of that pillar key.
+Default: ``0``.
 
 graylog2:recent_index_ttl_minutes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The number of minutes to show recent index.
 
-Default: ``60`` by default of that pillar key.
+Default: ``60``.
 
 graylog2:processbuffer_processors
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The number of parallel running processors.
 
-Default: ``5`` by default of that pillar key.
+Default: ``5``.
 
 graylog2:outputbuffer_processors
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The number of parallel running processors.
 
-Default: ``5`` by default of that pillar key.
+Default: ``5``.
 
 graylog2:processor_wait_strategy
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Wait strategy describing how buffer processors wait on a cursor sequence.
 
-Default: ``blocking`` by default of that pillar key.
+Default: ``blocking``.
 
 graylog2:ring_size
 ~~~~~~~~~~~~~~~~~~
 
 Size of internal ring buffers. Raise this if raising outputbuffer_processors does not help anymore.
 
-Default: ``1024`` by default of that pillar key.
+Default: ``1024``.
 
 graylog2:amqp
 ~~~~~~~~~~~~~
@@ -160,7 +160,7 @@ If enable, you must define:
       password: userpass
       vhost: localhost
 
-Default: ``False`` by default of that pillar key.
+Default: ``False``.
 
 amqp:host
 ~~~~~~~~~
@@ -192,14 +192,14 @@ graylog2:heap_size
 
 The size of heap give for JVM.
 
-Default: ``False`` by default of that pillar key.
+Default: ``False``.
 
 graylog2:ssl
 ~~~~~~~~~~~~
 
 Name of the SSL key to use for HTTPS.
 
-Default: ``False`` by default of that pillar key.
+Default: ``False``.
 
 graylog2:ssl_redirect
 ~~~~~~~~~~~~~~~~~~~~~
@@ -207,25 +207,17 @@ graylog2:ssl_redirect
 If set to True and SSL is turned on, this will force all HTTP traffic to be
 redirected to HTTPS.
 
-Default: ``False`` by default of that pillar key.
+Default: ``False``.
 
 graylog2:(workers|cheapers|idle|timeout)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 See uwsgi/doc/instance.rst for more details
 
-graylog2:email
-~~~~~~~~~~~~~~
+graylog2:smtp
+~~~~~~~~~~~~~
 
-This is configuration for SMTP. To enable it, you must define:
-
-graylog2:
-  email:
-    server: smtp.yourdomain.com
-    port: 25
-    tls: False
-    user: smtpuser@yourdomain.com
-    password: userpass
-    from: smtpuser@yourdomain.com
-
+This is configuration to allow Graylog2 to send email.
 Please see `doc/pillar.rst` for details.
+
+Default: value of ``smtp`` pillar key.

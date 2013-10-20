@@ -63,4 +63,4 @@ destructive_absent
 If True (not default), git repositories will be wiped if
 git.server.absent state is executed.
 
-Default: ``False`` by default of that pillar key.
+Default: ``False``.

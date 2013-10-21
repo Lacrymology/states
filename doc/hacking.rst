@@ -43,7 +43,6 @@ Make your virtualenv able to run salt master::
   $ mkdir -p conf/pki/master
   $ mkdir -p cache/master
   $ mkdir -p run/master
-  $ mkdir states
   $ mkdir pillar
 
 Create configuration file ``conf/master`` (replace ``$YOURUSERNAME`` and
@@ -60,13 +59,26 @@ Create configuration file ``conf/master`` (replace ``$YOURUSERNAME`` and
   sock_dir: /path/to/salt/run/master
   pki_dir: /path/to/salt/conf/pki/master
   cachedir: /path/to/salt/cache/master
-  file_roots:
-    base:
-    - /path/to/salt/states
+  user: $YOURUSERNAME
   pillar_roots:
     base:
-    - /path/to/salt/pillar
-  user: $YOURUSERNAME
+      - /path/to/salt/pillar
+
+This documentation file is located in ``salt-common`` repository. Let's
+assume that you already cloned it.
+
+If you only need ``salt-common``, set the specific value::
+
+  file_roots:
+    base:
+      - /absolute/path/to/salt-common
+
+Unless you need also a *non-common* repository::
+
+  file_roots:
+    base:
+      - /absolute/path/to/salt-common
+      - /absolute/path/to/salt-non-common
 
 You can now run the master::
 

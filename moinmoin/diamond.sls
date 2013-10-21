@@ -36,8 +36,8 @@ Diamond statistics for moinmoin.
 -#}
 include:
   - diamond
-  - rsyslog.diamond
   - nginx.diamond
+  - rsyslog.diamond
   - uwsgi.diamond
 
 uwsgi_diamond_moinmoin_resources:

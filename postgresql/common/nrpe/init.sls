@@ -32,10 +32,10 @@ Nagios NRPE check for PostgreSQL Server.
 {% set version="9.2" %}
 
 include:
+  - apt.nrpe
   - nrpe
   - postgresql.nrpe
   - postgresql.common.user
-  - apt.nrpe
   - rsyslog.nrpe
 {% if salt['pillar.get']('postgresql:ssl', False) %}
   - ssl.nrpe

@@ -29,10 +29,10 @@ Diamond statistics for Sentry.
 -#}
 include:
   - diamond
-  - rsyslog.diamond
   - memcache.diamond
   - nginx.diamond
   - postgresql.server.diamond
+  - rsyslog.diamond
   - statsd.diamond
   - uwsgi.diamond
 

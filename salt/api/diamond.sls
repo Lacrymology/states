@@ -29,9 +29,9 @@ Diamond statistics for Salt API.
 -#}
 include:
   - diamond
-  - salt.master.diamond
   - nginx.diamond
   - rsyslog.diamond
+  - salt.master.diamond
 
 salt_api_diamond_resources:
   file:

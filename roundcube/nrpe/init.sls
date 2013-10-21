@@ -28,17 +28,17 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Install a roundcube Nagios NRPE checks.
 -#}
 include:
-  - nrpe
   - apt.nrpe
-  - nginx.nrpe
-  - uwsgi.nrpe
   - build.nrpe
-  - rsyslog.nrpe
+  - nrpe
+  - nginx.nrpe
   - postgresql.nrpe
   - postgresql.server.nrpe
+  - rsyslog.nrpe
 {% if salt['pillar.get']('roundcube:ssl', False) %}
   - ssl.nrpe
 {% endif %}
+  - uwsgi.nrpe
 
 /etc/nagios/nrpe.d/roundcube.cfg:
   file:

@@ -30,7 +30,6 @@ Nagios NRPE check for Graphite.
 include:
   - apt.nrpe
   - graphite.common.nrpe
-  - rsyslog.nrpe
   - memcache.nrpe
   - nginx.nrpe
   - nrpe
@@ -38,12 +37,13 @@ include:
   - postgresql.nrpe
   - postgresql.server.nrpe
   - python.dev.nrpe
-  - statsd.nrpe
-  - uwsgi.nrpe
-  - virtualenv.nrpe
+  - rsyslog.nrpe
 {% if salt['pillar.get']('graphite:web:ssl', False) %}
   - ssl.nrpe
 {% endif %}
+  - statsd.nrpe
+  - uwsgi.nrpe
+  - virtualenv.nrpe
 
 /etc/nagios/nrpe.d/graphite.cfg:
   file:

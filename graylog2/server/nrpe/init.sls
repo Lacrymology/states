@@ -28,10 +28,10 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 Nagios NRPE check for Graylog2 Server.
 -#}
 include:
-  - nrpe
+  - apt.nrpe
   - elasticsearch.nrpe
   - mongodb.nrpe
-  - apt.nrpe
+  - nrpe
 
 {% set version = '0.11.0' %}
 

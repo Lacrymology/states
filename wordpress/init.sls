@@ -35,14 +35,14 @@ Maintainer: Lam Dang Tung <lamdt@familug.org>
 A blogging tool and content management system.
 -#}
 include:
-  - nginx
   - local
+  - nginx
   - {{ salt['pillar.get']('wordpress:mysql_variant', 'mariadb') }}.server
   - php.dev
-  - uwsgi.php
 {%- if salt['pillar.get']('wordpress:ssl', False) %}
   - ssl
 {%- endif %}
+  - uwsgi.php
   - web
 
 {%- set version = "3.5.2" %}

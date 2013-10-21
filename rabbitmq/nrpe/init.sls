@@ -28,9 +28,9 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 Nagios NRPE check for RabbitMQ.
 -#}
 include:
-  - nrpe
   - apt.nrpe
   - logrotate.nrpe
+  - nrpe
 {% if pillar['rabbitmq']['management'] != 'guest' -%}
   {%- if salt['pillar.get']('rabbitmq:ssl', False) %}
   - ssl.nrpe

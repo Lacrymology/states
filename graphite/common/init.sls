@@ -29,9 +29,9 @@ Common stuff between carbon and graphite.
 -#}
 
 include:
+  - local
   - virtualenv
   - web
-  - local
 
 graphite:
   user:

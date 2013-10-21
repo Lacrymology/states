@@ -28,14 +28,14 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 Install a Graylog2 logging server backend.
 -#}
 include:
-  - graylog2
+  - apt
+  - mongodb
 {% if grains['osrelease']|float < 12.04 %}
   - java.6
 {% else %}
   - java.7
 {% endif %}
-  - mongodb
-  - apt
+  - graylog2
   - local
 
 {# TODO: set Email output plugin settings straight into MongoDB from salt #}

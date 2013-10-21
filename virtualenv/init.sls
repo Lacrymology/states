@@ -28,9 +28,9 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 Install all dependencies to create Python's virtualenv.
 -#}
 include:
-  - pip
   - git
   - mercurial
+  - pip
 
 python-virtualenv:
   pkg:

@@ -23,12 +23,12 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet hvnsweeting@gmail.com
 Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
- 
+
  Nagios NRPE check for Rsync
 -#}
 include:
-  - nrpe
   - apt.nrpe
+  - nrpe
 
 /etc/nagios/nrpe.d/rsync.cfg:
   file:

@@ -28,9 +28,9 @@ Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
 include:
-  - postgresql.standby
   - postgresql.common.diamond
   - postgresql.server.diamond
+  - postgresql.standby
 
 extend:
   postgresql_monitoring:

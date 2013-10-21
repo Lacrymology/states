@@ -28,8 +28,8 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Nagios NRPE check for Postfix.
 -#}
 include:
-  - nrpe
   - apt.nrpe
+  - nrpe
 
 /etc/nagios/nrpe.d/postfix.cfg:
   file:

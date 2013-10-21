@@ -25,8 +25,8 @@ Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
 include:
-  - salt
   - apt
+  - salt
 
 {%- for type in ('profiles', 'providers') %}
 /etc/salt/cloud.{{ type }}:

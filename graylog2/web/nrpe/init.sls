@@ -29,10 +29,10 @@ Install a graylog2 web Nagios NRPE checks.
 -#}
 include:
   - build.nrpe
-  - rsyslog.nrpe
   - mongodb.nrpe
   - nginx.nrpe
   - nrpe
+  - rsyslog.nrpe
   - ruby.nrpe
 {% if salt['pillar.get']('graylog2:ssl', False) %}
   - ssl.nrpe

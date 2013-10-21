@@ -32,16 +32,13 @@ Once this state is installed, you need to create initial admin user:
 /usr/local/sentry/manage createsuperuser.
 -#}
 include:
-  - postgresql
-  - postgresql.server
-  - virtualenv
-  - uwsgi
+  - apt
   - local
   - nginx
   - pip
-  - web
+  - postgresql
+  - postgresql.server
   - python.dev
-  - apt
   - memcache
   - rsyslog
 {% if salt['pillar.get']('sentry:ssl', False) %}
@@ -50,6 +47,9 @@ include:
 {% if 'graphite_address' in pillar %}
   - statsd
 {% endif %}
+  - uwsgi
+  - virtualenv
+  - web
 
 sentry:
   virtualenv:

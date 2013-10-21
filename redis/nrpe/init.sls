@@ -35,8 +35,8 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Nagios NRPE check for redis.
 -#}
 include:
-  - nrpe
   - apt.nrpe
+  - nrpe
 
 /etc/nagios/nrpe.d/redis.cfg:
   file:

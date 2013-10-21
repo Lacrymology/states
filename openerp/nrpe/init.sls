@@ -29,10 +29,10 @@ Nagios NRPE check for OpenERP.
 -#}
 
 include:
-  - nrpe
   - apt.nrpe
   - build.nrpe
   - nginx.nrpe
+  - nrpe
   - pip.nrpe
   - postgresql.server.nrpe
   - python.dev.nrpe

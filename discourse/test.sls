@@ -34,8 +34,8 @@ Maintainer: Lam Dang Tung <lamdt@familug.org>
 -#}
 include:
   - discourse
-  - discourse.diamond
   - discourse.backup
+  - discourse.diamond
   - discourse.nrpe
 
 test:

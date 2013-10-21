@@ -28,10 +28,10 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 Install PyStatsD daemon, a statsd nodejs equivalent in python.
 -#}
 include:
-  - virtualenv
-  - rsyslog
   - local
   - python.dev
+  - rsyslog
+  - virtualenv
 
 /var/log/statsd.log:
   file:

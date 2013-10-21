@@ -35,8 +35,8 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Nagios NRPE check for Tomcat6.
 -#}
 include:
-  - nrpe
   - apt.nrpe
+  - nrpe
   - rsyslog.nrpe
 
 /etc/nagios/nrpe.d/tomcat.cfg:

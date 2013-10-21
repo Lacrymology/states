@@ -28,13 +28,13 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 Nagios NRPE check for Salt Master.
 -#}
 include:
-  - nrpe
-  - git.nrpe
-  - ssh.client.nrpe
-  - pip.nrpe
-  - python.dev.nrpe
   - apt.nrpe
+  - git.nrpe
+  - pip.nrpe
+  - nrpe
+  - python.dev.nrpe
   - rsyslog.nrpe
+  - ssh.client.nrpe
 
 /etc/nagios/nrpe.d/salt-master.cfg:
   file:

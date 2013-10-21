@@ -28,8 +28,8 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 Nagios NRPE check for OpenVPN.
 -#}
 include:
-  - nrpe
   - apt.nrpe
+  - nrpe
 
 /etc/nagios/nrpe.d/openvpn.cfg:
   file:

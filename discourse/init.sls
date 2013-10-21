@@ -48,9 +48,9 @@ include:
 {%- if salt['pillar.get']('discourse:ssl', False) %}
   - ssl
 {%- endif %}
-  - xml
   - uwsgi.ruby
   - web
+  - xml
 
 {%- set version = "0.9.6.3" %}
 {%- set web_root_dir = "/usr/local/discourse-" + version %}

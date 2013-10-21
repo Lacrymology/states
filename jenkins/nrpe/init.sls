@@ -28,8 +28,8 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Nagios NRPE check for jenkins.
 -#}
 include:
-  - java.7.jdk
   - apt.nrpe
+  - java.7.jdk
   - nginx.nrpe
 {% if salt['pillar.get']('jenkins:ssl', False) %}
   - ssl.nrpe

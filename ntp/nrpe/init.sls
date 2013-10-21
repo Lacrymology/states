@@ -28,8 +28,8 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 Nagios NRPE check for NTP.
 -#}
 include:
-  - nrpe
   - apt.nrpe
+  - nrpe
   - rsyslog.nrpe
 
 /etc/nagios/nrpe.d/ntpd.cfg:

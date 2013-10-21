@@ -33,15 +33,15 @@ Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
  -#}
 include:
-  - virtualenv
-  - uwsgi
   - local
   - nginx
+  - openldap.dev
   - pip
 {%- if salt['pillar.get']('moinmoin:ldap', False) %}
-  - openldap.dev
   - python.dev
 {%- endif %}
+  - uwsgi
+  - virtualenv
   - web
 
 {%- set root_dir = '/usr/local/moinmoin' %}

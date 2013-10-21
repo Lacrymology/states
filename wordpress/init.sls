@@ -1,23 +1,28 @@
 {#-
-Wordpress: a blogging tool and content management system
-=============================
+Copyright (c) 2013, Lam Dang Tung
 
-Mandatory Pillar
-----------------
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-wordpress:
-  hostnames:
-    - list of hostname, used for nginx config
-  title: Site title
-  username: admin username
-  admin_password: admin's password
-  email: admin email
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
 
-Optional Pillar
----------------
-  password:  password for mysql user "wordpress"
-  public: site appear in search engines. Default is: 1 (yes)
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
 
+Author: Lam Dang Tung <lamdt@familug.org>
+Maintainer: Lam Dang Tung <lamdt@familug.org>
+
+A blogging tool and content management system.
 -#}
 include:
   - nginx
@@ -25,19 +30,21 @@ include:
   - {{ salt['pillar.get']('wordpress:mysql_variant', 'mariadb') }}.server
   - php.dev
   - uwsgi.php
-{%- if pillar['wordpress']['ssl']|default(False) %}
+{%- if salt['pillar.get']('wordpress:ssl', False) %}
   - ssl
 {%- endif %}
   - web
 
 {%- set version = "3.5.2" %}
 {%- set wordpressdir = "/usr/local/wordpress" %}
-{%- set password = salt['password.pillar']('wordpress:password', 10) %}
+{%- set dbuser = salt['pillar.get']('wordpress:db:username', 'wordpress') %}
+{%- set dbuserpass = salt['password.pillar']('wordpress:db:password', 10) %}
+{%- set dbname = salt['pillar.get']('wordpress:db:name', 'wordpress') %}
 
 wordpress_drop_old_db:
   mysql_database:
     - absent
-    - name: wordpress
+    - name: {{ dbname }}
     - require:
       - service: mysql-server
       - pkg: python-mysqldb
@@ -47,7 +54,7 @@ wordpress:
     - extracted
     - name: /usr/local/
 {%- if 'files_archive' in pillar %}
-    - source: {{ salt['pillar.get']('files_archive') }}/mirror/wordpress-{{ version }}.tar.gz
+    - source: {{ pillar['files_archive'] }}/mirror/wordpress-{{ version }}.tar.gz
 {%- else %}
     - source: http://wordpress.org/wordpress-{{ version }}.tar.gz
 {%- endif %}
@@ -69,7 +76,7 @@ wordpress:
       - archive: wordpress
   mysql_database:
     - present
-    - name: wordpress
+    - name: {{ dbname }}
     - pkg: python-mysqldb
     - require:
       - service: mysql-server
@@ -78,15 +85,16 @@ wordpress:
   mysql_user:
     - present
     - host: localhost
-    - password: {{ password }}
+    - name: {{ dbuser }}
+    - password: {{ dbuserpass }}
     - require:
       - service: mysql-server
       - pkg: python-mysqldb
   mysql_grants:
     - present
     - grant: all privileges
-    - user: wordpress
-    - database: wordpress.*
+    - user: {{ dbuser }}
+    - database: {{ dbname }}.*
     - host: localhost
     - require:
       - mysql_user: wordpress
@@ -111,7 +119,9 @@ php5-mysql:
       - archive: wordpress
       - user: web
     - context:
-      password: {{ password }}
+      dbuserpass: {{ dbuserpass }}
+      dbname: {{ dbname }}
+      dbuser: {{ dbuser }}
 
 wordpress_initial:
   file:
@@ -193,7 +203,7 @@ wordpress_initial:
       - archive: wordpress
       - pkg: php5-mysql
 
-{%- if pillar['wordpress']['ssl']|default(False) %}
+{%- if salt['pillar.get']('wordpress:ssl', False) %}
 extend:
   nginx:
     service:

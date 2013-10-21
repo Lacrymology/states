@@ -1,33 +1,34 @@
 {#-
+Copyright (c) 2013, Bruno Clermont
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met: 
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer. 
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution. 
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+Author: Bruno Clermont <patate@fastmail.cn>
+Maintainer: Bruno Clermont <patate@fastmail.cn>
+
 Firewall
 ========
 
 Set a simple iptables based firewall
-
-Mandatory Pillar
-----------------
-
-message_do_not_modify: Warning message to not modify file.
-
-Optional Pillar
----------------
-
-ip_addresses:
- - 192.168.1.1
-firewall:
-  filter:
-    tcp:
-      - 22
-      - 80
-      - 443
-shinken_pollers:
-  - 192.168.1.1
-
-ip_addresses: list of host inside internal network that will get full access
-    to this server.
-firewall:filter: dict of protocol (tcp/udp) with inside it the list of port
-    that are allowed from external networks.
-shinken_pollers: IP address of monitoring poller that check this server.
 -#}
 include:
   - apt
@@ -49,7 +50,7 @@ iptables:
       - pkg: iptables
   pkg:
     - installed
-    - names:
+    - pkgs:
       - iptables
       - iptstate
       - iptables-persistent

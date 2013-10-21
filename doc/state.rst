@@ -1,6 +1,21 @@
 Salt State
 ==========
 
+:copyrights: Copyright (c) 2013, Bruno Clermont
+             All rights reserved.
+
+             Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met: 
+
+             1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer. 
+             2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution. 
+
+             THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED
+             ARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+             WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+             ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+             LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+:authors: - Bruno Clermont
+
 This document define the standard structure of the states.
 
 As the states are applied automatically in various way, there is a requirements
@@ -121,6 +136,29 @@ To overwrite default behavior of test and checks, you need to create a
 
 For more details on that file content, look at ``doc/tests.rst`` section
 *Test Validation*.
+
+Ordering
+--------
+
+*Status: Mandatory*
+
+All services should have the ``order`` argument specified with value ``50``:
+http://docs.saltstack.com/ref/states/ordering.html?highlight=order#the-order-option
+such as::
+
+  cron:
+    pkg:
+      - latest
+    service:
+      - running
+      - enable: True
+      - order: 50
+      - watch:
+        - pkg: cron
+
+Ordering is only used for testing framework, this make sure that test are run
+with order ``last`` while all services are started with an order that make sure
+everything is deployed and running before test run.
 
 Monitoring Auto-Discovery
 -------------------------

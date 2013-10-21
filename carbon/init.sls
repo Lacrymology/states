@@ -1,47 +1,32 @@
 {#-
-Carbon Daemon
-=============
+Copyright (c) 2013, Bruno Clermont
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met: 
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer. 
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution. 
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+Author: Bruno Clermont <patate@fastmail.cn>
+Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 Install Carbon, daemon that store on disk statistics database used by Graphite
 to render graphics.
-
-Mandatory Pillar
-----------------
-
-message_do_not_modify: Warning message to not modify file.
-
-graphite:
-  carbon:
-    instances: 2
-  retentions:
-    default_1min_for_1_month:
-      pattern: .*
-      retentions: 60s:30d
-
-graphite:carbon:instances: number of instances to deploy, should <= numbers of CPU cores
-graphite:retentions: list of data retention rules, see the following for
-    details:
-    http://graphite.readthedocs.org/en/latest/config-carbon.html#storage-schemas-conf
-
-Optional Pillar
----------------
-
-graphite:
-  file-max: 65535
-  carbon:
-    replication: 1
-    interface: 0.0.0.0
-shinken_pollers:
-  - 192.168.1.1
-
-graphite:file-max: maximum of open files for the daemon. Default: not used.
-graphite:carbon:interface: Network interface to bind Carbon-relay daemon.
-    Default: 0.0.0.0.
-graphite:carbon:replication: add redundancy of your data by replicating
-    every data point and relaying it to N caches (0 < N <= number of cache instances).
-    Default: 1 (Mean you have only one copy for each metric = No replication)
-shinken_pollers: IP address of monitoring poller that check this server.
-    Default: not used.
 -#}
 
 {#- TODO: send logs to GELF -#}
@@ -269,7 +254,7 @@ carbon-relay:
       - user: graphite
       - file: /etc/graphite
 
-{%- if 'whitelist' in pillar['graphite']['carbon']|default(False) %}
+{%- if 'whitelist' in salt['pillar.get']('graphite:carbon', False) %}
 /etc/graphite/whitelist.conf:
   file:
     - managed
@@ -283,8 +268,18 @@ carbon-relay:
     - require:
       - user: graphite
       - file: /etc/graphite
+      - file: /var/lib/graphite/lists
     - watch_in:
     {%- for instance in range(instances_count) %}
       - service: carbon-cache-{{ instance }}
     {%- endfor -%}
+
+/var/lib/graphite/lists:
+  file:
+    - directory
+    - user: graphite
+    - group: graphite
+    - mode: 550
+    - require:
+      - file: /var/lib/graphite
 {%- endif %}

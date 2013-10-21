@@ -1,3 +1,30 @@
+{#-
+Copyright (c) 2013, Bruno Clermont
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met: 
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer. 
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution. 
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+Author: Bruno Clermont <patate@fastmail.cn>
+Maintainer: Bruno Clermont <patate@fastmail.cn>
+-#}
 # {{ pillar['message_do_not_modify'] }}
 {%- set mine = salt['mine.get']('*', 'monitoring.data') %}
 
@@ -6,7 +33,7 @@ define realm {
     default 1
 }
 
-{#
+{#-
 Description: The Arbiter is responsible for:
 - Loading, manipulating and dispatching the configuration
 - Validating the health of all other Shinken daemons
@@ -33,7 +60,7 @@ define module {
     path /var/lib/shinken/arbiter.retention
 }
 
-{#
+{#-
 The scheduler is a "Host manager". It gets the hosts and their services,
 schedules the checks and transmit them to the pollers.
 Description: The scheduler is responsible for:
@@ -51,10 +78,10 @@ define scheduler {
     port 7768
     modules scheduler-retention
     realm All
-{#    spare 0#}
-{#    # Skip initial broks creation. Boot fast, but some broker modules won't#}
-{#    # work with it!#}
-{#    skip_initial_broks 0#}
+{#-    spare 0#}
+{#-    # Skip initial broks creation. Boot fast, but some broker modules won't#}
+{#-    # work with it!#}
+{#-   skip_initial_broks 0#}
 }
 {% endfor %}
 
@@ -64,7 +91,7 @@ define module {
     path /var/lib/shinken/scheduler.retention
 }
 
-{#
+{#-
 Description: The poller is responsible for:
 - Active data acquisition
 - Local passive data acquisition
@@ -81,7 +108,7 @@ define poller {
 }
 {% endfor %}
 
-{#
+{#-
 Description: The broker is responsible for:
 - Exporting centralized logs of all Shinken daemon processes
 - Exporting status data
@@ -104,7 +131,7 @@ define broker {
     {% if not loop.first %}
     spare 1
     {% endif %}
-{#                            ; broker for the arbiter.
+{#-                            ; broker for the arbiter.
     manage_sub_realms   1   ; Does it take jobs from schedulers of sub-Realms?
     timeout             3   ; Ping timeout
     data_timeout        120 ; Data send timeout
@@ -113,7 +140,7 @@ define broker {
 }
 {% endfor %}
 
-{#
+{#-
 Send all logs to system's Syslog
 Send all logs to a local syslog server. Support for remote syslog can be
 implemented if requested. Just lookup the syslog module source code, it's
@@ -163,14 +190,14 @@ define module {
     auth_secret CHANGE_ME
     manage_acl 1
     login_text Monitoring
-{#    allow_html_output 0       ; Allow or not HTML chars in plugins output.
+{#-    allow_html_output 0       ; Allow or not HTML chars in plugins output.
                                 ; WARNING: Allowing can be a security issue.
     max_output_length   100     ; Maximum output length for plugin output in webui
     play_sound          0       ; Play sound on new non-acknowledged problems.#}
 
     modules broker-webui-sqlite, broker-webui-auth{% if 'graphite_address' in pillar %}, broker-webui-graphite{% endif %}
 
-{#    ## Advanced Options
+{#-    ## Advanced Options
     # Don't use them as long as you don't know what you are doing!
     #http_backend            auto    ; Choice is: auto, wsgiref, cherrypy,
                                      ; paste, tornado, twisted or gevent.
@@ -210,14 +237,14 @@ Description: The reactionner is responsible for:
 - Executing notification actions
 - Executing event handler actions
 http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects/reactionner
--#}
+#}
 {% for id in pillar['shinken']['architecture']['reactionner'] %}
 define reactionner {
     reactionner_name reactionner-{{ id }}
     address {{ mine[id]['ip_addrs']['public'] }}
     port 7769
     realm All
-{#  Optional
+{#-  Optional
     manage_sub_realms   0   ; Does it take jobs from schedulers of sub-Realms?
     min_workers         1   ; Starts with N processes (0 = 1 per CPU)
     max_workers         15  ; No more than N processes (0 = 1 per CPU)
@@ -230,7 +257,7 @@ define reactionner {
 }
 {% endfor %}
 
-{#
+{#-
 The receiver manages passive information. It's just a "buffer" which will
 load passive modules (like NSCA) and be read by the arbiter to dispatch data.
 #}
@@ -241,7 +268,7 @@ define receiver {
     port 7773
     modules
     realm All
-{#    direct_routing      0   ; If enabled, it will directly send commands to the
+{#-    direct_routing      0   ; If enabled, it will directly send commands to the
                             ; schedulers if it know about the hostname in the
                             ; command.#}
 }

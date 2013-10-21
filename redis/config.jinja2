@@ -1,5 +1,29 @@
+{#-
+Copyright (c) 2013, Hung Nguyen Viet
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
+Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
+-#}
 # {{ pillar['message_do_not_modify'] }}
-{#- TODO config all in pillar, production -#}
+{#- TODO config all in pillar, production #}
 {#-
  Redis configuration file example
 
@@ -63,7 +87,7 @@ timeout {{ salt['pillar.get']('redis:timeout', 0) }}
 #}
 tcp-keepalive {{ salt['pillar.get']('redis:keepalive', 60) }}
 
-{#
+{#-
  Specify the server verbosity level.
  This can be one of:
  debug (a lot of information, useful for development/testing)
@@ -224,7 +248,7 @@ dir /var/lib/redis
 # AOF file or transmitted to slaves may cause problems.
 #}
 
-{#
+{#-
 ################################### LIMITS ####################################
 
 # Set the max number of connected clients at the same time. By default
@@ -239,7 +263,7 @@ dir /var/lib/redis
 #}
 maxclients {{ salt['pillar.get']('redis:maxclients', 10000) }}
 
-{#
+{#-
 # Don't use more memory than the specified amount of bytes.
 # When the memory limit is reached Redis will try to remove keys
 # accordingly to the eviction policy selected (see maxmemmory-policy).
@@ -266,7 +290,7 @@ maxclients {{ salt['pillar.get']('redis:maxclients', 10000) }}
 #}
 maxmemory {{ salt['pillar.get']('redis:maxmemory', '300mb') }}
 
-{#
+{#-
  MAXMEMORY POLICY: how Redis will select what to remove when maxmemory
  is reached. You can select among five behaviors:
 
@@ -288,7 +312,7 @@ maxmemory {{ salt['pillar.get']('redis:maxmemory', '300mb') }}
 #}
 maxmemory-policy {{ salt['pillar.get']('redis:policy', 'volatile-lru') }}
 
-{#
+{#-
 # LRU and minimal TTL algorithms are not precise algorithms but approximated
 # algorithms (in order to save memory), so you can select as well the sample
 # size to check. For instance for default Redis will check three keys and
@@ -298,7 +322,7 @@ maxmemory-policy {{ salt['pillar.get']('redis:policy', 'volatile-lru') }}
 #}
 maxmemory-samples {{ salt['pillar.get']('redis:samples', 3) }}
 
-{#
+{#-
 ############################## APPEND ONLY MODE ###############################
 
 # By default Redis asynchronously dumps the dataset on disk. This mode is
@@ -321,7 +345,7 @@ maxmemory-samples {{ salt['pillar.get']('redis:samples', 3) }}
 #}
 appendonly no
 
-{#
+{#-
 # The name of the append only file (default: "appendonly.aof")
 # appendfilename appendonly.aof
 
@@ -351,7 +375,7 @@ appendonly no
 # appendfsync always
 #}
 appendfsync everysec
-{#
+{#-
 # appendfsync no
 
 # When the AOF fsync policy is set to always or everysec, and a background
@@ -375,7 +399,7 @@ appendfsync everysec
 #}
 no-appendfsync-on-rewrite no
 
-{#
+{#-
 # Automatic rewrite of the append only file.
 # Redis is able to automatically rewrite the log file implicitly calling
 # BGREWRITEAOF when the AOF log size grows by the specified percentage.
@@ -397,7 +421,7 @@ no-appendfsync-on-rewrite no
 auto-aof-rewrite-percentage 100
 auto-aof-rewrite-min-size 64mb
 
-{#
+{#-
  Max execution time of a Lua script in milliseconds.
 
  If the maximum execution time is reached Redis will log that a script is
@@ -415,7 +439,7 @@ auto-aof-rewrite-min-size 64mb
 #}
 lua-time-limit 5000
 
-{#
+{#-
  The Redis Slow Log is a system to log queries that exceeded a specified
  execution time. The execution time does not include the I/O operations
  like talking with the client, sending the reply and so forth,
@@ -435,13 +459,13 @@ lua-time-limit 5000
 #}
 slowlog-log-slower-than 10000
 
-{#
+{#-
 # There is no limit to this length. Just be aware that it will consume memory.
 # You can reclaim memory used by the slow log with SLOWLOG RESET.
 #}
 slowlog-max-len 128
 
-{#
+{#-
 ############################### ADVANCED CONFIG ###############################
 
 # Hashes are encoded using a memory efficient data structure when they have a

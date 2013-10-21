@@ -1,7 +1,0 @@
-# {{ pillar['message_do_not_modify'] }}
-
-enabled = True
-
-user = diamond
-password = {{ salt['password.pillar']('postgresql:diamond') }}
-host = 127.0.0.1

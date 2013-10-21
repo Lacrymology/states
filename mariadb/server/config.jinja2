@@ -1,3 +1,27 @@
+{#-
+Copyright (c) 2013, Hung Nguyen Viet
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
+Maintainer: Dang Tung Lam <lamdt@familug.org>
+-#}
 # {{ pillar['message_do_not_modify'] }}
 {#-
 MariaDB database server configuration file.
@@ -24,8 +48,8 @@ sections)
 #}
 
 [client]
-port		= 3306
-socket		= /var/run/mysqld/mysqld.sock
+port = 3306
+socket = /var/run/mysqld/mysqld.sock
 {%- if salt['pillar.get']('mysql:utf8', False) %}
 default-character-set = utf8
 {%- endif -%}
@@ -38,20 +62,20 @@ The following values assume you have at least 32M ram
 This was formally known as [safe_mysqld]. Both versions are currently parsed.
 #}
 [mysqld_safe]
-socket		= /var/run/mysqld/mysqld.sock
-nice		= 0
+socket = /var/run/mysqld/mysqld.sock
+nice = 0
 
 [mysqld]
-user		= mysql
-pid-file	= /var/run/mysqld/mysqld.pid
-socket		= /var/run/mysqld/mysqld.sock
-port		= 3306
-bind-address		= {{ salt['pillar.get']('mysql:bind', '0.0.0.0') }}
-basedir		= /usr
-datadir		= /var/lib/mysql
-tmpdir		= /tmp
-lc_messages_dir	= /usr/share/mysql
-lc_messages	= en_US
+user = mysql
+pid-file = /var/run/mysqld/mysqld.pid
+socket = /var/run/mysqld/mysqld.sock
+port = 3306
+bind-address = {{ salt['pillar.get']('mysql:bind', '0.0.0.0') }}
+basedir = /usr
+datadir = /var/lib/mysql
+tmpdir = /tmp
+lc_messages_dir = /usr/share/mysql
+lc_messages = en_US
 skip-external-locking
 {%- if salt['pillar.get']('mysql:utf8', False) %}
 character-set-server  = utf8
@@ -60,15 +84,15 @@ character_set_server   = utf8
 collation_server       = utf8_general_ci
 {%- endif %}
 
-max_connections		= 100
-connect_timeout		= 5
-wait_timeout		= 600
-max_allowed_packet	= 16M
+max_connections = 100
+connect_timeout = 5
+wait_timeout = 600
+max_allowed_packet = 16M
 thread_cache_size       = 128
-sort_buffer_size	= 4M
-bulk_insert_buffer_size	= 16M
-tmp_table_size		= 32M
-max_heap_table_size	= 32M
+sort_buffer_size = 4M
+bulk_insert_buffer_size = 16M
+tmp_table_size = 32M
+max_heap_table_size = 32M
 {#-
 * MyISAM
 
@@ -76,25 +100,25 @@ This replaces the startup script and checks MyISAM tables if needed
 the first time they are touched. On error, make copy and try a repair.
 #}
 myisam_recover          = BACKUP
-key_buffer_size		= 128M
+key_buffer_size = 128M
 {#-
-open-files-limit	= 2000
+open-files-limit = 2000
 #}
-table_open_cache	= 400
-myisam_sort_buffer_size	= 512M
-concurrent_insert	= 2
-read_buffer_size	= 2M
-read_rnd_buffer_size	= 1M
+table_open_cache = 400
+myisam_sort_buffer_size = 512M
+concurrent_insert = 2
+read_buffer_size = 2M
+read_rnd_buffer_size = 1M
 {#-
  * Query Cache Configuration
 
  Cache only tiny result sets, so we can fit more in the query cache.
 #}
-query_cache_limit		= 128K
-query_cache_size		= 64M
+query_cache_limit = 128K
+query_cache_size = 64M
 {#-
  for more write intensive setups, set to DEMAND or OFF
-query_cache_type		= DEMAND
+query_cache_type = DEMAND
 
  * Logging and Replication
 
@@ -108,59 +132,59 @@ general_log             = 1
 
  we do want to know about network errors and such
 #}
-log_warnings		= 2
+log_warnings = 2
 {#-
  Enable the slow query log to see queries with especially long duration
  slow_query_log[={0|1}]
 #}
-slow_query_log_file	= /var/log/mysql/mariadb-slow.log
+slow_query_log_file = /var/log/mysql/mariadb-slow.log
 long_query_time = 10
-log_slow_verbosity	= query_plan
+log_slow_verbosity = query_plan
 {#-
-log_slow_rate_limit	= 1000
+log_slow_rate_limit = 1000
 log-queries-not-using-indexes
 log_slow_admin_statements
 
  The following can be used as easy to replay backup logs or for replication.
  note: if you are setting up a replication slave, see README.Debian about
        other settings you may need to change.
-server-id		= 1
-report_host		= master1
+server-id  = 1
+report_host  = master1
 auto_increment_increment = 2
-auto_increment_offset	= 1
+auto_increment_offset = 1
 #}
-log_bin			= /var/log/mysql/mariadb-bin
-log_bin_index		= /var/log/mysql/mariadb-bin.index
-expire_logs_days	= 10
+log_bin = /var/log/mysql/mariadb-bin
+log_bin_index = /var/log/mysql/mariadb-bin.index
+expire_logs_days = 10
 max_binlog_size         = 100M
 {#-
  not fab for performance, but safer
-sync_binlog		= 1
+sync_binlog  = 1
  slaves
-relay_log		= /var/log/mysql/relay-bin
-relay_log_index	= /var/log/mysql/relay-bin.index
-relay_log_info_file	= /var/log/mysql/relay-bin.info
+relay_log  = /var/log/mysql/relay-bin
+relay_log_index = /var/log/mysql/relay-bin.index
+relay_log_info_file = /var/log/mysql/relay-bin.info
 log_slave_updates
 read_only
 
  If applications support it, this stricter sql_mode prevents some
  mistakes like inserting invalid dates etc.
-sql_mode		= NO_ENGINE_SUBSTITUTION,TRADITIONAL
+sql_mode  = NO_ENGINE_SUBSTITUTION,TRADITIONAL
 
  * InnoDB
 
  InnoDB is enabled by default with a 10MB datafile in /var/lib/mysql/.
  Read the manual for more InnoDB related options. There are many!
-efault_storage_engine	= InnoDB
+efault_storage_engine = InnoDB
  you can't just change log file size, requires special procedure
-innodb_log_file_size	= 50M
+innodb_log_file_size = 50M
 #}
-innodb_buffer_pool_size	= 256M
-innodb_log_buffer_size	= 8M
-innodb_file_per_table	= 1
-innodb_open_files	= 400
-innodb_io_capacity	= 400
-innodb_flush_method	= O_DIRECT
+innodb_buffer_pool_size = 256M
+innodb_log_buffer_size = 8M
+innodb_file_per_table = 1
+innodb_open_files = 400
+innodb_io_capacity = 400
+innodb_flush_method = O_DIRECT
 {#-
 * Security Features
 
@@ -177,13 +201,13 @@ ssl-key=/etc/mysql/server-key.pem
 [mysqldump]
 quick
 quote-names
-max_allowed_packet	= 16M
+max_allowed_packet = 16M
 
 [mysql]
-{#- no-auto-rehash	# faster start of mysql but no tab completion #}
+{#- no-auto-rehash # faster start of mysql but no tab completion #}
 
 [isamchk]
-key_buffer		= 16M
+key_buffer = 16M
 
 {#-
  * IMPORTANT: Additional settings that can override those from this file!

@@ -1,3 +1,30 @@
+{#-
+Copyright (c) 2013, Hung Nguyen Viet
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met: 
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer. 
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution. 
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
+Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
+-#}
 # {{ pillar['message_do_not_modify'] }}
 $ModLoad imuxsock # provides support for local system logging
 $ModLoad imklog   # provides kernel logging support (previously done by rklogd)
@@ -55,13 +82,13 @@ $IncludeConfig /etc/rsyslog.d/*.conf
 50 default
   Default rules for rsyslog.
 
-			For more information see rsyslog.conf(5) and /etc/rsyslog.conf
+   For more information see rsyslog.conf(5) and /etc/rsyslog.conf
 
 
  First some standard log files.  Log by facility.
 
-auth,authpriv.*			/var/log/auth.log
-*.*;auth,authpriv.none		-/var/log/syslog
+auth,authpriv.* /var/log/auth.log
+*.*;auth,authpriv.none -/var/log/syslog
 #}
 {% if not salt['pillar.get']('debug', False) %}
 {%- for f in 'sshd', 'cron', 'sudo' %}
@@ -71,35 +98,35 @@ auth,authpriv.*			/var/log/auth.log
 {%- endfor %}
 {% endif %}
 {#-
-kern.*				-/var/log/kern.log
-mail.*				-/var/log/mail.log
+kern.* -/var/log/kern.log
+mail.* -/var/log/mail.log
 
-cron.*				/var/log/cron.log
-daemon.*			-/var/log/daemon.log
-lpr.*				-/var/log/lpr.log
-user.*				-/var/log/user.log
+cron.* /var/log/cron.log
+daemon.* -/var/log/daemon.log
+lpr.* -/var/log/lpr.log
+user.* -/var/log/user.log
 
  Logging for the mail system.  Split it up so that
  it is easy to write scripts to parse these files.
-mail.info			-/var/log/mail.info
-mail.warn			-/var/log/mail.warn
-mail.err			/var/log/mail.err
+mail.info -/var/log/mail.info
+mail.warn -/var/log/mail.warn
+mail.err /var/log/mail.err
 
 # Logging for INN news system.
-news.crit			/var/log/news/news.crit
-news.err			/var/log/news/news.err
-news.notice			-/var/log/news/news.notice
+news.crit /var/log/news/news.crit
+news.err /var/log/news/news.err
+news.notice -/var/log/news/news.notice
 
 
  Some "catch-all" log files.
 
 *.=debug;\
-	auth,authpriv.none;\
-	news.none;mail.none	-/var/log/debug
+    auth,authpriv.none;\
+    news.none;mail.none -/var/log/debug
 *.=info;*.=notice;*.=warn;\
-	auth,authpriv.none;\
-	cron,daemon.none;\
-	mail,news.none		-/var/log/messages
+    auth,authpriv.none;\
+    cron,daemon.none;\
+    mail,news.none -/var/log/messages
 
 
  Emergencies are sent to everybody logged in.
@@ -111,9 +138,9 @@ news.notice			-/var/log/news/news.notice
  console I usually leave idle.
 
 daemon,mail.*;\
-	news.=crit;news.=err;news.=notice;\
-	*.=debug;*.=info;\
-	*.=notice;*.=warn	/dev/tty8
+    news.=crit;news.=err;news.=notice;\
+    *.=debug;*.=info;\
+    *.=notice;*.=warn /dev/tty8
 
  The named pipe /dev/xconsole is for the `xconsole' utility.  To use it,
  you must invoke `xconsole' with the `-file' option:
@@ -124,12 +151,12 @@ daemon,mail.*;\
       busy site..
 
 daemon.*;mail.*;\
-	news.err;\
-	*.=debug;*.=info;\
-	*.=notice;*.=warn	|/dev/xconsole
+    news.err;\
+    *.=debug;*.=info;\
+    *.=notice;*.=warn |/dev/xconsole
 #}
 
-*.*         		-/var/log/syslog
+*.*           -/var/log/syslog
 {%- if 'graylog2_address' in pillar %}
 *.*;local7.none {% if salt['pillar.get']('rsyslog:tcp', False) %}@{% endif %}@{{ pillar['graylog2_address'] }}:514
 {%- endif -%}

@@ -24,10 +24,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author: Hung Nguyen Viet hvnsweeting@gmail.com
 Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
+
+Nagios NRPE check for djangopypi2.
 -#}
-{#
- Nagios NRPE check for djangopypi2
-#}
 include:
   - apt.nrpe
   - memcache.nrpe
@@ -38,7 +37,7 @@ include:
   - postgresql.server.nrpe
   - python.dev.nrpe
   - rsyslog.nrpe
-{% if pillar['djangopypi2']['ssl']|default(False) %}
+{% if salt['pillar.get']('djangopypi2:ssl', False) %}
   - ssl.nrpe
 {% endif %}
 {% if 'graphite_address' in pillar %}
@@ -59,7 +58,7 @@ include:
       - pkg: nagios-nrpe-server
     - context:
       deployment: djangopypi2
-      workers: {{ pillar['djangopypi2']['workers'] }}
+      workers: {{ salt['pillar.get']('djangopypi2:workers', 2) }}
       cheaper: {{ salt['pillar.get']('djangopypi2:cheaper', False) }}
     - require:
       - pkg: nagios-nrpe-server
@@ -78,7 +77,7 @@ include:
       deployment: djangopypi2
       domain_name: {{ pillar['djangopypi2']['hostnames'][0] }}
       http_uri: /packages/
-{% if pillar['djangopypi2']['ssl']|default(False) %}
+{% if salt['pillar.get']('djangopypi2:ssl', False) %}
       https: True
       http_result: 301 Moved Permanently
 {% endif %}
@@ -94,8 +93,9 @@ include:
     - require:
       - pkg: nagios-nrpe-server
     - context:
-      deployment: djangopypi2
-      password: {{ pillar['djangopypi2']['db']['password'] }}
+      database: {{ salt['pillar.get']('djangopypi2:db:name', 'djangopypi2') }}
+      username: {{ salt['pillar.get']('djangopypi2:db:username', 'djangopypi2') }}
+      password: {{ salt['password.pillar']('djangopypi2:db:password', 10) }}
 
 extend:
   nagios-nrpe-server:

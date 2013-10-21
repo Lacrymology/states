@@ -1,4 +1,28 @@
-{%- if grains['lsb_codename'] == 'lucid' %}
+{#-
+Copyright (c) 2013, Hung Nguyen Viet
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
+Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
+ -#}
+{%- if grains['lsb_distrib_codename'] == 'lucid' %}
 include:
   - apt
   - bbb.redis
@@ -21,7 +45,7 @@ libreoffice:
     - address: http://ppa.launchpad.net/libreoffice/libreoffice-4-0/ubuntu
     - components:
       - main
-    - distribution: {{ grains['lsb_codename'] }}
+    - distribution: {{ grains['lsb_distrib_codename'] }}
     - key_id: 1378B444
     - key_server: keyserver.ubuntu.com
   pkg:
@@ -72,7 +96,7 @@ bigbluebutton_ruby:
       - cmd: bigbluebutton
 {%- endfor %}
 
-{% set encoding = pillar['encoding']|default("en_US.UTF-8") %}
+{% set encoding = salt['pillar.get']('encoding', 'en_US.UTF-8') %}
 bigbluebutton:
   cmd:
     - run
@@ -84,10 +108,10 @@ bigbluebutton:
   pkgrepo:
     - managed
     - key_url: http://ubuntu.bigbluebutton.org/bigbluebutton.asc
-    - name: deb http://ubuntu.bigbluebutton.org/lucid_dev_081/ bigbluebutton-{{ grains['lsb_codename'] }} main
+    - name: deb http://ubuntu.bigbluebutton.org/lucid_dev_081/ bigbluebutton-{{ grains['lsb_distrib_codename'] }} main
     - file: /etc/apt/sources.list.d/bigbluebutton.list
     - require:
-      - pkg: python-apt
+      - pkg: apt_sources
   pkg:
     - installed
     - env:
@@ -121,10 +145,10 @@ bbb-conf-wrap:
     - require:
       - file: /usr/local
 
-/usr/local/bin/bbb-conf-wrap.sh --setip {{ salt['pillar.get']('bbb:hostname') }}:
+/usr/local/bin/bbb-conf-wrap.sh --setip {{ pillar['bbb']['hostname'] }}:
   cmd:
     - run
-    - unless: grep -q {{ salt['pillar.get']('bbb:hostname') }} /var/www/bigbluebutton/client/conf/config.xml
+    - unless: grep -q {{ pillar['bbb']['hostname'] }} /var/www/bigbluebutton/client/conf/config.xml
     - require:
       - pkg: bigbluebutton
       - file: bbb-conf-wrap

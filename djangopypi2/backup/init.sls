@@ -24,10 +24,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author: Hung Nguyen Viet hvnsweeting@gmail.com
 Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
+
+Backup client for djangopypi2.
 -#}
-{#
- Backup client for djangopypi2
- #}
 include:
   - cron
 

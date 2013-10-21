@@ -1,34 +1,28 @@
 {#-
-Install Discourse - Discussion Platform
-=================
+Copyright (c) 2013, Lam Dang Tung
 
-Mandatory Pillar
-----------------
-discourse:
-  hostnames:
-    - list of hostname, used for nginx config
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-Optional Pillar
----------------
-discourse:
-  upload_size: maximum file upload size. Default is: `2m` (this mean 2 megabyte)
-  smtp: 
-    enabled: False
-  ssl: False
-  database:
-    password: password for postgre user
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
 
-If you set discourse:smtp:enabled is True, you must define:
-discourse:
-  smtp:
-    server: your smtp server. Ex: smtp.yourdomain.com
-    port: smtp server port
-    domain: your domain
-    from: smtp account will sent email to users
-    user: account login
-    password: password for account login
-    authentication: Default is: `plain`
-    tls: Default is: False
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+Author: Lam Dang Tung <lamdt@familug.org>
+Maintainer: Lam Dang Tung <lamdt@familug.org>
+
+Install Discourse - Discussion Platform.
 #}
 
 include:
@@ -50,7 +44,9 @@ include:
 
 {%- set version = "0.9.6.3" %}
 {%- set web_root_dir = "/usr/local/discourse-" + version %}
-{%- set password = salt['password.pillar']('discourse:database:password', 10) %}
+{%- set dbuserpass = salt['password.pillar']('discourse:db:password', 10) %}
+{%- set dbuser = salt['pillar.get']('discourse:db:username', 'discourse') %}
+{%- set dbname = salt['pillar.get']('discourse:db:name', 'discourse') %}
 
 discourse_deps:
   pkg:
@@ -110,15 +106,15 @@ discourse:
       - user: web
   postgres_user:
     - present
-    - name: discourse
-    - password: {{ password }}
+    - name: {{ dbuser }}
+    - password: {{ dbuserpass }}
     - runas: postgres
     - require:
       - service: postgresql
   postgres_database:
     - present
-    - name: discourse
-    - owner: discourse
+    - name: {{ dbname }}
+    - owner: {{ dbuser }}
     - runas: postgres
     - require:
       - postgres_user: discourse
@@ -174,7 +170,9 @@ discourse_rack:
       - user: discourse
       - file: discourse_tar
     - context:
-      password: {{ password }}
+      dbuserpass: {{ dbuserpass }}
+      dbname: {{ dbname }}
+      dbuser: {{ dbuser }}
 
 {{ web_root_dir }}/config/environments/production.rb:
   file:
@@ -300,9 +298,9 @@ discourse_upstart:
       - pkg: nginx
       - file: /etc/uwsgi/discourse.ini
 {%- if salt['pillar.get']('discourse:ssl', False) %}
-      - cmd: /etc/ssl/{{ salt['pillar.get']('discourse:ssl') }}/chained_ca.crt
-      - module: /etc/ssl/{{ salt['pillar.get']('discourse:ssl') }}/server.pem
-      - file: /etc/ssl/{{ salt['pillar.get']('discourse:ssl') }}/ca.crt
+      - cmd: /etc/ssl/{{ pillar['discourse']['ssl'] }}/chained_ca.crt
+      - module: /etc/ssl/{{ pillar['discourse']['ssl'] }}/server.pem
+      - file: /etc/ssl/{{ pillar['discourse']['ssl'] }}/ca.crt
 {%- endif %}
     - watch_in:
       - service: nginx
@@ -333,7 +331,7 @@ discourse_add_psql_extension_pg_trgm:
     - run
     - name: psql discourse -c "CREATE EXTENSION IF NOT EXISTS pg_trgm;"
     - user: postgres
-    - require: 
+    - require:
       - service: postgresql
       - postgres_database: discourse
 
@@ -357,7 +355,7 @@ extend:
   nginx:
     service:
       - watch:
-        - cmd: /etc/ssl/{{ salt['pillar.get']('discourse:ssl') }}/chained_ca.crt
-        - module: /etc/ssl/{{ salt['pillar.get']('discourse:ssl') }}/server.pem
-        - file: /etc/ssl/{{ salt['pillar.get']('discourse:ssl') }}/ca.crt
+        - cmd: /etc/ssl/{{ pillar['discourse']['ssl'] }}/chained_ca.crt
+        - module: /etc/ssl/{{ pillar['discourse']['ssl'] }}/server.pem
+        - file: /etc/ssl/{{ pillar['discourse']['ssl'] }}/ca.crt
 {%- endif %}

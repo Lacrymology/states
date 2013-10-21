@@ -1,3 +1,30 @@
+{#-
+Copyright (c) 2013, Hung Nguyen Viet
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met: 
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer. 
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution. 
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
+Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
+-#}
 <?xml version="1.0" encoding="UTF-8" ?>
 <!-- {{ pillar['message_do_not_modify'] }} -->
 <tc:tc-config xmlns:tc="http://www.terracotta.org/config"
@@ -22,7 +49,7 @@
     <property name="l1.cachemanager.enabled" value="true"/>
     <property name="logging.maxLogFileSize" value="1024"/>
   </tc-properties>
-  
+
 {#-
  The 'system' section contains configuration data that affects the
  entire Terracotta system as a whole; things like whether to activate
@@ -178,42 +205,42 @@
          Default: dso port + 20
       -->
       <l2-group-port bind="12.345.678.9">9530</l2-group-port>
-      
+
       <!-- Turn on authentication for the Terracotta server. An empty tag
          <authentication> defaults to the standard Java JMX authentication
          mechanism referring to password and access files in:
          $JAVA_HOME/jre/lib/management.
          - $JAVA_HOME/jre/lib/management/jmxremote.password
          - $JAVA_HOME/jre/lib/management/jmxremote.access
-        
+
          You must modify these files as such (if none exist create them):
-        
+
          - jmxremote.password: add a line to the end of the file declaring
            your username and password followed by a caridge return:
            secretusername secretpassword
-        
+
          - jmxremote.access: add the following line (with a caridge return)
            to the end of your file:
            secretusername readwrite
-        
+
          You must also do:
          $ chmod 500 jmxremote.password
          $ chown <user who will execute the tc-server> jmxremote.password
       -->
       <authentication/>
-      
+
       <!-- Turn on authentication for the embedded Terracotta HTTP Server.
          This requires a properties file that contains the users and passwords
          that have access to the HTTP server.
-        
+
          The format of the properties file is:
          username: password [,rolename ...]
-        
+
          The supported roles and protected sections are: 
          - statistics: for the statistics gatherer at /statistics-gatherer
-        
+
          Passwords may be clear text, obfuscated or checksummed.
-         
+
          The class com.mortbay.Util.Password should be used to generate
          obfuscated passwords or password checksums.
       -->
@@ -389,7 +416,7 @@
          Default: 'networked-active-passive'
       -->
       <mode>networked-active-passive</mode>
-      
+
       <!-- This section allows you to declare the election time window, 
          which is used when servers run in network-based active-passive mode. 
          An active server is elected from the servers that cast a vote within 
@@ -419,7 +446,7 @@
          Default: 'false'
       -->
       <enabled>true</enabled>
-      
+
       <!-- This element controls the period, in days, between update checks
          given that update checking is enabled. When checking is enabled, each
          time the server starts an update check is performed as well as at

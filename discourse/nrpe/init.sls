@@ -1,6 +1,29 @@
 {#-
- Install a Discourse Nagios NRPE checks
-#}
+Copyright (c) 2013, Lam Dang Tung
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+Author: Lam Dang Tung <lamdt@familug.org>
+Maintainer: Lam Dang Tung <lamdt@familug.org>
+
+Install a Discourse Nagios NRPE checks.
+-#}
 include:
   - apt.nrpe
   - build.nrpe
@@ -31,8 +54,8 @@ include:
     - context:
       deployment: discourse
       workers: {{ salt['pillar.get']('discourse:workers', '2') }}
-{%- if 'cheaper' in salt['pillar.get']('discourse') %}
-      cheaper: {{ salt['pillar.get']('discourse:cheaper') }}
+{%- if 'cheaper' in pillar['discourse'] %}
+      cheaper: {{ pillar['discourse']['cheaper'] }}
 {%- endif %}
     - watch_in:
       - service: nagios-nrpe-server
@@ -49,13 +72,13 @@ include:
       - pkg: nagios-nrpe-server
     - context:
       deployment: discourse
-      domain_name: {{ salt['pillar.get']('discourse:hostnames')[0] }}
+      domain_name: {{ pillar['discourse']['hostnames'][0] }}
       http_uri: /
 {%- if salt['pillar.get']('discourse:ssl', False) %}
       https: True
       http_result: 301 Moved Permanently
 {%- endif %}
-{%- if pillar['__test__']|default(False) %}
+{%- if salt['pillar.get']('__test__', False) %}
       timeout: 120
 {%- endif %}
     - watch_in:
@@ -72,8 +95,9 @@ include:
     - require:
       - pkg: nagios-nrpe-server
     - context:
-      deployment: discourse
-      password: {{  salt['password.pillar']('discourse:database:password') }}
+      database: {{ salt['pillar.get']('discourse:db:name', 'discourse') }}
+      username: {{ salt['pillar.get']('discourse:db:username', 'discourse') }}
+      password: {{ salt['password.pillar']('discourse:db:password', 10) }}
     - watch_in:
       - service: nagios-nrpe-server
 

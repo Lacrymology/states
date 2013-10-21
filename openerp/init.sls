@@ -1,22 +1,30 @@
-{#- 
-Install OpenERP
-===============
+{#-
+Copyright (c) 2013, Lam Dang Tung
+All rights reserved.
 
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-Mandatory Pillar
-----------------
-openerp:
-  hostnames: 
-    - list of hostname, used for nginx config
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
 
-Optional Pillar
----------------
-openerp:
-  ssl: - enable ssl. Default: False
-  database:
-    password: password for postgres user
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#}
+Author: Lam Dang Tung <lamdt@familug.org>
+Maintainer: Lam Dang Tung <lamdt@familug.org>
+-#}
 
 include:
   - build
@@ -25,7 +33,7 @@ include:
   - pip
   - postgresql.server
   - python.dev
-{%- if pillar['openerp']['ssl']|default(False) %}
+{%- if salt['pillar.get']('openerp:ssl', False) %}
   - ssl
 {%- endif %}
   - underscore
@@ -33,11 +41,13 @@ include:
   - virtualenv
   - web
   - xml
+  - yaml
 
 {%- set home = "/usr/local/openerp" %}
 {%- set filename = "openerp-7.0-20130909-231057" %}
 {%- set web_root_dir =  home +"/"+ filename %}
-{%- set password = salt['password.pillar']('openerp:database:password', 10)  %}
+{%- set password = salt['password.pillar']('openerp:db:password', 10)  %}
+{%- set username = salt['pillar.get']('openerp:db:username', 'openerp') %}
 
 openerp_depends:
   file:
@@ -69,6 +79,7 @@ openerp_depends:
       - pkg: build
       - pkg: libjs-underscore
       - pkg: xml-dev
+      - pkg: yaml
   cmd:
     - wait
     - name: find {{ home }} -name '*.pyc' -delete
@@ -95,7 +106,7 @@ openerp:
       - module: virtualenv
   postgres_user:
     - present
-    - name: openerp
+    - name: {{ username }}
     - password: {{ password }}
     - createdb: True
     - require:
@@ -139,6 +150,7 @@ openerp:
       - file: openerp
     - context:
       password: {{ password }}
+      username: {{ username }}
       web_root_dir: {{ web_root_dir }}
 
 add_web_user_to_openerp_group:
@@ -192,9 +204,9 @@ add_web_user_to_openerp_group:
       - pkg: nginx
       - file: /etc/uwsgi/openerp.ini
 {%- if salt['pillar.get']('openerp:ssl', False) %}
-      - cmd: /etc/ssl/{{ salt['pillar.get']('openerp:ssl') }}/chained_ca.crt
-      - module: /etc/ssl/{{ salt['pillar.get']('openerp:ssl') }}/server.pem
-      - file: /etc/ssl/{{ salt['pillar.get']('openerp:ssl') }}/ca.crt
+      - cmd: /etc/ssl/{{ pillar['openerp']['ssl'] }}/chained_ca.crt
+      - module: /etc/ssl/{{ pillar['openerp']['ssl'] }}/server.pem
+      - file: /etc/ssl/{{ pillar['openerp']['ssl'] }}/ca.crt
 {%- endif %}
     - watch_in:
       - service: nginx
@@ -206,7 +218,7 @@ extend:
   nginx:
     service:
       - watch:
-        - cmd: /etc/ssl/{{ salt['pillar.get']('openerp:ssl') }}/chained_ca.crt
-        - module: /etc/ssl/{{ salt['pillar.get']('openerp:ssl') }}/server.pem
-        - file: /etc/ssl/{{ salt['pillar.get']('openerp:ssl') }}/ca.crt
+        - cmd: /etc/ssl/{{ pillar['openerp']['ssl'] }}/chained_ca.crt
+        - module: /etc/ssl/{{ pillar['openerp']['ssl'] }}/server.pem
+        - file: /etc/ssl/{{ pillar['openerp']['ssl'] }}/ca.crt
 {% endif %}

@@ -1,13 +1,37 @@
 {#-
-GitLab: self hosted Git management software
-===========================================
+Copyright (c) 2013, Lam Dang Tung
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+Author: Lam Dang Tung <lamdt@familug.org>
+Maintainer: Lam Dang Tung <lamdt@familug.org>
+
+Self hosted Git management software.
 
 Mandatory Pillar
 ----------------
 
 gitlab:
   hostnames:                # Should not use `localhost`
-    - 192.241.189.78
+    - 192.241.189.782
+  admin:
+    password: admin's login password
 
 Optional Pillar
 ---------------
@@ -29,6 +53,11 @@ gitlab:
     password: password for postgre user
   ldap:
     enabled: enable ldap auth, Default: False
+  admin:
+    email:  email of administrator. Default is: admin@local.host
+    name: name of administrator
+    username: admin username
+    projects_limit: max projects that administrator can create
 
 If you set gitlab:ldap:enabled is True, you must define:
 gitlab:
@@ -75,8 +104,9 @@ include:
   - web
   - xml
 
-{%- set database_username = salt['pillar.get']('gitlab:database:username', 'gitlab') %}
-{%- set database_password = salt['password.pillar']('gitlab:database:password', 10) %}
+{%- set database_name = salt['pillar.get']('gitlab:db:name', 'gitlab') %}
+{%- set database_username = salt['pillar.get']('gitlab:db:username', 'gitlab') %}
+{%- set database_password = salt['password.pillar']('gitlab:db:password', 10) %}
 
 {%- set version = '6-0' %}
 {%- set root_dir = "/usr/local" %}
@@ -108,7 +138,7 @@ gitlab-shell:
     - extracted
     - name: {{ home_dir }}/
     {%- if 'files_archive' in pillar %}
-    - source: {{ salt['pillar.get']('files_archive') }}/mirror/gitlab/shell-fbaf8d8c12dcb9d820d250b9f9589318dbc36616.tar.gz
+    - source: {{ pillar['files_archive'] }}/mirror/gitlab/shell-fbaf8d8c12dcb9d820d250b9f9589318dbc36616.tar.gz
     {%- else %}
     - source:  http://archive.robotinfra.com/mirror/gitlab/shell-fbaf8d8c12dcb9d820d250b9f9589318dbc36616.tar.gz
     {%- endif %}
@@ -180,7 +210,7 @@ gitlab:
       - cmd: install_gitlab_shell
   postgres_database:
     - present
-    - name: gitlab
+    - name: {{ database_name }}
     - owner: {{ database_username }}
     - require:
       - postgres_user: gitlab
@@ -404,9 +434,9 @@ add_web_user_to_git_group:
       - user: web
       - file: /etc/uwsgi/gitlab.ini
 {%- if salt['pillar.get']('gitlab:ssl', False) %}
-      - cmd: /etc/ssl/{{ salt['pillar.get']('gitlab:ssl') }}/chained_ca.crt
-      - module: /etc/ssl/{{ salt['pillar.get']('gitlab:ssl') }}/server.pem
-      - file: /etc/ssl/{{ salt['pillar.get']('gitlab:ssl') }}/ca.crt
+      - cmd: /etc/ssl/{{ pillar['gitlab']['ssl'] }}/chained_ca.crt
+      - module: /etc/ssl/{{ pillar['gitlab']['ssl'] }}/server.pem
+      - file: /etc/ssl/{{ pillar['gitlab']['ssl'] }}/ca.crt
 {%- endif %}
     - watch_in:
       - service: nginx
@@ -472,7 +502,7 @@ extend:
   nginx:
     service:
       - watch:
-        - cmd: /etc/ssl/{{ salt['pillar.get']('gitlab:ssl') }}/chained_ca.crt
-        - module: /etc/ssl/{{ salt['pillar.get']('gitlab:ssl') }}/server.pem
-        - file: /etc/ssl/{{ salt['pillar.get']('gitlab:ssl') }}/ca.crt
+        - cmd: /etc/ssl/{{ pillar['gitlab']['ssl'] }}/chained_ca.crt
+        - module: /etc/ssl/{{ pillar['gitlab']['ssl'] }}/server.pem
+        - file: /etc/ssl/{{ pillar['gitlab']['ssl'] }}/ca.crt
 {%- endif %}

@@ -1,82 +1,32 @@
 {#-
-Elasticsearch Daemon
-====================
+Copyright (c) 2013, Bruno Clermont
+All rights reserved.
 
-Install an Elasticsearch NoSQL server or cluster.
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met: 
 
-Elasticsearch don't support HTTP over SSL/HTTPS.
-The only way to secure access to admin interface over HTTPS is to proxy
-a SSL frontend in front of Elasticsearch HTTP interface.
-This is why nginx is used if SSL is in pillar.
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer. 
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution. 
 
-Mandatory Pillar
-----------------
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-elasticsearch:
-  cluster:
-    name: xxx
-    nodes:
-      server-alpha:
-        _network:
-          public: 204.168.1.1
-          private: 192.168.1.1
-        graylog2.server:
-          name: graylog2
-          port: 9400
-          http: false
-      server-beta:
-        _network:
-          public: 204.168.1.1
-          private: 192.168.1.1
-        elasticsearch: {}
-  hostnames:
-    - search.example.com
-message_do_not_modify: Warning message to not modify file.
-
-elasticsearch:cluster:name: Name of this ES cluster for all listed nodes.
-elasticsearch:nodes: dict of nodes part of the cluster.
-elasticsearch:nodes:{{ node minion ID }}:_network:public: this node hostname
-    or public IP to reach it from Internet.
-elasticsearch:nodes:{{ node minion ID }}:_network:private: this node hostname
-    or public IP to reach it from internal network.
-elasticsearch:nodes:{{ node minion ID }}:{{ state }}: a node can only actual
-    run a ES standalone node, or a graylog2.server state.
-elasticsearch:nodes:{{ node minion ID }}:{{ state }}:name: node ID, must be
-    unique across all node instances.
-elasticsearch:nodes:{{ node minion ID }}:{{ state }}:port: ES transport port.
-    if multiple instances of ES run on the same host, the port must be
-    different. Default: 9300.
-elasticsearch:nodes:{{ node minion ID }}:{{ state }}:http: if this instance
-    handle ES HTTP API port. only one HTTP API instance is required for each
-    host. Default: True.
-
-Optional Pillar
----------------
-
-elasticsearch:
-  heap_size: 512M
-  ssl: example.com
-  https_allowed:
-    - 192.168.0.0/24
-destructive_absent: False
-shinken_pollers:
-  - 192.168.1.1
-graphite_address: 192.168.1.1
-
-elasticsearch:heap_size: Java format of max memory consumed by JVM heap.
-    default is JVM default.
-elasticsearch:ssl: SSL key set to use to publish ES trough HTTPS.
-elasticsearch:https_allowed: only used if elasticsearch:ssl is defined.
-    List of CIDR format network where ES over HTTPS is allowed.
-destructive_absent: If True (not default), ES data saved on disk is purged when
-    elasticsearch.absent is executed.
-graphite_address: IP/Hostname of carbon/graphite server.
-shinken_pollers: IP address of monitoring poller that check this server.
-
-TODO: document AWS pillars
+Author: Bruno Clermont <patate@fastmail.cn>
+Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 {#- TODO: Diamond + http://www.elasticsearch.org/guide/reference/modules/jmx/ -#}
-{%- set ssl = pillar['elasticsearch']['ssl']|default(False) %}
+{%- set ssl = salt['pillar.get']('elasticsearch:ssl', False) %}
 include:
   - apt
   - cron
@@ -97,7 +47,7 @@ include:
     - mode: 440
     - source: salt://elasticsearch/default.jinja2
     - require:
-      - pkg_file: elasticsearch
+      - pkg: elasticsearch
 
 /etc/elasticsearch/logging.yml:
   file:
@@ -108,7 +58,7 @@ include:
     - mode: 440
     - source: salt://elasticsearch/logging.jinja2
     - require:
-      - pkg_file: elasticsearch
+      - pkg: elasticsearch
 
 /etc/cron.daily/elasticsearch-cleanup:
   file:
@@ -137,18 +87,16 @@ elasticsearch:
     - name: cloud-aws
     - url: elasticsearch/elasticsearch-cloud-aws/{{ pillar['elasticsearch']['elasticsearch-cloud-aws_version'] }}
     - require:
-      - pkg_file: elasticsearch
+      - pkg: elasticsearch
 {% endif %}
-  pkg_file:
+  pkg:
     - installed
-    - name: elasticsearch
-    - version: {{ version }}
+    - sources:
 {%- if 'files_archive' in pillar %}
-    - source: {{ pillar['files_archive'] }}/mirror/elasticsearch-{{ version }}.deb
+        - elasticsearch: {{ pillar['files_archive']|replace('file://', '') }}/mirror/elasticsearch-{{ version }}.deb
 {%- else %}
-    - source: http://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-{{ version }}.deb
+        - elasticsearch: http://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-{{ version }}.deb
 {%- endif %}
-    - source_hash: {{ checksum }}
     - require:
       - pkg: openjdk_jre_headless
   file:
@@ -164,7 +112,7 @@ elasticsearch:
       data: 'true'
       origin_state: elasticsearch
     - require:
-      - pkg_file: elasticsearch
+      - pkg: elasticsearch
   service:
     - running
     - enable: True
@@ -173,7 +121,7 @@ elasticsearch:
       - file: /etc/default/elasticsearch
       - file: /etc/elasticsearch/logging.yml
       - file: elasticsearch
-      - pkg_file: elasticsearch
+      - pkg: elasticsearch
       - pkg: openjdk_jre_headless
 {% if grains['cpuarch'] == 'i686' %}
       - file: /usr/lib/jvm/java-7-openjdk
@@ -202,7 +150,7 @@ elasticsearch:
 {% for ip_address in grains['ipv4'] %}
         - {{ ip_address }}/32
 {% endfor %}
-{% for allowed in pillar['elasticsearch']['https_allowed']|default([]) %}
+{% for allowed in salt['pillar.get']('elasticsearch:https_allowed', []) %}
         - {{ allowed }}
 {% endfor %}
 {% endif %}

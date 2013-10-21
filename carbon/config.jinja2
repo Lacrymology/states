@@ -1,3 +1,30 @@
+{#-
+Copyright (c) 2013, Bruno Clermont
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met: 
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer. 
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution. 
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+Author: Bruno Clermont <patate@fastmail.cn>
+Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
+-#}
 # {{ pillar['message_do_not_modify'] }}
 [cache]
 
@@ -38,7 +65,7 @@ MAX_UPDATES_PER_SECOND = 500
 #}
 MAX_CREATES_PER_MINUTE = inf
 
-{#
+{#-
  Set this to True to enable the UDP listener. By default this is off
  because it is very common to run multiple carbon daemons and managing
  another (rarely used) port for every carbon instance is not fun.
@@ -221,7 +248,7 @@ USE_FLOW_CONTROL = True
 metricsReceived) with the top level prefix of 'carbon' at an interval of 60
 seconds. Set CARBON_METRIC_INTERVAL to 0 to disable instrumentation
 CARBON_METRIC_INTERVAL = 60
- #}
+#}
 CARBON_METRIC_PREFIX = {{ grains['id'] }}.carbon
 
 {#-
@@ -242,4 +269,4 @@ LINE_RECEIVER_PORT = 2023
 
 PICKLE_RECEIVER_INTERFACE = {{ salt['pillar.get']('graphite:carbon:interface', '0.0.0.0') }}
 PICKLE_RECEIVER_PORT = 2024
--#}
+#}

@@ -24,10 +24,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author: Hung Nguyen Viet hvnsweeting@gmail.com
 Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
+
+Undo djangopypi2.backup state.
 -#}
-{#
- Undo djangopypi2.backup state
- #}
 /etc/cron.daily/backup-djangopypi2:
   file:
     - absent

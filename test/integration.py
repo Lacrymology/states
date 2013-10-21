@@ -9,7 +9,33 @@ and uninstall. The only deamon that isn't killed in the process is Salt Minion.
 
 Check file docs/run_tests.rst for details.
 
+Copyright (c) 2013, Bruno Clermont
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met: 
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer. 
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution. 
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
+
+__author__ = 'Bruno Clermont'
+__maintainer__ = 'Bruno Clermont'
+__email__ = 'patate@fastmail.cn'
 
 # TODO: faire une liste de fichiers AVANT et APRÈS les tests pour
 # afficher les différences et failer si un fichier est de trop.
@@ -90,7 +116,8 @@ def setUpModule():
         if client('pkg_installed.exists'):
             logger.info(
                 "pkg_installed snapshot was found, skip setUpModule(). If you "
-                "want to repeat the cleanup process, run 'pkg_installed.forget'")
+                "want to repeat the cleanup process, run "
+                "'pkg_installed.forget'")
             return
     except KeyError:
         # salt.client.Caller don't refresh the list of available modules
@@ -135,6 +162,127 @@ def setUpModule():
         raise ValueError(output)
 
 
+def parent_process_id(pid):
+    """
+    Return the parent process id
+    """
+    status_file = '/proc/%d/status' % pid
+    for line in open(status_file).readlines():
+        if line.startswith('PPid'):
+            return int(line.rstrip(os.linesep).split("\t")[1])
+    raise OSError("can't get parent process id of %d" % pid)
+
+
+def process_ancestors(pid):
+    """
+    Return the list of all process ancestor (pid).
+    """
+    output = []
+    try:
+        parent = parent_process_id(pid)
+    except IOError, err:
+        logger.debug("Process %d is already dead now", pid)
+        raise err
+    else:
+        try:
+            while parent != 0:
+                output.append(parent)
+                parent = parent_process_id(parent)
+        except IOError, err:
+            logger.debug("Ancestor %d is now dead", parent)
+            raise err
+    return output
+
+
+def list_user_space_processes():
+    """
+    return all running processes on minion
+    """
+    global client
+    result = client('status.procs')
+    output = {}
+
+    for pid in result:
+        name = result[pid]['cmd']
+        # kernel process are like this: [xfs], ignore them
+        if name.startswith('['):
+            continue
+        output[int(pid)] = name
+    return output
+
+
+def list_non_minion_processes(cmd_name='/usr/bin/python /usr/bin/salt-minion'):
+    """
+    Return the command name of all processes that aren't executed
+    by a minion
+    """
+    procs = list_user_space_processes()
+    output = []
+    minion_pids = []
+
+    # list all minions process
+    for pid in procs:
+        if procs[pid] == cmd_name:
+            logger.debug("Found minion pid %d", pid)
+            minion_pids.append(pid)
+    logger.debug("Found total of %d minions", len(minion_pids))
+
+    for pid in procs:
+        try:
+            ancestors = process_ancestors(pid)
+        except IOError:
+            pass
+        else:
+            run_trough_minion = False
+            for minion_pid in minion_pids:
+                if minion_pid in ancestors:
+                    logger.debug("Ignore %d proc %s as it's run by minion %d",
+                                 pid, procs[pid], minion_pid)
+                    run_trough_minion = True
+                    break
+
+            if not run_trough_minion and procs[pid] not in output:
+                output.append(procs[pid])
+    return output
+
+
+def list_groups():
+    """
+    return the list of groups
+    """
+    global client
+    output = []
+    for group in client('group.getent'):
+        output.append(group['name'])
+    return output
+
+
+def render_state_template(state):
+    """
+    Return de-serialized data of specified state name
+    """
+    tmp = tempfile.NamedTemporaryFile(delete=False)
+    tmp.close()
+    state_path = state.replace('.', '/')
+    for path_template in ('salt://{0}.sls', 'salt://{0}/init.sls'):
+        source = path_template.format(state_path)
+        client('cp.get_template', source, tmp.name)
+        with open(tmp.name) as yaml_fh:
+            try:
+                data = yaml.safe_load(yaml_fh)
+                if data:
+                    logger.debug("Found state %s, return dict size %d",
+                                 source, len(data))
+                    os.unlink(tmp.name)
+                    return data
+                logger.debug("%s don't seem to exists", source)
+            except Exception:
+                logger.error("Can't parse YAML %s", source, exc_info=True)
+    logger.error("Couldn't get content of %s", state)
+    os.unlink(tmp.name)
+    return {}
+
+
 class TestStateMeta(type):
     """
     Metaclass that create all the test_ methods based on
@@ -155,6 +303,7 @@ class TestStateMeta(type):
         """
         def output_func(self):
             func = getattr(self, test_func_name)
+            logger.debug("Run unit %s", test_func_name)
             func(*args, **kwargs)
         output_func.__name__ = func_name
         output_func.__doc__ = doc
@@ -304,11 +453,11 @@ class States(unittest.TestCase):
 
         # check processes
         if process_list is None:
-            process_list = self.list_user_space_processes()
+            process_list = list_non_minion_processes()
             logger.debug("First cleanup, keep list of %d process",
                          len(process_list))
         else:
-            actual = self.list_user_space_processes()
+            actual = list_non_minion_processes()
             logger.debug("Check %d proccess", len(actual))
             unclean = []
             for process in actual:
@@ -390,31 +539,6 @@ class States(unittest.TestCase):
         logger.info("Run top: %s", ', '.join(states))
         self.sls(states)
 
-    def render_state_template(self, state):
-        """
-        Return de-serialized data of specified state name
-        """
-        tmp = tempfile.NamedTemporaryFile(delete=False)
-        tmp.close()
-        state_path = state.replace('.', '/')
-        for path_template in ('salt://{0}.sls', 'salt://{0}/init.sls'):
-            source = path_template.format(state_path)
-            client('cp.get_template', source, tmp.name)
-            with open(tmp.name, 'r') as yaml_fh:
-                try:
-                    data = yaml.safe_load(yaml_fh)
-                    if data:
-                        logger.debug("Found state %s, return dict size %d",
-                                     source, len(data))
-                        os.unlink(tmp.name)
-                        return data
-                    logger.debug("%s don't seem to exists", source)
-                except Exception:
-                    logger.error("Can't parse YAML %s", source, exc_info=True)
-        logger.error("Couldn't get content of %s", state)
-        os.unlink(tmp.name)
-        return {}
-
     def check_integration_include(self, state, integration):
         """
         Check that Integration state (abc.nrpe) include the integration state
@@ -426,7 +550,7 @@ class States(unittest.TestCase):
 
         # list state include
         try:
-            state_include = self.render_state_template(state)['include']
+            state_include = render_state_template(state)['include']
             logger.debug("State %s got %d include(s)", state,
                          len(state_include))
         except KeyError:
@@ -435,8 +559,7 @@ class States(unittest.TestCase):
 
         # list integration include
         try:
-            integration_include = self.render_state_template(
-                integration)['include']
+            integration_include = render_state_template(integration)['include']
             logger.debug("Integration state %s got %d include(s)", integration,
                          len(integration_include))
         except KeyError:
@@ -470,30 +593,6 @@ class States(unittest.TestCase):
         if missing:
             self.fail("Integration state %s of %s miss %d include: %s" % (
                       state, integration, len(missing), ','.join(missing)))
-
-    def list_user_space_processes(self):
-        """
-        return the command name of all running processes on minion
-        """
-        global client
-        result = client('status.procs')
-        output = []
-        for pid in result:
-            name = result[pid]['cmd']
-            # kernel process are like this: [xfs]
-            if not name.startswith('['):
-                output.append(name)
-        return output
-
-    def list_groups(self):
-        """
-        return the list of groups
-        """
-        global client
-        output = []
-        for group in client('group.getent'):
-            output.append(group['name'])
-        return output
 
     def test_absent(self):
         """

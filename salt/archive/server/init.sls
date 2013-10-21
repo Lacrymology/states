@@ -1,53 +1,34 @@
 {#-
-Salt Archive Server HTTP/HTTPS
-==============================
+Copyright (c) 2013, Bruno Clermont
+All rights reserved.
 
-Mandatory Pillar
-----------------
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-message_do_not_modify: Warning message to not modify file.
-salt_archive:
-  web:
-    hostnames:
-      - archive.example.com
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
 
-salt_archive:web:hostnames: list of hostname of the web archive
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Optional Pillar
----------------
+Author: Bruno Clermont <patate@fastmail.cn>
+Maintainer: Bruno Clermont <patate@fastmail.cn>
 
-salt_archive:
-  source: rsync://archive.robotinfra.com/archive/
-  delete: True
-  web:
-    ssl: mykeyname
-    ssl_redirect: True
-  keys:
-    00daedbeef: ssh-dss
-
-salt_archive:source: rsync server used as the source for archived files.
-salt_archive:web:ssl: SSL key to use to secure this server archive
-salt_archive:web:ssl_redirect: if True, redirect all HTTP traffic to HTTPs.
-salt_archive:keys: dict of keys allowed to log in user
-
-This state also need the following pillar for rsync state:
-
-rsync:
-  uid: salt_archive
-  gid: salt_archive
-  'use chroot': yes
-  shares:
-    archive:
-      path: /var/lib/salt_archive
-      'read only': true
-      'dont compress': true
-      exclude: .* incoming
-
-You can change the name 'archive' by something else. but you need to change your
-files_archive pillar value accordingly.
+Salt Archive Server HTTP/HTTPS.
 -#}
 
-{%- set ssl = pillar['salt_archive']['web']['ssl']|default(False) -%}
+{%- set ssl = salt['pillar.get']('salt_archive:web:ssl', False) -%}
 
 include:
   - cron

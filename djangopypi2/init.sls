@@ -38,7 +38,7 @@ include:
   - apt
   - memcache
   - rsyslog
-{% if pillar['djangopypi2']['ssl']|default(False) %}
+{% if salt['pillar.get']('djangopypi2:ssl', False) %}
   - ssl
 {% endif %}
 {% if 'graphite_address' in pillar %}
@@ -86,7 +86,7 @@ djangopypi2:
   postgres_user:
     - present
     - name: {{ salt['pillar.get']('djangopypi2:db:username', 'djangopypi2') }}
-    - password: {{ pillar['djangopypi2']['db']['password'] }}
+    - password: {{ salt['password.pillar']('djangopypi2:db:password', 10) }}
     - runas: postgres
     - require:
       - service: postgresql
@@ -275,7 +275,7 @@ extend:
     service:
       - watch:
         - file: /etc/nginx/conf.d/djangopypi2.conf
-{% if pillar['djangopypi2']['ssl']|default(False) %}
+{% if salt['pillar.get']('djangopypi2:ssl', False) %}
         - cmd: /etc/ssl/{{ pillar['djangopypi2']['ssl'] }}/chained_ca.crt
         - module: /etc/ssl/{{ pillar['djangopypi2']['ssl'] }}/server.pem
         - file: /etc/ssl/{{ pillar['djangopypi2']['ssl'] }}/ca.crt

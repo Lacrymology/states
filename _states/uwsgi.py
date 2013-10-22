@@ -98,6 +98,10 @@ def available(name, enabled=False, **kwargs):
     '''
     ret = {'name': name, 'result': None, 'comment': '', 'changes': {}}
     kwargs = _get_default_kwargs(kwargs)
+
+    if kwargs['env'] is None:
+        kwargs['env'] = 'base'
+
     filename = _get_filename(name)
 
     if __opts__['test']:

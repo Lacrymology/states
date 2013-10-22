@@ -197,8 +197,8 @@ def absent(name):
         else:
             comment = []
             ret['result'] = True
+        ret['changes'].update(changes)
 
-    ret['changes'].update(changes)
     ret['comment'] = " ".join(comment)
     return ret
 

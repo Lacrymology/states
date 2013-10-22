@@ -67,8 +67,8 @@ procname-master = {{ appname }}-master
 socket = /var/lib/uwsgi/{{ appname }}.sock
 stats = /var/lib/uwsgi/{{ appname }}-stats.sock
 chdir = {{ chdir }}
-{%- if wsgi|default(False) %}
-wsgi-file = {{ wsgi }}
+{%- if wsgi_file|default(False) %}
+wsgi-file = {{ wsgi_file }}
 {%- endif %}
 {%- if virtualenv|default(False) %}
 virtualenv = {{ virtualenv }}

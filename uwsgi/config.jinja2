@@ -4,12 +4,12 @@
 threaded-logger = True
 {%- if 'graylog2_address' in pillar %}
 logger = graylog2:{{ pillar['graylog2_address'] }}:12201,{{ grains['id'] }}
-  {%- if pillar['debug'] %}
+  {%- if salt['pillar.get']('debug', False) %}
 req-logger = graylog2:{{ pillar['graylog2_address'] }}:12201,{{ grains['id'] }}
   {%- endif -%}
 {%- else %}
 logger = syslog:uwsgi
-  {%- if pillar['debug'] %}
+  {%- if salt['pillar.get']('debug', False) %}
 req-logger = syslog:uwsgi
   {%- endif -%}
 {%- endif %}

@@ -154,40 +154,47 @@ def absent(name):
     '''
     ret = {'name': name, 'comment': '', 'changes': {}, 'result': True}
     comment = []
+    config, link, _ = _get_app_paths(name)
 
     if __opts__['test']:
-        pass
-    else:
-        config, link, _ = _get_app_paths(name)
-        changes = {}
         if os.path.islink(link):
-            disabled = __salt__['uwsgi.disable'](name)
-            if disabled:
-                changes.update({name: 'is disabled'})
-                ret['result'] = True
-            else:
-                comment.append('[not disabled]')
-                ret['result'] = False
-        else:
-            comment = []
-            ret['result'] = False
-
+            comment.append('Symlink {0} will be removed.'.format(link))
         if os.path.isfile(config):
-            removed = __salt__['uwsgi.remove'](name)
-            if removed:
-                if name in changes:
-                    changes[name] = ('{0} and removed'
-                                     '').format(changes[name])
-                else:
-                    changes.update({name: '{0} is removed'.format(name)})
-                ret['result'] = True
-            else:
-                comment.append('[not removed]')
-                ret['result'] = False
-        else:
-            comment = []
+            comment.append('Config file {0} will be removed.'.format(link))
+
+        ret['result'] = None
+        ret['comment'] = '\n'.join(comment)
+        return ret
+
+    changes = {}
+    if os.path.islink(link):
+        disabled = __salt__['uwsgi.disable'](name)
+        if disabled:
+            changes.update({name: 'is disabled'})
             ret['result'] = True
-        ret['changes'].update(changes)
+        else:
+            comment.append('[not disabled]')
+            ret['result'] = False
+    else:
+        comment = []
+        ret['result'] = False
+
+    if os.path.isfile(config):
+        removed = __salt__['uwsgi.remove'](name)
+        if removed:
+            if name in changes:
+                changes[name] = ('{0} and removed'
+                                 '').format(changes[name])
+            else:
+                changes.update({name: '{0} is removed'.format(name)})
+            ret['result'] = True
+        else:
+            comment.append('[not removed]')
+            ret['result'] = False
+    else:
+        comment = []
+        ret['result'] = True
+    ret['changes'].update(changes)
 
     ret['comment'] = " ".join(comment)
     return ret

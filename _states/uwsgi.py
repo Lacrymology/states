@@ -85,28 +85,7 @@ def available(name, enabled=False, **kwargs):
     '''
     ret = {'name': name, 'result': None, 'comment': '', 'changes': {}}
     kwargs = _get_default_kwargs(kwargs)
-    # IMPLEMENT:
-    # this is a wrapper around file.managed and module.wait(file.touch)
-    #
-    # you have to create a python dict that look that YAML structure of file
-    # graphite/init.sls /etc/uwsgi/graphite.ini state.
-    # please check apt_repository.present for an example of have a state
-    # that wrap around an other.
-    #
-    # all kwargs are the same as file.managed EXCEPT for watch which is only
-    # used for file.touch.
-    #
-    # file.managed name is /etc/uwsgi/apps-available/$name.ini
-    # you need to track if any changes had been performed by the state.
-    #
-    # module.wait file.touch require argument must only be
-    # {file: $filename.ini}
-    # to leave all -require arguments passed to file.managed
-    # name=$filename.ini
-    # state
-
     filename = _get_filename(name)
-
     _patch_module(file)
     ret.update(file.managed(filename, **kwargs))
 

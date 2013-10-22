@@ -52,8 +52,7 @@ retroshare:
     - keyserver: keyserver.ubuntu.com
     - file: /etc/apt/sources.list.d/retroshare.list
     - require:
-      - pkg: python-apt
-      - pkg: python-software-properties
+      - pkg: apt_sources
   pkg:
     - installed
     - pkgs:

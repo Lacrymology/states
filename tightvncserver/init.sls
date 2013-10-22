@@ -115,7 +115,7 @@ tightvncserver:
     - data:
         'x11-common/xwrapper/allowed_users': {'type': 'string', 'value': 'console'}
     - require:
-      - pkg: debconf-utils
+      - pkg: apt_sources
       - pkg: tightvncserver
 
 /etc/init/tightvncserver.conf:

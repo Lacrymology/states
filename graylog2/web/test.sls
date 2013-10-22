@@ -26,10 +26,9 @@ Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
 include:
-  - djangopypi2
-  - djangopypi2.backup
-  - djangopypi2.diamond
-  - djangopypi2.nrpe
+  - graylog2.web
+  - graylog2.web.nrpe
+  - graylog2.web.diamond
 
 test:
   nrpe:

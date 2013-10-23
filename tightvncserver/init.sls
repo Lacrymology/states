@@ -95,6 +95,7 @@ tightvncserver:
     - user: {{ user }}
     - require:
       - file: tightvncserver
+      - {{ home }}/.vnc
     - watch:
       - pkg: tightvncserver
   service:
@@ -107,7 +108,6 @@ tightvncserver:
       - debconf: tightvncserver
       - cmd: tightvncserver
       - file: tightvncserver
-      - file: {{ home }}/.vnc/passwd
       - file: /etc/init/tightvncserver.conf
   debconf:
     - set
@@ -115,7 +115,7 @@ tightvncserver:
     - data:
         'x11-common/xwrapper/allowed_users': {'type': 'string', 'value': 'console'}
     - require:
-      - pkg: debconf-utils
+      - pkg: apt_sources
       - pkg: tightvncserver
 
 /etc/init/tightvncserver.conf:
@@ -131,6 +131,15 @@ tightvncserver:
       home: {{ home }}
     - require:
       - user: {{ user }}
+
+{{ home }}/.vnc:
+  file:
+    - directory
+    - user: {{ user }}
+    - group: {{ user }}
+    - dir_mode: 755
+    - require:
+      - user: tightvncserver
 
 {{ home }}/.vnc/passwd:
   file:

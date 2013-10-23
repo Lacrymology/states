@@ -106,7 +106,7 @@ def available(name, enabled=False, **kwargs):
 
     if __opts__['test']:
         config, link, _ = _get_app_paths(name)
-        _, c =  __salt__['file.check_managed'](filename, **kwargs)
+        _, c = __salt__['file.check_managed'](filename, **kwargs)
         comments = [c]
 
         if enabled:
@@ -208,13 +208,20 @@ def enabled(name):
     '''
     Make sure existing uWSGI application is enabled.
 
-    This require the uWSGI application to had been previously created trough
-    uwsgi.available state.
     '''
     ret = {'name': name, 'comment': '', 'result': False, 'changes': {}}
 
+    comments = []
     if __opts__['test']:
-        pass
+        if name in __salt__['uwsgi.list_available']():
+            config, link, _ = _get_app_paths(name)
+            if name not in __salt__['uwsgi.list_enabled']():
+                comments.append('Symlink {0} will be created and targets to'
+                                '{1}'.format(link, config))
+        else:
+            comments.append('Webapp {0} is not available'.format(name))
+        ret.update({'comment': '\n'.join(comments), 'result': None})
+        return ret
 
     was_enabled = __salt__['uwsgi.enable'](name)
     if was_enabled:
@@ -233,7 +240,11 @@ def disabled(name):
     ret = {'name': name, 'comment': '', 'changes': {}, 'result': False}
 
     if __opts__['test']:
-        pass
+        ret['result'] = None
+        if name in __salt__['uwsgi.list_enabled']():
+            _, link, _ = _get_app_paths(name)
+            ret['comment'] = 'Symlink {0} will be removed'.format(link)
+        return ret
 
     disabled = __salt__['uwsgi.disable'](name)
     if disabled:

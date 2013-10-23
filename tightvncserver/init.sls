@@ -95,7 +95,7 @@ tightvncserver:
     - user: {{ user }}
     - require:
       - file: tightvncserver
-      - {{ home }}/.vnc
+      - file: {{ home }}/.vnc
     - watch:
       - pkg: tightvncserver
   service:

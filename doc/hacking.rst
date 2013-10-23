@@ -115,6 +115,18 @@ and ``/path/to``)::
   pki_dir: /path/to/salt/conf/pki/minion
   cachedir: /path/to/salt/cache/minion
 
+For each states repos you will works with, add them to all 3 directives::
+
+  module_dirs:
+    - /absolute/path/to/salt-common/_modules
+    - /absolute/path/to/salt-non-common/_modules
+  states_dirs:
+    - /absolute/path/to/salt-common/_states
+    - /absolute/path/to/salt-non-common/_states
+  returner_dirs:
+    - /absolute/path/to/salt-common/_returners
+    - /absolute/path/to/salt-non-common/_returners
+
 You can now run the minion::
 
   $ bin/salt-minion -c /path/to/salt/conf

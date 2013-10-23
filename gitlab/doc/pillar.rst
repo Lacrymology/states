@@ -63,7 +63,7 @@ Example::
     port: 80
     support_email: support@exmple.com
     default_projects_limit: 10
-    database:
+    db:
       host: localhost
       name: gitlab
       username: gitlab

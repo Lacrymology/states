@@ -104,6 +104,7 @@ tightvncserver:
     - sig: su {{ user }} -c "/usr/bin/vncserver -depth 16 -geometry {{ salt['pillar.get']('tightvncserver:resolution', '1024x768') }} :{{ salt['pillar.get']('tightvncserver:display', 1) }}"
     - require:
       - pkg: tightvncserver
+      - file: {{ home }}/.vnc/passwd
     - watch:
       - debconf: tightvncserver
       - cmd: tightvncserver

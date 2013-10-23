@@ -69,4 +69,8 @@ server {
         include uwsgi_params;
         uwsgi_pass gitlab;
     }
+
+    location /assets/ {
+        expires max;
+    }
 }

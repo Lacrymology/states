@@ -39,11 +39,11 @@ include:
   - local
 
 {# TODO: set Email output plugin settings straight into MongoDB from salt #}
-{# TODO: run graylog2 server as a non-root user #}
 
 {% set version = '0.11.0' %}
 {% set checksum = 'md5=135c9eb384a03839e6f2eca82fd03502' %}
 {% set server_root_dir = '/usr/local/graylog2-server-' + version %}
+{%- set user = 'graylog2' %}
 
 graylog2-server_upstart:
   file:
@@ -56,6 +56,7 @@ graylog2-server_upstart:
     - source: salt://graylog2/server/upstart.jinja2
     - context:
       version: {{ version }}
+      user: {{ user }}
 
 {#graylog2-server_logrotate:#}
 {#  file:#}
@@ -73,15 +74,22 @@ graylog2-server_upstart:
     - managed
     - source: salt://elasticsearch/config.jinja2
     - template: jinja
-    - user: root
-    - group: root
+    - user: {{ user }}
+    - group: {{ user }}
     - mode: 440
     - context:
       master: 'false'
       data: 'false'
       origin_state: graylog2.server
+    - require:
+      - user: graylog2-server
 
 graylog2-server:
+  user:
+    - present
+    - name: {{ user }}
+    - home: /var/run/{{ user }}
+    - shell: /bin/false
   archive:
     - extracted
     - name: /usr/local/
@@ -100,12 +108,14 @@ graylog2-server:
     - managed
     - name: /etc/graylog2.conf
     - template: jinja
-    - user: root
-    - group: root
+    - user: {{ user }}
+    - group: {{ user }}
     - mode: 440
     - source: salt://graylog2/server/config.jinja2
     - context:
       version: {{ version }}
+    - require:
+      - user: graylog2-server
 {#
  IMPORTANT:
  graylog2-server need to be restarted after any change in
@@ -127,12 +137,28 @@ graylog2-server:
     - require:
       - file: /var/log/graylog2
       - service: mongodb
+      - file: {{ server_root_dir }}
+      - file: /var/run/graylog2
+
+{{ server_root_dir }}:
+  file:
+    - directory
+    - user: {{ user }}
+    - group: {{ user }}
+    - mode: 755
+    - recurse:
+      - user
+      - group
+    - require:
+      - archive: graylog2-server
+      - user: graylog2-server
 
 graylog2_email_output_plugin:
   cmd:
     - run
     - name: java -jar graylog2-server.jar --install-plugin email_output --plugin-version 0.10.0
     - cwd: {{ server_root_dir }}
+    - user: {{ user }}
     - unless: test -e {{ server_root_dir }}/plugin/outputs/org.graylog2.emailoutput.output.EmailOutput_gl2plugin.jar
     - require:
       - file: graylog2-server
@@ -140,6 +166,7 @@ graylog2_email_output_plugin:
       - archive: graylog2-server
       - pkg: openjdk_jre_headless
       - service: mongodb
+      - user: graylog2-server
 
 graylog2_sentry_output_plugin:
   file:
@@ -151,12 +178,13 @@ graylog2_sentry_output_plugin:
     - source: http://archive.robotinfra.com/mirror/graylog2-plugin-sentry-output-0.11.jar
 {% endif %}
     - source_hash: md5=9f8305a17af8bf6ab80dcab252489ec6
+    - user: {{ user }}
+    - group: {{ user }}
+    - mode: 440
     - require:
       - file: graylog2-server
       - archive: graylog2-server
-    - user: root
-    - group: root
-    - mode: 440
+      - user: graylog2-server
 
 graylog2_sentry_transport_plugin:
   file:
@@ -171,6 +199,17 @@ graylog2_sentry_transport_plugin:
     - require:
       - file: graylog2-server
       - archive: graylog2-server
-    - user: root
-    - group: root
+      - user: graylog2-server
+    - user: {{ user }}
+    - group: {{ user }}
     - mode: 440
+
+extend:
+{%- for dir in ('/var/log', '/var/run') %}
+  {{ dir }}/graylog2:
+    file:
+      - user: {{ user }}
+      - require:
+        - user: graylog2-server
+{%- endfor %}
+

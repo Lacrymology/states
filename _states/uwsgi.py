@@ -118,26 +118,27 @@ def available(name, enabled=False, **kwargs):
         test_res = check_res
 
         if check_res is False:
-            ret['comment'] = '\n'.join(comments)
+            ret['comment'] = '. '.join(comments)
             ret['result'] = test_res
             return ret
         else:
             if os.path.isfile(link):
                 if app_disabled:
-                    comments.append(('Symlink {0} will be '
+                    comments.append(('Symlink {0} is set to be '
                                      'removed').format(link, config))
                     test_res = None
                 if os.path.realpath(link) != config and app_enabled:
-                    comments.append(('Symlink {0} will be re-created and '
-                                    'target to {1}').format(link, config))
+                    comments.append(('Symlink {0} is set to be re-created'
+                                     'and targets to {1}').format(link,
+                                                                  config))
                     test_res = None
             else:
                 if app_enabled:
-                    comments.append(('Symlink {0} will be created and targets'
-                                     'to {1}.').format(link, config))
+                    comments.append(('Symlink {0} is set to be created and'
+                                     'targets to {1}.').format(link, config))
                     test_res = None
 
-        ret['comment'] = '\n'.join(comments)
+        ret['comment'] = '. '.join(comments)
         ret['result'] = test_res
         return ret
 
@@ -147,30 +148,29 @@ def available(name, enabled=False, **kwargs):
     if ret['result'] is False:
         return ret
     else:
-        if enabled:
-            if name not in __salt__['uwsgi.list_enabled']():
-                enable_output = __salt__['uwsgi.enable'](name)
-
-                ret['result'] = enable_output
-                changes = {'uwsgi': 'Webapp {0} has been enabled'.format(
-                           name)}
-                ret['changes'].update(changes)
-            else:
+        if app_enabled:
+            if name in __salt__['uwsgi.list_enabled']():
                 ret['comment'] = ('{0}\nWebapp {1} is already '
                                   'enabled'.format(ret['comment'], name))
-
+            else:
+                enable_ret = _enabled(name)
+                ret = _update_ret(ret, enable_ret)
         else:
-            if name not in __salt__['uwsgi.list_enabled']():
+            assert app_disabled is True
+            if name in __salt__['uwsgi.list_enabled']():
+                disable_ret = disabled(name, True)
+                ret = _update_ret(ret, disable_ret)
+            else:
                 ret['comment'] = ('{0}\nwebapp {1} is already '
                                   'disabled'.format(ret['comment'], name))
-            else:
-                disable_ret = __salt__['uwsgi.disable'](name)
-                if disable_ret is True:
-                    disable_data = {'result': disable_ret,
-                                    'changes': {'uwsgi': ('{0} is disabled'
-                                                          '').format(name)}}
-                    ret.update(disable_data)
         return ret
+
+
+def _update_ret(ret, action_ret):
+    ret['result'] = action_ret['result']
+    ret['changes'].update(action_ret['changes'])
+    ret['comment'] = '. '.join((ret['comment'], action_ret['comment']))
+    return ret
 
 
 def absent(name):
@@ -178,88 +178,91 @@ def absent(name):
     Make uWSGI application isn't there and not running.
     '''
     ret = {'name': name, 'comment': '', 'changes': {}, 'result': True}
-    comment = []
+    comments = []
     config, link, _ = _get_app_paths(name)
 
     if __opts__['test']:
         if os.path.islink(link):
-            comment.append('Symlink {0} will be removed.'.format(link))
+            comments.append('Symlink {0} is set to be removed.'.format(link))
             ret['result'] = None
         else:
-            comment.append('Symlink {0} is absent'.format(link))
+            comments.append('Symlink {0} is absent'.format(link))
             ret['result'] = True
 
         if os.path.isfile(config):
-            comment.append('Config file {0} will be removed.'.format(config))
+            comments.append(('Config file {0} is set'
+                             'to be removed.').format(config))
             ret['result'] = None
         else:
-            comment.append('Config file {0} is absent'.format(config))
+            comments.append('Config file {0} is absent'.format(config))
             ret['result'] = True
 
-        ret['comment'] = '\n'.join(comment)
+        ret['comment'] = '. '.join(comments)
         return ret
 
-    changes = {}
     if os.path.islink(link):
-        disabled = __salt__['uwsgi.disable'](name)
-        if disabled:
-            changes.update({name: 'is disabled'})
-            ret['result'] = True
-        else:
-            comment.append('[not disabled]')
-            ret['result'] = False
+        disabled_ret = disabled(name)
+        ret = _update_ret(ret, disable_ret)
     else:
-        comment = []
-        ret['result'] = False
+        comments.append('Symlink {0} is absent'.format(link))
+        ret['result'] = True
 
     if os.path.isfile(config):
         removed = __salt__['uwsgi.remove'](name)
         if removed:
+            changes = ret['changes']
+            ret['result'] = True
             if name in changes:
                 changes[name] = ('{0} and removed'
                                  '').format(changes[name])
             else:
                 changes.update({name: '{0} is removed'.format(name)})
-            ret['result'] = True
-        else:
-            comment.append('[not removed]')
-            ret['result'] = False
     else:
-        comment = []
+        comments.append('Config file {0} is absent'.format(link))
         ret['result'] = True
-    ret['changes'].update(changes)
 
-    ret['comment'] = " ".join(comment)
+    ret['comment'] = "\n".join(comments)
     return ret
 
 
-def enabled(name):
+def _enabled(name):
     '''
     Make sure existing uWSGI application is enabled.
 
     '''
     ret = {'name': name, 'comment': '', 'result': False, 'changes': {}}
+    config, link, _ = _get_app_paths(name)
 
     comments = []
     if __opts__['test']:
+        test_res = True
         if name in __salt__['uwsgi.list_available']():
-            config, link, _ = _get_app_paths(name)
             if name not in __salt__['uwsgi.list_enabled']():
-                comments.append('Symlink {0} will be created and targets to'
-                                '{1}'.format(link, config))
+                comments.append(('Symlink {0} is set to be created and'
+                                 'targets to {1}').format(link, config))
+                test_res = None
         else:
             comments.append('Webapp {0} is not available'.format(name))
-        ret.update({'comment': '\n'.join(comments), 'result': None})
+            test_res = False
+
+        ret.update({'comment': '. '.join(filter(None, comments)),
+                    'result': test_res})
         return ret
 
-    was_enabled = __salt__['uwsgi.enable'](name)
+    was_enabled, msg = __salt__['uwsgi.enable'](name)
+    comments.append(msg)
     if was_enabled:
+        ret['changes'][name] = ('Symlink {0} is created and targets to '
+                                '{1}').format(link, config)
         ret['result'] = True
-        ret['comment'] = "{0} was enabled".format(name)
-        ret['changes'][name] = {'new': 'Enabled', 'old': 'Disabled'}
     else:
-        ret['comment'] = "{0} was not enabled".format(name)
+        ret['result'] = False
+    ret['comment'] = '. '.join(filter(None, comments))
     return ret
+
+
+def enabled(name):
+    return _enabled(name)
 
 
 def disabled(name):
@@ -267,21 +270,25 @@ def disabled(name):
     Make sure existing uWSGI application is disabled.
     '''
     ret = {'name': name, 'comment': '', 'changes': {}, 'result': False}
+    _, link, _ = _get_app_paths(name)
 
     if __opts__['test']:
-        ret['result'] = None
         if name in __salt__['uwsgi.list_enabled']():
-            _, link, _ = _get_app_paths(name)
-            ret['comment'] = 'Symlink {0} will be removed'.format(link)
+            ret['comment'] = 'Symlink {0} is set to be removed'.format(link)
+            test_res = None
+        else:
+            ret['comment'] = 'Webapp {0} is disabled.'.format(name)
+            test_res = True
+        ret['result'] = test_res
         return ret
 
-    disabled = __salt__['uwsgi.disable'](name)
-    if disabled:
-        ret['comment'] = "{0} was disabled".format(name)
-        ret['changes'][name] = {'new': 'Disabled', 'old': 'Enabled'}
-        ret['result'] = True
-    else:
-        ret['comment'] = "{0} was not disabled".format(name)
+    disable_ret, msg = __salt__['uwsgi.disable'](name, True)
+
+    if disable_ret:
+        ret['changes'][name] = 'Symlink {0} is removed'.format(link)
+    ret['comment'] = '. '.join(filter(None,
+                                      (msg, "{0} is disabled".format(name))))
+    ret['result'] = True
 
     return ret
 

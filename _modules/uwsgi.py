@@ -64,8 +64,9 @@ def _applist(dirname, test):
         return [os.path.splitext(x)[0] for x in os.listdir(dirname)
                 if test(os.path.join(dirname, x)) and x.endswith('.ini')]
     except OSError, err:
-        logger.error("Can't list enabled: %s", err, exc_info=True)
-        return []
+        msg = "Can't list enabled: {0}".format(err)
+        logger.error(msg, exc_info=True)
+        raise
 
 
 def list_enabled():
@@ -83,57 +84,58 @@ def list_available():
     try:
         return _applist(_available_path(), os.path.isfile)
     except OSError, err:
-        logger.error("Can't list available: %s", err, exc_info=True)
-        return []
+        msg = "Can't list available: {0}".format(err)
+        logger.error(msg, exc_info=True)
+        raise
 
 
 def enable(app_name):
     '''
     Enable specified uWSGI application.
+    Return True ONLY when this function created symlink.
     '''
     app_config, app_symlink, app_file = _get_app_paths(app_name)
 
     if app_name not in list_available():
         message = "{0} is not an available app".format(app_name)
         logger.error(message)
-        return False
+        return False, message
     if app_name in list_enabled():
         message = "{0} already exists".format(app_symlink)
         logger.warning(message)
-        return False
+        return False, message
 
     try:
-        symlink(app_config, app_symlink)
+        ret = symlink(app_config, app_symlink)
+        logger.info('Created {0} symlink target to {1}\
+                    '.format(app_symlink, app_config))
+        return ret, ''
     except CommandExecutionError as e:
         message = "Error enabling app: {0}".format(e)
         logger.error(message)
-        return False
-    else:
-        logger.info('Created {0} symlink target to {1}\
-                    '.format(app_symlink, app_config))
-        return True
+        raise
 
 
 def disable(app_name, remove_orphan=False):
     '''
     Disable specified uWSGI application.
+    Return True ONLY when this function removed app symlink
     '''
     if not remove_orphan:
         if app_name not in list_enabled():
             message = "Webapp {0} isn't enabled".format(app_name)
             logger.error(message)
-            return False
+            return False, message
 
     _, app_symlink, __ = _get_app_paths(app_name)
     try:
-        __salt__['file.remove'](app_symlink)
+        ret = __salt__['file.remove'](app_symlink)
+        logger.info('removed {0}'.format(app_symlink))
+        return ret, ''
     except CommandExecutionError as e:
         message = "{0} could not be removed: {1}".format(app_symlink, e)
         logger.error(message)
-        return False
-    else:
-        logger.info('removed {0}'.format(app_symlink))
-        return True
+        raise
 
 
 def remove(app_name):
@@ -142,14 +144,13 @@ def remove(app_name):
     '''
     app_config, _, __ = _get_app_paths(app_name)
     try:
-        __salt__['file.remove'](app_config)
+        ret = __salt__['file.remove'](app_config)
+        logger.info('removed {0}'.format(app_config))
+        return ret
     except CommandExecutionError as e:
         message = '{0} could not be removed: {1}'.format(app_config, e)
         logger.error(message)
-        return False
-    else:
-        logger.info('removed {0}'.format(app_config))
-        return True
+        raise
 
 
 def clean():

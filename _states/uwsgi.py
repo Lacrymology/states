@@ -133,8 +133,8 @@ def available(name, enabled=False, **kwargs):
                     test_res = None
             else:
                 if app_enabled:
-                    comments.append(('Symlink {0} will be created and targets to '
-                                    '{1}.').format(link, config))
+                    comments.append(('Symlink {0} will be created and targets'
+                                     'to {1}.').format(link, config))
                     test_res = None
 
         ret['comment'] = '\n'.join(comments)
@@ -184,10 +184,18 @@ def absent(name):
     if __opts__['test']:
         if os.path.islink(link):
             comment.append('Symlink {0} will be removed.'.format(link))
-        if os.path.isfile(config):
-            comment.append('Config file {0} will be removed.'.format(link))
+            ret['result'] = None
+        else:
+            comment.append('Symlink {0} is absent'.format(link))
+            ret['result'] = True
 
-        ret['result'] = None
+        if os.path.isfile(config):
+            comment.append('Config file {0} will be removed.'.format(config))
+            ret['result'] = None
+        else:
+            comment.append('Config file {0} is absent'.format(config))
+            ret['result'] = True
+
         ret['comment'] = '\n'.join(comment)
         return ret
 

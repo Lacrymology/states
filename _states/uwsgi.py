@@ -98,6 +98,8 @@ def available(name, enabled=False, **kwargs):
     '''
     ret = {'name': name, 'result': None, 'comment': '', 'changes': {}}
     kwargs = _get_default_kwargs(kwargs)
+    app_enabled = enabled
+    app_disabled = not app_enabled
 
     if kwargs['env'] is None:
         kwargs['env'] = 'base'
@@ -105,19 +107,38 @@ def available(name, enabled=False, **kwargs):
     filename = _get_filename(name)
 
     if __opts__['test']:
+        '''
+        Return None: mean will be changed.
+        Return True: mean nothing need to be changed.
+        Return False: mean somethings go wrong and state can not be done.
+        '''
         config, link, _ = _get_app_paths(name)
-        _, c = __salt__['file.check_managed'](filename, **kwargs)
+        check_res, c = __salt__['file.check_managed'](filename, **kwargs)
         comments = [c]
+        test_res = check_res
 
-        if enabled:
+        if check_res is False:
+            ret['comment'] = '\n'.join(comments)
+            ret['result'] = test_res
+            return ret
+        else:
             if os.path.isfile(link):
-                if os.path.realpath(link) != config:
+                if app_disabled:
+                    comments.append(('Symlink {0} will be '
+                                     'removed').format(link, config))
+                    test_res = None
+                if os.path.realpath(link) != config and app_enabled:
                     comments.append(('Symlink {0} will be re-created and '
                                     'target to {1}').format(link, config))
+                    test_res = None
             else:
-                comments.append(('Symlink {0} will be created and targets to '
-                                '{1}.').format(link, config))
+                if app_enabled:
+                    comments.append(('Symlink {0} will be created and targets to '
+                                    '{1}.').format(link, config))
+                    test_res = None
+
         ret['comment'] = '\n'.join(comments)
+        ret['result'] = test_res
         return ret
 
     _patch_module(file)

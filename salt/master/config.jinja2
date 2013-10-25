@@ -31,9 +31,6 @@ fileserver_backend:
   - git
   - roots
 
-ext_pillar:
-  - git: {{ pillar['salt_master']['pillar']['branch'] }} {{ pillar['salt_master']['pillar']['remote'] }}
-
 worker_threads: {{ pillar['salt_master']['workers']|default(5) }}
 gitfs_remotes:
 {% for repo in pillar['salt_master']['gitfs_remotes'] %}

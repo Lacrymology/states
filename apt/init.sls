@@ -43,6 +43,10 @@ include:
 
 {%- set backup = '/etc/apt/sources.list.salt-backup' %}
 
+apt-transport-https:
+  pkg:
+    - installed
+
 apt_sources:
   file:
     - managed
@@ -79,6 +83,8 @@ apt_sources:
   cmd:
     - wait
     - name: apt-get update
+    - require:
+      - pkg: apt-transport-https
     - watch:
       - file: apt_sources
       - file: /etc/apt/apt.conf.d/99local

@@ -10,7 +10,6 @@ Example::
     web:
      hostnames:
         - graphite.example.com
-      sentry: http://XXX:YYY@sentry.example.com/0
       workers: 2
     carbon:
       instances: 2
@@ -23,11 +22,6 @@ graphite:web:hostnames
 ~~~~~~~~~~~~~~~~~~~~~~
 
 List of HTTP hostname that ends in graphite webapp.
-
-graphite:web:sentry
-~~~~~~~~~~~~~~~~~~~
-
-DSN of sentry server.
 
 graphite:web:workers
 ~~~~~~~~~~~~~~~~~~~~
@@ -42,6 +36,7 @@ Example::
   graphite:
     debug: False
     web:
+      sentry: http://XXX:YYY@sentry.example.com/0
       db:
         password: psqluserpass
         username: psqluser
@@ -64,6 +59,13 @@ Example::
   graylog2_address: 192.168.1.1
   shinken_pollers:
     - 192.168.1.1
+
+graphite:web:sentry
+~~~~~~~~~~~~~~~~~~~
+
+DSN of Sentry server.
+
+Default: value of pillar key ``sentry_dsn``.
 
 graphite:web:db:username
 ~~~~~~~~~~~~~~~~~~~~~~~~

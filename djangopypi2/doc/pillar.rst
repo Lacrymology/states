@@ -26,11 +26,6 @@ djangopypi2:hostnames
 
 List of HTTP hostnames that ends in djangopypi2 webapp.
 
-djangopypi2:sentry
-~~~~~~~~~~~~~~~~~~
-
-DSN of sentry server.
-
 djangopypi2:initial_admin_user:username
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -48,6 +43,13 @@ Django superuser's email to create.
 
 Optional
 --------
+
+djangopypi2:sentry
+~~~~~~~~~~~~~~~~~~
+
+DSN of Sentry server.
+
+Default: value of pillar key ``sentry_dsn``.
 
 djangopypi2:db:username
 ~~~~~~~~~~~~~~~~~~~~~~~

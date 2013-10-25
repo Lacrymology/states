@@ -223,7 +223,7 @@ LOGGING = {
     },
 }
 RAVEN_CONFIG = {
-    'dsn': '{{ pillar['djangopypi2']['sentry'] }}',
+    'dsn': '{{ salt['pillar.get']('djangopypi2:sentry', pillar['sentry_dsn']) }}',
 }
 
 {%- if 'graphite_address' in pillar %}

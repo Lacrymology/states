@@ -254,7 +254,7 @@ LOGGING = {
 }
 
 RAVEN_CONFIG = {
-    'dsn': '{{ pillar['graphite']['web']['sentry'] }}',
+    'dsn': '{{ salt['pillar.get']('graphite:web:sentry', pillar['sentry_dsn']) }}',
 }
 
 {#-

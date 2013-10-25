@@ -59,11 +59,11 @@ proftpd:deployments
 
 List deployments of proftpd.
 
-Default: [] by default of that pillar key.
+Default: [].
 
 destructive_absent
 ~~~~~~~~~~~~~~~~~~
 
 Remove all data when run absent.sls.
 
-Default: ``False`` by default of that pillar key.
+Default: ``False``.

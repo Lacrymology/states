@@ -96,7 +96,7 @@ Example::
       username: sentry
       name: sentry
       host: 127.0.0.1
-    ssl: sologroup
+    ssl: example_com
     ssl_redirect: False
     cheaper: 1
     timeout: 45
@@ -113,21 +113,21 @@ sentry:db:username
 
 PostgreSQL username for sentry. it will be created.
 
-Default: ``sentry`` by default of that pillar key.
+Default: ``sentry``.
 
 sentry:db:name
 ~~~~~~~~~~~~~~
 
 PostgreSQL database name. it will be created.
 
-Default: ``sentry`` by default of that pillar key.
+Default: ``sentry``.
 
 sentry:db:host
 ~~~~~~~~~~~~~~
 
 PostgreSQL address.
 
-Default: ``127.0.0.1`` by default of that pillar key.
+Default: ``127.0.0.1``.
 
 sentry:smtp
 ~~~~~~~~~~~
@@ -140,7 +140,7 @@ sentry:ssl
 
 Name of the SSL key to use for HTTPS.
 
-Default: ``False`` by default of that pillar key.
+Default: ``False``.
 
 sentry:ssl_redirect
 ~~~~~~~~~~~~~~~~~~~
@@ -148,7 +148,7 @@ sentry:ssl_redirect
 If set to True and SSL is turned on,
 this will force all HTTP traffic to be redirected to HTTPS.
 
-Default: ``False`` by default of that pillar key.
+Default: ``False``.
 
 sentry:(workers|cheapers|idle|timeout)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

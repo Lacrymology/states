@@ -13,13 +13,13 @@ Copyright (c) 2013, Bruno Clermont
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met: 
+modification, are permitted provided that the following conditions are met:
 
 1. Redistributions of source code must retain the above copyright notice, this
-   list of conditions and the following disclaimer. 
+   list of conditions and the following disclaimer.
 2. Redistributions in binary form must reproduce the above copyright notice,
    this list of conditions and the following disclaimer in the documentation
-   and/or other materials provided with the distribution. 
+   and/or other materials provided with the distribution.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -60,8 +60,8 @@ except ImportError:
 
 import yaml
 
-# until https://github.com/saltstack/salt/issues/4994 is fixed this is
-# required there
+# until https://github.com/saltstack/salt/issues/4994 is fixed, logger must
+# be configured before importing salt.client
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG,
                     format="%(asctime)s %(message)s")
 
@@ -77,6 +77,8 @@ is_clean = False
 clean_up_failed = False
 # list of process before tests ran
 process_list = None
+
+NO_TEST_STRING = '-*- ci-automatic-discovery: off -*-'
 
 
 def if_change(result):
@@ -283,6 +285,14 @@ def render_state_template(state):
     return {}
 
 
+def run_salt_module(module_name, *args, **kwargs):
+    try:
+        output = client(module_name, *args, **kwargs)
+    except Exception as err:
+        raise Exception('Module:{0} error: {1}'.format(module_name, err))
+    return output
+
+
 class TestStateMeta(type):
     """
     Metaclass that create all the test_ methods based on
@@ -296,56 +306,59 @@ class TestStateMeta(type):
         return 'test_%s' % state_name.replace('.', '_')
 
     @classmethod
-    def run_test_func(mcs, attrs, test_func_name, func_name, doc,
+    def wrap_test_func(mcs, attrs, test_func_name, new_func_name, doc,
                       *args, **kwargs):
         """
-        Return a function that run self.{{ test_func_name }}(*args, **kwargs)
+        Wrap function ``self.test_func_name`` and put in into ``attrs`` dict
         """
         def output_func(self):
             func = getattr(self, test_func_name)
             logger.debug("Run unit %s", test_func_name)
             func(*args, **kwargs)
-        output_func.__name__ = func_name
+        output_func.__name__ = new_func_name
         output_func.__doc__ = doc
-        logger.debug("Add method %s that run self.%s(...)", func_name,
+        logger.debug("Add method %s that run self.%s(...)", new_func_name,
                      test_func_name)
-        attrs[func_name] = output_func
+        attrs[new_func_name] = output_func
 
     @classmethod
     def add_test_integration(mcs, attrs, state):
         """
         add test for integration
         """
-        state_test = '.'.join((state, 'test'))
-        state_diamond = '.'.join((state, 'diamond'))
-        state_nrpe = '.'.join((state, 'nrpe'))
-
-        # check if state also have diamond and/or NRPE
-        # integration
+        state_test, state_diamond, state_nrpe = ('.'.join((state, s)) for s in
+                                                 ('test', 'diamond', 'nrpe'))
         states = [state]
-        if state_diamond in attrs['all_states']:
-            logger.debug("State %s got diamond integration, add check "
-                         "for include", state)
-            doc = 'Check includes for Diamond integration for ' + state
-            mcs.run_test_func(attrs, 'check_integration_include',
-                              mcs.func_name(state_diamond + '_include'),
-                              doc, state, state_diamond)
-            states.append(state_diamond)
-        if state_nrpe in attrs['all_states']:
-            logger.debug("State %s got NRPE integration add check for include",
-                         state)
-            doc = 'Check includes for NRPE integration for ' + state
-            mcs.run_test_func(attrs, 'check_integration_include',
-                              mcs.func_name(state_nrpe + '_include'), doc,
-                              state, state_nrpe)
-            states.append(state_nrpe)
+
+        def _add_include_check(state_integration, itype):
+            '''
+            Check whether a state has diamond and/or NRPE integration,
+            If yes, add checks for missing `include` statement in these
+            integration.
+            '''
+            if state_integration in attrs['all_states']:
+                logger.debug("State {0} got {1} integration, add check "
+                             "for include".format(state, itype))
+                doc = ('Check includes for {0} integration for {1}'
+                       '').format(itype, state)
+                mcs.wrap_test_func(attrs,
+                                   'check_integration_include',
+                                   mcs.func_name(state_integration +
+                                                 '_include'),
+                                   doc,
+                                   state,
+                                   state_integration)
+                states.append(state_integration)
+
+        _add_include_check(state_diamond, 'Diamond')
+        _add_include_check(state_nrpe, 'NRPE')
 
         if len(states) > 1:
             logger.debug("State %s got diamond/NRPE integration", state)
             if state_test in attrs['all_states']:
                 logger.debug("State %s do have a custom test state, "
                              "don't create automatically one", state)
-                mcs.run_test_func(attrs, 'top', mcs.func_name(state),
+                mcs.wrap_test_func(attrs, 'top', mcs.func_name(state),
                                   'Test state %s' % state, [state])
             else:
                 logger.debug("State %s don't have custom test state", state)
@@ -353,26 +366,30 @@ class TestStateMeta(type):
                       ', '.join(states)
                 states.append(mcs.nrpe_test_all_state)
                 # add test for the .sls file
-                mcs.run_test_func(attrs, 'top', mcs.func_name(state),
+                mcs.wrap_test_func(attrs, 'top', mcs.func_name(state),
                                   'Test state %s' % state, [state])
-                # and one for the automatically created one
-                mcs.run_test_func(attrs, 'top',
+                # and test for SLS file, and all corresponding integrations
+                mcs.wrap_test_func(attrs, 'top',
                                   mcs.func_name(state) + '_with_checks',
                                   doc, states)
         else:
             logger.debug("No diamond/NRPE integration for state %s", state)
-            mcs.run_test_func(attrs, 'top', mcs.func_name(state),
+            mcs.wrap_test_func(attrs, 'top', mcs.func_name(state),
                               'Test state %s' % state, [state])
 
     def __new__(mcs, name, bases, attrs):
+        '''
+        Return a class which consist of all needed test state functions
+        '''
         global client
+        # Get all SLSes to test
         attrs['all_states'] = client('cp.list_states')
         # don't play with salt.minion
         salt_minion_states = []
         for state in attrs['all_states']:
             if state.startswith('salt.minion'):
                 salt_minion_states.append(state)
-        # except diamond and nrpe
+        # but still test its diamond and nrpe
         salt_minion_states.remove('salt.minion.nrpe')
         salt_minion_states.remove('salt.minion.diamond')
         logger.debug("Don't run tests for salt minion, as it can interfer: %s",
@@ -381,20 +398,37 @@ class TestStateMeta(type):
                                    set(salt_minion_states))
 
         attrs['absent'] = []
+
+        # map SLSes to test methods then add to this class
         for state in attrs['all_states']:
-            # ignore all test.*
-            if state.startswith('test.') or state == 'top':
+            if state.startswith('test.') or state in ('top', 'overstate'):
                 logger.debug("Ignore state %s", state)
             else:
-                # absent states
+                # skip SLS contains string that indicate NO-TEST
+                logger.debug('salt://{0}.sls'.format(state.replace('.', '/')))
+
+                try:
+                    content = run_salt_module('cp.get_file_str',
+                                          'salt://{0}.sls'.format(state.replace('.', '/')))
+                except Exception:
+                    try:
+                        content = run_salt_module('cp.get_file_str',
+                                          'salt://{0}/init.sls'.format(state.replace('.', '/')))
+                    except Exception:
+                        raise
+
+                if NO_TEST_STRING in content:
+                    logger.debug('Explicit ignore state %s', state)
+                    continue
+
                 if state.endswith('.absent'):
                     logger.debug("Add test for absent state %s", state)
                     # build a list of all absent states
                     attrs['absent'].append(state)
                     doc = 'Run absent state for %s' % state.replace('.absent',
                                                                     '')
-                    # create test_$state_name.absent
-                    mcs.run_test_func(attrs, 'top', mcs.func_name(state),
+                    # create test_$(SLS_name)_absent
+                    mcs.wrap_test_func(attrs, 'top', mcs.func_name(state),
                                       doc, [state])
                 else:
                     logger.debug("%s is not an absent state", state)
@@ -402,9 +436,10 @@ class TestStateMeta(type):
                     if state.endswith('.nrpe') or state.endswith('.diamond') \
                        or state.endswith('.test'):
                         logger.debug("Add single test for %s", state)
-                        mcs.run_test_func(attrs, 'top', mcs.func_name(state),
+                        mcs.wrap_test_func(attrs, 'top', mcs.func_name(state),
                                           'Run test %s' % state, [state])
                     else:
+                        # all remaining SLSes
                         mcs.add_test_integration(attrs, state)
 
         attrs['absent'].sort()
@@ -469,31 +504,8 @@ class States(unittest.TestCase):
                 self.fail("Process that still run after cleanup: %s" % (
                           os.linesep.join(unclean)))
 
-        # check unix groups
-        # if group_list is None:
-        #     group_list = self.list_groups()
-        #     logger.debug("First cleanup, keep list of %d groups",
-        #                  len(group_list))
-        # else:
-        #     extra = set(self.list_groups()) - set(group_list)
-        #     if extra:
-        #         clean_up_failed = True
-        #         self.fail("New group that still exists after cleanup: %s" % (
-        #                   ','.join(extra)))
-
-        # check unix users
-        # if user_list is None:
-        #     user_list = client('user.list_users')
-        #     logger.debug("First cleanup, keep list of %d users",
-        #                  len(user_list))
-        # else:
-        #     extra = set(client('user.list_users')) - set(user_list)
-        #     if extra:
-        #         clean_up_failed = True
-        #         self.fail("New user that still exists after cleanup: %s" % (
-        #                   ','.join(extra)))
-
         is_clean = True
+
 
     def sls(self, states):
         """
@@ -609,7 +621,7 @@ class States(unittest.TestCase):
             if item.startswith('test_'):
                 func = getattr(cls, item)
                 print '%s.%s: %s ' % (cls.__name__, item,
-                                      func.__doc__.lstrip(" \n").rstrip(" \n"))
+                                      func.__doc__.strip())
 
 if __name__ == '__main__':
     if '--list' in sys.argv:

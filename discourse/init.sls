@@ -1,23 +1,33 @@
 {#-
-Copyright (c) 2013, Lam Dang Tung
+Copyright (C) 2013 the Institute for Institutional Innovation by Data
+Driven Design Inc.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
 
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE  MASSACHUSETTS INSTITUTE OF
+TECHNOLOGY AND THE INSTITUTE FOR INSTITUTIONAL INNOVATION BY DATA
+DRIVEN DESIGN INC. BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+Except as contained in this notice, the names of the Institute for
+Institutional Innovation by Data Driven Design Inc. shall not be used in
+advertising or otherwise to promote the sale, use or other dealings
+in this Software without prior written authorization from the
+Institute for Institutional Innovation by Data Driven Design Inc.
 
 Author: Lam Dang Tung <lamdt@familug.org>
 Maintainer: Lam Dang Tung <lamdt@familug.org>
@@ -129,6 +139,8 @@ discourse:
     - require:
       - file: discourse_tar
       - file: {{ web_root_dir }}/config/database.yml
+      - file: {{ web_root_dir }}/config/redis.yml
+      - file: {{ web_root_dir }}/config/environments/production.rb
       - user: discourse
       - service: postgresql
       - service: redis
@@ -230,7 +242,7 @@ discourse_upstart:
     - group: root
     - mode: 440
     - require:
-      - file: /etc/uwsgi/discourse.ini
+      - uwsgi: uwsgi_discourse
     - context:
       web_root_dir: {{ web_root_dir }}
       user: discourse
@@ -250,9 +262,11 @@ discourse_upstart:
     - context:
       web_root_dir: {{ web_root_dir }}
 
-/etc/uwsgi/discourse.ini:
-  file:
-    - managed
+uwsgi_discourse:
+  uwsgi:
+    - available
+    - enabled: True
+    - name: discourse
     - user: www-data
     - group: www-data
     - template: jinja
@@ -260,11 +274,6 @@ discourse_upstart:
     - mode: 440
     - require:
       - service: uwsgi_emperor
-      - file: discourse_tar
-      - file: discourse
-      - file: {{ web_root_dir }}/config/environments/production.rb
-      - file: {{ web_root_dir }}/config/database.yml
-      - file: {{ web_root_dir }}/config/redis.yml
       - user: add_web_user_to_discourse_group
       - cmd: discourse_bundler
       - cmd: discourse
@@ -273,12 +282,6 @@ discourse_upstart:
       - cmd: discourse_assets_precompile
     - context:
       web_root_dir: {{ web_root_dir }}
-  module:
-    - wait
-    - name: file.touch
-    - m_name: /etc/uwsgi/discourse.ini
-    - require:
-      - file: /etc/uwsgi/discourse.ini
     - watch:
       - file: discourse
       - file: {{ web_root_dir }}/config/environments/production.rb
@@ -296,7 +299,7 @@ discourse_upstart:
     - mode: 440
     - require:
       - pkg: nginx
-      - file: /etc/uwsgi/discourse.ini
+      - uwsgi: uwsgi_discourse
 {%- if salt['pillar.get']('discourse:ssl', False) %}
       - cmd: /etc/ssl/{{ pillar['discourse']['ssl'] }}/chained_ca.crt
       - module: /etc/ssl/{{ pillar['discourse']['ssl'] }}/server.pem

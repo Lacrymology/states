@@ -131,7 +131,7 @@ roundcube:
       - file: {{ roundcubedir }}
       - user: web
     - require_in:
-      - file: /etc/uwsgi/roundcube.ini
+      - uwsgi: uwsgi_roundcube
 {% endfor %}
 
 /etc/nginx/conf.d/roundcube.conf:
@@ -145,35 +145,27 @@ roundcube:
     - require:
       - pkg: nginx
       - user: web
-      - file: /etc/uwsgi/roundcube.ini
+      - uwsgi: uwsgi_roundcube
     - context:
       dir: {{ roundcubedir }}
     - watch_in:
       - service: nginx
 
-/etc/uwsgi/roundcube.ini:
-  file:
-    - managed
+uwsgi_roundcube:
+  uwsgi:
+    - available
+    - enabled: True
+    - name: roundcube
     - source: salt://roundcube/uwsgi.jinja2
     - template: jinja
     - user: www-data
     - group: www-data
     - mode: 440
+    - context:
+      dir: {{ roundcubedir }}
     - require:
       - service: uwsgi_emperor
       - module: roundcube_initial
-      - file: {{ roundcubedir }}/config/main.inc.php
-      - file: {{ roundcubedir }}/config/db.inc.php
-      - archive: roundcube
-      - pkg: php5-pgsql
-    - context:
-      dir: {{ roundcubedir }}
-  module:
-    - wait
-    - name: file.touch
-    - m_name: /etc/uwsgi/roundcube.ini
-    - require:
-      - file: /etc/uwsgi/roundcube.ini
     - watch:
       - file: {{ roundcubedir }}/config/main.inc.php
       - file: {{ roundcubedir }}/config/db.inc.php

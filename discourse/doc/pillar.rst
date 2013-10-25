@@ -70,14 +70,14 @@ discourse:db:username
 
 PostgreSQL username for discourse. it will be created.
 
-Default: ``discourse`` by default of that pillar key.
+Default: ``discourse``.
 
 discourse:db:name
 ~~~~~~~~~~~~~~~~~
 
 PostgreSQL database name. it will be created.
 
-Default: ``discourse`` by default of that pillar key.
+Default: ``discourse``.
 
 discourse:db:password
 ~~~~~~~~~~~~~~~~~~~~~
@@ -90,14 +90,14 @@ discourse:upload_size
 Max file size for upload to server
 In megabyte.
 
-Default: ``2m`` by default of that pillar key.
+Default: ``2m``.
 
 discourse:ssl
 ~~~~~~~~~~~~~
 
 Name of the SSL key to use for HTTPS.
 
-Default: ``False`` by default of that pillar key.
+Default: ``False``.
 
 discourse:ssl_redirect
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -105,10 +105,10 @@ discourse:ssl_redirect
 If set to True and SSL is turned on, this will force all HTTP traffic to be
 redirected to HTTPS.
 
-Default: ``False`` by default of that pillar key.
+Default: ``False``.
 
 discourse:(workers|cheapers|idle|timeout)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 See uwsgi/doc/instance.rst for more details
 

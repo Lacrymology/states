@@ -42,6 +42,3 @@ sentry_dsn
 ~~~~~~~~~~
 
 DSN of sentry server.
-
-Optional
---------

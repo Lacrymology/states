@@ -31,9 +31,6 @@
 Pillar
 ======
 
-Mandatory
----------
-
 Optional
 --------
 

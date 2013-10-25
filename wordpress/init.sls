@@ -1,23 +1,33 @@
 {#-
-Copyright (c) 2013, Lam Dang Tung
+Copyright (C) 2013 the Institute for Institutional Innovation by Data
+Driven Design Inc.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
 
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE  MASSACHUSETTS INSTITUTE OF
+TECHNOLOGY AND THE INSTITUTE FOR INSTITUTIONAL INNOVATION BY DATA
+DRIVEN DESIGN INC. BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+Except as contained in this notice, the names of the Institute for
+Institutional Innovation by Data Driven Design Inc. shall not be used in
+advertising or otherwise to promote the sale, use or other dealings
+in this Software without prior written authorization from the
+Institute for Institutional Innovation by Data Driven Design Inc.
 
 Author: Lam Dang Tung <lamdt@familug.org>
 Maintainer: Lam Dang Tung <lamdt@familug.org>
@@ -169,35 +179,28 @@ wordpress_initial:
     - template: jinja
     - require:
       - pkg: nginx
-      - file: /etc/uwsgi/wordpress.ini
+      - uwsgi: uwsgi_wordpress
     - watch_in:
       - service: nginx
     - context:
       dir: {{ wordpressdir }}
 
-/etc/uwsgi/wordpress.ini:
-  file:
-    - managed
+uwsgi_wordpress:
+  uwsgi:
+    - available
+    - enabled: True
+    - name: wordpress
     - source: salt://wordpress/uwsgi.jinja2
     - user: www-data
     - group: www-data
     - mode: 440
     - template: jinja
+    - context:
+      dir: {{ wordpressdir }}
     - require:
-      - file: {{ wordpressdir }}/wp-config.php
-      - archive: wordpress
-      - pkg: php5-mysql
       - module: wordpress_initial
       - service: uwsgi_emperor
       - service: mysql-server
-    - context:
-      dir: {{ wordpressdir }}
-  module:
-    - wait
-    - name: file.touch
-    - m_name: /etc/uwsgi/wordpress.ini
-    - require:
-      - file: /etc/uwsgi/wordpress.ini
     - watch:
       - file: {{ wordpressdir }}/wp-config.php
       - archive: wordpress

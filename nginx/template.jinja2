@@ -77,8 +77,8 @@ server {
 {%- endfor %}
 {%- endblock %}
 
-{%- block root_location  %}
-{#- magic number: php(14), ruby(7) -#}
+{%- block root_location -%}
+{#- magic number: php(14), ruby(7) #}
     location / {
         gzip off;
         include uwsgi_params;

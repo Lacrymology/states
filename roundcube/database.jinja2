@@ -27,7 +27,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
 <?php
 // {{ pillar['message_do_not_modify'] }}
-{#- Configuration file for database access -#}
+{#- Configuration file for database access #}
 $rcmail_config = array();
 
 {#
@@ -35,7 +35,7 @@ $rcmail_config = array();
  format is db_provider:user:password@host/database
  For examples see http:pear.php.net/manual/en/package.database.mdb2.intro-dsn.php
  currently supported db_providers: mysql, mysqli, pgsql, sqlite, mssql or sqlsrv
--#}
+#}
 $rcmail_config['db_dsnw'] = 'pgsql://{{ username }}:{{ password }}@127.0.0.1/{{ dbname }}';
 {#
  postgres example: 'pgsql:roundcube:pass@localhost/roundcubemail';
@@ -44,7 +44,7 @@ $rcmail_config['db_dsnw'] = 'pgsql://{{ username }}:{{ password }}@127.0.0.1/{{ 
 
  PEAR database DSN for read only operations (if empty write database will be used)
  useful for database replication
--#}
+#}
 $rcmail_config['db_dsnr'] = 'pgsql://{{ username }}:{{ password }}@127.0.0.1/{{ dbname }}';
 
 {#-

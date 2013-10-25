@@ -176,9 +176,11 @@ sentry-migrate-fake:
     - watch:
       - cmd: sentry-syncdb-all
 
-/etc/uwsgi/sentry.ini:
-  file:
-    - managed
+uwsgi_sentry:
+  uwsgi:
+    - available
+    - enabled: True
+    - name: sentry
     - template: jinja
     - user: www-data
     - group: www-data
@@ -187,14 +189,7 @@ sentry-migrate-fake:
     - require:
       - service: memcached
       - service: uwsgi_emperor
-      - cmd: sentry_settings
       - service: rsyslog
-  module:
-    - wait
-    - name: file.touch
-    - m_name: /etc/uwsgi/sentry.ini
-    - require:
-      - file: /etc/uwsgi/sentry.ini
     - watch:
       - file: sentry
       - cmd: sentry_settings
@@ -225,3 +220,5 @@ extend:
         - module: /etc/ssl/{{ pillar['sentry']['ssl'] }}/server.pem
         - file: /etc/ssl/{{ pillar['sentry']['ssl'] }}/ca.crt
 {% endif %}
+      - require:
+        - uwsgi: uwsgi_sentry

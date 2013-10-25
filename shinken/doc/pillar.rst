@@ -110,18 +110,18 @@ shinken:ssl
 
 Name of the SSL key to use for HTTPS.
 
-Default: ``False`` by default of that pillar key.
+Default: ``False``.
 
 shinken:ssl_redirect
 ~~~~~~~~~~~~~~~~~~~~
 
 If set to True and SSL is turned on, this will force all HTTP traffic to be redirected to HTTPS.
 
-Default: ``False`` by default of that pillar key.
+Default: ``False``.
 
 shinken:log_level
 ~~~~~~~~~~~~~~~~~
 
 Define level of logging.
 
-Default: ``INFO`` by default of that pillar key.
+Default: ``INFO``.

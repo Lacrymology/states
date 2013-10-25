@@ -68,7 +68,7 @@ nfs-kernel-server:
       - file: /etc/exports
 
 {%- set allow = pillar['nfs']['allow'] -%}
-{%- set deny = salt['pillar.get']('nfs:deny', 'ALL') -%}
+{%- set deny = salt['pillar.get']('nfs:deny', ['ALL']) -%}
 {%- set type2clients = {'allow': allow,
                         'deny': deny} %}
 
@@ -78,7 +78,7 @@ nfs_{{ service }}_{{ t }}:
   tcp_wrappers:
     - present
     - type: {{ t }}
-    - name: {{ type2clients[t] }}
+    - name: {{ type2clients[t]|join(', ') }}
     - service: {{ service }}
     - require:
       - pkg: nfs-kernel-server

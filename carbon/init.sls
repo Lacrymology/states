@@ -27,9 +27,9 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 Install Carbon, daemon that store on disk statistics database used by Graphite
 to render graphics.
--#}
 
-{#- TODO: send logs to GELF -#}
+TODO: send logs to GELF
+-#}
 include:
   - graphite.common
   - pip

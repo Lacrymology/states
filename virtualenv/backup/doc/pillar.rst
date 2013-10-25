@@ -43,4 +43,3 @@ backup_server:address
 ~~~~~~~~~~~~~~~~~~~~~
 
 Address of backup server.
-

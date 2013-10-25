@@ -52,7 +52,7 @@ creating LDAP users.
 Optional
 --------
 
-Example:
+Example::
 
   ldap:
     log_level: 256
@@ -82,4 +82,4 @@ ldap:log_level
 
 Log verbose level, some values of this can be: -1, 256, 16383, ...
 
-Default: ``256`` by default of that pillar key.
+Default: ``256``.

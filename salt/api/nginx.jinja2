@@ -35,7 +35,7 @@ server {
     server_name {% for hostname in pillar['salt_master']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
     return 301 https://{{ pillar['salt_master']['hostnames'][0] }}$request_uri;
 }
-{#- https server -#}
+{#- https server #}
 server {
 {% endif %}{# redirect http to https #}
     listen 443 ssl;

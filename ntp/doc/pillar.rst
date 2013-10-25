@@ -45,4 +45,4 @@ ntp:server
 
 The list of NTP servers.
 
-Default: [] by default of that pillar key.
+Default: empty list.

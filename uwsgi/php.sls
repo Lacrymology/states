@@ -54,8 +54,8 @@ extend:
     file:
       - require:
         - pkg: php-dev
-{% if grains['osrelease']|float == 12.04 %}
+{%- if grains['osrelease']|float == 12.04 %}
     cmd:
       - watch:
         - cmd: symlink-libphp5.so
-{% endif %}
+{%- endif -%}

@@ -47,7 +47,7 @@ nginx:worker_processes
 
 Number of nginx worker.
 
-Default: ``1`` by default of that pillar key.
+Default: ``1``.
 
 nginx:log_format
 ~~~~~~~~~~~~~~~~
@@ -64,4 +64,4 @@ by default of that pillar key.
 nginx:redirect_numeric_ip
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Default: ``False`` by default of that pillar key.
+Default: ``False``.

@@ -53,7 +53,7 @@ ssh:known_hosts
 
 List known hosts that will added to .ssh/known_hosts.
 
-Default: ``git.robotinfra.com`` by default of that pillar key.
+Default: ``git.robotinfra.com``.
 
 ssh:known_hosts:fingerprint
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -68,7 +68,7 @@ ssh:known_hosts:port
 
 Host's port for ssh access.
 
-Default: ``22022`` by default of that pillar key.
+Default: ``22022``.
 
 deployment_key:contents
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -78,5 +78,4 @@ SSH private key content.
 deployment_key:type
 ~~~~~~~~~~~~~~~~~~~
 
-Type of SSH private key.
-
+Type of SSH private key: ``rsa`` or ``dsa``.

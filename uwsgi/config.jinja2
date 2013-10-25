@@ -1,0 +1,25 @@
+# {{ pillar['message_do_not_modify'] }}
+{%- set ksm = grains['virtual'] == 'kvm' and salt['file.file_exists']('/sys/kernel/mm/ksm/run') %}
+[uwsgi]
+threaded-logger = True
+{%- if 'graylog2_address' in pillar %}
+logger = graylog2:{{ pillar['graylog2_address'] }}:12201,{{ grains['id'] }}
+  {%- if salt['pillar.get']('debug', False) %}
+req-logger = graylog2:{{ pillar['graylog2_address'] }}:12201,{{ grains['id'] }}
+  {%- endif -%}
+{%- else %}
+logger = syslog:uwsgi
+  {%- if salt['pillar.get']('debug', False) %}
+req-logger = syslog:uwsgi
+  {%- endif -%}
+{%- endif %}
+{%- if 'graphite_address' in pillar %}
+carbon-id = emperor
+carbon = {{ pillar['graphite_address'] }}:2003
+{%- endif %}
+emperor = /etc/uwsgi/apps-enabled
+no-orphans = True
+die-on-term = True
+{%- if ksm %}
+ksm = 10
+{%- endif -%}

@@ -41,6 +41,7 @@ udp = true
 multicast = false
 threading = true
 minterpreters = true
+matheval = false
 async = true
 ldap = false
 pcre = false
@@ -83,15 +84,11 @@ embedded_plugins = python,
 {%- endif -%}
     gevent, ping, nagios, carbon, signal
 as_shared_library = false
-
 locking = auto
 event = auto
 timer = auto
 filemonitor = auto
-
 blacklist =
 whitelist =
-
 embed_files =
-
 embed_config =

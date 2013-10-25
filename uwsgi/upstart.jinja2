@@ -37,10 +37,10 @@ umask 022
 env LC_ALL=en_US.UTF-8
 env LANG=en_US.UTF-8
 
-{% if ksm %}
+{%- if ksm %}
 pre-start script
     echo 1 > /sys/kernel/mm/ksm/run
 end script
-{% endif %}
+{%- endif %}
 
-exec /usr/local/uwsgi/uwsgi --threaded-logger --logger {% if 'graylog2_address' in pillar %}graylog2:{{ pillar['graylog2_address'] }}:12201,{{ grains['id'] }}{% else %}syslog:uwsgi{% endif %}{% if 'graphite_address' in pillar %} --carbon-id emperor --carbon {{ pillar['graphite_address'] }}:2003{% endif %} --emperor /etc/uwsgi/ --no-orphans --die-on-term{% if ksm %} --ksm=10{% endif %}
+exec {{ extracted_dir }}/uwsgi --ini /etc/uwsgi.ini

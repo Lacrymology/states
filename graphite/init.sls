@@ -261,9 +261,11 @@ graphite_admin_user:
     - watch:
       - postgres_database: graphite_settings
 
-/etc/uwsgi/graphite.ini:
-  file:
-    - managed
+uwsgi_graphite:
+  uwsgi:
+    - available
+    - enabled: True
+    - name: graphite
     - template: jinja
     - user: www-data
     - group: www-data
@@ -273,23 +275,10 @@ graphite_admin_user:
       - module: graphite_initial_fixture
       - service: uwsgi_emperor
       - file: graphite_logdir
-      - file: graphite_wsgi
-      - module: graphite_settings
-      - file: graphite_graph_templates
       - file: /usr/local/graphite/bin/build-index.sh
       - user: web
-      - file: graphite-urls-patch
       - service: rsyslog
-      - module: graphite-web
-      - pip: graphite-web
       - service: memcached
-  module:
-    - wait
-    - name: file.touch
-    - require:
-      - file: /etc/uwsgi/graphite.ini
-      - service: memcached
-    - m_name: /etc/uwsgi/graphite.ini
     - watch:
       - module: graphite_settings
       - file: graphite_wsgi
@@ -321,7 +310,7 @@ graphite_admin_user:
     - group: www-data
     - mode: 440
     - require:
-      - module: /etc/uwsgi/graphite.ini
+      - uwsgi: uwsgi_graphite
       - pkg: nginx
 
 extend:

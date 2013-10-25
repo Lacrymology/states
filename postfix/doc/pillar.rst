@@ -126,7 +126,7 @@ postfix:mydestination
 
 Host that this mail server will be final destination.
 
-Default: [].
+Default: empty list.
 
 postfix:relayhost
 ~~~~~~~~~~~~~~~~~

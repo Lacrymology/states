@@ -42,6 +42,15 @@ include:
   - python.dev
   - rsyslog
 
+{#- Upgrade uwsgi from 1.4 to 1.9.17.1 #}
+uwsgi_upgrade_remove_old_version:
+  file:
+    - absent
+    - name: /usr/local/uwsgi
+
+{%- set version = '1.9.17.1' -%}
+{%- set extracted_dir = '/usr/local/uwsgi-{0}'.format(version) %}
+
 /etc/init/uwsgi.conf:
   file:
     - managed
@@ -49,50 +58,50 @@ include:
     - user: root
     - group: root
     - mode: 440
+    - context:
+      extracted_dir: {{ extracted_dir }}
     - source: salt://uwsgi/upstart.jinja2
 
+/etc/uwsgi.ini:
+  file:
+    - managed
+    - template: jinja
+    - source: salt://uwsgi/config.jinja2
+    - mode: 440
+
 uwsgi_build:
-{%- if 'files_archive' in pillar -%}
-  {%- set uwsgi_download_module = "archive" %}
   archive:
     - extracted
     - name: /usr/local
-    - source: {{ pillar['files_archive'] }}/mirror/uwsgi-1.4.3-patched.tar.gz
-    - source_hash: md5=7e906d84fd576bccd1a3bb7ab308ec3c
+{%- if 'files_archive' in pillar %}
+    - source: {{ pillar['files_archive'] }}/mirror/uwsgi-{{ version }}.tar.gz
+{%- else %}
+    - source: http://projects.unbit.it/downloads/uwsgi-{{ version }}.tar.gz
+{%- endif %}
+    - source_hash: md5=501f29ad4538193c0ef585b4cef46bcf
     - archive_format: tar
     - tar_options: z
-    - if_missing: /usr/local/uwsgi
+    - if_missing: {{ extracted_dir }}
     - require:
       - file: /usr/local
-{%- else -%}
-  {%- set uwsgi_download_module = "git" %}
-  git:
-    - latest
-    - name: git://github.com/bclermont/uwsgi.git
-    - rev: 1.4.3-patched
-    - target: /usr/local/uwsgi
-    - require:
-      - pkg: git
-      - file: /usr/local
-{%- endif %}
   file:
     - managed
-    - name: /usr/local/uwsgi/buildconf/custom.ini
+    - name: {{ extracted_dir }}/buildconf/custom.ini
     - template: jinja
     - user: root
     - group: root
     - mode: 440
     - source: salt://uwsgi/buildconf.jinja2
     - require:
-      - {{ uwsgi_download_module }}: uwsgi_build
+      - archive: uwsgi_build
   cmd:
     - wait
     - name: python uwsgiconfig.py --clean; python uwsgiconfig.py --build custom
-    - cwd: /usr/local/uwsgi
+    - cwd: {{ extracted_dir }}
     - stateful: false
     - watch:
       - pkg: xml-dev
-      - {{ uwsgi_download_module }}: uwsgi_build
+      - archive: uwsgi_build
       - file: uwsgi_build
       - pkg: python-dev
 
@@ -106,16 +115,16 @@ uwsgi_sockets:
     - require:
       - user: web
       - cmd: uwsgi_build
-      - {{ uwsgi_download_module }}: uwsgi_build
+      - archive: uwsgi_build
       - file: uwsgi_build
 
 uwsgi_emperor:
   cmd:
     - wait
-    - name: strip /usr/local/uwsgi/uwsgi
+    - name: strip {{ extracted_dir }}/uwsgi
     - stateful: false
     - watch:
-      - {{ uwsgi_download_module }}: uwsgi_build
+      - archive: uwsgi_build
       - file: uwsgi_build
       - cmd: uwsgi_build
   service:
@@ -129,10 +138,32 @@ uwsgi_emperor:
       - service: rsyslog
     - watch:
       - cmd: uwsgi_emperor
+      - file: uwsgi_upgrade_remove_old_version
       - file: /etc/init/uwsgi.conf
+      - file: /etc/uwsgi.ini
+      - file: /etc/uwsgi/apps-available
+      - file: /etc/uwsgi/apps-enabled
   file:
     - directory
     - name: /etc/uwsgi
+    - user: www-data
+    - group: www-data
+    - mode: 550
+    - require:
+      - user: web
+
+/etc/uwsgi/apps-available:
+  file:
+    - directory
+    - user: www-data
+    - group: www-data
+    - mode: 550
+    - require:
+      - user: web
+
+/etc/uwsgi/apps-enabled:
+  file:
+    - directory
     - user: www-data
     - group: www-data
     - mode: 550

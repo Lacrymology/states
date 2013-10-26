@@ -75,17 +75,10 @@ virtualenv = {{ virtualenv }}
 {%- endif %}
 threaded-logger = true
 no-orphans = true
-{%- if 'graylog2_address' in pillar %}
-logger = graylog2:{{ pillar['graylog2_address'] }}:12201,{{ grains['id'] }}
-    {%- if salt['pillar.get']('debug', False) %}
-req-logger = graylog2:{{ pillar['graylog2_address'] }}:12201,{{ grains['id'] }}
-    {%- endif %}
-{%- else %}
 logger = syslog:uwsgi-{{ appname }}
     {%- if salt['pillar.get']('debug', False) %}
 req-logger = syslog:uwsgi-{{ appname }}
     {%- endif %}
-{%- endif %}
 {%- if 'graphite_address' in pillar %}
 carbon-id = {{ appname }}
 carbon = {{ pillar['graphite_address'] }}:2003

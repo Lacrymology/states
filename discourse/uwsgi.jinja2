@@ -69,12 +69,10 @@ chdir = {{ web_root_dir }}
 rack = {{ web_root_dir }}/config.ru
 threaded-logger = true
 no-orphans = true
-
-{% if 'graylog2_address' in pillar %}
-logger = graylog2:{{ pillar['graylog2_address'] }}:12201,{{ grains['id'] }}
-{% else %}
-log-syslog = uwsgi-discourse
-{% endif %}
+logger = syslog:uwsgi-discourse
+    {%- if salt['pillar.get']('debug', False) %}
+req-logger = syslog:uwsgi-discourse
+    {%- endif %}
 {% if 'graphite_address' in pillar %}
 carbon-id = graylog2
 carbon = {{ pillar['graphite_address'] }}:2003

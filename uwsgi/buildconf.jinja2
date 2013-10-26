@@ -3,13 +3,13 @@ Copyright (c) 2013, Bruno Clermont
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met: 
+modification, are permitted provided that the following conditions are met:
 
 1. Redistributions of source code must retain the above copyright notice, this
-   list of conditions and the following disclaimer. 
+   list of conditions and the following disclaimer.
 2. Redistributions in binary form must reproduce the above copyright notice,
    this list of conditions and the following disclaimer in the documentation
-   and/or other materials provided with the distribution. 
+   and/or other materials provided with the distribution.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -57,11 +57,7 @@ rack = true
 {%- if salt['cmd.has_exec']('php-config') %}
 php = true
 {%- endif -%}
-{%- if 'graylog2_address' not in pillar %}
 syslog = true
-{%- else %}
-graylog2 = true
-{%- endif %}
 xml_implementation = libxml2
 yaml_implementation = auto
 malloc_implementation = libc
@@ -77,12 +73,7 @@ embedded_plugins = python,
 {%- if salt['cmd.has_exec']('php-config') -%}
     php,
 {%- endif -%}
-{%- if 'graylog2_address' in pillar -%}
-    graylog2,
-{%- else -%}
-    syslog,
-{%- endif -%}
-    gevent, ping, nagios, carbon, signal
+    syslog, gevent, ping, nagios, carbon, signal
 as_shared_library = false
 locking = auto
 event = auto

@@ -232,7 +232,7 @@ def absent(name):
 
     if os.path.islink(link):
         disabled_ret = disabled(name)
-        ret = _update_ret(ret, disable_ret)
+        ret = _update_ret(ret, disabled_ret)
     else:
         comments.append('Symlink {0} is absent'.format(link))
         ret['result'] = True

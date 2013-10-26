@@ -111,7 +111,7 @@ restart_after_ssl:
   file:
     - managed
     - template: jinja
-    - source: salt://{{ pillar['ldap']['usertree'] }}
+    - source: salt://openldap/usertree.ldif.jinja2
     - mode: 400
 
 ldapadd -Y EXTERNAL -H ldapi:/// -f {{ opts['cachedir'] }}/usertree.ldif:

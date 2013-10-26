@@ -37,17 +37,29 @@ Mandatory
 Example::
 
   ldap:
-    suffix: Domain component entry # Example: dc=example,dc=com
-    usertree: salt path to user tree LDIF file #
-      Example: user_stuff/ldaptree.ldif
-    rootdn: Root Distinguished Name # Example: dn=admin,dc=example,dc=com
-    rootpw: Root's password (can be created used ldappasswd)
+    suffix: dc=example,dc=com
+    rootdn: cn=admin,dc=example,dc=com
+    rootpw: foobar123
 
-ldap:usertree
-~~~~~~~~~~~~~
+ldap:suffix
+~~~~~~~~~~~
 
-If use `openldap/usertree.ldif.jinja2`, data from ldap:data will be used for
-creating LDAP users.
+Domain component entry.
+
+Example: dc=example,dc=com
+
+ldap:rootdn
+~~~~~~~~~~~
+
+Root Distinguished Name.
+
+Example: cn=admin,dc=example,dc=com
+
+ldap:rootpw
+~~~~~~~~~~~
+
+Root's password (plaintext or encrypted which can be generate by using
+``slappasswd`` - an utility in ``slapd`` package)
 
 Optional
 --------
@@ -57,19 +69,19 @@ Example::
   ldap:
     log_level: 256
     data:
-      mailname:
-        user1:
-          cn: CN user1
-          sn: SN user1
-          passwd: password of user1 (plaintext or created by ldappasswd)
-          desc: description for user1
-          email: other email of user1
-        user2:
-          cn: CN user2
-          sn: SN user2
-          passwd: password of user2
+      example.com:
+        alice:
+          cn: Test
+          sn: Alice
+          passwd: '{MD5}/+VTaU9QlkcVkDQ0MjWeAg=='
           desc:
-          email:
+          email: alice@example.com
+        bob:
+          cn: Bob
+          sn: Yeah
+          passwd: 123465
+          desc:
+          email: bob@example.com
 
 ldap:data
 ~~~~~~~~~
@@ -80,6 +92,25 @@ and mapping emails (user@mailname) to mailboxes.
 ldap:log_level
 ~~~~~~~~~~~~~~
 
-Log verbose level, some values of this can be: -1, 256, 16383, ...
+Log verbose level, some values of this can be: -1, 256, 16383, ... See
+http://www.openldap.org/doc/admin24/slapdconfig.html for more details. Below
+is some values::
+
+    Level   Keyword     Description
+    -1  any     enable all debugging
+    0       no debugging
+    1   (0x1 trace)     trace function calls
+    2   (0x2 packets)   debug packet handling
+    4   (0x4 args)  heavy trace debugging
+    8   (0x8 conns)     connection management
+    16  (0x10 BER)  print out packets sent and received
+    32  (0x20 filter)   search filter processing
+    64  (0x40 config)   configuration processing
+    128     (0x80 ACL)  access control list processing
+    256     (0x100 stats)   stats log connections/operations/results
+    512     (0x200 stats2)  stats log entries sent
+    1024    (0x400 shell)   print communication with shell backends
+    2048    (0x800 parse)   print entry parsing debugging
+    16384   (0x4000 sync)   syncrepl consumer processing
 
 Default: ``256``.

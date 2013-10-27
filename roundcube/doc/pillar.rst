@@ -78,6 +78,20 @@ PostgreSQL user password.
 
 Default: Randomly created.
 
+roundcube:imap:server
+~~~~~~~~~~~~~~~~~~~~~
+
+IP or hostname of IMAP server to connect to.
+
+Default: local host ``127.0.0.1``.
+
+roundcube:imap:ssl
+~~~~~~~~~~~~~~~~~~
+
+If connect to IMAP server using SSL.
+
+Default: ``False``.
+
 roundcube:(workers|cheapers|idle|timeout)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

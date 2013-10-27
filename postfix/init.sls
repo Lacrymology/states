@@ -66,9 +66,8 @@ postfix:
       - file: /etc/postfix/master.cf
       - file: postfix
 {% if ssl %}
-      - cmd: /etc/ssl/{{ ssl }}/chained_ca.crt
-      - module: /etc/ssl/{{ ssl }}/server.pem
-      - file: /etc/ssl/{{ ssl }}/ca.crt
+      - file: /etc/ssl/{{ ssl }}/server.key
+      - file: /etc/ssl/{{ ssl }}/server.crt
 {% endif %}
 
 /etc/postfix/master.cf:

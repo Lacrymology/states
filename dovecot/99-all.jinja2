@@ -43,9 +43,9 @@ service auth {
 }
 {%- set ssl = salt['pillar.get']('dovecot:ssl', False) -%}
 {%- if ssl %}
-ssl = true
-ssl_cert = </etc/ssl/{{ ssl }}/ca.crt
-ssl_key = </etc/ssl/{{ ssl }}/server.pem
+ssl = yes
+ssl_cert = </etc/ssl/{{ ssl }}/server.crt
+ssl_key = </etc/ssl/{{ ssl }}/server.key
 {%- else %}
 ssl = no
 {%- endif %}

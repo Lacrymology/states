@@ -96,7 +96,7 @@ Random string. https://docs.djangoproject.com/en/1.4/ref/settings/#secret-key.
 Default: randomly created.
 
 graphite:web:smtp
-~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~
 
 The global `smtp` can be overrided for this particular state.
 For details on its format, please see `smtp` section in doc/pillar.rst.

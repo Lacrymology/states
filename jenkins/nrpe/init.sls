@@ -58,10 +58,12 @@ include:
     - context:
       deployment: jenkins
       domain_name: {{ pillar['jenkins']['hostnames'][0] }}
-{% if salt['pillar.get']('jenkins:ssl', False) %}
+{%- if salt['pillar.get']('jenkins:ssl', False) %}
       https: True
+    {%- if salt['pillar.get']('jenkins:ssl_redirect', False) %}
       http_result: 301 Moved Permanently
-{% endif %}
+    {%- endif -%}
+{%- endif %}
 
 extend:
   nagios-nrpe-server:

@@ -149,3 +149,10 @@ postfix:inet_interfaces
 Intefaces that this mail server listen to.
 
 Default: ``all``.
+
+postfix:ssl
+~~~~~~~~~~~
+
+SSL key to use to support SMTP over SSL.
+
+Default: no SSL.

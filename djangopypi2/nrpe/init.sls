@@ -84,10 +84,12 @@ include:
       deployment: djangopypi2
       domain_name: {{ pillar['djangopypi2']['hostnames'][0] }}
       http_uri: /packages/
-{% if salt['pillar.get']('djangopypi2:ssl', False) %}
+{%- if salt['pillar.get']('djangopypi2:ssl', False) %}
       https: True
+    {%- if salt['pillar.get']('djangopypi2:ssl_redirect', False) %}
       http_result: 301 Moved Permanently
-{% endif %}
+    {%- endif -%}
+{%- endif %}
 
 /etc/nagios/nrpe.d/postgresql-djangopypi2.cfg:
   file:

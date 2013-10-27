@@ -79,6 +79,8 @@ include:
       http_uri: /
 {%- if salt['pillar.get']('openerp:ssl', False) %}
       https: True
+    {%- if salt['pillar.get']('openerp:ssl_redirect', False) %}
       http_result: 301 Moved Permanently
+    {%- endif -%}
 {%- endif %}
 

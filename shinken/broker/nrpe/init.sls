@@ -64,7 +64,12 @@ include:
       deployment: shinken
       http_uri: /user/login
       domain_name: {{ pillar['shinken']['web']['hostnames'][0] }}
-      https: {{ salt['pillar.get']('shinken:ssl', False) }}
+{%- if salt['pillar.get']('shinken:ssl', False) %}
+      https: True
+    {%- if salt['pillar.get']('shinken:ssl_redirect', False) %}
+      http_result: 301 Moved Permanently
+    {%- endif -%}
+{%- endif %}
 
 extend:
   nagios-nrpe-server:

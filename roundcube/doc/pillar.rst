@@ -39,24 +39,46 @@ Example::
   roundcube:
     hostnames:
       - list of hostname, used for nginx config
-    password:  password for postgresql user "roundcube"
 
 Optional
 --------
-
-roundcube:ssl_redirect
-~~~~~~~~~~~~~~~~~~~~~~
-
-Default: ``False``.
 
 roundcube:ssl
 ~~~~~~~~~~~~~
 
 Name of SSL used for HTTPS.
 
+Default: not used.
+
+roundcube:ssl_redirect
+~~~~~~~~~~~~~~~~~~~~~~
+
+Redirect HTTP to HTTPs.
+
 Default: ``False``.
 
+roundcube:db:username
+~~~~~~~~~~~~~~~~~~~~~
+
+PostgreSQL username for graphite. It will be created.
+
+Default: ``roundcube``.
+
+roundcube:db:name
+~~~~~~~~~~~~~~~~~
+
+PostgreSQL database name. It will be created.
+
+Default: ``roundcube``.
+
+roundcube:db:password
+~~~~~~~~~~~~~~~~~~~~~
+
+PostgreSQL user password.
+
+Default: Randomly created.
+
 roundcube:(workers|cheapers|idle|timeout)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 See uwsgi/doc/instance.rst for more details

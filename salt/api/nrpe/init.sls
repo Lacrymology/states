@@ -63,14 +63,13 @@ include:
       - pkg: nagios-nrpe-server
     - context:
       deployment: salt_api
-{%- if ssl %}
-      http_result: 301 Moved
-      https_result: 401 Unauthorized
-{%- else %}
-      http_result: 401 Unauthorized
-{%- endif %}
       domain_name: {{ pillar['salt_master']['hostnames'][0] }}
-      https: {{ ssl }}
+{%- if ssl %}
+      https: True
+    {%- if salt['pillar.get']('salt_master:ssl_redirect', False) %}
+      http_result: 301 Moved Permanently
+    {%- endif -%}
+{%- endif %}
 
 extend:
   nagios-nrpe-server:

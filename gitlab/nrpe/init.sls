@@ -88,8 +88,10 @@ include:
       http_uri: /users/sign_in
 {%- if salt['pillar.get']('gitlab:ssl', False) %}
       https: True
+    {%- if salt['pillar.get']('gitlab:ssl_redirect', False) %}
       http_result: 301 Moved Permanently
-{%- endif %}
+    {%- endif -%}
+{%- endif -%}
 {%- if salt['pillar.get']('__test__', False) %}
       timeout: 120
 {%- endif %}

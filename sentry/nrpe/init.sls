@@ -78,10 +78,12 @@ include:
       deployment: sentry
       domain_name: {{ pillar['sentry']['hostnames'][0] }}
       http_uri: /login/
-{% if salt['pillar.get']('sentry:ssl', False) %}
+{%- if salt['pillar.get']('sentry:ssl', False) %}
       https: True
+    {%- if salt['pillar.get']('sentry:ssl_redirect', False) %}
       http_result: 301 Moved Permanently
-{% endif %}
+    {%- endif -%}
+{%- endif %}
 
 /etc/nagios/nrpe.d/postgresql-sentry.cfg:
   file:

@@ -78,10 +78,12 @@ include:
       deployment: moinmoin
       domain_name: {{ pillar['moinmoin']['hostnames'][0] }}
       http_uri: /StartingPage?action=login
-{% if salt['pillar.get']('moinmoin:ssl', False) %}
+{%- if salt['pillar.get']('moinmoin:ssl', False) %}
       https: True
+    {%- if salt['pillar.get']('moinmoin:ssl_redirect', False) %}
       http_result: 301 Moved Permanently
-{% endif %}
+    {%- endif -%}
+{%- endif %}
 
 extend:
   nagios-nrpe-server:

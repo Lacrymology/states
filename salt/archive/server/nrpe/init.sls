@@ -51,10 +51,13 @@ include:
       deployment: salt_archive
       domain_name: {{ pillar['salt_archive']['web']['hostnames'][0] }}
       http_uri: /
-{% if salt['pillar.get']('salt_archive:web:ssl', False) %}
+{%- if salt['pillar.get']('salt_archive:web:ssl', False) %}
       https: True
+    {%- if salt['pillar.get']('salt_archive:web:ssl_redirect', False) %}
       http_result: 301 Moved Permanently
-{% endif %}
+    {%- endif -%}
+{%- endif %}
+
 
 extend:
   nagios-nrpe-server:

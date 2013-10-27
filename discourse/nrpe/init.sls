@@ -86,7 +86,9 @@ include:
       http_uri: /
 {%- if salt['pillar.get']('discourse:ssl', False) %}
       https: True
+    {%- if salt['pillar.get']('discourse:ssl_redirect', False) %}
       http_result: 301 Moved Permanently
+    {%- endif -%}
 {%- endif %}
 {%- if salt['pillar.get']('__test__', False) %}
       timeout: 120

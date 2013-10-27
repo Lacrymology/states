@@ -33,6 +33,9 @@ include:
   - local
   - postgresql.server
   - uwsgi.php
+{%- if salt['pillar.get']('roundcube:ssl', False) %}
+  - ssl
+{%- endif %}
   - web
 
 {%- set version = "0.9.0" %}
@@ -148,8 +151,6 @@ roundcube:
       - uwsgi: uwsgi_roundcube
     - context:
       dir: {{ roundcubedir }}
-    - watch_in:
-      - service: nginx
 
 uwsgi_roundcube:
   uwsgi:
@@ -191,3 +192,14 @@ roundcube_initial:
     - runas: postgres
     - watch:
       - cmd: roundcube_initial
+
+extend:
+  nginx:
+    service:
+      - watch:
+        - file: /etc/nginx/conf.d/roundcube.conf
+{%- if salt['pillar.get']('roundcube:ssl', False) %}
+        - cmd: /etc/ssl/{{ pillar['roundcube']['ssl'] }}/chained_ca.crt
+        - module: /etc/ssl/{{ pillar['roundcube']['ssl'] }}/server.pem
+        - file: /etc/ssl/{{ pillar['roundcube']['ssl'] }}/ca.crt
+{% endif %}

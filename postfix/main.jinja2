@@ -62,7 +62,9 @@ smtpd_sasl_security_options = noanonymous
 smtpd_recipient_restrictions = permit_mynetworks, permit_sasl_authenticated, reject_unauth_destination
 {%- endif %}
 {%- if salt['pillar.get']('postfix:virtual_mailbox', False) %}
-virtual_mailbox_domains = $myhostname
+{#- set to $mydomain make this host receive mail for your domain
+MAKE SURE YOU ARE NOT SET postfix:mydestination pillar #}
+virtual_mailbox_domains = {{ salt['pillar.get']('postfix:virtual_mailbox_domains', '$mydomain') }}
 virtual_mailbox_base = /var/mail/vhosts
 virtual_mailbox_maps = hash:/etc/postfix/vmailbox
 virtual_minimum_uid = 100

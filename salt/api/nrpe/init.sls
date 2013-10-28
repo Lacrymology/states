@@ -64,11 +64,17 @@ include:
     - context:
       deployment: salt_api
       domain_name: {{ pillar['salt_master']['hostnames'][0] }}
+{%- set expected = '401 Unauthorized' -%}
 {%- if ssl %}
       https: True
     {%- if salt['pillar.get']('salt_master:ssl_redirect', False) %}
       http_result: 301 Moved Permanently
-    {%- endif -%}
+    {%- else %}
+      http_result: {{ expected }}
+    {%- endif %}
+      https_result: {{ expected }}
+{%- else %}
+      http_result: {{ expected }}
 {%- endif %}
 
 extend:

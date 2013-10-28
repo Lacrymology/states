@@ -70,6 +70,17 @@ postfix:
       - file: /etc/ssl/{{ ssl }}/server.crt
 {% endif %}
 
+/etc/postfix:
+  file:
+    - directory
+    - user: postfix
+    - group: postfix
+    - recurse:
+      - user
+      - group
+    - require:
+      - pkg: postfix
+
 /etc/postfix/master.cf:
   file:
     - managed
@@ -97,6 +108,7 @@ postmap /etc/postfix/vmailbox:
   cmd:
     - require:
       - pkg: postfix
+      - file: /etc/postfix
     {% if salt['file.file_exists']('/etc/postfix/vmailbox.db') %}
     - wait
     - watch:

@@ -43,6 +43,17 @@ include:
   - rsyslog
 
 {#- Upgrade uwsgi from 1.4 to 1.9.17.1 #}
+{% set prefix = '/etc/uwsgi' %}
+{% for filename in salt['file.find'](prefix, name='*.ini', type='f') %}
+uwsgi_upgrade_remove_old_app_config_{{ filename }}:
+  file:
+    - absent
+    - name: {{ filename }}
+    - require_in:
+      - file: uwsgi_upgrade_remove_old_version
+
+{%- endfor %}
+
 uwsgi_upgrade_remove_old_version:
   file:
     - absent

@@ -30,7 +30,9 @@ myhostname = {{ pillar['mail']['mailname'] }}
 smtpd_banner = $myhostname ESMTP $mail_name
 biff = no
 mydestination = {%- for i in salt['pillar.get']('postfix:mydestination', []) %} {{ i }}{%- endfor %}
+{%- block mynetworks %}
 mynetworks = {%- for i in salt['pillar.get']('postfix:mynetworks', ["127.0.0.0/8"]) %} {{ i }}{%- endfor %}
+{%- endblock %}
 relayhost = {{ salt['pillar.get']('postfix:relayhost', '') }}
 relay_domains = {{ salt['pillar.get']('postfix:relay_domains', '$mydestination') }}
 alias_maps = hash:/etc/aliases

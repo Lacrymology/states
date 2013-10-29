@@ -37,7 +37,13 @@ slapd:
     - dead
   file:
     - absent
-    - name: /etc/ldap/ldap.conf
+    - name: /etc/ldap
+    - require:
+      - pkg: slapd
+
+/var/lib/ldap:
+  file:
+    - absent
     - require:
       - pkg: slapd
 

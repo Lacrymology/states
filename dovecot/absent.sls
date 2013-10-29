@@ -42,3 +42,15 @@ dovecot:
     - name: /etc/dovecot
     - require:
       - pkg: dovecot
+
+/var/lib/dovecot:
+  file:
+    - absent
+    - require:
+      - pkg: dovecot
+
+/var/log/upstart/dovecot.log:
+  file:
+    - absent
+    - require:
+      - pkg: dovecot

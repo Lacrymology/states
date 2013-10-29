@@ -28,3 +28,8 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 dovecot-agent:
   user:
     - absent
+  file:
+    - absent
+    - name: /home/dovecot-agent
+    - require:
+      - user: dovecot-agent

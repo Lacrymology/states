@@ -40,3 +40,11 @@ uwsgi_roundcube:
   uwsgi:
     - absent
     - name: roundcube
+
+{%- for suffix in ('', '-stats') %}
+/var/lib/uwsgi/roundcube{{ suffix }}.sock:
+  file:
+    - absent
+    - require:
+      - uwsgi: uwsgi_roundcube
+{%- endfor -%}

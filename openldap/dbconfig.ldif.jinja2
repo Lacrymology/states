@@ -51,8 +51,11 @@ olcAccess: {3}to * by self write by dn="{{ rootdn }}" write
 dn: cn=config
 changetype: modify
 replace: olcLogLevel
-olcLogLevel: {{ salt['pillar.get']('ldap:log_level', 256) }}
-{% if salt['pillar.get']('ldap:ssl', False) -%}
+{%- set debug = salt['pillar_ext.debug']('ldap:debug') %}
+{%- if debug %}
+olcLogLevel: {{ debug }}
+{%- endif %}
+{%- if salt['pillar.get']('ldap:ssl', False) %}
 -
 replace: olcTLSCACertificateFile
 olcTLSCACertificateFile: /etc/ssl/{{ salt['pillar.get']('ldap:ssl') }}/ca.crt

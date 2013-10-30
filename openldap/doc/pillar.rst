@@ -89,28 +89,26 @@ ldap:data
 Nested dict contain user infomation, that will be used for create LDAP users
 and mapping emails (user@mailname) to mailboxes.
 
-ldap:log_level
-~~~~~~~~~~~~~~
+ldap:debug
+~~~~~~~~~~
 
 Log verbose level, some values of this can be: -1, 256, 16383, ... See
 http://www.openldap.org/doc/admin24/slapdconfig.html for more details. Below
 is some values::
 
-    Level   Keyword     Description
-    -1  any     enable all debugging
-    0       no debugging
-    1   (0x1 trace)     trace function calls
-    2   (0x2 packets)   debug packet handling
-    4   (0x4 args)  heavy trace debugging
-    8   (0x8 conns)     connection management
-    16  (0x10 BER)  print out packets sent and received
-    32  (0x20 filter)   search filter processing
-    64  (0x40 config)   configuration processing
-    128     (0x80 ACL)  access control list processing
-    256     (0x100 stats)   stats log connections/operations/results
-    512     (0x200 stats2)  stats log entries sent
-    1024    (0x400 shell)   print communication with shell backends
-    2048    (0x800 parse)   print entry parsing debugging
-    16384   (0x4000 sync)   syncrepl consumer processing
+- -1: enable all debugging
+- 1: trace function calls
+- 2: debug packet handling
+- 4: heavy trace debugging
+- 8: connection management
+- 16: print out packets sent and received
+- 32: search filter processing
+- 64: configuration processing
+- 128: access control list processing
+- 256: stats log connections/operations/results
+- 512: stats log entries sent
+- 1024: print communication with shell backends
+- 2048: print entry parsing debugging
+- 16384: syncrepl consumer processing
 
-Default: ``256``.
+Default is ``256`` (OpenLDAP default).

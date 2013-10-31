@@ -37,12 +37,20 @@ Optional
 Example::
 
   ntp:
-    server:
+    server: True
+    servers:
       - ntp.example.com
 
 ntp:server
 ~~~~~~~~~~
 
-The list of NTP servers.
+Does it act as a NTP server for other hosts?
 
-Default: empty list.
+Default: ``False``.
+
+ntp:servers
+~~~~~~~~~~~
+
+The list of NTP servers to connect to as a NTP client
+
+Default: not connect to any.

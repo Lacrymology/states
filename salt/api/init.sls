@@ -27,6 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Setup a Salt API REST server.
 -#}
+{%- set version = '0.8.2' -%}
 include:
   - git
   - local
@@ -91,42 +92,6 @@ salt-api-requirements:
     - require:
       - module: pip
 
-salt-api:
-  pkg:
-    - installed
-    - sources:
-{%- set api_path = '0.16.4/pool/main/s/salt-api/salt-api_0.8.2_all.deb' -%}
-{%- if 'files_archive' in pillar %}
-      - salt-api: {{ pillar['files_archive']|replace('file://', '') }}/mirror/salt/{{ api_path }}
-{%- else %}
-      - salt-api: http://saltinwound.org/ubuntu/{{ api_path }}
-{%- endif %}
-    - require:
-      - pkg: salt-master
-      - module: salt-api-requirements
-  file:
-    - managed
-    - name: /etc/init/salt-api.conf
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 440
-    - source: salt://salt/api/upstart.jinja2
-  service:
-    - running
-    - order: 50
-    - enable: True
-    - require:
-      - service: rsyslog
-    - watch:
-      - file: salt-api
-      - module: salt-api-requirements
-      - file: /etc/salt/master.d/ui.conf
-{%- if 'files_archive' in pillar %}
-      - archive: salt-ui
-{%- else %}
-      - git: salt-ui
-{%- endif %}
 
 salt-ui:
 {%- if 'files_archive' in pillar %}
@@ -163,18 +128,8 @@ salt-ui:
       - pkg: nginx
       - {{ salt_ui_module }}: salt-ui
 
+{%- set api_path = '0.16.4/pool/main/s/salt-api/salt-api_' + version + '_all.deb' %}
 salt-api:
-  pkg:
-    - installed
-    - sources:
-{%- if 'files_archive' in pillar %}
-      - salt-api: {{ pillar['files_archive']|replace('file://', '') }}/mirror/salt/{{ api_path }}
-{%- else %}
-      - salt-api: http://saltinwound.org/ubuntu/{{ api_path }}
-{%- endif %}
-    - require:
-      - pkg: salt-master
-      - module: salt-api-requirements
   file:
     - managed
     - name: /etc/init/salt-api.conf
@@ -197,6 +152,25 @@ salt-api:
       - file: /etc/salt/master.d/ui.conf
       - pkg: salt-api
       - {{ salt_ui_module }}: salt-ui
+  pkg:
+    - installed
+    - sources:
+{%- if 'files_archive' in pillar %}
+      - salt-api: {{ pillar['files_archive']|replace('file://', '') }}/mirror/salt/{{ api_path }}
+{%- else %}
+      - salt-api: http://saltinwound.org/ubuntu/{{ api_path }}
+{%- endif %}
+    - require:
+      - pkg: salt-master
+      - module: salt-api-requirements
+{%- if salt['pkg.version']('salt-api') != version %}
+      - pkg: salt_api_old_version
+
+salt_api_old_version:
+  pkg:
+    - removed
+    - name: salt-api
+{%- endif %}
 
 extend:
   nginx:

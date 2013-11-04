@@ -101,7 +101,12 @@ pip:
     - require:
       - file: /usr/local
   module:
+{%- if salt['file.file_exists']('/usr/local/bin/pip') -%}
+    {#- force module to run if pip isn't installed yet #}
+    - run
+{%- else %}
     - wait
+{%- endif %}
     - name: cmd.run
     - cmd: /usr/bin/python setup.py install
     - cwd: {{ opts['cachedir'] }}/pip-{{ version }}

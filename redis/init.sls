@@ -35,20 +35,13 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Install Redis.
 -#}
 
-{% set jemalloc = "libjemalloc1_3.4.0-1chl1~{0}1_{1}.deb".format(grains['lsb_distrib_codename'], grains['debian_arch']) %}
-{% set filename = "redis-server_2.6.14-1chl1~{0}1_{1}.deb".format(grains['lsb_distrib_codename'], grains['debian_arch']) %}
+{%- set redis_version = "2.6.14" %}
+{%- set jemalloc_version = "3.4.0" %}
+
+{%- set jemalloc = "libjemalloc1_{0}-1chl1~{1}1_{2}.deb".format(jemalloc_version, grains['lsb_distrib_codename'], grains['debian_arch']) %}
+{%- set filename = "redis-server_{0}-1chl1~{1}1_{2}.deb".format(redis_version, grains['lsb_distrib_codename'], grains['debian_arch']) %}
 
 redis:
-  pkg:
-    - installed
-    - sources:
-{%- if 'files_archive' in pillar %}
-      - libjemalloc1: {{ pillar['files_archive']|replace('file://', '') }}/mirror/{{ jemalloc }}
-      - redis-server: {{ pillar['files_archive']|replace('file://', '') }}/mirror/{{ filename }}
-{%- else %}
-      - libjemalloc1: http://ppa.launchpad.net/chris-lea/redis-server/ubuntu/pool/main/j/jemalloc/{{ jemalloc }}
-      - redis-server: http://ppa.launchpad.net/chris-lea/redis-server/ubuntu/pool/main/r/redis/{{ filename }}
-{%- endif %}
   file:
     - managed
     - template: jinja
@@ -64,3 +57,30 @@ redis:
     - watch:
       - file: redis
       - pkg: redis
+  pkg:
+    - installed
+    - sources:
+{%- if 'files_archive' in pillar %}
+      - libjemalloc1: {{ pillar['files_archive']|replace('file://', '') }}/mirror/{{ jemalloc }}
+      - redis-server: {{ pillar['files_archive']|replace('file://', '') }}/mirror/{{ filename }}
+{%- else %}
+      - libjemalloc1: http://ppa.launchpad.net/chris-lea/redis-server/ubuntu/pool/main/j/jemalloc/{{ jemalloc }}
+      - redis-server: http://ppa.launchpad.net/chris-lea/redis-server/ubuntu/pool/main/r/redis/{{ filename }}
+{%- endif %}
+{%- if salt['pkg.version']('redis-server') != "2:{0}-1chl1~{1}1".format(redis_version, grains['lsb_distrib_codename']) %}
+    - require:
+      - pkg: redis_old_version
+{%- if salt['pkg.version']('libjemalloc1') != "{0}-1chl1~{1}1".format(jemalloc_version, grains['lsb_distrib_codename']) %}
+      - pkg: jemalloc_old_version
+
+jemalloc_old_version:
+  pkg:
+    - removed
+    - name: libjemalloc1
+{%- endif %}
+
+redis_old_version:
+  pkg:
+    - removed
+    - name: redis-server
+{%- endif %}

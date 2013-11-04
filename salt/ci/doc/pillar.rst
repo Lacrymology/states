@@ -36,7 +36,7 @@ Mandatory
 Example::
 
     salt_archive:
-      source: rsync://salt.bit-flippers.com/archive/
+      source: rsync://salt.robotinfra.com/archive/
 
 salt_archive:source
 ~~~~~~~~~~~~~~~~~~~

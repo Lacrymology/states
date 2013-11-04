@@ -46,7 +46,12 @@ virtualenv:
     - group: root
     - mode: 440
   module:
+{%- if salt['file.file_exists']('/usr/local/bin/virtualenv') -%}
+    {#- force module to run if virtualenv isn't installed yet #}
+    - run
+{%- else %}
     - wait
+{%- endif %}
     - name: pip.install
     - requirements: {{ opts['cachedir'] }}/salt-virtualenv-requirements.txt
     - watch:

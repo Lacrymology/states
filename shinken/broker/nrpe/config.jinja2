@@ -3,13 +3,13 @@ Copyright (c) 2013, Bruno Clermont
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met: 
+modification, are permitted provided that the following conditions are met:
 
 1. Redistributions of source code must retain the above copyright notice, this
-   list of conditions and the following disclaimer. 
+   list of conditions and the following disclaimer.
 2. Redistributions in binary form must reproduce the above copyright notice,
    this list of conditions and the following disclaimer in the documentation
-   and/or other materials provided with the distribution. 
+   and/or other materials provided with the distribution.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -29,4 +29,4 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 command[shinken_broker_procs]=/usr/lib/nagios/plugins/check_procs -c 1:10 -C shinken-broker
 command[shinken_broker_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 7772
 command[shinken_broker_web]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 7767
-command[shinken_broker_http]=/usr/lib/nagios/plugins/check_http -H 127.0.0.1 -u /user/login -p 7767 -e '200 OK' -I 127.0.0.1
+command[shinken_broker_http]=/usr/lib/nagios/plugins/check_http -H 127.0.0.1 -u /user/login -p 7767 -e '200 OK' -I 127.0.0.1{%- if salt['pillar.get']('__test__', False) %} -v{%- endif %}

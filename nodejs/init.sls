@@ -50,6 +50,14 @@ nodejs:
 {%- endif %}
     - require:
       - pkg: rlwrap
+{%- if salt['pkg.version']('nodejs') != version + "-1chl1~" +  grains['lsb_distrib_codename']  + "1" %}
+      - pkg: nodejs_old_version
+
+nodejs_old_version:
+  pkg:
+    - removed
+    - name: nodejs
+{%- endif %}
 
 /etc/apt/sources.list.d/chris-lea-node.js-precise.lis:
   file:

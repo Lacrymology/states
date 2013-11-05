@@ -38,6 +38,9 @@ Install Redis.
 {%- set redis_version = "2.6.14" %}
 {%- set jemalloc_version = "3.4.0" %}
 
+{%- set redis_sub_version = "2:{0}-1chl1~{1}1".format(redis_version, grains['lsb_distrib_codename']) %}
+{%- set jemalloc_sub_version = "{0}-1chl1~{1}1".format(jemalloc_version, grains['lsb_distrib_codename']) %}
+
 {%- set jemalloc = "libjemalloc1_{0}-1chl1~{1}1_{2}.deb".format(jemalloc_version, grains['lsb_distrib_codename'], grains['debian_arch']) %}
 {%- set filename = "redis-server_{0}-1chl1~{1}1_{2}.deb".format(redis_version, grains['lsb_distrib_codename'], grains['debian_arch']) %}
 
@@ -67,10 +70,10 @@ redis:
       - libjemalloc1: http://ppa.launchpad.net/chris-lea/redis-server/ubuntu/pool/main/j/jemalloc/{{ jemalloc }}
       - redis-server: http://ppa.launchpad.net/chris-lea/redis-server/ubuntu/pool/main/r/redis/{{ filename }}
 {%- endif %}
-{%- if salt['pkg.version']('redis-server') != "2:{0}-1chl1~{1}1".format(redis_version, grains['lsb_distrib_codename']) %}
+{%- if salt['pkg.version']('redis-server') != redis_sub_version %}
     - require:
       - pkg: redis_old_version
-{%- if salt['pkg.version']('libjemalloc1') != "{0}-1chl1~{1}1".format(jemalloc_version, grains['lsb_distrib_codename']) %}
+{%- if salt['pkg.version']('libjemalloc1') != jemalloc_sub_version %}
       - pkg: jemalloc_old_version
 
 jemalloc_old_version:

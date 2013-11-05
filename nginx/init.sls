@@ -132,7 +132,8 @@ nginx_dependencies:
       - cmd: apt_sources
 
 {%- set version = '1.4.1' %}
-{%- set filename = 'nginx_{0}-1~{1}_{2}.deb'.format(version, grains['lsb_distrib_codename'], grains['debian_arch']) %}
+{%- set sub_version = '{0}-1~{1}'.format(version, grains['lsb_distrib_codename']) %}
+{%- set filename = 'nginx_{0}_{1}.deb'.format(sub_version, grains['debian_arch']) %}
 
 nginx:
   file:
@@ -173,7 +174,7 @@ nginx:
     - require:
       - user: web
       - pkg: nginx_dependencies
-{%- if salt['pkg.version']('nginx') != '{0}-1~{1}'.format(version, grains['lsb_distrib_codename']) %}
+{%- if salt['pkg.version']('nginx') != sub_version %}
       - pkg: nginx_old_version
 
 nginx_old_version:

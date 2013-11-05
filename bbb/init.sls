@@ -92,19 +92,20 @@ ruby_dependencies:
     - require:
       - cmd: apt_sources
 
-{%- set bigbluebutton_ruby = "1.9.2-p290-1" %}
+{%- set bigbluebutton_ruby = "1.9.2" %}
+{%- set bigbluebutton_ruby_sub_ver = "{0}-p290-1".format(vervion) %}
 bigbluebutton_ruby:
   pkg:
     - installed
     - sources:
   {%- if 'files_archive' in pillar %}
-      - ruby1.9.2: {{ pillar['files_archive']|replace('file://', '') }}/mirror/ruby1.9.2_{{ bigbluebutton_ruby }}_amd64.deb
+      - ruby1.9.2: {{ pillar['files_archive']|replace('file://', '') }}/mirror/ruby1.9.2_{{ bigbluebutton_ruby_sub_ver }}_amd64.deb
   {%- else %}
-      - ruby1.9.2: https://bigbluebutton.googlecode.com/files/ruby1.9.2_{{ bigbluebutton_ruby }}_amd64.deb
+      - ruby1.9.2: https://bigbluebutton.googlecode.com/files/ruby1.9.2_{{ bigbluebutton_ruby_sub_ver }}_amd64.deb
   {%- endif %}
     - require:
       - pkg: ruby_dependencies
-{%- if salt['pkg.version']('ruby1.9.2') != bigbluebutton_ruby %}
+{%- if salt['pkg.version']('ruby1.9.2') != bigbluebutton_ruby_sub_ver %}
       - pkg: bigbluebutton_ruby_old_version
 
 bigbluebutton_ruby_old_version:

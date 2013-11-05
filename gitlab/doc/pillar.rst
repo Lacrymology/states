@@ -210,17 +210,18 @@ Default: ``120``.
 gitlab:ldap:enabled
 ~~~~~~~~~~~~~~~~~~~
 
-If it's true, you must define:
-gitlab:
-  ldap:
-    host: ldap server, Ex: ldap.yourdomain.com
-    base: the base where your search for users. Ex: dc=yourdomain,dc=com
-    port: Default is 636 for `plain` method
-    uid: sAMAccountName
-    method: plain    # `plain` or `ssl`
-    bind_dn: binddn of user your will bind with. Ex: cn=vmail,dc=yourdomain,dc=com
-    password: password of bind user
-    allow_username_or_email_login: use name instead of email for login.
+If it's true, you must define::
+
+  gitlab:
+    ldap:
+      host: ldap server, Ex: ldap.yourdomain.com
+      base: the base where your search for users. Ex: dc=yourdomain,dc=com
+      port: Default is 636 for `plain` method
+      uid: sAMAccountName
+      method: plain    # `plain` or `ssl`
+      bind_dn: binddn of user your will bind with. Ex: cn=vmail,dc=yourdomain,dc=com
+      password: password of bind user
+      allow_username_or_email_login: use name instead of email for login.
 
 gitlab:smtp
 ~~~~~~~~~~~

@@ -27,6 +27,7 @@
              ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
              POSSIBILITY OF SUCH DAMAGE.
 :Authors: - Bruno Clermont
+
 Pillar
 ======
 
@@ -78,18 +79,18 @@ salt_archive:keys
 
 Dict of keys allowed to log in user.
 
-This state also need the following pillar for rsync state:
+This state also need the following pillar for rsync state::
 
-rsync:
-  uid: salt_archive
-  gid: salt_archive
-  'use chroot': yes
-  shares:
-    archive:
-      path: /var/lib/salt_archive
-      'read only': true
-      'dont compress': true
-      exclude: .* incoming
+  rsync:
+    uid: salt_archive
+    gid: salt_archive
+    'use chroot': yes
+    shares:
+      archive:
+        path: /var/lib/salt_archive
+        'read only': true
+        'dont compress': true
+        exclude: .* incoming
 
 You can change the name 'archive' by something else. but you need to change your
 files_archive pillar value accordingly.

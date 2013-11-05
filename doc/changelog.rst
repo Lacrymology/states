@@ -3,18 +3,32 @@ Changelog
 =========
 
 :copyrights: Copyright (c) 2013, Bruno Clermont
+
              All rights reserved.
 
-             Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met: 
+             Redistribution and use in source and binary forms, with or without
+             modification, are permitted provided that the following conditions
+             are met:
 
-             1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer. 
-             2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution. 
+             1. Redistributions of source code must retain the above copyright
+             notice, this list of conditions and the following disclaimer.
+             2. Redistributions in binary form must reproduce the above
+             copyright notice, this list of conditions and the following
+             disclaimer in the documentation and/or other materials provided
+             with the distribution.
 
-             THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED
-             ARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-             WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
-             ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-             LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+             THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+             "AS IS" AND ANY EXPRESS OR IMPLIED ARRANTIES, INCLUDING, BUT NOT
+             LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+             FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+             COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+             INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING,
+             BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+             LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+             CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+             LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+             ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+             POSSIBILITY OF SUCH DAMAGE.
 :authors: - Bruno Clermont
 
 2013-08-21 16:30:00 GMT+08:00
@@ -25,13 +39,17 @@ Changelog
 New additions
 =============
 
-- Module 'password.pillar' used to generate random password if a pillar value isn't defined. Primary usage is to create account used within a single host.
-- Module 'password.encrypt_shadow' that let you create encrypted user password for Linux.
+- Module 'password.pillar' used to generate random password if a pillar value
+  isn't defined. Primary usage is to create account used within a single host.
+- Module 'password.encrypt_shadow' that let you create encrypted user password
+  for Linux.
 - state module 'tcp_wrappers' to deal with /etc/hosts.allow and /etc/hosts.deny
 - State module 'nrpe', mostly used for automated testing.
 - Many test.sls file used to complete automated testing framework.
-- A lof of new 'monitor.jinja2' used to let know monitoring which checks to perform to which states.
-- 'backup.ssh' state to install a SSH based copy of backup archive to a remote server.
+- A lof of new 'monitor.jinja2' used to let know monitoring which checks to
+  perform to which states.
+- 'backup.ssh' state to install a SSH based copy of backup archive to a remote
+  server.
 - 'backup.s3' state to install a client that copy backup archive to Amazon S3.
 - Redis NoSQL database state
 - 'bbb' state for Big Blue Button (bigbluebutton.org)
@@ -44,7 +62,8 @@ New additions
 - basic support for Ubuntu lucid
 - PHP states and uWSGI support for it
 - remove support for Amazon SES in graphite and sentry
-- add some Java related states: Maven, Java 6 and Java 7 (and their JDK) & Tomcat 6 and Tomcat 7 states
+- add some Java related states: Maven, Java 6 and Java 7 (and their JDK) &
+  Tomcat 6 and Tomcat 7 states
 - MariaDB state for MySQL support
 - Added backup functionality to:
   - postgresql.server
@@ -54,12 +73,17 @@ Updates
 =======
 
 - Better support for encoding settings. Default is UTF-8 (encoding pillar value).
-- Testing framework had been updated to automatically create 99% of the tests to perform and it's now possible to write more complex test suite with salt states directly instead of writing python code.
-- Automatic discovery mecanism used to configure monitoring. Requires less code and less human intervention.
+- Testing framework had been updated to automatically create 99% of the tests to
+  perform and it's now possible to write more complex test suite with salt
+  states directly instead of writing python code.
+- Automatic discovery mecanism used to configure monitoring. Requires less code
+  and less human intervention.
 - Better error handling in state 'dnsimple.present'
-- All services now specify an "order" argument to make sure they run before automated testing.
+- All services now specify an "order" argument to make sure they run before
+  automated testing.
 - A lot of minor improvements.
-- Most states ID are the same in their absent counterpart to make sure there is conflict of ID if the $state and $state.absent get both included in highstate
+- Most states ID are the same in their absent counterpart to make sure there is
+  conflict of ID if the $state and $state.absent get both included in highstate
 - More states had been migrated to salt-archive/mirror of files.
 - all TAB (\t) characters had been replaced by spaces (\s)
 - More doc
@@ -76,13 +100,19 @@ Fixes
 Pillars
 =======
 
-- two pillar key that used to be a URL/path to a file that contains private data had been replaced by pillar key that hold the contains of the file, so everything is in pillars:
+- two pillar key that used to be a URL/path to a file that contains private data
+  had been replaced by pillar key that hold the contains of the file, so
+  everything is in pillars:
   - apt_source replaced apt:sources (see apt/init.sls for details)
   - deployment_key_source replaced by deployment_key (see ssh/client/init.sls for details)
   - ssl had not beeb replace, but rather it's structure change, the content of SSL keys are now pillars. (see ssl/init.sls for details).
-- Many new states added in this release have their own pillars key, please check those states for a list.
-- Elasticsearch pillars data structure had been changed to allow more precision regarding service port, this was required to allow ES and GL2 server to run on the same host at the same time.
-- The following pillars key aren't used anymore as they used to configure Amazon SES which is now deprecated:
+- Many new states added in this release have their own pillars key, please check
+  those states for a list.
+- Elasticsearch pillars data structure had been changed to allow more precision
+  regarding service port, this was required to allow ES and GL2 server to run on
+  the same host at the same time.
+- The following pillars key aren't used anymore as they used to configure Amazon
+  SES which is now deprecated:
   - graphite:web:email
   - amazon-ses
   - sentry:email
@@ -101,7 +131,8 @@ Pillars
   - salt:version
   - sentry:db:name
   - sentry:db:username
-- Some password related pillars values can be omitted as random string will be used instead, but keep pillar key if you're upgrading exinsting server:
+- Some password related pillars values can be omitted as random string will be
+  used instead, but keep pillar key if you're upgrading exinsting server:
   - graphite:web:db:password
   - postgresql:diamond
   - rabbitmq:monitor:password
@@ -159,7 +190,8 @@ Update
 - simplify shinken state: split it into smaller states, one per shinken component
 - improve route 53 state module
 - add many absent states
-- backup client and server, implement a simple way to use different backend storage for archive
+- backup client and server, implement a simple way to use different backend
+  storage for archive
 - lot's of bugfixes
 
 Fixes

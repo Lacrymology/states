@@ -55,7 +55,6 @@ Example::
     delete: True
     web:
       ssl: mykeyname
-      ssl_redirect: True
     keys:
       00daedbeef: ssh-dss
 
@@ -72,14 +71,7 @@ salt_archive:web:ssl
 
 SSL key to use to secure this server archive.
 
-Default: ``Flase``.
-
-salt_archive:web:ssl_redirect
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-If True, redirect all HTTP traffic to HTTPs.
-
-Default: ``Flase``.
+Default: ``False``.
 
 salt_archive:keys
 ~~~~~~~~~~~~~~~~~

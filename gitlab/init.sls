@@ -105,8 +105,8 @@ include:
   - postgresql
   - postgresql.server
   - python
-  - ruby
   - redis
+  - ruby
 {%- if salt['pillar.get']('gitlab:ssl', False) %}
   - ssl
 {%- endif %}

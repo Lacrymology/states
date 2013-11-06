@@ -28,9 +28,9 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 A webmail software.
 -#}
 include:
+  - local
   - nginx
   - php.dev
-  - local
   - postgresql.server
   - uwsgi.php
 {%- if salt['pillar.get']('roundcube:ssl', False) %}

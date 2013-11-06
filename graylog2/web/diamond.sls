@@ -29,9 +29,9 @@ Diamond statistics for Graylog2 Web Interface.
 -#}
 include:
   - diamond
-  - rsyslog.diamond
   - mongodb.diamond
   - nginx.diamond
+  - rsyslog.diamond
   - uwsgi.diamond
 
 graylog2_web_diamond_resource:

@@ -30,8 +30,8 @@ Diamond statistics for Nagios NRPE.
 include:
   - diamond
   - diamond.nrpe
-  - rsyslog.diamond
   - nrpe.rsyslog.diamond
+  - rsyslog.diamond
   - sudo.diamond
 
 nrpe_diamond_resources:

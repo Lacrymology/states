@@ -29,8 +29,8 @@ Diamond statistics for Nginx.
 -#}
 include:
   - diamond
-  - rsyslog.diamond
   - nginx
+  - rsyslog.diamond
 
 nginx_diamond_resources:
   file:

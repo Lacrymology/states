@@ -28,8 +28,8 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 Install a memcache server.
 -#}
 include:
-  - web
   - apt
+  - web
 
 {#
  first: install memcached and get rid of SysV startup script.

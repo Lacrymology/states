@@ -34,9 +34,9 @@ customer B, DMZ) There can be many pollers for load-balancing or hot standby
 spare roles.
 -#}
 include:
-  - shinken
   - apt
   - nrpe
+  - shinken
 
 nagios-nrpe-plugin:
   pkg:

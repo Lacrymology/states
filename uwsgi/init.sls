@@ -37,10 +37,10 @@ include:
   - local
   - nginx
   - pip
-  - web
-  - xml
   - python.dev
   - rsyslog
+  - web
+  - xml
 
 {#- Upgrade uwsgi from 1.4 to 1.9.17.1 #}
 {% set prefix = '/etc/uwsgi' %}

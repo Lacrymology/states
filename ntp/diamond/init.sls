@@ -29,8 +29,8 @@ Diamond statistics for NTP.
 -#}
 include:
   - diamond
-  - rsyslog.diamond
   - ntp
+  - rsyslog.diamond
 
 ntp_diamond_resources:
   file:

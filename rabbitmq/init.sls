@@ -41,8 +41,8 @@ is the pillar, the WebUI won't be available.
 
 include:
   - apt
-  - hostname
   - logrotate
+  - hostname
 {% if pillar['rabbitmq']['management'] != 'guest' -%}
   {%- if salt['pillar.get']('rabbitmq:ssl', False) %}
   - ssl

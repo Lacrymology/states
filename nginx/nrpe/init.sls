@@ -28,8 +28,8 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 Nagios NRPE check for Nginx.
 -#}
 include:
-  - nrpe
   - apt.nrpe
+  - nrpe
   - rsyslog.nrpe
 
 /etc/nagios/nrpe.d/nginx.cfg:

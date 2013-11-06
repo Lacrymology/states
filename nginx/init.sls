@@ -29,8 +29,8 @@ Install the Nginx web server.
 -#}
 include:
   - apt
-  - web
   - rsyslog
+  - web
 
 {% set bad_configs = ('default', 'example_ssl') %}
 

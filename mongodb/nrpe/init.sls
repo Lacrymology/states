@@ -28,8 +28,8 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 Nagios NRPE check for MongoDB.
 -#}
 include:
-  - nrpe
   - apt.nrpe
+  - nrpe
   - logrotate.nrpe
 
 /etc/nagios/nrpe.d/mongodb.cfg:

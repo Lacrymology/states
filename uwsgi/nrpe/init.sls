@@ -28,16 +28,16 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 Nagios NRPE check for uWSGI.
 -#}
 include:
-  - nrpe
-  - sudo
   - git.nrpe
   - nginx.nrpe
+  - nrpe
   - pip.nrpe
-  - ruby.nrpe
-  - xml.nrpe
   - python.dev.nrpe
   - rsyslog.nrpe
+  - ruby.nrpe
+  - sudo
   - web
+  - xml.nrpe
 
 /etc/nagios/nrpe.d/uwsgi.cfg:
   file:

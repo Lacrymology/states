@@ -36,11 +36,11 @@ Nagios NRPE check for moinmoin.
 -#}
 include:
   - apt.nrpe
-  - rsyslog.nrpe
   - nginx.nrpe
   - nrpe
   - pip.nrpe
   - python.dev.nrpe
+  - rsyslog.nrpe
 {% if salt['pillar.get']('moinmoin:ssl', False) %}
   - ssl.nrpe
 {% endif %}

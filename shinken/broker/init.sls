@@ -31,13 +31,13 @@ The broker daemon exports and manages data from schedulers. The broker uses
 modules exclusively to get the job done.
 -#}
 include:
-  - shinken
   - nginx
   - rsyslog
-  - web
+  - shinken
 {% if salt['pillar.get']('shinken:ssl', False) %}
   - ssl
 {% endif %}
+  - web
 
 /etc/nginx/conf.d/shinken-web.conf:
   file:

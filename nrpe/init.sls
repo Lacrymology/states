@@ -30,20 +30,20 @@ Install Nagios NRPE Agent.
 #TODO: set nagios user shell to /bin/false
 
 include:
-  - local
-  - pip
-  - pip.nrpe
-  - virtualenv
-  - virtualenv.nrpe
   - apt
   - apt.nrpe
+  - local
 {% if 'graphite_address' in pillar %}
   - nrpe.diamond
 {% endif %}
   - nrpe.rsyslog
+  - pip
+  - pip.nrpe
   - rsyslog
   - rsyslog.nrpe
   - sudo
+  - virtualenv
+  - virtualenv.nrpe
 
 /usr/local/nagiosplugin:
   file:

@@ -37,10 +37,10 @@ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
 #}
 include:
   - diamond
-  - rsyslog.diamond
   - memcache.diamond
   - nginx.diamond
   - postgresql.server.diamond
+  - rsyslog.diamond
   - statsd.diamond
   - uwsgi.diamond
 

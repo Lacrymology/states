@@ -41,10 +41,10 @@ Once this state is installed, you need to:
 include:
   - build
   - graylog2
-  - rsyslog
   - local
   - mongodb
   - nginx
+  - rsyslog
   - ruby
 {% if salt['pillar.get']('graylog2:ssl', False) %}
   - ssl

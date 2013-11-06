@@ -28,8 +28,8 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 PDNSd Nagios NRPE checks.
 -#}
 include:
-  - nrpe
   - apt.nrpe
+  - nrpe
 
 /etc/nagios/nrpe.d/pdnsd.cfg:
   file:

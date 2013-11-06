@@ -28,12 +28,12 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 Setup a Salt API REST server.
 -#}
 include:
-  - salt.master
   - git
   - local
   - nginx
   - pip
   - rsyslog
+  - salt.master
 {% if salt['pillar.get']('salt_master:ssl', False) %}
   - ssl
 {% endif %}

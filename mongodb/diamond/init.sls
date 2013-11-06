@@ -29,8 +29,8 @@ Diamond statistics for MongoDB.
 -#}
 include:
   - diamond
-  - pip
   - mongodb
+  - pip
 
 diamond-pymongo:
   file:

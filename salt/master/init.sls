@@ -31,12 +31,12 @@ If you install a salt master from scratch, check and run bootstrap_archive.py
 and use it to install the master.
 -#}
 include:
-  - salt
-  - git
-  - ssh.client
   - pip
   - python.dev
   - rsyslog
+  - git
+  - salt
+  - ssh.client
 
 salt-master-requirements:
   file:

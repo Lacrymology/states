@@ -29,15 +29,15 @@ Nagios NRPE check for Sentry.
 -#}
 include:
   - apt.nrpe
-  - rsyslog.nrpe
-  - nginx.nrpe
   - memcache.nrpe
+  - nginx.nrpe
   - nginx.nrpe
   - nrpe
   - pip.nrpe
   - postgresql.nrpe
   - postgresql.server.nrpe
   - python.dev.nrpe
+  - rsyslog.nrpe
 {% if salt['pillar.get']('sentry:ssl', False) %}
   - ssl.nrpe
 {% endif %}

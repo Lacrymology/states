@@ -29,11 +29,11 @@ Common stuff for all shinken components.
 -#}
 {% set version = "1.4" %}
 include:
-  - virtualenv
+  - apt
+  - local
   - pip
   - python.dev
-  - local
-  - apt
+  - virtualenv
 
 {# common to all shinken daemons #}
 

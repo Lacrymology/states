@@ -28,16 +28,16 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 Nagios NRPE check for Shinken.
 -#}
 include:
+  - apt.nrpe
+  - nginx.nrpe
   - nrpe
-  - virtualenv.nrpe
   - pip.nrpe
   - python.dev.nrpe
-  - apt.nrpe
 {% if salt['pillar.get']('shinken:ssl', False) %}
   - ssl.nrpe
 {% endif %}
-  - nginx.nrpe
   - rsyslog.nrpe
+  - virtualenv.nrpe
 
 /etc/nagios/nrpe.d/shinken-broker.cfg:
   file:

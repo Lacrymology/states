@@ -35,11 +35,11 @@ Maintainer: Lam Dang Tung <lamdt@familug.org>
 Install a wordpress Nagios NRPE checks.
 -#}
 include:
-  - nrpe
   - build.nrpe
   - mariadb.nrpe
   - mariadb.server.nrpe
   - nginx.nrpe
+  - nrpe
   - php.nrpe
 {%- if salt['pillar.get']('wordpress:ssl', False) %}
   - ssl.nrpe

@@ -46,8 +46,8 @@ Install a ProFTPd FTP server.
 include:
   - apt
   - postgresql.server
-  - web
   - rsyslog
+  - web
 
 proftpd-basic:
   debconf:

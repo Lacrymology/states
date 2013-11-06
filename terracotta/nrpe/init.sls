@@ -28,8 +28,8 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Nagios NRPE check for terracotta.
 -#}
 include:
-  - nrpe
   - apt.nrpe
+  - nrpe
 
 /etc/nagios/nrpe.d/terracotta.cfg:
   file:

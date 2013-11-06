@@ -28,9 +28,9 @@ Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
 include:
-  - postgresql.standby
   - postgresql.common.nrpe
   - postgresql.server.nrpe
+  - postgresql.standby
 
 extend:
   postgresql_monitoring:

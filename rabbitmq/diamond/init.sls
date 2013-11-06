@@ -29,9 +29,9 @@ Diamond statistics for RabbitMQ.
 -#}
 {% set master_id = pillar['rabbitmq']['cluster']['master'] %}
 include:
+  - apt
   - diamond
   - pip
-  - apt
 {% if grains['id'] != master_id %}
   - rabbitmq
 {% endif -%}

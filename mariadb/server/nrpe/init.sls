@@ -35,9 +35,9 @@ Maintainer: Dang Tung Lam <lamdt@familug.org>
 Nagios NRPE checks for MariaDB.
 -#}
 include:
-  - nrpe
   - apt.nrpe
   - mariadb.nrpe
+  - nrpe
   - salt.minion.nrpe
 
 /etc/nagios/nrpe.d/mysql.cfg:

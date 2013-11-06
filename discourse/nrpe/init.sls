@@ -48,8 +48,8 @@ include:
 {%- if salt['pillar.get']('discourse:ssl', False) %}
   - ssl.nrpe
 {%- endif %}
-  - xml.nrpe
   - uwsgi.nrpe
+  - xml.nrpe
 
 /etc/nagios/nrpe.d/discourse.cfg:
   file:

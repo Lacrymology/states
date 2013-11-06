@@ -29,13 +29,13 @@ Nagios NRPE check for Salt-API Server.
 -#}
 {%- set ssl = salt['pillar.get']('salt_master:ssl', False) -%}
 include:
-  - nrpe
-  - salt.master.nrpe
-  - git.nrpe
   - apt.nrpe
+  - git.nrpe
   - nginx.nrpe
+  - nrpe
   - pip.nrpe
   - rsyslog.nrpe
+  - salt.master.nrpe
 {%- if ssl %}
   - ssl.nrpe
 {%- endif %}

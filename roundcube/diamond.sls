@@ -30,9 +30,9 @@ Diamond statistics for Roundcube.
 include:
   - diamond
   - nginx.diamond
-  - uwsgi.diamond
-  - rsyslog.diamond
   - postgresql.server.diamond
+  - rsyslog.diamond
+  - uwsgi.diamond
 
 roundcube_web_diamond_resource:
   file:

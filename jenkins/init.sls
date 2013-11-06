@@ -30,8 +30,8 @@ TODO: add SSL through nginx.
 
 include:
   - apt
-  - nginx
   - java.7.jdk
+  - nginx
 {% if salt['pillar.get']('jenkins:ssl', False) %}
   - ssl
 {% endif %}

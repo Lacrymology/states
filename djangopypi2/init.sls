@@ -33,17 +33,14 @@ Author: Hung Nguyen Viet hvnsweeting@gmail.com
 Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
 -#}
 include:
-  - postgresql
-  - postgresql.server
-  - virtualenv
-  - uwsgi
+  - apt
   - local
+  - memcache
   - nginx
   - pip
-  - web
+  - postgresql
+  - postgresql.server
   - python.dev
-  - apt
-  - memcache
   - rsyslog
 {% if salt['pillar.get']('djangopypi2:ssl', False) %}
   - ssl
@@ -51,6 +48,9 @@ include:
 {% if 'graphite_address' in pillar %}
   - statsd
 {% endif %}
+  - uwsgi
+  - virtualenv
+  - web
 
 {%- set root_dir = "/usr/local/djangopypi2" %}
 

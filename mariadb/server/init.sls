@@ -34,7 +34,6 @@ Maintainer: Dang Tung Lam <lamdt@familug.org>
 
 Install MariaDB, a database server which is a drop-in replacement for MySQL.
 -#}
-
 include:
   - apt
   - mariadb

@@ -28,8 +28,8 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 Nagios NRPE check for Memcache.
 -#}
 include:
-  - nrpe
   - apt.nrpe
+  - nrpe
 
 /etc/nagios/nrpe.d/memcache.cfg:
   file:

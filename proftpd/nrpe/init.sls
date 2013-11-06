@@ -28,11 +28,11 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 Nagios NRPE check for ProFTPd.
 -#}
 include:
-  - nrpe
   - apt.nrpe
+  - nrpe
   - postgresql.server.nrpe
-  - web
   - rsyslog.nrpe
+  - web
 
 /etc/nagios/nrpe.d/proftpd.cfg:
   file:

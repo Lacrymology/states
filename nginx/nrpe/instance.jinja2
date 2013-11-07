@@ -3,13 +3,13 @@ Copyright (c) 2013, Bruno Clermont
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met: 
+modification, are permitted provided that the following conditions are met:
 
 1. Redistributions of source code must retain the above copyright notice, this
-   list of conditions and the following disclaimer. 
+   list of conditions and the following disclaimer.
 2. Redistributions in binary form must reproduce the above copyright notice,
    this list of conditions and the following disclaimer in the documentation
-   and/or other materials provided with the distribution. 
+   and/or other materials provided with the distribution.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -33,12 +33,12 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 {%- set first_ip = salt['network.ip_addrs']()[0] -%}
 {%- set effective_http_uri = http_uri|default("/") -%}
 {%- if http|default(True) %}
-command[{{ deployment }}_nginx_http]=/usr/lib/nagios/plugins/check_http -H {{ domain_name }} -u {{ effective_http_uri }} -p {{ http_port|default(80) }} -e '{{ http_result|default("200 OK") }}' -I {{ first_ip }}{% if timeout|default(False) %} --timeout={{ timeout }}{% endif %}
+command[{{ deployment }}_nginx_http]=/usr/lib/nagios/plugins/check_http -H {{ domain_name }} -u {{ effective_http_uri }} -p {{ http_port|default(80) }} -e '{{ http_result|default("200 OK") }}' -I {{ first_ip }}{% if timeout|default(False) %} --timeout={{ timeout }}{% endif %}{%- if salt['pillar.get']('__test__', False) %} -v{%- endif %}
 {% else %}
 command[{{ deployment }}_nginx_http]=/bin/echo "HTTP OK: No HTTP for {{ deployment }}"
 {% endif %}
 {% if https|default(False) -%}
-command[{{ deployment }}_nginx_https]=/usr/lib/nagios/plugins/check_http -S -H {{ domain_name }} -u {{ https_uri|default(effective_http_uri) }} -e '{{ https_result|default("200 OK") }}' -I {{ first_ip }}{% if timeout|default(False) %} --timeout={{ timeout }}{% endif %}
+command[{{ deployment }}_nginx_https]=/usr/lib/nagios/plugins/check_http -S -H {{ domain_name }} -u {{ https_uri|default(effective_http_uri) }} -e '{{ https_result|default("200 OK") }}' -I {{ first_ip }}{% if timeout|default(False) %} --timeout={{ timeout }}{% endif %}{%- if salt['pillar.get']('__test__', False) %} -v{%- endif %}
 command[{{ deployment }}_nginx_https_certificate]=/usr/lib/nagios/plugins/check_http -S -H {{ domain_name }} -C {{ https_max_age|default(60) }} -I {{ first_ip }}
 {% else -%}
     {%- for name in ('https', 'https_certificate') %}

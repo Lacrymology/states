@@ -89,16 +89,6 @@ elasticsearch:
     - require:
       - pkg: elasticsearch
 {% endif %}
-  pkg:
-    - installed
-    - sources:
-{%- if 'files_archive' in pillar %}
-        - elasticsearch: {{ pillar['files_archive']|replace('file://', '') }}/mirror/elasticsearch-{{ version }}.deb
-{%- else %}
-        - elasticsearch: http://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-{{ version }}.deb
-{%- endif %}
-    - require:
-      - pkg: openjdk_jre_headless
   file:
     - managed
     - name: /etc/elasticsearch/elasticsearch.yml
@@ -129,6 +119,24 @@ elasticsearch:
 {% if 'aws' in pillar['elasticsearch'] %}
       - elasticsearch_plugins: elasticsearch
 {% endif %}
+  pkg:
+    - installed
+    - sources:
+{%- if 'files_archive' in pillar %}
+        - elasticsearch: {{ pillar['files_archive']|replace('file://', '') }}/mirror/elasticsearch-{{ version }}.deb
+{%- else %}
+        - elasticsearch: http://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-{{ version }}.deb
+{%- endif %}
+    - require:
+      - pkg: openjdk_jre_headless
+{%- if salt['pkg.version']('elasticsearch') != version %}
+      - pkg: elasticsearch_old_version
+
+elasticsearch_old_version:
+  pkg:
+    - removed
+    - name: elasticsearch
+{%- endif %}i
 
 {% if ssl %}
 /etc/nginx/conf.d/elasticsearch.conf:

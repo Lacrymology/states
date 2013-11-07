@@ -49,7 +49,7 @@ to use PyPi as a failover if pkg is not available in using files_archive.
 Default: ``True``.
 
 pip:proxy_server
-~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~
 
 Proxy server address.
 

@@ -18,7 +18,7 @@ Mandatory
 ---------
 
 postgresql:replication:master
-~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Ip address of master server.
 
@@ -119,14 +119,14 @@ Run standby servers in hot standby mode.
 Default: ``True``.
 
 postgresql:replication:password
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Password for postgresql user that do replication.
 
 Default: ``auto-generate by salt``.
 
 postgresql:replication:standby
-~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 List of addresses of standby nodes in cluster.
 

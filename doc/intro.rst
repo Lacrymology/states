@@ -2,24 +2,38 @@ Introduction to this repository
 ===============================
 
 :copyrights: Copyright (c) 2013, Bruno Clermont
+
              All rights reserved.
 
-             Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met: 
+             Redistribution and use in source and binary forms, with or without
+             modification, are permitted provided that the following conditions
+             are met:
 
-             1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer. 
-             2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution. 
+             1. Redistributions of source code must retain the above copyright
+             notice, this list of conditions and the following disclaimer.
+             2. Redistributions in binary form must reproduce the above
+             copyright notice, this list of conditions and the following
+             disclaimer in the documentation and/or other materials provided
+             with the distribution.
 
-             THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED
-             ARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-             WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
-             ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-             LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+             THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+             "AS IS" AND ANY EXPRESS OR IMPLIED ARRANTIES, INCLUDING, BUT NOT
+             LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+             FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+             COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+             INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING,
+             BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+             LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+             CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+             LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+             ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+             POSSIBILITY OF SUCH DAMAGE.
 :authors: - Bruno Clermont
 
 Welcome to **Common** repository.
 
 This repository targets Linux only. It actually only supports Ubuntu 12.04
-Precise LTS but support for other releases of Ubuntu or Debian based 
+Precise LTS but support for other releases of Ubuntu or Debian based
 distributions can be easily added.
 
 It contains the low-level salt states for various operating-system services,
@@ -137,8 +151,8 @@ The states and pillars are documentations! These states try to do everything
 requires to have a fully working application. Human intervention is avoided at
 all costs.
 This allow to only backup the data that is produced by the application, for
-example: In PostgreSQL, it's the dump of all databases. As the configuration 
-files are managed by the states and pillars, they don't need to be backup. Nor 
+example: In PostgreSQL, it's the dump of all databases. As the configuration
+files are managed by the states and pillars, they don't need to be backup. Nor
 the binaries, as they're available through the package manager.
 So, well documented states and pillars can document what the infrastructure is
 and how global pieces are plugged together. Thus eliminate most of the documents
@@ -172,24 +186,30 @@ source application.
 But some of them exists only to support other components:
 
 - Monitoring:
+
   - Check that components run as expected.
-  - Perform additional validation that are mostly useful when a component doesn't
-    work as expected and someone tries to troubleshoot the issue.
+  - Perform additional validation that are mostly useful when a component
+    doesn't work as expected and someone tries to troubleshoot the issue.
   - Notify by email about any problem and its recovery.
   - Web interface to see actual problems, check history of a service or a
     host. Or a dashboard that shows status of various system.
   - Business health status, for example: a cluster is working as expected if at
     least 2 out of 3 nodes are working. If 2 nodes don't work and only 1 does,
     the status is at Warning and only support team get notification.
-    If 3 nodes are down, everyone will get a notification that the status is Error.
+    If 3 nodes are down, everyone will get a notification that the status is
+    Error.
+
 - Centralize into a single place all logs from all hosts:
+
   - To provide a single place to look for information.
   - Create alert based on some rules, such as Linux OOM (Out of Memory).
   - Give access to developers or tester to logs of some hosts.
   - Limit human requirements to log into a server to read logs, which limits
     the risks for someone to perform live changes on the server that aren't
     tracked by configuration management system.
+
 - Metrics Statistics and graphics:
+
   - A central dashboard that show graphics on thousands of metrics generated by
     each component of the infrastructure. The most basic one are CPU usage of
     a host, or a process memory usage.
@@ -197,7 +217,9 @@ But some of them exists only to support other components:
     graphs component to store and display its own performance data.
   - Any internally developed application can be changed to send internal metrics
     too and embedded graphics into it.
+
 - Error reporting:
+
   - Many states come with integration to an error reporting server, if the
     application allows it. When an internal error happens, the error is reported
     immediately instead of silently lost in the logs.
@@ -209,7 +231,9 @@ But some of them exists only to support other components:
     sure that multiple people can all receive the same error message.
     If an error happens 1000 times in a row, only a single notification is sent
     The error can be acknowledge.
+
 - Configuration Management:
+
   - Everything is done through states,
     **even the first salt-master installation!**. No surprise, no undocumented
     installation steps, no results that can't be reproduce.

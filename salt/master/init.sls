@@ -78,7 +78,7 @@ salt-master-requirements:
     - require:
       - file: /srv/salt
 
-{%- set version = '0.16.4' -%}
+{%- set version = '0.16.4' %}
 {%- set master_path = '{0}/pool/main/s/salt/salt-master_{0}-1{1}_all.deb'.format(version, grains['lsb_distrib_codename']) %}
 salt-master:
   file:
@@ -97,6 +97,17 @@ salt-master:
     - target: /srv/pillar
     - require:
       - pkg: git
+  service:
+    - running
+    - enable: True
+    - order: 90
+    - require:
+      - pkg: git
+      - service: rsyslog
+    - watch:
+      - pkg: salt-master
+      - file: salt-master
+      - module: salt-master-requirements
   pkg:
     - installed
     - skip_verify: True
@@ -109,14 +120,11 @@ salt-master:
     - require:
       - pkg: salt
       - module: salt-master-requirements
-  service:
-    - running
-    - enable: True
-    - order: 90
-    - require:
-      - pkg: git
-      - service: rsyslog
-    - watch:
-      - pkg: salt-master
-      - file: salt-master
-      - module: salt-master-requirements
+{%- if salt['pkg.version']('salt-master') != version %}
+      - pkg: salt_master_old_version
+
+salt_master_old_version:
+  pkg:
+    - removed
+    - name: salt-master
+{%- endif %}

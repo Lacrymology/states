@@ -45,7 +45,7 @@ Format::
       server_key: other ssl key content
       server_crt: other ssl cert content
       ca_crt: other ssl ca cert content
-    
+
 Example::
 
   ssl:
@@ -128,8 +128,8 @@ Example::
   example_org:
     ...
 
-
 Requires files in source:
+
 - ca.crt
   Bundled certificate
 - server.crt
@@ -144,6 +144,7 @@ Requires files in source:
   organization name, common name (domain name), locality, and country. It also
   contains the public key that will be included in your certificate. A private
   key is usually created at the same time that you create the CSR.
+
   How to generate a CSR (requires an existing key file):
     openssl req -new -keyout server.key -out server.csr
   How to generate a new CSR (no need for existing key file):
@@ -155,6 +156,7 @@ To use those SSL files in your states, you need to do the following:
 
 - Add a pillar key for your state that hold the name of the SSL key name
   defined in pillar['ssl'], such as example_com in previous example.
+
   It can be:
     my_app:
       ssl: example_com

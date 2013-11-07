@@ -43,23 +43,32 @@ jenkins_dependencies:
       - daemon
       - psmisc
 
+{%- set version = '1.529' %}
 jenkins:
+  service:
+    - running
+    - require:
+      - pkg: jenkins
   pkg:
     - installed
     - sources:
 {%- if 'files_archive' in pillar %}
-      - jenkins: {{ pillar['files_archive']|replace('file://', '') }}/mirror/jenkins_1.529_all.deb
+      - jenkins: {{ pillar['files_archive']|replace('file://', '') }}/mirror/jenkins_{{ version }}_all.deb
 {%- else %}
-      - jenkins: http://pkg.jenkins-ci.org/debian/binary/jenkins_1.529_all.deb
+      - jenkins: http://pkg.jenkins-ci.org/debian/binary/jenkins_{{ version }}_all.deb
 {%- endif %}
     - require:
       - cmd: apt_sources
       - pkg: openjdk_jdk
       - pkg: jenkins_dependencies
-  service:
-    - running
-    - require:
-      - pkg: jenkins
+{%- if salt['pkg.version']('jenkins') != version %}
+      - pkg: jenkins_old_version
+
+jenkins_old_version:
+  pkg:
+    - removed
+    - name: jenkins
+{%- endif %}
 
 /etc/nginx/conf.d/jenkins.conf:
   file:

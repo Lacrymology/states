@@ -77,7 +77,8 @@ rabbitmq:
  using regular startup script and need to be manually killed.
 #}
 
-{% set version = '3.1.2' %}
+{%- set version = '3.1.2' %}
+{%- set sub_version = version + '-1' %}
 rabbitmq_erlang_cookie:
   file:
     - managed
@@ -100,18 +101,6 @@ rabbitmq_dependencies:
       - pkg: logrotate
 
 rabbitmq-server:
-  pkg:
-    - installed
-    - sources:
-{%- if 'files_archive' in pillar %}
-      - rabbitmq-server: {{ pillar['files_archive']|replace('file://', '') }}/mirror/rabbitmq-server_{{ version }}-1_all.deb
-{%- else %}
-      - rabbitmq-server: http://www.rabbitmq.com/releases/rabbitmq-server/v{{ version }}/rabbitmq-server_{{ version }}-1_all.deb
-{%- endif %}
-    - require:
-      - pkg: rabbitmq_dependencies
-      - host: hostname
-      - file: rabbitmq_erlang_cookie
   file:
     - directory
     - name: /etc/rabbitmq/rabbitmq.conf.d
@@ -152,6 +141,26 @@ rabbitmq-server:
     - force: True
     - require:
       - service: rabbitmq-server
+  pkg:
+    - installed
+    - sources:
+{%- if 'files_archive' in pillar %}
+      - rabbitmq-server: {{ pillar['files_archive']|replace('file://', '') }}/mirror/rabbitmq-server_{{ sub_version }}_all.deb
+{%- else %}
+      - rabbitmq-server: http://www.rabbitmq.com/releases/rabbitmq-server/v{{ version }}/rabbitmq-server_{{ sub_version }}_all.deb
+{%- endif %}
+    - require:
+      - pkg: rabbitmq_dependencies
+      - host: hostname
+      - file: rabbitmq_erlang_cookie
+{%- if salt['pkg.version']('rabbitmq-server') != sub_version %}
+      - pkg: rabbitmq_old_version
+
+rabbitmq_old_version:
+  pkg:
+    - removed
+    - name: rabbitmq-server
+{%- endif %}
 
 {% for vhost in salt['pillar.get']('rabbitmq:vhosts', []) %}
 rabbitmq-vhost-{{ vhost }}:

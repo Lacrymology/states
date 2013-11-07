@@ -64,6 +64,7 @@ libreoffice:
       - apt_repository: libreoffice
       - pkg: openjdk_jre_headless
 
+{%- set openoffice_version = "1.0.4" %}
 openoffice:
   pkg:
     - installed
@@ -73,6 +74,14 @@ openoffice:
   {%- else %}
       - openoffice.org: http://bigbluebutton.googlecode.com/files/openoffice.org_1.0.4_all.deb
   {%- endif %}
+{%- if salt['pkg.version']('openoffice.org') != version %}
+      - pkg: openoffice_old_version
+
+openoffice_old_version:
+  pkg:
+    - removed
+    - name: openoffice.org
+{%- endif %}
 
 ruby_dependencies:
   pkg:
@@ -83,17 +92,27 @@ ruby_dependencies:
     - require:
       - cmd: apt_sources
 
+{%- set bigbluebutton_ruby = "1.9.2" %}
+{%- set bigbluebutton_ruby_sub_ver = "{0}-p290-1".format(vervion) %}
 bigbluebutton_ruby:
   pkg:
     - installed
     - sources:
   {%- if 'files_archive' in pillar %}
-      - ruby1.9.2: {{ pillar['files_archive']|replace('file://', '') }}/mirror/ruby1.9.2_1.9.2-p290-1_amd64.deb
+      - ruby1.9.2: {{ pillar['files_archive']|replace('file://', '') }}/mirror/ruby1.9.2_{{ bigbluebutton_ruby_sub_ver }}_amd64.deb
   {%- else %}
-      - ruby1.9.2: https://bigbluebutton.googlecode.com/files/ruby1.9.2_1.9.2-p290-1_amd64.deb
+      - ruby1.9.2: https://bigbluebutton.googlecode.com/files/ruby1.9.2_{{ bigbluebutton_ruby_sub_ver }}_amd64.deb
   {%- endif %}
     - require:
       - pkg: ruby_dependencies
+{%- if salt['pkg.version']('ruby1.9.2') != bigbluebutton_ruby_sub_ver %}
+      - pkg: bigbluebutton_ruby_old_version
+
+bigbluebutton_ruby_old_version:
+  pkg:
+    - removed
+    - name: ruby1.9.2
+{%- endif %}
 
 {%- for i in ('ruby', 'ri', 'irb', 'erb', 'rdoc', 'gem') %}
 /usr/bin/{{ i }}:

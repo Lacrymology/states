@@ -72,7 +72,8 @@ that supports multiple servers.
 
 To push the package to the local pypi::
 
-    $ python setup.py mregister -r local sdist mupload -r local
+  $ python setup.py mregister -r local sdist mupload -r local
+
 Users: How to use this server
 =============================
 
@@ -84,8 +85,8 @@ To install your package with pip::
  $ pip install -i http://my.pypiserver.com/simple/ <PACKAGE>
 
 If you want to fall back to PyPi or another repository in the event the
-package is not on your new server, or in particular if you are installing a number
-of packages, some on your private server and some on another, you can use
+package is not on your new server, or in particular if you are installing a
+number of packages, some on your private server and some on another, you can use
 pip in the following manner::
 
  $ pip install -i http://localhost:8000/simple/ \

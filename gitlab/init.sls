@@ -33,68 +33,7 @@ Author: Lam Dang Tung <lamdt@familug.org>
 Maintainer: Lam Dang Tung <lamdt@familug.org>
 
 Self hosted Git management software.
-
-Mandatory Pillar
-----------------
-
-gitlab:
-  hostnames:                # Should not use `localhost`
-    - 192.241.189.782
-  admin:
-    password: admin's login password
-
-Optional Pillar
----------------
-
-gitlab:
-  smtp:
-    enabled: Default is False
-
-  workers: 2
-  ssl: enable ssl. Default: False
-  port: port to run gitlab web. Default: 80
-  support_email: your support email
-  default_projects_limit: 10
-
-  database:
-    host: localhost
-    port: 5432
-    username: postgre user. Default is gitlab
-    password: password for postgre user
-  ldap:
-    enabled: enable ldap auth, Default: False
-  admin:
-    email:  email of administrator. Default is: admin@local.host
-    name: name of administrator
-    username: admin username
-    projects_limit: max projects that administrator can create
-
-If you set gitlab:ldap:enabled is True, you must define:
-gitlab:
-  ldap:
-    host: ldap ldap server, Ex: ldap.yourdomain.com
-    base: the base where your search for users. Ex: dc=yourdomain,dc=com
-    port: Default is 636 for `plain` method
-    uid: sAMAccountName
-    method: plain    # `plain` or `ssl`
-    bind_dn: binddn of user your will bind with. Ex: cn=vmail,dc=yourdomain,dc=com
-    password: password of bind user
-    allow_username_or_email_login: use name instead of email for login. Default: true
-
-If you set gitlab:smtp:enabled is True, you must define:
-gitlab
-  smtp:
-    default: use default settings, it mean that you don't need declare all values below. Default is True
-    server: your smtp server. Ex: smtp.yourdomain.com
-    port: smtp server port
-    domain: your email domain
-    from: smtp account will sent email to users
-    user: account login
-    password: password for account login
-    authentication: Default is: `plain`  for most smtp servers (like Gmail...)
-    tls: Default is: False
-#}
-
+-#}
 include:
   - apt
   - build
@@ -502,6 +441,19 @@ gitlab_upstart:
     - require_in:
       - cmd: bundler
 {%- endif %}
+
+{{ web_dir }}/db/fixtures/production/001_admin.rb:
+  file:
+    - managed
+    - source: salt://gitlab/admin.jinja2
+    - template: jinja
+    - user: git
+    - group: git
+    - mode: 644
+    - require:
+      - file: gitlab
+    - require_in:
+      - file: {{ home_dir }}/gitlab-satellites
 
 {%- if salt['pillar.get']('gitlab:ssl', False) %}
 extend:

@@ -39,6 +39,8 @@ Example::
   gitlab:
     hostnames:
       - gitlab.axmple.com
+    admin:
+      password: mypass
 
 gitlab:hostnames
 ~~~~~~~~~~~~~~~~
@@ -46,6 +48,11 @@ gitlab:hostnames
 List of HTTP hostname.
 
 You should not use ``localhost``.
+
+gitlab:admin:password
+~~~~~~~~~~~~~~~~~~~~~
+
+Password for Gitlab's Administrator account.
 
 Optional
 --------
@@ -69,10 +76,41 @@ Example::
       username: gitlab
       password: xxxxx
       port: 5432
-      username: gitlab
-      password: userpass
     ldap:
       enabled: False
+    admin:
+      email: admin@example.com
+      name: root
+      username: root
+      projects_limit: 1000
+
+gitlab:admin:email
+~~~~~~~~~~~~~~~~~~
+
+Email of administrator. This use for login.
+
+Default: ``admin@local.host``.
+
+gitlab:admin:name
+~~~~~~~~~~~~~~~~~
+
+Name of administrator.
+
+Default: ``Administrator``.
+
+gitlab:admin:username
+~~~~~~~~~~~~~~~~~~~~~
+
+Username of administrator. This use for Gitlab's namespace.
+
+Default: ``root``.
+
+gitlab:admin:projects_limit
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Max projects that administrator can be created.
+
+Default: ``1000``.
 
 gitlab:support_email
 ~~~~~~~~~~~~~~~~~~~~
@@ -172,17 +210,18 @@ Default: ``120``.
 gitlab:ldap:enabled
 ~~~~~~~~~~~~~~~~~~~
 
-If it's true, you must define:
-gitlab:
-  ldap:
-    host: ldap server, Ex: ldap.yourdomain.com
-    base: the base where your search for users. Ex: dc=yourdomain,dc=com
-    port: Default is 636 for `plain` method
-    uid: sAMAccountName
-    method: plain    # `plain` or `ssl`
-    bind_dn: binddn of user your will bind with. Ex: cn=vmail,dc=yourdomain,dc=com
-    password: password of bind user
-    allow_username_or_email_login: use name instead of email for login.
+If it's true, you must define::
+
+  gitlab:
+    ldap:
+      host: ldap server, Ex: ldap.yourdomain.com
+      base: the base where your search for users. Ex: dc=yourdomain,dc=com
+      port: Default is 636 for `plain` method
+      uid: sAMAccountName
+      method: plain    # `plain` or `ssl`
+      bind_dn: binddn of user your will bind with. Ex: cn=vmail,dc=yourdomain,dc=com
+      password: password of bind user
+      allow_username_or_email_login: use name instead of email for login.
 
 gitlab:smtp
 ~~~~~~~~~~~

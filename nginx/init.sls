@@ -132,20 +132,10 @@ nginx_dependencies:
       - cmd: apt_sources
 
 {%- set version = '1.4.1' %}
-{%- set filename = 'nginx_{0}-1~{1}_{2}.deb'.format(version, grains['lsb_distrib_codename'], grains['debian_arch']) %}
+{%- set sub_version = '{0}-1~{1}'.format(version, grains['lsb_distrib_codename']) %}
+{%- set filename = 'nginx_{0}_{1}.deb'.format(sub_version, grains['debian_arch']) %}
 
 nginx:
-  pkg:
-    - installed
-    - sources:
-{%- if 'files_archive' in pillar %}
-      - nginx: {{ pillar['files_archive']|replace('file://', '') }}/mirror/{{ filename }}
-{%- else %}
-      - nginx: http://nginx.org/packages/ubuntu/pool/nginx/n/nginx/{{ filename }}
-{%- endif %}
-    - require:
-      - user: web
-      - pkg: nginx_dependencies
   file:
     - managed
     - name: /etc/init/nginx.conf
@@ -173,6 +163,25 @@ nginx:
 {% for log_type in logger_types %}
       - service: nginx-logger-{{ log_type }}
 {% endfor %}
+  pkg:
+    - installed
+    - sources:
+{%- if 'files_archive' in pillar %}
+      - nginx: {{ pillar['files_archive']|replace('file://', '') }}/mirror/{{ filename }}
+{%- else %}
+      - nginx: http://nginx.org/packages/ubuntu/pool/nginx/n/nginx/{{ filename }}
+{%- endif %}
+    - require:
+      - user: web
+      - pkg: nginx_dependencies
+{%- if salt['pkg.version']('nginx') != sub_version %}
+      - pkg: nginx_old_version
+
+nginx_old_version:
+  pkg:
+    - removed
+    - name: nginx
+{%- endif %}
 
 /etc/apt/sources.list.d/nginx.org-packages_ubuntu-precise.list:
   file:

@@ -3,13 +3,13 @@ Copyright (c) 2013, Lam Dang Tung
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met: 
+modification, are permitted provided that the following conditions are met:
 
 1. Redistributions of source code must retain the above copyright notice, this
-   list of conditions and the following disclaimer. 
+   list of conditions and the following disclaimer.
 2. Redistributions in binary form must reproduce the above copyright notice,
    this list of conditions and the following disclaimer in the documentation
-   and/or other materials provided with the distribution. 
+   and/or other materials provided with the distribution.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -61,13 +61,10 @@ procname-master = openerp-master
 socket = /var/lib/uwsgi/openerp.sock
 stats = /var/lib/uwsgi/openerp-stats.sock
 no-orphans = true
-
-{%- if 'graylog2_address' in pillar %}
-logger = graylog2:{{ salt['pillar.get']('graylog2_address') }}:12201,{{ grains['id'] }}
-{%- else %}
-log-syslog = uwsgi-openerp
-{%- endif %}
-
+logger = syslog:uwsgi-openerp
+    {%- if salt['pillar.get']('debug', False) %}
+req-logger = syslog:uwsgi-openerp
+    {%- endif %}
 {%- if 'graphite_address' in pillar %}
 carbon-id = openerp
 carbon = {{ salt['pillar.get']('graphite_address') }}:2003

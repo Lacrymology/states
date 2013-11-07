@@ -2,8 +2,8 @@ admin = User.create(
   email: "{{ salt['pillar.get']('gitlab:admin:email', 'admin@local.host') }}",
   name: "{{ salt['pillar.get']('gitlab:admin:name', 'Administrator') }}",
   username: "{{ salt['pillar.get']('gitlab:admin:username', 'root') }}",
-  password: "{{ salt['pillar.get']('gitlab:admin:password') }}",
-  password_confirmation: "{{ salt['pillar.get']('gitlab:admin:password') }}",
+  password: "{{ pillar['gitlab']['admin']['password'] }}",
+  password_confirmation: "{{ pillar['gitlab']['admin']['password'] }}",
   password_expires_at: Time.now
 )
 
@@ -16,6 +16,6 @@ puts %q[
 Administrator account created:
 
 login.........{{ salt['pillar.get']('gitlab:admin:email', 'admin@local.host') }}
-password......{{ salt['pillar.get']('gitlab:admin:password') }}
+password......{{ pillar['gitlab']['admin']['password'] }}
 ]
 end

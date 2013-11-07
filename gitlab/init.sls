@@ -442,6 +442,19 @@ gitlab_upstart:
       - cmd: bundler
 {%- endif %}
 
+{{ web_dir }}/db/fixtures/production/001_admin.rb:
+  file:
+    - managed
+    - source: salt://gitlab/admin.jinja2
+    - template: jinja
+    - user: git
+    - group: git
+    - mode: 644
+    - require:
+      - file: gitlab
+    - require_in:
+      - file: {{ home_dir }}/gitlab-satellites
+
 {%- if salt['pillar.get']('gitlab:ssl', False) %}
 extend:
   nginx:

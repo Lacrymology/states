@@ -353,6 +353,32 @@ discourse_assets_precompile:
     - watch:
       - cmd: discourse
 
+{{ web_root_dir }}/Gemfile:
+  file:
+    - managed
+    - source: salt://discourse/gem.jinja2
+    - template: jinja
+    - user: discourse
+    - group: discourse
+    - mode: 644
+    - require:
+      - file: discourse_tar
+    - require_in:
+      - cmd: discourse_bundler
+
+{{ web_root_dir }}/Gemfile.lock:
+  file:
+    - managed
+    - source: salt://discourse/gemlock.jinja2
+    - template: jinja
+    - user: discourse
+    - group: discourse
+    - mode: 644
+    - require:
+      - file: discourse_tar
+    - require_in:
+      - cmd: discourse_bundler
+
 {%- if salt['pillar.get']('discourse:ssl', False) %}
 extend:
   nginx:

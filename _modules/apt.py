@@ -302,12 +302,6 @@ def install(name=None,
     if not fromrepo and repo:
         fromrepo = repo
 
-    if kwargs.get('env'):
-        try:
-            os.environ.update(kwargs.get('env'))
-        except Exception as e:
-            log.exception(e)
-
     old = list_pkgs()
 
     downgrade = False
@@ -347,7 +341,7 @@ def install(name=None,
                   pkg=' '.join(targets),
               )
 
-    __salt__['cmd.run_all'](cmd)
+    __salt__['cmd.run_all'](cmd, env=kwargs.get('env'))
     __context__.pop('pkg.list_pkgs', None)
     new = list_pkgs()
     return __salt__['pkg_resource.find_changes'](old, new)

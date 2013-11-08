@@ -136,7 +136,7 @@ elasticsearch_old_version:
   pkg:
     - removed
     - name: elasticsearch
-{%- endif %}i
+{%- endif %}
 
 {% if ssl %}
 /etc/nginx/conf.d/elasticsearch.conf:

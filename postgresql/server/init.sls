@@ -118,6 +118,14 @@ postgresql:
       - file: /etc/ssl/{{ ssl }}/ca.crt
 {% endif %}
 
+postgres_check_encoding:
+  cmd:
+    - run
+    - name: 'psql -l | grep template0.*{{ encoding }}'
+    - user: postgres
+    - require:
+      - service: postgresql
+
 /etc/logrotate.d/postgresql-common:
   file:
     - absent

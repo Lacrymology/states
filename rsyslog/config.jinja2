@@ -69,6 +69,10 @@ $PrivDropToGroup syslog
 $WorkDirectory /var/spool/rsyslog
 $IncludeConfig /etc/rsyslog.d/*.conf
 
+{#- send authentication logs to auth.log #}
+auth,authpriv.* /var/log/auth.log
+*.*;auth,authpriv.none -/var/log/syslog
+
 {#-
 20 ufw
  Log kernel generated UFW log messages to file
@@ -89,8 +93,6 @@ $IncludeConfig /etc/rsyslog.d/*.conf
 
  First some standard log files.  Log by facility.
 
-auth,authpriv.* /var/log/auth.log
-*.*;auth,authpriv.none -/var/log/syslog
 #}
 {% if not salt['pillar.get']('debug', False) %}
 {%- for f in 'sshd', 'cron', 'sudo' %}

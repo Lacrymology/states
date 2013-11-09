@@ -101,11 +101,13 @@ pip:
     - require:
       - file: /usr/local
   module:
-{%- if salt['file.file_exists']('/usr/local/bin/pip') -%}
+{%- if not salt['file.file_exists']('/usr/local/bin/pip') -%}
     {#- force module to run if pip isn't installed yet #}
     - run
 {%- else %}
     - wait
+    - watch:
+      - archive: pip
 {%- endif %}
     - name: cmd.run
     - cmd: /usr/bin/python setup.py install
@@ -116,10 +118,10 @@ pip:
       - pkg: python
       - pkg: python-setuptools
       - file: pip
-    - watch:
+{%- if salt['file.file_exists']('/usr/local/bin/pip') %}
       - archive: pip
-
-{#
+{%- endif %}
+{#-
  Upgrade distribute to avoid the following error:
  $ pip freeze
  Warning: cannot find svn location for distribute==0.6.24dev-r0
@@ -135,4 +137,4 @@ distribute:
     - upgrade: True
     - watch:
       - module: pip
-#}
+-#}

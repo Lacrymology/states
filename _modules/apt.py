@@ -1,3 +1,4 @@
+# This is 0.16.4 specific and need to be deleted when we migrate to 0.17
 '''
 Support for APT (Advanced Packaging Tool)
 '''

@@ -79,7 +79,8 @@ salt-master-requirements:
       - file: /srv/salt
 
 {%- set version = '0.16.4' %}
-{%- set master_path = '{0}/pool/main/s/salt/salt-master_{0}-1{1}_all.deb'.format(version, grains['lsb_distrib_codename']) %}
+{%- set pkg_version = '{0}-1{1}'.format(version, grains['lsb_distrib_codename']) %}
+{%- set master_path = '{0}/pool/main/s/salt/salt-master_{1}_all.deb'.format(version, pkg_version) %}
 salt-master:
   file:
     - managed
@@ -120,7 +121,7 @@ salt-master:
     - require:
       - pkg: salt
       - module: salt-master-requirements
-{%- if salt['pkg.version']('salt-master') != version %}
+{%- if salt['pkg.version']('salt-master') not in ('', pkg_version) %}
       - pkg: salt_master_old_version
 
 salt_master_old_version:

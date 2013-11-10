@@ -46,13 +46,14 @@ route53:
     - group: root
     - mode: 400
     - source: salt://route53/requirements.jinja2
+    - require:
+      - module: pip
   module:
     - wait
     - name: pip.install
     - upgrade: True
     - requirements: {{ opts['cachedir'] }}/salt-route53-requirements.txt
     - require:
-      - module: pip
       - pkg: python-lxml
     - watch:
       - pkg: xml-dev

@@ -79,7 +79,7 @@ pyelasticsearch:
     - group: root
     - mode: 440
     - require:
-      - module: nrpe-virtualenv
+      - virtualenv: nrpe-virtualenv
   module:
     - wait
     - name: pip.install
@@ -87,7 +87,6 @@ pyelasticsearch:
     - bin_env: /usr/local/nagios
     - requirements: /usr/local/nagios/elasticsearch-requirements.txt
     - require:
-      - virtualenv: nrpe-virtualenv
     - watch:
       - file: pyelasticsearch
 

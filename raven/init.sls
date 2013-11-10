@@ -43,12 +43,12 @@ raven:
     - group: root
     - mode: 440
     - source: salt://raven/requirements.jinja2
+    - require:
+      - module: pip
   module:
     - wait
     - name: pip.install
     - upgrade: True
     - requirements: {{ opts['cachedir'] }}/salt-raven-requirements.txt
-    - require:
-      - module: pip
     - watch:
       - file: raven

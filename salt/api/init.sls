@@ -83,15 +83,14 @@ salt-api-requirements:
     - user: root
     - group: root
     - mode: 440
+    - require:
+      - module: pip
   module:
     - wait
     - name: pip.install
     - requirements: {{ opts['cachedir'] }}/salt-api-requirements.txt
     - watch:
       - file: salt-api-requirements
-    - require:
-      - module: pip
-
 
 salt-ui:
 {%- if 'files_archive' in pillar %}

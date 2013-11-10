@@ -39,6 +39,8 @@ requests:
     - group: root
     - mode: 440
     - source: salt://requests/requirements.jinja2
+    - require:
+      - module: pip
   module:
     - wait
     - name: pip.install
@@ -46,5 +48,3 @@ requests:
     - requirements: {{ opts['cachedir'] }}/requests-requirements.txt
     - watch:
       - file: requests
-    - require:
-      - module: pip

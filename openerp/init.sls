@@ -60,6 +60,7 @@ openerp_depends:
     - source: salt://openerp/requirements.jinja2
     - require:
       - file: /usr/local
+      - module: pip
   module:
     - wait
     - name: pip.install

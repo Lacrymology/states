@@ -133,8 +133,6 @@ graphite-web:
     - install_options:
       - "--prefix=/usr/local/graphite"
       - "--install-lib=/usr/local/graphite/lib/python{{ python_version }}/site-packages"
-    - require:
-      - virtualenv: graphite
     - watch:
       - file: graphite-web
       - pkg: graphite-web

@@ -43,6 +43,8 @@ mercurial:
     - user: root
     - group: root
     - mode: 440
+    - require:
+      - module: pip
   module:
     - wait
     - name: pip.install
@@ -50,7 +52,6 @@ mercurial:
     - watch:
       - file: mercurial
     - require:
-      - module: pip
       - pkg: python-dev
 
 /etc/apt/sources.list.d/mercurial-ppa-releases-precise.list:

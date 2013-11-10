@@ -58,6 +58,8 @@ backup-archiver-dependency:
     - group: root
     - mode: 440
     - source: salt://backup/server/requirements.jinja2
+    - require:
+      - module: pip
   module:
     - wait
     - name: pip.install
@@ -65,8 +67,6 @@ backup-archiver-dependency:
     - requirements: {{ opts['cachedir'] }}/backup-requirements.txt
     - watch:
       - file: backup-archiver-dependency
-    - require:
-      - module: pip
 
 /etc/backup-archive.conf:
   file:

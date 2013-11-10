@@ -47,6 +47,8 @@ salt-master-requirements:
     - user: root
     - group: root
     - mode: 440
+    - require:
+      - module: pip
   module:
     - wait
     - name: pip.install
@@ -54,8 +56,6 @@ salt-master-requirements:
     - watch:
       - file: salt-master-requirements
       - pkg: python-dev
-    - require:
-      - module: pip
 
 /srv/salt:
   file:

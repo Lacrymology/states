@@ -37,11 +37,11 @@ uwsgitop:
     - user: root
     - group: root
     - mode: 440
+    - require:
+      - module: pip
   module:
     - wait
     - name: pip.install
     - requirements: {{ opts['cachedir'] }}/salt-uwsgitop-requirements.txt
     - watch:
       - file: uwsgitop
-    - require:
-      - module: pip

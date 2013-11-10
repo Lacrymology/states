@@ -86,7 +86,6 @@ pyelasticsearch:
     - upgrade: True
     - bin_env: /usr/local/nagios
     - requirements: /usr/local/nagios/elasticsearch-requirements.txt
-    - require:
     - watch:
       - file: pyelasticsearch
 

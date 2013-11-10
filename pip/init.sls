@@ -118,7 +118,7 @@ pip:
       - pkg: python
       - pkg: python-setuptools
       - file: pip
-{%- if salt['file.file_exists']('/usr/local/bin/pip') %}
+{%- if not salt['file.file_exists']('/usr/local/bin/pip') %}
       - archive: pip
 {%- endif %}
 {#-

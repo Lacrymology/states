@@ -61,6 +61,6 @@ virtualenv:
     - require:
       - pkg: git
       - module: mercurial
-{%- if salt['file.file_exists']('/usr/local/bin/virtualenv') %}
+{%- if not salt['file.file_exists']('/usr/local/bin/virtualenv') %}
       - file: virtualenv
 {%- endif -%}

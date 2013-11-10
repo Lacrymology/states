@@ -56,7 +56,7 @@ rack = true
 {%- endif -%}
 {%- if salt['cmd.has_exec']('php-config') %}
 php = true
-{%- endif -%}
+{%- endif %}
 syslog = true
 xml_implementation = libxml2
 yaml_implementation = auto

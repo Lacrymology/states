@@ -106,7 +106,6 @@ restart_after_ssl:
       - cmd: slapd_config_dbs
 {% endif %}
 
-{% if salt['pillar.get']('ldap:usertree', False) %}
 {{ opts['cachedir'] }}/usertree.ldif:
   file:
     - managed
@@ -123,4 +122,3 @@ ldapadd -Y EXTERNAL -H ldapi:/// -f {{ opts['cachedir'] }}/usertree.ldif:
       - file: {{ opts['cachedir'] }}/usertree.ldif
       - service: slapd
       - cmd: slapd_config_dbs
-{% endif %}

@@ -96,6 +96,8 @@ def data():
 
         if key_type == 'keys':
             extra_data[key_name] = __salt__['pillar.get'](path, {}).keys()
+        elif key_type == 'value':
+            extra_data[key_name] = __salt__['pillar.get'](path)
         elif key_type == 'exists':
             value = __salt__['pillar.get'](path, _DontExistData)
             if value == _DontExistData:
@@ -103,7 +105,7 @@ def data():
             else:
                 extra_data[key_name] = True
         else:
-            logger.error()
+            logger.error("Unknown key type '%s'", key_type)
     output['extra'] = extra_data
 
     return output

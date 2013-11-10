@@ -74,13 +74,14 @@ openoffice:
   {%- else %}
       - openoffice.org: http://bigbluebutton.googlecode.com/files/openoffice.org_1.0.4_all.deb
   {%- endif %}
-{%- if salt['pkg.version']('openoffice.org') != version %}
-      - pkg: openoffice_old_version
 
+{%- if salt['pkg.version']('openoffice.org') not in ('', version) %}
 openoffice_old_version:
   pkg:
     - removed
     - name: openoffice.org
+    - require_in:
+      - pkg: openoffice
 {%- endif %}
 
 ruby_dependencies:
@@ -105,13 +106,15 @@ bigbluebutton_ruby:
   {%- endif %}
     - require:
       - pkg: ruby_dependencies
-{%- if salt['pkg.version']('ruby1.9.2') != bigbluebutton_ruby_sub_ver %}
       - pkg: bigbluebutton_ruby_old_version
 
+{%- if salt['pkg.version']('ruby1.9.2') not in ('', bigbluebutton_ruby_sub_ver) %}
 bigbluebutton_ruby_old_version:
   pkg:
     - removed
     - name: ruby1.9.2
+    - require_in:
+      - pkg: bigbluebutton_ruby
 {%- endif %}
 
 {%- for i in ('ruby', 'ri', 'irb', 'erb', 'rdoc', 'gem') %}

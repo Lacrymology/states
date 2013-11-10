@@ -163,13 +163,14 @@ salt-api:
     - require:
       - pkg: salt-master
       - module: salt-api-requirements
-{%- if salt['pkg.version']('salt-api') != version %}
-      - pkg: salt_api_old_version
 
+{%- if salt['pkg.version']('salt-api') not in ('', version) %}
 salt_api_old_version:
   pkg:
     - removed
     - name: salt-api
+    - require_in:
+      - pkg: salt-api
 {%- endif %}
 
 extend:

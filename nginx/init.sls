@@ -174,13 +174,14 @@ nginx:
     - require:
       - user: web
       - pkg: nginx_dependencies
-{%- if salt['pkg.version']('nginx') != sub_version %}
-      - pkg: nginx_old_version
 
+{%- if salt['pkg.version']('nginx') not in ('', sub_version) %}
 nginx_old_version:
   pkg:
     - removed
     - name: nginx
+    - require_in:
+      - pkg: nginx
 {%- endif %}
 
 /etc/apt/sources.list.d/nginx.org-packages_ubuntu-precise.list:

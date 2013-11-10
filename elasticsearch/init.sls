@@ -129,13 +129,14 @@ elasticsearch:
 {%- endif %}
     - require:
       - pkg: openjdk_jre_headless
-{%- if salt['pkg.version']('elasticsearch') != version %}
-      - pkg: elasticsearch_old_version
 
+{%- if salt['pkg.version']('elasticsearch') not in ('', version) %}
 elasticsearch_old_version:
   pkg:
     - removed
     - name: elasticsearch
+    - require_in:
+      - pkg: elasticsearch
 {%- endif %}
 
 {% if ssl %}

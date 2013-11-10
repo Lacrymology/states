@@ -70,20 +70,21 @@ redis:
       - libjemalloc1: http://ppa.launchpad.net/chris-lea/redis-server/ubuntu/pool/main/j/jemalloc/{{ jemalloc }}
       - redis-server: http://ppa.launchpad.net/chris-lea/redis-server/ubuntu/pool/main/r/redis/{{ filename }}
 {%- endif %}
-{%- if salt['pkg.version']('redis-server') != redis_sub_version %}
-    - require:
-      - pkg: redis_old_version
-{%- if salt['pkg.version']('libjemalloc1') != jemalloc_sub_version %}
-      - pkg: jemalloc_old_version
 
+{%- if salt['pkg.version']('libjemalloc1') not in ('', jemalloc_sub_version) %}
 jemalloc_old_version:
   pkg:
     - removed
     - name: libjemalloc1
+    - require_in:
+      - pkg: redis
 {%- endif %}
 
+{%- if salt['pkg.version']('redis-server') not in ('', redis_sub_version)  %}
 redis_old_version:
   pkg:
     - removed
     - name: redis-server
+    - require_in:
+      - pkg: redis
 {%- endif %}

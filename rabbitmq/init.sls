@@ -153,13 +153,14 @@ rabbitmq-server:
       - pkg: rabbitmq_dependencies
       - host: hostname
       - file: rabbitmq_erlang_cookie
-{%- if salt['pkg.version']('rabbitmq-server') != sub_version %}
-      - pkg: rabbitmq_old_version
 
+{%- if salt['pkg.version']('rabbitmq-server') not in ('', sub_version) %}
 rabbitmq_old_version:
   pkg:
     - removed
     - name: rabbitmq-server
+    - require_in:
+      - pkg: rabbitmq-server
 {%- endif %}
 
 {% for vhost in salt['pillar.get']('rabbitmq:vhosts', []) %}

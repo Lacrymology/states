@@ -51,13 +51,14 @@ nodejs:
 {%- endif %}
     - require:
       - pkg: rlwrap
-{%- if salt['pkg.version']('nodejs') != sub_version %}
-      - pkg: nodejs_old_version
 
+{%- if salt['pkg.version']('nodejs') not in ('', sub_version) %}
 nodejs_old_version:
   pkg:
     - removed
     - name: nodejs
+    - require_in:
+      - pkg: nodejs
 {%- endif %}
 
 /etc/apt/sources.list.d/chris-lea-node.js-precise.lis:

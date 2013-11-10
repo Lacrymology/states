@@ -61,13 +61,14 @@ jenkins:
       - cmd: apt_sources
       - pkg: openjdk_jdk
       - pkg: jenkins_dependencies
-{%- if salt['pkg.version']('jenkins') != version %}
-      - pkg: jenkins_old_version
 
+{%- if salt['pkg.version']('jenkins') not in ('', version) %}
 jenkins_old_version:
   pkg:
     - removed
     - name: jenkins
+    - require_in:
+      - pkg: jenkins
 {%- endif %}
 
 /etc/nginx/conf.d/jenkins.conf:

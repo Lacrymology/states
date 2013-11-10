@@ -97,7 +97,6 @@ diamond:
     - requirements: /usr/local/diamond/salt-requirements.txt
     - require:
       - pkg: git
-      - virtualenv: diamond
     - watch:
       - pkg: python-dev
       - file: diamond_requirements

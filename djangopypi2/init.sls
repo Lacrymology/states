@@ -78,8 +78,6 @@ djangopypi2:
     - upgrade: True
     - bin_env: /usr/local/djangopypi2/bin/pip
     - requirements: /usr/local/djangopypi2/salt-requirements.txt
-    - require:
-      - virtualenv: djangopypi2
     - watch:
       - pkg: python-dev
       - pkg: postgresql-dev

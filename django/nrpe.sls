@@ -51,7 +51,6 @@ python-sitemap:
     - bin_env: /usr/local/nagios
     - requirements: /usr/local/nagios/salt-sitemap-requirements.txt
     - require:
-      - virtualenv: nrpe-virtualenv
       - pkg: xml-dev
     - watch:
       - file: python-sitemap

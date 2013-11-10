@@ -53,8 +53,6 @@ diamond_collector-psycopg2:
     - upgrade: True
     - bin_env: /usr/local/diamond
     - requirements: /usr/local/diamond/salt-postgresql-requirements.txt
-    - require:
-      - virtualenv: diamond
     - watch:
       - pkg: python-dev
       - pkg: postgresql-dev

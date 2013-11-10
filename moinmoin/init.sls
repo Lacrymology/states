@@ -79,7 +79,6 @@ moinmoin:
     - watch:
       - file: moinmoin
     - require:
-      - virtualenv: moinmoin
 {%- if salt['pillar.get']('moinmoin:ldap', False) %}
       - pkg: ldap-dev
       - pkg: python-dev

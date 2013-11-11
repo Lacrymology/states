@@ -42,11 +42,15 @@ Example::
 pip:mirrors
 ~~~~~~~~~~~
 
-Value: True/False.
-When file_archives is defined in pillar, this pillar item specify whether or not
-to use PyPi as a failover if pkg is not available in using files_archive.
+Value: list of pypi mirror server URLs.
+When file_archives is defined in pillar, this pillar item specify whether
+or not to use pypi server(s) as a failover if pkg is not available in using
+files_archive.
 
-Default: ``True``.
+Default: not defined.
+
+If this pillar item is declared but not assigned value, or its value is not
+a list, https://pypi.python.org/simple/ will be used as the mirror.
 
 pip:proxy_server
 ~~~~~~~~~~~~~~~~

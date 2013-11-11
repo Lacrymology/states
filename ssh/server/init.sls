@@ -64,4 +64,6 @@ ssh_server_root_{{ key }}:
     - name: {{ key }}
     - user: root
     - enc: {{ pillar['root_keys'][key] }}
+    - require_in:
+      - service: openssh-server
 {% endfor -%}

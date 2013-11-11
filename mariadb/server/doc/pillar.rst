@@ -31,20 +31,6 @@
 Pillar
 ======
 
-Mandatory
----------
-
-Example::
-
-  mysql:
-    password: root_plaintext_password
-
-mysql:password
-~~~~~~~~~~~~~~
-
-Root password used for installation process, change this after
-MariaDB installed does not make sense.
-
 Optional
 --------
 
@@ -53,6 +39,7 @@ Example::
   mysql:
     utf8: True/False
     bind: 0.0.0.0
+    password: root_plaintext_password
 
 mysql:utf8
 ~~~~~~~~~~
@@ -66,4 +53,13 @@ mysql:bind
 
 what IP does MariaDB server will bind to.
 
-Default: ``0.0.0.0``
+Default: ``0.0.0.0``.
+
+mysql:password
+~~~~~~~~~~~~~~
+
+Root password used for installation process, change this after.
+MariaDB installed does not make sense.
+
+Default: randomly created.
+

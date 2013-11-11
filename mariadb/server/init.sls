@@ -90,7 +90,7 @@ mysql-server:
     - set
     - name: mariadb-server-5.5
     - data:
-        'mysql-server/root_password': {'type': 'password', 'value': {{ salt['pillar.get']('mysql:password') }}}
-        'mysql-server/root_password_again': {'type': 'password', 'value': {{ salt['pillar.get']('mysql:password') }}}
+        'mysql-server/root_password': {'type': 'password', 'value': {{ salt['password.pillar']('mysql:password') }}}
+        'mysql-server/root_password_again': {'type': 'password', 'value': {{ salt['password.pillar']('mysql:password') }}}
     - require:
       - pkg: apt_sources

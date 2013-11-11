@@ -71,7 +71,6 @@ $IncludeConfig /etc/rsyslog.d/*.conf
 
 {#- send authentication logs to auth.log #}
 auth,authpriv.* /var/log/auth.log
-*.*;auth,authpriv.none -/var/log/syslog
 
 {#-
 20 ufw

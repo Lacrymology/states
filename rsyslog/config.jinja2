@@ -96,7 +96,7 @@ auth,authpriv.* /var/log/auth.log
 {% if not salt['pillar.get']('debug', False) %}
 {%- for f in 'sshd', 'cron', 'sudo' %}
     {%- for act in 'opened', 'closed' %}
-:msg, contains, "pam_unix({{ f }}:session): session {{ act }} for user" ~
+:msg, contains, "pam_unix({{ f }}:session): session {{ act }} for user" stop
     {%- endfor %}
 {%- endfor %}
 {% endif %}

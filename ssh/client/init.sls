@@ -66,6 +66,8 @@ known_hosts:
     - require:
       - file: {{ root_home }}/.ssh
       - pkg: openssh-client
+    - require_in:
+      - file: known_hosts
 {%- endfor %}
 
 openssh-client:

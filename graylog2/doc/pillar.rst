@@ -80,6 +80,8 @@ Example::
       user: smtpuser@yourdomain.com
       password: userpass
       from: smtpuser@yourdomain.com
+    server:
+      user: graylog2
 
 graylog2:max_docs
 ~~~~~~~~~~~~~~~~~
@@ -221,3 +223,10 @@ This is configuration to allow Graylog2 to send email.
 Please see `doc/pillar.rst` for details.
 
 Default: value of ``smtp`` pillar key.
+
+graylog2:server:user
+~~~~~~~~~~~~~~~~~~~~
+
+The user who will run graylog2 server.
+
+Default: ``graylog2``.

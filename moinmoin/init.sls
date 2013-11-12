@@ -64,12 +64,6 @@ moinmoin:
     - source: salt://moinmoin/requirements.jinja2
     - require:
       - virtualenv: moinmoin
-  cmd:
-    - wait
-    - name: find /usr/local/moinmoin -name '*.pyc' -delete
-    - stateful: False
-    - watch:
-      - module: moinmoin
   module:
     - wait
     - name: pip.install
@@ -78,11 +72,17 @@ moinmoin:
     - requirements: /usr/local/moinmoin/salt-requirements.txt
     - watch:
       - file: moinmoin
-    - require:
 {%- if salt['pillar.get']('moinmoin:ldap', False) %}
+    - require:
       - pkg: ldap-dev
       - pkg: python-dev
 {%- endif %}
+  cmd:
+    - wait
+    - name: find /usr/local/moinmoin -name '*.pyc' -delete
+    - stateful: False
+    - watch:
+      - module: moinmoin
 
 {{ root_dir }}/share/moin:
   file:

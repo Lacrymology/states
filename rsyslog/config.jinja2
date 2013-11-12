@@ -96,7 +96,7 @@ auth,authpriv.* /var/log/auth.log
 {% if not salt['pillar.get']('debug', False) %}
 {%- for f in 'sshd', 'cron', 'sudo' %}
     {%- for act in 'opened', 'closed' %}
-:msg, contains, "pam_unix({{ f }}:session): session {{ act }} for user" ~
+:msg, contains, "pam_unix({{ f }}:session): session {{ act }} for user" stop
     {%- endfor %}
 {%- endfor %}
 {% endif %}
@@ -161,5 +161,8 @@ daemon.*;mail.*;\
 
 *.*           -/var/log/syslog
 {%- if 'graylog2_address' in pillar %}
+  {#- avoid log looping #}
+  {%- if pillar['graylog2_address'] not in (none, 'localhost', '127.0.0.1', '0.0.0.0', grains['host']) %}
 *.*;local7.none {% if salt['pillar.get']('rsyslog:tcp', False) %}@{% endif %}@{{ pillar['graylog2_address'] }}:514
+  {%- endif -%}
 {%- endif -%}

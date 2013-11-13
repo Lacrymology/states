@@ -197,8 +197,10 @@ gitlab:
     - cwd: {{ web_dir }}
     - require:
       - service: redis
-    - watch:
       - cmd: bundler
+      - file: {{ web_dir }}/db/fixtures/production/001_admin.rb
+    - watch:
+      - postgres_database: gitlab
 
 gitlab_precompile_assets:
   cmd:
@@ -208,6 +210,7 @@ gitlab_precompile_assets:
         RAILS_ENV: production
     - user: git
     - cwd: {{ web_dir }}
+    - unless: ls {{ web_dir }}/public/assets/
     - watch:
       - cmd: gitlab
 
@@ -219,6 +222,7 @@ gitlab_start_sidekiq_service:
          RAILS_ENV: production
     - user: git
     - cwd: {{ web_dir }}
+    - unless: ps -ef | grep [s]idekiq
     - watch:
       - cmd: gitlab
 

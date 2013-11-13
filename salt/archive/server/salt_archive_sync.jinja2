@@ -27,17 +27,9 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 #!/bin/sh
 # {{ pillar['message_do_not_modify'] }}
-{%- set home = salt['user.info']('salt_archive')['home'] -%}
-{%- if pillar['salt_archive']['source'] is defined %}
-*/15 * * * * root /usr/local/bin/salt_archive_sync.sh
-{%- endif %}
-{%- if not salt['pillar.get']('salt_archive:source', False) %}
-{#- make sure everything is owner root:salt_archive #}
-0 * * * * root find {{ home }}/* ! -user root -exec chown root {} \;
-0 * * * * root find {{ home }}/* ! -group salt_archive -exec chgrp salt_archive {} \;
-{#- make sure file are 644 #}
-0 * * * * root find {{ home }}/* -type f ! -perm 644 -exec chmod 644 {} \;
-{#- make sure directory are 775 #}
-0 * * * * root find {{ home }}/* -type d ! -perm 755 -exec chmod 775 {} \;
-*/5 * * * * root /usr/local/bin/salt_archive_incoming.py
-{%- endif %}
+rsync -aq {% if salt['pillar.get']('salt_archive:delete', False) %} --delete{% endif %} --exclude ".*" {{ pillar['salt_archive']['source'] }} /var/lib/salt_archive/
+
+if [ $? -eq 0 ]; then
+  mkdir -p /var/cache/salt/master
+  touch /var/cache/salt/master/sync_timestamp.dat
+fi

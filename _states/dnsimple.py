@@ -34,11 +34,6 @@ __email__ = 'patate@fastmail.cn'
 
 import json
 import logging
-try:
-    import requests
-except ImportError:
-    requests = None
-
 
 log = logging.getLogger(__name__)
 
@@ -48,14 +43,8 @@ COMMON_HEADER = {'Accept': 'application/json',
 BASE_URL = 'https://dnsimple.com'
 
 
-def __virtual__():
-    '''Verify requests is installed.'''
-    if requests is None:
-        return False
-    return 'dnsimple'
-
-
 def _auth_session(email, token):
+    import requests
     ses = requests.Session()
     ses.auth = (email, token)
     ses.headers.update(COMMON_HEADER)
@@ -89,7 +78,12 @@ def created(name, email, token):
                     name)}
 
     path = "/domains"
-    ses = _auth_session(email, token)
+    try:
+        ses = _auth_session(email, token)
+    except ImportError:
+        ret['result'] = False
+        ret['comment'] = "Python library 'requests' is missing"
+        return ret
     data = {"domain": {"name": domain}}
     resp = ses.post(BASE_URL + path, json.dumps(data))
     log.info("{0} {1}".format(resp.status_code, resp.content))
@@ -166,7 +160,12 @@ def records_exists(name, email, token, records):
                          "than 2 spaces indentation"
         return ret
 
-    ses = _auth_session(email, token)
+    try:
+        ses = _auth_session(email, token)
+    except ImportError:
+        ret['result'] = False
+        ret['comment'] = "Python library 'requests' is missing"
+        return ret
     existing_records = {}
     for domain in records:
         path = "/domains/{0}/records".format(domain)

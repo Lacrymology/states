@@ -3,13 +3,13 @@ Copyright (c) 2013, Bruno Clermont
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met: 
+modification, are permitted provided that the following conditions are met:
 
 1. Redistributions of source code must retain the above copyright notice, this
-   list of conditions and the following disclaimer. 
+   list of conditions and the following disclaimer.
 2. Redistributions in binary form must reproduce the above copyright notice,
    this list of conditions and the following disclaimer in the documentation
-   and/or other materials provided with the distribution. 
+   and/or other materials provided with the distribution.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -26,58 +26,18 @@ Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 # {{ pillar['message_do_not_modify'] }}
-
-{% for port in salt['pillar.get']('ssh:ports', [22]) %}
-Port {{ port }}
-{% endfor %}
-
-Protocol 2
-
-RhostsRSAAuthentication no
-HostbasedAuthentication no
-RSAAuthentication yes
-PubkeyAuthentication yes
-KeyRegenerationInterval 3600
-ServerKeyBits 768
 HostKey /etc/ssh/ssh_host_rsa_key
 HostKey /etc/ssh/ssh_host_dsa_key
-
-UsePrivilegeSeparation yes
-
-SyslogFacility AUTH
-LogLevel INFO
-
-LoginGraceTime 120
-PermitRootLogin yes
-StrictModes yes
-IgnoreRhosts yes
-PermitEmptyPasswords no
-
-# Change to yes to enable challenge-response passwords (beware issues with
-# some PAM modules and threads)
+ServerKeyBits 768
+# default values set by debian openssh-server
+Protocol 2
 ChallengeResponseAuthentication no
-
-# Change to no to disable tunnelled clear text passwords
-PasswordAuthentication {% if salt['pillar.get']('ssh:password_authentication', True) %}yes{% else %}no{% endif %}
-
-X11Forwarding no
-X11DisplayOffset 10
+X11Forwarding yes
 PrintMotd no
-PrintLastLog yes
-TCPKeepAlive yes
-#UseLogin no
-
 AcceptEnv LANG LC_*
-
 Subsystem sftp /usr/lib/openssh/sftp-server
-
-# Set this to 'yes' to enable PAM authentication, account processing,
-# and session processing. If this is enabled, PAM authentication will
-# be allowed through the ChallengeResponseAuthentication and
-# PasswordAuthentication.  Depending on your PAM configuration,
-# PAM authentication via ChallengeResponseAuthentication may bypass
-# the setting of "PermitRootLogin without-password".
-# If you just want the PAM account and session checks to run without
-# PAM authentication, then enable this but set PasswordAuthentication
-# and ChallengeResponseAuthentication to 'no'.
 UsePAM yes
+# end of default values. here start overwrite:
+{%- for cfg in salt['pillar.get']('ssh:server:extra_configs', []) %}
+{{ cfg }}
+{%- endfor %}

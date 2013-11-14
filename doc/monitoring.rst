@@ -45,7 +45,7 @@ http://www.nagios.org/ but it's built in Python instead of C and Perl and fix
 most of Nagios architecture limitation.
 
 The only Nagios related component that is being used is NRPE, for Nagios Remote
-Process Execution. A mecanism used by Nagios server to securely run monitoring
+Process Execution. A mechanism used by Nagios server to securely run monitoring
 check on monitored hosts.
 
 Please check: http://nagios.sourceforge.net/docs/nrpe/NRPE.pdf page 1 and 2.
@@ -109,7 +109,7 @@ running service, protocol binding, hardware usage and health of the system it's
 also used by the testing / integration framework to validate that a state had
 been applied correctly.
 
-While testing, the monitoring checks are not executed trough NRPE, as it might
+While testing, the monitoring checks are not executed through NRPE, as it might
 not be installed or available during all test steps.
 
 It's rather executed by a Salt state module available in these Common states:

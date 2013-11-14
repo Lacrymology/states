@@ -35,8 +35,6 @@ You can include both uwsgi.php and uwsgi.ruby.
 include:
   - git
   - local
-  - nginx
-  - pip
   - python.dev
   - rsyslog
   - web

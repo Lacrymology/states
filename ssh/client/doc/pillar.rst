@@ -38,37 +38,31 @@ Example::
 
   ssh:
    known_hosts:
-     git.robotinfra.com:
-       fingerprint: c9:fb:62:8b:d3:b6:c8:7d:33:6b:65:9f:e2:9d:a2:71
-       port: 22022
+     github.com: github.com ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==
+
   deployment_key:
     contents: |
         -----BEGIN RSA PRIVATE KEY-----
        MIIEdsfadsfsdaXXXXXXXXXXX...
        -----END RSA PRIVATE KEY-----
-   type: rsa
+    type: rsa
 
 ssh:known_hosts
 ~~~~~~~~~~~~~~~
 
-List known hosts that will added to .ssh/known_hosts.
+Known hosts that will added to .ssh/known_hosts.
+Data formed as a dictionary ``domain_name``:``server public key``
+with server public key can be obtained by run ``ssh-keyscan domain``
 
-Default: ``git.robotinfra.com``.
+Example::
 
-ssh:known_hosts:fingerprint
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    $ ssh-keyscan github.com
+    # github.com SSH-2.0-OpenSSH_5.9p1 Debian-5ubuntu1+github5
+    github.com ssh-rsa
+    AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==
 
-Host's fingerprint.
-
-Default: ``c9:fb:62:8b:d3:b6:c8:7d:33:6b:65:9f:e2:9d:a2:71``
-by default of that pillar key.
-
-ssh:known_hosts:port
-~~~~~~~~~~~~~~~~~~~~
-
-Host's port for ssh access.
-
-Default: ``22022``.
+The public key of github.com is ``AAAAB......aQ==``. Though, prefix the key
+with ``github.com ssh-rsa`` still valid and improve redability.
 
 deployment_key:contents
 ~~~~~~~~~~~~~~~~~~~~~~~

@@ -82,12 +82,23 @@ Example::
           passwd: 123465
           desc:
           email: bob@example.com
+    absent:
+      example.com:
+        batman:
+        robin:
 
 ldap:data
 ~~~~~~~~~
 
 Nested dict contain user infomation, that will be used for create LDAP users
 and mapping emails (user@mailname) to mailboxes.
+
+ldap:absent
+~~~~~~~~~~~
+
+Nested dict contain usernames under each domain, formula will delete these
+user if exist in LDAP tree. Make sure one username under a domain does not
+in both ``ldap:data`` and ``ldap:absent``
 
 ldap:debug
 ~~~~~~~~~~

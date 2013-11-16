@@ -42,7 +42,7 @@ http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects
 #}
 {% for id in pillar['shinken']['architecture']['arbiter'] %}
 define arbiter {
-    arbiter_name arbiter-{{ grains['id'] }}
+    arbiter_name arbiter-{{ id }}
     host_name {{ id }}
     address {{ mine[id]['ip_addrs']['private'] }}
     port 7770

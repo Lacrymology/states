@@ -29,7 +29,6 @@ Diamond statistics for uWSGI.
 -#}
 include:
   - diamond
-  - nginx.diamond
   - rsyslog.diamond
 
 uwsgi_diamond_resources:

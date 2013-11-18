@@ -29,9 +29,7 @@ Nagios NRPE check for uWSGI.
 -#}
 include:
   - git.nrpe
-  - nginx.nrpe
   - nrpe
-  - pip.nrpe
   - python.dev.nrpe
   - rsyslog.nrpe
   - ruby.nrpe

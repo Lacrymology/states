@@ -91,8 +91,9 @@ tls = no
 # is still used, only the password field is ignored in it. Before doing any
 # search, the binding is switched back to the default DN.
 #}
+{#- %u mean full username (e.g. user@domain) #}
 auth_bind = yes
-auth_bind_userdn = uid=%n,ou=people,{{ salt['pillar.get']('ldap:suffix') }}
+auth_bind_userdn = uid=%u,ou=people,{{ salt['pillar.get']('ldap:suffix') }}
 ldap_version = 3
 
 {#-
@@ -126,7 +127,7 @@ base = ou=people,{{ salt['pillar.get']('ldap:suffix') }}
 #   %d - domain part in user@domain, empty if user there's no domain
 #user_filter = (&(objectClass=posixAccount)(uid=%u))
 #}
-user_filter = (&(objectClass=inetOrgPerson)(uid=%n))
+user_filter = (&(objectClass=inetOrgPerson)(uid=%u))
 {#-
 # Password checking attributes:
 #  user: Virtual user name (user@domain), if you wish to change the

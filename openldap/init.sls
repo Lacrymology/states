@@ -141,11 +141,11 @@ ldap_{{ domain }}_{{ uid }}:
     - unless:  ldapsearch -H ldapi:/// -Y EXTERNAL -b'uid={{ uid }},ou=people,dc=example,dc=com' -LLL -A
     - name: |
         ldapadd -H ldapi:/// -Y EXTERNAL << __EOF
-        dn: uid={{ uid }},ou=people,{{ suffix }}
+        dn: uid={{ uid }}@{{ domain }},ou=people,{{ suffix }}
         objectClass: inetOrgPerson
         cn: {{ u['cn'] }}
         sn: {{ u['sn'] }}
-        uid: {{ uid }}
+        uid: {{ uid }}@{{ domain }}
         userPassword: {{ u['passwd'] }}
         mail: {{ u['email'] }}
         description: {{ u['desc'] }}
@@ -155,13 +155,13 @@ ldap_{{ domain }}_{{ uid }}:
   {%- endfor %}
 {%- endfor %}
 
-{%- for domain in pillar['ldap']['absent'] %}
+{%- for domain in salt['pillar.get']('ldap:absent', []) %}
   {%- for uid in pillar['ldap']['absent'][domain] %}
 ldap_{{ domain }}_{{ uid }}: # make it will conflict if one DN in both ``data`` and ``absent``
   cmd:
     - run
     - onlyif: ldapsearch -H ldapi:/// -Y EXTERNAL -b'uid={{ uid }},ou=people,dc=example,dc=com' -LLL -A
-    - name: ldapdelete -H ldapi:/// -Y EXTERNAL "uid={{ uid }},ou=people,{{ suffix }}"
+    - name: ldapdelete -H ldapi:/// -Y EXTERNAL "uid={{ uid }}@{{ domain }},ou=people,{{ suffix }}"
     - require:
       - cmd: ldap_create_user_tree
   {%- endfor %}

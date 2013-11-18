@@ -9,11 +9,17 @@ Example::
   openerp:
     hostnames:
       - openerp.example.com
+    password: openerppasswd
 
 openerp:hostnames
 ~~~~~~~~~~~~~~~~~
 
 List of HTTP hostname that ends in graphite webapp.
+
+openerp:password
+~~~~~~~~~~~~~~~~
+
+The master password to manage databases.
 
 Optional
 --------

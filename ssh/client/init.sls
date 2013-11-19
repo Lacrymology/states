@@ -30,17 +30,7 @@ Configure an OpenSSH client.
 include:
   - apt
 
-{%- set root_home = salt['user.info']('root')['home'] -%}
-
-{%- macro knownhost(domain, fingerprint, user, port='22') %}
-{{ user }}_{{ domain }}:
-  ssh_known_hosts:
-    - name: {{ domain }}
-    - present
-    - user: {{ user }}
-    - fingerprint: {{ fingerprint }}
-    - port: {{ port }}
-{%- endmacro %}
+{%- set root_home = salt['user.info']('root')['home'] %}
 
 {{ root_home }}/.ssh:
   file:
@@ -48,6 +38,23 @@ include:
     - user: root
     - group: root
     - mode: 550
+
+{%- for domain in salt['pillar.get']('ssh:known_hosts', []) %}
+  {%- if pillar['ssh']['known_hosts'][domain] is string %}
+ssh_{{ domain }}:
+  file:
+    - append
+    - name: {{ root_home }}/.ssh/known_hosts
+    - makedirs: True
+    - text: |
+        {{ pillar['ssh']['known_hosts'][domain] }}
+    - require:
+      - file: {{ root_home }}/.ssh
+      - pkg: openssh-client
+    - require_in:
+      - file: known_hosts
+  {%- endif %}
+{%- endfor %}
 
 known_hosts:
   file:
@@ -60,13 +67,6 @@ known_hosts:
     - require:
       - file: {{ root_home }}/.ssh
       - pkg: openssh-client
-
-{%- for domain in salt['pillar.get']('ssh:known_hosts', []) %}
-{{ knownhost(domain, pillar['ssh']['known_hosts'][domain]['fingerprint'], 'root', pillar['ssh']['known_hosts'][domain]['port']) }}
-    - require:
-      - file: {{ root_home }}/.ssh
-      - pkg: openssh-client
-{%- endfor %}
 
 openssh-client:
   file:

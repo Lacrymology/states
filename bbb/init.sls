@@ -70,7 +70,7 @@ openoffice:
     - installed
     - sources:
   {%- if 'files_archive' in pillar %}
-      - openoffice.org: {{ pillar['files_archive']|replace('file://', '') }}/mirror/openoffice.org_1.0.4_all.deb
+      - openoffice.org: {{ pillar['files_archive']|replace('file://', '')|replace('https://', 'http://') }}/mirror/openoffice.org_1.0.4_all.deb
   {%- else %}
       - openoffice.org: http://bigbluebutton.googlecode.com/files/openoffice.org_1.0.4_all.deb
   {%- endif %}
@@ -100,7 +100,7 @@ bigbluebutton_ruby:
     - installed
     - sources:
   {%- if 'files_archive' in pillar %}
-      - ruby1.9.2: {{ pillar['files_archive']|replace('file://', '') }}/mirror/ruby1.9.2_{{ bigbluebutton_ruby_sub_ver }}_amd64.deb
+      - ruby1.9.2: {{ pillar['files_archive']|replace('file://', '')|replace('https://', 'http://') }}/mirror/ruby1.9.2_{{ bigbluebutton_ruby_sub_ver }}_amd64.deb
   {%- else %}
       - ruby1.9.2: https://bigbluebutton.googlecode.com/files/ruby1.9.2_{{ bigbluebutton_ruby_sub_ver }}_amd64.deb
   {%- endif %}

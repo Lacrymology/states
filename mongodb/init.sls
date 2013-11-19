@@ -57,7 +57,7 @@ mongodb:
     - installed
     - sources:
 {%- if 'files_archive' in pillar %}
-      - mongodb-10gen: {{ pillar['files_archive']|replace('file://', '') }}/mirror/{{ filename }}
+      - mongodb-10gen: {{ pillar['files_archive']|replace('file://', '')|replace('https://', 'http://') }}/mirror/{{ filename }}
 {%- else %}
       - mongodb-10gen: http://downloads-distro.mongodb.org/repo/ubuntu-upstart/dists/dist/10gen/binary-{{ grains['debian_arch'] }}/{{ filename }}
 {%- endif %}

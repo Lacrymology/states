@@ -37,7 +37,7 @@ The testing framework is in ``test/`` sub-folder in common states.
 It contains some states used to prepare the host for tests and the file
 ``integration.py``.
 
-This script use Python Unittest version 2 library to run tests on minion used
+This script uses Python Unittest version 2 library to run tests on minion used
 for this specific usage.
 
 .. warning::
@@ -70,8 +70,9 @@ Test units are built automatically from the list of available states except:
  - ``salt.minion.absent``
  - all those that start with ``test.``
  - ``top.sls``
+ - ``overstate.sls``
 
-All states are executed individually in independant test units.
+All states are executed individually in independent test units.
 
 If the state contains a NRPE (``$statename.nrpe``) or Diamond
 (``$statename.diamnd``) integration, it also execute all the monitoring checks
@@ -87,7 +88,7 @@ Common states rely NRPE checks for monitoring, but the same checks are reused
 to perform tests validation. For more details on monitoring checks, look at
 ``doc/monitoring.rst``.
 
-While testing, the monitoring checks are not executed trough NRPE, as it might
+While testing, the monitoring checks are not executed through NRPE, as it might
 not be installed or available during all test steps.
 
 It's rather executed by a Salt state module available in these Common states:

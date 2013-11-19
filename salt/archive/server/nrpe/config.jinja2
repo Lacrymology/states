@@ -1,5 +1,6 @@
 {#-
 Copyright (c) 2013, Hung Nguyen Viet
+All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
@@ -23,34 +24,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
--#}
-#!/bin/sh
+ -#}
 # {{ pillar['message_do_not_modify'] }}
-
-{%- block preparation %}
-mkdir -p /etc/salt/pki/minion
-chmod 700 /etc/salt/pki/minion
-mv /tmp/minion /etc/salt/
-mv /tmp/minion.pub /etc/salt/pki/minion/
-mv /tmp/minion.pem /etc/salt/pki/minion/
-chmod 400 /etc/salt/pki/minion/minion.pem
-{%- endblock -%}
-
-{#- if you change the following section, please also change
-    salt/minion/bootstrap.sh #}
-{%- block installation %}
-apt-get install -y python-software-properties
-apt-add-repository -y ppa:saltstack/salt
-    {%- if 'files_archive' in pillar %}
-echo "deb {{ pillar['files_archive'].rstrip('/')|replace('https://', 'http://') }}/mirror/salt/0.16.4/ `lsb_release -c -s` main" > /etc/apt/sources.list.d/saltstack-salt-`lsb_release -c -s`.list
-    {%- else %}
-echo "deb http://saltinwound.org/ubuntu/0.16.4/ `lsb_release -c -s` main" > /etc/apt/sources.list.d/saltstack-salt-`lsb_release -c -s`.list
-    {%- endif  %}
-apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0E27C0A6
-apt-get update
-apt-get install -y --force-yes -o DPkg::Options::=--force-confold salt-minion
-{%- endblock -%}
-
-{%- block post %}
-salt-call saltutil.sync_all
-{%- endblock -%}
+{%- if pillar['salt_archive']['source'] is defined %}
+{%- set max_age = salt['pillar.get']('salt_archive:max_age', 3600) %}
+command[salt_archive_timestamp]=/usr/lib/nagios/plugins/check_file_age -w {{ max_age }} -c {{ max_age }} /var/cache/salt/master/sync_timestamp.dat
+{%- else %}
+command[salt_archive_timestamp]=/bin/echo "FILE_AGE OK: No source for salt_archive"
+{%- endif %}

@@ -123,7 +123,7 @@ elasticsearch:
     - installed
     - sources:
 {%- if 'files_archive' in pillar %}
-        - elasticsearch: {{ pillar['files_archive']|replace('file://', '') }}/mirror/elasticsearch-{{ version }}.deb
+        - elasticsearch: {{ pillar['files_archive']|replace('file://', '')|replace('https://', 'http://') }}/mirror/elasticsearch-{{ version }}.deb
 {%- else %}
         - elasticsearch: http://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-{{ version }}.deb
 {%- endif %}

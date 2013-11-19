@@ -59,13 +59,15 @@ http {
     # turn on nginx_status on localhost
     server {
         listen 127.0.0.1:80;
-        server_name 127.0.0.1;
+        server_name 127.0.0.1 localhost;
+{% block localhost %}
         location /nginx_status {
             stub_status on;
             access_log off;
             allow 127.0.0.1;
             deny all;
         }
+{% endblock %}
     }
 
 {% if salt['pillar.get']('nginx:redirect_numeric_ip', False) %}

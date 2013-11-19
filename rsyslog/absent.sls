@@ -44,7 +44,7 @@ rsyslog:
   pkgrepo:
     - absent
 {%- if 'files_archive' in pillar %}
-    - name: deb {{ pillar['files_archive'] }}/mirror/rsyslog/7.4.4 {{ grains['lsb_distrib_codename'] }} main
+    - name: deb {{ pillar['files_archive']|replace('https://', 'http://') }}/mirror/rsyslog/7.4.4 {{ grains['lsb_distrib_codename'] }} main
 {%- else %}
     - ppa: tmortensen/rsyslogv7
 {%- endif %}

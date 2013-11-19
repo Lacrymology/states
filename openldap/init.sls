@@ -118,6 +118,10 @@ ldapadd -Y EXTERNAL -H ldapi:/// -f {{ opts['cachedir'] }}/usertree.ldif:
     - wait
     - watch:
       - pkg: slapd
+      {#- only run the first time when install slapd, ldapadd against  a file
+      cannot run multiple times, it will fail as soon as one entry exists.
+      This can be solved by ldap state module - but it's not available now.
+      #}
     - require:
       - file: {{ opts['cachedir'] }}/usertree.ldif
       - service: slapd

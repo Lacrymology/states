@@ -53,7 +53,7 @@ jenkins:
     - installed
     - sources:
 {%- if 'files_archive' in pillar %}
-      - jenkins: {{ pillar['files_archive']|replace('file://', '') }}/mirror/jenkins_{{ version }}_all.deb
+      - jenkins: {{ pillar['files_archive']|replace('file://', '')|replace('https://', 'http://') }}/mirror/jenkins_{{ version }}_all.deb
 {%- else %}
       - jenkins: http://pkg.jenkins-ci.org/debian/binary/jenkins_{{ version }}_all.deb
 {%- endif %}

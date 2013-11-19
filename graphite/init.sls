@@ -98,6 +98,7 @@ graphite_wsgi:
     - require:
       - virtualenv: graphite
       - user: web
+      - cmd: graphite-web
 
 /usr/local/graphite/manage:
   file:

@@ -100,6 +100,15 @@ rabbitmq_dependencies:
       - cmd: apt_sources
       - pkg: logrotate
 
+{%- if salt['pkg.version']('rabbitmq-server') not in ('', sub_version) %}
+rabbitmq_old_version:
+  pkg:
+    - removed
+    - name: rabbitmq-server
+    - require_in:
+      - pkg: rabbitmq-server
+{%- endif %}
+
 rabbitmq-server:
   file:
     - directory
@@ -128,6 +137,18 @@ rabbitmq-server:
     - env: HOME=/var/lib/rabbitmq
     - require:
       - pkg: rabbitmq-server
+  pkg:
+    - installed
+    - sources:
+{%- if 'files_archive' in pillar %}
+      - rabbitmq-server: {{ pillar['files_archive']|replace('file://', '')|replace('https://', 'http://') }}/mirror/rabbitmq-server_{{ sub_version }}_all.deb
+{%- else %}
+      - rabbitmq-server: http://www.rabbitmq.com/releases/rabbitmq-server/v{{ version }}/rabbitmq-server_{{ sub_version }}_all.deb
+{%- endif %}
+    - require:
+      - pkg: rabbitmq_dependencies
+      - host: hostname
+      - file: rabbitmq_erlang_cookie
 {% if grains['id'] == master_id %}
 {#  rabbitmq_vhost:#}
 {#    - present#}
@@ -141,27 +162,6 @@ rabbitmq-server:
     - force: True
     - require:
       - service: rabbitmq-server
-  pkg:
-    - installed
-    - sources:
-{%- if 'files_archive' in pillar %}
-      - rabbitmq-server: {{ pillar['files_archive']|replace('file://', '') }}/mirror/rabbitmq-server_{{ sub_version }}_all.deb
-{%- else %}
-      - rabbitmq-server: http://www.rabbitmq.com/releases/rabbitmq-server/v{{ version }}/rabbitmq-server_{{ sub_version }}_all.deb
-{%- endif %}
-    - require:
-      - pkg: rabbitmq_dependencies
-      - host: hostname
-      - file: rabbitmq_erlang_cookie
-
-{%- if salt['pkg.version']('rabbitmq-server') not in ('', sub_version) %}
-rabbitmq_old_version:
-  pkg:
-    - removed
-    - name: rabbitmq-server
-    - require_in:
-      - pkg: rabbitmq-server
-{%- endif %}
 
 {% for vhost in salt['pillar.get']('rabbitmq:vhosts', []) %}
 rabbitmq-vhost-{{ vhost }}:

@@ -48,6 +48,8 @@ apt:sources
 ~~~~~~~~~~~
 
 Content of sources.list file as multiline pillar.
+Don't use HTTPS URLs, as ubuntu 12.04 `apt-transport-https` does not support
+many HTTPS SSL certificate properly.
 
 Optional
 --------

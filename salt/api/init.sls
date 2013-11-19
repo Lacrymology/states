@@ -97,7 +97,7 @@ salt-ui:
   archive:
     - extracted
     - name: /usr/local
-    - source: {{ pillar['files_archive'] }}/mirror/salt-ui-6e8eee0477fdb0edaa9432f1beb5003aeda56ae6.tar.gz
+    - source: {{ pillar['files_archive']|replace('https://', 'http://') }}/mirror/salt-ui-6e8eee0477fdb0edaa9432f1beb5003aeda56ae6.tar.gz
     - source_hash: md5=2b7e581d0134c5f5dc29b5fca7a2df5b
     - archive_format: tar
     - tar_options: z
@@ -155,7 +155,7 @@ salt-api:
     - installed
     - sources:
 {%- if 'files_archive' in pillar %}
-      - salt-api: {{ pillar['files_archive']|replace('file://', '') }}/mirror/salt/{{ api_path }}
+      - salt-api: {{ pillar['files_archive']|replace('file://', '')|replace('https://', 'http://') }}/mirror/salt/{{ api_path }}
 {%- else %}
       - salt-api: http://saltinwound.org/ubuntu/{{ api_path }}
 {%- endif %}

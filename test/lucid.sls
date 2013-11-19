@@ -3,13 +3,13 @@ Copyright (c) 2013, Bruno Clermont
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met: 
+modification, are permitted provided that the following conditions are met:
 
 1. Redistributions of source code must retain the above copyright notice, this
-   list of conditions and the following disclaimer. 
+   list of conditions and the following disclaimer.
 2. Redistributions in binary form must reproduce the above copyright notice,
    this list of conditions and the following disclaimer in the documentation
-   and/or other materials provided with the distribution. 
+   and/or other materials provided with the distribution.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -34,7 +34,7 @@ python-unittest2:
     - installed
     - sources:
 {%- if 'files_archive' in pillar %}
-    - python-unittest2: {{ pillar['files_archive']|replace('file://', '') }}/mirror/python-unittest2_{{ version }}_all.deb
+    - python-unittest2: {{ pillar['files_archive']|replace('file://', '')|replace('https://', 'http://') }}/mirror/python-unittest2_{{ version }}_all.deb
 {%- else %}
     - python-unittest2: http://ppa.launchpad.net/chris-lea/python-unittest2/ubuntu/pool/main/u/python-unittest2_{{ version }}_all.deb
 {%- endif %}

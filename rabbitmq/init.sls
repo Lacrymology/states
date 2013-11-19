@@ -141,7 +141,7 @@ rabbitmq-server:
     - installed
     - sources:
 {%- if 'files_archive' in pillar %}
-      - rabbitmq-server: {{ pillar['files_archive']|replace('file://', '') }}/mirror/rabbitmq-server_{{ sub_version }}_all.deb
+      - rabbitmq-server: {{ pillar['files_archive']|replace('file://', '')|replace('https://', 'http://') }}/mirror/rabbitmq-server_{{ sub_version }}_all.deb
 {%- else %}
       - rabbitmq-server: http://www.rabbitmq.com/releases/rabbitmq-server/v{{ version }}/rabbitmq-server_{{ sub_version }}_all.deb
 {%- endif %}

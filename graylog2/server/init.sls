@@ -36,6 +36,7 @@ include:
   - java.7
 {% endif %}
   - graylog2
+  - rsyslog
   - local
 
 {# TODO: set Email output plugin settings straight into MongoDB from salt #}
@@ -205,6 +206,9 @@ graylog2_sentry_transport_plugin:
     - mode: 440
 
 extend:
+  rsyslog:
+    file:
+      - source: salt://graylog2/server/rsyslog.jinja2
 {%- for dir in ('/var/log', '/var/run') %}
   {{ dir }}/graylog2:
     file:

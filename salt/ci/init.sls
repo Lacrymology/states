@@ -30,7 +30,6 @@ include:
   - jenkins
   - local
   - rsync
-  - salt.archive.server
   - salt.cloud
   - salt.master
   - ssh.client
@@ -96,15 +95,7 @@ extend:
 
 /etc/cron.d/salt-archive-ci:
   file:
-    - managed
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 550
-    - source: salt://salt/ci/cron.jinja2
-    - require:
-      - pkg: rsync
-      - user: salt_archive
+    - absent
 
 /srv/salt/jenkins_archives:
   file:

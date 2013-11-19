@@ -33,9 +33,12 @@ $ModLoad imuxsock # provides support for local system logging
 $ModLoad imklog   # provides kernel logging support (previously done by rklogd)
 {#- #$ModLoad immark  # provides --MARK-- message capability #}
 
+{%- block remote_listening %}
 $ModLoad imudp
 $UDPServerAddress 127.0.0.1
 $UDPServerRun 514
+{%- endblock -%}
+
 {#-
  provides TCP syslog reception
 $ModLoad imtcp
@@ -161,6 +164,11 @@ daemon.*;mail.*;\
 #}
 
 *.*           -/var/log/syslog
-{%- if 'graylog2_address' in pillar %}
+{%- block remote_logging %}
+    {%- if 'graylog2_address' in pillar -%}
+        {#- avoid log looping -#}
+        {%- if pillar['graylog2_address'] not in (none, 'localhost', '127.0.0.1', '0.0.0.0', grains['host']) %}
 *.*;local7.none {% if salt['pillar.get']('rsyslog:tcp', False) %}@{% endif %}@{{ pillar['graylog2_address'] }}:514
-{%- endif -%}
+        {%- endif -%}
+    {%- endif -%}
+{%- endblock -%}

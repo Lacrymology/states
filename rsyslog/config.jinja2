@@ -166,9 +166,6 @@ daemon.*;mail.*;\
 *.*           -/var/log/syslog
 {%- block remote_logging %}
     {%- if 'graylog2_address' in pillar -%}
-        {#- avoid log looping -#}
-        {%- if pillar['graylog2_address'] not in (none, 'localhost', '127.0.0.1', '0.0.0.0', grains['host']) %}
-*.*;local7.none {% if salt['pillar.get']('rsyslog:tcp', False) %}@{% endif %}@{{ pillar['graylog2_address'] }}:514
-        {%- endif -%}
+*.*;local7.none {% if salt['pillar.get']('rsyslog:tcp', False) %}@{% endif %}@{{ pillar['graylog2_address'] }}:1514
     {%- endif -%}
 {%- endblock -%}

@@ -30,7 +30,7 @@ Uninstall a Graylog2 logging server backend.
 
 {%- set version = '0.11.0' %}
 {%- set server_root_dir = '/usr/local/graylog2-server-' + version %}
-{%- set user = 'graylog2' %}
+{%- set user = salt['pillar.get']('graylog2:server:user', 'graylog2') %}
 
 graylog2-server:
   user:

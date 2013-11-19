@@ -31,14 +31,24 @@ State(s) common to graylog2 web and server.
 include:
   - web
 
+{%- set user = salt['pillar.get']('graylog2:server:user', 'graylog2') %}
+
+graylog2:
+  user:
+    - present
+    - name: {{ user }}
+    - home: /var/run/{{ user }}
+    - shell: /bin/false
+
 {%- for dir in ('/var/log', '/var/run') %}
 {{ dir }}/graylog2:
   file:
     - directory
-    - user: root
+    - user: {{ user }}
     - group: www-data
     - mode: 770
     - makedirs: True
     - require:
       - user: web
+      - user: graylog2
 {%- endfor %}

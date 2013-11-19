@@ -113,7 +113,7 @@ salt-master:
     - skip_verify: True
     - sources:
 {%- if 'files_archive' in pillar %}
-      - salt-master: {{ pillar['files_archive']|replace('file://', '') }}/mirror/salt/{{ master_path }}
+      - salt-master: {{ pillar['files_archive']|replace('file://', '')|replace('https://', 'http://') }}/mirror/salt/{{ master_path }}
 {%- else %}
       - salt-master: http://archive.robotinfra.com/mirror/salt/{{ master_path }}
 {%- endif %}

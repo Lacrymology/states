@@ -53,7 +53,7 @@ salt:
     - present
 {%- if 'files_archive' in pillar %}
     - address: http://archive.robotinfra.com/mirror/salt/{{ salt['pillar.get']('salt:version', '0.16.4') }}
-{#    - address: {{ pillar['files_archive'] }}/mirror/salt/{{ salt['pillar.get']('salt:version', '0.16.4') }}#}
+{#    - address: {{ pillar['files_archive']|replace('https://', 'http://') }}/mirror/salt/{{ salt['pillar.get']('salt:version', '0.16.4') }}#}
 {%- else %}
     - address: http://archive.robotinfra.com/mirror/salt/{{ salt['pillar.get']('salt:version', '0.16.4') }}
 {%- endif %}

@@ -42,8 +42,24 @@ include:
     - template: jinja
 
 {%- set backup = '/etc/apt/sources.list.salt-backup' %}
+{%- if salt['file.file_exists'](backup) %}
+apt_sources_backup:
+  file:
+    - rename
+    - name: {{ backup }}
+    - source: /etc/apt/sources.list
+{%- endif %}
 
-apt_sources:
+{#-
+  cmd.wait is used instead of:
+
+  module:
+    - name: pkg.refresh_db
+
+  because the watch directive didn't seem to be respected back in older version.
+  this should be test to switch back to module.name instead.
+#}
+apt_update:
   file:
     - managed
     - name: /etc/apt/sources.list
@@ -59,28 +75,11 @@ apt_sources:
 {%- if salt['file.file_exists'](backup) %}
       - file: apt_sources_backup
 {%- endif %}
-  pkg:
-    - installed
-    - pkgs:
-      - debconf-utils
-      - python-apt
-      - python-software-properties
-    - require:
-      - cmd: apt_sources
-{#-
-  cmd.wait is used instead of:
-
-  module:
-    - name: pkg.refresh_db
-
-  because the watch directive didn't seem to be respected back in older version.
-  this should be test to switch back to module.name instead.
-#}
   cmd:
     - wait
     - name: apt-get update
     - watch:
-      - file: apt_sources
+      - file: apt_update
       - file: /etc/apt/apt.conf.d/99local
 {%- set packages_blacklist = salt['pillar.get']('packages:blacklist', False) -%}
 {%- set packages_whitelist = salt['pillar.get']('packages:whitelist', False) -%}
@@ -92,12 +91,21 @@ apt_sources:
     {%- if packages_whitelist %}
       - pkg: packages_whitelist
     {%- endif -%}
-{%- endif -%}
+{%- endif %}
 
-{%- if salt['file.file_exists'](backup) %}
-apt_sources_backup:
-  file:
-    - rename
-    - name: {{ backup }}
-    - source: /etc/apt/sources.list
-{%- endif -%}
+{#- dump state, just keep the API as others used it #}
+apt_sources:
+  pkg:
+    - installed
+    - pkgs:
+      - debconf-utils
+      - python-apt
+      - python-software-properties
+    - require:
+      - cmd: apt_update
+  cmd:
+    - wait
+    - name: touch /etc/apt/sources.list
+    - watch:
+      - pkg: apt_sources
+      - cmd: apt_update

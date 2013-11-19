@@ -64,6 +64,9 @@ Example::
 The public key of github.com is ``AAAAB......aQ==``. Though, prefix the key
 with ``github.com ssh-rsa`` still valid and improve redability.
 
+Notice: github.com and bitbucket.org public keys are already managed by this
+formula as they are often required by other formulas.
+
 deployment_key:contents
 ~~~~~~~~~~~~~~~~~~~~~~~
 

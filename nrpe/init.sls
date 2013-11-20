@@ -54,12 +54,21 @@ include:
     - absent
 
 nrpe-virtualenv:
+  {# remove system-wide nagiosplugin, only use one in our nrpe-virtualenv #}
+  pip:
+    - removed
+    - name: nagiosplugin
+    - require:
+      - module: pip
   virtualenv:
     - manage
     - upgrade: True
+    {#- some check need import salt code #}
+    - system_site_packages: True
     - name: /usr/local/nagios
     - require:
       - module: virtualenv
+      - pip: nrpe-virtualenv
       - file: /usr/local
   file:
     - managed
@@ -81,11 +90,6 @@ nrpe-virtualenv:
       - virtualenv: nrpe-virtualenv
     - watch:
       - file: nrpe-virtualenv
-  pip:
-    - removed
-    - name: nagiosplugin
-    - require:
-      - module: pip
 
 nagios-plugins:
   pkg:

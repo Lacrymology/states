@@ -3,13 +3,13 @@ Copyright (c) 2013, Bruno Clermont
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met: 
+modification, are permitted provided that the following conditions are met:
 
 1. Redistributions of source code must retain the above copyright notice, this
-   list of conditions and the following disclaimer. 
+   list of conditions and the following disclaimer.
 2. Redistributions in binary form must reproduce the above copyright notice,
    this list of conditions and the following disclaimer in the documentation
-   and/or other materials provided with the distribution. 
+   and/or other materials provided with the distribution.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -30,3 +30,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 command[salt_master_procs]=/usr/lib/nagios/plugins/check_procs -c {{ workers }}:{{ workers|int + 10 }} -C salt-master -u root
 command[salt_master_port_publish]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 4505
 command[salt_master_port_ret]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 4506
+{% if not salt['pillar.get']('__test__', False) %}
+{#- sudo for reading salt config files #}
+command[salt_master_mine]=sudo /usr/lib/nagios/plugins/check_mine_minions.py -v
+{%- endif %}

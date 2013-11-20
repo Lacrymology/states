@@ -35,6 +35,8 @@ include:
   - python.dev.nrpe
   - rsyslog.nrpe
   - ssh.client.nrpe
+  - sudo
+  - sudo.nrpe
 
 /etc/nagios/nrpe.d/salt-master.cfg:
   file:
@@ -46,6 +48,29 @@ include:
     - source: salt://salt/master/nrpe/config.jinja2
     - require:
       - pkg: nagios-nrpe-server
+
+/etc/sudoers.d/nrpe_salt_mine:
+  file:
+    - managed
+    - template: jinja
+    - source: salt://salt/master/nrpe/sudo.jinja2
+    - mode: 440
+    - user: root
+    - group: root
+    - require:
+      - pkg: sudo
+
+/usr/lib/nagios/plugins/check_mine_minions.py:
+  file:
+    - managed
+    - source: salt://salt/master/nrpe/check_mine.py
+    - user: nagios
+    - group: nagios
+    - mode: 550
+    - require:
+      - pkg: nagios-nrpe-server
+      - module: nrpe-virtualenv
+      - file: /etc/sudoers.d/nrpe_salt_mine
 
 extend:
   nagios-nrpe-server:

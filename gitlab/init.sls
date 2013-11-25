@@ -122,8 +122,11 @@ install_gitlab_shell:
     - name: {{ shell_dir }}/bin/install
     - user: git
     - require:
-      - file: {{ shell_dir }}/config.yml
       - pkg: ruby
+      - cmd: gitlab-shell
+    - watch:
+      - file: {{ shell_dir }}/config.yml
+      - archive: gitlab-shell
 
 {{ shell_dir }}/config.yml:
   file:

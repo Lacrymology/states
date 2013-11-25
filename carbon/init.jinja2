@@ -32,6 +32,8 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 cmd="/usr/local/graphite/bin/python /usr/local/graphite/bin/carbon-cache.py --config=/etc/graphite/carbon.conf --instance={{ instance }}"
 {%- else %}
 cmd="/usr/local/graphite/bin/python /usr/local/graphite/bin/carbon-relay.py --config=/etc/graphite/carbon.conf"
+ulimit -Hn 16384
+ulimit -Sn 16384
 {%- endif %}
 
 cntr=0

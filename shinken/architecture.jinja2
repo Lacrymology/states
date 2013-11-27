@@ -98,6 +98,11 @@ Description: The poller is responsible for:
 http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects/poller
 #}
 
+define module{
+    module_name NrpeBooster
+    module_type nrpe_poller
+}
+
 {% for id in pillar['shinken']['architecture']['poller'] %}
 define poller {
     poller_name poller-{{ id }}
@@ -105,6 +110,7 @@ define poller {
     port 7771
     poller_tags {{ pillar['shinken']['architecture']['poller'][id] }}
     realm All
+    modules NrpeBooster
 }
 {% endfor %}
 

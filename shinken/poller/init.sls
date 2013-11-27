@@ -37,6 +37,7 @@ include:
   - apt
   - nrpe
   - shinken
+  - ssl.dev
 
 nagios-nrpe-plugin:
   pkg:
@@ -82,3 +83,11 @@ shinken-poller:
     - require:
       - virtualenv: shinken
       - user: shinken
+
+extend:
+  shinken:
+    file:
+      - source: salt://shinken/poller/requirements.jinja2
+    module:
+      - watch:
+        - pkg: ssl-dev

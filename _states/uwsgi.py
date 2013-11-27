@@ -51,7 +51,7 @@ def _get_default_kwargs(kwargs):
                 'context': None,
                 'replace': True,
                 'defaults': None,
-                'env': None,
+                '__env__': None,
                 'backup': '',
                 'show_diff': True,
                 'create': True,
@@ -131,8 +131,8 @@ def available(name, enabled=False, **kwargs):
     app_enabled = enabled
     app_disabled = not app_enabled
 
-    if kwargs['env'] is None:
-        kwargs['env'] = 'base'
+    if kwargs['__env__'] is None:
+        kwargs['__env__'] = 'base'
 
     filename = _get_filename(name)
 

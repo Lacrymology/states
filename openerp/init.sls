@@ -36,6 +36,7 @@ include:
 {%- if salt['pillar.get']('openerp:ssl', False) %}
   - ssl
 {%- endif %}
+  - ssl.dev
   - underscore
   - uwsgi
   - virtualenv
@@ -74,6 +75,7 @@ openerp_depends:
       - virtualenv: openerp
     - watch:
       - file: openerp_depends
+      - pkg: ssl-dev
       - pkg: python-dev
       - pkg: ldap-dev
       - pkg: postgresql-dev

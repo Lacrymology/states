@@ -48,6 +48,7 @@ include:
 {%- if salt['pillar.get']('discourse:ssl', False) %}
   - ssl
 {%- endif %}
+  - ssl.dev
   - uwsgi.ruby
   - web
   - xml
@@ -62,7 +63,6 @@ discourse_deps:
   pkg:
     - installed
     - pkgs:
-      - libssl-dev
       - build-essential
       - libtool
       - gawk
@@ -75,6 +75,7 @@ discourse_deps:
       - pkg: postgresql-dev
       - pkg: ruby
       - pkg: git
+      - pkg: ssl-dev
 
 discourse_tar:
   archive:

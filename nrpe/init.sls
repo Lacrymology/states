@@ -91,6 +91,17 @@ nrpe-virtualenv:
     - watch:
       - file: nrpe-virtualenv
 
+{#- hack for making sure that above virtualenv is used system_site_packages
+    this only neccessary for existing virtualenv because the `virtualenv`
+    state module does not support that properly #}
+/usr/local/nagios/local/lib/python2.7/no-global-site-packages.txt:
+  file:
+    - absent
+    - require:
+      - virtualenv: nrpe-virtualenv
+    - watch_in:
+      - module: nrpe-virtualenv
+
 nagios-plugins:
   pkg:
     - installed

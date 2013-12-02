@@ -36,3 +36,11 @@ Remove Nagios NRPE check for PostgreSQL Server.
 /etc/nagios/nrpe.d/postgresql.cfg:
   file:
     - absent
+
+/usr/lib/nagios/plugins/check_psql_encoding.py:
+  file:
+    - absent
+
+/etc/sudoers.d/nrpe_postgresql_common:
+  file:
+    - absent

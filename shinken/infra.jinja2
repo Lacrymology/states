@@ -127,6 +127,7 @@ define command {
 define command {
     command_name check_nrpe
     command_line /usr/lib/nagios/plugins/check_nrpe -H $HOSTADDRESS$ -t 9 -u -c $ARG1$
+    module_type nrpe_poller
 }
 
 define command {

@@ -30,6 +30,7 @@ Install the Nginx web server.
 include:
   - apt
   - rsyslog
+  - ssl.dev
   - web
 
 {% set bad_configs = ('default', 'example_ssl') %}
@@ -124,11 +125,11 @@ nginx_dependencies:
     - installed
     - pkgs:
       - libpcre3-dev
-      - libssl-dev
       - zlib1g-dev
       - lsb-base
       - adduser
     - require:
+      - pkg: ssl-dev
       - cmd: apt_sources
 
 {%- set version = '1.4.1' %}

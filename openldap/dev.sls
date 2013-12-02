@@ -27,6 +27,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
 include:
   - apt
+  - ssl.dev
 
 ldap-dev:
   pkg:
@@ -34,6 +35,6 @@ ldap-dev:
     - names:
       - libldap2-dev
       - libsasl2-dev
-      - libssl-dev
     - require:
       - cmd: apt_sources
+      - pkg: ssl-dev

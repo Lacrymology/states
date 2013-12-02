@@ -132,7 +132,7 @@ nginx_dependencies:
       - pkg: ssl-dev
       - cmd: apt_sources
 
-{%- set version = '1.4.1' %}
+{%- set version = '1.4.4' %}
 {%- set sub_version = '{0}-1~{1}'.format(version, grains['lsb_distrib_codename']) %}
 {%- set filename = 'nginx_{0}_{1}.deb'.format(sub_version, grains['debian_arch']) %}
 
@@ -188,3 +188,10 @@ nginx_old_version:
 /etc/apt/sources.list.d/nginx.org-packages_ubuntu-precise.list:
   file:
     - absent
+
+nginx_verify_version:
+  cmd:
+    - run
+    - name: nginx -v 2>&1 | grep -q '{{ version }}'
+    - require:
+      - service: nginx

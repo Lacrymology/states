@@ -52,10 +52,10 @@ salt:
   apt_repository:
     - present
 {%- if 'files_archive' in pillar %}
-    - address: http://archive.robotinfra.com/mirror/salt/{{ salt['pillar.get']('salt:version', '0.16.4') }}
-{#    - address: {{ pillar['files_archive']|replace('https://', 'http://') }}/mirror/salt/{{ salt['pillar.get']('salt:version', '0.16.4') }}#}
+    - address: http://archive.robotinfra.com/mirror/salt/{{ salt['pillar.get']('salt:version', '0.17.2-2') }}
+{#    - address: {{ pillar['files_archive']|replace('https://', 'http://') }}/mirror/salt/{{ salt['pillar.get']('salt:version', '0.17.2-2') }}#}
 {%- else %}
-    - address: http://archive.robotinfra.com/mirror/salt/{{ salt['pillar.get']('salt:version', '0.16.4') }}
+    - address: http://archive.robotinfra.com/mirror/salt/{{ salt['pillar.get']('salt:version', '0.17.2-2') }}
 {%- endif %}
 {%- if grains['saltversion'] == '0.15.3' %}
     - filename: saltstack-salt-{{ grains['lsb_codename'] }}

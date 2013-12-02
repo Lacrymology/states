@@ -3,13 +3,13 @@ Copyright (c) 2013, Hung Nguyen Viet
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met: 
+modification, are permitted provided that the following conditions are met:
 
 1. Redistributions of source code must retain the above copyright notice, this
-   list of conditions and the following disclaimer. 
+   list of conditions and the following disclaimer.
 2. Redistributions in binary form must reproduce the above copyright notice,
    this list of conditions and the following disclaimer in the documentation
-   and/or other materials provided with the distribution. 
+   and/or other materials provided with the distribution.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -40,7 +40,7 @@ sudo salt -t 600 "integration-$JOB_NAME-$BUILD_NUMBER" archive.tar xzf /tmp/boot
 sudo salt -t 600 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call -c /root/salt/states/test/ state.sls test.jenkins" | /usr/local/bin/retcode_check.py
 sudo /usr/local/bin/wait_minion_up.py integration-$JOB_NAME-$BUILD_NUMBER
 sudo salt -t {{ salt['pillar.get']('salt:ci:timeout', 86400) }} "integration-$JOB_NAME-$BUILD_NUMBER" cmd.run "/root/salt/states/test/jenkins/run.py $*"
-sudo salt -t 600 "integration-$JOB_NAME-$BUILD_NUMBER" state.sls test.jenkins.result env=ci
+sudo salt -t 600 "integration-$JOB_NAME-$BUILD_NUMBER" state.sls test.jenkins.result
 sudo /usr/local/bin/import_test_data.py stderr.log.xz integration-$JOB_NAME-$BUILD_NUMBER $WORKSPACE
 xz -d -c $WORKSPACE/stderr.log.xz
 sudo /usr/local/bin/import_test_data.py stdout.log.xz integration-$JOB_NAME-$BUILD_NUMBER $WORKSPACE

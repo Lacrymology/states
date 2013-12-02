@@ -127,7 +127,7 @@ salt-ui:
       - pkg: nginx
       - {{ salt_ui_module }}: salt-ui
 
-{%- set api_path = '0.16.4/pool/main/s/salt-api/salt-api_' + version + '_all.deb' %}
+{%- set api_path = '0.17.2-2/pool/main/s/salt-api/salt-api_' + version + '_all.deb' %}
 salt-api:
   file:
     - managed

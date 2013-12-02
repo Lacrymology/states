@@ -188,3 +188,10 @@ nginx_old_version:
 /etc/apt/sources.list.d/nginx.org-packages_ubuntu-precise.list:
   file:
     - absent
+
+nginx_verify_version:
+  cmd:
+    - run
+    - name: nginx -v 2>&1 | grep -q '{{ version }}'
+    - require:
+      - service: nginx

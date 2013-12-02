@@ -1,0 +1,9 @@
+Discourse
+=========
+
+Contents:
+
+.. toctree::
+    :glob:
+
+    *

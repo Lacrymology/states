@@ -1,0 +1,9 @@
+Amavis
+======
+
+Contents:
+
+.. toctree::
+    :glob:
+
+    *

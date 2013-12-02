@@ -1,0 +1,9 @@
+Moinmoin
+========
+
+
+.. toctree::
+    :glob:
+
+
+    *

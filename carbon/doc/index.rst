@@ -1,0 +1,9 @@
+Carbon
+======
+
+Contents:
+
+.. toctree::
+    :glob:
+
+    *

@@ -27,7 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Setup a Salt API REST server.
 -#}
-{%- set version = '0.8.2' -%}
+{%- set version = '0.8.3' -%}
 include:
   - git
   - local

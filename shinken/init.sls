@@ -90,8 +90,8 @@ shinken:
   archive:
     - extracted
     - name: /usr/local/shinken/src
-    - source: {{ pillar['files_archive'] }}/mirror/shinken-{{ version }}.tar.gz
-    - source_hash: md5=2623699ef25f807c038ffc10692c856f
+    - source: {{ pillar['files_archive'] }}/mirror/shinken-{{ version }}-3e37861.tar.gz
+    - source_hash: md5=a35060a24292d0a8eb6e1164770f7f23
     - archive_format: tar
     - tar_options: z
     - if_missing: /usr/local/shinken/src/shinken-{{ version }}

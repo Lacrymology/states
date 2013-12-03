@@ -25,11 +25,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-/var/log/graylog2:
+
+{% for file in ['/var/log/graylog2', '/var/run/graylog2'] %}
+{{ file }}:
   file:
     - absent
-
-/var/run/graylog2:
-  file:
-    - absent
-
+{% endfor %}

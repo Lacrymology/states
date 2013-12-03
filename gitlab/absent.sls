@@ -65,3 +65,10 @@ uwsgi_gitlab:
   uwsgi:
     - absent
     - name: gitlab
+
+gitlab-upstart-log:
+  cmd:
+    - run
+    - name: find /var/log/upstart/ -maxdepth 1 -type f -name 'gitlab.log.*' -delete
+    - require:
+      - cmd: gitlab

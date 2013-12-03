@@ -64,3 +64,10 @@ terracotta:
     - absent
     - require:
       - service: terracotta
+
+terracotta-upstart-log:
+  cmd:
+    - run
+    - name: find /var/log/upstart/ -maxdepth 1 -type f -name 'terracotta.log.*' -delete
+    - require:
+      - service: terracotta

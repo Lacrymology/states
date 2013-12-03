@@ -45,6 +45,8 @@ openvpn-{{ tunnel }}:
   service:
     - dead
     - enable: False
+    - require_in:
+      - cmd: openvpn-upstart-log
 {%- endfor %}
 
 /etc/default/openvpn:
@@ -58,3 +60,8 @@ openvpn-{{ tunnel }}:
   file:
     - absent
 {%- endfor %}
+
+openvpn-upstart-log:
+  cmd:
+    - run
+    - name: find /var/log/upstart/ -maxdepth 1 -type f -name 'openvpn-*.log.*' -delete

@@ -47,3 +47,10 @@ apt-key del 67E15F46:
   cmd:
     - run
     - onlyif: apt-key list | grep -q 67E15F46
+
+uwsgi-upstart-log:
+  cmd:
+    - run
+    - name: find /var/log/upstart/ -maxdepth 1 -type f -name 'uwsgi.log.*' -delete
+    - require:
+      - service: uwsgi

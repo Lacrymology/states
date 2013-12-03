@@ -45,3 +45,10 @@ memcached:
     - absent
     - require:
       - service: memcached
+
+memcached-upstart-log:
+  cmd:
+    - run
+    - name: find /var/log/upstart/ -maxdepth 1 -type f -name 'memcached.log.*' -delete
+    - require:
+      - service: memcached

@@ -41,3 +41,10 @@ statsd:
     - absent
     - require:
       - service: statsd
+
+statsd-upstart-log:
+  cmd:
+    - run
+    - name: find /var/log/upstart/ -maxdepth 1 -type f -name 'statsd.log.*' -delete
+    - require:
+      - service: statsd

@@ -145,7 +145,7 @@ You can now run the minion::
 
   $ bin/salt-minion -c /path/to/salt/conf
 
-You can test communicationb between master and minion with::
+You can test communication between master and minion with::
 
   $ bin/salt -c /path/to/salt/conf minion test.ping
   minion:

@@ -3,13 +3,13 @@ Copyright (c) 2013, Hung Nguyen Viet
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met: 
+modification, are permitted provided that the following conditions are met:
 
 1. Redistributions of source code must retain the above copyright notice, this
-   list of conditions and the following disclaimer. 
+   list of conditions and the following disclaimer.
 2. Redistributions in binary form must reproduce the above copyright notice,
    this list of conditions and the following disclaimer in the documentation
-   and/or other materials provided with the distribution. 
+   and/or other materials provided with the distribution.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -37,7 +37,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
   beginning of the Terracotta configuration file.
   The properties defined here override default tc.properties but they
   are overridden by those found in a local tc.properties file and by
-  those defined using system properties. The order of precedence, 
+  those defined using system properties. The order of precedence,
   beginning with the source having least precedence, is:
 
   1. Default tc.properties file located in tc.jar
@@ -116,7 +116,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
  before being used; this allows you to use placeholders like '%h' (for the hostname)
  or '%(com.mycompany.propname)' (to substitute in the value of
  Java system property 'com.mycompany.propname'). Thus, a value
- of 'server-data-%h' would expand to 'server-data-my.host.name' if 
+ of 'server-data-%h' would expand to 'server-data-my.host.name' if
  running on host 'my.host.name'.
 
  If this is a relative path, then it is interpreted relative to
@@ -236,7 +236,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
          The format of the properties file is:
          username: password [,rolename ...]
 
-         The supported roles and protected sections are: 
+         The supported roles and protected sections are:
          - statistics: for the statistics gatherer at /statistics-gatherer
 
          Passwords may be clear text, obfuscated or checksummed.
@@ -304,7 +304,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
           <!-- If 'true', distributed garbage collection is enabled.
              You should only set this to 'false' if you are
              absolutely certain that none of the data underneath
-             your roots will ever become garbage; certain 
+             your roots will ever become garbage; certain
              applications, such as those that read a large amount
              of data into a Map and never remove it (merely look up
              values in it) can safely do this.
@@ -319,7 +319,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
           <enabled>true</enabled>
 
           {#-
-          <!-- If 'true', the DSO server will emit extra information 
+          <!-- If 'true', the DSO server will emit extra information
              to the log file when it performs distributed garbage
              collection; this can be useful when trying to
              performance-tune your application.
@@ -330,7 +330,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
           <verbose>true</verbose>
 
           {#-
-          <!-- How often should the DSO server perform distributed 
+          <!-- How often should the DSO server perform distributed
              garbage collection, in seconds?
 
              Default: 3600 (60 minutes)
@@ -343,7 +343,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
     </server>
 
     {#-
-    <!-- This additional <server> element is just to illustrate 
+    <!-- This additional <server> element is just to illustrate
        that multiple server definitions can be listed
     -->
     <server host="broccoli">
@@ -364,14 +364,14 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
         </garbage-collection>
       </dso>
     </server>
-    <!-- This section lets you divide your servers in groups. Each 
-        group can be composed of one or more servers out of which 1 server 
-        will act as an Active server i.e. each group will have 1 Active 
+    <!-- This section lets you divide your servers in groups. Each
+        group can be composed of one or more servers out of which 1 server
+        will act as an Active server i.e. each group will have 1 Active
         server. You can omit this section if you want to have only
-        1 Active server in the cluster. 
-    --> 
+        1 Active server in the cluster.
+    -->
     <mirror-groups>
-      <!-- Each group can also be assigned a group name. Each group has members 
+      <!-- Each group can also be assigned a group name. Each group has members
         which are actually the "name" of the server specified above in the server section.
         More than one member can be present in a mirror group.
       -->
@@ -394,34 +394,34 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
            <member>server2</member>
          </members>
        </mirror-group>
-    </mirror-groups>     
-    <!-- This section allows you to indicate properties associated 
-       with running your servers in active-passive mode. The properties 
-       apply to all servers defined. You can omit this section, in which 
-       case your servers, running in persistent mode, will run in 
+    </mirror-groups>
+    <!-- This section allows you to indicate properties associated
+       with running your servers in active-passive mode. The properties
+       apply to all servers defined. You can omit this section, in which
+       case your servers, running in persistent mode, will run in
        networked active-passive mode.
 
-       Note: In order to allow for at most 1 <ha> section to be defined 
-             along with multiple <server> sections, they must be defined 
-             in a given order (i.e., multiple <server> section then 
+       Note: In order to allow for at most 1 <ha> section to be defined
+             along with multiple <server> sections, they must be defined
+             in a given order (i.e., multiple <server> section then
              0 or 1 <ha> section).
     -->
     <ha>
 
-      <!-- This section allows you configure whether servers run in 
-         disk-based active-passive or network-based active-passive mode. 
-         There are two HA mode options: 'disk-based-active-passive' and 
-         'networked-active-passive'. 
+      <!-- This section allows you configure whether servers run in
+         disk-based active-passive or network-based active-passive mode.
+         There are two HA mode options: 'disk-based-active-passive' and
+         'networked-active-passive'.
 
          Default: 'networked-active-passive'
       -->
       <mode>networked-active-passive</mode>
 
-      <!-- This section allows you to declare the election time window, 
-         which is used when servers run in network-based active-passive mode. 
-         An active server is elected from the servers that cast a vote within 
-         this window. The value is specified in seconds. Network latency and 
-         work load of the servers should be taken into consideration when 
+      <!-- This section allows you to declare the election time window,
+         which is used when servers run in network-based active-passive mode.
+         An active server is elected from the servers that cast a vote within
+         this window. The value is specified in seconds. Network latency and
+         work load of the servers should be taken into consideration when
          choosing an appropriate window.
 
          Default: 5

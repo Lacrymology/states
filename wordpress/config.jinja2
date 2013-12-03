@@ -88,7 +88,7 @@ define('DB_COLLATE', '');
  You can generate these using the {@link https://api.wordpress.org/secret-key/1.1/salt/ WordPress.org secret-key service}
  You can change these at any point in time to invalidate all existing cookies. This will force all users to have to log in again.
 
- @since 2.6.0 
+ @since 2.6.0
 #}
 
 define('AUTH_KEY',         '{{ salt['password.generate']('wp_auth_key', 64) }}');
@@ -111,7 +111,7 @@ $table_prefix  = 'wp_';
 
 {#-
  WordPress Localized Language, defaults to English.
- 
+
  Change this to localize WordPress. A corresponding MO file for the chosen
  language must be installed to wp-content/languages. For example, install
  de_DE.mo to wp-content/languages and set WPLANG to 'de_DE' to enable German

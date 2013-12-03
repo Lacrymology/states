@@ -126,7 +126,7 @@ Default: ``False``.
 graphite:web:ssl_redirect
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If set to True and SSL is turned on, this will force all HTTP traffic to be 
+If set to True and SSL is turned on, this will force all HTTP traffic to be
 redirected to HTTPS.
 
 Default: ``False``.

@@ -39,7 +39,7 @@ Maintainer: Lam Dang Tung <lamdt@familug.org>
 #}
 user: git
 
-{#- 
+{#-
 Url to gitlab instance. Used for api calls. Should end with a slash.
 #}
 {%- if salt['pillar.get']('gitlab:ssl', False) %}
@@ -63,7 +63,7 @@ http_settings:
 #}
 repos_path: "{{ repos_dir }}"
 
-{#- 
+{#-
 File used as authorized_keys for gitlab user
 #}
 auth_file: "/home/git/.ssh/authorized_keys"

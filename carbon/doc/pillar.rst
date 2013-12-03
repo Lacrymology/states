@@ -46,7 +46,7 @@ Maximum of open files for the daemon.
 
 Default: ``False``.
 
-graphite:carbon:interface 
+graphite:carbon:interface
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Network interface to bind Carbon-relay daemon.

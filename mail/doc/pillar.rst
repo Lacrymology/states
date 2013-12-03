@@ -35,7 +35,7 @@ Mandatory
 ---------
 
 Example:
-  
+
   mail:
     mailname: xxxx
 

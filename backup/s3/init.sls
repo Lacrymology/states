@@ -36,7 +36,7 @@ include:
     - user: root
     - group: root
     - mode: 550
-    - source: salt://backup/s3/backup_store.jinja
+    - source: salt://backup/s3/backup_store.jinja2
     - require:
       - pkg: s3cmd
       - file: /usr/local

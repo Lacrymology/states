@@ -31,7 +31,7 @@ pip==1.3.1
 {%- if 'files_archive' in pillar %}
 {{ pillar['files_archive'] }}/pip/diamond-3.4.68.tar.gz
 {%- else %}
--e git+git://github.com/BrightcoveOS/Diamond.git@2d1149fb9d419a3016f5fe8e0830fa0015fbda06#egg=diamond
+diamond==3.4.68
 {%- endif %}
 {%- if 'graylog2_address' in pillar %}
 graypy==0.2.9

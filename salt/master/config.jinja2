@@ -37,6 +37,11 @@ gitfs_remotes:
   - {{ repo }}
 {%- endfor %}
 
+{%- if pillar['salt_master']['pillar'] in pillar %}
+ext_pillar:
+  - git: {{ pillar['salt_master']['pillar']['branch'] }} {{ pillar['salt_master']['pillar']['remote'] }}
+{%- endif %}
+
 log_file: file:///dev/log
 {%- if salt['pillar.get']('debug', False) %}
 log_level: debug

@@ -49,7 +49,7 @@ COMMIT
 -A INPUT -i lo -j ACCEPT
 -A INPUT -i {% if grains['virtual'] == 'openvzve' %}venet0{% else %}eth0{% endif %} -m state --state RELATED,ESTABLISHED -j ACCEPT
 {%- for host in pillar['ip_addresses'] %}
--A INPUT -i {% if grains['virtual'] == 'openvzve' %}venet0{% else %}eth0{% endif %} -s {{ pillar['ip_addresses'][host] }}/32 -j ACCEPT
+-A INPUT -i {% if grains['virtual'] == 'openvzve' %}venet0{% else %}eth0{% endif %} -s {{ host }}/32 -j ACCEPT
 {% endfor -%}
 {%- for protocol in pillar['firewall']['filter'] -%}
 {%- if pillar['firewall']['filter'][protocol]|length == 1 %}

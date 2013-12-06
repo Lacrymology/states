@@ -120,3 +120,9 @@ For more details on this, look ``doc/tests.rst`` section *Automatic Tests* and
 
 Monitoring Usage
 ----------------
+
+this is where you will document:
+
+- Monitoring with Shinken
+
+for task https://redmine.idhypercubed.org/issues/1589

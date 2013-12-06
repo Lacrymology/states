@@ -51,6 +51,13 @@ nginx:
   service:
     - dead
 
+nginx-upstart-log:
+  cmd:
+    - run
+    - name: find /var/log/upstart/ -maxdepth 1 -type f -name 'nginx.log.*' -delete
+    - require:
+      - service: nginx
+
 {% for type in ('etc', 'var/log', 'etc/logrotate.d') %}
 /{{ type }}/nginx:
   file:

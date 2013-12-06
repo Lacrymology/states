@@ -37,3 +37,12 @@ shinken-arbiter:
 /etc/shinken/arbiter.conf:
   file:
     - absent
+    - require:
+      - service: shinken-arbiter
+
+shinken-arbiter-upstart-log:
+  cmd:
+    - run
+    - name: find /var/log/upstart/ -maxdepth 1 -type f -name 'shinken-arbiter.log.*' -delete
+    - require:
+      - service: shinken-arbiter

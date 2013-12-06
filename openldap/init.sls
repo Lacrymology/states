@@ -138,7 +138,7 @@ ldap_create_user_tree:
 ldap_{{ domain }}_{{ uid }}:
   cmd:
     - run
-    - unless:  ldapsearch -H ldapi:/// -Y EXTERNAL -b'uid={{ uid }},ou=people,dc=example,dc=com' -LLL -A
+    - unless:  ldapsearch -H ldapi:/// -Y EXTERNAL -b'uid={{ uid }}@{{ domain }},ou=people,{{ suffix }}' -LLL -A
     - name: |
         ldapadd -H ldapi:/// -Y EXTERNAL << __EOF
         dn: uid={{ uid }}@{{ domain }},ou=people,{{ suffix }}
@@ -160,7 +160,7 @@ ldap_{{ domain }}_{{ uid }}:
 ldap_{{ domain }}_{{ uid }}: # make it will conflict if one DN in both ``data`` and ``absent``
   cmd:
     - run
-    - onlyif: ldapsearch -H ldapi:/// -Y EXTERNAL -b'uid={{ uid }},ou=people,dc=example,dc=com' -LLL -A
+    - onlyif: ldapsearch -H ldapi:/// -Y EXTERNAL -b'uid={{ uid }}@{{ domain }},ou=people,{{ suffix }}' -LLL -A
     - name: ldapdelete -H ldapi:/// -Y EXTERNAL "uid={{ uid }}@{{ domain }},ou=people,{{ suffix }}"
     - require:
       - cmd: ldap_create_user_tree

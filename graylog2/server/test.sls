@@ -33,10 +33,20 @@ include:
 {#- Graylog2 requires a running Elasticsearch server to work
   properly. Check will definitively fail. #}
 
+graylog2_log_one_msg:
+  cmd:
+    - run
+    - name: logger test
+    - require:
+      - service: graylog2-server
+
 test:
   nrpe:
     - run_all_checks
+    - order: last
     - exclude:
       - graylog2_elasticsearch_cluster
-      - graylog2_incoming_logs
       - elasticsearch_nginx_http
+{%- if not pillar['__test__']|default(False) %}
+      - graylog2_incoming_logs
+{%- endif %}

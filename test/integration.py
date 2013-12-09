@@ -121,7 +121,8 @@ def setUpModule():
                 "want to repeat the cleanup process, run "
                 "'pkg_installed.forget'")
             return
-    except KeyError:
+    except KeyError, err:
+        logger.debug("Catch error: %s", err, exc_info=True)
         # salt.client.Caller don't refresh the list of available modules
         # after running saltutil.sync_all, exit after doing it.
         client('saltutil.sync_all')
@@ -139,6 +140,7 @@ def setUpModule():
                 if not changes[change]['result']:
                     raise ValueError(changes[change]['comment'])
         except Exception, err:
+            logger.error("Catch error: %s", err, exc_info=True)
             raise ValueError("%s: %s" % (err, changes))
 
     logger.info("Run state equivalent of unittest setup class/function.")
@@ -160,7 +162,8 @@ def setUpModule():
     try:
         if not output['result']:
             raise ValueError(output['comment'])
-    except KeyError:
+    except KeyError, err:
+        logger.error("Catch error: %s", err, exc_info=True)
         raise ValueError(output)
 
 
@@ -289,6 +292,7 @@ def run_salt_module(module_name, *args, **kwargs):
     try:
         output = client(module_name, *args, **kwargs)
     except Exception as err:
+        logger.error("Catch error: %s", err, exc_info=True)
         raise Exception('Module:{0} error: {1}'.format(module_name, err))
     return output
 
@@ -408,14 +412,17 @@ class TestStateMeta(type):
                 logger.debug('salt://{0}.sls'.format(state.replace('.', '/')))
 
                 try:
-                    content = run_salt_module('cp.get_file_str',
-                                          'salt://{0}.sls'.format(state.replace('.', '/')))
-                except Exception:
+                    content = run_salt_module(
+                        'cp.get_file_str',
+                        'salt://{0}.sls'.format(state.replace('.', '/')))
+                except Exception, err:
                     try:
-                        content = run_salt_module('cp.get_file_str',
-                                          'salt://{0}/init.sls'.format(state.replace('.', '/')))
+                        content = run_salt_module(
+                            'cp.get_file_str',
+                            'salt://{0}/init.sls'.format(state.replace('.',
+                                                                       '/')))
                     except Exception:
-                        raise
+                        raise err
 
                 if NO_TEST_STRING in content:
                     logger.debug('Explicit ignore state %s', state)
@@ -476,14 +483,16 @@ class States(unittest.TestCase):
             output = client('pkg_installed.revert')
         except Exception, err:
             clean_up_failed = True
+            logger.error("Catch error: %s", err, exc_info=True)
             self.fail(err)
         else:
             try:
                 if not output['result']:
                     clean_up_failed = True
                     self.fail(output['result'])
-            except TypeError:
+            except TypeError, err:
                 clean_up_failed = True
+                logger.error("Catch error: %s", err, exc_info=True)
                 self.fail(output)
 
         # check processes
@@ -515,6 +524,7 @@ class States(unittest.TestCase):
         try:
             output = client('state.sls', ','.join(states))
         except Exception, err:
+            logger.error("Catch error: %s", err, exc_info=True)
             self.fail('states: %s. error: %s' % ('.'.join(states), err))
         # if it's not a dict, it's an error
         self.assertEqual(type(output), dict, output)

@@ -74,7 +74,7 @@ logger = syslog:uwsgi-gitlab
 req-logger = syslog:uwsgi-gitlab
     {%- endif %}
 {% if 'graphite_address' in pillar %}
-carbon-id = graylog2
+carbon-id = gitlab
     {%- if salt['dig.check_ip'](pillar['graphite_address']) %}
 carbon = {{ pillar['graphite_address'] }}:2003
     {%- else -%}

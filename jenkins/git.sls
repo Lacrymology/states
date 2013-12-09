@@ -41,7 +41,7 @@ include:
   file:
     - directory
     - user: jenkins
-    - group: jenkins
+    - group: nogroup
     - mode: 550
     - require:
       - pkg: jenkins

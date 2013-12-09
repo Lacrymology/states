@@ -40,8 +40,8 @@ include:
 {{ root_home }}/.ssh:
   file:
     - directory
-    - user: root
-    - group: root
+    - user: jenkins
+    - group: jenkins
     - mode: 550
     - require:
       - pkg: jenkins

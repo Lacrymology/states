@@ -67,5 +67,14 @@ req-logger = syslog:uwsgi-{{ deployment }}
     {%- endif %}
 {% if 'graphite_address' in pillar %}
 carbon-id = {{ deployment }}
+    {%- if salt['dig.check_ip'](pillar['graphite_address']) %}
 carbon = {{ pillar['graphite_address'] }}:2003
+    {%- else -%}
+        {%- set resolved_ip = salt['dig.A'](pillar['graphite_address']) -%}
+        {%- if resolved_ip %}
+carbon = {{ resolved_ip[0] }}:2003
+        {%- else %}
+# The domain name {{ pillar['graphite_address'] }} in pillar['graphite_address'] is invalid. carbon support is disabled.
+        {%- endif -%}
+    {%- endif -%}	
 {% endif %}

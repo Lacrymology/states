@@ -42,6 +42,8 @@ include:
     - mode: 500
     - template: jinja
     - source: salt://postgresql/server/backup/script.jinja2
+    - require:
+      - file: /usr/local
 
 /usr/local/bin/backup-postgresql-all:
   file:

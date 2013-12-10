@@ -28,5 +28,5 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 #!/bin/sh
 # {{ pillar['message_do_not_modify'] }}
 
-/usr/local/bin/backup-postgresql sentry
+/usr/local/bin/backup-postgresql {{ salt['pillar.get']('sentry:db:name', 'sentry') }}
 /usr/local/bin/backup-pip /usr/local/graphite

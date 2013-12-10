@@ -25,13 +25,27 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-{#- salt gitfs rename master branch into base. which is also the default value -#}
-{% if pillar['branch']|default('base') == 'master' %}base{% else %}{{ pillar['branch']|default('base') }}{% endif %}:
+{#- local mode don't support gitfs and multiple branches, force to use
+   'base' environment -#}
+{%- if opts['file_client'] == 'local' %}
+base:
+{%- else -%}
+    {#- file_client not in local mode.
+        salt gitfs rename master branch into base. which is also the default
+        value -#}
+    {%- if pillar['branch']|default('base') == 'master' %}
+base:
+    {%- else %}
+{{ pillar['branch']|default('base') }}:
+    {%- endif %}
+{%- endif -%}
+  {#- target all minions #}
   '*':
-{% for role in pillar['global_roles'] %}
-{% if role in pillar['roles']|default([]) %}
+{#- list all minion's role and absent role it's not member of -#}
+{%- for role in pillar['global_roles'] -%}
+  {%- if role in pillar['roles']|default([]) %}
     - roles.{{ role }}
-{% else %}
+  {%- else %}
     - roles.{{ role }}.absent
-{% endif %}
-{% endfor %}
+  {%- endif -%}
+{%- endfor -%}

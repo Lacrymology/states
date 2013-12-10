@@ -59,6 +59,7 @@ if [ $LOCAL_MODE -eq 1 ]; then
     echo $1 > /etc/hostname
     hostname `cat /etc/hostname`
     echo """master: 127.0.0.1
+id: $1
 mysql.default_file: '/etc/mysql/debian.cnf'
 file_log_level: debug
 file_client: local

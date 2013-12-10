@@ -30,3 +30,11 @@ Remove Nagios NRPE check for Salt Master.
 /etc/nagios/nrpe.d/salt-master.cfg:
   file:
     - absent
+
+/etc/sudoers.d/nrpe_salt_mine:
+  file:
+    - absent
+
+/etc/sudoers.d/nrpe_salt_master:
+  file:
+    - absent

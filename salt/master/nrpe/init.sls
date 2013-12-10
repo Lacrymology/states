@@ -51,6 +51,10 @@ include:
 
 /etc/sudoers.d/nrpe_salt_mine:
   file:
+    - absent
+
+/etc/sudoers.d/nrpe_salt_master:
+  file:
     - managed
     - template: jinja
     - source: salt://salt/master/nrpe/sudo.jinja2
@@ -70,7 +74,7 @@ include:
     - require:
       - pkg: nagios-nrpe-server
       - module: nrpe-virtualenv
-      - file: /etc/sudoers.d/nrpe_salt_mine
+      - file: /etc/sudoers.d/nrpe_salt_master
 
 extend:
   nagios-nrpe-server:

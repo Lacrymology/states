@@ -74,3 +74,27 @@ jenkins_known_hosts:
     - require:
       - file: {{ root_home }}/.ssh
       - pkg: openssh-client
+
+jenkins_set_git_email:
+  cmd:
+    - wait
+    - name: git config --global user.email "{{ pillar['smtp']['from'] }}"
+    - user: jenkins
+    - watch:
+      - pkg: git
+    - require:
+      - pkg: jenkins
+    - require_in:
+      - service: jenkins
+
+jenkins_set_git_user:
+  cmd:
+    - run
+    - name: git config --global user.name "Continous Integration"
+    - user: jenkins
+    - watch:
+      - pkg: git
+    - require:
+      - pkg: jenkins
+    - require_in:
+      - service: jenkins

@@ -29,6 +29,7 @@ Backup client for Sentry.
 -#}
 include:
   - cron
+  - postgresql.server.backup
 
 /etc/cron.daily/backup-sentry:
   file:
@@ -40,3 +41,4 @@ include:
     - source: salt://sentry/backup/cron.jinja2
     - require:
       - pkg: cron
+      - file: {{ script }}

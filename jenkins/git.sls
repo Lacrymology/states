@@ -80,7 +80,7 @@ jenkins_known_hosts:
 jenkins_set_git_email:
   cmd:
     - wait
-    - name: git config --global user.email "{{ pillar['smtp']['from'] }}"
+    - name: git config --global user.email "jenkins@{{ grains['id'] }}"
     - user: jenkins
     - watch:
       - pkg: git

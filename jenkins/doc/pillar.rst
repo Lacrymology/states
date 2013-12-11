@@ -68,3 +68,12 @@ If set to True and SSL is turned on, this will force all HTTP traffic to be
 redirected to HTTPS.
 
 Default: ``False``.
+
+ssh:known_hosts
+~~~~~~~~~~~~~~~
+
+Known hosts that will be added to /var/lib/jenkins/.ssh/known_hosts.
+Data formed as a dictionary ``domain_name``:``server public key``
+with server public key can be obtained by run ``ssh-keyscan domain``
+Consult ``ssh/client/doc/pillar.rst`` for more details.
+

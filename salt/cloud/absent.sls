@@ -35,6 +35,8 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 salt-cloud:
   pkg:
     - purged
+  pip:
+    - removed
 
 /etc/salt/cloud.deploy.d:
   file:

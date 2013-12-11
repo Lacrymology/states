@@ -27,6 +27,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 include:
   - apt
   - salt
+  - pip
 
 {%- for type in ('profiles', 'providers') %}
 /etc/salt/cloud.{{ type }}:
@@ -53,6 +54,11 @@ salt-cloud:
     - require:
       - pkg: salt
       - apt_repository: salt
+  pip:
+    - installed
+    - name: salt-cloud==0.8.11
+    - require:
+      - module: pip
 
 salt-cloud-boostrap-script:
   file:

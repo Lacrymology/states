@@ -54,7 +54,15 @@ Things you **must** do
 - Set Jenkins URL to first value of ``jenkins:web:hostnames``.
 - Configure SMTP.
 - Install https://wiki.jenkins-ci.org/display/JENKINS/Multiple+SCMs+Plugin
-- Configure SSH private key for user jenkins
+- Upgrade SSH Credential Plugin to 1.6+, so you can configure SSH private key
+  for user ``jenkins`` throught Jenkins Web UI. (Dashboard => Credential
+  => Add credential => Kind: SSH username with private key)
+- If you use git for SCM, install Git Plugin and upgrade it to  version 2.0 or
+  above. It will allow you to choose credential when add a git SCM repo.
+  Note that after upgrading, this plugin changes its name to
+  "Jenkins GIT plugin". This is link to its page:
+  https://wiki.jenkins-ci.org/display/JENKINS/Git+Plugin
+
 
 Jobs
 ----

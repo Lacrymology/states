@@ -121,8 +121,54 @@ For more details on this, look ``doc/tests.rst`` section *Automatic Tests* and
 Monitoring Usage
 ----------------
 
-this is where you will document:
+To understand more deep, you can install Shinken part by part::
 
-- Monitoring with Shinken
+Poller: The poller daemon launches check plugins as requested by schedulers.
+When the check is finished it returns the result to the schedulers::
 
-for task https://redmine.idhypercubed.org/issues/1589
+  salt 'q-shinken-*' state.sls shinken.poller -v
+
+Scheduler: The scheduler daemon manages the dispatching of checks and actions
+to the poller and reactionner daemons respectively::
+
+  salt 'q-shinken-*' state.sls shinken.scheduler -v
+
+Broker: The broker daemon exports and manages data from schedulers. The broker
+uses modules exclusively to get the job done::
+
+  salt 'q-shinken-*' state.sls shinken.broker -v
+
+Reactionner: The reactionner daemon issues notifications and launches
+event_handlers::
+
+  salt 'q-shinken-*' state.sls shinken.reactionner -v
+
+Arbiter: The arbiter daemon reads the configuration, divides it into parts (N
+schedulers = N parts), and distributes them to the appropriate Shinken
+daemons::
+
+  salt 'q-shinken-*' state.sls shinken.arbiter -v
+
+then check the log of each part in the `/var/log/shinken` to make sure that
+everything is working fine.
+
+Login to the Web UI, you will have an overview of business impact, for e.g: I
+am seeing 2 CRITICAL services on the `q-shinken-1`:
+
+* `apt_rc` - NRPE: Unable to read output 'pystatsd-server', UID = 0 (root)
+* `statsd_procs` - PROCS CRITICAL: 0 processes with command name
+
+To make these errors go away, you have to install NRPE checks for `apt` and
+`statsd`::
+
+  salt 'q-shinken-*' state.sls apt.nrpe -v
+  salt 'q-shinken-*' state.sls statsd.nrpe -v
+
+then on the Web UI:
+* click on the service
+* choose `Commands` tab
+* and `Recheck now`
+
+From the Shinken Web UI, you can also go to Graphite by clicking on the
+`Shinken` menu on the top-left. 
+

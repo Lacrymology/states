@@ -26,3 +26,4 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
 include:
   - apt.nrpe
+  - pip.nrpe

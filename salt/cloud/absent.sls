@@ -38,6 +38,10 @@ salt-cloud:
   pip:
     - removed
 
+python-libcloud:
+  pkg:
+    - purged
+
 /etc/salt/cloud.deploy.d:
   file:
     - absent

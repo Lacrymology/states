@@ -30,97 +30,49 @@ in this Software without prior written authorization from the
 Institute for Institutional Innovation by Data Driven Design Inc.
 
 Author: Luan Vo Ngoc <ngocluanvo@gmail.com>
+Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
 -#}
 #!/bin/sh
 # {{ pillar['message_do_not_modify'] }}
 
-{%- set web_root_dir = "/usr/local/discourse" %}
-{%- set wordpressdir = "/usr/local/wordpress" %}
+NOW=`/bin/date "+%Y-%m-%d-%H_%M_%S"`
 
+software=$1
+command="tar"
+flag="--xz -cf"
+extension='tar.xz'
+OUTPUT="/tmp/$software-$NOW.$extension"
+backup_store="/usr/local/bin/backup-store $OUTPUT"
 
-NOW=`/bin/date '+%Y-%m-%d-%H_%M_%S'`
+backup()
+{
+    $command $flag $OUTPUT -C $source
+    $backup_store
+}
 
-{%- set dbname_discourse = salt['pillar.get']('discourse:db:name', 'discourse') %}
-{%- set dbname_djangopypi2 = salt['pillar.get']('djangopypi2:db:name', 'djangopypi2') %}
-{%- set dbname_gitlab = salt['pillar.get']('gitlab:db:name', 'gitlab') %}
-{%- set dbname_wordpress = salt['pillar.get']('wordpress:db:name', 'wordpress') %}
-
-
-{%- set compressions = {
-'xz': {'exec' : '/bin/tar', 'flag': '--xz -cf', 'extension': 'tar.xz'},
-'gzip': {'exec': '/bin/tar', 'flag': '-zcvf', 'extension': 'tar.gz'},
-'bzip2': {'exec': '/bin/tar', 'flag': '-jcvf', 'extension': 'tar.bz2'}
-} %}
-
-if [ '$1' = '{{ dbname_discourse }}' ]
+if [ $software = "discourse" ]
 then
-    if [ '$2' = 'xz' ]
-    then
-        {{ compressions['xz']['exec'] }} {{ compressions['xz']['flag'] }} /tmp/{{ dbname_discourse }}_upload_$NOW.{{ compressions['xz']['extension'] }} -C {{ web_root_dir }}/public uploads
-        /usr/local/bin/backup-store /tmp/{{ dbname_discourse }}_upload_$NOW.tar.xz
-    elif [ '$2' = 'gzip' ]
-    then
-        {{ compressions['gzip']['exec'] }} {{ compressions['gzip']['flag'] }} /tmp/{{ dbname_discourse }}_upload_$NOW.{{ compressions['gzip']['extension'] }} -C {{ web_root_dir }}/public uploads
-        /usr/local/bin/backup-store /tmp/{{ dbname_discourse }}_upload_$NOW.tar.gz
-    elif [ '$2' = 'bzip2' ]
-    then
-        {{ compressions['bzip2']['exec'] }} {{ compressions['bzip2']['flag'] }} /tmp/{{ dbname_discourse }}_upload_$NOW.{{ compressions['bzip2']['extension'] }} -C {{ web_root_dir }}/public uploads
-        /usr/local/bin/backup-store /tmp/{{ dbname_discourse }}_upload_$NOW.tar.bz2
-    else
-        echo "Please put right kind compression"
+    source="/usr/local/$software/public uploads"
 
-
-elif [ '$1' = '{{ dbname_djangopypi2 }}' ]
+elif [ $software = "djangopypi2" ] || [ $software = "graylog2" ]
 then
-    if [ '$2' = 'xz' ]
-    then
-        {{ compressions['xz']['exec'] }} {{ compressions['xz']['flag'] }} /tmp/{{ dbname_djangopypi2 }}-pkg-$NOW.{{ compressions['xz']['extension'] }} -C /var/lib/deployments/{{ dbname_djangopypi2 }} media
-        /usr/local/bin/backup-store /tmp/{{ dbname_djangopypi2 }}-pkg-$NOW.tar.xz
-    elif [ '$2' = 'gzip' ]
-    then
-        {{ compressions['gzip']['exec'] }} {{ compressions['gzip']['flag'] }} /tmp/{{ dbname_djangopypi2 }}-pkg-$NOW.{{ compressions['gzip']['extension'] }} -C /var/lib/deployments/{{ dbname_djangopypi2 }} media
-        /usr/local/bin/backup-store /tmp/{{ dbname_djangopypi2 }}-pkg-$NOW.tar.gz
-    elif [ '$2' = 'bzip2' ]
-    then
-        {{ compressions['bzip2']['exec'] }} {{ compressions['bzip2']['flag'] }} /tmp/{{ dbname_djangopypi2 }}-pkg-$NOW.{{ compressions['bzip2']['extension'] }} -C /var/lib/deployments/{{ dbname_djangopypi2 }} media
-        /usr/local/bin/backup-store /tmp/{{ dbname_djangopypi2 }}-pkg-$NOW.tar.xz
-    else
-        echo "Please put right kind compression"
+    source="/var/lib/deployments/$software/ media"
 
-
-elif [ '$1' = '{{ dbname_gitlab }}' ]
+elif [ $software = "gitlab" ]
 then
-    if [ '$2' = 'xz' ]
-    then
-        {{ compressions['xz']['exec'] }} {{ compressions['xz']['flag'] }} /tmp/{{ dbname_gitlab }}_backup_$NOW.{{ compressions['xz']['extension'] }} -C /home/git repositories .ssh {{ dbname_gitlab }}-satellites
-        /usr/local/bin/backup-store /tmp/{{ dbname_gitlab }}_backup_$NOW.tar.xz
-    elif [ '$2' = 'gzip' ]
-    then
-        {{ compressions['gzip']['exec'] }} {{ compressions['gzip']['flag'] }} /tmp/{{ dbname_gitlab }}_backup_$NOW.{{ compressions['gzip']['extension'] }} -C /home/git repositories .ssh {{ dbname_gitlab }}-satellites
-        /usr/local/bin/backup-store /tmp/{{ dbname_gitlab }}_backup_$NOW.tar.xz
-    elif [ '$2' = 'bzip2' ]
-    then
-        {{ compressions['bzip2']['exec'] }} {{ compressions['bzip2']['flag'] }} /tmp/{{ dbname_gitlab }}_backup_$NOW.{{ compressions['bzip2']['extension'] }} -C /home/git repositories .ssh {{ dbname_gitlab }}-satellites
-        /usr/local/bin/backup-store /tmp/{{ dbname_gitlab }}_backup_$NOW.tar.xz
-    else
-        echo "Please put right kind compression"
+    source="/home/git repositories .ssh $software-satellites"
 
-elif [ '$1' = '{{ dbname_wordpress }}' ]
+elif [ $software = "wordpress" ]
 then
-    if [ '$2' = 'xz' ]
-    then
-        {{ compressions['xz']['exec'] }} {{ compressions['xz']['flag'] }} /tmp/{{ dbname_wordpress }}_upload_$NOW.{{ compressions['xz']['extension'] }} -C {{ wordpressdir}}/wp-content uploads
-        /usr/local/bin/backup-store /tmp/{{ dbname_wordpress }}_upload_$NOW.tar.xz
-    elif [ '$2' = 'gzip' ]
-    then
-        {{ compressions['gzip']['exec'] }} {{ compressions['gzip']['flag'] }} /tmp/{{ dbname_wordpress }}_upload_$NOW.{{ compressions['gzip']['extension'] }} -C {{ wordpressdir}}/wp-content uploads
-        /usr/local/bin/backup-store /tmp/{{ dbname_wordpress }}_upload_$NOW.tar.xz
-    elif [ '$2' = 'bzip2' ]
-    then
-        {{ compressions['bzip2']['exec'] }} {{ compressions['bzip2']['flag'] }} /tmp/{{ dbname_wordpress }}_upload_$NOW.{{ compressions['bzip2']['extension'] }} -C {{ wordpressdir}}/wp-content uploads
-        /usr/local/bin/backup-store /tmp/{{ dbname_wordpress }}_upload_$NOW.tar.xz
-    else
-        echo "Please put right kind compression"
+    source="/usr/local/$software/wp-content uploads"
 
-else
-    echo "Please put name database."
+elif [ $software = "graphite" ] || [ $software = "moinmoin" ]
+then
+    source="/var/lib/deployments/ $software"
+
+elif [ $software = "dovecot" ]
+then
+    source="/var/spool/mail"
+fi
+
+backup

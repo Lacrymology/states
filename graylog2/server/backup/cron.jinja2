@@ -34,8 +34,6 @@ Author: Luan Vo Ngoc <ngocluanvo@gmail.com>
 #!/bin/sh
 # {{ pillar['message_do_not_modify'] }}
 
-/usr/local/bin/backup-elasticsearch graylog2
+/usr/local/bin/backup-mongodb graylog2
 /usr/local/bin/backup-pip /usr/local/graylog2
-NOW=`/bin/date '+%Y-%m-%d-%H_%M_%S'`
-tar --xz -cf /tmp/graylog2-data-$NOW.tar.xz -C /var/lib/deployments/graylog2/ media
-/usr/local/bin/backup-store /tmp/graylog2-data-$NOW.tar.xz
+/usr/local/bin/backup-file graylog2

@@ -27,7 +27,4 @@ Author: Luan Vo Ngoc <ngocluanvo@gmail.com>
 #!/bin/sh
 # {{ pillar['message_do_not_modify'] }}
 
-NOW=`/bin/date '+%Y-%m-%d-%H_%M_%S'`
-
-tar --xz -cf /tmp/dovecot_data_$NOW.tar.xz -C /var/spool/mail
-/usr/local/bin/backup-store /tmp/dovecot_data_$NOW.tar.xz
+/usr/local/bin/backup-file dovecot

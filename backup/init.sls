@@ -29,17 +29,19 @@ advertising or otherwise to promote the sale, use or other dealings
 in this Software without prior written authorization from the
 Institute for Institutional Innovation by Data Driven Design Inc.
 
-Author: Lam Dang Tung <lamdt@familug.org>
-Maintainer: Lam Dang Tung <lamdt@familug.org>
+Author: Luan Vo Ngoc <ngocluanvo@gmail.com>
+
 -#}
-#!/bin/bash
-# {{ pillar['message_do_not_modify'] }}
-set -e
-/usr/local/bin/backup-postgresql discourse
+include:
+  - local
 
-NOW=`/bin/date '+%Y-%m-%d-%H_%M_%S'`
-tar --xz -cf /tmp/discourse_upload_$NOW.tar.xz -C {{ web_root_dir }}/public uploads
-/usr/local/bin/backup_store /tmp/discourse_upload_$NOW.tar.xz
-
-/usr/local/bin/backup-postgresql {{ salt['pillar.get']('discourse:db:name', 'discourse') }}
-/usr/local/bin/backup-file discourse
+/usr/local/bin/backup-file:
+  file:
+    - managed
+    - user: root
+    - group: root
+    - mode: 500
+    - template: jinja
+    - source: salt://backup/file.jinja2
+    - require:
+      - file: /usr/local

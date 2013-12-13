@@ -28,14 +28,4 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 #!/bin/sh
 # {{ pillar['message_do_not_modify'] }}
 
-dbname=all
-NOW=`date '+%Y-%m-%d-%H_%M_%S'`
-export TERM=dumb
-workdir=`mktemp -d`
-cd $workdir
-mongodump
-tar --xz -cf mongodb-$dbname-$NOW.tar.xz dump
-mv mongodb-$dbname-$NOW.tar.xz /tmp
-cd /tmp
-rm -rf $workdir
-/usr/local/bin/backup-store mongodb-$dbname-$NOW.tar.xz
+/usr/local/bin/backup-mongodb graylog2

@@ -30,6 +30,8 @@ include:
   - cron
   - virtualenv.backup
 
+{%- set diamond_dir = '/usr/local/diamond' %}
+
 /etc/cron.daily/backup-diamond:
   file:
     - managed
@@ -37,7 +39,9 @@ include:
     - group: root
     - mode: 500
     - template: jinja
-    - source: salt://diamond/backup/cron.jinja2
+    - source: salt://cron/cron.jinja2
     - require:
       - pkg: cron
       - file: /usr/local/bin/backup-pip
+    - context:
+      root_dir: {{ diamond_dir }}

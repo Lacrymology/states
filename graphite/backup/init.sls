@@ -31,6 +31,7 @@ include:
   - cron
   - postgresql.server.backup
   - virtualenv.backup
+  - backup
   - backup.client
 
 /etc/cron.daily/backup-graphite:
@@ -46,3 +47,4 @@ include:
       - file: /usr/local/bin/backup-postgresql
       - file: /usr/local/bin/backup-store
       - file: /usr/local/bin/backup-pip
+      - file: /usr/local/bin/backup-file

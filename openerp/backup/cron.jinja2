@@ -34,5 +34,5 @@ Author: Luan Vo Ngoc <ngocluanvo@gmail.com>
 #!/bin/sh
 # {{ pillar['message_do_not_modify'] }}
 
-/usr/local/bin/backup-postgresql openerp
+/usr/local/bin/backup-postgresql {{ salt['pillar.get']('openerp:db:name', 'openerp') }}
 /usr/local/bin/backup-pip /usr/local/openerp

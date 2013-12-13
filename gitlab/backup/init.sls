@@ -37,6 +37,7 @@ Backup for Gitlab.
 include:
   - cron
   - postgresql.server.backup
+  - backup
   - backup.client
 
 /etc/cron.daily/backup-gitlab:
@@ -51,3 +52,4 @@ include:
       - pkg: cron
       - file: /usr/local/bin/backup-postgresql
       - file: /usr/local/bin/backup-store
+      - file: /usr/local/bin/backup-file

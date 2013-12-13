@@ -39,9 +39,9 @@ include:
     - group: root
     - mode: 500
     - template: jinja
-    - source: salt://nrpe/backup/cron.jinja2
+    - source: salt://cron/cron.jinja2
     - require:
       - pkg: cron
       - file: /usr/local/bin/backup-pip
     - context:
-      diamond_dir: {{ nrpe_dir }}
+      root_dir: {{ nrpe_dir }}

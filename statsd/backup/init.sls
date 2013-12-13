@@ -30,6 +30,8 @@ include:
   - cron
   - virtualenv.backup
 
+{%- set statsd_dir = '/usr/local/statsd' %}
+
 /etc/cron.daily/backup-statsd:
   file:
     - managed
@@ -37,7 +39,9 @@ include:
     - group: root
     - mode: 500
     - template: jinja
-    - source: salt://statsd/backup/cron.jinja2
+    - source: salt://cron/cron.jinja2
     - require:
       - pkg: cron
       - file: /usr/local/bin/backup-pip
+    - context:
+      root_dir: {{ statsd_dir }}

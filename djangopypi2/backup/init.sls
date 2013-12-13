@@ -38,6 +38,7 @@ include:
   - cron
   - postgresql.server.backup
   - virtualenv.backup
+  - backup
   - backup.client
 
 /etc/cron.daily/backup-djangopypi2:
@@ -53,3 +54,4 @@ include:
       - file: /usr/local/bin/backup-postgresql
       - file: /usr/local/bin/backup-pip
       - file: /usr/local/bin/backup-store
+      - file: /usr/local/bin/backup-file

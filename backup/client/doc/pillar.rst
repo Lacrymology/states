@@ -41,4 +41,4 @@ Example::
 backup_storage
 ~~~~~~~~~~~~~~
 
-Type backup storage client.
+Type of backup storage client that is supported. It includes `scp`, `s3`.

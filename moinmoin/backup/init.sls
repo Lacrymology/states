@@ -31,6 +31,7 @@ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
 include:
   - cron
   - virtualenv.backup
+  - backup
   - backup.client
 
 /etc/cron.daily/backup-moinmoin:
@@ -44,4 +45,5 @@ include:
     - require:
       - pkg: cron
       - file:/usr/local/bin/backup-pip
-      - file: /usr/local/bin/backup-store 
+      - file: /usr/local/bin/backup-store
+      - file: /usr/local/bin/backup-file

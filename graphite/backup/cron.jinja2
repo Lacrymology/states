@@ -29,8 +29,6 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 # {{ pillar['message_do_not_modify'] }}
 set -e
 
-/usr/local/bin/backup-postgresql graphite
+/usr/local/bin/backup-postgresql {{ salt['pillar.get']('graphite:web:db:name', 'graphite') }}
 /usr/local/bin/backup-pip /usr/local/graphite
-NOW=`/bin/date '+%Y-%m-%d-%H_%M_%S'`
-/bin/tar --xz -cf /tmp/graphite-data-$NOW.tar.xz -C /var/lib/deployments/ graphite
-/usr/local/bin/backup-store /tmp/graphite-data-$NOW.tar.xz
+/usr/local/bin/backup-file graphite

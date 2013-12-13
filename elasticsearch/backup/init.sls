@@ -26,6 +26,10 @@ Author: Luan Vo Ngoc <ngocluanvo@gmail.com>
 
 Backup client for Elasticsearch.
 -#}
+include:
+  - cron
+  - mongodb.backup
+  - backup.client
 
 /usr/local/bin/backup-elasticsearch:
   file:
@@ -34,13 +38,7 @@ Backup client for Elasticsearch.
     - group: root
     - mode: 500
     - template: jinja
-    - source: salt://elasticsearch/backup/script.jinja2
-
-/usr/local/bin/backup-elasticsearch-all:
-  file:
-    - managed
-    - user: root
-    - group: root
-    - mode: 500
-    - template: jinja
-    - source: salt://elasticsearch/backup/dump_all.jinja2
+    - source: salt://elasticsearch/backup/cron.jinja2
+    - require:
+      - file: /usr/local/bin/backup-mongodb
+      - file: /usr/local/bin/backup-store

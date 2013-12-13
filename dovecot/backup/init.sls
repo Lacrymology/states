@@ -28,6 +28,7 @@ Backup for Dovecot.
 -#}
 include:
   - cron
+  - backup
   - backup.client
 
 /etc/cron.daily/backup-dovecot:
@@ -41,3 +42,4 @@ include:
     - require:
       - pkg: cron
       - file: /usr/local/bin/backup-store
+      - file: /usr/local/bin/backup-file

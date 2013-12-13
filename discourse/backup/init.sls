@@ -37,6 +37,7 @@ Backup client for Discourse.
 include:
   - cron
   - postgresql.server.backup
+  - backup
   - backup.client
 
 {%- set web_root_dir = "/usr/local/discourse" %}
@@ -52,5 +53,6 @@ include:
       - pkg: cron
       - file: /usr/local/bin/backup-postgresql
       - file: /usr/local/bin/backup-store
+      - file: /usr/local/bin/backup-file
     - context:
       web_root_dir: {{ web_root_dir }}

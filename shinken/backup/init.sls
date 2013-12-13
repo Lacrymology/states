@@ -30,6 +30,8 @@ include:
   - cron
   - virtualenv.backup
 
+{%- set shinken_dir = '/usr/local/shinken' %}
+
 /etc/cron.daily/backup-shinken:
   file:
     - managed
@@ -37,7 +39,9 @@ include:
     - group: root
     - mode: 500
     - template: jinja
-    - source: salt://shinken/backup/cron.jinja2
+    - source: salt://cron/cron.jinja2
     - require:
       - pkg: cron
       - file: /usr/local/bin/backup-pip
+    - context:
+      root_dir: {{ shinken_dir }}

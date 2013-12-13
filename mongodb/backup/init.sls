@@ -29,6 +29,7 @@ Backup client for MongoDB.
 -#}
 
 include:
+  - local
   - backup.client
 
 /usr/local/bin/backup-mongodb:
@@ -40,6 +41,7 @@ include:
     - template: jinja
     - source: salt://mongodb/backup/script.jinja2
     - require:
+      - file: /usr/local
       - file: /usr/local/bin/backup-store
 
 /usr/local/bin/backup-mongodb-all:
@@ -51,4 +53,5 @@ include:
     - template: jinja
     - source: salt://mongodb/backup/dump_all.jinja2
     - require:
+      - file: /usr/local
       - file: /usr/local/bin/backup-store

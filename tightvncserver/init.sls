@@ -86,6 +86,7 @@ tightvncserver:
     - template: jinja
     - require:
       - pkg: tightvncserver
+      - file: {{ home }}/.vnc
     - context:
       wm: {{ wm }}
   cmd:
@@ -101,7 +102,6 @@ tightvncserver:
   service:
     - running
     - name: tightvncserver
-    - sig: su {{ user }} -c "/usr/bin/vncserver -depth 16 -geometry {{ salt['pillar.get']('tightvncserver:resolution', '1024x768') }} :{{ salt['pillar.get']('tightvncserver:display', 1) }}"
     - require:
       - pkg: tightvncserver
       - file: {{ home }}/.vnc/passwd
@@ -119,37 +119,12 @@ tightvncserver:
       - pkg: apt_sources
       - pkg: tightvncserver
 
-/etc/init/tightvncserver.conf:
-  file:
-    - managed
-    - user: root
-    - group: root
-    - mode: 440
-    - source: salt://tightvncserver/upstart.jinja2
-    - template: jinja
-    - context:
-      user: {{ user }}
-      home: {{ home }}
-    - require:
-      - user: {{ user }}
-
 {{ home }}/.vnc:
   file:
     - directory
     - user: {{ user }}
     - group: {{ user }}
     - dir_mode: 755
-    - require:
-      - user: tightvncserver
-
-{{ home }}/.vnc/passwd:
-  file:
-    - managed
-    - user: {{ user }}
-    - group: {{ user }}
-    - mode: 600
-    - watch:
-      - cmd: tightvncserver
     - require:
       - user: tightvncserver
 
@@ -167,7 +142,44 @@ tightvncserver:
     - context:
       home: {{ home }}
 
+/etc/init/tightvncserver.conf:
+  file:
+    - managed
+    - user: root
+    - group: root
+    - mode: 440
+    - source: salt://tightvncserver/upstart.jinja2
+    - template: jinja
+    - context:
+      user: {{ user }}
+      home: {{ home }}
+    - require:
+      - user: {{ user }}
+
+{{ home }}/.vnc/passwd:
+  file:
+    - managed
+    - user: {{ user }}
+    - group: {{ user }}
+    - mode: 600
+    - watch:
+      - cmd: tightvncserver
+    - require:
+      - user: tightvncserver
+      - file: {{ home }}/.vnc
 {%- if wm == "fluxbox" %}
+      - file: {{ home }}/.fluxbox/menu
+
+vnc_change_permission_home_fluxbox:
+  file:
+    - directory
+    - name: {{ home }}/.fluxbox
+    - user: {{ user }}
+    - group: {{ user }}
+    - dir_mode: 755
+    - require:
+      - user: tightvncserver
+
 {{ home }}/.fluxbox/menu:
   file:
     - managed
@@ -178,4 +190,5 @@ tightvncserver:
     - template: jinja
     - require:
       - pkg: fluxbox
+      - file: vnc_change_permission_home_fluxbox
 {%- endif %}

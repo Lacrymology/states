@@ -28,9 +28,15 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 Uninstall a simple Git source control management server.
 -#}
 git-server:
+  group:
+    - absent
+    - name: git
+    - require:
+      - user: git-server
   user:
     - absent
     - name: git
+    - force: True
 {% if salt['pillar.get']('destructive_absent', False) %}
     - purge: True
 {% else %}

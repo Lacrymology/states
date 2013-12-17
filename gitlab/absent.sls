@@ -40,11 +40,14 @@ Unistalling GitLab.
 gitlab:
   user:
     - absent
+    - name: git
     - force: True
     - require:
       - cmd: gitlab
+      - uwsgi: uwsgi_gitlab
   group:
     - absent
+    - name: git
     - require:
       - user: gitlab
   cmd:

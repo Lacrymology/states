@@ -37,7 +37,6 @@ Diamond statistics for tightvncserver.
 {%- set wm = salt['pillar.get']('tightvncserver:wm', 'fluxbox') %}
 
 include:
-  - apt.diamond
   - diamond
   - {{ wm }}.diamond
 

@@ -74,6 +74,7 @@ graylog2-web-{{ filename }}:
     - source: salt://graylog2/web/{{ filename }}.jinja2
     - require:
       - user: web
+      - archive: graylog2-web
 {% endfor %}
 
 {% for filename in ('config', 'email') %}
@@ -81,6 +82,8 @@ graylog2-web-{{ filename }}:
   file:
     - absent
     - name: {{ web_root_dir }}/config/{{ filename }}.yml
+    - require:
+      - archive: graylog2-web
 {% endfor %}
 
 /etc/logrotate.d/graylog2-web:

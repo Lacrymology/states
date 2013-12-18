@@ -36,7 +36,6 @@ useless_kmod:
       - floppy
       - ppdev
       - serio_raw
-      - parport_pc
       - psmouse
       - reiserfs
       - ufs
@@ -60,10 +59,18 @@ dependencies_kmod:
   kmod:
     - absent
     - names:
-      - parport
+      - parport_pc
       - fat
       - libcrc32c
       - zlib_deflate
     - require:
       - kmod: useless_kmod
+
+# on 12.04.3, parport_pc depend on lp, so below state removes parport.
+kmod_parport:
+  kmod:
+    - absent
+    - name: parport
+    - require:
+      - kmod: dependencies_kmod
 {% endif %}

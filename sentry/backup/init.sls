@@ -41,4 +41,4 @@ include:
     - source: salt://sentry/backup/cron.jinja2
     - require:
       - pkg: cron
-      - file: {{ script }}
+      - file: /usr/local/bin/backup-postgresql

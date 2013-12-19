@@ -36,18 +36,19 @@ Unistalling GitLab.
 -#}
 {%- set version = '6-0' %}
 {%- set web_dir = "/usr/local/gitlabhq-" + version + "-stable"  %}
+{%- set user = 'gitlab' %}
 
 gitlab:
   user:
     - absent
-    - name: git
+    - name: {{ user }}
     - force: True
     - require:
       - cmd: gitlab
       - uwsgi: gitlab
   group:
     - absent
-    - name: git
+    - name: {{ user }}
     - require:
       - user: gitlab
   cmd:
@@ -59,7 +60,7 @@ gitlab:
     - absent
     - name: gitlab
 
-{%- for file in ('/etc/nginx/conf.d/gitlab.conf', web_dir, '/home/git', '/etc/init/gitlab.conf', '/etc/logrotate.d/gitlab') %}
+{%- for file in ('/etc/nginx/conf.d/gitlab.conf', web_dir, '/home/' + user, '/etc/init/gitlab.conf', '/etc/logrotate.d/gitlab') %}
 {{ file }}:
   file:
     - absent

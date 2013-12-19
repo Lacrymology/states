@@ -67,6 +67,7 @@ production: &base
      Uncomment and customize if you can't use the default user to run GitLab (default: 'git')
      # user: git
     #}
+    user: {{ user }}
 
     {#- Email settings #}
     email_from: {{ salt['pillar.get']('gitlab:smtp:from', salt['pillar.get']('smtp:from')) }}

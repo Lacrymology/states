@@ -59,9 +59,10 @@ include:
 {%- set database_username = salt['pillar.get']('gitlab:db:username', 'gitlab') %}
 {%- set database_password = salt['password.pillar']('gitlab:db:password', 10) %}
 
+{%- set user = 'gitlab' %}
 {%- set version = '6-0' %}
 {%- set root_dir = "/usr/local" %}
-{%- set home_dir = "/home/git" %}
+{%- set home_dir = "/home/" + user %}
 {%- set web_dir = root_dir +  "/gitlabhq-" + version + "-stable"  %}
 {%- set repos_dir = home_dir + "/repositories" %}
 {%- set shell_dir = home_dir + "/gitlab-shell" %}
@@ -101,10 +102,9 @@ gitlab-shell:
       - user: gitlab
   file:
     - directory
-    - name: {{ shell_dir }}
-    - user: git
-    - group: git
-    - mode: 770
+    - name: {{ home_dir }}
+    - user: {{ user }}
+    - group: {{ user }}
     - recurse:
       - user
       - group
@@ -114,7 +114,7 @@ gitlab-shell:
     - run
     - name: mv gitlab-shell-master gitlab-shell
     - cwd: {{ home_dir }}
-    - user: git
+    - user: {{ user }}
     - onlyif: ls {{ home_dir }} | grep gitlab-shell-master
     - require:
       - archive: gitlab-shell
@@ -123,7 +123,7 @@ install_gitlab_shell:
   cmd:
     - run
     - name: {{ shell_dir }}/bin/install
-    - user: git
+    - user: {{ user }}
     - require:
       - pkg: ruby
       - cmd: gitlab-shell
@@ -136,8 +136,8 @@ install_gitlab_shell:
     - managed
     - source: salt://gitlab/gitlab-shell.jinja2
     - template: jinja
-    - user: git
-    - group: git
+    - user: {{ user }}
+    - group: {{ user }}
     - mode: 440
     - require:
       - file: gitlab-shell
@@ -145,17 +145,39 @@ install_gitlab_shell:
     - context:
       repos_dir: {{ repos_dir }}
       shell_dir: {{ shell_dir }}
+      user: {{ user }}
+
+{#- move old data in to new home folder #}
+move_git_home:
+  cmd:
+    - run
+    - name: mv /home/git {{ home_dir }}
+    - cwd: /home
+    - user: root
+    - onlyif: ls /home/git
+
+change_git_command:
+  cmd:
+    - run
+    - name:  sed -i s@/home/git/@/home/{{ user }}/@g {{ home_dir }}/.ssh/authorized_keys
+    - user: root
+    - onlyif: ls {{ home_dir }}/.ssh/authorized_keys
+    - require:
+      - cmd: move_git_home
 
 gitlab:
   user:
     - present
-    - name: git
+    - name: {{ user }}
+    - home: {{ home_dir }}
     - groups:
       - www-data
     - shell: /bin/bash
     - require:
       - pkg: gitlab_dependencies
       - group: web
+      - cmd: move_git_home
+      - cmd: change_git_command
   postgres_user:
     - present
     - name: {{ database_username }}
@@ -187,9 +209,8 @@ gitlab:
   file:
     - directory
     - name: {{ web_dir }}
-    - user: git
-    - group: git
-    - mode: 770
+    - user: {{ user }}
+    - group: {{ user }}
     - recurse:
       - user
       - group
@@ -200,7 +221,7 @@ gitlab:
     - name: force=yes bundle exec rake gitlab:setup
     - env:
         RAILS_ENV: production
-    - user: git
+    - user: {{ user }}
     - cwd: {{ web_dir }}
     - require:
       - service: redis
@@ -244,7 +265,7 @@ gitlab_precompile_assets:
     - name: bundle exec rake assets:precompile
     - env:
         RAILS_ENV: production
-    - user: git
+    - user: {{ user }}
     - cwd: {{ web_dir }}
     - unless: ls {{ web_dir }}/public/assets/
     - watch:
@@ -256,7 +277,7 @@ gitlab_start_sidekiq_service:
     - name: bundle exec rake sidekiq:start
     - env:
          RAILS_ENV: production
-    - user: git
+    - user: {{ user }}
     - cwd: {{ web_dir }}
     - unless: ps -ef | grep [s]idekiq
     - watch:
@@ -266,8 +287,8 @@ gitlab_start_sidekiq_service:
   file:
     - managed
     - source: salt://gitlab/config.jinja2
-    - user: git
-    - group: git
+    - user: {{ user }}
+    - group: {{ user }}
     - template: jinja
     - mode: 440
     - require:
@@ -276,16 +297,16 @@ gitlab_start_sidekiq_service:
 {{ home_dir }}/gitlab-satellites:
   file:
     - directory
-    - user: git
-    - group: git
+    - user: {{ user }}
+    - group: {{ user }}
     - mode: 755
 
 {%- for dir in ('log', 'tmp', 'public/uploads', 'tmp/pids', 'tmp/cache') %}
 {{ web_dir }}/{{ dir }}:
   file:
     - directory
-    - user: git
-    - group: git
+    - user: {{ user }}
+    - group: {{ user }}
     - dir_mode: 755
     - file_mode: 644
     - recurse:
@@ -304,8 +325,8 @@ gitlab_start_sidekiq_service:
     - managed
     - source: salt://gitlab/{{ file }}.jinja2
     - template: jinja
-    - user: git
-    - group: git
+    - user: {{ user }}
+    - group: {{ user }}
     - mode: 440
     - require:
       - file: gitlab
@@ -315,6 +336,7 @@ gitlab_start_sidekiq_service:
       home_dir: {{ home_dir }}
       repos_dir: {{ repos_dir }}
       shell_dir: {{ shell_dir }}
+      user: {{ user }}
 {%- endfor %}
 
 /etc/logrotate.d/gitlab:
@@ -330,6 +352,7 @@ gitlab_start_sidekiq_service:
       - file: gitlab_upstart
     - context:
       web_dir: {{ web_dir }}
+      user: {{ user }}
 
 charlock_holmes:
   gem:
@@ -352,7 +375,7 @@ bundler:
     - run
     - name: bundle install --deployment --without development test mysql aws
     - cwd: {{ web_dir }}
-    - user: git
+    - user: {{ user }}
     - require:
       - gem: bundler
 
@@ -385,16 +408,16 @@ rack:
     - context:
       web_dir: {{ web_dir }}
 
-/home/git/.gitconfig:
+{{ home_dir }}/.gitconfig:
   file:
     - managed
     - source: salt://gitlab/gitconfig.jinja2
     - template: jinja
-    - user: git
-    - group: git
+    - user: {{ user }}
+    - group: {{ user }}
     - mode: 644
     - require:
-      - user: git
+      - user: {{ user }}
 
 gitlab_upstart:
   file:
@@ -408,6 +431,7 @@ gitlab_upstart:
       - cmd: gitlab
     - context:
       web_dir: {{ web_dir }}
+      user: {{ user }}
 
 {% from 'rsyslog/upstart.sls' import manage_upstart_log with context %}
 {{ manage_upstart_log('gitlab') }}
@@ -417,8 +441,8 @@ gitlab_upstart:
   file:
     - managed
     - source: salt://gitlab/production.jinja2
-    - user: git
-    - group: git
+    - user: {{ user }}
+    - group: {{ user }}
     - template: jinja
     - mode: 440
     - require:
@@ -431,8 +455,8 @@ gitlab_upstart:
   file:
     - managed
     - source: salt://gitlab/smtp.jinja2
-    - user: git
-    - group: git
+    - user: {{ user }}
+    - group: {{ user }}
     - template: jinja
     - mode: 440
     - require:
@@ -447,8 +471,8 @@ gitlab_upstart:
     - managed
     - source: salt://gitlab/admin.jinja2
     - template: jinja
-    - user: git
-    - group: git
+    - user: {{ user }}
+    - group: {{ user }}
     - mode: 644
     - require:
       - file: gitlab

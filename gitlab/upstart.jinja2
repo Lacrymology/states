@@ -44,8 +44,8 @@ stop on runlevel [!2345]
 
 chdir {{ web_dir }}
 
-setuid git
-setgid git
+setuid {{ user }}
+setgid {{ user }}
 
 env RAILS_ENV="production"
 

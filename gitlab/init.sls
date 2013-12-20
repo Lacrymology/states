@@ -253,11 +253,29 @@ gitlab:
       - user: gitlab
       - file: {{ web_dir }}/config/gitlab.yml
       - file: {{ web_dir }}/config/database.yml
-{%- if salt['pillar.get']('gitlab:smtp:enabled', False) %}
+ {%- if salt['pillar.get']('gitlab:smtp:enabled', False) %}
       - file: {{ web_dir }}/config/environments/production.rb
       - file: {{ web_dir }}/config/initializers/smtp_settings.rb
 {%- endif %}
       - archive: gitlab
+  service:
+    - running
+    - name: gitlab
+    - order: 50
+    - require:
+      - user: gitlab
+    - watch:
+      - archive: gitlab
+      - cmd: gitlab
+      - cmd: bundler
+      - cmd: gitlab_precompile_assets
+      - file: gitlab_upstart
+      - file: {{ web_dir }}/config.ru
+      - file: {{ web_dir }}/config/gitlab.yml
+{%- if salt['pillar.get']('gitlab:smtp:enabled', False) %}
+      - file: {{ web_dir }}/config/environments/production.rb
+      - file: {{ web_dir }}/config/initializers/smtp_settings.rb
+{%- endif %}
 
 gitlab_precompile_assets:
   cmd:
@@ -271,6 +289,7 @@ gitlab_precompile_assets:
     - watch:
       - cmd: gitlab
 
+{#-
 gitlab_start_sidekiq_service:
   cmd:
     - wait
@@ -282,6 +301,7 @@ gitlab_start_sidekiq_service:
     - unless: ps -ef | grep [s]idekiq
     - watch:
       - cmd: gitlab
+#}
 
 {{ web_dir }}/config.ru:
   file:

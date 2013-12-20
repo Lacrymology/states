@@ -44,28 +44,25 @@ gitlab:
     - name: {{ user }}
     - force: True
     - require:
-      - cmd: gitlab
       - uwsgi: gitlab
+      - service: gitlab
   group:
     - absent
     - name: {{ user }}
     - require:
       - user: gitlab
-  cmd:
-    - run
-    - name: kill -9 $(ps -ef | grep sidekiq | grep -v grep | awk  '{print $2}')
-    - user: root
-    - onlyif: ps -ef | grep sidekiq | grep -v grep
   uwsgi:
     - absent
     - name: gitlab
+  service:
+    - dead
 
 {%- for file in ('/etc/nginx/conf.d/gitlab.conf', web_dir, '/home/' + user, '/etc/init/gitlab.conf', '/etc/logrotate.d/gitlab') %}
 {{ file }}:
   file:
     - absent
     - require:
-      - cmd: gitlab
+      - service: gitlab
 {%- endfor %}
 
 gitlab-upstart-log:
@@ -73,8 +70,9 @@ gitlab-upstart-log:
     - run
     - name: find /var/log/upstart/ -maxdepth 1 -type f -name 'gitlab.log*' -delete
     - require:
-      - cmd: gitlab
+      - service: gitlab
 
 /etc/rsyslog.d/gitlab-upstart.conf:
   file:
     - absent
+      - service: gitlab

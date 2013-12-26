@@ -104,6 +104,20 @@ djangopypi2:
       - postgres_user: djangopypi2
       - service: postgresql
 
+{{ root_dir }}/manage:
+  file:
+    - managed
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 550
+    - source: salt://django/manage.jinja2
+    - context:
+      settings: djangopypi2.website.settings
+      virtualenv: {{ root_dir }}
+    - require:
+      - virtualenv: djangopypi2
+
 djangopypi2_urls:
   file:
     - managed

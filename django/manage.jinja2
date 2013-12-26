@@ -28,22 +28,17 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 #!/bin/sh
 # {{ pillar['message_do_not_modify'] }}
 TEMP_HOME_DIR=`mktemp -d`
-{%- if user is defined and group is defined %}
-export DJANGO_USER={{ user }}
-export DJANGO_GROUP={{ group }}
-{%- else %}
-export DJANGO_USER=www-data
-export DJANGO_GROUP=www-data
-{%- endif %}
-chown $DJANGO_USER $TEMP_HOME_DIR
-chgrp $DJANGO_GROUP $TEMP_HOME_DIR
+{%- set django_user = django_user|default('www-data') %}
+{%- set django_group = django_group|default('www-data') %}
+chown {{ django_user }} $TEMP_HOME_DIR
+chgrp {{ django_group }} $TEMP_HOME_DIR
 export HOME=$TEMP_HOME_DIR
 {%- if settings is defined %}
 export DJANGO_SETTINGS_MODULE={{ settings }}
 {%- endif %}
 {%- if alternate_admin_cmd is defined %}
-sudo -E -u $DJANGO_USER -g $DJANGO_GROUP{{ alternate_admin_cmd }} $*
+sudo -E -u {{ django_user }} -g {{ django_group }} {{ alternate_admin_cmd }} $*
 {%- else %}
-sudo -E -u $DJANGO_USER -g $DJANGO_GROUP {{ virtualenv }}/bin/django-admin.py $*
+sudo -E -u {{ django_user }} -g {{ django_group }} {{ virtualenv }}/bin/django-admin.py $*
 {%- endif %}
 rm -rf $TEMP_HOME_DIR

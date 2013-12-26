@@ -184,9 +184,10 @@ djangopypi2_collectstatic:
 djangopypi2_loaddata:
   cmd:
     - wait
-    - name: {{ root_dir }}/bin/django-admin.py loaddata --settings=djangopypi2.website.settings initial
+    - name: {{ root_dir }}/manage loaddata --settings=djangopypi2.website.settings initial
     - require:
       - module: djangopypi2_settings
+      - file: {{ root_dir }}/manage
     - watch:
       - postgres_database: djangopypi2
 
@@ -225,10 +226,11 @@ djangomod module, which is just a helper to build our command and run it.
 #}
   cmd:
     - wait
-    - name: {{ root_dir }}/bin/django-admin.py loaddata --settings=djangopypi2.website.settings {{ root_dir }}/django_contrib_sites.xml
+    - name: {{ root_dir }}/manage loaddata --settings=djangopypi2.website.settings {{ root_dir }}/django_contrib_sites.xml
     - require:
       - module: djangopypi2_settings
       - file: djangopypi2-django_contrib_sites
+      - file: {{ root_dir }}/manage
     - watch:
       - postgres_database: djangopypi2
 

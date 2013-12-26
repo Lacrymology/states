@@ -104,6 +104,20 @@ djangopypi2:
       - postgres_user: djangopypi2
       - service: postgresql
 
+{{ root_dir }}/manage:
+  file:
+    - managed
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 550
+    - source: salt://django/manage.jinja2
+    - context:
+      settings: djangopypi2.website.settings
+      virtualenv: {{ root_dir }}
+    - require:
+      - virtualenv: djangopypi2
+
 djangopypi2_urls:
   file:
     - managed
@@ -168,14 +182,12 @@ djangopypi2_collectstatic:
       - module: djangopypi2
 
 djangopypi2_loaddata:
-  module:
+  cmd:
     - wait
-    - name: django.loaddata
-    - settings_module: djangopypi2.website.settings
-    - fixtures: initial
-    - bin_env: {{ root_dir }}
+    - name: {{ root_dir }}/manage loaddata --settings=djangopypi2.website.settings initial
     - require:
       - module: djangopypi2_settings
+      - file: {{ root_dir }}/manage
     - watch:
       - postgres_database: djangopypi2
 
@@ -187,7 +199,7 @@ djangopypi2_admin_user:
     - settings_module: djangopypi2.website.settings
     - bin_env: {{ root_dir }}
     - require:
-      - module: djangopypi2_loaddata
+      - cmd: djangopypi2_loaddata
     - watch:
       - postgres_database: djangopypi2
 
@@ -207,15 +219,18 @@ djangopypi2-django_contrib_sites:
     - user: root
     - group: root
     - mode: 440
-  module:
+{#-
+since djangomod has a bug from 0.16-> 0.17+, that make we cannot use it with fixture.
+Therefore, let's use command directly - we'll get the same effect as run with
+djangomod module, which is just a helper to build our command and run it.
+#}
+  cmd:
     - wait
-    - name: django.loaddata
-    - settings_module: djangopypi2.website.settings
-    - fixtures: {{ root_dir }}/django_contrib_sites.xml
-    - bin_env: {{ root_dir }}
+    - name: {{ root_dir }}/manage loaddata --settings=djangopypi2.website.settings {{ root_dir }}/django_contrib_sites.xml
     - require:
       - module: djangopypi2_settings
       - file: djangopypi2-django_contrib_sites
+      - file: {{ root_dir }}/manage
     - watch:
       - postgres_database: djangopypi2
 
@@ -247,13 +262,13 @@ uwsgi_djangopypi2:
       - postgres_database: djangopypi2
       - service: memcached
       - service: rsyslog
-      - module: djangopypi2-django_contrib_sites
+      - cmd: djangopypi2-django_contrib_sites
     - watch:
       - cmd: djangopypi2
       - file: djangopypi2_settings
       - file: djangopypi2_urls
       - file: /var/lib/deployments/djangopypi2/media
-      - module: djangopypi2_loaddata
+      - cmd: djangopypi2_loaddata
 
 /etc/nginx/conf.d/djangopypi2.conf:
   file:

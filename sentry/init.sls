@@ -143,7 +143,9 @@ sentry_settings:
     - user: root
     - group: root
     - mode: 550
-    - source: salt://sentry/manage.jinja2
+    - source: salt://django/manage.jinja2
+    - context:
+      alternate_admin_cmd: /usr/local/sentry/bin/sentry --config=/etc/sentry.conf.py
     - require:
       - virtualenv: sentry
 

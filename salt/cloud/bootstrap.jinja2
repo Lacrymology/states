@@ -39,7 +39,7 @@ chmod 400 /etc/salt/pki/minion/minion.pem
 {#- if you change the following section, please also change
     salt/minion/bootstrap.sh #}
 {%- block installation %}
-apt-get install -y python-software-properties
+apt-get install -y python-software-properties python-pip
 apt-add-repository -y ppa:saltstack/salt
     {%- if 'files_archive' in pillar %}
 echo "deb {{ pillar['files_archive'].rstrip('/')|replace('https://', 'http://') }}/mirror/salt/0.17.2-2/ `lsb_release -c -s` main" > /etc/apt/sources.list.d/saltstack-salt-`lsb_release -c -s`.list

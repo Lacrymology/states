@@ -27,6 +27,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 include:
   - apt
   - salt
+  - pip
 
 {%- for type in ('profiles', 'providers') %}
 /etc/salt/cloud.{{ type }}:
@@ -46,13 +47,31 @@ include:
     - require:
       - pkg: salt-cloud
 
+salt_cloud_remove_old_version:
+  pkg:
+    - removed
+    - name: salt-cloud
+
+{%- set version = '0.8.11' %}
 salt-cloud:
   pkg:
     - installed
+    - name: python-libcloud
     - skip_verify: True
     - require:
       - pkg: salt
       - apt_repository: salt
+      - pkg: salt_cloud_remove_old_version
+  pip:
+    - installed
+{%- if 'files_archive' in pillar %}
+    - name: {{ pillar['files_archive'] }}/pip/salt-cloud-{{ version }}.tar.gz
+{%- else %}
+    - name: salt-cloud=={{ version }}
+{%- endif %}
+    - require:
+      - module: pip
+      - pkg: salt-cloud
 
 salt-cloud-boostrap-script:
   file:

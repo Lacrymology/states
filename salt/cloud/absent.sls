@@ -35,8 +35,11 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 salt-cloud:
   pkg:
     - purged
+{%- if salt['cmd.has_exec']('pip') %}
   pip:
     - removed
+    - order: 1
+{%- endif %}
 
 python-libcloud:
   pkg:

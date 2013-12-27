@@ -45,3 +45,4 @@ include:
 /usr/local:
   file:
     - absent
+    - order: last

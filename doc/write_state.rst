@@ -152,3 +152,14 @@ Should be ::
 * All config file must have a header tell that it's managed by salt (that string get from pillar)
 * All config file must end with `.jinja2`
 * Main config file should use name config.jinja2 instead of its_original_name.jinja2
+
+Absent
+------
+
+absent formulas are mainly used by intergration.py script.
+
+Some points to notice when write an absent formula:
+
+* If it has a pip.remove state, make sure that states has low order
+(often order: 1) because local.absent will remove /usr/local and therefore
+remove /usr/local/bin/pip

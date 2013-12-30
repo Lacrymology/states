@@ -43,7 +43,6 @@ Bad::
 
   MySQL-python
 
-
 States
 ------
 
@@ -163,3 +162,20 @@ Some points to notice when write an absent formula:
 * If it has a pip.remove state, make sure that states has low order
 (often order: 1) because local.absent will remove /usr/local and therefore
 remove /usr/local/bin/pip
+
+Installing
+----------
+
+* App that installed used an alternate method than apt-get should be located
+  in /usr/local/software_name
+* Using ppa is prefered to self-compile software from source.
+
+Upgrading
+---------
+
+* Make sure formula will work with an existing-running-service and a
+  new-clean-install-server. (Remove old version and install new, or just
+  install then restart service, or does it need a manually migrating process?)
+
+* Contact person that in charge of making local mirror for that software
+  (ppa repo, deb files, pip package, etc...)

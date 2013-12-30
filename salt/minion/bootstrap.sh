@@ -47,12 +47,10 @@ fi
 export HOME=`cat /etc/passwd | grep ^root\: | cut -d ':' -f 6`
 
 # if you change the following section, please also change
-# salt/cloud/bootstrap.sh
+# salt/cloud/bootstrap.jinja2
 apt-get update
 apt-get install -y python-software-properties python-pip
-apt-add-repository -y ppa:saltstack/salt
-echo "deb http://archive.robotinfra.com/mirror/salt/0.17.2-2/ `lsb_release -c -s` main" > /etc/apt/sources.list.d/saltstack-salt-`lsb_release -c -s`.list
-apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0E27C0A6
+echo "deb http://archive.robotinfra.com/mirror/salt/0.17.5-1/ `lsb_release -c -s` main" > /etc/apt/sources.list.d/saltstack-salt-`lsb_release -c -s`.list
 apt-get update
 apt-get install -y --force-yes salt-minion
 # end of section

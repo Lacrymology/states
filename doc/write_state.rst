@@ -30,6 +30,24 @@ Coding Style Guide
              POSSIBILITY OF SUCH DAMAGE.
 :authors: - Bruno Clermont
 
+
+Terminology
+-----------
+
+- Formula is a collection of SLS files, that often locate inside same
+  directory, and is used to provide a software and all supported integration
+  (NRPE, diamond).
+- SLS (stands for SaLt State file) is a file that ends with .sls extension.
+  Which often consists of multiple states.
+- State is a salt-state, which is a representation of the state that a system
+  should be in.
+- State module is a python module, which is responsible for system will be
+  in the declared state. For example, ``file`` state module is a python module
+  (https://github.com/saltstack/salt/blob/develop/salt/states/file.py) or
+  /usr/share/pyshared/salt/states/file.py on our Ubuntu OS. It is responsilbe
+  for a file will be managed, with user/group and mode set to what user
+  declared in his state.
+
 PIP
 ---
 

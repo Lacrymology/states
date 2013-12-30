@@ -1,0 +1,8 @@
+# {{ pillar['message_do_not_modify'] }}
+#! /bin/bash
+
+{%- for hostname in salt['pillar.get']('ejabberd:hostnames', []) %}
+  {% for user in salt['pillar.get']('ejabberd:' + hostname + ':admin' ) %}
+ejabberdctl register {{ user }} {{ hostname }} {{ salt['pillar.get']('ejabberd:' + hostname + ':admin:' + user ) }}
+  {% endfor %}
+{% endfor %}

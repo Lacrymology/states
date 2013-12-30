@@ -70,12 +70,20 @@ Options which are set by Debconf and managed by ucf
 
 Admin user
 #}
-{acl, admin, {user, "{{ admin }}", "{{ hostname }}"}}.
+
+{%- for hostname in salt['pillar.get']('ejabberd:hostnames', []) %}
+  {%- for user in salt['pillar.get']('ejabberd:' + hostname + ':admin' ) %}
+{acl, admin, {user, "{{ user }}", "{{ hostname }}"}}.
+  {%- endfor %}
+  {%- for user in salt['pillar.get']('ejabberd:' + hostname + ':blocked' ) %}
+{acl, blocked, {user, "{{ user }}", "{{ hostname }}"}}.
+  {%- endfor %}
+{%- endfor %}
 
 {#-
 Hostname
 #}
-{hosts, ["{% for hostname in salt['pillar.get']('ejabberd:hostnames') %}{{ '{{' + hostname + '}}' }}{% if not loop.last %} {% endif %}{% endfor %}"]}.
+{hosts, [{% for hostname in salt['pillar.get']('ejabberd:hostnames') %}{{ '"' + hostname + '"'}}{% if not loop.last %}, {% endif %}{% endfor %}]}.
 
 {#-
   =========

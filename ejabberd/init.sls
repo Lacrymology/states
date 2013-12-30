@@ -9,7 +9,6 @@ include:
   TODO
     - change ejabberd source
     - support ssl
-    - support multi admin user registrable
     - nrpe/diamond
     - nginx support to admin panel
 #}
@@ -58,9 +57,24 @@ ejabberd:
     - user: ejabberd
     - group: ejabberd
     - mode: 600
-    - context:
-      admin: {{ user }}
-      hostname: {{ hostname }}
-      pkg: {{ user }}
     - require:
       - pkg: ejabberd
+
+ejabberd_reg_user:
+  file:
+    - managed
+    - name: /tmp/reg.sh
+    - source: salt://ejabberd/reg.jinja2
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 500
+    - require:
+      - service: ejabberd
+  cmd:
+    - wait
+    - name: ./reg.sh
+    - user: root
+    - cwd: /tmp
+    - watch:
+      - file: ejabberd_reg_user

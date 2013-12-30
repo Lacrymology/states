@@ -11,11 +11,17 @@ Example::
       - localhost
       - 162.243.252.48
     localhost:
-      user1: admin
-      user2: blocked
+      admin:
+        user1: pass1
+      blocked:
+        - user2
     162.243.252.48:
-      user3: admin
-      user1: admin
+      admin:
+        user3: pass3
+        user1: pass1
+      blocked:
+        - user2
+        - user4
 
 Optional
 --------

@@ -30,6 +30,9 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
     - absent
 
 dovecot:
+  service:
+    - dead
+    - enable: False
   pkg:
     - purged
     - pkgs:
@@ -37,6 +40,8 @@ dovecot:
       - dovecot-pop3d
       - dovecot-ldap
       - dovecot-core
+    - require:
+      - service: dovecot
   file:
     - absent
     - name: /etc/dovecot

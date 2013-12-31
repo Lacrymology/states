@@ -36,6 +36,7 @@ Backup for Gitlab.
 -#}
 include:
   - cron
+  - postgresql.server.backup
 
 /etc/cron.daily/backup-gitlab:
   file:
@@ -47,3 +48,4 @@ include:
     - source: salt://gitlab/backup/cron.jinja2
     - require:
       - pkg: cron
+      - file: /usr/local/bin/backup-postgresql

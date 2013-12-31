@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Bruno Clermont
+Copyright (c) 2013, Hung Nguyen Viet
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,25 +22,30 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Bruno Clermont <patate@fastmail.cn>
+Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
-Backup client for Graphite.
+Poor man backup using rsync and scp.
 -#}
-include:
-  - cron
-  - postgresql.server.backup
-  - backup.client
 
-/etc/cron.daily/backup-graphite:
+include:
+  - local
+  - ssh.client
+
+backup-client:
+  ssh_known_hosts:
+    - present
+    - name: {{ pillar['backup_server']['address'] }}
+    - user: root
+    - fingerprint: {{ pillar['backup_server']['fingerprint'] }}
+
+/usr/local/bin/backup_store:
   file:
     - managed
     - user: root
     - group: root
-    - mode: 500
+    - mode: 550
     - template: jinja
-    - source: salt://graphite/backup/cron.jinja2
+    - source: salt://backup/client/scp/copy.jinja2
     - require:
-      - pkg: cron
-      - file: /usr/local/bin/backup-postgresql
-      - file: /usr/local/bin/backup_store
+      - file: /usr/local

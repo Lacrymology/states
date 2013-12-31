@@ -36,6 +36,8 @@ Backup client for djangopypi2.
 -#}
 include:
   - cron
+  - postgresql.server.backup
+  - backup.client
 
 /etc/cron.daily/backup-djangopypi2:
   file:
@@ -47,3 +49,5 @@ include:
     - source: salt://djangopypi2/backup/cron.jinja2
     - require:
       - pkg: cron
+      - file: /usr/local/bin/backup-postgresql
+      - file: /usr/local/bin/backup_store

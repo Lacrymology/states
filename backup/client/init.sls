@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Hung Nguyen Viet
+Copyright (c) 2013, Luan Vo Ngoc
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,30 +22,8 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
-Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
-
-Poor man backup using rsync and scp.
+Author: Luan Vo Ngoc <ngocluanvo@gmail.com>
 -#}
 
 include:
-  - local
-  - ssh.client
-
-backup-client:
-  ssh_known_hosts:
-    - present
-    - name: {{ pillar['backup_server']['address'] }}
-    - user: root
-    - fingerprint: {{ pillar['backup_server']['fingerprint'] }}
-
-/usr/local/bin/backup_store:
-  file:
-    - managed
-    - user: root
-    - group: root
-    - mode: 550
-    - template: jinja
-    - source: salt://backup/scp/copy.jinja2
-    - require:
-      - file: /usr/local
+  - backup.client.{{ pillar['backup_storage'] }}

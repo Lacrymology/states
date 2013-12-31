@@ -30,6 +30,7 @@ Backup client for Sentry.
 include:
   - cron
   - postgresql.server.backup
+  - backup.client
 
 /etc/cron.daily/backup-sentry:
   file:
@@ -42,3 +43,4 @@ include:
     - require:
       - pkg: cron
       - file: /usr/local/bin/backup-postgresql
+      - file: /usr/local/bin/backup_store

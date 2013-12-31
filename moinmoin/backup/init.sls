@@ -30,6 +30,8 @@ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
  #}
 include:
   - cron
+  - virtualenv.backup
+  - backup.client
 
 /etc/cron.daily/backup-moinmoin:
   file:
@@ -41,3 +43,5 @@ include:
     - source: salt://moinmoin/backup/cron.jinja2
     - require:
       - pkg: cron
+      - file:/usr/local/bin/backup-pip
+      - file: /usr/local/bin/backup_store 

@@ -409,25 +409,32 @@ class TestStateMeta(type):
                 logger.debug("Ignore state %s", state)
             else:
                 # skip SLS contains string that indicate NO-TEST
-                logger.debug('salt://{0}.sls'.format(state.replace('.', '/')))
-
+                spath = state.replace('.', '/')
                 try:
+                    logger.debug(('Trying to get content '
+                                  'of salt://{0}.sls').format(spath))
                     content = run_salt_module(
                         'cp.get_file_str',
-                        'salt://{0}.sls'.format(state.replace('.', '/')))
-                except Exception, err:
+                        'salt://{0}.sls'.format(spath))
+                    # NOTICE if above module running raises an exception,
+                    # Salt will log it out. Therefore, no need to worry
+                    # about that exception output.
+                except Exception as err:
+                    logger.debug(('salt://{0}.sls does not exist. '
+                                  'Try salt://{0}/init.sls').format(spath))
                     try:
                         content = run_salt_module(
-                            'cp.get_file_str',
-                            'salt://{0}/init.sls'.format(state.replace('.',
-                                                                       '/')))
+                                    'cp.get_file_str',
+                                    'salt://{0}/init.sls'.format(spath))
+                        logger.debug(('Got content of '
+                                      'salt://{0}/init.sls').format(spath))
                     except Exception:
                         raise err
-
                 if NO_TEST_STRING in content:
                     logger.debug('Explicit ignore state %s', state)
                     continue
 
+                # add all other states
                 if state.endswith('.absent'):
                     logger.debug("Add test for absent state %s", state)
                     # build a list of all absent states

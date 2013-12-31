@@ -100,3 +100,14 @@ gsyslogd:
       - pkg: rsyslog
     - watch_in:
       - service: rsyslog
+
+/etc/logrotate.d/rsyslog:
+  file:
+    - managed
+    - template: jinja
+    - source: salt://rsyslog/logrotate.jinja2
+    - user: root
+    - group: root
+    - mode: 644
+    - require:
+      - pkg: rsyslog

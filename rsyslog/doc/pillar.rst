@@ -49,3 +49,10 @@ rsyslog:tcp
 Use TCP for transfering log to remote destination.
 
 Default: ``False``.
+
+rsyslog:rotate
+~~~~~~~~~~~~~~
+
+The number of times the log file will be rotated before being removed.
+
+Default: ``14``.

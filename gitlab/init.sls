@@ -90,11 +90,11 @@ gitlab-shell:
     - extracted
     - name: {{ home_dir }}/
     {%- if 'files_archive' in pillar %}
-    - source: {{ pillar['files_archive'] }}/mirror/gitlab/shell-fbaf8d8c12dcb9d820d250b9f9589318dbc36616.tar.gz
+    - source: {{ pillar['files_archive'] }}/mirror/gitlab/shell-1.8.0.tar.gz
     {%- else %}
-    - source:  http://archive.robotinfra.com/mirror/gitlab/shell-fbaf8d8c12dcb9d820d250b9f9589318dbc36616.tar.gz
+    - source:  http://archive.robotinfra.com/mirror/gitlab/shell-1.8.0.tar.gz
     {%- endif %}
-    - source_hash: md5=fa679c88f382211b34ecd35bfbb54ea6
+    - source_hash: md5=6f82c0917dc1a65019ec04dec4e9a7d5
     - archive_format: tar
     - tar_options: z
     - if_missing: {{ shell_dir }}
@@ -112,7 +112,7 @@ gitlab-shell:
       - cmd: gitlab-shell
   cmd:
     - run
-    - name: mv gitlab-shell-master gitlab-shell
+    - name: mv gitlab-shell-1.8.0 gitlab-shell
     - cwd: {{ home_dir }}
     - user: {{ user }}
     - onlyif: ls {{ home_dir }} | grep gitlab-shell-master

@@ -5,11 +5,13 @@ admin = User.create(
   password: "{{ pillar['gitlab']['admin']['password'] }}",
   password_confirmation: "{{ pillar['gitlab']['admin']['password'] }}",
   password_expires_at: Time.now
+  theme_id: Gitlab::Theme::MARS
 )
 
 admin.projects_limit = {{ salt['pillar.get']('gitlab:admin:projects_limit', 1000) }}
 admin.admin = true
 admin.save!
+admin.confirm!
 
 if admin.valid?
 puts %q[

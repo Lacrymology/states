@@ -60,10 +60,10 @@ include:
 {%- set database_password = salt['password.pillar']('gitlab:db:password', 10) %}
 
 {%- set user = 'gitlab' %}
-{%- set version = '6-0' %}
+{%- set version = '6.4.3' %}
 {%- set root_dir = "/usr/local" %}
 {%- set home_dir = "/home/" + user %}
-{%- set web_dir = root_dir +  "/gitlabhq-" + version + "-stable"  %}
+{%- set web_dir = root_dir +  "/gitlabhq-" + version %}
 {%- set repos_dir = home_dir + "/repositories" %}
 {%- set shell_dir = home_dir + "/gitlab-shell" %}
 
@@ -171,6 +171,11 @@ change_git_command:
     - require:
       - cmd: move_git_home
 
+gitlab_remove_old_version:
+  file:
+    - absent
+    - name: /usr/local/gitlabhq-6-0-stable
+
 gitlab:
   user:
     - present
@@ -201,17 +206,18 @@ gitlab:
     - extracted
     - name: {{ root_dir }}/
 {%- if 'files_archive' in pillar %}
-    - source: {{ pillar['files_archive'] }}/mirror/gitlab/{{ version|replace("-", ".") }}.tar.gz
+    - source: {{ pillar['files_archive'] }}/mirror/gitlab/{{ version }}.tar.gz
 {%- else %}
-    - source: http://archive.robotinfra.com/mirror/gitlab/{{ version|replace("-", ".") }}.tar.gz
+    - source: http://archive.robotinfra.com/mirror/gitlab/{{ version }}.tar.gz
 {%- endif %}
-    - source_hash: md5=151be72dc60179254c58120098f2a84e
+    - source_hash: md5=a66d5504b154aacc68aefae9445f3fd2
     - archive_format: tar
     - tar_options: z
     - if_missing: {{ web_dir }}
     - require:
       - postgres_database: gitlab
       - file: /usr/local
+      - file: gitlab_remove_old_version
   file:
     - directory
     - name: {{ web_dir }}
@@ -283,17 +289,33 @@ gitlab:
       - file: {{ web_dir }}/config/initializers/smtp_settings.rb
 {%- endif %}
 
+gitlab_migrate_db:
+  cmd:
+    - wait
+    - name: bundle exec rake db:migrate
+    - env:
+        RAILS_ENV: production
+    - user: {{ user }}
+    - cwd: {{ web_dir }}
+    - watch:
+      - cmd: gitlab
+      - archive: gitlab
+    - require:
+      - service: redis
+      - cmd: bundler
+      - file: {{ web_dir }}/db/fixtures/production/001_admin.rb
+
 gitlab_precompile_assets:
   cmd:
     - wait
-    - name: bundle exec rake assets:precompile
+    - name: bundle exec rake assets:clean assets:precompile cache:clear
     - env:
         RAILS_ENV: production
     - user: {{ user }}
     - cwd: {{ web_dir }}
     - unless: ls {{ web_dir }}/public/assets/
     - watch:
-      - cmd: gitlab
+      - cmd: gitlab_migrate_db
 
 {#-
 gitlab_start_sidekiq_service:
@@ -405,14 +427,23 @@ bundler:
     - require:
       - gem: bundler
 
-rack:
+gitlab_rack_gem_remove_old_version:
+  gem:
+    - removed
+    - name: rack
+    - require:
+      - pkg: ruby
+
+gitlab_rack_gem:
   gem:
     - installed
-    - version: 1.4.5
+    - name: rack
+    - version: 1.5.2
     - runas: root
     - require:
       - pkg: ruby
       - pkg: build
+      - gem: gitlab_rack_gem_remove_old_version
 
 /etc/nginx/conf.d/gitlab.conf:
   file:

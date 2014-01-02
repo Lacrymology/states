@@ -34,8 +34,8 @@ Maintainer: Lam Dang Tung <lamdt@familug.org>
 
 Unistalling GitLab.
 -#}
-{%- set version = '6-0' %}
-{%- set web_dir = "/usr/local/gitlabhq-" + version + "-stable"  %}
+{%- set version = '6.4.3' %}
+{%- set web_dir = "/usr/local/gitlabhq-" + version  %}
 {%- set user = 'gitlab' %}
 
 gitlab:

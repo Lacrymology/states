@@ -85,6 +85,11 @@ gitlab_dependencies:
       - pkg: postgresql-dev
       - pkg: xml-dev
 
+remove_old_gitlab_shell:
+  file:
+    - absent
+    - name: {{ home_dir }}/gitlab-shell
+
 gitlab-shell:
   archive:
     - extracted
@@ -100,6 +105,7 @@ gitlab-shell:
     - if_missing: {{ shell_dir }}
     - require:
       - user: gitlab
+      - file: remove_old_gitlab_shell
   file:
     - directory
     - name: {{ home_dir }}
@@ -115,7 +121,7 @@ gitlab-shell:
     - name: mv gitlab-shell-1.8.0 gitlab-shell
     - cwd: {{ home_dir }}
     - user: {{ user }}
-    - onlyif: ls {{ home_dir }} | grep gitlab-shell-master
+    - onlyif: ls {{ home_dir }} | grep gitlab-shell-1.8.0
     - require:
       - archive: gitlab-shell
 

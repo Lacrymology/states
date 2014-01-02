@@ -4,7 +4,7 @@ admin = User.create(
   username: "{{ salt['pillar.get']('gitlab:admin:username', 'root') }}",
   password: "{{ pillar['gitlab']['admin']['password'] }}",
   password_confirmation: "{{ pillar['gitlab']['admin']['password'] }}",
-  password_expires_at: Time.now
+  password_expires_at: Time.now,
   theme_id: Gitlab::Theme::MARS
 )
 

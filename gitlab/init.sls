@@ -308,7 +308,7 @@ gitlab_migrate_db:
 gitlab_precompile_assets:
   cmd:
     - wait
-    - name: bundle exec rake assets:clean assets:precompile cache:clear
+    - name: bundle exec rake assets:precompile
     - env:
         RAILS_ENV: production
     - user: {{ user }}

@@ -43,7 +43,7 @@ jenkins_dependencies:
       - daemon
       - psmisc
 
-{%- set version = '1.529' %}
+{%- set version = '1.545' %}
 jenkins:
   service:
     - running

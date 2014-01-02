@@ -77,6 +77,23 @@ Example::
     port: 80
     support_email: support@exmple.com
     default_projects_limit: 10
+    default_theme: 2
+    default_can_create_group: True
+    default_can_create_team: True
+    username_changing_enabled: True
+    signup_enabled: False
+    restricted_visibility_levels: public
+    issue_closing_pattern: ([Cc]lose[sd]|[Ff]ixe[sd]) +#\d+
+    default_projects_features:
+      issues: True
+      merge_requests: True
+      wiki: True
+      wall: False
+      snippets: False
+      visibility_level: private
+    ssh_port: 22
+    max_size: 5242880
+    commit_timeout: 10
     db:
       host: localhost
       name: gitlab
@@ -90,6 +107,122 @@ Example::
       name: root
       username: root
       projects_limit: 1000
+
+gitlab:commit_timeout
+~~~~~~~~~~~~~~~~~~~~~
+
+Git timeout to read a commit, in seconds
+
+Default: ``10``.
+
+gitlab:max_size
+~~~~~~~~~~~~~~~
+
+Max size of a git object (e.g. a commit), in bytes.
+This value can be increased if you have very large commits
+
+Default: ````. It's 5 megabytes.
+
+gitlab:ssh_port
+~~~~~~~~~~~~~~~
+
+Specify your ssh port.
+
+Default: ``22``.
+
+gitlab:default_projects_features:visibility_level
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Set default visibility level when create new project.
+Can be "private" | "internal" | "public"
+
+Default: ``private``.
+
+gitlab:default_projects_features:snippets
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Enable snippets feature as default option for new project.
+
+Default: ``False``.
+
+gitlab:default_projects_features:wall
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Enable wall feature as default option for new project.
+
+Default: ``False``.
+
+gitlab:default_projects_features:wiki
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Enable wiki feature as default option for new project.
+
+Default: ``True``.
+
+gitlab:default_projects_features:merge_requests
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Enable merge requests feature as default option for new project.
+
+Default: ``True``.
+
+gitlab:default_projects_features:issues
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Enable issue feature as default option for new project.
+
+Default: ``True``.
+
+gitlab:issue_closing_pattern
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Automatic issue closing.
+If a commit message matches this regular expression, all issues referenced from 
+the matched text will be closed. This happens when the commit is pushed or 
+merged into the default branch of a project.
+
+Default: ```([Cc]lose[sd]|[Ff]ixe[sd]) +#\d+`.
+
+gitlab:signup_enabled
+~~~~~~~~~~~~~~~~~~~~~
+
+User can sign up.
+Account passwords are not sent via the email if signup is enabled.
+
+Default: ``False``.
+
+gitlab:default_can_create_group
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+User can create group.
+
+Default: ``True``.
+
+gitlab:default_can_create_team
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+User can create team.
+
+Default: ``True``.
+
+gitlab:username_changing_enabled
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+User can change username/namespace.
+
+Default: ``True``.
+
+gitlab:default_theme
+~~~~~~~~~~~~~~~~~~~~
+
+Default theme. The correct values are:
+BASIC  = 1
+MARS   = 2
+MODERN = 3
+GRAY   = 4
+COLOR  = 5
+
+Default: ``2``.
 
 gitlab:admin:email
 ~~~~~~~~~~~~~~~~~~

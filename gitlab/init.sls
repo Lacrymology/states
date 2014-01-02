@@ -426,23 +426,26 @@ bundler:
     - require:
       - gem: bundler
 
-gitlab_rack_gem_remove_old_version:
-  gem:
-    - removed
-    - name: rack
+{%- set rack_version = '1.5.2' %}
+
+{#- Can not use gem.removed function here, because it does not support uninstall
+without confirmation option #}
+gitlab_rack_gem:
+  cmd:
+    - run
+    - name: gem uninstall -Iax rack --version '<{{ rack_version }}'
+    - onlyif: gem list | grep rack
     - require:
       - pkg: ruby
-
-gitlab_rack_gem:
   gem:
     - installed
     - name: rack
-    - version: 1.5.2
+    - version: {{ rack_version }}
     - runas: root
     - require:
       - pkg: ruby
       - pkg: build
-      - gem: gitlab_rack_gem_remove_old_version
+      - cmd: gitlab_rack_gem
 
 /etc/nginx/conf.d/gitlab.conf:
   file:

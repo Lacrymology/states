@@ -120,7 +120,6 @@ gitlab-shell:
     - run
     - name: mv gitlab-shell-1.8.0 gitlab-shell
     - cwd: {{ home_dir }}
-    - user: {{ user }}
     - onlyif: ls {{ home_dir }} | grep gitlab-shell-1.8.0
     - require:
       - archive: gitlab-shell

@@ -206,9 +206,9 @@ gitlab:
     - extracted
     - name: {{ root_dir }}/
 {%- if 'files_archive' in pillar %}
-    - source: {{ pillar['files_archive'] }}/mirror/gitlab/{{ version }}.tar.gz
+    - source: {{ pillar['files_archive'] }}/mirror/{{ version }}.tar.gz
 {%- else %}
-    - source: http://archive.robotinfra.com/mirror/gitlab/{{ version }}.tar.gz
+    - source: http://archive.robotinfra.com/mirror/{{ version }}.tar.gz
 {%- endif %}
     - source_hash: md5=a66d5504b154aacc68aefae9445f3fd2
     - archive_format: tar

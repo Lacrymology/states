@@ -29,6 +29,7 @@ Clamav: A virus scanner.
 -#}
 include:
   - apt
+  - rsyslog
 
 clamav-freshclam:
   pkg:
@@ -74,6 +75,16 @@ clamav-daemon:
     - require:
       - cmd: apt_sources
       - pkg: clamav-freshclam
+  file:
+    - managed
+    - name: /etc/clamav/clamd.conf
+    - source: salt://clamav/clamd.jinja2
+    - template: jinja
+    - mode: 400
+    - user: clamav
+    - group: clamav
+    - require:
+      - pkg: clamav-daemon
   service:
     - running
     - order: 50
@@ -81,4 +92,5 @@ clamav-daemon:
       - service: clamav-freshclam
     - watch:
       - pkg: clamav-daemon
+      - file: clamav-daemon
 

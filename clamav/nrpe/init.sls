@@ -30,6 +30,7 @@ Nagios NRPE check for ClamAV.
 include:
   - apt.nrpe
   - nrpe
+  - rsyslog.nrpe
 
 /etc/nagios/nrpe.d/clamav.cfg:
   file:

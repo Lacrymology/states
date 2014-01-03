@@ -29,6 +29,8 @@ Diamond statistics for clamav.
 -#}
 include:
   - diamond
+  - rsyslog.diamond
+ 
 
 clamav_diamond_resources:
   file:

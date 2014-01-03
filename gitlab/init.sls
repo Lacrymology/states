@@ -305,6 +305,19 @@ gitlab_migrate_db:
       - cmd: bundler
       - file: {{ web_dir }}/db/fixtures/production/001_admin.rb
 
+gitlab_coppy_images:
+  cmd:
+    - run
+    - name: cp app/assets/images/* public/assets/
+    - user: {{ user }}
+    - cwd: {{ web_dir }}
+    - onlyif: ls {{ web_dir }}/public/assets/
+    - require:
+      - archive: gitlab
+      - user: gitlab
+    - require_in:
+      - cmd: gitlab_precompile_assets
+
 gitlab_precompile_assets:
   cmd:
     - wait

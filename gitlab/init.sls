@@ -283,6 +283,7 @@ gitlab:
       - file: gitlab_upstart
       - file: {{ web_dir }}/config.ru
       - file: {{ web_dir }}/config/gitlab.yml
+      - file: {{ web_dir }}/config/initializers/rack_attack.rb
 {%- if salt['pillar.get']('gitlab:smtp:enabled', False) %}
       - file: {{ web_dir }}/config/environments/production.rb
       - file: {{ web_dir }}/config/initializers/smtp_settings.rb
@@ -385,6 +386,19 @@ gitlab_start_sidekiq_service:
       shell_dir: {{ shell_dir }}
       user: {{ user }}
 {%- endfor %}
+
+{{ web_dir }}/config/initializers/rack_attack.rb:
+  file:
+    - managed
+    - source: salt://gitlab/rack_attack.rb.jinja2
+    - template: jinja
+    - user: {{ user }}
+    - group: {{ user }}
+    - mode: 440
+    - require:
+      - file: gitlab
+    - require_in:
+      - file: {{ home_dir }}/gitlab-satellites
 
 /etc/logrotate.d/gitlab:
   file:

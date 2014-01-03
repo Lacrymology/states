@@ -22,20 +22,10 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Bruno Clermont <patate@fastmail.cn>
-Maintainer: Bruno Clermont <patate@fastmail.cn>
--#}
-#!/bin/sh
-# {{ pillar['message_do_not_modify'] }}
+Author: Luan Vo Ngoc <ngocluanvo@gmail.com>
 
-dbname=all
-NOW=`date '+%Y-%m-%d-%H_%M_%S'`
-export TERM=dumb
-workdir=`mktemp -d`
-cd $workdir
-mongodump
-tar --xz -cf mongodb-$dbname-$NOW.tar.xz dump
-mv mongodb-$dbname-$NOW.tar.xz /tmp
-cd /tmp
-rm -rf $workdir
-/usr/local/bin/backup-store mongodb-$dbname-$NOW.tar.xz
+Turn off backup for Shinken.
+-#}
+/etc/cron.daily/backup-shinken:
+  file:
+    - absent

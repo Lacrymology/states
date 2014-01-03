@@ -29,24 +29,5 @@ Author: Luan Vo Ngoc <ngocluanvo@gmail.com>
 
 NOW=`/bin/date '+%Y-%m-%d-%H_%M_%S'`
 
-{%- set compressions = {
-'xz': {'exec' : '/bin/tar', 'flag': '--xz -cf', 'extension': 'tar.xz'},
-'gzip': {'exec': '/bin/tar', 'flag': '-zcvf', 'extension': 'tar.gz'},
-'bzip2': {'exec': '/bin/tar', 'flag': '-jcvf', 'extension': 'tar.bz2'}
-} %}
-
-if [ '$1' = 'xz' ]
-then
-    {{ compressions['xz']['exec'] }} {{ compressions['xz']['flag'] }} /tmp/moinmoin-data-$NOW.{{ compressions['xz']['extension'] }} -C /var/spool/mail/ moinmoin
-    /usr/local/bin/backup-store /tmp/moinmoin-data-$NOW.tar.xz
-elif [ '$1' = 'gzip' ]
-then
-    {{ compressions['gzip']['exec'] }} {{ compressions['gzip']['flag'] }} /tmp/moinmoin-data-$NOW.{{ compressions['gzip']['extension'] }} -C /var/spool/mail/ moinmoin
-    /usr/local/bin/backup-store /tmp/moinmoin-data-$NOW.tar.gz
-elif [ '$1' = 'bzip2' ]
-then
-    {{ compressions['bzip2']['exec'] }} {{ compressions['bzip2']['flag'] }} /tmp/moinmoin-data-$NOW.{{ compressions['bzip2']['extension'] }} -C /var/spool/mail/ moinmoin
-    /usr/local/bin/backup-store /tmp/moinmoin-data-$NOW.tar.bz2
-else
-    echo "Please put right kind compression"
-fi
+tar --xz -cf /tmp/dovecot_data_$NOW.tar.xz -C /var/spool/mail
+/usr/local/bin/backup-store /tmp/dovecot_data_$NOW.tar.xz

@@ -30,12 +30,19 @@ in this Software without prior written authorization from the
 Institute for Institutional Innovation by Data Driven Design Inc.
 
 Author: Luan Vo Ngoc <ngocluanvo@gmail.com>
--#}
-#!/bin/sh
-# {{ pillar['message_do_not_modify'] }}
 
-/usr/local/bin/backup-elasticsearch graylog2
-/usr/local/bin/backup-pip /usr/local/graylog2
-NOW=`/bin/date '+%Y-%m-%d-%H_%M_%S'`
-tar --xz -cf /tmp/graylog2-data-$NOW.tar.xz -C /var/lib/deployments/graylog2/ media
-/usr/local/bin/backup-store /tmp/graylog2-data-$NOW.tar.xz
+Backup client for graylog2.
+-#}
+include:
+  - cron
+
+/etc/cron.daily/backup-graylog2:
+  file:
+    - managed
+    - user: root
+    - group: root
+    - mode: 500
+    - template: jinja
+    - source: salt://graylog2/server/backup/cron.jinja2
+    - require:
+      - pkg: cron

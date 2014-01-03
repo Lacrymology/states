@@ -30,19 +30,23 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 {%- if opts['file_client'] == 'local' %}
 base:
 {%- else -%}
-    {#- file_client not in local mode.
-        salt gitfs rename master branch into base. which is also the default
-        value -#}
-    {%- if pillar['branch']|default('base') == 'master' %}
-base:
-    {%- else %}
-{{ pillar['branch']|default('base') }}:
-    {%- endif %}
-{%- endif -%}
+  {#- file_client not in local mode.
+      salt gitfs rename master branch into base. which is also the default
+      value -#}
+  {%- set saltenv =  salt['pillar.get']('branch', 'base') %}
+  {%- if saltenv == 'master' %}
+    {%- set saltenv = 'base' %}
+  {%- endif %}
+{{ saltenv }}:
+{%- endif %}
   {#- target all minions #}
   '*':
 {#- list all minion's role and absent role it's not member of -#}
-{%- for role in pillar['global_roles'] -%}
+{%- set global_roles = salt['pillar.get']('global_roles', None) %}
+{%- if global_roles in ('', 'None') %}
+  {%- set global_roles = salt['cp.list_master_dirs'](saltenv, 'roles') %}
+{%- endif %}
+{%- for role in global_roles %}
   {%- if role in pillar['roles']|default([]) %}
     - roles.{{ role }}
   {%- else %}

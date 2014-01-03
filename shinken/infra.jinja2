@@ -199,7 +199,17 @@ define service {
     _httpstink NO
 }
 
-{%- for role in pillar['global_roles'] %}
+{%- set saltenv =  salt['pillar.get']('branch', 'base') %}
+{%- if saltenv == 'master' %}
+  {%- set saltenv = 'base' %}
+{%- endif %}
+
+{%- set global_roles = salt['pillar.get']('global_roles', None) %}
+{%- if global_roles in ('', 'None') %}
+  {%- set global_roles = salt['cp.list_master_dirs'](saltenv, 'roles') %}
+{%- endif %}
+
+{%- for role in global_roles %}
 define hostgroup {
     hostgroup_name {{ role }}
     alias {{ role|capitalize }} Role

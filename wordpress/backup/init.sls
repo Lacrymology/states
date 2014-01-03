@@ -3,7 +3,7 @@
 #}
 include:
   - cron
-  - postgresql.server.backup
+  - mariadb.server.backup
   - backup.client
 
 {%- set wordpressdir = "/usr/local/wordpress" %}
@@ -18,7 +18,7 @@ include:
     - source: salt://wordpress/backup/cron.jinja2
     - require:
       - pkg: cron
-      - file: /usr/local/bin/backup-postgresql
+      - file: /usr/local/bin/backup-mysql
       - file: /usr/local/bin/backup_store
     - context:
       wordpressdir: {{ wordpressdir }}

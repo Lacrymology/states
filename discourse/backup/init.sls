@@ -51,6 +51,6 @@ include:
     - require:
       - pkg: cron
       - file: /usr/local/bin/backup-postgresql
-      - file: /usr/local/bin/backup_store
+      - file: /usr/local/bin/backup-store
     - context:
       web_root_dir: {{ web_root_dir }}

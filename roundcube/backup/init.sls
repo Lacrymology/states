@@ -29,41 +29,24 @@ advertising or otherwise to promote the sale, use or other dealings
 in this Software without prior written authorization from the
 Institute for Institutional Innovation by Data Driven Design Inc.
 
-Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
-Maintainer: Dang Tung Lam <lamdt@familug.org>
+Author: Luan Vo Ngoc <ngocluanvo@gmail.com>
 
- Backup client for Mariadb
+Backup for Roundcube.
 -#}
-
 include:
-  - local
+  - cron
+  - postgresql.server.backup
   - backup.client
 
-/etc/cron.daily/backup-mysql:
-  file:
-    - absent
-
-/usr/local/bin/backup-mysql:
+/etc/cron.daily/backup-roundcube:
   file:
     - managed
     - user: root
     - group: root
     - mode: 500
     - template: jinja
-    - source: salt://mariadb/server/backup/script.jinja2
+    - source: salt://roundcube/backup/cron.jinja2
     - require:
-      - file: /usr/local
+      - pkg: cron
+      - file: /usr/local/bin/backup-postgresql
       - file: /usr/local/bin/backup-store
-
-/usr/local/bin/backup-mysql-all:
-  file:
-    - managed
-    - user: root
-    - group: root
-    - mode: 500
-    - template: jinja
-    - source: salt://mariadb/server/backup/dump_all.jinja2
-    - require:
-      - file: /usr/local
-      - file: /usr/local/bin/backup-store
-

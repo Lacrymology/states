@@ -29,14 +29,14 @@ include:
   - local
   - s3cmd
 
-/usr/local/bin/backup_store:
+/usr/local/bin/backup-store:
   file:
     - managed
     - template: jinja
     - user: root
     - group: root
     - mode: 550
-    - source: salt://backup/client/s3/backup_store.jinja2
+    - source: salt://backup/client/s3/backup-store.jinja2
     - require:
       - pkg: s3cmd
       - file: /usr/local

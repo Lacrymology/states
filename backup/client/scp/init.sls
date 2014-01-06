@@ -39,7 +39,7 @@ backup-client:
     - user: root
     - fingerprint: {{ pillar['backup_server']['fingerprint'] }}
 
-/usr/local/bin/backup_store:
+/usr/local/bin/backup-store:
   file:
     - managed
     - user: root

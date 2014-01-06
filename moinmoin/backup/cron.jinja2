@@ -32,4 +32,4 @@ set -e
 /usr/local/bin/backup-pip /usr/local/moinmoin
 NOW=`/bin/date '+%Y-%m-%d-%H_%M_%S'`
 /bin/tar --xz -cf /tmp/moinmoin-data-$NOW.tar.xz -C /var/lib/deployments/ moinmoin
-/usr/local/bin/backup_store /tmp/moinmoin-data-$NOW.tar.xz
+/usr/local/bin/backup-store /tmp/moinmoin-data-$NOW.tar.xz

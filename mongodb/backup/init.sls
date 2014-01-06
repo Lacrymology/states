@@ -40,7 +40,7 @@ include:
     - template: jinja
     - source: salt://mongodb/backup/script.jinja2
     - require:
-      - file: /usr/local/bin/backup_store
+      - file: /usr/local/bin/backup-store
 
 /usr/local/bin/backup-mongodb-all:
   file:
@@ -51,4 +51,4 @@ include:
     - template: jinja
     - source: salt://mongodb/backup/dump_all.jinja2
     - require:
-      - file: /usr/local/bin/backup_store
+      - file: /usr/local/bin/backup-store

@@ -52,4 +52,4 @@ include:
       - pkg: cron
       - file: /usr/local/bin/backup-postgresql
       - file: /usr/local/bin/backup-pip
-      - file: /usr/local/bin/backup_store
+      - file: /usr/local/bin/backup-store

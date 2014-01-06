@@ -4,4 +4,4 @@ set -e
 
 /usr/local/bin/backup-mysql wordpress
 tar czf /tmp/wordpress_upload.tar.gz -C {{ wordpressdir }}/wp-content uploads
-/usr/local/bin/backup_store /tmp/wordpress_upload.tar.gz
+/usr/local/bin/backup-store /tmp/wordpress_upload.tar.gz

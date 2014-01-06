@@ -19,6 +19,6 @@ include:
     - require:
       - pkg: cron
       - file: /usr/local/bin/backup-mysql
-      - file: /usr/local/bin/backup_store
+      - file: /usr/local/bin/backup-store
     - context:
       wordpressdir: {{ wordpressdir }}

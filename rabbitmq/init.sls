@@ -162,6 +162,20 @@ rabbitmq-server:
     - force: True
     - require:
       - service: rabbitmq-server
+  module:
+    - run
+    - name: rabbitmq.set_user_tags
+    - m_name: {{ salt['pillar.get']('rabbitmq:monitor:user', salt['pillar.get']('salt_monitor') )}}
+    - tags: monitoring
+    - require:
+      - rabbitmq_user: rabbitmq-server
+
+rabbitmq_delete_guest:
+  rabbitmq_user:
+    - absent
+    - name: guest
+    - require:
+      - service: rabbitmq-server
 
 {% for vhost in salt['pillar.get']('rabbitmq:vhosts', []) %}
 rabbitmq-vhost-{{ vhost }}:

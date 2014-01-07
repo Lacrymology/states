@@ -30,6 +30,7 @@ A LDAP server.
 {% set ssl = salt['pillar.get']('ldap:ssl', False) %}
 include:
   - apt
+  - hostname
 {% if ssl %}
   - ssl
 {% endif %}
@@ -42,6 +43,7 @@ slapd:
       - ldap-utils
     - require:
       - cmd: apt_sources
+      - host: hostname
   service:
     - running
     - enable: True

@@ -39,6 +39,7 @@ include:
   - diamond
   - postfix
   - rsyslog
+  - local
 
 postfix_diamond_collector:
   file:
@@ -108,6 +109,8 @@ postfix_stats:
         /usr/local/diamond/bin/postfix_stats.py -d
     - require:
       - pkg: rsyslog
+      - file: /usr/local
+      - module: postfix_stats
 
 /etc/rsyslog.d/postfix_stats.conf:
   file:
@@ -129,4 +132,5 @@ extend:
         - file: postfix_diamond_collector
         - module: postfix_stats
       - require:
+        - service: rsyslog
         - service: postfix

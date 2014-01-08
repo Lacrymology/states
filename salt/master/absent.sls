@@ -40,7 +40,7 @@ salt-master:
 {#- Workaround bug that sometime salt-master process doesn't stop after integration.py cleanup phase #}
   cmd:
     - run
-    - unless: pgrep salt-master
+    - onlyif: pgrep salt-master
     - name: kill -9 `pgrep salt-master` || true
     - require:
       - pkg: salt-master

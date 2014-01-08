@@ -31,3 +31,11 @@ postfix_diamond_collector:
   file:
     - absent
     - name: /etc/diamond/collectors/PostfixCollector.conf
+
+/etc/rsyslog.d/postfix_stats.conf:
+  file:
+    - absent
+
+/usr/local/bin/postfix_stats.sh:
+  file:
+    - absent

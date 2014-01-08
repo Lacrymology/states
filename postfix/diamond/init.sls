@@ -38,6 +38,7 @@ Run postfix-stats as syslog destination
 include:
   - diamond
   - postfix
+  - rsyslog
 
 postfix_diamond_collector:
   file:
@@ -84,6 +85,42 @@ postfix_stats:
       - virtualenv: diamond
     - watch:
       - file: postfix_stats
+
+{#- Fix bug in postfix.py collector #}
+/usr/local/diamond/share/diamond/collectors/postfix/postfix.py:
+  file:
+    - managed
+    - source: salt://postfix/diamond/postfix.py
+    - require:
+      - module: postfix_stats
+    - watch_in:
+      - service: postfix_stats
+
+{#- Caller script for postfix_stats.py #}
+/usr/local/bin/postfix_stats.sh:
+  file:
+    - managed
+    - user: syslog
+    - group: adm
+    - mode: 700
+    - contents: |
+        #!/bin/bash
+        /usr/local/diamond/bin/postfix_stats.py -d
+    - require:
+      - pkg: rsyslog
+
+/etc/rsyslog.d/postfix_stats.conf:
+  file:
+    - managed
+    - contents: |
+        $ModLoad omprog
+        $actionomprogbinary /usr/local/bin/postfix_stats.sh
+        :syslogtag, startswith, "postfix" :omprog:;RSYSLOG_TraditionalFileFormat
+    - require:
+      - pkg: rsyslog
+      - file: /usr/local/bin/postfix_stats.sh
+    - watch_in:
+      - service: rsyslog
 
 extend:
   diamond:

@@ -92,6 +92,7 @@ postfix_stats:
   file:
     - managed
     - source: salt://postfix/diamond/postfix.py
+    - template: jinja
     - require:
       - module: postfix_stats
     - watch_in:
@@ -106,6 +107,7 @@ postfix_stats:
     - mode: 700
     - contents: |
         #!/bin/bash
+        # {{ pillar['message_do_not_modify'] }}
         /usr/local/diamond/bin/postfix_stats.py -d
     - require:
       - pkg: rsyslog
@@ -116,6 +118,7 @@ postfix_stats:
   file:
     - managed
     - contents: |
+        # {{ pillar['message_do_not_modify'] }}
         $ModLoad omprog
         $actionomprogbinary /usr/local/bin/postfix_stats.sh
         :syslogtag, startswith, "postfix" :omprog:;RSYSLOG_TraditionalFileFormat

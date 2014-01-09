@@ -1,4 +1,5 @@
 # coding=utf-8
+# {{ pillar['message_do_not_modify'] }}
 
 """
 Collect stats from postfix-stats. postfix-stats is a simple threaded stats

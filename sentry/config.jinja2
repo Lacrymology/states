@@ -46,19 +46,12 @@ DATABASES = {
 
 SENTRY_KEY = '{{ salt['password.pillar']('sentry:django_key', 50) }}'
 
-{#-CACHE_PREFIX = 'sentry'#}
-{#-CACHE_TIMEOUT = 300#}
-{#-MIDDLEWARE_CLASSES.insert(0, 'johnny.middleware.QueryCacheMiddleware')#}
-{#-MIDDLEWARE_CLASSES.insert(0, 'johnny.middleware.LocalStoreClearMiddleware')#}
-{#-CACHES = {#}
-{#-    'default' : dict(#}
-{#-        BACKEND = 'johnny.backends.memcached.MemcachedCache',#}
-{#-        LOCATION = [{% for ip in pillar['memcache_servers'] %}'{{ ip }}:11211'{% if not loop.last %},{% endif %}{% endfor %}],#}
-{#-        JOHNNY_CACHE = True,#}
-{#-    )#}
-{#-}#}
-{#-JOHNNY_MIDDLEWARE_KEY_PREFIX='sentry'#}
-
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': 'unix:/tmp/memcached.sock',
+    }
+}
 
 # Set this to false to require authentication
 SENTRY_PUBLIC = False

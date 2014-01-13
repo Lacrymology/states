@@ -28,8 +28,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 # {{ pillar['message_do_not_modify'] }}
 [uwsgi]
 master = true
-env = DJANGO_SETTINGS_MODULE=my_sentry_conf
-pymodule-alias = my_sentry_conf=/etc/sentry.conf.py
+env = SENTRY_CONF=/etc/sentry.conf.py
 module = sentry.wsgi
 processes = {{ pillar['sentry']['workers'] }}
 harakiri = {{ pillar['sentry']['timeout']|default(45) }}
@@ -73,5 +72,5 @@ carbon = {{ resolved_ip[0] }}:2003
         {%- else %}
 # The domain name {{ pillar['graphite_address'] }} in pillar['graphite_address'] is invalid. carbon support is disabled.
         {%- endif -%}
-    {%- endif -%}	
+    {%- endif -%}
 {% endif %}

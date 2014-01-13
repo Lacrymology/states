@@ -99,16 +99,17 @@ postfix_stats:
       - service: postfix_stats
 
 {#- Caller script for postfix_stats.py #}
-/usr/local/bin/postfix_stats.sh:
+/usr/local/diamond/bin/postfix_rsyslog.py:
   file:
     - managed
     - user: syslog
     - group: adm
     - mode: 700
     - contents: |
-        #!/bin/bash
+        #!/usr/local/diamond/bin/python
         # {{ pillar['message_do_not_modify'] }}
-        /usr/local/diamond/bin/postfix_stats.py -d
+        from postfix_stats import main
+        main(None, True, local_emails=[])
     - require:
       - pkg: rsyslog
       - file: /usr/local
@@ -120,11 +121,11 @@ postfix_stats:
     - contents: |
         # {{ pillar['message_do_not_modify'] }}
         $ModLoad omprog
-        $actionomprogbinary /usr/local/bin/postfix_stats.sh
+        $actionomprogbinary /usr/local/diamond/bin/postfix_rsyslog.py
         :syslogtag, startswith, "postfix" :omprog:;RSYSLOG_TraditionalFileFormat
     - require:
       - pkg: rsyslog
-      - file: /usr/local/bin/postfix_stats.sh
+      - file: /usr/local/diamond/bin/postfix_rsyslog.py
     - watch_in:
       - service: rsyslog
 

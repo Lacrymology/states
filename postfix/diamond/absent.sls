@@ -36,6 +36,6 @@ postfix_diamond_collector:
   file:
     - absent
 
-/usr/local/bin/postfix_stats.sh:
+/usr/local/diamond/bin/postfix_rsyslog.py:
   file:
     - absent

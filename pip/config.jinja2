@@ -31,14 +31,16 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 {%- if 'files_archive' in pillar %}
 no-index = true
 find-links = {{ pillar['files_archive'] }}/pip/
-    {%- if pillar['pip']['mirrors'] is defined %}
+    {%- if pillar['pip'] is defined %}
+        {%- if pillar['pip']['mirrors'] is defined %}
 use-mirrors = true
 mirrors = {% if pillar['pip']['mirrors'] is sequence -%}{{ pillar['pip']['mirrors'] | join(' ') }}{%- endif %} https://pypi.python.org/simple/
+        {%- endif %}
     {%- endif %}
 {%- else %}
 download-cache = /var/cache/pip
 {%- endif -%}
 
-{%- if pillar['proxy_server']|default(False) %}
+{%- if salt['pillar.get']('proxy_server', False) %}
 proxy = {{ pillar['proxy_server'] }}
 {%- endif -%}

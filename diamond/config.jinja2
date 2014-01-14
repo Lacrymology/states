@@ -29,7 +29,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 [server]
 
 # Handlers for published metrics.
-handlers = diamond.handler.graphitepickle.GraphitePickleHandler
+handlers = diamond.handler.graphite.GraphiteHandler
 #diamond.handler.stats_d.StatsdHandler
 
 # Leave empty to use the current user
@@ -66,17 +66,15 @@ keys = syslog
 
 [[default]]
 
-[[GraphitePickleHandler]]
-
+[[GraphiteHandler]]
 host = {{ pillar['graphite_address'] }}
-
-# Port to send metrics to
-port = 2004
-
-batch = {{ salt['pillar.get']('diamond:batch', 256) }}
+port = 2003
 
 # Socket timeout (seconds)
 timeout = 15
+
+# How many to store before sending to the graphite server
+batch = {{ salt['pillar.get']('diamond:batch', 256) }}
 
 #[[StatsdHandler]]
 #host = 127.0.0.1

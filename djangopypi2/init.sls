@@ -58,7 +58,7 @@ djangopypi2:
   virtualenv:
     - manage
     - name: /usr/local/djangopypi2
-    - no_site_packages: True
+    - system_site_packages: False
     - require:
       - module: virtualenv
       - file: /usr/local

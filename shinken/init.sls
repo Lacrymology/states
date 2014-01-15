@@ -82,7 +82,7 @@ shinken:
   virtualenv:
     - manage
     - name: /usr/local/shinken
-    - no_site_packages: True
+    - system_site_packages: False
     - require:
       - module: virtualenv
       - file: /usr/local

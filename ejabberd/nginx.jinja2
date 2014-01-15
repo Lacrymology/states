@@ -1,0 +1,38 @@
+# {{ pillar['message_do_not_modify'] }}
+
+upstream ejabberd {
+    server localhost:5280;
+}
+
+server {
+    listen 80;
+{% if pillar['ejabberd']['ssl']|default(False) %}
+{% if pillar['ejabberd']['ssl_redirect']|default(False) %}
+    {# if https, redirect http port 80 to https port 443 #}
+    server_name {% for hostname in pillar['ejabberd']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+    return 301 https://{{ pillar['ejabberd']['hostnames'][0] }}$request_uri;
+}
+{# https server #}
+server {
+{% endif %}{# redirect http to https #}
+    listen 443 ssl;
+    ssl_certificate /etc/ssl/{{ pillar['ejabberd']['ssl'] }}/chained_ca.crt;
+    ssl_certificate_key /etc/ssl/{{ pillar['ejabberd']['ssl'] }}/server.pem;
+    ssl_client_certificate /etc/ssl/{{ pillar['ejabberd']['ssl'] }}/ca.crt;
+    ssl_ciphers RC4:HIGH:!aNULL:!MD5;
+    ssl_prefer_server_ciphers on;
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout 10m;
+{% endif %}
+{# web app logic #}
+    server_name {% for hostname in pillar['ejabberd']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+
+    location / {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto https;
+        proxy_set_header Host $http_host;
+        proxy_next_upstream error;
+        proxy_pass http://ejabberd;
+    }
+}

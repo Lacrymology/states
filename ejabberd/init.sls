@@ -1,5 +1,6 @@
 include:
   - apt
+  - nginx
 
 {#-
   TODO
@@ -70,3 +71,29 @@ ejabberd_reg_user_{{ user }}:
       - service: ejabberd
 {%- endfor %}
 
+/etc/nginx/conf.d/ejabberd.conf:
+  file:
+    - managed
+    - template: jinja
+    - source: salt://ejabberd/nginx.jinja2
+    - user: www-data
+    - group: www-data
+    - mode: 440
+    - watch_in:
+      - service: nginx
+    - require:
+      - pkg: nginx
+      - service: ejabberd
+{%- if salt['pillar.get']('ejabberd:ssl', False) %}
+      - cmd: /etc/ssl/{{ pillar['ejabberd']['ssl'] }}/chained_ca.crt
+      - module: /etc/ssl/{{ pillar['ejabberd']['ssl'] }}/server.pem
+      - file: /etc/ssl/{{ pillar['ejabberd']['ssl'] }}/ca.crt
+
+extend:
+  nginx:
+    service:
+      - watch:
+        - cmd: /etc/ssl/{{ pillar['ejabberd']['ssl'] }}/chained_ca.crt
+        - module: /etc/ssl/{{ pillar['ejabberd']['ssl'] }}/server.pem
+        - file: /etc/ssl/{{ pillar['ejabberd']['ssl'] }}/ca.crt
+{%- endif %}

@@ -46,6 +46,7 @@ export HOME=`cat /etc/passwd | grep ^root\: | cut -d ':' -f 6`
 
 # if you change the following section, please also change
 # salt/cloud/bootstrap.sh
+apt-get update
 apt-get install -y python-software-properties python-pip
 apt-add-repository -y ppa:saltstack/salt
 echo "deb http://archive.robotinfra.com/mirror/salt/0.17.2-2/ `lsb_release -c -s` main" > /etc/apt/sources.list.d/saltstack-salt-`lsb_release -c -s`.list

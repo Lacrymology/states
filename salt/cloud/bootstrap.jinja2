@@ -39,6 +39,7 @@ chmod 400 /etc/salt/pki/minion/minion.pem
 {#- if you change the following section, please also change
     salt/minion/bootstrap.sh #}
 {%- block installation %}
+apt-get update
 apt-get install -y python-software-properties python-pip
 apt-add-repository -y ppa:saltstack/salt
     {%- if 'files_archive' in pillar %}

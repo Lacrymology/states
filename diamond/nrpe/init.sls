@@ -27,6 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Nagios NRPE checks for diamond.
 -#}
+{%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - git.nrpe
   - nrpe
@@ -45,6 +46,8 @@ include:
     - source: salt://diamond/nrpe/config.jinja2
     - require:
       - pkg: nagios-nrpe-server
+
+{{ passive_check('diamond') }}
 
 extend:
   nagios-nrpe-server:

@@ -45,6 +45,8 @@ include:
   - virtualenv
   - virtualenv.nrpe
 
+{% from 'nrpe/passive.sls' import passive_check with context %}
+
 /usr/local/nagiosplugin:
   file:
     - absent
@@ -134,6 +136,16 @@ nagios-nrpe-server:
       - pkg: nagios-nrpe-server
       - file: nagios-nrpe-server
 
+/usr/local/nagios/bin/passive_check.py:
+  file:
+    - managed
+    - source: salt://nrpe/passive_check.py
+    - user: nagios
+    - group: nagios
+    - mode: 550
+    - require:
+      - module: nrpe-virtualenv
+
 /usr/local/bin/check_memory.py:
   file:
     - absent
@@ -168,3 +180,31 @@ nagios-nrpe-server:
     - group: root
     - require:
       - pkg: sudo
+
+/etc/send_nsca.conf:
+  file:
+    - managed
+    - template: jinja
+    - source: salt://nrpe/send_nsca.jinja2
+    - user: nagios
+    - group: nagios
+    - mode: 440
+    - require:
+      - module: nrpe-virtualenv
+
+{%- for state in pillar['monitoring']['states'] -%}
+{%- for name in salt['monitoring.discover_checks_passive'](state) %}
+touch_{{ state }}_cron:
+  file:
+    - touch
+    - name: /etc/cron.d/passive-checks-{{ state }}
+/etc/cron.d/passive-checks-{{ state }}:
+  file:
+    - append
+    - text: |
+        {{ passive_check(state, name)|indent(8) }}
+    - require:
+      - file: touch_{{ state }}_cron
+      - file: /etc/send_nsca.conf
+{%- endfor -%}
+{%- endfor %}

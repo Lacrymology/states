@@ -27,6 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Nagios NRPE check for ProFTPd.
 -#}
+{%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - apt.nrpe
   - nrpe
@@ -60,6 +61,8 @@ include:
       database: {{ salt['pillar.get']('proftpd:db:name', 'proftpd') }}
       username: {{ salt['pillar.get']('proftpd:db:username', 'proftpd') }}
       password: {{ salt['password.pillar']('proftpd:db:password', 10) }}
+
+{{ passive_check('proftpd') }}
 
 extend:
   nagios-nrpe-server:

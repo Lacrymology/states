@@ -27,9 +27,11 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
 graphite_nginx_http:
   description: Graphite HTTP protocol
+  passive: True
 
 graphite_nginx_https:
   description: Graphite HTTPS protocol
+  passive: True
 
 graphite_nginx_https_certificate:
   description: HTTPS Certificate Expiration
@@ -37,12 +39,15 @@ graphite_nginx_https_certificate:
 
 graphite_postgresql:
   description: PostgreSQL database
+  passive: True
 
 graphite_uwsgi_master:
   description: uWSGI Master Process
+  passive: True
 
 graphite_uwsgi_worker:
   description: uWSGI Workers Process
+  passive: True
 
 graphite_uwsgi_ping:
   description: uWSGI Ping

@@ -30,3 +30,7 @@ Remove Nagios NRPE check for Memcache.
 /etc/nagios/nrpe.d/memcache.cfg:
   file:
     - absent
+
+/etc/cron.d/passive-checks-memcache:
+  file:
+    - absent

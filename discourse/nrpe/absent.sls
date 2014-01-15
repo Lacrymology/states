@@ -46,4 +46,6 @@ Remove GitLab NRPE checks.
   file:
     - absent
 
-
+/etc/cron.d/passive-checks-discourse:
+  file:
+    - absent

@@ -34,9 +34,11 @@ Maintainer: Lam Dang Tung <lamdt@familug.org>
 -#}
 wordpress_nginx_http:
   description: Wordpress HTTP Protocol
+  passive: True
 
 wordpress_nginx_https:
   description: Wordpress HTTPS Protocol
+  passive: True
 
 wordpress_nginx_https_certificate:
   description: Wordpress HTTPS Certificate Expiration
@@ -44,9 +46,11 @@ wordpress_nginx_https_certificate:
 
 wordpress_uwsgi_master:
   description: Wordpress uWSGI Master Process
+  passive: True
 
 wordpress_uwsgi_worker:
   description: Wordpress uWSGI Workers Process
+  passive: True
 
 wordpress_uwsgi_ping:
   description: Wordpress uWSGI Ping

@@ -34,3 +34,7 @@ Remove Nagios NRPE check for Salt-API Server.
 /etc/nagios/nrpe.d/salt-api-nginx.cfg:
   file:
     - absent
+
+/etc/cron.d/passive-checks-salt.api:
+  file:
+    - absent

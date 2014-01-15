@@ -27,6 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Nagios NRPE check for StatsD.
 -#}
+{%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - nrpe
   - python.dev.nrpe
@@ -43,6 +44,8 @@ include:
     - source: salt://statsd/nrpe/config.jinja2
     - require:
       - pkg: nagios-nrpe-server
+
+{{ passive_check('statsd') }}
 
 extend:
   nagios-nrpe-server:

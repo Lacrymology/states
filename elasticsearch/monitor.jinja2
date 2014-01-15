@@ -27,6 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 elasticsearch_procs:
   description: Elasticsearch Daemon
+  passive: True
 
 elasticsearch_cluster:
   description: Elasticsearch Cluster
@@ -41,15 +42,19 @@ elasticsearch-remote-port-transport:
 
 elasticsearch_port_http:
   description: Elasticsearch Local HTTP Port
+  passive: True
 
 elasticsearch_port_transport:
   description: Elasticsearch Local Transport Port
+  passive: True
 
 elasticsearch_nginx_http:
   description: Elasticsearch HTTP Protocol
+  passive: True
 
 elasticsearch_nginx_https:
   description: Elasticsearch HTTPS Protocol
+  passive: True
 
 elasticsearch_nginx_https_certificate:
   description: Elasticsearch HTTPS Certificate Expiration

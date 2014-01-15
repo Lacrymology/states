@@ -161,9 +161,6 @@ define service {
     parallelize_check 1
     # We should obsess over this service (if necessary)
     obsess_over_service 1
-    # Default is to NOT check service 'freshness'
-    check_freshness 1
-    freshness_threshold 3600
     # Service notifications are enabled
     notifications_enabled 1
     event_handler_enabled 0
@@ -229,7 +226,7 @@ define servicegroup {
 }
 {% endfor -%}
 
-{%- set reserved_keys = ('check', 'description') -%}
+{%- set reserved_keys = ('check', 'description', 'passive', 'passive_interval') -%}
 {%- for state in pillar['monitoring']['states'] -%}
     {%- set state_checks = salt['monitoring.discover_checks'](state) -%}
     {%- if not state_checks %}
@@ -242,6 +239,14 @@ define service {
     use salt-service
     service_description {{ name }}
     display_name {{ state_checks[name]['description'] }}
+            {%- if 'passive' in state_checks[name] and state_checks[name]['passive'] == True %}
+    active_checks_enabled 0
+    passive_checks_enabled 1
+    check_freshness 1
+                {%- if 'freshness_threshold' not in state_checks[name] %}
+    freshness_threshold 600
+                {%- endif %}
+            {%- endif %}
     check_command {{ state_checks[name]['check']|default('check_nrpe!' + name) }}
             {%- for key_name in state_checks[name] %}
                 {%- if key_name not in reserved_keys %}

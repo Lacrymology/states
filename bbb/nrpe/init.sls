@@ -34,6 +34,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
  Nagios NRPE checks for bigbluebutton
 -#}
+{%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - nrpe
   - nginx.nrpe
@@ -50,6 +51,8 @@ include:
     - source: salt://bbb/nrpe/config.jinja2
     - require:
       - pkg: nagios-nrpe-server
+
+{{ passive_check('bbb') }}
 
 extend:
   nagios-nrpe-server:

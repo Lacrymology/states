@@ -38,3 +38,7 @@ Remove Nagios NRPE check for Fluxbox.
 /etc/nagios/nrpe.d/fluxbox.cfg:
   file:
     - absent
+
+/etc/cron.d/passive-checks-fluxbox:
+  file:
+    - absent

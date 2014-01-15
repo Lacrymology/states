@@ -30,3 +30,7 @@ Remove Nagios NRPE check for Carbon.
 /etc/nagios/nrpe.d/carbon.cfg:
   file:
     - absent
+
+/etc/cron.d/passive-checks-carbon:
+  file:
+    - absent

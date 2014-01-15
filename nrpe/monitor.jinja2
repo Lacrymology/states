@@ -28,7 +28,6 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 {%- set nrpe_checks = {
   'free_disks_space': 'All Disks',
   'free_memory': 'Memory Usage',
-  'load_average': 'Load Average',
   'logged_users': 'Logged Users',
   'loopback_interface': 'Loopback Interface',
   'nrpe_procs': 'NRPE Processes',
@@ -42,7 +41,13 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 {%- for check in nrpe_checks %}
 {{ check }}:
   description: {{ nrpe_checks[check] }}
+  passive: True
+  passive_interval: 5
+  freshness_threshold: 600
 {% endfor -%}
+
+load_average:
+  description: Load Average
 
 nrpe-remote-port:
   description: Remote NRPE Port

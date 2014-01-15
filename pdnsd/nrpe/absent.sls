@@ -30,3 +30,7 @@ Remove pDNSd Nagios NRPE checks.
 /etc/nagios/nrpe.d/pdnsd.cfg:
   file:
     - absent
+
+/etc/cron.d/passive-checks-pdnsd:
+  file:
+    - absent

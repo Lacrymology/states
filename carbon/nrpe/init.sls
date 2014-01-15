@@ -27,6 +27,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 Nagios NRPE check for Carbon.
 -#}
+{%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - graphite.common.nrpe
   - nrpe
@@ -44,6 +45,8 @@ include:
     - source: salt://carbon/nrpe/config.jinja2
     - require:
       - pkg: nagios-nrpe-server
+
+{{ passive_check('carbon') }}
 
 extend:
   nagios-nrpe-server:

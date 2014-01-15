@@ -34,6 +34,7 @@ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
 
 Nagios NRPE check for djangopypi2.
 -#}
+{%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - apt.nrpe
   - memcache.nrpe
@@ -106,6 +107,8 @@ include:
       database: {{ salt['pillar.get']('djangopypi2:db:name', 'djangopypi2') }}
       username: {{ salt['pillar.get']('djangopypi2:db:username', 'djangopypi2') }}
       password: {{ salt['password.pillar']('djangopypi2:db:password', 10) }}
+
+{{ passive_check('djangopypi2') }}
 
 extend:
   nagios-nrpe-server:

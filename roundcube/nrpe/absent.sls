@@ -38,3 +38,7 @@ Remove roundcube web Nagios NRPE checks.
 /etc/nagios/nrpe.d/postgresql-roundcube.cfg:
   file:
     - absent
+
+/etc/cron.d/passive-checks-roundcube:
+  file:
+    - absent

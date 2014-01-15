@@ -27,6 +27,7 @@ Maintainer: Lam Dang Tung <lamdt@familug.org>
 
 Nagios NRPE check for OpenERP.
 -#}
+{%- from 'nrpe/passive.sls' import passive_check with context %}
 
 include:
   - apt.nrpe
@@ -83,4 +84,6 @@ include:
       http_result: 301 Moved Permanently
     {%- endif -%}
 {%- endif %}
+
+{{ passive_check('openerp') }}
 

@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Bruno Clermont
+Copyright (c) 2013, Quan Tong Anh
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,19 +22,9 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Bruno Clermont <patate@fastmail.cn>
-Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
+Author: Quan Tong Anh <tonganhquan.net@gmail.com>
+Maintainer: Quan Tong Anh <tonganhquan.net@gmail.com>
 -#}
-include:
-  - apt.nrpe
-  - nrpe
-  - postgresql.common.nrpe
-  - postgresql.nrpe
-  - postgresql.server
-  - rsyslog.nrpe
-
-extend:
-  postgresql_monitoring:
-    postgres_user:
-      - require:
-        - service: postgresql
+/etc/cron.d/passive-checks-postgresql.server:
+  file:
+    - absent

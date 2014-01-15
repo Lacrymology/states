@@ -34,7 +34,7 @@ Maintainer: Lam Dang Tung <lamdt@familug.org>
 
 Nagios NRPE check for Fluxbox.
 -#}
-
+{%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - apt.nrpe
   - nrpe
@@ -51,3 +51,5 @@ include:
       - pkg: nagios-nrpe-server
     - watch_in:
       - service: nagios-nrpe-server
+
+{{ passive_check('fluxbox') }}

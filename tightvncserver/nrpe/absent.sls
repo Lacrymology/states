@@ -38,3 +38,7 @@ Maintainer: Lam Dang Tung <lamdt@familug.org>
 /etc/nagios/nrpe.d/tightvncserver.cfg:
   file:
     - absent
+
+/etc/cron.d/passive-checks-tightvncserver:
+  file:
+    - absent

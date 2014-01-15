@@ -96,3 +96,7 @@ nagios:
 /etc/sudoers.d/nrpe_oom:
   file:
     - absent
+
+/etc/cron.d/passive-checks-nrpe.cfg:
+  file:
+    - absent

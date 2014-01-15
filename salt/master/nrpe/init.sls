@@ -27,6 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Nagios NRPE check for Salt Master.
 -#}
+{%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - apt.nrpe
   - pip.nrpe
@@ -74,6 +75,8 @@ include:
       - pkg: nagios-nrpe-server
       - module: nrpe-virtualenv
       - file: /etc/sudoers.d/nrpe_salt_master
+
+{{ passive_check('salt.master') }}
 
 extend:
   nagios-nrpe-server:

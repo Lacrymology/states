@@ -30,3 +30,7 @@ Remove Nagios NRPE check for terracotta.
 /etc/nagios/nrpe.d/terracotta.cfg:
   file:
     - absent
+
+/etc/cron.d/passive-checks-terracotta:
+  file:
+    - absent

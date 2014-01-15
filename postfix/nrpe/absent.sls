@@ -30,3 +30,7 @@ Remove Nagios NRPE check for Postfix.
 /etc/nagios/nrpe.d/postfix.cfg:
   file:
     - absent
+
+/etc/cron.d/passive-checks-postfix:
+  file:
+    - absent

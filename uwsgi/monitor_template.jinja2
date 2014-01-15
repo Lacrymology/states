@@ -28,9 +28,11 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 {%- macro monitor(appname, check_postgresql=True) %}
 {{ appname }}_nginx_http:
   description: {{ appname|title }} HTTP protocol
+  passive: True
 
 {{ appname }}_nginx_https:
   description: {{ appname|title }} HTTPS protocol
+  passive: True
 
 {{ appname }}_nginx_https_certificate:
   description: HTTPS Certificate Expiration
@@ -38,9 +40,11 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 {{ appname }}_uwsgi_master:
   description: {{ appname|title }} uWSGI Master Process
+  passive: True
 
 {{ appname }}_uwsgi_worker:
   description: {{ appname|title }} uWSGI Workers Process
+  passive: True
 
 {{ appname }}_uwsgi_ping:
   description: uWSGI Ping
@@ -48,5 +52,6 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 {%- if check_postgresql == True %}
 {{ appname }}_postgresql:
   description: PostgreSQL database
+  passive: True
 {%- endif %}
 {%- endmacro %}

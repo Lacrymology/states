@@ -27,6 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Nagios NRPE check for Backup Server.
 -#}
+{%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - apt.nrpe
   - cron.nrpe
@@ -74,6 +75,8 @@ include:
       - pkg: nagios-nrpe-server
       - file: /etc/sudoers.d/nrpe_backups
       - file: /usr/lib/nagios/plugins/check_backups.py
+
+{{ passive_check('backup.server') }}
 
 extend:
   nagios-nrpe-server:

@@ -27,6 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Nagios NRPE check for Graylog2 Server.
 -#}
+{%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - apt.nrpe
   - elasticsearch.nrpe
@@ -60,6 +61,8 @@ include:
       - file: /usr/lib/nagios/plugins/check_new_logs.py
     - context:
       version: {{ version }}
+
+{{ passive_check('graylog2.server') }}
 
 extend:
   nagios-nrpe-server:

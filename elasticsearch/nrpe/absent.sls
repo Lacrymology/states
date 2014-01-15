@@ -42,3 +42,7 @@ Remove Nagios NRPE checks for elasticsearch.
 /usr/lib/nagios/plugins/check_elasticsearch_cluster.py:
   file:
     - absent
+
+/etc/cron.d/passive-checks-elasticsearch:
+  file:
+    - absent

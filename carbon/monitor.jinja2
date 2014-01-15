@@ -27,9 +27,11 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
 carbon_cache_procs:
   description: Carbon Cache Instances
+  passive: True
 
 carbon_relay_procs:
   description: Carbon Relay Instance
+  passive: True
 
 carbon-remote-port-plaintext:
   description: Carbon Remote Port PlainText Protocol
@@ -41,6 +43,8 @@ carbon-remote-port-pickle:
 
 carbon_port_plaintext:
   description: Carbon Local Port PlainText Protocol
+  passive: True
 
 carbon_port_pickle:
   description: Carbon Local Port Pickle Protocol
+  passive: True

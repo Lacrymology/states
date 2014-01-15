@@ -30,3 +30,7 @@ Remove Nagios NRPE checks for diamond.
 /etc/nagios/nrpe.d/diamond.cfg:
   file:
     - absent
+
+/etc/cron.d/passive-checks-diamond:
+  file:
+    - absent

@@ -39,3 +39,7 @@ Remove Nagios NRPE check for OpenERP.
 /etc/nagios/nrpe.d/openerp-nginx.cfg:
   file:
     - absent
+
+/etc/cron.d/passive-checks-openerp:
+  file:
+    - absent

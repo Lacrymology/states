@@ -27,9 +27,11 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
 roundcube_nginx_http:
   description: RoundCube HTTP Protocol
+  passive: True
 
 roundcube_nginx_https:
   description: RoundCube HTTPS Protocol
+  passive: True
 
 roundcube_nginx_https_certificate:
   description: RoundCube HTTPS Certificate Expiration
@@ -37,12 +39,16 @@ roundcube_nginx_https_certificate:
 
 roundcube_postgresql:
   description: RoundCube PostgreSQL database
+  passive: True
 
 roundcube_uwsgi_master:
   description: RoundCube uWSGI Master Process
+  passive: True
 
 roundcube_uwsgi_worker:
   description: RoundCube uWSGI Workers Process
+  passive: True
 
 roundcube_uwsgi_ping:
   description: RoundCube uWSGI Ping
+  passive: True

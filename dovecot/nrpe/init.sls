@@ -27,6 +27,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 Nagios NRPE check for Dovecot.
 -#}
+{%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - apt.nrpe
   - nrpe
@@ -43,6 +44,8 @@ include:
     - require:
       - pkg: nagios-nrpe-server
       - file: /usr/lib/nagios/plugins/check_dovecot.py
+
+{{ passive_check('dovecot') }}
 
 extend:
   nagios-nrpe-server:

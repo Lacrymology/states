@@ -34,6 +34,7 @@ Maintainer: Lam Dang Tung <lamdt@familug.org>
 
 Install a wordpress Nagios NRPE checks.
 -#}
+{%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - build.nrpe
   - logrotate.nrpe
@@ -103,3 +104,5 @@ include:
       database: {{ salt['pillar.get']('wordpress:db:name', 'wordpress') }}
       username: {{ salt['pillar.get']('wordpress:db:username', 'wordpress') }}
       password: {{ salt['password.pillar']('wordpress:db:password', 10) }}
+      
+{{ passive_check('wordpress') }}

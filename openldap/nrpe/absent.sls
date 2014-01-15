@@ -30,3 +30,7 @@ Remove Nagios NRPE check for OpenLDAP.
 /etc/nagios/nrpe.d/openldap.cfg:
   file:
     - absent
+
+/etc/cron.d/passive-checks-openldap:
+  file:
+    - absent

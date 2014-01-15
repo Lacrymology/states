@@ -41,3 +41,7 @@ Remove Nagios NRPE check for moinmoin.
 /etc/nagios/nrpe.d/moinmoin-nginx.cfg:
   file:
     - absent
+
+/etc/cron.d/passive-checks-moinmoin:
+  file:
+    - absent

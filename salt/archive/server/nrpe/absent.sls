@@ -32,3 +32,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 /etc/nagios/nrpe.d/salt-archive.cfg:
   file:
     - absent
+
+/etc/cron.d/passive-checks-salt.archive.server:
+  file:
+    - absent

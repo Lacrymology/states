@@ -34,3 +34,7 @@ Remove graylog2 web Nagios NRPE checks.
 /etc/nagios/nrpe.d/graylog2-nginx.cfg:
   file:
     - absent
+
+/etc/cron.d/passive-checks-graylog2.web:
+  file:
+    - absent

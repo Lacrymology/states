@@ -37,3 +37,7 @@ Remove Nagios NRPE check for redis.
 /etc/nagios/nrpe.d/redis.cfg:
   file:
     - absent
+
+/etc/cron.d/passive-checks-redis:
+  file:
+    - absent

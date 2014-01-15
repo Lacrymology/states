@@ -26,7 +26,6 @@ Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 # {{ pillar['message_do_not_modify'] }}
-{#- TODO: add support for GELF logging #}
 
 {%- if pillar['salt']['master']|default(False) %}
 master: {{ pillar['salt']['master'] }}
@@ -39,23 +38,8 @@ pillar_roots:
     - /srv/salt/pillar
 {%- endif %}
 id: {{ grains['id'] }}
-log_file: file:///dev/log
-{%- if salt['pillar.get']('debug', False) %}
-log_level: debug
-{%- else %}
-log_level: warning
-{%- endif %}
-log_fmt_logfile: '%(asctime)-15s salt-minion[%(process)d] %(name)s: %(message)s'
-log_datefmt_logfile: '%b %d %H:%M:%S'
-{%- if 'graphite_address' in pillar %}
-carbon.host: {{ pillar['graphite_address'] }}
-carbon.port: 2003
-{%- endif -%}
 
 {%- if 'shinken_pollers' in pillar %}
 mine_functions:
   monitoring.data: []
 {%- endif -%}
-
-{#- MySQL state requires this to work. it's there even we don't need it. #}
-mysql.default_file: '/etc/mysql/debian.cnf'

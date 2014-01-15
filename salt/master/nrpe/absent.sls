@@ -38,3 +38,7 @@ Remove Nagios NRPE check for Salt Master.
 /etc/sudoers.d/nrpe_salt_master:
   file:
     - absent
+
+/etc/cron.d/passive-checks-salt.master:
+  file:
+    - absent

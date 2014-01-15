@@ -27,6 +27,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 Nagios NRPE check for jenkins.
 -#}
+{%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - apt.nrpe
   - java.7.jdk
@@ -64,6 +65,8 @@ include:
       http_result: 301 Moved Permanently
     {%- endif -%}
 {%- endif %}
+
+{{ passive_check('jenkins') }}
 
 extend:
   nagios-nrpe-server:

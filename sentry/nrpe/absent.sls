@@ -38,3 +38,7 @@ Remove Nagios NRPE check for Sentry.
 /etc/nagios/nrpe.d/postgresql-sentry.cfg:
   file:
     - absent
+
+/etc/cron.d/passive-checks-sentry:
+  file:
+    - absent

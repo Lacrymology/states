@@ -34,9 +34,11 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
 openoffice_procs:
   description: Openoffice Daemon
+  passive: True
 
 openoffice_port:
   description: Openoffice Local Port
+  passive: True
 
 openoffice_remote_port:
   check: check_tcp!8100
@@ -44,9 +46,11 @@ openoffice_remote_port:
 
 freeswitch_procs:
   description: Freeswitch Daemon
+  passive: True
 
 freeswitch_port:
   description: Freeswitch Local Port
+  passive: True
 
 freeswitch_remote_port:
   check: check_tcp!8021
@@ -54,9 +58,11 @@ freeswitch_remote_port:
 
 red5_procs:
   description: Red5 Daemon
+  passive: True
 
 red5_rmtp_port:
   description: Red5 RMTP Local Port
+  passive: True
 
 red5_rmtp_remote_port:
   check: check_tcp!1935
@@ -64,6 +70,7 @@ red5_rmtp_remote_port:
 
 red5_rmi_port:
   description: Red5 RMI Local Port
+  passive: True
 
 red5_rmi_remote_port:
   check: check_tcp!9999
@@ -71,6 +78,7 @@ red5_rmi_remote_port:
 
 red5_desktop_sharing_port:
   description: Red5 Desktop Sharing Local Port
+  passive: True
 
 red5_desktop_sharing_remote_port:
   check: check_tcp!9123
@@ -78,3 +86,4 @@ red5_desktop_sharing_remote_port:
 
 god_procs:
   description: God Daemon
+  passive: True

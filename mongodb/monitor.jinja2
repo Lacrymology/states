@@ -33,5 +33,6 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 {%- for check in mongodb_checks %}
 mongodb_{{ check }}:
   description: MongoDB {{ mongodb_checks[check] }}
+  passive: True
 {% endfor -%}
 {#- TODO: remote port check? #}

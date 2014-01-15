@@ -6,8 +6,6 @@ include:
   - mariadb.server.backup
   - backup
 
-{%- set wordpressdir = "/usr/local/wordpress" %}
-
 /etc/cron.daily/backup-wordpress:
   file:
     - managed
@@ -20,5 +18,3 @@ include:
       - pkg: cron
       - file: /usr/local/bin/backup-mysql
       - file: /usr/local/bin/backup-file
-    - context:
-      wordpressdir: {{ wordpressdir }}

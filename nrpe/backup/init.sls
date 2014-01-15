@@ -30,8 +30,6 @@ include:
   - cron
   - virtualenv.backup
 
-{%- set nrpe_dir = '/usr/local/nagios' %}
-
 /etc/cron.daily/backup-nrpe:
   file:
     - managed
@@ -44,4 +42,4 @@ include:
       - pkg: cron
       - file: /usr/local/bin/backup-pip
     - context:
-      root_dir: {{ nrpe_dir }}
+      root_dir: /usr/local/nagios

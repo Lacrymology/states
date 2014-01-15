@@ -30,8 +30,6 @@ include:
   - cron
   - virtualenv.backup
 
-{%- set carbon_dir = '/usr/local/graphite' %}
-
 /etc/cron.daily/backup-carbon:
   file:
     - managed
@@ -44,4 +42,4 @@ include:
       - pkg: cron
       - file: /usr/local/bin/backup-pip
     - context:
-      root_dir: {{ carbon_dir }}
+      root_dir: /usr/local/graphite

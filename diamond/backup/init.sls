@@ -30,8 +30,6 @@ include:
   - cron
   - virtualenv.backup
 
-{%- set diamond_dir = '/usr/local/diamond' %}
-
 /etc/cron.daily/backup-diamond:
   file:
     - managed
@@ -44,4 +42,4 @@ include:
       - pkg: cron
       - file: /usr/local/bin/backup-pip
     - context:
-      root_dir: {{ diamond_dir }}
+      root_dir: /usr/local/diamond

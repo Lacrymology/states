@@ -30,8 +30,6 @@ include:
   - cron
   - virtualenv.backup
 
-{%- set statsd_dir = '/usr/local/statsd' %}
-
 /etc/cron.daily/backup-statsd:
   file:
     - managed
@@ -44,4 +42,4 @@ include:
       - pkg: cron
       - file: /usr/local/bin/backup-pip
     - context:
-      root_dir: {{ statsd_dir }}
+      root_dir: /usr/local/statsd

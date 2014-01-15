@@ -29,7 +29,6 @@ Backup for Dovecot.
 include:
   - cron
   - backup
-  - backup.client
 
 /etc/cron.daily/backup-dovecot:
   file:
@@ -41,5 +40,4 @@ include:
     - source: salt://carbon/backup/cron.jinja2
     - require:
       - pkg: cron
-      - file: /usr/local/bin/backup-store
       - file: /usr/local/bin/backup-file

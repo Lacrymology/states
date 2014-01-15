@@ -36,9 +36,7 @@ Backup client for graylog2.
 include:
   - cron
   - mongodb.backup
-  - virtualenv.backup
   - backup
-  - backup.client
 
 /etc/cron.daily/backup-graylog2:
   file:
@@ -51,6 +49,4 @@ include:
     - require:
       - pkg: cron
       - file: /usr/local/bin/backup-mongodb
-      - file: /usr/local/bin/backup-pip
-      - file: /usr/local/bin/backup-store
       - file: /usr/local/bin/backup-file

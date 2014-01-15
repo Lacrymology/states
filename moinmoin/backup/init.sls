@@ -32,7 +32,6 @@ include:
   - cron
   - virtualenv.backup
   - backup
-  - backup.client
 
 /etc/cron.daily/backup-moinmoin:
   file:
@@ -44,6 +43,5 @@ include:
     - source: salt://moinmoin/backup/cron.jinja2
     - require:
       - pkg: cron
-      - file:/usr/local/bin/backup-pip
-      - file: /usr/local/bin/backup-store
+      - file: /usr/local/bin/backup-pip
       - file: /usr/local/bin/backup-file

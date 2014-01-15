@@ -36,7 +36,6 @@ Backup for Roundcube.
 include:
   - cron
   - postgresql.server.backup
-  - backup.client
 
 /etc/cron.daily/backup-roundcube:
   file:
@@ -49,4 +48,3 @@ include:
     - require:
       - pkg: cron
       - file: /usr/local/bin/backup-postgresql
-      - file: /usr/local/bin/backup-store

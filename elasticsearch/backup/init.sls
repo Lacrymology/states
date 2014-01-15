@@ -29,7 +29,6 @@ Backup client for Elasticsearch.
 include:
   - cron
   - mongodb.backup
-  - backup.client
 
 /usr/local/bin/backup-elasticsearch:
   file:
@@ -41,4 +40,3 @@ include:
     - source: salt://elasticsearch/backup/cron.jinja2
     - require:
       - file: /usr/local/bin/backup-mongodb
-      - file: /usr/local/bin/backup-store

@@ -36,7 +36,6 @@ Backup for Proftpd.
 include:
   - cron
   - postgresql.server.backup
-  - backup.client
 
 /etc/cron.daily/backup-proftpd:
   file:
@@ -49,4 +48,3 @@ include:
     - require:
       - pkg: cron
       - file: /usr/local/bin/backup-postgresql
-      - file: /usr/local/bin/backup-store

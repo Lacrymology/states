@@ -31,7 +31,6 @@ include:
   - cron
   - postgresql.server.backup
   - virtualenv.backup
-  - backup.client
 
 /etc/cron.daily/backup-sentry:
   file:
@@ -44,5 +43,4 @@ include:
     - require:
       - pkg: cron
       - file: /usr/local/bin/backup-postgresql
-      - file: /usr/local/bin/backup-store
       - file: /usr/local/bin/backup-pip

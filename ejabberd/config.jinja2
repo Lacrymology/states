@@ -327,10 +327,11 @@ Hostname
  The default method is the internal.
  If you want to use a different method,
  comment this line and enable the correct ones.
-#}
+
 {%- if salt['pillar.get']('ejabberd:auth_method', 'internal') == 'internal' %}
 {auth_method, internal}.
 {%- endif %}
+#}
 
 {#-
  Authentication using external script
@@ -346,6 +347,7 @@ Hostname
 
 {auth_method, odbc}.
 #}
+{auth_method, odbc}.
 
 {#-
  Authentication using PAM
@@ -441,6 +443,8 @@ Hostname
 
 {pgsql_users_number_estimate, true}.
 #}
+
+{odbc_server, {pgsql, "localhost", "{{ dbname }}", "{{ dbuser }}", "{{ dbuserpass }}"}}.
 
 {#-
  ODBC compatible or MSSQL server:

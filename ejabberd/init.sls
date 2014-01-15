@@ -1,13 +1,13 @@
 include:
   - apt
   - nginx
+  - postgresql.server
 
 {#-
   TODO
     - change ejabberd source
     - support ssl
     - nrpe/diamond
-    - nginx support to admin panel
 #}
 ejabberd_dependencies:
   pkg:
@@ -26,7 +26,41 @@ ejabberd_dependencies:
     - require:
       - cmd: apt_sources
 
+{%- set dbuserpass = salt['password.pillar']('ejabberd:db:password', 10) %}
+{%- set dbuser = salt['pillar.get']('ejabberd:db:username', 'ejabberd') %}
+{%- set dbname = salt['pillar.get']('ejabberd:db:name', 'ejabberd') %}
+
+erlang_mod_pgsql:
+  archive:
+    - extracted
+    - name: /usr/lib/erlang/lib
+{%- if 'files_archive' in pillar %}
+    - source: {{ pillar['files_archive'] }}/mirror/erlang_mod_pgsql.tar.gz
+{%- else %}
+    - source: http://archive.robotinfra.com/mirror/erlang_mod_pgsql.tar.gz
+{%- endif %}
+    - source_hash: md5=ef26b7ec4f06d822ab56f0da6ad467cc
+    - archive_format: tar
+    - tar_options: z
+    - if_missing: /usr/lib/erlang/lib/pgsql
+    - require:
+      - pkg: ejabberd_dependencies
+
 ejabberd:
+  postgres_user:
+    - present
+    - name: {{ dbuser }}
+    - password: {{ dbuserpass }}
+    - runas: postgres
+    - require:
+      - service: postgresql
+  postgres_database:
+    - present
+    - name: {{ dbname }}
+    - owner: {{ dbuser }}
+    - runas: postgres
+    - require:
+      - postgres_user: ejabberd
   pkg:
     - installed
     - sources:
@@ -44,6 +78,7 @@ ejabberd:
     - order: 50
     - require:
       - pkg: ejabberd
+      - archive: erlang_mod_pgsql
     - watch:
       - file: ejabberd
   file:
@@ -56,6 +91,11 @@ ejabberd:
     - mode: 600
     - require:
       - pkg: ejabberd
+      - postgres_database: ejabberd
+    - context:
+      dbname: {{ dbname }}
+      dbuser: {{ dbuser }}
+      dbuserpass: {{ dbuserpass }}
 
 {%- for user in salt['pillar.get']('ejabberd:admins') %}
 {% set password = salt['pillar.get']('ejabberd:admins:' + user) %}
@@ -66,7 +106,7 @@ ejabberd_reg_user_{{ user }}:
     - run
     - name: ejabberdctl register {{ user }} {{ hostname }} {{ password }}
     - user: root
-    - unless: ejabberdctl registered_{{ user }} {{ hostname }} | grep {{ user }}
+    - unless: ejabberdctl registered_users {{ user }} {{ hostname }} | grep {{ user }}
     - require:
       - service: ejabberd
 {%- endfor %}

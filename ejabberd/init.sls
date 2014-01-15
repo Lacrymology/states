@@ -1,10 +1,6 @@
 include:
   - apt
 
-{%- set user = salt['pillar.get']('ejabberd:user', 'xmppadmin') %}
-{%- set password = salt['pillar.get']('ejabberd:password', 'password') %}
-{%- set hostname = salt['pillar.get']('ejabberd:hostname', salt['network.ip_addrs']('eth0')[0]) %}
-
 {#-
   TODO
     - change ejabberd source
@@ -34,9 +30,9 @@ ejabberd:
     - installed
     - sources:
 {%- if 'files_archive' in pillar %}
-      - ejabberd: http://launchpadlibrarian.net/156862939/ejabberd_2.1.10-2ubuntu1.3_i386.deb
+      - ejabberd: http://ftp.riken.jp/Linux/ubuntu/pool/universe/e/ejabberd/ejabberd_2.1.10-2ubuntu1.3_amd64.deb
 {%- else %}
-      - ejabberd: http://launchpadlibrarian.net/156862939/ejabberd_2.1.10-2ubuntu1.3_i386.deb
+      - ejabberd: http://ftp.riken.jp/Linux/ubuntu/pool/universe/e/ejabberd/ejabberd_2.1.10-2ubuntu1.3_amd64.deb
 {%- endif %}
     - require:
       - pkg: ejabberd_dependencies
@@ -60,21 +56,17 @@ ejabberd:
     - require:
       - pkg: ejabberd
 
-ejabberd_reg_user:
-  file:
-    - managed
-    - name: /tmp/reg.sh
-    - source: salt://ejabberd/reg.jinja2
-    - template: jinja
+{%- for user in salt['pillar.get']('ejabberd:admins') %}
+{% set password = salt['pillar.get']('ejabberd:admins:' + user) %}
+{% set hostname = salt['pillar.get']('ejabberd:hostnames')[0] %}
+
+ejabberd_reg_user_{{ user }}:
+  cmd:
+    - run
+    - name: ejabberdctl register {{ user }} {{ hostname }} {{ password }}
     - user: root
-    - group: root
-    - mode: 500
+    - unless: ejabberdctl registered_{{ user }} {{ hostname }} | grep {{ user }}
     - require:
       - service: ejabberd
-  cmd:
-    - wait
-    - name: ./reg.sh
-    - user: root
-    - cwd: /tmp
-    - watch:
-      - file: ejabberd_reg_user
+{%- endfor %}
+

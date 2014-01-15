@@ -71,13 +71,13 @@ Options which are set by Debconf and managed by ucf
 Admin user
 #}
 
-{%- for hostname in salt['pillar.get']('ejabberd:hostnames', []) %}
-  {%- for user in salt['pillar.get']('ejabberd:' + hostname + ':admin' ) %}
-{acl, admin, {user, "{{ user }}", "{{ hostname }}"}}.
-  {%- endfor %}
-  {%- for user in salt['pillar.get']('ejabberd:' + hostname + ':blocked' ) %}
-{acl, blocked, {user, "{{ user }}", "{{ hostname }}"}}.
-  {%- endfor %}
+{%- for user in salt['pillar.get']('ejabberd:admins') %}
+{acl, admin, {user, "{{ user }}", "{{ salt['pillar.get']('ejabberd:hostnames')[0] }}"}}.
+{%- endfor %}
+
+{# Blocked user #}
+{%- for user in salt['pillar.get']('ejabberd:blocked' ) %}
+{acl, blocked, {user, "{{ user }}", "{{ salt['pillar.get']('ejabberd:hostnames')[0] }}"}}.
 {%- endfor %}
 
 {#-
@@ -153,8 +153,8 @@ Hostname
                         %%zlib,
 			starttls, {certfile, "/etc/ejabberd/ejabberd.pem"}
 		       ]},
-{#-
 
+{#
    To enable the old SSL connection method (deprecated) in port 5223:
 
   {5223, ejabberd_c2s, [
@@ -169,7 +169,8 @@ Hostname
 			   {shaper, s2s_shaper},
 			   {max_stanza_size, 131072}
 			  ]},
-{#-
+
+{#
    External MUC jabber-muc
   {5554, ejabberd_service, [
   			    {ip, {127, 0, 0, 1}},
@@ -220,6 +221,7 @@ Hostname
   			    {host, "jud.localhost", [{password, "secret"}]}
   			    ]},
 #}
+
   {5280, ejabberd_http, [
 			 %%{request_handlers,
 			 %% [

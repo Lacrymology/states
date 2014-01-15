@@ -37,7 +37,7 @@ include:
     - group: root
     - mode: 500
     - template: jinja
-    - source: salt://cron/cron.jinja2
+    - source: salt://virtualenv/backup/cron.jinja2
     - require:
       - pkg: cron
       - file: /usr/local/bin/backup-pip

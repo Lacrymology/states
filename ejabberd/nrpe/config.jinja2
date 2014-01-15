@@ -1,0 +1,3 @@
+# {{ pillar['message_do_not_modify'] }}
+
+command[ejabberd_check]=/usr/lib/nagios/plugins/check_procs -c 1:1 -a '-ejabberd config "/etc/ejabberd/ejabberd.cfg' -u ejabberd

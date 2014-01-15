@@ -26,7 +26,7 @@ ejabberd_dependencies:
     - require:
       - cmd: apt_sources
 
-{%- set dbuserpass = '123456a' %} #salt['password.pillar']('ejabberd:db:password', 10) %}
+{%- set dbuserpass = salt['password.pillar']('ejabberd:db:password', 10) %}
 {%- set dbuser = salt['pillar.get']('ejabberd:db:username', 'ejabberd') %}
 {%- set dbname = salt['pillar.get']('ejabberd:db:name', 'ejabberd') %}
 

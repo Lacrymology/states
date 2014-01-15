@@ -31,48 +31,22 @@ Institute for Institutional Innovation by Data Driven Design Inc.
 
 Author: Luan Vo Ngoc <ngocluanvo@gmail.com>
 Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
+
+First argument is name of software component
+Second is the working directory where tar will run
+All other arguments are files tar will archive
 -#}
 #!/bin/sh
 # {{ pillar['message_do_not_modify'] }}
 
-NOW=`/bin/date "+%Y-%m-%d-%H_%M_%S"`
+set -e
 
 software=$1
-command="tar"
-flag="--xz -cf"
-extension='tar.xz'
-OUTPUT="/tmp/$software-$NOW.$extension"
-backup_store="/usr/local/bin/backup-store $OUTPUT"
+shift
+working_directory=$1
+shift
 
-backup()
-{
-    $command $flag $OUTPUT -C $source
-    $backup_store
-}
-
-if [ $software = "discourse" ]
-then
-    source="/usr/local/$software/public uploads"
-
-elif [ $software = "djangopypi2" ] || [ $software = "graylog2" ]
-then
-    source="/var/lib/deployments/$software/ media"
-
-elif [ $software = "gitlab" ]
-then
-    source="/home/git repositories .ssh $software-satellites"
-
-elif [ $software = "wordpress" ]
-then
-    source="/usr/local/$software/wp-content uploads"
-
-elif [ $software = "graphite" ] || [ $software = "moinmoin" ]
-then
-    source="/var/lib/deployments/ $software"
-
-elif [ $software = "dovecot" ]
-then
-    source="/var/spool/mail"
-fi
-
-backup
+NOW=`/bin/date "+%Y-%m-%d-%H_%M_%S"`
+OUTPUT="/tmp/$software-$NOW.tar.xz"
+tar --xz -cf $OUTPUT -C $working_directory $*
+/usr/local/bin/backup-store $OUTPUT

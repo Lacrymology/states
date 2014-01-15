@@ -38,4 +38,4 @@ set -e
 
 /usr/local/bin/backup-postgresql {{ salt['pillar.get']('djangopypi2:db:name', 'djangopypi2') }}
 /usr/local/bin/backup-pip /usr/local/djangopypi2
-/usr/local/bin/backup-file djangopypi2
+/usr/local/bin/backup-file djangopypi2 /var/lib/deployments/djangopypi2 media

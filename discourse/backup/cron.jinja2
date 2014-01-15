@@ -42,4 +42,4 @@ tar --xz -cf /tmp/discourse_upload_$NOW.tar.xz -C {{ web_root_dir }}/public uplo
 /usr/local/bin/backup_store /tmp/discourse_upload_$NOW.tar.xz
 
 /usr/local/bin/backup-postgresql {{ salt['pillar.get']('discourse:db:name', 'discourse') }}
-/usr/local/bin/backup-file discourse
+/usr/local/bin/backup-file discourse {{ web_root_dir }}/public uploads

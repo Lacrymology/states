@@ -10,7 +10,7 @@ ejabberd:
   service:
     - dead
 
-{%- for file in ('/var/lib/ejabberd', '/etc/ejabberd', '/var/log/ejabberd') %}
+{%- for file in ('/var/lib/ejabberd', '/etc/ejabberd', '/var/log/ejabberd', '/usr/lib/ejabberd') %}
 {{ file }}:
   file:
     - absent

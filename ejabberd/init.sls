@@ -26,7 +26,7 @@ ejabberd_dependencies:
     - require:
       - cmd: apt_sources
 
-{%- set dbuserpass = salt['password.pillar']('ejabberd:db:password', 10) %}
+{%- set dbuserpass = '123456a' %} #salt['password.pillar']('ejabberd:db:password', 10) %}
 {%- set dbuser = salt['pillar.get']('ejabberd:db:username', 'ejabberd') %}
 {%- set dbname = salt['pillar.get']('ejabberd:db:name', 'ejabberd') %}
 
@@ -81,6 +81,7 @@ ejabberd:
       - archive: erlang_mod_pgsql
     - watch:
       - file: ejabberd
+      - cmd: ejabberd_psql
   file:
     - managed
     - name: /etc/ejabberd/ejabberd.cfg
@@ -97,18 +98,40 @@ ejabberd:
       dbuser: {{ dbuser }}
       dbuserpass: {{ dbuserpass }}
 
+ejabberd_psql:
+  file:
+    - managed
+    - name: /var/lib/ejabberd/pg.sql
+    - source: salt://ejabberd/database.jinja2
+    - template: jinja
+    - mode: 644
+    - require:
+      - pkg: ejabberd
+  cmd:
+    - wait
+    - name: psql {{ dbname }} < pg.sql
+    - cwd: /var/lib/ejabberd
+    - user: ejabberd
+    - require:
+      - postgres_database: ejabberd
+    - watch:
+      - file: ejabberd_psql
+
 {%- for user in salt['pillar.get']('ejabberd:admins') %}
 {% set password = salt['pillar.get']('ejabberd:admins:' + user) %}
 {% set hostname = salt['pillar.get']('ejabberd:hostnames')[0] %}
 
 ejabberd_reg_user_{{ user }}:
   cmd:
-    - run
+    - wait
     - name: ejabberdctl register {{ user }} {{ hostname }} {{ password }}
     - user: root
     - unless: ejabberdctl registered_users {{ user }} {{ hostname }} | grep {{ user }}
     - require:
+      - file: ejabberd
+    - watch:
       - service: ejabberd
+      - file: ejabberd
 {%- endfor %}
 
 /etc/nginx/conf.d/ejabberd.conf:

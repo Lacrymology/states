@@ -51,6 +51,5 @@ if [ -d "$1/.git/" ]; then
 fi
 
 $1/bin/pip freeze >> $OUTPUT
-gzip -9 $OUTPUT
-scp -q $OUTPUT.gz root@{{ pillar['backup_server']['address'] }}:/var/lib/backup/{{ grains['id'] }}-$DEPLOYMENT-virtualenv-$NOW.pip.gz
-rm -f $OUTPUT.gz
+xz $OUTPUT
+/usr/local/bin/backup-store $OUTPUT.xz

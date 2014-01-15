@@ -39,7 +39,6 @@ include:
   - postgresql.server.backup
   - backup
 
-{%- set web_root_dir = "/usr/local/discourse" %}
 /etc/cron.daily/backup-discourse:
   file:
     - managed
@@ -52,5 +51,3 @@ include:
       - pkg: cron
       - file: /usr/local/bin/backup-postgresql
       - file: /usr/local/bin/backup-file
-    - context:
-      web_root_dir: {{ web_root_dir }}

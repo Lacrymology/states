@@ -8,20 +8,12 @@ Example::
 
   ejabberd:
     hostnames:
-      - localhost
-      - 162.243.252.48
-    localhost:
-      admin:
-        user1: pass1
-      blocked:
-        - user2
-    162.243.252.48:
-      admin:
-        user3: pass3
-        user1: pass1
-      blocked:
-        - user2
-        - user4
+      - example.com
+    admins:
+      user1: pass1
+      user2: pass2
+    blocked:
+      - user2
 
 Optional
 --------

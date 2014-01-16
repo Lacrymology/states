@@ -126,9 +126,9 @@ ejabberd_reg_user_{{ user }}:
     - wait
     - name: ejabberdctl register {{ user }} {{ hostname }} {{ password }}
     - user: root
-    - unless: ejabberdctl registered_users {{ user }} {{ hostname }} | grep {{ user }}
+    - unless: ejabberdctl check_account {{ user }} {{ hostname }}
     - require:
-      - file: ejabberd
+      - pkg: ejabberd
     - watch:
       - service: ejabberd
       - file: ejabberd

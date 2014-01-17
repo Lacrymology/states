@@ -47,6 +47,11 @@ ejabberd_dependencies:
       - erlang-public-key
       - erlang-ssl
       - erlang-syntax-tools
+      - zlib1g
+      - libssl1.0.0
+      - libpam0g
+      - libexpat1
+      - libc6
     - require:
       - cmd: apt_sources
 

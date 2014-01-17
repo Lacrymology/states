@@ -70,6 +70,8 @@ erlang_mod_pgsql:
     - require:
       - pkg: ejabberd_dependencies
 
+{%- set filename = 'ejabberd_2.1.10-2ubuntu1.3_' + grains['debian_arch'] + '.deb' %}
+
 ejabberd:
   postgres_user:
     - present
@@ -90,9 +92,9 @@ ejabberd:
     - installed
     - sources:
 {%- if 'files_archive' in pillar %}
-      - ejabberd: http://ftp.riken.jp/Linux/ubuntu/pool/universe/e/ejabberd/ejabberd_2.1.10-2ubuntu1.3_amd64.deb
+      - ejabberd: {{ pillar['files_archive'] }}/mirror/{{ filename }}
 {%- else %}
-      - ejabberd: http://ftp.riken.jp/Linux/ubuntu/pool/universe/e/ejabberd/ejabberd_2.1.10-2ubuntu1.3_amd64.deb
+      - ejabberd: http://archive.bit-flippers.com/mirror/{{ filename }}
 {%- endif %}
     - require:
       - pkg: ejabberd_dependencies

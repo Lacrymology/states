@@ -269,11 +269,7 @@ RAVEN_CONFIG = {
 #}
 
 {%- set nodes = salt['pillar.get']('graphite:nodes', []) %}
-{%- if nodes|length > 0 %}
-CLUSTER_SERVERS = ["{% for node in nodes -%}{{ node }}{% if not loop.last %}", "{% endif %}{%- endfor %}"]
-{%- else %}
-CLUSTER_SERVERS = []
-{%- endif %}
+CLUSTER_SERVERS = [{% for node in nodes %}"{{ node }}"{% if not loop.last %}, {% endif %}{% endfor %}]
 
 {#-
  These are timeout values (in seconds) for requests to remote webapps

@@ -70,13 +70,13 @@ def generate(name, length=20):
         password: {{ salt['password.generate']('monitoring_user', 30) }}
     '''
     key_name = '-'.join((__virtual__(), name))
-    try:
-        return __salt__['data.getval'](key_name)
-    except KeyError:
-        pass
-    password = _generate_random_password(length)
-    __salt__['data.update'](key_name, password)
-    return password
+    existing_passwd = __salt__['data.getval'](key_name)
+    if existing_passwd is None:
+        password = _generate_random_password(length)
+        __salt__['data.update'](key_name, password)
+        return password
+    else:
+        return existing_passwd
 
 
 def pillar(pillar_path, length=20):

@@ -2,5 +2,11 @@
 
 command[ejabberd_web_check]=/usr/lib/nagios/plugins/check_procs -c 1:1 -a '-ejabberd config "/etc/ejabberd/ejabberd.cfg' -u ejabberd
 command[ejabberd_c2s_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 5222
-command[ejabberd_s2s_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 5269
 
+{%- if salt['pillar.get']('ejabberd:server_to_server', False) %}
+command[ejabberd_s2s_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 5269
+{%- endif %}
+
+{%- if salt['pillar.get']('ejabberd:ssl', False) %}
+command[ejabberd_c2s_ssl_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 5223
+{%- endif %}

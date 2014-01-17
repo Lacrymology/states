@@ -7,6 +7,6 @@ command[ejabberd_c2s_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 522
 command[ejabberd_s2s_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 5269
 {%- endif %}
 
-{%- if salt['pillar.get']('ejabberd:ssl', False) %}
+{%- if salt['pillar.get']('ejabberd:old_ssl', False) %}
 command[ejabberd_c2s_ssl_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 5223
 {%- endif %}

@@ -72,6 +72,7 @@ Example::
     override_acls: False
     watchdog_admins: user1@im.example.com
     ssl: example.com
+    old_ssl: False
     ssl_redirect: True
     server_to_server: False
     odbc_pool_size: 10
@@ -129,6 +130,13 @@ ejabberd:ssl
 ~~~~~~~~~~~~
 
 Name of the SSL key to use for HTTPS or connection to XMPP server.
+
+Default: ``False``.
+
+ejabberd:old_ssl
+~~~~~~~~~~~~~~~~
+
+Enable old SSL connection
 
 Default: ``False``.
 

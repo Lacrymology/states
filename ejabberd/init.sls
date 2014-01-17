@@ -3,12 +3,6 @@ include:
   - nginx
   - postgresql.server
 
-{#-
-  TODO
-    - change ejabberd source
-    - support ssl
-    - nrpe/diamond
-#}
 ejabberd_dependencies:
   pkg:
     - installed

@@ -36,6 +36,8 @@ include:
     {%- if salt['pillar.get']('ejabberd:ssl_redirect', False) %}
       http_result: 301 Moved Permanently
     {%- endif -%}
+{%- else %}
+      http_result: 401 Unauthorized
 {%- endif %}
     - watch_in:
       - service: nagios-nrpe-server

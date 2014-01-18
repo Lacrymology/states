@@ -97,7 +97,7 @@ ejabberd:
     - installed
     - sources:
 {%- if 'files_archive' in pillar %}
-      - ejabberd: {{ pillar['files_archive'] }}/mirror/{{ filename }}
+      - ejabberd: {{ pillar['files_archive']|replace('file://', '')|replace('https://', 'http://') }}/mirror/{{ filename }}
 {%- else %}
       - ejabberd: http://archive.bit-flippers.com/mirror/{{ filename }}
 {%- endif %}

@@ -35,14 +35,17 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Install Redis.
 -#}
 
-{%- set redis_version = "2.6.14" %}
-{%- set jemalloc_version = "3.4.0" %}
+{%- set redis_version = "2.8.4" %}
+{%- set jemalloc_version = "3.4.1" %}
+{%- set redistools_version = "2.8.4" %}
 
 {%- set redis_sub_version = "2:{0}-1chl1~{1}1".format(redis_version, grains['lsb_distrib_codename']) %}
 {%- set jemalloc_sub_version = "{0}-1chl1~{1}1".format(jemalloc_version, grains['lsb_distrib_codename']) %}
+{%- set redistools_sub_version = "2:{0}-1chl1~{1}1".format(redistools_version, grains['lsb_distrib_codename']) %}
 
 {%- set jemalloc = "libjemalloc1_{0}-1chl1~{1}1_{2}.deb".format(jemalloc_version, grains['lsb_distrib_codename'], grains['debian_arch']) %}
 {%- set filename = "redis-server_{0}-1chl1~{1}1_{2}.deb".format(redis_version, grains['lsb_distrib_codename'], grains['debian_arch']) %}
+{%- set redistools = "redis-tools_{0}-1chl1~{1}1_{2}.deb".format(redistools_version, grains['lsb_distrib_codename'], grains['debian_arch']) %}
 
 redis:
   file:
@@ -66,9 +69,11 @@ redis:
 {%- if 'files_archive' in pillar %}
       - libjemalloc1: {{ pillar['files_archive']|replace('file://', '')|replace('https://', 'http://') }}/mirror/{{ jemalloc }}
       - redis-server: {{ pillar['files_archive']|replace('file://', '')|replace('https://', 'http://') }}/mirror/{{ filename }}
+      - redis-tools: {{ pillar['files_archive']|replace('file://', '')|replace('https://', 'http://') }}/mirror/{{ redistools }}
 {%- else %}
       - libjemalloc1: http://ppa.launchpad.net/chris-lea/redis-server/ubuntu/pool/main/j/jemalloc/{{ jemalloc }}
       - redis-server: http://ppa.launchpad.net/chris-lea/redis-server/ubuntu/pool/main/r/redis/{{ filename }}
+      - redis-tools: http://ppa.launchpad.net/chris-lea/redis-server/ubuntu/pool/main/r/redis/{{ redistools }}
 {%- endif %}
 
 {%- if salt['pkg.version']('libjemalloc1') not in ('', jemalloc_sub_version) %}

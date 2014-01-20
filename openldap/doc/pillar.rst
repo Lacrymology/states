@@ -74,14 +74,10 @@ Example::
           cn: Test
           sn: Alice
           passwd: '{MD5}/+VTaU9QlkcVkDQ0MjWeAg=='
-          desc:
-          email: alice@example.com
         bob:
           cn: Bob
           sn: Yeah
           passwd: 123465
-          desc:
-          email: bob@example.com
     absent:
       example.com:
         batman:

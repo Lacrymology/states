@@ -149,8 +149,6 @@ ldap_{{ domain }}_{{ uid }}:
         sn: {{ u['sn'] }}
         uid: {{ uid }}@{{ domain }}
         userPassword: {{ u['passwd'] }}
-        mail: {{ u['email'] }}
-        description: {{ u['desc'] }}
         __EOF
     - require:
       - cmd: ldap_create_user_tree

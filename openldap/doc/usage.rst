@@ -60,8 +60,6 @@ value, in this case ``testfoo.ldif``:
     sn: testfoo
     uid: testfoo
     userPassword: testfoo
-    mail: testfoo@example.com
-    description: None
 
 The password can be in clear text, or encrypted with ``slappasswd`` format.
 ``slappasswd`` is an utility that come in ``slapd`` package.
@@ -98,8 +96,6 @@ Content of `usertree.ldif` rendered from pillar, in this example is::
             cn: bob
             sn: bob
             passwd: bobpass
-            desc:
-            email: bob@example.com
 
 How do email accounts created?
 ------------------------------

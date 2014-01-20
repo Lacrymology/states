@@ -25,7 +25,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-#!/bin/sh
+#!/bin/bash
 # {{ pillar['message_do_not_modify'] }}
+set -e
 {# flush old logs of one week old #}
 find /var/log/elasticsearch -type f -mtime +7 -exec rm -f {} \;

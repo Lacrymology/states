@@ -25,8 +25,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-#!/bin/sh
-#  {{ pillar['message_do_not_modify'] }}
+#!/bin/bash
+# {{ pillar['message_do_not_modify'] }}
+set -e
 {% for role in ('broker', 'arbiter', 'reactionner', 'poller', 'scheduler') %}
 if [ -r /etc/init/shinken-{{ role }}.conf ]; then
     $1 shinken-{{ role }}

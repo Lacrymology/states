@@ -25,8 +25,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-#!/bin/sh
+#!/bin/bash
 # {{ pillar['message_do_not_modify'] }}
+set -e
 
 DEPLOYMENT=`basename $1`
 NOW=`date '+%Y-%m-%d-%H_%M_%S'`

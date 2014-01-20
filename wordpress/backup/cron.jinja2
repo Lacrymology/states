@@ -1,5 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 # {{ pillar['message_do_not_modify'] }}
+set -e
 
 /usr/local/bin/backup-mysql wordpress
 tar czf /tmp/wordpress_upload.tar.gz -C {{ wordpressdir }}/wp-content uploads

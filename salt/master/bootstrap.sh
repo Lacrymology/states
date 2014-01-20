@@ -1,4 +1,6 @@
-#!/bin/sh
+#!/bin/bash
+# {{ pillar['message_do_not_modify'] }}
+set -e
 # Copyright (c) 2013, Bruno Clermont
 # All rights reserved.
 #

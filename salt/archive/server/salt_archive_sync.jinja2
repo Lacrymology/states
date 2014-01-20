@@ -25,8 +25,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-#!/bin/sh
+#!/bin/bash
 # {{ pillar['message_do_not_modify'] }}
+set -e
 rsync -aq {% if salt['pillar.get']('salt_archive:delete', False) %} --delete{% endif %} --exclude ".*" {{ pillar['salt_archive']['source'] }} /var/lib/salt_archive/
 
 if [ $? -eq 0 ]; then

@@ -42,6 +42,7 @@ include:
   - ssl.nrpe
 {% endif %}
   - statsd.nrpe
+  - sudo.nrpe
   - uwsgi.nrpe
   - virtualenv.nrpe
 

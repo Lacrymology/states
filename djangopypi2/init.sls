@@ -42,6 +42,7 @@ include:
   - postgresql.server
   - python.dev
   - rsyslog
+  - sudo
 {% if salt['pillar.get']('djangopypi2:ssl', False) %}
   - ssl
 {% endif %}
@@ -117,6 +118,7 @@ djangopypi2:
       virtualenv: {{ root_dir }}
     - require:
       - virtualenv: djangopypi2
+      - pkg: sudo
 
 djangopypi2_urls:
   file:

@@ -47,6 +47,7 @@ include:
 {% if 'graphite_address' in pillar %}
   - statsd
 {% endif %}
+  - sudo
   - uwsgi
   - virtualenv
   - web
@@ -148,6 +149,7 @@ sentry_settings:
       alternate_admin_cmd: /usr/local/sentry/bin/sentry --config=/etc/sentry.conf.py
     - require:
       - virtualenv: sentry
+      - pkg: sudo
 
 sentry-syncdb-all:
   cmd:

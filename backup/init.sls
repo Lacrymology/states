@@ -34,6 +34,7 @@ Author: Luan Vo Ngoc <ngocluanvo@gmail.com>
 -#}
 include:
   - local
+  - backup.client
 
 /usr/local/bin/backup-file:
   file:
@@ -45,3 +46,4 @@ include:
     - source: salt://backup/file.jinja2
     - require:
       - file: /usr/local
+      - file: /usr/local/bin/backup-store

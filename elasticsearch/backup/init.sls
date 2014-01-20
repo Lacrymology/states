@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Bruno Clermont
+Copyright (c) 2013, Luan Vo Ngoc
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -23,14 +23,16 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author: Luan Vo Ngoc <ngocluanvo@gmail.com>
+Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
 
 Backup client for Elasticsearch.
 -#}
 include:
+  - backup.client
   - cron
-  - mongodb.backup
+  - pip
 
-/usr/local/bin/backup-elasticsearch:
+/etc/cron.daily/backup-elasticsearch:
   file:
     - managed
     - user: root
@@ -39,4 +41,24 @@ include:
     - template: jinja
     - source: salt://elasticsearch/backup/cron.jinja2
     - require:
-      - file: /usr/local/bin/backup-mongodb
+      - pkg: cron
+      - file: /usr/local/bin/backup-store
+
+esclient:
+  file:
+    - managed
+    - name: {{ opts['cachedir'] }}/esclient-requirements.txt
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - source: salt://elasticsearch/backup/requirements.jinja2
+    - require:
+      - module: pip
+  module:
+    - wait
+    - name: pip.install
+    - upgrade: True
+    - requirements: {{ opts['cachedir'] }}/esclient-requirements.txt
+    - watch:
+      - file: esclient

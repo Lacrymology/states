@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Dang Tung Lam <lamdt@familug.org>
 Maintainer: Dang Tung Lam <lamdt@familug.org>
 
-Uninstall NRPE check for eJabberd - XMPP Server
+Uninstall NRPE check for ejabberd - XMPP Server
 #}
 
 /etc/nagios/nrpe.d/ejabberd.cfg:

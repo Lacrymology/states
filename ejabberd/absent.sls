@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Dang Tung Lam <lamdt@familug.org>
 Maintainer: Dang Tung Lam <lamdt@familug.org>
 
-Uninstall eJabberd - XMPP Server
+Uninstall ejabberd - XMPP Server
 #}
 
 ejabberd:

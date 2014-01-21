@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Dang Tung Lam <lamdt@familug.org>
 Maintainer: Dang Tung Lam <lamdt@familug.org>
 
-NRPE check for eJabberd - XMPP Server
+NRPE check for ejabberd - XMPP Server
 #}
 
 include:

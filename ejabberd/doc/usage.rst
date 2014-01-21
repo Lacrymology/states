@@ -31,7 +31,7 @@ XMPP server
              POSSIBILITY OF SUCH DAMAGE.
 :Authors: - Dang Tung Lam
 
-`eJabberd` is a Jabber/XMPP instant messaging server, licensed under GPLv2 
+`ejabberd` is a Jabber/XMPP instant messaging server, licensed under GPLv2 
 (Free and Open Source), written in Erlang/OTP. Among other features, 
 ejabberd is cross-platform, fault-tolerant, clusterable and modular.
 

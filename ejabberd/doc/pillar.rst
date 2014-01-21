@@ -67,9 +67,6 @@ Optional
 Example::
 
   ejabberd:
-    override_global: False
-    override_local: False
-    override_acls: False
     watchdog_admins: user1@im.example.com
     ssl: example.com
     old_ssl: False
@@ -77,25 +74,6 @@ Example::
     server_to_server: False
     odbc_pool_size: 10
     odbc_keepalive_interval: undefined
-
-
-ejabberd:override_global
-~~~~~~~~~~~~~~~~~~~~~~~~
-Override global options (shared by all ejabberd nodes in a cluster).
-
-Default: ``False`` as disable.
-
-ejabberd:override_local
-~~~~~~~~~~~~~~~~~~~~~~~
-Override local options (specific for this particular ejabberd node).
-
-Default: ``False`` as disable.
-
-ejabberd:override_acls
-~~~~~~~~~~~~~~~~~~~~~~
-Remove the Access Control Lists before new ones are added.
-
-Default: ``False`` as disable.
 
 ejabberd:watchdog_admins
 ~~~~~~~~~~~~~~~~~~~~~~~~

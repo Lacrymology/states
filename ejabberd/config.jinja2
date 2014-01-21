@@ -38,35 +38,6 @@ Maintainer: Dang Tung Lam <lamdt@familug.org>
 #}
 
 {#-
-  OVERRIDE OPTIONS STORED IN DATABASE
-
- Override global options (shared by all ejabberd nodes in a cluster).
-
-override_global.
-#}
-{%- if salt['pillar.get']('ejabberd:override_global', False) %}
-override_global.
-{%- endif %}
-
-{#-
- Override local options (specific for this particular ejabberd node).
-
-override_local.
-#}
-{%- if salt['pillar.get']('ejabberd:override_local', False) %}
-override_local.
-{%- endif %}
-
-{#-
- Remove the Access Control Lists before new ones are added.
-
-override_acls.
-#}
-{%- if salt['pillar.get']('ejabberd:override_acls', False) %}
-override_acls.
-{%- endif %}
-
-{#-
 Options which are set by Debconf and managed by ucf
 
 Admin user

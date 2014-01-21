@@ -44,6 +44,7 @@ include:
 {% if 'graphite_address' in pillar %}
   - statsd.nrpe
 {% endif %}
+  - sudo.nrpe
   - uwsgi.nrpe
   - virtualenv.nrpe
 

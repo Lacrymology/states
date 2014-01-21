@@ -42,6 +42,7 @@ include:
   - python.dev
   - rsyslog
   - statsd
+  - sudo
   - uwsgi
   - virtualenv
   - web
@@ -113,6 +114,7 @@ graphite_wsgi:
       virtualenv: /usr/local/graphite
     - require:
       - virtualenv: graphite
+      - pkg: sudo
 
 graphite-web:
   file:

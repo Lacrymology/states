@@ -42,6 +42,7 @@ include:
   - postgresql.server.diamond
   - rsyslog.diamond
   - statsd.diamond
+  - sudo.diamond
   - uwsgi.diamond
 
 uwsgi_diamond_djangopypi2_resources:

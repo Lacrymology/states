@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2014, Dang Tung Lam
+Copyright (c) 2014, Process-one
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,7 +22,7 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Dang Tung Lam <lamdt@familug.org>
+Author: Process-one
 Maintainer: Dang Tung Lam <lamdt@familug.org>
 #}
 
@@ -174,17 +174,3 @@ CREATE TABLE private_storage (
 
 CREATE INDEX i_private_storage_username ON private_storage USING btree (username);
 CREATE UNIQUE INDEX i_private_storage_username_namespace ON private_storage USING btree (username, namespace);
-
-{#-
---- To update from 0.9.8:
--- CREATE SEQUENCE spool_seq_seq;
--- ALTER TABLE spool ADD COLUMN seq integer;
--- ALTER TABLE spool ALTER COLUMN seq SET DEFAULT nextval('spool_seq_seq');
--- UPDATE spool SET seq = DEFAULT;
--- ALTER TABLE spool ALTER COLUMN seq SET NOT NULL;
-
---- To update from 1.x:
--- ALTER TABLE rosterusers ADD COLUMN askmessage text;
--- UPDATE rosterusers SET askmessage = '';
--- ALTER TABLE rosterusers ALTER COLUMN askmessage SET NOT NULL;
-#}

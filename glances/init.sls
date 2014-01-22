@@ -47,9 +47,7 @@ glances:
     - require:
       - virtualenv: glances
     - watch:
-      - file: glances_requirements
-
-glances_requirements:
+      - file: glances
   file:
     - managed
     - name: /usr/local/glances/salt-requirements.txt

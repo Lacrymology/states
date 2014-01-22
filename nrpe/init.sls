@@ -32,6 +32,8 @@ Install Nagios NRPE Agent.
 include:
   - apt
   - apt.nrpe
+  - cron
+  - cron.nrpe
   - local
 {% if 'graphite_address' in pillar %}
   - nrpe.diamond
@@ -192,19 +194,4 @@ nagios-nrpe-server:
     - require:
       - module: nrpe-virtualenv
 
-{%- for state in pillar['monitoring']['states'] -%}
-{%- for name in salt['monitoring.discover_checks_passive'](state) %}
-touch_{{ state }}_cron:
-  file:
-    - touch
-    - name: /etc/cron.d/passive-checks-{{ state }}
-/etc/cron.d/passive-checks-{{ state }}:
-  file:
-    - append
-    - text: |
-        {{ passive_check(state, name)|indent(8) }}
-    - require:
-      - file: touch_{{ state }}_cron
-      - file: /etc/send_nsca.conf
-{%- endfor -%}
-{%- endfor %}
+{{ passive_check('nrpe') }}

@@ -63,3 +63,5 @@ glances:
   file:
     - symlink
     - target: /usr/local/glances/local/bin/glances
+    - require:
+      - module: glances

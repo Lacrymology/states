@@ -164,7 +164,8 @@ move_git_home:
 change_git_command:
   cmd:
     - run
-    - name:  sed -i s@/home/git/@/home/{{ user }}/@g {{ home_dir }}/.ssh/authorized_keys
+    - name:  find ./ -type f -exec sed -i 's:/home/git/:/home/gitlab/:g' {} \;
+    - cwd: {{ home_dir }}
     - user: root
     - onlyif: ls {{ home_dir }}/.ssh/authorized_keys
     - require:
@@ -331,13 +332,37 @@ gitlab_precompile_assets:
       - cmd: gitlab
       - cmd: bundler
 
+{%- if version == '6.4.3' %}
+gitlab_migrate_miids:
+  cmd:
+    - wait
+    - name: bundle exec rake migrate_iids RAILS_ENV=production
+    - env:
+        RAILS_ENV: production
+    - user: {{ user }}
+    - cwd: {{ web_dir }}
+    - require:
+      - cmd: gitlab_migrate_db
+    - watch:
+      - archive: gitlab
+{%- endif %}
+
 gitlab_update_hook:
+  file:
+    - managed
+    - name: {{ shell_dir }}/support/rewrite-hooks.sh
+    - user: {{ user }}
+    - group: {{ user }}
+    - mode: 550
+    - require:
+      - file: gitlab-shell
   cmd:
     - wait
     - name: {{ shell_dir }}/support/rewrite-hooks.sh {{ repos_dir }}
     - user: {{ user }}
     - cwd: {{ home_dir }}
     - require:
+      - file: gitlab_update_hook
       - file: gitlab-shell
     - watch:
       - archive: gitlab

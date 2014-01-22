@@ -79,12 +79,14 @@ def main():
     else:
         status = p.returncode
 
+    password = config.get('server', 'password')
+    if len(password) > send_nsca.nsca.MAX_PASSWORD_LENGTH:
+        raise ValueError("Too large password %d" % len(password))
+
     # NSCA client
     for host in config.get('server', 'address').split(','):
         sender = send_nsca.nsca.NscaSender(host, None)
-        sender.password = config.get('server', 'password')
-        if len(sender.password) > send_nsca.nsca.MAX_PASSWORD_LENGTH:
-            raise ValueError("Too large password %d" % len(sender.password))
+        sender.password = password
         # hardcode encryption method (equivalent of 1)
         sender.Crypter = send_nsca.nsca.XORCrypter
     

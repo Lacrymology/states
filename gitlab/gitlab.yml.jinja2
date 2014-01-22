@@ -289,7 +289,7 @@ production: &base
     {#-
      Git timeout to read a commit, in seconds
     #}
-    timeout: {{ salt['pillar.get']('gitlab:max_size', 10) }}
+    timeout: {{ salt['pillar.get']('gitlab:commit_timeout', 30) }}
 
   {#-
    4. Extra customization

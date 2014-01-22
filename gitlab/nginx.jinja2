@@ -55,10 +55,16 @@ server {
 {# web app logic #}
     server_name {% for hostname in  salt['pillar.get']('gitlab:hostnames') %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
     root {{ web_dir }}/public;
+    client_max_body_size 5m;
+    server_tokens off;
 
 {% include "nginx/block_hacks.jinja2" %}
 
     location / {
+        try_files $uri $uri/index.html $uri.html @gitlab;
+    }
+
+    location @gitlab {
         gzip off;
         uwsgi_modifier1 7;
         include uwsgi_params;

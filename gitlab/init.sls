@@ -330,6 +330,17 @@ gitlab_precompile_assets:
     - watch:
       - cmd: gitlab_migrate_db
 
+gitlab_update_hook:
+  cmd:
+    - wait
+    - name: {{ shell_dir }}/support/rewrite-hooks.sh {{ repos_dir }}
+    - user: {{ user }}
+    - cwd: {{ home_dir }}
+    - require:
+      - file: gitlab-shell
+    - watch:
+      - archive: gitlab
+
 gitlab_clean_redis_db:
   cmd:
     - wait

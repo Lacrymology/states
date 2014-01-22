@@ -316,8 +316,6 @@ gitlab_coppy_images:
       - archive: gitlab
       - user: gitlab
       - cmd: gitlab_precompile_assets
-    - require_in:
-      - cmd: gitlab_precompile_assets
 
 gitlab_precompile_assets:
   cmd:
@@ -330,6 +328,8 @@ gitlab_precompile_assets:
     - unless: ls {{ web_dir }}/public/assets/
     - watch:
       - cmd: gitlab_migrate_db
+      - cmd: gitlab
+      - cmd: bundler
 
 gitlab_update_hook:
   cmd:

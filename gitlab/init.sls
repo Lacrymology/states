@@ -311,7 +311,7 @@ gitlab_coppy_images:
     - name: cp app/assets/images/* public/assets/
     - user: {{ user }}
     - cwd: {{ web_dir }}
-    - onlyif: ls {{ web_dir }}/public/assets/
+    - unless: ls {{ web_dir }}/public/assets/logo-black.png
     - require:
       - archive: gitlab
       - user: gitlab

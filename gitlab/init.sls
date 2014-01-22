@@ -330,19 +330,15 @@ gitlab_precompile_assets:
     - watch:
       - cmd: gitlab_migrate_db
 
-{#-
-gitlab_start_sidekiq_service:
+gitlab_clean_redis_db:
   cmd:
     - wait
-    - name: bundle exec rake sidekiq:start
-    - env:
-         RAILS_ENV: production
-    - user: {{ user }}
-    - cwd: {{ web_dir }}
-    - unless: ps -ef | grep [s]idekiq
+    - name: redis-cli flushdb
+    - require:
+      - service: redis
     - watch:
       - cmd: gitlab
-#}
+      - archive: gitlab
 
 {{ web_dir }}/config.ru:
   file:

@@ -125,3 +125,10 @@ shinken:log_level
 Define level of logging.
 
 Default: ``INFO``.
+
+shinken:nrpe:timeout
+~~~~~~~~~~~~~~~~~~~~
+
+How many seconds until a NRPE connection timeout.
+
+Default: ``9``.

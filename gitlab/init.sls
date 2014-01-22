@@ -315,6 +315,7 @@ gitlab_coppy_images:
     - require:
       - archive: gitlab
       - user: gitlab
+      - cmd: gitlab_precompile_assets
     - require_in:
       - cmd: gitlab_precompile_assets
 

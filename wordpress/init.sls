@@ -37,6 +37,9 @@ A blogging tool and content management system.
 include:
   - local
   - nginx
+{%- if salt['pillar.get']('debug', False) %}
+  - logrotate
+{%- endif %}
   - {{ salt['pillar.get']('wordpress:mysql_variant', 'mariadb') }}.server
   - php.dev
 {%- if salt['pillar.get']('wordpress:ssl', False) %}
@@ -205,6 +208,21 @@ uwsgi_wordpress:
       - file: {{ wordpressdir }}/wp-config.php
       - archive: wordpress
       - pkg: php5-mysql
+
+{%- if salt['pillar.get']('debug', False) %}
+/etc/logrotate.d/wordpress:
+  file:
+    - managed
+    - source: salt://wordpress/logrotate.jinja2
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - require:
+      - pkg: logrotate
+    - context:
+      web_dir: {{ wordpressdir }}
+{%- endif %}
 
 {%- if salt['pillar.get']('wordpress:ssl', False) %}
 extend:

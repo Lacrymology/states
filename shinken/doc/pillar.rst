@@ -103,7 +103,6 @@ Example::
   shinken:
     ssl: False
     ssl_redirect: False
-    log_level: INFO
 
 shinken:ssl
 ~~~~~~~~~~~

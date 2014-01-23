@@ -52,7 +52,11 @@ conf['admin_passwd'] = '{{ pillar['openerp']['password'] }}'
  DEBUG=10, DEBUG_RPC=8, DEBUG_RPC_ANSWER=6, DEBUG_SQL=5, INFO=20,
  WARNING=30, ERROR=40, CRITICAL=50
 #}
+{%- if salt['pillar.get']('debug', False) %}
 conf['log_level'] = 10
+{%- else %}
+conf['log_level'] = 30
+{%- endif %}
 
 {#-
  If --static-http-enable is used, path for the static web directory

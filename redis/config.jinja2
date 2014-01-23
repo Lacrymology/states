@@ -105,7 +105,11 @@ tcp-keepalive {{ salt['pillar.get']('redis:keepalive', 60) }}
  notice (moderately verbose, what you want in production probably)
  warning (only very important / critical messages are logged)
 #}
-loglevel {{ salt['pillar.get']('redis:loglevel', 'notice') }}
+{%- if salt['pillar.get']('debug', False) %}
+loglevel debug
+{%- else %}
+loglevel notice
+{%- endif %}
 
 {#-
  Specify the log file name. Also 'stdout' can be used to force

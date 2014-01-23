@@ -36,6 +36,7 @@ Install a wordpress Nagios NRPE checks.
 -#}
 include:
   - build.nrpe
+  - logrotate.nrpe
   - mariadb.nrpe
   - mariadb.server.nrpe
   - nginx.nrpe

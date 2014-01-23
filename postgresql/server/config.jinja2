@@ -106,15 +106,6 @@ temp_buffers = {{ salt['pillar.get']('postgresql:temp_buffers', '8MB') }}
 log_destination = 'syslog'
 syslog_facility = 'local0'
 syslog_ident = 'postgres'
-client_min_messages = notice
-log_min_messages = warning
-log_min_error_statement = error
-{#-
- -1 is disabled
- 0 logs all statements
- > 0 logs only statements running at least this number of milliseconds
-#}
-log_min_duration_statement = {{ salt['pillar.get']('postgresql:log_slow_query', -1) }}
 
 {#- What to Log #}
 
@@ -126,8 +117,27 @@ log_checkpoints = off
 log_connections = off
 log_disconnections = off
 log_duration = off
-{#- terse, default, or verbose messages #}
+
+{#-
+log_min_duration_statement =
+ -1 is disabled
+ 0 logs all statements
+ > 0 logs only statements running at least this number of milliseconds
+#}
+log_min_duration_statement = {{ salt['pillar.get']('postgresql:log_slow_query', -1) }}
+
+{%- if salt['pillar.get']('debug', False) %}
+log_error_verbosity = verbose
+log_min_messages = debug5
+client_min_messages = debug5
+log_min_error_statement = debug5
+{%- else %}
 log_error_verbosity = default
+log_min_messages = warning
+client_min_messages = notice
+log_min_error_statement = error
+{%- endif %}
+
 log_hostname = off
 {#- special values:
  %a = application name

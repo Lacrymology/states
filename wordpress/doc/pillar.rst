@@ -44,6 +44,7 @@ Optional
 
 Example::
 
+  debug: False
   wordpress:
     password: dbpassword
     public: 1
@@ -54,6 +55,11 @@ Example::
     cheaper: 1
     timeout: 60
     idle: 300
+
+debug
+~~~~~
+
+Enable Debug logging to the /wp-content/debug.log file
 
 wordpress:password
 ~~~~~~~~~~~~~~~~~~

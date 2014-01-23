@@ -28,18 +28,29 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 <?php
 # {{ pillar['message_do_not_modify'] }}
 $rcmail_config = array();
-$rcmail_config['debug_level'] = 1;
 $rcmail_config['log_driver'] = 'syslog';
 $rcmail_config['log_date_format'] = 'd-M-Y H:i:s O';
 $rcmail_config['syslog_id'] = 'roundcube';
 $rcmail_config['syslog_facility'] = LOG_USER;
-$rcmail_config['smtp_log'] = false;
+{%- if salt['pillar.get']('debug', False) %}
+$rcmail_config['debug_level'] = 8;
+$rcmail_config['log_logins'] = true;
+$rcmail_config['log_session'] = true;
+$rcmail_config['smtp_log'] = true;
+$rcmail_config['sql_debug'] = true;
+$rcmail_config['imap_debug'] = true;
+$rcmail_config['ldap_debug'] = true;
+$rcmail_config['smtp_debug'] = true;
+{%- else %}
+$rcmail_config['debug_level'] = 4;
 $rcmail_config['log_logins'] = false;
 $rcmail_config['log_session'] = false;
+$rcmail_config['smtp_log'] = false;
 $rcmail_config['sql_debug'] = false;
 $rcmail_config['imap_debug'] = false;
 $rcmail_config['ldap_debug'] = false;
 $rcmail_config['smtp_debug'] = false;
+{%- endif %}
 {%- if salt['pillar.get']('roundcube:imap:ssl', False) %}
 $rcmail_config['default_host'] = 'ssl://{{ salt['pillar.get']('roundcube:imap:server', '127.0.0.1') }}';
 $rcmail_config['default_port'] = 993;

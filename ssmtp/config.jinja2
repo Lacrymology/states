@@ -39,3 +39,7 @@ UseSTARTTLS=yes
 UseTLS=yes
 {%- endif %}
 FromLineOverride=yes
+
+{%- if salt['pillar.get']('debug', False) %}
+Debug=YES
+{%- endif %}

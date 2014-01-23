@@ -163,12 +163,12 @@ move_git_home:
 
 change_git_command:
   cmd:
-    - run
+    - wait
     - name:  find ./ -type f -exec sed -i 's:/home/git/:/home/gitlab/:g' {} \;
     - cwd: {{ home_dir }}
     - user: root
     - onlyif: ls {{ home_dir }}/.ssh/authorized_keys
-    - require:
+    - watch:
       - cmd: move_git_home
 
 gitlab_remove_old_version:

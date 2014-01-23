@@ -33,7 +33,7 @@ http://docs.mongodb.org/manual/tutorial/configure-ssl/
 include:
   - logrotate
 
-{% set version = '2.4.4' %}
+{% set version = '2.4.9' %}
 {% set filename = 'mongodb-10gen_' + version + '_' + grains['debian_arch'] + '.deb' %}
 
 mongodb:

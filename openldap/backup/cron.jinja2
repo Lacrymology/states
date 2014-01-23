@@ -25,8 +25,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Luan Vo Ngoc <ngocluanvo@gmail.com>
 Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
 -#}
-#!/bin/sh
+#!/bin/bash
 # {{ pillar['message_do_not_modify'] }}
+set -e
 
 NOW=`date '+%Y-%m-%d-%H_%M_%S'`
 OUTPUT="/tmp/openldap-$NOW.ldif"

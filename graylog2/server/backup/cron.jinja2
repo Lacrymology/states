@@ -31,8 +31,9 @@ Institute for Institutional Innovation by Data Driven Design Inc.
 
 Author: Luan Vo Ngoc <ngocluanvo@gmail.com>
 -#}
-#!/bin/sh
+#!/bin/bash
 # {{ pillar['message_do_not_modify'] }}
+set -e
 
 /usr/local/bin/backup-elasticsearch graylog2
 /usr/local/bin/backup-mongodb graylog2

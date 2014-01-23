@@ -26,7 +26,8 @@ Author: Luan Vo Ngoc <ngocluanvo@gmail.com>
 
 Template for a backup cron job that only need to backup pip.
 -#}
-#!/bin/sh
+#!/bin/bash
 # {{ pillar['message_do_not_modify'] }}
+set -e
 
 /usr/local/bin/backup-pip {{ root_dir }}

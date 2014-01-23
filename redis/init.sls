@@ -56,6 +56,7 @@ redis:
       - pkg: redis
   service:
     - running
+    - enable: True
     - name: redis-server
     - order: 50
     - watch:

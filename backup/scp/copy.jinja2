@@ -25,8 +25,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
-#!/bin/sh
+#!/bin/bash
 # {{ pillar['message_do_not_modify'] }}
+set -e
 archive_path=$1
 archive_name=`basename $archive_path`
 scp -q $archive_path root@{{ pillar['backup_server']['address'] }}:/var/lib/backup/{{ grains['id'] }}-$archive_name

@@ -1,4 +1,6 @@
-#!/bin/sh
+#!/bin/bash
+# {{ pillar['message_do_not_modify'] }}
+set -e
 # Copyright (c) 2013, Hung Nguyen Viet
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy

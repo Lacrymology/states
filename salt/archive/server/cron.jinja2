@@ -25,8 +25,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-#!/bin/sh
+#!/bin/bash
 # {{ pillar['message_do_not_modify'] }}
+set -e
 {%- set home = salt['user.info']('salt_archive')['home'] -%}
 {%- if pillar['salt_archive']['source'] is defined %}
 */15 * * * * root /usr/local/bin/salt_archive_sync.sh

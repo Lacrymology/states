@@ -10,6 +10,7 @@ import re
 import os
 import logging
 import subprocess
+import shlex
 from ConfigParser import SafeConfigParser
 
 import yaml
@@ -71,7 +72,7 @@ def main():
     if check_name not in checks:
         logger.error("Can't find check %s", check_name)
         sys.exit(1)
-    p = subprocess.Popen(checks[check_name].replace("'", '"'), stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    p = subprocess.Popen(shlex.split(checks[check_name]), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     output, errors = p.communicate()
     if p.returncode not in (0, 1, 2, 3) or errors:
         status = 3

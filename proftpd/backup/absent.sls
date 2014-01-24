@@ -30,6 +30,7 @@ in this Software without prior written authorization from the
 Institute for Institutional Innovation by Data Driven Design Inc.
 
 Author: Luan Vo Ngoc <ngocluanvo@gmail.com>
+Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
 
 Remove Backup for Proftpd.
 -#}

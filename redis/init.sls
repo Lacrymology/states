@@ -51,6 +51,7 @@ redis:
     - template: jinja
     - source: salt://redis/config.jinja2
     - name: /etc/redis/redis.conf
+    - mode: 644
     - makedirs: True
     - require:
       - pkg: redis

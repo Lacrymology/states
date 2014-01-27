@@ -165,15 +165,13 @@ move_git_home:
   cmd:
     - run
     - name: mv /home/git {{ home_dir }}
-    - cwd: /home
     - user: root
     - onlyif: test -d /home/git
 
 replace_git_home_in_file:
   cmd:
     - wait
-    - name:  find ./ -type f -exec sed -i 's:/home/git/:/home/gitlab/:g' {} \;
-    - cwd: {{ home_dir }}
+    - name:  find {{ home_dir }} -type f -exec sed -i 's:/home/git/:/home/gitlab/:g' {} \;
     - user: root
     - onlyif: test -f {{ home_dir }}/.ssh/authorized_keys
     - watch:
@@ -317,9 +315,8 @@ gitlab_migrate_db:
 gitlab_coppy_images:
   cmd:
     - run
-    - name: cp app/assets/images/* public/assets/
+    - name: cp {{ web_dir }}/app/assets/images/* {{ web_dir }}/public/assets/
     - user: {{ user }}
-    - cwd: {{ web_dir }}
     - unless: test -f {{ web_dir }}/public/assets/logo-black.png
     - require:
       - archive: gitlab

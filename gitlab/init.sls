@@ -85,10 +85,18 @@ gitlab_dependencies:
       - pkg: postgresql-dev
       - pkg: xml-dev
 
+gitlab_stop_old_sidekiq_process:
+  cmd:
+    - run
+    - name: ps aux | grep [s]idekiq | awk '{print $2}' | xargs kill -9
+    - onlyif: ps aux | grep [s]idekiq
+
 remove_old_gitlab_shell:
   file:
     - absent
     - name: {{ home_dir }}/gitlab-shell
+    - require:
+      - cmd: gitlab_stop_old_sidekiq_process
 
 gitlab-shell:
   archive:

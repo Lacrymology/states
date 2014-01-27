@@ -57,6 +57,9 @@ Example::
     spam_filter: True
     sasl: True
     virtual_mailbox: True
+    aliases: |
+        user1.abc@example.com example.com/user1
+        user2.xyz@example.com example.com/user2
     mydestination:
       - saltlab.com
       - localhost.localdomain
@@ -113,6 +116,11 @@ postfix:virtual_mailbox
 Enable using virtual mailbox.
 
 Default: ``False``.
+
+postfix:aliases
+~~~~~~~~~~~~~~~
+
+Support alias function on postfix.
 
 postfix:mynetworks
 ~~~~~~~~~~~~~~~~~~

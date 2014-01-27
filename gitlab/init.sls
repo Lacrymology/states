@@ -169,7 +169,7 @@ move_git_home:
     - user: root
     - onlyif: test -d /home/git
 
-change_git_command:
+replace_git_home_in_file:
   cmd:
     - wait
     - name:  find ./ -type f -exec sed -i 's:/home/git/:/home/gitlab/:g' {} \;
@@ -196,7 +196,7 @@ gitlab:
       - pkg: gitlab_dependencies
       - group: web
       - cmd: move_git_home
-      - cmd: change_git_command
+      - cmd: replace_git_home_in_file
   postgres_user:
     - present
     - name: {{ database_username }}

@@ -120,7 +120,7 @@ gitlab-shell:
     - run
     - name: mv gitlab-shell-1.8.0 gitlab-shell
     - cwd: {{ home_dir }}
-    - onlyif: ls {{ home_dir }} | grep gitlab-shell-1.8.0
+    - onlyif: test -d {{ home_dir }}/gitlab-shell-1.8.0
     - require:
       - archive: gitlab-shell
 
@@ -159,7 +159,7 @@ move_git_home:
     - name: mv /home/git {{ home_dir }}
     - cwd: /home
     - user: root
-    - onlyif: ls /home/git
+    - onlyif: test -d /home/git
 
 change_git_command:
   cmd:
@@ -167,7 +167,7 @@ change_git_command:
     - name:  find ./ -type f -exec sed -i 's:/home/git/:/home/gitlab/:g' {} \;
     - cwd: {{ home_dir }}
     - user: root
-    - onlyif: ls {{ home_dir }}/.ssh/authorized_keys
+    - onlyif: test -f {{ home_dir }}/.ssh/authorized_keys
     - watch:
       - cmd: move_git_home
 
@@ -312,7 +312,7 @@ gitlab_coppy_images:
     - name: cp app/assets/images/* public/assets/
     - user: {{ user }}
     - cwd: {{ web_dir }}
-    - unless: ls {{ web_dir }}/public/assets/logo-black.png
+    - unless: test -f {{ web_dir }}/public/assets/logo-black.png
     - require:
       - archive: gitlab
       - user: gitlab
@@ -326,7 +326,7 @@ gitlab_precompile_assets:
         RAILS_ENV: production
     - user: {{ user }}
     - cwd: {{ web_dir }}
-    - unless: ls {{ web_dir }}/public/assets/
+    - unless: test -d {{ web_dir }}/public/assets/
     - watch:
       - cmd: gitlab_migrate_db
       - cmd: gitlab

@@ -49,7 +49,7 @@ base:
 {%- for role in global_roles %}
   {%- if role in pillar['roles']|default([]) %}
     - roles.{{ role }}
-  {%- else %}
+  {%- elif salt['pillar.get']('roles_absent', False) %}
     - roles.{{ role }}.absent
   {%- endif -%}
 {%- endfor -%}

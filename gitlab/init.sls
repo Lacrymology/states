@@ -105,7 +105,7 @@ gitlab-shell:
     {%- if 'files_archive' in pillar %}
     - source: {{ pillar['files_archive'] }}/mirror/gitlab/shell-1.8.0.tar.gz
     {%- else %}
-    - source:  http://archive.robotinfra.com/mirror/gitlab/shell-1.8.0.tar.gz
+    - source:  https://github.com/gitlabhq/gitlab-shell/archive/v1.8.0.tar.gz
     {%- endif %}
     - source_hash: md5=6f82c0917dc1a65019ec04dec4e9a7d5
     - archive_format: tar
@@ -216,7 +216,7 @@ gitlab:
 {%- if 'files_archive' in pillar %}
     - source: {{ pillar['files_archive'] }}/mirror/gitlab/{{ version }}.tar.gz
 {%- else %}
-    - source: http://archive.robotinfra.com/mirror/gitlab/{{ version }}.tar.gz
+    - source: https://github.com/gitlabhq/gitlabhq/archive/v{{ version }}.tar.gz
 {%- endif %}
     - source_hash: md5=a66d5504b154aacc68aefae9445f3fd2
     - archive_format: tar

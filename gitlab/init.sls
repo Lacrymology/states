@@ -534,7 +534,7 @@ gitlab_rack_gem:
     - template: jinja
     - user: {{ user }}
     - group: {{ user }}
-    - mode: 644
+    - mode: 640
     - require:
       - user: {{ user }}
 
@@ -592,7 +592,7 @@ gitlab_upstart:
     - template: jinja
     - user: {{ user }}
     - group: {{ user }}
-    - mode: 644
+    - mode: 640
     - require:
       - file: gitlab
     - require_in:

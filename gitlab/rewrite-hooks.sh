@@ -1,9 +1,7 @@
-# {{ pillar['message_do_not_modify'] }}
 #!/bin/bash
-{#-
- $1 is an optional argument specifying the location of the repositories directory.
- Defaults to /home/git/repositories if not provided
-#}
+
+# $1 is an optional argument specifying the location of the repositories directory.
+# Defaults to /home/git/repositories if not provided
 
 home_dir="/home/{{ user }}"
 src=${1:-"$home_dir/repositories"}

@@ -97,6 +97,7 @@ remove_old_gitlab_shell:
     - name: {{ home_dir }}/gitlab-shell
     - require:
       - cmd: gitlab_stop_old_sidekiq_process
+      - cmd: move_git_home
 
 gitlab-shell:
   archive:
@@ -353,24 +354,20 @@ gitlab_migrate_miids:
 {%- endif %}
 
 gitlab_update_hook:
-  file:
-    - managed
-    - name: {{ shell_dir }}/support/rewrite-hooks.sh
-    - user: {{ user }}
-    - group: {{ user }}
-    - mode: 550
-    - require:
-      - file: gitlab-shell
   cmd:
-    - wait
-    - name: {{ shell_dir }}/support/rewrite-hooks.sh {{ repos_dir }}
+    - script
+    - name: rewrite-hooks.sh {{ repos_dir }}
+    - source: salt://gitlab/rewrite-hooks.sh
+    - template: jinja
+    - shell: /bin/bash
     - user: {{ user }}
-    - cwd: {{ home_dir }}
+    - cwd: {{ shell_dir }}/support
     - require:
-      - file: gitlab_update_hook
       - file: gitlab-shell
     - watch:
       - archive: gitlab
+    - context:
+      user: {{ user }}
 
 gitlab_clean_redis_db:
   cmd:

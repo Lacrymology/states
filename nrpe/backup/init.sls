@@ -29,6 +29,7 @@ Backup for NRPE.
 -#}
 include:
   - cron
+  - cron.nrpe
   - virtualenv.backup
 
 /etc/cron.daily/backup-nrpe:

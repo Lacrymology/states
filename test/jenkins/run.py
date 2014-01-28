@@ -108,7 +108,7 @@ def main():
         tests = Tests()
         args = sys.argv[1:]
         for arg in args:
-            if '/' in args:
+            if '/' in arg:
                 str_index, str_size = arg.split('/')
                 args.remove(arg)
                 tests.add_chunk(int(str_index), int(str_size))

@@ -72,7 +72,8 @@ def list_tests_filtered(keywords):
     output.sort()
     return output
 
-if __name__ == '__main__':
+
+def main():
     suffix = '> /root/salt/stdout.log 2> /root/salt/stderr.log'
     if len(sys.argv) > 1:
         command = ' '.join((
@@ -83,3 +84,6 @@ if __name__ == '__main__':
     else:
         command = ' '.join((TEST_SCRIPT, suffix))
     os.system(command)
+
+if __name__ == '__main__':
+    main()

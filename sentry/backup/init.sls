@@ -32,9 +32,10 @@ include:
   - postgresql.server.backup
   - virtualenv.backup
 
-/etc/cron.daily/backup-sentry:
+backup-sentry:
   file:
     - managed
+    - name: /etc/cron.daily/backup-sentry
     - user: root
     - group: root
     - mode: 500

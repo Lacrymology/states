@@ -29,7 +29,7 @@ include:
   - local
 
 {# manage a script which test archive integrity #}
-/usr/local/bin/backup_store:
+/usr/local/bin/backup-store:
   file:
     - managed
     - source: salt://backup/client/test/no_operate.jinja2

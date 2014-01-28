@@ -31,7 +31,7 @@ include:
   - cron
   - virtualenv.backup
 
-/etc/cron.daily/backup-statsd:
+backup-statsd:
   file:
     - managed
     - user: root

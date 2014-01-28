@@ -1,4 +1,6 @@
 {#-
+-*- ci-automatic-discovery: off -*-
+
 Copyright (c) 2013, Bruno Clermont
 All rights reserved.
 
@@ -29,7 +31,6 @@ Execute this state only when mongodb or the server crashed and it requires
 a repair.
 -#}
 
-{%- if salt['file.file_exists']('/usr/bin/mongod') %}
 mongodb_repair:
   service:
     - dead
@@ -39,7 +40,7 @@ mongodb_repair:
     - require:
        - service: mongodb_repair
 
-mongodb:
+mongodb_repair_post:
   cmd:
     - run
     - name: chown -R mongodb:nogroup /var/lib/mongodb
@@ -48,5 +49,4 @@ mongodb:
   service:
     - running
     - require:
-      - cmd: mongodb
-{%- endif -%}
+      - cmd: mongodb_repair_post

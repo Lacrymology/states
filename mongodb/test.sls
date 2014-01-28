@@ -31,6 +31,7 @@ include:
   - mongodb.backup
   - mongodb.diamond
   - mongodb.nrpe
+  - mongodb.repair
 
 test:
   nrpe:
@@ -42,3 +43,10 @@ test:
     - require:
       - file: /usr/local/bin/backup-mongodb-all
     - order: last
+
+extend:
+  mongodb_repair_post:
+    service:
+      - order: last
+      - require:
+        - cmd: test

@@ -84,6 +84,20 @@ def move_incoming(directory, category, incoming_sub_directory='incoming',
     if err:
         logging.error("Got things in stderr: %s", err)
 
+    # sadly there doesn't seem to be a way to easily delete files filtered by
+    # the --ignore-existing bit
+    for path, dirs, files in os.walk(source_directory, topdown=False):
+        to_remove = []
+        for file in files:
+            filename = os.path.join(path, file)
+            if filename[len(source_directory):] not in filtered:
+                os.unlink(filename)
+                to_remove.append(file)
+
+        files[:] = [f for f in files if f not in to_remove]
+
+        if not (dirs or files):
+            os.rmdir(path)
 
 def main():
     import sys

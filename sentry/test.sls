@@ -36,3 +36,9 @@ test:
     - run_all_checks
     - wait: 60
     - order: last
+  cmd:
+    - run
+    - name: /etc/cron.daily/backup-sentry
+    - require:
+      - file: backup-sentry
+    - order: last

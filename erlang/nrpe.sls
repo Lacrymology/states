@@ -32,8 +32,5 @@ Institute for Institutional Innovation by Data Driven Design Inc.
 Author: Lam Dang Tung <lamdt@familug.org>
 Maintainer: Lam Dang Tung <lamdt@familug.org>
 #}
-
-erlang:
-  pkg:
-    - purged
-    - name: erlang-nox
+include:
+  - apt.nrpe

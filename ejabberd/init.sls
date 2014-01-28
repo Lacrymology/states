@@ -30,6 +30,8 @@ Installing ejabberd - XMPP Server
 
 include:
   - apt
+  - erlang
+  - erlang.pgsql
   - nginx
   - postgresql.server
 
@@ -37,44 +39,14 @@ ejabberd_dependencies:
   pkg:
     - installed
     - pkgs:
-      - erlang-nox
-      - erlang-asn1
-      - erlang-base
-      - erlang-crypto
-      - erlang-inets
-      - erlang-mnesia
-      - erlang-odbc
-      - erlang-public-key
-      - erlang-ssl
-      - erlang-syntax-tools
-      - zlib1g
       - libssl1.0.0
-      - libpam0g
-      - libexpat1
-      - libc6
     - require:
       - cmd: apt_sources
+      - pkg: erlang
 
 {%- set dbuserpass = salt['password.pillar']('ejabberd:db:password', 10) %}
 {%- set dbuser = salt['pillar.get']('ejabberd:db:username', 'ejabberd') %}
 {%- set dbname = salt['pillar.get']('ejabberd:db:name', 'ejabberd') %}
-
-erlang_mod_pgsql:
-  archive:
-    - extracted
-    - name: /usr/lib/erlang/lib
-{%- if 'files_archive' in pillar %}
-    - source: {{ pillar['files_archive'] }}/mirror/erlang_mod_pgsql.tar.gz
-{%- else %}
-    - source: http://archive.robotinfra.com/mirror/erlang_mod_pgsql.tar.gz
-{%- endif %}
-    - source_hash: md5=ef26b7ec4f06d822ab56f0da6ad467cc
-    - archive_format: tar
-    - tar_options: z
-    - if_missing: /usr/lib/erlang/lib/pgsql
-    - require:
-      - pkg: ejabberd_dependencies
-
 {%- set filename = 'ejabberd_2.1.10-2ubuntu1.3_' + grains['debian_arch'] + '.deb' %}
 
 ejabberd:
@@ -110,7 +82,7 @@ ejabberd:
     - order: 50
     - require:
       - pkg: ejabberd
-      - archive: erlang_mod_pgsql
+      - cmd: erlang_mod_pgsql
     - watch:
       - file: ejabberd
       - cmd: ejabberd_psql

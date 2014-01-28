@@ -34,6 +34,7 @@ Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
 
 Undo graylog2 backup state.
 -#}
-/etc/cron.daily/backup-graylog2:
+backup-graylog2:
   file:
     - absent
+    - name: /etc/cron.daily/backup-graylog2

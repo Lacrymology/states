@@ -34,6 +34,7 @@ Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
 
 Undo openerp state.
 -#}
-/etc/cron.daily/backup-openerp:
+backup-openerp:
   file:
     - absent
+    - name: /etc/cron.daily/backup-openerp

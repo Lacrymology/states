@@ -34,6 +34,7 @@ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
 
 Undo djangopypi2.backup state.
 -#}
-/etc/cron.daily/backup-djangopypi2:
+backup-djangopypi2:
   file:
     - absent
+    - name: /etc/cron.daily/backup-djangopypi2

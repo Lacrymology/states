@@ -31,9 +31,10 @@ include:
   - cron
   - backup
 
-/etc/cron.daily/backup-saltmaster:
+backup-saltmaster:
   file:
     - managed
+    - name: /etc/cron.daily/backup-saltmaster
     - user: root
     - group: root
     - mode: 500

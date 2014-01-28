@@ -35,6 +35,8 @@ Maintainer: Lam Dang Tung <lamdt@familug.org>
 include:
   - discourse
   - discourse.backup
+  - discourse.backup.nrpe
+  - discourse.backup.diamond
   - discourse.diamond
   - discourse.nrpe
 
@@ -43,4 +45,9 @@ test:
     - run_all_checks
     - wait: 60
     - order: last
-
+  cmd:
+    - run
+    - name: /etc/cron.daily/backup-discourse
+    - require:
+      - file: backup-discourse
+    - order: last

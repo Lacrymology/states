@@ -27,6 +27,7 @@ Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
 
 Turn off backup for Shinken.
 -#}
-/etc/cron.daily/backup-shinken:
+backup-shinken:
   file:
     - absent
+    - name: /etc/cron.daily/backup-shinken

@@ -27,6 +27,7 @@ Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
 
 Turn off backup for Statsd.
 -#}
-/etc/cron.daily/backup-statsd:
+backup-statsd:
   file:
     - absent
+    - name: /etc/cron.daily/backup-statsd

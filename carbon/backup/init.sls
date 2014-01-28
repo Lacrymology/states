@@ -31,9 +31,10 @@ include:
   - cron
   - virtualenv.backup
 
-/etc/cron.daily/backup-carbon:
+backup-carbon:
   file:
     - managed
+    - name: /etc/cron.daily/backup-carbon
     - user: root
     - group: root
     - mode: 500

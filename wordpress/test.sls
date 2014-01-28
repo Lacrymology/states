@@ -34,6 +34,9 @@ Maintainer: Lam Dang Tung <lamdt@familug.org>
 -#}
 include:
   - wordpress
+  - wordpress.backup
+  - wordpress.backup.diamond
+  - wordpress.backup.nrpe
   - wordpress.diamond
   - wordpress.nrpe
 
@@ -42,3 +45,9 @@ test:
     - run_all_checks
     - order: last
     - wait: 30
+  cmd:
+    - run
+    - name: /etc/cron.daily/backup-wordpress
+    - require:
+      - file: backup-wordpress
+    - order: last

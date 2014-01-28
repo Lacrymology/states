@@ -31,9 +31,10 @@ include:
   - cron
   - backup.client
 
-/etc/cron.daily/backup-openldap:
+backup-openldap:
   file:
     - managed
+    - name: /etc/cron.daily/backup-openldap
     - user: root
     - group: root
     - mode: 500

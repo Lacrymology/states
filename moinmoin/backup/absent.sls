@@ -24,10 +24,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author: Hung Nguyen Viet hvnsweeting@gmail.com
 Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
+
+Undo moinmoin.backup state.
 -#}
-{#
- Undo moinmoin.backup state
- #}
-/etc/cron.daily/backup-moinmoin:
+backup-moinmoin:
   file:
     - absent
+    - name: /etc/cron.daily/backup-moinmoin

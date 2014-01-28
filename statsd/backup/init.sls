@@ -34,6 +34,7 @@ include:
 backup-statsd:
   file:
     - managed
+    - name: /etc/cron.daily/backup-statsd
     - user: root
     - group: root
     - mode: 500

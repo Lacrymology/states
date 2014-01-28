@@ -27,6 +27,7 @@ Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
 
 Turn off backup for Carbon.
 -#}
-/etc/cron.daily/backup-carbon:
+backup-carbon:
   file:
     - absent
+    - name: /etc/cron.daily/backup-carbon

@@ -27,6 +27,8 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
 include:
   - dovecot
+  - dovecot.backup
+  - dovecot.backup.nrpe
   - dovecot.diamond
   - dovecot.nrpe
   - postfix.nrpe
@@ -38,4 +40,10 @@ include:
 test:
   nrpe:
     - run_all_checks
+    - order: last
+  cmd:
+    - run
+    - name: /etc/cron.daily/backup-saltmaster
+    - require:
+      - file: backup-saltmaster
     - order: last

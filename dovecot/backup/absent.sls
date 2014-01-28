@@ -27,6 +27,7 @@ Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
 
 Turn off backup for Dovecot.
 -#}
-/etc/cron.daily/backup-dovecot:
+backup-dovecot:
   file:
     - absent
+    - name: /etc/cron.daily/backup-dovecot

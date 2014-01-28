@@ -39,9 +39,10 @@ include:
   - postgresql.server.backup
   - backup
 
-/etc/cron.daily/backup-discourse:
+backup-discourse:
   file:
     - managed
+    - name: /etc/cron.daily/backup-discourse
     - user: root
     - group: root
     - mode: 500

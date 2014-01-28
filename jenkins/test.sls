@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Luan Vo Ngoc
+Copyright (c) 2013, Bruno Clermont
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,27 +22,23 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Luan Vo Ngoc <ngocluanvo@gmail.com>
-Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
-
-Backup for NRPE.
+Author: Bruno Clermont <patate@fastmail.cn>
+Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
 include:
-  - cron
-  - cron.nrpe
-  - virtualenv.backup
+  - jenkins
+  - jenkins.backup
+  - jenkins.backup.nrpe
+  - jenkins.diamond
+  - jenkins.nrpe
 
-backup-nrpe:
-  file:
-    - managed
-    - name: /etc/cron.daily/backup-nrpe
-    - user: root
-    - group: root
-    - mode: 500
-    - template: jinja
-    - source: salt://virtualenv/backup/cron.jinja2
+test:
+  nrpe:
+    - run_all_checks
+    - order: last
+  cmd:
+    - run
+    - name: /etc/cron.daily/backup-jenkins
     - require:
-      - pkg: cron
-      - file: /usr/local/bin/backup-pip
-    - context:
-      root_dir: /usr/local/nagios
+      - file: backup-jenkins
+    - order: last

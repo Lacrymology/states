@@ -27,6 +27,7 @@ Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
 
 Turn off backup for NRPE.
 -#}
-/etc/cron.daily/backup-nrpe:
+backup-nrpe:
   file:
     - absent
+    - name: /etc/cron.daily/backup-nrpe

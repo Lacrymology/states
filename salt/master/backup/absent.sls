@@ -27,6 +27,7 @@ Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
 
 Turn off backup for Salt Master.
 -#}
-/etc/cron.daily/backup-saltmaster:
+backup-saltmaster:
   file:
     - absent
+    - name: /etc/cron.daily/backup-saltmaster

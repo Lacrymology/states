@@ -40,9 +40,10 @@ include:
   - virtualenv.backup
   - backup
 
-/etc/cron.daily/backup-djangopypi2:
+backup-djangopypi2:
   file:
     - managed
+    - name: /etc/cron.daily/backup-djangopypi2
     - user: root
     - group: root
     - mode: 500

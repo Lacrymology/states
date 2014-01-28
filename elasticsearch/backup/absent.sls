@@ -28,6 +28,7 @@ Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
 Remove Backup client for Elasticsearch.
 -#}
 
-/etc/cron.daily/backup-elasticsearch:
+backup-elasticsearch:
   file:
     - absent
+    - name: /etc/cron.daily/backup-elasticsearch

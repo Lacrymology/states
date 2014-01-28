@@ -32,9 +32,10 @@ include:
   - cron
   - pip
 
-/etc/cron.daily/backup-elasticsearch:
+backup-elasticsearch:
   file:
     - managed
+    - name: /etc/cron.daily/backup-elasticsearch
     - user: root
     - group: root
     - mode: 500

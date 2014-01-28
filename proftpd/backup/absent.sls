@@ -34,6 +34,7 @@ Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
 
 Remove Backup for Proftpd.
 -#}
-/etc/cron.daily/backup-proftpd:
+backup-proftpd:
   file:
     - absent
+    - name: /etc/cron.daily/backup-proftpd

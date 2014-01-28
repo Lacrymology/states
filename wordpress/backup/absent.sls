@@ -28,6 +28,7 @@ Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
 Remove Backup for Wordpress
 -#}
 
-/etc/cron.daily/backup-wordpress:
+backup-wordpress:
   file:
     - absent
+    - name: /etc/cron.daily/backup-wordpress

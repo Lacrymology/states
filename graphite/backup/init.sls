@@ -33,9 +33,10 @@ include:
   - virtualenv.backup
   - backup
 
-/etc/cron.daily/backup-graphite:
+backup-graphite:
   file:
     - managed
+    - name: /etc/cron.daily/backup-graphite
     - user: root
     - group: root
     - mode: 500

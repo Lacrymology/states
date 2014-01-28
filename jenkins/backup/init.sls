@@ -31,9 +31,10 @@ include:
   - cron
   - backup
 
-/etc/cron.daily/backup-jenkins:
+backup-jenkins:
   file:
     - managed
+    - name: /etc/cron.daily/backup-jenkins
     - user: root
     - group: root
     - mode: 500

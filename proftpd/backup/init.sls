@@ -38,9 +38,10 @@ include:
   - cron
   - postgresql.server.backup
 
-/etc/cron.daily/backup-proftpd:
+backup-proftpd:
   file:
     - managed
+    - name: /etc/cron.daily/backup-proftpd
     - user: root
     - group: root
     - mode: 500

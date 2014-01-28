@@ -32,9 +32,10 @@ include:
   - mariadb.server.backup
   - backup
 
-/etc/cron.daily/backup-wordpress:
+backup-wordpress:
   file:
     - managed
+    - name: /etc/cron.daily/backup-wordpress
     - user: root
     - group: root
     - mode: 500

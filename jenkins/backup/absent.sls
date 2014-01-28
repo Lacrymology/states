@@ -27,6 +27,7 @@ Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
 
 Turn off backup for Jenkins.
 -#}
-/etc/cron.daily/backup-jenkins:
+backup-jenkins:
   file:
     - absent
+    - name: /etc/cron.daily/backup-jenkins

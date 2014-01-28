@@ -31,11 +31,18 @@ include:
   - shinken.{{ role }}.diamond
   - shinken.{{ role }}.nrpe
 {%- endfor %}
+  - shinken.backup
 
 test:
   nrpe:
     - run_all_checks
     - wait: 60
+    - order: last
+  cmd:
+    - run
+    - name: /etc/cron.daily/backup-shinken
+    - require:
+      - file: backup-shinken
     - order: last
 
 stop_shinken:

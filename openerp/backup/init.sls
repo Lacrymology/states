@@ -39,9 +39,10 @@ include:
   - postgresql.server.backup
   - virtualenv.backup
 
-/etc/cron.daily/backup-openerp:
+backup-openerp:
   file:
     - managed
+    - name: /etc/cron.daily/backup-openerp
     - user: root
     - group: root
     - mode: 500

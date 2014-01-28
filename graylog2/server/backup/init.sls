@@ -39,9 +39,10 @@ include:
   - mongodb.backup
   - backup
 
-/etc/cron.daily/backup-graylog2:
+backup-graylog2:
   file:
     - managed
+    - name: /etc/cron.daily/backup-graylog2
     - user: root
     - group: root
     - mode: 500

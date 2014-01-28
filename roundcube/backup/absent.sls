@@ -34,6 +34,7 @@ Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
 
 Remove Backup for Roundcube.
 -#}
-/etc/cron.daily/backup-roundcube:
+backup-roundcube:
   file:
     - absent
+    - name: /etc/cron.daily/backup-roundcube

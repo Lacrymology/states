@@ -31,9 +31,10 @@ include:
   - cron
   - virtualenv.backup
 
-/etc/cron.daily/backup-shinken:
+backup-shinken:
   file:
     - managed
+    - name: /etc/cron.daily/backup-shinken
     - user: root
     - group: root
     - mode: 500

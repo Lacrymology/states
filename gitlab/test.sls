@@ -36,10 +36,18 @@ include:
   - gitlab
   - gitlab.diamond
   - gitlab.backup
+  - gitlab.backup.diamond
+  - gitlab.backup.nrpe
   - gitlab.nrpe
 
 test:
   nrpe:
     - run_all_checks
     - wait: 120
+    - order: last
+  cmd:
+    - run
+    - name: /etc/cron.daily/backup-gitlab
+    - require:
+      - file: backup-gitlab
     - order: last

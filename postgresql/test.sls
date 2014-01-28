@@ -34,3 +34,19 @@ test:
   nrpe:
     - run_all_checks
     - order: last
+  cmd:
+    - run
+    - name: /usr/local/bin/backup-postgresql postgres
+    - require:
+      - file: /usr/local/bin/backup-postgresql
+      - service: postgresql
+    - order: last
+
+test_backup_all:
+  cmd:
+    - run
+    - name: /usr/local/bin/backup-postgresql-all
+    - require:
+      - file: /usr/local/bin/backup-postgresql-all
+      - service: postgresql
+    - order: last

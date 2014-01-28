@@ -27,6 +27,7 @@ Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
 
 Turn off backup for Openldap.
 -#}
-/etc/cron.daily/backup-openldap:
+backup-openldap:
   file:
     - absent
+    - name: /etc/cron.daily/backup-openldap

@@ -27,6 +27,7 @@ Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
 
 Turn off backup for Diamond.
 -#}
-/etc/cron.daily/backup-diamond:
+backup-diamond:
   file:
     - absent
+    - name: /etc/cron.daily/backup-diamond

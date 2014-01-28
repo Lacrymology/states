@@ -38,9 +38,10 @@ include:
   - cron
   - postgresql.server.backup
 
-/etc/cron.daily/backup-roundcube:
+backup-roundcube:
   file:
     - managed
+    - name: /etc/cron.daily/backup-roundcube
     - user: root
     - group: root
     - mode: 500

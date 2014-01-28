@@ -31,9 +31,10 @@ include:
   - cron
   - backup
 
-/etc/cron.daily/backup-dovecot:
+backup-dovecot:
   file:
     - managed
+    - name: /etc/cron.daily/backup-dovecot
     - user: root
     - group: root
     - mode: 500

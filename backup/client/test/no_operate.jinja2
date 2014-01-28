@@ -35,8 +35,16 @@ if [ -z $1 ]; then
   exit 1
 fi
 
+{%- if salt['pillar.get']('__test__', False) %}
+echo "Testing backup archive $1"
+xz --list $1
+{%- endif %}
+
 case "$1" in
     *.tar.*)
+{%- if salt['pillar.get']('__test__', False) %}
+        tar -tvf $1
+{%- endif %}
         if [ $(tar -tvf $1 | wc -l) -eq 0 ]; then
             echo "Archive $1 empty or broken"
             exit 1

@@ -25,6 +25,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
+{%- set roles = salt['pillar.get']('roles', []) -%}
+{%- set global_roles = salt['pillar.get']('global_roles', []) -%}
+{%- if global_roles in ('', []) -%}
+    {%- set global_roles = salt['cp.list_master_dirs'](saltenv, 'roles') -%}
+{%- endif -%}
 {#- local mode don't support gitfs and multiple branches, force to use
    'base' environment -#}
 {%- if opts['file_client'] == 'local' %}
@@ -33,23 +38,22 @@ base:
   {#- file_client not in local mode.
       salt gitfs rename master branch into base. which is also the default
       value -#}
-  {%- set saltenv =  salt['pillar.get']('branch', 'base') %}
-  {%- if saltenv == 'master' %}
-    {%- set saltenv = 'base' %}
+  {%- set saltenv =  salt['pillar.get']('branch', 'base') -%}
+  {%- if saltenv == 'master' -%}
+    {%- set saltenv = 'base' -%}
   {%- endif %}
 {{ saltenv }}:
-{%- endif %}
+{%- endif -%}
   {#- target all minions #}
   '*':
-{#- list all minion's role and absent role it's not member of -#}
-{%- set global_roles = salt['pillar.get']('global_roles', []) %}
-{%- if global_roles in ('', []) %}
-  {%- set global_roles = salt['cp.list_master_dirs'](saltenv, 'roles') %}
-{%- endif %}
-{%- for role in global_roles %}
-  {%- if role in pillar['roles']|default([]) %}
+{%- if not roles and not global_roles %} [] {#- empty list -#}
+{%- else -%}
+    {#- list all minion's role and absent role it's not member of -#}
+    {%- for role in global_roles -%}
+        {%- if role in roles) %}
     - roles.{{ role }}
-  {%- elif salt['pillar.get']('roles_absent', False) %}
+        {%- elif salt['pillar.get']('roles_absent', False) %}
     - roles.{{ role }}.absent
-  {%- endif -%}
-{%- endfor -%}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endif -%}

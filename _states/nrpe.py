@@ -52,11 +52,6 @@ def run_all_checks(**kwargs):
     ret = {'name': '{0} excluded'.format(len(exclude)), 'result': None,
            'changes': {}, 'comment': ''}
 
-    try:
-        time.sleep(kwargs['wait'])
-    except KeyError:
-        pass
-
     if exclude is None:
         exclude = []
 
@@ -68,6 +63,11 @@ def run_all_checks(**kwargs):
             ','.join(checks_name)
         )
         return ret
+
+    try:
+        time.sleep(kwargs['wait'])
+    except KeyError:
+        pass
 
     failed = {}
     for check_name in checks_name:

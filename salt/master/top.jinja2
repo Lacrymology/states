@@ -42,8 +42,8 @@ base:
   {#- target all minions #}
   '*':
 {#- list all minion's role and absent role it's not member of -#}
-{%- set global_roles = salt['pillar.get']('global_roles', None) %}
-{%- if global_roles in ('', 'None') %}
+{%- set global_roles = salt['pillar.get']('global_roles', []) %}
+{%- if global_roles in ('', []) %}
   {%- set global_roles = salt['cp.list_master_dirs'](saltenv, 'roles') %}
 {%- endif %}
 {%- for role in global_roles %}

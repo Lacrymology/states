@@ -31,10 +31,9 @@ Institute for Institutional Innovation by Data Driven Design Inc.
 
 Author: Hung Nguyen Viet hvnsweeting@gmail.com
 Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
+
+Diamond statistics for djangopypi2
 -#}
-{#
- Diamond statistics for djangopypi2
-#}
 include:
   - diamond
   - memcache.diamond

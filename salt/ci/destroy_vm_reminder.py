@@ -60,14 +60,16 @@ def main(*args):
 
     for user, keys in vms.items():
         template = Template(u"""
-        {{ name }}:
+{{ name }}:
 
-        You have the following VMs open:{% for vm in vms %}
-        {{ vm }}{% endfor %}
+You have the following VMs open:{% for vm in vms %}
+- {{ vm }}{% endfor %}
 
-        Please go to {{ url }} and  destroy them if you're done with them
+Please go to
+{{ url }}
+and destroy them if you're done with them
 
-        Admin
+Admin
         """)
 
         res = requests.get(("http://ci.bit-flippers.com/securityRealm/user/"

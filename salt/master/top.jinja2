@@ -50,7 +50,7 @@ base:
 {%- else -%}
     {#- list all minion's role and absent role it's not member of -#}
     {%- for role in global_roles -%}
-        {%- if role in roles) %}
+        {%- if role in roles %}
     - roles.{{ role }}
         {%- elif salt['pillar.get']('roles_absent', False) %}
     - roles.{{ role }}.absent

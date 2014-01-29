@@ -29,13 +29,13 @@ Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
 # {{ pillar['message_do_not_modify'] }}
 set -e
 
-value=`redis-cli lastsave`
-redis-cli bgsave
+value=`redis-cli --raw lastsave`
+redis-cli --raw bgsave > /dev/null
  
 while true
 do
     sleep 10
-    lastsave=`redis-cli lastsave`
+    lastsave=`redis-cli --raw lastsave`
     if [ "$lastsave" -ne "$value" ]; then
         break
     fi

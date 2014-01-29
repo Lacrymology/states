@@ -31,9 +31,10 @@ include:
   - cron
   - backup
 
-/etc/cron.daily/backup-redis:
+backup-redis:
   file:
     - managed
+    - name: /etc/cron.daily/backup-redis
     - user: root
     - group: root
     - mode: 500

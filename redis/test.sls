@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Luan Vo Ngoc
+Copyright (c) 2013, Bruno Clermont
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,12 +22,24 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Luan Vo Ngoc <ngocluanvo@gmail.com>
+Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
-
-Turn off backup for Redis.
 -#}
-backup-redis:
-  file:
-    - absent
+include:
+  - redis
+  - redis.backup
+  - redis.backup.nrpe
+  - redis.diamond
+  - redis.nrpe
+
+test:
+  nrpe:
+    - run_all_checks
+    - wait: 60
+    - order: last
+  cmd:
+    - run
     - name: /etc/cron.daily/backup-redis
+    - require:
+      - file: backup-redis
+    - order: last

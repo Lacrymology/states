@@ -39,7 +39,7 @@ backup-dovecot:
     - group: root
     - mode: 500
     - template: jinja
-    - source: salt://carbon/backup/cron.jinja2
+    - source: salt://dovecot/backup/cron.jinja2
     - require:
       - pkg: cron
       - file: /usr/local/bin/backup-file

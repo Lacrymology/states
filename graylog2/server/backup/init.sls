@@ -37,7 +37,7 @@ Backup client for graylog2.
 include:
   - cron
   - mongodb.backup
-  - backup
+  - elasticsearch.backup
 
 backup-graylog2:
   file:
@@ -51,4 +51,3 @@ backup-graylog2:
     - require:
       - pkg: cron
       - file: /usr/local/bin/backup-mongodb
-      - file: /usr/local/bin/backup-file

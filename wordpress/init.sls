@@ -113,6 +113,15 @@ wordpress:
       - mysql_user: wordpress
       - mysql_database: wordpress
 
+{{ wordpressdir }}/wp-content/uploads:
+  file:
+    - directory
+    - user: www-data
+    - group: www-data
+    - mode: 550
+    - require:
+      - archive: wordpress
+
 php5-mysql:
   pkg:
     - installed

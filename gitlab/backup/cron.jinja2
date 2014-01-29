@@ -38,4 +38,4 @@ NOW=`/bin/date '+%Y-%m-%d-%H_%M_%S'`
 /usr/local/bin/backup-postgresql gitlab
 
 tar --xz -cf /tmp/gitlab_backup_$NOW.tar.xz -C /home/git repositories .ssh gitlab-satellites
-/usr/local/bin/backup_store /tmp/gitlab_backup_$NOW.tar.xz
+/usr/local/bin/backup-store /tmp/gitlab_backup_$NOW.tar.xz

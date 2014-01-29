@@ -43,7 +43,7 @@ test:
     - order: last
   cmd:
     - run
-    - name: /etc/cron.daily/backup-saltmaster
+    - name: /etc/cron.daily/backup-dovecot
     - require:
-      - file: backup-saltmaster
+      - file: backup-dovecot
     - order: last

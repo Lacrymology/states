@@ -39,7 +39,7 @@ test:
     - wait: 60
   cmd:
     - run
-    - name: /etc/cron.daily/backup-roundcube
+    - name: /etc/cron.daily/backup-saltmaster
     - require:
-      - file: backup-roundcube
+      - file: backup-saltmaster
     - order: last

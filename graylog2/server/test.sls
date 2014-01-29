@@ -29,6 +29,7 @@ include:
   - graylog2.server
   - graylog2.server.diamond
   - graylog2.server.nrpe
+  - graylog2.server.backup
   - graylog2.server.backup.nrpe
 
 {#- Graylog2 requires a running Elasticsearch server to work

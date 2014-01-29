@@ -29,7 +29,6 @@ include:
   - carbon
   - carbon.backup
   - carbon.backup.nrpe
-  - carbon.diamond
   - carbon.nrpe
 
 test:

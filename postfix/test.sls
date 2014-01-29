@@ -27,6 +27,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
 include:
   - postfix
+  - postfix.backup
   - postfix.diamond
   - postfix.nrpe
   - openldap
@@ -36,4 +37,10 @@ include:
 test:
   nrpe:
     - run_all_checks
+    - order: last
+  cmd:
+    - run
+    - name: /etc/cron.daily/backup-postfix
+    - require:
+      - file: backup-postfix
     - order: last

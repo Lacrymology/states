@@ -224,6 +224,14 @@ uwsgi_wordpress:
       web_dir: {{ wordpressdir }}
 {%- endif %}
 
+/var/lib/deployments/wordpress/upload:
+  file:
+    - symlink
+    - target: {{ wordpressdir }}/wp-content/uploads
+    - makedirs: True
+    - require:
+      - file: {{ wordpressdir }}/wp-content/uploads
+
 {%- if salt['pillar.get']('wordpress:ssl', False) %}
 extend:
   nginx:

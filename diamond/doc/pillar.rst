@@ -57,3 +57,10 @@ diamond:ping
 List of IP/hostname ping to monitor latency and availability.
 
 Default: ``empty``.
+
+diamond:batch
+~~~~~~~~~~~~~
+
+How many to store before sending to the graphite server.
+
+Default: ``256``.

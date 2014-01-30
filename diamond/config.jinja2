@@ -69,11 +69,7 @@ keys = syslog
 [[GraphiteHandler]]
 host = {{ pillar['graphite_address'] }}
 port = 2003
-
-# Socket timeout (seconds)
 timeout = 15
-
-# How many to store before sending to the graphite server
 batch = {{ salt['pillar.get']('diamond:batch', 256) }}
 
 #[[StatsdHandler]]

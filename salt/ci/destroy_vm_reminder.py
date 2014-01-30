@@ -28,6 +28,45 @@
 This script sends reminders to developers with open dev vms to close them when
 they are done with them
 
+This application requires the values below to exist in the salt master
+configuration.
+
+The destroy_vm_reminder/email/smtp dictionary is passed as-is to envelope's smtp
+instance, see Envelopes documentation for details
+
+The key_regexp must at least contain a group named user (i.e. something of the
+form `(?P<user>PATTERN)`), which is used to retrieve the user's email address
+from jenkins
+
+Config example
+==============
+
+destroy_vm_reminder:
+  key_regexp: some-prefix-(?P<user>.*)-some-suffix-[0-9]+
+  key_glob: integration-dev-*-*
+  jenkins_prefix: http://jenkins.example.com
+  destroy_job: destroy-dev-vm
+  email:
+    from: admin@example.com
+    subject: 'Please remember to destroy your vms'
+    smtp:
+      host: smpt.example.com
+      port: 25
+      login: myuser
+      password: mypassword
+      tls: (boolean)
+      timeout: (float)
+    message_template: |
+                      {{ name }}:
+
+                      You have the following VMs open:{% for vm in vms %}
+                      - {{ vm }}{% endfor %}
+
+                      Please go to
+                      {{ url }}
+                      and destroy them if you're done with them
+
+                      Admin
 """
 
 __author__ = 'Tomas Neme'

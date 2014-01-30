@@ -30,6 +30,7 @@ NRPE check for ejabberd - XMPP Server
 
 include:
   - apt.nrpe
+  - erlang.nrpe
   - nginx.nrpe
   - nrpe
   - postgresql.server.nrpe

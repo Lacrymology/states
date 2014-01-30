@@ -30,6 +30,7 @@ Nagios NRPE check for RabbitMQ.
 {%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - apt.nrpe
+  - erlang.nrpe
   - logrotate.nrpe
   - nrpe
 {%- if salt['pillar.get']('rabbitmq:ssl', False) %}

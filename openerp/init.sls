@@ -148,7 +148,7 @@ openerp:
     - group: openerp
     - mode: 440
     - template: jinja
-    - source: salt://openerp/openerp.jinja2
+    - source: salt://openerp/wsgi.jinja2
     - require:
       - file: openerp
     - context:

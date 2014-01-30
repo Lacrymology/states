@@ -28,19 +28,19 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 # {{ pillar['message_do_not_modify'] }}
 
 fileserver_backend:
-  - git
   - roots
+{%- if pillar['salt_master']['pillar'] in pillar %}
+  - git
+
+ext_pillar:
+  - git: {{ pillar['salt_master']['pillar']['branch'] }} {{ pillar['salt_master']['pillar']['remote'] }}
+{%- endif %}
 
 worker_threads: {{ pillar['salt_master']['workers']|default(5) }}
 gitfs_remotes:
 {% for repo in pillar['salt_master']['gitfs_remotes'] %}
   - {{ repo }}
 {%- endfor %}
-
-{%- if pillar['salt_master']['pillar'] in pillar %}
-ext_pillar:
-  - git: {{ pillar['salt_master']['pillar']['branch'] }} {{ pillar['salt_master']['pillar']['remote'] }}
-{%- endif %}
 
 log_file: file:///dev/log
 {%- if salt['pillar.get']('debug', False) %}

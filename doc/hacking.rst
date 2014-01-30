@@ -33,9 +33,6 @@ Hack Salt in your Sandbox
 Installation
 ------------
 
-First, you need to know that we're on 0.16.x branch, as 0.17.x don't work with
-our current states.
-
 You need ZeroMQ dev libraries to build Python binding, in Ubuntu::
 
   # apt-get install libzmq-dev
@@ -66,7 +63,7 @@ Create configuration file ``conf/master`` (replace ``$YOURUSERNAME`` and
   keep_jobs: 999999
   open_mode: True
   auto_accept: True
-  log_file: file:///dev/stdout
+  log_file: /dev/stdout
   log_level: garbage
   log_datefmt_logfile: '%Y-%m-%d %H:%M:%S'
   pidfile: /path/to/salt/run/master/pid
@@ -120,7 +117,7 @@ and ``/path/to``)::
   multiprocessing: False
   worker_threads: 1
   pillar_opts: False
-  log_file: file:///dev/stdout
+  log_file: /dev/stdout
   log_level: garbage
   log_datefmt_logfile: '%Y-%m-%d %H:%M:%S'
   user: $YOURUSERNAME
@@ -150,6 +147,11 @@ You can test communication between master and minion with::
   $ bin/salt -c /path/to/salt/conf minion test.ping
   minion:
       True
+
+To run some state without having the master running you can use salt-call
+passing it the `--local` switch:
+
+  $ bin/salt -c/path/to/salt/conf --local minion test.ping
 
 Salt API
 --------
@@ -206,3 +208,21 @@ Result should be::
 
   return:
     - minion: true
+
+Overriding default paths
+------------------------
+
+When you get tired of passing `-c /path/to/salt/conf` to every call you can do
+the following:
+
+If you installed salt with `pip -e` as per this docs, go to `/path/to/salt/repo`
+which by default will be in `/path/to/salt/src/salt` and edit `salt/syspaths.py`
+
+Do the following changes:
+
+* change `ROOT_DIR = '/'` for `ROOT_DIR = '/path/to/salt'`
+* change `CONFIG_DIR = os.path.join(ROOT_DIR, 'etc', 'salt')` for
+  `CONFIG_DIR = os.path.join(ROOT_DIR, 'conf')`
+
+If you installed salt without `-e` do those changes in `salt/_syspaths.py`
+instead

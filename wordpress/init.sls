@@ -109,7 +109,7 @@ wordpress:
     - directory
     - user: www-data
     - group: www-data
-    - mode: 550
+    - mode: 755
     - require:
       - archive: wordpress
 

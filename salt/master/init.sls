@@ -34,7 +34,6 @@ include:
   - pip
   - python.dev
   - rsyslog
-  - git
   - salt
   - ssh.client
 
@@ -68,6 +67,21 @@ salt-master-requirements:
   file:
     - absent
 
+{%- if pillar['salt_master']['pillar'] in pillar %}
+/srv/pillar:
+  file:
+    - absent
+{%- else %}
+/srv/pillar:
+  file:
+    - directory
+    - user: root
+    - group: root
+    - mode: 550
+    - require:
+      - pkg: salt-master
+{%- endif %}
+
 /srv/salt/top.sls:
   file:
     - managed
@@ -94,19 +108,13 @@ salt-master:
     - mode: 400
     - require:
       - pkg: salt-master
-  git:
-    - latest
-    - name: {{ pillar['salt_master']['pillar_remote'] }}
-    - target: /srv/pillar
-    - require:
-      - pkg: git
   service:
     - running
     - enable: True
     - order: 90
     - require:
-      - pkg: git
       - service: rsyslog
+      - file: /srv/pillar
     - watch:
       - pkg: salt-master
       - file: salt-master

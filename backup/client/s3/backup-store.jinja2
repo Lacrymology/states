@@ -1,8 +1,4 @@
-#!/usr/bin/env python
-
-"""
-Stores data files on Amazon S3.
-
+{#-
 Copyright (c) 2013, Nicolas Plessis
 All rights reserved.
 
@@ -25,40 +21,16 @@ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-"""
 
-__author__ = 'Nicolas Plessis'
-__maintainer__ = 'Nicolas Plessis'
-__email__ = 'nicolasp@microsigns.com'
+Author: Nicolas Plessis <nicolasp@microsigns.com>
+Maintainer: Nicolas Plessis <nicolasp@microsigns.com>
 
-import argparse
-import os
-import sys
-
-
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('file')
-    arg = parser.parse_args()
-    filename = arg.file
-
-    if not os.path.exists(filename):
-        print "File %s does not exist" % filename
-        sys.exit()
-    else:
-        print "Upload '%s' in progress..." % filename
-
-    return filename
-
-
-def upload(data):
-    """
-    Upload data on AWS S3
-    """
-    bucket = "{{ pillar['aws']['s3']['bucket'] }}/{{ pillar['aws']['s3']['path'] }}"
-    cmd = "s3cmd put %s s3://%s" % (data, bucket)
-    os.system(cmd)
-
-
-if __name__ == '__main__':
-    upload(main())
+Stores data files on Amazon S3.
+#}
+#!/bin/bash
+# {{ pillar['message_do_not_modify'] }}
+set -e
+archive_path=$1
+archive_name=`basename $archive_path`
+s3cmd put $archive_path s3://{{ pillar['aws']['s3']['bucket'] }}/{{ pillar['aws']['s3']['path'] }}/$archive_name
+rm -f $archive_path

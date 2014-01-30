@@ -53,7 +53,7 @@ def _get_default_kwargs(kwargs):
                 'context': None,
                 'replace': True,
                 'defaults': None,
-                '__env__': None,
+                '__env__': 'base',
                 'env': None,
                 'backup': '',
                 'show_diff': True,
@@ -142,8 +142,6 @@ def available(name, enabled=False, **kwargs):
         )
         # Backwards compatibility
         kwargs['__env__'] = kwargs['env']
-    if kwargs['__env__'] is None:
-        kwargs['__env__'] = 'base'
 
     filename = _get_filename(name)
 

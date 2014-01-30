@@ -34,6 +34,7 @@ Maintainer: Lam Dang Tung <lamdt@familug.org>
 
 Remove Backup for Gitlab.
 -#}
-/etc/cron.daily/backup-gitlab:
+backup-gitlab:
   file:
     - absent
+    - name: /etc/cron.daily/backup-gitlab

@@ -28,6 +28,10 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 Backup client for MongoDB.
 -#}
 
+include:
+  - local
+  - backup.client
+
 /usr/local/bin/backup-mongodb:
   file:
     - managed
@@ -36,6 +40,9 @@ Backup client for MongoDB.
     - mode: 500
     - template: jinja
     - source: salt://mongodb/backup/script.jinja2
+    - require:
+      - file: /usr/local
+      - file: /usr/local/bin/backup-store
 
 /usr/local/bin/backup-mongodb-all:
   file:
@@ -45,3 +52,6 @@ Backup client for MongoDB.
     - mode: 500
     - template: jinja
     - source: salt://mongodb/backup/dump_all.jinja2
+    - require:
+      - file: /usr/local
+      - file: /usr/local/bin/backup-store

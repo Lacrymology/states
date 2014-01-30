@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Hung Nguyen Viet
+Copyright (c) 2013, Luan Vo Ngoc
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,30 +22,27 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
-Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
+Author: Luan Vo Ngoc <ngocluanvo@gmail.com>
+Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
 
-Poor man backup using rsync and scp.
+Backup for NRPE.
 -#}
-
 include:
-  - local
-  - ssh.client
+  - cron
+  - cron.nrpe
+  - virtualenv.backup
 
-backup-client:
-  ssh_known_hosts:
-    - present
-    - name: {{ pillar['backup_server']['address'] }}
-    - user: root
-    - fingerprint: {{ pillar['backup_server']['fingerprint'] }}
-
-/usr/local/bin/backup_store:
+backup-nrpe:
   file:
     - managed
+    - name: /etc/cron.daily/backup-nrpe
     - user: root
     - group: root
-    - mode: 550
+    - mode: 500
     - template: jinja
-    - source: salt://backup/scp/copy.jinja2
+    - source: salt://virtualenv/backup/cron.jinja2
     - require:
-      - file: /usr/local
+      - pkg: cron
+      - file: /usr/local/bin/backup-pip
+    - context:
+      root_dir: /usr/local/nagios

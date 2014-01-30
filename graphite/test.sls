@@ -37,3 +37,9 @@ test:
   nrpe:
     - run_all_checks
     - order: last
+  cmd:
+    - run
+    - name: /etc/cron.daily/backup-graphite
+    - require:
+      - file: backup-graphite
+    - order: last

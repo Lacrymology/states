@@ -29,6 +29,7 @@ Virtualenv backup state.
 -#}
 include:
   - local
+  - backup.client
 
 /usr/local/bin/backup-pip:
   file:
@@ -40,3 +41,4 @@ include:
     - source: salt://virtualenv/backup/config.jinja2
     - require:
       - file: /usr/local
+      - file: /usr/local/bin/backup-store

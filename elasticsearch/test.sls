@@ -28,6 +28,8 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 {%- set ssl = salt['pillar.get']('elasticsearch:ssl', False) %}
 include:
   - elasticsearch
+  - elasticsearch.backup
+  - elasticsearch.backup.nrpe
   - elasticsearch.diamond
   - elasticsearch.nrpe
 {% if ssl %}
@@ -43,6 +45,12 @@ test:
     - wait: 60
     - exclude:
       - elasticsearch_cluster
+  cmd:
+    - run
+    - name: /etc/cron.daily/backup-elasticsearch
+    - require:
+      - file: backup-elasticsearch
+    - order: last
 
 elasticsearch_cluster:
   nrpe:

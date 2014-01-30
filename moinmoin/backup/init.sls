@@ -24,16 +24,18 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author: Hung Nguyen Viet hvnsweeting@gmail.com
 Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
+
+Backup client for moinmoin.
 -#}
-{#
- Backup client for moinmoin
- #}
 include:
   - cron
+  - virtualenv.backup
+  - backup
 
-/etc/cron.daily/backup-moinmoin:
+backup-moinmoin:
   file:
     - managed
+    - name: /etc/cron.daily/backup-moinmoin
     - user: root
     - group: root
     - mode: 500
@@ -41,3 +43,5 @@ include:
     - source: salt://moinmoin/backup/cron.jinja2
     - require:
       - pkg: cron
+      - file: /usr/local/bin/backup-pip
+      - file: /usr/local/bin/backup-file

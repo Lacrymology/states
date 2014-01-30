@@ -35,6 +35,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 include:
   - djangopypi2
   - djangopypi2.backup
+  - djangopypi2.backup.nrpe
   - djangopypi2.diamond
   - djangopypi2.nrpe
 
@@ -42,4 +43,10 @@ test:
   nrpe:
     - run_all_checks
     - wait: 60
+    - order: last
+  cmd:
+    - run
+    - name: /etc/cron.daily/backup-djangopypi2
+    - require:
+      - file: backup-djangopypi2
     - order: last

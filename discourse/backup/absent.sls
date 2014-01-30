@@ -34,6 +34,7 @@ Maintainer: Lam Dang Tung <lamdt@familug.org>
 
 Remove backup Discourse.
 -#}
-/etc/cron.daily/backup-discourse:
+backup-discourse:
   file:
     - absent
+    - name: /etc/cron.daily/backup-discourse

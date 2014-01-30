@@ -27,6 +27,8 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 include:
   - salt.master
+  - salt.master.backup
+  - salt.master.backup.nrpe
   - salt.master.diamond
   - salt.master.nrpe
 
@@ -35,3 +37,9 @@ test:
     - run_all_checks
     - order: last
     - wait: 60
+  cmd:
+    - run
+    - name: /etc/cron.daily/backup-saltmaster
+    - require:
+      - file: backup-saltmaster
+    - order: last

@@ -35,8 +35,13 @@ export TERM=dumb
 workdir=`mktemp -d`
 cd $workdir
 mongodump
+if [ ! -d dump ]; then
+    logger -p user.notice MongoDB don\'t have a database yet, nothing to \
+        backup except empty directory.
+    mkdir dump
+fi
 tar --xz -cf mongodb-$dbname-$NOW.tar.xz dump
 mv mongodb-$dbname-$NOW.tar.xz /tmp
 cd /tmp
 rm -rf $workdir
-/usr/local/bin/backup_store mongodb-$dbname-$NOW.tar.xz
+/usr/local/bin/backup-store mongodb-$dbname-$NOW.tar.xz

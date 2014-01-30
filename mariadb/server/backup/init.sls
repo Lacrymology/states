@@ -37,6 +37,7 @@ Maintainer: Dang Tung Lam <lamdt@familug.org>
 
 include:
   - local
+  - backup.client
 
 /etc/cron.daily/backup-mysql:
   file:
@@ -50,6 +51,9 @@ include:
     - mode: 500
     - template: jinja
     - source: salt://mariadb/server/backup/script.jinja2
+    - require:
+      - file: /usr/local
+      - file: /usr/local/bin/backup-store
 
 /usr/local/bin/backup-mysql-all:
   file:
@@ -61,3 +65,5 @@ include:
     - source: salt://mariadb/server/backup/dump_all.jinja2
     - require:
       - file: /usr/local
+      - file: /usr/local/bin/backup-store
+

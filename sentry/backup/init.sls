@@ -30,10 +30,12 @@ Backup client for Sentry.
 include:
   - cron
   - postgresql.server.backup
+  - virtualenv.backup
 
-/etc/cron.daily/backup-sentry:
+backup-sentry:
   file:
     - managed
+    - name: /etc/cron.daily/backup-sentry
     - user: root
     - group: root
     - mode: 500
@@ -42,3 +44,4 @@ include:
     - require:
       - pkg: cron
       - file: /usr/local/bin/backup-postgresql
+      - file: /usr/local/bin/backup-pip

@@ -29,6 +29,7 @@ Backup client for PostgreSQL.
 -#}
 include:
   - local
+  - backup.client
 
 /etc/cron.daily/backup-postgresql:
   file:
@@ -44,6 +45,7 @@ include:
     - source: salt://postgresql/server/backup/script.jinja2
     - require:
       - file: /usr/local
+      - file: /usr/local/bin/backup-store
 
 /usr/local/bin/backup-postgresql-all:
   file:
@@ -55,3 +57,4 @@ include:
     - source: salt://postgresql/server/backup/dump_all.jinja2
     - require:
       - file: /usr/local
+      - file: /usr/local/bin/backup-store

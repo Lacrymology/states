@@ -1,4 +1,4 @@
-:Copyrights: Copyright (c) 2013, Bruno Clermont
+:Copyrights: Copyright (c) 2013, Luan Vo Ngoc
 
              All rights reserved.
 
@@ -26,7 +26,7 @@
              LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
              ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
              POSSIBILITY OF SUCH DAMAGE.
-:Authors: - Bruno Clermont
+:Authors: - Luan Vo Ngoc <ngocluanvo@gmail.com>
 
 Pillar
 ======
@@ -36,10 +36,9 @@ Mandatory
 
 Example::
 
-  backup_server:
-    address: bitbucket.org
+  backup_storage: scp
 
-backup_server:address
-~~~~~~~~~~~~~~~~~~~~~
+backup_storage
+~~~~~~~~~~~~~~
 
-Address of backup server.
+Type of backup storage client that is supported. It includes `scp`, `s3`.

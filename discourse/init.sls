@@ -161,6 +161,16 @@ discourse:
       - file: discourse_tar
       - user: discourse
 
+{{ web_root_dir }}/public/uploads:
+  file:
+    - directory
+    - user: discourse
+    - group: discourse
+    - mode: 550
+    - require:
+      - user: discourse
+      - file: discourse_tar
+
 discourse_rack:
   gem:
     - installed

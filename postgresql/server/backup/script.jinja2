@@ -33,4 +33,4 @@ dbname=$1
 NOW=`date '+%Y-%m-%d-%H_%M_%S'`
 export TERM=dumb
 sudo -H -i -u postgres -g postgres pg_dump $dbname | xz > /tmp/postgresql-$dbname-$NOW.sql.xz
-/usr/local/bin/backup_store /tmp/postgresql-$dbname-$NOW.sql.xz
+/usr/local/bin/backup-store /tmp/postgresql-$dbname-$NOW.sql.xz

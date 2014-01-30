@@ -29,6 +29,8 @@ include:
   - graylog2.server
   - graylog2.server.diamond
   - graylog2.server.nrpe
+  - graylog2.server.backup
+  - graylog2.server.backup.nrpe
 
 {#- Graylog2 requires a running Elasticsearch server to work
   properly. Check will definitively fail. #}
@@ -50,3 +52,9 @@ test:
 {%- if not pillar['__test__']|default(False) %}
       - graylog2_incoming_logs
 {%- endif %}
+  cmd:
+    - run
+    - name: /etc/cron.daily/backup-graylog2
+    - require:
+      - file: backup-graylog2
+    - order: last

@@ -25,6 +25,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 include:
   - moinmoin
   - moinmoin.backup
+  - moinmoin.backup.nrpe
   - moinmoin.diamond
   - moinmoin.nrpe
 
@@ -32,4 +33,10 @@ test:
   nrpe:
     - run_all_checks
     - wait: 60
+    - order: last
+  cmd:
+    - run
+    - name: /etc/cron.daily/backup-moinmoin
+    - require:
+      - file: backup-moinmoin
     - order: last

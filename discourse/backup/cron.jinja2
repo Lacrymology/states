@@ -35,9 +35,8 @@ Maintainer: Lam Dang Tung <lamdt@familug.org>
 #!/bin/bash
 # {{ pillar['message_do_not_modify'] }}
 set -e
-/usr/local/bin/backup-postgresql discourse
 
 NOW=`/bin/date '+%Y-%m-%d-%H_%M_%S'`
-tar --xz -cf /tmp/discourse_upload_$NOW.tar.xz -C {{ web_root_dir }}/public uploads
-/usr/local/bin/backup_store /tmp/discourse_upload_$NOW.tar.xz
 
+/usr/local/bin/backup-postgresql {{ salt['pillar.get']('discourse:db:name', 'discourse') }}
+/usr/local/bin/backup-file discourse /usr/local/discourse-0.9.6.3/public uploads

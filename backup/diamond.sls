@@ -39,4 +39,4 @@ backup_diamond_resources:
     - text:
       - |
         [[backup]]
-        cmdline = ^\/usr\/local\/bin\/backup_store$
+        cmdline = ^\/usr\/local\/bin\/backup-store$

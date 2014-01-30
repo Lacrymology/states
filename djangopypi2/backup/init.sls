@@ -36,10 +36,14 @@ Backup client for djangopypi2.
 -#}
 include:
   - cron
+  - postgresql.server.backup
+  - virtualenv.backup
+  - backup
 
-/etc/cron.daily/backup-djangopypi2:
+backup-djangopypi2:
   file:
     - managed
+    - name: /etc/cron.daily/backup-djangopypi2
     - user: root
     - group: root
     - mode: 500
@@ -47,3 +51,6 @@ include:
     - source: salt://djangopypi2/backup/cron.jinja2
     - require:
       - pkg: cron
+      - file: /usr/local/bin/backup-postgresql
+      - file: /usr/local/bin/backup-pip
+      - file: /usr/local/bin/backup-file

@@ -28,6 +28,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 include:
   - sentry
   - sentry.backup
+  - sentry.backup.nrpe
   - sentry.diamond
   - sentry.nrpe
 
@@ -35,4 +36,10 @@ test:
   nrpe:
     - run_all_checks
     - wait: 60
+    - order: last
+  cmd:
+    - run
+    - name: /etc/cron.daily/backup-sentry
+    - require:
+      - file: backup-sentry
     - order: last

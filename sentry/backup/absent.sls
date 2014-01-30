@@ -27,6 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Undo sentry.backup state.
 -#}
-/etc/cron.daily/backup-sentry:
+backup-sentry:
   file:
     - absent
+    - name: /etc/cron.daily/backup-sentry

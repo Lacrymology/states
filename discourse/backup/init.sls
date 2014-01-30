@@ -36,10 +36,13 @@ Backup client for Discourse.
 -#}
 include:
   - cron
-{%- set web_root_dir = "/usr/local/discourse" %}
-/etc/cron.daily/backup-discourse:
+  - postgresql.server.backup
+  - backup
+
+backup-discourse:
   file:
     - managed
+    - name: /etc/cron.daily/backup-discourse
     - user: root
     - group: root
     - mode: 500
@@ -47,5 +50,5 @@ include:
     - source: salt://discourse/backup/cron.jinja2
     - require:
       - pkg: cron
-    - context:
-      web_root_dir: {{ web_root_dir }}
+      - file: /usr/local/bin/backup-postgresql
+      - file: /usr/local/bin/backup-file

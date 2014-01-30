@@ -29,10 +29,13 @@ Backup client for Graphite.
 -#}
 include:
   - cron
+  - postgresql.server.backup
+  - virtualenv.backup
 
-/etc/cron.daily/backup-graphite:
+backup-graphite:
   file:
     - managed
+    - name: /etc/cron.daily/backup-graphite
     - user: root
     - group: root
     - mode: 500
@@ -40,3 +43,5 @@ include:
     - source: salt://graphite/backup/cron.jinja2
     - require:
       - pkg: cron
+      - file: /usr/local/bin/backup-postgresql
+      - file: /usr/local/bin/backup-pip

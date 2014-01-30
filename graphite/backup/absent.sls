@@ -27,6 +27,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 Turn off backup client for Graphite.
 -#}
-/etc/cron.daily/backup-graphite:
+backup-graphite:
   file:
     - absent
+    - name: /etc/cron.daily/backup-graphite

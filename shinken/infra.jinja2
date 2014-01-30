@@ -126,7 +126,7 @@ define command {
 
 define command {
     command_name check_nrpe
-    command_line /usr/lib/nagios/plugins/check_nrpe -H $HOSTADDRESS$ -t {{ pillar['pillar.get']('shinken:nrpe:timeout', 9) }} -u -c $ARG1$
+    command_line /usr/lib/nagios/plugins/check_nrpe -H $HOSTADDRESS$ -t {{ salt['pillar.get']('shinken:nrpe:timeout', 9) }} -u -c $ARG1$
     module_type nrpe_poller
 }
 

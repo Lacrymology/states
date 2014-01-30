@@ -54,14 +54,6 @@ include:
 {%- set dbuserpass = salt['password.pillar']('wordpress:db:password', 10) %}
 {%- set dbname = salt['pillar.get']('wordpress:db:name', 'wordpress') %}
 
-wordpress_drop_old_db:
-  mysql_database:
-    - absent
-    - name: {{ dbname }}
-    - require:
-      - service: mysql-server
-      - pkg: python-mysqldb
-
 wordpress:
   archive:
     - extracted
@@ -94,7 +86,6 @@ wordpress:
     - require:
       - service: mysql-server
       - pkg: python-mysqldb
-      - mysql_database: wordpress_drop_old_db
   mysql_user:
     - present
     - host: localhost
@@ -158,7 +149,7 @@ wordpress_initial:
       - archive: wordpress
       - user: web
   cmd:
-    - run
+    - wait
     - name: php init.php
     - cwd: {{ wordpressdir }}/wp-admin
     - user: www-data
@@ -167,10 +158,10 @@ wordpress_initial:
       - pkg: php5-mysql
       - user: web
       - mysql_grants: wordpress
-    - watch:
       - file: wordpress_initial
-      - file: wordpress
       - file: {{ wordpressdir }}/wp-config.php
+    - watch:
+      - mysql_database: wordpress
   module:
     - wait
     - grant: all privileges

@@ -36,6 +36,8 @@ uWSGI state
 
 import logging
 import os
+import salt
+from salt._compat import string_types
 from salt.states import file
 
 logger = logging.getLogger(__name__)
@@ -51,7 +53,8 @@ def _get_default_kwargs(kwargs):
                 'context': None,
                 'replace': True,
                 'defaults': None,
-                '__env__': None,
+                '__env__': 'base',
+                'env': None,
                 'backup': '',
                 'show_diff': True,
                 'create': True,
@@ -131,8 +134,14 @@ def available(name, enabled=False, **kwargs):
     app_enabled = enabled
     app_disabled = not app_enabled
 
-    if kwargs['__env__'] is None:
-        kwargs['__env__'] = 'base'
+    if isinstance(kwargs['env'], string_types):
+        salt.utils.warn_until(
+            (0, 19),
+            "Passing a salt environment should be done using '__env__' not "
+            "'env'.",
+        )
+        # Backwards compatibility
+        kwargs['__env__'] = kwargs['env']
 
     filename = _get_filename(name)
 
@@ -142,6 +151,10 @@ def available(name, enabled=False, **kwargs):
         Return True: mean nothing need to be changed.
         Return False: mean somethings go wrong and state can not be done.
         '''
+
+        # Amazing. States now expect __env__, but modules expect env.. so, there
+        kwargs['env'] = kwargs['__env__']
+
         config, link, _ = _get_app_paths(name)
         check_res, c = __salt__['file.check_managed'](filename, **kwargs)
         comments = [c]

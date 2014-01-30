@@ -53,9 +53,8 @@ collectors_config_path = /etc/diamond/collectors/
 # Interval to reload collectors
 collectors_reload_interval = 3600
 
-#handlers_config_path = /etc/diamond/handlers/
+handlers_config_path = /etc/diamond/handlers/
 
-### Options for handlers
 [handlers]
 
 # logging handlers
@@ -119,6 +118,7 @@ enabled = True
 [[DiskSpaceCollector]]
 
 enabled = True
+filesystems = ext2,ext3,ext4,xfs,glusterfs,nfs,ntfs,hfs,fat32,fat16,rootfs,jfs
 
 {% if grains['virtual'] != 'openvzve' %}
 [[DiskUsageCollector]]

@@ -45,11 +45,13 @@ from envelopes import Envelope, SMTP
 def main(*args):
     parser = SaltKeyOptionParser()
     parser.parse_args()
-    key = Key(parser.config)
-    key_list = key.name_match("integration-dev-*-*")
+    opts = parser.config
+    key = Key(opts)
+    my_opts = opts['destroy_vm_reminder']
+    key_list = key.name_match(my_opts['key_glob'])
 
     vms = {}
-    rxp = re.compile(r'integration-dev-(?P<user>.*)-(?P<build>[0-9])')
+    rxp = re.compile(my_opts['key_regexp'])
     for status, keys in key_list.items():
         for key in keys:
             m = rxp.match(key)
@@ -59,22 +61,13 @@ def main(*args):
                     vms[user] = []
                 vms[user].append(key)
 
+    smtp = SMTP(**my_opts['email']['smtp'])
+    template = Template(my_opts['email']['message_template'])
+
     for user, keys in vms.items():
-        template = Template(u"""
-{{ name }}:
 
-You have the following VMs open:{% for vm in vms %}
-- {{ vm }}{% endfor %}
-
-Please go to
-{{ url }}
-and destroy them if you're done with them
-
-Admin
-        """)
-
-        res = requests.get(("http://ci.bit-flippers.com/securityRealm/user/"
-                            "{user}/api/json").format(user=user))
+        res = requests.get(("{prefix}/securityRealm/user/{user}/api/json").format(
+            prefi=my_opts['jenkinx_prefix'], user=user))
         data = json.loads(res.content)
         name = data['fullName']
         email = ''
@@ -85,15 +78,17 @@ Admin
 
         message = template.render(
             name=name, vms=keys,
-            url="http://ci.bit-flippers.com/job/-dev-vm-destroy-/build?delay=0sec")
+            url="{prefix}/job/{job_name}/build?delay=0sec".format(
+                prefix=my_opts['jenkin_prefix'],
+                job_name=my_opts['destroy_job']))
 
         envelope = Envelope(
-            from_addr="noreply@bit-flippers.com",
+            from_addr=my_opts['email']['from'],
             to_addr=(email, name),
-            subject=u'Please remember to destroy your vms',
+            subject=my_opts['email']['subject'],
             text_body = message,
         )
-        envelope.send("smtp.bit-flippers.com")
+        smtp.send(envelope)
 
 if __name__ == '__main__':
     import sys

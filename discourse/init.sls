@@ -84,7 +84,7 @@ discourse_tar:
 {%- if 'files_archive' in pillar %}
     - source: {{ pillar['files_archive'] }}/mirror/discourse/v{{ version }}.tar.gz
 {%- else %}
-    - source: http://archive.robotinfra.com/mirror/discourse/v{{ version }}.tar.gz
+    - source: https://github.com/discourse/discourse/archive/v{{ version }}.tar.gz
 {%- endif %}
     - source_hash: md5=7e608572bfa2902aaa53cb229cf56516
     - archive_format: tar

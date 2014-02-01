@@ -393,6 +393,17 @@ discourse_assets_precompile:
     - require_in:
       - cmd: discourse_bundler
 
+/var/lib/deployments/discourse/uploads:
+  file:
+    - symlink
+    - target: {{ web_root_dir }}/public/uploads
+    - mode: 750
+    - user: root
+    - group: root
+    - makedirs: True
+    - require:
+      - file: {{ web_root_dir }}/public/uploads
+
 {%- if salt['pillar.get']('discourse:ssl', False) %}
 extend:
   nginx:

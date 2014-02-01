@@ -149,6 +149,7 @@ discourse:
     - watch:
       - cmd: discourse_add_psql_extension_hstore
       - cmd: discourse_add_psql_extension_pg_trgm
+      - archive: discourse_tar
   file:
     - managed
     - name: {{ web_root_dir }}/config.ru
@@ -333,20 +334,22 @@ add_web_user_to_discourse_group:
 
 discourse_add_psql_extension_hstore:
   cmd:
-    - run
+    - wait
     - name: psql discourse -c "CREATE EXTENSION IF NOT EXISTS hstore;"
     - user: postgres
     - require:
       - service: postgresql
+    - watch:
       - postgres_database: discourse
 
 discourse_add_psql_extension_pg_trgm:
   cmd:
-    - run
+    - wait
     - name: psql discourse -c "CREATE EXTENSION IF NOT EXISTS pg_trgm;"
     - user: postgres
     - require:
       - service: postgresql
+    - watch:
       - postgres_database: discourse
 
 discourse_assets_precompile:

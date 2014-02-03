@@ -32,5 +32,5 @@ Stores data files on Amazon S3.
 set -e
 archive_path=$1
 archive_name=`basename $archive_path`
-s3cmd put $archive_path s3://{{ pillar['aws']['s3']['bucket'] }}/{{ pillar['aws']['s3']['path'] }}/$archive_name
+s3cmd --no-progress put $archive_path s3://{{ pillar['aws']['s3']['bucket'] }}/{{ pillar['aws']['s3']['path'] }}/$archive_name | logger -t s3cmd
 rm -f $archive_path

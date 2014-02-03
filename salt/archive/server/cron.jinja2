@@ -25,13 +25,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-#!/bin/bash
 # {{ pillar['message_do_not_modify'] }}
-set -e
 {%- set home = salt['user.info']('salt_archive')['home'] -%}
 {%- if pillar['salt_archive']['source'] is defined %}
 */15 * * * * root /usr/local/bin/salt_archive_sync.sh
-{%- endif %}
+{%- endif -%}
 {%- if not salt['pillar.get']('salt_archive:source', False) %}
 {#- make sure everything is owner root:salt_archive #}
 0 * * * * root find {{ home }}/* ! -user root -exec chown root {} \;

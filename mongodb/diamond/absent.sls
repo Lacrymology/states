@@ -30,9 +30,14 @@ Turn off  Diamond statistics for MongoDB.
 diamond-pymongo:
   file:
     - absent
-    - name: /usr/local/diamond/salt-pymongo-requirements.txt
+    - name: /usr/local/diamond/salt-mongodb-requirements.txt
 
 diamond_mongodb:
   file:
     - absent
     - name: /etc/diamond/collectors/MongoDBCollector.conf
+
+{#- TODO: remove that statement in >= 2014-04 #}
+/usr/local/diamond/salt-pymongo-requirements.txt:
+  file:
+    - absent

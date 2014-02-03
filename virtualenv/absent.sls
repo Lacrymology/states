@@ -28,9 +28,14 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 virtualenv:
   file:
     - absent
-    - name: {{ opts['cachedir'] }}/salt-virtualenv-requirements.txt
+    - name: {{ opts['cachedir'] }}/pip/virtualenv
 {% if salt['cmd.has_exec']('pip') %}
   pip:
     - removed
     - order: 1
 {% endif %}
+
+{#- TODO: remove that statement in >= 2014-04 #}
+{{ opts['cachedir'] }}/salt-virtualenv-requirements.txt:
+  file:
+    - absent

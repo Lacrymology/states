@@ -32,6 +32,12 @@ diamond_rabbitmq:
     - absent
     - name: /etc/diamond/collectors/RabbitMQCollector.conf
 
+diamond-pyrabbit:
+  file:
+    - absent
+    - name: /usr/local/diamond/salt-rabbitmq-requirements.txt
+
+{#- TODO: remove that statement in >= 2014-04 #}
 /usr/local/diamond/salt-pyrabbit-requirements.txt:
   file:
     - absent

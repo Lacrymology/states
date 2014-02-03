@@ -37,3 +37,13 @@ Turn off Diamond statistics for Redis.
 /etc/diamond/collectors/RedisCollector.conf:
   file:
     - absent
+
+diamond_redis:
+  file:
+    - absent
+    - name: /usr/local/diamond/salt-redis-requirements.txt
+
+{#- TODO: remove that statement in >= 2014-04 #}
+/usr/local/diamond/redis-requirements.txt:
+  file:
+    - absent

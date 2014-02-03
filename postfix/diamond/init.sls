@@ -65,10 +65,15 @@ postfix_diamond_resources:
         [[postfix]]
         exe = ^\/usr\/lib\/postfix\/master$
 
+{#- TODO: remove that statement in >= 2014-04 #}
+/usr/local/diamond/postfix-requirements.txt:
+  file:
+    - absent
+
 postfix_stats:
   file:
     - managed
-    - name: /usr/local/diamond/postfix-requirements.txt
+    - name: /usr/local/diamond/salt-postfix-requirements.txt
     - template: jinja
     - user: root
     - group: root
@@ -81,7 +86,7 @@ postfix_stats:
     - name: pip.install
     - upgrade: True
     - bin_env: /usr/local/diamond
-    - requirements: /usr/local/diamond/postfix-requirements.txt
+    - requirements: /usr/local/diamond/salt-postfix-requirements.txt
     - require:
       - virtualenv: diamond
     - watch:

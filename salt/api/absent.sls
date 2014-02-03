@@ -86,6 +86,12 @@ salt-api:
   file:
     - absent
 
+salt-api-requirements:
+  file:
+    - absent
+    - name: {{ opts['cachedir'] }}/pip/salt.api
+
+{#- TODO: remove that statement in >= 2014-04 #}
 {{ opts['cachedir'] }}/salt-api-requirements.txt:
   file:
     - absent

@@ -30,6 +30,7 @@ Install Raven (Sentry client-side python library) into OS/root site-packages.
 include:
   - pip
 
+{#- TODO: remove that statement in >= 2014-04 #}
 {{ opts['cachedir'] }}/raven-requirements.txt:
  file:
    - absent
@@ -37,7 +38,7 @@ include:
 raven:
   file:
     - managed
-    - name: {{ opts['cachedir'] }}/salt-raven-requirements.txt
+    - name: {{ opts['cachedir'] }}/pip/raven
     - template: jinja
     - user: root
     - group: root
@@ -49,6 +50,6 @@ raven:
     - wait
     - name: pip.install
     - upgrade: True
-    - requirements: {{ opts['cachedir'] }}/salt-raven-requirements.txt
+    - requirements: {{ opts['cachedir'] }}/pip/raven
     - watch:
       - file: raven

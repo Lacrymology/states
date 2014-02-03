@@ -31,13 +31,18 @@ include:
   - pip
   - python.dev
 
+{#- TODO: remove that statement in >= 2014-04 #}
+{{ opts['cachedir'] }}/salt-mercurial-requirements.txt:
+  file:
+    - absent
+
 mercurial:
   pkg:
     - purged
     - name: mercurial-common
   file:
     - managed
-    - name: {{ opts['cachedir'] }}/salt-mercurial-requirements.txt
+    - name: {{ opts['cachedir'] }}/pip/mercurial
     - source: salt://mercurial/requirements.jinja2
     - template: jinja
     - user: root
@@ -48,7 +53,7 @@ mercurial:
   module:
     - wait
     - name: pip.install
-    - requirements: {{ opts['cachedir'] }}/salt-mercurial-requirements.txt
+    - requirements: {{ opts['cachedir'] }}/pip/mercurial
     - watch:
       - file: mercurial
     - require:

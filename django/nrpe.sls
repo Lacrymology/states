@@ -33,10 +33,15 @@ include:
   file:
     - absent
 
+{#- TODO: remove that statement in >= 2014-04 #}
+/usr/local/nagios/salt-sitemap-requirements.txt:
+  file:
+    - absent
+
 python-sitemap:
   file:
     - managed
-    - name: /usr/local/nagios/salt-sitemap-requirements.txt
+    - name: /usr/local/nagios/salt-django-requirements.txt
     - template: jinja
     - user: root
     - group: root
@@ -49,7 +54,7 @@ python-sitemap:
     - name: pip.install
     - upgrade: True
     - bin_env: /usr/local/nagios
-    - requirements: /usr/local/nagios/salt-sitemap-requirements.txt
+    - requirements: /usr/local/nagios/salt-django-requirements.txt
     - require:
       - pkg: xml-dev
     - watch:

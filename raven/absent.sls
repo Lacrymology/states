@@ -28,10 +28,15 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 raven:
   file:
     - absent
-    - name: {{ opts['cachedir'] }}/salt-raven-requirements.txt
+    - name: {{ opts['cachedir'] }}/pip/raven
 {% if salt['cmd.has_exec']('pip') %}
   pip:
     - name: raven
     - removed
     - order: 1
 {% endif %}
+
+{#- TODO: remove that statement in >= 2014-04 #}
+{{ opts['cachedir'] }}/raven-requirements.txt:
+ file:
+   - absent

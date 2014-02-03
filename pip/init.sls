@@ -80,7 +80,20 @@ python-setuptools:
     - require:
       - cmd: apt_sources
 
-{% set version='1.5.2' %}
+{{ opts['cachedir'] }}/pip:
+  file:
+    - directory
+    - user: root
+    - group: root
+    - mode: 550
+
+{%- set version='1.5.2' -%}
+
+{#- TODO: remove that statement in >= 2014-04 #}
+{{ opts['cachedir'] }}/pip-{{ version }}:
+  file:
+    - absent
+
 pip:
   file:
     - directory
@@ -88,7 +101,7 @@ pip:
     - makedirs: True
   archive:
     - extracted
-    - name: {{ opts['cachedir'] }}
+    - name: {{ opts['cachedir'] }}/pip
 {%- if 'files_archive' in pillar %}
     - source: {{ pillar['files_archive'] }}/pip/pip-{{ version }}.tar.gz
 {%- else %}
@@ -100,6 +113,7 @@ pip:
     - if_missing: {{ opts['cachedir'] }}/pip-{{ version }}
     - require:
       - file: /usr/local
+      - file: {{ opts['cachedir'] }}/pip
   module:
 {%- if not salt['file.file_exists']('/usr/local/bin/pip') -%}
     {#- force module to run if pip isn't installed yet #}
@@ -111,7 +125,7 @@ pip:
 {%- endif %}
     - name: cmd.run
     - cmd: /usr/bin/python setup.py install
-    - cwd: {{ opts['cachedir'] }}/pip-{{ version }}
+    - cwd: {{ opts['cachedir'] }}/pip/pip-{{ version }}
     - require:
       - pkg: python-pip
       - file: pip-config

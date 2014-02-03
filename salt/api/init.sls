@@ -74,10 +74,15 @@ user_{{ user }}:
     - require:
       - pkg: salt-master
 
+{#- TODO: remove that statement in >= 2014-04 #}
+{{ opts['cachedir'] }}/salt-api-requirements.txt:
+  file:
+    - absent
+
 salt-api-requirements:
   file:
     - managed
-    - name: {{ opts['cachedir'] }}/salt-api-requirements.txt
+    - name: {{ opts['cachedir'] }}/pip/salt.api
     - source: salt://salt/api/requirements.jinja2
     - template: jinja
     - user: root
@@ -88,7 +93,7 @@ salt-api-requirements:
   module:
     - wait
     - name: pip.install
-    - requirements: {{ opts['cachedir'] }}/salt-api-requirements.txt
+    - requirements: {{ opts['cachedir'] }}/pip/salt.api
     - watch:
       - file: salt-api-requirements
 

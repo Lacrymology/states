@@ -32,10 +32,15 @@ include:
   - mongodb
   - pip
 
+{#- TODO: remove that statement in >= 2014-04 #}
+/usr/local/diamond/salt-pymongo-requirements.txt:
+  file:
+    - absent
+
 diamond-pymongo:
   file:
     - managed
-    - name: /usr/local/diamond/salt-pymongo-requirements.txt
+    - name: /usr/local/diamond/salt-mongodb-requirements.txt
     - template: jinja
     - user: root
     - group: root
@@ -48,7 +53,7 @@ diamond-pymongo:
     - name: pip.install
     - upgrade: True
     - bin_env: /usr/local/diamond
-    - requirements: /usr/local/diamond/salt-pymongo-requirements.txt
+    - requirements: /usr/local/diamond/salt-mongodb-requirements.txt
     - require:
       - virtualenv: diamond
     - watch:

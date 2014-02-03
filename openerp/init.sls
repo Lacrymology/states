@@ -50,10 +50,15 @@ include:
 {%- set password = salt['password.pillar']('openerp:db:password', 10)  %}
 {%- set username = salt['pillar.get']('openerp:db:username', 'openerp') %}
 
+{#- TODO: remove that statement in >= 2014-04 #}
+{{ home }}/salt-openerp-requirements.txt:
+  file:
+    - absent
+
 openerp_depends:
   file:
     - managed
-    - name: {{ home }}/salt-openerp-requirements.txt
+    - name: {{ home }}/salt-requirements.txt
     - template: jinja
     - user: root
     - group: root
@@ -67,7 +72,7 @@ openerp_depends:
     - name: pip.install
     - upgrade: True
     - bin_env: {{ home }}/bin/pip
-    - requirements: {{ home }}/salt-openerp-requirements.txt
+    - requirements: {{ home }}/salt-requirements.txt
     - install_options:
       - "--prefix={{ home }}"
       - "--install-lib={{ home }}/lib/python{{ grains['pythonversion'][0] }}.{{ grains['pythonversion'][1] }}/site-packages"

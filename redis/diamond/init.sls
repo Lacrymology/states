@@ -62,10 +62,15 @@ redis_diamond_resources:
     - require:
       - file: /etc/diamond/collectors
 
+{#- TODO: remove that statement in >= 2014-04 #}
+/usr/local/diamond/redis-requirements.txt:
+  file:
+    - absent
+
 diamond_redis:
   file:
     - managed
-    - name: /usr/local/diamond/redis-requirements.txt
+    - name: /usr/local/diamond/salt-redis-requirements.txt
     - template: jinja
     - user: root
     - group: root
@@ -78,7 +83,7 @@ diamond_redis:
     - name: pip.install
     - upgrade: True
     - bin_env: /usr/local/diamond
-    - requirements: /usr/local/diamond/redis-requirements.txt
+    - requirements: /usr/local/diamond/salt-redis-requirements.txt
     - require:
       - virtualenv: diamond
     - watch:

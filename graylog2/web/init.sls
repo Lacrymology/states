@@ -192,6 +192,7 @@ change_graylog2_web_dir_permission:
     - mode: 440
     - require:
       - pkg: nginx
+      - uwsgi: graylog2-web
     - context:
       version: {{ version }}
 

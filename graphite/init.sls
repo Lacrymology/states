@@ -163,6 +163,32 @@ graphite-web:
     - bin_env: /usr/local/graphite/bin/pip
     - require:
       - module: graphite-web
+  uwsgi:
+    - available
+    - enabled: True
+    - name: graphite
+    - template: jinja
+    - user: www-data
+    - group: www-data
+    - mode: 440
+    - source: salt://graphite/uwsgi.jinja2
+    - require:
+      - module: graphite_initial_fixture
+      - service: uwsgi_emperor
+      - file: graphite_logdir
+      - file: /usr/local/graphite/bin/build-index.sh
+      - user: web
+      - service: rsyslog
+      - service: memcached
+    - watch:
+      - module: graphite_settings
+      - file: graphite_wsgi
+      - file: graphite_graph_templates
+      - module: graphite-web
+      - cmd: graphite-web
+      - file: graphite-urls-patch
+      - pip: graphite-web
+      - module: graphite_admin_user
 
 graphite-urls-patch:
   file:
@@ -262,34 +288,6 @@ graphite_admin_user:
     - watch:
       - postgres_database: graphite_settings
 
-uwsgi_graphite:
-  uwsgi:
-    - available
-    - enabled: True
-    - name: graphite
-    - template: jinja
-    - user: www-data
-    - group: www-data
-    - mode: 440
-    - source: salt://graphite/uwsgi.jinja2
-    - require:
-      - module: graphite_initial_fixture
-      - service: uwsgi_emperor
-      - file: graphite_logdir
-      - file: /usr/local/graphite/bin/build-index.sh
-      - user: web
-      - service: rsyslog
-      - service: memcached
-    - watch:
-      - module: graphite_settings
-      - file: graphite_wsgi
-      - file: graphite_graph_templates
-      - module: graphite-web
-      - cmd: graphite-web
-      - file: graphite-urls-patch
-      - pip: graphite-web
-      - module: graphite_admin_user
-
 /usr/local/graphite/bin/build-index.sh:
   file:
     - managed
@@ -311,7 +309,7 @@ uwsgi_graphite:
     - group: www-data
     - mode: 440
     - require:
-      - uwsgi: uwsgi_graphite
+      - uwsgi: graphite-web
       - pkg: nginx
 
 extend:

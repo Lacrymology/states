@@ -41,7 +41,7 @@ uwsgi_moinmoin:
   file:
     - absent
     - require:
-      - uwsgi: uwsgi_moinmoin
+      - uwsgi: moinmoin
 
 /etc/nginx/conf.d/moinmoin.conf:
   file:

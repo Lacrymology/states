@@ -50,22 +50,24 @@ sentry:
       - postgres_database: sentry
 {% endif %}
 #}
-uwsgi_sentry:
+sentry:
   uwsgi:
     - absent
     - name: sentry
+    - require:
+      - file: /etc/nginx/conf.d/sentry.conf
 
 /etc/sentry.conf.py:
   file:
     - absent
     - require:
-      - uwsgi: uwsgi_sentry
+      - uwsgi: sentry
 
 /usr/local/sentry:
   file:
     - absent
     - require:
-      - uwsgi: uwsgi_sentry
+      - uwsgi: sentry
 
 /etc/nginx/conf.d/sentry.conf:
   file:

@@ -204,6 +204,35 @@ gitlab:
       - file: {{ web_dir }}/db/fixtures/production/001_admin.rb
     - watch:
       - postgres_database: gitlab
+  uwsgi:
+    - available
+    - enabled: True
+    - name: gitlab
+    - source: salt://gitlab/uwsgi.jinja2
+    - group: www-data
+    - user: www-data
+    - template: jinja
+    - mode: 440
+    - context:
+      web_dir: {{ web_dir }}
+    - require:
+      - cmd: gitlab
+      - cmd: gitlab_start_sidekiq_service
+      - cmd: gitlab_precompile_assets
+      - service: uwsgi_emperor
+      - file: gitlab_upstart
+      - gem: rack
+      - file: {{ web_dir }}/config.ru
+      - user: add_web_user_to_git_group
+      - postgres_database: gitlab
+    - watch:
+      - file: {{ web_dir }}/config/gitlab.yml
+      - file: {{ web_dir }}/config/database.yml
+{%- if salt['pillar.get']('gitlab:smtp:enabled', False) %}
+      - file: {{ web_dir }}/config/environments/production.rb
+      - file: {{ web_dir }}/config/initializers/smtp_settings.rb
+{%- endif %}
+      - archive: gitlab
 
 gitlab_precompile_assets:
   cmd:
@@ -342,37 +371,6 @@ add_web_user_to_git_group:
       - user: web
       - user: gitlab
 
-uwsgi_gitlab:
-  uwsgi:
-    - available
-    - enabled: True
-    - name: gitlab
-    - source: salt://gitlab/uwsgi.jinja2
-    - group: www-data
-    - user: www-data
-    - template: jinja
-    - mode: 440
-    - context:
-      web_dir: {{ web_dir }}
-    - require:
-      - cmd: gitlab
-      - cmd: gitlab_start_sidekiq_service
-      - cmd: gitlab_precompile_assets
-      - service: uwsgi_emperor
-      - file: gitlab_upstart
-      - gem: rack
-      - file: {{ web_dir }}/config.ru
-      - user: add_web_user_to_git_group
-      - postgres_database: gitlab
-    - watch:
-      - file: {{ web_dir }}/config/gitlab.yml
-      - file: {{ web_dir }}/config/database.yml
-{%- if salt['pillar.get']('gitlab:smtp:enabled', False) %}
-      - file: {{ web_dir }}/config/environments/production.rb
-      - file: {{ web_dir }}/config/initializers/smtp_settings.rb
-{%- endif %}
-      - archive: gitlab
-
 /etc/nginx/conf.d/gitlab.conf:
   file:
     - managed
@@ -384,7 +382,7 @@ uwsgi_gitlab:
     - require:
       - pkg: nginx
       - user: web
-      - uwsgi: uwsgi_gitlab
+      - uwsgi: gitlab
 {%- if salt['pillar.get']('gitlab:ssl', False) %}
       - cmd: /etc/ssl/{{ pillar['gitlab']['ssl'] }}/chained_ca.crt
       - module: /etc/ssl/{{ pillar['gitlab']['ssl'] }}/server.pem

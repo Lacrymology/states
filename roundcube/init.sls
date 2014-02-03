@@ -79,6 +79,25 @@ roundcube:
     - runas: postgres
     - require:
       - postgres_user: roundcube
+  uwsgi:
+    - available
+    - enabled: True
+    - name: roundcube
+    - source: salt://roundcube/uwsgi.jinja2
+    - template: jinja
+    - user: www-data
+    - group: www-data
+    - mode: 440
+    - context:
+      dir: {{ roundcubedir }}
+    - require:
+      - service: uwsgi_emperor
+      - module: roundcube_initial
+    - watch:
+      - file: {{ roundcubedir }}/config/main.inc.php
+      - file: {{ roundcubedir }}/config/db.inc.php
+      - archive: roundcube
+      - pkg: php5-pgsql
 
 {{ roundcubedir }}:
   file:
@@ -134,7 +153,7 @@ roundcube:
       - file: {{ roundcubedir }}
       - user: web
     - require_in:
-      - uwsgi: uwsgi_roundcube
+      - uwsgi: roundcube
 {% endfor %}
 
 /etc/nginx/conf.d/roundcube.conf:
@@ -148,30 +167,9 @@ roundcube:
     - require:
       - pkg: nginx
       - user: web
-      - uwsgi: uwsgi_roundcube
+      - uwsgi: roundcube
     - context:
       dir: {{ roundcubedir }}
-
-uwsgi_roundcube:
-  uwsgi:
-    - available
-    - enabled: True
-    - name: roundcube
-    - source: salt://roundcube/uwsgi.jinja2
-    - template: jinja
-    - user: www-data
-    - group: www-data
-    - mode: 440
-    - context:
-      dir: {{ roundcubedir }}
-    - require:
-      - service: uwsgi_emperor
-      - module: roundcube_initial
-    - watch:
-      - file: {{ roundcubedir }}/config/main.inc.php
-      - file: {{ roundcubedir }}/config/db.inc.php
-      - archive: roundcube
-      - pkg: php5-pgsql
 
 roundcube_initial:
   cmd:

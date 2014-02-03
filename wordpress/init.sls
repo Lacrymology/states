@@ -103,6 +103,25 @@ wordpress:
     - require:
       - mysql_user: wordpress
       - mysql_database: wordpress
+  uwsgi:
+    - available
+    - enabled: True
+    - name: wordpress
+    - source: salt://wordpress/uwsgi.jinja2
+    - user: www-data
+    - group: www-data
+    - mode: 440
+    - template: jinja
+    - context:
+      dir: {{ wordpressdir }}
+    - require:
+      - module: wordpress_initial
+      - service: uwsgi_emperor
+      - service: mysql-server
+    - watch:
+      - file: {{ wordpressdir }}/wp-config.php
+      - archive: wordpress
+      - pkg: php5-mysql
 
 {{ wordpressdir }}/wp-content/uploads:
   file:
@@ -185,32 +204,11 @@ wordpress_initial:
     - template: jinja
     - require:
       - pkg: nginx
-      - uwsgi: uwsgi_wordpress
+      - uwsgi: wordpress
     - watch_in:
       - service: nginx
     - context:
       dir: {{ wordpressdir }}
-
-uwsgi_wordpress:
-  uwsgi:
-    - available
-    - enabled: True
-    - name: wordpress
-    - source: salt://wordpress/uwsgi.jinja2
-    - user: www-data
-    - group: www-data
-    - mode: 440
-    - template: jinja
-    - context:
-      dir: {{ wordpressdir }}
-    - require:
-      - module: wordpress_initial
-      - service: uwsgi_emperor
-      - service: mysql-server
-    - watch:
-      - file: {{ wordpressdir }}/wp-config.php
-      - archive: wordpress
-      - pkg: php5-mysql
 
 {%- if salt['pillar.get']('debug', False) %}
 /etc/logrotate.d/wordpress:

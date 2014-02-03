@@ -83,6 +83,33 @@ moinmoin:
     - stateful: False
     - watch:
       - module: moinmoin
+  uwsgi:
+    - available
+    - enabled: True
+    - name: moinmoin
+    - template: jinja
+    - user: www-data
+    - group: www-data
+    - mode: 440
+    - source: salt://uwsgi/template.jinja2
+    - context:
+      chdir: /usr/local/moinmoin/share/moin/
+      appname: moinmoin
+      wsgi_file: /usr/local/moinmoin/share/moin/moin.wsgi
+      virtualenv: {{ root_dir }}
+    - require:
+      - service: uwsgi_emperor
+      - file: moinmoin
+      - file: moinmoin_config
+      - file: {{ root_dir }}/share/moin
+      - file: {{ root_dir }}/share/moin/moin.wsgi
+      - file: /var/lib/deployments/moinmoin
+      - user: web
+    - watch:
+      - file: moinmoin
+      - file: moinmoin_config
+      - file: {{ root_dir }}/share/moin
+      - file: {{ root_dir }}/share/moin/moin.wsgi
 
 {{ root_dir }}/share/moin:
   file:
@@ -119,35 +146,6 @@ moinmoin_config:
       - virtualenv: moinmoin
       - user: web
 
-uwsgi_moinmoin:
-  uwsgi:
-    - available
-    - enabled: True
-    - name: moinmoin
-    - template: jinja
-    - user: www-data
-    - group: www-data
-    - mode: 440
-    - source: salt://uwsgi/template.jinja2
-    - context:
-      chdir: /usr/local/moinmoin/share/moin/
-      appname: moinmoin
-      wsgi_file: /usr/local/moinmoin/share/moin/moin.wsgi
-      virtualenv: {{ root_dir }}
-    - require:
-      - service: uwsgi_emperor
-      - file: moinmoin
-      - file: moinmoin_config
-      - file: {{ root_dir }}/share/moin
-      - file: {{ root_dir }}/share/moin/moin.wsgi
-      - file: /var/lib/deployments/moinmoin
-      - user: web
-    - watch:
-      - file: moinmoin
-      - file: moinmoin_config
-      - file: {{ root_dir }}/share/moin
-      - file: {{ root_dir }}/share/moin/moin.wsgi
-
 /etc/nginx/conf.d/moinmoin.conf:
   file:
     - managed
@@ -162,6 +160,7 @@ uwsgi_moinmoin:
     - require:
       - pkg: nginx
       - user: web
+      - uwsgi: moinmoin
 
 /var/lib/deployments:
   file:

@@ -133,8 +133,12 @@ def discover_checks(state_name):
         try:
             unserialized = yaml.safe_load(rendered_template)
         except Exception:
+            logger.critical("YAML data from failed to parse for '%s'",
+                            state_name, exc_info=True)
+            rendered_template.seek(0)
+            logger.debug("failed YAML content of '%s' is '%s'", state_name,
+                         rendered_template.read())
             os.unlink(temp_dest.name)
-            logger.critical('YAML data from failed to parse', exc_info=True)
             return {}
     os.unlink(temp_dest.name)
     if not unserialized:

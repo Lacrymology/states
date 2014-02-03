@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
-{% set version='1.3.1' %}
+{% set version='1.5.2' %}
 
 {{ opts['cachedir'] }}/pip-{{ version }}:
   file:

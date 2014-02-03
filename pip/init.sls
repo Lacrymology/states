@@ -80,7 +80,7 @@ python-setuptools:
     - require:
       - cmd: apt_sources
 
-{% set version='1.3.1' %}
+{% set version='1.5.2' %}
 pip:
   file:
     - directory
@@ -94,7 +94,7 @@ pip:
 {%- else %}
     - source: https://pypi.python.org/packages/source/p/pip/pip-{{ version }}.tar.gz
 {%- endif %}
-    - source_hash: md5=cbb27a191cebc58997c4da8513863153
+    - source_hash: md5=5da30919f732d68b1c666e484e7676f5
     - archive_format: tar
     - tar_options: z
     - if_missing: {{ opts['cachedir'] }}/pip-{{ version }}

@@ -34,7 +34,7 @@ NOW=`date '+%Y-%m-%d-%H_%M_%S'`
 export TERM=dumb
 workdir=`mktemp -d`
 cd $workdir
-mongodump -d $dbname
+mongodump -d $dbname > /dev/null
 tar --xz -cf mongodb-$dbname-$NOW.tar.xz dump
 mv mongodb-$dbname-$NOW.tar.xz /tmp
 cd /tmp

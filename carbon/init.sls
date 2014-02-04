@@ -272,7 +272,7 @@ carbon-relay:
     - watch_in:
     {%- for instance in range(instances_count) %}
       - service: carbon-cache-{{ instance }}
-    {%- endfor -%}
+    {%- endfor %}
 
 /var/lib/graphite/lists:
   file:

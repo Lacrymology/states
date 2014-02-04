@@ -57,6 +57,7 @@ shinken-poller:
     - source: salt://shinken/upstart.jinja2
     - context:
       shinken_component: poller
+      max_filedescriptors: {{ salt['pillar.get']('shinken:poller_max_fd', 16384) }}
   service:
     - running
     - enable: True

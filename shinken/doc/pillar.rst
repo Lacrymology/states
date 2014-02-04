@@ -65,6 +65,13 @@ List contact users.
 Please replace <username> by real username.
 Example: ci, lam, hvn
 
+shinken:poller_max_fd
+~~~~~~~~~~~~~~~~~~~~~
+
+Maximum number of file descriptors poller can allocate.
+
+Default: ``16384``.
+
 shinken:<username>:email
 ~~~~~~~~~~~~~~~~~~~~~~~~
 

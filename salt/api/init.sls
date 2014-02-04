@@ -166,7 +166,7 @@ salt-api:
 {%- if salt['pkg.version']('salt-api') not in ('', version) %}
 salt_api_old_version:
   pkg:
-    - removed
+    - purged
     - name: salt-api
     - require_in:
       - pkg: salt-api

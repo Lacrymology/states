@@ -34,7 +34,8 @@ stop on runlevel [!2345]
 respawn
 
 pre-start script
-    if [ ! -r /var/log/nginx/{{ type }}.fifo ]; then
+    if [ ! -p /var/log/nginx/{{ type }}.fifo ]; then
+        rm -f /var/log/nginx/{{ type }}.fifo
         mkfifo /var/log/nginx/{{ type }}.fifo
         chown root.root /var/log/nginx/{{ type }}.fifo
         chmod 660 /var/log/nginx/{{ type }}.fifo

@@ -33,4 +33,5 @@
 # Author: Dang Tung Lam <lamdt@familug.org>
 # Maintainer: Dang Tung Lam <lamdt@familug.org>
 
+sphinx_rtd_theme==0.1.5
 Sphinx==1.2.1

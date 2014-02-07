@@ -39,4 +39,4 @@ set -e
 NOW=`/bin/date '+%Y-%m-%d-%H_%M_%S'`
 
 /usr/local/bin/backup-postgresql {{ salt['pillar.get']('discourse:db:name', 'discourse') }}
-/usr/local/bin/backup-file discourse /usr/local/discourse-0.9.6.3/public uploads
+/usr/local/bin/backup-file discourse /usr/local/discourse-{{ version }}/public uploads

@@ -28,6 +28,10 @@ Maintainer: Quan Tong Anh <tonganhquan.net@gmail.com>
 # {{ pillar['message_do_not_modify'] }}
 {#- TODO: add support for GELF logging #}
 log_file: file:///dev/log
+{%- if salt['pillar.get']('debug', False) %}
 log_level: debug
+{%- else %}
+log_level: warning
+{%- endif %}
 log_fmt_logfile: '%(asctime)-15s salt-minion[%(process)d] %(name)s: %(message)s'
 log_datefmt_logfile: '%b %d %H:%M:%S'

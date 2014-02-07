@@ -34,22 +34,18 @@ Maintainer: Lam Dang Tung <lamdt@familug.org>
 -#}
 gitlab_uwsgi_master:
   description: GitLab uWSGI Master Process
-  passive: True
 
 gitlab_uwsgi_worker:
   description: GitLab uWSGI Workers Process
-  passive: True
 
 gitlab_uwsgi_ping:
   description: GitLab uWSGI Ping
 
 gitlab_nginx_http:
   description: GitLab HTTP protocol
-  passive: True
 
 gitlab_nginx_https:
   description: GitLab HTTPS protocol
-  passive: True
 
 gitlab_nginx_https_certificate:
   description: HTTPS Certificate Expiration
@@ -57,4 +53,3 @@ gitlab_nginx_https_certificate:
 
 gitlab_postgresql:
   description: GitLab PostgreSQL database
-  passive: True

@@ -239,7 +239,7 @@ define service {
     use salt-service
     service_description {{ name }}
     display_name {{ state_checks[name]['description'] }}
-            {%- if 'passive' in state_checks[name] and state_checks[name]['passive'] == True %}
+            {%- if 'passive' not in state_checks[name] or ('passive' in state_checks[name] and state_checks[name]['passive']) %}
     active_checks_enabled 0
     passive_checks_enabled 1
     check_freshness 1

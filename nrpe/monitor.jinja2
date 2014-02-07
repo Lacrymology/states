@@ -41,7 +41,6 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 {%- for check in nrpe_checks %}
 {{ check }}:
   description: {{ nrpe_checks[check] }}
-  passive: True
   passive_interval: 5
   freshness_threshold: 600
 {% endfor -%}

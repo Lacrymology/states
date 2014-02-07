@@ -27,13 +27,11 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 graylog2_procs:
   description: Graylog2 Daemon
-  passive: True
 
 {#- if graylog2_address isn't 127.0.0.1 test fail -#}
 {%- if not pillar['__test__']|default(False) %}
 graylog2_incoming_logs:
   description: Incoming Logs Rate
-  passive: True
 {%- endif %}
 
 graylog2_elasticsearch_cluster:
@@ -41,8 +39,6 @@ graylog2_elasticsearch_cluster:
 
 graylog2_elasticsearch_port_http:
   description: Graylog2 Elasticsearch Local HTTP Port
-  passive: True
 
 graylog2_elasticsearch_port_transport:
   description: Graylog2 Elasticsearch Local Transport Port
-  passive: True

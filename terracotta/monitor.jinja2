@@ -27,11 +27,9 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
 terracotta_procs:
   description: Terracotta Daemon
-  passive: True
 
 terracotta_dso_local_port:
   description: Terracotta DSO Local Port
-  passive: True
 
 terracotta_dso_remote_port:
   check: check_tcp!9510
@@ -39,7 +37,6 @@ terracotta_dso_remote_port:
 
 terracotta_jmx_local_port:
   description: Terracotta JMX Local Port
-  passive: True
 
 terracotta_jmx_remote_port:
   check: check_tcp!9520
@@ -47,7 +44,6 @@ terracotta_jmx_remote_port:
 
 terracotta_communicate_local_port:
   description: Terracotta Communicate Local Port
-  passive: True
 
 terracotta_communicate_remote_port:
   check: check_tcp!9530

@@ -36,16 +36,13 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 {%- for check in rabbitmq_checks %}
 {{ check }}:
   description: RabbitMQ {{ rabbitmq_checks[check] }}
-  passive: True
 {% endfor -%}
 
 rabbitmq_nginx_http:
   description: RabbitMQ HTTP Protocol
-  passive: True
 
 rabbitmq_nginx_https:
   description: RabbitMQ HTTPS Protocol
-  passive: True
 
 rabbitmq_nginx_https_certificate:
   description: RabbitMQ HTTPS Certificate Expiration

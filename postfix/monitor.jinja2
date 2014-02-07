@@ -37,5 +37,4 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 {%- for check in postfix_checks %}
 postfix_{{ check }}:
   description: Postfix {{ postfix_checks[check] }}
-  passive: True
 {% endfor -%}

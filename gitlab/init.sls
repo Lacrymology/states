@@ -97,7 +97,7 @@ remove_old_gitlab_shell:
     - name: {{ home_dir }}/gitlab-shell
     - require:
       - cmd: gitlab_stop_old_sidekiq_process
-      - cmd: move_git_home
+      - cmd: gitlab_rename_home_folder
 
 gitlab-shell:
   archive:
@@ -162,7 +162,7 @@ install_gitlab_shell:
       user: {{ user }}
 
 {#- move old data in to new home folder #}
-move_git_home:
+gitlab_rename_home_folder:
   cmd:
     - run
     - name: mv /home/git {{ home_dir }}
@@ -176,7 +176,7 @@ replace_git_home_in_file:
     - user: root
     - onlyif: test -f {{ home_dir }}/.ssh/authorized_keys
     - watch:
-      - cmd: move_git_home
+      - cmd: gitlab_rename_home_folder
 
 gitlab_remove_old_version:
   file:
@@ -194,7 +194,8 @@ gitlab:
     - require:
       - pkg: gitlab_dependencies
       - group: web
-      - cmd: move_git_home
+      - user: web
+      - cmd: gitlab_rename_home_folder
       - cmd: replace_git_home_in_file
   postgres_user:
     - present

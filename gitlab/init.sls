@@ -174,7 +174,6 @@ replace_git_home_in_file:
     - wait
     - name:  find {{ home_dir }} -type f -exec sed -i 's:/home/git/:/home/gitlab/:g' {} \;
     - user: root
-    - onlyif: test -f {{ home_dir }}/.ssh/authorized_keys
     - watch:
       - cmd: gitlab_rename_home_folder
 

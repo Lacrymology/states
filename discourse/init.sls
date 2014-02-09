@@ -167,7 +167,7 @@ discourse:
     - directory
     - user: discourse
     - group: discourse
-    - mode: 775
+    - mode: 750
     - require:
       - user: discourse
       - file: discourse_tar

@@ -28,8 +28,13 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 # {{ pillar['message_do_not_modify'] }}
 
 fileserver_backend:
-  - git
   - roots
+{%- if salt['pillar.get']('salt_master:pillar', False) %}
+  - git
+
+ext_pillar:
+  - git: {{ pillar['salt_master']['pillar']['branch'] }} {{ pillar['salt_master']['pillar']['remote'] }}
+{%- endif %}
 
 worker_threads: {{ pillar['salt_master']['workers']|default(5) }}
 gitfs_remotes:

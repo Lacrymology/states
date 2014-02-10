@@ -29,7 +29,6 @@ Nagios NRPE check for Salt Master.
 -#}
 include:
   - apt.nrpe
-  - git.nrpe
   - pip.nrpe
   - nrpe
   - python.dev.nrpe

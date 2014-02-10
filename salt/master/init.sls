@@ -31,13 +31,26 @@ If you install a salt master from scratch, check and run bootstrap_archive.py
 and use it to install the master.
 -#}
 include:
+{%- if salt['pillar.get']('salt_master:pillar', False) %}
   - pip
+{%- endif %}
   - python.dev
   - rsyslog
-  - git
   - salt
   - ssh.client
 
+/srv/salt:
+  file:
+    - directory
+    - user: root
+    - group: root
+    - mode: 555
+
+/srv/pillars:
+  file:
+    - absent
+
+{%- if salt['pillar.get']('salt_master:pillar', False) %}
 salt-master-requirements:
   file:
     - managed
@@ -56,17 +69,22 @@ salt-master-requirements:
     - watch:
       - file: salt-master-requirements
       - pkg: python-dev
-
-/srv/salt:
+    - watch_in:
+      - service: salt-master
+    - require_in:
+      - pkg: salt-master
+{%- else %}
+/srv/pillar:
   file:
     - directory
     - user: root
     - group: root
-    - mode: 555
-
-/srv/pillars:
-  file:
-    - absent
+    - mode: 550
+    - require:
+      - pkg: salt-master
+    - require_in:
+      - service: salt-master
+{%- endif %}
 
 /srv/salt/top.sls:
   file:
@@ -94,23 +112,15 @@ salt-master:
     - mode: 400
     - require:
       - pkg: salt-master
-  git:
-    - latest
-    - name: {{ pillar['salt_master']['pillar_remote'] }}
-    - target: /srv/pillar
-    - require:
-      - pkg: git
   service:
     - running
     - enable: True
     - order: 90
     - require:
-      - pkg: git
       - service: rsyslog
     - watch:
       - pkg: salt-master
       - file: salt-master
-      - module: salt-master-requirements
   pkg:
     - installed
     - skip_verify: True
@@ -122,7 +132,6 @@ salt-master:
 {%- endif %}
     - require:
       - pkg: salt
-      - module: salt-master-requirements
 {%- if salt['pkg.version']('salt-master') not in ('', pkg_version) %}
       - pkg: salt_master_old_version
 

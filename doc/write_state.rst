@@ -1,6 +1,3 @@
-Coding Style Guide
-==================
-
 :copyrights: Copyright (c) 2013, Bruno Clermont
 
              All rights reserved.
@@ -30,6 +27,8 @@ Coding Style Guide
              POSSIBILITY OF SUCH DAMAGE.
 :authors: - Bruno Clermont
 
+Coding Style Guide
+==================
 
 Terminology
 -----------

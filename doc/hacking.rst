@@ -1,6 +1,3 @@
-Hack Salt in your Sandbox
-=========================
-
 :copyrights: Copyright (c) 2013, Bruno Clermont
 
              All rights reserved.
@@ -29,6 +26,9 @@ Hack Salt in your Sandbox
              ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
              POSSIBILITY OF SUCH DAMAGE.
 :authors: - Bruno Clermont
+
+Hack Salt in your Sandbox
+=========================
 
 Installation
 ------------

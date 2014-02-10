@@ -106,12 +106,15 @@ wordpress:
 
 {{ wordpressdir }}/wp-content/uploads:
   file:
-    - directory
+    - symlink
+    - target: /var/lib/deployments/wordpress/upload
+    - makedirs: True
+    - mode: 750
     - user: www-data
     - group: www-data
-    - mode: 750
     - require:
       - archive: wordpress
+      - file: /var/lib/deployments/wordpress/upload
 
 php5-mysql:
   pkg:
@@ -226,12 +229,11 @@ uwsgi_wordpress:
 
 /var/lib/deployments/wordpress/upload:
   file:
-    - symlink
-    - target: {{ wordpressdir }}/wp-content/uploads
-    - makedirs: True
+    - directory
+    - user: www-data
+    - group: www-data
     - mode: 750
-    - require:
-      - file: {{ wordpressdir }}/wp-content/uploads
+    - makedirs: True
 
 {%- if salt['pillar.get']('wordpress:ssl', False) %}
 extend:

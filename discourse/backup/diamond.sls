@@ -33,4 +33,5 @@ Author: Lam Dang Tung <lamdt@familug.org>
 Maintainer: Lam Dang Tung <lamdt@familug.org>
 -#}
 include:
+  - backup.diamond
   - cron.diamond

@@ -84,7 +84,7 @@ discourse_tar:
 {%- if 'files_archive' in pillar %}
     - source: {{ pillar['files_archive'] }}/mirror/discourse/v{{ version }}.tar.gz
 {%- else %}
-    - source: http://archive.robotinfra.com/mirror/discourse/v{{ version }}.tar.gz
+    - source: https://github.com/discourse/discourse/archive/v{{ version }}.tar.gz
 {%- endif %}
     - source_hash: md5=7e608572bfa2902aaa53cb229cf56516
     - archive_format: tar
@@ -149,6 +149,7 @@ discourse:
     - watch:
       - cmd: discourse_add_psql_extension_hstore
       - cmd: discourse_add_psql_extension_pg_trgm
+      - archive: discourse_tar
   file:
     - managed
     - name: {{ web_root_dir }}/config.ru
@@ -163,13 +164,16 @@ discourse:
 
 {{ web_root_dir }}/public/uploads:
   file:
-    - directory
+    - symlink
+    - target: /var/lib/deployments/discourse/uploads
     - user: discourse
     - group: discourse
-    - mode: 550
+    - mode: 750
+    - makedirs: True
     - require:
       - user: discourse
       - file: discourse_tar
+      - file: /var/lib/deployments/discourse/uploads
 
 discourse_rack:
   gem:
@@ -333,20 +337,22 @@ add_web_user_to_discourse_group:
 
 discourse_add_psql_extension_hstore:
   cmd:
-    - run
+    - wait
     - name: psql discourse -c "CREATE EXTENSION IF NOT EXISTS hstore;"
     - user: postgres
     - require:
       - service: postgresql
+    - watch:
       - postgres_database: discourse
 
 discourse_add_psql_extension_pg_trgm:
   cmd:
-    - run
+    - wait
     - name: psql discourse -c "CREATE EXTENSION IF NOT EXISTS pg_trgm;"
     - user: postgres
     - require:
       - service: postgresql
+    - watch:
       - postgres_database: discourse
 
 discourse_assets_precompile:
@@ -389,6 +395,16 @@ discourse_assets_precompile:
       - file: discourse_tar
     - require_in:
       - cmd: discourse_bundler
+
+/var/lib/deployments/discourse/uploads:
+  file:
+    - directory
+    - mode: 750
+    - user: discourse
+    - group: discourse
+    - makedirs: True
+    - require:
+      - user: discourse
 
 {%- if salt['pillar.get']('discourse:ssl', False) %}
 extend:

@@ -52,3 +52,5 @@ backup-discourse:
       - pkg: cron
       - file: /usr/local/bin/backup-postgresql
       - file: /usr/local/bin/backup-file
+    - context:
+      version: "0.9.6.3"

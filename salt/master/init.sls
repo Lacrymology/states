@@ -31,11 +31,29 @@ If you install a salt master from scratch, check and run bootstrap_archive.py
 and use it to install the master.
 -#}
 include:
+{%- if salt['pillar.get']('salt_master:pillar', False) %}
   - pip
+{%- endif %}
   - python.dev
   - rsyslog
   - salt
   - ssh.client
+
+/srv/salt:
+  file:
+    - directory
+    - user: root
+    - group: root
+    - mode: 555
+
+/srv/pillars:
+  file:
+    - absent
+
+{%- if salt['pillar.get']('salt_master:pillar', False) %}
+/srv/pillar:
+  file:
+    - absent
 
 salt-master-requirements:
   file:
@@ -55,22 +73,10 @@ salt-master-requirements:
     - watch:
       - file: salt-master-requirements
       - pkg: python-dev
-
-/srv/salt:
-  file:
-    - directory
-    - user: root
-    - group: root
-    - mode: 555
-
-/srv/pillars:
-  file:
-    - absent
-
-{%- if pillar['salt_master']['pillar'] in pillar %}
-/srv/pillar:
-  file:
-    - absent
+    - watch_in:
+      - service: salt-master
+    - require_in:
+      - pkg: salt-master
 {%- else %}
 /srv/pillar:
   file:
@@ -118,7 +124,6 @@ salt-master:
     - watch:
       - pkg: salt-master
       - file: salt-master
-      - module: salt-master-requirements
   pkg:
     - installed
     - skip_verify: True
@@ -130,7 +135,6 @@ salt-master:
 {%- endif %}
     - require:
       - pkg: salt
-      - module: salt-master-requirements
 {%- if salt['pkg.version']('salt-master') not in ('', pkg_version) %}
       - pkg: salt_master_old_version
 

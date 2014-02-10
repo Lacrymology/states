@@ -31,12 +31,8 @@ set -e
 # Script for building salt common documentation.
 
 if [ -z $1 ]; then
-    echo "Usage: $0 output_dir [virtualenv]"
+    echo "Usage: $0 output_dir"
     exit 1
 else
-    if [ -z $2 ]; then
-        sphinx-build -c doc . $1
-    else
-        $2/bin/sphinx-build -c doc . $1
-    fi
+    sphinx-build -c doc . $1
 fi

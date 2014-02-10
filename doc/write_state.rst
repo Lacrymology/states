@@ -60,7 +60,7 @@ Bad::
 
   MySQL-python
 
-Requirements file should me ``file.managed`` and have ``pip.install`` module run
+Requirements file should be ``file.managed`` and have ``pip.install`` module run
 only if they're changed.
 
 If the Python environment destination is the root (``/usr/local``), it's

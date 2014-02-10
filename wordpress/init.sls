@@ -54,14 +54,6 @@ include:
 {%- set dbuserpass = salt['password.pillar']('wordpress:db:password', 10) %}
 {%- set dbname = salt['pillar.get']('wordpress:db:name', 'wordpress') %}
 
-wordpress_drop_old_db:
-  mysql_database:
-    - absent
-    - name: {{ dbname }}
-    - require:
-      - service: mysql-server
-      - pkg: python-mysqldb
-
 wordpress:
   archive:
     - extracted
@@ -94,7 +86,6 @@ wordpress:
     - require:
       - service: mysql-server
       - pkg: python-mysqldb
-      - mysql_database: wordpress_drop_old_db
   mysql_user:
     - present
     - host: localhost
@@ -115,12 +106,15 @@ wordpress:
 
 {{ wordpressdir }}/wp-content/uploads:
   file:
-    - directory
+    - symlink
+    - target: /var/lib/deployments/wordpress/upload
+    - makedirs: True
+    - mode: 750
     - user: www-data
     - group: www-data
-    - mode: 550
     - require:
       - archive: wordpress
+      - file: /var/lib/deployments/wordpress/upload
 
 php5-mysql:
   pkg:
@@ -158,7 +152,7 @@ wordpress_initial:
       - archive: wordpress
       - user: web
   cmd:
-    - run
+    - wait
     - name: php init.php
     - cwd: {{ wordpressdir }}/wp-admin
     - user: www-data
@@ -167,10 +161,10 @@ wordpress_initial:
       - pkg: php5-mysql
       - user: web
       - mysql_grants: wordpress
-    - watch:
       - file: wordpress_initial
-      - file: wordpress
       - file: {{ wordpressdir }}/wp-config.php
+    - watch:
+      - mysql_database: wordpress
   module:
     - wait
     - grant: all privileges
@@ -232,6 +226,16 @@ uwsgi_wordpress:
     - context:
       web_dir: {{ wordpressdir }}
 {%- endif %}
+
+/var/lib/deployments/wordpress/upload:
+  file:
+    - directory
+    - user: www-data
+    - group: www-data
+    - mode: 750
+    - makedirs: True
+    - require:
+      - user: web
 
 {%- if salt['pillar.get']('wordpress:ssl', False) %}
 extend:

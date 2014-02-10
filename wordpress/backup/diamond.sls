@@ -27,5 +27,6 @@ Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
 -#}
 
 include:
+  - backup.diamond
   - cron.diamond
 

@@ -93,12 +93,3 @@ redis_old_version:
     - require_in:
       - pkg: redis
 {%- endif %}
-
-{%- if salt['pkg.version']('redis-tools') not in ('', redis_sub_version)  %}
-redistools_old_version:
-  pkg:
-    - removed
-    - name: redis-tools
-    - require_in:
-      - pkg: redis
-{%- endif %}

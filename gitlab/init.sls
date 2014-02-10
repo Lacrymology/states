@@ -88,8 +88,8 @@ gitlab_dependencies:
 gitlab_stop_old_sidekiq_process:
   cmd:
     - run
-    - name: ps aux | grep [s]idekiq | awk '{print $2}' | xargs kill -9
-    - onlyif: ps aux | grep [s]idekiq
+    - name: kill -9 `pgrep -u git -f 'sidekiq 2.12.4'` || true
+    - onlyif: pgrep -u git -f 'sidekiq 2.12.4'
 
 remove_old_gitlab_shell:
   file:

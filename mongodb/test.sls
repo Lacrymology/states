@@ -48,5 +48,5 @@ extend:
   mongodb_repair_post:
     service:
       - order: last
-      - require:
+      - require_in:
         - cmd: test

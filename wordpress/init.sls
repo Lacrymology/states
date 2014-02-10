@@ -109,7 +109,7 @@ wordpress:
     - directory
     - user: www-data
     - group: www-data
-    - mode: 755
+    - mode: 750
     - require:
       - archive: wordpress
 
@@ -229,6 +229,7 @@ uwsgi_wordpress:
     - symlink
     - target: {{ wordpressdir }}/wp-content/uploads
     - makedirs: True
+    - mode: 750
     - require:
       - file: {{ wordpressdir }}/wp-content/uploads
 

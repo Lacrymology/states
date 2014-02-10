@@ -234,6 +234,8 @@ uwsgi_wordpress:
     - group: www-data
     - mode: 750
     - makedirs: True
+    - require:
+      - user: web
 
 {%- if salt['pillar.get']('wordpress:ssl', False) %}
 extend:

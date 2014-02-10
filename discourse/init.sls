@@ -164,13 +164,16 @@ discourse:
 
 {{ web_root_dir }}/public/uploads:
   file:
-    - directory
+    - symlink
+    - target: /var/lib/deployments/discourse/uploads
     - user: discourse
     - group: discourse
     - mode: 750
+    - makedirs: True
     - require:
       - user: discourse
       - file: discourse_tar
+      - file: /var/lib/deployments/discourse/uploads
 
 discourse_rack:
   gem:
@@ -395,14 +398,13 @@ discourse_assets_precompile:
 
 /var/lib/deployments/discourse/uploads:
   file:
-    - symlink
-    - target: {{ web_root_dir }}/public/uploads
+    - directory
     - mode: 750
-    - user: root
-    - group: root
+    - user: discourse
+    - group: discourse
     - makedirs: True
     - require:
-      - file: {{ web_root_dir }}/public/uploads
+      - user: discourse
 
 {%- if salt['pillar.get']('discourse:ssl', False) %}
 extend:

@@ -34,6 +34,43 @@ include:
 {% if ssl %}
   - ssl
 {% endif %}
+{%- if salt['pillar.get']('postfix:virtual_mailbox', False) %}
+  - dovecot.agent
+
+/var/mail/vhosts:
+  file:
+    - directory
+    - user: dovecot-agent
+    - require:
+      - user: dovecot-agent
+    - require_in:
+      - service: postfix
+
+/etc/postfix/vmailbox:
+  file:
+    - managed
+    - source: salt://postfix/vmailbox.jinja2
+    - template: jinja
+    - mode: 400
+    - user: postfix
+    - group: postfix
+    - require:
+      - pkg: postfix
+
+postmap /etc/postfix/vmailbox:
+  cmd:
+    - require:
+      - pkg: postfix
+      - file: /etc/postfix
+    {% if salt['file.file_exists']('/etc/postfix/vmailbox.db') %}
+    - wait
+    - watch:
+      - file: /etc/postfix/vmailbox
+    {% else %}
+      - file: /etc/postfix/vmailbox
+    - run
+    {% endif %}
+{%- endif %}
 
 apt-utils:
   pkg:
@@ -92,30 +129,3 @@ postfix:
     - file_mode: 400
     - require:
       - pkg: postfix
-
-{%- if salt['pillar.get']('postfix:virtual_mailbox', False) %}
-/etc/postfix/vmailbox:
-  file:
-    - managed
-    - source: salt://postfix/vmailbox.jinja2
-    - template: jinja
-    - mode: 400
-    - user: postfix
-    - group: postfix
-    - require:
-      - pkg: postfix
-
-postmap /etc/postfix/vmailbox:
-  cmd:
-    - require:
-      - pkg: postfix
-      - file: /etc/postfix
-    {% if salt['file.file_exists']('/etc/postfix/vmailbox.db') %}
-    - wait
-    - watch:
-      - file: /etc/postfix/vmailbox
-    {% else %}
-      - file: /etc/postfix/vmailbox
-    - run
-    {% endif %}
-{%- endif %}

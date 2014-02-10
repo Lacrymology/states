@@ -37,7 +37,7 @@ mongodb_repair:
     - name: mongodb
   cmd:
     - run
-    - name: /usr/bin/mongod --config /etc/mongodb.conf --repair
+    - name: /usr/bin/mongod --dbpath=/var/lib/mongodb --repair
     - require:
        - service: mongodb_repair
 

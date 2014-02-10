@@ -34,6 +34,7 @@ a repair.
 mongodb_repair:
   service:
     - dead
+    - name: mongodb
   cmd:
     - run
     - name: /usr/bin/mongod --config /etc/mongodb.conf --repair
@@ -48,5 +49,6 @@ mongodb_repair_post:
       - cmd: mongodb_repair
   service:
     - running
+    - name: mongodb
     - require:
       - cmd: mongodb_repair_post

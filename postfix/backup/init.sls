@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Hung Nguyen Viet
+Copyright (c) 2013, Luan Vo Ngoc
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,25 +22,24 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
-Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
+Author: Luan Vo Ngoc <ngocluanvo@gmail.com>
+Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
+
+Backup for Postfix.
 -#}
 include:
-  - postfix
-  - postfix.backup
-  - postfix.diamond
-  - postfix.nrpe
-  - openldap
-  - openldap.diamond
-  - openldap.nrpe
+  - cron
+  - backup
 
-test:
-  nrpe:
-    - run_all_checks
-    - order: last
-  cmd:
-    - run
+backup-postfix:
+  file:
+    - managed
     - name: /etc/cron.daily/backup-postfix
+    - user: root
+    - group: root
+    - mode: 500
+    - template: jinja
+    - source: salt://postfix/backup/cron.jinja2
     - require:
-      - file: backup-postfix
-    - order: last
+      - pkg: cron
+      - file: /usr/local/bin/backup-file

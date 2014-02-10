@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Hung Nguyen Viet
+Copyright (c) 2013, Luan Vo Ngoc
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,25 +22,12 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
-Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
--#}
-include:
-  - postfix
-  - postfix.backup
-  - postfix.diamond
-  - postfix.nrpe
-  - openldap
-  - openldap.diamond
-  - openldap.nrpe
+Author: Luan Vo Ngoc <ngocluanvo@gmail.com>
+Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
 
-test:
-  nrpe:
-    - run_all_checks
-    - order: last
-  cmd:
-    - run
+Turn off backup for Postfix.
+-#}
+backup-postfix:
+  file:
+    - absent
     - name: /etc/cron.daily/backup-postfix
-    - require:
-      - file: backup-postfix
-    - order: last

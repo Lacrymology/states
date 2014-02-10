@@ -51,10 +51,6 @@ include:
     - absent
 
 {%- if salt['pillar.get']('salt_master:pillar', False) %}
-/srv/pillar:
-  file:
-    - absent
-
 salt-master-requirements:
   file:
     - managed
@@ -86,6 +82,8 @@ salt-master-requirements:
     - mode: 550
     - require:
       - pkg: salt-master
+    - require_in:
+      - service: salt-master
 {%- endif %}
 
 /srv/salt/top.sls:
@@ -120,7 +118,6 @@ salt-master:
     - order: 90
     - require:
       - service: rsyslog
-      - file: /srv/pillar
     - watch:
       - pkg: salt-master
       - file: salt-master

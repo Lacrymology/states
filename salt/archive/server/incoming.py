@@ -33,6 +33,8 @@ __maintainer__ = 'Bruno Clermont'
 __email__ = 'patate@fastmail.cn'
 
 import os
+import subprocess
+import tempfile
 import logging
 
 logger = logging.getLogger(__name__)
@@ -50,19 +52,52 @@ def move_incoming(directory, category, incoming_sub_directory='incoming',
     source_directory = os.path.join(directory, incoming_sub_directory, category)
     destination_directory = os.path.join(directory, destination_sub_directory,
                                          category)
-    for filename in os.listdir(source_directory):
-        destination_file = os.path.join(destination_directory, filename)
-        source_file = os.path.join(source_directory, filename)
-        if not os.path.exists(destination_file):
-            logger.info("Move %s file %s to rsync server", category,
-                        filename)
-            logger.debug("Rename %s to %s", source_file, destination_file)
-            os.rename(source_file, destination_file)
-        else:
-            logger.error("File %s already exists for %s, don't import it",
-                         filename, category)
-            os.unlink(source_file)
 
+    # get a list of currently open files to avoid transfering it, This assumes
+    # that once a file is released it isn't opened again
+    lsof = subprocess.Popen(('lsof', '-Fn', '+D', source_directory),
+                            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    # lsof outputs n<filename>, so lose that
+    filtered = [line[1:] for line in lsof.communicate()[0].split('\n') if line.startswith('n')]
+    # get paths relative to source_directory
+    filtered = [line[len(source_directory):] for line in filtered]
+    logging.debug("excluding open files: %s", filtered)
+
+    # write files to be excluded to a tmp file for rsync to read
+    exclude = tempfile.NamedTemporaryFile()
+    exclude.file.write("\n".join(filtered))
+    exclude.file.close()
+
+    rsync = subprocess.Popen(('rsync',
+                              '-a',
+                              '--ignore-existing',     # don't overwrite
+                              '--remove-source-files', # delete moved files
+                              '--exclude-from=%s' % exclude.name, # exclude open
+                              '--prune-empty-dirs',    # don't create empty dirs
+                              source_directory,
+                              destination_directory),
+                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+    out, err = rsync.communicate()
+    if out:
+        logging.debug("rsync stdout: %s", out)
+    if err:
+        logging.error("Got things in stderr: %s", err)
+
+    # sadly there doesn't seem to be a way to easily delete files filtered by
+    # the --ignore-existing bit
+    for path, dirs, files in os.walk(source_directory, topdown=False):
+        to_remove = []
+        for file in files:
+            filename = os.path.join(path, file)
+            if filename[len(source_directory):] not in filtered:
+                os.unlink(filename)
+                to_remove.append(file)
+
+        files[:] = [f for f in files if f not in to_remove]
+
+        if not (dirs or files):
+            os.rmdir(path)
 
 def main():
     import sys

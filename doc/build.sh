@@ -34,5 +34,5 @@ if [ -z $1 ]; then
     echo "Usage: $0 output_dir"
     exit 1
 else
-    sphinx-build -c doc . $1
+    sphinx-build -W -c doc . $1
 fi

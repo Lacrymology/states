@@ -8,10 +8,20 @@ Introduction:
     :titlesonly:
     :glob:
 
+    changelog
     intro
+    firewall
+    hacking
+    master_installation
+    minion_installation
+    monitoring
+    pillar
+    run_tests
+    state
+    tests
+    troubleshoot
     usage
     write_state
-    changelog
 
 
 Formulars Document:
@@ -22,3 +32,5 @@ Formulars Document:
     :maxdepth: 1
 
     ../*/doc/index
+    ../*/*/doc/index
+    ../*/index

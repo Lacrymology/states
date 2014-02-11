@@ -1,0 +1,9 @@
+Pillar
+======
+
+Contents:
+
+.. toctree::
+    :glob:
+
+    *

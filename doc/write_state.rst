@@ -177,8 +177,8 @@ absent formulas are mainly used by intergration.py script.
 Some points to notice when write an absent formula:
 
 * If it has a pip.remove state, make sure that states has low order
-(often order: 1) because local.absent will remove /usr/local and therefore
-remove /usr/local/bin/pip
+  (often order: 1) because local.absent will remove /usr/local and therefore
+  remove /usr/local/bin/pip
 
 Installing
 ----------

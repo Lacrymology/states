@@ -116,6 +116,7 @@ moinmoin:
     - directory
     - user: www-data
     - group: www-data
+    - mode: 550
     - recurse:
       - user
       - group
@@ -129,6 +130,7 @@ moinmoin:
     - target: {{ root_dir }}/share/moin/server/moin.wsgi
     - user: www-data
     - group: www-data
+    - mode: 440
     - require:
       - cmd: moinmoin
       - user: web
@@ -167,6 +169,7 @@ moinmoin_config:
     - directory
     - user: www-data
     - group: www-data
+    - mode: 555
     - makedirs: True
     - require:
       - user: web
@@ -185,6 +188,7 @@ moinmoin_move_data_to_right_place:
     - directory
     - user: www-data
     - group: www-data
+    - mode: 770
     - makedirs: True
     - recurse:
       - user

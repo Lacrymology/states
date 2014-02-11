@@ -120,6 +120,7 @@ moinmoin:
     - recurse:
       - user
       - group
+      - mode
     - require:
       - cmd: moinmoin
       - user: web
@@ -193,6 +194,7 @@ moinmoin_move_data_to_right_place:
     - recurse:
       - user
       - group
+      - mode
     - require:
       - user: web
       - cmd: moinmoin_move_data_to_right_place

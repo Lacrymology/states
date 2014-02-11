@@ -31,8 +31,7 @@ set -e
 # Script for building salt common documentation.
 
 if [ -z $1 ]; then
-    echo "Usage: $0 output_dir"
-    exit 1
+    sphinx-build -W -c doc . ../salt-common-doc
 else
     sphinx-build -W -c doc . $1
 fi

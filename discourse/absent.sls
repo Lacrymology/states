@@ -48,6 +48,9 @@ discourse:
       - user: discourse
   service:
     - dead
+  uwsgi:
+    - absent
+    - name: discourse
 
 {%- for file in (web_root_dir, '/home/discourse', '/etc/nginx/conf.d/discourse.conf', '/etc/logrotate.d/discourse', '/etc/init/discourse.conf') %}
 {{ file }}:
@@ -56,11 +59,6 @@ discourse:
     - require:
       - service: discourse
 {%- endfor %}
-
-uwsgi_discourse:
-  uwsgi:
-    - absent
-    - name: discourse
 
 discourse-upstart-log:
   cmd:

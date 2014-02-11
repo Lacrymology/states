@@ -161,6 +161,31 @@ discourse:
     - require:
       - file: discourse_tar
       - user: discourse
+  uwsgi:
+    - available
+    - enabled: True
+    - name: discourse
+    - user: www-data
+    - group: www-data
+    - template: jinja
+    - source: salt://discourse/uwsgi.jinja2
+    - mode: 440
+    - require:
+      - service: uwsgi_emperor
+      - user: add_web_user_to_discourse_group
+      - cmd: discourse_bundler
+      - cmd: discourse
+      - gem: discourse_rack
+      - postgres_database: discourse
+      - cmd: discourse_assets_precompile
+    - context:
+      web_root_dir: {{ web_root_dir }}
+    - watch:
+      - file: discourse
+      - file: {{ web_root_dir }}/config/environments/production.rb
+      - file: {{ web_root_dir }}/config/database.yml
+      - file: {{ web_root_dir }}/config/redis.yml
+      - file: discourse_tar
 
 {{ web_root_dir }}/public/uploads:
   file:
@@ -257,7 +282,7 @@ discourse_upstart:
     - group: root
     - mode: 440
     - require:
-      - uwsgi: uwsgi_discourse
+      - uwsgi: discourse
     - context:
       web_root_dir: {{ web_root_dir }}
       user: discourse
@@ -277,33 +302,6 @@ discourse_upstart:
     - context:
       web_root_dir: {{ web_root_dir }}
 
-uwsgi_discourse:
-  uwsgi:
-    - available
-    - enabled: True
-    - name: discourse
-    - user: www-data
-    - group: www-data
-    - template: jinja
-    - source: salt://discourse/uwsgi.jinja2
-    - mode: 440
-    - require:
-      - service: uwsgi_emperor
-      - user: add_web_user_to_discourse_group
-      - cmd: discourse_bundler
-      - cmd: discourse
-      - gem: discourse_rack
-      - postgres_database: discourse
-      - cmd: discourse_assets_precompile
-    - context:
-      web_root_dir: {{ web_root_dir }}
-    - watch:
-      - file: discourse
-      - file: {{ web_root_dir }}/config/environments/production.rb
-      - file: {{ web_root_dir }}/config/database.yml
-      - file: {{ web_root_dir }}/config/redis.yml
-      - file: discourse_tar
-
 /etc/nginx/conf.d/discourse.conf:
   file:
     - managed
@@ -314,7 +312,7 @@ uwsgi_discourse:
     - mode: 440
     - require:
       - pkg: nginx
-      - uwsgi: uwsgi_discourse
+      - uwsgi: discourse
 {%- if salt['pillar.get']('discourse:ssl', False) %}
       - cmd: /etc/ssl/{{ pillar['discourse']['ssl'] }}/chained_ca.crt
       - module: /etc/ssl/{{ pillar['discourse']['ssl'] }}/server.pem

@@ -140,6 +140,28 @@ openerp:
     - if_missing: {{ web_root_dir }}
     - require:
       - file: /usr/local
+  uwsgi:
+    - available
+    - enabled: True
+    - name: openerp
+    - template: jinja
+    - source: salt://openerp/uwsgi.jinja2
+    - user: www-data
+    - group: www-data
+    - mode: 440
+    - context:
+      web_root_dir: {{ web_root_dir }}
+      home: {{ home }}
+    - require:
+      - user: add_web_user_to_openerp_group
+      - service: uwsgi_emperor
+      - postgres_user: openerp
+      - file: openerp
+    - watch:
+      - module: openerp_depends
+      - archive: openerp
+      - file: {{ web_root_dir }}/openerp.wsgi
+      - cmd: openerp_depends
 
 {{ web_root_dir }}/openerp.wsgi:
   file:
@@ -166,30 +188,6 @@ add_web_user_to_openerp_group:
       - user: web
       - user: openerp
 
-uwsgi_openerp:
-  uwsgi:
-    - available
-    - enabled: True
-    - name: openerp
-    - template: jinja
-    - source: salt://openerp/uwsgi.jinja2
-    - user: www-data
-    - group: www-data
-    - mode: 440
-    - context:
-      web_root_dir: {{ web_root_dir }}
-      home: {{ home }}
-    - require:
-      - user: add_web_user_to_openerp_group
-      - service: uwsgi_emperor
-      - postgres_user: openerp
-      - file: openerp
-    - watch:
-      - module: openerp_depends
-      - archive: openerp
-      - file: {{ web_root_dir }}/openerp.wsgi
-      - cmd: openerp_depends
-
 /etc/nginx/conf.d/openerp.conf:
   file:
     - managed
@@ -200,7 +198,7 @@ uwsgi_openerp:
     - mode: 440
     - require:
       - pkg: nginx
-      - uwsgi: uwsgi_openerp
+      - uwsgi: openerp
 {%- if salt['pillar.get']('openerp:ssl', False) %}
       - cmd: /etc/ssl/{{ pillar['openerp']['ssl'] }}/chained_ca.crt
       - module: /etc/ssl/{{ pillar['openerp']['ssl'] }}/server.pem

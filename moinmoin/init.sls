@@ -83,43 +83,6 @@ moinmoin:
     - stateful: False
     - watch:
       - module: moinmoin
-
-{{ root_dir }}/share/moin:
-  file:
-    - directory
-    - user: www-data
-    - group: www-data
-    - recurse:
-      - user
-      - group
-    - require:
-      - cmd: moinmoin
-      - user: web
-
-{{ root_dir }}/share/moin/moin.wsgi:
-  file:
-    - symlink
-    - target: {{ root_dir }}/share/moin/server/moin.wsgi
-    - user: www-data
-    - group: www-data
-    - require:
-      - cmd: moinmoin
-      - user: web
-
-moinmoin_config:
-  file:
-    - managed
-    - name: {{ root_dir }}/share/moin/wikiconfig.py
-    - template: jinja
-    - user: www-data
-    - group: www-data
-    - mode: 440
-    - source: salt://moinmoin/config.jinja2
-    - require:
-      - virtualenv: moinmoin
-      - user: web
-
-uwsgi_moinmoin:
   uwsgi:
     - available
     - enabled: True
@@ -148,6 +111,44 @@ uwsgi_moinmoin:
       - file: {{ root_dir }}/share/moin
       - file: {{ root_dir }}/share/moin/moin.wsgi
 
+{{ root_dir }}/share/moin:
+  file:
+    - directory
+    - user: www-data
+    - group: www-data
+    - mode: 550
+    - recurse:
+      - user
+      - group
+      - mode
+    - require:
+      - cmd: moinmoin
+      - user: web
+
+{{ root_dir }}/share/moin/moin.wsgi:
+  file:
+    - symlink
+    - target: {{ root_dir }}/share/moin/server/moin.wsgi
+    - user: www-data
+    - group: www-data
+    - mode: 440
+    - require:
+      - cmd: moinmoin
+      - user: web
+
+moinmoin_config:
+  file:
+    - managed
+    - name: {{ root_dir }}/share/moin/wikiconfig.py
+    - template: jinja
+    - user: www-data
+    - group: www-data
+    - mode: 440
+    - source: salt://moinmoin/config.jinja2
+    - require:
+      - virtualenv: moinmoin
+      - user: web
+
 /etc/nginx/conf.d/moinmoin.conf:
   file:
     - managed
@@ -162,12 +163,14 @@ uwsgi_moinmoin:
     - require:
       - pkg: nginx
       - user: web
+      - uwsgi: moinmoin
 
 /var/lib/deployments:
   file:
     - directory
     - user: www-data
     - group: www-data
+    - mode: 555
     - makedirs: True
     - require:
       - user: web
@@ -186,10 +189,12 @@ moinmoin_move_data_to_right_place:
     - directory
     - user: www-data
     - group: www-data
+    - mode: 770
     - makedirs: True
     - recurse:
       - user
       - group
+      - mode
     - require:
       - user: web
       - cmd: moinmoin_move_data_to_right_place

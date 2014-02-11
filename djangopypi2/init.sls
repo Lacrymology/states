@@ -104,6 +104,33 @@ djangopypi2:
     - require:
       - postgres_user: djangopypi2
       - service: postgresql
+  uwsgi:
+    - available
+    - enabled: True
+    - name: djangopypi2
+    - template: jinja
+    - user: www-data
+    - group: www-data
+    - mode: 440
+    - source: salt://uwsgi/template.jinja2
+    - context:
+      chdir: {{ root_dir }}
+      appname: djangopypi2
+      module: djangopypi2.website.wsgi
+      django_settings: djangopypi2.website.settings
+      virtualenv: {{ root_dir }}
+    - require:
+      - service: uwsgi_emperor
+      - postgres_database: djangopypi2
+      - service: memcached
+      - service: rsyslog
+      - cmd: djangopypi2-django_contrib_sites
+    - watch:
+      - cmd: djangopypi2
+      - file: djangopypi2_settings
+      - file: djangopypi2_urls
+      - file: /var/lib/deployments/djangopypi2/media
+      - cmd: djangopypi2_loaddata
 
 {{ root_dir }}/manage:
   file:
@@ -155,20 +182,6 @@ djangopypi2_settings:
       - file: djangopypi2_settings
       - file: djangopypi2_urls
       - postgres_database: djangopypi2
-
-{{ root_dir }}/manage:
-  file:
-    - managed
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 550
-    - source: salt://django/manage.jinja2
-    - context:
-      settings: djangopypi2.website.settings
-      virtualenv: {{ root_dir }}
-    - require:
-      - virtualenv: djangopypi2
 
 djangopypi2_collectstatic:
   module:
@@ -243,35 +256,6 @@ djangomod module, which is just a helper to build our command and run it.
     - group: www-data
     - makedirs: True
 
-uwsgi_djangopypi2:
-  uwsgi:
-    - available
-    - enabled: True
-    - name: djangopypi2
-    - template: jinja
-    - user: www-data
-    - group: www-data
-    - mode: 440
-    - source: salt://uwsgi/template.jinja2
-    - context:
-      chdir: {{ root_dir }}
-      appname: djangopypi2
-      module: djangopypi2.website.wsgi
-      django_settings: djangopypi2.website.settings
-      virtualenv: {{ root_dir }}
-    - require:
-      - service: uwsgi_emperor
-      - postgres_database: djangopypi2
-      - service: memcached
-      - service: rsyslog
-      - cmd: djangopypi2-django_contrib_sites
-    - watch:
-      - cmd: djangopypi2
-      - file: djangopypi2_settings
-      - file: djangopypi2_urls
-      - file: /var/lib/deployments/djangopypi2/media
-      - cmd: djangopypi2_loaddata
-
 /etc/nginx/conf.d/djangopypi2.conf:
   file:
     - managed
@@ -287,6 +271,7 @@ uwsgi_djangopypi2:
         - static
     - require:
       - pkg: nginx
+      - uwsgi: djangopypi2
 
 extend:
   nginx:

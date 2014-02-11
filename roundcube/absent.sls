@@ -36,15 +36,14 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
   file:
     - absent
 
-uwsgi_roundcube:
+roundcube:
   uwsgi:
     - absent
-    - name: roundcube
 
 {%- for suffix in ('', '-stats') %}
 /var/lib/uwsgi/roundcube{{ suffix }}.sock:
   file:
     - absent
     - require:
-      - uwsgi: uwsgi_roundcube
+      - uwsgi: roundcube
 {%- endfor -%}

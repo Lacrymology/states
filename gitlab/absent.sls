@@ -44,7 +44,7 @@ gitlab:
     - force: True
     - require:
       - cmd: gitlab
-      - uwsgi: uwsgi_gitlab
+      - uwsgi: gitlab
   group:
     - absent
     - name: git
@@ -55,6 +55,9 @@ gitlab:
     - name: kill -9 $(ps -ef | grep sidekiq | grep -v grep | awk  '{print $2}')
     - user: root
     - onlyif: ps -ef | grep sidekiq | grep -v grep
+  uwsgi:
+    - absent
+    - name: gitlab
 
 {%- for file in ('/etc/nginx/conf.d/gitlab.conf', web_dir, '/home/git', '/etc/init/gitlab.conf', '/etc/logrotate.d/gitlab') %}
 {{ file }}:
@@ -63,11 +66,6 @@ gitlab:
     - require:
       - cmd: gitlab
 {%- endfor %}
-
-uwsgi_gitlab:
-  uwsgi:
-    - absent
-    - name: gitlab
 
 gitlab-upstart-log:
   cmd:

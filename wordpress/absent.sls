@@ -41,12 +41,12 @@ wordpress:
   file:
     - absent
     - name: {{ wordpressdir }}
+  uwsgi:
+    - absent
+    - name: wordpress
+    - require:
+      - file: /etc/nginx/conf.d/wordpress.conf
 
 /etc/nginx/conf.d/wordpress.conf:
   file:
     - absent
-
-uwsgi_wordpress:
-  uwsgi:
-    - absent
-    - name: wordpress

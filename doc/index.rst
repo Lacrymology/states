@@ -8,20 +8,21 @@ Introduction:
     :titlesonly:
     :glob:
 
-    changelog
     intro
-    firewall
-    hacking
     master_installation
     minion_installation
-    monitoring
-    pillar
-    run_tests
+    usage
     state
     tests
-    troubleshoot
-    usage
+    monitoring
+    pillar
+    firewall
+    hacking
+    build_doc
     write_state
+    run_tests
+    troubleshoot
+    changelog
 
 
 Formulars Document:

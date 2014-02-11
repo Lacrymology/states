@@ -1,5 +1,5 @@
-Salt common documentation
-=========================
+Building Salt common documentation
+==================================
 
 You need sphinx to build the doc. Install it by run below commands::
 

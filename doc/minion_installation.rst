@@ -1,6 +1,3 @@
-Salt-Minion Installation
-========================
-
 :copyrights: Copyright (c) 2013, Bruno Clermont
 
              All rights reserved.
@@ -29,6 +26,9 @@ Salt-Minion Installation
              ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
              POSSIBILITY OF SUCH DAMAGE.
 :authors: - Bruno Clermont
+
+Salt-Minion Installation
+========================
 
 Copy the file ``salt/minion/bootstrap.sh`` to target and run it with it's ID
 followed by the IP or hostname of the Salt master::

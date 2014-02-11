@@ -11,3 +11,8 @@ those stats as well.
 Each of those other daemons state come with their own configuration file
 that are put in /etc/diamond/collectors, directory check at startup for
 additional configurations.
+
+.. toctree::
+    :glob:
+
+    *

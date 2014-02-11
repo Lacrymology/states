@@ -1,6 +1,3 @@
-Introduction to this repository
-===============================
-
 :copyrights: Copyright (c) 2013, Bruno Clermont
 
              All rights reserved.
@@ -29,6 +26,9 @@ Introduction to this repository
              ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
              POSSIBILITY OF SUCH DAMAGE.
 :authors: - Bruno Clermont
+
+Introduction to this repository
+===============================
 
 Welcome to **Common** repository.
 

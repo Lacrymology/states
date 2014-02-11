@@ -1,6 +1,3 @@
-Salt-Master Installation
-========================
-
 :copyrights: Copyright (c) 2013, Bruno Clermont
 
              All rights reserved.
@@ -29,6 +26,9 @@ Salt-Master Installation
              ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
              POSSIBILITY OF SUCH DAMAGE.
 :authors: - Bruno Clermont
+
+Salt-Master Installation
+========================
 
 Git Repositories
 ----------------

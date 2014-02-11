@@ -1,0 +1,9 @@
+Mail
+====
+
+
+.. toctree::
+    :glob:
+
+
+    *

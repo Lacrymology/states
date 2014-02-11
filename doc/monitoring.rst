@@ -1,6 +1,3 @@
-Monitoring
-==========
-
 :copyrights: Copyright (c) 2013, Bruno Clermont
 
              All rights reserved.
@@ -29,6 +26,9 @@ Monitoring
              ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
              POSSIBILITY OF SUCH DAMAGE.
 :authors: - Bruno Clermont
+
+Monitoring
+==========
 
 Monitoring is one of the most important aspects of these states, as it's not
 only used to reports on the health of a deployed infrastructure. It's also an

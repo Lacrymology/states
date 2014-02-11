@@ -1,0 +1,9 @@
+Shinken
+=======
+
+
+.. toctree::
+    :glob:
+
+
+    *

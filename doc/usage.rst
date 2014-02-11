@@ -1,6 +1,3 @@
-Common Repository Usage
-=======================
-
 :copyrights: Copyright (c) 2013, Bruno Clermont
 
              All rights reserved.
@@ -29,6 +26,9 @@ Common Repository Usage
              ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
              POSSIBILITY OF SUCH DAMAGE.
 :authors: - Bruno Clermont
+
+Common Repository Usage
+=======================
 
 Git Repositories
 ----------------

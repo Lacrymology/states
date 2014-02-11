@@ -126,28 +126,28 @@ To understand more deep, you can install Shinken part by part::
 Poller: The poller daemon launches check plugins as requested by schedulers.
 When the check is finished it returns the result to the schedulers::
 
-  salt 'q-shinken-*' state.sls shinken.poller -v
+  salt -L myminion1,myminion2 state.sls shinken.poller -v
 
 Scheduler: The scheduler daemon manages the dispatching of checks and actions
 to the poller and reactionner daemons respectively::
 
-  salt 'q-shinken-*' state.sls shinken.scheduler -v
+  salt -L myminion1,myminion2 state.sls shinken.scheduler -v
 
 Broker: The broker daemon exports and manages data from schedulers. The broker
 uses modules exclusively to get the job done::
 
-  salt 'q-shinken-*' state.sls shinken.broker -v
+  salt -L myminion1,myminion2 state.sls shinken.broker -v
 
 Reactionner: The reactionner daemon issues notifications and launches
 event_handlers::
 
-  salt 'q-shinken-*' state.sls shinken.reactionner -v
+  salt -L myminion1,myminion2 state.sls shinken.reactionner -v
 
 Arbiter: The arbiter daemon reads the configuration, divides it into parts (N
 schedulers = N parts), and distributes them to the appropriate Shinken
 daemons::
 
-  salt 'q-shinken-*' state.sls shinken.arbiter -v
+  salt -L myminion1,myminion2 state.sls shinken.arbiter -v
 
 then check the log of each part in the `/var/log/shinken` to make sure that
 everything is working fine.
@@ -161,8 +161,8 @@ am seeing 2 CRITICAL services on the `q-shinken-1`:
 To make these errors go away, you have to install NRPE checks for `apt` and
 `statsd`::
 
-  salt 'q-shinken-*' state.sls apt.nrpe -v
-  salt 'q-shinken-*' state.sls statsd.nrpe -v
+  salt -L myminion1,myminion2 state.sls apt.nrpe -v
+  salt -L myminion1,myminion2 state.sls statsd.nrpe -v
 
 then on the Web UI:
 * click on the service

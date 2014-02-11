@@ -62,6 +62,6 @@ Don't forget to update the `top.sls` file to include this role::
 
 Run the following command to install Jenkins on the same machine that is running Salt master::
 
-  salt -t 6000 q-configs state.sls salt.ci -v
+  salt -t 6000 myminion state.sls salt.ci -v
 
 If there is no "Failed", access to the web interface and follow the instruction in the `jenkins.rst` to configure and run a testing job.

@@ -44,20 +44,20 @@ Installation
 
 I am going to install on the same machine that is running Salt::
 
-  salt q-configs state.sls salt.archive -v
+  salt myminion state.sls salt.archive -v
 
 This only create the `salt_archive` user and the directory
 (`/var/lib/salt_archive/`) to hold the data. 
 
 To start syncing, run the following command::
 
-  salt q-configs state.sls salt.archive.server -v
+  salt myminion state.sls salt.archive.server -v
 
 After that, you can access to the `web <http://q-archive.robotinfra.com>`_ to see all the packages that was synced.
 
 To add a "file age" check to the Nagios::
 
-  salt q-configs state.sls salt.archive.server.nrpe -v
+  salt myminion state.sls salt.archive.server.nrpe -v
 
 An example when running from the command line::
 

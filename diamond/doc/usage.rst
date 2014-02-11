@@ -44,7 +44,7 @@ that is running ElasticSearch and send to Graphite.
 
 Install Diamond on the ElasticSearch server by running::
 
-  salt q-elasticsearch-1 state.sls diamond -v
+  salt myminion state.sls diamond -v
 
 Make sure that Diamond connected to the Graphite::
 

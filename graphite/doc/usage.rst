@@ -15,7 +15,7 @@ from the agents and make that data available for real-time graphing.
 
 You can install by running::
 
-  salt q-graphite state.sls carbon -v
+  salt myminion state.sls carbon -v
 
 Read more: http://graphite.readthedocs.org/en/latest/feeding-carbon.html
 
@@ -24,7 +24,7 @@ Graphite
 
 Run the following command on the Salt master to install Graphite::
 
-  salt q-graphite state.sls graphite -v
+  salt myminion state.sls graphite -v
 
 Diamond
 -------
@@ -33,7 +33,7 @@ Graphite only store time-series data and render graphs, it does not collect data
 
 For simplicity, I am going to install Diamond on the same machine that is running Graphite::
 
-  salt q-graphite state.sls diamond -v
+  salt myminion state.sls diamond -v
 
 Check the `netstat` output to make sure that Diamond connected to the carbon-relay::
 

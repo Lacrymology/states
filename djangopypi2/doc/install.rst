@@ -57,41 +57,14 @@ Follow the steps in the file `doc/pillar.rst` to create the pillar data for Djan
 
 Push it to the `salt-pillars` repository and verify by running::
 
-  salt q-pip pillar.items
+  salt myminion pillar.items
 
 Installation
 ------------
 
 Run the following command on the Salt master::
 
-  salt q-pip state.sls djangopypi2 -v
-
-Have a look at the log file on the minion, if you see something like this::
-
-  Executing command '/usr/local/djangopypi2/bin/django-admin.py loaddata
-  --settings=djangopypi2.website.settings --initial' in directory '/root'
-  output: Usage: /usr/local/djangopypi2/bin/django-admin.py loaddata [options]
-  fixture [fixture ...]
-  /usr/local/djangopypi2/bin/django-admin.py: error: no such option: --initial
-
-it means that the module `djangomod.py` is parsing the options incorrectly.
-
-Do the following steps as a workaround:
-
-- copy the above module to the folder `_modules`
-- remove the double dash before the options when calling `loaddata`::
-
-  49,52c49
-  <         if command == "loaddata":
-  <             cmd = '{0} {1}'.format(cmd, arg)
-  <         else:
-  <             cmd = '{0} --{1}'.format(cmd, arg)
-  ---
-  >         cmd = '{0} --{1}'.format(cmd, arg)
-
-- sync to the minion by executing::
-
-  salt q-pip saltutil.sync_modules
+  salt myminion state.sls djangopypi2 -v
 
 Usage
 -----

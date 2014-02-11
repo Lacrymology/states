@@ -42,7 +42,7 @@ Sentry
 From the Salt master, you can install `Sentry` on the target minion by
 running::
 
-  salt q-alerts state.sls sentry
+  salt myminion state.sls sentry
 
 Don't surprise if you see this command returns nothing because it may take a
 few (ten) minutes to execute. Let's check all actively running jobs::
@@ -52,13 +52,13 @@ few (ten) minutes to execute. Let's check all actively running jobs::
 you will see something like this::
 
   '20131212061915418364':
-  Arguments:
-  - sentry
-  Function: state.sls
-  Start Time: 2013, Dec 12 06:19:15.418364
-  Target: q-alerts
-  Target-type: glob
-  User: root
+    Arguments:
+    - sentry
+    Function: state.sls
+    Start Time: 2013, Dec 12 06:19:15.418364
+    Target: q-alerts
+    Target-type: glob
+    User: root
 
 then display the return data::
   

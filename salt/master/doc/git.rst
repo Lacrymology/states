@@ -79,7 +79,7 @@ In the above example, we are going to setup 3 repositories:
 
 from the Salt master, run the following command::
 
-  salt q-git state.sls git.server
+  salt myminion state.sls git.server
 
 After the installation is finished, you will see the following in the
 `/var/lib/git-server`::

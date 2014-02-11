@@ -45,10 +45,10 @@ Installing
 
 After installing the Salt minion, from the Salt master you can run::
   
-  salt q-graphite state.sls denyhosts -v
+  salt myminion state.sls denyhosts -v
 
 If you want to gather metrics and send to the Graphite::
   
-  salt q-graphite state.sls denyhosts.diamond -v
+  salt myminion state.sls denyhosts.diamond -v
 
 

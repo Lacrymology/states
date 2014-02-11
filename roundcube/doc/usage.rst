@@ -42,17 +42,17 @@ pillar data for OpenLDAP, for e.g::
     rootdn: cn=admin,dc=robotinfra,dc=com
     rootpw: VLgWqk0s
     data:
-      {{ domain_name }}:
+      example.com:
         nam:
-          cn: Nam Pham Thanh
-          sn: Nam
+          cn: Common Name
+          sn: Surname
           passwd: pass
           desc:
-          email: phamthanhnam.ptn@gmail.com
+          email: someone@example.com
 
 then you can install the OpenLDAP by running::
 
-  salt q-mail state.sls openldap -v
+  salt myminion state.sls openldap -v
 
 make sure that you will see the result when doing a `ldapsearch`::
 
@@ -66,11 +66,11 @@ Postfix is mail server as an alternative to the `Sendmail` program.
 Since the `mailname` is already defined in the pillar file `common.sls`::
 
   mail:
-    mailname: {{ grains['id'] }}.{{ domain_name }}
+    mailname: {{ grains['id'] }}.example.com
 
 all you need to do to install Postfix is::
 
-  salt q-mail state.sls postfix -v
+  salt myminion state.sls postfix -v
 
 on the target minion, check to see if postfix is running::
 
@@ -82,7 +82,7 @@ Dovecot
 
 Run the following command to install `Dovecot`::
 
-  salt q-mail state.sls dovecot -v
+  salt myminion state.sls dovecot -v
 
 then you can check the authentication::
 
@@ -101,8 +101,8 @@ Here's an example of pillar data::
 
   roundcube:
     hostnames:
-      - q-mail.{{ domain_name }}
-    ssl: {{ domain_name }}
+      - q-mail.example.com
+    ssl: example.com
     ssl_redirect: True
     workers: 1
     imap:
@@ -110,7 +110,7 @@ Here's an example of pillar data::
 
 push it to the pillar repository, then install by running::
 
-  salt q-mail state.sls roundcube -v
+  salt myminion state.sls roundcube -v
 
 After that, you can access to the web interface (`https://q-mail.robotinfra.com`) and login using the LDAP account (`nam/pass`).
 

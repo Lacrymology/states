@@ -96,7 +96,7 @@ Make sure that it is updated, if not, run the following command::
 
 It's time to install `salt-cloud`::
 
-  salt q-configs state.sls salt.cloud -v
+  salt myminion state.sls salt.cloud -v
 
 The profile can be realized now with a salt command::
 
@@ -114,6 +114,6 @@ If everything is OK, you will see something like this::
 Once the instance has been created with salt-minion installed, connectivity to
 it can be verified with Salt::
 
-  # salt q-ci test.ping
+  # salt myminion test.ping
   q-ci:
       True

@@ -36,7 +36,7 @@ Elasticsearch
 Follow the instruction in the minion_installation.rst to install the minions.
 Then from the Salt master, you can install Elasticsearch cluster by running::
 
-  salt 'q-elasticsearch-*' state.sls elasticsearch
+  salt -L myminion1,myminion2 state.sls elasticsearch
 
 Start the first instance, you should see something along the lines of::
 
@@ -68,7 +68,7 @@ Graylog2 server
 
 Run the following command on the Salt master to install Graylog2 server::
 
-  salt q-graylog2 state.sls graylog2.server
+  salt myminion state.sls graylog2.server
 
 Check the log on the Elasticsearch nodes to make sure that the graylog2-server
 was discovered::
@@ -94,7 +94,7 @@ Graylog2 web interface
 
 Install Graylog2 web interface by running::
 
-  salt q-graylog2 state.sls graylog2.web
+  salt myminion state.sls graylog2.web
 
 If everything is OK, now you can access to the web interface via the URL that
 is configured in the web server (for e.g: q-logs.robotinfra.com). 

@@ -12,4 +12,6 @@ run::
 
   ./doc/build.sh path_to_output_dir
 
+Use ``../salt-common-doc`` if ``path_to_output_dir`` is not specified.
+
 You can access index by ``path_to_output_dir/doc/index.html``

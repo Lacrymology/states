@@ -261,7 +261,6 @@ gitlab:
       web_dir: {{ web_dir }}
     - require:
       - cmd: gitlab
-      - cmd: gitlab_start_sidekiq_service
       - cmd: gitlab_precompile_assets
       - service: uwsgi_emperor
       - file: gitlab_upstart

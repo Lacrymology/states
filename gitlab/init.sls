@@ -145,6 +145,16 @@ install_gitlab_shell:
       - file: {{ shell_dir }}/config.yml
       - archive: gitlab-shell
 
+gitlab_shell_logfile:
+  file:
+    - managed
+    - name: {{ shell_dir }}/gitlab-shell.log
+    - mode: 660
+    - user: {{ user }}
+    - group: {{ user }}
+    - require:
+      - file: gitlab-shell
+
 {{ shell_dir }}/config.yml:
   file:
     - managed

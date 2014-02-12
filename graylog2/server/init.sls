@@ -37,6 +37,7 @@ include:
 {% endif %}
   - graylog2
   - local
+  - rsyslog
 
 {# TODO: set Email output plugin settings straight into MongoDB from salt #}
 
@@ -134,6 +135,18 @@ graylog2-server:
       - service: mongodb
       - file: {{ server_root_dir }}
       - file: /var/run/graylog2
+
+graylog2_rsyslog_config:
+  file:
+    - managed
+    - mode: 644
+    - source: salt://graylog2/server/rsyslog.jinja2
+    - name: /etc/rsyslog.d/graylog2-server.conf
+    - template: jinja
+    - require:
+      - pkg: rsyslog
+    - watch_in:
+      - service: rsyslog
 
 {{ server_root_dir }}:
   file:

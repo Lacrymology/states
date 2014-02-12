@@ -32,6 +32,7 @@ include:
   - elasticsearch.nrpe
   - mongodb.nrpe
   - nrpe
+  - rsyslog.nrpe
 
 {% set version = '0.11.0' %}
 

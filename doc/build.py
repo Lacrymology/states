@@ -1,7 +1,4 @@
-#!/bin/bash
-# {{ pillar['message_do_not_modify'] }}
-set -e
-
+#!/usr/bin/env python
 # Copyright (c) 2014, Hung Nguyen Viet
 # All rights reserved.
 #
@@ -27,11 +24,45 @@ set -e
 #
 # Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 # Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
-
+#
 # Script for building salt common documentation.
 
-if [ -z $1 ]; then
-    sphinx-build -W -c doc . ../salt-common-doc
-else
-    sphinx-build -W -c doc . $1
-fi
+import os
+import sys
+
+my_dir = os.path.dirname(os.path.abspath(__file__))
+root_dir = os.path.abspath(os.path.join(my_dir, '..'))
+default_directory = os.path.abspath(os.path.join(root_dir, '..', 'salt-doc'))
+
+if len(sys.argv) > 2:
+    print "Invalid argument."
+    print "%s [output-directory]"
+    print "Default directory: %s" % default_directory
+    sys.exit(1)
+
+# check if it's a valid virtualenv path
+virtualenv_key = 'VIRTUAL_ENV'
+if virtualenv_key not in os.environ:
+    print "Please use a Python VirtualEnv"
+    sys.exit(1)
+virtual_env = os.path.abspath(os.environ[virtualenv_key])
+if virtual_env.startswith(root_dir):
+    print "Please don't use a Python VirtualEnv inside %s" % root_dir
+    sys.exit(1)
+
+# replace argv to pass to sphinx-build
+try:
+    output_dir = sys.argv[1]
+    if output_dir.startswith(root_dir):
+        print "Please specify an output directory outside %s" % root_dir
+        sys.exit(1)
+except IndexError:
+    output_dir = default_directory
+
+os.chdir(root_dir)
+sys.argv[1:] = ['-c', 'doc', '-W', '.', output_dir]
+
+from pkg_resources import load_entry_point
+sys.exit(
+    load_entry_point('Sphinx', 'console_scripts', 'sphinx-build')()
+)

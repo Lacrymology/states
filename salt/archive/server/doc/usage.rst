@@ -61,10 +61,7 @@ To add a "file age" check to the Nagios::
 
 An example when running from the command line::
 
-  su - nagios -s /bin/sh -c '/usr/lib/nagios/plugins/check_file_age -w 3600 -c
-  3600 /var/cache/salt/master/sync_timestamp.dat'
-  FILE_AGE OK: /var/cache/salt/master/sync_timestamp.dat is 516 seconds old and
-  0 bytes
+  salt-call nrpe.run_check salt_archive_timestamp
 
 Usage
 -----

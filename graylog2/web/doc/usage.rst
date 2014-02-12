@@ -83,11 +83,7 @@ was discovered::
 
 Verify your cluster is operational::
 
-  curl -XGET 'http://localhost:9200/_cluster/nodes?pretty=true'
-
-You can also check the health of a cluster by running::
-
-  curl -XGET 'http://localhost:9200/_cluster/health?pretty=true'
+  salt-call nrpe.run_check graylog2_elasticsearch_cluster
 
 Graylog2 web interface
 ----------------------

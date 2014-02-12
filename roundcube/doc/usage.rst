@@ -74,8 +74,7 @@ all you need to do to install Postfix is::
 
 on the target minion, check to see if postfix is running::
 
-  # postfix status
-  postfix/postfix-script: the Postfix mail system is running: PID: 13244
+  salt-call nrpe.run_check postfix_master
 
 Dovecot
 -------
@@ -86,13 +85,7 @@ Run the following command to install `Dovecot`::
 
 then you can check the authentication::
 
-  # telnet localhost 143
-  Trying 127.0.0.1...
-  Connected to localhost.
-  Escape character is '^]'.
-  * OK [CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE IDLE STARTTLS AUTH=PLAIN] Dovecot ready.
-  a login "nam" "pass"
-  a OK [CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE IDLE SORT SORT=DISPLAY THREAD=REFERENCES THREAD=REFS MULTIAPPEND UNSELECT CHILDREN NAMESPACE UIDPLUS LIST-EXTENDED I18NLEVEL=1 CONDSTORE QRESYNC ESEARCH ESORT SEARCHRES WITHIN CONTEXT=SEARCH LIST-STATUS] Logged in
+  salt-call nrpe.run_check dovecot_login
 
 Roundcube
 ---------

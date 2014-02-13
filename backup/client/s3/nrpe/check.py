@@ -53,18 +53,15 @@ class BackupFile(nagiosplugin.Resource):
     def probe(self):
         files = self.get_manifest()
 
-        if self.facility not in files:
-            return [nagiosplugin.Metric('exists', False)]
+        file = files.get(self.facility, {
+            'date': datetime.datetime.fromtimestamp(0),
+            'size': 0,
+        })
 
-        ret = [nagiosplugin.Metric('exists', True)]
-
-
-        file = files[self.facility]
-        ret.append(nagiosplugin.Metric(('age', datetime.datetime.now() - file['date']).hours(), min=0))
-
-        ret.append(nagiosplugin.Metric('size', file['size'], min=0))
-
-        return ret
+        return [
+            nagiosplugin.Metric(('age', datetime.datetime.now() - file['date']).hours(), min=0),
+            nagiosplugin.Metric('size', file['size'], min=0),
+            ]
 
     def get_manifest(self):
         if not os.path.exists(self.manifest):

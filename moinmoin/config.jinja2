@@ -87,10 +87,10 @@ class Config(multiconfig.DefaultConfig):
 
     # Where your own wiki pages are (make regular backups of this directory):
     # data_dir = os.path.join(instance_dir, 'data', '') # path with trailing /
-    data_dir = '/var/lib/deployments/moinmoin/'
+    data_dir = '/var/lib/deployments/moinmoin/data'
 
     # Where system and help pages are (you may exclude this from backup):
-    data_underlay_dir = os.path.join(instance_dir, 'underlay', '') # path with trailing /
+    data_underlay_dir = '/var/lib/deployments/moinmoin/underlay'
 
     # The URL prefix we use to access the static stuff (img, css, js).
     # Note: moin runs a static file server at url_prefix_static path (relative

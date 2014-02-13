@@ -103,13 +103,22 @@ moinmoin:
       - file: moinmoin_config
       - file: {{ root_dir }}/share/moin
       - file: {{ root_dir }}/share/moin/moin.wsgi
-      - file: /var/lib/deployments/moinmoin
       - user: web
     - watch:
       - file: moinmoin
       - file: moinmoin_config
       - file: {{ root_dir }}/share/moin
       - file: {{ root_dir }}/share/moin/moin.wsgi
+
+{{ root_dir }}/share:
+  file:
+    - directory
+    - user: root
+    - group: www-data
+    - mode: 550
+    - require:
+      - cmd: moinmoin
+      - user: web
 
 {{ root_dir }}/share/moin:
   file:
@@ -120,10 +129,8 @@ moinmoin:
     - recurse:
       - user
       - group
-      - mode
     - require:
-      - cmd: moinmoin
-      - user: web
+      - file: {{ root_dir }}/share
 
 {{ root_dir }}/share/moin/moin.wsgi:
   file:
@@ -168,36 +175,75 @@ moinmoin_config:
 /var/lib/deployments:
   file:
     - directory
-    - user: www-data
-    - group: www-data
+    - user: root
+    - group: root
     - mode: 555
     - makedirs: True
-    - require:
-      - user: web
-
-moinmoin_move_data_to_right_place:
-  cmd:
-    - wait
-    - name: mv /usr/local/moinmoin/share/moin/data /var/lib/deployments/moinmoin
-    - watch:
-      - module: moinmoin
-    - require:
-      - file: /var/lib/deployments
 
 /var/lib/deployments/moinmoin:
   file:
     - directory
     - user: www-data
     - group: www-data
+    - mode: 550
+    - require:
+      - user: web
+      - file: /var/lib/deployments
+
+/var/lib/deployments/moinmoin/data:
+  file:
+    - directory
+    - user: www-data
+    - group: www-data
     - mode: 770
-    - makedirs: True
     - recurse:
       - user
       - group
-      - mode
     - require:
-      - user: web
-      - cmd: moinmoin_move_data_to_right_place
+      - module: /var/lib/deployments/moinmoin/data
+    - require_in:
+      - uwsgi: moinmoin
+  module:
+    - wait
+    - name: file.rename
+    - src: /usr/local/moinmoin/share/moin/data
+    - dst: /var/lib/deployments/moinmoin/data
+    - watch:
+      - module: moinmoin
+    - require:
+      - file: /var/lib/deployments/moinmoin
+
+/var/lib/deployments/moinmoin/underlay:
+  file:
+    - directory
+    - user: www-data
+    - group: www-data
+    - mode: 550
+    - require:
+      - file: /var/lib/deployments/moinmoin
+
+/var/lib/deployments/moinmoin/underlay/pages:
+  file:
+    - directory
+    - user: www-data
+    - group: www-data
+    - mode: 770
+    - require:
+      - module: /var/lib/deployments/moinmoin/underlay/pages
+    - recurse:
+      - user
+      - group
+    - require_in:
+      - uwsgi: moinmoin
+  module:
+    - wait
+    - name: file.rename
+    - src: /usr/local/moinmoin/share/moin/underlay/pages
+    - dst: /var/lib/deployments/moinmoin/underlay/pages
+    - watch:
+      - module: moinmoin
+    - require:
+      - file: /var/lib/deployments/moinmoin/underlay
 
 extend:
   nginx:

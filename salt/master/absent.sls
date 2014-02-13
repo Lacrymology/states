@@ -30,11 +30,6 @@ Uninstall a Salt Management Master (server).
 include:
   - salt.api.absent
 
-salt-master-requirements:
-  file:
-    - absent
-    - name: {{ opts['cachedir'] }}/salt-master-requirements.txt
-
 salt-master:
   service:
     - dead

@@ -32,7 +32,7 @@ include:
 uwsgitop:
   file:
     - managed
-    - name: {{ opts['cachedir'] }}/salt-uwsgitop-requirements.txt
+    - name: {{ opts['cachedir'] }}/pip/uwsgi.top
     - source: salt://uwsgi/top/requirements.jinja2
     - template: jinja
     - user: root
@@ -43,6 +43,6 @@ uwsgitop:
   module:
     - wait
     - name: pip.install
-    - requirements: {{ opts['cachedir'] }}/salt-uwsgitop-requirements.txt
+    - requirements: {{ opts['cachedir'] }}/pip/uwsgi.top
     - watch:
       - file: uwsgitop

@@ -31,3 +31,4 @@ Remove Nagios NRPE check for Dovecot.
 {{ file }}:
   file:
     - absent
+{% endfor %}

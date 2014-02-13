@@ -38,71 +38,94 @@ import datetime
 import os
 import pickle
 import re
-import sys
+import nagiosplugin
 
-def make_file(filename, size):
-    match = re.match(r'%s(?P<facility>.+)-(?P<date>[0-9\-_]{19}).tar.xz' % BUCKET_PREFIX, filename)
-    if match:
-        match = match.groupdict()
-        name = match['facility']
-        date = datetime.datetime.strptime(match['date'], "%Y-%m-%d-%H_%M_%S")
+class BackupFile(nagiosplugin.Resource):
+    def __init__(self, facility, manifest, age, key, secret, bucket, prefix):
+        self.facility = facility
+        self.manifest = manifest
+        self.key = key
+        self.secret = secret
+        self.bucket = bucket
+        self.prefix = prefix
+        self.age = age
 
-        return {
-            name: {
-                'name': filename,
-                'size': size,
-                'date': date,
-                },
-            }
+    def probe(self):
+        files = self.get_manifest()
 
-    return {}
+        if self.facility not in files:
+            return [nagiosplugin.Metric('exists', False)]
 
-######################################
-# this section is s3-dependant
-def create_manifest(path):
-    import boto
-    s3 = boto.connect_s3(KEY, SECRET)
+        ret = [nagiosplugin.Metric('exists', True)]
 
-    # with bucket validation
-    bucket = s3.get_bucket(BUCKET,
-    # # without bucket validation
-    #                        validate=False,
-    )
 
-    files = {}
+        file = files[self.facility]
+        ret.append(nagiosplugin.Metric(('age', datetime.datetime.now() - file['date']).hours(), min=0))
 
-    for key in bucket.list(prefix=BUCKET_PREFIX):
-        file = make_file(filename=key.name,
-                         size=key.size,)
-        # I expect file to have one and only one element
-        if file:
-            key, value = file.items()[0]
-            # update this if it's the first time this appears, or if the date
-            # is newer
-            if (not key in files) or (value['date'] > files[key]['date']):
-                files.update(file)
+        ret.append(nagiosplugin.Metric('size', file['size'], min=0))
 
-    pickle.dump(files, open(path, 'wb+'))
-    return files
-# end of s3-dependant section
-#########################################
+        return ret
 
-def get_manifest(path):
-    if not os.path.exists(path):
-        return create_manifest(path)
+    def get_manifest(self):
+        if not os.path.exists(self.manifest):
+            return self.create_manifest()
 
-    stat = os.stat(path)
-    time = datetime.datetime.fromtimestamp(stat.st_mtime)
-    now = datetime.datetime.now()
+        stat = os.stat(self.manifest)
+        time = datetime.datetime.fromtimestamp(stat.st_mtime)
+        now = datetime.datetime.now()
 
-    # check that it's 48 hours or younger
-    if ((now - time).total_seconds() / (60 * 60)) >= 48:
-        manifest = create_manifest(path)
-    else:
-        manifest = pickle.load(open(path, 'rb'))
+        # check that it's 48 hours or younger
+        if ((now - time).total_seconds() / (60 * 60)) >= 48:
+            return self.create_manifest()
+        else:
+            return pickle.load(open(self.manifest, 'rb'))
 
-    return manifest
+    def create_manifest(self):
+        """
+        Creates the manifest file from the s3 bucket. This is the only part of
+        this class that is s3-dependant
+        """
+        import boto
+        s3 = boto.connect_s3(self.key, self.secret)
 
+        # with bucket validation
+        bucket = s3.get_bucket(self.bucket,
+        # # without bucket validation, which is faster and cheaper, but can
+        # # cause unexpected errors later
+        #                        validate=False,
+        )
+
+        files = {}
+
+        for key in bucket.list(prefix=self.prefix):
+            file = self.make_file(key)
+            # I expect file to have one and only one element
+            if file:
+                key, value = file.items()[0]
+                # update this if it's the first time this appears, or if the date
+                # is newer
+                if (not key in files) or (value['date'] > files[key]['date']):
+                    files.update(file)
+
+        pickle.dump(files, open(self.manifest, 'wb+'))
+        return files
+
+    def make_file(self, key):
+        match = re.match(r'%s(?P<facility>.+)-(?P<date>[0-9\-_]{19}).tar.xz' % self.prefix, key.filename)
+        if match:
+            match = match.groupdict()
+            name = match['facility']
+            date = datetime.datetime.strptime(match['date'], "%Y-%m-%d-%H_%M_%S")
+
+            return {
+                name: {
+                    'name': key.filename,
+                    'size': key.size,
+                    'date': date,
+                    },
+                }
+
+        return {}
 
 @nagiosplugin.guarded
 def main():

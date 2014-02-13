@@ -139,14 +139,19 @@ graylog2-server:
 graylog2_rsyslog_config:
   file:
     - managed
-    - mode: 644
-    - source: salt://graylog2/server/rsyslog.jinja2
+    - mode: 640
+    - source: salt://rsyslog/template.jinja2
     - name: /etc/rsyslog.d/graylog2-server.conf
     - template: jinja
     - require:
       - pkg: rsyslog
     - watch_in:
       - service: rsyslog
+    - context:
+      file_path: /var/log/graylog2/server.fifo
+      tag_name: graylog2-server
+      severity: info
+      facility: local7
 
 {{ server_root_dir }}:
   file:
@@ -211,4 +216,3 @@ graylog2_sentry_transport_plugin:
     - user: {{ user }}
     - group: {{ user }}
     - mode: 440
-

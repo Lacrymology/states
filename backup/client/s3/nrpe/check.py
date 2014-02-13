@@ -129,7 +129,7 @@ def main():
     argp = argparse.ArgumentParser(description=__doc__,
                                    formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     argp.add_argument('facility', help='facility name to check backups for')
-    argp.add_argument('-w', '--warning', metavar='HOURS', default='48', type=int,
+    argp.add_argument('-w', '--warning', metavar='HOURS', default='48',
                       help='Emit a warning if a backup file is older than HOURS')
     argp.add_argument('-k', '--key', help='s3 key', required=True)
     argp.add_argument('-s', '--secret', help='s3 secret', required=True)
@@ -139,6 +139,7 @@ def main():
     argp.add_argument('-m', '--manifest',
                       help='s3 backup files manifest location',
                       default='/tmp/s3.backup.manifest.pickle')
+    argp.add_argument('-v', '--verbose', action='count', default=0)
 
     args = argp.parse_args()
 

@@ -28,6 +28,11 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 Uninstall uWSGI top.
 -#}
 
+uwsgitop:
+  file:
+    - absent
+    - name: {{ opts['cachedir'] }}/salt-uwsgitop-requirements.txt
+
 {#
 {% if salt['cmd.has_exec']('pip') %}
 uwsgitop:

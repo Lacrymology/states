@@ -32,3 +32,7 @@ backup-elasticsearch:
   file:
     - absent
     - name: /etc/cron.daily/backup-elasticsearch
+
+{{ opts['cachedir'] }}/esclient-requirements.txt:
+  file:
+    - absent

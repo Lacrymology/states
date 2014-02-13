@@ -45,6 +45,7 @@ include:
 {{ redis_dir }}/debian:
   file:
     - directory
+    - mode: 750
     - makedirs: True
 
 {%- for filename in filenames %}
@@ -53,6 +54,7 @@ include:
     - managed
     - source: salt://bbb/redis/{{ filename }}.jinja2
     - template: jinja
+    - mode: 640
     - context:
       package_name: redis-server-{{ version }}
       version: {{ version }}

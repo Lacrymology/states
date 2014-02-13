@@ -32,8 +32,8 @@ pattern = ^{{ grains['id']}}\.carbon\.
 retentions = 60:90d
 
 {%- for name in pillar['graphite']['retentions']|default([]) %}
+
 [{{ name }}]
 pattern = {{ pillar['graphite']['retentions'][name]['pattern'] }}
 retentions = {{ pillar['graphite']['retentions'][name]['retentions'] }}
-
 {% endfor -%}

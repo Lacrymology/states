@@ -59,7 +59,7 @@ class BackupFile(nagiosplugin.Resource):
         })
 
         return [
-            nagiosplugin.Metric(('age', datetime.datetime.now() - file['date']).hours(), min=0),
+            nagiosplugin.Metric('age', (datetime.datetime.now() - file['date']).total_seconds() / (60*60), min=0),
             nagiosplugin.Metric('size', file['size'], min=0),
             ]
 
@@ -71,8 +71,8 @@ class BackupFile(nagiosplugin.Resource):
         time = datetime.datetime.fromtimestamp(stat.st_mtime)
         now = datetime.datetime.now()
 
-        # check that it's 48 hours or younger
-        if ((now - time).total_seconds() / (60 * 60)) >= 48:
+        # check that it's self.age hours or younger
+        if ((now - time).total_seconds() / (60 * 60)) >= self.age:
             return self.create_manifest()
         else:
             return pickle.load(open(self.manifest, 'rb'))
@@ -108,7 +108,7 @@ class BackupFile(nagiosplugin.Resource):
         return files
 
     def make_file(self, key):
-        match = re.match(r'%s(?P<facility>.+)-(?P<date>[0-9\-_]{19}).tar.xz' % self.prefix, key.filename)
+        match = re.match(r'%s(?P<facility>.+)-(?P<date>[0-9\-_]{19}).tar.xz' % self.prefix, key.name)
         if match:
             match = match.groupdict()
             name = match['facility']
@@ -116,7 +116,7 @@ class BackupFile(nagiosplugin.Resource):
 
             return {
                 name: {
-                    'name': key.filename,
+                    'name': key.name,
                     'size': key.size,
                     'date': date,
                     },
@@ -145,7 +145,7 @@ def main():
     check = nagiosplugin.Check(
         BackupFile(args.facility,
                    args.manifest,
-                   args.warning,
+                   int(args.warning),
                    args.key,
                    args.secret,
                    args.bucket,
@@ -153,7 +153,7 @@ def main():
         nagiosplugin.ScalarContext('age', args.warning, args.warning),
         nagiosplugin.ScalarContext('size', "1:", "1:"),
     )
-    check.main(args.verbose)
+    check.main(args.verbose, timeout=None)
 
 if __name__ == '__main__':
     main()

@@ -29,6 +29,7 @@ Install a graylog2 web Nagios NRPE checks.
 -#}
 include:
   - build.nrpe
+  - logrotate.nrpe
   - mongodb.nrpe
   - nginx.nrpe
   - nrpe

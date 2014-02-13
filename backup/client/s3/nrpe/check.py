@@ -142,6 +142,18 @@ def main():
     argp.add_argument('-v', '--verbose', action='count', default=0)
 
     args = argp.parse_args()
+    check = nagiosplugin.Check(
+        BackupFile(args.facility,
+                   args.manifest,
+                   args.warning,
+                   args.key,
+                   args.secret,
+                   args.bucket,
+                   args.prefix),
+        nagiosplugin.ScalarContext('age', args.warning, args.warning),
+        nagiosplugin.ScalarContext('size', "1:", "1:"),
+    )
+    check.main(args.verbose)
 
 if __name__ == '__main__':
     main()

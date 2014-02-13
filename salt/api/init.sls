@@ -162,7 +162,7 @@ salt-api:
 {%- if 'files_archive' in pillar %}
       - salt-api: {{ pillar['files_archive']|replace('file://', '')|replace('https://', 'http://') }}/mirror/salt/{{ api_path }}
 {%- else %}
-      - salt-api: http://archive.bit-flippers.com/mirror/salt/{{ api_path }}
+      - salt-api: http://archive.robotinfra.com/mirror/salt/{{ api_path }}
 {%- endif %}
     - require:
       - pkg: salt-master

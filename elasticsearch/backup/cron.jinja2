@@ -32,5 +32,5 @@ set -e
 NOW=`date '+%Y-%m-%d-%H_%M_%S'`
 OUTPUT="/tmp/elasticsearch-$NOW.xz"
 
-esdump --url http://localhost:9200/ | xz > $OUTPUT
+/usr/local/bin/esdump --url http://localhost:9200/ | xz > $OUTPUT
 /usr/local/bin/backup-store $OUTPUT

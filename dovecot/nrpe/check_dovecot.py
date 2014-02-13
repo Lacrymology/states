@@ -1,5 +1,8 @@
-{#-
-Copyright (c) 2013, Hung Nguyen Viet
+#!/usr/local/nagios/bin/python
+# -*- coding: utf-8 -*-
+
+"""
+Copyright (c) 2013, Quan Tong Anh
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,40 +25,43 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
-Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
+Nagios plugin to check that Dovecot is allowing logins.
+"""
 
-Nagios NRPE check for Dovecot.
--#}
-include:
-  - apt.nrpe
-  - nrpe
-  - postfix.nrpe
+__author__ = 'Quan Tong Anh'
+__maintainer__ = 'Quan Tong Anh'
+__email__ = 'tonganhquan.net@gmail.com'
 
-/etc/nagios/nrpe.d/dovecot.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://dovecot/nrpe/config.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-      - file: /usr/lib/nagios/plugins/check_dovecot.py
+import telnetlib
+import argparse
+import time
 
-extend:
-  nagios-nrpe-server:
-    service:
-      - watch:
-        - file: /etc/nagios/nrpe.d/dovecot.cfg
 
-/usr/lib/nagios/plugins/check_dovecot.py:
-  file:
-    - managed
-    - source: salt://dovecot/nrpe/check_dovecot.py
-    - user: nagios
-    - group: nagios
-    - mode: 550
-    - require:
-      - pkg: nagios-nrpe-server
+def main():
+    argp = argparse.ArgumentParser(description=__doc__)
+    argp.add_argument('-u', '--username', metavar='VALUE')
+    argp.add_argument('-p', '--password', metavar='VALUE')
+    args = argp.parse_args()
+
+    username = args.username
+    password = args.password
+
+    tn = telnetlib.Telnet("localhost", 143)
+    tn.read_until("Dovecot ready.")
+    time.sleep(1)
+    tn.write('a login "{0}" "{1}" \r\n'.format(username, password))
+    time.sleep(2)
+
+    data = tn.read_very_eager()
+    tn.close()
+
+    if 'Logged in' in data:
+        print ('OK - {0}'.format(data))
+	raise SystemExit(0)
+    else:
+        print ('CRITICAL - {0}'.format(data))
+        raise SystemExit(2)
+
+
+if __name__ == "__main__":
+    main()

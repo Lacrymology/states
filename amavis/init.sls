@@ -53,6 +53,7 @@ amavis:
     - managed
     - source: salt://amavis/{{ cfg }}.jinja2
     - template: jinja
+    - mode: 440
     - watch_in:
       - service: amavis
 {% endfor %}

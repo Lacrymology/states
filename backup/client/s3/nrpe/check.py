@@ -139,6 +139,7 @@ def main():
     argp.add_argument('-m', '--manifest',
                       help='s3 backup files manifest location',
                       default='/tmp/s3.backup.manifest.pickle')
+    argp.add_argument('--timeout', default=None)
     argp.add_argument('-v', '--verbose', action='count', default=0)
 
     args = argp.parse_args()
@@ -153,7 +154,7 @@ def main():
         nagiosplugin.ScalarContext('age', args.warning, args.warning),
         nagiosplugin.ScalarContext('size', "1:", "1:"),
     )
-    check.main(args.verbose, timeout=None)
+    check.main(args.verbose, timeout=args.timeout)
 
 if __name__ == '__main__':
     main()

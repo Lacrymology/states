@@ -139,7 +139,7 @@ graylog2-server:
 graylog2_rsyslog_config:
   file:
     - managed
-    - mode: 640
+    - mode: 440
     - source: salt://rsyslog/template.jinja2
     - name: /etc/rsyslog.d/graylog2-server.conf
     - template: jinja

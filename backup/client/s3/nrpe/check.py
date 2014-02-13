@@ -33,17 +33,12 @@ __author__ = 'Tomas Neme'
 __maintainer__ = 'Tomas Neme'
 __email__ = 'lacrymology@gmail.com'
 
-import os
+import argparse
 import datetime
+import os
 import pickle
 import re
 import sys
-
-
-KEY = "FOOBAR"
-SECRET = "BARFOO"
-BUCKET = 'my-bucket'
-BUCKET_PREFIX = 'my/key/prefix'
 
 def make_file(filename, size):
     match = re.match(r'%s(?P<facility>.+)-(?P<date>[0-9\-_]{19}).tar.xz' % BUCKET_PREFIX, filename)
@@ -108,24 +103,24 @@ def get_manifest(path):
 
     return manifest
 
-def main(facility=None):
-    files = get_manifest("/tmp/s3-backups.pickle")
-    if facility not in files:
-        print "facility %s backup not found" % facility
-        sys.exit(1)
 
-    file = files[facility]
-    oldest = datetime.datetime.now() - datetime.timedelta(hours=48)
-    if file['date'] < oldest:
-        print "file %s has a filename date more than %d hours old" % (file['name'], 48)
-        sys.exit(1)
+@nagiosplugin.guarded
+def main():
+    argp = argparse.ArgumentParser(description=__doc__,
+                                   formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    argp.add_argument('facility', help='facility name to check backups for')
+    argp.add_argument('-w', '--warning', metavar='HOURS', default='48', type=int,
+                      help='Emit a warning if a backup file is older than HOURS')
+    argp.add_argument('-k', '--key', help='s3 key', required=True)
+    argp.add_argument('-s', '--secret', help='s3 secret', required=True)
+    argp.add_argument('-b', '--bucket', help='s3 bucket name', required=True)
+    argp.add_argument('-p', '--prefix', help='s3 key name prefix (directory)',
+                      default='')
+    argp.add_argument('-m', '--manifest',
+                      help='s3 backup files manifest location',
+                      default='/tmp/s3.backup.manifest.pickle')
 
-    if not file['size']:
-        print "filesize of %s is 0" % (file['name'])
-        sys.exit(1)
-
-    print "%s backup OK. Backup date: %s, file size: %d" % (facility, file['date'].strftime("%Y-%m-%d@%H:%M:%S"), file['size'])
-    sys.exit(0)
+    args = argp.parse_args()
 
 if __name__ == '__main__':
-    main(sys.argv[1])
+    main()

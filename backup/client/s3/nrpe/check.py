@@ -138,7 +138,7 @@ def main():
                       default='')
     argp.add_argument('-m', '--manifest',
                       help='s3 backup files manifest location',
-                      default='/tmp/s3.backup.manifest.pickle')
+                      default='/var/lib/nagios/s3.backup.manifest.pickle')
     argp.add_argument('--timeout', default=None)
     argp.add_argument('-v', '--verbose', action='count', default=0)
 

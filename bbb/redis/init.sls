@@ -44,7 +44,6 @@ include:
 
 {{ redis_dir }}/debian:
   file:
-    - name:
     - directory
     - makedirs: True
 

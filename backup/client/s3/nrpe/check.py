@@ -39,15 +39,16 @@ import os
 import pickle
 import re
 import nagiosplugin
+from ConfigParser import SafeConfigParser as ConfigParser
 
 class BackupFile(nagiosplugin.Resource):
-    def __init__(self, facility, manifest, age, key, secret, bucket, prefix):
+    def __init__(self, config, facility, manifest, age):
         self.facility = facility
         self.manifest = manifest
-        self.key = key
-        self.secret = secret
-        self.bucket = bucket
-        self.prefix = prefix
+        self.key = config.get('s3','key')
+        self.secret = config.get('s3', 'secret')
+        self.bucket = config.get('s3', 'bucket')
+        self.prefix = config.get('s3', 'path')
         self.age = age
 
     def probe(self):
@@ -131,11 +132,8 @@ def main():
     argp.add_argument('facility', help='facility name to check backups for')
     argp.add_argument('-w', '--warning', metavar='HOURS', default='48',
                       help='Emit a warning if a backup file is older than HOURS')
-    argp.add_argument('-k', '--key', help='s3 key', required=True)
-    argp.add_argument('-s', '--secret', help='s3 secret', required=True)
-    argp.add_argument('-b', '--bucket', help='s3 bucket name', required=True)
-    argp.add_argument('-p', '--prefix', help='s3 key name prefix (directory)',
-                      default='')
+    argp.add_argument('-c', '--config', metavar="PATH",
+                      default='/etc/nagios/backup.conf')
     argp.add_argument('-m', '--manifest',
                       help='s3 backup files manifest location',
                       default='/var/lib/nagios/s3.backup.manifest.pickle')
@@ -143,14 +141,15 @@ def main():
     argp.add_argument('-v', '--verbose', action='count', default=0)
 
     args = argp.parse_args()
+
+    parser = ConfigParser()
+    parser.read(args.config)
+
     check = nagiosplugin.Check(
-        BackupFile(args.facility,
+        BackupFile(parser,
+                   args.facility,
                    args.manifest,
-                   int(args.warning),
-                   args.key,
-                   args.secret,
-                   args.bucket,
-                   args.prefix),
+                   int(args.warning)),
         nagiosplugin.ScalarContext('age', args.warning, args.warning),
         nagiosplugin.ScalarContext('size', "1:", "1:"),
     )

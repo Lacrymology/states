@@ -31,44 +31,33 @@
 How to build a mirror with debmirror
 ====================================
 
-I wrote a simple state at `_states/debmirror.py`. Whenever you want to create a
-local repository, all you have to do is create a `sls` file::
+I wrote a simple macro at `lib.sls`. This macro must be called in the following
+order::
 
-  {%- set version = '0.17.4-1' %}
+  debmirror(arch,
+            section,
+            server,
+            release,
+            in_path,
+            proto,
+            out_path,
+            **kwargs)
 
-  debmirror:
-    pkg:
-      - installed
-  
-  keyring_import:
-    cmd:
-      - run
-      - name: wget -q -O- "http://keyserver.ubuntu.com:11371/pks/lookup?op=get&search=0x4759FA960E27C0A6" | gpg --no-default-keyring --keyring /root/.gnupg/trustedkeys.gpg --import
-      - unless: gpg --no-default-keyring --keyring /root/.gnupg/trustedkeys.gpg --list-keys | grep 0E27C0A6
-  
-  salt:
-    debmirror:
-      - created
-      - arch: i386,amd64
-      - section: main,restricted,universe,multiverse
-      - release: precise
-      - server: ppa.launchpad.net
-      - in_path: /saltstack/salt/ubuntu
-      - proto: http
-      - out_path: //var/lib/salt_archive/mirror/salt/{{ version }}
-      - require:
-        - pkg: debmirror
-        - cmd: keyring_import
+Whenever you want to create a local repository, all you have to do is create a `sls` file::
 
-Don't forget to change the key URL if you want to do for the other.
+  {% set version = '0.17.5-1' %}
+
+  {% from 'lib.sls' import debmirror with context %}
+
+  {{ debmirror('i386,amd64', 'main,restricted,universe,multiverse', 'ppa.launchpad.net', 'precise', '/saltstack/salt/ubuntu', 'http', '/var/lib/salt_archive/mirror/salt/' ~ version, key_url='http://keyserver.ubuntu.com:11371/pks/lookup?op=get&search=0x4759FA960E27C0A6', gnupghome='/home/mirrorkeyring') }}
 
 Then run the following command from the Salt master::
 
-  salt -t 600 minionid state.sls salt.archive.server.mirror
+  salt -t 600 minionid state.sls salt.archive.mirror
 
 It will create the structure like below::
 
-  /var/lib/salt_archive/mirror/salt/0.17.4-1
+  /var/lib/salt_archive/mirror/salt/0.17.5-1
   ├── dists
   │   └── precise
   │       ├── main
@@ -97,14 +86,14 @@ It will create the structure like below::
       └── trace
           └── localhost
   
-  /var/lib/salt_archive/mirror/salt/0.17.4-1/pool/main/s
+  /var/lib/salt_archive/mirror/salt/0.17.5-1/pool/main/s
   ├── salt
-  │   ├── salt-common_0.17.4-1precise_all.deb
-  │   ├── salt-doc_0.17.4-1precise_all.deb
-  │   ├── salt-master_0.17.4-1precise_all.deb
-  │   ├── salt-minion_0.17.4-1precise_all.deb
-  │   ├── salt-ssh_0.17.4-1precise_all.deb
-  │   └── salt-syndic_0.17.4-1precise_all.deb
+  │   ├── salt-common_0.17.5-1precise_all.deb
+  │   ├── salt-doc_0.17.5-1precise_all.deb
+  │   ├── salt-master_0.17.5-1precise_all.deb
+  │   ├── salt-minion_0.17.5-1precise_all.deb
+  │   ├── salt-ssh_0.17.5-1precise_all.deb
+  │   └── salt-syndic_0.17.5-1precise_all.deb
   ├── salt-api
   │   └── salt-api_0.8.3_all.deb
   └── salt-cloud

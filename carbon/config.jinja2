@@ -46,24 +46,14 @@ USER = graphite
 MAX_CACHE_SIZE = {{ salt['pillar.get']('graphite:carbon:max_cache_size', 'inf') }}
 
 {#-
- Limits the number of whisper update_many() calls per second, which effectively
- means the number of write requests sent to the disk. This is intended to
- prevent over-utilizing the disk and thus starving the rest of the system.
- When the rate of required updates exceeds this, then carbon's caching will
- take effect and increase the overall throughput accordingly.
+ See carbon/doc/pillar.rst graphite:carbon:max_creates_per_minute
 #}
-MAX_UPDATES_PER_SECOND = 500
+MAX_UPDATES_PER_SECOND = {{ salt['pillar.get']('graphite:carbon:max_updates_per_second', '500') }}
 
 {#-
- Softly limits the number of whisper files that get created each minute.
- Setting this value low (like at 50) is a good way to ensure your graphite
- system will not be adversely impacted when a bunch of new metrics are
- sent to it. The trade off is that it will take much longer for those metrics'
- database files to all get created and thus longer until the data becomes usable.
- Setting this value high (like "inf" for infinity) will cause graphite to create
- the files quickly but at the risk of slowing I/O down considerably for a while.
+ See carbon/doc/pillar.rst graphite:carbon:max_creates_per_minute
 #}
-MAX_CREATES_PER_MINUTE = inf
+MAX_CREATES_PER_MINUTE = {{ salt['pillar.get']('graphite:carbon:max_creates_per_minute', 'inf') }}
 
 {#-
  Set this to True to enable the UDP listener. By default this is off
@@ -117,6 +107,17 @@ WHISPER_AUTOFLUSH = False
  depending on the underlying storage configuration.
  WHISPER_SPARSE_CREATE = False
 
+ By default new Whisper files are created pre-allocated with the data region
+ filled with zeros to prevent fragmentation and speed up contiguous reads and
+ writes (which are common). Enabling this option will cause Whisper to create
+ fallocate the file instead. Only beneficial on a filesystem that
+ supports fallocate.  It maintains the benefits of contiguous reads/writes.
+ but with a much faster creation speed. Enabling this option may
+ allow a large increase of MAX_CREATES_PER_MINUTE.
+#}
+WHISPER_FALLOCATE_CREATE = True
+
+{#-
  Enabling this option will cause Whisper to lock each Whisper file it writes
  to with an exclusive lock (LOCK_EX, see: man 2 flock). This is useful when
  multiple carbon-cache daemons are writing to the same files

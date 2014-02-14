@@ -41,16 +41,16 @@ def test(map, logfile):
     :return:
     """
     fails = {}
-    for collector, metrics in map.keys():
+    for collector, metrics in map.items():
         fails[collector] = f = {}
-        os.unlink(logfile)
-        res = os.system('diamond -r {}'.format(collector))
+        if os.path.exists(logfile):
+            os.unlink(logfile)
         with open(logfile, 'r') as file:
             for line in file:
                 metric, value, timestamp = line.split()
                 if metric not in metrics:
                     continue
-                if value == 0 and not metrics[metric]:
+                if (not value or not float(value)) and not metrics[metric]:
                     f[metric] = (value)
                     continue
                 # if this metric is OK, I can delete it from metrics

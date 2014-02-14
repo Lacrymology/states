@@ -108,6 +108,8 @@ auth,authpriv.* /var/log/auth.log
 :msg, isequal, " PING" stop
 {#- discard ssh monitoring check msg #}
 :msg, contains, "Did not receive identification string from 127.0.0.1" stop
+{#- discard graylog2 health check msg #}
+if ($programname == "uwsgi-graylog2" or $programname == "nginx" and $msg contains "GET /health/currentthroughput") then stop
 {% endif %}
 {#-
 kern.* -/var/log/kern.log

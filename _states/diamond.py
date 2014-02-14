@@ -23,11 +23,18 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-def test(map):
+def test(map, logfile):
     """
     Run a list of diamond collectors and make sure the right metrics are
-    recorded
+    recorded.
 
-    :param map:
+    Expects diamond to have the ArchiveHandler active.
+
+    :param map: a map in the form
+        { collectorName: { metric: boolean, metric: .. }, collectorName: ..}
+        where collectorName must be just the name of the diamond collectors to
+        be run, and each metric maps to a boolean that defines whether 0 is an
+        acceptable value for the metric
+    :param logfile: the path to the diamond ArchiveHandler logfile
     :return:
     """

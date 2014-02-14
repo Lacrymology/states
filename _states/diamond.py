@@ -45,6 +45,8 @@ def test(map, logfile):
         fails[collector] = f = {}
         if os.path.exists(logfile):
             os.unlink(logfile)
+        command = 'diamond -r {}Collector'.format(collector)
+        res = os.system(command)
         with open(logfile, 'r') as file:
             for line in file:
                 metric, value, timestamp = line.split()

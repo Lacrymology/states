@@ -26,20 +26,26 @@ Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
 # {{ pillar['message_do_not_modify'] }}
-{% set ssl = salt['pillar.get']('dovecot:ssl', False) %}
+{%- set ssl = salt['pillar.get']('dovecot:ssl', False) %}
 command[dovecot_procs]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u root -C dovecot
 command[dovecot_anvil]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u dovecot -a 'dovecot/anvil' -C anvil
 command[dovecot_log]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u root -a 'dovecot/log' -C log
 command[dovecot_config]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u root -a 'dovecot/config' -C config
 command[dovecot_port_imap]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 143
+{%- if 'data' in pillar['ldap'] %}
+    {%- set domain = salt['pillar.get']('ldap:data').keys()[0] %}
+    {%- set username = salt['pillar.get']('ldap:data')[domain].keys()[0] %}
+    {%- set password = salt['pillar.get']('ldap:data')[domain][username]['passwd'] %}
+command[dovecot_login]=/usr/lib/nagios/plugins/check_dovecot.py -u {{ username }} -p {{ password }}
+{%- endif %}
 command[dovecot_port_pop3]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 110
-{% if ssl %}
+{%- if ssl %}
 command[dovecot_port_imaps]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 993
 command[dovecot_port_pop3s]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 995
-{% else %}
+{%- else %}
 command[dovecot_port_imaps]=/bin/echo "TCP OK: SSL not configured for IMAP"
 command[dovecot_port_pop3s]=/bin/echo "TCP OK: SSL not configured for POP3"
-{% endif %}
+{%- endif %}
 {#- TODO: http://wiki2.dovecot.org/RunningDovecot add more processes #}
 {#- TODO: use /usr/lib/nagios/plugins/check_spop #}
 {#- TODO: use /usr/lib/nagios/plugins/check_simap #}

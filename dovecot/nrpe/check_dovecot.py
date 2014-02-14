@@ -1,7 +1,7 @@
-#!/usr/bin/env python
+#!/usr/local/nagios/bin/python
 # -*- coding: utf-8 -*-
 
-# Copyright (c) 2013, Hung Nguyen Viet
+# Copyright (c) 2013, Quan Tong Anh
 # All rights reserved.
 # 
 # Redistribution and use in source and binary forms, with or without
@@ -25,50 +25,43 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 """
-Take output of salt cmd.run_all --out json
-and sys.exit it's value
-
-This is only used to make a jenkins job fail if something bad happened
-during execution.
+Nagios plugin to check that Dovecot is allowing logins.
 """
 
-__author__ = 'Hung Nguyen Viet'
-__maintainer__ = 'Bruno Clermont, Hung Nguyen viet'
-__email__ = 'patate@fastmail.cn, hvnsweeting@gmail.com'
+__author__ = 'Quan Tong Anh'
+__maintainer__ = 'Quan Tong Anh'
+__email__ = 'tonganhquan.net@gmail.com'
 
-import json
-import sys
-import os
+import telnetlib
+import argparse
+import time
 
-json_text = sys.stdin.read()
-try:
-    data = json.loads(json_text)
-except ValueError:
-    sys.stderr.write(json_text)
-    sys.exit(1)
-keys = data.keys()
-if len(keys) != 1:
-    print 'More than 1 key: %d: %s' % (len(data), keys)
 
-result = data[keys[0]]
+def main():
+    argp = argparse.ArgumentParser(description=__doc__)
+    argp.add_argument('-u', '--username', metavar='VALUE')
+    argp.add_argument('-p', '--password', metavar='VALUE')
+    args = argp.parse_args()
 
-if type(result) == bool:
-    if result:
-        sys.exit(0)
+    username = args.username
+    password = args.password
+
+    tn = telnetlib.Telnet("localhost", 143)
+    tn.read_until("Dovecot ready.")
+    time.sleep(1)
+    tn.write('a login "{0}" "{1}" \r\n'.format(username, password))
+    time.sleep(2)
+
+    data = tn.read_very_eager()
+    tn.close()
+
+    if 'Logged in' in data:
+        print ('OK - {0}'.format(data))
+	raise SystemExit(0)
     else:
-        sys.exit(1)
+        print ('CRITICAL - {0}'.format(data))
+        raise SystemExit(2)
 
 
-def write_output(output_type):
-    handler = getattr(sys, output_type)
-    handler.write(os.linesep)
-    handler.write(output_type.upper())
-    handler.write(os.linesep)
-    handler.write("-" * 79)
-    handler.write(os.linesep)
-    handler.write(result[output_type])
-    handler.write(os.linesep)
-
-write_output('stdout')
-write_output('stderr')
-sys.exit(result['retcode'])
+if __name__ == "__main__":
+    main()

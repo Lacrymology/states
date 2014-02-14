@@ -66,6 +66,8 @@ Example::
     carbon:
       replication: 1
       interface: 0.0.0.0
+      max_creates_per_minute: inf
+      max_updates_per_second: 500
   shinken_pollers:
     - 192.168.1.1
 
@@ -82,6 +84,30 @@ graphite:carbon:interface
 Network interface to bind Carbon-relay daemon.
 
 Default: ``0.0.0.0``.
+
+graphite:carbon:max_creates_per_minute
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Softly limits the number of whisper files that get created each minute.
+Setting this value low (like at 50) is a good way to ensure your graphite
+system will not be adversely impacted when a bunch of new metrics are
+sent to it. The trade off is that it will take much longer for those metrics'
+database files to all get created and thus longer until the data becomes usable.
+Setting this value high (like "inf" for infinity) will cause graphite to create
+the files quickly but at the risk of slowing I/O down considerably for a while.
+
+Default: ``inf``. No limit.
+
+graphite:carbon:max_updates_per_second
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Limits the number of whisper update_many() calls per second, which effectively
+means the number of write requests sent to the disk. This is intended to
+prevent over-utilizing the disk and thus starving the rest of the system.
+When the rate of required updates exceeds this, then carbon's caching will
+take effect and increase the overall throughput accordingly.
+
+Default: ``500``.
 
 graphite:carbon:replication
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~

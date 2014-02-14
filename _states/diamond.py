@@ -23,6 +23,8 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+import os
+
 def test(map, logfile):
     """
     Run a list of diamond collectors and make sure the right metrics are
@@ -38,3 +40,22 @@ def test(map, logfile):
     :param logfile: the path to the diamond ArchiveHandler logfile
     :return:
     """
+    fails = {}
+    for collector, metrics in map.keys():
+        fails[collector] = f = {}
+        os.unlink(logfile)
+        res = os.system('diamond -r {}'.format(collector))
+        with open(logfile, 'r') as file:
+            for line in file:
+                metric, value, timestamp = line.split()
+                if metric not in metrics:
+                    continue
+                if value == 0 and not metrics[metric]:
+                    f[metric] = (value)
+                    continue
+                # if this metric is OK, I can delete it from metrics
+                del metrics[metric]
+
+        # if there's any metric left, it was not in
+        if metrics:
+            f.update(metrics)

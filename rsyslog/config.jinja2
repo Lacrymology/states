@@ -104,6 +104,8 @@ auth,authpriv.* /var/log/auth.log
 :msg, contains, "pam_unix({{ f }}:session): session {{ act }} for user" stop
     {%- endfor %}
 {%- endfor %}
+# discard uwsgi ping log msg produced by NRPE check
+:msg, isequal, " PING" stop
 {% endif %}
 {#-
 kern.* -/var/log/kern.log

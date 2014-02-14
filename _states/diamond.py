@@ -59,3 +59,4 @@ def test(map, logfile):
         # if there's any metric left, it was not in
         if metrics:
             f.update(metrics)
+    return fails

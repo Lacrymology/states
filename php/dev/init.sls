@@ -58,6 +58,7 @@ php-dev:
     - managed
     - name: /etc/php5/embed/conf.d/salt.ini
     - source: salt://php/config.jinja2
+    - mode: 440
     - template: jinja
     - require:
       - pkg: php-dev

@@ -43,6 +43,7 @@ rsyslog:
       - pkg: apt_sources
   pkg:
     - installed
+    - version: 7.4.4-0ubuntu1ppa1
     - require:
       - cmd: apt_sources
       - pkg: gsyslogd

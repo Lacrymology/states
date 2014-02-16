@@ -104,6 +104,14 @@ auth,authpriv.* /var/log/auth.log
 :msg, contains, "pam_unix({{ f }}:session): session {{ act }} for user" stop
     {%- endfor %}
 {%- endfor %}
+{#- discard uwsgi ping log msg produced by NRPE check #}
+:msg, isequal, " PING" stop
+{#- discard ssh monitoring check msg #}
+:msg, contains, "Did not receive identification string from 127.0.0.1" stop
+{#- discard graylog2 health check msg #}
+if ($programname == "uwsgi-graylog2" or $programname == "nginx" and $msg contains "GET /health/currentthroughput") then stop
+{# discard nginx response buffer msg #}
+if ($programname == "nginx" and $msg contains "an upstream response is buffered to a temporary file") then stop
 {% endif %}
 {#-
 kern.* -/var/log/kern.log

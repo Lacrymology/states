@@ -43,7 +43,8 @@ def test(name, map, logfile):
         where collectorName must be just the name of the diamond collectors to
         be run, and each metric maps to a boolean that defines whether 0 is an
         acceptable value for the metric
-    :param logfile: the path to the diamond ArchiveHandler logfile
+    :param logfile: the path to the diamond ArchiveHandler logfile. Beware that
+        this file will be purged at every run.
     :return:
     """
     ret = {

@@ -48,17 +48,22 @@ def test(map, logfile):
         command = 'diamond -r {}Collector'.format(collector)
         res = os.system(command)
         with open(logfile, 'r') as file:
+        collected_metrics = {}
             for line in file:
                 metric, value, timestamp = line.split()
-                if metric not in metrics:
-                    continue
-                if (not value or not float(value)) and not metrics[metric]:
-                    f[metric] = (value)
-                    continue
-                # if this metric is OK, I can delete it from metrics
-                del metrics[metric]
+                collected_metrics[metric] = value
 
-        # if there's any metric left, it was not in
-        if metrics:
-            f.update(metrics)
+        for metric in metrics:
+            if metric not in collected_metrics:
+                f.update({metric: 'Not collected'})
+            else:
+                try:
+                    value = float(collected_metrics[metric])
+                except ValueError, e:
+                    value = None
+
+                if (not metrics[metric]) and (not value):
+                    f[metric] = 'Non-acceptable value: %s' % (
+                            collected_metrics[metric])
+
     return fails

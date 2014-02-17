@@ -31,7 +31,7 @@ pip==1.5.2
 {%- if 'files_archive' in pillar %}
 {{ pillar['files_archive'] }}/pip/diamond-42d1e961.zip
 {%- else %}
--e git+https://github.com/Lacrymology/Diamond.git@42d1e961a2d5508396b921a48540e9cf664784f4#egg=diamond
+-e git+https://github.com/BrightcoveOS/Diamond.git@42d1e961a2d5508396b921a48540e9cf664784f4#egg=diamond
 {%- endif %}
 {%- if 'graylog2_address' in pillar %}
 graypy==0.2.9

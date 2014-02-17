@@ -34,6 +34,7 @@ include:
   file:
     - managed
     - template: jinja
+    - mode: 440
     - source: salt://salt/cloud/{{ type }}.jinja2
     - require:
       - pkg: salt-cloud
@@ -43,6 +44,7 @@ include:
   file:
     - managed
     - template: jinja
+    - mode: 440
     - source: salt://salt/cloud/config.jinja2
     - require:
       - pkg: salt-cloud

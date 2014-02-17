@@ -33,6 +33,7 @@ include:
   - pip
   - postgresql.server
   - python.dev
+  - python.pillow
 {%- if salt['pillar.get']('openerp:ssl', False) %}
   - ssl
 {%- endif %}
@@ -83,6 +84,7 @@ openerp_depends:
       - pkg: libjs-underscore
       - pkg: xml-dev
       - pkg: yaml
+      - pkg: pillow-dependencies
   cmd:
     - wait
     - name: find {{ home }} -name '*.pyc' -delete

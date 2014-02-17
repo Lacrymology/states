@@ -40,8 +40,7 @@ graylog2:
     - home: /var/run/{{ user }}
     - shell: /bin/false
 
-{%- for dir in ('/var/log', '/var/run') %}
-{{ dir }}/graylog2:
+/var/run/graylog2:
   file:
     - directory
     - user: {{ user }}
@@ -51,4 +50,14 @@ graylog2:
     - require:
       - user: web
       - user: graylog2
-{%- endfor %}
+
+/var/log/graylog2:
+  file:
+    - directory
+    - user: {{ user }}
+    - group: www-data
+    - mode: 775
+    - makedirs: True
+    - require:
+      - user: web
+      - user: graylog2

@@ -39,7 +39,9 @@ $ModLoad imklog
 $ModLoad imudp
 $UDPServerAddress 127.0.0.1
 $UDPServerRun 514
-{%- endblock -%}
+{%- endblock %}
+
+$ModLoad imfile
 
 {#-
  provides TCP syslog reception

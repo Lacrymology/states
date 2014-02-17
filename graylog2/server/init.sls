@@ -37,6 +37,7 @@ include:
 {% endif %}
   - graylog2
   - local
+  - rsyslog
 
 {# TODO: set Email output plugin settings straight into MongoDB from salt #}
 
@@ -58,15 +59,9 @@ graylog2-server_upstart:
       version: {{ version }}
       user: {{ user }}
 
-{#graylog2-server_logrotate:#}
-{#  file:#}
-{#    - managed#}
-{#    - name: /etc/logrotate.d/graylog2-server#}
-{#    - template: jinja#}
-{#    - user: root#}
-{#    - group: root#}
-{#    - mode: 600#}
-{#    - source: salt://graylog2/server/logrotate.jinja2#}
+/var/log/graylog2/server.log:
+  file:
+    - absent
 
 {# For cluster using, all node's data should be explicit: http,master,data,port and/or name #}
 /etc/graylog2-elasticsearch.yml:
@@ -131,9 +126,27 @@ graylog2-server:
       - file: graylog2_sentry_transport_plugin
     - require:
       - file: /var/log/graylog2
+      - file: /var/log/graylog2/server.log
       - service: mongodb
       - file: {{ server_root_dir }}
       - file: /var/run/graylog2
+
+graylog2_rsyslog_config:
+  file:
+    - managed
+    - mode: 440
+    - source: salt://rsyslog/template.jinja2
+    - name: /etc/rsyslog.d/graylog2-server.conf
+    - template: jinja
+    - require:
+      - pkg: rsyslog
+    - watch_in:
+      - service: rsyslog
+    - context:
+      file_path: /var/log/graylog2/server.fifo
+      tag_name: graylog2-server
+      severity: info
+      facility: local7
 
 {{ server_root_dir }}:
   file:
@@ -198,4 +211,3 @@ graylog2_sentry_transport_plugin:
     - user: {{ user }}
     - group: {{ user }}
     - mode: 440
-

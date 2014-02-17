@@ -42,6 +42,7 @@ include:
   - build
   - graylog2
   - local
+  - logrotate
   - mongodb
   - nginx
   - rsyslog
@@ -86,10 +87,6 @@ graylog2-web-{{ filename }}:
       - archive: graylog2-web
 {% endfor %}
 
-/etc/logrotate.d/graylog2-web:
-  file:
-    - absent
-
 graylog2-web-upstart:
   file:
     - absent
@@ -109,6 +106,16 @@ graylog2-web-upstart:
       - archive: graylog2-web
 
 graylog2-web:
+  file:
+    - managed
+    - name: /etc/logrotate.d/graylog2-web
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - source: salt://graylog2/web/logrotate.jinja2
+    - require:
+      - pkg: logrotate
   gem:
     - installed
     - name: bundler

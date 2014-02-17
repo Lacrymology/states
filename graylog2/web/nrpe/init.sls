@@ -30,6 +30,7 @@ Install a graylog2 web Nagios NRPE checks.
 {%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - build.nrpe
+  - logrotate.nrpe
   - mongodb.nrpe
   - nginx.nrpe
   - nrpe

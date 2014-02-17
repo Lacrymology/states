@@ -133,7 +133,7 @@ class BackupFile(nagiosplugin.Resource):
     def make_file(self, key):
         log.info("Creating single file for key: %s", key)
         match = re.match(r'%s(?P<facility>.+)-(?P<date>[0-9\-_]{19}).tar.xz' % (
-            self.prefix, key.name))
+            self.prefix), key.name)
         if match:
             match = match.groupdict()
             log.debug("Key matched regexp, facility: %s, date: %s",

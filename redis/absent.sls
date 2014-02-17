@@ -41,6 +41,7 @@ redis:
     - pkgs:
       - redis-server
       - libjemalloc1
+      - redis-tools
     - require:
       - service: redis
   service:

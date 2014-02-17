@@ -153,7 +153,7 @@ graylog2_rsyslog_config:
     - directory
     - user: {{ user }}
     - group: {{ user }}
-    - mode: 755
+    - mode: 750
     - recurse:
       - user
       - group

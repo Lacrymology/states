@@ -25,7 +25,13 @@
 
 import os
 
-def test(map, logfile):
+def __virtual__():
+    '''
+    name this state module
+    '''
+    return 'diamond'
+
+def test(name, map, logfile):
     """
     Run a list of diamond collectors and make sure the right metrics are
     recorded.
@@ -40,9 +46,14 @@ def test(map, logfile):
     :param logfile: the path to the diamond ArchiveHandler logfile
     :return:
     """
-    fails = {}
+    ret = {
+        'name': 'Test Diamond',
+        'changes': {},
+        'result': True,
+        'comment': '',
+    }
     for collector, metrics in map.items():
-        fails[collector] = f = {}
+        ret['changes'][collector] = f = {}
         if os.path.exists(logfile):
             os.unlink(logfile)
         command = 'diamond -r {}Collector'.format(collector)
@@ -55,7 +66,10 @@ def test(map, logfile):
 
         for metric in metrics:
             if metric not in collected_metrics:
-                f.update({metric: 'Not collected'})
+                f[metric] = {
+                    'old': "Expected",
+                    'new': 'Not collected',
+                }
             else:
                 try:
                     value = float(collected_metrics[metric])
@@ -63,7 +77,12 @@ def test(map, logfile):
                     value = None
 
                 if (not metrics[metric]) and (not value):
-                    f[metric] = 'Non-acceptable value: %s' % (
-                            collected_metrics[metric])
+                    f[metric] = {
+                        'old': 'Expected non-zero numerical value',
+                        'new': collected_metrics[metric],
+                    }
 
-    return fails
+        # finally, update 'result': if there's anything in f, we've failed
+        ret['result'] = ret['result'] and not bool(f)
+
+    return ret

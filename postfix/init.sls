@@ -75,6 +75,7 @@ postfix:
     - directory
     - user: postfix
     - group: postfix
+    - mode: 550
     - recurse:
       - user
       - group

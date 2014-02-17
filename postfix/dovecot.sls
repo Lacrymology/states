@@ -33,6 +33,7 @@ include:
   file:
     - directory
     - user: dovecot-agent
+    - mode: 750
     - require:
       - user: dovecot-agent
     - require_in:

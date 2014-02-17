@@ -77,6 +77,7 @@ terracotta:
   file:
     - managed
     - template: jinja
+    - mode: 440
     - source: salt://terracotta/config.jinja2
 
 /var/lib/terracotta/server-data:
@@ -85,6 +86,7 @@ terracotta:
     - makedirs: True
     - user: terracotta
     - group: terracotta
+    - mode: 755
     - require:
       - user: terracotta
 
@@ -94,6 +96,7 @@ terracotta:
     - makedirs: True
     - user: terracotta
     - group: terracotta
+    - mode: 755
     - require:
       - user: terracotta
 
@@ -103,5 +106,6 @@ terracotta:
     - makedirs: True
     - user: terracotta
     - group: terracotta
+    - mode: 755
     - require:
       - user: terracotta

@@ -51,6 +51,7 @@ recovery_from_master_base_backup:
   file:
     - directory
     - name: /var/lib/postgresql/9.2/main/
+    - mode: 755
     - clean: True
     - require:
       - service: recovery_from_master_base_backup

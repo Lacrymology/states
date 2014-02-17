@@ -31,9 +31,10 @@ If one day MongoDB support SSL in free distribution, do this:
 http://docs.mongodb.org/manual/tutorial/configure-ssl/
 -#}
 include:
+  - locale
   - logrotate
 
-{% set version = '2.4.4' %}
+{% set version = '2.4.9' %}
 {% set filename = 'mongodb-10gen_' + version + '_' + grains['debian_arch'] + '.deb' %}
 
 mongodb:
@@ -56,6 +57,8 @@ mongodb:
       - file: /etc/mongodb.conf
   pkg:
     - installed
+    - require:
+      - cmd: system_locale
     - sources:
 {%- if 'files_archive' in pillar %}
       - mongodb-10gen: {{ pillar['files_archive']|replace('file://', '')|replace('https://', 'http://') }}/mirror/{{ filename }}

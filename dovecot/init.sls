@@ -101,5 +101,6 @@ dovecot:
     - directory
     - user: dovecot-agent
     - makedirs: True
+    - mode: 750
     - require:
       - user: dovecot-agent

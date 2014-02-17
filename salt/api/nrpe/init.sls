@@ -27,6 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Nagios NRPE check for Salt-API Server.
 -#}
+{%- from 'nrpe/passive.sls' import passive_check with context %}
 {%- set ssl = salt['pillar.get']('salt_master:ssl', False) -%}
 include:
   - apt.nrpe
@@ -76,6 +77,8 @@ include:
 {%- else %}
       http_result: {{ expected }}
 {%- endif %}
+
+{{ passive_check('salt.api') }}
 
 extend:
   nagios-nrpe-server:

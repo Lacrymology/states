@@ -28,7 +28,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 Uninstall all Shinken components.
 -#}
 
-{% set roles = ('broker', 'arbiter', 'reactionner', 'poller', 'scheduler') %}
+{% set roles = ('broker', 'arbiter', 'reactionner', 'poller', 'scheduler', 'receiver') %}
 include:
 {% for role in roles %}
   - shinken.{{ role }}.absent

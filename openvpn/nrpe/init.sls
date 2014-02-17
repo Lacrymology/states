@@ -27,6 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Nagios NRPE check for OpenVPN.
 -#}
+{%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - apt.nrpe
   - nrpe
@@ -43,6 +44,8 @@ include:
       - pkg: nagios-nrpe-server
     - context:
       instances: {{ salt['pillar.get']('openvpn', {}) }}
+
+{{ passive_check('openvpn') }}
 
 extend:
   nagios-nrpe-server:

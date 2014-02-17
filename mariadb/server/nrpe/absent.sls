@@ -37,3 +37,7 @@ Remove Nagios NRPE checks for MariaDB.
 /etc/nagios/nrpe.d/mysql.cfg:
   file:
     - absent
+
+/etc/cron.d/passive-checks-mariadb.server:
+  file:
+    - absent

@@ -37,3 +37,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 /etc/nagios/nrpe.d/bigbluebutton.cfg:
   file:
     - absent
+
+/etc/cron.d/passive-checks-bbb:
+  file:
+    - absent

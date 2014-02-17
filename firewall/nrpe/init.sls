@@ -27,6 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
  Nagios NRPE check for iptables
 -#}
+{%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - apt.nrpe
   - nrpe
@@ -83,6 +84,8 @@ include:
       - file: /etc/sudoers.d/nrpe_firewall
     - context:
       critical: {{ critical }}
+
+{{ passive_check('firewall') }}
 
 extend:
   nagios-nrpe-server:

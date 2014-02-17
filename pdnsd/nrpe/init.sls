@@ -27,6 +27,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 PDNSd Nagios NRPE checks.
 -#}
+{%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - apt.nrpe
   - nrpe
@@ -41,6 +42,8 @@ include:
     - source: salt://pdnsd/nrpe/config.jinja2
     - require:
       - pkg: nagios-nrpe-server
+
+{{ passive_check('pdnsd') }}
 
 extend:
   nagios-nrpe-server:

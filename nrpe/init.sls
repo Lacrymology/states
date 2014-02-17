@@ -32,6 +32,8 @@ Install Nagios NRPE Agent.
 include:
   - apt
   - apt.nrpe
+  - cron
+  - cron.nrpe
   - local
 {% if 'graphite_address' in pillar %}
   - nrpe.diamond
@@ -44,6 +46,8 @@ include:
   - sudo
   - virtualenv
   - virtualenv.nrpe
+
+{% from 'nrpe/passive.sls' import passive_check with context %}
 
 /usr/local/nagiosplugin:
   file:
@@ -134,6 +138,16 @@ nagios-nrpe-server:
       - pkg: nagios-nrpe-server
       - file: nagios-nrpe-server
 
+/usr/local/nagios/bin/passive_check.py:
+  file:
+    - managed
+    - source: salt://nrpe/passive_check.py
+    - user: nagios
+    - group: nagios
+    - mode: 550
+    - require:
+      - module: nrpe-virtualenv
+
 /usr/local/bin/check_memory.py:
   file:
     - absent
@@ -168,3 +182,16 @@ nagios-nrpe-server:
     - group: root
     - require:
       - pkg: sudo
+
+/etc/send_nsca.conf:
+  file:
+    - managed
+    - template: jinja
+    - source: salt://nrpe/send_nsca.jinja2
+    - user: nagios
+    - group: nagios
+    - mode: 440
+    - require:
+      - module: nrpe-virtualenv
+
+{{ passive_check('nrpe') }}

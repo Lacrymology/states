@@ -34,6 +34,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 Nagios NRPE check for moinmoin.
 -#}
+{%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - apt.nrpe
   - nginx.nrpe
@@ -84,6 +85,8 @@ include:
       http_result: 301 Moved Permanently
     {%- endif -%}
 {%- endif %}
+
+{{ passive_check('moinmoin') }}
 
 extend:
   nagios-nrpe-server:

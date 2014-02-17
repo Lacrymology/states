@@ -30,3 +30,7 @@ Remove Nagios NRPE check for ProFTPd.
 /etc/nagios/nrpe.d/proftpd.cfg:
   file:
     - absent
+
+/etc/cron.d/passive-checks-proftpd:
+  file:
+    - absent

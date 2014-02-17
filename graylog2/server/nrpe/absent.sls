@@ -34,3 +34,7 @@ Remove NRPE check for Graylog2 Server.
 /etc/nagios/nrpe.d/graylog2-server.cfg:
   file:
     - absent
+
+/etc/cron.d/passive-checks-graylog2.server:
+  file:
+    - absent

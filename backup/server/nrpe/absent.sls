@@ -42,3 +42,7 @@ Remove Nagios NRPE check for Backup Server.
 /etc/sudoers.d/nrpe_backups:
   file:
     - absent
+
+/etc/cron.d/passive-checks-backup.server:
+  file:
+    - absent

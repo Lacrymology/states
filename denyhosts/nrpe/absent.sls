@@ -35,3 +35,7 @@ Remove Nagios NRPE check for Denyhosts.
 /var/lib/denyhosts/allowed-hosts:
   file:
     - absent
+
+/etc/cron.d/passive-checks-denyhosts:
+  file:
+    - absent

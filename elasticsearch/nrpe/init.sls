@@ -27,6 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
  Nagios NRPE checks for elasticsearch
 -#}
+{%- from 'nrpe/passive.sls' import passive_check with context %}
 {% set ssl = salt['pillar.get']('elasticsearch:ssl', False) %}
 include:
   - apt.nrpe
@@ -99,6 +100,8 @@ pyelasticsearch:
     - require:
       - module: pyelasticsearch
       - pkg: nagios-nrpe-server
+
+{{ passive_check('elasticsearch') }}
 
 extend:
   nagios-nrpe-server:

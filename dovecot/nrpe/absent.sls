@@ -32,3 +32,7 @@ Remove Nagios NRPE check for Dovecot.
   file:
     - absent
 {% endfor %}
+
+/etc/cron.d/passive-checks-dovecot:
+  file:
+    - absent

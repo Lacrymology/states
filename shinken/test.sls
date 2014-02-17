@@ -26,7 +26,7 @@ Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 include:
-{%- for role in ('arbiter', 'broker', 'poller', 'reactionner', 'scheduler') %}
+{%- for role in ('arbiter', 'broker', 'poller', 'reactionner', 'scheduler', 'receiver') %}
   - shinken.{{ role }}
   - shinken.{{ role }}.diamond
   - shinken.{{ role }}.nrpe

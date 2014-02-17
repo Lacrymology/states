@@ -44,6 +44,7 @@ backup-elasticsearch:
     - require:
       - pkg: cron
       - file: /usr/local/bin/backup-store
+      - module: esclient
 
 esclient:
   file:

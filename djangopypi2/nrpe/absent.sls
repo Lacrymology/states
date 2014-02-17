@@ -45,3 +45,7 @@ Remove Nagios NRPE check for djangopypi2.
 /etc/nagios/nrpe.d/postgresql-djangopypi2.cfg:
   file:
     - absent
+
+/etc/cron.d/passive-checks-djangopypi2:
+  file:
+    - absent

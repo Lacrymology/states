@@ -27,6 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Install a graylog2 web Nagios NRPE checks.
 -#}
+{%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - build.nrpe
   - mongodb.nrpe
@@ -76,6 +77,8 @@ include:
       http_result: 301 Moved Permanently
     {%- endif -%}
 {%- endif %}
+
+{{ passive_check('graylog2.web') }}
 
 extend:
   nagios-nrpe-server:

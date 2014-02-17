@@ -34,6 +34,7 @@ Maintainer: Lam Dang Tung <lamdt@familug.org>
 
 Install a Discourse Nagios NRPE checks.
 -#}
+{%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - apt.nrpe
   - build.nrpe
@@ -112,4 +113,6 @@ include:
       password: {{ salt['password.pillar']('discourse:db:password', 10) }}
     - watch_in:
       - service: nagios-nrpe-server
+
+{{ passive_check('discourse') }}
 

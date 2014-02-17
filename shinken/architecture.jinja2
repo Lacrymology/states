@@ -263,6 +263,15 @@ define reactionner {
 }
 {% endfor %}
 
+define module {
+    module_name NSCA
+    module_type nsca_server
+    host *
+    port 5667
+    encryption_method 1
+    password {{ pillar['nrpe']['nsca_password'] }}
+}
+
 {#-
 The receiver manages passive information. It's just a "buffer" which will
 load passive modules (like NSCA) and be read by the arbiter to dispatch data.
@@ -272,7 +281,7 @@ define receiver {
     receiver_name receiver-{{ id }}
     address {{ mine[id]['ip_addrs']['public'] }}
     port 7773
-    modules
+    modules NSCA
     realm All
 {#-    direct_routing      0   ; If enabled, it will directly send commands to the
                             ; schedulers if it know about the hostname in the

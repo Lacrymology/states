@@ -147,6 +147,26 @@ def discover_checks(state_name):
     return unserialized
 
 
+def discover_checks_passive(state_name):
+    '''
+    Return a dict of all checks that are passive in specified state
+    '''
+    output = {}
+    checks = discover_checks(state_name)
+    if not checks:
+        logger.debug("discover_checks('%s') returned nothing", state_name)
+        return output
+
+    for check_name in checks:
+        check = checks[check_name]
+        if 'passive' not in check or ('passive' in check and check['passive']):
+            output[check_name] = check
+
+    if not output:
+        logger.info("No passive")
+    return output
+
+
 def update():
     '''
     Run a salt function specified in pillar data.

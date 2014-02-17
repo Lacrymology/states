@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Bruno Clermont
+Copyright (c) 2013, Quan Tong Anh
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,19 +22,32 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Bruno Clermont <patate@fastmail.cn>
-Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
+Author: Quan Tong Anh <tonganhquan.net@gmail.com>
+Maintainer: Quan Tong Anh <tonganhquan.net@gmail.com>
 -#}
 include:
   - apt.nrpe
   - nrpe
-  - postgresql.common.nrpe
-  - postgresql.nrpe
-  - postgresql.server
-  - rsyslog.nrpe
+  - pip.nrpe
+  - python.dev.nrpe
+{% if salt['pillar.get']('shinken:ssl', False) %}
+  - ssl.nrpe
+{% endif %}
+  - virtualenv.nrpe
+
+/etc/nagios/nrpe.d/shinken-receiver.cfg:
+  file:
+    - managed
+    - template: jinja
+    - user: nagios
+    - group: nagios
+    - mode: 440
+    - source: salt://shinken/receiver/nrpe/config.jinja2
+    - require:
+      - pkg: nagios-nrpe-server
 
 extend:
-  postgresql_monitoring:
-    postgres_user:
-      - require:
-        - service: postgresql
+  nagios-nrpe-server:
+    service:
+      - watch:
+        - file: /etc/nagios/nrpe.d/shinken-receiver.cfg

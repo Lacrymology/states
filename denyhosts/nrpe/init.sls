@@ -27,6 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Nagios NRPE check for Denyhosts.
 -#}
+{%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - apt.nrpe
   - denyhosts
@@ -43,6 +44,8 @@ include:
     - source: salt://denyhosts/nrpe/config.jinja2
     - require:
       - pkg: nagios-nrpe-server
+
+{{ passive_check('denyhosts') }}
 
 extend:
   nagios-nrpe-server:

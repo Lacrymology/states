@@ -27,6 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Nagios NRPE check for RabbitMQ.
 -#}
+{%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - apt.nrpe
   - logrotate.nrpe
@@ -68,6 +69,8 @@ include:
     - source: salt://rabbitmq/nrpe/config.jinja2
     - require:
       - pkg: nagios-nrpe-server
+
+{{ passive_check('rabbitmq') }}
 
 extend:
   nagios-nrpe-server:

@@ -38,3 +38,7 @@ Remove Nagios NRPE check for Graphite.
 /etc/nagios/nrpe.d/postgresql-graphite.cfg:
   file:
     - absent
+
+/etc/cron.d/passive-checks-graphite:
+  file:
+    - absent

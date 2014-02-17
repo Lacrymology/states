@@ -27,6 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Nagios NRPE check for Sentry.
 -#}
+{%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - apt.nrpe
   - memcache.nrpe
@@ -100,6 +101,8 @@ include:
       database: {{ salt['pillar.get']('sentry:db:name', 'sentry') }}
       username: {{ salt['pillar.get']('sentry:db:username', 'sentry') }}
       password: {{ salt['password.pillar']('sentry:db:password', 10) }}
+
+{{ passive_check('sentry') }}
 
 extend:
   nagios-nrpe-server:

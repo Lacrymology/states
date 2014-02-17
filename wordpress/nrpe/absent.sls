@@ -45,3 +45,7 @@ Remove Wordpress Nagios NRPE checks.
 /etc/nagios/nrpe.d/wordpress-mysql.cfg:
   file:
     - absent
+
+/etc/cron.d/passive-checks-wordpress:
+  file:
+    - absent

@@ -27,6 +27,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 Install a roundcube Nagios NRPE checks.
 -#}
+{%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - apt.nrpe
   - build.nrpe
@@ -92,6 +93,8 @@ include:
       database: {{ salt['pillar.get']('roundcube:db:name', 'roundcube') }}
       username: {{ salt['pillar.get']('roundcube:db:username', 'roundcube') }}
       password: {{ salt['password.pillar']('roundcube:db:password', 10) }}
+
+{{ passive_check('roundcube') }}
 
 extend:
   nagios-nrpe-server:

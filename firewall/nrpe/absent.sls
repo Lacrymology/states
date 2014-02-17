@@ -42,3 +42,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 /etc/nagios/nrpe.d/firewall.cfg:
   file:
     - absent
+
+/etc/cron.d/passive-checks-firewall:
+  file:
+    - absent

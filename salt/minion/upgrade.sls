@@ -44,7 +44,7 @@ salt-minion:
     - name: /etc/salt/minion
     - user: root
     - group: root
-    - mode: 440
+    - mode: 444
     - source: salt://salt/minion/config.jinja2
     - require:
       - pkg: salt-minion
@@ -57,3 +57,20 @@ salt-minion:
     - watch:
       - pkg: salt-minion
       - file: salt-minion
+
+{%- for file in ('logging', 'graphite', 'mysql') %}
+  {%- if (file == 'graphite' and 'graphite_address' in pillar) or file != 'graphite' %}
+/etc/salt/minion.d/{{ file }}.conf:
+  file:
+    - managed
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - source: salt://salt/minion/{{ file }}.jinja2
+    - require:
+      - pkg: salt-minion
+    - watch_in:
+      - service: salt-minion
+  {%- endif %}
+{%- endfor %}

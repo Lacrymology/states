@@ -34,6 +34,7 @@ Maintainer: Lam Dang Tung <lamdt@familug.org>
 
 Nagios NRPE check for tightvncserver.
 -#}
+{%- from 'nrpe/passive.sls' import passive_check with context %}
 {%- set wm = salt['pillar.get']('tightvncserver:wm', 'fluxbox') %}
 
 include:
@@ -54,3 +55,5 @@ include:
       - pkg: nagios-nrpe-server
     - watch_in:
       - service: nagios-nrpe-server
+
+{{ passive_check('tightvncserver') }}

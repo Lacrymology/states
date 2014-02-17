@@ -34,6 +34,7 @@ Maintainer: Dang Tung Lam <lamdt@familug.org>
 
 Nagios NRPE checks for MariaDB.
 -#}
+{%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - apt.nrpe
   - mariadb.nrpe
@@ -50,6 +51,8 @@ include:
     - source: salt://mariadb/server/nrpe/config.jinja2
     - require:
       - pkg: nagios-nrpe-server
+
+{{ passive_check('mariadb.server') }}
 
 extend:
   nagios-nrpe-server:

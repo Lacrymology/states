@@ -27,6 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Nagios NRPE check for uWSGI.
 -#}
+{%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - git.nrpe
   - nrpe
@@ -82,6 +83,8 @@ include:
     - require:
       - pkg: nagios-nrpe-server
       - user: web
+
+{{ passive_check('uwsgi') }}
 
 extend:
   nagios-nrpe-server:

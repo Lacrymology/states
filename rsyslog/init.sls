@@ -51,6 +51,7 @@ rsyslog:
   file:
     - managed
     - name: /etc/rsyslog.conf
+    - mode: 440
     - template: jinja
     - source: salt://rsyslog/config.jinja2
     - require:

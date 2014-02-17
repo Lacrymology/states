@@ -35,11 +35,14 @@ __email__ = 'lacrymology@gmail.com'
 
 import argparse
 import datetime
+import logging
 import os
 import pickle
 import re
 import nagiosplugin
 from ConfigParser import SafeConfigParser as ConfigParser
+
+log = logging.getLogger('nagiosplugin')
 
 class BackupFile(nagiosplugin.Resource):
     def __init__(self, config, facility, manifest, age):
@@ -52,30 +55,42 @@ class BackupFile(nagiosplugin.Resource):
         self.age = age
 
     def probe(self):
+        log.info("Probe backup for facility: %s", self.facility)
         files = self.get_manifest()
 
+        log.info("%s in manifest? %s", self.facility,
+                 str(not files.get(self.facility, None) is None))
         file = files.get(self.facility, {
             'date': datetime.datetime.fromtimestamp(0),
             'size': 0,
         })
 
-        return [
-            nagiosplugin.Metric('age', (datetime.datetime.now() - file['date']).total_seconds() / (60*60), min=0),
-            nagiosplugin.Metric('size', file['size'], min=0),
-            ]
+        age_metric = nagiosplugin.Metric(
+            'age',
+            (datetime.datetime.now() - file['date']).total_seconds() / (60*60),
+            min=0)
+        size_metric = nagiosplugin.Metric('size', file['size'], min=0)
+
+        log.debug("returning age: %s, size: %s", age_metric, size_metric)
+        return [age_metric, size_metric]
 
     def get_manifest(self):
+        log.info('manifest requested')
         if not os.path.exists(self.manifest):
+            log.debug("manifest file doesn't exist")
             return self.create_manifest()
 
         stat = os.stat(self.manifest)
         time = datetime.datetime.fromtimestamp(stat.st_mtime)
         now = datetime.datetime.now()
+        log.debug("Manifest file mtime: %s", time.strftime("%Y-%m-%d-%H_%M_%S"))
 
         # check that it's self.age hours or younger
         if ((now - time).total_seconds() / (60 * 60)) >= self.age:
+            log.debug("manifest file is too old")
             return self.create_manifest()
         else:
+            log.debug("returning cached manifest file")
             return pickle.load(open(self.manifest, 'rb'))
 
     def create_manifest(self):
@@ -83,9 +98,11 @@ class BackupFile(nagiosplugin.Resource):
         Creates the manifest file from the s3 bucket. This is the only part of
         this class that is s3-dependant
         """
+        log.info("Creating new manifest file")
         import boto
         s3 = boto.connect_s3(self.key, self.secret)
 
+        log.debug("searching bucket %s", self.bucket)
         # with bucket validation
         bucket = s3.get_bucket(self.bucket,
         # # without bucket validation, which is faster and cheaper, but can
@@ -95,25 +112,35 @@ class BackupFile(nagiosplugin.Resource):
 
         files = {}
 
+        log.debug("Searching keys with prefix %s", self.prefix)
         for key in bucket.list(prefix=self.prefix):
+            log.debug("Processing key %s", key)
             file = self.make_file(key)
             # I expect file to have one and only one element
             if file:
+                log.debug("File created")
                 key, value = file.items()[0]
                 # update this if it's the first time this appears, or if the date
                 # is newer
                 if (not key in files) or (value['date'] > files[key]['date']):
+                    log.debug("Adding file to return dict")
                     files.update(file)
 
+        log.debug("dumping files: %s", str(files))
         pickle.dump(files, open(self.manifest, 'wb+'))
         return files
 
     def make_file(self, key):
-        match = re.match(r'%s(?P<facility>.+)-(?P<date>[0-9\-_]{19}).tar.xz' % self.prefix, key.name)
+        log.info("Creating single file for key: %s", key)
+        match = re.match(r'%s(?P<facility>.+)-(?P<date>[0-9\-_]{19}).tar.xz' % (
+            self.prefix, key.name))
         if match:
             match = match.groupdict()
+            log.debug("Key matched regexp, facility: %s, date: %s",
+                      match['facility'], match['date'])
             name = match['facility']
-            date = datetime.datetime.strptime(match['date'], "%Y-%m-%d-%H_%M_%S")
+            date = datetime.datetime.strptime(match['date'],
+                                              "%Y-%m-%d-%H_%M_%S")
 
             return {
                 name: {
@@ -122,13 +149,17 @@ class BackupFile(nagiosplugin.Resource):
                     'date': date,
                     },
                 }
+        else:
+            log.warn("Key didn't match regexp. This file shouldn't be here: ",
+                     key)
 
         return {}
 
 @nagiosplugin.guarded
 def main():
-    argp = argparse.ArgumentParser(description=__doc__,
-                                   formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    argp = argparse.ArgumentParser(
+        description=__doc__,
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     argp.add_argument('facility', help='facility name to check backups for')
     argp.add_argument('-w', '--warning', metavar='HOURS', default='48',
                       help='Emit a warning if a backup file is older than HOURS')
@@ -143,6 +174,7 @@ def main():
     args = argp.parse_args()
 
     parser = ConfigParser()
+    log.debug("Reading config file: %s", args.config)
     parser.read(args.config)
 
     check = nagiosplugin.Check(

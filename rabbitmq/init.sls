@@ -106,6 +106,7 @@ rabbitmq-server:
   file:
     - directory
     - name: /etc/rabbitmq/rabbitmq.conf.d
+    - mode: 550
     - require:
       - pkg: rabbitmq-server
   service:

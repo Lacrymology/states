@@ -60,6 +60,7 @@ tomcat:
     - source: salt://tomcat/7/config.jinja2
     - template: jinja
     - name: /etc/default/tomcat7
+    - mode: 440
     - require:
       - pkg: tomcat
 

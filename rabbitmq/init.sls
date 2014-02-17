@@ -43,12 +43,10 @@ include:
   - apt
   - logrotate
   - hostname
-{% if pillar['rabbitmq']['management'] != 'guest' -%}
-  {%- if salt['pillar.get']('rabbitmq:ssl', False) %}
+{%- if salt['pillar.get']('rabbitmq:ssl', False) %}
   - ssl
-  {%- endif %}
+{%- endif %}
   - nginx
-{% endif %}
 
 {% set master_id = pillar['rabbitmq']['cluster']['master'] %}
 
@@ -220,7 +218,6 @@ host_{{ node }}:
     {% endif %}
 {% endfor %}
 
-{% if pillar['rabbitmq']['management'] != 'guest' %}
 /etc/nginx/conf.d/rabbitmq.conf:
   file:
     - managed
@@ -235,19 +232,16 @@ host_{{ node }}:
       destination: http://127.0.0.1:15672
       ssl: {{ salt['pillar.get']('rabbitmq:ssl', False) }}
       hostnames: {{ pillar['rabbitmq']['hostnames'] }}
-{% endif %}
 
-{% if pillar['rabbitmq']['management'] != 'guest' %}
 extend:
   nginx:
     service:
       - watch:
         - file: /etc/nginx/conf.d/rabbitmq.conf
-  {% if salt['pillar.get']('rabbitmq:ssl', False) %}
+{% if salt['pillar.get']('rabbitmq:ssl', False) %}
         - cmd: /etc/ssl/{{ pillar['rabbitmq']['ssl'] }}/chained_ca.crt
         - module: /etc/ssl/{{ pillar['rabbitmq']['ssl'] }}/server.pem
         - file: /etc/ssl/{{ pillar['rabbitmq']['ssl'] }}/ca.crt
-  {% endif %}
 {% endif %}
 
 

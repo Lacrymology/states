@@ -32,12 +32,10 @@ include:
   - apt
   - diamond
   - pip
-{% if grains['id'] != master_id %}
+{%- if grains['id'] != master_id %}
   - rabbitmq
-{% endif -%}
-{%- if pillar['rabbitmq']['management'] != 'guest' %}
+{%- endif %}
   - nginx.diamond
-{% endif %}
 
 rabbitmq_diamond_resources:
   file:

@@ -110,6 +110,6 @@ gsyslogd:
     - source: salt://rsyslog/logrotate.jinja2
     - user: root
     - group: root
-    - mode: 644
+    - mode: 440
     - require:
       - pkg: rsyslog

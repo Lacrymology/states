@@ -32,12 +32,10 @@ include:
   - apt.nrpe
   - logrotate.nrpe
   - nrpe
-{% if pillar['rabbitmq']['management'] != 'guest' -%}
-  {%- if salt['pillar.get']('rabbitmq:ssl', False) %}
+{%- if salt['pillar.get']('rabbitmq:ssl', False) %}
   - ssl.nrpe
-  {%- endif %}
+{%- endif %}
   - nginx.nrpe
-{% endif %}
 
 /etc/nagios/nrpe.d/rabbitmq-web.cfg:
   file:
@@ -53,11 +51,7 @@ include:
       deployment: rabbitmq
       http_port: 15672
       domain_name: 127.0.0.1
-{% if pillar['rabbitmq']['management'] != 'guest' %}
       https: {{ salt['pillar.get']('rabbitmq:ssl', False) }}
-{% else %}
-      https: False
-{% endif %}
 
 /etc/nagios/nrpe.d/rabbitmq.cfg:
   file:

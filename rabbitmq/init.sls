@@ -30,11 +30,6 @@ Install a server or cluster of RabbitMQ message queue servers.
 To properly use this state, the user monitor need to be changed
 in WebUI to grant read access across all vhost.
 as this is not yet implemented in salt.
-
-and a admin user should be created and the user guest with default
-password dropped.
-as long as the default guest user and guest password combination is
-is the pillar, the WebUI won't be available.
 -#}
 {#- TODO: configure logging to GELF -#}
 {#- TODO: SSL support http://www.rabbitmq.com/ssl.html -#}

@@ -66,6 +66,7 @@ class SCPBackupFile(BackupFile):
         self.host_key_auto_add = self.kwargs.pop('host_key_auto_add', False)
         # convert port to an int
         if 'port' in self.kwargs:
+            log.debug('converting port %s to int', self.kwargs['port'])
             self.kwargs['port'] = int(self.kwargs['port'])
 
     def files(self):
@@ -74,33 +75,46 @@ class SCPBackupFile(BackupFile):
         preprocesses the whole list of filenames before yielding to avoid asking
         fstat for older backups (it makes sure it has the newest ones only)
         """
+        log.info("starting file iteration")
         ssh = paramiko.SSHClient()
 
         if self.load_system_host_keys:
+            log.debug('loading system host keys')
             ssh.load_system_host_keys()
         if self.host_key_auto_add:
+            log.debug('setting host key policy to auto add')
             ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
+        log.info("connecting to %s", self.kwargs['hostname'])
+        log.debug("kwargs: %s", str(self.kwargs))
         ssh.connect(**self.kwargs)
+        log.debug("opening sftp")
         ftp = ssh.open_sftp()
+        log.debug("chdir %s", self.prefix)
         ftp.chdir(self.prefix)
 
         # optimization. To avoid running fstat for every backup file, I filter
         # out to only test the newest backup for each facility
         files = {}
-
+        log.debug("running ls")
         for file in ftp.listdir():
+            log.debug('processing %s', file)
             f = self.make_file(file, None)
             if not f:
+                log.debug('skipping')
                 continue
             key, value = f.items()[0]
             # this code is taken from BackupFile.create_manifest, it keeps only
             # the newest file for each facility
             if (not key in files) or (value['date'] > files[key]['date']):
+                log.debug('first or newer.')
                 files.update(f)
+            else:
+                log.debug('was old')
 
         # now fetch fstat for each file, and yield them
         for k, f in files.items():
+            log.debug('getting fstat for %s', f['filename'])
             filestat = ftp.stat(f['filename'])
             f['size'] = filestat.st_size
             yield {k: f}

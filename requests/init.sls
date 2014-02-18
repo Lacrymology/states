@@ -33,7 +33,7 @@ include:
 requests:
   file:
     - managed
-    - name: {{ opts['cachedir'] }}/requests-requirements.txt
+    - name: {{ opts['cachedir'] }}/pip/requests
     - template: jinja
     - user: root
     - group: root
@@ -45,6 +45,6 @@ requests:
     - wait
     - name: pip.install
     - upgrade: True
-    - requirements: {{ opts['cachedir'] }}/requests-requirements.txt
+    - requirements: {{ opts['cachedir'] }}/pip/requests
     - watch:
       - file: requests

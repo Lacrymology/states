@@ -124,9 +124,10 @@ class BackupFile(nagiosplugin.Resource):
         pickle.dump(files, open(self.manifest, 'wb+'))
         return files
 
-    def make_file(self, name, size):
-        log.info("Creating file dict for: %s(%sB)", name, size)
-        match = re.match(r'(?P<facility>.+)-(?P<date>[0-9\-_]{19}).tar.xz', name)
+    def make_file(self, filename, size):
+        log.info("Creating file dict for: %s(%sB)", filename, size)
+        match = re.match(r'(?P<facility>.+)-(?P<date>[0-9\-_]{19}).tar.xz',
+                         filename)
         if match:
             match = match.groupdict()
             log.debug("Key matched regexp, facility: %s, date: %s",
@@ -140,11 +141,12 @@ class BackupFile(nagiosplugin.Resource):
                     'name': name,
                     'size': size,
                     'date': date,
+                    'filename': filename,
                     },
                 }
         else:
             log.warn("Filename didn't match regexp. This file shouldn't be here: %s",
-                     name)
+                     filename)
 
         return {}
 
@@ -184,13 +186,26 @@ class SCPBackupFile(BackupFile):
         ssh.connect(**self.kwargs)
         ftp = ssh.open_sftp()
         ftp.chdir(self.prefix)
+
+        # optimization. To avoid running fstat for every backup file, I filter
+        # out to only test the newest backup for each facility
+        files = {}
+
         for file in ftp.listdir():
-            filestat = ftp.stat(file)
-            if stat.S_ISDIR(filestat.st_mode):
+            f = self.make_file(file, None)
+            if not f:
                 continue
-            f = self.make_file(file, filestat.st_size)
-            if f:
-                yield f
+            key, value = f.items()[0]
+            # this code is taken from BackupFile.create_manifest, it keeps only
+            # the newest file for each facility
+            if (not key in files) or (value['date'] > files[key]['date']):
+                files.update(f)
+
+        # now fetch fstat for each file, and yield them
+        for k, f in files.items():
+            filestat = ftp.stat(f['filename'])
+            f['size'] = filestat.st_size
+            yield {k: f}
 
 
 @nagiosplugin.guarded

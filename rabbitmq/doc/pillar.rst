@@ -97,6 +97,8 @@ rabbitmq:management:user
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 Username used to perform management trough Web UI.
+Never use ``guest`` as it's a default RabbitMQ user that is removed for security
+reasons.
 
 rabbitmq:management:password
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -30,5 +30,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 [s3]
 key = {{ pillar['aws']['access_key'] }}
 secret = {{ pillar['aws']['secret_key'] }}
-path = {{ pillar['aws']['s3']['path'] }}
 bucket = {{ pillar['aws']['s3']['bucket'] }}
+
+[backup]
+path = {{ pillar['aws']['s3']['path'] }}

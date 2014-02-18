@@ -46,13 +46,15 @@ log = logging.getLogger('nagiosplugin')
 
 class BackupFile(nagiosplugin.Resource):
     def __init__(self, config, facility, manifest, age):
+        self.config = ConfigParser()
+        log.debug("Reading config file: %s", config)
+        self.config.read(config)
+
         self.facility = facility
         self.manifest = manifest
-        self.key = config.get('s3','key')
-        self.secret = config.get('s3', 'secret')
-        self.bucket = config.get('s3', 'bucket')
-        self.prefix = config.get('s3', 'path')
         self.age = age
+
+        self.prefix = self.config.get('backup', 'path')
 
     def probe(self):
         log.info("Probe backup for facility: %s", self.facility)
@@ -93,47 +95,38 @@ class BackupFile(nagiosplugin.Resource):
             log.debug("returning cached manifest file")
             return pickle.load(open(self.manifest, 'rb'))
 
+    def files(self):
+        """
+        Subclasses must implement this method to create the list of files using
+        `make_file(name, size)`
+        """
+        raise NotImplementedError()
+
     def create_manifest(self):
         """
         Creates the manifest file from the s3 bucket. This is the only part of
         this class that is s3-dependant
         """
         log.info("Creating new manifest file")
-        import boto
-        s3 = boto.connect_s3(self.key, self.secret)
-
-        log.debug("searching bucket %s", self.bucket)
-        # with bucket validation
-        bucket = s3.get_bucket(self.bucket,
-        # # without bucket validation, which is faster and cheaper, but can
-        # # cause unexpected errors later
-        #                        validate=False,
-        )
-
         files = {}
 
         log.debug("Searching keys with prefix %s", self.prefix)
-        for key in bucket.list(prefix=self.prefix):
-            log.debug("Processing key %s", key)
-            file = self.make_file(key)
-            # I expect file to have one and only one element
-            if file:
-                log.debug("File created")
-                key, value = file.items()[0]
-                # update this if it's the first time this appears, or if the date
-                # is newer
-                if (not key in files) or (value['date'] > files[key]['date']):
-                    log.debug("Adding file to return dict")
-                    files.update(file)
+        for file in self.files():
+            log.debug("File created")
+            key, value = file.items()[0]
+            # update this if it's the first time this appears, or if the date
+            # is newer
+            if (not key in files) or (value['date'] > files[key]['date']):
+                log.debug("Adding file to return dict")
+                files.update(file)
 
         log.debug("dumping files: %s", str(files))
         pickle.dump(files, open(self.manifest, 'wb+'))
         return files
 
-    def make_file(self, key):
-        log.info("Creating single file for key: %s", key)
-        match = re.match(r'%s(?P<facility>.+)-(?P<date>[0-9\-_]{19}).tar.xz' % (
-            self.prefix), key.name)
+    def make_file(self, name, size):
+        log.info("Creating file dict for: %s(%sB)", name, size)
+        match = re.match(r'(?P<facility>.+)-(?P<date>[0-9\-_]{19}).tar.xz', name)
         if match:
             match = match.groupdict()
             log.debug("Key matched regexp, facility: %s, date: %s",
@@ -144,16 +137,47 @@ class BackupFile(nagiosplugin.Resource):
 
             return {
                 name: {
-                    'name': key.name,
-                    'size': key.size,
+                    'name': name,
+                    'size': size,
                     'date': date,
                     },
                 }
         else:
-            log.warn("Key didn't match regexp. This file shouldn't be here: ",
-                     key)
+            log.warn("Filename didn't match regexp. This file shouldn't be here: %s",
+                     name)
 
         return {}
+
+
+class S3BackupFile(BackupFile):
+    """
+    S3-specific backup file checker
+    """
+    def __init__(self, *args, **kwargs):
+        super(S3BackupFile, self).__init__(*args, **kwargs)
+        self.key = self.config.get('s3','key')
+        self.secret = self.config.get('s3', 'secret')
+        self.bucket = self.config.get('s3', 'bucket')
+
+
+    def files(self):
+        import boto
+        s3 = boto.connect_s3(self.key, self.secret)
+
+        log.debug("searching bucket %s", self.bucket)
+        # with bucket validation
+        bucket = s3.get_bucket(self.bucket,
+        # # without bucket validation, which is faster and cheaper, but can
+        # # cause unexpected errors later
+        #                        validate=False,
+        )
+        for key in bucket.list(prefix=self.prefix):
+            log.debug("Processing key %s", key)
+            file = self.make_file(os.path.basename(key.name), key.size)
+            # I expect file to have one and only one element
+            if file:
+                yield file
+
 
 @nagiosplugin.guarded
 def main():
@@ -173,15 +197,11 @@ def main():
 
     args = argp.parse_args()
 
-    parser = ConfigParser()
-    log.debug("Reading config file: %s", args.config)
-    parser.read(args.config)
-
     check = nagiosplugin.Check(
-        BackupFile(parser,
-                   args.facility,
-                   args.manifest,
-                   int(args.warning)),
+        S3BackupFile(args.config,
+                     args.facility,
+                     args.manifest,
+                     int(args.warning)),
         nagiosplugin.ScalarContext('age', args.warning, args.warning),
         nagiosplugin.ScalarContext('size', "1:", "1:"),
     )

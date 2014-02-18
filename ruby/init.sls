@@ -56,3 +56,4 @@ ruby:
       - cmd: apt_sources
       {#- gem requires SSL to works when packages are available trough https #}
       - pkg: ssl-cert
+      - cmd: system_locale

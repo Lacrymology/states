@@ -66,4 +66,3 @@ include:
     - require:
       - file: /usr/local
       - file: /usr/local/bin/backup-store
-

@@ -31,7 +31,6 @@ Institute for Institutional Innovation by Data Driven Design Inc.
 
 Author: Luan Vo Ngoc <ngocluanvo@gmail.com>
 Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
-
 -#}
 include:
   - local

@@ -36,10 +36,15 @@ python-virtualenv:
   pkg:
     - purged
 
+{#- TODO: remove that statement in >= 2014-04 #}
+{{ opts['cachedir'] }}/salt-virtualenv-requirements.txt:
+  file:
+    - absent
+
 virtualenv:
   file:
     - managed
-    - name: {{ opts['cachedir'] }}/salt-virtualenv-requirements.txt
+    - name: {{ opts['cachedir'] }}/pip/virtualenv
     - source: salt://virtualenv/requirements.jinja2
     - template: jinja
     - user: root
@@ -57,7 +62,7 @@ virtualenv:
       - file: virtualenv
 {%- endif %}
     - name: pip.install
-    - requirements: {{ opts['cachedir'] }}/salt-virtualenv-requirements.txt
+    - requirements: {{ opts['cachedir'] }}/pip/virtualenv
     - require:
       - pkg: git
       - module: mercurial

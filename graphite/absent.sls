@@ -40,7 +40,7 @@ graphite-web:
       - uwsgi: graphite-web
 {% endfor %}
 
-{% for local in ('manage', 'salt-graphite-web-requirements.txt', 'bin/build-index.sh') %}
+{% for local in ('manage', 'salt-graphite-requirements.txt', 'bin/build-index.sh') %}
 /usr/local/graphite/{{ local }}:
   file:
     - absent

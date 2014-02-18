@@ -70,10 +70,15 @@ include:
   file:
     - absent
 
+{#- TODO: remove that statement in >= 2014-04 #}
+/usr/local/nagios/elasticsearch-requirements.txt:
+  file:
+    - absent
+
 pyelasticsearch:
   file:
     - managed
-    - name: /usr/local/nagios/elasticsearch-requirements.txt
+    - name: /usr/local/nagios/salt-elasticsearch-requirements.txt
     - source: salt://elasticsearch/nrpe/requirements.jinja2
     - template: jinja
     - user: root
@@ -86,7 +91,7 @@ pyelasticsearch:
     - name: pip.install
     - upgrade: True
     - bin_env: /usr/local/nagios
-    - requirements: /usr/local/nagios/elasticsearch-requirements.txt
+    - requirements: /usr/local/nagios/salt-elasticsearch-requirements.txt
     - watch:
       - file: pyelasticsearch
 

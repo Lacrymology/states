@@ -46,10 +46,15 @@ backup-elasticsearch:
       - file: /usr/local/bin/backup-store
       - module: esclient
 
+{#- TODO: remove that statement in >= 2014-04 #}
+{{ opts['cachedir'] }}/esclient-requirements.txt:
+  file:
+    - absent
+
 esclient:
   file:
     - managed
-    - name: {{ opts['cachedir'] }}/esclient-requirements.txt
+    - name: {{ opts['cachedir'] }}/pip/elasticsearch.backup
     - template: jinja
     - user: root
     - group: root
@@ -61,6 +66,6 @@ esclient:
     - wait
     - name: pip.install
     - upgrade: True
-    - requirements: {{ opts['cachedir'] }}/esclient-requirements.txt
+    - requirements: {{ opts['cachedir'] }}/pip/elasticsearch.backup
     - watch:
       - file: esclient

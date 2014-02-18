@@ -27,6 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Uninstall Nagios NRPE Agent.
 -#}
+{#- TODO: remove that statement in >= 2014-04 #}
 {{ opts['cachedir'] }}/nagiosplugin-requirements.txt:
   file:
     - absent
@@ -81,6 +82,7 @@ nagios:
   file:
     - absent
 
+{#- TODO: remove that statement in >= 2014-04 #}
 /usr/local/bin/check_memory.py:
   file:
     - absent

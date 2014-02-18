@@ -60,6 +60,13 @@ Bad::
 
   MySQL-python
 
+Requirements file should be ``file.managed`` and have ``pip.install`` module run
+only if they're changed.
+
+If the Python environment destination is the root (``/usr/local``), it's
+filename should be ``{{ opts['cachedir'] }}/pip/$statename``.
+If it's in a virtualenv it should be ``/usr/local/$venv/salt-requirements.txt``.
+
 States
 ------
 

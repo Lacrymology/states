@@ -28,6 +28,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 Diamond statistics for Nagios NRPE.
 -#}
 include:
+  - cron.diamond
   - diamond
   - diamond.nrpe
   - nrpe.rsyslog.diamond

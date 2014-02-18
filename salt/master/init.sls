@@ -39,6 +39,11 @@ include:
   - salt
   - ssh.client
 
+{#- TODO: remove that statement in >= 2014-04 #}
+{{ opts['cachedir'] }}/salt-master-requirements.txt:
+  file:
+    - absent
+
 /srv/salt:
   file:
     - directory
@@ -54,7 +59,7 @@ include:
 salt-master-requirements:
   file:
     - managed
-    - name: {{ opts['cachedir'] }}/salt-master-requirements.txt
+    - name: {{ opts['cachedir'] }}/pip/salt.master
     - source: salt://salt/master/requirements.jinja2
     - template: jinja
     - user: root
@@ -65,7 +70,7 @@ salt-master-requirements:
   module:
     - wait
     - name: pip.install
-    - requirements: {{ opts['cachedir'] }}/salt-master-requirements.txt
+    - requirements: {{ opts['cachedir'] }}/pip/salt.master
     - watch:
       - file: salt-master-requirements
       - pkg: python-dev

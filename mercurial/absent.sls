@@ -28,7 +28,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 mercurial:
   file:
     - absent
-    - name: {{ opts['cachedir'] }}/salt-mercurial-requirements.txt
+    - name: {{ opts['cachedir'] }}/pip/mercurial
 {%- if salt['cmd.has_exec']('pip') %}
   pip:
     - removed

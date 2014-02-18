@@ -49,10 +49,15 @@ backup-server:
     - group: root
     - mode: 775
 
+{#- TODO: remove that statement in >= 2014-04 #}
+{{ opts['cachedir'] }}/backup-requirements.txt:
+  file:
+    - absent
+
 backup-archiver-dependency:
   file:
     - managed
-    - name: {{ opts['cachedir'] }}/backup-requirements.txt
+    - name: {{ opts['cachedir'] }}/pip/backup.server
     - template: jinja
     - user: root
     - group: root
@@ -64,7 +69,7 @@ backup-archiver-dependency:
     - wait
     - name: pip.install
     - upgrade: True
-    - requirements: {{ opts['cachedir'] }}/backup-requirements.txt
+    - requirements: {{ opts['cachedir'] }}/pip/backup.server
     - watch:
       - file: backup-archiver-dependency
 

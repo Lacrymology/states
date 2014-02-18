@@ -39,3 +39,13 @@ postfix_diamond_collector:
 /usr/local/diamond/bin/postfix_rsyslog.py:
   file:
     - absent
+
+postfix_stats:
+  file:
+    - absent
+    - name: /usr/local/diamond/salt-postfix-requirements.txt
+
+{#- TODO: remove that statement in >= 2014-04 #}
+/usr/local/diamond/postfix-requirements.txt:
+  file:
+    - absent

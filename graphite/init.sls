@@ -116,10 +116,15 @@ graphite_wsgi:
       - virtualenv: graphite
       - pkg: sudo
 
+{#- TODO: remove that statement in >= 2014-04 #}
+/usr/local/graphite/salt-graphite-web-requirements.txt:
+  file:
+    - absent
+
 graphite-web:
   file:
     - managed
-    - name: /usr/local/graphite/salt-graphite-web-requirements.txt
+    - name: /usr/local/graphite/salt-graphite-requirements.txt
     - template: jinja
     - user: root
     - group: root
@@ -132,7 +137,7 @@ graphite-web:
     - name: pip.install
     - upgrade: True
     - bin_env: /usr/local/graphite/bin/pip
-    - requirements: /usr/local/graphite/salt-graphite-web-requirements.txt
+    - requirements: /usr/local/graphite/salt-graphite-requirements.txt
     - install_options:
       - "--prefix=/usr/local/graphite"
       - "--install-lib=/usr/local/graphite/lib/python{{ python_version }}/site-packages"

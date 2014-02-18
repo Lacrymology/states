@@ -49,11 +49,18 @@ include:
 
 {% from 'nrpe/passive.sls' import passive_check with context %}
 
+{#- TODO: remove that statement in >= 2014-04 #}
 /usr/local/nagiosplugin:
   file:
     - absent
 
+{#- TODO: remove that statement in >= 2014-04 #}
 {{ opts['cachedir'] }}/nagiosplugin-requirements.txt:
+  file:
+    - absent
+
+{#- TODO: remove that statement in >= 2014-04 #}
+/usr/local/nagios/nagiosplugin-requirements.txt:
   file:
     - absent
 
@@ -76,7 +83,7 @@ nrpe-virtualenv:
       - file: /usr/local
   file:
     - managed
-    - name: /usr/local/nagios/nagiosplugin-requirements.txt
+    - name: /usr/local/nagios/salt-requirements.txt
     - template: jinja
     - user: root
     - group: root
@@ -89,7 +96,7 @@ nrpe-virtualenv:
     - name: pip.install
     - upgrade: True
     - bin_env: /usr/local/nagios
-    - requirements: /usr/local/nagios/nagiosplugin-requirements.txt
+    - requirements: /usr/local/nagios/salt-requirements.txt
     - require:
       - virtualenv: nrpe-virtualenv
     - watch:
@@ -148,6 +155,7 @@ nagios-nrpe-server:
     - require:
       - module: nrpe-virtualenv
 
+{#- TODO: remove that statement in >= 2014-04 #}
 /usr/local/bin/check_memory.py:
   file:
     - absent

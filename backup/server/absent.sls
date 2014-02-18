@@ -39,6 +39,6 @@ Remove poor man backup server.
   file:
     - absent
 
-{{ opts['cachedir'] }}/backup-requirements.txt:
+{{ opts['cachedir'] }}/pip/backup.server:
   file:
     - absent

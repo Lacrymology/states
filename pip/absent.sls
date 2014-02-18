@@ -27,7 +27,12 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
 {% set version='1.5.2' %}
 
+{#- TODO: remove that statement in >= 2014-04 #}
 {{ opts['cachedir'] }}/pip-{{ version }}:
+  file:
+    - absent
+
+{{ opts['cachedir'] }}/pip:
   file:
     - absent
 

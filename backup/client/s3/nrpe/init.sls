@@ -33,7 +33,7 @@ include:
   file:
     - managed
     - template: jinja
-    - source: salt://backup/client/s3/nrpe/config.jinja2
+    - source: salt://backup/client/s3/nrpe/s3config.jinja2
     - user: nagios
     - group: nagios
     - mode: 440

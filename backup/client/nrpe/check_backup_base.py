@@ -125,7 +125,7 @@ class BackupFile(nagiosplugin.Resource):
 
     def make_file(self, filename, size):
         log.info("Creating file dict for: %s(%sB)", filename, size)
-        match = re.match(r'(?P<facility>.+)-(?P<date>[0-9\-_]{19}).tar.xz',
+        match = re.match(r'(?P<facility>.+)-(?P<date>[0-9\-_]{19})',
                          filename)
         if match:
             match = match.groupdict()

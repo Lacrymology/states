@@ -59,8 +59,8 @@ def test(name, map, logfile):
             os.unlink(logfile)
         command = 'diamond -r {}Collector'.format(collector)
         res = os.system(command)
-        with open(logfile, 'r') as file:
         collected_metrics = {}
+        with open(logfile, 'r') as file:
             for line in file:
                 metric, value, timestamp = line.split()
                 collected_metrics[metric] = value

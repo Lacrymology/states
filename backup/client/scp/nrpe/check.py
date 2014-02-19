@@ -34,6 +34,7 @@ __maintainer__ = 'Tomas Neme'
 __email__ = 'lacrymology@gmail.com'
 
 import logging
+import os
 
 import paramiko
 
@@ -69,6 +70,8 @@ class SCPBackupFile(BackupFile):
             log.debug('converting port %s to int', self.kwargs['port'])
             self.kwargs['port'] = int(self.kwargs['port'])
 
+        self.pwd, self.nameprefix = os.path.split(self.prefix)
+
     def files(self):
         """
         generator that returns files in the backup server. Notice that this
@@ -90,8 +93,8 @@ class SCPBackupFile(BackupFile):
         ssh.connect(**self.kwargs)
         log.debug("opening sftp")
         ftp = ssh.open_sftp()
-        log.debug("chdir %s", self.prefix)
-        ftp.chdir(self.prefix)
+        log.debug("chdir %s", self.pwd)
+        ftp.chdir(self.pwd)
 
         # optimization. To avoid running fstat for every backup file, I filter
         # out to only test the newest backup for each facility
@@ -99,11 +102,19 @@ class SCPBackupFile(BackupFile):
         log.debug("running ls")
         for file in ftp.listdir():
             log.debug('processing %s', file)
-            f = self.make_file(file, None)
+            if not file.startswith(self.nameprefix):
+                log.debug("skipping file that doesn't start with %s",
+                          self.nameprefix)
+                continue
+            # make_file expects the filename to start with $facility-. See below
+            # for our "undo" of this replace
+            f = self.make_file(file.replace(self.nameprefix, ''), None)
             if not f:
                 log.debug('skipping')
                 continue
             key, value = f.items()[0]
+            # we may want to run fstat on this file later on
+            f[key]['filename'] = file
             # this code is taken from BackupFile.create_manifest, it keeps only
             # the newest file for each facility
             if (not key in files) or (value['date'] > files[key]['date']):

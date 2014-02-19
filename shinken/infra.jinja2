@@ -56,7 +56,19 @@ define host {
 define host {
     use salt-host
     host_name {{ host }}
+    {%- if 'availabilityZone' in grains -%}
+        {% if 'amazon_ec2' in mine[host] -%}
+            {%- if grains['availabilityZone'] == mine[host]['amazon_ec2']['availability_zone'] %}
     address {{ mine[host]['ip_addrs']['private'] }}
+            {%- else %}
+    address {{ mine[host]['ip_addrs']['public'] }}
+            {%- endif -%}
+        {%- else %}
+    address {{ mine[host]['ip_addrs']['public'] }}
+        {%- endif %}
+    {%- else %}
+    address {{ mine[host]['ip_addrs']['public'] }}
+    {%- endif %}
     alias {{ host }}
     hostgroups {% for role in mine[host]['roles'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     poller_tag all

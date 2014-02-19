@@ -44,7 +44,11 @@ Config example
 destroy_vm_reminder:
   key_regexp: some-prefix-(?P<user>.*)-some-suffix-[0-9]+
   key_glob: integration-dev-*-*
-  jenkins_prefix: http://jenkins.example.com
+  jenkins:
+    prefix: http://jenkins.example.com
+    username: jenkins_username
+    # get your api_token from your jenkins profile page
+    api_token: 1234567890abcdef1234567890abcdef
   destroy_job: destroy-dev-vm
   email:
     from: admin@example.com
@@ -106,7 +110,9 @@ def main(*args):
     for user, keys in vms.items():
 
         res = requests.get(("{prefix}/securityRealm/user/{user}/api/json").format(
-            prefix=my_opts['jenkins_prefix'], user=user))
+            prefix=my_opts['jenkins']['prefix'], user=user),
+                           auth=(my_opts['jenkins']['username'],
+                                 my_opts['jenkins']['api_token']))
         data = json.loads(res.content)
         name = data['fullName']
         email = ''
@@ -118,7 +124,7 @@ def main(*args):
         message = template.render(
             name=name, vms=keys,
             url="{prefix}/job/{job_name}/build?delay=0sec".format(
-                prefix=my_opts['jenkins_prefix'],
+                prefix=my_opts['jenkins']['prefix'],
                 job_name=my_opts['destroy_job']))
 
         envelope = Envelope(

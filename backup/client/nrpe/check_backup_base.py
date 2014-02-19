@@ -52,8 +52,8 @@ class BackupFile(nagiosplugin.Resource):
         self.facility = facility
         self.age = age
 
-        self.prefix = self.config.get('backup', 'path')
         self.manifest = self.config.get('backup', 'manifest')
+        self.prefix = self.config.get('backup', 'prefix')
 
     def probe(self):
         log.info("Probe backup for facility: %s", self.facility)

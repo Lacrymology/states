@@ -49,11 +49,11 @@ class BackupFile(nagiosplugin.Resource):
         log.debug("Reading config file: %s", config)
         self.config.read(config)
 
-        self.facility = facility
-        self.age = age
-
-        self.manifest = self.config.get('backup', 'manifest')
         self.prefix = self.config.get('backup', 'prefix')
+        self.manifest = self.config.get('backup', 'manifest')
+        self.age = self.config.getint('backup', 'age')
+
+        self.facility = facility
 
     def probe(self):
         log.info("Probe backup for facility: %s", self.facility)
@@ -169,8 +169,7 @@ def main(Collector):
 
     check = nagiosplugin.Check(
         Collector(args.config,
-                  args.facility,
-                  int(args.warning)),
+                  args.facility,),
         nagiosplugin.ScalarContext('age', args.warning, args.warning),
         nagiosplugin.ScalarContext('size', "1:", "1:"),
     )

@@ -28,16 +28,6 @@ Maintainer: Dang Tung Lam <lamdt@familug.org>
 
 %%% {{ pillar['message_do_not_modify'] }}
 {#-
-     Debian ejabberd configuration file
-     This config must be in UTF-8 encoding
-
- The parameters used in this configuration file are explained in more detail
- in the ejabberd Installation and Operation Guide.
- Please consult the Guide in case of doubts, it is available at
- /usr/share/doc/ejabberd/guide.html
-#}
-
-{#-
 Options which are set by Debconf and managed by ucf
 
 Admin user
@@ -85,16 +75,6 @@ Hostname
 {%- endif %}
 
 {#-
-   SERVED HOSTNAMES
-
- hosts: Domains served by ejabberd.
- You can define one or several, for example:
- {hosts, ["example.net", "example.com", "example.org"]}.
-
- (This option is defined by debconf earlier)
- {hosts, ["localhost"]}.
-
-
  route_subdomains: Delegate subdomains to other Jabber server.
  For example, if this ejabberd serves example.org and you want
  to allow communication with a Jabber server called im.example.org.
@@ -104,10 +84,8 @@ Hostname
 
 {#-
    LISTENING PORTS
-
  listen: Which ports will ejabberd listen, which service handles it
  and what options to start it with.
-
 #}
 {listen,
  [

@@ -37,20 +37,24 @@ Optional
 Example::
 
   pip:
-    mirrors: True
+    allow_pypi: True
 
-pip:mirrors
-~~~~~~~~~~~
+pip:allow_pypi
+~~~~~~~~~~~~~~
 
-Value: list of pypi mirror server URLs.
-When file_archives is defined in pillar, this pillar item specify whether
-or not to use pypi server(s) as a failover if pkg is not available in using
-files_archive.
+Value: True/False
+When ``file_archives`` is defined in pillar, if this pillar item not
+setted/defined or has value ``False`` will make pip use files_archive
+as the pkg source.
+When it setted to value ``True``, file_archives will act as
+a fallback when pkg is not available in pypi offical index.
 
-Default: not defined.
+There is no way to make pypi offical index act as fallback for file_archives
+because of the way pip 1.5.x handles pkg sources.
+In which, index always be choosen as pkg source when that pkg is available in
+both index and file_archives (provided by option ``find-links``).
 
-If this pillar item is declared but not assigned value, or its value is not
-a list, https://pypi.python.org/simple/ will be used as the mirror.
+Default: not defined
 
 pip:proxy_server
 ~~~~~~~~~~~~~~~~

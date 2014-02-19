@@ -29,12 +29,12 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 [global]
 
 {%- if 'files_archive' in pillar %}
-no-index = true
 find-links = {{ pillar['files_archive'] }}/pip/
     {%- if pillar['pip'] is defined %}
-        {%- if pillar['pip']['mirrors'] is defined %}
-use-mirrors = true
-mirrors = {% if pillar['pip']['mirrors'] is sequence -%}{{ pillar['pip']['mirrors'] | join(' ') }}{%- endif %} https://pypi.python.org/simple/
+        {%- if pillar['pip']['allow_pypi'] is defined and pillar['pip']['allow_pypi'] %}
+no-index = false
+        {%- else %}
+no-index = true
         {%- endif %}
     {%- endif %}
 {%- else %}

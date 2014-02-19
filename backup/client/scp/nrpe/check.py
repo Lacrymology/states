@@ -94,7 +94,11 @@ class SCPBackupFile(BackupFile):
         log.debug("opening sftp")
         ftp = ssh.open_sftp()
         log.debug("chdir %s", self.pwd)
-        ftp.chdir(self.pwd)
+        try:
+            ftp.chdir(self.pwd)
+        except IOError, e:
+            log.error("Error going to directory %s: %s", self.pwd, e)
+            return
 
         # optimization. To avoid running fstat for every backup file, I filter
         # out to only test the newest backup for each facility

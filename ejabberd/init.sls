@@ -118,10 +118,10 @@ ejabberd_psql:
     - cwd: /var/lib/ejabberd
     - user: ejabberd
     - require:
-      - postgres_database: ejabberd
       - pkg: ejabberd
     - watch:
       - file: ejabberd_psql
+      - postgres_database: ejabberd
 
 ejabberd_reload:
   cmd:

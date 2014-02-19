@@ -44,16 +44,16 @@ import nagiosplugin
 log = logging.getLogger('nagiosplugin')
 
 class BackupFile(nagiosplugin.Resource):
-    def __init__(self, config, facility, manifest, age):
+    def __init__(self, config, facility, age):
         self.config = ConfigParser()
         log.debug("Reading config file: %s", config)
         self.config.read(config)
 
         self.facility = facility
-        self.manifest = manifest
         self.age = age
 
         self.prefix = self.config.get('backup', 'path')
+        self.manifest = self.config.get('backup', 'manifest')
 
     def probe(self):
         log.info("Probe backup for facility: %s", self.facility)
@@ -163,9 +163,6 @@ def main(Collector):
                       help='Emit a warning if a backup file is older than HOURS')
     argp.add_argument('-c', '--config', metavar="PATH",
                       default='/etc/nagios/backup.conf')
-    argp.add_argument('-m', '--manifest',
-                      help='s3 backup files manifest location',
-                      default='/var/lib/nagios/s3.backup.manifest.pickle')
     argp.add_argument('--timeout', default=None)
     argp.add_argument('-v', '--verbose', action='count', default=0)
 
@@ -173,9 +170,8 @@ def main(Collector):
 
     check = nagiosplugin.Check(
         Collector(args.config,
-                     args.facility,
-                     args.manifest,
-                     int(args.warning)),
+                  args.facility,
+                  int(args.warning)),
         nagiosplugin.ScalarContext('age', args.warning, args.warning),
         nagiosplugin.ScalarContext('size', "1:", "1:"),
     )

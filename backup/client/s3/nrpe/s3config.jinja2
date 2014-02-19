@@ -34,3 +34,4 @@ bucket = {{ pillar['aws']['s3']['bucket'] }}
 
 [backup]
 path = {{ pillar['aws']['s3']['path'] }}
+manifest = /var/lib/nagios/backup.manifest.pickle

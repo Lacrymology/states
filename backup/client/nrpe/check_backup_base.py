@@ -140,7 +140,6 @@ class BackupFile(nagiosplugin.Resource):
                     'name': name,
                     'size': size,
                     'date': date,
-                    'filename': filename,
                     },
                 }
         else:

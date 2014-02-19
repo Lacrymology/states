@@ -106,7 +106,7 @@ def main(*args):
     for user, keys in vms.items():
 
         res = requests.get(("{prefix}/securityRealm/user/{user}/api/json").format(
-            prefi=my_opts['jenkinx_prefix'], user=user))
+            prefix=my_opts['jenkins_prefix'], user=user))
         data = json.loads(res.content)
         name = data['fullName']
         email = ''
@@ -118,7 +118,7 @@ def main(*args):
         message = template.render(
             name=name, vms=keys,
             url="{prefix}/job/{job_name}/build?delay=0sec".format(
-                prefix=my_opts['jenkin_prefix'],
+                prefix=my_opts['jenkins_prefix'],
                 job_name=my_opts['destroy_job']))
 
         envelope = Envelope(

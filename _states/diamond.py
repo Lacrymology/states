@@ -57,8 +57,10 @@ def test(name, map, logfile):
         ret['changes'][collector] = f = {}
         if os.path.exists(logfile):
             os.unlink(logfile)
-        command = 'diamond -r {}Collector'.format(collector)
-        res = os.system(command)
+        command = 'diamond -r {}'.format(collector)
+        if not collector.startswith('/') and not collector.endswith("Collector"):
+            command += 'Collector'
+        os.system(command)
         collected_metrics = {}
         with open(logfile, 'r') as file:
             for line in file:

@@ -38,7 +38,7 @@ include:
     - user: nagios
     - group: nagios
     - mode: 440
-    - source: salt://graylog2/backup/nrpe/config.jinja2
+    - source: salt://graylog2/server/backup/nrpe/config.jinja2
     - require:
       - pkg: nagios-nrpe-server
     - watch_in:

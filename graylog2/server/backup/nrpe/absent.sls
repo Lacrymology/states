@@ -25,21 +25,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
-Nagios NRPE check for Graylog2 backup
+Remove Nagios NRPE check for Graylog2 backup
 -#}
-include:
-  - cron.nrpe
-  - nrpe
-
 /etc/nagios/nrpe.d/backup-graylog2.cfg:
   file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://graylog2/backup/nrpe/config.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-    - watch_in:
-      - service: nagios-nrpe-server
+    - absent

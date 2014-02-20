@@ -126,7 +126,7 @@ openerp:
     - name: {{ home }}
     - user: openerp
     - group: openerp
-    - mode: 770
+    - mode: 755
     - recurse:
       - user
       - group

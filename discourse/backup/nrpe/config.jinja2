@@ -25,21 +25,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
-include:
-  - backup.diamond
-  - cron.diamond
-
-discourse_backup_diamond_resources:
-  file:
-    - accumulated
-    - name: processes
-    - template: jinja
-    - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - require_in:
-      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - text:
-      - |
-        [[backup-discourse-postgres]]
-        cmdline = ^\/usr\/local\/bin\/backup-postgresql {{ salt['pillar.get']('discourse:db:name', 'discourse') }}$
-        [[backup-discourse-file]]
-        cmdline = ^\/usr\/local\/bin\/backup-file discourse
+# {{ pillar['message_do_not_modify'] }}
+command[backup_discourse_postgres_procs]=/usr/lib/nagios/plugins/check_procs -c 0:1 -u root -a "/usr/local/bin/backup-postgresql {{ salt['pillar.get']('discourse:db:name', 'discourse') }}"
+command[backup_discourse_file_procs]=/usr/lib/nagios/plugins/check_procs -c 0:1 -u root -a '/usr/local/bin/backup-file discourse /usr/local/discourse-{{ version }}/public uploads'

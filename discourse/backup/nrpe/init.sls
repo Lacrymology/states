@@ -24,22 +24,22 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
+
+Nagios NRPE check for Discourse backup
 -#}
 include:
-  - backup.diamond
-  - cron.diamond
+  - cron.nrpe
+  - nrpe
 
-discourse_backup_diamond_resources:
+/etc/nagios/nrpe.d/backup-discourse.cfg:
   file:
-    - accumulated
-    - name: processes
+    - managed
     - template: jinja
-    - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - require_in:
-      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - text:
-      - |
-        [[backup-discourse-postgres]]
-        cmdline = ^\/usr\/local\/bin\/backup-postgresql {{ salt['pillar.get']('discourse:db:name', 'discourse') }}$
-        [[backup-discourse-file]]
-        cmdline = ^\/usr\/local\/bin\/backup-file discourse
+    - user: nagios
+    - group: nagios
+    - mode: 440
+    - source: salt://discourse/backup/nrpe/config.jinja2
+    - require:
+      - pkg: nagios-nrpe-server
+    - watch_in:
+      - service: nagios-nrpe-server

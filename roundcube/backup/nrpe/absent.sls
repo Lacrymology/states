@@ -24,20 +24,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
--#}
-include:
-  - backup.diamond
-  - cron.diamond
 
-roundcube_backup_diamond_resources:
+Remove Nagios NRPE check for RoundCube backup
+-#}
+/etc/nagios/nrpe.d/backup-roundcube.cfg:
   file:
-    - accumulated
-    - name: processes
-    - template: jinja
-    - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - require_in:
-      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - text:
-      - |
-        [[backup-roundcube-postgres]]
-        cmdline = ^\/usr\/local\/bin\/backup-postgresql {{ salt['pillar.get']('roundcube:db:name', 'roundcube') }}$
+    - absent

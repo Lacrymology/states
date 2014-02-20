@@ -25,19 +25,5 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
-include:
-  - backup.diamond
-  - cron.diamond
-
-roundcube_backup_diamond_resources:
-  file:
-    - accumulated
-    - name: processes
-    - template: jinja
-    - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - require_in:
-      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - text:
-      - |
-        [[backup-roundcube-postgres]]
-        cmdline = ^\/usr\/local\/bin\/backup-postgresql {{ salt['pillar.get']('roundcube:db:name', 'roundcube') }}$
+# {{ pillar['message_do_not_modify'] }}
+command[backup_roundcube_postgres_procs]=/usr/lib/nagios/plugins/check_procs -c 0:1 -u root -a "/usr/local/bin/backup-postgresql {{ salt['pillar.get']('roundcube:db:name', 'roundcube') }}"

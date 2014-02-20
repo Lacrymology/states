@@ -24,22 +24,22 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
-
-Nagios NRPE check for MoinMoin backup
 -#}
 include:
-  - cron.nrpe
-  - nrpe
+  - backup.diamond
+  - cron.diamond
 
-/etc/nagios/nrpe.d/backup-moinmoin.cfg:
+moinmoin_backup_diamond_resources:
   file:
-    - managed
+    - accumulated
+    - name: processes
     - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://moinmoin/backup/nrpe/config.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-    - watch_in:
-      - service: nagios-nrpe-server
+    - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
+    - require_in:
+      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
+    - text:
+      - |
+        [[backup-moinmoin-pip]]
+        cmdline = ^\/usr\/local\/bin\/backup-pip \/usr\/local\/moinmoin
+        [[backup-moinmoin-file]]
+        cmdline = ^\/usr\/local\/bin\/backup-file moinmoin

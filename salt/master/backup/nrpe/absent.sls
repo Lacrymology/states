@@ -25,21 +25,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
-Nagios NRPE check for Salt Master backup
+Remove Nagios NRPE check for Salt Master backup
 -#}
-include:
-  - cron.nrpe
-  - nrpe
-
 /etc/nagios/nrpe.d/backup-saltmaster.cfg:
   file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://salt/master/backup/nrpe/config.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-    - watch_in:
-      - service: nagios-nrpe-server
+    - absent

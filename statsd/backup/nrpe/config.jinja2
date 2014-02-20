@@ -24,22 +24,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
-
-Nagios NRPE check for statsd backup
 -#}
-include:
-  - cron.nrpe
-  - nrpe
-
-/etc/nagios/nrpe.d/backup-statsd.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://statsd/backup/nrpe/config.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-    - watch_in:
-      - service: nagios-nrpe-server
+# {{ pillar['message_do_not_modify'] }}
+command[backup_statsd_file_procs]=/usr/lib/nagios/plugins/check_procs -c 0:1 -u root -a '/usr/local/bin/backup-pip /usr/local/statsd'

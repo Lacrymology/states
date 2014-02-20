@@ -30,6 +30,7 @@ Nagios NRPE check for Elasticsearch backup
 include:
   - cron.nrpe
   - nrpe
+  - pip.nrpe
 
 /etc/nagios/nrpe.d/backup-elasticsearch.cfg:
   file:

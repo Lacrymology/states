@@ -24,22 +24,22 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
-
-Nagios NRPE check for Sentry backup
 -#}
 include:
-  - cron.nrpe
-  - nrpe
+  - backup.diamond
+  - cron.diamond
 
-/etc/nagios/nrpe.d/backup-sentry.cfg:
+sentry_backup_diamond_resources:
   file:
-    - managed
+    - accumulated
+    - name: processes
     - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://sentry/backup/nrpe/config.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-    - watch_in:
-      - service: nagios-nrpe-server
+    - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
+    - require_in:
+      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
+    - text:
+      - |
+        [[backup-sentry-postgres]]
+        cmdline = ^\/usr\/local\/bin\/backup-postgresql {{ salt['pillar.get']('sentry:db:name', 'sentry') }}$
+        [[backup-sentry-pip]]
+        cmdline = ^\/usr\/local\/bin\/backup-pip \/usr\/local\/sentry

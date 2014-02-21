@@ -50,16 +50,19 @@ def data():
         'monitor': __salt__['pillar.get']('monitor', True)
     }
 
-    # figure how monitoring can reach this host
-    if __salt__['pillar.get']('ip_addrs', False):
-        # from pillar data
-        output['ip_addrs'] = __salt__['pillar.get']('ip_addrs')
-    elif 'availabilityZone' in __salt__['grains.ls']():
+    if 'availabilityZone' in __salt__['grains.ls']():
         # from ec2_info grains
         output['amazon_ec2'] = {
             'availability_zone': __salt__['grains.get']('availabilityZone'),
             'region':  __salt__['grains.get']('region')
         }
+
+    # figure how monitoring can reach this host
+    if __salt__['pillar.get']('ip_addrs', False):
+        # from pillar data
+        output['ip_addrs'] = __salt__['pillar.get']('ip_addrs')
+    elif 'amazon_ec2' in output:
+        # if IP not defined, just pick those from EC2
         output['ip_addrs'] = {
             'public': __salt__['grains.get']('public-ipv4'),
             'private': __salt__['grains.get']('privateIp'),

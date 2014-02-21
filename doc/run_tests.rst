@@ -36,9 +36,17 @@ Git Repositories
 You need checkout the following 3 repositories into your own
 workstation:
 
-- Common (where this file is)
-- Client specific (where the roles are)
+- Common states (where this file is)
+- Client specific states (where the roles are)
 - Pillar repository
+
+If you don't have or need a client specific states, just create an empty
+fake repo::
+
+  mkdir /tmp/repo
+  git init /tmp/repo
+
+And use ``/tmp/repo``
 
 Bootstrap Archive
 -----------------
@@ -90,4 +98,4 @@ You can launch specific test such as::
 
 To get the list of available tests run::
 
-  /root/salt/states/test/integraiton.py --list
+  /root/salt/states/test/integration.py --list

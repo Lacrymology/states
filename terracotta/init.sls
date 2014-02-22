@@ -90,7 +90,7 @@ terracotta:
     - makedirs: True
     - user: terracotta
     - group: terracotta
-    - mode: 755
+    - mode: 750
     - require:
       - user: terracotta
 
@@ -100,7 +100,7 @@ terracotta:
     - makedirs: True
     - user: terracotta
     - group: terracotta
-    - mode: 755
+    - mode: 750
     - require:
       - user: terracotta
 
@@ -110,6 +110,6 @@ terracotta:
     - makedirs: True
     - user: terracotta
     - group: terracotta
-    - mode: 755
+    - mode: 750
     - require:
       - user: terracotta

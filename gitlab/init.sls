@@ -308,16 +308,15 @@ gitlab:
 
 gitlab_migrate_db:
   cmd:
-    - wait
+    - run
     - name: bundle exec rake db:migrate
     - env:
         RAILS_ENV: production
     - user: {{ user }}
     - cwd: {{ web_dir }}
-    - watch:
+    - require:
       - cmd: gitlab
       - archive: gitlab
-    - require:
       - service: redis
       - cmd: bundler
       - file: {{ web_dir }}/db/fixtures/production/001_admin.rb
@@ -350,7 +349,7 @@ gitlab_precompile_assets:
 {%- if version == '6.4.3' %}
 gitlab_migrate_miids:
   cmd:
-    - wait
+    - run
     - name: bundle exec rake migrate_iids RAILS_ENV=production
     - env:
         RAILS_ENV: production
@@ -358,7 +357,6 @@ gitlab_migrate_miids:
     - cwd: {{ web_dir }}
     - require:
       - cmd: gitlab_migrate_db
-    - watch:
       - archive: gitlab
 {%- endif %}
 

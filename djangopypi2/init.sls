@@ -255,7 +255,7 @@ djangomod module, which is just a helper to build our command and run it.
     - user: www-data
     - group: www-data
     - makedirs: True
-    - mode: 755
+    - mode: 750
 
 /etc/nginx/conf.d/djangopypi2.conf:
   file:

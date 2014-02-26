@@ -53,9 +53,9 @@ salt:
   apt_repository:
     - present
 {%- if 'files_archive' in pillar %}
-    - address: {{ pillar['files_archive']|replace('https://', 'http://') }}/mirror/salt/{{ salt['pillar.get']('salt:version', version) }}
+    - address: {{ pillar['files_archive']|replace('https://', 'http://') }}/mirror/salt/{{ version }}
 {%- else %}
-    - address: http://archive.robotinfra.com/mirror/salt/{{ salt['pillar.get']('salt:version', version) }}
+    - address: http://archive.robotinfra.com/mirror/salt/{{ version }}
 {%- endif %}
 {%- if grains['saltversion'] == '0.15.3' %}
     - filename: saltstack-salt-{{ grains['lsb_codename'] }}

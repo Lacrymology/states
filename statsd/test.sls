@@ -27,18 +27,10 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 include:
   - statsd
-  - statsd.backup
-  - statsd.backup.nrpe
   - statsd.diamond
   - statsd.nrpe
 
 test:
   nrpe:
     - run_all_checks
-    - order: last
-  cmd:
-    - run
-    - name: /etc/cron.daily/backup-statsd
-    - require:
-      - file: backup-statsd
     - order: last

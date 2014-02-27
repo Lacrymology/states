@@ -37,7 +37,6 @@ Backup client for openerp.
 include:
   - cron
   - postgresql.server.backup
-  - virtualenv.backup
 
 backup-openerp:
   file:
@@ -51,4 +50,3 @@ backup-openerp:
     - require:
       - pkg: cron
       - file: /usr/local/bin/backup-postgresql
-      - file: /usr/local/bin/backup-pip

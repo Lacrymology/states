@@ -39,7 +39,5 @@ moinmoin_backup_diamond_resources:
       - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
     - text:
       - |
-        [[backup-moinmoin-pip]]
-        cmdline = ^\/usr\/local\/bin\/backup-pip \/usr\/local\/moinmoin
         [[backup-moinmoin-file]]
         cmdline = ^\/usr\/local\/bin\/backup-file moinmoin

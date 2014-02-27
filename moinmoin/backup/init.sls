@@ -29,7 +29,6 @@ Backup client for moinmoin.
 -#}
 include:
   - cron
-  - virtualenv.backup
   - backup
 
 backup-moinmoin:
@@ -43,5 +42,4 @@ backup-moinmoin:
     - source: salt://moinmoin/backup/cron.jinja2
     - require:
       - pkg: cron
-      - file: /usr/local/bin/backup-pip
       - file: /usr/local/bin/backup-file

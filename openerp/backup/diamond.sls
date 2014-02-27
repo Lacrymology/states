@@ -41,5 +41,3 @@ openerp_backup_diamond_resources:
       - |
         [[backup-openerp-postgres]]
         cmdline = ^\/usr\/local\/bin\/backup-postgresql {{ salt['pillar.get']('openerp:db:name', 'openerp') }}$
-        [[backup-openerp-pip]]
-        cmdline = ^\/usr\/local\/bin\/backup-pip \/usr\/local\/openerp

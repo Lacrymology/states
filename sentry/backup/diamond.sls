@@ -41,5 +41,3 @@ sentry_backup_diamond_resources:
       - |
         [[backup-sentry-postgres]]
         cmdline = ^\/usr\/local\/bin\/backup-postgresql {{ salt['pillar.get']('sentry:db:name', 'sentry') }}$
-        [[backup-sentry-pip]]
-        cmdline = ^\/usr\/local\/bin\/backup-pip \/usr\/local\/sentry

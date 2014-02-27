@@ -43,5 +43,3 @@ djangopypi2_backup_diamond_resources:
         cmdline = ^\/usr\/local\/bin\/backup-postgresql {{ salt['pillar.get']('djangopypi2:db:name', 'djangopypi2') }}$
         [[backup-djangopypi2-file]]
         cmdline = ^\/usr\/local\/bin\/backup-file djangopypi2
-        [[backup-djangopypi2-pip]]
-        cmdline = ^\/usr\/local\/bin\/backup-pip \/usr\/local\/djangopypi2

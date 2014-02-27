@@ -50,14 +50,14 @@ recovery_from_master_base_backup:
       - pkg: postgresql
   file:
     - directory
-    - name: /var/lib/postgresql/9.2/main/
+    - name: /var/lib/postgresql/{{ version }}/main/
     - mode: 750
     - clean: True
     - require:
       - service: recovery_from_master_base_backup
   cmd:
     - run
-    - cwd: /var/lib/postgresql/9.2/main/
+    - cwd: /var/lib/postgresql/{{ version }}/main/
     - name: pg_basebackup -U {{ username }} -h {{ pillar['master'] }} -p 5432 -D .
     - user: postgres
     - group: postgres

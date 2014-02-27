@@ -34,8 +34,8 @@ rm -f $WORKSPACE/bootstrap-archive.tar.gz $WORKSPACE/stderr.log.xz $WORKSPACE/st
 rm -rf $WORKSPACE/salt-common-doc
 virtualenv $WORKSPACE/virtualenv
 . $WORKSPACE/virtualenv/bin/activate
-pip install -r doc/requirements.txt
 cd common
+pip install -r doc/requirements.txt
 doc/build.sh
 ./bootstrap_archive.py ../pillar ../non-common > /srv/salt/jenkins_archives/$JOB_NAME-$BUILD_NUMBER.tar.gz
 sudo salt-cloud -p ci-minion integration-$JOB_NAME-$BUILD_NUMBER

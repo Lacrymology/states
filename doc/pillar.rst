@@ -115,3 +115,10 @@ smtp:tls
 ~~~~~~~~
 
 Use TLS or Not. Default is: `False`.
+
+encoding
+~~~~~~~~
+
+Default system locale.
+
+Default: ``en_US.UTF-8``.

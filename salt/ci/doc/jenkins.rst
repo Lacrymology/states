@@ -83,3 +83,23 @@ In each instance of Multi SCM, click 2nd ``Advanced...`` button and set the
 
 Specify the tested branch, never put ``**`` or a single click on **build**
 can trigger 200 builds.
+
+In Build section, add a build step by choosing
+``Add build step`` > ``Execute shell``
+add bellow script to create a "fake" ``non-common`` git repository or you
+you have a real ``non-common`` repository, add it as the same way you do
+with ``common`` and ``pillar``::
+
+    if [ ! -d $WORKSPACE/non-common/.git ]; then
+      mkdir -p $WORKSPACE/non-common/.git
+    fi
+
+Add one more build step, with bellow command::
+
+    $WORKSPACE/common/test/jenkins/build.sh vim
+
+which will run build script from path
+``$WORKSPACE/common/test/jenkins/build.sh`` with one argument ``vim``,
+this make build job run all test against ``vim`` formula.
+To add more tests, just pass them as arguments to this script (separate
+by space). To run all test, provide no argument.

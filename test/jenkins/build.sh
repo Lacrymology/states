@@ -37,7 +37,7 @@ virtualenv $WORKSPACE/virtualenv
 cd common
 pip install -r doc/requirements.txt
 doc/build.py
-./bootstrap_archive.py ../pillar ../non-common > /srv/salt/jenkins_archives/$JOB_NAME-$BUILD_NUMBER.tar.gz
+./bootstrap_archive.py ../pillar > /srv/salt/jenkins_archives/$JOB_NAME-$BUILD_NUMBER.tar.gz
 sudo salt-cloud -p ci-minion integration-$JOB_NAME-$BUILD_NUMBER
 sudo salt -t 600 "integration-$JOB_NAME-$BUILD_NUMBER" cmd.run "hostname integration-$JOB_NAME-$BUILD_NUMBER"
 sudo salt -t 600 "integration-$JOB_NAME-$BUILD_NUMBER" cp.get_file salt://jenkins_archives/$JOB_NAME-$BUILD_NUMBER.tar.gz /tmp/bootstrap-archive.tar.gz

@@ -86,24 +86,31 @@ def main():
     main loop.
     :return: None
     """
-    if len(sys.argv) != 3:
+    if len(sys.argv) == 3:
+        states_root = validate_git_dir(sys.argv[2])
+    elif len(sys.argv) == 2:
+        states_root = None
+    else:
         print '%s: [path to pillar] [path to states]' % sys.argv[0]
         sys.exit(1)
-    # guess the common repository from the path to reach this file
-    common_root = os.path.dirname(os.path.abspath(__file__))
-    pillar_root = validate_git_dir(sys.argv[1])
-    states_root = validate_git_dir(sys.argv[2])
 
     tar = tarfile.open(mode='w:gz', fileobj=sys.stdout)
 
     # pillar
+    pillar_root = validate_git_dir(sys.argv[1])
     for filename in os.listdir(pillar_root):
         if filename != '.git':
             tar.add(os.path.join(pillar_root, filename),
                     'root/salt/pillar/' + filename)
 
+    # guess the common repository from the path to reach this file
+    common_root = os.path.dirname(os.path.abspath(__file__))
     # states
-    for state_dir in (common_root, states_root):
+    all_states = [common_root]
+    if states_root:
+        all_states.append(states_root)
+
+    for state_dir in all_states:
         for filename in os.listdir(state_dir):
             if filename != '.git':
                 tar.add(os.path.join(state_dir, filename),

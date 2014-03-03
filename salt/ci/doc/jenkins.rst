@@ -86,15 +86,6 @@ can trigger 200 builds.
 
 In Build section, add a build step by choosing
 ``Add build step`` > ``Execute shell``
-add bellow script to create a "fake" ``non-common`` git repository or you
-you have a real ``non-common`` repository, add it as the same way you do
-with ``common`` and ``pillar``::
-
-    if [ ! -d $WORKSPACE/non-common/.git ]; then
-      mkdir -p $WORKSPACE/non-common/.git
-    fi
-
-Add one more build step, with bellow command::
 
     $WORKSPACE/common/test/jenkins/build.sh vim
 

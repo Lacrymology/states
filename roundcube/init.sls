@@ -113,6 +113,12 @@ roundcube:
       - archive: roundcube
       - user: web
 
+{{ roundcubedir }}/installer:
+  file:
+    - absent
+    - require:
+      - archive: roundcube
+
 {{ roundcubedir }}/config/db.inc.php:
   file:
     - managed

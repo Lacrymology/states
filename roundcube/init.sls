@@ -119,6 +119,16 @@ roundcube:
     - require:
       - archive: roundcube
 
+{{ roundcubedir }}/bin:
+  file:
+    - directory
+    - user: www-data
+    - mode: 550
+    - recurse:
+      - mode
+    - require:
+      - file: {{ roundcubedir }}
+
 {{ roundcubedir }}/config/db.inc.php:
   file:
     - managed

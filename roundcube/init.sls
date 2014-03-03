@@ -104,7 +104,8 @@ roundcube:
     - directory
     - user: www-data
     - group: www-data
-    - mode: 750
+    - dir_mode: 750
+    - file_mode: 640
     - recurse:
       - user
       - group

@@ -73,4 +73,16 @@ server {
         uwsgi_modifier1 14;
         uwsgi_pass roundcube;
     }
+
+    location ~ ^/?(\.git|\.tx|SQL|bin|config|logs|temp|tests|program\/(include|lib|localization|steps)) {
+        return 403;
+    }
+
+    location ~ /?(README\.md|CHANGELOG|INSTALL|LICENSE|UPGRADING)$ {
+        return 403;
+    }
+
+    location /favicon {
+        rewrite ^/favicon\.ico$ /skins/larry/images/favicon.ico;
+    }
 }

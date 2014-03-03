@@ -102,13 +102,32 @@ roundcube:
 {{ roundcubedir }}:
   file:
     - directory
-    - user: root
-    - group: root
+    - user: www-data
+    - group: www-data
+    - dir_mode: 750
+    - file_mode: 640
     - recurse:
       - user
       - group
     - require:
       - archive: roundcube
+      - user: web
+
+{{ roundcubedir }}/installer:
+  file:
+    - absent
+    - require:
+      - archive: roundcube
+
+{{ roundcubedir }}/bin:
+  file:
+    - directory
+    - user: www-data
+    - mode: 550
+    - recurse:
+      - mode
+    - require:
+      - file: {{ roundcubedir }}
 
 {{ roundcubedir }}/config/db.inc.php:
   file:

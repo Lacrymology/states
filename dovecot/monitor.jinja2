@@ -42,4 +42,7 @@ dovecot_{{ check }}:
 {%- for port in ('imap', 'pop3', 'imaps', 'pop3s') %}
 dovecot_port_{{ port }}:
   description: Dovecot {{ port|upper }} Port
-{% endfor -%}
+{%- endfor %}
+
+backup_dovecot_file_procs:
+  description: Dovecot Backup Files Process

@@ -102,6 +102,7 @@ gitlab-shell:
     - name: {{ shell_dir }}
     - user: git
     - group: git
+    - mode: 770
     - recurse:
       - user
       - group
@@ -186,6 +187,7 @@ gitlab:
     - name: {{ web_dir }}
     - user: git
     - group: git
+    - mode: 770
     - recurse:
       - user
       - group

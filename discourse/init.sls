@@ -97,6 +97,7 @@ discourse_tar:
     - name: {{ web_root_dir }}
     - user: discourse
     - group: discourse
+    - mode: 750
     - recurse:
       - user
       - group
@@ -375,7 +376,7 @@ discourse_assets_precompile:
     - template: jinja
     - user: discourse
     - group: discourse
-    - mode: 644
+    - mode: 440
     - require:
       - file: discourse_tar
     - require_in:
@@ -388,7 +389,7 @@ discourse_assets_precompile:
     - template: jinja
     - user: discourse
     - group: discourse
-    - mode: 644
+    - mode: 440
     - require:
       - file: discourse_tar
     - require_in:

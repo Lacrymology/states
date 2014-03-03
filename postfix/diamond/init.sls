@@ -123,6 +123,7 @@ postfix_stats:
 /etc/rsyslog.d/postfix_stats.conf:
   file:
     - managed
+    - mode: 440
     - contents: |
         # {{ pillar['message_do_not_modify'] }}
         $ModLoad omprog

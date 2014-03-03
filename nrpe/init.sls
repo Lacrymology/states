@@ -64,6 +64,18 @@ include:
   file:
     - absent
 
+{#- Change /usr/local/nagios owner #}
+/usr/local/nagios:
+  file:
+    - directory
+    - user: nagios
+    - group: nagios
+    - recurse:
+      - user
+      - group
+    - require:
+      - module: nrpe-virtualenv
+
 nrpe-virtualenv:
   {# remove system-wide nagiosplugin, only use one in our nrpe-virtualenv #}
   pip:

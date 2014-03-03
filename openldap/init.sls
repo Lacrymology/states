@@ -52,6 +52,7 @@ slapd:
     - managed
     - name: /etc/ldap/ldap.conf
     - source: salt://openldap/config.jinja2
+    - mode: 400
     - template: jinja
 
 {% if ssl %}

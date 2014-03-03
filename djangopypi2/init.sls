@@ -255,6 +255,20 @@ djangomod module, which is just a helper to build our command and run it.
     - user: www-data
     - group: www-data
     - makedirs: True
+    - mode: 750
+
+/var/lib/deployments/djangopypi2:
+  file:
+    - directory
+    - user: www-data
+    - group: www-data
+    - mode: 750
+    - recurse:
+      - user
+      - group
+    - require:
+      - user: web
+      - uwsgi: djangopypi2
 
 /etc/nginx/conf.d/djangopypi2.conf:
   file:

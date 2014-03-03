@@ -74,6 +74,7 @@ wordpress:
     - name: {{ wordpressdir }}
     - user: www-data
     - group: www-data
+    - mode: 750
     - recurse:
       - user
       - group

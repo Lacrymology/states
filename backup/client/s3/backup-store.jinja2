@@ -30,6 +30,11 @@ Stores data files on Amazon S3.
 #!/bin/bash
 # {{ pillar['message_do_not_modify'] }}
 set -e
+
+# limit resources usage
+ulimit -e 19
+onice -c idle -p $$
+
 archive_path=$1
 archive_name=`basename $archive_path`
 s3cmd --no-progress put $archive_path s3://{{ pillar['aws']['s3']['bucket'] }}/{{ pillar['aws']['s3']['path'] }}/$archive_name | logger -t s3cmd

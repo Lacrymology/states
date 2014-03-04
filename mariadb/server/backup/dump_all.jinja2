@@ -36,6 +36,11 @@ Maintainer: Dang Tung Lam <lamdt@familug.org>
 # {{ pillar['message_do_not_modify'] }}
 set -e
 
+# limit resources usage
+ulimit -e 19
+onice -c idle -p $$
+XZ_DEFAULTS=--memlimit=64MiB
+
 NOW=`date '+%Y-%m-%d-%H_%M_%S'`
 export TERM=dumb
 /usr/bin/mysqldump -p{{ salt['password.pillar']('mysql:password') }} -uroot --all-databases | xz > /tmp/mysql-all-$NOW.sql.xz

@@ -28,14 +28,10 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 /etc/nagios/backup.conf:
   file:
     - absent
-    - require:
-      - file: /usr/lib/nagios/plugins/check_backup.py
 
 /usr/local/nagios/lib/python2.7/check_backup_base.py:
   file:
     - absent
-    - require:
-      - file: /usr/lib/nagios/plugins/check_backup.py:
 
 /usr/lib/nagios/plugins/check_backup.py:
   file:

@@ -27,7 +27,6 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 include:
   - virtualenv
-  - virtualenv.backup
   - virtualenv.nrpe
 
 test:

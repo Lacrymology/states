@@ -37,4 +37,3 @@ Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
 set -e
 
 /usr/local/bin/backup-postgresql {{ salt['pillar.get']('openerp:db:name', 'openerp') }}
-/usr/local/bin/backup-pip /usr/local/openerp

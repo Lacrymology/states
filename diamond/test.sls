@@ -27,17 +27,9 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 include:
   - diamond
-  - diamond.backup
-  - diamond.backup.nrpe
   - diamond.nrpe
 
 test:
   nrpe:
     - run_all_checks
     - order: last
-  cmd:
-    - run
-    - name: /etc/cron.daily/backup-diamond
-    - require:
-      - file: backup-diamond
-      - service: diamond

@@ -85,6 +85,16 @@ uwsgi_dnsutils:
     - source: salt://uwsgi/config.jinja2
     - mode: 440
 
+uwsgi_patch_carbon_name_order:
+{#- https://github.com/unbit/uwsgi/issues/534 #}
+  file:
+    - patch
+    - name: {{ extracted_dir }}/plugins/carbon/carbon.c
+    - source: salt://uwsgi/carbon.patch
+    - hash: md5=1f96187b79550be801a9ab1397cb66ca
+    - require:
+      - archive: uwsgi_build
+
 uwsgi_build:
   archive:
     - extracted
@@ -120,6 +130,7 @@ uwsgi_build:
       - archive: uwsgi_build
       - file: uwsgi_build
       - pkg: python-dev
+      - file: uwsgi_patch_carbon_name_order
 
 uwsgi_sockets:
   file:

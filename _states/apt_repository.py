@@ -44,11 +44,13 @@ def __virtual__():
     '''
     Verify apt is installed.
     '''
+    command = 'apt-key'
     try:
-        utils.check_or_die('apt-key')
-        return 'apt_repository'
+        utils.check_or_die(command)
     except exceptions.CommandNotFoundError:
+        log.debug("Can't find command '%s'", command)
         return False
+    return 'apt_repository'
 
 
 def present(address, components, distribution=None, source=False, key_id=None,

@@ -42,12 +42,13 @@ def __virtual__():
     '''
     Verify RabbitMQ is installed.
     '''
-    name = 'rabbitmq_plugins'
+    command = 'rabbitmq-plugins'
     try:
-        utils.check_or_die('rabbitmq-plugins')
+        utils.check_or_die(command)
     except exceptions.CommandNotFoundError:
-        name = False
-    return name
+        log.debug("Can't find command '%s'", command)
+        return False
+    return 'rabbitmq_plugins'
 
 def _convert_env(env):
     output = {}

@@ -19,12 +19,13 @@ log = logging.getLogger(__name__)
 def __virtual__():
     '''Verify RabbitMQ is installed.
     '''
-    name = 'rabbitmq'
+    command = 'rabbitmqctl'
     try:
-        utils.check_or_die('rabbitmqctl')
+        utils.check_or_die(command)
     except exceptions.CommandNotFoundError:
-        name = False
-    return name
+        log.debug("Can't find command '%s", command)
+        return False
+    return 'rabbitmq'
 
 
 def _format_response(response, msg):

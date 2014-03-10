@@ -48,6 +48,7 @@ def __virtual__():
     Verify python-route53 is installed.
     '''
     if route53 is None:
+        log.debug("Can't find python module 'route53'")
         return False
     return 'route53'
 

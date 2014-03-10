@@ -42,25 +42,24 @@ except ImportError:
 from salt import exceptions, utils
 
 log = logging.getLogger(__name__)
-log.debug("module rabbitmq_cluster loaded")
 
 def __virtual__():
     '''
     Verify PyRabbit and RabbitMQ are installed.
     '''
+    command = 'rabbitmqctl'
     try:
-        utils.check_or_die('rabbitmqctl')
-        log.debug("rabbitmqctl is available")
+        utils.check_or_die(command)
     except exceptions.CommandNotFoundError:
-        log.error("rabbitmqctl is not available")
-        name = False
+        log.debug("Can't find command '%s'", command)
+        return False
     if not has_pyrabbit:
-        log.error("pyrabbit is not available")
+        log.debug("Can't find python module 'pyrabbit'")
+        return False
     return 'rabbitmq_cluster'
 
 def listeners(host, user, password):
-    log.debug("Connect to RabbitMQ instance %s user: %s password: %s", host,
-              user, password)
+    log.debug("Connect to RabbitMQ instance %s user: %s", host, user)
     client = pyrabbit.api.Client(host, user, password)
     log.debug("call get_overview()")
     output = client.get_overview()

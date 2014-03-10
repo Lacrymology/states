@@ -42,12 +42,14 @@ def __virtual__():
     '''
     Verify npm is installed.
     '''
+    command = 'npm'
     try:
-        utils.check_or_die('npm')
-        return 'npm'
+        utils.check_or_die(command)
     except exceptions.CommandNotFoundError:
-        log.error("Can't find npm")
+        log.debug("Can't find command '%s'", command)
         return False
+    # command module name are the same
+    return command
 
 def _npm(command, is_global=True, runas=None):
     if is_global:

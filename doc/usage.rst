@@ -90,7 +90,7 @@ master branch.
 To specify which branch to use, the pillar data for a host need to contains the
 branch key, such as::
 
-    branch: develop
+  branch: develop
 
 The only limitation with that, is that the branch name need to exist in all
 git repositories (except the one for pillar).
@@ -104,3 +104,11 @@ step is to run tests. For that check tests document.
 Once states are applied successfully, the salt master can bootstrap itself and
 be available to configure all minions. For that, check the master installation
 document.
+
+Formula Installation
+--------------------
+
+DOC HERE THE COMMON PRACTICE REGARDING FORMULA INSTALLATION
+SUCH AS LOOKING AT PILLAR.RST
+NRPE INTEGRATION SHOULD ALWAYS BE APPLIED TOO
+AND USE nrpe.run_all_checks TO MAKE SURE THINGS ARE OK

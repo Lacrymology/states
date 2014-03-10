@@ -31,47 +31,49 @@ File Archive server
              POSSIBILITY OF SUCH DAMAGE.
 :Authors: - Quan Tong Anh
 
-Installing the latest version often causes problems, so we build our own
-mirrors of every files which are use to deploy states.
-
-This also has some other advantages:
-
-* Not depending on the pypi.python.org, github.com, ...
-* Make the installation faster since everything is mirrored internally
-
-Installation
-------------
-
-I am going to install on the same machine that is running Salt::
-
-  salt myminion state.sls salt.archive -v
-
-This only create the `salt_archive` user and the directory
-(`/var/lib/salt_archive/`) to hold the data. 
-
-To start syncing, run the following command::
-
-  salt myminion state.sls salt.archive.server -v
-
-After that, you can access to the `web <http://q-archive.robotinfra.com>`_ to see all the packages that was synced.
-
-To add a "file age" check to the Nagios::
-
-  salt myminion state.sls salt.archive.server.nrpe -v
-
-An example when running from the command line::
-
-  salt-call nrpe.run_check salt_archive_timestamp
-
 Usage
------
+=====
 
-When you write a new state or pillar file, you should get the package from the file
-archive server first (if it was defined in the pillar)::
+When you author a formula or pillar file, you should get the package from the
+file archive server first (if it was defined in the pillar), such as:
 
   {%- if 'files_archive' in pillar %}
-  {{ pillar['files_archive'] }}/pip/diamond-3.4.68.tar.gz
+  {{ pillar['files_archive'] }}/pip/diamond-xxx.tar.gz
   {%- else %}
-  -e
-  git+git://github.com/BrightcoveOS/Diamond.git@2d1149fb9d419a3016f5fe8e0830fa0015fbda06#egg=diamond
+  git+git://github.com/BrightcoveOS/Diamond.git@xxx#egg=diamond
   {%- endif %}
+
+Python Pip
+----------
+
+LINK TO PIP DOC
+
+Pip come with native support for the archive, if ``files_archive`` is defined
+it will automatically grab those files from it. No need to specify the path
+in your ``requirements.txt``.
+
+How to upload new files
+-----------------------
+
+First, your Salt Archive server need to be a "master" server. It don't have to
+act solely as a mirror and rsync to a source. That mean the
+``salt_archive:source`` pillar key must be undefined.
+
+If a server got the pillar key ``salt_archive:source`` is defined, any
+new files will be erased on next synchronization with the said source.
+
+If your server don't have a source, an incoming folder is created for any
+authorized users to upload new file.
+
+To upload you have to copy the new file in ``incoming/pip`` (if it's a Python
+package) or ``incoming/mirror`` directory on the server using SFTP with the
+username ``salt_archive``.
+
+The access to this user is granted using SSH keys, you have your public key in
+``salt_archive:keys`` pillar key.
+
+Once your file is uploaded, after a while, a cron job run and if the same file
+don't exists in ``pip/`` and ``mirror/`` it will move it if the file don't
+already exists to avoid the same filename with different content.
+
+If file exists, it get removed.

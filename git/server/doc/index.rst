@@ -31,6 +31,8 @@ Git server
              POSSIBILITY OF SUCH DAMAGE.
 :Authors: - Quan Tong Anh
 
+THIS DOC IS SALT MASTER SPECIFIC AND NEED CLEANUP
+
 If you have ever look at the master configuration file, you will see something
 like::
 

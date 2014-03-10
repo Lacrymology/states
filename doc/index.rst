@@ -9,8 +9,7 @@ Introduction:
     :glob:
 
     intro
-    master_installation
-    minion_installation
+    install
     usage
     state
     tests

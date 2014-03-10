@@ -27,33 +27,12 @@
              ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
              POSSIBILITY OF SUCH DAMAGE.
 :Authors: - Quan Tong Anh
-          
-Diamond
-=======
-
-Diamond is a python daemon that collects system metrics and publishes them to
-Graphite (and others). It is capable of collecting cpu, memory, network, i/o,
-load and disk metrics. Additionally, it features an API for implementing custom
-collectors for gathering metrics from almost any source.
-
-Installation
-------------
-
-Here we will show you the way to use `Diamond` to gather metrics of the server
-that is running ElasticSearch and send to Graphite.
-
-Install Diamond on the ElasticSearch server by running::
-
-  salt myminion state.sls diamond -v
-
-Make sure that Diamond connected to the Graphite::
-
-  tcp        0      0 10.134.133.157:51832    10.128.41.11:2004
-  ESTABLISHED 29756/python
 
 Usage
------
+=====
 
 After installing, refresh the Graphite web, you will see a new node appear
 under Graphite with name is the hostname of ElasticSearch machine. You can
-override it by changing the `path_prefix` setting in the configuration file.
+override it by changing the ``path_prefix`` setting in the configuration file.
+
+LINK TO GRAPHITE DOC!!

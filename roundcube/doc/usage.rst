@@ -1,6 +1,3 @@
-Mail system
-===========
-
 :Copyrights: Copyright (c) 2013, Quan Tong Anh
 
              All rights reserved.
@@ -31,80 +28,14 @@ Mail system
              POSSIBILITY OF SUCH DAMAGE.
 :Authors: - Quan Tong Anh
 
-OpenLDAP
---------
+Usage
+=====
 
-Follow the instructions in the file `openldap/doc/pillar.rst` to create the
-pillar data for OpenLDAP, for e.g::
+After that, you can access to the web interface SPECIFY PILLAR KEY FOR WEB URL
+AND LINK TO PILLAR FILE.
+And login using the LDAP account SPECIFY PILLAR KEY AND LINK TO PILLAR FILE.
 
-  ldap:
-    suffix: dc=robotinfra,dc=com
-    rootdn: cn=admin,dc=robotinfra,dc=com
-    rootpw: VLgWqk0s
-    data:
-      example.com:
-        nam:
-          cn: Common Name
-          sn: Surname
-          passwd: pass
-          desc:
-          email: someone@example.com
+IS THE NEXT STEP REALLY REQUIRED?
 
-then you can install the OpenLDAP by running::
-
-  salt myminion state.sls openldap -v
-
-make sure that you will see the result when doing a `ldapsearch`::
-
-  ldapsearch -x -W -D "cn=admin,dc=robotinfra,dc=com" -b "dc=robotinfra,dc=com"
-
-Postfix
--------
-
-Postfix is mail server as an alternative to the `Sendmail` program.
-
-Since the `mailname` is already defined in the pillar file `common.sls`::
-
-  mail:
-    mailname: {{ grains['id'] }}.example.com
-
-all you need to do to install Postfix is::
-
-  salt myminion state.sls postfix -v
-
-on the target minion, check to see if postfix is running::
-
-  salt-call nrpe.run_check postfix_master
-
-Dovecot
--------
-
-Run the following command to install `Dovecot`::
-
-  salt myminion state.sls dovecot -v
-
-then you can check the authentication::
-
-  salt-call nrpe.run_check dovecot_login
-
-Roundcube
----------
-
-Here's an example of pillar data::
-
-  roundcube:
-    hostnames:
-      - q-mail.example.com
-    ssl: example.com
-    ssl_redirect: True
-    workers: 1
-    imap:
-      ssl: True
-
-push it to the pillar repository, then install by running::
-
-  salt myminion state.sls roundcube -v
-
-After that, you can access to the web interface (`https://q-mail.robotinfra.com`) and login using the LDAP account (`nam/pass`).
-
-Go to `Settings` on the top-right and change the `Identities` from `nam@127.0.0.1` to something like `nam@robotinfra.com`.
+Once logged successfully in Web UI, go to `Settings` on the top-right and change
+the `Identities` to something more appropriate like `myusername@mydomain.com`.

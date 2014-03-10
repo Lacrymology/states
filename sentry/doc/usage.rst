@@ -1,6 +1,3 @@
-Sentry
-======
-
 :copyrights: Copyright (c) 2013, Quan Tong Anh
 
              All rights reserved.
@@ -30,44 +27,12 @@ Sentry
              POSSIBILITY OF SUCH DAMAGE.
 :authors: - Quan Tong Anh
 
-Initial deployment
-------------------
+Usage
+=====
 
-Follow the instruction in the `master_installation.rst` and
-`minion_installation.rst` to bootstrap Salt.
+Log into PILAR KEY FOR URL
+Using credential in PILLAR KEY USERNAME AND PASSWORD
+LINK TO PILLAR DOC.
 
-Sentry
-------
-
-From the Salt master, you can install `Sentry` on the target minion by
-running::
-
-  salt myminion state.sls sentry
-
-Don't surprise if you see this command returns nothing because it may take a
-few (ten) minutes to execute. Let's check all actively running jobs::
-
-  salt-run jobs.active
-
-you will see something like this::
-
-  '20131212061915418364':
-    Arguments:
-    - sentry
-    Function: state.sls
-    Start Time: 2013, Dec 12 06:19:15.418364
-    Target: q-alerts
-    Target-type: glob
-    User: root
-
-then display the return data::
-  
-  salt-run jobs.lookup_jid 20131212061915418364
-
-You can also see what's going on by checking the log on the minion::
-
-  tail -f /var/log/salt/minion
-
-Login to the web interface (`https://q-alerts.robotinfra.com`) with your Sentry account that is defined in the pillar.
-
-Create a new project and start send logging to the Sentry follow `this <http://sentry.readthedocs.org/en/latest/client/index.html>`_ guide.
+Create a new project and start send logging to the Sentry follow
+`this <http://sentry.readthedocs.org/en/latest/client/index.html>`_ guide.

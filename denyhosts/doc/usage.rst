@@ -28,27 +28,8 @@
              POSSIBILITY OF SUCH DAMAGE.
 :Authors: - Quan Tong Anh
 
-DenyHosts
-=========
+Usage
+=====
 
-Introducing
------------
-
-DenyHost is a script that analyzes the sshd log messages to determine what
-hosts are attempting to hack into your system.
-
-Upon discovering a repeated attack host, the /etc/hosts.deny file is updated to
-prevent future break-in attempts from that host.
-
-Installing
-----------
-
-After installing the Salt minion, from the Salt master you can run::
-  
-  salt myminion state.sls denyhosts -v
-
-If you want to gather metrics and send to the Graphite::
-  
-  salt myminion state.sls denyhosts.diamond -v
-
-
+HERE DOCUMENT HOW TO REMOVE FROM BLACKLIST AN HOSTNAME
+SHOULD WE HAVE A SCRIPT FOR THIS?

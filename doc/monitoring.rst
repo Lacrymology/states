@@ -121,54 +121,62 @@ For more details on this, look ``doc/tests.rst`` section *Automatic Tests* and
 Monitoring Usage
 ----------------
 
-To understand more deep, you can install Shinken part by part::
+To understand more deep, you can install Shinken part by part.
 
-Poller: The poller daemon launches check plugins as requested by schedulers.
-When the check is finished it returns the result to the schedulers::
+Poller
+~~~~~~
 
-  salt -L myminion1,myminion2 state.sls shinken.poller -v
+The poller daemon launches check plugins as requested by schedulers.
 
-Scheduler: The scheduler daemon manages the dispatching of checks and actions
-to the poller and reactionner daemons respectively::
+Formula: ``shinken.poller``.
 
-  salt -L myminion1,myminion2 state.sls shinken.scheduler -v
+Scheduler
+~~~~~~~~~
 
-Broker: The broker daemon exports and manages data from schedulers. The broker
-uses modules exclusively to get the job done::
+The scheduler daemon manages the dispatching of checks and actions
+to the poller and reactionner daemons respectively.
 
-  salt -L myminion1,myminion2 state.sls shinken.broker -v
+Formula: ``shinken.scheduler``.
 
-Reactionner: The reactionner daemon issues notifications and launches
-event_handlers::
+Broker
+~~~~~~
 
-  salt -L myminion1,myminion2 state.sls shinken.reactionner -v
+The broker daemon exports and manages data from schedulers. The broker
+uses modules exclusively to get the job done.
 
-Arbiter: The arbiter daemon reads the configuration, divides it into parts (N
-schedulers = N parts), and distributes them to the appropriate Shinken
-daemons::
+Formula: ``shinken.broker``.
 
-  salt -L myminion1,myminion2 state.sls shinken.arbiter -v
+Reactionner
+~~~~~~~~~~~
 
-then check the log of each part in the `/var/log/shinken` to make sure that
-everything is working fine.
+The reactionner daemon issues notifications and launches event_handlers.
 
-Login to the Web UI, you will have an overview of business impact, for e.g: I
-am seeing 2 CRITICAL services on the `q-shinken-1`:
+Formula: ``shinken.reactionner``.
 
-* `apt_rc` - NRPE: Unable to read output 'pystatsd-server', UID = 0 (root)
-* `statsd_procs` - PROCS CRITICAL: 0 processes with command name
+Arbiter
+~~~~~~~
 
-To make these errors go away, you have to install NRPE checks for `apt` and
-`statsd`::
+The arbiter daemon reads the configuration, divides it into parts
+(N schedulers = N parts), and distributes them to the appropriate Shinken
+daemons.
 
-  salt -L myminion1,myminion2 state.sls apt.nrpe -v
-  salt -L myminion1,myminion2 state.sls statsd.nrpe -v
+Formula: ``shinken.arbiter``.
+
+Web UI
+~~~~~~
+
+This is a module running in the broker.
+
+Login to the Web UI in the URL specified in your Pillar, you will have an
+overview of business impact.
+
+NOTE ON SERVICE REFRESH
 
 then on the Web UI:
+
 * click on the service
 * choose `Commands` tab
 * and `Recheck now`
 
 From the Shinken Web UI, you can also go to Graphite by clicking on the
-`Shinken` menu on the top-left. 
-
+`Shinken` menu on the top-left.

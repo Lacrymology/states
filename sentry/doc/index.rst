@@ -1,6 +1,7 @@
 Sentry
 ======
 
+INTRODUCTION TO SENTRY
 
 .. toctree::
     :glob:

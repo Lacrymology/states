@@ -30,70 +30,11 @@ Graylog2 web interface user guide
              POSSIBILITY OF SUCH DAMAGE.
 :authors: - Quan Tong Anh
 
-Elasticsearch
+Web interface
 -------------
 
-Follow the instruction in the minion_installation.rst to install the minions.
-Then from the Salt master, you can install Elasticsearch cluster by running::
-
-  salt -L myminion1,myminion2 state.sls elasticsearch
-
-Start the first instance, you should see something along the lines of::
-
-  [2013-12-11 02:23:34,245][INFO ][cluster.service          ]
-  [q-elasticsearch-1] new_master
-  [q-elasticsearch-1][feumL84zT26zxpLi-PBWNQ][inet[/10.134.133.157:9300]]{master=true},
-  reason: zen-disco-join (elected_as_master)
-
-and on the second node::
-
-  [2013-12-11 02:23:40,498][INFO ][cluster.service          ]
-  [q-elasticsearch-2] detected_master
-  [q-elasticsearch-1][feumL84zT26zxpLi-PBWNQ][inet[/10.134.133.1
-  57:9300]]{master=true}, added
-  {[q-elasticsearch-1][feumL84zT26zxpLi-PBWNQ][inet[/10.134.133.157:9300]]{master=true},},
-  reason: zen-disco-receive(from master [
-  [q-elasticsearch-1][feumL84zT26zxpLi-PBWNQ][inet[/10.134.133.157:9300]]{master=true}])
-
-switch back to the first node::
-
-  [2013-12-11 02:23:42,522][INFO ][cluster.service          ]
-  [q-elasticsearch-1] added
-  {[q-elasticsearch-2][URdBoFeFRKim3N-UYGxgCQ][inet[/10.128.213.252:9300]]
-  {master=true},}, reason: zen-disco-receive(join from
-  node[[q-elasticsearch-2][URdBoFeFRKim3N-UYGxgCQ][inet[/10.128.213.252:9300]]{master=true}])
-
-Graylog2 server
----------------
-
-Run the following command on the Salt master to install Graylog2 server::
-
-  salt myminion state.sls graylog2.server
-
-Check the log on the Elasticsearch nodes to make sure that the graylog2-server
-was discovered::
-
-  [2013-12-11 02:27:20,308][INFO ][cluster.service          ]
-  [q-elasticsearch-1] added
-  {[q-graylog2][MZXCVbnLT4Wiq0dgxiWVvA][inet[/10.138.50.176:9300]]{client=
-  true, data=false, master=false},}, reason: zen-disco-receive(join from
-  node[[q-graylog2][MZXCVbnLT4Wiq0dgxiWVvA][inet[/10.138.50.176:9300]]{client=true,
-  data=
-  false, master=false}])
-
-Verify your cluster is operational::
-
-  salt-call nrpe.run_check graylog2_elasticsearch_cluster
-
-Graylog2 web interface
-----------------------
-
-Install Graylog2 web interface by running::
-
-  salt myminion state.sls graylog2.web
-
-If everything is OK, now you can access to the web interface via the URL that
-is configured in the web server (for e.g: q-logs.robotinfra.com). 
+If install had been OK, now you can access to the web interface via the URL that
+is configured in the web server REFER TO PILLAR KEY AND LINK TO PILLAR DOC.
 
 After registering an admin user and login, take a look at over all tabs.
 
@@ -119,5 +60,5 @@ steps that you need to do to get the notifications:
 Go to `users` tab and add the email address for each user that you want to
 send him email notifications.
 
-About the OOM error, you can use this regex: :code:`[Oo]ut of
-[Mm]emory: [Kk]illed process|oom-killer`.
+A usefull alarm is to check for Linux out of memory error, you can use this
+regex: :code:`[Oo]ut of [Mm]emory: [Kk]illed process|oom-killer`.

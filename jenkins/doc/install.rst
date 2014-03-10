@@ -29,9 +29,12 @@
 :Authors: - Bruno Clermont
           - Hung Nguyen Viet
 
-=====================
-Jenkins Configuration
-=====================
+====================
+Jenkins Installation
+====================
+
+Follow the generic logic of pillar, apply formula and run checks, then perform
+the followings.
 
 First go in one of the hostname you specified at ``jenkins:web:hostnames``.
 
@@ -52,7 +55,7 @@ Things you **must** do
 
 - Raise number of executor to large value such as ``20``.
 - Set Jenkins URL to first value of ``jenkins:web:hostnames``.
-- Configure SMTP.
+- Configure SMTP to send email for build status change.
 - Install https://wiki.jenkins-ci.org/display/JENKINS/Multiple+SCMs+Plugin
 - Upgrade SSH Credential Plugin to 1.6+, so you can configure SSH private key
   for user ``jenkins`` throught Jenkins Web UI. (Dashboard => Credential
@@ -62,7 +65,6 @@ Things you **must** do
   Note that after upgrading, this plugin changes its name to
   "Jenkins GIT plugin". This is link to its page:
   https://wiki.jenkins-ci.org/display/JENKINS/Git+Plugin
-
 
 Jobs
 ----
@@ -74,7 +76,7 @@ A testing job must be created with the following:
 Select ``Multi SCM`` as **Source Code Management**. You need 3 repositories:
 
 - Common states
-- Non-common states (optional)
+- Non-common states
 - Pillars repo
 
 In each instance of Multi SCM, click 2nd ``Advanced...`` button and set the
@@ -85,7 +87,7 @@ Specify the tested branch, never put ``**`` or a single click on **build**
 can trigger 200 builds.
 
 In Build section, add a build step by choosing
-``Add build step`` > ``Execute shell``
+``Add build step`` > ``Execute shell``::
 
     $WORKSPACE/common/test/jenkins/build.sh vim
 

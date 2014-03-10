@@ -64,9 +64,6 @@ salt_archive:source
 
 Rsync server used as the source for archived files.
 
-Default: ``rsync://archive.robotinfra.com/archive/``
-by default of that pillar key.
-
 salt_archive:web:ssl
 ~~~~~~~~~~~~~~~~~~~~
 

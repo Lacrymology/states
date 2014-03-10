@@ -46,7 +46,7 @@ Checkout them with ``git clone``::
   git clone git@git.robotinfra.com:infra/states.git salt-states
   git clone git@git.robotinfra.com:infra/robotinfra.git salt-pillars
 
-Switch branch
+Switching branch
 -------------
 
 You need switch to `develop` branch::

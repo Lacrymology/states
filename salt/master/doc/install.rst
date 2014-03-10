@@ -40,6 +40,24 @@ workstation:
 - Client specific (where the roles are)
 - Pillar repository
 
+Checkout them with ``git clone``::
+  
+  git clone git@git.robotinfra.com:dev/common.git salt-common
+  git clone git@git.robotinfra.com:infra/states.git salt-states
+  git clone git@git.robotinfra.com:infra/robotinfra.git salt-pillars
+
+Switch branch
+-------------
+
+You need switch to `develop` branch::
+  
+  cd ~/somewhere/salt-common
+  git checkout -b develop origin/develop
+  cd ~/somewhere/salt-states
+  git checkout -b develop origin/develop
+  cd ~/somewhere/salt-pillars
+  git checkout -b develop origin/master
+
 Bootstrap Archive
 -----------------
 
@@ -48,7 +66,9 @@ Create an archive for salt-master bootstrap purpose.
 Check the ``bootstrap_archive.py`` script at the root of the common repository
 for instruction.
 
-Copy output of the archive to the server that you want to install salt-master.
+Copy output of the archive to the server that you want to install salt-master::
+
+  scp /path/archive.targ.z root@salt-master-server:/whereis/hold/archive.tar.gz
 
 Installation
 ------------

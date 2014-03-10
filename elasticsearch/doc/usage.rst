@@ -25,3 +25,6 @@ switch back to the first node::
   {[my-node-2][URdBoFeFRKim3N-UYGxgCQ][inet[/10.128.213.252:9300]]
   {master=true},}, reason: zen-disco-receive(join from
   node[[my-node-2][URdBoFeFRKim3N-UYGxgCQ][inet[/10.128.213.252:9300]]{master=true}])
+
+NO REAL USAGE OF IT.
+PLEASE LINK TO ES OFFICIAL DOC.

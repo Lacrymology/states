@@ -32,7 +32,7 @@ set -e
 # limit resources usage
 ulimit -e 19
 onice -c idle -p $$
-XZ_DEFAULTS=--memlimit={{ salt['pillar.get']('backup:xz_memlimit', '64MiB') }}
+XZ_DEFAULTS=--memlimit={{ salt['pillar.get']('backup:xz_memlimit', '64') }}MiB
 
 NOW=`date '+%Y-%m-%d-%H_%M_%S'`
 export TERM=dumb

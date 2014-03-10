@@ -29,6 +29,11 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 # {{ pillar['message_do_not_modify'] }}
 set -e
 
+# limit resources usage
+ulimit -e 19
+onice -c idle -p $$
+XZ_DEFAULTS=--memlimit={{ salt['pillar.get']('backup:xz_memlimit', '64') }}MiB
+
 dbname=$1
 NOW=`date '+%Y-%m-%d-%H_%M_%S'`
 export TERM=dumb

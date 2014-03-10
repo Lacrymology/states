@@ -75,3 +75,31 @@ Once the master and minion are running, run::
   salt-key -A
 
 To allow minion to connect to master.
+
+Git Server
+----------
+
+Self-Hosted
+~~~~~~~~~~~
+
+Basic
+`````
+
+REFACTOR git/server/doc/install.rst TO MAKE IT MORE GENERIC
+MOVE HERE THE SALT MASTER GENERIC
+
+GitLab
+``````
+
+LINK TO GITLAB
+
+Externally Hosted
+~~~~~~~~~~~~~~~~~
+
+You can pick any solution you want, here is some example:
+
+- Github LINK TO GITHUB
+- BitBucket LINK TO BITBUCKET
+
+REFER TO GIT LAB
+

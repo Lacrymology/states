@@ -78,6 +78,12 @@ Then on the server run::
   cd /
   tar -xvzf /whereis/copied/archive.tar.gz
 
+Note that you need update ``/root/salt/pillar/top.sls`` again::
+
+  base:
+    hostname_of_salt-master_server:
+      - pillar_of_salt-master
+
 To install a salt-master::
 
   /root/salt/states/salt/master/bootstrap.sh [minion id]

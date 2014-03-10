@@ -74,7 +74,7 @@ A testing job must be created with the following:
 Select ``Multi SCM`` as **Source Code Management**. You need 3 repositories:
 
 - Common states
-- Non-common states
+- Non-common states (optional)
 - Pillars repo
 
 In each instance of Multi SCM, click 2nd ``Advanced...`` button and set the

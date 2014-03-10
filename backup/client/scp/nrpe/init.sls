@@ -28,6 +28,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 include:
   - nrpe
+  - backup.client.base
 
 /etc/nagios/backup.conf:
   file:
@@ -39,16 +40,6 @@ include:
     - mode: 440
     - require:
       - pkg: nagios-nrpe-server
-
-/usr/local/nagios/lib/python2.7/check_backup_base.py:
-#backup_base:
-  file:
-    - managed
-#    - name: /usr/local/nagios/lib/python2.7/check_backup_base.py
-    - source: salt://backup/client/nrpe/check_backup_base.py
-    - user: nagios
-    - group: nagios
-    - mode: 440
 
 /usr/lib/nagios/plugins/check_backup.py:
   file:

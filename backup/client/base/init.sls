@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Bruno Clermont
+Copyright (c) 2014, Tomas Neme
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,32 +22,15 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Bruno Clermont <patate@fastmail.cn>
-Maintainer: Bruno Clermont <patate@fastmail.cn>
+Author: Tomas Neme <lacrymology@gmail.com>
+Maintainer: Tomas Neme <lacrymology@gmail.com>
 -#}
 
-include:
-  - nrpe
-  - backup.client.base
-
-/etc/nagios/backup.conf:
+/usr/local/nagios/lib/python2.7/check_backup_base.py:
   file:
     - managed
-    - template: jinja
-    - source: salt://backup/client/s3/nrpe/s3config.jinja2
+    - source: salt://backup/client/nrpe/check_backup_base.py
     - user: nagios
     - group: nagios
     - mode: 440
-    - require:
-      - pkg: nagios-nrpe-server
 
-/usr/lib/nagios/plugins/check_backup.py:
-  file:
-    - managed
-    - source: salt://backup/client/s3/nrpe/check.py
-    - user: nagios
-    - group: nagios
-    - mode: 550
-    - require:
-      - file: /etc/nagios/backup.conf
-      - file: /usr/local/nagios/lib/python2.7/check_backup_base.py

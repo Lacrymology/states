@@ -44,18 +44,15 @@ Example::
     monitoring:
       password: mypassword
 
-Mandatory
----------
+Optional
+--------
 
 postgresql:replication:master
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Ip address of master server.
 
-This key is manadatory if you are setting up a cluster.
-
-Optional
---------
+This key is mandatory if you are setting up a cluster.
 
 encoding
 ~~~~~~~~

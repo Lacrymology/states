@@ -257,11 +257,7 @@ CARBON_METRIC_PREFIX = {{ grains['id'] }}.carbon
  CONF_DIR/whitelist and CONF_DIR/blacklist. If the whitelist is missing or
  empty, all metrics will pass through
 #}
-{%- if 'whitelist' in salt['pillar.get']('graphite:carbon', False) %}
-USE_WHITELIST = True
-{%- else %}
-USE_WHITELIST = False
-{%- endif -%}
+USE_WHITELIST = {{ filtering }}
 
 {#-
 [aggregator]

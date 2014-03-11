@@ -132,3 +132,21 @@ Every data point and relaying it to N caches (0 < N <= number of cache
 instances).
 
 Default: ``1``. Which is only one copy for each metric, thus no replication.
+
+graphite:carbon:filter:type
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Put in place blacklisting or metrics or whitelisting.
+
+Available values: ``black`` or ``white``.
+
+Default: ``None``. Unused.
+
+graphite:carbon:filter:rules
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+List of regular expressions of black or white listed metrics.
+
+Used only if ``graphite:carbon:filter:type`` is turned on.
+
+Default: ``[]``. Empty list.

@@ -30,6 +30,9 @@ to render graphics.
 
 TODO: send logs to GELF
 -#}
+{%- set filter_type = salt['pillar.get']('graphite:carbon:filter:type', False) -%}
+{%- set supported_filter_types = ('white', 'black')  %}
+
 include:
   - graphite.common
   - logrotate
@@ -147,6 +150,8 @@ carbon:
     - group: root
     - mode: 440
     - source: salt://carbon/config.jinja2
+    - context:
+      filtering: {% if filter_type in supported_filter_types %}True{% else %}False{% endif %}
     - require:
       - file: /etc/graphite
 
@@ -255,32 +260,40 @@ carbon-relay:
       - user: graphite
       - file: /etc/graphite
 
-{%- if 'whitelist' in salt['pillar.get']('graphite:carbon', False) %}
-/etc/graphite/whitelist.conf:
-  file:
-    - managed
-    - user: graphite
-    - group: graphite
-    - mode: 440
-    - contents: |
-    {%- for rule in pillar['graphite']['carbon']['whitelist'] %}
-        {{ rule }}
-    {%- endfor %}
-    - require:
-      - user: graphite
-      - file: /etc/graphite
-      - file: /var/lib/graphite/lists
-    - watch_in:
-    {%- for instance in range(instances_count) %}
-      - service: carbon-cache-{{ instance }}
-    {%- endfor %}
-
 /var/lib/graphite/lists:
   file:
+{%- if filter_type not in supported_filter_types %}
+    - absent
+{%- else %}
     - directory
     - user: graphite
     - group: graphite
     - mode: 550
     - require:
       - file: /var/lib/graphite
-{%- endif %}
+{%- endif -%}
+
+{%- for all_filter_type in supported_filter_types %}
+/etc/graphite/{{ all_filter_type }}list.conf:
+  file:
+  {%- if all_filter_type == filter_type %}
+    - managed
+    - user: graphite
+    - group: graphite
+    - mode: 440
+    - contents: |
+     {%- for rule in salt['pillar.get']('graphite:carbon:filter:rules', []) %}
+        {{ rule }}
+     {%- endfor %}
+    - require:
+      - user: graphite
+      - file: /etc/graphite
+      - file: /var/lib/graphite/lists
+    - watch_in:
+      {%- for instance in range(instances_count) %}
+      - service: carbon-cache-{{ instance }}
+      {%- endfor -%}
+  {%- else %}
+    - absent
+  {%- endif -%}
+{%- endfor -%}

@@ -31,7 +31,11 @@ __author__ = 'Bruno Clermont'
 __maintainer__ = 'Bruno Clermont'
 __email__ = 'patate@fastmail.cn'
 
+import logging
+
 from salt import exceptions, utils
+
+log = logging.getLogger(__name__)
 
 def __virtual__():
     '''

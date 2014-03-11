@@ -46,6 +46,8 @@ Checkout them with ``git clone``::
   git clone git@git.robotinfra.com:infra/states.git salt-states
   git clone git@git.robotinfra.com:infra/robotinfra.git salt-pillars
 
+Note that `git` must be installed on your workstation.
+
 Switching branch
 -------------
 
@@ -68,7 +70,7 @@ for instruction.
 
 Copy output of the archive to the server that you want to install salt-master::
 
-  scp /path/archive.targ.z root@salt-master-server:/whereis/hold/archive.tar.gz
+  scp /path/archive.tar.gz root@salt-master-server:/whereis/hold/archive.tar.gz
 
 Installation
 ------------

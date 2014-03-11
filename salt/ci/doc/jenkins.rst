@@ -74,7 +74,7 @@ A testing job must be created with the following:
 Select ``Multi SCM`` as **Source Code Management**. You need 3 repositories:
 
 - Common states
-- Non-common states
+- Non-common states (optional)
 - Pillars repo
 
 In each instance of Multi SCM, click 2nd ``Advanced...`` button and set the
@@ -83,3 +83,14 @@ In each instance of Multi SCM, click 2nd ``Advanced...`` button and set the
 
 Specify the tested branch, never put ``**`` or a single click on **build**
 can trigger 200 builds.
+
+In Build section, add a build step by choosing
+``Add build step`` > ``Execute shell``
+
+    $WORKSPACE/common/test/jenkins/build.sh vim
+
+which will run build script from path
+``$WORKSPACE/common/test/jenkins/build.sh`` with one argument ``vim``,
+this make build job run all test against ``vim`` formula.
+To add more tests, just pass them as arguments to this script (separate
+by space). To run all test, provide no argument.

@@ -45,9 +45,11 @@ Example::
 nginx:worker_processes
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Number of nginx worker.
+Number of nginx workers.
 
-Default: ``1``.
+Default: ``auto``.
+
+``auto`` means use the number of available CPU cores.
 
 nginx:log_format
 ~~~~~~~~~~~~~~~~
@@ -59,7 +61,6 @@ Default: $scheme://$host:$server_port$uri$is_args$args $remote_addr:$remote_user
 "$http_user_agent" "$http_x_forwarded_for.
 
 Default: ``$scheme://$host:$server_port$uri$is_args$args $remote_addr:$remote_user "$request" $request_time $request_length:$bytes_sent $status "$http_referer" "$http_user_agent" "$http_x_forwarded_for``
-by default of that pillar key.
 
 nginx:redirect_numeric_ip
 ~~~~~~~~~~~~~~~~~~~~~~~~~

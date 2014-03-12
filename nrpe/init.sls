@@ -167,6 +167,16 @@ nagios-nrpe-server:
     - require:
       - module: nrpe-virtualenv
 
+/usr/lib/nagios/plugins/check_domain.sh:
+  file:
+    - managed
+    - source: salt://nrpe/check_domain.sh
+    - user: nagios
+    - group: nagios
+    - mode: 550
+    - require:
+      - pkg: nagios-nrpe-server
+
 {#- TODO: remove that statement in >= 2014-04 #}
 /usr/local/bin/check_memory.py:
   file:

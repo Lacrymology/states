@@ -1,0 +1,77 @@
+{#-
+Copyright (c) 2014, Dang Tung Lam
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+Author: Dang Tung Lam <lamdt@familug.org>
+Maintainer: Dang Tung Lam <lamdt@familug.org>
+
+-#}
+// {{ pillar['message_do_not_modify'] }}
+{
+  "title": "{{ salt['pillar.get']('etherpad:title', 'Etherpad') }}",
+  "favicon": "favicon.ico",
+  {#- IP and port which etherpad should bind at #}
+  "ip": "127.0.0.1",
+  "port" : {{ salt['pillar.get']('etherpad:listen_port', '9001') }},
+  "sessionKey" : "{{ salt['password.generate']('etherpad_sessionkey', 10) }}",
+  "dbType" : "postgres",
+  "dbSettings" : {
+                    "user"    : "{{ dbuser }}",
+                    "host"    : "{{ dbhost }}",
+                    "password": "{{ dbuserpass }}",
+                    "database": "{{ dbname }}"
+                  },
+  "defaultPadText" : "{{ salt['pillar.get']('etherpad:default_pad_text', '') }}",
+{%- if salt['pillar.get']('etherpad:require_session', False) %}
+  "requireSession": true,
+{%- endif %}
+  "editOnly" : false,
+  "minify" : true,
+  "maxAge" : 21600, {# 60 * 60 * 6 = 6 hours #}
+  "abiword" : null,
+{%- if salt['pillar.get']('etherpad:require_authentication', False) %}
+  "requireAuthentication": true,
+{%- endif %}
+{%- if salt['pillar.get']('etherpad:require_authorization', False) %}
+  "requireAuthorization": true,
+{%- endif %}
+  "trustProxy": true,
+  "disableIPlogging": false,
+  "users": {
+{%- for user in salt['pillar.get']('etherpad:users', []) %}
+    "{{ user }}": {
+      "password": "{{ pillar['etherpad']['users'][user]['password'] }}"
+  {%- if salt['pillar.get']('etherpad:users:' + user + ':admin', False) %}
+      , "is_admin": true
+  {%- endif %}
+    }{% if not loop.last %},{% endif %}
+{%- endfor %}
+  },
+  "socketTransportProtocols" : ["xhr-polling", "jsonp-polling", "htmlfile"],
+{#- The log level we are using, can be: DEBUG, INFO, WARN, ERROR #}
+{%- if salt['pillar.get']('debug', False) %}
+  "loglevel": "DEBUG",
+{%- else %}
+  "loglevel": "INFO"
+{%- endif %}
+}

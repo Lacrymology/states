@@ -1,0 +1,77 @@
+{#-
+Copyright (c) 2014, Dang Tung Lam
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+Author: Dang Tung Lam <lamdt@familug.org>
+Maintainer: Dang Tung Lam <lamdt@familug.org>
+
+-#}
+# {{ pillar['message_do_not_modify'] }}
+upstream etherpad {
+    server localhost:9001;
+}
+
+server {
+    listen 80;
+{%- if pillar['etherpad']['ssl']|default(False) %}
+{%- if pillar['etherpad']['ssl_redirect']|default(False) %}
+    {# if https, redirect http port 80 to https port 443 #}
+    server_name {% for hostname in pillar['etherpad']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+    return 301 https://{{ pillar['etherpad']['hostnames'][0] }}$request_uri;
+}
+{# https server #}
+server {
+{%- endif %}{# redirect http to https #}
+    listen 443 ssl;
+    ssl_certificate /etc/ssl/{{ pillar['etherpad']['ssl'] }}/chained_ca.crt;
+    ssl_certificate_key /etc/ssl/{{ pillar['etherpad']['ssl'] }}/server.pem;
+    ssl_client_certificate /etc/ssl/{{ pillar['etherpad']['ssl'] }}/ca.crt;
+    ssl_ciphers RC4:HIGH:!aNULL:!MD5;
+    ssl_prefer_server_ciphers on;
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout 10m;
+{%- endif %}
+{# web app logic #}
+    server_name {% for hostname in pillar['etherpad']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+
+    location / {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $http_host;
+        proxy_pass http://etherpad;
+    }
+
+{%- if salt['pillar.get']('etherpad:restrict_referer', False) %}
+    if ($request_method ~ GET) {
+        set $block tr;
+    }
+
+    if ($http_referer !~ "{{ salt['pillar.get']('etherpad:restrict_referer') }}") {
+        set $block "${block}ue";
+    }
+
+    if ($block = true) {
+        return 403;
+    }
+{%- endif %}
+}

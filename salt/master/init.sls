@@ -101,9 +101,9 @@ salt-master-requirements:
     - require:
       - file: /srv/salt
 
-{%- set version = '0.17.2-2' %}
+{%- set version = '0.17.5-1' %}
 {%- set pkg_version = '{0}{1}1'.format(version, grains['lsb_distrib_codename']) %}
-{#- check deb filename carefully, number `1` after {1} is added only on 0.17.2-2
+{#- check deb filename carefully, number `1` after {1} is added only on 0.17.5-1
     pkg sub-version can be anything #}
 {%- set master_path = '{0}/pool/main/s/salt/salt-master_{1}_all.deb'.format(version, pkg_version) %}
 salt-master:

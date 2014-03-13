@@ -132,7 +132,7 @@ salt-ui:
       - pkg: nginx
       - {{ salt_ui_module }}: salt-ui
 
-{%- set api_path = '0.17.2-2/pool/main/s/salt-api/salt-api_' + version + '_all.deb' %}
+{%- set api_path = '0.17.5-1/pool/main/s/salt-api/salt-api_' + version + '_all.deb' %}
 salt-api:
   file:
     - managed
@@ -162,7 +162,7 @@ salt-api:
 {%- if 'files_archive' in pillar %}
       - salt-api: {{ pillar['files_archive']|replace('file://', '')|replace('https://', 'http://') }}/mirror/salt/{{ api_path }}
 {%- else %}
-      - salt-api: http://saltinwound.org/ubuntu/{{ api_path }}
+      - salt-api: http://archive.robotinfra.com/mirror/salt/{{ api_path }}
 {%- endif %}
     - require:
       - pkg: salt-master

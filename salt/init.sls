@@ -40,6 +40,7 @@ To only keep lucid/precise::
    rm -rf `find dists/ -maxdepth 1 -mindepth 1 ! -name lucid ! -name precise`
    find pool/ -type f -name '*.deb' ! -name '*lucid*'  ! -name '*precise*' -delete
 -#}
+{%- set version = '0.17.5-1' %}
 
 salt:
   file:
@@ -52,10 +53,9 @@ salt:
   apt_repository:
     - present
 {%- if 'files_archive' in pillar %}
-    - address: http://archive.robotinfra.com/mirror/salt/{{ salt['pillar.get']('salt:version', '0.17.2-2') }}
-{#    - address: {{ pillar['files_archive']|replace('https://', 'http://') }}/mirror/salt/{{ salt['pillar.get']('salt:version', '0.17.2-2') }}#}
+    - address: {{ pillar['files_archive']|replace('https://', 'http://') }}/mirror/salt/{{ version }}
 {%- else %}
-    - address: http://archive.robotinfra.com/mirror/salt/{{ salt['pillar.get']('salt:version', '0.17.2-2') }}
+    - address: http://archive.robotinfra.com/mirror/salt/{{ version }}
 {%- endif %}
 {%- if grains['saltversion'] == '0.15.3' %}
     - filename: saltstack-salt-{{ grains['lsb_codename'] }}

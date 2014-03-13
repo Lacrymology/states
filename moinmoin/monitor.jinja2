@@ -35,5 +35,8 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 {%- from 'uwsgi/monitor_template.jinja2' import monitor  %}
 {{ monitor('moinmoin', check_postgresql=False) }}
 
-backup_moinmoin_file_procs:
+moinmoin_backup_file_procs:
   description: MoinMoin Backup File Process
+
+moinmoin_backup:
+  description: MoinMoin Backup Age And Size

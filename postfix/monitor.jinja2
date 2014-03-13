@@ -39,5 +39,8 @@ postfix_{{ check }}:
   description: Postfix {{ postfix_checks[check] }}
 
 {%- endfor %}
-backup_postfix_file_procs:
+postfix_backup_file_procs:
   description: Postfix Backup Files Process
+
+postfix_backup:
+  description: Postfix Backup Age And Size

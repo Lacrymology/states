@@ -44,5 +44,8 @@ dovecot_port_{{ port }}:
   description: Dovecot {{ port|upper }} Port
 {%- endfor %}
 
-backup_dovecot_file_procs:
+dovecot_backup_file_procs:
   description: Dovecot Backup Files Process
+
+dovecot_backup:
+  description: Dovecot Backup Age And Size

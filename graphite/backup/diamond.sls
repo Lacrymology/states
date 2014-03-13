@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Bruno Clermont
+Copyright (c) 2014, Hung Nguyen Viet
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,8 +22,22 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Bruno Clermont <patate@fastmail.cn>
+Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
 include:
+  - backup.diamond
   - cron.diamond
+
+graphite_backup_diamond_resources:
+  file:
+    - accumulated
+    - name: processes
+    - template: jinja
+    - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
+    - require_in:
+      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
+    - text:
+      - |
+        [[backup-graphite-postgres]]
+        cmdline = ^\/usr\/local\/bin\/backup-postgresql {{ salt['pillar.get']('graphite:db:name', 'graphite') }}$

@@ -38,7 +38,7 @@ set -e
 
 # limit resources usage
 ulimit -e 19
-onice -c idle -p $$
+ionice -c idle -p $$
 XZ_DEFAULTS=--memlimit={{ salt['pillar.get']('backup:xz_memlimit', '64') }}MiB
 
 dbname=$1

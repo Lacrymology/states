@@ -123,6 +123,10 @@ To delete all minions to disconnect to master, run::
 
   salt-key -D
 
+After add key, check minion can connect to master or not, run::
+
+  salt -t 600 [minion id] test.ping
+
 Git Server
 ----------
 

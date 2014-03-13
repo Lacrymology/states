@@ -38,18 +38,3 @@ dc: {{ suffix.split(',')[-2].split('=')[1] }}
 dn: ou=people,{{ suffix }}
 ou: people
 objectClass: organizationalUnit
-
-{% for dom in salt['pillar.get']('ldap:data') %}
-{% for user in salt['pillar.get']('ldap:data')[dom] %}
-{% set u = salt['pillar.get']('ldap:data')[dom][user] %}
-dn: uid={{ user }},ou=people,{{ suffix }}
-objectClass: inetOrgPerson
-cn: {{ u['cn'] }}
-sn: {{ u['sn'] }}
-uid: {{ user }}
-userPassword: {{ u['passwd'] }}
-mail: {{ u['email'] }}
-description: {{ u['desc'] }}
-
-{% endfor %}
-{% endfor %}

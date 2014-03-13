@@ -30,6 +30,7 @@ A LDAP server.
 {% set ssl = salt['pillar.get']('ldap:ssl', False) %}
 include:
   - apt
+  - hostname
 {% if ssl %}
   - ssl
 {% endif %}
@@ -42,6 +43,7 @@ slapd:
       - ldap-utils
     - require:
       - cmd: apt_sources
+      - host: hostname
   service:
     - running
     - enable: True
@@ -114,9 +116,10 @@ restart_after_ssl:
     - source: salt://openldap/usertree.ldif.jinja2
     - mode: 400
 
-ldapadd -Y EXTERNAL -H ldapi:/// -f {{ opts['cachedir'] }}/usertree.ldif:
+ldap_create_user_tree:
   cmd:
     - wait
+    - name: ldapadd -Y EXTERNAL -H ldapi:/// -f {{ opts['cachedir'] }}/usertree.ldif
     - watch:
       - pkg: slapd
       {#- only run the first time when install slapd, ldapadd against  a file
@@ -127,3 +130,39 @@ ldapadd -Y EXTERNAL -H ldapi:/// -f {{ opts['cachedir'] }}/usertree.ldif:
       - file: {{ opts['cachedir'] }}/usertree.ldif
       - service: slapd
       - cmd: slapd_config_dbs
+
+{#- create / delete user entries #}
+{#- TODO implement support multiple LDAP tree #}
+{% set suffix = salt['pillar.get']('ldap:suffix') %}
+{%- for domain in pillar['ldap']['data'] %}
+  {%- for uid in pillar['ldap']['data'][domain] %}
+    {% set u = salt['pillar.get']('ldap:data')[domain][uid] %}
+ldap_{{ domain }}_{{ uid }}:
+  cmd:
+    - run
+    - unless:  ldapsearch -H ldapi:/// -Y EXTERNAL -b'uid={{ uid }}@{{ domain }},ou=people,{{ suffix }}' -LLL -A
+    - name: |
+        ldapadd -H ldapi:/// -Y EXTERNAL << __EOF
+        dn: uid={{ uid }}@{{ domain }},ou=people,{{ suffix }}
+        objectClass: inetOrgPerson
+        cn: {{ u['cn'] }}
+        sn: {{ u['sn'] }}
+        uid: {{ uid }}@{{ domain }}
+        userPassword: {{ u['passwd'] }}
+        __EOF
+    - require:
+      - cmd: ldap_create_user_tree
+  {%- endfor %}
+{%- endfor %}
+
+{%- for domain in salt['pillar.get']('ldap:absent', []) %}
+  {%- for uid in pillar['ldap']['absent'][domain] %}
+ldap_{{ domain }}_{{ uid }}: # make it will conflict if one DN in both ``data`` and ``absent``
+  cmd:
+    - run
+    - onlyif: ldapsearch -H ldapi:/// -Y EXTERNAL -b'uid={{ uid }}@{{ domain }},ou=people,{{ suffix }}' -LLL -A
+    - name: ldapdelete -H ldapi:/// -Y EXTERNAL "uid={{ uid }}@{{ domain }},ou=people,{{ suffix }}"
+    - require:
+      - cmd: ldap_create_user_tree
+  {%- endfor %}
+{%- endfor %}

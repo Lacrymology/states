@@ -25,6 +25,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Tomas Neme <lacrymology@gmail.com>
 Maintainer: Tomas Neme <lacrymology@gmail.com>
 -#}
+include:
+  - nrpe
 
 /usr/local/nagios/lib/python2.7/check_backup_base.py:
   file:
@@ -33,4 +35,5 @@ Maintainer: Tomas Neme <lacrymology@gmail.com>
     - user: nagios
     - group: nagios
     - mode: 440
-
+    - require:
+      - pkg: nagios-nrpe-server

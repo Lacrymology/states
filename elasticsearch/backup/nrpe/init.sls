@@ -28,6 +28,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Nagios NRPE check for Elasticsearch backup
 -#}
 include:
+  - backup.client.{{ pillar['backup_storage'] }}.nrpe
   - cron.nrpe
   - nrpe
   - pip.nrpe

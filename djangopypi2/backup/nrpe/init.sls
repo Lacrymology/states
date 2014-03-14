@@ -28,6 +28,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Nagios NRPE check for Djangopypi2 backup
 -#}
 include:
+  - backup.client.{{ pillar['backup_storage'] }}.nrpe
   - cron.nrpe
   - nrpe
 

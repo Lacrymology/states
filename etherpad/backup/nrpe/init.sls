@@ -28,6 +28,7 @@ Maintainer: Dang Tung Lam <lamdt@familug.org>
 Nagios NRPE check for Etherpad backup
 -#}
 include:
+  - backup.client.{{ pillar['backup_storage'] }}.nrpe
   - cron.nrpe
   - nrpe
 

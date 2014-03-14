@@ -41,14 +41,8 @@ server {
 }
 server {
 {%- endif %}{# redirect http to https #}
-    listen 443 ssl;
-    ssl_certificate /etc/ssl/{{ salt['pillar.get']('openerp:ssl') }}/chained_ca.crt;
-    ssl_certificate_key /etc/ssl/{{ salt['pillar.get']('openerp:ssl') }}/server.pem;
-    ssl_client_certificate /etc/ssl/{{ salt['pillar.get']('openerp:ssl') }}/ca.crt;
-    ssl_ciphers RC4:HIGH:!aNULL:!MD5;
-    ssl_prefer_server_ciphers on;
-    ssl_session_cache shared:SSL:10m;
-    ssl_session_timeout 10m;
+{%- from 'nginx/ssl.jinja2' import ssl_config with context %}
+    {{ ssl_config(pillar['openerp']['ssl']) }}
 {%- endif %}
 
     server_name {% for hostname in salt['pillar.get']('openerp:hostnames') %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};

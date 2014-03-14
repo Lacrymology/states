@@ -28,7 +28,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 # {{ pillar['message_do_not_modify'] }}
 
 user www-data www-data;
-worker_processes {{ salt['pillar.get']('nginx:worker_processes', 1) }};
+worker_processes {{ salt['pillar.get']('nginx:worker_processes', 'auto') }};
 
 error_log /var/log/nginx/error.fifo warn;
 pid /var/run/nginx.pid;

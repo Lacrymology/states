@@ -32,11 +32,10 @@ include:
 /usr/bin/mail:
   file:
     - managed
-    - template: jinja
     - user: root
     - group: root
     - mode: 775
-    - source: salt://raven/mail/script.jinja2
+    - source: salt://raven/mail/script.py
     - require:
       - module: raven
       - service: rsyslog

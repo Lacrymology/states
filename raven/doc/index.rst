@@ -7,3 +7,4 @@ Raven
 
 
     *
+    ../mail/doc/index

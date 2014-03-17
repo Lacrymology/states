@@ -32,12 +32,15 @@ include:
   - local
   - ssh.client
 
+{%- if pillar['backup_server']['address'] not in grains['ipv4'] and
+       pillar['backup_server']['address'] not in ('localhost', grains['host']) %}
 backup-client:
   ssh_known_hosts:
     - present
     - name: {{ pillar['backup_server']['address'] }}
     - user: root
     - fingerprint: {{ pillar['backup_server']['fingerprint'] }}
+{%- endif %}
 
 /usr/local/bin/backup-store:
   file:

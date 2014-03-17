@@ -43,7 +43,6 @@ include:
     - source: salt://dovecot/nrpe/config.jinja2
     - require:
       - pkg: nagios-nrpe-server
-      - file: /usr/lib/nagios/plugins/check_dovecot.py
 
 {{ passive_check('dovecot') }}
 
@@ -52,13 +51,3 @@ extend:
     service:
       - watch:
         - file: /etc/nagios/nrpe.d/dovecot.cfg
-
-/usr/lib/nagios/plugins/check_dovecot.py:
-  file:
-    - managed
-    - source: salt://dovecot/nrpe/check_dovecot.py
-    - user: nagios
-    - group: nagios
-    - mode: 550
-    - require:
-      - pkg: nagios-nrpe-server

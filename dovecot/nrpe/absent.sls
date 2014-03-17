@@ -27,12 +27,8 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 Remove Nagios NRPE check for Dovecot.
 -#}
-{% for file in ('/etc/nagios/nrpe.d/dovecot.cfg', '/usr/lib/nagios/plugins/check_dovecot.py') %}
+{% for file in ('/etc/nagios/nrpe.d/dovecot.cfg', '/etc/cron.d/passive-checks-dovecot') %}
 {{ file }}:
   file:
     - absent
 {% endfor %}
-
-/etc/cron.d/passive-checks-dovecot:
-  file:
-    - absent

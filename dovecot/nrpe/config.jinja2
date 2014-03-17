@@ -32,17 +32,13 @@ command[dovecot_anvil]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u dovecot -a 
 command[dovecot_log]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u root -a 'dovecot/log' -C log
 command[dovecot_config]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u root -a 'dovecot/config' -C config
 command[dovecot_port_imap]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 143
-{%- if 'data' in pillar['ldap'] %}
-    {%- set domain = salt['pillar.get']('ldap:data').keys()[0] %}
-    {%- set username = salt['pillar.get']('ldap:data')[domain].keys()[0] %}
-    {%- set password = salt['pillar.get']('ldap:data')[domain][username]['passwd'] %}
-command[dovecot_login]=/usr/lib/nagios/plugins/check_dovecot.py -u {{ username }} -p {{ password }}
-{%- endif %}
 command[dovecot_port_pop3]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 110
 {%- if ssl %}
 command[dovecot_port_imaps]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 993
 command[dovecot_port_pop3s]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 995
+command[dovecot_simap]=/usr/lib/nagios/plugins/check_simap -H 127.0.0.1 -p 143
 {%- else %}
+command[dovecot_imap]=/usr/lib/nagios/plugins/check_imap -H 127.0.0.1 -p 143
 command[dovecot_port_imaps]=/bin/echo "TCP OK: SSL not configured for IMAP"
 command[dovecot_port_pop3s]=/bin/echo "TCP OK: SSL not configured for POP3"
 {%- endif %}

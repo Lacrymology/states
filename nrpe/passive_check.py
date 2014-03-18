@@ -83,7 +83,10 @@ def main():
 
     # run check
 
-    lock = lockfile.LockFile('/var/run/passive_check.{0}.lock'.format(check_name))
+    lock_file = os.path.join(
+        config.get('lock', 'directory'),
+        'passive_check.{0}.lock'.format(check_name))
+    lock = lockfile.LockFile(lock_file)
     if lock.is_locked():
         raise Exception('One instance of this check is running.')
 

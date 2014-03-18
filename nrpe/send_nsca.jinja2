@@ -28,6 +28,9 @@ Maintainer: Quan Tong Anh <tonganhquan.net@gmail.com>
 # {{ pillar['message_do_not_modify'] }}
 {%- set mine = salt['mine.get']('*', 'monitoring.data') %}
 
+[lock]
+directory = /var/run/nagios
+
 [logging]
 level = info
 

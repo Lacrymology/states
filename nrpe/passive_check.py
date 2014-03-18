@@ -98,7 +98,7 @@ def main():
 
         # NSCA client
         addrs = filter(None, config.get('server', 'address').split(','))
-        if addrs == []:
+        if not addrs:
             raise Exception('Empty address, need to reconfigure')
 
         for addr in addrs:

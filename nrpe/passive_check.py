@@ -92,19 +92,20 @@ def main():
             raise ValueError("Too long password %d" % len(password))
 
         # NSCA client
-        for addr in config.get('server', 'address').split(','):
-            if addr == '':
-                raise Exception('Empty address, need to reconfigure')
+        addrs = filter(None, config.get('server', 'address').split(','))
+        if addrs == []:
+            raise Exception('Empty address, need to reconfigure')
 
+        for addr in addrs:
             try:
-                _, _, addrs = socket.gethostbyaddr(addr)
+                _, _, ip_addrs = socket.gethostbyaddr(addr)
             except socket.gaierror as e:
                 raise Exception('Cannot resolve server address')
 
-            assert len(addrs) > 0
+            assert len(ip_addrs) > 0
             # we only use the first addr returned by gethostbyaddr, as we
-            # haven't know how to handle when addrs has more than 1 addr
-            sender = send_nsca.nsca.NscaSender(addrs[0], None)
+            # haven't know how to handle when ip_addrs has more than 1 IP
+            sender = send_nsca.nsca.NscaSender(ip_addrs[0], None)
             sender.password = password
             # hardcode encryption method (equivalent of 1)
             sender.Crypter = send_nsca.nsca.XORCrypter

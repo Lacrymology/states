@@ -9,8 +9,9 @@ import sys
 import re
 import os
 import logging
-import subprocess
+import socket
 import shlex
+import subprocess
 from ConfigParser import SafeConfigParser
 
 import yaml
@@ -20,6 +21,10 @@ import send_nsca.nsca
 import salt.utils
 
 logger = logging.getLogger(__name__)
+
+def log_and_exit(msg):
+    logger.error(msg, exc_info=True)
+    sys.exit(1)
 
 
 # the following function had been converted from _modules/nrpe.py to run
@@ -64,14 +69,13 @@ def main():
     try:
         minion_id = yaml.load(open('/etc/salt/minion'))['id']
     except:
-        logger.error("Can't get minion id", exc_info=True)
-        sys.exit(1)
+        log_and_exit("Can't get minion id")
 
     # run check
     checks = list_checks()
     if check_name not in checks:
-        logger.error("Can't find check %s", check_name)
-        sys.exit(1)
+        log_and_exit("Can't find check %s", check_name)
+
     p = subprocess.Popen(shlex.split(checks[check_name]), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     output, errors = p.communicate()
     if p.returncode not in (0, 1, 2, 3) or errors:
@@ -86,14 +90,28 @@ def main():
 
     # NSCA client
     for host in config.get('server', 'address').split(','):
-        sender = send_nsca.nsca.NscaSender(host, None)
+        if host == '':
+            log_and_exit('Bad host address: {0}'.format(host))
+
+        try:
+            _, _, addrs = socket.gethostbyaddr(host)
+        except socket.gaierror as e:
+            log_and_exit('Cannot resolve host {0}'.format(host))
+
+        assert len(addrs) > 0
+        # we only use the first addr returned by gethostbyaddr, as we haven't
+        # know how to handle when addrs has more than 1 addr
+        sender = send_nsca.nsca.NscaSender(addr[0], None)
         sender.password = password
         # hardcode encryption method (equivalent of 1)
         sender.Crypter = send_nsca.nsca.XORCrypter
-    
+
         # send result to NSCA server
         sender.send_service(minion_id, check_name, status, output)
         sender.disconnect()
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except Exception as e:
+        log_and_exit(str(e))

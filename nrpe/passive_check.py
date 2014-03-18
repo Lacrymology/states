@@ -63,7 +63,8 @@ def main():
 
     # get salt minion id
     try:
-        minion_id = yaml.load(open('/etc/salt/minion'))['id']
+        with open('/etc/salt/minion') as f:
+            minion_id = yaml.load(f)['id']
     except:
         raise Exception("Can't get minion id")
 
@@ -91,19 +92,19 @@ def main():
             raise ValueError("Too long password %d" % len(password))
 
         # NSCA client
-        for host in config.get('server', 'address').split(','):
-            if host == '':
-                raise Exception('Empty host address, need to reconfigure')
+        for addr in config.get('server', 'address').split(','):
+            if addr == '':
+                raise Exception('Empty address, need to reconfigure')
 
             try:
-                _, _, addrs = socket.gethostbyaddr(host)
+                _, _, addrs = socket.gethostbyaddr(addr)
             except socket.gaierror as e:
                 raise Exception('Cannot resolve server address')
 
             assert len(addrs) > 0
             # we only use the first addr returned by gethostbyaddr, as we
             # haven't know how to handle when addrs has more than 1 addr
-            sender = send_nsca.nsca.NscaSender(addr[0], None)
+            sender = send_nsca.nsca.NscaSender(addrs[0], None)
             sender.password = password
             # hardcode encryption method (equivalent of 1)
             sender.Crypter = send_nsca.nsca.XORCrypter

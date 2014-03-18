@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Quan Tong Anh
+Copyright (c) 2013, Bruno Clermont
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,15 +22,20 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Quan Tong Anh <tonganhquan.net@gmail.com>
-Maintainer: Quan Tong Anh <tonganhquan.net@gmail.com>
+Author: Bruno Clermont <patate@fastmail.cn>
+Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-shinken_receiver_procs:
-  description: Shinken Receiver Deamon
+scp_nagios_config:
+  file:
+    - absent
+    - name: /etc/nagios/backup.conf
 
-shinken_receiver_port:
-  description: Shinken Receiver Local Port
+scp_check_backup_base:
+  file:
+    - absent
+    - name: /usr/local/nagios/lib/python2.7/check_backup_base.py
 
-shinken_receiver_remote_port:
-  description: Shinken Receiver Remote Port
-  check: check_tcp!7773
+scp_check_backup:
+  file:
+    - absent
+    - name: /usr/lib/nagios/plugins/check_backup.py

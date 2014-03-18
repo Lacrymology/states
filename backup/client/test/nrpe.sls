@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Quan Tong Anh
+Copyright (c) 2014, Hung Nguyen Viet
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,15 +22,21 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Quan Tong Anh <tonganhquan.net@gmail.com>
-Maintainer: Quan Tong Anh <tonganhquan.net@gmail.com>
+Author: Hung Nguyen Viet <hvnsweeting@gmil.com>
+Maintainer: Hung Nguyen Viet <hvnsweeting@gmil.com>
 -#}
-shinken_receiver_procs:
-  description: Shinken Receiver Deamon
+include:
+  - nrpe
 
-shinken_receiver_port:
-  description: Shinken Receiver Local Port
-
-shinken_receiver_remote_port:
-  description: Shinken Receiver Remote Port
-  check: check_tcp!7773
+/usr/lib/nagios/plugins/check_backup.py:
+  file:
+    - managed
+    - template: jinja
+    - contents: |
+        #!/usr/local/nagios/bin/python
+        # # {{ pillar['message_do_not_modify'] }}
+        # A place-holder script always return 0
+        # Which replaces check_backup.py in test mode
+    - user: nagios
+    - group: nagios
+    - mode: 550

@@ -26,5 +26,6 @@ Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
 # {{ pillar['message_do_not_modify'] }}
-command[backup_wordpress_mysql_procs]=/usr/lib/nagios/plugins/check_procs -c 0:1 -u root -a "/usr/local/bin/backup-mysql {{ salt['pillar.get']('wordpress:db:name', 'wordpress') }}"
-command[backup_wordpress_file_procs]=/usr/lib/nagios/plugins/check_procs -c 0:1 -u root -a '/usr/local/bin/backup-file wordpress /usr/local/wordpress/wp-content uploads'
+command[wordpress_backup_mysql_procs]=/usr/lib/nagios/plugins/check_procs -c 0:1 -u root -a "/usr/local/bin/backup-mysql {{ salt['pillar.get']('wordpress:db:name', 'wordpress') }}"
+command[wordpress_backup_file_procs]=/usr/lib/nagios/plugins/check_procs -c 0:1 -u root -a '/usr/local/bin/backup-file wordpress /usr/local/wordpress/wp-content uploads'
+command[wordpress_backup]=/usr/lib/nagios/plugins/check_backup.py -w {{ salt['pillar.get']('backup:age', '48') }} wordpress

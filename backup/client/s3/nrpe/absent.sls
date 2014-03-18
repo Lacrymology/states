@@ -25,12 +25,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-/etc/nagios/backup.conf:
+s3_nrpe_config:
   file:
     - absent
-    - require:
-      - file: /usr/lib/nagios/plugins/check_backup.py
+    - name: /etc/nagios/backup.conf
 
-/usr/lib/nagios/plugins/check_backup.py:
+s3_nrpe_check_backup:
   file:
     - absent
+    - name: /usr/lib/nagios/plugins/check_backup.py

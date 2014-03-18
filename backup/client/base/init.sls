@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Hung Nguyen Viet
+Copyright (c) 2014, Tomas Neme
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,8 +22,18 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
-Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
+Author: Tomas Neme <lacrymology@gmail.com>
+Maintainer: Tomas Neme <lacrymology@gmail.com>
 -#}
 include:
-  - ssh.client.nrpe
+  - nrpe
+
+/usr/local/nagios/lib/python2.7/check_backup_base.py:
+  file:
+    - managed
+    - source: salt://backup/client/base/check_backup_base.py
+    - user: nagios
+    - group: nagios
+    - mode: 440
+    - require:
+      - pkg: nagios-nrpe-server

@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Quan Tong Anh
+Copyright (c) 2013, Bruno Clermont
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,15 +22,21 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Quan Tong Anh <tonganhquan.net@gmail.com>
-Maintainer: Quan Tong Anh <tonganhquan.net@gmail.com>
+Author: Bruno Clermont <patate@fastmail.cn>
+Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-shinken_receiver_procs:
-  description: Shinken Receiver Deamon
+# {{ pillar['message_do_not_modify'] }}
 
-shinken_receiver_port:
-  description: Shinken Receiver Local Port
+[ssh]
+hostname = {{ pillar['backup_server']['address'] }}
+user = root
 
-shinken_receiver_remote_port:
-  description: Shinken Receiver Remote Port
-  check: check_tcp!7773
+[backup]
+prefix = /var/lib/backup
+manifest = /var/lib/nagios/backup.manifest.pickle
+{#
+acceptable age for the MANIFEST FILE (not for the backup files themselves) in
+hours.
+recommended to keep this somewhere about max backup file age / 2
+#}
+age = 24

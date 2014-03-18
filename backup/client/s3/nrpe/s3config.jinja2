@@ -30,5 +30,14 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 [s3]
 key = {{ pillar['aws']['access_key'] }}
 secret = {{ pillar['aws']['secret_key'] }}
-path = {{ pillar['aws']['s3']['path'] }}
 bucket = {{ pillar['aws']['s3']['bucket'] }}
+
+[backup]
+prefix = {{ pillar['aws']['s3']['path'] }}
+manifest = /var/lib/nagios/backup.manifest.pickle
+{#
+acceptable age for the MANIFEST FILE (not for the backup files themselves) in
+hours.
+recommended to keep this somewhere about max backup file age / 2
+#}
+age = 24

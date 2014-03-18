@@ -28,6 +28,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 include:
   - nrpe
+  - backup.client.base
 
 /etc/nagios/backup.conf:
   file:
@@ -49,3 +50,4 @@ include:
     - mode: 550
     - require:
       - file: /etc/nagios/backup.conf
+      - file: /usr/local/nagios/lib/python2.7/check_backup_base.py

@@ -28,7 +28,6 @@ logging.basicConfig(stream=sys.stdout, level=logging.DEBUG,
 import salt.utils
 
 
-
 # the following function had been converted from _modules/nrpe.py to run
 # outside salt
 def list_checks(config_dir='/etc/nagios/nrpe.d'):
@@ -77,7 +76,7 @@ def main():
     with lock:
         checks = list_checks()
         if check_name not in checks:
-            raise Exception("Can't find check %s", check_name)
+            raise Exception('Check does not exist in list of checks')
 
         p = subprocess.Popen(shlex.split(checks[check_name]), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         output, errors = p.communicate()
@@ -99,7 +98,7 @@ def main():
             try:
                 _, _, addrs = socket.gethostbyaddr(host)
             except socket.gaierror as e:
-                raise Exception('Cannot resolve host {0}'.format(host))
+                raise Exception('Cannot resolve server address')
 
             assert len(addrs) > 0
             # we only use the first addr returned by gethostbyaddr, as we

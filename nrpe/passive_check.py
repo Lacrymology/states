@@ -9,6 +9,7 @@ import sys
 import re
 import os
 import logging
+import logging.handlers
 import socket
 import shlex
 import subprocess
@@ -22,8 +23,16 @@ import yaml
 logger = logging.getLogger(__name__)
 
 # salt-bug, must config this before import salt
-logging.basicConfig(stream=sys.stdout, level=logging.DEBUG,
-		    format="%(message)s")
+logging.basicConfig(stream=sys.stdout, level=logging.WARN,
+                   format="%(message)s")
+handler = logging.handlers.SysLogHandler(
+    address='/dev/log',
+    facility=logging.handlers.SysLogHandler.LOG_DAEMON)
+handler.setFormatter(
+    logging.Formatter(
+        'passive_check[%(process)d]: %(message)s'))
+logger = logging.getLogger(__name__)
+logger.addHandler(handler)
 
 import salt.utils
 

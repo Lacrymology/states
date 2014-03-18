@@ -14,9 +14,10 @@ import shlex
 import subprocess
 from ConfigParser import SafeConfigParser
 
-import yaml
+import lockfile
 import send_nsca
 import send_nsca.nsca
+import yaml
 
 import salt.utils
 
@@ -69,46 +70,47 @@ def main():
     try:
         minion_id = yaml.load(open('/etc/salt/minion'))['id']
     except:
-        log_and_exit("Can't get minion id")
+        raise Exception("Can't get minion id")
 
     # run check
     checks = list_checks()
     if check_name not in checks:
-        log_and_exit("Can't find check %s", check_name)
+        raise Exception("Can't find check %s", check_name)
 
-    p = subprocess.Popen(shlex.split(checks[check_name]), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    output, errors = p.communicate()
-    if p.returncode not in (0, 1, 2, 3) or errors:
-        status = 3
-        output = errors
-    else:
-        status = p.returncode
+    with LockFile('/var/run/passive_check.{0}.lock'.format(check_name)):
+        p = subprocess.Popen(shlex.split(checks[check_name]), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        output, errors = p.communicate()
+        if p.returncode not in (0, 1, 2, 3) or errors:
+            status = 3
+            output = errors
+        else:
+            status = p.returncode
 
-    password = config.get('server', 'password')
-    if len(password) > send_nsca.nsca.MAX_PASSWORD_LENGTH:
-        raise ValueError("Too large password %d" % len(password))
+        password = config.get('server', 'password')
+        if len(password) > send_nsca.nsca.MAX_PASSWORD_LENGTH:
+            raise ValueError("Too long password %d" % len(password))
 
-    # NSCA client
-    for host in config.get('server', 'address').split(','):
-        if host == '':
-            log_and_exit('Bad host address: {0}'.format(host))
+        # NSCA client
+        for host in config.get('server', 'address').split(','):
+            if host == '':
+                raise Exception('Empty host address, need to reconfigure')
 
-        try:
-            _, _, addrs = socket.gethostbyaddr(host)
-        except socket.gaierror as e:
-            log_and_exit('Cannot resolve host {0}'.format(host))
+            try:
+                _, _, addrs = socket.gethostbyaddr(host)
+            except socket.gaierror as e:
+                raise Exception('Cannot resolve host {0}'.format(host))
 
-        assert len(addrs) > 0
-        # we only use the first addr returned by gethostbyaddr, as we haven't
-        # know how to handle when addrs has more than 1 addr
-        sender = send_nsca.nsca.NscaSender(addr[0], None)
-        sender.password = password
-        # hardcode encryption method (equivalent of 1)
-        sender.Crypter = send_nsca.nsca.XORCrypter
+            assert len(addrs) > 0
+            # we only use the first addr returned by gethostbyaddr, as we
+            # haven't know how to handle when addrs has more than 1 addr
+            sender = send_nsca.nsca.NscaSender(addr[0], None)
+            sender.password = password
+            # hardcode encryption method (equivalent of 1)
+            sender.Crypter = send_nsca.nsca.XORCrypter
 
-        # send result to NSCA server
-        sender.send_service(minion_id, check_name, status, output)
-        sender.disconnect()
+            # send result to NSCA server
+            sender.send_service(minion_id, check_name, status, output)
+            sender.disconnect()
 
 if __name__ == '__main__':
     try:

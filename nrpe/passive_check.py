@@ -69,11 +69,16 @@ def main():
         raise Exception("Can't get minion id")
 
     # run check
-    checks = list_checks()
-    if check_name not in checks:
-        raise Exception("Can't find check %s", check_name)
 
-    with lockfile.LockFile('/var/run/passive_check.{0}.lock'.format(check_name)):
+    lock = lockfile.LockFile('/var/run/passive_check.{0}.lock'.format(check_name))
+    if lock.is_locked():
+        raise Exception('One instance of this check is running.')
+
+    with lock:
+        checks = list_checks()
+        if check_name not in checks:
+            raise Exception("Can't find check %s", check_name)
+
         p = subprocess.Popen(shlex.split(checks[check_name]), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         output, errors = p.communicate()
         if p.returncode not in (0, 1, 2, 3) or errors:

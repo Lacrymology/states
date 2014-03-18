@@ -19,9 +19,14 @@ import send_nsca
 import send_nsca.nsca
 import yaml
 
+logger = logging.getLogger(__name__)
+
+# salt-bug, must config this before import salt
+logging.basicConfig(stream=sys.stdout, level=logging.DEBUG,
+		    format="%(message)s")
+
 import salt.utils
 
-logger = logging.getLogger(__name__)
 
 
 # the following function had been converted from _modules/nrpe.py to run
@@ -57,11 +62,6 @@ def main():
     config = SafeConfigParser()
     config.read('/etc/send_nsca.conf')
 
-    # logging
-    logging_level = getattr(logging, config.get('logging', 'level').upper())
-    logging.basicConfig(stream=sys.stderr, level=logging_level,
-                        fmt="%(message)s")
-
     # get salt minion id
     try:
         minion_id = yaml.load(open('/etc/salt/minion'))['id']
@@ -73,7 +73,7 @@ def main():
     if check_name not in checks:
         raise Exception("Can't find check %s", check_name)
 
-    with LockFile('/var/run/passive_check.{0}.lock'.format(check_name)):
+    with lockfile.LockFile('/var/run/passive_check.{0}.lock'.format(check_name)):
         p = subprocess.Popen(shlex.split(checks[check_name]), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         output, errors = p.communicate()
         if p.returncode not in (0, 1, 2, 3) or errors:
@@ -113,4 +113,5 @@ if __name__ == '__main__':
         main()
     except Exception as e:
         logger.error(str(e), exc_info=True)
+        logger.debug('Existing...')
         sys.exit(1)

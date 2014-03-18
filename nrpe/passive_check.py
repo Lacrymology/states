@@ -113,17 +113,7 @@ def main():
             raise Exception('Empty address, need to reconfigure')
 
         for addr in addrs:
-            try:
-                _, _, ip_addrs = socket.gethostbyaddr(addr)
-            except Exception, err:
-                logger.error('Cannot resolve server address %s', addr,
-                             exc_info=True)
-                raise err
-
-            assert len(ip_addrs) > 0
-            # we only use the first addr returned by gethostbyaddr, as we
-            # haven't know how to handle when ip_addrs has more than 1 IP
-            sender = send_nsca.nsca.NscaSender(ip_addrs[0], None)
+            sender = send_nsca.nsca.NscaSender(addr, None)
             sender.password = password
             # hardcode encryption method (equivalent of 1)
             sender.Crypter = send_nsca.nsca.XORCrypter
@@ -135,7 +125,7 @@ def main():
 if __name__ == '__main__':
     try:
         main()
-    except Exception as e:
+    except (Exception, socket.error) as e:
         logger.error(str(e), exc_info=True)
         logger.debug('Existing...')
         sys.exit(1)

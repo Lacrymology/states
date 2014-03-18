@@ -115,8 +115,8 @@ def main():
         for addr in addrs:
             try:
                 _, _, ip_addrs = socket.gethostbyaddr(addr)
-            except socket.gaierror as e:
-                raise Exception('Cannot resolve server address')
+            except:
+                raise Exception('Cannot resolve server address %s' % addr)
 
             assert len(ip_addrs) > 0
             # we only use the first addr returned by gethostbyaddr, as we

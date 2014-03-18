@@ -115,8 +115,10 @@ def main():
         for addr in addrs:
             try:
                 _, _, ip_addrs = socket.gethostbyaddr(addr)
-            except:
-                raise Exception('Cannot resolve server address %s' % addr)
+            except Exception, err:
+                logger.error('Cannot resolve server address %s', addr,
+                             exc_info=True)
+                raise err
 
             assert len(ip_addrs) > 0
             # we only use the first addr returned by gethostbyaddr, as we

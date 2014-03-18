@@ -32,7 +32,7 @@ Maintainer: Quan Tong Anh <tonganhquan.net@gmail.com>
 directory = /var/run/nagios
 
 [logging]
-level = info
+level = {% if salt['pillar.get']('debug', False) %}debug{% else %}info{% endif %}
 
 [server]
 address={% for id in salt['pillar.get']('shinken:architecture:receiver', []) %}{{ mine[id]['ip_addrs']['public'] }}{% if not loop.last %},{% endif %}{% endfor %}

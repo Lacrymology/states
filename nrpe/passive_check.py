@@ -22,21 +22,6 @@ import yaml
 
 logger = logging.getLogger(__name__)
 
-# salt-bug, must config this before import salt
-logging.basicConfig(stream=sys.stdout, level=logging.WARN,
-                   format="%(message)s")
-handler = logging.handlers.SysLogHandler(
-    address='/dev/log',
-    facility=logging.handlers.SysLogHandler.LOG_DAEMON)
-handler.setFormatter(
-    logging.Formatter(
-        'passive_check[%(process)d]: %(message)s'))
-logger = logging.getLogger(__name__)
-logger.addHandler(handler)
-
-import salt.utils
-
-
 # the following function had been converted from _modules/nrpe.py to run
 # outside salt
 def list_checks(config_dir='/etc/nagios/nrpe.d'):
@@ -60,6 +45,17 @@ def main():
     """
     main loop
     """
+    # initialize logging
+    logging.basicConfig(stream=sys.stdout, level=logging.WARN,
+                        format="%(message)s")
+    handler = logging.handlers.SysLogHandler(
+        address='/dev/log',
+        facility=logging.handlers.SysLogHandler.LOG_DAEMON)
+    handler.setFormatter(
+        logging.Formatter(
+            'passive_check[%(process)d]: %(message)s'))
+    logger.addHandler(handler)
+
     # check argument
     if len(sys.argv) != 2:
         print 'Bad argument. Syntax: %s [checkname]' % sys.argv[0]

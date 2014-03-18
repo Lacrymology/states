@@ -23,10 +23,6 @@ import salt.utils
 
 logger = logging.getLogger(__name__)
 
-def log_and_exit(msg):
-    logger.error(msg, exc_info=True)
-    sys.exit(1)
-
 
 # the following function had been converted from _modules/nrpe.py to run
 # outside salt
@@ -116,4 +112,5 @@ if __name__ == '__main__':
     try:
         main()
     except Exception as e:
-        log_and_exit(str(e))
+        logger.error(str(e), exc_info=True)
+        sys.exit(1)

@@ -20,6 +20,7 @@ import send_nsca
 import send_nsca.nsca
 import yaml
 
+
 logger = logging.getLogger(__name__)
 
 # the following function had been converted from _modules/nrpe.py to run
@@ -118,6 +119,8 @@ def main():
             # hardcode encryption method (equivalent of 1)
             sender.Crypter = send_nsca.nsca.XORCrypter
 
+            # avoid connection exists too long
+            socket.setdefaulttimeout(3)
             # send result to NSCA server
             sender.send_service(minion_id, check_name, status, output)
             sender.disconnect()
@@ -125,7 +128,8 @@ def main():
 if __name__ == '__main__':
     try:
         main()
-    except (Exception, socket.error) as e:
+    except (Exception, socket.error, socket.herror,
+            socket.gaierror, socket.timeout) as e:
         logger.error(str(e), exc_info=True)
-        logger.debug('Existing...')
+        logger.warning('Exiting due to exception...')
         sys.exit(1)

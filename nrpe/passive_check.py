@@ -46,7 +46,8 @@ def main():
     main loop
     """
     # initialize logging
-    logging.basicConfig(stream=sys.stdout, level=logging.WARN,
+    default_logging_level = logging.WARN
+    logging.basicConfig(stream=sys.stdout, level=default_logging_level,
                         format="%(message)s")
     handler = logging.handlers.SysLogHandler(
         address='/dev/log',
@@ -65,6 +66,13 @@ def main():
     # config file
     config = SafeConfigParser()
     config.read('/etc/send_nsca.conf')
+
+    # switch logging level, if necessary
+    root_logger = logging.getLogger()
+    logging_level_string = config.get('logging', 'level').upper()
+    logging_level = getattr(logging, logging_level_string)
+    if logging_level != default_logging_level:
+        root_logger.setLevel(logging_level)
 
     # get salt minion id
     try:

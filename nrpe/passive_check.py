@@ -20,12 +20,12 @@ import send_nsca
 import send_nsca.nsca
 import yaml
 
-
 logger = logging.getLogger(__name__)
 
-# the following function had been converted from _modules/nrpe.py to run
-# outside salt
+
 def list_checks(config_dir='/etc/nagios/nrpe.d'):
+    # the following function had been converted from _modules/nrpe.py to run
+    # outside salt
     output = {}
     nrpe_re = re.compile('^command\[([^\]]+)\]=(.+)$')
     for filename in os.listdir(config_dir):
@@ -96,7 +96,9 @@ def main():
         if check_name not in checks:
             raise Exception('Check does not exist in list of checks')
 
-        p = subprocess.Popen(shlex.split(checks[check_name]), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        p = subprocess.Popen(shlex.split(checks[check_name]),
+                             stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE)
         output, errors = p.communicate()
         if p.returncode not in (0, 1, 2, 3) or errors:
             status = 3

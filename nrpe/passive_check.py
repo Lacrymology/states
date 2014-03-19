@@ -78,21 +78,19 @@ def main():
     if logging_level != default_logging_level:
         root_logger.setLevel(logging_level)
 
-    # get salt minion id
-    try:
-        with open('/etc/salt/minion') as f:
-            minion_id = yaml.load(f)['id']
-    except KeyError:
-        raise Exception("Can't get minion id")
-
-    # run check
-
     lock_file = os.path.join(
         config.get('lock', 'directory'),
         'passive_check.{0}.lock'.format(check_name))
     lock = lockfile.LockFile(lock_file)
     if lock.is_locked():
         raise Exception('One instance of this check is running.')
+
+    # get salt minion id
+    try:
+        with open('/etc/salt/minion') as f:
+            minion_id = yaml.load(f)['id']
+    except KeyError:
+        raise Exception("Can't get minion id")
 
     with lock:
         checks = list_checks()

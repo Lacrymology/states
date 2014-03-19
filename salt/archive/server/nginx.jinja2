@@ -31,7 +31,7 @@ server {
     listen 80;
 {%- if pillar['salt_archive']['web']['ssl']|default(False) %}
 {%- from 'nginx/ssl.jinja2' import ssl_config with context %}
-    {{ ssl_config(pillar['salt_archive']['ssl']) }}
+    {{ ssl_config(pillar['salt_archive']['web']['ssl']) }}
 {%- endif %}
     server_name {% for hostname in pillar['salt_archive']['web']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
 

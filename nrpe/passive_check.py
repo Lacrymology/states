@@ -79,7 +79,7 @@ def main():
     try:
         with open('/etc/salt/minion') as f:
             minion_id = yaml.load(f)['id']
-    except:
+    except KeyError:
         raise Exception("Can't get minion id")
 
     # run check

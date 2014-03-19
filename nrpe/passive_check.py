@@ -71,7 +71,10 @@ def main():
     # switch logging level, if necessary
     root_logger = logging.getLogger()
     logging_level_string = config.get('logging', 'level').upper()
-    logging_level = getattr(logging, logging_level_string)
+    try:
+        logging_level = getattr(logging, logging_level_string)
+    except AttributeError:
+        raise ValueError("Invalid logging level '%s'" % logging_level_string)
     if logging_level != default_logging_level:
         root_logger.setLevel(logging_level)
 

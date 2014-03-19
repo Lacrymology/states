@@ -130,8 +130,6 @@ def main():
 if __name__ == '__main__':
     try:
         main()
-    except (Exception, socket.error, socket.herror,
-            socket.gaierror, socket.timeout) as e:
-        logger.error(str(e), exc_info=True)
-        logger.warning('Exiting due to exception...')
+    except Exception, e:
+        logger.error('Exiting due to exception', exc_info=True)
         sys.exit(1)

@@ -86,9 +86,6 @@ Example::
         port: 25
         password: smtppassword
         tls: True
-  graylog2_address: 192.168.1.1
-  shinken_pollers:
-    - 192.168.1.1
 
 graphite:web:sentry
 ~~~~~~~~~~~~~~~~~~~

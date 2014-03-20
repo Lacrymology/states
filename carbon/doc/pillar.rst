@@ -68,8 +68,6 @@ Example::
       interface: 0.0.0.0
       max_creates_per_minute: inf
       max_updates_per_second: 500
-  shinken_pollers:
-    - 192.168.1.1
 
 graphite:file-max
 ~~~~~~~~~~~~~~~~~

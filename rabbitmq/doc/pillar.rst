@@ -117,8 +117,6 @@ Example::
 
   rabbitmq:
     ssl: example.com
-  shinken_pollers:
-    - 192.168.1.1
   destructive_absent: False
 
 destructive_absent

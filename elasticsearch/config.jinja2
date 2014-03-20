@@ -90,7 +90,7 @@ discovery:
 {%- for node in es['cluster']['nodes'] -%}
     {%- for origin_state in es['cluster']['nodes'][node] -%}
         {%- if origin_state != '_network' -%}
-"{{ es['cluster']['nodes'][node]['_network']['private'] }}:{{ es['cluster']['nodes'][node][origin_state]['port']|default(9300) }}"{% if not loop.last %}, {% endif -%}
+"{{ es['cluster']['nodes'][node]['_network']['private'] }}:{{ es['cluster']['nodes'][node][origin_state]['port']|default(9300) }}",
         {%- endif -%}
     {%- endfor -%}
 {%- endfor %}]

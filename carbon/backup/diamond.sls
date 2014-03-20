@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Bruno Clermont
+Copyright (c) 2014, Hung Nguyen Viet
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,31 +22,22 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Bruno Clermont <patate@fastmail.cn>
+Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
-carbon_cache_procs:
-  description: Carbon Cache Instances
+include:
+  - backup.diamond
+  - cron.diamond
 
-carbon_relay_procs:
-  description: Carbon Relay Instance
-
-carbon-remote-port-plaintext:
-  description: Carbon Remote Port PlainText Protocol
-  check: check_tcp!2003
-
-carbon-remote-port-pickle:
-  description: Carbon Remote Port Pickle Protocol
-  check: check_tcp!2004
-
-carbon_port_plaintext:
-  description: Carbon Local Port PlainText Protocol
-
-carbon_port_pickle:
-  description: Carbon Local Port Pickle Protocol
-
-carbon_backup_file_procs:
-  description: Carbon Backup Files Process
-
-carbon_backup:
-  description: Carbon Backup Age And Size
+carbon_backup_diamond_resources:
+  file:
+    - accumulated
+    - name: processes
+    - template: jinja
+    - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
+    - require_in:
+      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
+    - text:
+      - |
+        [[backup-carbon-file]]
+        cmdline = ^\/usr\/local\/bin\/backup-file carbon

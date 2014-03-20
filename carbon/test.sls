@@ -28,8 +28,17 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 include:
   - carbon
   - carbon.nrpe
+  - carbon.backup
+  - carbon.backup.diamond
+  - carbon.backup.nrpe
 
 test:
   nrpe:
     - run_all_checks
+    - order: last
+  cmd:
+    - run
+    - name: /etc/cron.daily/backup-carbon
+    - require:
+      - file: backup-carbon
     - order: last

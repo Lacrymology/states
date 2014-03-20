@@ -131,5 +131,5 @@ if __name__ == '__main__':
     try:
         main()
     except (Exception, socket.error, socket.timeout) as e:
-        logger.error('Exiting due to exception', exc_info=True)
+        logger.error('Passive check {0} exiting due to exception'.format(sys.argv[1]), exc_info=True)
         sys.exit(1)

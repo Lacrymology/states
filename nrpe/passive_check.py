@@ -117,13 +117,12 @@ def main():
             raise Exception('Empty address, need to reconfigure')
 
         for addr in addrs:
-            sender = send_nsca.nsca.NscaSender(addr, None)
+            sender = send_nsca.nsca.NscaSender(addr,
+                                               config_path=None, timeout=10)
             sender.password = password
             # hardcode encryption method (equivalent of 1)
             sender.Crypter = send_nsca.nsca.XORCrypter
 
-            # avoid connection exists too long
-            socket.setdefaulttimeout(3)
             # send result to NSCA server
             sender.send_service(minion_id, check_name, status, output)
             sender.disconnect()
@@ -131,6 +130,6 @@ def main():
 if __name__ == '__main__':
     try:
         main()
-    except Exception, e:
+    except (Exception, socket.error, socket.timeout) as e:
         logger.error('Exiting due to exception', exc_info=True)
         sys.exit(1)

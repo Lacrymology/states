@@ -29,5 +29,9 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 argparse==1.2.1
 nagiosplugin==1.1
-send_nsca==0.1.4.1
 lockfile==0.9.1
+{%- if 'files_archive' in pillar %}
+{{ pillar['files_archive'] }}/pip/send_nsca-0.1.4.2-hvn.tar.gz
+{%- else %}
+https://github.com/hvnsweeting/send_nsca/archive/v0.1.4.2-hvn.tar.gz
+{%- endif %}

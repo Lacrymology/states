@@ -29,7 +29,7 @@ Backup for Wordpress
 -#}
 include:
   - cron
-  - mariadb.server.backup
+  - {{ salt['pillar.get']('wordpress:mysql_variant', 'mariadb') }}.server.backup
   - backup
 
 backup-wordpress:

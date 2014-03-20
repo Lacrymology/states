@@ -38,8 +38,8 @@ Install a wordpress Nagios NRPE checks.
 include:
   - build.nrpe
   - logrotate.nrpe
-  - mariadb.nrpe
-  - mariadb.server.nrpe
+  - {{ salt['pillar.get']('wordpress:mysql_variant', 'mariadb') }}.nrpe
+  - {{ salt['pillar.get']('wordpress:mysql_variant', 'mariadb') }}.server.nrpe
   - nginx.nrpe
   - nrpe
   - php.nrpe
@@ -97,7 +97,7 @@ include:
     - user: nagios
     - group: nagios
     - mode: 440
-    - source: salt://mariadb/nrpe.jinja2
+    - source: salt://{{ salt['pillar.get']('wordpress:mysql_variant', 'mariadb') }}/nrpe.jinja2
     - require:
       - pkg: nagios-nrpe-server
     - context:

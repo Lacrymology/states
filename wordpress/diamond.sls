@@ -36,7 +36,7 @@ Diamond statistics for wordpress.
 -#}
 include:
   - diamond
-  - mariadb.server.diamond
+  - {{ salt['pillar.get']('wordpress:mysql_variant', 'mariadb') }}.server.diamond
   - nginx.diamond
   - uwsgi.diamond
 

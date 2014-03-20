@@ -70,6 +70,7 @@ include:
     - directory
     - user: nagios
     - group: nagios
+    - mode: 755
     - recurse:
       - user
       - group
@@ -138,6 +139,7 @@ nagios-nrpe-server:
     - require:
       - pkg: nagios-plugins
       - cmd: apt_sources
+      - module: nrpe-virtualenv
   file:
     - managed
     - name: /etc/nagios/nrpe.d/000-nagios-servers.cfg

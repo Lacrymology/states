@@ -70,6 +70,7 @@ include:
     - directory
     - user: nagios
     - group: nagios
+    - mode: 755
     - recurse:
       - user
       - group

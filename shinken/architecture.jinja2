@@ -269,7 +269,7 @@ define module {
     host *
     port 5667
     encryption_method 1
-    password {{ pillar['nrpe']['password'] }}
+    password {{ pillar['nrpe']['nsca']['password'] }}
 }
 
 {#-

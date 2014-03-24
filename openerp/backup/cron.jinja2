@@ -36,4 +36,4 @@ Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
 # {{ pillar['message_do_not_modify'] }}
 set -e
 
-/usr/local/bin/backup-postgresql {{ salt['pillar.get']('openerp:db:name', 'openerp') }}
+/usr/local/bin/backup-postgresql-by-role {{ salt['pillar.get']('openerp:db:name', 'openerp') }}

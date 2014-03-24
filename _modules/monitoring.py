@@ -162,7 +162,8 @@ def discover_checks_passive(state_name):
 
     for check_name in checks:
         check = checks[check_name]
-        if 'passive' not in check or ('passive' in check and check['passive']):
+        # default is checks are passive
+        if check.get('passive', True):
             output[check_name] = check
 
     if not output:

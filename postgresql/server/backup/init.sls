@@ -58,3 +58,14 @@ include:
     - require:
       - file: /usr/local
       - file: /usr/local/bin/backup-store
+
+/usr/local/bin/backup-postgresql-by-role:
+  file:
+    - managed
+    - user: root
+    - group: root
+    - mode: 500
+    - template: jinja
+    - source: salt://postgresql/server/backup/backup_by_role.jinja2
+    - require:
+      - file: /usr/local/bin/backup-postgresql

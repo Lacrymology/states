@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Bruno Clermont
+Copyright (c) 2014, Hung Nguyen Viet
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,23 +22,21 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Bruno Clermont <patate@fastmail.cn>
+Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
+#}
+#!/bin/bash
+# {{ pillar['message_do_not_modify'] }}
+set -e
 
-Remove Backup client for PostgreSQL.
--#}
-/etc/cron.daily/backup-postgresql:
-  file:
-    - absent
+# limit resources usage
+ulimit -e 19
+ionice -c idle -p $$
 
-/usr/local/bin/backup-postgresql:
-  file:
-    - absent
-
-/usr/local/bin/backup-postgresql-all:
-  file:
-    - absent
-
-/usr/local/bin/backup-postgresql-by-role:
-  file:
-    - absent
+role=$1
+query="SELECT pg_database.datname FROM pg_database, pg_authid
+       WHERE pg_database.datdba=pg_authid.oid AND pg_authid.rolname='${role}'";
+databases=$(sudo -u postgres psql --tuples-only --no-align -c "${query}")
+for db in ${databases}; do
+  /usr/local/bin/backup-postgresql ${db}
+done

@@ -4,9 +4,11 @@
     But as long as it include ``nrpe`` it's ok as itself include ``cron``.
      -#}
     {%- set state_checks = salt['monitoring.discover_checks_passive'](state) -%}
-    {%- if state_checks %}
 /etc/cron.d/passive-checks-{{ state }}:
   file:
+    {%- if not state_checks %}
+    - absent
+    {%- else %}
     - managed
     - user: root
     - group: root

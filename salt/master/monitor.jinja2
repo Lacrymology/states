@@ -31,10 +31,12 @@ salt_master_procs:
 salt-master-remote-port-publish:
   description: Salt Master Remote Port Publish
   check: check_tcp!4505
+  passive: False
 
 salt-master-remote-port-ret:
   description: Salt Master Remote Port Return
   check: check_tcp!4506
+  passive: False
 
 salt_master_port_publish:
   description: Salt Master Local Port Publish

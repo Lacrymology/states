@@ -35,6 +35,7 @@ shinken_broker_port:
 shinken_broker_remote_port:
   description: Shinken Broker Remote Port
   check: check_tcp!7772
+  passive: False
 
 shinken_nginx_http:
   description: Shinken HTTP Protocol

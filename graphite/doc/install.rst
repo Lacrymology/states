@@ -26,18 +26,18 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-Elasticsearch Installation
-==========================
+Graphite Installation
+=====================
 
 With appropriate pillar values LINK TO PILLAR.RST and apply this formula
-on those defined minion you can have a single host or cluster of Elasticsearch.
+on those defined minion you can have a Graphite server.
 
-To install Elasticsearch, you can run
+To install Graphite, you can run
 
 On salt master server::
 
-  salt -t 600 [elasticsearch-minion-id] state.sls elasticsearch
+  salt -t 600 [graphite-minion-id] state.sls graphite
 
 Or minion server itself::
 
-  salt-call state.sls elasticsearch
+  salt-call state.sls graphite

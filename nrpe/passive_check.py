@@ -83,7 +83,7 @@ def main():
         'passive_check.{0}.lock'.format(check_name))
     lock = lockfile.LockFile(lock_file)
     if lock.is_locked():
-        raise Exception('One instance of this check is running.')
+        raise Exception('One instance of this check is already running.')
 
     # get salt minion id
     try:
@@ -95,7 +95,8 @@ def main():
     with lock:
         checks = list_checks()
         if check_name not in checks:
-            raise Exception('Check does not exist in list of checks')
+            raise Exception("Check '%s' does not exist in list of checks" \
+                            % check_name)
 
         p = subprocess.Popen(shlex.split(checks[check_name]),
                              stdout=subprocess.PIPE,
@@ -109,7 +110,7 @@ def main():
 
         password = config.get('server', 'password')
         if len(password) > send_nsca.nsca.MAX_PASSWORD_LENGTH:
-            raise ValueError("Too long password %d" % len(password))
+            raise ValueError("Too long password %d characters" % len(password))
 
         # NSCA client
         addrs = filter(None, config.get('server', 'address').split(','))

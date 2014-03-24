@@ -49,4 +49,4 @@ backup-openerp:
     - source: salt://openerp/backup/cron.jinja2
     - require:
       - pkg: cron
-      - file: /usr/local/bin/backup-postgresql
+      - file: /usr/local/bin/backup-postgresql-by-role

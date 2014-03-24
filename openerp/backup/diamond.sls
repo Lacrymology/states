@@ -40,4 +40,4 @@ openerp_backup_diamond_resources:
     - text:
       - |
         [[backup-openerp-postgres]]
-        cmdline = ^\/usr\/local\/bin\/backup-postgresql {{ salt['pillar.get']('openerp:db:name', 'openerp') }}$
+        cmdline = ^\/usr\/local\/bin\/backup-postgresql-by-role {{ salt['pillar.get']('openerp:db:name', 'openerp') }}$

@@ -167,7 +167,7 @@ def discover_checks_passive(state_name):
             output[check_name] = check
 
     if not output:
-        logger.info("No passive")
+        logger.info("No passive checks for '%s'", state_name)
     return output
 
 

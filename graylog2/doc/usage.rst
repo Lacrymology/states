@@ -61,3 +61,10 @@ send him email notifications.
 
 A usefull alarm is to check for Linux out of memory error, you can use this
 regex: :code:`[Oo]ut of [Mm]emory: [Kk]illed process|oom-killer`.
+
+Create user
+-----------
+
+* Go to `users` tab. Click `Create new user` button. Then put into `Username`, `Sentry DSN`, `Email address`, `Name`, `Password`, `Confirm Password` and last one `Role`.
+
+Note that if you want to user has full permission. Click choose Admin on `Role`. Or you only want user has permission read permission. Let choose Reader on `Role`.

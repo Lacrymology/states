@@ -49,3 +49,5 @@ nrpe_diamond_resources:
         cmdline = ^\/usr\/lib\/nagios\/plugins\/check_
         [[init]]
         exec = ^\/sbin\/init$
+        [[nsca_passive]]
+        cmdline = ^\/usr\/local\/nagios\/bin\/nsca_passive

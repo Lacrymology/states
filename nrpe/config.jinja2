@@ -33,6 +33,7 @@ command[load_average]=/usr/lib/nagios/plugins/check_load -w 10,5,3 -c 20,15,11
 command[logged_users]=/usr/lib/nagios/plugins/check_users -w 5 -c 10
 command[loopback_interface]=/usr/lib/nagios/plugins/check_ping -H 127.0.0.1 -p 1 -w 100,100% -c 100,100%
 command[nrpe_procs]=/usr/lib/nagios/plugins/check_procs -u nagios -C nrpe -c 1:15
+command[nsca_passive_procs]=/usr/lib/nagios/plugins/check_procs -u nagios -C nsca_passive -c 1:1
 command[total_procs]=/usr/lib/nagios/plugins/check_procs -w 150 -c 200
 command[zombie_procs]=/usr/lib/nagios/plugins/check_procs -w 5 -c 10 -s Z
 {%- if salt['file.contains_regex']('/proc/swaps','^/') %}

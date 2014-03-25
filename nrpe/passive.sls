@@ -1,24 +1,21 @@
 {%- macro passive_check(state) -%}
-    {#-
-    This require the consumer of this macro to have included ``cron`` somewhere.
-    But as long as it include ``nrpe`` it's ok as itself include ``cron``.
-     -#}
-    {%- set state_checks = salt['monitoring.discover_checks_passive'](state) -%}
-/etc/cron.d/passive-checks-{{ state }}:
+/etc/nagios/nsca.d/{{ state }}.yml:
   file:
-    {%- if not state_checks %}
-    - absent
-    {%- else %}
     - managed
-    - user: root
-    - group: root
+    - makedirs: True
+    - user: nagios
+    - group: nagios
     - mode: 440
     - template: jinja
-    - source: salt://nrpe/passive_cron.jinja2
+    - source: salt://{{ state }}/monitor.jinja2
     - require:
-      - file: /etc/send_nsca.conf
-      - pkg: cron
-    - context:
-      checks: {{ state_checks }}
-    {%- endif -%}
+      - file: /etc/nagios/nsca.d
+    - watch_in:
+      - service: nsca_passive
+
+/etc/cron.d/passive-checks-{{ state }}:
+  file:
+    - absent
+    - watch_in:
+      - service: cron
 {%- endmacro %}

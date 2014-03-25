@@ -27,12 +27,15 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 Nagios NRPE check for Dovecot.
 -#}
+{%- set ssl = salt['pillar.get']('dovecot:ssl', False) %}
 {%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - apt.nrpe
   - nrpe
   - postfix.nrpe
-
+{%- if ssl %}
+  - ssl.nrpe
+{%- endif %}
 /etc/nagios/nrpe.d/dovecot.cfg:
   file:
     - managed

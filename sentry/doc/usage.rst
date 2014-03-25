@@ -33,5 +33,17 @@ Log into PILAR KEY FOR URL
 Using credential in PILLAR KEY USERNAME AND PASSWORD
 LINK TO PILLAR DOC.
 
-Create a new project and start send logging to the Sentry follow
-`this <http://sentry.readthedocs.org/en/latest/client/index.html>`_ guide.
+Create user
+-----------
+
+Default user can create account by click `Create a new account`. Then put `Email*`, `Password*`. And then click `Register`.
+
+Create team
+-----------
+
+To create team. You need to login by admin account. Then click `Create a New Team`. Then put `Team Name*`, `Owner`. And then click `Create Team`.
+
+Create project
+--------------
+
+After you already create team. You can create project. Only put `Project Name*`, `Platform*` and `Owner`. And then click `Save Changes.` 

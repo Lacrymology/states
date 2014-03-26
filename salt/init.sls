@@ -64,8 +64,7 @@ salt:
 {%- endif %}
     - components:
       - main
-    - key_server: keyserver.ubuntu.com
-    - key_id: 0E27C0A6
+    - key_url: salt://salt/key.gpg
     - require:
       - file: salt
   pkg:

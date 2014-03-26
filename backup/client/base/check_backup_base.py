@@ -44,7 +44,7 @@ import nagiosplugin
 log = logging.getLogger('nagiosplugin')
 
 class BackupFile(nagiosplugin.Resource):
-    def __init__(self, config, facility, age):
+    def __init__(self, config, facility):
         self.config = ConfigParser()
         log.debug("Reading config file: %s", config)
         self.config.read(config)

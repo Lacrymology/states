@@ -40,35 +40,33 @@ To only keep lucid/precise::
    rm -rf `find dists/ -maxdepth 1 -mindepth 1 ! -name lucid ! -name precise`
    find pool/ -type f -name '*.deb' ! -name '*lucid*'  ! -name '*precise*' -delete
 -#}
-{%- set version = '0.17.5-1' %}
+include:
+  - apt
 
-salt:
+{%- set version = '0.17.5-1' %}
+{%- for i in ('list', 'list.save') %}
+salt_absent_old_apt_salt_{{ i }}:
   file:
     - absent
-{%- if grains['saltversion'] == '0.15.3' %}
-    - name: /etc/apt/sources.list.d/saltstack-salt-{{ grains['lsb_release'] }}.list
-{%- else %}
-    - name: /etc/apt/sources.list.d/saltstack-salt-{{ grains['lsb_distrib_release'] }}.list
-{%- endif %}
-  apt_repository:
-    - present
+    - name: /etc/apt/sources.list.d/saltstack-salt-{{ grains['lsb_distrib_codename'] }}.{{ i }}
+    - require_in:
+      - pkgrepo: salt
+{%- endfor %}
+
+salt:
+  pkgrepo:
+    - managed
 {%- if 'files_archive' in pillar %}
-    - address: {{ pillar['files_archive']|replace('https://', 'http://') }}/mirror/salt/{{ version }}
+    - name: deb {{ pillar['files_archive']|replace('https://', 'http://') }}/mirror/salt/{{ version }} {{ grains['lsb_distrib_codename'] }} main
 {%- else %}
-    - address: http://archive.robotinfra.com/mirror/salt/{{ version }}
+    - name: deb http://archive.robotinfra.com/mirror/salt/{{ version }} {{ grains['lsb_distrib_codename'] }} main
 {%- endif %}
-{%- if grains['saltversion'] == '0.15.3' %}
-    - filename: saltstack-salt-{{ grains['lsb_codename'] }}
-{%- else %}
-    - filename: saltstack-salt-{{ grains['lsb_distrib_codename'] }}
-{%- endif %}
-    - components:
-      - main
+    - file: /etc/apt/sources.list.d/saltstack-salt.list
     - key_url: salt://salt/key.gpg
     - require:
-      - file: salt
+      - cmd: apt_sources
   pkg:
     - installed
     - name: salt-common
     - require:
-      - apt_repository: salt
+      - pkgrepo: salt

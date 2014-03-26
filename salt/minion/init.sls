@@ -61,6 +61,6 @@ extend:
         - dmidecode
 {%- endif %}
       - require:
-        - apt_repository: salt
+        - pkgrepo: salt
         - cmd: apt_sources
         - pkg: apt_sources

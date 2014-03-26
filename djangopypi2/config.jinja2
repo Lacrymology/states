@@ -146,7 +146,7 @@ EMAIL_USE_TLS = True
 EMAIL_USE_TLS = False
 {% endif %}
 
-{%- if pillar['djangopypi2']['ssl']|default(False) %}
+{%- if salt['pillar.get']('djangopypi2:ssl', False) %}
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 {%- endif %}

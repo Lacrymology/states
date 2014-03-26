@@ -34,8 +34,8 @@ upstream jenkins {
 
 server {
     listen 80;
-{% if pillar['jenkins']['ssl']|default(False) %}
-{% if pillar['jenkins']['ssl_redirect']|default(False) %}
+{% if salt['pillar.get']('jenkins:ssl', False) %}
+{% if salt['pillar.get']('jenkins:ssl_redirect', False) %}
     {# if https, redirect http port 80 to https port 443 #}
     server_name {% for hostname in pillar['jenkins']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
     return 301 https://{{ pillar['jenkins']['hostnames'][0] }}$request_uri;

@@ -30,11 +30,11 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 mailhub={{ pillar['smtp']['server'] }}:{{ pillar['smtp']['port'] }}
 root={{ pillar['smtp']['root'] }}
 hostname={{ pillar['mail']['mailname'] }}
-{%- if pillar['smtp']['user']|default(False) %}
+{%- if salt['pillar.get']('smtp:user', False) %}
 AuthUser={{ pillar['smtp']['user'] }}
 AuthPass={{ pillar['smtp']['password'] }}
 {%- endif %}
-{%- if pillar['smtp']['tls']|default(False) %}
+{%- if salt['pillar.get']('smtp:tls', False) %}
 UseSTARTTLS=yes
 UseTLS=yes
 {%- endif %}

@@ -53,7 +53,7 @@ idontcareaboutsecurity=0
 
 {#- until shinken 1.4 isn't out, can't use SSL #}
 {#-
-{% if pillar['shinken']['ssl']|default(False) %}
+{% if salt['pillar.get']('shinken:ssl', False) %}
 use_ssl=1
 certs_dir=/etc/ssl/{{ pillar['shinken']['ssl'] }}
 ca_cert=/etc/ssl/{{ pillar['shinken']['ssl'] }}/chained_ca.crt

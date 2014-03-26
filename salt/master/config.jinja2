@@ -36,7 +36,7 @@ ext_pillar:
   - git: {{ pillar['salt_master']['pillar']['branch'] }} {{ pillar['salt_master']['pillar']['remote'] }}
 {%- endif %}
 
-worker_threads: {{ pillar['salt_master']['workers']|default(5) }}
+worker_threads: {{ salt['pillar.get']('salt_master:workers', '5') }}
 gitfs_remotes:
 {% for repo in pillar['salt_master']['gitfs_remotes'] %}
   - {{ repo }}

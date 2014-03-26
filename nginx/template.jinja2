@@ -42,8 +42,8 @@ upstream {{ name }} {
 
 server {
     listen 80;
-{% if pillar[name]['ssl']|default(False) %}
-{% if pillar[name]['ssl_redirect']|default(False) %}
+{% if salt['pillar.get'](name + ':ssl', False) %}
+{% if salt['pillar.get'](name + ':ssl_redirect', False) %}
     {# if https, redirect http port 80 to https port 443 #}
     server_name {% for hostname in pillar[name]['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
     return 301 https://{{ pillar[name]['hostnames'][0] }}$request_uri;

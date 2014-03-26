@@ -26,7 +26,7 @@ Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 # {{ pillar['message_do_not_modify'] }}
-{% set workers = pillar['salt_master']['workers']|default("5") %}
+{% set workers = salt['pillar.get']('salt_master:workers', '5') %}
 command[salt_master_procs]=/usr/lib/nagios/plugins/check_procs -c {{ workers }}:{{ workers|int + 10 }} -C salt-master -u root
 command[salt_master_port_publish]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 4505
 command[salt_master_port_ret]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 4506

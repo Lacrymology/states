@@ -48,19 +48,19 @@ udp_recvbuffer_sizes = 1048576
 
 # Embedded elasticsearch
 elasticsearch_config_file = /etc/graylog2-elasticsearch.yml
-elasticsearch_max_docs_per_index = {{ pillar['graylog2']['max_docs']|default(20000000) }}
+elasticsearch_max_docs_per_index = {{ salt['pillar.get']('graylog2:max_docs', '20000000') }}
 elasticsearch_index_prefix = graylog2-{{ grains['id'] }}
 {#-
  How many indices do you want to keep? If the number of indices exceeds this
  number, older indices will be dropped.
 #}
-elasticsearch_max_number_of_indices = {{ pillar['graylog2']['max_indices']|default(20) }}
+elasticsearch_max_number_of_indices = {{ salt['pillar.get']('graylog2:max_indices', '20') }}
 {#-
  How many ElasticSearch shards and replicas should be used per index? Note that
  this only applies to newly created indices.
 #}
-elasticsearch_shards = {{ pillar['graylog2']['shards']|default(4) }}
-elasticsearch_replicas = {{ pillar['graylog2']['replicas']|default(0) }}
+elasticsearch_shards = {{ salt['pillar.get']('graylog2:shards', '4') }}
+elasticsearch_replicas = {{ salt['pillar.get']('graylog2:replicas', '0') }}
 {#-
  Analyzer (tokenizer) to use for message and full_message field. The "standard"
  filter usually is a good idea.
@@ -78,7 +78,7 @@ elasticsearch_analyzer = standard
  Raise this value if you want to see more messages in the overview pages. This
  is not affecting for example searches which are always targeting *all* indices.
 #}
-recent_index_ttl_minutes = {{ pillar['graylog2']['recent_index_ttl_minutes']|default(60) }}
+recent_index_ttl_minutes = {{ salt['pillar.get']('graylog2:recent_index_ttl_minutes', '60') }}
 
 {#-
  Storage type of recent index. Allowed values: niofs, simplefs, mmapfs, memory
@@ -116,8 +116,8 @@ output_batch_size = 5000
  The number of parallel running processors.
  Raise this number if your buffers are filling up.
 #}
-processbuffer_processors = {{ pillar['graylog2']['processbuffer_processors']|default(5) }}
-outputbuffer_processors = {{ pillar['graylog2']['outputbuffer_processors']|default(5) }}
+processbuffer_processors = {{ salt['pillar.get']('graylog2:processbuffer_processors', '5') }}
+outputbuffer_processors = {{ salt['pillar.get']('graylog2:outputbuffer_processors', '5') }}
 
 {#-
  Wait strategy describing how buffer processors wait on a cursor sequence.
@@ -134,7 +134,7 @@ outputbuffer_processors = {{ pillar['graylog2']['outputbuffer_processors']|defau
      Avoids syscalls which could introduce latency jitter. Best when threads can
      be bound to specific CPU cores.
 #}
-processor_wait_strategy = {{ pillar['graylog2']['processor_wait_strategy']|default("blocking") }}
+processor_wait_strategy = {{ salt['pillar.get']('graylog2:processor_wait_strategy', 'blocking') }}
 
 {#-
  Size of internal ring buffers. Raise this if raising outputbuffer_processors
@@ -144,7 +144,7 @@ processor_wait_strategy = {{ pillar['graylog2']['processor_wait_strategy']|defau
  Start server with --statistics flag to see buffer utilization.
  Must be a power of 2. (512, 1024, 2048, ...)
 #}
-ring_size = {{ pillar['graylog2']['ring_size']|default(1024) }}
+ring_size = {{ salt['pillar.get']('graylog2:ring_size', '1024') }}
 
 mongodb_useauth = false
 {#mongodb_user = grayloguser
@@ -179,7 +179,7 @@ gelf_listen_port = 12201
 # rules_file = /etc/graylog2.d/rules/graylog2.drl
 #}
 
-{% if pillar['graylog2']['amqp']|default(False) %}
+{% if salt['pillar.get']('graylog2:amqp', False) %}
 amqp_enabled = true
 amqp_host = {{ pillar['amqp']['host'] }}
 amqp_port = {{ pillar['amqp']['port'] }}

@@ -29,8 +29,8 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 server {
     listen 80;
-{% if pillar['salt_ppa_mirror']['ssl']|default(False) %}
-{% if pillar['salt_ppa_mirror']['ssl_redirect']|default(False) %}
+{% if salt['pillar.get']('salt_ppa_mirror:ssl', False) %}
+{% if salt['pillar.get']('salt_ppa_mirror:ssl_redirect', False) %}
     {# if https, redirect http port 80 to https port 443 #}
     server_name {% for hostname in pillar['salt_ppa_mirror']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
     return 301 https://{{ pillar['salt_ppa_mirror']['hostnames'][0] }}$request_uri;

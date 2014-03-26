@@ -36,19 +36,19 @@ cluster:
     allocation:
       node_concurrent_recoveries: 2
 
-{%- set state_pillar = salt['pillar.get']('elasticsearch:cluster:nodes:{0}:{1}'.format(grains['id'], origin_state), {}) %}
+{%- set pillar_string = 'elasticsearch:cluster:nodes:{0}:{1}'.format(grains['id'], origin_state) %}
 http:
   port: 9200
-  enabled: {% if state_pillar['http']|default(True) %}true{% else %}false{% endif %}
+  enabled: {% if salt['pillar.get'](pillar_string + ':http', True) %}true{% else %}false{% endif %}
 
 transport:
   tcp:
-    port: {{ state_pillar['port']|default(9300) }}
+    port: {{ salt['pillar.get'](pillar_string + ':port', '9300') }}
 
 node:
-  name: {{ state_pillar['name']|default(grains['id']) }}
-  master: {{ state_pillar['master']|default(master) }}
-  data: {{ state_pillar['data']|default(data) }}
+  name: {{ salt['pillar.get'](pillar_string + ':name', grains['id']) }}
+  master: {{ salt['pillar.get'](pillar_string + ':master', master) }}
+  data: {{ salt['pillar.get'](pillar_string + ':data', data) }}
 
 {#- configure amazon ec2 cloud auto-discovery #}
 {% if es['aws']|default(false) %}

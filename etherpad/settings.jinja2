@@ -72,6 +72,6 @@ Maintainer: Dang Tung Lam <lamdt@familug.org>
 {%- if salt['pillar.get']('debug', False) %}
   "loglevel": "DEBUG",
 {%- else %}
-  "loglevel": "INFO"
+  "loglevel": "WARN"
 {%- endif %}
 }

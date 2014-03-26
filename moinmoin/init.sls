@@ -40,6 +40,9 @@ include:
 {%- if salt['pillar.get']('moinmoin:ldap', False) %}
   - python.dev
 {%- endif %}
+{% if salt['pillar.get']('moinmoin:ssl', False) %}
+  - ssl
+{% endif %}
   - uwsgi
   - virtualenv
   - web

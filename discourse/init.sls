@@ -289,6 +289,23 @@ discourse_upstart:
       user: discourse
       home: /home/discourse
 
+discourse_upstart_rsyslog_config:
+  file:
+    - managed
+    - mode: 440
+    - source: salt://rsyslog/template.jinja2
+    - name: /etc/rsyslog.d/discourse-upstart.conf
+    - template: jinja
+    - require:
+      - pkg: rsyslog
+    - watch_in:
+      - service: rsyslog
+    - context:
+      file_path: /var/log/upstart/discourse.log
+      tag_name: discourse-upstart
+      severity: error
+      facility: daemon
+
 /etc/logrotate.d/discourse:
   file:
     - managed

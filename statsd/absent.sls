@@ -48,3 +48,7 @@ statsd-upstart-log:
     - name: find /var/log/upstart/ -maxdepth 1 -type f -name 'statsd.log*' -delete
     - require:
       - service: statsd
+
+/etc/rsyslog.d/statsd-upstart.conf:
+  file:
+    - absent

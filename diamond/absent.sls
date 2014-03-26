@@ -38,3 +38,7 @@ diamond:
     - require:
       - service: diamond
 {% endfor %}
+
+/etc/rsyslog.d/diamond-upstart.conf:
+  file:
+    - absent

@@ -59,3 +59,20 @@ rsync:
     - source: salt://rsync/config.jinja2
     - require:
       - pkg: rsync
+
+rsync_upstart_rsyslog_config:
+  file:
+    - managed
+    - mode: 440
+    - source: salt://rsyslog/template.jinja2
+    - name: /etc/rsyslog.d/rsync-upstart.conf
+    - template: jinja
+    - require:
+      - pkg: rsyslog
+    - watch_in:
+      - service: rsyslog
+    - context:
+      file_path: /var/log/upstart/rsync.log
+      tag_name: rsync-upstart
+      severity: error
+      facility: daemon

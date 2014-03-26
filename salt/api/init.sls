@@ -177,6 +177,23 @@ salt_api_old_version:
       - pkg: salt-api
 {%- endif %}
 
+salt_api_upstart_rsyslog_config:
+  file:
+    - managed
+    - mode: 440
+    - source: salt://rsyslog/template.jinja2
+    - name: /etc/rsyslog.d/salt-api-upstart.conf
+    - template: jinja
+    - require:
+      - pkg: rsyslog
+    - watch_in:
+      - service: rsyslog
+    - context:
+      file_path: /var/log/upstart/salt-api.log
+      tag_name: salt-api-upstart
+      severity: error
+      facility: daemon
+
 extend:
   nginx:
     service:

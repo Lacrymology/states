@@ -192,3 +192,20 @@ vnc_change_permission_home_fluxbox:
       - pkg: fluxbox
       - file: vnc_change_permission_home_fluxbox
 {%- endif %}
+
+tightvncserver_upstart_rsyslog_config:
+  file:
+    - managed
+    - mode: 440
+    - source: salt://rsyslog/template.jinja2
+    - name: /etc/rsyslog.d/tightvncserver-upstart.conf
+    - template: jinja
+    - require:
+      - pkg: rsyslog
+    - watch_in:
+      - service: rsyslog
+    - context:
+      file_path: /var/log/upstart/tightvncserver.log
+      tag_name: tightvncserver-upstart
+      severity: error
+      facility: daemon

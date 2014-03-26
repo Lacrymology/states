@@ -67,6 +67,10 @@ tightvncserver:
   file:
     - absent
 
+/etc/rsyslog.d/tightvncserver-upstart.conf:
+  file:
+    - absent
+
 tightvncserver-upstart-log:
   cmd:
     - run

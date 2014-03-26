@@ -65,3 +65,7 @@ openvpn-upstart-log:
   cmd:
     - run
     - name: find /var/log/upstart/ -maxdepth 1 -type f -name 'openvpn-*.log*' -delete
+
+/etc/rsyslog.d/openvpn-upstart.conf:
+  file:
+    - absent

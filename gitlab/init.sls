@@ -419,6 +419,23 @@ gitlab_upstart:
     - context:
       web_dir: {{ web_dir }}
 
+gitlab_upstart_rsyslog_config:
+  file:
+    - managed
+    - mode: 440
+    - source: salt://rsyslog/template.jinja2
+    - name: /etc/rsyslog.d/gitlab-upstart.conf
+    - template: jinja
+    - require:
+      - pkg: rsyslog
+    - watch_in:
+      - service: rsyslog
+    - context:
+      file_path: /var/log/upstart/gitlab.log
+      tag_name: gitlab-upstart
+      severity: error
+      facility: daemon
+
 {%- if salt['pillar.get']('gitlab:smtp:enabled', False) %}
 {{ web_dir }}/config/environments/production.rb:
   file:

@@ -87,3 +87,20 @@ upstart_memcached:
     - require:
       - file: memcached
       - user: web
+
+memcached_upstart_rsyslog_config:
+  file:
+    - managed
+    - mode: 440
+    - source: salt://rsyslog/template.jinja2
+    - name: /etc/rsyslog.d/memcached-upstart.conf
+    - template: jinja
+    - require:
+      - pkg: rsyslog
+    - watch_in:
+      - service: rsyslog
+    - context:
+      file_path: /var/log/upstart/memcached.log
+      tag_name: memcached-upstart
+      severity: error
+      facility: daemon

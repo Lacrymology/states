@@ -148,3 +148,20 @@ diamond:
     - require:
       - file: /etc/diamond/collectors
       - file: /etc/diamond/collectors/ProcessMemoryCollector.conf
+
+diamond_upstart_rsyslog_config:
+  file:
+    - managed
+    - mode: 440
+    - source: salt://rsyslog/template.jinja2
+    - name: /etc/rsyslog.d/diamond-upstart.conf
+    - template: jinja
+    - require:
+      - pkg: rsyslog
+    - watch_in:
+      - service: rsyslog
+    - context:
+      file_path: /var/log/upstart/diamond.log
+      tag_name: diamond-upstart
+      severity: error
+      facility: daemon

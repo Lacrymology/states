@@ -71,3 +71,7 @@ terracotta-upstart-log:
     - name: find /var/log/upstart/ -maxdepth 1 -type f -name 'terracotta.log*' -delete
     - require:
       - service: terracotta
+
+/etc/rsyslog.d/terracotta-upstart.conf:
+  file:
+    - absent

@@ -46,3 +46,7 @@ shinken-arbiter-upstart-log:
     - name: find /var/log/upstart/ -maxdepth 1 -type f -name 'shinken-arbiter.log*' -delete
     - require:
       - service: shinken-arbiter
+
+/etc/rsyslog.d/shinken-arbiter-upstart.conf:
+  file:
+    - absent

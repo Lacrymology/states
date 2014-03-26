@@ -201,3 +201,20 @@ uwsgi_emperor:
     - mode: 550
     - require:
       - user: web
+
+uwsgi_upstart_rsyslog_config:
+  file:
+    - managed
+    - mode: 440
+    - source: salt://rsyslog/template.jinja2
+    - name: /etc/rsyslog.d/uwsgi-upstart.conf
+    - template: jinja
+    - require:
+      - pkg: rsyslog
+    - watch_in:
+      - service: rsyslog
+    - context:
+      file_path: /var/log/upstart/uwsgi.log
+      tag_name: uwsgi-upstart
+      severity: error
+      facility: daemon

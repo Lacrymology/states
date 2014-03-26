@@ -52,3 +52,26 @@ include:
     - require:
       - file: /etc/nagios/backup.conf
       - file: /usr/local/nagios/lib/python2.7/check_backup_base.py
+      - module: backup_client_nrpe-requirements
+
+backup_client_nrpe-requirements:
+  file:
+    - managed
+    - name: /usr/local/nagios/backup.client.nrpe-requirements.txt
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - source: salt://backup/client/scp/nrpe/requirements.jinja2
+    - require:
+      - virtualenv: nrpe-virtualenv
+  module:
+    - wait
+    - name: pip.install
+    - upgrade: True
+    - bin_env: /usr/local/nagios
+    - requirements: /usr/local/nagios/backup.client.nrpe-requirements.txt
+    - require:
+      - virtualenv: nrpe-virtualenv
+    - watch:
+      - file: backup_client_nrpe-requirements

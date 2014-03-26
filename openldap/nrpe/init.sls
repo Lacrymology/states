@@ -27,10 +27,14 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 Nagios NRPE check for OpenLDAP.
 -#}
+{%- set ssl = salt['pillar.get']('ldap:ssl', False) %}
 {%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - apt.nrpe
   - nrpe
+{%- if ssl %}
+  - ssl.nrpe
+{%- endif %}
 
 /etc/nagios/nrpe.d/openldap.cfg:
   file:

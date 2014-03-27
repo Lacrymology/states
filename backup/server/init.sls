@@ -48,6 +48,8 @@ backup-server:
     - user: root
     - group: root
     - mode: 775
+    - require:
+      - pkg: backup-server
 
 {#- TODO: remove that statement in >= 2014-04 #}
 {{ opts['cachedir'] }}/backup-requirements.txt:

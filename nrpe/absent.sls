@@ -62,11 +62,26 @@ nagios-nrpe-server:
       - user: nagios
 {% endfor %}
 
+nsca_passive:
+  file:
+    - absent
+    - name: /etc/init/nsca_passive.conf
+    - require:
+      - service: nsca_passive
+  service:
+    - dead
+    - enable: False
+
+/usr/local/nagios/bin/nsca_passive:
+  file:
+    - absent
+
 nagios:
   user:
     - absent
     - require:
       - pkg: nagios-nrpe-server
+      - service: nsca_passive
 
 /usr/lib/nagios/plugins:
   file:

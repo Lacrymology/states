@@ -1,5 +1,6 @@
 {#-
-Copyright (c) 2013, Bruno Clermont
+Copyright (c) 2014, Hung Nguyen Viet
+All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
@@ -21,14 +22,24 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Bruno Clermont <patate@fastmail.cn>
-Maintainer: Bruno Clermont <patate@fastmail.cn>
+Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
+Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
+{%- if pillar['backup_server'] is defined %}
+include:
+  - backup.client.scp
+  - backup.client.scp.nrpe
+  - backup.dumb
 
-/usr/local/bin/backup-file:
-  file:
-    - absent
-
-/usr/local/bin/create_dump:
-  file:
-    - absent
+test:
+  nrpe:
+    - run_all_checks
+    - order: last
+    - wait: 30
+  cmd:
+    - run
+    - name: /usr/local/bin/backup-store `/usr/local/bin/create_dumb`
+    - require:
+      - file: /usr/local/bin/backup-store
+      - file: /usr/local/bin/create_dumb
+{%- endif %}

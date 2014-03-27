@@ -1,5 +1,6 @@
 {#-
-Copyright (c) 2013, Bruno Clermont
+Copyright (c) 2014, Hung Nguyen Viet
+All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
@@ -21,14 +22,20 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Bruno Clermont <patate@fastmail.cn>
-Maintainer: Bruno Clermont <patate@fastmail.cn>
+Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
+Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
+#!/bin/bash
+# {{ pillar['message_do_not_modify'] }}
+set -e
 
-/usr/local/bin/backup-file:
-  file:
-    - absent
+# limit resources usage
+ulimit -e 19
+ionice -c idle -p $$
+XZ_DEFAULTS=--memlimit={{ salt['pillar.get']('backup:xz_memlimit', '64') }}MiB
 
-/usr/local/bin/create_dump:
-  file:
-    - absent
+NOW=`date '+%Y-%m-%d-%H_%M_%S'`
+export TERM=dumb
+
+echo "created by create_dumb, for testing backup.client SLSs" | xz > /tmp/client-test-$NOW.txt.xz
+echo /tmp/client-test-$NOW.txt.xz

@@ -1,4 +1,0 @@
-# {{ pillar['message_do_not_modify'] }}
-{%- for service in checks %}
-*/{% if 'passive_interval' in checks[service] %}{{ checks[service]['passive_interval'] }}{% else %}5{% endif %} * * * * nagios /usr/local/nagios/bin/passive_check.py {{ service }}
-{%- endfor -%}

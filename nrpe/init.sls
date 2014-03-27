@@ -47,8 +47,6 @@ include:
   - virtualenv
   - virtualenv.nrpe
 
-{% from 'nrpe/passive.sls' import passive_check with context %}
-
 {#- TODO: remove that statement in >= 2014-04 #}
 /usr/local/nagiosplugin:
   file:
@@ -63,19 +61,6 @@ include:
 /usr/local/nagios/nagiosplugin-requirements.txt:
   file:
     - absent
-
-{#- Change /usr/local/nagios owner #}
-/usr/local/nagios:
-  file:
-    - directory
-    - user: nagios
-    - group: nagios
-    - mode: 755
-    - recurse:
-      - user
-      - group
-    - require:
-      - module: nrpe-virtualenv
 
 nrpe-virtualenv:
   {# remove system-wide nagiosplugin, only use one in our nrpe-virtualenv #}
@@ -134,6 +119,8 @@ nagios-plugins:
       - nagios-plugins-basic
 
 nagios-nrpe-server:
+{#- all states that require nrpe should require this state or
+service: nagios-nrpe-server #}
   pkg:
     - latest
     - require:
@@ -159,15 +146,32 @@ nagios-nrpe-server:
       - pkg: nagios-nrpe-server
       - file: nagios-nrpe-server
 
+{#- Change /usr/local/nagios owner #}
+/usr/local/nagios:
+  file:
+    - directory
+    - user: nagios
+    - group: nagios
+    - mode: 755
+    - recurse:
+      - user
+      - group
+    - require:
+      - pkg: nagios-nrpe-server
+
 /usr/local/nagios/bin/passive_check.py:
   file:
+    - absent
+
+/usr/local/nagios/bin/passive_daemon.py:
+  file:
     - managed
-    - source: salt://nrpe/passive_check.py
+    - source: salt://nrpe/passive_daemon.py
     - user: nagios
     - group: nagios
     - mode: 550
     - require:
-      - module: nrpe-virtualenv
+      - pkg: nagios-nrpe-server
 
 /usr/lib/nagios/plugins/check_domain.sh:
   file:
@@ -215,15 +219,62 @@ nagios-nrpe-server:
     - require:
       - pkg: sudo
 
-/etc/send_nsca.conf:
+/etc/nagios/nsca.conf:
+  file:
+    - absent
+
+/etc/nagios/nsca.d:
+  file:
+    - directory
+    - user: nagios
+    - group: nagios
+    - mode: 500
+    - require:
+      - pkg: nagios-nrpe-server
+
+/etc/nagios/nsca.yaml:
   file:
     - managed
     - template: jinja
-    - source: salt://nrpe/send_nsca.jinja2
+    - source: salt://nrpe/nsca.jinja2
     - user: nagios
     - group: nagios
     - mode: 440
     - require:
-      - module: nrpe-virtualenv
+      - pkg: nagios-nrpe-server
 
+/etc/send_nsca.conf:
+  file:
+    - absent
+
+/usr/local/nagios/bin/nsca_passive:
+  file:
+    - managed
+    - source: salt://nrpe/passive_daemon.py
+    - mode: 500
+    - user: nagios
+    - group: nagios
+    - require:
+      - module: nrpe-virtualenv
+      - file: /etc/nagios/nsca.yaml
+      - file: /etc/nagios/nsca.d
+
+nsca_passive:
+  file:
+    - managed
+    - name: /etc/init/nsca_passive.conf
+    - source: salt://nrpe/upstart.jinja2
+    - user: root
+    - group: root
+    - mode: 400
+    - template: jinja
+  service:
+    - running
+    - require:
+      - service: rsyslog
+    - watch:
+      - file: nsca_passive
+      - file: /usr/local/nagios/bin/nsca_passive
+
+{% from 'nrpe/passive.sls' import passive_check with context %}
 {{ passive_check('nrpe') }}

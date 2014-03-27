@@ -51,7 +51,6 @@ include:
     - user: root
     - group: root
     - require:
-      - module: nrpe-virtualenv
       - pkg: sudo
 
 /usr/local/bin/check_firewall.py:

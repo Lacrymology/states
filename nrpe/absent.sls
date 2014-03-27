@@ -102,3 +102,19 @@ nagios:
 /etc/cron.d/passive-checks-nrpe.cfg:
   file:
     - absent
+
+/etc/nagios/nsca.conf:
+  file:
+    - absent
+
+/etc/nagios/nsca.yaml:
+  file:
+    - absent
+
+/etc/nagios/nsca.d:
+  file:
+    - absent
+
+/var/run/nagios/passive_check.lock:
+  file:
+    - absent

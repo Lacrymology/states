@@ -55,6 +55,14 @@ include:
     - mode: 440
     - makedirs: True
 
+remove_bin_log:
+  cmd:
+    - run
+    - name: rm -f /var/log/mysql/mariadb-bin.*
+    - onlyif: ls /var/log/mysql/mariadb-bin.*
+    - watch_in:
+      - service: mysql-server
+
 /etc/mysql/my.cnf.dpkg-dist:
   file:
     - absent

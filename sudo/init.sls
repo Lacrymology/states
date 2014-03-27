@@ -27,6 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 include:
   - apt
+  - hostname
   - rsyslog
 
 sudo:

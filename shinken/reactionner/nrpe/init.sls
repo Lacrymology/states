@@ -25,6 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
+{%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - apt.nrpe
   - nrpe
@@ -45,6 +46,8 @@ include:
     - source: salt://shinken/reactionner/nrpe/config.jinja2
     - require:
       - pkg: nagios-nrpe-server
+
+{{ passive_check('shinken.reactionner') }}
 
 extend:
   nagios-nrpe-server:

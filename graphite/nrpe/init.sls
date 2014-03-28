@@ -27,6 +27,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 Nagios NRPE check for Graphite.
 -#}
+{%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - apt.nrpe
   - graphite.common.nrpe
@@ -98,6 +99,8 @@ include:
       database: {{ salt['pillar.get']('graphite:web:db:name', 'graphite') }}
       username: {{ salt['pillar.get']('graphite:web:db:username', 'graphite') }}
       password: {{ salt['password.pillar']('graphite:web:db:password', 10) }}
+
+{{ passive_check('graphite') }}
 
 extend:
   nagios-nrpe-server:

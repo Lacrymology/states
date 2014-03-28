@@ -27,6 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Nagios NRPE check for Shinken Arbiter.
 -#}
+{%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - apt.nrpe
   - nrpe
@@ -48,6 +49,8 @@ include:
     - source: salt://shinken/arbiter/nrpe/config.jinja2
     - require:
       - pkg: nagios-nrpe-server
+
+{{ passive_check('shinken.arbiter') }}
 
 extend:
   nagios-nrpe-server:

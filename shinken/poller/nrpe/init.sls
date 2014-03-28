@@ -47,7 +47,7 @@ include:
     - require:
       - pkg: nagios-nrpe-server
 
-{{ passive_check('shinken-poller') }}
+{{ passive_check('shinken.poller') }}
 
 extend:
   nagios-nrpe-server:

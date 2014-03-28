@@ -47,7 +47,7 @@ include:
     - require:
       - pkg: nagios-nrpe-server
 
-{{ passive_check('shinken-scheduler') }}
+{{ passive_check('shinken.scheduler') }}
 
 extend:
   nagios-nrpe-server:

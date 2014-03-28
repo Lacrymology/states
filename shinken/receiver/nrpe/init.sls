@@ -47,7 +47,7 @@ include:
     - require:
       - pkg: nagios-nrpe-server
 
-{{ passive_check('shinken-receiver') }}
+{{ passive_check('shinken.receiver') }}
 
 extend:
   nagios-nrpe-server:

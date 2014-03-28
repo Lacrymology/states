@@ -50,7 +50,7 @@ include:
     - require:
       - pkg: nagios-nrpe-server
 
-{{ passive_check('shinken-arbiter') }}
+{{ passive_check('shinken.arbiter') }}
 
 extend:
   nagios-nrpe-server:

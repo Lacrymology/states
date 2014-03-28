@@ -72,7 +72,7 @@ include:
     {%- endif -%}
 {%- endif %}
 
-{{ passive_check('shinken-broker') }}
+{{ passive_check('shinken.broker') }}
 
 extend:
   nagios-nrpe-server:

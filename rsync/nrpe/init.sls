@@ -30,6 +30,7 @@ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
 include:
   - apt.nrpe
   - nrpe
+  - rsyslog.nrpe
 
 /etc/nagios/nrpe.d/rsync.cfg:
   file:

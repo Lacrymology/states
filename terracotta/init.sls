@@ -29,6 +29,7 @@ include:
   - hostname
   - java.7.jdk
   - local
+  - rsyslog
 {% set version = '3.7.0' %}
 
 terracotta:

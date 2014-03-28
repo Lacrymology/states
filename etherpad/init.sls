@@ -35,6 +35,7 @@ include:
   - local
   - postgresql.server
   - python.dev
+  - rsyslog
 {%- if salt['pillar.get']('etherpad:ssl', False) %}
   - ssl
 {%- endif %}

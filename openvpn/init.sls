@@ -29,6 +29,7 @@ Install and run one or multiple OpenVPN servers.
 -#}
 include:
   - apt
+  - rsyslog
 
 openvpn:
   pkg:

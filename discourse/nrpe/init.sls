@@ -46,6 +46,7 @@ include:
   - postgresql.server.nrpe
   - redis.nrpe
   - ruby.nrpe
+  - rsyslog.nrpe
 {%- if salt['pillar.get']('discourse:ssl', False) %}
   - ssl.nrpe
 {%- endif %}

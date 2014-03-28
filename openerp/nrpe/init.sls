@@ -37,6 +37,7 @@ include:
   - pip.nrpe
   - postgresql.server.nrpe
   - python.dev.nrpe
+  - rsyslog.nrpe
 {%- if salt['pillar.get']('openerp:ssl', False) %}
   - ssl.nrpe
 {%- endif %}

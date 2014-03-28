@@ -43,6 +43,7 @@ Install TightVNC - Virtual Network Computing.
 include:
   - apt
   - logrotate
+  - rsyslog
   - {{ wm }}
 
 tightvncserver_depends:

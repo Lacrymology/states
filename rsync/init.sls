@@ -27,6 +27,9 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 A file-copying tool.
 -#}
+include:
+  - rsyslog
+
 rsync:
   pkg:
     - installed

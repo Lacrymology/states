@@ -39,6 +39,7 @@ arbiters acting as hot standby spares in the architecture.
 -#}
 include:
   - hostname
+  - rsyslog
   - shinken
   - ssmtp
 

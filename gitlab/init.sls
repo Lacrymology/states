@@ -46,6 +46,7 @@ include:
   - python
   - redis
   - ruby
+  - rsyslog
 {%- if salt['pillar.get']('gitlab:ssl', False) %}
   - ssl
 {%- endif %}

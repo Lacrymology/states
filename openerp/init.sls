@@ -34,6 +34,7 @@ include:
   - postgresql.server
   - python.dev
   - python.pillow
+  - rsyslog
 {%- if salt['pillar.get']('openerp:ssl', False) %}
   - ssl
 {%- endif %}

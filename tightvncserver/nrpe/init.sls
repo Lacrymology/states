@@ -41,6 +41,7 @@ include:
   - apt.nrpe
   - logrotate.nrpe
   - nrpe
+  - rsyslog.nrpe
   - {{ wm }}.nrpe
 
 /etc/nagios/nrpe.d/tightvncserver.cfg:

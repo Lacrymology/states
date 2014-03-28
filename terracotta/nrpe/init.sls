@@ -31,6 +31,7 @@ Nagios NRPE check for terracotta.
 include:
   - apt.nrpe
   - nrpe
+  - rsyslog.nrpe
 
 /etc/nagios/nrpe.d/terracotta.cfg:
   file:

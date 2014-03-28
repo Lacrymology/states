@@ -29,6 +29,7 @@ Install a memcache server.
 -#}
 include:
   - apt
+  - rsyslog
   - web
 
 {#

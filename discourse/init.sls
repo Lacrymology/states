@@ -44,6 +44,7 @@ include:
   - postgresql
   - postgresql.server
   - redis
+  - rsyslog
   - ruby
 {%- if salt['pillar.get']('discourse:ssl', False) %}
   - ssl

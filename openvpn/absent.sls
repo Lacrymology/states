@@ -64,4 +64,4 @@ openvpn-{{ tunnel }}:
 openvpn-upstart-log:
   cmd:
     - run
-    - name: find /var/log/upstart/ -maxdepth 1 -type f -name 'openvpn-*.log.*' -delete
+    - name: find /var/log/upstart/ -maxdepth 1 -type f -name 'openvpn-*.log*' -delete

@@ -58,6 +58,6 @@ graylog2-server:
 graylog2-upstart-log:
   cmd:
     - run
-    - name: find /var/log/upstart/ -maxdepth 1 -type f -name 'graylog2.log.*' -delete
+    - name: find /var/log/upstart/ -maxdepth 1 -type f -name 'graylog2.log*' -delete
     - require:
       - service: graylog2-server

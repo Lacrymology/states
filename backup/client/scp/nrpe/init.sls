@@ -30,6 +30,10 @@ include:
   - backup.client.base
   - nrpe
   - ssh.client.nrpe
+{%- if pillar['backup_server']['address'] in grains['ipv4'] or
+       pillar['backup_server']['address'] in ('localhost', grains['host']) %}
+  - backup.server.nrpe
+{%- endif %}
 
 /etc/nagios/backup.conf:
   file:

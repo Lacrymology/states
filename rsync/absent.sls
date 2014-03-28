@@ -48,7 +48,7 @@ rsync:
 rsync-upstart-log:
   cmd:
     - run
-    - name: find /var/log/upstart/ -maxdepth 1 -type f -name 'rsync.log.*' -delete
+    - name: find /var/log/upstart/ -maxdepth 1 -type f -name 'rsync.log*' -delete
     - require:
       - pkg: rsync
       - service: rsync

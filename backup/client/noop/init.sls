@@ -32,7 +32,7 @@ include:
 /usr/local/bin/backup-store:
   file:
     - managed
-    - source: salt://backup/client/test/no_operate.jinja2
+    - source: salt://backup/client/noop/no_operate.jinja2
     - mode: 755
     - template: jinja
     - require:

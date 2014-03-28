@@ -82,6 +82,32 @@ def drop_privilege(username, groupname):
     os.setgid(group.gr_gid)
     os.setuid(user.pw_uid)
 
+
+class NSCAServerMetrics(object):
+    def __init__(self, address):
+        self.address = address
+        self.failure = 0
+        self.total_failure = 0
+        self.failure_sequence = 0
+
+    def increment(self):
+        self.failure += 1
+        self.total_failure += 1
+
+    def reset(self):
+        if self.failure:
+            logger.info("After %d try %s is now back online", self.failure,
+                        self.address)
+        self.failure = 0
+
+    @property
+    def ever_success(self):
+        return self.failure == self.total_failure
+
+    def __repr__(self):
+        return self.address
+
+
 class PassiveDaemon(object):
     """
     Daemon that collects all monitoring NRPE commands, checks some
@@ -97,8 +123,9 @@ class PassiveDaemon(object):
         self.minion_id = minion_id
         self.nsca_timeout = nsca_timeout
         self.sched = scheduler.Scheduler(standalone=True)
-        self.senders = self.initialize_senders(nsca_servers)
+        self.nsca_servers = nsca_servers
         self.checks = self.collect_passive_checks()
+        self.counters = {}
 
     def load_nsca_yaml_files(self):
         '''
@@ -157,22 +184,26 @@ class PassiveDaemon(object):
         logger.debug("check '%s' out: '%s' err: '%s'", check_name, output,
                      errors)
 
-        for sender in self.senders:
+        for address in self.nsca_servers:
+            # create sender instance
+            sender = send_nsca.nsca.NscaSender(address, config_path=None,
+                                               timeout=self.nsca_timeout)
+            sender.password = self.nsca_servers[address]
+            # hardcode encryption method (equivalent of 1)
+            sender.Crypter = send_nsca.nsca.XORCrypter
+            counters = self.counters[address]
             logger.debug("sending result to NSCA server %s", sender.remote_host)
             try:
                 sender.send_service(self.minion_id, check_name, status, output)
-                if sender.__failure_continuous:
-                    logger.info("After %d try %s is now back online",
-                                sender.__failure_continuous, sender.remote_host)
-                    sender.__failure_continuous = 0
-                else:
+                if not counters.failure:
                     logger.debug("Sent to %s", sender.remote_host)
+                else:
+                    counters.reset()
             except Exception, err:
                 logger.debug("Can't send NSCA data to '%s': '%s'",
                              sender.remote_host, err, exc_info=True)
-                sender.__failure_count += 1
-                sender.__failure_continuous += 1
-                if sender.__failure_count == sender.__failure_continuous:
+                counters.increment()
+                if counters.ever_success:
                     logger.warning(
                         "Can't send to server '%s' as it never worked",
                         sender.remote_host)
@@ -180,8 +211,7 @@ class PassiveDaemon(object):
                     logger.info(
                         "Can't send '%s' check to '%s', %d failure (total %d)",
                         check_name, sender.remote_host,
-                        sender.__failure_continuous, sender.__failure_count,
-                        exc_info=True)
+                        counters.failure, counters.total_failure)
             sender.disconnect()
 
     def collect_passive_checks(self):
@@ -215,26 +245,16 @@ class PassiveDaemon(object):
                 logger.debug("Ignore non-passive check '%s'", check_name)
         return output
 
-    def initialize_senders(self, nsca_servers):
+    def validate_servers(self):
         '''
-        Initialize all NSCA sender instances
+        Validate all NSCA servers password
         '''
-        output = []
-        for address in nsca_servers:
-            password = nsca_servers[address]
+        for address, password in self.nsca_servers.iteritems():
             if len(password) > send_nsca.nsca.MAX_PASSWORD_LENGTH:
                 raise ValueError(
                     "NSCA server '%s' password is too long %d characters" % (
                         address, len(password)))
-            sender = send_nsca.nsca.NscaSender(address, config_path=None,
-                                               timeout=self.nsca_timeout)
-            sender.password = password
-            # hardcode encryption method (equivalent of 1)
-            sender.Crypter = send_nsca.nsca.XORCrypter
-            sender.__failure_count = 0
-            sender.__failure_continuous = 0
-            output.append(sender)
-        return output
+            self.counters[address] = NSCAServerMetrics(address)
 
     def run_checks(self, checks):
         '''
@@ -248,6 +268,7 @@ class PassiveDaemon(object):
         """
         Collect checks list, add them to the scheduler, and run it
         """
+        self.validate_servers()
         for interval, checks in self.checks.iteritems():
             logger.debug("Create scheduler job for interval %d and checks %s",
                          interval, checks)

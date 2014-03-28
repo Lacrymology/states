@@ -1,0 +1,9 @@
+#!/bin/sh
+# {{ pillar['message_do_not_modify'] }}
+#
+# wrap around check_uwsgi to silence it's stderr output
+# as current version show those 2 noisy and useless message:
+# !!! no internal routing support, rebuild with pcre support !!!
+# thunder lock: disabled (you can enable it with --thunder-lock)
+#
+/usr/lib/nagios/plugins/check_uwsgi $* 2> /dev/null

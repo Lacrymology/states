@@ -48,7 +48,7 @@ include:
     - source: salt://uwsgi/nrpe/config.jinja2
     - require:
       - pkg: nagios-nrpe-server
-      - file: /usr/lib/nagios/plugins/check_uwsgi
+      - file: /usr/lib/nagios/plugins/check_uwsgi_nostderr
       - file: /etc/sudoers.d/nrpe_uwsgi
 
 /etc/sudoers.d/nagios_uwsgi:
@@ -71,6 +71,17 @@ include:
 /usr/local/bin/uwsgi-nagios.sh:
   file:
    - absent
+
+/usr/lib/nagios/plugins/check_uwsgi_nostderr:
+  file:
+    - managed
+    - template: jinja
+    - source: salt://uwsgi/nrpe/nostderr_wrap.jinja2
+    - mode: 550
+    - user: www-data
+    - group: www-data
+    - require:
+      - file: /usr/lib/nagios/plugins/check_uwsgi
 
 /usr/lib/nagios/plugins/check_uwsgi:
   file:

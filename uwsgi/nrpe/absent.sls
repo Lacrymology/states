@@ -47,6 +47,10 @@ Nagios NRPE check for uWSGI.
   file:
     - absent
 
+/usr/lib/nagios/plugins/check_uwsgi_nostderr:
+  file:
+    - absent
+
 /etc/cron.d/passive-checks-uwsgi:
   file:
     - absent

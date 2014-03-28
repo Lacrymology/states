@@ -27,6 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Nagios NRPE check for Shinken.
 -#}
+{%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - apt.nrpe
   - nginx.nrpe
@@ -70,6 +71,8 @@ include:
       http_result: 301 Moved Permanently
     {%- endif -%}
 {%- endif %}
+
+{{ passive_check('shinken.broker') }}
 
 extend:
   nagios-nrpe-server:

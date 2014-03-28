@@ -27,6 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Nagios NRPE check for APT.
 -#}
+{%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - nrpe
 
@@ -56,6 +57,8 @@ include:
     - require:
       - pkg: nagios-nrpe-server
       - file: /usr/lib/nagios/plugins/check_apt-rc.py
+
+{{ passive_check('apt') }}
 
 extend:
   nagios-nrpe-server:

@@ -34,6 +34,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 Nagios NRPE check for redis.
 -#}
+{%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - apt.nrpe
   - nrpe
@@ -48,6 +49,8 @@ include:
     - source: salt://redis/nrpe/config.jinja2
     - require:
       - pkg: nagios-nrpe-server
+
+{{ passive_check('redis') }}
 
 extend:
   nagios-nrpe-server:

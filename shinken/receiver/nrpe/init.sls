@@ -25,6 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Quan Tong Anh <tonganhquan.net@gmail.com>
 Maintainer: Quan Tong Anh <tonganhquan.net@gmail.com>
 -#}
+{%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - apt.nrpe
   - nrpe
@@ -45,6 +46,8 @@ include:
     - source: salt://shinken/receiver/nrpe/config.jinja2
     - require:
       - pkg: nagios-nrpe-server
+
+{{ passive_check('shinken.receiver') }}
 
 extend:
   nagios-nrpe-server:

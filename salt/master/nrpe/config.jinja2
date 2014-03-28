@@ -32,5 +32,5 @@ command[salt_master_port_publish]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1
 command[salt_master_port_ret]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 4506
 {% if not salt['pillar.get']('__test__', False) %}
 {#- sudo for reading salt config files #}
-command[salt_master_mine]=sudo /usr/lib/nagios/plugins/check_mine_minions.py -v
+command[salt_master_mine]=sudo /usr/lib/nagios/plugins/check_mine_minions.py
 {%- endif %}

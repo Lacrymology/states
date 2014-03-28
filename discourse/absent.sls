@@ -63,6 +63,6 @@ discourse:
 discourse-upstart-log:
   cmd:
     - run
-    - name: find /var/log/upstart/ -maxdepth 1 -type f -name 'discourse.log.*' -delete
+    - name: find /var/log/upstart/ -maxdepth 1 -type f -name 'discourse.log*' -delete
     - require:
       - service: discourse

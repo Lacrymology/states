@@ -54,7 +54,7 @@ nginx:
 nginx-upstart-log:
   cmd:
     - run
-    - name: find /var/log/upstart/ -maxdepth 1 -type f -name 'nginx.log.*' -delete
+    - name: find /var/log/upstart/ -maxdepth 1 -type f -name 'nginx.log*' -delete
     - require:
       - service: nginx
 

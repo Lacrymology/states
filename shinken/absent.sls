@@ -59,7 +59,7 @@ shinken:
 shinken-upstart-log:
   cmd:
     - run
-    - name: find /var/log/upstart/ -maxdepth 1 -type f -name 'shinken-*.log.*' -delete
+    - name: find /var/log/upstart/ -maxdepth 1 -type f -name 'shinken-*.log*' -delete
     - require:
 {% for role in roles %}
       - service: shinken-{{ role }}

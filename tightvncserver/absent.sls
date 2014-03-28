@@ -70,6 +70,6 @@ tightvncserver:
 tightvncserver-upstart-log:
   cmd:
     - run
-    - name: find /var/log/upstart/ -maxdepth 1 -type f -name 'tightvncserver.log.*' -delete
+    - name: find /var/log/upstart/ -maxdepth 1 -type f -name 'tightvncserver.log*' -delete
     - require:
       - service: tightvncserver

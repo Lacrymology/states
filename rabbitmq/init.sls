@@ -144,11 +144,7 @@ rabbitmq-server:
       - host: hostname
       - file: rabbitmq_erlang_cookie
 {% if grains['id'] == master_id %}
-{#  rabbitmq_vhost:#}
-{#    - present#}
-{#    - name: test#}
-{#    - require:#}
-{#      - service: rabbitmq-server#}
+monitor_user:
   rabbitmq_user:
     - present
     - name: {{ salt['pillar.get']('rabbitmq:monitor:user', salt['pillar.get']('salt_monitor') )}}
@@ -162,7 +158,23 @@ rabbitmq-server:
     - m_name: {{ salt['pillar.get']('rabbitmq:monitor:user', salt['pillar.get']('salt_monitor') )}}
     - tags: monitoring
     - require:
-      - rabbitmq_user: rabbitmq-server
+      - rabbitmq_user: monitor_user
+
+admin_user:
+  rabbitmq_user:
+    - present
+    - name: {{ salt['pillar.get']('rabbitmq:management:user', salt['pillar.get']('salt_monitor') )}}
+    - password: {{ salt['password.pillar']('rabbitmq:management:password') }}
+    - force: True
+    - require:
+      - service: rabbitmq-server
+  module:
+    - run
+    - name: rabbitmq.set_user_tags
+    - m_name: {{ salt['pillar.get']('rabbitmq:management:user', salt['pillar.get']('salt_monitor') )}}
+    - tags: administrator
+    - require:
+      - rabbitmq_user: admin_user
 
 rabbitmq_delete_guest:
   rabbitmq_user:

@@ -1,4 +1,4 @@
-.. Copyright (c) 2009, Bruno Clermont
+.. Copyright (c) 2009, Luan Vo Ngoc
 .. All rights reserved.
 ..
 .. Redistribution and use in source and binary forms, with or without
@@ -10,7 +10,7 @@
 ..       notice, this list of conditions and the following disclaimer in the
 ..       documentation and/or other materials provided with the distribution.
 ..
-.. Neither the name of Bruno Clermont nor the names of its contributors may be used
+.. Neither the name of Luan Vo Ngoc nor the names of its contributors may be used
 .. to endorse or promote products derived from this software without specific
 .. prior written permission.
 ..
@@ -26,33 +26,19 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-Clustering Troubleshooting
---------------------------
+Usage
+=====
 
-Start the first instance, you should see something along the lines of::
+Web UI
+------
 
-  [2013-12-11 02:23:34,245][INFO ][cluster.service          ]
-  [my-node-1] new_master
-  [my-node-1][feumL84zT26zxpLi-PBWNQ][inet[/10.134.133.157:9300]]{master=true},
-  reason: zen-disco-join (elected_as_master)
+After installing, you can login to the Shinken UI by using the account that
+is defined in pillar ``shinken:users``.
 
-and on the second node::
+LINK TO PILLAR DOC
 
-  [2013-12-11 02:23:40,498][INFO ][cluster.service          ]
-  [my-node-2] detected_master
-  [my-node-1][feumL84zT26zxpLi-PBWNQ][inet[/10.134.133.1
-  57:9300]]{master=true}, added
-  {[my-node-1][feumL84zT26zxpLi-PBWNQ][inet[/10.134.133.157:9300]]{master=true},},
-  reason: zen-disco-receive(from master [
-  [my-node-1][feumL84zT26zxpLi-PBWNQ][inet[/10.134.133.157:9300]]{master=true}])
+Click `All` section to see all notifications on shinken that include: `CRITICAL`, `WARNING`, `UNKNOWN`, `UP`, `OK`.
 
-switch back to the first node::
+Click `IT problems` to see notifications that only include something ralated to errors.
 
-  [2013-12-11 02:23:42,522][INFO ][cluster.service          ]
-  [my-node-1] added
-  {[my-node-2][URdBoFeFRKim3N-UYGxgCQ][inet[/10.128.213.252:9300]]
-  {master=true},}, reason: zen-disco-receive(join from
-  node[[my-node-2][URdBoFeFRKim3N-UYGxgCQ][inet[/10.128.213.252:9300]]{master=true}])
-
-NO REAL USAGE OF IT.
-PLEASE LINK TO ES OFFICIAL DOC.
+With these error notifications that can be considered are ignored. Let acknowledge by click `Acknowledge` at `Actions` section.

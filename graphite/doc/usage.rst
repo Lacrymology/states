@@ -79,3 +79,13 @@ remove the folder from the file-system of the carbon server::
   /var/lib/graphite/whisper/$MINION
 
 Where ``$MINION`` is the minion ID of the host you want to remove.
+
+Create user
+-----------
+
+To create user, you can login to the Django Administration Web http://graphhite.example.com/admin/ by using the account that
+is defined in pillar ``graphite:web:initial_admin_user``.
+
+LINK TO PILLAR DOC
+
+Click `Users` at `Auth` section. Then put `Username`, `Password`, `Password confirmation`. And click `Save` if you want to stop that, click `Save and add another` if you want to continue to add another user or click `Save and continue editing` if you want to edit.

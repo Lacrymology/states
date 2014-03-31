@@ -32,7 +32,7 @@ salt-minion:
   pkg:
     - latest
     - require:
-      - apt_repository: salt
+      - pkgrepo: salt
   service:
     - running
     - enable: True

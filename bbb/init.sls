@@ -50,18 +50,15 @@ include:
   - tomcat.6
 
 libreoffice:
-  apt_repository:
-    - present
-    - address: http://ppa.launchpad.net/libreoffice/libreoffice-4-0/ubuntu
-    - components:
-      - main
-    - distribution: {{ grains['lsb_distrib_codename'] }}
-    - key_id: 1378B444
-    - key_server: keyserver.ubuntu.com
+  pkgrepo:
+    - managed
+    - name: deb http://ppa.launchpad.net/libreoffice/libreoffice-4-0/ubuntu {{ grains['lsb_distrib_codename'] }} main
+    - keyid: 1378B444
+    - keyserver: keyserver.ubuntu.com
   pkg:
     - installed
     - require:
-      - apt_repository: libreoffice
+      - pkgrepo: libreoffice
       - pkg: openjdk_jre_headless
 
 {%- set openoffice_version = "1.0.4" %}

@@ -48,6 +48,23 @@ openvpn:
     - require:
       - pkg: openvpn
 
+openvpn_upstart_rsyslog_config:
+  file:
+    - managed
+    - mode: 440
+    - source: salt://rsyslog/template.jinja2
+    - name: /etc/rsyslog.d/openvpn-upstart.conf
+    - template: jinja
+    - require:
+      - pkg: rsyslog
+    - watch_in:
+      - service: rsyslog
+    - context:
+      file_path: /var/log/upstart/openvpn.log
+      tag_name: openvpn-upstart
+      severity: error
+      facility: daemon
+
 {%- for type in ('lib', 'log') %}
 /var/{{ type }}/openvpn:
   file:
@@ -55,9 +72,8 @@ openvpn:
     - user: root
     - group: root
     - mode: 770
-{%- endfor -%}
-
-{%- macro service_openvpn(tunnels) -%}
+{%- endfor %}
+{%- macro service_openvpn(tunnels) %}
     {%- for tunnel in tunnels %}
 openvpn-{{ tunnel }}:
   file:
@@ -79,20 +95,3 @@ openvpn-{{ tunnel }}:
       - file: openvpn-{{ tunnel }}
     {%- endfor -%}
 {%- endmacro -%}
-
-openvpn_upstart_rsyslog_config:
-  file:
-    - managed
-    - mode: 440
-    - source: salt://rsyslog/template.jinja2
-    - name: /etc/rsyslog.d/openvpn-upstart.conf
-    - template: jinja
-    - require:
-      - pkg: rsyslog
-    - watch_in:
-      - service: rsyslog
-    - context:
-      file_path: /var/log/upstart/openvpn.log
-      tag_name: openvpn-upstart
-      severity: error
-      facility: daemon

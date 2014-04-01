@@ -40,6 +40,7 @@ include:
   - nodejs.diamond
   - postgresql.server.diamond
   - redis.diamond
+  - rsyslog.diamond
   - uwsgi.diamond
 
 gitlab_diamond_resource:

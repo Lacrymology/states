@@ -29,6 +29,7 @@ Diamond statistics for OpenVPN.
 -#}
 include:
   - diamond
+  - rsyslog.diamond
 
 openvpn_diamond_collector:
   file:

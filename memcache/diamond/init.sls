@@ -30,6 +30,7 @@ Diamond statistics for Memcache.
 include:
   - diamond
   - memcache
+  - rsyslog.diamond
 
 memcached_diamond_resources:
   file:

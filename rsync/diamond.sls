@@ -29,6 +29,7 @@ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
 
 include:
   - diamond
+  - rsyslog.diamond
 
 rsync_diamond_resources:
   file:

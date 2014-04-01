@@ -39,6 +39,7 @@ Diamond statistics for tightvncserver.
 include:
   - diamond
   - {{ wm }}.diamond
+  - rsyslog.diamond
 
 tightvncserver_diamond_resources:
   file:

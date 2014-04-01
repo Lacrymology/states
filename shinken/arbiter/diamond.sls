@@ -27,6 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 include:
   - diamond
+  - rsyslog.diamond
   - ssmtp.diamond
 
 shinken_arbiter_diamond_resources:

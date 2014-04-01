@@ -39,6 +39,7 @@ include:
   - postgresql.server.diamond
   - nginx.diamond
   - redis.diamond
+  - rsyslog.diamond
   - uwsgi.diamond
 
 discourse_diamond_resource:

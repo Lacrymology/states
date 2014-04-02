@@ -1149,7 +1149,7 @@ def mod_repo(repo, **kwargs):
 
     elif 'key_url' in kwargs:
         key_url = kwargs['key_url']
-        fn_ = __salt__['cp.cache_file'](key_url)
+        fn_ = __salt__['cp.cache_file'](key_url, kwargs['__env__'])
         cmd = 'apt-key add {0}'.format(fn_)
         out = __salt__['cmd.run_stdout'](cmd, **kwargs)
         if not out.upper().startswith('OK'):

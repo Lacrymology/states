@@ -459,3 +459,11 @@ gitlab_upstart:
       - file: gitlab
     - require_in:
       - file: {{ home_dir }}/gitlab-satellites
+
+{%- if salt['pillar.get']('gitlab:ssl', False) %}
+extend:
+  nginx:
+    service:
+      - watch:
+        - cmd: ssl_cert_and_key_for_{{ pillar['gitlab']['ssl'] }}
+{%- endif %}

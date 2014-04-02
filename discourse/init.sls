@@ -402,3 +402,11 @@ discourse_assets_precompile:
     - makedirs: True
     - require:
       - user: discourse
+
+{%- if salt['pillar.get']('discourse:ssl', False) %}
+extend:
+  nginx:
+    service:
+      - watch:
+        - cmd: ssl_cert_and_key_for_{{ pillar['discourse']['ssl'] }}
+{%- endif %}

@@ -27,5 +27,5 @@ Maintainer: Dang Tung Lam <lamdt@familug.org>
 
 -#}
 # {{ pillar['message_do_not_modify'] }}
-command[etherpad_procs]=/usr/lib/nagios/plugins/check_procs -c 1:1 -a "node_modules/ep_etherpad-lite"
+command[etherpad_procs]=/usr/lib/nagios/plugins/check_procs -c 1:1 -a "node_modules/ep_etherpad-lite" -u www-data
 command[etherpad_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 9001

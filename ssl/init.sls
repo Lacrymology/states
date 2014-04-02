@@ -61,7 +61,7 @@ ssl-cert:
         {{ pillar['ssl'][name]['server_crt'] | indent(8) }}
     - user: root
     - group: ssl-cert
-    - mode: 644
+    - mode: 444
     - require:
       - pkg: ssl-cert
 
@@ -72,7 +72,7 @@ ssl-cert:
         {{ pillar['ssl'][name]['ca_crt'] | indent(8) }}
     - user: root
     - group: ssl-cert
-    - mode: 644
+    - mode: 444
     - require:
       - pkg: ssl-cert
 
@@ -111,7 +111,7 @@ in the combined file:
         {{ pillar['ssl'][name]['ca_crt'] | indent(8) }}
     - user: root
     - group: ssl-cert
-    - mode: 644
+    - mode: 444
     - require:
       - pkg: ssl-cert
 

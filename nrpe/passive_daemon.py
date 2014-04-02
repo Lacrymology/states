@@ -235,7 +235,7 @@ class PassiveDaemon(object):
                                  "in '%s'", check_name,
                                  self.nrpe_include_directory)
                 else:
-                    interval = check.get('passive_interval',
+                    interval = check.get('check_interval',
                                          self.default_interval)
                     try:
                         output[interval][check_name] = nrpe_command

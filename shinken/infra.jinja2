@@ -226,7 +226,7 @@ define servicegroup {
 }
 {% endfor -%}
 
-{%- set reserved_keys = ('check', 'description', 'passive', 'passive_interval') -%}
+{%- set reserved_keys = ('check', 'description', 'passive') -%}
 {%- for state in pillar['monitoring']['states'] -%}
     {%- set state_checks = salt['monitoring.discover_checks'](state) -%}
     {%- if not state_checks %}

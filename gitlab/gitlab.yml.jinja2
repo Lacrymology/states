@@ -48,7 +48,7 @@ production: &base
     Web server settings
     #}
     host: {{ salt['pillar.get']('gitlab:hostnames')[0] }}
-    port: {{ salt['pillar.get']('gitlab:port', '80') }}
+    port: {{ salt['pillar.get']('gitlab:port', 80) }}
     {%- if salt['pillar.get']('gitlab:ssl', False) %}
     https: true
     {%- else %}
@@ -74,7 +74,7 @@ production: &base
 
     {#- User settings #}
 
-    default_projects_limit: {{ salt['pillar.get']('gitlab:default_projects_limit', '10') }}
+    default_projects_limit: {{ salt['pillar.get']('gitlab:default_projects_limit', 10) }}
     {#-
     default_can_create_group: false  # default: true
     default_can_create_team: false   # default: true

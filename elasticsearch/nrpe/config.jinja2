@@ -49,12 +49,12 @@ command[graylog2_elasticsearch_port_http]=/usr/lib/nagios/plugins/check_tcp -H 1
     {%- else %}
 command[graylog2_elasticsearch_port_http]=/bin/echo "HTTP OK: Graylog2 is configured to not serve HTTP."
     {%- endif %}
-command[graylog2_elasticsearch_port_transport]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p {{ salt['pillar.get'](pillar_string + ':port', '9300') }}
+command[graylog2_elasticsearch_port_transport]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p {{ salt['pillar.get'](pillar_string + ':port', 9300) }}
 {%- else -%}
     {%- if salt['pillar.get'](pillar_string + ':http', True) %}
 command[elasticsearch_port_http]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 9200
     {%- else %}
 command[elasticsearch_port_http]=/bin/echo "HTTP OK: Elasticsearch is configured to not serve HTTP."
     {%- endif %}
-command[elasticsearch_port_transport]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p {{ salt['pillar.get'](pillar_string + ':port', '9300') }}
+command[elasticsearch_port_transport]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p {{ salt['pillar.get'](pillar_string + ':port', 9300) }}
 {%- endif -%}

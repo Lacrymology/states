@@ -48,7 +48,7 @@ MAX_CACHE_SIZE = {{ salt['pillar.get']('graphite:carbon:max_cache_size', 'inf') 
 {#-
  See carbon/doc/pillar.rst graphite:carbon:max_creates_per_minute
 #}
-MAX_UPDATES_PER_SECOND = {{ salt['pillar.get']('graphite:carbon:max_updates_per_second', '500') }}
+MAX_UPDATES_PER_SECOND = {{ salt['pillar.get']('graphite:carbon:max_updates_per_second', 500) }}
 
 {#-
  See carbon/doc/pillar.rst graphite:carbon:max_creates_per_minute

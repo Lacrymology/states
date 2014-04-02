@@ -34,8 +34,8 @@ global {
     server_ip = {{ salt['pillar.get']('dns_proxy:ip_address', '0.0.0.0') }};
     status_ctl = {% if pillar['dns_proxy']['dns_server'] == 'resolv.conf' %}on{% else %}off{% endif %};
     paranoid = on;
-    min_ttl = {{ salt['pillar.get']('dns_proxy:minimum_ttl', '900') }};
-    max_ttl = {{ salt['pillar.get']('dns_proxy:maximum_ttl', '604800') }};
+    min_ttl = {{ salt['pillar.get']('dns_proxy:minimum_ttl', 900) }};
+    max_ttl = {{ salt['pillar.get']('dns_proxy:maximum_ttl', 604800) }};
     timeout = 10;
 {%- if salt['pillar.get']('debug', False) %}
     debug = on;

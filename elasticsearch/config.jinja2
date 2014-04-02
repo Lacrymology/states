@@ -43,7 +43,7 @@ http:
 
 transport:
   tcp:
-    port: {{ salt['pillar.get'](pillar_string + ':port', '9300') }}
+    port: {{ salt['pillar.get'](pillar_string + ':port', 9300) }}
 
 node:
   name: {{ salt['pillar.get'](pillar_string + ':name', grains['id']) }}

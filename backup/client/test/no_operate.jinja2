@@ -38,7 +38,7 @@ fi
 # limit resources usage
 ulimit -e 19
 ionice -c idle -p $$
-XZ_DEFAULTS=--memlimit={{ salt['pillar.get']('backup:xz_memlimit', '64') }}MiB
+XZ_DEFAULTS=--memlimit={{ salt['pillar.get']('backup:xz_memlimit', 64) }}MiB
 
 {%- if salt['pillar.get']('__test__', False) %}
 echo "Testing backup archive $1"

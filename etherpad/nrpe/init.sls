@@ -82,4 +82,17 @@ include:
     - watch_in:
       - service: nagios-nrpe-server
 
+/etc/nagios/nrpe.d/etherpad.cfg:
+  file:
+    - managed
+    - template: jinja
+    - user: nagios
+    - group: nagios
+    - mode: 440
+    - source: salt://etherpad/nrpe/config.jinja2
+    - require:
+      - pkg: nagios-nrpe-server
+    - watch_in:
+      - service: nagios-nrpe-server
+
 {{ passive_check('etherpad') }}

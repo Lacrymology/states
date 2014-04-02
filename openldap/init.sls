@@ -50,6 +50,9 @@ slapd:
     - order: 50
     - watch:
       - pkg: slapd
+{% if ssl %}
+      - cmd: ssl_cert_and_key_for_{{ ssl }}
+{% endif %}
   file:
     - managed
     - name: /etc/ldap/ldap.conf

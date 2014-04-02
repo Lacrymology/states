@@ -208,7 +208,7 @@ def managed(name, **kwargs):
             repokwargs['repo'] = repo_name
         elif kwarg == 'humanname':
             repokwargs['name'] = kwargs[kwarg]
-        elif kwarg in ('__id__', 'fun', 'state', '__env__', '__sls__',
+        elif kwarg in ('__id__', 'fun', 'state', '__sls__',
                        'order', 'watch', 'watch_in', 'require', 'require_in',
                        'prereq', 'prereq_in'):
             pass

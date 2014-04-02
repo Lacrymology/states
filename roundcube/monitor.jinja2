@@ -34,6 +34,7 @@ roundcube_nginx_https:
 roundcube_nginx_https_certificate:
   description: RoundCube HTTPS Certificate Expiration
   check_interval: 1440 {#- only need to check https certificate each day #}
+  freshness_threshold: {{ (1440 + 10) * 60 }}
 
 roundcube_postgresql:
   description: RoundCube PostgreSQL database

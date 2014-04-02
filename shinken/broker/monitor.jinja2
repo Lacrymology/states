@@ -46,6 +46,7 @@ shinken_nginx_https:
 shinken_nginx_https_certificate:
   description: Shinken HTTPS Certificate Expiration
   check_interval: 1440 {#- only need to check https certificate each day #}
+  freshness_threshold: {{ (1440 + 10) * 60 }}
 
 shinken_broker_web:
   description: Shinken Broker Web UI Port

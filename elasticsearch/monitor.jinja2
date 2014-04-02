@@ -56,6 +56,7 @@ elasticsearch_nginx_https:
 elasticsearch_nginx_https_certificate:
   description: Elasticsearch HTTPS Certificate Expiration
   check_interval: 1440 {#- only need to check https certificate each day #}
+  freshness_threshold: {{ (1440 + 10) * 60 }}
 
 elasticsearch_backup_esdump_procs:
   description: Elasticsearch Backup Database Process

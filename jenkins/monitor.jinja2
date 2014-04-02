@@ -34,6 +34,7 @@ jenkins_nginx_https:
 jenkins_nginx_https_certificate:
   description: jenkins HTTPS Certificate Expiration
   check_interval: 1440 {#- only need to check https certificate each day #}
+  freshness_threshold: {{ (1440 + 10) * 60 }}
 
 jenkins_backup_file_procs:
   description: Jenkins Backup File Process

@@ -47,6 +47,7 @@ rabbitmq_nginx_https:
 rabbitmq_nginx_https_certificate:
   description: RabbitMQ HTTPS Certificate Expiration
   check_interval: 1440 {#- only need to check https certificate each day #}
+  freshness_threshold: {{ (1440 + 10) * 60 }}
 
 rabbitmq-remote-amqp-port:
   description: Remote RabbitMQ AMQP Port

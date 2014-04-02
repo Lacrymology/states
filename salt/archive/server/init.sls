@@ -159,7 +159,5 @@ extend:
       - watch:
         - file: /etc/nginx/conf.d/salt_archive.conf
 {%- if ssl %}
-        - cmd: /etc/ssl/{{ ssl }}/chained_ca.crt
-        - module: /etc/ssl/{{ ssl }}/server.pem
-        - file: /etc/ssl/{{ ssl }}/ca.crt
+        - file: ssl_cert_and_key_for_{{ ssl }}
 {%- endif -%}

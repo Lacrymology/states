@@ -254,7 +254,5 @@ extend:
       - watch:
         - file: /etc/nginx/conf.d/moinmoin.conf
 {%- if salt['pillar.get']('moinmoin:ssl', False) %}
-        - cmd: /etc/ssl/{{ pillar['moinmoin']['ssl'] }}/chained_ca.crt
-        - module: /etc/ssl/{{ pillar['moinmoin']['ssl'] }}/server.pem
-        - file: /etc/ssl/{{ pillar['moinmoin']['ssl'] }}/ca.crt
+        - file: ssl_cert_and_key_for_{{ pillar['moinmoin']['ssl'] }}
 {%- endif %}

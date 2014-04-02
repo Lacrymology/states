@@ -467,7 +467,5 @@ extend:
   nginx:
     service:
       - watch:
-        - cmd: /etc/ssl/{{ pillar['gitlab']['ssl'] }}/chained_ca.crt
-        - module: /etc/ssl/{{ pillar['gitlab']['ssl'] }}/server.pem
-        - file: /etc/ssl/{{ pillar['gitlab']['ssl'] }}/ca.crt
+        - file: ssl_cert_and_key_for_{{ pillar['gitlab']['ssl'] }}
 {%- endif %}

@@ -209,7 +209,5 @@ extend:
       - watch:
         - file: /etc/nginx/conf.d/graylog2-web.conf
 {% if salt['pillar.get']('graylog2:ssl', False) %}
-        - cmd: /etc/ssl/{{ pillar['graylog2']['ssl'] }}/chained_ca.crt
-        - module: /etc/ssl/{{ pillar['graylog2']['ssl'] }}/server.pem
-        - file: /etc/ssl/{{ pillar['graylog2']['ssl'] }}/ca.crt
+        - file: ssl_cert_and_key_for_{{ pillar['graylog2']['ssl'] }}
 {% endif %}

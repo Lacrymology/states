@@ -410,7 +410,5 @@ extend:
   nginx:
     service:
       - watch:
-        - cmd: /etc/ssl/{{ pillar['discourse']['ssl'] }}/chained_ca.crt
-        - module: /etc/ssl/{{ pillar['discourse']['ssl'] }}/server.pem
-        - file: /etc/ssl/{{ pillar['discourse']['ssl'] }}/ca.crt
+        - file: ssl_cert_and_key_for_{{ pillar['discourse']['ssl'] }}
 {%- endif %}

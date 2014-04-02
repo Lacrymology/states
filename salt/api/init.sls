@@ -183,9 +183,7 @@ extend:
       - watch:
         - file: salt-ui
 {% if salt['pillar.get']('salt_master:ssl', False) %}
-        - cmd: /etc/ssl/{{ pillar['salt_master']['ssl'] }}/chained_ca.crt
-        - module: /etc/ssl/{{ pillar['salt_master']['ssl'] }}/server.pem
-        - file: /etc/ssl/{{ pillar['salt_master']['ssl'] }}/ca.crt
+        - file: ssl_cert_and_key_for_{{ pillar['salt_master']['ssl'] }}
 {% endif %}
   salt-master:
     service:

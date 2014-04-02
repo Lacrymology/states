@@ -95,7 +95,5 @@ extend:
       - watch:
         - file: /etc/nginx/conf.d/shinken-web.conf
 {% if salt['pillar.get']('shinken:ssl', False) %}
-        - cmd: /etc/ssl/{{ pillar['shinken']['ssl'] }}/chained_ca.crt
-        - module: /etc/ssl/{{ pillar['shinken']['ssl'] }}/server.pem
-        - file: /etc/ssl/{{ pillar['shinken']['ssl'] }}/ca.crt
+        - file: ssl_cert_and_key_for_{{ pillar['shinken']['ssl'] }}
 {% endif %}

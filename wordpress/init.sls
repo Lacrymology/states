@@ -241,7 +241,5 @@ extend:
   nginx:
     service:
       - watch:
-        - cmd: /etc/ssl/{{ pillar['wordpress']['ssl'] }}/chained_ca.crt
-        - module: /etc/ssl/{{ pillar['wordpress']['ssl'] }}/server.pem
-        - file: /etc/ssl/{{ pillar['wordpress']['ssl'] }}/ca.crt
+        - file: ssl_cert_and_key_for_{{ pillar['wordpress']['ssl'] }}
 {%- endif %}

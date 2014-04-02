@@ -222,7 +222,5 @@ extend:
   nginx:
     service:
       - watch:
-        - cmd: /etc/ssl/{{ pillar['openerp']['ssl'] }}/chained_ca.crt
-        - module: /etc/ssl/{{ pillar['openerp']['ssl'] }}/server.pem
-        - file: /etc/ssl/{{ pillar['openerp']['ssl'] }}/ca.crt
+        - file: ssl_cert_and_key_for_{{ pillar['openerp']['ssl'] }}
 {% endif %}

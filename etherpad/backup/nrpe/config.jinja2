@@ -26,4 +26,4 @@ Author: Dang Tung Lam <lamdt@familug.org>
 Maintainer: Dang Tung Lam <lamdt@familug.org>
 -#}
 # {{ pillar['message_do_not_modify'] }}
-command[backup_etherpad_postgres_procs]=/usr/lib/nagios/plugins/check_procs -c 0:1 -u root -a "/usr/local/bin/backup-postgresql {{ salt['pillar.get']('etherpad:db:name', 'etherpad') }}"
+command[etherpad_backup_postgres_procs]=/usr/lib/nagios/plugins/check_procs -c 0:1 -u root -a "/usr/local/bin/backup-postgresql {{ salt['pillar.get']('etherpad:db:name', 'etherpad') }}"

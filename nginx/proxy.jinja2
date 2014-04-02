@@ -71,14 +71,9 @@ server {
     listen {{ http_port|default(80) }};
 {% endif %}
 {% if ssl|default(False) %}
-    listen {{ https_port|default(443) }} ssl;
-    ssl_certificate /etc/ssl/{{ ssl }}/chained_ca.crt;
-    ssl_certificate_key /etc/ssl/{{ ssl }}/server.pem;
-    ssl_client_certificate /etc/ssl/{{ ssl }}/ca.crt;
-    ssl_ciphers RC4:HIGH:!aNULL:!MD5;
-    ssl_prefer_server_ciphers on;
-    ssl_session_cache shared:SSL:10m;
-    ssl_session_timeout 10m;
+{%- from 'nginx/ssl.jinja2' import ssl_config with context %}
+    {{ ssl_config(ssl) }}
+{% endif %}
 {% endif %}
 
     server_name {% for hostname in hostnames %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};

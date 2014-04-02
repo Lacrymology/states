@@ -31,7 +31,7 @@ global {
     perm_cache = 2048;
     cache_dir = "/var/cache/pdnsd";
     run_as = "pdnsd";
-    server_ip = {{ salt['pillar.get']('dns_proxy:ip_address', '"0.0.0.0"') }};
+    server_ip = {{ salt['pillar.get']('dns_proxy:ip_address', '0.0.0.0') }};
     status_ctl = {% if pillar['dns_proxy']['dns_server'] == 'resolv.conf' %}on{% else %}off{% endif %};
     paranoid = on;
     min_ttl = {{ salt['pillar.get']('dns_proxy:minimum_ttl', '900') }};

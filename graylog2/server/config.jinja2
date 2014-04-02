@@ -59,8 +59,8 @@ elasticsearch_max_number_of_indices = {{ salt['pillar.get']('graylog2:max_indice
  How many ElasticSearch shards and replicas should be used per index? Note that
  this only applies to newly created indices.
 #}
-elasticsearch_shards = {{ salt['pillar.get']('graylog2:shards', '4') }}
-elasticsearch_replicas = {{ salt['pillar.get']('graylog2:replicas', '0') }}
+elasticsearch_shards = {{ salt['pillar.get']('graylog2:shards', 4) }}
+elasticsearch_replicas = {{ salt['pillar.get']('graylog2:replicas', 0) }}
 {#-
  Analyzer (tokenizer) to use for message and full_message field. The "standard"
  filter usually is a good idea.
@@ -116,8 +116,8 @@ output_batch_size = 5000
  The number of parallel running processors.
  Raise this number if your buffers are filling up.
 #}
-processbuffer_processors = {{ salt['pillar.get']('graylog2:processbuffer_processors', '5') }}
-outputbuffer_processors = {{ salt['pillar.get']('graylog2:outputbuffer_processors', '5') }}
+processbuffer_processors = {{ salt['pillar.get']('graylog2:processbuffer_processors', 5) }}
+outputbuffer_processors = {{ salt['pillar.get']('graylog2:outputbuffer_processors', 5) }}
 
 {#-
  Wait strategy describing how buffer processors wait on a cursor sequence.

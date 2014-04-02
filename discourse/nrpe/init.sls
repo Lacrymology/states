@@ -64,7 +64,7 @@ include:
       - pkg: nagios-nrpe-server
     - context:
       deployment: discourse
-      workers: {{ salt['pillar.get']('discourse:workers', '2') }}
+      workers: {{ salt['pillar.get']('discourse:workers', 2) }}
 {%- if 'cheaper' in pillar['discourse'] %}
       cheaper: {{ pillar['discourse']['cheaper'] }}
 {%- endif %}

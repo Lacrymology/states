@@ -293,5 +293,5 @@ extend:
       - watch:
         - file: /etc/nginx/conf.d/djangopypi2.conf
 {% if salt['pillar.get']('djangopypi2:ssl', False) %}
-        - file: ssl_cert_and_key_for_{{ pillar['djangopypi2']['ssl'] }}
+        - cmd: ssl_cert_and_key_for_{{ pillar['djangopypi2']['ssl'] }}
 {% endif %}

@@ -183,7 +183,7 @@ extend:
       - watch:
         - file: salt-ui
 {% if salt['pillar.get']('salt_master:ssl', False) %}
-        - file: ssl_cert_and_key_for_{{ pillar['salt_master']['ssl'] }}
+        - cmd: ssl_cert_and_key_for_{{ pillar['salt_master']['ssl'] }}
 {% endif %}
   salt-master:
     service:

@@ -74,7 +74,6 @@ server {
 {%- from 'nginx/ssl.jinja2' import ssl_config with context %}
     {{ ssl_config(ssl) }}
 {% endif %}
-{% endif %}
 
     server_name {% for hostname in hostnames %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
 

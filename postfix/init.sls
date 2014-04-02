@@ -103,7 +103,7 @@ postfix:
       - file: /etc/postfix/master.cf
       - file: postfix
 {% if ssl %}
-      - file: ssl_cert_and_key_for_{{ ssl }}
+      - cmd: ssl_cert_and_key_for_{{ ssl }}
 {% endif %}
 
 /etc/postfix:

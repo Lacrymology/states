@@ -89,5 +89,5 @@ extend:
       - watch:
         - file: /etc/nginx/conf.d/jenkins.conf
 {% if salt['pillar.get']('jenkins:ssl', False) %}
-        - file: ssl_cert_and_key_for_{{ pillar['jenkins']['ssl'] }}
+        - cmd: ssl_cert_and_key_for_{{ pillar['jenkins']['ssl'] }}
 {% endif %}

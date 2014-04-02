@@ -95,5 +95,5 @@ extend:
       - watch:
         - file: /etc/nginx/conf.d/shinken-web.conf
 {% if salt['pillar.get']('shinken:ssl', False) %}
-        - file: ssl_cert_and_key_for_{{ pillar['shinken']['ssl'] }}
+        - cmd: ssl_cert_and_key_for_{{ pillar['shinken']['ssl'] }}
 {% endif %}

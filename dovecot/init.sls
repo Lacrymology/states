@@ -55,7 +55,7 @@ dovecot:
       - file: /etc/dovecot/dovecot-ldap.conf.ext
       - file: /var/mail/vhosts/indexes
 {% if ssl %}
-      - file: ssl_cert_and_key_for_{{ ssl }}
+      - cmd: ssl_cert_and_key_for_{{ ssl }}
 {% endif %}
     - require:
       - user: dovecot-agent

@@ -215,5 +215,5 @@ extend:
       - watch:
         - file: /etc/nginx/conf.d/sentry.conf
 {% if salt['pillar.get']('sentry:ssl', False) %}
-        - file: ssl_cert_and_key_for_{{ pillar['sentry']['ssl'] }}
+        - cmd: ssl_cert_and_key_for_{{ pillar['sentry']['ssl'] }}
 {% endif %}

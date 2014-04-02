@@ -241,5 +241,5 @@ extend:
   nginx:
     service:
       - watch:
-        - file: ssl_cert_and_key_for_{{ pillar['wordpress']['ssl'] }}
+        - cmd: ssl_cert_and_key_for_{{ pillar['wordpress']['ssl'] }}
 {%- endif %}

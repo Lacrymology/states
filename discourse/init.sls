@@ -315,9 +315,7 @@ discourse_upstart:
       - pkg: nginx
       - uwsgi: discourse
 {%- if salt['pillar.get']('discourse:ssl', False) %}
-      - cmd: /etc/ssl/{{ pillar['discourse']['ssl'] }}/chained_ca.crt
-      - module: /etc/ssl/{{ pillar['discourse']['ssl'] }}/server.pem
-      - file: /etc/ssl/{{ pillar['discourse']['ssl'] }}/ca.crt
+      - cmd: ssl_cert_and_key_for_{{ pillar['discourse']['ssl'] }}
 {%- endif %}
     - watch_in:
       - service: nginx
@@ -404,11 +402,3 @@ discourse_assets_precompile:
     - makedirs: True
     - require:
       - user: discourse
-
-{%- if salt['pillar.get']('discourse:ssl', False) %}
-extend:
-  nginx:
-    service:
-      - watch:
-        - file: ssl_cert_and_key_for_{{ pillar['discourse']['ssl'] }}
-{%- endif %}

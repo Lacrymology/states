@@ -386,9 +386,7 @@ add_web_user_to_git_group:
       - user: web
       - uwsgi: gitlab
 {%- if salt['pillar.get']('gitlab:ssl', False) %}
-      - cmd: /etc/ssl/{{ pillar['gitlab']['ssl'] }}/chained_ca.crt
-      - module: /etc/ssl/{{ pillar['gitlab']['ssl'] }}/server.pem
-      - file: /etc/ssl/{{ pillar['gitlab']['ssl'] }}/ca.crt
+      - cmd: ssl_cert_and_key_for_{{ pillar['gitlab']['ssl'] }}
 {%- endif %}
     - watch_in:
       - service: nginx
@@ -461,11 +459,3 @@ gitlab_upstart:
       - file: gitlab
     - require_in:
       - file: {{ home_dir }}/gitlab-satellites
-
-{%- if salt['pillar.get']('gitlab:ssl', False) %}
-extend:
-  nginx:
-    service:
-      - watch:
-        - file: ssl_cert_and_key_for_{{ pillar['gitlab']['ssl'] }}
-{%- endif %}

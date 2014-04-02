@@ -122,5 +122,5 @@ extend:
       - watch:
         - file: /etc/nginx/conf.d/salt_mirror_ppa.conf
 {% if salt['pillar.get']('salt_ppa_mirror:ssl', False) %}
-        - file: ssl_cert_and_key_for_{{ pillar['salt_ppa_mirror']['ssl'] }}
+        - cmd: ssl_cert_and_key_for_{{ pillar['salt_ppa_mirror']['ssl'] }}
 {% endif %}

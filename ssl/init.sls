@@ -103,11 +103,9 @@ bundle of chained certificates which should be concatenated to the signed server
 certificate. The server certificate must appear before the chained certificates
 in the combined file:
 #}
-ssl_cert_and_key_for_{{ name }}:
-{#- use a nice name to expose outside as API #}
+/etc/ssl/certs/{{ name }}_chained.crt:
   file:
     - managed
-    - name: /etc/ssl/certs/{{ name }}_chained.crt
     - contents: |
         {{ pillar['ssl'][name]['server_crt'] | indent(8) }}
         {{ pillar['ssl'][name]['ca_crt'] | indent(8) }}
@@ -116,8 +114,17 @@ ssl_cert_and_key_for_{{ name }}:
     - mode: 644
     - require:
       - pkg: ssl-cert
+
+{#- as service need to watch all cert files, use this cmd as trigger that
+    service restart everywhen cert files changed #}
+ssl_cert_and_key_for_{{ name }}:
+  cmd:
+    - wait
+    - name: echo managed ssl cert for {{ name }}
+    - watch:
       - file: /etc/ssl/private/{{ name }}.key
       - file: /etc/ssl/certs/{{ name }}.crt
       - file: /etc/ssl/certs/{{ name }}_ca.crt
       - file: /etc/ssl/private/{{ name }}.pem
+      - file: /etc/ssl/certs/{{ name }}_chained.crt
 {%- endfor -%}

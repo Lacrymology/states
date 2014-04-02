@@ -170,5 +170,5 @@ extend:
     service:
       - watch:
         - file: /etc/nginx/conf.d/elasticsearch.conf
-        - file: ssl_cert_and_key_for_{{ pillar['elasticsearch']['ssl'] }}
+        - cmd: ssl_cert_and_key_for_{{ pillar['elasticsearch']['ssl'] }}
 {% endif %}

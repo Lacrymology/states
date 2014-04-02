@@ -96,7 +96,7 @@ slapd_config_dbs:
 {% if ssl %}
 {# Cert/key must be created use GNUTLS
 openssl is not compatible with ubuntu ldap #}
-      - file: ssl_cert_and_key_for_{{ ssl }}
+      - cmd: ssl_cert_and_key_for_{{ ssl }}
       - user: openldap
 
 restart_after_ssl:

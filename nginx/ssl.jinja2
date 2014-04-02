@@ -1,8 +1,8 @@
 {%- macro ssl_config(certname) %}
     listen 443 ssl;
-    ssl_certificate /etc/ssl/{{ certname }}/chained_ca.crt;
-    ssl_certificate_key /etc/ssl/{{ certname }}/server.pem;
-    ssl_client_certificate /etc/ssl/{{ certname }}/ca.crt;
+    ssl_certificate /etc/ssl/certs/{{ certname }}_chained.crt;
+    ssl_certificate_key /etc/ssl/private/{{ certname }}.pem;
+    ssl_client_certificate /etc/ssl/certs/{{ certname }}_ca.crt;
     ssl_session_cache shared:SSL:10m;
     ssl_session_timeout 10m;
     ssl_prefer_server_ciphers on;

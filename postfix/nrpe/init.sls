@@ -27,12 +27,11 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 Nagios NRPE check for Postfix.
 -#}
-{% set ssl = salt['pillar.get']('postfix:ssl', False) %}
 {%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - apt.nrpe
   - nrpe
-{% if ssl %}
+{% if salt['pillar.get']('postfix:ssl', False) %}
   - ssl.nrpe
 {% endif %}
 

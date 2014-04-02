@@ -245,7 +245,10 @@ define service {
     check_freshness 1
                 {%- if 'freshness_threshold' not in state_checks[name] %}
     freshness_threshold 600
-                {%- endif %}
+                {%- endif -%}
+            {%- else %}
+    active_checks_enabled 1
+    passive_checks_enabled 0
             {%- endif %}
     check_command {{ state_checks[name]['check']|default('check_nrpe!' + name) }}
             {%- for key_name in state_checks[name] %}

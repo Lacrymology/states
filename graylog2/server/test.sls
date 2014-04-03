@@ -49,7 +49,9 @@ test:
     - exclude:
       - graylog2_elasticsearch_cluster
       - elasticsearch_nginx_http
-{%- if not salt['pillar.get']('__test__', False) %}
+      - elasticsearch_nginx_https
+      - elasticsearch_nginx_https_certificate
+{%- if not pillar['__test__']|default(False) %}
       - graylog2_incoming_logs
 {%- endif %}
   cmd:

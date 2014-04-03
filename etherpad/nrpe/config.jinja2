@@ -26,28 +26,6 @@ Author: Dang Tung Lam <lamdt@familug.org>
 Maintainer: Dang Tung Lam <lamdt@familug.org>
 
 -#}
-etherpad_nginx_http:
-  description: Etherpad HTTP protocol
-
-etherpad_nginx_https:
-  description: Etherpad HTTPS protocol
-
-etherpad_nginx_https_certificate:
-  description: HTTPS Certificate Expiration
-  check_interval: 1440 {#- only need to check https certificate each day #}
-  freshness_threshold: {{ (1440 + 10) * 60 }}
-
-etherpad_postgresql:
-  description: Etherpad PostgreSQL database
-
-etherpad_backup_postgres_procs:
-  description: Etherpad Backup PostgreSQL Database Process
-
-etherpad_backup:
-  description: Etherpad Backup Age And Size
-
-etherpad_procs:
-  description: NodeJS Daemon for running Etherpad
-
-etherpad_port:
-  description: Etherpad TCP Port
+# {{ pillar['message_do_not_modify'] }}
+command[etherpad_procs]=/usr/lib/nagios/plugins/check_procs -c 1:1 -a "node_modules/ep_etherpad-lite" -u www-data
+command[etherpad_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 9001

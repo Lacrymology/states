@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
-{%- if pillar['aws'] is defined and 's3' in pillar['aws'] %}
+{%- if salt['pillar.get']('aws:s3', False) %}
 include:
   - backup.client.s3
   - backup.client.s3.nrpe

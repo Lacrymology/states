@@ -33,8 +33,7 @@ postgresql-dev:
     - managed
 {%- if 'files_archive' in pillar %}
     - name: deb {{ pillar['files_archive']|replace('https://', 'http://') }}/mirror/postgresql/ {{ grains['lsb_distrib_codename'] }} main
-    - keyid: 8683D8A2
-    - keyserver: keyserver.ubuntu.com
+    - key_url: salt://postgresql/key.gpg
 {%- else %}
     - ppa: pitti/postgresql
 {%- endif %}

@@ -27,6 +27,6 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 # {{ pillar['message_do_not_modify'] }}
 APT::Install-Recommends "0";
-{% if pillar['proxy_server']|default(False) %}
+{% if salt['pillar.get']('proxy_server', False) %}
 Acquire::http::Proxy "http://{{ pillar['proxy_server'] }}";
 {% endif %}

@@ -33,8 +33,8 @@ upstream graylog2 {
 
 server {
     listen 80;
-{% if pillar['graylog2']['ssl']|default(False) %}
-{% if pillar['graylog2']['ssl_redirect']|default(False) %}
+{% if salt['pillar.get']('graylog2:ssl', False) %}
+{% if salt['pillar.get']('graylog2:ssl_redirect', False) %}
     {# if https, redirect http port 80 to https port 443 #}
     server_name {% for hostname in pillar['graylog2']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
     return 301 https://{{ pillar['graylog2']['hostnames'][0] }}$request_uri;

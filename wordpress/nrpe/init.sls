@@ -60,7 +60,7 @@ include:
       - pkg: nagios-nrpe-server
     - context:
       deployment: wordpress
-      workers: {{ salt['pillar.get']('wordpress:workers', '2') }}
+      workers: {{ salt['pillar.get']('wordpress:workers', 2) }}
 {%- if 'cheaper' in pillar['wordpress'] %}
       cheaper: {{ pillar['wordpress']['cheaper'] }}
 {%- endif %}
@@ -104,5 +104,5 @@ include:
       database: {{ salt['pillar.get']('wordpress:db:name', 'wordpress') }}
       username: {{ salt['pillar.get']('wordpress:db:username', 'wordpress') }}
       password: {{ salt['password.pillar']('wordpress:db:password', 10) }}
-      
+
 {{ passive_check('wordpress') }}

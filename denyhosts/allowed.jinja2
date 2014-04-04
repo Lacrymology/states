@@ -30,7 +30,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 {{ host }}
 {%- endfor %}
 {#- The following is specific NRPE integration. -#}
-{%- for host in pillar['shinken_pollers']|default([]) %}
+{%- for host in salt['pillar.get']('shinken_pollers', []) %}
 {{ host }}
 {%- endfor %}
 127.0.0.1

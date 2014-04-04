@@ -29,7 +29,7 @@ graylog2_procs:
   description: Graylog2 Daemon
 
 {#- if graylog2_address isn't 127.0.0.1 test fail -#}
-{%- if not pillar['__test__']|default(False) %}
+{%- if not salt['pillar.get']('__test__', False) %}
 graylog2_incoming_logs:
   description: Incoming Logs Rate
 {%- endif %}

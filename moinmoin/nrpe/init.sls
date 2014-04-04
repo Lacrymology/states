@@ -60,7 +60,7 @@ include:
       - pkg: nagios-nrpe-server
     - context:
       deployment: moinmoin
-      workers: {{ salt['pillar.get']('moinmoin:workers', '2') }}
+      workers: {{ salt['pillar.get']('moinmoin:workers', 2) }}
       cheaper: {{ salt['pillar.get']('moinmoin:cheaper', False) }}
     - require:
       - pkg: nagios-nrpe-server

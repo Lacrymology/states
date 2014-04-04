@@ -35,12 +35,12 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 {#-filegen clockstats file clockstats type day enable#}
 
 {#- internal server used to synchronize peers with ourselves #}
-{% if pillar['ntp']['server']|default(False) %}
+{% if salt['pillar.get']('ntp:server', False) %}
 server 127.127.1.1
 fudge 127.127.1.1 stratum 3 refid NIST
 {% endif %}
 
-{% for server in pillar['ntp']['servers']|default([]) %}
+{% for server in salt['pillar.get']('ntp:servers', []) %}
 server {{ server }}
 {% endfor %}
 

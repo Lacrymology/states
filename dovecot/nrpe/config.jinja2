@@ -36,7 +36,7 @@ command[dovecot_port_pop3]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 110
 {%- if ssl %}
 command[dovecot_port_imaps]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 993
 command[dovecot_port_pop3s]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 995
-command[dovecot_simap]=/usr/lib/nagios/plugins/check_simap -H 127.0.0.1 -p 143
+command[dovecot_simap]=/usr/lib/nagios/plugins/check_simap -H 127.0.0.1 -p 993
 {%- else %}
 command[dovecot_imap]=/usr/lib/nagios/plugins/check_imap -H 127.0.0.1 -p 143
 command[dovecot_port_imaps]=/bin/echo "TCP OK: SSL not configured for IMAP"

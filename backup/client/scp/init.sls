@@ -31,9 +31,12 @@ Poor man backup using rsync and scp.
 include:
   - local
   - ssh.client
+{%- if pillar['backup_server']['address'] in grains['ipv4'] or
+       pillar['backup_server']['address'] in ('localhost', grains['host']) %}
+  {#- If backup_server address set to localhost (mainly in CI testing), install backup.server first #}
+  - backup.server
+{%- else %}
 
-{%- if pillar['backup_server']['address'] not in grains['ipv4'] and
-       pillar['backup_server']['address'] not in ('localhost', grains['host']) %}
 backup-client:
   ssh_known_hosts:
     - present
@@ -52,3 +55,7 @@ backup-client:
     - source: salt://backup/client/scp/copy.jinja2
     - require:
       - file: /usr/local
+{%- if pillar['backup_server']['address'] in grains['ipv4'] or
+       pillar['backup_server']['address'] in ('localhost', grains['host']) %}
+      - file: /var/lib/backup
+{%- endif %}

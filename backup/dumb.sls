@@ -1,7 +1,5 @@
-#!/bin/bash
-# {{ pillar['message_do_not_modify'] }}
 {#-
-Copyright (c) 2013, Nicolas Plessis
+Copyright (c) 2014, Hung Nguyen Viet
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -24,18 +22,18 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Nicolas Plessis <nicolasp@microsigns.com>
-Maintainer: Nicolas Plessis <nicolasp@microsigns.com>
-
-Stores data files on Amazon S3.
+Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
+Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 #}
-set -e
+include:
+  - local
 
-# limit resources usage
-ulimit -e 19
-ionice -c idle -p $$
-
-archive_path=$1
-archive_name=`basename $archive_path`
-s3cmd --no-progress put $archive_path s3://{{ pillar['aws']['s3']['bucket'] }}/{{ pillar['aws']['s3']['path'] }}/$archive_name | logger -t s3cmd
-rm -f $archive_path
+{# manage a script which creates a dumb file and print new created filename #}
+/usr/local/bin/create_dumb:
+  file:
+    - managed
+    - source: salt://backup/create_dumb.sh
+    - mode: 755
+    - template: jinja
+    - require:
+      - file: /usr/local

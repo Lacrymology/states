@@ -1,7 +1,5 @@
-#!/bin/bash
-# {{ pillar['message_do_not_modify'] }}
 {#-
-Copyright (c) 2013, Nicolas Plessis
+Copyright (c) 2014, Hung Nguyen Viet
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -24,18 +22,24 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Nicolas Plessis <nicolasp@microsigns.com>
-Maintainer: Nicolas Plessis <nicolasp@microsigns.com>
+Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
+Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
+-#}
+{%- if salt['pillar.get']('aws:s3', False) %}
+include:
+  - backup.client.s3
+  - backup.client.s3.nrpe
+  - backup.dumb
 
-Stores data files on Amazon S3.
-#}
-set -e
-
-# limit resources usage
-ulimit -e 19
-ionice -c idle -p $$
-
-archive_path=$1
-archive_name=`basename $archive_path`
-s3cmd --no-progress put $archive_path s3://{{ pillar['aws']['s3']['bucket'] }}/{{ pillar['aws']['s3']['path'] }}/$archive_name | logger -t s3cmd
-rm -f $archive_path
+test:
+  nrpe:
+    - run_all_checks
+    - order: last
+    - wait: 30
+  cmd:
+    - run
+    - name: /usr/local/bin/backup-store `/usr/local/bin/create_dumb`
+    - require:
+      - file: /usr/local/bin/backup-store
+      - file: /usr/local/bin/create_dumb
+{%- endif %}

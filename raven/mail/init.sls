@@ -39,3 +39,10 @@ include:
     - require:
       - module: raven
       - service: rsyslog
+
+/usr/sbin/sendmail:
+  file:
+    - symlink
+    - target: /usr/bin/mail
+    - require:
+      - file: /usr/bin/mail

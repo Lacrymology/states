@@ -72,6 +72,9 @@ def main():
     from argparse import ArgumentParser
     argpsr = ArgumentParser()
     argpsr.add_argument('-s', help="Subject")
+    argpsr.add_argument('-i', action='store_true')
+    argpsr.add_argument('-F')
+    argpsr.add_argument('-o')
     argpsr.add_argument('recipients', nargs='*', default='')
     args = argpsr.parse_args()
 

@@ -61,7 +61,6 @@ smtp_tls_security_level = may
 smtp_tls_loglevel = 1
 {#- if you have authentication enabled, only offer it after STARTTLS #}
 smtpd_tls_auth_only = yes
-tls_ssl_options = NO_COMPRESSION
 {% endif %}
 
 {%- if salt['pillar.get']('postfix:sasl', False) %}

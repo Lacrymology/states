@@ -42,7 +42,6 @@ __email__ = 'hvnsweeting@gmail.com'
 
 import argparse
 import logging
-import sys
 
 import salt.key
 import salt.client
@@ -51,18 +50,7 @@ from salt.utils import parsers
 
 import nagiosplugin as nap
 
-log = logging.getLogger(__name__)
-log.addHandler(logging.StreamHandler(sys.stderr))
-log.setLevel(logging.WARNING)
-
-argp = argparse.ArgumentParser()
-argp.add_argument('-v', "--verbose",
-                  help="increase output verbosity",
-                  action="store_true")
-args = argp.parse_args()
-
-if args.verbose:
-    log.setLevel(logging.DEBUG)
+log = logging.getLogger('nagiosplugin')
 
 
 class MineMinion(nap.Resource):
@@ -104,9 +92,13 @@ class MineMinion(nap.Resource):
 @nap.guarded
 def main():
     m_ids = MineMinion()
+    argp = argparse.ArgumentParser()
+    argp.add_argument('-v', "--verbose",
+                      help="increase output verbosity",
+                      action="store_true")
+    args = argp.parse_args()
     check = nap.Check(m_ids, nap.ScalarContext('minions', '0:0', '0:0'))
     check.main(args.verbose)
-
 
 if __name__ == "__main__":
     main()

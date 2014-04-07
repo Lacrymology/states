@@ -37,10 +37,6 @@ import nagiosplugin as nap
 
 log = logging.getLogger('nagiosplugin')
 
-argp = argparse.ArgumentParser()
-argp.add_argument('--name', '-n', help='Database name', default='template0')
-argp.add_argument('--encoding', '-e', help='Encoding name', default='UTF8')
-argp.add_argument('-v', '--verbose', action='count', default=0)
 
 class Encoding(nap.Resource):
     def __init__(self, dbname, encoding):
@@ -73,6 +69,10 @@ class Encoding(nap.Resource):
 
 @nap.guarded
 def main():
+    argp = argparse.ArgumentParser()
+    argp.add_argument('--name', '-n', help='Database name', default='template0')
+    argp.add_argument('--encoding', '-e', help='Encoding name', default='UTF8')
+    argp.add_argument('-v', '--verbose', action='count', default=0)
     args = argp.parse_args()
     enc = Encoding(args.name, args.encoding)
     check = nap.Check(enc, nap.ScalarContext('encoding', '0:0', '0:0'))

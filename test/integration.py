@@ -3,16 +3,16 @@
 
 # Copyright (c) 2013, Bruno Clermont
 # All rights reserved.
-# 
+#
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
-# 
+#
 # 1. Redistributions of source code must retain the above copyright notice, this
 #    list of conditions and the following disclaimer.
 # 2. Redistributions in binary form must reproduce the above copyright notice,
 #    this list of conditions and the following disclaimer in the documentation
 #    and/or other materials provided with the distribution.
-# 
+#
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 # ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -80,6 +80,8 @@ process_list = None
 
 NO_TEST_STRING = '-*- ci-automatic-discovery: off -*-'
 
+all_states = client('cp.list_states')
+
 
 def if_change(result):
     """
@@ -113,6 +115,20 @@ def setUpModule():
 
     # force HOME to be root directory
     os.environ['HOME'] = pwd.getpwnam('root').pw_dir
+
+    client('saltutil.sync_all')
+    logger.info("Rendering all *.test SLS files to quickly find malformed ones")
+    for sls in all_states:
+        if sls.endswith('.test'):
+            try:
+                ret = client('state.show_sls', sls)
+            except:
+                logger.error("Catch error: %s", err, exc_info=True)
+                raise
+            if isinstance(ret, list):
+                # if render is okay, it returns dict, else, it returns list
+                # of msg error
+                raise Exception(ret)
 
     try:
         if client('pkg_installed.exists'):
@@ -159,6 +175,7 @@ def setUpModule():
 
     logger.info("Save state of currently installed packages.")
     output = client('pkg_installed.snapshot')
+
     try:
         if not output['result']:
             raise ValueError(output['comment'])
@@ -386,8 +403,9 @@ class TestStateMeta(type):
         Return a class which consist of all needed test state functions
         '''
         global client
+        global all_states
         # Get all SLSes to test
-        attrs['all_states'] = client('cp.list_states')
+        attrs['all_states'] = all_states
         # don't play with salt.minion
         salt_minion_states = []
         for state in attrs['all_states']:

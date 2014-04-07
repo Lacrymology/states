@@ -87,4 +87,3 @@ include:
 {%- endif %}
 
 {{ passive_check('openerp') }}
-

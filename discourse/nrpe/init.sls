@@ -116,4 +116,3 @@ include:
       - service: nagios-nrpe-server
 
 {{ passive_check('discourse') }}
-

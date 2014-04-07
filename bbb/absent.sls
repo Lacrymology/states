@@ -32,6 +32,7 @@ Institute for Institutional Innovation by Data Driven Design Inc.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
+{%- if grains['lsb_distrib_codename'] == 'lucid' %}
 libreoffice:
   file:
     - absent
@@ -95,3 +96,4 @@ redis_build_dir:
   file:
     - absent
     - name: {{ bbb_dir }}
+{%- endif %}

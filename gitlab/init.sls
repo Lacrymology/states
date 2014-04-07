@@ -466,6 +466,21 @@ gitlab_upstart:
     - require_in:
       - file: {{ home_dir }}/gitlab-satellites
 
+{%- for file in ('Gemfile', 'Gemfile.lock') %}
+{{ web_dir }}/{{ file }}:
+  file:
+    - managed
+    - source: salt://gitlab/{{ file }}
+    - user: git
+    - group: git
+    - mode: 440
+    - require:
+      - user: gitlab
+      - file: gitlab
+    - require_in:
+      - cmd: bundler
+{%- endfor %}
+
 {%- if salt['pillar.get']('gitlab:ssl', False) %}
 extend:
   nginx:

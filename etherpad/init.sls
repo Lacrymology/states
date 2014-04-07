@@ -180,22 +180,8 @@ etherpad:
       - pkg: nginx
       - service: etherpad
 
-etherpad_upstart_rsyslog_config:
-  file:
-    - managed
-    - mode: 440
-    - source: salt://rsyslog/template.jinja2
-    - name: /etc/rsyslog.d/etherpad-upstart.conf
-    - template: jinja
-    - require:
-      - pkg: rsyslog
-    - watch_in:
-      - service: rsyslog
-    - context:
-      file_path: /var/log/upstart/etherpad.log
-      tag_name: etherpad-upstart
-      severity: error
-      facility: daemon
+{% from 'rsyslog/upstart.sls' import manage_upstart_log with context %}
+{{ manage_upstart_log('etherpad') }}
 
 extend:
   nginx:

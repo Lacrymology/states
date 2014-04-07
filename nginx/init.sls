@@ -196,19 +196,5 @@ nginx_verify_version:
     - require:
       - service: nginx
 
-nginx_upstart_rsyslog_config:
-  file:
-    - managed
-    - mode: 440
-    - source: salt://rsyslog/template.jinja2
-    - name: /etc/rsyslog.d/nginx-upstart.conf
-    - template: jinja
-    - require:
-      - pkg: rsyslog
-    - watch_in:
-      - service: rsyslog
-    - context:
-      file_path: /var/log/upstart/nginx.log
-      tag_name: nginx-upstart
-      severity: error
-      facility: daemon
+{% from 'rsyslog/upstart.sls' import manage_upstart_log with context %}
+{{ manage_upstart_log('nginx') }}

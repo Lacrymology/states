@@ -75,22 +75,8 @@ statsd:
       - pkg: python-dev
       - file: statsd_requirements
 
-statsd_upstart_rsyslog_config:
-  file:
-    - managed
-    - mode: 440
-    - source: salt://rsyslog/template.jinja2
-    - name: /etc/rsyslog.d/statsd-upstart.conf
-    - template: jinja
-    - require:
-      - pkg: rsyslog
-    - watch_in:
-      - service: rsyslog
-    - context:
-      file_path: /var/log/upstart/statsd.log
-      tag_name: statsd-upstart
-      severity: error
-      facility: daemon
+{% from 'rsyslog/upstart.sls' import manage_upstart_log with context %}
+{{ manage_upstart_log('statsd') }}
 
 statsd_requirements:
   file:

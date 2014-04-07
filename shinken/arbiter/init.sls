@@ -123,19 +123,5 @@ shinken-arbiter:
       - user: shinken
 {% endfor %}
 
-shinken_arbiter_upstart_rsyslog_config:
-  file:
-    - managed
-    - mode: 440
-    - source: salt://rsyslog/template.jinja2
-    - name: /etc/rsyslog.d/shinken-arbiter-upstart.conf
-    - template: jinja
-    - require:
-      - pkg: rsyslog
-    - watch_in:
-      - service: rsyslog
-    - context:
-      file_path: /var/log/upstart/shinken-arbiter.log
-      tag_name: shinken-arbiter-upstart
-      severity: error
-      facility: daemon
+{% from 'rsyslog/upstart.sls' import manage_upstart_log with context %}
+{{ manage_upstart_log('shinken-arbiter') }}

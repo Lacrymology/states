@@ -74,22 +74,8 @@ terracotta:
       - file: terracotta
       - file: /etc/terracotta.conf
 
-terracotta_upstart_rsyslog_config:
-  file:
-    - managed
-    - mode: 440
-    - source: salt://rsyslog/template.jinja2
-    - name: /etc/rsyslog.d/terracotta-upstart.conf
-    - template: jinja
-    - require:
-      - pkg: rsyslog
-    - watch_in:
-      - service: rsyslog
-    - context:
-      file_path: /var/log/upstart/terracotta.log
-      tag_name: terracotta-upstart
-      severity: error
-      facility: daemon
+{% from 'rsyslog/upstart.sls' import manage_upstart_log with context %}
+{{ manage_upstart_log('terracotta') }}
 
 /etc/terracotta.conf:
   file:

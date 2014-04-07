@@ -27,6 +27,7 @@
 #
 # Author: Bruno Clermont <patate@fastmail.cn>
 # Maintainer: Bruno Clermont <patate@fastmail.cn>
+#             Quan Tong Anh <tonganhquan.net@gmail.com>
 
 """
 RavenMail: Emulate /usr/bin/mail(x) but send mail to a Sentry server instead.
@@ -72,8 +73,7 @@ def main():
     from argparse import ArgumentParser
     argpsr = ArgumentParser()
     argpsr.add_argument('-s', help="Subject")
-    argpsr.add_argument('recipients', nargs='*', default='')
-    args = argpsr.parse_args()
+    args, unknown = argpsr.parse_known_args()
 
     if args.s:
         msg = os.linesep.join((args.s, body))
@@ -82,7 +82,7 @@ def main():
 
     # copy os.environ and remove DSN
     environ = copy.copy(dict(os.environ))
-    environ['recipients'] = args.recipients
+    environ['command-line'] = unknown
     environ.pop('SENTRY_DSN', None)
     client.captureMessage(msg, extra=environ)
 

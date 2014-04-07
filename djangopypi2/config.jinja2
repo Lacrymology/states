@@ -38,7 +38,7 @@ DEBUG = False
 TEMPLATE_DEBUG = False
 
 ADMINS = ()
-TIME_ZONE = 'UTC'
+TIME_ZONE = '{{ salt['pillar.get']('timezone', 'UTC') }}'
 LANGUAGE_CODE = 'en_US'
 ALLOW_VERSION_OVERWRITE = {{ salt["pillar.get"]("djangopypi2:allow_version_overwrite", False) }}
 

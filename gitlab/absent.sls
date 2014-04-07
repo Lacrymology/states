@@ -73,3 +73,7 @@ gitlab-upstart-log:
     - name: find /var/log/upstart/ -maxdepth 1 -type f -name 'gitlab.log*' -delete
     - require:
       - cmd: gitlab
+
+/etc/rsyslog.d/gitlab-upstart.conf:
+  file:
+    - absent

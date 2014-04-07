@@ -31,6 +31,7 @@ include:
   - nginx.diamond
   - nodejs.diamond
   - postgresql.server.diamond
+  - rsyslog.diamond
 
 etherpad_diamond_resources:
   file:

@@ -201,3 +201,6 @@ uwsgi_emperor:
     - mode: 550
     - require:
       - user: web
+
+{% from 'rsyslog/upstart.sls' import manage_upstart_log with context %}
+{{ manage_upstart_log('uwsgi') }}

@@ -35,6 +35,7 @@ include:
   - nrpe
   - postgresql.server.nrpe
   - python.dev.nrpe
+  - rsyslog.nrpe
 {%- if salt['pillar.get']('etherpad:ssl', False) %}
   - ssl.nrpe
 {%- endif %}

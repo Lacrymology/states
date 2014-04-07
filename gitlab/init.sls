@@ -46,6 +46,7 @@ include:
   - python
   - redis
   - ruby
+  - rsyslog
 {%- if salt['pillar.get']('gitlab:ssl', False) %}
   - ssl
 {%- endif %}
@@ -418,6 +419,9 @@ gitlab_upstart:
       - cmd: gitlab
     - context:
       web_dir: {{ web_dir }}
+
+{% from 'rsyslog/upstart.sls' import manage_upstart_log with context %}
+{{ manage_upstart_log('gitlab') }}
 
 {%- if salt['pillar.get']('gitlab:smtp:enabled', False) %}
 {{ web_dir }}/config/environments/production.rb:

@@ -30,6 +30,7 @@ Diamond statistics for terracotta.
 
 include:
   - diamond
+  - rsyslog.diamond
 
 terracotta_diamond_resources:
   file:

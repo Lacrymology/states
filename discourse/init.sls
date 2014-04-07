@@ -44,6 +44,7 @@ include:
   - postgresql
   - postgresql.server
   - redis
+  - rsyslog
   - ruby
 {%- if salt['pillar.get']('discourse:ssl', False) %}
   - ssl
@@ -288,6 +289,9 @@ discourse_upstart:
       web_root_dir: {{ web_root_dir }}
       user: discourse
       home: /home/discourse
+
+{% from 'rsyslog/upstart.sls' import manage_upstart_log with context %}
+{{ manage_upstart_log('discourse') }}
 
 /etc/logrotate.d/discourse:
   file:

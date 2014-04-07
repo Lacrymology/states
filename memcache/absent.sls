@@ -52,3 +52,8 @@ memcached-upstart-log:
     - name: find /var/log/upstart/ -maxdepth 1 -type f -name 'memcached.log*' -delete
     - require:
       - service: memcached
+
+/etc/rsyslog.d/memcached-upstart.conf:
+  file:
+    - absent
+

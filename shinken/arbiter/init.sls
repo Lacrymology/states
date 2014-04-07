@@ -39,6 +39,7 @@ arbiters acting as hot standby spares in the architecture.
 -#}
 include:
   - hostname
+  - rsyslog
   - shinken
   - ssmtp
 
@@ -121,3 +122,6 @@ shinken-arbiter:
       - file: /etc/shinken
       - user: shinken
 {% endfor %}
+
+{% from 'rsyslog/upstart.sls' import manage_upstart_log with context %}
+{{ manage_upstart_log('shinken-arbiter') }}

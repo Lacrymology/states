@@ -177,6 +177,9 @@ salt_api_old_version:
       - pkg: salt-api
 {%- endif %}
 
+{% from 'rsyslog/upstart.sls' import manage_upstart_log with context %}
+{{ manage_upstart_log('salt-api') }}
+
 extend:
   nginx:
     service:

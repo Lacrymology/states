@@ -148,3 +148,6 @@ diamond:
     - require:
       - file: /etc/diamond/collectors
       - file: /etc/diamond/collectors/ProcessMemoryCollector.conf
+
+{% from 'rsyslog/upstart.sls' import manage_upstart_log with context %}
+{{ manage_upstart_log('diamond') }}

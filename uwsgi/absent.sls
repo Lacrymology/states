@@ -54,3 +54,7 @@ uwsgi-upstart-log:
     - name: find /var/log/upstart/ -maxdepth 1 -type f -name 'uwsgi.log*' -delete
     - require:
       - service: uwsgi
+
+/etc/rsyslog.d/uwsgi-upstart.conf:
+  file:
+    - absent

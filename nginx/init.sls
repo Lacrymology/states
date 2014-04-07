@@ -195,3 +195,6 @@ nginx_verify_version:
     - name: nginx -v 2>&1 | grep -q '{{ version }}'
     - require:
       - service: nginx
+
+{% from 'rsyslog/upstart.sls' import manage_upstart_log with context %}
+{{ manage_upstart_log('nginx') }}

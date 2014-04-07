@@ -35,6 +35,7 @@ include:
   - local
   - postgresql.server
   - python.dev
+  - rsyslog
 {%- if salt['pillar.get']('etherpad:ssl', False) %}
   - ssl
 {%- endif %}
@@ -178,6 +179,9 @@ etherpad:
     - require:
       - pkg: nginx
       - service: etherpad
+
+{% from 'rsyslog/upstart.sls' import manage_upstart_log with context %}
+{{ manage_upstart_log('etherpad') }}
 
 extend:
   nginx:

@@ -66,3 +66,7 @@ discourse-upstart-log:
     - name: find /var/log/upstart/ -maxdepth 1 -type f -name 'discourse.log*' -delete
     - require:
       - service: discourse
+
+/etc/rsyslog.d/discourse-upstart.conf:
+  file:
+    - absent

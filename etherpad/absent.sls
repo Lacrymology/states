@@ -52,3 +52,7 @@ etherpad:
 /etc/nginx/conf.d/etherpad.conf:
   file:
     - absent
+
+/etc/rsyslog.d/etherpad-upstart.conf:
+  file:
+    - absent

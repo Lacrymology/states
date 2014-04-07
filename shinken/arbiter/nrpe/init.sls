@@ -36,6 +36,7 @@ include:
 {% if salt['pillar.get']('shinken:ssl', False) %}
   - ssl.nrpe
 {% endif %}
+  - rsyslog.nrpe
   - ssmtp.nrpe
   - virtualenv.nrpe
 

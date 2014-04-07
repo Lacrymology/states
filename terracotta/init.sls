@@ -29,6 +29,7 @@ include:
   - hostname
   - java.7.jdk
   - local
+  - rsyslog
 {% set version = '3.7.0' %}
 
 terracotta:
@@ -72,6 +73,9 @@ terracotta:
     - watch:
       - file: terracotta
       - file: /etc/terracotta.conf
+
+{% from 'rsyslog/upstart.sls' import manage_upstart_log with context %}
+{{ manage_upstart_log('terracotta') }}
 
 /etc/terracotta.conf:
   file:

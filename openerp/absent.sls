@@ -47,3 +47,7 @@ openerp:
 /etc/nginx/conf.d/openerp.conf:
   file:
     - absent
+
+/etc/rsyslog.d/openerp-upstart.conf:
+  file:
+    - absent

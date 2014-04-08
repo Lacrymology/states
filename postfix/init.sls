@@ -105,8 +105,7 @@ postfix:
       - file: /etc/postfix
       - file: postfix
 {% if ssl %}
-      - file: /etc/ssl/{{ ssl }}/server.key
-      - file: /etc/ssl/{{ ssl }}/server.crt
+      - cmd: ssl_cert_and_key_for_{{ ssl }}
 {% endif %}
 
 /etc/postfix:

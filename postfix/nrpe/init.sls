@@ -31,6 +31,9 @@ Nagios NRPE check for Postfix.
 include:
   - apt.nrpe
   - nrpe
+{% if salt['pillar.get']('postfix:ssl', False) %}
+  - ssl.nrpe
+{% endif %}
 
 /etc/nagios/nrpe.d/postfix.cfg:
   file:

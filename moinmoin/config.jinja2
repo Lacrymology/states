@@ -253,10 +253,10 @@ class Config(multiconfig.DefaultConfig):
 {%- set ssl = salt['pillar.get']('moinmoin:ldap:ssl', False) %}
 {%- if ssl %}
         start_tls=2, # usage of Transport Layer Security 0 = No, 1 = Try, 2 = Required
-        tls_cacertdir='/etc/ssl/{{ ssl }}',
-        tls_cacertfile='/etc/ssl/{{ ssl }}/ca.crt',
-        tls_certfile='/etc/ssl/{{ ssl }}/server.crt',
-        tls_keyfile='/etc/ssl/{{ ssl }}/server.key',
+        tls_cacertdir='/etc/ssl/certs',
+        tls_cacertfile='/etc/ssl/certs/{{ ssl }}_ca.crt',
+        tls_certfile='/etc/ssl/certs/{{ name }}.crt',
+        tls_keyfile='/etc/ssl/private/{{ name }}.key',
         tls_require_cert=0, # 0 == ldap.OPT_X_TLS_NEVER (needed for self-signed certs)
 {%- endif %}
         bind_once=False, # set to True to only do one bind - useful if configured to bind as the user on the first attempt

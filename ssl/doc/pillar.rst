@@ -164,9 +164,8 @@ To use those SSL files in your states, you need to do the following:
   which that daemon run.
 - Add ssl to the list of included sls file
 - Requires the following three condition before starting your service:
-    - cmd: /etc/ssl/{{ pillar['my_app']['ssl'] }}/chained_ca.crt
-    - module: /etc/ssl/{{ pillar['my_app']['ssl'] }}/server.pem
-    - file: /etc/ssl/{{ pillar['my_app']['ssl'] }}/ca.crt
+    - cmd: ssl_cert_and_key_for_{{ pillar['my_app']['ssl'] }}
+
 - In the config file you point to the same path to reach those files, like:
-    tls_cert = /etc/ssl/{{ pillar['my_app']['ssl'] }}/chained_ca.crt;
-    tls_key = /etc/ssl/{{ pillar['my_app']['ssl'] }}/server.pem;
+    /etc/ssl/certs/{{ pillar['my_app']['ssl'] }}_chained.crt;
+    tls_key = /etc/ssl/private/{{ pillar['my_app']['ssl'] }}.pem;

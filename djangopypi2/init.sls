@@ -293,7 +293,5 @@ extend:
       - watch:
         - file: /etc/nginx/conf.d/djangopypi2.conf
 {% if salt['pillar.get']('djangopypi2:ssl', False) %}
-        - cmd: /etc/ssl/{{ pillar['djangopypi2']['ssl'] }}/chained_ca.crt
-        - module: /etc/ssl/{{ pillar['djangopypi2']['ssl'] }}/server.pem
-        - file: /etc/ssl/{{ pillar['djangopypi2']['ssl'] }}/ca.crt
+        - cmd: ssl_cert_and_key_for_{{ pillar['djangopypi2']['ssl'] }}
 {% endif %}

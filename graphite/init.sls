@@ -329,7 +329,5 @@ extend:
       - watch:
         - file: /etc/nginx/conf.d/graphite.conf
 {% if salt['pillar.get']('graphite:web:ssl', False) %}
-        - cmd: /etc/ssl/{{ pillar['graphite']['web']['ssl'] }}/chained_ca.crt
-        - module: /etc/ssl/{{ pillar['graphite']['web']['ssl'] }}/server.pem
-        - file: /etc/ssl/{{ pillar['graphite']['web']['ssl'] }}/ca.crt
+        - cmd: ssl_cert_and_key_for_{{ pillar['graphite']['web']['ssl'] }}
 {% endif %}

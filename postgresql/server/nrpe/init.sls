@@ -33,6 +33,9 @@ include:
   - postgresql.nrpe
   - postgresql.server
   - rsyslog.nrpe
+{% if salt['pillar.get']('postgresql:ssl', False) %}
+  - ssl.nrpe
+{% endif %}
 
 {{ passive_check('postgresql.server') }}
 

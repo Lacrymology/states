@@ -253,3 +253,6 @@ extend:
     service:
       - watch:
         - file: /etc/nginx/conf.d/moinmoin.conf
+{%- if salt['pillar.get']('moinmoin:ssl', False) %}
+        - cmd: ssl_cert_and_key_for_{{ pillar['moinmoin']['ssl'] }}
+{%- endif %}

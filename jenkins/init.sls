@@ -89,7 +89,5 @@ extend:
       - watch:
         - file: /etc/nginx/conf.d/jenkins.conf
 {% if salt['pillar.get']('jenkins:ssl', False) %}
-        - cmd: /etc/ssl/{{ pillar['jenkins']['ssl'] }}/chained_ca.crt
-        - module: /etc/ssl/{{ pillar['jenkins']['ssl'] }}/server.pem
-        - file: /etc/ssl/{{ pillar['jenkins']['ssl'] }}/ca.crt
+        - cmd: ssl_cert_and_key_for_{{ pillar['jenkins']['ssl'] }}
 {% endif %}

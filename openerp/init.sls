@@ -209,21 +209,9 @@ add_web_user_to_openerp_group:
       - pkg: nginx
       - uwsgi: openerp
 {%- if salt['pillar.get']('openerp:ssl', False) %}
-      - cmd: /etc/ssl/{{ pillar['openerp']['ssl'] }}/chained_ca.crt
-      - module: /etc/ssl/{{ pillar['openerp']['ssl'] }}/server.pem
-      - file: /etc/ssl/{{ pillar['openerp']['ssl'] }}/ca.crt
+      - cmd: ssl_cert_and_key_for_{{ pillar['openerp']['ssl'] }}
 {%- endif %}
     - watch_in:
       - service: nginx
     - context:
       web_root_dir: {{ web_root_dir }}
-
-{%- if salt['pillar.get']('openerp:ssl', False) %}
-extend:
-  nginx:
-    service:
-      - watch:
-        - cmd: /etc/ssl/{{ pillar['openerp']['ssl'] }}/chained_ca.crt
-        - module: /etc/ssl/{{ pillar['openerp']['ssl'] }}/server.pem
-        - file: /etc/ssl/{{ pillar['openerp']['ssl'] }}/ca.crt
-{% endif %}

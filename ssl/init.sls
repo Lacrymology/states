@@ -41,51 +41,56 @@ ssl-cert:
 {% for name in salt['pillar.get']('ssl', []) -%}
 /etc/ssl/{{ name }}:
   file:
-    - directory
-    - user: root
-    - group: root
-    - mode: 775
-    - require:
-      - pkg: ssl-cert
+    - absent
 
-    {%- for filename in ('server.key', 'server.crt', 'ca.crt') -%}
-        {%- set pillar_key = filename.replace('.', '_') %}
-/etc/ssl/{{ name }}/{{ filename }}:
+/etc/ssl/private/{{ name }}.key:
   file:
     - managed
     - contents: |
-        {{ pillar['ssl'][name][pillar_key] | indent(8) }}
+        {{ pillar['ssl'][name]['server_key'] | indent(8) }}
     - user: root
     - group: ssl-cert
     - mode: 440
     - require:
       - pkg: ssl-cert
-      - file: /etc/ssl/{{ name }}
-    {%- endfor -%}
+
+/etc/ssl/certs/{{ name }}.crt:
+  file:
+    - managed
+    - contents: |
+        {{ pillar['ssl'][name]['server_crt'] | indent(8) }}
+    - user: root
+    - group: ssl-cert
+    - mode: 444
+    - require:
+      - pkg: ssl-cert
+
+/etc/ssl/certs/{{ name }}_ca.crt:
+  file:
+    - managed
+    - contents: |
+        {{ pillar['ssl'][name]['ca_crt'] | indent(8) }}
+    - user: root
+    - group: ssl-cert
+    - mode: 444
+    - require:
+      - pkg: ssl-cert
 
 {#-
 Create from server private key and certificate a PEM used by most daemon
 that support SSL.
 #}
-/etc/ssl/{{ name }}/server.pem:
-  cmd:
-    - wait
-    - name: cat /etc/ssl/{{ name }}/server.crt /etc/ssl/{{ name }}/server.key > /etc/ssl/{{ name }}/server.pem
-    - watch:
-      - file: /etc/ssl/{{ name }}/server.crt
-      - file: /etc/ssl/{{ name }}/server.key
-  module:
-    - wait
-    - name: file.check_perms
-    - m_name: /etc/ssl/{{ name }}/server.pem
-    - ret: {}
-    - mode: "440"
+/etc/ssl/private/{{ name }}.pem:
+  file:
+    - managed
+    - contents: |
+        {{ pillar['ssl'][name]['server_crt'] | indent(8) }}
+        {{ pillar['ssl'][name]['server_key'] | indent(8) }}
     - user: root
     - group: ssl-cert
+    - mode: 440
     - require:
       - pkg: ssl-cert
-    - watch:
-      - cmd: /etc/ssl/{{ name }}/server.pem
 
 {#-
 Some browsers may complain about a certificate signed by a well-known
@@ -98,11 +103,28 @@ bundle of chained certificates which should be concatenated to the signed server
 certificate. The server certificate must appear before the chained certificates
 in the combined file:
 #}
-/etc/ssl/{{ name }}/chained_ca.crt:
+/etc/ssl/certs/{{ name }}_chained.crt:
+  file:
+    - managed
+    - contents: |
+        {{ pillar['ssl'][name]['server_crt'] | indent(8) }}
+        {{ pillar['ssl'][name]['ca_crt'] | indent(8) }}
+    - user: root
+    - group: ssl-cert
+    - mode: 444
+    - require:
+      - pkg: ssl-cert
+
+{#- as service need to watch all cert files, use this cmd as trigger that
+    service restart everywhen cert files changed #}
+ssl_cert_and_key_for_{{ name }}:
   cmd:
     - wait
-    - name: cat /etc/ssl/{{ name }}/server.crt /etc/ssl/{{ name }}/ca.crt > /etc/ssl/{{ name }}/chained_ca.crt
+    - name: echo managed ssl cert for {{ name }}
     - watch:
-      - file: /etc/ssl/{{ name }}/server.crt
-      - file: /etc/ssl/{{ name }}/ca.crt
+      - file: /etc/ssl/private/{{ name }}.key
+      - file: /etc/ssl/certs/{{ name }}.crt
+      - file: /etc/ssl/certs/{{ name }}_ca.crt
+      - file: /etc/ssl/private/{{ name }}.pem
+      - file: /etc/ssl/certs/{{ name }}_chained.crt
 {%- endfor -%}

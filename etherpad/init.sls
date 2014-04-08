@@ -189,7 +189,5 @@ extend:
       - watch:
         - file: /etc/nginx/conf.d/etherpad.conf
 {%- if salt['pillar.get']('etherpad:ssl', False) %}
-        - cmd: /etc/ssl/{{ pillar['etherpad']['ssl'] }}/chained_ca.crt
-        - module: /etc/ssl/{{ pillar['etherpad']['ssl'] }}/server.pem
-        - file: /etc/ssl/{{ pillar['etherpad']['ssl'] }}/ca.crt
+        - cmd: ssl_cert_and_key_for_{{ pillar['etherpad']['ssl'] }}
 {%- endif %}

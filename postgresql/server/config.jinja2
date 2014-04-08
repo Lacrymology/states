@@ -164,13 +164,13 @@ log_line_prefix = ''
 #log_lock_waits = off
 {#- none, ddl, mod, all #}
 #log_statement = 'none'
-log_timezone = 'UTC'
+log_timezone = '{{ salt['pillar.get']('timezone', 'UTC') }}'
 log_checkpoints = on
 
 {#-
  Locale and Formatting
 #}
-timezone = 'UTC'
+timezone = '{{ salt['pillar.get']('timezone', 'UTC') }}'
 {#- These settings are initialized by initdb, but they can be changed.#}
 {#-lc_messages = 'C'
 lc_monetary = 'C'

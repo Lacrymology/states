@@ -34,8 +34,8 @@ upstream sentry {
 
 server {
     listen 80;
-{% if pillar['sentry']['ssl']|default(False) %}
-{% if pillar['sentry']['ssl_redirect']|default(False) %}
+{% if salt['pillar.get']('sentry:ssl', False) %}
+{% if salt['pillar.get']('sentry:ssl_redirect', False) %}
     {# if https, redirect http port 80 to https port 443 #}
     server_name {% for hostname in pillar['sentry']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
     return 301 https://{{ pillar['sentry']['hostnames'][0] }}$request_uri;

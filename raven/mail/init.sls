@@ -32,6 +32,7 @@ include:
 /usr/bin/mail:
   file:
     - managed
+    - template: jinja
     - user: root
     - group: root
     - mode: 775
@@ -39,3 +40,10 @@ include:
     - require:
       - module: raven
       - service: rsyslog
+
+/usr/sbin/sendmail:
+  file:
+    - symlink
+    - target: /usr/bin/mail
+    - require:
+      - file: /usr/bin/mail

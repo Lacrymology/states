@@ -28,3 +28,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 /usr/local/bin/backup-file:
   file:
     - absent
+
+/usr/local/bin/create_dump:
+  file:
+    - absent

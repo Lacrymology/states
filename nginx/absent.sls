@@ -76,3 +76,7 @@ nginx-logger-{{ log_type }}:
   service:
     - dead
 {% endfor %}
+
+/etc/rsyslog.d/nginx-upstart.conf:
+  file:
+    - absent

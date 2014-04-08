@@ -177,15 +177,16 @@ salt_api_old_version:
       - pkg: salt-api
 {%- endif %}
 
+{% from 'rsyslog/upstart.sls' import manage_upstart_log with context %}
+{{ manage_upstart_log('salt-api') }}
+
 extend:
   nginx:
     service:
       - watch:
         - file: salt-ui
 {% if salt['pillar.get']('salt_master:ssl', False) %}
-        - cmd: /etc/ssl/{{ pillar['salt_master']['ssl'] }}/chained_ca.crt
-        - module: /etc/ssl/{{ pillar['salt_master']['ssl'] }}/server.pem
-        - file: /etc/ssl/{{ pillar['salt_master']['ssl'] }}/ca.crt
+        - cmd: ssl_cert_and_key_for_{{ pillar['salt_master']['ssl'] }}
 {% endif %}
   salt-master:
     service:

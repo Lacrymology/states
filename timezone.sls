@@ -25,15 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 #}
-include:
-  - local
-
-{# manage a script which test archive integrity #}
-/usr/local/bin/backup-store:
-  file:
-    - managed
-    - source: salt://backup/client/test/no_operate.jinja2
-    - mode: 755
-    - template: jinja
-    - require:
-      - file: /usr/local
+system_timezone:
+  timezone:
+    - system
+    - name: {{ salt['pillar.get']('timezone', 'UTC') }}

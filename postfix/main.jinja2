@@ -34,7 +34,7 @@ mydestination = {%- for i in salt['pillar.get']('postfix:mydestination', []) %} 
 {%- block mynetworks %}
 mynetworks = {%- for i in salt['pillar.get']('postfix:mynetworks', ["127.0.0.0/8"]) %} {{ i }}{%- endfor %}
 {%- endblock %}
-relayhost = {{ salt['pillar.get']('postfix:relayhost', '') }}
+relayhost = {{ salt['pillar.get']('postfix:relayhost') }}
 relay_domains = {{ salt['pillar.get']('postfix:relay_domains', '$mydestination') }}
 alias_maps = hash:/etc/aliases
 alias_database = hash:/etc/aliases
@@ -49,8 +49,8 @@ delay_warning_time = 4h
 readme_directory = no
 {#- TLS parameters -#}
 {% if salt['pillar.get']('postfix:ssl', False) %}
-smtpd_tls_cert_file=/etc/ssl/{{ salt['pillar.get']('postfix:ssl') }}/server.crt
-smtpd_tls_key_file=/etc/ssl/{{ salt['pillar.get']('postfix:ssl') }}/server.key
+smtpd_tls_cert_file=/etc/ssl/certs/{{ pillar['postfix']['ssl'] }}.crt
+smtpd_tls_key_file=/etc/ssl/private/{{ pillar['postfix']['ssl'] }}.key
 smtpd_use_tls=yes
 smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
 smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
@@ -61,7 +61,6 @@ smtp_tls_security_level = may
 smtp_tls_loglevel = 1
 {#- if you have authentication enabled, only offer it after STARTTLS #}
 smtpd_tls_auth_only = yes
-tls_ssl_options = NO_COMPRESSION
 {% endif %}
 
 {%- if salt['pillar.get']('postfix:sasl', False) %}

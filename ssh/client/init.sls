@@ -86,10 +86,11 @@ openssh-client:
 {%- if salt['pillar.get']('deployment_key', False) %}
       - file: {{ root_home }}/.ssh/id_{{ pillar['deployment_key']['type'] }}
 
+{%- set ssh_private_path = root_home + '/.ssh/id_' + pillar['deployment_key']['type'] %}
 root_ssh_private_key:
   file:
     - managed
-    - name: {{ root_home }}/.ssh/id_{{ pillar['deployment_key']['type'] }}
+    - name: {{ ssh_private_path }}
     - contents: |
         {{ pillar['deployment_key']['contents'] | indent(8) }}
     - user: root
@@ -97,4 +98,13 @@ root_ssh_private_key:
     - mode: 400
     - require:
       - file: {{ root_home }}/.ssh
+
+root_ssh_public_key:
+  cmd:
+    - wait
+    - name: ssh-keygen -y -f {{ ssh_private_path }} > {{ ssh_private_path}}.pub
+    - watch:
+      - file: root_ssh_private_key
+    - require:
+      - pkg: openssh-client
 {%- endif -%}

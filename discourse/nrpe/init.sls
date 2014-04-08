@@ -46,6 +46,7 @@ include:
   - postgresql.server.nrpe
   - redis.nrpe
   - ruby.nrpe
+  - rsyslog.nrpe
 {%- if salt['pillar.get']('discourse:ssl', False) %}
   - ssl.nrpe
 {%- endif %}
@@ -64,7 +65,7 @@ include:
       - pkg: nagios-nrpe-server
     - context:
       deployment: discourse
-      workers: {{ salt['pillar.get']('discourse:workers', '2') }}
+      workers: {{ salt['pillar.get']('discourse:workers', 2) }}
 {%- if 'cheaper' in pillar['discourse'] %}
       cheaper: {{ pillar['discourse']['cheaper'] }}
 {%- endif %}
@@ -115,4 +116,3 @@ include:
       - service: nagios-nrpe-server
 
 {{ passive_check('discourse') }}
-

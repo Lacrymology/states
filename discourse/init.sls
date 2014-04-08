@@ -44,6 +44,7 @@ include:
   - postgresql
   - postgresql.server
   - redis
+  - rsyslog
   - ruby
 {%- if salt['pillar.get']('discourse:ssl', False) %}
   - ssl
@@ -289,6 +290,9 @@ discourse_upstart:
       user: discourse
       home: /home/discourse
 
+{% from 'rsyslog/upstart.sls' import manage_upstart_log with context %}
+{{ manage_upstart_log('discourse') }}
+
 /etc/logrotate.d/discourse:
   file:
     - managed
@@ -315,9 +319,7 @@ discourse_upstart:
       - pkg: nginx
       - uwsgi: discourse
 {%- if salt['pillar.get']('discourse:ssl', False) %}
-      - cmd: /etc/ssl/{{ pillar['discourse']['ssl'] }}/chained_ca.crt
-      - module: /etc/ssl/{{ pillar['discourse']['ssl'] }}/server.pem
-      - file: /etc/ssl/{{ pillar['discourse']['ssl'] }}/ca.crt
+      - cmd: ssl_cert_and_key_for_{{ pillar['discourse']['ssl'] }}
 {%- endif %}
     - watch_in:
       - service: nginx
@@ -410,7 +412,5 @@ extend:
   nginx:
     service:
       - watch:
-        - cmd: /etc/ssl/{{ pillar['discourse']['ssl'] }}/chained_ca.crt
-        - module: /etc/ssl/{{ pillar['discourse']['ssl'] }}/server.pem
-        - file: /etc/ssl/{{ pillar['discourse']['ssl'] }}/ca.crt
+        - cmd: ssl_cert_and_key_for_{{ pillar['discourse']['ssl'] }}
 {%- endif %}

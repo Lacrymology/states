@@ -37,6 +37,7 @@ include:
   - pip.nrpe
   - postgresql.server.nrpe
   - python.dev.nrpe
+  - rsyslog.nrpe
 {%- if salt['pillar.get']('openerp:ssl', False) %}
   - ssl.nrpe
 {%- endif %}
@@ -59,7 +60,7 @@ include:
       - service: nagios-nrpe-server
     - context:
       deployment: openerp
-      workers: {{ salt['pillar.get']('openerp:workers', '2') }}
+      workers: {{ salt['pillar.get']('openerp:workers', 2) }}
       {%- if 'cheaper' in pillar['openerp'] %}
       cheaper: {{ pillar['openerp']['cheaper']  }}
       {%- endif %}
@@ -86,4 +87,3 @@ include:
 {%- endif %}
 
 {{ passive_check('openerp') }}
-

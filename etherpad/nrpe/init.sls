@@ -35,6 +35,7 @@ include:
   - nrpe
   - postgresql.server.nrpe
   - python.dev.nrpe
+  - rsyslog.nrpe
 {%- if salt['pillar.get']('etherpad:ssl', False) %}
   - ssl.nrpe
 {%- endif %}
@@ -79,6 +80,19 @@ include:
       database: {{ salt['pillar.get']('etherpad:db:name', 'etherpad') }}
       username: {{ salt['pillar.get']('etherpad:db:username', 'etherpad') }}
       password: {{ salt['password.pillar']('etherpad:db:password', 10) }}
+    - watch_in:
+      - service: nagios-nrpe-server
+
+/etc/nagios/nrpe.d/etherpad.cfg:
+  file:
+    - managed
+    - template: jinja
+    - user: nagios
+    - group: nagios
+    - mode: 440
+    - source: salt://etherpad/nrpe/config.jinja2
+    - require:
+      - pkg: nagios-nrpe-server
     - watch_in:
       - service: nagios-nrpe-server
 

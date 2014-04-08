@@ -35,6 +35,7 @@ include:
   - local
   - postgresql.server
   - python.dev
+  - rsyslog
 {%- if salt['pillar.get']('etherpad:ssl', False) %}
   - ssl
 {%- endif %}
@@ -179,13 +180,14 @@ etherpad:
       - pkg: nginx
       - service: etherpad
 
+{% from 'rsyslog/upstart.sls' import manage_upstart_log with context %}
+{{ manage_upstart_log('etherpad') }}
+
 extend:
   nginx:
     service:
       - watch:
         - file: /etc/nginx/conf.d/etherpad.conf
 {%- if salt['pillar.get']('etherpad:ssl', False) %}
-        - cmd: /etc/ssl/{{ pillar['etherpad']['ssl'] }}/chained_ca.crt
-        - module: /etc/ssl/{{ pillar['etherpad']['ssl'] }}/server.pem
-        - file: /etc/ssl/{{ pillar['etherpad']['ssl'] }}/ca.crt
+        - cmd: ssl_cert_and_key_for_{{ pillar['etherpad']['ssl'] }}
 {%- endif %}

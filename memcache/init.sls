@@ -29,6 +29,7 @@ Install a memcache server.
 -#}
 include:
   - apt
+  - rsyslog
   - web
 
 {#
@@ -87,3 +88,6 @@ upstart_memcached:
     - require:
       - file: memcached
       - user: web
+
+{% from 'rsyslog/upstart.sls' import manage_upstart_log with context %}
+{{ manage_upstart_log('memcached') }}

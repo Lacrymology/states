@@ -31,7 +31,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 pattern = ^{{ grains['id']}}\.carbon\.
 retentions = 60:90d
 
-{%- for name in pillar['graphite']['retentions']|default([]) %}
+{%- for name in salt['pillar.get']('graphite:retentions', []) %}
 
 [{{ name }}]
 pattern = {{ pillar['graphite']['retentions'][name]['pattern'] }}

@@ -52,3 +52,7 @@ rsync-upstart-log:
     - require:
       - pkg: rsync
       - service: rsync
+
+/etc/rsyslog.d/rsync-upstart.conf:
+  file:
+    - absent

@@ -37,10 +37,6 @@ openssh-client:
     - purged
 
 {% set root_home = salt['user.info']('root')['home'] %}
-{{ root_home }}/.ssh/id_dsa:
-  file:
-    - absent
-
-{{ root_home }}/.ssh/known_hosts:
+{{ root_home }}/.ssh:
   file:
     - absent

@@ -31,16 +31,16 @@ master = true
 env = SENTRY_CONF=/etc/sentry.conf.py
 module = sentry.wsgi
 processes = {{ pillar['sentry']['workers'] }}
-harakiri = {{ pillar['sentry']['timeout']|default(45) }}
+harakiri = {{ salt['pillar.get']('sentry:timeout', 45) }}
 harakiri-verbose = true
-{% if pillar['sentry']['cheaper']|default(False) %}
+{% if salt['pillar.get']('sentry:cheaper', False) %}
 {% if pillar['sentry']['cheaper'] > 0 %}
 cheaper = {{ pillar['sentry']['cheaper'] }}
 {% else %}
 cheap = true
 {% endif %}
 {% if pillar['sentry']['workers'] == 1 and pillar['sentry']['cheaper'] == 0 %}
-idle = {{ pillar['sentry']['idle']|default(300) }}
+idle = {{ salt['pillar.get']('sentry:idle', 300) }}
 {% endif %}
 {% endif -%}
 {%- if grains['virtual'] == 'kvm' and salt['file.file_exists']('/sys/kernel/mm/ksm/run') %}

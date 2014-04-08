@@ -31,6 +31,7 @@ Nagios NRPE check for OpenVPN.
 include:
   - apt.nrpe
   - nrpe
+  - rsyslog.nrpe
 
 /etc/nagios/nrpe.d/openvpn.cfg:
   file:

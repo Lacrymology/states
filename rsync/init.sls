@@ -27,6 +27,9 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 A file-copying tool.
 -#}
+include:
+  - rsyslog
+
 rsync:
   pkg:
     - installed
@@ -59,3 +62,6 @@ rsync:
     - source: salt://rsync/config.jinja2
     - require:
       - pkg: rsync
+
+{% from 'rsyslog/upstart.sls' import manage_upstart_log with context %}
+{{ manage_upstart_log('rsync') }}

@@ -7,7 +7,7 @@ admin = User.create(
   password_expires_at: Time.now
 )
 
-admin.projects_limit = {{ salt['pillar.get']('gitlab:admin:projects_limit', '1000') }}
+admin.projects_limit = {{ salt['pillar.get']('gitlab:admin:projects_limit', 1000) }}
 admin.admin = true
 admin.save!
 

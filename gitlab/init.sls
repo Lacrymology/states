@@ -46,6 +46,7 @@ include:
   - python
   - redis
   - ruby
+  - rsyslog
 {%- if salt['pillar.get']('gitlab:ssl', False) %}
   - ssl
 {%- endif %}
@@ -386,9 +387,7 @@ add_web_user_to_git_group:
       - user: web
       - uwsgi: gitlab
 {%- if salt['pillar.get']('gitlab:ssl', False) %}
-      - cmd: /etc/ssl/{{ pillar['gitlab']['ssl'] }}/chained_ca.crt
-      - module: /etc/ssl/{{ pillar['gitlab']['ssl'] }}/server.pem
-      - file: /etc/ssl/{{ pillar['gitlab']['ssl'] }}/ca.crt
+      - cmd: ssl_cert_and_key_for_{{ pillar['gitlab']['ssl'] }}
 {%- endif %}
     - watch_in:
       - service: nginx
@@ -418,6 +417,9 @@ gitlab_upstart:
       - cmd: gitlab
     - context:
       web_dir: {{ web_dir }}
+
+{% from 'rsyslog/upstart.sls' import manage_upstart_log with context %}
+{{ manage_upstart_log('gitlab') }}
 
 {%- if salt['pillar.get']('gitlab:smtp:enabled', False) %}
 {{ web_dir }}/config/environments/production.rb:
@@ -462,12 +464,25 @@ gitlab_upstart:
     - require_in:
       - file: {{ home_dir }}/gitlab-satellites
 
+{%- for file in ('Gemfile', 'Gemfile.lock') %}
+{{ web_dir }}/{{ file }}:
+  file:
+    - managed
+    - source: salt://gitlab/{{ file }}
+    - user: git
+    - group: git
+    - mode: 440
+    - require:
+      - user: gitlab
+      - file: gitlab
+    - require_in:
+      - cmd: bundler
+{%- endfor %}
+
 {%- if salt['pillar.get']('gitlab:ssl', False) %}
 extend:
   nginx:
     service:
       - watch:
-        - cmd: /etc/ssl/{{ pillar['gitlab']['ssl'] }}/chained_ca.crt
-        - module: /etc/ssl/{{ pillar['gitlab']['ssl'] }}/server.pem
-        - file: /etc/ssl/{{ pillar['gitlab']['ssl'] }}/ca.crt
+        - cmd: ssl_cert_and_key_for_{{ pillar['gitlab']['ssl'] }}
 {%- endif %}

@@ -136,4 +136,3 @@ shinken:
     - absent
     - require_in:
       - module: shinken
-

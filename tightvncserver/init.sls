@@ -43,6 +43,7 @@ Install TightVNC - Virtual Network Computing.
 include:
   - apt
   - logrotate
+  - rsyslog
   - {{ wm }}
 
 tightvncserver_depends:
@@ -192,3 +193,6 @@ vnc_change_permission_home_fluxbox:
       - pkg: fluxbox
       - file: vnc_change_permission_home_fluxbox
 {%- endif %}
+
+{% from 'rsyslog/upstart.sls' import manage_upstart_log with context %}
+{{ manage_upstart_log('tightvncserver') }}

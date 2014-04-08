@@ -170,7 +170,5 @@ extend:
     service:
       - watch:
         - file: /etc/nginx/conf.d/elasticsearch.conf
-        - cmd: /etc/ssl/{{ pillar['elasticsearch']['ssl'] }}/chained_ca.crt
-        - module: /etc/ssl/{{ pillar['elasticsearch']['ssl'] }}/server.pem
-        - file: /etc/ssl/{{ pillar['elasticsearch']['ssl'] }}/ca.crt
+        - cmd: ssl_cert_and_key_for_{{ pillar['elasticsearch']['ssl'] }}
 {% endif %}

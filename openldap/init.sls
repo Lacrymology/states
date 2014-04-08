@@ -50,11 +50,14 @@ slapd:
     - order: 50
     - watch:
       - pkg: slapd
+{% if ssl %}
+      - cmd: ssl_cert_and_key_for_{{ ssl }}
+{% endif %}
   file:
     - managed
     - name: /etc/ldap/ldap.conf
     - source: salt://openldap/config.jinja2
-    - mode: 400
+    - mode: 444
     - template: jinja
 
 {% if ssl %}
@@ -96,9 +99,7 @@ slapd_config_dbs:
 {% if ssl %}
 {# Cert/key must be created use GNUTLS
 openssl is not compatible with ubuntu ldap #}
-      - cmd: /etc/ssl/{{ ssl }}/chained_ca.crt
-      - module: /etc/ssl/{{ ssl }}/server.pem
-      - file: /etc/ssl/{{ ssl }}/ca.crt
+      - cmd: ssl_cert_and_key_for_{{ ssl }}
       - user: openldap
 
 restart_after_ssl:

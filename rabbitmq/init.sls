@@ -247,9 +247,7 @@ extend:
       - watch:
         - file: /etc/nginx/conf.d/rabbitmq.conf
 {% if salt['pillar.get']('rabbitmq:ssl', False) %}
-        - cmd: /etc/ssl/{{ pillar['rabbitmq']['ssl'] }}/chained_ca.crt
-        - module: /etc/ssl/{{ pillar['rabbitmq']['ssl'] }}/server.pem
-        - file: /etc/ssl/{{ pillar['rabbitmq']['ssl'] }}/ca.crt
+        - cmd: ssl_cert_and_key_for_{{ pillar['rabbitmq']['ssl'] }}
 {% endif %}
 
 

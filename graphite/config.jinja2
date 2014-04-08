@@ -33,15 +33,15 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
  If your graphs appear to be offset by a couple hours then this probably
  needs to be explicitly set to your local timezone.
 #}
-TIME_ZONE = 'UTC'
+TIME_ZONE = '{{ salt['pillar.get']('timezone', 'UTC') }}'
 
 {#- Override this to provide documentation specific to your Graphite deployment #}
 DOCUMENTATION_URL = "http://graphite.readthedocs.org/"
 
 {#- Logging #}
-LOG_RENDERING_PERFORMANCE = {{ pillar['graphite']['web']['debug']|default(False) }}
-LOG_CACHE_PERFORMANCE = {{ pillar['graphite']['web']['debug']|default(False) }}
-LOG_METRIC_ACCESS = {{ pillar['graphite']['web']['debug']|default(False) }}
+LOG_RENDERING_PERFORMANCE = {{ salt['pillar.get']('graphite:web:debug', False) }}
+LOG_CACHE_PERFORMANCE = {{ salt['pillar.get']('graphite:web:debug', False) }}
+LOG_METRIC_ACCESS = {{ salt['pillar.get']('graphite:web:debug', False) }}
 
 {#- Enable full debug page display on exceptions (Internal Server Error pages)
 #DEBUG = True
@@ -236,7 +236,7 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': False
         },
-{% if not pillar['graphite']['web']['debug']|default(False) %}
+{% if not salt['pillar.get']('graphite:web:debug', False) %}
 {% for logger in ('cache', 'rendering', 'metric_access') %}
         '{{ logger }}': {
             'handlers': ['sentry', 'syslog'{% if 'graylog2_address' in pillar %}, 'gelf'{% endif %}],

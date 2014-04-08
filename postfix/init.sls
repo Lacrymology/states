@@ -95,16 +95,17 @@ postfix:
     - file_mode: 400
     - require:
       - pkg: postfix
+      - file: /etc/postfix
   service:
     - running
     - order: 50
     - watch:
       - pkg: postfix
       - file: /etc/postfix/master.cf
+      - file: /etc/postfix
       - file: postfix
 {% if ssl %}
-      - file: /etc/ssl/{{ ssl }}/server.key
-      - file: /etc/ssl/{{ ssl }}/server.crt
+      - cmd: ssl_cert_and_key_for_{{ ssl }}
 {% endif %}
 
 /etc/postfix:
@@ -112,7 +113,7 @@ postfix:
     - directory
     - user: postfix
     - group: postfix
-    - mode: 550
+    - dir_mode: 750
     - recurse:
       - user
       - group
@@ -126,6 +127,6 @@ postfix:
     - template: jinja
     - user: postfix
     - group: postfix
-    - file_mode: 400
+    - mode: 400
     - require:
-      - pkg: postfix
+      - file: /etc/postfix

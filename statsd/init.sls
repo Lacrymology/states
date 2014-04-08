@@ -75,6 +75,9 @@ statsd:
       - pkg: python-dev
       - file: statsd_requirements
 
+{% from 'rsyslog/upstart.sls' import manage_upstart_log with context %}
+{{ manage_upstart_log('statsd') }}
+
 statsd_requirements:
   file:
     - managed

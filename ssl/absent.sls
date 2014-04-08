@@ -31,6 +31,26 @@ Undo SSL state.
 /etc/ssl/{{ name }}:
   file:
     - absent
+
+/etc/ssl/private/{{ name }}.key:
+  file:
+    - absent
+
+/etc/ssl/certs/{{ name }}.crt:
+  file:
+    - absent
+
+/etc/ssl/certs/{{ name }}_ca.crt:
+  file:
+    - absent
+
+/etc/ssl/private/{{ name }}.pem:
+  file:
+    - absent
+
+/etc/ssl/{{ name }}:
+  file:
+    - absent
 {% endfor %}
 
 ssl-cert:

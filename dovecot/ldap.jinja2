@@ -63,7 +63,7 @@ uris = {{ salt['pillar.get']('ldap:host', 'ldap://127.0.0.1') }}
 {%- set ldap_ssl = salt['pillar.get']('ldap:ssl', False) -%}
 {%- if ldap_ssl %}
 tls = yes
-tls_ca_cert_file = /etc/ssl/{{ ldap_ssl }}/ca.crt
+tls_ca_cert_file = /etc/ssl/certs/{{ ldap_ssl }}_ca.crt
 {%- else %}
 tls = no
 {%- endif -%}

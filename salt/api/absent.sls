@@ -95,3 +95,7 @@ salt-api-requirements:
 {{ opts['cachedir'] }}/salt-api-requirements.txt:
   file:
     - absent
+
+/etc/rsyslog.d/salt-api-upstart.conf:
+  file:
+    - absent

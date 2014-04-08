@@ -122,7 +122,5 @@ extend:
       - watch:
         - file: /etc/nginx/conf.d/salt_mirror_ppa.conf
 {% if salt['pillar.get']('salt_ppa_mirror:ssl', False) %}
-        - cmd: /etc/ssl/{{ pillar['salt_ppa_mirror']['ssl'] }}/chained_ca.crt
-        - module: /etc/ssl/{{ pillar['salt_ppa_mirror']['ssl'] }}/server.pem
-        - file: /etc/ssl/{{ pillar['salt_ppa_mirror']['ssl'] }}/ca.crt
+        - cmd: ssl_cert_and_key_for_{{ pillar['salt_ppa_mirror']['ssl'] }}
 {% endif %}

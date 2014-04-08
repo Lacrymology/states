@@ -29,6 +29,7 @@ Install and run one or multiple OpenVPN servers.
 -#}
 include:
   - apt
+  - rsyslog
 
 openvpn:
   pkg:
@@ -47,6 +48,9 @@ openvpn:
     - require:
       - pkg: openvpn
 
+{% from 'rsyslog/upstart.sls' import manage_upstart_log with context %}
+{{ manage_upstart_log('openvpn') }}
+
 {%- for type in ('lib', 'log') %}
 /var/{{ type }}/openvpn:
   file:
@@ -54,9 +58,8 @@ openvpn:
     - user: root
     - group: root
     - mode: 770
-{%- endfor -%}
-
-{%- macro service_openvpn(tunnels) -%}
+{%- endfor %}
+{%- macro service_openvpn(tunnels) %}
     {%- for tunnel in tunnels %}
 openvpn-{{ tunnel }}:
   file:

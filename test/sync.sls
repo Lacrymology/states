@@ -28,11 +28,11 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 Copy files archive if necessary.
 -#}
 
-include:
-  - rsync
-
 {%- set archive_dir = salt['user.info']('root')['home'] + '/salt/archive' %}
 salt_archive:
+  pkg:
+    - installed
+    - name: rsync
   file:
     - directory
     - name: {{ archive_dir }}
@@ -44,5 +44,5 @@ salt_archive:
     - run
     - name: rsync -av --delete {{ pillar['salt_archive']['source'] }} {{ archive_dir }}/
     - require:
-      - pkg: rsync
+      - pkg: salt_archive
       - file: salt_archive

@@ -32,6 +32,7 @@ include:
   - diamond
   - nginx.diamond
   - postgresql.server.diamond
+  - rsyslog.diamond
   - uwsgi.diamond
 
 openerp_diamond_resources:

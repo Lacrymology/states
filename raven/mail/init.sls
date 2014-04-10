@@ -41,9 +41,10 @@ include:
       - module: raven
       - service: rsyslog
 
-/usr/sbin/sendmail:
-  file:
-    - symlink
-    - target: /usr/bin/mail
+sendmail_symlink:
+  cmd:
+    - run
+    - name: ln -s /usr/bin/mail /usr/sbin/sendmail
+    - unless: test -e /usr/sbin/sendmail
     - require:
       - file: /usr/bin/mail

@@ -24,7 +24,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
-#}
+-#}
 #!/bin/bash
 # {{ pillar['message_do_not_modify'] }}
 set -e
@@ -36,7 +36,7 @@ ionice -c idle -p $$
 role=$1
 query="SELECT pg_database.datname FROM pg_database, pg_authid
        WHERE pg_database.datdba=pg_authid.oid AND pg_authid.rolname='${role}'";
-databases=$(sudo -u postgres psql --tuples-only --no-align -c "${query}")
+databases=$(sudo -i -u postgres psql --tuples-only --no-align -c "${query}")
 for db in ${databases}; do
   /usr/local/bin/backup-postgresql ${db}
 done

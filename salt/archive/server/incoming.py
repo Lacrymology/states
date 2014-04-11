@@ -96,7 +96,7 @@ def move_incoming(directory, category, incoming_sub_directory='incoming',
 
         files[:] = [f for f in files if f not in to_remove]
 
-        if not (dirs or files):
+        if (path != source_directory) and not (dirs or files):
             os.rmdir(path)
 
 def main():

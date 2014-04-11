@@ -123,6 +123,7 @@ def ec2_info():
         LOG.info("Could not read EC2 data: %s" % (serr))
         return empty
 
+
 def boot_datetime(proc_filename='/proc/uptime'):
     """
     When this host booted

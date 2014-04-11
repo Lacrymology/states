@@ -24,10 +24,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
+            Quan Tong Anh <tonganhquan.net@gmail.com>
 -#}
 include:
   - raven
   - rsyslog
+  - cron
 
 /usr/bin/mail:
   file:
@@ -41,9 +43,24 @@ include:
       - module: raven
       - service: rsyslog
 
-/usr/sbin/sendmail:
+/usr/bin/ravenmail:
   file:
     - symlink
     - target: /usr/bin/mail
     - require:
       - file: /usr/bin/mail
+
+cron_sendmail_patch:
+  cmd:
+    - wait
+    - name: perl -pi -e "s|/usr/sbin/sendmail|/usr/bin/ravenmail|" /usr/sbin/cron
+    - require:
+      - file: /usr/bin/ravenmail
+    - watch:
+      - pkg: cron
+
+extend:
+  cron:
+    service:
+      - watch:
+        - cmd: cron_sendmail_patch

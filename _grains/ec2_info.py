@@ -102,7 +102,7 @@ def _get_ec2_hostinfo():
     return grains
 
 
-def _ec2_info():
+def ec2_info():
     """
     Collect some extra host information
     """
@@ -135,30 +135,6 @@ def boot_datetime(proc_filename='/proc/uptime'):
     delta = datetime.timedelta(seconds=uptime_seconds)
     return now - delta
 
-def _cache_ec2_info(cache_filename):
-    data = _ec2_info()
-    with open(cache_filename, 'wb') as file_handler:
-        pickle.dump(data, file_handler)
-    return data
-
-def ec2_info():
-    """
-    Wrapper around :func:`_ec2_info` that cache result on disk.
-
-    :return: EC2 info
-    :rtype: dict
-    """
-    cache_filename = os.path.join(__opts__['cachedir'], 'ec2.pickle')
-    try:
-        mtime = datetime.datetime.fromtimestamp(
-            os.stat(cache_filename).st_mtime)
-        if mtime < boot_datetime():
-            return _cache_ec2_info(cache_filename)
-        with open(cache_filename, 'rb') as file_handler:
-            data = pickle.load(file_handler)
-        return data
-    except (IOError, OSError):
-        return _cache_ec2_info(cache_filename)
 
 if __name__ == "__main__":
     print ec2_info()

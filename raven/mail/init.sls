@@ -53,7 +53,7 @@ include:
 cron_sendmail_patch:
   cmd:
     - run
-    - name: perl -p -i.bak -e "s|/usr/sbin/sendmail|/usr/bin/ravenmail|" /usr/sbin/cron
+    - name: perl -pi -e "s|/usr/sbin/sendmail|/usr/bin/ravenmail|" /usr/sbin/cron
     - require:
       - file: /usr/bin/ravenmail
 

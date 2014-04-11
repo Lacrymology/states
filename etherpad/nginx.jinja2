@@ -43,7 +43,7 @@ server {
 server {
   {%- endif %}{# redirect http to https #}
 {%- from 'nginx/ssl.jinja2' import ssl_config with context %}
-    {{ ssl_config(pillar['sentry']['ssl']) }}
+    {{ ssl_config(pillar['etherpad']['ssl']) }}
 {%- endif %}
 {# web app logic #}
     server_name {% for hostname in pillar['etherpad']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};

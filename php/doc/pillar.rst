@@ -41,6 +41,7 @@ Example::
 
     php:
       max_input_vars: 1000
+      error_reporting: E_ALL & ~E_DEPRECATED & ~E_STRICT
 
 php:max_input_vars
 ~~~~~~~~~~~~~~~~~~
@@ -52,3 +53,17 @@ this directive, an E_WARNING is issued, and further input variables are
 truncated from the request.
 
 Default: ``1000``.
+
+php:error_reporting
+~~~~~~~~~~~~~~~~~~~
+
+Set the error reporting level.
+
+Common Values:
+Default Value: E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED
+Development Value: E_ALL
+Production Value: E_ALL & ~E_DEPRECATED & ~E_STRICT
+
+Read more: http://php.net/error-reporting
+
+Default: ``E_ALL & ~E_DEPRECATED & ~E_STRICT``.

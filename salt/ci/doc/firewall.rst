@@ -37,5 +37,5 @@ salt.ci
 
 That's included that will be installed jenkins.
 
-So the web interface is reachable through Nginx on port 80.
-LINK TO FIREWALL DOC NGINX.
+So the web interface is reachable through Nginx on port 80 and 443 if ssl is on.
+Link to ``nginx/doc/firewall.rst``.

@@ -37,5 +37,5 @@ rsyslog
 
 Rsyslog run on the following port:
 
-- UDP 514: RSYSLOGD
+- UDP 514: rsyslogd
 

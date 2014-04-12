@@ -35,8 +35,8 @@ services work:
 nginx
 -----
 
-All web apps in this set of states do have their interface is reachable trough
+All web apps in this set of states do have their interface is reachable through
 Nginx on port 80.
-If ``ssl`` is defined in app pillar, the port 443 is also reachable. If SSL is
-turned on, any connection to HTTP port 80 are automatically redirected to HTTPS
-port 443.
+If ``ssl`` is defined in app pillar, the port 443 is also reachable. 
+If ``ssl_redirect`` pillar is set to `True` then any connection to HTTP port 80 
+are automatically redirected to HTTPS port 443.

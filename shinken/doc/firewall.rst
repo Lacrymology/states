@@ -35,7 +35,7 @@ services work:
 shinken
 -------
 
-Monitoring server, see each for the details on each Shinken daemons:
+Shinken monitoring server includes some Shinken daemons the following:
 
 # shinken.arbiter
 # shinken.broker

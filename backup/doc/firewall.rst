@@ -36,4 +36,4 @@ backup.server
 -------------
 
 It use SSH as the transport mechanism.
-LINK TO FIREWALL DOC SSH.SERVER.
+Link to ``ssh/server/doc/firewall.rst``.

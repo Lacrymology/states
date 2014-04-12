@@ -35,5 +35,5 @@ services work:
 graphite
 --------
 
-The web interface is reachable through Nginx on port 80.
-LINK TO FIREWALL DOC NGINX.
+The web interface is reachable through Nginx on port 80 and 443 if ssl is on.
+Link to ``nginx/doc/firewall.rst``.

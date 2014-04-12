@@ -37,11 +37,13 @@ terracotta
 
 There is 3 ways to communicate to a terracotta server:
 
-One is listenning for connections from DSO clients.
+dso-port: Port listens for connections from DSO clients.
 
-One is listenning for connections from the Terracotta administration console.
+jmx-port: Port listens for connections from the Terracotta administration 
+console.
 
-And last one is listenning for communication from other servers participating in an networked-active-passive setup.
+l2-group-port: Port listens for communication from other servers participating 
+in an networked-active-passive setup.
 
 - TCP 9510: dso-port
 - TCP 9520: jmx-port

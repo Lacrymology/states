@@ -36,7 +36,7 @@ gitlab
 ------
 
 It use SSH as the transport mechanism.
-LINK TO FIREWALL DOC SSH.SERVER.
+Link to ``ssh/server/doc/firewall.rst``.
 
-The web interface is reachable through Nginx on port 80.
-LINK TO FIREWALL DOC NGINX.
+The web interface is reachable through Nginx on port 80 and 443 if ssl is on.
+Link to ``nginx/doc/firewall.rst``.

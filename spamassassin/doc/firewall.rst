@@ -37,4 +37,4 @@ spamassassin
 
 Optionally specifies the port number for the server to listen on (default: 783).
 
-- TCP 783: SPAMD default port
+- TCP 783: spamd

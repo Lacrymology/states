@@ -35,15 +35,15 @@ services work:
 openerp
 -------
 
-The web interface is reachable through Nginx on port 80.
-LINK TO FIREWALL DOC NGINX.
+The web interface is reachable through Nginx on port 80 and 443 if ssl is on.
+Link to ``nginx/doc/firewall.rst``.
 
 etherpad
 --------
 
 Etherpad will run and communicate via following port:
 
-- TCP 9001: NODE
+- TCP 9001: node
 
-The web interface is reachable through Nginx on port 80.
-LINK TO FIREWALL DOC NGINX.
+The web interface is reachable through Nginx on port 80 and 443 if ssl is on.
+Link to ``nginx/doc/firewall.rst``.

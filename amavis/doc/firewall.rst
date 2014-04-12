@@ -37,12 +37,12 @@ amavis
 
 Amavis run on the following port:
 
-- TCP 10024: AMAVISD
+- TCP 10024: amavisd
 
 amavis.clamav
 -------------
 
 Clamav run on the following port:
 
-- TCP 3310: CLAMD
+- TCP 3310: clamd
 

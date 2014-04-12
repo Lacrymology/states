@@ -35,10 +35,5 @@ services work:
 tomcat
 ------
 
-Tomcat will run and communicate directly via following port:
-
-- TCP 8080: HTTP 
-- TCP 8443: HTTPS
-
-But it can also act as a proxy in order to run web interface through Nginx.
-LINK TO FIREWALL DOC NGINX.
+The web interface is reachable through Nginx on port 80 and 443 if ssl is on.
+Link to ``nginx/doc/firewall.rst``.

@@ -40,4 +40,3 @@ to an other one. You need to check which port is defined in pillar, but here
 is the default:
 
 - TCP 22: SSH default port
-- TCP 22022: SSH additional port

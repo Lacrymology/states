@@ -37,5 +37,5 @@ statsd
 
 Statsd run on the following port:
 
-- UDP 8125: STATSD
+- UDP 8125: statsd
 

@@ -39,5 +39,5 @@ All NFS client need to be allowed to connect to the following port:
 
 - TCP 111: portmapper
 - UDP 111: portmapper
-- TCP 2049: NFSD
-- UDP 2024: NFSD
+- TCP 2049: nfsd
+- UDP 2049: nfsd

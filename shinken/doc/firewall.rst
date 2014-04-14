@@ -32,8 +32,8 @@ Firewall Settings
 The following ports need to be open for the following states to make some
 services work:
 
-shinken
--------
+shinken server
+--------------
 
 Shinken monitoring server includes some Shinken daemons the following:
 
@@ -53,3 +53,9 @@ ports:
 - TCP 7771: Shinken Poller
 - TCP 7772: Shinken Broker
 - TCP 7773: Shinken Receiver
+
+shinken web interface
+---------------------
+
+The web interface is reachable through Nginx on port 80 and 443 if ssl is on.
+Link to `nginx/doc/firewall.rst`_

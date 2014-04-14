@@ -36,4 +36,4 @@ git.server
 ----------
 
 It use SSH as the transport mechanism.
-Link to ``ssh/server/doc/firewall.rst``.
+Link to `ssh/server/doc/firewall.rst`_

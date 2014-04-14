@@ -65,6 +65,7 @@ Example::
     cheaper: 1
     timeout: 30
     idle: 300
+    max_upload_file_size: 1
 
 openerp:ssl
 ~~~~~~~~~~~
@@ -90,3 +91,12 @@ openerp:(workers|cheapers|idle|timeout)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 See uwsgi/doc/instance.rst for more details
+
+openerp:max_upload_file_size
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Sets the maximum allowed size of the client request body,
+specified in the "Content-Length" request header field.
+Unit is in megabytes.
+
+Default: ``1``.

@@ -612,8 +612,8 @@ gitlab_upstart:
   file:
     - managed
     - source: salt://gitlab/{{ file }}
-    - user: git
-    - group: git
+    - user: {{ user }}
+    - group: {{ user }}
     - mode: 440
     - require:
       - user: gitlab

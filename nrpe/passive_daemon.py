@@ -11,23 +11,23 @@ Run a single Passive Check and send result to NSCA server
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
 #
-# 1. Redistributions of source code must retain the above copyright notice, this
-#    list of conditions and the following disclaimer.
+# 1. Redistributions of source code must retain the above copyright notice,
+#    this list of conditions and the following disclaimer.
 # 2. Redistributions in binary form must reproduce the above copyright notice,
 #    this list of conditions and the following disclaimer in the documentation
 #    and/or other materials provided with the distribution.
 #
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
-# ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-# (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-# ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-import argparse
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+# BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+# WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+# OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
+# IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 __author__ = 'Hung Nguyen Viet'
 __maintainer__ = 'Hung Nguyen Viet'
@@ -42,45 +42,15 @@ import logging.handlers
 import subprocess
 import glob
 import shlex
-import pwd
-import grp
 
-import lockfile
 import send_nsca
 import send_nsca.nsca
-import yaml
 from apscheduler import scheduler
 
+import bfs
+
+
 logger = logging.getLogger(__name__)
-
-
-def unserialize_yaml(filename):
-    '''
-    Return all monitoring configuration from of ``filename``.
-
-    :param filename: the full path to a yaml-parseable file
-    :return: the deserialized yaml file.
-    '''
-    try:
-        with open(filename) as config_file:
-            try:
-                return yaml.safe_load(config_file)
-            except:
-                logger.critical("YAML data from failed to parse for '%s'",
-                                filename, exc_info=True)
-                config_file.seek(0)
-                logger.debug("failed YAML content of '%s' is '%s'", filename,
-                             config_file.read())
-    except:
-        logger.critical("Can't open and read '%s'", filename)
-    return {}
-
-
-def drop_privilege(username, groupname):
-    user = pwd.getpwnam(username)
-    group = grp.getgrnam(groupname)
-    os.setgid(group.gr_gid)
-    os.setuid(user.pw_uid)
 
 
 class NSCAServerMetrics(object):
@@ -115,28 +85,31 @@ class PassiveDaemon(object):
     runs them somewhat linearly
     """
 
-    def __init__(self, minion_id, nsca_servers, nsca_include_directory,
-                 nrpe_include_directory, default_interval, nsca_timeout):
+    def __init__(self, config, minion_id, nsca_servers, nsca_include_directory,
+                 nsca_timeout, default_interval, nrpe_include_directory):
+
+        self.config = config
+        self.minion_id = minion_id
+        self.nsca_servers = nsca_servers
         self.nsca_include_directory = nsca_include_directory
         self.default_interval = default_interval
         self.nrpe_include_directory = nrpe_include_directory
-        self.minion_id = minion_id
         self.nsca_timeout = nsca_timeout
+
         self.sched = scheduler.Scheduler(standalone=True)
-        self.nsca_servers = nsca_servers
         self.checks = self.collect_passive_checks()
         self.counters = {}
 
     def load_nsca_yaml_files(self):
         '''
         Search for .yml files within directory, and build a dictionary mapping
-        `check name -> check config`. Here `check_name` must be the same values as
-        in `list_checks`.
+        `check name -> check config`. Here `check_name` must be the same values
+        as in `list_checks`.
         '''
         checks = {}
         for filename in glob.glob(os.path.join(self.nsca_include_directory,
                                                '*.yml')):
-            checks.update(unserialize_yaml(filename))
+            checks.update(bfs.unserialize_yaml(filename))
         return checks
 
     def list_checks(self):
@@ -145,7 +118,7 @@ class PassiveDaemon(object):
         dictionary mapping `check name -> check command`.
 
         :return: A dictionary like `{ 'memcached_procs':
-                                        '/path/to/checker -some -params', ... }`
+                                      '/path/to/checker -some -params', ... }`
         '''
         output = {}
         nrpe_re = re.compile(r'^command\[(?P<check>[^\]]+)\]=(?P<command>.+)$')
@@ -192,7 +165,8 @@ class PassiveDaemon(object):
             # hardcode encryption method (equivalent of 1)
             sender.Crypter = send_nsca.nsca.XORCrypter
             counters = self.counters[address]
-            logger.debug("sending result to NSCA server %s", sender.remote_host)
+            logger.debug("sending result to NSCA server %s",
+                         sender.remote_host)
             try:
                 sender.send_service(self.minion_id, check_name, status, output)
                 if not counters.failure:
@@ -284,49 +258,46 @@ class PassiveDaemon(object):
 
 
 def main():
-    # initialize basic logging strategy until logging.dictconfig run
-    logging.basicConfig(stream=sys.stdout, level=logging.ERROR,
-                        format="%(message)s")
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-c', '--config', default='/etc/nagios/nsca.yaml')
+    parser = bfs.common_argparser(default_config_path='/etc/nagios/nsca.yaml')
     args = parser.parse_args()
-    config = unserialize_yaml(args.config)
-    if not config:
-        logger.error("Can't get configuration, abort.")
+
+    try:
+        config = bfs.Util(args.config, debug=args.log)
+
+        minion_config = config['file']['salt_minion']
+        try:
+            minion_id = bfs.unserialize_yaml(minion_config)['id']
+        except KeyError:
+            logger.error("Can't get minion id from '%s'", minion_config)
+            sys.exit(1)
+
+        try:
+            nsca_servers = config['nsca']['servers']
+            nsca_include_directory = config['file']['monitor_config']
+            default_interval = config['nsca']['default_interval']
+            nrpe_include_directory = config['file']['nrpe_config']
+            nsca_timeout = config['nsca']['timeout']
+        except KeyError, err:
+            logger.error('Bad config %r', err)
+            sys.exit(1)
+
+    except Exception as err:
+        logger.error("PassiveDaemon is not configured properly: %r", err,
+                     exc_info=True)
+        sys.exit(1)
     else:
-        logging.config.dictConfig(config['logging'])
-        lock = lockfile.LockFile(config['file']['lock'])
-        if lock.is_locked():
-            logger.warning('Other instance of this daemon is already running.')
-        else:
-            minion_config = config['file']['salt_minion']
-            try:
-                minion_id = unserialize_yaml(minion_config)['id']
-            except KeyError:
-                logger.error("Can't get minion id from '%s'", minion_config)
-            else:
-                nsca_servers = config['nsca']['servers']
-                if not nsca_servers:
-                    logger.error("Unconfigured NSCA servers!")
-                else:
-                    try:
-                        drop_privilege(config['daemon']['user'],
-                                       config['daemon']['group'])
-                    except KeyError, err:
-                        logger.error("invalid user and/or group '%s", err)
-                    else:
-                        try:
-                            PassiveDaemon(
-                                minion_id,
-                                nsca_servers,
-                                config['file']['monitor_config'],
-                                config['file']['nrpe_config'],
-                                config['nsca']['default_interval'],
-                                config['nsca']['timeout']
-                            ).main()
-                        except Exception, err:
-                            logger.error("Can't run PassiveDaemon: %s", err,
-                                         exc_info=True)
+        try:
+            PassiveDaemon(config,
+                          minion_id,
+                          nsca_servers,
+                          nsca_include_directory,
+                          nsca_timeout,
+                          default_interval,
+                          nrpe_include_directory).main()
+        except Exception as err:
+            logger.error("Encountered error when running PassiveDaemon: %r",
+                         err, exc_info=True)
+
 
 if __name__ == '__main__':
     main()

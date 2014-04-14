@@ -28,3 +28,4 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 include:
   - raven.nrpe
   - rsyslog.nrpe
+  - cron.nrpe

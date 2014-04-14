@@ -27,3 +27,4 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 include:
   - rsyslog.diamond
+  - cron.diamond

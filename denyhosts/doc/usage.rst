@@ -30,4 +30,24 @@ Usage
 =====
 
 HERE DOCUMENT HOW TO REMOVE FROM BLACKLIST AN HOSTNAME
-SHOULD WE HAVE A SCRIPT FOR THIS?
+
+- Stop DenyHosts by run ``service denyhosts stop``
+
+- Remove the IP address from /etc/hosts.deny
+
+- Edit /var/lib/denyhosts/hosts and remove the lines containing the IP address. 
+  Save the file.
+
+- Edit /var/lib/denyhosts/hosts-restricted and remove the lines containing the IP 
+  address. Save the file.
+
+- Edit /var/lib/denyhosts/hosts-root and remove the lines containing the IP address. 
+  Save the file.
+
+- Edit /var/lib/denyhosts/hosts-valid and remove the lines containing the IP address. 
+  Save the file.
+
+- Edit /var/lib/denyhosts/user-hosts and remove the lines containing the IP address. 
+  Save the file.
+
+- Start DenyHosts by run ``service denyhosts start`` 

@@ -281,7 +281,7 @@ gitlab:
       - user: gitlab
       - file: {{ web_dir }}/config/gitlab.yml
       - file: {{ web_dir }}/config/database.yml
- {%- if salt['pillar.get']('gitlab:smtp:enabled', False) %}
+{%- if salt['pillar.get']('gitlab:smtp:enabled', False) %}
       - file: {{ web_dir }}/config/environments/production.rb
       - file: {{ web_dir }}/config/initializers/smtp_settings.rb
 {%- endif %}

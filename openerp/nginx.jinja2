@@ -32,6 +32,7 @@ upstream openerp {
 server {
     listen 80;
 
+    client_max_body_size {{ salt['pillar.get']('openerp:max_upload_file_size', 1) }}m;
     {%- if salt['pillar.get']('openerp:ssl', False) %}
     {%- if salt['pillar.get']('openerp:ssl_redirect', False) %}
     {# if https, redirect http port 80 to https port 443 #}

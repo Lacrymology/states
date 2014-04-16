@@ -32,9 +32,9 @@ pip==1.5.2
 psutil==2.0.0
 six==1.5.2
 {%- if 'files_archive' in pillar %}
-{{ pillar['files_archive'] }}/pip/diamond-42d1e961.zip
+{{ pillar['files_archive'] }}/pip/diamond-v3.4.2.tar.gz
 {%- else %}
--e git+https://github.com/BrightcoveOS/Diamond.git@42d1e961a2d5508396b921a48540e9cf664784f4#egg=diamond
+https://github.com/hvnsweeting/Diamond/archive/v3.4.2.tar.gz
 {%- endif %}
 {%- if 'graylog2_address' in pillar %}
 graypy==0.2.9

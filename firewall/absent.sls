@@ -31,24 +31,17 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
   file:
     - absent
 
-iptables_flush_all_chains:
+iptables_reset_to_defaults:
   cmd:
-    - run
-    - name: iptables --flush
-
-iptables_delete_all_user_defined_chains:
-  cmd:
-    - run
-    - name: iptables --delete-chain
-    - require:
-      - cmd: iptables_flush_all_chains
+    - script
+    - source: salt://firewall/reset.sh
 
 iptables:
   file:
     - absent
     - name: /etc/iptables/rules.v4
     - require:
-      - cmd: iptables_delete_all_user_defined_chains
+      - cmd: iptables_reset_to_defaults
   pkg:
     - purged
     - pkgs:
@@ -56,7 +49,7 @@ iptables:
       - iptstate
       - iptables-persistent
     - require:
-      - cmd: iptables_delete_all_user_defined_chains
+      - cmd: iptables_reset_to_defaults
 
 nf_conntrack_ftp:
    kmod:

@@ -31,16 +31,26 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
   file:
     - absent
 
+iptables_reset_to_defaults:
+  cmd:
+    - script
+    - source: salt://firewall/reset.sh
+    - onlyif: iptables --version
+
 iptables:
   file:
     - absent
     - name: /etc/iptables/rules.v4
+    - require:
+      - cmd: iptables_reset_to_defaults
   pkg:
     - purged
     - pkgs:
       - iptables
       - iptstate
       - iptables-persistent
+    - require:
+      - cmd: iptables_reset_to_defaults
 
 nf_conntrack_ftp:
    kmod:

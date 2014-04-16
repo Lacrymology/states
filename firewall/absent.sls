@@ -35,6 +35,7 @@ iptables_reset_to_defaults:
   cmd:
     - script
     - source: salt://firewall/reset.sh
+    - onlyif: iptables --version
 
 iptables:
   file:

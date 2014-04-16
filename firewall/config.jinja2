@@ -47,6 +47,7 @@ COMMIT
 :INPUT {% if grains['virtual'] == 'openvzve' %}ACCEPT{% else %}DROP{% endif %} [0:0]
 :FORWARD {% if grains['virtual'] == 'openvzve' %}ACCEPT{% else %}DROP{% endif %} [0:0]
 -A INPUT -i lo -j ACCEPT
+-A INPUT -p icmp -j ACCEPT
 -A INPUT -i {% if grains['virtual'] == 'openvzve' %}venet0{% else %}eth0{% endif %} -m state --state RELATED,ESTABLISHED -j ACCEPT
 {%- for host in pillar['ip_addresses'] %}
 -A INPUT -i {% if grains['virtual'] == 'openvzve' %}venet0{% else %}eth0{% endif %} -s {{ host }}/32 -j ACCEPT

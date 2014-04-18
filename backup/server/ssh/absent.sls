@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Luan Vo Ngoc
+Copyright (c) 2014, Luan Vo Ngoc
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Luan Vo Ngoc <ngocluanvo@gmail.com>
 Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
 
-Remove cleanup old archive.
+Remove cron script use to cleanup old archive file.
 -#}
 cleanup-old-archive:
   file:

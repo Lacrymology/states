@@ -27,6 +27,9 @@
 # Author: Luan Vo Ngoc <ngocluanvo@gmail.com>
 # Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
 #
+# -e is optional argument, if it is passed as the first argument,
+# tar command will ignore warning message when it compress a file which
+# is changing. Other arguments can be passed normally after it.
 # First argument is name of software component
 # Second is the working directory where tar will run
 # All other arguments are files tar will archive
@@ -38,6 +41,11 @@ ulimit -e 19
 ionice -c idle -p $$
 XZ_DEFAULTS=--memlimit={{ salt['pillar.get']('backup:xz_memlimit', 64) }}MiB
 
+if [ $1 = '-e' ]; then
+    shift
+    logfile=$(tempfile)
+fi
+
 software=$1
 shift
 working_directory=$1
@@ -45,5 +53,32 @@ shift
 
 NOW=`/bin/date "+%Y-%m-%d-%H_%M_%S"`
 OUTPUT="/tmp/$software-$NOW.tar.xz"
-tar --xz -cf $OUTPUT -C $working_directory $*
+
+if [ -z "$logfile" ]; then
+    tar --xz -cf $OUTPUT -C $working_directory $*
+else
+    set +e
+    tar --xz -cf $OUTPUT -C $working_directory $* 2>$logfile
+    set -e
+    # workaround tar warning when compress a file which changed in compress process
+    errlog=$(cat ${logfile})
+    rm $logfile
+
+    set +e
+    if [ -z "$errlog" ]; then
+        exit 0
+    else
+        echo "$errlog" | grep -qv "file changed as we read it"
+
+        if [ $? -eq 0 ]; then
+            # found another error log than "file changed as we read it" error
+            echo "$errlog"
+            exit 1
+        else
+            # no error log or only "file changed as we read it" error
+            exit 0
+        fi
+    fi
+fi
+
 /usr/local/bin/backup-store $OUTPUT

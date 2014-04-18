@@ -58,10 +58,12 @@ handlers_config_path = /etc/diamond/handlers/
 [handlers]
 
 # logging handlers
-{%- if 'graylog2_address' in pillar %}
-keys = gelf,syslog
-{% else %}
 keys = syslog
+{%- if pillar.get('graylog2_address', False) -%}
+,gelf
+{%- endif -%}
+{%- if pillar.get('sentry_dsn', False) -%}
+,raven
 {%- endif %}
 
 [[default]]
@@ -183,16 +185,28 @@ keys = message_only,syslog
 [logger_root]
 # to increase verbosity, set DEBUG
 level = INFO
-{%- if 'graylog2_address' in pillar %}
-handlers = gelf,syslog
+handlers = syslog
+{%- if pillar.get('graylog2_address', False) -%}
+,gelf
+{%- endif -%}
+{%- if pillar.get('sentry_dsn', False) -%}
+,raven
+{%- endif %}
 
+{%- if pillar.get('graylog2_address', False) %}
 [handler_gelf]
 class = graypy.handler.GELFHandler
 level = DEBUG
 formatter = message_only
 args = ('{{ pillar['graylog2_address'] }}', 12201)
-{% else %}
-handlers = syslog
+{%- endif %}
+
+{%- if pillar.get('sentry_dsn', False) %}
+[handler_raven]
+level = ERROR
+class = raven.handlers.logging.SentryHandler
+formatter = message_only
+args = ('{{ pillar['sentry_dsn'] }}',)
 {%- endif %}
 
 [handler_syslog]

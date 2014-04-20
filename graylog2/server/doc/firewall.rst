@@ -41,9 +41,3 @@ to access the server with the following ports:
 - TCP 12201: GELF over TCP
 - UDP 12201: GELF over UDP
 - UDP 1514: receive syslog messages
-
-graylog2.web
-------------
-
-The web interface is reachable through Nginx on port 80 and 443 if ssl is on.
-Link to `nginx/doc/firewall.rst`_

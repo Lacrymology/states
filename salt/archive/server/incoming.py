@@ -3,16 +3,16 @@
 
 # Copyright (c) 2013, Bruno Clermont
 # All rights reserved.
-# 
+#
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
-# 
+#
 # 1. Redistributions of source code must retain the above copyright notice, this
 #    list of conditions and the following disclaimer.
 # 2. Redistributions in binary form must reproduce the above copyright notice,
 #    this list of conditions and the following disclaimer in the documentation
 #    and/or other materials provided with the distribution.
-# 
+#
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 # ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -49,7 +49,7 @@ def move_incoming(directory, category, incoming_sub_directory='incoming',
     :param incoming_sub_directory: incoming root sub-directory
     :param destination_sub_directory: outgoing root sub-directory
     """
-    source_directory = os.path.join(directory, incoming_sub_directory, category)
+    source_directory = os.path.join(directory, incoming_sub_directory, category) + os.sep
     destination_directory = os.path.join(directory, destination_sub_directory,
                                          category)
 

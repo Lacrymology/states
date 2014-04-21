@@ -41,6 +41,8 @@ doc/build.py
 
 if [ "$1" == "--profile" ]; then
     profile=$2
+    shift
+    shift
 else
     profile='ci-minion'
 fi

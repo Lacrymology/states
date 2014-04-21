@@ -30,4 +30,8 @@ Remove cron script use to cleanup old archive file.
 cleanup-old-archive:
   file:
     - absent
-    - name: /etc/cron.daily/cleanup-old-archive
+    - name: /etc/cron.daily/backup-server-ssh
+
+/etc/cron.daily/cleanup-old-archive:
+  file:
+    - absent

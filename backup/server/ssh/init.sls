@@ -33,7 +33,7 @@ include:
 cleanup-old-archive:
   file:
     - managed
-    - name: /etc/cron.daily/cleanup-old-archive
+    - name: /etc/cron.daily/backup-server-ssh
     - user: root
     - group: root
     - mode: 500

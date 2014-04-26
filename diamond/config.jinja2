@@ -114,7 +114,7 @@ enabled = True
 [[DiskSpaceCollector]]
 
 enabled = True
-filesystems = ext2,ext3,ext4,xfs,glusterfs,nfs,ntfs,hfs,fat32,fat16,rootfs,jfs
+filesystems = ext2,ext3,ext4,xfs,glusterfs,nfs,ntfs,hfs,fat32,fat16,rootfs,jfs,simfs
 
 {% if grains['virtual'] != 'openvzve' %}
 [[DiskUsageCollector]]

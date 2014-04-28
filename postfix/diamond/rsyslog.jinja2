@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Hung Nguyen Viet
+Copyright (c) 2014, Hung Nguyen Viet
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -25,37 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
-Turn off Diamond statistics for postfix.
+Rsyslog config file for outputing mail info log to a log file
+which is used to get postfix stats
 -#}
-postfix_diamond_collector:
-  file:
-    - absent
-    - name: /etc/diamond/collectors/PostfixCollector.conf
-
-/etc/rsyslog.d/postfix_stats.conf:
-  file:
-    - absent
-
-/usr/local/diamond/bin/postfix_rsyslog.py:
-  file:
-    - absent
-
-postfix_stats:
-  service:
-    - dead
-  file:
-    - absent
-    - name: /usr/local/diamond/salt-postfix-requirements.txt
-
-/etc/init/postfix_stats:
-  file:
-    - absent
-
-/etc/rsyslog.d/postfix_stats:
-  file:
-    - absent
-
-{#- TODO: remove that statement in >= 2014-04 #}
-/usr/local/diamond/postfix-requirements.txt:
-  file:
-    - absent
+mail.* -/var/log/mail.log

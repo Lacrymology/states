@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Hung Nguyen Viet
+Copyright (c) 2014, Hung Nguyen Viet
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -24,38 +24,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
-
-Turn off Diamond statistics for postfix.
 -#}
-postfix_diamond_collector:
-  file:
-    - absent
-    - name: /etc/diamond/collectors/PostfixCollector.conf
+# {{ pillar['message_do_not_modify'] }}
+# startup script for postfix_stats daemon
+respawn
+respawn limit 10 5
+start on filesystem or runlevel [2345]
+stop on runlevel [!2345]
 
-/etc/rsyslog.d/postfix_stats.conf:
-  file:
-    - absent
-
-/usr/local/diamond/bin/postfix_rsyslog.py:
-  file:
-    - absent
-
-postfix_stats:
-  service:
-    - dead
-  file:
-    - absent
-    - name: /usr/local/diamond/salt-postfix-requirements.txt
-
-/etc/init/postfix_stats:
-  file:
-    - absent
-
-/etc/rsyslog.d/postfix_stats:
-  file:
-    - absent
-
-{#- TODO: remove that statement in >= 2014-04 #}
-/usr/local/diamond/postfix-requirements.txt:
-  file:
-    - absent
+exec tail -qF /var/log/mail.log | /usr/local/diamond/bin/postfix_stats.py -d

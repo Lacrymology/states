@@ -61,3 +61,6 @@ PyXML==0.8.4
 argparse==1.2.1
 six==1.4.1
 wsgiref==0.1.2
+{%- if salt['pillar.get']('openerp:sentry_dsn', False) %}
+raven==4.1.1
+{%- endif -%}

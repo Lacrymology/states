@@ -44,6 +44,10 @@ openerp:
     - require:
       - file: /etc/nginx/conf.d/openerp.conf
 
+/usr/local/openerp/config.yaml:
+  file:
+    - absent
+
 /etc/nginx/conf.d/openerp.conf:
   file:
     - absent
@@ -51,3 +55,11 @@ openerp:
 /etc/rsyslog.d/openerp-upstart.conf:
   file:
     - absent
+
+openerp-cron:
+  service:
+    - dead
+  file:
+    - absent
+    - require:
+      - service: openerp-cron

@@ -178,14 +178,46 @@ openerp:
     - user: openerp
     - group: openerp
     - mode: 440
-    - template: jinja
-    - source: salt://openerp/wsgi.jinja2
+    - source: salt://openerp/wsgi.py
+    - require:
+      - file: openerp
+      - file: {{ home }}/config.yaml
+
+{{ home }}/config.yaml:
+  file:
+    - managed
+    - user: openerp
+    - group: openerp
+    - mode: 440
     - require:
       - file: openerp
     - context:
       password: {{ password }}
       username: {{ username }}
-      web_root_dir: {{ web_root_dir }}
+
+openerp-cron:
+  file:
+    - name: /etc/init/openerp.conf
+{%- if salt['pillar.get']('openerp:company_db', False) %}
+    - managed
+    - source: salt://openerp/cron.py
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 400
+{%- else %}
+    - absent
+{%- endif %}
+  service:
+{%- if salt['pillar.get']('openerp:company_db', False) %}
+    - running
+    - require:
+      - file: {{ home }}/config.yaml
+{%- else %}
+    - dead
+    - require_in:
+{%- endif %}
+      - file: openerp-cron
 
 add_web_user_to_openerp_group:
   user:

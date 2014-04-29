@@ -1,0 +1,20 @@
+{%- from 'python/logging.sls' import logging with context %}
+db:
+  host: 127.0.0.1
+  user: {{ username }}
+  port: 5432
+  password: {{ password }}
+
+company_db: {{ salt['pillar.get']('openerp:company_db') }}
+
+admin:
+  password: {{ pillar['openerp']['password'] }}
+
+{#
+ OpenERP Log Level
+ DEBUG=10, DEBUG_RPC=8, DEBUG_RPC_ANSWER=6, DEBUG_SQL=5, INFO=20,
+ WARNING=30, ERROR=40, CRITICAL=50
+-#}
+log_level: {% if salt['pillar.get']('debug', False) %}1{% else %}3{% endif %}0
+
+{{ logging('openerp', 'openerp:sentry_dsn') }}

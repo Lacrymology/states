@@ -42,3 +42,4 @@ logging:
 {%- if sentry_dsn %}
         - sentry
 {%- endif -%}
+{%- endmacro -%}

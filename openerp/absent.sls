@@ -61,5 +61,6 @@ openerp-cron:
     - dead
   file:
     - absent
+    - name: /etc/init/openerp.conf
     - require:
       - service: openerp-cron

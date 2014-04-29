@@ -107,3 +107,10 @@ openerp:company_db
 Which database to use to run scheduled jobs.
 
 Default: ``None``.
+
+openerp:sentry
+~~~~~~~~~~~~~~
+
+DSN of Sentry server.
+
+Default: value of pillar key ``sentry_dsn``.

@@ -2,7 +2,8 @@
  General use template of YAML data for Python logging
 -#}
 {%- macro logging(process_name, sentry_dsn_pillar_key) -%}
-{%- set sentry_dsn = salt['pillar.get'](sentry_dsn_pillar_key, False) %}
+{%- set default_dsn = salt['pillar.get']('sentry_dsn', False) -%}
+{%- set sentry_dsn = salt['pillar.get'](sentry_dsn_pillar_key, default_dsn) %}
 logging:
   version: 1
   disable_existing_loggers: False

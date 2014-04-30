@@ -100,3 +100,17 @@ specified in the "Content-Length" request header field.
 Unit is in megabytes.
 
 Default: ``1``.
+
+openerp:company_db
+~~~~~~~~~~~~~~~~~~
+
+Which database to use to run scheduled jobs.
+
+Default: ``None``.
+
+openerp:sentry
+~~~~~~~~~~~~~~
+
+DSN of Sentry server.
+
+Default: value of pillar key ``sentry_dsn``.

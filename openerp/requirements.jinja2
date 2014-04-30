@@ -61,3 +61,8 @@ PyXML==0.8.4
 argparse==1.2.1
 six==1.4.1
 wsgiref==0.1.2
+{%- set default_dsn = salt['pillar.get']('sentry_dsn', False) -%}
+{%- set sentry_dsn = salt['pillar.get']('openerp:sentry_dsn', default_dsn) -%}
+{%- if sentry_dsn %}
+raven==4.1.1
+{%- endif -%}

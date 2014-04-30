@@ -25,6 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Quan Tong Anh <tonganhquan.net@gmail.com>
 Maintainer: Quan Tong Anh <tonganhquan.net@gmail.com>
 -#}
+{%- from 'python/logging.sls' import logging with context %}
 # {{ pillar['message_do_not_modify'] }}
 file:
   lock: /var/run/nagios/passive_check.lock
@@ -44,41 +45,4 @@ nsca:
     {{ receiver }}: {{ pillar['nrpe']['nsca']['password'] }}
 {%- endfor %}
 
-logging:
-  version: 1
-  disable_existing_loggers: False
-  formatters:
-    only_message:
-      format: '%(message)s'
-    syslog:
-      format: 'passive_check[%(process)d]: %(message)s'
-  handlers:
-    syslog:
-{%- if salt['pillar.get']('debug', False) %}
-      level: DEBUG
-{%- else %}
-      level: INFO
-{%- endif %}
-      class: logging.handlers.SysLogHandler
-      address: /dev/log
-      facility: local7
-      formatter: syslog
-    console:
-      level: ERROR
-      class: logging.StreamHandler
-      formatter: only_message
-{%- if salt['pillar.get']('sentry_dsn', False)  %}
-    sentry:
-      level: ERROR
-      class: raven.handlers.logging.SentryHandler
-      dsn: {{ pillar['sentry_dsn'] }}
-{%- endif %}
-  loggers:
-    '':
-      level: DEBUG
-      handlers:
-        - syslog
-        - console
-{%- if salt['pillar.get']('sentry_dsn', False)  %}
-        - sentry
-{%- endif -%}
+{{ logging('passive_check', 'sentry_dsn') }}

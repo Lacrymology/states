@@ -27,7 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Undo SSL state.
 -#}
-{% for name in salt['pillar.get']('ssl', []) %}
+{%- for name in salt['pillar.get']('ssl', []) %}
 /etc/ssl/{{ name }}:
   file:
     - absent
@@ -47,11 +47,7 @@ Undo SSL state.
 /etc/ssl/private/{{ name }}.pem:
   file:
     - absent
-
-/etc/ssl/{{ name }}:
-  file:
-    - absent
-{% endfor %}
+{%- endfor %}
 
 ssl-cert:
   pkg:

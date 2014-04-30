@@ -36,7 +36,7 @@ full_path = os.path.realpath(__file__)
 current_dir = os.path.dirname(full_path) + "/"
 sys.path.append(current_dir)
 
-config = yaml.load(open(os.path.join(current_dir, 'config.yaml')))
+config = yaml.load(open('/usr/local/openerp/config.yaml'))
 logging.config.dictConfig(config['logging'])
 
 import openerp
@@ -59,7 +59,7 @@ server.check_root_user()
 server.check_postgres_user()
 server.report_configuration()
 server.setup_pid_file()
-server.preload_registry(config['company_database'])
+server.preload_registry(config['company_db'])
 
 openerp.modules.module.initialize_sys_path()
 openerp.modules.loading.open_openerp_namespace()

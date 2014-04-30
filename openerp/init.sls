@@ -188,7 +188,7 @@ openerp:
     - managed
     - user: openerp
     - group: openerp
-    - source: salt://openerp/config.yaml
+    - source: salt://openerp/config.jinja2
     - template: jinja
     - mode: 440
     - require:

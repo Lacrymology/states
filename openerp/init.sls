@@ -183,6 +183,17 @@ openerp:
       - file: openerp
       - file: {{ home }}/config.yaml
 
+{{ web_root_dir }}/openerp-cron.py:
+  file:
+    - managed
+    - user: openerp
+    - group: openerp
+    - mode: 550
+    - source: salt://openerp/cron.py
+    - require:
+      - file: openerp
+      - file: {{ home }}/config.yaml
+
 {{ home }}/config.yaml:
   file:
     - managed
@@ -202,11 +213,15 @@ openerp-cron:
     - name: /etc/init/openerp.conf
 {%- if salt['pillar.get']('openerp:company_db', False) %}
     - managed
-    - source: salt://openerp/cron.py
+    - source: salt://openerp/upstart.jinja2
     - template: jinja
     - user: root
     - group: root
     - mode: 400
+    - context:
+      home: {{ web_root_dir }}
+    - require:
+      - file: {{ web_root_dir }}/openerp-cron.py
 {%- else %}
     - absent
 {%- endif %}

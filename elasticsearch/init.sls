@@ -36,8 +36,7 @@ include:
   - nginx
   - ssl
 {% endif %}
-{% set version = '0.20.5'%}
-{% set checksum = 'md5=e244c5a39515983ba81006a3186843f4' %}
+{%- set version = salt['pillar.get']('elasticsearch:version', '0.20.5') %}
 
 /etc/default/elasticsearch:
   file:

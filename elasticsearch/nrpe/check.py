@@ -36,10 +36,23 @@ import argparse
 import nagiosplugin
 import requests
 
+
+def elasticsearch_version():
+    req = requests.get('http://127.0.0.1:9200/')
+    major, minor, bug = req.json['version']['number'].split('.')
+    return (int(major), int(minor), int(bug))
+
+
 class ClusterNodes(nagiosplugin.Resource):
     def probe(self):
-        req = requests.get('http://127.0.0.1:9200/_cluster/nodes/')
+        major = elasticsearch_version()[0]
+        if major < 1:
+            rsc = 'nodes/'
+        else:
+            rsc = 'states/nodes/'
+        req = requests.get('http://127.0.0.1:9200/_cluster/' + rsc)
         return [nagiosplugin.Metric('nodes', len(req.json['nodes']), min=0)]
+
 
 @nagiosplugin.guarded
 def main():

@@ -27,7 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 elasticsearch_procs:
   description: Elasticsearch Daemon
-  command: '/usr/lib/nagios/plugins/check_procs -u elasticsearch -c 1:1 -C java -a org.elasticsearch.bootstrap.ElasticSearch'
+  command: '/usr/lib/nagios/plugins/check_procs -u elasticsearch -c 1:1 -C java -a org.elasticsearch.bootstrap'
 
 elasticsearch-remote-port-http:
   description: Elasticsearch Remote HTTP Port

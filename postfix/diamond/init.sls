@@ -70,7 +70,43 @@ postfix_diamond_resources:
   file:
     - absent
 
+/var/log/mail.log:
+  file:
+    - managed
+    - user: syslog
+    - group: adm
+    - mode: 640
+    - require:
+      - pkg: rsyslog
+
+/etc/rsyslog.d/postfix_stats.conf:
+  file:
+    - managed
+    - user: root
+    - group: root
+    - mode: 440
+    - source: salt://postfix/diamond/rsyslog.jinja2
+    - template: jinja
+    - require:
+      - pkg: rsyslog
+    - watch_in:
+      - service: rsyslog
+
+/etc/init/postfix_stats.conf:
+  file:
+    - managed
+    - source: salt://postfix/diamond/upstart.jinja2
+    - template: jinja
+    - require:
+      - module: postfix_stats
+      - file: /var/log/mail.log
+
 postfix_stats:
+  service:
+    - running
+    - watch:
+      - file: /etc/init/postfix_stats.conf
+      - file: /usr/local/diamond/share/diamond/collectors/postfix/postfix.py
   file:
     - managed
     - name: /usr/local/diamond/salt-postfix-requirements.txt
@@ -100,40 +136,6 @@ postfix_stats:
     - template: jinja
     - require:
       - module: postfix_stats
-    - watch_in:
-      - service: postfix_stats
-
-{#- Caller script for postfix_stats.py #}
-/usr/local/diamond/bin/postfix_rsyslog.py:
-  file:
-    - managed
-    - user: syslog
-    - group: adm
-    - mode: 700
-    - contents: |
-        #!/usr/local/diamond/bin/python
-        # {{ pillar['message_do_not_modify'] }}
-        from postfix_stats import main
-        main(None, True, local_emails=[])
-    - require:
-      - pkg: rsyslog
-      - file: /usr/local
-      - module: postfix_stats
-
-/etc/rsyslog.d/postfix_stats.conf:
-  file:
-    - managed
-    - mode: 440
-    - contents: |
-        # {{ pillar['message_do_not_modify'] }}
-        $ModLoad omprog
-        $actionomprogbinary /usr/local/diamond/bin/postfix_rsyslog.py
-        :syslogtag, startswith, "postfix" :omprog:;RSYSLOG_TraditionalFileFormat
-    - require:
-      - pkg: rsyslog
-      - file: /usr/local/diamond/bin/postfix_rsyslog.py
-    - watch_in:
-      - service: rsyslog
 
 extend:
   diamond:
@@ -144,3 +146,7 @@ extend:
       - require:
         - service: rsyslog
         - service: postfix
+      {#- make sure postfix_stat service runs before diamond postfix collector
+          which gets data from it #}
+      - require_in:
+        - service: postfix_stats

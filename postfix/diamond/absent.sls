@@ -47,11 +47,11 @@ postfix_stats:
     - absent
     - name: /usr/local/diamond/salt-postfix-requirements.txt
 
-/etc/init/postfix_stats:
+/etc/init/postfix_stats.conf:
   file:
     - absent
 
-/etc/rsyslog.d/postfix_stats:
+/etc/rsyslog.d/postfix_stats.conf:
   file:
     - absent
 

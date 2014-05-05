@@ -127,4 +127,4 @@ ssl_cert_and_key_for_{{ name }}:
       - file: /etc/ssl/certs/{{ name }}_ca.crt
       - file: /etc/ssl/private/{{ name }}.pem
       - file: /etc/ssl/certs/{{ name }}_chained.crt
-{%- endfor -%}
+{% endfor -%}

@@ -1,7 +1,7 @@
 Pillar
 ======
 
-NEED TO DOC PILLAR
+.. TODO: NEED TO DOC PILLAR
 
 Mandatory
 ---------
@@ -10,17 +10,23 @@ Example::
 
     salt_master:
       gitfs_remotes:
-        - git@git.robotinfra.com:dev/common.git
-        - git@git.robotinfra.com:infra/states.git
+        - git@git.example.com:common.git
+        - git@git.example.com:states.git
 
 salt_master:gitfs_remotes
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Git fileserver backend configuration
-When using the git fileserver backend at least one git remote needs to be
-defined. The user running the salt master will need read access to the repo.
+.. copied from https://github.com/saltstack/salt/blob/2014.1/conf/master#L385
 
-Copied from: https://github.com/saltstack/salt/blob/2014.1/conf/master#L385
+Git fileserver backend configuration.
+When using the git fileserver backend at least one git remote needs to be
+defined.
+
+The user running the salt master will need read access to the repo.
+Look in :doc:`/ssh/client/index` for more details.
+
+If the salt-master act also as the git server, look for :doc:`git` exact pillars
+keys details.
 
 Optional
 --------
@@ -31,7 +37,7 @@ Example::
       workers: 1
       pillar:
         branch: develop
-        remote: git@git.robotinfra.com:dev/pillars.git
+        remote: git@git.example.com:dev/pillars.git
 
 salt_master:pillar
 ~~~~~~~~~~~~~~~~~~
@@ -41,6 +47,9 @@ Specify a remote git repo for using as ext pillar.
 Default: ``False``
 
 ``False`` means not use.
+
+If the salt-master act also as the git server, look for :doc:`git` exact pillars
+keys details.
 
 salt_master:pillar:branch
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -62,19 +71,19 @@ Default: ``5``
 salt_master:loop_interval
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
+.. https://github.com/saltstack/salt/blob/2014.1/conf/master#L80
+
 The loop_interval option controls the seconds for the master's maintinance
 process check cycle. This process updates file server backends, cleans the
 job cache and executes the scheduler.
-Copied from:
-https://github.com/saltstack/salt/blob/2014.1/conf/master#L80
 
 Default: ``60``
 
 salt_master:keep_jobs_hours
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+.. https://github.com/saltstack/salt/blob/2014.1/conf/master#L73
+
 Set the number of hours to keep old job information in the job cache
-Copied from:
-https://github.com/saltstack/salt/blob/2014.1/conf/master#L73
 
 Default: ``24``

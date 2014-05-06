@@ -29,71 +29,14 @@ Git server
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-THIS DOC IS SALT MASTER SPECIFIC AND NEED CLEANUP
-
-If you have ever look at the master configuration file, you will see something
-like::
-
-  fileserver_backend:  
-    - git  
-    - roots
-      
-  gitfs_remotes:  
-    - file:///var/lib/git-server/salt-common.git  
-    - file:///var/lib/git-server/salt-states.git
-
-Here we use a git backend to maintain all of the Salt formulars and files in a
-git repository. If the requested file is not found, the `roots` backend
-(`/srv/salt`)  will be searched.
-
-Pillar
-------
-
-Follow the instruction in the `git/server/doc/pillar.rst` to create the pillar
-data for git server, for e.g::
-  
-  git-server:
-    keys:
-      {# quanta #}
-      AAAAB3NzaC1yc2EAAAADAQABAAABAQClUI66kBQhf/hw3BmTuX4GvnYgFFxvPyFIsTW5wUeYZO+k+ResrQouzeV5LB3TEQcBNbWFcOdlHlor/0Q14TvwW9CKwGjF76x6JGkdXCFDvnjo3CIohwEh49TJ7+AL+103h8Ed+Kr7CrITVJQmxqFAWD7lfCGzdOFsYzHDPzgt/NyuWdmOqqED0KDWzOzqE4+PaarvKsOilTFMMaDCCboZY3rmKxCPmrktrLkM5cUtZYbiT9oBVDAnym5M2IivbAFuGf4X3BjRjfj3sBI7sB0p4PwSs9VHHUkOKPxcmTYw0mekOkOgF1mBZ5wsbPp+lk9Hy3IG1BNsS0R9+fpcB+ln: ssh-rsa
-    repositories:
-  {%- for type in ('common', 'states', 'pillars') %}
-      salt-{{ type }}:
-        push_notification: False
-  {%- endfor %}
-
-Don't forget to update the `top.sls` file to deliver this pillar data to
-minion::
-
-  base:
-    q-git:
-      - git
-
-Installation
+Introduction
 ------------
 
-In the above example, we are going to setup 3 repositories:
-- common
-- states
-- pillars
+Lightweight simple Git server available trough
+:doc:`OpenSSH </ssh/server/doc/index>` only.
 
-from the Salt master, run the following command::
+.. toctree::
+    :glob:
 
-  salt myminion state.sls git.server
-
-After the installation is finished, you will see the following in the
-`/var/lib/git-server`::
-
-  drwxrwx--- 7 git git 4096 Dec 10 07:39 salt-common.git
-  drwxrwx--- 7 git git 4096 Dec 10 07:39 salt-pillars.git
-  drwxrwx--- 7 git git 4096 Dec 10 07:39 salt-states.git
-
-Usage
------
-
-After writing the pillar data on your workstation, you can push it to the
-remote git server by running::
-
-  git remote add salt-pillars git@ip.addr.of.git:~git/salt-pillars.git
-  git remote -v
-  git push salt-pillars master:master
+    *
+    /salt/master/doc/git

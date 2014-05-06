@@ -32,9 +32,6 @@ Firewall Settings
 The following ports need to be open for the following states to make some
 services work:
 
-rabbitmq
---------
-
 All AMQP client need to be allowed to connect to the following port:
 
 - TCP 5672: AMQP
@@ -43,3 +40,7 @@ Management can be allowed from some secured network to:
 
 - TCP 15672: RabbitMQ management interface
 - TCP 55672: RabgtiMQ console
+
+And optionally:
+
+.. include:: /nginx/doc/firewall.include

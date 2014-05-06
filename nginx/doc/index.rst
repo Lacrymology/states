@@ -3,7 +3,6 @@ Nginx
 
 
 .. toctree::
-    :glob:
 
-
-    *
+    pillar
+    firewall

@@ -47,3 +47,5 @@ following port:
 - TCP 9200: HTTP API
 
 Allow it for all ES clients.
+
+.. include:: /nginx/doc/firewall.include

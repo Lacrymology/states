@@ -29,11 +29,15 @@
 Firewall Settings
 =================
 
-The following ports need to be open for the following states to make some
-services work:
+The Salt archive server depends on the following two components:
 
-salt.archive.server
--------------------
+- :doc:`Rsync </rsync/doc/index>`
+- :doc:`Nginx </nginx/doc/index>`
 
-The web interface is reachable through Nginx on port 80 and 443 if ssl is on.
-Link to `nginx/doc/firewall.rst`_
+Rsync
+-----
+
+If you need the rsync server to be available publicly, look at
+:doc:`rsync firewall documentation </rsync/doc/firewall>`.
+
+.. include:: /nginx/doc/firewall.include

@@ -54,8 +54,6 @@ ports:
 - TCP 7772: Shinken Broker
 - TCP 7773: Shinken Receiver
 
-shinken web interface
----------------------
+Broker also run a web interface.
 
-The web interface is reachable through Nginx on port 80 and 443 if ssl is on.
-Link to `nginx/doc/firewall.rst`_
+.. include:: /nginx/doc/firewall.include

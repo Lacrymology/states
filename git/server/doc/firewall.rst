@@ -32,8 +32,5 @@ Firewall Settings
 The following ports need to be open for the following states to make some
 services work:
 
-git.server
-----------
+.. include:: /ssh/server/doc/firewall.include
 
-It use SSH as the transport mechanism.
-Link to `ssh/server/doc/firewall.rst`_

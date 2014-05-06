@@ -32,6 +32,8 @@ Firewall Settings
 The following ports need to be open for the following states to make some
 services work:
 
-.. include:: /ssh/server/doc/firewall.include
+Etherpad listen on the following port: ``tcp/9001``.
+But only :doc:`Nginx </nginx/doc/index>` communicate with it. It's not reachable
+externally.
 
 .. include:: /nginx/doc/firewall.include

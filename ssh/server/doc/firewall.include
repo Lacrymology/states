@@ -1,0 +1,8 @@
+OpenSSH Server
+--------------
+
+This formula depends on :doc:`OpenSSH Server </ssh/server/doc/index>` to make it
+available over `OpenSSH <http://en.wikipedia.org/wiki/OpenSSH>`_ on port ``22``
+or other ports if you changed ``extra_configs`` in :doc:`pillar`.
+
+Please check :doc:`Nginx pillar doc </ssh/server/doc/firewall>` for details.

@@ -32,8 +32,4 @@ Firewall Settings
 The following ports need to be open for the following states to make some
 services work:
 
-moinmoin
---------
-
-The web interface is reachable through Nginx on port 80 and 443 if ssl is on.
-Link to `nginx/doc/firewall.rst`_
+.. include:: /nginx/doc/firewall.include

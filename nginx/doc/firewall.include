@@ -1,0 +1,13 @@
+Nginx
+-----
+
+This formula depends on :doc:`Nginx </nginx/doc/index>` to make it available
+over `HTTP <http://en.wikipedia.org/wiki/Http>`_ on port ``80`` or
+`HTTPS <http://en.wikipedia.org/wiki/Https>`_ over port ``443``
+
+.. note::
+
+  `SSL <http://en.wikipedia.org/wiki/Secure_Sockets_Layer>`_ is used only if you
+  specified ``ssl`` key in your formula's pillars keys.
+
+Please check :doc:`Nginx pillar doc </nginx/doc/firewall>` for details.

@@ -31,13 +31,39 @@ Global Pillars
 
 The following Pillar values are commonly used across all states.
 
-Optional
+Required
 --------
+
+roles
+~~~~~
+
+List of roles that apply to a minion.
+See :doc:`intro` and :doc:`usage` for details on roles.
+
+Default: empty list ``[]``.
+
+salt:master
+~~~~~~~~~~~
+
+As all deployed hosts are done trough salt, the minion need to know where is the
+master to connect.
+
+Look in :doc:`/salt/minion/doc/index` for details.
 
 message_do_not_modify
 ~~~~~~~~~~~~~~~~~~~~~
 
 Warning message to not modify file.
+
+Optional
+--------
+
+branch
+~~~~~~
+
+Which git branch to use during ``state.highstate``.
+
+Default: ``master``.
 
 files_archive
 ~~~~~~~~~~~~~
@@ -48,12 +74,23 @@ pip) to apply states.
 graylog2_address
 ~~~~~~~~~~~~~~~~
 
-IP/Hostname of centralized Graylog2 server
+IP/Hostname of centralized Graylog2 server.
 
 graphite_address
 ~~~~~~~~~~~~~~~~
 
 IP/Hostname of carbon/graphite server.
+This key is required if ``diamond`` integration of formulas had been included in
+roles.
+
+shinken_pollers
+~~~~~~~~~~~~~~~
+
+List of monitoring hosts that can perform checks on this host.
+This is required if any ``nrpe`` integration of formula had been included in
+roles.
+
+See :doc:`/nrpe/doc/index` for details.
 
 smtp
 ~~~~
@@ -107,12 +144,12 @@ Password for account login, if specified user.
 smtp:authentication
 ~~~~~~~~~~~~~~~~~~~
 
-Authentication method. Default is: `plain`.
+Authentication method. Default is: ``plain``.
 
 smtp:tls
 ~~~~~~~~
 
-Use TLS or Not. Default is: `False`.
+Use TLS or Not. Default is: ``False``.
 
 encoding
 ~~~~~~~~
@@ -120,3 +157,20 @@ encoding
 Default system locale.
 
 Default: ``en_US.UTF-8``.
+
+global_roles
+~~~~~~~~~~~~
+
+List of all available roles.
+
+Default: automatically built by listing sub-directories of ``/roles``.
+
+This key is usefull to restrict the list of available roles for an hosts.
+
+roles_absent
+~~~~~~~~~~~~
+
+If ``True``, run the ``absent`` formula of each roles that the minion is not
+assigned to.
+
+Default: ``False``.

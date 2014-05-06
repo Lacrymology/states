@@ -1,13 +1,14 @@
 Salt
 ====
 
-INTRO TO SALT
+TODO: INTRO TO SALT
 
 .. toctree::
-    :glob:
+   :glob:
 
-    ../minion/doc/index.rst
-    ../master/doc/index.rst
-    ../cloud/doc/index.rst
-    ../archive/server/doc/*
-    ../ci/doc/*
+   ../minion/doc/index
+   ../master/doc/index
+   ../cloud/doc/index
+   ../api/doc/*
+   ../archive/server/doc/*
+   ../ci/doc/*

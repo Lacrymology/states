@@ -205,13 +205,47 @@ $rcmail_config['autocomplete_single'] = false;
 $rcmail_config['default_font'] = '';
 
 {#- address book config #}
-$rcmail_config['address_book_type'] = 'sql';
-$rcmail_config['ldap_public'] = array();
-$rcmail_config['autocomplete_addressbooks'] = array('sql');
+$rcmail_config['address_book_type'] = 'ldap';
+$rcmail_config['ldap_public']['public'] = array(
+  'name'          => 'Public LDAP adress book',
+  'hosts'         => array('localhost'),
+  'port'          => 389,
+{%- if salt['pillar.get']('roundcube:ldap:ssl', salt['pillar.get']('ldap:ssl', False)) %}
+  'use_tls'           => true,
+{%- else %}
+  'use_tls'           => false,
+{%- endif %}
+  'ldap_version'  => 3,
+  'network_timeout' => 10,
+  'user_specific' => false,
+  'base_dn'       => 'ou=people,{{ salt['pillar.get']('roundcube:ldap:suffix', pillar['ldap']['suffix']) }}',
+  'bind_dn'       => '',
+  'bind_pass'     => '',
+  'hidden'        => false,
+  'searchonly'    => false,
+  'writable'       => false,
+  'fieldmap' => array(
+    'name'        => 'cn',
+    'surname'     => 'sn',
+    'email'       => 'uid',
+  ),
+  'sub_fields' => array(),
+  'autovalues' => array(),
+  'sort'          => 'cn',
+  'scope'         => 'sub',
+  'filter'        => '(objectClass=inetOrgPerson)',
+  'fuzzy_search'  => true,
+  'vlv'           => false,
+  'numsub_filter' => '(objectClass=organizationalUnit)',
+  'sizelimit'     => '0',
+  'timelimit'     => '0',
+  'referrals'     => true|false,
+);
+
+$rcmail_config['autocomplete_addressbooks'] = array('public');
 $rcmail_config['autocomplete_min_length'] = 1;
 $rcmail_config['autocomplete_threads'] = 0;
 $rcmail_config['autocomplete_max'] = 15;
-$rcmail_config['address_template'] = '{street}<br/>{locality} {zipcode}<br/>{country} {region}';
 $rcmail_config['addressbook_search_mode'] = 0;
 $rcmail_config['addressbook_pagesize'] = 50;
 $rcmail_config['addressbook_sort_col'] = 'surname';

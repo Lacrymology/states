@@ -48,7 +48,7 @@ Checkout them with ``git clone``::
 Note that `git` must be installed on your workstation.
 
 Switching branch
--------------
+----------------
 
 You need switch to `develop` branch::
   

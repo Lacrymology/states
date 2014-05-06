@@ -1,0 +1,7 @@
+OpenSSH Server
+==============
+
+.. toctree::
+    :glob:
+
+    *

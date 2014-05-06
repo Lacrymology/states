@@ -1,0 +1,7 @@
+OpenSSH Client
+==============
+
+.. toctree::
+    :glob:
+
+    *

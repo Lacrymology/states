@@ -1,10 +1,8 @@
-SSH
-===
-
+OpenSSH
+=======
 
 .. toctree::
     :glob:
 
-
-    ../server/doc/*
-    ../client/doc/*
+    ../server/doc/index
+    ../client/doc/index

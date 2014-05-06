@@ -119,3 +119,10 @@ is some values::
 - 16384: syncrepl consumer processing
 
 Default is ``256`` (OpenLDAP default).
+
+ldap:ssl
+~~~~~~~~
+
+Name of the SSL key used for LDAPS.
+
+Default: not used.

@@ -28,6 +28,11 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 {% set version = "0.9.0" %}
 {% set roundcubedir = "/usr/local/roundcubemail-" + version %}
 
+roundcube_password_plugin_ldap_driver_dependency:
+  pkg:
+    - purged
+    - name: php-net-ldap2
+
 {{ roundcubedir }}:
   file:
     - absent

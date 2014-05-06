@@ -98,6 +98,7 @@ roundcube:
       - file: {{ roundcubedir }}/config/db.inc.php
       - archive: roundcube
       - pkg: php5-pgsql
+      - pkg: roundcube_password_plugin_ldap_driver_dependency
 
 {{ roundcubedir }}:
   file:
@@ -160,6 +161,25 @@ roundcube:
       - file: {{ roundcubedir }}
       - user: web
       - archive: roundcube
+
+roundcube_password_plugin_ldap_driver_dependency:
+  pkg:
+    - installed
+    - name: php-net-ldap2
+
+{{ roundcubedir }}/plugins/password/config.inc.php:
+  file:
+    - managed
+    - source: salt://roundcube/password_plugin.jinja2
+    - template: jinja
+    - user: www-data
+    - group: www-data
+    - mode: 440
+    - require:
+      - file: {{ roundcubedir }}
+      - user: web
+      - archive: roundcube
+      - pkg: roundcube_password_plugin_ldap_driver_dependency
 
 {% for dir in ('logs', 'temp') %}
 {{ roundcubedir }}/{{ dir }}:

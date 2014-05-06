@@ -32,3 +32,4 @@ WRITE INTRODUCTION TO THE WEB UI
     :glob:
 
     *
+    ../*/doc/firewall

@@ -161,6 +161,19 @@ roundcube:
       - user: web
       - archive: roundcube
 
+{{ roundcubedir }}/plugins/password/config.inc.php:
+  file:
+    - managed
+    - source: salt://roundcube/password_plugin.jinja2
+    - template: jinja
+    - user: www-data
+    - group: www-data
+    - mode: 440
+    - require:
+      - file: {{ roundcubedir }}
+      - user: web
+      - archive: roundcube
+
 {% for dir in ('logs', 'temp') %}
 {{ roundcubedir }}/{{ dir }}:
   file:

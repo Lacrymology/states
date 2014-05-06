@@ -96,3 +96,11 @@ roundcube:(workers|cheapers|idle|timeout)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 See uwsgi/doc/instance.rst for more details
+
+roundcube:ldap:suffix
+~~~~~~~~~~~~~~~~~~~~~
+
+LDAP suffix used to config Roundcube supports changing password (LDAP password)
+of user through Roundcube WebUI.
+
+Default: Use value provided for ``ldap:suffix`` pillar key.

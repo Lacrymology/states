@@ -1,0 +1,9 @@
+SpamAssassin
+============
+
+
+.. toctree::
+    :glob:
+
+
+    *

@@ -23,7 +23,7 @@ When using the git fileserver backend at least one git remote needs to be
 defined.
 
 The user running the salt master will need read access to the repo.
-Look in :doc:`/ssh/client/index` for more details.
+Look in :doc:`/ssh/client/doc/index` for more details.
 
 If the salt-master act also as the git server, look for :doc:`git` exact pillars
 keys details.

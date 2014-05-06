@@ -74,7 +74,10 @@ salt_archive:keys
 
 Dict of keys allowed to log in user.
 
-This state also need the following pillar for rsync state::
+Rsync
+-----
+
+This state also need the following pillar for :doc:`/rsync/doc/index` formula::
 
   rsync:
     uid: salt_archive
@@ -88,4 +91,4 @@ This state also need the following pillar for rsync state::
         exclude: .* incoming
 
 You can change the name 'archive' by something else. but you need to change your
-files_archive pillar value accordingly.
+``files_archive`` pillar value accordingly.

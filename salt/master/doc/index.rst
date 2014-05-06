@@ -4,13 +4,15 @@ Salt Master
 Introduction
 ------------
 
-INTRODUCTION TO SALT MASTER
+.. TODO: INTRODUCTION TO SALT MASTER
 
-..note::
+Consider seriously adding a :doc:`Salt Archive </salt/archive/server/doc/index>`
+to the role of the Salt Master. That will speed up deployment of hosts and make
+them more resilient on third-party failure.
 
-  You should seriously consider adding a :doc:`../../archive/server/doc` to the
-  role of your Salt Master. That will speed up deployment of hosts and make them
-  more resilient on third-party failure.
+In case there is no available git server already, adding
+:doc:`Git server </git/server/doc/index>` to the role can be an option.
+See :doc:`git` for details.
 
 .. toctree::
     :glob:

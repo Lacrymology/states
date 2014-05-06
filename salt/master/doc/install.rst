@@ -29,47 +29,106 @@
 Salt-Master Installation
 ========================
 
+Git Server
+----------
+
+As explained in :doc:`/doc/usage`, first you need three git repositories
+localy checked out:
+
+- Common (where this file is)
+- Client specifics (where the roles are)
+- Pillar repository
+
+An existing Git server or hosting provider can be used or a self-host those
+repositories.
+
+Self-Hosted
+^^^^^^^^^^^
+
+Basic
+"""""
+
+The salt master can be used to host it's own Git repositories.
+See :doc:`/salt/master/doc/index` for details.
+
+GitLab
+""""""
+
+A :doc:`Gitlab formula </gitlab/doc/index>` is also available to act as a
+git server for a salt master. It requires manual settings and need more
+preparation but can answers other needs.
+
+Externally Hosted
+^^^^^^^^^^^^^^^^^
+
+Existing git hosting service can be used such as:
+
+- `Github <https://github.com/>`_
+- `BitBucket <https://bitbucket.org/>`_
+
+Requirements
+------------
+
+To perform the following steps the some requirements are needed to be installed:
+
+- `Git <http://git-scm.com/>`_
+- `Python 2.7 <https://www.python.org/>`_
+- `SSH Client <http://en.wikipedia.org/wiki/Comparison_of_SSH_clients>`_
+
+And you need to have access to Salt Master host with SSH.
+
+.. note::
+
+  This doc show examples that are using Unix as host that bootstrap the salt
+  master.
+
 Git Repositories
 ----------------
 
-You need to checkout following 3 repositories into your own
-workstation:
+As explained in :doc:`/doc/usage`, three git repositories need to be localy
+checked out:
 
-- Common (where this file is)
-- Client specific (where the roles are)
+- Common
+- Client specifics
 - Pillar repository
 
-Checkout them with ``git clone``::
-  
-  git clone git@git.robotinfra.com:dev/common.git salt-common
-  git clone git@git.robotinfra.com:infra/states.git salt-states
-  git clone git@git.robotinfra.com:infra/robotinfra.git salt-pillars
+If starting from scratch, create localy repositories with::
 
-Note that `git` must be installed on your workstation.
+  git init pillars
+  git init non_common
 
-Switching branch
-----------------
+Add files, then ``git add`` and ``git commit`` those files.
 
-You need switch to `develop` branch::
-  
-  cd ~/somewhere/salt-common
-  git checkout -b develop origin/develop
-  cd ~/somewhere/salt-states
-  git checkout -b develop origin/develop
-  cd ~/somewhere/salt-pillars
-  git checkout -b develop origin/master
+Or pick an existing repo and clone it locally with ``git clone``.
+
+.. note::
+
+  If note using the master branch, specify one with ``-b $branchname``.
+
+Pillar Top file
+---------------
+
+In Pillar repository, the salt-master minion ID must be linked to pillar
+data for the salt master and it's related roles:
+
+Note that pillar ``top.sls`` need something similar to::
+
+  base:
+    minion-id:
+      - pillar_of_salt-master
 
 Bootstrap Archive
 -----------------
 
-Create an archive for salt-master bootstrap purpose.
+Create an archive to bootstrap salt-master using ``bootstrap_archive.py`` script
+at the root of the common repository::
 
-Check the ``bootstrap_archive.py`` script at the root of the common repository
-for instruction.
+  cd ~/somewhere/common-checkout/
+  ./boostrap_archive.py /path/to/pillars ~/somewhere/client-checkout > /path/to/archive.tar.gz
 
-Copy output of the archive to the server that you want to install salt-master::
+Copy output of the archive to the server to target salt-master host::
 
-  scp /path/archive.tar.gz root@salt-master-server:/whereis/hold/archive.tar.gz
+  scp /path/archive.tar.gz root@ip-or-hostname-salt-master:/tmp/archive.tar.gz
 
 Installation
 ------------
@@ -77,79 +136,24 @@ Installation
 Then on the server run::
 
   cd /
-  tar -xvzf /whereis/copied/archive.tar.gz
-
-Note that you need update ``/root/salt/pillar/top.sls`` again::
-
-  base:
-    hostname_of_salt-master_server:
-      - pillar_of_salt-master
+  tar -xvzf /tmp/archive.tar.gz
 
 To install a salt-master::
 
-  /root/salt/states/salt/master/bootstrap.sh [minion id]
+  /root/salt/states/salt/master/bootstrap.sh [minion-id]
 
-Note that it's really the minion ID that is required to install the Salt Master.
-As it first install a Salt Minion and use it to install Salt Master. This step
-install both minion and master.
+.. note::
 
-If your pillar source is a git repository that didn't existed while master state
-is executed (such as salt itself create the git repository), you need to go to
-``/srv/pillar`` and run ``git pull`` once you pushed into new repository.
+  This is really the minion ID that is required to install the Salt Master.
+   As it first install a Salt Minion and use it to install Salt Master. This
+   step install both minion and master.
+
+If the following instruction :doc:`/salt/master/doc/index` had been followed.
+This is possible to ``git push`` all three repositories.
+
+.. TODO: WHAT?
 
 You should restart `salt-master` and `salt-minion`::
 
   service salt-master restart
   service salt-minion restart
-
-You can check all list of minions by::
-
-  salt-key -L
-
-To allow one minion to connect to master, run::
-
-  salt-key -a [minion id]
-
-To allow all minions to connect to master, run::
-
-  salt-key -A
-
-To delete one minion to disconnect to master, run::
-
-  salt-key -d [minion id]
-
-To delete all minions to disconnect to master, run::
-
-  salt-key -D
-
-After add key, check minion can connect to master or not, run::
-
-  salt -t 600 [minion id] test.ping
-
-Git Server
-----------
-
-Self-Hosted
-~~~~~~~~~~~
-
-Basic
-`````
-
-REFACTOR git/server/doc/install.rst TO MAKE IT MORE GENERIC
-MOVE HERE THE SALT MASTER GENERIC
-
-GitLab
-``````
-
-LINK TO GITLAB
-
-Externally Hosted
-~~~~~~~~~~~~~~~~~
-
-You can pick any solution you want, here is some example:
-
-- Github LINK TO GITHUB
-- BitBucket LINK TO BITBUCKET
-
-REFER TO GIT LAB
-

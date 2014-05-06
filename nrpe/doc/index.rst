@@ -3,7 +3,6 @@ NRPE
 
 
 .. toctree::
-       :glob:
-
+    :glob:
 
     *

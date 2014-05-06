@@ -58,7 +58,7 @@ Optional
 destructive_absent
 ~~~~~~~~~~~~~~~~~~
 
-If True (not default), git repositories will be wiped if
-git.server.absent state is executed.
+If ``True``, git repositories will be wiped if
+``git.server.absent`` formula is applied.
 
 Default: ``False``.

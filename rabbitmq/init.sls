@@ -198,6 +198,17 @@ rabbitmq-vhost-{{ vhost }}:
     - user: {{ vhost }}
     - require:
       - rabbitmq_user: rabbitmq-vhost-{{ vhost }}
+  set_permissions:
+    - run
+    - name: rabbitmq.set_permissions
+    - vhost: {{ vhost }}
+    - user: {{ salt['pillar.get']('rabbitmq:monitor:user', salt['pillar.get']('salt_monitor') )}}
+    - conf: ""
+    - write: ""
+    - read: ".*"
+    - require:
+      - rabbitmq_vhost: rabbitmq-vhost-{{ vhost }}
+      - rabbitmq_user: monitor_user
 {% endfor %}
 
 {% endif %}

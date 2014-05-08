@@ -37,6 +37,7 @@ include:
   - local
 {% if 'graphite_address' in pillar %}
   - nrpe.diamond
+  - statsd
 {% endif %}
   - nrpe.rsyslog
   - pip
@@ -160,16 +161,6 @@ service: nagios-nrpe-server #}
   file:
     - absent
 
-/usr/local/nagios/bin/passive_daemon.py:
-  file:
-    - managed
-    - source: salt://nrpe/passive_daemon.py
-    - user: nagios
-    - group: nagios
-    - mode: 550
-    - require:
-      - pkg: nagios-nrpe-server
-
 /usr/lib/nagios/plugins/check_domain.sh:
   file:
     - managed
@@ -257,6 +248,9 @@ service: nagios-nrpe-server #}
       - file: /etc/nagios/nsca.d
 
 nsca_passive:
+  pkg:
+    - installed
+    - name: libyaml-dev {#- PyYAML needs this pkg #}
   file:
     - managed
     - name: /etc/init/nsca_passive.conf
@@ -269,9 +263,13 @@ nsca_passive:
     - running
     - require:
       - service: rsyslog
+      - pkg: nsca_passive
     - watch:
       - file: nsca_passive
       - file: /usr/local/nagios/bin/nsca_passive
+      - module: nrpe-virtualenv
+      - file: /etc/nagios/nsca.yaml
+      - file: /etc/nagios/nsca.d
 
 {% from 'nrpe/passive.sls' import passive_check with context %}
 {{ passive_check('nrpe') }}

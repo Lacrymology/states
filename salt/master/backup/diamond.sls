@@ -29,7 +29,7 @@ include:
   - backup.diamond
   - cron.diamond
 
-saltmaster_backup_diamond_resources:
+salt_master_backup_diamond_resources:
   file:
     - accumulated
     - name: processes

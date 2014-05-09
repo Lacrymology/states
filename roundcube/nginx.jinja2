@@ -81,4 +81,6 @@ server {
     location /favicon {
         rewrite ^/favicon\.ico$ /skins/larry/images/favicon.ico;
     }
+{%- from 'nginx/block_hacks.jinja2' import block_hacks with context %}
+    {{ block_hacks() }}
 }

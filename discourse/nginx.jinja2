@@ -140,5 +140,7 @@ server {
     include uwsgi_params;
     uwsgi_pass discourse;
   }
+{%- from 'nginx/block_hacks.jinja2' import block_hacks with context %}
+    {{ block_hacks() }}
 }
 

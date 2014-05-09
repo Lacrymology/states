@@ -64,4 +64,6 @@ server {
         proxy_pass http://shinken-backend;
         proxy_set_header X-Real-IP $remote_addr;
     }
+{%- from 'nginx/block_hacks.jinja2' import block_hacks with context %}
+    {{ block_hacks() }}
 }

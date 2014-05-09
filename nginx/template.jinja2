@@ -89,4 +89,6 @@ server {
 
 {%- block footer %}
 {%- endblock %}
+{%- from 'nginx/block_hacks.jinja2' import block_hacks with context %}
+    {{ block_hacks() }}
 }

@@ -70,5 +70,6 @@ server {
         uwsgi_pass sentry;
         include uwsgi_params;
     }
-
+{%- from 'nginx/block_hacks.jinja2' import block_hacks with context %}
+    {{ block_hacks() }}
 }

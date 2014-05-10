@@ -57,6 +57,8 @@ server {
 {#- web app logic #}
     server_name {% for hostname in pillar[name]['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
     root {{ root_path }};
+{%- from 'nginx/block_hacks.jinja2' import block_hacks with context %}
+    {{ block_hacks() }}
 
 {#- reserve for directives should go before all other location #}
 {%- block first_location %}
@@ -89,6 +91,4 @@ server {
 
 {%- block footer %}
 {%- endblock %}
-{%- from 'nginx/block_hacks.jinja2' import block_hacks with context %}
-    {{ block_hacks() }}
 }

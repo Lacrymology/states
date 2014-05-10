@@ -1,5 +1,5 @@
 {%- macro block_hacks() %}
-    location ~* /(cpphpmyadmin|cpdbadmin|cpanel|cpadmin|w00tw00t|PMA|bbs|admn|admm|httpdocs|apache-default|htdocs|_admin|padmin|mysql|dbadmin2|databaseadmin|php|adminmysql|mydataadmin|crossdomain.xml|SQL|pHpMyAdMiN|PHPMYADMIN|sql|vtigercrm|cgi-bin) {
+    location ~* /(cpphpmyadmin|cpdbadmin|cpanel|cpadmin|w00tw00t|PMA|bbs|admn|admm|httpdocs|apache-default|htdocs|_admin|padmin|mysql|dbadmin2|databaseadmin|php|adminmysql|mydataadmin|SQL|pHpMyAdMiN|PHPMYADMIN|sql|vtigercrm|cgi-bin|crossdomain.xml) {
         deny all;
         return 404;
     }

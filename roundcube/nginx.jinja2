@@ -48,6 +48,8 @@ server {
 {#- web app logic #}
     server_name {% for hostname in pillar['roundcube']['hostnames'] -%}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
     root {{ dir }};
+{%- from 'nginx/block_hacks.jinja2' import block_hacks with context %}
+    {{ block_hacks() }}
 
 {%- for dir in ('skins',) %}
     location /{{ dir }}/ {
@@ -81,6 +83,4 @@ server {
     location /favicon {
         rewrite ^/favicon\.ico$ /skins/larry/images/favicon.ico;
     }
-{%- from 'nginx/block_hacks.jinja2' import block_hacks with context %}
-    {{ block_hacks() }}
 }

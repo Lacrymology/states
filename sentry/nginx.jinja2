@@ -50,6 +50,8 @@ server {
     server_name {% for hostname in pillar['sentry']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
 
     root /usr/local/sentry;
+{%- from 'nginx/block_hacks.jinja2' import block_hacks with context %}
+    {{ block_hacks() }}
 
     location /_admin_media/ {
         expires 1h;
@@ -70,6 +72,4 @@ server {
         uwsgi_pass sentry;
         include uwsgi_params;
     }
-{%- from 'nginx/block_hacks.jinja2' import block_hacks with context %}
-    {{ block_hacks() }}
 }

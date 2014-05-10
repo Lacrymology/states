@@ -55,7 +55,8 @@ server {
 {# web app logic #}
     server_name {% for hostname in  salt['pillar.get']('gitlab:hostnames') %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
     root {{ web_dir }}/public;
-
+{%- from 'nginx/block_hacks.jinja2' import block_hacks with context %}
+    {{ block_hacks() }}
 
     location / {
         gzip off;
@@ -69,6 +70,4 @@ server {
     location /assets/ {
         expires max;
     }
-{%- from 'nginx/block_hacks.jinja2' import block_hacks with context %}
-    {{ block_hacks() }}
 }

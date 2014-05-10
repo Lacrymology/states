@@ -54,6 +54,8 @@ server {
         deny all;
         return 404;
     }
+{%- from 'nginx/block_hacks.jinja2' import block_hacks with context %}
+    {{ block_hacks() }}
 
 {% if 'render_allow' in pillar['graphite']['web'] %}
     location /render/ {
@@ -83,6 +85,4 @@ server {
         uwsgi_pass graphite;
         include uwsgi_params;
     }
-{%- from 'nginx/block_hacks.jinja2' import block_hacks with context %}
-    {{ block_hacks() }}
 }

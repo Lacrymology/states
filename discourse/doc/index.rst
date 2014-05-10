@@ -1,7 +1,7 @@
 Discourse
 =========
 
-Contents:
+.. TODO: INTRO
 
 .. toctree::
     :glob:

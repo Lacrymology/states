@@ -29,9 +29,12 @@
 Usage
 =====
 
-Log into PILAR KEY FOR URL
-Using credential in PILLAR KEY USERNAME AND PASSWORD
-LINK TO PILLAR DOC.
+Based from :doc:`pillar` values, log into URL one of the ``sentry:hostnames``
+(if DNS had been configured properly) using username
+``sentry:initial_admin_user:username`` and password
+``sentry:initial_admin_user:password``.
+
+.. TODO: FIX USAGE DOC
 
 Create user
 -----------

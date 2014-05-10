@@ -1,7 +1,7 @@
 Graylog2
 ========
 
-WRITE INTRODUCTION TO GRAYLOG2
+.. TODO: WRITE INTRODUCTION TO GRAYLOG2
 
 Centralized logging provides a number of benefits than logging on local
 servers:
@@ -11,25 +11,8 @@ servers:
   an instrusion or system failure
 - log rotation mechanism can also be centralized
 
-Server
-------
-
-WRITE INTRODUCTION TO THE SERVER
-REFER TO ELASTICSEARCH REQUIREMENTS
-REFER TO MONGODB REQIUREMENTS
-
-LINK TO ELASTICSEARCH DOC
-
-The server come with a built-in Elasticsearch node. It need to be part of the
-cluster.
-
-Web
----
-
-WRITE INTRODUCTION TO THE WEB UI
-
 .. toctree::
     :glob:
 
-    *
-    ../*/doc/firewall
+    ../server/doc/index
+    ../web/doc/index

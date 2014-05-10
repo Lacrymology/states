@@ -33,4 +33,4 @@ After installing, refresh the Graphite web, you will see a new node appear
 under Graphite with name is the hostname of ElasticSearch machine. You can
 override it by changing the ``path_prefix`` setting in the configuration file.
 
-LINK TO GRAPHITE DOC!!
+.. TODO MORE + LINK TO GRAPHITE DOC!!

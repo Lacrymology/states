@@ -1,7 +1,7 @@
 Salt
 ====
 
-TODO: INTRO TO SALT
+.. TODO: INTRO TO SALT
 
 .. toctree::
    :glob:
@@ -9,6 +9,6 @@ TODO: INTRO TO SALT
    ../minion/doc/index
    ../master/doc/index
    ../cloud/doc/index
-   ../api/doc/*
-   ../archive/server/doc/*
-   ../ci/doc/*
+   ../api/doc/index
+   ../archive/server/doc/index
+   ../ci/doc/index

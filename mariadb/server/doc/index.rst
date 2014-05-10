@@ -1,10 +1,10 @@
-Minion
-======
+MariaDB Server
+==============
 
 Introduction
 ------------
 
-.. TODO: INTRO
+.. TODO: intro
 
 .. toctree::
     :glob:

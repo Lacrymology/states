@@ -1,9 +1,9 @@
 Etherpad
 ========
 
-A really-real time collaborative word processor for the web
+.. TODO: IMPROVE INTRO
 
-Contents:
+A really-real time collaborative word processor for the web
 
 .. toctree::
     :glob:

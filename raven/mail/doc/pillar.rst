@@ -1,3 +1,5 @@
+.. TODO: FIx LICENSE
+
 :copyrights: Copyright (c) 2014, Dang Tung Lam
 
              All rights reserved.
@@ -30,4 +32,4 @@
 Pillar
 ======
 
-See ``raven/doc/pillar.rst`` for more details.
+See :doc:`/raven/doc/pillar` for more details.

@@ -1,9 +1,7 @@
-S3
-==
+Backup Server
+=============
 
 .. TODO: Intro
-
-Contents:
 
 .. toctree::
     :glob:

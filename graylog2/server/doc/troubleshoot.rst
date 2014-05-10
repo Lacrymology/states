@@ -1,11 +1,10 @@
 Troubleshoot
 ============
 
-Server
-------
+.. TODO: FIX
 
 Daemon
-~~~~~~
+------
 
 In case of problem, have a look at
 ``/var/log/upstart/graylog2-server.log``. This file exists when graylog2-server
@@ -16,7 +15,7 @@ messages go nowhere than these files (you would not see them on graylog2-web
 user interface).
 
 Elasticsearch Cluster
-~~~~~~~~~~~~~~~~~~~~~
+---------------------
 
 Check the log on the Elasticsearch nodes to make sure that the graylog2-server
 was discovered::

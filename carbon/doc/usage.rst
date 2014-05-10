@@ -1,6 +1,8 @@
 Usage
 =====
 
+.. TODO: FIX
+
 The most common client of carbon is Diamond LINK TO CARBON DOC.
 
 But it's easy to feed metrics to it:

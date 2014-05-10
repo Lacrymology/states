@@ -1,7 +1,7 @@
 Sentry
 ======
 
-INTRODUCTION TO SENTRY
+.. TODO: INTRODUCTION TO SENTRY
 
 .. toctree::
     :glob:

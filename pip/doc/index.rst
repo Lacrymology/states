@@ -1,9 +1,9 @@
-Python - PIP
-============
+Python PIP
+==========
 
+.. TODO: INTRO
 
 .. toctree::
     :glob:
-
 
     *

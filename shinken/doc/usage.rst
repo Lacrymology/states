@@ -29,16 +29,24 @@
 Usage
 =====
 
+.. TODO: FIX
+
 Web UI
 ------
 
 After installing, you can login to the Shinken UI by using the account that
-is defined in pillar ``shinken:users``.
+is defined in :doc:`pillar` key ``shinken:users``.
 
-LINK TO PILLAR DOC
+Click ``All`` section to see all notifications on shinken that include:
 
-Click `All` section to see all notifications on shinken that include: `CRITICAL`, `WARNING`, `UNKNOWN`, `UP`, `OK`.
+- ``CRITICAL``
+- ``WARNING``
+- ``UNKNOWN``
+- ``UP``
+- ``OK``
 
-Click `IT problems` to see notifications that only include something ralated to errors.
+Click ``IT problems`` to see notifications that only include something ralated
+to errors.
 
-With these error notifications that can be considered are ignored. Let acknowledge by click `Acknowledge` at `Actions` section.
+With these error notifications that can be considered are ignored. Let
+acknowledge by click ``Acknowledge`` at ``Actions`` section.

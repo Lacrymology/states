@@ -29,23 +29,20 @@
 Usage
 =====
 
-HERE DOCUMENT HOW TO REMOVE FROM BLACKLIST AN HOSTNAME
+.. TODO: FIX
+
+.. TODO: HERE DOCUMENT HOW TO REMOVE FROM BLACKLIST AN HOSTNAME
 
 - Stop DenyHosts by run ``service denyhosts stop``
-
 - Remove the IP address from /etc/hosts.deny
-
 - Edit /var/lib/denyhosts/hosts and remove the lines containing the IP address. 
   Save the file.
-
-- Edit /var/lib/denyhosts/hosts-restricted and remove the lines containing the IP 
+- Edit /var/lib/denyhosts/hosts-restricted and remove the lines containing the
+  IP address. Save the file.
+- Edit /var/lib/denyhosts/hosts-root and remove the lines containing the IP
   address. Save the file.
-
-- Edit /var/lib/denyhosts/hosts-root and remove the lines containing the IP address. 
-  Save the file.
-
-- Edit /var/lib/denyhosts/hosts-valid and remove the lines containing the IP address. 
-  Save the file.
+- Edit /var/lib/denyhosts/hosts-valid and remove the lines containing the IP
+  address.  Save the file.
 
 - Edit /var/lib/denyhosts/user-hosts and remove the lines containing the IP address. 
   Save the file.

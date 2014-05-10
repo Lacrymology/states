@@ -29,6 +29,8 @@
 Usage
 =====
 
+.. TODO: CLEAN THAT
+
 After that, you can access to the web interface SPECIFY PILLAR KEY FOR WEB URL
 AND LINK TO PILLAR FILE.
 And login using the LDAP account SPECIFY PILLAR KEY AND LINK TO PILLAR FILE.

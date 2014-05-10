@@ -29,9 +29,13 @@
 Usage
 =====
 
-Log into PILAR KEY FOR URL
-Using credential in PILLAR KEY USERNAME AND PASSWORD
-LINK TO PILLAR DOC.
+.. TODO: FIX THAT
+
+.. TODO Log into PILAR KEY FOR URL
+
+.. Using credential in PILLAR KEY USERNAME AND PASSWORD
+
+.. LINK TO PILLAR DOC.
 
 Create user
 -----------

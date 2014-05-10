@@ -17,6 +17,12 @@ details.
 Then define the roles that correspond to business requirements and create their
 formulas.
 
+If you plan to perform any kind of monitoring and stats integration please look
+at:
+
+- :doc:`/nrpe/doc/index` :doc:`/nrpe/doc/pillar`
+- :doc:`/diamond/doc/index` :doc:`/diamond/doc/pillar`
+
 Dynamic DNS
 ^^^^^^^^^^^
 
@@ -47,11 +53,16 @@ Define all those pillar keys.
 been installed. Any value such as ``https://x:y@hostname/0`` can be used until
 Sentry server is installed, team and project created.
 
+Take extra care with ``files_archive`` if :doc:`/salt/archive/server/doc/index`
+need to be bootstraped. Set the value of ``files_archive`` to same as
+``salt_archive:source`` (:doc:`/salt/archive/server/doc/pillar`) and change it
+to any hostname in ``salt_archive:web:hostnames``.
+
 Salt Master
 -----------
 
 As the entire infrastructure is installed trough Salt, you first need to
-bootstrap the initial salt master VM.
+install the initial salt master VM.
 
 Define the role of that master host to include or not other formulas that might
 improve performance of installed minions and also changed pillars keys you

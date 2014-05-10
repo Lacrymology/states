@@ -148,12 +148,18 @@ To install a salt-master::
    As it first install a Salt Minion and use it to install Salt Master. This
    step install both minion and master.
 
-If the following instruction :doc:`/salt/master/doc/index` had been followed.
-This is possible to ``git push`` all three repositories.
+If the following instruction :doc:`/salt/master/doc/index` and
+:doc:`/salt/master/doc/git` had been followed.
+At this point it's now possible to ``git push`` all three repositories.
 
-.. TODO: WHAT?
+Connect Minion to Master
+------------------------
 
-You should restart `salt-master` and `salt-minion`::
+Now that both master and minion are running, the master need to accept it's own
+minion key::
 
-  service salt-master restart
-  service salt-minion restart
+  salt-key -A -y
+
+Salt master host minion is now connect to itself trough the master::
+
+  salt-call test.ping

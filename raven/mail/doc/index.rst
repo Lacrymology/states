@@ -1,3 +1,5 @@
+.. TODO: fix license format
+
 :copyrights: Copyright (c) 2014, Dang Tung Lam
 
              All rights reserved.
@@ -30,37 +32,16 @@
 Test Sentry Alert
 =================
 
-This formula will install an executable script that check the activity of Sentry.
-After installed, this script will emulate ``/usr/bin/mail`` but send an event to
+This formula will install an executable script that check the activity of
+:doc:`/sentry/doc/index`.
+After installed, this script will emulate ``/usr/bin/mail`` but send an event
+to
 your Sentry server instead.
 To start checking, please run command::
 
     echo "My Test" | /usr/bin/mail
 
-Then, check your mailbox or Sentry WebUI for result.
-
-To install ``raven.mail`` please see installation instruction page `<install.html>`_.
-
-An other way, if you don't like install ``raven.mail``, you can use Python
-script ``raven/mail/script.py``. It requires ``SENTRY_DSN``
-environment variable and Sentry client for Python.
-
-Install Sentry client through ``pip``::
-
-    # Install pip
-    sudo apt-get install python-pip
-    # Install python-raven
-    pip install raven simplejson
-
-Define your Sentry DSN::
-
-    export SENTRY_DSN=http://your_sentry_dsn
-
-And run following command to check::
-
-    echo "test" | python script.py
-
-Check your mailbox or Sentry WebUI for result.
+Then check your mailbox or Sentry WebUI for result.
 
 .. toctree::
      :glob:

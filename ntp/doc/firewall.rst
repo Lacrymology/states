@@ -26,16 +26,8 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-Firewall Settings
-=================
-
-The following ports need to be open for the following states to make some
-services work:
-
-ntp
----
+Firewall
+========
 
 If the pillar ask NTP state to act as a NTP server, the following ports need to
-be open to all NTP clients:
-
-- UDP 123: NTP
+be open to all NTP clients: ``UDP`` ``123``

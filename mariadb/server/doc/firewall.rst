@@ -26,16 +26,8 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-Firewall Settings
-=================
+Firewall
+========
 
-The following ports need to be open for the following states to make some
-services work:
-
-mariadb.server
---------------
-
-All MariaDB client need to be allowed to connect to the following port:
-
-- TCP 3306: MariaDB/MySQL
+Allow all MySQL client to connect using ``TCP`` ``3306``.
 

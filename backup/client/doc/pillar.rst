@@ -39,4 +39,10 @@ Example::
 backup_storage
 ~~~~~~~~~~~~~~
 
-Type of backup storage client that is supported. It includes `scp`, `s3`.
+Type of backup storage client that is supported.
+
+Available values are:
+
+- ``scp`` - :doc:`/backup/client/scp/doc/index`
+- ``s3`` - :doc:`/backup/client/s3/doc/index`
+- ``noop`` - :doc:`/backup/client/noop/doc/index`

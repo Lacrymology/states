@@ -26,17 +26,14 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-Firewall Settings
-=================
-
-The following ports need to be open for the following states to make some
-services work:
-
-ssh.server
-----------
+Firewall
+========
 
 This state come with optional pillar setting to change it's default port (22)
 to an other one. You need to check which port is defined in pillar, but here
 is the default:
 
 - TCP 22: SSH default port
+
+The ports can be changed with ``extra_configs`` pillar key, please look in
+:doc:`/ssh/server/doc/pillar` for details.

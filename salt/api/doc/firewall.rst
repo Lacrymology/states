@@ -26,10 +26,7 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-Firewall Settings
-=================
+.. include:: /doc/include/firewall.inc
 
-The following ports need to be open for the following states to make some
-services work:
-
-.. include:: /nginx/doc/firewall.include
+- :doc:`/nginx/doc/index` :doc:`/nginx/doc/firewall`
+- :doc:`/salt/master/doc/index` :doc:`/salt/master/doc/firewall`

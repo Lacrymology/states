@@ -1,6 +1,3 @@
-Git server
-==========
-
 .. Copyright (c) 2013, Quan Tong Anh
 .. All rights reserved.
 ..
@@ -29,11 +26,14 @@ Git server
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
+Git Server
+==========
+
 Introduction
 ------------
 
-Lightweight simple Git server available trough
-:doc:`OpenSSH </ssh/server/doc/index>` only.
+Lightweight simple Git server available trough :doc:`/ssh/server/doc/index`
+only.
 
 .. toctree::
     :glob:

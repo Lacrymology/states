@@ -26,8 +26,12 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-Pillar
-======
+.. include:: /doc/include/add_pillar.inc
+
+- :doc:`/apt/doc/index` :doc:`/apt/doc/pillar`
+- :doc:`/postgresql/doc/index` :doc:`/postgresql/doc/pillar`
+- :doc:`/nginx/doc/index` :doc:`/nginx/doc/pillar`
+- :doc:`/statsd/doc/index` :doc:`/statsd/doc/pillar`
 
 Mandatory
 ---------
@@ -67,7 +71,7 @@ sentry:django_key
 ~~~~~~~~~~~~~~~~~
 
 Random string.
-https://docs.djangoproject.com/en/1.4/ref/settings/#secret-key
+See `Django Secret key Doc <https://docs.djangoproject.com/en/1.4/ref/settings/#secret-key>`_.
 
 sentry:db:password
 ~~~~~~~~~~~~~~~~~~
@@ -151,4 +155,4 @@ Default: ``False``.
 sentry:(workers|cheapers|idle|timeout)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-See uwsgi/doc/instance.rst for more details
+See :doc:`/uwsgi/doc/pillar` for more details

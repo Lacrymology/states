@@ -26,16 +26,7 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-Firewall Settings
-=================
+.. include:: /doc/include/add_firewall.inc
 
-The following ports need to be open for the following states to make some
-services work:
-
-openldap
---------
-
-SSL or not, SSL client need to be allowed to reach OpenLDAP server trough the
-following ports:
-
-- TCP 389: OpenLDAP
+SSL or not, client need to be allowed to reach OpenLDAP server trough the
+following port: ``TCP`` ``389``.

@@ -26,8 +26,9 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-Pillar
-======
+.. include:: /doc/include/add_pillar.inc
+
+- :doc:`/ssh/client/doc/index` :doc:`/ssh/client/doc/pillar`
 
 Mandatory
 ---------
@@ -51,12 +52,9 @@ SSH fingerprint of backup SSH server.
 How to get SSH fingerprint
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This is an example for getting github.com SSH fingerprint:: 
+This is an example for getting github.com SSH fingerprint::
   
   ssh-keyscan github.com > /tmp/github.pub
-
-Then run below command::
-  
   ssh-keygen -lf /tmp/github.pub
 
 Output is key's fingerprint::

@@ -26,18 +26,8 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-Firewall Settings
-=================
+.. include:: /doc/include/firewall.inc
 
-The Salt archive server depends on the following two components:
-
-- :doc:`Rsync </rsync/doc/index>`
-- :doc:`Nginx </nginx/doc/index>`
-
-Rsync
------
-
-If you need the rsync server to be available publicly, look at
-:doc:`rsync firewall documentation </rsync/doc/firewall>`.
-
-.. include:: /nginx/doc/firewall.include
+- :doc:`/nginx/doc/index` :doc:`/nginx/doc/firewall`
+- :doc:`/rsync/doc/index` :doc:`/rsync/doc/firewall`
+- :doc:`/ssh/server/doc/index` :doc:`/ssh/server/doc/firewall`

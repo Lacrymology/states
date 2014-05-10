@@ -26,16 +26,10 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-Firewall Settings
-=================
-
-The following ports need to be open for the following states to make some
-services work:
-
-postfix
--------
+Firewall
+========
 
 All SMTP client need to be allowed to connect to the following port:
 
-- TCP 25: SMTP
-- TCP 465: Secure SMTP
+- ``TCP`` ``25``: SMTP
+- if ``ssl`` is turned on in :doc:`pillar` ``TCP`` ``465``: Secure SMTP

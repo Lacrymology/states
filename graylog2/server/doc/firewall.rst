@@ -26,18 +26,13 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-Firewall Settings
-=================
+.. include:: /doc/include/add_firewall.inc
 
-The following ports need to be open for the following states to make some
-services work:
-
-graylog2.server
----------------
+- :doc:`/mongodb/doc/index` :doc:`/mongodb/doc/firewall`
 
 All hosts that need to send their logs to the centralized graylog2 server need
 to access the server with the following ports:
 
-- TCP 12201: GELF over TCP
-- UDP 12201: GELF over UDP
-- UDP 1514: receive syslog messages
+- ``TCP`` ``12201``: GELF over TCP
+- ``UDP`` ``12201``: GELF over UDP
+- ``UDP`` ``1514``: receive syslog messages

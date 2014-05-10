@@ -26,14 +26,9 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-Firewall Settings
-=================
+.. include:: /doc/include/add_firewall.inc
 
-The following ports need to be open for the following states to make some
-services work:
-
-elasticsearch
--------------
+- :doc:`/nginx/doc/index` :doc:`/nginx/doc/firewall`
 
 Each nodes of a single Elasticsearch (ES) cluster need to connect to each others
 using the following port:
@@ -47,5 +42,3 @@ following port:
 - TCP 9200: HTTP API
 
 Allow it for all ES clients.
-
-.. include:: /nginx/doc/firewall.include

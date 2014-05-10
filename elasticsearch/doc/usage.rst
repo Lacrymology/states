@@ -26,8 +26,11 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-Clustering Troubleshooting
---------------------------
+Troubleshooting
+===============
+
+Clustering
+----------
 
 Start the first instance, you should see something along the lines of::
 
@@ -54,5 +57,5 @@ switch back to the first node::
   {master=true},}, reason: zen-disco-receive(join from
   node[[my-node-2][URdBoFeFRKim3N-UYGxgCQ][inet[/10.128.213.252:9300]]{master=true}])
 
-NO REAL USAGE OF IT.
-PLEASE LINK TO ES OFFICIAL DOC.
+.. TODO: NO REAL USAGE OF IT.
+.. TODO: PLEASE LINK TO ES OFFICIAL DOC.

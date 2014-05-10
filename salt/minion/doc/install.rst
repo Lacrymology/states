@@ -26,8 +26,8 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-Salt-Minion Installation
-========================
+Installation
+============
 
 Copy the file ``salt/minion/bootstrap.sh`` to target and run it with it's ID
 followed by the IP or hostname of the Salt master::

@@ -26,23 +26,27 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-Firewall Settings
-=================
+.. include:: /doc/include/add_firewall.inc
 
-The following ports need to be open for the following states to make some
-services work:
+- :doc:`/spamassassin/doc/index` :doc:`/spamassassin/doc/firewall`
 
-amavis
+.. warning::
+
+  These 2 daemons don't need to be open unless it's plan to be run on a
+  separated hosts as the mail server. Which is not usually the case.
+
+  In case of doubt, don't allow traffic in for these.
+
+Amavis
 ------
 
 Amavis run on the following port:
 
-- TCP 10024: amavisd
+- ``TCP`` ``10024`` amavisd
 
-amavis.clamav
--------------
+Clamav
+------
 
-Clamav run on the following port:
+:doc:`/clamav/doc/index` integration run on the following port:
 
-- TCP 3310: clamd
-
+- ``TCP`` ``3310`` clamd

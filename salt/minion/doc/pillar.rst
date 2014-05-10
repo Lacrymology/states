@@ -1,3 +1,5 @@
+.. TODO: REFORMAT LICENSE
+
 :Copyrights: Copyright (c) 2014, Hung Nguyen Viet
 
              All rights reserved.
@@ -28,8 +30,9 @@
              POSSIBILITY OF SUCH DAMAGE.
 :Authors: - Hung Nguyen Viet
 
-Pillar
-======
+.. include:: /doc/include/add_pillar.inc
+
+- :doc:`/rsyslog/doc/index` :doc:`/rsyslog/doc/pillar`
 
 Mandatory
 ---------

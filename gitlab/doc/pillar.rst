@@ -26,8 +26,14 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-Pillar
-======
+.. include:: /doc/include/add_pillar.inc
+
+- :doc:`/apt/doc/index` :doc:`/apt/doc/pillar`
+- :doc:`/git/doc/index` :doc:`/git/doc/pillar`
+- :doc:`/nginx/doc/index` :doc:`/nginx/doc/pillar`
+- :doc:`/postgresql/doc/index` :doc:`/postgresql/doc/pillar`
+- :doc:`/rsyslog/doc/index` :doc:`/rsyslog/doc/pillar`
+- :doc:`/ssh/server/doc/index` :doc:`/ssh/server/doc/pillar`
 
 Mandatory
 ---------

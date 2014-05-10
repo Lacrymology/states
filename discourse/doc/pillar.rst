@@ -29,6 +29,15 @@
 Pillar
 ======
 
+.. include:: /doc/include/add_pillar.inc
+
+- :doc:`/apt/doc/index` :doc:`/apt/doc/pillar`
+- :doc:`/git/doc/index` :doc:`/git/doc/pillar`
+- :doc:`/nginx/doc/index` :doc:`/nginx/doc/pillar`
+- :doc:`/postgresql/doc/index` :doc:`/postgresql/doc/pillar`
+- :doc:`/redis/doc/index` :doc:`/redis/doc/pillar`
+- :doc:`/rsyslog/doc/index` :doc:`/rsyslog/doc/pillar`
+
 Mandatory
 ---------
 

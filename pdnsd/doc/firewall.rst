@@ -26,16 +26,8 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-Firewall Settings
-=================
-
-The following ports need to be open for the following states to make some
-services work:
-
-pdnsd
------
+Firewall
+========
 
 Proxy DNS server act like regular DNS server, so they need all client to be
-allowed to reach the server using:
-
-- UDP 53: DNS
+allowed to reach the server using: ``UDP`` ``53``.

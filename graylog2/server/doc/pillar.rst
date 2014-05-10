@@ -26,60 +26,14 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-Pillar
-======
+.. include:: /doc/include/add_pillar.inc
 
-Mandatory
----------
-
-Example::
-
-  graylog2:
-    hostnames:
-     - graylog2.example.com
-    workers: 2
-
-graylog2:hostnames
-~~~~~~~~~~~~~~~~~~
-
-List of HTTP hostname.
-
-graylog2:workers
-~~~~~~~~~~~~~~~~
-
-Number of uWSGI worker that will run the webapp.
+- :doc:`/apt/doc/index` :doc:`/apt/doc/pillar`
+- :doc:`/mongodb/doc/index` :doc:`/mongodb/doc/pillar`
+- :doc:`/rsyslog/doc/index` :doc:`/rsyslog/doc/pillar`
 
 Optional
 --------
-
-Example::
-
-  graylog2:
-    max_docs: 20000000
-    max_indices: 20
-    shards: 4
-    replicas: 0
-    recent_index_ttl_minutes: 60
-    processbuffer_processors: 5
-    outputbuffer_processors: 5
-    processor_wait_strategy: blocking
-    ring_size: 1024
-    amqp: False
-    heap_size: False
-    ssl: False
-    ssl_redirect: False
-    cheaper: 1
-    idle: 300
-    timeout: 60
-    smtp:
-      server: smtp.yourdomain.com
-      port: 25
-      tls: False
-      user: smtpuser@yourdomain.com
-      password: userpass
-      from: smtpuser@yourdomain.com
-    server:
-      user: graylog2
 
 graylog2:max_docs
 ~~~~~~~~~~~~~~~~~
@@ -193,34 +147,6 @@ graylog2:heap_size
 The size of heap give for JVM.
 
 Default: ``False``.
-
-graylog2:ssl
-~~~~~~~~~~~~
-
-Name of the SSL key to use for HTTPS.
-
-Default: ``False``.
-
-graylog2:ssl_redirect
-~~~~~~~~~~~~~~~~~~~~~
-
-If set to True and SSL is turned on, this will force all HTTP traffic to be
-redirected to HTTPS.
-
-Default: ``False``.
-
-graylog2:(workers|cheapers|idle|timeout)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-See uwsgi/doc/instance.rst for more details
-
-graylog2:smtp
-~~~~~~~~~~~~~
-
-This is configuration to allow Graylog2 to send email.
-Please see `doc/pillar.rst` for details.
-
-Default: value of ``smtp`` pillar key.
 
 graylog2:server:user
 ~~~~~~~~~~~~~~~~~~~~

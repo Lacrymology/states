@@ -1,5 +1,7 @@
-Backup
-======
+Backup Client
+=============
+
+.. TODO: Intro
 
 Contents:
 
@@ -7,3 +9,8 @@ Contents:
     :glob:
 
     *
+
+    ../s3/doc/index
+    ../scp/doc/index
+    ../noop/doc/index
+

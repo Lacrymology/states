@@ -26,18 +26,12 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-Firewall Settings
-=================
-
-The following ports need to be open for the following states to make some
-services work:
-
-nfs.server
-----------
+Firewall
+========
 
 All NFS client need to be allowed to connect to the following port:
 
-- TCP 111: portmapper
-- UDP 111: portmapper
-- TCP 2049: nfsd
-- UDP 2049: nfsd
+- ``TCP`` ``111``: portmapper
+- ``UDP`` ``111``: portmapper
+- ``TCP`` ``2049``: nfsd
+- ``UDP`` ``2049``: nfsd

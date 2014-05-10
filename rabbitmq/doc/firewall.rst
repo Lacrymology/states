@@ -26,21 +26,16 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-Firewall Settings
-=================
+.. include:: /doc/include/add_firewall.inc
 
-The following ports need to be open for the following states to make some
-services work:
+- If you turned on ``ssl`` in :doc:`pillar`:
+  :doc:`/nginx/doc/index` :doc:`/nginx/doc/firewall`
 
 All AMQP client need to be allowed to connect to the following port:
 
-- TCP 5672: AMQP
+- ``TCP`` ``5672`` AMQP
 
 Management can be allowed from some secured network to:
 
-- TCP 15672: RabbitMQ management interface
-- TCP 55672: RabgtiMQ console
-
-And optionally:
-
-.. include:: /nginx/doc/firewall.include
+- ``TCP`` ``15672``: RabbitMQ management interface
+- ``TCP`` ``55672``: RabgtiMQ console

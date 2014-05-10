@@ -1,7 +1,8 @@
-Pillar
-======
+.. include:: /doc/include/add_pillar.inc
 
-.. TODO: NEED TO DOC PILLAR
+- :doc:`/pip/doc/index` :doc:`/pip/doc/pillar`
+- :doc:`/rsyslog/doc/index` :doc:`/rsyslog/doc/pillar`
+- :doc:`/ssh/client/doc/index` :doc:`/ssh/client/doc/pillar`
 
 Mandatory
 ---------
@@ -25,8 +26,8 @@ defined.
 The user running the salt master will need read access to the repo.
 Look in :doc:`/ssh/client/doc/index` for more details.
 
-If the salt-master act also as the git server, look for :doc:`git` exact pillars
-keys details.
+If the salt-master act also as the git server, look for
+:doc:`/git/server/doc/pillar` exact pillars keys details.
 
 Optional
 --------
@@ -48,8 +49,8 @@ Default: ``False``
 
 ``False`` means not use.
 
-If the salt-master act also as the git server, look for :doc:`git` exact pillars
-keys details.
+If the salt-master act also as the git server, look for
+:doc:`/git/server/doc/pillar` exact pillars keys details.
 
 salt_master:pillar:branch
 ~~~~~~~~~~~~~~~~~~~~~~~~~

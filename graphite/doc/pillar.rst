@@ -26,8 +26,15 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-Pillar
-======
+.. include:: /doc/include/add_pillar.inc
+
+- :doc:`/apt/doc/index` :doc:`/apt/doc/pillar`
+- :doc:`/memcache/doc/index` :doc:`/memcache/doc/pillar`
+- :doc:`/nginx/doc/index` :doc:`/nginx/doc/pillar`
+- :doc:`/pip/doc/index` :doc:`/pip/doc/pillar`
+- :doc:`/postgresql/doc/index` :doc:`/postgresql/doc/pillar`
+- :doc:`/rsyslog/doc/index` :doc:`/rsyslog/doc/pillar`
+- :doc:`/statsd/doc/index` :doc:`/statsd/doc/pillar`
 
 Mandatory
 ---------
@@ -164,4 +171,4 @@ Consult carbon/doc/pillar.rst for more information.
 graphite:web:(workers|cheapers|idle|timeout)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-See uwsgi/doc/instance.rst for more details.
+See :doc:`/uwsgi/doc/pillar` for more details.

@@ -1,8 +1,9 @@
 Nginx
 =====
 
+.. TODO: INTRO
 
 .. toctree::
+    :glob:
 
-    pillar
-    firewall
+    *

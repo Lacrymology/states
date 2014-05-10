@@ -26,17 +26,9 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-Firewall Settings
-=================
-
-The following ports need to be open for the following states to make some
-services work:
-
-postgresql.server
------------------
+.. include:: /doc/include/pillar.inc
 
 All PostgreSQL client need to be allowed to connect to the following port:
+``TCP`` ``5432``
 
-- TCP 5432: PostgreSQL
-
-If ``ssl`` is defined in pillar, the same port is used.
+If ``ssl`` is defined in :doc:`pillar`, the same port is used.

@@ -1,5 +1,5 @@
-Salt Master
-===========
+Master
+======
 
 Introduction
 ------------

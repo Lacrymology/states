@@ -26,8 +26,9 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-Pillar
-======
+.. include:: /doc/include/add_pillar.inc
+
+- :doc:`/s3cmd/doc/index` :doc:`/s3cmd/doc/pillar`
 
 Mandatory
 ---------

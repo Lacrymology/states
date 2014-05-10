@@ -1,5 +1,5 @@
-Elasticsearch Daemon
-====================
+Elasticsearch
+=============
 
 Install an Elasticsearch NoSQL server or cluster.
 
@@ -10,6 +10,5 @@ This is why nginx is used if SSL is in pillar.
 
 .. toctree::
     :glob:
-
 
     *

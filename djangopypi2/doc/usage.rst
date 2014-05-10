@@ -26,12 +26,14 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
+Usage
+=====
 
 Developers: How to upload packages
-==================================
+----------------------------------
 
 Uploading to your PyPI
-----------------------
+~~~~~~~~~~~~~~~~~~~~~~
 
 Assuming you are running your Django site locally for now, add the following to
 your ``~/.pypirc`` file::

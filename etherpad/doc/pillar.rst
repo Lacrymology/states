@@ -1,3 +1,5 @@
+.. TODO: FIX LICENSE FORMAT
+
 :Copyrights: Copyright (c) 2014, Lam Dang Tung
 
              All rights reserved.
@@ -28,8 +30,12 @@
              POSSIBILITY OF SUCH DAMAGE.
 :Authors: - Lam Dang Tung
 
-Pillar
-======
+.. include:: /doc/include/add_pillar.inc
+
+- :doc:`/apt/doc/index` :doc:`/apt/doc/pillar`
+- :doc:`/nginx/doc/index` :doc:`/nginx/doc/pillar`
+- :doc:`/postgresql/doc/index` :doc:`/postgresql/doc/pillar`
+- :doc:`/rsyslog/doc/index` :doc:`/rsyslog/doc/pillar`
 
 Mandatory
 ---------

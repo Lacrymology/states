@@ -26,16 +26,10 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-Firewall Settings
-=================
-
-The following ports need to be open for the following states to make some
-services work:
-
-salt.master
------------
+Firewall
+========
 
 All minion need to reach the following two ports:
 
-- TCP 4505: Salt Publish
-- TCP 4506: Salt Ret
+- ``TCP`` ``4505``: Salt Publish
+- ``TCP`` ``4506``: Salt Ret

@@ -26,16 +26,10 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-Firewall Settings
-=================
+Firewall
+========
 
-The following ports need to be open for the following states to make some
-services work:
-
-carbon
-------
-
-Recommended to open the following to all monitored hosts:
+All metrics producers must be allowed to reach Carbon with:
 
 - TCP 2003: carbon plaintext protocol
 - TCP 2004: carbon pickle protocol

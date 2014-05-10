@@ -26,34 +26,26 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-Firewall Settings
-=================
+.. include:: /doc/include/add_firewall.inc
 
-The following ports need to be open for the following states to make some
-services work:
-
-shinken server
---------------
+- Broker also run a web interface :doc:`/nginx/doc/index`
+  :doc:`/nginx/doc/firewall`
 
 Shinken monitoring server includes some Shinken daemons the following:
 
-# shinken.arbiter
-# shinken.broker
-# shinken.poller
-# shinken.reactionner
-# shinken.receiver
-# shinken.scheduler
+- shinken.arbiter
+- shinken.broker
+- shinken.poller
+- shinken.reactionner
+- shinken.receiver
+- shinken.scheduler
 
 Arbiter need to access all other nodes that run Shinken daemons on the following
 ports:
 
-- TCP 7768: Shinken Scheduler
-- TCP 7769: Shinken Reactionner
-- TCP 7770: Shinken Arbiter
-- TCP 7771: Shinken Poller
-- TCP 7772: Shinken Broker
-- TCP 7773: Shinken Receiver
-
-Broker also run a web interface.
-
-.. include:: /nginx/doc/firewall.include
+- ``TCP`` ``7768``: Shinken Scheduler
+- ``TCP`` ``7769``: Shinken Reactionner
+- ``TCP`` ``7770``: Shinken Arbiter
+- ``TCP`` ``7771``: Shinken Poller
+- ``TCP`` ``7772``: Shinken Broker
+- ``TCP`` ``7773``: Shinken Receiver

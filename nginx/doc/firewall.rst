@@ -26,17 +26,21 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-Firewall Settings
-=================
+Firewall
+========
 
-The following ports need to be open for the following states to make some
-services work:
-
-nginx
------
+http
+----
 
 All web apps in this set of states do have their interface is reachable through
-Nginx on port 80.
-If ``ssl`` is defined in app pillar, the port 443 is also reachable. 
-If ``ssl_redirect`` pillar is set to `True` then any connection to HTTP port 80 
-are automatically redirected to HTTPS port 443.
+Nginx on port ``80`` TCP.
+
+https
+-----
+
+It also support `SSL <http://en.wikipedia.org/wiki/Secure_Sockets_Layer>`_ on
+port ``443`` TCP.
+
+If ``ssl`` is defined in app pillar, the port ``443`` is also reachable.
+If ``ssl_redirect`` pillar is set to `True` then any connection to HTTP port
+``80`` are automatically redirected to HTTPS port ``443``.

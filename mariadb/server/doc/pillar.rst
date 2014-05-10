@@ -26,8 +26,9 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-Pillar
-======
+.. include:: /doc/include/add_pillar.inc
+
+- :doc:`/apt/doc/index` :doc:`/apt/doc/pillar`
 
 Optional
 --------
@@ -38,6 +39,8 @@ Example::
     utf8: True/False
     bind: 0.0.0.0
     password: root_plaintext_password
+
+.. TODO: NOT THIS NOT DEFAULT?
 
 mysql:utf8
 ~~~~~~~~~~

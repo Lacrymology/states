@@ -26,8 +26,9 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-Pillar
-======
+.. include:: /doc/include/add_pillar.inc
+
+- :doc:`/rsyslog/doc/index` :doc:`/rsyslog/doc/pillar`
 
 Optional
 --------
@@ -47,7 +48,7 @@ Format: <size>[g|G|m|M|k|K].
 Default: ``512m``.
 
 terracotta:java_mx
-~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~
 
 Set maximum Java heap size (-Xmx).
 

@@ -26,8 +26,11 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-Pillar
-======
+.. include:: /doc/include/add_pillar.inc
+
+- :doc:`/apt/doc/index` :doc:`/apt/doc/pillar`
+- :doc:`/pip/doc/index` :doc:`/pip/doc/pillar`
+- if ``sentry:ssl`` is defined :doc:`/ssl/doc/index` :doc:`/ssl/doc/pillar`
 
 Mandatory
 ---------
@@ -61,7 +64,6 @@ shinken:users
 
 List contact users.
 Please replace <username> by real username.
-Example: ci, lam, hvn
 
 shinken:poller_max_fd
 ~~~~~~~~~~~~~~~~~~~~~
@@ -98,7 +100,7 @@ shinken:architecture:poller:id
 shinken:web:hostnames
 ~~~~~~~~~~~~~~~~~~~~~
 
-List of HTTP hostname
+List of HTTP hostnames that Shinken web UI is assigned to.
 
 Optional
 --------

@@ -1,11 +1,12 @@
 Postfix
 =======
 
-Postfix is mail server as an alternative to the `Sendmail` program.
+Postfix is a
+`SMTP <https://en.wikipedia.org/wiki/Simple_Mail_Transfer_Protocol>`_
+server as an alternative to the ``sendmail``.
 
 .. toctree::
     :glob:
-
 
     *
 

@@ -26,14 +26,8 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-Firewall Settings
-=================
-
-The following ports need to be open for the following states to make some
-services work:
-
-mongodb
--------
+Firewall
+========
 
 There is 2 way to communicate to a MongoDB server, one is native protocol and
 the other is trough an HTTP API. You need to open the following ports to all

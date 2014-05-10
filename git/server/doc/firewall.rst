@@ -26,11 +26,6 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-Firewall Settings
-=================
+.. include:: /doc/include/firewall.inc
 
-The following ports need to be open for the following states to make some
-services work:
-
-.. include:: /ssh/server/doc/firewall.include
-
+- :doc:`/ssh/server/doc/index` :doc:`/ssh/server/doc/firewall`

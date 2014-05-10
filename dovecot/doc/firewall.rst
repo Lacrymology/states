@@ -26,14 +26,9 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-Firewall Settings
-=================
+.. include:: /doc/include/add_firewall.inc
 
-The following ports need to be open for the following states to make some
-services work:
-
-dovecot
--------
+- :doc:`/postfix/doc/index` :doc:`/postfix/doc/firewall`
 
 The IMAP/POP server need to get the following port open to anyone, based on your
 security requirements (don't want cleartext):

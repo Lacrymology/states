@@ -26,15 +26,12 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-Firewall Settings
-=================
+Firewall
+========
 
-The following ports need to be open for the following states to make some
-services work:
+SpamAssassin daemon run on the following port: ``TCP`` ``783`` spamd.
 
-spamassassin
-------------
+.. warning::
 
-Optionally specifies the port number for the server to listen on (default: 783).
-
-- TCP 783: spamd
+  If SpamAssassin is only installed as dependencies of :doc:`/amavis/doc/index`
+  no need to open firewall ports as it will connect locally.

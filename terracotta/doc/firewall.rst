@@ -26,14 +26,11 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-Firewall Settings
-=================
+.. include:: /doc/include/add_firewall.inc
 
-The following ports need to be open for the following states to make some
-services work:
-
-terracotta
-----------
+- :doc:`/nginx/doc/index` :doc:`/nginx/doc/firewall`
+- :doc:`/rsync/doc/index` :doc:`/rsync/doc/firewall`
+- :doc:`/ssh/server/doc/index` :doc:`/ssh/server/doc/firewall`
 
 There is 3 ways to communicate to a terracotta server:
 
@@ -45,6 +42,6 @@ console.
 l2-group-port: Port listens for communication from other servers participating 
 in an networked-active-passive setup.
 
-- TCP 9510: dso-port
-- TCP 9520: jmx-port
-- TCP 9530: l2-group-port
+- ``TCP`` ``9510``: dso-port
+- ``TCP`` ``9520``: jmx-port
+- ``TCP`` ``9530``: l2-group-port

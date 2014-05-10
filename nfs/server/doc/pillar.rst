@@ -26,8 +26,9 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-Pillar
-======
+.. include:: /doc/include/add_firewall.inc
+
+- :doc:`/nginx/doc/index` :doc:`/nginx/doc/firewall`
 
 Mandatory
 ---------

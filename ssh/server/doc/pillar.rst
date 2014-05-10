@@ -26,8 +26,9 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-Pillar
-======
+.. include:: /doc/include/add_pillar.inc
+
+- :doc:`/apt/doc/index` :doc:`/apt/doc/pillar`
 
 Optional
 --------
@@ -59,7 +60,7 @@ ssh:server:extra_configs
 
 List extra configurations for ssh server.
 
-See more: http://www.manpagez.com/man/5/sshd_config/
+See more in
+`SSH man <http://www.openbsd.org/cgi-bin/man.cgi?query=sshd_config&sektion=5>`_.
 
 Default: Empty list.
-

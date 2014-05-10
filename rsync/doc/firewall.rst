@@ -26,16 +26,8 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-Firewall Settings
-=================
+Firewall
+========
 
-The following ports need to be open for the following states to make some
-services work:
-
-rsync
------
-
-Rsync run on the following port:
-
-- TCP 873: RSYNC
+Rsync daemon run on the following port ``TCP`` ``873``.
 

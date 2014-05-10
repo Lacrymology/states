@@ -26,16 +26,17 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-Pillar
-======
+.. include:: /doc/include/add_pillar.inc
+
+- :doc:`/pip/doc/index` :doc:`/pip/doc/pillar`
 
 Mandatory
 ---------
 
 Example::
 
-    salt:
-      master: salt.domain.com
+  salt:
+    master: salt.domain.com
 
 salt:master
 ~~~~~~~~~~~
@@ -47,14 +48,14 @@ Optional
 
 Example::
 
-    salt:
-      cloud:
-        profiles:
-          <profile_name>:
-            <attribute_name>: <value>
-        providers:
-          <provider_name>:
-            <attribute_name>: <value>
+  salt:
+    cloud:
+      profiles:
+        <profile_name>:
+          <attribute_name>: <value>
+      providers:
+        <provider_name>:
+          <attribute_name>: <value>
 
 salt:cloud:profiles:<profile_name>
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

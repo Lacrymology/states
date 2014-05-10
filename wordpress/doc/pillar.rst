@@ -26,8 +26,10 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-Pillar
-======
+.. include:: /doc/include/add_pillar.inc
+
+- :doc:`/nginx/doc/index` :doc:`/nginx/doc/pillar`
+- :doc:`/mariadb/server/doc/index` :doc:`/mariadb/server/doc/pillar`
 
 Mandatory
 ---------
@@ -124,6 +126,6 @@ redirected to HTTPS.
 Default: ``False``.
 
 wordpress:(workers|cheapers|idle|timeout)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 See uwsgi/doc/instance.rst for more details

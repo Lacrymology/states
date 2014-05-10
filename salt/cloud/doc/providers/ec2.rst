@@ -1,5 +1,5 @@
-Amazon EC2 Support
-==================
+Amazon EC2
+==========
 
 
 Salt server side pillar, value XXX will be replaced later::
@@ -51,12 +51,13 @@ key and put it into ``deployment_key:contents`` this way::
         {# followed by the content #}
         -----END RSA PRIVATE KEY-----
 
-Choose a EC2 image in http://cloud-images.ubuntu.com/releases/precise/release/
+Choose a EC2 image in
+`Ubuntu releases <http://cloud-images.ubuntu.com/releases/precise/release/>`_
 in the region you choosed. Set the ``ami-XXX`` value to
 ``salt:cloud:profiles:ci-minion:image``.
 
 Pick VM size in
-https://github.com/saltstack/salt-cloud/blob/0.8.9/saltcloud/clouds/ec2.py#L99
+`salt cloud ec2 python module <https://github.com/saltstack/salt-cloud/blob/0.8.9/saltcloud/clouds/ec2.py#L99>`_
 such as ``Micro Instance`` and set it to
 ``salt:cloud:profiles:ci-minion:size``
 

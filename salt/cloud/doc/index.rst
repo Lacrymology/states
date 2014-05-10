@@ -1,5 +1,5 @@
-Salt Cloud
-==========
+Cloud
+=====
 
 Introduction
 ------------
@@ -12,4 +12,4 @@ systems can be quickly and easily modeled and provisioned.
    :glob:
 
    *
-   providers/*
+   providers/index

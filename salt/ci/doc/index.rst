@@ -19,7 +19,7 @@ test upgrades and allow human testers to log into them anytime.
 
 But most minions will be temporary (created, run tests, then terminated).
 
-LINK TO SALT MASTER DOC
+Look in :doc:`/salt/master/doc/index` for more details.
 
 Salt Archive
 ~~~~~~~~~~~~
@@ -33,7 +33,7 @@ unavailable such as github.com.
 To make sure that archive is up to date, the synchronization with upstream
 salt archive server is executed each 5 minutes trough a cronjob.
 
-LINK TO SALT ARCHIVE SERVER DOC
+Look in :doc:`/salt/archive/server/doc/index` for more details.
 
 Salt Cloud
 ~~~~~~~~~~
@@ -50,7 +50,7 @@ On test failure or completion, results are gathered and VM terminated.
 Salt cloud is use to create those VMs, run bootstrap script and terminated
 completion.
 
-LINK TO SALT CLOUD DOC
+Look in :doc:`/salt/cloud/doc/index` for more details.
 
 Jenkins
 ~~~~~~~
@@ -64,9 +64,9 @@ some conditions such as:
 - A private git repo come with hook that perform a call back to CI server notify
   that changes were pushed to that branch and job need to run.
 - Github is configured to perform a callback to CI server when a push occurs.
-- Gitlab:
-  - https://wiki.jenkins-ci.org/display/JENKINS/Gitlab+Merge+Request+Builder+Plugin
-  - https://wiki.jenkins-ci.org/display/JENKINS/Gitlab+Hook+Plugin
+- Gitlab plugins:
+  - `Gitlab merge request <https://wiki.jenkins-ci.org/display/JENKINS/Gitlab+Merge+Request+Builder+Plugin>`_
+  - `Gitlab hook plugin <https://wiki.jenkins-ci.org/display/JENKINS/Gitlab+Hook+Plugin>`_
 - A job is configured to run at specific time (such as each day at midnight)
 
 The jobs can 2 different things:
@@ -93,7 +93,7 @@ Run test suite
   Minion by the bootstrap script.
 - Run a CI specific bootstrap script (not the one that come with salt.cloud
   state. This alternate script copy the artifact and follow the testing
-  framework steps::
+  framework steps:
 
   - chdir /
   - extract the artifact
@@ -120,7 +120,8 @@ Once Jenkins is deployed, go in one of the hostname you specified at
 Set ``[a-zA-Z0-9\-]*`` as regular expression for job name. As job name are
 used to create VM hostname, this need to be a valid hostname.
 
-Install https://wiki.jenkins-ci.org/display/JENKINS/Multiple+SCMs+Plugin plugin
+Install
+`Multiple SCM plugin <https://wiki.jenkins-ci.org/display/JENKINS/Multiple+SCMs+Plugin>`_
 to have it check all 3 git repositories required:
 
 - Common states
@@ -129,3 +130,8 @@ to have it check all 3 git repositories required:
 
 Raise number of executor to large value such as ``20`` if you want to let it
 run multiple tests in parallels.
+
+.. toctree::
+    :glob:
+
+    *

@@ -26,11 +26,10 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-==========
 Amazon EC2
 ==========
 
-Here is minimal pillars data to starts with. LINK TO PILLAR DOC.
+Here is minimal :doc:`pillar` data to starts with.
 
 First setup APT to use Amazon S3 internal mirrors::
 
@@ -49,7 +48,6 @@ Make CI server act as an NTP servers for all tested minions::
   {% for i in range(0, 4) %}
       - {{ i }}.amazon.pool.ntp.org
   {% endfor %}
-
 
 
 External Git Repositories

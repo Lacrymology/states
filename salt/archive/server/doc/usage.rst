@@ -1,6 +1,3 @@
-File Archive server
-===================
-
 .. Copyright (c) 2013, Quan Tong Anh
 .. All rights reserved.
 ..
@@ -33,7 +30,7 @@ Usage
 =====
 
 When you author a formula or pillar file, you should get the package from the
-file archive server first (if it was defined in the pillar), such as:
+file archive server first (if it was defined in the pillar), such as::
 
   {%- if 'files_archive' in pillar %}
   {{ pillar['files_archive'] }}/pip/diamond-xxx.tar.gz
@@ -44,11 +41,9 @@ file archive server first (if it was defined in the pillar), such as:
 Python Pip
 ----------
 
-LINK TO PIP DOC
-
-Pip come with native support for the archive, if ``files_archive`` is defined
-it will automatically grab those files from it. No need to specify the path
-in your ``requirements.txt``.
+:doc:`/pip/doc/index` come with native support for the archive, if
+``files_archive`` is defined it will automatically grab those files from it.
+No need to specify the path in your ``requirements.txt``.
 
 How to upload new files
 -----------------------

@@ -1,13 +1,13 @@
-I DON'T THIS IS SALT CLOUD SPECIFIC
+.todo: I DON'T THIS IS SALT CLOUD SPECIFIC
 
 Some settings need to be noticed:
 
 * providers:
   * keyname: is the name of the SSH private key
-  * provider: must be `ec2`
+  * provider: must be ``ec2``
 
 * profiles:
-  * image: must have prefix `ami-`
+  * image: must have prefix ``ami-``
   * size: Micro Instance, High-CPU Medium Instance, ...
 
 Installation
@@ -28,7 +28,7 @@ Make sure that it is updated, if not, run the following command::
   # cd /srv/pillar
   # git pull
 
-It's time to install `salt-cloud`::
+It's time to install ``salt-cloud``::
 
   salt myminion state.sls salt.cloud -v
 

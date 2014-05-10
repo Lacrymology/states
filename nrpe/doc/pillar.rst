@@ -58,4 +58,5 @@ Password use to submit passive check to NSCA daemon.
 shinken_pollers
 ~~~~~~~~~~~~~~~
 
-IPs address of system load balancing shinken.
+As documented in :doc:`/doc/pillar`, IPs address of system load balancing
+shinken.

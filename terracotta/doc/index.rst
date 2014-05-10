@@ -1,9 +1,7 @@
 Terracotta
 ==========
 
-
 .. toctree::
     :glob:
-
 
     *

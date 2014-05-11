@@ -54,7 +54,9 @@ After authoring the pillar data in local sandbox, it can be pushed on the
 master::
 
   git remote add salt-pillars git@ip-addr-of-salt-master:~git/salt-pillars.git
-  git remote -v
   git push salt-pillars master:master
 
-And do the same for all 2 other repositories in their local sandbox.
+And do the same for all 2 other repositories in their local sandbox:
+
+- git@ip-addr-of-salt-master:~git/salt-states.git
+- git@ip-addr-of-salt-master:~git/salt-common.git

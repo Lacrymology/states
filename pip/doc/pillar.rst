@@ -44,16 +44,16 @@ pip:allow_pypi
 ~~~~~~~~~~~~~~
 
 Value: True/False
-When ``file_archives`` is defined in pillar, if this pillar item not
+When ``files_archive`` is defined in pillar, if this pillar item not
 setted/defined or has value ``False`` will make pip use files_archive
 as the pkg source.
-When it setted to value ``True``, file_archives will act as
+When it setted to value ``True``, ``files_archive`` will act as
 a fallback when pkg is not available in pypi offical index.
 
-There is no way to make pypi offical index act as fallback for file_archives
+There is no way to make pypi offical index act as fallback for ``files_archive``
 because of the way pip 1.5.x handles pkg sources.
 In which, index always be choosen as pkg source when that pkg is available in
-both index and file_archives (provided by option ``find-links``).
+both index and ``files_archive`` (provided by option ``find-links``).
 
 Default: not defined
 

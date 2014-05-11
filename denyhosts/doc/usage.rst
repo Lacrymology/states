@@ -34,17 +34,11 @@ Usage
 .. TODO: HERE DOCUMENT HOW TO REMOVE FROM BLACKLIST AN HOSTNAME
 
 - Stop DenyHosts by run ``service denyhosts stop``
-- Remove the IP address from /etc/hosts.deny
-- Edit /var/lib/denyhosts/hosts and remove the lines containing the IP address. 
-  Save the file.
-- Edit /var/lib/denyhosts/hosts-restricted and remove the lines containing the
-  IP address. Save the file.
-- Edit /var/lib/denyhosts/hosts-root and remove the lines containing the IP
-  address. Save the file.
-- Edit /var/lib/denyhosts/hosts-valid and remove the lines containing the IP
-  address.  Save the file.
-
-- Edit /var/lib/denyhosts/user-hosts and remove the lines containing the IP address. 
-  Save the file.
-
-- Start DenyHosts by run ``service denyhosts start`` 
+- Remove the lines that contains the blocked IP address from the following
+  files:``/etc/hosts.deny``:
+  - ``/var/lib/denyhosts/hosts``
+  - ``/var/lib/denyhosts/hosts-restricted``
+  - ``/var/lib/denyhosts/hosts-root``
+  - ``/var/lib/denyhosts/hosts-valid``
+  - ``/var/lib/denyhosts/user-hosts``
+- Start DenyHosts: ``service denyhosts start``

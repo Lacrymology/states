@@ -2,3 +2,8 @@
 
 - :doc:`/apt/doc/index` :doc:`/apt/doc/pillar`
 - :doc:`/ssh/client/doc/index` :doc:`/ssh/client/doc/pillar`
+
+.. warning::
+
+  Make sure that :doc:`/ssh/server/doc/index` :doc:`/ssh/server/doc/pillar`
+  key ``ssh:server:extra_configs`` allow the user ``git`` in.

@@ -34,6 +34,11 @@
 - :doc:`/rsync/doc/index` :doc:`/rsync/doc/pillar`
 - :doc:`/ssh/server/doc/index` :doc:`/ssh/server/doc/pillar`
 
+.. warning::
+
+  Make sure that :doc:`/ssh/server/doc/index` :doc:`/ssh/server/doc/pillar`
+  key ``ssh:server:extra_configs`` allow the user ``git`` in.
+
 Mandatory
 ---------
 

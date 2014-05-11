@@ -35,6 +35,11 @@
 - :doc:`/rsyslog/doc/index` :doc:`/rsyslog/doc/pillar`
 - :doc:`/ssh/server/doc/index` :doc:`/ssh/server/doc/pillar`
 
+.. warning::
+
+  Make sure that :doc:`/ssh/server/doc/index` :doc:`/ssh/server/doc/pillar`
+  key ``ssh:server:extra_configs`` allow the user ``gitlab`` in.
+
 Mandatory
 ---------
 

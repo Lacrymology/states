@@ -64,3 +64,9 @@ See more in
 `SSH man <http://www.openbsd.org/cgi-bin/man.cgi?query=sshd_config&sektion=5>`_.
 
 Default: Empty list.
+
+.. warning::
+
+  Some formula such as :doc:`/git/server/doc/index`, :doc:`/gitlab/doc/index`
+  and :doc:`/salt/archive/server/doc/index` requires some users allowed to
+  log in.

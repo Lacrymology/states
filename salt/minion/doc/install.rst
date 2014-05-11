@@ -29,8 +29,8 @@
 Installation
 ============
 
-Copy the file ``salt/minion/bootstrap.sh`` to target and run it with it's ID
-followed by the IP or hostname of the Salt master::
+Copy the file ``salt/minion/bootstrap.sh`` to host target and run it with it's
+ID followed by the IP or hostname of deployed :doc:`/salt/master/doc/index`::
 
   ./bootstrap.sh mysuperminion 192.168.1.2
 

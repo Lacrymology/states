@@ -9,18 +9,19 @@ Introduction:
     :glob:
 
     intro
-    install
     usage
+    pillar
     state
+    install
     tests
     monitoring
-    pillar
     hacking
     build_doc
     write_state
     run_tests
     troubleshoot
     changelog
+    /_pillars/index
 
 
 Formulas Document:
@@ -30,6 +31,4 @@ Formulas Document:
     :titlesonly:
     :maxdepth: 1
 
-    ../*/doc/index
-    ../*/*/doc/index
-    ../*/index
+    /*/doc/index

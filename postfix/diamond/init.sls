@@ -78,6 +78,8 @@ postfix_diamond_resources:
     - mode: 640
     - require:
       - pkg: rsyslog
+    - require_in:
+      - service: rsyslog
 
 /etc/rsyslog.d/postfix_stats.conf:
   file:
@@ -100,6 +102,7 @@ postfix_diamond_resources:
     - require:
       - module: postfix_stats
       - file: /var/log/mail.log
+      - file: /etc/rsyslog.d/postfix_stats.conf
 
 postfix_stats:
   service:

@@ -87,13 +87,13 @@ Write Check
 
 It's very easy to write in any language. It's simply an binary of script that
 run, send text to standard output and exit with a specific code.
-`More on the expected output <http://nagiosplug.sourceforge.net/developer-guidelines.html#PLUGOUTPUT>`_.
+`More on the expected output <http://nagiosplug.sourceforge.net/developer-guidelines.html#PLUGOUTPUT>`__.
 
 To make it even easier, the following Python module is always available in
 ``/usr/local/nagios``
-`Python virtualenv <https://pypi.python.org/pypi/nagiosplugin/>`_.
+`Python virtualenv <https://pypi.python.org/pypi/nagiosplugin/>`__.
 
-You can look at the doc in http://pythonhosted.org/nagiosplugin/ or look
+You can look at `the doc <http://pythonhosted.org/nagiosplugin/>`__ or look
 in the common states you can find some of it's usage as example.
 
 Non-Monitoring Usage
@@ -108,9 +108,9 @@ While testing, the monitoring checks are not executed through NRPE, as it might
 not be installed or available during all test steps.
 
 It's rather executed by a Salt state module available in these Common states:
-``_states/nrpe.py`` and ``_modules/nrpe.py``.
+:download:`/_states/nrpe.py` and :download:`/_modules/nrpe.py`.
 
-For more details on this, look ``doc/tests.rst`` section *Automatic Tests* and
+For more details on this, look :doc:`/doc/tests` section *Automatic Tests* and
 *Test validation*.
 
 Monitoring Usage

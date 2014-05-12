@@ -47,13 +47,13 @@ graphite:carbon:instances
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Number of instances to deploy, should <= numbers of
-`CPU cores <https://en.wikipedia.org/wiki/Multi-core_processor>`_.
+`CPU cores <https://en.wikipedia.org/wiki/Multi-core_processor>`__.
 
 graphite:retentions
 ~~~~~~~~~~~~~~~~~~~
 
 List of data retention rules, see the
-`Graphite doc <http://graphite.readthedocs.org/en/latest/config-carbon.html#storage-schemas-conf>`_
+`Graphite doc <http://graphite.readthedocs.org/en/latest/config-carbon.html#storage-schemas-conf>`__
 for details of syntax .
 
 Optional

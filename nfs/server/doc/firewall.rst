@@ -29,7 +29,7 @@
 Firewall
 ========
 
-All `NFS <https://en.wikipedia.org/wiki/Network_File_System>`_
+All `NFS <https://en.wikipedia.org/wiki/Network_File_System>`__
 client need to be allowed to connect to the following port:
 
 - ``TCP`` ``111``: portmapper

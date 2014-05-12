@@ -58,7 +58,7 @@ diamond:ping
 ~~~~~~~~~~~~
 
 List of IP/hostname ping to monitor
-`latency <https://en.wikipedia.org/wiki/Latency_(engineering)#Packet-switched_networks>`_
+`latency <https://en.wikipedia.org/wiki/Latency_(engineering)#Packet-switched_networks>`__
 and availability.
 
 Default: empty list (``[]``).

@@ -42,5 +42,5 @@ It also support :doc:`/ssl/doc/index` on port ``443`` TCP.
 
 If ``ssl`` is defined in app pillar, the port ``443`` is also reachable.
 If ``ssl_redirect`` pillar is set to `True` then any connection to
-`HTTP <https://en.wikipedia.org/wiki/Http>`_ port
+`HTTP <https://en.wikipedia.org/wiki/Http>`__ port
 ``80`` are automatically redirected to HTTPS port ``443``.

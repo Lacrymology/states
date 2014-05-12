@@ -48,10 +48,10 @@ backup_server:fingerprint
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 :doc:`/ssh/doc/index`
-`fingerprint <http://en.wikipedia.org/wiki/Public_key_fingerprint>`_
+`fingerprint <http://en.wikipedia.org/wiki/Public_key_fingerprint>`__
 of backup :doc:`/backup/server/doc/index`.
 
-This is an example how to retrieve `github <https://github.com>`_
+This is an example how to retrieve `github <https://github.com>`__
 :doc:`/ssh/doc/index` fingerprint::
   
   ssh-keyscan github.com > /tmp/github.pub

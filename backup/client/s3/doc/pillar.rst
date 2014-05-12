@@ -43,12 +43,12 @@ Example::
 aws:s3:bucket
 ~~~~~~~~~~~~~
 
-`Amazon S3 bucket <http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html>`_
+`Amazon S3 bucket <http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html>`__
 name.
 
 aws:s3:path
 ~~~~~~~~~~~
 
 Path in
-`S3 bucket <http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html>`_
+`S3 bucket <http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html>`__
 where to push archive files.

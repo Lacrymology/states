@@ -100,7 +100,7 @@ ldap:debug
 ~~~~~~~~~~
 
 Log verbose level, some values of this can be: -1, 256, 16383, ...
-See `See slapdconfig <http://www.openldap.org/doc/admin24/slapdconfig.html>`_
+See `See slapdconfig <http://www.openldap.org/doc/admin24/slapdconfig.html>`__
 for more details.
 
 Below is some values:

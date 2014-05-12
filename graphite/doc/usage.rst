@@ -69,7 +69,7 @@ A few functions to get the data you want:
 
     mostDeviant(3,*.os.memory.MemFree)    
 
-`Full list of function <http://graphite.readthedocs.org/en/latest/functions.html>`_
+`Full list of function <http://graphite.readthedocs.org/en/latest/functions.html>`__
 
 Cleanup Metrics
 ---------------
@@ -79,8 +79,8 @@ remove the folder from the file-system of the carbon server::
 
   /var/lib/graphite/whisper/$MINION
 
-Where ``$MINION`` is the :doc:`/salt/minion/index` ID of the host you want to
-remove.
+Where ``$MINION`` is the :doc:`/salt/minion/doc/index` ID of the host you want
+to remove.
 
 Create user
 -----------

@@ -51,7 +51,7 @@ clamav:dns_db
 
 Database verification domain, DNS used to verify virus database version.
 Link to the
-`public list of available mirrors <http://www.clamav.net/mirrors.html>`_.
+`public list of available mirrors <http://www.clamav.net/mirrors.html>`__.
 
 Default: ``current.cvd.clamav.net``.
 
@@ -81,7 +81,7 @@ clamav:db_mirrors
 
 Tuple of spam database servers.
 Link to the
-`public list of available mirrors <http://www.clamav.net/mirrors.html>`_.
+`public list of available mirrors <http://www.clamav.net/mirrors.html>`__.
 
 Default: list with:
  - ``db.local.clamav.net``

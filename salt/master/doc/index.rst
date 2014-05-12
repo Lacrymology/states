@@ -6,12 +6,12 @@ Introduction
 
 .. TODO: INTRODUCTION TO SALT MASTER
 
-Consider seriously adding a :doc:`Salt Archive </salt/archive/server/doc/index>`
+Consider seriously adding a :doc:`/salt/archive/server/doc/index`
 to the role of the Salt Master. That will speed up deployment of hosts and make
 them more resilient on third-party failure.
 
 In case there is no available git server already, adding
-:doc:`/git/server/doc/index>` to the role can be an option.
+:doc:`/git/server/doc/index` to the role can be an option.
 See :doc:`git` for details.
 
 If you need to perform remote call using

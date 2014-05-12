@@ -29,7 +29,7 @@
 Firewall
 ========
 
-This state come with optional :doc:`pillarp` setting to change it's default
+This state come with optional :doc:`pillar` setting to change it's default
 port ``22`` to an other one. You need to check which port is defined in
 :doc:`pillar`, but here is the default:
 

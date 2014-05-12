@@ -1,4 +1,5 @@
 .. TODO: FIX COMMENT STYLE
+
 :Copyrights: Copyright (c) 2014, Lam Dang Tung
 
              All rights reserved.
@@ -55,7 +56,7 @@ Default: ``1000``.
 php:error_reporting
 ~~~~~~~~~~~~~~~~~~~
 
-Set the `error reporting level <http://php.net/error-reporting>`_.
+Set the `error reporting level <http://php.net/error-reporting>`__.
 
 Common Values:
 Default Value: ``E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED``

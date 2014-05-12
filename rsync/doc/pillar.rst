@@ -45,7 +45,7 @@ Example::
 
 Attributes and values is mapped to rsync daemon's attributes and values. If
 attribute contains space, wrap quotes about it. All attributes and values
-are `available here <http://rsync.samba.org/documentation.html>`_.
+are `available here <http://rsync.samba.org/documentation.html>`__.
 
 Example::
 

@@ -65,7 +65,7 @@ openvpn:<tunnelname>:config
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Map to openvpn configuration options. Please consult
-`OpenVPN document <http://openvpn.net/index.php/open-source/documentation.html>`_
+`OpenVPN document <http://openvpn.net/index.php/open-source/documentation.html>`__
 for more details.
 
 Note: some keys is "reserved" or "blocked" when provide throught this salt

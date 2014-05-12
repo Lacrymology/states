@@ -128,7 +128,7 @@ elasticsearch:ssl
 .. note::
 
   Only used to make :doc:`/elasticsearch/doc/index` trough
-  `HTTPS <https://en.wikipedia.org/wiki/Https>`_.
+  `HTTPS <https://en.wikipedia.org/wiki/Https>`__.
 
 elasticsearch:https_allowed
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -63,17 +63,17 @@ Externally Hosted
 
 Existing git hosting service can be used such as:
 
-- `Github <https://github.com/>`_
-- `BitBucket <https://bitbucket.org/>`_
+- `Github <https://github.com/>`__
+- `BitBucket <https://bitbucket.org/>`__
 
 Requirements
 ------------
 
 To perform the following steps the some requirements are needed to be installed:
 
-- `Git <http://git-scm.com/>`_
-- `Python 2.7 <https://www.python.org/>`_
-- `SSH Client <http://en.wikipedia.org/wiki/Comparison_of_SSH_clients>`_
+- `Git <http://git-scm.com/>`__
+- `Python 2.7 <https://www.python.org/>`__
+- `SSH Client <http://en.wikipedia.org/wiki/Comparison_of_SSH_clients>`__
 
 And you need to have access to Salt Master host with :doc:`/ssh/doc/index`.
 
@@ -146,8 +146,9 @@ To install a salt-master::
 
   This is really the :doc:`/salt/minion/doc/index` ID that is required to
   install the :doc:`index`.
-   As it first install a :doc:`/salt/minion/doc/index` and use it to install :doc:`index`. This
-   step install both :doc:`/salt/minion/doc/index` and :doc:`index`.
+  As it first install a :doc:`/salt/minion/doc/index` and use it to install
+  :doc:`index`. This step install both :doc:`/salt/minion/doc/index` and
+  :doc:`index`.
 
 If the following instruction :doc:`/salt/master/doc/index` and
 :doc:`/salt/master/doc/git` had been followed.

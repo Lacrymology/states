@@ -29,5 +29,5 @@
 Firewall
 ========
 
-:doc:`index` listen on `Syslog <https://en.wikipedia.org/wiki/Syslog>`_
+:doc:`index` listen on `Syslog <https://en.wikipedia.org/wiki/Syslog>`__
 port ``514`` on ``UDP`` protocol.

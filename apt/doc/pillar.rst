@@ -44,11 +44,11 @@ Example::
 apt:sources
 ~~~~~~~~~~~
 
-Content of `APT sources.list <https://help.ubuntu.com/community/SourcesList>`_
+Content of `APT sources.list <https://help.ubuntu.com/community/SourcesList>`__
 file as multiline pillar.
 
-Don't use `HTTPS <https://en.wikipedia.org/wiki/Https>`_
-`URL <http://en.wikipedia.org/wiki/Uniform_resource_locator>`_, as Ubuntu 12.04
+Don't use `HTTPS <https://en.wikipedia.org/wiki/Https>`__
+`URL <http://en.wikipedia.org/wiki/Uniform_resource_locator>`__, as Ubuntu 12.04
 ``apt-transport-https`` does not support
 many :doc:`/ssl/doc/index` certificate properly.
 

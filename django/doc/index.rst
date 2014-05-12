@@ -3,4 +3,4 @@ Django
 
 .. TODO: INTRO
 
-`Django Python web framework <http://www.djangoproject.com>`_.
+`Django Python web framework <http://www.djangoproject.com>`__.

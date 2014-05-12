@@ -61,7 +61,7 @@ ssh:server:extra_configs
 List extra configurations for :doc:`index`.
 
 See more in
-`SSH man <http://www.openbsd.org/cgi-bin/man.cgi?query=sshd_config&sektion=5>`_.
+`SSH man <http://www.openbsd.org/cgi-bin/man.cgi?query=sshd_config&sektion=5>`__.
 
 Default: Empty list (``[]``).
 

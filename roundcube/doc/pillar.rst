@@ -80,7 +80,7 @@ roundcube:imap:server
 ~~~~~~~~~~~~~~~~~~~~~
 
 IP or hostname of :doc:`/dovecot/doc/index`
-`IMAP <https://en.wikipedia.org/wiki/Internet_Message_Access_Protocol>`_
+`IMAP <https://en.wikipedia.org/wiki/Internet_Message_Access_Protocol>`__
 server to connect to.
 
 Default: localhost ``127.0.0.1``.

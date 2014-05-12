@@ -40,15 +40,15 @@ such as:
 
 .. TODO: CONVERT INTO LINKS
 
-- logging daemon
-- package manager
+- :doc:`logging daemon </rsyslog/doc/index>`
+- :doc:`package manager </apt/doc/index>`
 - :doc:`/ssh/server/doc/index`
 - cron
 - logging rotation
-- Network time synchronization client and server
-- DNS cache server
+- :doc:`/ntp/doc/index` client and server
+- :doc:`/pdnsd/doc/index`
 - sudo
-- Simple SMTP client
+- :doc:`Simple SMTP client </ssmtp/doc/index>`
 - screen
 
 and numerous states for tools used by itself to deploy applications, such as:
@@ -69,51 +69,51 @@ such as:
 - :doc:`/nginx/doc/index` web server
 - :doc:`/memcache/doc/index` daemon
 - NodeJS
-- uWSGI application server
+- :doc:`/uwsgi/doc/index` application server
 - :doc:`/django/doc/index`
 
 Databases SQL or NoSQL, such as:
 
-- :doc:`/postgresql/server/doc/index`
+- :doc:`/postgresql/doc/index`
 - :doc:`/elasticsearch/doc/index`
 - :doc:`/mongodb/doc/index`
 
 States that protect the server, such as:
 
-- Denyhosts to block bruteforce SSH attacks
-- Firewall
-- Clamav anti-virus
-- OpenVPN to secure communication
+- :doc:`/denyhosts/doc/index` to block bruteforce SSH attacks
+- :doc:`/firewall/doc/index`
+- :doc:`/clamav/doc/index` anti-virus
+- :doc:`/openvpn/doc/index` to secure communication
 
 States to deploy complex tools that is used to support the Infrastructure in
 various ways, such as:
 
-- Graylog2 centralized logging
-- Statistic and graphics using Graphite
-- Shinken distributed monitoring
-- Configuration management using Saltstack
-- Sentry for error notification and reporting
-- Backup
+- :doc:`/graylog2/doc/index` centralized logging
+- Statistic and graphics using :doc:`/graphite/doc/index`
+- :doc:`/shinken/doc/index` distributed monitoring
+- Configuration management using :doc:`/salt/doc/index`
+- :doc:`/sentry/doc/index` for error notification and reporting
+- :doc:`/backup/doc/index`
 
 Standalone daemon state, such as:
 
-- ProFTPd
-- Git server
+- :doc:`/proftpd/doc/index`
+- :doc:`/git/server/doc/index`
 
 States for integration of various components at operating system level:
 
-- Diamond, a daemon that gathers statistics on thousands of metrics and sends it
-  to Graphite server.
-- NRPE (Nagios Remote Plugin Executor), called by Shinken server to perform
-  checks.
+- :doc:`/diamond/doc/index`, a daemon that gathers statistics on thousands of
+  metrics and sends it to :doc:`/graphite/doc/index`.
+- :doc:`/nrpe/doc/index` (Nagios Remote Plugin Executor), called by
+  :doc:`/shinken/doc/index` server to perform checks.
 - Raven client to report error to Sentry.
-- StatsD, a daemon that receives stats from some applications and periodically
-  sends them to Graphite server.
+- :doc:`/statsd/doc/index`, a daemon that receives stats from some applications
+  and periodically sends them to :doc:`/graphite/doc/index`.
 
 Other states, such as:
 
 - Salt web UI
-- Salt REST API
+- :doc:`Salt web UI </salt/api/doc/index>`
 - An APT repository server to host your own Debian packages
 
 States for testing and its requirements.
@@ -152,9 +152,9 @@ The states and pillars are documentations! These states try to do everything
 requires to have a fully working application. Human intervention is avoided at
 all costs.
 This allow to only backup the data that is produced by the application, for
-example: In PostgreSQL, it's the dump of all databases. As the configuration
-files are managed by the states and pillars, they don't need to be backup. Nor
-the binaries, as they're available through the package manager.
+example: In :doc:`/postgresql/doc/index`, it's the dump of all databases. As the
+configuration files are managed by the states and pillars, they don't need to be
+backup. Nor the binaries, as they're available through the package manager.
 So, well documented states and pillars can document what the infrastructure is
 and how global pieces are plugged together. Thus eliminate most of the documents
 requirements and make it very easy to plan a disaster recovery plan.
@@ -165,7 +165,8 @@ server.
 This repository contains only low-levels states. Low-level means that they only
 perform changes on the server itself on specific applications or the operating
 system itself. This repository alone with pillars, can't even execute salt
-``state.highstate`` function. But, each state can be executed through ``state.sls``.
+``state.highstate`` function. But, each state can be executed through
+``state.sls``.
 This repository don't contains business logic, orchestration or integration. It
 need to be into another repository. This allows this **common** repository to
 never contains client's specific changes and stays generic and usable by
@@ -247,15 +248,18 @@ Integration
 -----------
 
 Most of the states come with a sub-state that integrate themselves with other
-components, such as monitoring (through Nagios NRPE), statistics and graphs
-(through Diamond) and logging (to filter noise out of logs).
+components, such as monitoring (through :doc:`/nrpe/doc/index`), statistics and
+graphs (through :doc:`/graphite/doc/index`) and logging (to filter noise out of
+logs).
 
 Those sub-states with integration aren't required to install the parent state.
-Such as PostgreSQL server state can be deployed without NRPE monitoring checks,
-Diamond plugin configuration or client-side backup script.
+Such as :doc:`/postgresql/doc/index` state can be deployed without
+:doc:`/nrpe/doc/index` monitoring checks,
+:doc:`/diamond/doc/index` plugin configuration or client-side backup script.
 
 A lot of other states also directly integrate themselves when they have
-native support for technologies, such as built-in Graylog2 support in uWSGI
+native support for technologies, such as built-in :doc:`/graylog2/doc/index`
+support in :doc:`/uwsgi/doc/index`.
 through its GELF plugin. Or through third party library, such as GrayPY for
 Python based application. In those cases, the integration is turned on only
 when Salt pillar data contains an expected value.
@@ -272,22 +276,23 @@ the states in that repository.
 
 Only the following support both HA and HP:
 
-- Elasticsearch
-- RabbitMQ ActiveMQ bus
-- Shinken monitoring
+- :doc:`/elasticsearch/doc/index`
+- :doc:`/rabbitmq/doc/index` ActiveMQ bus
+- :doc:`/shinken/doc/index` monitoring
 
 The following states will soon have HA support:
 
-- PostgreSQL server
+- :doc:`/postgresql/doc/index` server
 
 The following states will soon have HA and HP support:
 
-- Graphite: Statistic and graphics
-- Graylog2 centralized logging
-- MongoDB NoSQL database
-- Sentry: error notification and reporting
+- :doc:`/graphite/doc/index`: Statistic and graphics
+- :doc:`/graylog2/doc/index` centralized logging
+- :doc:`/mongodb/doc/index` NoSQL database
+- :doc:`/sentry/doc/index`: error notification and reporting
 
-Once Salt Master supports properly multi-master, the state will support it.
+Once :doc:`/salt/master/doc/index` supports properly multi-master, the state
+will support it.
 
 Evolution
 ---------
@@ -303,9 +308,9 @@ Uninstallation of components
 
 All the states come with its uninstall equivalent. These are required for
 testing purpose. But they're also useful to undo some changes. They're called
-"absent" states and they have the standard absent name. Example: PostgreSQL
-database server state is ``postgresql.server`` and the uninstallation state is
-``postgresql.server.absent``.
+"absent" states and they have the standard absent name. Example:
+:doc:`/postgresql/doc/index` database server state is ``postgresql.server`` and
+the uninstallation state is ``postgresql.server.absent``.
 
 Unlike the states that install or create something that often include and
 requires other state, the absent only remove itself. I don't try to uninstall
@@ -335,8 +340,8 @@ here is an example list:
 
 Or simply borrows the name of the low-level state:
 
-- ``shinken`` monitoring host
-- ``elasticsearch`` node
+- :doc:`/shinken/doc/index` monitoring host
+- :doc:`/elasticsearch/doc/index` node
 
 Then, for each role, who's responsible to integration this repository states
 to the business requirements need to create one state file per role.

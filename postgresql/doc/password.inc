@@ -1,4 +1,4 @@
-:doc:`/postgresql/server/doc/index` user password.
+:doc:`/postgresql/doc/index` user password.
 
 Default: randomly generated.
 

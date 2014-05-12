@@ -65,8 +65,8 @@ some conditions such as:
   that changes were pushed to that branch and job need to run.
 - Github is configured to perform a callback to CI server when a push occurs.
 - :doc:`/gitlab/doc/index` plugins:
-  - `Gitlab merge request <https://wiki.jenkins-ci.org/display/JENKINS/Gitlab+Merge+Request+Builder+Plugin>`_
-  - `Gitlab hook plugin <https://wiki.jenkins-ci.org/display/JENKINS/Gitlab+Hook+Plugin>`_
+  - `Gitlab merge request <https://wiki.jenkins-ci.org/display/JENKINS/Gitlab+Merge+Request+Builder+Plugin>`__
+  - `Gitlab hook plugin <https://wiki.jenkins-ci.org/display/JENKINS/Gitlab+Hook+Plugin>`__
 - A job is configured to run at specific time (such as each day at midnight)
 
 The jobs can 2 different things:
@@ -121,7 +121,7 @@ Set ``[a-zA-Z0-9\-]*`` as regular expression for job name. As job name are
 used to create VM hostname, this need to be a valid hostname.
 
 Install
-`Multiple SCM plugin <https://wiki.jenkins-ci.org/display/JENKINS/Multiple+SCMs+Plugin>`_
+`Multiple SCM plugin <https://wiki.jenkins-ci.org/display/JENKINS/Multiple+SCMs+Plugin>`__
 to have it check all 3 git repositories required:
 
 - Common states

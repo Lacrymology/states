@@ -49,7 +49,7 @@ nrpe:nsca:servers
 ~~~~~~~~~~~~~~~~~
 
 IPs address of each node on :doc:`/shinken/doc/index`
-`receiver <http://www.shinken-monitoring.org/wiki/nsca_daemon_module>`_ server.
+`receiver <http://www.shinken-monitoring.org/wiki/nsca_daemon_module>`__ server.
 
 nrpe:nsca:password
 ~~~~~~~~~~~~~~~~~~

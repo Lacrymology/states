@@ -43,7 +43,7 @@ tightvncserver:password
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 Password to login server via a
-`VNC <https://en.wikipedia.org/wiki/Virtual_Network_Computing>`_ viewer.
+`VNC <https://en.wikipedia.org/wiki/Virtual_Network_Computing>`__ viewer.
 
 Optional
 --------

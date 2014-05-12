@@ -42,7 +42,7 @@ Example::
 aws:access_key
 ~~~~~~~~~~~~~~
 
-`Amazon <https://aws-portal.amazon.com/gp/aws/developer/account/index.html?action=access-key>`_
+`Amazon <https://aws-portal.amazon.com/gp/aws/developer/account/index.html?action=access-key>`__
 access key.
 
 aws:secret_key

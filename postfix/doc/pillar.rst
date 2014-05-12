@@ -106,7 +106,7 @@ postfix:sasl
 ~~~~~~~~~~~~
 
 Set configuration for authentication by :doc:`/dovecot/doc/index`
-`SASL <https://en.wikipedia.org/wiki/Simple_Authentication_and_Security_Layer>`_.
+`SASL <https://en.wikipedia.org/wiki/Simple_Authentication_and_Security_Layer>`__.
 
 Default:``False``.
 

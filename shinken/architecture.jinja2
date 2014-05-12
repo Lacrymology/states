@@ -39,8 +39,9 @@ Description: The Arbiter is responsible for:
 - Validating the health of all other Shinken daemons
 - Issuing global directives to Shinken daemons (kill, activate-spare, etc.)
 http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects/arbiter
-#}
-{% for id in pillar['shinken']['architecture']['arbiter'] %}
+-#}
+{%- for id in pillar['shinken']['architecture']['arbiter'] -%}
+  {%- if id in mine %}
 define arbiter {
     arbiter_name arbiter-{{ id }}
     host_name {{ id }}
@@ -52,7 +53,10 @@ define arbiter {
     spare 1
     {% endif %}
 }
-{% endfor %}
+  {%- else %}
+# Can't define arbiter {{ id }}, data not yet available in salt mine
+  {%- endif -%}
+{%- endfor %}
 
 define module {
     module_name arbiter-retention
@@ -70,20 +74,24 @@ Description: The scheduler is responsible for:
 - Requesting actions from a reactionner
 - Buffering and forwarding results its associated broker
 http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects/scheduler
-#}
-{% for id in pillar['shinken']['architecture']['scheduler'] %}
+-#}
+{%- for id in pillar['shinken']['architecture']['scheduler'] -%}
+  {%- if id in mine %}
 define scheduler {
     scheduler_name scheduler-{{ id }}
     address {{ mine[id]['ip_addrs']['public'] }}
     port 7768
     modules scheduler-retention
     realm All
-{#-    spare 0#}
-{#-    # Skip initial broks creation. Boot fast, but some broker modules won't#}
-{#-    # work with it!#}
+{#-    spare 0-#}
+{#-    # Skip initial broks creation. Boot fast, but some broker modules won't-#}
+{#-    # work with it!-#}
 {#-   skip_initial_broks 0#}
 }
-{% endfor %}
+  {%- else %}
+# Can't define scheduler {{ id }}, data not yet available in salt mine
+  {%- endif -%}
+{%- endfor %}
 
 define module {
     module_name scheduler-retention
@@ -103,7 +111,8 @@ define module{
     module_type nrpe_poller
 }
 
-{% for id in pillar['shinken']['architecture']['poller'] %}
+{%- for id in pillar['shinken']['architecture']['poller'] -%}
+  {%- if id in mine %}
 define poller {
     poller_name poller-{{ id }}
     address {{ mine[id]['ip_addrs']['public'] }}
@@ -112,7 +121,10 @@ define poller {
     realm All
     modules NrpeBooster
 }
-{% endfor %}
+  {%- else %}
+# Can't define poller {{ id }}, data not yet available in salt mine
+  {%- endif -%}
+{%- endfor -%}
 
 {#-
 Description: The broker is responsible for:
@@ -125,8 +137,9 @@ Description: The broker is responsible for:
   - Configuration data
   - Command interface
 http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects/broker
-#}
-{% for id in pillar['shinken']['architecture']['broker'] %}
+-#}
+{%- for id in pillar['shinken']['architecture']['broker'] -%}
+  {%- if id in mine %}
 define broker {
     broker_name broker-{{ id }}
     address {{ mine[id]['ip_addrs']['public'] }}
@@ -134,9 +147,9 @@ define broker {
     modules broker-syslog, broker-retention, broker-webui{% if 'graphite_address' in pillar %}, broker-graphite{% endif %}
     realm All
     manage_arbiters 1
-    {% if not loop.first %}
+    {%- if not loop.first %}
     spare 1
-    {% endif %}
+    {%- endif -%}
 {#-                            ; broker for the arbiter.
     manage_sub_realms   1   ; Does it take jobs from schedulers of sub-Realms?
     timeout             3   ; Ping timeout
@@ -144,7 +157,10 @@ define broker {
     max_check_attempts  3   ; If ping fails N or more, then the node is dead
     check_interval      60  ; Ping node every minutes#}
 }
-{% endfor %}
+  {%- else %}
+# Can't define broker {{ id }}, data not yet available in salt mine
+  {%- endif -%}
+{%- endfor -%}
 
 {#-
 Send all logs to system's Syslog
@@ -158,12 +174,12 @@ define module {
     module_type syslog
 }
 
-{% if 'graphite_address' in pillar %}
+{%- if 'graphite_address' in pillar %}
 define module {
     module_name broker-graphite
     module_type graphite_perfdata
     host {{ pillar['graphite_address'] }}
-    {# Or 2004 if using use_pickle 1 #}
+    {#- Or 2004 if using use_pickle 1 #}
     port 2003
     #tick_limit 300 ; Default value 300
     graphite_data_source shinken
@@ -176,7 +192,7 @@ define module {
     templates_path /usr/local/shinken/share/templates/graphite/
     graphite_data_source shinken
 }
-{% endif %}
+{%- endif %}
 
 define module {
     module_name broker-retention
@@ -187,11 +203,11 @@ define module {
 define module {
     module_name broker-webui
     module_type webui
-{% if pillar['shinken']['architecture']['broker']|length == 1 %}
+{%- if pillar['shinken']['architecture']['broker']|length == 1 %}
     host 127.0.0.1
-{% else %}
+{%- else %}
     host 0.0.0.0
-{% endif %}
+{%- endif %}
     port 7767
     auth_secret CHANGE_ME
     manage_acl 1
@@ -215,7 +231,7 @@ define module {
                                      ; must be a Shinken contact.#}
 }
 
-{## Module:      OpenLDAP_UI
+{#- Module:      OpenLDAP_UI
 ## Loaded by:   WebUI
 ## Usage:       Uncomment and set your value in ldap_uri
 # Check authentication for WebUI using an Open Ldap server.
@@ -230,9 +246,9 @@ define module {
     # For mode you can switch between ad (active dir)
     # and openldap
     mode            openldap
-}#}
+}-#}
 
-# Check authentification using password parameter in contact definition.
+{#- Check authentification using password parameter in contact definition. #}
 define module {
     module_name broker-webui-auth
     module_type cfg_password_webui
@@ -243,9 +259,10 @@ Description: The reactionner is responsible for:
 - Executing notification actions
 - Executing event handler actions
 http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects/reactionner
-#}
-{% for id in pillar['shinken']['architecture']['reactionner'] %}
+-#}
+{%- for id in pillar['shinken']['architecture']['reactionner'] %}
 define reactionner {
+  {%- if id in mine %}
     reactionner_name reactionner-{{ id }}
     address {{ mine[id]['ip_addrs']['public'] }}
     port 7769
@@ -261,7 +278,10 @@ define reactionner {
     check_interval      60  ; Ping node every minutes#}
     modules
 }
-{% endfor %}
+  {%- else %}
+# Can't define reactionner {{ id }}, data not yet available in salt mine
+  {%- endif -%}
+{%- endfor %}
 
 define module {
     module_name NSCA
@@ -275,9 +295,10 @@ define module {
 {#-
 The receiver manages passive information. It's just a "buffer" which will
 load passive modules (like NSCA) and be read by the arbiter to dispatch data.
-#}
-{% for id in salt['pillar.get']('shinken:architecture:receiver', []) %}
+-#}
+{%- for id in salt['pillar.get']('shinken:architecture:receiver', []) %}
 define receiver {
+  {%- if id in mine %}
     receiver_name receiver-{{ id }}
     address {{ mine[id]['ip_addrs']['public'] }}
     port 7773
@@ -287,7 +308,10 @@ define receiver {
                             ; schedulers if it know about the hostname in the
                             ; command.#}
 }
-{% endfor %}
+  {%- else %}
+# Can't define receiver {{ id }}, data not yet available in salt mine
+  {%- endif -%}
+{%- endfor -%}
 
 {#-
 Module: broker-webui-sqlite

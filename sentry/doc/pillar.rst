@@ -143,4 +143,4 @@ sentry:ssl_redirect
 sentry:(workers|cheapers|idle|timeout)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-See :doc:`/uwsgi/doc/pillar` for more details
+.. include:: /uwsgi/doc/pillar.inc

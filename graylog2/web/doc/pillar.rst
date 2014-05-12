@@ -34,7 +34,7 @@ graylog2:ssl_redirect
 graylog2:(workers|cheapers|idle|timeout)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-See :doc:`/uwsgi/doc/pillar` for more details
+.. include:: /uwsgi/doc/pillar.inc
 
 graylog2:smtp
 ~~~~~~~~~~~~~

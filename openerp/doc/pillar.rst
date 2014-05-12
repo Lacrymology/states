@@ -101,7 +101,7 @@ openerp:db:password
 openerp:(workers|cheapers|idle|timeout)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-See :doc:`/uwsgi/doc/pillar` for more details
+.. include:: /uwsgi/doc/pillar.inc
 
 openerp:max_upload_file_size
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~

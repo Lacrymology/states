@@ -71,7 +71,7 @@ Data for binding with ldap.
 moinmoin:(workers|cheapers|idle|timeout)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-See :doc:`/uwsgi/doc/pillar` for more details
+.. include:: /uwsgi/doc/pillar.inc
 
 moinmoin:hostnames
 ~~~~~~~~~~~~~~~~~~

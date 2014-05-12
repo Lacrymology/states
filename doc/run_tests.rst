@@ -50,10 +50,10 @@ And use ``/tmp/repo``
 Bootstrap Archive
 -----------------
 
-Create an archive for salt-master bootstrap purpose.
+Create an archive for :doc:`/salt/master/doc/index` bootstrap purpose.
 
-Check the ``bootstrap_archive.py`` script at the root of the common repository
-for instruction.
+Check the :download:`/bootstrap_archive.py` script at the root of the common
+repository for instruction.
 
 Copy the output of the archive to the server you want to install the
 testing host.
@@ -70,7 +70,7 @@ Install minion::
 
   /root/salt/states/salt/minion/bootstrap.sh integration-[whatever]
 
-Quick shortcut:
+Quick shortcut::
 
   cd /; tar -xzf /tmp/archive.tar.gz; /root/salt/states/salt/minion/bootstrap.sh integration
 
@@ -86,8 +86,8 @@ To launch tests::
 
   /root/salt/states/test/integration.py -c
 
-There is more than 500 tests, it takes time and generate a lot of logs, so I
-suggest:
+There is more than 950 tests, it takes time and generate a lot of logs, so I
+suggest::
 
   nohup /root/salt/states/test/integration.py -c > /tmp/test.log
 

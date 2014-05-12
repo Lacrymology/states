@@ -30,15 +30,12 @@
 
 - :doc:`/nginx/doc/index` :doc:`/nginx/doc/firewall`
 
-Each nodes of a single Elasticsearch (ES) cluster need to connect to each others
-using the following port:
+Each nodes of a single :doc:`index` cluster need to connect to each others
+using the following port for transport``TCP`` ``9300``.
 
-- TCP 9300: Transport
+:doc:`index` client that aren't using native :doc:`index` protocol with a
+built-in Java :doc:`index` instance such as :doc:`/graylog2/server/doc/index`
+connect using it's HTTP interface which is on the following port: ``TCP``
+``9200``.
 
-ES client that aren't using native ES protocol with a built-in Java ES instance
-such as Graylog2 Server connect using it's HTTP interface which is on the
-following port:
-
-- TCP 9200: HTTP API
-
-Allow it for all ES clients.
+Allow it for all :doc:`index` clients.

@@ -149,7 +149,7 @@ List of users.
 etherpad:users:<username>
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Username of user who uses Etherpad.
+Username of user who uses :doc:`index`.
 
 etherpad:users:<username>:password
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -174,7 +174,7 @@ etherpad:restrict_referer
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Regex for referer URL restriction. When you want block direct access to
-Etherpad.
+:doc:`index`.
 
 Example: ``^(.*)(sometext|othertex)(.*)$``
 

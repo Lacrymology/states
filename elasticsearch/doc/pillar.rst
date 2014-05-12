@@ -57,7 +57,7 @@ Example::
 elasticsearch:cluster:name
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Name of this ES cluster for all listed nodes.
+Name of this :doc:`index` cluster for all listed nodes.
 
 elasticsearch:nodes
 ~~~~~~~~~~~~~~~~~~~
@@ -77,7 +77,8 @@ This node hostname or public IP to reach it from internal network.
 elasticsearch:nodes:{{ node minion ID }}:{{ state }}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-A node can only actual run a ES standalone node, or a graylog2.server state.
+A node can only actual run a :doc:`index` standalone node, or a
+``graylog2.server``.
 
 elasticsearch:nodes:{{ node minion ID }}:{{ state }}:name
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -99,9 +100,9 @@ Example::
 elasticsearch:nodes:{{ node minion ID }}:{{ state }}:port
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-ES transport port.
+:doc:`index` transport port.
 
-If multiple instances of ES run on the same host, the port must be
+If multiple instances of :doc:`index` run on the same host, the port must be
 different.
 
 Default: ``9300``.
@@ -109,8 +110,8 @@ Default: ``9300``.
 elasticsearch:nodes:{{ node minion ID }}:{{ state }}:http
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If this instance handle ES HTTP API port. Only one HTTP API instance is required
-for each host.
+If this instance handle :doc:`index` HTTP API port. Only one HTTP API instance
+is required for each host.
 
 Default: ``True``.
 

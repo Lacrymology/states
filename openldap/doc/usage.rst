@@ -121,7 +121,7 @@ How to add email accounts after formula ran the fist time?
 Two thing need to be done:
 
 - Add an LDAP entry in form: ``uid=USERNAME,ou=people,dc=DOMAIN,dc=TLD``
-  See ``openldap/pillar.rst`` for more details about attributes of an user
+  See :doc:`/openldap/doc/pillar` for more details about attributes of an user
   entry.
 - Create a key in pillar likes already exist users to map recently created
   LDAP entry to a virtual mailbox. Apply :doc:`/postfix/doc/index` formula

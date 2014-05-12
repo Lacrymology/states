@@ -121,7 +121,8 @@ Bootstrap Archive
 -----------------
 
 Create an archive to bootstrap :doc:`index` using
-:download:`/bootstrap_archive.py` script at the root of the common repository::
+:download:`bootstrap_archive.py </bootstrap_archive.py>` script at the root of
+the common repository::
 
   cd ~/somewhere/common-checkout/
   ./boostrap_archive.py /path/to/pillars ~/somewhere/client-checkout > /path/to/archive.tar.gz

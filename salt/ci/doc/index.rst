@@ -97,7 +97,8 @@ Run test suite
 
   - chdir /
   - extract the artifact
-  - install minion (like :download:`/salt/cloud/bootstrap.jinja2`)
+  - install minion (like
+    :download:`bootstrap.jinja2 </salt/cloud/bootstrap.jinja2>`)
   - run ``/root/salt/states/test/integration.py``
 
 Installation

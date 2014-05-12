@@ -7,5 +7,5 @@ Default: randomly created.
 .. note::
 
   If for any reason the password need to be retrieved after installation,
-  use the custom salt module :download:`/_modules/password.py` and specify
+  use the custom salt module ``password.pillar`` and specify
   the pillar key name in format ``path:django_key``.

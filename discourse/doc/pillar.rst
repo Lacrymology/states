@@ -111,7 +111,7 @@ discourse:ssl_redirect
 discourse:(workers|cheapers|idle|timeout)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-See :doc:`/uwsgi/doc/pillar` for more details
+.. include:: /uwsgi/doc/pillar.inc
 
 discourse:smtp
 ~~~~~~~~~~~~~~

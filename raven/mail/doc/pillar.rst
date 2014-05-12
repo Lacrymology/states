@@ -29,7 +29,6 @@
              POSSIBILITY OF SUCH DAMAGE.
 :authors: - Dang Tung Lam
 
-Pillar
-======
+.. include:: /doc/include/add_pillar.inc
 
-See :doc:`/raven/doc/pillar` for more details.
+- :doc:`/raven/doc/index` :doc:`/raven/doc/pillar`

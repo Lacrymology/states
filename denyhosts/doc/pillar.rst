@@ -196,6 +196,6 @@ The value specified for this option limits the downloaded data to
 resiliency period or greater.
 
 Additional details on many of these pillar are documented in
-:download:`../config.jinja2`.
+:download:`config <../config.jinja2>`.
 
 Default: ``5h``.

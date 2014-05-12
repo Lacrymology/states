@@ -158,6 +158,7 @@ To use those SSL files in your states, you need to do the following:
 - Requires the following three condition before starting your service:
     ``- cmd: ssl_cert_and_key_for_{{ pillar['my_app']['ssl'] }}``
 
-- In the config file you point to the same path to reach those files, like:
+- In the config file you point to the same path to reach those files, like::
+
     /etc/ssl/certs/{{ pillar['my_app']['ssl'] }}_chained.crt;
     tls_key = /etc/ssl/private/{{ pillar['my_app']['ssl'] }}.pem;

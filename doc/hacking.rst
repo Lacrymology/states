@@ -147,8 +147,8 @@ You can test communication between master and minion with::
   minion:
       True
 
-To run some state without having the master running you can use salt-call
-passing it the `--local` switch:
+To run some state without having the master running you can use ``salt-call``
+passing it the `--local` switch::
 
   $ bin/salt -c/path/to/salt/conf --local minion test.ping
 
@@ -211,17 +211,18 @@ Result should be::
 Overriding default paths
 ------------------------
 
-When you get tired of passing `-c /path/to/salt/conf` to every call you can do
+When you get tired of passing ``-c /path/to/salt/conf`` to every call you can do
 the following:
 
-If you installed salt with `pip -e` as per this docs, go to `/path/to/salt/repo`
-which by default will be in `/path/to/salt/src/salt` and edit `salt/syspaths.py`
+If you installed salt with ``pip -e`` as per this docs, go to
+``/path/to/salt/repo`` which by default will be in ``/path/to/salt/src/salt``
+and edit ``salt/syspaths.py``
 
 Do the following changes:
 
-* change `ROOT_DIR = '/'` for `ROOT_DIR = '/path/to/salt'`
-* change `CONFIG_DIR = os.path.join(ROOT_DIR, 'etc', 'salt')` for
-  `CONFIG_DIR = os.path.join(ROOT_DIR, 'conf')`
+* change ``ROOT_DIR = '/'`` for ``ROOT_DIR = '/path/to/salt'``
+* change ``CONFIG_DIR = os.path.join(ROOT_DIR, 'etc', 'salt')`` for
+  ``CONFIG_DIR = os.path.join(ROOT_DIR, 'conf')``
 
-If you installed salt without `-e` do those changes in `salt/_syspaths.py`
+If you installed salt without ``-e`` do those changes in ``salt/_syspaths.py``
 instead

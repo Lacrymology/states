@@ -81,9 +81,6 @@ repository too.
 Multiple versions of states
 ---------------------------
 
-As Salt don't support GitFS for pillars, there is only a single branch checked
-out on the salt master.
-
 But states can have multiple versions in separate branches. By default, it's the
 master branch.
 

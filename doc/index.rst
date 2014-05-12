@@ -1,7 +1,4 @@
-Salt common documentations
-==========================
-
-Introduction:
+Welcome to Infrastructure Documentation:
 
 .. toctree::
     :maxdepth: 2

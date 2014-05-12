@@ -116,7 +116,7 @@ djangopypi2:smtp
 djangopypi2:(workers|cheapers|idle|timeout)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-See :doc:`/uwsgi/doc/pillar` for more details
+.. include:: /uwsgi/doc/pillar.inc
 
 djangopypi2:ssl
 ~~~~~~~~~~~~~~~

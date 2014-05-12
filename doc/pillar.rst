@@ -46,7 +46,7 @@ salt:master
 ~~~~~~~~~~~
 
 As all deployed hosts are done trough salt, the minion need to know where is the
-master to connect.
+:doc:`/salt/master/doc/index` to connect.
 
 Look in :doc:`/salt/minion/doc/index` for details.
 
@@ -68,18 +68,18 @@ Default: ``master``.
 files_archive
 ~~~~~~~~~~~~~
 
-Path to mirror/archive server where download most files (archives, packages,
-pip) to apply states.
+Path to :doc:`/salt/archive/server/doc/index` where download most files
+(archives, packages, pip) to apply states.
 
 graylog2_address
 ~~~~~~~~~~~~~~~~
 
-IP/Hostname of centralized Graylog2 server.
+IP/Hostname of centralized :doc:`/graylog2/server/doc/index` server.
 
 graphite_address
 ~~~~~~~~~~~~~~~~
 
-IP/Hostname of carbon/graphite server.
+IP/Hostname of :doc:`/carbon/doc/index` server.
 This key is required if ``diamond`` integration of formulas had been included in
 roles.
 
@@ -87,10 +87,8 @@ shinken_pollers
 ~~~~~~~~~~~~~~~
 
 List of monitoring hosts that can perform checks on this host.
-This is required if any ``nrpe`` integration of formula had been included in
-roles.
-
-See :doc:`/nrpe/doc/index` for details.
+This is required if any :doc:`/nrpe/doc/index` integration of formula had been
+included in roles.
 
 smtp
 ~~~~
@@ -114,7 +112,7 @@ See below for details on each keys.
 smtp:server
 ~~~~~~~~~~~
 
-Your SMTP server. Ex: smtp.yourdomain.com
+Your SMTP server. Ex: ``smtp.yourdomain.com``
 
 smtp:port
 ~~~~~~~~~

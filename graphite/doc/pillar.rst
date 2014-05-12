@@ -147,4 +147,4 @@ Consult :doc:`/carbon/doc/pillar` for more information.
 graphite:web:(workers|cheapers|idle|timeout)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-See :doc:`/uwsgi/doc/pillar` for more details.
+.. include:: /uwsgi/doc/pillar.inc

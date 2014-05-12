@@ -16,4 +16,4 @@ It's probably
 
 - The private key isn't specified in :doc:`pillar` ``git-server:keys``
 - User ``git`` isn't allowed in :doc:`/ssh/server/doc/pillar` of
-  :doc:/ssh/server/doc/index`.
+  :doc:`/ssh/server/doc/index`.

@@ -32,13 +32,11 @@ Introduction to this repository
 Welcome to **Common** repository.
 
 This repository targets Linux only. It actually only supports Ubuntu 12.04
-Precise LTS but support for other releases of Ubuntu or Debian based
-distributions can be easily added.
+Precise LTS but support for other releases of `Ubuntu <http://www.ubuntu.com>`__
+or `Debian <http://www.debian.org>`__ based distributions can be easily added.
 
 It contains the low-level salt states for various operating-system services,
 such as:
-
-.. TODO: CONVERT INTO LINKS
 
 - :doc:`logging daemon </rsyslog/doc/index>`
 - :doc:`package manager </apt/doc/index>`

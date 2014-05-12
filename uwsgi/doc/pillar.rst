@@ -29,8 +29,8 @@
 Pillar
 ======
 
-Following pillar keys are used by many uWSGI instances (softwares that use
-:doc:`index` as application server).
+Following pillar keys are used by many :doc:`index` instances (softwares that
+use :doc:`index` as application server).
 
 Optional
 --------
@@ -51,8 +51,8 @@ Default ``30``.
 cheaper
 ~~~~~~~
 
-Number of process in :doc:`index` cheaper mode.
-See: http://uwsgi-docs.readthedocs.org/en/latest/Cheaper.html
+Number of process in :doc:`index`
+`cheaper mode <http://uwsgi-docs.readthedocs.org/en/latest/Cheaper.html>`__
 
 Default: cheaper mode isn't used.
 

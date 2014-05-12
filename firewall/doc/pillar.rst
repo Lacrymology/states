@@ -47,10 +47,10 @@ Example::
 ip_addresses
 ~~~~~~~~~~~~
 
-List of host inside internal network that will get full access to this server.
+List of additional hosts inside that will get full access to this server.
 
 firewall:filter
 ~~~~~~~~~~~~~~~
 
-Dict of protocol (tcp/udp) with inside it the list of port that are allowed from
-external networks.
+Dict of protocol (``tcp`` and ``udp``) with inside it the list of port that are
+allowed from external networks.

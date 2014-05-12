@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Lam Dang Tung
+Copyright (c) 2013, Bruno Clermont
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,28 +22,13 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Lam Dang Tung <lamdt@familug.org>
-Maintainer: Lam Dang Tung <lamdt@familug.org>
-
-Remove Nagios NRPE check for OpenERP.
+Author: Bruno Clermont <patate@fastmail.cn>
+Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-
-/etc/nagios/nrpe.d/openerp.cfg:
-  file:
-    - absent
-
-/etc/nagios/nrpe.d/openerp-uwsgi.cfg:
-  file:
-    - absent
-{#-
-/etc/nagios/nrpe.d/postgresql-openerp.cfg:
-  file:
-    - absent
-#}
-/etc/nagios/nrpe.d/openerp-nginx.cfg:
-  file:
-    - absent
-
-/etc/cron.d/passive-checks-openerp:
-  file:
-    - absent
+# {{ pillar['message_do_not_modify'] }}
+command[openerp_cron]=
+{%- if salt['pillar.get']('openerp:company_db', False) -%}
+/usr/lib/nagios/plugins/check_procs -C openerp-cron.py -u openerp -w 1:1
+{%- else -%}
+/bin/echo "HTTP OK: No cron process (no DB specified)"
+{%- endif -%}

@@ -53,6 +53,19 @@ include:
     - user: nagios
     - group: nagios
     - mode: 440
+    - source: salt://openerp/nrpe/config.jinja2
+    - require:
+      - pkg: nagios-nrpe-server
+    - watch_in:
+      - service: nagios-nrpe-server
+
+/etc/nagios/nrpe.d/openerp-uwsgi.cfg:
+  file:
+    - managed
+    - template: jinja
+    - user: nagios
+    - group: nagios
+    - mode: 440
     - source: salt://uwsgi/nrpe/instance.jinja2
     - require:
       - pkg: nagios-nrpe-server

@@ -91,19 +91,18 @@ And then on :doc:`/salt/master/doc/index` run::
 Here is a sugestion of sequence. This is a list of formulas
 and not roles:
 
-# :doc:`/salt/archive/server/doc/index`. After that you should change
-  ``files_archive`` in :doc:`/salt/archive/server/doc/pillar` for one of the
-  ``salt_archive:web:hostnames``.
-
-# :doc:`/sentry/doc/index`
-# :doc:`/carbon/doc/index`
-# :doc:`/graphite/doc/index`
-# mail server related formulas
-# :doc:`/elasticsearch/doc/index`
-# :doc:`/graylog2/server/doc/index`
-# :doc:`/graylog2/web/doc/index`
-# :doc:`/shinken/doc/index`
-# :doc:`/backup/server/doc/index`
+#. :doc:`/salt/archive/server/doc/index`. After that you should change
+   ``files_archive`` in :doc:`/salt/archive/server/doc/pillar` for one of the
+   ``salt_archive:web:hostnames``.
+#. :doc:`/sentry/doc/index`
+#. :doc:`/carbon/doc/index`
+#. :doc:`/graphite/doc/index`
+#. mail server related formulas
+#. :doc:`/elasticsearch/doc/index`
+#. :doc:`/graylog2/server/doc/index`
+#. :doc:`/graylog2/web/doc/index`
+#. :doc:`/shinken/doc/index`
+#. :doc:`/backup/server/doc/index`
 
 .. warning::
 

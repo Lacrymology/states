@@ -29,7 +29,8 @@
 Firewall
 ========
 
-All NFS client need to be allowed to connect to the following port:
+All `NFS <https://en.wikipedia.org/wiki/Network_File_System>`_
+client need to be allowed to connect to the following port:
 
 - ``TCP`` ``111``: portmapper
 - ``UDP`` ``111``: portmapper

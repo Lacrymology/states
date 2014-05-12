@@ -38,13 +38,12 @@ Mandatory
 Example::
 
   proftpd:
-    - list
     password: userpass
 
 proftpd:password
 ~~~~~~~~~~~~~~~~
 
-PostgreSQL user password.
+:doc:`/postgresql/doc/index` user password.
 
 Optional
 --------
@@ -58,13 +57,13 @@ Example::
 proftpd:deployments
 ~~~~~~~~~~~~~~~~~~~
 
-List deployments of proftpd.
+List deployments of :doc:`index`.
 
-Default: [].
+Default: Empty list (``[]``).
 
 destructive_absent
 ~~~~~~~~~~~~~~~~~~
 
-Remove all data when run absent.sls.
+Remove all data when run ``absent.sls``.
 
 Default: ``False``.

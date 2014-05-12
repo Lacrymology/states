@@ -54,7 +54,7 @@ See :doc:`/salt/master/doc/index` for details.
 GitLab
 """"""
 
-A :doc:`Gitlab formula </gitlab/doc/index>` is also available to act as a
+A :doc:`/gitlab/doc/index` is also available to act as a
 git server for a salt master. It requires manual settings and need more
 preparation but can answers other needs.
 
@@ -75,7 +75,7 @@ To perform the following steps the some requirements are needed to be installed:
 - `Python 2.7 <https://www.python.org/>`_
 - `SSH Client <http://en.wikipedia.org/wiki/Comparison_of_SSH_clients>`_
 
-And you need to have access to Salt Master host with SSH.
+And you need to have access to Salt Master host with :doc:`/ssh/doc/index`.
 
 .. note::
 
@@ -120,13 +120,13 @@ Note that pillar ``top.sls`` need something similar to::
 Bootstrap Archive
 -----------------
 
-Create an archive to bootstrap salt-master using ``bootstrap_archive.py`` script
-at the root of the common repository::
+Create an archive to bootstrap :doc:`index` using
+:download:`/bootstrap_archive.py` script at the root of the common repository::
 
   cd ~/somewhere/common-checkout/
   ./boostrap_archive.py /path/to/pillars ~/somewhere/client-checkout > /path/to/archive.tar.gz
 
-Copy output of the archive to the server to target salt-master host::
+Copy output of the archive to the server to target :doc:`index` host::
 
   scp /path/archive.tar.gz root@ip-or-hostname-salt-master:/tmp/archive.tar.gz
 
@@ -144,9 +144,10 @@ To install a salt-master::
 
 .. note::
 
-  This is really the minion ID that is required to install the Salt Master.
-   As it first install a Salt Minion and use it to install Salt Master. This
-   step install both minion and master.
+  This is really the :doc:`/salt/minion/doc/index` ID that is required to
+  install the :doc:`index`.
+   As it first install a :doc:`/salt/minion/doc/index` and use it to install :doc:`index`. This
+   step install both :doc:`/salt/minion/doc/index` and :doc:`index`.
 
 If the following instruction :doc:`/salt/master/doc/index` and
 :doc:`/salt/master/doc/git` had been followed.
@@ -155,11 +156,12 @@ At this point it's now possible to ``git push`` all three repositories.
 Connect Minion to Master
 ------------------------
 
-Now that both master and minion are running, the master need to accept it's own
-minion key::
+Now that both :doc:`index` and :doc:`/salt/minion/doc/index` are running, the
+:doc:`index` need to accept it's own :doc:`/salt/minion/doc/index` key::
 
   salt-key -A -y
 
-Salt master host minion is now connect to itself trough the master::
+Salt master host :doc:`/salt/minion/doc/index` is now connect to itself trough
+the :doc:`index`::
 
   salt-call test.ping

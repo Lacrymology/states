@@ -1,3 +1,4 @@
+.. TODO: FIX COMMENT STYLE
 :Copyrights: Copyright (c) 2014, Lam Dang Tung
 
              All rights reserved.
@@ -31,9 +32,6 @@
 Pillar
 ======
 
-Mandatory
----------
-
 Optional
 --------
 
@@ -57,13 +55,11 @@ Default: ``1000``.
 php:error_reporting
 ~~~~~~~~~~~~~~~~~~~
 
-Set the error reporting level.
+Set the `error reporting level <http://php.net/error-reporting>`_.
 
 Common Values:
-Default Value: E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED
-Development Value: E_ALL
-Production Value: E_ALL & ~E_DEPRECATED & ~E_STRICT
-
-Read more: http://php.net/error-reporting
+Default Value: ``E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED``
+Development Value: ``E_ALL``
+Production Value: ``E_ALL & ~E_DEPRECATED & ~E_STRICT``
 
 Default: ``E_ALL & ~E_DEPRECATED & ~E_STRICT``.

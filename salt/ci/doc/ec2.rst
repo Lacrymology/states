@@ -56,7 +56,8 @@ External Git Repositories
 Skip this step if you use git repository hosted on the CI server itself.
 
 Grant access to the key pair you created to you're Git/Bitbucket repositories.
-If you need the OpenSSH compatible public key value, do the following::
+If you need the :doc:`/ssh/doc/index` compatible public key value, do the
+following::
 
   chmod 400 $keyfile.pem
   ssh-keygen -y -f $keyfile.pem
@@ -64,8 +65,8 @@ If you need the OpenSSH compatible public key value, do the following::
 Server Installation
 -------------------
 
-Create a security only for the C.I. server. Allow in SSH, HTTP and HTTPs (if
-you turned on SSL).
+Create a security only for the C.I. server. Allow in :doc:`/ssh/doc/index`,
+HTTP and HTTPs (if you turned on :doc:`/ssl/doc/index`).
 Allow all TCP, UDP and ICMP traffic from security group
 ``salt:cloud:providers:amazon_ec2:securitygroup`` in.
 

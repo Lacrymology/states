@@ -26,9 +26,8 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
--------------------
 Why? ``_pillars/``?
--------------------
+===================
 
 Because I want to write my own ext_pillar, but it need to be in a specific
 place in the Python path:

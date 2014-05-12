@@ -57,7 +57,8 @@ Example::
 shinken:graphite_url
 ~~~~~~~~~~~~~~~~~~~~
 
-Graphite address.
+:doc:`/graphite/doc/index` address.
+Should be one value in :doc:`/graphite/doc/pillar` ``graphite:hostnames``.
 
 shinken:users
 ~~~~~~~~~~~~~
@@ -75,12 +76,12 @@ Default: ``16384``.
 shinken:<username>:email
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-Shinken user's email
+:doc:`index` user's email
 
 shinken:<username>:password
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Shinken user's password
+:doc:`index` user's password
 
 shinken:architecture:broker
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -100,7 +101,7 @@ shinken:architecture:poller:id
 shinken:web:hostnames
 ~~~~~~~~~~~~~~~~~~~~~
 
-List of HTTP hostnames that Shinken web UI is assigned to.
+.. include:: /nginx/doc/hostnames.inc
 
 Optional
 --------
@@ -114,16 +115,12 @@ Example::
 shinken:ssl
 ~~~~~~~~~~~
 
-Name of the SSL key to use for HTTPS.
-
-Default: ``False``.
+.. include:: /nginx/doc/ssl.inc
 
 shinken:ssl_redirect
 ~~~~~~~~~~~~~~~~~~~~
 
-If set to True and SSL is turned on, this will force all HTTP traffic to be redirected to HTTPS.
-
-Default: ``False``.
+.. include:: /nginx/doc/ssl_redirect.inc
 
 shinken:log_level
 ~~~~~~~~~~~~~~~~~
@@ -135,6 +132,6 @@ Default: ``INFO``.
 shinken:nrpe:timeout
 ~~~~~~~~~~~~~~~~~~~~
 
-How many seconds until a NRPE connection timeout.
+How many seconds until a :doc:`/nrpe/doc/index` connection timeout.
 
 Default: ``9``.

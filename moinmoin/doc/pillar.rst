@@ -40,13 +40,12 @@ Example::
       superusers:
         - spiderman
         - batman
-    ldap: # config ldap as backend authenticate for moinmoin
+    ldap:
       uri: 'ldap://example.com
       binddn: 'cn=admin,dc=example,dc=com'
       bindpw: 'passwordhere'
       basedn: 'dc=example,dc=com'
-      ssl: idoic # config moinmoin use ldap with TLS for authenticate. See
-      ssl/init.sls for more
+      ssl: bleh
     workers: 2
     cheaper: False
 
@@ -72,4 +71,19 @@ Data for binding with ldap.
 moinmoin:(workers|cheapers|idle|timeout)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-See uwsgi/doc/instance.rst for more details
+See :doc:`/uwsgi/doc/pillar` for more details
+
+moinmoin:hostnames
+~~~~~~~~~~~~~~~~~~
+
+.. include:: /nginx/doc/hostnames.inc
+
+moinmoin:ssl
+~~~~~~~~~~~~
+
+.. include:: /nginx/doc/ssl.inc
+
+moinmoin:ssl_redirect
+~~~~~~~~~~~~~~~~~~~~~
+
+.. include:: /nginx/doc/ssl_redirect.inc

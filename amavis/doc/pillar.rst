@@ -26,20 +26,9 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-.. include:: /doc/include/support.inc
+.. include:: /doc/include/add_pillar.inc
 
-Mandatory
----------
-
-Example::
-
-  mail:
-    mailname: domain.ltd
-
-mail:mailname
-~~~~~~~~~~~~~
-
-See :doc:`mail:mailname</mail/doc/pillar>`
+- :doc:`/mail/doc/index` :doc:`/mail/doc/pillar`
 
 Optional
 --------

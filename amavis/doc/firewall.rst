@@ -40,13 +40,10 @@
 Amavis
 ------
 
-Amavis run on the following port:
-
-- ``TCP`` ``10024`` amavisd
+Amavis run on the following port: ``TCP`` ``10024``.
 
 Clamav
 ------
 
 :doc:`/clamav/doc/index` integration run on the following port:
-
-- ``TCP`` ``3310`` clamd
+``TCP`` ``3310``.

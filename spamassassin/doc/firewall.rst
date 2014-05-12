@@ -29,9 +29,9 @@
 Firewall
 ========
 
-SpamAssassin daemon run on the following port: ``TCP`` ``783`` spamd.
+:doc:`index` daemon run on the following port: ``TCP`` ``783`` spamd.
 
 .. warning::
 
-  If SpamAssassin is only installed as dependencies of :doc:`/amavis/doc/index`
+  If :doc:`index` is only installed as dependencies of :doc:`/amavis/doc/index`
   no need to open firewall ports as it will connect locally.

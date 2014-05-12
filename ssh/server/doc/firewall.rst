@@ -29,11 +29,11 @@
 Firewall
 ========
 
-This state come with optional pillar setting to change it's default port (22)
-to an other one. You need to check which port is defined in pillar, but here
-is the default:
+This state come with optional :doc:`pillarp` setting to change it's default
+port ``22`` to an other one. You need to check which port is defined in
+:doc:`pillar`, but here is the default:
 
-- TCP 22: SSH default port
+``TCP`` ``22``: :doc:`/ssh/doc/index` default port
 
-The ports can be changed with ``extra_configs`` pillar key, please look in
-:doc:`/ssh/server/doc/pillar` for details.
+The ports can be changed with ``extra_configs`` :doc:`pillar` key, please look
+for details.

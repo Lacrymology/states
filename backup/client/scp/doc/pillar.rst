@@ -42,17 +42,17 @@ Example::
 backup_server:address
 ~~~~~~~~~~~~~~~~~~~~~
 
-IP/Hostname of backup server.
+IP/Hostname of :doc:`/backup/server/doc/index`.
 
 backup_server:fingerprint
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-SSH fingerprint of backup SSH server.
+:doc:`/ssh/doc/index`
+`fingerprint <http://en.wikipedia.org/wiki/Public_key_fingerprint>`_
+of backup :doc:`/backup/server/doc/index`.
 
-How to get SSH fingerprint
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-This is an example for getting github.com SSH fingerprint::
+This is an example how to retrieve `github <https://github.com>`_
+:doc:`/ssh/doc/index` fingerprint::
   
   ssh-keyscan github.com > /tmp/github.pub
   ssh-keygen -lf /tmp/github.pub

@@ -42,7 +42,7 @@ such as:
 
 - logging daemon
 - package manager
-- SSH server
+- :doc:`/ssh/server/doc/index`
 - cron
 - logging rotation
 - Network time synchronization client and server
@@ -53,30 +53,30 @@ such as:
 
 and numerous states for tools used by itself to deploy applications, such as:
 
-- Git
+- :doc:`/git/doc/index`
 - Mercurial
-- SSH client
+- :doc:`/ssh/client/doc/index` client
 - Python PIP
 - Python virtualenv
-- SSL keys
+- :doc:`/ssl/doc/index` keys
 - Python
 - Ruby
 
 It also contains less generic services that might be used by other applications,
 such as:
 
-- RabbitMQ ActiveMQ bus
-- Nginx web server
-- Memcache daemon
+- :doc:`/rabbitmq/doc/index` ActiveMQ bus
+- :doc:`/nginx/doc/index` web server
+- :doc:`/memcache/doc/index` daemon
 - NodeJS
 - uWSGI application server
-- Django
+- :doc:`/django/doc/index`
 
 Databases SQL or NoSQL, such as:
 
-- Postgresql
-- Elasticsearch
-- MongoDB
+- :doc:`/postgresql/server/doc/index`
+- :doc:`/elasticsearch/doc/index`
+- :doc:`/mongodb/doc/index`
 
 States that protect the server, such as:
 

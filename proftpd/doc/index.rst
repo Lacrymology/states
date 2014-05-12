@@ -5,8 +5,8 @@ ProFPTD
 
 .. warning::
 
-  FTP is an insecure and crappy protocol, I would never use that.
-  Please do not use this state.
+  `FTP <https://en.wikipedia.org/wiki/Ftp>`_ is an insecure and crappy protocol,
+  You should never use that. Please do not use this state.
 
 But a client wanted to upload files from a special software used
 during sports competitions.

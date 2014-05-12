@@ -34,10 +34,10 @@ Usage
 Web UI
 ------
 
-After installing, you can login to the Shinken UI by using the account that
+After installing, you can login to the :doc:`index` UI by using the account that
 is defined in :doc:`pillar` key ``shinken:users``.
 
-Click ``All`` section to see all notifications on shinken that include:
+Click ``All`` section to see all notifications on :doc:`index` that include:
 
 - ``CRITICAL``
 - ``WARNING``

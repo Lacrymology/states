@@ -1,5 +1,5 @@
-OpenSSH
-=======
+SSH
+===
 
 .. TODO: Introduction
 

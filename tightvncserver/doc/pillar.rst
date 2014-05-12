@@ -42,7 +42,8 @@ Example::
 tightvncserver:password
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-Password to login server ia VNC viewer.
+Password to login server via a
+`VNC <https://en.wikipedia.org/wiki/Virtual_Network_Computing>`_ viewer.
 
 Optional
 --------
@@ -61,36 +62,36 @@ Example::
 tightvncserver:wm
 ~~~~~~~~~~~~~~~~~
 
-Name of window manager, That run by VNC server.
-Currently we only support fluxbox.
+Name of window manager, That run by :doc:`index`.
+Currently we only support ``fluxbox``.
 
 Default: ``fluxbox``.
 
 tightvncserver:user
 ~~~~~~~~~~~~~~~~~~~
 
-Name of user who run VNC service.
+Name of user who run :doc:`index`.
 
 Default: ``vnc``.
 
 tightvncserver:user_passwd
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Password of VNC user.
+Password of :doc:`index` user.
 
 Default: random.
 
 tightvncserver:sudo
 ~~~~~~~~~~~~~~~~~~~
 
-VNC user is a sudoer?
+:doc:`index` user is a sudoer?
 
 Default: ``False``.
 
 tightvncserver:resolution
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Screen resolution that show in VNC viewer when access to VNC server.
+Screen resolution that show in VNC viewer when access to :doc:`index`.
 
 Default: ``1024x768``.
 

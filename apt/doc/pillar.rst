@@ -44,9 +44,13 @@ Example::
 apt:sources
 ~~~~~~~~~~~
 
-Content of sources.list file as multiline pillar.
-Don't use HTTPS URLs, as ubuntu 12.04 `apt-transport-https` does not support
-many HTTPS SSL certificate properly.
+Content of `APT sources.list <https://help.ubuntu.com/community/SourcesList>`_
+file as multiline pillar.
+
+Don't use `HTTPS <https://en.wikipedia.org/wiki/Https>`_
+`URL <http://en.wikipedia.org/wiki/Uniform_resource_locator>`_, as Ubuntu 12.04
+``apt-transport-https`` does not support
+many :doc:`/ssl/doc/index` certificate properly.
 
 Optional
 --------
@@ -65,8 +69,10 @@ Example::
 proxy_server
 ~~~~~~~~~~~~
 
-If True, the specific HTTP proxy server (without authentication) is used to
-download .deb and reach APT server.
+If ``True``, the specific
+`HTTP proxy server <https://en.wikipedia.org/wiki/Proxy_server#Web_proxy_servers>`_
+(without authentication) is used to download ``.deb`` and reach
+`APT <http://en.wikipedia.org/wiki/Advanced_Packaging_Tool>`_ server.
 
 Default: ``False``.
 

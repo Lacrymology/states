@@ -33,9 +33,6 @@
 - :doc:`/nginx/doc/index` :doc:`/nginx/doc/pillar`
 - :doc:`/statsd/doc/index` :doc:`/statsd/doc/pillar`
 
-Mandatory
----------
-
 Example::
 
   memcache_servers:
@@ -52,41 +49,41 @@ Example::
       password: test
       email: joe@test.com
 
+Mandatory
+---------
+
 sentry:initial_admin_user:username
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Username of initial administrative user created at installation.
+.. include:: /django/doc/initial_username.inc
 
 sentry:initial_admin_user:password
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Password of initial administrative user created at installation.
-
-sentry:hostnames
-~~~~~~~~~~~~~~~~
-
-List of HTTP hostname that ends in sentry webapp.
-
-sentry:django_key
-~~~~~~~~~~~~~~~~~
-
-Random string.
-See `Django Secret key Doc <https://docs.djangoproject.com/en/1.4/ref/settings/#secret-key>`_.
-
-sentry:db:password
-~~~~~~~~~~~~~~~~~~
-
-PostgreSQL user password.
-
-sentry:worker
-~~~~~~~~~~~~~
-
-Number of uWSGI worker that will run the webapp.
+.. include:: /django/doc/initial_password.inc
 
 sentry:initial_admin_user:email
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Email address of initial administrative user created at installation.
+
+sentry:hostnames
+~~~~~~~~~~~~~~~~
+
+.. include:: /nginx/doc/hostnames.inc
+
+Optional
+--------
+
+sentry:django_key
+~~~~~~~~~~~~~~~~~
+
+.. include:: /django/doc/key.inc
+
+sentry:db:password
+~~~~~~~~~~~~~~~~~~
+
+.. include:: /postgresql/doc/password.inc
 
 Optional
 --------
@@ -113,44 +110,35 @@ Example::
 sentry:db:username
 ~~~~~~~~~~~~~~~~~~
 
-PostgreSQL username for sentry. it will be created.
+.. include:: /postgresql/doc/username.inc
 
 Default: ``sentry``.
 
 sentry:db:name
 ~~~~~~~~~~~~~~
 
-PostgreSQL database name. it will be created.
+.. include:: /postgresql/doc/name.inc
 
 Default: ``sentry``.
 
-sentry:db:host
-~~~~~~~~~~~~~~
-
-PostgreSQL address.
-
-Default: ``127.0.0.1``.
+.. sentry:db:host
+.. PostgreSQL address.
+.. Default: ``127.0.0.1``.
 
 sentry:smtp
 ~~~~~~~~~~~
 
-The global `smtp` can be overrided for this particular state.
-For details on its format, please see `smtp` section in doc/pillar.rst.
+.. include:: /mail/doc/smtp.inc
 
 sentry:ssl
 ~~~~~~~~~~
 
-Name of the SSL key to use for HTTPS.
-
-Default: ``False``.
+.. include:: /nginx/doc/ssl.inc
 
 sentry:ssl_redirect
 ~~~~~~~~~~~~~~~~~~~
 
-If set to True and SSL is turned on,
-this will force all HTTP traffic to be redirected to HTTPS.
-
-Default: ``False``.
+.. include:: /nginx/doc/ssl_redirect.inc
 
 sentry:(workers|cheapers|idle|timeout)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

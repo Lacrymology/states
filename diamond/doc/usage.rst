@@ -29,8 +29,10 @@
 Usage
 =====
 
-After installing, refresh the Graphite web, you will see a new node appear
-under Graphite with name is the hostname of ElasticSearch machine. You can
-override it by changing the ``path_prefix`` setting in the configuration file.
+After Diamond is installed and metrics are pouring into :doc:`/carbon/doc/index`
+go into :doc:`/graphite/doc/index`.
+In the list of metrics now appears a new root node with the
+:doc:`/salt/minion/doc/index` salt grains ``id``.
+Under it can be found the metrics sent by Diamond under ``os``.
 
-.. TODO MORE + LINK TO GRAPHITE DOC!!
+See :doc:`/graphite/doc/index` :doc:`/graphite/doc/usage` for more details.

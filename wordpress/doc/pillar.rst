@@ -47,7 +47,7 @@ Example::
 wordpress:hostnames
 ~~~~~~~~~~~~~~~~~~~
 
-List of http hostname.
+.. include:: /nginx/doc/hostnames.inc
 
 wordpress:title
 ~~~~~~~~~~~~~~~
@@ -89,12 +89,12 @@ Example::
 debug
 ~~~~~
 
-Enable Debug logging to the /wp-content/debug.log file
+Enable Debug logging to the ``/wp-content/debug.log`` file
 
 wordpress:password
 ~~~~~~~~~~~~~~~~~~
 
-MySQL user password.
+:doc:`/mariadb/doc/index` user password.
 
 wordpress:mysql_variant
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -113,19 +113,14 @@ Default: ``1`` (yes).
 wordpress:ssl
 ~~~~~~~~~~~~~
 
-Name of the SSL key to use for HTTPS.
-
-Default: ``False``.
+.. include:: /nginx/doc/ssl.inc
 
 wordpress:ssl_redirect
 ~~~~~~~~~~~~~~~~~~~~~~
 
-If set to True and SSL is turned on, this will force all HTTP traffic to be
-redirected to HTTPS.
-
-Default: ``False``.
+.. include:: /nginx/doc/ssl_redirect.inc
 
 wordpress:(workers|cheapers|idle|timeout)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-See uwsgi/doc/instance.rst for more details
+See :doc:`/uwsgi/doc/pillar` for more details

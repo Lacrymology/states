@@ -75,7 +75,8 @@ a library or third party dependency, a ``somelib/init.sls`` and
 ``somelib/absent.sls`` can exists in the additional state repositories and be
 include by the role.
 
-SSL and SSH keys can be kept in that repository too.
+:doc:`/ssl/doc/index` and :doc:`/ssh/doc/index` keys can be kept in that
+repository too.
 
 Multiple versions of states
 ---------------------------

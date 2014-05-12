@@ -3,7 +3,7 @@ S3
 
 .. TODO: Intro
 
-Contents:
+`Amazon S3 <https://en.wikipedia.org/wiki/Amazon_S3>`_
 
 .. toctree::
     :glob:

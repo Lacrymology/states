@@ -41,7 +41,7 @@ Example::
 dns_proxy:dns_server
 ~~~~~~~~~~~~~~~~~~~~~
 
-To enable status control if you are using resolv.conf.
+To enable status control if you are using ``/etc/resolv.conf``.
 
 Optional
 --------
@@ -56,7 +56,7 @@ Example::
 dns_proxy:ip_address
 ~~~~~~~~~~~~~~~~~~~~~
 
-The IP address pdnsd listens on for requests.
+The IP address daemon listens on for requests.
 
 Default: ``0.0.0.0``.
 

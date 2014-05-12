@@ -10,7 +10,7 @@ To works properly, Roundcube need to have installed:
 - :doc:`/dovecot/doc/index`
 
 On the same **or** separate host, for this reason they can't be included by
-other formulas. Roles and pillar need to define your mail architecture.
+other formulas. Roles and :doc:`pillar` need to define your mail architecture.
 
 .. TODO: WRITE HERE ANYTHING SPECIFIC TO ROUNDCUBE FOR THOSE OTHER STATES
 

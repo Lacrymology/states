@@ -29,4 +29,5 @@
 Firewall
 ========
 
-Rsyslog listen on *syslog* port ``514`` on ``UDP`` protocol.
+:doc:`index` listen on `Syslog <https://en.wikipedia.org/wiki/Syslog>`_
+port ``514`` on ``UDP`` protocol.

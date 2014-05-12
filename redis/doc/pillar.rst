@@ -50,16 +50,16 @@ Example::
 redis:port
 ~~~~~~~~~~
 
-Accept connections on the specified port, default is 6379.
+Accept connections on the specified port, default is ``6379``.
 
-If port 0 is specified Redis will not listen on a TCP socket.
+If port ``0`` is specified Redis will not listen on a TCP socket.
 
 Default: ``6379``.
 
 redis:timeout
 ~~~~~~~~~~~~~
 
-Close the connection after a client is idle for N seconds (0 to disable)
+Close the connection after a client is idle for N seconds (``0`` to disable)
 
 Default: ``0``.
 
@@ -114,8 +114,8 @@ redis:maxclients
 ~~~~~~~~~~~~~~~~
 
 Set the max number of connected clients at the same time. By default
-this limit is set to 10000 clients, however if the Redis server is not
-able to configure the process file limit to allow for the specified limit
+this limit is set to ``10000`` clients, however if the :doc:`index` server is
+not able to configure the process file limit to allow for the specified limit
 the max number of allowed clients is set to the current file limit
 minus 32 (as Redis reserves a few file descriptors for internal uses).
 

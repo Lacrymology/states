@@ -30,4 +30,5 @@ Firewall
 ========
 
 Nagios Remote Plugin Executor only need to be access by the hosts that run the
-Shinken Pollers (see shinken.poller state) on the follow port: ``TCP`` ``5666``.
+Shinken Pollers (see ``shinken.poller`` state) on the follow port:
+``TCP`` ``5666``.

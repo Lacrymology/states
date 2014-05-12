@@ -43,7 +43,7 @@ for this specific usage.
 
    Never run integration tests on a production server!
    Many steps are destructive and will likely uninstall everything, even remote
-   SSH access.
+   :doc:`/ssh/doc/index` access.
 
 The test script first run some ``.sls`` in ``test/`` directory to cleanup the
 minion, and then run all the test units. The important thing about this is that

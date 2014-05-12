@@ -45,7 +45,7 @@ git-server:keys
 ~~~~~~~~~~~~~~~
 
 Dict of all users that can access the git repository. Each key is a dict of
-the SSH public key and the value is the key format.
+the :doc:`/ssh/doc/index` public key and the value is the key format.
 
 git-server:repositories
 ~~~~~~~~~~~~~~~~~~~~~~~

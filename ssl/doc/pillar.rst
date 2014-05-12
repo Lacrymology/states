@@ -129,14 +129,10 @@ Example::
 
 Requires files in source:
 
-- ca.crt
-  Bundled certificate
-- server.crt
-  Server certificate
-- server.key
-  Server private key
-- server.csr
-  Server Certificate Signing Request.
+- ``ca.crt`` Bundled certificate
+- ``server.crt`` Server certificate
+- ``server.key`` Server private key
+- ``server.csr`` Server Certificate Signing Request.
   A CSR or Certificate Signing request is a block of encrypted text that is
   generated on the server that the certificate will be used on. It contains
   information that will be included in your certificate such as your
@@ -145,25 +141,22 @@ Requires files in source:
   key is usually created at the same time that you create the CSR.
 
   How to generate a CSR (requires an existing key file):
-    openssl req -new -keyout server.key -out server.csr
+  ``openssl req -new -keyout server.key -out server.csr``
   How to generate a new CSR (no need for existing key file):
-    openssl req -new -newkey rsa:2048 -nodes -keyout server.key -out server.csr
-  How to decode a CSR:
-    openssl req -in server.csr -noout -text
+  ``openssl req -new -newkey rsa:2048 -nodes -keyout server.key -out server.csr``
+  How to decode a CSR: ``openssl req -in server.csr -noout -text``
 
 To use those SSL files in your states, you need to do the following:
 
 - Add a pillar key for your state that hold the name of the SSL key name
   defined in pillar['ssl'], such as example_com in previous example.
 
-  It can be:
-    my_app:
-      ssl: example_com
-- If the daemon isn't running as root, add the group ssl-cert to the user with
-  which that daemon run.
-- Add ssl to the list of included sls file
+  It can be: ``my_app:ssl``: ``example_com``
+- If the daemon isn't running as root, add the group ``ssl-cert`` to the user
+  with which that daemon run.
+- Add ``ssl`` to the list of included sls file
 - Requires the following three condition before starting your service:
-    - cmd: ssl_cert_and_key_for_{{ pillar['my_app']['ssl'] }}
+    ``- cmd: ssl_cert_and_key_for_{{ pillar['my_app']['ssl'] }}``
 
 - In the config file you point to the same path to reach those files, like:
     /etc/ssl/certs/{{ pillar['my_app']['ssl'] }}_chained.crt;

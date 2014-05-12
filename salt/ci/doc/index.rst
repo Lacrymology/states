@@ -64,7 +64,7 @@ some conditions such as:
 - A private git repo come with hook that perform a call back to CI server notify
   that changes were pushed to that branch and job need to run.
 - Github is configured to perform a callback to CI server when a push occurs.
-- Gitlab plugins:
+- :doc:`/gitlab/doc/index` plugins:
   - `Gitlab merge request <https://wiki.jenkins-ci.org/display/JENKINS/Gitlab+Merge+Request+Builder+Plugin>`_
   - `Gitlab hook plugin <https://wiki.jenkins-ci.org/display/JENKINS/Gitlab+Hook+Plugin>`_
 - A job is configured to run at specific time (such as each day at midnight)
@@ -89,16 +89,16 @@ Run test suite
 ``````````````
 
 - CI job need git pull all states branches.
-- Run bootstrap_archive.py and create a single artifact that will copied to the
-  Minion by the bootstrap script.
-- Run a CI specific bootstrap script (not the one that come with salt.cloud
-  state. This alternate script copy the artifact and follow the testing
-  framework steps:
+- Run ``bootstrap_archive.py`` and create a single artifact that will copied to
+  the :doc:`/salt/minion/doc/index` by the bootstrap script.
+- Run a CI specific bootstrap script (not the one that come with
+  :doc:`/salt/cloud/doc/index` state. This alternate script copy the artifact
+  and follow the testing framework steps:
 
   - chdir /
   - extract the artifact
-  - install minion (like salt/cloud/bootstrap.jinja2)
-  - run /root/salt/states/test/integration.py
+  - install minion (like :download:`/salt/cloud/bootstrap.jinja2`)
+  - run ``/root/salt/states/test/integration.py``
 
 Installation
 ------------
@@ -114,8 +114,8 @@ Here are ``salt.ci`` specific consideration with those dependencies:
 Jenkins
 ~~~~~~~
 
-Once Jenkins is deployed, go in one of the hostname you specified at
-``jenkins:web:hostnames`` pillar key LINK TO IT.
+Once :doc:`/jenkins/doc/index` is deployed, go in one of the hostname you
+specified at ``jenkins:web:hostnames`` :doc:`/jenkins/doc/pillar`.
 
 Set ``[a-zA-Z0-9\-]*`` as regular expression for job name. As job name are
 used to create VM hostname, this need to be a valid hostname.

@@ -45,7 +45,7 @@ Example::
 mysql:utf8
 ~~~~~~~~~~
 
-Enable or disable charset utf8. If disable, Latin1 charset will be used.
+Enable or disable charset ``utf8``. If disable, ``Latin1`` charset will be used.
 
 Default: ``False``.
 

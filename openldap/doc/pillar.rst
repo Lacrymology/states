@@ -99,30 +99,32 @@ in both ``ldap:data`` and ``ldap:absent``
 ldap:debug
 ~~~~~~~~~~
 
-Log verbose level, some values of this can be: -1, 256, 16383, ... See
-http://www.openldap.org/doc/admin24/slapdconfig.html for more details. Below
-is some values::
+Log verbose level, some values of this can be: -1, 256, 16383, ...
+See `See slapdconfig <http://www.openldap.org/doc/admin24/slapdconfig.html>`_
+for more details.
 
-- -1: enable all debugging
-- 1: trace function calls
-- 2: debug packet handling
-- 4: heavy trace debugging
-- 8: connection management
-- 16: print out packets sent and received
-- 32: search filter processing
-- 64: configuration processing
-- 128: access control list processing
-- 256: stats log connections/operations/results
-- 512: stats log entries sent
-- 1024: print communication with shell backends
-- 2048: print entry parsing debugging
-- 16384: syncrepl consumer processing
+Below is some values:
+
+- ``-1``: enable all debugging
+- ``1``: trace function calls
+- ``2``: debug packet handling
+- ``4``: heavy trace debugging
+- ``8``: connection management
+- ``16``: print out packets sent and received
+- ``32``: search filter processing
+- ``64``: configuration processing
+- ``128``: access control list processing
+- ``256``: stats log connections/operations/results
+- ``512``: stats log entries sent
+- ``1024``: print communication with shell backends
+- ``2048``: print entry parsing debugging
+- ``16384``: syncrepl consumer processing
 
 Default is ``256`` (OpenLDAP default).
 
 ldap:ssl
 ~~~~~~~~
 
-Name of the SSL key used for LDAPS.
+Name of the :doc:`/ssl/doc/index` key used for LDAPS.
 
 Default: not used.

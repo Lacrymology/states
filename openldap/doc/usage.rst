@@ -27,30 +27,30 @@
 .. POSSIBILITY OF SUCH DAMAGE.
 
 Usage
-======
+=====
 
 How to add an LDAP user entry?
 ------------------------------
 
 This formula only creates LDAP users the first time it run (when install
-slapd). List of users to create provided through pillar, see ``ldap:data``
-in ``openldap/pillar.rst`` for more details.
+slapd). List of users to create provided through pillar, see :doc:`pillar``
+``ldap:data`` for more details.
 
 To add more user entry after the first time formula run, any LDAP tool
 can be used, includes:
 
-- CLI: ``ldapadd`` from `ldap-utils` package that is installed by `openldap`
+- CLI: ``ldapadd`` from ``ldap-utils`` package that is installed by ``openldap``
   state.
 - The following GUI aren't yet available as salt states in `common` repository,
   but can be used if installed:
-  - LAT http://sourceforge.net/p/ldap-at/wiki/Home/
-  - Apache Directory Studio http://directory.apache.org/studio/
-  - Web: phpLDAPAdmin http://phpldapadmin.sourceforge.net
+  - `LAT <http://sourceforge.net/p/ldap-at/wiki/Home/>`_
+  - `Apache Directory Studio <http://directory.apache.org/studio/>`_
+  - `Web: phpLDAPAdmin <http://phpldapadmin.sourceforge.net>`_
 
-For `ldapadd`, below example is how to create user ``testfoo`` entry. First
-create an LPAD Data Interchange formated file
-http://en.wikipedia.org/wiki/LDAP_Data_Interchange_Format with the expected
-value, in this case ``testfoo.ldif``:
+For ``ldapadd``, below example is how to create user ``testfoo`` entry. First
+create an
+`LPAD Data Interchange formated file <http://en.wikipedia.org/wiki/LDAP_Data_Interchange_Format`_
+with the expected value, in this case ``testfoo.ldif``:
 
     dn: uid=testfoo,ou=people,dc=example,dc=com
     objectClass: inetOrgPerson
@@ -74,31 +74,35 @@ Then load the file::
     SASL SSF: 0
     adding new entry "uid=testfoo,ou=people,dc=example,dc=com"
 
-A point to notice is `ldapadd` run as root and use -Y EXTERNAL for authenticate.
-Normal (user/password) authenticate can be used for that, too.
+.. note::
+
+  Previous example ``ldapadd`` run as root and use ``-Y EXTERNAL`` to
+  authenticate.
+  Normal (user/password) authenticate can be used for that, too.
 
 Above example worked because entry ``ou=people,dc=example,dc=com`` is already
-there (by our state - run ``ldapadd`` against the `usertree.ldif` file).
+there (by our state - run ``ldapadd`` against the ``usertree.ldif`` file).
 
-Content of `usertree.ldif` rendered from pillar, in this example is::
+Content of ``usertree.ldif`` rendered from pillar, in this example is::
 
-    ldap:
-      usertree: openldap/usertree.ldif.jinja2
-      log_level: 256
-      suffix: dc=example,dc=com
-      rootdn: cn=admin,dc=example,dc=com
-      rootpw: '{MD5}/+VTaU9QlkcVkDQ0KjWeAg=='
-      data:
-        example.com:
-          bob:
-            cn: bob
-            sn: bob
-            passwd: bobpass
+  ldap:
+    usertree: openldap/usertree.ldif.jinja2
+    log_level: 256
+    suffix: dc=example,dc=com
+    rootdn: cn=admin,dc=example,dc=com
+    rootpw: '{MD5}/+VTaU9QlkcVkDQ0KjWeAg=='
+    data:
+      example.com:
+        bob:
+          cn: bob
+          sn: bob
+          passwd: bobpass
 
 How do email accounts created?
 ------------------------------
 
-When used in conjunction with formula ``postfix`` and ``dovecot``.
+When used in conjunction with formula :doc:`/postfix/doc/index` and
+:doc`/dovecot/doc/index`.
 If ``postfix`` is configured to serve virtual host
 (set ``postfix:virtual_mailbox`` to ``True``),
 OpenLDAP  will be used as authenticate backend, so, each LDAP entry which has
@@ -109,7 +113,7 @@ Postfix need to maintain an alias database, that map LDAP entries to virtual
 mailboxes. This is done by ``vmailbox`` in ``postfix`` formula, which is
 rendered from ``ldap:data`` and will be applied each time ``ldap:data`` changed.
 
-So, with above pillar, an email account is created named `bob@example.com`.
+So, with above pillar, an email account is created named ``bob@example.com``.
 
 How to add email accounts after formula ran the fist time?
 ----------------------------------------------------------
@@ -120,4 +124,5 @@ Two thing need to be done:
   See ``openldap/pillar.rst`` for more details about attributes of an user
   entry.
 - Create a key in pillar likes already exist users to map recently created
-  LDAP entry to a virtual mailbox. Run ``postfix`` formula again, to apply it.
+  LDAP entry to a virtual mailbox. Apply :doc:`/postfix/doc/index` formula
+  again, to apply it.

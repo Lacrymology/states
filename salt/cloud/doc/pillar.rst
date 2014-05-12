@@ -29,19 +29,7 @@
 .. include:: /doc/include/add_pillar.inc
 
 - :doc:`/pip/doc/index` :doc:`/pip/doc/pillar`
-
-Mandatory
----------
-
-Example::
-
-  salt:
-    master: salt.domain.com
-
-salt:master
-~~~~~~~~~~~
-
-Address of Salt Master instance.
+- :doc:`/salt/minion/doc/index` :doc:`/salt/minion/doc/pillar`
 
 Optional
 --------

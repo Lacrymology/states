@@ -45,23 +45,11 @@ Example::
     web:
      hostnames:
         - graphite.example.com
-      workers: 2
-    carbon:
-      instances: 2
-    retentions:
-      default_1min_for_1_month:
-        pattern: .*
-        retentions: 60s:30d
 
 graphite:web:hostnames
 ~~~~~~~~~~~~~~~~~~~~~~
 
-List of HTTP hostname that ends in graphite webapp.
-
-graphite:web:workers
-~~~~~~~~~~~~~~~~~~~~
-
-Number of uWSGI worker that will run the webapp.
+.. include:: /nginx/doc/hostnames.inc
 
 Optional
 --------
@@ -95,55 +83,48 @@ Example::
 graphite:web:sentry
 ~~~~~~~~~~~~~~~~~~~
 
-DSN of Sentry server.
-
-Default: value of pillar key ``sentry_dsn``.
+.. include:: /sentry/doc/dsn.inc
 
 graphite:web:db:username
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-PostgreSQL username for graphite. It will be created.
+.. include:: /postgresql/doc/username.inc
 
 Default: ``graphite``.
 
 graphite:web:db:name
 ~~~~~~~~~~~~~~~~~~~~
 
-PostgreSQL database name. It will be created.
+.. include:: /postgresql/doc/name.inc
 
 Default: ``graphite``.
 
 graphite:web:db:password
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-PostgreSQL user password.
-
-Default: Randomly created.
+.. include:: /postgresql/doc/password.inc
 
 graphite:web:django_key
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-Random string. https://docs.djangoproject.com/en/1.4/ref/settings/#secret-key.
-
-Default: randomly created.
+.. include:: /django/doc/key.inc
 
 graphite:web:smtp
 ~~~~~~~~~~~~~~~~~
 
-The global `smtp` can be overrided for this particular state.
-For details on its format, please see `smtp` section in doc/pillar.rst.
+.. include:: /mail/doc/smtp.inc
 
 graphite:web:debug
 ~~~~~~~~~~~~~~~~~~
 
-If True, graphite run with extra logging.
+If set to ``True``, run with extra logging.
 
 Default: ``False``.
 
 graphite:web:render_noauth
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If set to True, the rendered graphics can be directly GET by anyone
+If set to ``True``, the rendered graphics can be directly GET by anyone
 without user authentication.
 
 Default: ``False``.
@@ -151,22 +132,17 @@ Default: ``False``.
 graphite:web:ssl
 ~~~~~~~~~~~~~~~~
 
-Name of the SSL key to use for HTTPS.
-
-Default: ``False``.
+.. include:: /nginx/doc/ssl.inc
 
 graphite:web:ssl_redirect
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If set to True and SSL is turned on, this will force all HTTP traffic to be
-redirected to HTTPS.
-
-Default: ``False``.
+.. include:: /nginx/doc/ssl_redirect.inc
 
 graphite:carbon
 ~~~~~~~~~~~~~~~
 
-Consult carbon/doc/pillar.rst for more information.
+Consult :doc:`/carbon/doc/pillar` for more information.
 
 graphite:web:(workers|cheapers|idle|timeout)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

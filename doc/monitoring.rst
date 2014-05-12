@@ -87,15 +87,11 @@ Write Check
 
 It's very easy to write in any language. It's simply an binary of script that
 run, send text to standard output and exit with a specific code.
-
-More on the expected output:
-
-http://nagiosplug.sourceforge.net/developer-guidelines.html#PLUGOUTPUT
+`More on the expected output <http://nagiosplug.sourceforge.net/developer-guidelines.html#PLUGOUTPUT>`_.
 
 To make it even easier, the following Python module is always available in
-``/usr/local/nagios`` Python virtualenv:
-
-https://pypi.python.org/pypi/nagiosplugin/
+``/usr/local/nagios``
+`Python virtualenv <https://pypi.python.org/pypi/nagiosplugin/>`_.
 
 You can look at the doc in http://pythonhosted.org/nagiosplugin/ or look
 in the common states you can find some of it's usage as example.
@@ -169,7 +165,7 @@ This is a module running in the broker.
 Login to the Web UI in the URL specified in your Pillar, you will have an
 overview of business impact.
 
-NOTE ON SERVICE REFRESH
+.. TODO: NOTE ON SERVICE REFRESH
 
 then on the Web UI:
 

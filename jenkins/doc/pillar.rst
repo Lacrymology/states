@@ -41,9 +41,9 @@ Example::
       - ci.example.com
 
 jenkins:hostnames
-~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~
 
-List of HTTP hostnames that ends in jenkins webapp.
+.. include:: /nginx/doc/hostnames.inc
 
 Optional
 --------
@@ -57,23 +57,18 @@ Example::
 jenkins:ssl
 ~~~~~~~~~~~
 
-Name of the SSL key to use for HTTPS.
-
-Default: ``False``.
+.. include:: /nginx/doc/ssl.inc
 
 jenkins:ssl_redirect
 ~~~~~~~~~~~~~~~~~~~~
 
-If set to True and SSL is turned on, this will force all HTTP traffic to be
-redirected to HTTPS.
-
-Default: ``False``.
+.. include:: /nginx/doc/ssl_redirect.inc
 
 ssh:known_hosts
 ~~~~~~~~~~~~~~~
 
-Known hosts that will be added to /var/lib/jenkins/.ssh/known_hosts.
+Known hosts that will be added to ``/var/lib/jenkins/.ssh/known_hosts``.
 Data formed as a dictionary ``domain_name``:``server public key``
 with server public key can be obtained by run ``ssh-keyscan domain``
-Consult ``ssh/client/doc/pillar.rst`` for more details.
+Consult :doc:`/ssh/client/doc/pillar` for more details.
 

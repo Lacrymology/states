@@ -49,8 +49,8 @@ Default: ``False``
 
 ``False`` means not use.
 
-If the salt-master act also as the git server, look for
-:doc:`/git/server/doc/pillar` exact pillars keys details.
+If the :doc:`index` act also as the :doc:`/git/server/doc/index`, look for
+exact :doc:`/git/server/doc/pillar` keys details.
 
 salt_master:pillar:branch
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -66,6 +66,8 @@ salt_master:workers
 ~~~~~~~~~~~~~~~~~~~
 
 Numbers of workers.
+
+.. TODO: use number of cores
 
 Default: ``5``
 

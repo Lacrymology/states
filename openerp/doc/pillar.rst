@@ -46,7 +46,7 @@ Example::
 openerp:hostnames
 ~~~~~~~~~~~~~~~~~
 
-List of HTTP hostname that ends in graphite webapp.
+.. include:: /nginx/doc/hostnames.inc
 
 openerp:password
 ~~~~~~~~~~~~~~~~
@@ -72,33 +72,43 @@ Example::
 openerp:ssl
 ~~~~~~~~~~~
 
-Name of the SSL key to use for HTTPS.
-
-Default: ``False``.
+.. include:: /nginx/doc/ssl.inc
 
 openerp:ssl_redirect
 ~~~~~~~~~~~~~~~~~~~~
 
-If set to True and SSL is turned on, this will force all HTTP traffic to be
-redirected to HTTPS.
+.. include:: /nginx/doc/ssl_redirect.inc
 
-Default: ``False``.
+openerp:db:name
+~~~~~~~~~~~~~~~
+
+.. include:: /postgresql/doc/name.inc
+
+Default: ``openerp``.
+
+openerp:db:username
+~~~~~~~~~~~~~~~~~~~
+
+.. include:: /postgresql/doc/username.inc
+
+Default: ``openerp``.
 
 openerp:db:password
 ~~~~~~~~~~~~~~~~~~~
 
-PostgreSQL user password.
+.. include:: /postgresql/doc/password.inc
 
 openerp:(workers|cheapers|idle|timeout)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-See uwsgi/doc/instance.rst for more details
+See :doc:`/uwsgi/doc/pillar` for more details
 
 openerp:max_upload_file_size
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Sets the maximum allowed size of the client request body,
-specified in the "Content-Length" request header field.
+specified in the "Content-Length"
+`HTTP <https://en.wikipedia.org/wiki/Http>`_ request header field.
 Unit is in megabytes.
 
 Default: ``1``.
@@ -113,6 +123,4 @@ Default: ``None``.
 openerp:sentry
 ~~~~~~~~~~~~~~
 
-DSN of Sentry server.
-
-Default: value of pillar key ``sentry_dsn``.
+.. include:: /sentry/doc/dsn.inc

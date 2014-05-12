@@ -31,8 +31,8 @@ pillar data for git server, but most importantly the following values::
       salt-pillars:
         push_notification: False
 
-The public key of local SSH client must be listed in ``git-server:keys`` for
-last step during the ``git push``.
+The public key of local :doc:`/ssh/doc/index` client must be listed in
+``git-server:keys`` for last step during the ``git push``.
 
 On the master side the following pillars values are required to be set::
 
@@ -47,8 +47,8 @@ On the master side the following pillars values are required to be set::
 Usage
 -----
 
-Once the salt-master (and git-server) had been installed, the Git repositories
-is available.
+Once the salt-master (and :doc:`/git/server/doc/index`) had been installed,
+the Git repositories is available.
 
 After authoring the pillar data in local sandbox, it can be pushed on the
 master::

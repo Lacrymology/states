@@ -50,7 +50,7 @@ Example::
 discourse:hostnames
 ~~~~~~~~~~~~~~~~~~~
 
-List of HTTP hostname that ends in graphite webapp.
+.. include:: /nginx/doc/hostnames.inc
 
 Optional
 --------
@@ -58,7 +58,7 @@ Optional
 Example::
 
   discourse:
-    upload_size: 2m
+    upload_size: 2
     smtp:
       enabled: True
     ssl: microsigns
@@ -75,52 +75,45 @@ Example::
 discourse:db:username
 ~~~~~~~~~~~~~~~~~~~~~
 
-PostgreSQL username for discourse. it will be created.
+.. include:: /postgresql/doc/username.inc
 
 Default: ``discourse``.
 
 discourse:db:name
 ~~~~~~~~~~~~~~~~~
 
-PostgreSQL database name. it will be created.
+.. include:: /postgresql/doc/name.inc
 
 Default: ``discourse``.
 
 discourse:db:password
 ~~~~~~~~~~~~~~~~~~~~~
 
-PostgreSQL user password. it will be created.
+.. include:: /postgresql/doc/password.inc
 
 discourse:upload_size
 ~~~~~~~~~~~~~~~~~~~~~
 
-Max file size for upload to server
-In megabyte.
+Max file size for upload to server. In megabyte.
 
-Default: ``2m``.
+Default: ``2`` megabytes.
 
 discourse:ssl
 ~~~~~~~~~~~~~
 
-Name of the SSL key to use for HTTPS.
-
-Default: ``False``.
+.. include:: /nginx/doc/ssl.inc
 
 discourse:ssl_redirect
 ~~~~~~~~~~~~~~~~~~~~~~
 
-If set to True and SSL is turned on, this will force all HTTP traffic to be
-redirected to HTTPS.
-
-Default: ``False``.
+.. include:: /nginx/doc/ssl_redirect.inc
 
 discourse:(workers|cheapers|idle|timeout)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-See uwsgi/doc/instance.rst for more details
+See :doc:`/uwsgi/doc/pillar` for more details
 
 discourse:smtp
 ~~~~~~~~~~~~~~
 
-The global `smtp` can be overrided for this particular formula.
-For details on its format, please see `smtp` section in doc/pillar.rst.
+.. include:: /mail/doc/smtp.inc

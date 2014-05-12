@@ -1,9 +1,9 @@
-.todo: I DON'T THIS IS SALT CLOUD SPECIFIC
+.. TODO: I DON'T THIS IS SALT CLOUD SPECIFIC
 
 Some settings need to be noticed:
 
 * providers:
-  * keyname: is the name of the SSH private key
+  * keyname: is the name of the :doc:`/ssh/doc/index` private key
   * provider: must be ``ec2``
 
 * profiles:

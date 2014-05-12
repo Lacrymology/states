@@ -112,7 +112,7 @@ Default: ``5432``.
 postgresql:ssl
 ~~~~~~~~~~~~~~
 
-Name of SSL key used for encrypted postgresql connection.
+Name of :doc:`/ssl/doc/index` key used for encrypted postgresql connection.
 
 postgresql:log_slow_query
 ~~~~~~~~~~~~~~~~~~~~~~~~~

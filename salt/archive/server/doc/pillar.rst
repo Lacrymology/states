@@ -52,7 +52,7 @@ Example::
 salt_archive:web:hostnames
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-List of hostname of the web archive.
+.. include:: /nginx/doc/hostnames.inc
 
 Optional
 --------
@@ -70,19 +70,17 @@ Example::
 salt_archive:source
 ~~~~~~~~~~~~~~~~~~~
 
-Rsync server used as the source for archived files.
+:doc:`/rsync/doc/index` server used as the source for archived files.
 
 salt_archive:web:ssl
 ~~~~~~~~~~~~~~~~~~~~
 
-SSL key to use to secure this server archive.
-
-Default: ``False``.
+.. include:: /nginx/doc/ssl.inc
 
 salt_archive:keys
 ~~~~~~~~~~~~~~~~~
 
-Dict of keys allowed to log in user.
+Dict of :doc:`/ssh/client/doc/index` keys allowed to log in user.
 
 Rsync
 -----

@@ -49,3 +49,4 @@ ports:
 - ``TCP`` ``7771``: Shinken Poller
 - ``TCP`` ``7772``: Shinken Broker
 - ``TCP`` ``7773``: Shinken Receiver
+- ``TCP`` ``5667``: NSCA Daemon (Receiver)

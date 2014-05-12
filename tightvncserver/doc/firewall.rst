@@ -29,7 +29,7 @@
 Firewall
 ========
 
-All TightVNC client need to be allowed to connect to the following port:
+All :doc:`index` client need to be allowed to connect to the following port:
 
 - ``TCP`` ``5901``: VNC-1
 - ``TCP`` ``6001``: X11:1

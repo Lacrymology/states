@@ -38,9 +38,9 @@ Nginx on port ``80`` TCP.
 https
 -----
 
-It also support `SSL <http://en.wikipedia.org/wiki/Secure_Sockets_Layer>`_ on
-port ``443`` TCP.
+It also support :doc:`/ssl/doc/index` on port ``443`` TCP.
 
 If ``ssl`` is defined in app pillar, the port ``443`` is also reachable.
-If ``ssl_redirect`` pillar is set to `True` then any connection to HTTP port
+If ``ssl_redirect`` pillar is set to `True` then any connection to
+`HTTP <https://en.wikipedia.org/wiki/Http>`_ port
 ``80`` are automatically redirected to HTTPS port ``443``.

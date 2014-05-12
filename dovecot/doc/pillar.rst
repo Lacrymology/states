@@ -68,13 +68,13 @@ Default: ``ldap://127.0.0.1``.
 dovecot:ssl
 ~~~~~~~~~~~
 
-Name of the SSL key used for IMAPS, POP3S.
+Name of the :doc:`/ssl/doc/index` key used for IMAPS and/or POP3S.
 
 Default: ``False``.
 
 ldap:ssl
 ~~~~~~~~
 
-Name of the SSL key used for LDAPS.
+Name of the :doc:`/ssl/doc/index` key used for LDAPS.
 
 Default: ``False``.

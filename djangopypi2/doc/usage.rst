@@ -57,7 +57,7 @@ Uploading a package: Python >=2.6
 
 To push the package to the local pypi::
 
-  $ python setup.py register -r local sdist upload -r local
+  python setup.py register -r local sdist upload -r local
 
 Uploading a package: Python <2.6
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -90,11 +90,9 @@ package is not on your new server, or in particular if you are installing a
 number of packages, some on your private server and some on another, you can use
 pip in the following manner::
 
-  pip install -i http://localhost:8000/simple/ \
+  pip install -i http://pypi.example.com/simple/ \
     --extra-index-url=http://pypi.python.org/simple/ \
     -r requirements.txt
-
-(substitute your djangopypi2 server URL for the ``localhost`` one in this example)
 
 The downside is that each install of a package hosted on the repository in
 ``--extra-index-url`` will start with a call to the first repository which

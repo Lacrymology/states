@@ -123,22 +123,27 @@ default is JVM default.
 elasticsearch:ssl
 ~~~~~~~~~~~~~~~~~
 
-SSL key set to use to publish ES trough HTTPS.
+.. include:: /nginx/doc/ssl.inc
 
-Default: ``False``.
+.. note::
+
+  Only used to make :doc:`/elasticsearch/doc/index` trough
+  `HTTPS <https://en.wikipedia.org/wiki/Https>`_.
 
 elasticsearch:https_allowed
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Only used if elasticsearch:ssl is defined.
+Only used if ``elasticsearch:ssl`` is defined.
 
-List of CIDR format network where ES over HTTPS is allowed.
+List of CIDR format network where :doc:`/elasticsearch/doc/index` over HTTPS is
+allowed.
 
 Default: Empty list.
 
 destructive_absent
 ~~~~~~~~~~~~~~~~~~
 
-If True, ES data saved on disk is purged when elasticsearch.absent is executed.
+If True, :doc:`/elasticsearch/doc/index` data saved on disk is purged when
+``elasticsearch.absent`` is executed.
 
 Default: ``False``.

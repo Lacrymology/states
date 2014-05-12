@@ -55,9 +55,10 @@ Things you **must** do
 - Set Jenkins URL to first value of ``jenkins:web:hostnames``.
 - Configure SMTP to send email for build status change.
 - Install https://wiki.jenkins-ci.org/display/JENKINS/Multiple+SCMs+Plugin
-- Upgrade SSH Credential Plugin to 1.6+, so you can configure SSH private key
+- Upgrade :doc:`/ssh/doc/index` Credential Plugin to 1.6+, so you can configure
+  :doc:`/ssh/doc/index` private key
   for user ``jenkins`` throught Jenkins Web UI. (Dashboard => Credential
-  => Add credential => Kind: SSH username with private key)
+  => Add credential => Kind: :doc:`/ssh/doc/index` username with private key)
 - If you use git for SCM, install Git Plugin and upgrade it to  version 2.0 or
   above. It will allow you to choose credential when add a git SCM repo.
   Note that after upgrading, this plugin changes its name to

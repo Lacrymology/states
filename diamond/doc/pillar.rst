@@ -49,18 +49,23 @@ diamond:interfaces
 
 List of network interface check for I/O stats.
 
-Default show in example.
+Default: list of:
+
+ - ``eth0``
+ - ``lo``
 
 diamond:ping
 ~~~~~~~~~~~~
 
-List of IP/hostname ping to monitor latency and availability.
+List of IP/hostname ping to monitor
+`latency <https://en.wikipedia.org/wiki/Latency_(engineering)#Packet-switched_networks>`_
+and availability.
 
 Default: empty list (``[]``).
 
 diamond:batch
 ~~~~~~~~~~~~~
 
-How many metrics to store before sending to the graphite server.
+How many metrics to store before sending to the :doc:`/carbon/doc/index` server.
 
 Default: ``256``.

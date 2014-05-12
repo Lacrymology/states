@@ -31,7 +31,7 @@
 Mandatory
 ---------
 
-Example:
+Example::
 
   mail:
     mailname: xxxx
@@ -39,7 +39,17 @@ Example:
 mail:mailname
 ~~~~~~~~~~~~~
 
-A name used by postfix, amavis or other mail-relate services.
-Often set to domain part of expected email address
-(e.g. if this mail system suppose to server email for ``username@example.com``,
-then ``mail:mailname`` need to set to ``example.com``).
+A name used by :doc:`/postfix/doc/index` or other mail-related service.
+Often is set to
+`Fully qualified domain <http://en.wikipedia.org/wiki/Fully_qualified_domain_name>`_
+of this host.
+
+Example::
+
+  mail:
+    mailname: somehost.fqdn.com
+
+mail:mailname
+~~~~~~~~~~~~~
+
+Fully qualified domain (if possible) of the mail server hostname.

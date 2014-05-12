@@ -59,84 +59,71 @@ Mandatory
 djangopypi2:hostnames
 ~~~~~~~~~~~~~~~~~~~~~
 
-List of HTTP hostnames that ends in djangopypi2 webapp.
+.. include:: /nginx/doc/hostnames.inc
 
 djangopypi2:initial_admin_user:username
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Django superuser's username to create.
+.. include:: /django/doc/initial_username.inc
 
 djangopypi2:initial_admin_user:password
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Django superuser's password to create.
-
-djangopypi2:initial_admin_user:email
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Django superuser's email to create.
+.. include:: /django/doc/initial_password.inc
 
 Optional
 --------
 
+djangopypi2:initial_admin_user:email
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. include:: /django/doc/initial_email.inc
+
 djangopypi2:sentry
 ~~~~~~~~~~~~~~~~~~
 
-DSN of Sentry server.
-
-Default: value of pillar key ``sentry_dsn``.
+.. include:: /sentry/doc/dsn.inc
 
 djangopypi2:db:username
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-PostgreSQL username used for djangopypi2.
+.. include:: /postgresql/doc/username.inc
 
 Default: ``djangopypi2``.
 
 djangopypi2:db:name
 ~~~~~~~~~~~~~~~~~~~
 
-PostgreSQL database name used for djangopypi2.
+.. include:: /postgresql/doc/name.inc
 
 Default: ``djangopypi2``.
 
 djangopypi2:db:password
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-PostgreSQL user password used for djangopypi2.
-
-Default: randomly created.
+.. include:: /postgresql/doc/password.inc
 
 djangopypi2:django_key
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Random string.
-https://docs.djangoproject.com/en/1.4/ref/settings/#secret-key
-
-Default: randomly created.
+.. include:: /django/doc/key.inc
 
 djangopypi2:smtp
 ~~~~~~~~~~~~~~~~
 
-The global `smtp` can be overrided for this particular state.
-For details on its format, please see `smtp` section in doc/pillar.rst.
+.. include:: /mail/doc/smtp.inc
 
 djangopypi2:(workers|cheapers|idle|timeout)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-See uwsgi/doc/instance.rst for more details
+See :doc:`/uwsgi/doc/pillar` for more details
 
 djangopypi2:ssl
 ~~~~~~~~~~~~~~~
 
-Name of the SSL key to use for HTTPS.
-
-Default: Unused.
+.. include:: /nginx/doc/ssl.inc
 
 djangopypi2:ssl_redirect
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-If set to True and SSL is turned on, this will force all HTTP traffic to be
-redirected to HTTPS.
-
-Default: ``False``.
+.. include:: /nginx/doc/ssl_redirect.inc

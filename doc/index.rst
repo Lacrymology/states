@@ -15,7 +15,6 @@ Introduction:
     tests
     monitoring
     pillar
-    firewall
     hacking
     build_doc
     write_state

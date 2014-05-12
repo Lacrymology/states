@@ -103,7 +103,7 @@ graylog2:amqp
 ~~~~~~~~~~~~~
 
 Enable AMQP (Advanced Message Queuing Protocol).
-If enable, you must define:
+If enable, you must define::
 
   graylog2:
     amqp:
@@ -119,7 +119,9 @@ Default: ``False``.
 amqp:host
 ~~~~~~~~~
 
-The host address AMQP listens on for requests.
+The host address
+`AMQP <https://en.wikipedia.org/wiki/Advanced_Message_Queuing_Protocol>`_
+listens on for requests.
 
 amqp:port
 ~~~~~~~~~
@@ -129,17 +131,17 @@ The port AMQP listens on for requests.
 graylog2:rabbitmq:user
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Rabitmq username.
+:doc:`/rabbitmq/doc/index` username.
 
 graylog2:rabbitmq:password
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Rabitmq user password.
+:doc:`/rabbitmq/doc/index` user password.
 
 graylog2:rabbitmq:vhost
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-Rabitmq virtual host.
+:doc:`/rabbitmq/doc/index` virtual host.
 
 graylog2:heap_size
 ~~~~~~~~~~~~~~~~~~
@@ -151,6 +153,6 @@ Default: ``False``.
 graylog2:server:user
 ~~~~~~~~~~~~~~~~~~~~
 
-The user who will run graylog2 server.
+The Unix user (UID) who will run graylog2 server.
 
 Default: ``graylog2``.

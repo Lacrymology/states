@@ -48,7 +48,8 @@ Example::
 nrpe:nsca:servers
 ~~~~~~~~~~~~~~~~~
 
-IPs address of each node on shinken server.
+IPs address of each node on :doc:`/shinken/doc/index`
+`receiver <http://www.shinken-monitoring.org/wiki/nsca_daemon_module>`_ server.
 
 nrpe:nsca:password
 ~~~~~~~~~~~~~~~~~~
@@ -59,4 +60,4 @@ shinken_pollers
 ~~~~~~~~~~~~~~~
 
 As documented in :doc:`/doc/pillar`, IPs address of system load balancing
-shinken.
+:doc:`/shinken/doc/index`.

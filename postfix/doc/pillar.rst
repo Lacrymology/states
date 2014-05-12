@@ -29,6 +29,7 @@
 .. include:: /doc/include/add_pillar.inc
 
 - :doc:`/apt/doc/index` :doc:`/apt/doc/pillar`
+- :doc:`/mail/doc/index` :doc:`/mail/doc/pillar`
 
 Mandatory
 ---------
@@ -97,14 +98,15 @@ and mapping emails (user@mailname) to mailboxes.
 postfix:spam_filter
 ~~~~~~~~~~~~~~~~~~~
 
-Set configuration for amavis spam filter.
+Set configuration for :doc:`/amavis/doc/index` spam filter.
 
 Default: ``False``.
 
 postfix:sasl
 ~~~~~~~~~~~~
 
-Set configuration for authentication by dovecot sasl.
+Set configuration for authentication by :doc:`/dovecot/doc/index`
+`SASL <https://en.wikipedia.org/wiki/Simple_Authentication_and_Security_Layer>`_.
 
 Default:``False``.
 
@@ -118,12 +120,12 @@ Default: ``False``.
 postfix:aliases
 ~~~~~~~~~~~~~~~
 
-Support alias function on postfix.
+Support alias function on :doc:`index`.
 
 postfix:mynetworks
 ~~~~~~~~~~~~~~~~~~
 
-List of trusted networks that postfix will relay mail from.
+List of trusted networks that :doc:`index` will relay mail from.
 
 Default: ``127.0.0.0/8``.
 
@@ -147,7 +149,7 @@ postfix:relay_domains
 
 Domains that this mail server will relay mail to.
 
-Default: all values defined in mydestination.
+Default: all values defined in ``postfix:mydestination``.
 
 postfix:inet_interfaces
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -159,6 +161,6 @@ Default: ``all``.
 postfix:ssl
 ~~~~~~~~~~~
 
-SSL key to use to support SMTP over SSL.
+:doc:`/ssl/doc/index` key to use to support SMTP over :doc:`/ssl/doc/index`.
 
-Default: no SSL.
+Default: not used.

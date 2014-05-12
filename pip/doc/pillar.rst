@@ -43,7 +43,6 @@ Example::
 pip:allow_pypi
 ~~~~~~~~~~~~~~
 
-Value: True/False
 When ``files_archive`` is defined in pillar, if this pillar item not
 setted/defined or has value ``False`` will make pip use files_archive
 as the pkg source.

@@ -29,5 +29,5 @@
 Firewall
 ========
 
-All Redis client need to be allowed to connect to the following port:
+All :doc:`index` client need to be allowed to connect to the following port:
 ``TCP`` ``6379``.

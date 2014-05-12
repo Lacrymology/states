@@ -33,7 +33,7 @@ Web interface
 -------------
 
 If install had been OK, now you can access to the web interface via the URL that
-is configured in the web server REFER TO PILLAR KEY AND LINK TO PILLAR DOC.
+is configured in the web server :doc:`pillar` ``graylog2:hostnames``.
 
 After registering an admin user and login, take a look at over all tabs.
 
@@ -65,6 +65,10 @@ regex: :code:`[Oo]ut of [Mm]emory: [Kk]illed process|oom-killer`.
 Create user
 -----------
 
-* Go to `users` tab. Click `Create new user` button. Then put into `Username`, `Sentry DSN`, `Email address`, `Name`, `Password`, `Confirm Password` and last one `Role`.
+Go to `users` tab. Click `Create new user` button. Then put into `Username`,
+`Sentry DSN`, `Email address`, `Name`, `Password`, `Confirm Password` and
+lastone `Role`.
 
-Note that if you want to user has full permission. Click choose Admin on `Role`. Or you only want user has permission read permission. Let choose Reader on `Role`.
+Note that if you want to user has full permission. Click choose Admin on `Role`.
+Or you only want user has permission read permission. Let choose Reader on
+`Role`.

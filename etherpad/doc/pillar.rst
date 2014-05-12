@@ -50,7 +50,7 @@ Example::
 etherpad:hostnames
 ~~~~~~~~~~~~~~~~~~
 
-List of HTTP hostnames.
+.. include:: /nginx/doc/hostnames.inc
 
 etherpad:apikey
 ~~~~~~~~~~~~~~~
@@ -88,43 +88,35 @@ Example::
 etherpad:db:username
 ~~~~~~~~~~~~~~~~~~~~
 
-PostgreSQL username for Etherpad. It will be created.
+.. include:: /postgresql/doc/username.inc
 
 Default: ``etherpad``.
 
 etherpad:db:name
 ~~~~~~~~~~~~~~~~
 
-PostgreSQL database name. It will be created.
+.. include:: /postgresql/doc/name.inc
 
 Default: ``etherpad``.
 
 etherpad:db:password
 ~~~~~~~~~~~~~~~~~~~~
 
-PostgreSQL user password. It will be created.
+.. include:: /postgresql/doc/password.inc
 
-etherpad:db:host
-~~~~~~~~~~~~~~~~
-
-PostgreSQL server address.
-
-Default: ``localhost``.
+.. etherpad:db:host
+.. PostgreSQL server address.
+.. Default: ``localhost``.
 
 etherpad:ssl
 ~~~~~~~~~~~~
 
-Name of the SSL key to use for HTTPS.
-
-Default: ``False``.
+.. include:: /nginx/doc/ssl.inc
 
 etherpad:ssl_redirect
 ~~~~~~~~~~~~~~~~~~~~~
 
-If set to True and SSL is turned on, this will force all HTTP traffic to be
-redirected to HTTPS.
-
-Default: ``False``.
+.. include:: /nginx/doc/ssl_redirect.inc
 
 etherpad:require_session
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -181,7 +173,9 @@ Default: ``None``.
 etherpad:restrict_referer
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Regex for referer URL restriction. When you want block direct access to Etherpad.
-Example: ^(.*)(sometext|othertex)(.*)$
+Regex for referer URL restriction. When you want block direct access to
+Etherpad.
+
+Example: ``^(.*)(sometext|othertex)(.*)$``
 
 Default: ``False``.

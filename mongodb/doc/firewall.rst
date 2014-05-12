@@ -33,5 +33,5 @@ There is 2 way to communicate to a MongoDB server, one is native protocol and
 the other is trough an HTTP API. You need to open the following ports to all
 MongoDB clients based on your needs:
 
-- TCP 27017: MongoDB
-- TCP 28017: MongoDB over HTTP
+- ``TCP`` ``27017``: MongoDB
+- ``TCP`` ``28017``: MongoDB over HTTP

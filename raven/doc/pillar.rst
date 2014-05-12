@@ -41,4 +41,5 @@ sentry_dsn
 ~~~~~~~~~~
 
 DSN of sentry server.
+
 .. TODO: what is DSN? please link to sentry doc

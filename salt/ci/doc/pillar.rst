@@ -33,20 +33,6 @@
 - :doc:`/salt/cloud/doc/index` :doc:`/salt/cloud/doc/pillar`
 - :doc:`/salt/master/doc/index` :doc:`/salt/master/doc/pillar`
 
-Mandatory
----------
-
-Example::
-
-    salt_archive:
-      source: rsync://salt.robotinfra.com/archive/
-
-salt_archive:source
-~~~~~~~~~~~~~~~~~~~
-
-Rsync server used as the source for archived files.
-See `salt/archive` doc for more details.
-
 Optional
 --------
 

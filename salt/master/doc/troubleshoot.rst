@@ -66,7 +66,8 @@ Some branch modify _module/_states may need to sync them first::
 Remount Error
 -------------
 
-When you run bootstrap to install Salt Master on version `0.17.2`::
+When you run :download:`/bootstrap_archive.py` to install :doc:`index` on
+version `0.17.2`::
 
   /root/salt/states/salt/master/bootstrap.sh [minion id]
 

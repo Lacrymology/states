@@ -59,10 +59,11 @@ If your server don't have a source, an incoming folder is created for any
 authorized users to upload new file.
 
 To upload you have to copy the new file in ``incoming/pip`` (if it's a Python
-package) or ``incoming/mirror`` directory on the server using SFTP with the
+package) or ``incoming/mirror`` directory on the server using
+`SFTP <https://en.wikipedia.org/wiki/SSH_File_Transfer_Protocol>`_ with the
 username ``salt_archive``.
 
-The access to this user is granted using SSH keys, you have your public key in
+The access to this user is granted using :doc:`/ssh/doc/index` keys, you have your public key in
 ``salt_archive:keys`` pillar key.
 
 Once your file is uploaded, after a while, a cron job run and if the same file

@@ -46,14 +46,15 @@ Example::
 graphite:carbon:instances
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Number of instances to deploy, should <= numbers of CPU cores.
+Number of instances to deploy, should <= numbers of
+`CPU cores <https://en.wikipedia.org/wiki/Multi-core_processor>`_.
 
 graphite:retentions
 ~~~~~~~~~~~~~~~~~~~
 
-List of data retention rules, see the following for details:
-
-http://graphite.readthedocs.org/en/latest/config-carbon.html#storage-schemas-conf
+List of data retention rules, see the
+`Graphite doc <http://graphite.readthedocs.org/en/latest/config-carbon.html#storage-schemas-conf>`_
+for details of syntax .
 
 Optional
 --------
@@ -86,11 +87,11 @@ graphite:carbon:max_creates_per_minute
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Softly limits the number of whisper files that get created each minute.
-Setting this value low (like at 50) is a good way to ensure your graphite
+Setting this value low (like at ``50``) is a good way to ensure your graphite
 system will not be adversely impacted when a bunch of new metrics are
 sent to it. The trade off is that it will take much longer for those metrics'
 database files to all get created and thus longer until the data becomes usable.
-Setting this value high (like "inf" for infinity) will cause graphite to create
+Setting this value high (like ``inf`` for infinity) will cause graphite to create
 the files quickly but at the risk of slowing I/O down considerably for a while.
 
 Default: ``inf``. No limit.

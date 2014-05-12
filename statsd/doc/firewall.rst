@@ -29,4 +29,4 @@
 Firewall
 ========
 
-Statsd run on the following port: ``UDP`` ``8125``
+:doc:`index` run on the following port: ``UDP`` ``8125``

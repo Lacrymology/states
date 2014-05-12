@@ -50,13 +50,15 @@ clamav:dns_db
 ~~~~~~~~~~~~~
 
 Database verification domain, DNS used to verify virus database version.
+Link to the
+`public list of available mirrors <http://www.clamav.net/mirrors.html>`_.
 
-Default: ``(current.cvd.clamav.net)``.
+Default: ``current.cvd.clamav.net``.
 
 clamav:connect_timeout
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Timeout in seconds when connecting to database server.
+Timeout in seconds when connecting to virus database server.
 
 Default: ``30``.
 
@@ -70,7 +72,7 @@ Default: ``30``.
 clamav:times_of_check
 ~~~~~~~~~~~~~~~~~~~~~
 
-Numbers of database checks per day.
+Numbers of database server checks per day.
 
 Default: ``24``.
 
@@ -78,5 +80,9 @@ clamav:db_mirrors
 ~~~~~~~~~~~~~~~~~
 
 Tuple of spam database servers.
+Link to the
+`public list of available mirrors <http://www.clamav.net/mirrors.html>`_.
 
-Default: ``('db.local.clamav.net', 'database.clamav.net')``.
+Default: list with:
+ - ``db.local.clamav.net``
+ - ``database.clamav.net``

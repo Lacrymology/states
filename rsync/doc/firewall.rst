@@ -29,5 +29,5 @@
 Firewall
 ========
 
-Rsync daemon run on the following port ``TCP`` ``873``.
+:doc:`index` daemon run on the following port ``TCP`` ``873``.
 

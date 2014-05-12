@@ -37,7 +37,12 @@ Example::
 
   roundcube:
     hostnames:
-      - list of hostname, used for nginx config
+      - mail.example.com
+
+roundcube:hostnames
+~~~~~~~~~~~~~~~~~~~
+
+.. include:: /nginx/doc/hostnames.inc
 
 Optional
 --------
@@ -45,56 +50,52 @@ Optional
 roundcube:ssl
 ~~~~~~~~~~~~~
 
-Name of SSL used for HTTPS.
-
-Default: not used.
+.. include:: /nginx/doc/ssl.inc
 
 roundcube:ssl_redirect
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Redirect HTTP to HTTPs.
-
-Default: ``False``.
+.. include:: /nginx/doc/ssl_redirect.inc
 
 roundcube:db:username
 ~~~~~~~~~~~~~~~~~~~~~
 
-PostgreSQL username for graphite. It will be created.
+.. include:: /postgresql/doc/username.inc
 
 Default: ``roundcube``.
 
 roundcube:db:name
 ~~~~~~~~~~~~~~~~~
 
-PostgreSQL database name. It will be created.
+.. include:: /postgresql/doc/name.inc
 
 Default: ``roundcube``.
 
 roundcube:db:password
 ~~~~~~~~~~~~~~~~~~~~~
 
-PostgreSQL user password.
-
-Default: Randomly created.
+.. include:: /postgresql/doc/password.inc
 
 roundcube:imap:server
 ~~~~~~~~~~~~~~~~~~~~~
 
-IP or hostname of IMAP server to connect to.
+IP or hostname of :doc:`/dovecot/doc/index`
+`IMAP <https://en.wikipedia.org/wiki/Internet_Message_Access_Protocol>`_
+server to connect to.
 
-Default: local host ``127.0.0.1``.
+Default: localhost ``127.0.0.1``.
 
 roundcube:imap:ssl
 ~~~~~~~~~~~~~~~~~~
 
-If connect to IMAP server using SSL.
+If connect to IMAP server using `SSL </ssl/doc/index>`.
 
 Default: ``False``.
 
 roundcube:(workers|cheapers|idle|timeout)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-See uwsgi/doc/instance.rst for more details
+See :doc:`/uwsgi/doc/pillar` for more details
 
 roundcube:ldap:suffix
 ~~~~~~~~~~~~~~~~~~~~~
@@ -107,8 +108,7 @@ Default: Use value provided for ``ldap:suffix`` pillar key.
 roundcube:ldap:ssl
 ~~~~~~~~~~~~~~~~~~
 
-Whether to use STARTTLS for ldap connection when changing password or not.
+Whether to use STARTTLS for :doc:`/openldap/doc/index` connection when changing
+password or not.
 
-Default: Use value provided for ``ldap:ssl`` pillar key.
-
-If this pillar key is set, starttls will be used.
+Default: Use value provided for ``ldap:ssl`` :doc:`/openldap/doc/pillar` key.

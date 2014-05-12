@@ -33,6 +33,6 @@
 All hosts that need to send their logs to the centralized graylog2 server need
 to access the server with the following ports:
 
-- ``TCP`` ``12201``: GELF over TCP
+- ``TCP`` ``12201``: `GELF <http://www.graylog2.org/gelf>`_ over TCP
 - ``UDP`` ``12201``: GELF over UDP
-- ``UDP`` ``1514``: receive syslog messages
+- ``UDP`` ``1514``: receive `Syslog <http://en.wikipedia.org/wiki/Syslog>`_

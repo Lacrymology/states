@@ -44,6 +44,7 @@ Example::
 backup:xz_memlimit
 ~~~~~~~~~~~~~~~~~~
 
-Memory limit to ``xz`` program when run backup scripts (in MiB).
+Memory limit to `xz <https://en.wikipedia.org/wiki/Xz>`_ compressor when it run
+(in MiB).
 
 Default: ``64``.

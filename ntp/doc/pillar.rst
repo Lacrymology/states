@@ -44,7 +44,8 @@ Example::
 ntp:server
 ~~~~~~~~~~
 
-Does it act as a NTP server for other hosts?
+Does it act as a `NTP <https://en.wikipedia.org/wiki/Network_Time_Protocol>`_
+server for other hosts?
 
 Default: ``False``.
 

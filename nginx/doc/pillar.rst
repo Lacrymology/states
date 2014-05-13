@@ -66,3 +66,10 @@ nginx:redirect_numeric_ip
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Default: ``False``.
+
+nginx:client_body_buffer_size
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+set NGINX config directive client_body_buffer_size.  Unit is Kilobytes (k).
+
+Default: ``200``.

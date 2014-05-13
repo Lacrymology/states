@@ -109,7 +109,6 @@ postfix_stats:
     - running
     - watch:
       - file: /etc/init/postfix_stats.conf
-      - file: /usr/local/diamond/share/diamond/collectors/postfix/postfix.py
   file:
     - managed
     - name: /usr/local/diamond/salt-postfix-requirements.txt
@@ -130,15 +129,6 @@ postfix_stats:
       - virtualenv: diamond
     - watch:
       - file: postfix_stats
-
-{#- Fix bug in postfix.py collector #}
-/usr/local/diamond/share/diamond/collectors/postfix/postfix.py:
-  file:
-    - managed
-    - source: salt://postfix/diamond/postfix.py
-    - template: jinja
-    - require:
-      - module: postfix_stats
 
 extend:
   diamond:

@@ -52,9 +52,25 @@ Number of instances to deploy, should <= numbers of
 graphite:retentions
 ~~~~~~~~~~~~~~~~~~~
 
+The retentions line can specify multiple retentions. Each retention of
+``frequency:history`` is separated by a comma. Frequency should >= 60s
+as metric collectors usually configured to send data each 60 seconds. Setting
+frequency < 60s may cause discontinuous line in Graphite graph.
+Changing this pillar key will change retentions policy of new ``.wsp`` files,
+it will not affect existed ``.wsp`` files, use ``whisper-resize.py``
+to convert existed files.
+
+Example, below command find all ``.wsp`` files and apply new retentions policy
+``60s:1d,300s:7d,15m:30d,30m:90d``, run it as ``root``::
+
+  su graphite -s /bin/bash -c 'find /var/lib/graphite/whisper/ -name '*.wsp' -type f -exec /usr/local/graphite/bin/whisper-resize.py {} 60s:1d 300s:7d 15m:30d 30m:90d \;'
+
+Notice that it will all ``.wsp`` files in ``/var/lib/graphite/whisper``,
+it may change files which use other retention policy.
+
 List of data retention rules, see the
 `Graphite doc <http://graphite.readthedocs.org/en/latest/config-carbon.html#storage-schemas-conf>`__
-for details of syntax .
+for details of syntax.
 
 Optional
 --------

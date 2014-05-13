@@ -70,6 +70,8 @@ Default: ``False``.
 nginx:client_body_buffer_size
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-set NGINX config directive client_body_buffer_size.  Unit is Kilobytes (k).
+Set :doc:`/nginx/doc/index` config directive
+`client_body_buffer_size <http://nginx.org/en/docs/http/ngx_http_core_module.html#client_body_buffer_size>`__ 
+Unit is Kilobytes of memory.
 
 Default: ``200``.

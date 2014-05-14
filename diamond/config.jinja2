@@ -179,8 +179,11 @@ keys = root
 keys = message_only,syslog
 
 [logger_root]
-# to increase verbosity, set DEBUG
-level = INFO
+  {%- if salt['pillar.get']('debug', False) %}
+level = DEBUG
+  {%- else %}
+level = WARNING
+  {%- endif %}
 handlers = syslog
 {%- if pillar.get('graylog2_address', False) -%}
 ,gelf
@@ -191,8 +194,8 @@ handlers = syslog
 
 {%- if pillar.get('graylog2_address', False) %}
 [handler_gelf]
+level = NOTSET
 class = graypy.handler.GELFHandler
-level = DEBUG
 formatter = message_only
 args = ('{{ pillar['graylog2_address'] }}', 12201)
 {%- endif %}

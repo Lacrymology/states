@@ -40,4 +40,4 @@ rsyslog_diamond_resources:
     - text:
       - |
         [[rsyslog]]
-        exe = ^rsyslogd
+        exe = ^\/usr\/sbin\/rsyslogd

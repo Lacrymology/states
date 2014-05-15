@@ -50,4 +50,4 @@ nrpe_diamond_resources:
         [[init]]
         exec = ^\/sbin\/init$
         [[nsca_passive]]
-        cmdline = ^\/usr\/local\/nagios\/bin\/nsca_passive
+        cmdline = python \/usr\/local\/nagios\/bin\/nsca_passive

@@ -189,6 +189,24 @@ nginx_old_version:
   file:
     - absent
 
+{#- This robots.txt file is used to deny all search engine, only affect if
+    specific app uses it.  #}
+/var/www/robots.txt:
+  file:
+    - managed
+    - user: root
+    - group: root
+    - mode: 644
+    - contents: |
+        User-agent: *
+        Disallow: /
+    - require:
+      - pkg: nginx
+      - user: web
+      - file: /var/www
+    - require_in:
+      - service: nginx
+
 nginx_verify_version:
   cmd:
     - run

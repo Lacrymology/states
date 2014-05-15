@@ -80,3 +80,7 @@ nginx-logger-{{ log_type }}:
 /etc/rsyslog.d/nginx-upstart.conf:
   file:
     - absent
+
+/var/www/robots.txt:
+  file:
+    - absent

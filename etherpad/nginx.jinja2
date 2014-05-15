@@ -42,7 +42,7 @@ server {
 {# https server #}
 server {
   {%- endif %}{# redirect http to https #}
-{%- from 'nginx/ssl.jinja2' import ssl_config with context %}
+{%- from 'nginx/macro.jinja2' import ssl_config with context %}
     {{ ssl_config(pillar['etherpad']['ssl']) }}
 {%- endif %}
 {# web app logic #}
@@ -68,4 +68,6 @@ server {
         return 403;
     }
 {%- endif %}
+
+{% include 'nginx/location_robots.jinja2' %}
 }

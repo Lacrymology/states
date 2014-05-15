@@ -38,7 +38,7 @@ server {
 {#- https server #}
 server {
 {% endif %}{# redirect http to https #}
-{%- from 'nginx/ssl.jinja2' import ssl_config with context %}
+{%- from 'nginx/macro.jinja2' import ssl_config with context %}
     {{ ssl_config(pillar['salt_master']['ssl']) }}
 {% endif %}
 {#- web app logic #}
@@ -49,6 +49,8 @@ server {
 
     expires max;
     autoindex off;
+
+{% include 'nginx/location_robots.jinja2' %}
 
     location / {
         proxy_pass http://127.0.0.1:8000;

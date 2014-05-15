@@ -43,7 +43,7 @@ server {
 
 server {
 {% endif %}{# redirect http to https #}
-{%- from 'nginx/ssl.jinja2' import ssl_config with context %}
+{%- from 'nginx/macro.jinja2' import ssl_config with context %}
     {{ ssl_config(pillar['sentry']['ssl']) }}
 {% endif %}
 
@@ -62,6 +62,8 @@ server {
         autoindex off;
         alias /usr/local/sentry/lib/python{{ python_version }}/site-packages/sentry/static/;
     }
+
+{% include 'nginx/location_robots.jinja2' %}
 
     location / {
         {#  rewrite ^/favicon.ico$ /media/images/favicon.ico last;#}

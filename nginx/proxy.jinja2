@@ -71,7 +71,7 @@ server {
     listen {{ http_port|default(80) }};
 {% endif %}
 {% if ssl|default(False) %}
-{%- from 'nginx/ssl.jinja2' import ssl_config with context %}
+{%- from 'nginx/macro.jinja2' import ssl_config with context %}
     {{ ssl_config(ssl) }}
 {% endif %}
 

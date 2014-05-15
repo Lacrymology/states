@@ -27,7 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 # {{ pillar['message_do_not_modify'] }}
 {%- set mine = salt['mine.get']('*', 'monitoring.data') -%}
-{%- from 'nginx/ssl.jinja2' import ssl_config with context %}
+{%- from 'nginx/macro.jinja2' import ssl_config with context %}
 
 upstream shinken-backend {
     ip_hash;

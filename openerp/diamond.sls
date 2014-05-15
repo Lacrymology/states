@@ -46,7 +46,7 @@ openerp_diamond_resources:
       - |
         [[uwsgi.openerp]]
         cmdline = ^openerp-(worker|master)$
-{%- if salt['pillar.get']('openerp:company_db', False) -%}
+{%- if salt['pillar.get']('openerp:company_db', False) %}
         [[openerp]]
         cmdline = openerp-cron.py$
 {%- endif %}

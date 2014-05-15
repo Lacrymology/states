@@ -50,6 +50,9 @@ server {
 
     root {{ web_root_dir }}/openerp;
 
+{%- from 'nginx/macro.jinja2' import robottxt with context %}
+    {{ robottxt() }}
+
     location / {
         uwsgi_pass openerp;
         include uwsgi_params;

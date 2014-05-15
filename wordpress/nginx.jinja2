@@ -68,6 +68,9 @@ server {
         try_files $uri $uri/ /index.html;
     }
 
+{%- from 'nginx/macro.jinja2' import robottxt with context %}
+    {{ robottxt() }}
+
     location ~ .php$ {
         gzip off;
         include uwsgi_params;

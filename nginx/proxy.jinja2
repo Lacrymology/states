@@ -112,4 +112,8 @@ server {
     {% endif -%}
 {%- endfor %}
     }
+
+{%- from 'nginx/macro.jinja2' import robottxt with context %}
+    {{ robottxt() }}
+
 }

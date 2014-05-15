@@ -54,6 +54,9 @@ server {
         autoindex off;
     }
 
+{%- from 'nginx/macro.jinja2' import robottxt with context %}
+    {{ robottxt() }}
+
     location / {
         gzip off;
         uwsgi_modifier1 7;

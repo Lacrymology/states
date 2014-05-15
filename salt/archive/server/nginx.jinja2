@@ -55,6 +55,9 @@ server {
         expires max;
     }
 
+{%- from 'nginx/macro.jinja2' import robottxt with context %}
+    {{ robottxt() }}
+
     location / {
         autoindex on;
     }

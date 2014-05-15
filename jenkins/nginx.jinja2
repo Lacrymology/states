@@ -68,6 +68,9 @@ server {
         proxy_pass http://jenkins;
     }
 
+{%- from 'nginx/macro.jinja2' import robottxt with context %}
+    {{ robottxt() }}
+
     location /favicon.ico {
         deny all;
         return 404;

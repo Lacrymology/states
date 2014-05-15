@@ -77,6 +77,9 @@ server {
         autoindex off;
     }
 
+{%- from 'nginx/macro.jinja2' import robottxt with context %}
+    {{ robottxt() }}
+
     location / {
         uwsgi_pass graphite;
         include uwsgi_params;

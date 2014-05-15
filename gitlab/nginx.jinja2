@@ -64,6 +64,9 @@ server {
         uwsgi_pass gitlab;
     }
 
+{%- from 'nginx/macro.jinja2' import robottxt with context %}
+    {{ robottxt() }}
+
     location /assets/ {
         expires max;
     }

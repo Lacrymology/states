@@ -49,6 +49,10 @@ server {
     location /favicon.ico {
         return 404;
     }
+
+{%- from 'nginx/macro.jinja2' import robottxt with context %}
+    {{ robottxt() }}
+
 {% for dirname in ('conf', 'db', 'lists') %}
 {% for version in pillar['salt_ppa_mirror']['versions'] %}
     location /ubuntu/{{ version }}/{{ dirname }}/ {

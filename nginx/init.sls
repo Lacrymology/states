@@ -189,6 +189,21 @@ nginx_old_version:
   file:
     - absent
 
+{#- Exclude all robots from the entire server #}
+/usr/share/nginx/html/robots.txt:
+  file:
+    - managed
+    - user: root
+    - group: root
+    - mode: 644
+    - contents: |
+        User-agent: *
+        Disallow: /
+    - require:
+      - pkg: nginx
+    - require_in:
+      - service: nginx
+
 nginx_verify_version:
   cmd:
     - run

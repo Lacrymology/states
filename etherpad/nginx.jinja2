@@ -68,4 +68,7 @@ server {
         return 403;
     }
 {%- endif %}
+
+{%- from 'nginx/macro.jinja2' import robottxt with context %}
+    {{ robottxt() }}
 }

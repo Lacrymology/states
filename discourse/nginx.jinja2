@@ -123,6 +123,9 @@ server {
     try_files $uri @discourse;
   }
 
+{%- from 'nginx/macro.jinja2' import robottxt with context %}
+    {{ robottxt() }}
+
   location /downloads/ {
     internal;
     alias $public/;

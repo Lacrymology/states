@@ -198,7 +198,7 @@ rabbitmq-vhost-{{ vhost }}:
     - user: {{ vhost }}
     - require:
       - rabbitmq_user: rabbitmq-vhost-{{ vhost }}
-  set_permissions:
+  module:
     - run
     - name: rabbitmq.set_permissions
     - vhost: {{ vhost }}

@@ -50,7 +50,7 @@ server {
 
     root {{ web_root_dir }}/openerp;
 
-{%- include 'nginx/location_robots.jinja2' %}
+{% include 'nginx/location_robots.jinja2' %}
 
     location / {
         uwsgi_pass openerp;

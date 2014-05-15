@@ -60,7 +60,7 @@ def test(name, map, logfile=None):
         ret['changes'][collector] = f = {}
         if os.path.exists(logfile):
             os.unlink(logfile)
-        command = 'diamond -r {}'.format(collector)
+        command = '/usr/local/diamond/bin/python /usr/local/diamond/bin/diamond -r {}'.format(collector)
         if not collector.startswith('/') and not collector.endswith("Collector"):
             command += 'Collector'
         os.system(command)

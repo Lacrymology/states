@@ -31,7 +31,7 @@ def __virtual__():
     '''
     return 'diamond'
 
-def test(name, map, logfile):
+def test(name, map, logfile=None):
     """
     Run a list of diamond collectors and make sure the right metrics are
     recorded.
@@ -47,6 +47,9 @@ def test(name, map, logfile):
         this file will be purged at every run.
     :return:
     """
+    if not logfile:
+        logfile = '/var/local/diamond.archive.log'
+
     ret = {
         'name': 'Test Diamond',
         'changes': {},

@@ -81,6 +81,6 @@ nginx-logger-{{ log_type }}:
   file:
     - absent
 
-/usr/share/nginx/html/robots.txt:
+/var/www/robots.txt:
   file:
     - absent

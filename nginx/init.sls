@@ -189,8 +189,9 @@ nginx_old_version:
   file:
     - absent
 
-{#- Exclude all robots from the entire server #}
-/usr/share/nginx/html/robots.txt:
+{#- This robots.txt file is used to deny all search engine, only affect if
+    specific app uses it.  #}
+/var/www/robots.txt:
   file:
     - managed
     - user: root
@@ -201,6 +202,7 @@ nginx_old_version:
         Disallow: /
     - require:
       - pkg: nginx
+      - user: web
     - require_in:
       - service: nginx
 

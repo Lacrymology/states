@@ -203,6 +203,7 @@ nginx_old_version:
     - require:
       - pkg: nginx
       - user: web
+      - file: /var/www
     - require_in:
       - service: nginx
 

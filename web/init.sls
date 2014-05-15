@@ -36,11 +36,22 @@ web:
     - fullname: www-data
     - shell: /bin/false
     - home: /var/www
+    - createhome: True
     - password: "*"
     - enforce_password: True
   file:
     - directory
     - name: /var/lib/deployments
+    - user: www-data
+    - group: www-data
+    - mode: 775
+    - require:
+      - user: web
+
+{#- ensure owner/mode of this dir #}
+/var/www:
+  file:
+    - directory
     - user: www-data
     - group: www-data
     - mode: 775

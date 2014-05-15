@@ -58,8 +58,7 @@ server {
 {#- web app logic #}
     server_name {% for hostname in pillar['shinken']['web']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
 
-{%- from 'nginx/macro.jinja2' import robottxt with context %}
-    {{ robottxt() }}
+{%- include 'nginx/location_robots.jinja2' %}
 
     location / {
         proxy_pass http://shinken-backend;

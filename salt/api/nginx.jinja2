@@ -50,8 +50,7 @@ server {
     expires max;
     autoindex off;
 
-{%- from 'nginx/macro.jinja2' import robottxt with context %}
-    {{ robottxt() }}
+{%- include 'nginx/location_robots.jinja2' %}
 
     location / {
         proxy_pass http://127.0.0.1:8000;

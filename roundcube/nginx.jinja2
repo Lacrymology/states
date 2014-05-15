@@ -61,8 +61,7 @@ server {
         try_files $uri $uri/ /index.html;
     }
 
-{%- from 'nginx/macro.jinja2' import robottxt with context %}
-    {{ robottxt() }}
+{%- include 'nginx/location_robots.jinja2' %}
 
     location ~ .php$ {
         gzip off;

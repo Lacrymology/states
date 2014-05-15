@@ -50,8 +50,7 @@ server {
         return 404;
     }
 
-{%- from 'nginx/macro.jinja2' import robottxt with context %}
-    {{ robottxt() }}
+{%- include 'nginx/location_robots.jinja2' %}
 
 {% for dirname in ('conf', 'db', 'lists') %}
 {% for version in pillar['salt_ppa_mirror']['versions'] %}

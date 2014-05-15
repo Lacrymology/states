@@ -63,8 +63,7 @@ server {
         alias /usr/local/sentry/lib/python{{ python_version }}/site-packages/sentry/static/;
     }
 
-{%- from 'nginx/macro.jinja2' import robottxt with context %}
-    {{ robottxt() }}
+{%- include 'nginx/location_robots.jinja2' %}
 
     location / {
         {#  rewrite ^/favicon.ico$ /media/images/favicon.ico last;#}

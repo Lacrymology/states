@@ -181,7 +181,7 @@ If a commit message matches this regular expression, all issues referenced from
 the matched text will be closed. This happens when the commit is pushed or
 merged into the default branch of a project.
 
-Default: ```([Cc]lose[sd]|[Ff]ixe[sd]) +#\d+`.
+Default: ``([Cc]lose[sd]|[Ff]ixe[sd]) +#\d+``.
 
 gitlab:signup_enabled
 ~~~~~~~~~~~~~~~~~~~~~

@@ -89,7 +89,7 @@ def test(name, map, logfile=None):
                         'new': collected_metrics[metric],
                     }
 
-        # finally, update 'result': if there's anything in change, we've failed
-        ret['result'] = ret['result'] and not bool(change)
+        if change:
+            ret['result'] = False
 
     return ret

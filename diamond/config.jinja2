@@ -29,7 +29,10 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 [server]
 
 # Handlers for published metrics.
-handlers = diamond.handler.graphite.GraphiteHandler, diamond.handler.archive.ArchiveHandler
+handlers = diamond.handler.graphite.GraphiteHandler,
+{%- if salt['pillar.get']("__test__", False) -%}
+         diamond.handler.archive.ArchiveHandler
+{%- endif %}
 
 # Leave empty to use the current user
 user =
@@ -71,12 +74,14 @@ port = 2003
 timeout = 15
 batch = {{ salt['pillar.get']('diamond:batch', 256) }}
 
+{%- if salt['pillar.get']("__test__", False) %}
 [[ArchiveHandler]]
 {#- File to write archive log files #}
 log_file = {{ opts['cachedir'] }}/diamond.archive.log
 
 {#- Number of days to keep archive log files #}
 days = 7
+{%- endif %}
 
 #[[StatsdHandler]]
 #host = 127.0.0.1

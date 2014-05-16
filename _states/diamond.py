@@ -72,21 +72,22 @@ def test(name, map, logfile=None):
                 collected_metrics[metric] = value
 
         for metric in metrics:
-            if metric not in collected_metrics:
-                change[metric] = {
+            fullpath = '.'.join((__grains__['id'], metric))
+            if fullpath not in collected_metrics:
+                change[fullpath] = {
                     'old': "Expected",
                     'new': 'Not collected',
                 }
             else:
                 try:
-                    value = float(collected_metrics[metric])
+                    value = float(collected_metrics[fullpath])
                 except ValueError, e:
                     value = None
 
                 if (not metrics[metric]) and (not value):
-                    change[metric] = {
+                    change[fullpath] = {
                         'old': 'Expected non-zero numerical value',
-                        'new': collected_metrics[metric],
+                        'new': collected_metrics[fullpath],
                     }
 
         if change:

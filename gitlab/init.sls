@@ -412,8 +412,8 @@ gitlab_clean_redis_db:
     - directory
     - user: {{ user }}
     - group: {{ user }}
-    - dir_mode: 755
-    - file_mode: 644
+    - dir_mode: 775
+    - file_mode: 664
     - recurse:
       - user
       - group

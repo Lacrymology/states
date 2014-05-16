@@ -172,3 +172,15 @@ If ``True``, run the ``absent`` formula of each roles that the minion is not
 assigned to.
 
 Default: ``False``.
+
+__test__
+~~~~~~~~
+
+If ``True`` the formulas consider themselves running trough the testing
+framework. That pillar key must **NEVER** be defined in non-testing pillars.
+
+And it must **ALWAYS** be defined and set to ``True`` in testing pillars.
+
+Not following this rule will result in lost data and broken system.
+
+Default: ``False``.

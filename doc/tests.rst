@@ -61,6 +61,21 @@ Finally, all installed installed packages is then reverted to that list that
 was built during initial cleanup process, by running ``pkg_installed.revert``
 module.
 
+Formula's Test Specifics
+------------------------
+
+Sometimes, some formulas must adapt themselves to be more verbose during
+execution of test units. Or work around limitation of testing environments.
+
+There is a special pillar key ``__test__`` so to ``True`` that is always defined
+during test execution. See :doc:`pillar` for additional details.
+
+You can use the following condition::
+
+  {% if salt['pillar.get']('__test__', False) %}
+
+to apply tests specific changes.
+
 Automatic Tests
 ---------------
 

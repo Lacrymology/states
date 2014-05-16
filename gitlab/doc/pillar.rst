@@ -121,7 +121,7 @@ gitlab:max_size
 Max size of a git object (e.g. a commit), in bytes.
 This value can be increased if you have very large commits
 
-Default: ````. It's 5 megabytes.
+Default: ``5242880``. It's 5 megabytes.
 
 gitlab:ssh_port
 ~~~~~~~~~~~~~~~
@@ -177,8 +177,8 @@ gitlab:issue_closing_pattern
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Automatic issue closing.
-If a commit message matches this regular expression, all issues referenced from 
-the matched text will be closed. This happens when the commit is pushed or 
+If a commit message matches this regular expression, all issues referenced from
+the matched text will be closed. This happens when the commit is pushed or
 merged into the default branch of a project.
 
 Default: ```([Cc]lose[sd]|[Ff]ixe[sd]) +#\d+`.

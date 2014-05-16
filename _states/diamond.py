@@ -91,5 +91,6 @@ def test(name, map, logfile=None):
 
         if change:
             ret['result'] = False
+            return ret
 
     return ret

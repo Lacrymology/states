@@ -57,7 +57,7 @@ def test(name, map, logfile=None):
         'comment': '',
     }
     for collector, metrics in map.items():
-        ret['changes'][collector] = f = {}
+        ret['changes'][collector] = change = {}
         if os.path.exists(logfile):
             os.unlink(logfile)
         command = '/usr/local/diamond/bin/python /usr/local/diamond/bin/diamond -r {}'.format(collector)
@@ -73,7 +73,7 @@ def test(name, map, logfile=None):
 
         for metric in metrics:
             if metric not in collected_metrics:
-                f[metric] = {
+                change[metric] = {
                     'old': "Expected",
                     'new': 'Not collected',
                 }
@@ -84,12 +84,12 @@ def test(name, map, logfile=None):
                     value = None
 
                 if (not metrics[metric]) and (not value):
-                    f[metric] = {
+                    change[metric] = {
                         'old': 'Expected non-zero numerical value',
                         'new': collected_metrics[metric],
                     }
 
-        # finally, update 'result': if there's anything in f, we've failed
-        ret['result'] = ret['result'] and not bool(f)
+        # finally, update 'result': if there's anything in change, we've failed
+        ret['result'] = ret['result'] and not bool(change)
 
     return ret

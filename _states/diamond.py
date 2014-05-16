@@ -23,34 +23,27 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+
 import os
 
 
-def __virtual__():
-    '''
-    name this state module
-    '''
-    return 'diamond'
-
-
-def test(name, map, logfile=None):
+def test(name, map):
     """
     Run a list of diamond collectors and make sure the right metrics are
     recorded.
 
-    Expects diamond to have the ArchiveHandler active.
+    Expects diamond to have the ArchiveHandler active, which is the case
+    if ``__test__`` pillar key is turned on when state ``diamond`` is applied
 
     :param map: a map in the form
         { collectorName: { metric: boolean, metric: .. }, collectorName: ..}
         where collectorName must be just the name of the diamond collectors to
         be run, and each metric maps to a boolean that defines whether 0 is an
-        acceptable value for the metric
-    :param logfile: the path to the diamond ArchiveHandler logfile. Beware that
-        this file will be purged at every run.
+        acceptable value for the metric. Metrics must not prefix with the
+        hostname, as this module will do that instead.
     :return:
     """
-    if not logfile:
-        logfile = os.path.join(__opts__['cachedir'], 'diamond.archive.log')
+    logfile = os.path.join(__opts__['cachedir'], 'diamond.archive.log')
 
     ret = {
         'name': 'Test Diamond',
@@ -58,22 +51,31 @@ def test(name, map, logfile=None):
         'result': True,
         'comment': '',
     }
+
     for collector, metrics in map.items():
         ret['changes'][collector] = change = {}
-        if os.path.exists(logfile):
-            os.unlink(logfile)
+        if __salt__['file.file_exists'](logfile):
+            __salt__['file.remove'](logfile)
         command = ('/usr/local/diamond/bin/python '
                    '/usr/local/diamond/bin/diamond -r {}').format(collector)
 
         if (not collector.startswith('/') and
            not collector.endswith("Collector")):
             command += 'Collector'
-        os.system(command)
+        retcode = __salt__['cmd.retcode'](command)
+
+        if retcode != 0:
+            ret['comment'] = '%s failed with retcode %d'.format(command,
+                                                                retcode)
+            ret['result'] = False
+            return ret
+
         collected_metrics = {}
-        with open(logfile, 'r') as file:
+        with open(logfile) as file:
             for line in file:
                 metric, value, timestamp = line.split()
                 collected_metrics[metric] = value
+        __salt__['file.remove'](logfile)
 
         for metric in metrics:
             fullpath = '.'.join((__grains__['id'], metric))

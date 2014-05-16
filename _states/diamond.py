@@ -25,11 +25,13 @@
 
 import os
 
+
 def __virtual__():
     '''
     name this state module
     '''
     return 'diamond'
+
 
 def test(name, map, logfile=None):
     """
@@ -48,7 +50,7 @@ def test(name, map, logfile=None):
     :return:
     """
     if not logfile:
-        logfile = os.path.join(__opts__ ['cachedir'], 'diamond.archive.log')
+        logfile = os.path.join(__opts__['cachedir'], 'diamond.archive.log')
 
     ret = {
         'name': 'Test Diamond',
@@ -60,9 +62,11 @@ def test(name, map, logfile=None):
         ret['changes'][collector] = change = {}
         if os.path.exists(logfile):
             os.unlink(logfile)
-        command = '/usr/local/diamond/bin/python /usr/local/diamond/bin/diamond -r {}'.format(collector)
+        command = ('/usr/local/diamond/bin/python '
+                   '/usr/local/diamond/bin/diamond -r {}').format(collector)
 
-        if not collector.startswith('/') and not collector.endswith("Collector"):
+        if (not collector.startswith('/') and
+           not collector.endswith("Collector")):
             command += 'Collector'
         os.system(command)
         collected_metrics = {}
@@ -81,7 +85,7 @@ def test(name, map, logfile=None):
             else:
                 try:
                     value = float(collected_metrics[fullpath])
-                except ValueError, e:
+                except ValueError:
                     value = None
 
                 if (not metrics[metric]) and (not value):

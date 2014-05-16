@@ -73,7 +73,7 @@ batch = {{ salt['pillar.get']('diamond:batch', 256) }}
 
 [[ArchiveHandler]]
 {#- File to write archive log files #}
-log_file = /var/local/diamond.archive.log
+log_file = {{ opts['cachedir'] }}/diamond.archive.log
 
 {#- Number of days to keep archive log files #}
 days = 7

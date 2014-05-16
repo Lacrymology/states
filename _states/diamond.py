@@ -48,7 +48,7 @@ def test(name, map, logfile=None):
     :return:
     """
     if not logfile:
-        logfile = '/var/local/diamond.archive.log'
+        logfile = os.path.join(__opts__ ['cachedir'], 'diamond.archive.log')
 
     ret = {
         'name': 'Test Diamond',
@@ -61,6 +61,7 @@ def test(name, map, logfile=None):
         if os.path.exists(logfile):
             os.unlink(logfile)
         command = '/usr/local/diamond/bin/python /usr/local/diamond/bin/diamond -r {}'.format(collector)
+
         if not collector.startswith('/') and not collector.endswith("Collector"):
             command += 'Collector'
         os.system(command)

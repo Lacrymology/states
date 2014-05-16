@@ -40,7 +40,7 @@ def test(name, map):
         where collectorName must be just the name of the diamond collectors to
         be run, and each metric maps to a boolean that defines whether 0 is an
         acceptable value for the metric. Metrics must not prefix with the
-        hostname, as this module will do that instead.
+        <hostname>.os, as this module will do that instead.
     :return:
     """
     logfile = os.path.join(__opts__['cachedir'], 'diamond.archive.log')
@@ -78,7 +78,7 @@ def test(name, map):
         __salt__['file.remove'](logfile)
 
         for metric in metrics:
-            fullpath = '.'.join((__grains__['id'], metric))
+            fullpath = '.'.join((__grains__['id'], 'os', metric))
             if fullpath not in collected_metrics:
                 change[fullpath] = {
                     'old': "Expected",

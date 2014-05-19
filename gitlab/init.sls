@@ -402,7 +402,9 @@ gitlab_clean_redis_db:
     - directory
     - user: {{ user }}
     - group: {{ user }}
-    - mode: 755
+    - mode: 775
+    - require:
+      - user: {{ user }}
 
 {%- for dir in ('log', 'tmp', 'public/uploads', 'tmp/pids', 'tmp/cache') %}
 {{ web_dir }}/{{ dir }}:

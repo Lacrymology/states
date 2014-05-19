@@ -33,3 +33,10 @@ test:
   nrpe:
     - run_all_checks
     - order: last
+  diamond:
+    - test
+    - map:
+        ProcessResources:
+          process.diamond.memory_percent: True
+          process.init.num_threads: False
+          process.udev.num_threads: False

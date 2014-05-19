@@ -47,7 +47,5 @@ nrpe_diamond_resources:
         [[nrpe]]
         exe = ^\/usr\/sbin\/nrpe$
         cmdline = ^\/usr\/lib\/nagios\/plugins\/check_
-        [[init]]
-        exec = ^\/sbin\/init$
         [[nsca_passive]]
         cmdline = python \/usr\/local\/nagios\/bin\/nsca_passive

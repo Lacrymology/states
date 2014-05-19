@@ -25,6 +25,10 @@
 
 
 import os
+import logging
+
+
+log = logging.getLogger(__name__)
 
 
 def test(name, map):
@@ -71,11 +75,13 @@ def test(name, map):
             return ret
 
         collected_metrics = {}
+        log.info('Reading from %s', logfile)
         with open(logfile) as file:
             for line in file:
                 metric, value, timestamp = line.split()
                 collected_metrics[metric] = value
         __salt__['file.remove'](logfile)
+        log.debug('Collected: %s', collected_metrics)
 
         for metric in metrics:
             fullpath = '.'.join((__grains__['id'], 'os', metric))
@@ -85,6 +91,8 @@ def test(name, map):
                     'new': 'Not collected',
                 }
             else:
+                log.info('Received metric: %s %s',
+                         fullpath, collected_metrics[fullpath])
                 try:
                     value = float(collected_metrics[fullpath])
                 except ValueError:

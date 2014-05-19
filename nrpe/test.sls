@@ -33,3 +33,9 @@ test:
   nrpe:
     - run_all_checks
     - order: last
+  diamond:
+    - test
+    - map:
+        ProcessResources:
+          process.nrpe.num_threads: False
+          process.nsca_passive.cpu_percent: True

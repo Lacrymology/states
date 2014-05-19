@@ -35,10 +35,10 @@ How to create a snapshot of saltstack Ubuntu PPA::
   find . -type f -name 'index.*' -delete
   find pool/ -type f ! -name '*.deb' -delete
 
-To only keep lucid/precise::
+To only keep precise::
 
-   rm -rf `find dists/ -maxdepth 1 -mindepth 1 ! -name lucid ! -name precise`
-   find pool/ -type f -name '*.deb' ! -name '*lucid*'  ! -name '*precise*' -delete
+   rm -rf `find dists/ -maxdepth 1 -mindepth 1 ! -name precise`
+   find pool/ -type f -name '*.deb' ! -name '*precise*' -delete
 -#}
 include:
   - apt

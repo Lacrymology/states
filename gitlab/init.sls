@@ -76,6 +76,7 @@ gitlab_dependencies:
       - libcurl4-openssl-dev
       - libicu-dev
       - build-essential
+      - python-docutils
     - require:
       - cmd: apt_sources
       - pkg: build

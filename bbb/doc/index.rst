@@ -1,9 +1,0 @@
-BBB
-===
-
-Contents:
-
-.. toctree::
-    :glob:
-
-    *

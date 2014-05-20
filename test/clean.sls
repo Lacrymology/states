@@ -222,20 +222,6 @@ clean_pkg:
       - xauth
       - xkb-data
       - xml-core
-{%- if grains['oscodename'] == 'lucid' %}
-      - console-terminus
-      - cpp-4.4
-      - cpu-checker
-      - hal-info
-      - libpam-ck-connector
-      - make
-      - python-gobject
-      - python-pexpect
-      - radeontool
-      - ubuntu-serverguide
-      - update-motd
-      - vbetool
-{%- endif %}
 
 {% for service in ('acpid', 'console-setup', 'dbus', 'whoopsie') %}
 /var/log/upstart/{{ service }}.log:

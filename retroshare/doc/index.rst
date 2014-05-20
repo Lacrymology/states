@@ -1,9 +1,0 @@
-RetroShare
-==========
-
-
-.. toctree::
-    :glob:
-
-
-    *

@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Hung Nguyen Viet
+Copyright (c) 2014, Hung Nguyen Viet
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -26,35 +26,62 @@ Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
 # {{ pillar['message_do_not_modify'] }}
+lmtp_save_to_detail_mailbox = yes
 mail_gid = mail
 mail_home = /var/mail/vhosts/indexes/%d/%n
 mail_location = mbox:~/mail:INBOX=/var/mail/vhosts/%d/%n
 mail_privileged_group = mail
 mail_uid = dovecot-agent
+managesieve_notify_capability = mailto
+managesieve_sieve_capability = fileinto reject envelope encoded-character vacation subaddress comparator-i;ascii-numeric relational regex imap4flags copy include variables body enotify environment mailbox date ihave
 passdb {
   args = /etc/dovecot/dovecot-ldap.conf.ext
   driver = ldap
 }
-protocols = "imap pop3"
+plugin {
+  sieve = ~/.dovecot.sieve
+  sieve_dir = ~/sieve
+  sieve_global_dir = /var/lib/dovecot/sieve/global/
+  sieve_global_path = /var/lib/dovecot/sieve/default.sieve
+}
+protocols = imap pop3 lmtp sieve
 service auth {
+  extra_groups = ssl-cert
   unix_listener /var/spool/postfix/private/auth {
     mode = 0666
   }
-  extra_groups = ssl-cert
 }
-{%- set ssl = salt['pillar.get']('dovecot:ssl', False) -%}
-{%- if ssl %}
-ssl = yes
+service lmtp {
+  unix_listener /var/spool/postfix/private/dovecot-lmtp {
+    group = postfix
+    mode = 0600
+    user = postfix
+  }
+}
+service managesieve-login {
+  inet_listener sieve {
+    port = 4190
+  }
+}
+service ssl-params {
+  type =
+}
 ssl_cert = </etc/ssl/certs/{{ ssl }}_chained.crt
+ssl_cipher_list = EDH+CAMELLIA:EDH+aRSA:EECDH+aRSA+AESGCM:EECDH+aRSA+SHA384:EECDH+aRSA+SHA256:EECDH:+CAMELLIA256:+AES256:+CAMELLIA128:+AES128:+SSLv3:!aNULL:!eNULL:!LOW:!3DES:!MD5:!EXP:!PSK:!DSS:!RC4:!SEED:!ECDSA:CAMELLIA256-SHA:AES256-SHA:CAMELLIA128-SHA:AES128-SHA
 ssl_key = </etc/ssl/private/{{ ssl }}.key
-ssl_cipher_list = 'EDH+CAMELLIA:EDH+aRSA:EECDH+aRSA+AESGCM:EECDH+aRSA+SHA384:EECDH+aRSA+SHA256:EECDH:+CAMELLIA256:+AES256:+CAMELLIA128:+AES128:+SSLv3:!aNULL:!eNULL:!LOW:!3DES:!MD5:!EXP:!PSK:!DSS:!RC4:!SEED:!ECDSA:CAMELLIA256-SHA:AES256-SHA:CAMELLIA128-SHA:AES128-SHA'
-{%- else %}
-ssl = no
-{%- endif %}
 userdb {
   args = /etc/dovecot/dovecot-ldap.conf.ext
   driver = ldap
 }
-service ssl-params {
-    type =
+protocol lmtp {
+  mail_plugins = " sieve"
+  postmaster_address = {{ pillar['mail:postmaster'] }}
+}
+protocol sieve {
+  mail_max_userip_connections = 10
+  mail_plugins =
+  managesieve_implementation_string = Dovecot Pigeonhole
+  managesieve_logout_format = bytes=%i/%o
+  managesieve_max_compile_errors = 5
+  managesieve_max_line_length = 65536
 }

@@ -55,8 +55,8 @@ server {
 {# web app logic #}
     server_name {% for hostname in pillar['wordpress']['hostnames'] -%}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
     root {{ dir }};
-{%- from 'nginx/block_hacks.jinja2' import block_hacks with context %}
-    {{ block_hacks() }}
+
+{% include "nginx/block_hacks.jinja2" %}
 
 {% for dir in ('skins',) %}
     location /{{ dir }}/ {

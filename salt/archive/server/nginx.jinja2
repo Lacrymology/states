@@ -55,8 +55,8 @@ server {
         deny all;
         return 404;
     }
-{%- from 'nginx/block_hacks.jinja2' import block_hacks with context %}
-    {{ block_hacks() }}
+
+{% include "nginx/block_hacks.jinja2" %}
 
     location ~* \.(gz|txt|zip)$ {
         expires max;

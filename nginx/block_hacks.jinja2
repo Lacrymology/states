@@ -1,7 +1,29 @@
-{%- macro block_hacks() %}
-    location ~* /(cpphpmyadmin|cpdbadmin|cpanel|cpadmin|w00tw00t|PMA|bbs|admn|admm|httpdocs|apache-default|htdocs|_admin|padmin|mysql|dbadmin2|databaseadmin|php|adminmysql|mydataadmin|SQL|pHpMyAdMiN|PHPMYADMIN|sql|vtigercrm|cgi-bin|crossdomain.xml) {
+    ## Deny scan admin page 
+    location ~* /(admn|admm|_admin|padmin) {
         deny all;
         return 404;
     }
-{%- endmacro %}
 
+    ## Deny scan panel page
+    location ~* /(cpphpmyadmin|cpdbadmin|cpanel|cpadmin) {
+        deny all;
+        return 404;
+    }
+
+    ## Deny scan pages manage database
+    location ~* /(phpmyadmin|pHpMyAdMiN|PHPMyAdmin|PHPMYADMIN|sql|mysql|SQL) {
+        deny all;
+        return 404;
+    }
+
+    ## Deny run script cgi-bin
+    location ~*/cgi-bin {
+        deny all;
+        return 404;
+    }
+
+    ## Deny w00tw00t.at.ISC.SANS.DFind Web Scanner
+    location ~*/w00tw00t {
+        deny all;
+        return 404;
+    }

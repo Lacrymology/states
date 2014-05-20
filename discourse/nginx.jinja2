@@ -73,8 +73,8 @@ server {
    maximum file upload size (keep up to date when changing the corresponding site setting)
   #}
   client_max_body_size {{ salt['pillar.get']('discourse:upload_size', '2m') }};
-{%- from 'nginx/block_hacks.jinja2' import block_hacks with context %}
-    {{ block_hacks() }}
+
+{% include "nginx/block_hacks.jinja2" %}
 
   {#-
    path to discourse's public directory

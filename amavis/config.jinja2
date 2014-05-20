@@ -1,5 +1,6 @@
 use strict;
 
+{#-
 #
 # Place your configuration directives here.  They will override those in
 # earlier files.
@@ -7,7 +8,38 @@ use strict;
 # See /usr/share/doc/amavisd-new/ for documentation and examples of
 # the directives you can use in this file
 #
+#}
+$myhostname = "{{ pillar['mail']['mailname'] }}";
 
+{#- enable virus checking #}
+@bypass_virus_checks_maps = (
+   \%bypass_virus_checks, \@bypass_virus_checks_acl, \$bypass_virus_checks_re);
+{#- enable anti-spam checking #}
+@bypass_spam_checks_maps = (
+   \%bypass_spam_checks, \@bypass_spam_checks_acl, \$bypass_spam_checks_re);
 
-#------------ Do not modify anything below this line -------------
+{#- number of pre-forked children #}
+$max_servers = {{ salt['pillar.get']('mail:maxproc', 2) }};
+
+{#- amavis will tell LDA/LMTP move spam emails to user/spam folder #}
+$recipient_delimiter = '+';
+@addr_extension_spam_maps = ('spam');
+
+{#- add SA tag to all emails #}
+$sa_tag_level_deflt = {{ salt['pillar.get']('amavis:sa_tag_level', -999) }};
+{#- add tags for spammy emails #}
+$sa_tag2_level_deflt = {{ salt['pillar.get']('amavis:sa_tag2_level', 6.31) }};
+{#- real spam score #}
+$sa_kill_level_deflt = {{ salt['pillar.get']('amavis:sa_kill_level', 10) }};
+{#- when spam score exceeds this, do not send delivery status notification msg #}
+$sa_dsn_cutoff_level = {{ salt['pillar.get']('amavis:sa_kill_level', 100) }};
+{#- transport spam email to rcpt #}
+$final_spam_destiny=D_PASS;
+
+{#- who will receive notify when there is REAL spam email #}
+$spam_admin = '{{ pillar['mail']['postmaster'] }}';
+{#- send a template mail to warn spam sender #}
+$warnspamsender = {{ salt['pillar.get']('amavis:warnspamsender', 1) }};
+
+{#- ------------ Do not modify anything below this line ------------- #}
 1;  # ensure a defined return

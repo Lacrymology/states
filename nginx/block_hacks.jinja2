@@ -1,28 +1,28 @@
-    ## Deny scan admin page 
+    # deny scan admin 
     location ~* /(admn|admm|_admin|padmin) {
         deny all;
         return 404;
     }
 
-    ## Deny scan panel page
+    # deny scan cpanel
     location ~* /(cpphpmyadmin|cpdbadmin|cpanel|cpadmin) {
         deny all;
         return 404;
     }
 
-    ## Deny scan pages manage database
+    # deny scan PhpMyAdmin
     location ~* /(phpmyadmin|pHpMyAdMiN|PHPMyAdmin|PHPMYADMIN|sql|mysql|SQL) {
         deny all;
         return 404;
     }
 
-    ## Deny run script cgi-bin
+    # deny run script cgi-bin
     location ~*/cgi-bin {
         deny all;
         return 404;
     }
 
-    ## Deny w00tw00t.at.ISC.SANS.DFind Web Scanner
+    # deny w00tw00t.at.ISC.SANS.DFind Web Scanner
     location ~*/w00tw00t {
         deny all;
         return 404;

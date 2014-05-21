@@ -50,6 +50,8 @@ server {
     expires max;
     autoindex off;
 
+{% include "nginx/block_hacks.jinja2" %}
+
 {% include 'nginx/location_robots.jinja2' %}
 
     location / {

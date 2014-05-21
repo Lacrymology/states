@@ -46,6 +46,8 @@ server {
     root /var/lib/reprepro/salt/;
     autoindex on;
 
+{% include "nginx/block_hacks.jinja2" %}
+
     location /favicon.ico {
         return 404;
     }

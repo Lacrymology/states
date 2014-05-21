@@ -49,6 +49,8 @@ server {
     server_name {% for hostname in pillar['roundcube']['hostnames'] -%}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
     root {{ dir }};
 
+{% include "nginx/block_hacks.jinja2" %}
+
 {%- for dir in ('skins',) %}
     location /{{ dir }}/ {
         expires max;

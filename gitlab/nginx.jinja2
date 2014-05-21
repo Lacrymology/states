@@ -56,6 +56,7 @@ server {
     server_name {% for hostname in  salt['pillar.get']('gitlab:hostnames') %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
     root {{ web_dir }}/public;
 
+{% include "nginx/block_hacks.jinja2" %}
 
     location / {
         gzip off;

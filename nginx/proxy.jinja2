@@ -77,6 +77,8 @@ server {
 
     server_name {% for hostname in hostnames %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
 
+{% include "nginx/block_hacks.jinja2" %}
+
     location / {
 {% if cache_size|default(False) %}
         {# default: Google DNS #}

@@ -58,6 +58,8 @@ server {
     server_name {% for hostname in pillar[name]['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
     root {{ root_path }};
 
+{% include "nginx/block_hacks.jinja2" %}
+
 {#- reserve for directives should go before all other location #}
 {%- block first_location %}
 {%- endblock %}

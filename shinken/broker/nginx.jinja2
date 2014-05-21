@@ -58,6 +58,8 @@ server {
 {#- web app logic #}
     server_name {% for hostname in pillar['shinken']['web']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
 
+{% include "nginx/block_hacks.jinja2" %}
+
 {% include 'nginx/location_robots.jinja2' %}
 
     location / {

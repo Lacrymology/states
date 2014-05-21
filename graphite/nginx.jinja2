@@ -55,6 +55,8 @@ server {
         return 404;
     }
 
+{% include "nginx/block_hacks.jinja2" %}
+
 {% if 'render_allow' in pillar['graphite']['web'] %}
     location /render/ {
 {% for network in pillar['graphite']['web']['render_allow'] %}

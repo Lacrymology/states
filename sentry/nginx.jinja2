@@ -51,6 +51,8 @@ server {
 
     root /usr/local/sentry;
 
+{% include "nginx/block_hacks.jinja2" %}
+
     location /_admin_media/ {
         expires 1h;
         autoindex off;
@@ -70,5 +72,4 @@ server {
         uwsgi_pass sentry;
         include uwsgi_params;
     }
-
 }

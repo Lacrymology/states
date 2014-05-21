@@ -43,6 +43,7 @@ dovecot:
       - dovecot-imapd
       - dovecot-pop3d
       - dovecot-ldap
+      - dovecot-lmtpd
       - dovecot-managesieved
     - require:
       - cmd: apt_sources

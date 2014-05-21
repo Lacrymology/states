@@ -51,7 +51,7 @@ server {
     }
 {%- endif %}
 
-   location ~* /i18n {
+   location ~* /i18n/* {
         deny all;
         return 404;
     }

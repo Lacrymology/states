@@ -17,13 +17,13 @@
     }
 
     # deny run script cgi-bin
-    location ~*/cgi-bin {
+    location ~* /cgi-bin {
         deny all;
         return 404;
     }
 
     # deny w00tw00t.at.ISC.SANS.DFind Web Scanner
-    location ~*/w00tw00t {
+    location ~* /w00tw00t {
         deny all;
         return 404;
     }

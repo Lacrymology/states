@@ -78,7 +78,7 @@ salt_archive_incoming:
     - directory
     - user: salt_archive
     - group: salt_archive
-    - mode: 770
+    - mode: 750
     - require:
       - user: salt_archive
       - file: salt_archive_incoming
@@ -154,6 +154,9 @@ extend:
     service:
       - watch:
         - file: /etc/cron.d/salt-archive
+  www-data:
+    groups:
+      - salt_archive
   nginx:
     service:
       - watch:

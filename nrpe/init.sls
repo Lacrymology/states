@@ -152,10 +152,7 @@ service: nagios-nrpe-server #}
     - directory
     - user: nagios
     - group: nagios
-    - mode: 755
-    - recurse:
-      - user
-      - group
+    - mode: 750
     - require:
       - pkg: nagios-nrpe-server
 

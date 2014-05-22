@@ -154,6 +154,7 @@ nginx:
     - enable: True
     - order: 50
     - watch:
+      - user: web
       - file: nginx
       - file: /etc/nginx/nginx.conf
 {% for filename in bad_configs %}

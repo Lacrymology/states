@@ -36,8 +36,8 @@ Mandatory
 
 Example::
 
-mail:
-  postmaster: admin@example.com
+  mail:
+    postmaster: admin@example.com
 
 mail:postmaster
 ~~~~~~~~~~~~~~~

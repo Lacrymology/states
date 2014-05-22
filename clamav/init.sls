@@ -93,4 +93,3 @@ clamav-daemon:
     - watch:
       - pkg: clamav-daemon
       - file: clamav-daemon
-

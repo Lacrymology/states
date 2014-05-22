@@ -1,0 +1,52 @@
+{#-
+Copyright (c) 2013, Diep Pham
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+Author: Diep Pham <imeo@favadi.com>
+Maintainer: Diep Pham <imeo@favadi.com>
+-#}
+# {{ pillar['message_do_not_modify'] }}
+
+START={{ salt['pillar.get']('varnish:start', 'yes') }}
+NFILES={{ salt['pillar.get']('varnish:nfiles', '131072') }}
+MEMLOCK={{ salt['pillar.get']('varnish:memlock', '82000') }}
+INSTANCE={{ grains.host }}
+
+{% set listen_address = salt['pillar.get']('varnish:listen_address', '') -%}
+{%- set listen_port = salt['pillar.get']('varnish:listen_port', '80') -%}
+{%- set telnet_address = salt['pillar.get']('varnish:telnet_address', 'localhost') -%}
+{%- set telnet_port = salt['pillar.get']('varnish:telnet_port', '6082') -%}
+
+{%- set malloc_size = salt['pillar.get']('varnish:malloc_size', '256M') -%}
+
+{%- if storage_backend == 'malloc' -%}
+  {%- set storage_backend_options = malloc_size -%}
+{%- elif storage_backend == 'file' -%}
+  {%- set storage_backend_options = file_path ~ ',' ~ file_size -%}
+{%- endif -%}
+
+DAEMON_OPTS="-a {{ listen_address }}:{{ listen_port }} \
+             -T {{ telnet_address }}:{{ telnet_port }} \
+             -f /etc/varnish/default.vcl \
+             -S /etc/varnish/secret \
+             -s {{ storage_backend }},{{ storage_backend_options }}"

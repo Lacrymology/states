@@ -31,6 +31,7 @@ include:
   - apt
   - mail
   - spamassassin
+  - amavis.clamav
 
 amavis:
   pkg:

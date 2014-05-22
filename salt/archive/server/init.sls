@@ -154,7 +154,7 @@ extend:
     service:
       - watch:
         - file: /etc/cron.d/salt-archive
-  www-data:
+  web:
     user:
       - groups:
         - salt_archive

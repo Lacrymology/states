@@ -39,8 +39,6 @@ web:
     - createhome: True
     - password: "*"
     - enforce_password: True
-    - groups:
-      - salt_archive
   file:
     - directory
     - name: /var/lib/deployments

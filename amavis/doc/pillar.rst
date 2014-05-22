@@ -37,12 +37,12 @@ Mandatory
 Example::
 
   mail:
-    mailname: somehost.fqdn.com
+    mailname: domain.ltd
 
 mail:mailname
 ~~~~~~~~~~~~~
 
-Fully qualified domain (if possible) of the mail server hostname.
+See :doc:`mail:mailname</mail/doc/pillar>`
 
 Optional
 --------

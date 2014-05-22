@@ -62,7 +62,7 @@ include:
 backup_client_nrpe-requirements:
   file:
     - managed
-    - name: /usr/local/nagios/backup.client.nrpe-requirements.txt
+    - name: /usr/local/nagios/backup.client.scp.nrpe-requirements.txt
     - template: jinja
     - user: root
     - group: root
@@ -75,7 +75,7 @@ backup_client_nrpe-requirements:
     - name: pip.install
     - upgrade: True
     - bin_env: /usr/local/nagios
-    - requirements: /usr/local/nagios/backup.client.nrpe-requirements.txt
+    - requirements: /usr/local/nagios/backup.client.scp.nrpe-requirements.txt
     - require:
       - virtualenv: nrpe-virtualenv
     - watch:

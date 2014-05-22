@@ -43,4 +43,9 @@ scp_check_backup:
 backup_client_nrpe-requirements:
   file:
     - absent
-    - name: /usr/local/nagios/backup.client.nrpe-requirements.txt
+    - name: /usr/local/nagios/backup.client.scp.nrpe-requirements.txt
+
+{# remove file with bad name #}
+/usr/local/nagios/backup.client.nrpe-requirements.txt:
+  file:
+    - absent

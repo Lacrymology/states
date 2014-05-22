@@ -101,7 +101,7 @@ def extracted(name, source, archive_format, tar_options=None, source_hash=None,
     filename = os.path.join(__opts__['cachedir'],
                             '{0}.{1}'.format(if_missing.replace('/', '_'),
                                              archive_format))
-    if not salt['file.file_exists'](filename):
+    if not __salt__['file.file_exists'](filename):
         if __opts__['test']:
             ret['result'] = None
             ret['comment'] = \

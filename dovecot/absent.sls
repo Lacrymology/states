@@ -40,6 +40,7 @@ dovecot:
       - dovecot-pop3d
       - dovecot-ldap
       - dovecot-core
+      - dovecot-managesieved
     - require:
       - service: dovecot
   file:

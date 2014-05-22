@@ -43,6 +43,8 @@ dovecot:
       - dovecot-imapd
       - dovecot-pop3d
       - dovecot-ldap
+      - dovecot-lmtpd
+      - dovecot-managesieved
     - require:
       - cmd: apt_sources
       - pkg: postfix
@@ -50,7 +52,7 @@ dovecot:
     - running
     - order: 50
     - watch:
-      - file: /etc/dovecot/conf.d/99-all.conf
+      - file: /etc/dovecot/dovecot.conf
       - pkg: dovecot
       - file: /etc/dovecot/dovecot-ldap.conf.ext
       - file: /var/mail/vhosts/indexes
@@ -60,21 +62,10 @@ dovecot:
     - require:
       - user: dovecot-agent
 
-/etc/dovecot/conf.d/:
-  file:
-    - directory
-    - clean: True
-    - user: dovecot
-    - group: dovecot
-    - dir_mode: 700
-    - require:
-      - file: /etc/dovecot/conf.d/99-all.conf
-      - pkg: dovecot
-
-/etc/dovecot/conf.d/99-all.conf:
+/etc/dovecot/dovecot.conf:
   file:
     - managed
-    - source: salt://dovecot/99-all.jinja2
+    - source: salt://dovecot/config.jinja2
     - template: jinja
     - mode: 400
     - user: dovecot

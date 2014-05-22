@@ -34,6 +34,16 @@ Pillar
 Mandatory
 ---------
 
+Example::
+
+  mail:
+    postmaster: admin@example.com
+
+mail:postmaster
+~~~~~~~~~~~~~~~
+
+Email address of postmaster.
+
 ldap:suffix
 ~~~~~~~~~~~
 

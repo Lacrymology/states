@@ -25,6 +25,8 @@ $max_servers = {{ salt['pillar.get']('mail:maxproc', 2) }};
 $recipient_delimiter = '+';
 @addr_extension_spam_maps = ('spam');
 
+{#- just move spam to user/spam folder, no need to change its subject #}
+$sa_spam_subject_tag = '';
 {#- add SA tag to all emails #}
 $sa_tag_level_deflt = {{ salt['pillar.get']('amavis:sa_tag_level', -999) }};
 {#- add tags for spammy emails #}

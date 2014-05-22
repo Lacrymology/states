@@ -58,6 +58,7 @@ try:
         sys.exit(1)
 except IndexError:
     output_dir = default_directory
+    print 'Output directory is %s' % default_directory
 
 os.chdir(root_dir)
 sys.argv[1:] = ['-c', 'doc', '-W', '.', output_dir]

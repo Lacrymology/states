@@ -42,5 +42,7 @@ Example:
 mail:mailname
 ~~~~~~~~~~~~~
 
-A name used by postfix or other mail-relate service. Often is set to
-fqdn of this host.
+A name used by postfix, amavis or other mail-relate services.
+Often set to domain part of expected email address
+(e.g. if this mail system suppose to server email for ``username@example.com``,
+then ``mail:mailname`` need to set to ``example.com``).

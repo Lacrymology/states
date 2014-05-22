@@ -181,6 +181,19 @@ roundcube_password_plugin_ldap_driver_dependency:
       - archive: roundcube
       - pkg: roundcube_password_plugin_ldap_driver_dependency
 
+{{ roundcubedir }}/plugins/managesieve/config.inc.php:
+  file:
+    - managed
+    - source: salt://roundcube/sieve_plugin.jinja2
+    - template: jinja
+    - user: www-data
+    - group: www-data
+    - mode: 440
+    - require:
+      - file: {{ roundcubedir }}
+      - user: web
+      - archive: roundcube
+
 {% for dir in ('logs', 'temp') %}
 {{ roundcubedir }}/{{ dir }}:
   file:

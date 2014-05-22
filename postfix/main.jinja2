@@ -27,7 +27,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
 # {{ pillar['message_do_not_modify'] }}
 inet_protocols = ipv4
-myhostname = {{ pillar['mail']['mailname'] }}
+mydomain = {{ pillar['mail']['mailname'] }}
 smtpd_banner = $myhostname ESMTP $mail_name
 biff = no
 mydestination = {%- for i in salt['pillar.get']('postfix:mydestination', []) %} {{ i }}{%- endfor %}

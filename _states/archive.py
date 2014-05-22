@@ -100,7 +100,7 @@ def extracted(name, source, archive_format, tar_options=None, source_hash=None,
     filename = os.path.join(__opts__['cachedir'],
                             '{0}.{1}'.format(if_missing.replace('/', '_'),
                                              archive_format))
-    if not os.path.exists(filename):
+    if not salt['file.file_exists'](filename):
         if __opts__['test']:
             ret['result'] = None
             ret['comment'] = \
@@ -157,7 +157,7 @@ def extracted(name, source, archive_format, tar_options=None, source_hash=None,
             ret['changes']['directories_created'].append(if_missing)
         ret['changes']['extracted_files'] = files
         ret['comment'] = "{0} extracted in {1}".format(source, name)
-        os.unlink(filename)
+        __salt__['file.remove'](filename)
     else:
         __salt__['file.remove'](if_missing)
         ret['result'] = False

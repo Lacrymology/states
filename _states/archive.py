@@ -90,8 +90,9 @@ def extracted(name, source, archive_format, tar_options=None, source_hash=None,
 
     if if_missing is None:
         if_missing = name
-    if (__salt__['file.directory_exists'](if_missing) or
-        __salt__['file.file_exists'](if_missing)):
+    log.debug("Check if '%s' exists", if_missing)
+    if __salt__['file.directory_exists'](if_missing) or \
+       __salt__['file.file_exists'](if_missing):
         ret['result'] = True
         ret['comment'] = '{0} already exists'.format(if_missing)
         return ret

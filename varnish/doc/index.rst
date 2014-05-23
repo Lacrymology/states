@@ -1,0 +1,7 @@
+Varnish
+=======
+
+.. toctree::
+    :glob:
+
+    *

@@ -110,7 +110,7 @@ pip:
     - source_hash: md5=5da30919f732d68b1c666e484e7676f5
     - archive_format: tar
     - tar_options: z
-    - if_missing: {{ opts['cachedir'] }}/pip-{{ version }}
+    - if_missing: {{ opts['cachedir'] }}/pip/pip-{{ version }}
     - require:
       - file: /usr/local
       - file: {{ opts['cachedir'] }}/pip

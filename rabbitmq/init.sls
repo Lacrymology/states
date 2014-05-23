@@ -211,6 +211,19 @@ rabbitmq-vhost-{{ vhost }}:
       - rabbitmq_user: monitor_user
 {% endfor %}
 
+rabbitmq-root-vhost:
+  module:
+    - run
+    - name: rabbitmq.set_permissions
+    - vhost: /
+    - user: {{ salt['pillar.get']('rabbitmq:monitor:user', salt['pillar.get']('salt_monitor') )}}
+    - conf: ""
+    - write: ""
+    - read: ".*"
+    - require:
+      - service: rabbitmq-server
+      - rabbitmq_user: monitor_user
+
 {% endif %}
 
 {% if grains['id'] != master_id %}

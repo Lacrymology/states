@@ -158,6 +158,8 @@ extend:
     user:
       - groups:
         - salt_archive
+      - require:
+        - user: salt_archive
   nginx:
     service:
       - watch:

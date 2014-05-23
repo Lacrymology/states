@@ -25,7 +25,7 @@ Introduction:
     changelog
 
 
-Formulars Document:
+Formulas Document:
 
 .. toctree::
     :glob:

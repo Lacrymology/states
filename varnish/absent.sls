@@ -36,9 +36,11 @@ varnish:
   service:
     - dead
 
-# remove varnish secret key
-/etc/varnish:
+{% set varnish_dirs = ['/etc/varnish', '/var/lib/varnish'] %}
+{% for dir in varnish_dirs %}
+{{ dir }}:
   file:
     - absent
     - require:
         - pkg: varnish
+{% endfor %}

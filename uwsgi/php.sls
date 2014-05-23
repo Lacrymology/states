@@ -50,6 +50,10 @@ symlink-libphp5.so:
 {%- endif %}
 
 extend:
+  uwsgi_emperor:
+    service:
+      - watch:
+        - file: php-dev
   uwsgi_build:
     file:
       - require:

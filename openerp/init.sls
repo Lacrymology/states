@@ -226,6 +226,7 @@ openerp-cron:
     - absent
 {%- endif %}
   service:
+    - name: openerp
 {%- if salt['pillar.get']('openerp:company_db', False) %}
     - running
     - require:

@@ -41,6 +41,9 @@ Install Varnish.
   {% set file_size_unit = file_size | list | last %}
 {% endif %}
 
+include:
+  - apt
+
 varnish:
   pkg:
     - installed

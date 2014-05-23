@@ -53,14 +53,16 @@ include:
 {%- set username = salt['pillar.get']('openerp:db:username', 'openerp') %}
 
 {#- TODO: remove that statement in >= 2014-04 #}
-{{ home }}/salt-openerp-requirements.txt:
+{%- for prefix in ('salt', 'salt-openerp') %}
+{{ home }}/{{ prefix }}-requirements.txt:
   file:
     - absent
+{%- endfor %}
 
 openerp_depends:
   file:
     - managed
-    - name: {{ home }}/salt-requirements.txt
+    - name: {{ opts['cachedir'] }}/pip/openerp
     - template: jinja
     - user: root
     - group: root
@@ -74,7 +76,7 @@ openerp_depends:
     - name: pip.install
     - upgrade: True
     - bin_env: {{ home }}/bin/pip
-    - requirements: {{ home }}/salt-requirements.txt
+    - requirements: {{ opts['cachedir'] }}/pip/openerp
     - install_options:
       - "--prefix={{ home }}"
       - "--install-lib={{ home }}/lib/python{{ grains['pythonversion'][0] }}.{{ grains['pythonversion'][1] }}/site-packages"
@@ -124,13 +126,15 @@ openerp:
       - service: postgresql
   file:
     - directory
-    - name: {{ home }}
-    - user: openerp
+    - name: {{ web_root_dir }}
+    - user: root
     - group: openerp
-    - mode: 755
+    - dir_mode: 750
+    - file_mode: 640
     - recurse:
       - user
       - group
+      - mode
     - require:
       - archive: openerp
       - user: openerp

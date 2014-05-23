@@ -64,3 +64,7 @@ openerp-cron:
     - name: /etc/init/openerp.conf
     - require:
       - service: openerp-cron
+
+{{ opts['cachedir'] }}/pip/openerp:
+  file:
+    - absent

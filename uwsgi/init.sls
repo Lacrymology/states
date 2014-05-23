@@ -175,6 +175,7 @@ uwsgi_emperor:
       - file: /etc/uwsgi.ini
       - file: /etc/uwsgi/apps-available
       - file: /etc/uwsgi/apps-enabled
+      - user: web
   file:
     - directory
     - name: /etc/uwsgi

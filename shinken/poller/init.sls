@@ -70,6 +70,7 @@ shinken-poller:
       - module: shinken
       - file: /etc/shinken/poller.conf
       - file: shinken-poller
+      - user: shinken
 
 /etc/shinken/poller.conf:
   file:

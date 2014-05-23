@@ -68,9 +68,9 @@ terracotta:
       - file: /var/lib/terracotta/server-statistics
       - file: /var/log/terracotta/server-logs
       - file: /var/lib/terracotta/server-data
-      - user: terracotta
       - host: hostname
     - watch:
+      - user: terracotta
       - file: terracotta
       - file: /etc/terracotta.conf
 

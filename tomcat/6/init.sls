@@ -56,6 +56,7 @@ tomcat:
       - file: add_catalina_env
       - file: /usr/share/tomcat6/shared
       - file: /usr/share/tomcat6/server
+      - user: tomcat
 
 add_catalina_env:
   file:

@@ -50,6 +50,7 @@ slapd:
     - order: 50
     - watch:
       - pkg: slapd
+      - user: openldap
 {% if ssl %}
       - cmd: ssl_cert_and_key_for_{{ ssl }}
 {% endif %}
@@ -60,15 +61,17 @@ slapd:
     - mode: 444
     - template: jinja
 
-{% if ssl %}
 openldap:
   user:
     - present
     - groups:
+{% if ssl %}
       - ssl-cert
+{% endif %}
       - openldap
     - require:
       - pkg: slapd
+{% if ssl %}
       - pkg: ssl-cert
 {% endif %}
 

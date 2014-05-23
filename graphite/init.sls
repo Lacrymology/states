@@ -186,6 +186,7 @@ graphite-web:
       - service: rsyslog
       - service: memcached
     - watch:
+      - user: graphite
       - module: graphite_settings
       - file: graphite_wsgi
       - file: graphite_graph_templates
@@ -328,6 +329,7 @@ extend:
     service:
       - watch:
         - file: /etc/nginx/conf.d/graphite.conf
+        - user: graphite
 {% if salt['pillar.get']('graphite:web:ssl', False) %}
         - cmd: ssl_cert_and_key_for_{{ pillar['graphite']['web']['ssl'] }}
 {% endif %}

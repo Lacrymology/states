@@ -74,6 +74,7 @@ shinken-broker:
       - file: /etc/shinken/broker.conf
       - file: shinken-broker
       - service: rsyslog
+      - user: shinken
 
 /etc/shinken/broker.conf:
   file:

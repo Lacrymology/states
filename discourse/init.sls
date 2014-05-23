@@ -174,7 +174,6 @@ discourse:
     - mode: 440
     - require:
       - service: uwsgi_emperor
-      - user: add_web_user_to_discourse_group
       - cmd: discourse_bundler
       - cmd: discourse
       - gem: discourse_rack
@@ -183,6 +182,8 @@ discourse:
     - context:
       web_root_dir: {{ web_root_dir }}
     - watch:
+      - user: add_web_user_to_discourse_group
+      - user: discourse
       - file: discourse
       - file: {{ web_root_dir }}/config/environments/production.rb
       - file: {{ web_root_dir }}/config/database.yml
@@ -275,6 +276,7 @@ discourse_upstart:
     - name: discourse
     - watch:
       - file: discourse_upstart
+      - user: discourse
   file:
     - managed
     - name: /etc/init/discourse.conf

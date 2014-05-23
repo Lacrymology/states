@@ -31,6 +31,7 @@ include:
   - apt
   - mail
   - spamassassin
+  - amavis.clamav
 
 amavis:
   pkg:
@@ -47,13 +48,11 @@ amavis:
     - require:
       - pkg: spamassassin
 
-{% for cfg in ('05-node_id', '15-content_filter_mode', '22-max_servers') %}
-/etc/amavis/conf.d/{{ cfg }}:
+/etc/amavis/conf.d/50-user:
   file:
     - managed
-    - source: salt://amavis/{{ cfg }}.jinja2
+    - source: salt://amavis/config.jinja2
     - template: jinja
     - mode: 440
     - watch_in:
       - service: amavis
-{% endfor %}

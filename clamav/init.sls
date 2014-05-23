@@ -55,7 +55,7 @@ clamav-freshclam:
     - name: /etc/clamav/freshclam.conf
     - source: salt://clamav/freshclam.jinja2
     - template: jinja
-    - mode: 400
+    - mode: 444
     - user: clamav
     - group: clamav
     - require:
@@ -93,4 +93,3 @@ clamav-daemon:
     - watch:
       - pkg: clamav-daemon
       - file: clamav-daemon
-

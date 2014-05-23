@@ -113,10 +113,6 @@ postfix:
     - directory
     - user: postfix
     - group: postfix
-    - dir_mode: 750
-    - recurse:
-      - user
-      - group
     - require:
       - pkg: postfix
 

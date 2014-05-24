@@ -29,9 +29,6 @@ __email__ = 'patate@fastmail.cn'
 
 import logging
 import tempfile
-import os
-
-import yaml
 
 logger = logging.getLogger(__name__)
 
@@ -147,9 +144,9 @@ def discover_checks(state_name):
             rendered_template.seek(0)
             logger.debug("failed YAML content of '%s' is '%s'", state_name,
                          rendered_template.read())
-            os.unlink(temp_dest.name)
+            __salt__['file.remove'](temp_dest.name)
             return {}
-    os.unlink(temp_dest.name)
+    __salt__['file.remove'](temp_dest.name)
     if not unserialized:
         logger.critical("Cannot copy %s to the minion. Make sure that it exists "
                         "and the environment '%s' is correct", source, env)

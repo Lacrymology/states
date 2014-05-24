@@ -177,6 +177,10 @@ class PassiveDaemon(object):
                 logger.debug("Can't send NSCA data to '%s': '%s'",
                              sender.remote_host, err, exc_info=True)
                 counters.increment()
+                self.config.stats.gauge('passive_check.failure',
+                                        counters.failure)
+                self.config.stats.gauge('passive_check.total_failure',
+                                        counters.total_failure)
                 if counters.ever_success:
                     logger.warning(
                         "Can't send to server '%s' as it never worked",

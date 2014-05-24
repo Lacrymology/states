@@ -36,7 +36,9 @@ salt_archive_nginx_https_certificate:
   check_interval: 1440 {#- only need to check https certificate each day #}
   freshness_threshold: {{ (1440 + 10) * 60 }}
 
+{%- if salt['pillar.get']('salt_archive:source', False) %}
 salt_archive_timestamp:
   description: Salt Archive Synchronization
   check_interval: 900
   freshness_threshold: {{ (900 + 10) * 60 }}
+{%- endif -%}

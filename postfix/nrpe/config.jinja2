@@ -26,20 +26,16 @@ Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
 # {{ pillar['message_do_not_modify'] }}
-{% set ssl = salt['pillar.get']('postfix:ssl', False) %}
+{% set ssl =  %}
 command[postfix_master]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u root -C master
 command[postfix_pickup]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u postfix -C pickup -a '-l -t fifo -u -c'
 command[postfix_qmgr]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u postfix -C qmgr -a '-l -t fifo -u'
 command[postfix_port_smtp]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 25
 {%- if salt['pillar.get']('postfix:spam_filter', False) %}
 command[postfix_port_spam_handler]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 10025
-{%- else %}
-command[postfix_port_spam_handler]=/bin/echo "SPAM OK: No anti spam for Postfix"
 {%- endif -%}
-{% if ssl %}
+{%- if salt['pillar.get']('postfix:ssl', False) %}
 command[postfix_port_smtps]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 465
-{% else %}
-command[postfix_port_smtps]=/bin/echo "TCP OK: SSL not configured for SMTP"
-{% endif %}
-{# TODO: use /usr/lib/nagios/plugins/check_smtp #}
-{# TODO: use /usr/lib/nagios/plugins/check_mailq #}
+{%- endif -%}
+{#- TODO: use /usr/lib/nagios/plugins/check_smtp -#}
+{#- TODO: use /usr/lib/nagios/plugins/check_mailq -#}

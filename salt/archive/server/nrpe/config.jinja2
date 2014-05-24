@@ -26,9 +26,7 @@ Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
  -#}
 # {{ pillar['message_do_not_modify'] }}
-{%- if pillar['salt_archive']['source'] is defined %}
-{%- set max_age = salt['pillar.get']('salt_archive:max_age', 3600) %}
+{%- if salt['pillar.get']('salt_archive:source', False) %}
+    {%- set max_age = salt['pillar.get']('salt_archive:max_age', 3600) %}
 command[salt_archive_timestamp]=/usr/lib/nagios/plugins/check_file_age -w {{ max_age }} -c {{ max_age }} /var/cache/salt/master/sync_timestamp.dat
-{%- else %}
-command[salt_archive_timestamp]=/bin/echo "FILE_AGE OK: No source for salt_archive"
 {%- endif %}

@@ -33,7 +33,6 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
   'nrpe_procs': 'NRPE Processes',
   'total_procs': 'Total Processes',
   'zombie_procs': 'Zombie Processes',
-  'free_swap_space': 'Swap Usage',
   'oom_messages': 'Out Of Memory Messages',
   'nsca_passive_procs': 'NSCA Passive daemon Processes'
 }
@@ -42,7 +41,12 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 {%- for check in nrpe_checks %}
 {{ check }}:
   description: {{ nrpe_checks[check] }}
-{% endfor -%}
+{%- endfor -%}
+
+{%- if salt['file.contains_regex']('/proc/swaps','^/') %}
+free_swap_space:
+  description: Swap Usage
+{%- endif %}
 
 load_average:
   description: Load Average

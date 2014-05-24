@@ -29,16 +29,24 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
   'master': 'Master',
   'pickup': 'Local mail pickup',
   'qmgr': 'Queue manager',
-  'port_spam_handler': 'Port SPAM handler',
   'port_smtp': 'SMTP Port',
-  'port_smtps': 'SMTP over SSL Port',
 }
  -%}
 {%- for check in postfix_checks %}
 postfix_{{ check }}:
   description: Postfix {{ postfix_checks[check] }}
+{%- endfor -%}
 
-{%- endfor %}
+{%- if salt['pillar.get']('postfix:spam_filter', False) %}
+port_spam_handler:
+  description: Port SPAM handler
+{%- endif %}
+
+{%- if salt['pillar.get']('postfix:ssl', False) %}
+port_smtps:
+  description: SMTP over SSL Port
+{%- endif %}
+
 postfix_backup_file_procs:
   description: Postfix Backup Files Process
 

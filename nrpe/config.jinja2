@@ -39,8 +39,6 @@ command[zombie_procs]=/usr/lib/nagios/plugins/check_procs -w 5 -c 10 -s Z
 {%- if grains['virtual'] != 'openvzve' %}
 {%- if salt['file.contains_regex']('/proc/swaps','^/') %}
 command[free_swap_space]=/usr/lib/nagios/plugins/check_swap -w 30% -c 10%
-{%- else %}
-command[free_swap_space]=/bin/echo "SWAP OK: No swap on this host"
 {%- endif %}
 {%- else %}
 command[free_swap_space]=/bin/echo "SWAP OK: No need to check on this host"

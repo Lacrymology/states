@@ -36,13 +36,22 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 {%- for check in dovecot_checks %}
 dovecot_{{ check }}:
   description: Dovecot {{ dovecot_checks[check] }}
-{% endfor -%}
+{%- endfor -%}
 
 {#- TODO: check remote port? #}
-{%- for port in ('imap', 'pop3', 'imaps', 'pop3s') %}
-dovecot_port_{{ port }}:
-  description: Dovecot {{ port|upper }} Port
-{%- endfor %}
+{%- if salt['pillar.get']('dovecot:ssl', False) %}
+dovecot_port_imaps:
+  description: Dovecot IMAPS Port
+
+dovecot_port_pop3s:
+  description: Dovecot POP3S Port
+
+dovecot_simap:
+  description: Dovecot SIMAP
+{%- else %}
+dovecot_imap:
+  description: Dovecot IMAP
+{%- endif %}
 
 dovecot_backup_file_procs:
   description: Dovecot Backup Files Process

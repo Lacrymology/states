@@ -35,6 +35,7 @@ Maintainer: Lam Dang Tung <lamdt@familug.org>
 wordpress_nginx_http:
   description: Wordpress HTTP Protocol
 
+{%- if salt['pillar.get']('wordpress:ssl', False) %}
 wordpress_nginx_https:
   description: Wordpress HTTPS Protocol
 
@@ -42,6 +43,7 @@ wordpress_nginx_https_certificate:
   description: Wordpress HTTPS Certificate Expiration
   check_interval: 1440 {#- only need to check https certificate each day #}
   freshness_threshold: {{ (1440 + 10) * 60 }}
+{%- endif %}
 
 wordpress_uwsgi_master:
   description: Wordpress uWSGI Master Process

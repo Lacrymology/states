@@ -29,21 +29,38 @@ __email__ = 'patate@fastmail.cn'
 
 import logging
 import tempfile
+from UserList import UserList
 
 import yaml
 
 logger = logging.getLogger(__name__)
 
-def _yaml(stream):
-    try:
-        returun yaml.safe_load(stream)
-    except Exception, err:
-        logger.critical("YAML data from failed to parse for '%s'",
-                        state_name, exc_info=True)
-        rendered_template.seek(0)
-        logger.debug("failed YAML content of '%s' is '%s'", state_name,
-                     rendered_template.read())
-        raise err
+def _yaml(filename):
+    with open(filename, 'r') as stream:
+        try:
+            return yaml.safe_load(stream)
+        except Exception, err:
+            logger.critical("YAML data from failed to parse for '%s'",
+                            state_name, exc_info=True)
+            rendered_template.seek(0)
+            logger.debug("failed YAML content of '%s' is '%s'", state_name,
+                         rendered_template.read())
+            raise err
+
+
+def discover_checks(directory='/etc/nagios/nsca.d'):
+    '''
+    Return all monitor.jinja2 rendered data for a single minion.
+    '''
+    checks = {}
+    logger.debug("Check for yaml file in %s", directory)
+    for filename in __salt__['file.find'](directory, type='f'):
+        try:
+            checks.update(_yaml(filename))
+            logger.debug("Processed '%s' succesfully", filename)
+        except Exception:
+            logger.debug("Skip '%s'", filename)
+    return checks
 
 
 class _DontExistData(object):
@@ -57,6 +74,7 @@ def data():
     output = {
         'shinken_pollers': __salt__['pillar.get']('shinken_pollers', []),
         'roles': __salt__['pillar.get']('roles', []),
+        'checks': discover_checks(),
         'monitor': __salt__['pillar.get']('monitor', True)
     }
 
@@ -142,8 +160,8 @@ def discover_checks(state_name):
 
     logger.debug("Running `salt %s cp.get_template %s %s env='%s'`",
                  __grains__['id'],
-                 source, 
-                 temp_dest.name, 
+                 source,
+                 temp_dest.name,
                  env)
 
     __salt__['cp.get_template'](source, temp_dest.name, env=env)
@@ -218,3 +236,75 @@ def update():
                              __salt__[func_name](**mod[func_name]))
             else:
                 logger.error("Invalid update value %s", str(mod))
+
+
+class Check(object):
+    def __init__(self, check_data, minions=None):
+        self.data = check_data
+        if not minions:
+            self.minions = []
+        else:
+            self.minions = minions
+
+    def __repr__(self):
+        return 'Check(%r, %r)' % (self.data, self.minions)
+
+class CheckList(UserList):
+
+    @property
+    def check_datas(self):
+        output = []
+        for check in self.data:
+            output.append(check.data)
+        return output
+
+    def __contains__(self, item):
+        return item in self.check_datas
+
+
+    def append(self, item, minion):
+        check_datas = self.check_datas
+        try:
+            index = check_datas.index(item)
+            self.data[index].minions.append(minion)
+            logger.debug("Existing checks '%s', now %d minions: %s",
+                         item, len(self.data[index].minions),
+                         self.data[index].minions)
+        except ValueError:
+            logger.debug("New check '%s' start with minion '%s'",
+                         item, minion)
+            check = Check(item)
+            check.minions = [minion]
+            self.data.append(check)
+
+
+def shinken(data=None):
+    '''
+    Pre-process all salt mine monitoring data for all minions to let
+    shinken build a monitoring configuration.
+
+    The
+    '''
+    # salt module function name
+    func_name = 'monitoring.data'
+    # which dict key data() put data processed by this function
+    data_key = 'checks'
+    checks = {}
+    if not data:
+        data = __salt__['mine.get']('*', func_name)
+    for minion in data:
+        logger.debug("Processing mine data of '%s' for '%s'", minion, func_name)
+        if data[minion]['monitor']:
+            logger.debug("Minion '%s' is monitored", minion)
+            for check_name in data[minion][data_key]:
+                check = data[minion][data_key][check_name]
+                try:
+                    check_list = checks[check_name]
+                except KeyError:
+                    checks[check_name] = CheckList()
+                    check_list = checks[check_name]
+                check_list.append(data[minion][data_key][check_name], minion)
+        else:
+            logger.debug("Minion '%s' is NOT monitored", minion)
+
+    return checks

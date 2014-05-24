@@ -30,7 +30,20 @@ __email__ = 'patate@fastmail.cn'
 import logging
 import tempfile
 
+import yaml
+
 logger = logging.getLogger(__name__)
+
+def _yaml(stream):
+    try:
+        returun yaml.safe_load(stream)
+    except Exception, err:
+        logger.critical("YAML data from failed to parse for '%s'",
+                        state_name, exc_info=True)
+        rendered_template.seek(0)
+        logger.debug("failed YAML content of '%s' is '%s'", state_name,
+                     rendered_template.read())
+        raise err
 
 
 class _DontExistData(object):
@@ -137,13 +150,8 @@ def discover_checks(state_name):
 
     with open(temp_dest.name, 'r') as rendered_template:
         try:
-            unserialized = yaml.safe_load(rendered_template)
+            unserialized = _yaml(rendered_template)
         except Exception:
-            logger.critical("YAML data from failed to parse for '%s'",
-                            state_name, exc_info=True)
-            rendered_template.seek(0)
-            logger.debug("failed YAML content of '%s' is '%s'", state_name,
-                         rendered_template.read())
             __salt__['file.remove'](temp_dest.name)
             return {}
     __salt__['file.remove'](temp_dest.name)

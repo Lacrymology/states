@@ -25,7 +25,21 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-# {{ pillar['message_do_not_modify'] }}
-command[{{ deployment }}_uwsgi_master]=/usr/lib/nagios/plugins/check_procs -c 1:1 -a {{ deployment }}-master -C uwsgi
-command[{{ deployment }}_uwsgi_worker]=/usr/lib/nagios/plugins/check_procs -c {% if cheaper|default(False) %}{{ cheaper }}{% else %}{{ workers }}{% endif %}:{{ workers }} -a {{ deployment }}-worker -C uwsgi
-command[{{ deployment }}_uwsgi_ping]=sudo /usr/lib/nagios/plugins/check_uwsgi_nostderr {{ deployment }}
+{%- macro uwsgi_instance(deployment, prefix=None) -%}
+    {%- if not prefix -%}
+        {%- set prefix = deployment -%}
+    {%- endif -%}
+    {%- set workers = salt['pillar.get'](prefix + ':workers', grains['num_cpus']) %}
+
+{{ deployment }}_uwsgi_master:
+  description: {{ deployment|capitalize }} uWSGI Master Process
+  command: /usr/lib/nagios/plugins/check_procs -c 1:1 -a {{ deployment }}-master -C uwsgi
+
+{{ deployment }}_uwsgi_worker:
+  description: {{ deployment|capitalize }} uWSGI Workers Process
+  command: /usr/lib/nagios/plugins/check_procs -c {{ salt['pillar.get'](prefix + ':cheaper', default_workers) }}:{{ workers }} -a {{ deployment }}-worker -C uwsgi
+
+{{ deployment }}_uwsgi_ping:
+  description: {{ deployment|capitalize }} uWSGI Ping
+  command: sudo /usr/lib/nagios/plugins/check_uwsgi_nostderr {{ deployment }}
+{%- endmacro -%}

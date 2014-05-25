@@ -35,6 +35,7 @@ Optional
 
 Format::
 
+  ssl_https_max_age: TODO DOCUMENT ME
   ssl:
     [key_name]:
       server_key: ssl key content

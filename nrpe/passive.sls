@@ -7,7 +7,7 @@
     - group: nagios
     - mode: 440
     - template: jinja
-    - source: salt://{{ state|replace('.', '/') }}/monitor.jinja2
+    - source: salt://{{ state|replace('.', '/') }}/nrpe/config.jinja2
     - require:
       - file: /etc/nagios/nsca.d
     - watch_in:

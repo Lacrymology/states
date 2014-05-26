@@ -266,7 +266,7 @@ def main():
     args = parser.parse_args()
 
     try:
-        config = bfs.Util(args.config, debug=args.log)
+        config = bfs.Util(args.config, debug=args.log, drop_privilege=False)
 
         minion_config = config['file']['salt_minion']
         try:
@@ -291,6 +291,8 @@ def main():
         sys.exit(1)
     else:
         try:
+            # late drop_privilege because it needs to read salt minion config
+            config.drop_privilege()
             PassiveDaemon(config,
                           minion_id,
                           nsca_servers,

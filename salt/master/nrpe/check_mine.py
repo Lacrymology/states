@@ -95,15 +95,16 @@ class MineMinion(nap.Resource):
 @nap.guarded
 def main():
     argp = argparse.ArgumentParser()
-    argp.add_argument('data_path', type=str, default='')
+    argp.add_argument('--data', type=str, default='',
+                      help='path to prefetch salt mine data')
     argp.add_argument('-v', "--verbose",
                       help="increase output verbosity",
                       action="store_true")
     args = argp.parse_args()
     data = None
-    if args.data_path:
+    if args.data:
         try:
-            with open(args.data_path) as f:
+            with open(args.data) as f:
                 data = yaml.load(f)
         except IOError as e:
             log.warning(e)

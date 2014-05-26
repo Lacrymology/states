@@ -42,8 +42,8 @@ varnish_diamond_ProcessResourcesCollector:
       - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
     - text:
       - |
-      [[varnish]]
-      exe = ^\/usr\/sbin\/varnishd$
+        [[varnish]]
+        exe = ^\/usr\/sbin\/varnishd$
 
 varnish_diamond_VarnishCollector:
   file:

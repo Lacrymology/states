@@ -166,7 +166,6 @@ openerp:
       - postgres_user: openerp
       - file: openerp
     - watch:
-      - user: add_web_user_to_openerp_group
       - user: openerp
       - module: openerp_depends
       - archive: openerp
@@ -240,16 +239,6 @@ openerp-cron:
 {%- endif %}
       - file: openerp-cron
 
-add_web_user_to_openerp_group:
-  user:
-    - present
-    - name: www-data
-    - groups:
-      - openerp
-    - require:
-      - user: web
-      - user: openerp
-
 /etc/nginx/conf.d/openerp.conf:
   file:
     - managed
@@ -268,3 +257,13 @@ add_web_user_to_openerp_group:
       - service: nginx
     - context:
       web_root_dir: {{ web_root_dir }}
+
+extend:
+  web:
+    user:
+    - groups:
+      - openerp
+    - require:
+      - user: openerp
+    - watch_in:
+      - uwsgi: openerp

@@ -229,7 +229,6 @@ gitlab:
       - postgres_database: gitlab
     - watch:
       - user: gitlab
-      - user: add_web_user_to_git_group
       - file: {{ web_dir }}/config/gitlab.yml
       - file: {{ web_dir }}/config/database.yml
 {%- if salt['pillar.get']('gitlab:smtp:enabled', False) %}
@@ -365,16 +364,6 @@ rack:
       - pkg: ruby
       - pkg: build
 
-add_web_user_to_git_group:
-  user:
-    - present
-    - name: www-data
-    - groups:
-      - git
-    - require:
-      - user: web
-      - user: gitlab
-
 /etc/nginx/conf.d/gitlab.conf:
   file:
     - managed
@@ -480,8 +469,17 @@ gitlab_upstart:
       - cmd: bundler
 {%- endfor %}
 
-{%- if salt['pillar.get']('gitlab:ssl', False) %}
 extend:
+  web:
+    user:
+    - groups:
+      - git
+    - require:
+      - user: gitlab
+    - watch_in:
+      - uwsgi: gitlab
+
+{%- if salt['pillar.get']('gitlab:ssl', False) %}
   nginx:
     service:
       - watch:

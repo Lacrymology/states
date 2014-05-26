@@ -102,8 +102,12 @@ def main():
     args = argp.parse_args()
     data = None
     if args.data_path:
-        with open(args.data_path) as f:
-            data = yaml.load(f)
+        try:
+            with open(args.data_path) as f:
+                data = yaml.load(f)
+        except IOError as e:
+            log.warning(e)
+
     m_ids = MineMinion(data)
     check = nap.Check(m_ids, nap.ScalarContext('minions', '0:0', '0:0'))
     check.main(args.verbose)

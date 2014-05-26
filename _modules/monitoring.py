@@ -41,10 +41,10 @@ def _yaml(filename):
             return yaml.safe_load(stream)
         except Exception, err:
             logger.critical("YAML data from failed to parse for '%s'",
-                            state_name, exc_info=True)
-            rendered_template.seek(0)
-            logger.debug("failed YAML content of '%s' is '%s'", state_name,
-                         rendered_template.read())
+                            filename, exc_info=True)
+            stream.seek(0)
+            logger.debug("failed YAML content of '%s' is '%s'", filename,
+                         stream.read())
             raise err
 
 

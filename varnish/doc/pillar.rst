@@ -72,16 +72,6 @@ Extra config to put in ``/etc/varnish/default.vcl``.
 
    Invalid VCL will cause varnish daemon fail to start.
 
-
-varnish:start
-~~~~~~~~~~~~~
-
-Should we start varnishd at boot?  Set to "no" to disable.
-
-Possible values: ``yes``, ``no``
-
-Default: ``no``
-
 varnish:nfiles
 ~~~~~~~~~~~~~~
 

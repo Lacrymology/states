@@ -27,7 +27,6 @@ Maintainer: Diep Pham <imeo@favadi.com>
 -#}
 # {{ pillar['message_do_not_modify'] }}
 
-START={{ salt['pillar.get']('varnish:start', 'yes') }}
 NFILES={{ salt['pillar.get']('varnish:nfiles', '131072') }}
 MEMLOCK={{ salt['pillar.get']('varnish:memlock', '82000') }}
 INSTANCE={{ grains.host }}

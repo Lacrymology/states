@@ -90,7 +90,7 @@ varnish:
     - user: root
     - group: root
     - mode: 644
-    - source: salt://varnish/varnish.jinja2
+    - source: salt://varnish/config.jinja2
     - context:
       storage_backend: {{ storage_backend }}
     {% if storage_backend == 'file' %}

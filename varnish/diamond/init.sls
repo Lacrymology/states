@@ -53,7 +53,7 @@ varnish_diamond_VarnishCollector:
     - group: root
     - mode: 440
     - template: jinja
-    - source: salt://varnish/diamond/VarnishCollector.conf.jinja2
+    - source: salt://varnish/diamonfd/config.jinja2
     - require:
       - file: /etc/diamond/collectors
 

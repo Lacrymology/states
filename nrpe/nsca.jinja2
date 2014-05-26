@@ -27,8 +27,12 @@ Maintainer: Quan Tong Anh <tonganhquan.net@gmail.com>
 -#}
 {%- from 'python/logging.sls' import logging with context %}
 # {{ pillar['message_do_not_modify'] }}
+lock: /var/run/nagios/passive_check.lock
+{% if 'graphite_address' in pillar %}
+graphite: {{ pillar['graphite_address'] }}
+{%- endif %}
+
 file:
-  lock: /var/run/nagios/passive_check.lock
   nrpe_config: /etc/nagios/nrpe.d
   monitor_config: /etc/nagios/nsca.d
   salt_minion: /etc/salt/minion

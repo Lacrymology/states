@@ -39,11 +39,11 @@ varnish_diamond_ProcessResourcesCollector:
     - name: processes
     - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
     - require_in:
-        - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
+      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
     - text:
-        - |
-          [[varnish]]
-          exe = ^\/usr\/sbin\/varnishd$
+      - |
+      [[varnish]]
+      exe = ^\/usr\/sbin\/varnishd$
 
 varnish_diamond_VarnishCollector:
   file:
@@ -55,12 +55,12 @@ varnish_diamond_VarnishCollector:
     - template: jinja
     - source: salt://varnish/diamond/VarnishCollector.conf.jinja2
     - require:
-        - file: /etc/diamond/collectors
+      - file: /etc/diamond/collectors
 
 extend:
   diamond:
-   service:
-    - watch:
+    service:
+      - watch:
         - file: varnish_diamond_VarnishCollector
-    - require:
+      - require:
         - service: varnish

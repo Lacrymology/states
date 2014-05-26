@@ -53,14 +53,14 @@ varnish:
     - order: 50
   {% if storage_backend == 'file' %}
     - require:
-        - cmd: varnish
+      - cmd: varnish
   {% endif %}
     - watch:
-        - pkg: varnish
-        - file: /etc/varnish/default.vcl
-        - file: /etc/default/varnish
-# preallocate file to prevent fragment
-# K is too small and T is too large
+      - pkg: varnish
+      - file: /etc/varnish/default.vcl
+      - file: /etc/default/varnish
+{# preallocate file to prevent fragment #}
+{# K is too small and T is too large #}
 {% if storage_backend == 'file' and file_size_unit in ['M', 'G'] %}
   cmd:
     - script
@@ -68,7 +68,7 @@ varnish:
     - name: allocate {{ file_path }} {{ file_size }}
     - unless: test -f "{{ file_path }}"
     - require:
-        - pkg: varnish
+      - pkg: varnish
 {% endif %}
 
 /etc/varnish/default.vcl:
@@ -80,11 +80,11 @@ varnish:
     - mode: 644
     - source: salt://varnish/default.vcl.jinja2
     - require:
-        - pkg: varnish
+      - pkg: varnish
 
 
 /etc/default/varnish:
-    file:
+  file:
     - managed
     - template: jinja
     - user: root
@@ -92,10 +92,10 @@ varnish:
     - mode: 644
     - source: salt://varnish/varnish.jinja2
     - context:
-        storage_backend: {{ storage_backend }}
-      {% if storage_backend == 'file' %}
-        file_size: {{ file_size }}
-        file_path: {{ file_path }}
-      {% endif %}
+      storage_backend: {{ storage_backend }}
+    {% if storage_backend == 'file' %}
+      file_size: {{ file_size }}
+      file_path: {{ file_path }}
+    {% endif %}
     - require:
-        - pkg: varnish
+      - pkg: varnish

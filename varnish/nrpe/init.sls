@@ -43,12 +43,12 @@ include:
     - mode: 440
     - source: salt://varnish/nrpe/config.jinja2
     - require:
-        - pkg: nagios-nrpe-server
+      - pkg: nagios-nrpe-server
 
 extend:
   nagios-nrpe-server:
     service:
       - watch:
-          - file: /etc/nagios/nrpe.d/varnish.cfg
+        - file: /etc/nagios/nrpe.d/varnish.cfg
 
 {{ passive_check('varnish') }}

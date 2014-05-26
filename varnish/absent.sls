@@ -32,7 +32,7 @@ varnish:
   pkg:
     - purged
     - require:
-        - service: varnish
+      - service: varnish
   service:
     - dead
 
@@ -42,5 +42,5 @@ varnish:
   file:
     - absent
     - require:
-        - pkg: varnish
+      - pkg: varnish
 {% endfor %}

@@ -25,13 +25,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Diep Pham <imeo@favadi.com>
 Maintainer: Diep Pham <imeo@favadi.com>
 -#}
+varnish_daemon:
+  description: Varnish Daemon Process
 
-{%- set varnish_checks = {
-  'daemon': 'Daemon Process',
-  'status': 'HTTP status',
-} -%}
-
-{%- for check in varnish_checks -%}
-varnish_{{ check }}:
-  description: Varnish {{ varnish_checks[check] }}
-{% endfor %}
+varnish_status:
+  description: Varnish HTTP status

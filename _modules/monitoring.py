@@ -28,12 +28,12 @@ __maintainer__ = 'Bruno Clermont'
 __email__ = 'patate@fastmail.cn'
 
 import logging
-import tempfile
 from UserList import UserList
 
 import yaml
 
 logger = logging.getLogger(__name__)
+
 
 def _yaml(filename):
     with open(filename, 'r') as stream:
@@ -258,8 +258,8 @@ class Check(object):
     def __repr__(self):
         return 'Check(%r, %r)' % (self.data, self.minions)
 
-class CheckList(UserList):
 
+class CheckList(UserList):
     @property
     def check_datas(self):
         output = []
@@ -269,7 +269,6 @@ class CheckList(UserList):
 
     def __contains__(self, item):
         return item in self.check_datas
-
 
     def append(self, item, minion):
         check_datas = self.check_datas
@@ -302,11 +301,11 @@ def shinken(data=None):
     if not data:
         data = __salt__['mine.get']('*', func_name)
     for minion in data:
-        logger.debug("Processing mine data of '%s' for '%s'", minion, func_name)
+        logger.debug("Processing mine data of '%s' for '%s'",
+                     minion, func_name)
         if data[minion]['monitor']:
             logger.debug("Minion '%s' is monitored", minion)
             for check_name in data[minion][data_key]:
-                check = data[minion][data_key][check_name]
                 try:
                     check_list = checks[check_name]
                 except KeyError:

@@ -1,5 +1,6 @@
+# {{ pillar['message_do_not_modify'] }}
 {#-
-Copyright (c) 2013, Bruno Clermont
+Copyright (c) 2014, Hung Nguyen Viet
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,15 +23,7 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Bruno Clermont <patate@fastmail.cn>
-Maintainer: Bruno Clermont <patate@fastmail.cn>
--#}
-# {{ pillar['message_do_not_modify'] }}
-{% set workers = salt['pillar.get']('salt_master:workers', 5) %}
-command[salt_master_procs]=/usr/lib/nagios/plugins/check_procs -c {{ workers }}:{{ workers|int + 10 }} -C salt-master -u root
-command[salt_master_port_publish]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 4505
-command[salt_master_port_ret]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 4506
-{% if not salt['pillar.get']('__test__', False) %}
-{#- sudo for reading salt config files #}
-command[salt_master_mine]=sudo /usr/lib/nagios/plugins/check_mine_minions.py /var/lib/nagios/salt_mine.yaml
-{%- endif %}
+Author: Hung Nguyen Viet <hvnsweeting@gmil.com>
+Maintainer: Hung Nguyen Viet <hvnsweeting@gmil.com>
+#}
+*/5 * * * *   root  salt-call mine.get '*' monitoring.data --out=yaml > /var/lib/nagios/salt_mine.yaml

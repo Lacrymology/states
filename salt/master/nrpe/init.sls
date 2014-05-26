@@ -87,6 +87,8 @@ salt_mine_collect_minions_data:
     - source: salt://salt/master/nrpe/cron.jinja2
     - require:
       - pkg: cron
+    - watch_in:
+      - service: cron
 
 {{ passive_check('salt.master') }}
 

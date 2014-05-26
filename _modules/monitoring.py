@@ -56,10 +56,19 @@ def discover_checks(directory='/etc/nagios/nsca.d'):
     logger.debug("Check for yaml file in %s", directory)
     for filename in __salt__['file.find'](directory, type='f'):
         try:
-            checks.update(_yaml(filename))
-            logger.debug("Processed '%s' succesfully", filename)
+            check = _yaml(filename)
         except Exception:
             logger.debug("Skip '%s'", filename)
+        else:
+            # Remove the key that hold NRPE command that is executed as check.
+            # That must not be copied in salt mine as it's not used by
+            # shinken and it might contains sensible informations.
+            try:
+                del check['command']
+            except KeyError:
+                pass
+            checks.update(check)
+            logger.debug("Processed '%s' succesfully", filename)
     return checks
 
 

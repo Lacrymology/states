@@ -76,6 +76,20 @@ include:
       - module: nrpe-virtualenv
       - file: /etc/sudoers.d/nrpe_salt_master
 
+salt_mine_collect_minions_data:
+  file:
+    - managed
+    - name: /etc/cron.d/salt_mine_data
+    - user: root
+    - group: root
+    - mode: 400
+    - template: jinja
+    - source: salt://salt/master/nrpe/cron.jinja2
+    - require:
+      - pkg: cron
+    - watch_in:
+      - service: cron
+
 {{ passive_check('salt.master') }}
 
 extend:

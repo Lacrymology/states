@@ -100,6 +100,10 @@ nrpe-virtualenv:
       - virtualenv: nrpe-virtualenv
     - watch:
       - file: nrpe-virtualenv
+      - pkg: nrpe-virtualenv
+  pkg:
+    - installed
+    - name: libyaml-dev {#- PyYAML needs this pkg #}
 
 {#- hack for making sure that above virtualenv is used system_site_packages
     this only neccessary for existing virtualenv because the `virtualenv`
@@ -248,9 +252,6 @@ service: nagios-nrpe-server #}
       - file: /etc/nagios/nsca.d
 
 nsca_passive:
-  pkg:
-    - installed
-    - name: libyaml-dev {#- PyYAML needs this pkg #}
   file:
     - managed
     - name: /etc/init/nsca_passive.conf
@@ -263,7 +264,6 @@ nsca_passive:
     - running
     - require:
       - service: rsyslog
-      - pkg: nsca_passive
     - watch:
       - file: nsca_passive
       - file: /usr/local/nagios/bin/nsca_passive

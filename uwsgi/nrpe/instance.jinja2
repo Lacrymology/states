@@ -37,7 +37,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 {{ deployment }}_uwsgi_worker:
   description: {{ deployment|capitalize }} uWSGI Workers Process
-  command: /usr/lib/nagios/plugins/check_procs -c {{ salt['pillar.get'](prefix + ':cheaper', default_workers) }}:{{ workers }} -a {{ deployment }}-worker -C uwsgi
+  command: /usr/lib/nagios/plugins/check_procs -c {{ salt['pillar.get'](prefix + ':cheaper', workers) }}:{{ workers }} -a {{ deployment }}-worker -C uwsgi
 
 {{ deployment }}_uwsgi_ping:
   description: {{ deployment|capitalize }} uWSGI Ping

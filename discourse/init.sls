@@ -401,12 +401,12 @@ discourse_assets_precompile:
 extend:
   web:
     user:
-    - groups:
-      - discourse
-    - require:
-      - user: discourse
-    - watch_in:
-      - uwsgi: discourse
+      - groups:
+        - discourse
+      - require:
+        - user: discourse
+      - watch_in:
+        - uwsgi: discourse
 {%- if salt['pillar.get']('discourse:ssl', False) %}
   nginx:
     service:

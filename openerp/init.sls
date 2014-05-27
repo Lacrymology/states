@@ -261,9 +261,9 @@ openerp-cron:
 extend:
   web:
     user:
-    - groups:
-      - openerp
-    - require:
-      - user: openerp
-    - watch_in:
-      - uwsgi: openerp
+      - groups:
+        - openerp
+      - require:
+        - user: openerp
+      - watch_in:
+        - uwsgi: openerp

@@ -472,13 +472,12 @@ gitlab_upstart:
 extend:
   web:
     user:
-    - groups:
-      - git
-    - require:
-      - user: gitlab
-    - watch_in:
-      - uwsgi: gitlab
-
+      - groups:
+        - git
+      - require:
+        - user: gitlab
+      - watch_in:
+        - uwsgi: gitlab
 {%- if salt['pillar.get']('gitlab:ssl', False) %}
   nginx:
     service:

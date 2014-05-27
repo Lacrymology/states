@@ -55,6 +55,7 @@ shinken-receiver:
       - module: shinken
       - file: /etc/shinken/receiver.conf
       - file: shinken-receiver
+      - user: shinken
 
 /etc/shinken/receiver.conf:
   file:

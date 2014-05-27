@@ -230,10 +230,10 @@ carbon-relay:
     - sig: /usr/local/graphite/bin/python /usr/local/graphite/bin/carbon-relay.py --config=/etc/graphite/carbon.conf start
     - name: carbon-relay
     - require:
-      - user: graphite
       - file: /var/log/graphite/carbon
       - file: /var/lib/graphite
     - watch:
+      - user: graphite
       - module: carbon
       - cmd: carbon
       - file: /etc/graphite/carbon.conf

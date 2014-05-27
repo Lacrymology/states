@@ -116,6 +116,7 @@ etherpad:
       - file: {{ web_root_dir }}/bin
       - postgres_database: etherpad
     - watch:
+      - user: web
       - file: {{ web_root_dir }}/APIKEY.txt
       - file: {{ web_root_dir }}/settings.json
       - file: /etc/init/etherpad.conf

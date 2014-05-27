@@ -107,6 +107,7 @@ tightvncserver:
       - pkg: tightvncserver
       - file: {{ home }}/.vnc/passwd
     - watch:
+      - user: tightvncserver
       - debconf: tightvncserver
       - cmd: tightvncserver
       - file: tightvncserver

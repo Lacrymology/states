@@ -124,6 +124,7 @@ graylog2-server:
       - cmd: graylog2_email_output_plugin
       - file: graylog2_sentry_output_plugin
       - file: graylog2_sentry_transport_plugin
+      - user: graylog2
     - require:
       - file: /var/log/graylog2
       - file: /var/log/graylog2/server.log

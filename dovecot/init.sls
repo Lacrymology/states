@@ -52,6 +52,7 @@ dovecot:
     - running
     - order: 50
     - watch:
+      - user: dovecot-agent
       - file: /etc/dovecot/dovecot.conf
       - pkg: dovecot
       - file: /etc/dovecot/dovecot-ldap.conf.ext
@@ -59,8 +60,6 @@ dovecot:
 {% if ssl %}
       - cmd: ssl_cert_and_key_for_{{ ssl }}
 {% endif %}
-    - require:
-      - user: dovecot-agent
 
 /etc/dovecot/dovecot.conf:
   file:

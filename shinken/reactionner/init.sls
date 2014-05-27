@@ -56,6 +56,7 @@ shinken-reactionner:
     - watch:
       - module: shinken
       - file: /etc/shinken/reactionner.conf
+      - user: shinken
       - file: shinken-reactionner
 
 /etc/shinken/reactionner.conf:

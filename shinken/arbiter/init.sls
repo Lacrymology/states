@@ -74,6 +74,7 @@ shinken-arbiter:
       - file: /etc/shinken/objects
       - pkg: ssmtp
     - watch:
+      - user: shinken
       - module: shinken
       - file: shinken-arbiter
       - file: /etc/shinken/arbiter.conf

@@ -51,6 +51,8 @@ tomcat:
     - running
     - name: tomcat7
     - order: 50
+    - watch:
+      - user: tomcat
     - require:
       - pkg: tomcat
       - file: add_catalina_env

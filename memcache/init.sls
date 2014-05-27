@@ -65,6 +65,7 @@ memcached:
     - require:
       - file: memcached
     - watch:
+      - user: web
       - file: upstart_memcached
 
 /etc/memcached.conf:

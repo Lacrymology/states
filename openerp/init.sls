@@ -162,11 +162,11 @@ openerp:
       web_root_dir: {{ web_root_dir }}
       home: {{ home }}
     - require:
-      - user: add_web_user_to_openerp_group
       - service: uwsgi_emperor
       - postgres_user: openerp
       - file: openerp
     - watch:
+      - user: openerp
       - module: openerp_depends
       - archive: openerp
       - file: {{ web_root_dir }}/openerp.wsgi
@@ -229,6 +229,8 @@ openerp-cron:
     - name: openerp
 {%- if salt['pillar.get']('openerp:company_db', False) %}
     - running
+    - watch:
+      - user: openerp
     - require:
       - file: {{ home }}/config.yaml
 {%- else %}
@@ -236,16 +238,6 @@ openerp-cron:
     - require_in:
 {%- endif %}
       - file: openerp-cron
-
-add_web_user_to_openerp_group:
-  user:
-    - present
-    - name: www-data
-    - groups:
-      - openerp
-    - require:
-      - user: web
-      - user: openerp
 
 /etc/nginx/conf.d/openerp.conf:
   file:
@@ -265,3 +257,13 @@ add_web_user_to_openerp_group:
       - service: nginx
     - context:
       web_root_dir: {{ web_root_dir }}
+
+extend:
+  web:
+    user:
+      - groups:
+        - openerp
+      - require:
+        - user: openerp
+      - watch_in:
+        - uwsgi: openerp

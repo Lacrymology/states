@@ -118,6 +118,7 @@ rabbitmq-server:
     - require:
       - pkg: rabbitmq-server
     - watch:
+      - user: rabbitmq
       - file: rabbitmq-server
       - rabbitmq_plugins: rabbitmq-server
 {% for node in pillar['rabbitmq']['cluster']['nodes'] %}

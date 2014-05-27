@@ -1,3 +1,9 @@
+    # deny read file README.txt
+    location ~* /recordings/README.txt {
+        deny all;
+        return 404;
+    }
+
     # deny scan admin 
     location ~* /(admn|admm|_admin|padmin) {
         deny all;

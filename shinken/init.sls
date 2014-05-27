@@ -34,6 +34,7 @@ include:
   - pip
   - python.dev
   - virtualenv
+  - nrpe
 
 {# common to all shinken daemons #}
 
@@ -130,6 +131,10 @@ shinken:
     - shell: /bin/false
     - home: /var/lib/shinken
     - gid_from_name: True
+    - groups:
+      - nagios
+    - require:
+      - pkg: nagios-nrpe-server
 
 /usr/local/shinken/src/shinken-1.2.4:
   file:

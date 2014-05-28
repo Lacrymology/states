@@ -112,11 +112,8 @@ discourse:
     - present
     - name: discourse
     - shell: /bin/bash
-    - groups:
-      - www-data
     - require:
       - pkg: discourse_deps
-      - user: web
   postgres_user:
     - present
     - name: {{ dbuser }}

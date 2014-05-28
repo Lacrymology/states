@@ -5,19 +5,19 @@
     }
 
     # deny scan admin 
-    location ~* /(admn|admm|_admin|padmin) {
+    location ~* ^/(admn|admm|_admin|padmin) {
         deny all;
         return 404;
     }
 
     # deny scan cpanel
-    location ~* /(cpphpmyadmin|cpdbadmin|cpanel|cpadmin) {
+    location ~* ^/(cpphpmyadmin|cpdbadmin|cpanel|cpadmin) {
         deny all;
         return 404;
     }
 
     # deny scan PhpMyAdmin
-    location ~* /(phpmyadmin|pHpMyAdMiN|PHPMyAdmin|PHPMYADMIN|sql|mysql|SQL) {
+    location ~* ^/(phpmyadmin|pHpMyAdMiN|PHPMyAdmin|PHPMYADMIN|sql|mysql|SQL) {
         deny all;
         return 404;
     }

@@ -27,7 +27,10 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 {%- macro nginx_instance(deployment, http=True, http_uri='/', http_result=None, http_port=80, https_uri=None, https_result="200 OK", prefix=None, timeout=False) -%}
     {%- set first_ip = salt['network.ip_addrs']()[0] -%}
-    {%- set domain_name = salt['pillar.get'](prefix + 'hostnames'][0], '127.0.0.1') -%}
+    {%- if not prefix -%}
+        {%- set prefix = deployment -%}
+    {%- endif -%}
+    {%- set domain_name = salt['pillar.get'](prefix + 'hostnames', ['127.0.0.1'])[0] -%}
     {#- if http is redirected to https, force a specific header -#}
     {%- if salt['pillar.get'](prefix + ':ssl_redirect', False) -%}
         {%- set http_result="301 Moved Permanently" -%}

@@ -104,10 +104,7 @@ openerp:
     - present
     - shell: /bin/false
     - home: {{ home }}
-    - groups:
-      - www-data
     - require:
-      - user: web
       - file: /usr/local
   virtualenv:
     - managed

@@ -248,7 +248,7 @@ define service {
         {%- if not loop.last %},{% endif -%}
     {%- endfor %}
     display_name {{ check.data['description'] }}
-        {%- if check.data.get('passive', True) -%}
+        {%- if not check.data.get('passive', True) -%}
             {#- by default check are passive #}
     active_checks_enabled 1
     passive_checks_enabled 0

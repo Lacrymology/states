@@ -1,36 +1,35 @@
-:Copyrights: Copyright (c) 2013, Hung Nguyen Viet
+.. Copyright (c) 2013, Hung Nguyen Viet
+.. All rights reserved.
+..
+.. Redistribution and use in source and binary forms, with or without
+.. modification, are permitted provided that the following conditions are met:
+..
+..     1. Redistributions of source code must retain the above copyright notice,
+..        this list of conditions and the following disclaimer.
+..     2. Redistributions in binary form must reproduce the above copyright
+..        notice, this list of conditions and the following disclaimer in the
+..        documentation and/or other materials provided with the distribution.
+..
+.. Neither the name of Hung Nguyen Viet nor the names of its contributors may be used
+.. to endorse or promote products derived from this software without specific
+.. prior written permission.
+..
+.. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+.. AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+.. THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+.. PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
+.. BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+.. CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+.. SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+.. INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+.. CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+.. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+.. POSSIBILITY OF SUCH DAMAGE.
 
-             All rights reserved.
+.. include:: /doc/include/add_pillar.inc
 
-             Redistribution and use in source and binary forms, with or without
-             modification, are permitted provided that the following conditions
-             are met:
-
-             1. Redistributions of source code must retain the above copyright
-             notice, this list of conditions and the following disclaimer.
-
-             2. Redistributions in binary form must reproduce the above
-             copyright notice, this list of conditions and the following
-             disclaimer in the documentation and/or other materials provided
-             with the distribution.
-
-             THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-             "AS IS" AND ANY EXPRESS OR IMPLIED ARRANTIES, INCLUDING, BUT NOT
-             LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
-             FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
-             COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-             INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING,
-             BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-             LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-             CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-             LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
-             ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-             POSSIBILITY OF SUCH DAMAGE.
-:Authors: - Hung Nguyen Viet
-
-
-Pillar
-======
+- :doc:`/apt/doc/index` :doc:`/apt/doc/pillar`
+- :doc:`/mail/doc/index` :doc:`/mail/doc/pillar`
 
 Mandatory
 ---------
@@ -99,14 +98,15 @@ and mapping emails (user@mailname) to mailboxes.
 postfix:spam_filter
 ~~~~~~~~~~~~~~~~~~~
 
-Set configuration for amavis spam filter.
+Set configuration for :doc:`/amavis/doc/index` spam filter.
 
 Default: ``False``.
 
 postfix:sasl
 ~~~~~~~~~~~~
 
-Set configuration for authentication by dovecot sasl.
+Set configuration for authentication by :doc:`/dovecot/doc/index`
+`SASL <https://en.wikipedia.org/wiki/Simple_Authentication_and_Security_Layer>`__.
 
 Default:``False``.
 
@@ -120,12 +120,12 @@ Default: ``False``.
 postfix:aliases
 ~~~~~~~~~~~~~~~
 
-Support alias function on postfix.
+Support alias function on :doc:`index`.
 
 postfix:mynetworks
 ~~~~~~~~~~~~~~~~~~
 
-List of trusted networks that postfix will relay mail from.
+List of trusted networks that :doc:`index` will relay mail from.
 
 Default: ``127.0.0.0/8``.
 
@@ -149,7 +149,7 @@ postfix:relay_domains
 
 Domains that this mail server will relay mail to.
 
-Default: all values defined in mydestination.
+Default: all values defined in ``postfix:mydestination``.
 
 postfix:inet_interfaces
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -161,6 +161,6 @@ Default: ``all``.
 postfix:ssl
 ~~~~~~~~~~~
 
-SSL key to use to support SMTP over SSL.
+:doc:`/ssl/doc/index` key to use to support SMTP over :doc:`/ssl/doc/index`.
 
-Default: no SSL.
+Default: not used.

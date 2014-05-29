@@ -1,31 +1,30 @@
-:copyrights: Copyright (c) 2013, Bruno Clermont
-
-             All rights reserved.
-
-             Redistribution and use in source and binary forms, with or without
-             modification, are permitted provided that the following conditions
-             are met:
-
-             1. Redistributions of source code must retain the above copyright
-             notice, this list of conditions and the following disclaimer.
-             2. Redistributions in binary form must reproduce the above
-             copyright notice, this list of conditions and the following
-             disclaimer in the documentation and/or other materials provided
-             with the distribution.
-
-             THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-             "AS IS" AND ANY EXPRESS OR IMPLIED ARRANTIES, INCLUDING, BUT NOT
-             LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
-             FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
-             COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-             INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING,
-             BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-             LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-             CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-             LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
-             ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-             POSSIBILITY OF SUCH DAMAGE.
-:authors: - Bruno Clermont
+.. Copyright (c) 2013, Bruno Clermont
+.. All rights reserved.
+..
+.. Redistribution and use in source and binary forms, with or without
+.. modification, are permitted provided that the following conditions are met:
+..
+..     1. Redistributions of source code must retain the above copyright notice,
+..        this list of conditions and the following disclaimer.
+..     2. Redistributions in binary form must reproduce the above copyright
+..        notice, this list of conditions and the following disclaimer in the
+..        documentation and/or other materials provided with the distribution.
+..
+.. Neither the name of Bruno Clermont nor the names of its contributors may be used
+.. to endorse or promote products derived from this software without specific
+.. prior written permission.
+..
+.. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+.. AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+.. THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+.. PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
+.. BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+.. CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+.. SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+.. INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+.. CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+.. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+.. POSSIBILITY OF SUCH DAMAGE.
 
 Common Repository Usage
 =======================
@@ -76,13 +75,11 @@ a library or third party dependency, a ``somelib/init.sls`` and
 ``somelib/absent.sls`` can exists in the additional state repositories and be
 include by the role.
 
-SSL and SSH keys can be kept in that repository too.
+:doc:`/ssl/doc/index` and :doc:`/ssh/doc/index` keys can be kept in that
+repository too.
 
 Multiple versions of states
 ---------------------------
-
-As Salt don't support GitFS for pillars, there is only a single branch checked
-out on the salt master.
 
 But states can have multiple versions in separate branches. By default, it's the
 master branch.
@@ -90,7 +87,7 @@ master branch.
 To specify which branch to use, the pillar data for a host need to contains the
 branch key, such as::
 
-    branch: develop
+  branch: develop
 
 The only limitation with that, is that the branch name need to exist in all
 git repositories (except the one for pillar).
@@ -104,3 +101,12 @@ step is to run tests. For that check tests document.
 Once states are applied successfully, the salt master can bootstrap itself and
 be available to configure all minions. For that, check the master installation
 document.
+
+Formula Installation
+--------------------
+
+.. TOOD
+.. DOC HERE THE COMMON PRACTICE REGARDING FORMULA INSTALLATION
+.. SUCH AS LOOKING AT PILLAR.RST
+.. NRPE INTEGRATION SHOULD ALWAYS BE APPLIED TOO
+.. AND USE nrpe.run_all_checks TO MAKE SURE THINGS ARE OK

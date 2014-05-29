@@ -1,7 +1,4 @@
-Salt common documentations
-==========================
-
-Introduction:
+Welcome to Infrastructure Documentation:
 
 .. toctree::
     :maxdepth: 2
@@ -9,20 +6,19 @@ Introduction:
     :glob:
 
     intro
-    master_installation
-    minion_installation
     usage
+    pillar
     state
+    install
     tests
     monitoring
-    pillar
-    firewall
     hacking
     build_doc
     write_state
     run_tests
     troubleshoot
     changelog
+    /_pillars/index
 
 
 Formulas Document:
@@ -32,6 +28,4 @@ Formulas Document:
     :titlesonly:
     :maxdepth: 1
 
-    ../*/doc/index
-    ../*/*/doc/index
-    ../*/index
+    /*/doc/index

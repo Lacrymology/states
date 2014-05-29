@@ -1,61 +1,94 @@
-:Copyrights: Copyright (c) 2013, Bruno Clermont
-
-             All rights reserved.
-
-             Redistribution and use in source and binary forms, with or without
-             modification, are permitted provided that the following conditions
-             are met:
-
-             1. Redistributions of source code must retain the above copyright
-             notice, this list of conditions and the following disclaimer.
-
-             2. Redistributions in binary form must reproduce the above
-             copyright notice, this list of conditions and the following
-             disclaimer in the documentation and/or other materials provided
-             with the distribution.
-
-             THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-             "AS IS" AND ANY EXPRESS OR IMPLIED ARRANTIES, INCLUDING, BUT NOT
-             LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
-             FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
-             COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-             INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING,
-             BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-             LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-             CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-             LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
-             ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-             POSSIBILITY OF SUCH DAMAGE.
-:Authors: - Bruno Clermont
+.. Copyright (c) 2013, Bruno Clermont
+.. All rights reserved.
+..
+.. Redistribution and use in source and binary forms, with or without
+.. modification, are permitted provided that the following conditions are met:
+..
+..     1. Redistributions of source code must retain the above copyright notice,
+..        this list of conditions and the following disclaimer.
+..     2. Redistributions in binary form must reproduce the above copyright
+..        notice, this list of conditions and the following disclaimer in the
+..        documentation and/or other materials provided with the distribution.
+..
+.. Neither the name of Bruno Clermont nor the names of its contributors may be used
+.. to endorse or promote products derived from this software without specific
+.. prior written permission.
+..
+.. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+.. AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+.. THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+.. PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
+.. BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+.. CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+.. SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+.. INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+.. CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+.. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+.. POSSIBILITY OF SUCH DAMAGE.
 
 Global Pillars
 ==============
 
 The following Pillar values are commonly used across all states.
 
-Optional
+Required
 --------
+
+roles
+~~~~~
+
+List of roles that apply to a minion.
+See :doc:`intro` and :doc:`usage` for details on roles.
+
+Default: empty list ``[]``.
+
+salt:master
+~~~~~~~~~~~
+
+As all deployed hosts are done trough salt, the minion need to know where is the
+:doc:`/salt/master/doc/index` to connect.
+
+Look in :doc:`/salt/minion/doc/index` for details.
 
 message_do_not_modify
 ~~~~~~~~~~~~~~~~~~~~~
 
 Warning message to not modify file.
 
+Optional
+--------
+
+branch
+~~~~~~
+
+Which git branch to use during ``state.highstate``.
+
+Default: ``master``.
+
 files_archive
 ~~~~~~~~~~~~~
 
-Path to mirror/archive server where download most files (archives, packages,
-pip) to apply states.
+Path to :doc:`/salt/archive/server/doc/index` where download most files
+(archives, packages, pip) to apply states.
 
 graylog2_address
 ~~~~~~~~~~~~~~~~
 
-IP/Hostname of centralized Graylog2 server
+IP/Hostname of centralized :doc:`/graylog2/server/doc/index` server.
 
 graphite_address
 ~~~~~~~~~~~~~~~~
 
-IP/Hostname of carbon/graphite server.
+IP/Hostname of :doc:`/carbon/doc/index` server.
+This key is required if ``diamond`` integration of formulas had been included in
+roles.
+
+shinken_pollers
+~~~~~~~~~~~~~~~
+
+List of monitoring hosts that can perform checks on this host.
+This is required if any :doc:`/nrpe/doc/index` integration of formula had been
+included in roles.
 
 smtp
 ~~~~
@@ -79,7 +112,7 @@ See below for details on each keys.
 smtp:server
 ~~~~~~~~~~~
 
-Your SMTP server. Ex: smtp.yourdomain.com
+Your SMTP server. Ex: ``smtp.yourdomain.com``
 
 smtp:port
 ~~~~~~~~~
@@ -109,12 +142,12 @@ Password for account login, if specified user.
 smtp:authentication
 ~~~~~~~~~~~~~~~~~~~
 
-Authentication method. Default is: `plain`.
+Authentication method. Default is: ``plain``.
 
 smtp:tls
 ~~~~~~~~
 
-Use TLS or Not. Default is: `False`.
+Use TLS or Not. Default is: ``False``.
 
 encoding
 ~~~~~~~~
@@ -122,3 +155,32 @@ encoding
 Default system locale.
 
 Default: ``en_US.UTF-8``.
+
+global_roles
+~~~~~~~~~~~~
+
+List of all available roles.
+
+Default: automatically built by listing sub-directories of ``/roles``.
+
+This key is usefull to restrict the list of available roles for an hosts.
+
+roles_absent
+~~~~~~~~~~~~
+
+If ``True``, run the ``absent`` formula of each roles that the minion is not
+assigned to.
+
+Default: ``False``.
+
+__test__
+~~~~~~~~
+
+If ``True`` the formulas consider themselves running trough the testing
+framework. That pillar key must **NEVER** be defined in non-testing pillars.
+
+And it must **ALWAYS** be defined and set to ``True`` in testing pillars.
+
+Not following this rule will result in lost data and broken system.
+
+Default: ``False``.

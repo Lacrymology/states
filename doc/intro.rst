@@ -1,31 +1,30 @@
-:copyrights: Copyright (c) 2013, Bruno Clermont
-
-             All rights reserved.
-
-             Redistribution and use in source and binary forms, with or without
-             modification, are permitted provided that the following conditions
-             are met:
-
-             1. Redistributions of source code must retain the above copyright
-             notice, this list of conditions and the following disclaimer.
-             2. Redistributions in binary form must reproduce the above
-             copyright notice, this list of conditions and the following
-             disclaimer in the documentation and/or other materials provided
-             with the distribution.
-
-             THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-             "AS IS" AND ANY EXPRESS OR IMPLIED ARRANTIES, INCLUDING, BUT NOT
-             LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
-             FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
-             COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-             INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING,
-             BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-             LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-             CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-             LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
-             ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-             POSSIBILITY OF SUCH DAMAGE.
-:authors: - Bruno Clermont
+.. Copyright (c) 2013, Bruno Clermont
+.. All rights reserved.
+..
+.. Redistribution and use in source and binary forms, with or without
+.. modification, are permitted provided that the following conditions are met:
+..
+..     1. Redistributions of source code must retain the above copyright notice,
+..        this list of conditions and the following disclaimer.
+..     2. Redistributions in binary form must reproduce the above copyright
+..        notice, this list of conditions and the following disclaimer in the
+..        documentation and/or other materials provided with the distribution.
+..
+.. Neither the name of Bruno Clermont nor the names of its contributors may be used
+.. to endorse or promote products derived from this software without specific
+.. prior written permission.
+..
+.. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+.. AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+.. THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+.. PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
+.. BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+.. CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+.. SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+.. INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+.. CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+.. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+.. POSSIBILITY OF SUCH DAMAGE.
 
 Introduction to this repository
 ===============================
@@ -33,86 +32,86 @@ Introduction to this repository
 Welcome to **Common** repository.
 
 This repository targets Linux only. It actually only supports Ubuntu 12.04
-Precise LTS but support for other releases of Ubuntu or Debian based
-distributions can be easily added.
+Precise LTS but support for other releases of `Ubuntu <http://www.ubuntu.com>`__
+or `Debian <http://www.debian.org>`__ based distributions can be easily added.
 
 It contains the low-level salt states for various operating-system services,
 such as:
 
-- logging daemon
-- package manager
-- SSH server
+- :doc:`logging daemon </rsyslog/doc/index>`
+- :doc:`package manager </apt/doc/index>`
+- :doc:`/ssh/server/doc/index`
 - cron
 - logging rotation
-- Network time synchronization client and server
-- DNS cache server
+- :doc:`/ntp/doc/index` client and server
+- :doc:`/pdnsd/doc/index`
 - sudo
-- Simple SMTP client
+- :doc:`Simple SMTP client </ssmtp/doc/index>`
 - screen
 
 and numerous states for tools used by itself to deploy applications, such as:
 
-- Git
+- :doc:`/git/doc/index`
 - Mercurial
-- SSH client
+- :doc:`/ssh/client/doc/index` client
 - Python PIP
 - Python virtualenv
-- SSL keys
+- :doc:`/ssl/doc/index` keys
 - Python
 - Ruby
 
 It also contains less generic services that might be used by other applications,
 such as:
 
-- RabbitMQ ActiveMQ bus
-- Nginx web server
-- Memcache daemon
+- :doc:`/rabbitmq/doc/index` ActiveMQ bus
+- :doc:`/nginx/doc/index` web server
+- :doc:`/memcache/doc/index` daemon
 - NodeJS
-- uWSGI application server
-- Django
+- :doc:`/uwsgi/doc/index` application server
+- :doc:`/django/doc/index`
 
 Databases SQL or NoSQL, such as:
 
-- Postgresql
-- Elasticsearch
-- MongoDB
+- :doc:`/postgresql/doc/index`
+- :doc:`/elasticsearch/doc/index`
+- :doc:`/mongodb/doc/index`
 
 States that protect the server, such as:
 
-- Denyhosts to block bruteforce SSH attacks
-- Firewall
-- Clamav anti-virus
-- OpenVPN to secure communication
+- :doc:`/denyhosts/doc/index` to block bruteforce SSH attacks
+- :doc:`/firewall/doc/index`
+- :doc:`/clamav/doc/index` anti-virus
+- :doc:`/openvpn/doc/index` to secure communication
 
 States to deploy complex tools that is used to support the Infrastructure in
 various ways, such as:
 
-- Graylog2 centralized logging
-- Statistic and graphics using Graphite
-- Shinken distributed monitoring
-- Configuration management using Saltstack
-- Sentry for error notification and reporting
-- Backup
+- :doc:`/graylog2/doc/index` centralized logging
+- Statistic and graphics using :doc:`/graphite/doc/index`
+- :doc:`/shinken/doc/index` distributed monitoring
+- Configuration management using :doc:`/salt/doc/index`
+- :doc:`/sentry/doc/index` for error notification and reporting
+- :doc:`/backup/doc/index`
 
 Standalone daemon state, such as:
 
-- ProFTPd
-- Git server
+- :doc:`/proftpd/doc/index`
+- :doc:`/git/server/doc/index`
 
 States for integration of various components at operating system level:
 
-- Diamond, a daemon that gathers statistics on thousands of metrics and sends it
-  to Graphite server.
-- NRPE (Nagios Remote Plugin Executor), called by Shinken server to perform
-  checks.
+- :doc:`/diamond/doc/index`, a daemon that gathers statistics on thousands of
+  metrics and sends it to :doc:`/graphite/doc/index`.
+- :doc:`/nrpe/doc/index` (Nagios Remote Plugin Executor), called by
+  :doc:`/shinken/doc/index` server to perform checks.
 - Raven client to report error to Sentry.
-- StatsD, a daemon that receives stats from some applications and periodically
-  sends them to Graphite server.
+- :doc:`/statsd/doc/index`, a daemon that receives stats from some applications
+  and periodically sends them to :doc:`/graphite/doc/index`.
 
 Other states, such as:
 
 - Salt web UI
-- Salt REST API
+- :doc:`Salt web UI </salt/api/doc/index>`
 - An APT repository server to host your own Debian packages
 
 States for testing and its requirements.
@@ -151,9 +150,9 @@ The states and pillars are documentations! These states try to do everything
 requires to have a fully working application. Human intervention is avoided at
 all costs.
 This allow to only backup the data that is produced by the application, for
-example: In PostgreSQL, it's the dump of all databases. As the configuration
-files are managed by the states and pillars, they don't need to be backup. Nor
-the binaries, as they're available through the package manager.
+example: In :doc:`/postgresql/doc/index`, it's the dump of all databases. As the
+configuration files are managed by the states and pillars, they don't need to be
+backup. Nor the binaries, as they're available through the package manager.
 So, well documented states and pillars can document what the infrastructure is
 and how global pieces are plugged together. Thus eliminate most of the documents
 requirements and make it very easy to plan a disaster recovery plan.
@@ -164,7 +163,8 @@ server.
 This repository contains only low-levels states. Low-level means that they only
 perform changes on the server itself on specific applications or the operating
 system itself. This repository alone with pillars, can't even execute salt
-``state.highstate`` function. But, each state can be executed through ``state.sls``.
+``state.highstate`` function. But, each state can be executed through
+``state.sls``.
 This repository don't contains business logic, orchestration or integration. It
 need to be into another repository. This allows this **common** repository to
 never contains client's specific changes and stays generic and usable by
@@ -246,15 +246,18 @@ Integration
 -----------
 
 Most of the states come with a sub-state that integrate themselves with other
-components, such as monitoring (through Nagios NRPE), statistics and graphs
-(through Diamond) and logging (to filter noise out of logs).
+components, such as monitoring (through :doc:`/nrpe/doc/index`), statistics and
+graphs (through :doc:`/graphite/doc/index`) and logging (to filter noise out of
+logs).
 
 Those sub-states with integration aren't required to install the parent state.
-Such as PostgreSQL server state can be deployed without NRPE monitoring checks,
-Diamond plugin configuration or client-side backup script.
+Such as :doc:`/postgresql/doc/index` state can be deployed without
+:doc:`/nrpe/doc/index` monitoring checks,
+:doc:`/diamond/doc/index` plugin configuration or client-side backup script.
 
 A lot of other states also directly integrate themselves when they have
-native support for technologies, such as built-in Graylog2 support in uWSGI
+native support for technologies, such as built-in :doc:`/graylog2/doc/index`
+support in :doc:`/uwsgi/doc/index`.
 through its GELF plugin. Or through third party library, such as GrayPY for
 Python based application. In those cases, the integration is turned on only
 when Salt pillar data contains an expected value.
@@ -271,22 +274,23 @@ the states in that repository.
 
 Only the following support both HA and HP:
 
-- Elasticsearch
-- RabbitMQ ActiveMQ bus
-- Shinken monitoring
+- :doc:`/elasticsearch/doc/index`
+- :doc:`/rabbitmq/doc/index` ActiveMQ bus
+- :doc:`/shinken/doc/index` monitoring
 
 The following states will soon have HA support:
 
-- PostgreSQL server
+- :doc:`/postgresql/doc/index` server
 
 The following states will soon have HA and HP support:
 
-- Graphite: Statistic and graphics
-- Graylog2 centralized logging
-- MongoDB NoSQL database
-- Sentry: error notification and reporting
+- :doc:`/graphite/doc/index`: Statistic and graphics
+- :doc:`/graylog2/doc/index` centralized logging
+- :doc:`/mongodb/doc/index` NoSQL database
+- :doc:`/sentry/doc/index`: error notification and reporting
 
-Once Salt Master supports properly multi-master, the state will support it.
+Once :doc:`/salt/master/doc/index` supports properly multi-master, the state
+will support it.
 
 Evolution
 ---------
@@ -302,9 +306,9 @@ Uninstallation of components
 
 All the states come with its uninstall equivalent. These are required for
 testing purpose. But they're also useful to undo some changes. They're called
-"absent" states and they have the standard absent name. Example: PostgreSQL
-database server state is ``postgresql.server`` and the uninstallation state is
-``postgresql.server.absent``.
+"absent" states and they have the standard absent name. Example:
+:doc:`/postgresql/doc/index` database server state is ``postgresql.server`` and
+the uninstallation state is ``postgresql.server.absent``.
 
 Unlike the states that install or create something that often include and
 requires other state, the absent only remove itself. I don't try to uninstall
@@ -334,8 +338,8 @@ here is an example list:
 
 Or simply borrows the name of the low-level state:
 
-- ``shinken`` monitoring host
-- ``elasticsearch`` node
+- :doc:`/shinken/doc/index` monitoring host
+- :doc:`/elasticsearch/doc/index` node
 
 Then, for each role, who's responsible to integration this repository states
 to the business requirements need to create one state file per role.

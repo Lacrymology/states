@@ -1,9 +1,9 @@
-TightVNCServer
-==============
+TightVNC Server
+===============
 
+.. TODO: Introduction
 
 .. toctree::
     :glob:
-
 
     *

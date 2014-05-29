@@ -1,3 +1,5 @@
+.. TODO: FIX LICENSE FORMAT
+
 :Copyrights: Copyright (c) 2014, Lam Dang Tung
 
              All rights reserved.
@@ -28,8 +30,12 @@
              POSSIBILITY OF SUCH DAMAGE.
 :Authors: - Lam Dang Tung
 
-Pillar
-======
+.. include:: /doc/include/add_pillar.inc
+
+- :doc:`/apt/doc/index` :doc:`/apt/doc/pillar`
+- :doc:`/nginx/doc/index` :doc:`/nginx/doc/pillar`
+- :doc:`/postgresql/doc/index` :doc:`/postgresql/doc/pillar`
+- :doc:`/rsyslog/doc/index` :doc:`/rsyslog/doc/pillar`
 
 Mandatory
 ---------
@@ -44,7 +50,7 @@ Example::
 etherpad:hostnames
 ~~~~~~~~~~~~~~~~~~
 
-List of HTTP hostnames.
+.. include:: /nginx/doc/hostnames.inc
 
 etherpad:apikey
 ~~~~~~~~~~~~~~~
@@ -82,43 +88,35 @@ Example::
 etherpad:db:username
 ~~~~~~~~~~~~~~~~~~~~
 
-PostgreSQL username for Etherpad. It will be created.
+.. include:: /postgresql/doc/username.inc
 
 Default: ``etherpad``.
 
 etherpad:db:name
 ~~~~~~~~~~~~~~~~
 
-PostgreSQL database name. It will be created.
+.. include:: /postgresql/doc/name.inc
 
 Default: ``etherpad``.
 
 etherpad:db:password
 ~~~~~~~~~~~~~~~~~~~~
 
-PostgreSQL user password. It will be created.
+.. include:: /postgresql/doc/password.inc
 
-etherpad:db:host
-~~~~~~~~~~~~~~~~
-
-PostgreSQL server address.
-
-Default: ``localhost``.
+.. etherpad:db:host
+.. PostgreSQL server address.
+.. Default: ``localhost``.
 
 etherpad:ssl
 ~~~~~~~~~~~~
 
-Name of the SSL key to use for HTTPS.
-
-Default: ``False``.
+.. include:: /nginx/doc/ssl.inc
 
 etherpad:ssl_redirect
 ~~~~~~~~~~~~~~~~~~~~~
 
-If set to True and SSL is turned on, this will force all HTTP traffic to be
-redirected to HTTPS.
-
-Default: ``False``.
+.. include:: /nginx/doc/ssl_redirect.inc
 
 etherpad:require_session
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -151,7 +149,7 @@ List of users.
 etherpad:users:<username>
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Username of user who uses Etherpad.
+Username of user who uses :doc:`index`.
 
 etherpad:users:<username>:password
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -175,7 +173,9 @@ Default: ``None``.
 etherpad:restrict_referer
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Regex for referer URL restriction. When you want block direct access to Etherpad.
-Example: ^(.*)(sometext|othertex)(.*)$
+Regex for referer URL restriction. When you want block direct access to
+:doc:`index`.
+
+Example: ``^(.*)(sometext|othertex)(.*)$``
 
 Default: ``False``.

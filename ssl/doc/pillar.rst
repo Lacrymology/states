@@ -1,35 +1,34 @@
-:Copyrights: Copyright (c) 2013, Bruno Clermont
+.. Copyright (c) 2013, Bruno Clermont
+.. All rights reserved.
+..
+.. Redistribution and use in source and binary forms, with or without
+.. modification, are permitted provided that the following conditions are met:
+..
+..     1. Redistributions of source code must retain the above copyright notice,
+..        this list of conditions and the following disclaimer.
+..     2. Redistributions in binary form must reproduce the above copyright
+..        notice, this list of conditions and the following disclaimer in the
+..        documentation and/or other materials provided with the distribution.
+..
+.. Neither the name of Bruno Clermont nor the names of its contributors may be used
+.. to endorse or promote products derived from this software without specific
+.. prior written permission.
+..
+.. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+.. AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+.. THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+.. PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
+.. BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+.. CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+.. SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+.. INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+.. CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+.. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+.. POSSIBILITY OF SUCH DAMAGE.
 
-             All rights reserved.
+.. include:: /doc/include/add_pillar.inc
 
-             Redistribution and use in source and binary forms, with or without
-             modification, are permitted provided that the following conditions
-             are met:
-
-             1. Redistributions of source code must retain the above copyright
-             notice, this list of conditions and the following disclaimer.
-
-             2. Redistributions in binary form must reproduce the above
-             copyright notice, this list of conditions and the following
-             disclaimer in the documentation and/or other materials provided
-             with the distribution.
-
-             THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-             "AS IS" AND ANY EXPRESS OR IMPLIED ARRANTIES, INCLUDING, BUT NOT
-             LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
-             FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
-             COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-             INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING,
-             BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-             LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-             CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-             LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
-             ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-             POSSIBILITY OF SUCH DAMAGE.
-:Authors: - Bruno Clermont
-
-Pillar
-======
+- :doc:`/apt/doc/index` :doc:`/apt/doc/pillar`
 
 Optional
 --------
@@ -130,14 +129,10 @@ Example::
 
 Requires files in source:
 
-- ca.crt
-  Bundled certificate
-- server.crt
-  Server certificate
-- server.key
-  Server private key
-- server.csr
-  Server Certificate Signing Request.
+- ``ca.crt`` Bundled certificate
+- ``server.crt`` Server certificate
+- ``server.key`` Server private key
+- ``server.csr`` Server Certificate Signing Request.
   A CSR or Certificate Signing request is a block of encrypted text that is
   generated on the server that the certificate will be used on. It contains
   information that will be included in your certificate such as your
@@ -146,26 +141,24 @@ Requires files in source:
   key is usually created at the same time that you create the CSR.
 
   How to generate a CSR (requires an existing key file):
-    openssl req -new -keyout server.key -out server.csr
+  ``openssl req -new -keyout server.key -out server.csr``
   How to generate a new CSR (no need for existing key file):
-    openssl req -new -newkey rsa:2048 -nodes -keyout server.key -out server.csr
-  How to decode a CSR:
-    openssl req -in server.csr -noout -text
+  ``openssl req -new -newkey rsa:2048 -nodes -keyout server.key -out server.csr``
+  How to decode a CSR: ``openssl req -in server.csr -noout -text``
 
 To use those SSL files in your states, you need to do the following:
 
 - Add a pillar key for your state that hold the name of the SSL key name
   defined in pillar['ssl'], such as example_com in previous example.
 
-  It can be:
-    my_app:
-      ssl: example_com
-- If the daemon isn't running as root, add the group ssl-cert to the user with
-  which that daemon run.
-- Add ssl to the list of included sls file
+  It can be: ``my_app:ssl``: ``example_com``
+- If the daemon isn't running as root, add the group ``ssl-cert`` to the user
+  with which that daemon run.
+- Add ``ssl`` to the list of included sls file
 - Requires the following three condition before starting your service:
-    - cmd: ssl_cert_and_key_for_{{ pillar['my_app']['ssl'] }}
+    ``- cmd: ssl_cert_and_key_for_{{ pillar['my_app']['ssl'] }}``
 
-- In the config file you point to the same path to reach those files, like:
+- In the config file you point to the same path to reach those files, like::
+
     /etc/ssl/certs/{{ pillar['my_app']['ssl'] }}_chained.crt;
     tls_key = /etc/ssl/private/{{ pillar['my_app']['ssl'] }}.pem;

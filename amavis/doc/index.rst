@@ -1,5 +1,5 @@
-Amavisd-new
-===========
+Amavis
+======
 
 Contents:
 

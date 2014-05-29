@@ -1,9 +1,13 @@
-_pillar
-=======
+Custom pillar modules
+=====================
 
-Contents:
+Why? ``_pillars/``?
+-------------------
 
-.. toctree::
-    :glob:
+Because we needed custom
+`ext_pillar <http://docs.saltstack.com/en/latest/topics/development/external_pillars.html>`__
+, but it need to be in a specific place in the Python path:
 
-    *
+https://github.com/saltstack/salt/issues/3949
+
+Until this is fixed, they will be here.

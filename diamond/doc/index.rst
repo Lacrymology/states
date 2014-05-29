@@ -1,15 +1,18 @@
 Diamond
 =======
 
-Install diamond, a daemon and toolset for gather system statistics
-and publishing them to graphite.
+.. TODO: BETTER INTRO
 
-Mostly operating system related such as CPU, memory.
+Diamond is a python daemon that collects system metrics and publishes them to
+Graphite (and others). It is capable of collecting CPU, memory, network, I/O,
+load and disk metrics. Additionally, it features an API for implementing custom
+collectors for gathering metrics from almost any source.
 
-but it's often plug with third party daemon such as PostgreSQL to gather
+It also plug with third party daemon such as PostgreSQL to gather
 those stats as well.
+
 Each of those other daemons state come with their own configuration file
-that are put in /etc/diamond/collectors, directory check at startup for
+that are put in ``/etc/diamond/collectors``, directory check at startup for
 additional configurations.
 
 .. toctree::

@@ -1,31 +1,30 @@
-:copyrights: Copyright (c) 2013, Bruno Clermont
-
-             All rights reserved.
-
-             Redistribution and use in source and binary forms, with or without
-             modification, are permitted provided that the following conditions
-             are met:
-
-             1. Redistributions of source code must retain the above copyright
-             notice, this list of conditions and the following disclaimer.
-             2. Redistributions in binary form must reproduce the above
-             copyright notice, this list of conditions and the following
-             disclaimer in the documentation and/or other materials provided
-             with the distribution.
-
-             THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-             "AS IS" AND ANY EXPRESS OR IMPLIED ARRANTIES, INCLUDING, BUT NOT
-             LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
-             FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
-             COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-             INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING,
-             BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-             LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-             CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-             LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
-             ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-             POSSIBILITY OF SUCH DAMAGE.
-:authors: - Bruno Clermont
+.. Copyright (c) 2013, Bruno Clermont
+.. All rights reserved.
+..
+.. Redistribution and use in source and binary forms, with or without
+.. modification, are permitted provided that the following conditions are met:
+..
+..     1. Redistributions of source code must retain the above copyright notice,
+..        this list of conditions and the following disclaimer.
+..     2. Redistributions in binary form must reproduce the above copyright
+..        notice, this list of conditions and the following disclaimer in the
+..        documentation and/or other materials provided with the distribution.
+..
+.. Neither the name of Bruno Clermont nor the names of its contributors may be used
+.. to endorse or promote products derived from this software without specific
+.. prior written permission.
+..
+.. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+.. AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+.. THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+.. PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
+.. BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+.. CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+.. SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+.. INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+.. CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+.. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+.. POSSIBILITY OF SUCH DAMAGE.
 
 Hack Salt in your Sandbox
 =========================
@@ -148,8 +147,8 @@ You can test communication between master and minion with::
   minion:
       True
 
-To run some state without having the master running you can use salt-call
-passing it the `--local` switch:
+To run some state without having the master running you can use ``salt-call``
+passing it the `--local` switch::
 
   $ bin/salt -c/path/to/salt/conf --local minion test.ping
 
@@ -212,17 +211,18 @@ Result should be::
 Overriding default paths
 ------------------------
 
-When you get tired of passing `-c /path/to/salt/conf` to every call you can do
+When you get tired of passing ``-c /path/to/salt/conf`` to every call you can do
 the following:
 
-If you installed salt with `pip -e` as per this docs, go to `/path/to/salt/repo`
-which by default will be in `/path/to/salt/src/salt` and edit `salt/syspaths.py`
+If you installed salt with ``pip -e`` as per this docs, go to
+``/path/to/salt/repo`` which by default will be in ``/path/to/salt/src/salt``
+and edit ``salt/syspaths.py``
 
 Do the following changes:
 
-* change `ROOT_DIR = '/'` for `ROOT_DIR = '/path/to/salt'`
-* change `CONFIG_DIR = os.path.join(ROOT_DIR, 'etc', 'salt')` for
-  `CONFIG_DIR = os.path.join(ROOT_DIR, 'conf')`
+* change ``ROOT_DIR = '/'`` for ``ROOT_DIR = '/path/to/salt'``
+* change ``CONFIG_DIR = os.path.join(ROOT_DIR, 'etc', 'salt')`` for
+  ``CONFIG_DIR = os.path.join(ROOT_DIR, 'conf')``
 
-If you installed salt without `-e` do those changes in `salt/_syspaths.py`
+If you installed salt without ``-e`` do those changes in ``salt/_syspaths.py``
 instead

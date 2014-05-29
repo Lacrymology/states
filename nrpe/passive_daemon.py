@@ -1,10 +1,5 @@
 #!/usr/local/nagios/bin/python
 # -*- coding: utf-8 -*-
-
-"""
-Run a single Passive Check and send result to NSCA server
-"""
-
 # Copyright (c) 2014, Hung Nguyen Viet
 # All rights reserved.
 #
@@ -28,6 +23,10 @@ Run a single Passive Check and send result to NSCA server
 # WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
 # OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 # IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+"""
+Run a single Passive Check and send result to NSCA server
+"""
 
 __author__ = 'Hung Nguyen Viet'
 __maintainer__ = 'Hung Nguyen Viet'

@@ -1,3 +1,5 @@
+.. TODO: FIx LICENSE
+
 :copyrights: Copyright (c) 2014, Dang Tung Lam
 
              All rights reserved.
@@ -27,7 +29,6 @@
              POSSIBILITY OF SUCH DAMAGE.
 :authors: - Dang Tung Lam
 
-Pillar
-======
+.. include:: /doc/include/add_pillar.inc
 
-See ``raven/doc/pillar.rst`` for more details.
+- :doc:`/raven/doc/index` :doc:`/raven/doc/pillar`

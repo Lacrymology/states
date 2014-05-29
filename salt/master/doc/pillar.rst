@@ -1,35 +1,8 @@
-:Copyrights: Copyright (c) 2014, Hung Nguyen Viet
+.. include:: /doc/include/add_pillar.inc
 
-             All rights reserved.
-
-             Redistribution and use in source and binary forms, with or without
-             modification, are permitted provided that the following conditions
-             are met:
-
-             1. Redistributions of source code must retain the above copyright
-             notice, this list of conditions and the following disclaimer.
-
-             2. Redistributions in binary form must reproduce the above
-             copyright notice, this list of conditions and the following
-             disclaimer in the documentation and/or other materials provided
-             with the distribution.
-
-             THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-             "AS IS" AND ANY EXPRESS OR IMPLIED ARRANTIES, INCLUDING, BUT NOT
-             LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
-             FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
-             COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-             INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING,
-             BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-             LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-             CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-             LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
-             ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-             POSSIBILITY OF SUCH DAMAGE.
-:Authors: - Hung Nguyen Viet
-
-Pillar
-======
+- :doc:`/pip/doc/index` :doc:`/pip/doc/pillar`
+- :doc:`/rsyslog/doc/index` :doc:`/rsyslog/doc/pillar`
+- :doc:`/ssh/client/doc/index` :doc:`/ssh/client/doc/pillar`
 
 Mandatory
 ---------
@@ -38,17 +11,23 @@ Example::
 
     salt_master:
       gitfs_remotes:
-        - git@git.robotinfra.com:dev/common.git
-        - git@git.robotinfra.com:infra/states.git
+        - git@git.example.com:common.git
+        - git@git.example.com:states.git
 
 salt_master:gitfs_remotes
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Git fileserver backend configuration
-When using the git fileserver backend at least one git remote needs to be
-defined. The user running the salt master will need read access to the repo.
+.. copied from https://github.com/saltstack/salt/blob/2014.1/conf/master#L385
 
-Copied from: https://github.com/saltstack/salt/blob/2014.1/conf/master#L385
+Git fileserver backend configuration.
+When using the git fileserver backend at least one git remote needs to be
+defined.
+
+The user running the salt master will need read access to the repo.
+Look in :doc:`/ssh/client/doc/index` for more details.
+
+If the salt-master act also as the git server, look for
+:doc:`/git/server/doc/pillar` exact pillars keys details.
 
 Optional
 --------
@@ -59,7 +38,7 @@ Example::
       workers: 1
       pillar:
         branch: develop
-        remote: git@git.robotinfra.com:dev/pillars.git
+        remote: git@git.example.com:dev/pillars.git
 
 salt_master:pillar
 ~~~~~~~~~~~~~~~~~~
@@ -69,6 +48,9 @@ Specify a remote git repo for using as ext pillar.
 Default: ``False``
 
 ``False`` means not use.
+
+If the :doc:`index` act also as the :doc:`/git/server/doc/index`, look for
+exact :doc:`/git/server/doc/pillar` keys details.
 
 salt_master:pillar:branch
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -85,24 +67,26 @@ salt_master:workers
 
 Numbers of workers.
 
+.. TODO: use number of cores
+
 Default: ``5``
 
 salt_master:loop_interval
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
+.. https://github.com/saltstack/salt/blob/2014.1/conf/master#L80
+
 The loop_interval option controls the seconds for the master's maintinance
 process check cycle. This process updates file server backends, cleans the
 job cache and executes the scheduler.
-Copied from:
-https://github.com/saltstack/salt/blob/2014.1/conf/master#L80
 
 Default: ``60``
 
 salt_master:keep_jobs_hours
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+.. https://github.com/saltstack/salt/blob/2014.1/conf/master#L73
+
 Set the number of hours to keep old job information in the job cache
-Copied from:
-https://github.com/saltstack/salt/blob/2014.1/conf/master#L73
 
 Default: ``24``

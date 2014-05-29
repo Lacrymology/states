@@ -1,31 +1,30 @@
-:copyrights: Copyright (c) 2013, Bruno Clermont
-
-             All rights reserved.
-
-             Redistribution and use in source and binary forms, with or without
-             modification, are permitted provided that the following conditions
-             are met:
-
-             1. Redistributions of source code must retain the above copyright
-             notice, this list of conditions and the following disclaimer.
-             2. Redistributions in binary form must reproduce the above
-             copyright notice, this list of conditions and the following
-             disclaimer in the documentation and/or other materials provided
-             with the distribution.
-
-             THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-             "AS IS" AND ANY EXPRESS OR IMPLIED ARRANTIES, INCLUDING, BUT NOT
-             LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
-             FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
-             COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-             INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING,
-             BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-             LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-             CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-             LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
-             ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-             POSSIBILITY OF SUCH DAMAGE.
-:authors: - Bruno Clermont
+.. Copyright (c) 2013, Bruno Clermont
+.. All rights reserved.
+..
+.. Redistribution and use in source and binary forms, with or without
+.. modification, are permitted provided that the following conditions are met:
+..
+..     1. Redistributions of source code must retain the above copyright notice,
+..        this list of conditions and the following disclaimer.
+..     2. Redistributions in binary form must reproduce the above copyright
+..        notice, this list of conditions and the following disclaimer in the
+..        documentation and/or other materials provided with the distribution.
+..
+.. Neither the name of Bruno Clermont nor the names of its contributors may be used
+.. to endorse or promote products derived from this software without specific
+.. prior written permission.
+..
+.. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+.. AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+.. THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+.. PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
+.. BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+.. CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+.. SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+.. INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+.. CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+.. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+.. POSSIBILITY OF SUCH DAMAGE.
 
 Salt State
 ==========
@@ -41,7 +40,7 @@ Basic
 *Status: Mandatory*
 
 A very simple state without any kind of integration can be a single ``.sls``
-file in state Git repository, such as ``gcc.sls``.
+file in state :doc:`/git/doc/index` repository, such as ``gcc.sls``.
 
 But if there is any kind of integration, they need to be under the state name
 directory, such as ``gcc/init.sls``.
@@ -79,16 +78,18 @@ don't have persistence impact on the server:
 
 Monitoring checks are handled by ``$statename.nrpe`` (``$statename/nrpe.sls`` OR
 ``$statename/npre/init.sls`` if you're monitoring checks state requires
-additional files such as check script or NRPE configuration template).
+additional files such as check script or :doc:`/nrpe/doc/index` configuration
+template).
 
-If you add new monitoring checks, you have to make them available to NRPE (see
-``doc/monitoring.rst`` for more details on that) as a file in
-``/etc/nagios/nrpe.d/$statename-$suffix.cfg``. Check other NRPE integration in
-common states for examples.
+If you add new monitoring checks, you have to make them available to
+:doc:`/nrpe/doc/index` (see :doc:`monitoring` for more details on that) as a
+file in ``/etc/nagios/nrpe.d/$statename-$suffix.cfg``. Check other
+:doc:`/nrpe/doc/index` integration in common states for examples.
 
 .. warning::
-   Your addition monitoring NRPE checks state must include ``nrpe`` state.
-   It must require ``- pkg: nagios-nrpe-server`` and watch_in
+   Your addition monitoring :doc:`/nrpe/doc/index` checks state must include
+   ``nrpe`` state.
+   It must require ``- pkg: nagios-nrpe-server`` and ``watch_in``
    ``- service: nagios-nrpe-server``.
 
 If you need to install files to fill your monitoring requirements, you **must**
@@ -107,32 +108,35 @@ don't have persistence impact on the server:
 
 *Status: Optional*
 
-Diamond (``diamond`` state) is used to gather OS metrics and send it to Graphite
-(``graphite`` state) stats server.
+:doc:`/diamond/doc/index` (``diamond`` state) is used to gather OS metrics and
+send it to :doc:`/graphite/doc/index` (``graphite`` state) stats server.
 
 So it's integration in your state need to be in ``$statename.diamond``.
 
-It support many collectors
-https://github.com/BrightcoveOS/Diamond/tree/master/src/collectors
+It support many
+`collectors <https://github.com/BrightcoveOS/Diamond/tree/master/src/collectors>`__
 if any of these collectors are specific to deployed software, please turn it on.
 Check in salt common states for many examples of that.
 
 If you state deploy one or multiple daemon that run constantly, you have to add
 it to the list of processes that the CPU and Memory usage stats are sent.
-TODO: document this process.
 
-If you turn on Diamond collector, you have to add a file to it's configuration
-directory in ``/etc/diamond/collectors/$CollectorNameClass.conf``.
+.. TODO: document this process.
 
-Check other diamond integration in common states for examples.
+If you turn on :doc:`/diamond/doc/index` collector, you have to add a file to
+it's configuration directory in
+``/etc/diamond/collectors/$CollectorNameClass.conf``.
+
+Check other :doc:`/diamond/doc/index` integration in common states for examples.
 
 .. warning::
-   Your addition monitoring NRPE checks state must include ``nrpe`` state.
-   It must require ``- file: /etc/diamond/collectors`` and watch_in
+   Your addition monitoring :doc:`/nrpe/doc/index` checks state must include
+   ``nrpe`` state.
+   It must require ``- file: /etc/diamond/collectors`` and ``watch_in``
    ``- service: diamond``.
 
-If Diamond integration requires installation of additional files, you **must**
-have a ``$statename.diamond.absent`` file.
+If :doc:`/diamond/doc/index` integration requires installation of additional
+files, you **must** have a ``$statename.diamond.absent`` file.
 
 Tests
 -----
@@ -140,25 +144,27 @@ Tests
 *Status: Optional*
 
 Test are executed automatically and all available monitoring checks are
-executed. For more details, check ``doc/tests.sls``.
+executed. For more details, check :doc:`tests`.
 
 But your state might need custom steps to setup the test, or just need to wait
 few seconds to let the cluster initialize before running all the tests.
-You might want to have additional tests, or handle failure in NRPE checks.
+You might want to have additional tests, or handle failure in
+:doc:`/nrpe/doc/index` checks.
 
 To overwrite default behavior of test and checks, you need to create a
 ``$statename.test`` (or ``$statename/test.sls`` file).
 
-For more details on that file content, look at ``doc/tests.rst`` section
-*Test Validation*.
+For more details on that file content, look at :ref:`test_validation`.
 
 Ordering
 --------
 
 *Status: Mandatory*
 
-All services should have the ``order`` argument specified with value ``50``:
-http://docs.saltstack.com/ref/states/ordering.html?highlight=order#the-order-option
+All services should have the
+`order <http://docs.saltstack.com/ref/states/ordering.html?highlight=order#the-order-option>`__
+argument specified with value ``50``:
+
 such as::
 
   cron:
@@ -187,11 +193,13 @@ If not:
 *Status: Optional*
 
 Monitoring checks need to declare to the monitoring server how to perform those
-checks. Monitoring server will auto-discover in other ways which Minion perform
-those checks and how to send alert.
+checks. Monitoring server will auto-discover in other ways which
+:doc:`/salt/minion/doc/index` perform those checks and how to send alert.
 
-The state must only declare the list of check in the YAML Jinja2 template file
-``salt://$state/monitor.jinja2``.
+The state must only declare the list of check in the
+`YAML <http://en.wikipedia.org/wiki/YAML>`__
+`Jinja2 <https://en.wikipedia.org/wiki/Jinja_(Template_engine)>`__
+template file ``salt://$state/monitor.jinja2``.
 
 It must match the checks you created into *Monitoring Checks* section.
 

@@ -1,9 +1,7 @@
 Rsync
 =====
 
-
 .. toctree::
     :glob:
-
 
     *

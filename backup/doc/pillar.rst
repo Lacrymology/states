@@ -1,3 +1,5 @@
+.. TODO: CONVERT FORMAT
+
 :Copyrights: Copyright (c) 2014, Hung Nguyen Viet
 
              All rights reserved.
@@ -42,6 +44,7 @@ Example::
 backup:xz_memlimit
 ~~~~~~~~~~~~~~~~~~
 
-Memory limit to ``xz`` program when run backup scripts (in MiB).
+Memory limit to `xz <https://en.wikipedia.org/wiki/Xz>`__ compressor when it run
+(in MiB).
 
 Default: ``64``.

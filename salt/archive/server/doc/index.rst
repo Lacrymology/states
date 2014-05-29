@@ -1,24 +1,34 @@
-How to upload new files
------------------------
+Salt Archive Server
+===================
 
-First, your Salt Archive server need to be a "master" server. It don't have to
-act solely as a mirror and rsync to a source.
+Introduction
+------------
 
-If a server got the pillar key ``salt_archive:source`` set to ``True``, any
-new files will be erased on next synchronization with the said source.
+Installing the latest version of remote depdencies often causes problems:
 
-If your server don't have a source, an incoming folder is created for any
-authorized users to upload new file.
+- Network issue
+- Latency
+- Can be quite slow sometimes
+- Remote mirror is temporarly unavailable (Not depending on the pypi.python.org,
+  github.com, etc)
 
-To upload you have to copy the new file in ``incoming/pip`` (if it's a Python
-package) or ``incoming/mirror`` directory on the server using SFTP with the
-username ``salt_archive``.
+This can be use to internally mirror every files which are use to deploy states.
 
-The access to this user is granted using SSH keys, you have your public key in
-``salt_archive:keys`` pillar key.
+The major benifit to use this is for testing. As tests required the same files
+to be download over and over, it make the entire test run faster.
 
-Once your file is uploaded, after a while, a cron job run and if the same file
-don't exists in ``pip/`` and ``mirror/`` it will move it if the file don't
-already exists to avoid the same filename with different content.
+Installation
+------------
 
-If file exists, it get removed.
+Run this formula will create a ``/var/lib/salt_archive/`` to hold the files.
+
+The initial application of this formula will take a while as it rsync the entire
+content of ``salt_archive:source`` :doc:`/rsync/doc/index` server.
+
+Once done you can connect to ``salt_archive:web:hostnames`` to see all mirrored
+files.
+
+.. toctree::
+    :glob:
+
+    *

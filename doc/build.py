@@ -30,6 +30,19 @@
 import os
 import sys
 
+def in_directory(dir1, dir2):
+    dirs1 = dir1.split(os.sep)
+    dirs2 = dir2.split(os.sep)
+
+    for i in range(0, len(dirs1)):
+        try:
+            if dirs1[i] != dirs2[i]:
+                return False
+        except IndexError:
+            return False
+    return True
+
+
 my_dir = os.path.dirname(os.path.abspath(__file__))
 root_dir = os.path.abspath(os.path.join(my_dir, '..'))
 default_directory = os.path.abspath(os.path.join(root_dir, '..', 'salt-doc'))
@@ -46,8 +59,10 @@ if virtualenv_key not in os.environ:
     print "Please use a Python VirtualEnv"
     sys.exit(1)
 virtual_env = os.path.abspath(os.environ[virtualenv_key])
-if virtual_env.startswith(root_dir):
-    print "Please don't use a Python VirtualEnv inside %s" % root_dir
+
+if in_directory(virtual_env, root_dir):
+    print "Please don't use Python VirtualEnv %s inside %s" % (virtual_env,
+                                                               root_dir)
     sys.exit(1)
 
 # replace argv to pass to sphinx-build

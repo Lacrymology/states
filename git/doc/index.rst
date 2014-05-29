@@ -1,9 +1,10 @@
 Git
 ===
 
+.. TODO: INTRO
 
 .. toctree::
     :glob:
 
-
-    ../server/doc/*
+    *
+    ../server/doc/index

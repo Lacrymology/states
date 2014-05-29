@@ -7,7 +7,11 @@
     - group: nagios
     - mode: 440
     - template: jinja
+{%- if state == 'nrpe' %}
+    - source: salt://nrpe/config.jinja2
+{%- else %}
     - source: salt://{{ state|replace('.', '/') }}/nrpe/config.jinja2
+{%- endif %}
     - require:
       - file: /etc/nagios/nsca.d
     - watch_in:

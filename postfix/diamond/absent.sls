@@ -51,10 +51,6 @@ postfix_stats:
   file:
     - absent
 
-/etc/rsyslog.d/postfix_stats.conf:
-  file:
-    - absent
-
 {#- TODO: remove that statement in >= 2014-04 #}
 /usr/local/diamond/postfix-requirements.txt:
   file:

@@ -55,6 +55,12 @@ server {
         return 404;
     }
 
+    # deny read file ie.css
+    location ~* /common/ie.css {
+        deny all;
+        return 404;
+    }
+
 {% include "nginx/block_hacks.jinja2" %}
 
 {% if 'render_allow' in pillar['graphite']['web'] %}

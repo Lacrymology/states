@@ -35,22 +35,21 @@ __email__ = 'quanta@robotinfra.com'
 
 import os
 import sys
+import argparse
 import subprocess
 from lxml import etree
 import nagiosplugin as nap
 from datetime import datetime
 
 
-class SslScore(nap.Resource):
+class SslConfiguration(nap.Resource):
     def probe(self):
-        target = sys.argv[1]
-        host = target.split(':')[0]
         DEVNULL = open(os.devnull, 'wb')
-        sslyze_command = "/usr/local/bin/sslyze.py --regular --xml_out='/tmp/{0}_sslyze.xml' {1}".format(host, target)
+        sslyze_command = "/usr/local/bin/sslyze.py --regular --xml_out='/tmp/{0}_{1}_sslyze.xml' {0}:{1}".format(host, port)
         stderr = subprocess.Popen(sslyze_command, stdout=DEVNULL, shell=True).communicate()[1]
         
         if stderr is None:
-            root = etree.parse("/tmp/{0}_sslyze.xml".format(host))
+            root = etree.parse("/tmp/{0}_{1}_sslyze.xml".format(host, port))
             
             hostnameValidation = root.xpath("//hostnameValidation[@certificateMatchesServerHostname]")
             certificateMatchesServerHostname = hostnameValidation[0].attrib['certificateMatchesServerHostname']
@@ -94,42 +93,57 @@ class SslScore(nap.Resource):
                         key_score = key_scores[k]
                         break
                 
-                cipher_strength = root.xpath("//cipherSuite[@connectionStatus='HTTP 200 OK']")
+                cipher_strength = root.xpath("//acceptedCipherSuites/cipherSuite")
                 keySizes = []
     
                 for c in cipher_strength:
-                    keySizes.append(c.attrib['keySize'])
+                    # https://github.com/iSECPartners/sslyze/issues/71
+                    if c.attrib['keySize'] != 'Anon':
+                        keySizes.append(c.attrib['keySize'])
                 
-                weakest_cipher = sorted(keySizes)[0].split()[0]
-                strongest_cipher = sorted(keySizes)[-1].split()[0]
+                weakest_cipher_strength = sorted(keySizes)[0].split()[0]
+                strongest_cipher_strength = sorted(keySizes)[-1].split()[0]
     
                 cipher_scores = {(0, 128): 20, (128, 256): 80, (256,16384): 100}
                 for k, v in cipher_scores.iteritems():
-                    if k[0] <= int(weakest_cipher) and int(weakest_cipher) < k[1]:
-                        weakest_score = cipher_scores[k]
+                    if k[0] <= int(weakest_cipher_strength) and int(weakest_cipher_strength) < k[1]:
+                        weakest_cipher_score = cipher_scores[k]
                         break
                 
                 for k, v in cipher_scores.iteritems():
-                    if k[0] <= int(strongest_cipher) and int(strongest_cipher) < k[1]:
-                        strongest_score = cipher_scores[k]
+                    if k[0] <= int(strongest_cipher_strength) and int(strongest_cipher_strength) < k[1]:
+                        strongest_cipher_score = cipher_scores[k]
                         break
                 
-                cipher_score = (weakest_score + strongest_score) / 2
+                cipher_score = (weakest_cipher_score + strongest_cipher_score) / 2
                 
                 final_score = protocol_score * 0.3 + key_score * 0.3 + cipher_score * 0.4
-            else:
-                final_score = 0
-
-            return [nap.Metric('sslscore', final_score, min=0, max=100)]
+                return [nap.Metric('sslscore', final_score, min=0, max=100)]
+            elif certificateMatchesServerHostname != 'True':
+                return [nap.Metric('serverHostname', hostnameValidation[0].attrib['serverHostname'])]
+            elif expire_in.days <= 0:
+                return [nap.Metric('expireInDays', expire_in.days)]
+            elif validationResult != 'ok':
+                return [nap.Metric('validationResult', validationResult)]
 
 
 @nap.guarded
 def main():
     check = nap.Check(
-        SslScore(),
-        nap.ScalarContext('sslscore', nap.Range('@65:80'), nap.Range('@0:65')))
+        SslConfiguration(),
+        nap.ScalarContext('sslscore', nap.Range('@65:80'), nap.Range('@0:65')),
+        nap.ScalarContext('serverHostname', fmt_metric='The certificate does not match the host name {value}'),
+        nap.ScalarContext('expireInDays', nap.Range('@:0'), fmt_metric='The certificate expired {value} days ago'),
+        nap.ScalarContext('validationResult', fmt_metric='This server\'s certificate is not trusted: {value}'))
     check.main(timeout=60)
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-H', '--hostname', type=str, required=True)
+    parser.add_argument('-p', '--port', type=int, default=443)
+    args = parser.parse_args()
+    host = args.hostname
+    port = args.port
+
     main()

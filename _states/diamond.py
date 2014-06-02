@@ -60,17 +60,26 @@ def test(name, map):
         ret['changes'][collector] = change = {}
         if __salt__['file.file_exists'](logfile):
             __salt__['file.remove'](logfile)
-        command = ('/usr/local/diamond/bin/python '
-                   '/usr/local/diamond/bin/diamond -r {}').format(collector)
 
         if (not collector.startswith('/') and
            not collector.endswith("Collector")):
-            command += 'Collector'
-        retcode = __salt__['cmd.retcode'](command)
+            collector += 'Collector'
+
+        command = ('/usr/local/diamond/bin/python '
+                   '/usr/local/diamond/bin/diamond -l -r {}').format(collector)
+
+        cret = __salt__['cmd.run_all'](command)
+        retcode = cret['retcode']
 
         if retcode != 0:
             ret['comment'] = '%s failed with retcode %d'.format(command,
                                                                 retcode)
+            ret['result'] = False
+            return ret
+
+        if 'Initialized Collector: {}'.format(collector) not in cret['stdout']:
+            ret['comment'] = ('{0} was not been initialized, recheck collector'
+                              ' name or its config').format(collector)
             ret['result'] = False
             return ret
 

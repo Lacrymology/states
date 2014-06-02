@@ -35,7 +35,7 @@ AuthUser={{ pillar['smtp']['user'] }}
 AuthPass={{ pillar['smtp']['password'] }}
 {%- endif %}
 {%- if salt['pillar.get']('smtp:tls', False) %}
-UseSTARTTLS=yes
+UseSTARTTLS=no
 UseTLS=yes
 {%- endif %}
 FromLineOverride=yes

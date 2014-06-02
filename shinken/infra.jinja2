@@ -261,7 +261,22 @@ define service {
             {%- if key_name not in reserved_keys %}
     {{ key_name }} {{ check.data[key_name] }}
             {%- endif -%}
-        {%- endfor %}
+        {%- endfor -%}
+        {#- `business_rule_service_notification_options` only available from 2.0 #}
+        {%- if check_name in ('shinken_broker_http', 'shinken_broker_web') %}
+    notification_options n
+        {%- endif %}
 }
     {%- endfor -%}
+{%- endfor -%}
+
+{%- for service in ('shinken_broker_http', 'shinken_broker_web') %}
+define service {
+    use salt-service
+    host_name {{ pillar['shinken']['architecture']['broker'][0] }}
+    service_description {{ service }}_cluster
+    check_command bp_rule!({{ pillar['shinken']['architecture']['broker'][0] }},{{ service }} | {{ pillar['shinken']['architecture']['broker'][1] }},{{ service }})
+    business_rule_service_notification_options n
+    business_rule_smart_notifications 1
+}
 {%- endfor -%}

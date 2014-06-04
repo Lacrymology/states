@@ -35,10 +35,13 @@ Usage
 
 - Stop DenyHosts by run ``service denyhosts stop``
 - Remove the lines that contains the blocked IP address from the following
-  files:``/etc/hosts.deny``:
+  files:
+
+  - ``/etc/hosts.deny``
   - ``/var/lib/denyhosts/hosts``
   - ``/var/lib/denyhosts/hosts-restricted``
   - ``/var/lib/denyhosts/hosts-root``
   - ``/var/lib/denyhosts/hosts-valid``
   - ``/var/lib/denyhosts/user-hosts``
+
 - Start DenyHosts: ``service denyhosts start``

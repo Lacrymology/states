@@ -39,6 +39,8 @@ web:
     - createhome: True
     - password: "*"
     - enforce_password: True
+    - require:
+      - group: web
   file:
     - directory
     - name: /var/lib/deployments
@@ -47,6 +49,9 @@ web:
     - mode: 775
     - require:
       - user: web
+  group:
+    - present
+    - name: www-data
 
 {#- ensure owner/mode of this dir #}
 /var/www:

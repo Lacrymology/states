@@ -104,8 +104,11 @@ openerp:
     - present
     - shell: /bin/false
     - home: {{ home }}
+    - groups:
+      - www-data
     - require:
       - file: /usr/local
+      - group: web
   virtualenv:
     - managed
     - name: {{ home }}

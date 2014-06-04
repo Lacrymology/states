@@ -63,8 +63,15 @@ iptables:
     - watch:
       - file: iptables
 
+firewall_nf_conntrack:
+  kmod:
+    - present
+    - name: nf_conntrack
+
 {% if salt['pillar.get']('firewall:filter', False) and 21 in salt['pillar.get']('firewall:filter:tcp', []) %}
 nf_conntrack_ftp:
    kmod:
      - present
+     - require:
+       - kmod: firewall_nf_conntrack
 {% endif %}

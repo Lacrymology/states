@@ -27,7 +27,6 @@ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
 
  Diamond statistics for firewall
 -#}
-{% if salt['pillar.get']('firewall:filter', False) and 21 in salt['pillar.get']('firewall:filter:tcp', []) %}
 include:
   - diamond
   - firewall
@@ -45,7 +44,6 @@ firewall_nf_conntrack_diamond_collector:
         files = nf_conntrack_count,nf_conntrack_max
     - require:
       - file: /etc/diamond/collectors
-      - kmod: nf_conntrack_ftp
+      - kmod: firewall_nf_conntrack
     - watch_in:
       - service: diamond
-{% endif %}

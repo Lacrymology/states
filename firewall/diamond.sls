@@ -27,6 +27,7 @@ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
 
  Diamond statistics for firewall
 -#}
+{% if grains['virtual'] != 'openvzve' %}
 include:
   - diamond
   - firewall
@@ -47,3 +48,4 @@ firewall_nf_conntrack_diamond_collector:
       - kmod: firewall_nf_conntrack
     - watch_in:
       - service: diamond
+{% endif %}

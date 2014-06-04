@@ -57,6 +57,8 @@ class MineMinion(nap.Resource):
     def __init__(self, mine_data=None):
         if mine_data:
             self.ids_from_mine = set(id for id in mine_data if mine_data[id])
+            log.debug('Minion IDs in Salt mine read from data file: %s',
+                      self.ids_from_mine)
         else:
             self.ids_from_mine = self._mine_ids()
         self.ids_from_salt_key = self._accepted_ids()
@@ -65,15 +67,14 @@ class MineMinion(nap.Resource):
         key = salt.key.Key(config.master_config('/etc/salt/master'))
         minion_ids = key.list_keys()['minions']
         ret = set(minion_ids)
-        log.debug('Minion IDs in Salt key accepted: {0}'.format(ret))
+        log.debug('Minion IDs in Salt key accepted: %s', ret)
         return ret
 
     def _mine_ids(self):
         client = salt.client.Caller('/etc/salt/minion')
         ids = client.function('mine.get', '*', 'monitoring.data')
         ret = set(id for id in ids if ids[id])
-        log.debug(('Minion IDs in Salt Mine '
-                   'monitoring.data: {0}').format(ret))
+        log.debug('Minion IDs in Salt Mine monitoring.data: %s', ret)
         return ret
 
     def _is_matched(self):
@@ -87,7 +88,7 @@ class MineMinion(nap.Resource):
                           + list(self.ids_from_mine))
             diff_ids = set(list(all_ids - self.ids_from_salt_key) +
                            list(all_ids - self.ids_from_mine))
-            log.debug('Diff minion IDs: {0}'.format(diff_ids))
+            log.debug('Diff minion IDs: %s', diff_ids)
             return [nap.Metric('mine_minions', len(diff_ids),
                                min=0, context='minions')]
 
@@ -105,7 +106,7 @@ def main():
     if args.data:
         try:
             with open(args.data) as f:
-                data = yaml.load(f)
+                data = yaml.load(f)['local']
         except IOError as e:
             log.warning(e)
 

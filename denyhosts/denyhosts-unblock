@@ -1,0 +1,40 @@
+#!/bin/bash
+
+set -o nounset
+set -o errexit
+
+usage() {
+    echo 'usage: denyhosts-unblock <ip address>...'
+}
+
+readonly current_ts=$(date +%s)
+readonly denyhosts_files=(
+    '/etc/hosts.deny'
+    '/var/lib/denyhosts/hosts'
+    '/var/lib/denyhosts/hosts-restricted'
+    '/var/lib/denyhosts/hosts-root'
+    '/var/lib/denyhosts/hosts-valid'
+    '/var/lib/denyhosts/users-hosts')
+
+remove_ip() {
+    ip="$1"
+    [[ -z "$1" ]] && exit 1
+    for file in ${denyhosts_files[@]}; do
+        echo "Remove ${ip} from ${file}"
+        sed -i-"${current_ts}" -e "/^${ip}/d" "${file}"
+    done
+}
+
+# print usage if argument number = 0
+[[ "$#" -eq 0 ]] && usage && exit 0
+
+# stop denyhosts
+service denyhosts stop
+
+# remove ip, see:
+for ip in "$@"; do
+    remove_ip "${ip}"
+done
+
+# stop denyhosts
+service denyhosts start

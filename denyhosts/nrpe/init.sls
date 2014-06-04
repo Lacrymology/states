@@ -33,6 +33,7 @@ include:
   - denyhosts
   - nrpe
   - rsyslog.nrpe
+  - bash.nrpe
 
 /etc/nagios/nrpe.d/denyhosts.cfg:
   file:

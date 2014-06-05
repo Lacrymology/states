@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Bruno Clermont
+Copyright (c) 2014, Hung Nguyen Viet
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,58 +22,30 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Bruno Clermont <patate@fastmail.cn>
-Maintainer: Bruno Clermont <patate@fastmail.cn>
+Author: Hung Nguyen Viet hvnsweeting@gmail.com
+Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
 
-Firewall
-========
-
-Set a simple iptables based firewall
+ Diamond statistics for firewall
 -#}
+{% if grains['virtual'] != 'openvzve' %}
 include:
-  - apt
+  - diamond
+  - firewall
 
-/etc/network/iptables.conf:
-  file:
-    - absent
-
-iptables:
+firewall_nf_conntrack_diamond_collector:
   file:
     - managed
-    - name: /etc/iptables/rules.v4
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 440
-    - source: salt://firewall/config.jinja2
-    - require:
-      - pkg: iptables
-  pkg:
-    - installed
-    - pkgs:
-      - iptables
-      - iptstate
-      - iptables-persistent
-    - require:
-      - cmd: apt_sources
-  cmd:
-    - wait
-    - name: iptables-restore < /etc/iptables/rules.v4
-    - stateful: False
-    - watch:
-      - file: iptables
+    - name: /etc/diamond/collectors/ConnTrackCollector.conf
+    - contents: |
+        # {{ pillar['message_do_not_modify'] }}
+        [[ConnTrackCollector]]
 
-{% if grains['virtual'] != 'openvzve' %}
-firewall_nf_conntrack:
-  kmod:
-    - present
-    - name: nf_conntrack
-
-  {% if salt['pillar.get']('firewall:filter', False) and 21 in salt['pillar.get']('firewall:filter:tcp', []) %}
-nf_conntrack_ftp:
-   kmod:
-     - present
-     - require:
-       - kmod: firewall_nf_conntrack
-  {% endif %}
+        enabled = True
+        dir = /proc/sys/net/netfilter
+        files = nf_conntrack_count,nf_conntrack_max
+    - require:
+      - file: /etc/diamond/collectors
+      - kmod: firewall_nf_conntrack
+    - watch_in:
+      - service: diamond
 {% endif %}

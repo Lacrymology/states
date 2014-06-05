@@ -45,9 +45,12 @@ def _error(ret, err_msg):
     ret['comment'] = err_msg
     return ret
 
+def absent(name):
+    # this should remove "/etc/nagios/nrpe.d/{0}.cfg".format(name)
+    pass
 
-def managed(name, source, template='jinja',
-            user='root', group='root', mode='644',
+def managed(name, source=None, template='jinja',
+            user='nagios', group='nagios', mode='440',
             saltenv='base', context={},
             makedirs=False,
             show_diff=True,
@@ -61,15 +64,29 @@ def managed(name, source, template='jinja',
            'result': True,
            'comment': ''}
 
+    # make sure nagios-nrpe-server is required
+    minimal_requirement = {'pkg': 'nagios-nrpe-server'}
+    require = 'require'
+    try:
+        if minimal_requirement not in kwargs[require]:
+            kwargs[require].append(minimal_requirement)
+    except KeyError:
+        kwargs[require] = [minimal_requirement]
+
     context.update({'env': env})
 
     source_hash = ''
     __env__ = env
 
-    # Gather the source file from the server
+    # Retrieve the source file from the server
+    if not source:
+        source = "salt://{0}/nrpe/config.jinja2".format(name)
+
+    filename = "/etc/nagios/nrpe.d/{0}.cfg".format(name)
+
     try:
         sfn, source_sum, comment_ = __salt__['file.get_managed'](
-            name,
+            filename,
             template,
             source,
             source_hash,

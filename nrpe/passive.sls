@@ -1,4 +1,4 @@
-{%- macro passive_check(state) -%}
+{%- macro passive_check(state, extra_requirements) -%}
 /etc/nagios/nsca.d/{{ state }}.yml:
   file:
     - managed
@@ -14,6 +14,9 @@
 {%- endif %}
     - require:
       - file: /etc/nagios/nsca.d
+{%- for state, name in extra_requirements %}
+      - {{ state }}: {{ name }}
+{%- endfor -%}
     - watch_in:
       - service: nsca_passive
 
@@ -22,4 +25,15 @@
     - absent
     - watch_in:
       - service: cron
-{%- endmacro %}
+
+{{ state }}-monitoring:
+  monitoring:
+    - managed
+    - name: wordpress
+{%- for state, name in extra_requirements -%}
+  {%- if loop.first %}
+    - require:
+  {%- endif -%}
+      - {{ state }}: {{ name }}
+{%- endfor -%}
+{%- endmacro -%}

@@ -63,15 +63,4 @@ include:
       username: {{ salt['pillar.get']('wordpress:db:username', 'wordpress') }}
       password: {{ salt['password.pillar']('wordpress:db:password', 10) }}
 
-/etc/nagios/nrpe.d/wordpress.cfg:
-  monitoring:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://wordpress/nrpe/config.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-
-{{ passive_check('wordpress') }}
+{{ passive_check('wordpress', [{'uwsgi': 'wordpress'}]) }}

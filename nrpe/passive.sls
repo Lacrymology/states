@@ -1,4 +1,4 @@
-{%- macro passive_check(state, extra_requirements) -%}
+{%- macro passive_check(state, extra_requirements={}) %}
 /etc/nagios/nsca.d/{{ state }}.yml:
   file:
     - managed

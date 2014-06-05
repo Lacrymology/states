@@ -29,7 +29,7 @@
 {{ state }}-monitoring:
   monitoring:
     - managed
-    - name: wordpress
+    - name: {{ state }}
 {%- for state, name in extra_requirements -%}
   {%- if loop.first %}
     - require:

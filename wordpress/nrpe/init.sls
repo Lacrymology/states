@@ -106,7 +106,7 @@ include:
       password: {{ salt['password.pillar']('wordpress:db:password', 10) }}
 
 /etc/nagios/nrpe.d/wordpress.cfg:
-  nrpe_config:
+  monitoring:
     - managed
     - template: jinja
     - user: nagios

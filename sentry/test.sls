@@ -33,7 +33,7 @@ include:
   - sentry.nrpe
 
 test:
-  nrpe:
+  monitoring:
     - run_all_checks
     - wait: 60
     - order: last

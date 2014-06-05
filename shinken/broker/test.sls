@@ -36,7 +36,7 @@ include:
                     ('shinken_nginx_https', 'Invalid HTTP response')) %}
 
 test:
-  nrpe:
+  monitoring:
     - run_all_checks
     - exclude:
   {%- for name, _ in check_set %}
@@ -44,12 +44,12 @@ test:
   {%- endfor %}
     - require:
 {% for name, failure in check_set %}
-      - nrpe: {{ name }}
+      - monitoring: {{ name }}
 {%- endfor %}
 
 {% for name, failure in check_set %}
 {{ name }}:
-  nrpe:
+  monitoring:
     - run_check
     - order: last
     - accepted_failure: {{ failure }}

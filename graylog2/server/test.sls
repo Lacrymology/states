@@ -43,7 +43,7 @@ graylog2_log_one_msg:
       - service: graylog2-server
 
 test:
-  nrpe:
+  monitoring:
     - run_all_checks
     - order: last
     - exclude:

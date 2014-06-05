@@ -31,7 +31,7 @@ include:
   - salt.ci.diamond
 
 test:
-  nrpe:
+  monitoring:
     - run_all_checks
     - order: last
     - wait: 60

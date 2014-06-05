@@ -30,7 +30,7 @@ include:
   - nrpe.diamond
 
 test:
-  nrpe:
+  monitoring:
     - run_all_checks
     - order: last
   diamond:

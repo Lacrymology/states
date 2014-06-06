@@ -32,6 +32,7 @@ include:
   - local
   - nrpe
   - virtualenv
+  - unzip
 
 sslyze:
   archive:
@@ -43,6 +44,7 @@ sslyze:
     - if_missing: /usr/local/src/sslyze-{{ version|replace(".", "_") }}-linux64
     - require:
       - file: /usr/local/src
+      - pkg: unzip
   cmd:
     - wait
     - cwd: /usr/local/src/sslyze-{{ version|replace(".", "_") }}-linux64

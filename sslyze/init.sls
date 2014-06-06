@@ -29,37 +29,57 @@ A Python tool that can analyze the SSL configuration of a server
 -#}
 {% set version = "0.9" %}
 include:
+  - local
+  - nrpe
   - virtualenv
 
-/usr/local/sslyze/src:
-  file:
-    - directory
-    - user: root
-    - group: root
-    - mode: 755
-    - require:
-      - virtualenv: sslyze
-
 sslyze:
-  virtualenv:
-    - manage
-    - name: /usr/local/sslyze
-    - system_site_packages: False
-    - require:
-      - module: virtualenv
-      - file: /usr/local
   archive:
     - extracted
-    - name: /usr/local/sslyze/src
+    - name: /usr/local/src
     - source: https://github.com/iSECPartners/sslyze/releases/download/release-{{ version }}/sslyze-{{ version|replace(".", "_") }}-linux64.zip
     - source_hash: md5=1b5a235f97db11cc2f72ccb499d861f0
     - archive_format: zip
-    - if_missing: /usr/local/sslyze/src/sslyze-{{ version|replace(".", "_") }}-linux64
+    - if_missing: /usr/local/src/sslyze-{{ version|replace(".", "_") }}-linux64
     - require:
-      - file: /usr/local/sslyze/src
+      - file: /usr/local/src
   cmd:
     - wait
-    - cwd: /usr/local/sslyze/src/sslyze-{{ version|replace(".", "_") }}-linux64
-    - name: /usr/local/sslyze/bin/python setup.py install
+    - cwd: /usr/local/src/sslyze-{{ version|replace(".", "_") }}-linux64
+    - name: /usr/local/nagios/bin/python setup.py install
     - watch:
       - archive: sslyze
+    - require:
+      - virtualenv: nrpe-virtualenv
+
+/usr/lib/nagios/plugins/check_ssl_configuration.py:
+  file:
+    - managed
+    - source: salt://sslyze/check_ssl_configuration.py
+    - user: nagios
+    - group: nagios
+    - mode: 550
+    - require:
+      - pkg: nagios-nrpe-server
+      - cmd: sslyze
+
+sslyze_requirements:
+  file:
+    - managed
+    - name: /usr/local/nagios/salt-sslyze-requirements.txt
+    - source: salt://sslyze/requirements.jinja2
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - require:
+      - virtualenv: nrpe-virtualenv
+      - pkg: nagios-nrpe-server
+  module:
+    - wait
+    - name: pip.install
+    - upgrade: True
+    - bin_env: /usr/local/nagios
+    - requirements: /usr/local/nagios/salt-sslyze-requirements.txt
+    - watch:
+      - file: sslyze_requirements

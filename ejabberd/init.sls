@@ -35,15 +35,6 @@ include:
   - nginx
   - postgresql.server
 
-ejabberd_dependencies:
-  pkg:
-    - installed
-    - pkgs:
-      - libssl1.0.0
-    - require:
-      - cmd: apt_sources
-      - pkg: erlang
-
 {%- set dbuserpass = salt['password.pillar']('ejabberd:db:password', 10) %}
 {%- set dbuser = salt['pillar.get']('ejabberd:db:username', 'ejabberd') %}
 {%- set dbname = salt['pillar.get']('ejabberd:db:name', 'ejabberd') %}
@@ -67,14 +58,11 @@ ejabberd:
       - postgres_user: ejabberd
   pkg:
     - installed
-    - sources:
-{%- if 'files_archive' in pillar %}
-      - ejabberd: {{ pillar['files_archive']|replace('file://', '')|replace('https://', 'http://') }}/mirror/{{ filename }}
-{%- else %}
-      - ejabberd: http://archive.bit-flippers.com/mirror/{{ filename }}
-{%- endif %}
     - require:
-      - pkg: ejabberd_dependencies
+      - host: hostname
+      - cmd: hostname
+      - pkg: postgresql
+      - cmd: erlang_mod_pgsql
   service:
     - running
     - name: ejabberd
@@ -83,6 +71,7 @@ ejabberd:
     - require:
       - pkg: ejabberd
       - cmd: erlang_mod_pgsql
+      - cmd: hostname
     - watch:
       - file: ejabberd
       - cmd: ejabberd_psql

@@ -130,6 +130,12 @@ def discover_checks(state_name):
     if env == 'master':
         env = 'base'
 
+    logger.debug("Running `salt %s cp.get_template %s %s env='%s'`",
+                 __grains__['id'],
+                 source, 
+                 temp_dest.name, 
+                 env)
+
     __salt__['cp.get_template'](source, temp_dest.name, env=env)
 
     with open(temp_dest.name, 'r') as rendered_template:
@@ -145,7 +151,8 @@ def discover_checks(state_name):
             return {}
     os.unlink(temp_dest.name)
     if not unserialized:
-        logger.critical("File %s don't exists", source)
+        logger.critical("Cannot copy %s to the minion. Make sure that it exists "
+                        "and the environment '%s' is correct", source, env)
         return {}
     return unserialized
 

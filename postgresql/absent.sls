@@ -27,7 +27,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 Undo postgresql state.
 -#}
-/etc/apt/sources.list.d/pitti-postgresql-precise.list:
+/etc/apt/sources.list.d/postgresql.list:
   file:
     - absent
 

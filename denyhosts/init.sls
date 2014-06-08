@@ -76,7 +76,7 @@ denyhosts:
     - source: salt://denyhosts/denyhosts-unblock
     - user: root
     - group: root
-    - mode: 755
+    - mode: 500
     - require:
       - pkg: denyhosts
       - pkg: bash

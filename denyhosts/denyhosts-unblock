@@ -36,5 +36,5 @@ for ip in "$@"; do
     remove_ip "${ip}"
 done
 
-# stop denyhosts
+# start denyhosts
 service denyhosts start

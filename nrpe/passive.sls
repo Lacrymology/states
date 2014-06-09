@@ -1,4 +1,16 @@
-{%- macro passive_check(state, extra_requirements={}) %}
+{%- macro render_requirement(requirements=[]) %}
+{#- requirements can be a dict or a list of dicts #}
+{%- if requirements is mapping %}
+{%- set requirements = [requirements] %}
+{%- endif %}
+  {%- for adict in requirements %}
+    {%- for state, name in adict.iteritems() %}
+      - {{ state }}: {{ name }}
+    {%- endfor %}
+  {%- endfor %}
+{%- endmacro %}
+
+{%- macro passive_check(state, extra_requirements=[]) %}
 /etc/nagios/nsca.d/{{ state }}.yml:
   file:
     - managed
@@ -14,9 +26,7 @@
 {%- endif %}
     - require:
       - file: /etc/nagios/nsca.d
-{%- for state, name in extra_requirements %}
-      - {{ state }}: {{ name }}
-{%- endfor -%}
+{{ render_requirement(extra_requirements) }}
     - watch_in:
       - service: nsca_passive
 
@@ -30,11 +40,12 @@
   monitoring:
     - managed
     - name: {{ state }}
+{%- if state == 'nrpe' %}
+    - source: salt://nrpe/config.jinja2
+{%- endif %}
     - require:
       - pkg: nagios-nrpe-server
-{%- for state, name in extra_requirements -%}
-      - {{ state }}: {{ name }}
-{%- endfor -%}
+{{ render_requirement(extra_requirements) }}
     - watch_in:
       - service: nagios-nrpe-server
 {%- endmacro -%}

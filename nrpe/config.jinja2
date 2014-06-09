@@ -25,24 +25,41 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-{%- set nrpe_checks = {
-  'free_disks_space': ['All Disks', '/usr/lib/nagios/plugins/check_disk -w 20% -c 10%'],
-  'free_memory': ['Memory Usage', '/usr/lib/nagios/plugins/check_memory.py -w 90 -c 95'],
-  'logged_users': ['Logged Users', '/usr/lib/nagios/plugins/check_users -w 5 -c 10'],
-  'loopback_interface': ['Loopback Interface', '/usr/lib/nagios/plugins/check_ping -H 127.0.0.1 -p 1 -w 100,100% -c 100,100%'],
-  'nrpe_procs': ['NRPE Processes', '/usr/lib/nagios/plugins/check_procs -u nagios -C nrpe -c 1:15'],
-  'total_procs': ['Total Processes', '/usr/lib/nagios/plugins/check_procs -w 150 -c 200'],
-  'zombie_procs': ['Zombie Processes', '/usr/lib/nagios/plugins/check_procs -w 5 -c 10 -s Z'],
-  'oom_messages': ['Out Of Memory Messages', 'sudo /usr/lib/nagios/plugins/check_oom.py'],
-  'nsca_passive_procs': ['NSCA Passive daemon Processes', '/usr/lib/nagios/plugins/check_procs -u nagios -C nsca_passive -c 1:1']
-}
--%}
+nsca_passive_procs:
+  description: NSCA Passive daemon Processes
+  command: '/usr/lib/nagios/plugins/check_procs -u nagios -C nsca_passive -c 1:1'
 
-{%- for check in nrpe_checks %}
-{{ check }}:
-  description: {{ nrpe_checks[check][0] }}
-  command:  {{ nrpe_checks[check][1] }}
-{%- endfor -%}
+free_disks_space:
+  description: All Disks
+  command: /usr/lib/nagios/plugins/check_disk -w 20% -c 10%
+
+total_procs:
+  description: Total Processes
+  command: /usr/lib/nagios/plugins/check_procs -w 150 -c 200
+
+zombie_procs:
+  description: Zombie Processes
+  command: /usr/lib/nagios/plugins/check_procs -w 5 -c 10 -s Z
+
+nrpe_procs:
+  description: NRPE Processes
+  command: '/usr/lib/nagios/plugins/check_procs -u nagios -C nrpe -c 1:15'
+
+logged_users:
+  description: Logged Users
+  command: /usr/lib/nagios/plugins/check_users -w 5 -c 10
+
+loopback_interface:
+  description: Loopback Interface
+  command: /usr/lib/nagios/plugins/check_ping -H 127.0.0.1 -p 1 -w 100,100% -c 100,100%
+
+oom_messages:
+  description: Out Of Memory Messages
+  command: sudo /usr/lib/nagios/plugins/check_oom.py
+
+free_memory:
+  description: Memory Usage
+  command: /usr/lib/nagios/plugins/check_memory.py -w 90 -c 95
 
 {%- if salt['file.contains_regex']('/proc/swaps','^/') %}
 free_swap_space:

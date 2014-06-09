@@ -31,14 +31,22 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 {%- set num_workers = pillar['nginx']['worker_processes'] %}
 {%- endif %}
 
-{%- set nginx_checks = {
-    'master': ['Master Process', '/usr/lib/nagios/plugins/check_procs -c 1:1 -a "nginx: master process /usr/sbin/nginx -c /etc/nginx/nginx.conf" -u root'],
-    'worker': ['Worker Processes', '/usr/lib/nagios/plugins/check_procs -c {{ num_workers }}:{{ num_workers }} -a "nginx: worker process" -u www-data'],
-    'status': ['Status Page', '/usr/lib/nagios/plugins/check_http -H 127.0.0.1 -I 127.0.0.1 -u /nginx_status -p 80 -e "200 OK"{%- if salt["pillar.get"]("__test__", False) %} -v{%- endif %}'],
-    'logger_access': ['Access Logger', '/usr/lib/nagios/plugins/check_procs -c 1:1 -C logger -a "-f /var/log/nginx/access.fifo"'],
-    'logger_error': ['Error Logger', '/usr/lib/nagios/plugins/check_procs -c 1:1 -C logger -a "-f /var/log/nginx/error.fifo"']} -%}
-{%- for check in nginx_checks %}
-nginx_{{ check }}:
-  description: Nginx {{ nginx_checks[check][0] }}
-  command: '{{ nginx_checks[check][1] }}'
-{% endfor -%}
+nginx_status:
+  description: Nginx Status Page
+  command: '/usr/lib/nagios/plugins/check_http -H 127.0.0.1 -I 127.0.0.1 -u /nginx_status -p 80 -e "200 OK"{%- if salt["pillar.get"]("__test__", False) %} -v{%- endif %}'
+
+nginx_worker:
+  description: Nginx Worker Processes
+  command: '/usr/lib/nagios/plugins/check_procs -c {{ num_workers }}:{{ num_workers }} -a "nginx: worker process" -u www-data'
+
+nginx_logger_access:
+  description: Nginx Access Logger
+  command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -C logger -a "-f /var/log/nginx/access.fifo"'
+
+nginx_logger_error:
+  description: Nginx Error Logger
+  command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -C logger -a "-f /var/log/nginx/error.fifo"'
+
+nginx_master:
+  description: Nginx Master Process
+  command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -a "nginx: master process /usr/sbin/nginx -c /etc/nginx/nginx.conf" -u root'

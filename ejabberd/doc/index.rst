@@ -1,7 +1,7 @@
-ejabberd
+Ejabberd
 ========
 
-ejabberd is a Jabber/XMPP instant messaging server
+Ejabberd is a Jabber/XMPP instant messaging server
 
 .. toctree::
     :glob:

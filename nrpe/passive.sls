@@ -42,6 +42,8 @@
     - name: {{ state }}
 {%- if state == 'nrpe' %}
     - source: salt://nrpe/config.jinja2
+{%- else %}
+    - source: salt://{{ state|replace('.', '/') }}/nrpe/config.jinja2
 {%- endif %}
     - require:
       - pkg: nagios-nrpe-server

@@ -70,14 +70,10 @@ def managed(name, source=None, template='jinja',
     __env__ = env
 
     # Retrieve the source file from the server
-    if not source:
-        source = "salt://{0}/nrpe/config.jinja2".format(name)
-
-    filename = "/etc/nagios/nrpe.d/{0}.cfg".format(name)
-
+    name = "/etc/nagios/nrpe.d/{0}.cfg".format(name)
     try:
         sfn, source_sum, comment_ = __salt__['file.get_managed'](
-            filename,
+            name,
             template,
             source,
             source_hash,

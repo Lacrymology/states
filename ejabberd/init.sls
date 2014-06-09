@@ -115,7 +115,7 @@ ejabberd_psql:
 ejabberd_reload:
   cmd:
     - wait
-    - name: ejabberdctl restart; sleep 15 {# wait ejabberd service restart finish #}
+    - name: ejabberdctl restart && sleep 15 {# wait ejabberd service restart finish #}
     - require:
       - pkg: ejabberd
     - watch:

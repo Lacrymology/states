@@ -31,10 +31,14 @@ __author__ = 'Hung Nguyen Viet'
 __maintainer__ = 'Hung Nguyen Viet'
 __email__ = 'hvnsweeting@gmail.com'
 
+import logging
 import time
 
 import salt.utils
 import salt.utils.yamlloader as yamlloader
+
+
+log = logging.getLogger(__name__)
 
 
 def _error(ret, err_msg):
@@ -45,9 +49,11 @@ def _error(ret, err_msg):
     ret['comment'] = err_msg
     return ret
 
+
 def absent(name):
     # this should remove "/etc/nagios/nrpe.d/{0}.cfg".format(name)
     pass
+
 
 def managed(name, source=None, template='jinja',
             user='nagios', group='nagios', mode='440',
@@ -93,9 +99,15 @@ def managed(name, source=None, template='jinja',
     with open(sfn) as f:
         loaded = yamlloader.load(f, Loader=yamlloader.CustomLoader)
 
-    lines = ["command[{0}]={1}\n".format(check_name,
-             loaded[check_name].get('command', '/bin/echo FIXME'))
-             for check_name in loaded]
+    lines = []
+    for check_name in loaded:
+        if 'command' in loaded[check_name]:
+            lines.append("command[{0}]={1}\n".format(check_name,
+                         loaded[check_name]['command']))
+        else:
+            log.info(('Check "%s" has no "command" attribute, it maybe a'
+                      ' check which performed by Shinken or %s is malformed'),
+                     check_name, name)
 
     tmp = salt.utils.mkstemp(text=True)
     with salt.utils.fopen(tmp, 'w') as tmp_:
@@ -125,6 +137,7 @@ def managed(name, source=None, template='jinja',
             ret['changes'] = {}
             return _error(ret, 'Unable to manage file: {0}'.format(exc))
 
+
 def run_all_checks(**kwargs):
     '''
     Run all NRPE check, excepted listed.
@@ -143,7 +156,8 @@ def run_all_checks(**kwargs):
         exclude = []
 
     # all checks without check in exception list
-    checks_name = list(set(__salt__['monitoring.list_checks']()) - set(exclude))
+    checks_name = list(set(__salt__['monitoring.list_checks']())
+                       - set(exclude))
 
     if __opts__['test']:
         ret['comment'] = 'would have run following checks: {0}'.format(

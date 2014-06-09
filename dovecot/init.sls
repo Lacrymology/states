@@ -61,6 +61,16 @@ dovecot:
       - cmd: ssl_cert_and_key_for_{{ ssl }}
 {% endif %}
 
+{#- this setup uses only dovecot.conf config file, remove this dir for avoiding
+    confusing #}
+/etc/dovecot/conf.d:
+  file:
+    - absent
+    - require:
+      - pkg: dovecot
+    - watch_in:
+      - service: dovecot
+
 /etc/dovecot/dovecot.conf:
   file:
     - managed

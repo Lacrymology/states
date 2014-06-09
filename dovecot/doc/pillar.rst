@@ -65,6 +65,13 @@ LDAP URIs that be used for authentication.
 
 Default: ``ldap://127.0.0.1``.
 
+dovecot:max_userip_connections
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Max number of connections for one user from an IP.
+
+Default: ``20``
+
 dovecot:ssl
 ~~~~~~~~~~~
 

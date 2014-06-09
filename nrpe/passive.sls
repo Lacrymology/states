@@ -30,10 +30,11 @@
   monitoring:
     - managed
     - name: {{ state }}
-{%- for state, name in extra_requirements -%}
-  {%- if loop.first %}
     - require:
-  {%- endif -%}
+      - pkg: nagios-nrpe-server
+{%- for state, name in extra_requirements -%}
       - {{ state }}: {{ name }}
 {%- endfor -%}
+    - watch_in:
+      - service: nagios-nrpe-server
 {%- endmacro -%}

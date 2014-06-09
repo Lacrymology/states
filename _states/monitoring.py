@@ -64,15 +64,6 @@ def managed(name, source=None, template='jinja',
            'result': True,
            'comment': ''}
 
-    # make sure nagios-nrpe-server is required
-    minimal_requirement = {'pkg': 'nagios-nrpe-server'}
-    require = 'require'
-    try:
-        if minimal_requirement not in kwargs[require]:
-            kwargs[require].append(minimal_requirement)
-    except KeyError:
-        kwargs[require] = [minimal_requirement]
-
     context.update({'env': env})
 
     source_hash = ''

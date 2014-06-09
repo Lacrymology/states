@@ -38,7 +38,7 @@ XMPP server
 Pillar
 ------
 
-Follow the instruction in the :doc:`ejabberd/doc/pillar.rst` to create the pillar
+Follow the instruction in the :doc:`/ejabberd/doc/pillar` to create the pillar
 data for git server, for e.g::
 
   ejabberd:

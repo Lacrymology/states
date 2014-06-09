@@ -15,7 +15,7 @@
     - require:
       - file: /etc/nagios/nsca.d
 {%- if caller is defined %}
-      {{ caller()|trim|indent(6) }}
+{{ caller()|trim|indent(6, indentfirst=True) }}
 {%- endif %}
     - watch_in:
       - service: nsca_passive
@@ -38,7 +38,7 @@
     - require:
       - pkg: nagios-nrpe-server
 {%- if caller is defined %}
-      {{ caller()|trim|indent(6) }}
+{{ caller()|trim|indent(6, indentfirst=True) }}
 {%- endif %}
     - watch_in:
       - service: nagios-nrpe-server

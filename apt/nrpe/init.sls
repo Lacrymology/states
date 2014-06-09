@@ -47,5 +47,5 @@ include:
       - pkg: nagios-nrpe-server
 
 {% call passive_check('apt') %}
-  - file: /usr/lib/nagios/plugins/check_apt-rc.py
+- file: /usr/lib/nagios/plugins/check_apt-rc.py
 {% endcall %}

@@ -1,5 +1,5 @@
 #!/usr/bin/env python2
-# -*- coding: utf-8 mode:python -*-
+# -*- coding: utf-8 -*-
 # Copyright (c) 2014, Diep Pham
 # All rights reserved.
 #
@@ -26,7 +26,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 """
-Script to unban from denyhost
+Script to unban from denyhosts
 """
 
 __author__ = 'Diep Pham'

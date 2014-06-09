@@ -32,6 +32,15 @@ Institute for Institutional Innovation by Data Driven Design Inc.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Dang Tung Lam <lamdt@familug.org>
 -#}
-# {{ pillar['message_do_not_modify'] }}
-command[mysql_procs]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u mysql -C mysqld -a '--basedir=/usr --datadir=/var/lib/mysql --plugin-dir=/usr/lib/mysql/plugin --user=mysql --pid-file=/var/run/mysqld/mysqld.pid --socket=/var/run/mysqld/mysqld.sock'
-command[mysql_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 3306
+mysql_procs:
+  description: MariaDB Daemon
+  command: /usr/lib/nagios/plugins/check_procs -c 1:1 -u mysql -C mysqld -a '--basedir=/usr --datadir=/var/lib/mysql --plugin-dir=/usr/lib/mysql/plugin --user=mysql --pid-file=/var/run/mysqld/mysqld.pid --socket=/var/run/mysqld/mysqld.sock'
+
+mysql_port:
+  description: MariaDB Local Port
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 3306
+
+mysql_remote_port:
+  check: check_tcp!3306
+  description: MariaDB Remote Port
+  passive: False

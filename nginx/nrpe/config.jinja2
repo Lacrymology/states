@@ -25,15 +25,20 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-# {{ pillar['message_do_not_modify'] }}
 {%- if salt['pillar.get']('nginx:worker_processes', 'auto') == 'auto' %}
 {%- set num_workers = grains['num_cpus'] %}
 {%- else %}
 {%- set num_workers = pillar['nginx']['worker_processes'] %}
 {%- endif %}
-command[nginx_master]=/usr/lib/nagios/plugins/check_procs -c 1:1 -a 'nginx: master process /usr/sbin/nginx -c /etc/nginx/nginx.conf' -u root
-command[nginx_worker]=/usr/lib/nagios/plugins/check_procs -c {{ num_workers }}:{{ num_workers }} -a 'nginx: worker process' -u www-data
-command[nginx_status]=/usr/lib/nagios/plugins/check_http -H 127.0.0.1 -I 127.0.0.1 -u /nginx_status -p 80 -e '200 OK'{%- if salt['pillar.get']('__test__', False) %} -v{%- endif %}
-{% for log_type in ('access', 'error') %}
-command[nginx_logger_{{ log_type }}]=/usr/lib/nagios/plugins/check_procs -c 1:1 -C logger -a "-f /var/log/nginx/{{ log_type }}.fifo"
-{% endfor %}
+
+{%- set nginx_checks = {
+    'master': ['Master Process', '/usr/lib/nagios/plugins/check_procs -c 1:1 -a "nginx: master process /usr/sbin/nginx -c /etc/nginx/nginx.conf" -u root'],
+    'worker': ['Worker Processes', '/usr/lib/nagios/plugins/check_procs -c {{ num_workers }}:{{ num_workers }} -a "nginx: worker process" -u www-data'],
+    'status': ['Status Page', '/usr/lib/nagios/plugins/check_http -H 127.0.0.1 -I 127.0.0.1 -u /nginx_status -p 80 -e "200 OK"{%- if salt["pillar.get"]("__test__", False) %} -v{%- endif %}'],
+    'logger_access': ['Access Logger', '/usr/lib/nagios/plugins/check_procs -c 1:1 -C logger -a "-f /var/log/nginx/access.fifo"'],
+    'logger_error': ['Error Logger', '/usr/lib/nagios/plugins/check_procs -c 1:1 -C logger -a "-f /var/log/nginx/error.fifo"']} -%}
+{%- for check in nginx_checks %}
+nginx_{{ check }}:
+  description: Nginx {{ nginx_checks[check][0] }}
+  command: {{ nginx_checks[check][1] }}
+{% endfor -%}

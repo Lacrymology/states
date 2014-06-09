@@ -112,16 +112,6 @@ ejabberd_psql:
       - file: ejabberd_psql
       - postgres_database: ejabberd
 
-ejabberd_reload:
-  cmd:
-    - wait
-    - name: ejabberdctl restart && sleep 15 {# wait ejabberd service restart finish #}
-    - require:
-      - pkg: ejabberd
-    - watch:
-      - service: ejabberd
-      - file: ejabberd
-
 {%- for user in salt['pillar.get']('ejabberd:admins') %}
 {%- set password = salt['pillar.get']('ejabberd:admins:' + user) %}
 {%- set hostname = salt['pillar.get']('ejabberd:hostnames')[0] %}
@@ -135,7 +125,6 @@ ejabberd_reg_user_{{ user }}:
     - require:
       - pkg: ejabberd
       - service: ejabberd
-      - cmd: ejabberd_reload
 {%- endfor %}
 
 /etc/nginx/conf.d/ejabberd.conf:

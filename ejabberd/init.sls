@@ -68,6 +68,7 @@ ejabberd:
     - name: ejabberd
     - enable: True
     - order: 50
+    - sig: ejabberd
     - require:
       - pkg: ejabberd
       - cmd: erlang_mod_pgsql

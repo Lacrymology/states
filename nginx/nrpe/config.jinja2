@@ -40,5 +40,5 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 {%- for check in nginx_checks %}
 nginx_{{ check }}:
   description: Nginx {{ nginx_checks[check][0] }}
-  command: {{ nginx_checks[check][1] }}
+  command: '{{ nginx_checks[check][1] }}'
 {% endfor -%}

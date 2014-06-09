@@ -73,7 +73,8 @@ denyhosts:
 /usr/local/bin/denyhosts-unblock:
   file:
     - managed
-    - source: salt://denyhosts/denyhosts-unblock
+    - source: salt://denyhosts/denyhosts-unblock.jinja2
+    - template: jinja
     - user: root
     - group: root
     - mode: 500

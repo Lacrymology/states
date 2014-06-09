@@ -46,4 +46,6 @@ include:
       - module: nrpe-virtualenv
       - pkg: nagios-nrpe-server
 
-{{ passive_check('apt', {'file': '/usr/lib/nagios/plugins/check_apt-rc.py'}) }}
+{% call passive_check('apt') %}
+  - file: /usr/lib/nagios/plugins/check_apt-rc.py
+{% endcall %}

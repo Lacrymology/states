@@ -1,16 +1,4 @@
-{%- macro render_requirement(requirements=[]) %}
-{#- requirements can be a dict or a list of dicts #}
-{%- if requirements is mapping %}
-{%- set requirements = [requirements] %}
-{%- endif %}
-  {%- for adict in requirements %}
-    {%- for state, name in adict.iteritems() %}
-      - {{ state }}: {{ name }}
-    {%- endfor %}
-  {%- endfor %}
-{%- endmacro %}
-
-{%- macro passive_check(state, extra_requirements=[]) %}
+{%- macro passive_check(state) %}
 /etc/nagios/nsca.d/{{ state }}.yml:
   file:
     - managed
@@ -26,7 +14,9 @@
 {%- endif %}
     - require:
       - file: /etc/nagios/nsca.d
-{{ render_requirement(extra_requirements) }}
+{%- if caller is defined %}
+      {{ caller()|trim|indent(6) }}
+{%- endif %}
     - watch_in:
       - service: nsca_passive
 
@@ -47,7 +37,9 @@
 {%- endif %}
     - require:
       - pkg: nagios-nrpe-server
-{{ render_requirement(extra_requirements) }}
+{%- if caller is defined %}
+      {{ caller()|trim|indent(6) }}
+{%- endif %}
     - watch_in:
       - service: nagios-nrpe-server
 {%- endmacro -%}

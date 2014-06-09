@@ -30,11 +30,7 @@ Uninstall ejabberd - XMPP Server
 
 ejabberd:
   pkg:
-{% if salt['pillar.get']('destructive_absent', False) %}
     - purged
-{% else %}
-    - removed
-{% endif %}
     - require:
       - service: ejabberd
   service:
@@ -48,4 +44,3 @@ ejabberd:
     - require:
       - pkg: ejabberd
 {%- endfor %}
-

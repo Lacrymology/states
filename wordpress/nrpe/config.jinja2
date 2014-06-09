@@ -37,13 +37,3 @@ Maintainer: Lam Dang Tung <lamdt@familug.org>
 {%- set deployment = 'wordpress' %}
 {{ uwsgi_instance(deployment) }}
 {{ nginx_instance(deployment) }}
-
-wordpress_backup_file_procs:
-  description: Wordpress Backup File Process
-{# TODO revert command nrpe for those 3 checks #}
-
-wordpress_backup_mysql_procs:
-  description: Wordpress Backup MySQL Process
-
-wordpress_backup:
-  description: Wordpress Backup Age And Size

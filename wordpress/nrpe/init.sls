@@ -63,4 +63,4 @@ include:
       username: {{ salt['pillar.get']('wordpress:db:username', 'wordpress') }}
       password: {{ salt['password.pillar']('wordpress:db:password', 10) }}
 
-{{ passive_check('wordpress', {'uwsgi': 'wordpress'}) }}
+{{ passive_check('wordpress') }}

@@ -36,21 +36,4 @@ include:
   - rsyslog.nrpe
   - virtualenv.nrpe
 
-/etc/nagios/nrpe.d/diamond.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://diamond/nrpe/config.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-
 {{ passive_check('diamond') }}
-
-extend:
-  nagios-nrpe-server:
-    service:
-      - watch:
-        - file: /etc/nagios/nrpe.d/diamond.cfg

@@ -83,6 +83,6 @@ include:
       - user: web
 
 {%- call passive_check('uwsgi') %}
-- file: /usr/lib/nagios/plugins/check_uwsgi_nostderr
-- file: /etc/sudoers.d/nrpe_uwsgi
+    - file: /usr/lib/nagios/plugins/check_uwsgi_nostderr
+    - file: /etc/sudoers.d/nrpe_uwsgi
 {%- endcall %}

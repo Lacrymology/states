@@ -54,6 +54,10 @@ server {
 {# web app logic #}
     server_name {% for hostname in pillar['ejabberd']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
 
+{% include "nginx/block_hacks.jinja2" %}
+
+{% include "nginx/location_robots.jinja2" %}
+
     location / {
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;

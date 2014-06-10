@@ -42,14 +42,8 @@ server {
 {# https server #}
 server {
 {% endif %}{# redirect http to https #}
-    listen 443 ssl;
-    ssl_certificate /etc/ssl/{{ pillar['ejabberd']['ssl'] }}/chained_ca.crt;
-    ssl_certificate_key /etc/ssl/{{ pillar['ejabberd']['ssl'] }}/server.pem;
-    ssl_client_certificate /etc/ssl/{{ pillar['ejabberd']['ssl'] }}/ca.crt;
-    ssl_ciphers RC4:HIGH:!aNULL:!MD5;
-    ssl_prefer_server_ciphers on;
-    ssl_session_cache shared:SSL:10m;
-    ssl_session_timeout 10m;
+{%- from 'nginx/macro.jinja2' import ssl_config with context %}
+    {{ ssl_config(pillar['ejabberd']['ssl']) }}
 {% endif %}
 {# web app logic #}
     server_name {% for hostname in pillar['ejabberd']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};

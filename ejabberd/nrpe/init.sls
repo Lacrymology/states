@@ -34,6 +34,7 @@ include:
   - nginx.nrpe
   - nrpe
   - postgresql.server.nrpe
+  - ssl.nrpe
 
 /etc/nagios/nrpe.d/ejabberd.cfg:
   file:
@@ -64,6 +65,7 @@ include:
       http_uri: /admin
 {%- if salt['pillar.get']('ejabberd:ssl', False) %}
       https: True
+      https_result: 401 Unauthorized
     {%- if salt['pillar.get']('ejabberd:ssl_redirect', False) %}
       http_result: 301 Moved Permanently
     {%- endif -%}

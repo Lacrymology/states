@@ -35,42 +35,5 @@ include:
 {% if salt['pillar.get']('jenkins:ssl', False) %}
   - ssl.nrpe
 {% endif %}
-/etc/nagios/nrpe.d/jenkins.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://jenkins/nrpe/config.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-
-/etc/nagios/nrpe.d/jenkins-nginx.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://nginx/nrpe/instance.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-    - context:
-      deployment: jenkins
-      domain_name: {{ pillar['jenkins']['hostnames'][0] }}
-{%- if salt['pillar.get']('jenkins:ssl', False) %}
-      https: True
-    {%- if salt['pillar.get']('jenkins:ssl_redirect', False) %}
-      http_result: 301 Moved Permanently
-    {%- endif -%}
-{%- endif %}
 
 {{ passive_check('jenkins') }}
-
-extend:
-  nagios-nrpe-server:
-    service:
-      - watch:
-        - file: /etc/nagios/nrpe.d/jenkins.cfg
-        - file: /etc/nagios/nrpe.d/jenkins-nginx.cfg

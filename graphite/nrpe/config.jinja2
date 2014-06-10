@@ -25,25 +25,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
-graphite_nginx_http:
-  description: Graphite HTTP protocol
-
-graphite_nginx_https:
-  description: Graphite HTTPS protocol
-
-graphite_nginx_https_certificate:
-  description: HTTPS Certificate Expiration
-  check_interval: 1440 {#- only need to check https certificate each day #}
-  freshness_threshold: {{ (1440 + 10) * 60 }}
-
-graphite_postgresql:
-  description: PostgreSQL database
-
-graphite_uwsgi_master:
-  description: uWSGI Master Process
-
-graphite_uwsgi_worker:
-  description: uWSGI Workers Process
-
-graphite_uwsgi_ping:
-  description: uWSGI Ping
+{%- from 'uwsgi/nrpe/instance.jinja2' import uwsgi_instance with context -%}
+{%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
+{%- from 'postgresql/server/nrpe/instance.jinja2' import postgresql_instance with context -%}
+{%- set deployment = 'graphite' %}
+{{ uwsgi_instance(deployment, prefix='graphite:web') }}
+{{ nginx_instance(deployment, timeout=120, http_uri='/account/login', prefix='graphite:web') }}
+{{ postgresql_instance({{ salt['pillar.get']('graphite:web:db:name', 'graphite') }}, username={{ salt['pillar.get']('graphite:web:db:username', 'graphite') }}, password={{ salt['password.pillar']('graphite:web:db:password', 10) }}) }}

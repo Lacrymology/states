@@ -34,13 +34,9 @@ include:
 
 /etc/nagios/nrpe.d/backup-saltmaster.cfg:
   file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://salt/master/backup/nrpe/config.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
+    - absent
     - watch_in:
       - service: nagios-nrpe-server
+
+{%- from 'nrpe/passive.sls' import passive_check with context %}
+{{ passive_check('salt.master.backup') }}

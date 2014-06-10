@@ -34,13 +34,9 @@ include:
 
 /etc/nagios/nrpe.d/backup-graylog2.cfg:
   file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://graylog2/server/backup/nrpe/config.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
+    - absent
     - watch_in:
       - service: nagios-nrpe-server
+
+{%- from 'nrpe/passive.sls' import passive_check with context %}
+{{ passive_check('graylog2.server.backup') }}

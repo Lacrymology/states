@@ -34,13 +34,7 @@ include:
 
 /etc/nagios/nrpe.d/backup-gitlab.cfg:
   file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://gitlab/backup/nrpe/config.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-    - watch_in:
-      - service: nagios-nrpe-server
+    - absent
+
+{%- from 'nrpe/passive.sls' import passive_check with context %}
+{{ passive_check('gitlab.backup') }}

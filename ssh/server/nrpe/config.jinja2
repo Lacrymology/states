@@ -25,6 +25,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-# {{ pillar['message_do_not_modify'] }}
-command[ssh_procs]=/usr/lib/nagios/plugins/check_procs -c 1:1 -C sshd -u root -a /usr/sbin/sshd
-command[ssh_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p {{ salt['pillar.get']('ssh:ports', [22])[0] }}
+ssh_procs:
+  description: SSH Server Daemon
+  command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -C sshd -u root -a /usr/sbin/sshd'
+
+ssh_port:
+  description: SSH Server Local Port
+  command: "/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p {{ salt['pillar.get']('ssh:ports', [22])[0] }}"

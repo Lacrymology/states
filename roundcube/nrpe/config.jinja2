@@ -25,31 +25,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
-roundcube_nginx_http:
-  description: RoundCube HTTP Protocol
-
-roundcube_nginx_https:
-  description: RoundCube HTTPS Protocol
-
-roundcube_nginx_https_certificate:
-  description: RoundCube HTTPS Certificate Expiration
-  check_interval: 1440 {#- only need to check https certificate each day #}
-  freshness_threshold: {{ (1440 + 10) * 60 }}
-
-roundcube_postgresql:
-  description: RoundCube PostgreSQL database
-
-roundcube_uwsgi_master:
-  description: RoundCube uWSGI Master Process
-
-roundcube_uwsgi_worker:
-  description: RoundCube uWSGI Workers Process
-
-roundcube_uwsgi_ping:
-  description: RoundCube uWSGI Ping
-
-roundcube_backup_postgres_procs:
-  description: RoundCube Backup PostgreSQL Database Process
-
-roundcube_backup:
-  description: RoundCube Backup Age And Size
+{%- from 'uwsgi/nrpe/instance.jinja2' import uwsgi_instance with context -%}
+{%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
+{%- from 'postgresql/server/nrpe/instance.jinja2' import postgresql_instance_prefix with context -%}
+{%- set deployment = 'roundcube' %}
+{{ uwsgi_instance(deployment) }}
+{{ nginx_instance(deployment) }}
+{{ postgresql_instance_prefix(deployment) }}

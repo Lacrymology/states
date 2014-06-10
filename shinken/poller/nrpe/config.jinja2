@@ -25,6 +25,16 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-# {{ pillar['message_do_not_modify'] }}
-command[shinken_poller_procs]=/usr/lib/nagios/plugins/check_procs -c 1:10 -C shinken-poller
-command[shinken_poller_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 7771
+shinken_poller_procs:
+  description: Shinken Poller Deamon
+  passive: False
+  command: '/usr/lib/nagios/plugins/check_procs -c 1:10 -C shinken-poller'
+
+shinken_poller_port:
+  description: Shinken Poller Local Port
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 7771
+
+shinken_poller_remote_port:
+  description: Shinken Poller Remote Port
+  check: check_tcp!7771
+  passive: False

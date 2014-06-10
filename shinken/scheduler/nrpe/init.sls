@@ -36,21 +36,4 @@ include:
 {% endif %}
   - virtualenv.nrpe
 
-/etc/nagios/nrpe.d/shinken-scheduler.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://shinken/scheduler/nrpe/config.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-
 {{ passive_check('shinken.scheduler') }}
-
-extend:
-  nagios-nrpe-server:
-    service:
-      - watch:
-        - file: /etc/nagios/nrpe.d/shinken-scheduler.cfg

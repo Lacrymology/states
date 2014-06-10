@@ -25,7 +25,17 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+shinken_arbiter_procs:
+  description: Shinken Arbiter Daemon
+  passive: False # TODO this wrong?
 {#- for some reason arbiter don't change it's user id to shinken #}
-command[shinken_arbiter_procs]=/usr/lib/nagios/plugins/check_procs -c 1:10 -u root -C shinken-arbiter
-command[shinken_arbiter_port]=/usr/lib/nagios/plugins/check_tcp -H {{ salt['mine.get'](grains['id'], 'monitoring.data')[grains['id']]['ip_addrs']['private'] }} -p 7770
+  command: '/usr/lib/nagios/plugins/check_procs -c 1:10 -u root -C shinken-arbiter'
+
+shinken_arbiter_port:
+  description: Shinken Arbiter Local Port
+  command: "/usr/lib/nagios/plugins/check_tcp -H {{ salt['mine.get'](grains['id'], 'monitoring.data')[grains['id']]['ip_addrs']['private'] }} -p 7770"
+
+shinken_arbiter_remote_port:
+  description: Shinken Arbiter Remote Port
+  check: check_tcp!7770
+  passive: False

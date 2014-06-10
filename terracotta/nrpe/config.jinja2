@@ -25,8 +25,33 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
-command[terracotta_procs]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u terracotta -C java -a 'com.tc.server.TCServerMain'
-command[terracotta_dso_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 9510
-command[terracotta_jmx_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 9520
-command[terracotta_communicate_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 9530
+terracotta_procs:
+  description: Terracotta Daemon
+  command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -u terracotta -C java -a 'com.tc.server.TCServerMain'"
+
+terracotta_dso_local_port:
+  description: Terracotta DSO Local Port
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 9510
+
+terracotta_dso_remote_port:
+  check: check_tcp!9510
+  description: Terracotta DSO Remote Port
+  passive: False
+
+terracotta_jmx_local_port:
+  description: Terracotta JMX Local Port
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 9520
+
+terracotta_jmx_remote_port:
+  check: check_tcp!9520
+  description: Terracotta JMX Remote Port
+  passive: False
+
+terracotta_communicate_local_port:
+  description: Terracotta Communicate Local Port
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 9530
+
+terracotta_communicate_remote_port:
+  check: check_tcp!9530
+  description: Terracotta Communicate Remote Port
+  passive: False

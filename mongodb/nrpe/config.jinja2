@@ -25,8 +25,20 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-# {{ pillar['message_do_not_modify'] }}
-command[mongodb_procs]=/usr/lib/nagios/plugins/check_procs -c 1:1 -C mongod -u mongodb
-command[mongodb_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 27017
-command[mongodb_http]=/usr/lib/nagios/plugins/check_http -I 127.0.0.1 -p 28017{%- if salt['pillar.get']('__test__', False) %} -v{%- endif %}
-command[mongodb_port_http]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 28017
+mongodb_http:
+  description: MongoDB HTTP Interface
+  command: /usr/lib/nagios/plugins/check_http -I 127.0.0.1 -p 28017{%- if salt['pillar.get']('__test__', False) %} -v{%- endif %}
+
+mongodb_port:
+  description: MongoDB Port
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 27017
+
+mongodb_procs:
+  description: MongoDB Daemon
+  command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -C mongod -u mongodb'
+
+mongodb_port_http:
+  description: MongoDB HTTP Port
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 28017
+
+{#- TODO: remote port check? #}

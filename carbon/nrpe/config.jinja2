@@ -25,15 +25,53 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
 {%- set instances_count = pillar['graphite']['carbon']['instances'] %}
-command[carbon_relay_procs]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u graphite -C python -a "/usr/local/graphite/bin/carbon-relay.py --config=/etc/graphite/carbon.conf start"
-command[carbon_cache_procs]=/usr/lib/nagios/plugins/check_procs -c {{ instances_count }}:{{ instances_count }} -u graphite -C python  -a "/usr/local/graphite/bin/carbon-cache.py --config=/etc/graphite/carbon.conf"
 {% for instance in range(instances_count) %}
-command[carbon_cache_{{ instance }}_procs]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u graphite -C python -a "/usr/local/graphite/bin/carbon-cache.py --config=/etc/graphite/carbon.conf --instance={{ instance }} start"
-command[carbon_cache_{{ instance }}_port_plaintext]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 20{{ instance|int + 1 }}3
-command[carbon_cache_{{ instance }}_port_pickle]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 20{{ instance|int + 1 }}4
-command[carbon_cache_{{ instance }}_port_cache_query]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 70{{ instance|int + 1 }}2
+carbon_cache_{{ instance }}_procs:
+  description: Carbon Cache Instance {{ instance }}
+  command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -u graphite -C python -a "/usr/local/graphite/bin/carbon-cache.py --config=/etc/graphite/carbon.conf --instance={{ instance }} start"'
+
+carbon_cache_{{ instance }}_port_plaintext:
+  description: Carbon Cache {{ instance }} Port Plaintext
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 20{{ instance|int + 1 }}3
+
+carbon_cache_{{ instance }}_port_pickle:
+  description: Carbon Cache {{ instance }} Port Pickle
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 20{{ instance|int + 1 }}4
+
+carbon_cache_{{ instance }}_port_cache_query:
+  description: Carbon Cache {{ instance }} Port Cache Query
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 70{{ instance|int + 1 }}2
 {% endfor %}
-command[carbon_port_plaintext]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 2003
-command[carbon_port_pickle]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 2004
+
+carbon_cache_procs:
+  description: Carbon Cache Instances
+  command: '/usr/lib/nagios/plugins/check_procs -c {{ instances_count }}:{{ instances_count }} -u graphite -C python  -a "/usr/local/graphite/bin/carbon-cache.py --config=/etc/graphite/carbon.conf"'
+
+carbon_relay_procs:
+  description: Carbon Relay Instance
+  command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -u graphite -C python -a "/usr/local/graphite/bin/carbon-relay.py --config=/etc/graphite/carbon.conf start"'
+
+carbon-remote-port-plaintext:
+  description: Carbon Remote Port PlainText Protocol
+  check: check_tcp!2003
+  passive: False
+
+carbon-remote-port-pickle:
+  description: Carbon Remote Port Pickle Protocol
+  check: check_tcp!2004
+  passive: False
+
+carbon_port_plaintext:
+  description: Carbon Local Port PlainText Protocol
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 2003
+
+carbon_port_pickle:
+  description: Carbon Local Port Pickle Protocol
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 2004
+
+carbon_backup_file_procs:
+  description: Carbon Backup Files Process
+
+carbon_backup:
+  description: Carbon Backup Age And Size

@@ -1,7 +1,7 @@
 #!/usr/local/nagios/bin/python
 # -*- coding: utf-8 -*-
 
-# Copyright (c) 2013, Quan Tong Anh
+# Copyright (c) 2014, Quan Tong Anh
 # All rights reserved.
 # 
 # Redistribution and use in source and binary forms, with or without

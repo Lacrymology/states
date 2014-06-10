@@ -38,16 +38,34 @@ sslyze:
   archive:
     - extracted
     - name: /usr/local/src
+{%- if grains['osarch'] == 'amd64' %}
+  {%- if 'files_archive' in pillar %}
+    - source: {{ pillar['files_archive'] }}/mirror/sslyze-{{ version|replace(".", "_") }}-linux64.zip
+  {%- else %}
     - source: https://github.com/iSECPartners/sslyze/releases/download/release-{{ version }}/sslyze-{{ version|replace(".", "_") }}-linux64.zip
+  {%- endif %}
     - source_hash: md5=1b5a235f97db11cc2f72ccb499d861f0
-    - archive_format: zip
     - if_missing: /usr/local/src/sslyze-{{ version|replace(".", "_") }}-linux64
+{%- else %}
+  {%- if 'files_archive' in pillar %}
+    - source: {{ pillar['files_archive'] }}/mirror/sslyze-{{ version|replace(".", "_") }}-linux32.zip
+  {%- else %}
+    - source: https://github.com/iSECPartners/sslyze/releases/download/release-{{ version }}/sslyze-{{ version|replace(".", "_") }}-linux32.zip
+  {%- endif %}
+    - source_hash: md5=4471cfc348b4d1777fc39dc9200f6cc5
+    - if_missing: /usr/local/src/sslyze-{{ version|replace(".", "_") }}-linux32
+{%- endif %}
+    - archive_format: zip
     - require:
       - file: /usr/local/src
       - pkg: unzip
   cmd:
     - wait
+{%- if grains['osarch'] == 'amd64' %}
     - cwd: /usr/local/src/sslyze-{{ version|replace(".", "_") }}-linux64
+{%- else %}
+    - cwd: /usr/local/src/sslyze-{{ version|replace(".", "_") }}-linux32
+{%- endif %}
     - name: /usr/local/nagios/bin/python setup.py install
     - watch:
       - archive: sslyze

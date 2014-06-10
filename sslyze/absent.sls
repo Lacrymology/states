@@ -25,11 +25,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Quan Tong Anh <quanta@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
-include:
-  - apt
-
-unzip:
-  pkg:
-    - installed
-    - require:
-      - cmd: apt_sources
+{% for file in ('/usr/local/src/sslyze-0_9-linux32/', '/usr/lib/nagios/plugins/check_ssl_configuration.py', '/usr/local/nagios/salt-sslyze-requirements.txt') %}
+{{ file }}:
+  file:
+    - absent
+{% endfor %}

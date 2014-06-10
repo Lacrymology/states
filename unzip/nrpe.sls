@@ -26,10 +26,4 @@ Author: Quan Tong Anh <quanta@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
 include:
-  - apt
-
-unzip:
-  pkg:
-    - installed
-    - require:
-      - cmd: apt_sources
+  - apt.nrpe

@@ -35,8 +35,4 @@ include:
   - rsyslog.nrpe
   - web
 
-      database: {{ salt['pillar.get']('proftpd:db:name', 'proftpd') }}
-      username: {{ salt['pillar.get']('proftpd:db:username', 'proftpd') }}
-      password: {{ salt['password.pillar']('proftpd:db:password', 10) }}
-
 {{ passive_check('proftpd') }}

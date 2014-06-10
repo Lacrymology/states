@@ -93,8 +93,12 @@ Hostname
 			{access, c2s},
 			{shaper, c2s_shaper},
 			{max_stanza_size, 65536},
-                        %%zlib,
+{%- if salt['pillar.get']('ejabberd:ssl', False) %}
+            %%zlib,
 			starttls, {certfile, "/etc/ssl/private/{{ pillar['ejabberd']['ssl'] }}.pem"}
+{%- else %}
+            %%zlib
+{%- endif %}
 		       ]},
 
 {%- if salt['pillar.get']('ejabberd:server_to_server', False) %}
@@ -142,6 +146,7 @@ Hostname
  You must specify a certificate file.
 
 #}
+{%- if salt['pillar.get']('ejabberd:ssl', False) %}
 {s2s_use_starttls, true}.
 
 {#-
@@ -149,7 +154,7 @@ Hostname
 
 #}
 {s2s_certfile, "/etc/ssl/private/{{ pillar['ejabberd']['ssl'] }}.pem"}.
-
+{%- endif %}
 {#-
  domain_certfile: Specify a different certificate for each served hostname.
 

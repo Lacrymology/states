@@ -37,35 +37,6 @@ include:
   - ssl.nrpe
   - nginx.nrpe
 {% endif %}
-
-/etc/nagios/nrpe.d/elasticsearch.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://elasticsearch/nrpe/config.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-
-/etc/nagios/nrpe.d/elasticsearch-nginx.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://nginx/nrpe/instance.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-      - file: /usr/lib/nagios/plugins/check_elasticsearch_cluster.py
-    - context:
-      deployment: elasticsearch
-      http_port: 9200
-      domain_name: 127.0.0.1
-      https: {{ ssl }}
-
 /usr/local/bin/check_elasticsearch_cluster.py:
   file:
     - absent
@@ -106,11 +77,6 @@ pyelasticsearch:
       - module: pyelasticsearch
       - pkg: nagios-nrpe-server
 
-{{ passive_check('elasticsearch') }}
-
-extend:
-  nagios-nrpe-server:
-    service:
-      - watch:
-        - file: /etc/nagios/nrpe.d/elasticsearch.cfg
-        - file: /etc/nagios/nrpe.d/elasticsearch-nginx.cfg
+{%- call passive_check('elasticsearch') %}
+- file: /usr/lib/nagios/plugins/check_elasticsearch_cluster.py
+{%- endcall %}

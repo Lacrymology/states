@@ -25,19 +25,55 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
-command[dovecot_procs]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u root -C dovecot
-command[dovecot_anvil]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u dovecot -a 'dovecot/anvil' -C anvil
-command[dovecot_log]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u root -a 'dovecot/log' -C log
-command[dovecot_config]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u root -a 'dovecot/config' -C config
-command[dovecot_port_imap]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 143
-command[dovecot_port_pop3]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 110
+dovecot_config:
+  description: Dovecot Config daemon
+  command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -u root -a 'dovecot/config' -C config"
+
+dovecot_log:
+  description: Dovecot Logger
+  command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -u root -a 'dovecot/log' -C log"
+
+dovecot_procs:
+  description: Dovecot Master
+  command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -u root -C dovecot'
+
+dovecot_anvil:
+  description: Dovecot Users connection tracker
+  command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -u dovecot -a 'dovecot/anvil' -C anvil"
+
+dovecot_port_imaps:
+  description: Dovecot IMAPS Port
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 143
+
+dovecot_backup_file_procs:
+  description: Dovecot Backup Files Process
+
+dovecot_backup:
+  description: Dovecot Backup Age And Size
+
+{#- TODO: check remote port? #}
 {%- if salt['pillar.get']('dovecot:ssl', False) %}
-command[dovecot_port_imaps]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 993
-command[dovecot_port_pop3s]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 995
-command[dovecot_simap]=/usr/lib/nagios/plugins/check_simap -H 127.0.0.1 -p 993
+dovecot_port_imaps:
+  description: Dovecot IMAPS Port
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 993
+
+dovecot_port_pop3s:
+  description: Dovecot POP3S Port
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 995
+
+dovecot_simap:
+  description: Dovecot SIMAP
+  command: /usr/lib/nagios/plugins/check_simap -H 127.0.0.1 -p 993
+
 {%- else %}
-command[dovecot_imap]=/usr/lib/nagios/plugins/check_imap -H 127.0.0.1 -p 143
+dovecot_imap:
+  description: Dovecot IMAP
+  command: /usr/lib/nagios/plugins/check_imap -H 127.0.0.1 -p 143
+
+dovecot_port_pop3:
+  description: Dovecot POP3 Port
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 110
 {%- endif %}
+
 {#- TODO: http://wiki2.dovecot.org/RunningDovecot add more processes #}
 {#- TODO: use /usr/lib/nagios/plugins/check_spop #}

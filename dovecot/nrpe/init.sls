@@ -36,21 +36,5 @@ include:
 {%- if ssl %}
   - ssl.nrpe
 {%- endif %}
-/etc/nagios/nrpe.d/dovecot.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://dovecot/nrpe/config.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
 
 {{ passive_check('dovecot') }}
-
-extend:
-  nagios-nrpe-server:
-    service:
-      - watch:
-        - file: /etc/nagios/nrpe.d/dovecot.cfg

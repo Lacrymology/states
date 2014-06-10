@@ -1,5 +1,5 @@
 {#-
- Copyright (c) 2013, Bruno Clermont
+Copyright (c) 2013, Bruno Clermont
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -25,9 +25,24 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-# {{ pillar['message_do_not_modify'] }}
-command[graylog2_procs]=/usr/lib/nagios/plugins/check_procs -c 1:1 -C java -a '-jar /usr/local/graylog2-server-{{ version }}/graylog2-server.jar'
+
+{% set version = '0.11.0' %}
+graylog2_procs:
+  description: Graylog2 Daemon
+  command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -C java -a '-jar /usr/local/graylog2-server-{{ version }}/graylog2-server.jar'"
+
 {#- if graylog2_address isn't 127.0.0.1 test fail -#}
 {%- if not salt['pillar.get']('__test__', False) %}
-command[graylog2_incoming_logs]=/usr/lib/nagios/plugins/check_new_logs.py -w 1:50000 -t 60
+graylog2_incoming_logs:
+  description: Incoming Logs Rate
+  command: '/usr/lib/nagios/plugins/check_new_logs.py -w 1:50000 -t 60'
 {%- endif %}
+
+graylog2_elasticsearch_cluster:
+  description: Graylog2 Elasticsearch Cluster
+
+graylog2_elasticsearch_port_http:
+  description: Graylog2 Elasticsearch Local HTTP Port
+
+graylog2_elasticsearch_port_transport:
+  description: Graylog2 Elasticsearch Local Transport Port

@@ -35,8 +35,6 @@ include:
   - nrpe
   - rsyslog.nrpe
 
-{% set version = '0.11.0' %}
-
 /usr/lib/nagios/plugins/check_new_logs.py:
   file:
     - managed
@@ -49,27 +47,14 @@ include:
       - module: pyelasticsearch
       - pkg: nagios-nrpe-server
 
-/etc/nagios/nrpe.d/graylog2-server.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://graylog2/server/nrpe/config.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
+
+{%- call passive_check('graylog2.server') %}
       - file: /usr/lib/nagios/plugins/check_new_logs.py
-    - context:
-      version: {{ version }}
+{%- endcall %}
 
-{{ passive_check('graylog2.server') }}
 
+#TODO FIXME
 extend:
-  nagios-nrpe-server:
-    service:
-      - watch:
-        - file: /etc/nagios/nrpe.d/graylog2-server.cfg
   /etc/nagios/nrpe.d/elasticsearch.cfg:
     file:
       - context:

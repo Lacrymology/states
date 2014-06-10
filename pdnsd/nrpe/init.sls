@@ -32,21 +32,4 @@ include:
   - apt.nrpe
   - nrpe
 
-/etc/nagios/nrpe.d/pdnsd.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://pdnsd/nrpe/config.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-
 {{ passive_check('pdnsd') }}
-
-extend:
-  nagios-nrpe-server:
-    service:
-      - watch:
-        - file: /etc/nagios/nrpe.d/pdnsd.cfg

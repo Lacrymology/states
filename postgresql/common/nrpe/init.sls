@@ -109,7 +109,6 @@ extend:
   nagios-nrpe-server:
     service:
       - watch:
-        - file: /etc/nagios/nrpe.d/postgresql.cfg
         - file: /etc/nagios/nrpe.d/postgresql-monitoring.cfg
       - require:
         - postgres_database: postgresql_monitoring

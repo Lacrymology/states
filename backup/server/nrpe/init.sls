@@ -63,23 +63,7 @@ include:
     - require:
       - pkg: sudo
 
-/etc/nagios/nrpe.d/backups.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://backup/server/nrpe/config.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
+{%- call passive_check('backup.server') %}
       - file: /etc/sudoers.d/nrpe_backups
       - file: /usr/lib/nagios/plugins/check_backups.py
-
-{{ passive_check('backup.server') }}
-
-extend:
-  nagios-nrpe-server:
-    service:
-      - watch:
-        - file: /etc/nagios/nrpe.d/backups.cfg
+{%- endcall %}

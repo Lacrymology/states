@@ -29,3 +29,14 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 command[discourse_backup_postgres_procs]=/usr/lib/nagios/plugins/check_procs -c 0:1 -u root -a "/usr/local/bin/backup-postgresql {{ salt['pillar.get']('discourse:db:name', 'discourse') }}"
 command[discourse_backup_file_procs]=/usr/lib/nagios/plugins/check_procs -c 0:1 -u root -a '/usr/local/bin/backup-file discourse /usr/local/discourse-0.9.6.3/public uploads'
 command[discourse_backup]=/usr/lib/nagios/plugins/check_backup.py -w {{ salt['pillar.get']('backup:age', 48) }} discourse
+
+
+#TODO FIXME
+discourse_backup_file_procs:
+  description: Discourse Backup Files Process
+
+discourse_backup_postgres_procs:
+  description: Discourse Backup PostgreSQL Database Process
+
+discourse_backup:
+  description: Discourse Backup Age And Size

@@ -32,34 +32,10 @@ Institute for Institutional Innovation by Data Driven Design Inc.
 Author: Lam Dang Tung <lamdt@familug.org>
 Maintainer: Lam Dang Tung <lamdt@familug.org>
 -#}
-discourse_uwsgi_master:
-  description: Discourse uWSGI Master Process
-
-discourse_uwsgi_worker:
-  description: Discourse uWSGI Workers Process
-
-discourse_uwsgi_ping:
-  description: Discourse uWSGI Ping
-
-discourse_nginx_http:
-  description: Discourse HTTP protocol
-
-discourse_nginx_https:
-  description: Discourse HTTPS protocol
-
-discourse_nginx_https_certificate:
-  description: HTTPS Certificate Expiration
-  check_interval: 1440 {#- only need to check https certificate each day #}
-  freshness_threshold: {{ (1440 + 10) * 60 }}
-
-discourse_postgresql:
-  description: Discourse PostgreSQL database
-
-discourse_backup_file_procs:
-  description: Discourse Backup Files Process
-
-discourse_backup_postgres_procs:
-  description: Discourse Backup PostgreSQL Database Process
-
-discourse_backup:
-  description: Discourse Backup Age And Size
+{%- from 'uwsgi/nrpe/instance.jinja2' import uwsgi_instance with context -%}
+{%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
+{%- from 'postgresql/server/nrpe/instance.jinja2' import postgresql_instance with context -%}
+{%- set deployment = 'discourse' %}
+{{ uwsgi_instance(deployment) }}
+{{ nginx_instance(deployment, timeout=120) }}
+{{ postgresql_instance({{ salt['pillar.get']('discourse:db:name', 'discourse') }}, username={{ salt['pillar.get']('discourse:db:username', 'discourse') }}, password={{ salt['password.pillar']('discourse:db:password', 10) }}) }}

@@ -25,12 +25,36 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+
 {% set workers = salt['pillar.get']('salt_master:workers', 5) %}
-command[salt_master_procs]=/usr/lib/nagios/plugins/check_procs -c {{ workers }}:{{ workers|int + 10 }} -C salt-master -u root
-command[salt_master_port_publish]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 4505
-command[salt_master_port_ret]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 4506
+
+salt_master_procs:
+  description: Salt Master Daemon
+  command: '/usr/lib/nagios/plugins/check_procs -c {{ workers }}:{{ workers|int + 10 }} -C salt-master -u root'
+
+salt-master-remote-port-publish:
+  description: Salt Master Remote Port Publish
+  check: check_tcp!4505
+  passive: False
+
+salt-master-remote-port-ret:
+  description: Salt Master Remote Port Return
+  check: check_tcp!4506
+  passive: False
+
+salt_master_port_publish:
+  description: Salt Master Local Port Publish
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 4505
+
+salt_master_port_ret:
+  description: Salt Master Local Port Return
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 4506
+
 {% if not salt['pillar.get']('__test__', False) %}
+salt_master_mine:
+  description: Salt Master Unfinished Minions
+  check_interval: 360
+  freshness_threshold: {{ (360 + 10) * 60 }}
 {#- sudo for reading salt config files #}
-command[salt_master_mine]=sudo /usr/lib/nagios/plugins/check_mine_minions.py --data /var/lib/nagios/salt_mine.yaml
+  command: sudo /usr/lib/nagios/plugins/check_mine_minions.py --data /var/lib/nagios/salt_mine.yaml
 {%- endif %}

@@ -25,8 +25,15 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
 {%- set max_proc = salt['pillar.get']('mail:maxproc', 2) %}
-command[amavis_master]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u amavis -a 'amavisd (master)' -C amavisd
-command[amavis_child]=/usr/lib/nagios/plugins/check_procs -c {{ max_proc }}:{{ max_proc }} -u amavis -a 'amavisd (virgin child)' -C amavisd
-command[amavis_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 10024
+amavis_master:
+  description: Amavis Master Process
+  command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -u amavis -a 'amavisd (master)' -C amavisd'
+
+amavis_child:
+  description: Amavis Child Processes
+  command: "/usr/lib/nagios/plugins/check_procs -c {{ max_proc }}:{{ max_proc }} -u amavis -a 'amavisd (virgin child)' -C amavisd"
+
+amavis_port:
+  description: Amavis Listen Port
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 10024

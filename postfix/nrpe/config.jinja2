@@ -25,16 +25,33 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
-command[postfix_master]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u root -C master
-command[postfix_pickup]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u postfix -C pickup -a '-l -t fifo -u -c'
-command[postfix_qmgr]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u postfix -C qmgr -a '-l -t fifo -u'
-command[postfix_port_smtp]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 25
+postfix_qmgr:
+  description: Postfix Queue manager
+  command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -u postfix -C qmgr -a '-l -t fifo -u'"
+
+postfix_pickup:
+  description: Postfix Local mail pickup
+  command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -u postfix -C pickup -a '-l -t fifo -u -c'"
+
+postfix_master:
+  description: Postfix Master
+  command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -u root -C master'
+
+postfix_port_smtp:
+  description: Postfix SMTP Port
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 25
+
 {%- if salt['pillar.get']('postfix:spam_filter', False) %}
-command[postfix_port_spam_handler]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 10025
-{%- endif -%}
+port_spam_handler:
+  description: Port SPAM handler
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 10025
+{%- endif %}
+
 {%- if salt['pillar.get']('postfix:ssl', False) %}
-command[postfix_port_smtps]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 465
-{%- endif -%}
+port_smtps:
+  description: SMTP over SSL Port
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 465
+{%- endif %}
+
 {#- TODO: use /usr/lib/nagios/plugins/check_smtp -#}
 {#- TODO: use /usr/lib/nagios/plugins/check_mailq -#}

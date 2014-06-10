@@ -26,6 +26,7 @@ Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
 # {{ pillar['message_do_not_modify'] }}
+{% set version="9.2" %}
 postgresql_procs:
   description: PostgreSQL Daemon
   command: "/usr/lib/nagios/plugins/check_procs -c 1:2 -a '/usr/lib/postgresql/{{ version }}/bin/postgres -D /var/lib/postgresql/{{ version }}/main -c config_file=/etc/postgresql/{{ version }}/main/postgresql.conf' -C postgres -u postgres"

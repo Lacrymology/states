@@ -94,7 +94,7 @@ Hostname
 			{shaper, c2s_shaper},
 			{max_stanza_size, 65536},
                         %%zlib,
-			starttls, {certfile, "/etc/ejabberd/ejabberd.pem"}
+			starttls, {certfile, "/etc/ssl/{{ pillar['ejabberd']['ssl'] }}/server.pem"}
 		       ]},
 
 {%- if salt['pillar.get']('ejabberd:server_to_server', False) %}
@@ -148,7 +148,7 @@ Hostname
  s2s_certfile: Specify a certificate file.
 
 #}
-{s2s_certfile, "/etc/ejabberd/ejabberd.pem"}.
+{s2s_certfile, "/etc/ssl/{{ pillar['ejabberd']['ssl'] }}/server.pem"}.
 
 {#-
  domain_certfile: Specify a different certificate for each served hostname.

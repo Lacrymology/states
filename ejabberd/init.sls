@@ -142,15 +142,11 @@ ejabberd_reg_user_{{ user }}:
       - pkg: nginx
       - service: ejabberd
 {%- if salt['pillar.get']('ejabberd:ssl', False) %}
-      - cmd: /etc/ssl/{{ pillar['ejabberd']['ssl'] }}/chained_ca.crt
-      - module: /etc/ssl/{{ pillar['ejabberd']['ssl'] }}/server.pem
-      - file: /etc/ssl/{{ pillar['ejabberd']['ssl'] }}/ca.crt
+      - cmd: ssl_cert_and_key_for_{{ pillar['ejabberd']['ssl'] }}
 
 extend:
   nginx:
     service:
       - watch:
-        - cmd: /etc/ssl/{{ pillar['ejabberd']['ssl'] }}/chained_ca.crt
-        - module: /etc/ssl/{{ pillar['ejabberd']['ssl'] }}/server.pem
-        - file: /etc/ssl/{{ pillar['ejabberd']['ssl'] }}/ca.crt
+        - cmd: ssl_cert_and_key_for_{{ pillar['ejabberd']['ssl'] }}
 {%- endif %}

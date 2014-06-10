@@ -24,12 +24,14 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author: Diep Pham <imeo@favadi.com>
 Maintainer: Diep Pham <imeo@favadi.com>
-
 -#}
-# {{ pillar['message_do_not_modify'] }}
 
-{% set listen_port = salt['pillar.get']('varnish:listen_port', '80') -%}
-{%- set listen_address = salt['pillar.get']('varnish:listen_address', '127.0.0.1') -%}
+{%- set listen_port = salt['pillar.get']('varnish:listen_port', '80') %}
+{%- set listen_address = salt['pillar.get']('varnish:listen_address', '127.0.0.1') %}
+varnish_procs:
+  description: Varnish Daemon Process
+  command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -a 'varnishd' -u root"
 
-command[varnish_daemon]=/usr/lib/nagios/plugins/check_procs -c 1:1 -a 'varnishd' -u root
-command[varnish_status]=/usr/lib/nagios/plugins/check_http -I {{ listen_address }} -p {{ listen_port }}
+varnish_status:
+  description: Varnish HTTP status
+  command: /usr/lib/nagios/plugins/check_http -I {{ listen_address }} -p {{ listen_port }}

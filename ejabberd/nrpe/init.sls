@@ -68,6 +68,8 @@ include:
       https_result: 401 Unauthorized
     {%- if salt['pillar.get']('ejabberd:ssl_redirect', False) %}
       http_result: 301 Moved Permanently
+    {%- else %}
+      http_result: 401 Unauthorized
     {%- endif -%}
 {%- else %}
       http_result: 401 Unauthorized

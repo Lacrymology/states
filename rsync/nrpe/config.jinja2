@@ -24,7 +24,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet hvnsweeting@gmail.com
 Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
  -#}
-# {{ pillar['message_do_not_modify'] }}
-command[rsync_procs]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u root -C rsync -a '--daemon'
-command[rsync_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 873
+rsync_procs:
+  description: Rsync Daemon
+  command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -u root -C rsync -a '--daemon'"
+
+rsync_port:
+  description: Rsync Port
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 873
+
 {#- TODO: use /usr/lib/nagios/plugins/check_rsync #}

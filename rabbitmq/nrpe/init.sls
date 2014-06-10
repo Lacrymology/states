@@ -38,38 +38,4 @@ include:
 {%- endif %}
   - nginx.nrpe
 
-/etc/nagios/nrpe.d/rabbitmq-web.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://nginx/nrpe/instance.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-    - context:
-      deployment: rabbitmq
-      http_port: 15672
-      domain_name: 127.0.0.1
-      https: {{ salt['pillar.get']('rabbitmq:ssl', False) }}
-
-/etc/nagios/nrpe.d/rabbitmq.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://rabbitmq/nrpe/config.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-
 {{ passive_check('rabbitmq') }}
-
-extend:
-  nagios-nrpe-server:
-    service:
-      - watch:
-        - file: /etc/nagios/nrpe.d/rabbitmq.cfg
-        - file: /etc/nagios/nrpe.d/rabbitmq-web.cfg

@@ -25,9 +25,24 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
 {%- set procs = salt['pillar.get']('nfs:procs', 8) %}
-command[nfsd4_procs]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u root -C nfsd4
-command[nfsd4_callbacks_procs]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u root -C nfsd4_callbacks
-command[nfsd_procs]=/usr/lib/nagios/plugins/check_procs -c {{ procs }}:{{ procs }} -u root -C nfsd
-command[nfs_rpcbind_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 111
+nfsd4_procs:
+  description: Nfsd4 Daemon
+  command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -u root -C nfsd4'
+
+nfsd4_callbacks_procs:
+  description: Nfsd4 Callbacks Daemon
+  command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -u root -C nfsd4_callbacks'
+
+nfsd_procs:
+  description: Nfsd Daemon
+  command: '/usr/lib/nagios/plugins/check_procs -c {{ procs }}:{{ procs }} -u root -C nfsd'
+
+nfs_rpcbind_port:
+  description: NFS Local Port
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 111
+
+nfs_rpcbind_remote_port:
+  check: check_tcp!111
+  description: NFS Remote Port
+  passive: False

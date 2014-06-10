@@ -44,4 +44,11 @@ Usage
   - ``/var/lib/denyhosts/hosts-valid``
   - ``/var/lib/denyhosts/user-hosts``
 
+- Use script ``/usr/local/bin/denyhosts-unblock`` to unblock one or
+  more ip address.
+
+::
+
+   usage: denyhosts-unblock <ip_address> ...
+
 - Start DenyHosts: ``service denyhosts start``

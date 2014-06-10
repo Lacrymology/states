@@ -32,34 +32,10 @@ Institute for Institutional Innovation by Data Driven Design Inc.
 Author: Hung Nguyen Viet hvnsweeting@gmail.com
 Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
 -#}
-djangopypi2_nginx_http:
-  description: djangopypi2 HTTP Protocol
-
-djangopypi2_nginx_https:
-  description: djangopypi2 HTTPS Protocol
-
-djangopypi2_nginx_https_certificate:
-  description: djangopypi2 HTTPS Certificate Expiration
-  check_interval: 1440 {#- only need to check https certificate each day #}
-  freshness_threshold: {{ (1440 + 10) * 60 }}
-
-djangopypi2_postgresql:
-  description: djangopypi2 PostgreSQL database
-
-djangopypi2_uwsgi_master:
-  description: djangopypi2 uWSGI Master Process
-
-djangopypi2_uwsgi_worker:
-  description: djangopypi2 uWSGI Workers Process
-
-djangopypi2_uwsgi_ping:
-  description: djangopypi2 uWSGI Ping
-
-djangopypi2_backup_file_procs:
-  description: djangopypi2 Backup Files Process
-
-djangopypi2_backup_postgres_procs:
-  description: djangopypi2 Backup PostgreSQL Database Process
-
-djangopypi2_backup:
-  description: djangopypi2 Backup Age And Size
+{%- from 'uwsgi/nrpe/instance.jinja2' import uwsgi_instance with context -%}
+{%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
+{%- from 'postgresql/server/nrpe/instance.jinja2' import postgresql_instance with context -%}
+{%- set deployment = 'djangopypi2' %}
+{{ uwsgi_instance(deployment) }}
+{{ nginx_instance(deployment, timeout=120, http_uri='/packages/') }}
+{{ postgresql_instance({{ salt['pillar.get']('djangopypi2:db:name', 'djangopypi2') }}, username={{ salt['pillar.get']('djangopypi2:db:username', 'djangopypi2') }}, password={{ salt['password.pillar']('djangopypi2:db:password', 10) }}) }}

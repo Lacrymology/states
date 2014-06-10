@@ -32,31 +32,11 @@ Institute for Institutional Innovation by Data Driven Design Inc.
 Author: Lam Dang Tung <lamdt@familug.org>
 Maintainer: Lam Dang Tung <lamdt@familug.org>
 -#}
-gitlab_uwsgi_master:
-  description: GitLab uWSGI Master Process
 
-gitlab_uwsgi_worker:
-  description: GitLab uWSGI Workers Process
-
-gitlab_uwsgi_ping:
-  description: GitLab uWSGI Ping
-
-gitlab_nginx_http:
-  description: GitLab HTTP protocol
-
-gitlab_nginx_https:
-  description: GitLab HTTPS protocol
-
-gitlab_nginx_https_certificate:
-  description: HTTPS Certificate Expiration
-  check_interval: 1440 {#- only need to check https certificate each day #}
-  freshness_threshold: {{ (1440 + 10) * 60 }}
-
-gitlab_postgresql:
-  description: GitLab PostgreSQL database
-
-gitlab_backup_postgres_procs:
-  description: GitLab Backup PostgreSQL Database Process
-
-gitlab_backup:
-  description: GitLab Backup Age And Size
+{%- from 'uwsgi/nrpe/instance.jinja2' import uwsgi_instance with context -%}
+{%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
+{%- from 'postgresql/server/nrpe/instance.jinja2' import postgresql_instance with context -%}
+{%- set deployment = 'gitlab' %}
+{{ uwsgi_instance(deployment) }}
+{{ nginx_instance(deployment, timeout=120, http_uri='/users/sign_in') }}
+{{ postgresql_instance({{ salt['pillar.get']('gitlab:db:name', 'gitlab') }}, username={{ salt['pillar.get']('gitlab:db:username', 'gitlab') }}, password={{ salt['password.pillar']('gitlab:db:password', 10) }}) }}

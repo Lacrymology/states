@@ -32,8 +32,8 @@ Institute for Institutional Innovation by Data Driven Design Inc.
 Author: Lam Dang Tung <lamdt@familug.org>
 Maintainer: Lam Dang Tung <lamdt@familug.org>
 -#}
-
-# {{ pillar['message_do_not_modify'] }}
 {%- if not salt['pillar.get']('__test__', False) %}
-command[fluxbox_procs]=/usr/lib/nagios/plugins/check_procs -c 1:1 -C fluxbox
+fluxbox_procs:
+  description: Fluxbox Daemon
+  command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -C fluxbox'
 {%- endif -%}

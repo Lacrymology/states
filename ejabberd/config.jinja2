@@ -97,18 +97,6 @@ Hostname
 			starttls, {certfile, "/etc/ejabberd/ejabberd.pem"}
 		       ]},
 
-{#
-   To enable the old SSL connection method (deprecated) in port 5223:
-#}
-{%- if salt['pillar.get']('ejabberd:old_ssl', False) %}
-  {5223, ejabberd_c2s, [
-  			{access, c2s},
-  			{shaper, c2s_shaper},
-  			{max_stanza_size, 65536},
-                        zlib,
-                        tls, {certfile, "/etc/ejabberd/ejabberd.pem"}
-  		       ]},
-{%- endif %}
 {%- if salt['pillar.get']('ejabberd:server_to_server', False) %}
   {5269, ejabberd_s2s_in, [
 			   {shaper, s2s_shaper},

@@ -25,11 +25,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-graylog2_uwsgi_master:
-  description: Graylog2 uWSGI Master Process
-
-graylog2_uwsgi_worker:
-  description: Graylog2 uWSGI Workers Process
-
-graylog2_uwsgi_ping:
-  description: Graylog2 uWSGI Ping
+{%- from 'uwsgi/nrpe/instance.jinja2' import uwsgi_instance with context -%}
+{%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
+{%- set deployment = 'graylog2' %}
+{{ uwsgi_instance(deployment) }}
+{{ nginx_instance(deployment, http_uri='/login') }}

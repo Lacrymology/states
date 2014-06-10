@@ -32,11 +32,8 @@ Institute for Institutional Innovation by Data Driven Design Inc.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
-{%- from 'uwsgi/monitor_template.jinja2' import monitor  %}
-{{ monitor('moinmoin', check_postgresql=False) }}
-
-moinmoin_backup_file_procs:
-  description: MoinMoin Backup File Process
-
-moinmoin_backup:
-  description: MoinMoin Backup Age And Size
+{%- from 'uwsgi/nrpe/instance.jinja2' import uwsgi_instance with context -%}
+{%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
+{%- set deployment = 'moinmoin' %}
+{{ uwsgi_instance(deployment) }}
+{{ nginx_instance(deployment, http_uri='/StartingPage?action=login') }}

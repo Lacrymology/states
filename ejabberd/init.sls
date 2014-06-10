@@ -34,7 +34,9 @@ include:
   - erlang.pgsql
   - nginx
   - postgresql.server
+{%- if salt['pillar.get']('ejabberd:ssl', False) %}
   - ssl
+{%- endif %}
 
 {%- set dbuserpass = salt['password.pillar']('ejabberd:db:password', 10) %}
 {%- set dbuser = salt['pillar.get']('ejabberd:db:username', 'ejabberd') %}
@@ -75,7 +77,9 @@ ejabberd:
       - cmd: erlang_mod_pgsql
       - cmd: hostname
     - watch:
+    {%- if salt['pillar.get']('ejabberd:ssl', False) %}
       - cmd: ssl_cert_and_key_for_{{ pillar['ejabberd']['ssl'] }}
+    {%- endif %}
       - user: ejabberd
       - file: ejabberd
       - cmd: ejabberd_psql
@@ -97,8 +101,10 @@ ejabberd:
       dbuserpass: {{ dbuserpass }}
   user:
     - present
+  {%- if salt['pillar.get']('ejabberd:ssl', False) %}
     - groups:
       - ssl-cert
+  {%- endif %}
     - require:
       - pkg: ejabberd
 

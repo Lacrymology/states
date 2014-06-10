@@ -92,12 +92,12 @@ Hostname
   {5222, ejabberd_c2s, [
 			{access, c2s},
 			{shaper, c2s_shaper},
-			{max_stanza_size, 65536},
-{%- if salt['pillar.get']('ejabberd:ssl', False) %}
             %%zlib,
-			starttls, {certfile, "/etc/ssl/private/{{ pillar['ejabberd']['ssl'] }}.pem"}
+{%- if salt['pillar.get']('ejabberd:ssl', False) %}
+			{max_stanza_size, 65536},
+  			starttls, {certfile, "/etc/ssl/private/{{ pillar['ejabberd']['ssl'] }}.pem"}
 {%- else %}
-            %%zlib
+			{max_stanza_size, 65536}
 {%- endif %}
 		       ]},
 

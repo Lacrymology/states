@@ -26,6 +26,16 @@ Author: Dang Tung Lam <lamdt@familug.org>
 Maintainer: Dang Tung Lam <lamdt@familug.org>
 
 -#}
-# {{ pillar['message_do_not_modify'] }}
-command[etherpad_procs]=/usr/lib/nagios/plugins/check_procs -c 1:1 -a "node_modules/ep_etherpad-lite" -u www-data
-command[etherpad_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 9001
+{%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
+{{ nginx_instance('etherpad', timeout=60) }}
+
+{%- from 'postgresql/server/nrpe/instance.jinja2' import postgresql_instance with context -%}
+{{ postgresql_instance({{ salt['pillar.get']('etherpad:db:name', 'etherpad') }}, username={{ salt['pillar.get']('etherpad:db:username', 'etherpad') }}, password={{ salt['password.pillar']('etherpad:db:password', 10) }}) }}
+
+etherpad_procs:
+  description: NodeJS Daemon for running Etherpad
+  command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -a "node_modules/ep_etherpad-lite" -u www-data'
+
+etherpad_port:
+  description: Etherpad TCP Port
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 9001

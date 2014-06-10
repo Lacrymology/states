@@ -25,31 +25,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-sentry_nginx_http:
-  description: Sentry HTTP Protocol
-
-sentry_nginx_https:
-  description: Sentry HTTPS Protocol
-
-sentry_nginx_https_certificate:
-  description: Sentry HTTPS Certificate Expiration
-  check_interval: 1440 {#- only need to check https certificate each day #}
-  freshness_threshold: {{ (1440 + 10) * 60 }}
-
-sentry_postgresql:
-  description: Sentry PostgreSQL database
-
-sentry_uwsgi_master:
-  description: Sentry uWSGI Master Process
-
-sentry_uwsgi_worker:
-  description: Sentry uWSGI Workers Process
-
-sentry_uwsgi_ping:
-  description: Sentry uWSGI Ping
-
-sentry_backup_postgres_procs:
-  description: Sentry Backup PostgreSQL Database Process
-
-sentry_backup:
-  description: Sentry Backup Age And Size
+{%- from 'uwsgi/nrpe/instance.jinja2' import uwsgi_instance with context -%}
+{%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
+{%- from 'postgresql/server/nrpe/instance.jinja2' import postgresql_instance_prefix with context -%}
+{%- set deployment = 'sentry' %}
+{{ uwsgi_instance(deployment) }}
+{{ nginx_instance(deployment, http_uri='/login/') }}
+{{ postgresql_instance_prefix(deployment) }}

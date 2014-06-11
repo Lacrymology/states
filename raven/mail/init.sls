@@ -52,12 +52,12 @@ include:
 
 cron_sendmail_patch:
   cmd:
-    - wait
+    - run
     - name: perl -pi -e "s|/usr/sbin/sendmail|/usr/bin/ravenmail|" /usr/sbin/cron
+    - unless: grep -a ravenmail /usr/sbin/cron
     - require:
-      - file: /usr/bin/ravenmail
-    - watch:
       - pkg: cron
+      - file: /usr/bin/ravenmail
 
 extend:
   cron:

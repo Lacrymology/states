@@ -42,7 +42,11 @@ import nagiosplugin as nap
 
 
 class SslConfiguration(nap.Resource):
-    def probe(self):
+    def __init__(self, host, port):
+        self.host = host
+        self.port = port
+
+    def check(self):
         shared_settings = {
             'certinfo': 'basic', 
             'starttls': None, 
@@ -75,7 +79,7 @@ class SslConfiguration(nap.Resource):
             'xmpp_to': None
         }
         
-        target = (host, socket.gethostbyname(host), port, TLSV1_2)
+        target = (self.host, socket.gethostbyname(self.host), self.port, TLSV1_2)
         
         cert_plugin = PluginCertInfo.PluginCertInfo()
         cert_plugin._shared_settings = shared_settings
@@ -148,32 +152,57 @@ class SslConfiguration(nap.Resource):
             cipher_score = (weakest_cipher_score + strongest_cipher_score) / 2
             
             final_score = protocol_score * 0.3 + key_score * 0.3 + cipher_score * 0.4
-            return [nap.Metric('sslscore', final_score, min=0, max=100)]
-        elif not hostname_validation.startswith('OK'):
-            return [nap.Metric('serverHostname', hostname_validation)]
-        elif expire_in.days <= 0:
-            return [nap.Metric('expireInDays', expire_in.days)]
-        elif is_trusted != 'OK':
-            return [nap.Metric('validationResult', is_trusted)]
+        else:
+            final_score = 0
+        return (hostname_validation, is_trusted, expire_in.days, final_score)
+
+    def probe(self):
+        if self.check()[3] > 0:
+            return [nap.Metric('sslscore', self.check()[3])]
+        elif not self.check()[0].startswith('OK'):
+            return [nap.Metric('sslscore', 0, context='serverHostname')]
+        elif self.check()[1] != 'OK':
+            return [nap.Metric('sslscore', 0, context='validationResult')]
+        elif self.check()[2] <= 0:
+            return [nap.Metric('sslscore', 0, context='expireInDays')]
+
+
+class SslSummary(nap.Summary):
+    def __init__(self, host, port):
+        self.host = host
+        self.port = port
+
+    def status_line(self, results):
+        ssl_configuration = SslConfiguration(self.host, self.port)
+        if results['sslscore'].context.name == 'serverHostname':
+            return "sslscore is 0 ({0})".format(ssl_configuration.check()[0])
+        elif results['sslscore'].context.name == 'validationResult':
+            return "sslscore is 0 ({0})".format(ssl_configuration.check()[1])
+        elif results['sslscore'].context.name == 'expireInDays':
+            return "sslscore is 0 (The certificate expired {0} days ago)".format(ssl_configuration.check()[2])
+
+    def problem(self, results):
+        return self.status_line(results)
 
 
 @nap.guarded
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-H', '--host', type=str, required=True)
+    parser.add_argument('-p', '--port', type=int, default=443)
+    parser.add_argument('-v', '--verbose', action='count', default=0, help="increase output verbosity (use up to 3 times)")
+    parser.add_argument('-t', '--timeout', type=int, default=60)
+    args = parser.parse_args()
+
     check = nap.Check(
-        SslConfiguration(),
+        SslConfiguration(args.host, args.port),
         nap.ScalarContext('sslscore', nap.Range('@65:80'), nap.Range('@0:65')),
-        nap.ScalarContext('serverHostname', fmt_metric='{value}'),
-        nap.ScalarContext('expireInDays', nap.Range('@:0'), fmt_metric='The certificate expired {value} days ago'),
-        nap.ScalarContext('validationResult', fmt_metric='{value}'))
-    check.main(timeout=60)
+        nap.ScalarContext('serverHostname', nap.Range('@65:80'), nap.Range('@0:65')),
+        nap.ScalarContext('validationResult', nap.Range('@65:80'), nap.Range('@0:65')),
+        nap.ScalarContext('expireInDays', nap.Range('@65:80'), nap.Range('@0:65')),
+        SslSummary(args.host, args.port))
+    check.main(args.verbose, args.timeout)
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-H', '--hostname', type=str, required=True)
-    parser.add_argument('-p', '--port', type=int, default=443)
-    args = parser.parse_args()
-    host = args.hostname
-    port = args.port
-
     main()

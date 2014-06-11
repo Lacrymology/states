@@ -41,7 +41,6 @@ include:
 {%- set dbuserpass = salt['password.pillar']('ejabberd:db:password', 10) %}
 {%- set dbuser = salt['pillar.get']('ejabberd:db:username', 'ejabberd') %}
 {%- set dbname = salt['pillar.get']('ejabberd:db:name', 'ejabberd') %}
-{%- set filename = 'ejabberd_2.1.10-2ubuntu1.3_' + grains['debian_arch'] + '.deb' %}
 
 ejabberd:
   postgres_user:

@@ -45,6 +45,8 @@ Example::
       user1: pass1
       user2: pass2
 
+.. _ejabberd:hostnames:
+
 ejabberd:hostnames
 ~~~~~~~~~~~~~~~~~~
 

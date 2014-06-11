@@ -35,29 +35,15 @@ cross-platform, fault-tolerant, clusterable and modular.
 XMPP server
 ===========
 
-Pillar
-------
-
-Follow the instruction in the :doc:`/ejabberd/doc/pillar` to create the pillar
-data for ejabberd, for e.g::
-
-  ejabberd:
-    hostnames:
-      - im.example.com
-    admins:
-      user1: pass1
-      user2: pass2
-    blocked:
-      - user3
-      - user4
-
-After the installation is finished, you can login and modify all the settings in
-eJabberd web administrator interface at `http(s)://im.example.com/admin`
+After the installation is finished, you can login and modify all the
+settings in eJabberd web administrator interface at
+`http(s)://im.example.com/admin` (as specify in pillar key
+:ref:`ejabberd:hostnames`)
 
 Usage
 -----
 
-You can use an XMPP client on your OS (such as Pidgin, Empathy...) to communicate 
+You can use an XMPP client on your OS (such as Pidgin, Empathy...) to communicate
 with server with below infomations::
 
   Username: user1

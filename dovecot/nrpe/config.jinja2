@@ -45,12 +45,6 @@ dovecot_port_imaps:
   description: Dovecot IMAPS Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 143
 
-dovecot_backup_file_procs:
-  description: Dovecot Backup Files Process
-
-dovecot_backup:
-  description: Dovecot Backup Age And Size
-
 {#- TODO: check remote port? #}
 {%- if salt['pillar.get']('dovecot:ssl', False) %}
 dovecot_port_imaps:

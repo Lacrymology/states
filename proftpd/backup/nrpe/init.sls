@@ -32,11 +32,5 @@ include:
   - cron.nrpe
   - nrpe
 
-/etc/nagios/nrpe.d/backup-proftpd.cfg:
-  file:
-    - absent
-    - watch_in:
-      - service: nagios-nrpe-server
-
 {%- from 'nrpe/passive.sls' import passive_check with context %}
 {{ passive_check('proftpd.backup') }}

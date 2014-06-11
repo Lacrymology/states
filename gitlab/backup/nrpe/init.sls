@@ -32,9 +32,5 @@ include:
   - cron.nrpe
   - nrpe
 
-/etc/nagios/nrpe.d/backup-gitlab.cfg:
-  file:
-    - absent
-
 {%- from 'nrpe/passive.sls' import passive_check with context %}
 {{ passive_check('gitlab.backup') }}

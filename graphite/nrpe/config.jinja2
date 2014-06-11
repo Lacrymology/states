@@ -27,8 +27,8 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
 {%- from 'uwsgi/nrpe/instance.jinja2' import uwsgi_instance with context -%}
 {%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
-{%- from 'postgresql/server/nrpe/instance.jinja2' import postgresql_instance with context -%}
+{%- from 'postgresql/server/nrpe/instance.jinja2' import postgresql_instance_prefix with context -%}
 {%- set deployment = 'graphite' %}
 {{ uwsgi_instance(deployment, prefix='graphite:web') }}
 {{ nginx_instance(deployment, timeout=120, http_uri='/account/login', prefix='graphite:web') }}
-{{ postgresql_instance({{ salt['pillar.get']('graphite:web:db:name', 'graphite') }}, username={{ salt['pillar.get']('graphite:web:db:username', 'graphite') }}, password={{ salt['password.pillar']('graphite:web:db:password', 10) }}) }}
+{{ postgresql_instance_prefix('graphite', prefix='graphite:web')}}

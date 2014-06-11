@@ -38,9 +38,11 @@ Admin user
 {%- endfor %}
 
 {# Blocked user #}
+{%- if salt['pillar.get']('ejabberd:blocked', None) %}
 {%- for user in salt['pillar.get']('ejabberd:blocked' ) %}
 {acl, blocked, {user, "{{ user }}", "{{ salt['pillar.get']('ejabberd:hostnames')[0] }}"}}.
 {%- endfor %}
+{%- endif  %}
 
 {#-
 Hostname

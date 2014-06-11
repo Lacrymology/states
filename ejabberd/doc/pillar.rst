@@ -44,9 +44,6 @@ Example::
     admins:
       user1: pass1
       user2: pass2
-    blocked:
-      - user3
-      - user4
 
 ejabberd:hostnames
 ~~~~~~~~~~~~~~~~~~
@@ -57,11 +54,6 @@ ejabberd:admins
 ~~~~~~~~~~~~~~~
 
 Administrators user with password.
-
-ejabberd:blocked
-~~~~~~~~~~~~~~~~
-
-List of blocked users.
 
 Optional
 --------
@@ -75,6 +67,14 @@ Example::
     server_to_server: False
     odbc_pool_size: 10
     odbc_keepalive_interval: undefined
+    blocked:
+      - user3
+      - user4
+
+ejabberd:blocked
+~~~~~~~~~~~~~~~~
+
+List of blocked users.
 
 ejabberd:watchdog_admins
 ~~~~~~~~~~~~~~~~~~~~~~~~

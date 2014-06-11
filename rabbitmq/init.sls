@@ -36,6 +36,7 @@ as this is not yet implemented in salt.
 
 include:
   - apt
+  - erlang
   - logrotate
   - hostname
 {%- if salt['pillar.get']('rabbitmq:ssl', False) %}
@@ -83,15 +84,6 @@ rabbitmq_erlang_cookie:
     - source: salt://rabbitmq/cookie.jinja2
     - require:
       - file: /var/lib/rabbitmq
-
-rabbitmq_dependencies:
-  pkg:
-    - installed
-    - pkgs:
-      - erlang-nox
-    - require:
-      - cmd: apt_sources
-      - pkg: logrotate
 
 {%- if salt['pkg.version']('rabbitmq-server') not in ('', sub_version) %}
 rabbitmq_old_version:
@@ -141,7 +133,9 @@ rabbitmq-server:
       - rabbitmq-server: http://www.rabbitmq.com/releases/rabbitmq-server/v{{ version }}/rabbitmq-server_{{ sub_version }}_all.deb
 {%- endif %}
     - require:
-      - pkg: rabbitmq_dependencies
+      - pkg: erlang
+      - cmd: apt_sources
+      - pkg: logrotate
       - host: hostname
       - file: rabbitmq_erlang_cookie
 {% if grains['id'] == master_id %}

@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Bruno Clermont
+Copyright (c) 2014, Dang Tung Lam
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,54 +22,20 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Bruno Clermont <patate@fastmail.cn>
-Maintainer: Bruno Clermont <patate@fastmail.cn>
+Author: Dang Tung Lam <lamdt@familug.org>
+Maintainer: Dang Tung Lam <lamdt@familug.org>
 
-Nagios NRPE check for RabbitMQ.
--#}
-{%- from 'nrpe/passive.sls' import passive_check with context %}
-include:
-  - apt.nrpe
-  - erlang.nrpe
-  - logrotate.nrpe
-  - nrpe
-{%- if salt['pillar.get']('rabbitmq:ssl', False) %}
-  - ssl.nrpe
-{%- endif %}
-  - nginx.nrpe
+Uninstall NRPE check for ejabberd - XMPP Server
+#}
 
-/etc/nagios/nrpe.d/rabbitmq-web.cfg:
+/etc/nagios/nrpe.d/ejabberd.cfg:
   file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://nginx/nrpe/instance.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-    - context:
-      deployment: rabbitmq
-      http_port: 15672
-      domain_name: 127.0.0.1
-      https: {{ salt['pillar.get']('rabbitmq:ssl', False) }}
+    - absent
 
-/etc/nagios/nrpe.d/rabbitmq.cfg:
+/etc/nagios/nrpe.d/ejabberd-nginx.cfg:
   file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://rabbitmq/nrpe/config.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
+    - absent
 
-{{ passive_check('rabbitmq') }}
-
-extend:
-  nagios-nrpe-server:
-    service:
-      - watch:
-        - file: /etc/nagios/nrpe.d/rabbitmq.cfg
-        - file: /etc/nagios/nrpe.d/rabbitmq-web.cfg
+/etc/nagios/nrpe.d/postgresql-ejabberd.cfg:
+  file:
+    - absent

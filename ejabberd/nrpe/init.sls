@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Bruno Clermont
+Copyright (c) 2014, Dang Tung Lam
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,23 +22,34 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Bruno Clermont <patate@fastmail.cn>
-Maintainer: Bruno Clermont <patate@fastmail.cn>
+Author: Dang Tung Lam <lamdt@familug.org>
+Maintainer: Dang Tung Lam <lamdt@familug.org>
 
-Nagios NRPE check for RabbitMQ.
--#}
-{%- from 'nrpe/passive.sls' import passive_check with context %}
+NRPE check for ejabberd - XMPP Server
+#}
+
 include:
   - apt.nrpe
   - erlang.nrpe
-  - logrotate.nrpe
-  - nrpe
-{%- if salt['pillar.get']('rabbitmq:ssl', False) %}
-  - ssl.nrpe
-{%- endif %}
   - nginx.nrpe
+  - nrpe
+  - postgresql.server.nrpe
+  - ssl.nrpe
 
-/etc/nagios/nrpe.d/rabbitmq-web.cfg:
+/etc/nagios/nrpe.d/ejabberd.cfg:
+  file:
+    - managed
+    - template: jinja
+    - user: nagios
+    - group: nagios
+    - mode: 440
+    - source: salt://ejabberd/nrpe/config.jinja2
+    - require:
+      - pkg: nagios-nrpe-server
+    - watch_in:
+      - service: nagios-nrpe-server
+
+/etc/nagios/nrpe.d/ejabberd-nginx.cfg:
   file:
     - managed
     - template: jinja
@@ -49,27 +60,36 @@ include:
     - require:
       - pkg: nagios-nrpe-server
     - context:
-      deployment: rabbitmq
-      http_port: 15672
-      domain_name: 127.0.0.1
-      https: {{ salt['pillar.get']('rabbitmq:ssl', False) }}
+      deployment: ejabberd
+      domain_name: {{ pillar['ejabberd']['hostnames'][0] }}
+      http_uri: /admin
+{%- if salt['pillar.get']('ejabberd:ssl', False) %}
+      https: True
+      https_result: 401 Unauthorized
+    {%- if salt['pillar.get']('ejabberd:ssl_redirect', False) %}
+      http_result: 301 Moved Permanently
+    {%- else %}
+      http_result: 401 Unauthorized
+    {%- endif -%}
+{%- else %}
+      http_result: 401 Unauthorized
+{%- endif %}
+    - watch_in:
+      - service: nagios-nrpe-server
 
-/etc/nagios/nrpe.d/rabbitmq.cfg:
+/etc/nagios/nrpe.d/postgresql-ejabberd.cfg:
   file:
     - managed
     - template: jinja
     - user: nagios
     - group: nagios
     - mode: 440
-    - source: salt://rabbitmq/nrpe/config.jinja2
+    - source: salt://postgresql/nrpe.jinja2
     - require:
       - pkg: nagios-nrpe-server
-
-{{ passive_check('rabbitmq') }}
-
-extend:
-  nagios-nrpe-server:
-    service:
-      - watch:
-        - file: /etc/nagios/nrpe.d/rabbitmq.cfg
-        - file: /etc/nagios/nrpe.d/rabbitmq-web.cfg
+    - context:
+      database: {{ salt['pillar.get']('ejabberd:db:name', 'ejabberd') }}
+      username: {{ salt['pillar.get']('ejabberd:db:username', 'ejabberd') }}
+      password: {{ salt['password.pillar']('ejabberd:db:password', 10) }}
+    - watch_in:
+      - service: nagios-nrpe-server

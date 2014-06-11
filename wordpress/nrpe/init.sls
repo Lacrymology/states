@@ -1,4 +1,4 @@
-{#-
+j#-
 Copyright (C) 2013 the Institute for Institutional Innovation by Data
 Driven Design Inc.
 
@@ -47,20 +47,5 @@ include:
   - ssl.nrpe
 {%- endif %}
   - uwsgi.nrpe
-
-/etc/nagios/nrpe.d/wordpress-mysql.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://{{ salt['pillar.get']('wordpress:mysql_variant', 'mariadb') }}/nrpe.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-    - context:
-      database: {{ salt['pillar.get']('wordpress:db:name', 'wordpress') }}
-      username: {{ salt['pillar.get']('wordpress:db:username', 'wordpress') }}
-      password: {{ salt['password.pillar']('wordpress:db:password', 10) }}
 
 {{ passive_check('wordpress') }}

@@ -28,7 +28,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 {%- set max_proc = salt['pillar.get']('mail:maxproc', 2) %}
 amavis_master:
   description: Amavis Master Process
-  command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -u amavis -a 'amavisd (master)' -C amavisd'
+  command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -u amavis -a 'amavisd (master)' -C amavisd"
 
 amavis_child:
   description: Amavis Child Processes

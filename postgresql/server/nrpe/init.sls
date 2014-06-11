@@ -25,7 +25,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
-{%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - apt.nrpe
   - nrpe
@@ -36,8 +35,6 @@ include:
 {% if salt['pillar.get']('postgresql:ssl', False) %}
   - ssl.nrpe
 {% endif %}
-
-{{ passive_check('postgresql.server') }}
 
 extend:
   postgresql_monitoring:

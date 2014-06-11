@@ -34,3 +34,6 @@ postgresql_procs:
 postgresql_port:
   description: PostgreSQL Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 5432
+
+{%- from 'postgresql/server/nrpe/instance.jinja2' import postgresql_instance with context -%}
+{{ postgresql_instance('monitoring', username='monitoring', password={{ salt['password.pillar']('postgresql:monitoring:password', 10) }}) }}

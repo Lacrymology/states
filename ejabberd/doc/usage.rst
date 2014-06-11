@@ -39,7 +39,7 @@ Pillar
 ------
 
 Follow the instruction in the :doc:`/ejabberd/doc/pillar` to create the pillar
-data for git server, for e.g::
+data for ejabberd, for e.g::
 
   ejabberd:
     hostnames:
@@ -50,20 +50,6 @@ data for git server, for e.g::
     blocked:
       - user3
       - user4
-
-Don't forget to update the `top.sls` file to deliver this pillar data to
-minion::
-
-  base:
-    xmpp-server:
-      - ejabberd
-
-Installation
-------------
-
-From the Salt master, run the following command::
-
-  salt xmpp-server state.sls ejabberd
 
 After the installation is finished, you can login and modify all the settings in
 eJabberd web administrator interface at `http(s)://im.example.com/admin`
@@ -77,7 +63,7 @@ with server with below infomations::
   Username: user1
   Domain: im.example.com
   Server: im.example.com
-  Port: 5222 (or 5223 if old-style ssl enabled)
+  Port: 5222
 
 Then, add your friend and start chatting.
 

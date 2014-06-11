@@ -113,7 +113,7 @@ Name of the SSL key to use for HTTPS or connection to XMPP server.
 Default: ``False``.
 
 ejabberd:ssl_redirect
-~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
 
 If set to True and SSL is turned on, this will force all HTTP traffic to be
 redirected to HTTPS.

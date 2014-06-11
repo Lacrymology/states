@@ -34,7 +34,7 @@ Maintainer: Lam Dang Tung <lamdt@familug.org>
 -#}
 {%- from 'uwsgi/nrpe/instance.jinja2' import uwsgi_instance with context -%}
 {%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
-{%- from "salt['pillar.get']('wordpress:mysql_variant', 'mariadb')/server/nrpe/instance.jinja2" import mysql_instance with context -%}
+{%- from salt['pillar.get']('wordpress:mysql_variant', 'mariadb') + '/server/nrpe/instance.jinja2' import mysql_instance_prefix with context -%}
 {%- set deployment = 'wordpress' %}
 {{ uwsgi_instance(deployment) }}
 {{ nginx_instance(deployment) }}

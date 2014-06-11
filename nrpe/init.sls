@@ -149,7 +149,6 @@ service: nagios-nrpe-server #}
     - order: 50
     - watch:
       - pkg: nagios-nrpe-server
-      - file: nagios-nrpe-server
 
 {#- Change /usr/local/nagios owner #}
 /usr/local/nagios:

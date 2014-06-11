@@ -51,11 +51,3 @@ include:
 {%- call passive_check('graylog2.server') %}
       - file: /usr/lib/nagios/plugins/check_new_logs.py
 {%- endcall %}
-
-
-#TODO FIXME
-extend:
-  /etc/nagios/nrpe.d/elasticsearch.cfg:
-    file:
-      - context:
-        origin_state: graylog2.server

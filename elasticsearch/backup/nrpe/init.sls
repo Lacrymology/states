@@ -33,9 +33,5 @@ include:
   - nrpe
   - pip.nrpe
 
-/etc/nagios/nrpe.d/backup-elasticsearch.cfg:
-  file:
-    - absent
-
 {%- from 'nrpe/passive.sls' import passive_check with context %}
 {{ passive_check('elasticsearch.backup') }}

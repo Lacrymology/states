@@ -39,4 +39,4 @@ Maintainer: Lam Dang Tung <lamdt@familug.org>
 {%- set deployment = 'gitlab' %}
 {{ uwsgi_instance(deployment) }}
 {{ nginx_instance(deployment, timeout=120, http_uri='/users/sign_in') }}
-{{ postgresql_instance_prefix('gitlab', prefix='gitlab:db') }}
+{{ postgresql_instance_prefix('gitlab', prefix='gitlab') }}

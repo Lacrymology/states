@@ -34,8 +34,8 @@ Maintainer: Lam Dang Tung <lamdt@familug.org>
 -#}
 {%- from 'uwsgi/nrpe/instance.jinja2' import uwsgi_instance with context -%}
 {%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
-{%- from 'postgresql/server/nrpe/instance.jinja2' import postgresql_instance with context -%}
+{%- from 'postgresql/server/nrpe/instance.jinja2' import postgresql_instance_prefix with context -%}
 {%- set deployment = 'discourse' %}
 {{ uwsgi_instance(deployment) }}
 {{ nginx_instance(deployment, timeout=120) }}
-{{ postgresql_instance({{ salt['pillar.get']('discourse:db:name', 'discourse') }}, username={{ salt['pillar.get']('discourse:db:username', 'discourse') }}, password={{ salt['password.pillar']('discourse:db:password', 10) }}) }}
+{{ postgresql_instance_prefix(deployment) }}

@@ -77,6 +77,7 @@ def managed(name, source=None, template='jinja',
 
     # Retrieve the source file from the server
     name = "/etc/nagios/nrpe.d/{0}.cfg".format(name)
+    log.info('Managing %s content from source file %s', name, source)
     try:
         sfn, source_sum, comment_ = __salt__['file.get_managed'](
             name,
@@ -96,6 +97,7 @@ def managed(name, source=None, template='jinja',
         return _error(ret, 'Unable to manage file: {0}'.format(exc))
 
     # generate nrpe config from rendered yaml file
+    log.debug("Parsing yaml file from %s", sfn)
     with open(sfn) as f:
         loaded = yamlloader.load(f, Loader=yamlloader.CustomLoader)
 

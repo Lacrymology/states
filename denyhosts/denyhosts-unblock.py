@@ -35,10 +35,23 @@ __email__ = 'favadi@robotinfra.com'
 
 import logging
 import os
+import socket
 import subprocess
 import sys
 
 logger = logging.getLogger(__name__)
+
+
+def is_valid_ip(addr):
+    # only accept ip address with three dots
+    if len(addr.split('.')) != 4:
+        return False
+
+    try:
+        socket.inet_aton(addr)
+        return True
+    except socket.error:
+        return False
 
 
 def filter_ips(filename, ips):
@@ -47,7 +60,7 @@ def filter_ips(filename, ips):
     with open(filename) as fh:
         for line in fh:
             line_is_black = False
-            for ip in sys.argv[1:]:
+            for ip in ips:
                 if ip in line:
                     logger.debug("Found IP %s in '%s' line '%s'.",
                                  ip, filename, line.rstrip(os.linesep))
@@ -84,8 +97,16 @@ def main():
         logger.debug("stop %s", init_script)
         subprocess.check_call([init_script, 'stop'])
 
+        # removed invalid ips
+        valid_ips = []
+        for ip in ips:
+            if is_valid_ip(ip):
+                valid_ips.append(ip)
+            else:
+                logger.debug("Not a valid IP address: %s", ip)
+
         for filename in denyhosts_files:
-            filter_ips(filename, ips)
+            filter_ips(filename, valid_ips)
 
         # start denyhosts
         logger.debug("start %s", init_script)

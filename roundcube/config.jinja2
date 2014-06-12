@@ -89,8 +89,13 @@ $rcmail_config['user_aliases'] = false;
 $rcmail_config['log_dir'] = 'logs/';
 $rcmail_config['temp_dir'] = 'temp/';
 $rcmail_config['message_cache_lifetime'] = '10d';
+{%- if salt['pillar.get']('roundcube:ssl', False) %}
+$rcmail_config['force_https'] = true;
+$rcmail_config['use_https'] = true;
+{%- else %}
 $rcmail_config['force_https'] = false;
 $rcmail_config['use_https'] = false;
+{%- endif %}
 $rcmail_config['login_autocomplete'] = 0;
 $rcmail_config['login_lc'] = 2;
 $rcmail_config['skin_include_php'] = false;

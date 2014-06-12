@@ -56,7 +56,8 @@ def filter_ips(filename, ips):
             if not line_is_black:
                 lines.append(line)
     if is_black:
-        logger.debug("Overwrite content of %s.", filename)
+        logger.debug("Deleted line(s) contain: %s from %s.",
+                     ' '.join(ips), filename)
         with open(filename, 'w') as fh:
             fh.writelines(lines)
     else:

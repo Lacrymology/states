@@ -94,8 +94,7 @@ roundcube:
       - service: uwsgi_emperor
       - module: roundcube_initial
     - watch:
-      - file: {{ roundcubedir }}/config/main.inc.php
-      - file: {{ roundcubedir }}/config/db.inc.php
+      - file: {{ roundcubedir }}/config/config.inc.php
       - archive: roundcube
       - pkg: php5-pgsql
       - pkg: roundcube_password_plugin_ldap_driver_dependency
@@ -132,23 +131,13 @@ roundcube:
 
 {{ roundcubedir }}/config/db.inc.php:
   file:
-    - managed
-    - source: salt://roundcube/database.jinja2
-    - template: jinja
-    - makedirs: True
-    - user: www-data
-    - group: www-data
-    - mode: 440
-    - require:
-      - file: {{ roundcubedir }}
-      - archive: roundcube
-      - user: web
-    - context:
-      password: {{ dbuserpass }}
-      dbname: {{ dbname }}
-      username: {{ dbuser }}
+    - absent
 
 {{ roundcubedir }}/config/main.inc.php:
+  file:
+    - absent
+
+{{ roundcubedir }}/config/config.inc.php:
   file:
     - managed
     - source: salt://roundcube/config.jinja2
@@ -157,10 +146,16 @@ roundcube:
     - user: www-data
     - group: www-data
     - mode: 440
+    - context:
+      password: {{ dbuserpass }}
+      dbname: {{ dbname }}
+      username: {{ dbuser }}
     - require:
       - file: {{ roundcubedir }}
       - user: web
       - archive: roundcube
+      - file: {{ roundcubedir }}/config/main.inc.php
+      - file: {{ roundcubedir }}/config/db.inc.php
 
 roundcube_password_plugin_ldap_driver_dependency:
   pkg:

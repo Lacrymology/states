@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Bruno Clermont
+Copyright (c) 2014, Quan Tong Anh
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,24 +22,17 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Bruno Clermont <patate@fastmail.cn>
-Maintainer: Bruno Clermont <patate@fastmail.cn>
-            Quan Tong Anh <quanta@robotinfra.com>
+Author: Quan Tong Anh <quanta@robotinfra.com>
+Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
-/usr/local:
+{%- set version = "0.9" -%}
+{%- if grains['osarch'] == 'amd64' -%}
+    {%- set bits = "64" -%}
+{%- else -%}
+    {%- set bits = "32" -%}
+{%- endif -%}
+{% for file in ('/usr/local/src/sslyze-' + version|replace(".", "_") + '-linux' + bits, '/usr/lib/nagios/plugins/check_ssl_configuration.py', '/usr/local/nagios/salt-sslyze-requirements.txt') %}
+{{ file }}:
   file:
-    - directory
-    - name: /usr/local/bin
-    - makedirs: True
-    - user: root
-    - group: root
-    - mode: 755
-
-/usr/local/src:
-  file:
-    - directory
-    - user: root
-    - group: root
-    - mode: 755
-    - require:
-      - file: /usr/local
+    - absent
+{% endfor %}

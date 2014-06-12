@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Bruno Clermont
+Copyright (c) 2014, Quan Tong Anh
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,24 +22,14 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Bruno Clermont <patate@fastmail.cn>
-Maintainer: Bruno Clermont <patate@fastmail.cn>
-            Quan Tong Anh <quanta@robotinfra.com>
+Author: Quan Tong Anh <quanta@robotinfra.com>
+Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
-/usr/local:
-  file:
-    - directory
-    - name: /usr/local/bin
-    - makedirs: True
-    - user: root
-    - group: root
-    - mode: 755
+include:
+  - apt
 
-/usr/local/src:
-  file:
-    - directory
-    - user: root
-    - group: root
-    - mode: 755
+unzip:
+  pkg:
+    - installed
     - require:
-      - file: /usr/local
+      - cmd: apt_sources

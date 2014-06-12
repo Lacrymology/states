@@ -34,27 +34,25 @@ include:
   - virtualenv
   - unzip
 
+{%- if grains['osarch'] == 'amd64' -%}
+    {%- set bits = "64" -%}
+    {%- set sum = "1b5a235f97db11cc2f72ccb499d861f0" -%}
+{%- else -%}
+    {%- set bits = "32" -%}
+    {%- set sum = "4471cfc348b4d1777fc39dc9200f6cc5" -%}
+{%- endif %}
+
 sslyze:
   archive:
     - extracted
     - name: /usr/local/src
-{%- if grains['osarch'] == 'amd64' %}
-  {%- if 'files_archive' in pillar %}
-    - source: {{ pillar['files_archive'] }}/mirror/sslyze-{{ version|replace(".", "_") }}-linux64.zip
-  {%- else %}
-    - source: https://github.com/iSECPartners/sslyze/releases/download/release-{{ version }}/sslyze-{{ version|replace(".", "_") }}-linux64.zip
-  {%- endif %}
-    - source_hash: md5=1b5a235f97db11cc2f72ccb499d861f0
-    - if_missing: /usr/local/src/sslyze-{{ version|replace(".", "_") }}-linux64
+{%- if 'files_archive' in pillar %}
+    - source: {{ pillar['files_archive'] }}/mirror/sslyze-{{ version|replace(".", "_") }}-linux{{ bits }}.zip
 {%- else %}
-  {%- if 'files_archive' in pillar %}
-    - source: {{ pillar['files_archive'] }}/mirror/sslyze-{{ version|replace(".", "_") }}-linux32.zip
-  {%- else %}
-    - source: https://github.com/iSECPartners/sslyze/releases/download/release-{{ version }}/sslyze-{{ version|replace(".", "_") }}-linux32.zip
-  {%- endif %}
-    - source_hash: md5=4471cfc348b4d1777fc39dc9200f6cc5
-    - if_missing: /usr/local/src/sslyze-{{ version|replace(".", "_") }}-linux32
+    - source: https://github.com/iSECPartners/sslyze/releases/download/release-{{ version }}/sslyze-{{ version|replace(".", "_") }}-linux{{ bits }}.zip
 {%- endif %}
+    - source_hash: md5={{ sum }}
+    - if_missing: /usr/local/src/sslyze-{{ version|replace(".", "_") }}-linux{{ bits }}
     - archive_format: zip
     - require:
       - file: /usr/local/src

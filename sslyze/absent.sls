@@ -25,7 +25,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Quan Tong Anh <quanta@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
-{% for file in ('/usr/local/src/sslyze-0_9-linux32/', '/usr/lib/nagios/plugins/check_ssl_configuration.py', '/usr/local/nagios/salt-sslyze-requirements.txt') %}
+{%- set version = "0.9" -%}
+{%- if grains['osarch'] == 'amd64' -%}
+    {%- set bits = "64" -%}
+{%- else -%}
+    {%- set bits = "32" -%}
+{%- endif -%}
+{% for file in ('/usr/local/src/sslyze-' + version|replace(".", "_") + '-linux' + bits, '/usr/lib/nagios/plugins/check_ssl_configuration.py', '/usr/local/nagios/salt-sslyze-requirements.txt') %}
 {{ file }}:
   file:
     - absent

@@ -157,13 +157,19 @@ class SslConfiguration(nap.Resource):
         return (hostname_validation, is_trusted, expire_in.days, final_score)
 
     def probe(self):
-        if self.check()[3] > 0:
-            return [nap.Metric('sslscore', self.check()[3])]
-        elif not self.check()[0].startswith('OK'):
+        check_results = self.check()
+        hostname_validation = check_results[0]
+        is_trusted = check_results[1]
+        expire_in_days = check_results[2]
+        final_score = check_results[3]
+
+        if final_score > 0:
+            return [nap.Metric('sslscore', final_score)]
+        elif not hostname_validation.startswith('OK'):
             return [nap.Metric('sslscore', 0, context='serverHostname')]
-        elif self.check()[1] != 'OK':
+        elif is_trusted != 'OK':
             return [nap.Metric('sslscore', 0, context='validationResult')]
-        elif self.check()[2] <= 0:
+        elif expire_in_days <= 0:
             return [nap.Metric('sslscore', 0, context='expireInDays')]
 
 

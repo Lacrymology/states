@@ -37,5 +37,5 @@ etherpad_port:
 {%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
 {{ nginx_instance('etherpad', timeout=60) }}
 
-{%- from 'postgresql/server/nrpe/instance.jinja2' import postgresql_instance_prefix with context -%}
+{%- from 'postgresql/server/nrpe/instance.jinja2' import postgresql_instance_prefix with context %}
 {{ postgresql_instance_prefix('etherpad') }}

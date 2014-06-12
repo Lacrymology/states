@@ -42,7 +42,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 {{ deployment }}_nginx_http:
   description: {{ deployment|capitalize }} HTTP Protocol
-  command: /usr/lib/nagios/plugins/check_http -H {{ domain_name -}} -u {{ http_uri }} -p {{ http_port }} -e '{{ http_result }}' -I {{ first_ip }}
+  command: /usr/lib/nagios/plugins/check_http -H {{ domain_name }} -u {{ http_uri }} -p {{ http_port }} -e '{{ http_result }}' -I {{ first_ip }}
     {%- if timeout %} --timeout={{ timeout }}{% endif -%}
     {%- if salt['pillar.get']('__test__', False) %} -v{%- endif %}
 

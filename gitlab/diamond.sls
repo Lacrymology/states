@@ -41,6 +41,7 @@ include:
   - postgresql.server.diamond
   - redis.diamond
   - rsyslog.diamond
+  - ssh.server.diamond
   - uwsgi.diamond
 
 gitlab_diamond_resource:

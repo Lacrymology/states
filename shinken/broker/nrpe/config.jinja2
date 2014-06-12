@@ -47,17 +47,5 @@ shinken_broker_http:
   description: Shinken Broker Web UI HTTP
   command: "/usr/lib/nagios/plugins/check_http -H 127.0.0.1 -u /user/login -p 7767 -e '200 OK' -I 127.0.0.1{%- if salt['pillar.get']('__test__', False) %} -v{%- endif %}"
 
-
-{%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
+{%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context %}
 {{ nginx_instance('shinken', http_uri='/user/login') }}
-
-shinken_nginx_http:
-  description: Shinken HTTP Protocol
-
-shinken_nginx_https:
-  description: Shinken HTTPS Protocol
-
-shinken_nginx_https_certificate:
-  description: Shinken HTTPS Certificate Expiration
-  check_interval: 1440 {#- only need to check https certificate each day #}
-  freshness_threshold: {{ (1440 + 10) * 60 }}

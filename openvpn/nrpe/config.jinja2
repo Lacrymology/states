@@ -30,7 +30,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 openvpn_{{ instance }}:
   description: Openvpn Instance {{ instance }}
   command: "/usr/lib/nagios/plugins/check_procs -C openvpn -c 1:1 -a '--config /etc/openvpn/{{ instance }}/config'"
-{%- endfor -%}
+{%- endfor %}
 
 openvpn_procs:
   description: Openvpn Daemon

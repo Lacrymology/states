@@ -34,15 +34,17 @@ __maintainer__ = 'Diep Pham'
 __email__ = 'favadi@robotinfra.com'
 
 import sys
+import os
 import subprocess
 import logging
 
 logger = logging.getLogger(__name__)
 
+
 def filter_ips(filename, ips):
     lines = []
     is_black = False
-    open(filename) as fh:
+    with open(filename) as fh:
         for line in fh:
             line_is_black = False
             for ip in sys.argv[1:]:
@@ -55,7 +57,7 @@ def filter_ips(filename, ips):
                 lines.append(line)
     if is_black:
         logger.debug("Overwrite content of %s.", filename)
-        open(filename, 'w') as fh:
+        with open(filename, 'w') as fh:
             fh.writelines(lines)
     else:
         logger.debug("File %s don't had any changes, leave as is.", filename)
@@ -92,5 +94,5 @@ def main():
 
 
 if __name__ == '__main__':
-    logger.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+    logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
     main()

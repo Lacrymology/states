@@ -38,7 +38,7 @@ include:
 {%- endif %}
   - web
 
-{%- set version = "0.9.0" %}
+{%- set version = "1.0.1" %}
 {%- set roundcubedir = "/usr/local/roundcubemail-" + version %}
 {%- set dbname = salt['pillar.get']('roundcube:db:name', 'roundcube') %}
 {%- set dbuser = salt['pillar.get']('roundcube:db:username', 'roundcube') %}
@@ -59,7 +59,7 @@ roundcube:
 {%- else %}
     - source: http://jaist.dl.sourceforge.net/project/roundcubemail/roundcubemail/{{ version }}/roundcubemail-{{ version }}.tar.gz
 {%- endif %}
-    - source_hash: md5=843de3439886c2dddb0f09e9bb6a4d04
+    - source_hash: md5=2e1629ea21615005b0a991e591f36363
     - archive_format: tar
     - tar_options: z
     - if_missing: /usr/local/roundcubemail-{{ version }}

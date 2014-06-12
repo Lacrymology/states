@@ -50,7 +50,7 @@ def filter_ips(filename, ips):
             for ip in sys.argv[1:]:
                 if ip in line:
                     logger.debug("Found IP %s in '%s' line '%s'.",
-                                 filename, ip, line.rstrip(os.linesep))
+                                 ip, filename, line.rstrip(os.linesep))
                     line_is_black = is_black = True
                     break
             if not line_is_black:

@@ -30,7 +30,6 @@ Install Denyhosts used to block SSH brute-force attack.
 include:
   - apt
   - rsyslog
-  - bash
 
 denyhosts-allowed:
   file:
@@ -79,7 +78,6 @@ denyhosts:
     - mode: 500
     - require:
       - pkg: denyhosts
-      - pkg: bash
 
 {% for file in ('/etc/logrotate.d/denyhosts', '/var/log/denyhosts') %}
 {{ file }}:

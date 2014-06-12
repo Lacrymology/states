@@ -33,10 +33,10 @@ __author__ = 'Diep Pham'
 __maintainer__ = 'Diep Pham'
 __email__ = 'favadi@robotinfra.com'
 
-import sys
+import logging
 import os
 import subprocess
-import logging
+import sys
 
 logger = logging.getLogger(__name__)
 

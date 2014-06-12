@@ -27,193 +27,193 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
 <?php
 # {{ pillar['message_do_not_modify'] }}
-$rcmail_config = array();
-$rcmail_config['log_driver'] = 'syslog';
-$rcmail_config['log_date_format'] = 'd-M-Y H:i:s O';
-$rcmail_config['syslog_id'] = 'roundcube';
-$rcmail_config['syslog_facility'] = LOG_USER;
+$config = array();
+$config['log_driver'] = 'syslog';
+$config['log_date_format'] = 'd-M-Y H:i:s O';
+$config['syslog_id'] = 'roundcube';
+$config['syslog_facility'] = LOG_USER;
 {%- if salt['pillar.get']('debug', False) %}
-$rcmail_config['debug_level'] = 8;
-$rcmail_config['log_logins'] = true;
-$rcmail_config['log_session'] = true;
-$rcmail_config['smtp_log'] = true;
-$rcmail_config['sql_debug'] = true;
-$rcmail_config['imap_debug'] = true;
-$rcmail_config['ldap_debug'] = true;
-$rcmail_config['smtp_debug'] = true;
+$config['debug_level'] = 8;
+$config['log_logins'] = true;
+$config['log_session'] = true;
+$config['smtp_log'] = true;
+$config['sql_debug'] = true;
+$config['imap_debug'] = true;
+$config['ldap_debug'] = true;
+$config['smtp_debug'] = true;
 {%- else %}
-$rcmail_config['debug_level'] = 1;
-$rcmail_config['log_logins'] = false;
-$rcmail_config['log_session'] = false;
-$rcmail_config['smtp_log'] = false;
-$rcmail_config['sql_debug'] = false;
-$rcmail_config['imap_debug'] = false;
-$rcmail_config['ldap_debug'] = false;
-$rcmail_config['smtp_debug'] = false;
+$config['debug_level'] = 1;
+$config['log_logins'] = false;
+$config['log_session'] = false;
+$config['smtp_log'] = false;
+$config['sql_debug'] = false;
+$config['imap_debug'] = false;
+$config['ldap_debug'] = false;
+$config['smtp_debug'] = false;
 {%- endif %}
 {%- if salt['pillar.get']('roundcube:imap:ssl', False) %}
-$rcmail_config['default_host'] = 'ssl://{{ salt['pillar.get']('roundcube:imap:server', '127.0.0.1') }}';
-$rcmail_config['default_port'] = 993;
+$config['default_host'] = 'ssl://{{ salt['pillar.get']('roundcube:imap:server', '127.0.0.1') }}';
+$config['default_port'] = 993;
 {%- else %}
-$rcmail_config['default_host'] = '{{ salt['pillar.get']('roundcube:imap:server', '127.0.0.1') }}';
-$rcmail_config['default_port'] = 143;
+$config['default_host'] = '{{ salt['pillar.get']('roundcube:imap:server', '127.0.0.1') }}';
+$config['default_port'] = 143;
 {%- endif %}
-$rcmail_config['imap_auth_type'] = null;
-$rcmail_config['imap_delimiter'] = null;
-$rcmail_config['imap_ns_personal'] = null;
-$rcmail_config['imap_ns_other']    = null;
-$rcmail_config['imap_ns_shared']   = null;
-$rcmail_config['imap_force_caps'] = false;
-$rcmail_config['imap_force_lsub'] = false;
-$rcmail_config['imap_force_ns'] = false;
-$rcmail_config['imap_timeout'] = 0;
-$rcmail_config['imap_auth_cid'] = null;
-$rcmail_config['imap_auth_pw'] = null;
-$rcmail_config['imap_cache'] = null;
-$rcmail_config['messages_cache'] = false;
-$rcmail_config['smtp_server'] = 'tls://127.0.0.1';
-$rcmail_config['smtp_port'] = 25;
-$rcmail_config['smtp_user'] = '%u';
-$rcmail_config['smtp_pass'] = '%p';
-$rcmail_config['smtp_auth_type'] = '';
-$rcmail_config['smtp_auth_cid'] = null;
-$rcmail_config['smtp_auth_pw'] = null;
-$rcmail_config['smtp_helo_host'] = '';
-$rcmail_config['smtp_timeout'] = 0;
-$rcmail_config['enable_installer'] = false;
-$rcmail_config['dont_override'] = array();
-$rcmail_config['support_url'] = '';
-$rcmail_config['skin_logo'] = null;
-$rcmail_config['auto_create_user'] = true;
-$rcmail_config['user_aliases'] = false;
-$rcmail_config['log_dir'] = 'logs/';
-$rcmail_config['temp_dir'] = 'temp/';
-$rcmail_config['message_cache_lifetime'] = '10d';
+$config['imap_auth_type'] = null;
+$config['imap_delimiter'] = null;
+$config['imap_ns_personal'] = null;
+$config['imap_ns_other']    = null;
+$config['imap_ns_shared']   = null;
+$config['imap_force_caps'] = false;
+$config['imap_force_lsub'] = false;
+$config['imap_force_ns'] = false;
+$config['imap_timeout'] = 0;
+$config['imap_auth_cid'] = null;
+$config['imap_auth_pw'] = null;
+$config['imap_cache'] = null;
+$config['messages_cache'] = false;
+$config['smtp_server'] = 'tls://127.0.0.1';
+$config['smtp_port'] = 25;
+$config['smtp_user'] = '%u';
+$config['smtp_pass'] = '%p';
+$config['smtp_auth_type'] = '';
+$config['smtp_auth_cid'] = null;
+$config['smtp_auth_pw'] = null;
+$config['smtp_helo_host'] = '';
+$config['smtp_timeout'] = 0;
+$config['enable_installer'] = false;
+$config['dont_override'] = array();
+$config['support_url'] = '';
+$config['skin_logo'] = null;
+$config['auto_create_user'] = true;
+$config['user_aliases'] = false;
+$config['log_dir'] = 'logs/';
+$config['temp_dir'] = 'temp/';
+$config['message_cache_lifetime'] = '10d';
 {%- if salt['pillar.get']('roundcube:ssl', False) %}
-$rcmail_config['force_https'] = true;
-$rcmail_config['use_https'] = true;
+$config['force_https'] = true;
+$config['use_https'] = true;
 {%- else %}
-$rcmail_config['force_https'] = false;
-$rcmail_config['use_https'] = false;
+$config['force_https'] = false;
+$config['use_https'] = false;
 {%- endif %}
-$rcmail_config['login_autocomplete'] = 0;
-$rcmail_config['login_lc'] = 2;
-$rcmail_config['skin_include_php'] = false;
-$rcmail_config['display_version'] = false;
-$rcmail_config['session_lifetime'] = 10;
-$rcmail_config['session_domain'] = '';
-$rcmail_config['session_name'] = null;
-$rcmail_config['session_path'] = null;
-$rcmail_config['session_storage'] = 'db';
-$rcmail_config['memcache_hosts'] = null;
-$rcmail_config['ip_check'] = false;
-$rcmail_config['referer_check'] = false;
-$rcmail_config['x_frame_options'] = 'sameorigin';
-$rcmail_config['des_key'] = 'rcmail-!24ByteDESkey*Str';
-$rcmail_config['username_domain'] = '';
-$rcmail_config['mail_domain'] = '';
-$rcmail_config['password_charset'] = 'ISO-8859-1';
-$rcmail_config['sendmail_delay'] = 0;
-$rcmail_config['max_recipients'] = 0;
-$rcmail_config['max_group_members'] = 0;
-$rcmail_config['useragent'] = 'Roundcube Webmail/'.RCMAIL_VERSION;
-$rcmail_config['product_name'] = 'Roundcube Webmail';
-$rcmail_config['include_host_config'] = false;
-$rcmail_config['generic_message_footer'] = '';
-$rcmail_config['generic_message_footer_html'] = '';
-$rcmail_config['http_received_header'] = false;
-$rcmail_config['http_received_header_encrypt'] = false;
-$rcmail_config['mail_header_delimiter'] = NULL;
-$rcmail_config['line_length'] = 72;
-$rcmail_config['send_format_flowed'] = true;
-$rcmail_config['mdn_use_from'] = false;
-$rcmail_config['identities_level'] = 0;
-$rcmail_config['client_mimetypes'] = null;  # null == default
-$rcmail_config['mime_magic'] = null;
-$rcmail_config['mime_types'] = null;
-$rcmail_config['im_identify_path'] = null;
-$rcmail_config['im_convert_path'] = null;
-$rcmail_config['image_thumbnail_size'] = 240;
-$rcmail_config['contact_photo_size'] = 160;
-$rcmail_config['email_dns_check'] = false;
-$rcmail_config['no_save_sent_messages'] = false;
-$rcmail_config['plugins'] = array('password', 'archive', 'markasjunk', 'emoticons', 'managesieve');
-$rcmail_config['message_sort_col'] = '';
-$rcmail_config['message_sort_order'] = 'DESC';
-$rcmail_config['list_cols'] = array('subject', 'status', 'fromto', 'date', 'size', 'flag', 'attachment');
-$rcmail_config['language'] = null;
-$rcmail_config['date_format'] = 'Y-m-d';
-$rcmail_config['date_formats'] = array('Y-m-d', 'd-m-Y', 'Y/m/d', 'm/d/Y', 'd/m/Y', 'd.m.Y', 'j.n.Y');
-$rcmail_config['time_format'] = 'H:i';
-$rcmail_config['time_formats'] = array('G:i', 'H:i', 'g:i a', 'h:i A');
-$rcmail_config['date_short'] = 'D H:i';
-$rcmail_config['date_long'] = 'Y-m-d H:i';
-$rcmail_config['drafts_mbox'] = 'Drafts';
-$rcmail_config['junk_mbox'] = 'spam';
-$rcmail_config['sent_mbox'] = 'Sent';
-$rcmail_config['trash_mbox'] = 'Trash';
-$rcmail_config['archive_mbox'] = 'Archive';
-$rcmail_config['archive_show_button'] = true;
-$rcmail_config['default_folders'] = array('INBOX', 'Drafts', 'Archive', 'Sent', 'spam', 'Trash');
-$rcmail_config['create_default_folders'] = true;
-$rcmail_config['protect_default_folders'] = true;
-$rcmail_config['quota_zero_as_unlimited'] = false;
-$rcmail_config['enable_spellcheck'] = true;
-$rcmail_config['spellcheck_dictionary'] = false;
-$rcmail_config['spellcheck_engine'] = 'googie';
-$rcmail_config['spellcheck_uri'] = '';
-$rcmail_config['spellcheck_languages'] = NULL;
-$rcmail_config['spellcheck_ignore_caps'] = false;
-$rcmail_config['spellcheck_ignore_nums'] = false;
-$rcmail_config['spellcheck_ignore_syms'] = false;
-$rcmail_config['recipients_separator'] = ',';
-$rcmail_config['max_pagesize'] = 200;
-$rcmail_config['min_refresh_interval'] = 60;
-$rcmail_config['upload_progress'] = false;
-$rcmail_config['undo_timeout'] = 0;
-$rcmail_config['default_charset'] = 'ISO-8859-1';
-$rcmail_config['skin'] = 'larry';
-$rcmail_config['mail_pagesize'] = 50;
-$rcmail_config['timezone'] = 'auto';
-$rcmail_config['prefer_html'] = true;
-$rcmail_config['show_images'] = 0;
-$rcmail_config['message_extwin'] = false;
-$rcmail_config['compose_extwin'] = false;
-$rcmail_config['htmleditor'] = 1;
-$rcmail_config['prettydate'] = true;
-$rcmail_config['draft_autosave'] = 300;
-$rcmail_config['preview_pane'] = false;
-$rcmail_config['preview_pane_mark_read'] = 0;
-$rcmail_config['logout_purge'] = false;
-$rcmail_config['logout_expunge'] = false;
-$rcmail_config['inline_images'] = true;
-$rcmail_config['mime_param_folding'] = 1;
-$rcmail_config['skip_deleted'] = false;
-$rcmail_config['read_when_deleted'] = true;
-$rcmail_config['flag_for_deletion'] = false;
-$rcmail_config['refresh_interval'] = 60;
-$rcmail_config['check_all_folders'] = false;
-$rcmail_config['display_next'] = true;
-$rcmail_config['autoexpand_threads'] = 0;
-$rcmail_config['reply_mode'] = 0;
-$rcmail_config['strip_existing_sig'] = true;
-$rcmail_config['show_sig'] = 1;
-$rcmail_config['force_7bit'] = false;
-$rcmail_config['search_mods'] = null;
-$rcmail_config['delete_always'] = false;
-$rcmail_config['delete_junk'] = false;
-$rcmail_config['mdn_requests'] = 0;
-$rcmail_config['mdn_default'] = 0;
-$rcmail_config['dsn_default'] = 0;
-$rcmail_config['reply_same_folder'] = false;
-$rcmail_config['forward_attachment'] = false;
-$rcmail_config['spellcheck_before_send'] = false;
-$rcmail_config['autocomplete_single'] = false;
-$rcmail_config['default_font'] = '';
+$config['login_autocomplete'] = 0;
+$config['login_lc'] = 2;
+$config['skin_include_php'] = false;
+$config['display_version'] = false;
+$config['session_lifetime'] = 10;
+$config['session_domain'] = '';
+$config['session_name'] = null;
+$config['session_path'] = null;
+$config['session_storage'] = 'db';
+$config['memcache_hosts'] = null;
+$config['ip_check'] = false;
+$config['referer_check'] = false;
+$config['x_frame_options'] = 'sameorigin';
+$config['des_key'] = 'rcmail-!24ByteDESkey*Str';
+$config['username_domain'] = '';
+$config['mail_domain'] = '';
+$config['password_charset'] = 'ISO-8859-1';
+$config['sendmail_delay'] = 0;
+$config['max_recipients'] = 0;
+$config['max_group_members'] = 0;
+$config['useragent'] = 'Roundcube Webmail/'.RCMAIL_VERSION;
+$config['product_name'] = 'Roundcube Webmail';
+$config['include_host_config'] = false;
+$config['generic_message_footer'] = '';
+$config['generic_message_footer_html'] = '';
+$config['http_received_header'] = false;
+$config['http_received_header_encrypt'] = false;
+$config['mail_header_delimiter'] = NULL;
+$config['line_length'] = 72;
+$config['send_format_flowed'] = true;
+$config['mdn_use_from'] = false;
+$config['identities_level'] = 0;
+$config['client_mimetypes'] = null;  # null == default
+$config['mime_magic'] = null;
+$config['mime_types'] = null;
+$config['im_identify_path'] = null;
+$config['im_convert_path'] = null;
+$config['image_thumbnail_size'] = 240;
+$config['contact_photo_size'] = 160;
+$config['email_dns_check'] = false;
+$config['no_save_sent_messages'] = false;
+$config['plugins'] = array('password', 'archive', 'markasjunk', 'emoticons', 'managesieve');
+$config['message_sort_col'] = '';
+$config['message_sort_order'] = 'DESC';
+$config['list_cols'] = array('subject', 'status', 'fromto', 'date', 'size', 'flag', 'attachment');
+$config['language'] = null;
+$config['date_format'] = 'Y-m-d';
+$config['date_formats'] = array('Y-m-d', 'd-m-Y', 'Y/m/d', 'm/d/Y', 'd/m/Y', 'd.m.Y', 'j.n.Y');
+$config['time_format'] = 'H:i';
+$config['time_formats'] = array('G:i', 'H:i', 'g:i a', 'h:i A');
+$config['date_short'] = 'D H:i';
+$config['date_long'] = 'Y-m-d H:i';
+$config['drafts_mbox'] = 'Drafts';
+$config['junk_mbox'] = 'spam';
+$config['sent_mbox'] = 'Sent';
+$config['trash_mbox'] = 'Trash';
+$config['archive_mbox'] = 'Archive';
+$config['archive_show_button'] = true;
+$config['default_folders'] = array('INBOX', 'Drafts', 'Archive', 'Sent', 'spam', 'Trash');
+$config['create_default_folders'] = true;
+$config['protect_default_folders'] = true;
+$config['quota_zero_as_unlimited'] = false;
+$config['enable_spellcheck'] = true;
+$config['spellcheck_dictionary'] = false;
+$config['spellcheck_engine'] = 'googie';
+$config['spellcheck_uri'] = '';
+$config['spellcheck_languages'] = NULL;
+$config['spellcheck_ignore_caps'] = false;
+$config['spellcheck_ignore_nums'] = false;
+$config['spellcheck_ignore_syms'] = false;
+$config['recipients_separator'] = ',';
+$config['max_pagesize'] = 200;
+$config['min_refresh_interval'] = 60;
+$config['upload_progress'] = false;
+$config['undo_timeout'] = 0;
+$config['default_charset'] = 'ISO-8859-1';
+$config['skin'] = 'larry';
+$config['mail_pagesize'] = 50;
+$config['timezone'] = 'auto';
+$config['prefer_html'] = true;
+$config['show_images'] = 0;
+$config['message_extwin'] = false;
+$config['compose_extwin'] = false;
+$config['htmleditor'] = 1;
+$config['prettydate'] = true;
+$config['draft_autosave'] = 300;
+$config['preview_pane'] = false;
+$config['preview_pane_mark_read'] = 0;
+$config['logout_purge'] = false;
+$config['logout_expunge'] = false;
+$config['inline_images'] = true;
+$config['mime_param_folding'] = 1;
+$config['skip_deleted'] = false;
+$config['read_when_deleted'] = true;
+$config['flag_for_deletion'] = false;
+$config['refresh_interval'] = 60;
+$config['check_all_folders'] = false;
+$config['display_next'] = true;
+$config['autoexpand_threads'] = 0;
+$config['reply_mode'] = 0;
+$config['strip_existing_sig'] = true;
+$config['show_sig'] = 1;
+$config['force_7bit'] = false;
+$config['search_mods'] = null;
+$config['delete_always'] = false;
+$config['delete_junk'] = false;
+$config['mdn_requests'] = 0;
+$config['mdn_default'] = 0;
+$config['dsn_default'] = 0;
+$config['reply_same_folder'] = false;
+$config['forward_attachment'] = false;
+$config['spellcheck_before_send'] = false;
+$config['autocomplete_single'] = false;
+$config['default_font'] = '';
 
 {#- address book config #}
-$rcmail_config['address_book_type'] = 'ldap';
-$rcmail_config['ldap_public']['public'] = array(
+$config['address_book_type'] = 'ldap';
+$config['ldap_public']['public'] = array(
   'name'          => 'Public LDAP adress book',
   'hosts'         => array('localhost'),
   'port'          => 389,
@@ -249,14 +249,63 @@ $rcmail_config['ldap_public']['public'] = array(
   'referrals'     => true|false,
 );
 
-$rcmail_config['autocomplete_addressbooks'] = array('public');
-$rcmail_config['autocomplete_min_length'] = 1;
-$rcmail_config['autocomplete_threads'] = 0;
-$rcmail_config['autocomplete_max'] = 15;
-$rcmail_config['addressbook_search_mode'] = 0;
-$rcmail_config['addressbook_pagesize'] = 50;
-$rcmail_config['addressbook_sort_col'] = 'surname';
-$rcmail_config['addressbook_name_listing'] = 0;
-$rcmail_config['default_addressbook'] = null;
-$rcmail_config['addressbook_search_mods'] = null;
+$config['autocomplete_addressbooks'] = array('public');
+$config['autocomplete_min_length'] = 1;
+$config['autocomplete_threads'] = 0;
+$config['autocomplete_max'] = 15;
+$config['addressbook_search_mode'] = 0;
+$config['addressbook_pagesize'] = 50;
+$config['addressbook_sort_col'] = 'surname';
+$config['addressbook_name_listing'] = 0;
+$config['default_addressbook'] = null;
+$config['addressbook_search_mods'] = null;
+
+{#- Configuration file for database access #}
+{#
+ PEAR database DSN for read/write operations
+ format is db_provider:user:password@host/database
+ For examples see http:pear.php.net/manual/en/package.database.mdb2.intro-dsn.php
+ currently supported db_providers: mysql, mysqli, pgsql, sqlite, mssql or sqlsrv
+#}
+$config['db_dsnw'] = 'pgsql://{{ username }}:{{ password }}@127.0.0.1/{{ dbname }}';
+{#
+ postgres example: 'pgsql:roundcube:pass@localhost/roundcubemail';
+ Warning: for SQLite use absolute path in DSN:
+ sqlite example: 'sqlite:full/path/to/sqlite.db?mode=0646';
+
+ PEAR database DSN for read only operations (if empty write database will be used)
+ useful for database replication
+#}
+$config['db_dsnr'] = 'pgsql://{{ username }}:{{ password }}@127.0.0.1/{{ dbname }}';
+
+{#-
+ use persistent db-connections
+ beware this will not "always" work as expected
+ see: http:www.php.net/manual/en/features.persistent-connections.php
+#}
+$config['db_persistent'] = FALSE;
+{#-
+ you can define specific table names used to store webmail data
+#}
+$config['db_table_users'] = 'users';
+$config['db_table_identities'] = 'identities';
+$config['db_table_contacts'] = 'contacts';
+$config['db_table_contactgroups'] = 'contactgroups';
+$config['db_table_contactgroupmembers'] = 'contactgroupmembers';
+$config['db_table_session'] = 'session';
+$config['db_table_cache'] = 'cache';
+$config['db_table_cache_index'] = 'cache_index';
+$config['db_table_cache_thread'] = 'cache_thread';
+$config['db_table_cache_messages'] = 'cache_messages';
+$config['db_table_dictionary'] = 'dictionary';
+$config['db_table_searches'] = 'searches';
+$config['db_table_system'] = 'system';
+{#-
+ you can define specific sequence names used in PostgreSQL
+#}
+$config['db_sequence_users'] = 'user_ids';
+$config['db_sequence_identities'] = 'identity_ids';
+$config['db_sequence_contacts'] = 'contact_ids';
+$config['db_sequence_contactgroups'] = 'contactgroups_ids';
+$config['db_sequence_searches'] = 'search_ids';
 ?>

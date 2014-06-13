@@ -30,6 +30,7 @@ Nagios NRPE check for Amavis.
 {%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - apt.nrpe
+  - cron.nrpe
   - nrpe
 
 /etc/nagios/nrpe.d/amavis.cfg:

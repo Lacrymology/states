@@ -29,6 +29,7 @@ Diamond statistics for amavis.
 -#}
 
 include:
+  - cron
   - diamond
 
 amavis_diamond_resources:

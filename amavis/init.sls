@@ -29,6 +29,7 @@ Amavis: A Email Virus Scanner.
 -#}
 include:
   - apt
+  - cron
   - mail
   - spamassassin
   - amavis.clamav
@@ -56,3 +57,14 @@ amavis:
     - mode: 440
     - watch_in:
       - service: amavis
+
+/etc/cron.daily/amavisd-new:
+  file:
+    - managed
+    - source: salt://amavis/cron_daily.jinja2
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 500
+    - require:
+      - pkg: cron

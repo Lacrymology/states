@@ -34,6 +34,7 @@ __maintainer__ = 'Quan Tong Anh'
 __email__ = 'quanta@robotinfra.com'
 
 from plugins import PluginCertInfo, PluginOpenSSLCipherSuites
+from utils.SSLyzeSSLConnection import SSLHandshakeRejected
 from nassl import SSLV2, SSLV3, TLSV1, TLSV1_1, TLSV1_2
 from datetime import datetime
 import socket
@@ -79,24 +80,32 @@ class SslConfiguration(nap.Resource):
             'xmpp_to': None
         }
         
-        target = (self.host, socket.gethostbyname(self.host), self.port, TLSV1_2)
-        
         cert_plugin = PluginCertInfo.PluginCertInfo()
         cert_plugin._shared_settings = shared_settings
-        cert_result = cert_plugin.process_task(target, 'certinfo', 'basic')
+
+        for p in reversed(range(1, 6)):
+            target = (self.host, socket.gethostbyname(self.host), self.port, p)  
+            try:
+                cert_result = cert_plugin.process_task(target, 'certinfo', 'basic')
+            except SSLHandshakeRejected:
+                pass
+            else:
+                break
         
         is_trusted = 'OK'
+        cert_result_list = cert_result.get_txt_result()
         
-        for c in cert_result.get_txt_result():
+        for c in cert_result_list:
             if "Not After" in c:
                 not_after = c.split("Not After:")[1].lstrip()
             if "Key Size" in c:
                 key_size = c.split(':')[1].lstrip().split()[0]
             if "Hostname Validation" in c:
                 hostname_validation = c.split(':')[1].lstrip()
-            if "CA Store" in c:
-                if not c.split(':')[1].lstrip().startswith('OK'):
-                    is_trusted = c.split(':')[1].lstrip()
+                for i in range(cert_result_list.index(c) + 1, cert_result_list.index(c) + 5):
+                    if not cert_result_list[i].split(':')[1].lstrip().startswith('OK'):
+                        is_trusted = cert_result_list[i].split(':')[1].lstrip()
+                        break
         
         expire_date = datetime.strptime(not_after, "%b %d %H:%M:%S %Y %Z")
         expire_in = expire_date - datetime.now()
@@ -106,7 +115,7 @@ class SslConfiguration(nap.Resource):
             cipher_plugin._shared_settings = shared_settings
             
             protocols = ['sslv2', 'sslv3', 'tlsv1', 'tlsv1_1', 'tlsv1_2']
-            
+
             ciphers = []
             
             for p in protocols[:]:

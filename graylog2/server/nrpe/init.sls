@@ -30,7 +30,7 @@ Nagios NRPE check for Graylog2 Server.
 {%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - apt.nrpe
-  - elasticsearch.nrpe
+  - elasticsearch.nrpe.instance
   - mongodb.nrpe
   - nrpe
   - rsyslog.nrpe
@@ -46,7 +46,6 @@ include:
       - module: nrpe-virtualenv
       - module: pyelasticsearch
       - pkg: nagios-nrpe-server
-
 
 {%- call passive_check('graylog2.server') %}
       - file: /usr/lib/nagios/plugins/check_new_logs.py

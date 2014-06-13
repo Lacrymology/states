@@ -26,7 +26,7 @@ Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 #}
 {%- macro elasticsearch_instance(which='elasticsearch') %}
-{%- set prefix = 'graylog2_' if which.startswith('graylog2') else '' %}
+{%- set prefix = 'graylog2_' if which == 'graylog2.server' else '' %}
 
 {%- set nodes_total = 0 -%}
 {#- this ugly hack is required to get the total number of nodes #}

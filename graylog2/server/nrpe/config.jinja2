@@ -39,4 +39,4 @@ graylog2_incoming_logs:
 {%- endif %}
 
 {%- from 'elasticsearch/nrpe/instance.jinja2' import elasticsearch_instance with context -%}
-{{ elasticsearch_instance('graylog2') }}
+{{ elasticsearch_instance('graylog2.server') }}

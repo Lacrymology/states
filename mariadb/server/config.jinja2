@@ -97,9 +97,6 @@ collation_server       = utf8_general_ci
 max_connections = 100
 connect_timeout = 5
 wait_timeout = 600
-max_allowed_packet = 16M
-thread_cache_size       = 128
-sort_buffer_size = 4M
 bulk_insert_buffer_size = 16M
 tmp_table_size = 32M
 max_heap_table_size = 32M
@@ -114,7 +111,6 @@ key_buffer_size = 128M
 {#-
 open-files-limit = 2000
 #}
-table_open_cache = 400
 myisam_sort_buffer_size = 512M
 concurrent_insert = 2
 read_buffer_size = 2M
@@ -153,8 +149,6 @@ log_warnings = 2
  slow_query_log[={0|1}]
 #}
 slow_query_log_file = /var/log/mysql/mariadb-slow.log
-long_query_time = 10
-log_slow_verbosity = query_plan
 {#-
 log_slow_rate_limit = 1000
 log-queries-not-using-indexes
@@ -194,7 +188,6 @@ efault_storage_engine = InnoDB
 innodb_log_file_size = 50M
 #}
 innodb_buffer_pool_size = 256M
-innodb_log_buffer_size = 8M
 innodb_file_per_table = 1
 innodb_open_files = 400
 innodb_io_capacity = 400

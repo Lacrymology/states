@@ -35,6 +35,7 @@ Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
 Backup for Proftpd.
 -#}
 include:
+  - bash
   - cron
   - postgresql.server.backup
 
@@ -50,3 +51,4 @@ backup-proftpd:
     - require:
       - pkg: cron
       - file: /usr/local/bin/backup-postgresql
+      - file: bash

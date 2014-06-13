@@ -28,6 +28,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 Backup client for Sentry.
 -#}
 include:
+  - bash
   - cron
   - postgresql.server.backup
 
@@ -43,3 +44,4 @@ backup-sentry:
     - require:
       - pkg: cron
       - file: /usr/local/bin/backup-postgresql
+      - file: bash

@@ -27,6 +27,7 @@ Maintainer: Dang Tung Lam <lamdt@familug.org>
 
 -#}
 include:
+  - bash
   - cron
   - postgresql.server.backup
 
@@ -42,3 +43,4 @@ backup-etherpad:
     - require:
       - pkg: cron
       - file: /usr/local/bin/backup-postgresql
+      - file: bash

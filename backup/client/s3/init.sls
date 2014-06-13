@@ -26,6 +26,7 @@ Author: Nicolas Plessis <nicolasp@microsigns.com>
 Maintainer: Nicolas Plessis <nicolasp@microsigns.com>
 -#}
 include:
+  - bash
   - local
   - s3cmd
 
@@ -40,3 +41,4 @@ include:
     - require:
       - pkg: s3cmd
       - file: /usr/local
+      - file: bash

@@ -26,6 +26,7 @@ Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 #}
 include:
+  - bash
   - local
 
 {# manage a script which creates a dumb file and print new created filename #}
@@ -37,3 +38,4 @@ include:
     - template: jinja
     - require:
       - file: /usr/local
+      - file: bash

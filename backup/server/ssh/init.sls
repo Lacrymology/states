@@ -28,6 +28,7 @@ Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
 Cleanup old archive.
 -#}
 include:
+  - bash
   - cron
 
 cleanup-old-archive:
@@ -41,3 +42,4 @@ cleanup-old-archive:
     - source: salt://backup/server/ssh/cron.jinja2
     - require:
       - pkg: cron
+      - file: bash

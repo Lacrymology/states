@@ -33,6 +33,7 @@ Author: Luan Vo Ngoc <ngocluanvo@gmail.com>
 Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
 -#}
 include:
+  - bash
   - local
   - backup.client
 
@@ -47,3 +48,4 @@ include:
     - require:
       - file: /usr/local
       - file: /usr/local/bin/backup-store
+      - file: bash

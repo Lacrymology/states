@@ -27,6 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
        Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
 include:
+  - bash
   - jenkins
   - local
   - rsync
@@ -94,6 +95,7 @@ extend:
     - template: jinja
     - require:
       - pkg: jenkins
+      - file: bash
 
 /etc/cron.d/salt-archive-ci:
   file:

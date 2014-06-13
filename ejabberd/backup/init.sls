@@ -31,6 +31,7 @@ Backup for ejabberd
 include:
   - cron
   - postgresql.server.backup
+  - bash
 
 /etc/cron.daily/backup-ejabberd:
   file:
@@ -43,3 +44,4 @@ include:
     - require:
       - pkg: cron
       - file: /usr/local/bin/backup-postgresql
+      - file: bash

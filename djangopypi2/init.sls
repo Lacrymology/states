@@ -34,6 +34,7 @@ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
 -#}
 include:
   - apt
+  - bash
   - local
   - memcache
   - nginx
@@ -146,6 +147,7 @@ djangopypi2:
     - require:
       - virtualenv: djangopypi2
       - pkg: sudo
+      - file: bash
 
 djangopypi2_urls:
   file:

@@ -29,6 +29,7 @@ Install a Sentry (error management and reporting tool) web server.
 -#}
 include:
   - apt
+  - bash
   - local
   - nginx
   - pip
@@ -162,6 +163,7 @@ sentry_settings:
     - require:
       - virtualenv: sentry
       - pkg: sudo
+      - file: bash
 
 sentry-syncdb-all:
   cmd:

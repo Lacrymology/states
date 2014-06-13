@@ -30,6 +30,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 {%- set ssl = salt['pillar.get']('elasticsearch:ssl', False) %}
 include:
   - apt
+  - bash
   - cron
   - java.7
 {% if ssl %}
@@ -70,6 +71,7 @@ include:
     - source: salt://elasticsearch/cron_daily.jinja2
     - require:
       - pkg: cron
+      - file: bash
 
 {% if grains['cpuarch'] == 'i686' %}
 /usr/lib/jvm/java-7-openjdk:

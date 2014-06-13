@@ -31,6 +31,7 @@ Salt Archive Server HTTP/HTTPS.
 {%- set ssl = salt['pillar.get']('salt_archive:ssl', False) -%}
 
 include:
+  - bash
   - cron
   - local
   - nginx
@@ -55,6 +56,7 @@ include:
     - source: salt://salt/archive/server/cron.jinja2
     - require:
       - user: salt_archive
+      - file: bash
 {%- if not salt['pillar.get']('salt_archive:source', False) %}
       - file: /usr/local/bin/salt_archive_incoming.py
     {#-
@@ -113,6 +115,7 @@ salt_archive_incoming:
     - mode: 550
     - require:
       - file: /usr/local
+      - file: bash
 
 archive_rsync:
   cmd:

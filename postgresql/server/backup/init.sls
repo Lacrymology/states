@@ -28,6 +28,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Backup client for PostgreSQL.
 -#}
 include:
+  - bash
   - local
   - backup.client
 
@@ -46,6 +47,7 @@ include:
     - require:
       - file: /usr/local
       - file: /usr/local/bin/backup-store
+      - file: bash
 
 /usr/local/bin/backup-postgresql-all:
   file:
@@ -58,6 +60,7 @@ include:
     - require:
       - file: /usr/local
       - file: /usr/local/bin/backup-store
+      - file: bash
 
 /usr/local/bin/backup-postgresql-by-role:
   file:
@@ -69,3 +72,4 @@ include:
     - source: salt://postgresql/server/backup/backup_by_role.jinja2
     - require:
       - file: /usr/local/bin/backup-postgresql
+      - file: bash

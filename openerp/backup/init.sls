@@ -35,6 +35,7 @@ Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
 Backup client for openerp.
 -#}
 include:
+  - bash
   - cron
   - postgresql.server.backup
 
@@ -50,3 +51,4 @@ backup-openerp:
     - require:
       - pkg: cron
       - file: /usr/local/bin/backup-postgresql-by-role
+      - file: bash

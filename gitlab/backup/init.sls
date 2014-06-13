@@ -35,6 +35,7 @@ Maintainer: Lam Dang Tung <lamdt@familug.org>
 Backup for Gitlab.
 -#}
 include:
+  - bash
   - cron
   - postgresql.server.backup
   - backup
@@ -52,3 +53,4 @@ backup-gitlab:
       - pkg: cron
       - file: /usr/local/bin/backup-postgresql
       - file: /usr/local/bin/backup-file
+      - file: bash

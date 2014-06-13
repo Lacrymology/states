@@ -32,6 +32,7 @@ Install the web interface component of graphite.
 
 include:
   - apt
+  - bash
   - graphite.common
   - local
   - memcache
@@ -115,6 +116,7 @@ graphite_wsgi:
     - require:
       - virtualenv: graphite
       - pkg: sudo
+      - file: bash
 
 {#- TODO: remove that statement in >= 2014-04 #}
 /usr/local/graphite/salt-graphite-web-requirements.txt:
@@ -305,6 +307,7 @@ graphite_admin_user:
     - require:
       - virtualenv: graphite
       - file: /var/lib/graphite/whisper
+      - file: bash
 
 /etc/nginx/conf.d/graphite.conf:
   file:

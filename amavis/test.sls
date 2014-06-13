@@ -35,3 +35,8 @@ test:
     - run_all_checks
     - wait: 60
     - order: last
+  cmd:
+    - run
+    - name: /etc/cron.daily/amavisd-new
+    - require:
+      - service: amavis

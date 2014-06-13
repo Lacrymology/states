@@ -69,6 +69,16 @@ denyhosts:
     - require:
       - service: rsyslog
 
+/usr/local/bin/denyhosts-unblock:
+  file:
+    - managed
+    - source: salt://denyhosts/denyhosts-unblock.py
+    - user: root
+    - group: root
+    - mode: 500
+    - require:
+      - pkg: denyhosts
+
 {% for file in ('/etc/logrotate.d/denyhosts', '/var/log/denyhosts') %}
 {{ file }}:
   file:

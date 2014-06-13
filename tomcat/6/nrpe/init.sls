@@ -40,4 +40,10 @@ include:
   - nrpe
   - rsyslog.nrpe
 
-{{ passive_check('tomcat.6', filename='tomcat') }}
+/etc/nagios/nrpe.d/tomcat.cfg:
+  file:
+    - absent
+
+{%- call passive_check('tomcat.6') %}
+  - file: /etc/nagios/nrpe.d/tomcat.cfg
+{%- endcall %}

@@ -87,8 +87,14 @@ check_postgres:
     - require:
       - pkg: sudo
 
+/etc/nagios/nrpe.d/postgresql.cfg:
+  file:
+    - absent
+
 {%- from 'nrpe/passive.sls' import passive_check with context %}
-{{ passive_check('postgresql.common', filename='postgresql') }}
+{%- call passive_check('postgresql.common') %}
+  - file: /etc/nagios/nrpe.d/postgresql.cfg
+{%- endcall %}
 
 extend:
   nagios-nrpe-server:

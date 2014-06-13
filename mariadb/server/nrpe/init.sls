@@ -41,4 +41,10 @@ include:
   - nrpe
   - salt.minion.nrpe
 
-{{ passive_check('mariadb.server') }}
+/etc/nagios/nrpe.d/mysql.cfg:
+  file:
+    - absent
+
+{%- call passive_check('mariadb.server') %}
+  - file: /etc/nagios/nrpe.d/mysql.cfg
+{%- endcall %}

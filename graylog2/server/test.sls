@@ -45,6 +45,7 @@ graylog2_log_one_msg:
 test:
   monitoring:
     - run_all_checks
+    - wait: 60
     - order: last
     - exclude:
       - graylog2_elasticsearch_cluster

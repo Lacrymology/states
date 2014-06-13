@@ -140,6 +140,11 @@ define command {
     command_line /usr/lib/nagios/plugins/check_tcp -H $HOSTADDRESS$ -p $ARG1$
 }
 
+define command {
+    command_name check_ssl_configuration
+    command_line /usr/lib/nagios/plugins/check_ssl_configuration.py -H $ARG1$
+}
+
 define timeperiod {
     timeperiod_name 24x7
     alias 24_Hours_A_Day,_7_Days_A_Week

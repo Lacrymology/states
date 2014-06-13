@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Hung Nguyen Viet
+Copyright (c) 2014, Hung Nguyen Viet
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -25,37 +25,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
-amavis:
-  service:
-    - dead
-  pkg:
-    - purged
-    - name: amavisd-new
-    - require:
-      - service: amavis
-  user:
-    - absent
-    - require:
-      - pkg: amavis
-      - service: amavis
-
-{#
- For some reason, purge amavisd-new Ubuntu package don't clean these.
- /var/run/amavis is $HOME of user amavis.
- So, when amavisd-new is uninstalled the first time the UID of this
- directory is changed to something else, once userdel amavis is executed.
- When amavisd-new is installed again, it can't write the PID file in
- /var/run/amavis. As the ownership is not for itself, it can't write the PID.
- This cause stopping the service to fail, as it can't find a PID.
-#}
-{% for dirname in ('/etc', '/var/run', '/var/lib') %}
-{{ dirname }}/amavis:
-  file:
-    - absent
-    - require:
-      - user: amavis
-{% endfor %}
-
-/etc/cron.daily/amavisd-new:
-  file:
-    - absent
+#!/bin/sh
+# {{ pillar['message_do_not_modify'] }}
+#
+#  Daily maintenance for amavisd-new
+#  $Id: amavisd-new.cron.daily 930 2006-08-10 13:38:45Z hmh $
+#
+export TERM=dumb
+test -e /usr/sbin/amavisd-new-cronjob && exec /usr/sbin/amavisd-new-cronjob sa-clean
+exit 0

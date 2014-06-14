@@ -33,6 +33,12 @@ backend default {
 }
 
 {% set extra_config = salt['pillar.get']('varnish:extra_config', None) -%}
-{%- if extra_config -%}
-{{- extra_config -}}
+{%- if extra_config %}
+{{ extra_config }}
+{%- endif %}
+
+{%- if salt['pillar.get']("__test__", False) %}
+sub vcl_recv {
+    set req.http.host = "archive.robotinfra.com";
+}
 {%- endif %}

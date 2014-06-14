@@ -31,7 +31,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
         {%- set prefix = deployment -%}
     {%- endif -%}
     {%- if not domain_name %}
-        {%- set domain_name = salt['pillar.get'](prefix + 'hostnames', ['127.0.0.1'])[0] -%}
+        {%- set domain_name = salt['pillar.get'](prefix + ':hostnames', ['127.0.0.1'])[0] -%}
     {%- endif %}
     {#- if http is redirected to https, force a specific header -#}
     {%- if salt['pillar.get'](prefix + ':ssl_redirect', False) -%}

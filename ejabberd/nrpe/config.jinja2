@@ -28,7 +28,7 @@ Maintainer: Dang Tung Lam <lamdt@familug.org>
 
 # {{ pillar['message_do_not_modify'] }}
 
-command[ejabberd_web_check]=/usr/lib/nagios/plugins/check_procs -c 1:1 -a '-ejabberd config "/etc/ejabberd/ejabberd.cfg' -u ejabberd
+command[ejabberd_proc_check]=/usr/lib/nagios/plugins/check_procs -c 1:1 -a '-ejabberd config "/etc/ejabberd/ejabberd.cfg' -u ejabberd
 command[ejabberd_c2s_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 5222
 
 {%- if salt['pillar.get']('ejabberd:server_to_server', False) %}

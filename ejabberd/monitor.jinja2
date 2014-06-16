@@ -26,15 +26,28 @@ Author: Dang Tung Lam <lamdt@familug.org>
 Maintainer: Dang Tung Lam <lamdt@familug.org>
 #}
 
+ejabberd_proc_check:
+  description: ejabberd process
+
+ejabberd_c2s_port:
+  description: ejabberd c2s tcp port 5222
+
+{%- if salt['pillar.get']('ejabberd:server_to_server', False) %}
+ejabberd_s2s_port:
+  description: ejabberd s2s tcp port 5269
+{%- endif %}
+
 ejabberd_nginx_http:
   description: ejabberd Web Admin HTTP protocol
 
+{%- if salt['pillar.get']('ejabberd:ssl', False) %}
 ejabberd_nginx_https:
   description: ejabberd Web Admin HTTPS protocol
 
 ejabberd_nginx_https_certificate:
   description: HTTPS Certificate Expiration
   check_interval: 1440 {#- only need to check https certificate each day #}
+{%- endif %}
 
 ejabberd_postgresql:
   description: ejabberd PostgreSQL database

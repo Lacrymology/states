@@ -28,6 +28,7 @@ Maintainer: Dang Tung Lam <lamdt@familug.org>
 NRPE check for ejabberd - XMPP Server
 #}
 
+{%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - apt.nrpe
   - erlang.nrpe
@@ -93,3 +94,5 @@ include:
       password: {{ salt['password.pillar']('ejabberd:db:password', 10) }}
     - watch_in:
       - service: nagios-nrpe-server
+
+{{ passive_check('ejabberd') }}

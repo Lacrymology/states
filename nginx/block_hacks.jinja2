@@ -5,7 +5,7 @@
     }
 
     # deny read file config.php
-    location ~* /admin/config.php {
+    location /admin/config.php {
         deny all;
         return 404;
     }

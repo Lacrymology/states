@@ -40,8 +40,8 @@ ejabberd_s2s_port:
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 5269
 {%- endif %}
 
-{%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
-{%- from 'postgresql/server/nrpe/instance.jinja2' import postgresql_instance_prefix with context -%}
+{%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context %}
+{%- from 'postgresql/server/nrpe/instance.jinja2' import postgresql_instance_prefix with context %}
 {%- set deployment = 'ejabberd' %}
 {{ nginx_instance(deployment, http_uri='/admin', https_result='401 Unauthorized', http_result='401 Unauthorized') }}
 {{ postgresql_instance_prefix(deployment) }}

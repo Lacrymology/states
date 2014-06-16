@@ -28,7 +28,7 @@ Maintainer: Dang Tung Lam <lamdt@familug.org>
 
 ejabberd_proc_check:
   description: ejabberd Process
-  command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -a '-ejabberd config "/etc/ejabberd/ejabberd.cfg' -u ejabberd"
+  command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -a ''-ejabberd config "/etc/ejabberd/ejabberd.cfg"'' -u ejabberd'
 
 ejabberd_c2s_port:
   description: ejabberd XMPP Port (C2S)

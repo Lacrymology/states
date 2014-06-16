@@ -277,10 +277,10 @@ define reactionner {
     max_check_attempts  3   ; If ping fails N or more, then the node is dead
     check_interval      60  ; Ping node every minutes#}
     modules
-}
   {%- else %}
 # Can't define reactionner {{ id }}, data not yet available in salt mine
-  {%- endif -%}
+  {%- endif %}
+}
 {%- endfor %}
 
 define module {

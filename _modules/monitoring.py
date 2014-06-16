@@ -152,7 +152,7 @@ def data():
     return output
 
 
-def discover_checks(state_name):
+def checks_for_formula(state_name):
     '''
     Return dict of all data in salt://$statename/monitor.jinja2.
     Check ``doc/state.rst`` for details on this file.
@@ -190,14 +190,14 @@ def discover_checks(state_name):
     return unserialized
 
 
-def discover_checks_passive(state_name):
+def passive_checks_for_formula(state_name):
     '''
     Return a dict of all checks that are passive in specified state
     '''
     output = {}
-    checks = discover_checks(state_name)
+    checks = checks_for_formula(state_name)
     if not checks:
-        logger.debug("discover_checks('%s') returned nothing", state_name)
+        logger.debug("checks_for_formula('%s') returned nothing", state_name)
         return output
 
     for check_name in checks:

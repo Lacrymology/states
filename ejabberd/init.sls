@@ -127,20 +127,15 @@ ejabberd_psql:
       - file: ejabberd_psql
       - postgres_database: ejabberd
 
-{%- for user in salt['pillar.get']('ejabberd:admins') %}
-{%- set password = salt['pillar.get']('ejabberd:admins:' + user) %}
-{%- set hostname = salt['pillar.get']('ejabberd:hostnames')[0] %}
-
-ejabberd_reg_user_{{ user }}:
+ejabberd_reg_user:
   cmd:
-    - run
-    - name: ejabberdctl register {{ user }} {{ hostname }} {{ password }}
+    - script
+    - source: salt://ejabberd/ejabberd_reg_user.jinja2
+    - template: jinja
     - user: root
-    - unless: ejabberdctl check_account {{ user }} {{ hostname }}
     - require:
       - pkg: ejabberd
       - service: ejabberd
-{%- endfor %}
 
 /etc/nginx/conf.d/ejabberd.conf:
   file:

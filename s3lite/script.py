@@ -68,19 +68,20 @@ class S3Util(object):
         logger.info('uploading %s to %s,%s', filepath, bucket.name, k.key)
 
         wrote_bytes = k.set_contents_from_filename(filepath)
-        logger.info('wrote %d bytes', wrote_bytes)
+        logger.debug('wrote %d bytes', wrote_bytes)
         return wrote_bytes
 
     def sync(self, bucket, path, prefix=''):
-        logger.info('Prefix to sync: %s', prefix)
+        logger.debug('Prefix to sync: %s', prefix)
         localfiles = self.get_filedatas(bucket, path, prefix)
+        total_to_process = len(localfiles)
         counter = collections.Counter({'uploaded': 0,
                                        'existed_before_sync': 0})
 
         for rfile in bucket.list(prefix):
             # etag is usually md5sum of that file
             rmd5 = rfile.etag.strip('"')
-            logger.info('Remote md5 of %r: %r', rfile.name, rmd5)
+            logger.debug('Remote md5 of %r: %r', rfile.name, rmd5)
             for lfn in localfiles:
                 if rmd5 == unicode(localfiles[lfn]['md5']):
                     logger.warning('%s existed on S3 at %s', lfn, rfile.name)
@@ -93,6 +94,12 @@ class S3Util(object):
                 counter['uploaded'] += 1
             else:
                 counter['existed_before_sync'] += 1
+            processed = counter['uploaded'] + counter['existed_before_sync']
+            logger.info('Total %d, processed %d, uploaded %d, existed %d',
+                        total_to_process,
+                        processed,
+                        counter['uploaded'],
+                        counter['existed_before_sync'])
 
         return counter
 

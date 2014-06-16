@@ -65,10 +65,18 @@ server {
         alias /usr/local/sentry/lib/python{{ python_version }}/site-packages/sentry/static/;
     }
 
+    location = /favicon.ico {
+        alias /usr/local/sentry/lib/python{{ python_version }}/site-packages/sentry/static/sentry/images/favicon.ico;
+    }
+
+    location ~ ^/apple-touch-icon {
+        root /usr/local/sentry/lib/python{{ python_version }}/site-packages/sentry/static/sentry/bootstrap/docs/assets/ico;
+        rewrite ^/apple-touch-icon-([0-9]+)x[0-9]+.png$ /apple-touch-icon-$1-precomposed.png;
+    }
+
 {% include 'nginx/location_robots.jinja2' %}
 
     location / {
-        {#  rewrite ^/favicon.ico$ /media/images/favicon.ico last;#}
         uwsgi_pass sentry;
         include uwsgi_params;
     }

@@ -49,6 +49,7 @@ include:
   - redis.nrpe
   - rsyslog.nrpe
   - ruby.nrpe
+  - ssh.server.nrpe
 {%- if salt['pillar.get']('gitlab:ssl', False) %}
   - ssl.nrpe
 {%- endif %}

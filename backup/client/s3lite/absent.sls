@@ -37,3 +37,7 @@ s3lite:
 /usr/local/bin/s3lite:
   file:
     - absent
+
+/usr/local/bin/backup-store:
+  file:
+    - absent

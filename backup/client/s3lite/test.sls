@@ -26,9 +26,9 @@ Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 #}
 include:
-  - s3lite
-  - s3lite.diamond
-  - s3lite.nrpe
+  - backup.client.s3lite
+  - backup.client.s3lite.diamond
+  - backup.client.s3lite.nrpe
 
 test:
   nrpe:

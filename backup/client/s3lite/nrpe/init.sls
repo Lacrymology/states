@@ -28,3 +28,4 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 include:
   - virtualenv.nrpe
+  - backup.client.s3.nrpe

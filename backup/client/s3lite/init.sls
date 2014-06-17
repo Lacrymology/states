@@ -44,7 +44,7 @@ s3lite:
     - user: root
     - group: root
     - mode: 440
-    - source: salt://s3lite/requirements.jinja2
+    - source: salt://backup/client/s3lite/requirements.jinja2
     - require:
       - virtualenv: s3lite
   module:
@@ -63,14 +63,14 @@ s3lite:
     - mode: 400
     - user: root
     - group: root
-    - source: salt://s3lite/config.jinja2
+    - source: salt://backup/client/s3lite/config.jinja2
 
 {#- anyuser/program should can run this script, it just needs to provide
 the config file as default config file is only for root #}
 /usr/local/s3lite/bin/s3lite:
   file:
     - managed
-    - source: salt://s3lite/script.py
+    - source: salt://backup/client/s3lite/script.py
     - user: root
     - group: root
     - mode: 551

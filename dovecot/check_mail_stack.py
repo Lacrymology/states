@@ -39,37 +39,12 @@ import os
 import smtplib
 import sys
 import time
-import unittest
 import uuid
+import nagiosplugin as nap
 
 
 logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger(__name__)
-
-parser = ConfigParser.SafeConfigParser()
-abspath = os.path.abspath('check_mail_stack.cfg')
-read = parser.read(abspath)
-if not read:
-    log.critical('Missing config file at %s', abspath)
-    sys.exit(1)
-
-try:
-    WAITTIME = float(parser.get('mail', 'smtp_wait'))
-    USERNAME = parser.get('mail', 'username')
-    PASSWORD = parser.get('mail', 'password')
-    IMAP_SERVER = parser.get('mail', 'imap_server')
-    SMTP_SERVER = parser.get('mail', 'smtp_server')
-except Exception as e:
-    log.critical('Bad config: %s', e, exc_info=True)
-    log.critical('Sample config \n%s',
-                 '''[mail]
-username = admin@example.com
-password = securepasswd
-imap_server = mail.example.com
-smtp_server = mail.example.com
-smtp_wait = 7
-                 ''')
-    sys.exit(1)
 
 
 def pad_uuid(msg):
@@ -77,21 +52,40 @@ def pad_uuid(msg):
     return '. '.join((msg, 'UUID: %s' % uuid.uuid4().hex))
 
 
-class TestMailStack(unittest.TestCase):
+class MailStackHealth(nap.Resource):
+    def __init__(self,
+                 imap_server,
+                 smtp_server,
+                 username,
+                 password,
+                 smtp_wait):
 
-    @classmethod
-    def setUpClass(cls):
-        cls.imap = imaplib.IMAP4_SSL(IMAP_SERVER)
-        log.debug('IMAP login: %s', cls.imap.login(USERNAME, PASSWORD))
-        cls.smtp = smtplib.SMTP_SSL(SMTP_SERVER, 465)
-        log.debug('SMTP EHLO: %s', cls.smtp.ehlo())
-        log.debug('SMTP login: %s', cls.smtp.login(USERNAME, PASSWORD))
+        self.imap = imaplib.IMAP4_SSL(imap_server)
+        log.debug('IMAP login: %s', self.imap.login(username, password))
 
-    def setUp(self):
-        self.imap = TestMailStack.imap
-        self.smtp = TestMailStack.smtp
+        self.smtp = smtplib.SMTP_SSL(smtp_server, 465)
+        log.debug('SMTP EHLO: %s', self.smtp.ehlo())
+        log.debug('SMTP login: %s', self.smtp.login(username, password))
 
-    def send_email(self, subject, rcpts, body, _from=USERNAME, wait=0):
+        self.username = username
+        self.password = password
+        self.waittime = smtp_wait
+
+    def probe(self):
+        try:
+            spamtest = self.test_send_and_receive_GTUBE_spam_in_spam_folder()
+            inboxtest = self.test_send_and_receive_email_in_inbox_mailbox()
+            virustest = self.test_send_virus_email_and_discarded_by_amavis()
+        except Exception as e:
+            log.error(e, exc_info=True)
+        else:
+            return [nap.Metric('mail_stack_health',
+                               all((spamtest, inboxtest, virustest)),
+                               context='null')]
+
+    def send_email(self, subject, rcpts, body, _from=None, wait=0):
+        if _from is None:
+            _from = self.username
         msg = '''\
 From: %s
 Subject: %s
@@ -107,7 +101,8 @@ Subject: %s
 
     def _send_email_for_test(self, subject, body):
         body = pad_uuid(body)
-        self.send_email(subject, [USERNAME], body, wait=WAITTIME)
+        self.send_email(subject, [self.username], body,
+                        wait=self.waittime)
 
     def _fetch_msg_in_mailbox(self, msg, mailbox, msg_set, msg_parts):
         log.debug('SELECT %s: %s', mailbox, self.imap.select(mailbox))
@@ -130,13 +125,13 @@ Subject: %s
                 'STANDARD-ANTI-UBE-TEST-EMAIL*C.34X')
         self._send_email_for_test('Testing spam with GTUBE', body)
         found = self.grep_msg(body, 'spam', msg_set='latest')
-        self.assertTrue(found)
+        return found
 
     def test_send_and_receive_email_in_inbox_mailbox(self):
         body = 'Test inbox'
         self._send_email_for_test('Testing send email to INBOX', body)
         found = self.grep_msg(body, 'INBOX', msg_set='latest')
-        self.assertTrue(found)
+        return found
 
     def test_send_virus_email_and_discarded_by_amavis(self):
         # http://en.wikipedia.org/wiki/EICAR_test_file
@@ -144,8 +139,41 @@ Subject: %s
                 'EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*')
         self._send_email_for_test('Testing send virus email ', body)
         found = self.grep_msg(body, 'INBOX', msg_set='latest')
-        self.assertFalse(found)
+        # not found the msg means antivirus worked
+        return (not found)
 
+
+@nap.guarded
+def main():
+    parser = ConfigParser.SafeConfigParser()
+    abspath = os.path.abspath('check_mail_stack.cfg')
+    read = parser.read(abspath)
+    if not read:
+        log.critical('Missing config file at %s', abspath)
+        sys.exit(1)
+
+    try:
+        WAITTIME = float(parser.get('mail', 'smtp_wait'))
+        USERNAME = parser.get('mail', 'username')
+        PASSWORD = parser.get('mail', 'password')
+        IMAP_SERVER = parser.get('mail', 'imap_server')
+        SMTP_SERVER = parser.get('mail', 'smtp_server')
+    except Exception as e:
+        log.critical('Bad config: %s', e, exc_info=True)
+        log.critical('Sample config \n%s',
+                     '''[mail]
+    username = admin@example.com
+    password = securepasswd
+    imap_server = mail.example.com
+    smtp_server = mail.example.com
+    smtp_wait = 7
+                     ''')
+        sys.exit(1)
+
+    mshealth = MailStackHealth(IMAP_SERVER, SMTP_SERVER, USERNAME, PASSWORD,
+                               WAITTIME)
+    check = nap.Check(mshealth)
+    check.main(timeout=300)
 
 if __name__ == "__main__":
-    unittest.main()
+    main()

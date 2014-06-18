@@ -32,14 +32,14 @@ __author__ = 'Hung Nguyen Viet <hvnsweeting@gmail.com>'
 __maintainer__ = 'Hung Nguyen Viet <hvnsweeting@gmail.com>'
 __email__ = 'hvnsweeting@gmail.com'
 
-import ConfigParser
 import imaplib
 import logging
-import os
 import smtplib
 import sys
 import time
 import uuid
+
+import bfs
 import nagiosplugin as nap
 
 
@@ -145,33 +145,20 @@ Subject: %s
 
 @nap.guarded
 def main():
-    parser = ConfigParser.SafeConfigParser()
-    abspath = os.path.abspath('check_mail_stack.cfg')
-    read = parser.read(abspath)
-    if not read:
-        log.critical('Missing config file at %s', abspath)
-        sys.exit(1)
-
     try:
-        WAITTIME = float(parser.get('mail', 'smtp_wait'))
-        USERNAME = parser.get('mail', 'username')
-        PASSWORD = parser.get('mail', 'password')
-        IMAP_SERVER = parser.get('mail', 'imap_server')
-        SMTP_SERVER = parser.get('mail', 'smtp_server')
+        config = bfs.Util('check_mail_stack.yml', lock=False)
+        mail = config['mail']
+        waittime = mail['smtp_wait']
+        username = mail['username']
+        password = mail['password']
+        imap_server = mail['imap_server']
+        smtp_server = mail['smtp_server']
     except Exception as e:
         log.critical('Bad config: %s', e, exc_info=True)
-        log.critical('Sample config \n%s',
-                     '''[mail]
-    username = admin@example.com
-    password = securepasswd
-    imap_server = mail.example.com
-    smtp_server = mail.example.com
-    smtp_wait = 7
-                     ''')
         sys.exit(1)
 
-    mshealth = MailStackHealth(IMAP_SERVER, SMTP_SERVER, USERNAME, PASSWORD,
-                               WAITTIME)
+    mshealth = MailStackHealth(imap_server, smtp_server, username, password,
+                               waittime)
     check = nap.Check(mshealth)
     check.main(timeout=300)
 

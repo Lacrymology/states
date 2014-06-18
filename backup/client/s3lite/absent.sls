@@ -28,3 +28,16 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 include:
   - backup.absent
   - backup.client.absent
+
+s3lite:
+  file:
+    - absent
+    - name: /usr/local/s3lite
+
+/etc/s3lite.yml:
+  file:
+    - absent
+
+/usr/local/bin/s3lite:
+  file:
+    - absent

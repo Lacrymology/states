@@ -25,6 +25,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 #}
-include:
-  - backup.absent
-  - backup.client.absent
+boto==2.29.1
+{%- if 'files_archive' in pillar %}
+{{ pillar['files_archive'] }}/pip/bfs-0.2.4.tar.gz
+{%- else %}
+http://archive.robotinfra.com/pip/bfs-0.2.4.tar.gz
+{%- endif %}

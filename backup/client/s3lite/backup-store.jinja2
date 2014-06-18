@@ -1,3 +1,5 @@
+#!/bin/bash
+# {{ pillar['message_do_not_modify'] }}
 {#-
 Copyright (c) 2014, Hung Nguyen Viet
 All rights reserved.
@@ -24,7 +26,16 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
+
+Stores data files on Amazon S3, use s3lite for uploading.
 #}
-include:
-  - backup.absent
-  - backup.client.absent
+set -e
+
+# limit resources usage
+ulimit -e 19
+ionice -c idle -p $$
+
+archive_path=$1
+archive_name=`basename $archive_path`
+/usr/local/s3lite/bin/s3lite $archive_path s3://{{ pillar['aws']['s3']['bucket'] }}/{{ pillar['aws']['s3']['path'] }}/$archive_name | logger -t s3lite
+rm -f $archive_path

@@ -27,3 +27,4 @@ Maintainer: Nicolas Plessis <nicolasp@microsigns.com>
 -#}
 include:
   - backup.absent
+  - backup.client.absent

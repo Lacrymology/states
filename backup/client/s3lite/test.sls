@@ -26,5 +26,16 @@ Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 #}
 include:
-  - backup.absent
-  - backup.client.absent
+  - backup.client.s3lite
+  - backup.client.s3lite.diamond
+  - backup.client.s3lite.nrpe
+
+test:
+  nrpe:
+    - run_all_checks
+    - order: last
+  cmd:
+    - run
+    - name: /usr/local/bin/backup-store /usr/local/s3lite/bin/s3lite
+    - require:
+      - file: /usr/local/bin/backup-store

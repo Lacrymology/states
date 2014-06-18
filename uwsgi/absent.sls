@@ -24,6 +24,31 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
+<<<<<<< HEAD:uwsgi/absent.sls
+=======
+-#}
+sentry_nginx_http:
+  description: Sentry HTTP Protocol
+
+sentry_nginx_https:
+  description: Sentry HTTPS Protocol
+
+sentry_nginx_https_certificate:
+  description: Sentry HTTPS Certificate Expiration
+  check_interval: 1440 {#- only need to check https certificate each day #}
+  freshness_threshold: {{ (1440 + 10) * 60 }}
+
+sentry_ssl_configuration:
+  description: Sentry SSL Configuration
+  check_interval: 1440
+  freshness_threshold: {{ (1440 + 10) * 60 }}
+
+sentry_postgresql:
+  description: Sentry PostgreSQL database
+
+sentry_uwsgi_master:
+  description: Sentry uWSGI Master Process
+>>>>>>> erpt620: add SSL configuration check into monitor.jinja2 of https sites:sentry/monitor.jinja2
 
 Uninstall uWSGI Web app server.
 -#}

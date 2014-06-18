@@ -41,6 +41,7 @@ include:
   - rsyslog.nrpe
 {% if salt['pillar.get']('sentry:ssl', False) %}
   - ssl.nrpe
+  - sslyze
 {% endif %}
 {% if 'graphite_address' in pillar %}
   - statsd.nrpe

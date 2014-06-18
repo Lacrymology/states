@@ -38,6 +38,7 @@ include:
   - rsyslog.nrpe
 {% if salt['pillar.get']('roundcube:ssl', False) %}
   - ssl.nrpe
+  - sslyze
 {% endif %}
   - uwsgi.nrpe
 

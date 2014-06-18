@@ -28,8 +28,6 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 {%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
 {{ nginx_instance('salt_archive') }}
 
-{%- if salt['pillar.get']('salt_archive:source', False) %}
-  {%- set max_age = salt['pillar.get']('salt_archive:max_age', 3600) %}
 salt_archive_timestamp:
   description: Salt Archive Synchronization
   check_interval: 900

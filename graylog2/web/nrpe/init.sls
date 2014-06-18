@@ -38,6 +38,7 @@ include:
   - ruby.nrpe
 {% if salt['pillar.get']('graylog2:ssl', False) %}
   - ssl.nrpe
+  - sslyze
 {% endif %}
   - uwsgi.nrpe
 

@@ -36,5 +36,6 @@ include:
   - nrpe
   - postgresql.server.nrpe
   - ssl.nrpe
+  - sslyze
 
 {{ passive_check('ejabberd') }}

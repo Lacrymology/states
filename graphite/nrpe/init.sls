@@ -41,6 +41,7 @@ include:
   - rsyslog.nrpe
 {% if salt['pillar.get']('graphite:web:ssl', False) %}
   - ssl.nrpe
+  - sslyze
 {% endif %}
   - statsd.nrpe
   - sudo.nrpe

@@ -36,6 +36,7 @@ include:
   - ssh.server.nrpe
 {% if salt['pillar.get']('salt_archive:web:ssl', False) %}
   - ssl.nrpe
+  - sslyze
 {% endif %}
 
 {{ passive_check('salt.archive.server') }}

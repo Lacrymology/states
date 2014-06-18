@@ -40,6 +40,7 @@ include:
   - rsyslog.nrpe
 {%- if salt['pillar.get']('openerp:ssl', False) %}
   - ssl.nrpe
+  - sslyze
 {%- endif %}
   - underscore.nrpe
   - uwsgi.nrpe

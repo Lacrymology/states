@@ -37,8 +37,21 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
   check_interval: 1440 {#- only need to check https certificate each day #}
   freshness_threshold: {{ (1440 + 10) * 60 }}
 
+<<<<<<< HEAD:uwsgi/monitor_template.jinja2
 {{ appname }}_uwsgi_master:
   description: {{ appname|title }} uWSGI Master Process
+=======
+graphite_ssl_configuration:
+  description: Graphite SSL Configuration
+  check_interval: 1440 {#- only need to check https certificate each day #}
+  freshness_threshold: {{ (1440 + 10) * 60 }}
+
+graphite_postgresql:
+  description: PostgreSQL database
+
+graphite_uwsgi_master:
+  description: uWSGI Master Process
+>>>>>>> erpt620: add SSL configuration check into monitor.jinja2 of https sites:graphite/monitor.jinja2
 
 {{ appname }}_uwsgi_worker:
   description: {{ appname|title }} uWSGI Workers Process

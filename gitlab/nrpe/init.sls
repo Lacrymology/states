@@ -52,6 +52,7 @@ include:
   - ssh.server.nrpe
 {%- if salt['pillar.get']('gitlab:ssl', False) %}
   - ssl.nrpe
+  - sslyze
 {%- endif %}
   - uwsgi.nrpe
   - xml.nrpe

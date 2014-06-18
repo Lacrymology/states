@@ -1,7 +1,7 @@
 # file contains all common macros
 #
 
-{%- macro manage_pid(path, user, group, require_pkg, watch_in_service, mode='644') %}
+{%- macro manage_pid(path, user, group, watch_in_service, require, mode='644') %}
 {#- manage pid file owner/mode only if it exists, as if always manage it may
 cause problem because each daemon handle existed pid file different way #}
   {%- if salt['file.file_exists'](path) %}
@@ -11,9 +11,17 @@ cause problem because each daemon handle existed pid file different way #}
     - user: {{ user }}
     - group: {{ group }}
     - mode: {{ mode }}
+{%- if caller is defined %}
+{%- for line in caller().split("\n") %}
+  {%- if loop.first %}
     - require:
-      - pkg: {{ require_pkg }}
+  {%- endif %}
+{{ line|trim|indent(6, indentfirst=True) }}
+{%- endfor %}
+{%- endif %}
     - watch_in:
       - service: {{ watch_in_service }}
+  {%- else %}
+# {{ path }} does not exist, no need to manage
   {%- endif %}
 {%- endmacro %}

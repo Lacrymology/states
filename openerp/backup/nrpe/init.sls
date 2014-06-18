@@ -32,15 +32,5 @@ include:
   - cron.nrpe
   - nrpe
 
-/etc/nagios/nrpe.d/backup-openerp.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://openerp/backup/nrpe/config.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-    - watch_in:
-      - service: nagios-nrpe-server
+{%- from 'nrpe/passive.sls' import passive_check with context %}
+{{ passive_check('openerp.backup') }}

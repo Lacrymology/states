@@ -33,7 +33,7 @@ include:
   - openldap.nrpe
 
 test:
-  nrpe:
+  monitoring:
     - run_all_checks
     - order: last
   cmd:

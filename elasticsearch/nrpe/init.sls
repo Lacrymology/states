@@ -32,85 +32,13 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 include:
   - apt.nrpe
   - cron.nrpe
+  - elasticsearch.nrpe.instance
   - nrpe
 {% if ssl %}
   - ssl.nrpe
   - nginx.nrpe
 {% endif %}
 
-/etc/nagios/nrpe.d/elasticsearch.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://elasticsearch/nrpe/config.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-
-/etc/nagios/nrpe.d/elasticsearch-nginx.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://nginx/nrpe/instance.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-      - file: /usr/lib/nagios/plugins/check_elasticsearch_cluster.py
-    - context:
-      deployment: elasticsearch
-      http_port: 9200
-      domain_name: 127.0.0.1
-      https: {{ ssl }}
-
-/usr/local/bin/check_elasticsearch_cluster.py:
-  file:
-    - absent
-
-{#- TODO: remove that statement in >= 2014-04 #}
-/usr/local/nagios/elasticsearch-requirements.txt:
-  file:
-    - absent
-
-pyelasticsearch:
-  file:
-    - managed
-    - name: /usr/local/nagios/salt-elasticsearch-requirements.txt
-    - source: salt://elasticsearch/nrpe/requirements.jinja2
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 440
-    - require:
-      - virtualenv: nrpe-virtualenv
-  module:
-    - wait
-    - name: pip.install
-    - upgrade: True
-    - bin_env: /usr/local/nagios
-    - requirements: /usr/local/nagios/salt-elasticsearch-requirements.txt
-    - watch:
-      - file: pyelasticsearch
-
-/usr/lib/nagios/plugins/check_elasticsearch_cluster.py:
-  file:
-    - managed
-    - source: salt://elasticsearch/nrpe/check.py
-    - user: nagios
-    - group: nagios
-    - mode: 550
-    - require:
-      - module: pyelasticsearch
-      - pkg: nagios-nrpe-server
-
-{{ passive_check('elasticsearch') }}
-
-extend:
-  nagios-nrpe-server:
-    service:
-      - watch:
-        - file: /etc/nagios/nrpe.d/elasticsearch.cfg
-        - file: /etc/nagios/nrpe.d/elasticsearch-nginx.cfg
+{%- call passive_check('elasticsearch') %}
+- file: /usr/lib/nagios/plugins/check_elasticsearch_cluster.py
+{%- endcall %}

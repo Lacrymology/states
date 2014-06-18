@@ -25,23 +25,41 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-# {{ pillar['message_do_not_modify'] }}
-{#-
- This file isn't used directly by nginx NRPE state but it's reused by other
- states that requires on Nginx.
-#}
-{%- set first_ip = salt['network.ip_addrs']()[0] -%}
-{%- set effective_http_uri = http_uri|default("/") -%}
-{%- if http|default(True) %}
-command[{{ deployment }}_nginx_http]=/usr/lib/nagios/plugins/check_http -H {{ domain_name }} -u {{ effective_http_uri }} -p {{ http_port|default(80) }} -e '{{ http_result|default("200 OK") }}' -I {{ first_ip }}{% if timeout|default(False) %} --timeout={{ timeout }}{% endif %}{%- if salt['pillar.get']('__test__', False) %} -v{%- endif %}
-{% else %}
-command[{{ deployment }}_nginx_http]=/bin/echo "HTTP OK: No HTTP for {{ deployment }}"
-{% endif %}
-{% if https|default(False) -%}
-command[{{ deployment }}_nginx_https]=/usr/lib/nagios/plugins/check_http -S -H {{ domain_name }} -u {{ https_uri|default(effective_http_uri) }} -e '{{ https_result|default("200 OK") }}' -I {{ first_ip }}{% if timeout|default(False) %} --timeout={{ timeout }}{% endif %}{%- if salt['pillar.get']('__test__', False) %} -v{%- endif %}
-command[{{ deployment }}_nginx_https_certificate]=/usr/lib/nagios/plugins/check_http -S -H {{ domain_name }} -C {{ https_max_age|default(60) }} -I {{ first_ip }}
-{% else -%}
-    {%- for name in ('https', 'https_certificate') %}
-command[{{ deployment }}_nginx_{{ name }}]=/bin/echo "HTTP OK: No HTTPS for {{ deployment }}"
-    {%- endfor -%}
-{%- endif %}
+{%- macro nginx_instance(deployment, http=True, http_uri='/', http_result=None, http_port=80, https_uri=None, https_result="200 OK", prefix=None, timeout=False, domain_name=None) -%}
+    {%- set first_ip = salt['network.ip_addrs']()[0] -%}
+    {%- if not prefix -%}
+        {%- set prefix = deployment -%}
+    {%- endif -%}
+    {%- if not domain_name %}
+        {%- set domain_name = salt['pillar.get'](prefix + ':hostnames', ['127.0.0.1'])[0] -%}
+    {%- endif %}
+    {#- if http is redirected to https, force a specific header -#}
+    {%- if salt['pillar.get'](prefix + ':ssl_redirect', False) -%}
+        {%- set http_result="301 Moved Permanently" -%}
+    {%- elif not http_result -%}
+        {%- set http_result="200 OK" -%}
+    {%- endif %}
+
+{{ deployment }}_nginx_http:
+  description: {{ deployment|capitalize }} HTTP Protocol
+  command: /usr/lib/nagios/plugins/check_http -H {{ domain_name }} -u {{ http_uri }} -p {{ http_port }} -e '{{ http_result }}' -I {{ first_ip }}
+    {%- if timeout %} --timeout={{ timeout }}{% endif -%}
+    {%- if salt['pillar.get']('__test__', False) %} -v{%- endif %}
+
+    {%- if salt['pillar.get'](prefix + ':ssl', False) %}
+        {%- if not https_uri -%}
+            {%- set https_uri = http_uri -%}
+        {%- endif %}
+{{ deployment }}_nginx_https:
+  description: {{ deployment|capitalize }} HTTPS Protocol
+  command: /usr/lib/nagios/plugins/check_http -S -H {{ domain_name }} -u {{ https_uri }} -e '{{ https_result }}' -I {{ first_ip }}
+        {%- if timeout %} --timeout={{ timeout }}{% endif -%}
+        {%- if salt['pillar.get']('__test__', False) %} -v{%- endif %}
+
+{{ deployment }}_nginx_https_certificate:
+  description: {{ deployment|capitalize }} HTTPS Certificate Expiration
+  check_interval: 1440 {#- only need to check https certificate each day #}
+  freshness_threshold: {{ (1440 + 10) * 60 }}
+  command: /usr/lib/nagios/plugins/check_http -S -H {{ domain_name }} -C {{ salt['pillar.get']('ssl_https_max_age', 60) }} -I {{ first_ip }}
+    {%- endif -%}
+{%- endmacro -%}

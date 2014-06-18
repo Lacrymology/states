@@ -46,22 +46,6 @@ include:
       - module: nrpe-virtualenv
       - pkg: nagios-nrpe-server
 
-/etc/nagios/nrpe.d/apt.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://apt/nrpe/config.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-      - file: /usr/lib/nagios/plugins/check_apt-rc.py
-
-{{ passive_check('apt') }}
-
-extend:
-  nagios-nrpe-server:
-    service:
-      - watch:
-        - file: /etc/nagios/nrpe.d/apt.cfg
+{% call passive_check('apt') %}
+- file: /usr/lib/nagios/plugins/check_apt-rc.py
+{% endcall %}

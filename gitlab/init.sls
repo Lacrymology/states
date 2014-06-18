@@ -155,7 +155,7 @@ gitlab:
     - shell: /bin/bash
     - require:
       - pkg: gitlab_dependencies
-      - user: web
+      - group: web
   postgres_user:
     - present
     - name: {{ database_username }}

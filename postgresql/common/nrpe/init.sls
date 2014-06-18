@@ -42,34 +42,6 @@ include:
 {% endif %}
   - sudo
 
-/etc/nagios/nrpe.d/postgresql-monitoring.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://postgresql/nrpe.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-    - context:
-      database: monitoring
-      version: {{ version }}
-      password: {{ salt['password.pillar']('postgresql:monitoring:password') }}
-
-/etc/nagios/nrpe.d/postgresql.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://postgresql/common/nrpe/config.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-    - context:
-      version: {{ version }}
-
 {%- set check_pg_version = "2.21.0" %}
 check_postgres:
   archive:
@@ -115,11 +87,17 @@ check_postgres:
     - require:
       - pkg: sudo
 
+/etc/nagios/nrpe.d/postgresql.cfg:
+  file:
+    - absent
+
+{%- from 'nrpe/passive.sls' import passive_check with context %}
+{%- call passive_check('postgresql.common') %}
+  - file: /etc/nagios/nrpe.d/postgresql.cfg
+{%- endcall %}
+
 extend:
   nagios-nrpe-server:
     service:
-      - watch:
-        - file: /etc/nagios/nrpe.d/postgresql.cfg
-        - file: /etc/nagios/nrpe.d/postgresql-monitoring.cfg
       - require:
         - postgres_database: postgresql_monitoring

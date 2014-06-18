@@ -27,13 +27,50 @@ __author__ = 'Bruno Clermont'
 __maintainer__ = 'Bruno Clermont'
 __email__ = 'patate@fastmail.cn'
 
+import re
 import logging
-import tempfile
-import os
+from UserList import UserList
 
 import yaml
 
 logger = logging.getLogger(__name__)
+
+
+def _yaml(filename):
+    with open(filename, 'r') as stream:
+        try:
+            return yaml.safe_load(stream)
+        except Exception, err:
+            logger.critical("YAML data from failed to parse for '%s'",
+                            filename, exc_info=True)
+            stream.seek(0)
+            logger.debug("failed YAML content of '%s' is '%s'", filename,
+                         stream.read())
+            raise err
+
+
+def discover_checks(directory='/etc/nagios/nsca.d'):
+    '''
+    Return all monitor.jinja2 rendered data for a single minion.
+    '''
+    checks = {}
+    logger.debug("Check for yaml file in %s", directory)
+    for filename in __salt__['file.find'](directory, type='f'):
+        try:
+            check = _yaml(filename)
+        except Exception:
+            logger.debug("Skip '%s'", filename)
+        else:
+            # Remove the key that hold NRPE command that is executed as check.
+            # That must not be copied in salt mine as it's not used by
+            # shinken and it might contains sensible informations.
+            try:
+                del check['command']
+            except KeyError:
+                pass
+            checks.update(check)
+            logger.debug("Processed '%s' succesfully", filename)
+    return checks
 
 
 class _DontExistData(object):
@@ -47,6 +84,7 @@ def data():
     output = {
         'shinken_pollers': __salt__['pillar.get']('shinken_pollers', []),
         'roles': __salt__['pillar.get']('roles', []),
+        'checks': discover_checks(),
         'monitor': __salt__['pillar.get']('monitor', True)
     }
 
@@ -114,7 +152,7 @@ def data():
     return output
 
 
-def discover_checks(state_name):
+def checks_for_formula(state_name):
     '''
     Return dict of all data in salt://$statename/monitor.jinja2.
     Check ``doc/state.rst`` for details on this file.
@@ -132,24 +170,19 @@ def discover_checks(state_name):
 
     logger.debug("Running `salt %s cp.get_template %s %s env='%s'`",
                  __grains__['id'],
-                 source, 
-                 temp_dest.name, 
+                 source,
+                 temp_dest.name,
                  env)
 
     __salt__['cp.get_template'](source, temp_dest.name, env=env)
 
     with open(temp_dest.name, 'r') as rendered_template:
         try:
-            unserialized = yaml.safe_load(rendered_template)
+            unserialized = _yaml(rendered_template)
         except Exception:
-            logger.critical("YAML data from failed to parse for '%s'",
-                            state_name, exc_info=True)
-            rendered_template.seek(0)
-            logger.debug("failed YAML content of '%s' is '%s'", state_name,
-                         rendered_template.read())
-            os.unlink(temp_dest.name)
+            __salt__['file.remove'](temp_dest.name)
             return {}
-    os.unlink(temp_dest.name)
+    __salt__['file.remove'](temp_dest.name)
     if not unserialized:
         logger.critical("Cannot copy %s to the minion. Make sure that it exists "
                         "and the environment '%s' is correct", source, env)
@@ -157,14 +190,14 @@ def discover_checks(state_name):
     return unserialized
 
 
-def discover_checks_passive(state_name):
+def passive_checks_for_formula(state_name):
     '''
     Return a dict of all checks that are passive in specified state
     '''
     output = {}
-    checks = discover_checks(state_name)
+    checks = checks_for_formula(state_name)
     if not checks:
-        logger.debug("discover_checks('%s') returned nothing", state_name)
+        logger.debug("checks_for_formula('%s') returned nothing", state_name)
         return output
 
     for check_name in checks:
@@ -213,3 +246,145 @@ def update():
                              __salt__[func_name](**mod[func_name]))
             else:
                 logger.error("Invalid update value %s", str(mod))
+
+
+class Check(object):
+    def __init__(self, check_data, minions=None):
+        self.data = check_data
+        if not minions:
+            self.minions = []
+        else:
+            self.minions = minions
+
+    def __repr__(self):
+        return 'Check(%r, %r)' % (self.data, self.minions)
+
+
+class CheckList(UserList):
+    @property
+    def check_datas(self):
+        output = []
+        for check in self.data:
+            output.append(check.data)
+        return output
+
+    def __contains__(self, item):
+        return item in self.check_datas
+
+    def append(self, item, minion):
+        check_datas = self.check_datas
+        try:
+            index = check_datas.index(item)
+            self.data[index].minions.append(minion)
+            logger.debug("Existing checks '%s', now %d minions: %s",
+                         item, len(self.data[index].minions),
+                         self.data[index].minions)
+        except ValueError:
+            logger.debug("New check '%s' start with minion '%s'",
+                         item, minion)
+            check = Check(item)
+            check.minions = [minion]
+            self.data.append(check)
+
+
+def shinken(data=None):
+    '''
+    Pre-process all salt mine monitoring data for all minions to let
+    shinken build a monitoring configuration.
+
+    The
+    '''
+    # salt module function name
+    func_name = 'monitoring.data'
+    # which dict key data() put data processed by this function
+    data_key = 'checks'
+    checks = {}
+    if not data:
+        data = __salt__['mine.get']('*', func_name)
+    for minion in data:
+        logger.debug("Processing mine data of '%s' for '%s'",
+                     minion, func_name)
+        if data[minion]['monitor']:
+            logger.debug("Minion '%s' is monitored", minion)
+            for check_name in data[minion][data_key]:
+                try:
+                    check_list = checks[check_name]
+                except KeyError:
+                    checks[check_name] = CheckList()
+                    check_list = checks[check_name]
+                check_list.append(data[minion][data_key][check_name], minion)
+        else:
+            logger.debug("Minion '%s' is NOT monitored", minion)
+
+    return checks
+
+__NRPE_RE = re.compile('^command\[([^\]]+)\]=(.+)$')
+
+def list_checks(config_dir='/etc/nagios/nrpe.d'):
+    '''
+    List all available NRPE check.
+
+    CLI Exaple::
+
+        salt '*' nrpe.list_checks
+
+    '''
+    output = {}
+    for filename in __salt__['file.find'](config_dir, type="f"):
+        with open(filename, 'r') as input_fh:
+            for line in input_fh:
+                match = __NRPE_RE.match(line)
+                if match:
+                    output[match.group(1)] = match.group(2)
+    return output
+
+
+def run_check(check_name):
+    '''
+    Run a specific nagios check
+
+    CLI Example::
+
+        salt '*' nrpe.run_check <check name>
+
+    '''
+    checks = list_checks()
+    logger.debug("Found %d checks", len(checks.keys()))
+    ret = {
+        'name': check_name,
+        'changes': {},
+    }
+
+    if check_name not in checks:
+        ret['result'] = False
+        ret['comment'] = "Can't find check '{0}'".format(check_name)
+        return ret
+
+    output = __salt__['cmd.run_all'](checks[check_name], runas='nagios')
+    ret['comment'] = "stdout: '{0}' stderr: '{1}'".format(output['stdout'],
+                                                          output['stderr'])
+    ret['result'] = output['retcode'] == 0
+    return ret
+
+
+def run_all_checks(return_only_failure=False):
+    '''
+    Run all available nagios check, usefull to check if everything is fine
+    before monitoring system find it.
+
+    CLI Example::
+
+        salt '*' nrpe.run_all_checks
+
+    '''
+    output = {}
+    for check_name in list_checks():
+        check_result = run_check(check_name)
+        del check_result['changes']
+        del check_result['name']
+        if return_only_failure:
+            if not check_result['result']:
+                output[check_name] = check_result
+        else:
+            output[check_name] = check_result
+    return output

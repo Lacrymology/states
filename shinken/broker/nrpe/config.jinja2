@@ -25,8 +25,27 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-# {{ pillar['message_do_not_modify'] }}
-command[shinken_broker_procs]=/usr/lib/nagios/plugins/check_procs -c 1:10 -C shinken-broker
-command[shinken_broker_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 7772
-command[shinken_broker_web]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 7767
-command[shinken_broker_http]=/usr/lib/nagios/plugins/check_http -H 127.0.0.1 -u /user/login -p 7767 -e '200 OK' -I 127.0.0.1{%- if salt['pillar.get']('__test__', False) %} -v{%- endif %}
+shinken_broker_procs:
+  description: Shinken Broker Deamon
+  passive: False
+  command: '/usr/lib/nagios/plugins/check_procs -c 1:10 -C shinken-broker'
+
+shinken_broker_port:
+  description: Shinken Broker Local Port
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 7772
+
+shinken_broker_remote_port:
+  description: Shinken Broker Remote Port
+  check: check_tcp!7772
+  passive: False
+
+shinken_broker_web:
+  description: Shinken Broker Web UI Port
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 7767
+
+shinken_broker_http:
+  description: Shinken Broker Web UI HTTP
+  command: "/usr/lib/nagios/plugins/check_http -H 127.0.0.1 -u /user/login -p 7767 -e '200 OK' -I 127.0.0.1{%- if salt['pillar.get']('__test__', False) %} -v{%- endif %}"
+
+{%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context %}
+{{ nginx_instance('shinken', http_uri='/user/login') }}

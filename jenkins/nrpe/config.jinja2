@@ -25,6 +25,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Nicolas Plessis <nicolasp@microsigns.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
-command[jenkins_procs]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u jenkins -C daemon -a '--name=jenkins'
-command[jenkins_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 8080
+{%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
+{{ nginx_instance('jenkins') }}
+
+jenkins_procs:
+  description: Jenkins Process
+  command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -u jenkins -C daemon -a '--name=jenkins'"
+
+jenkins_port:
+  description: Jenkins Port
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 8080

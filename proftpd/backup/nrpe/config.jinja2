@@ -25,6 +25,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
-command[proftpd_backup_postgres_procs]=/usr/lib/nagios/plugins/check_procs -c 0:1 -u root -a "/usr/local/bin/backup-postgresql {{ salt['pillar.get']('proftpd:db:name', 'proftpd') }}"
-command[proftpd_backup]=/usr/lib/nagios/plugins/check_backup.py -w {{ salt['pillar.get']('backup:age', 48) }} proftpd
+proftpd_backup_postgres_procs:
+  description: ProFTPD Backup PostgreSQL Database Process
+  command: '/usr/lib/nagios/plugins/check_procs -c 0:1 -u root -a "/usr/local/bin/backup-postgresql {{ salt["pillar.get"]("proftpd:db:name", "proftpd") }}"'
+
+proftpd_backup:
+  description: ProFTPD Backup Age And Size
+  command: /usr/lib/nagios/plugins/check_backup.py -w {{ salt['pillar.get']('backup:age', 48) }} proftpd

@@ -25,24 +25,53 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-# {{ pillar['message_do_not_modify'] }}
-allowed_hosts={% for host in pillar['shinken_pollers'] %}{{ host }}{% if not loop.last %},{% endif %}{% endfor %}
-command[free_disks_space]=/usr/lib/nagios/plugins/check_disk -w 20% -c 10%
-command[free_memory]=/usr/lib/nagios/plugins/check_memory.py -w 90 -c 95
-command[load_average]=/usr/lib/nagios/plugins/check_load -w 10,5,3 -c 20,15,11
-command[logged_users]=/usr/lib/nagios/plugins/check_users -w 5 -c 10
-command[loopback_interface]=/usr/lib/nagios/plugins/check_ping -H 127.0.0.1 -p 1 -w 100,100% -c 100,100%
-command[nrpe_procs]=/usr/lib/nagios/plugins/check_procs -u nagios -C nrpe -c 1:15
-command[nsca_passive_procs]=/usr/lib/nagios/plugins/check_procs -u nagios -C nsca_passive -c 1:1
-command[total_procs]=/usr/lib/nagios/plugins/check_procs -w 150 -c 200
-command[zombie_procs]=/usr/lib/nagios/plugins/check_procs -w 5 -c 10 -s Z
-{%- if grains['virtual'] != 'openvzve' %}
+nsca_passive_procs:
+  description: NSCA Passive daemon Processes
+  command: '/usr/lib/nagios/plugins/check_procs -u nagios -C nsca_passive -c 1:1'
+
+free_disks_space:
+  description: All Disks
+  command: /usr/lib/nagios/plugins/check_disk -w 20% -c 10%
+
+total_procs:
+  description: Total Processes
+  command: /usr/lib/nagios/plugins/check_procs -w 150 -c 200
+
+zombie_procs:
+  description: Zombie Processes
+  command: /usr/lib/nagios/plugins/check_procs -w 5 -c 10 -s Z
+
+nrpe_procs:
+  description: NRPE Processes
+  command: '/usr/lib/nagios/plugins/check_procs -u nagios -C nrpe -c 1:15'
+
+logged_users:
+  description: Logged Users
+  command: /usr/lib/nagios/plugins/check_users -w 5 -c 10
+
+loopback_interface:
+  description: Loopback Interface
+  command: /usr/lib/nagios/plugins/check_ping -H 127.0.0.1 -p 1 -w 100,100% -c 100,100%
+
+oom_messages:
+  description: Out Of Memory Messages
+  command: sudo /usr/lib/nagios/plugins/check_oom.py
+
+free_memory:
+  description: Memory Usage
+  command: /usr/lib/nagios/plugins/check_memory.py -w 90 -c 95
+
 {%- if salt['file.contains_regex']('/proc/swaps','^/') %}
-command[free_swap_space]=/usr/lib/nagios/plugins/check_swap -w 30% -c 10%
-{%- else %}
-command[free_swap_space]=/bin/echo "SWAP OK: No swap on this host"
+free_swap_space:
+  description: Swap Usage
+  command: /usr/lib/nagios/plugins/check_swap -w 30% -c 10%
 {%- endif %}
-{%- else %}
-command[free_swap_space]=/bin/echo "SWAP OK: No need to check on this host"
-{%- endif %}
-command[oom_messages]=sudo /usr/lib/nagios/plugins/check_oom.py
+
+load_average:
+  description: Load Average
+  command: /usr/lib/nagios/plugins/check_load -w 10,5,3 -c 20,15,11
+
+nrpe-remote-port:
+  description: Remote NRPE Port
+  check: check_tcp!5666
+  passive: False

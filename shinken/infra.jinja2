@@ -52,7 +52,7 @@ define host {
 }
 
 {%- for host in mine -%}
-{%- if mine[host]['monitor'] %}
+    {%- if mine[host]['monitor'] %}
 define host {
     use salt-host
     host_name {{ host }}
@@ -61,8 +61,8 @@ define host {
     hostgroups {% for role in mine[host]['roles'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     poller_tag all
 }
-{% endif -%}
-{%- endfor -%}
+    {%- endif -%}
+{%- endfor %}
 
 define contact {
     name salt-contact
@@ -91,7 +91,7 @@ define contact {
     password {{ pillar['shinken']['users'][user]['password'] }}
     use salt-contact
 }
-{% endfor -%}
+{%- endfor %}
 
 define contactgroup {
     contactgroup_name admins
@@ -145,7 +145,7 @@ define timeperiod {
     alias 24_Hours_A_Day,_7_Days_A_Week
 {%- for day in ('sun', 'mon', 'tues', 'wednes', 'thurs', 'fri', 'satur') %}
     {{ day }}day 00:00-24:00
-{% endfor -%}
+{%- endfor %}
 }
 
 define service {
@@ -197,15 +197,15 @@ define service {
     _httpstink NO
 }
 
-{%- set saltenv =  salt['pillar.get']('branch', 'base') %}
-{%- if saltenv == 'master' %}
-  {%- set saltenv = 'base' %}
-{%- endif %}
+{%- set saltenv =  salt['pillar.get']('branch', 'base') -%}
+{%- if saltenv == 'master' -%}
+    {%- set saltenv = 'base' -%}
+{%- endif -%}
 
-{%- set global_roles = salt['pillar.get']('global_roles', None) %}
-{%- if global_roles in ('', 'None') %}
-  {%- set global_roles = salt['cp.list_master_dirs'](saltenv, 'roles') %}
-{%- endif %}
+{%- set global_roles = salt['pillar.get']('global_roles', None) -%}
+{%- if global_roles in ('', 'None') -%}
+    {%- set global_roles = salt['cp.list_master_dirs'](saltenv, 'roles') -%}
+{%- endif -%}
 
 {%- for role in global_roles %}
 define hostgroup {
@@ -225,34 +225,43 @@ define servicegroup {
     servicegroup_name {{ role }}
     alias {{ role|capitalize }} Role
 }
-{% endfor -%}
+{%- endfor -%}
 
 {%- set reserved_keys = ('check', 'description', 'passive') -%}
-{%- for state in pillar['monitoring']['states'] -%}
-    {%- set state_checks = salt['monitoring.discover_checks'](state) -%}
-    {%- if not state_checks %}
-# ERROR: state {{ state }} don't have monitor.jinja2 file
-    {%- else -%}
-        {%- for name in state_checks %}
+{%- set data = salt['monitoring.shinken'](mine) -%}
+{%- for check_name in data -%}
+    {%- for check in data[check_name] %}
 define service {
-    hostgroup_name {% for role in pillar['monitoring']['states'][state] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
-    servicegroups {% for role in pillar['monitoring']['states'][state] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
     use salt-service
-    service_description {{ name }}
-    display_name {{ state_checks[name]['description'] }}
-            {%- if not state_checks[name].get('passive', True) -%}
-                {#- by default check are passive #}
+    service_description {% if loop.first and loop.last -%}
+            {#- if only one in the list -#}
+            {{ check_name }}
+        {%- elif loop.first -%}
+            {#- there is more than 1, but this is the first one -#}
+            {{ check_name }}
+        {%- else -%}
+            {#- more than 1 and this is not the first one -#}
+            {{ check_name }}-{{ loop.index0 + 1 }}
+        {%- endif %}
+    host_name {% for minion in check.minions -%}
+        {{ minion }}
+        {%- if not loop.last %},{% endif -%}
+    {%- endfor %}
+    display_name {{ check.data['description'] }}
+        {%- if not check.data.get('passive', True) -%}
+            {#- by default check are passive #}
     active_checks_enabled 1
     passive_checks_enabled 0
     check_freshness 0
-            {%- endif %}
-    check_command {{ state_checks[name]['check']|default('check_nrpe!' + name) }}
-            {%- for key_name in state_checks[name] %}
-                {%- if key_name not in reserved_keys %}
-    {{ key_name }} {{ state_checks[name][key_name] }}
-                {%- endif %}
-            {%- endfor %}
-}
+        {%- endif -%}
+    {%- set default_check = 'check_nrpe!' + check_name %}
+    check_command {{ check.data.get('check', default_check) }}
+    {#- everything else -#}
+        {%- for key_name in check.data -%}
+            {%- if key_name not in reserved_keys %}
+    {{ key_name }} {{ check.data[key_name] }}
+            {%- endif -%}
         {%- endfor %}
-    {%- endif -%}
+}
+    {%- endfor -%}
 {%- endfor -%}

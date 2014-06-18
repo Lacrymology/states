@@ -34,14 +34,6 @@ include:
   - sudo
   - sudo.nrpe
 
-{#
- this is a constant used to define the -c flag of nagios check that set the
- maximal number of iptables rules before it's considered critical.
- the number is high because we only care about 0 iptables, where there is just
- no rules applied.
-#}
-{% set critical=300 %}
-
 /etc/sudoers.d/nrpe_firewall:
   file:
     - managed
@@ -69,25 +61,7 @@ include:
       - file: /etc/sudoers.d/nrpe_firewall
       - pkg: nagios-nrpe-server
 
-/etc/nagios/nrpe.d/firewall.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://firewall/nrpe/config.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
+{%- call passive_check('firewall') %}
       - file: /usr/lib/nagios/plugins/check_firewall.py
       - file: /etc/sudoers.d/nrpe_firewall
-    - context:
-      critical: {{ critical }}
-
-{{ passive_check('firewall') }}
-
-extend:
-  nagios-nrpe-server:
-    service:
-      - watch:
-        - file: /etc/nagios/nrpe.d/firewall.cfg
+{%- endcall %}

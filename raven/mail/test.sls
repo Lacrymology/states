@@ -31,7 +31,7 @@ include:
   - raven.mail.nrpe
 
 test:
-  nrpe:
+  monitoring:
     - run_all_checks
     - require:
       - cmd: send_unittest_mail

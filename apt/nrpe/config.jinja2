@@ -25,8 +25,28 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-# {{ pillar['message_do_not_modify'] }}
-command[apt_rc]=/usr/lib/nagios/plugins/check_apt-rc.py
 {%- if not salt['pillar.get']('__test__', False) %}
-command[apt]=/usr/lib/nagios/plugins/check_apt
+apt:
+  description: APT Updates
+  {#-
+  Services that don't affect production and that have high cost in CPU, I/O
+  and RAM to performs.
+  Run them only each 6 hours.
+  #}
+  check_interval: 360
+  freshness_threshold: {{ (360 + 10) * 60 }}
+  retry_interval: 5
+  notifications_enabled: 0
+  {#- enable only notification for real error #}
+  notification_options: c
+  command: /usr/lib/nagios/plugins/check_apt
 {%- endif -%}
+
+apt_rc:
+  description: APT Not-Purged
+  check_interval: 360
+  freshness_threshold: {{ (360 + 10) * 60 }}
+  retry_interval: 5
+  notifications_enabled: 0
+  notification_options: c
+  command: /usr/lib/nagios/plugins/check_apt-rc.py

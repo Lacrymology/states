@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Hung Nguyen Viet
+Copyright (c) 2013, Bruno Clermont
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,13 +22,17 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
-Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
- -#}
-# {{ pillar['message_do_not_modify'] }}
-{%- if pillar['salt_archive']['source'] is defined %}
-{%- set max_age = salt['pillar.get']('salt_archive:max_age', 3600) %}
-command[salt_archive_timestamp]=/usr/lib/nagios/plugins/check_file_age -w {{ max_age }} -c {{ max_age }} /var/cache/salt/master/sync_timestamp.dat
-{%- else %}
-command[salt_archive_timestamp]=/bin/echo "FILE_AGE OK: No source for salt_archive"
-{%- endif %}
+Author: Bruno Clermont <patate@fastmail.cn>
+Maintainer: Bruno Clermont <patate@fastmail.cn>
+-#}
+{%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
+{{ nginx_instance('salt_archive') }}
+
+{%- if salt['pillar.get']('salt_archive:source', False) %}
+  {%- set max_age = salt['pillar.get']('salt_archive:max_age', 3600) %}
+salt_archive_timestamp:
+  description: Salt Archive Synchronization
+  check_interval: 900
+  freshness_threshold: {{ (900 + 10) * 60 }}
+  command: '/usr/lib/nagios/plugins/check_file_age -w {{ max_age }} -c {{ max_age }} /var/cache/salt/master/sync_timestamp.dat'
+{%- endif -%}

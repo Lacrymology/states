@@ -43,14 +43,12 @@ graylog2_log_one_msg:
       - service: graylog2-server
 
 test:
-  nrpe:
+  monitoring:
     - run_all_checks
+    - wait: 60
     - order: last
     - exclude:
       - graylog2_elasticsearch_cluster
-      - elasticsearch_nginx_http
-      - elasticsearch_nginx_https
-      - elasticsearch_nginx_https_certificate
 {%- if not pillar['__test__']|default(False) %}
       - graylog2_incoming_logs
 {%- endif %}

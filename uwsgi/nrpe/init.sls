@@ -38,19 +38,6 @@ include:
   - web
   - xml.nrpe
 
-/etc/nagios/nrpe.d/uwsgi.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://uwsgi/nrpe/config.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-      - file: /usr/lib/nagios/plugins/check_uwsgi_nostderr
-      - file: /etc/sudoers.d/nrpe_uwsgi
-
 /etc/sudoers.d/nagios_uwsgi:
   file:
     - absent
@@ -95,10 +82,7 @@ include:
       - pkg: nagios-nrpe-server
       - user: web
 
-{{ passive_check('uwsgi') }}
-
-extend:
-  nagios-nrpe-server:
-    service:
-      - watch:
-        - file: /etc/nagios/nrpe.d/uwsgi.cfg
+{%- call passive_check('uwsgi') %}
+    - file: /usr/lib/nagios/plugins/check_uwsgi_nostderr
+    - file: /etc/sudoers.d/nrpe_uwsgi
+{%- endcall %}

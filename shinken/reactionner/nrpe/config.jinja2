@@ -25,6 +25,16 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-# {{ pillar['message_do_not_modify'] }}
-command[shinken_reactionner_procs]=/usr/lib/nagios/plugins/check_procs -c 1:10 -u shinken -a 'shinken-reactionner -c /etc/shinken/reactionner.conf'
-command[shinken_reactionner_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 7769
+shinken_reactionner_procs:
+  description: Shinken Reactionner Deamon
+  passive: False
+  command: "/usr/lib/nagios/plugins/check_procs -c 1:10 -u shinken -a 'shinken-reactionner -c /etc/shinken/reactionner.conf'"
+
+shinken_reactionner_port:
+  description: Shinken Reactionner Local Port
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 7769
+
+shinken_reactionner_remote_port:
+  description: Shinken Reactionner Remote Port
+  check: check_tcp!7769
+  passive: False

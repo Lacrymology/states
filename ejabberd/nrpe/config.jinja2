@@ -26,11 +26,22 @@ Author: Dang Tung Lam <lamdt@familug.org>
 Maintainer: Dang Tung Lam <lamdt@familug.org>
 #}
 
-# {{ pillar['message_do_not_modify'] }}
+ejabberd_proc_check:
+  description: ejabberd Process
+  command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -a ''-ejabberd config "/etc/ejabberd/ejabberd.cfg"'' -u ejabberd'
 
-command[ejabberd_web_check]=/usr/lib/nagios/plugins/check_procs -c 1:1 -a '-ejabberd config "/etc/ejabberd/ejabberd.cfg' -u ejabberd
-command[ejabberd_c2s_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 5222
+ejabberd_c2s_port:
+  description: ejabberd XMPP Port (C2S)
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 5222
 
 {%- if salt['pillar.get']('ejabberd:server_to_server', False) %}
-command[ejabberd_s2s_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 5269
+ejabberd_s2s_port:
+  description: ejabberd Server-to-Server(S2S) Port
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 5269
 {%- endif %}
+
+{%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context %}
+{%- from 'postgresql/server/nrpe/instance.jinja2' import postgresql_instance_prefix with context %}
+{%- set deployment = 'ejabberd' %}
+{{ nginx_instance(deployment, http_uri='/admin', https_result='401 Unauthorized', http_result='401 Unauthorized') }}
+{{ postgresql_instance_prefix(deployment) }}

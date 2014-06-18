@@ -25,5 +25,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-# {{ pillar['message_do_not_modify'] }}
-command[firewall_rules]=sudo /usr/lib/nagios/plugins/check_firewall.py -w 1:{{ critical }}
+{#
+ this is a constant used to define the -c flag of nagios check that set the
+ maximal number of iptables rules before it's considered critical.
+ the number is high because we only care about 0 iptables, where there is just
+ no rules applied.
+#}
+firewall_rules:
+  description: Firewall Rules
+  command: 'sudo /usr/lib/nagios/plugins/check_firewall.py -w 1:300'

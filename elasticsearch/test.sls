@@ -39,7 +39,7 @@ include:
 {% endif %}
 
 test:
-  nrpe:
+  monitoring:
     - run_all_checks
     - order: last
     - wait: 60
@@ -53,7 +53,7 @@ test:
     - order: last
 
 elasticsearch_cluster:
-  nrpe:
+  monitoring:
     - run_check
     - wait: 60
     - order: last

@@ -25,7 +25,15 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-# {{ pillar['message_do_not_modify'] }}
-command[proftpd_procs]=/usr/lib/nagios/plugins/check_procs -C proftpd -w 1:1 -u www-data -a "proftpd: (accepting connections)"
-command[proftpd_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 21
+proftpd_procs:
+  description: ProFTPD Daemon
+  command: '/usr/lib/nagios/plugins/check_procs -C proftpd -w 1:1 -u www-data -a "proftpd: (accepting connections)"'
+
+proftpd_port:
+  description: ProFTPD Port
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 21
+
+{%- from 'postgresql/server/nrpe/instance.jinja2' import postgresql_instance_prefix with context %}
+{{ postgresql_instance_prefix('proftpd') }}
+
 {# TODO: use check_ftp #}

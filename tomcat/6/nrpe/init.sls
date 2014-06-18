@@ -42,19 +42,8 @@ include:
 
 /etc/nagios/nrpe.d/tomcat.cfg:
   file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://tomcat/6/nrpe/config.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
+    - absent
 
-{{ passive_check('tomcat') }}
-
-extend:
-  nagios-nrpe-server:
-    service:
-      - watch:
-        - file: /etc/nagios/nrpe.d/tomcat.cfg
+{%- call passive_check('tomcat.6') %}
+  - file: /etc/nagios/nrpe.d/tomcat.cfg
+{%- endcall %}

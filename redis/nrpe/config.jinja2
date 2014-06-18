@@ -32,6 +32,15 @@ Institute for Institutional Innovation by Data Driven Design Inc.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
-command[redis_procs]=/usr/lib/nagios/plugins/check_procs -c 1:1 -u redis -C redis-server
-command[redis_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 6379
+redis_procs:
+  description: Redis Daemon
+  command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -u redis -C redis-server'
+
+redis_port:
+  description: Redis Local Port
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 6379
+
+redis_remote_port:
+  check: check_tcp!6379
+  description: Redis Remote Port
+  passive: False

@@ -1,0 +1,53 @@
+{#-
+Copyright (c) 2014, Hung Nguyen Viet
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
+Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
+#}
+{%- macro elasticsearch_instance(which='elasticsearch') %}
+{%- set prefix = 'graylog2_' if which == 'graylog2.server' else '' %}
+
+{%- set nodes_total = 0 -%}
+{#- this ugly hack is required to get the total number of nodes #}
+{%- for item in pillar['elasticsearch']['cluster']['nodes'].viewitems() -%}
+    {#- take 1 off the length to remove the _network key -#}
+    {%- set nodes_total = nodes_total - 1 + item[1]|length -%}
+    {%- if loop.last %}
+{{ prefix }}elasticsearch_cluster:
+  description: {{ which| title }} Elasticsearch cluster
+  command: '/usr/lib/nagios/plugins/check_elasticsearch_cluster.py -c {{ nodes_total }}:{{ nodes_total }}'
+    {%- endif %}
+{%- endfor %}
+
+{%- set pillar_string = 'elasticsearch:cluster:nodes:{0}:{1}'.format(grains['id'], which) %}
+{%- if salt['pillar.get'](pillar_string + ':http', True) %}
+{{ prefix }}elasticsearch_port_http:
+  description: {{ which| title }} Elasticsearch Remote HTTP Port
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 9200
+{%- endif %}
+
+{{ prefix }}elasticsearch_port_transport:
+  description: {{ which| title }} Elasticsearch Transport Port
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p {{ salt['pillar.get'](pillar_string + ':port', 9300) }}
+{%- endmacro %}

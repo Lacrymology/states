@@ -25,6 +25,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
-command[graylog2_backup_mongodb_procs]=/usr/lib/nagios/plugins/check_procs -c 0:1 -u root -a "/usr/local/bin/backup-mongodb graylog2"
-command[graylog2_backup]=/usr/lib/nagios/plugins/check_backup.py -w {{ salt['pillar.get']('backup:age', 48) }} graylog2
+graylog2_backup_mongodb_procs:
+  description: Graylog2 Backup MongoDB Process
+  command: '/usr/lib/nagios/plugins/check_procs -c 0:1 -u root -a "/usr/local/bin/backup-mongodb graylog2"'
+
+graylog2_backup:
+  description: Graylog2 Backup Age And Size
+  command: "/usr/lib/nagios/plugins/check_backup.py -w {{ salt['pillar.get']('backup:age', 48) }} graylog2"

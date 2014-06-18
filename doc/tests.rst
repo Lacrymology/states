@@ -109,16 +109,16 @@ While testing, the monitoring checks are not executed through NRPE, as it might
 not be installed or available during all test steps.
 
 It's rather executed by a :doc:`/salt/doc/index` state module available in these
-Common states: ``nrpe.run_check`` and ``nrpe.run_all_checks``.
+Common states: ``monitoring.run_check`` and ``monitoring.run_all_checks``.
 
 By default, all available checks are executed after all states had been executed
-for a test unit using ``nrpe.run_all_checks`` module. This step is insured by
+for a test unit using ``monitoring.run_all_checks`` module. This step is insured by
 the ``test/nrpe.sls`` state file, which is added automatically to the list or
 executed state file tested.
 
 There is a way to change this behaviour, is to add a ``test.sls`` file to root
-of a state, such as :download:`test.sls </wordpress/test.sls>` that add custom
-tests for :doc:`/wordpress/doc/index`.
+of a state, such as :download:`test.sls </sentry/test.sls>` that add custom
+tests for :doc:`/sentry/doc/index`.
 
 Then, in this file you can add custom testing steps you want to execute in your
 state, such as running a script and just after looking at it's output.

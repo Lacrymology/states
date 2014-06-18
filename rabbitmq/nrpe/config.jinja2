@@ -25,11 +25,35 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-# {{ pillar['message_do_not_modify'] }}
-command[rabbitmq_procs]=/usr/lib/nagios/plugins/check_procs -c 1:1 -C beam{% if grains['num_cpus'] > 1 %}.smp{% endif %} -u rabbitmq
-command[rabbitmq_port_management]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 15672
-command[rabbitmq_port_console]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 55672
-command[rabbitmq_port_amqp]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 5672
+rabbitmq_port_console:
+  description: RabbitMQ Console Port
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 55672
+
+rabbitmq_procs:
+  description: RabbitMQ Daemon
+  command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -C beam{% if grains['num_cpus'] > 1 %}.smp{% endif %} -u rabbitmq"
+
 {# epmd is Erlang Port Mapper Daemon #}
-command[erlang_procs]=/usr/lib/nagios/plugins/check_procs -c 1:1 -C epmd -u rabbitmq
-command[erlang_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 4369
+erlang_procs:
+  description: RabbitMQ Erlang
+  command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -C epmd -u rabbitmq'
+
+rabbitmq_port_management:
+  description: RabbitMQ Management Port
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 15672
+
+erlang_port:
+  description: RabbitMQ Erlang Port
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 4369
+
+rabbitmq_port_amqp:
+  description: RabbitMQ Local AMQP Port
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 5672
+
+{%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
+{{ nginx_instance('rabbitmq', http_port=15672, domain_name='127.0.0.1') }}
+
+rabbitmq-remote-amqp-port:
+  description: Remote RabbitMQ AMQP Port
+  check: check_tcp!55672
+  passive: False

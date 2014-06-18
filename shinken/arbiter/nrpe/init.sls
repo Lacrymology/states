@@ -40,21 +40,4 @@ include:
   - ssmtp.nrpe
   - virtualenv.nrpe
 
-/etc/nagios/nrpe.d/shinken-arbiter.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://shinken/arbiter/nrpe/config.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-
 {{ passive_check('shinken.arbiter') }}
-
-extend:
-  nagios-nrpe-server:
-    service:
-      - watch:
-        - file: /etc/nagios/nrpe.d/shinken-arbiter.cfg

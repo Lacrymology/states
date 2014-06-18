@@ -33,7 +33,7 @@ include:
 {%- endfor %}
 
 test:
-  nrpe:
+  monitoring:
     - run_all_checks
     - order: last
     - wait: 60
@@ -41,7 +41,7 @@ test:
       - elasticsearch_cluster
 
 graylog2_elasticsearch_cluster:
-  nrpe:
+  monitoring:
     - run_check
     - wait: 60
     - order: last

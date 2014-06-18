@@ -33,15 +33,5 @@ include:
   - nrpe
   - pip.nrpe
 
-/etc/nagios/nrpe.d/backup-elasticsearch.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://elasticsearch/backup/nrpe/config.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-    - watch_in:
-      - service: nagios-nrpe-server
+{%- from 'nrpe/passive.sls' import passive_check with context %}
+{{ passive_check('elasticsearch.backup') }}

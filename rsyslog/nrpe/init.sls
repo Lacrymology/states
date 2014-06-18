@@ -32,21 +32,4 @@ include:
   - apt.nrpe
   - nrpe
 
-/etc/nagios/nrpe.d/rsyslog.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://rsyslog/nrpe/config.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-
 {{ passive_check('rsyslog') }}
-
-extend:
-  nagios-nrpe-server:
-    service:
-      - watch:
-        - file: /etc/nagios/nrpe.d/rsyslog.cfg

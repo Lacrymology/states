@@ -25,9 +25,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-# {{ pillar['message_do_not_modify'] }}
-{%- set vpns = instances|default([]) %}
-command[openvpn_procs]=/usr/lib/nagios/plugins/check_procs -c {{ vpns|length }}:{{ vpns|length }} -C openvpn
+{%- set vpns = salt['pillar.get']('openvpn', {}) %}
 {%- for instance in vpns %}
-command[openvpn_{{ instance }}]=/usr/lib/nagios/plugins/check_procs -C openvpn -c 1:1 -a '--config /etc/openvpn/{{ instance }}/config'
-{%- endfor -%}
+openvpn_{{ instance }}:
+  description: Openvpn Instance {{ instance }}
+  command: "/usr/lib/nagios/plugins/check_procs -C openvpn -c 1:1 -a '--config /etc/openvpn/{{ instance }}/config'"
+{%- endfor %}
+
+openvpn_procs:
+  description: Openvpn Daemon
+  command: '/usr/lib/nagios/plugins/check_procs -c {{ vpns|length }}:{{ vpns|length }} -C openvpn'

@@ -25,13 +25,19 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
-{% set ssl = salt['pillar.get']('ldap:ssl', False) %}
-command[openldap_procs]=/usr/lib/nagios/plugins/check_procs -u openldap -C slapd
-command[openldap_port]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 389
-{% if ssl %}
-command[openldap_base]=/usr/lib/nagios/plugins/check_ldap -H 127.0.0.1 -p 389 -b '{{ salt["pillar.get"]("ldap:suffix") }}' -T -3
+openldap_procs:
+  description: OpenLDAP Daemon (slapd)
+  command: /usr/lib/nagios/plugins/check_procs -u openldap -C slapd
+
+openldap_port:
+  description: LDAP Port
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 389
+
+openldap_base:
+  description: LDAP Base
+{% if salt['pillar.get']('ldap:ssl', False) %}
+  command: /usr/lib/nagios/plugins/check_ldap -H 127.0.0.1 -p 389 -b '{{ salt["pillar.get"]("ldap:suffix") }}' -T -3
 {% else %}
-command[openldap_base]=/usr/lib/nagios/plugins/check_ldap -H 127.0.0.1 -p 389 -b '{{ salt["pillar.get"]("ldap:suffix") }}' -3
+  command: /usr/lib/nagios/plugins/check_ldap -H 127.0.0.1 -p 389 -b '{{ salt["pillar.get"]("ldap:suffix") }}' -3
 {% endif %}
 {# TODO: use /usr/lib/nagios/plugins/check_ldaps #}

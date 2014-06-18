@@ -79,7 +79,7 @@ checks by other states.
 
 You can always list the already existing checks on a running Minion by running::
 
-    salt-call nrpe.list_checks
+    salt-call monitoring.list_checks
 
 Write Check
 -----------
@@ -108,7 +108,7 @@ While testing, the monitoring checks are not executed through
 test steps.
 
 It's rather executed by a :doc:`/salt/doc/index` state module available in these
-Common states: ``nrpe.run_check`` and ``nrpe.run_all_checks``.
+Common states: ``monitoring.run_check`` and ``monitoring.run_all_checks``.
 
 For more details on this, look :doc:`/doc/tests` section *Automatic Tests* and
 *Test validation*.

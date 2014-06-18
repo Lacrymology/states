@@ -41,8 +41,9 @@ Example::
       - eth0
       - lo
     ping:
-      - 192.168.1.1
-      - 192.168.1.2
+      target_1: 192.168.1.1
+      target_2: example.com
+    batch: 256
 
 diamond:interfaces
 ~~~~~~~~~~~~~~~~~~

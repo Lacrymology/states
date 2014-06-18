@@ -206,7 +206,7 @@ User can create team.
 Default: ``True``.
 
 gitlab:username_changing_enabled
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 User can change username/namespace.
 

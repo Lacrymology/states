@@ -118,6 +118,7 @@ diamond:
         {{ host }}: {{ pillar['diamond']['ping'][host] }}
 {%- endfor %}
   service:
+    {#- does not use pid file, no need to manage one #}
     - running
     - enable: True
     - order: 50

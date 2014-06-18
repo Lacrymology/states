@@ -43,6 +43,11 @@ jenkins_dependencies:
       - daemon
       - psmisc
 
+{%- from 'macros.jinja2' import manage_pid with context %}
+{%- call manage_pid('/var/run/jenkins/jenkins.pid', 'jenkins', 'nogroup', 'jenkins', 644) %}
+- pkg: jenkins
+{%- endcall %}
+
 {%- set version = '1.545' %}
 jenkins:
   service:

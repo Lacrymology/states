@@ -80,6 +80,12 @@ include:
       - pkg: openjdk_jre_headless
 {% endif %}
 
+
+{%- from 'macros.jinja2' import manage_pid with context %}
+{%- call manage_pid('/var/run/elasticsearch.pid', 'elasticsearch', 'elasticsearch', 'elasticsearch', 644) }}
+- pkg: elasticsearch
+{%- endcall %}
+
 elasticsearch:
 {% if 'aws' in pillar['elasticsearch'] %}
   elasticsearch_plugins:

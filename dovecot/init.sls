@@ -36,6 +36,8 @@ include:
   - ssl
 {% endif %}
 
+{#- PID file owned by root, no need to manage #}
+
 dovecot:
   pkg:
     - installed

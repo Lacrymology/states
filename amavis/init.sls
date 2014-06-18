@@ -68,3 +68,8 @@ amavis:
     - mode: 500
     - require:
       - pkg: cron
+
+{%- from 'macros.jinja2' import manage_pid with context %}
+{%- call manage_pid('/var/run/amavis/amavisd.pid', 'amavis', 'amavis', 'amavis', 640) %}
+- pkg: amavis
+{%- endcall %}

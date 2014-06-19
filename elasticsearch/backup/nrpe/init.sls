@@ -29,6 +29,7 @@ Nagios NRPE check for Elasticsearch backup
 -#}
 include:
   - backup.client.{{ pillar['backup_storage'] }}.nrpe
+  - bash.nrpe
   - cron.nrpe
   - nrpe
   - pip.nrpe

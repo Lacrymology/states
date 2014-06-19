@@ -31,6 +31,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 {% set ssl = salt['pillar.get']('elasticsearch:ssl', False) %}
 include:
   - apt.nrpe
+  - bash.nrpe
   - cron.nrpe
   - elasticsearch.nrpe.instance
   - nrpe

@@ -37,6 +37,7 @@ Nagios NRPE check for djangopypi2.
 {%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - apt.nrpe
+  - bash.nrpe
   - memcache.nrpe
   - nginx.nrpe
   - nrpe

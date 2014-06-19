@@ -29,6 +29,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 include:
   - nrpe
   - backup.client.base
+  - bash.nrpe
 
 /etc/nagios/backup.conf:
   file:

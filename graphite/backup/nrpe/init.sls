@@ -28,6 +28,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Nagios NRPE check for Graphite backup
 -#}
 include:
+  - bash.nrpe
   - cron.nrpe
   - nrpe
 

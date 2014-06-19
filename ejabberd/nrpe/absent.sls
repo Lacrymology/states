@@ -41,7 +41,8 @@ Uninstall NRPE check for ejabberd - XMPP Server
     - absent
 
 {%- if salt['pillar.get']('ejabberd:ssl', False) %}
-/usr/lib/nagios/plugins/check_ssl_configuration.py:
+ejabberd_ssl_configuration:
   file:
     - absent
+    - name: /usr/lib/nagios/plugins/check_ssl_configuration.py
 {%- endif %}

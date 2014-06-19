@@ -40,7 +40,8 @@ Remove graylog2 web Nagios NRPE checks.
     - absent
 
 {%- if salt['pillar.get']('graylog2:ssl', False) %}
-/usr/lib/nagios/plugins/check_ssl_configuration.py:
+graylog2_ssl_configuration:
   file:
     - absent
+    - name: /usr/lib/nagios/plugins/check_ssl_configuration.py
 {%- endif %}

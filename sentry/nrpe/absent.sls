@@ -44,7 +44,8 @@ Remove Nagios NRPE check for Sentry.
     - absent
 
 {%- if salt['pillar.get']('sentry:ssl', False) %}
-/usr/lib/nagios/plugins/check_ssl_configuration.py:
+sentry_ssl_configuration:
   file:
     - absent
+    - name: /usr/lib/nagios/plugins/check_ssl_configuration.py
 {%- endif %}

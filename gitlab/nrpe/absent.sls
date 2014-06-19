@@ -51,7 +51,8 @@ Remove GitLab NRPE checks.
     - absent
 
 {%- if salt['pillar.get']('gitlab:ssl', False) %}
-/usr/lib/nagios/plugins/check_ssl_configuration.py:
+gitlab_ssl_configuration:
   file:
     - absent
+    - name: /usr/lib/nagios/plugins/check_ssl_configuration.py
 {%- endif %}

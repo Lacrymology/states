@@ -49,7 +49,8 @@ Remove Nagios NRPE check for OpenERP.
     - absent
 
 {%- if salt['pillar.get']('openerp:ssl', False) %}
-/usr/lib/nagios/plugins/check_ssl_configuration.py:
+openerp_ssl_configuration:
   file:
     - absent
+    - name: /usr/lib/nagios/plugins/check_ssl_configuration.py
 {%- endif %}

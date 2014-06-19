@@ -36,7 +36,8 @@ Remove Nagios NRPE check for jenkins.
     - absent
 
 {%- if salt['pillar.get']('jenkins:ssl', False) %}
-/usr/lib/nagios/plugins/check_ssl_configuration.py:
+jenkins_ssl_configuration:
   file:
     - absent
+    - name: /usr/lib/nagios/plugins/check_ssl_configuration.py
 {%- endif %}

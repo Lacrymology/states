@@ -44,7 +44,8 @@ Remove Nagios NRPE check for Graphite.
     - absent
 
 {%- if salt['pillar.get']('graphite:web:ssl', False) %}
-/usr/lib/nagios/plugins/check_ssl_configuration.py:
+graphite_ssl_configuration:
   file:
     - absent
+    - name: /usr/lib/nagios/plugins/check_ssl_configuration.py
 {%- endif %}

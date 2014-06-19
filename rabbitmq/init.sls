@@ -94,6 +94,7 @@ rabbitmq_old_version:
       - pkg: rabbitmq-server
 {%- endif %}
 
+{#- does not use PID, no need to manage #}
 rabbitmq-server:
   file:
     - directory

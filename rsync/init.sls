@@ -51,6 +51,7 @@ rsync:
       - file: rsync
       - file: /etc/rsyncd.conf
       - pkg: rsync
+{#- PID file owned by root, no need to manage #}
 
 /etc/rsyncd.conf:
   file:

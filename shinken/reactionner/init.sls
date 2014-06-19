@@ -58,6 +58,7 @@ shinken-reactionner:
       - file: /etc/shinken/reactionner.conf
       - user: shinken
       - file: shinken-reactionner
+{#- does not use PID, no need to manage #}
 
 /etc/shinken/reactionner.conf:
   file:

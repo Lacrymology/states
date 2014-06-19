@@ -71,6 +71,7 @@ shinken-poller:
       - file: /etc/shinken/poller.conf
       - file: shinken-poller
       - user: shinken
+{#- does not use PID, no need to manage #}
 
 /etc/shinken/poller.conf:
   file:

@@ -238,6 +238,7 @@ openerp-cron:
     - require_in:
 {%- endif %}
       - file: openerp-cron
+{#- does not use PID, no need to manage #}
 
 /etc/nginx/conf.d/openerp.conf:
   file:

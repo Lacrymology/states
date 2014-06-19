@@ -68,7 +68,7 @@ denyhosts:
       - file: denyhosts-allowed
     - require:
       - service: rsyslog
-{#- PID owned by root, no need to manage #}
+{#- PID file owned by root, no need to manage #}
 
 /usr/local/bin/denyhosts-unblock:
   file:

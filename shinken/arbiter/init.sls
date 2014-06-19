@@ -73,6 +73,7 @@ shinken-arbiter:
       - file: /var/lib/shinken
       - file: /etc/shinken/objects
       - pkg: ssmtp
+{#- does not use PID, no need to manage #}
     - watch:
       - user: shinken
       - module: shinken

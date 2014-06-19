@@ -32,6 +32,7 @@ Institute for Institutional Innovation by Data Driven Design Inc.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
+{%- from 'macros.jinja2' import manage_pid with context %}
 include:
   - apt
 
@@ -57,6 +58,10 @@ tomcat:
       - file: /usr/share/tomcat6/shared
       - file: /usr/share/tomcat6/server
       - user: tomcat
+{%- call manage_pid('/var/run/tomcat6.pid', 'tomcat6', 'root', 'tomcat') %}
+- pkg: tomcat
+- user: tomcat
+{%- endcall %}
 
 add_catalina_env:
   file:

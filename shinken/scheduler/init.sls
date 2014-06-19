@@ -63,6 +63,7 @@ shinken-scheduler:
       - module: shinken
       - file: /etc/shinken/scheduler.conf
       - file: shinken-scheduler
+{#- does not use PID, no need to manage #}
 
 /etc/shinken/scheduler.conf:
   file:

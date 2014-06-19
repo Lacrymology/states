@@ -132,6 +132,7 @@ salt-ui:
       - pkg: nginx
       - {{ salt_ui_module }}: salt-ui
 
+{#- PID file owned by root, no need to manage #}
 {%- set api_path = '0.17.5-1/pool/main/s/salt-api/salt-api_' + version + '_all.deb' %}
 salt-api:
   file:

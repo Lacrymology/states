@@ -150,6 +150,11 @@ service: nagios-nrpe-server #}
     - watch:
       - pkg: nagios-nrpe-server
 
+{%- from 'macros.jinja2' import manage_pid with context %}
+{%- call manage_pid('/var/run/nagios/nrpe.pid', 'nagios', 'nagios', 'nagios-nrpe-server') %}
+- pkg: nagios-nrpe-server
+{%- endcall %}
+
 {#- Change /usr/local/nagios owner #}
 /usr/local/nagios:
   file:

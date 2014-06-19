@@ -75,6 +75,7 @@ shinken-broker:
       - file: shinken-broker
       - service: rsyslog
       - user: shinken
+{#- does not use PID, no need to manage #}
 
 /etc/shinken/broker.conf:
   file:

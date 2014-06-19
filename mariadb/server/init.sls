@@ -34,6 +34,7 @@ Maintainer: Dang Tung Lam <lamdt@familug.org>
 
 Install MariaDB, a database server which is a drop-in replacement for MySQL.
 -#}
+{%- from 'macros.jinja2' import manage_pid with context %}
 include:
   - apt
   - mariadb
@@ -74,6 +75,10 @@ python-mysqldb:
     - installed
     - require:
       - cmd: apt_sources
+
+{%- call manage_pid('/var/run/mysqld/mysqld.pid', 'mysql', 'mysql', 'mysql-server', 660) %}
+- pkg: mysql-server
+{%- endcall %}
 
 mysql-server:
   pkg:

@@ -81,7 +81,7 @@ include:
       - pkg: openjdk_jre_headless
 {% endif %}
 
-{%- call manage_pid('/var/run/elasticsearch.pid', 'elasticsearch', 'elasticsearch', 'elasticsearch', 644) }}
+{%- call manage_pid('/var/run/elasticsearch.pid', 'elasticsearch', 'elasticsearch', 'elasticsearch') %}
 - pkg: elasticsearch
 {%- endcall %}
 

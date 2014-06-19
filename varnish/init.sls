@@ -81,7 +81,7 @@ varnish:
     - source: salt://varnish/default.vcl.jinja2
     - require:
       - pkg: varnish
-
+{#- PID file owned by root, no need to manage #}
 
 /etc/default/varnish:
   file:

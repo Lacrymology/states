@@ -66,6 +66,8 @@ mongodb:
       - mongodb-10gen: http://downloads-distro.mongodb.org/repo/ubuntu-upstart/dists/dist/10gen/binary-{{ grains['debian_arch'] }}/{{ filename }}
 {%- endif %}
 
+{#- does not use PID, no need to manage #}
+
 {%- if salt['pkg.version']('mongodb-10gen') not in ('', version) %}
 mongodb_old_version:
   pkg:

@@ -115,6 +115,7 @@ proftpd:
       - file: proftpd
       - pkg: proftpd-mod-pgsql
       - pkg: proftpd-basic
+{#- PID file owned by root, no need to manage #}
 
 {% for file in ('virtuals', 'tls', 'sql', 'modules', 'ldap') %}
 /etc/proftpd/{{ file }}.conf:

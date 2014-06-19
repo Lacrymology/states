@@ -34,6 +34,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 Install Redis.
 -#}
+{%- from 'macros.jinja2' import manage_pid with context %}
 
 {%- set redis_version = "2.8.4" %}
 {%- set jemalloc_version = "3.4.1" %}
@@ -77,6 +78,10 @@ redis:
       - redis-server: http://ppa.launchpad.net/chris-lea/redis-server/ubuntu/pool/main/r/redis/{{ filename }}
       - redis-tools: http://ppa.launchpad.net/chris-lea/redis-server/ubuntu/pool/main/r/redis/{{ redistools }}
 {%- endif %}
+
+{%- call manage_pid('/var/run/redis/redis-server.pid', 'redis', 'redis', 'redis-server') %}
+- pkg: redis
+{%- endcall %}
 
 {%- if salt['pkg.version']('libjemalloc1') not in ('', jemalloc_sub_version) %}
 jemalloc_old_version:

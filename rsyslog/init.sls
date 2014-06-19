@@ -28,6 +28,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 include:
   - apt
 
+{#- PID file owned by root, no need to manage #}
 rsyslog:
   pkgrepo:
     - managed

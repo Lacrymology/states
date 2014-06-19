@@ -41,6 +41,7 @@ salt-minion:
       - pip: unittest-xml-reporting
     - watch:
       - pkg: salt-minion
+{#- PID file owned by root, no need to manage #}
 
 {#- sync after install newest version, because custom module maybe one
 that override main modules, that may not work on old minion version #}

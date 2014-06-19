@@ -75,4 +75,3 @@ gitlab-upstart-log:
 /etc/rsyslog.d/gitlab-upstart.conf:
   file:
     - absent
-      - service: gitlab

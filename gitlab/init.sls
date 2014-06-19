@@ -204,7 +204,6 @@ gitlab:
     - require:
       - pkg: gitlab_dependencies
       - group: web
-      - user: web
       - cmd: gitlab_rename_home_folder
       - cmd: replace_git_home_in_file
   postgres_user:

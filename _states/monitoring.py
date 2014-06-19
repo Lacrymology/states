@@ -63,17 +63,19 @@ def managed(name, source=None, template='jinja',
             backup=False,
             dir_mode=755,
             contents=None,
-            defaults=None, env='base', **kwargs):
+            defaults=None, env=None, **kwargs):
 
     ret = {'name': name,
            'changes': {},
            'result': True,
            'comment': ''}
 
+    if env is None:
+        env = kwargs.get('__env__', 'base')
+
     context.update({'env': env})
 
     source_hash = ''
-    __env__ = env
 
     # Retrieve the source file from the server
     name = "/etc/nagios/nrpe.d/{0}.cfg".format(name)
@@ -87,7 +89,7 @@ def managed(name, source=None, template='jinja',
             user,
             group,
             mode,
-            __env__,
+            env,
             context,
             defaults,
             **kwargs
@@ -129,7 +131,7 @@ def managed(name, source=None, template='jinja',
                 user,
                 group,
                 mode,
-                __env__,
+                env,
                 backup,
                 template,
                 show_diff,

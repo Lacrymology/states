@@ -47,8 +47,8 @@ server {
 {%- if salt['pillar.get']('shinken:ssl', False) -%}
   {%- if salt['pillar.get']('shinken:ssl_redirect', False) %}
     {# if https, redirect http port 80 to https port 443 #}
-    server_name {% for hostname in pillar['shinken']['web']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
-    return 301 https://{{ pillar['shinken']['web']['hostnames'][0] }}$request_uri;
+    server_name {% for hostname in pillar['shinken']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+    return 301 https://{{ pillar['shinken']['hostnames'][0] }}$request_uri;
 }
 {#- https server #}
 server {
@@ -56,7 +56,7 @@ server {
     {{ ssl_config(pillar['shinken']['ssl']) }}
 {%- endif -%}
 {#- web app logic #}
-    server_name {% for hostname in pillar['shinken']['web']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+    server_name {% for hostname in pillar['shinken']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
 
 {% include "nginx/block_hacks.jinja2" %}
 

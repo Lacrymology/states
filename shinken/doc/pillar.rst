@@ -50,9 +50,8 @@ Example::
       reactionner:
       poller:
         id:
-    web:
-      hostname:
-        - shinken.example.com
+    hostname:
+      - shinken.example.com
 
 shinken:graphite_url
 ~~~~~~~~~~~~~~~~~~~~
@@ -98,7 +97,7 @@ shinken:architecture:reactionner
 shinken:architecture:poller:id
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-shinken:web:hostnames
+shinken:hostnames
 ~~~~~~~~~~~~~~~~~~~~~
 
 .. include:: /nginx/doc/hostnames.inc

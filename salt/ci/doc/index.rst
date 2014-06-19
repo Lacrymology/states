@@ -116,7 +116,7 @@ Jenkins
 ~~~~~~~
 
 Once :doc:`/jenkins/doc/index` is deployed, go in one of the hostname you
-specified at ``jenkins:web:hostnames`` :doc:`/jenkins/doc/pillar`.
+specified at ``jenkins:hostnames`` :doc:`/jenkins/doc/pillar`.
 
 Set ``[a-zA-Z0-9\-]*`` as regular expression for job name. As job name are
 used to create VM hostname, this need to be a valid hostname.

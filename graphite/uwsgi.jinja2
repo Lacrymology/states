@@ -31,17 +31,17 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 master = true
 env = DJANGO_SETTINGS_MODULE=graphite.settings
 module = graphite.wsgi
-processes = {{ pillar['graphite']['web']['workers'] }}
-harakiri = {{ salt['pillar.get']('graphite:web:timeout', 30) }}
+processes = {{ pillar['graphite']['workers'] }}
+harakiri = {{ salt['pillar.get']('graphite:timeout', 30) }}
 harakiri-verbose = true
-{% if salt['pillar.get']('graphite:web:cheaper', False) %}
-{% if pillar['graphite']['web']['cheaper'] > 0 %}
-cheaper = {{ pillar['graphite']['web']['cheaper'] }}
+{% if salt['pillar.get']('graphite:cheaper', False) %}
+{% if pillar['graphite']['cheaper'] > 0 %}
+cheaper = {{ pillar['graphite']['cheaper'] }}
 {% else %}
 cheap = true
 {% endif %}
-{% if pillar['graphite']['web']['workers'] == 1 and pillar['graphite']['web']['cheaper'] == 0 %}
-idle = {{ salt['pillar.get']('graphite:web:idle', 300) }}
+{% if pillar['graphite']['workers'] == 1 and pillar['graphite']['cheaper'] == 0 %}
+idle = {{ salt['pillar.get']('graphite:idle', 300) }}
 {% endif %}
 {% endif -%}
 {%- if grains['virtual'] == 'kvm' and salt['file.file_exists']('/sys/kernel/mm/ksm/run') %}

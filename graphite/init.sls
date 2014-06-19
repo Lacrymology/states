@@ -46,7 +46,7 @@ include:
   - uwsgi
   - virtualenv
   - web
-{% if salt['pillar.get']('graphite:web:ssl', False) %}
+{% if salt['pillar.get']('graphite:ssl', False) %}
   - ssl
 {% endif %}
 
@@ -225,15 +225,15 @@ graphite_settings:
       - module: graphite-web
   postgres_user:
     - present
-    - name: {{ salt['pillar.get']('graphite:web:db:username', 'graphite') }}
-    - password: {{ salt['password.pillar']('graphite:web:db:password', 10) }}
+    - name: {{ salt['pillar.get']('graphite:db:username', 'graphite') }}
+    - password: {{ salt['password.pillar']('graphite:db:password', 10) }}
     - runas: postgres
     - require:
       - service: postgresql
   postgres_database:
     - present
-    - name: {{ salt['pillar.get']('graphite:web:db:name', 'graphite') }}
-    - owner: {{ salt['pillar.get']('graphite:web:db:username', 'graphite') }}
+    - name: {{ salt['pillar.get']('graphite:db:name', 'graphite') }}
+    - owner: {{ salt['pillar.get']('graphite:db:username', 'graphite') }}
     - runas: postgres
     - require:
       - postgres_user: graphite_settings
@@ -285,7 +285,7 @@ graphite_admin_user:
   module:
     - wait
     - name: django.command
-    - command: createsuperuser_plus --username={{ pillar['graphite']['web']['initial_admin_user']['username'] }} --email={{ salt['pillar.get']('graphite:web:initial_admin_user:email', 'root@example.com') }} --password={{ pillar['graphite']['web']['initial_admin_user']['password'] }}
+    - command: createsuperuser_plus --username={{ pillar['graphite']['initial_admin_user']['username'] }} --email={{ salt['pillar.get']('graphite:initial_admin_user:email', 'root@example.com') }} --password={{ pillar['graphite']['initial_admin_user']['password'] }}
     - settings_module: graphite.settings
     - bin_env: /usr/local/graphite
     - stateful: False
@@ -330,6 +330,6 @@ extend:
       - watch:
         - file: /etc/nginx/conf.d/graphite.conf
         - user: graphite
-{% if salt['pillar.get']('graphite:web:ssl', False) %}
-        - cmd: ssl_cert_and_key_for_{{ pillar['graphite']['web']['ssl'] }}
+{% if salt['pillar.get']('graphite:ssl', False) %}
+        - cmd: ssl_cert_and_key_for_{{ pillar['graphite']['ssl'] }}
 {% endif %}

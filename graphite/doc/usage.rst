@@ -36,7 +36,7 @@ Web UI
 
 After installing, you can login to the :doc:`/graphite/doc/index` web by using
 the account that is defined in :doc:`pillar`
-``graphite:web:initial_admin_user``.
+``graphite:initial_admin_user``.
 
 Here you can see all the metrics, such as those that :doc:`/diamond/doc/index`
 sent to Carbon under: Graphite -> `Your minion name` -> ``os``.
@@ -88,7 +88,7 @@ Create user
 To create user, you can login to the Django Administration Web ``/admin/`` URL
 of :doc:`pillar` in one of the value of ``graphite:hostnames``.
 by using the account that is defined in :doc:`pillar`
-``graphite:web:initial_admin_user``.
+``graphite:initial_admin_user``.
 
 Click `Users` at `Auth` section. Then put `Username`, `Password`,
 `Password confirmation`. And click `Save` if you want to stop that, click

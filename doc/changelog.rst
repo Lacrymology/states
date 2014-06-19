@@ -112,17 +112,17 @@ Pillars
   the same host at the same time.
 - The following pillars key aren't used anymore as they used to configure Amazon
   SES which is now deprecated:
-  - graphite:web:email
+  - graphite:email
   - amazon-ses
   - sentry:email
 - Some keys had been added to replace old one:
-  - graphite:web:smtp instead of graphite:web:email
-  - sentry:web:smtp instead of sentry:web:email
+  - graphite:smtp instead of graphite:email
+  - sentry:smtp instead of sentry:email
 - Many pillars values are now optional, default value are used when not specified:
   - debug
   - memcache:memory
-  - graphite:web:db:name
-  - graphite:web:db:username
+  - graphite:db:name
+  - graphite:db:username
   - graylog2:email:tls
   - graylog2:email:user
   - graylog2:email:password
@@ -132,7 +132,7 @@ Pillars
   - sentry:db:username
 - Some password related pillars values can be omitted as random string will be
   used instead, but keep pillar key if you're upgrading exinsting server:
-  - graphite:web:db:password
+  - graphite:db:password
   - postgresql:diamond
   - rabbitmq:monitor:password
   - sentry:db:password

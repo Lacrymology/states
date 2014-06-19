@@ -42,11 +42,10 @@ Mandatory
 Example::
 
   graphite:
-    web:
-     hostnames:
-        - graphite.example.com
+    hostnames:
+      - graphite.example.com
 
-graphite:web:hostnames
+graphite:hostnames
 ~~~~~~~~~~~~~~~~~~~~~~
 
 .. include:: /nginx/doc/hostnames.inc
@@ -58,70 +57,69 @@ Example::
 
   graphite:
     debug: False
-    web:
-      sentry: http://XXX:YYY@sentry.example.com/0
-      db:
-        password: psqluserpass
-        username: psqluser
-        name: psqldbname
-      django_key: totalyrandomstring
-      ssl: microsigns
-      ssl_redirect: True
-      render_noauth: False
-      timeout: 30
-      cheaper: 1
-      idle: 240
-      smtp:
-        method: smtp
-        server: smtp.example.com
-        user: smtpuser
-        from: from@example.com
-        port: 25
-        password: smtppassword
-        tls: True
+    sentry: http://XXX:YYY@sentry.example.com/0
+    db:
+      password: psqluserpass
+      username: psqluser
+      name: psqldbname
+    django_key: totalyrandomstring
+    ssl: microsigns
+    ssl_redirect: True
+    render_noauth: False
+    timeout: 30
+    cheaper: 1
+    idle: 240
+    smtp:
+      method: smtp
+      server: smtp.example.com
+      user: smtpuser
+      from: from@example.com
+      port: 25
+      password: smtppassword
+      tls: True
 
-graphite:web:sentry
+graphite:sentry
 ~~~~~~~~~~~~~~~~~~~
 
 .. include:: /sentry/doc/dsn.inc
 
-graphite:web:db:username
+graphite:db:username
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. include:: /postgresql/doc/username.inc
 
 Default: ``graphite``.
 
-graphite:web:db:name
+graphite:db:name
 ~~~~~~~~~~~~~~~~~~~~
 
 .. include:: /postgresql/doc/name.inc
 
 Default: ``graphite``.
 
-graphite:web:db:password
+graphite:db:password
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. include:: /postgresql/doc/password.inc
 
-graphite:web:django_key
+graphite:django_key
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 .. include:: /django/doc/key.inc
 
-graphite:web:smtp
+graphite:smtp
 ~~~~~~~~~~~~~~~~~
 
 .. include:: /mail/doc/smtp.inc
 
-graphite:web:debug
+graphite:debug
 ~~~~~~~~~~~~~~~~~~
 
 If set to ``True``, run with extra logging.
 
 Default: ``False``.
 
-graphite:web:render_noauth
+graphite:render_noauth
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If set to ``True``, the rendered graphics can be directly GET by anyone
@@ -129,12 +127,12 @@ without user authentication.
 
 Default: ``False``.
 
-graphite:web:ssl
+graphite:ssl
 ~~~~~~~~~~~~~~~~
 
 .. include:: /nginx/doc/ssl.inc
 
-graphite:web:ssl_redirect
+graphite:ssl_redirect
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. include:: /nginx/doc/ssl_redirect.inc
@@ -144,7 +142,7 @@ graphite:carbon
 
 Consult :doc:`/carbon/doc/pillar` for more information.
 
-graphite:web:(workers|cheapers|idle|timeout)
+graphite:(workers|cheapers|idle|timeout)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. include:: /uwsgi/doc/pillar.inc

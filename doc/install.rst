@@ -56,7 +56,7 @@ Sentry server is installed, team and project created.
 Take extra care with ``files_archive`` if :doc:`/salt/archive/server/doc/index`
 need to be bootstraped. Set the value of ``files_archive`` to same as
 ``salt_archive:source`` (:doc:`/salt/archive/server/doc/pillar`) until it's
-deployed and then change it to any hostname in ``salt_archive:web:hostnames``.
+deployed and then change it to any hostname in ``salt_archive:hostnames``.
 
 Salt Master
 -----------
@@ -93,7 +93,7 @@ and not roles:
 
 #. :doc:`/salt/archive/server/doc/index`. After that you should change
    ``files_archive`` in :doc:`/salt/archive/server/doc/pillar` for one of the
-   ``salt_archive:web:hostnames``.
+   ``salt_archive:hostnames``.
 #. :doc:`/sentry/doc/index`
 #. :doc:`/carbon/doc/index`
 #. :doc:`/graphite/doc/index`

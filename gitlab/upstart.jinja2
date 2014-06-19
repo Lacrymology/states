@@ -42,17 +42,19 @@ description "Sidekiq Background Worker for Gitlab"
 start on runlevel [2345]
 stop on runlevel [!2345]
 
+nice 10
+respawn
+
 chdir {{ web_dir }}
 
-setuid git
-setgid git
+setuid {{ user }}
+setgid {{ user }}
 
+env HOME="{{ user }}"
+env USER="/home/{{ user }}"
 env RAILS_ENV="production"
 
-post-start script
-  exec bundle exec rake sidekiq:start
-end script
-
-post-stop script
-  exec bundle exec rake sidekiq:stop
+script
+  exec bundle exec sidekiq -q post_receive,mailer,system_hook,project_web_hook,gitlab_shell,common,default | logger -t gitlab-sidekiq
+  emit gitlab_running
 end script

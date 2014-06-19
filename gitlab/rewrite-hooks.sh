@@ -31,47 +31,32 @@ Institute for Institutional Innovation by Data Driven Design Inc.
 
 Author: Lam Dang Tung <lamdt@familug.org>
 Maintainer: Lam Dang Tung <lamdt@familug.org>
-
-Unistalling GitLab.
 -#}
-{%- set version = '6.4.3' %}
-{%- set web_dir = "/usr/local/gitlabhq-" + version  %}
-{%- set user = 'gitlab' %}
+#!/bin/bash
 
-gitlab:
-  user:
-    - absent
-    - name: {{ user }}
-    - force: True
-    - require:
-      - uwsgi: gitlab
-      - service: gitlab
-  group:
-    - absent
-    - name: {{ user }}
-    - require:
-      - user: gitlab
-  uwsgi:
-    - absent
-    - name: gitlab
-  service:
-    - dead
+# $1 is an optional argument specifying the location of the repositories directory.
+# Defaults to /home/git/repositories if not provided
 
-{%- for file in ('/etc/nginx/conf.d/gitlab.conf', web_dir, '/home/' + user, '/etc/init/gitlab.conf', '/etc/logrotate.d/gitlab') %}
-{{ file }}:
-  file:
-    - absent
-    - require:
-      - service: gitlab
-{%- endfor %}
+home_dir="/home/{{ user }}"
+src=${1:-"$home_dir/repositories"}
 
-gitlab-upstart-log:
-  cmd:
-    - run
-    - name: find /var/log/upstart/ -maxdepth 1 -type f -name 'gitlab.log*' -delete
-    - require:
-      - service: gitlab
+function create_link_in {
+  ln -s -f "$home_dir/gitlab-shell/hooks/update" "$1/hooks/update"
+}
 
-/etc/rsyslog.d/gitlab-upstart.conf:
-  file:
-    - absent
+for dir in `ls "$src/"`
+do
+  if [ -d "$src/$dir" ]; then
+    if [[ "$dir" =~ ^.*\.git$ ]]
+    then
+      create_link_in "$src/$dir"
+    else
+      for subdir in `ls "$src/$dir/"`
+      do
+        if [ -d "$src/$dir/$subdir" ] && [[ "$subdir" =~ ^.*\.git$ ]]; then
+          create_link_in "$src/$dir/$subdir"
+        fi
+      done
+    fi
+  fi
+done

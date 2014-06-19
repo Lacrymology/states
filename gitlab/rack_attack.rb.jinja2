@@ -31,47 +31,19 @@ Institute for Institutional Innovation by Data Driven Design Inc.
 
 Author: Lam Dang Tung <lamdt@familug.org>
 Maintainer: Lam Dang Tung <lamdt@familug.org>
-
-Unistalling GitLab.
 -#}
-{%- set version = '6.4.3' %}
-{%- set web_dir = "/usr/local/gitlabhq-" + version  %}
-{%- set user = 'gitlab' %}
+# {{ pillar['message_do_not_modify'] }}
 
-gitlab:
-  user:
-    - absent
-    - name: {{ user }}
-    - force: True
-    - require:
-      - uwsgi: gitlab
-      - service: gitlab
-  group:
-    - absent
-    - name: {{ user }}
-    - require:
-      - user: gitlab
-  uwsgi:
-    - absent
-    - name: gitlab
-  service:
-    - dead
+paths_to_be_protected = [
+  "#{Rails.application.config.relative_url_root}/users/password",
+  "#{Rails.application.config.relative_url_root}/users/sign_in",
+  "#{Rails.application.config.relative_url_root}/api/#{API::API.version}/session.json",
+  "#{Rails.application.config.relative_url_root}/api/#{API::API.version}/session",
+  "#{Rails.application.config.relative_url_root}/users"
+]
 
-{%- for file in ('/etc/nginx/conf.d/gitlab.conf', web_dir, '/home/' + user, '/etc/init/gitlab.conf', '/etc/logrotate.d/gitlab') %}
-{{ file }}:
-  file:
-    - absent
-    - require:
-      - service: gitlab
-{%- endfor %}
-
-gitlab-upstart-log:
-  cmd:
-    - run
-    - name: find /var/log/upstart/ -maxdepth 1 -type f -name 'gitlab.log*' -delete
-    - require:
-      - service: gitlab
-
-/etc/rsyslog.d/gitlab-upstart.conf:
-  file:
-    - absent
+unless Rails.env.test?
+  Rack::Attack.throttle('protected paths', limit: 10, period: 60.seconds) do |req|
+    req.ip if paths_to_be_protected.include?(req.path) && req.post?
+  end
+end

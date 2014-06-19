@@ -34,5 +34,7 @@ Maintainer: Lam Dang Tung <lamdt@familug.org>
 #}
 # {{ pillar['message_do_not_modify'] }}
 set -e
+NOW=`/bin/date '+%Y-%m-%d-%H_%M_%S'`
+
 /usr/local/bin/backup-postgresql gitlab
-/usr/local/bin/backup-file gitlab /home/git repositories .ssh gitlab-satellites
+/usr/local/bin/backup-file gitlab /home/gitlab repositories .ssh gitlab-satellites

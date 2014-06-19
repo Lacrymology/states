@@ -33,20 +33,17 @@ Author: Lam Dang Tung <lamdt@familug.org>
 Maintainer: Lam Dang Tung <lamdt@familug.org>
 -#}
 # {{ pillar['message_do_not_modify'] }}
-
 # GitLab application config file
 
 production: &base
-  {#-
+{#-
+
    1. GitLab app settings
    ==========================
 
    GitLab settings
-  #}
+#}
   gitlab:
-    {#-
-    Web server settings
-    #}
     host: {{ salt['pillar.get']('gitlab:hostnames')[0] }}
     port: {{ salt['pillar.get']('gitlab:port', 80) }}
     {%- if salt['pillar.get']('gitlab:ssl', False) %}
@@ -56,17 +53,23 @@ production: &base
     {%- endif %}
 
     {#-
-     WARNING: This feature is no longer supported
-     Uncomment and customize to run in non-root path
-     Note that ENV['RAILS_RELATIVE_URL_ROOT'] in config/puma.rb may need to be changed
+     Uncomment and customize the last line to run in a non-root path
+     WARNING: We recommend creating a FQDN to host GitLab in a root path instead of this.
+     Note that four settings need to be changed for this to work.
+     1) In your application.rb file: config.relative_url_root = "/gitlab"
+     2) In your gitlab.yml file: relative_url_root: /gitlab
+     3) In your unicorn.rb: ENV['RAILS_RELATIVE_URL_ROOT'] = "/gitlab"
+     4) In ../gitlab-shell/config.yml: gitlab_url: "http://127.0.0.1/gitlab"
+     To update the path, run: sudo -u git -H bundle exec rake assets:precompile RAILS_ENV=production
 
      relative_url_root: /gitlab
     #}
 
     {#-
      Uncomment and customize if you can't use the default user to run GitLab (default: 'git')
-     # user: git
+     user: git
     #}
+    user: {{ user }}
 
     {#- Email settings #}
     email_from: {{ salt['pillar.get']('gitlab:smtp:from', salt['pillar.get']('smtp:from')) }}
@@ -75,29 +78,88 @@ production: &base
     {#- User settings #}
 
     default_projects_limit: {{ salt['pillar.get']('gitlab:default_projects_limit', 10) }}
+
+    {#- User can create group #}
+    {%- if not salt['pillar.get']('gitlab:default_can_create_group', True) %}
+    default_can_create_group: false
+    {%- endif %}
+
+    {#- User can create team #}
+    {%- if not salt['pillar.get']('gitlab:default_can_create_team', True) %}
+    default_can_create_team: false
+    {%- endif %}
+
+    {#- User can change her username/namespace #}
+    {%- if not salt['pillar.get']('gitlab:username_changing_enabled', True) %}
+    username_changing_enabled: false
+    {%- endif %}
+
+    default_theme: {{ salt['pillar.get']('gitlab:default_theme', 2) }}
+
     {#-
-    default_can_create_group: false  # default: true
-    default_can_create_team: false   # default: true
-    username_changing_enabled: false # default: true - User can change her username/namespace
+     Users management
+     Account passwords are not sent via the email if signup is enabled.
     #}
 
-    {#- Users management
+    {%- if salt['pillar.get']('gitlab:signup_enabled', True) %}
+    signup_enabled: true
+    {%- endif %}
 
-    signup_enabled: true   # default: false - Account passwords are not sent via the email if signup is enabled.
+    {#-
+     Restrict setting visibility levels for non-admin users.
+     The default is to allow all levels.
+    restricted_visibility_levels: [ "public" ]
     #}
+
+    {#- Automatic issue closing #}
+
+    {#-
+     If a commit message matches this regular expression, all issues referenced from the matched text will be closed.
+     This happens when the commit is pushed or merged into the default branch of a project.
+     When not specified the default issue_closing_pattern as specified below will be used.
+     issue_closing_pattern: ([Cc]lose[sd]|[Ff]ixe[sd]) +#\d+
+    #}
+    issue_closing_pattern: {{ salt['pillar.get']('gitlab:issue_closing_pattern', '([Cc]lose[sd]|[Ff]ixe[sd]) +#\d+') }}
 
     {#- Default project features settings #}
     default_projects_features:
+      {%- if salt['pillar.get']('gitlab:default_projects_features:issues', True) %}
       issues: true
-      merge_requests: true
-      wiki: true
-      wall: false
-      snippets: false
+      {%- else %}
+      issues: false
+      {%- endif %}
 
-  {#- External issues trackers #}
-  issues_tracker:
+      {%- if salt['pillar.get']('gitlab:default_projects_features:merge_requests', True) %}
+      merge_requests: true
+      {%- else %}
+      merge_requests: false
+      {%- endif %}
+
+      {%- if salt['pillar.get']('gitlab:default_projects_features:wiki', True) %}
+      wiki: true
+      {%- else %}
+      wiki: false
+      {%- endif %}
+
+      {%- if salt['pillar.get']('gitlab:default_projects_features:wall', False) %}
+      wall: true
+      {%- else %}
+      wall: false
+      {%- endif %}
+
+      {%- if salt['pillar.get']('gitlab:default_projects_features:snippets', False) %}
+      snippets: true
+      {%- else %}
+      snippets: false
+      {%- endif %}
+
+      visibility_level: "{{ salt['pillar.get']('gitlab:default_projects_features:visibility_level', 'private') }}"
+
   {#-
+   External issues trackers
+  issues_tracker:
     # redmine:
+    #   title: "Redmine"
     #   ## If not nil, link 'Issues' on project page will be replaced with this
     #   ## Use placeholders:
     #   ##  :project_id        - GitLab project identifier
@@ -118,6 +180,7 @@ production: &base
     #   new_issue_url: "http://redmine.sample/projects/:issues_tracker_id/issues/new"
     #
     # jira:
+    #   title: "Atlassian Jira"
     #   project_url: "http://jira.sample/issues/?jql=project=:issues_tracker_id"
     #   issues_url: "http://jira.sample/browse/:id"
     #   new_issue_url: "http://jira.sample/secure/CreateIssue.jspa"
@@ -126,17 +189,17 @@ production: &base
   {#- Gravatar #}
   gravatar:
     enabled: true                 # Use user avatar image from Gravatar.com (default: true)
-    {#-
-    plain_url: "http://..."     # default: http://www.gravatar.com/avatar/%{hash}?s=%{size}&d=mm
-    ssl_url:   "https://..."    # default: https://secure.gravatar.com/avatar/%{hash}?s=%{size}&d=mm
-    #}
+    # plain_url: "http://..."     # default: http://www.gravatar.com/avatar/%{hash}?s=%{size}&d=mm
+    # ssl_url:   "https://..."    # default: https://secure.gravatar.com/avatar/%{hash}?s=%{size}&d=mm
 
   {#-
    2. Auth settings
    ==========================
-  #}
 
-  {#- LDAP settings #}
+   LDAP settings
+   You can inspect the first 100 LDAP users with login access by running:
+    bundle exec rake gitlab:ldap:check[100] RAILS_ENV=production
+  #}
   ldap:
     {%- if salt['pillar.get']('gitlab:ldap:enabled', False)  %}
     {%- set ldap =  salt['pillar.get']('gitlab:ldap') %}
@@ -155,29 +218,23 @@ production: &base
 
   {#- OmniAuth settings #}
   omniauth:
-    {#- Allow login via Twitter, Google, etc. using OmniAuth providers #}
-    enabled: {{ salt['pillar.get']('gitlab:omniauth:enabled', 'false') }}
+    # Allow login via Twitter, Google, etc. using OmniAuth providers
+    enabled: false
 
-    {#-
-     CAUTION!
-     This allows users to login without having a user account first (default: false).
-     User accounts will be created automatically when authentication was successful.
-    #}
+    # CAUTION!
+    # This allows users to login without having a user account first (default: false).
+    # User accounts will be created automatically when authentication was successful.
+    allow_single_sign_on: false
+    # Locks down those users until they have been cleared by the admin (default: true).
+    block_auto_created_users: true
 
-    allow_single_sign_on: {{ salt['pillar.get']('gitlab:omniauth:allow_single_sign_on', 'false') }}
-
-    {#- Locks down those users until they have been cleared by the admin (default: true). #}
-    block_auto_created_users: {{ salt['pillar.get']('gitlab:omniauth:block_auto_created_users',' true') }}
-
-    {#-
-    Auth providers
-     Uncomment the following lines and fill in the data of the auth provider you want to use
-     If your favorite auth provider is not listed you can use others:
-     see https://github.com/gitlabhq/gitlabhq/wiki/Using-Custom-Omniauth-Providers
-     The 'app_id' and 'app_secret' parameters are always passed as the first two
-     arguments, followed by optional 'args' which can be either a hash or an array.
-    #}
-    # providers:
+    ## Auth providers
+    # Uncomment the following lines and fill in the data of the auth provider you want to use
+    # If your favorite auth provider is not listed you can use others:
+    # see https://github.com/gitlabhq/gitlab-public-wiki/wiki/Working-custom-omniauth-provider-configurations
+    # The 'app_id' and 'app_secret' parameters are always passed as the first two
+    # arguments, followed by optional 'args' which can be either a hash or an array.
+    providers:
       # - { name: 'google_oauth2', app_id: 'YOUR APP ID',
       #     app_secret: 'YOUR APP SECRET',
       #     args: { access_type: 'offline', approval_prompt: '' } }
@@ -186,27 +243,25 @@ production: &base
       # - { name: 'github', app_id: 'YOUR APP ID',
       #     app_secret: 'YOUR APP SECRET' }
 
-
-
   {#-
    3. Advanced settings
    ==========================
-  #}
 
-  {#- GitLab Satellites #}
+   GitLab Satellites
+  #}
   satellites:
     {#- Relative paths are relative to Rails.root (default: tmp/repo_satellites/) #}
     path: {{ home_dir }}/gitlab-satellites/
 
   {#- Backup settings #}
   backup:
-    {#- Relative paths are relative to Rails.root (default: tmp/backups/) #}
-    path: "tmp/backups"
-    {#- default: 0 (forever) (in seconds) #}
-    keep_time: 604800
+    path: "tmp/backups"   # Relative paths are relative to Rails.root (default: tmp/backups/)
+    # keep_time: 604800   # default: 0 (forever) (in seconds)
 
   {#- GitLab Shell settings #}
   gitlab_shell:
+    path: {{ shell_dir }}/
+
     {#- REPOS_PATH MUST NOT BE A SYMLINK!!! #}
     repos_path: {{ repos_dir }}/
     hooks_path: {{ shell_dir }}/hooks/
@@ -216,27 +271,25 @@ production: &base
     receive_pack: true
 
     {#-
-    If you use non-standard ssh port you need to specify it
-
-    ssh_port: 22
+     If you use non-standard ssh port you need to specify it
     #}
+    ssh_port: {{ salt['pillar.get']('gitlab:ssh_port', 22) }}
 
-  {#-
-  Git settings
-  CAUTION!
-  Use the default values unless you really know what you are doing
-  #}
-
+  {#- Git settings
+   CAUTION!
+   Use the default values unless you really know what you are doing
+  }
   git:
     bin_path: /usr/bin/git
     {#-
      Max size of a git object (e.g. a commit), in bytes
      This value can be increased if you have very large commits
     #}
-    max_size: 5242880
-
-    {#- Git timeout to read a commit, in seconds #}
-    timeout: 10
+    max_size: {{ salt['pillar.get']('gitlab:max_size', 5242880) }}
+    {#-
+     Git timeout to read a commit, in seconds
+    #}
+    timeout: {{ salt['pillar.get']('gitlab:commit_timeout', 30) }}
 
   {#-
    4. Extra customization
@@ -245,16 +298,13 @@ production: &base
 
   extra:
     {#-
-    Google analytics. Uncomment if you want it
-
+     Google analytics. Uncomment if you want it
     google_analytics_id: '_your_tracking_id'
-    #}
 
-    {#-
-    Text under sign-in page (Markdown enabled)
-    sign_in_text: |
-      ![Company Logo](http://www.companydomain.com/logo.png)
-      [Learn more about CompanyName](http://www.companydomain.com/)
+     Text under sign-in page (Markdown enabled)
+     sign_in_text: |
+       ![Company Logo](http://www.companydomain.com/logo.png)
+       [Learn more about CompanyName](http://www.companydomain.com/)
     #}
 
 development:
@@ -264,6 +314,7 @@ test:
   <<: *base
   issues_tracker:
     redmine:
+      title: "Redmine"
       project_url: "http://redmine/projects/:issues_tracker_id"
       issues_url: "http://redmine/:project_id/:issues_tracker_id/:id"
       new_issue_url: "http://redmine/projects/:issues_tracker_id/issues/new"

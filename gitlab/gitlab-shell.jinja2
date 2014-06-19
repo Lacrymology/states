@@ -37,7 +37,7 @@ Maintainer: Lam Dang Tung <lamdt@familug.org>
 {#-
  GitLab user. git by default
 #}
-user: git
+user: {{ user }}
 
 {#-
 Url to gitlab instance. Used for api calls. Should end with a slash.
@@ -66,7 +66,7 @@ repos_path: "{{ repos_dir }}"
 {#-
 File used as authorized_keys for gitlab user
 #}
-auth_file: "/home/git/.ssh/authorized_keys"
+auth_file: "/home/{{ user }}/.ssh/authorized_keys"
 
 {#-
 Redis settings used for pushing commit notices to gitlab

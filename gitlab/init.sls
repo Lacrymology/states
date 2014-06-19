@@ -59,10 +59,11 @@ include:
 {%- set database_username = salt['pillar.get']('gitlab:db:username', 'gitlab') %}
 {%- set database_password = salt['password.pillar']('gitlab:db:password', 10) %}
 
-{%- set version = '6-0' %}
+{%- set user = 'gitlab' %}
+{%- set version = '6.4.3' %}
 {%- set root_dir = "/usr/local" %}
-{%- set home_dir = "/home/git" %}
-{%- set web_dir = root_dir +  "/gitlabhq-" + version + "-stable"  %}
+{%- set home_dir = "/home/" + user %}
+{%- set web_dir = root_dir +  "/gitlabhq-" + version %}
 {%- set repos_dir = home_dir + "/repositories" %}
 {%- set shell_dir = home_dir + "/gitlab-shell" %}
 
@@ -75,6 +76,7 @@ gitlab_dependencies:
       - libcurl4-openssl-dev
       - libicu-dev
       - build-essential
+      - python-docutils
     - require:
       - cmd: apt_sources
       - pkg: build
@@ -84,27 +86,41 @@ gitlab_dependencies:
       - pkg: postgresql-dev
       - pkg: xml-dev
 
+gitlab_stop_old_sidekiq_process:
+  cmd:
+    - run
+    - name: kill -9 `pgrep -u git -f 'sidekiq 2.12.4'` || true
+    - onlyif: pgrep -u git -f 'sidekiq 2.12.4'
+
+remove_old_gitlab_shell:
+  file:
+    - absent
+    - name: {{ home_dir }}/gitlab-shell
+    - require:
+      - cmd: gitlab_stop_old_sidekiq_process
+      - cmd: gitlab_rename_home_folder
+
 gitlab-shell:
   archive:
     - extracted
     - name: {{ home_dir }}/
     {%- if 'files_archive' in pillar %}
-    - source: {{ pillar['files_archive'] }}/mirror/gitlab/shell-fbaf8d8c12dcb9d820d250b9f9589318dbc36616.tar.gz
+    - source: {{ pillar['files_archive'] }}/mirror/gitlab/shell-1.8.0.tar.gz
     {%- else %}
-    - source:  http://archive.robotinfra.com/mirror/gitlab/shell-fbaf8d8c12dcb9d820d250b9f9589318dbc36616.tar.gz
+    - source:  https://github.com/gitlabhq/gitlab-shell/archive/v1.8.0.tar.gz
     {%- endif %}
-    - source_hash: md5=fa679c88f382211b34ecd35bfbb54ea6
+    - source_hash: md5=6f82c0917dc1a65019ec04dec4e9a7d5
     - archive_format: tar
     - tar_options: z
     - if_missing: {{ shell_dir }}
     - require:
       - user: gitlab
+      - file: remove_old_gitlab_shell
   file:
     - directory
-    - name: {{ shell_dir }}
-    - user: git
-    - group: git
-    - mode: 770
+    - name: {{ home_dir }}
+    - user: {{ user }}
+    - group: {{ user }}
     - recurse:
       - user
       - group
@@ -112,10 +128,9 @@ gitlab-shell:
       - cmd: gitlab-shell
   cmd:
     - run
-    - name: mv gitlab-shell-master gitlab-shell
+    - name: mv gitlab-shell-1.8.0 gitlab-shell
     - cwd: {{ home_dir }}
-    - user: git
-    - onlyif: ls {{ home_dir }} | grep gitlab-shell-master
+    - onlyif: test -d {{ home_dir }}/gitlab-shell-1.8.0
     - require:
       - archive: gitlab-shell
 
@@ -123,7 +138,7 @@ install_gitlab_shell:
   cmd:
     - run
     - name: {{ shell_dir }}/bin/install
-    - user: git
+    - user: {{ user }}
     - require:
       - pkg: ruby
       - cmd: gitlab-shell
@@ -131,13 +146,23 @@ install_gitlab_shell:
       - file: {{ shell_dir }}/config.yml
       - archive: gitlab-shell
 
+gitlab_shell_logfile:
+  file:
+    - managed
+    - name: {{ shell_dir }}/gitlab-shell.log
+    - mode: 660
+    - user: {{ user }}
+    - group: {{ user }}
+    - require:
+      - file: gitlab-shell
+
 {{ shell_dir }}/config.yml:
   file:
     - managed
     - source: salt://gitlab/gitlab-shell.jinja2
     - template: jinja
-    - user: git
-    - group: git
+    - user: {{ user }}
+    - group: {{ user }}
     - mode: 440
     - require:
       - file: gitlab-shell
@@ -145,17 +170,42 @@ install_gitlab_shell:
     - context:
       repos_dir: {{ repos_dir }}
       shell_dir: {{ shell_dir }}
+      user: {{ user }}
+
+{#- move old data in to new home folder #}
+gitlab_rename_home_folder:
+  cmd:
+    - run
+    - name: mv /home/git {{ home_dir }}
+    - user: root
+    - onlyif: test -d /home/git
+
+replace_git_home_in_file:
+  cmd:
+    - wait
+    - name:  find {{ home_dir }} -type f -exec sed -i 's:/home/git/:/home/gitlab/:g' {} \;
+    - user: root
+    - watch:
+      - cmd: gitlab_rename_home_folder
+
+gitlab_remove_old_version:
+  file:
+    - absent
+    - name: /usr/local/gitlabhq-6-0-stable
 
 gitlab:
   user:
     - present
-    - name: git
+    - name: {{ user }}
+    - home: {{ home_dir }}
     - groups:
       - www-data
     - shell: /bin/bash
     - require:
       - pkg: gitlab_dependencies
       - group: web
+      - cmd: gitlab_rename_home_folder
+      - cmd: replace_git_home_in_file
   postgres_user:
     - present
     - name: {{ database_username }}
@@ -173,23 +223,23 @@ gitlab:
     - extracted
     - name: {{ root_dir }}/
 {%- if 'files_archive' in pillar %}
-    - source: {{ pillar['files_archive'] }}/mirror/gitlab/{{ version|replace("-", ".") }}.tar.gz
+    - source: {{ pillar['files_archive'] }}/mirror/gitlab/{{ version }}.tar.gz
 {%- else %}
-    - source: http://archive.robotinfra.com/mirror/gitlab/{{ version|replace("-", ".") }}.tar.gz
+    - source: https://github.com/gitlabhq/gitlabhq/archive/v{{ version }}.tar.gz
 {%- endif %}
-    - source_hash: md5=151be72dc60179254c58120098f2a84e
+    - source_hash: md5=a66d5504b154aacc68aefae9445f3fd2
     - archive_format: tar
     - tar_options: z
     - if_missing: {{ web_dir }}
     - require:
       - postgres_database: gitlab
       - file: /usr/local
+      - file: gitlab_remove_old_version
   file:
     - directory
     - name: {{ web_dir }}
-    - user: git
-    - group: git
-    - mode: 770
+    - user: {{ user }}
+    - group: {{ user }}
     - recurse:
       - user
       - group
@@ -200,7 +250,7 @@ gitlab:
     - name: force=yes bundle exec rake gitlab:setup
     - env:
         RAILS_ENV: production
-    - user: git
+    - user: {{ user }}
     - cwd: {{ web_dir }}
     - require:
       - service: redis
@@ -221,7 +271,6 @@ gitlab:
       web_dir: {{ web_dir }}
     - require:
       - cmd: gitlab
-      - cmd: gitlab_start_sidekiq_service
       - cmd: gitlab_precompile_assets
       - service: uwsgi_emperor
       - file: gitlab_upstart
@@ -237,6 +286,51 @@ gitlab:
       - file: {{ web_dir }}/config/initializers/smtp_settings.rb
 {%- endif %}
       - archive: gitlab
+  service:
+    - running
+    - name: gitlab
+    - order: 50
+    - require:
+      - user: gitlab
+    - watch:
+      - archive: gitlab
+      - cmd: gitlab
+      - cmd: bundler
+      - cmd: gitlab_precompile_assets
+      - file: gitlab_upstart
+      - file: {{ web_dir }}/config.ru
+      - file: {{ web_dir }}/config/gitlab.yml
+      - file: {{ web_dir }}/config/initializers/rack_attack.rb
+{%- if salt['pillar.get']('gitlab:smtp:enabled', False) %}
+      - file: {{ web_dir }}/config/environments/production.rb
+      - file: {{ web_dir }}/config/initializers/smtp_settings.rb
+{%- endif %}
+
+gitlab_migrate_db:
+  cmd:
+    - run
+    - name: bundle exec rake db:migrate
+    - env:
+        RAILS_ENV: production
+    - user: {{ user }}
+    - cwd: {{ web_dir }}
+    - require:
+      - cmd: gitlab
+      - archive: gitlab
+      - service: redis
+      - cmd: bundler
+      - file: {{ web_dir }}/db/fixtures/production/001_admin.rb
+
+gitlab_coppy_images:
+  cmd:
+    - run
+    - name: cp {{ web_dir }}/app/assets/images/* {{ web_dir }}/public/assets/
+    - user: {{ user }}
+    - unless: test -f {{ web_dir }}/public/assets/logo-black.png
+    - require:
+      - archive: gitlab
+      - user: gitlab
+      - cmd: gitlab_precompile_assets
 
 gitlab_precompile_assets:
   cmd:
@@ -244,30 +338,60 @@ gitlab_precompile_assets:
     - name: bundle exec rake assets:precompile
     - env:
         RAILS_ENV: production
-    - user: git
+    - user: {{ user }}
     - cwd: {{ web_dir }}
-    - unless: ls {{ web_dir }}/public/assets/
+    - unless: test -d {{ web_dir }}/public/assets/
     - watch:
+      - cmd: gitlab_migrate_db
       - cmd: gitlab
+      - cmd: bundler
 
-gitlab_start_sidekiq_service:
+{%- if version == '6.4.3' %}
+gitlab_migrate_miids:
+  cmd:
+    - run
+    - name: bundle exec rake migrate_iids RAILS_ENV=production
+    - env:
+        RAILS_ENV: production
+    - user: {{ user }}
+    - cwd: {{ web_dir }}
+    - require:
+      - cmd: gitlab_migrate_db
+      - archive: gitlab
+{%- endif %}
+
+gitlab_update_hook:
+  cmd:
+    - script
+    - name: rewrite-hooks.sh {{ repos_dir }}
+    - source: salt://gitlab/rewrite-hooks.sh
+    - template: jinja
+    - shell: /bin/bash
+    - user: {{ user }}
+    - cwd: {{ shell_dir }}/support
+    - require:
+      - file: gitlab-shell
+    - watch:
+      - archive: gitlab
+    - context:
+      user: {{ user }}
+
+gitlab_clean_redis_db:
   cmd:
     - wait
-    - name: bundle exec rake sidekiq:start
-    - env:
-         RAILS_ENV: production
-    - user: git
-    - cwd: {{ web_dir }}
-    - unless: ps -ef | grep [s]idekiq
+    - name: redis-cli flushdb
+    - require:
+      - service: redis
     - watch:
       - cmd: gitlab
+      - archive: gitlab
 
 {{ web_dir }}/config.ru:
   file:
     - managed
     - source: salt://gitlab/config.jinja2
-    - user: git
-    - group: git
+    - user: {{ user }}
+    - group: {{ user }}
     - template: jinja
     - mode: 440
     - require:
@@ -276,18 +400,20 @@ gitlab_start_sidekiq_service:
 {{ home_dir }}/gitlab-satellites:
   file:
     - directory
-    - user: git
-    - group: git
-    - mode: 755
+    - user: {{ user }}
+    - group: {{ user }}
+    - mode: 775
+    - require:
+      - user: {{ user }}
 
 {%- for dir in ('log', 'tmp', 'public/uploads', 'tmp/pids', 'tmp/cache') %}
 {{ web_dir }}/{{ dir }}:
   file:
     - directory
-    - user: git
-    - group: git
-    - dir_mode: 755
-    - file_mode: 644
+    - user: {{ user }}
+    - group: {{ user }}
+    - dir_mode: 775
+    - file_mode: 664
     - recurse:
       - user
       - group
@@ -304,8 +430,8 @@ gitlab_start_sidekiq_service:
     - managed
     - source: salt://gitlab/{{ file }}.jinja2
     - template: jinja
-    - user: git
-    - group: git
+    - user: {{ user }}
+    - group: {{ user }}
     - mode: 440
     - require:
       - file: gitlab
@@ -315,7 +441,21 @@ gitlab_start_sidekiq_service:
       home_dir: {{ home_dir }}
       repos_dir: {{ repos_dir }}
       shell_dir: {{ shell_dir }}
+      user: {{ user }}
 {%- endfor %}
+
+{{ web_dir }}/config/initializers/rack_attack.rb:
+  file:
+    - managed
+    - source: salt://gitlab/rack_attack.rb.jinja2
+    - template: jinja
+    - user: {{ user }}
+    - group: {{ user }}
+    - mode: 440
+    - require:
+      - file: gitlab
+    - require_in:
+      - file: {{ home_dir }}/gitlab-satellites
 
 /etc/logrotate.d/gitlab:
   file:
@@ -330,6 +470,7 @@ gitlab_start_sidekiq_service:
       - file: gitlab_upstart
     - context:
       web_dir: {{ web_dir }}
+      user: {{ user }}
 
 charlock_holmes:
   gem:
@@ -352,18 +493,30 @@ bundler:
     - run
     - name: bundle install --deployment --without development test mysql aws
     - cwd: {{ web_dir }}
-    - user: git
+    - user: {{ user }}
     - require:
       - gem: bundler
 
-rack:
+{%- set rack_version = '1.5.2' %}
+
+{#- Can not use gem.removed function here, because it does not support uninstall
+without confirmation option #}
+gitlab_rack_gem:
+  cmd:
+    - run
+    - name: gem uninstall -Iax rack --version '<{{ rack_version }}'
+    - onlyif: gem list | grep rack
+    - require:
+      - pkg: ruby
   gem:
     - installed
-    - version: 1.4.5
+    - name: rack
+    - version: {{ rack_version }}
     - runas: root
     - require:
       - pkg: ruby
       - pkg: build
+      - cmd: gitlab_rack_gem
 
 /etc/nginx/conf.d/gitlab.conf:
   file:
@@ -385,16 +538,16 @@ rack:
     - context:
       web_dir: {{ web_dir }}
 
-/home/git/.gitconfig:
+{{ home_dir }}/.gitconfig:
   file:
     - managed
     - source: salt://gitlab/gitconfig.jinja2
     - template: jinja
-    - user: git
-    - group: git
-    - mode: 644
+    - user: {{ user }}
+    - group: {{ user }}
+    - mode: 640
     - require:
-      - user: git
+      - user: {{ user }}
 
 gitlab_upstart:
   file:
@@ -408,6 +561,7 @@ gitlab_upstart:
       - cmd: gitlab
     - context:
       web_dir: {{ web_dir }}
+      user: {{ user }}
 
 {% from 'rsyslog/upstart.sls' import manage_upstart_log with context %}
 {{ manage_upstart_log('gitlab') }}
@@ -417,8 +571,8 @@ gitlab_upstart:
   file:
     - managed
     - source: salt://gitlab/production.jinja2
-    - user: git
-    - group: git
+    - user: {{ user }}
+    - group: {{ user }}
     - template: jinja
     - mode: 440
     - require:
@@ -431,8 +585,8 @@ gitlab_upstart:
   file:
     - managed
     - source: salt://gitlab/smtp.jinja2
-    - user: git
-    - group: git
+    - user: {{ user }}
+    - group: {{ user }}
     - template: jinja
     - mode: 440
     - require:
@@ -447,9 +601,9 @@ gitlab_upstart:
     - managed
     - source: salt://gitlab/admin.jinja2
     - template: jinja
-    - user: git
-    - group: git
-    - mode: 644
+    - user: {{ user }}
+    - group: {{ user }}
+    - mode: 640
     - require:
       - file: gitlab
     - require_in:
@@ -460,8 +614,8 @@ gitlab_upstart:
   file:
     - managed
     - source: salt://gitlab/{{ file }}
-    - user: git
-    - group: git
+    - user: {{ user }}
+    - group: {{ user }}
     - mode: 440
     - require:
       - user: gitlab
@@ -474,7 +628,7 @@ extend:
   web:
     user:
       - groups:
-        - git
+        - gitlab
       - require:
         - user: gitlab
       - watch_in:

@@ -59,8 +59,8 @@ ksm = 20
 buffer-size = 32768
 
 lazy-apps = true
-uid = git
-gid = git
+uid = {{ user }}
+gid = {{ user }}
 procname = gitlab-worker
 procname-master = gitlab-master
 socket = /var/lib/uwsgi/gitlab.sock
@@ -87,5 +87,5 @@ carbon = {{ resolved_ip[0] }}:2003
     {%- endif -%}	
 {% endif %}
 
-chmod-socket = 775
-chown-socket = git:git
+chmod-socket = 770
+chown-socket = {{ user }}:{{ user }}

@@ -628,7 +628,7 @@ extend:
   web:
     user:
       - groups:
-        - git
+        - gitlab
       - require:
         - user: gitlab
       - watch_in:

@@ -30,3 +30,9 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
   file:
     - absent
 {% endfor %}
+
+{%- if salt['pillar.get']('shinken:ssl', False) %}
+/usr/lib/nagios/plugins/check_ssl_configuration.py:
+  file:
+    - absent
+{%- endif %}

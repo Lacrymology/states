@@ -38,13 +38,17 @@ include:
   - postgresql.server.nrpe
   - python.dev.nrpe
   - rsyslog.nrpe
-{%- if salt['pillar.get']('openerp:ssl', False) %}
-  - ssl.nrpe
-  - sslyze
-{%- endif %}
   - underscore.nrpe
   - uwsgi.nrpe
   - virtualenv.nrpe
   - xml.nrpe
+{%- if salt['pillar.get']('openerp:ssl', False) %}
+  - ssl.nrpe
+  - sslyze
 
+{%- call passive_check('openerp') -%}
+- file: /usr/lib/nagios/plugins/check_ssl_configuration.py
+{%- endcall %}
+{%- else %}
 {{ passive_check('openerp') }}
+{%- endif %}

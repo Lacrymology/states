@@ -37,6 +37,10 @@ include:
 {% if salt['pillar.get']('salt_archive:web:ssl', False) %}
   - ssl.nrpe
   - sslyze
-{% endif %}
 
+{%- call passive_check('salt.archive.server') -%}
+- file: /usr/lib/nagios/plugins/check_ssl_configuration.py
+{%- endcall %}
+{%- else %}
 {{ passive_check('salt.archive.server') }}
+{%- endif %}

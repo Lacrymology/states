@@ -42,3 +42,9 @@ Remove roundcube web Nagios NRPE checks.
 /etc/cron.d/passive-checks-roundcube:
   file:
     - absent
+
+{%- if salt['pillar.get']('roundcube:ssl', False) %}
+/usr/lib/nagios/plugins/check_ssl_configuration.py:
+  file:
+    - absent
+{%- endif %}

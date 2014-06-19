@@ -31,14 +31,10 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
         {%- set prefix = deployment -%}
     {%- endif -%}
     {%- if not domain_name -%}
-        {%- if pillar[prefix]['hostnames'] is defined -%}
-            {%- set domain_name = pillar[prefix]['hostnames'][0] -%}
-        {%- else %}
-            {%- set domain_name = salt['pillar.get'](prefix + ':web:hostnames', ['127.0.0.1'])[0] -%}
-        {%- endif %}
+        {%- set domain_name = salt['pillar.get'](prefix + ':hostnames', ['127.0.0.1'])[0] -%}
     {%- endif %}
     {#- if http is redirected to https, force a specific header -#}
-    {%- if salt['pillar.get'](prefix + ':ssl_redirect', False) or salt['pillar.get'](prefix + ':web:ssl_redirect', False) -%}
+    {%- if salt['pillar.get'](prefix + ':ssl_redirect', False) -%}
         {%- set http_result="301 Moved Permanently" -%}
     {%- elif not http_result -%}
         {%- set http_result="200 OK" -%}
@@ -50,7 +46,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
     {%- if timeout %} --timeout={{ timeout }}{% endif -%}
     {%- if salt['pillar.get']('__test__', False) %} -v{%- endif %}
 
-    {%- if salt['pillar.get'](prefix + ':ssl', False) or salt['pillar.get'](prefix + ':web:ssl', False) %}
+    {%- if salt['pillar.get'](prefix + ':ssl', False) %}
         {%- if not https_uri -%}
             {%- set https_uri = http_uri -%}
         {%- endif %}

@@ -39,9 +39,9 @@ include:
   - ssl.nrpe
   - sslyze
 
-{%- call passive_check('ejabberd') -%}
+    {%- call passive_check('ejabberd') -%}
 - file: /usr/lib/nagios/plugins/check_ssl_configuration.py
-{%- endcall %}
+    {%- endcall %}
 {%- else %}
-{{ passive_check('ejabberd') }}
+    {{ passive_check('ejabberd') }}
 {%- endif %}

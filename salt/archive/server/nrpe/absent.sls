@@ -37,7 +37,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
   file:
     - absent
 
-{%- if salt['pillar.get']('salt_archive:web:ssl', False) %}
+{%- if salt['pillar.get']('salt_archive:ssl', False) %}
 salt_archive_ssl_configuration:
   file:
     - absent

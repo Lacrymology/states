@@ -40,9 +40,9 @@ include:
   - ssl.nrpe
   - sslyze
 
-{%- call passive_check('shinken.broker') -%}
+    {%- call passive_check('shinken.broker') -%}
 - file: /usr/lib/nagios/plugins/check_ssl_configuration.py
-{%- endcall %}
+    {%- endcall %}
 {%- else %}
-{{ passive_check('shinken.broker') }}
+    {{ passive_check('shinken.broker') }}
 {%- endif %}

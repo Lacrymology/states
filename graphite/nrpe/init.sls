@@ -43,13 +43,13 @@ include:
   - sudo.nrpe
   - uwsgi.nrpe
   - virtualenv.nrpe
-{% if salt['pillar.get']('graphite:web:ssl', False) %}
+{% if salt['pillar.get']('graphite:ssl', False) %}
   - ssl.nrpe
   - sslyze
 
-{%- call passive_check('graphite') -%}
+    {%- call passive_check('graphite') -%}
 - file: /usr/lib/nagios/plugins/check_ssl_configuration.py
-{%- endcall %}
+    {%- endcall %}
 {%- else %}
-{{ passive_check('graphite') }}
+    {{ passive_check('graphite') }}
 {%- endif %}

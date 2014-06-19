@@ -46,9 +46,9 @@ include:
   - ssl.nrpe
   - sslyze
 
-{%- call passive_check('openerp') -%}
+    {%- call passive_check('openerp') -%}
 - file: /usr/lib/nagios/plugins/check_ssl_configuration.py
-{%- endcall %}
+    {%- endcall %}
 {%- else %}
-{{ passive_check('openerp') }}
+    {{ passive_check('openerp') }}
 {%- endif %}

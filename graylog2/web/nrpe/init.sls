@@ -41,9 +41,9 @@ include:
   - ssl.nrpe
   - sslyze
 
-{%- call passive_check('graylog2.web') -%}
+    {%- call passive_check('graylog2.web') -%}
 - file: /usr/lib/nagios/plugins/check_ssl_configuration.py
-{%- endcall %}
+    {%- endcall %}
 {%- else %}
-{{ passive_check('graylog2.web') }}
+    {{ passive_check('graylog2.web') }}
 {%- endif %}

@@ -56,9 +56,9 @@ include:
   - ssl.nrpe
   - sslyze
 
-{%- call passive_check('gitlab') -%}
+    {%- call passive_check('gitlab') -%}
 - file: /usr/lib/nagios/plugins/check_ssl_configuration.py
-{%- endcall %}
+    {%- endcall %}
 {%- else %}
-{{ passive_check('gitlab') }}
+    {{ passive_check('gitlab') }}
 {%- endif %}

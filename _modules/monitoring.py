@@ -306,13 +306,18 @@ def shinken(data=None):
                      minion, func_name)
         if data[minion]['monitor']:
             logger.debug("Minion '%s' is monitored", minion)
-            for check_name in data[minion][data_key]:
-                try:
-                    check_list = checks[check_name]
-                except KeyError:
-                    checks[check_name] = CheckList()
-                    check_list = checks[check_name]
-                check_list.append(data[minion][data_key][check_name], minion)
+            try:
+                for check_name in data[minion][data_key]:
+                    try:
+                        check_list = checks[check_name]
+                    except KeyError:
+                        checks[check_name] = CheckList()
+                        check_list = checks[check_name]
+                    check_list.append(data[minion][data_key][check_name],
+                                      minion)
+            except KeyError:
+                logger.warning("Minion %s don't have %s in mine data of %s",
+                               minion, data_key, func_name)
         else:
             logger.debug("Minion '%s' is NOT monitored", minion)
 

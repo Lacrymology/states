@@ -27,6 +27,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 Clamav: A virus scanner.
 -#}
+{%- from 'macros.jinja2' import manage_pid with context %}
 include:
   - apt
   - rsyslog
@@ -94,7 +95,6 @@ clamav-daemon:
       - pkg: clamav-daemon
       - file: clamav-daemon
 
-{%- from 'macros.jinja2' import manage_pid with context %}
 {%- call manage_pid('/var/run/clamav/freshclam.pid', 'clamav', 'clamav', 'clamav-freshclam', 660) %}
 - pkg: clamav-freshclam
 {%- endcall %}

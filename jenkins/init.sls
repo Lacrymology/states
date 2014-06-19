@@ -27,7 +27,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 TODO: add SSL through nginx.
 -#}
-
+{%- from 'macros.jinja2' import manage_pid with context %}
 include:
   - apt
   - java.7.jdk
@@ -43,8 +43,7 @@ jenkins_dependencies:
       - daemon
       - psmisc
 
-{%- from 'macros.jinja2' import manage_pid with context %}
-{%- call manage_pid('/var/run/jenkins/jenkins.pid', 'jenkins', 'nogroup', 'jenkins', 644) %}
+{%- call manage_pid('/var/run/jenkins/jenkins.pid', 'jenkins', 'nogroup', 'jenkins') %}
 - pkg: jenkins
 {%- endcall %}
 

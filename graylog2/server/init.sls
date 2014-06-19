@@ -27,6 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Install a Graylog2 logging server backend.
 -#}
+{%- from 'macros.jinja2' import manage_pid with context %}
 include:
   - apt
   - mongodb
@@ -131,8 +132,7 @@ graylog2-server:
       - file: {{ server_root_dir }}
       - file: /var/run/graylog2
 
-{%- from 'macros.jinja2' import manage_pid with context %}
-{%- call manage_pid('/var/run/graylog2/graylog2.pid', 'graylog2', 'graylog2', 'graylog2-server', 644) %}
+{%- call manage_pid('/var/run/graylog2/graylog2.pid', 'graylog2', 'graylog2', 'graylog2-server') %}
 - user: graylog2
 - file: /var/run/graylog2
 {%- endcall %}

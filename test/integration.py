@@ -63,7 +63,7 @@ import yaml
 # until https://github.com/saltstack/salt/issues/4994 is fixed, logger must
 # be configured before importing salt.client
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG,
-                    format="%(asctime)s %(message)s")
+                    format="%(asctime)s %(name)s %(message)s")
 
 import salt.client
 

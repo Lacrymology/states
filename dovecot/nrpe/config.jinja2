@@ -41,10 +41,6 @@ dovecot_anvil:
   description: Dovecot Users connection tracker
   command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -u dovecot -a 'dovecot/anvil' -C anvil"
 
-dovecot_port_imaps:
-  description: Dovecot IMAPS Port
-  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 143
-
 {#- TODO: check remote port? #}
 {%- if salt['pillar.get']('dovecot:ssl', False) %}
 dovecot_port_imaps:

@@ -36,3 +36,10 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 /etc/cron.d/passive-checks-salt.archive.server:
   file:
     - absent
+
+{%- if salt['pillar.get']('salt_archive:ssl', False) %}
+salt_archive_ssl_configuration:
+  file:
+    - absent
+    - name: /usr/lib/nagios/plugins/check_ssl_configuration.py
+{%- endif %}

@@ -34,10 +34,15 @@ include:
   - nrpe
   - pip.nrpe
   - python.dev.nrpe
-{% if salt['pillar.get']('shinken:ssl', False) %}
-  - ssl.nrpe
-{% endif %}
   - rsyslog.nrpe
   - virtualenv.nrpe
+{% if salt['pillar.get']('shinken:ssl', False) %}
+  - ssl.nrpe
+  - sslyze
 
-{{ passive_check('shinken.broker') }}
+    {%- call passive_check('shinken.broker') -%}
+- file: /usr/lib/nagios/plugins/check_ssl_configuration.py
+    {%- endcall %}
+{%- else %}
+    {{ passive_check('shinken.broker') }}
+{%- endif %}

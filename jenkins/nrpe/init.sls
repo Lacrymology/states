@@ -34,6 +34,11 @@ include:
   - nginx.nrpe
 {% if salt['pillar.get']('jenkins:ssl', False) %}
   - ssl.nrpe
-{% endif %}
+  - sslyze
 
-{{ passive_check('jenkins') }}
+    {%- call passive_check('jenkins') -%}
+- file: /usr/lib/nagios/plugins/check_ssl_configuration.py
+    {%- endcall %}
+{%- else %}
+    {{ passive_check('jenkins') }}
+{%- endif %}

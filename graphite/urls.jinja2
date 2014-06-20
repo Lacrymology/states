@@ -39,7 +39,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
   ('^admin/', include(admin.site.urls)),
-{% if salt['pillar.get']('graphite:web:render_noauth', False) %}
+{% if salt['pillar.get']('graphite:render_noauth', False) %}
   ('^render/?', include('graphite.render.urls')),
 {% else %}
   ('^render/?', decorator_include(login_required, 'graphite.render.urls')),

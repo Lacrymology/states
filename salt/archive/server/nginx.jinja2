@@ -29,11 +29,11 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 server {
     listen 80;
-{%- if salt['pillar.get']('salt_archive:web:ssl', False) %}
+{%- if salt['pillar.get']('salt_archive:ssl', False) %}
 {%- from 'nginx/macro.jinja2' import ssl_config with context %}
-    {{ ssl_config(pillar['salt_archive']['web']['ssl']) }}
+    {{ ssl_config(pillar['salt_archive']['ssl']) }}
 {%- endif %}
-    server_name {% for hostname in pillar['salt_archive']['web']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+    server_name {% for hostname in pillar['salt_archive']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
 
     root /var/lib/salt_archive;
 

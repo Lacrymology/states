@@ -45,11 +45,10 @@ Mandatory
 Example::
 
   salt_archive:
-    web:
-      hostnames:
-      -   archive.example.com
+    hostnames:
+      - archive.example.com
 
-salt_archive:web:hostnames
+salt_archive:hostnames
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. include:: /nginx/doc/hostnames.inc
@@ -62,8 +61,7 @@ Example::
   salt_archive:
     source: rsync://archive.robotinfra.com/archive/
     delete: True
-    web:
-      ssl: mykeyname
+    ssl: mykeyname
     keys:
       00daedbeef: ssh-dss
 
@@ -72,7 +70,7 @@ salt_archive:source
 
 :doc:`/rsync/doc/index` server used as the source for archived files.
 
-salt_archive:web:ssl
+salt_archive:ssl
 ~~~~~~~~~~~~~~~~~~~~
 
 .. include:: /nginx/doc/ssl.inc

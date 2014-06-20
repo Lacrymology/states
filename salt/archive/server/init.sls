@@ -28,7 +28,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 Salt Archive Server HTTP/HTTPS.
 -#}
 
-{%- set ssl = salt['pillar.get']('salt_archive:web:ssl', False) -%}
+{%- set ssl = salt['pillar.get']('salt_archive:ssl', False) -%}
 
 include:
   - cron

@@ -30,7 +30,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
     {%- if not prefix -%}
         {%- set prefix = deployment -%}
     {%- endif -%}
-    {%- if not domain_name %}
+    {%- if not domain_name -%}
         {%- set domain_name = salt['pillar.get'](prefix + ':hostnames', ['127.0.0.1'])[0] -%}
     {%- endif %}
     {#- if http is redirected to https, force a specific header -#}
@@ -61,5 +61,11 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
   check_interval: 1440 {#- only need to check https certificate each day #}
   freshness_threshold: {{ (1440 + 10) * 60 }}
   command: /usr/lib/nagios/plugins/check_http -S -H {{ domain_name }} -C {{ salt['pillar.get']('ssl_https_max_age', 60) }} -I {{ first_ip }}
+
+{{ deployment }}_ssl_configuration:
+  description: {{ deployment|capitalize }} SSL Configuration
+  check_interval: 1440
+  freshness_threshold: {{ (1440 + 10) * 60 }}
+  command: /usr/lib/nagios/plugins/check_ssl_configuration.py -H {{ domain_name }}
     {%- endif -%}
 {%- endmacro -%}

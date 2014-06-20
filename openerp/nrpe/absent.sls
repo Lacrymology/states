@@ -47,3 +47,10 @@ Remove Nagios NRPE check for OpenERP.
 /etc/cron.d/passive-checks-openerp:
   file:
     - absent
+
+{%- if salt['pillar.get']('openerp:ssl', False) %}
+openerp_ssl_configuration:
+  file:
+    - absent
+    - name: /usr/lib/nagios/plugins/check_ssl_configuration.py
+{%- endif %}

@@ -50,10 +50,15 @@ include:
   - rsyslog.nrpe
   - ruby.nrpe
   - ssh.server.nrpe
-{%- if salt['pillar.get']('gitlab:ssl', False) %}
-  - ssl.nrpe
-{%- endif %}
   - uwsgi.nrpe
   - xml.nrpe
+{%- if salt['pillar.get']('gitlab:ssl', False) %}
+  - ssl.nrpe
+  - sslyze
 
-{{ passive_check('gitlab') }}
+    {%- call passive_check('gitlab') -%}
+- file: /usr/lib/nagios/plugins/check_ssl_configuration.py
+    {%- endcall %}
+{%- else %}
+    {{ passive_check('gitlab') }}
+{%- endif %}

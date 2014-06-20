@@ -25,7 +25,7 @@ Run this formula will create a ``/var/lib/salt_archive/`` to hold the files.
 The initial application of this formula will take a while as it rsync the entire
 content of ``salt_archive:source`` :doc:`/rsync/doc/index` server.
 
-Once done you can connect to ``salt_archive:web:hostnames`` to see all mirrored
+Once done you can connect to ``salt_archive:hostnames`` to see all mirrored
 files.
 
 .. toctree::

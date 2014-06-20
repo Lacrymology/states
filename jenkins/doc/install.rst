@@ -34,7 +34,7 @@ Jenkins Installation
 Follow the generic logic of pillar, apply formula and run checks, then perform
 the followings.
 
-First go in one of the hostname you specified at ``jenkins:web:hostnames``.
+First go in one of the hostname you specified at ``jenkins:hostnames``.
 
 Things you **should** do
 ------------------------
@@ -52,7 +52,7 @@ Things you **must** do
 ----------------------
 
 - Raise number of executor to large value such as ``20``.
-- Set Jenkins URL to first value of ``jenkins:web:hostnames``.
+- Set Jenkins URL to first value of ``jenkins:hostnames``.
 - Configure SMTP to send email for build status change.
 - Install https://wiki.jenkins-ci.org/display/JENKINS/Multiple+SCMs+Plugin
 - Upgrade :doc:`/ssh/doc/index` Credential Plugin to 1.6+, so you can configure

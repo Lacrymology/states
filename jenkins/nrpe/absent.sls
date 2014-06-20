@@ -34,3 +34,10 @@ Remove Nagios NRPE check for jenkins.
 /etc/cron.d/passive-checks-jenkins:
   file:
     - absent
+
+{%- if salt['pillar.get']('jenkins:ssl', False) %}
+jenkins_ssl_configuration:
+  file:
+    - absent
+    - name: /usr/lib/nagios/plugins/check_ssl_configuration.py
+{%- endif %}

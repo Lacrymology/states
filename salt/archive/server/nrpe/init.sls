@@ -34,8 +34,13 @@ include:
   - rsync.nrpe
   - rsyslog.nrpe
   - ssh.server.nrpe
-{% if salt['pillar.get']('salt_archive:web:ssl', False) %}
+{% if salt['pillar.get']('salt_archive:ssl', False) %}
   - ssl.nrpe
-{% endif %}
+  - sslyze
 
-{{ passive_check('salt.archive.server') }}
+    {%- call passive_check('salt.archive.server') -%}
+- file: /usr/lib/nagios/plugins/check_ssl_configuration.py
+    {%- endcall %}
+{%- else %}
+    {{ passive_check('salt.archive.server') }}
+{%- endif %}

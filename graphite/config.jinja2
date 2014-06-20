@@ -39,9 +39,9 @@ TIME_ZONE = '{{ salt['pillar.get']('timezone', 'UTC') }}'
 DOCUMENTATION_URL = "http://graphite.readthedocs.org/"
 
 {#- Logging #}
-LOG_RENDERING_PERFORMANCE = {{ salt['pillar.get']('graphite:web:debug', False) }}
-LOG_CACHE_PERFORMANCE = {{ salt['pillar.get']('graphite:web:debug', False) }}
-LOG_METRIC_ACCESS = {{ salt['pillar.get']('graphite:web:debug', False) }}
+LOG_RENDERING_PERFORMANCE = {{ salt['pillar.get']('graphite:debug', False) }}
+LOG_CACHE_PERFORMANCE = {{ salt['pillar.get']('graphite:debug', False) }}
+LOG_METRIC_ACCESS = {{ salt['pillar.get']('graphite:debug', False) }}
 
 {#- Enable full debug page display on exceptions (Internal Server Error pages)
 #DEBUG = True
@@ -111,7 +111,7 @@ DATA_DIRS = [
 LOG_DIR = '/var/log/graphite/graphite'
 INDEX_FILE = STORAGE_DIR + '/index'
 
-{%- set smtp = salt['pillar.get']('graphite:web:email', salt['pillar.get']('smtp')) %}
+{%- set smtp = salt['pillar.get']('graphite:email', salt['pillar.get']('smtp')) %}
 EMAIL_HOST = '{{ smtp['server'] }}'
 EMAIL_HOST_PASSWORD = '{{ smtp['password']|default('') }}'
 EMAIL_HOST_USER = '{{ smtp['user']|default('') }}'
@@ -181,11 +181,11 @@ LOGIN_URL = '/account/login'
 
 DATABASES = {
     'default': {
-        'NAME': '{{ salt['pillar.get']('graphite:web:db:name', 'graphite') }}',
+        'NAME': '{{ salt['pillar.get']('graphite:db:name', 'graphite') }}',
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'USER': '{{ salt['pillar.get']('graphite:web:db:username', 'graphite') }}',
-        'PASSWORD': '{{ salt['password.pillar']('graphite:web:db:password', 10) }}',
-        'HOST': '{{ salt['pillar.get']('graphite:web:db:host', '127.0.0.1') }}',
+        'USER': '{{ salt['pillar.get']('graphite:db:username', 'graphite') }}',
+        'PASSWORD': '{{ salt['password.pillar']('graphite:db:password', 10) }}',
+        'HOST': '{{ salt['pillar.get']('graphite:db:host', '127.0.0.1') }}',
         'PORT': ''
     }
 }
@@ -239,7 +239,7 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': False
         },
-{% if not salt['pillar.get']('graphite:web:debug', False) %}
+{% if not salt['pillar.get']('graphite:debug', False) %}
 {% for logger in ('cache', 'rendering', 'metric_access') %}
         '{{ logger }}': {
             'handlers': ['sentry', 'syslog'{% if 'graylog2_address' in pillar %}, 'gelf'{% endif %}],
@@ -257,7 +257,7 @@ LOGGING = {
 }
 
 RAVEN_CONFIG = {
-    'dsn': '{{ salt['pillar.get']('graphite:web:sentry', pillar['sentry_dsn']) }}',
+    'dsn': '{{ salt['pillar.get']('graphite:sentry', pillar['sentry_dsn']) }}',
 }
 
 {#-
@@ -324,10 +324,10 @@ MIDDLEWARE_CLASSES = MIDDLEWARE_CLASSES + (
     'django_statsd.middleware.GraphiteMiddleware'
 )
 
-SECRET_KEY = "{{ salt['password.pillar']('graphite:web:django_key') }}"
+SECRET_KEY = "{{ salt['password.pillar']('graphite:django_key') }}"
 STATSD_PREFIX = 'graphite'
 STATSD_CLIENT = 'django_statsd.clients.normal'
 INSTALLED_APPS = list(INSTALLED_APPS)
 INSTALLED_APPS.extend(['django_insecure'])
 
-ALLOWED_HOSTS = ["{% for hostname in pillar['graphite']['web']['hostnames'] %}{{ hostname }}{% if not loop.last %}", "{% endif %}{% endfor %}"]
+ALLOWED_HOSTS = ["{% for hostname in pillar['graphite']['hostnames'] %}{{ hostname }}{% if not loop.last %}", "{% endif %}{% endfor %}"]

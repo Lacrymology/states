@@ -42,3 +42,10 @@ Remove Nagios NRPE check for Sentry.
 /etc/cron.d/passive-checks-sentry:
   file:
     - absent
+
+{%- if salt['pillar.get']('sentry:ssl', False) %}
+sentry_ssl_configuration:
+  file:
+    - absent
+    - name: /usr/lib/nagios/plugins/check_ssl_configuration.py
+{%- endif %}

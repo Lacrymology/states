@@ -116,12 +116,12 @@ define contactgroup {
 
 define command {
     command_name notify-host-by-email
-    command_line /usr/bin/printf "%b" "Shinken Notification\n\nType:$NOTIFICATIONTYPE$\nHost: $HOSTALIAS$\nState: $HOSTSTATE$\nAddress: $HOSTADDRESS$\nInfo: $HOSTOUTPUT$\nWhen: $LONGDATETIME$\n\nLast Up: $LASTHOSTUP$\nLast Down: $LASTHOSTDOWN$\nLast Unreachable: $LASTHOSTUNREACHABLE$\n\nURL: http{% if salt['pillar.get']('shinken:ssl', False) %}s{% endif %}://{{ pillar['shinken']['web']['hostnames'][0] }}/host/$HOSTNAME$ " | /usr/bin/bsd-mailx -s "Host $HOSTSTATE$ alert for $HOSTNAME$!" $CONTACTEMAIL$
+    command_line /usr/bin/printf "%b" "Shinken Notification\n\nType:$NOTIFICATIONTYPE$\nHost: $HOSTALIAS$\nState: $HOSTSTATE$\nAddress: $HOSTADDRESS$\nInfo: $HOSTOUTPUT$\nWhen: $LONGDATETIME$\n\nLast Up: $LASTHOSTUP$\nLast Down: $LASTHOSTDOWN$\nLast Unreachable: $LASTHOSTUNREACHABLE$\n\nURL: http{% if salt['pillar.get']('shinken:ssl', False) %}s{% endif %}://{{ pillar['shinken']['hostnames'][0] }}/host/$HOSTNAME$ " | /usr/bin/bsd-mailx -s "Host $HOSTSTATE$ alert for $HOSTNAME$!" $CONTACTEMAIL$
 
 # send email for a service
 define command {
     command_name notify-service-by-email
-    command_line /usr/bin/printf "%b" "Shinken Notification\n\nNotification Type: $NOTIFICATIONTYPE$\n\nService: $SERVICEDESC$\nHost: $HOSTALIAS$\nAddress: $HOSTADDRESS$\nState: $SERVICESTATE$\nWhen: $LONGDATETIME$\n\nAdditional Info : $SERVICEOUTPUT$\n\nLast OK: $LASTSERVICEOK$\nLast Warning: $LASTSERVICEWARNING$\nLast Unknown: $LASTSERVICEUNKNOWN$\nLast Critical: $LASTSERVICECRITICAL$\n\nServices OK: $TOTALSERVICESOK$\nServices Warning/Unhandled: $TOTALSERVICESWARNING$/$TOTALSERVICESWARNINGUNHANDLED$\nServices Critical/Unhandled: $TOTALSERVICESCRITICAL$/$TOTALSERVICESCRITICALUNHANDLED$\nServices Unknown/Unhandled: $TOTALSERVICESUNKNOWN$/$TOTALSERVICESUNKNOWNUNHANDLED$\nTotal Services Problems/Unhandlded: $TOTALSERVICEPROBLEMS$/$TOTALSERVICEPROBLEMSUNHANDLED$\n\nURL: http{% if salt['pillar.get']('shinken:ssl', False) %}s{% endif %}://{{ pillar['shinken']['web']['hostnames'][0] }}/host/$HOSTNAME$ "| /usr/bin/bsd-mailx -s "** $NOTIFICATIONTYPE$ alert - $HOSTALIAS$/$SERVICEDESC$ is $SERVICESTATE$ ** " $CONTACTEMAIL$
+    command_line /usr/bin/printf "%b" "Shinken Notification\n\nNotification Type: $NOTIFICATIONTYPE$\n\nService: $SERVICEDESC$\nHost: $HOSTALIAS$\nAddress: $HOSTADDRESS$\nState: $SERVICESTATE$\nWhen: $LONGDATETIME$\n\nAdditional Info : $SERVICEOUTPUT$\n\nLast OK: $LASTSERVICEOK$\nLast Warning: $LASTSERVICEWARNING$\nLast Unknown: $LASTSERVICEUNKNOWN$\nLast Critical: $LASTSERVICECRITICAL$\n\nServices OK: $TOTALSERVICESOK$\nServices Warning/Unhandled: $TOTALSERVICESWARNING$/$TOTALSERVICESWARNINGUNHANDLED$\nServices Critical/Unhandled: $TOTALSERVICESCRITICAL$/$TOTALSERVICESCRITICALUNHANDLED$\nServices Unknown/Unhandled: $TOTALSERVICESUNKNOWN$/$TOTALSERVICESUNKNOWNUNHANDLED$\nTotal Services Problems/Unhandlded: $TOTALSERVICEPROBLEMS$/$TOTALSERVICEPROBLEMSUNHANDLED$\n\nURL: http{% if salt['pillar.get']('shinken:ssl', False) %}s{% endif %}://{{ pillar['shinken']['hostnames'][0] }}/host/$HOSTNAME$ "| /usr/bin/bsd-mailx -s "** $NOTIFICATIONTYPE$ alert - $HOSTALIAS$/$SERVICEDESC$ is $SERVICESTATE$ ** " $CONTACTEMAIL$
 }
 
 define command {
@@ -138,6 +138,11 @@ define command {
 define command {
     command_name check_tcp
     command_line /usr/lib/nagios/plugins/check_tcp -H $HOSTADDRESS$ -p $ARG1$
+}
+
+define command {
+    command_name check_ssl_configuration
+    command_line /usr/lib/nagios/plugins/check_ssl_configuration.py -H $ARG1$
 }
 
 define timeperiod {
@@ -263,14 +268,17 @@ define service {
             {%- endif -%}
         {%- endfor -%}
         {#- `business_rule_service_notification_options` only available from 2.0 #}
-        {%- if check_name in ('shinken_broker_http', 'shinken_broker_web') %}
+        {%- if pillar['shinken']['architecture']['broker']|length == 2 -%}
+            {%- if check_name in ('shinken_broker_http', 'shinken_broker_web') %}
     notification_options n
+            {%- endif -%}
         {%- endif %}
 }
     {%- endfor -%}
 {%- endfor -%}
 
-{%- for service in ('shinken_broker_http', 'shinken_broker_web') %}
+{%- if pillar['shinken']['architecture']['broker']|length == 2 -%}
+    {%- for service in ('shinken_broker_http', 'shinken_broker_web') %}
 define service {
     use salt-service
     host_name {{ pillar['shinken']['architecture']['broker'][0] }}
@@ -279,4 +287,5 @@ define service {
     business_rule_service_notification_options n
     business_rule_smart_notifications 1
 }
-{%- endfor -%}
+    {%- endfor -%}
+{%- endif %}

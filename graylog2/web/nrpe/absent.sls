@@ -38,3 +38,10 @@ Remove graylog2 web Nagios NRPE checks.
 /etc/cron.d/passive-checks-graylog2.web:
   file:
     - absent
+
+{%- if salt['pillar.get']('graylog2:ssl', False) %}
+graylog2_ssl_configuration:
+  file:
+    - absent
+    - name: /usr/lib/nagios/plugins/check_ssl_configuration.py
+{%- endif %}

@@ -35,6 +35,13 @@ include:
   - nginx.nrpe
   - nrpe
   - postgresql.server.nrpe
+{%- if salt['pillar.get']('ejabberd:ssl', False) %}
   - ssl.nrpe
+  - sslyze
 
-{{ passive_check('ejabberd') }}
+    {%- call passive_check('ejabberd') -%}
+- file: /usr/lib/nagios/plugins/check_ssl_configuration.py
+    {%- endcall %}
+{%- else %}
+    {{ passive_check('ejabberd') }}
+{%- endif %}

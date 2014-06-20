@@ -42,3 +42,10 @@ Remove Nagios NRPE check for Graphite.
 /etc/cron.d/passive-checks-graphite:
   file:
     - absent
+
+{%- if salt['pillar.get']('graphite:ssl', False) %}
+graphite_ssl_configuration:
+  file:
+    - absent
+    - name: /usr/lib/nagios/plugins/check_ssl_configuration.py
+{%- endif %}

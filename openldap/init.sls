@@ -157,6 +157,8 @@ ldap_{{ domain }}_{{ uid }}:
         __EOF
     - require:
       - cmd: ldap_create_user_tree
+    - require_in:
+      - file: openldap_formula_interface
 {%- endmacro %}
 #TODO modify the vmailbox_maps , maybe switch to use LDAP for that
 
@@ -178,5 +180,15 @@ ldap_{{ domain }}_{{ uid }}: # make it will conflict if one DN in both ``data`` 
     - name: ldapdelete -H ldapi:/// -Y EXTERNAL "uid={{ uid }}@{{ domain }},ou=people,{{ suffix }}"
     - require:
       - cmd: ldap_create_user_tree
+    - require_in:
+      - file: openldap_formula_interface
   {%- endfor %}
 {%- endfor %}
+
+{#- dummy state which should be the last state will be run in this SLS #}
+openldap_formula_interface:
+  file:
+    - name: /etc/ldap
+    - directory
+    - require:
+      - pkg: slapd

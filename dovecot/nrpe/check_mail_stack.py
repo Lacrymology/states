@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/local/nagios/bin/python
 # -*- coding: utf-8 -*-
 
 # Copyright (c) 2014, Hung Nguyen Viet
@@ -146,7 +146,7 @@ Subject: %s
 @nap.guarded
 def main():
     try:
-        config = bfs.Util('check_mail_stack.yml', lock=False)
+        config = bfs.Util('/etc/nagios/check_mail_stack.yml', lock=False)
         mail = config['mail']
         waittime = mail['smtp_wait']
         username = mail['username']

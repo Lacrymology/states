@@ -32,35 +32,27 @@ include:
 {% set encoding = salt['pillar.get']('encoding', 'en_US.UTF-8') %}
 
 system_locale:
-  locale:
-    - system
-    - name: {{ encoding }}
+  pkg:
+    - installed
+    - name: language-pack-{{ encoding.split('_')[0] }}
     - require:
-      - pkg: language_pack
-      - debconf: system_locale
-  cmd:
-    - wait
-    - name: locale-gen {{ encoding }}
-    - watch:
-      - locale: system_locale
+      - cmd: apt_sources
   debconf:
     - set
     - data:
         'locales/default_environment_locale': {'type': 'select', 'value': '{{ encoding }}'}
         'locales/locales_to_be_generated': {'type': 'multiselect', 'value': '{{ encoding }} {{ encoding }}'}
     - require:
-      - pkg: language_pack
-
-language_pack:
-  pkg:
-    - installed
-    - name: language-pack-{{ encoding.split('_')[0] }}
+      - pkg: system_locale
+  locale:
+    - system
+    - name: {{ encoding }}
     - require:
-      - cmd: apt_sources
-
-/etc/default/locale:
+      - pkg: system_locale
+      - debconf: system_locale
   file:
     - managed
+    - name: /etc/default/locale
     - template: jinja
     - user: root
     - group: root
@@ -70,4 +62,9 @@ language_pack:
         LC_ALL="{{ encoding }}"
         LC_CTYPE="{{ encoding }}"
     - require:
+      - locale: system_locale
+  cmd:
+    - wait
+    - name: locale-gen {{ encoding }}
+    - watch:
       - locale: system_locale

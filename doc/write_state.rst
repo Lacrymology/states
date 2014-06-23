@@ -206,3 +206,10 @@ Upgrading
 
 * Contact person that in charge of making local mirror for that software
   (ppa repo, deb files, pip package, etc...)
+
+Service
+-------
+
+Services which run with other user than root, an have a PID file belong to
+that custom user should manage the PID file. Macro ``manage_pid`` in
+``macro.sls`` helps handle that case.

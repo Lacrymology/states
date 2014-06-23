@@ -32,15 +32,14 @@ __author__ = 'Hung Nguyen Viet'
 __maintainer__ = 'Hung Nguyen Viet'
 __email__ = 'hvnsweeting@gmail.com'
 
-import os
-import sys
-import re
+import glob
 import logging
 import logging.config
 import logging.handlers
-import subprocess
-import glob
+import os
 import shlex
+import subprocess
+import sys
 
 import send_nsca
 import send_nsca.nsca
@@ -85,14 +84,13 @@ class PassiveDaemon(object):
     """
 
     def __init__(self, config, minion_id, nsca_servers, nsca_include_directory,
-                 nsca_timeout, default_interval, nrpe_include_directory):
+                 nsca_timeout, default_interval):
 
         self.config = config
         self.minion_id = minion_id
         self.nsca_servers = nsca_servers
         self.nsca_include_directory = nsca_include_directory
         self.default_interval = default_interval
-        self.nrpe_include_directory = nrpe_include_directory
         self.nsca_timeout = nsca_timeout
 
         self.sched = scheduler.Scheduler(standalone=True)
@@ -102,8 +100,7 @@ class PassiveDaemon(object):
     def load_nsca_yaml_files(self):
         '''
         Search for .yml files within directory, and build a dictionary mapping
-        `check name -> check config`. Here `check_name` must be the same values
-        as in `list_checks`.
+        `check name -> check config`.
         '''
         checks = {}
         for filename in glob.glob(os.path.join(self.nsca_include_directory,
@@ -111,42 +108,18 @@ class PassiveDaemon(object):
             checks.update(bfs.unserialize_yaml(filename))
         return checks
 
-    def list_checks(self):
-        '''
-        Search for .cfg files within a directory, and build a
-        dictionary mapping `check name -> check command`.
-
-        :return: A dictionary like `{ 'memcached_procs':
-                                      '/path/to/checker -some -params', ... }`
-        '''
-        output = {}
-        nrpe_re = re.compile(r'^command\[(?P<check>[^\]]+)\]=(?P<command>.+)$')
-        for filename in glob.glob(os.path.join(self.nrpe_include_directory,
-                                               '*.cfg')):
-            logger.debug("Found %s config, parsing", filename)
-            try:
-                with open(filename) as input_fh:
-                    for line in input_fh:
-                        match = nrpe_re.match(line)
-                        if match:
-                            matches = match.groupdict()
-                            output[matches['check']] = matches['command']
-                        else:
-                            logger.debug("Ignore line '%s'",
-                                         line.strip(os.linesep))
-            except Exception, err:
-                logger.error("Can't get checks in '%s': %s", filename, err,
-                             exc_info=True)
-        logger.debug("Found %d passive checks", len(output))
-        return output
-
     def send_check_result(self, check_name, command):
         '''
         Run specified check, connect to NSCA server and send results.
         '''
         logger.debug('Running {0}'.format(check_name))
-        p = subprocess.Popen(command, stdout=subprocess.PIPE,
-                             stderr=subprocess.PIPE)
+        try:
+            p = subprocess.Popen(command, stdout=subprocess.PIPE,
+                                 stderr=subprocess.PIPE)
+        except OSError as e:
+            logger.error('Check %s with command %r failed. %s',
+                         check_name, command, e, exc_info=True)
+
         output, errors = p.communicate()
         if p.returncode not in (0, 1, 2, 3) or errors:
             status = 3
@@ -197,7 +170,6 @@ class PassiveDaemon(object):
         :return: a dict of {interval: {'bleh': 'command to check bleh'}}
         """
         output = {}
-        nrpe_checks = self.list_checks()
         for check_name, check in self.load_nsca_yaml_files().iteritems():
             # by default check are passive
             if check.get('passive', True):
@@ -206,11 +178,10 @@ class PassiveDaemon(object):
                 try:
                     # use shlex.split to only keep a list of command line
                     # arguments. required for subprocess.Popen
-                    nrpe_command = shlex.split(nrpe_checks[check_name])
+                    nrpe_command = shlex.split(check['command'])
                 except KeyError:
-                    logger.error("Found passive check '%s', but isn't defined "
-                                 "in '%s'", check_name,
-                                 self.nrpe_include_directory)
+                    logger.error("Found passive check '%s', but command isn't"
+                                 " defined.", check_name)
                 else:
                     interval = check.get('check_interval',
                                          self.default_interval)
@@ -278,7 +249,6 @@ def main():
             nsca_servers = config['nsca']['servers']
             nsca_include_directory = config['file']['monitor_config']
             default_interval = config['nsca']['default_interval']
-            nrpe_include_directory = config['file']['nrpe_config']
             nsca_timeout = config['nsca']['timeout']
         except KeyError, err:
             logger.error('Bad config %r', err)
@@ -297,8 +267,8 @@ def main():
                           nsca_servers,
                           nsca_include_directory,
                           nsca_timeout,
-                          default_interval,
-                          nrpe_include_directory).main()
+                          default_interval
+                          ).main()
         except Exception as err:
             logger.error("Encountered error when running PassiveDaemon: %r",
                          err, exc_info=True)

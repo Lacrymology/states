@@ -68,3 +68,4 @@ system_locale:
     - name: locale-gen {{ encoding }}
     - watch:
       - locale: system_locale
+      - file: system_locale

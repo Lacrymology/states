@@ -241,7 +241,7 @@ service: nagios-nrpe-server #}
 /usr/local/nagios/bin/nsca_passive:
   file:
     - managed
-    - source: salt://nrpe/passive_daemon.py
+    - source: salt://nrpe/nsca_passive.py
     - mode: 500
     - user: nagios
     - group: nagios

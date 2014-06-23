@@ -51,7 +51,7 @@ rabbitmq_port_amqp:
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 5672
 
 {%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
-{{ nginx_instance('rabbitmq', http_port=15672, domain_name='127.0.0.1') }}
+{{ nginx_instance('rabbitmq', http_port=15672) }}
 
 rabbitmq-remote-amqp-port:
   description: Remote RabbitMQ AMQP Port

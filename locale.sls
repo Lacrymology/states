@@ -47,7 +47,7 @@ system_locale:
     - set
     - data:
         'locales/default_environment_locale': {'type': 'select', 'value': '{{ encoding }}'}
-        'locales/locales_to_be_generated': {'type': 'multiselect', 'value': '{{ encoding }} {{ encoding.split("_")[1] }}'}
+        'locales/locales_to_be_generated': {'type': 'multiselect', 'value': '{{ encoding }} {{ encoding }}'}
     - require:
       - pkg: language_pack
 
@@ -57,3 +57,17 @@ language_pack:
     - name: language-pack-{{ encoding.split('_')[0] }}
     - require:
       - cmd: apt_sources
+
+/etc/default/locale:
+  file:
+    - managed
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 644
+    - contents: |
+        LANG="{{ encoding }}"
+        LC_ALL="{{ encoding }}"
+        LC_CTYPE="{{ encoding }}"
+    - require:
+      - locale: system_locale

@@ -73,8 +73,9 @@ most of SLS should have its counter-part absent SLS. That means:
 
 * if you have ``mariadb/server/init.sl``s, you should have
   ``mariadb/server/absent.sls``
-* absent state must not use same ID as ``init.sls`` or other SLS file, that will
-  cause conflict when we include all them to test.
+* absent state must contain some state IDs like in ``init.sls`` , that will
+  cause conflict when we include both ``init.sls`` and ``absent.sls`` of a
+  formula, which is a situation that should never happen.
 
 Use only standard style to write state.
 

@@ -65,5 +65,11 @@ dovecot_port_pop3:
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 110
 {%- endif %}
 
+{% if not salt['pillar.get']('__test__', False) %}
+mailstack_functionality:
+  description: Mail Stack Functionality
+  command: /usr/lib/nagios/plugins/check_mail_stack.py
+{%- endif %}
+
 {#- TODO: http://wiki2.dovecot.org/RunningDovecot add more processes #}
 {#- TODO: use /usr/lib/nagios/plugins/check_spop #}

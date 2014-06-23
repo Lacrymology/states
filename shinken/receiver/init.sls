@@ -56,6 +56,7 @@ shinken-receiver:
       - file: /etc/shinken/receiver.conf
       - file: shinken-receiver
       - user: shinken
+{#- does not use PID, no need to manage #}
 
 /etc/shinken/receiver.conf:
   file:

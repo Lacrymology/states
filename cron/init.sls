@@ -56,3 +56,5 @@ cron:
     - watch:
       - pkg: cron
       - file: /etc/crontab
+
+{#- PID file owned by root, no need to manage #}

@@ -49,7 +49,7 @@ Terminology
 PIP
 ---
 
-all package install by ``pip`` must be specified version number
+all packages installed by ``pip`` must be specified version number
 
 Good::
 
@@ -59,8 +59,8 @@ Bad::
 
   MySQL-python
 
-Requirements file should be ``file.managed`` and have ``pip.install`` module run
-only if they're changed.
+Requirements file should be ``file.managed`` and have ``pip.install`` module
+run only if they're changed.
 
 If the Python environment destination is the root (``/usr/local``), it's
 filename should be ``{{ opts['cachedir'] }}/pip/$statename``.
@@ -69,12 +69,13 @@ If it's in a virtualenv it should be ``/usr/local/$venv/salt-requirements.txt``.
 States
 ------
 
-most of SLS should have its counter-part absent SLS. That means:
+most of init SLS should have its counter-part absent SLS. That means:
 
-* if you have ``mariadb/server/init.sl``s, you should have
+* if a formula has ``mariadb/server/init.sls``, it should have
   ``mariadb/server/absent.sls``
-* absent state must not use same ID as ``init.sls`` or other SLS file, that will
-  cause conflict when we include all them to test.
+* absent state must contain some state IDs like in ``init.sls`` , that will
+  cause conflict when we include both ``init.sls`` and ``absent.sls`` of a
+  formula, which is the situation that should never happen.
 
 Use only standard style to write state.
 
@@ -124,10 +125,9 @@ States should use grains when possible:
 
 Good::
 
-    salt:
-      file:
-        - absent
-        - name: /etc/apt/sources.list.d/saltstack-salt-{{ grains['lsb_distrib_release'] }}.list
+  file:
+    - absent
+    - name: /etc/apt/sources.list.d/saltstack-salt-{{ grains['lsb_distrib_release'] }}.list
 
 Bad::
 
@@ -152,11 +152,12 @@ Bad::
 Configs
 -------
 
-All app/daemon log must be send to syslog or graylog2 (if support).
+All app/daemon log must be sent to syslog or graylog2 (if support).
 
 All comment must be commented by jinja2 comment. User should only get a config
-file with no comment.
-
+file with no comment. Reason for this is make user in trouble if they do
+change config file manually (which may break a system managed by salt), and
+the config file will be shorter, cleaner without comments.
 
 This means::
 
@@ -172,28 +173,29 @@ Should be ::
     #}
     log: syslog
 
-* All config file must have a header tell that it's managed by salt (that string
-  get from pillar)
-* All config file must end with ``.jinja2``
+* All config files must have a header tell that it's managed by salt
+  (that string get from pillar)
+* All config files must end with ``.jinja2``
 * Main config file should use name ``config.jinja2`` instead of
   ``its_original_name.jinja2``
 
 Absent
 ------
 
-absent formulas are mainly used by ``integration.py`` script.
+absent SLS files are mainly used by ``integration.py`` script.
 
-Some points to notice when write an absent formula:
+Some points to notice when write an absent SLS:
 
 * If it has a pip.remove state, make sure that states has low order
-  (often order: 1) because local.absent will remove ``/usr/local`` and therefore
-  remove ``/usr/local/bin/pip``
+  (often order: 1) because local.absent will remove ``/usr/local`` and
+  therefore remove ``/usr/local/bin/pip``, which in turn make pip.remove
+  does not work anymore.
 
 Installing
 ----------
 
-* App that installed used an alternate method than ``apt-get`` should be located
-  in ``/usr/local/software_name``
+* App that installed used an alternate method than ``apt-get`` should be
+  located in ``/usr/local/software_name``
 * Using ppa is prefered to self-compile software from source.
 
 Upgrading
@@ -203,5 +205,9 @@ Upgrading
   new-clean-install-server. (Remove old version and install new, or just
   install then restart service, or does it need a manually migrating process?)
 
-* Contact person that in charge of making local mirror for that software
-  (ppa repo, deb files, pip package, etc...)
+Service
+-------
+
+Services which run with other user than root, an have a PID file belong to
+that custom user should manage the PID file. Macro ``manage_pid`` in
+``macro.sls`` helps handle that case.

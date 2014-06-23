@@ -107,6 +107,7 @@ postfix:
 {% if ssl %}
       - cmd: ssl_cert_and_key_for_{{ ssl }}
 {% endif %}
+{#- does not use PID, no need to manage #}
 
 /etc/postfix:
   file:

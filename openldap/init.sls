@@ -27,6 +27,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 A LDAP server.
 -#}
+{%- from 'macros.jinja2' import manage_pid with context %}
 {% set ssl = salt['pillar.get']('ldap:ssl', False) %}
 include:
   - apt
@@ -34,6 +35,11 @@ include:
 {% if ssl %}
   - ssl
 {% endif %}
+
+{%- call manage_pid('/var/run/slapd/slapd.pid', 'openldap', 'openldap', 'slapd') %}
+- pkg: slapd
+- user: openldap
+{%- endcall %}
 
 slapd:
   pkg:

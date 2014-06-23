@@ -56,6 +56,7 @@ openssh-server:
     - watch:
       - pkg: openssh-server
       - file: openssh-server
+{#- PID file owned by root, no need to manage #}
 
 {% for key in salt['pillar.get']('root_keys', []) -%}
 ssh_server_root_{{ key }}:

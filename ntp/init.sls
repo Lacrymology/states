@@ -73,3 +73,4 @@ ntp:
       - service: rsyslog
     - watch:
       - file: ntp
+{#- PID file owned by root, no need to manage #}

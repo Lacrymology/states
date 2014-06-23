@@ -36,6 +36,7 @@ include:
  first: install memcached and get rid of SysV startup script.
  and remove it's config file.
 #}
+{#- does not use PID, no need to manage #}
 memcached:
   pkg:
     - installed

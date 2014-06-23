@@ -152,6 +152,7 @@ carbon:
 
 {%- set instances_count = pillar['graphite']['carbon']['instances'] %}
 
+{#- PID file owned by root, no need to manage #}
 {% for instance in range(instances_count) %}
 carbon-cache-{{ instance }}:
   file:

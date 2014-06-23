@@ -149,6 +149,7 @@ uwsgi_sockets:
       - archive: uwsgi_build
       - file: uwsgi_build
 
+{#- does not use PID, no need to manage #}
 uwsgi_emperor:
   cmd:
     - wait

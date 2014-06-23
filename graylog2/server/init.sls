@@ -27,23 +27,23 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Install a Graylog2 logging server backend.
 -#}
+{%- from 'macros.jinja2' import manage_pid with context %}
 include:
   - apt
   - mongodb
-{% if grains['osrelease']|float < 12.04 %}
+{%- if grains['osrelease']|float < 12.04 %}
   - java.6
-{% else %}
+{%- else %}
   - java.7
-{% endif %}
+{%- endif %}
   - graylog2
   - local
   - rsyslog
 
-{# TODO: set Email output plugin settings straight into MongoDB from salt #}
-
-{% set version = '0.11.0' %}
-{% set checksum = 'md5=135c9eb384a03839e6f2eca82fd03502' %}
-{% set server_root_dir = '/usr/local/graylog2-server-' + version %}
+{#- TODO: set Email output plugin settings straight into MongoDB from salt #}
+{%- set version = '0.11.0' %}
+{%- set checksum = 'md5=135c9eb384a03839e6f2eca82fd03502' %}
+{%- set server_root_dir = '/usr/local/graylog2-server-' + version %}
 {%- set user = salt['pillar.get']('graylog2:server:user', 'graylog2') %}
 
 graylog2-server_upstart:
@@ -131,6 +131,11 @@ graylog2-server:
       - service: mongodb
       - file: {{ server_root_dir }}
       - file: /var/run/graylog2
+
+{%- call manage_pid('/var/run/graylog2/graylog2.pid', 'graylog2', 'graylog2', 'graylog2-server') %}
+- user: graylog2
+- file: /var/run/graylog2
+{%- endcall %}
 
 graylog2_rsyslog_config:
   file:

@@ -50,6 +50,7 @@ pdnsd:
       - file: /etc/default/pdnsd
       - file: /etc/pdnsd.conf
       - pkg: pdnsd
+{#- PID file owned by root, no need to manage #}
 
 /etc/default/pdnsd:
   file:

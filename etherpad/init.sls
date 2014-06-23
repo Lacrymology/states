@@ -120,6 +120,7 @@ etherpad:
       - file: {{ web_root_dir }}/APIKEY.txt
       - file: {{ web_root_dir }}/settings.json
       - file: /etc/init/etherpad.conf
+{#- does not use PID, no need to manage #}
 
 {{ web_root_dir }}/bin:
   file:

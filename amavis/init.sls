@@ -27,6 +27,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 Amavis: A Email Virus Scanner.
 -#}
+{%- from 'macros.jinja2' import manage_pid with context %}
 include:
   - apt
   - cron
@@ -68,3 +69,7 @@ amavis:
     - mode: 500
     - require:
       - pkg: cron
+
+{%- call manage_pid('/var/run/amavis/amavisd.pid', 'amavis', 'amavis', 'amavis', 640) %}
+- pkg: amavis
+{%- endcall %}

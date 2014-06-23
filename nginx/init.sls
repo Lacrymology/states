@@ -136,6 +136,7 @@ nginx_dependencies:
 {%- set sub_version = '{0}-1~{1}'.format(version, grains['lsb_distrib_codename']) %}
 {%- set filename = 'nginx_{0}_{1}.deb'.format(sub_version, grains['debian_arch']) %}
 
+{#- PID file owned by root, no need to manage #}
 nginx:
   file:
     - managed

@@ -27,6 +27,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 Install a PostgreSQL database server.
 -#}
+{%- from 'macros.jinja2' import manage_pid with context %}
 {% set ssl = salt['pillar.get']('postgresql:ssl', False) %}
 include:
   - apt
@@ -81,6 +82,10 @@ postgresql:
 {% if ssl %}
       - cmd: ssl_cert_and_key_for_{{ ssl }}
 {% endif %}
+
+{%- call manage_pid('/var/run/postgresql/9.2-main.pid', 'postgres', 'postgres', 'postgresql') %}
+- pkg: postgresql
+{%- endcall %}
 
 /etc/logrotate.d/postgresql-common:
   file:

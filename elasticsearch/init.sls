@@ -26,6 +26,7 @@ Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 {#- TODO: Diamond + http://www.elasticsearch.org/guide/reference/modules/jmx/ -#}
+{%- from 'macros.jinja2' import manage_pid with context %}
 {%- set ssl = salt['pillar.get']('elasticsearch:ssl', False) %}
 include:
   - apt
@@ -79,6 +80,10 @@ include:
     - require:
       - pkg: openjdk_jre_headless
 {% endif %}
+
+{%- call manage_pid('/var/run/elasticsearch.pid', 'elasticsearch', 'elasticsearch', 'elasticsearch') %}
+- pkg: elasticsearch
+{%- endcall %}
 
 elasticsearch:
 {% if 'aws' in pillar['elasticsearch'] %}

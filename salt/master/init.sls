@@ -126,6 +126,7 @@ salt-master:
     - watch:
       - pkg: salt-master
       - file: salt-master
+{#- PID file owned by root, no need to manage #}
   pkg:
     - installed
     - skip_verify: True

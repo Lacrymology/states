@@ -32,7 +32,6 @@ include:
   - apt.nrpe
   - memcache.nrpe
   - nginx.nrpe
-  - nginx.nrpe
   - nrpe
   - pip.nrpe
   - postgresql.nrpe

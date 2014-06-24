@@ -26,13 +26,10 @@ Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
 {%- set max_proc = salt['pillar.get']('mail:maxproc', 2) %}
-amavis_master:
-  description: Amavis Master Process
-  command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -u amavis -a 'amavisd (master)' -C amavisd"
-
-amavis_child:
-  description: Amavis Child Processes
-  command: "/usr/lib/nagios/plugins/check_procs -c {{ max_proc }}:{{ max_proc }} -u amavis -a 'amavisd (virgin child)' -C amavisd"
+amavis_procs:
+  description: Amavis Processes
+  {#- +1 for master process #}
+  command: "/usr/lib/nagios/plugins/check_procs -c {{ max_proc + 1 }}:{{ max_proc + 1 }} -u amavis -C amavisd"
 
 amavis_port:
   description: Amavis Listen Port

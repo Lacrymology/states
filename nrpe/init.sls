@@ -143,12 +143,24 @@ service: nagios-nrpe-server #}
       - pkg: nagios-plugins
       - cmd: apt_sources
       - module: nrpe-virtualenv
+  file:
+    - managed
+    - name: /etc/nagios/nrpe.d/000.nagios.servers.cfg
+    - template: jinja
+    - user: nagios
+    - group: nagios
+    - mode: 440
+    - source: salt://nrpe/server.jinja2
+    - require:
+      - pkg: nagios-nrpe-server
+      - file: /usr/lib/nagios/plugins/check_memory.py
   service:
     - running
     - enable: True
     - order: 50
     - watch:
       - pkg: nagios-nrpe-server
+      - file: nagios-nrpe-server
 
 {%- from 'macros.jinja2' import manage_pid with context %}
 {%- call manage_pid('/var/run/nagios/nrpe.pid', 'nagios', 'nagios', 'nagios-nrpe-server') %}

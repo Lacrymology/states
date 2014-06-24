@@ -3,16 +3,16 @@
 
 # Copyright (c) 2013, Bruno Clermont
 # All rights reserved.
-# 
+#
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
-# 
+#
 # 1. Redistributions of source code must retain the above copyright notice, this
 #    list of conditions and the following disclaimer.
 # 2. Redistributions in binary form must reproduce the above copyright notice,
 #    this list of conditions and the following disclaimer in the documentation
 #    and/or other materials provided with the distribution.
-# 
+#
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 # ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -27,11 +27,11 @@
 """
 Salt master or test bootstrap creator.
 
-To use it you need checkout the following 3 repositories into your own
-workstation:
+To use it you need checkout the following 3 (or more) repositories into your
+own workstation:
 
 - Common (where this file is)
-- Client specific (where the roles are)
+- Client specific repositories (where the roles and client formulas are)
 - Pillar repository
 
 To use it run this script::
@@ -39,7 +39,8 @@ To use it run this script::
   cd ~/somewhere/common-checkout/
   ./boostrap_archive.py /path/to/pillars ~/somewhere/client-checkout > /path/to/archive.tar.gz
 
-Note: first argument is always the pillar path
+Note: - first argument is always the pillar path
+      - multiple client specific repositories can be passed as arguments.
 """
 
 __author__ = 'Bruno Clermont'
@@ -74,7 +75,7 @@ def add_symlink(tar, src, dst):
     tmpfile = '/tmp/{0}_{1}'.format(os.getpid(), src.replace('/', '_'))
     try:
         os.symlink(src, tmpfile)
-    except OSError, e:
+    except OSError:
         pass
     tar.add(tmpfile, dst)
     os.remove(tmpfile)
@@ -86,12 +87,13 @@ def main():
     main loop.
     :return: None
     """
-    if len(sys.argv) == 3:
-        states_root = validate_git_dir(sys.argv[2])
+    if len(sys.argv) >= 3:
+        states_root = (validate_git_dir(git_dir) for git_dir in sys.argv[2:])
     elif len(sys.argv) == 2:
         states_root = None
     else:
-        print '%s: [path to pillar] [path to states]' % sys.argv[0]
+        print ('%s <path to pillar> [repo1_dir] [repo2_dir] ...'
+               % sys.argv[0])
         sys.exit(1)
 
     tar = tarfile.open(mode='w:gz', fileobj=sys.stdout)
@@ -108,7 +110,7 @@ def main():
     # states
     all_states = [common_root]
     if states_root:
-        all_states.append(states_root)
+        all_states.extend(states_root)
 
     for state_dir in all_states:
         for filename in os.listdir(state_dir):

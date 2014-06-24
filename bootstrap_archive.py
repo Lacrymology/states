@@ -27,11 +27,11 @@
 """
 Salt master or test bootstrap creator.
 
-To use it you need checkout the following 3 repositories into your own
-workstation:
+To use it you need checkout the following 3 (or more) repositories into your
+own workstation:
 
 - Common (where this file is)
-- Client specific (where the roles are)
+- Client specific repositories (where the roles and client formulas are)
 - Pillar repository
 
 To use it run this script::
@@ -39,7 +39,8 @@ To use it run this script::
   cd ~/somewhere/common-checkout/
   ./boostrap_archive.py /path/to/pillars ~/somewhere/client-checkout > /path/to/archive.tar.gz
 
-Note: first argument is always the pillar path
+Note: - first argument is always the pillar path
+      - multiple client specific repositories can be passed as arguments.
 """
 
 __author__ = 'Bruno Clermont'
@@ -91,7 +92,8 @@ def main():
     elif len(sys.argv) == 2:
         states_root = None
     else:
-        print '%s: [path to pillar] [path to states]' % sys.argv[0]
+        print ('%s <path to pillar> [repo1_dir] [repo2_dir] ...'
+               % sys.argv[0])
         sys.exit(1)
 
     tar = tarfile.open(mode='w:gz', fileobj=sys.stdout)

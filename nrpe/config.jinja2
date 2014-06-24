@@ -33,7 +33,7 @@ free_disks_space:
   description: All Disks
   command: /usr/lib/nagios/plugins/check_disk -w 20% -c 10%
 
-{%- set max_proc = salt['pillar.get']('nrpe:max_proc', 150) -%}
+{%- set max_proc = salt['pillar.get']('nrpe:max_proc', 150)|int -%}
 {%- set max_proc_15_percent = max_proc + (max_proc / 100.0 * 15) %}
 total_procs:
   description: Total Processes

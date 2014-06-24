@@ -3,16 +3,16 @@
 
 # Copyright (c) 2013, Bruno Clermont
 # All rights reserved.
-# 
+#
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
-# 
+#
 # 1. Redistributions of source code must retain the above copyright notice, this
 #    list of conditions and the following disclaimer.
 # 2. Redistributions in binary form must reproduce the above copyright notice,
 #    this list of conditions and the following disclaimer in the documentation
 #    and/or other materials provided with the distribution.
-# 
+#
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 # ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -74,7 +74,7 @@ def add_symlink(tar, src, dst):
     tmpfile = '/tmp/{0}_{1}'.format(os.getpid(), src.replace('/', '_'))
     try:
         os.symlink(src, tmpfile)
-    except OSError, e:
+    except OSError:
         pass
     tar.add(tmpfile, dst)
     os.remove(tmpfile)
@@ -86,8 +86,8 @@ def main():
     main loop.
     :return: None
     """
-    if len(sys.argv) == 3:
-        states_root = validate_git_dir(sys.argv[2])
+    if len(sys.argv) >= 3:
+        states_root = (validate_git_dir(git_dir) for git_dir in sys.argv[2:])
     elif len(sys.argv) == 2:
         states_root = None
     else:
@@ -108,7 +108,7 @@ def main():
     # states
     all_states = [common_root]
     if states_root:
-        all_states.append(states_root)
+        all_states.extend(states_root)
 
     for state_dir in all_states:
         for filename in os.listdir(state_dir):

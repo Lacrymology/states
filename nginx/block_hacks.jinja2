@@ -1,3 +1,9 @@
+    # deny Coldfusion hacking
+    location /CFIDE/administrator/enter.cfm {
+        deny all;
+        return 404;
+    }
+
     # deny read file README.txt
     location ~* /recordings/README.txt {
         deny all;

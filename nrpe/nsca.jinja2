@@ -33,7 +33,6 @@ graphite: {{ pillar['graphite_address'] }}
 {%- endif %}
 
 file:
-  nrpe_config: /etc/nagios/nrpe.d
   monitor_config: /etc/nagios/nsca.d
   salt_minion: /etc/salt/minion
 

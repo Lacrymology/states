@@ -141,12 +141,7 @@ ldap_create_user_tree:
       - service: slapd
       - cmd: slapd_config_dbs
 
-{#- create / delete user entries #}
-{#- TODO implement support multiple LDAP tree #}
-{% set suffix = salt['pillar.get']('ldap:suffix') %}
-{%- for domain in pillar['ldap']['data'] %}
-  {%- for uid in pillar['ldap']['data'][domain] %}
-    {% set u = salt['pillar.get']('ldap:data')[domain][uid] %}
+{%- macro ldap_adduser(uid, domain, suffix, cn, sn, password) %}
 ldap_{{ domain }}_{{ uid }}:
   cmd:
     - run
@@ -155,13 +150,24 @@ ldap_{{ domain }}_{{ uid }}:
         ldapadd -H ldapi:/// -Y EXTERNAL << __EOF
         dn: uid={{ uid }}@{{ domain }},ou=people,{{ suffix }}
         objectClass: inetOrgPerson
-        cn: {{ u['cn'] }}
-        sn: {{ u['sn'] }}
+        cn: {{ cn }}
+        sn: {{ sn }}
         uid: {{ uid }}@{{ domain }}
-        userPassword: {{ u['passwd'] }}
+        userPassword: {{ password }}
         __EOF
     - require:
       - cmd: ldap_create_user_tree
+    - require_in:
+      - file: openldap_formula_interface
+{%- endmacro %}
+#TODO modify the vmailbox_maps , maybe switch to use LDAP for that
+
+{#- create / delete user entries #}
+{% set suffix = salt['pillar.get']('ldap:suffix') %}
+{%- for domain in pillar['ldap']['data'] %}
+  {%- for uid in pillar['ldap']['data'][domain] %}
+    {% set u = salt['pillar.get']('ldap:data')[domain][uid] %}
+{{ ldap_adduser(uid, domain, suffix, u['cn'], u['sn'], u['passwd']) }}
   {%- endfor %}
 {%- endfor %}
 
@@ -174,5 +180,15 @@ ldap_{{ domain }}_{{ uid }}: # make it will conflict if one DN in both ``data`` 
     - name: ldapdelete -H ldapi:/// -Y EXTERNAL "uid={{ uid }}@{{ domain }},ou=people,{{ suffix }}"
     - require:
       - cmd: ldap_create_user_tree
+    - require_in:
+      - file: openldap_formula_interface
   {%- endfor %}
 {%- endfor %}
+
+{#- dummy state which should be the last state will be run in this SLS #}
+openldap_formula_interface:
+  file:
+    - name: /etc/ldap
+    - directory
+    - require:
+      - pkg: slapd

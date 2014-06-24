@@ -1,0 +1,19 @@
+{%- from 'python/logging.sls' import logging with context %}
+{% if 'graphite_address' in pillar %}
+graphite: {{ pillar['graphite_address'] }}
+{%- endif %}
+
+daemon:
+  user: nagios
+  group: nagios
+
+{{ logging('check_mail_stack', 'sentry_dsn') }}
+
+{%- set mail_pillar = pillar['mail']['check_mail_stack'] %}
+mail:
+  username: {{ username }}
+  password: "{{ password }}"
+  imap_server: localhost
+  smtp_server: {{ mail_pillar['smtp_server'] }}
+  # wait N seconds after sending mail
+  smtp_wait: {{ salt['pillar.get']('mail:check_mail_stack:smtp_wait', 7) }}

@@ -68,7 +68,7 @@ include:
 nrpe_remove_old_config_files:
   cmd:
     - run
-    - name: "find /etc/nagios/nrpe.d -name '*-*' -or -name '*_*' -delete"
+    - name: "find /etc/nagios/nrpe.d -name '*-*' -or -name '*_*' | xargs rm -f"
     - require:
       - pkg: nagios-nrpe-server
     - require_in:

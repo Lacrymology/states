@@ -73,24 +73,32 @@ class S3Util(object):
 
     def sync(self, bucket, path, prefix=''):
         logger.debug('Prefix to sync: %s', prefix)
-        localfiles = self.get_filedatas(bucket, path, prefix)
-        total_to_process = len(localfiles)
+        localfiles = self.get_filedatas
         counter = collections.Counter({'uploaded': 0,
                                        'existed_before_sync': 0})
+
+        existed = []
+        total_to_process = 0
 
         for rfile in bucket.list(prefix):
             # etag is usually md5sum of that file
             rmd5 = rfile.etag.strip('"')
             logger.debug('Remote md5 of %r: %r', rfile.name, rmd5)
-            for lfn in localfiles:
-                if rmd5 == unicode(localfiles[lfn]['md5']):
-                    logger.warning('%s existed on S3 at %s', lfn, rfile.name)
-                    localfiles[lfn]['on_remote'] = True
+            cntr = 0
+            for lfn in localfiles(bucket, path, prefix):
+                cntr += 1
+                if rmd5 == unicode(lfn['md5']):
+                    logger.warning('%s existed on S3 at %s', lfn['fullpath'],
+                                   rfile.name)
+                    existed.append(lfn['fullpath'])
 
-        for lfn in localfiles:
-            if not localfiles[lfn]['on_remote']:
-                self.upload_file(localfiles[lfn]['bucket'], lfn,
-                                 localfiles[lfn]['prefix'])
+            # count once
+            if total_to_process == 0:
+                total_to_process = cntr
+
+        for lfn in localfiles(bucket, path, prefix):
+            if lfn['fullpath'] not in existed:
+                self.upload_file(lfn['bucket'], lfn['fullpath'], lfn['prefix'])
                 counter['uploaded'] += 1
             else:
                 counter['existed_before_sync'] += 1
@@ -106,13 +114,13 @@ class S3Util(object):
     def get_filedatas(self, bucket, path, prefix):
 
         def _get_filedata(bucket, fullpath, prefix):
-            return {fullpath: {'md5': md5hash(fullpath),
-                               'bucket': bucket,
-                               'prefix': prefix,
-                               'on_remote': False,
-                               }}
+            return {'md5': md5hash(fullpath),
+                    'fullpath': fullpath,
+                    'bucket': bucket,
+                    'prefix': prefix,
+                    'on_remote': False
+                    }
 
-        filedatas = {}
         if os.path.isdir(path):
             for dirname, _, filenames in os.walk(path):
                 for fn in filenames:
@@ -121,17 +129,13 @@ class S3Util(object):
                     if relpath == '.':
                         relpath = ''
                     new_prefix = os.path.join(prefix, relpath)
-                    filedatas.update(_get_filedata(bucket,
-                                                   fullpath, new_prefix))
+                    yield _get_filedata(bucket, fullpath, new_prefix)
         elif os.path.isfile(path):
-            filedatas.update(_get_filedata(bucket, os.path.abspath(path),
-                                           prefix))
+            yield _get_filedata(bucket, os.path.abspath(path), prefix)
         else:
             raise NotImplementedError('This script is not able to upload '
                                       'things that not is a normal file or '
                                       'directory.')
-
-        return filedatas
 
 
 def main():

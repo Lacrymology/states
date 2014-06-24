@@ -37,7 +37,7 @@ free_disks_space:
 {%- set max_proc_15_percent = max_proc + (max_proc / 100.0 * 15) %}
 total_procs:
   description: Total Processes
-  command: /usr/lib/nagios/plugins/check_procs -w {{ max_proc }} -c {{ max_proc_15_percent }}
+  command: /usr/lib/nagios/plugins/check_procs -w {{ max_proc }} -c {{ max_proc_15_percent|int }}
 
 zombie_procs:
   description: Zombie Processes

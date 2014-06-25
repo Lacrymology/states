@@ -117,10 +117,6 @@ dovecot_check_mail_stack:
   file:
     - absent
 
-/etc/nagios/check_mail_stack.yml:
-  file:
-    - absent
-
 /usr/lib/nagios/plugins/check_mail_stack.py:
   file:
     - absent

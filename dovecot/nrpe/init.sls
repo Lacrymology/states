@@ -71,8 +71,10 @@ dovecot_check_mail_stack:
 
 dovecot_add_spam_mailbox_for_check_user:
   cmd:
-    - run
+    - wait
     - name: doveadm mailbox create -u {{ mailaddr }} spam
+    - watch:
+      - file: dovecot_check_mail_stack
     - require:
       - service: dovecot
       - file: openldap_formula_interface

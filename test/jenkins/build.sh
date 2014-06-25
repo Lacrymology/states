@@ -37,7 +37,26 @@ virtualenv $WORKSPACE/virtualenv
 cd common
 pip install -r doc/requirements.txt
 doc/build.py
-./bootstrap_archive.py ../pillar > /srv/salt/jenkins_archives/$JOB_NAME-$BUILD_NUMBER.tar.gz
+
+# allow multiple --repo options to get all non-common reporitories
+# each value passed to  --repo is relative path to user-specific directory from
+# $WORKSPACE. The structure after all SCM checkout looks like:
+#  - common
+#  - pillar
+#  - repo1
+#  - repo2
+# then use --repo repo1 --repo repo2
+repos=()
+cntr=0
+while [ "${1}" = '--repo' ]; do
+    repos[${cntr}]="../${2}"
+    cntr+=1
+    shift
+    shift
+done
+
+# create archive from common, pillar, and all user-specific formulas repos
+./bootstrap_archive.py ../pillar ${repos[@]} > /srv/salt/jenkins_archives/$JOB_NAME-$BUILD_NUMBER.tar.gz
 
 if [ "$1" == "--profile" ]; then
     profile=$2

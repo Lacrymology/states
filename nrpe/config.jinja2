@@ -63,16 +63,10 @@ free_memory:
   description: Memory Usage
   command: /usr/lib/nagios/plugins/check_memory.py -w 90 -c 95
 
-{%- if grains['virtual'] != 'openvzve' %}
-{%- if salt['file.contains_regex']('/proc/swaps','^/') %}
+{%- if salt['file.contains_regex']('/proc/swaps','^/') and grains['virtual'] != 'openvzve' %}
 free_swap_space:
   description: Swap Usage
   command: /usr/lib/nagios/plugins/check_swap -w 30% -c 10%
-{%- endif %}
-{%- else %}
-free_swap_space:
-  description: Swap Usage
-  command[free_swap_space]=/bin/echo "SWAP OK: No need to check on this host"
 {%- endif %}
 
 load_average:

@@ -119,6 +119,7 @@ class PassiveDaemon(object):
         except OSError as e:
             logger.error('Check %s with command %r failed. %s',
                          check_name, command, e, exc_info=True)
+            return
 
         output, errors = p.communicate()
         if p.returncode not in (0, 1, 2, 3) or errors:

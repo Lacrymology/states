@@ -29,4 +29,4 @@ Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
 # {{ pillar['message_do_not_modify'] }}
 set -e
 
-/usr/local/bin/backup-file -e dovecot /var mail
+/usr/local/bin/backup-file -e dovecot /var mail --exclude '*.lock'

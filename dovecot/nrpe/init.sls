@@ -105,4 +105,24 @@ dovecot_add_spam_mailbox_for_check_user:
       - module: dovecot_check_mail_stack
       - pkg: nagios-nrpe-server
       - file: /etc/nagios/check_mail_stack.yml
-{%- endif %}
+
+{%- else %}
+
+dovecot_check_mail_stack:
+  file:
+    - absent
+    - name: /usr/local/nagios/salt-check-mail-stack-requirements.txt
+
+/etc/nagios/check_mail_stack.yml:
+  file:
+    - absent
+
+/etc/nagios/check_mail_stack.yml:
+  file:
+    - absent
+
+/usr/lib/nagios/plugins/check_mail_stack.py:
+  file:
+    - absent
+
+{%- endif -%}

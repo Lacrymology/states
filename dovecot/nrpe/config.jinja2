@@ -63,13 +63,13 @@ dovecot_imap:
 dovecot_port_pop3:
   description: Dovecot POP3 Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 110
-{%- endif %}
+{%- endif -%}
 
-{% if not salt['pillar.get']('__test__', False) %}
+{%- if not salt['pillar.get']('__test__', False) and salt['pillar.get']('mail:check_mail_stack', False) %}
 mailstack_functionality:
   description: Mail Stack Functionality
   command: /usr/lib/nagios/plugins/check_mail_stack.py
-{%- endif %}
+{%- endif -%}
 
-{#- TODO: http://wiki2.dovecot.org/RunningDovecot add more processes #}
-{#- TODO: use /usr/lib/nagios/plugins/check_spop #}
+{#- TODO: http://wiki2.dovecot.org/RunningDovecot add more processes -#}
+{#- TODO: use /usr/lib/nagios/plugins/check_spop -#}

@@ -36,18 +36,10 @@ Optional
 Example::
 
   mysql:
-    utf8: True/False
     bind: 0.0.0.0
     password: root_plaintext_password
 
 .. TODO: NOT THIS NOT DEFAULT?
-
-mysql:utf8
-~~~~~~~~~~
-
-Enable or disable charset ``utf8``. If disable, ``Latin1`` charset will be used.
-
-Default: ``False``.
 
 mysql:bind
 ~~~~~~~~~~

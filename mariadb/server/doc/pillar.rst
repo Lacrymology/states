@@ -36,10 +36,19 @@ Optional
 Example::
 
   mysql:
+    ssl: example.com
     bind: 0.0.0.0
     password: root_plaintext_password
 
 .. TODO: NOT THIS NOT DEFAULT?
+
+mysql:ssl
+~~~~~~~~~
+
+The name of the SSL certificate and key files to use for establishing a secure
+connection.
+
+Default: ``False``.
 
 mysql:bind
 ~~~~~~~~~~

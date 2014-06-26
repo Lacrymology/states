@@ -40,6 +40,9 @@ include:
   - mariadb.nrpe
   - nrpe
   - salt.minion.nrpe
+{%- if salt['pillar.get']('mysql:ssl', False) %}
+  - ssl.nrpe
+{%- endif %}
 
 /etc/nagios/nrpe.d/mysql.cfg:
   file:

@@ -40,9 +40,11 @@ include:
 {% if salt['pillar.get']('roundcube:ssl', False) %}
   - ssl.nrpe
   - sslyze
+  - dnsutils
 
     {%- call passive_check('roundcube') -%}
 - file: /usr/lib/nagios/plugins/check_ssl_configuration.py
+- pkg: dnsutils
     {%- endcall %}
 {%- else %}
     {{ passive_check('roundcube') }}

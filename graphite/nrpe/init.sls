@@ -46,9 +46,11 @@ include:
 {% if salt['pillar.get']('graphite:ssl', False) %}
   - ssl.nrpe
   - sslyze
+  - dnsutils
 
     {%- call passive_check('graphite') -%}
 - file: /usr/lib/nagios/plugins/check_ssl_configuration.py
+- pkg: dnsutils
     {%- endcall %}
 {%- else %}
     {{ passive_check('graphite') }}

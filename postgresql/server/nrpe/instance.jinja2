@@ -34,7 +34,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 {%- macro postgresql_instance_prefix(deployment, prefix=None) -%}
     {%- if not prefix -%}
         {%- set prefix = deployment -%}
-    {%- endif -%}
+    {%- endif %}
 {{ deployment }}_postgresql:
   description: {{ deployment|capitalize }} PostgreSQL Database
   command: /usr/lib/nagios/plugins/check_pgsql -H 127.0.0.1 -P 5432 -d {{ salt['pillar.get'](prefix + ':db:name', deployment) }} -l {{ salt['pillar.get'](prefix + ':db:username', deployment) }} -p {{ salt['password.pillar'](prefix + ':db:password', 10) }}

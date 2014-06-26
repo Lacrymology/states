@@ -38,6 +38,9 @@ Install MariaDB, a database server which is a drop-in replacement for MySQL.
 include:
   - apt
   - mariadb
+{% if salt['pillar.get']('mysql:ssl', False) %}
+  - ssl
+{% endif %}
 
 /etc/mysql:
   file:
@@ -97,6 +100,9 @@ mysql-server:
     - order: 50
     - watch:
       - file: /etc/mysql/my.cnf
+{%- if salt['pillar.get']('mysql:ssl', False) %}
+      - cmd: ssl_cert_and_key_for_{{ pillar['mysql']['ssl'] }}
+{%- endif %}
     - require:
       - pkg: mysql-server
   debconf:
@@ -107,3 +113,12 @@ mysql-server:
         'mysql-server/root_password_again': {'type': 'password', 'value': {{ salt['password.pillar']('mysql:password') }}}
     - require:
       - pkg: apt_sources
+  user:
+    - present
+    - name: mysql
+  {%- if salt['pillar.get']('mysql:ssl', False) %}
+    - groups:
+      - ssl-cert
+  {%- endif %}
+    - require:
+      - pkg: mariadb-server

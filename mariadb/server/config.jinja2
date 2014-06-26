@@ -61,6 +61,9 @@ Default is Latin1. Use utf-8 if global pillar encoding contain
 {%- endif %}
 
 [client]
+{%- if salt['pillar.get']('mysql:ssl', False) %}
+ssl-ca = /etc/ssl/certs/{{ pillar['mysql']['ssl'] }}_ca.crt
+{%- endif %}
 port = 3306
 socket = /var/run/mysqld/mysqld.sock
 {%- if use_utf8 %}
@@ -72,6 +75,11 @@ socket = /var/run/mysqld/mysqld.sock
 nice = 0
 
 [mysqld]
+{%- if salt['pillar.get']('mysql:ssl', False) %}
+{%- set certname = pillar['mysql']['ssl'] %}
+ssl-cert = /etc/ssl/certs/{{ certname }}.crt
+ssl-key = /etc/ssl/private/{{ certname }}.pem
+{%- endif %}
 user = mysql
 pid-file = /var/run/mysqld/mysqld.pid
 socket = /var/run/mysqld/mysqld.sock

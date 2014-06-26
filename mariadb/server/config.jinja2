@@ -53,16 +53,19 @@ especially if they contain "#" chars...
 Remember to edit /etc/mysql/debian.cnf when changing the socket location.
 
 * Character sets
-Default is Latin1, if you need UTF-8 set all this (in both client and server
-sections)
+Default is Latin1. Use utf-8 if global pillar encoding contain
+'UTF-8'.
 #}
+{%- if 'UTF-8' in pillar.get(encoding, 'en_US.UTF-8') %}
+{%- set use_utf8 = True %}
+{%- endif %}
 
 [client]
 port = 3306
 socket = /var/run/mysqld/mysqld.sock
-{%- if salt['pillar.get']('mysql:utf8', False) %}
+{%- if use_utf8 %}
 default-character-set = utf8
-{%- endif -%}
+{%- endif %}
 
 [mysqld_safe]
 socket = /var/run/mysqld/mysqld.sock
@@ -80,7 +83,7 @@ tmpdir = /tmp
 lc_messages_dir = /usr/share/mysql
 lc_messages = en_US
 skip-external-locking
-{%- if salt['pillar.get']('mysql:utf8', False) %}
+{%- if use_utf8 %}
 character-set-server  = utf8
 collation-server      = utf8_general_ci
 character_set_server   = utf8

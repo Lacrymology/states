@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Bruno Clermont
+Copyright (c) 2014, Quan Tong Anh
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,37 +22,8 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Bruno Clermont <patate@fastmail.cn>
-Maintainer: Bruno Clermont <patate@fastmail.cn>
-
-Nagios NRPE check for Sentry.
+Author: Quan Tong Anh <quanta@robotinfra.com>
+Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
-{%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - apt.nrpe
-  - memcache.nrpe
-  - nginx.nrpe
-  - nrpe
-  - pip.nrpe
-  - postgresql.nrpe
-  - postgresql.server.nrpe
-  - python.dev.nrpe
-  - rsyslog.nrpe
-{% if 'graphite_address' in pillar %}
-  - statsd.nrpe
-{% endif %}
-  - sudo.nrpe
-  - uwsgi.nrpe
-  - virtualenv.nrpe
-{% if salt['pillar.get']('sentry:ssl', False) %}
-  - ssl.nrpe
-  - sslyze
-  - dnsutils
-
-    {%- call passive_check('sentry') -%}
-- file: /usr/lib/nagios/plugins/check_ssl_configuration.py
-- pkg: dnsutils
-    {%- endcall %}
-{%- else %}
-    {{ passive_check('sentry') }}
-{%- endif %}

@@ -45,9 +45,11 @@ include:
 {%- if salt['pillar.get']('openerp:ssl', False) %}
   - ssl.nrpe
   - sslyze
+  - dnsutils
 
     {%- call passive_check('openerp') -%}
 - file: /usr/lib/nagios/plugins/check_ssl_configuration.py
+- pkg: dnsutils
     {%- endcall %}
 {%- else %}
     {{ passive_check('openerp') }}

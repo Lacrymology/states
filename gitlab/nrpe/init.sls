@@ -55,9 +55,11 @@ include:
 {%- if salt['pillar.get']('gitlab:ssl', False) %}
   - ssl.nrpe
   - sslyze
+  - dnsutils
 
     {%- call passive_check('gitlab') -%}
 - file: /usr/lib/nagios/plugins/check_ssl_configuration.py
+- pkg: dnsutils
     {%- endcall %}
 {%- else %}
     {{ passive_check('gitlab') }}

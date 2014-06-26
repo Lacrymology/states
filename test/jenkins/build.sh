@@ -38,6 +38,14 @@ cd common
 pip install -r doc/requirements.txt
 doc/build.py
 
+if [ "$1" == "--profile" ]; then
+    profile=$2
+    shift
+    shift
+else
+    profile='ci-minion'
+fi
+
 # allow multiple --repo options to get all non-common reporitories
 # each value passed to  --repo is relative path to user-specific directory from
 # $WORKSPACE. The structure after all SCM checkout looks like:
@@ -46,6 +54,7 @@ doc/build.py
 #  - repo1
 #  - repo2
 # then use --repo repo1 --repo repo2
+# NOTICE --repo must come after --profile if --profile is used.
 repos=()
 cntr=0
 while [ "${1}" = '--repo' ]; do
@@ -57,14 +66,6 @@ done
 
 # create archive from common, pillar, and all user-specific formulas repos
 ./bootstrap_archive.py ../pillar ${repos[@]} > /srv/salt/jenkins_archives/$JOB_NAME-$BUILD_NUMBER.tar.gz
-
-if [ "$1" == "--profile" ]; then
-    profile=$2
-    shift
-    shift
-else
-    profile='ci-minion'
-fi
 
 sudo salt-cloud --profile $profile integration-$JOB_NAME-$BUILD_NUMBER
 sudo salt -t 600 "integration-$JOB_NAME-$BUILD_NUMBER" cmd.run "hostname integration-$JOB_NAME-$BUILD_NUMBER"

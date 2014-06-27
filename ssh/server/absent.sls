@@ -45,6 +45,6 @@ openssh-server:
   file:
     - absent
 
-/usr/local/bin/robotinfra-shell-wrapper:
+/usr/local/bin/root-shell-wrapper:
   file:
     - absent

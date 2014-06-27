@@ -68,18 +68,18 @@ ssh_server_root_{{ key }}:
     - user: root
     - enc: {{ pillar['root_keys'][user][key] }}
     - options:
-      - command="/usr/local/bin/robotinfra-shell-wrapper {{ user }}"
+      - command="/usr/local/bin/root-shell-wrapper {{ user }}"
     - require:
-      - file: /usr/local/bin/robotinfra-shell-wrapper
+      - file: /usr/local/bin/root-shell-wrapper
     - require_in:
       - service: openssh-server
   {% endfor %}
 {% endfor %}
 
-/usr/local/bin/robotinfra-shell-wrapper:
+/usr/local/bin/root-shell-wrapper:
   file:
     - managed
-    - source: salt://ssh/server/robotinfra-shell-wrapper.sh
+    - source: salt://ssh/server/root-shell-wrapper.sh
     - user: root
     - group: root
     - mode: 755

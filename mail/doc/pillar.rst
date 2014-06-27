@@ -53,3 +53,43 @@ mail:mailname
 ~~~~~~~~~~~~~
 
 Fully qualified domain (if possible) of the mail server hostname.
+
+Optional
+--------
+
+Example::
+
+  mail:
+    mailname: robotinfra.com
+    postmaster: test@robotinfra.com
+    check_mail_stack:
+      username: check_mail_stack
+      smtp_server: localhost
+
+mail:check_mail_stack
+~~~~~~~~~~~~~~~~~~~~~
+
+Pillar keys for nrpe check funtionality of a mail stack. If this pillar key
+is not defined, the NRPE check will not be enabled.
+
+mail:check_mail_stack:username
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Username of mail account dedicated for testing, do not use in common with other
+account. Do not need to specify the domain path of this username. This must be
+one pillar key defined in :doc:`/openldap/doc/index`.
+
+mail:check_mail_stack:smtp_server
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+SMTP server used for sending email, as the NRPE check is installed on
+dovecot server, SMTP server does not always need to be allocated in the same
+server.
+
+mail:check_mail_stack:smtp_wait
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Time to wait after send an email. As the mail processing may take time to
+scan and transport the email.
+
+Default: ``7``

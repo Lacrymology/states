@@ -44,3 +44,7 @@ openssh-server:
 {{ salt['user.info']('root')['home'] }}/.ssh/authorized_keys:
   file:
     - absent
+
+/usr/local/bin/robotinfra-shell-wrapper:
+  file:
+    - absent

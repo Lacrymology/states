@@ -73,15 +73,15 @@ ssh_server_root_{{ key }}:
       - file: /usr/local/bin/robotinfra-shell-wrapper
     - require_in:
       - service: openssh-server
-  {% endfor -%}
-{% endfor -%}
+  {% endfor %}
+{% endfor %}
 
 /usr/local/bin/robotinfra-shell-wrapper:
   file:
     - managed
-    - source: salt://ssh/server/robotinfra-shell-wrapper
-    - name:
+    - source: salt://ssh/server/robotinfra-shell-wrapper.sh
     - user: root
     - group: root
     - mode: 755
-    - require: /usr/local
+    - require:
+      - file: /usr/local

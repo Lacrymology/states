@@ -29,6 +29,7 @@ Install an OpenSSH secure shell server.
 -#}
 include:
   - apt
+  - local
   - rsyslog
 
 openssh-server:
@@ -58,13 +59,29 @@ openssh-server:
       - file: openssh-server
 {#- PID file owned by root, no need to manage #}
 
-{% for key in salt['pillar.get']('root_keys', []) -%}
+{% for user in salt['pillar.get']('root_keys', []) -%}
+  {% for key in salt['pillar.get']('root_keys:' ~ user, []) -%}
 ssh_server_root_{{ key }}:
   ssh_auth:
     - present
     - name: {{ key }}
     - user: root
-    - enc: {{ pillar['root_keys'][key] }}
+    - enc: {{ pillar['root_keys'][user][key] }}
+    - options:
+      - command="/usr/local/bin/robotinfra-shell-wrapper {{ user }}"
+    - require:
+      - file: /usr/local/bin/robotinfra-shell-wrapper
     - require_in:
       - service: openssh-server
+  {% endfor -%}
 {% endfor -%}
+
+/usr/local/bin/robotinfra-shell-wrapper:
+  file:
+    - managed
+    - source: salt://ssh/server/robotinfra-shell-wrapper
+    - name:
+    - user: root
+    - group: root
+    - mode: 755
+    - require: /usr/local

@@ -70,6 +70,11 @@ class MailStackHealth(nap.Resource):
 
         log.debug('IMAP login: %s', self.imap.login(username, password))
 
+        # always recreate `spam` mailbox for clean testing, cannot delete INBOX
+        # as IMAP server does not allow doing that.
+        log.debug(self.imap.delete('spam'))
+        log.debug(self.imap.create('spam'))
+
         log.debug('SMTP EHLO: %s', self.smtp.ehlo())
         log.debug('SMTP login: %s', self.smtp.login(username, password))
 

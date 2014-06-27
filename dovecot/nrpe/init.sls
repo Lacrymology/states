@@ -69,16 +69,6 @@ dovecot_check_mail_stack:
 {%- set mailaddr = username + '@' + mailname %}
 {%- set password = pillar['ldap']['data'][mailname][username]['passwd'] %}
 
-dovecot_add_spam_mailbox_for_check_user:
-  cmd:
-    - wait
-    - name: doveadm mailbox create -u {{ mailaddr }} spam
-    - watch:
-      - file: dovecot_check_mail_stack
-    - require:
-      - service: dovecot
-      - file: openldap_formula_interface
-
 /etc/nagios/check_mail_stack.yml:
   file:
     - managed

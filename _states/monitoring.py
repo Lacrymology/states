@@ -32,6 +32,7 @@ __maintainer__ = 'Hung Nguyen Viet'
 __email__ = 'hvnsweeting@gmail.com'
 
 import logging
+import os
 import time
 
 import salt.utils
@@ -101,7 +102,13 @@ def managed(name, source=None, template='jinja',
     # generate nrpe config from rendered yaml file
     log.debug("Parsing yaml file from %s", sfn)
     with open(sfn) as f:
-        loaded = yamlloader.load(f, Loader=yamlloader.CustomLoader)
+        try:
+            loaded = yamlloader.load(f, Loader=yamlloader.CustomLoader)
+        except Exception, err:
+            f.seek(0)
+            log.error("Content of failed YAML for %s:%s%s", name, os.linesep,
+                      f.read())
+            raise err
 
     lines = []
     for check_name in loaded:

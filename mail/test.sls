@@ -22,4 +22,5 @@ test_check_mail_stack:
   cmd:
     - run
     - name: /usr/lib/nagios/plugins/check_mail_stack.py
-    - order: last
+    - require:
+      - file: /usr/lib/nagios/plugins/check_mail_stack.py

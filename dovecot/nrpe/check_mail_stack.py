@@ -58,12 +58,18 @@ class MailStackHealth(nap.Resource):
                  smtp_server,
                  username,
                  password,
-                 smtp_wait):
+                 smtp_wait,
+                 ssl):
 
-        self.imap = imaplib.IMAP4_SSL(imap_server)
+        if ssl:
+            self.imap = imaplib.IMAP4_SSL(imap_server)
+            self.smtp = smtplib.SMTP_SSL(smtp_server, 465)
+        else:
+            self.imap = imaplib.IMAP4(imap_server)
+            self.smtp = smtplib.SMTP(smtp_server)
+
         log.debug('IMAP login: %s', self.imap.login(username, password))
 
-        self.smtp = smtplib.SMTP_SSL(smtp_server, 465)
         log.debug('SMTP EHLO: %s', self.smtp.ehlo())
         log.debug('SMTP login: %s', self.smtp.login(username, password))
 
@@ -73,8 +79,8 @@ class MailStackHealth(nap.Resource):
 
     def probe(self):
         try:
-            spamtest = self.test_send_and_receive_GTUBE_spam_in_spam_folder()
             inboxtest = self.test_send_and_receive_email_in_inbox_mailbox()
+            spamtest = self.test_send_and_receive_GTUBE_spam_in_spam_folder()
             virustest = self.test_send_virus_email_and_discarded_by_amavis()
         except Exception as e:
             log.error(e, exc_info=True)
@@ -153,12 +159,13 @@ def main():
         password = mail['password']
         imap_server = mail['imap_server']
         smtp_server = mail['smtp_server']
+        ssl = mail['ssl']
     except Exception as e:
         log.critical('Bad config: %s', e, exc_info=True)
         sys.exit(1)
 
     mshealth = MailStackHealth(imap_server, smtp_server, username, password,
-                               waittime)
+                               waittime, ssl)
     check = nap.Check(mshealth)
     check.main(timeout=300)
 

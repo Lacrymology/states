@@ -283,6 +283,7 @@ nsca_passive:
     - running
     - require:
       - service: rsyslog
+      - pkg: nagios-nrpe-server
     - watch:
       - file: nsca_passive
       - file: /usr/local/nagios/bin/nsca_passive

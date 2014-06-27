@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-{%- macro nginx_instance(deployment, http=True, http_uri='/', http_result=None, http_port=80, https_uri=None, https_result="200 OK", prefix=None, timeout=False, domain_name=None) -%}
+{%- macro nginx_instance(deployment, http=True, http_uri='/', http_result=None, http_port=80, https_uri=None, https_result="200 OK", prefix=None, timeout=False, domain_name=None, allow_ssl_redirect=True) -%}
     {%- set first_ip = salt['network.ip_addrs']()[0] -%}
     {%- if not prefix -%}
         {%- set prefix = deployment -%}
@@ -33,8 +33,12 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
     {%- if not domain_name -%}
         {%- set domain_name = salt['pillar.get'](prefix + ':hostnames', ['127.0.0.1'])[0] -%}
     {%- endif %}
-    {#- if http is redirected to https, force a specific header -#}
-    {%- if salt['pillar.get'](prefix + ':ssl_redirect', False) -%}
+    {#- if allow_ssl_redirect is True (because we can't trust pillar value in
+        every cases.
+        and pillar value ask for it
+        http is redirected to https, force a specific header.
+      -#}
+    {%- if salt['pillar.get'](prefix + ':ssl_redirect', False) and allow_ssl_redirect -%}
         {%- set http_result="301 Moved Permanently" -%}
     {%- elif not http_result -%}
         {%- set http_result="200 OK" -%}

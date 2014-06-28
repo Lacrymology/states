@@ -67,7 +67,8 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
   freshness_threshold: {{ (1440 + 10) * 60 }}
   command: /usr/lib/nagios/plugins/check_http -S -H {{ domain_name }} -C {{ salt['pillar.get']('ssl_https_max_age', 60) }} -I {{ first_ip }}
 
-        {%- if not salt['dig.check_ip'](domain_name) -%}
+        {%- if not salt['dig.check_ip'](domain_name) %}
+
 {{ deployment }}_ssl_configuration:
   description: {{ deployment|capitalize }} SSL Configuration
   check_interval: 1440

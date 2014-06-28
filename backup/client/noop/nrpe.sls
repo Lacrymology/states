@@ -27,6 +27,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmil.com>
 -#}
 include:
   - nrpe
+  - bash.nrpe
 
 /usr/lib/nagios/plugins/check_backup.py:
   file:

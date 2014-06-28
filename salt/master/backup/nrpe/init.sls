@@ -29,6 +29,7 @@ Nagios NRPE check for Salt Master backup
 -#}
 include:
   - backup.client.{{ pillar['backup_storage'] }}.nrpe
+  - bash.nrpe
   - cron.nrpe
   - nrpe
 

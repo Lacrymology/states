@@ -35,6 +35,7 @@ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
 Backup client for djangopypi2.
 -#}
 include:
+  - bash
   - cron
   - postgresql.server.backup
   - backup
@@ -52,3 +53,4 @@ backup-djangopypi2:
       - pkg: cron
       - file: /usr/local/bin/backup-postgresql
       - file: /usr/local/bin/backup-file
+      - file: bash

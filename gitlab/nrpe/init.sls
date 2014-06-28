@@ -37,6 +37,7 @@ Install a GitLab Nagios NRPE checks.
 {%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - apt.nrpe
+  - bash.nrpe
   - build.nrpe
   - git.nrpe
   - logrotate.nrpe

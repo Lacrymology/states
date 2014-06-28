@@ -35,6 +35,7 @@ Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
 Backup client for graylog2.
 -#}
 include:
+  - bash
   - cron
   - mongodb.backup
 
@@ -50,3 +51,4 @@ backup-graylog2:
     - require:
       - pkg: cron
       - file: /usr/local/bin/backup-mongodb
+      - file: bash

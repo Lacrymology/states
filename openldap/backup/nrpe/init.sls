@@ -27,3 +27,4 @@ Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
 -#}
 include:
   - cron.nrpe
+  - bash.nrpe

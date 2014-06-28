@@ -29,6 +29,7 @@ Nagios NRPE check for uWSGI.
 -#}
 {%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
+  - bash
   - git.nrpe
   - nrpe
   - python.dev.nrpe
@@ -81,6 +82,7 @@ include:
     - require:
       - pkg: nagios-nrpe-server
       - user: web
+      - file: bash
 
 {%- call passive_check('uwsgi') %}
     - file: /usr/lib/nagios/plugins/check_uwsgi_nostderr

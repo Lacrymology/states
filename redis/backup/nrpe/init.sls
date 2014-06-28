@@ -26,4 +26,5 @@ Author: Luan Vo Ngoc <ngocluanvo@gmail.com>
 Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
 -#}
 include:
+  - bash.nrpe
   - cron.nrpe

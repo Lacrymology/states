@@ -30,6 +30,7 @@ Nagios NRPE check for Graphite.
 {%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - apt.nrpe
+  - bash.nrpe
   - graphite.common.nrpe
   - memcache.nrpe
   - nginx.nrpe

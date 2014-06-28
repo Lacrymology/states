@@ -26,6 +26,9 @@ Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
 include:
+  - amavis
+  - amavis.nrpe
+  - amavis.diamond
   - dovecot
   - dovecot.backup
   - dovecot.backup.nrpe
@@ -47,3 +50,10 @@ test:
     - require:
       - file: backup-dovecot
     - order: last
+
+test_check_mail_stack:
+  cmd:
+    - run
+    - name: /usr/lib/nagios/plugins/check_mail_stack.py
+    - require:
+      - file: /usr/lib/nagios/plugins/check_mail_stack.py

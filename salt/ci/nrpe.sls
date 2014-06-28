@@ -27,6 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
             Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
 include:
+  - bash.nrpe
   - jenkins.nrpe
   - rsync.nrpe
   - salt.cloud.nrpe

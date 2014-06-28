@@ -26,6 +26,7 @@ Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
 include:
+  - bash
   - cron
   - backup
 
@@ -41,3 +42,4 @@ backup-carbon:
     - require:
       - pkg: cron
       - file: /usr/local/bin/backup-file
+      - file: bash

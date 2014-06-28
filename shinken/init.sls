@@ -30,6 +30,7 @@ Common stuff for all shinken components.
 {% set version = "1.4" %}
 include:
   - apt
+  - bash
   - local
   - pip
   - python.dev
@@ -48,6 +49,7 @@ include:
     - source: salt://shinken/shinken-ctl.jinja2
     - require:
       - file: /usr/local
+      - file: bash
 
 {% for dirname in ('log', 'lib') %}
 /var/{{ dirname }}/shinken:

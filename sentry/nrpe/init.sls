@@ -30,6 +30,7 @@ Nagios NRPE check for Sentry.
 {%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - apt.nrpe
+  - bash.nrpe
   - memcache.nrpe
   - nginx.nrpe
   - nrpe

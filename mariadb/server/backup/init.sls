@@ -36,6 +36,7 @@ Maintainer: Dang Tung Lam <lamdt@familug.org>
 -#}
 
 include:
+  - bash
   - local
   - backup.client
 
@@ -54,6 +55,7 @@ include:
     - require:
       - file: /usr/local
       - file: /usr/local/bin/backup-store
+      - file: bash
 
 /usr/local/bin/backup-mysql-all:
   file:
@@ -66,3 +68,4 @@ include:
     - require:
       - file: /usr/local
       - file: /usr/local/bin/backup-store
+      - file: bash

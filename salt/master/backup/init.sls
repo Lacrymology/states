@@ -28,6 +28,7 @@ Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
 Backup for Salt Master.
 -#}
 include:
+  - bash
   - cron
   - backup
 
@@ -43,3 +44,4 @@ backup-saltmaster:
     - require:
       - pkg: cron
       - file: /usr/local/bin/backup-file
+      - file: bash

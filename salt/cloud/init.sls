@@ -26,6 +26,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
 include:
   - apt
+  - bash
   - salt
   - pip
 
@@ -87,3 +88,4 @@ salt-cloud-boostrap-script:
     - template: jinja
     - require:
       - pkg: salt-cloud
+      - file: bash

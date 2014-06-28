@@ -28,6 +28,7 @@ Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
 Backup client for Elasticsearch.
 -#}
 include:
+  - bash
   - backup.client
   - cron
   - pip
@@ -44,6 +45,7 @@ backup-elasticsearch:
     - require:
       - pkg: cron
       - file: /usr/local/bin/backup-store
+      - file: bash
       - module: esclient
 
 {#- TODO: remove that statement in >= 2014-04 #}

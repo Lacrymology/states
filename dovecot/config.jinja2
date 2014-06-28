@@ -74,6 +74,7 @@ ssl_cipher_list = EDH+CAMELLIA:EDH+aRSA:EECDH+aRSA+AESGCM:EECDH+aRSA+SHA384:EECD
 ssl_key = </etc/ssl/private/{{ ssl }}.key
 {%- else %}
 ssl = no
+disable_plaintext_auth = no
 {%- endif %}
 userdb {
   args = /etc/dovecot/dovecot-ldap.conf.ext

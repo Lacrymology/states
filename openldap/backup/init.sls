@@ -28,6 +28,7 @@ Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
 Backup for Openldap.
 -#}
 include:
+  - bash
   - cron
   - backup.client
 
@@ -43,3 +44,4 @@ backup-openldap:
     - require:
       - pkg: cron
       - file: /usr/local/bin/backup-store
+      - file: bash

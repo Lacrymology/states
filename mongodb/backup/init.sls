@@ -29,6 +29,7 @@ Backup client for MongoDB.
 -#}
 
 include:
+  - bash
   - local
   - backup.client
 
@@ -43,6 +44,7 @@ include:
     - require:
       - file: /usr/local
       - file: /usr/local/bin/backup-store
+      - file: bash
 
 /usr/local/bin/backup-mongodb-all:
   file:
@@ -55,3 +57,4 @@ include:
     - require:
       - file: /usr/local
       - file: /usr/local/bin/backup-store
+      - file: bash

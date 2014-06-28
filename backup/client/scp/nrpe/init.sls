@@ -28,6 +28,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 include:
   - backup.client.base
+  - bash.nrpe
   - nrpe
   - ssh.client.nrpe
 {%- if pillar['backup_server']['address'] in grains['ipv4'] or

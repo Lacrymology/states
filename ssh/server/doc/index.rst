@@ -7,3 +7,5 @@ OpenSSH Server
     :glob:
 
     *
+
+See :ref:`root_keys` to allow log in as root account.

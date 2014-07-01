@@ -33,6 +33,7 @@ etherpad_procs:
 etherpad_port:
   description: Etherpad TCP Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 9001
+  service_dependencies: ',etherpad_procs'
 
 {%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
 {{ nginx_instance('etherpad', timeout=60) }}

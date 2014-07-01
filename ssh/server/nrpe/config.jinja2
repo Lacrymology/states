@@ -32,3 +32,4 @@ ssh_procs:
 ssh_port:
   description: SSH Server Local Port
   command: "/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p {{ salt['pillar.get']('ssh:ports', [22])[0] }}"
+  service_dependencies: ',ssh_procs'

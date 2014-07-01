@@ -49,6 +49,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
   command: /usr/lib/nagios/plugins/check_http -H {{ domain_name }} -u {{ http_uri }} -p {{ http_port }} -e '{{ http_result }}' -I {{ first_ip }}
     {%- if timeout %} --timeout={{ timeout }}{% endif -%}
     {%- if salt['pillar.get']('__test__', False) %} -v{%- endif %}
+  service_dependencies: ',nginx_master'
 
     {%- if salt['pillar.get'](prefix + ':ssl', False) %}
         {%- if not https_uri -%}
@@ -60,12 +61,14 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
   command: /usr/lib/nagios/plugins/check_http -S -H {{ domain_name }} -u {{ https_uri }} -e '{{ https_result }}' -I {{ first_ip }}
         {%- if timeout %} --timeout={{ timeout }}{% endif -%}
         {%- if salt['pillar.get']('__test__', False) %} -v{%- endif %}
+  service_dependencies: ',nginx_master'
 
 {{ deployment }}_nginx_https_certificate:
   description: {{ deployment|capitalize }} HTTPS Certificate Expiration
   check_interval: 1440 {#- only need to check https certificate each day #}
   freshness_threshold: {{ (1440 + 10) * 60 }}
   command: /usr/lib/nagios/plugins/check_http -S -H {{ domain_name }} -C {{ salt['pillar.get']('ssl_https_max_age', 60) }} -I {{ first_ip }}
+  service_dependencies: ',nginx_master'
 
         {%- if not salt['dig.check_ip'](domain_name) %}
 
@@ -74,6 +77,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
   check_interval: 1440
   freshness_threshold: {{ (1440 + 10) * 60 }}
   command: /usr/lib/nagios/plugins/check_ssl_configuration.py -H {{ domain_name }}
+  service_dependencies: ',nginx_master'
         {%- endif -%}
     {%- endif -%}
-{%- endmacro -%}
+{%- endmacro %}

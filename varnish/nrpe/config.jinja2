@@ -35,3 +35,4 @@ varnish_procs:
 varnish_status:
   description: Varnish HTTP status
   command: /usr/lib/nagios/plugins/check_http -I {{ listen_address }} -p {{ listen_port }}
+  service_dependencies: ',varnish_procs'

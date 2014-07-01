@@ -32,6 +32,7 @@ proftpd_procs:
 proftpd_port:
   description: ProFTPD Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 21
+  service_dependencies: ',proftpd_procs'
 
 {%- from 'postgresql/server/nrpe/instance.jinja2' import postgresql_instance_prefix with context %}
 {{ postgresql_instance_prefix('proftpd') }}

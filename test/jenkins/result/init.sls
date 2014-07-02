@@ -89,6 +89,10 @@ ci-agent:
 {%- set result_file = '/home/ci-agent/result.xml' -%}
 {%- set test_files = salt['file.find']('/root/salt/', name='TEST-*-salt.xml') %}
 
+openssh-client:
+  pkg:
+    - installed
+
 test_result:
   file:
 {%- if test_files -%}
@@ -110,6 +114,7 @@ test_result:
       - file: test_result
       - file: /home/ci-agent/.ssh/known_hosts
       - file: /home/ci-agent/.ssh/id_rsa
+      - pkg: openssh-client
 
 {%- for type in ('stdout', 'stderr') %}
 {{ type }}:
@@ -126,4 +131,5 @@ scp_{{ type }}_to_master:
       - cmd: {{ type }}
       - file: /home/ci-agent/.ssh/known_hosts
       - file: /home/ci-agent/.ssh/id_rsa
+      - pkg: openssh-client
 {%- endfor %}

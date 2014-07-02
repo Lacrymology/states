@@ -109,10 +109,18 @@ elasticsearch:
       origin_state: elasticsearch
     - require:
       - pkg: elasticsearch
+  process:
+    - wait
+    - name: '-Delasticsearch'
+    - timeout: 10
+    - require:
+      - pkg: elasticsearch
   service:
     - running
     - enable: True
     - order: 50
+    - require:
+      - process: elasticsearch
     - watch:
       - file: /etc/default/elasticsearch
       - file: /etc/elasticsearch/logging.yml

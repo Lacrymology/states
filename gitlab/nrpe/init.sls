@@ -50,13 +50,13 @@ include:
   - redis.nrpe
   - rsyslog.nrpe
   - ruby.nrpe
+  - salt.minion
   - ssh.server.nrpe
   - uwsgi.nrpe
   - xml.nrpe
 {%- if salt['pillar.get']('gitlab:ssl', False) %}
   - ssl.nrpe
   - sslyze
-  - dnsutils
 
     {%- call passive_check('gitlab') -%}
 - file: /usr/lib/nagios/plugins/check_ssl_configuration.py

@@ -34,11 +34,11 @@ include:
   - nrpe
   - rsync.nrpe
   - rsyslog.nrpe
+  - salt.minion
   - ssh.server.nrpe
 {% if salt['pillar.get']('salt_archive:ssl', False) %}
   - ssl.nrpe
   - sslyze
-  - dnsutils
 
     {%- call passive_check('salt.archive.server') -%}
 - file: /usr/lib/nagios/plugins/check_ssl_configuration.py

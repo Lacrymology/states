@@ -39,6 +39,7 @@ include:
   - postgresql.server.nrpe
   - python.dev.nrpe
   - rsyslog.nrpe
+  - salt.minion
 {% if 'graphite_address' in pillar %}
   - statsd.nrpe
 {% endif %}
@@ -48,7 +49,6 @@ include:
 {% if salt['pillar.get']('sentry:ssl', False) %}
   - ssl.nrpe
   - sslyze
-  - dnsutils
 
     {%- call passive_check('sentry') -%}
 - file: /usr/lib/nagios/plugins/check_ssl_configuration.py

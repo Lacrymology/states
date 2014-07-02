@@ -54,9 +54,11 @@ extend:
       - watch:
         - module: salt_minion_master_key
     pkg:
-      - pkgs:
+      - names:
         - salt-minion
         - lsb-release
+        - unzip
+        - dnsutils
 {%- if grains['virtual'] != 'openvzve' %}
         - pciutils
         - dmidecode

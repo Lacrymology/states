@@ -35,10 +35,10 @@ include:
   - nginx.nrpe
   - nrpe
   - postgresql.server.nrpe
+  - salt.minion
 {%- if salt['pillar.get']('ejabberd:ssl', False) %}
   - ssl.nrpe
   - sslyze
-  - dnsutils
 
     {%- call passive_check('ejabberd') -%}
 - file: /usr/lib/nagios/plugins/check_ssl_configuration.py

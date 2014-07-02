@@ -32,7 +32,7 @@ include:
   - local
   - nrpe
   - virtualenv
-  - unzip
+  - salt.minion
 
 {%- if grains['osarch'] == 'amd64' -%}
     {%- set bits = "64" -%}

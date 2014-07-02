@@ -40,6 +40,7 @@ include:
   - postgresql.server.nrpe
   - python.dev.nrpe
   - rsyslog.nrpe
+  - salt.minion
   - statsd.nrpe
   - sudo.nrpe
   - uwsgi.nrpe
@@ -47,7 +48,6 @@ include:
 {% if salt['pillar.get']('graphite:ssl', False) %}
   - ssl.nrpe
   - sslyze
-  - dnsutils
 
     {%- call passive_check('graphite') -%}
 - file: /usr/lib/nagios/plugins/check_ssl_configuration.py

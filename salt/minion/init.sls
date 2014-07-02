@@ -92,3 +92,7 @@ salt-fire-event:
     - group: root
     - require:
       - pkg: salt-minion
+
+python-psutil:
+  pkg:
+    - installed

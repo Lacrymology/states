@@ -43,7 +43,7 @@ To only keep precise::
 include:
   - apt
 
-{%- set version = '0.17.5-1' %}
+{%- set version = '2014.1.5-5' %}
 {%- for i in ('list', 'list.save') %}
 salt_absent_old_apt_salt_{{ i }}:
   file:

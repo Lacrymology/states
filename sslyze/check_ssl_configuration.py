@@ -40,6 +40,7 @@ from datetime import datetime
 import socket
 import argparse
 import nagiosplugin as nap
+import re
 
 
 class SslConfiguration(nap.Resource):
@@ -104,7 +105,7 @@ class SslConfiguration(nap.Resource):
                 hostname_validation = c.split(':')[1].lstrip()
                 for i in range(cert_result_list.index(c) + 1, cert_result_list.index(c) + 5):
                     if not cert_result_list[i].split(':')[1].lstrip().startswith('OK'):
-                        is_trusted = cert_result_list[i].split(':')[1].lstrip()
+                        is_trusted = re.split(r':\s{2}', cert_result_list[i])[1].lstrip()
                         break
         
         expire_date = datetime.strptime(not_after, "%b %d %H:%M:%S %Y %Z")

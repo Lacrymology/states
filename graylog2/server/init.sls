@@ -43,6 +43,21 @@ include:
 {%- set user = salt['pillar.get']('graylog2:server:user', 'graylog2') %}
 {%- set mongodb_suffix = '0-20' %}
 
+{# remove old mongodb db: graylog2 #}
+python-pymongo:
+  pkg:
+    - installed
+
+graylog2-old-mongodb:
+  mongodb_database:
+    - absent
+    - name: graylog2
+    - host: 127.0.0.1
+    - port: 27017
+    - require:
+      - pkg: mongodb
+      - pkg: python-pymongo
+
 graylog2-server_upstart:
   file:
     - managed

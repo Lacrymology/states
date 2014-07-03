@@ -27,10 +27,13 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 # {{ pillar['message_do_not_modify'] }}
 
-argparse==1.2.1
 APScheduler==2.1.2
-nagiosplugin==1.1
+PyYAML==3.11
+argparse==1.2.1
 lockfile==0.9.1
+nagiosplugin==1.1
+pycrypto==2.6.1
+pystatsd==0.1.10
 {%- if 'files_archive' in pillar %}
 {{ pillar['files_archive'] }}/pip/send_nsca-0.1.4.2-hvn.tar.gz
 {{ pillar['files_archive'] }}/pip/bfs-0.2.2.tar.gz

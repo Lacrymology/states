@@ -31,20 +31,17 @@ Install a Graylog2 logging server backend.
 include:
   - apt
   - mongodb
-{%- if grains['osrelease']|float < 12.04 %}
-  - java.6
-{%- else %}
   - java.7
-{%- endif %}
   - graylog2
   - local
   - rsyslog
 
 {#- TODO: set Email output plugin settings straight into MongoDB from salt #}
-{%- set version = '0.11.0' %}
-{%- set checksum = 'md5=135c9eb384a03839e6f2eca82fd03502' %}
+{%- set version = '0.20.3' %}
+{%- set checksum = 'md5=41d26cc5d65d275038b972cce1a7c2e6' %}
 {%- set server_root_dir = '/usr/local/graylog2-server-' + version %}
 {%- set user = salt['pillar.get']('graylog2:server:user', 'graylog2') %}
+{%- set mongodb_suffix = '0-20' %}
 
 graylog2-server_upstart:
   file:
@@ -104,13 +101,9 @@ graylog2-server:
     - source: salt://graylog2/server/config.jinja2
     - context:
       version: {{ version }}
+      mongodb_suffix: {{ mongodb_suffix }}
     - require:
       - user: graylog2
-{#
- IMPORTANT:
- graylog2-server need to be restarted after any change in
- mail output plugin settings.
-#}
   service:
     - running
     - enable: True
@@ -121,9 +114,6 @@ graylog2-server:
       - file: graylog2-server
       - file: /etc/graylog2-elasticsearch.yml
       - archive: graylog2-server
-      - cmd: graylog2_email_output_plugin
-      - file: graylog2_sentry_output_plugin
-      - file: graylog2_sentry_transport_plugin
       - user: graylog2
     - require:
       - file: /var/log/graylog2
@@ -167,54 +157,3 @@ graylog2_rsyslog_config:
     - require:
       - archive: graylog2-server
       - user: graylog2
-
-graylog2_email_output_plugin:
-  cmd:
-    - run
-    - name: java -jar graylog2-server.jar --install-plugin email_output --plugin-version 0.10.0
-    - cwd: {{ server_root_dir }}
-    - user: {{ user }}
-    - unless: test -e {{ server_root_dir }}/plugin/outputs/org.graylog2.emailoutput.output.EmailOutput_gl2plugin.jar
-    - require:
-      - file: graylog2-server
-      - file: /etc/graylog2-elasticsearch.yml
-      - archive: graylog2-server
-      - pkg: openjdk_jre_headless
-      - service: mongodb
-      - user: graylog2
-
-graylog2_sentry_output_plugin:
-  file:
-    - managed
-    - name: {{ server_root_dir }}/plugin/outputs/com.bitflippers.sentryoutput.output.SentryOutput_gl2plugin.jar
-{% if 'files_archive' in pillar %}
-    - source: {{ pillar['files_archive'] }}/mirror/graylog2-plugin-sentry-output-0.11.jar
-{% else %}
-    - source: http://archive.robotinfra.com/mirror/graylog2-plugin-sentry-output-0.11.jar
-{% endif %}
-    - source_hash: md5=9f8305a17af8bf6ab80dcab252489ec6
-    - user: {{ user }}
-    - group: {{ user }}
-    - mode: 440
-    - require:
-      - file: graylog2-server
-      - archive: graylog2-server
-      - user: graylog2
-
-graylog2_sentry_transport_plugin:
-  file:
-    - managed
-    - name: {{ server_root_dir }}/plugin/transports/com.bitflippers.sentrytransport.transport.SentryTransport_gl2plugin.jar
-{% if 'files_archive' in pillar %}
-    - source: {{ pillar['files_archive'] }}/mirror/graylog2-plugin-sentry-transport-0.11-1.jar
-{% else %}
-    - source: http://archive.robotinfra.com/mirror/graylog2-plugin-sentry-transport-0.11-1.jar
-{% endif %}
-    - source_hash: md5=7b7982643577aed239efaea62e78104a
-    - require:
-      - file: graylog2-server
-      - archive: graylog2-server
-      - user: graylog2
-    - user: {{ user }}
-    - group: {{ user }}
-    - mode: 440

@@ -32,8 +32,45 @@
 - :doc:`/mongodb/doc/index` :doc:`/mongodb/doc/pillar`
 - :doc:`/rsyslog/doc/index` :doc:`/rsyslog/doc/pillar`
 
+Mandatory
+---------
+
+Example::
+  
+  graylog2:
+    root_password_sha2: 06f8a1541ca80cfe08fe6fe7576c7e37a3480e8d1a12486fc9d85880478ab2cb
+
+graylog2:root_password_sha2
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+shasum of root user's password.
+Create one by using for example: ``echo -n yourpassword | shasum -a 256``
+
 Optional
 --------
+
+graylog2:root_username
+~~~~~~~~~~~~~~~~~~~~~~
+
+root user's username.
+
+Default: ``admin``.
+
+graylogs2:rest_listen_uri
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+REST API listen URI. Must be reachable by other graylog2-server nodes
+if you run a cluster.
+
+Default: ``http://127.0.0.1:12900``.
+
+graylogs2:rest_transport_uri
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+REST API transport address. If not set, the value is same as
+:ref:`graylog2:rest_listen_uri`
+
+Default: ``None``
 
 graylog2:max_docs
 ~~~~~~~~~~~~~~~~~
@@ -64,13 +101,6 @@ The number of replicas for your indices.
 
 Default: ``0``.
 
-graylog2:recent_index_ttl_minutes
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-The number of minutes to show recent index.
-
-Default: ``60``.
-
 graylog2:processbuffer_processors
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -83,7 +113,7 @@ graylog2:outputbuffer_processors
 
 The number of parallel running processors.
 
-Default: ``5``.
+Default: ``3``.
 
 graylog2:processor_wait_strategy
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -98,50 +128,6 @@ graylog2:ring_size
 Size of internal ring buffers. Raise this if raising outputbuffer_processors does not help anymore.
 
 Default: ``1024``.
-
-graylog2:amqp
-~~~~~~~~~~~~~
-
-Enable AMQP (Advanced Message Queuing Protocol).
-If enable, you must define::
-
-  graylog2:
-    amqp:
-      host: amqp.example.com
-      port: 5672
-    rabbitmq:
-      user: username
-      password: userpass
-      vhost: localhost
-
-Default: ``False``.
-
-amqp:host
-~~~~~~~~~
-
-The host address
-`AMQP <https://en.wikipedia.org/wiki/Advanced_Message_Queuing_Protocol>`_
-listens on for requests.
-
-amqp:port
-~~~~~~~~~
-
-The port AMQP listens on for requests.
-
-graylog2:rabbitmq:user
-~~~~~~~~~~~~~~~~~~~~~~
-
-:doc:`/rabbitmq/doc/index` username.
-
-graylog2:rabbitmq:password
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-:doc:`/rabbitmq/doc/index` user password.
-
-graylog2:rabbitmq:vhost
-~~~~~~~~~~~~~~~~~~~~~~~
-
-:doc:`/rabbitmq/doc/index` virtual host.
 
 graylog2:heap_size
 ~~~~~~~~~~~~~~~~~~

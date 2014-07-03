@@ -32,7 +32,7 @@ include:
   - local
   - nrpe
   - virtualenv
-  - salt.minion
+  - salt.minion.deps
 
 {%- if grains['osarch'] == 'amd64' -%}
     {%- set bits = "64" -%}

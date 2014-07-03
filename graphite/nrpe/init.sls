@@ -40,12 +40,12 @@ include:
   - postgresql.server.nrpe
   - python.dev.nrpe
   - rsyslog.nrpe
-  - salt.minion
   - statsd.nrpe
   - sudo.nrpe
   - uwsgi.nrpe
   - virtualenv.nrpe
 {% if salt['pillar.get']('graphite:ssl', False) %}
+  - salt.minion.deps
   - ssl.nrpe
   - sslyze
 

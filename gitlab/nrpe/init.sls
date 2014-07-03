@@ -50,11 +50,11 @@ include:
   - redis.nrpe
   - rsyslog.nrpe
   - ruby.nrpe
-  - salt.minion
   - ssh.server.nrpe
   - uwsgi.nrpe
   - xml.nrpe
 {%- if salt['pillar.get']('gitlab:ssl', False) %}
+  - salt.minion.deps
   - ssl.nrpe
   - sslyze
 

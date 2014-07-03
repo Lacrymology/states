@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Lam Dang Tung
+Copyright (c) 2014, Quan Tong Anh
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,35 +22,22 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Lam Dang Tung <lamdt@familug.org>
-Maintainer: Lam Dang Tung <lamdt@familug.org>
+Author: Quan Tong Anh <quanta@robotinfra.com>
+Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 
-Nagios NRPE check for OpenERP.
+These are required to run some Salt states/modules
+for e.g, `salt.modules.dig` need `dnsutils` to be installed
 -#}
-{%- from 'nrpe/passive.sls' import passive_check with context %}
 
-include:
-  - apt.nrpe
-  - build.nrpe
-  - nginx.nrpe
-  - nrpe
-  - pip.nrpe
-  - postgresql.server.nrpe
-  - python.dev.nrpe
-  - rsyslog.nrpe
-  - underscore.nrpe
-  - uwsgi.nrpe
-  - virtualenv.nrpe
-  - xml.nrpe
-{%- if salt['pillar.get']('openerp:ssl', False) %}
-  - salt.minion.deps
-  - ssl.nrpe
-  - sslyze
-
-    {%- call passive_check('openerp') -%}
-- file: /usr/lib/nagios/plugins/check_ssl_configuration.py
-- pkg: dnsutils
-    {%- endcall %}
-{%- else %}
-    {{ passive_check('openerp') }}
+salt_minion_deps:
+  pkg:
+    - installed
+    - names:
+      - lsb-release
+      - unzip
+      - dnsutils
+      - python-psutil
+{%- if grains['virtual'] != 'openvzve' %}
+      - pciutils
+      - dmidecode
 {%- endif %}

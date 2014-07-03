@@ -38,6 +38,13 @@ include:
   - rsyslog.nrpe
 {%- if salt['pillar.get']('etherpad:ssl', False) %}
   - ssl.nrpe
-{%- endif %}
+  - sslyze
+  - salt.minion.deps
 
-{{ passive_check('etherpad') }}
+    {%- call passive_check('etherpad') %}
+- file: /usr/lib/nagios/plugins/check_ssl_configuration.py
+- pkg: dnsutils
+    {%- endcall %}
+{%- else %}
+    {{ passive_check('etherpad') }}
+{%- endif %}

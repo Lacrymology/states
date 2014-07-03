@@ -46,7 +46,6 @@ include:
   - postgresql.server.nrpe
   - python.dev.nrpe
   - rsyslog.nrpe
-  - salt.minion
 {% if 'graphite_address' in pillar %}
   - statsd.nrpe
 {% endif %}
@@ -54,6 +53,7 @@ include:
   - uwsgi.nrpe
   - virtualenv.nrpe
 {% if salt['pillar.get']('djangopypi2:ssl', False) %}
+  - salt.minion.deps
   - ssl.nrpe
   - sslyze
 

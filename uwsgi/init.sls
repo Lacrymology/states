@@ -37,7 +37,7 @@ include:
   - local
   - python.dev
   - rsyslog
-  - salt.minion
+  - salt.minion.deps
   - web
   - xml
 

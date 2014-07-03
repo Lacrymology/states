@@ -39,9 +39,10 @@ include:
   - apt.nrpe
   - mariadb.nrpe
   - nrpe
-  - salt.minion.nrpe
 {%- if salt['pillar.get']('mysql:ssl', False) %}
+  - salt.minion.deps
   - ssl.nrpe
+  - sslyze
 {%- endif %}
 
 /etc/nagios/nrpe.d/mysql.cfg:
@@ -49,5 +50,9 @@ include:
     - absent
 
 {%- call passive_check('mariadb.server') %}
-  - file: /etc/nagios/nrpe.d/mysql.cfg
+- file: /etc/nagios/nrpe.d/mysql.cfg
+    {%- if salt['pillar.get']('mysql:ssl', False) %}
+- file: /usr/lib/nagios/plugins/check_ssl_configuration.py
+- pkg: dnsutils
+    {%- endif -%}
 {%- endcall %}

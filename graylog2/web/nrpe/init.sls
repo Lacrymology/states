@@ -36,9 +36,9 @@ include:
   - nrpe
   - rsyslog.nrpe
   - ruby.nrpe
-  - salt.minion
   - uwsgi.nrpe
 {% if salt['pillar.get']('graylog2:ssl', False) %}
+  - salt.minion.deps
   - ssl.nrpe
   - sslyze
 

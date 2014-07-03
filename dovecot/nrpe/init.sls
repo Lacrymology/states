@@ -35,13 +35,20 @@ include:
   - dovecot
   - nrpe
   - postfix.nrpe
-{%- if ssl %}
-  - ssl.nrpe
-{%- endif %}
   - openldap
   - openldap.nrpe
+{%- if ssl %}
+  - salt.minion.deps
+  - ssl.nrpe
+  - sslyze
 
-{{ passive_check('dovecot') }}
+    {%- call passive_check('dovecot') -%}
+- file: /usr/lib/nagios/plugins/check_ssl_configuration.py
+- pkg: dnsutils
+    {%- endcall %}
+{%- else %}
+    {{ passive_check('dovecot') }}
+{%- endif %}
 
 {%- if salt['pillar.get']('mail:check_mail_stack', False) %}
 dovecot_check_mail_stack:

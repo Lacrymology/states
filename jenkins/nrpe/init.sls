@@ -32,8 +32,8 @@ include:
   - apt.nrpe
   - java.7.jdk
   - nginx.nrpe
-  - salt.minion
 {% if salt['pillar.get']('jenkins:ssl', False) %}
+  - salt.minion.deps
   - ssl.nrpe
   - sslyze
 

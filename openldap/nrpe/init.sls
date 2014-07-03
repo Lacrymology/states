@@ -33,7 +33,14 @@ include:
   - apt.nrpe
   - nrpe
 {%- if ssl %}
+  - salt.minion.deps
   - ssl.nrpe
-{%- endif %}
+  - sslyze
 
-{{ passive_check('openldap') }}
+    {%- call passive_check('openldap') -%}
+- file: /usr/lib/nagios/plugins/check_ssl_configuration.py
+- pkg: dnsutils
+    {%- endcall %}
+{%- else %}
+    {{ passive_check('openldap') }}
+{%- endif %}

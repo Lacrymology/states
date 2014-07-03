@@ -35,11 +35,13 @@ include:
   - nrpe
   - nginx.nrpe
 {%- if salt['pillar.get']('rabbitmq:ssl', False) %}
+  - salt.minion.deps
   - ssl.nrpe
   - sslyze
 
     {%- call passive_check('rabbitmq') -%}
 - file: /usr/lib/nagios/plugins/check_ssl_configuration.py
+- pkg: dnsutils
     {%- endcall %}
 {%- else %}
     {{ passive_check('rabbitmq') }}

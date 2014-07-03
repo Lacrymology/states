@@ -38,7 +38,14 @@ include:
   - rsyslog.nrpe
   - salt.master.nrpe
 {%- if ssl %}
+  - salt.minion.deps
   - ssl.nrpe
-{%- endif %}
+  - sslyze
 
-{{ passive_check('salt.api') }}
+    {%- call passive_check('salt.api') -%}
+- file: /usr/lib/nagios/plugins/check_ssl_configuration.py
+- pkg: dnsutils
+    {%- endcall %}
+{%- else %}
+    {{ passive_check('salt.api') }}
+{%- endif %}

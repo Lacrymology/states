@@ -31,9 +31,16 @@ include:
   - nrpe
   - pip.nrpe
   - python.dev.nrpe
-{% if salt['pillar.get']('shinken:ssl', False) %}
-  - ssl.nrpe
-{% endif %}
   - virtualenv.nrpe
+{% if salt['pillar.get']('shinken:ssl', False) %}
+  - salt.minion.deps
+  - ssl.nrpe
+  - sslyze
 
-{{ passive_check('shinken.scheduler') }}
+    {%- call passive_check('shinken.scheduler') -%}
+- file: /usr/lib/nagios/plugins/check_ssl_configuration.py
+- pkg: dnsutils
+    {%- endcall %}
+{%- else %}
+    {{ passive_check('shinken.scheduler') }}
+{%- endif %}

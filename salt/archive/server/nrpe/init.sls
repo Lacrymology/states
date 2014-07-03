@@ -34,9 +34,9 @@ include:
   - nrpe
   - rsync.nrpe
   - rsyslog.nrpe
-  - salt.minion
   - ssh.server.nrpe
 {% if salt['pillar.get']('salt_archive:ssl', False) %}
+  - salt.minion.deps
   - ssl.nrpe
   - sslyze
 

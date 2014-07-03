@@ -37,9 +37,9 @@ include:
   - rsyslog.nrpe
   - virtualenv.nrpe
 {% if salt['pillar.get']('shinken:ssl', False) %}
+  - salt.minion.deps
   - ssl.nrpe
   - sslyze
-  - dnsutils
 
     {%- call passive_check('shinken.broker') -%}
 - file: /usr/lib/nagios/plugins/check_ssl_configuration.py

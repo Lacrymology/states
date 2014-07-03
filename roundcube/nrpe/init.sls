@@ -36,9 +36,9 @@ include:
   - postgresql.nrpe
   - postgresql.server.nrpe
   - rsyslog.nrpe
-  - salt.minion
   - uwsgi.nrpe
 {% if salt['pillar.get']('roundcube:ssl', False) %}
+  - salt.minion.deps
   - ssl.nrpe
   - sslyze
 

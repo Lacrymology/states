@@ -35,8 +35,8 @@ include:
   - nginx.nrpe
   - nrpe
   - postgresql.server.nrpe
-  - salt.minion
 {%- if salt['pillar.get']('ejabberd:ssl', False) %}
+  - salt.minion.deps
   - ssl.nrpe
   - sslyze
 

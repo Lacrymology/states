@@ -32,13 +32,11 @@ include:
   - apt.nrpe
   - nrpe
 {% if salt['pillar.get']('postfix:ssl', False) %}
-  - salt.minion.deps
   - ssl.nrpe
   - sslyze
 
     {%- call passive_check('postfix') -%}
-- file: /usr/lib/nagios/plugins/check_ssl_configuration.py
-- pkg: dnsutils
+- file: check_ssl_configuration.py
     {%- endcall %}
 {%- else %}
     {{ passive_check('postfix') }}

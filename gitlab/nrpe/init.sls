@@ -54,13 +54,11 @@ include:
   - uwsgi.nrpe
   - xml.nrpe
 {%- if salt['pillar.get']('gitlab:ssl', False) %}
-  - salt.minion.deps
   - ssl.nrpe
   - sslyze
 
     {%- call passive_check('gitlab') -%}
-- file: /usr/lib/nagios/plugins/check_ssl_configuration.py
-- pkg: dnsutils
+- file: check_ssl_configuration.py
     {%- endcall %}
 {%- else %}
     {{ passive_check('gitlab') }}

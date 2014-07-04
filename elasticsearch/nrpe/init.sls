@@ -38,14 +38,12 @@ include:
 {%- if ssl %}
   - ssl.nrpe
   - nginx.nrpe
-  - salt.minion.deps
   - sslyze
 {%- endif %}
 
 {%- call passive_check('elasticsearch') %}
 - file: /usr/lib/nagios/plugins/check_elasticsearch_cluster.py
     {%- if ssl %}
-- file: /usr/lib/nagios/plugins/check_ssl_configuration.py
-- pkg: dnsutils
+- file: check_ssl_configuration.py
     {%- endif -%}
 {%- endcall %}

@@ -53,13 +53,11 @@ include:
   - uwsgi.nrpe
   - virtualenv.nrpe
 {% if salt['pillar.get']('djangopypi2:ssl', False) %}
-  - salt.minion.deps
   - ssl.nrpe
   - sslyze
 
     {%- call passive_check('djangopypi2') -%}
-- file: /usr/lib/nagios/plugins/check_ssl_configuration.py
-- pkg: dnsutils
+- file: check_ssl_configuration.py
     {%- endcall %}
 {%- else %}
     {{ passive_check('djangopypi2') }}

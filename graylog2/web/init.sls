@@ -153,8 +153,8 @@ change_graylog2_web_dir_permission:
     - managed
     - template: jinja
     - source: salt://graylog2/web/nginx.jinja2
-    - user: {{ user }}
-    - group: {{ user }}
+    - user: www-data
+    - group: www-data
     - mode: 440
     - require:
       - pkg: nginx

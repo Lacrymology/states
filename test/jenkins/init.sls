@@ -30,7 +30,8 @@ include:
 
 salt-minion:
   pkg:
-    - latest
+    - installed
+    - version: 0.17.5-1precise1
     - require:
       - pkgrepo: salt
   service:

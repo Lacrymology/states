@@ -35,8 +35,7 @@ include:
   - nginx.nrpe
   - nrpe
   - rsyslog.nrpe
-  - ruby.nrpe
-  - uwsgi.nrpe
+  - graylog2.server.nrpe
 {% if salt['pillar.get']('graylog2:ssl', False) %}
   - ssl.nrpe
   - sslyze

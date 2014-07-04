@@ -32,6 +32,7 @@ include:
   - elasticsearch.diamond
   - mongodb.diamond
   - rsyslog.diamond
+  - graylog2.server.diamond
 
 graylog2_server_diamond_resources:
   file:

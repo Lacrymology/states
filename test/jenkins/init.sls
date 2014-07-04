@@ -42,7 +42,7 @@ unittest-xml-reporting:
 salt-minion:
   pkg:
     - installed
-    - version: 0.17.5-1precise1
+    - version: 2014.1.5-5precise1
     - require:
       - pkgrepo17: salt
       - pkg: python-pip

@@ -56,7 +56,7 @@ root user's username.
 
 Default: ``admin``.
 
-graylogs2:rest_listen_uri
+graylog2:rest_listen_uri
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 REST API listen URI. Must be reachable by other graylog2-server nodes
@@ -64,11 +64,11 @@ if you run a cluster.
 
 Default: ``http://127.0.0.1:12900``.
 
-graylogs2:rest_transport_uri
+graylog2:rest_transport_uri
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 REST API transport address. If not set, the value is same as
-:ref:`graylog2:rest_listen_uri`
+`graylog2:rest_listen_uri`_.
 
 Default: ``None``
 

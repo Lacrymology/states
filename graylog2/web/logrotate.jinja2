@@ -27,14 +27,12 @@ Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
 
-/var/log/graylog2/production.log {
+/var/log/graylog2/application.log {
     daily
     missingok
     rotate 7
     compress
     delaycompress
     notifempty
-    postrotate
-        /usr/bin/touch /etc/uwsgi/apps-enabled/graylog2.ini
-    endscript
+    copytruncate
 }

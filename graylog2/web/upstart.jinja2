@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Bruno Clermont
+Copyright (c) 2014, Diep Pham
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,10 +22,23 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Bruno Clermont <patate@fastmail.cn>
-Maintainer: Bruno Clermont <patate@fastmail.cn>
+Author: Diep Pham <favadi@robotinfra.com>
+Maintainer: Diep Pham <favadi@robotinfra.com>
+
 -#}
 # {{ pillar['message_do_not_modify'] }}
-production:
-  url: http://127.0.0.1:9200/
-  index_prefix: graylog2-{{ grains['id'] }}
+# ubuntu upstart script for graylog2-web
+{% set heap_size = salt['pillar.get']('graylog2:web_heap_size', False) %}
+start on (filesystem and net-device-up IFACE=eth0)
+stop on runlevel [!2345]
+
+nice 10
+respawn
+
+setuid {{ user }}
+
+env JAVA_OPTS='{% if heap_size %} -Xms{{ heap_size }} -Xmx{{ heap_size }}{% endif %}' 
+
+script
+  exec {{ web_root_dir }}/bin/graylog2-web-interface -Dhttp.port=9000 -Dhttp.address=127.0.0.1
+end script

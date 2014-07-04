@@ -1,0 +1,57 @@
+{#-
+Copyright (c) 2014, Diep Pham
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+Author: Diep Pham <favadi@robotinfra.com>
+Maintainer: Diep Pham <favadi@robotinfra.com>
+
+-#}
+# {{ pillar['message_do_not_modify'] }}
+{#- graylog2-server REST URIs (one or more, comma separated) For example: "http://127.0.0.1:12900/,http://127.0.0.1:12910/" #}
+{%- if  salt['pillar.get']('graylog2:rest_transport_uri', None) %}
+graylog2-server.uris="{{ pillar['graylog2']['rest_transport_uri'] }}"
+{%- else %}
+graylog2-server.uris="{{ salt['pillar.get']('graylog2:rest_listen_uri', 'http://127.0.0.1:12900/') }}"  
+{%- endif %}
+
+{#- The secret key is used to secure cryptographics functions. Set this to a long and randomly generated string. #}
+{#- If you deploy your application to several instances be sure to use the same key! #}
+{#- Generate for example with: pwgen -s 96 #}
+application.secret="{{ salt['password.pillar']('graylog2:application_secret', 128) }}"
+
+{#- Web interface timezone #}
+{#- Graylog2 stores all timestamps in UTC. To properly display times, set the default timezone of the interface. #}
+{#- If you leave this out, Graylog2 will pick your system default as the timezone. Usually you will want to configure it explicitly. #}
+{#- # timezone="Europe/Berlin" #}
+
+{#- Message field limit #}
+{#- Your web interface can cause high load in your browser when you have a lot of different message fields. The default #}
+{#- limit of message fields is 100. Set it to 0 if you always want to get all fields. They are for example used in the #}
+{#- search result sidebar or for autocompletion of field names. #}
+field_list_limit=100
+
+{#- Use this to run Graylog2 with a path prefix #}
+{#- #application.context=/graylog2 #}
+
+{#- You usually do not want to change this. #}
+application.global=lib.Global

@@ -41,5 +41,6 @@ source /usr/local/share/salt_common.sh
 log_start_script "$@"
 trap "log_stop_script \$?" EXIT
 
+{%- set mongodb_suffix = '0-20' %}
 # elasticsearch come with it's own backup script
-/usr/local/bin/backup-mongodb graylog2
+/usr/local/bin/backup-mongodb graylog2-{{ mongodb_suffix }}

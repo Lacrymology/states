@@ -31,12 +31,15 @@ graylog2:ssl_redirect
 
 .. include:: /nginx/doc/ssl_redirect.inc
 
-graylog2:(workers|cheapers|idle|timeout)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. include:: /uwsgi/doc/pillar.inc
-
 graylog2:smtp
 ~~~~~~~~~~~~~
 
 .. include:: /mail/doc/smtp.inc
+
+graylog2:application_secret
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The secret key is used to secure cryptographics functions.
+
+Default: random generated
+

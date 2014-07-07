@@ -53,8 +53,15 @@ include:
 
 {% set version = '0.20.3' %}
 {% set checksum = 'md5=7da99597ba0a3c81ca69882a9883ee9a' %}
-{%- set user = salt['pillar.get']('graylog2:server:user', 'graylog2') %}
+{% set user = salt['pillar.get']('graylog2:web:user', 'graylog2-ui') %}
 {% set web_root_dir = '/usr/local/graylog2-web-interface-' + version %}
+
+{{ user }}:
+  user:
+    - present
+    - name: {{ user }}
+    - home: /var/run/{{ user }}
+    - shell: /bin/false
 
 {% for previous_version in ('0.9.6p1', '0.11.0') %}
 /usr/local/graylog2-web-interface-{{ previous_version }}:

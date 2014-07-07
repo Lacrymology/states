@@ -29,11 +29,23 @@ Uninstall a graylog2 web interface server.
 -#}
 {% set version = '0.20.3' %}
 {% set web_root_dir = '/usr/local/graylog2-web-interface-' + version %}
+{% set user = salt['pillar.get']('graylog2:server:user', 'graylog2-ui') %}
+
 /etc/logrotate.d/graylog2-web:
   file:
     - absent
 
 graylog2-web:
+  user:
+    - absent
+    - name: {{ user }}
+    - require:
+      - service: graylog2-web
+  group:
+    - absent
+    - name: {{ user }}
+    - require:
+      - service: graylog2-web
   service:
     - dead
     - enable: False

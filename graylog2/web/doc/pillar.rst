@@ -43,3 +43,11 @@ The secret key is used to secure cryptographics functions.
 
 Default: random generated
 
+graylog2:web:user
+~~~~~~~~~~~~~~~~~
+
+The Unix user (UID) who will run graylog2 web interface.
+
+Default: ``graylog2-ui``
+
+

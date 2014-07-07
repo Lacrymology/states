@@ -30,7 +30,6 @@ Copy files archive if necessary.
 
 include:
   - deborphan
-  - test.sync
 
 {#-
  Fake the mine module, this let a minion to run without a master.

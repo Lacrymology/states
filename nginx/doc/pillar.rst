@@ -67,6 +67,15 @@ Default: ``$scheme://$host:$server_port$uri$is_args$args $remote_addr:$remote_us
 nginx:redirect_numeric_ip
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
+URL where connection to this host using the numeric IP
+(such as ``http://1.2.3.4``) get permanently redirected to.
+
+This affect all resources under that URL, not only the root (``/``).
+
+This is mostly used to trick bot to go elsewhere.
+
+Suggested value is ``http://www.google.com``.
+
 Default: ``False``.
 
 nginx:client_body_buffer_size

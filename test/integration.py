@@ -129,6 +129,8 @@ def setUpModule():
             except Exception as err:
                 logger.error("Catch error: %s", err, exc_info=True)
                 raise
+            except:
+                raise
             if isinstance(ret, list):
                 # if render is okay, it returns dict, else, it returns list
                 # of msg error

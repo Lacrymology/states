@@ -27,6 +27,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
 # {{ pillar['message_do_not_modify'] }}
 django==1.3.7
+django-decorator-include==0.1
 django-statsd-mozilla==0.3.8.7
 django-tagging==0.3.1
 graphite-web==0.9.12
@@ -38,11 +39,12 @@ pip==1.5.2
 psycopg2==2.4.5
 python-memcached==1.53
 pytz==2013b
-raven==4.0.4
-simplejson==3.3.0
+raven==4.1.1
+simplejson==3.3.2
 statsd==2.0.1
 txamqp==0.6.2
 whisper==0.9.12
+zope.interface==4.0.5
 {%- if 'files_archive' in pillar %}
 {{ pillar['files_archive'] }}/pip/py2cairo-1.8.10.tar.gz
 {{ pillar['files_archive'] }}/pip/django-insecure-0.1.zip

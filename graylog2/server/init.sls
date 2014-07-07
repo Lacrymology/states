@@ -92,6 +92,15 @@ graylog2-server_upstart:
     - require:
       - user: graylog2
 
+/etc/graylog2-server-node-id:
+  file:
+    - managed
+    - user: {{ user }}
+    - group: {{ user }}
+    - mode: 644
+    - require:
+      - archive: graylog2-server
+
 graylog2-server:
   archive:
     - extracted
@@ -131,6 +140,7 @@ graylog2-server:
       - file: /etc/graylog2-elasticsearch.yml
       - archive: graylog2-server
       - user: graylog2
+      - file: /etc/graylog2-server-node-id
     - require:
       - file: /var/log/graylog2
       - file: /var/log/graylog2/server.log

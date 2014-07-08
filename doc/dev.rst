@@ -118,7 +118,7 @@ Then on the server run::
   cd /
   tar -xvzf /tmp/archive.tar.gz
 
-Install minion::
+Install :doc:`/salt/minion/doc/index`::
 
   /root/salt/states/salt/minion/bootstrap.sh [minion-name-that-match-pillars]
 
@@ -133,3 +133,17 @@ pillars value, just run::
 To apply everything. Or specify a single formula, such as::
 
   salt-call state.sls vim
+
+Develop
+-------
+
+The formula can be edited directly on the development host and apply directly.
+Please follow :doc:`write_formula`.
+
+Once it's tested properly, new or updated files can be copied back to developer
+workstation and changes applied to git repositories.
+
+.. warning::
+
+  As the source are in ``/root/salt``, just make sure the new formula don't
+  perform any change in that directory.

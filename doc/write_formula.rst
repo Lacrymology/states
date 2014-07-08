@@ -26,8 +26,8 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-Coding Style Guide
-==================
+New Formula Guidelines
+======================
 
 Terminology
 -----------
@@ -139,15 +139,32 @@ Bad::
 Pillar
 ------
 
-All user data must be embeded to SLS using pillar
+All user data must be embeded to SLS configuration file using pillar:
 
-Good::
+Good optional pillar::
 
    bind: {{ salt['pillar.get']('mysql:bind', '127.0.0.1') }}
 
 Bad::
 
    bind: 127.0.0.1
+
+Good required pillar key::
+
+   bind: {{ pillar['mysql']['bind'] }}
+
+Bad mandatory pillar key::
+
+   bind: {{ salt['pillar.get']('mysql:bind') }}
+
+.. warning::
+
+  Optional pillar key must use ``pillar.get`` and mandatory pillar must use
+  ``pillar`` dictionary. If mandatory pillar value is used with ``pillar.get``
+  and the pillar key isn't defined in pillar will result with an empty string
+  and might have dangerous consequence.
+
+Document those pillar keys in the ``doc/pillar.rst`` file in formula directory.
 
 Configs
 -------

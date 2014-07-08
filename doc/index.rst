@@ -15,7 +15,7 @@ Welcome to Infrastructure Documentation:
     dev
     hacking
     build_doc
-    write_state
+    write_formula
     run_tests
     troubleshoot
     changelog

@@ -40,13 +40,14 @@ include:
 {%- if ssl %}
   - ssl.nrpe
   - sslyze
-
-    {%- call passive_check('dovecot') -%}
-- file: check_ssl_configuration.py
-    {%- endcall %}
-{%- else %}
-    {{ passive_check('dovecot') }}
 {%- endif %}
+
+{%- call passive_check('dovecot') -%}
+  {%- if ssl %}
+  - file: check_ssl_configuration.py
+  {%- endif %}
+  - file: /usr/lib/nagios/plugins/check_mail_stack.py
+{%- endcall %}
 
 {%- if salt['pillar.get']('mail:check_mail_stack', False) %}
 dovecot_check_mail_stack:

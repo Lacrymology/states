@@ -33,4 +33,6 @@ include:
   - nrpe
 
 {%- from 'nrpe/passive.sls' import passive_check with context %}
-{{ passive_check('graphite.backup') }}
+{%- call passive_check('graphite.backup') %}
+  - file: check_backup.py
+{%- endcall -%}

@@ -79,4 +79,6 @@ salt_mine_collect_minions_data:
     - watch_in:
       - service: cron
 
-{{ passive_check('salt.master') }}
+{%- call passive_check('salt.master') %}
+  - file: /usr/lib/nagios/plugins/check_mine_minions.py
+{%- endcall -%}

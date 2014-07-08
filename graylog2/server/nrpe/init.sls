@@ -48,5 +48,5 @@ include:
       - pkg: nagios-nrpe-server
 
 {%- call passive_check('graylog2.server') %}
-      - file: /usr/lib/nagios/plugins/check_new_logs.py
+  - file: /usr/lib/nagios/plugins/check_new_logs.py
 {%- endcall %}

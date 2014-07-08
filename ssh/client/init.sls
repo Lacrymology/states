@@ -70,8 +70,9 @@ known_hosts:
 
 {%- for hostname in salt['pillar.get']('ssh:keys', {}) -%}
     {%- for user in salt['pillar.get']('ssh:keys:' ~ hostname, {}) %}
-/etc/ssh/keys/{{ user }}:
+ssh_{{ user }}_{{ hostname }}:
   file:
+    - name: /etc/ssh/keys/{{ user }}
     - directory
     - user: {{ user }}
     - group: {{ user }}
@@ -89,7 +90,7 @@ known_hosts:
     - group: {{ user }}
     - mode: 400
     - require:
-      - file: /etc/ssh/keys/{{ user }}
+      - file: ssh_{{ user }}_{{ hostname }}
     {%- endfor -%}
 {%- endfor %}
 

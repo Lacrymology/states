@@ -28,7 +28,6 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 # {{ pillar['message_do_not_modify'] }}
 
 Host *
-    IdentityFile /etc/ssh/keys/%u/%h
     ForwardAgent yes
     SendEnv LANG LC_*
     HashKnownHosts yes
@@ -38,3 +37,10 @@ Host *
 {#- because we can't get fingerprint of localhost for each test VM #}
     NoHostAuthenticationForLocalhost yes
 {%- endif %}
+
+{%- for hostname in salt['pillar.get']('ssh:keys', {}) %}
+    {% for user in salt['pillar.get']('ssh:keys:' ~ hostname, {}) %}
+Host {{ hostname }} {% for alias in salt['pillar.get']('ssh:keys:' ~ hostname ~ ':' ~ user ~ ':extra_hosts', {}) %}{{ alias }}{% if not loop.last %} {% endif %}{% endfor %}
+    IdentityFile /etc/ssh/keys/%u/{{ hostname }}
+    {%- endfor -%}
+{%- endfor %}

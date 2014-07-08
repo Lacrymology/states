@@ -50,10 +50,6 @@ include:
 {% endfor %}
 
 {# remove old mongodb db: graylog2 #}
-python-pymongo:
-  pkg:
-    - installed
-
 graylog2-old-mongodb:
   mongodb_database:
     - absent
@@ -62,7 +58,10 @@ graylog2-old-mongodb:
     - port: 27017
     - require:
       - pkg: mongodb
-      - pkg: python-pymongo
+      - pkg: graylog2-old-mongodb
+  pkg:
+    - name: python-pymongo
+    - installed
 
 graylog2-server_upstart:
   file:

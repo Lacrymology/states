@@ -29,7 +29,6 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 Diamond statistics for Graylog2 Web Interface.
 -#}
 {% set version = '0.20.3' %}
-{% set web_root_dir = '/usr/local/graylog2-web-interface-' + version %}
 
 include:
   - diamond

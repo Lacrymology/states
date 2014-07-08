@@ -31,6 +31,7 @@ __author__ = 'Hung Nguyen Viet'
 __maintainer__ = 'Hung Nguyen Viet'
 __email__ = 'hvnsweeting@gmail.com'
 
+import contextlib
 import logging
 import os
 import time
@@ -123,6 +124,22 @@ def managed(name, source=None, template='jinja',
     tmp = salt.utils.mkstemp(text=True)
     with salt.utils.fopen(tmp, 'w') as tmp_:
         tmp_.writelines(lines)
+
+    if __opts__['test']:
+        if salt.utils.istextfile(name):
+            with contextlib.nested(
+                    salt.utils.fopen(tmp, 'rb'),
+                    salt.utils.fopen(name, 'rb')) as (src, name_):
+                slines = src.readlines()
+                nlines = name_.readlines()
+                if ''.join(nlines) == ''.join(slines):
+                    ret['comment'] = ('The file {0} is in the '
+                                      'correct state').format(name)
+                    return ret
+
+        ret['comment'] = 'File {0} is set to be updated'.format(name)
+        ret['result'] = None
+        return ret
 
     # manage nrpe config file
     if comment_ and contents is None:

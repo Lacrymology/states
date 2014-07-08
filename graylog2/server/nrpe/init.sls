@@ -31,7 +31,6 @@ Nagios NRPE check for Graylog2 Server.
 include:
   - apt.nrpe
   - elasticsearch.nrpe.instance
-  - elasticsearch.nrpe
   - mongodb.nrpe
   - nrpe
   - rsyslog.nrpe

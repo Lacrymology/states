@@ -40,7 +40,6 @@ Once this state is installed, you need to:
 -#}
 include:
   - graylog2
-  - graylog2.server
   - local
   - logrotate
   - mongodb

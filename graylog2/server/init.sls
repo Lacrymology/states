@@ -30,7 +30,6 @@ Install a Graylog2 logging server backend.
 {%- from 'macros.jinja2' import manage_pid with context %}
 include:
   - apt
-  - elasticsearch
   - mongodb
   - java.7
   - graylog2

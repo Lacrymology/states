@@ -35,7 +35,6 @@ include:
   - diamond
   - mongodb.diamond
   - nginx.diamond
-  - graylog2.server.diamond
   - rsyslog.diamond
 
 graylog2_web_diamond_resource:

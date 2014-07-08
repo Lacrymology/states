@@ -56,7 +56,7 @@ include:
 {% set user = salt['pillar.get']('graylog2:web:user', 'graylog2-ui') %}
 {% set web_root_dir = '/usr/local/graylog2-web-interface-' + version %}
 
-{{ user }}:
+graylog2-web-{{ user }}:
   user:
     - present
     - name: {{ user }}
@@ -114,7 +114,7 @@ graylog2-web:
     - source: salt://graylog2/web/config.jinja2
     - require:
       - archive: graylog2-web
-      - user: graylog2
+      - user: graylog2-web-{{ user }}
   archive:
     - extracted
     - name: /usr/local/
@@ -136,7 +136,7 @@ graylog2-web:
       - file: graylog2-web_upstart
       - pkg: openjdk_jre_headless
       - archive: graylog2-web
-      - user: graylog2
+      - user: graylog2-web-{{ user }}
     - require:
       - file: /var/log/graylog2
 
@@ -147,7 +147,7 @@ change_graylog2_web_dir_permission:
       - archive: graylog2-web
     - name: chown -R {{ user }}:{{ user }} {{ web_root_dir }}
     - require:
-      - user: graylog2
+      - user: graylog2-web-{{ user }}
 
 {% for command in ('streamalarms', 'subscriptions') %}
 /etc/cron.hourly/graylog2-web-{{ command }}:

@@ -29,9 +29,10 @@ include:
   - nrpe
   - bash.nrpe
 
-/usr/lib/nagios/plugins/check_backup.py:
+check_backup.py:
   file:
     - managed
+    - name: /usr/lib/nagios/plugins/check_backup.py
     - template: jinja
     - contents: |
         #!/usr/local/nagios/bin/python

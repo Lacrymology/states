@@ -35,16 +35,17 @@ include:
   file:
     - managed
     - template: jinja
-    - source: salt://backup/client/s3/nrpe/s3config.jinja2
+    - source: salt://backup/client/s3/nrpe/config.jinja2
     - user: nagios
     - group: nagios
     - mode: 440
     - require:
       - pkg: nagios-nrpe-server
 
-/usr/lib/nagios/plugins/check_backup.py:
+check_backup.py:
   file:
     - managed
+    - name: /usr/lib/nagios/plugins/check_backup.py
     - source: salt://backup/client/s3/nrpe/check.py
     - user: nagios
     - group: nagios

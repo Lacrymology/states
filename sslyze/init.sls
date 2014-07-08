@@ -56,7 +56,7 @@ sslyze:
     - archive_format: zip
     - require:
       - file: /usr/local/src
-      - pkg: unzip
+      - pkg: salt_minion_deps
   cmd:
     - wait
 {%- if grains['osarch'] == 'amd64' %}
@@ -81,7 +81,7 @@ check_ssl_configuration.py:
     - require:
       - pkg: nagios-nrpe-server
       - cmd: sslyze
-      - pkg: dnsutils
+      - pkg: salt_minion_deps
 
 sslyze_requirements:
   file:

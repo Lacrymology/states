@@ -32,7 +32,7 @@ for e.g, `salt.modules.dig` need `dnsutils` to be installed
 salt_minion_deps:
   pkg:
     - installed
-    - names:
+    - pkgs:
       - lsb-release
       - unzip
       - dnsutils

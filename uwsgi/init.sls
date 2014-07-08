@@ -162,7 +162,7 @@ uwsgi_emperor:
       - file: uwsgi_emperor
       - file: uwsgi_sockets
       - service: rsyslog
-      - pkg: dnsutils
+      - pkg: salt_minion_deps
     - watch:
       - cmd: uwsgi_emperor
       - file: uwsgi_upgrade_remove_old_version

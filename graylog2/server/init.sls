@@ -44,6 +44,12 @@ include:
 {%- set user = salt['pillar.get']('graylog2:server:user', 'graylog2') %}
 {%- set mongodb_suffix = '0-20' %}
 
+{% for previous_version in ('0.11.0', ) %}
+/usr/local/graylog2-server-{{ previous_version }}:
+  file:
+    - absent
+{% endfor %}
+
 {# remove old mongodb db: graylog2 #}
 python-pymongo:
   pkg:

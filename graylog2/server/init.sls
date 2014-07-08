@@ -98,6 +98,10 @@ graylog2-server_upstart:
     - require:
       - user: graylog2
 
+{#
+We have to create this file before graylog2-server service start, because
+graylog2 user may not have the required privilege to create file in /etc folder
+#}
 /etc/graylog2-server-node-id:
   file:
     - managed

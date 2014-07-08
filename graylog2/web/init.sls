@@ -40,6 +40,7 @@ Once this state is installed, you need to:
 -#}
 include:
   - graylog2
+  - java.7
   - local
   - logrotate
   - mongodb

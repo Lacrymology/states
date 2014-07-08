@@ -108,6 +108,8 @@ graylog2 user may not have the required privilege to create file in /etc folder
     - mode: 644
     - require:
       - archive: graylog2-server
+      - user: graylog2
+
 
 graylog2-server:
   archive:
@@ -136,7 +138,7 @@ graylog2-server:
       version: {{ version }}
       mongodb_suffix: {{ mongodb_suffix }}
     - require:
-      - user: graylog2
+      - user: {{ user }}
   service:
     - running
     - enable: True
@@ -147,7 +149,7 @@ graylog2-server:
       - file: graylog2-server
       - file: /etc/graylog2-elasticsearch.yml
       - archive: graylog2-server
-      - user: graylog2
+      - user: {{ user }}
       - file: /etc/graylog2-server-node-id
     - require:
       - file: /var/log/graylog2
@@ -157,7 +159,7 @@ graylog2-server:
       - file: /var/run/graylog2
 
 {%- call manage_pid('/var/run/graylog2/graylog2.pid', 'graylog2', 'syslog', 'graylog2-server') %}
-- user: graylog2
+- user: {{ user }}
 - file: /var/run/graylog2
 - pkg: rsyslog
 {%- endcall %}
@@ -190,4 +192,4 @@ graylog2_rsyslog_config:
       - group
     - require:
       - archive: graylog2-server
-      - user: graylog2
+      - user: {{ user }}

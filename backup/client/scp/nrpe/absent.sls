@@ -37,8 +37,3 @@ backup_client_nrpe-requirements:
 /usr/local/nagios/backup.client.nrpe-requirements.txt:
   file:
     - absent
-
-backup_client_private_keys:
-  file:
-    - absent
-    - name: /etc/ssh/keys

@@ -37,42 +37,6 @@ include:
   - backup.server.nrpe
 {%- endif %}
 
-{%- for keyname in salt['pillar.get']('ssh:keys', {}) %}
-{%- set user = pillar['ssh']['keys'][keyname]['user'] %}
-/etc/ssh/keys/{{ user }}:
-  file:
-    - directory
-    - user: {{ user }}
-    - group: {{ user }}
-    - mode: 700
-    - makedirs: True
-    - require:
-      - pkg: openssh-client
-
-/etc/ssh/keys/{{ user }}/{{ keyname }}:
-  file:
-    - managed
-    - contents: |
-        {{ pillar['ssh']['keys'][keyname]['contents'] | indent(8) }}
-    - user: {{ user }}
-    - group: {{ user }}
-    - mode: 400
-    - require:
-      - file: /etc/ssh/keys/{{ user }}
-
-openssh-client-identity-file:
-  file:
-    - append
-    - name: /etc/ssh/ssh_config
-    - text: |
-
-        Host {{ keyname }} {% for extra_host in salt['pillar.get']('ssh:keys:' + keyname + ':extra_hosts', {}) %}{{ extra_host }}{% if not loop.last %} {% endif %}{% endfor %}
-            IdentityFile /etc/ssh/keys/{{ user }}/{{ keyname }}
-    - require:
-      - file: /etc/ssh/keys/{{ user }}/{{ keyname }}
-      - pkg: openssh-client
-{%- endfor %}
-
 /etc/nagios/backup.conf:
   file:
     - managed

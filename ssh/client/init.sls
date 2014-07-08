@@ -68,6 +68,31 @@ known_hosts:
       - file: {{ root_home }}/.ssh
       - pkg: openssh-client
 
+{%- for hostname in salt['pillar.get']('ssh:keys', {}) -%}
+    {%- for user in salt['pillar.get']('ssh:keys:' ~ hostname, {}) %}
+/etc/ssh/keys/{{ user }}:
+  file:
+    - directory
+    - user: {{ user }}
+    - group: {{ user }}
+    - mode: 700
+    - makedirs: True
+    - require:
+      - pkg: openssh-client
+
+/etc/ssh/keys/{{ user }}/{{ hostname }}:
+  file:
+    - managed
+    - contents: |
+        {{ pillar['ssh']['keys'][hostname][user]['contents'] | indent(8) }}
+    - user: {{ user }}
+    - group: {{ user }}
+    - mode: 400
+    - require:
+      - file: /etc/ssh/keys/{{ user }}
+    {%- endfor -%}
+{%- endfor %}
+
 openssh-client:
   file:
     - managed

@@ -40,3 +40,7 @@ openssh-client:
 {{ root_home }}/.ssh:
   file:
     - absent
+
+/etc/ssh/keys:
+  file:
+    - absent

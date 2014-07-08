@@ -1,5 +1,5 @@
-Minion
-======
+Salt Minion
+===========
 
 Introduction
 ------------

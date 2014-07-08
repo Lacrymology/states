@@ -62,6 +62,6 @@ include:
       - pkg: nagios-nrpe-server
 
 {%- call passive_check('firewall') %}
-      - file: /usr/lib/nagios/plugins/check_firewall.py
-      - file: /etc/sudoers.d/nrpe_firewall
+  - file: /usr/lib/nagios/plugins/check_firewall.py
+  - file: /etc/sudoers.d/nrpe_firewall
 {%- endcall %}

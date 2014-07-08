@@ -29,55 +29,17 @@
 Running Integration Tests
 =========================
 
-Git Repositories
-----------------
+As running tests is expensive in term of file copy, only the ``local`` mode is
+used to run them.
 
-You need checkout the following 3 repositories into your own
-workstation:
-
-- Common states (where this file is)
-- Client specific states (where the roles are)
-- Pillar repository
-
-If you don't have or need a client specific states, just create an empty
-fake repo::
-
-  mkdir /tmp/repo
-  git init /tmp/repo
-
-And use ``/tmp/repo``
-
-Bootstrap Archive
------------------
-
-Create an archive for :doc:`/salt/master/doc/index` bootstrap purpose.
-
-Check the :download:`/bootstrap_archive.py` script at the root of the common
-repository for instruction.
-
-Copy the output of the archive to the server you want to install the
-testing host.
-
-Salt-Minion Installation
-------------------------
-
-Then on the server run::
-
-  cd /
-  tar -xvzf /tmp/archive.tar.gz
-
-Install minion::
+Follow the same setup process as in :doc:`dev`, but make sure that you use an
+hostname that starts with ``integration``::
 
   /root/salt/states/salt/minion/bootstrap.sh integration-[whatever]
 
 Quick shortcut::
 
   cd /; tar -xzf /tmp/archive.tar.gz; /root/salt/states/salt/minion/bootstrap.sh integration
-
-If you need to troubleshoot something between, you might ends with vim
-uninstalled, to install it run::
-
-  salt-call state.sls vim
 
 Integration Tests
 -----------------
@@ -86,8 +48,8 @@ To launch tests::
 
   /root/salt/states/test/integration.py -c
 
-There is more than 950 tests, it takes time and generate a lot of logs, so I
-suggest::
+There is more than 950 tests, it takes time and generate a lot of logs, it's
+suggested to redirect logs to output::
 
   nohup /root/salt/states/test/integration.py -c > /tmp/test.log
 

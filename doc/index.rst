@@ -12,6 +12,7 @@ Welcome to Infrastructure Documentation:
     install
     tests
     monitoring
+    dev
     hacking
     build_doc
     write_state

@@ -43,7 +43,7 @@ Example::
 graylog2:root_password_sha2
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-shasum of root user's password.
+SHA-256 hash of root user's password.
 Create one by using for example: ``echo -n yourpassword | shasum -a 256``
 
 Optional
@@ -57,7 +57,7 @@ root user's username.
 Default: ``admin``.
 
 graylog2:rest_listen_uri
-~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 REST API listen URI. Must be reachable by other graylog2-server nodes
 if you run a cluster.
@@ -65,7 +65,7 @@ if you run a cluster.
 Default: ``http://127.0.0.1:12900``.
 
 graylog2:rest_transport_uri
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 REST API transport address. If not set, the value is same as
 `graylog2:rest_listen_uri`_.

@@ -206,7 +206,7 @@ http_listen_port = 12202
   mail output plugin settings.
 #}
 transport_email_enabled = true
-{%- if email['port'] == 465 %}
+{%- if email['encryption']|default('plain') == 'SSL/TLS' %}
 transport_email_protocol = smtps
 {%- else %}
 transport_email_protocol = smtp

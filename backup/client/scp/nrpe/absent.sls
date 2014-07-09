@@ -28,15 +28,6 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 include:
   - backup.client.base.absent
 
-/etc/nagios/backup.conf:
-  file:
-    - absent
-
-check_backup.py:
-  file:
-    - absent
-    - name: /usr/lib/nagios/plugins/check_backup.py
-
 backup_client_nrpe-requirements:
   file:
     - absent

@@ -132,9 +132,10 @@ graylog2-server:
       - file: {{ server_root_dir }}
       - file: /var/run/graylog2
 
-{%- call manage_pid('/var/run/graylog2/graylog2.pid', 'graylog2', 'graylog2', 'graylog2-server') %}
+{%- call manage_pid('/var/run/graylog2/graylog2.pid', 'graylog2', 'syslog', 'graylog2-server') %}
 - user: graylog2
 - file: /var/run/graylog2
+- pkg: rsyslog
 {%- endcall %}
 
 graylog2_rsyslog_config:

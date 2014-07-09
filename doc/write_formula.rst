@@ -32,19 +32,19 @@ New Formula Guidelines
 Terminology
 -----------
 
-- Formula is a collection of SLS files, that often locate inside same
-  directory, and is used to provide a software and all supported integration
-  (:doc:`/nrpe/doc/index`, :doc:`/diamond/doc/index`).
-- SLS (stands for SaLt State file) is a file that ends with .sls extension.
+- Formula is a collection of SLS files, which often locate inside the same
+  directory. Formula is used to provide a software and all supported
+  integration (:doc:`/nrpe/doc/index`, :doc:`/diamond/doc/index`).
+- SLS (stands for SaLt State file) is a file that ends with ``.sls`` extension.
   Which often consists of multiple states.
 - State is a salt-state, which is a representation of the state that a system
   should be in.
 - State module is a python module, which is responsible for system will be
   in the declared state. For example, ``file`` state module is a
   `python module <https://github.com/saltstack/salt/blob/develop/salt/states/file.py>`__
-  or ``/usr/share/pyshared/salt/states/file.py`` on Ubuntu OS. It is responsilbe
-  for a file will be managed, with user/group and mode set to what user
-  declared in his state.
+  or ``/usr/share/pyshared/salt/states/file.py`` on Ubuntu OS. It is
+  responsible for a file will be managed, with user/group and mode set to
+  what user declared in his state.
 
 PIP
 ---
@@ -69,13 +69,14 @@ If it's in a virtualenv it should be ``/usr/local/$venv/salt-requirements.txt``.
 States
 ------
 
-most of init SLS should have its counter-part absent SLS. That means:
+Each ``init.sls`` should have its counter-part ``absent.sls`` . That means:
 
 * if a formula has ``mariadb/server/init.sls``, it should have
   ``mariadb/server/absent.sls``
-* absent state must contain some state IDs like in ``init.sls`` , that will
-  cause conflict when we include both ``init.sls`` and ``absent.sls`` of a
-  formula, which is the situation that should never happen.
+* absent state must contain some state IDs like in ``init.sls`` ,
+  if one includes both ``init.sls`` and ``absent.sls`` of a formula into
+  a SLS, it will cause conflict and formula writer will easy to detect that
+  (one will never want both to install a software and remove it).
 
 Use only standard style to write state.
 
@@ -90,7 +91,7 @@ Bad::
   mariadb-server:
     pkg.installed
 
-States should be group together if it make sense:
+States should be group together if it makes sense:
 
 Good::
 
@@ -139,7 +140,7 @@ Bad::
 Pillar
 ------
 
-All user data must be embeded to SLS configuration file using pillar:
+All user data must be embedded to SLS configuration file using pillar:
 
 Good optional pillar::
 
@@ -169,9 +170,9 @@ Document those pillar keys in the ``doc/pillar.rst`` file in formula directory.
 Configs
 -------
 
-All app/daemon log must be sent to syslog or graylog2 (if support).
+All app/daemon log messages must be sent to syslog or graylog2 (if support).
 
-All comment must be commented by jinja2 comment. User should only get a config
+All comments must be commented by jinja2 comment. User should only get a config
 file with no comment. Reason for this is make user in trouble if they do
 change config file manually (which may break a system managed by salt), and
 the config file will be shorter, cleaner without comments.
@@ -195,13 +196,17 @@ Should be ::
 * All config files must end with ``.jinja2``
 * Main config file should use name ``config.jinja2`` instead of
   ``its_original_name.jinja2``
+* When starting to manage a new config file, it's good practice to add the
+  origin config file, then make changes and commit the changes. As this will
+  help formula writer easy to change the config file without have to reinstall
+  the software and read the document / config from it.
 
 Absent
 ------
 
-absent SLS files are mainly used by ``integration.py`` script.
+``absent.sls``  files are mainly used by ``integration.py`` script.
 
-Some points to notice when write an absent SLS:
+Some notices when write an ``absent.sls``:
 
 * If it has a pip.remove state, make sure that states has low order
   (often order: 1) because local.absent will remove ``/usr/local`` and
@@ -213,7 +218,7 @@ Installing
 
 * App that installed used an alternate method than ``apt-get`` should be
   located in ``/usr/local/software_name``
-* Using ppa is prefered to self-compile software from source.
+* Using Ubuntu ppa is preferred to self-compile software from source.
 
 Upgrading
 ---------
@@ -228,3 +233,18 @@ Service
 Services which run with other user than root, an have a PID file belong to
 that custom user should manage the PID file. Macro ``manage_pid`` in
 ``macro.sls`` helps handle that case.
+
+Documentation
+-------------
+
+Each formula must have a ``doc`` directory to contains documentation files.
+It often consists of ``pillar.rst``, ``troubleshoot.rst``, and ``usage.rst``.
+
+* ``pillar.rst`` contains document for all pillar keys used in that formula.
+  It should refer to other document instead of rewriting if needed.
+* Pillar key that is not a fixed value (hostname, username, ...) should use
+  ``{{ }}`` to wrap around the words.
+
+Examples::
+
+    elasticsearch:nodes:{{ node minion ID }}:_network:public

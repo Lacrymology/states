@@ -24,10 +24,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
-       Hung Nguyen Viet <hvnsweeting@gmail.com>
+            Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
-{%- for script in ('import_test_data.py', 'retcode_check.py') %}
-/usr/local/bin/{{ script }}:
+{%- for script in ('import_test_data', 'wait_minion_up') %}
+/usr/local/bin/{{ script }}.py:
   file:
     - absent
 {%- endfor %}

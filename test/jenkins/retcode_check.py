@@ -3,16 +3,16 @@
 
 # Copyright (c) 2013, Hung Nguyen Viet
 # All rights reserved.
-# 
+#
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
-# 
+#
 # 1. Redistributions of source code must retain the above copyright notice, this
 #    list of conditions and the following disclaimer.
 # 2. Redistributions in binary form must reproduce the above copyright notice,
 #    this list of conditions and the following disclaimer in the documentation
 #    and/or other materials provided with the distribution.
-# 
+#
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 # ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -39,6 +39,7 @@ __email__ = 'patate@fastmail.cn, hvnsweeting@gmail.com'
 import json
 import sys
 import os
+import re
 
 json_text = sys.stdin.read()
 try:
@@ -71,4 +72,13 @@ def write_output(output_type):
 
 write_output('stdout')
 write_output('stderr')
-sys.exit(result['retcode'])
+
+pattern = re.compile('Failed: .*(\d+)')
+if int(result['retcode']) == 0:
+    try:
+        if pattern.findall(result['stdout'])[0] == '0':
+            sys.exit(0)
+    except Exception as e:
+        print e
+
+sys.exit(1)

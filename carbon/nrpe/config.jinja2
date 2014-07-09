@@ -34,14 +34,17 @@ carbon_cache_{{ instance }}_procs:
 carbon_cache_{{ instance }}_port_plaintext:
   description: Carbon Cache {{ instance }} Port Plaintext
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 20{{ instance|int + 1 }}3
+  service_dependencies: ',carbon_cache_{{ instance }}_procs'
 
 carbon_cache_{{ instance }}_port_pickle:
   description: Carbon Cache {{ instance }} Port Pickle
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 20{{ instance|int + 1 }}4
+  service_dependencies: ',carbon_cache_{{ instance }}_procs'
 
 carbon_cache_{{ instance }}_port_cache_query:
   description: Carbon Cache {{ instance }} Port Cache Query
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 70{{ instance|int + 1 }}2
+  service_dependencies: ',carbon_cache_{{ instance }}_procs'
 {% endfor %}
 
 carbon_cache_procs:
@@ -56,16 +59,20 @@ carbon-remote-port-plaintext:
   description: Carbon Remote Port PlainText Protocol
   check: check_tcp!2003
   passive: False
+  service_dependencies: ',carbon_cache_procs'
 
 carbon-remote-port-pickle:
   description: Carbon Remote Port Pickle Protocol
   check: check_tcp!2004
   passive: False
+  service_dependencies: ',carbon_cache_procs'
 
 carbon_port_plaintext:
   description: Carbon Local Port PlainText Protocol
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 2003
+  service_dependencies: ',carbon_cache_procs'
 
 carbon_port_pickle:
   description: Carbon Local Port Pickle Protocol
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 2004
+  service_dependencies: ',carbon_cache_procs'

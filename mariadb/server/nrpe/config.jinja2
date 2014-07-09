@@ -39,10 +39,12 @@ mysql_procs:
 mysql_port:
   description: MariaDB Local Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 3306
+  service_dependencies: ',mysql_procs'
 
 {%- if salt['pillar.get']('mysql:bind', '127.0.0.1') != '127.0.0.1' %}
 mysql_remote_port:
   check: check_tcp!3306
   description: MariaDB Remote Port
   passive: False
+  service_dependencies: ',mysql_procs'
 {%- endif %}

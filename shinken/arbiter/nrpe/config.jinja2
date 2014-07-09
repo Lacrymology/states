@@ -34,8 +34,10 @@ shinken_arbiter_procs:
 shinken_arbiter_port:
   description: Shinken Arbiter Local Port
   command: "/usr/lib/nagios/plugins/check_tcp -H {{ salt['mine.get'](grains['id'], 'monitoring.data')[grains['id']]['ip_addrs']['private'] }} -p 7770"
+  service_dependencies: ',shinken_arbiter_procs'
 
 shinken_arbiter_remote_port:
   description: Shinken Arbiter Remote Port
   check: check_tcp!7770
   passive: False
+  service_dependencies: ',shinken_arbiter_procs'

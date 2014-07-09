@@ -40,17 +40,20 @@ postfix_master:
 postfix_port_smtp:
   description: Postfix SMTP Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 25
+  service_dependencies: ',postfix_master'
 
 {%- if salt['pillar.get']('postfix:spam_filter', False) %}
 port_spam_handler:
   description: Port SPAM handler
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 10025
+  service_dependencies: ',postfix_master'
 {%- endif %}
 
 {%- if salt['pillar.get']('postfix:ssl', False) %}
 port_smtps:
   description: SMTP over SSL Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 465
+  service_dependencies: ',postfix_master'
 {%- endif %}
 
 {#- TODO: use /usr/lib/nagios/plugins/check_smtp -#}

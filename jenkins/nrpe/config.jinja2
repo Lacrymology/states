@@ -35,3 +35,4 @@ jenkins_procs:
 jenkins_port:
   description: Jenkins Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 8080
+  service_dependencies: ',jenkins_procs'

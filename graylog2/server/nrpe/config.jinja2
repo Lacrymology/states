@@ -36,6 +36,7 @@ graylog2_procs:
 graylog2_incoming_logs:
   description: Incoming Logs Rate
   command: '/usr/lib/nagios/plugins/check_new_logs.py -w 1:50000 -t 60'
+  service_dependencies: ',graylog2_procs'
 {%- endif %}
 
 {%- from 'elasticsearch/nrpe/instance.jinja2' import elasticsearch_instance with context -%}

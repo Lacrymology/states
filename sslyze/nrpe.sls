@@ -27,4 +27,3 @@ Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
 include:
   - virtualenv.nrpe
-  - salt.minion.nrpe

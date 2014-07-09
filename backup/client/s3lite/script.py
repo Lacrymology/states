@@ -60,11 +60,13 @@ class S3Util(object):
         self.conn = S3Connection(key_id, secret_key)
         self.buckets = self.conn.get_all_buckets()
 
-    def upload_file(self, bucket, filepath, prefix):
+    def _gen_path(self, prefix, filepath):
         filename = os.path.basename(filepath)
+        return os.path.join(prefix, filename) if prefix else filename
 
+    def upload_file(self, bucket, filepath, prefix):
         k = Key(bucket)
-        k.key = os.path.join(prefix, filename) if prefix else filename
+        k.key = self._gen_path(prefix, filepath)
         logger.info('uploading %s to %s,%s', filepath, bucket.name, k.key)
 
         wrote_bytes = k.set_contents_from_filename(filepath)
@@ -77,37 +79,29 @@ class S3Util(object):
         counter = collections.Counter({'uploaded': 0,
                                        'existed_before_sync': 0})
 
-        existed = []
-        total_to_process = 0
+        def _log_progress(counter):
+            logger.info('Processed %d, uploaded %d, existed %d',
+                        counter['uploaded'] + counter['existed_before_sync'],
+                        counter['uploaded'],
+                        counter['existed_before_sync'])
 
-        for rfile in bucket.list(prefix):
-            # etag is usually md5sum of that file
-            rmd5 = rfile.etag.strip('"')
-            logger.debug('Remote md5 of %r: %r', rfile.name, rmd5)
-            cntr = 0
-            for lfn in localfiles(bucket, path, prefix):
-                cntr += 1
+        logger.info('Uploading files')
+        for lfn in localfiles(bucket, path, prefix):
+            rfile = bucket.get_key(self._gen_path(lfn['prefix'],
+                                                  lfn['fullpath']))
+            if rfile:
+                # etag is usually md5sum of that file
+                rmd5 = rfile.etag.strip('"')
                 if rmd5 == unicode(lfn['md5']):
                     logger.warning('%s existed on S3 at %s', lfn['fullpath'],
                                    rfile.name)
-                    existed.append(lfn['fullpath'])
+                    counter['existed_before_sync'] += 1
+                    _log_progress(counter)
+                    continue
 
-            # count once
-            if total_to_process == 0:
-                total_to_process = cntr
-
-        for lfn in localfiles(bucket, path, prefix):
-            if lfn['fullpath'] not in existed:
-                self.upload_file(lfn['bucket'], lfn['fullpath'], lfn['prefix'])
-                counter['uploaded'] += 1
-            else:
-                counter['existed_before_sync'] += 1
-            processed = counter['uploaded'] + counter['existed_before_sync']
-            logger.info('Total %d, processed %d, uploaded %d, existed %d',
-                        total_to_process,
-                        processed,
-                        counter['uploaded'],
-                        counter['existed_before_sync'])
+            self.upload_file(lfn['bucket'], lfn['fullpath'], lfn['prefix'])
+            counter['uploaded'] += 1
+            _log_progress(counter)
 
         return counter
 

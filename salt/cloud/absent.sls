@@ -24,7 +24,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
-/etc/salt/cloud.profiles:
+{%- for type in ('profiles', 'providers') %}
+/etc/salt/cloud.{{ type }}:
   file:
     - absent
 

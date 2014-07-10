@@ -33,11 +33,12 @@ include:
   - bash
   - cron
   - java.7
+  - salt.minion.deps
 {% if ssl %}
   - nginx
   - ssl
 {% endif %}
-{%- set version = salt['pillar.get']('elasticsearch:version', '0.20.5') %}
+{%- set version = salt['pillar.get']('elasticsearch:version', '0.90.10') %}
 
 /etc/default/elasticsearch:
   file:
@@ -109,10 +110,19 @@ elasticsearch:
       origin_state: elasticsearch
     - require:
       - pkg: elasticsearch
+  process:
+    - wait
+    - name: '-Delasticsearch'
+    - timeout: 10
+    - require:
+      - pkg: elasticsearch
+      - pkg: salt_minion_deps
   service:
     - running
     - enable: True
     - order: 50
+    - require:
+      - process: elasticsearch
     - watch:
       - file: /etc/default/elasticsearch
       - file: /etc/elasticsearch/logging.yml

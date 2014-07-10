@@ -28,6 +28,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 /etc/salt/cloud.{{ type }}:
   file:
     - absent
+{%- endfor %}
 
 /etc/salt/cloud:
   file:

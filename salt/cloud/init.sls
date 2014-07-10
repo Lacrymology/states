@@ -51,26 +51,19 @@ include:
       - pkg: salt-cloud
 
 salt_cloud_remove_old_version:
-  pkg:
+  pip:
     - removed
     - name: salt-cloud
+    - require:
+      - module: pip
 
-{%- set version = '0.8.11' %}
 salt-cloud:
   pkg:
     - installed
-    - name: python-libcloud
     - skip_verify: True
     - require:
       - pkg: salt
-      - pkgrepo: salt
-      - pkg: salt_cloud_remove_old_version
-  pip:
-    - installed
-    - name: salt-cloud=={{ version }}
-    - require:
-      - module: pip
-      - pkg: salt-cloud
+      - pip: salt_cloud_remove_old_version
 
 salt-cloud-boostrap-script:
   file:

@@ -33,6 +33,7 @@ include:
   - bash
   - cron
   - java.7
+  - salt.minion.deps
 {% if ssl %}
   - nginx
   - ssl
@@ -115,6 +116,7 @@ elasticsearch:
     - timeout: 10
     - require:
       - pkg: elasticsearch
+      - pkg: salt_minion_deps
   service:
     - running
     - enable: True

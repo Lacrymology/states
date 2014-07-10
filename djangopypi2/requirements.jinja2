@@ -56,6 +56,6 @@ raven==4.1.1
 {%- endif %}
 ipython==0.13.2
 {%- set smtp = salt['pillar.get']('djangopypi2:email', salt['pillar.get']('smtp')) -%}
-{%- if smtp['port'] == 465 and smtp['tls']|default(False) %}
+{%- if smtp['encryption']|default('plain') == 'SSL/TLS' %}
 django-smtp-ssl==1.0
 {%- endif -%}

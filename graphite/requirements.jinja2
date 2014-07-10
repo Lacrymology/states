@@ -53,6 +53,6 @@ http://cairographics.org/releases/py2cairo-1.8.10.tar.gz
 -e git+git@github.com:bclermont/django-insecure.git@ce529583fc02db20a5ea2b34f1ee8f3d4538a14e#egg=django-insecure
 {%- endif -%}
 {%- set smtp = salt['pillar.get']('graphite:email', salt['pillar.get']('smtp')) -%}
-{%- if smtp['port'] == 465 and smtp['tls']|default(False) %}
+{%- if smtp['encryption']|default('plain') == 'SSL/TLS' %}
 django-smtp-ssl==1.0
 {%- endif -%}

@@ -81,6 +81,6 @@ urllib3==1.7.1
 https://github.com/bclermont/django-insecure/archive/v0.2.tar.gz
 {%- endif %}
 {%- set smtp = salt['pillar.get']('sentry:email', salt['pillar.get']('smtp')) -%}
-{%- if smtp['port'] == 465 and smtp['tls']|default(False) %}
+{%- if smtp['encryption']|default('plain') == 'SSL/TLS' %}
 django-smtp-ssl==1.0
 {%- endif -%}

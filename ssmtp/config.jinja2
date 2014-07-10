@@ -34,8 +34,8 @@ hostname={{ pillar['mail']['mailname'] }}
 AuthUser={{ pillar['smtp']['user'] }}
 AuthPass={{ pillar['smtp']['password'] }}
 {%- endif %}
-{%- if salt['pillar.get']('smtp:tls', False) %}
-    {%- if pillar['smtp']['port'] == 465 %}
+{% if salt['pillar.get']('smtp:encryption', 'plain') in ('SSL/TLS', 'STARTTLS') %}
+    {%- if pillar['smtp']['encryption']|default('plain') == 'SSL/TLS' %}
 UseSTARTTLS=no
     {%- else %}
 UseSTARTTLS=yes

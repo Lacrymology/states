@@ -132,7 +132,7 @@ EMAIL_PORT = {{ smtp['port'] }}
 DEFAULT_FROM_EMAIL = '{{ smtp['from'] }}'
 {%- if smtp['tls']|default(False) %}
 EMAIL_USE_TLS = True
-    {%- if smtp['port'] == 465 %}
+    {%- if smtp['encryption']|default('plain') == 'SSL/TLS' %}
 EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
     {%- endif -%}
 {%- else %}

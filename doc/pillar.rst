@@ -105,7 +105,7 @@ Example::
     user: yyy
     password: xxx
     authentication: plain
-    tls: False
+    encryption: plain
 
 See below for details on each keys.
 
@@ -144,10 +144,14 @@ smtp:authentication
 
 Authentication method. Default is: ``plain``.
 
-smtp:tls
-~~~~~~~~
+smtp:encryption
+~~~~~~~~~~~~~~~
 
-Use TLS or Not. Default is: ``False``.
+SMTP encryption type.
+
+Possible values: `SSL/TLS <http://en.wikipedia.org/wiki/Transport_Layer_Security>`_, `STARTTLS <http://en.wikipedia.org/wiki/Starttls>`_, ``plain``.
+
+Default: ``plain``
 
 encoding
 ~~~~~~~~

@@ -25,20 +25,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-scp_nagios_config:
-  file:
-    - absent
-    - name: /etc/nagios/backup.conf
-
-scp_check_backup_base:
-  file:
-    - absent
-    - name: /usr/local/nagios/lib/python2.7/check_backup_base.py
-
-scp_check_backup:
-  file:
-    - absent
-    - name: /usr/lib/nagios/plugins/check_backup.py
+include:
+  - backup.client.base.absent
 
 backup_client_nrpe-requirements:
   file:

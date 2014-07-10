@@ -68,7 +68,7 @@ include:
     - absent
 
 {%- call passive_check('backup.server') %}
-      - file: /etc/sudoers.d/nrpe_backups
-      - file: /usr/lib/nagios/plugins/check_backups.py
-      - file: /etc/nagios/nrpe.d/backups.cfg
+  - file: /etc/sudoers.d/nrpe_backups
+  - file: /usr/lib/nagios/plugins/check_backups.py
+  - file: /etc/nagios/nrpe.d/backups.cfg
 {%- endcall %}

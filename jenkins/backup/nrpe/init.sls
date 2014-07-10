@@ -33,5 +33,7 @@ include:
   - cron.nrpe
   - nrpe
 
-{%- from 'nrpe/passive.sls' import passive_check with context %}
-{{ passive_check('jenkins.backup') }}
+{%- from 'nrpe/passive.sls' import passive_check with context -%}
+{%- call passive_check('jenkins.backup') %}
+  - file: check_backup.py
+{%- endcall -%}

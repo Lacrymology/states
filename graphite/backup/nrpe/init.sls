@@ -28,9 +28,12 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Nagios NRPE check for Graphite backup
 -#}
 include:
+  - backup.client.{{ pillar['backup_storage'] }}.nrpe
   - bash.nrpe
   - cron.nrpe
   - nrpe
 
 {%- from 'nrpe/passive.sls' import passive_check with context %}
-{{ passive_check('graphite.backup') }}
+{%- call passive_check('graphite.backup') %}
+  - file: check_backup.py
+{%- endcall -%}

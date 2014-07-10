@@ -34,4 +34,6 @@ include:
   - nrpe
 
 {%- from 'nrpe/passive.sls' import passive_check with context %}
-{{ passive_check('etherpad.backup') }}
+{%- call passive_check('etherpad.backup') %}
+  - file: check_backup.py
+{%- endcall -%}

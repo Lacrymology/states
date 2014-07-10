@@ -48,9 +48,10 @@ include:
     - require:
       - pkg: nagios-nrpe-server
 
-/usr/lib/nagios/plugins/check_backup.py:
+check_backup.py:
   file:
     - managed
+    - name: /usr/lib/nagios/plugins/check_backup.py
     - source: salt://backup/client/scp/nrpe/check.py
     - user: nagios
     - group: nagios

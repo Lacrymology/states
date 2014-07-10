@@ -113,7 +113,7 @@ salt-master-job_changes.py:
     - require:
       - file: /usr/local
 
-{%- set version = '0.17.5-1' %}
+{%- set version = '2014.1.5-5' %}
 {%- set pkg_version = '{0}{1}1'.format(version, grains['lsb_distrib_codename']) %}
 {#- check deb filename carefully, number `1` after {1} is added only on 0.17.5-1
     pkg sub-version can be anything #}

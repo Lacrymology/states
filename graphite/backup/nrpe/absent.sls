@@ -30,3 +30,4 @@ Remove Nagios NRPE check for Graphite backup
 /etc/nagios/nrpe.d/backup-graphite.cfg:
   file:
     - absent
+{#- TODO: remove passive_check output  #}

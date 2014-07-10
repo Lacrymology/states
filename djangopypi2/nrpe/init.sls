@@ -55,11 +55,9 @@ include:
 {% if salt['pillar.get']('djangopypi2:ssl', False) %}
   - ssl.nrpe
   - sslyze
-  - dnsutils
 
     {%- call passive_check('djangopypi2') -%}
-- file: /usr/lib/nagios/plugins/check_ssl_configuration.py
-- pkg: dnsutils
+- file: check_ssl_configuration.py
     {%- endcall %}
 {%- else %}
     {{ passive_check('djangopypi2') }}

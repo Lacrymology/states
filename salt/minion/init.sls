@@ -54,13 +54,7 @@ extend:
       - watch:
         - module: salt_minion_master_key
     pkg:
-      - pkgs:
-        - salt-minion
-        - lsb-release
-{%- if grains['virtual'] != 'openvzve' %}
-        - pciutils
-        - dmidecode
-{%- endif %}
+      - installed
       - require:
         - pkgrepo: salt
         - cmd: apt_sources
@@ -92,7 +86,3 @@ salt-fire-event:
     - group: root
     - require:
       - pkg: salt-minion
-
-python-psutil:
-  pkg:
-    - installed

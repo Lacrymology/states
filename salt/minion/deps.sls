@@ -24,6 +24,20 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author: Quan Tong Anh <quanta@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
+
+These are required to run some Salt states/modules
+for e.g, `salt.modules.dig` need `dnsutils` to be installed
 -#}
-include:
-  - apt.nrpe
+
+salt_minion_deps:
+  pkg:
+    - installed
+    - pkgs:
+      - lsb-release
+      - unzip
+      - dnsutils
+      - python-psutil
+{%- if grains['virtual'] != 'openvzve' %}
+      - pciutils
+      - dmidecode
+{%- endif %}

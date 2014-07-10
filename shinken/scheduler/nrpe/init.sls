@@ -31,9 +31,14 @@ include:
   - nrpe
   - pip.nrpe
   - python.dev.nrpe
+  - virtualenv.nrpe
 {% if salt['pillar.get']('shinken:ssl', False) %}
   - ssl.nrpe
-{% endif %}
-  - virtualenv.nrpe
+  - sslyze
 
-{{ passive_check('shinken.scheduler') }}
+    {%- call passive_check('shinken.scheduler') -%}
+- file: check_ssl_configuration.py
+    {%- endcall %}
+{%- else %}
+    {{ passive_check('shinken.scheduler') }}
+{%- endif %}

@@ -39,6 +39,7 @@ include:
   - rsyslog.nrpe
 {% if salt['pillar.get']('postgresql:ssl', False) %}
   - ssl.nrpe
+  - sslyze
 {% endif %}
   - sudo
 
@@ -93,7 +94,10 @@ check_postgres:
 
 {%- from 'nrpe/passive.sls' import passive_check with context %}
 {%- call passive_check('postgresql.common') %}
-  - file: /etc/nagios/nrpe.d/postgresql.cfg
+- file: /etc/nagios/nrpe.d/postgresql.cfg
+    {%- if salt['pillar.get']('postgresql:ssl', False) %}
+- file: check_ssl_configuration.py
+    {%- endif -%}
 {%- endcall %}
 
 extend:

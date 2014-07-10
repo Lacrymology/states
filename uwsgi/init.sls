@@ -37,6 +37,7 @@ include:
   - local
   - python.dev
   - rsyslog
+  - salt.minion.deps
   - web
   - xml
 
@@ -56,13 +57,6 @@ uwsgi_upgrade_remove_old_version:
   file:
     - absent
     - name: /usr/local/uwsgi
-
-# Required for `dig` module to work, which used to convert graphite domain to ip
-# Since uwsgi does not support using domain name in "carbon" config, just ip only.
-uwsgi_dnsutils:
-  pkg:
-    - installed
-    - name: dnsutils
 
 {%- set version = '1.9.17.1' -%}
 {%- set extracted_dir = '/usr/local/uwsgi-{0}'.format(version) %}
@@ -168,7 +162,7 @@ uwsgi_emperor:
       - file: uwsgi_emperor
       - file: uwsgi_sockets
       - service: rsyslog
-      - pkg: uwsgi_dnsutils
+      - pkg: salt_minion_deps
     - watch:
       - cmd: uwsgi_emperor
       - file: uwsgi_upgrade_remove_old_version

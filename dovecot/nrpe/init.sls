@@ -35,13 +35,18 @@ include:
   - dovecot
   - nrpe
   - postfix.nrpe
-{%- if ssl %}
-  - ssl.nrpe
-{%- endif %}
   - openldap
   - openldap.nrpe
+{%- if ssl %}
+  - ssl.nrpe
+  - sslyze
 
-{{ passive_check('dovecot') }}
+    {%- call passive_check('dovecot') -%}
+- file: check_ssl_configuration.py
+    {%- endcall %}
+{%- else %}
+    {{ passive_check('dovecot') }}
+{%- endif %}
 
 {%- if salt['pillar.get']('mail:check_mail_stack', False) %}
 dovecot_check_mail_stack:

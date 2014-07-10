@@ -31,8 +31,8 @@ A Python tool that can analyze the SSL configuration of a server
 include:
   - local
   - nrpe
+  - salt.minion.deps
   - virtualenv
-  - unzip
 
 {%- if grains['osarch'] == 'amd64' -%}
     {%- set bits = "64" -%}
@@ -56,7 +56,7 @@ sslyze:
     - archive_format: zip
     - require:
       - file: /usr/local/src
-      - pkg: unzip
+      - pkg: salt_minion_deps
   cmd:
     - wait
 {%- if grains['osarch'] == 'amd64' %}
@@ -70,9 +70,10 @@ sslyze:
     - require:
       - virtualenv: nrpe-virtualenv
 
-/usr/lib/nagios/plugins/check_ssl_configuration.py:
+check_ssl_configuration.py:
   file:
     - managed
+    - name: /usr/lib/nagios/plugins/check_ssl_configuration.py
     - source: salt://sslyze/check_ssl_configuration.py
     - user: nagios
     - group: nagios
@@ -80,6 +81,7 @@ sslyze:
     - require:
       - pkg: nagios-nrpe-server
       - cmd: sslyze
+      - pkg: salt_minion_deps
 
 sslyze_requirements:
   file:

@@ -35,11 +35,15 @@ include:
   - cron.nrpe
   - elasticsearch.nrpe.instance
   - nrpe
-{% if ssl %}
+{%- if ssl %}
   - ssl.nrpe
   - nginx.nrpe
-{% endif %}
+  - sslyze
+{%- endif %}
 
 {%- call passive_check('elasticsearch') %}
 - file: /usr/lib/nagios/plugins/check_elasticsearch_cluster.py
+    {%- if ssl %}
+- file: check_ssl_configuration.py
+    {%- endif -%}
 {%- endcall %}

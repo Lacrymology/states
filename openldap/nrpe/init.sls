@@ -34,6 +34,11 @@ include:
   - nrpe
 {%- if ssl %}
   - ssl.nrpe
-{%- endif %}
+  - sslyze
 
-{{ passive_check('openldap') }}
+    {%- call passive_check('openldap') -%}
+- file: check_ssl_configuration.py
+    {%- endcall %}
+{%- else %}
+    {{ passive_check('openldap') }}
+{%- endif %}

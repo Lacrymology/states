@@ -38,6 +38,11 @@ include:
   - rsyslog.nrpe
 {%- if salt['pillar.get']('etherpad:ssl', False) %}
   - ssl.nrpe
-{%- endif %}
+  - sslyze
 
-{{ passive_check('etherpad') }}
+    {%- call passive_check('etherpad') %}
+- file: check_ssl_configuration.py
+    {%- endcall %}
+{%- else %}
+    {{ passive_check('etherpad') }}
+{%- endif %}

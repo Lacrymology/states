@@ -33,11 +33,16 @@ include:
   - nrpe
   - pip.nrpe
   - python.dev.nrpe
-{% if salt['pillar.get']('shinken:ssl', False) %}
-  - ssl.nrpe
-{% endif %}
   - rsyslog.nrpe
   - ssmtp.nrpe
   - virtualenv.nrpe
+{% if salt['pillar.get']('shinken:ssl', False) %}
+  - ssl.nrpe
+  - sslyze
 
-{{ passive_check('shinken.arbiter') }}
+    {%- call passive_check('shinken.arbiter') -%}
+- file: check_ssl_configuration.py
+    {%- endcall %}
+{%- else %}
+    {{ passive_check('shinken.arbiter') }}
+{%- endif %}

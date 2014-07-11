@@ -70,7 +70,8 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
   command: /usr/lib/nagios/plugins/check_http -S -H {{ domain_name }} -C {{ salt['pillar.get']('ssl_https_max_age', 60) }} -I {{ first_ip }}
   service_dependencies: ',nginx_master'
 
-        {%- if not salt['dig.check_ip'](domain_name) %}
+        {%- if 'dnsutils' in salt['pkg.list_pkgs']() -%}
+            {%- if not salt['dig.check_ip'](domain_name) %}
 
 {{ deployment }}_ssl_configuration:
   description: {{ deployment|capitalize }} SSL Configuration
@@ -78,6 +79,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
   freshness_threshold: {{ (1440 + 10) * 60 }}
   command: /usr/lib/nagios/plugins/check_ssl_configuration.py -H {{ domain_name }}
   service_dependencies: ',nginx_master'
+            {%- endif -%}
         {%- endif -%}
     {%- endif -%}
 {%- endmacro %}

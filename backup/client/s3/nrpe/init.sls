@@ -25,7 +25,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-
 include:
   - nrpe
   - backup.client.base
@@ -42,6 +41,28 @@ include:
     - require:
       - pkg: nagios-nrpe-server
 
+backup_client_nrpe-requirements:
+  file:
+    - managed
+    - name: /usr/local/nagios/backup.client.s3.nrpe-requirements.txt
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - source: salt://backup/client/s3/nrpe/requirements.jinja2
+    - require:
+      - virtualenv: nrpe-virtualenv
+  module:
+    - wait
+    - name: pip.install
+    - upgrade: True
+    - bin_env: /usr/local/nagios
+    - requirements: /usr/local/nagios/backup.client.s3.nrpe-requirements.txt
+    - require:
+      - virtualenv: nrpe-virtualenv
+    - watch:
+      - file: backup_client_nrpe-requirements
+
 check_backup.py:
   file:
     - managed
@@ -53,3 +74,5 @@ check_backup.py:
     - require:
       - file: /etc/nagios/backup.conf
       - file: /usr/local/nagios/lib/python2.7/check_backup_base.py
+      - pkg: nagios-nrpe-server
+      - module: backup_client_nrpe-requirements

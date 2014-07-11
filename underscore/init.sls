@@ -38,12 +38,12 @@ include:
   - apt
 {%- set version = '1.4.2-1chl1~precise1' %}
 libjs-underscore:
-  pkgrepo:
+  pkgrepo17:
     - managed
     - ppa: chris-lea/libjs-underscore
   pkg:
     - installed
     - version: {{ version }}
     - require:
-      - pkgrepo: libjs-underscore
+      - pkgrepo17: libjs-underscore
       - cmd: apt_sources

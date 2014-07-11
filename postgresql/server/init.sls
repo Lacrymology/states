@@ -49,7 +49,7 @@ postgresql:
       - postgresql-client-{{ version }}
     - require:
       - cmd: system_locale
-      - pkgrepo: postgresql-dev
+      - pkgrepo17: postgresql-dev
       - cmd: apt_sources
 {% set encoding = salt['pillar.get']('encoding', 'en_US.UTF-8') %}
     - env:

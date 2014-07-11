@@ -45,4 +45,4 @@ php_bundle:
       - php5-curl
       - php5-cli
     - require:
-      - pkgrepo: php
+      - pkgrepo17: php

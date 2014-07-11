@@ -43,7 +43,7 @@ mariadb_remove_key:
     - onlyif: apt-key list | grep -q 0xcbcb082a1bb943db
 
 mariadb:
-  pkgrepo:
+  pkgrepo17:
     - absent
 {%- if 'files_archive' in pillar %}
     - name: deb {{ pillar['files_archive']|replace('https://', 'http://') }}/mirror/mariadb/5.5.31 {{ grains['lsb_distrib_codename'] }} main

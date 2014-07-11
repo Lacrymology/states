@@ -71,7 +71,7 @@ libmariadbclient-dev:
   pkg:
     - installed
     - require:
-      - pkgrepo: mariadb
+      - pkgrepo17: mariadb
       - cmd: apt_sources
       - pkg: mariadb
 

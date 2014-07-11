@@ -47,3 +47,9 @@
     - watch_in:
       - service: nagios-nrpe-server
 {%- endmacro -%}
+
+{%- macro passive_absent(state) %}
+/etc/nagios/nrpe.d/{{ state }}.cfg:
+  file:
+    - absent
+{%- endmacro %}

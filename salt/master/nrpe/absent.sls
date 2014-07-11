@@ -39,6 +39,5 @@ Remove Nagios NRPE check for Salt Master.
   file:
     - absent
 
-/etc/cron.d/passive-checks-salt.master:
-  file:
-    - absent
+{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{{ passive_absent('salt.master') }}

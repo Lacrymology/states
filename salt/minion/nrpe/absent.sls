@@ -27,10 +27,5 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Remove Nagios NRPE check for Salt Minion.
 -#}
-/etc/nagios/nrpe.d/salt-minion.cfg:
-  file:
-    - absent
-
-/etc/cron.d/passive-checks-salt.minion:
-  file:
-    - absent
+{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{{ passive_absent('salt.minion') }}

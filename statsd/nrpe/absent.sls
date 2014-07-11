@@ -27,10 +27,6 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Remove Nagios NRPE check for StatsD.
 -#}
-/etc/nagios/nrpe.d/statsd.cfg:
-  file:
-    - absent
+{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{{ passive_absent('statsd') }}
 
-/etc/cron.d/passive-checks-statsd:
-  file:
-    - absent

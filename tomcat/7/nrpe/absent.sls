@@ -32,5 +32,5 @@ Institute for Institutional Innovation by Data Driven Design Inc.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
-include:
-  - tomcat.6.nrpe.absent
+{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{{ passive_absent('tomcat.7') }}

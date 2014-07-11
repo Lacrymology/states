@@ -27,10 +27,6 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Remove Nagios NRPE checks for diamond.
 -#}
-/etc/nagios/nrpe.d/diamond.cfg:
-  file:
-    - absent
+{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{{ passive_absent('diamond') }}
 
-/etc/cron.d/passive-checks-diamond:
-  file:
-    - absent

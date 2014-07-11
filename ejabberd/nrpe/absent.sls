@@ -28,9 +28,8 @@ Maintainer: Dang Tung Lam <lamdt@familug.org>
 Uninstall NRPE check for ejabberd - XMPP Server
 #}
 
-/etc/nagios/nrpe.d/ejabberd.cfg:
-  file:
-    - absent
+{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{{ passive_absent('ejabberd') }}
 
 /etc/nagios/nrpe.d/ejabberd-nginx.cfg:
   file:

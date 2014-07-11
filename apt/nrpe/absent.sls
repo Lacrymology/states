@@ -27,9 +27,8 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Remove Nagios NRPE check for APT.
 -#}
-/etc/nagios/nrpe.d/apt.cfg:
-  file:
-    - absent
+{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{{ passive_absent('apt') }}
 
 /usr/local/bin/check_apt-rc.py:
   file:

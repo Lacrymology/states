@@ -27,9 +27,8 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Remove Nagios NRPE checks for elasticsearch.
 -#}
-/etc/nagios/nrpe.d/elasticsearch.cfg:
-  file:
-    - absent
+{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{{ passive_absent('elasticsearch') }}
 
 /etc/nagios/nrpe.d/elasticsearch-nginx.cfg:
   file:
@@ -53,6 +52,3 @@ pyelasticsearch:
   file:
     - absent
 
-/etc/cron.d/passive-checks-elasticsearch:
-  file:
-    - absent

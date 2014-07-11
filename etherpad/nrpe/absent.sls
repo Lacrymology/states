@@ -26,6 +26,9 @@ Author: Dang Tung Lam <lamdt@familug.org>
 Maintainer: Dang Tung Lam <lamdt@familug.org>
 
 -#}
+{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{{ passive_absent('etherpad') }}
+
 /etc/nagios/nrpe.d/etherpad-nginx.cfg:
   file:
     - absent
@@ -34,6 +37,3 @@ Maintainer: Dang Tung Lam <lamdt@familug.org>
   file:
     - absent
 
-/etc/cron.d/passive-checks-etherpad:
-  file:
-    - absent

@@ -27,10 +27,6 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 Remove Nagios NRPE check for terracotta.
 -#}
-/etc/nagios/nrpe.d/terracotta.cfg:
-  file:
-    - absent
+{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{{ passive_absent('terracotta') }}
 
-/etc/cron.d/passive-checks-terracotta:
-  file:
-    - absent

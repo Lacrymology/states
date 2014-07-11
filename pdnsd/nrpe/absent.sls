@@ -27,10 +27,6 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 Remove pDNSd Nagios NRPE checks.
 -#}
-/etc/nagios/nrpe.d/pdnsd.cfg:
-  file:
-    - absent
+{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{{ passive_absent('pdnsd') }}
 
-/etc/cron.d/passive-checks-pdnsd:
-  file:
-    - absent

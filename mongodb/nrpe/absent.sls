@@ -27,10 +27,6 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Remove Nagios NRPE check for MongoDB.
 -#}
-/etc/nagios/nrpe.d/mongodb.cfg:
-  file:
-    - absent
+{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{{ passive_absent('mongodb') }}
 
-/etc/cron.d/passive-checks-mongodb:
-  file:
-    - absent

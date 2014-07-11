@@ -35,6 +35,5 @@ Remove Nagios NRPE check for Salt-API Server.
   file:
     - absent
 
-/etc/cron.d/passive-checks-salt.api:
-  file:
-    - absent
+{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{{ passive_absent('salt.api') }}

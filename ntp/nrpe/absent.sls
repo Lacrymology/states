@@ -31,6 +31,5 @@ Remove Nagios NRPE check for NTP.
   file:
     - absent
 
-/etc/cron.d/passive-checks-ntp:
-  file:
-    - absent
+{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{{ passive_absent('ntp') }}

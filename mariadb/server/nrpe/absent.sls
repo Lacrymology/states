@@ -38,6 +38,5 @@ Remove Nagios NRPE checks for MariaDB.
   file:
     - absent
 
-/etc/cron.d/passive-checks-mariadb.server:
-  file:
-    - absent
+{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{{ passive_absent('mariadb.server') }}

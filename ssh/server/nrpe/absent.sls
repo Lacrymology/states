@@ -31,6 +31,5 @@ Remove Nagios NRPE check for OpenSSH Server.
   file:
     - absent
 
-/etc/cron.d/passive-checks-ssh.server:
-  file:
-    - absent
+{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{{ passive_absent('ssh.server') }}

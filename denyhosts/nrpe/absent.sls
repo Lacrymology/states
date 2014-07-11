@@ -28,14 +28,10 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 Remove Nagios NRPE check for Denyhosts.
 -#}
 
-/etc/nagios/nrpe.d/denyhosts.cfg:
-  file:
-    - absent
+{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{{ passive_absent('denyhosts') }}
 
 /var/lib/denyhosts/allowed-hosts:
   file:
     - absent
 
-/etc/cron.d/passive-checks-denyhosts:
-  file:
-    - absent

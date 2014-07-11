@@ -34,9 +34,8 @@ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
 
 Remove Nagios NRPE check for djangopypi2.
 -#}
-/etc/nagios/nrpe.d/djangopypi2.cfg:
-  file:
-    - absent
+{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{{ passive_absent('djangopypi2') }}
 
 /etc/nagios/nrpe.d/djangopypi2-nginx.cfg:
   file:
@@ -46,6 +45,3 @@ Remove Nagios NRPE check for djangopypi2.
   file:
     - absent
 
-/etc/cron.d/passive-checks-djangopypi2:
-  file:
-    - absent

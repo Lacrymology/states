@@ -30,3 +30,6 @@ Remove Nagios NRPE check for Postfix backup
 /etc/nagios/nrpe.d/backup-postfix.cfg:
   file:
     - absent
+
+{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{{ passive_absent('postfix.backup') }}

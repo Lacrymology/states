@@ -27,10 +27,6 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 Remove Nagios NRPE check for Postfix.
 -#}
-/etc/nagios/nrpe.d/postfix.cfg:
-  file:
-    - absent
+{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{{ passive_absent('postfix') }}
 
-/etc/cron.d/passive-checks-postfix:
-  file:
-    - absent

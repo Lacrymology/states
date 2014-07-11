@@ -28,9 +28,8 @@ Maintainer: Lam Dang Tung <lamdt@familug.org>
 Remove Nagios NRPE check for OpenERP.
 -#}
 
-/etc/nagios/nrpe.d/openerp.cfg:
-  file:
-    - absent
+{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{{ passive_absent('openerp') }}
 
 /etc/nagios/nrpe.d/openerp-uwsgi.cfg:
   file:
@@ -44,9 +43,6 @@ Remove Nagios NRPE check for OpenERP.
   file:
     - absent
 
-/etc/cron.d/passive-checks-openerp:
-  file:
-    - absent
 
 {%- if salt['pillar.get']('openerp:ssl', False) %}
 openerp_ssl_configuration:

@@ -40,6 +40,7 @@ salt-cloud:
 {%- if salt['cmd.has_exec']('pip') %}
   pip:
     - removed
+    - name: apache-libcloud
     - order: 1
 {%- endif %}
 

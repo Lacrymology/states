@@ -64,6 +64,12 @@ salt-cloud:
     - require:
       - pkg: salt
       - pip: salt_cloud_remove_old_version
+  pip:
+   - installed
+   - name: apache-libcloud==0.15.1
+   - require:
+     - module: pip
+     - pkg: salt-cloud
 
 salt-cloud-boostrap-script:
   file:
@@ -76,5 +82,5 @@ salt-cloud-boostrap-script:
     - mkdirs: True
     - template: jinja
     - require:
-      - pkg: salt-cloud
+      - pip: salt-cloud
       - file: bash

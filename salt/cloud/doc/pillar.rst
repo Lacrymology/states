@@ -31,6 +31,20 @@
 - :doc:`/pip/doc/index` :doc:`/pip/doc/pillar`
 - :doc:`/salt/minion/doc/index` :doc:`/salt/minion/doc/pillar`
 
+Mandatory
+---------
+
+Example::
+
+  salt:
+    cloud:
+      master: 1.2.3.4
+
+salt:cloud:master
+~~~~~~~~~~~~~~~~~
+
+Address of salt-master for all salt-cloud managed VMs.
+
 Optional
 --------
 

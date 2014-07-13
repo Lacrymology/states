@@ -43,18 +43,23 @@ To only keep precise::
 include:
   - apt
 
-{%- set version = '2014.1.5-5' %}
 {%- for i in ('list', 'list.save') %}
 salt_absent_old_apt_salt_{{ i }}:
   file:
     - absent
     - name: /etc/apt/sources.list.d/saltstack-salt-{{ grains['lsb_distrib_codename'] }}.{{ i }}
-    - require_in:
-      - pkgrepo: salt
 {%- endfor %}
 
+{%- set version = '2014.1.5-5' %}
 salt:
+  pkg:
+    - installed
+    - name: salt-common
+{%- if grains['saltversion'].startswith('0.17') %}
+  pkgrepo17:
+{%- else %}
   pkgrepo:
+{%- endif %}
     - managed
 {%- if 'files_archive' in pillar %}
     - name: deb {{ pillar['files_archive']|replace('https://', 'http://') }}/mirror/salt/{{ version }} {{ grains['lsb_distrib_codename'] }} main
@@ -65,8 +70,7 @@ salt:
     - key_url: salt://salt/key.gpg
     - require:
       - cmd: apt_sources
-  pkg:
-    - installed
-    - name: salt-common
-    - require:
-      - pkgrepo: salt
+      - file: salt_absent_old_apt_salt_list
+      - file: salt_absent_old_apt_salt_list.save
+    - require_in:
+      - pkg: salt

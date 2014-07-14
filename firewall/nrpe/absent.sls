@@ -39,10 +39,6 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
   file:
     - absent
 
-/etc/nagios/nrpe.d/firewall.cfg:
-  file:
-    - absent
+{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{{ passive_absent('firewall') }}
 
-/etc/cron.d/passive-checks-firewall:
-  file:
-    - absent

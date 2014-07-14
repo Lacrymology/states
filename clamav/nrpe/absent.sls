@@ -27,10 +27,6 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 Remove Nagios NRPE check for ClamAV.
 -#}
-/etc/nagios/nrpe.d/clamav.cfg:
-  file:
-    - absent
+{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{{ passive_absent('clamav') }}
 
-/etc/cron.d/passive-checks-clamav:
-  file:
-    - absent

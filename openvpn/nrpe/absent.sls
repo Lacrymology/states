@@ -27,10 +27,6 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Remove Nagios NRPE check for OpenVPN.
 -#}
-/etc/nagios/nrpe.d/openvpn.cfg:
-  file:
-    - absent
+{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{{ passive_absent('openvpn') }}
 
-/etc/cron.d/passive-checks-openvpn:
-  file:
-    - absent

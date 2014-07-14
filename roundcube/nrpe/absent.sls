@@ -27,9 +27,8 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 Remove roundcube web Nagios NRPE checks.
 -#}
-/etc/nagios/nrpe.d/roundcube.cfg:
-  file:
-    - absent
+{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{{ passive_absent('roundcube') }}
 
 /etc/nagios/nrpe.d/roundcube-nginx.cfg:
   file:
@@ -39,9 +38,6 @@ Remove roundcube web Nagios NRPE checks.
   file:
     - absent
 
-/etc/cron.d/passive-checks-roundcube:
-  file:
-    - absent
 
 {%- if salt['pillar.get']('roundcube:ssl', False) %}
 roundcube_ssl_configuration:

@@ -27,9 +27,8 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Remove Nagios NRPE check for Sentry.
 -#}
-/etc/nagios/nrpe.d/sentry.cfg:
-  file:
-    - absent
+{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{{ passive_absent('sentry') }}
 
 /etc/nagios/nrpe.d/sentry-nginx.cfg:
   file:
@@ -39,9 +38,6 @@ Remove Nagios NRPE check for Sentry.
   file:
     - absent
 
-/etc/cron.d/passive-checks-sentry:
-  file:
-    - absent
 
 {%- if salt['pillar.get']('sentry:ssl', False) %}
 sentry_ssl_configuration:

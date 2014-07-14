@@ -27,10 +27,6 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Remove Nagios NRPE check for ProFTPd.
 -#}
-/etc/nagios/nrpe.d/proftpd.cfg:
-  file:
-    - absent
+{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{{ passive_absent('proftpd') }}
 
-/etc/cron.d/passive-checks-proftpd:
-  file:
-    - absent

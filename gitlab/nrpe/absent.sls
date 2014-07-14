@@ -34,9 +34,8 @@ Maintainer: Lam Dang Tung <lamdt@familug.org>
 
 Remove GitLab NRPE checks.
 -#}
-/etc/nagios/nrpe.d/gitlab.cfg:
-  file:
-    - absent
+{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{{ passive_absent('gitlab') }}
 
 /etc/nagios/nrpe.d/gitlab-nginx.cfg:
   file:
@@ -46,9 +45,6 @@ Remove GitLab NRPE checks.
   file:
     - absent
 
-/etc/cron.d/passive-checks-gitlab:
-  file:
-    - absent
 
 {%- if salt['pillar.get']('gitlab:ssl', False) %}
 gitlab_ssl_configuration:

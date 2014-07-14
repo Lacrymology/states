@@ -27,6 +27,5 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Remove Nagios NRPE check for cron.
 -#}
-/etc/nagios/nrpe.d/cron.cfg:
-  file:
-    - absent
+{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{{ passive_absent('cron') }}

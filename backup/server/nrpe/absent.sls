@@ -27,9 +27,8 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Remove Nagios NRPE check for Backup Server.
 -#}
-/etc/nagios/nrpe.d/backups.cfg:
-  file:
-    - absent
+{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{{ passive_absent('backup.server') }}
 
 /usr/local/bin/check_backups.py:
   file:
@@ -43,6 +42,3 @@ Remove Nagios NRPE check for Backup Server.
   file:
     - absent
 
-/etc/cron.d/passive-checks-backup.server:
-  file:
-    - absent

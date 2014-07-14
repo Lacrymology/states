@@ -34,10 +34,6 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 Remove Nagios NRPE check for redis.
 -#}
-/etc/nagios/nrpe.d/redis.cfg:
-  file:
-    - absent
+{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{{ passive_absent('redis') }}
 
-/etc/cron.d/passive-checks-redis:
-  file:
-    - absent

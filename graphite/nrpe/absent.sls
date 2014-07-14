@@ -27,9 +27,8 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 Remove Nagios NRPE check for Graphite.
 -#}
-/etc/nagios/nrpe.d/graphite.cfg:
-  file:
-    - absent
+{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{{ passive_absent('graphite') }}
 
 /etc/nagios/nrpe.d/graphite-nginx.cfg:
   file:
@@ -39,9 +38,6 @@ Remove Nagios NRPE check for Graphite.
   file:
     - absent
 
-/etc/cron.d/passive-checks-graphite:
-  file:
-    - absent
 
 {%- if salt['pillar.get']('graphite:ssl', False) %}
 graphite_ssl_configuration:

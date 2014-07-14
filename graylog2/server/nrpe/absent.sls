@@ -27,6 +27,9 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Remove NRPE check for Graylog2 Server.
 -#}
+{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{{ passive_absent('graylog2.server') }}
+
 /usr/lib/nagios/plugins/check_new_logs.py:
   file:
     - absent
@@ -35,6 +38,3 @@ Remove NRPE check for Graylog2 Server.
   file:
     - absent
 
-/etc/cron.d/passive-checks-graylog2.server:
-  file:
-    - absent

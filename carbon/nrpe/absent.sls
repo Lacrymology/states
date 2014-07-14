@@ -27,10 +27,6 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 Remove Nagios NRPE check for Carbon.
 -#}
-/etc/nagios/nrpe.d/carbon.cfg:
-  file:
-    - absent
+{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{{ passive_absent('carbon') }}
 
-/etc/cron.d/passive-checks-carbon:
-  file:
-    - absent

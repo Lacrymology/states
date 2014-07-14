@@ -28,6 +28,5 @@ Maintainer: Diep Pham <imeo@favadi.com>
 Remove Nagios NRPE check for Varnish.
 -#}
 
-/etc/nagios/nrpe.d/varnish.cfg:
-  file:
-    - absent
+{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{{ passive_absent('varnish') }}

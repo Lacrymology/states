@@ -27,9 +27,8 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Nagios NRPE check for uWSGI.
 -#}
-/etc/nagios/nrpe.d/uwsgi.cfg:
-  file:
-    - absent
+{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{{ passive_absent('uwsgi') }}
 
 /etc/sudoers.d/nagios_uwsgi:
   file:
@@ -51,6 +50,3 @@ Nagios NRPE check for uWSGI.
   file:
     - absent
 
-/etc/cron.d/passive-checks-uwsgi:
-  file:
-    - absent

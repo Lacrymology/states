@@ -31,10 +31,6 @@ Remove Nagios NRPE check for RabbitMQ.
   file:
     - absent
 
-/etc/nagios/nrpe.d/rabbitmq.cfg:
-  file:
-    - absent
+{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{{ passive_absent('rabbitmq') }}
 
-/etc/cron.d/passive-checks-rabbitmq:
-  file:
-    - absent

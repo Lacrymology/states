@@ -27,10 +27,6 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Remove Nagios NRPE check for Nginx.
 -#}
-/etc/nagios/nrpe.d/nginx.cfg:
-  file:
-    - absent
+{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{{ passive_absent('nginx') }}
 
-/etc/cron.d/passive-checks-nginx:
-  file:
-    - absent

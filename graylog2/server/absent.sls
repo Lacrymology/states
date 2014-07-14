@@ -46,8 +46,8 @@ graylog2-server:
   service:
     - dead
 
-{%- for file in ('/etc/graylog2.conf', server_root_dir, '/etc/graylog2-elasticsearch.yml',
-                '/etc/init/graylog2-server.conf', '/etc/rsyslog.d/graylog2-server.conf', '/etc/graylog2-server-node-id') %}
+{%- for file in ('/etc/graylog2.conf', server_root_dir,
+                '/etc/init/graylog2-server.conf', '/etc/rsyslog.d/graylog2-server.conf', '/etc/graylog2') %}
 {{ file }}:
   file:
     - absent

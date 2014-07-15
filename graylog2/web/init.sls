@@ -139,6 +139,9 @@ graylog2-web:
       - user: graylog2-web-{{ user }}
     - require:
       - file: /var/log/graylog2
+  uwsgi:
+    - absent
+    - name: graylog2
 
 change_graylog2_web_dir_permission:
   cmd:

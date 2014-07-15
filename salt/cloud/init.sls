@@ -28,6 +28,7 @@ include:
   - apt
   - bash
   - salt
+  - salt.master
   - pip
 
 {%- for type in ('profiles', 'providers') %}
@@ -70,6 +71,7 @@ salt-cloud:
    - require:
      - module: pip
      - pkg: salt-cloud
+     - service: salt-master
 
 salt-cloud-boostrap-script:
   file:

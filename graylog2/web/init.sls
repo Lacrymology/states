@@ -152,7 +152,7 @@ graylog2-web:
   uwsgi:
     - available
     - name: graylog2
-    - enabled: True
+    - enable: True
     - template: jinja
     - user: www-data
     - group: www-data

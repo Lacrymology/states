@@ -123,7 +123,7 @@ def available(name, enable=False, **kwargs):
         mywebapp:
           uwsgi:
             - available
-            - enabled: True
+            - enable: True
             - source: salt://path/to/file.jinja
             - template: jinja
             - watch:

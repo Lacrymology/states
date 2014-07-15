@@ -107,7 +107,7 @@ djangopypi2:
       - service: postgresql
   uwsgi:
     - available
-    - enabled: True
+    - enable: True
     - name: djangopypi2
     - template: jinja
     - user: www-data

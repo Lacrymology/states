@@ -76,6 +76,7 @@ sudo salt-cloud --profile $profile integration-$JOB_NAME-$BUILD_NUMBER
 sudo salt -t 600 "integration-$JOB_NAME-$BUILD_NUMBER" cmd.run "hostname integration-$JOB_NAME-$BUILD_NUMBER"
 sudo salt -t 600 "integration-$JOB_NAME-$BUILD_NUMBER" cp.get_file salt://jenkins_archives/$JOB_NAME-$BUILD_NUMBER.tar.gz /tmp/bootstrap-archive.tar.gz
 sudo salt -t 600 "integration-$JOB_NAME-$BUILD_NUMBER" archive.tar xzf /tmp/bootstrap-archive.tar.gz cwd=/
+sudo salt -t 600 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call -c /root/salt/states/test/ saltutil.sync_all"
 sudo salt -t 600 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call -c /root/salt/states/test/ state.sls test.sync" | ./test/jenkins/retcode_check.py
 sudo salt -t 600 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call -c /root/salt/states/test/ state.sls test.jenkins" | ./test/jenkins/retcode_check.py
 sudo /usr/local/bin/wait_minion_up.py integration-$JOB_NAME-$BUILD_NUMBER

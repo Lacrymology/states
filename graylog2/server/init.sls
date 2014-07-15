@@ -43,6 +43,7 @@ include:
 {%- set server_root_dir = '/usr/local/graylog2-server-' + version %}
 {%- set user = salt['pillar.get']('graylog2:server:user', 'graylog2') %}
 {%- set mongodb_suffix = '0-20' %}
+{%- set elasticsearch_prefix = '0-20' %}
 
 {% for previous_version in ('0.11.0', ) %}
 /usr/local/graylog2-server-{{ previous_version }}:
@@ -146,6 +147,7 @@ graylog2-server:
     - context:
       version: {{ version }}
       mongodb_suffix: {{ mongodb_suffix }}
+      elasticsearch_prefix: {{ elasticsearch_prefix }}
     - require:
       - user: {{ user }}
   service:

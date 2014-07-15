@@ -105,6 +105,7 @@ graylog2-server_upstart:
       origin_state: graylog2.server
     - require:
       - file: /etc/graylog2
+      - user: {{ user }}
 
 {#
 We have to create this file before graylog2-server service start, because
@@ -119,7 +120,7 @@ graylog2 user may not have the required privilege to create file in /etc folder
     - require:
       - archive: graylog2-server
       - file: /etc/graylog2
-
+      - user: {{ user }}
 
 graylog2-server:
   archive:

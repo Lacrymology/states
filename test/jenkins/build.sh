@@ -34,6 +34,11 @@ rm -f $WORKSPACE/bootstrap-archive.tar.gz $WORKSPACE/stderr.log.xz $WORKSPACE/st
 rm -rf $WORKSPACE/salt-common-doc
 virtualenv $WORKSPACE/virtualenv
 . $WORKSPACE/virtualenv/bin/activate
+
+if [ "${with_ssl:-true}" = "false" ]; then
+  $WORKSPACE/common/test/jenkins/generate_non_ssl_pillar.sh pillar
+fi
+
 cd common
 pip install -r doc/requirements.txt
 doc/build.py

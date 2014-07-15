@@ -34,6 +34,7 @@ include:
   - mongodb.nrpe
   - nrpe
   - rsyslog.nrpe
+  - bash.nrpe
 
 /usr/lib/nagios/plugins/check_new_logs.py:
   file:

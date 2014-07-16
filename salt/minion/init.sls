@@ -59,7 +59,7 @@ extend:
     pkg:
       - installed
       - require:
-        - pkgrepo17: salt
+        - pkgrepo: salt
         - cmd: apt_sources
         - pkg: apt_sources
 

@@ -50,11 +50,11 @@ salt_absent_old_apt_salt_{{ i }}:
     - absent
     - name: /etc/apt/sources.list.d/saltstack-salt-{{ grains['lsb_distrib_codename'] }}.{{ i }}
     - require_in:
-      - pkgrepo17: salt
+      - pkgrepo: salt
 {%- endfor %}
 
 salt:
-  pkgrepo17:
+  pkgrepo:
     - managed
 {%- if 'files_archive' in pillar %}
     - name: deb {{ pillar['files_archive']|replace('https://', 'http://') }}/mirror/salt/{{ version }} {{ grains['lsb_distrib_codename'] }} main
@@ -69,4 +69,4 @@ salt:
     - installed
     - name: salt-common
     - require:
-      - pkgrepo17: salt
+      - pkgrepo: salt

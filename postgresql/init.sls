@@ -29,7 +29,7 @@ include:
   - apt
 
 postgresql-dev:
-  pkgrepo17:
+  pkgrepo:
     - managed
 {%- if 'files_archive' in pillar %}
     - name: deb {{ pillar['files_archive']|replace('https://', 'http://') }}/mirror/postgresql/ {{ grains['lsb_distrib_codename'] }} main
@@ -44,5 +44,5 @@ postgresql-dev:
     - installed
     - name: libpq-dev
     - require:
-      - pkgrepo17: postgresql-dev
+      - pkgrepo: postgresql-dev
       - cmd: apt_sources

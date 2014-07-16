@@ -52,7 +52,7 @@ To keep only precise and trusty:
 #}
 
 mariadb:
-  pkgrepo17:
+  pkgrepo:
     - managed
     - key_url: salt://mariadb/key.gpg
 {%- if 'files_archive' in pillar %}
@@ -67,7 +67,7 @@ mariadb:
     - installed
     - name: libmysqlclient18
     - require:
-      - pkgrepo17: mariadb
+      - pkgrepo: mariadb
       - pkg: mysql-common
 
 mysql-common:

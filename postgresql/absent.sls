@@ -40,7 +40,7 @@ postgresql-dev:
   pkg:
     - purged
     - name: libpq-dev
-  pkgrepo17:
+  pkgrepo:
     - absent
 {%- if 'files_archive' in pillar %}
     - name: deb {{ pillar['files_archive']|replace('https://', 'http://') }}/mirror/postgresql/ {{ grains['lsb_distrib_codename'] }} main

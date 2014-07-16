@@ -63,7 +63,7 @@ salt-cloud:
     - skip_verify: True
     - require:
       - pkg: salt
-      - pkgrepo17: salt
+      - pkgrepo: salt
       - pkg: salt_cloud_remove_old_version
   pip:
     - installed

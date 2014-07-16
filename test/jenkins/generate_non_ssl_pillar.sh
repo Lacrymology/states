@@ -3,8 +3,7 @@
 # this will change the origin pillar files, make it become non-SSL pillar,
 # which used to test formulas with non-SSL.
 pillar_dir=$1
-cd $pillar_dir
-sed -i 's/  ssl_redirect:.*//g' *.sls
-sed -i 's/  ssl:.*//g' *.sls
+find $pillar_dir -name '*.sls' -type f -exec sed -i -e 's/  ssl_redirect:.*//g' -e 's/  ssl:.*//g' {} \;
 # show changes for debugging purpose
+cd $pillar_dir
 git diff

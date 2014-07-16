@@ -30,7 +30,7 @@ include:
 
 {#- PID file owned by root, no need to manage #}
 rsyslog:
-  pkgrepo:
+  pkgrepo17:
     - managed
 {%- if 'files_archive' in pillar %}
     - name: deb {{ pillar['files_archive']|replace('https://', 'http://') }}/mirror/rsyslog/7.4.4 {{ grains['lsb_distrib_codename'] }} main
@@ -47,7 +47,7 @@ rsyslog:
     - require:
       - cmd: apt_sources
       - pkg: gsyslogd
-      - pkgrepo: rsyslog
+      - pkgrepo17: rsyslog
   file:
     - managed
     - name: /etc/rsyslog.conf

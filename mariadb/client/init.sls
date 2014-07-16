@@ -42,5 +42,5 @@ mysql-client:
     - name: mariadb-client
     - require:
       - cmd: apt_sources
-      - pkgrepo: mariadb
+      - pkgrepo17: mariadb
       - pkg: mariadb

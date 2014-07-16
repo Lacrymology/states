@@ -53,7 +53,7 @@ php-dev:
       - php5-dev
       - php-config
     - require:
-      - pkgrepo: php
+      - pkgrepo17: php
   file:
     - managed
     - name: /etc/php5/embed/conf.d/salt.ini

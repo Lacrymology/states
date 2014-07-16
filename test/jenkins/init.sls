@@ -33,7 +33,7 @@ salt-minion:
     - installed
     - version: 0.17.5-1precise1
     - require:
-      - pkgrepo: salt
+      - pkgrepo17: salt
   service:
     - running
     - enable: True

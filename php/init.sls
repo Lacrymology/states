@@ -36,7 +36,7 @@ include:
   - apt
 
 php:
-  pkgrepo:
+  pkgrepo17:
     - managed
 {%- if 'files_archive' in pillar %}
     - name: deb {{ pillar['files_archive']|replace('https://', 'http://') }}/mirror/lucid-php5 {{ grains['lsb_distrib_codename'] }} main

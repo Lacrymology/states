@@ -36,7 +36,7 @@ include:
   - apt
 
 mariadb:
-  pkgrepo:
+  pkgrepo17:
     - managed
     - keyid: '0xcbcb082a1bb943db'
     - keyserver: keyserver.ubuntu.com
@@ -53,7 +53,7 @@ mariadb:
     - name: libmysqlclient18
     - version: 5.5.31+maria-1~precise
     - require:
-      - pkgrepo: mariadb
+      - pkgrepo17: mariadb
       - pkg: mysql-common
 {#- prevent dist_upgrade #}
   cmd:
@@ -69,7 +69,7 @@ mysql-common:
     - installed
     - version: 5.5.31+maria-1~precise
     - require:
-      - pkgrepo: mariadb
+      - pkgrepo17: mariadb
 
 hold_mysql_common:
   cmd:

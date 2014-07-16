@@ -35,7 +35,7 @@ Maintainer: Lam Dang Tung <lamdt@familug.org>
 Removing Underscore.
 -#}
 libjs-underscore:
-  pkgrepo:
+  pkgrepo17:
     - absent
     - ppa: chris-lea/libjs-underscore
   pkg:

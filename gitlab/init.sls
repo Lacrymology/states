@@ -260,7 +260,7 @@ gitlab:
       - postgres_database: gitlab
   uwsgi:
     - available
-    - enabled: True
+    - enable: True
     - name: gitlab
     - source: salt://gitlab/uwsgi.jinja2
     - group: www-data

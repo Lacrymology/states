@@ -106,14 +106,14 @@ def _patch_module(mod):
     mod.__opts__ = __opts__
 
 
-def available(name, enabled=False, **kwargs):
+def available(name, enable=False, **kwargs):
     '''
     Make available a uWSGI application.
 
     name
         uWSGI application name.
 
-    enabled
+    enable
         is application also enabled?
 
     All other arguments of file.managed are also supported.
@@ -123,7 +123,7 @@ def available(name, enabled=False, **kwargs):
         mywebapp:
           uwsgi:
             - available
-            - enabled: True
+            - enable: True
             - source: salt://path/to/file.jinja
             - template: jinja
             - watch:
@@ -131,7 +131,7 @@ def available(name, enabled=False, **kwargs):
     '''
     ret = {'name': name, 'result': None, 'comment': '', 'changes': {}}
     kwargs = _get_default_kwargs(kwargs)
-    app_enabled = enabled
+    app_enabled = enable
     app_disabled = not app_enabled
 
     if isinstance(kwargs['env'], string_types):
@@ -152,7 +152,7 @@ def available(name, enabled=False, **kwargs):
         Return False: mean somethings go wrong and state can not be done.
         '''
 
-        # Amazing. States now expect __env__, but modules expect env.. so, there
+        # Amazing. States now expect __env__, but modules expect env..
         kwargs['env'] = kwargs['__env__']
 
         config, link, _ = _get_app_paths(name)

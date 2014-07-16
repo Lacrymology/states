@@ -109,7 +109,7 @@ sentry:
       - service: postgresql
   uwsgi:
     - available
-    - enabled: True
+    - enable: True
     - name: sentry
     - template: jinja
     - user: www-data

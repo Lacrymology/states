@@ -172,7 +172,7 @@ graphite-web:
       - module: graphite-web
   uwsgi:
     - available
-    - enabled: True
+    - enable: True
     - name: graphite
     - template: jinja
     - user: www-data

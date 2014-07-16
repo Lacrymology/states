@@ -81,7 +81,7 @@ roundcube:
       - postgres_user: roundcube
   uwsgi:
     - available
-    - enabled: True
+    - enable: True
     - name: roundcube
     - source: salt://roundcube/uwsgi.jinja2
     - template: jinja

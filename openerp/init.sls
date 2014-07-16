@@ -151,7 +151,7 @@ openerp:
       - file: /usr/local
   uwsgi:
     - available
-    - enabled: True
+    - enable: True
     - name: openerp
     - template: jinja
     - source: salt://openerp/uwsgi.jinja2

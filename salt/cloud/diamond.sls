@@ -29,6 +29,7 @@ Diamond statistics for salt_cloud.
 
 include:
   - diamond
+  - salt.master.diamond
 
 salt_cloud_diamond_resources:
   file:

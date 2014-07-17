@@ -65,13 +65,26 @@ salt-cloud:
     - require:
       - pkg: salt
       - pip: salt_cloud_remove_old_version
-  pip:
-   - installed
-   - name: apache-libcloud==0.15.1
-   - require:
-     - module: pip
-     - pkg: salt-cloud
-     - service: salt-master
+  file:
+    - managed
+    - name: {{ opts['cachedir'] }}/pip/salt.cloud
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - source: salt://salt/cloud/requirements.jinja2
+    - require:
+      - module: pip
+  module:
+    - wait
+    - name: pip.install
+    - upgrade: True
+    - requirements: {{ opts['cachedir'] }}/pip/salt.cloud
+    - watch:
+      - file: salt-cloud
+      - module: pip
+      - pkg: salt-cloud
+      - service: salt-master
 
 salt-cloud-boostrap-script:
   file:
@@ -84,5 +97,5 @@ salt-cloud-boostrap-script:
     - mkdirs: True
     - template: jinja
     - require:
-      - pip: salt-cloud
+      - module: salt-cloud
       - file: bash

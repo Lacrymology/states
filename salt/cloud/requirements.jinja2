@@ -1,5 +1,6 @@
 {#-
-Copyright (c) 2013, Hung Nguyen Viet
+Copyright (c) 2014, Hung Nguyen Viet
+All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
@@ -23,28 +24,5 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
--#}
-{%- for type in ('profiles', 'providers') %}
-/etc/salt/cloud.{{ type }}:
-  file:
-    - absent
-{%- endfor %}
-
-/etc/salt/cloud:
-  file:
-    - absent
-
-salt-cloud:
-  pkg:
-    - purged
-  file:
-    - absent
-    - name: {{ opts['cachedir'] }}/pip/salt.cloud
-
-python-libcloud:
-  pkg:
-    - purged
-
-/etc/salt/cloud.deploy.d:
-  file:
-    - absent
+#}
+apache-libcloud==0.15.1

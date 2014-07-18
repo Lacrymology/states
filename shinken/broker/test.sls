@@ -63,6 +63,7 @@ test:
 shinken.broker_nginx_https:
   monitoring:
     - run_check
-    - order: last
     - accepted_failure: 'Invalid HTTP response'
+    - require:
+      - sls: shinken.broker.nrpe
 {%- endif %}

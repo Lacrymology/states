@@ -34,3 +34,10 @@ include:
   - salt.master.nrpe
   - ssh.client.nrpe
   - sudo.nrpe
+
+extend:
+  {#- if used in conjunction with salt.ci just used a slightly different
+    config.jinja2 #}
+  /etc/nagios/nsca.d/salt.master.yml:
+    file:
+      - source: salt://salt/ci/nrpe/config.jinja2

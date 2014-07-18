@@ -50,11 +50,13 @@ salt_master_port_ret:
   description: Salt Master Local Port Return
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 4506
 
-{% if not salt['pillar.get']('__test__', False) %}
+{%- block salt_master_mine -%}
+    {%- if not salt['pillar.get']('__test__', False) %}
 salt_master_mine:
   description: Salt Master Unfinished Minions
   check_interval: 360
   freshness_threshold: {{ (360 + 10) * 60 }}
 {#- sudo for reading salt config files #}
   command: sudo /usr/lib/nagios/plugins/check_mine_minions.py --data /var/lib/nagios/salt_mine.yaml
-{%- endif %}
+    {%- endif -%}
+{%- endblock -%}

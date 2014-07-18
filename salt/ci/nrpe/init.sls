@@ -41,3 +41,6 @@ extend:
   /etc/nagios/nsca.d/salt.master.yml:
     file:
       - source: salt://salt/ci/nrpe/config.jinja2
+  salt.master-monitoring:
+    monitoring:
+      - source: salt://salt/ci/nrpe/config.jinja2

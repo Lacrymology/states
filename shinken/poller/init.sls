@@ -86,6 +86,7 @@ shinken-poller:
     - require:
       - virtualenv: shinken
       - user: shinken
+      - file: /etc/shinken
 
 extend:
   shinken:

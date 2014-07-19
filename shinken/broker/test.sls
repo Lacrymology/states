@@ -35,35 +35,28 @@ include:
                     ('shinken.broker_nginx_http', 'Invalid HTTP response')) %}
 
 {%- set ssl = salt['pillar.get']('shinken:ssl', False) %}
-
-test:
-  monitoring:
-    - run_all_checks
-    - exclude:
-{%- for name, _ in check_set %}
-      - {{ name }}
-{%- endfor %}
 {%- if ssl %}
-      - shinken.broker_nginx_https
+{%- set check_set = check_set + [('shinken.broker_nginx_https', 'Invalid HTTP response')] %}
 {%- endif %}
-    - require:
-{% for name, failure in check_set %}
-      - monitoring: {{ name }}
-{%- endfor %}
 
 {% for name, failure in check_set %}
 {{ name }}:
   monitoring:
     - run_check
-    - order: last
     - accepted_failure: {{ failure }}
-{%- endfor %}
-
-{%- if ssl %}
-shinken.broker_nginx_https:
-  monitoring:
-    - run_check
-    - accepted_failure: 'Invalid HTTP response'
     - require:
       - sls: shinken.broker.nrpe
-{%- endif %}
+{%- endfor %}
+
+test:
+  monitoring:
+    - run_all_checks
+    - order: last
+    - exclude:
+{%- for name, _ in check_set %}
+      - {{ name }}
+{%- endfor %}
+    - require:
+{%- for name, _ in check_set %}
+      - monitoring: {{ name }}
+{%- endfor %}

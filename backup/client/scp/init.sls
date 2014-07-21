@@ -39,6 +39,9 @@ include:
 {%- else %}
 
 backup-client:
+  pkg:
+    - installed
+    - name: rsync
   ssh_known_hosts:
     - present
     - name: {{ pillar['backup_server']['address'] }}

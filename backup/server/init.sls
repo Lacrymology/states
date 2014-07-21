@@ -38,7 +38,7 @@ backup-server:
   pkg:
     - installed
     - name: rsync
-{#- do not use rsync formula as this only need rsync installed, not run rsyncd #}
+{#- this does not include rsync formula as this only need rsync installed, not run rsyncd #}
     - required:
       - pkg: openssh-server
       - service: openssh-server

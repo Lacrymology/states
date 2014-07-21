@@ -32,4 +32,4 @@ etherpad_backup_postgres_procs:
 
 etherpad_backup:
   description: Etherpad Backup Age And Size
-  command: /usr/lib/nagios/plugins/check_backup.py -w {{ salt['pillar.get']('backup:age', '48') }} etherpad
+  command: /usr/lib/nagios/plugins/check_backup.py -w {{ salt['pillar.get']('backup:age', '48') }} postgresql-etherpad

@@ -35,4 +35,4 @@ djangopypi2_backup_postgres_procs:
 
 djangopypi2_backup:
   description: djangopypi2 Backup Age And Size
-  command: /usr/lib/nagios/plugins/check_backup.py -w {{ salt['pillar.get']('backup:age', 48) }} djangopypi2
+  command: /usr/lib/nagios/plugins/check_backup.py -w {{ salt['pillar.get']('backup:age', 48) }} postgresql-djangopypi2

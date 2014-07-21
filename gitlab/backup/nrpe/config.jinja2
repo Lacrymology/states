@@ -31,4 +31,4 @@ gitlab_backup_postgres_procs:
 
 gitlab_backup:
   description: GitLab Backup Age And Size
-  command: /usr/lib/nagios/plugins/check_backup.py -w {{ salt['pillar.get']('backup:age', 48) }} gitlab
+  command: /usr/lib/nagios/plugins/check_backup.py -w {{ salt['pillar.get']('backup:age', 48) }} postgresql-gitlab

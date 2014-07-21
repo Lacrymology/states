@@ -31,4 +31,4 @@ openerp_backup_postgres_procs:
 
 openerp_backup:
   description: OpenERP Backup Age And Size
-  command: /usr/lib/nagios/plugins/check_backup.py -w {{ salt['pillar.get']('backup:age', 48) }} openerp
+  command: /usr/lib/nagios/plugins/check_backup.py -w {{ salt['pillar.get']('backup:age', 48) }} postgresql-openerp

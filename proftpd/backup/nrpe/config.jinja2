@@ -31,4 +31,4 @@ proftpd_backup_postgres_procs:
 
 proftpd_backup:
   description: ProFTPD Backup Age And Size
-  command: /usr/lib/nagios/plugins/check_backup.py -w {{ salt['pillar.get']('backup:age', 48) }} proftpd
+  command: /usr/lib/nagios/plugins/check_backup.py -w {{ salt['pillar.get']('backup:age', 48) }} postgresql-proftpd

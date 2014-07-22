@@ -39,6 +39,6 @@ https://github.com/hvnsweeting/Diamond/archive/v3.4.8.tar.gz
 {%- if 'graylog2_address' in pillar %}
 graypy==0.2.9
 {%- endif %}
-{%- if pillar.get('sentry_dsn', False) %}
+{%- if salt['pillar.get']('sentry_dsn', False) %}
 raven==4.1.1
 {%- endif %}

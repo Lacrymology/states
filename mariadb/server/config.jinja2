@@ -56,7 +56,7 @@ Remember to edit /etc/mysql/debian.cnf when changing the socket location.
 Default is Latin1. Use utf-8 if global pillar encoding contain
 'UTF-8'.
 #}
-{%- if 'UTF-8' in pillar.get(encoding, 'en_US.UTF-8') %}
+{%- if 'UTF-8' in salt['pillar.get'](encoding, 'en_US.UTF-8') %}
 {%- set use_utf8 = True %}
 {%- endif %}
 

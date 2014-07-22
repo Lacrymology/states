@@ -33,7 +33,7 @@ username = root
 host_key_auto_add = true
 
 [backup]
-prefix = /var/lib/backup
+prefix = /var/lib/backup/{{ salt['pillar.get']('backup_server:subdir', grains['id']) }}
 manifest = /var/lib/nagios/backup.manifest.pickle
 {#
 acceptable age for the MANIFEST FILE (not for the backup files themselves) in

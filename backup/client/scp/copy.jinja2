@@ -35,5 +35,11 @@ ionice -c idle -p $$
 
 archive_path=$1
 archive_name=`basename $archive_path`
-scp -q $archive_path root@{{ pillar['backup_server']['address'] }}:/var/lib/backup/{{ grains['id'] }}-$archive_name
-rm -f $archive_path
+subdir={{ salt['pillar.get']('backup_server:subdir', grains['id']) }}
+tmpdir=$(mktemp -d)
+cd ${tmpdir}
+mkdir "${subdir}"
+mv $archive_path "${subdir}"
+rsync --archive --quiet --relative ./"${subdir}"/ root@{{ pillar['backup_server']['address'] }}:/var/lib/backup
+cd /
+rm -rf ${tmpdir}

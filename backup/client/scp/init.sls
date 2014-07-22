@@ -47,6 +47,9 @@ backup-client:
 {%- endif %}
 
 /usr/local/bin/backup-store:
+  pkg:
+    - installed
+    - name: rsync
   file:
     - managed
     - user: root
@@ -57,6 +60,7 @@ backup-client:
     - require:
       - file: /usr/local
       - file: bash
+      - pkg: /usr/local/bin/backup-store
 {%- if pillar['backup_server']['address'] in grains['ipv4'] or
        pillar['backup_server']['address'] in ('localhost', grains['host']) %}
       - file: /var/lib/backup

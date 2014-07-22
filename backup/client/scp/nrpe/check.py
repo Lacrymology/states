@@ -33,13 +33,13 @@ __maintainer__ = 'Tomas Neme'
 __email__ = 'lacrymology@gmail.com'
 
 import logging
-import os
 
 import paramiko
 
 from check_backup_base import BackupFile, main
 
 log = logging.getLogger('nagiosplugin')
+
 
 class SCPBackupFile(BackupFile):
     """
@@ -69,7 +69,7 @@ class SCPBackupFile(BackupFile):
             log.debug('converting port %s to int', self.kwargs['port'])
             self.kwargs['port'] = int(self.kwargs['port'])
 
-        self.pwd, self.nameprefix = os.path.split(self.prefix)
+        self.pwd = self.prefix
 
     def files(self):
         """
@@ -105,13 +105,8 @@ class SCPBackupFile(BackupFile):
         log.debug("running ls")
         for file in ftp.listdir():
             log.debug('processing %s', file)
-            if not file.startswith(self.nameprefix):
-                log.debug("skipping file that doesn't start with %s",
-                          self.nameprefix)
-                continue
-            # make_file expects the filename to start with $facility-. See below
-            # for our "undo" of this replace
-            f = self.make_file(file.replace(self.nameprefix, ''), None)
+
+            f = self.make_file(file, None)
             if not f:
                 log.debug('skipping')
                 continue

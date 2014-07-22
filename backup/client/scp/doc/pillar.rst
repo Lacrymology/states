@@ -52,7 +52,7 @@ Sub directory of ``/var/lib/backup`` to backup file to. This uses salt minion
 IDs of backup clients as default value. With this value, each minion will
 backup files to a separate directory under ``/var/lib/backup``.
 
-Default: rendered value of `{{ grains['id'] }}``
+Default: use minion ID
 
 backup_server:fingerprint
 ~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -46,12 +46,10 @@ backup-client:
     - fingerprint: {{ pillar['backup_server']['fingerprint'] }}
 {%- endif %}
 
-backup_scp_script_requisite:
+/usr/local/bin/backup-store:
   pkg:
     - installed
     - name: rsync
-
-/usr/local/bin/backup-store:
   file:
     - managed
     - user: root
@@ -62,7 +60,7 @@ backup_scp_script_requisite:
     - require:
       - file: /usr/local
       - file: bash
-      - pkg: backup_scp_script_requisite
+      - pkg: /usr/local/bin/backup-store
 {%- if pillar['backup_server']['address'] in grains['ipv4'] or
        pillar['backup_server']['address'] in ('localhost', grains['host']) %}
       - file: /var/lib/backup

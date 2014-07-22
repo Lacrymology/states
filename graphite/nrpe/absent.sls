@@ -37,11 +37,3 @@ Remove Nagios NRPE check for Graphite.
 /etc/nagios/nrpe.d/postgresql-graphite.cfg:
   file:
     - absent
-
-
-{%- if salt['pillar.get']('graphite:ssl', False) %}
-graphite_ssl_configuration:
-  file:
-    - absent
-    - name: /usr/lib/nagios/plugins/check_ssl_configuration.py
-{%- endif %}

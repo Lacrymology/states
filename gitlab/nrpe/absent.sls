@@ -44,11 +44,3 @@ Remove GitLab NRPE checks.
 /etc/nagios/nrpe.d/postgresql-gitlab.cfg:
   file:
     - absent
-
-
-{%- if salt['pillar.get']('gitlab:ssl', False) %}
-gitlab_ssl_configuration:
-  file:
-    - absent
-    - name: /usr/lib/nagios/plugins/check_ssl_configuration.py
-{%- endif %}

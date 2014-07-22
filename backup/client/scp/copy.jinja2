@@ -36,7 +36,7 @@ ionice -c idle -p $$
 archive_path=$1
 archive_name=`basename $archive_path`
 subdir={{ salt['pillar.get']('backup_server:subdir', grains['id']) }}
-tmpdir=$(mkdir -d)
+tmpdir=$(mktemp -d)
 cd ${tmpdir}
 mkdir "${subdir}"
 mv $archive_path "${subdir}"

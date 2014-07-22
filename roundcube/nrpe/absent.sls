@@ -37,11 +37,3 @@ Remove roundcube web Nagios NRPE checks.
 /etc/nagios/nrpe.d/postgresql-roundcube.cfg:
   file:
     - absent
-
-
-{%- if salt['pillar.get']('roundcube:ssl', False) %}
-roundcube_ssl_configuration:
-  file:
-    - absent
-    - name: /usr/lib/nagios/plugins/check_ssl_configuration.py
-{%- endif %}

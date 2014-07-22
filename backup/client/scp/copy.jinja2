@@ -36,11 +36,10 @@ ionice -c idle -p $$
 archive_path=$1
 archive_name=`basename $archive_path`
 subdir={{ salt['pillar.get']('backup_server:subdir', grains['id']) }}
-cd /tmp
-if [ ! -d "${subdir}" ]; then
-  mkdir "${subdir}"
-fi
+tmpdir=$(mkdir -d)
+cd ${tmpdir}
+mkdir "${subdir}"
 mv $archive_path "${subdir}"
 rsync --archive --quiet --relative ./"${subdir}"/ root@{{ pillar['backup_server']['address'] }}:/var/lib/backup
-rm -f "${subdir}"/$archive_name
-{#- do not delete created dir as other file may copied into it and running rsync #}
+cd /
+rm -rf ${tmpdir}

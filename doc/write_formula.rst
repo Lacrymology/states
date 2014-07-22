@@ -208,6 +208,9 @@ Absent
 
 Some notices when write an ``absent.sls``:
 
+* One ``absent.sls`` should only remove/absent stuffs managed by its
+  corresponding ``init.sls``. And it should not include other ``absent.sls``,
+  as ``integration.py`` will run all absent SLSes itself.
 * If it has a pip.remove state, make sure that states has low order
   (often order: 1) because local.absent will remove ``/usr/local`` and
   therefore remove ``/usr/local/bin/pip``, which in turn make pip.remove

@@ -40,8 +40,8 @@ upstream gitlab {
 
 server {
     listen 80;
-{% if salt['pillar.get']('gitlab:ssl')|default(False) %}
-{% if salt['pillar.get']('gitlab:ssl_redirect')|default(False) %}
+{% if salt['pillar.get']('gitlab:ssl', False) %}
+{% if salt['pillar.get']('gitlab:ssl_redirect', False) %}
     {# if https, redirect http port 80 to https port 443 #}
     server_name {% for hostname in salt['pillar.get']('gitlab:hostnames') %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
     return 301 https://{{ salt['pillar.get']('gitlab:hostnames')[0] }}$request_uri;

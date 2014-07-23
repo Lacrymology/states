@@ -33,8 +33,8 @@ upstream ejabberd {
 
 server {
     listen 80;
-{% if pillar['ejabberd']['ssl']|default(False) %}
-{% if pillar['ejabberd']['ssl_redirect']|default(False) %}
+{% if salt['pillar.get']('ejabberd:ssl', False) %}
+{% if salt['pillar.get']('ejabberd:ssl_redirect', False) %}
     {# if https, redirect http port 80 to https port 443 #}
     server_name {% for hostname in pillar['ejabberd']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
     return 301 https://{{ pillar['ejabberd']['hostnames'][0] }}$request_uri;

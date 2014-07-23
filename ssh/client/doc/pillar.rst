@@ -38,6 +38,26 @@ Example::
   ssh:
     known_hosts:
       github.com: github.com ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==
+    keys:
+      localhost:
+        root:
+          contents: |
+              -----BEGIN RSA PRIVATE KEY-----
+              MIIEowIBAAKCAQEA3wk5tqR1i...
+              -----END RSA PRIVATE KEY-----
+          type: rsa
+          extra_hosts:
+            - 127.0.0.1
+            - 127.0.0.2
+      example.com:
+        nagios:
+          contents: |
+              -----BEGIN RSA PRIVATE KEY-----
+              MIIEowblahblah...
+              -----END RSA PRIVATE KEY-----
+          type: rsa
+          extra_hosts:
+            - www.example.com
 
   deployment_key:
     contents: |
@@ -67,6 +87,21 @@ redability.
 .. note::
   github.com and `bitbucket.org <https://bitbucket.org>`__ public keys are
   already managed by this formula as they are often required by other one.
+
+ssh:keys:{{ remote host name}}:{{ local user name }}:contents
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+:doc:`/ssh/doc/index` private key content.
+
+ssh:keys:{{ remote host name}}:{{ local user name }}:type
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Type of :doc:`/ssh/doc/index` private key: ``rsa`` or ``dsa``.
+
+ssh:keys:{{ remote host name}}:{{ local user name }}:extra_hosts
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The list of IP addresses or alias hostnames
 
 deployment_key:contents
 ~~~~~~~~~~~~~~~~~~~~~~~

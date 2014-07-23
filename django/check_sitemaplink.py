@@ -84,7 +84,7 @@ def main():
                 nagiosplugin.ScalarContext('sitemaplink',
                                            args.warning,
                                            args.critical),)
-    check.main()
+    check.main(verbose=0)
 
 
 if __name__ == "__main__":

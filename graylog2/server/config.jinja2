@@ -208,17 +208,14 @@ http_listen_port = 12202
 transport_email_enabled = true
 {%- if email['encryption']|default('plain') == 'SSL/TLS' %}
 transport_email_protocol = smtps
+transport_email_use_tls = true
 {%- else %}
 transport_email_protocol = smtp
+transport_email_use_tls = false
 {%- endif %}
 transport_email_hostname = {{ email['server'] }}
 transport_email_port = {{ email['port'] }}
 transport_email_use_auth = true
-{% if email['tls']|default(False) %}
-transport_email_use_tls = true
-{% else %}
-transport_email_use_tls = false
-{% endif %}
 transport_email_auth_username = {{ email['user']|default("null") }}
 transport_email_auth_password = {{ email['password']|default("null") }}
 transport_email_subject_prefix = [graylog2]

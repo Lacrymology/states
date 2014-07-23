@@ -56,7 +56,7 @@ if Gitlab::Application.config.action_mailer.delivery_method == :smtp
     password: "{{ smtp['password'] }}",
     domain: "{{ smtp['domain']|default( smtp['user'].split('@', 1)[1] ) }}",
     authentication: "{{ smtp['authentication']|default('plain') }}",
-{%- if smtp['tls']|default(False) %}
+{%- if smtp['encryption']|default('plain') == 'STARTTLS' %}
     enable_starttls_auto: true,
 {%- else %}
     enable_starttls_auto: false,

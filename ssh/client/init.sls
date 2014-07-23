@@ -68,30 +68,41 @@ known_hosts:
       - file: {{ root_home }}/.ssh
       - pkg: openssh-client
 
-{%- for hostname in salt['pillar.get']('ssh:keys', {}) -%}
-    {%- for user in salt['pillar.get']('ssh:keys:' ~ hostname, {}) %}
-ssh_{{ user }}_{{ hostname }}:
+/etc/ssh/keys:
   file:
-    - name: /etc/ssh/keys/{{ user }}
     - directory
-    - user: {{ user }}
-    - group: {{ user }}
-    - mode: 700
-    - makedirs: True
     - require:
       - pkg: openssh-client
 
-/etc/ssh/keys/{{ user }}/{{ hostname }}:
+{#- manage mutilple ssh private keys for multiple users #}
+{%- for k in salt['pillar.get']('ssh:keys', {}) -%}
+  {%- set maps = k['map'] %}
+  {%- for hostname in maps %}
+{%- set local_remotes = maps[hostname] if maps[hostname] != none else {'root': 'root'} %}
+    {%- for l_user in local_remotes %}
+      {%- set r_user = local_remotes[l_user] %}
+ssh_{{ l_user }}_{{ hostname }}_{{ r_user }}:
+  file:
+    - name: /etc/ssh/keys/{{ l_user }}/{{ hostname }}
+    - directory
+    - user: {{ l_user }}
+    - group: {{ l_user }}
+    - makedirs: True
+    - require:
+      - file: /etc/ssh/keys
+
+/etc/ssh/keys/{{ l_user }}/{{ hostname }}/{{ r_user }}:
   file:
     - managed
     - contents: |
-        {{ pillar['ssh']['keys'][hostname][user]['contents'] | indent(8) }}
-    - user: {{ user }}
-    - group: {{ user }}
+        {{ k['contents'] | indent(8) }}
+    - user: {{ l_user }}
+    - group: {{ l_user }}
     - mode: 400
     - require:
-      - file: ssh_{{ user }}_{{ hostname }}
+      - file: ssh_{{ l_user }}_{{ hostname }}_{{ r_user }}
     {%- endfor -%}
+  {%- endfor -%}
 {%- endfor %}
 
 openssh-client:

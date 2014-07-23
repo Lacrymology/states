@@ -49,7 +49,7 @@ include:
 jenkins_set_git_email:
   cmd:
     - wait
-    - name: git config --global user.email "jenkins@{{ grains['id'] }}"
+    - name: git config --global user.email "{{ pillar['smtp']['user'] }}"
     - user: jenkins
     - watch:
       - pkg: git

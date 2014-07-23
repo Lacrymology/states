@@ -88,17 +88,17 @@ redability.
   github.com and `bitbucket.org <https://bitbucket.org>`__ public keys are
   already managed by this formula as they are often required by other one.
 
-ssh:keys:{{ remote host name }}:{{ local user name }}:contents
+ssh:keys:{{ remote hostname }}:{{ local username }}:contents
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 :doc:`/ssh/doc/index` private key content.
 
-ssh:keys:{{ remote host name }}:{{ local user name }}:type
+ssh:keys:{{ remote hostname }}:{{ local username }}:type
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Type of :doc:`/ssh/doc/index` private key: ``rsa`` or ``dsa``.
 
-ssh:keys:{{ remote host name }}:{{ local user name }}:aliases
+ssh:keys:{{ remote hostname }}:{{ local username }}:aliases
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The list of IP addresses or alias hostnames

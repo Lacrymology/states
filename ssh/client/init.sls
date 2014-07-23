@@ -128,7 +128,7 @@ root_ssh_private_key:
 root_ssh_public_key:
   cmd:
     - wait
-    - name: ssh-keygen -y -f {{ ssh_private_path }} > {{ ssh_private_path}}.pub
+    - name: ssh-keygen -y -f {{ ssh_private_path }} > {{ ssh_private_path }}.pub
     - watch:
       - file: root_ssh_private_key
     - require:

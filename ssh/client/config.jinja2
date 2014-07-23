@@ -33,14 +33,10 @@ Host *
     HashKnownHosts yes
     GSSAPIAuthentication yes
     GSSAPIDelegateCredentials no
+    IdentityFile /etc/ssh/keys/%u/%h/%r
+    IdentityFile ~/.ssh/id_rsa
+    IdentityFile ~/.ssh/id_dsa
 {%- if salt['pillar.get']('backup_server:address', False) in ('localhost', '127.0.0.1') -%}
 {#- because we can't get fingerprint of localhost for each test VM #}
     NoHostAuthenticationForLocalhost yes
 {%- endif %}
-
-{%- for hostname in salt['pillar.get']('ssh:keys', {}) %}
-    {% for user in salt['pillar.get']('ssh:keys:' ~ hostname, {}) %}
-Host {{ hostname }} {% for alias in salt['pillar.get']('ssh:keys:' ~ hostname ~ ':' ~ user ~ ':aliases', {}) %}{{ alias }}{% if not loop.last %} {% endif %}{% endfor %}
-    IdentityFile /etc/ssh/keys/%u/{{ hostname }}
-    {%- endfor -%}
-{%- endfor %}

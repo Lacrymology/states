@@ -140,14 +140,15 @@ EMAIL_HOST_PASSWORD = '{{ smtp['password']|default('') }}'
 EMAIL_HOST_USER = '{{ smtp['user']|default('') }}'
 EMAIL_PORT = {{ smtp['port'] }}
 DEFAULT_FROM_EMAIL = '{{ smtp['from'] }}'
-{% if smtp['encryption']|default('plain') in ('SSL/TLS', 'STARTTLS') %}
+{%- set encryption = smtp['encryption']|default('plain') -%}
+{%- if encryption in ('SSL/TLS', 'STARTTLS') %}
 EMAIL_USE_TLS = True
-    {%- if smtp['encryption'] == 'SSL/TLS' %}
+    {%- if encryption == 'SSL/TLS' %}
 EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
     {%- endif -%}
 {%- else %}
 EMAIL_USE_TLS = False
-{% endif %}
+{%- endif %}
 
 
 {%- if salt['pillar.get']('djangopypi2:ssl', False) %}

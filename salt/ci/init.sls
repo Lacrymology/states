@@ -29,6 +29,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 include:
   - bash
   - jenkins
+  - jenkins.git
   - local
   - rsync
   - salt.cloud

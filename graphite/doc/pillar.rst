@@ -76,7 +76,7 @@ Example::
       from: from@example.com
       port: 25
       password: smtppassword
-      tls: True
+      encrpytion: 'SSL/TLS'
 
 graphite:sentry
 ~~~~~~~~~~~~~~~~~~~

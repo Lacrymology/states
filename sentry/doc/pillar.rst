@@ -105,7 +105,7 @@ Example::
       port: 25
       user: user@example.com
       from: user@example.com
-      tls: False
+      encryption: 'SSL/TLS'
 
 sentry:db:username
 ~~~~~~~~~~~~~~~~~~

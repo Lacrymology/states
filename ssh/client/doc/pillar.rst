@@ -46,7 +46,7 @@ Example::
               MIIEowIBAAKCAQEA3wk5tqR1i...
               -----END RSA PRIVATE KEY-----
           type: rsa
-          extra_hosts:
+          aliases:
             - 127.0.0.1
             - 127.0.0.2
       example.com:
@@ -56,7 +56,7 @@ Example::
               MIIEowblahblah...
               -----END RSA PRIVATE KEY-----
           type: rsa
-          extra_hosts:
+          aliases:
             - www.example.com
 
   deployment_key:
@@ -98,8 +98,8 @@ ssh:keys:{{ remote host name }}:{{ local user name }}:type
 
 Type of :doc:`/ssh/doc/index` private key: ``rsa`` or ``dsa``.
 
-ssh:keys:{{ remote host name }}:{{ local user name }}:extra_hosts
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ssh:keys:{{ remote host name }}:{{ local user name }}:aliases
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The list of IP addresses or alias hostnames
 

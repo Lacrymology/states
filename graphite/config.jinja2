@@ -111,7 +111,7 @@ DATA_DIRS = [
 LOG_DIR = '/var/log/graphite/graphite'
 INDEX_FILE = STORAGE_DIR + '/index'
 
-{%- set smtp = salt['pillar.get']('graphite:email', salt['pillar.get']('smtp')) %}
+{%- set smtp = salt['pillar.get']('graphite:smtp', salt['pillar.get']('smtp')) %}
 EMAIL_HOST = '{{ smtp['server'] }}'
 EMAIL_HOST_PASSWORD = '{{ smtp['password']|default('') }}'
 EMAIL_HOST_USER = '{{ smtp['user']|default('') }}'

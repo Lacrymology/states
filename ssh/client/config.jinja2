@@ -33,6 +33,9 @@ Host *
     HashKnownHosts yes
     GSSAPIAuthentication yes
     GSSAPIDelegateCredentials no
+    IdentityFile /etc/ssh/keys/%h_%u_%r
+    IdentityFile ~/.ssh/id_rsa
+    IdentityFile ~/.ssh/id_dsa
 {%- if salt['pillar.get']('backup_server:address', False) in ('localhost', '127.0.0.1') -%}
 {#- because we can't get fingerprint of localhost for each test VM #}
     NoHostAuthenticationForLocalhost yes

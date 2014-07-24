@@ -72,35 +72,40 @@ known_hosts:
     - require:
       - pkg: openssh-client
 
-{#- manage mutilple ssh private keys for multiple users #}
+{#- manage multiple ssh private keys for multiple users #}
 {%- set managed_keys = [] -%}
 {%- for elem in salt['pillar.get']('ssh:keys', []) -%}
   {%- set maps = elem['map'] %}
   {%- for hostname in maps %}
     {%- set local_remotes = maps[hostname] if maps[hostname] != none else {'root': 'root'} %}
     {%- for local in local_remotes %}
+/etc/ssh/keys/{{ local }}:
+  file:
+    - directory
+    - user: root
+    - group: root
+    - mode: 750
+    - require:
+      - file: /etc/ssh/keys
       {%- set remotes = local_remotes[local] %}
       {%- set remotes = [remotes] if remotes is string else remotes %}
       {%- for remote in remotes %}
-        {%- set current_key = '/etc/ssh/keys/' + '_'.join((hostname, local, remote)) -%}
+        {%- set current_key = '/etc/ssh/keys/{0}/{1}'.format(local, '_'.join((hostname, remote))) -%}
         {%- do managed_keys.append(current_key) %}
 {{ current_key }}:
   file:
     - managed
     - contents: |
         {{ elem['contents'] | indent(8) }}
-    - user: {{ local }}
-    - group: root
-    - mode: 400
     - require:
-      - file: /etc/ssh/keys
+      - file: /etc/ssh/keys/{{ local }}
       {%- endfor %}
     {%- endfor -%}
   {%- endfor -%}
 {%- endfor -%}
 
 {#- remove all unmanaged keys -#}
-{%- for keyfile in salt['file.find']('/etc/ssh/keys') -%}
+{%- for keyfile in salt['file.find']('/etc/ssh/keys', type='f') -%}
   {%- if keyfile not in managed_keys %}
 {{ keyfile }}:
   file:

@@ -73,6 +73,7 @@ known_hosts:
       - pkg: openssh-client
 
 {#- manage mutilple ssh private keys for multiple users #}
+{%- set managed_keys = [] -%}
 {%- for elem in salt['pillar.get']('ssh:keys', []) -%}
   {%- set maps = elem['map'] %}
   {%- for hostname in maps %}
@@ -81,7 +82,9 @@ known_hosts:
       {%- set remotes = local_remotes[local] %}
       {%- set remotes = [remotes] if remotes is string else remotes %}
       {%- for remote in remotes %}
-/etc/ssh/keys/{{ hostname }}_{{ local }}_{{ remote }}:
+        {%- set current_key = '/etc/ssh/keys/' + '_'.join((hostname, local, remote)) -%}
+        {%- do managed_keys.append(current_key) %}
+{{ current_key }}:
   file:
     - managed
     - contents: |
@@ -94,6 +97,15 @@ known_hosts:
       {%- endfor %}
     {%- endfor -%}
   {%- endfor -%}
+{%- endfor -%}
+
+{#- remove all unmanaged keys -#}
+{%- for keyfile in salt['file.find']('/etc/ssh/keys') -%}
+  {%- if keyfile not in managed_keys %}
+{{ keyfile }}:
+  file:
+    - absent
+  {%- endif -%}
 {%- endfor %}
 
 openssh-client:

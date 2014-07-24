@@ -88,6 +88,8 @@ jenkins_old_version:
       - service: jenkins
 
 extend:
+{%- from 'macros.jinja2' import change_ssh_key_owner with context %}
+{{ change_ssh_key_owner('jenkins', {'pkg': 'jenkins'}) }}
   nginx:
     service:
       - watch:

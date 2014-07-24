@@ -33,7 +33,7 @@ Host *
     HashKnownHosts yes
     GSSAPIAuthentication yes
     GSSAPIDelegateCredentials no
-    IdentityFile /etc/ssh/keys/%h_%u_%r
+    IdentityFile /etc/ssh/keys/%u/%r@%h
     IdentityFile ~/.ssh/id_rsa
     IdentityFile ~/.ssh/id_dsa
 {%- if salt['pillar.get']('backup_server:address', False) in ('localhost', '127.0.0.1') -%}

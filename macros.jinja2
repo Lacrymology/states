@@ -32,3 +32,33 @@ mode: permission of PID file
 # {{ path }} does not exist, no need to manage
     {%- endif %}
 {%- endmacro %}
+
+{#- extend for change owner of ssh keys #}
+{%- macro change_ssh_key_owner(owner, requisites) %}
+{#- a dirty hack to make sure this macro will render at least one state to extend #}
+  /etc/ssh/keys:
+    file:
+      - directory
+
+{%- set managed_users = [] -%}
+{%- for elem in salt['pillar.get']('ssh:keys', []) -%}
+  {%- set maps = elem['map'] %}
+  {%- for hostname in maps %}
+    {%- set local_remotes = maps[hostname] if maps[hostname] != none else {'root': 'root'} %}
+    {%- for local in local_remotes %}
+    {% do managed_users.append(local) %}
+    {%- endfor %}
+  {%- endfor %}
+{%- endfor %}
+{%- if local in managed_users %}
+  /etc/ssh/keys/{{ owner }}:
+    file:
+      - user: {{ owner }}
+      - recurse:
+        - user
+      - require:
+  {%- for k, v in requisites.iteritems() %}
+        - {{ k }}: {{ v }}
+  {%- endfor %}
+{%- endif %}
+{%- endmacro %}

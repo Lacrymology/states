@@ -44,6 +44,7 @@ include:
   - pip.nrpe
   - rsyslog
   - rsyslog.nrpe
+  - ssh.client
   - sudo
   - virtualenv
   - virtualenv.nrpe
@@ -293,3 +294,7 @@ nsca_passive:
 
 {% from 'nrpe/passive.sls' import passive_check with context %}
 {{ passive_check('nrpe') }}
+
+extend:
+{%- from 'macros.jinja2' import change_ssh_key_owner with context %}
+{{ change_ssh_key_owner('nagios', {'pkg': 'nagios-nrpe-server'}) }}

@@ -46,7 +46,9 @@ Example::
         map:
           ci.example.com:
           alerts.example.com:
-            nagios: root
+            nagios:
+              - root
+              - gitlab
             backup: backup
       - contents: |
          ...
@@ -92,14 +94,17 @@ List of key mapping, each map use below structure::
   map:
     {{ address }}:
       {{ localuser1 }}: {{ remoteuser1 }}
-      {{ localuser1 }}: {{ remoteuser1 }}
+      {{ localuser2 }}:
+        - {{ remoteuser1 }}
+        - {{ remoteuser2 }}
 
 
 For private content, see :doc:`/ssh/doc/index`
 
 Use address of remote host (domain or IP) for ``address``
 ``localuser`` is linux user, who will run ssh and use the managed key.
-``remoteuser`` is linux user on ``address``, which will be logged in as.
+``remoteuser`` is linux user on ``address``, which will be logged in as. This
+can also be a list of remote users.
 
 If no ``localuser``:``remoteuser`` provided, use ``root``:``root``
 

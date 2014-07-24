@@ -78,7 +78,9 @@ known_hosts:
   {%- for hostname in maps %}
     {%- set local_remotes = maps[hostname] if maps[hostname] != none else {'root': 'root'} %}
     {%- for local in local_remotes %}
-      {%- set remote = local_remotes[local] %}
+      {%- set remotes = local_remotes[local] %}
+      {%- set remotes = [remotes] if remotes is string else remotes %}
+      {%- for remote in remotes %}
 /etc/ssh/keys/{{ hostname }}_{{ local }}_{{ remote }}:
   file:
     - managed
@@ -89,6 +91,7 @@ known_hosts:
     - mode: 400
     - require:
       - file: /etc/ssh/keys
+      {%- endfor %}
     {%- endfor -%}
   {%- endfor -%}
 {%- endfor %}

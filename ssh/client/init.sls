@@ -90,7 +90,7 @@ known_hosts:
       {%- set remotes = local_remotes[local] %}
       {%- set remotes = [remotes] if remotes is string else remotes %}
       {%- for remote in remotes %}
-        {%- set current_key = '/etc/ssh/keys/{0}/{1}_{2}'.format(local, hostname, remote) -%}
+        {%- set current_key = '/etc/ssh/keys/{0}/{1}@{2}'.format(local, remote, hostname) -%}
         {%- do managed_keys.append(current_key) %}
 {{ current_key }}:
   file:

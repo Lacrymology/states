@@ -87,7 +87,12 @@ class SCPBackupFile(BackupFile):
             log.debug('setting host key policy to auto add')
             ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
-        log.info("connecting to %s", self.kwargs['hostname'])
+        sshconf = paramiko.SSHConfig()
+        with open('/etc/ssh/ssh_config') as f:
+            sshconf.parse(f)
+        self.kwargs['key_filename'] = sshconf.lookup(self.hostname)['identityfile']
+
+        log.info("connecting to %s", self.hostname)
         log.debug("kwargs: %s", str(self.kwargs))
         ssh.connect(**self.kwargs)
         log.debug("opening sftp")

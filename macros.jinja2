@@ -50,7 +50,7 @@ mode: permission of PID file
     {%- endfor %}
   {%- endfor %}
 {%- endfor %}
-{%- if local in managed_users %}
+{%- if owner in managed_users %}
   /etc/ssh/keys/{{ owner }}:
     file:
       - user: {{ owner }}

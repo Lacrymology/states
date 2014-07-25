@@ -33,6 +33,8 @@ __maintainer__ = 'Tomas Neme'
 __email__ = 'lacrymology@gmail.com'
 
 import logging
+import os
+import pwd
 
 import paramiko
 
@@ -87,7 +89,20 @@ class SCPBackupFile(BackupFile):
             log.debug('setting host key policy to auto add')
             ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
-        log.info("connecting to %s", self.kwargs['hostname'])
+        sshconf = paramiko.SSHConfig()
+        with open('/etc/ssh/ssh_config') as f:
+            sshconf.parse(f)
+
+        local_user = pwd.getpwuid(os.getuid()).pw_name
+
+        # paramiko wrongly parses %u/%r@%h as it use same value for %u and %r
+        # replace %r with the configured username
+        self.kwargs['key_filename'] = (
+            path.replace(local_user + '@', self.kwargs['username'] + '@')
+            for path in sshconf.lookup(self.hostname)['identityfile']
+            if '@' in os.path.basename(path))
+
+        log.info("connecting to %s", self.hostname)
         log.debug("kwargs: %s", str(self.kwargs))
         ssh.connect(**self.kwargs)
         log.debug("opening sftp")

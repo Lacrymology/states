@@ -35,9 +35,3 @@ host_key_auto_add = true
 [backup]
 prefix = /var/lib/backup/{{ salt['pillar.get']('backup_server:subdir', grains['id']) }}
 manifest = /var/lib/nagios/backup.manifest.pickle
-{#
-acceptable age for the MANIFEST FILE (not for the backup files themselves) in
-hours.
-recommended to keep this somewhere about max backup file age / 2
-#}
-age = 24

@@ -42,6 +42,7 @@ import re
 import nagiosplugin
 
 log = logging.getLogger('nagiosplugin')
+CACHE_TIMEOUT = 15 # minutes
 
 class BackupFile(nagiosplugin.Resource):
     def __init__(self, config, facility):
@@ -51,7 +52,6 @@ class BackupFile(nagiosplugin.Resource):
 
         self.prefix = self.config.get('backup', 'prefix')
         self.manifest = self.config.get('backup', 'manifest')
-        self.age = self.config.getint('backup', 'age')
 
         self.facility = facility
 
@@ -76,6 +76,10 @@ class BackupFile(nagiosplugin.Resource):
         return [age_metric, size_metric]
 
     def get_manifest(self):
+        '''
+        Using manifest cache file for saving multiple connections if there
+        are multiple check_backup run on the same machine.
+        '''
         log.info('manifest requested')
         if not os.path.exists(self.manifest):
             log.debug("manifest file doesn't exist")
@@ -86,8 +90,7 @@ class BackupFile(nagiosplugin.Resource):
         now = datetime.datetime.now()
         log.debug("Manifest file mtime: %s", time.strftime("%Y-%m-%d-%H_%M_%S"))
 
-        # check that it's self.age hours or younger
-        if ((now - time).total_seconds() / (60 * 60)) >= self.age:
+        if ((now - time).total_seconds() / 60 >= CACHE_TIMEOUT:
             log.debug("manifest file is too old")
             return self.create_manifest()
         else:

@@ -42,6 +42,8 @@ import re
 import nagiosplugin
 
 log = logging.getLogger('nagiosplugin')
+CACHE_TIMEOUT = 15
+
 
 class BackupFile(nagiosplugin.Resource):
     def __init__(self, config, facility):
@@ -51,7 +53,6 @@ class BackupFile(nagiosplugin.Resource):
 
         self.prefix = self.config.get('backup', 'prefix')
         self.manifest = self.config.get('backup', 'manifest')
-        self.age = self.config.getint('backup', 'age')
 
         self.facility = facility
 
@@ -76,6 +77,10 @@ class BackupFile(nagiosplugin.Resource):
         return [age_metric, size_metric]
 
     def get_manifest(self):
+        '''
+        Using manifest cache file for saving multiple connections if there
+        are multiple check_backup run on the same machine.
+        '''
         log.info('manifest requested')
         if not os.path.exists(self.manifest):
             log.debug("manifest file doesn't exist")
@@ -86,8 +91,7 @@ class BackupFile(nagiosplugin.Resource):
         now = datetime.datetime.now()
         log.debug("Manifest file mtime: %s", time.strftime("%Y-%m-%d-%H_%M_%S"))
 
-        # check that it's self.age hours or younger
-        if ((now - time).total_seconds() / (60 * 60)) >= self.age:
+        if ((now - time).total_seconds() / 60) >= CACHE_TIMEOUT:
             log.debug("manifest file is too old")
             return self.create_manifest()
         else:
@@ -115,7 +119,7 @@ class BackupFile(nagiosplugin.Resource):
             key, value = file.items()[0]
             # update this if it's the first time this appears, or if the date
             # is newer
-            if (not key in files) or (value['date'] > files[key]['date']):
+            if (key not in files) or (value['date'] > files[key]['date']):
                 log.debug("Adding file to return dict")
                 files.update(file)
 
@@ -143,10 +147,11 @@ class BackupFile(nagiosplugin.Resource):
                     },
                 }
         else:
-            log.warn("Filename didn't match regexp. This file shouldn't be here: %s",
-                     filename)
+            log.warn("Filename didn't match regexp.\
+                     This file shouldn't be here: %s", filename)
 
         return {}
+
 
 @nagiosplugin.guarded
 def main(Collector):
@@ -159,7 +164,8 @@ def main(Collector):
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     argp.add_argument('facility', help='facility name to check backups for')
     argp.add_argument('-w', '--warning', metavar='HOURS', default='48',
-                      help='Emit a warning if a backup file is older than HOURS')
+                      help='Emit a warning if a backup file is older\
+                            than HOURS')
     argp.add_argument('-c', '--config', metavar="PATH",
                       default='/etc/nagios/backup.conf')
     argp.add_argument('--timeout', default=None)
@@ -174,4 +180,3 @@ def main(Collector):
         nagiosplugin.ScalarContext('size', "1:", "1:"),
     )
     check.main(args.verbose, timeout=args.timeout)
-

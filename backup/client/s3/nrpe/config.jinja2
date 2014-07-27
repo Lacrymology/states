@@ -35,9 +35,3 @@ bucket = {{ pillar['aws']['s3']['bucket'] }}
 [backup]
 prefix = {{ pillar['aws']['s3']['path'] }}
 manifest = /var/lib/nagios/backup.manifest.pickle
-{#
-acceptable age for the MANIFEST FILE (not for the backup files themselves) in
-hours.
-recommended to keep this somewhere about max backup file age / 2
-#}
-age = 24

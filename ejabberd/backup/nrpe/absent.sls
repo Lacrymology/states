@@ -26,6 +26,5 @@ Author: Diep Pham <favadi@robotinfra.com>
 Maintainer: Diep Pham <favadi@robotinfra.com>
 
 -#}
-/etc/nagios/nrpe.d/ejabberd.backup.cfg:
-  file:
-    - absent
+{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{{ passive_absent('ejabberd.backup') }}

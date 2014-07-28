@@ -27,6 +27,5 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 Remove Nagios NRPE check for Gitlab backup
 -#}
-/etc/nagios/nrpe.d/backup-gitlab.cfg:
-  file:
-    - absent
+{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{{ passive_absent('gitlab.backup') }}

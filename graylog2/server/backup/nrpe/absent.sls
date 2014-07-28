@@ -27,6 +27,5 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 Remove Nagios NRPE check for Graylog2 backup
 -#}
-/etc/nagios/nrpe.d/backup-graylog2.cfg:
-  file:
-    - absent
+{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{{ passive_absent('graylog2.server.backup') }}

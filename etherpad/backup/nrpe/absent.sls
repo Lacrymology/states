@@ -27,6 +27,5 @@ Maintainer: Dang Tung Lam <lamdt@familug.org>
 
 Remove Nagios NRPE check for Etherpad backup
 -#}
-/etc/nagios/nrpe.d/backup-etherpad.cfg:
-  file:
-    - absent
+{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{{ passive_absent('etherpad.backup') }}

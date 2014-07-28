@@ -44,5 +44,6 @@ graylog2_elasticsearch_cluster:
   monitoring:
     - run_check
     - wait: 60
-    - order: last
-    - accepted_failure: 1 nodes in cluster (outside 2:2)
+    - accepted_failure: 1 nodes in cluster (outside range 2:2)
+    - require:
+      - sls: graylog2.server.nrpe

@@ -57,4 +57,4 @@ elasticsearch_cluster:
     - run_check
     - wait: 60
     - order: last
-    - accepted_failure: 1 nodes in cluster (outside 2:2)
+    - accepted_failure: 1 nodes in cluster (outside range 2:2)

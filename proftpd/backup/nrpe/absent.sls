@@ -28,4 +28,4 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Remove Nagios NRPE check for Proftpd backup
 -#}
 {%- from 'nrpe/passive.sls' import passive_absent with context %}
-{{ passive_absent('proftpd.absent') }}
+{{ passive_absent('proftpd.backup') }}

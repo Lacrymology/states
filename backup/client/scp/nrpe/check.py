@@ -90,10 +90,13 @@ class SCPBackupFile(BackupFile):
             ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
         sshconf = paramiko.SSHConfig()
+        # paramiko uses 'USER' environment var to parsing %u, %r
+        # when nrpe daemon run the check, that var is not set and results in
+        # 'None' user, set it before parsing config file.
+        local_user = pwd.getpwuid(os.getuid()).pw_name
+        os.environ['USER'] = os.environ.get('USER', local_user)
         with open('/etc/ssh/ssh_config') as f:
             sshconf.parse(f)
-
-        local_user = pwd.getpwuid(os.getuid()).pw_name
 
         # paramiko wrongly parses %u/%r@%h as it use same value for %u and %r
         # replace %r with the configured username

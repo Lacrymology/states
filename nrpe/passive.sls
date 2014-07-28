@@ -52,4 +52,8 @@
 /etc/nagios/nrpe.d/{{ state }}.cfg:
   file:
     - absent
+
+/etc/nagios/nsca.d/{{ state }}.cfg:
+  file:
+    - absent
 {%- endmacro %}

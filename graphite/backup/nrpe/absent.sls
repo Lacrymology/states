@@ -27,7 +27,5 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 Remove Nagios NRPE check for Graphite backup
 -#}
-/etc/nagios/nrpe.d/backup-graphite.cfg:
-  file:
-    - absent
-{#- TODO: remove passive_check output  #}
+{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{{ passive_absent('graphite.backup') }}

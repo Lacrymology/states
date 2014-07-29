@@ -39,5 +39,5 @@ query="SELECT pg_database.datname FROM pg_database, pg_authid
        WHERE pg_database.datdba=pg_authid.oid AND pg_authid.rolname='${role}'";
 databases=$(sudo -H -i -u postgres psql --tuples-only --no-align -c "${query}")
 for db in ${databases}; do
-  /usr/local/bin/backup-postgresql ${role}-${db}
+  /usr/local/bin/backup-postgresql --prefix ${role} ${db}
 done

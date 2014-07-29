@@ -33,9 +33,14 @@ set -e
 ulimit -e 19
 ionice -c idle -p $$
 XZ_DEFAULTS=--memlimit={{ salt['pillar.get']('backup:xz_memlimit', 64) }}MiB
-
-dbname=$1
+if [ "$1" = '--prefix' ]; then
+  prefix="$2"
+  dbname="$3"
+else
+  prefix=""
+  dbname="$1"
+fi
 NOW=`date '+%Y-%m-%d-%H_%M_%S'`
 export TERM=dumb
-sudo -H -i -u postgres -g postgres pg_dump $dbname | xz > /tmp/postgresql-$dbname-$NOW.sql.xz
-/usr/local/bin/backup-store /tmp/postgresql-$dbname-$NOW.sql.xz
+sudo -H -i -u postgres -g postgres pg_dump $dbname | xz > /tmp/postgresql-$prefix-$dbname-$NOW.sql.xz
+/usr/local/bin/backup-store /tmp/postgresql-$prefix-$dbname-$NOW.sql.xz

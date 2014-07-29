@@ -39,6 +39,7 @@ test:
     - wait: 60
     - exclude:
       - elasticsearch_cluster
+      - graylog2_elasticsearch_cluster
 
 graylog2_elasticsearch_cluster:
   monitoring:

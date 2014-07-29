@@ -37,5 +37,9 @@ ionice -c idle -p $$
 
 archive_path=$1
 archive_name=`basename $archive_path`
-/usr/local/s3lite/bin/s3lite $archive_path s3://{{ pillar['aws']['s3']['bucket'] }}/{{ pillar['aws']['s3']['path'] }}/$archive_name | logger -t s3lite
+{%- if pillar['aws']['s3']['path'] == '/' %}
+/usr/local/s3lite/bin/s3lite $archive_path s3://{{ pillar['aws']['s3']['bucket'] }}/$archive_name | logger -t s3lite
+{%- else %}
+/usr/local/s3lite/bin/s3lite $archive_path s3://{{ pillar['aws']['s3']['bucket'] }}/{{ pillar['aws']['s3']['path'].strip('/') }}/$archive_name | logger -t s3lite
+{%- endif %}
 rm -f $archive_path

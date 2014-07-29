@@ -24,24 +24,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
+            Quan Tong Anh <quanta@robotinfra.com>
 
 Diamond statistics for Roundcube.
 -#}
-include:
-  - diamond
-  - nginx.diamond
-  - postgresql.server.diamond
-  - rsyslog.diamond
-  - uwsgi.diamond
-
-roundcube_web_diamond_resource:
-  file:
-    - accumulated
-    - name: processes
-    - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - require_in:
-      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - text:
-      - |
-        [[uwsgi.roundcube]]
-        cmdline = ^roundcube-(worker|master)$
+{%- from 'diamond/macro.jinja2' import uwsgi_diamond with context %}
+{%- call uwsgi_diamond('roundcube') %}
+- postgresql.server.diamond
+- rsyslog.diamond
+{%- endcall %}

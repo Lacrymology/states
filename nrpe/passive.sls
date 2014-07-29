@@ -53,7 +53,7 @@
   file:
     - absent
 
-/etc/nagios/nsca.d/{{ state }}.cfg:
+/etc/nagios/nsca.d/{{ state }}.yml:
   file:
     - absent
 {%- endmacro %}

@@ -31,27 +31,15 @@ Institute for Institutional Innovation by Data Driven Design Inc.
 
 Author: Hung Nguyen Viet hvnsweeting@gmail.com
 Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
+            Quan Tong Anh <quanta@robotinfra.com>
 
 Diamond statistics for djangopypi2
 -#}
-include:
-  - diamond
-  - memcache.diamond
-  - nginx.diamond
-  - postgresql.server.diamond
-  - rsyslog.diamond
-  - statsd.diamond
-  - sudo.diamond
-  - uwsgi.diamond
-
-uwsgi_diamond_djangopypi2_resources:
-  file:
-    - accumulated
-    - name: processes
-    - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - require_in:
-      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - text:
-      - |
-        [[uwsgi.djangopypi2]]
-        cmdline = ^djangopypi2-(worker|master)$
+{%- from 'diamond/macro.jinja2' import uwsgi_diamond with context %}
+{%- call uwsgi_diamond('djangopypi2') %}
+- memcache.diamond
+- postgresql.server.diamond
+- rsyslog.diamond
+- statsd.diamond
+- sudo.diamond
+{%- endcall %}

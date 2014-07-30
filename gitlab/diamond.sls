@@ -31,27 +31,15 @@ Institute for Institutional Innovation by Data Driven Design Inc.
 
 Author: Lam Dang Tung <lamdt@familug.org>
 Maintainer: Lam Dang Tung <lamdt@familug.org>
+            Quan Tong Anh <quanta@robotinfra.com>
 
 Diamond statistics for GitLab.
 -#}
-include:
-  - diamond
-  - nginx.diamond
-  - nodejs.diamond
-  - postgresql.server.diamond
-  - redis.diamond
-  - rsyslog.diamond
-  - ssh.server.diamond
-  - uwsgi.diamond
-
-gitlab_diamond_resource:
-  file:
-    - accumulated
-    - name: processes
-    - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - require_in:
-      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - text:
-      - |
-        [[uwsgi.gitlab]]
-        cmdline = ^gitlab-(worker|master)$
+{%- from 'diamond/macro.jinja2' import uwsgi_diamond with context %}
+{%- call uwsgi_diamond('gitlab') %}
+- nodejs.diamond
+- postgresql.server.diamond
+- redis.diamond
+- rsyslog.diamond
+- ssh.server.diamond
+{%- endcall %}

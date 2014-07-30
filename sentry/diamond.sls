@@ -24,27 +24,15 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
+            Quan Tong Anh <quanta@robotinfra.com>
 
 Diamond statistics for Sentry.
 -#}
-include:
-  - diamond
-  - memcache.diamond
-  - nginx.diamond
-  - postgresql.server.diamond
-  - rsyslog.diamond
-  - statsd.diamond
-  - sudo.diamond
-  - uwsgi.diamond
-
-uwsgi_diamond_sentry_resources:
-  file:
-    - accumulated
-    - name: processes
-    - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - require_in:
-      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - text:
-      - |
-        [[uwsgi.sentry]]
-        cmdline = ^sentry-(worker|master)$
+{%- from 'diamond/macro.jinja2' import uwsgi_diamond with context %}
+{%- call uwsgi_diamond('sentry') %}
+- memcache.diamond
+- postgresql.server.diamond
+- rsyslog.diamond
+- statsd.diamond
+- sudo.diamond
+{%- endcall %}

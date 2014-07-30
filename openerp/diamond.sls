@@ -24,28 +24,16 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author: Lam Dang Tung <lamdt@familug.org>
 Maintainer: Lam Dang Tung <lamdt@familug.org>
+            Quan Tong Anh <quanta@robotinfra.com>
 
 Diamond statistics for OpenERP.
 -#}
 
-include:
-  - diamond
-  - nginx.diamond
-  - postgresql.server.diamond
-  - rsyslog.diamond
-  - uwsgi.diamond
-
-openerp_diamond_resources:
-  file:
-    - accumulated
-    - name: processes
-    - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - require_in:
-      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - text:
-      - |
-        [[uwsgi.openerp]]
-        cmdline = ^openerp-(worker|master)$
+{%- from 'diamond/macro.jinja2' import uwsgi_diamond with context %}
+{%- call uwsgi_diamond('openerp') %}
+- postgresql.server.diamond
+- rsyslog.diamond
+{%- endcall %}
 {%- if salt['pillar.get']('openerp:company_db', False) %}
         [[openerp]]
         cmdline = openerp-cron.py$

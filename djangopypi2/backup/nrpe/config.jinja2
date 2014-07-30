@@ -33,8 +33,8 @@ djangopypi2_backup_postgres_procs:
   description: djangopypi2 Backup PostgreSQL Database Process
   command: '/usr/lib/nagios/plugins/check_procs -c 0:1 -u root -a "/usr/local/bin/backup-postgresql {{ salt["pillar.get"]("djangopypi2:db:name", "djangopypi2") }}"'
 
-djangopypi2_backup:
-  description: djangopypi2 Backup Age And Size
+djangopypi2_database_backup:
+  description: djangopypi2 Database Backup Age And Size
   command: /usr/lib/nagios/plugins/check_backup.py -w {{ salt['pillar.get']('backup:age', 48) }} postgresql-djangopypi2
 
 djangopypi2_file_backup:

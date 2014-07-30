@@ -110,13 +110,13 @@ rabbitmq-server:
     - watch:
       - user: rabbitmq
       - file: rabbitmq-server
-      - rabbitmq_plugins: rabbitmq-server
+      - rabbitmq_plugin: rabbitmq-server
 {% for node in pillar['rabbitmq']['cluster']['nodes'] %}
     {% if node != grains['id'] %}
       - host: host_{{ node }}
     {% endif %}
 {% endfor %}
-  rabbitmq_plugins:
+  rabbitmq_plugin:
     - enabled
     - name: rabbitmq_management
     - require:
@@ -210,7 +210,7 @@ in_rabbitmq_cluster:
     - password: {{ pillar['rabbitmq']['management']['password'] }}
     - disk_node: True
     - require:
-      - rabbitmq_plugins: rabbitmq-server
+      - rabbitmq_plugin: rabbitmq-server
       - service: rabbitmq-server
 {% endif %}
 

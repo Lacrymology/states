@@ -29,5 +29,4 @@ Maintainer: Dang Tung Lam <lamdt@familug.org>
 # {{ pillar['message_do_not_modify'] }}
 set -e
 
-NOW=`/bin/date '+%Y-%m-%d-%H_%M_%S'`
 /usr/local/bin/backup-postgresql {{ salt['pillar.get']('etherpad:db:name', 'etherpad') }}

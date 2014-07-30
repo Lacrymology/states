@@ -31,10 +31,10 @@ Institute for Institutional Innovation by Data Driven Design Inc.
 
 Author: Lam Dang Tung <lamdt@familug.org>
 Maintainer: Lam Dang Tung <lamdt@familug.org>
-#}
+-#}
+#!/bin/bash
 # {{ pillar['message_do_not_modify'] }}
 set -e
-NOW=`/bin/date '+%Y-%m-%d-%H_%M_%S'`
 
 /usr/local/bin/backup-postgresql gitlab
 /usr/local/bin/backup-file gitlab /home/gitlab repositories .ssh gitlab-satellites

@@ -137,6 +137,24 @@ rabbitmq-server:
       - host: hostname
       - file: rabbitmq_erlang_cookie
 {% if grains['id'] == master_id %}
+{% set vhosts = salt['pillar.get']('rabbitmq:vhosts', []) %}
+{% for vhost in vhosts %}
+rabbitmq-vhost-{{ vhost }}:
+  rabbitmq_user:
+    - present
+    - name: {{ vhost }}
+    - password: {{ pillar['rabbitmq']['vhosts'][vhost] }}
+    - force: True
+    - require:
+      - service: rabbitmq-server
+  rabbitmq_vhost:
+    - present
+    - name: {{ vhost }}
+    - user: {{ vhost }}
+    - require:
+      - rabbitmq_user: rabbitmq-vhost-{{ vhost }}
+{% endfor %}
+
 monitor_user:
   rabbitmq_user:
     - present
@@ -150,7 +168,6 @@ monitor_user:
         - ""
         - ""
         - ".*"
-{% set vhosts = salt['pillar.get']('rabbitmq:vhosts', []) %}
 {% for vhost in vhosts %}
   {%- if vhost != '/' %}
       - {{ vhost }}:
@@ -182,23 +199,6 @@ rabbitmq_delete_guest:
     - name: guest
     - require:
       - service: rabbitmq-server
-
-{% for vhost in vhosts %}
-rabbitmq-vhost-{{ vhost }}:
-  rabbitmq_user:
-    - present
-    - name: {{ vhost }}
-    - password: {{ pillar['rabbitmq']['vhosts'][vhost] }}
-    - force: True
-    - require:
-      - service: rabbitmq-server
-  rabbitmq_vhost:
-    - present
-    - name: {{ vhost }}
-    - user: {{ vhost }}
-    - require:
-      - rabbitmq_user: rabbitmq-vhost-{{ vhost }}
-{% endfor %}
 {% endif %}
 
 {% if grains['id'] != master_id %}

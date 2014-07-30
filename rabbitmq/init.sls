@@ -143,15 +143,10 @@ monitor_user:
     - name: {{ pillar['rabbitmq']['monitor']['user'] }}
     - password: {{ salt['password.pillar']('rabbitmq:monitor:password') }}
     - force: True
+    - tags:
+      - monitoring
     - require:
       - service: rabbitmq-server
-  module:
-    - run
-    - name: rabbitmq.set_user_tags
-    - m_name: {{ pillar['rabbitmq']['monitor']['user'] }}
-    - tags: monitoring
-    - require:
-      - rabbitmq_user: monitor_user
 
 admin_user:
   rabbitmq_user:
@@ -161,13 +156,8 @@ admin_user:
     - force: True
     - require:
       - service: rabbitmq-server
-  module:
-    - run
-    - name: rabbitmq.set_user_tags
-    - m_name: {{ pillar['rabbitmq']['management']['user'] }}
-    - tags: administrator
-    - require:
-      - rabbitmq_user: admin_user
+    - tags:
+      - administrator
 
 rabbitmq_delete_guest:
   rabbitmq_user:

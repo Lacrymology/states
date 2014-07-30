@@ -119,7 +119,6 @@ rabbitmq-server:
   rabbitmq_plugins:
     - enabled
     - name: rabbitmq_management
-    - env: HOME=/var/lib/rabbitmq
     - require:
       - pkg: rabbitmq-server
   pkg:

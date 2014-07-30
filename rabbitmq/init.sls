@@ -145,7 +145,24 @@ monitor_user:
     - force: True
     - tags:
       - monitoring
+    - perms:
+      - '/':
+        - ""
+        - ""
+        - ".*"
+{% set vhosts = salt['pillar.get']('rabbitmq:vhosts', []) %}
+{% for vhost in vhosts %}
+  {%- if vhost != '/' %}
+      - {{ vhost }}:
+        - ""
+        - ""
+        - ".*"
+  {%- endif %}
+{%- endfor %}
     - require:
+{% for vhost in vhosts %}
+      - rabbitmq_vhost: rabbitmq-vhost-{{ vhost }}
+{%- endfor %}
       - service: rabbitmq-server
 
 admin_user:
@@ -166,7 +183,7 @@ rabbitmq_delete_guest:
     - require:
       - service: rabbitmq-server
 
-{% for vhost in salt['pillar.get']('rabbitmq:vhosts', []) %}
+{% for vhost in vhosts %}
 rabbitmq-vhost-{{ vhost }}:
   rabbitmq_user:
     - present
@@ -181,32 +198,7 @@ rabbitmq-vhost-{{ vhost }}:
     - user: {{ vhost }}
     - require:
       - rabbitmq_user: rabbitmq-vhost-{{ vhost }}
-  module:
-    - run
-    - name: rabbitmq.set_permissions
-    - vhost: {{ vhost }}
-    - user: {{ pillar['rabbitmq']['monitor']['user'] }}
-    - conf: ""
-    - write: ""
-    - read: ".*"
-    - require:
-      - rabbitmq_vhost: rabbitmq-vhost-{{ vhost }}
-      - rabbitmq_user: monitor_user
 {% endfor %}
-
-rabbitmq-root-vhost:
-  module:
-    - run
-    - name: rabbitmq.set_permissions
-    - vhost: /
-    - user: {{ pillar['rabbitmq']['monitor']['user'] }}
-    - conf: ""
-    - write: ""
-    - read: ".*"
-    - require:
-      - service: rabbitmq-server
-      - rabbitmq_user: monitor_user
-
 {% endif %}
 
 {% if grains['id'] != master_id %}

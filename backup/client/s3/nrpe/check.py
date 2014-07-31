@@ -62,7 +62,9 @@ class S3BackupFile(BackupFile):
         # # cause unexpected errors later
         #                        validate=False,
         )
-        for key in bucket.list(prefix=self.prefix):
+
+        # S3 allows /// is a valid path, /xxx and xxx are different dirs
+        for key in bucket.list(prefix=self.prefix.strip('/')):
             log.debug("Processing key %s", key)
             file = self.make_file(os.path.basename(key.name), key.size)
             # I expect file to have one and only one element

@@ -41,27 +41,26 @@ from check_backup_base import BackupFile, main
 
 log = logging.getLogger('nagiosplugin')
 
+
 class S3BackupFile(BackupFile):
     """
     S3-specific backup file checker
     """
     def __init__(self, *args, **kwargs):
         super(S3BackupFile, self).__init__(*args, **kwargs)
-        self.key = self.config.get('s3','key')
+        self.key = self.config.get('s3', 'key')
         self.secret = self.config.get('s3', 'secret')
         self.bucket = self.config.get('s3', 'bucket')
-
 
     def files(self):
         s3 = boto.connect_s3(self.key, self.secret)
 
         log.debug("searching bucket %s", self.bucket)
         # with bucket validation
-        bucket = s3.get_bucket(self.bucket,
-        # # without bucket validation, which is faster and cheaper, but can
-        # # cause unexpected errors later
-        #                        validate=False,
-        )
+        bucket = s3.get_bucket(self.bucket)
+        # without bucket validation, which is faster and cheaper, but can
+        # cause unexpected errors later
+        # validate=False,
 
         # S3 allows /// is a valid path, /xxx and xxx are different dirs
         for key in bucket.list(prefix=self.prefix.strip('/')):

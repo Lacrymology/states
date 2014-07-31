@@ -205,7 +205,7 @@ join_rabbitmq_cluster:
   rabbitmq_cluster:
     - joined
     - host: {{ master_id }}
-    - user: {{ pillar['rabbitmq']['management']['user'] }}
+    - user: rabbit
     - require:
       - rabbitmq_plugin: rabbitmq-server
       - service: rabbitmq-server

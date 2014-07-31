@@ -201,14 +201,11 @@ rabbitmq_delete_guest:
 {% endif %}
 
 {% if grains['id'] != master_id %}
-in_rabbitmq_cluster:
+join_rabbitmq_cluster:
   rabbitmq_cluster:
     - joined
-    - master: {{ master_id }}
-    - env: HOME=/var/lib/rabbitmq
+    - host: {{ master_id }}
     - user: {{ pillar['rabbitmq']['management']['user'] }}
-    - password: {{ pillar['rabbitmq']['management']['password'] }}
-    - disk_node: True
     - require:
       - rabbitmq_plugin: rabbitmq-server
       - service: rabbitmq-server

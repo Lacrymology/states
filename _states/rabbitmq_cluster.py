@@ -16,6 +16,9 @@ Example:
 # Import python libs
 import logging
 
+# Import salt libs
+import salt.utils
+
 log = logging.getLogger(__name__)
 
 
@@ -23,24 +26,23 @@ def __virtual__():
     '''
     Only load if RabbitMQ is installed.
     '''
-    name = 'rabbitmq_cluster'
-    if not __salt__['cmd.has_exec']('rabbitmqctl'):
-        name = False
-    return name
+    return salt.utils.which('rabbitmqctl') is not None
 
 
-def join(name, host, user='rabbit', runas=None):
+def joined(name, host, user='rabbit', ram_node=None, runas=None):
     '''
-    Ensure the RabbitMQ plugin is enabled.
+    Ensure the node user@host is joined to cluster
 
     name
         Irrelevant, not used (recommended: user@host)
     user
         The user to join the cluster as (default: rabbit)
     host
-        The cluster host to join to
+        The host to join to cluster
+    ram_node
+        Join node as a RAM node
     runas
-        The user to run the rabbitmq-plugin command as
+        The user to run the rabbitmq command as
     '''
 
     ret = {'name': name, 'result': True, 'comment': '', 'changes': {}}
@@ -53,11 +55,12 @@ def join(name, host, user='rabbit', runas=None):
 
     if __opts__['test']:
         ret['result'] = None
-        ret['comment'] = 'Host is set to join cluster {0}@{1}'.format(
+        ret['comment'] = 'Node {0}@{1} is set to join cluster'.format(
             user, host)
         return ret
 
-    result = __salt__['rabbitmq.join_cluster'](host, user, runas=runas)
+    result = __salt__['rabbitmq.join_cluster'](host, user,
+                                               ram_node, runas=runas)
 
     if 'Error' in result:
         ret['result'] = False
@@ -67,3 +70,7 @@ def join(name, host, user='rabbit', runas=None):
         ret['changes'] = {'old': '', 'new': '{0}@{1}'.format(user, host)}
 
     return ret
+
+
+# Alias join to preserve backward compat
+join = joined

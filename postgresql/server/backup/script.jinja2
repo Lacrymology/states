@@ -33,14 +33,13 @@ set -e
 ulimit -e 19
 ionice -c idle -p $$
 XZ_DEFAULTS=--memlimit={{ salt['pillar.get']('backup:xz_memlimit', 64) }}MiB
-if [ "$1" = '--prefix' ]; then
-  prefix="$2"
-  dbname="$3"
-else
-  prefix=""
-  dbname="$1"
-fi
 NOW=`date '+%Y-%m-%d-%H_%M_%S'`
 export TERM=dumb
-sudo -H -i -u postgres -g postgres pg_dump $dbname | xz > /tmp/postgresql-$prefix-$dbname-$NOW.sql.xz
-/usr/local/bin/backup-store /tmp/postgresql-$prefix-$dbname-$NOW.sql.xz
+
+if [ "$1" = '--prefix' ]; then
+  temp_path=/tmp/postgresql-$2-$3-$NOW.sql.xz
+else
+  temp_path=/tmp/postgresql-$1-$NOW.sql.xz
+fi
+sudo -H -i -u postgres -g postgres pg_dump $dbname | xz > ${temp_path}
+/usr/local/bin/backup-store ${temp_path}

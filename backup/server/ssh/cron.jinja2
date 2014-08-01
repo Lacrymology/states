@@ -32,5 +32,5 @@ export TERM=dumb
 
 for i in *.xz *.gz *.tar
 do
-    find /var/lib/backup -maxdepth 1 -type f -name "$i" -mtime +{{ salt['pillar.get']('backup:ssh:retention', 30) }} -exec rm -f {} \;
+    find /var/lib/backup -maxdepth 2 -type f -name "$i" -mtime +{{ salt['pillar.get']('backup:ssh:retention', 30) }} -exec rm -f {} \;
 done

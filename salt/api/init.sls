@@ -27,7 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Setup a Salt API REST server.
 -#}
-{%- set version = '0.8.3' -%}
+{%- set version = '0.8.4' -%}
 include:
   - git
   - local
@@ -133,7 +133,7 @@ salt-ui:
       - {{ salt_ui_module }}: salt-ui
 
 {#- PID file owned by root, no need to manage #}
-{%- set api_path = '0.17.5-1/pool/main/s/salt-api/salt-api_' + version + '_all.deb' %}
+{%- set api_path = '2014.1.5-5/pool/main/s/salt-api/salt-api_' + version + '_all.deb' %}
 salt-api:
   file:
     - managed

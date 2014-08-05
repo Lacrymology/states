@@ -29,8 +29,8 @@ Install a Graylog2 logging server backend.
 -#}
 {%- from 'macros.jinja2' import manage_pid with context %}
 include:
+  - python
   - apt
-  - bash
   - mongodb
   - java.7
   - graylog2
@@ -210,7 +210,7 @@ graylog2_rsyslog_config:
 import_general_syslog_udp_input graylog2-{{ mongodb_suffix }}:
   cmd:
     - script
-    - source: salt://graylog2/server/import_general_syslog_udp_input.sh
+    - source: salt://graylog2/server/import_general_syslog_udp_input.py
     - require:
       - service: graylog2-server
-      - pkg: bash
+      - pkg: graylog2-old-mongodb

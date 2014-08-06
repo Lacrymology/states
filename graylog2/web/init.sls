@@ -71,7 +71,17 @@ graylog2-web-{{ user }}:
     - mode: 750
     - makedirs: True
     - require:
-      - user: {{ user }}
+      - user: graylog2-web-{{ user }}
+
+/var/log/{{ user }}:
+  file:
+    - directory
+    - user: {{ user }}
+    - group: {{ user }}
+    - mode: 775
+    - makedirs: True
+    - require:
+      - user: graylog2-web-{{ user }}
 
 {% for previous_version in ('0.9.6p1', '0.11.0') %}
 /usr/local/graylog2-web-interface-{{ previous_version }}:
@@ -96,10 +106,10 @@ graylog2-web_upstart:
   file:
     - symlink
     - force: True
-    - target: /var/log/graylog2/
+    - target: /var/log/{{ user }}
     - require:
       - archive: graylog2-web
-      - file: /var/log/graylog2
+      - file: /var/log/{{ user }}
 
 graylog2-web-logrotate:
   file:
@@ -149,7 +159,7 @@ graylog2-web:
       - user: graylog2-web-{{ user }}
     - require:
       - file: /var/run/{{ user }}
-      - file: /var/log/graylog2
+      - file: /var/log/{{ user }}
   uwsgi:
     - absent
     - name: graylog2

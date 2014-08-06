@@ -107,19 +107,14 @@ graylog2-server_upstart:
       - file: /etc/graylog2
       - user: {{ user }}
 
-{#
-We have to create this file before graylog2-server service start, because
-graylog2 user may not have the required privilege to create file in /etc folder
-#}
-/etc/graylog2/server-node-id:
+/var/lib/graylog2:
   file:
-    - managed
+    - directory
     - user: {{ user }}
     - group: {{ user }}
-    - mode: 644
+    - mode: 750
     - require:
       - archive: graylog2-server
-      - file: /etc/graylog2
       - user: {{ user }}
 
 graylog2-server:
@@ -162,7 +157,7 @@ graylog2-server:
       - file: /etc/graylog2/elasticsearch.yml
       - archive: graylog2-server
       - user: {{ user }}
-      - file: /etc/graylog2/server-node-id
+      - file: /var/lib/graylog2
     - require:
       - file: /var/log/graylog2
       - file: /var/log/graylog2/server.log

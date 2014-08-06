@@ -191,3 +191,10 @@ extend:
 {% if salt['pillar.get']('graylog2:ssl', False) %}
         - cmd: ssl_cert_and_key_for_{{ pillar['graylog2']['ssl'] }}
 {% endif %}
+
+{%- from 'macros.jinja2' import manage_pid with context %}
+{%- call manage_pid('/var/run/' ~ user ~ '/graylog2-web.pid', user , 'syslog', 'graylog2-web') %}
+- user: graylog2-web-{{ user }}
+- file: /var/run/{{ user }}
+- pkg: rsyslog
+{%- endcall %}

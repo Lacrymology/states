@@ -87,6 +87,7 @@ graylog2-server_upstart:
     - directory
     - user: {{ user }}
     - group: {{ user }}
+    - mode: 550
     - require:
       - user: {{ user }}
 

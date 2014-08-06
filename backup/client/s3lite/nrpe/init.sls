@@ -41,7 +41,7 @@ include:
     - require:
       - pkg: nagios-nrpe-server
 
-/usr/lib/nagios/plugins/check_s3lite_backup.py:
+/usr/lib/nagios/plugins/check_backup_s3lite.py:
   file:
     - managed
     - source: salt://backup/client/s3lite/nrpe/check_s3_sync.py

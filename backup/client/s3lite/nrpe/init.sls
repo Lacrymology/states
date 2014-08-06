@@ -29,3 +29,26 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 include:
   - virtualenv.nrpe
   - backup.client.s3.nrpe
+
+/etc/nagios/backup_s3lite_sync.conf:
+  file:
+    - managed
+    - template: jinja
+    - source: salt://backup/client/s3lite/nrpe/check_config.jinja2
+    - user: nagios
+    - group: nagios
+    - mode: 440
+    - require:
+      - pkg: nagios-nrpe-server
+
+/usr/lib/nagios/plugins/check_s3lite_backup.py:
+  file:
+    - managed
+    - source: salt://backup/client/s3lite/nrpe/check_s3_sync.py
+    - user: nagios
+    - group: nagios
+    - mode: 550
+    - require:
+      - file: /etc/nagios/backup_s3lite_sync.conf
+      - pkg: nagios-nrpe-server
+      - module: backup_client_nrpe-requirements

@@ -32,10 +32,11 @@ __author__ = 'Hung Nguyen Viet'
 __maintainer__ = 'Hung Nguyen Viet'
 __email__ = 'hvnsweeting@gmail.com'
 
+import collections
+import hashlib
+import json
 import os
 import logging
-import hashlib
-import collections
 
 import boto
 from boto.s3.key import Key
@@ -45,6 +46,7 @@ import bfs
 
 
 logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.DEBUG)
 
 
 def md5hash(filepath):
@@ -103,6 +105,23 @@ class S3Util(object):
             counter['uploaded'] += 1
             _log_progress(counter)
 
+        def log_result(bucket, prefix, path):
+            # each backup need an identifier to distinguish with others,
+            # use path of it as name of the file, and place that file in
+            # the s3path it upload to.
+            backup_identifier = 's3lite_' + path.replace('/', '_') + '.json'
+            filepath = os.path.join(prefix, backup_identifier)
+            logger.info('Writing log file to %s', filepath)
+
+            processed = counter['uploaded'] + counter['existed_before_sync']
+            data = {'processed': processed}
+
+            k = Key(bucket)
+            k.name = filepath
+            wrote = k.set_contents_from_string(json.dumps(data))
+            logger.info('Wrote %d for log file %s', wrote, filepath)
+
+        log_result(bucket, prefix, path)
         return counter
 
     def get_filedatas(self, bucket, path, prefix):

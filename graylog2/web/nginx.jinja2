@@ -31,6 +31,10 @@ upstream graylog2 {
     server 127.0.0.1:9000;
 }
 
+upstream rest_api {
+    server {{ salt['pillar.get']('graylog2:rest_listen_uri', 'http://127.0.0.1:12900') | replace('http:', '') | replace('/', '') }};
+}
+
 server {
     listen 80;
 {% if salt['pillar.get']('graylog2:ssl', False) %}
@@ -52,6 +56,11 @@ server {
 {% include "nginx/block_hacks.jinja2" %}
 
 {% include 'nginx/location_robots.jinja2' %}
+
+    location /api {
+        rewrite /api/(.*) /$1  break;
+        proxy_pass http://rest_api;
+    }
 
     location / {
         gzip off;

@@ -63,6 +63,16 @@ graylog2-web-{{ user }}:
     - home: /var/run/{{ user }}
     - shell: /bin/false
 
+/var/run/{{ user }}:
+  file:
+    - directory
+    - user: {{ user }}
+    - group: {{ user }}
+    - mode: 750
+    - makedirs: True
+    - require:
+      - user: {{ user }}
+
 {% for previous_version in ('0.9.6p1', '0.11.0') %}
 /usr/local/graylog2-web-interface-{{ previous_version }}:
   file:
@@ -138,19 +148,11 @@ graylog2-web:
       - archive: graylog2-web
       - user: graylog2-web-{{ user }}
     - require:
+      - file: /var/run/{{ user }}
       - file: /var/log/graylog2
   uwsgi:
     - absent
     - name: graylog2
-
-change_graylog2_web_dir_permission:
-  cmd:
-    - wait
-    - watch:
-      - archive: graylog2-web
-    - name: chown -R {{ user }}:{{ user }} {{ web_root_dir }}
-    - require:
-      - user: graylog2-web-{{ user }}
 
 {% for command in ('streamalarms', 'subscriptions') %}
 /etc/cron.hourly/graylog2-web-{{ command }}:

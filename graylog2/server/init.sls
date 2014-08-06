@@ -89,7 +89,7 @@ graylog2-server_upstart:
     - group: {{ user }}
     - mode: 550
     - require:
-      - user: {{ user }}
+      - user: graylog2
 
 {# For cluster using, all node's data should be explicit: http,master,data,port and/or name #}
 /etc/graylog2/elasticsearch.yml:
@@ -106,7 +106,7 @@ graylog2-server_upstart:
       origin_state: graylog2.server
     - require:
       - file: /etc/graylog2
-      - user: {{ user }}
+      - user: graylog2
 
 /var/lib/graylog2:
   file:
@@ -116,7 +116,7 @@ graylog2-server_upstart:
     - mode: 750
     - require:
       - archive: graylog2-server
-      - user: {{ user }}
+      - user: graylog2
 
 graylog2-server:
   archive:
@@ -146,7 +146,7 @@ graylog2-server:
       mongodb_suffix: {{ mongodb_suffix }}
       elasticsearch_prefix: {{ elasticsearch_prefix }}
     - require:
-      - user: {{ user }}
+      - user: graylog2
   service:
     - running
     - enable: True
@@ -157,7 +157,7 @@ graylog2-server:
       - file: graylog2-server
       - file: /etc/graylog2/elasticsearch.yml
       - archive: graylog2-server
-      - user: {{ user }}
+      - user: graylog2
       - file: /var/lib/graylog2
     - require:
       - file: /var/log/graylog2
@@ -166,8 +166,8 @@ graylog2-server:
       - file: {{ server_root_dir }}
       - file: /var/run/graylog2
 
-{%- call manage_pid('/var/run/graylog2/graylog2.pid', 'graylog2', 'syslog', 'graylog2-server') %}
-- user: {{ user }}
+{%- call manage_pid('/var/run/graylog2/graylog2.pid', user, 'syslog', 'graylog2-server') %}
+- user: graylog2
 - file: /var/run/graylog2
 - pkg: rsyslog
 {%- endcall %}
@@ -200,7 +200,7 @@ graylog2_rsyslog_config:
       - group
     - require:
       - archive: graylog2-server
-      - user: {{ user }}
+      - user: graylog2
 
 {# Auto add General Syslog UDP input #}
 import_general_syslog_udp_input graylog2-{{ mongodb_suffix }}:

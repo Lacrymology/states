@@ -49,12 +49,13 @@ NEG_INF = float('-inf')
 
 
 class BackupAge(nap.Resource):
-    def __init__(self, key, secret, bucket, prefix, path):
+    def __init__(self, key, secret, bucket, prefix, path, minion_id):
         self.key = key
         self.secret = secret
         self.bucket = bucket
         self.prefix = prefix
         self.path = path
+        self.minion_id = minion_id
 
     def probe(self):
         def log_and_return(value, *msg, **kwargs):
@@ -70,7 +71,9 @@ class BackupAge(nap.Resource):
 
         s3 = boto.connect_s3(self.key, self.secret)
         bucket = s3.get_bucket(self.bucket)
-        backup_identifier = 's3lite_' + self.path.replace('/', '_') + '.json'
+        normalized_fn = self.path.replace(os.sep, '_')
+        backup_identifier = 's3lite_{0}_{1}.json'.format(self.minion_id,
+                                                         normalized_fn)
 
         log_path = os.path.join(self.prefix.strip('/'), backup_identifier)
         logkey = bucket.get_key(log_path)
@@ -103,7 +106,7 @@ class BackupAge(nap.Resource):
 def main():
     import sys
     argp = bfs.common_argparser(default_config_path='/etc/s3lite.yml')
-    argp.add_argument('name', type=str, help='Name of backup')
+    argp.add_argument('path', type=str, help='Path used when backup')
     argp.add_argument('bucket',
                       help='s3://bucket/prefix to check uploaded file')
     argp.add_argument('-w', '--warning', metavar='HOURS', default='48',
@@ -123,7 +126,9 @@ def main():
                                     util['s3']['secret_key'],
                                     bucket_name,
                                     prefix,
-                                    args.name),
+                                    args.path,
+                                    util['minion_id'],
+                                    ),
                           nap.ScalarContext('age', args.warning, args.warning))
         check.main(timeout=args.timeout)
     except boto.exception.S3ResponseError as e:

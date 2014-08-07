@@ -112,6 +112,8 @@ def managed(name, source=None, template='jinja',
             raise err
 
     lines = []
+    if loaded is None:  # config.jinja2 is empty
+        loaded = []
     for check_name in loaded:
         if 'command' in loaded[check_name]:
             lines.append("command[{0}]={1}\n".format(check_name,

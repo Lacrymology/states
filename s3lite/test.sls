@@ -27,7 +27,6 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 #}
 include:
   - s3lite
-  - s3lite.diamond
   - s3lite.nrpe
 
 test:
@@ -37,6 +36,6 @@ test:
   cmd:
     - run
     - cwd: /usr/local/s3lite/bin/
-    - name: /usr/local/s3lite/bin/s3lite s3lite s3://{{ grains['id'] }}
+    - name: /usr/local/s3lite/bin/s3lite s3lite s3://{{ pillar['aws']['s3']['bucket'] }}/{{ pillar['aws']['s3']['path'].strip('/') }}
     - require:
       - file: /usr/local/s3lite/bin/s3lite

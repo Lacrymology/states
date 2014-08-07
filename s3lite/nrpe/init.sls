@@ -25,16 +25,16 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 #}
-
 include:
   - virtualenv.nrpe
-  - backup.client.s3.nrpe
 
-/etc/nagios/backup_s3lite_sync.conf:
+{#- use this file instead of using /etc/s3lite.yml because it needs another
+    process name - for bfs config #}
+/etc/nagios/s3lite.yml:
   file:
     - managed
     - template: jinja
-    - source: salt://backup/client/s3lite/nrpe/check_config.jinja2
+    - source: salt://s3lite/nrpe/check_config.jinja2
     - user: nagios
     - group: nagios
     - mode: 440
@@ -44,11 +44,10 @@ include:
 /usr/lib/nagios/plugins/check_backup_s3lite.py:
   file:
     - managed
-    - source: salt://backup/client/s3lite/nrpe/check_s3_sync.py
+    - source: salt://s3lite/nrpe/check_s3_sync.py
     - user: nagios
     - group: nagios
     - mode: 550
     - require:
-      - file: /etc/nagios/backup_s3lite_sync.conf
+      - file: /etc/nagios/s3lite.yml
       - pkg: nagios-nrpe-server
-      - module: backup_client_nrpe-requirements

@@ -71,7 +71,7 @@ class BackupAge(nap.Resource):
 
         s3 = boto.connect_s3(self.key, self.secret)
         bucket = s3.get_bucket(self.bucket)
-        normalized_fn = self.path.replace(os.sep, '_')
+        normalized_fn = self.path.strip(os.sep).replace(os.sep, '_')
         backup_identifier = 's3lite_{0}_{1}.json'.format(self.minion_id,
                                                          normalized_fn)
 

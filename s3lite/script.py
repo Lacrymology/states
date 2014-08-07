@@ -110,7 +110,7 @@ class S3Util(object):
             # each backup need an identifier to distinguish with others,
             # use path of it as name of the file, and place that file in
             # the s3path it upload to.
-            normalized_fn = path.replace(os.sep, '_')
+            normalized_fn = path.strip(os.sep).replace(os.sep, '_')
             backup_identifier = 's3lite_{0}_{1}.json'.format(self.minion_id,
                                                              normalized_fn)
             filepath = os.path.join(prefix, backup_identifier)

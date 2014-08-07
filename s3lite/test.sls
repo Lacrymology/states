@@ -26,9 +26,9 @@ Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 #}
 include:
-  - backup.client.s3lite
-  - backup.client.s3lite.diamond
-  - backup.client.s3lite.nrpe
+  - s3lite
+  - s3lite.diamond
+  - s3lite.nrpe
 
 test:
   monitoring:
@@ -36,6 +36,7 @@ test:
     - order: last
   cmd:
     - run
-    - name: /usr/local/bin/backup-store /usr/local/s3lite/bin/s3lite
+    - cwd: /usr/local/s3lite/bin/
+    - name: /usr/local/s3lite/bin/s3lite s3lite s3://{{ grains['id'] }}
     - require:
-      - file: /usr/local/bin/backup-store
+      - file: /usr/local/s3lite/bin/s3lite

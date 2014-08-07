@@ -43,8 +43,11 @@ hostname:
     - require:
       - cmd: hostname
   cmd:
+{%- if grains['id'] != grains['localhost'] %}
+    - run
+{%- else %}
     - wait
-    - stateful: False
+{%- endif %}
     - name: hostname `cat /etc/hostname`
     - watch:
       - file: hostname

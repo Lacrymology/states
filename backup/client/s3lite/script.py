@@ -58,9 +58,10 @@ def md5hash(filepath):
 
 
 class S3Util(object):
-    def __init__(self, key_id, secret_key):
+    def __init__(self, key_id, secret_key, minion_id=None):
         self.conn = S3Connection(key_id, secret_key)
         self.buckets = self.conn.get_all_buckets()
+        self.minion_id = minion_id
 
     def _gen_path(self, prefix, filepath):
         filename = os.path.basename(filepath)
@@ -109,8 +110,11 @@ class S3Util(object):
             # each backup need an identifier to distinguish with others,
             # use path of it as name of the file, and place that file in
             # the s3path it upload to.
-            backup_identifier = 's3lite_' + path.replace('/', '_') + '.json'
+            normalized_fn = path.replace(os.sep, '_')
+            backup_identifier = 's3lite_{0}_{1}.json'.format(self.minion_id,
+                                                             normalized_fn)
             filepath = os.path.join(prefix, backup_identifier)
+
             logger.info('Writing log file to %s', filepath)
 
             processed = counter['uploaded'] + counter['existed_before_sync']
@@ -161,7 +165,8 @@ def main():
 
     util = bfs.Util(args.config, debug=args.log, drop_privilege=False)
 
-    s3u = S3Util(util['s3']['key_id'], util['s3']['secret_key'])
+    s3u = S3Util(util['s3']['key_id'], util['s3']['secret_key'],
+                 minion_id=util['minion_id'])
 
     try:
         parsed = boto.urlparse.urlparse(args.bucket)

@@ -32,7 +32,7 @@ Stores data files on Amazon S3.
 set -e
 
 # limit resources usage
-ulimit -e 19
+renice -n 19 -p $$
 ionice -c idle -p $$
 
 archive_path=$1

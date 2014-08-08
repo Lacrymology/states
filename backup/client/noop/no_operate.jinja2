@@ -36,7 +36,7 @@ if [ -z $1 ]; then
 fi
 
 # limit resources usage
-ulimit -e 19
+renice -n 19 -p $$
 ionice -c idle -p $$
 XZ_DEFAULTS=--memlimit={{ salt['pillar.get']('backup:xz_memlimit', 64) }}MiB
 

@@ -32,8 +32,10 @@ include:
   - bash.nrpe
   - cron.nrpe
   - nrpe
+  - postgresql.server
 
 {%- from 'nrpe/passive.sls' import passive_check with context -%}
 {%- call passive_check('openerp.backup') %}
   - file: check_backup.py
+  - service: postgresql
 {%- endcall -%}

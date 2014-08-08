@@ -59,6 +59,7 @@ Example::
     aliases: |
         user1.abc@example.com example.com/user1
         user2.xyz@example.com example.com/user2
+    message_size_limit: 15360000
     mydestination:
       - saltlab.com
       - localhost.localdomain
@@ -121,6 +122,13 @@ postfix:aliases
 ~~~~~~~~~~~~~~~
 
 Support alias function on :doc:`index`.
+
+postfix:message_size_limit
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The maximal size in bytes of a message.
+
+Defaults: ``10240000``.
 
 postfix:mynetworks
 ~~~~~~~~~~~~~~~~~~

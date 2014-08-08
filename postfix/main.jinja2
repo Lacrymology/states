@@ -39,6 +39,7 @@ relay_domains = {{ salt['pillar.get']('postfix:relay_domains', '$mydestination')
 alias_maps = hash:/etc/aliases
 alias_database = hash:/etc/aliases
 mailbox_size_limit = 0
+message_size_limit = {{ salt['pillar.get']('postfix:message_size_limit', '10240000') }}
 recipient_delimiter = +
 inet_interfaces = {{ salt['pillar.get']('postfix:inet_interfaces', 'all') }}
 append_dot_mydomain = no

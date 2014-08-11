@@ -38,5 +38,9 @@ Remove Nagios NRPE checks for MariaDB.
   file:
     - absent
 
+/usr/lib/nagios/plugins/check_mysql_query.py:
+  file:
+    - absent
+
 {%- from 'nrpe/passive.sls' import passive_absent with context %}
 {{ passive_absent('mariadb.server') }}

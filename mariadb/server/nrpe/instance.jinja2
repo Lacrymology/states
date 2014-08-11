@@ -37,7 +37,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 {{ dbname }}_mysql:
   description: {{ dbname|capitalize }} MySQL Database
   # Just run a stupid query to make sure connection work
-  command: /usr/lib/nagios/plugins/check_mysql_query -H localhost -P 3306 -q 'select @@max_connections;' -d {{ dbname }} -u {{ username }} -p'{{ password }}'
+  command: /usr/lib/nagios/plugins/check_mysql_query.py --config /etc/nagios/mysql_{{ username }}@{{ dbname }}.cfg
 {%- endmacro %}
 
 {%- macro mysql_instance_prefix(deployment, prefix=None) -%}
@@ -46,5 +46,38 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
     {%- endif -%}
 {{ deployment }}_mysql:
   description: {{ deployment|capitalize }} MySQL Database
-  command: /usr/lib/nagios/plugins/check_mysql_query -H localhost -P 3306 -q 'select @@max_connections;' -d {{ salt['pillar.get'](prefix + ':db:name', deployment)  }} -u {{ salt['pillar.get'](prefix + ':db:username', deployment) }} -p'{{ salt['password.pillar'](prefix + ':db:password', 10) }}'
+  command: /usr/lib/nagios/plugins/check_mysql_query.py --config /etc/nagios/mysql_{{ salt['pillar.get'](prefix + ':db:username', deployment) }}@{{ salt['pillar.get'](prefix + ':db:name', deployment) }}.cfg
+{%- endmacro %}
+
+{%- macro mysql_nrpe_config_manage(dbname, passwd, username=None) -%}
+{%- if not username is defined %}
+{%- set username = dbname %}
+{%- endif %}
+
+mysql_check_query_nrpe_config:
+  file:
+    - managed
+    - template: jinja
+    - name: /etc/nagios/mysql_{{ username }}@{{ dbname }}.cfg
+    - source: salt://mariadb/server/nrpe/mysql_config.jinja2
+    - user: root
+    - group: root
+    - context:
+        user: {{ username }}
+        passwd: {{ passwd }}
+        dbname: {{ dbname }}
+    - mode: 440
+    - require:
+      - pkg: nagios-nrpe-server
+{%- endmacro %}
+
+{%- macro mysql_nrpe_config_absent(dbname, username=None) -%}
+{%- if not username is defined %}
+{%- set username = dbname %}
+{%- endif %}
+
+mysql_check_query_nrpe_config:
+  file:
+    - absent
+    - name: /etc/nagios/mysql_{{ username }}@{{ dbname }}.cfg
 {%- endmacro %}

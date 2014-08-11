@@ -40,9 +40,9 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
     {%- if not prefix -%}
         {%- set prefix = deployment -%}
     {%- endif -%}
-{{ deployment }}_mysql:
-  description: {{ deployment|capitalize }} MySQL Database
-  command: /usr/lib/nagios/plugins/check_mysql_query.py --config /etc/nagios/mysql_{{ salt['pillar.get'](prefix + ':db:username', deployment) }}@{{ salt['pillar.get'](prefix + ':db:name', deployment) }}.cfg
+{%- set username = salt['pillar.get'](prefix + ':db:username', deployment)  %}
+{%- set dbname = salt['pillar.get'](prefix + ':db:name', deployment) %}
+{{ mysql_instance(dbname, username) }}
 {%- endmacro %}
 
 {%- macro mysql_nrpe_config_manage(dbname, passwd, username=None) -%}

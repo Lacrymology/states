@@ -33,7 +33,6 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 {{ dbname }}_mysql:
   description: {{ dbname|capitalize }} MySQL Database
-  # Just run a stupid query to make sure connection work
   command: /usr/lib/nagios/plugins/check_mysql_query.py --config /etc/nagios/mysql_{{ username }}@{{ dbname }}.cfg
 {%- endmacro %}
 

@@ -26,65 +26,28 @@ Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 #}
 include:
-  - local
-  - virtualenv
+  - virtualenv.nrpe
 
-s3lite:
-  virtualenv:
-    - manage
-    - name: /usr/local/s3lite
-    - system_site_packages: False
-    - require:
-      - module: virtualenv
-      - file: /usr/local
+{#- use this file instead of using /etc/s3lite.yml because it needs another
+    process name - for bfs config #}
+/etc/nagios/s3lite.yml:
   file:
     - managed
-    - name: /usr/local/s3lite/salt-requirements.txt
     - template: jinja
-    - user: root
-    - group: root
+    - source: salt://s3lite/nrpe/check_config.jinja2
+    - user: nagios
+    - group: nagios
     - mode: 440
-    - source: salt://backup/client/s3lite/requirements.jinja2
     - require:
-      - virtualenv: s3lite
-  module:
-    - wait
-    - name: pip.install
-    - upgrade: True
-    - bin_env: /usr/local/s3lite/bin/pip
-    - requirements: /usr/local/s3lite/salt-requirements.txt
-    - watch:
-      - file: s3lite
+      - pkg: nagios-nrpe-server
 
-/etc/s3lite.yml:
+/usr/lib/nagios/plugins/check_backup_s3lite.py:
   file:
     - managed
-    - template: jinja
-    - mode: 400
-    - user: root
-    - group: root
-    - source: salt://backup/client/s3lite/config.jinja2
-
-{#- anyuser/program should can run this script, it just needs to provide
-the config file as default config file is only for root #}
-/usr/local/s3lite/bin/s3lite:
-  file:
-    - managed
-    - source: salt://backup/client/s3lite/script.py
-    - user: root
-    - group: root
-    - mode: 551
-    - require:
-      - module: s3lite
-      - file: /etc/s3lite.yml
-
-/usr/local/bin/backup-store:
-  file:
-    - managed
-    - template: jinja
-    - user: root
-    - group: root
+    - source: salt://s3lite/nrpe/check_s3_sync.py
+    - user: nagios
+    - group: nagios
     - mode: 550
-    - source: salt://backup/client/s3lite/backup-store.jinja2
     - require:
-      - file: /usr/local/s3lite/bin/s3lite
+      - file: /etc/nagios/s3lite.yml
+      - pkg: nagios-nrpe-server

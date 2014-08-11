@@ -25,6 +25,15 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 #}
+s3lite:
+  file:
+    - absent
+    - name: /usr/local/s3lite
 
-include:
-  - backup.client.s3.nrpe.absent
+/etc/s3lite.yml:
+  file:
+    - absent
+
+/usr/local/bin/s3lite:
+  file:
+    - absent

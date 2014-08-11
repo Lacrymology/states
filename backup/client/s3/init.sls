@@ -29,6 +29,7 @@ include:
   - bash
   - local
   - s3cmd
+  - s3lite
 
 /usr/local/bin/backup-store:
   file:

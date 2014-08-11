@@ -29,6 +29,7 @@ include:
   - nrpe
   - backup.client.base
   - bash.nrpe
+  - s3lite.nrpe
 
 /etc/nagios/backup.conf:
   file:

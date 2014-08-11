@@ -25,17 +25,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 #}
-include:
-  - backup.client.s3lite
-  - backup.client.s3lite.diamond
-  - backup.client.s3lite.nrpe
 
-test:
-  monitoring:
-    - run_all_checks
-    - order: last
-  cmd:
-    - run
-    - name: /usr/local/bin/backup-store /usr/local/s3lite/bin/s3lite
-    - require:
-      - file: /usr/local/bin/backup-store
+{%- from 'python/bfs.jinja2' import bfs_config with context %}
+{{ bfs_config(process_name='s3lite', sentry_dsn_pillar_key='sentry_dns') }}
+
+s3:
+  key_id: {{ pillar['aws']['access_key'] }}
+  secret_key: {{ pillar['aws']['secret_key'] }}
+
+minion_id: {{ grains['id'] }}

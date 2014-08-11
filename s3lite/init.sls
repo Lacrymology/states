@@ -1,5 +1,3 @@
-#!/bin/bash
-# {{ pillar['message_do_not_modify'] }}
 {#-
 Copyright (c) 2014, Hung Nguyen Viet
 All rights reserved.
@@ -26,20 +24,56 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
-
-Stores data files on Amazon S3, use s3lite for uploading.
 #}
-set -e
+include:
+  - local
+  - virtualenv
 
-# limit resources usage
-renice -n 19 -p $$
-ionice -c idle -p $$
+s3lite:
+  virtualenv:
+    - manage
+    - name: /usr/local/s3lite
+    - system_site_packages: False
+    - require:
+      - module: virtualenv
+      - file: /usr/local
+  file:
+    - managed
+    - name: /usr/local/s3lite/salt-requirements.txt
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - source: salt://s3lite/requirements.jinja2
+    - require:
+      - virtualenv: s3lite
+  module:
+    - wait
+    - name: pip.install
+    - upgrade: True
+    - bin_env: /usr/local/s3lite/bin/pip
+    - requirements: /usr/local/s3lite/salt-requirements.txt
+    - watch:
+      - file: s3lite
 
-archive_path=$1
-archive_name=`basename $archive_path`
-{%- if pillar['aws']['s3']['path'] == '/' %}
-/usr/local/s3lite/bin/s3lite $archive_path s3://{{ pillar['aws']['s3']['bucket'] }}/$archive_name | logger -t s3lite
-{%- else %}
-/usr/local/s3lite/bin/s3lite $archive_path s3://{{ pillar['aws']['s3']['bucket'] }}/{{ pillar['aws']['s3']['path'].strip('/') }}/$archive_name | logger -t s3lite
-{%- endif %}
-rm -f $archive_path
+/etc/s3lite.yml:
+  file:
+    - managed
+    - template: jinja
+    - mode: 400
+    - user: root
+    - group: root
+    - source: salt://s3lite/config.jinja2
+
+{#- anyuser/program should can run this script, it just needs to provide
+the config file as default config file is only for root #}
+/usr/local/s3lite/bin/s3lite:
+  file:
+    - managed
+    - source: salt://s3lite/script.py
+    - user: root
+    - group: root
+    - mode: 551
+    - require:
+      - module: s3lite
+      - file: /etc/s3lite.yml

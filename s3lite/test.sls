@@ -24,6 +24,18 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
--#}
+#}
 include:
-  - backup.diamond
+  - s3lite
+  - s3lite.nrpe
+
+test:
+  monitoring:
+    - run_all_checks
+    - order: last
+  cmd:
+    - run
+    - cwd: /usr/local/s3lite/bin/
+    - name: /usr/local/s3lite/bin/s3lite s3lite s3://{{ pillar['aws']['s3']['bucket'] }}/{{ pillar['aws']['s3']['path'].strip('/') }}
+    - require:
+      - file: /usr/local/s3lite/bin/s3lite

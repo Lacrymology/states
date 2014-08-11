@@ -25,7 +25,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 #}
+/etc/nagios/s3lite.yml:
+  file:
+    - absent
 
-include:
-  - virtualenv.nrpe
-  - backup.client.s3.nrpe
+/usr/lib/nagios/plugins/check_backup_s3lite.py:
+  file:
+    - absent

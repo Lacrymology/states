@@ -25,7 +25,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 #}
-{%- macro mysql_instance(dbname, password, username=None) -%}
+{%- macro mysql_instance(dbname, password=None, username=None) -%}
+{#- password args is not used anymore but turned to kwarg for backward compatible #}
 {%- if not username is defined %}
 {%- set username = dbname %}
 {%- endif %}
@@ -42,7 +43,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
     {%- endif -%}
 {%- set username = salt['pillar.get'](prefix + ':db:username', deployment)  %}
 {%- set dbname = salt['pillar.get'](prefix + ':db:name', deployment) %}
-{{ mysql_instance(dbname, username) }}
+{{ mysql_instance(dbname, username=username) }}
 {%- endmacro %}
 
 {%- macro mysql_nrpe_config_manage(dbname, passwd, username=None) -%}

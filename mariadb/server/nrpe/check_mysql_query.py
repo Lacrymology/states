@@ -34,8 +34,8 @@ __email__ = 'hvnsweeting@gmail.com'
 
 import argparse
 import logging
-from ConfigParser import SafeConfigParser
 
+import yaml
 import pymysql
 import nagiosplugin as nap
 
@@ -69,8 +69,10 @@ class MysqlQuery(nap.Resource):
 @nap.guarded
 def main():
     argp = argparse.ArgumentParser(description=__doc__)
-    argp.add_argument('-C', '--config', metavar='PATH',
+    argp.add_argument('-f', '--formula', metavar='PATH',
                       help='path to config file')
+    argp.add_argument('-d', '--database', metavar='DATABASE',
+                      help='database name')
     argp.add_argument('-v', '--verbose', action='count', default=0,
                       help='increase output verbosity (use up to 3 times)')
     argp.add_argument('-c', '--critical', metavar='RANGE', default='1:',
@@ -80,18 +82,24 @@ def main():
                       help='SQL query to execute')
     args = argp.parse_args()
 
-    cp = SafeConfigParser()
+    config = yaml.safe_load(args.config)
+    dbkey = '%s_mysql' % args.database
     try:
-        cp.read(args.config)
-    except TypeError:
-        log.critical('Please provide a valid path to config file')
+        dbconfig = config[dbkey]
+    except KeyError:
+        log.critical('Please provide a valid database name')
+        # TODO EXIT
 
-    passwd = cp.get('mysql', 'passwd')
-    user = cp.get('mysql', 'user')
-    host = cp.get('mysql', 'host')
-    database = cp.get('mysql', 'database')
-
-    check = nap.Check(MysqlQuery(host, user, passwd, database, args.query),
+    kwargs = {'database': args.databse, 'query': args.query}
+    for key in ('passwd', 'user', 'host'):
+        yaml_key = '_' + key
+        try:
+            kwargs[key] = dbconfig[yaml_key]
+        except KeyError:
+            log.critical("Missing %s key under %s in %s", yaml_key, dbkey,
+                         args.config)
+            # TODO EXIT
+    check = nap.Check(MysqlQuery(**kwargs),
                       nap.ScalarContext('records', args.critical,
                                         args.critical))
     check.main(verbose=args.verbose)

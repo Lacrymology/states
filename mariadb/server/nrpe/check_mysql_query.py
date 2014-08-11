@@ -69,7 +69,7 @@ class MysqlQuery(nap.Resource):
 @nap.guarded
 def main():
     argp = argparse.ArgumentParser(description=__doc__)
-    argp.add_argument('-f', '--formula', metavar='PATH',
+    argp.add_argument('-C', '--config', metavar='PATH',
                       help='path to config file')
     argp.add_argument('-d', '--database', metavar='DATABASE',
                       help='database name')

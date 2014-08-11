@@ -26,12 +26,8 @@ Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 #}
 {%- macro mysql_instance(dbname, password, username=None) -%}
-
-{%- if not dbname is defined %}
-{%- set dbname = deployment %}
-{%- endif %}
 {%- if not username is defined %}
-{%- set username = deployment %}
+{%- set username = dbname %}
 {%- endif %}
 
 {{ dbname }}_mysql:

@@ -33,7 +33,7 @@ include:
 /usr/local/bin/create_dumb:
   file:
     - managed
-    - source: salt://backup/create_dumb.sh
+    - source: salt://backup/create_dumb.jinja2
     - mode: 755
     - template: jinja
     - require:

@@ -37,7 +37,7 @@ Maintainer: Dang Tung Lam <lamdt@familug.org>
 set -e
 
 # limit resources usage
-renice -n 19 -p $$
+renice -n 19 -p $$ > /dev/null
 ionice -c idle -p $$
 XZ_DEFAULTS=--memlimit={{ salt['pillar.get']('backup:xz_memlimit', 64) }}MiB
 

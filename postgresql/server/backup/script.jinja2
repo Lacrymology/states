@@ -30,7 +30,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 set -e
 
 # limit resources usage
-renice -n 19 -p $$
+renice -n 19 -p $$ > /dev/null
 ionice -c idle -p $$
 XZ_DEFAULTS=--memlimit={{ salt['pillar.get']('backup:xz_memlimit', 64) }}MiB
 NOW=`date '+%Y-%m-%d-%H_%M_%S'`

@@ -67,7 +67,7 @@ class S3BackupFile(BackupFile):
         # and use delimiter to only list file at top prefix level, not
         # list all file recursively, which is expensive.
         for key in bucket.list(prefix=self.prefix.strip('/') + '/', delimiter='/'):
-            log.debug("Processing key %s", key)
+            log.debug("Processing key %s", key.name)
             file = self.make_file(os.path.basename(key.name), key.size)
             # I expect file to have one and only one element
             if file:

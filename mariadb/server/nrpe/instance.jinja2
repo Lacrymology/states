@@ -33,10 +33,12 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 {{ dbname }}_mysql:
   description: {{ dbname|capitalize }} MySQL Database
-  command: /usr/lib/nagios/plugins/check_mysql_query.py -C /etc/nagios/nsca.d/{{ formula }}.yaml -d {{ dbname }}
-  _passwd = {{ password }}
-  _user = {{ username }}
-  _host = localhost
+  command: /usr/lib/nagios/plugins/check_mysql_query.py -F {{ formula }} -d {{ dbname }}_mysql
+  arguments:
+    passwd: {{ password }}
+    user: {{ username }}
+    host: localhost
+    database: {{ dbname }}
 {%- endmacro %}
 
 {%- macro mysql_instance_prefix(deployment, prefix=None) -%}

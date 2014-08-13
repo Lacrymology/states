@@ -47,11 +47,24 @@ case "$1" in
             echo "Archive $1 empty or broken"
             exit 1
         fi
+
+        # check if the tar.xz file contains only 1 empty file.
+        if [ $(tar -tvf $1 | wc -l) -eq 1 ]; then
+            if (tar -tvf $1 | grep -q '  0'); then
+                echo 'Archive contains only an empty file'
+                exit 1
+            fi
+        fi
         ;;
     *.xz)
         # not a tarball
         if [ $(xz --list $1 | wc -l) -lt 2 ];then
             echo "Archive $1 empty or broken"
+            exit 1
+        fi
+        # check whether the original file is empty (size = 0)
+        if [ "$(xz --list --robot $1 | grep file | cut -f5)" -eq 0 ]; then
+            echo "The original file is empty"
             exit 1
         fi
         ;;

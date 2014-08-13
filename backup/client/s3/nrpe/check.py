@@ -66,7 +66,8 @@ class S3BackupFile(BackupFile):
         # user may wrongly config path with/without ending '/', add one
         # and use delimiter to only list file at top prefix level, not
         # list all file recursively, which is expensive.
-        for key in bucket.list(prefix=self.prefix.strip('/') + '/', delimiter='/'):
+        for key in bucket.list(prefix=self.prefix.strip('/') + '/',
+                               delimiter='/'):
             log.debug("Processing key %s", key.name)
             if isinstance(key, boto.s3.prefix.Prefix):
                 # prefix is a concept same as "directory"

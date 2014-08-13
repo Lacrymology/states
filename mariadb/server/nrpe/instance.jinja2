@@ -33,7 +33,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 {{ dbname }}_mysql:
   description: {{ dbname|capitalize }} MySQL Database
-  command: /usr/lib/nagios/plugins/check_mysql_query.py -F {{ formula }} -d {{ dbname }}_mysql
+  command: /usr/lib/nagios/plugins/check_mysql_query.py -F {{ formula }} -N {{ dbname }}_mysql
   arguments:
     passwd: {{ password }}
     user: {{ username }}

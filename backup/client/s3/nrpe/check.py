@@ -62,9 +62,17 @@ class S3BackupFile(BackupFile):
         # cause unexpected errors later
         # validate=False,
 
-        # S3 allows /// is a valid path, /xxx and xxx are different dirs
-        for key in bucket.list(prefix=self.prefix.strip('/')):
-            log.debug("Processing key %s", key)
+        # S3 allows /// as a valid path, but we won't support that case
+        # user may wrongly config path with/without ending '/', add one
+        # and use delimiter to only list file at top prefix level, not
+        # list all file recursively, which is expensive.
+        for key in bucket.list(prefix=self.prefix.strip('/') + '/',
+                               delimiter='/'):
+            log.debug("Processing key %s", key.name)
+            if isinstance(key, boto.s3.prefix.Prefix):
+                # prefix is a concept same as "directory"
+                log.debug('%s is a Prefix, skipping ...', key.name)
+                continue
             file = self.make_file(os.path.basename(key.name), key.size)
             # I expect file to have one and only one element
             if file:

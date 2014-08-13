@@ -36,10 +36,10 @@ pycrypto==2.6.1
 pystatsd==0.1.10
 {%- if 'files_archive' in pillar %}
 {{ pillar['files_archive'] }}/pip/send_nsca-0.1.4.2-hvn.tar.gz
-{{ pillar['files_archive'] }}/pip/bfs-0.2.2.tar.gz
+{{ pillar['files_archive'] }}/pip/bfs-0.2.5.tar.gz
 {%- else %}
 https://github.com/hvnsweeting/send_nsca/archive/v0.1.4.2-hvn.tar.gz
-http://archive.robotinfra.com/pip/bfs-0.2.2.tar.gz
+http://archive.robotinfra.com/pip/bfs-0.2.5.tar.gz
 {%- endif %}
 {%- if salt['pillar.get']('sentry_dsn', False) %}
 raven==4.1.1

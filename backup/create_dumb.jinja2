@@ -37,5 +37,5 @@ XZ_DEFAULTS=--memlimit={{ salt['pillar.get']('backup:xz_memlimit', '64') }}MiB
 NOW=`date '+%Y-%m-%d-%H_%M_%S'`
 export TERM=dumb
 
-echo "created by create_dumb, for testing backup.client SLSs" | xz > /tmp/client-test-$NOW.txt.xz
-echo /tmp/client-test-$NOW.txt.xz
+echo "created by create_dumb, for testing backup.client SLSs" | xz > /tmp/backup-client-test-$NOW.txt.xz
+echo /tmp/backup-client-test-$NOW.txt.xz

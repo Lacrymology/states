@@ -68,6 +68,10 @@ class S3BackupFile(BackupFile):
         # list all file recursively, which is expensive.
         for key in bucket.list(prefix=self.prefix.strip('/') + '/', delimiter='/'):
             log.debug("Processing key %s", key.name)
+            if isinstance(key, boto.s3.prefix.Prefix):
+                # prefix is a concept same as "directory"
+                log.debug('%s is a Prefix, skipping ...', key.name)
+                continue
             file = self.make_file(os.path.basename(key.name), key.size)
             # I expect file to have one and only one element
             if file:

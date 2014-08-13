@@ -49,3 +49,15 @@ include:
       - file: /usr/local
       - file: /usr/local/bin/backup-store
       - file: bash
+
+/usr/local/bin/backup-validate:
+  file:
+    - managed
+    - user: root
+    - group: root
+    - mode: 500
+    - template: jinja
+    - source: salt://backup/client/validate.jinja2
+    - require:
+      - file: /usr/local
+      - file: bash

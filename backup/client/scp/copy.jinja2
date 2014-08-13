@@ -33,6 +33,9 @@ set -e
 renice -n 19 -p $$ > /dev/null
 ionice -c idle -p $$
 
+source /usr/local/bin/backup-validate
+validate_archive $1
+
 archive_path=$1
 archive_name=`basename $archive_path`
 subdir={{ salt['pillar.get']('backup_server:subdir', grains['id']) }}

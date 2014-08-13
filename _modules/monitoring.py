@@ -61,19 +61,18 @@ def discover_checks(directory='/etc/nagios/nsca.d'):
         except Exception:
             logger.debug("Skip '%s'", filename)
         else:
-            for key in check:
-                # Remove the key that hold NRPE command that is executed as
-                # check.
-                # That must not be copied in salt mine as it's not used by
-                # shinken and it might contains sensible information.
-                try:
-                    del check[key]['command']
-                except KeyError:
-                    pass
-                # Also remove all key that starts with underscore ('_').
-                for sub_key in check[key]:
-                    if sub_key.startswith('_'):
-                        continue
+            # Remove the key that hold NRPE command that is executed as
+            # check.
+            # That must not be copied in salt mine as it's not used by
+            # shinken and it might contains sensible information.
+            # same with subkey 'arguments' that hold arguments passed to NRPE
+            # check.
+            for subkey in ('command', 'arguments'):
+                for key in check:
+                    try:
+                        del check[key][subkey]
+                    except KeyError:
+                        pass
             checks.update(check)
             logger.debug("Processed '%s' succesfully", filename)
     return checks

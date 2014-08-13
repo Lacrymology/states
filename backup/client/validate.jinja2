@@ -27,8 +27,9 @@
 # Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 # Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 #
-# Script for checking integrity of tar archive (xz, bzip, gzip), or *.xz files
-# used mainly for testing backup archives.
+# Script for checking integrity of tar.xz archive, or *.xz files
+# used mainly for testing backup archives in backup script, which in turn run
+# as cron scripts, so this should not print anything to stdout or stderr.
 
 if [ -z $1 ]; then
   echo "Usage: $0 archive_file"
@@ -40,23 +41,15 @@ renice -n 19 -p $$ > /dev/null
 ionice -c idle -p $$
 XZ_DEFAULTS=--memlimit={{ salt['pillar.get']('backup:xz_memlimit', 64) }}MiB
 
-{%- if salt['pillar.get']('__test__', False) %}
-echo "Testing backup archive $1"
-xz --list $1
-{%- endif %}
-
 case "$1" in
-    *.tar.*)
-{%- if salt['pillar.get']('__test__', False) %}
-        tar -tvf $1
-{%- endif %}
+    *.tar.xz)
         if [ $(tar -tvf $1 | wc -l) -eq 0 ]; then
             echo "Archive $1 empty or broken"
             exit 1
         fi
         ;;
     *.xz)
-        # not a tarbar
+        # not a tarball
         if [ $(xz --list $1 | wc -l) -lt 2 ];then
             echo "Archive $1 empty or broken"
             exit 1

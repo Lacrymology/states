@@ -58,9 +58,9 @@ system_locale:
     - group: root
     - mode: 644
     - contents: |
-        LANG="{{ encoding }}"
-        LC_ALL="{{ encoding }}"
-        LC_CTYPE="{{ encoding }}"
+        LANG={{ encoding }}
+        LC_ALL={{ encoding }}
+        LC_CTYPE={{ encoding }}
     - require:
       - locale: system_locale
   cmd:

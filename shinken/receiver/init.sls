@@ -71,3 +71,4 @@ shinken-receiver:
     - require:
       - virtualenv: shinken
       - user: shinken
+      - file: /etc/shinken

@@ -40,29 +40,18 @@ __author__ = 'Hung Nguyen Viet <hvnsweeting@gmail.com>'
 __maintainer__ = 'Hung Nguyen Viet <hvnsweeting@gmail.com>'
 __email__ = 'hvnsweeting@gmail.com'
 
-import argparse
 import logging
-import yaml
 
 import salt.key
 import salt.client
 import salt.config as config
 
-import nagiosplugin as nap
+import bfs.nrpe as nap
 
 log = logging.getLogger('nagiosplugin')
 
 
 class MineMinion(nap.Resource):
-    def __init__(self, mine_data=None):
-        if mine_data:
-            self.ids_from_mine = set(id for id in mine_data if mine_data[id])
-            log.debug('Minion IDs in Salt mine read from data file: %s',
-                      self.ids_from_mine)
-        else:
-            self.ids_from_mine = self._mine_ids()
-        self.ids_from_salt_key = self._accepted_ids()
-
     def _accepted_ids(self):
         key = salt.key.Key(config.master_config('/etc/salt/master'))
         minion_ids = key.list_keys()['minions']
@@ -77,17 +66,16 @@ class MineMinion(nap.Resource):
         log.debug('Minion IDs in Salt Mine monitoring.data: %s', ret)
         return ret
 
-    def _is_matched(self):
-        return (set(self.ids_from_salt_key) == set(self.ids_from_mine))
-
     def probe(self):
-        if self._is_matched():
+        ids_from_mine = self._mine_ids()
+        ids_from_salt_key = self._accepted_ids()
+        if set(ids_from_salt_key) == set(ids_from_mine):
             return [nap.Metric('mine_minions', 0, min=0, context='minions')]
         else:
-            all_ids = set(list(self.ids_from_salt_key)
-                          + list(self.ids_from_mine))
-            diff_ids = set(list(all_ids - self.ids_from_salt_key) +
-                           list(all_ids - self.ids_from_mine))
+            all_ids = set(list(ids_from_salt_key)
+                          + list(ids_from_mine))
+            diff_ids = set(list(all_ids - ids_from_salt_key) +
+                           list(all_ids - ids_from_mine))
             log.debug('Diff minion IDs: %s', diff_ids)
             return [nap.Metric('mine_minions', len(diff_ids),
                                min=0, context='minions')]
@@ -95,24 +83,11 @@ class MineMinion(nap.Resource):
 
 @nap.guarded
 def main():
-    argp = argparse.ArgumentParser()
-    argp.add_argument('--data', type=str, default='',
-                      help='path to prefetch salt mine data')
-    argp.add_argument('-v', "--verbose",
-                      help="increase output verbosity",
-                      action="store_true")
+    argp = nap.ArgumentParser()
     args = argp.parse_args()
-    data = None
-    if args.data:
-        try:
-            with open(args.data) as f:
-                data = yaml.load(f)['local']
-        except IOError as e:
-            log.warning(e)
-
-    m_ids = MineMinion(data)
+    m_ids = MineMinion()
     check = nap.Check(m_ids, nap.ScalarContext('minions', '0:0', '0:0'))
-    check.main(args.verbose)
+    check.main(args)
 
 if __name__ == "__main__":
     main()

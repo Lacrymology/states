@@ -38,8 +38,11 @@ export TERM=dumb
 
 if [ "$1" = '--prefix' ]; then
   temp_path=/tmp/postgresql-$2-$3-$NOW.sql.xz
+  dbname=$3
 else
   temp_path=/tmp/postgresql-$1-$NOW.sql.xz
+  dbname=$1
 fi
+
 sudo -H -i -u postgres -g postgres pg_dump $dbname | xz > ${temp_path}
 /usr/local/bin/backup-store ${temp_path}

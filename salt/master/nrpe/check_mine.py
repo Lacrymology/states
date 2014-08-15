@@ -46,7 +46,8 @@ import salt.key
 import salt.client
 import salt.config as config
 
-import bfs.nrpe as nap
+import nagiosplugin as nap
+import bfs.nrpe as bfe
 
 log = logging.getLogger('nagiosplugin')
 
@@ -83,10 +84,10 @@ class MineMinion(nap.Resource):
 
 @nap.guarded
 def main():
-    argp = nap.ArgumentParser()
+    argp = bfe.ArgumentParser()
     args = argp.parse_args()
     m_ids = MineMinion()
-    check = nap.Check(m_ids, nap.ScalarContext('minions', '0:0', '0:0'))
+    check = bfe.Check(m_ids, nap.ScalarContext('minions', '0:0', '0:0'))
     check.main(args)
 
 if __name__ == "__main__":

@@ -32,6 +32,12 @@
 # as cron scripts, so this should not print anything to stdout or stderr.
 
 function validate_archive() {
+    # filename must not contains space, it's source of evil
+    if [ "$1" != "${1/ /}" ]; then
+        echo "Filename must not contain spaces"
+        exit 1
+    fi
+
     # limit resources usage
     renice -n 19 -p $$ > /dev/null
     ionice -c idle -p $$
@@ -71,9 +77,9 @@ function validate_archive() {
     esac
 }
 
-if [ -z $1 ]; then
+if [ -z "$1" ]; then
   echo "Usage: $0 archive_file"
   exit 1
 else
-  validate_archive $1
+  validate_archive "$1"
 fi

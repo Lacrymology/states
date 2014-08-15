@@ -59,7 +59,7 @@ function validate_archive() {
                 exit 1
             fi
             # check whether the original file is empty (size = 0)
-            if [ "$(xz --list --robot $1 | grep file | cut -f5)" -eq 0 ]; then
+            if [ "$(xz --list --robot $1 | grep ^file | cut -f5)" -eq 0 ]; then
                 echo "The original file is empty"
                 exit 1
             fi

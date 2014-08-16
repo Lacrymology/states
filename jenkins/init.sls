@@ -32,6 +32,7 @@ include:
   - apt
   - java.7.jdk
   - nginx
+  - ssh.client
 {% if salt['pillar.get']('jenkins:ssl', False) %}
   - ssl
 {% endif %}

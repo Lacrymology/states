@@ -32,6 +32,7 @@ include:
   - apt.nrpe
   - java.7.jdk
   - nginx.nrpe
+  - ssh.client.nrpe
 {% if salt['pillar.get']('jenkins:ssl', False) %}
   - ssl.nrpe
   - sslyze

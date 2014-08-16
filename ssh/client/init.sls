@@ -82,8 +82,6 @@ known_hosts:
 /etc/ssh/keys/{{ local }}:
   file:
     - directory
-    - user: root
-    - group: root
     - mode: 750
     - require:
       - file: /etc/ssh/keys

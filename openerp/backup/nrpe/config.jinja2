@@ -29,8 +29,10 @@ openerp_backup_postgres_procs:
   description: OpenERP Backup PostgreSQL Database Process
   command: '/usr/lib/nagios/plugins/check_procs -c 0:1 -u root -a "/usr/local/bin/backup-postgresql-by-role {{ salt["pillar.get"]("openerp:db:name", "openerp") }}"'
 
-{%- for db in salt['cmd.run']("sudo -H -i -u postgres psql --tuples-only --no-align -c\
-          \"SELECT pg_database.datname FROM pg_database, pg_authid WHERE pg_database.datdba=pg_authid.oid AND pg_authid.rolname='openerp'\"").split() %}
+{#- \\\ for escaping quote as this cmd will be process by jinja2 then by bash
+ su will let new user in /root, it need cd to other dir before running psql #}
+{%- set cmd = 'cd /; su --command "psql --tuples-only --no-align -c \\\"SELECT pg_database.datname FROM pg_database, pg_authid WHERE pg_database.datdba=pg_authid.oid AND pg_authid.rolname=' + "'openerp'" + '\\\"" postgres' %}
+{%- for db in salt['cmd.run'](cmd).split() %}
 openerp_backup_postgres_{{ db }}_age:
   description: OpenERP Backup Database {{ db }} Age
   command: /usr/lib/nagios/plugins/check_backup.py -w {{ salt['pillar.get']('backup:age', 48) }} postgresql-openerp-{{ db }}

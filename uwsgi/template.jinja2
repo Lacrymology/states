@@ -92,5 +92,8 @@ carbon = {{ resolved_ip[0] }}:2003
         {%- endif -%}
     {%- endif -%}	
 {%- endif %}
+{%- if php_settings|default(False) %}
+{{ php_settings }}
+{%- endif %}
 {%- block footer %}
 {%- endblock %}

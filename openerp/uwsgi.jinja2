@@ -76,8 +76,8 @@ carbon = {{ resolved_ip[0] }}:2003
         {%- else %}
 # The domain name {{ pillar['graphite_address'] }} in pillar['graphite_address'] is invalid. carbon support is disabled.
         {%- endif -%}
-    {%- endif -%}	
+    {%- endif -%}
 {%- endif %}
 
-chmod-socket = 775
-chown-socket = openerp:openerp
+chmod-socket = 770
+chown-socket = www-data:www-data

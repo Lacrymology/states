@@ -55,6 +55,6 @@ http://cairographics.org/releases/py2cairo-1.8.10.tar.gz
 Twisted==13.1.0
 {%- endif -%}
 {%- set smtp = salt['pillar.get']('graphite:email', salt['pillar.get']('smtp')) -%}
-{%- if smtp['encryption']|default('plain') == 'SSL/TLS' %}
+{%- if smtp['encryption']|default('plain') == 'ssl' %}
 django-smtp-ssl==1.0
 {%- endif -%}

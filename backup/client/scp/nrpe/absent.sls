@@ -26,7 +26,7 @@ Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 include:
-  - backup.client.base.absent
+  - backup.client.base.nrpe.absent
 
 backup_client_nrpe-requirements:
   file:

@@ -1,2 +1,2 @@
 include:
-  - backup.client.base.absent
+  - backup.client.base.nrpe.absent

@@ -27,7 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 include:
   - nrpe
-  - backup.client.base
+  - backup.client.base.nrpe
   - bash.nrpe
   - s3lite.nrpe
 

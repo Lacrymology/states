@@ -31,7 +31,7 @@ include:
 /usr/local/nagios/lib/python2.7/check_backup_base.py:
   file:
     - managed
-    - source: salt://backup/client/base/check_backup_base.py
+    - source: salt://backup/client/base/nrpe/check_backup_base.py
     - user: nagios
     - group: nagios
     - mode: 440

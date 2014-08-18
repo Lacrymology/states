@@ -118,9 +118,9 @@ EMAIL_HOST_USER = '{{ smtp['user']|default('') }}'
 EMAIL_PORT = {{ smtp['port'] }}
 DEFAULT_FROM_EMAIL = '{{ smtp['from'] }}'
 {%- set encryption = smtp['encryption']|default('plain') -%}
-{%- if encryption in ('SSL/TLS', 'STARTTLS') %}
+{%- if encryption in ('ssl', 'starttls') %}
 EMAIL_USE_TLS = True
-    {%- if encryption == 'SSL/TLS' %}
+    {%- if encryption == 'ssl' %}
 EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
     {%- endif -%}
 {%- else %}

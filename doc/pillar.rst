@@ -149,7 +149,7 @@ smtp:encryption
 
 SMTP encryption type.
 
-Possible values: `SSL/TLS <http://en.wikipedia.org/wiki/Transport_Layer_Security>`_, `STARTTLS <http://en.wikipedia.org/wiki/Starttls>`_, ``plain``.
+Possible values: `ssl <http://en.wikipedia.org/wiki/Transport_Layer_Security>`_, `starttls <http://en.wikipedia.org/wiki/Starttls>`_, ``plain``.
 
 Default: ``plain``
 

@@ -35,8 +35,8 @@ AuthUser={{ pillar['smtp']['user'] }}
 AuthPass={{ pillar['smtp']['password'] }}
 {%- endif -%}
 {%- set encryption = salt['pillar.get']('smtp:encryption', 'plain') -%}
-{%- if encryption in ('SSL/TLS', 'STARTTLS') -%}
-    {%- if encryption == 'SSL/TLS' %}
+{%- if encryption in ('ssl', 'starttls') -%}
+    {%- if encryption == 'ssl' %}
 UseSTARTTLS=no
     {%- else %}
 UseSTARTTLS=yes

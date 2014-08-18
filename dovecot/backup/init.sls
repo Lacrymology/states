@@ -30,7 +30,7 @@ Backup for Dovecot.
 include:
   - bash
   - cron
-  - backup
+  - backup.client
 
 backup-dovecot:
   file:

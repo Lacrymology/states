@@ -30,7 +30,7 @@ Backup for Jenkins.
 include:
   - bash
   - cron
-  - backup
+  - backup.client
 
 backup-jenkins:
   file:

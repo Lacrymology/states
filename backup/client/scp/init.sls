@@ -29,6 +29,7 @@ Poor man backup using rsync and scp.
 -#}
 
 include:
+  - backup.client.base
   - bash
   - local
   - ssh.client

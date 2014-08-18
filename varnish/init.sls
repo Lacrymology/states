@@ -62,13 +62,21 @@ varnish:
 {# preallocate file to prevent fragment #}
 {# K is too small and T is too large #}
 {% if storage_backend == 'file' and file_size_unit in ['M', 'G'] %}
+  file:
+    - directory
+    - name: /var/lib/varnish/{{ grains['host'] }}
+    - owner: varnish
+    - group: varnish
+    - mode: 755
+    - require:
+      - pkg: varnish
   cmd:
     - script
     - source: salt://varnish/allocate.sh
     - name: allocate {{ file_path }} {{ file_size }}
     - unless: test -f "{{ file_path }}"
     - require:
-      - pkg: varnish
+      - file: varnish
 {% endif %}
 
 /etc/varnish/default.vcl:

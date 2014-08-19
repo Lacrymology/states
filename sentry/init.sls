@@ -164,6 +164,7 @@ sentry_settings:
       - virtualenv: sentry
       - pkg: sudo
       - file: bash
+      - file: /usr/local/share/salt_common.sh
 
 sentry-syncdb-all:
   cmd:

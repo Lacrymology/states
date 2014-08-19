@@ -148,6 +148,7 @@ djangopypi2:
       - virtualenv: djangopypi2
       - pkg: sudo
       - file: bash
+      - file: /usr/local/share/salt_common.sh
 
 djangopypi2_urls:
   file:

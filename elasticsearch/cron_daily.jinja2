@@ -27,6 +27,12 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 #!/bin/bash
 # {{ pillar['message_do_not_modify'] }}
+
+# log start stop time to syslog
+source /usr/local/share/salt_common.sh
+log_start_script "$@"
+trap "log_stop_script \$?" EXIT
+
 set -e
 {# flush old logs of one week old #}
 find /var/log/elasticsearch -type f -mtime +7 -exec rm -f {} \;

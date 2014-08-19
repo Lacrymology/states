@@ -73,6 +73,7 @@ include:
     - require:
       - pkg: cron
       - file: bash
+      - file: /usr/local/share/salt_common.sh
 
 {% if grains['cpuarch'] == 'i686' %}
 /usr/lib/jvm/java-7-openjdk:

@@ -116,6 +116,7 @@ salt_archive_incoming:
     - require:
       - file: /usr/local
       - file: bash
+      - file: /usr/local/share/salt_common.sh
 
 archive_rsync:
   cmd:

@@ -29,6 +29,8 @@ State to configure bash.
 -#}
 include:
   - apt
+  - local
+  - rsyslog
 
 bash:
   pkg:
@@ -49,3 +51,17 @@ bash:
 {{ salt['user.info']('root')['home'] }}/.bashrc:
   file:
     - absent
+
+/usr/local/share/salt_common.sh:
+  pkg:
+    - installed
+    - name: bsdutils
+  file:
+    - managed
+    - template: jinja
+    - source: salt://bash/salt-common.jinja2
+    - require:
+      - file: /usr/local/share
+      - pkg: /usr/local/share/salt_common.sh
+      - pkg: bash
+      - service: rsyslog

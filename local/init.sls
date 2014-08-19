@@ -43,3 +43,12 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
     - mode: 755
     - require:
       - file: /usr/local
+
+/usr/local/share:
+  file:
+    - directory
+    - user: root
+    - group: root
+    - mode: 755
+    - require:
+      - file: /usr/local

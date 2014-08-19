@@ -44,3 +44,4 @@ backup-etherpad:
       - pkg: cron
       - file: /usr/local/bin/backup-postgresql
       - file: bash
+      - file: /usr/local/share/salt_common.sh

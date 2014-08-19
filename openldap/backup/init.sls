@@ -45,3 +45,4 @@ backup-openldap:
       - pkg: cron
       - file: /usr/local/bin/backup-store
       - file: bash
+      - file: /usr/local/share/salt_common.sh

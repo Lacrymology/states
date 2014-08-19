@@ -45,3 +45,4 @@ backup-dovecot:
       - pkg: cron
       - file: /usr/local/bin/backup-file
       - file: bash
+      - file: /usr/local/share/salt_common.sh

@@ -47,6 +47,7 @@ backup-elasticsearch:
       - file: /usr/local/bin/backup-store
       - file: bash
       - module: esclient
+      - file: /usr/local/share/salt_common.sh
 
 {#- TODO: remove that statement in >= 2014-04 #}
 {{ opts['cachedir'] }}/esclient-requirements.txt:

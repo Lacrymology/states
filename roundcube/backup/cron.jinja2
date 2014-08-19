@@ -34,6 +34,12 @@ Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
 -#}
 #!/bin/bash
 # {{ pillar['message_do_not_modify'] }}
+
+# log start stop time to syslog
+source /usr/local/share/salt_common.sh
+log_start_script "$@"
+trap "log_stop_script \$?" EXIT
+
 set -e
 
 /usr/local/bin/backup-postgresql {{ salt['pillar.get']('roundcube:db:name', 'roundcube') }}

@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-{%- macro nginx_instance(deployment, http=True, http_uri='/', http_result=None, http_port=80, https_uri=None, https_result="200 OK", prefix=None, timeout=False, domain_name=None, allow_ssl_redirect=True) -%}
+{%- macro nginx_instance(deployment, http=True, http_uri='/', http_result=None, http_port=80, https_uri=None, https_result="200 OK", prefix=None, timeout=False, domain_name=None, allow_ssl_redirect=True, check_interval=False) -%}
     {%- set first_ip = salt['network.ip_addrs']()[0] -%}
     {%- if not prefix -%}
         {%- set prefix = deployment -%}
@@ -49,6 +49,9 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
   command: /usr/lib/nagios/plugins/check_http -H {{ domain_name }} -u {{ http_uri }} -p {{ http_port }} -e '{{ http_result }}' -I {{ first_ip }}
     {%- if timeout %} --timeout={{ timeout }}{% endif -%}
     {%- if salt['pillar.get']('__test__', False) %} -v{%- endif %}
+    {%- if check_interval %}
+  check_interval: {{ check_interval }}
+    {%- endif %}
   service_dependencies: ',nginx_master'
 
     {%- if salt['pillar.get'](prefix + ':ssl', False) %}
@@ -61,6 +64,9 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
   command: /usr/lib/nagios/plugins/check_http -S -H {{ domain_name }} -u {{ https_uri }} -e '{{ https_result }}' -I {{ first_ip }}
         {%- if timeout %} --timeout={{ timeout }}{% endif -%}
         {%- if salt['pillar.get']('__test__', False) %} -v{%- endif %}
+    {%- if check_interval %}
+  check_interval: {{ check_interval }}
+    {%- endif %}
   service_dependencies: ',nginx_master'
 
 {{ deployment }}_nginx_https_certificate:

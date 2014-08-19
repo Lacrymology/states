@@ -42,4 +42,6 @@ sudo -E -u {{ django_user }} -g {{ django_group }} {{ alternate_admin_cmd }} $*
 {%- else %}
 sudo -E -u {{ django_user }} -g {{ django_group }} {{ virtualenv }}/bin/django-admin.py $*
 {%- endif %}
+RET_CODE=$?
 rm -rf $TEMP_HOME_DIR
+exit $RET_CODE

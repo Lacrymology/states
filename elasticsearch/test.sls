@@ -38,23 +38,25 @@ include:
   - ssl.nrpe
 {% endif %}
 
+elasticsearch_cluster:
+  monitoring:
+    - run_check
+    - wait: 60
+    - accepted_failure: 1 nodes in cluster (outside range 2:2)
+    - require:
+      - sls: elasticsearch
+      - sls: elasticsearch.nrpe
+
 test:
+  cmd:
+    - run
+    - name: /etc/cron.daily/backup-elasticsearch
+    - require:
+      - sls: elasticsearch
+      - sls: elasticsearch.backup
   monitoring:
     - run_all_checks
     - order: last
     - wait: 60
     - exclude:
       - elasticsearch_cluster
-  cmd:
-    - run
-    - name: /etc/cron.daily/backup-elasticsearch
-    - require:
-      - file: backup-elasticsearch
-    - order: last
-
-elasticsearch_cluster:
-  monitoring:
-    - run_check
-    - wait: 60
-    - order: last
-    - accepted_failure: 1 nodes in cluster (outside range 2:2)

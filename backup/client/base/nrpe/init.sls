@@ -26,6 +26,7 @@ Author: Tomas Neme <lacrymology@gmail.com>
 Maintainer: Tomas Neme <lacrymology@gmail.com>
 -#}
 include:
+  - bash.nrpe
   - nrpe
 
 /usr/local/nagios/lib/python2.7/check_backup_base.py:

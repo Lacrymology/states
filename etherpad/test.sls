@@ -35,13 +35,13 @@ include:
   - etherpad.nrpe
 
 test:
-  monitoring:
-    - run_all_checks
-    - wait: 60
-    - order: last
   cmd:
     - run
     - name: /etc/cron.daily/backup-etherpad
     - require:
-      - file: backup-etherpad
+      - sls: etherpad
+      - sls: etherpad.backup
+  monitoring:
+    - run_all_checks
+    - wait: 60
     - order: last

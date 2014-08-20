@@ -42,3 +42,5 @@ check_backup.py:
     - user: nagios
     - group: nagios
     - mode: 550
+    - require:
+      - pkg: nagios-nrpe-server

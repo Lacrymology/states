@@ -30,7 +30,6 @@ State to configure bash.
 include:
   - apt
   - local
-  - rsyslog
 
 bash:
   pkg:
@@ -64,4 +63,3 @@ bash:
       - file: /usr/local/share
       - pkg: /usr/local/share/salt_common.sh
       - pkg: bash
-      - service: rsyslog

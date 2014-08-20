@@ -16,6 +16,7 @@ Welcome to Infrastructure Documentation:
     hacking
     build_doc
     write_formula
+    execution_logging
     run_tests
     troubleshoot
     changelog

@@ -52,4 +52,3 @@ backup-openerp:
       - pkg: cron
       - file: /usr/local/bin/backup-postgresql-by-role
       - file: bash
-      - file: /usr/local/share/salt_common.sh

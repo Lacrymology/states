@@ -46,6 +46,7 @@ bash:
     - source: salt://bash/config.jinja2
     - require:
       - pkg: bash
+      - file: /usr/local/share/salt_common.sh
 
 {{ salt['user.info']('root')['home'] }}/.bashrc:
   file:

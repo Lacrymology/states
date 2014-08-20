@@ -117,7 +117,6 @@ graphite_wsgi:
       - virtualenv: graphite
       - pkg: sudo
       - file: bash
-      - file: /usr/local/share/salt_common.sh
 
 {#- TODO: remove that statement in >= 2014-04 #}
 /usr/local/graphite/salt-graphite-web-requirements.txt:

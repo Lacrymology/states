@@ -50,7 +50,6 @@ include:
     - require:
       - file: /usr/local
       - file: bash
-      - file: /usr/local/share/salt_common.sh
 
 {% for dirname in ('log', 'lib') %}
 /var/{{ dirname }}/shinken:

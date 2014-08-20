@@ -35,12 +35,12 @@ Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
 #!/bin/bash
 # {{ pillar['message_do_not_modify'] }}
 
+set -e
+
 # log start stop time to syslog
 source /usr/local/share/salt_common.sh
 log_start_script "$@"
 trap "log_stop_script \$?" EXIT
-
-set -e
 
 {#- elasticsearch come with it's own backup script #}
 /usr/local/bin/backup-mongodb graylog2

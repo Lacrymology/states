@@ -55,7 +55,7 @@ bash:
 /usr/local/share/salt_common.sh:
   pkg:
     - installed
-    - name: bsdutils
+    - name: bsdutils {# for /usr/bin/logger #}
   file:
     - managed
     - template: jinja

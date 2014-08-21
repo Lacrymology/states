@@ -33,3 +33,4 @@ ejabberd_backup_postgresql_procs:
 ejabberd_backup:
   description: ejabberd Backup Age And Size
   command: /usr/lib/nagios/plugins/check_backup.py -w {{ salt['pillar.get']('backup:age', 48) }} postgresql-ejabberd
+  check_interval: {{ salt['pillar.get']('backup:check_interval', 2160) }}

@@ -57,6 +57,8 @@ salt_master_mine:
   check_interval: 360
   freshness_threshold: {{ (360 + 10) * 60 }}
 {#- sudo for reading salt config files #}
-  command: sudo /usr/lib/nagios/plugins/check_mine_minions.py --data /var/lib/nagios/salt_mine.yaml
+  command: sudo /usr/lib/nagios/plugins/check_mine_minions.py -F salt.master -N salt_master_mine --cronresult
+  arguments:
+    timeout: 6
     {%- endif -%}
 {%- endblock -%}

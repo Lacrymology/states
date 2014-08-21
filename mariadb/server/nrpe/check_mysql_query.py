@@ -32,12 +32,11 @@ __author__ = 'Hung Nguyen Viet'
 __maintainer__ = 'Hung Nguyen Viet'
 __email__ = 'hvnsweeting@gmail.com'
 
-import argparse
 import logging
-from ConfigParser import SafeConfigParser
 
 import pymysql
 import nagiosplugin as nap
+import bfs.nrpe as bfe
 
 
 log = logging.getLogger('nagiosplugin')
@@ -68,33 +67,15 @@ class MysqlQuery(nap.Resource):
 
 @nap.guarded
 def main():
-    argp = argparse.ArgumentParser(description=__doc__)
-    argp.add_argument('-C', '--config', metavar='PATH',
-                      help='path to config file')
-    argp.add_argument('-v', '--verbose', action='count', default=0,
-                      help='increase output verbosity (use up to 3 times)')
-    argp.add_argument('-c', '--critical', metavar='RANGE', default='1:',
-                      help='return critical if number of queried records\
-                            is outside of RANGE')
-    argp.add_argument('-q', '--query', default='select @@max_connections;',
-                      help='SQL query to execute')
+    argp = bfe.ArgumentParser(description=__doc__)
     args = argp.parse_args()
-
-    cp = SafeConfigParser()
-    try:
-        cp.read(args.config)
-    except TypeError:
-        log.critical('Please provide a valid path to config file')
-
-    passwd = cp.get('mysql', 'passwd')
-    user = cp.get('mysql', 'user')
-    host = cp.get('mysql', 'host')
-    database = cp.get('mysql', 'database')
-
-    check = nap.Check(MysqlQuery(host, user, passwd, database, args.query),
-                      nap.ScalarContext('records', args.critical,
-                                        args.critical))
-    check.main(verbose=args.verbose)
+    config = bfe.ConfigFile.from_arguments(args)
+    kwargs = config.kwargs('host', 'user', 'passwd', 'database')
+    kwargs['query'] = config.get_argument('query', 'select @@max_connections;')
+    critical = config.get_argument('critical', '1:')
+    check = bfe.Check(MysqlQuery(**kwargs),
+                      nap.ScalarContext('records', critical, critical))
+    check.main(args)
 
 
 if __name__ == "__main__":

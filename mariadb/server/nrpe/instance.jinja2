@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 #}
-{%- macro mysql_instance(dbname, password=None, username=None) -%}
+{%- macro mysql_instance(formula, dbname, password=None, username=None) -%}
 {#- password args is not used anymore but turned to kwarg for backward compatible #}
 {%- if not username is defined %}
 {%- set username = dbname %}
@@ -33,8 +33,12 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 {{ dbname }}_mysql:
   description: {{ dbname|capitalize }} MySQL Database
-  # Just run a stupid query to make sure connection work
-  command: /usr/lib/nagios/plugins/check_mysql_query.py --config /etc/nagios/mysql_{{ username }}@{{ dbname }}.cfg
+  command: /usr/lib/nagios/plugins/check_mysql_query.py -F {{ formula }} -N {{ dbname }}_mysql
+  context:
+    passwd: {{ password }}
+    user: {{ username }}
+    host: localhost
+    database: {{ dbname }}
 {%- endmacro %}
 
 {%- macro mysql_instance_prefix(deployment, prefix=None) -%}
@@ -44,28 +48,6 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 {%- set username = salt['pillar.get'](prefix + ':db:username', deployment)  %}
 {%- set dbname = salt['pillar.get'](prefix + ':db:name', deployment) %}
 {{ mysql_instance(dbname, username=username) }}
-{%- endmacro %}
-
-{%- macro mysql_nrpe_config_manage(dbname, passwd, username=None) -%}
-{%- if not username is defined %}
-{%- set username = dbname %}
-{%- endif %}
-
-mysql_check_query_nrpe_config:
-  file:
-    - managed
-    - template: jinja
-    - name: /etc/nagios/mysql_{{ username }}@{{ dbname }}.cfg
-    - source: salt://mariadb/server/nrpe/mysql_config.jinja2
-    - user: root
-    - group: root
-    - context:
-        user: {{ username }}
-        passwd: {{ passwd }}
-        dbname: {{ dbname }}
-    - mode: 440
-    - require:
-      - pkg: nagios-nrpe-server
 {%- endmacro %}
 
 {%- macro mysql_nrpe_config_absent(dbname, username=None) -%}

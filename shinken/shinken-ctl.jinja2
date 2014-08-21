@@ -27,7 +27,14 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 #!/bin/bash
 # {{ pillar['message_do_not_modify'] }}
+
 set -e
+
+# log start stop time to syslog
+source /usr/local/share/salt_common.sh
+log_start_script "$@"
+trap "log_stop_script \$?" EXIT
+
 {% for role in ('broker', 'arbiter', 'reactionner', 'poller', 'scheduler', 'receiver') %}
 if [ -r /etc/init/shinken-{{ role }}.conf ]; then
     $1 shinken-{{ role }}

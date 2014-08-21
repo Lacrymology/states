@@ -29,6 +29,7 @@ State to configure bash.
 -#}
 include:
   - apt
+  - local
 
 bash:
   pkg:
@@ -45,7 +46,21 @@ bash:
     - source: salt://bash/config.jinja2
     - require:
       - pkg: bash
+      - file: /usr/local/share/salt_common.sh
 
 {{ salt['user.info']('root')['home'] }}/.bashrc:
   file:
     - absent
+
+/usr/local/share/salt_common.sh:
+  pkg:
+    - installed
+    - name: bsdutils {# for /usr/bin/logger #}
+  file:
+    - managed
+    - template: jinja
+    - source: salt://bash/salt-common.jinja2
+    - require:
+      - file: /usr/local/share
+      - pkg: /usr/local/share/salt_common.sh
+      - pkg: bash

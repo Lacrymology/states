@@ -27,6 +27,12 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
 #!/bin/bash
 # {{ pillar['message_do_not_modify'] }}
+
 set -e
+
+# log start stop time to syslog
+source /usr/local/share/salt_common.sh
+log_start_script "$@"
+trap "log_stop_script \$?" EXIT
 
 /usr/local/bin/backup-postgresql {{ salt['pillar.get']('graphite:db:name', 'graphite') }}

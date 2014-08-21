@@ -53,7 +53,7 @@ elasticsearch_test_create_sample_data:
     - name: curl
   cmd:
     - run
-    - name: 'curl -XPUT \'http://localhost:9200/twitter/tweet/1\' -d \'{"user" : "kimchy", "post_date" : "2009-11-15T14:12:12", "message" : "trying out Elasticsearch"}\''
+    - name: 'curl -XPUT ''http://localhost:9200/twitter/tweet/1'' -d ''{"user" : "kimchy", "post_date" : "2009-11-15T14:12:12", "message" : "trying out Elasticsearch"}'''
     - require:
       - sls: elasticsearch
       - sls: elasticsearch.backup

@@ -65,9 +65,9 @@ def discover_checks(directory='/etc/nagios/nsca.d'):
             # check.
             # That must not be copied in salt mine as it's not used by
             # shinken and it might contains sensible information.
-            # same with subkey 'arguments' that hold arguments passed to NRPE
+            # same with subkey 'context' that hold context passed to NRPE
             # check.
-            for subkey in ('command', 'arguments'):
+            for subkey in ('command', 'context'):
                 for key in check:
                     try:
                         del check[key][subkey]

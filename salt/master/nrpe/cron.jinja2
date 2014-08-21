@@ -26,4 +26,4 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmil.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmil.com>
 #}
-*/5 * * * *   root  salt-call mine.get '*' monitoring.data --out=yaml > /var/lib/nagios/salt_mine.yaml 2> /dev/null
+*/5 * * * *   root /usr/lib/nagios/plugins/check_mine_minions.py -F salt.master -N salt_master_mine --cronjob

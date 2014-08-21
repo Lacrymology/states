@@ -33,7 +33,7 @@ __author__ = 'Erik Günther'
 __maintainer__ = 'Bruno Clermont'
 __email__ = 'patate@fastmail.cn'
 
-import ast
+import json
 import logging
 import httplib
 import pickle
@@ -56,7 +56,7 @@ def _call_aws(url):
     conn.request('GET', url)
     response = conn.getresponse()
     if response.status != 200:
-        return ""
+        return "{}"
 
     data = response.read()
     return data
@@ -90,7 +90,7 @@ def _get_ec2_hostinfo():
     #Read the buffert, and convert it to a dict
     data = _call_aws("/latest/dynamic/instance-identity/document")
     #null isn't None so translate on the fly
-    grains = ast.literal_eval(data.replace('null', 'None'))
+    grains = json.loads(data)
 
     #Add some more default data
     grains['local-ipv4'] = _call_aws("/latest/meta-data/local-ipv4")

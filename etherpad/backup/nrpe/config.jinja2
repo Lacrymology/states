@@ -33,3 +33,4 @@ etherpad_backup_postgres_procs:
 etherpad_backup:
   description: Etherpad Backup Age And Size
   command: /usr/lib/nagios/plugins/check_backup.py -w {{ salt['pillar.get']('backup:age', '48') }} postgresql-etherpad
+  check_interval: {{ salt['pillar.get']('backup:check_interval', 2160) }}

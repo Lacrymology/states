@@ -32,3 +32,4 @@ graylog2_backup_mongodb_procs:
 graylog2_backup:
   description: Graylog2 Backup Age And Size
   command: "/usr/lib/nagios/plugins/check_backup.py -w {{ salt['pillar.get']('backup:age', 48) }} graylog2"
+  check_interval: {{ salt['pillar.get']('backup:check_interval', 2160) }}

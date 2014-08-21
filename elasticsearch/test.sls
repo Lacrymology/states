@@ -47,6 +47,18 @@ elasticsearch_cluster:
       - sls: elasticsearch
       - sls: elasticsearch.nrpe
 
+elasticsearch_test_create_sample_data:
+  pkg:
+    - installed
+    - name: curl
+  cmd:
+    - run
+    - name: 'curl -XPUT \'http://localhost:9200/twitter/tweet/1\' -d \'{"user" : "kimchy", "post_date" : "2009-11-15T14:12:12", "message" : "trying out Elasticsearch"}\''
+    - require:
+      - sls: elasticsearch
+      - sls: elasticsearch.backup
+      - pkg: elasticsearch_test_create_sample_data
+
 test:
   cmd:
     - run
@@ -54,6 +66,7 @@ test:
     - require:
       - sls: elasticsearch
       - sls: elasticsearch.backup
+      - cmd: elasticsearch_test_create_sample_data
   monitoring:
     - run_all_checks
     - order: last

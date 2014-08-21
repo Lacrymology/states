@@ -56,12 +56,12 @@ Implementations
 Bash
 ----
 
-All bash scripts have to have ``file: bash`` as theirs requirement.
+All bash scripts have to require ``file: bash``.
 
 File ``/usr/local/share/salt_common.sh`` (in ``bash`` formula)
 contains two functions that log start and stop event of a script:
-``log_start_script`` and ``log_stop_script``. You can simply include
-following snippet at top of your script to start using them.
+``log_start_script`` and ``log_stop_script``. Add following snippet to
+the top of script that needs to log start and stop event.
 
 ::
 
@@ -71,5 +71,5 @@ following snippet at top of your script to start using them.
 
 .. warning::
 
-  If you has already trapped EXIT in your script, please consider
-  modify last line in above snippet, it may override your trap function.
+   ``trap "log_stop_script \$?" EXIT`` line may override existing trap
+   functions.

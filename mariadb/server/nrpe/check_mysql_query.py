@@ -35,7 +35,8 @@ __email__ = 'hvnsweeting@gmail.com'
 import logging
 
 import pymysql
-import bfs.nrpe as nap
+import nagiosplugin as nap
+import bfs.nrpe as bfe
 
 
 log = logging.getLogger('nagiosplugin')
@@ -66,13 +67,13 @@ class MysqlQuery(nap.Resource):
 
 @nap.guarded
 def main():
-    argp = nap.ArgumentParser(description=__doc__)
+    argp = bfe.ArgumentParser(description=__doc__)
     args = argp.parse_args()
-    config = nap.ConfigFile.from_arguments(args)
+    config = bfe.ConfigFile.from_arguments(args)
     kwargs = config.kwargs('host', 'user', 'passwd', 'database')
     kwargs['query'] = config.get_argument('query', 'select @@max_connections;')
     critical = config.get_argument('critical', '1:')
-    check = nap.Check(MysqlQuery(**kwargs),
+    check = bfe.Check(MysqlQuery(**kwargs),
                       nap.ScalarContext('records', critical, critical))
     check.main(args)
 

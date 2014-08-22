@@ -58,10 +58,9 @@ cron:
       - pkg: cron
       - file: /etc/crontab
 
-apt-clean:
+/etc/cron.daily/apt-clean:
   file:
     - managed
-    - name: /etc/cron.daily/apt-clean
     - user: root
     - group: root
     - mode: 500

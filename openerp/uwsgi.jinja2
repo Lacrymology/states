@@ -26,7 +26,7 @@ Author: Lam Dang Tung <lamdt@familug.org>
 Maintainer: Lam Dang Tung <lamdt@familug.org>
 -#}
 # {{ pillar['message_do_not_modify'] }}
-{%- set web = salt['pillar.get']('openerp') %}
+{%- set web = pillar['openerp'] %}
 [uwsgi]
 
 master = true

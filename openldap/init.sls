@@ -163,10 +163,10 @@ ldap_{{ domain }}_{{ uid }}:
 #TODO modify the vmailbox_maps , maybe switch to use LDAP for that
 
 {#- create / delete user entries #}
-{% set suffix = salt['pillar.get']('ldap:suffix') %}
+{% set suffix = pillar['ldap']['suffix'] %}
 {%- for domain in pillar['ldap']['data'] %}
   {%- for uid in pillar['ldap']['data'][domain] %}
-    {% set u = salt['pillar.get']('ldap:data')[domain][uid] %}
+    {% set u = pillar['ldap']['data'][domain][uid] %}
 {{ ldap_adduser(uid, domain, suffix, u['cn'], u['sn'], u['passwd']) }}
   {%- endfor %}
 {%- endfor %}

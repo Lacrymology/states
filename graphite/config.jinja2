@@ -104,14 +104,14 @@ RRD_DIR = '/opt/graphite/storage/rrd'
 DATA_DIRS = ['/var/lib/graphite/whisper']
 #}
 DATA_DIRS = [
-{%- set instances_count = salt['pillar.get']('graphite:carbon:instances') %}
+{%- set instances_count = pillar['graphite']['carbon']['instances'] %}
 {%- for instance in range(instances_count) -%}
 "/var/lib/graphite/whisper/{{ instance }}"{% if not loop.last %}, {% endif %}
 {%- endfor -%}]
 LOG_DIR = '/var/log/graphite/graphite'
 INDEX_FILE = STORAGE_DIR + '/index'
 
-{%- set smtp = salt['pillar.get']('graphite:smtp', salt['pillar.get']('smtp')) %}
+{%- set smtp = salt['pillar.get']('graphite:smtp', pillar['smtp']) %}
 EMAIL_HOST = '{{ smtp['server'] }}'
 EMAIL_HOST_PASSWORD = '{{ smtp['password']|default('') }}'
 EMAIL_HOST_USER = '{{ smtp['user']|default('') }}'

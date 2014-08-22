@@ -26,7 +26,7 @@ Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
 # {{ pillar['message_do_not_modify'] }}
-{% set mdata = salt['pillar.get']('ldap:data') %}
+{% set mdata = pillar['ldap']['data'] %}
 {% for dom in mdata %}
   {% for user in mdata[dom] %}
 {{ user }}@{{ dom }} {{ dom }}/{{ user }}

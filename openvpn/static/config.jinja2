@@ -56,7 +56,7 @@ port {{ pillar['openvpn'][tunnel]['peers'][grains['id']]['port'] }}
 {%- for peer in pillar['openvpn'][tunnel]['peers'] -%}
     {%- if peer != grains['id'] %}
 ifconfig {{ pillar['openvpn'][tunnel]['peers'][grains['id']]['vpn_address'] }} {{ pillar['openvpn'][tunnel]['peers'][peer]['vpn_address'] }}
-remote {{ pillar['openvpn'][tunnel]['peers'][peer]['address'] }} {{ salt['pillar.get']('openvpn:' + tunnel + ':peers:' + peer + ':port') }}
+remote {{ pillar['openvpn'][tunnel]['peers'][peer]['address'] }} {{ salt['pillar.get']('openvpn:' + tunnel + ':peers:' + peer + ':port', '') }}
     {%- endif -%}
 {%- endfor -%}
 {%- if salt['pillar.get']('debug', False) %}

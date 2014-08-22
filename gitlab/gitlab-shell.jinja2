@@ -43,9 +43,9 @@ user: {{ user }}
 Url to gitlab instance. Used for api calls. Should end with a slash.
 #}
 {%- if salt['pillar.get']('gitlab:ssl', False) %}
-gitlab_url: "https://{{ salt['pillar.get']('gitlab:hostnames')[0] }}/"
+gitlab_url: "https://{{ pillar['gitlab']['hostnames'][0] }}/"
 {%- else %}
-gitlab_url: "http://{{ salt['pillar.get']('gitlab:hostnames')[0] }}/"
+gitlab_url: "http://{{ pillar['gitlab']['hostnames'][0] }}/"
 {%- endif %}
 
 http_settings:

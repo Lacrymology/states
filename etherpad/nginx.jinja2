@@ -62,7 +62,7 @@ server {
         set $block tr;
     }
 
-    if ($http_referer !~ "{{ salt['pillar.get']('etherpad:restrict_referer') }}") {
+    if ($http_referer !~ "{{ pillar['etherpad']['restrict_referer'] }}") {
         set $block "${block}ue";
     }
 

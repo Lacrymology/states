@@ -166,7 +166,7 @@ WHISPER_FALLOCATE_CREATE = True
  BIND_PATTERNS = #
 #}
 
-{%- set instances_count = salt['pillar.get']('graphite:carbon:instances') %}
+{%- set instances_count = pillar['graphite']['carbon']['instances'] %}
 {% for instance in range(instances_count) %}
 [cache:{{ instance }}]
 LINE_RECEIVER_PORT = 20{{ loop.index }}3

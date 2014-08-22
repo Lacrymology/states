@@ -30,7 +30,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 {% if ssl %}
 SSL ON
-TLS_CACERT      /etc/ssl/certs/{{ salt['pillar.get']('ldap:ssl') }}_ca.crt
+TLS_CACERT      /etc/ssl/certs/{{ pillar['ldap']['ssl'] }}_ca.crt
 TLS_REQCERT never
 {% endif %}
 HOST {{ grains['id'] }}

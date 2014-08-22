@@ -70,7 +70,7 @@ dovecot_check_mail_stack:
     - watch:
       - file: dovecot_check_mail_stack
 
-{%- set username = salt['pillar.get']('mail:check_mail_stack:username') %}
+{%- set username = pillar['mail']['check_mail_stack']['username'] %}
 {%- set mailname = pillar['mail']['mailname'] %}
 {%- set mailaddr = username + '@' + mailname %}
 {%- set password = pillar['ldap']['data'][mailname][username]['passwd'] %}

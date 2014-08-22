@@ -43,8 +43,8 @@ server {
 {% if salt['pillar.get']('gitlab:ssl', False) %}
 {% if salt['pillar.get']('gitlab:ssl_redirect', False) %}
     {# if https, redirect http port 80 to https port 443 #}
-    server_name {% for hostname in salt['pillar.get']('gitlab:hostnames') %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
-    return 301 https://{{ salt['pillar.get']('gitlab:hostnames')[0] }}$request_uri;
+    server_name {% for hostname in pillar['gitlab']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+    return 301 https://{{ pillar['gitlab']['hostnames'][0] }}$request_uri;
 }
 {# https server #}
 server {
@@ -53,7 +53,7 @@ server {
     {{ ssl_config(pillar['gitlab']['ssl']) }}
 {% endif %}
 {# web app logic #}
-    server_name {% for hostname in  salt['pillar.get']('gitlab:hostnames') %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+    server_name {% for hostname in  pillar['gitlab']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
     root {{ web_dir }}/public;
     client_max_body_size 5m;
     server_tokens off;

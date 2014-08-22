@@ -44,7 +44,7 @@ production: &base
    GitLab settings
 #}
   gitlab:
-    host: {{ salt['pillar.get']('gitlab:hostnames')[0] }}
+    host: {{ pillar['gitlab']['hostnames'][0] }}
     port: {{ salt['pillar.get']('gitlab:port', 80) }}
     {%- if salt['pillar.get']('gitlab:ssl', False) %}
     https: true
@@ -72,8 +72,8 @@ production: &base
     user: {{ user }}
 
     {#- Email settings #}
-    email_from: {{ salt['pillar.get']('gitlab:smtp:from', salt['pillar.get']('smtp:from')) }}
-    support_email: {{ salt['pillar.get']('gitlab:support_email') }}
+    email_from: {{ salt['pillar.get']('gitlab:smtp:from', pillar['smtp']['from']) }}
+    support_email: {{ salt['pillar.get']('gitlab:support_email', '""') }}
 
     {#- User settings #}
 
@@ -202,7 +202,7 @@ production: &base
   #}
   ldap:
     {%- if salt['pillar.get']('gitlab:ldap:enabled', False)  %}
-    {%- set ldap =  salt['pillar.get']('gitlab:ldap') %}
+    {%- set ldap =  pillar['gitlab']['ldap'] %}
     enabled: true
     host: '{{ ldap['host'] }}'
     base: '{{ ldap['base'] }}'

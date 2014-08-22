@@ -127,3 +127,22 @@ postfix:
     - mode: 400
     - require:
       - file: /etc/postfix
+
+{%- if salt['pillar.get']('postfix:aliases', False) %}
+{# contains alias for email forwarding #}
+/etc/postfix/virtual:
+  file:
+    - managed
+    - template: jinja
+    - mode: 400
+    - user: postfix
+    - group: postfix
+    - content: |
+        {{ pillar['postfix']['aliases'] }}
+    - require:
+      - pkg: postfix
+  cmd:
+    - wait
+    - watch:
+      - file: /etc/postfix/virtual
+{%- endif %}

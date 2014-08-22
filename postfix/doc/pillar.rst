@@ -57,8 +57,8 @@ Example::
     sasl: True
     virtual_mailbox: True
     aliases: |
-        user1.abc@example.com example.com/user1
-        user2.xyz@example.com example.com/user2
+        user1.abc@example.com user1@example.com
+        user2.xyz@example.com user2@example.com
     message_size_limit: 15360000
     mydestination:
       - saltlab.com
@@ -121,7 +121,12 @@ Default: ``False``.
 postfix:aliases
 ~~~~~~~~~~~~~~~
 
-Support alias function on :doc:`index`.
+Support alias(mail forwarding) on :doc:`index`. Uses below syntax::
+
+  <source_addr> <dest_addr>
+  <source_addr2> <dest_addr2>
+
+Use it carefully, or it may cause recursive forwarding.
 
 postfix:message_size_limit
 ~~~~~~~~~~~~~~~~~~~~~~~~~~

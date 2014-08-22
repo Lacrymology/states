@@ -30,6 +30,7 @@ Install daemon to execute scheduled commands (Vixie Cron).
 
 include:
   - apt
+  - bash
   - rsyslog
 
 cron:
@@ -56,5 +57,18 @@ cron:
     - watch:
       - pkg: cron
       - file: /etc/crontab
+
+apt-clean:
+  file:
+    - managed
+    - name: /etc/cron.daily/apt-clean
+    - user: root
+    - group: root
+    - mode: 500
+    - template: jinja
+    - source: salt://cron/apt_clean.jinja2
+    - require:
+      - pkg: cron
+      - file: bash
 
 {#- PID file owned by root, no need to manage #}

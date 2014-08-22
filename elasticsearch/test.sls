@@ -62,7 +62,7 @@ elasticsearch_test_create_sample_data:
 test:
   cmd:
     - run
-    - name: /etc/cron.daily/backup-elasticsearch
+    - name: sleep 7 && /etc/cron.daily/backup-elasticsearch
     - require:
       - sls: elasticsearch
       - sls: elasticsearch.backup

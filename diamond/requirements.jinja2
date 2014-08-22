@@ -32,9 +32,9 @@ pip==1.5.2
 psutil==2.0.0
 six==1.5.2
 {%- if 'files_archive' in pillar %}
-{{ pillar['files_archive'] }}/pip/diamond-v3.4.8.tar.gz
+{{ pillar['files_archive'] }}/pip/diamond-v3.4.10.tar.gz
 {%- else %}
-https://github.com/hvnsweeting/Diamond/archive/v3.4.8.tar.gz
+https://github.com/hvnsweeting/Diamond/archive/v3.4.10.tar.gz
 {%- endif %}
 {%- if 'graylog2_address' in pillar %}
 graypy==0.2.9

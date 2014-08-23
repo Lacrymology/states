@@ -30,7 +30,7 @@ Backup for Redis.
 include:
   - bash
   - cron
-  - backup
+  - backup.client
 
 backup-redis:
   file:

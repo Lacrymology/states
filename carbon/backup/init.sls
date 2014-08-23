@@ -28,7 +28,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 include:
   - bash
   - cron
-  - backup
+  - backup.client
 
 backup-carbon:
   file:

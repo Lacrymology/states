@@ -30,7 +30,7 @@ Backup for Postfix.
 include:
   - bash
   - cron
-  - backup
+  - backup.client
 
 backup-postfix:
   file:

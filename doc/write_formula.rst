@@ -237,6 +237,12 @@ Services which run with other user than root, an have a PID file belong to
 that custom user should manage the PID file. Macro ``manage_pid`` in
 ``macro.sls`` helps handle that case.
 
+Backup
+------
+
+All backup archives must use ``.xz`` format. Backup scripts may use ``tar``
+or ``xz`` for creating ``.xz`` archive.
+
 Documentation
 -------------
 

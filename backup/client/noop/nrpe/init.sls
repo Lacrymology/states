@@ -26,8 +26,9 @@ Author: Hung Nguyen Viet <hvnsweeting@gmil.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmil.com>
 -#}
 include:
-  - nrpe
+  - backup.client.base.nrpe
   - bash.nrpe
+  - nrpe
 
 check_backup.py:
   file:

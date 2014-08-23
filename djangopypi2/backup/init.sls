@@ -38,7 +38,7 @@ include:
   - bash
   - cron
   - postgresql.server.backup
-  - backup
+  - backup.client
 
 backup-djangopypi2:
   file:

@@ -30,7 +30,7 @@ Backup for Salt Master.
 include:
   - bash
   - cron
-  - backup
+  - backup.client
 
 backup-saltmaster:
   file:

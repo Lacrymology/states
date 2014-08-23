@@ -33,6 +33,13 @@ include:
   - mongodb.nrpe
   - mongodb.repair
 
+mongodb_test_generate_sample_db_for_backup_test:
+  cmd:
+    - run
+    - name: "mongo citest --eval \"db.msg.insert({'name': 'citest'});\""
+    - require:
+      - sls: mongodb
+
 test:
   monitoring:
     - run_all_checks
@@ -42,11 +49,11 @@ test:
     - name: /usr/local/bin/backup-mongodb-all
     - require:
       - file: /usr/local/bin/backup-mongodb-all
-    - order: last
+      - cmd: mongodb_test_generate_sample_db_for_backup_test
+      - sls: mongodb.backup
 
 extend:
   mongodb_repair_post:
     service:
-      - order: last
       - require_in:
         - cmd: test

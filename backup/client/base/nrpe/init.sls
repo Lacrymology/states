@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Luan Vo Ngoc
+Copyright (c) 2014, Tomas Neme
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,26 +22,19 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Luan Vo Ngoc <ngocluanvo@gmail.com>
-Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
-
-Backup for Dovecot.
+Author: Tomas Neme <lacrymology@gmail.com>
+Maintainer: Tomas Neme <lacrymology@gmail.com>
 -#}
 include:
-  - bash
-  - cron
-  - backup.client
+  - bash.nrpe
+  - nrpe
 
-backup-dovecot:
+/usr/local/nagios/lib/python2.7/check_backup_base.py:
   file:
     - managed
-    - name: /etc/cron.daily/backup-dovecot
-    - user: root
-    - group: root
-    - mode: 500
-    - template: jinja
-    - source: salt://dovecot/backup/cron.jinja2
+    - source: salt://backup/client/base/nrpe/check_backup_base.py
+    - user: nagios
+    - group: nagios
+    - mode: 440
     - require:
-      - pkg: cron
-      - file: /usr/local/bin/backup-file
-      - file: bash
+      - pkg: nagios-nrpe-server

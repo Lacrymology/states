@@ -38,23 +38,38 @@ include:
   - ssl.nrpe
 {% endif %}
 
+elasticsearch_cluster:
+  monitoring:
+    - run_check
+    - wait: 60
+    - accepted_failure: 1 nodes in cluster (outside range 2:2)
+    - require:
+      - sls: elasticsearch
+      - sls: elasticsearch.nrpe
+
+elasticsearch_test_create_sample_data:
+  pkg:
+    - installed
+    - name: curl
+  cmd:
+    - run
+    - name: 'curl -XPUT ''http://localhost:9200/twitter/tweet/1'' -d ''{"user" : "kimchy", "post_date" : "2009-11-15T14:12:12", "message" : "trying out Elasticsearch"}'''
+    - require:
+      - sls: elasticsearch
+      - sls: elasticsearch.backup
+      - pkg: elasticsearch_test_create_sample_data
+
 test:
+  cmd:
+    - run
+    - name: sleep 7 && /etc/cron.daily/backup-elasticsearch
+    - require:
+      - sls: elasticsearch
+      - sls: elasticsearch.backup
+      - cmd: elasticsearch_test_create_sample_data
   monitoring:
     - run_all_checks
     - order: last
     - wait: 60
     - exclude:
       - elasticsearch_cluster
-  cmd:
-    - run
-    - name: /etc/cron.daily/backup-elasticsearch
-    - require:
-      - file: backup-elasticsearch
-    - order: last
-
-elasticsearch_cluster:
-  monitoring:
-    - run_check
-    - wait: 60
-    - order: last
-    - accepted_failure: 1 nodes in cluster (outside range 2:2)

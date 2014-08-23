@@ -30,6 +30,7 @@ include:
   - local
   - s3cmd
   - s3lite
+  - backup.client.base
 
 /usr/local/bin/backup-store:
   file:

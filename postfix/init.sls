@@ -137,12 +137,17 @@ postfix:
     - mode: 400
     - user: postfix
     - group: postfix
-    - content: |
-        {{ pillar['postfix']['aliases'] }}
+    - contents: |
+        {{ pillar['postfix']['aliases'] | indent(8) }}
     - require:
       - pkg: postfix
   cmd:
+    {%- if salt['file.file_exists']('/etc/postfix/virtual.db') %}
     - wait
+    {%- else %}
+    - run
+    {%- endif %}
+    - name: postmap /etc/postfix/virtual
     - watch:
       - file: /etc/postfix/virtual
 {%- endif %}

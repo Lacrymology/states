@@ -73,7 +73,7 @@ production: &base
 
     {#- Email settings #}
     email_from: {{ salt['pillar.get']('gitlab:smtp:from', pillar['smtp']['from']) }}
-    support_email: {{ salt['pillar.get']('gitlab:support_email', '""') }}
+    support_email: {{ salt['pillar.get']('gitlab:support_email', '[]') }}
 
     {#- User settings #}
 

@@ -25,7 +25,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-{%- macro nginx_instance(deployment, http=True, http_uri='/', http_result=None, http_port=80, https_uri=None, https_result="200 OK", prefix=None, timeout=False, domain_name=None, allow_ssl_redirect=True, check_interval=False, expire_days=15) -%}
+{%- macro nginx_instance(deployment, http=True, http_uri='/', http_result=None, http_port=80, https_uri=None, https_result="200 OK", prefix=None, timeout=False, domain_name=None, allow_ssl_redirect=True, check_interval=False) -%}
+    {%- set expire_days = salt['pillar.get']('ssl:warning_certificate', 15) -%}
     {%- set first_ip = salt['network.ip_addrs']()[0] -%}
     {%- if not prefix -%}
         {%- set prefix = deployment -%}
@@ -73,7 +74,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
   description: {{ deployment|capitalize }} HTTPS Certificate Expiration
   check_interval: 1440 {#- only need to check https certificate each day #}
   freshness_threshold: {{ (1440 + 10) * expire_days }}
-  command: /usr/lib/nagios/plugins/check_http -S -H {{ domain_name }} -C {{ salt['pillar.get']('ssl_https_max_age', 60) }} -I {{ first_ip }}
+  command: /usr/lib/nagios/plugins/check_http -S -H {{ domain_name }} -C {{ expire_days }} -I {{ first_ip }}
   service_dependencies: ',nginx_master'
 
         {%- if 'dnsutils' in salt['pkg.list_pkgs']() -%}

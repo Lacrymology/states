@@ -37,15 +37,23 @@ include:
   - python.nrpe
 
 /usr/lib/nagios/plugins/check_new_logs.py:
+  module:
+    - run
+    - name: pip.install
+    - pkgs: requests==0.14.2
+    - bin_env: /usr/local/nagios
+    - require:
+      - module: nrpe-virtualenv
   file:
     - managed
+    - template: jinja
     - source: salt://graylog2/server/nrpe/check.py
     - user: nagios
     - group: nagios
     - mode: 550
     - require:
+      - module: /usr/lib/nagios/plugins/check_new_logs.py
       - module: nrpe-virtualenv
-      - module: pyelasticsearch
       - pkg: nagios-nrpe-server
 
 {%- call passive_check('graylog2.server') %}

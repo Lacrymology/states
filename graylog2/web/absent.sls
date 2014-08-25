@@ -27,23 +27,35 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Uninstall a graylog2 web interface server.
 -#}
-{% set version = '0.11.0' %}
+{% set version = '0.20.3' %}
 {% set web_root_dir = '/usr/local/graylog2-web-interface-' + version %}
+{% set user = salt['pillar.get']('graylog2:server:user', 'graylog2-ui') %}
+
 /etc/logrotate.d/graylog2-web:
   file:
     - absent
 
 graylog2-web:
-  uwsgi:
+  user:
     - absent
-    - name: graylog2
+    - name: {{ user }}
+    - require:
+      - service: graylog2-web
+  group:
+    - absent
+    - name: {{ user }}
+    - require:
+      - service: graylog2-web
+  service:
+    - dead
+    - enable: False
 
 {% for file in ('/etc/nginx/conf.d/graylog2-web.conf', web_root_dir, '/etc/init/graylog2-web.conf') %}
 {{ file }}:
   file:
     - absent
     - require:
-      - uwsgi: graylog2-web
+      - service: graylog2-web
 {% endfor %}
 
 {% for command in ('streamalarms', 'subscriptions') %}

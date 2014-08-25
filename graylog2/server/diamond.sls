@@ -29,7 +29,6 @@ Diamond statistics for Graylog2 Server.
 -#}
 include:
   - diamond
-  - elasticsearch.diamond
   - mongodb.diamond
   - rsyslog.diamond
 

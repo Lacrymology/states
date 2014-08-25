@@ -28,7 +28,11 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 # {{ pillar['message_do_not_modify'] }}
 
 upstream graylog2 {
-    server unix:///var/lib/uwsgi/graylog2.sock;
+    server 127.0.0.1:9000;
+}
+
+upstream rest_api {
+    server {{ salt['pillar.get']('graylog2:rest_listen_uri', 'http://127.0.0.1:12900') | replace('http:', '') | replace('/', '') }};
 }
 
 server {
@@ -47,21 +51,19 @@ server {
 {% endif %}
 {#- web app logic #}
     server_name {% for hostname in pillar['graylog2']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
-    root /usr/local/graylog2-web-interface-{{ version }}/public;
+    root /var/www;
 
 {% include "nginx/block_hacks.jinja2" %}
 
-    location /assets/ {
-        expires max;
-        autoindex off;
-    }
-
 {% include 'nginx/location_robots.jinja2' %}
+
+    location /api {
+        rewrite /api/(.*) /$1  break;
+        proxy_pass http://rest_api;
+    }
 
     location / {
         gzip off;
-        uwsgi_modifier1 7;
-        include uwsgi_params;
-        uwsgi_pass graylog2;
+        proxy_pass http://graylog2;
     }
 }

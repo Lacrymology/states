@@ -26,10 +26,10 @@ Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 
-{% set version = '0.11.0' %}
+{% set version = '0.20.3' %}
 graylog2_procs:
   description: Graylog2 Daemon
-  command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -C java -a '-jar /usr/local/graylog2-server-{{ version }}/graylog2-server.jar'"
+  command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -C java -a '-jar /usr/local/graylog2-server-{{ version }}/graylog2-server'"
 
 {#- if graylog2_address isn't 127.0.0.1 test fail -#}
 {%- if not salt['pillar.get']('__test__', False) %}

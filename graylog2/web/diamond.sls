@@ -28,8 +28,22 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Diamond statistics for Graylog2 Web Interface.
 -#}
-{%- from 'diamond/macro.jinja2' import uwsgi_diamond with context %}
-{%- call uwsgi_diamond('graylog2') %}
-- mongodb.diamond
-- rsyslog.diamond
-{%- endcall %}
+{% set version = '0.20.3' %}
+
+include:
+  - diamond
+  - mongodb.diamond
+  - nginx.diamond
+  - rsyslog.diamond
+
+graylog2_web_diamond_resource:
+  file:
+    - accumulated
+    - name: processes
+    - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
+    - require_in:
+      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
+    - text:
+      - |
+        [[graylog2-web]]
+        cmdline = ^java.+-Duser\.dir=/usr/local/graylog2-web-interface.*$

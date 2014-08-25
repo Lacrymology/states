@@ -39,73 +39,79 @@ Once this state is installed, you need to:
   /users/
 -#}
 include:
-  - build
   - graylog2
+  - java.7
   - local
   - logrotate
   - mongodb
   - nginx
   - rsyslog
-  - ruby
 {% if salt['pillar.get']('graylog2:ssl', False) %}
   - ssl
 {% endif %}
-  - uwsgi.ruby
   - web
 
-{% set version = '0.11.0' %}
-{% set checksum = 'md5=35d20002dbc7f192a1adbcd9b53b2732' %}
+{% set version = '0.20.3' %}
+{% set checksum = 'md5=7da99597ba0a3c81ca69882a9883ee9a' %}
+{% set user = salt['pillar.get']('graylog2:web:user', 'graylog2-ui') %}
 {% set web_root_dir = '/usr/local/graylog2-web-interface-' + version %}
 
-{% for previous_version in ('0.9.6p1',) %}
+graylog2-web-{{ user }}:
+  user:
+    - present
+    - name: {{ user }}
+    - home: /var/run/{{ user }}
+    - shell: /bin/false
+
+/var/run/{{ user }}:
+  file:
+    - directory
+    - user: {{ user }}
+    - group: {{ user }}
+    - mode: 750
+    - makedirs: True
+    - require:
+      - user: graylog2-web-{{ user }}
+
+/var/log/{{ user }}:
+  file:
+    - directory
+    - user: {{ user }}
+    - group: {{ user }}
+    - mode: 775
+    - makedirs: True
+    - require:
+      - user: graylog2-web-{{ user }}
+
+{% for previous_version in ('0.9.6p1', '0.11.0') %}
 /usr/local/graylog2-web-interface-{{ previous_version }}:
   file:
     - absent
 {% endfor %}
 
-{% for filename in ('general', 'indexer', 'mongoid') %}
-graylog2-web-{{ filename }}:
+graylog2-web_upstart:
   file:
     - managed
-    - name: {{ web_root_dir }}/config/{{ filename }}.yml
-    - template: jinja
-    - user: www-data
-    - group: www-data
-    - mode: 440
-    - source: salt://graylog2/web/{{ filename }}.jinja2
-    - require:
-      - user: web
-      - archive: graylog2-web
-{% endfor %}
-
-{% for filename in ('config', 'email') %}
-graylog2-web-{{ filename }}:
-  file:
-    - absent
-    - name: {{ web_root_dir }}/config/{{ filename }}.yml
-    - require:
-      - archive: graylog2-web
-{% endfor %}
-
-graylog2-web-upstart:
-  file:
-    - absent
     - name: /etc/init/graylog2-web.conf
-  cmd:
-    - wait
-    - name: stop graylog2-web
-    - watch:
-      - file: graylog2-web-upstart
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 600
+    - source: salt://graylog2/web/upstart.jinja2
+    - context:
+      web_root_dir: {{ web_root_dir }}
+      user: {{ user }}
 
-{{ web_root_dir }}/log:
+{{ web_root_dir }}/logs:
   file:
     - symlink
     - force: True
-    - target: /var/log/graylog2/
+    - target: /var/log/{{ user }}
     - require:
       - archive: graylog2-web
+      - file: /var/log/{{ user }}
 
-graylog2-web:
+graylog2-web-logrotate:
   file:
     - managed
     - name: /etc/logrotate.d/graylog2-web
@@ -116,15 +122,19 @@ graylog2-web:
     - source: salt://graylog2/web/logrotate.jinja2
     - require:
       - pkg: logrotate
-  gem:
-    - installed
-    - name: bundler
-    - version: 1.3.1
+        
+graylog2-web:
+  file:
+    - managed
+    - name: {{ web_root_dir }}/conf/graylog2-web-interface.conf
+    - template: jinja
+    - user: {{ user }}
+    - group: {{ user }}
+    - mode: 440
+    - source: salt://graylog2/web/config.jinja2
     - require:
-      - pkg: ruby
-      - pkg: build
-    - watch:
       - archive: graylog2-web
+      - user: graylog2-web-{{ user }}
   archive:
     - extracted
     - name: /usr/local/
@@ -139,49 +149,20 @@ graylog2-web:
     - if_missing: {{ web_root_dir }}
     - require:
       - file: /usr/local
-  cmd:
-    - wait
-    - stateful: False
-    - name: bundle install
-    - cwd: {{ web_root_dir }}
-    - require:
-      - gem: graylog2-web
-    - watch:
-      - pkg: ruby
-      - archive: graylog2-web
-  uwsgi:
-    - available
-    - name: graylog2
+  service:
+    - running
     - enable: True
-    - template: jinja
-    - user: www-data
-    - group: www-data
-    - mode: 440
-    - source: salt://graylog2/web/uwsgi.jinja2
-    - context:
-      version: {{ version }}
-    - require:
-      - user: web
-      - file: {{ web_root_dir }}/log
-      - service: uwsgi_emperor
-      - service: mongodb
-      - cmd: graylog2-web
-      - service: rsyslog
-      - file: /var/log/graylog2
     - watch:
+      - file: graylog2-web_upstart
+      - pkg: openjdk_jre_headless
       - archive: graylog2-web
-{% for filename in ('general', 'indexer', 'mongoid') %}
-      - file: graylog2-web-{{ filename }}
-{% endfor %}
-
-change_graylog2_web_dir_permission:
-  cmd:
-    - wait
-    - watch:
-      - archive: graylog2-web
-    - name: chown -R www-data:www-data {{ web_root_dir }}
+      - user: graylog2-web-{{ user }}
     - require:
-      - user: web
+      - file: /var/run/{{ user }}
+      - file: /var/log/{{ user }}
+  uwsgi:
+    - absent
+    - name: graylog2
 
 {% for command in ('streamalarms', 'subscriptions') %}
 /etc/cron.hourly/graylog2-web-{{ command }}:
@@ -199,7 +180,6 @@ change_graylog2_web_dir_permission:
     - mode: 440
     - require:
       - pkg: nginx
-      - uwsgi: graylog2-web
     - context:
       version: {{ version }}
 
@@ -211,3 +191,10 @@ extend:
 {% if salt['pillar.get']('graylog2:ssl', False) %}
         - cmd: ssl_cert_and_key_for_{{ pillar['graylog2']['ssl'] }}
 {% endif %}
+
+{%- from 'macros.jinja2' import manage_pid with context %}
+{%- call manage_pid('/var/run/' ~ user ~ '/graylog2-web.pid', user , 'syslog', 'graylog2-web') %}
+- user: graylog2-web-{{ user }}
+- file: /var/run/{{ user }}
+- pkg: rsyslog
+{%- endcall %}

@@ -43,14 +43,16 @@ include:
 
 {#- Upgrade uwsgi from 1.4 to 1.9.17.1 #}
 {% set prefix = '/etc/uwsgi' %}
-{% for filename in salt['file.find'](prefix, name='*.ini', type='f') %}
+{#- salt does not support maxdepth, use this hack to get list of old ini files in /etc/uwsgi, not deeper #}
+{%- for filename in salt['file.find'](prefix, name='*.ini', type='f') %}
+    {%- if (filename.split('/')|length) == 4 %}
 uwsgi_upgrade_remove_old_app_config_{{ filename }}:
   file:
     - absent
     - name: {{ filename }}
     - require_in:
       - file: uwsgi_upgrade_remove_old_version
-
+    {%- endif %}
 {%- endfor %}
 
 uwsgi_upgrade_remove_old_version:

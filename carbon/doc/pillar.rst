@@ -39,8 +39,7 @@ Example::
     carbon:
       instances: 2
     retentions:
-      default_1min_for_1_month:
-        pattern: .*
+      - pattern: .*
         retentions: 60s:30d
 
 graphite:carbon:instances
@@ -52,8 +51,7 @@ Number of instances to deploy, should <= numbers of
 graphite:retentions
 ~~~~~~~~~~~~~~~~~~~
 
-The retentions line can specify multiple retentions. Each retention of
-``frequency:history`` is separated by a comma. Frequency should >= 60s
+The retentions policies of metrics stored on disk. Frequency should >= 60s
 as metric collectors usually configured to send data each 60 seconds. Setting
 frequency < 60s may cause discontinuous line in Graphite graph.
 Changing this pillar key will change retentions policy of new ``.wsp`` files,

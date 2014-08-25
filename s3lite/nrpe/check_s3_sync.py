@@ -129,7 +129,7 @@ def main():
                           nap.ScalarContext('age', args.warning, args.warning))
         check.main(timeout=args.timeout)
     except boto.exception.S3ResponseError:
-        raise boto.exception.S3ResponseError('Bad or non-existing bucket name')
+        raise ValueError('Bad or non-existing bucket name')
     except Exception:
         raise
 

@@ -150,4 +150,16 @@ postfix:
     - name: postmap /etc/postfix/virtual
     - watch:
       - file: /etc/postfix/virtual
+{%- else %}
+/etc/postfix/virtual:
+  file:
+    - absent
+    - require:
+      - pkg: postfix
+
+/etc/postfix/virtual.db:
+  file:
+    - absent
+    - require:
+      - pkg: postfix
 {%- endif %}

@@ -28,3 +28,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 cron:
   pkg:
     - purged
+
+/etc/cron.daily/apt-clean:
+  file:
+    - absent

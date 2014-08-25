@@ -30,6 +30,7 @@ Nagios NRPE check for cron.
 {%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - apt.nrpe
+  - bash.nrpe
   - nrpe
   - rsyslog.nrpe
 

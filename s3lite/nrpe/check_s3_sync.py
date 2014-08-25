@@ -45,7 +45,6 @@ import bfs
 
 log = logging.getLogger('nagiosplugin')
 logging.basicConfig(level=logging.DEBUG)
-NEG_INF = float('-inf')
 
 
 class BackupAge(nap.Resource):
@@ -65,10 +64,6 @@ class BackupAge(nap.Resource):
 
             return [nap.Metric('age', value, 'hours')]
 
-        def fail(*msg):
-            # return NEG_INF as age for all errors this will suffer
-            return log_and_return(NEG_INF, *msg)
-
         s3 = boto.connect_s3(self.key, self.secret)
         bucket = s3.get_bucket(self.bucket)
         normalized_fn = self.path.strip(os.sep).replace(os.sep, '_')
@@ -83,7 +78,7 @@ class BackupAge(nap.Resource):
             try:
                 log.debug(backup_mdata)
                 if backup_mdata['processed'] == 0:
-                    return fail('Last backup processed no-file')
+                    raise ValueError('Last backup processed no-file')
                 else:
                     assert backup_mdata['processed'] > 0
                     # S3 time format sample 'Wed, 06 Aug 2014 03:07:27 GMT'
@@ -98,13 +93,15 @@ class BackupAge(nap.Resource):
                         loglevel='info',
                         )
             except KeyError:
-                return fail('Malformed log file')
+                log.critical('Log file %s is malformed', log_path)
+                raise KeyError('Malformed s3lite log file')
         else:
-            return fail('Log file %s does not exist', log_path)
+            log.critical('Log file %s does not exist', log_path)
+            raise RuntimeError('S3lite log file does not exist')
 
 
+@nap.guarded
 def main():
-    import sys
     argp = bfs.common_argparser(default_config_path='/etc/nagios/s3lite.yml')
     argp.add_argument('path', type=str, help='Path used when backup')
     argp.add_argument('bucket',
@@ -131,13 +128,10 @@ def main():
                                     ),
                           nap.ScalarContext('age', args.warning, args.warning))
         check.main(timeout=args.timeout)
-    except boto.exception.S3ResponseError as e:
-        log.error('Bucket name %r is bad or does not exist.', args.bucket,
-                  exc_info=True)
-        sys.exit(1)
-    except Exception as e:
-        log.error(e, exc_info=True)
-        sys.exit(1)
+    except boto.exception.S3ResponseError:
+        raise boto.exception.S3ResponseError('Bad or non-existing bucket name')
+    except Exception:
+        raise
 
 
 if __name__ == "__main__":

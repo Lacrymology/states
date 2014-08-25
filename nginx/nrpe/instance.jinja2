@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-{%- macro nginx_instance(deployment, http=True, http_uri='/', http_result=None, http_port=80, https_uri=None, https_result="200 OK", prefix=None, timeout=False, domain_name=None, allow_ssl_redirect=True, check_interval=False, expire_days=30) -%}
+{%- macro nginx_instance(deployment, http=True, http_uri='/', http_result=None, http_port=80, https_uri=None, https_result="200 OK", prefix=None, timeout=False, domain_name=None, allow_ssl_redirect=True, check_interval=False, expire_days=15) -%}
     {%- set first_ip = salt['network.ip_addrs']()[0] -%}
     {%- if not prefix -%}
         {%- set prefix = deployment -%}

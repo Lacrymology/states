@@ -24,39 +24,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
-#}
-{%- macro mysql_instance(formula, dbname, password=None, username=None) -%}
-{#- password args is not used anymore but turned to kwarg for backward compatible #}
-{%- if not username is defined %}
-{%- set username = dbname %}
+-#}
+# {{ pillar['message_do_not_modify'] }}
+
+PyMySQL==0.6.2
+nagiosplugin==1.2.1
+{%- if 'files_archive' in pillar %}
+{{ pillar['files_archive'] }}/pip/bfs-0.2.5.tar.gz
+{%- else %}
+http://archive.robotinfra.com/pip/bfs-0.2.5.tar.gz
 {%- endif %}
-
-{{ dbname }}_mysql:
-  description: {{ dbname|capitalize }} MySQL Database
-  command: /usr/lib/nagios/plugins/check_mysql_query.py -F {{ formula }} -N {{ dbname }}_mysql
-  context:
-    passwd: {{ password }}
-    user: {{ username }}
-    host: localhost
-    database: {{ dbname }}
-{%- endmacro %}
-
-{%- macro mysql_instance_prefix(deployment, prefix=None) -%}
-    {%- if not prefix -%}
-        {%- set prefix = deployment -%}
-    {%- endif -%}
-{%- set username = salt['pillar.get'](prefix + ':db:username', deployment)  %}
-{%- set dbname = salt['pillar.get'](prefix + ':db:name', deployment) %}
-{{ mysql_instance(dbname, username=username) }}
-{%- endmacro %}
-
-{%- macro mysql_nrpe_config_absent(dbname, username=None) -%}
-{%- if not username is defined %}
-{%- set username = dbname %}
-{%- endif %}
-
-mysql_check_query_nrpe_config:
-  file:
-    - absent
-    - name: /etc/nagios/mysql_{{ username }}@{{ dbname }}.cfg
-{%- endmacro %}

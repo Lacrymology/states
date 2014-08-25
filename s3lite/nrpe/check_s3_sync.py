@@ -102,7 +102,6 @@ class BackupAge(nap.Resource):
 
 @nap.guarded
 def main():
-    import sys
     argp = bfs.common_argparser(default_config_path='/etc/nagios/s3lite.yml')
     argp.add_argument('path', type=str, help='Path used when backup')
     argp.add_argument('bucket',
@@ -130,9 +129,9 @@ def main():
                           nap.ScalarContext('age', args.warning, args.warning))
         check.main(timeout=args.timeout)
     except boto.exception.S3ResponseError:
-        log.error('Bucket name %r is bad or does not exist.', args.bucket,
-                  exc_info=True)
-        sys.exit(1)
+        raise boto.exception.S3ResponseError('Bad or non-existing bucket name')
+    except Exception:
+        raise
 
 
 if __name__ == "__main__":

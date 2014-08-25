@@ -38,13 +38,12 @@ Mandatory
 Example::
   
   graylog2:
-    root_password_sha2: 06f8a1541ca80cfe08fe6fe7576c7e37a3480e8d1a12486fc9d85880478ab2cb
+    root_password: 06f8a1541ca80cfe08fe6fe7576c7e37a3480e8d1a12486fc9d85880478ab2cb
 
-graylog2:root_password_sha2
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+graylog2:root_password
+~~~~~~~~~~~~~~~~~~~~~~
 
-SHA-256 hash of root user's password.
-Create one by using for example: ``echo -n yourpassword | shasum -a 256``
+Graylog2 root password.
 
 Optional
 --------

@@ -34,7 +34,7 @@ apt:
   Run them only each 6 hours.
   #}
   check_interval: 360
-  freshness_threshold: {{ (360 + 10) * 60 }}
+  freshness_threshold: 370
   retry_interval: 5
   notifications_enabled: 0
   {#- enable only notification for real error #}
@@ -45,7 +45,7 @@ apt:
 apt_rc:
   description: APT Not-Purged
   check_interval: 360
-  freshness_threshold: {{ (360 + 10) * 60 }}
+  freshness_threshold: 370
   retry_interval: 5
   notifications_enabled: 0
   notification_options: c

@@ -35,7 +35,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 {{ appname }}_nginx_https_certificate:
   description: HTTPS Certificate Expiration
   check_interval: 1440 {#- only need to check https certificate each day #}
-  freshness_threshold: {{ (1440 + 10) * 60 }}
+  freshness_threshold: 1450
 
 {{ appname }}_uwsgi_master:
   description: {{ appname|title }} uWSGI Master Process

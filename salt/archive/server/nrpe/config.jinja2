@@ -33,6 +33,6 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 salt_archive_timestamp:
   description: Salt Archive Synchronization
   check_interval: 900
-  freshness_threshold: {{ (900 + 10) * 60 }}
+  freshness_threshold: 910
   command: '/usr/lib/nagios/plugins/check_file_age -w {{ max_age }} -c {{ max_age }} /var/cache/salt/master/sync_timestamp.dat'
 {%- endif -%}

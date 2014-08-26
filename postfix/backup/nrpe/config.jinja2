@@ -32,4 +32,5 @@ postfix_backup_file_procs:
 postfix_backup:
   description: Postfix Backup Age And Size
   command: /usr/lib/nagios/plugins/check_backup.py -w {{ salt['pillar.get']('backup:age', 48) }} postfix
-  check_interval: {{ salt['pillar.get']('backup:check_interval', 2160) }}
+  check_interval: 720
+  freshness_threshold: 730

@@ -56,6 +56,8 @@ salt_master_mine:
   description: Salt Master Unfinished Minions
   check_interval: 360
   freshness_threshold: 370
+  arguments:
+    timeout: {{ 15 * 60 * 60 }} {#- this should never need more than 15 minutes to -#}
 {#- sudo for reading salt config files #}
   command: sudo /usr/lib/nagios/plugins/check_mine_minions.py -F salt.master -N salt_master_mine --cronresult
     {%- endif -%}

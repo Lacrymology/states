@@ -57,10 +57,10 @@ openssh-server:
     - watch:
       - pkg: openssh-server
       - file: openssh-server
-{#- PID file owned by root, no need to manage #}
+{#- PID file owned by root, no need to manage -#}
 
-{% for user in salt['pillar.get']('root_keys', []) -%}
-  {% for key in salt['pillar.get']('root_keys:' ~ user, []) -%}
+{%- for user in salt['pillar.get']('root_keys', []) -%}
+  {%- for key in salt['pillar.get']('root_keys:' ~ user, []) %}
 ssh_server_root_{{ key }}:
   ssh_auth:
     - present
@@ -73,8 +73,8 @@ ssh_server_root_{{ key }}:
       - file: /usr/local/bin/root-shell-wrapper
     - require_in:
       - service: openssh-server
-  {% endfor %}
-{% endfor %}
+  {%- endfor -%}
+{%- endfor %}
 
 /usr/local/bin/root-shell-wrapper:
   file:

@@ -78,20 +78,21 @@ class BackupAge(nap.Resource):
             try:
                 log.debug(backup_mdata)
                 if backup_mdata['processed'] == 0:
-                    raise ValueError('Last backup processed no-file')
-                else:
-                    assert backup_mdata['processed'] > 0
-                    # S3 time format sample 'Wed, 06 Aug 2014 03:07:27 GMT'
-                    last = datetime.strptime(logkey.last_modified,
-                                             '%a, %d %b %Y %H:%M:%S %Z')
-                    now = datetime.utcnow()
-                    age_in_hours = (now - last).seconds / 60 / 60
-                    return log_and_return(
-                        age_in_hours,
-                        'Last backup processed %d files',
-                        backup_mdata['processed'],
-                        loglevel='info',
-                        )
+                    log.warning('Last backup processed no-file,'
+                                ' maybe backed up dir does not contain'
+                                ' any regular file')
+
+                # S3 time format sample 'Wed, 06 Aug 2014 03:07:27 GMT'
+                last = datetime.strptime(logkey.last_modified,
+                                         '%a, %d %b %Y %H:%M:%S %Z')
+                now = datetime.utcnow()
+                age_in_hours = (now - last).seconds / 60 / 60
+                return log_and_return(
+                    age_in_hours,
+                    'Last backup processed %d files',
+                    backup_mdata['processed'],
+                    loglevel='info',
+                    )
             except KeyError:
                 log.critical('Log file %s is malformed', log_path)
                 raise KeyError('Malformed s3lite log file')

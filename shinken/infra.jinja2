@@ -298,6 +298,8 @@ define service {
     check_command bp_rule!({{ pillar['shinken']['architecture']['broker'][0] }},{{ service }} | {{ pillar['shinken']['architecture']['broker'][1] }},{{ service }})
     business_rule_service_notification_options n
     business_rule_smart_notifications 1
+    active_checks_enabled 1
+    passive_checks_enabled 0
 }
     {%- endfor -%}
 {%- endif %}

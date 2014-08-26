@@ -67,7 +67,7 @@ def discover_checks(directory='/etc/nagios/nsca.d'):
             # shinken and it might contains sensible information.
             # same with subkey 'context' that hold context passed to NRPE
             # check.
-            for subkey in ('command', 'context'):
+            for subkey in ('command', 'arguments'):
                 for key in check:
                     try:
                         del check[key][subkey]

@@ -43,7 +43,7 @@ Example::
 graylog2:admin_password
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-Graylog2 root password.
+Graylog2 admin password.
 
 Optional
 --------

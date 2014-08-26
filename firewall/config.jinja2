@@ -26,6 +26,7 @@ Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 {%- set mine = salt['mine.get']('*', 'monitoring.data') -%}
+{%- set pillars_ip = salt['pillar.get']('ip_addresses', []) -%}
 # {{ pillar['message_do_not_modify'] }}
 *nat
 :PREROUTING ACCEPT [0:0]
@@ -58,12 +59,12 @@ COMMIT
     {%- set addr_types = ['public', 'private'] -%}
   {%- endif -%}
   {%- for addr_type in addr_types -%}
-    {%- if mine[host]['ip_addrs'][addr_type] not in pillar['ip_addresses'] %}
+    {%- if mine[host]['ip_addrs'][addr_type] not in pillars_ip %}
 -A INPUT -i {% if grains['virtual'] == 'openvzve' %}venet0{% else %}eth0{% endif %} -s {{ mine[host]['ip_addrs'][addr_type] }}/32 -j ACCEPT
     {%- endif -%}
   {%- endfor -%}
 {%- endfor -%}
-{%- for host in pillar['ip_addresses'] %}
+{%- for host in pillars_ip %}
 -A INPUT -i {% if grains['virtual'] == 'openvzve' %}venet0{% else %}eth0{% endif %} -s {{ host }}/32 -j ACCEPT
 {%- endfor -%}
 {%- for protocol in pillar['firewall']['filter'] -%}

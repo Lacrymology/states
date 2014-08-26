@@ -37,7 +37,7 @@ import nagiosplugin
 import requests
 
 
-class SystemThroughput(nagiosplugin.Resource):
+class Graylog2Throughput(nagiosplugin.Resource):
 
     def __init__(self, api_url, username, password):
 
@@ -57,7 +57,7 @@ def main():
     argp.add_argument('-w', '--warning', metavar='RANGE', default='1:10000',
                       help='critical if message numbers is outside RANGE')
     args = argp.parse_args()
-    throughput = SystemThroughput(
+    throughput = Graylog2Throughput(
         'http://127.0.0.1:12900/system/throughput',
         "{{ salt['pillar.get']('graylog2:root_username', 'admin') }}",
         "{{ pillar['graylog2']['admin_password'] }}")

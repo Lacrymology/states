@@ -58,7 +58,5 @@ salt_master_mine:
   freshness_threshold: 370
 {#- sudo for reading salt config files #}
   command: sudo /usr/lib/nagios/plugins/check_mine_minions.py -F salt.master -N salt_master_mine --cronresult
-  arguments:
-    timeout: 6
     {%- endif -%}
 {%- endblock -%}

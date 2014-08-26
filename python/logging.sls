@@ -29,7 +29,7 @@ logging:
       formatter: only_message
 {%- if sentry_dsn %}
     sentry:
-      level: ERROR
+      level: WARNING
       class: raven.handlers.logging.SentryHandler
       dsn: {{ sentry_dsn }}
 {%- endif %}

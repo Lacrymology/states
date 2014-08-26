@@ -60,7 +60,7 @@ def main():
     throughput = SystemThroughput(
         'http://127.0.0.1:12900/system/throughput',
         "{{ salt['pillar.get']('graylog2:root_username', 'admin') }}",
-        "{{ pillar['graylog2']['root_password'] }}")
+        "{{ pillar['graylog2']['admin_password'] }}")
     check = nagiosplugin.Check(
         throughput,
         nagiosplugin.ScalarContext('throughput', args.warning, args.warning))

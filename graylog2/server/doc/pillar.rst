@@ -38,10 +38,10 @@ Mandatory
 Example::
   
   graylog2:
-    root_password: 06f8a1541ca80cfe08fe6fe7576c7e37a3480e8d1a12486fc9d85880478ab2cb
+    admin_password: 06f8a1541ca80cfe08fe6fe7576c7e37a3480e8d1a12486fc9d85880478ab2cb
 
-graylog2:root_password
-~~~~~~~~~~~~~~~~~~~~~~
+graylog2:admin_password
+~~~~~~~~~~~~~~~~~~~~~~~
 
 Graylog2 root password.
 

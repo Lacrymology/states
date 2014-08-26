@@ -143,6 +143,11 @@ def managed(name, source=None, template='jinja',
         ret['result'] = None
         return ret
 
+    # we need compare hash of rendered nrpe file against ``name`` file,
+    # which managed, so change hash of source with hash of rendered file
+    source_sum['hsum'] = __salt__['file.get_hash'](tmp,
+                                                   source_sum['hash_type'])
+
     # manage nrpe config file
     if comment_ and contents is None:
         return _error(ret, comment_)

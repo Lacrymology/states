@@ -34,7 +34,6 @@ __author__ = 'Quan Tong Anh'
 __maintainer__ = 'Quan Tong Anh'
 __email__ = 'quanta@robotinfra.com'
 
-import argparse
 import socket
 import re
 from datetime import datetime
@@ -222,7 +221,7 @@ class SslSummary(nap.Summary):
 
 @nap.guarded
 def main():
-    parser = argparse.ArgumentParser()
+    parser = bfe.ArgumentParser()
     parser.add_argument('-H', '--host', type=str, required=True)
     parser.add_argument('-p', '--port', type=int, default=443)
     parser.add_argument('-v', '--verbose', action='count', default=0,
@@ -230,7 +229,7 @@ def main():
     parser.add_argument('-t', '--timeout', type=int, default=60)
     args = parser.parse_args()
 
-    check = nap.Check(
+    check = bfe.Check(
         SslConfiguration(args.host, args.port),
         nap.ScalarContext('sslscore',
                           nap.Range('@65:80'), nap.Range('@0:65')),

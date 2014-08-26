@@ -76,6 +76,7 @@ salt_mine_collect_minions_data:
     - source: salt://salt/master/nrpe/cron.jinja2
     - require:
       - pkg: cron
+      - file: /usr/lib/nagios/plugins/check_mine_minions.py
     - watch_in:
       - service: cron
 

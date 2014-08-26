@@ -33,15 +33,16 @@ __author__ = 'Quan Tong Anh'
 __maintainer__ = 'Quan Tong Anh'
 __email__ = 'quanta@robotinfra.com'
 
-from plugins import PluginCertInfo, PluginOpenSSLCipherSuites
-from utils.SSLyzeSSLConnection import SSLHandshakeRejected
-from nassl import SSLV2, SSLV3, TLSV1, TLSV1_1, TLSV1_2
-from datetime import datetime
-import socket
 import argparse
+import socket
+import re
+from datetime import datetime
+
 import nagiosplugin as nap
 import bfs.nrpe as bfe
-import re
+
+from plugins import PluginCertInfo, PluginOpenSSLCipherSuites
+from utils.SSLyzeSSLConnection import SSLHandshakeRejected
 
 
 class SslConfiguration(nap.Resource):

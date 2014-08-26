@@ -33,7 +33,7 @@ Maintainer: Dang Tung Lam <lamdt@familug.org>
   {#- IP and port which etherpad should bind at #}
   "ip": "127.0.0.1",
   "port" : {{ salt['pillar.get']('etherpad:listen_port', 9001) }},
-  "sessionKey" : "{{ salt['password.generate']('etherpad_sessionkey', 10) }}",
+  "sessionKey" : "{{ salt['password.generate']('etherpad:sessionkey', 10) }}",
   "dbType" : "postgres",
   "dbSettings" : {
                     "user"    : "{{ dbuser }}",

@@ -74,10 +74,10 @@ Example::
     require_authentication: False
     require_authorization: False
     users:
-      lamdt:
+      user1:
         password: 123123123
         admin: True
-      hvn:
+      user2:
         password: 321321321
       <username>:
         password: <userpass>
@@ -179,3 +179,8 @@ Regex for referer URL restriction. When you want block direct access to
 Example: ``^(.*)(sometext|othertex)(.*)$``
 
 Default: ``False``.
+
+etherpad:session_key
+~~~~~~~~~~~~~~~~~~~~
+
+TODO

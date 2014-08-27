@@ -72,6 +72,9 @@ smtpd_sasl_path = private/auth
 smtpd_sasl_security_options = noanonymous
 smtpd_recipient_restrictions = permit_mynetworks, permit_sasl_authenticated, reject_unauth_destination
 {%- endif %}
+{%- if salt['pillar.get']('postfix:aliases', False) %}
+virtual_alias_maps = hash:/etc/postfix/virtual
+{%- endif %}
 {%- if salt['pillar.get']('postfix:virtual_mailbox', False) %}
 {#- set to $mydomain make this host receive mail for your domain
 MAKE SURE YOU ARE NOT SET postfix:mydestination pillar #}

@@ -224,8 +224,6 @@ def main():
     parser = bfe.ArgumentParser()
     parser.add_argument('-H', '--host', type=str, required=True)
     parser.add_argument('-p', '--port', type=int, default=443)
-    parser.add_argument('-v', '--verbose', action='count', default=0,
-                        help="increase output verbosity (use up to 3 times)")
     parser.add_argument('-t', '--timeout', type=int, default=60)
     args = parser.parse_args()
 

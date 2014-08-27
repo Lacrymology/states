@@ -87,6 +87,8 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
   check_interval: {{ 24 * 60 }} {#- a day  #}
   freshness_threshold: {{ ((24 * 60) + 10) * 60 }} {#- 24 hours + 10 minutes #}
   command: /usr/lib/nagios/plugins/check_ssl_configuration.py -H {{ domain_name }}
+  arguments:
+    host: {{ domain_name }}
   service_dependencies: ',nginx_master'
             {%- endif -%}
         {%- endif -%}

@@ -72,8 +72,8 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 {{ deployment }}_nginx_https_certificate:
   description: {{ deployment|capitalize }} HTTPS Certificate Expiration
-  check_interval: 1440 {#- only need to check https certificate each day #}
-  freshness_threshold: 1450
+  check_interval: {{ 24 * 60 }} {#- a day  #}
+  freshness_threshold: {{ ((24 * 60) + 10) * 60 }} {#- 24 hours + 10 minutes #}
   command: /usr/lib/nagios/plugins/check_http -S -H {{ domain_name }} -C {{ expire_days }} -I {{ first_ip }}
   service_dependencies: ',nginx_master'
 

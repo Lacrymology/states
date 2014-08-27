@@ -36,11 +36,11 @@ djangopypi2_backup_postgres_procs:
 djangopypi2_backup_postgres_age:
   description: djangopypi2 PostgreSQL Database Backup's Age
   command: /usr/lib/nagios/plugins/check_backup.py -w {{ salt['pillar.get']('backup:age', 48) }} postgresql-djangopypi2
-  check_interval: 720
-  freshness_threshold: 730
+  check_interval: {{ 12 * 60 }} {#- 12 hours  #}
+  freshness_threshold: {{ ((12 * 60) + 10) * 60 }} {#- 12 hours + 10 minutes #}
 
 djangopypi2_backup_file_age:
   description: djangopypi2 File Backup's Age
   command: /usr/lib/nagios/plugins/check_backup.py -w {{ salt['pillar.get']('backup:age', 48) }} djangopypi2
-  check_interval: 720
-  freshness_threshold: 730
+  check_interval: {{ 12 * 60 }} {#- 12 hours  #}
+  freshness_threshold: {{ ((12 * 60) + 10) * 60 }} {#- 12 hours + 10 minutes #}

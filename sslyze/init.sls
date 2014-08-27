@@ -68,7 +68,6 @@ sslyze:
     - name: /usr/local/nagios/bin/python setup.py install
     - watch:
       - archive: sslyze
-    - require:
       - virtualenv: nrpe-virtualenv
 
 check_ssl_configuration.py:
@@ -106,3 +105,4 @@ sslyze_requirements:
     - requirements: /usr/local/nagios/salt-sslyze-requirements.txt
     - watch:
       - file: sslyze_requirements
+      - virtualenv: nrpe-virtualenv

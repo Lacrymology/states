@@ -222,13 +222,15 @@ class SslSummary(nap.Summary):
 @nap.guarded
 def main():
     parser = bfe.ArgumentParser()
-    parser.add_argument('-H', '--host', type=str, required=True)
+    parser.add_argument('-H', '--host', type=str)
     parser.add_argument('-p', '--port', type=int, default=443)
     parser.add_argument('-t', '--timeout', type=int, default=60)
     args = parser.parse_args()
+    config = bfe.ConfigFile.from_arguments(args)
+    kwargs = config.kwargs('host', 'port')
 
     check = bfe.Check(
-        SslConfiguration(args.host, args.port),
+        SslConfiguration(**kwargs),
         nap.ScalarContext('sslscore',
                           nap.Range('@65:80'), nap.Range('@0:65')),
         nap.ScalarContext('serverHostname',

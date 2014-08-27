@@ -40,6 +40,7 @@ test:
     - exclude:
       - elasticsearch_cluster
       - graylog2_elasticsearch_cluster
+      - graylog2_incoming_logs
 
 graylog2_elasticsearch_cluster:
   monitoring:

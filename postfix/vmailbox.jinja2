@@ -32,6 +32,3 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 {{ user }}@{{ dom }} {{ dom }}/{{ user }}
   {% endfor %}
 {% endfor %}
-{%- if salt['pillar.get']('postfix:aliases', False) %}
-{{ pillar['postfix']['aliases'] }}
-{%- endif %}

@@ -127,3 +127,39 @@ postfix:
     - mode: 400
     - require:
       - file: /etc/postfix
+
+{%- if salt['pillar.get']('postfix:aliases', False) %}
+{# contains alias for email forwarding #}
+/etc/postfix/virtual:
+  file:
+    - managed
+    - template: jinja
+    - mode: 400
+    - user: postfix
+    - group: postfix
+    - contents: |
+        {{ pillar['postfix']['aliases'] | indent(8) }}
+    - require:
+      - pkg: postfix
+  cmd:
+    {%- if salt['file.file_exists']('/etc/postfix/virtual.db') %}
+    - wait
+    {%- else %}
+    - run
+    {%- endif %}
+    - name: postmap /etc/postfix/virtual
+    - watch:
+      - file: /etc/postfix/virtual
+{%- else %}
+/etc/postfix/virtual:
+  file:
+    - absent
+    - require:
+      - pkg: postfix
+
+/etc/postfix/virtual.db:
+  file:
+    - absent
+    - require:
+      - pkg: postfix
+{%- endif %}

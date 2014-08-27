@@ -82,8 +82,8 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 {{ deployment }}_ssl_configuration:
   description: {{ deployment|capitalize }} SSL Configuration
-  check_interval: 1440
-  freshness_threshold: 1450
+  check_interval: {{ 24 * 60 }} {#- a day  #}
+  freshness_threshold: {{ ((24 * 60) + 10) * 60 }} {#- 24 hours + 10 minutes #}
   command: /usr/lib/nagios/plugins/check_ssl_configuration.py -H {{ domain_name }}
   service_dependencies: ',nginx_master'
             {%- endif -%}

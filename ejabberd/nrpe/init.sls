@@ -37,11 +37,6 @@ include:
   - postgresql.server.nrpe
 {%- if salt['pillar.get']('ejabberd:ssl', False) %}
   - ssl.nrpe
-  - sslyze
-
-    {%- call passive_check('ejabberd') -%}
-- file: check_ssl_configuration.py
-    {%- endcall %}
-{%- else %}
-    {{ passive_check('ejabberd') }}
 {%- endif %}
+
+{{ passive_check('ejabberd') }}

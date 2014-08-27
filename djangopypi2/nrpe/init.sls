@@ -54,11 +54,6 @@ include:
   - virtualenv.nrpe
 {% if salt['pillar.get']('djangopypi2:ssl', False) %}
   - ssl.nrpe
-  - sslyze
-
-    {%- call passive_check('djangopypi2') -%}
-- file: check_ssl_configuration.py
-    {%- endcall %}
-{%- else %}
-    {{ passive_check('djangopypi2') }}
 {%- endif %}
+
+{{ passive_check('djangopypi2') }}

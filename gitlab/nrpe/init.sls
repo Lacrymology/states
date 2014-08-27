@@ -55,11 +55,6 @@ include:
   - xml.nrpe
 {%- if salt['pillar.get']('gitlab:ssl', False) %}
   - ssl.nrpe
-  - sslyze
-
-    {%- call passive_check('gitlab') -%}
-- file: check_ssl_configuration.py
-    {%- endcall %}
-{%- else %}
-    {{ passive_check('gitlab') }}
 {%- endif %}
+
+{{ passive_check('gitlab') }}

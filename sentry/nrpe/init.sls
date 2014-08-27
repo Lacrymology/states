@@ -50,3 +50,4 @@ include:
 {%- endif %}
 
 {{ passive_check('sentry') }}
+

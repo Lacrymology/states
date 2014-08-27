@@ -33,11 +33,6 @@ include:
   - nrpe
 {% if salt['pillar.get']('postfix:ssl', False) %}
   - ssl.nrpe
-  - sslyze
-
-    {%- call passive_check('postfix') -%}
-- file: check_ssl_configuration.py
-    {%- endcall %}
-{%- else %}
-    {{ passive_check('postfix') }}
 {%- endif %}
+
+{{ passive_check('postfix') }}

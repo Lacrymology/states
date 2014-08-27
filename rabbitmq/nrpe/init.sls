@@ -36,11 +36,6 @@ include:
   - nginx.nrpe
 {%- if salt['pillar.get']('rabbitmq:ssl', False) %}
   - ssl.nrpe
-  - sslyze
-
-    {%- call passive_check('rabbitmq') -%}
-- file: check_ssl_configuration.py
-    {%- endcall %}
-{%- else %}
-    {{ passive_check('rabbitmq') }}
 {%- endif %}
+
+{{ passive_check('rabbitmq') }}

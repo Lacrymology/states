@@ -44,11 +44,6 @@ include:
   - xml.nrpe
 {%- if salt['pillar.get']('openerp:ssl', False) %}
   - ssl.nrpe
-  - sslyze
-
-    {%- call passive_check('openerp') -%}
-- file: check_ssl_configuration.py
-    {%- endcall %}
-{%- else %}
-    {{ passive_check('openerp') }}
 {%- endif %}
+
+{{ passive_check('openerp') }}

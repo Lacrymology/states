@@ -39,11 +39,6 @@ include:
   - salt.master.nrpe
 {%- if ssl %}
   - ssl.nrpe
-  - sslyze
-
-    {%- call passive_check('salt.api') -%}
-- file: check_ssl_configuration.py
-    {%- endcall %}
-{%- else %}
-    {{ passive_check('salt.api') }}
 {%- endif %}
+
+{{ passive_check('salt.api') }}

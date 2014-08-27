@@ -35,11 +35,6 @@ include:
   - ssh.client.nrpe
 {% if salt['pillar.get']('jenkins:ssl', False) %}
   - ssl.nrpe
-  - sslyze
-
-    {%- call passive_check('jenkins') -%}
-- file: check_ssl_configuration.py
-    {%- endcall %}
-{%- else %}
-    {{ passive_check('jenkins') }}
 {%- endif %}
+
+{{ passive_check('jenkins') }}

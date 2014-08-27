@@ -52,6 +52,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
     {%- if salt['pillar.get']('__test__', False) %} -v{%- endif %}
     {%- if check_interval %}
   check_interval: {{ check_interval }}
+  freshness_threshold: {{ (check_interval + 10) * 60 }} {#- check_interval + 10 minutes in seconds #}
     {%- endif %}
   service_dependencies: ',nginx_master'
 
@@ -67,6 +68,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
         {%- if salt['pillar.get']('__test__', False) %} -v{%- endif %}
     {%- if check_interval %}
   check_interval: {{ check_interval }}
+  freshness_threshold: {{ (check_interval + 10) * 60 }} {#- check_interval + 10 minutes in seconds #}
     {%- endif %}
   service_dependencies: ',nginx_master'
 

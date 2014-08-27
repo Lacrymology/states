@@ -29,6 +29,7 @@ A Python tool that can analyze the SSL configuration of a server
 -#}
 {% set version = "0.9" %}
 include:
+  - cron
   - local
   - nrpe
   - salt.minion.deps
@@ -82,6 +83,8 @@ check_ssl_configuration.py:
       - pkg: nagios-nrpe-server
       - cmd: sslyze
       - pkg: salt_minion_deps
+{#- consumers of sslyze check use cron, make them only require sslyze check script #}
+      - pkg: cron
 
 sslyze_requirements:
   file:

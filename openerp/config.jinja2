@@ -5,7 +5,9 @@ db:
   port: 5432
   password: {{ password }}
 
+{%- if salt['pillar.get']('openerp:company_db', False) %}
 company_db: {{ salt['pillar.get']('openerp:company_db', '""') }}
+{%- endif %}
 
 admin:
   password: {{ pillar['openerp']['password'] }}

@@ -89,6 +89,20 @@ graylog2-web-{{ user }}:
     - absent
 {% endfor %}
 
+graylog2-web_upstart_prep:
+  file:
+    - managed
+    - name: /etc/init/graylog2-web_prep.conf
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 600
+    - source: salt://graylog2/web/upstart_prep.jinja2
+    - context:
+      user: {{ user }}
+    - require:
+      - user: graylog2-web-{{ user }}
+
 graylog2-web_upstart:
   file:
     - managed
@@ -99,6 +113,7 @@ graylog2-web_upstart:
     - mode: 600
     - source: salt://graylog2/web/upstart.jinja2
     - context:
+      file: graylog2-web_upstart_prep
       web_root_dir: {{ web_root_dir }}
       user: {{ user }}
 
@@ -193,7 +208,7 @@ extend:
 {% endif %}
 
 {%- from 'macros.jinja2' import manage_pid with context %}
-{%- call manage_pid('/var/run/' ~ user ~ '/graylog2-web.pid', user , 'syslog', 'graylog2-web') %}
+{%- call manage_pid('/var/run/graylog2-web/graylog2-web.pid', user , 'syslog', 'graylog2-web') %}
 - user: graylog2-web-{{ user }}
 - file: /var/run/{{ user }}
 - pkg: rsyslog

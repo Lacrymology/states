@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Bruno Clermont
+Copyright (c) 2014, Diep Pham
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,37 +22,15 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Bruno Clermont <patate@fastmail.cn>
-Maintainer: Bruno Clermont <patate@fastmail.cn>
-
-State(s) common to graylog2 web and server.
+Author: Diep Pham <favadi@robotinfra.com>
+Maintainer: Diep Pham <favadi@robotinfra.com>
 -#}
 
-{%- set user = salt['pillar.get']('graylog2:server:user', 'graylog2') %}
+# {{ pillar['message_do_not_modify'] }}
+# ubuntu upstart script prepare for graylog2-web
 
-graylog2:
-  user:
-    - present
-    - name: {{ user }}
-    - home: /var/run/{{ user }}
-    - shell: /bin/false
+start on starting graylog2-web
 
-/var/run/graylog2:
-  file:
-    - directory
-    - user: {{ user }}
-    - group: {{ user }}
-    - mode: 750
-    - makedirs: True
-    - require:
-      - user: graylog2
+task
 
-/var/log/graylog2:
-  file:
-    - directory
-    - user: {{ user }}
-    - group: {{ user }}
-    - mode: 755
-    - makedirs: True
-    - require:
-      - user: graylog2
+exec install -o {{ user }} -g  {{ user }} -d /var/run/graylog2-web

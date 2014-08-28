@@ -65,6 +65,20 @@ graylog2-old-mongodb:
     - name: python-pymongo
     - installed
 
+graylog2-server_upstart_prep:
+  file:
+    - managed
+    - name: /etc/init/graylog2-server_prep.conf
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 600
+    - source: salt://graylog2/server/upstart_prep.jinja2
+    - context:
+      user: {{ user }}
+    - require:
+      - user: graylog2
+
 graylog2-server_upstart:
   file:
     - managed
@@ -77,6 +91,8 @@ graylog2-server_upstart:
     - context:
       version: {{ version }}
       user: {{ user }}
+    - require:
+      - file: graylog2-server_upstart_prep
 
 /var/log/graylog2/server.log:
   file:

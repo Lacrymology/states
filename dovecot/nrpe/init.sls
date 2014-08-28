@@ -41,7 +41,7 @@ include:
   - ssl.nrpe
 {%- endif %}
 
-{% passive_check('dovecot') %}
+{{ passive_check('dovecot') }}
 
 {%- if salt['pillar.get']('mail:check_mail_stack', False) %}
 dovecot_check_mail_stack:

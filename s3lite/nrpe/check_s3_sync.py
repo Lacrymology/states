@@ -97,10 +97,10 @@ class BackupAge(nap.Resource):
                     )
             except KeyError:
                 log.critical('Log file %s is malformed', log_path)
-                raise KeyError('Malformed s3lite log file')
+                raise KeyError('Malformed s3lite log file %s' % log_path)
         else:
             log.critical('Log file %s does not exist', log_path)
-            raise RuntimeError('S3lite log file does not exist')
+            raise RuntimeError('S3lite log %s file does not exist' % log_path)
 
 
 @nap.guarded

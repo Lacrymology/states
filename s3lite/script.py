@@ -96,8 +96,8 @@ class S3Util(object):
                 # etag is usually md5sum of that file
                 rmd5 = rfile.etag.strip('"')
                 if rmd5 == unicode(lfn['md5']):
-                    logger.warning('%s existed on S3 at %s', lfn['fullpath'],
-                                   rfile.name)
+                    logger.debug('%s existed on S3 at %s', lfn['fullpath'],
+                                 rfile.name)
                     counter['existed_before_sync'] += 1
                     _log_progress(counter)
                     continue

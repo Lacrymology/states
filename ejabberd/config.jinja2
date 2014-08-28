@@ -33,21 +33,21 @@ Options which are set by Debconf and managed by ucf
 Admin user
 #}
 
-{%- for user in salt['pillar.get']('ejabberd:admins') %}
-{acl, admin, {user, "{{ user }}", "{{ salt['pillar.get']('ejabberd:hostnames')[0] }}"}}.
+{%- for user in pillar['ejabberd']['admins'] %}
+{acl, admin, {user, "{{ user }}", "{{ pillar['ejabberd']['hostnames'][0] }}"}}.
 {%- endfor %}
 
 {# Blocked user #}
 {%- if salt['pillar.get']('ejabberd:blocked', None) %}
-{%- for user in salt['pillar.get']('ejabberd:blocked' ) %}
-{acl, blocked, {user, "{{ user }}", "{{ salt['pillar.get']('ejabberd:hostnames')[0] }}"}}.
+{%- for user in pillar['ejabberd']['blocked'] %}
+{acl, blocked, {user, "{{ user }}", "{{ pillar['ejabberd']['hostnames'][0] }}"}}.
 {%- endfor %}
 {%- endif  %}
 
 {#-
 Hostname
 #}
-{hosts, [{% for hostname in salt['pillar.get']('ejabberd:hostnames') %}"{{ hostname }}"{% if not loop.last %}, {% endif %}{% endfor %}]}.
+{hosts, [{% for hostname in pillar['ejabberd']['hostnames'] %}"{{ hostname }}"{% if not loop.last %}, {% endif %}{% endfor %}]}.
 
 {#-
   DEBUGGING
@@ -73,7 +73,7 @@ Hostname
 
 #}
 {%- if salt['pillar.get']('ejabberd:watchdog_admins', False) %}
-  {watchdog_admins, ["{{ salt['pillar.get']('ejabberd:watchdog_admins') }}"]}.
+  {watchdog_admins, ["{{ pillar['ejabberd']['watchdog_admins'] }}"]}.
 {%- endif %}
 
 {#-

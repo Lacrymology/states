@@ -124,7 +124,7 @@ LOGGING = {
     }
 }
 
-{% set smtp = salt['pillar.get']('sentry:smtp', salt['pillar.get']('smtp')) %}
+{% set smtp = salt['pillar.get']('sentry:smtp', pillar['smtp']) %}
 EMAIL_HOST = '{{ smtp['server'] }}'
 EMAIL_HOST_PASSWORD = '{{ smtp['password']|default('') }}'
 EMAIL_HOST_USER = '{{ smtp['user']|default('') }}'

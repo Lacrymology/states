@@ -143,7 +143,7 @@ rabbitmq-server:
 monitor_user:
   rabbitmq_user:
     - present
-    - name: {{ salt['pillar.get']('rabbitmq:monitor:user', salt['pillar.get']('salt_monitor') )}}
+    - name: {{ pillar['rabbitmq']['monitor']['user'] }}
     - password: {{ salt['password.pillar']('rabbitmq:monitor:password') }}
     - force: True
     - require:
@@ -151,7 +151,7 @@ monitor_user:
   module:
     - run
     - name: rabbitmq.set_user_tags
-    - m_name: {{ salt['pillar.get']('rabbitmq:monitor:user', salt['pillar.get']('salt_monitor') )}}
+    - m_name: {{ pillar['rabbitmq']['monitor']['user'] }}
     - tags: monitoring
     - require:
       - rabbitmq_user: monitor_user
@@ -159,7 +159,7 @@ monitor_user:
 admin_user:
   rabbitmq_user:
     - present
-    - name: {{ salt['pillar.get']('rabbitmq:management:user', salt['pillar.get']('salt_monitor') )}}
+    - name: {{ pillar['rabbitmq']['management']['user'] }}
     - password: {{ salt['password.pillar']('rabbitmq:management:password') }}
     - force: True
     - require:
@@ -167,7 +167,7 @@ admin_user:
   module:
     - run
     - name: rabbitmq.set_user_tags
-    - m_name: {{ salt['pillar.get']('rabbitmq:management:user', salt['pillar.get']('salt_monitor') )}}
+    - m_name: {{ pillar['rabbitmq']['management']['user'] }}
     - tags: administrator
     - require:
       - rabbitmq_user: admin_user
@@ -198,7 +198,7 @@ rabbitmq-vhost-{{ vhost }}:
     - run
     - name: rabbitmq.set_permissions
     - vhost: {{ vhost }}
-    - user: {{ salt['pillar.get']('rabbitmq:monitor:user', salt['pillar.get']('salt_monitor') )}}
+    - user: {{ pillar['rabbitmq']['monitor']['user'] }}
     - conf: ""
     - write: ""
     - read: ".*"
@@ -212,7 +212,7 @@ rabbitmq-root-vhost:
     - run
     - name: rabbitmq.set_permissions
     - vhost: /
-    - user: {{ salt['pillar.get']('rabbitmq:monitor:user', salt['pillar.get']('salt_monitor') )}}
+    - user: {{ pillar['rabbitmq']['monitor']['user'] }}
     - conf: ""
     - write: ""
     - read: ".*"

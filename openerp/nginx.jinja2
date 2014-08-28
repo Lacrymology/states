@@ -37,8 +37,8 @@ server {
     {%- if salt['pillar.get']('openerp:ssl_redirect', False) %}
     {# if https, redirect http port 80 to https port 443 #}
 
-    server_name {% for hostname in salt['pillar.get']('openerp:hostnames') %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
-    return 301 https://{{ salt['pillar.get']('openerp:hostnames')[0] }}$request_uri;
+    server_name {% for hostname in pillar['openerp']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+    return 301 https://{{ pillar['openerp']['hostnames'][0] }}$request_uri;
 }
 server {
 {%- endif %}{# redirect http to https #}
@@ -46,7 +46,7 @@ server {
     {{ ssl_config(pillar['openerp']['ssl']) }}
 {%- endif %}
 
-    server_name {% for hostname in salt['pillar.get']('openerp:hostnames') %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+    server_name {% for hostname in pillar['openerp']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
 
     root {{ web_root_dir }}/openerp;
 

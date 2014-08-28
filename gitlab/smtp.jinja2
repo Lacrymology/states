@@ -43,9 +43,9 @@ Maintainer: Lam Dang Tung <lamdt@familug.org>
 #}
 
 {%- if salt['pillar.get']('gitlab:smtp:default', True) %}
-{%- set smtp = salt['pillar.get']('smtp') %}
+{%- set smtp = pillar['smtp'] %}
 {%- else %}
-{%- set smtp = salt['pillar.get']('gitlab:smtp') %}
+{%- set smtp = pillar['gitlab']['smtp'] %}
 {%- endif %}
 
 if Gitlab::Application.config.action_mailer.delivery_method == :smtp

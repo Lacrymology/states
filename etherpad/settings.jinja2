@@ -41,7 +41,7 @@ Maintainer: Dang Tung Lam <lamdt@familug.org>
                     "password": "{{ dbuserpass }}",
                     "database": "{{ dbname }}"
                   },
-  "defaultPadText" : "{{ salt['pillar.get']('etherpad:default_pad_text') }}",
+  "defaultPadText" : "{{ salt['pillar.get']('etherpad:default_pad_text', '') }}",
 {%- if salt['pillar.get']('etherpad:require_session', False) %}
   "requireSession": true,
 {%- endif %}

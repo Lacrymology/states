@@ -39,7 +39,6 @@ extend:
         role: standby
 
 {%- if not salt['file.file_exists']('/var/lib/postgresql/' + version + '/main/recovery.done') -%}
-{%- set pillar = pillar['postgresql']['replication'] -%}
 {%- set password = salt['password.pillar']('postgresql:replication:password') -%}
 {%- set username = salt['pillar.get']('postgresql:replication:username', 'replication_agent') %}
 recovery_from_master_base_backup:
@@ -58,7 +57,7 @@ recovery_from_master_base_backup:
   cmd:
     - run
     - cwd: /var/lib/postgresql/{{ version }}/main/
-    - name: pg_basebackup -U {{ username }} -h {{ pillar['master'] }} -p 5432 -D .
+    - name: pg_basebackup -U {{ username }} -h {{ pillar['postgresql']['replication']['master'] }} -p 5432 -D .
     - user: postgres
     - group: postgres
     - require:

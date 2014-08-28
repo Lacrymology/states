@@ -26,7 +26,7 @@ Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
 {#- ldiff simple example -#}
-{% set suffix = salt['pillar.get']('ldap:suffix') %}
+{% set suffix = pillar['ldap']['suffix'] %}
 dn: {{ suffix }}
 objectClass: top
 objectClass: dcObject

@@ -134,7 +134,7 @@ INSTALLED_APPS = (
 
 ACCOUNT_ACTIVATION_DAYS = 7
 
-{%- set smtp = salt['pillar.get']('djangopypi2:email', salt['pillar.get']('smtp')) %}
+{%- set smtp = salt['pillar.get']('djangopypi2:email', pillar['smtp']) %}
 EMAIL_HOST = '{{ smtp['server'] }}'
 EMAIL_HOST_PASSWORD = '{{ smtp['password']|default('') }}'
 EMAIL_HOST_USER = '{{ smtp['user']|default('') }}'

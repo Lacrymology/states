@@ -185,6 +185,7 @@ openerp:
 
 {{ web_root_dir }}/openerp-cron.py:
   file:
+{%- if salt['pillar.get']('openerp:company_db', False) %}
     - managed
     - user: openerp
     - group: openerp
@@ -193,6 +194,9 @@ openerp:
     - require:
       - file: openerp
       - file: {{ home }}/config.yaml
+{%- else %}
+    - absent
+{%- endif %}
 
 {{ home }}/config.yaml:
   file:

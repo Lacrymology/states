@@ -55,7 +55,7 @@ raven==4.1.1
 -e git+git@github.com:bclermont/django-insecure.git@ce529583fc02db20a5ea2b34f1ee8f3d4538a14e#egg=django-insecure
 {%- endif %}
 ipython==0.13.2
-{%- set smtp = salt['pillar.get']('djangopypi2:email', salt['pillar.get']('smtp')) -%}
+{%- set smtp = salt['pillar.get']('djangopypi2:email', pillar['smtp']) -%}
 {%- if smtp['encryption']|default('plain') == 'ssl' %}
 django-smtp-ssl==1.0
 {%- endif -%}

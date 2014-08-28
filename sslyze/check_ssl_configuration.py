@@ -240,7 +240,7 @@ def main():
         nap.ScalarContext('expireInDays',
                           nap.Range('@65:80'), nap.Range('@0:65')),
         SslSummary(args.host, args.port))
-    check.main(args.verbose, args.timeout)
+    check.main(args)
 
 
 if __name__ == "__main__":

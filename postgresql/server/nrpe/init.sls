@@ -36,6 +36,9 @@ include:
   - ssl.nrpe
 {% endif %}
 
+{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{{ passive_absent('postgresql.server') }}
+
 extend:
   postgresql_monitoring:
     postgres_user:

@@ -48,13 +48,15 @@ logging.basicConfig(level=logging.DEBUG)
 
 
 class BackupAge(nap.Resource):
-    def __init__(self, key, secret, bucket, prefix, path, minion_id):
+    def __init__(self, key, secret, bucket, prefix, path, minion_id,
+                 allow_empty=False):
         self.key = key
         self.secret = secret
         self.bucket = bucket
         self.prefix = prefix
         self.path = path
         self.minion_id = minion_id
+        self.allow_empty = allow_empty
 
     def probe(self):
         def log_and_return(value, *msg, **kwargs):
@@ -77,7 +79,7 @@ class BackupAge(nap.Resource):
             backup_mdata = json.loads(logkey.get_contents_as_string())
             try:
                 log.debug(backup_mdata)
-                if backup_mdata['processed'] == 0:
+                if backup_mdata['processed'] == 0 and not self.allow_empty:
                     log.warning('Last backup processed no-file,'
                                 ' maybe backed up dir does not contain'
                                 ' any regular file')
@@ -95,10 +97,10 @@ class BackupAge(nap.Resource):
                     )
             except KeyError:
                 log.critical('Log file %s is malformed', log_path)
-                raise KeyError('Malformed s3lite log file')
+                raise KeyError('Malformed s3lite log file %s' % log_path)
         else:
             log.critical('Log file %s does not exist', log_path)
-            raise RuntimeError('S3lite log file does not exist')
+            raise RuntimeError('S3lite log %s file does not exist' % log_path)
 
 
 @nap.guarded
@@ -107,6 +109,8 @@ def main():
     argp.add_argument('path', type=str, help='Path used when backup')
     argp.add_argument('bucket',
                       help='s3://bucket/prefix to check uploaded file')
+    argp.add_argument('-e', '--empty', action='store_true',
+                      help='Allow backup source to be empty')
     argp.add_argument('-w', '--warning', metavar='HOURS', default='48',
                       help='Emit a warning if a backup file is older\
                             than HOURS')
@@ -126,6 +130,7 @@ def main():
                                     prefix,
                                     args.path,
                                     util['minion_id'],
+                                    allow_empty=args.empty
                                     ),
                           nap.ScalarContext('age', args.warning, args.warning))
         check.main(timeout=args.timeout)

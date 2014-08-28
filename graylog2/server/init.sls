@@ -205,8 +205,10 @@ graylog2_rsyslog_config:
 {# Auto add General Syslog UDP input #}
 import_general_syslog_udp_input graylog2-{{ mongodb_suffix }}:
   cmd:
-    - script
+    - wait_script
     - source: salt://graylog2/server/import_general_syslog_udp_input.py
     - require:
       - service: graylog2-server
       - pkg: graylog2-old-mongodb
+    - watch:
+      - archive: graylog2-server

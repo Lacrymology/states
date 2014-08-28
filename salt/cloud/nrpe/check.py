@@ -29,6 +29,9 @@ Nagios plugin to check that saltcloud images are as listed in the cloud.profile
 file
 """
 import argparse
+import logging
+import subprocess
+import yaml
 
 __author__ = 'Tomas Neme'
 __maintainer__ = 'Tomas Neme'
@@ -36,12 +39,82 @@ __email__ = 'lacrymology@gmail.com'
 
 import nagiosplugin
 
+log = logging.getLogger("nagiosplugin")
+
+class Summary(nagiosplugin.Summary):
+    def ok(self, results):
+       return "ok".join(str(r) for r in results)
+
+    def problem(self, results):
+        return ";".join(self.format(result) for result in results)
+
+    def format(self, result):
+        value = result.metric.value
+        count = len(value)
+        msg = "is OK"
+        if count > 0:
+            msg = "%d missing images [%s]" % (count, ", ".join(value))
+        return "{metric}: {msg}".format(metric=result.metric.name, msg=msg)
+
+class MissingImageContext(nagiosplugin.Context):
+    def describe(self, metric):
+        if len(metric) > 0:
+            return "%d images missing: [%s]" % (len(metric), ", ".join(metric))
+        return "No images missing"
+
+    def evaluate(self, metric, resource):
+        if len(metric) > 0:
+            state = nagiosplugin.state.Critical
+        else:
+            state = nagiosplugin.state.Ok
+
+        yield nagiosplugin.Result(state, metric=metric)
+
+class ImageIds(nagiosplugin.Resource):
+    """
+    Checks the salt-cloud instances list against cloud.profile
+    """
+    def __init__(self, profile_file):
+        self.profile_file = profile_file
+
+    def probe(self):
+        # get cloud.profile data
+        profile_list = {}
+        with open(self.profile_file) as f:
+            profile_list = yaml.load(f)
+
+        # get salt-cloud output
+        try:
+            proc = subprocess.Popen(['salt-cloud', '--list-images',
+                                     'digitalocean', '--out=yaml'],
+                                    stdout=subprocess.PIPE)
+        except OSError:
+            pass
+        else:
+            salt_list = yaml.load(proc.stdout)
+            try:
+                salt_list = salt_list['digitalocean']['digital_ocean']
+            except KeyError:
+                salt_list = {}
+
+        ids = set(str(inst['id']) for inst in salt_list.values())
+        imgs = set(str(prof['image']) for prof in profile_list.values())
+        nagiosplugin.Metric('missing', imgs - ids,
+                            contextobj=MissingImageContext())
+
 @nagiosplugin.guarded
 def main():
     argp = argparse.ArgumentParser()
+    argp.add_argument("--profile-file", metavar="PATH",
+                      default="/etc/salt/cloud.profile")
+    argp.add_argument('-v', '--verbose', action='count', default=0)
     args = argp.parse_args()
 
-
+    check = nagiosplugin.Check(ImageIds(args.profile_file),
+                               MissingImageContext('missing'),
+                               Summary())
+    check.main(args.verbose)
 
 if __name__ == '__main__':
     main()
+set

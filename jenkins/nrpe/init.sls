@@ -30,6 +30,7 @@ Nagios NRPE check for jenkins.
 {%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - apt.nrpe
+  - cron.nrpe
   - java.7.jdk
   - nginx.nrpe
   - ssh.client.nrpe

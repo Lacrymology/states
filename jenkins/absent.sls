@@ -32,3 +32,7 @@ jenkins:
 /etc/nginx/conf.d/jenkins.conf:
   file:
     - absent
+
+/etc/cron.daily/jenkins_delete_old_workspaces.py:
+  file:
+    - absent

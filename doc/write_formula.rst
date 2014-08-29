@@ -272,12 +272,12 @@ Jinja2
   but not absent it otherwise, the file may be leave on system when the pillar
   change::
 
-  {%- if salt['pillar.get']('nginx:blah', False) %}
-  /etc/nginx/conf.d/a_config_file.cfg:
-    file:
-      - managed
-      ...
-  {%- endif %}
+    {%- if salt['pillar.get']('nginx:blah', False) %}
+    /etc/nginx/conf.d/a_config_file.cfg:
+      file:
+        - managed
+        ...
+    {%- endif %}
 
 Then if the pillar set ``nginx:blah`` beforehand, the file is managed,
 later, if that pillar is deleted as user don't want to use it anymore, the file

@@ -52,7 +52,7 @@ graylog2:
     - directory
     - user: {{ user }}
     - group: {{ user }}
-    - mode: 755
+    - mode: 755  {# syslog user needs to read the fifo in this folder #}
     - makedirs: True
     - require:
       - user: graylog2

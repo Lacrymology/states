@@ -29,6 +29,7 @@ A Python tool that can analyze the SSL configuration of a server
 -#}
 {% set version = "0.9" %}
 include:
+  - cron
   - local
   - nrpe
   - salt.minion.deps
@@ -67,7 +68,6 @@ sslyze:
     - name: /usr/local/nagios/bin/python setup.py install
     - watch:
       - archive: sslyze
-    - require:
       - virtualenv: nrpe-virtualenv
 
 check_ssl_configuration.py:
@@ -82,6 +82,8 @@ check_ssl_configuration.py:
       - pkg: nagios-nrpe-server
       - cmd: sslyze
       - pkg: salt_minion_deps
+{#- consumers of sslyze check use cron, make them only require sslyze check script #}
+      - pkg: cron
 
 sslyze_requirements:
   file:
@@ -103,3 +105,4 @@ sslyze_requirements:
     - requirements: /usr/local/nagios/salt-sslyze-requirements.txt
     - watch:
       - file: sslyze_requirements
+      - virtualenv: nrpe-virtualenv

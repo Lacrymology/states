@@ -117,6 +117,27 @@ Not so good::
       - require:
         - pkg: mariadb-server
 
+StateID
+-------
+
+* StateID should not contain space. A cmd.run should having ``- name`` argument
+  to provide its command instead of put the command in StateID.
+
+Bad::
+
+  nginx --version:
+    cmd:
+      - run
+
+Good::
+
+  nginx_version:
+    cmd:
+      - run
+      - name: nginx --version
+
+* Do not mix ``-`` and ``_`` in StateID
+* Do not use too generic StateID, it will be easy to conflict.
 
 Grains
 ------
@@ -242,6 +263,27 @@ Backup
 
 All backup archives must use ``.xz`` format. Backup scripts may use ``tar``
 or ``xz`` for creating ``.xz`` archive.
+
+Jinja2
+------
+
+* Wrapping a State into an ``if`` condition should consider to have counter
+  part in ``else``. Example, if a file is managed base on a pillar condition,
+  but not absent it otherwise, the file may be leave on system when the pillar
+  change::
+
+    {%- if salt['pillar.get']('nginx:blah', False) %}
+    /etc/nginx/conf.d/a_config_file.cfg:
+      file:
+        - managed
+        ...
+    {%- endif %}
+
+Then if the pillar set ``nginx:blah`` beforehand, the file is managed,
+later, if that pillar is deleted as user don't want to use it anymore, the file
+still located on file, it still takes effect, it just not managed by Salt.
+Therefore, it's good to have an ``{%- else %}`` and absent that file to avoid
+this pitfall.
 
 Documentation
 -------------

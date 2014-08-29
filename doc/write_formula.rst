@@ -117,6 +117,27 @@ Not so good::
       - require:
         - pkg: mariadb-server
 
+StateID
+-------
+
+* StateID should not contain space. A cmd.run should having ``- name`` argument
+  to provide its command instead of put the command in StateID.
+
+Bad::
+
+  nginx --version:
+    cmd:
+      - run
+
+Good::
+
+  nginx_version:
+    cmd:
+      - run
+      - name: nginx --version
+
+* Do not mix ``-`` and ``_`` in StateID
+* Do not use too generic StateID, it will be easy to conflict.
 
 Grains
 ------

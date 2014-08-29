@@ -88,7 +88,7 @@ class BackupAge(nap.Resource):
                 last = datetime.strptime(logkey.last_modified,
                                          '%a, %d %b %Y %H:%M:%S %Z')
                 now = datetime.utcnow()
-                age_in_hours = (now - last).seconds / 60 / 60
+                age_in_hours = (now - last).total_seconds() / 60 / 60
                 return log_and_return(
                     age_in_hours,
                     'Last backup processed %d files',

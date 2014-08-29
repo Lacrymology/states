@@ -36,11 +36,6 @@ include:
   - rsyslog.nrpe
 {% if salt['pillar.get']('graylog2:ssl', False) %}
   - ssl.nrpe
-  - sslyze
-
-    {%- call passive_check('graylog2.web') -%}
-- file: check_ssl_configuration.py
-    {%- endcall %}
-{%- else %}
-    {{ passive_check('graylog2.web') }}
 {%- endif %}
+
+{{ passive_check('graylog2.web') }}

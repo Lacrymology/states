@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Hung Nguyen Viet
+Copyright (c) 2014, Hung Nguyen Viet
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -24,16 +24,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
-
-Nagios NRPE check for OpenLDAP.
--#}
-{%- set ssl = salt['pillar.get']('ldap:ssl', False) %}
-{%- from 'nrpe/passive.sls' import passive_check with context %}
+#}
 include:
-  - apt.nrpe
-  - nrpe
-{%- if ssl %}
-  - ssl.nrpe
-{%- endif %}
+  - sslyze
 
-{{ passive_check('openldap') }}
+test_sslyze_with_gmail:
+  cmd:
+    - run
+    - name: /usr/lib/nagios/plugins/check_ssl_configuration.py -H mail.google.com
+    - require:
+      - sls: sslyze

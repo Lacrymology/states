@@ -26,4 +26,5 @@ Author: Quan Tong Anh <quanta@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
 include:
+  - cron.nrpe
   - virtualenv.nrpe

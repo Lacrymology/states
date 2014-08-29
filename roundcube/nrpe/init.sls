@@ -39,11 +39,6 @@ include:
   - uwsgi.nrpe
 {% if salt['pillar.get']('roundcube:ssl', False) %}
   - ssl.nrpe
-  - sslyze
-
-    {%- call passive_check('roundcube') -%}
-- file: check_ssl_configuration.py
-    {%- endcall %}
-{%- else %}
-    {{ passive_check('roundcube') }}
 {%- endif %}
+
+{{ passive_check('roundcube') }}

@@ -56,10 +56,8 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
     {%- endif %}
   service_dependencies: ',nginx_master'
 
-    {%- if salt['pillar.get'](prefix + ':ssl', False) %}
-        {%- if not https_uri -%}
-            {%- set https_uri = http_uri -%}
-        {%- endif %}
+{%- if salt['pillar.get'](prefix + ':ssl', False) %}
+{%- set https_uri = http_uri if not https_uri %}
 
 {{ deployment }}_nginx_https:
   description: {{ deployment|capitalize }} HTTPS Protocol
@@ -79,16 +77,15 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
   command: /usr/lib/nagios/plugins/check_http -S -H {{ domain_name }} -C {{ expire_days }} -I {{ first_ip }}
   service_dependencies: ',nginx_master'
 
-        {%- if 'dnsutils' in salt['pkg.list_pkgs']() -%}
-            {%- if not salt['dig.check_ip'](domain_name) %}
-
+  {% if domain_name|replace('.', '')|int is not number %} {# only check if it is a domain, not IP #}
 {{ deployment }}_ssl_configuration:
   description: {{ deployment|capitalize }} SSL Configuration
   check_interval: {{ 24 * 60 }} {#- a day  #}
   freshness_threshold: {{ ((24 * 60) + 10) * 60 }} {#- 24 hours + 10 minutes #}
   command: /usr/lib/nagios/plugins/check_ssl_configuration.py -H {{ domain_name }}
+  arguments:
+    host: {{ domain_name }}
   service_dependencies: ',nginx_master'
-            {%- endif -%}
-        {%- endif -%}
-    {%- endif -%}
+  {%- endif %}
+{%- endif -%}
 {%- endmacro %}

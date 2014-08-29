@@ -89,14 +89,15 @@ graylog2-web-{{ user }}:
     - absent
 {% endfor %}
 
+{#- create runtime directory for graylog2-web upstart script #}
 graylog2-web_upstart_prep:
   file:
     - managed
-    - name: /etc/init/graylog2-web_prep.conf
+    - name: /etc/init/graylog2-web-prep.conf
     - template: jinja
     - user: root
     - group: root
-    - mode: 600
+    - mode: 400
     - source: salt://graylog2/web/upstart_prep.jinja2
     - context:
       user: {{ user }}
@@ -110,7 +111,7 @@ graylog2-web_upstart:
     - template: jinja
     - user: root
     - group: root
-    - mode: 600
+    - mode: 400
     - source: salt://graylog2/web/upstart.jinja2
     - context:
       file: graylog2-web_upstart_prep

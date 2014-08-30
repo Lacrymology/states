@@ -26,7 +26,12 @@ Author: Quan Tong Anh <quanta@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 #}
 # {{ pillar['message_do_not_modify'] }}
-{# No need to specify the version of sslyze at 
+{# No need to specify the version of sslyze at
 https://github.com/iSECPartners/sslyze/releases #}
 argparse==1.2.1
 nagiosplugin==1.2.1
+{%- if 'files_archive' in pillar %}
+{{ pillar['files_archive'] }}/pip/bfs-0.2.6.tar.gz
+{%- else %}
+http://archive.robotinfra.com/pip/bfs-0.2.6.tar.gz
+{%- endif %}

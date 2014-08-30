@@ -30,7 +30,9 @@ TODO: add SSL through nginx.
 {%- from 'macros.jinja2' import manage_pid with context %}
 include:
   - apt
+  - cron
   - java.7.jdk
+  - local
   - nginx
   - ssh.client
 {% if salt['pillar.get']('jenkins:ssl', False) %}
@@ -87,6 +89,16 @@ jenkins_old_version:
     - require:
       - pkg: nginx
       - service: jenkins
+
+/etc/cron.daily/jenkins_delete_old_workspaces.py:
+  file:
+    - managed
+    - source: salt://jenkins/del_old_ws.py
+    - mode: 500
+    - require:
+      - file: /usr/local
+      - service: jenkins
+      - pkg: cron
 
 extend:
 {%- from 'macros.jinja2' import change_ssh_key_owner with context %}

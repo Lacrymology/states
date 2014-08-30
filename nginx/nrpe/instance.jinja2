@@ -82,7 +82,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
   description: {{ deployment|capitalize }} SSL Configuration
   check_interval: {{ 24 * 60 }} {#- a day  #}
   freshness_threshold: {{ ((24 * 60) + 10) * 60 }} {#- 24 hours + 10 minutes #}
-  command: /usr/lib/nagios/plugins/check_ssl_configuration.py
+  command: /usr/lib/nagios/plugins/check_ssl_configuration.py --cronresult -F {{ deployment }} -N {{ deployment }}_ssl_configuration
   arguments:
     host: {{ domain_name }}
     port: 443

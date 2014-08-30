@@ -42,7 +42,7 @@ sslyze_collect_data_for_{{ state }}:
     - template: jinja
     - source: salt://sslyze/cron_template.jinja2
     - context:
-        state: {{ state }}
+        deployment: {{ state }}
     - require:
       - file: check_ssl_configuration.py
       - pkg: cron

@@ -77,7 +77,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
   command: /usr/lib/nagios/plugins/check_http -S -H {{ domain_name }} -C {{ expire_days }} -I {{ first_ip }}
   service_dependencies: ',nginx_master'
 
-  {% if domain_name|replace('.', '')|int is not number %} {# only check if it is a domain, not IP #}
+  {% if domain_name|replace('.', '')|int == 0 %} {# only check if it is a domain, not IP. int returns 0 for unconvertible value #}
 {{ deployment }}_ssl_configuration:
   description: {{ deployment|capitalize }} SSL Configuration
   check_interval: {{ 24 * 60 }} {#- a day  #}

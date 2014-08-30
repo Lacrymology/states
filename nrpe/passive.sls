@@ -31,7 +31,7 @@
 {% if salt['pillar.get'](state ~ ':ssl', False) %}
 {#- manage cron file for sslyze NRPE check consumer #}
 {%- set domain_name = salt['pillar.get'](state + ':hostnames', ['127.0.0.1'])[0] if not domain_name -%}
-  {% if domain_name|replace('.', '')|int is not number %} {# only check if it is a domain, not IP #}
+  {% if domain_name|replace('.', '')|int == 0 %} {# only check if it is a domain, not IP. int returns 0 for unconvertible value #}
 sslyze_collect_data_for_{{ state }}:
   file:
     - managed

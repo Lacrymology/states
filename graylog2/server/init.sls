@@ -65,6 +65,25 @@ graylog2-old-mongodb:
     - name: python-pymongo
     - installed
 
+{#-
+  graylog2-server upstart job can't create folder in /var/run (we
+  use setuid and setguid), this upstart job creates runtime directory
+  for it.
+#}
+graylog2-server_upstart_prep:
+  file:
+    - managed
+    - name: /etc/init/graylog2-server-prep.conf
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 400
+    - source: salt://graylog2/server/upstart_prep.jinja2
+    - context:
+      user: {{ user }}
+    - require:
+      - user: graylog2
+
 graylog2-server_upstart:
   file:
     - managed
@@ -72,11 +91,13 @@ graylog2-server_upstart:
     - template: jinja
     - user: root
     - group: root
-    - mode: 600
+    - mode: 400
     - source: salt://graylog2/server/upstart.jinja2
     - context:
       version: {{ version }}
       user: {{ user }}
+    - require:
+      - file: graylog2-server_upstart_prep
 
 /var/log/graylog2/server.log:
   file:

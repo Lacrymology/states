@@ -196,7 +196,8 @@ old_graylog2_index:
     - name: curl
   cmd:
     - run
-    - name: /bin/sleep 30 && curl -XDELETE 'http://127.0.0.1:9200/graylog2-{{ grains['id'] }}_*'
+    - name: curl -XDELETE 'http://127.0.0.1:9200/graylog2-{{ grains['id'] }}_*'
+    - onlyif: /bin/sleep 30 && curl --fail -XGET 'http://127.0.0.1:9200/graylog2-{{ grains['id'] }}_*/_search?'
     - require:
       - pkg: old_graylog2_index
       - process: elasticsearch

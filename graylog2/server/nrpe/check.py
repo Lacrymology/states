@@ -37,6 +37,7 @@ __maintainer__ = 'Diep Pham'
 __email__ = 'favadi@robotinfra.com'
 
 import logging
+import time
 import bfs.nrpe as bfe
 import nagiosplugin
 import requests
@@ -46,21 +47,23 @@ log = logging.getLogger('nagiosplugin')
 
 class Graylog2Throughput(nagiosplugin.Resource):
 
-    def __init__(self, api_url, username, password):
+    def __init__(self, api_url, username, password, max_retry):
         self._api_url = api_url
         self._username = username
         self._password = password
+        self._max_retry = max_retry
 
     def probe(self):
         try:
             # /system/throughput sometimes return 0 (which is normal),
             # retry 5 times before return 0
-            for _ in xrange(5):
+            for _ in xrange(self._max_retry):
                 r = requests.get(
                     self._api_url, auth=(self._username, self._password))
                 throughput = r.json['throughput']
                 if throughput != 0:
                     break
+                time.sleep(1)  # take a break before retry
         except requests.ConnectionError:
             raise nagiosplugin.CheckError(
                 'Could not connect to graylog2 server: {}'.format(
@@ -82,6 +85,7 @@ def main():
     config = bfe.ConfigFile.from_arguments(args)
     kwargs = config.kwargs('api_url', 'username', 'password')
     crit_range = config.get_argument('crit_range', '1:10000')
+    kwargs['max_retry'] = config.get_argument('max_retry', '20')
     check = nagiosplugin.Check(
         Graylog2Throughput(**kwargs),
         nagiosplugin.ScalarContext('throughput', critical=crit_range))

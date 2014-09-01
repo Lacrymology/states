@@ -50,9 +50,7 @@ test:
     - exclude:
       - graylog2_elasticsearch_cluster
       - graylog2_elasticsearch_port_transport
-{%- if not pillar['__test__']|default(False) %}
       - graylog2_incoming_logs
-{%- endif %}
   cmd:
     - run
     - name: /etc/cron.daily/backup-graylog2

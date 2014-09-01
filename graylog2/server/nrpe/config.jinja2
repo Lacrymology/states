@@ -31,13 +31,15 @@ graylog2_procs:
   description: Graylog2 Daemon
   command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -C java -a '-jar /usr/local/graylog2-server-{{ version }}/graylog2-server'"
 
-{#- if graylog2_address isn't 127.0.0.1 test fail -#}
-{%- if not salt['pillar.get']('__test__', False) %}
 graylog2_incoming_logs:
   description: Incoming Logs Rate
-  command: '/usr/lib/nagios/plugins/check_new_logs.py -w 1:50000 -t 60'
+  command: /usr/lib/nagios/plugins/check_new_logs.py -F graylog2.server -N graylog2_incoming_logs
   service_dependencies: ',graylog2_procs'
-{%- endif %}
+  arguments:
+    api_url: 'http://127.0.0.1:12900/system/throughput'
+    username: '{{ salt['pillar.get']('graylog2:root_username', 'admin') }}'
+    password: '{{ pillar['graylog2']['admin_password'] }}'
+    crit_range: '1:50000'
 
-{%- from 'elasticsearch/nrpe/instance.jinja2' import elasticsearch_instance with context -%}
+{%- from 'elasticsearch/nrpe/instance.jinja2' import elasticsearch_instance with context %}
 {{ elasticsearch_instance('graylog2.server') }}

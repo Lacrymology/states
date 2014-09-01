@@ -56,7 +56,7 @@ modify it in this file.
 Create one by using for example: echo -n yourpassword | shasum -a 256
 and put the resulting hash value into the following line
 #}
-root_password_sha2 = {{ pillar['graylog2']['root_password_sha2'] }}
+root_password_sha2 = {{ salt['password.sha256'](pillar['graylog2']['admin_password']) }}
 
 {#-
 Set plugin directory here (relative or absolute)

@@ -45,7 +45,6 @@ include:
     - mode: 550
     - require:
       - module: nrpe-virtualenv
-      - module: pyelasticsearch
       - pkg: nagios-nrpe-server
 
 {%- call passive_check('graylog2.server') %}

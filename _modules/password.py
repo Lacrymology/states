@@ -31,9 +31,10 @@ __author__ = 'Hung Nguyen Viet'
 __maintainer__ = 'Hung Nguyen Viet'
 __email__ = 'hvnsweeting@gmail.com'
 
-import string
-import random
 import crypt
+import hashlib
+import random
+import string
 
 
 def __virtual__():
@@ -108,3 +109,10 @@ def encrypt_shadow(unencrypted_password, salt_key=None, hash_type='6'):
     return crypt.crypt(unencrypted_password,
                        "$%s$%s%s" % (hash_type, salt_key,
                                      unencrypted_password))
+
+
+def sha256(data):
+    """
+    return shasum -a 256 of data string
+    """
+    return hashlib.sha256(str(data)).hexdigest()

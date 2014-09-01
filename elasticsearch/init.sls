@@ -197,6 +197,10 @@ old_graylog2_index:
   cmd:
     - run
     - name: curl -XDELETE 'http://127.0.0.1:9200/graylog2-{{ grains['id'] }}_*'
+    {#-
+      check if graylog2 indices exist
+      graylog2 prefix: graylog2-{{ grains['id'] }}_
+    #}
     - onlyif: /bin/sleep 30 && curl --fail -XGET 'http://127.0.0.1:9200/graylog2-{{ grains['id'] }}_*/_search?'
     - require:
       - pkg: old_graylog2_index

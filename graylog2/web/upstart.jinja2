@@ -36,6 +36,7 @@ nice 10
 respawn
 
 setuid {{ user }}
+setgid syslog # for reading by rsyslog
 
 env JAVA_OPTS='{% if heap_size %} -Xms{{ heap_size }} -Xmx{{ heap_size }}{% endif %}' 
 

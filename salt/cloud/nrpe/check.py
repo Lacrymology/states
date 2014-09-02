@@ -99,8 +99,7 @@ class ImageIds(nagiosplugin.Resource):
 
         ids = set(str(inst['id']) for inst in salt_list.values())
         imgs = set(str(prof['image']) for prof in profile_list.values())
-        nagiosplugin.Metric('missing', imgs - ids,
-                            contextobj=MissingImageContext())
+        nagiosplugin.Metric('missing', imgs - ids)
 
 @nagiosplugin.guarded
 def main():

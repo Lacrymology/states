@@ -1,4 +1,8 @@
-{%- macro passive_check(state, domain_name=None) %}
+{%- macro passive_check(state, domain_name=None, pillar_prefix=None) -%}
+    {%- if not pillar_prefix -%}
+        {%- set pillar_prefix = deployment -%}
+    {%- endif %}
+
 /etc/nagios/nsca.d/{{ state }}.yml:
   file:
     - managed
@@ -28,9 +32,9 @@
     - watch_in:
       - service: cron
 
-{% if salt['pillar.get'](state ~ ':ssl', False) %}
+{% if salt['pillar.get'](pillar_prefix ~ ':ssl', False) %}
 {#- manage cron file for sslyze NRPE check consumer #}
-{%- set domain_name = salt['pillar.get'](state + ':hostnames', ['127.0.0.1'])[0] if not domain_name -%}
+{%- set domain_name = salt['pillar.get'](pillar_prefix + ':hostnames', ['127.0.0.1'])[0] if not domain_name -%}
   {% if domain_name|replace('.', '')|int == 0 %} {# only check if it is a domain, not IP. int returns 0 for unconvertible value #}
 sslyze_collect_data_for_{{ state }}:
   file:

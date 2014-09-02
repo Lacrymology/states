@@ -26,7 +26,7 @@
     - watch_in:
       - service: nsca_passive
 
-/etc/cron.d/passive-checks-{{ formula }}:
+/etc/cron.d/passive-checks-{{ formula|replace('.', '-') }}:
   file:
     - absent
     - watch_in:
@@ -39,14 +39,15 @@
 sslyze_collect_data_for_{{ formula }}:
   file:
     - managed
-    - name: /etc/cron.d/sslyze_check_{{ formula }}
+    - name: /etc/cron.d/sslyze_check_{{ formula|replace('.', '-') }}
     - user: root
     - group: root
     - mode: 400
     - template: jinja
     - source: salt://sslyze/cron_template.jinja2
     - context:
-      deployment: {{ formula }}
+      formula: {{ formula }}
+      deployment: {{ deployment }}
     - require:
       - file: check_ssl_configuration.py
       - pkg: cron
@@ -57,7 +58,7 @@ sslyze_collect_data_for_{{ formula }}:
 sslyze_collect_data_for_{{ formula }}:
   file:
     - absent
-    - name: /etc/cron.d/sslyze_check_{{ formula }}
+    - name: /etc/cron.d/sslyze_check_{{ formula|replace('.', '-') }}
   {%- endif %}
 {%- endif %}
 
@@ -94,5 +95,5 @@ sslyze_collect_data_for_{{ formula }}:
 sslyze_collect_data_for_{{ formula }}:
   file:
     - absent
-    - name: /etc/cron.d/sslyze_check_{{ formula }}
+    - name: /etc/cron.d/sslyze_check_{{ formula|replace('.', '-') }}
 {%- endmacro %}

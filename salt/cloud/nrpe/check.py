@@ -105,7 +105,7 @@ class ImageIds(nagiosplugin.Resource):
 def main():
     argp = argparse.ArgumentParser()
     argp.add_argument("--profile-file", metavar="PATH",
-                      default="/etc/salt/cloud.profile")
+                      default="/etc/salt/cloud.profiles")
     argp.add_argument('-v', '--verbose', action='count', default=0)
     args = argp.parse_args()
 

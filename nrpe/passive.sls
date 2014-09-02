@@ -68,7 +68,6 @@ sslyze_collect_data_for_{{ formula }}:
     - name: {{ formula }}
 {%- if formula == 'nrpe' %}
     - source: salt://nrpe/config.jinja2
-    - source: salt://nrpe/config.jinja2
 {%- else %}
     - source: salt://{{ formula|replace('.', '/') }}/nrpe/config.jinja2
 {%- endif %}

@@ -52,4 +52,4 @@ shinken_broker_http:
   service_dependencies: ',shinken_broker_procs'
 
 {%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context %}
-{{ nginx_instance('shinken', http_uri='/user/login') }}
+{{ nginx_instance('shinken', http_uri='/user/login', formula='shinken.broker') }}

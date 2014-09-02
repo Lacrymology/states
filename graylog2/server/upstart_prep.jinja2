@@ -33,4 +33,4 @@ start on starting graylog2-server
 
 task
 
-exec install -o {{ user }} -g  {{ user }} -d /var/run/graylog2
+exec install -o {{ user }} -g  {{ user }} -m 750 -d /var/run/graylog2

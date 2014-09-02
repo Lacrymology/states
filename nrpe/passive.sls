@@ -50,6 +50,7 @@ sslyze_collect_data_for_{{ formula }}:
     - require:
       - file: check_ssl_configuration.py
       - pkg: cron
+      - file: /etc/nagios/nsca.d/{{ formula }}.yml
     - watch_in:
       - service: cron
   {%- else %}

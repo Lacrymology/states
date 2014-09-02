@@ -68,7 +68,7 @@ class MissingImageContext(nagiosplugin.Context):
         else:
             state = nagiosplugin.state.Ok
 
-        yield nagiosplugin.Result(state, metric=metric)
+        return nagiosplugin.Result(state, metric=metric)
 
 class ImageIds(nagiosplugin.Resource):
     """
@@ -99,7 +99,7 @@ class ImageIds(nagiosplugin.Resource):
 
         ids = set(str(inst['id']) for inst in salt_list.values())
         imgs = set(str(prof['image']) for prof in profile_list.values())
-        nagiosplugin.Metric('missing', imgs - ids)
+        yield nagiosplugin.Metric('missing', imgs - ids)
 
 @nagiosplugin.guarded
 def main():
@@ -112,7 +112,7 @@ def main():
     check = nagiosplugin.Check(ImageIds(args.profile_file),
                                MissingImageContext('missing'),
                                Summary())
-    check.main(args.verbose)
+    check.main(args.verbose, timeout=0)
 
 if __name__ == '__main__':
     main()

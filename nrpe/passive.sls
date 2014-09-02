@@ -1,6 +1,6 @@
 {%- macro passive_check(formula, domain_name=None, pillar_prefix=None) -%}
     {%- if not pillar_prefix -%}
-        {%- set pillar_prefix = deployment -%}
+        {%- set pillar_prefix = formula -%}
     {%- endif %}
 
 /etc/nagios/nsca.d/{{ formula }}.yml:
@@ -66,6 +66,7 @@ sslyze_collect_data_for_{{ formula }}:
     - managed
     - name: {{ formula }}
 {%- if formula == 'nrpe' %}
+    - source: salt://nrpe/config.jinja2
     - source: salt://nrpe/config.jinja2
 {%- else %}
     - source: salt://{{ formula|replace('.', '/') }}/nrpe/config.jinja2

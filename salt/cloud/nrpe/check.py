@@ -112,7 +112,7 @@ def main():
     check = nagiosplugin.Check(ImageIds(args.profile_file),
                                MissingImageContext('missing'),
                                Summary())
-    check.main(args.verbose, timeout=0)
+    check.main(args.verbose, timeout=300)
 
 if __name__ == '__main__':
     main()

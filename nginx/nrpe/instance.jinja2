@@ -25,11 +25,14 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-{%- macro nginx_instance(deployment, http=True, http_uri='/', http_result=None, http_port=80, https_uri=None, https_result="200 OK", pillar_prefix=None, timeout=False, domain_name=None, allow_ssl_redirect=True, check_interval=False) -%}
+{%- macro nginx_instance(deployment, http=True, http_uri='/', http_result=None, http_port=80, https_uri=None, https_result="200 OK", pillar_prefix=None, timeout=False, domain_name=None, allow_ssl_redirect=True, check_interval=False, formula=None) -%}
     {%- set expire_days = salt['pillar.get']('ssl:warning_certificate', 15) -%}
     {%- set first_ip = salt['network.ip_addrs']()[0] -%}
     {%- if not pillar_prefix -%}
         {%- set pillar_prefix = deployment -%}
+    {%- endif -%}
+    {%- if not formula -%}
+        {%- set formula = deployment -%}
     {%- endif -%}
     {%- if not domain_name -%}
         {%- set domain_name = salt['pillar.get'](pillar_prefix + ':hostnames', ['127.0.0.1'])[0] -%}
@@ -82,7 +85,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
   description: {{ deployment|capitalize }} SSL Configuration
   check_interval: {{ 24 * 60 }} {#- a day  #}
   freshness_threshold: {{ ((24 * 60) + 10) * 60 }} {#- 24 hours + 10 minutes #}
-  command: /usr/lib/nagios/plugins/check_ssl_configuration.py --cronresult -F {{ deployment }} -N {{ deployment }}_ssl_configuration
+  command: /usr/lib/nagios/plugins/check_ssl_configuration.py --cronresult -F {{ formula }} -N {{ deployment }}_ssl_configuration
   arguments:
     host: {{ domain_name }}
     port: 443

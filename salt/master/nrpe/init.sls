@@ -64,27 +64,11 @@ include:
       - pkg: nagios-nrpe-server
       - module: nrpe-virtualenv
       - file: /etc/sudoers.d/nrpe_salt_master
-      - module: salt_check_mine_nrpe_check
 
 salt_check_mine_nrpe_check:
   file:
-    - managed
+    - absent
     - name: /usr/local/nagios/salt-check-mine-requirements.txt
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 440
-    - source: salt://salt/master/nrpe/requirements.jinja2
-    - require:
-      - virtualenv: nrpe-virtualenv
-  module:
-    - wait
-    - name: pip.install
-    - upgrade: True
-    - bin_env: /usr/local/nagios/bin/pip
-    - requirements: /usr/local/nagios/salt-check-mine-requirements.txt
-    - watch:
-      - file: salt_check_mine_nrpe_check
 
 salt_mine_collect_minions_data:
   file:

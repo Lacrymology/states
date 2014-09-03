@@ -87,22 +87,5 @@ check_ssl_configuration.py:
 
 sslyze_requirements:
   file:
-    - managed
+    - absent
     - name: /usr/local/nagios/salt-sslyze-requirements.txt
-    - source: salt://sslyze/requirements.jinja2
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 440
-    - require:
-      - virtualenv: nrpe-virtualenv
-      - pkg: nagios-nrpe-server
-  module:
-    - wait
-    - name: pip.install
-    - upgrade: True
-    - bin_env: /usr/local/nagios
-    - requirements: /usr/local/nagios/salt-sslyze-requirements.txt
-    - watch:
-      - file: sslyze_requirements
-      - virtualenv: nrpe-virtualenv

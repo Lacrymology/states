@@ -90,6 +90,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
     host: {{ domain_name }}
     port: 443
     timeout: {{ 3 * 60 }} {#- 3 minutes #}
+    freshness: {{ ((24 * 60) + 10) * 60 }}
   service_dependencies: ',nginx_master'
   {%- endif %}
 {%- endif -%}

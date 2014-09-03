@@ -28,5 +28,6 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Diamond statistics for Jenkins.
 -#}
 include:
+  - cron.diamond
   - diamond
   - nginx.diamond

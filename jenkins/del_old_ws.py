@@ -35,9 +35,14 @@ __email__ = 'hvnsweeting@gmail.com'
 
 import os
 import shutil
+import sys
 
 WS = '/var/lib/jenkins/workspace/'
 JOBS_DIR = '/var/lib/jenkins/jobs/'
+
+# No workspace has created yet. This is likely a new installed Jenkins
+if not os.path.isdir(WS):
+    sys.exit(0)
 
 workspaces = os.listdir(WS)
 ws_without_jobs = []

@@ -126,7 +126,21 @@ def installed(name, is_global=True, runas=None):
 
     __salt__['npm.install'](name, is_global, runas)
     packages = __salt__['npm.list'](is_global, runas)
-    if name in packages:
+    if '@' in name:
+        has_version = True
+        package_name, package_version = name.split('@', 1)
+    else:
+        package_name = name
+
+    if package_name in packages:
+        if has_version:
+            installed_version = packages[package_name]['version']
+            if installed_version != package_version:
+                ret['result'] = False
+                comment_fmt = 'Version mismatch (installed: {}, expect: {}).'
+                ret['comment'] = comment_fmt.format(
+                    installed_version, package_version)
+                return ret
         ret['result'] = True
         ret['changes'][name] = 'Installed'
         ret['comment'] = 'Package was successfully installed.'

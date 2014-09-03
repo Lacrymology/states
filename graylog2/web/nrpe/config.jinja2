@@ -26,4 +26,4 @@ Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 {%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
-{{ nginx_instance('graylog2', http_uri='/login', formula='graylog2.web') }}
+{{ nginx_instance('graylog2.web', http_uri='/login', deployment='graylog2', pillar_prefix='graylog2') }}

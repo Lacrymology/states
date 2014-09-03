@@ -44,5 +44,5 @@ XZ_DEFAULTS=--memlimit={{ salt['pillar.get']('backup:xz_memlimit', 64) }}MiB
 dbname=$1
 NOW=`date '+%Y-%m-%d-%H_%M_%S'`
 export TERM=dumb
-/usr/bin/mysqldump -p{{ salt['password.pillar']('mysql:password') }} -uroot $dbname | xz > /tmp/mysql-$dbname-$NOW.sql.xz
+/usr/bin/mysqldump -p{{ salt['password.pillar']('mysql:password') }} -uroot --single-transaction $dbname | xz > /tmp/mysql-$dbname-$NOW.sql.xz
 /usr/local/bin/backup-store /tmp/mysql-$dbname-$NOW.sql.xz

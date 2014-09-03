@@ -47,7 +47,6 @@ sslyze_collect_data_for_{{ formula }}:
     - source: salt://sslyze/cron_template.jinja2
     - context:
       formula: {{ formula }}
-      deployment: {{ deployment }}
     - require:
       - file: check_ssl_configuration.py
       - pkg: cron

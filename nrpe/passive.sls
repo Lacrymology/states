@@ -36,6 +36,11 @@
 {#- manage cron file for sslyze NRPE check consumer #}
 {%- set domain_name = salt['pillar.get'](pillar_prefix + ':hostnames', ['127.0.0.1'])[0] if not domain_name -%}
   {% if domain_name|replace('.', '')|int == 0 %} {# only check if it is a domain, not IP. int returns 0 for unconvertible value #}
+sslyze_cron_old_file_name_scheme_{{ formula }}:
+  file:
+    - absent
+    - name: /etc/cron.d/sslyze_check_{{ formula }}
+
 sslyze_collect_data_for_{{ formula }}:
   file:
     - managed
@@ -51,6 +56,7 @@ sslyze_collect_data_for_{{ formula }}:
       - file: check_ssl_configuration.py
       - pkg: cron
       - file: /etc/nagios/nsca.d/{{ formula }}.yml
+      - file: sslyze_cron_old_file_name_scheme_{{ formula }}
     - watch_in:
       - service: cron
   {%- else %}
@@ -80,6 +86,7 @@ sslyze_collect_data_for_{{ formula }}:
     - watch_in:
       - service: nagios-nrpe-server
 {%- endmacro -%}
+
 
 {%- macro passive_absent(formula) %}
 /etc/nagios/nrpe.d/{{ formula }}.cfg:

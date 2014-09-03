@@ -26,7 +26,7 @@ Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 {%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
-{{ nginx_instance('salt_archive', allow_ssl_redirect=False, formula='salt.archive.server') }}
+{{ nginx_instance(formula='salt.archive.server', allow_ssl_redirect=False, deployment='salt_archive', pillar_prefix='salt_archive') }}
 
 {%- if salt['pillar.get']('salt_archive:source', False) %}
   {%- set max_age = salt['pillar.get']('salt_archive:max_age', 3600) %}

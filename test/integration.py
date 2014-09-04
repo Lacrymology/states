@@ -81,6 +81,7 @@ process_list = None
 NO_TEST_STRING = '-*- ci-automatic-discovery: off -*-'
 
 all_states = client('cp.list_states')
+ran_sls_cntr = 0
 
 
 def if_change(result):
@@ -548,6 +549,8 @@ class States(unittest.TestCase):
         logger.debug("Run states: %s", ', '.join(states))
         try:
             output = client('state.sls', ','.join(states))
+            global ran_sls_cntr
+            ran_sls_cntr += len(states)
         except Exception, err:
             logger.error("Catch error: %s", err, exc_info=True)
             self.fail('states: %s. error: %s' % ('.'.join(states), err))
@@ -667,3 +670,4 @@ if __name__ == '__main__':
                 output='/root/salt', outsuffix='salt'))
         else:
             unittest.main()
+        print 'Ran totally: {0} SLSes (included rerun)'.format(ran_sls_cntr)

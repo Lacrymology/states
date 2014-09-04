@@ -43,27 +43,13 @@ include:
 
 {{ passive_check('dovecot') }}
 
-{%- if salt['pillar.get']('mail:check_mail_stack', False) %}
+{#- check_mail_stack use common pkgs managed by nrpe, no need to install them again #}
 dovecot_check_mail_stack:
   file:
-    - managed
+    - absent
     - name: /usr/local/nagios/salt-check-mail-stack-requirements.txt
-    - source: salt://dovecot/nrpe/requirements.jinja2
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 440
-    - require:
-      - virtualenv: nrpe-virtualenv
-  module:
-    - wait
-    - name: pip.install
-    - upgrade: True
-    - bin_env: /usr/local/nagios
-    - requirements: /usr/local/nagios/salt-check-mail-stack-requirements.txt
-    - watch:
-      - file: dovecot_check_mail_stack
 
+{%- if salt['pillar.get']('mail:check_mail_stack', False) %}
 {%- set username = pillar['mail']['check_mail_stack']['username'] %}
 {%- set mailname = pillar['mail']['mailname'] %}
 {%- set mailaddr = username + '@' + mailname %}
@@ -92,17 +78,9 @@ dovecot_check_mail_stack:
     - mode: 550
     - require:
       - module: nrpe-virtualenv
-      - module: dovecot_check_mail_stack
       - pkg: nagios-nrpe-server
       - file: /etc/nagios/check_mail_stack.yml
-
 {%- else %}
-
-dovecot_check_mail_stack:
-  file:
-    - absent
-    - name: /usr/local/nagios/salt-check-mail-stack-requirements.txt
-
 /etc/nagios/check_mail_stack.yml:
   file:
     - absent

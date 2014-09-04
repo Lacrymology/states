@@ -123,7 +123,7 @@ def setUpModule():
         if sls.endswith('.test'):
             try:
                 ret = client('state.show_sls', sls)
-            except:
+            except Exception as err:
                 logger.error("Catch error: %s", err, exc_info=True)
                 raise
             if isinstance(ret, list):

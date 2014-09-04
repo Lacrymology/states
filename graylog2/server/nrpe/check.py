@@ -55,8 +55,8 @@ class Graylog2Throughput(nagiosplugin.Resource):
 
     def probe(self):
         try:
-            # /system/throughput sometimes return 0 (which is normal),
-            # retry 5 times before return 0
+            # /system/throughput sometimes returns 0 (which is normal),
+            # retry max_retry times before returns 0
             for _ in xrange(self._max_retry):
                 r = requests.get(
                     self._api_url, auth=(self._username, self._password))

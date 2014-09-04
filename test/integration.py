@@ -118,7 +118,7 @@ def setUpModule():
     os.environ['HOME'] = pwd.getpwnam('root').pw_dir
 
     client('saltutil.sync_all')
-    logger.info("Rendering all *.test SLS files to quickly find malformed ones")
+    logger.info("Rendering all *.test SLS to quickly find malformed ones")
     for sls in all_states:
         if sls.endswith('.test'):
             try:
@@ -329,7 +329,7 @@ class TestStateMeta(type):
 
     @classmethod
     def wrap_test_func(mcs, attrs, test_func_name, new_func_name, doc,
-                      *args, **kwargs):
+                       *args, **kwargs):
         """
         Wrap function ``self.test_func_name`` and put in into ``attrs`` dict
         """
@@ -540,7 +540,6 @@ class States(unittest.TestCase):
                           os.linesep.join(unclean)))
 
         is_clean = True
-
 
     def sls(self, states):
         """

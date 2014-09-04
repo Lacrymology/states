@@ -28,6 +28,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 include:
   - bash
+  - cron
   - jenkins
   - jenkins.git
   - local
@@ -118,3 +119,36 @@ extend:
     - require:
       - pkg: jenkins
       - file: /srv/salt
+
+ci-agent:
+  user:
+    - present
+  file:
+    - name: /home/ci-agent/.ssh
+    - directory
+    - user: ci-agent
+    - group: ci-agent
+    - mode: 750
+    - require:
+      - user: ci-agent
+
+/home/ci-agent/.ssh/authorized:
+  file:
+    - managed
+    - user: ci-agent
+    - group: ci-agent
+    - mode: 400
+    - contents: |
+        {{ pillar['salt']['ci']['authorized_keys']|indent(8) }}
+    - require:
+      - file: ci-agent
+
+/etc/cron.daily/ci-agent-cleanup-build-logs:
+  file:
+    - managed
+    - mode: 500
+    - contents: |
+        rm -f /home/ci-agent/*
+    - require:
+      - pkg: cron
+      - user: ci-agent

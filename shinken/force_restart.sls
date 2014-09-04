@@ -31,7 +31,7 @@ and it need to be manually kill. This state force a restart.
 
 {%- set roles = ('broker', 'arbiter', 'reactionner', 'poller', 'scheduler', 'receiver') -%}
 
-{% if salt['file.file_exists']('/usr/local/shinken') %}
+{% if salt['file.directory_exists']('/usr/local/shinken') %}
     {%- for role in roles -%}
         {%- if salt['file.file_exists']('/etc/init/shinken-' + role + '.conf') %}
 shinken-{{ role }}-dead:

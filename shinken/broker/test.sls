@@ -32,7 +32,7 @@ include:
 
 {%- set check_set = (('shinken_broker_web', 'Connection refused'),
                     ('shinken_broker_http', 'Connection refused'),
-                    ('shinken_nginx_http', 'Invalid HTTP response')) %}
+                    ('shinken.broker_nginx_http', 'Invalid HTTP response')) %}
 
 {%- set ssl = salt['pillar.get']('shinken:ssl', False) %}
 
@@ -44,7 +44,7 @@ test:
       - {{ name }}
 {%- endfor %}
 {%- if ssl %}
-      - shinken_nginx_https
+      - shinken.broker_nginx_https
 {%- endif %}
     - require:
 {% for name, failure in check_set %}
@@ -60,7 +60,7 @@ test:
 {%- endfor %}
 
 {%- if ssl %}
-shinken_nginx_https:
+shinken.broker_nginx_https:
   monitoring:
     - run_check
     - order: last

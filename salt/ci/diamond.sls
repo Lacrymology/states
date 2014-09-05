@@ -28,6 +28,5 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 include:
   - jenkins.diamond
-  - rsync.diamond
   - salt.cloud.diamond
   - salt.master.diamond

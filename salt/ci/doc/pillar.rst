@@ -29,7 +29,6 @@
 .. include:: /doc/include/add_pillar.inc
 
 - :doc:`/jenkins/doc/index` :doc:`/jenkins/doc/pillar`
-- :doc:`/rsync/doc/index` :doc:`/rsync/doc/pillar`
 - :doc:`/salt/cloud/doc/index` :doc:`/salt/cloud/doc/pillar`
 - :doc:`/salt/master/doc/index` :doc:`/salt/master/doc/pillar`
 

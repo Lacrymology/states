@@ -44,7 +44,11 @@ salt-minion:
     - installed
     - version: 2014.1.5-5precise1
     - require:
+{%- if grains['saltversion'].startswith('0.17') %}
       - pkgrepo17: salt
+{%- else %}
+      - pkgrepo: salt
+{%- endif %}
       - pkg: python-pip
       - pip: unittest-xml-reporting
   service:

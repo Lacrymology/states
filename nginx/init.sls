@@ -95,23 +95,12 @@ nginx-old-init-disable:
 
 nginx-logger-{{ log_type }}:
   file:
-    - managed
+    - absent
     - name: /etc/init/nginx-logger-{{ log_type }}.conf
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 440
-    - source: salt://nginx/upstart_logger.jinja2
-    - context:
-      type: {{ log_type }}
-  service:
-    - running
-    - enable: True
-    - order: 50
     - require:
-      - service: rsyslog
-      - file: nginx-logger-{{ log_type }}
-      - pkg: nginx
+      - service: nginx-logger-{{ log_type }}
+  service:
+    - dead
 {% endfor %}
 
 /etc/logrotate.d/nginx:
@@ -132,7 +121,7 @@ nginx_dependencies:
       - pkg: ssl-dev
       - cmd: apt_sources
 
-{%- set version = '1.4.4' %}
+{%- set version = '1.7.4' %}
 {%- set sub_version = '{0}-1~{1}'.format(version, grains['lsb_distrib_codename']) %}
 {%- set filename = 'nginx_{0}_{1}.deb'.format(sub_version, grains['debian_arch']) %}
 
@@ -172,7 +161,7 @@ nginx:
 {%- if 'files_archive' in pillar %}
       - nginx: {{ pillar['files_archive']|replace('file://', '')|replace('https://', 'http://') }}/mirror/{{ filename }}
 {%- else %}
-      - nginx: http://nginx.org/packages/ubuntu/pool/nginx/n/nginx/{{ filename }}
+      - nginx: http://nginx.org/packages/mainline/ubuntu/pool/nginx/n/nginx/{{ filename }}
 {%- endif %}
     - require:
       - user: web

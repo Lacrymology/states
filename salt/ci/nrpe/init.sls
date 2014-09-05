@@ -35,6 +35,7 @@ include:
   - salt.master.nrpe
   - ssh.client.nrpe
   - sudo.nrpe
+  - virtualenv.nrpe
 
 extend:
   {#- if used in conjunction with salt.ci just used a slightly different

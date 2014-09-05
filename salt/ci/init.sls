@@ -38,6 +38,7 @@ include:
   - salt.master
   - ssh.client
   - sudo
+  - virtualenv
 
 extend:
   salt-cloud-boostrap-script:

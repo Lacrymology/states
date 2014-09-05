@@ -148,7 +148,7 @@ ci-agent:
     - managed
     - mode: 500
     - contents: |
-        rm -f /home/ci-agent/*
+        find /home/ci-agent -name '*.xz' -mtime +1 -delete
     - require:
       - pkg: cron
       - user: ci-agent

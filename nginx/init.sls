@@ -163,7 +163,7 @@ nginx:
       - user: web
       - pkg: nginx_dependencies
 {%- for log_type in logger_types %}
-      - service: nginx-logger-{{ log_type }}
+      - file: nginx-logger-{{ log_type }}
 {%- endfor %}
 
 {%- if salt['pkg.version']('nginx') not in ('', sub_version) %}

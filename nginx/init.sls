@@ -151,10 +151,6 @@ nginx:
       - file: /etc/nginx/conf.d/{{ filename }}.conf
 {% endfor %}
       - pkg: nginx
-    - require:
-{% for log_type in logger_types %}
-      - service: nginx-logger-{{ log_type }}
-{% endfor %}
   pkg:
     - installed
     - sources:
@@ -166,6 +162,9 @@ nginx:
     - require:
       - user: web
       - pkg: nginx_dependencies
+{% for log_type in logger_types %}
+      - service: nginx-logger-{{ log_type }}
+{% endfor %}
 
 {%- if salt['pkg.version']('nginx') not in ('', sub_version) %}
 nginx_old_version:

@@ -27,7 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Common stuff for all shinken components.
 -#}
-{% set version = "1.4" %}
+{% set version = "2.0.3" %}
 include:
   - apt
   - bash
@@ -93,8 +93,8 @@ shinken:
   archive:
     - extracted
     - name: /usr/local/shinken/src
-    - source: {{ pillar['files_archive'] }}/mirror/shinken-{{ version }}-3e37861.tar.gz
-    - source_hash: md5=a35060a24292d0a8eb6e1164770f7f23
+    - source: {{ pillar['files_archive'] }}/mirror/shinken-{{ version }}.tar.gz
+    - source_hash: md5=2ea403179e257fb640b2b555598cacc4
     - archive_format: tar
     - tar_options: z
     - if_missing: /usr/local/shinken/src/shinken-{{ version }}
@@ -138,7 +138,7 @@ shinken:
     - require:
       - pkg: nagios-nrpe-server
 
-/usr/local/shinken/src/shinken-1.2.4:
+/usr/local/shinken/src/shinken-1.4:
   file:
     - absent
     - require_in:

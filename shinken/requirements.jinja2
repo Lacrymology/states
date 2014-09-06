@@ -32,6 +32,6 @@ pip==1.5.2
 {%- if 'files_archive' in pillar %}
 -e /usr/local/shinken/src/shinken-{{ version }}
 {%- else %}
--e git+git://github.com/naparuba/shinken.git@e59f1c89385eb6999d02ad2420f0c49a4b40adf6#egg=shinken
+-e git+git://github.com/naparuba/shinken.git@master#egg=shinken
 {%- endif %}
 {%- block extra_requirements %}{% endblock -%}

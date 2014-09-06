@@ -147,9 +147,9 @@ nginx:
       - user: web
       - file: nginx
       - file: /etc/nginx/nginx.conf
-{% for filename in bad_configs %}
+{%- for filename in bad_configs %}
       - file: /etc/nginx/conf.d/{{ filename }}.conf
-{% endfor %}
+{%- endfor %}
       - pkg: nginx
   pkg:
     - installed
@@ -162,9 +162,9 @@ nginx:
     - require:
       - user: web
       - pkg: nginx_dependencies
-{% for log_type in logger_types %}
+{%- for log_type in logger_types %}
       - service: nginx-logger-{{ log_type }}
-{% endfor %}
+{%- endfor %}
 
 {%- if salt['pkg.version']('nginx') not in ('', sub_version) %}
 nginx_old_version:

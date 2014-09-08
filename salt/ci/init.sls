@@ -131,7 +131,7 @@ ci-agent:
     - require:
       - user: ci-agent
 
-/home/ci-agent/.ssh/authorized:
+/home/ci-agent/.ssh/authorized_keys:
   file:
     - managed
     - user: ci-agent

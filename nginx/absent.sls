@@ -66,17 +66,6 @@ nginx-upstart-log:
       - pkg: nginx
 {% endfor %}
 
-{% for log_type in ('access', 'error') %}
-nginx-logger-{{ log_type }}:
-  file:
-    - absent
-    - name: /etc/init/nginx-logger-{{ log_type }}.conf
-    - require:
-      - service: nginx-logger-{{ log_type }}
-  service:
-    - dead
-{% endfor %}
-
 /etc/rsyslog.d/nginx-upstart.conf:
   file:
     - absent

@@ -40,14 +40,6 @@ nginx_worker:
   description: Nginx Worker Processes
   command: '/usr/lib/nagios/plugins/check_procs -c {{ num_workers }}:{{ num_workers }} -a "nginx: worker process" -u www-data'
 
-nginx_logger_access:
-  description: Nginx Access Logger
-  command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -C logger -a "-f /var/log/nginx/access.fifo"'
-
-nginx_logger_error:
-  description: Nginx Error Logger
-  command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -C logger -a "-f /var/log/nginx/error.fifo"'
-
 nginx_master:
   description: Nginx Master Process
   command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -a "nginx: master process /usr/sbin/nginx -c /etc/nginx/nginx.conf" -u root'

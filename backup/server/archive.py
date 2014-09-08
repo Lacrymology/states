@@ -34,6 +34,7 @@ import os
 import datetime
 import logging
 import logging.config
+import bfs
 
 logger = logging.getLogger('backup-archive')
 
@@ -53,6 +54,7 @@ def archive_directory(root_directory='/var/lib/backup'):
             archive.close()
             logger.info("Archive %s created from %s", absolute_filename)
 
+@bfs.profile(log=logger)
 def main():
     logging.config.fileConfig('/etc/backup-archive.conf')
     archive_directory()

@@ -199,9 +199,9 @@ nginx_old_version:
 
 nginx_verify_version:
   cmd:
-    - run
+    - wait
     - name: nginx -v 2>&1 | grep -q '{{ version }}'
-    - require:
+    - watch:
       - service: nginx
 
 {% from 'rsyslog/upstart.sls' import manage_upstart_log with context %}

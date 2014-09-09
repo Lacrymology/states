@@ -52,6 +52,10 @@ def pad_uuid(msg):
     return '. '.join((msg, 'UUID: %s' % uuid.uuid4().hex))
 
 
+class EmptyMailboxError(Exception):
+    pass
+
+
 class MailStackHealth(nap.Resource):
     def __init__(self,
                  imap_server,
@@ -130,6 +134,11 @@ Subject: %s
                  msg_parts='(BODY[TEXT])'):
         if msg_set == 'latest':
             msg_set = self.imap.select(mailbox)[1][0]
+
+        if int(msg_set) == 0:
+            raise EmptyMailboxError('%s is empty, maybe mail processing takes'
+                                    ' too long. Consider raising timeout.' %
+                                    mailbox)
 
         return (msg in
                 self._fetch_msg_in_mailbox(msg, mailbox,

@@ -75,6 +75,14 @@ class MailStackHealth(nap.Resource):
         log.debug(self.imap.delete('spam'))
         log.debug(self.imap.create('spam'))
 
+        # cleanup all mail existing in INBOX
+        self.imap.select('INBOX')
+        _, _data = self.imap.search(None, 'ALL')
+        for num in _data[0].split():
+            self.imap.store(num, '+FLAGS', '\\Deleted')
+        self.imap.expunge()
+        self.imap.close()
+
         log.debug('SMTP EHLO: %s', self.smtp.ehlo())
         log.debug('SMTP login: %s', self.smtp.login(username, password))
 
@@ -113,6 +121,7 @@ Subject: %s
 
     def _fetch_msg_in_mailbox(self, msg, mailbox, msg_set, msg_parts):
         log.debug('SELECT %s: %s', mailbox, self.imap.select(mailbox))
+        log.debug('msg_set: %s, msg_parts: %s', msg_set, msg_parts)
         fetched = self.imap.fetch(msg_set, msg_parts)
         log.debug('Fetched: %s', fetched)
         return fetched

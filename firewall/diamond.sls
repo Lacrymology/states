@@ -38,7 +38,6 @@ firewall_nf_conntrack_diamond_collector:
     - name: /etc/diamond/collectors/ConnTrackCollector.conf
     - contents: |
         # {{ pillar['message_do_not_modify'] }}
-        [[ConnTrackCollector]]
 
         enabled = True
         dir = /proc/sys/net/netfilter

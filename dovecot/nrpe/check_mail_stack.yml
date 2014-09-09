@@ -16,7 +16,7 @@ mail:
   imap_server: localhost
   smtp_server: {{ mail_pillar['smtp_server'] }}
 {#- wait N seconds after sending mail #}
-  smtp_wait: {{ salt['pillar.get']('mail:check_mail_stack:smtp_wait', 7) }}
+  smtp_wait: {{ salt['pillar.get']('mail:check_mail_stack:smtp_wait', 10) }}
 {#- Assuming that if dovecot is configured to use SSL,
     means all the stack uses SSL #}
 {%- if salt['pillar.get']('dovecot:ssl', False) %}

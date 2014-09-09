@@ -52,6 +52,10 @@ def pad_uuid(msg):
     return '. '.join((msg, 'UUID: %s' % uuid.uuid4().hex))
 
 
+class EmptyMailboxError(Exception):
+    pass
+
+
 class MailStackHealth(nap.Resource):
     def __init__(self,
                  imap_server,
@@ -74,6 +78,14 @@ class MailStackHealth(nap.Resource):
         # as IMAP server does not allow doing that.
         log.debug(self.imap.delete('spam'))
         log.debug(self.imap.create('spam'))
+
+        # cleanup all mail existing in INBOX
+        self.imap.select('INBOX')
+        _, _data = self.imap.search(None, 'ALL')
+        for num in _data[0].split():
+            self.imap.store(num, '+FLAGS', '\\Deleted')
+        self.imap.expunge()
+        self.imap.close()
 
         log.debug('SMTP EHLO: %s', self.smtp.ehlo())
         log.debug('SMTP login: %s', self.smtp.login(username, password))
@@ -113,6 +125,7 @@ Subject: %s
 
     def _fetch_msg_in_mailbox(self, msg, mailbox, msg_set, msg_parts):
         log.debug('SELECT %s: %s', mailbox, self.imap.select(mailbox))
+        log.debug('msg_set: %s, msg_parts: %s', msg_set, msg_parts)
         fetched = self.imap.fetch(msg_set, msg_parts)
         log.debug('Fetched: %s', fetched)
         return fetched
@@ -121,6 +134,11 @@ Subject: %s
                  msg_parts='(BODY[TEXT])'):
         if msg_set == 'latest':
             msg_set = self.imap.select(mailbox)[1][0]
+
+        if int(msg_set) == 0:
+            raise EmptyMailboxError('%s is empty, maybe mail processing takes'
+                                    ' too long. Consider raising timeout.' %
+                                    mailbox)
 
         return (msg in
                 self._fetch_msg_in_mailbox(msg, mailbox,

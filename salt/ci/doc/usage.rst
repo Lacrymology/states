@@ -15,9 +15,12 @@ Install following plugins:
 Configuration
 -------------
 
-- Configure :doc:`/ssh/doc/index` private key
-  for user ``jenkins`` throught Jenkins Web UI. (Dashboard => Credential
-  => Add credential => Kind: :doc:`/ssh/doc/index` username with private key)
+Notices that some config options only available after installing all needed
+plugins, so do install above plugins before doing followings steps.
+
+- Configure SSH private key
+  for user ``jenkins`` through Jenkins Web UI. (Dashboard => Credential
+  => Add credential => ``Kind: SSH username with private key``)
 
 Jobs
 ----

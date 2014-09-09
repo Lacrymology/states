@@ -39,10 +39,10 @@ First go in one of the hostname you specified at ``jenkins:hostnames``.
 Things you **should** do
 ------------------------
 
-- Restrict project naming.
-- Set admin e-mail address.
-- Create an user AND switch to Matrix based security to prevent anonymous user to
+- Enable security in ``Configure Global Security`` then create an user.
+  After that, switch to Matrix based security to prevent anonymous user to
   have read-only access to Jenkins.
+- Set admin e-mail address.
 - Install https://wiki.jenkins-ci.org/display/JENKINS/Timestamper and turn it
   on to all jobs.
 - Set ``[a-zA-Z0-9\-]*`` as regular expression for job name. As job name are

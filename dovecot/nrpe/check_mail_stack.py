@@ -83,16 +83,12 @@ class MailStackHealth(nap.Resource):
         self.waittime = smtp_wait
 
     def probe(self):
-        try:
-            inboxtest = self.test_send_and_receive_email_in_inbox_mailbox()
-            spamtest = self.test_send_and_receive_GTUBE_spam_in_spam_folder()
-            virustest = self.test_send_virus_email_and_discarded_by_amavis()
-        except Exception as e:
-            log.error(e, exc_info=True)
-        else:
-            return [nap.Metric('mail_stack_health',
-                               all((spamtest, inboxtest, virustest)),
-                               context='null')]
+        inboxtest = self.test_send_and_receive_email_in_inbox_mailbox()
+        spamtest = self.test_send_and_receive_GTUBE_spam_in_spam_folder()
+        virustest = self.test_send_virus_email_and_discarded_by_amavis()
+        return [nap.Metric('mail_stack_health',
+                           all((spamtest, inboxtest, virustest)),
+                           context='null')]
 
     def send_email(self, subject, rcpts, body, _from=None, wait=0):
         if _from is None:

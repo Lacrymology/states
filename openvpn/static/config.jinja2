@@ -33,6 +33,7 @@ secret /etc/openvpn/{{ tunnel }}/secret.key
 user nobody
 group nogroup
 writepid /var/run/openvnp-{{ tunnel }}.pid
+status /var/lib/openvpn/{{ tunnel }}.log
 syslog vpn-{{ tunnel }}
 persist-tun
 persist-key

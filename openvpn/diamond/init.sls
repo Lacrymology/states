@@ -41,7 +41,10 @@ openvpn_diamond_collector:
     - mode: 440
     - source: salt://openvpn/diamond/config.jinja2
     - context:
-      instances: {{ salt['pillar.get']('openvpn', {}) }}
+      instances:
+{%- for tunnel in pillar['openvpn'] %}
+        {{ tunnel }}: file:///var/lib/openvpn/{{ tunnel }}.log
+{%- endfor %}
     - require:
       - file: /etc/diamond/collectors
 

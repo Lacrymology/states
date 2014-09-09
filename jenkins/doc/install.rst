@@ -95,3 +95,11 @@ which will run build script from path
 this make build job run all test against ``vim`` formula.
 To add more tests, just pass them as arguments to this script (separate
 by space). To run all test, provide no argument.
+
+Plugins
+-------
+
+- Execute shell task in ``Post-build actions``: postbuild-task
+- Checkout source code with git: git-client
+- Use multiple SCMs: multiple-scms
+

@@ -81,6 +81,10 @@ include:
       - virtualenv: shinken
       - file: /usr/local/bin/shinken-ctl.sh
 
+libffi-dev:
+  pkg:
+    - installed
+
 shinken:
   virtualenv:
     - manage
@@ -89,18 +93,6 @@ shinken:
     - require:
       - module: virtualenv
       - file: /usr/local
-{%- if 'files_archive' in pillar %}
-  archive:
-    - extracted
-    - name: /usr/local/shinken/src
-    - source: {{ pillar['files_archive'] }}/mirror/shinken-{{ version }}.tar.gz
-    - source_hash: md5=2ea403179e257fb640b2b555598cacc4
-    - archive_format: tar
-    - tar_options: z
-    - if_missing: /usr/local/shinken/src/shinken-{{ version }}
-    - require:
-      - file: /usr/local/shinken/src
-{%- endif %}
   file:
     - managed
     - name: /usr/local/shinken/salt-requirements.txt
@@ -122,12 +114,12 @@ shinken:
     - require:
       - virtualenv: shinken
     - watch:
-{%- if 'files_archive' in pillar %}
-      - archive: shinken
-{%- endif %}
       - file: shinken
       - pkg: python-dev
       - user: shinken
+{%- if salt['pillar.get']('shinken:ssl', False) %}
+      - pkg: libffi-dev
+{%- endif %}
   user:
     - present
     - shell: /bin/false
@@ -135,6 +127,9 @@ shinken:
     - gid_from_name: True
     - groups:
       - nagios
+{%- if salt['pillar.get']('shinken:ssl', False) %}
+      - ssl-cert
+{%- endif %}
     - require:
       - pkg: nagios-nrpe-server
 

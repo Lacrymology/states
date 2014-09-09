@@ -38,6 +38,6 @@ script
   ulimit -Hn {{ max_filedescriptors }}
   ulimit -Sn {{ max_filedescriptors }}
 {%- endif %}
-  exec /usr/local/shinken/bin/shinken-{{ shinken_component }} -c /etc/shinken/{{ shinken_component }}.conf
+  exec /usr/local/shinken/bin/python /usr/bin/shinken-{{ shinken_component }} -c /etc/shinken/{{ shinken_component }}.conf
   emit shinken-arbiter-{{ shinken_component }}
 end script

@@ -90,8 +90,6 @@ shinken-poller:
 
 extend:
   shinken:
-    file:
-      - source: salt://shinken/poller/requirements.jinja2
     module:
       - watch:
         - pkg: ssl-dev

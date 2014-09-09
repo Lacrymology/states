@@ -72,6 +72,7 @@ shinken-broker:
     - watch:
       - module: shinken
       - file: /etc/shinken/broker.conf
+      - file: shinken
       - file: shinken-broker
       - service: rsyslog
       - user: shinken
@@ -98,4 +99,9 @@ extend:
         - file: /etc/nginx/conf.d/shinken-web.conf
 {% if salt['pillar.get']('shinken:ssl', False) %}
         - cmd: ssl_cert_and_key_for_{{ pillar['shinken']['ssl'] }}
+  web:
+    user:
+      - present
+      - groups:
+        - ssl-cert
 {% endif %}

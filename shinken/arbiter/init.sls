@@ -41,6 +41,9 @@ include:
   - hostname
   - rsyslog
   - shinken
+{%- if salt['pillar.get']('shinken:ssl', False) %}
+  - ssl
+{%- endif %}
   - ssmtp
 
 {#{% if 'arbiter' in pillar['shinken']['roles'] %}#}
@@ -50,6 +53,15 @@ include:
 {#{% endif %}#}
 
 {% set configs = ('architecture', 'infra') %}
+
+shinken-init:
+  cmd:
+    - run
+    - user: shinken
+    - name: /usr/local/shinken/bin/python /usr/bin/shinken --init
+    - unless: test -f /var/lib/shinken/.shinken.ini
+    - require:
+      - module: shinken
 
 shinken-arbiter:
   file:
@@ -77,11 +89,24 @@ shinken-arbiter:
     - watch:
       - user: shinken
       - module: shinken
+      - file: shinken
       - file: shinken-arbiter
       - file: /etc/shinken/arbiter.conf
     {% for config in configs %}
       - file: /etc/shinken/{{ config }}.conf
     {% endfor %}
+
+{%- for module in ('auth-cfg-password', 'booster-nrpe', 'graphite', 'nsca', 'pickle-retention-file-generic', 'sqlitedb', 'syslog-sink', 'ui-graphite', 'webui') %}
+{{ module }}:
+  cmd:
+    - run
+    - user: shinken
+    - name: /usr/local/shinken/bin/python /usr/bin/shinken install {{ module }}
+    - unless: /usr/local/shinken/bin/python /usr/bin/shinken inventory | grep {{ module }}
+    - require:
+      - module: shinken
+      - cmd: shinken-init
+{%- endfor %}
 
 /etc/shinken/arbiter.conf:
   file:
@@ -99,6 +124,9 @@ shinken-arbiter:
     - require:
       - file: /etc/shinken
       - user: shinken
+{%- if salt['pillar.get']('shinken:ssl', False) %}
+      - cmd: ssl_cert_and_key_for_{{ pillar['shinken']['ssl'] }}
+{% endif %}
 
 /etc/shinken/objects:
   file:

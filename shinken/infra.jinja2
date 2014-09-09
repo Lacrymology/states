@@ -278,13 +278,7 @@ define service {
             {%- if key_name not in reserved_keys %}
     {{ key_name }} {{ check.data[key_name] }}
             {%- endif -%}
-        {%- endfor -%}
-        {#- `business_rule_service_notification_options` only available from 2.0 #}
-        {%- if pillar['shinken']['architecture']['broker']|length == 2 -%}
-            {%- if check_name in ('shinken_broker_http', 'shinken_broker_web') %}
-    notification_options n
-            {%- endif -%}
-        {%- endif %}
+        {%- endfor %}
 }
     {%- endfor -%}
 {%- endfor -%}

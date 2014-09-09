@@ -32,7 +32,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 user=shinken
 group=shinken
 
-pidfile=/var/lib/shinken/{{ shinken_component }}.pid
+pidfile=/var/run/shinken/{{ shinken_component }}.pid
 local_log=/var/log/shinken/{{ shinken_component }}.log
 workdir=/var/lib/shinken
 
@@ -51,15 +51,13 @@ daemon_enabled=1
 {#-maxfd=1024#}
 idontcareaboutsecurity=0
 
-{#- until shinken 1.4 isn't out, can't use SSL #}
-{#-
 {% if salt['pillar.get']('shinken:ssl', False) %}
 use_ssl=1
 certs_dir=/etc/ssl/certs/
 ca_cert=/etc/ssl/certs/{{ pillar['shinken']['ssl'] }}_chained.crt
-server_cert=/etc/ssl/private/{{ pillar['shinken']['ssl'] }}.pem
-#hard_ssl_name_check=0
+server_cert=/etc/ssl/certs/{{ pillar['shinken']['ssl'] }}.crt
+server_key=/etc/ssl/private/{{ pillar['shinken']['ssl'] }}.pem
+hard_ssl_name_check=0
 {% else %}
-#}
 use_ssl=0
-{#-{% endif %}#}
+{% endif %}

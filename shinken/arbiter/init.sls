@@ -61,7 +61,7 @@ shinken-init:
     - name: /usr/local/shinken/bin/python /usr/local/shinken/bin/shinken --init
     - unless: test -f /var/lib/shinken/.shinken.ini
     - require:
-      - module: shinken
+      - cmd: shinken
 
 shinken-arbiter:
   file:
@@ -75,7 +75,7 @@ shinken-arbiter:
     - require:
       - pkg: ssmtp
       - host: hostname
-      - module: shinken
+      - cmd: shinken
   service:
     - running
     - enable: True
@@ -88,7 +88,7 @@ shinken-arbiter:
 {#- does not use PID, no need to manage #}
     - watch:
       - user: shinken
-      - module: shinken
+      - cmd: shinken
       - file: shinken
       - file: shinken-arbiter
       - file: /etc/shinken/arbiter.conf
@@ -104,7 +104,6 @@ shinken-arbiter:
     - name: /usr/local/shinken/bin/python /usr/local/shinken/bin/shinken install {{ module }}
     - unless: /usr/local/shinken/bin/python /usr/local/shinken/bin/shinken inventory | grep {{ module }}
     - require:
-      - module: shinken
       - cmd: shinken-init
 {%- endfor %}
 

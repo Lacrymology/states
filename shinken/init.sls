@@ -170,4 +170,4 @@ shinken:
   file:
     - absent
     - require_in:
-      - module: shinken
+      - cmd: shinken

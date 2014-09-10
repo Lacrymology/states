@@ -70,7 +70,7 @@ shinken-broker:
       - file: /var/log/shinken
       - file: /var/lib/shinken
     - watch:
-      - module: shinken
+      - cmd: shinken
       - file: /etc/shinken/broker.conf
       - file: shinken
       - file: shinken-broker

@@ -52,7 +52,7 @@ shinken-receiver:
       - file: /var/lib/shinken
       - file: /var/log/shinken
     - watch:
-      - module: shinken
+      - cmd: shinken
       - file: /etc/shinken/receiver.conf
       - file: shinken-receiver
       - user: shinken

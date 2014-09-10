@@ -1,4 +1,5 @@
 {#-
+
 Copyright (c) 2013, Bruno Clermont
 All rights reserved.
 
@@ -101,6 +102,20 @@ shinken:
     - require:
       - module: virtualenv
       - file: /usr/local
+  archive:
+    - extracted
+    - name: /usr/local/shinken/src
+{%- if 'files_archive' in pillar %}
+    - source: {{ pillar['files_archive'] }}/pip/Shinken-{{ version }}.tar.gz
+{%- else %}
+    - source: https://pypi.python.org/packages/source/S/Shinken/Shinken-{{ version }}.tar.gz
+{%- endif %}
+    - source_hash: md5=0350cc0fbeba6405d88e5fbce3580a91
+    - archive_format: tar
+    - tar_options: z
+    - if_missing: /usr/local/shinken/src/Shinken-{{ version }}
+    - require:
+      - file: /usr/local/shinken/src
   file:
     - managed
     - name: /usr/local/shinken/salt-requirements.txt
@@ -128,6 +143,15 @@ shinken:
 {%- if salt['pillar.get']('shinken:ssl', False) %}
       - pkg: shinken_dependencies
 {%- endif %}
+  cmd:
+    - wait
+    - cwd: /usr/local/shinken/src/Shinken-{{ version }}
+    - name: /usr/local/shinken/bin/python setup.py install --install-scripts=/usr/local/shinken/bin
+    - watch:
+      - virtualenv: shinken
+      - archive: shinken
+    - require:
+      - module: shinken
   user:
     - present
     - shell: /bin/false

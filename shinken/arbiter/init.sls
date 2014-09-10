@@ -58,7 +58,7 @@ shinken-init:
   cmd:
     - run
     - user: shinken
-    - name: /usr/local/shinken/bin/python /usr/bin/shinken --init
+    - name: /usr/local/shinken/bin/python /usr/local/shinken/bin/shinken --init
     - unless: test -f /var/lib/shinken/.shinken.ini
     - require:
       - module: shinken
@@ -101,8 +101,8 @@ shinken-arbiter:
   cmd:
     - run
     - user: shinken
-    - name: /usr/local/shinken/bin/python /usr/bin/shinken install {{ module }}
-    - unless: /usr/local/shinken/bin/python /usr/bin/shinken inventory | grep {{ module }}
+    - name: /usr/local/shinken/bin/python /usr/local/shinken/bin/shinken install {{ module }}
+    - unless: /usr/local/shinken/bin/python /usr/local/shinken/bin/shinken inventory | grep {{ module }}
     - require:
       - module: shinken
       - cmd: shinken-init

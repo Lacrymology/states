@@ -36,4 +36,4 @@ include:
   - ssl.nrpe
 {%- endif %}
 
-{{ passive_check('shinken.scheduler') }}
+{{ passive_check('shinken.scheduler', pillar_prefix='shinken') }}

@@ -34,3 +34,9 @@ test:
   monitoring:
     - run_all_checks
     - order: last
+
+extend:
+  openvpn_diamond_collector:
+    file:
+      - require:
+        - sls: openvpn.static

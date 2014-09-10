@@ -166,8 +166,10 @@ shinken:
       - pkg: nagios-nrpe-server
       - pkg: ssl-cert
 
-/usr/local/shinken/src/shinken-1.4:
-  file:
-    - absent
+shinken_old_version:
+  cmd:
+    - run
+    - cwd: /usr/local/shinken/src/shinken-1.4
+    - name: yes | ./install -u
     - require_in:
       - cmd: shinken

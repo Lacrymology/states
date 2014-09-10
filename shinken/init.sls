@@ -84,9 +84,14 @@ include:
       - virtualenv: shinken
       - file: /usr/local/bin/shinken-ctl.sh
 
-libffi-dev:
+shinken_dependencies:
   pkg:
     - installed
+    - pkgs:
+      - libffi-dev
+      - libcurl4-openssl-dev
+    - require:
+      - cmd: apt_sources
 
 shinken:
   virtualenv:
@@ -121,7 +126,7 @@ shinken:
       - pkg: python-dev
       - user: shinken
 {%- if salt['pillar.get']('shinken:ssl', False) %}
-      - pkg: libffi-dev
+      - pkg: shinken_dependencies
 {%- endif %}
   user:
     - present

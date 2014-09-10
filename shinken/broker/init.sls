@@ -104,4 +104,6 @@ extend:
       - present
       - groups:
         - ssl-cert
+      - require:
+        - pkg: ssl-cert
 {% endif %}

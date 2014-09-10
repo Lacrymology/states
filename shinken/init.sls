@@ -36,6 +36,9 @@ include:
   - python.dev
   - virtualenv
   - nrpe
+{% if salt['pillar.get']('shinken:ssl', False) %}
+  - ssl
+{% endif %}
 
 {# common to all shinken daemons #}
 
@@ -132,6 +135,7 @@ shinken:
 {%- endif %}
     - require:
       - pkg: nagios-nrpe-server
+      - pkg: ssl-cert
 
 /usr/local/shinken/src/shinken-1.4:
   file:

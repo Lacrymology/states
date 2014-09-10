@@ -102,8 +102,9 @@ class ImageIds(nagiosplugin.Resource):
         ids = set()
         # get the providers and their drivers' names and populate a list of ids
         for provider, data in providers.items():
-            ids.add(str(inst['id'])
-                    for inst in salt_list[provider][data['provider']])
+            salt_list_data = salt_list[provider][data['provider']]
+            ids.update(str(salt_list_data[inst]['id'])
+                       for inst in salt_list_data)
 
         imgs = set(str(prof['image']) for prof in profile_list.values())
         yield nagiosplugin.Metric('missing', imgs - ids)

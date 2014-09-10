@@ -74,8 +74,9 @@ class ImageIds(nagiosplugin.Resource):
     """
     Checks the salt-cloud instances list against cloud.profile
     """
-    def __init__(self, profile_file):
+    def __init__(self, profile_file, providers_file):
         self.profile_file = profile_file
+        self.providers_file = providers_file
 
     def probe(self):
         # get cloud.profile data
@@ -83,21 +84,27 @@ class ImageIds(nagiosplugin.Resource):
         with open(self.profile_file) as f:
             profile_list = yaml.load(f)
 
+        providers = {}
+        with open(self.providers_file) as f:
+            providers = yaml.safe_load(f)
+
         # get salt-cloud output
         try:
-            proc = subprocess.Popen(['salt-cloud', '--list-images',
-                                     'digitalocean', '--out=yaml'],
+            proc = subprocess.Popen(['salt-cloud',
+                                     '--list-images=all',
+                                     '--out=yaml'],
                                     stdout=subprocess.PIPE)
         except OSError:
             pass
         else:
             salt_list = yaml.load(proc.stdout)
-            try:
-                salt_list = salt_list['digitalocean']['digital_ocean']
-            except KeyError:
-                salt_list = {}
 
-        ids = set(str(inst['id']) for inst in salt_list.values())
+        ids = set()
+        # get the providers and their drivers' names and populate a list of ids
+        for provider, data in providers.items():
+            ids.add(str(inst['id'])
+                    for inst in salt_list[provider][data['provider']])
+
         imgs = set(str(prof['image']) for prof in profile_list.values())
         yield nagiosplugin.Metric('missing', imgs - ids)
 
@@ -106,10 +113,12 @@ def main():
     argp = argparse.ArgumentParser()
     argp.add_argument("--profile-file", metavar="PATH",
                       default="/etc/salt/cloud.profiles")
+    argp.add_argument("--providers-file", metavar="PATH",
+                      default="/etc/salt/cloud.providers")
     argp.add_argument('-v', '--verbose', action='count', default=0)
     args = argp.parse_args()
 
-    check = nagiosplugin.Check(ImageIds(args.profile_file),
+    check = nagiosplugin.Check(ImageIds(args.profile_file, args.providers_file),
                                MissingImageContext('missing'),
                                Summary())
     check.main(args.verbose, timeout=300)

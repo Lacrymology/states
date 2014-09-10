@@ -42,11 +42,20 @@ include:
   - ssl.nrpe
 {% endif %}
 
+/usr/local/nagios/src:
+  file:
+    - directory
+    - user: root
+    - group: root
+    - mode: 755
+    - require:
+      - virtualenv: nrpe-virtualenv
+
 {%- set check_pg_version = "2.21.0" %}
 check_postgres:
   archive:
     - extracted
-    - name: /usr/local
+    - name: /usr/local/nagios/src
 {%- if 'files_archive' in pillar %}
     - source: {{ pillar['files_archive'] }}/mirror/check_postgres-{{ check_pg_version }}.tar.gz
 {%- else %}
@@ -55,12 +64,12 @@ check_postgres:
     - source_hash: md5=c27dc6daaf75de32fc4f6e8cc3502116
     - archive_format: tar
     - tar_options: z
-    - if_missing: /usr/local/check_postgres-{{ check_pg_version }}
+    - if_missing: /usr/local/nagios/src/check_postgres-{{ check_pg_version }}
     - require:
-      - file: /usr/local
+      - file: /usr/local/nagios/src
   file:
     - symlink
-    - target: /usr/local/check_postgres-{{ check_pg_version }}/check_postgres.pl
+    - target: /usr/local/nagios/src/check_postgres-{{ check_pg_version }}/check_postgres.pl
     - name: /usr/lib/nagios/plugins/check_postgres
     - require:
       - pkg: nagios-nrpe-server

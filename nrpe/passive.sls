@@ -1,4 +1,4 @@
-{%- macro passive_check(formula, domain_name=None, pillar_prefix=None) -%}
+{%- macro passive_check(formula, domain_name=None, pillar_prefix=None, check_sslyze=True) -%}
     {%- if not pillar_prefix -%}
         {%- set pillar_prefix = formula -%}
     {%- endif %}
@@ -30,7 +30,7 @@
   file:
     - absent
 
-{% if salt['pillar.get'](pillar_prefix ~ ':ssl', False) %}
+{% if salt['pillar.get'](pillar_prefix ~ ':ssl', False) and check_sslyze %}
 {#- manage cron file for sslyze NRPE check consumer #}
 {%- set domain_name = salt['pillar.get'](pillar_prefix + ':hostnames', ['127.0.0.1'])[0] if not domain_name -%}
   {% if domain_name|replace('.', '')|int == 0 %} {# only check if it is a domain, not IP. int returns 0 for unconvertible value #}

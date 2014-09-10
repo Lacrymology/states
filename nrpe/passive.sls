@@ -50,11 +50,11 @@
       - pkg: cron
       - file: /etc/nagios/nsca.d/{{ formula }}.yml
 
-{%- if formula|replace('.', '') != formula %}
+    {%- if formula|replace('.', '') != formula %}
 /etc/cron.d/sslyze_check_{{ formula }}:
   file:
     - absent
-{%- endif %}
+    {%- endif %}
 
   {%- else %}
 /etc/cron.d/sslyze_check_{{ formula|replace('.', '-') }}:

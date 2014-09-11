@@ -47,14 +47,24 @@ base:
 {%- endif -%}
   {#- target all minions #}
   '*':
-{%- if not roles and not global_roles %} [] {#- empty list #}
+{%- if not roles and not global_roles -%}
+    {#- do nothing #}
+    - salt.noop
 {%- else -%}
-    {#- list all minion's role and absent role it's not member of #}
+    {#- empty is True if no roles (or roles.absent) are applied -#}
+    {%- set empty = True -%}
+    {#- list all minion's role and absent role it's not member of -#}
     {%- for role in global_roles -%}
-        {%- if role in roles %}
+        {%- if role in roles -%}
+            {%- do empty = False %}
     - roles.{{ role }}
-        {%- elif salt['pillar.get']('roles_absent', False) %}
+        {%- elif salt['pillar.get']('roles_absent', False) -%}
+            {%- do empty = False %}
     - roles.{{ role }}.absent
         {%- endif -%}
     {%- endfor -%}
+    {#- it's possible that a minion don't have any roles, so do nothing -#}
+    {%- if empty %}
+    - salt.noop
+    {%- endif -%}
 {%- endif -%}

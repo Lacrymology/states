@@ -102,6 +102,9 @@ shinken:
     - require:
       - module: virtualenv
       - file: /usr/local
+{%- if salt['file.directory_exists']('/usr/local/shinken/src/shinken-1.4') %}
+      - cmd: shinken_old_version
+{%- endif %}
   archive:
     - extracted
     - name: /usr/local/shinken/src
@@ -146,7 +149,7 @@ shinken:
   cmd:
     - wait
     - cwd: /usr/local/shinken/src/Shinken-{{ version }}
-    - name: /usr/local/shinken/bin/python setup.py install --install-scripts=/usr/local/shinken/bin
+    - name: /usr/local/shinken/bin/python setup.py install --root=/usr/local/shinken --install-scripts=/bin
     - watch:
       - virtualenv: shinken
       - archive: shinken
@@ -166,6 +169,7 @@ shinken:
       - pkg: nagios-nrpe-server
       - pkg: ssl-cert
 
+{%- if salt['file.directory_exists']('/usr/local/shinken/src/shinken-1.4') %}
 shinken_old_version:
   cmd:
     - run
@@ -173,3 +177,4 @@ shinken_old_version:
     - name: yes | ./install -u
     - require_in:
       - cmd: shinken
+{%- endif %}

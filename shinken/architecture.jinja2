@@ -47,7 +47,7 @@ define arbiter {
     host_name {{ id }}
     address {{ mine[id]['ip_addrs']['private'] }}
     port 7770
-    modules arbiter-retention
+    modules PickleRetentionArbiter
     {# only the first one is not a spare #}
     {%- if not loop.first %}
     spare 1
@@ -62,8 +62,8 @@ define arbiter {
 {%- endfor %}
 
 define module {
-    module_name arbiter-retention
-    module_type pickle-retention-file-generic
+    module_name PickleRetentionArbiter
+    module_type pickle_retention_file_generic
     path /var/lib/shinken/arbiter.retention
 }
 
@@ -113,8 +113,8 @@ http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects
 #}
 
 define module{
-    module_name NrpeBooster
-    module_type booster-nrpe
+    module_name booster-nrpe
+    module_type nrpe_poller
 }
 
 {%- for id in pillar['shinken']['architecture']['poller'] -%}
@@ -125,7 +125,7 @@ define poller {
     port 7771
     poller_tags {{ pillar['shinken']['architecture']['poller'][id] }}
     realm All
-    modules NrpeBooster
+    modules booster-nrpe
     {%- if salt['pillar.get']('shinken:ssl', False) %}
     use_ssl 1
     {%- endif %}
@@ -153,7 +153,7 @@ define broker {
     broker_name broker-{{ id }}
     address {{ mine[id]['ip_addrs']['public'] }}
     port 7772
-    modules broker-syslog, broker-retention, broker-webui{% if 'graphite_address' in pillar %}, broker-graphite{% endif %}
+    modules Syslog, PickleRetentionBroker, webui{% if 'graphite_address' in pillar %}, graphite{% endif %}
     realm All
     manage_arbiters 1
     {%- if not loop.first %}
@@ -182,14 +182,14 @@ easy to modify. Use for example with Splunk Molog, Logstash or other log
 management and analysis system.
 #}
 define module {
-    module_name broker-syslog
-    module_type syslog-sink
+    module_name Syslog
+    module_type syslog
 }
 
 {%- if 'graphite_address' in pillar %}
 define module {
-    module_name broker-graphite
-    module_type graphite
+    module_name graphite
+    module_type graphite_perfdata
     host {{ pillar['graphite_address'] }}
     {#- Or 2004 if using use_pickle 1 #}
     port 2003
@@ -198,8 +198,8 @@ define module {
 }
 
 define module {
-    module_name broker-webui-graphite
-    module_type ui-graphite
+    module_name ui-graphite
+    module_type graphite-webui
     uri {{ pillar['shinken']['graphite_url'] }}
     templates_path /usr/local/shinken/share/templates/graphite/
     graphite_data_source shinken
@@ -207,13 +207,13 @@ define module {
 {%- endif %}
 
 define module {
-    module_name broker-retention
-    module_type pickle-retention-file-generic
+    module_name PickleRetentionBroker
+    module_type pickle_retention_file_generic
     path /var/lib/shinken/broker.retention
 }
 
 define module {
-    module_name broker-webui
+    module_name webui
     module_type webui
 {%- if pillar['shinken']['architecture']['broker']|length == 1 %}
     host 127.0.0.1
@@ -229,7 +229,7 @@ define module {
     max_output_length   100     ; Maximum output length for plugin output in webui
     play_sound          0       ; Play sound on new non-acknowledged problems.#}
 
-    modules broker-webui-sqlite, broker-webui-auth{% if 'graphite_address' in pillar %}, broker-webui-graphite{% endif %}
+    modules SQLitedb, auth-cfg-password{% if 'graphite_address' in pillar %}, ui-graphite{% endif %}
 
 {#-    ## Advanced Options
     # Don't use them as long as you don't know what you are doing!
@@ -262,8 +262,8 @@ define module {
 
 {#- Check authentification using password parameter in contact definition. #}
 define module {
-    module_name broker-webui-auth
-    module_type auth-cfg-password
+    module_name auth-cfg-password
+    module_type cfg_password_webui
 }
 
 {#-
@@ -299,8 +299,8 @@ define reactionner {
 {%- endfor %}
 
 define module {
-    module_name NSCA
-    module_type nsca
+    module_name nsca
+    module_type nsca_server
     host *
     port 5667
     encryption_method 1
@@ -317,7 +317,7 @@ define receiver {
     receiver_name receiver-{{ id }}
     address {{ mine[id]['ip_addrs']['public'] }}
     port 7773
-    modules NSCA
+    modules nsca
     realm All
     {%- if salt['pillar.get']('shinken:ssl', False) %}
     use_ssl 1
@@ -332,12 +332,12 @@ define receiver {
 {%- endfor -%}
 
 {#-
-Module: broker-webui-sqlite
-Loaded by: broker-webui
-In broker-webui: Save/read user preferences
+Module: SQLitedb
+Loaded by: webui
+In webui: Save/read user preferences
 #}
 define module {
-    module_name broker-webui-sqlite
+    module_name SQLitedb
     module_type sqlitedb
     uri /var/lib/shinken/webui.sqlite
 }

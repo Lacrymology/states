@@ -95,15 +95,7 @@ extend:
 
 /var/lib/jenkins/salt-post.sh:
   file:
-    - managed
-    - user: jenkins
-    - group: nogroup
-    - mode: 500
-    - source: salt://salt/ci/post.jinja2
-    - template: jinja
-    - require:
-      - pkg: jenkins
-      - file: bash
+    - absent
 
 /etc/cron.d/salt-archive-ci:
   file:

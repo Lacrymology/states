@@ -52,14 +52,14 @@ base:
     - salt.noop
 {%- else -%}
     {#- empty is True if no roles (or roles.absent) are applied -#}
-    {%- set empty = True -%}
+    {%- set check = {'empty': True} -%}
     {#- list all minion's role and absent role it's not member of -#}
     {%- for role in global_roles -%}
         {%- if role in roles -%}
-            {%- set empty = False %}
+            {%- do check.update({'empty': False}) %}
     - roles.{{ role }}
         {%- elif salt['pillar.get']('roles_absent', False) -%}
-            {%- set empty = False %}
+            {%- do check.update({'empty': False}) %}
     - roles.{{ role }}.absent
         {%- endif -%}
     {%- endfor -%}

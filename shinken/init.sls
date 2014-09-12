@@ -55,7 +55,7 @@ include:
       - file: /usr/local
       - file: bash
 
-{% for dirname in ('log', 'lib') %}
+{% for dirname in ('log', 'lib', 'run') %}
 /var/{{ dirname }}/shinken:
   file:
     - directory
@@ -73,6 +73,7 @@ include:
     - group: shinken
     - mode: 550
     - require:
+      - cmd: shinken_move_config_files
       - user: shinken
 
 /usr/local/shinken/src:
@@ -149,9 +150,8 @@ shinken:
   cmd:
     - wait
     - cwd: /usr/local/shinken/src/Shinken-{{ version }}
-    - name: /usr/local/shinken/bin/python setup.py install --root=/usr/local/shinken --install-scripts=/bin
+    - name: /usr/local/shinken/bin/python setup.py install --install-scripts=/usr/local/shinken/bin --record=/usr/local/shinken/install.log
     - watch:
-      - virtualenv: shinken
       - archive: shinken
     - require:
       - module: shinken
@@ -168,6 +168,37 @@ shinken:
     - require:
       - pkg: nagios-nrpe-server
       - pkg: ssl-cert
+
+shinken_move_config_files:
+  cmd:
+    - run
+    - name: |
+        mv /etc/shinken /usr/local/shinken/etc
+        chown -R shinken:shinken /usr/local/shinken/etc
+    - onlyif: test "$(ls -A /etc/shinken)"
+    - require:
+      - cmd: shinken
+
+/var/lib/shinken/.shinken.ini:
+  file:
+    - managed
+    - source: salt://shinken/shinken.ini
+    - user: shinken
+    - group: shinken
+    - mode: 750
+    - require:
+      - user: shinken
+
+shinken_modules:
+  cmd:
+    - script
+    - user: shinken
+    - source: salt://shinken/install_modules.sh
+    - onlyif: test $(/usr/local/shinken/bin/shinken inventory | wc -l) -eq 0
+    - watch:
+      - cmd: shinken
+    - require:
+      - file: /var/lib/shinken/.shinken.ini
 
 {%- if salt['file.directory_exists']('/usr/local/shinken/src/shinken-1.4') %}
 shinken_old_version:

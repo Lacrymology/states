@@ -54,15 +54,6 @@ include:
 
 {% set configs = ('architecture', 'infra') %}
 
-shinken-init:
-  cmd:
-    - run
-    - user: shinken
-    - name: /usr/local/shinken/bin/python /usr/local/shinken/bin/shinken --init
-    - unless: test -f /var/lib/shinken/.shinken.ini
-    - require:
-      - cmd: shinken
-
 shinken-arbiter:
   file:
     - managed
@@ -88,24 +79,13 @@ shinken-arbiter:
 {#- does not use PID, no need to manage #}
     - watch:
       - user: shinken
-      - cmd: shinken
+      - cmd: shinken_modules
       - file: shinken
       - file: shinken-arbiter
       - file: /etc/shinken/arbiter.conf
     {% for config in configs %}
       - file: /etc/shinken/{{ config }}.conf
     {% endfor %}
-
-{%- for module in ('auth-cfg-password', 'booster-nrpe', 'graphite', 'nsca', 'pickle-retention-file-generic', 'sqlitedb', 'syslog-sink', 'ui-graphite', 'webui') %}
-{{ module }}:
-  cmd:
-    - run
-    - user: shinken
-    - name: /usr/local/shinken/bin/python /usr/local/shinken/bin/shinken install {{ module }}
-    - unless: /usr/local/shinken/bin/python /usr/local/shinken/bin/shinken inventory | grep {{ module }}
-    - require:
-      - cmd: shinken-init
-{%- endfor %}
 
 /etc/shinken/arbiter.conf:
   file:

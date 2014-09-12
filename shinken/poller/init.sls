@@ -67,7 +67,7 @@ shinken-poller:
       - file: /var/log/shinken
       - pkg: nagios-nrpe-plugin
     - watch:
-      - cmd: shinken
+      - cmd: shinken_modules
       - file: /etc/shinken/poller.conf
       - file: shinken-poller
       - user: shinken

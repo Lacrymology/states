@@ -60,7 +60,7 @@ shinken-scheduler:
       - file: /var/log/shinken
     - watch:
       - user: shinken
-      - cmd: shinken
+      - cmd: shinken_modules
       - file: /etc/shinken/scheduler.conf
       - file: shinken-scheduler
 {#- does not use PID, no need to manage #}

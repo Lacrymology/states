@@ -54,7 +54,7 @@ shinken-reactionner:
       - file: /var/lib/shinken
       - file: /var/log/shinken
     - watch:
-      - cmd: shinken
+      - cmd: shinken_modules
       - file: /etc/shinken/reactionner.conf
       - user: shinken
       - file: shinken-reactionner

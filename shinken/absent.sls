@@ -42,7 +42,7 @@ shinken:
       - service: shinken-{{ role }}
 {% endfor %}
 
-{% for rootdir in ('etc', 'usr/local', 'var/log', 'var/lib') %}
+{% for rootdir in ('etc', 'usr/local', 'var/log', 'var/lib', 'var/run') %}
 /{{ rootdir }}/shinken:
   file:
     - absent

@@ -28,6 +28,7 @@ set -e
 # Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 # Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 #             Bruno Clermont <patate@fastmail.cn>
+# NOTICE: this script executed as jenkins user
 
 set -x
 start_time=$(date +%s)

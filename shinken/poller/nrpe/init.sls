@@ -36,4 +36,4 @@ include:
   - ssl.nrpe
 {%- endif %}
 
-{{ passive_check('shinken.poller', pillar_prefix='shinken', check_sslyze=False) }}
+{{ passive_check('shinken.poller', pillar_prefix='shinken') }}

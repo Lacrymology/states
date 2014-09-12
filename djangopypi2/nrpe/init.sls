@@ -56,4 +56,4 @@ include:
   - ssl.nrpe
 {%- endif %}
 
-{{ passive_check('djangopypi2') }}
+{{ passive_check('djangopypi2', check_ssl_score=True) }}

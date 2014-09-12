@@ -46,4 +46,4 @@ include:
   - ssl.nrpe
 {%- endif %}
 
-{{ passive_check('openerp') }}
+{{ passive_check('openerp', check_ssl_score=True) }}

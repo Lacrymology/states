@@ -48,4 +48,4 @@ include:
   - ssl.nrpe
 {%- endif %}
 
-{{ passive_check('graphite') }}
+{{ passive_check('graphite', check_ssl_score=True) }}

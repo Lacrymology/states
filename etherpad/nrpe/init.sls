@@ -40,4 +40,4 @@ include:
   - ssl.nrpe
 {%- endif %}
 
-{{ passive_check('etherpad') }}
+{{ passive_check('etherpad', check_ssl_score=True) }}

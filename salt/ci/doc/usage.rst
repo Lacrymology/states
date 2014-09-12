@@ -66,5 +66,5 @@ You may also want to adding following post-build actions:
 - ``Archive the artifacts``
 - ``Publish JUnit test result report``
 - ``Execute a set of scripts`` and run
-``$WORKSPACE/common/test/jenkins/post.sh`` script to delete created VM
+  ``$WORKSPACE/common/test/jenkins/post.sh`` script to delete created VM
 - ``E-mail Notification`` to send email whenever a build fails.

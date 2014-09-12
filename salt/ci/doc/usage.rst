@@ -3,6 +3,14 @@ Usage
 
 .. TODO: FIX
 
+Update pillar
+-------------
+
+Test VMs will copy result to CI server after done testing, it is done through
+scp command instead of salt-cp to avoid security problems. To make scp work,
+it must set pillar ``salt:ci:host_key`` to host key of CI server. See
+:doc:`/ssh/doc/index` for instruction.
+
 Plugins
 -------
 

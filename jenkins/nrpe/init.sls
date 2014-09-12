@@ -38,4 +38,4 @@ include:
   - ssl.nrpe
 {%- endif %}
 
-{{ passive_check('jenkins') }}
+{{ passive_check('jenkins', check_ssl_score=True) }}

@@ -39,4 +39,4 @@ include:
   - ssl.nrpe
 {%- endif %}
 
-{{ passive_check('salt.archive.server', pillar_prefix='salt_archive') }}
+{{ passive_check('salt.archive.server', pillar_prefix='salt_archive', check_ssl_score=True) }}

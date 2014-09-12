@@ -39,4 +39,4 @@ include:
   - ssl.nrpe
 {%- endif %}
 
-{{ passive_check('ejabberd') }}
+{{ passive_check('ejabberd', check_ssl_score=True) }}

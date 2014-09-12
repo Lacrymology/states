@@ -49,5 +49,4 @@ include:
   - ssl.nrpe
 {%- endif %}
 
-{{ passive_check('sentry') }}
-
+{{ passive_check('sentry', check_ssl_score=True) }}

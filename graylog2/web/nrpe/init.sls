@@ -38,4 +38,4 @@ include:
   - ssl.nrpe
 {%- endif %}
 
-{{ passive_check('graylog2.web', pillar_prefix='graylog2') }}
+{{ passive_check('graylog2.web', pillar_prefix='graylog2', check_ssl_score=True) }}

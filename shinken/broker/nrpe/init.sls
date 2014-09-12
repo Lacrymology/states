@@ -40,4 +40,4 @@ include:
   - ssl.nrpe
 {%- endif %}
 
-{{ passive_check('shinken.broker', pillar_prefix='shinken') }}
+{{ passive_check('shinken.broker', pillar_prefix='shinken', check_ssl_score=True) }}

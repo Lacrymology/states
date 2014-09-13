@@ -48,17 +48,32 @@ def alert(dsn, message, level='INFO', extra=None):
     Send a sentry alert
 
     :param dsn: The sentry DSN, in the form of
-        {protocol}://{public}:{private}@{host}/{path}{project id}
+        {protocol}://{public}:{private}@{host}/{path}{project id}. The protocol
+        is always forced to use the requests+http(s) transport if the requests
+        library is present, or sync+http(s) otherwise. See
+        http://raven.readthedocs.org/en/latest/transports/index.html
+        for more information. If the dsn is set to None, though, raven defaults
+        to using the SENTRY_DSN environment variable
     :param message: The message string you want to send
     :param level: The level of the message (DEBUG, INFO, WARN, ERROR)
     :param extra: Any extra parameters you want sent with the message
     """
     if extra is None:
         extra = {}
+    if dsn is not None:
+        sdns = dsn.split(":")
+        protocol, rest = sdns[0], sdns[1:]
+        if protocol.lower().startswith('http'):
+            try:
+                import requests
+                protocol = 'requests+' + protocol
+            except ImportError:
+                protocol = 'sync+' + protocol
+        dsn = ":".join([protocol] + sdns)
     log.debug('raven.alert called with: %s, %s, %s, %s',
               dsn, message, level, str(extra))
 
-    client = raven.Client(dsn)
+    client = raven.Client(dsn=dsn)
     level = getattr(logging, level.upper(), 'INFO')
     extra.update({'level': level})
     data = client.build_msg('raven.events.Message', message=message, data=extra)

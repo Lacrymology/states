@@ -72,7 +72,7 @@ include:
     - group: shinken
     - mode: 550
     - require:
-      - cmd: shinken_move_config_files
+      - file: shinken_move_config_files
       - user: shinken
 
 /usr/local/shinken/src:
@@ -169,14 +169,24 @@ shinken:
       - pkg: ssl-cert
 
 shinken_move_config_files:
-  cmd:
-    - run
-    - name: |
-        mv /etc/shinken /usr/local/shinken/etc
-        chown -R shinken:shinken /usr/local/shinken/etc
-    - onlyif: test "$(ls -A /etc/shinken)"
+  file:
+    - rename
+    - name: /usr/local/shinken/etc
+    - source: /etc/shinken
     - require:
       - cmd: shinken
+
+/usr/local/shinken/etc:
+  file:
+    - directory
+    - user: shinken
+    - group: shinken
+    - mode: 755
+    - recurse:
+      - user
+      - group
+    - require:
+      - file: shinken_move_config_files
 
 /var/lib/shinken/.shinken.ini:
   file:

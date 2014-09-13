@@ -55,10 +55,14 @@ def alert(dsn, message, level='INFO', extra=None):
     """
     if extra is None:
         extra = {}
+    log.debug('raven.alert called with: %s, %s, %s, %s',
+              dsn, message, level, str(extra))
+
     client = raven.Client(dsn)
     level = getattr(logging, level.upper(), 'INFO')
     extra.update({'level': level})
     data = client.build_msg('raven.events.Message', message=message, data=extra)
+    log.info('message object: %s', str(data))
     client.send(**data)
 
     return {

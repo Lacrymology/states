@@ -36,7 +36,7 @@ include:
 
 {%- set ssl = salt['pillar.get']('shinken:ssl', False) %}
 {%- if ssl %}
-{%- set check_set = check_set + [('shinken.broker_nginx_https', 'Invalid HTTP response')] %}
+{%- set check_set = check_set + ('shinken.broker_nginx_https', 'Invalid HTTP response') %}
 {%- endif %}
 
 {% for name, failure in check_set %}

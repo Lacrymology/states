@@ -6,11 +6,11 @@
     Changing directly in consumer only needed when new version of salt
     change a lot in ppa structure.
 #}
-{%- macro salt_version() %}
+{%- macro salt_version() -%}
 2014.1.10-1
 {%- endmacro %}
 
-{%- macro salt_deb_version() %}
+{%- macro salt_deb_version() -%}
 {#- example: salt-minion_0.17.5-1precise1_all.deb
     this macro will provide ``0.17.5-1precise1`` #}
 {{ salt_version() }}-{{ grains['lsb_distrib_codename'] }}1

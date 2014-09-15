@@ -1,5 +1,21 @@
 {#- file contains all common macros #}
 
+{#- when upgrading salt, it should only change salt version here and in
+    bootstrap.sh (not managed by salt),
+    all consumer of these macros should got it automatically,
+    Changing directly in consumer only needed when new version of salt
+    change a lot in ppa structure.
+#}
+{%- macro salt_version() %}
+2014.1.10-1
+{%- endmacro %}
+
+{%- macro salt_deb_version() %}
+{#- example: salt-minion_0.17.5-1precise1_all.deb
+    this macro will provide ``0.17.5-1precise1`` #}
+{{ salt_version() }}-{{ grains['lsb_distrib_codename'] }}1
+{%- endmacro %}
+
 {#- manage pid file owner/mode only if it exists, as if always manage it may
 cause problem because each daemon handles existed pid file different way.
 

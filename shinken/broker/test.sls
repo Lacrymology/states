@@ -30,16 +30,13 @@ include:
   - shinken.broker.diamond
   - shinken.broker.nrpe
 
-{%- set check_set = (('shinken_broker_http_port', 'Connection refused'),
+{%- set check_list = [('shinken_broker_http_port', 'Connection refused'),
                     ('shinken_broker_http', 'Connection refused'),
-                    ('shinken.broker_nginx_http', 'Invalid HTTP response')) %}
+                    ('shinken.broker_nginx_http', 'Invalid HTTP response')] %}
 
-{%- set ssl = salt['pillar.get']('shinken:ssl', False) %}
-{%- if ssl %}
-{%- set check_set = check_set + ('shinken.broker_nginx_https', 'Invalid HTTP response') %}
-{%- endif %}
+{%- set check_list = check_list + [('shinken.broker_nginx_https', 'Invalid HTTP response')] %}
 
-{% for name, failure in check_set %}
+{% for name, failure in check_list %}
 {{ name }}:
   monitoring:
     - run_check
@@ -53,10 +50,10 @@ test:
     - run_all_checks
     - order: last
     - exclude:
-{%- for name, _ in check_set %}
+{%- for name, _ in check_list %}
       - {{ name }}
 {%- endfor %}
     - require:
-{%- for name, _ in check_set %}
+{%- for name, _ in check_list %}
       - monitoring: {{ name }}
 {%- endfor %}

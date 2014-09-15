@@ -114,7 +114,7 @@ salt-ui:
       - pkg: nginx
 
 {#- PID file owned by root, no need to manage #}
-{%- from macros.jinja2 import salt_version with context %}
+{%- from "macros.jinja2" import salt_version with context %}
 {%- set api_path = salt_version() ~ '/pool/main/s/salt-api/salt-api_' + api_version + '_all.deb' %}
 salt-api:
   file:

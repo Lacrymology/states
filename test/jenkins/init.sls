@@ -39,7 +39,7 @@ unittest-xml-reporting:
     - require:
       - pkg: python-pip
 
-{%- from macros.jinja2 import salt_deb_version with context %}
+{%- from "macros.jinja2" import salt_deb_version with context %}
 salt-minion:
   pkg:
     - installed

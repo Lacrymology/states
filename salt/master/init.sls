@@ -113,7 +113,7 @@ salt-master-job_changes.py:
     - require:
       - file: /usr/local
 
-{%- from macros.jinja2 import salt_version,salt_deb_version with context %}
+{%- from "macros.jinja2" import salt_version,salt_deb_version with context %}
 {%- set version = salt_version() %}
 {%- set pkg_version =  salt_deb_version() %}
 {#- check deb filename carefully, number `1` after {1} is added only on 0.17.5-1

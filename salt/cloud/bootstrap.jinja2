@@ -27,7 +27,8 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 #!/bin/bash
 # {{ pillar['message_do_not_modify'] }}
 set -e
-{%- set version = '2014.1.5-5' %}
+{%- from macros.jinja2 import salt_version with context %}
+{%- set version = salt_version %}
 
 {%- block preparation %}
 mkdir -p /etc/salt/pki/minion

@@ -50,7 +50,8 @@ salt_absent_old_apt_salt_{{ i }}:
     - name: /etc/apt/sources.list.d/saltstack-salt-{{ grains['lsb_distrib_codename'] }}.{{ i }}
 {%- endfor %}
 
-{%- set version = '2014.1.5-5' %}
+{%- from macros.jinja2 import salt_version with context %}
+{%- set version = salt_version() %}
 salt:
   pkg:
     - installed

@@ -27,7 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Setup a Salt API REST server.
 -#}
-{%- set version = '0.8.4' -%}
+{%- set api_version = '0.8.4' -%}
 include:
   - git
   - local
@@ -114,7 +114,8 @@ salt-ui:
       - pkg: nginx
 
 {#- PID file owned by root, no need to manage #}
-{%- set api_path = '2014.1.5-5/pool/main/s/salt-api/salt-api_' + version + '_all.deb' %}
+{%- from macros.jinja2 import salt_version with context %}
+{%- set api_path = salt_version() ~ '/pool/main/s/salt-api/salt-api_' + api_version + '_all.deb' %}
 salt-api:
   file:
     - managed
@@ -149,7 +150,7 @@ salt-api:
       - pkg: salt-master
       - module: salt-api-requirements
 
-{%- if salt['pkg.version']('salt-api') not in ('', version) %}
+{%- if salt['pkg.version']('salt-api') not in ('', api_version) %}
 salt_api_old_version:
   pkg:
     - purged

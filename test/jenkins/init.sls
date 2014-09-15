@@ -39,10 +39,11 @@ unittest-xml-reporting:
     - require:
       - pkg: python-pip
 
+{%- from macros.jinja2 import salt_deb_version with context %}
 salt-minion:
   pkg:
     - installed
-    - version: 2014.1.5-5precise1
+    - version: {{ salt_deb_version() }}
     - require:
 {%- if grains['saltversion'].startswith('0.17') %}
       - pkgrepo17: salt

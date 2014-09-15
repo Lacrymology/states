@@ -44,7 +44,7 @@ include:
 
 {%- set check_pg_version = "2.21.0" %}
 
-/usr/local/check_postgres-{{ check_pg_version }}:
+/usr/local/check_postgres-2.21.0:
   file:
     - absent
 

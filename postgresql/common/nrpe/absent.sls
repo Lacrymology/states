@@ -44,6 +44,14 @@ Remove Nagios NRPE check for PostgreSQL Server.
   file:
     - absent
 
+/usr/local/nagios/src/check_postgres-2.21.0:
+  file:
+    - absent
+
+/usr/lib/nagios/plugins/check_postgres:
+  file:
+    - absent
+
 /etc/sudoers.d/nrpe_postgresql_common:
   file:
     - absent

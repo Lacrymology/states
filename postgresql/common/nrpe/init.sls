@@ -42,16 +42,12 @@ include:
   - ssl.nrpe
 {% endif %}
 
-/usr/local/nagios/src:
-  file:
-    - directory
-    - user: root
-    - group: root
-    - mode: 755
-    - require:
-      - virtualenv: nrpe-virtualenv
-
 {%- set check_pg_version = "2.21.0" %}
+
+/usr/local/check_postgres-{{ check_pg_version }}:
+  file:
+    - absent
+
 check_postgres:
   archive:
     - extracted

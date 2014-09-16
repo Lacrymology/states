@@ -37,6 +37,8 @@ try:
 except ImportError:
     raven = False
 
+import urlparse
+
 log = logging.getLogger(__name__)
 
 def __virtual__():
@@ -61,15 +63,15 @@ def alert(dsn, message, level='INFO', extra=None):
     if extra is None:
         extra = {}
     if dsn is not None:
-        sdns = dsn.split(":")
-        protocol, rest = sdns[0], sdns[1:]
-        if protocol.lower().startswith('http'):
+        parsed = urlparse.urlparse(dsn)
+        protocol = parsed.scheme
+        if protocol.startswith('http'):
             try:
                 import requests
                 protocol = 'requests+' + protocol
             except ImportError:
                 protocol = 'sync+' + protocol
-        dsn = ":".join([protocol] + sdns)
+        dsn = urlparse.urlunparse([protocol] + list(parsed[1:]))
     log.debug('raven.alert called with: %s, %s, %s, %s',
               dsn, message, level, str(extra))
 

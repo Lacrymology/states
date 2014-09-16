@@ -58,12 +58,12 @@ class Summary(nagiosplugin.Summary):
 
 class MissingImageContext(nagiosplugin.Context):
     def describe(self, metric):
-        if len(metric) > 0:
+        if len(metric.value) > 0:
             return "%d images missing: [%s]" % (len(metric), ", ".join(metric))
         return "No images missing"
 
     def evaluate(self, metric, resource):
-        if len(metric) > 0:
+        if len(metric.value) > 0:
             state = nagiosplugin.state.Critical
         else:
             state = nagiosplugin.state.Ok

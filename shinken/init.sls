@@ -212,8 +212,15 @@ shinken_modules:
     - require:
       - file: /var/lib/shinken/.shinken.ini
 
+{%- if salt['file.directory_exists']('/usr/local/shinken/src/shinken-1.4') %}
 /usr/local/shinken/src/shinken-1.4:
   file:
     - absent
+
+stop_shinken:
+  cmd:
+    - run
+    - name: /usr/local/bin/shinken-ctl.sh stop
     - require_in:
       - cmd: shinken
+{%- endif %}

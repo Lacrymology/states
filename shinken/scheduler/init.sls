@@ -37,8 +37,17 @@ queue of pending checks and notifications for other daemons of the architecture
 many pollers. There can be many schedulers for load-balancing or hot standby
 roles.
 -#}
+{% set ssl = salt['pillar.get']('shinken:ssl', False) %}
 include:
   - shinken
+{%- if ssl %}
+  - ssl
+{%- endif %}
+
+shinken-scheduler:
+  file:
+    - absent
+    - name: /usr/local/shinken/bin/shinken-scheduler.py
 
 shinken-scheduler:
   file:
@@ -63,6 +72,9 @@ shinken-scheduler:
       - cmd: shinken_modules
       - file: /etc/shinken/scheduler.conf
       - file: shinken-scheduler
+{%- if ssl %}
+      - cmd: ssl_cert_and_key_for_{{ pillar['shinken']['ssl'] }}
+{% endif %}
 {#- does not use PID, no need to manage #}
 
 /etc/shinken/scheduler.conf:

@@ -37,11 +37,12 @@ to the appropriate daemon. Passive check results are forwarded to the Scheduler
 responsible for the check. There can only be one active arbiter with other
 arbiters acting as hot standby spares in the architecture.
 -#}
+{% set ssl = salt['pillar.get']('shinken:ssl', False) %}
 include:
   - hostname
   - rsyslog
   - shinken
-{%- if salt['pillar.get']('shinken:ssl', False) %}
+{%- if ssl %}
   - ssl
 {%- endif %}
   - ssmtp
@@ -92,6 +93,9 @@ shinken-arbiter:
     {% for config in configs %}
       - file: /etc/shinken/{{ config }}.conf
     {% endfor %}
+{%- if ssl %}
+      - cmd: ssl_cert_and_key_for_{{ pillar['shinken']['ssl'] }}
+{% endif %}
 
 /etc/shinken/arbiter.conf:
   file:
@@ -109,9 +113,6 @@ shinken-arbiter:
     - require:
       - file: /etc/shinken
       - user: shinken
-{%- if salt['pillar.get']('shinken:ssl', False) %}
-      - cmd: ssl_cert_and_key_for_{{ pillar['shinken']['ssl'] }}
-{% endif %}
 
 /etc/shinken/objects:
   file:

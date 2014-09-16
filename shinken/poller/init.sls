@@ -50,6 +50,11 @@ nagios-nrpe-plugin:
       - cmd: apt_sources
       - pkg: nagios-plugins
 
+shinken-poller.py:
+  file:
+    - absent
+    - name: /usr/local/shinken/bin/shinken-poller.py
+
 shinken-poller:
   file:
     - managed

@@ -30,11 +30,12 @@ Shinken Broker state.
 The broker daemon exports and manages data from schedulers. The broker uses
 modules exclusively to get the job done.
 -#}
+{% set ssl = salt['pillar.get']('shinken:ssl', False) %}
 include:
   - nginx
   - rsyslog
   - shinken
-{% if salt['pillar.get']('shinken:ssl', False) %}
+{% if ssl %}
   - ssl
 {% endif %}
   - web
@@ -50,6 +51,11 @@ include:
     - require:
       - pkg: nginx
       - user: web
+
+shinken-broker.py:
+  file:
+    - absent
+    - name: /usr/local/shinken/bin/shinken-broker.py
 
 shinken-broker:
   file:
@@ -76,8 +82,8 @@ shinken-broker:
       - file: shinken-broker
       - service: rsyslog
       - user: shinken
-{% if salt['pillar.get']('shinken:ssl', False) %}
-        - cmd: ssl_cert_and_key_for_{{ pillar['shinken']['ssl'] }}
+{% if ssl %}
+      - cmd: ssl_cert_and_key_for_{{ pillar['shinken']['ssl'] }}
 {% endif %}
 {#- does not use PID, no need to manage #}
 
@@ -100,6 +106,6 @@ extend:
     service:
       - watch:
         - file: /etc/nginx/conf.d/shinken-web.conf
-{% if salt['pillar.get']('shinken:ssl', False) %}
+{% if ssl %}
         - cmd: ssl_cert_and_key_for_{{ pillar['shinken']['ssl'] }}
 {% endif %}

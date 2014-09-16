@@ -28,6 +28,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 Common stuff for all shinken components.
 -#}
 {% set version = "2.0.3" %}
+{% set ssl = salt['pillar.get']('shinken:ssl', False) %}
 include:
   - apt
   - bash
@@ -36,7 +37,7 @@ include:
   - python.dev
   - virtualenv
   - nrpe
-{% if salt['pillar.get']('shinken:ssl', False) %}
+{% if ssl %}
   - ssl
 {% endif %}
 
@@ -143,7 +144,7 @@ shinken:
       - file: shinken
       - pkg: python-dev
       - user: shinken
-{%- if salt['pillar.get']('shinken:ssl', False) %}
+{%- if ssl %}
       - pkg: shinken_dependencies
 {%- endif %}
   cmd:
@@ -161,12 +162,14 @@ shinken:
     - gid_from_name: True
     - groups:
       - nagios
-{%- if salt['pillar.get']('shinken:ssl', False) %}
+{%- if ssl %}
       - ssl-cert
 {%- endif %}
     - require:
       - pkg: nagios-nrpe-server
+{%- if ssl %}
       - pkg: ssl-cert
+{%- endif %}
 
 shinken_move_config_files:
   file:
@@ -209,12 +212,8 @@ shinken_modules:
     - require:
       - file: /var/lib/shinken/.shinken.ini
 
-{%- if salt['file.directory_exists']('/usr/local/shinken/src/shinken-1.4') %}
-shinken_old_version:
-  cmd:
-    - run
-    - cwd: /usr/local/shinken/src/shinken-1.4
-    - name: yes | ./install -u
+/usr/local/shinken/src/shinken-1.4:
+  file:
+    - absent
     - require_in:
       - cmd: shinken
-{%- endif %}

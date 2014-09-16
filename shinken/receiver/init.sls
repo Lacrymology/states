@@ -30,8 +30,17 @@ State for Shinken Receiver.
 Shinken Receiver will receive the NSCA messages and queue them to be sent to the
 Arbiter or Scheduler for processing.
 -#}
+{% set ssl = salt['pillar.get']('shinken:ssl', False) %}
 include:
   - shinken
+{% if ssl %}
+  - ssl
+{% endif %}
+
+shinken-receiver.py:
+  file:
+    - absent
+    - name: /usr/local/shinken/bin/shinken-receiver.py
 
 shinken-receiver:
   file:
@@ -56,6 +65,9 @@ shinken-receiver:
       - file: /etc/shinken/receiver.conf
       - file: shinken-receiver
       - user: shinken
+{% if ssl %}
+      - cmd: ssl_cert_and_key_for_{{ pillar['shinken']['ssl'] }}
+{% endif %}
 {#- does not use PID, no need to manage #}
 
 /etc/shinken/receiver.conf:

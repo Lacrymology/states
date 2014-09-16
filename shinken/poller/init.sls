@@ -33,11 +33,15 @@ tagged for specialized checks (ex. Windows versus Unix, customer A versus
 customer B, DMZ) There can be many pollers for load-balancing or hot standby
 spare roles.
 -#}
+{% set ssl = salt['pillar.get']('shinken:ssl', False) %}
 include:
   - apt
   - nrpe
   - shinken
   - ssl.dev
+{% if ssl %}
+  - ssl
+{% endif %}
 
 nagios-nrpe-plugin:
   pkg:
@@ -71,6 +75,9 @@ shinken-poller:
       - file: /etc/shinken/poller.conf
       - file: shinken-poller
       - user: shinken
+{% if ssl %}
+      - cmd: ssl_cert_and_key_for_{{ ssl }}
+{% endif %}
 {#- does not use PID, no need to manage #}
 
 /etc/shinken/poller.conf:

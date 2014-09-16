@@ -27,4 +27,32 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 include:
   - apt.nrpe
   - bash.nrpe
+  - nrpe
   - pip.nrpe
+  - sudo.nrpe
+
+{%- from 'nrpe/passive.sls' import passive_check with context %}
+{{ passive_check('salt.cloud') }}
+
+/etc/sudoers.d/nrpe_salt_cloud:
+  file:
+    - managed
+    - template: jinja
+    - source: salt://salt/cloud/nrpe/sudo.jinja2
+    - mode: 440
+    - user: root
+    - group: root
+    - require:
+      - pkg: sudo
+
+/usr/lib/nagios/plugins/check_saltcloud_images.py:
+  file:
+    - managed
+    - source: salt://salt/cloud/nrpe/check.py
+    - user: nagios
+    - group: nagios
+    - mode: 550
+    - require:
+      - pkg: nagios-nrpe-server
+      - module: nrpe-virtualenv
+      - file: /etc/sudoers.d/nrpe_salt_cloud

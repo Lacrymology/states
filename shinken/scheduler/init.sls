@@ -44,7 +44,7 @@ include:
   - ssl
 {%- endif %}
 
-shinken-scheduler:
+shinken-scheduler.py:
   file:
     - absent
     - name: /usr/local/shinken/bin/shinken-scheduler.py

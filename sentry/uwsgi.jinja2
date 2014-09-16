@@ -57,6 +57,7 @@ procname-master = sentry-master
 socket = /var/lib/uwsgi/sentry.sock
 stats = /var/lib/uwsgi/sentry-stats.sock
 no-orphans = true
+buffer-size = 65535
 logger = syslog:uwsgi-sentry
     {%- if salt['pillar.get']('debug', False) %}
 req-logger = syslog:uwsgi-sentry

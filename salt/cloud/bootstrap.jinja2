@@ -35,6 +35,9 @@ chmod 700 /etc/salt/pki/minion
 mv /tmp/.saltcloud/minion /etc/salt/
 mv /tmp/.saltcloud/minion.pub /etc/salt/pki/minion/
 mv /tmp/.saltcloud/minion.pem /etc/salt/pki/minion/
+if [ -f /tmp/.saltcloud/grains ]; then
+    mv /tmp/.saltcloud/grains /etc/salt/grains
+fi
 chmod 400 /etc/salt/pki/minion/minion.pem
 {%- endblock -%}
 

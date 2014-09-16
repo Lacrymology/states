@@ -26,27 +26,43 @@ Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 include:
-{%- for role in ('arbiter', 'broker', 'poller', 'reactionner', 'scheduler', 'receiver') %}
-  - shinken.{{ role }}
-  - shinken.{{ role }}.diamond
-  - shinken.{{ role }}.nrpe
-{%- endfor %}
+  - shinken.broker
+  - shinken.broker.diamond
+  - shinken.broker.nrpe
+
+{%- set check_set = (('shinken_broker_web', 'Connection refused'),
+                    ('shinken_broker_http', 'Connection refused'),
+                    ('shinken.broker_nginx_http', 'Invalid HTTP response')) %}
+
+{%- set ssl = salt['pillar.get']('shinken:ssl', False) %}
 
 test:
   monitoring:
     - run_all_checks
-    - wait: 60
-    - order: last
-
-stop_shinken:
-  cmd:
-    - run
-    - name: /usr/local/bin/shinken-ctl.sh stop
-
-start_shinken:
-  cmd:
-    - run
-    - name: /usr/local/bin/shinken-ctl.sh start
-    - order: last
+    - exclude:
+{%- for name, _ in check_set %}
+      - {{ name }}
+{%- endfor %}
+{%- if ssl %}
+      - shinken.broker_nginx_https
+{%- endif %}
     - require:
-      - cmd: stop_shinken
+{% for name, failure in check_set %}
+      - monitoring: {{ name }}
+{%- endfor %}
+
+{% for name, failure in check_set %}
+{{ name }}:
+  monitoring:
+    - run_check
+    - order: last
+    - accepted_failure: {{ failure }}
+{%- endfor %}
+
+{%- if ssl %}
+shinken.broker_nginx_https:
+  monitoring:
+    - run_check
+    - order: last
+    - accepted_failure: 'Invalid HTTP response'
+{%- endif %}

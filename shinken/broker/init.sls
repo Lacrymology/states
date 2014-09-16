@@ -76,6 +76,9 @@ shinken-broker:
       - file: shinken-broker
       - service: rsyslog
       - user: shinken
+{% if salt['pillar.get']('shinken:ssl', False) %}
+        - cmd: ssl_cert_and_key_for_{{ pillar['shinken']['ssl'] }}
+{% endif %}
 {#- does not use PID, no need to manage #}
 
 /etc/shinken/broker.conf:

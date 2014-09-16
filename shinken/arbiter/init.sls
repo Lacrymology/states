@@ -54,6 +54,11 @@ include:
 
 {% set configs = ('architecture', 'infra') %}
 
+shinken-arbiter.py:
+  file:
+    - absent
+    - name: /usr/local/shinken/bin/shinken-arbiter.py
+
 shinken-arbiter:
   file:
     - managed
@@ -75,6 +80,7 @@ shinken-arbiter:
       - file: /var/log/shinken
       - file: /var/lib/shinken
       - file: /etc/shinken/objects
+      - file: shinken-arbiter.py
       - pkg: ssmtp
 {#- does not use PID, no need to manage #}
     - watch:

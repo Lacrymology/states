@@ -38,6 +38,7 @@ __maintainer__ = 'Tomas Neme'
 __email__ = 'lacrymology@gmail.com'
 
 import nagiosplugin
+from bfs import nrpe as bfe
 
 log = logging.getLogger("nagiosplugin")
 
@@ -114,18 +115,17 @@ class ImageIds(nagiosplugin.Resource):
 
 @nagiosplugin.guarded
 def main():
-    argp = argparse.ArgumentParser()
+    argp = bfe.ArgumentParser()
     argp.add_argument("--profile-file", metavar="PATH",
                       default="/etc/salt/cloud.profiles")
     argp.add_argument("--providers-file", metavar="PATH",
                       default="/etc/salt/cloud.providers")
-    argp.add_argument('-v', '--verbose', action='count', default=0)
     args = argp.parse_args()
 
-    check = nagiosplugin.Check(ImageIds(args.profile_file, args.providers_file),
+    check = bfe.Check(ImageIds(args.profile_file, args.providers_file),
                                MissingImageContext('missing'),
                                Summary())
-    check.main(args.verbose, timeout=300)
+    check.main(args)
 
 if __name__ == '__main__':
     main()

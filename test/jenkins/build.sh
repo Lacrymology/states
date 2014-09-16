@@ -84,8 +84,6 @@ sudo salt -t 10 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all 
 # sync extmod from extracted archive to bootstrapped salt instance
 sudo salt -t 60 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call -c /root/salt/states/test/ saltutil.sync_all"
 sudo salt -t 200 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call -c /root/salt/states/test/ state.sls test.sync" | ./test/jenkins/retcode_check.py
-# setup "teardown" ASAP for ablity to access to failed test VM if it fails in the early phase. Must after test.sync as it will use pkg from synced archive
-sudo salt -t 100 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call -c /root/salt/states/test/ state.sls test.teardown"
 sudo salt -t 100 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call -c /root/salt/states/test/ state.sls test.jenkins" | ./test/jenkins/retcode_check.py
 sudo salt -t 20 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call -c /root/salt/states/test/ saltutil.sync_all"
 sudo salt -t 10 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call -c /root/salt/states/test/ saltutil.refresh_modules"

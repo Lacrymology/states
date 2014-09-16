@@ -1,4 +1,4 @@
-{%- macro passive_check(formula, domain_name=None, pillar_prefix=None) -%}
+{%- macro passive_check(formula, domain_name=None, pillar_prefix=None, check_ssl_score=False) -%}
     {%- if not pillar_prefix -%}
         {%- set pillar_prefix = formula -%}
     {%- endif %}
@@ -30,9 +30,9 @@
   file:
     - absent
 
-{% if salt['pillar.get'](pillar_prefix ~ ':ssl', False) %}
+{% if salt['pillar.get'](pillar_prefix ~ ':ssl', False) and check_ssl_score %}
 {#- manage cron file for sslyze NRPE check consumer #}
-{%- set domain_name = salt['pillar.get'](pillar_prefix + ':hostnames', ['127.0.0.1'])[0] if not domain_name -%}
+  {%- set domain_name = salt['pillar.get'](pillar_prefix + ':hostnames', ['127.0.0.1'])[0] if not domain_name -%}
   {% if domain_name|replace('.', '')|int == 0 %} {# only check if it is a domain, not IP. int returns 0 for unconvertible value #}
 /etc/cron.d/sslyze_check_{{ formula|replace('.', '-') }}:
   file:
@@ -50,17 +50,22 @@
       - pkg: cron
       - file: /etc/nagios/nsca.d/{{ formula }}.yml
 
-{%- if formula|replace('.', '') != formula %}
+    {%- if formula|replace('.', '') != formula %}
 /etc/cron.d/sslyze_check_{{ formula }}:
   file:
     - absent
-{%- endif %}
+    {%- endif %}
 
   {%- else %}
 /etc/cron.d/sslyze_check_{{ formula|replace('.', '-') }}:
   file:
     - absent
   {%- endif %}
+
+{%- else %}
+/etc/cron.d/sslyze_check_{{ formula|replace('.', '-') }}:
+  file:
+    - absent
 {%- endif %}
 
 {{ formula }}-monitoring:

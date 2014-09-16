@@ -64,7 +64,7 @@ base:
         {%- endif -%}
     {%- endfor -%}
     {#- it's possible that a minion don't have any roles, so do nothing -#}
-    {%- if empty %}
+    {%- if check.empty %}
     - salt.noop
     {%- endif -%}
 {%- endif -%}

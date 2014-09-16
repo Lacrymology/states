@@ -57,4 +57,4 @@ include:
   - ssl.nrpe
 {%- endif %}
 
-{{ passive_check('gitlab') }}
+{{ passive_check('gitlab', check_ssl_score=True) }}

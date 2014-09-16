@@ -239,7 +239,7 @@ def main():
                           nap.Range('@65:80'), nap.Range('@0:65')),
         nap.ScalarContext('expireInDays',
                           nap.Range('@65:80'), nap.Range('@0:65')),
-        SslSummary(args.host, args.port))
+        SslSummary(**kwargs))
     check.main(args)
 
 

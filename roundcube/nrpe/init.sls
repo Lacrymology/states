@@ -41,4 +41,4 @@ include:
   - ssl.nrpe
 {%- endif %}
 
-{{ passive_check('roundcube') }}
+{{ passive_check('roundcube', check_ssl_score=True) }}

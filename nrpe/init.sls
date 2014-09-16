@@ -120,6 +120,15 @@ nrpe-virtualenv:
     - installed
     - name: libyaml-dev {#- PyYAML needs this pkg #}
 
+/usr/local/nagios/src:
+  file:
+    - directory
+    - user: root
+    - group: root
+    - mode: 755
+    - require:
+      - virtualenv: nrpe-virtualenv
+
 {#- hack for making sure that above virtualenv is used system_site_packages
     this only neccessary for existing virtualenv because the `virtualenv`
     state module does not support that properly #}

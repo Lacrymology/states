@@ -105,9 +105,12 @@ class ImageIds(nagiosplugin.Resource):
             salt_list_data = salt_list[provider][data['provider']]
             ids.update(str(salt_list_data[inst]['id'])
                        for inst in salt_list_data)
+        log.debug("received ids: %s", str(ids))
 
         imgs = set(str(prof['image']) for prof in profile_list.values())
+        log.debug("profile images: %s", str(imgs))
         yield nagiosplugin.Metric('missing', imgs - ids)
+
 
 @nagiosplugin.guarded
 def main():

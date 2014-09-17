@@ -57,24 +57,21 @@ openssh-server:
     - watch:
       - pkg: openssh-server
       - file: openssh-server
-{#- PID file owned by root, no need to manage -#}
+{#- PID file owned by root, no need to manage #}
 
+ssh_server_root_authorized_keys:
+  file:
+    - managed
+    - name: /root/.ssh/authorized_keys
+    - mode: 400
+    - contents: |
 {%- for user in salt['pillar.get']('root_keys', []) -%}
   {%- for key in salt['pillar.get']('root_keys:' ~ user, []) %}
-ssh_server_root_{{ key }}:
-  ssh_auth:
-    - present
-    - name: {{ key }}
-    - user: root
-    - enc: {{ pillar['root_keys'][user][key] }}
-    - options:
-      - command="/usr/local/bin/root-shell-wrapper {{ user }}"
-    - require:
-      - file: /usr/local/bin/root-shell-wrapper
-    - require_in:
-      - service: openssh-server
+        command="/usr/local/bin/root-shell-wrapper {{ user }}" {{ pillar['root_keys'][user][key] }} {{ key }}
   {%- endfor -%}
 {%- endfor %}
+    - require:
+      - service: openssh-server
 
 /usr/local/bin/root-shell-wrapper:
   file:

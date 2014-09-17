@@ -65,7 +65,7 @@ shinken-broker.py:
     {%- endcall -%}
 {% endif %}
 
-{%- for module_name in ('auth-cfg-password', 'pickle-retention-file-generic', 'sqlitedb', 'syslog-sink', 'webui') -%}
+{%- for module_name in ('auth-cfg-password', 'sqlitedb', 'syslog-sink', 'webui') -%}
     {%- call shinken_install_module(module_name) %}
 - service: shinken-broker
     {%- endcall -%}
@@ -91,6 +91,7 @@ shinken-broker:
       - file: /var/lib/shinken
     - watch:
       - cmd: shinken
+      - cmd: shinken-module-pickle-retention-file-generic
       - file: /etc/shinken/broker.conf
       - file: shinken
       - file: shinken-broker

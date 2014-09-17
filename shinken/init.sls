@@ -207,6 +207,8 @@ shinken_setup.py:
     - require:
       - user: shinken
 
+{{ shinken_install_module('pickle-retention-file-generic') }}
+
 {%- if salt['file.directory_exists']('/usr/local/shinken/src/shinken-1.4') %}
 /usr/local/shinken/src/shinken-1.4:
   file:

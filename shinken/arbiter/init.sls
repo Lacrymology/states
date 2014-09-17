@@ -37,7 +37,6 @@ to the appropriate daemon. Passive check results are forwarded to the Scheduler
 responsible for the check. There can only be one active arbiter with other
 arbiters acting as hot standby spares in the architecture.
 -#}
-{%- from 'shinken/init.sls' import shinken_install_module with context -%}
 {% set ssl = salt['pillar.get']('shinken:ssl', False) %}
 include:
   - hostname
@@ -60,10 +59,6 @@ shinken-arbiter.py:
   file:
     - absent
     - name: /usr/local/shinken/bin/shinken-arbiter.py
-
-{%- call shinken_install_module('pickle-retention-file-generic') %}
-- service: shinken-arbiter
-{%- endcall %}
 
 shinken-arbiter:
   file:
@@ -92,6 +87,7 @@ shinken-arbiter:
     - watch:
       - user: shinken
       - cmd: shinken
+      - cmd: shinken-module-pickle-retention-file-generic
       - file: shinken
       - file: shinken-arbiter
       - file: /etc/shinken/arbiter.conf

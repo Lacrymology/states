@@ -30,6 +30,7 @@ Shinken Broker state.
 The broker daemon exports and manages data from schedulers. The broker uses
 modules exclusively to get the job done.
 -#}
+{%- from 'shinken/init.sls' import shinken_install_module with context -%}
 {% set ssl = salt['pillar.get']('shinken:ssl', False) %}
 include:
   - nginx
@@ -56,6 +57,19 @@ shinken-broker.py:
   file:
     - absent
     - name: /usr/local/shinken/bin/shinken-broker.py
+
+{#- install shinken modules for broker web ui #}
+{% if 'graphite_address' in pillar %}
+    {%- call shinken_install_module('ui-graphite') %}
+- require_in:
+  - service: shinken-broker
+    {%- endcall -%}
+{% endif %}
+
+{%- call shinken_install_module('webui') %}
+- require_in:
+  - service: shinken-broker
+{%- endcall -%}
 
 shinken-broker:
   file:

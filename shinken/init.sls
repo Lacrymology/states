@@ -27,6 +27,23 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Common stuff for all shinken components.
 -#}
+{%- macro shinken_install_module(module_name) %}
+shinke-module-{{ module_name }}:
+  cmd:
+    - run
+    - user: shinken
+    - onlyif: test $(/usr/local/shinken/bin/shinken inventory | grep {{ module_name }}) -eq 0
+    - require:
+      - file: /var/lib/shinken/.shinken.ini
+      - cmd: shinken
+    - name: /usr/local/shinken/bin/python /usr/local/shinken/bin/shinken install {{ module_name }}
+    {%- if caller is defined -%}
+        {%- for line in caller().split("\n") %}
+{{ line|trim|indent(6, indentfirst=True) }}
+        {%- endfor -%}
+    {%- endif -%}
+{%- endmacro -%}
+
 {% set version = "2.0.3" %}
 {% set ssl = salt['pillar.get']('shinken:ssl', False) %}
 include:
@@ -201,16 +218,14 @@ shinken_move_config_files:
     - require:
       - user: shinken
 
-shinken_modules:
-  cmd:
-    - script
-    - user: shinken
-    - source: salt://shinken/install_modules.sh
-    - onlyif: test $(/usr/local/shinken/bin/shinken inventory | wc -l) -eq 0
-    - watch:
-      - cmd: shinken
-    - require:
-      - file: /var/lib/shinken/.shinken.ini
+{# TODO: is auth-cfg-password only used in broker webui ? #}
+{# TODO: who need graphite? #}
+{# TODO: is nsca only required for receiver? #}
+{# TODO: others? #}
+{# TODO: 'booster-nrpe' is needed only for poller #}
+{% for module in ('auth-cfg-password', 'graphite', 'nsca', 'pickle-retention-file-generic', 'sqlitedb', 'syslog-sink') %}
+{{ shinken_install_module(module) }}
+{% endfor %}
 
 {%- if salt['file.directory_exists']('/usr/local/shinken/src/shinken-1.4') %}
 /usr/local/shinken/src/shinken-1.4:

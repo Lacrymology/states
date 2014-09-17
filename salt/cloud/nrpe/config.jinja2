@@ -24,9 +24,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
+{%- if salt['pillar.get']('salt:cloud:providers', False) %}
 salt_cloud_configurations_check:
   description: Salt-Cloud Image Monitor
   command: sudo /usr/lib/nagios/plugins/check_saltcloud_images.py
   check_interval: {{ 24 * 60 }} {# 1 day #}
   arguments:
     timeout: {{ 15 * 60 }}
+{%- endif %}

@@ -31,6 +31,9 @@ include:
   - apt
   - local
   - rsyslog
+  - ssh.common
+
+{%- from 'ssh/common.sls' import root_home with context %}
 
 openssh-server:
   pkg:
@@ -59,19 +62,10 @@ openssh-server:
       - file: openssh-server
 {#- PID file owned by root, no need to manage #}
 
-/root/.ssh:
-  file:
-    - directory
-    - user: root
-    - group: root
-    - mode: 700
-    - require:
-      - service: openssh-server
-
 ssh_server_root_authorized_keys:
   file:
     - managed
-    - name: /root/.ssh/authorized_keys
+    - name: {{ root_home() }}/.ssh/authorized_keys
     - mode: 400
     - contents: |
 {%- for user in salt['pillar.get']('root_keys', []) -%}
@@ -80,7 +74,7 @@ ssh_server_root_authorized_keys:
   {%- endfor -%}
 {%- endfor %}
     - require:
-      - file: /root/.ssh
+      - file: {{ root_home() }}/.ssh
 
 /usr/local/bin/root-shell-wrapper:
   file:

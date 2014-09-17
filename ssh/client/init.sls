@@ -29,15 +29,10 @@ Configure an OpenSSH client.
 -#}
 include:
   - apt
+  - ssh.common
 
-{%- set root_home = salt['user.info']('root')['home'] %}
-
-{{ root_home }}/.ssh:
-  file:
-    - directory
-    - user: root
-    - group: root
-    - mode: 550
+{%- from 'ssh/common.sls' import root_home with context %}
+{%- set root_home = root_home() %}
 
 {%- for domain in salt['pillar.get']('ssh:known_hosts', []) %}
   {%- if pillar['ssh']['known_hosts'][domain] is string %}

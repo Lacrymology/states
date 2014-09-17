@@ -33,6 +33,7 @@ tagged for specialized checks (ex. Windows versus Unix, customer A versus
 customer B, DMZ) There can be many pollers for load-balancing or hot standby
 spare roles.
 -#}
+{%- from 'shinken/init.sls' import shinken_install_module with context -%}
 {% set ssl = salt['pillar.get']('shinken:ssl', False) %}
 include:
   - apt
@@ -55,6 +56,10 @@ shinken-poller.py:
     - absent
     - name: /usr/local/shinken/bin/shinken-poller.py
 
+{%- call shinken_install_module('booster-nrpe') %}
+- service: shinken-poller
+{%- endcall %}
+
 shinken-poller:
   file:
     - managed
@@ -76,7 +81,7 @@ shinken-poller:
       - file: /var/log/shinken
       - pkg: nagios-nrpe-plugin
     - watch:
-      - cmd: shinken_modules
+      - cmd: shinken
       - file: /etc/shinken/poller.conf
       - file: shinken-poller
       - user: shinken

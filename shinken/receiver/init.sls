@@ -30,6 +30,7 @@ State for Shinken Receiver.
 Shinken Receiver will receive the NSCA messages and queue them to be sent to the
 Arbiter or Scheduler for processing.
 -#}
+{%- from 'shinken/init.sls' import shinken_install_module with context -%}
 {% set ssl = salt['pillar.get']('shinken:ssl', False) %}
 include:
   - shinken
@@ -41,6 +42,10 @@ shinken-receiver.py:
   file:
     - absent
     - name: /usr/local/shinken/bin/shinken-receiver.py
+
+{%- call shinken_install_module('nsca') %}
+- service: shinken-receiver
+{%- endcall %}
 
 shinken-receiver:
   file:
@@ -61,7 +66,7 @@ shinken-receiver:
       - file: /var/lib/shinken
       - file: /var/log/shinken
     - watch:
-      - cmd: shinken_modules
+      - cmd: shinken
       - file: /etc/shinken/receiver.conf
       - file: shinken-receiver
       - user: shinken

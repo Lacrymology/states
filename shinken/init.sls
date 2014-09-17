@@ -28,21 +28,22 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 Common stuff for all shinken components.
 -#}
 {%- macro shinken_install_module(module_name) %}
-shinke-module-{{ module_name }}:
+shinken-module-{{ module_name }}:
   cmd:
     - run
     - user: shinken
-    - onlyif: test $(/usr/local/shinken/bin/shinken inventory | grep {{ module_name }}) -eq 0
+    - onlyif: test $(/usr/local/shinken/bin/python /usr/local/shinken/bin/shinken inventory | grep {{ module_name }}) -eq 0
     - require:
       - file: /var/lib/shinken/.shinken.ini
       - cmd: shinken
     - name: /usr/local/shinken/bin/python /usr/local/shinken/bin/shinken install {{ module_name }}
+    - require_in:
     {%- if caller is defined -%}
         {%- for line in caller().split("\n") %}
 {{ line|trim|indent(6, indentfirst=True) }}
         {%- endfor -%}
     {%- endif -%}
-{%- endmacro -%}
+{%- endmacro %}
 
 {% set version = "2.0.3" %}
 {% set ssl = salt['pillar.get']('shinken:ssl', False) %}
@@ -90,7 +91,6 @@ include:
     - group: shinken
     - mode: 550
     - require:
-      - file: shinken_move_config_files
       - user: shinken
 
 /usr/local/shinken/src:
@@ -169,6 +169,7 @@ shinken:
       - archive: shinken
     - require:
       - module: shinken
+      - file: shinken_setup.py
   user:
     - present
     - shell: /bin/false
@@ -185,25 +186,16 @@ shinken:
       - pkg: ssl-cert
 {%- endif %}
 
-shinken_move_config_files:
+shinken_setup.py:
   file:
-    - rename
-    - name: /usr/local/shinken/etc
-    - source: /etc/shinken
-    - require:
-      - cmd: shinken
-
-/usr/local/shinken/etc:
-  file:
-    - directory
-    - user: shinken
-    - group: shinken
+    - managed
+    - name: /usr/local/shinken/src/Shinken-{{ version }}/setup.py
+    - source: salt://shinken/setup.py
+    - user: root
+    - group: root
     - mode: 755
-    - recurse:
-      - user
-      - group
     - require:
-      - file: shinken_move_config_files
+      - archive: shinken
 
 /var/lib/shinken/.shinken.ini:
   file:
@@ -215,24 +207,23 @@ shinken_move_config_files:
     - require:
       - user: shinken
 
-{# TODO: is auth-cfg-password only used in broker webui ? #}
-{# TODO: who need graphite? #}
-{# TODO: is nsca only required for receiver? #}
-{# TODO: others? #}
-{# TODO: 'booster-nrpe' is needed only for poller #}
-{% for module in ('auth-cfg-password', 'graphite', 'nsca', 'pickle-retention-file-generic', 'sqlitedb', 'syslog-sink') %}
-{{ shinken_install_module(module) }}
-{% endfor %}
-
 {%- if salt['file.directory_exists']('/usr/local/shinken/src/shinken-1.4') %}
 /usr/local/shinken/src/shinken-1.4:
   file:
     - absent
 
-stop_old_shinken:
+shinken_stop_old_daemons:
   cmd:
     - run
     - name: /usr/local/bin/shinken-ctl.sh stop
+
+shinken_remove_old_scripts:
+  cmd:
+    - run
+    - name: rm -f /usr/local/shinken/bin/shinken*
+    - onlyif: ls /usr/local/shinken/bin/shinken*
+    - require:
+      - cmd: shinken_stop_old_daemons
     - require_in:
       - cmd: shinken
 {%- endif %}

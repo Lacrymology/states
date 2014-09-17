@@ -61,15 +61,15 @@ shinken-broker.py:
 {#- install shinken modules for broker web ui #}
 {% if 'graphite_address' in pillar %}
     {%- call shinken_install_module('ui-graphite') %}
-- require_in:
-  - service: shinken-broker
+- service: shinken-broker
     {%- endcall -%}
 {% endif %}
 
-{%- call shinken_install_module('webui') %}
-- require_in:
-  - service: shinken-broker
-{%- endcall -%}
+{%- for module_name in ('auth-cfg-password', 'pickle-retention-file-generic', 'sqlitedb', 'syslog-sink', 'webui') -%}
+    {%- call shinken_install_module(module_name) %}
+- service: shinken-broker
+    {%- endcall -%}
+{%- endfor %}
 
 shinken-broker:
   file:
@@ -90,7 +90,7 @@ shinken-broker:
       - file: /var/log/shinken
       - file: /var/lib/shinken
     - watch:
-      - cmd: shinken_modules
+      - cmd: shinken
       - file: /etc/shinken/broker.conf
       - file: shinken
       - file: shinken-broker

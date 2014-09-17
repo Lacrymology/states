@@ -24,6 +24,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
+{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{{ passive_absent('salt.cloud') }}
+
 /etc/sudoers.d/nrpe_salt_cloud:
   file:
     - absent

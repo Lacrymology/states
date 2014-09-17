@@ -31,8 +31,12 @@ include:
   - pip.nrpe
   - sudo.nrpe
 
-{%- from 'nrpe/passive.sls' import passive_check with context %}
+{%- if salt['pillar.get']('salt:cloud:providers', False) %}
+{%- from 'nrpe/passive.sls' import passive_check, passive_absent with context %}
 {{ passive_check('salt.cloud') }}
+{%- else %}
+{{ passive_absent('salt.cloud') }}
+{%- endif %}
 
 /etc/sudoers.d/nrpe_salt_cloud:
   file:

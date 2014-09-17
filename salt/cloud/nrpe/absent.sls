@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Hung Nguyen Viet
+Copyright (c) 2014, Hung Nguyen Viet
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
@@ -24,7 +24,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
-include:
-  - apt.nrpe
-  - bash.nrpe
-  - pip.nrpe
+{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{{ passive_absent('salt.cloud') }}
+
+/etc/sudoers.d/nrpe_salt_cloud:
+  file:
+    - absent
+
+/usr/lib/nagios/plugins/check_saltcloud_images.py:
+  file:
+    - absent

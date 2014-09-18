@@ -146,7 +146,7 @@ graylog2-server:
 {%- if 'files_archive' in pillar %}
     - source: {{ pillar['files_archive'] }}/mirror/graylog2-server-{{ version }}.tar.gz
 {%- else %}
-    - source: http://download.graylog2.org/graylog2-server/graylog2-server-{{ version }}.tar.gz
+    - source: http://packages.graylog2.org/releases/graylog2-server/graylog2-server-{{ version }}.tgz
 {%- endif %}
     - source_hash: {{ checksum }}
     - archive_format: tar

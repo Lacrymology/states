@@ -167,7 +167,7 @@ graylog2-web:
 {%- if 'files_archive' in pillar %}
     - source: {{ pillar['files_archive'] }}/mirror/graylog2-web-interface-{{ version }}.tar.gz
 {%- else %}
-    - source: http://download.graylog2.org/graylog2-web-interface/graylog2-web-interface-{{ version }}.tar.gz
+    - source: http://packages.graylog2.org/releases/graylog2-web-interface/graylog2-web-interface-{{ version }}.tgz
 {%- endif %}
     - source_hash: {{ checksum }}
     - archive_format: tar

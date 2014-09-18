@@ -37,7 +37,7 @@ from UserList import UserList
 import datetime
 import sys
 import logging
-import bfs
+import pysc
 
 logger = logging.getLogger('check_backup')
 
@@ -129,7 +129,7 @@ class BackupDirectory(UserList):
                 logger.debug("%s isn't a file", absolute_filename)
         UserList.__init__(self, data)
 
-@bfs.profile(log=logger)
+@pysc.profile(log=logger)
 def main():
     """
     main loop

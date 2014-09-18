@@ -39,7 +39,7 @@ import sys
 import time
 import uuid
 
-import bfs
+import pysc
 import nagiosplugin as nap
 
 
@@ -169,10 +169,10 @@ Subject: %s
 
 
 @nap.guarded
-@bfs.profile(log=log)
+@pysc.profile(log=log)
 def main():
     try:
-        config = bfs.Util('/etc/nagios/check_mail_stack.yml', lock=False)
+        config = pysc.Util('/etc/nagios/check_mail_stack.yml', lock=False)
         mail = config['mail']
         waittime = mail['smtp_wait']
         username = mail['username']

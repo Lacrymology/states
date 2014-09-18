@@ -36,7 +36,7 @@ import sitemap
 import socket
 import os
 import urllib2
-import bfs
+import pysc
 
 RESULT_PREFIX = '/var/lib/nagios'
 
@@ -79,7 +79,7 @@ def failed(link):
         return ret
 
 
-@bfs.profile(log='django.check_links')
+@pysc.profile(log='django.check_links')
 def main():
     argp = argparse.ArgumentParser(description=__doc__)
     argp.add_argument('sitemap', metavar='sitemap',

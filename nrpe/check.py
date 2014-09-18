@@ -33,7 +33,7 @@ __maintainer__ = 'Bruno Clermont'
 __email__ = 'patate@fastmail.cn'
 
 import argparse
-import bfs
+import pysc
 
 def MemValues():
     """
@@ -57,7 +57,7 @@ def percentFreeMem():
     return (((int(memFree) + int(memCached)) * 100) / int(memTotal))
 
 
-@bfs.profile('nrpe.check_memory')
+@pysc.profile('nrpe.check_memory')
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-w', '--warning', default='80', type=int)

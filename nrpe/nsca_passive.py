@@ -45,7 +45,7 @@ import send_nsca
 import send_nsca.nsca
 from apscheduler import scheduler
 
-import bfs
+import pysc
 
 
 logger = logging.getLogger(__name__)
@@ -105,7 +105,7 @@ class PassiveDaemon(object):
         checks = {}
         for filename in glob.glob(os.path.join(self.nsca_include_directory,
                                                '*.yml')):
-            checks.update(bfs.unserialize_yaml(filename))
+            checks.update(pysc.unserialize_yaml(filename))
         return checks
 
     def send_check_result(self, check_name, command):
@@ -233,15 +233,15 @@ class PassiveDaemon(object):
 
 
 def main():
-    parser = bfs.common_argparser(default_config_path='/etc/nagios/nsca.yaml')
+    parser = pysc.common_argparser(default_config_path='/etc/nagios/nsca.yaml')
     args = parser.parse_args()
 
     try:
-        config = bfs.Util(args.config, debug=args.log, drop_privilege=False)
+        config = pysc.Util(args.config, debug=args.log, drop_privilege=False)
 
         minion_config = config['file']['salt_minion']
         try:
-            minion_id = bfs.unserialize_yaml(minion_config)['id']
+            minion_id = pysc.unserialize_yaml(minion_config)['id']
         except KeyError:
             logger.error("Can't get minion id from '%s'", minion_config)
             sys.exit(1)

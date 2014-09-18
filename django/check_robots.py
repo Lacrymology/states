@@ -38,10 +38,10 @@ __email__ = 'patate@fastmail.cn'
 
 import robotparser
 import sys
-import bfs
+import pysc
 
 
-@bfs.profile(log=__name__)
+@pysc.profile(log=__name__)
 def main():
     rp = robotparser.RobotFileParser()
     try:

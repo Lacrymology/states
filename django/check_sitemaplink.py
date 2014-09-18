@@ -36,7 +36,7 @@ import os
 import pickle
 import sitemap
 import sys
-import bfs
+import pysc
 
 
 RESULT_PREFIX = '/var/lib/nagios'
@@ -74,7 +74,7 @@ class SiteMapLink(nagiosplugin.Resource):
 
 
 @nagiosplugin.guarded
-@bfs.profile("nrpe.check_sitemaplink")
+@pysc.profile("nrpe.check_sitemaplink")
 def main():
     argp = argparse.ArgumentParser(description=__doc__)
     argp.add_argument('-w', '--warning', metavar='RANGE', default='')

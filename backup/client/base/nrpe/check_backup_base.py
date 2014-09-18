@@ -39,7 +39,7 @@ import os
 import pickle
 import re
 import nagiosplugin
-import bfs
+import pysc
 
 log = logging.getLogger('nagiosplugin')
 CACHE_TIMEOUT = 15
@@ -154,7 +154,7 @@ class BackupFile(nagiosplugin.Resource):
 
 
 @nagiosplugin.guarded
-@bfs.profile(log=log)
+@pysc.profile(log=log)
 def main(Collector):
     """
     :param Collector: A BackupFile subclass to be instantiated

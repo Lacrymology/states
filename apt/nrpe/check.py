@@ -37,7 +37,7 @@ import argparse
 import os
 
 import nagiosplugin
-import bfs
+import pysc
 
 class HalfInstalled(nagiosplugin.Resource):
     def probe(self):
@@ -51,7 +51,7 @@ class HalfInstalled(nagiosplugin.Resource):
         return [nagiosplugin.Metric('halfinstalled', len(pkgs), min=0)]
 
 @nagiosplugin.guarded
-@bfs.profile(log='check_apt-rc')
+@pysc.profile(log='check_apt-rc')
 def main():
     argp = argparse.ArgumentParser(description=__doc__)
     argp.add_argument(

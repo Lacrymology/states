@@ -26,8 +26,8 @@ Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 #}
 
-{%- from 'python/bfs.jinja2' import bfs_config with context %}
-{{ bfs_config(process_name='s3lite_check', sentry_dsn_pillar_key='sentry_dns') }}
+{%- from 'python/pysc.jinja2' import pysc_config with context %}
+{{ pysc_config(process_name='s3lite_check', sentry_dsn_pillar_key='sentry_dns') }}
 
 s3:
   key_id: {{ pillar['aws']['access_key'] }}

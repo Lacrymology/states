@@ -26,7 +26,7 @@ Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
 {%- from 'python/logging.sls' import logging with context %}
-{%- macro bfs_config(process_name=None, sentry_dsn_pillar_key=None, lock=None, daemon_user=None, daemon_group=None) %}
+{%- macro pysc_config(process_name=None, sentry_dsn_pillar_key=None, lock=None, daemon_user=None, daemon_group=None) %}
   {%- if lock %}
 lock: {{ lock }}
   {%- endif %}

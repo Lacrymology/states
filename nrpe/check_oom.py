@@ -34,7 +34,7 @@ import glob
 import argparse
 import datetime
 import nagiosplugin as nap
-import bfs
+import pysc
 
 
 class OOM_Message(nap.Resource):
@@ -75,7 +75,7 @@ class OOM_Message(nap.Resource):
 
 
 @nap.guarded
-@bfs.profile(log='nrpe.check_oom')
+@pysc.profile(log='nrpe.check_oom')
 def main():
     argp = argparse.ArgumentParser()
     argp.add_argument('-s', '--seconds', type=int,

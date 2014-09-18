@@ -47,8 +47,8 @@ import salt.client
 import salt.config as config
 
 import nagiosplugin as nap
-import bfs
-import bfs.nrpe as bfe
+import pysc
+import pysc.nrpe as bfe
 
 log = logging.getLogger('nagiosplugin')
 
@@ -84,7 +84,7 @@ class MineMinion(nap.Resource):
 
 
 @nap.guarded
-@bfs.profile(log=log)
+@pysc.profile(log=log)
 def main():
     argp = bfe.ArgumentParser()
     args = argp.parse_args()

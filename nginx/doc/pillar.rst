@@ -86,3 +86,10 @@ Set :doc:`/nginx/doc/index` config directive
 Unit is Kilobytes of memory.
 
 Default: ``200``.
+
+nginx:gzip_compression
+~~~~~~~~~~~~~~~~~~~~~~
+
+Gzip compression level: from ``1`` to ``9``.
+
+Default: ``6``.

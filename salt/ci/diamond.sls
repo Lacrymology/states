@@ -27,6 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
             Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
 include:
+  - cron.diamond
   - jenkins.diamond
   - salt.cloud.diamond
   - salt.master.diamond

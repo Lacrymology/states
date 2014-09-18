@@ -28,6 +28,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 include:
   - bash.nrpe
+  - cron.nrpe
   - jenkins.nrpe
   - salt.cloud.nrpe
   - salt.master.nrpe

@@ -27,11 +27,11 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 # {{ pillar['message_do_not_modify'] }}
 
-[ssh]
-hostname = {{ pillar['backup_server']['address'] }}
-username = root
-host_key_auto_add = true
+ssh:
+  hostname: {{ pillar['backup_server']['address'] }}
+  username: root
+  host_key_auto_add: true
 
-[backup]
-prefix = /var/lib/backup/{{ salt['pillar.get']('backup_server:subdir', grains['id']) }}
-manifest = /var/lib/nagios/backup.manifest.pickle
+backup:
+  prefix: /var/lib/backup/{{ salt['pillar.get']('backup_server:subdir', grains['id']) }}
+  manifest: /var/lib/nagios/backup.manifest.pickle

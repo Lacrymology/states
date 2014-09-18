@@ -27,11 +27,11 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 # {{ pillar['message_do_not_modify'] }}
 
-[s3]
-key = {{ pillar['aws']['access_key'] }}
-secret = {{ pillar['aws']['secret_key'] }}
-bucket = {{ pillar['aws']['s3']['bucket'] }}
+s3:
+  key: {{ pillar['aws']['access_key'] }}
+  secret: {{ pillar['aws']['secret_key'] }}
+  bucket: {{ pillar['aws']['s3']['bucket'] }}
 
-[backup]
-prefix = {{ pillar['aws']['s3']['path'] }}
-manifest = /var/lib/nagios/backup.manifest.pickle
+backup:
+  prefix: {{ pillar['aws']['s3']['path'] }}
+  manifest: /var/lib/nagios/backup.manifest.pickle

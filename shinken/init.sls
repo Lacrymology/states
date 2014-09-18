@@ -33,7 +33,7 @@ shinken-module-{{ module_name }}:
     - run
     - user: shinken
     - name: /usr/local/shinken/bin/python /usr/local/shinken/bin/shinken install {{ module_name }}
-    - onlyif: test $(/usr/local/shinken/bin/python /usr/local/shinken/bin/shinken inventory | grep {{ module_name }}) -eq 0
+    - onlyif: test $(/usr/local/shinken/bin/python /usr/local/shinken/bin/shinken inventory | grep -c {{ module_name }}) -eq 0
     - require:
       - file: /var/lib/shinken/.shinken.ini
       - cmd: shinken

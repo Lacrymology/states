@@ -7,7 +7,11 @@ erlang_mod_pgsql:
   archive:
     - extracted
     - name: {{ build_dir }}
-    - source: https://github.com/lamoanh/pgsql/archive/v1.0.tar.gz 
+{%- if 'files_archive' in pillar %}
+    - source: {{ pillar['files_archive'] }}/mirror/erlang_mod_pgsql-1.0.tar.gz
+{%- else %}
+    - source: https://github.com/lamoanh/pgsql/archive/v1.0.tar.gz
+{%- endif %}
     - source_hash: md5=757dbadf64257426fbc2e3127075e9a6
     - archive_format: tar
     - tar_options: z

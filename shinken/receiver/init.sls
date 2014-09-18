@@ -43,7 +43,7 @@ shinken-receiver.py:
     - absent
     - name: /usr/local/shinken/bin/shinken-receiver.py
 
-{%- call shinken_install_module('nsca') %}
+{%- call shinken_install_module(module_name='nsca', hash='7dd8c372864bce48eb204a1444ad2ebd') %}
 - service: shinken-receiver
 {%- endcall %}
 

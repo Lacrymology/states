@@ -56,7 +56,7 @@ shinken-poller.py:
     - absent
     - name: /usr/local/shinken/bin/shinken-poller.py
 
-{%- call shinken_install_module('booster-nrpe') %}
+{%- call shinken_install_module(module_name='booster-nrpe', hash='667d7d941f3156a93f3396654ee631dc') %}
 - service: shinken-poller
 {%- endcall %}
 

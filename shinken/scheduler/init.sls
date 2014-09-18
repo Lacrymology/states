@@ -37,6 +37,7 @@ queue of pending checks and notifications for other daemons of the architecture
 many pollers. There can be many schedulers for load-balancing or hot standby
 roles.
 -#}
+{%- from 'shinken/init.sls' import shinken_install_module with context -%}
 {% set ssl = salt['pillar.get']('shinken:ssl', False) %}
 include:
   - shinken
@@ -48,6 +49,10 @@ shinken-scheduler.py:
   file:
     - absent
     - name: /usr/local/shinken/bin/shinken-scheduler.py
+
+{%- call shinken_install_module(module_name='pickle-retention-file-scheduler', hash='216da06b322f72fab4f7c7c0673f96cd') %}
+- service: shinken-receiver
+{%- endcall %}
 
 shinken-scheduler:
   file:
@@ -70,7 +75,7 @@ shinken-scheduler:
     - watch:
       - user: shinken
       - cmd: shinken
-      - cmd: shinken-module-pickle-retention-file-generic
+      - cmd: shinken-module-pickle-retention-file-scheduler
       - file: /etc/shinken/scheduler.conf
       - file: shinken-scheduler
 {%- if ssl %}

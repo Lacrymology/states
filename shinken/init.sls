@@ -27,16 +27,35 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Common stuff for all shinken components.
 -#}
-{%- macro shinken_install_module(module_name) %}
+{%- macro shinken_install_module(module_name, hash=None) %}
 shinken-module-{{ module_name }}:
+    {%- if 'files_archive' in pillar %}
+  archive:
+    - extracted
+    - name: /usr/local/shinken/modules
+    - source: {{ pillar['files_archive'] }}/mirror/shinken/{{ module_name }}.tar.xz
+    - source_hash: md5={{ hash }}
+    - archive_format: tar
+    - tar_options: J
+    - if_missing: /usr/local/shinken/modules/{{ module_name }}
+    - require:
+      - file: /usr/local/shinken/modules
+    {%- endif %}
   cmd:
     - run
     - user: shinken
+    {%- if 'files_archive' in pillar %}
+    - name: /usr/local/shinken/bin/python /usr/local/shinken/bin/shinken install --local /usr/local/shinken/modules/{{ module_name }}
+    {%- else %}
     - name: /usr/local/shinken/bin/python /usr/local/shinken/bin/shinken install {{ module_name }}
+    {%- endif %}
     - onlyif: test $(/usr/local/shinken/bin/python /usr/local/shinken/bin/shinken inventory | grep -c {{ module_name }}) -eq 0
     - require:
       - file: /var/lib/shinken/.shinken.ini
       - cmd: shinken
+    {%- if 'files_archive' in pillar %}
+      - archive: shinken-module-{{ module_name }}
+    {%- endif %}
     - require_in:
     {%- if caller is defined -%}
         {%- for line in caller().split("\n") %}
@@ -102,6 +121,15 @@ include:
     - require:
       - virtualenv: shinken
       - file: /usr/local/bin/shinken-ctl.sh
+
+/usr/local/shinken/modules:
+  file:
+    - directory
+    - user: shinken
+    - group: shinken
+    - mode: 755
+    - require:
+      - virtualenv: shinken
 
 shinken_dependencies:
   pkg:
@@ -207,13 +235,10 @@ shinken_setup.py:
     - require:
       - user: shinken
 
-{{ shinken_install_module('pickle-retention-file-generic') }}
+{{ shinken_install_module(module_name='pickle-retention-file-generic', hash='a5f37f78caa61c92d8de75c20f4bf999') }}
 
-{%- if salt['file.directory_exists']('/usr/local/shinken/src/shinken-1.4') %}
-/usr/local/shinken/src/shinken-1.4:
-  file:
-    - absent
-
+{%- if salt['cmd.retcode']("/usr/local/shinken/bin/pip show shinken | grep 'Version: 1.4'") == 0 -%}
+    {%- if salt['file.directory_exists']('/usr/local/shinken/src/shinken-1.4') %}
 shinken_stop_old_daemons:
   cmd:
     - run
@@ -224,8 +249,14 @@ shinken_remove_old_scripts:
     - run
     - name: rm -f /usr/local/shinken/bin/shinken*
     - onlyif: ls /usr/local/shinken/bin/shinken*
+
+/usr/local/shinken/src/shinken-1.4:
+  file:
+    - absent
     - require:
       - cmd: shinken_stop_old_daemons
+      - cmd: shinken_remove_old_scripts
     - require_in:
       - cmd: shinken
+    {%- endif -%}
 {%- endif %}

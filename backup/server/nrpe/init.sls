@@ -33,6 +33,7 @@ include:
   - cron.nrpe
   - nrpe
   - pip.nrpe
+  - pysc.nrpe
   - rsyslog.nrpe
   - sudo
   - sudo.nrpe

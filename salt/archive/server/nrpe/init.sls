@@ -32,6 +32,7 @@ include:
   - cron.nrpe
   - nginx.nrpe
   - nrpe
+  - pysc.nrpe
   - rsync.nrpe
   - rsyslog.nrpe
   - ssh.server.nrpe

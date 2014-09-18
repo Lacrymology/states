@@ -43,6 +43,12 @@ include:
       - pkg: nginx
 {% endfor %}
 
+/etc/nginx/mime.types:
+  file:
+    - absent
+    - require:
+      - pkg: nginx
+
 /etc/nginx/nginx.conf:
   file:
     - managed
@@ -53,6 +59,7 @@ include:
     - source: salt://nginx/config.jinja2
     - require:
       - pkg: nginx
+      - file: /etc/nginx/mime.types
 
 nginx-old-init:
   file:

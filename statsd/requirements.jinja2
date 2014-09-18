@@ -28,7 +28,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 # {{ pillar['message_do_not_modify'] }}
 
 {%- if 'files_archive' in pillar %}
-{{ pillar['files_archive'] }}/pip/py-statsd-0.1.7.zip
+py-statsd==0.1.7
 {%- else %}
 -e git://github.com/Jonty/py-statsd.git@750c395ad56b314083145b1a1b825dda8ed05653#egg=py-statsd
 {%- endif %}

@@ -162,7 +162,7 @@ graphite-web:
   pip:
     - installed
 {%- if 'files_archive' in pillar %}
-    - name: {{ pillar['files_archive'] }}/pip/django-decorator-include-0.1.zip
+    - name: django-decorator-include==0.1
 {% else %}
     - name: ""
     - editable: git+git://github.com/jeffkistler/django-decorator-include.git#egg=django-decorator-include

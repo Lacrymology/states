@@ -50,7 +50,7 @@ pytz==2013b
 psycopg2==2.5.1
 raven==4.1.1
 {%- if 'files_archive' in pillar %}
-{{ pillar['files_archive'] }}/pip/django-insecure-0.1.zip
+django-insecure==0.1
 {%- else %}
 -e git+git@github.com:bclermont/django-insecure.git@ce529583fc02db20a5ea2b34f1ee8f3d4538a14e#egg=django-insecure
 {%- endif %}

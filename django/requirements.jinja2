@@ -29,7 +29,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 lxml==3.2.1
 {%- if 'files_archive' in pillar %}
-{{ pillar['files_archive'] }}/pip/sitemap-0.1.0.zip
+sitemap==0.1.0
 {%- else %}
 -e git+git://github.com/andreisavu/python-sitemap.git#egg=sitemap
 {%- endif -%}

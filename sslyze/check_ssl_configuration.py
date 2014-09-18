@@ -39,6 +39,7 @@ import re
 from datetime import datetime
 
 import nagiosplugin as nap
+import bfs
 import bfs.nrpe as bfe
 
 from plugins import PluginCertInfo, PluginOpenSSLCipherSuites
@@ -220,6 +221,7 @@ class SslSummary(nap.Summary):
 
 
 @nap.guarded
+@bfs.profile(log=__name__)
 def main():
     parser = bfe.ArgumentParser()
     parser.add_argument('-H', '--host', type=str)

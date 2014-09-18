@@ -169,6 +169,7 @@ Subject: %s
 
 
 @nap.guarded
+@bfs.profile(log=log)
 def main():
     try:
         config = bfs.Util('/etc/nagios/check_mail_stack.yml', lock=False)

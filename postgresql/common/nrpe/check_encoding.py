@@ -34,6 +34,7 @@ import argparse
 import logging
 import subprocess
 import nagiosplugin as nap
+import bfs
 
 log = logging.getLogger('nagiosplugin')
 
@@ -68,6 +69,7 @@ class Encoding(nap.Resource):
 
 
 @nap.guarded
+@bfs.profile(log=log)
 def main():
     argp = argparse.ArgumentParser()
     argp.add_argument('--name', '-n', help='Database name', default='template0')

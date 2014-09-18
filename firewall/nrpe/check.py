@@ -36,6 +36,7 @@ __email__ = 'patate@fastmail.cn'
 import argparse
 import nagiosplugin
 import subprocess
+import bfs
 
 class Rules(nagiosplugin.Resource):
     def probe(self):
@@ -51,6 +52,7 @@ class Rules(nagiosplugin.Resource):
         return [nagiosplugin.Metric('rules', total, min=0)]
 
 @nagiosplugin.guarded
+@bfs.profile(log='nrpe.check_firewall')
 def main():
     argp = argparse.ArgumentParser(description=__doc__)
     argp.add_argument('-w', '--warning', metavar='VALUE', default='2',

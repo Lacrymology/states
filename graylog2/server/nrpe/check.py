@@ -38,6 +38,7 @@ __email__ = 'favadi@robotinfra.com'
 
 import logging
 import time
+import bfs
 import bfs.nrpe as bfe
 import nagiosplugin
 import requests
@@ -79,6 +80,7 @@ class Graylog2Throughput(nagiosplugin.Resource):
 
 
 @nagiosplugin.guarded
+@bfs.profile(log=log)
 def main():
     argp = bfe.ArgumentParser(description=__doc__)
     args = argp.parse_args()

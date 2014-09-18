@@ -104,6 +104,7 @@ class BackupAge(nap.Resource):
 
 
 @nap.guarded
+@bfs.profile(log=log)
 def main():
     argp = bfs.common_argparser(default_config_path='/etc/nagios/s3lite.yml')
     argp.add_argument('path', type=str, help='Path used when backup')

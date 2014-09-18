@@ -31,7 +31,7 @@ include:
   - bash.nrpe
   - s3lite.nrpe
 
-/etc/nagios/backup.conf:
+/etc/nagios/backup.yml:
   file:
     - managed
     - template: jinja

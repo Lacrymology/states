@@ -1,8 +1,5 @@
 {#-
--*- ci-automatic-discovery: off -*-
-
-Copyright (c) 2013, Bruno Clermont
-All rights reserved.
+Copyright (c) 2013, Hung Nguyen Viet
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
@@ -24,30 +21,42 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Bruno Clermont <patate@fastmail.cn>
+Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
-
-Remove Nagios NRPE check for PostgreSQL Server.
 -#}
-/etc/nagios/nrpe.d/postgresql-diamond.cfg:
-  file:
-    - absent
+include:
+  - apt.nrpe
+  - bash.nrpe
+  - nrpe
+  - pip.nrpe
+  - sudo.nrpe
 
-/etc/nagios/nrpe.d/postgresql.cfg:
-  file:
-    - absent
+{%- from 'nrpe/passive.sls' import passive_check, passive_absent with context %}
+{%- if salt['pillar.get']('salt:cloud:providers', False) %}
+{{ passive_check('salt.cloud') }}
+{%- else %}
+{{ passive_absent('salt.cloud') }}
+{%- endif %}
 
-{%- from 'nrpe/passive.sls' import passive_absent with context %}
-{{ passive_absent('postgresql.common') }}
-
-/usr/local/nagios/src/check_postgres-2.21.0:
+/etc/sudoers.d/nrpe_salt_cloud:
   file:
-    - absent
+    - managed
+    - template: jinja
+    - source: salt://salt/cloud/nrpe/sudo.jinja2
+    - mode: 440
+    - user: root
+    - group: root
+    - require:
+      - pkg: sudo
 
-/usr/lib/nagios/plugins/check_postgres:
+/usr/lib/nagios/plugins/check_saltcloud_images.py:
   file:
-    - absent
-
-/etc/sudoers.d/nrpe_postgresql_common:
-  file:
-    - absent
+    - managed
+    - source: salt://salt/cloud/nrpe/check.py
+    - user: nagios
+    - group: nagios
+    - mode: 550
+    - require:
+      - pkg: nagios-nrpe-server
+      - module: nrpe-virtualenv
+      - file: /etc/sudoers.d/nrpe_salt_cloud

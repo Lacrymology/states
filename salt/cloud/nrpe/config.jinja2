@@ -1,8 +1,5 @@
 {#-
--*- ci-automatic-discovery: off -*-
-
-Copyright (c) 2013, Bruno Clermont
-All rights reserved.
+Copyright (c) 2013, Hung Nguyen Viet
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
@@ -24,30 +21,12 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Bruno Clermont <patate@fastmail.cn>
+Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
-
-Remove Nagios NRPE check for PostgreSQL Server.
 -#}
-/etc/nagios/nrpe.d/postgresql-diamond.cfg:
-  file:
-    - absent
-
-/etc/nagios/nrpe.d/postgresql.cfg:
-  file:
-    - absent
-
-{%- from 'nrpe/passive.sls' import passive_absent with context %}
-{{ passive_absent('postgresql.common') }}
-
-/usr/local/nagios/src/check_postgres-2.21.0:
-  file:
-    - absent
-
-/usr/lib/nagios/plugins/check_postgres:
-  file:
-    - absent
-
-/etc/sudoers.d/nrpe_postgresql_common:
-  file:
-    - absent
+salt_cloud_configurations_check:
+  description: Salt-Cloud Image Monitor
+  command: sudo /usr/lib/nagios/plugins/check_saltcloud_images.py
+  check_interval: {{ 24 * 60 }} {# 1 day #}
+  arguments:
+    timeout: {{ 15 * 60 }}

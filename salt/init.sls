@@ -38,7 +38,8 @@ How to create a snapshot of saltstack Ubuntu PPA::
 To only keep precise & trusty::
 
    rm -rf `find dists/ -maxdepth 1 -mindepth 1 ! -name precise ! -name trusty`
-   find pool/ \( -type f -name '*.deb' ! -name '*precise*' ! -name '*trusty*' \) -delete
+   # because some deb can be used for all (E.g: salt-api)
+   find pool/ \( -type f -name '*.deb' \( -name '*lucid*' -or  -name '*oneiric*' -or  -name '*quantal*' -or  -name '*raring*' -or -name '*saucy*' \) \) -delete
 -#}
 include:
   - apt

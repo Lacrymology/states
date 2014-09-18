@@ -31,11 +31,7 @@ configobj==5.0.2
 pip==1.5.2
 psutil==2.0.0
 six==1.5.2
-{%- if 'files_archive' in pillar %}
-{{ pillar['files_archive'] }}/pip/diamond-v3.4.11.tar.gz
-{%- else %}
-https://github.com/hvnsweeting/Diamond/archive/v3.4.11.tar.gz
-{%- endif %}
+diamond==3.4.11
 {%- if 'graylog2_address' in pillar %}
 graypy==0.2.9
 {%- endif %}

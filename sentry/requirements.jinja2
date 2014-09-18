@@ -76,7 +76,7 @@ six==1.5.2
 statsd==1.0.0
 urllib3==1.7.1
 {%- if 'files_archive' in pillar %}
-{{ pillar['files_archive'] }}/pip/django-insecure-0.2.zip
+django-insecure==0.2
 {%- else %}
 https://github.com/bclermont/django-insecure/archive/v0.2.tar.gz
 {%- endif %}

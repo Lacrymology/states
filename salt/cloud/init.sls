@@ -67,11 +67,7 @@ salt-cloud:
       - pkg: salt_cloud_remove_old_version
   pip:
     - installed
-{%- if 'files_archive' in pillar %}
-    - name: {{ pillar['files_archive'] }}/pip/salt-cloud-{{ version }}.tar.gz
-{%- else %}
     - name: salt-cloud=={{ version }}
-{%- endif %}
     - require:
       - module: pip
       - pkg: salt-cloud

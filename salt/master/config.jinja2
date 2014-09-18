@@ -29,9 +29,9 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 fileserver_backend:
   - roots
-{%- if salt['pillar.get']('salt_master:pillar', False) %}
   - git
 
+{%- if salt['pillar.get']('salt_master:pillar', False) %}
 ext_pillar:
   - git: {{ pillar['salt_master']['pillar']['branch'] }} {{ pillar['salt_master']['pillar']['remote'] }}
 {%- endif %}

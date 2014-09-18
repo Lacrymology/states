@@ -38,14 +38,14 @@ include:
   - rsyslog
 
 {#- TODO: set Email output plugin settings straight into MongoDB from salt #}
-{%- set version = '0.20.3' %}
-{%- set checksum = 'md5=41d26cc5d65d275038b972cce1a7c2e6' %}
+{%- set version = '0.20.6' %}
+{%- set checksum = 'md5=a9105a4fb5c950b3760df02dface6465' %}
 {%- set server_root_dir = '/usr/local/graylog2-server-' + version %}
 {%- set user = salt['pillar.get']('graylog2:server:user', 'graylog2') %}
 {%- set mongodb_suffix = '0-20' %}
 {%- set elasticsearch_prefix = '0-20' %}
 
-{% for previous_version in ('0.11.0', ) %}
+{% for previous_version in ('0.11.0', '0.20.3') %}
 /usr/local/graylog2-server-{{ previous_version }}:
   file:
     - absent

@@ -102,10 +102,10 @@ salt-ui:
   archive:
     - extracted
     - name: /usr/local
-    - source: {{ pillar['files_archive']|replace('https://', 'http://') }}/mirror/salt-ui-6e8eee0477fdb0edaa9432f1beb5003aeda56ae6.tar.gz
-    - source_hash: md5=2b7e581d0134c5f5dc29b5fca7a2df5b
+    - source: {{ pillar['files_archive']|replace('https://', 'http://') }}/mirror/salt-ui-6e8eee0477fdb0edaa9432f1beb5003aeda56ae6.tar.bz2
+    - source_hash: md5=61c814fb27e1e86006cdbaf8dc3ce6df
     - archive_format: tar
-    - tar_options: z
+    - tar_options: j
     - if_missing: /usr/local/salt-ui/
     - require:
       - file: /usr/local

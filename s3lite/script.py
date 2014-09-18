@@ -155,6 +155,7 @@ class S3Util(object):
                                       'directory.')
 
 
+@bfs.profile(log=logger)
 def main():
     import sys
 

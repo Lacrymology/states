@@ -103,11 +103,11 @@ pip:
     - extracted
     - name: {{ opts['cachedir'] }}/pip
 {%- if 'files_archive' in pillar %}
-    - source: {{ pillar['files_archive'] }}/pip/pip-{{ version }}.tar.gz
+    - source: {{ pillar['files_archive'] }}/pip/pip-{{ version }}.tar.bz2
 {%- else %}
-    - source: https://pypi.python.org/packages/source/p/pip/pip-{{ version }}.tar.gz
+    - source: https://pypi.python.org/packages/source/p/pip/pip-{{ version }}.tar.bz2
 {%- endif %}
-    - source_hash: md5=5da30919f732d68b1c666e484e7676f5
+    - source_hash: md5=835ac3c648478c0ee16d6e5571a97ac6
     - archive_format: tar
     - tar_options: z
     - if_missing: {{ opts['cachedir'] }}/pip/pip-{{ version }}

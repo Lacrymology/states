@@ -40,10 +40,6 @@ Remove Nagios NRPE check for PostgreSQL Server.
 {%- from 'nrpe/passive.sls' import passive_absent with context %}
 {{ passive_absent('postgresql.common') }}
 
-/usr/lib/nagios/plugins/check_psql_encoding.py:
-  file:
-    - absent
-
 /usr/local/nagios/src/check_postgres-2.21.0:
   file:
     - absent

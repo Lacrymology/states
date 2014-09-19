@@ -109,7 +109,7 @@ pip:
 {%- endif %}
     - source_hash: md5=835ac3c648478c0ee16d6e5571a97ac6
     - archive_format: tar
-    - tar_options: z
+    - tar_options: j
     - if_missing: {{ opts['cachedir'] }}/pip/pip-{{ version }}
     - require:
       - file: /usr/local

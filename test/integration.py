@@ -47,6 +47,7 @@ import pwd
 import StringIO
 import pprint
 import tempfile
+import collections
 try:
     import unittest2 as unittest
 except ImportError:
@@ -81,7 +82,7 @@ process_list = None
 NO_TEST_STRING = '-*- ci-automatic-discovery: off -*-'
 
 all_states = client('cp.list_states')
-ran_sls_cntr = 0
+ran_states_cntr = collections.Counter()
 
 
 def if_change(result):
@@ -103,7 +104,10 @@ def if_change(result):
 
 def tearDownModule():
     global client
+    global ran_states_cntr
     logger.debug("Running tearDownModule")
+    logger.info('Ran totally: %d States', (sum(ran_states_cntr.values())))
+    logger.info('By state declaration: %s', ran_states_cntr)
     client('state.sls', 'test.teardown')
 
 
@@ -548,8 +552,6 @@ class States(unittest.TestCase):
         logger.debug("Run states: %s", ', '.join(states))
         try:
             output = client('state.sls', ','.join(states))
-            global ran_sls_cntr
-            ran_sls_cntr += len(states)
         except Exception, err:
             logger.error("Catch error: %s", err, exc_info=True)
             self.fail('states: %s. error: %s' % ('.'.join(states), err))
@@ -559,6 +561,16 @@ class States(unittest.TestCase):
         # check that all state had been executed properly.
         # build a list of comment of all failed state.
         errors = StringIO.StringIO()
+
+        # A sample output:
+        #   pkg_|-vim_|-vim_|-latest:
+        #     __run_num__: 5
+        #     changes: {}
+        #     comment: Package vim is already up-to-date.
+        #     name: vim
+        #     result: true
+        global ran_states_cntr
+        ran_states_cntr.update(sid.split('|')[0] for sid in output)
         for state in output:
             if not output[state]['result']:
                 # remove not useful keys
@@ -669,4 +681,3 @@ if __name__ == '__main__':
                 output='/root/salt', outsuffix='salt'))
         else:
             unittest.main()
-        print 'Ran totally: {0} SLSes (included rerun)'.format(ran_sls_cntr)

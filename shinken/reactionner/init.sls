@@ -61,7 +61,7 @@ shinken-reactionner:
     - order: 50
     - require:
       - file: /var/lib/shinken
-      - file: /var/log/shinken
+      - file: /var/run/shinken
     - watch:
       - cmd: shinken
       - file: /etc/shinken/reactionner.conf

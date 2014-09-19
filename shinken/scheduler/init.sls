@@ -75,7 +75,7 @@ shinken-scheduler:
     - enable: True
     - require:
       - file: /var/lib/shinken
-      - file: /var/log/shinken
+      - file: /var/run/shinken
     - watch:
       - user: shinken
       - cmd: shinken

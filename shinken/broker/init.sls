@@ -109,7 +109,7 @@ shinken-broker:
     - order: 50
     - enable: True
     - require:
-      - file: /var/log/shinken
+      - file: /var/run/shinken
       - file: /var/lib/shinken
     - watch:
       - cmd: shinken

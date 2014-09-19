@@ -78,7 +78,7 @@ shinken-arbiter:
     - enable: True
     - order: 50
     - require:
-      - file: /var/log/shinken
+      - file: /var/run/shinken
       - file: /var/lib/shinken
       - file: /etc/shinken/objects
       - file: shinken-arbiter.py

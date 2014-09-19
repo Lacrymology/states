@@ -90,7 +90,11 @@ include:
       - file: /usr/local
       - file: bash
 
-{% for dirname in ('log', 'lib', 'run') %}
+/var/log/shinken:
+  file:
+    - absent
+
+{% for dirname in ('lib', 'run') %}
 /var/{{ dirname }}/shinken:
   file:
     - directory
@@ -191,9 +195,7 @@ shinken:
       - file: shinken
       - pkg: python-dev
       - user: shinken
-{%- if ssl %}
       - pkg: shinken
-{%- endif %}
   cmd:
     - wait
     - cwd: /usr/local/shinken/src/Shinken-{{ version }}

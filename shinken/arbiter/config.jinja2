@@ -31,8 +31,10 @@ user=shinken
 group=shinken
 host=0.0.0.0
 pidfile=/var/run/shinken/arbiter.pid
-local_log=/var/log/shinken/arbiter.log
 pack_distribution_file=/var/lib/shinken/distribution.pack
+
+use_local_log=0
+use_syslog=1
 
 execute_host_checks=1
 execute_service_checks=1

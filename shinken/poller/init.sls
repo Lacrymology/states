@@ -82,7 +82,7 @@ shinken-poller:
     - order: 50
     - require:
       - file: /var/lib/shinken
-      - file: /var/log/shinken
+      - file: /var/run/shinken
       - pkg: nagios-nrpe-plugin
     - watch:
       - cmd: shinken

@@ -33,16 +33,10 @@ user=shinken
 group=shinken
 
 pidfile=/var/run/shinken/{{ shinken_component }}.pid
-local_log=/var/log/shinken/{{ shinken_component }}.log
 workdir=/var/lib/shinken
 
-use_local_log=1
-{%- if salt['pillar.get']('debug', False) %}
-log_level=DEBUG
-{%- else %}
-log_level=WARNING
-{%- endif %}
-
+use_local_log=0
+use_syslog=1
 
 host=0.0.0.0
 daemon_enabled=1

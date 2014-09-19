@@ -68,7 +68,7 @@ shinken-receiver:
     - enable: True
     - require:
       - file: /var/lib/shinken
-      - file: /var/log/shinken
+      - file: /var/run/shinken
     - watch:
       - cmd: shinken
       - cmd: shinken-module-nsca

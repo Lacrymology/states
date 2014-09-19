@@ -195,7 +195,9 @@ shinken:
       - archive: shinken
     - require:
       - module: shinken
-      - file: shinken_setup.py
+      - file: shinken_replace_etc_shinken
+      - file: shinken_replace_etc
+      - file: shinken_replace_init
   user:
     - present
     - shell: /bin/false
@@ -212,14 +214,30 @@ shinken:
       - pkg: ssl-cert
 {%- endif %}
 
-shinken_setup.py:
+shinken_replace_etc_shinken:
   file:
-    - managed
+    - replace
     - name: /usr/local/shinken/src/Shinken-{{ version }}/setup.py
-    - source: salt://shinken/setup.py
-    - user: root
-    - group: root
-    - mode: 755
+    - pattern: '"/etc/shinken"'
+    - repl: '"/usr/local/shinken/etc/shinken"'
+    - require:
+      - archive: shinken
+
+shinken_replace_etc:
+  file:
+    - replace
+    - name: /usr/local/shinken/src/Shinken-{{ version }}/setup.py
+    - pattern: "'/etc'"
+    - repl: "'/usr/local/shinken/etc'"
+    - require:
+      - archive: shinken
+
+shinken_replace_init:
+  file:
+    - replace
+    - name: /usr/local/shinken/src/Shinken-{{ version }}/setup.py
+    - pattern: "'/etc/init.d/shinken"
+    - repl: "'/usr/local/shinken/etc/init.d/shinken"
     - require:
       - archive: shinken
 

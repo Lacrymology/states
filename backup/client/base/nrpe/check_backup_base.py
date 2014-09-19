@@ -169,15 +169,13 @@ def main(Collector):
                             than HOURS')
     argp.add_argument('-c', '--config', metavar="PATH",
                       default='/etc/nagios/backup.yaml')
-    argp.add_argument('--timeout', default=None)
-    argp.add_argument('-v', '--verbose', action='count', default=0)
 
     args = argp.parse_args()
 
-    check = nagiosplugin.Check(
+    check = bfe.Check(
         Collector(args.config,
                   args.facility,),
         nagiosplugin.ScalarContext('age', args.warning, args.warning),
         nagiosplugin.ScalarContext('size', "1:", "1:"),
     )
-    check.main(args.verbose, timeout=args.timeout)
+    check.main(args)

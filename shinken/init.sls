@@ -55,7 +55,6 @@ shinken-module-{{ module_name }}:
     {%- endif %}
     - onlyif: test $(/usr/local/shinken/bin/python /usr/local/shinken/bin/shinken inventory | grep -c {{ module_name }}) -eq 0
     - watch:
-      - pip: pycurl
       - file: /var/lib/shinken/.shinken.ini
       - cmd: shinken
     {%- if 'files_archive' in pillar %}
@@ -203,6 +202,7 @@ shinken:
     - watch:
       - archive: shinken
     - require:
+      - pip: pycurl
       - module: shinken
       - file: shinken_replace_etc_shinken
       - file: shinken_replace_etc

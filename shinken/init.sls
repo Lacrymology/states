@@ -129,15 +129,6 @@ include:
     - require:
       - virtualenv: shinken
 
-shinken_dependencies:
-  pkg:
-    - installed
-    - pkgs:
-      - libffi-dev
-      - libcurl4-openssl-dev
-    - require:
-      - cmd: apt_sources
-
 pycurl:
   pip:
     - installed
@@ -145,8 +136,16 @@ pycurl:
     - bin_env: /usr/local/shinken/bin/pip
     - require:
       - virtualenv: shinken
+      - pkg: shinken
 
 shinken:
+  pkg:
+    - installed
+    - pkgs:
+      - libffi-dev
+      - libcurl4-openssl-dev
+    - require:
+      - cmd: apt_sources
   virtualenv:
     - manage
     - name: /usr/local/shinken
@@ -193,7 +192,7 @@ shinken:
       - pkg: python-dev
       - user: shinken
 {%- if ssl %}
-      - pkg: shinken_dependencies
+      - pkg: shinken
 {%- endif %}
   cmd:
     - wait

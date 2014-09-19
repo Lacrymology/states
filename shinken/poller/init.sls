@@ -51,11 +51,6 @@ nagios-nrpe-plugin:
       - cmd: apt_sources
       - pkg: nagios-plugins
 
-shinken-poller.py:
-  file:
-    - absent
-    - name: /usr/local/shinken/bin/shinken-poller.py
-
 {%- if 'files_archive' in pillar %}
     {%- call shinken_install_module('booster-nrpe') %}
 - source_hash: md5=667d7d941f3156a93f3396654ee631dc

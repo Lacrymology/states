@@ -45,11 +45,6 @@ include:
   - ssl
 {%- endif %}
 
-shinken-scheduler.py:
-  file:
-    - absent
-    - name: /usr/local/shinken/bin/shinken-scheduler.py
-
 {%- if 'files_archive' in pillar %}
     {%- call shinken_install_module('pickle-retention-file-scheduler') %}
 - source_hash: md5=216da06b322f72fab4f7c7c0673f96cd

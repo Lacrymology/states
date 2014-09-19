@@ -55,11 +55,6 @@ include:
 
 {% set configs = ('architecture', 'infra') %}
 
-shinken-arbiter.py:
-  file:
-    - absent
-    - name: /usr/local/shinken/bin/shinken-arbiter.py
-
 shinken-arbiter:
   file:
     - managed

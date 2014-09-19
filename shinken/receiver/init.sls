@@ -38,11 +38,6 @@ include:
   - ssl
 {% endif %}
 
-shinken-receiver.py:
-  file:
-    - absent
-    - name: /usr/local/shinken/bin/shinken-receiver.py
-
 {%- if 'files_archive' in pillar %}
     {%- call shinken_install_module('nsca') %}
 - source_hash: md5=7dd8c372864bce48eb204a1444ad2ebd

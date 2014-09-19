@@ -39,11 +39,6 @@ include:
   - ssl
 {% endif %}
 
-shinken-reactionner.py:
-  file:
-    - absent
-    - name: /usr/local/shinken/bin/shinken-reactionner.py
-
 shinken-reactionner:
   file:
     - managed

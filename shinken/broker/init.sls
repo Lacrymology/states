@@ -53,11 +53,6 @@ include:
       - pkg: nginx
       - user: web
 
-shinken-broker.py:
-  file:
-    - absent
-    - name: /usr/local/shinken/bin/shinken-broker.py
-
 {%- if 'files_archive' in pillar -%}
     {%- if 'graphite_address' in pillar -%}
         {%- call shinken_install_module('graphite') %}

@@ -30,6 +30,7 @@ set -e
 #             Bruno Clermont <patate@fastmail.cn>
 
 set -x
+start_time=$(date +%s)
 rm -f $WORKSPACE/bootstrap-archive.tar.gz $WORKSPACE/stderr.log.xz $WORKSPACE/stdout.log.xz $WORKSPACE/result.xml
 rm -rf $WORKSPACE/salt-common-doc
 virtualenv $WORKSPACE/virtualenv
@@ -80,10 +81,15 @@ sudo salt -t 600 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all
 sudo salt -t 600 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call -c /root/salt/states/test/ state.sls test.sync" | ./test/jenkins/retcode_check.py
 sudo salt -t 600 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call -c /root/salt/states/test/ state.sls test.jenkins" | ./test/jenkins/retcode_check.py
 sudo /usr/local/bin/wait_minion_up.py integration-$JOB_NAME-$BUILD_NUMBER
+start_run_test_time=$(date +%s)
+echo "TIME-METER: Preparing for test took: $((start_run_test_time - start_time)) seconds"
 sudo salt -t 86400 "integration-$JOB_NAME-$BUILD_NUMBER" cmd.run "/root/salt/states/test/jenkins/run.py $*"
+finish_run_test_time=$(date +%s)
+echo "TIME-METER: Run integration.py took: $((finish_run_test_time - start_run_test_time)) seconds"
 sudo salt -t 600 "integration-$JOB_NAME-$BUILD_NUMBER" state.sls test.jenkins.result
 sudo /usr/local/bin/import_test_data.py stderr.log.xz integration-$JOB_NAME-$BUILD_NUMBER $WORKSPACE
 xz -d -c $WORKSPACE/stderr.log.xz
 sudo /usr/local/bin/import_test_data.py stdout.log.xz integration-$JOB_NAME-$BUILD_NUMBER $WORKSPACE
 sudo /usr/local/bin/import_test_data.py result.xml integration-$JOB_NAME-$BUILD_NUMBER $WORKSPACE
 mv /srv/salt/jenkins_archives/$JOB_NAME-$BUILD_NUMBER.tar.gz $WORKSPACE/bootstrap-archive.tar.gz
+echo "TIME-METER: Total time: $(($(date +%s) - start_time)) seconds"

@@ -74,7 +74,7 @@ uwsgi_upgrade_remove_old_version:
       extracted_dir: {{ extracted_dir }}
     - source: salt://uwsgi/upstart.jinja2
 
-/etc/uwsgi.ini:
+/etc/uwsgi.yml:
   file:
     - managed
     - template: jinja
@@ -169,7 +169,7 @@ uwsgi_emperor:
       - cmd: uwsgi_emperor
       - file: uwsgi_upgrade_remove_old_version
       - file: /etc/init/uwsgi.conf
-      - file: /etc/uwsgi.ini
+      - file: /etc/uwsgi.yml
       - file: /etc/uwsgi/apps-available
       - file: /etc/uwsgi/apps-enabled
       - user: web
@@ -202,3 +202,8 @@ uwsgi_emperor:
 
 {% from 'rsyslog/upstart.sls' import manage_upstart_log with context %}
 {{ manage_upstart_log('uwsgi') }}
+
+{#- remove old uwsgi .ini config files #}
+/etc/uwsgi.ini:
+  file:
+    - absent

@@ -106,8 +106,8 @@ def tearDownModule():
     global client
     global ran_states_cntr
     logger.debug("Running tearDownModule")
-    logger.info('Ran totally: %d States', (sum(ran_states_cntr.values())))
-    logger.info('By state declaration: %s', ran_states_cntr)
+    logger.info('COUNTER: Ran totally: %d States', (sum(ran_states_cntr.values())))
+    logger.info('COUNTER: By state declaration: %s', ran_states_cntr)
     client('state.sls', 'test.teardown')
 
 

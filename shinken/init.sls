@@ -150,7 +150,7 @@ shinken:
     - extracted
     - name: /usr/local/shinken/src
 {%- if 'files_archive' in pillar %}
-    - source: {{ pillar['files_archive'] }}/pip/Shinken-{{ version }}.tar.gz
+    - source: {{ pillar['files_archive'] }}/mirror/shinken/{{ version }}.tar.gz
 {%- else %}
     - source: https://pypi.python.org/packages/source/S/Shinken/Shinken-{{ version }}.tar.gz
 {%- endif %}

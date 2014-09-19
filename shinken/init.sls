@@ -55,6 +55,7 @@ shinken-module-{{ module_name }}:
     {%- endif %}
     - onlyif: test $(/usr/local/shinken/bin/python /usr/local/shinken/bin/shinken inventory | grep -c {{ module_name }}) -eq 0
     - watch:
+      - pip: pycurl
       - file: /var/lib/shinken/.shinken.ini
       - cmd: shinken
     {%- if 'files_archive' in pillar %}
@@ -137,6 +138,14 @@ shinken_dependencies:
       - libcurl4-openssl-dev
     - require:
       - cmd: apt_sources
+
+pycurl:
+  pip:
+    - installed
+    - name: pycurl == 7.19.5
+    - bin_env: /usr/local/shinken/bin/pip
+    - require:
+      - virtualenv: shinken
 
 shinken:
   virtualenv:

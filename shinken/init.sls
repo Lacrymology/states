@@ -27,14 +27,18 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Common stuff for all shinken components.
 -#}
-{%- macro shinken_install_module(module_name, hash=None) %}
+{%- macro shinken_install_module(module_name) %}
 shinken-module-{{ module_name }}:
     {%- if 'files_archive' in pillar %}
   archive:
     - extracted
     - name: /usr/local/shinken/modules
     - source: {{ pillar['files_archive'] }}/mirror/shinken/{{ module_name }}.tar.xz
-    - source_hash: md5={{ hash }}
+    {%- if caller is defined -%}
+        {%- for line in caller().split("\n") %}
+{{ line|trim|indent(4, indentfirst=True) }}
+        {%- endfor -%}
+    {%- endif %}
     - archive_format: tar
     - tar_options: J
     - if_missing: /usr/local/shinken/modules/{{ module_name }}
@@ -50,18 +54,12 @@ shinken-module-{{ module_name }}:
     - name: /usr/local/shinken/bin/python /usr/local/shinken/bin/shinken install {{ module_name }}
     {%- endif %}
     - onlyif: test $(/usr/local/shinken/bin/python /usr/local/shinken/bin/shinken inventory | grep -c {{ module_name }}) -eq 0
-    - require:
+    - watch:
       - file: /var/lib/shinken/.shinken.ini
       - cmd: shinken
     {%- if 'files_archive' in pillar %}
       - archive: shinken-module-{{ module_name }}
     {%- endif %}
-    - require_in:
-    {%- if caller is defined -%}
-        {%- for line in caller().split("\n") %}
-{{ line|trim|indent(6, indentfirst=True) }}
-        {%- endfor -%}
-    {%- endif -%}
 {%- endmacro %}
 
 {% set version = "2.0.3" %}
@@ -235,7 +233,13 @@ shinken_setup.py:
     - require:
       - user: shinken
 
-{{ shinken_install_module(module_name='pickle-retention-file-generic', hash='a5f37f78caa61c92d8de75c20f4bf999') }}
+{%- if 'files_archive' in pillar %}
+    {%- call shinken_install_module('pickle-retention-file-generic') %}
+- source_hash: md5=a5f37f78caa61c92d8de75c20f4bf999
+    {%- endcall %}
+{%- else %}
+    {{ shinken_install_module('pickle-retention-file-generic') }}
+{%- endif %}
 
 {%- if salt['cmd.retcode']("/usr/local/shinken/bin/pip show shinken | grep 'Version: 1.4'") == 0 -%}
     {%- if salt['file.directory_exists']('/usr/local/shinken/src/shinken-1.4') %}

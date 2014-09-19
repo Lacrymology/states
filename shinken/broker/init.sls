@@ -58,31 +58,40 @@ shinken-broker.py:
     - absent
     - name: /usr/local/shinken/bin/shinken-broker.py
 
-{#- install shinken modules for broker web ui #}
-{%- if 'graphite_address' in pillar -%}
-    {%- call shinken_install_module(module_name='graphite', hash='56b393c9970275327644123480ffd413') %}
-- service: shinken-broker
+{%- if 'files_archive' in pillar -%}
+    {%- if 'graphite_address' in pillar -%}
+        {%- call shinken_install_module('graphite') %}
+- source_hash: md5=56b393c9970275327644123480ffd413
+        {%- endcall %}
+        {%- call shinken_install_module('ui-graphite') %}
+- source_hash: md5=497dafa1036c84f2c5722fb557060c50
+        {%- endcall %}
+    {%- endif %}
+    
+    {%- call shinken_install_module('auth-cfg-password') %}
+- source_hash: md5=c91aef6581d2d4ef33cccd50bd16faf4
     {%- endcall %}
-    {%- call shinken_install_module(module_name='ui-graphite', hash='497dafa1036c84f2c5722fb557060c50') %}
-- service: shinken-broker
+    
+    {%- call shinken_install_module('sqlitedb') %}
+- source_hash: md5=ef0bc27efbcadc4f9056a263cd698cbd
     {%- endcall %}
-{% endif %}
-
-{%- call shinken_install_module(module_name='auth-cfg-password', hash='c91aef6581d2d4ef33cccd50bd16faf4') %}
-- service: shinken-broker
-{%- endcall %}
-
-{%- call shinken_install_module(module_name='sqlitedb', hash='ef0bc27efbcadc4f9056a263cd698cbd') %}
-- service: shinken-broker
-{%- endcall %}
-
-{%- call shinken_install_module(module_name='syslog-sink', hash='41acd03bc4f0579debc6b0402d257a9a') %}
-- service: shinken-broker
-{%- endcall %}
-
-{%- call shinken_install_module(module_name='webui', hash='396be5667ca41b57d65239d7bd4b061a') %}
-- service: shinken-broker
-{%- endcall %}
+    
+    {%- call shinken_install_module('syslog-sink') %}
+- source_hash: md5=41acd03bc4f0579debc6b0402d257a9a
+    {%- endcall %}
+    
+    {%- call shinken_install_module('webui') %}
+- source_hash: md5=396be5667ca41b57d65239d7bd4b061a
+    {%- endcall %}
+{%- else %}
+    {%- if 'graphite_address' in pillar -%}
+        {{ shinken_install_module('graphite') }}
+        {{ shinken_install_module('ui-graphite') }}
+    {%- endif %}
+    {%- for module_name in ('auth-cfg-password', 'sqlitedb', 'syslog-sink', 'webui') %}
+{{ shinken_install_module(module_name) }}
+    {%- endfor %}
+{%- endif %}
 
 shinken-broker:
   file:
@@ -104,6 +113,13 @@ shinken-broker:
       - file: /var/lib/shinken
     - watch:
       - cmd: shinken
+{%- if 'graphite_address' in pillar %}
+      - cmd: shinken-module-graphite
+      - cmd: shinken-module-ui-graphite
+{%- endif %}
+{%- for module_name in ('auth-cfg-password', 'sqlitedb', 'syslog-sink', 'webui') %}
+      - cmd: shinken-module-{{ module_name }}
+{%- endfor %}
       - cmd: shinken-module-pickle-retention-file-generic
       - file: /etc/shinken/broker.conf
       - file: shinken

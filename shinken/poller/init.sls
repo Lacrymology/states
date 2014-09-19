@@ -56,9 +56,13 @@ shinken-poller.py:
     - absent
     - name: /usr/local/shinken/bin/shinken-poller.py
 
-{%- call shinken_install_module(module_name='booster-nrpe', hash='667d7d941f3156a93f3396654ee631dc') %}
-- service: shinken-poller
-{%- endcall %}
+{%- if 'files_archive' in pillar %}
+    {%- call shinken_install_module('booster-nrpe') %}
+- source_hash: md5=667d7d941f3156a93f3396654ee631dc
+    {%- endcall %}
+{%- else %}
+    {{ shinken_install_module('booster-nrpe') }}
+{%- endif %}
 
 shinken-poller:
   file:
@@ -82,6 +86,7 @@ shinken-poller:
       - pkg: nagios-nrpe-plugin
     - watch:
       - cmd: shinken
+      - cmd: shinken-module-booster-nrpe
       - file: /etc/shinken/poller.conf
       - file: shinken-poller
       - user: shinken

@@ -50,9 +50,13 @@ shinken-scheduler.py:
     - absent
     - name: /usr/local/shinken/bin/shinken-scheduler.py
 
-{%- call shinken_install_module(module_name='pickle-retention-file-scheduler', hash='216da06b322f72fab4f7c7c0673f96cd') %}
-- service: shinken-receiver
-{%- endcall %}
+{%- if 'files_archive' in pillar %}
+    {%- call shinken_install_module('pickle-retention-file-scheduler') %}
+- source_hash: md5=216da06b322f72fab4f7c7c0673f96cd
+    {%- endcall %}
+{%- else %}
+    {{ shinken_install_module('pickle-retention-file-scheduler') }}
+{%- endif %}
 
 shinken-scheduler:
   file:

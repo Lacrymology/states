@@ -43,9 +43,13 @@ shinken-receiver.py:
     - absent
     - name: /usr/local/shinken/bin/shinken-receiver.py
 
-{%- call shinken_install_module(module_name='nsca', hash='7dd8c372864bce48eb204a1444ad2ebd') %}
-- service: shinken-receiver
-{%- endcall %}
+{%- if 'files_archive' in pillar %}
+    {%- call shinken_install_module('nsca') %}
+- source_hash: md5=7dd8c372864bce48eb204a1444ad2ebd
+    {%- endcall %}
+{%- else %}
+    {{ shinken_install_module('nsca') }}
+{%- endif %}
 
 shinken-receiver:
   file:
@@ -67,6 +71,7 @@ shinken-receiver:
       - file: /var/log/shinken
     - watch:
       - cmd: shinken
+      - cmd: shinken-module-nsca
       - file: /etc/shinken/receiver.conf
       - file: shinken-receiver
       - user: shinken

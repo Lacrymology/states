@@ -76,7 +76,6 @@ shinken-arbiter:
       - file: /var/run/shinken
       - file: /var/lib/shinken
       - file: /etc/shinken/objects
-      - file: shinken-arbiter.py
       - pkg: ssmtp
 {#- does not use PID, no need to manage #}
     - watch:

@@ -133,15 +133,6 @@ include:
     - require:
       - virtualenv: shinken
 
-pycurl:
-  pip:
-    - installed
-    - name: pycurl == 7.19.5
-    - bin_env: /usr/local/shinken/bin/pip
-    - require:
-      - virtualenv: shinken
-      - pkg: shinken
-
 shinken:
   pkg:
     - installed
@@ -203,7 +194,6 @@ shinken:
     - watch:
       - archive: shinken
     - require:
-      - pip: pycurl
       - module: shinken
       - file: shinken_replace_etc_shinken
       - file: shinken_replace_etc

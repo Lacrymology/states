@@ -154,6 +154,7 @@ nginx:
       - user: web
       - file: nginx
       - file: /etc/nginx/nginx.conf
+      - file: /etc/nginx/mime.types
 {%- for filename in bad_configs %}
       - file: /etc/nginx/conf.d/{{ filename }}.conf
 {%- endfor %}

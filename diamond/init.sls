@@ -25,7 +25,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-{#- TODO: sentry/raven integration -#}
 include:
 {% if 'shinken_pollers' in pillar %}
   - diamond.nrpe

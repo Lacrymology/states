@@ -27,8 +27,6 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 Install Carbon, daemon that store on disk statistics database used by Graphite
 to render graphics.
-
-TODO: send logs to GELF
 -#}
 {%- set filter_type = salt['pillar.get']('graphite:carbon:filter:type', False) -%}
 {%- set supported_filter_types = ('white', 'black')  %}

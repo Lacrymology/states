@@ -43,6 +43,7 @@ include:
   - postgresql.server
   - python.dev
   - rsyslog
+  - salt.minion.deps
   - sudo
 {% if salt['pillar.get']('djangopypi2:ssl', False) %}
   - ssl
@@ -131,6 +132,7 @@ djangopypi2-uwsgi:
       - file: djangopypi2_urls
       - file: /var/lib/deployments/djangopypi2/media
       - cmd: djangopypi2_loaddata
+      - pkg: salt_minion_deps
 
 {{ root_dir }}/manage:
   file:

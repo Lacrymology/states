@@ -32,8 +32,12 @@ centralizes communication channels with external systems in order to simplify
 SMTP authorizations or RSS feed sources (only one for all hosts/services).
 There can be many reactionners for load-balancing and spare roles
 -#}
+{% set ssl = salt['pillar.get']('shinken:ssl', False) %}
 include:
   - shinken
+{% if ssl %}
+  - ssl
+{% endif %}
 
 shinken-reactionner:
   file:
@@ -52,12 +56,15 @@ shinken-reactionner:
     - order: 50
     - require:
       - file: /var/lib/shinken
-      - file: /var/log/shinken
+      - file: /var/run/shinken
     - watch:
-      - module: shinken
+      - cmd: shinken
       - file: /etc/shinken/reactionner.conf
       - user: shinken
       - file: shinken-reactionner
+{% if ssl %}
+      - cmd: ssl_cert_and_key_for_{{ pillar['shinken']['ssl'] }}
+{% endif %}
 {#- does not use PID, no need to manage #}
 
 /etc/shinken/reactionner.conf:

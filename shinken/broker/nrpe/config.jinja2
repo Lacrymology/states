@@ -28,20 +28,20 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 shinken_broker_procs:
   description: Shinken Broker Deamon
   passive: False
-  command: '/usr/lib/nagios/plugins/check_procs -c 1:10 -C shinken-broker'
+  command: "/usr/lib/nagios/plugins/check_procs -c 1:10 -u shinken -C python -a 'shinken-broker -c /etc/shinken/broker.conf'"
 
 shinken_broker_port:
   description: Shinken Broker Local Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 7772
   service_dependencies: ',shinken_broker_procs'
 
-shinken_broker_remote_port:
+shinken_broker_port_remote:
   description: Shinken Broker Remote Port
   check: check_tcp!7772
   passive: False
-  service_dependencies: ',shinken_broker_procs'
+  service_dependencies: ',shinken_broker_port'
 
-shinken_broker_web:
+shinken_broker_http_port:
   description: Shinken Broker Web UI Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 7767
   service_dependencies: ',shinken_broker_procs'
@@ -49,7 +49,7 @@ shinken_broker_web:
 shinken_broker_http:
   description: Shinken Broker Web UI HTTP
   command: "/usr/lib/nagios/plugins/check_http -H 127.0.0.1 -u /user/login -p 7767 -e '200 OK' -I 127.0.0.1{%- if salt['pillar.get']('__test__', False) %} -v{%- endif %}"
-  service_dependencies: ',shinken_broker_procs'
+  service_dependencies: ',shinken_broker_http_port'
 
 {%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context %}
-{{ nginx_instance('shinken.broker', deployment='shinken', pillar_prefix='shinken', http_uri='/user/login') }}
+{{ nginx_instance('shinken.broker', deployment='shinken', pillar_prefix='shinken', http_uri='/user/login', extra_service_dependencies=('shinken_broker_http',)) }}

@@ -28,15 +28,15 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 shinken_reactionner_procs:
   description: Shinken Reactionner Deamon
   passive: False
-  command: "/usr/lib/nagios/plugins/check_procs -c 1:10 -u shinken -a 'shinken-reactionner -c /etc/shinken/reactionner.conf'"
+  command: "/usr/lib/nagios/plugins/check_procs -c 1:10 -u shinken -C python -a 'shinken-reactionner -c /etc/shinken/reactionner.conf'"
 
 shinken_reactionner_port:
   description: Shinken Reactionner Local Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 7769
   service_dependencies: ',shinken_reactionner_procs'
 
-shinken_reactionner_remote_port:
+shinken_reactionner_port_remote:
   description: Shinken Reactionner Remote Port
   check: check_tcp!7769
   passive: False
-  service_dependencies: ',shinken_reactionner_procs'
+  service_dependencies: ',shinken_reactionner_port'

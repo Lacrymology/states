@@ -1,0 +1,9 @@
+{#- epmd is Erlang Port Mapper Daemon #}
+erlang_procs:
+  description: RabbitMQ Erlang
+  command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -C epmd -u rabbitmq'
+
+erlang_port:
+  description: RabbitMQ Erlang Port
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 4369
+  service_dependencies: ',erlang_procs'

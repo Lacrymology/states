@@ -37,11 +37,6 @@ __author__ = 'Bruno Clermont'
 __maintainer__ = 'Bruno Clermont'
 __email__ = 'patate@fastmail.cn'
 
-# TODO: faire une liste de fichiers AVANT et APRÈS les tests pour
-# afficher les différences et failer si un fichier est de trop.
-# compare /etc en RAM
-# faire un test ALL avec tout les states loader en meme temps
-
 import logging
 import pwd
 import StringIO

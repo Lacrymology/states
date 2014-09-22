@@ -29,6 +29,7 @@ Maintainer: Dang Tung Lam <lamdt@familug.org>
 ejabberd_proc_check:
   description: ejabberd Process
   command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -a ''-ejabberd config "/etc/ejabberd/ejabberd.cfg"'' -u ejabberd'
+  service_dependencies: ',erlang_procs'
 
 ejabberd_c2s_port:
   description: ejabberd XMPP Port (C2S)
@@ -45,5 +46,5 @@ ejabberd_s2s_port:
 {%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context %}
 {%- from 'postgresql/server/nrpe/instance.jinja2' import postgresql_instance_prefix with context %}
 {%- set deployment = 'ejabberd' %}
-{{ nginx_instance(deployment, http_uri='/admin', https_result='401 Unauthorized', http_result='401 Unauthorized') }}
 {{ postgresql_instance_prefix(deployment) }}
+{{ nginx_instance(deployment, http_uri='/admin', https_result='401 Unauthorized', http_result='401 Unauthorized', extra_service_dependencies=('ejabberd_postgresql', 'ejabberd_c2s_port')) }}

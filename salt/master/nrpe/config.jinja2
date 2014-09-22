@@ -32,23 +32,27 @@ salt_master_procs:
   description: Salt Master Daemon
   command: '/usr/lib/nagios/plugins/check_procs -c {{ workers }}:{{ workers|int + 10 }} -C salt-master -u root'
 
-salt-master-remote-port-publish:
+salt_master_publish_port:
+  description: Salt Master Local Port Publish
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 4505
+  service_dependencies: ',salt_master_procs'
+
+salt_master_publish_port_remote:
   description: Salt Master Remote Port Publish
   check: check_tcp!4505
   passive: False
+  service_dependencies: ',salt_master_publish_port'
 
-salt-master-remote-port-ret:
+salt_master_return_port:
+  description: Salt Master Local Port Return
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 4506
+  service_dependencies: ',salt_master_procs'
+
+salt_master_return_port_remote:
   description: Salt Master Remote Port Return
   check: check_tcp!4506
   passive: False
-
-salt_master_port_publish:
-  description: Salt Master Local Port Publish
-  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 4505
-
-salt_master_port_ret:
-  description: Salt Master Local Port Return
-  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 4506
+  service_dependencies: ',salt_master_return_port'
 
 {%- block salt_master_mine -%}
     {%- if not salt['pillar.get']('__test__', False) %}
@@ -56,6 +60,7 @@ salt_master_mine:
   description: Salt Master Unfinished Minions
   check_interval: {{ 12 * 60 }} {#- 12 hours  #}
   freshness_threshold: {{ ((12 * 60) + 10) * 60 }} {#- 12 hours + 10 minutes #}
+  service_dependencies: ',salt_master_procs'
   arguments:
     freshness: 20 {#- cron period + timeout #}
     timeout: {{ 15 * 60 }} {#- this should never need more than 15 minutes to -#}

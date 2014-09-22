@@ -33,11 +33,16 @@ tagged for specialized checks (ex. Windows versus Unix, customer A versus
 customer B, DMZ) There can be many pollers for load-balancing or hot standby
 spare roles.
 -#}
+{%- from 'shinken/init.sls' import shinken_install_module with context -%}
+{% set ssl = salt['pillar.get']('shinken:ssl', False) %}
 include:
   - apt
   - nrpe
   - shinken
   - ssl.dev
+{% if ssl %}
+  - ssl
+{% endif %}
 
 nagios-nrpe-plugin:
   pkg:
@@ -45,6 +50,14 @@ nagios-nrpe-plugin:
     - require:
       - cmd: apt_sources
       - pkg: nagios-plugins
+
+{%- if 'files_archive' in pillar %}
+    {%- call shinken_install_module('booster-nrpe') %}
+- source_hash: md5=667d7d941f3156a93f3396654ee631dc
+    {%- endcall %}
+{%- else %}
+    {{ shinken_install_module('booster-nrpe') }}
+{%- endif %}
 
 shinken-poller:
   file:
@@ -64,13 +77,17 @@ shinken-poller:
     - order: 50
     - require:
       - file: /var/lib/shinken
-      - file: /var/log/shinken
+      - file: /var/run/shinken
       - pkg: nagios-nrpe-plugin
     - watch:
-      - module: shinken
+      - cmd: shinken
+      - cmd: shinken-module-booster-nrpe
       - file: /etc/shinken/poller.conf
       - file: shinken-poller
       - user: shinken
+{% if ssl %}
+      - cmd: ssl_cert_and_key_for_{{ ssl }}
+{% endif %}
 {#- does not use PID, no need to manage #}
 
 /etc/shinken/poller.conf:
@@ -90,8 +107,6 @@ shinken-poller:
 
 extend:
   shinken:
-    file:
-      - source: salt://shinken/poller/requirements.jinja2
     module:
       - watch:
         - pkg: ssl-dev

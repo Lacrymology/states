@@ -47,6 +47,7 @@ import pwd
 import StringIO
 import pprint
 import tempfile
+import collections
 try:
     import unittest2 as unittest
 except ImportError:
@@ -81,6 +82,7 @@ process_list = None
 NO_TEST_STRING = '-*- ci-automatic-discovery: off -*-'
 
 all_states = client('cp.list_states')
+ran_states_cntr = collections.Counter()
 
 
 def if_change(result):
@@ -102,7 +104,10 @@ def if_change(result):
 
 def tearDownModule():
     global client
+    global ran_states_cntr
     logger.debug("Running tearDownModule")
+    logger.info('COUNTER: Ran totally: %d States', (sum(ran_states_cntr.values())))
+    logger.info('COUNTER: By state declaration: %s', ran_states_cntr)
     client('state.sls', 'test.teardown')
 
 
@@ -117,12 +122,12 @@ def setUpModule():
     os.environ['HOME'] = pwd.getpwnam('root').pw_dir
 
     client('saltutil.sync_all')
-    logger.info("Rendering all *.test SLS files to quickly find malformed ones")
+    logger.info("Rendering all *.test SLS to quickly find malformed ones")
     for sls in all_states:
         if sls.endswith('.test'):
             try:
                 ret = client('state.show_sls', sls)
-            except:
+            except Exception as err:
                 logger.error("Catch error: %s", err, exc_info=True)
                 raise
             if isinstance(ret, list):
@@ -328,7 +333,7 @@ class TestStateMeta(type):
 
     @classmethod
     def wrap_test_func(mcs, attrs, test_func_name, new_func_name, doc,
-                      *args, **kwargs):
+                       *args, **kwargs):
         """
         Wrap function ``self.test_func_name`` and put in into ``attrs`` dict
         """
@@ -540,7 +545,6 @@ class States(unittest.TestCase):
 
         is_clean = True
 
-
     def sls(self, states):
         """
         Apply specified list of states.
@@ -557,6 +561,16 @@ class States(unittest.TestCase):
         # check that all state had been executed properly.
         # build a list of comment of all failed state.
         errors = StringIO.StringIO()
+
+        # A sample output:
+        #   pkg_|-vim_|-vim_|-latest:
+        #     __run_num__: 5
+        #     changes: {}
+        #     comment: Package vim is already up-to-date.
+        #     name: vim
+        #     result: true
+        global ran_states_cntr
+        ran_states_cntr.update(sid.split('|')[0] for sid in output)
         for state in output:
             if not output[state]['result']:
                 # remove not useful keys

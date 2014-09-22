@@ -168,7 +168,7 @@ def main(Collector):
                       help='Emit a warning if a backup file is older\
                             than HOURS')
     argp.add_argument('-c', '--config', metavar="PATH",
-                      default='/etc/nagios/backup.yaml')
+                      default='/etc/nagios/backup.yml')
 
     args = argp.parse_args()
 

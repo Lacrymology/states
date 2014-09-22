@@ -27,4 +27,4 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 uwsgi_emperor:
   description: uWSGI Emperor
-  command: /usr/lib/nagios/plugins/check_procs -c 2:2 -C uwsgi -a '--ini /etc/uwsgi.ini' -u root
+  command: /usr/lib/nagios/plugins/check_procs -c 2:2 -C uwsgi -a '--yaml /etc/uwsgi.yml' -u root

@@ -25,59 +25,60 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Lam Dang Tung <lamdt@familug.org>
 Maintainer: Lam Dang Tung <lamdt@familug.org>
 -#}
-# {{ pillar['message_do_not_modify'] }}
 {%- set web = pillar['openerp'] %}
-[uwsgi]
-
-master = true
-wsgi-file = {{ web_root_dir }}/openerp.wsgi
-processes = {{ web['workers']|default(2) }}
-harakiri = {{ web['timeout']|default(30) }}
-harakiri-verbose = true
+uwsgi:
+  master: true
+  wsgi-file: {{ web_root_dir }}/openerp.wsgi
+  processes: {{ web['workers']|default(2) }}
+  harakiri: {{ web['timeout']|default(30) }}
+  harakiri-verbose: true
 {%- if web['cheaper']|default(False) %}
-{%- if web['cheaper'] > 0 %}
-cheaper = {{ web['cheaper'] }}
-{%- else %}
-cheap = true
-{%- endif %}
+  {%- if web['cheaper'] > 0 %}
+  cheaper: {{ web['cheaper'] }}
+  {%- else %}
+  cheap: true
+  {%- endif %}
 
-{%- if web['workers'] == 1 and web['cheaper'] == 0 %}
-idle = {{ web['idle']|default(300) }}
-{%- endif %}
+  {%- if web['workers'] == 1 and web['cheaper'] == 0 %}
+  idle: {{ web['idle']|default(300) }}
+  {%- endif %}
 {%- endif %}
 {%- if grains['virtual'] == 'kvm' and salt['file.file_exists']('/sys/kernel/mm/ksm/run') %}
-ksm = 20
+  ksm: 20
 {%- endif %}
 
-lazy-apps = true
-uid = openerp
-gid = openerp
-threaded-logger = true
-virtualenv = {{ home }}
-chdir = {{ web_root_dir }}/openerp
+  lazy-apps: true
+  uid: openerp
+  gid: openerp
+  threaded-logger: true
+  virtualenv: {{ home }}
+  chdir: {{ web_root_dir }}/openerp
 
-procname = openerp-worker
-procname-master = openerp-master
-socket = /var/lib/uwsgi/openerp.sock
-stats = /var/lib/uwsgi/openerp-stats.sock
-no-orphans = true
-logger = syslog:uwsgi-openerp
-    {%- if salt['pillar.get']('debug', False) %}
-req-logger = syslog:uwsgi-openerp
-    {%- endif %}
+  procname: openerp-worker
+  procname-master: openerp-master
+  socket: /var/lib/uwsgi/openerp.sock
+  stats: /var/lib/uwsgi/openerp-stats.sock
+  no-orphans: true
+  logger: syslog:uwsgi-openerp
+{%- if salt['pillar.get']('debug', False) %}
+  req-logger: syslog:uwsgi-openerp
+{%- endif %}
 {%- if 'graphite_address' in pillar %}
-carbon-id = openerp
-    {%- if salt['dig.check_ip'](pillar['graphite_address']) %}
-carbon = {{ pillar['graphite_address'] }}:2003
-    {%- else -%}
-        {%- set resolved_ip = salt['dig.A'](pillar['graphite_address']) -%}
-        {%- if resolved_ip %}
-carbon = {{ resolved_ip[0] }}:2003
-        {%- else %}
-# The domain name {{ pillar['graphite_address'] }} in pillar['graphite_address'] is invalid. carbon support is disabled.
-        {%- endif -%}
-    {%- endif -%}
+  carbon-id: openerp
+  {%- if salt['dig.check_ip'](pillar['graphite_address']) %}
+  carbon: {{ pillar['graphite_address'] }}:2003
+  {%- else -%}
+    {%- set resolved_ip = salt['dig.A'](pillar['graphite_address']) -%}
+    {%- if resolved_ip %}
+  carbon: {{ resolved_ip[0] }}:2003
+    {%- else %}
+{#-
+  The domain name {{ pillar['graphite_address'] }} in
+  pillar['graphite_address'] is invalid. carbon support is disabled.
+#}
+    {%- endif %}
+  {%- endif %}
 {%- endif %}
 
-chmod-socket = 770
-chown-socket = www-data:www-data
+  chmod-socket: 770
+  chown-socket: www-data:www-data

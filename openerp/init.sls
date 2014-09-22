@@ -153,10 +153,11 @@ openerp:
     - if_missing: {{ web_root_dir }}
     - require:
       - file: /usr/local
-  uwsgi:
-    - available
-    - enable: True
-    - name: openerp
+
+openerp-uwsgi:
+  file:
+    - managed
+    - name: /etc/uwsgi/openerp.yml
     - template: jinja
     - source: salt://openerp/uwsgi.jinja2
     - user: www-data
@@ -166,15 +167,9 @@ openerp:
       web_root_dir: {{ web_root_dir }}
       home: {{ home }}
     - require:
-      - service: uwsgi_emperor
       - postgres_user: openerp
       - file: openerp
-    - watch:
-      - user: openerp
-      - module: openerp_depends
-      - archive: openerp
       - file: {{ web_root_dir }}/openerp.wsgi
-      - cmd: openerp_depends
 
 {{ web_root_dir }}/openerp.wsgi:
   file:
@@ -258,7 +253,7 @@ openerp-cron:
     - mode: 440
     - require:
       - pkg: nginx
-      - uwsgi: openerp
+      - file: openerp-uwsgi
 {%- if salt['pillar.get']('openerp:ssl', False) %}
       - cmd: ssl_cert_and_key_for_{{ pillar['openerp']['ssl'] }}
 {%- endif %}
@@ -275,4 +270,9 @@ extend:
       - require:
         - user: openerp
       - watch_in:
-        - uwsgi: openerp
+        - file: openerp-uwsgi
+  uwsgi_emperor:
+    service:
+      - running
+      - watch:
+        - file: openerp-uwsgi

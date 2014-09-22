@@ -45,10 +45,15 @@ rabbitmq_port_amqp:
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 5672
   service_dependencies: ',rabbitmq_procs'
 
-{%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
-{{ nginx_instance('rabbitmq', http_port=15672) }}
-{# TODO QUANTA: implement separate check for port 15672 like for ES #}
-{# TODO QUANTA: use cleanly nginx_instance and requires rabbitmq_port_amqp and rabbitmq_port_management #}
+rabbitmq_http:
+  description: RabbitMQ HTTP Protocol
+  command: /usr/lib/nagios/plugins/check_http -H 127.0.0.1 -u / -p 15672 -e '200 OK' -I {{ salt['network.ip_addrs']('eth0')[0] }}
+  service_dependencies: ',rabbitmq_port_management'
+
+{%- if salt['pillar.get']('rabbitmq:ssl', False) -%}
+    {%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
+{{ nginx_instance('rabbitmq', extra_service_dependencies=('rabbitmq_http',)) }}
+{%- endif -%}
 
 rabbitmq-remote-amqp-port:
   description: Remote RabbitMQ AMQP Port

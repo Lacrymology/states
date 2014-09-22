@@ -49,5 +49,4 @@ ejabberd_s2s_port:
 {%- from 'postgresql/server/nrpe/instance.jinja2' import postgresql_instance_prefix with context %}
 {%- set deployment = 'ejabberd' %}
 {{ postgresql_instance_prefix(deployment) }}
-{{ nginx_instance(deployment, http_uri='/admin', https_result='401 Unauthorized', http_result='401 Unauthorized') }}
-{# TODO QUANTA: depends on postgresql ejabber instance + ejabber port #}
+{{ nginx_instance(deployment, http_uri='/admin', https_result='401 Unauthorized', http_result='401 Unauthorized', extra_service_dependencies=('ejabberd_postgresql', 'ejabberd_c2s_port')) }}

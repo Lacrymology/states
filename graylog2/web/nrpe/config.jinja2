@@ -34,6 +34,7 @@ graylog2_web_procs:
   description: Graylog2 Web Daemon
   command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -C java -a 'graylog2-web-interface-{{ version }}.jar'"
 
-graylo2_web_port:
+graylog2_web_port:
   description: Graylog2 Web TCP Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 9000
+  service_dependencies: ',graylog2_web_procs'

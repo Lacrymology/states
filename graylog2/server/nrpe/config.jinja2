@@ -32,13 +32,13 @@ graylog2_procs:
   command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -C java -a '-jar /usr/local/graylog2-server-{{ version }}/graylog2-server'"
 
 graylog2_api_port:
-  description: {{ formula|title }} ES HTTP Port
-  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 9200
+  description: Graylog2 API Port
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 12900
   service_dependencies: ',graylog2_procs'
 
 graylog2_api:
-  description: {{ formula|title }} ES HTTP Interface
-  command: /usr/lib/nagios/plugins/check_http -H 127.0.0.1 -u / -p 9200 -e '200 OK'
+  description: Graylog2 API Interface
+  command: /usr/lib/nagios/plugins/check_http -I 127.0.0.1 -u /system -p 12900 -e '401 Unauthorized'
   service_dependencies: ',graylog2_api_port'
 
 graylog2_incoming_logs:

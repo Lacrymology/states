@@ -38,7 +38,6 @@ rabbitmq_console_http:
 rabbitmq_procs:
   description: RabbitMQ Daemon
   command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -C beam{% if grains['num_cpus'] > 1 %}.smp{% endif %} -u rabbitmq"
-  service_dependencies: ',erlang_procs'
 
 rabbitmq_management_port:
   description: RabbitMQ Management Port

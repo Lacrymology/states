@@ -78,7 +78,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
   check_interval: {{ 24 * 60 }} {#- a day  #}
   freshness_threshold: {{ ((24 * 60) + 10) * 60 }} {#- 24 hours + 10 minutes #}
   command: /usr/lib/nagios/plugins/check_http -S -H {{ domain_name }} -C {{ expire_days }} -I {{ first_ip }}
-  service_dependencies: ',nginx_master'
+  service_dependencies: ',{{ formula }}_nginx_https'
 
   {% if domain_name|replace('.', '')|int == 0 %} {# only check if it is a domain, not IP. int returns 0 for unconvertible value #}
 {{ formula }}_ssl_configuration:
@@ -91,7 +91,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
     port: 443
     timeout: {{ 3 * 60 }} {#- 3 minutes #}
     freshness: {{ ((24 * 60) + 10) * 60 }}
-  service_dependencies: ',nginx_master'
+  service_dependencies: ',{{ formula }}_nginx_https_certificate'
   {%- endif %}
 {%- endif -%}
 {%- endmacro %}

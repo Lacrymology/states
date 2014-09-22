@@ -29,12 +29,6 @@ include:
   - nrpe
   - nrpe.diamond
 
-{#
- TODO: we need a test monitoring check that just return True
- and then cmd.run it with --cronjob and after that --cronresults
- to be able to test bfs.nrpe ability to use cron or not
- #}
-
 test:
   monitoring:
     - run_all_checks

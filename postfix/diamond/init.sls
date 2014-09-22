@@ -27,14 +27,6 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 Diamond statistics for postfix.
 -#}
-
-{#
-TODO
-https://github.com/BrightcoveOS/Diamond/wiki/collectors-PostfixCollector
-https://github.com/disqus/postfix-stats
-Run postfix-stats as syslog destination
-#}
-
 include:
   - diamond
   - postfix

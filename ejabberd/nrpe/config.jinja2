@@ -36,8 +36,6 @@ ejabberd_c2s_port:
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 5222
   service_dependencies: ',ejabberd_proc_check'
 
-{#- TODO: find or implement an XMPP service check  #}
-
 {%- if salt['pillar.get']('ejabberd:server_to_server', False) %}
 ejabberd_s2s_port:
   description: ejabberd Server-to-Server(S2S) Port

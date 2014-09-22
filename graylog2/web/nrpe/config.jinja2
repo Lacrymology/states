@@ -25,10 +25,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-{# TODO: quanta or favadi: add gl2 web ui monitoring check and have nginx instance depends on it #}
 {% set version = '0.20.6' %}
 {%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
-{{ nginx_instance('graylog2.web', http_uri='/login', deployment='graylog2', pillar_prefix='graylog2') }}
+{{ nginx_instance('graylog2.web', http_uri='/login', deployment='graylog2', pillar_prefix='graylog2', extra_service_dependencies=('graylog2_web_port',)) }}
 
 graylog2_web_procs:
   description: Graylog2 Web Daemon
@@ -38,3 +37,8 @@ graylog2_web_port:
   description: Graylog2 Web TCP Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 9000
   service_dependencies: ',graylog2_web_procs'
+
+graylog2_web_port:
+  description: Graylog2 Web HTTP
+  command: /usr/lib/nagios/plugins/check_http -I 127.0.0.1 -p 9000 -e '303 See Other'
+  service_dependencies: ',graylog2_web_port'

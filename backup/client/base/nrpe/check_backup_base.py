@@ -32,14 +32,13 @@ __maintainer__ = 'Tomas Neme'
 __email__ = 'lacrymology@gmail.com'
 
 import argparse
-import yaml
 import datetime
 import logging
 import os
 import pickle
 import re
 
-from bfs import nrpe as bfe
+from bfs import nrpe as bfe, unserialize_yaml
 import nagiosplugin
 
 log = logging.getLogger('nagiosplugin')
@@ -48,9 +47,8 @@ CACHE_TIMEOUT = 15
 
 class BackupFile(nagiosplugin.Resource):
     def __init__(self, config, facility):
-        with open(config) as f:
-            log.debug("Reading config file: %s", config)
-            self.config = yaml.safe_load(f)
+        log.debug("Reading config file: %s", config)
+        self.config = unserialize_yaml(config)
 
         self.prefix = self.config['backup']['prefix']
         self.manifest = self.config['backup']['manifest']

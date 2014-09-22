@@ -50,10 +50,9 @@ sentry:
       - postgres_database: sentry
 {% endif %}
 #}
-sentry:
-  uwsgi:
+/etc/uwsgi/sentry.yml:
+  file:
     - absent
-    - name: sentry
     - require:
       - file: /etc/nginx/conf.d/sentry.conf
 
@@ -61,13 +60,13 @@ sentry:
   file:
     - absent
     - require:
-      - uwsgi: sentry
+      - file: /etc/uwsgi/sentry.yml
 
 /usr/local/sentry:
   file:
     - absent
     - require:
-      - uwsgi: sentry
+      - file: /etc/uwsgi/sentry.yml
 
 /etc/nginx/conf.d/sentry.conf:
   file:

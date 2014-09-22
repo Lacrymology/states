@@ -39,7 +39,9 @@ openerp:
   file:
     - absent
     - name: {{ web_root_dir }}
-  uwsgi:
+
+/etc/uwsgi/openerp.yml:
+  file:
     - absent
     - require:
       - file: /etc/nginx/conf.d/openerp.conf

@@ -33,21 +33,23 @@ Author: Hung Nguyen Viet hvnsweeting@gmail.com
 Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
 -#}
 djangopypi2:
-  uwsgi:
-    - absent
-    - require:
-      - file: /etc/nginx/conf.d/djangopypi2.conf
   file:
     - absent
     - name: /usr/local/djangopypi2
     - require:
-      - uwsgi: djangopypi2
+      - file: /etc/uwsgi/djangopypi2.yml
+
+/etc/uwsgi/djangopypi2.yml:
+  file:
+    - absent
+    - require:
+      - file: /etc/nginx/conf.d/djangopypi2.conf
 
 /var/lib/deployments/djangopypi2:
   file:
     - absent
     - require:
-      - uwsgi: djangopypi2
+      - file: /etc/uwsgi/djangopypi2.yml
 
 /etc/nginx/conf.d/djangopypi2.conf:
   file:

@@ -28,16 +28,16 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Uninstall the web interface component of graphite.
 -#}
 graphite-web:
-  uwsgi:
+  file:
     - absent
-    - name: graphite
+    - name: /etc/uwsgi/graphite.yml
 
 {% for file in ('/var/log/graphite/graphite', '/etc/graphite/graphTemplates.conf', '/etc/nginx/conf.d/graphite.conf') %}
 {{ file }}:
   file:
     - absent
     - require:
-      - uwsgi: graphite-web
+      - file: graphite-web
 {% endfor %}
 
 {% for local in ('manage', 'salt-graphite-requirements.txt', 'bin/build-index.sh') %}
@@ -45,7 +45,7 @@ graphite-web:
   file:
     - absent
     - require:
-      - uwsgi: graphite-web
+      - file: graphite-web
 {% endfor %}
 
 {% for module in ('wsgi.py', 'local_settings.py') %}
@@ -53,5 +53,5 @@ graphite-web:
   file:
     - absent
     - require:
-      - uwsgi: graphite-web
+      - file: graphite-web
 {% endfor %}

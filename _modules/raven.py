@@ -72,6 +72,8 @@ def alert(dsn, message, level='INFO', extra=None):
         protocol = parsed.scheme
         if protocol.startswith('http'):
             try:
+                import requests
+                assert requests  # silence pyflake
                 protocol = 'requests+' + protocol
             except ImportError:
                 protocol = 'sync+' + protocol

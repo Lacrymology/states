@@ -44,5 +44,5 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 {{ deployment }}_uwsgi_ping:
   description: {{ deployment|capitalize }} uWSGI Ping
   command: sudo /usr/lib/nagios/plugins/check_uwsgi_nostderr {{ deployment }}
-  service_dependencies: ',uwsgi_emperor'
+  service_dependencies: ',{{ deployment }}_uwsgi_worker'
 {%- endmacro -%}

@@ -56,13 +56,18 @@ dovecot_port_pop3s:
 dovecot_simap:
   description: Dovecot SIMAP
   command: /usr/lib/nagios/plugins/check_simap -H 127.0.0.1 -p 993
-  service_dependencies: ',dovecot_procs'
+  service_dependencies: ',dovecot_port_imaps'
 
 {%- else %}
+dovecot_port_imap:
+  description: Dovecot IMAPS Port
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 143
+  service_dependencies: ',dovecot_procs'
+
 dovecot_imap:
   description: Dovecot IMAP
   command: /usr/lib/nagios/plugins/check_imap -H 127.0.0.1 -p 143
-  service_dependencies: ',dovecot_procs'
+  service_dependencies: ',dovecot_port_imap'
 
 dovecot_port_pop3:
   description: Dovecot POP3 Port
@@ -74,6 +79,7 @@ dovecot_port_pop3:
 mailstack_functionality:
   description: Mail Stack Functionality
   command: /usr/lib/nagios/plugins/check_mail_stack.py
+  service_dependencies: ',dovecot_{% if salt['pillar.get']('dovecot:ssl', False) %}s{% endif %}imap'
 {%- endif -%}
 
 {#- TODO: http://wiki2.dovecot.org/RunningDovecot add more processes -#}

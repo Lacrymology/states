@@ -41,12 +41,15 @@ tomcat_remote_port:
   check: check_tcp!8080
   description: Tomcat HTTP Remote Port
   passive: False
+  service_dependencies: ',tomcat_procs'
 
 tomcat_port:
   description: Tomcat HTTP Local Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 8080
+  service_dependencies: ',tomcat_procs'
 
 tomcat_command_port:
   description: Tomcat Command Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 8005
+  service_dependencies: ',tomcat_procs'
 {%- endmacro %}

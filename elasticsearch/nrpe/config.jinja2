@@ -48,7 +48,7 @@ elasticsearch_http:
 
 {%- if salt['pillar.get']('elasticsearch:ssl', False) -%}
     {%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
-{{ nginx_instance('elasticsearch') }}
+{{ nginx_instance('elasticsearch', extra_service_dependencies=('elasticsearch_http',)) }}
 {%- endif -%}
 
 {%- from 'elasticsearch/nrpe/instance.jinja2' import elasticsearch_instance with context -%}

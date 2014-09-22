@@ -41,7 +41,7 @@ shinken_broker_remote_port:
   passive: False
   service_dependencies: ',shinken_broker_procs'
 
-shinken_broker_web:
+shinken_broker_http_port:
   description: Shinken Broker Web UI Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 7767
   service_dependencies: ',shinken_broker_procs'
@@ -49,7 +49,7 @@ shinken_broker_web:
 shinken_broker_http:
   description: Shinken Broker Web UI HTTP
   command: "/usr/lib/nagios/plugins/check_http -H 127.0.0.1 -u /user/login -p 7767 -e '200 OK' -I 127.0.0.1{%- if salt['pillar.get']('__test__', False) %} -v{%- endif %}"
-  service_dependencies: ',shinken_broker_procs'
+  service_dependencies: ',shinken_broker_http_port'
 
 {%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context %}
-{{ nginx_instance('shinken.broker', deployment='shinken', pillar_prefix='shinken', http_uri='/user/login') }}
+{{ nginx_instance('shinken.broker', deployment='shinken', pillar_prefix='shinken', http_uri='/user/login', extra_service_dependencies=('shinken_broker_http',)) }}

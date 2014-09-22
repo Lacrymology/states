@@ -36,19 +36,23 @@ salt-master-remote-port-publish:
   description: Salt Master Remote Port Publish
   check: check_tcp!4505
   passive: False
+  service_dependencies: ',salt_master_procs'
 
 salt-master-remote-port-ret:
   description: Salt Master Remote Port Return
   check: check_tcp!4506
   passive: False
+  service_dependencies: ',salt_master_procs'
 
 salt_master_port_publish:
   description: Salt Master Local Port Publish
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 4505
+  service_dependencies: ',salt_master_procs'
 
 salt_master_port_ret:
   description: Salt Master Local Port Return
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 4506
+  service_dependencies: ',salt_master_procs'
 
 {%- block salt_master_mine -%}
     {%- if not salt['pillar.get']('__test__', False) %}
@@ -56,6 +60,7 @@ salt_master_mine:
   description: Salt Master Unfinished Minions
   check_interval: {{ 12 * 60 }} {#- 12 hours  #}
   freshness_threshold: {{ ((12 * 60) + 10) * 60 }} {#- 12 hours + 10 minutes #}
+  service_dependencies: ',salt_master_procs'
   arguments:
     freshness: 20 {#- cron period + timeout #}
     timeout: {{ 15 * 60 }} {#- this should never need more than 15 minutes to -#}

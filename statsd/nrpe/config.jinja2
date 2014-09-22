@@ -28,3 +28,8 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 statsd_procs:
   description: StatsD Daemon
   command: '/usr/lib/nagios/plugins/check_procs -C pystatsd-server -c 1:1 -u root'
+
+statsd_logger:
+  description: StatsD Logger
+  command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -C logger -a "-t statsd"'
+  service_dependencies: ',statsd_procs'

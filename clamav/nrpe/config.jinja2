@@ -32,3 +32,5 @@ freshclam_procs:
 clamav_procs:
   description: ClamAV Daemon
   command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -u clamav -C clamd'
+
+{# TODO: check clamav DB freshness #}

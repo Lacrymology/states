@@ -36,3 +36,4 @@ openerp_cron:
 {%- set deployment = 'openerp' %}
 {{ uwsgi_instance(deployment) }}
 {{ nginx_instance(deployment, timeout=120) }}
+{# TODO QUANTA: fix dependencies for nginx_instance, requires uwsgi worker and postgresql server proc #}

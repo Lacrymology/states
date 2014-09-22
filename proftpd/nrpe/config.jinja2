@@ -37,4 +37,4 @@ proftpd_port:
 {%- from 'postgresql/server/nrpe/instance.jinja2' import postgresql_instance_prefix with context %}
 {{ postgresql_instance_prefix('proftpd') }}
 
-{# TODO: use check_ftp #}
+{# TODO: use check_ftp that depends on postgresql server #}

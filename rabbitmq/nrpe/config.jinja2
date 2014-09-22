@@ -33,20 +33,12 @@ rabbitmq_port_console:
 rabbitmq_procs:
   description: RabbitMQ Daemon
   command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -C beam{% if grains['num_cpus'] > 1 %}.smp{% endif %} -u rabbitmq"
-
-{# epmd is Erlang Port Mapper Daemon #}
-erlang_procs:
-  description: RabbitMQ Erlang
-  command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -C epmd -u rabbitmq'
+  service_dependencies: ',erlang_procs'
 
 rabbitmq_port_management:
   description: RabbitMQ Management Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 15672
   service_dependencies: ',rabbitmq_procs'
-
-erlang_port:
-  description: RabbitMQ Erlang Port
-  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 4369
 
 rabbitmq_port_amqp:
   description: RabbitMQ Local AMQP Port
@@ -55,6 +47,8 @@ rabbitmq_port_amqp:
 
 {%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
 {{ nginx_instance('rabbitmq', http_port=15672) }}
+{# TODO QUANTA: implement separate check for port 15672 like for ES #}
+{# TODO QUANTA: use cleanly nginx_instance and requires rabbitmq_port_amqp and rabbitmq_port_management #}
 
 rabbitmq-remote-amqp-port:
   description: Remote RabbitMQ AMQP Port

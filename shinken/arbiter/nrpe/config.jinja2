@@ -27,7 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 shinken_arbiter_procs:
   description: Shinken Arbiter Daemon
-  passive: False # TODO this wrong?
+  passive: False {# TODO this wrong? #}
 {#- for some reason arbiter don't change it's user id to shinken #}
   command: "/usr/lib/nagios/plugins/check_procs -c 1:10 -u root -C python -a 'shinken-arbiter -c /etc/shinken/arbiter.conf'"
 

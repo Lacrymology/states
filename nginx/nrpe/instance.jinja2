@@ -59,9 +59,9 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
     {%- endif %}
   service_dependencies: ',nginx_master
     {%- for extra_dependency in extra_service_dependencies -%}
-        {%- if loop.first %},{% endif -%}
-        {{ extra_dependency }}
-        {%- if not loop.last -%},{% endif -%}
+        {%- if loop.first %}, {% endif -%}
+        ,{{ extra_dependency }}
+        {%- if not loop.last -%}, {% endif -%}
     {%- endfor -%}'
 
 {%- if salt['pillar.get'](pillar_prefix + ':ssl', False) %}
@@ -78,9 +78,9 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
     {%- endif %}
   service_dependencies: ',nginx_master
     {%- for extra_dependency in extra_service_dependencies -%}
-        {%- if loop.first %},{% endif -%}
-        {{ extra_dependency }}
-        {%- if not loop.last -%},{% endif -%}
+        {%- if loop.first %}, {% endif -%}
+        ,{{ extra_dependency }}
+        {%- if not loop.last -%}, {% endif -%}
     {%- endfor -%}'
 
 {{ formula }}_nginx_https_certificate:

@@ -43,10 +43,12 @@ import urlparse
 
 log = logging.getLogger(__name__)
 
+
 def __virtual__():
     if raven:
         return 'raven'
     return False
+
 
 def alert(dsn, message, level='INFO', extra=None):
     """
@@ -70,7 +72,6 @@ def alert(dsn, message, level='INFO', extra=None):
         protocol = parsed.scheme
         if protocol.startswith('http'):
             try:
-                import requests
                 protocol = 'requests+' + protocol
             except ImportError:
                 protocol = 'sync+' + protocol
@@ -81,7 +82,8 @@ def alert(dsn, message, level='INFO', extra=None):
     client = raven.Client(dsn=dsn)
     level = getattr(logging, level.upper(), 'INFO')
     extra.update({'level': level})
-    data = client.build_msg('raven.events.Message', message=message, data=extra)
+    data = client.build_msg('raven.events.Message',
+                            message=message, data=extra)
     log.info('message object: %s', str(data))
     client.send(**data)
 

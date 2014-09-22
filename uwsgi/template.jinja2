@@ -31,66 +31,68 @@ This template need:
 - context variable(s): chdir, appname, [wsgi_file], [virtualenv], [django_settings], [module]
 [something] means optional
 -#}
-# {{ pillar['message_do_not_modify'] }}
 {%- set web = pillar[appname] %}
-[uwsgi]
+uwsgi:
 {%- block header %}
 {%- endblock %}
-master = true
-processes = {{ web['workers']|default(2) }}
-harakiri = {{ web['timeout']|default(60) }}
-harakiri-verbose = true
+  master: true
+  processes: {{ web['workers']|default(2) }}
+  harakiri: {{ web['timeout']|default(60) }}
+  harakiri-verbose: true
 {%- if django_settings|default(False) %}
-env = DJANGO_SETTINGS_MODULE={{ django_settings }}
+  env: DJANGO_SETTINGS_MODULE={{ django_settings }}
 {%- endif %}
 {%- if module|default(False) %}
-module = {{ module }}
+  module: {{ module }}
 {%- endif %}
 {%- if web['cheaper']|default(False) %}
-    {%- if web['cheaper'] > 0 %}
-cheaper = {{ web['cheaper'] }}
-    {%- else %}
-cheap = true
-    {%- endif %}
-    {%- if web['workers'] == 1 and web['cheaper'] == 0 %}
-idle = {{ web['idle']|default(300) }}
-    {%- endif %}
+  {%- if web['cheaper'] > 0 %}
+  cheaper: {{ web['cheaper'] }}
+  {%- else %}
+  cheap: true
+  {%- endif %}
+  {%- if web['workers'] == 1 and web['cheaper'] == 0 %}
+  idle: {{ web['idle']|default(300) }}
+  {%- endif %}
 {%- endif %}
 {%- if grains['virtual'] == 'kvm' and salt['file.file_exists']('/sys/kernel/mm/ksm/run') %}
-ksm = 20
+  ksm: 20
 {%- endif %}
-lazy-apps = true
-uid = www-data
-gid = www-data
-procname = {{ appname }}-worker
-procname-master = {{ appname }}-master
-socket = /var/lib/uwsgi/{{ appname }}.sock
-stats = /var/lib/uwsgi/{{ appname }}-stats.sock
-chdir = {{ chdir }}
+  lazy-apps: true
+  uid: www-data
+  gid: www-data
+  procname: {{ appname }}-worker
+  procname-master: {{ appname }}-master
+  socket: /var/lib/uwsgi/{{ appname }}.sock
+  stats: /var/lib/uwsgi/{{ appname }}-stats.sock
+  chdir: {{ chdir }}
 {%- if wsgi_file|default(False) %}
-wsgi-file = {{ wsgi_file }}
+  wsgi-file: {{ wsgi_file }}
 {%- endif %}
 {%- if virtualenv|default(False) %}
-virtualenv = {{ virtualenv }}
+  virtualenv: {{ virtualenv }}
 {%- endif %}
-threaded-logger = true
-no-orphans = true
-logger = syslog:uwsgi-{{ appname }}
-    {%- if salt['pillar.get']('debug', False) %}
-req-logger = syslog:uwsgi-{{ appname }}
-    {%- endif %}
+  threaded-logger: true
+  no-orphans: true
+  logger: syslog:uwsgi-{{ appname }}
+{%- if salt['pillar.get']('debug', False) %}
+  req-logger: syslog:uwsgi-{{ appname }}
+{%- endif %}
 {%- if 'graphite_address' in pillar %}
-carbon-id = {{ appname }}
-    {%- if salt['dig.check_ip'](pillar['graphite_address']) %}
-carbon = {{ pillar['graphite_address'] }}:2003
-    {%- else -%}
-        {%- set resolved_ip = salt['dig.A'](pillar['graphite_address']) -%}
-        {%- if resolved_ip %}
-carbon = {{ resolved_ip[0] }}:2003
-        {%- else %}
-# The domain name {{ pillar['graphite_address'] }} in pillar['graphite_address'] is invalid. carbon support is disabled.
-        {%- endif -%}
-    {%- endif -%}	
+  carbon-id: {{ appname }}
+  {%- if salt['dig.check_ip'](pillar['graphite_address']) %}
+  carbon: {{ pillar['graphite_address'] }}:2003
+  {%- else %}
+    {%- set resolved_ip = salt['dig.A'](pillar['graphite_address']) %}
+    {%- if resolved_ip %}
+  carbon: {{ resolved_ip[0] }}:2003
+    {%- else %}
+{#-
+  The domain name {{ pillar['graphite_address'] }} in
+  pillar['graphite_address'] is invalid. carbon support is disabled.
+#}
+    {%- endif %}
+  {%- endif %}
 {%- endif %}
 {%- if php_settings|default(False) %}
 {{ php_settings }}

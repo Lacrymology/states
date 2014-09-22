@@ -105,10 +105,11 @@ djangopypi2:
     - require:
       - postgres_user: djangopypi2
       - service: postgresql
-  uwsgi:
-    - available
-    - enable: True
-    - name: djangopypi2
+
+djangopypi2-uwsgi:
+  file:
+    - managed
+    - name: /etc/uwsgi/djangopypi2.yml
     - template: jinja
     - user: www-data
     - group: www-data
@@ -121,12 +122,10 @@ djangopypi2:
       django_settings: djangopypi2.website.settings
       virtualenv: {{ root_dir }}
     - require:
-      - service: uwsgi_emperor
       - postgres_database: djangopypi2
       - service: memcached
       - service: rsyslog
       - cmd: djangopypi2-django_contrib_sites
-    - watch:
       - cmd: djangopypi2
       - file: djangopypi2_settings
       - file: djangopypi2_urls
@@ -270,7 +269,7 @@ djangomod module, which is just a helper to build our command and run it.
       - group
     - require:
       - user: web
-      - uwsgi: djangopypi2
+      - file: djangopypi2-uwsgi
 
 /etc/nginx/conf.d/djangopypi2.conf:
   file:
@@ -287,7 +286,7 @@ djangomod module, which is just a helper to build our command and run it.
         - static
     - require:
       - pkg: nginx
-      - uwsgi: djangopypi2
+      - file: djangopypi2-uwsgi
 
 extend:
   nginx:
@@ -297,3 +296,8 @@ extend:
 {% if salt['pillar.get']('djangopypi2:ssl', False) %}
         - cmd: ssl_cert_and_key_for_{{ pillar['djangopypi2']['ssl'] }}
 {% endif %}
+  uwsgi_emperor:
+    service:
+      - running
+      - watch:
+        - file: djangopypi2-uwsgi

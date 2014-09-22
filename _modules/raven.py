@@ -46,6 +46,7 @@ log = logging.getLogger(__name__)
 def __virtual__():
     if raven:
         return 'raven'
+    return False
 
 def alert(dsn, message, level='INFO', extra=None):
     """

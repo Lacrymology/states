@@ -38,7 +38,7 @@ graylog2_web_port:
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 9000
   service_dependencies: ',graylog2_web_procs'
 
-graylog2_web_port:
+graylog2_web_http:
   description: Graylog2 Web HTTP
   command: /usr/lib/nagios/plugins/check_http -I 127.0.0.1 -p 9000 -e '303 See Other'
   service_dependencies: ',graylog2_web_port'

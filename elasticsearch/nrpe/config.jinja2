@@ -41,8 +41,15 @@ elasticsearch-remote-port-transport:
   passive: False
   service_dependencies: ',elasticsearch_procs'
 
-{%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
-{{ nginx_instance('elasticsearch', http_port=9200, domain_name='127.0.0.1') }}
+elasticsearch_http:
+  description: Elasticsearch HTTP Protocol
+  command: /usr/lib/nagios/plugins/check_http -H 127.0.0.1 -u / -p 9200 -e '200 OK' -I {{ salt['network.ip_addrs']()[0] }}
+  service_dependencies: ',elasticsearch_procs'
+
+{%- if salt['pillar.get']('elasticsearch:ssl', False) -%}
+    {%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
+{{ nginx_instance('elasticsearch') }}
+{%- endif -%}
 
 {%- from 'elasticsearch/nrpe/instance.jinja2' import elasticsearch_instance with context -%}
 {{ elasticsearch_instance('elasticsearch') }}

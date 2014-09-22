@@ -35,8 +35,8 @@ shinken_scheduler_port:
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 7768
   service_dependencies: ',shinken_scheduler_procs'
 
-shinken_scheduler_remote_port:
+shinken_scheduler_port_remote:
   description: Shinken Scheduler Remote Port
   check: check_tcp!7768
   passive: False
-  service_dependencies: ',shinken_scheduler_procs'
+  service_dependencies: ',shinken_scheduler_port'

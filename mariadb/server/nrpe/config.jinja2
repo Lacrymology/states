@@ -47,9 +47,9 @@ mysql_port:
 {%- endif -%}
 
 {%- if salt['pillar.get']('mysql:bind', '127.0.0.1') != '127.0.0.1' %}
-mysql_remote_port:
+mysql_port_remote:
   check: check_tcp!3306
   description: MariaDB Remote Port
   passive: False
-  service_dependencies: ',mysql_procs'
+  service_dependencies: ',mysql_port'
 {%- endif %}

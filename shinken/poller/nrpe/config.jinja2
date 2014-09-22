@@ -35,8 +35,8 @@ shinken_poller_port:
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 7771
   service_dependencies: ',shinken_poller_procs'
 
-shinken_poller_remote_port:
+shinken_poller_port_remote:
   description: Shinken Poller Remote Port
   check: check_tcp!7771
   passive: False
-  service_dependencies: ',shinken_poller_procs'
+  service_dependencies: ',shinken_poller_port'

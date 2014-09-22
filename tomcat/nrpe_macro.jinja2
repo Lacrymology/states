@@ -37,11 +37,11 @@ tomcat_procs:
   description: Tomcat Daemon
   command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -C java -u tomcat{{ version }}'
 
-tomcat_remote_port:
+tomcat_port_remote:
   check: check_tcp!8080
   description: Tomcat HTTP Remote Port
   passive: False
-  service_dependencies: ',tomcat_procs'
+  service_dependencies: ',tomcat_port'
 
 tomcat_port:
   description: Tomcat HTTP Local Port

@@ -35,11 +35,11 @@ shinken_broker_port:
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 7772
   service_dependencies: ',shinken_broker_procs'
 
-shinken_broker_remote_port:
+shinken_broker_port_remote:
   description: Shinken Broker Remote Port
   check: check_tcp!7772
   passive: False
-  service_dependencies: ',shinken_broker_procs'
+  service_dependencies: ',shinken_broker_port'
 
 shinken_broker_http_port:
   description: Shinken Broker Web UI Port

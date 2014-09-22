@@ -28,7 +28,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 mongodb_http:
   description: MongoDB HTTP Interface
   command: /usr/lib/nagios/plugins/check_http -I 127.0.0.1 -p 28017{%- if salt['pillar.get']('__test__', False) %} -v{%- endif %}
-  service_dependencies: ',mongodb_procs'
+  service_dependencies: ',mongodb_http_port'
 
 mongodb_port:
   description: MongoDB Port
@@ -39,7 +39,7 @@ mongodb_procs:
   description: MongoDB Daemon
   command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -C mongod -u mongodb'
 
-mongodb_port_http:
+mongodb_http_port:
   description: MongoDB HTTP Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 28017
   service_dependencies: ',mongodb_procs'

@@ -160,7 +160,6 @@ ldap_{{ domain }}_{{ uid }}:
     - require_in:
       - file: openldap_formula_interface
 {%- endmacro %}
-#TODO modify the vmailbox_maps , maybe switch to use LDAP for that
 
 {#- create / delete user entries #}
 {% set suffix = pillar['ldap']['suffix'] %}

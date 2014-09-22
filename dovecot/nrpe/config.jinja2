@@ -41,7 +41,6 @@ dovecot_anvil:
   description: Dovecot Users connection tracker
   command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -u dovecot -a 'dovecot/anvil' -C anvil"
 
-{#- TODO: check remote port? #}
 {%- if salt['pillar.get']('dovecot:ssl', False) %}
 dovecot_port_imaps:
   description: Dovecot IMAPS Port
@@ -81,6 +80,3 @@ mailstack_functionality:
   command: /usr/lib/nagios/plugins/check_mail_stack.py
   service_dependencies: ',dovecot_{% if salt['pillar.get']('dovecot:ssl', False) %}s{% endif %}imap'
 {%- endif -%}
-
-{#- TODO: http://wiki2.dovecot.org/RunningDovecot add more processes -#}
-{#- TODO: use /usr/lib/nagios/plugins/check_spop -#}

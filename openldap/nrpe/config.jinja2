@@ -42,4 +42,3 @@ openldap_base:
   command: /usr/lib/nagios/plugins/check_ldap -H 127.0.0.1 -p 389 -b '{{ pillar['ldap']['suffix'] }}' -3
 {% endif %}
   service_dependencies: ',openldap_port'
-{# TODO: use /usr/lib/nagios/plugins/check_ldaps #}

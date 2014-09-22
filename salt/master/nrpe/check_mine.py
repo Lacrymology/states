@@ -50,7 +50,7 @@ import nagiosplugin as nap
 import pysc
 import pysc.nrpe as bfe
 
-log = logging.getLogger('nagiosplugin')
+log = logging.getLogger('nagiosplugin.salt.master.mine_minion')
 
 
 class MineMinion(nap.Resource):
@@ -69,9 +69,12 @@ class MineMinion(nap.Resource):
         return ret
 
     def probe(self):
+        log.info("MineMinion.probe started")
         ids_from_mine = self._mine_ids()
         ids_from_salt_key = self._accepted_ids()
         if set(ids_from_salt_key) == set(ids_from_mine):
+            log.info("MineMinion.probe ended")
+            log.debug("returning 0")
             return [nap.Metric('mine_minions', 0, min=0, context='minions')]
         else:
             all_ids = set(list(ids_from_salt_key)
@@ -79,6 +82,8 @@ class MineMinion(nap.Resource):
             diff_ids = set(list(all_ids - ids_from_salt_key) +
                            list(all_ids - ids_from_mine))
             log.debug('Diff minion IDs: %s', diff_ids)
+            log.info("MineMinion.probe ended")
+            log.debug("returning %d", len(diff_ids))
             return [nap.Metric('mine_minions', len(diff_ids),
                                min=0, context='minions')]
 

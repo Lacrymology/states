@@ -42,9 +42,12 @@ import sys
 import time
 import uuid
 
+import pysc
+
+
 logger = logging.getLogger(__name__)
 
-
+@pysc.profile(log=logger)
 def main():
     if len(sys.argv) <= 1:
         logger.error('need exactly one argument: db_name')
@@ -85,5 +88,4 @@ def main():
             sys.exit(1)
 
 if __name__ == '__main__':
-    logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
     main()

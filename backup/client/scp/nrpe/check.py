@@ -38,9 +38,10 @@ import pwd
 
 import paramiko
 
+import pysc
 from check_backup_base import BackupFile, main
 
-log = logging.getLogger('nagiosplugin')
+log = logging.getLogger('nagiosplugin.backup.client.scp')
 
 
 class SCPBackupFile(BackupFile):
@@ -148,4 +149,5 @@ class SCPBackupFile(BackupFile):
 
 
 if __name__ == '__main__':
-    main(SCPBackupFile)
+    p_main = pysc.profile(log=log)(main)
+    p_main(SCPBackupFile)

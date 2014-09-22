@@ -28,7 +28,6 @@
 Nagios plugin to check that saltcloud images are as listed in the cloud.profile
 file
 """
-import argparse
 import logging
 import subprocess
 import yaml
@@ -38,13 +37,15 @@ __maintainer__ = 'Tomas Neme'
 __email__ = 'lacrymology@gmail.com'
 
 import nagiosplugin
-from bfs import nrpe as bfe
+import pysc
+from pysc import nrpe as bfe
 
-log = logging.getLogger("nagiosplugin")
+log = logging.getLogger("nagiosplugin.salt.cloud.image_ids")
+
 
 class Summary(nagiosplugin.Summary):
     def ok(self, results):
-       return "ok".join(str(r) for r in results)
+        return "ok".join(str(r) for r in results)
 
     def problem(self, results):
         return ";".join(self.format(result) for result in results)
@@ -76,10 +77,12 @@ class ImageIds(nagiosplugin.Resource):
     Checks the salt-cloud instances list against cloud.profile
     """
     def __init__(self, profile_file, providers_file):
+        log.debug("ImageIds(%s, %s)", profile_file, providers_file)
         self.profile_file = profile_file
         self.providers_file = providers_file
 
     def probe(self):
+        log.info("ImageIds.probe started")
         # get cloud.profile data
         profile_list = {}
         with open(self.profile_file) as f:
@@ -96,9 +99,10 @@ class ImageIds(nagiosplugin.Resource):
                                      '--out=yaml'],
                                     stdout=subprocess.PIPE)
         except OSError:
-            pass
+            log.warn("Could not call salt-cloud", exc_info=True)
         else:
             salt_list = yaml.load(proc.stdout)
+            log.debug("salt list: %s", str(salt_list))
 
         ids = set()
         # get the providers and their drivers' names and populate a list of ids
@@ -111,9 +115,11 @@ class ImageIds(nagiosplugin.Resource):
         imgs = set(str(prof['image']) for prof in profile_list.values())
         log.debug("profile images: %s", str(imgs))
         yield nagiosplugin.Metric('missing', imgs - ids)
+        log.info("ImageIds.probe ended")
 
 
 @nagiosplugin.guarded
+@pysc.profile(log=log)
 def main():
     argp = bfe.ArgumentParser()
     argp.add_argument("--profile-file", metavar="PATH",
@@ -123,8 +129,8 @@ def main():
     args = argp.parse_args()
 
     check = bfe.Check(ImageIds(args.profile_file, args.providers_file),
-                               MissingImageContext('missing'),
-                               Summary())
+                      MissingImageContext('missing'),
+                      Summary())
     check.main(args)
 
 if __name__ == '__main__':

@@ -102,8 +102,6 @@ def move_incoming(directory, category, incoming_sub_directory='incoming',
 
 @pysc.profile(log=logger)
 def main():
-    import sys
-    logging.basicConfig(stream=sys.stderr, level=logging.ERROR)
     move_incoming('/var/lib/salt_archive', 'pip')
     move_incoming('/var/lib/salt_archive', 'mirror')
 

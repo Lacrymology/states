@@ -34,8 +34,6 @@ __email__ = 'hvnsweeting@gmail.com'
 
 import glob
 import logging
-import logging.config
-import logging.handlers
 import os
 import shlex
 import subprocess

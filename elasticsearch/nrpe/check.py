@@ -3,16 +3,16 @@
 
 # Copyright (c) 2013, Bruno Clermont
 # All rights reserved.
-# 
+#
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
-# 
+#
 # 1. Redistributions of source code must retain the above copyright notice, this
 #    list of conditions and the following disclaimer.
 # 2. Redistributions in binary form must reproduce the above copyright notice,
 #    this list of conditions and the following disclaimer in the documentation
 #    and/or other materials provided with the distribution.
-# 
+#
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 # ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -35,7 +35,10 @@ __email__ = 'patate@fastmail.cn'
 import argparse
 import nagiosplugin
 import requests
+import logging
 import pysc
+
+log = logging.getLogger("nagiosplugin.elasticsearch.cluster_nodes")
 
 
 def elasticsearch_version():
@@ -46,17 +49,21 @@ def elasticsearch_version():
 
 class ClusterNodes(nagiosplugin.Resource):
     def probe(self):
+        log.info("ClusterNode.probe started")
         major = elasticsearch_version()[0]
         if major < 1:
             rsc = 'nodes/'
         else:
             rsc = 'states/nodes/'
+        log.debug("calling localhost to get cluster %s", rsc)
         req = requests.get('http://127.0.0.1:9200/_cluster/' + rsc)
+        log.debug("response: %s", req.content)
+        log.info("ClusterNode.probe finished")
         return [nagiosplugin.Metric('nodes', len(req.json['nodes']), min=0)]
 
 
 @nagiosplugin.guarded
-@pysc.profile('nrpe.elasticsearch')
+@pysc.profile(log=log)
 def main():
     argp = argparse.ArgumentParser(description=__doc__)
     argp.add_argument('-c', '--critical', metavar='VALUE', default='2',

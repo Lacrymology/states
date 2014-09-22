@@ -34,16 +34,12 @@ import sys
 import logging
 import datetime
 
-logging.basicConfig(stream=sys.stdout, level=logging.DEBUG,
-                    format="%(asctime)s %(message)s")
+import pysc
 
-import salt.client
-
-client = salt.client.LocalClient()
 logger = logging.getLogger(__name__)
 
 
-def wait_minion_up(minion_id, max_wait):
+def wait_minion_up(client, minion_id, max_wait):
     output = {}
     start = datetime.datetime.now()
     while minion_id not in output:
@@ -62,5 +58,11 @@ def wait_minion_up(minion_id, max_wait):
             logger.info("Minion %s is finally up after %d seconds", minion_id,
                         delta.total_seconds())
 
+@pysc.profile(log=logger)
+def main():
+    import salt.client
+    client = salt.client.LocalClient()
+    wait_minion_up(client, sys.argv[1], 300)
+
 if __name__ == '__main__':
-    wait_minion_up(sys.argv[1], 300)
+    main()

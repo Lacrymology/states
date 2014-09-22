@@ -40,11 +40,14 @@ import pysc
 import pysc.nrpe as bfe
 
 
-log = logging.getLogger('nagiosplugin')
+log = logging.getLogger('nagiosplugin.mariadb.server.query')
 
 
 class MysqlQuery(nap.Resource):
     def __init__(self, host, user, passwd, database, query):
+        log.debug("MysqlQuery(%s, %s, %s, %s, %s)",
+                  host, user, passwd[:2] + "*****" + passwd[-2:],
+                  database, query)
         self.user = user
         self.passwd = passwd
         self.host = host
@@ -52,17 +55,22 @@ class MysqlQuery(nap.Resource):
         self.query = query
 
     def probe(self):
+        log.info("MysqlQuery.probe started")
         try:
+            log.debug("connecting with pymysql")
             c = pymysql.connect(self.host, self.user,
                                 self.passwd, self.database)
             cursor = c.cursor()
+            log.debug("about to execute query: %s", self.query)
             records = cursor.execute(self.query)
-            log.debug(records)
+            log.debug("resulted in %d records", records)
             log.debug(cursor.fetchall())
         except Exception as e:
             log.critical(e)
             records = -1
 
+        log.info("MysqlQuery.probe finished")
+        log.debug("returning %d", records)
         return [nap.Metric('records', records, context='records')]
 
 

@@ -41,7 +41,7 @@ import nagiosplugin
 import pysc
 from pysc import nrpe as pysce, unserialize_yaml
 
-log = logging.getLogger('nagiosplugin')
+log = logging.getLogger('nagiosplugin.backup.client.base')
 CACHE_TIMEOUT = 15
 
 
@@ -56,6 +56,7 @@ class BackupFile(nagiosplugin.Resource):
         self.facility = facility
 
     def probe(self):
+        log.info("BackupFile probe started")
         log.info("Probe backup for facility: %s", self.facility)
         files = self.get_manifest()
 
@@ -72,6 +73,7 @@ class BackupFile(nagiosplugin.Resource):
             min=0)
         size_metric = nagiosplugin.Metric('size', file['size'], min=0)
 
+        log.info("BackupFile.probe finished")
         log.debug("returning age: %s, size: %s", age_metric, size_metric)
         return [age_metric, size_metric]
 

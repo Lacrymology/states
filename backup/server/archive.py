@@ -38,17 +38,20 @@ import pysc
 
 logger = logging.getLogger('backup-archive')
 
+
 def archive_directory(root_directory='/var/lib/backup'):
     logger.debug("Start to archive %s", root_directory)
     for filename in os.listdir(root_directory):
         absolute_filename = os.path.join(root_directory, filename)
         if os.path.isdir(absolute_filename):
             logger.debug("found directory %s", absolute_filename)
-            archive_filename = os.path.join(root_directory,
-                                            '{0}-{1}.tar'.format(
-                                                filename,
-                                                datetime.datetime.now().isoformat()
-                                            ))
+            archive_filename = os.path.join(
+                root_directory,
+                '{0}-{1}.tar'.format(
+                    filename,
+                    datetime.datetime.now().isoformat()
+                )
+            )
             archive = tarfile.open(archive_filename, 'w')
             archive.add(absolute_filename, filename)
             archive.close()

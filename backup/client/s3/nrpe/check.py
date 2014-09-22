@@ -37,9 +37,10 @@ import os
 
 import boto
 
+import pysc
 from check_backup_base import BackupFile, main
 
-log = logging.getLogger('nagiosplugin')
+log = logging.getLogger('nagiosplugin.backup.s3')
 
 
 class S3BackupFile(BackupFile):
@@ -53,6 +54,7 @@ class S3BackupFile(BackupFile):
         self.bucket = self.config['s3']['bucket']
 
     def files(self):
+        log.info("started iterating files")
         s3 = boto.connect_s3(self.key, self.secret)
 
         log.debug("searching bucket %s", self.bucket)
@@ -80,7 +82,9 @@ class S3BackupFile(BackupFile):
             # I expect file to have one and only one element
             if file:
                 yield file
+        log.info("finished iterating files")
 
 
 if __name__ == '__main__':
-    main(S3BackupFile)
+    p_main = pysc.profile(log=log)(main)
+    p_main(S3BackupFile)

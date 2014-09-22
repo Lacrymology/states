@@ -39,6 +39,8 @@ import socket
 import subprocess
 import sys
 
+import pysc
+
 logger = logging.getLogger(__name__)
 
 
@@ -76,7 +78,7 @@ def filter_ips(filename, ips):
     else:
         logger.debug("File %s don't had any changes, leave as is.", filename)
 
-
+@pysc.profile(log=logger)
 def main():
     # list of denyhosts files
     denyhosts_files = (
@@ -116,5 +118,4 @@ def main():
 
 
 if __name__ == '__main__':
-    logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
     main()

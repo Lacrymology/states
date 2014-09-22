@@ -46,7 +46,6 @@ import pysc
 
 
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.DEBUG)
 
 
 def md5hash(filepath):

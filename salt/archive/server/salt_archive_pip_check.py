@@ -8,9 +8,10 @@ __email__ = 'patate@fastmail.cn'
 import logging
 import os
 import shutil
-import sys
 import tarfile
 import tempfile
+
+import pysc
 
 logger = logging.getLogger(__name__)
 
@@ -85,7 +86,9 @@ def validate(dirname):
         else:
             logger.debug("Ignore non tar %s", absolute_filename)
 
+@pysc.profile(log=logger)
+def main():
+    validate('/var/lib/salt_archive/pip')
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.DEBUG, stream=sys.stderr)
-    validate('/var/lib/salt_archive/pip')
+    main()

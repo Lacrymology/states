@@ -39,7 +39,10 @@ import sys
 import logging
 import pysc
 
-logger = logging.getLogger('check_backup')
+# NOTE: This doesn't use python's nagiosplugin, but let's put the logs in the
+#   same namespace anyways
+logger = logging.getLogger('nagiosplugin.backup.server.file')
+
 
 class BackupFile(object):
     """
@@ -76,7 +79,7 @@ class BackupFile(object):
         return '-'.join((
             self.hostname, self.name, self.type,
             self.date.strftime("%Y-%m-%d-%H_%M_%S"),
-#            self.format_type[self.type], self.compression
+            # self.format_type[self.type], self.compression
             self.type, self.compression
         ))
 
@@ -134,10 +137,12 @@ def main():
     """
     main loop
     """
+    logger.info("check started")
     now = datetime.datetime.now()
     max_time = datetime.timedelta(hours=36)
     hosts = {}
     backup = BackupDirectory('/var/lib/backup')
+    logger.info("iterating directory /var/lib/backup")
     for file in backup:
         try:
             host = hosts[file.hostname]
@@ -153,8 +158,10 @@ def main():
             type = name[file.type] = {}
         type[file.date] = file
 
+    logger.debug("Built files map: %s", str(hosts))
     number_backups = 0
     missing_backup = []
+    logger.info("Iterating hosts")
     for host in hosts:
         for name in hosts[host]:
             for type in hosts[host][name]:
@@ -162,7 +169,7 @@ def main():
                 dates = hosts[host][name][type].keys()
                 dates.sort()
                 latest = hosts[host][name][type][dates[-1]]
-                logger.debug("Latest backup %s: %s", latest.date.isoformat())
+                logger.debug("Latest backup %s", latest.date.isoformat())
                 if now - latest.date > max_time:
                     logger.debug("Expired backup %s", latest)
                     missing_backup.append('-'.join((host, type)))
@@ -170,6 +177,8 @@ def main():
                     logger.debug("Good backup %s", latest)
                     number_backups += 1
 
+    logger.info("check finished")
+    logger.debug("missing backups: %s", str(missing_backup))
     if not missing_backup:
         print 'BACKUP OK - no missing backup|backups={0}'.format(
             number_backups)
@@ -180,5 +189,4 @@ def main():
         sys.exit(1)
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.ERROR, stream=sys.stdout)
     main()

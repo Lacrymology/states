@@ -35,6 +35,7 @@ include:
   - python.dev
   - python.pillow
   - rsyslog
+  - salt.minion.deps
 {%- if salt['pillar.get']('openerp:ssl', False) %}
   - ssl
 {%- endif %}
@@ -170,6 +171,7 @@ openerp-uwsgi:
       - postgres_user: openerp
       - file: openerp
       - file: {{ web_root_dir }}/openerp.wsgi
+      - pkg: salt_minion_deps
 
 {{ web_root_dir }}/openerp.wsgi:
   file:

@@ -45,11 +45,11 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 {{ prefix }}elasticsearch_port_http:
   description: {{ which| title }} Elasticsearch Remote HTTP Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 9200
-  service_dependencies: ',elasticsearch_procs'
+  service_dependencies: {% if prefix == 'graylog2_' %}',graylog2_procs'{% else %}',elasticsearch_procs'{% endif %}
 {%- endif %}
 
 {{ prefix }}elasticsearch_port_transport:
   description: {{ which| title }} Elasticsearch Transport Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p {{ salt['pillar.get'](pillar_string + ':port', 9300) }}
-  service_dependencies: ',elasticsearch_procs'
+  service_dependencies: {% if prefix == 'graylog2_' %}',graylog2_procs'{% else %}',elasticsearch_procs'{% endif %}
 {%- endmacro %}

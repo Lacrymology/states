@@ -57,7 +57,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
   check_interval: {{ check_interval }}
   freshness_threshold: {{ (check_interval + 10) * 60 }} {#- check_interval + 10 minutes in seconds #}
     {%- endif %}
-  service_dependencies: ',nginx_master'
+  service_dependencies: {% if formula == 'elasticsearch' %}',elasticsearch_procs'{% else %}',nginx_master'{% endif %}
 
 {%- if salt['pillar.get'](pillar_prefix + ':ssl', False) %}
 {%- set https_uri = http_uri if not https_uri %}

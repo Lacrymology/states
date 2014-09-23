@@ -56,7 +56,7 @@ dovecot_simap:
   description: Dovecot SIMAP
   command: /usr/lib/nagios/plugins/check_simap -H 127.0.0.1 -p 993
   service_dependencies: ',dovecot_port_imaps'
-{%- endif -%}
+{%- endif %}
 
 dovecot_port_imap:
   description: Dovecot IMAPS Port
@@ -78,7 +78,7 @@ mailstack_functionality:
   description: Mail Stack Functionality
   command: /usr/lib/nagios/plugins/check_mail_stack.py
   service_dependencies: ',dovecot_{% if salt['pillar.get']('dovecot:ssl', False) %}s{% endif %}imap'
-{%- endif -%}
+{%- endif %}
 
 dovecot_managesieve_port:
   description: Dovecot Managesieve Port

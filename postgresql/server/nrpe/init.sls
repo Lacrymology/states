@@ -39,16 +39,13 @@ include:
 {%- from 'nrpe/passive.sls' import passive_absent with context %}
 {{ passive_absent('postgresql.server') }}
 
-postgres:
-  user:
-    - present
-    - groups:
-      - nagios
-    - require:
-      - pkg: postgresql
-      - pkg: nagios-nrpe-server
-
 extend:
+  postgres:
+    user:
+      - groups:
+        - nagios
+      - require:
+        - pkg: nagios-nrpe-server
   postgresql_monitoring:
     postgres_user:
       - require:

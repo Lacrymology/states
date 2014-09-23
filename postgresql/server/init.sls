@@ -83,6 +83,12 @@ postgresql:
       - cmd: ssl_cert_and_key_for_{{ ssl }}
 {% endif %}
 
+postgres:
+  user:
+    - present
+    - require:
+      - pkg: postgresql
+
 {%- call manage_pid('/var/run/postgresql/9.2-main.pid', 'postgres', 'postgres', 'postgresql') %}
 - pkg: postgresql
 {%- endcall %}

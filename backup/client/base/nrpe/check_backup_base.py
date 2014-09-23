@@ -37,9 +37,9 @@ import logging
 import os
 import pickle
 import re
-
-from bfs import nrpe as bfe, unserialize_yaml
 import nagiosplugin
+import pysc
+from pysc import nrpe as pysce, unserialize_yaml
 
 log = logging.getLogger('nagiosplugin')
 CACHE_TIMEOUT = 15
@@ -153,12 +153,13 @@ class BackupFile(nagiosplugin.Resource):
 
 
 @nagiosplugin.guarded
+@pysc.profile(log=log)
 def main(Collector):
     """
     :param Collector: A BackupFile subclass to be instantiated
     :return:
     """
-    argp = bfe.ArgumentParser(
+    argp = pysce.ArgumentParser(
         description=__doc__,
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     argp.add_argument('facility', help='facility name to check backups for')
@@ -170,7 +171,7 @@ def main(Collector):
 
     args = argp.parse_args()
 
-    check = bfe.Check(
+    check = pysce.Check(
         Collector(args.config,
                   args.facility,),
         nagiosplugin.ScalarContext('age', args.warning, args.warning),

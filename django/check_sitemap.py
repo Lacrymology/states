@@ -34,6 +34,7 @@ import argparse
 import nagiosplugin
 import sitemap
 import sys
+import pysc
 
 
 class SiteMap(nagiosplugin.Resource):
@@ -55,6 +56,7 @@ class SiteMap(nagiosplugin.Resource):
 
 
 @nagiosplugin.guarded
+@pysc.profile(log='nrpe.check_sitemap')
 def main():
     argp = argparse.ArgumentParser(description=__doc__)
     argp.add_argument('-w', '--warning', metavar='RANGE', default='')

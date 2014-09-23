@@ -36,6 +36,7 @@ import os
 import subprocess
 import tempfile
 import logging
+import pysc
 
 logger = logging.getLogger(__name__)
 
@@ -99,6 +100,7 @@ def move_incoming(directory, category, incoming_sub_directory='incoming',
         if (path != source_directory) and not (dirs or files):
             os.rmdir(path)
 
+@pysc.profile(log=logger)
 def main():
     import sys
     logging.basicConfig(stream=sys.stderr, level=logging.ERROR)

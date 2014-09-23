@@ -41,7 +41,7 @@ from datetime import datetime
 import boto
 import nagiosplugin as nap
 
-import bfs
+import pysc
 
 log = logging.getLogger('nagiosplugin')
 logging.basicConfig(level=logging.DEBUG)
@@ -104,8 +104,9 @@ class BackupAge(nap.Resource):
 
 
 @nap.guarded
+@pysc.profile(log=log)
 def main():
-    argp = bfs.common_argparser(default_config_path='/etc/nagios/s3lite.yml')
+    argp = pysc.common_argparser(default_config_path='/etc/nagios/s3lite.yml')
     argp.add_argument('path', type=str, help='Path used when backup')
     argp.add_argument('bucket',
                       help='s3://bucket/prefix to check uploaded file')
@@ -117,7 +118,7 @@ def main():
     argp.add_argument('--timeout', default=None)
     args = argp.parse_args()
 
-    util = bfs.Util(args.config, debug=args.log, drop_privilege=False)
+    util = pysc.Util(args.config, debug=args.log, drop_privilege=False)
 
     try:
         parsed = boto.urlparse.urlparse(args.bucket)

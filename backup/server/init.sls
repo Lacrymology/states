@@ -31,6 +31,7 @@ include:
   - apt
   - cron
   - pip
+  - pysc
   - rsyslog
   - ssh.server
 
@@ -96,3 +97,4 @@ backup-archiver-dependency:
       - module: backup-archiver-dependency
       - pkg: cron
       - service: rsyslog
+      - module: pysc

@@ -35,6 +35,7 @@ include:
   - cron
   - local
   - nginx
+  - pysc
   - rsync
   - salt.archive
   - ssh.server
@@ -95,6 +96,7 @@ salt_archive_incoming:
     - mode: 550
     - require:
       - file: /usr/local
+      - module: pysc
 {%- else %}
     {#-
      if pillar['salt_archive']['source'] is defined, can't have an incoming

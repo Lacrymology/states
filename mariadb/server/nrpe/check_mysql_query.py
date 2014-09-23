@@ -36,7 +36,8 @@ import logging
 
 import pymysql
 import nagiosplugin as nap
-import bfs.nrpe as bfe
+import pysc
+import pysc.nrpe as bfe
 
 
 log = logging.getLogger('nagiosplugin')
@@ -66,6 +67,7 @@ class MysqlQuery(nap.Resource):
 
 
 @nap.guarded
+@pysc.profile(log=log)
 def main():
     argp = bfe.ArgumentParser(description=__doc__)
     args = argp.parse_args()

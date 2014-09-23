@@ -39,7 +39,8 @@ import re
 from datetime import datetime
 
 import nagiosplugin as nap
-import bfs.nrpe as bfe
+import pysc
+import pysc.nrpe as bfe
 
 from plugins import PluginCertInfo, PluginOpenSSLCipherSuites
 from utils.SSLyzeSSLConnection import SSLHandshakeRejected
@@ -220,6 +221,7 @@ class SslSummary(nap.Summary):
 
 
 @nap.guarded
+@pysc.profile(log=__name__)
 def main():
     parser = bfe.ArgumentParser()
     parser.add_argument('-H', '--host', type=str)

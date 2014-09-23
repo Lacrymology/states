@@ -42,7 +42,7 @@ import boto
 from boto.s3.key import Key
 from boto.s3.connection import S3Connection
 
-import bfs
+import pysc
 
 
 logger = logging.getLogger(__name__)
@@ -155,15 +155,16 @@ class S3Util(object):
                                       'directory.')
 
 
+@pysc.profile(log=logger)
 def main():
     import sys
 
-    argp = bfs.common_argparser(default_config_path='/etc/s3lite.yml')
+    argp = pysc.common_argparser(default_config_path='/etc/s3lite.yml')
     argp.add_argument('path', type=str, help='Path to file/dir to upload')
     argp.add_argument('bucket', help='s3://bucket/prefix to upload file to')
     args = argp.parse_args()
 
-    util = bfs.Util(args.config, debug=args.log, drop_privilege=False)
+    util = pysc.Util(args.config, debug=args.log, drop_privilege=False)
 
     s3u = S3Util(util['s3']['key_id'], util['s3']['secret_key'],
                  minion_id=util['minion_id'])

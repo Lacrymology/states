@@ -24,13 +24,28 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
+
+Mange pysc pip package, which provide lib support for python scrips in salt common
 #}
 
-{%- from 'python/pysc.jinja2' import pysc_config with context %}
-{{ pysc_config(process_name='s3lite', sentry_dsn_pillar_key='sentry_dns') }}
+include:
+  - pip
 
-s3:
-  key_id: {{ pillar['aws']['access_key'] }}
-  secret_key: {{ pillar['aws']['secret_key'] }}
-
-minion_id: {{ grains['id'] }}
+pysc:
+  file:
+    - managed
+    - name: {{ opts['cachedir'] }}/salt-pysc-requirements.txt
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - source: salt://pysc/requirements.jinja2
+  module:
+    - wait
+    - name: pip.install
+    - upgrade: True
+    - requirements: {{ opts['cachedir'] }}/salt-pysc-requirements.txt
+    - require:
+      - module: pip
+    - watch:
+      - file: pysc

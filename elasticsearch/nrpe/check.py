@@ -35,6 +35,7 @@ __email__ = 'patate@fastmail.cn'
 import argparse
 import nagiosplugin
 import requests
+import pysc
 
 
 def elasticsearch_version():
@@ -55,6 +56,7 @@ class ClusterNodes(nagiosplugin.Resource):
 
 
 @nagiosplugin.guarded
+@pysc.profile('nrpe.elasticsearch')
 def main():
     argp = argparse.ArgumentParser(description=__doc__)
     argp.add_argument('-c', '--critical', metavar='VALUE', default='2',

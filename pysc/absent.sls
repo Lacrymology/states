@@ -25,12 +25,14 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 #}
-
-{%- from 'python/pysc.jinja2' import pysc_config with context %}
-{{ pysc_config(process_name='s3lite', sentry_dsn_pillar_key='sentry_dns') }}
-
-s3:
-  key_id: {{ pillar['aws']['access_key'] }}
-  secret_key: {{ pillar['aws']['secret_key'] }}
-
-minion_id: {{ grains['id'] }}
+pysc:
+  file:
+    - absent
+    - name: {{ opts['cachedir'] }}/salt-pysc-requirements.txt
+  module:
+    - wait
+    - name: pip.uninstall
+    - upgrade: True
+    - requirements: {{ opts['cachedir'] }}/salt-pysc-requirements.txt
+    - require_in:
+      - file: pysc

@@ -24,21 +24,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
--#}
-{%- from 'python/logging.sls' import logging with context %}
-{%- macro bfs_config(process_name=None, sentry_dsn_pillar_key=None, lock=None, daemon_user=None, daemon_group=None) %}
-  {%- if lock %}
-lock: {{ lock }}
-  {%- endif %}
-  {% if 'graphite_address' in pillar %}
-graphite: {{ pillar['graphite_address'] }}
-  {%- endif %}
-  {%- if daemon_user and daemon_group %}
-daemon:
-  user: {{ daemon_user }}
-  group: {{ daemon_group }}
-  {%- endif %}
-  {%- if process_name and sentry_dsn_pillar_key %}
-{{ logging(process_name, sentry_dsn_pillar_key) }}
-  {%- endif %}
-{%- endmacro %}
+#}
+{%- if 'files_archive' in pillar %}
+{{ pillar['files_archive'] }}/pip/pysc-0.2.8.tar.gz
+{%- else %}
+http://archive.robotinfra.com/pip/pysc-0.2.8.tar.gz
+{%- endif %}

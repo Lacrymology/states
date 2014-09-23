@@ -28,7 +28,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 To use this template, extends it and define blocks that you want to replace,
 This template need:
 - pillar data for this app
-- context variable(s): chdir, appname, [wsgi_file], [virtualenv], [django_settings], [module]
+- context variable(s): chdir, appname, [wsgi_file], [virtualenv], [django_settings], [module], [uid], [gid]
 [something] means optional
 -#}
 {%- set web = pillar[appname] %}
@@ -59,8 +59,8 @@ uwsgi:
   ksm: 20
 {%- endif %}
   lazy-apps: true
-  uid: www-data
-  gid: www-data
+  uid: {{ uid|default("www-data") }}
+  gid: {{ gid|default("www-data") }}
   procname: {{ appname }}-worker
   procname-master: {{ appname }}-master
   socket: /var/lib/uwsgi/{{ appname }}.sock

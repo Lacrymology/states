@@ -29,7 +29,6 @@ include:
   - ssh.server
   - ssh.server.diamond
   - ssh.server.nrpe
-  - ssh.server.rsyslog
 
 test:
   monitoring:

@@ -57,7 +57,7 @@ check_backup.py:
     - group: nagios
     - mode: 550
     - require:
-      - file: /etc/nagios/backup.conf
+      - file: /etc/nagios/backup.yml
       - file: /usr/local/nagios/lib/python2.7/check_backup_base.py
       - module: backup_client_nrpe-requirements
 

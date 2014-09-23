@@ -288,7 +288,9 @@ gitlab-uwsgi:
     - template: jinja
     - mode: 440
     - context:
-      web_dir: {{ web_dir }}
+      appname: gitlab
+      chdir: {{ web_dir }}
+      rack: {{ web_dir }}/config.ru
     - require:
       - cmd: gitlab
       - cmd: gitlab_precompile_assets

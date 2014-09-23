@@ -82,10 +82,9 @@ postgresql:
 {% if ssl %}
       - cmd: ssl_cert_and_key_for_{{ ssl }}
 {% endif %}
-
-postgres:
   user:
     - present
+    - name: postgres
     - require:
       - pkg: postgresql
 

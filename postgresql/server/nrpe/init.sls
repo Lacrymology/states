@@ -40,7 +40,7 @@ include:
 {{ passive_absent('postgresql.server') }}
 
 extend:
-  postgres:
+  postgresql:
     user:
       - groups:
         - nagios

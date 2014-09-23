@@ -186,9 +186,6 @@ graylog2-web:
     - require:
       - file: /var/run/{{ user }}
       - file: /var/log/{{ user }}
-  uwsgi:
-    - absent
-    - name: graylog2
 
 {% for command in ('streamalarms', 'subscriptions') %}
 /etc/cron.hourly/graylog2-web-{{ command }}:

@@ -117,6 +117,11 @@ sentry-uwsgi:
     - group: www-data
     - mode: 440
     - source: salt://sentry/uwsgi.jinja2
+    - context:
+      appname: sentry
+      module: sentry.wsgi
+      virtualenv: /usr/local/sentry
+      chdir: /usr/local/sentry
     - require:
       - service: memcached
       - service: uwsgi_emperor

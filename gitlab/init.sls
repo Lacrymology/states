@@ -292,10 +292,18 @@ gitlab-uwsgi:
     - require:
       - cmd: gitlab
       - cmd: gitlab_precompile_assets
+      - service: uwsgi_emperor
       - file: gitlab_upstart
       - gem: rack
       - file: {{ web_dir }}/config.ru
       - postgres_database: gitlab
+  module:
+    - wait
+    - name: file.touch
+    - m_name: /etc/uwsgi/gitlab.yml
+    - require:
+      - file: /etc/uwsgi/gitlab.yml
+    - watch:
       - user: gitlab
       - file: {{ web_dir }}/config/gitlab.yml
       - file: {{ web_dir }}/config/database.yml
@@ -304,7 +312,6 @@ gitlab-uwsgi:
       - file: {{ web_dir }}/config/initializers/smtp_settings.rb
 {%- endif %}
       - archive: gitlab
-      - service: uwsgi_emperor
 
 gitlab_migrate_db:
   cmd:

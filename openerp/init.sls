@@ -167,10 +167,21 @@ openerp-uwsgi:
       web_root_dir: {{ web_root_dir }}
       home: {{ home }}
     - require:
+      - service: uwsgi_emperor
       - postgres_user: openerp
       - file: openerp
+  module:
+    - wait
+    - name: file.touch
+    - m_name: /etc/uwsgi/openerp.yml
+    - require:
+      - file: /etc/uwsgi/openerp.yml
+    - watch:
+      - user: openerp
+      - module: openerp_depends
+      - archive: openerp
       - file: {{ web_root_dir }}/openerp.wsgi
-      - service: uwsgi_emperor
+      - cmd: openerp_depends
 
 {{ web_root_dir }}/openerp.wsgi:
   file:

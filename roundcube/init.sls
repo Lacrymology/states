@@ -92,12 +92,19 @@ roundcube-uwsgi:
     - context:
       dir: {{ roundcubedir }}
     - require:
+      - service: uwsgi_emperor
       - module: roundcube_initial
+  module:
+    - wait
+    - name: file.touch
+    - m_name: /etc/uwsgi/roundcube.yml
+    - require:
+      - file: /etc/uwsgi/roundcube.yml
+    - watch:
       - file: {{ roundcubedir }}/config/config.inc.php
       - archive: roundcube
       - pkg: php5-pgsql
       - pkg: roundcube_password_plugin_ldap_driver_dependency
-      - service: uwsgi_emperor
 
 {{ roundcubedir }}:
   file:

@@ -182,11 +182,19 @@ graphite-web-uwsgi:
     - source: salt://graphite/uwsgi.jinja2
     - require:
       - module: graphite_initial_fixture
+      - service: uwsgi_emperor
       - file: graphite_logdir
       - file: /usr/local/graphite/bin/build-index.sh
       - user: web
       - service: rsyslog
       - service: memcached
+  module:
+    - wait
+    - name: file.touch
+    - m_name: /etc/uwsgi/graphite.yml
+    - require:
+      - file: /etc/uwsgi/graphite.yml
+    - watch:
       - user: graphite
       - module: graphite_settings
       - file: graphite_wsgi
@@ -196,7 +204,6 @@ graphite-web-uwsgi:
       - file: graphite-urls-patch
       - pip: graphite-web
       - module: graphite_admin_user
-      - service: uwsgi_emperor
 
 graphite-urls-patch:
   file:

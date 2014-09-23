@@ -119,10 +119,17 @@ sentry-uwsgi:
     - source: salt://sentry/uwsgi.jinja2
     - require:
       - service: memcached
+      - service: uwsgi_emperor
       - service: rsyslog
+  module:
+    - wait
+    - name: file.touch
+    - m_name: /etc/uwsgi/sentry.yml
+    - require:
+      - file: /etc/uwsgi/sentry.yml
+    - watch:
       - file: sentry
       - cmd: sentry_settings
-      - service: uwsgi_emperor
 
 sentry_settings:
   file:

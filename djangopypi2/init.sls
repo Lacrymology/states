@@ -122,16 +122,23 @@ djangopypi2-uwsgi:
       django_settings: djangopypi2.website.settings
       virtualenv: {{ root_dir }}
     - require:
+      - service: uwsgi_emperor
       - postgres_database: djangopypi2
       - service: memcached
       - service: rsyslog
       - cmd: djangopypi2-django_contrib_sites
+  module:
+    - wait
+    - name: file.touch
+    - m_name: /etc/uwsgi/djangopypi2.yml
+    - require:
+      - file: /etc/uwsgi/djangopypi2.yml
+    - watch:
       - cmd: djangopypi2
       - file: djangopypi2_settings
       - file: djangopypi2_urls
       - file: /var/lib/deployments/djangopypi2/media
       - cmd: djangopypi2_loaddata
-      - service: uwsgi_emperor
 
 {{ root_dir }}/manage:
   file:

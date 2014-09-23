@@ -28,7 +28,6 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 include:
   - firewall
   - firewall.nrpe
-  - firewall.rsyslog
 
 test:
   monitoring:

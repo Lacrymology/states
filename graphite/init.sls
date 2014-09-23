@@ -180,6 +180,14 @@ graphite-web-uwsgi:
     - group: www-data
     - mode: 440
     - source: salt://graphite/uwsgi.jinja2
+    - context:
+      appname: graphite
+      django_settings: graphite.settings
+      module: graphite.wsgi
+      uid: www-data
+      gid: graphite
+      virtualenv: /usr/local/graphite
+      chdir: /usr/local/graphite
     - require:
       - module: graphite_initial_fixture
       - service: uwsgi_emperor

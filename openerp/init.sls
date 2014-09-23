@@ -164,8 +164,12 @@ openerp-uwsgi:
     - group: www-data
     - mode: 440
     - context:
-      web_root_dir: {{ web_root_dir }}
-      home: {{ home }}
+      appname: openerp
+      chdir: {{ web_root_dir }}/openerp
+      uid: openerp
+      gid: openerp
+      wsgi_file: {{ web_root_dir }}/openerp.wsgi
+      virtualenv: {{ home }}
     - require:
       - service: uwsgi_emperor
       - postgres_user: openerp

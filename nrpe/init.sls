@@ -312,14 +312,10 @@ nsca_passive:
     - mode: 440
     - require:
       - pkg: rsyslog
+    - watch_in:
+      - service: rsyslog
 {% endif %}
 
 extend:
-{% if not salt['pillar.get']('debug', False) %}
-  rsyslog:
-    service:
-      - watch:
-        - file: /etc/rsyslog.d/nrpe.conf
-{% endif %}
 {%- from 'macros.jinja2' import change_ssh_key_owner with context %}
 {{ change_ssh_key_owner('nagios', {'pkg': 'nagios-nrpe-server'}) }}

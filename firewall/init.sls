@@ -93,9 +93,5 @@ nf_conntrack_ftp:
       critical: {{ critical }}
     - require:
       - pkg: rsyslog
-
-extend:
-  rsyslog:
-    service:
-      - watch:
-        - file: /etc/rsyslog.d/firewall.conf
+    - watch_in:
+      - service: rsyslog

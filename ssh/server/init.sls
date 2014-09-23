@@ -97,12 +97,8 @@ ssh_server_root_authorized_keys:
     - mode: 440
     - require:
       - pkg: rsyslog
+    - watch_in:
+      - service: rsyslog
 {% else %}
     - absent
 {% endif %}
-
-extend:
-  rsyslog:
-    service:
-      - watch:
-        - file: /etc/rsyslog.d/ssh.conf

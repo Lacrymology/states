@@ -90,7 +90,8 @@ roundcube-uwsgi:
     - group: www-data
     - mode: 440
     - context:
-      dir: {{ roundcubedir }}
+      appname: roundcube
+      chdir: {{ roundcubedir }}
     - require:
       - service: uwsgi_emperor
       - module: roundcube_initial

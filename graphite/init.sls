@@ -42,6 +42,7 @@ include:
   - postgresql.server
   - python.dev
   - rsyslog
+  - salt.minion.deps
   - statsd
   - sudo
   - uwsgi
@@ -170,10 +171,11 @@ graphite-web:
     - bin_env: /usr/local/graphite/bin/pip
     - require:
       - module: graphite-web
-  uwsgi:
-    - available
-    - enable: True
-    - name: graphite
+
+graphite-web-uwsgi:
+  file:
+    - managed
+    - name: /etc/uwsgi/graphite.yml
     - template: jinja
     - user: www-data
     - group: www-data
@@ -181,13 +183,11 @@ graphite-web:
     - source: salt://graphite/uwsgi.jinja2
     - require:
       - module: graphite_initial_fixture
-      - service: uwsgi_emperor
       - file: graphite_logdir
       - file: /usr/local/graphite/bin/build-index.sh
       - user: web
       - service: rsyslog
       - service: memcached
-    - watch:
       - user: graphite
       - module: graphite_settings
       - file: graphite_wsgi
@@ -197,6 +197,7 @@ graphite-web:
       - file: graphite-urls-patch
       - pip: graphite-web
       - module: graphite_admin_user
+      - pkg: salt_minion_deps
 
 graphite-urls-patch:
   file:
@@ -318,7 +319,7 @@ graphite_admin_user:
     - group: www-data
     - mode: 440
     - require:
-      - uwsgi: graphite-web
+      - file: graphite-web-uwsgi
       - pkg: nginx
 
 extend:
@@ -336,3 +337,8 @@ extend:
 {% if salt['pillar.get']('graphite:ssl', False) %}
         - cmd: ssl_cert_and_key_for_{{ pillar['graphite']['ssl'] }}
 {% endif %}
+  uwsgi_emperor:
+    service:
+      - running
+      - watch:
+        - file: graphite-web-uwsgi

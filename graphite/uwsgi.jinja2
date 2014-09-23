@@ -25,53 +25,54 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
-[uwsgi]
-
-master = true
-env = DJANGO_SETTINGS_MODULE=graphite.settings
-module = graphite.wsgi
-processes = {{ pillar['graphite']['workers'] }}
-harakiri = {{ salt['pillar.get']('graphite:timeout', 30) }}
-harakiri-verbose = true
+uwsgi:
+  master: true
+  env: DJANGO_SETTINGS_MODULE=graphite.settings
+  module: graphite.wsgi
+  processes: {{ pillar['graphite']['workers'] }}
+  harakiri: {{ salt['pillar.get']('graphite:timeout', 30) }}
+  harakiri-verbose: true
 {% if salt['pillar.get']('graphite:cheaper', False) %}
-{% if pillar['graphite']['cheaper'] > 0 %}
-cheaper = {{ pillar['graphite']['cheaper'] }}
-{% else %}
-cheap = true
-{% endif %}
-{% if pillar['graphite']['workers'] == 1 and pillar['graphite']['cheaper'] == 0 %}
-idle = {{ salt['pillar.get']('graphite:idle', 300) }}
-{% endif %}
-{% endif -%}
+  {% if pillar['graphite']['cheaper'] > 0 %}
+  cheaper: {{ pillar['graphite']['cheaper'] }}
+  {% else %}
+  cheap: true
+  {% endif %}
+  {% if pillar['graphite']['workers'] == 1 and pillar['graphite']['cheaper'] == 0 %}
+  idle: {{ salt['pillar.get']('graphite:idle', 300) }}
+  {% endif %}
+{%- endif %}
 {%- if grains['virtual'] == 'kvm' and salt['file.file_exists']('/sys/kernel/mm/ksm/run') %}
-ksm = 20
-{% endif -%}
-lazy-apps = true
-uid = www-data
-gid = graphite
-threaded-logger = true
-virtualenv = /usr/local/graphite
-chdir = /usr/local/graphite
-procname = graphite-worker
-procname-master = graphite-master
-socket = /var/lib/uwsgi/graphite.sock
-stats = /var/lib/uwsgi/graphite-stats.sock
-no-orphans = true
-logger = syslog:uwsgi-graphite
-    {%- if salt['pillar.get']('debug', False) %}
-req-logger = syslog:uwsgi-graphite
-    {%- endif %}
+  ksm: 20
+{%- endif %}
+  lazy-apps: true
+  uid: www-data
+  gid: graphite
+  threaded-logger: true
+  virtualenv: /usr/local/graphite
+  chdir: /usr/local/graphite
+  procname: graphite-worker
+  procname-master: graphite-master
+  socket: /var/lib/uwsgi/graphite.sock
+  stats: /var/lib/uwsgi/graphite-stats.sock
+  no-orphans: true
+  logger: syslog:uwsgi-graphite
+{%- if salt['pillar.get']('debug', False) %}
+  req-logger: syslog:uwsgi-graphite
+{%- endif %}
 {% if 'graphite_address' in pillar %}
-carbon-id = graphite
-    {%- if salt['dig.check_ip'](pillar['graphite_address']) %}
-carbon = {{ pillar['graphite_address'] }}:2003
-    {%- else -%}
-        {%- set resolved_ip = salt['dig.A'](pillar['graphite_address']) -%}
-        {%- if resolved_ip %}
-carbon = {{ resolved_ip[0] }}:2003
-        {%- else %}
-# The domain name {{ pillar['graphite_address'] }} in pillar['graphite_address'] is invalid. carbon support is disabled.
-        {%- endif -%}
-    {%- endif -%}
-{% endif %}
+  carbon-id: graphite
+  {%- if salt['dig.check_ip'](pillar['graphite_address']) %}
+  carbon: {{ pillar['graphite_address'] }}:2003
+  {%- else %}
+    {%- set resolved_ip = salt['dig.A'](pillar['graphite_address']) %}
+    {%- if resolved_ip %}
+  carbon: {{ resolved_ip[0] }}:2003
+    {%- else %}
+{#-
+  The domain name {{ pillar['graphite_address'] }} in
+  pillar['graphite_address'] is invalid. carbon support is disabled.
+#}
+    {%- endif %}
+  {%- endif %}
+{%- endif %}

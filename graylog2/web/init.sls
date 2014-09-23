@@ -221,3 +221,7 @@ extend:
 - file: /var/run/{{ user }}
 - pkg: rsyslog
 {%- endcall %}
+
+/etc/uwsgi/apps-enabled/graylog2.ini:
+  file:
+    - absent

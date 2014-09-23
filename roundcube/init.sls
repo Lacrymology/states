@@ -33,6 +33,7 @@ include:
   - php.dev
   - postgresql.server
   - uwsgi.php
+  - salt.minion.deps
 {%- if salt['pillar.get']('roundcube:ssl', False) %}
   - ssl
 {%- endif %}
@@ -79,10 +80,11 @@ roundcube:
     - runas: postgres
     - require:
       - postgres_user: roundcube
-  uwsgi:
-    - available
-    - enable: True
-    - name: roundcube
+
+roundcube-uwsgi:
+  file:
+    - managed
+    - name: /etc/uwsgi/roundcube.yml
     - source: salt://roundcube/uwsgi.jinja2
     - template: jinja
     - user: www-data
@@ -91,13 +93,12 @@ roundcube:
     - context:
       dir: {{ roundcubedir }}
     - require:
-      - service: uwsgi_emperor
       - module: roundcube_initial
-    - watch:
       - file: {{ roundcubedir }}/config/config.inc.php
       - archive: roundcube
       - pkg: php5-pgsql
       - pkg: roundcube_password_plugin_ldap_driver_dependency
+      - pkg: salt_minion_deps
 
 {{ roundcubedir }}:
   file:
@@ -200,7 +201,7 @@ roundcube_password_plugin_ldap_driver_dependency:
       - file: {{ roundcubedir }}
       - user: web
     - require_in:
-      - uwsgi: roundcube
+      - file: roundcube-uwsgi
 {% endfor %}
 
 /etc/nginx/conf.d/roundcube.conf:
@@ -214,7 +215,7 @@ roundcube_password_plugin_ldap_driver_dependency:
     - require:
       - pkg: nginx
       - user: web
-      - uwsgi: roundcube
+      - file: roundcube-uwsgi
     - context:
       dir: {{ roundcubedir }}
 
@@ -246,3 +247,8 @@ extend:
 {%- if salt['pillar.get']('roundcube:ssl', False) %}
         - cmd: ssl_cert_and_key_for_{{ pillar['roundcube']['ssl'] }}
 {% endif %}
+  uwsgi_emperor:
+    service:
+      - running
+      - watch:
+        - file: roundcube-uwsgi

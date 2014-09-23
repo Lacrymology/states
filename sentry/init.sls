@@ -38,6 +38,7 @@ include:
   - python.dev
   - memcache
   - rsyslog
+  - salt.minion.deps
 {% if salt['pillar.get']('sentry:ssl', False) %}
   - ssl
 {% endif %}
@@ -107,10 +108,11 @@ sentry:
     - require:
       - postgres_user: sentry
       - service: postgresql
-  uwsgi:
-    - available
-    - enable: True
-    - name: sentry
+
+sentry-uwsgi:
+  file:
+    - managed
+    - name: /etc/uwsgi/sentry.yml
     - template: jinja
     - user: www-data
     - group: www-data
@@ -118,11 +120,10 @@ sentry:
     - source: salt://sentry/uwsgi.jinja2
     - require:
       - service: memcached
-      - service: uwsgi_emperor
       - service: rsyslog
-    - watch:
       - file: sentry
       - cmd: sentry_settings
+      - pkg: salt_minion_deps
 
 sentry_settings:
   file:
@@ -204,7 +205,7 @@ sentry-migrate-fake:
     - source: salt://sentry/nginx.jinja2
     - require:
       - pkg: nginx
-      - uwsgi: sentry
+      - file: sentry-uwsgi
 
 extend:
   memcached:
@@ -219,3 +220,8 @@ extend:
 {% if salt['pillar.get']('sentry:ssl', False) %}
         - cmd: ssl_cert_and_key_for_{{ pillar['sentry']['ssl'] }}
 {% endif %}
+  uwsgi_emperor:
+    service:
+      - running
+      - watch:
+        - file: sentry-uwsgi

@@ -32,11 +32,14 @@ Institute for Institutional Innovation by Data Driven Design Inc.
 Author: Lam Dang Tung <lamdt@familug.org>
 Maintainer: Lam Dang Tung <lamdt@familug.org>
 -#}
+gitlab_sidekiq_procs:
+  description: GitLab Sidekiq Process
+  command: /usr/lib/nagios/plugins/check_procs -c 1:1 -u gitlab -a 'sidekiq 2.17.0'
 
 {%- from 'uwsgi/nrpe/instance.jinja2' import uwsgi_instance with context -%}
 {%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
 {%- from 'postgresql/server/nrpe/instance.jinja2' import postgresql_instance_prefix with context -%}
 {%- set deployment = 'gitlab' %}
 {{ uwsgi_instance(deployment) }}
-{{ nginx_instance(deployment, timeout=120, http_uri='/users/sign_in') }}
 {{ postgresql_instance_prefix(deployment, prefix=deployment) }}
+{{ nginx_instance(deployment, timeout=120, http_uri='/users/sign_in', extra_service_dependencies=('gitlab_uwsgi_worker', 'gitlab_postgresql')) }}

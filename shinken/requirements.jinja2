@@ -29,9 +29,8 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Pyro==3.16
 pip==1.5.2
-{%- if 'files_archive' in pillar %}
--e /usr/local/shinken/src/shinken-{{ version }}
-{%- else %}
--e git+git://github.com/naparuba/shinken.git@e59f1c89385eb6999d02ad2420f0c49a4b40adf6#egg=shinken
+pycurl==7.19.5
+{%- if salt['pillar.get']('shinken:ssl', False) %}
+pyOpenSSL==0.14
+CherryPy==3.2.4
 {%- endif %}
-{%- block extra_requirements %}{% endblock -%}

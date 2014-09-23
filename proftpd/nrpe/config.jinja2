@@ -37,4 +37,7 @@ proftpd_port:
 {%- from 'postgresql/server/nrpe/instance.jinja2' import postgresql_instance_prefix with context %}
 {{ postgresql_instance_prefix('proftpd') }}
 
-{# TODO: use check_ftp #}
+proftpd_ftp:
+  description: ProFTPD FTP Connection
+  command: /usr/lib/nagios/plugins/check_ftp -H 127.0.0.1 -p 21
+  service_dependencies: ',proftpd_port, ,proftpd_postgresql'

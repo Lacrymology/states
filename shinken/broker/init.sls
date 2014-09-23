@@ -30,11 +30,13 @@ Shinken Broker state.
 The broker daemon exports and manages data from schedulers. The broker uses
 modules exclusively to get the job done.
 -#}
+{%- from 'shinken/init.sls' import shinken_install_module with context -%}
+{% set ssl = salt['pillar.get']('shinken:ssl', False) %}
 include:
   - nginx
   - rsyslog
   - shinken
-{% if salt['pillar.get']('shinken:ssl', False) %}
+{% if ssl %}
   - ssl
 {% endif %}
   - web
@@ -50,6 +52,41 @@ include:
     - require:
       - pkg: nginx
       - user: web
+
+{%- if 'files_archive' in pillar -%}
+    {%- if 'graphite_address' in pillar -%}
+        {%- call shinken_install_module('graphite') %}
+- source_hash: md5=56b393c9970275327644123480ffd413
+        {%- endcall %}
+        {%- call shinken_install_module('ui-graphite') %}
+- source_hash: md5=497dafa1036c84f2c5722fb557060c50
+        {%- endcall %}
+    {%- endif %}
+    
+    {%- call shinken_install_module('auth-cfg-password') %}
+- source_hash: md5=c91aef6581d2d4ef33cccd50bd16faf4
+    {%- endcall %}
+    
+    {%- call shinken_install_module('sqlitedb') %}
+- source_hash: md5=ef0bc27efbcadc4f9056a263cd698cbd
+    {%- endcall %}
+    
+    {%- call shinken_install_module('syslog-sink') %}
+- source_hash: md5=41acd03bc4f0579debc6b0402d257a9a
+    {%- endcall %}
+    
+    {%- call shinken_install_module('webui') %}
+- source_hash: md5=396be5667ca41b57d65239d7bd4b061a
+    {%- endcall %}
+{%- else %}
+    {%- if 'graphite_address' in pillar -%}
+        {{ shinken_install_module('graphite') }}
+        {{ shinken_install_module('ui-graphite') }}
+    {%- endif %}
+    {%- for module_name in ('auth-cfg-password', 'sqlitedb', 'syslog-sink', 'webui') %}
+{{ shinken_install_module(module_name) }}
+    {%- endfor %}
+{%- endif %}
 
 shinken-broker:
   file:
@@ -67,14 +104,26 @@ shinken-broker:
     - order: 50
     - enable: True
     - require:
-      - file: /var/log/shinken
+      - file: /var/run/shinken
       - file: /var/lib/shinken
     - watch:
-      - module: shinken
+      - cmd: shinken
+{%- if 'graphite_address' in pillar %}
+      - cmd: shinken-module-graphite
+      - cmd: shinken-module-ui-graphite
+{%- endif %}
+{%- for module_name in ('auth-cfg-password', 'sqlitedb', 'syslog-sink', 'webui') %}
+      - cmd: shinken-module-{{ module_name }}
+{%- endfor %}
+      - cmd: shinken-module-pickle-retention-file-generic
       - file: /etc/shinken/broker.conf
+      - file: shinken
       - file: shinken-broker
       - service: rsyslog
       - user: shinken
+{% if ssl %}
+      - cmd: ssl_cert_and_key_for_{{ pillar['shinken']['ssl'] }}
+{% endif %}
 {#- does not use PID, no need to manage #}
 
 /etc/shinken/broker.conf:
@@ -96,6 +145,6 @@ extend:
     service:
       - watch:
         - file: /etc/nginx/conf.d/shinken-web.conf
-{% if salt['pillar.get']('shinken:ssl', False) %}
+{% if ssl %}
         - cmd: ssl_cert_and_key_for_{{ pillar['shinken']['ssl'] }}
 {% endif %}

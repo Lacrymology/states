@@ -55,6 +55,3 @@ port_smtps:
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 465
   service_dependencies: ',postfix_master'
 {%- endif %}
-
-{#- TODO: use /usr/lib/nagios/plugins/check_smtp -#}
-{#- TODO: use /usr/lib/nagios/plugins/check_mailq -#}

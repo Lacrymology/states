@@ -60,9 +60,9 @@ class SCPBackupFile(BackupFile):
     """
     def __init__(self, *args, **kwargs):
         super(SCPBackupFile, self).__init__(*args, **kwargs)
-        self.kwargs = { k: v for k, v in self.config.items('ssh') }
+        self.kwargs = self.config['ssh']
         # this is mainly to get an error if the 'hostname' config is missing
-        self.hostname = self.config.get('ssh','hostname')
+        self.hostname = self.config['ssh']['hostname']
         self.load_system_host_keys = self.kwargs.pop('load_system_host_keys',
                                                      True)
         self.host_key_auto_add = self.kwargs.pop('host_key_auto_add', False)

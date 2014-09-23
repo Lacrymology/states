@@ -26,7 +26,7 @@ Author: Nicolas Plessis <nicolasp@microsigns.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
 {%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
-{{ nginx_instance('jenkins', http_uri='/login') }}
+{{ nginx_instance('jenkins', http_uri='/login', extra_service_dependencies=('jenkins_http',)) }}
 
 jenkins_procs:
   description: Jenkins Process
@@ -36,3 +36,8 @@ jenkins_port:
   description: Jenkins Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 8080
   service_dependencies: ',jenkins_procs'
+
+jenkins_http:
+  description: Jenkins HTTP
+  command: /usr/lib/nagios/plugins/check_http -I 127.0.0.1 -p 8080 -e 'HTTP/1.0'
+  service_dependencies: ',jenkins_port'

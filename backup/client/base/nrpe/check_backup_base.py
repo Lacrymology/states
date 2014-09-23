@@ -32,7 +32,6 @@ __maintainer__ = 'Tomas Neme'
 __email__ = 'lacrymology@gmail.com'
 
 import argparse
-from ConfigParser import SafeConfigParser as ConfigParser
 import datetime
 import logging
 import os
@@ -40,6 +39,7 @@ import pickle
 import re
 import nagiosplugin
 import pysc
+from pysc import nrpe as pysce, unserialize_yaml
 
 log = logging.getLogger('nagiosplugin')
 CACHE_TIMEOUT = 15
@@ -47,12 +47,11 @@ CACHE_TIMEOUT = 15
 
 class BackupFile(nagiosplugin.Resource):
     def __init__(self, config, facility):
-        self.config = ConfigParser()
         log.debug("Reading config file: %s", config)
-        self.config.read(config)
+        self.config = unserialize_yaml(config)
 
-        self.prefix = self.config.get('backup', 'prefix')
-        self.manifest = self.config.get('backup', 'manifest')
+        self.prefix = self.config['backup']['prefix']
+        self.manifest = self.config['backup']['manifest']
 
         self.facility = facility
 
@@ -160,7 +159,7 @@ def main(Collector):
     :param Collector: A BackupFile subclass to be instantiated
     :return:
     """
-    argp = argparse.ArgumentParser(
+    argp = pysce.ArgumentParser(
         description=__doc__,
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     argp.add_argument('facility', help='facility name to check backups for')
@@ -168,16 +167,14 @@ def main(Collector):
                       help='Emit a warning if a backup file is older\
                             than HOURS')
     argp.add_argument('-c', '--config', metavar="PATH",
-                      default='/etc/nagios/backup.conf')
-    argp.add_argument('--timeout', default=None)
-    argp.add_argument('-v', '--verbose', action='count', default=0)
+                      default='/etc/nagios/backup.yml')
 
     args = argp.parse_args()
 
-    check = nagiosplugin.Check(
+    check = pysce.Check(
         Collector(args.config,
                   args.facility,),
         nagiosplugin.ScalarContext('age', args.warning, args.warning),
         nagiosplugin.ScalarContext('size', "1:", "1:"),
     )
-    check.main(args.verbose, timeout=args.timeout)
+    check.main(args)

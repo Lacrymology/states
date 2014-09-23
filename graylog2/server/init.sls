@@ -37,7 +37,6 @@ include:
   - local
   - rsyslog
 
-{#- TODO: set Email output plugin settings straight into MongoDB from salt #}
 {%- set version = '0.20.6' %}
 {%- set checksum = 'md5=a9105a4fb5c950b3760df02dface6465' %}
 {%- set server_root_dir = '/usr/local/graylog2-server-' + version %}

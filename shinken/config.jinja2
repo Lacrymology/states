@@ -32,17 +32,11 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 user=shinken
 group=shinken
 
-pidfile=/var/lib/shinken/{{ shinken_component }}.pid
-local_log=/var/log/shinken/{{ shinken_component }}.log
+pidfile=/var/run/shinken/{{ shinken_component }}.pid
 workdir=/var/lib/shinken
 
-use_local_log=1
-{%- if salt['pillar.get']('debug', False) %}
-log_level=DEBUG
-{%- else %}
-log_level=WARNING
-{%- endif %}
-
+use_local_log=0
+use_syslog=1
 
 host=0.0.0.0
 daemon_enabled=1
@@ -51,15 +45,13 @@ daemon_enabled=1
 {#-maxfd=1024#}
 idontcareaboutsecurity=0
 
-{#- until shinken 1.4 isn't out, can't use SSL #}
-{#-
 {% if salt['pillar.get']('shinken:ssl', False) %}
 use_ssl=1
 certs_dir=/etc/ssl/certs/
 ca_cert=/etc/ssl/certs/{{ pillar['shinken']['ssl'] }}_chained.crt
-server_cert=/etc/ssl/private/{{ pillar['shinken']['ssl'] }}.pem
-#hard_ssl_name_check=0
+server_cert=/etc/ssl/certs/{{ pillar['shinken']['ssl'] }}.crt
+server_key=/etc/ssl/private/{{ pillar['shinken']['ssl'] }}.pem
+hard_ssl_name_check=0
 {% else %}
-#}
 use_ssl=0
-{#-{% endif %}#}
+{% endif %}

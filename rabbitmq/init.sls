@@ -31,9 +31,6 @@ To properly use this state, the user monitor need to be changed
 in WebUI to grant read access across all vhost.
 as this is not yet implemented in salt.
 -#}
-{#- TODO: configure logging to GELF -#}
-{#- TODO: SSL support http://www.rabbitmq.com/ssl.html -#}
-
 include:
   - apt
   - erlang

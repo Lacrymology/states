@@ -25,39 +25,42 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-rabbitmq_port_console:
+rabbitmq_console_port:
   description: RabbitMQ Console Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 55672
   service_dependencies: ',rabbitmq_procs'
+
+rabbitmq_console_http:
+  description: RabbitMQ Console HTTP
+  command: /usr/lib/nagios/plugins/check_http -I 127.0.0.1 -p 55672 -e 'HTTP/1.0 301 Moved Permanently'
+  service_dependencies: ',rabbitmq_console_port'
 
 rabbitmq_procs:
   description: RabbitMQ Daemon
   command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -C beam{% if grains['num_cpus'] > 1 %}.smp{% endif %} -u rabbitmq"
 
-{# epmd is Erlang Port Mapper Daemon #}
-erlang_procs:
-  description: RabbitMQ Erlang
-  command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -C epmd -u rabbitmq'
-
-rabbitmq_port_management:
+rabbitmq_management_port:
   description: RabbitMQ Management Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 15672
   service_dependencies: ',rabbitmq_procs'
 
-erlang_port:
-  description: RabbitMQ Erlang Port
-  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 4369
-
-rabbitmq_port_amqp:
+rabbitmq_amqp_port:
   description: RabbitMQ Local AMQP Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 5672
   service_dependencies: ',rabbitmq_procs'
 
-{%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
-{{ nginx_instance('rabbitmq', http_port=15672) }}
+rabbitmq_http:
+  description: RabbitMQ HTTP Protocol
+  command: /usr/lib/nagios/plugins/check_http -H 127.0.0.1 -u / -p 15672 -e '200 OK' -I {{ salt['network.ip_addrs']('eth0')[0] }}
+  service_dependencies: ',rabbitmq_management_port'
 
-rabbitmq-remote-amqp-port:
+{%- if salt['pillar.get']('rabbitmq:ssl', False) -%}
+    {%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
+{{ nginx_instance('rabbitmq', extra_service_dependencies=('rabbitmq_http',)) }}
+{%- endif -%}
+
+rabbitmq_amqp_port_remote:
   description: Remote RabbitMQ AMQP Port
   check: check_tcp!55672
   passive: False
-  service_dependencies: ',rabbitmq_procs'
+  service_dependencies: ',rabbitmq_amqp_port'

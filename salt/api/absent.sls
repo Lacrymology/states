@@ -27,7 +27,6 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Uninstall a Salt API REST server.
 -#}
-{# TODO: Support Nginx #}
 
 salt_api:
   group:

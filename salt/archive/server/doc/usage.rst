@@ -71,3 +71,27 @@ don't exists in ``pip/`` and ``mirror/`` it will move it if the file don't
 already exists to avoid the same filename with different content.
 
 If file exists, it get removed.
+
+Mirror an Ubuntu PPA
+--------------------
+
+To create such mirror run the following::
+
+  mkdir -p /var/lib/salt_archive/mirror/$MIRROR_NAME/$VERSION
+  cd /var/lib/salt_archive/mirror/$MIRROR_NAME/$VERSION
+  wget -m -I /$PPA_USERNAME/$PROJECT_NAME/ubuntu/ http://ppa.launchpad.net/$PPA_USERNAME/$PROJECT_NAME/ubuntu/
+  mv ppa.launchpad.net/$PPA_USERNAME/$PROJECT_NAME/ubuntu/dists ppa.launchpad.net/$PPA_USERNAME/$PROJECT_NAME/ubuntu/pool .
+  rm -rf ppa.launchpad.net
+  find . -type f -name 'index.*' -delete
+  find pool/ -type f ! -name '*.deb' -delete
+
+Replace the ``$PROJECT_NAME`` by the name of your choice.
+
+.. note:: The name of the formula might be the best name.
+
+Replace ``$VERSION`` for what is actual latest version of the PPA packages.
+Or any version or codename that represent the repository status at this point.
+
+Replace ``$PPA_USERNAME`` and ``$PROJECT_NAME`` by the value of PPA URL:
+
+``https://launchpad.net/~PPA_USERNAME/+archive/ubuntu/PROJECT_NAME``

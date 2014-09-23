@@ -33,12 +33,12 @@ stop on runlevel [!2345]
 
 respawn
 
-{% set check_command = "/usr/local/shinken/bin/shinken-arbiter --verify-config -c /etc/shinken/arbiter.conf" %}
+{% set check_command = "/usr/local/shinken/bin/python /usr/local/shinken/bin/shinken-arbiter --verify-config -c /etc/shinken/arbiter.conf" %}
 pre-start script
    {{ check_command }} || { echo "Shinken Arbiter {{ grains['id'] }} contains error(s)! See errors using:\n{{ check_command }}" | /usr/bin/mail -s 'Shinken Arbiter Config Error' {% for user in pillar['shinken']['users'] %}{{ pillar['shinken']['users'][user]['email'] }}{% if not loop.last %} {% endif %}{% endfor %}; stop; exit 0; }
 end script
 
 script
-  exec /usr/local/shinken/bin/shinken-arbiter -c /etc/shinken/arbiter.conf
+  exec /usr/local/shinken/bin/python /usr/local/shinken/bin/shinken-arbiter -c /etc/shinken/arbiter.conf
   emit shinken-arbiter-arbiter
 end script

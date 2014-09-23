@@ -29,20 +29,22 @@ elasticsearch_procs:
   description: Elasticsearch Daemon
   command: '/usr/lib/nagios/plugins/check_procs -u elasticsearch -c 1:1 -C java -a org.elasticsearch.bootstrap'
 
-elasticsearch-remote-port-http:
+elasticsearch-es_remote_port_http:
   description: Elasticsearch Remote HTTP Port
   check: check_tcp!9200
   passive: False
   service_dependencies: ',elasticsearch_procs'
 
-elasticsearch-remote-port-transport:
+elasticsearch-es_remote_port-transport:
   description: Elasticsearch Remote Transport Port
   check: check_tcp!9300
   passive: False
   service_dependencies: ',elasticsearch_procs'
 
-{%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
-{{ nginx_instance('elasticsearch', http_port=9200, domain_name='127.0.0.1') }}
+{%- if salt['pillar.get']('elasticsearch:ssl', False) -%}
+    {%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
+{{ nginx_instance('elasticsearch', extra_service_dependencies=('elasticsearch_http',)) }}
+{%- endif -%}
 
 {%- from 'elasticsearch/nrpe/instance.jinja2' import elasticsearch_instance with context -%}
-{{ elasticsearch_instance('elasticsearch') }}
+{{ elasticsearch_instance('elasticsearch', 'elasticsearch_procs') }}

@@ -34,7 +34,6 @@ include:
   - nrpe
   - postgresql.nrpe
   - postgresql.common.user
-  - postgresql.server
   - rsyslog.nrpe
   - sudo
 {% if salt['pillar.get']('postgresql:ssl', False) %}
@@ -90,15 +89,6 @@ check_postgres:
     - group: root
     - require:
       - pkg: sudo
-
-postgres:
-  user:
-    - present
-    - groups:
-      - nagios
-    - require:
-      - pkg: postgresql
-      - pkg: nagios-nrpe-server
 
 /etc/nagios/nrpe.d/postgresql.cfg:
   file:

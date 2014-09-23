@@ -33,7 +33,6 @@ include:
   - php.dev
   - postgresql.server
   - uwsgi.php
-  - salt.minion.deps
 {%- if salt['pillar.get']('roundcube:ssl', False) %}
   - ssl
 {%- endif %}
@@ -98,7 +97,7 @@ roundcube-uwsgi:
       - archive: roundcube
       - pkg: php5-pgsql
       - pkg: roundcube_password_plugin_ldap_driver_dependency
-      - pkg: salt_minion_deps
+      - service: uwsgi_emperor
 
 {{ roundcubedir }}:
   file:
@@ -247,8 +246,3 @@ extend:
 {%- if salt['pillar.get']('roundcube:ssl', False) %}
         - cmd: ssl_cert_and_key_for_{{ pillar['roundcube']['ssl'] }}
 {% endif %}
-  uwsgi_emperor:
-    service:
-      - running
-      - watch:
-        - file: roundcube-uwsgi

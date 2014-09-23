@@ -47,7 +47,6 @@ include:
   - redis
   - ruby
   - rsyslog
-  - salt.minion.deps
   - ssh.server
 {%- if salt['pillar.get']('gitlab:ssl', False) %}
   - ssl
@@ -305,7 +304,7 @@ gitlab-uwsgi:
       - file: {{ web_dir }}/config/initializers/smtp_settings.rb
 {%- endif %}
       - archive: gitlab
-      - pkg: salt_minion_deps
+      - service: uwsgi_emperor
 
 gitlab_migrate_db:
   cmd:
@@ -640,8 +639,3 @@ extend:
       - watch:
         - cmd: ssl_cert_and_key_for_{{ pillar['gitlab']['ssl'] }}
 {%- endif %}
-  uwsgi_emperor:
-    service:
-      - running
-      - watch:
-        - file: gitlab-uwsgi

@@ -42,7 +42,6 @@ include:
   - postgresql.server
   - python.dev
   - rsyslog
-  - salt.minion.deps
   - statsd
   - sudo
   - uwsgi
@@ -197,7 +196,7 @@ graphite-web-uwsgi:
       - file: graphite-urls-patch
       - pip: graphite-web
       - module: graphite_admin_user
-      - pkg: salt_minion_deps
+      - service: uwsgi_emperor
 
 graphite-urls-patch:
   file:
@@ -337,8 +336,3 @@ extend:
 {% if salt['pillar.get']('graphite:ssl', False) %}
         - cmd: ssl_cert_and_key_for_{{ pillar['graphite']['ssl'] }}
 {% endif %}
-  uwsgi_emperor:
-    service:
-      - running
-      - watch:
-        - file: graphite-web-uwsgi

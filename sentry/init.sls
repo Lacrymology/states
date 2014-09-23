@@ -38,7 +38,6 @@ include:
   - python.dev
   - memcache
   - rsyslog
-  - salt.minion.deps
 {% if salt['pillar.get']('sentry:ssl', False) %}
   - ssl
 {% endif %}
@@ -123,7 +122,7 @@ sentry-uwsgi:
       - service: rsyslog
       - file: sentry
       - cmd: sentry_settings
-      - pkg: salt_minion_deps
+      - service: uwsgi_emperor
 
 sentry_settings:
   file:
@@ -220,8 +219,3 @@ extend:
 {% if salt['pillar.get']('sentry:ssl', False) %}
         - cmd: ssl_cert_and_key_for_{{ pillar['sentry']['ssl'] }}
 {% endif %}
-  uwsgi_emperor:
-    service:
-      - running
-      - watch:
-        - file: sentry-uwsgi

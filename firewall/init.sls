@@ -79,8 +79,6 @@ nf_conntrack_ftp:
   {% endif %}
 {% endif %}
 
-{% set critical=300 %}
-
 /etc/rsyslog.d/firewall.conf:
   file:
     - managed
@@ -89,8 +87,6 @@ nf_conntrack_ftp:
     - mode: 440
     - user: root
     - group: root
-    - context:
-      critical: {{ critical }}
     - require:
       - pkg: rsyslog
     - watch_in:

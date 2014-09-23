@@ -26,4 +26,4 @@ Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 # {{ pillar['message_do_not_modify'] }}
-:msg, contains, "nagios : TTY=unknown ; PWD=/ ; USER=root ; COMMAND=/usr/lib/nagios/plugins/check_firewall.py -c 1:{{ critical }}" stop
+:msg, contains, "nagios : TTY=unknown ; PWD=/ ; USER=root ; COMMAND=/usr/lib/nagios/plugins/check_firewall.py" stop

@@ -47,6 +47,7 @@ include:
   - redis
   - ruby
   - rsyslog
+  - salt.minion.deps
   - ssh.server
 {%- if salt['pillar.get']('gitlab:ssl', False) %}
   - ssl
@@ -258,34 +259,6 @@ gitlab:
       - file: {{ web_dir }}/db/fixtures/production/001_admin.rb
     - watch:
       - postgres_database: gitlab
-  uwsgi:
-    - available
-    - enable: True
-    - name: gitlab
-    - source: salt://gitlab/uwsgi.jinja2
-    - group: www-data
-    - user: www-data
-    - template: jinja
-    - mode: 440
-    - context:
-      web_dir: {{ web_dir }}
-    - require:
-      - cmd: gitlab
-      - cmd: gitlab_precompile_assets
-      - service: uwsgi_emperor
-      - file: gitlab_upstart
-      - gem: rack
-      - file: {{ web_dir }}/config.ru
-      - postgres_database: gitlab
-    - watch:
-      - user: gitlab
-      - file: {{ web_dir }}/config/gitlab.yml
-      - file: {{ web_dir }}/config/database.yml
-{%- if salt['pillar.get']('gitlab:smtp:enabled', False) %}
-      - file: {{ web_dir }}/config/environments/production.rb
-      - file: {{ web_dir }}/config/initializers/smtp_settings.rb
-{%- endif %}
-      - archive: gitlab
   service:
     - running
     - name: gitlab
@@ -305,6 +278,34 @@ gitlab:
       - file: {{ web_dir }}/config/environments/production.rb
       - file: {{ web_dir }}/config/initializers/smtp_settings.rb
 {%- endif %}
+
+gitlab-uwsgi:
+  file:
+    - managed
+    - name: /etc/uwsgi/gitlab.yml
+    - source: salt://gitlab/uwsgi.jinja2
+    - group: www-data
+    - user: www-data
+    - template: jinja
+    - mode: 440
+    - context:
+      web_dir: {{ web_dir }}
+    - require:
+      - cmd: gitlab
+      - cmd: gitlab_precompile_assets
+      - file: gitlab_upstart
+      - gem: rack
+      - file: {{ web_dir }}/config.ru
+      - postgres_database: gitlab
+      - user: gitlab
+      - file: {{ web_dir }}/config/gitlab.yml
+      - file: {{ web_dir }}/config/database.yml
+{%- if salt['pillar.get']('gitlab:smtp:enabled', False) %}
+      - file: {{ web_dir }}/config/environments/production.rb
+      - file: {{ web_dir }}/config/initializers/smtp_settings.rb
+{%- endif %}
+      - archive: gitlab
+      - pkg: salt_minion_deps
 
 gitlab_migrate_db:
   cmd:
@@ -529,7 +530,7 @@ gitlab_rack_gem:
     - require:
       - pkg: nginx
       - user: web
-      - uwsgi: gitlab
+      - file: gitlab-uwsgi
 {%- if salt['pillar.get']('gitlab:ssl', False) %}
       - cmd: ssl_cert_and_key_for_{{ pillar['gitlab']['ssl'] }}
 {%- endif %}
@@ -632,10 +633,15 @@ extend:
       - require:
         - user: gitlab
       - watch_in:
-        - uwsgi: gitlab
+        - file: gitlab-uwsgi
 {%- if salt['pillar.get']('gitlab:ssl', False) %}
   nginx:
     service:
       - watch:
         - cmd: ssl_cert_and_key_for_{{ pillar['gitlab']['ssl'] }}
 {%- endif %}
+  uwsgi_emperor:
+    service:
+      - running
+      - watch:
+        - file: gitlab-uwsgi

@@ -10,6 +10,6 @@ check_backup.py:
 {#-
 Not all backup "driver" have a config file, but just erase that anyway.
  #}
-/etc/nagios/backup.conf:
+/etc/nagios/backup.yml:
   file:
     - absent

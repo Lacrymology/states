@@ -48,9 +48,9 @@ class S3BackupFile(BackupFile):
     """
     def __init__(self, *args, **kwargs):
         super(S3BackupFile, self).__init__(*args, **kwargs)
-        self.key = self.config.get('s3', 'key')
-        self.secret = self.config.get('s3', 'secret')
-        self.bucket = self.config.get('s3', 'bucket')
+        self.key = self.config['s3']['key']
+        self.secret = self.config['s3']['secret']
+        self.bucket = self.config['s3']['bucket']
 
     def files(self):
         s3 = boto.connect_s3(self.key, self.secret)

@@ -31,6 +31,7 @@ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
 include:
   - diamond
   - firewall
+  - rsyslog.diamond
 
 firewall_nf_conntrack_diamond_collector:
   file:

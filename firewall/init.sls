@@ -32,6 +32,7 @@ Set a simple iptables based firewall
 -#}
 include:
   - apt
+  - rsyslog
 
 /etc/network/iptables.conf:
   file:
@@ -77,3 +78,24 @@ nf_conntrack_ftp:
        - kmod: firewall_nf_conntrack
   {% endif %}
 {% endif %}
+
+{% set critical=300 %}
+
+/etc/rsyslog.d/firewall.conf:
+  file:
+    - managed
+    - source: salt://firewall/rsyslog.jinja2
+    - template: jinja
+    - mode: 440
+    - user: root
+    - group: root
+    - context:
+      critical: {{ critical }}
+    - require:
+      - pkg: rsyslog
+
+extend:
+  rsyslog:
+    service:
+      - watch:
+        - file: /etc/rsyslog.d/firewall.conf

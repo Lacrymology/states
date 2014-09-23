@@ -31,6 +31,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 include:
   - apt.nrpe
   - nrpe
+  - rsyslog.nrpe
   - sudo
   - sudo.nrpe
 

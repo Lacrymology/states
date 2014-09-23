@@ -55,3 +55,7 @@ iptables:
 nf_conntrack_ftp:
    kmod:
      - absent
+
+/etc/rsyslog.d/firewall.conf:
+  file:
+    - absent

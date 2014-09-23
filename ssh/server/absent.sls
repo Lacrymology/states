@@ -48,3 +48,7 @@ openssh-server:
 /usr/local/bin/root-shell-wrapper:
   file:
     - absent
+
+/etc/rsyslog.d/ssh.conf:
+  file:
+    - absent

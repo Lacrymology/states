@@ -31,7 +31,6 @@ include:
   - cron.diamond
   - diamond
   - diamond.nrpe
-  - nrpe.rsyslog.diamond
   - rsyslog.diamond
   - statsd.diamond
   - sudo.diamond

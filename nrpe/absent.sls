@@ -133,3 +133,7 @@ nagios:
 /var/run/nagios/passive_check.lock:
   file:
     - absent
+
+/etc/rsyslog.d/nrpe.conf:
+  file:
+    - absent

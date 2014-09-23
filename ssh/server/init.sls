@@ -85,3 +85,24 @@ ssh_server_root_authorized_keys:
     - mode: 755
     - require:
       - file: /usr/local
+
+/etc/rsyslog.d/ssh.conf:
+  file:
+{% if not salt['pillar.get']('debug', False) and 'shinken_pollers' in pillar %}
+    - managed
+    - template: jinja
+    - source: salt://ssh/server/rsyslog.jinja2
+    - user: root
+    - group: root
+    - mode: 440
+    - require:
+      - pkg: rsyslog
+{% else %}
+    - absent
+{% endif %}
+
+extend:
+  rsyslog:
+    service:
+      - watch:
+        - file: /etc/rsyslog.d/ssh.conf

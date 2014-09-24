@@ -37,7 +37,6 @@ include:
   - nrpe.diamond
   - statsd
 {% endif %}
-  - nrpe.rsyslog
   - pip
   - pip.nrpe
   - rsyslog
@@ -301,6 +300,21 @@ nsca_passive:
 
 {% from 'nrpe/passive.sls' import passive_check with context %}
 {{ passive_check('nrpe') }}
+
+{% if not salt['pillar.get']('debug', False) %}
+/etc/rsyslog.d/nrpe.conf:
+  file:
+    - managed
+    - template: jinja
+    - source: salt://nrpe/rsyslog.jinja2
+    - user: root
+    - group: root
+    - mode: 440
+    - require:
+      - pkg: rsyslog
+    - watch_in:
+      - service: rsyslog
+{% endif %}
 
 extend:
 {%- from 'macros.jinja2' import change_ssh_key_owner with context %}

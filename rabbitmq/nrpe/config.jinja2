@@ -55,9 +55,9 @@ rabbitmq_http:
   service_dependencies: ',rabbitmq_management_port'
 
 {%- if salt['pillar.get']('rabbitmq:ssl', False) -%}
-    {%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
+    {%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context %}
 {{ nginx_instance('rabbitmq', extra_service_dependencies=('rabbitmq_http',)) }}
-{%- endif -%}
+{%- endif %}
 
 rabbitmq_amqp_port_remote:
   description: Remote RabbitMQ AMQP Port

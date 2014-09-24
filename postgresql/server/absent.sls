@@ -49,6 +49,11 @@ postgresql:
   service:
     - dead
     - enable: False
+  user:
+    - absent
+    - name: postgres
+    - require:
+      - pkg: postgresql
 
 /etc/logrotate.d/postgresql-common:
   file:

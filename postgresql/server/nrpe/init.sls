@@ -40,6 +40,12 @@ include:
 {{ passive_absent('postgresql.server') }}
 
 extend:
+  postgresql:
+    user:
+      - groups:
+        - nagios
+      - require:
+        - pkg: nagios-nrpe-server
   postgresql_monitoring:
     postgres_user:
       - require:

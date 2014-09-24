@@ -30,6 +30,11 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
   description: {{ dbname|capitalize }} PostgreSQL Database
   command: /usr/lib/nagios/plugins/check_pgsql -H 127.0.0.1 -P 5432 -d {{ dbname }} -l {{ username|default(dbname, boolean=True) }} -p {{ password }}
   service_dependencies: ',postgresql_procs'
+
+{{ dbname }}_postgresql_encoding:
+  description: {{ dbname|capitalize }} PostgreSQL Database Encoding
+  command: sudo -u postgres /usr/lib/nagios/plugins/check_psql_encoding.py -n {{ dbname }}
+  service_dependencies: ',postgresql_procs'
 {%- endmacro %}
 
 {%- macro postgresql_instance_prefix(deployment, prefix=None) -%}
@@ -39,5 +44,10 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 {{ deployment }}_postgresql:
   description: {{ deployment|capitalize }} PostgreSQL Database
   command: /usr/lib/nagios/plugins/check_pgsql -H 127.0.0.1 -P 5432 -d {{ salt['pillar.get'](prefix + ':db:name', deployment) }} -l {{ salt['pillar.get'](prefix + ':db:username', deployment) }} -p {{ salt['password.pillar'](prefix + ':db:password', 10) }}
+  service_dependencies: ',postgresql_procs'
+
+{{ deployment }}_postgresql_encoding:
+  description: {{ deployment|capitalize }} PostgreSQL Database Encoding
+  command: sudo -u postgres /usr/lib/nagios/plugins/check_psql_encoding.py -n {{ salt['pillar.get'](prefix + ':db:name', deployment) }}
   service_dependencies: ',postgresql_procs'
 {%- endmacro %}

@@ -71,11 +71,24 @@ check_postgres:
 
 /usr/lib/nagios/plugins/check_psql_encoding.py:
   file:
-    - absent
+    - managed
+    - source: salt://postgresql/common/nrpe/check_encoding.py
+    - user: nagios
+    - group: nagios
+    - mode: 555
+    - require:
+      - pkg: nagios-nrpe-server
 
 /etc/sudoers.d/nrpe_postgresql_common:
   file:
-    - absent
+    - managed
+    - template: jinja
+    - source: salt://postgresql/common/nrpe/sudo.jinja2
+    - mode: 440
+    - user: root
+    - group: root
+    - require:
+      - pkg: sudo
 
 /etc/nagios/nrpe.d/postgresql.cfg:
   file:

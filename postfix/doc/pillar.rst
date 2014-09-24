@@ -121,6 +121,16 @@ Enable using virtual mailbox.
 
 Default: ``False``.
 
+postfix:virtual_mailbox_domains
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+List of domains that Postfix will receive emails for and they are delivered
+via the ``virtual_transport``.
+WARNING! ensuring that these values must not be set in
+``postfix:mydestination`` pillar.
+
+Default: ``$mydomain`` if ``postfix:virtual_mailbox`` set to ``True``.
+
 postfix:aliases
 ~~~~~~~~~~~~~~~
 
@@ -135,7 +145,8 @@ postfix:alias_domains
 ~~~~~~~~~~~~~~~~~~~~~
 
 Postfix will receive email for those domains and forward to addresses specified
-in ``postfix:aliases``.
+in ``postfix:aliases``. WARNING! ensuring that these values must not be set
+in ``postfix:mydestination`` pillar.
 
 Default: ``[]`` - empty list.
 

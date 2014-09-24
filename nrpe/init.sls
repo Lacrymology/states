@@ -30,6 +30,8 @@ Install Nagios NRPE Agent.
 include:
   - apt
   - apt.nrpe
+  - bash
+  - bash.nrpe
   - cron
   - cron.nrpe
   - local
@@ -153,6 +155,7 @@ service: nagios-nrpe-server #}
       - pkg: nagios-plugins
       - cmd: apt_sources
       - module: nrpe-virtualenv
+      - file: bash
   file:
     - managed
     - name: /etc/nagios/nrpe.d/000.nagios.servers.cfg

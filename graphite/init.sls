@@ -179,7 +179,7 @@ graphite-web-uwsgi:
     - user: www-data
     - group: www-data
     - mode: 440
-    - source: salt://graphite/uwsgi.jinja2
+    - source: salt://uwsgi/template.jinja2
     - context:
       appname: graphite
       django_settings: graphite.settings

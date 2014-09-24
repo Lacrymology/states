@@ -159,7 +159,7 @@ openerp-uwsgi:
     - managed
     - name: /etc/uwsgi/openerp.yml
     - template: jinja
-    - source: salt://openerp/uwsgi.jinja2
+    - source: salt://uwsgi/template.jinja2
     - user: www-data
     - group: www-data
     - mode: 440

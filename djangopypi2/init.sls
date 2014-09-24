@@ -114,7 +114,7 @@ djangopypi2-uwsgi:
     - user: www-data
     - group: www-data
     - mode: 440
-    - source: salt://djangopypi2/uwsgi.jinja2
+    - source: salt://uwsgi/template.jinja2
     - context:
       chdir: {{ root_dir }}
       appname: djangopypi2

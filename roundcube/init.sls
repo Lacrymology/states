@@ -84,7 +84,7 @@ roundcube-uwsgi:
   file:
     - managed
     - name: /etc/uwsgi/roundcube.yml
-    - source: salt://roundcube/uwsgi.jinja2
+    - source: salt://uwsgi/template.jinja2
     - template: jinja
     - user: www-data
     - group: www-data

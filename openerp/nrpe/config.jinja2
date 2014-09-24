@@ -32,9 +32,7 @@ openerp_cron:
 {%- endif -%}
 
 {%- from 'uwsgi/nrpe/instance.jinja2' import uwsgi_instance with context -%}
-{%- from 'postgresql/server/nrpe/instance.jinja2' import postgresql_instance_prefix with context -%}
 {%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
 {%- set deployment = 'openerp' %}
 {{ uwsgi_instance(deployment) }}
-{{ postgresql_instance_prefix(deployment) }}
-{{ nginx_instance(deployment, timeout=120, extra_service_dependencies=('openerp_uwsgi_worker', 'openerp_postgresql')) }}
+{{ nginx_instance(deployment, timeout=120, extra_service_dependencies=('openerp_uwsgi_worker',)) }}

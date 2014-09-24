@@ -30,12 +30,14 @@ State to configure bash.
 include:
   - apt
   - local
+  - locale
 
 bash:
   pkg:
     - latest
     - require:
       - cmd: apt_sources
+      - cmd: system_locale
   file:
     - managed
     - name: /etc/profile.d/bash_prompt.sh

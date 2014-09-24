@@ -38,4 +38,5 @@ shinken_arbiter_port:
 shinken_arbiter_port_remote:
   description: Shinken Arbiter Remote Port
   check: check_tcp!7770
+  passive: False
   service_dependencies: ',shinken_arbiter_port'

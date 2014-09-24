@@ -261,7 +261,6 @@ gitlab:
   service:
     - running
     - name: gitlab
-    - order: 50
     - require:
       - user: gitlab
     - watch:

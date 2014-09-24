@@ -28,6 +28,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 Install PyStatsD daemon, a statsd nodejs equivalent in python.
 -#}
 include:
+  - hostname
   - local
   - python.dev
   - rsyslog
@@ -59,6 +60,7 @@ statsd:
     - enable: True
     - order: 50
     - require:
+      - host: hostname
       - service: rsyslog
     - watch:
       - file: statsd

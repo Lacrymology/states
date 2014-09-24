@@ -36,21 +36,21 @@ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
   file:
     - absent
 
-/etc/uwsgi/djangopypi2.yml:
+djangopypi2-uwsgi:
   file:
     - absent
+    - name: /etc/uwsgi/djangopypi2.yml
     - require:
       - file: /etc/nginx/conf.d/djangopypi2.conf
 
-djangopypi2:
+/usr/local/djangopypi2:
   file:
     - absent
-    - name: /usr/local/djangopypi2
     - require:
-      - file: /etc/uwsgi/djangopypi2.yml
+      - file: djangopypi2-uwsgi
 
 /var/lib/deployments/djangopypi2:
   file:
     - absent
     - require:
-      - file: /etc/uwsgi/djangopypi2.yml
+      - file: djangopypi2-uwsgi

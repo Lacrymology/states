@@ -53,7 +53,7 @@ postgresql:
     - absent
     - name: postgres
     - require:
-      - service: postgresql
+      - pkg: postgresql
 
 /etc/logrotate.d/postgresql-common:
   file:

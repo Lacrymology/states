@@ -48,7 +48,7 @@ test:
     - wait: 60
     - order: last
     - exclude:
-      - graylog2_elasticsearch_cluster
+      - graylog2_server-es_cluster
       - graylog2_elasticsearch_port_transport
       - graylog2_incoming_logs
   cmd:

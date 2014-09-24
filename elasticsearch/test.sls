@@ -72,4 +72,4 @@ test:
     - order: last
     - wait: 60
     - exclude:
-      - elasticsearch_cluster
+      - elasticsearch-es_cluster

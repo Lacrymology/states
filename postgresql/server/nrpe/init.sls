@@ -25,6 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
+{% set ssl = salt['pillar.get']('postgresql:ssl', False) %}
 include:
   - apt.nrpe
   - nrpe
@@ -32,7 +33,7 @@ include:
   - postgresql.nrpe
   - postgresql.server
   - rsyslog.nrpe
-{% if salt['pillar.get']('postgresql:ssl', False) %}
+{% if ssl %}
   - ssl.nrpe
 {% endif %}
 
@@ -44,6 +45,9 @@ extend:
     user:
       - groups:
         - nagios
+    {%- if ssl %}
+        - ssl-cert
+    {%- endif %}
       - require:
         - pkg: nagios-nrpe-server
   postgresql_monitoring:

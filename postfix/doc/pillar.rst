@@ -96,7 +96,7 @@ amavis, too.
 ldap:data
 ~~~~~~~~~
 
-Nested dict contain user infomation, that will be used for create LDAP users
+Nested dict contain user information, that will be used for create LDAP users
 and mapping emails (user@mailname) to mailboxes.
 
 postfix:spam_filter
@@ -198,7 +198,7 @@ Default: all values defined in ``postfix:mydestination``.
 postfix:inet_interfaces
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-Intefaces that this mail server listen to.
+Network interfaces that this mail server listen to.
 
 Default: ``all``.
 

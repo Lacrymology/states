@@ -222,6 +222,10 @@ extend:
 - pkg: rsyslog
 {%- endcall %}
 
+{#-
+  we have to explicit remove the old uwsgi config file here because
+  graylog2.web doesn't include uwsgi anymore
+#}
 /etc/uwsgi/apps-enabled/graylog2.ini:
   file:
     - absent

@@ -59,6 +59,9 @@ Example::
     aliases: |
         user1.abc@example.com user1@example.com
         user2.xyz@example.com user2@example.com
+    alias_domains:
+      - saltlint.org
+      - saltci.org
     message_size_limit: 15360000
     mydestination:
       - saltlab.com
@@ -127,6 +130,23 @@ Support alias(mail forwarding) on :doc:`index`. Uses below syntax::
   <source_addr2> <dest_addr2>
 
 Use it carefully, or it may cause recursive forwarding.
+
+postfix:alias_domains
+~~~~~~~~~~~~~~~~~~~~~
+
+Postfix will receive email for those domains and forward to addresses specified
+in ``postfix:aliases``.
+
+Default: ``[]`` - empty list.
+
+Example, if one wants to receive email for address salt@example.org then
+forward it to email saltstack@example.com, those pillar keys should be set::
+
+  postfix:
+    alias_domains:
+      - example.org
+    aliases:
+      salt@example.org saltstack@example.com
 
 postfix:message_size_limit
 ~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -94,6 +94,8 @@ uwsgi:
     {%- endif %}
   {%- endif %}
 {%- endif %}
+  chmod-socket: 770
+  chown-socket: www-data:www-data
 {%- if php_settings|default(False) %}
 {{ php_settings }}
 {%- endif %}

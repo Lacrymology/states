@@ -39,7 +39,7 @@ test:
     - wait: 60
     - exclude:
       - elasticsearch_cluster
-      - graylog2_elasticsearch_cluster
+      - graylog2_server-es_cluster
       - graylog2_incoming_logs
 
 graylog2_elasticsearch_cluster:

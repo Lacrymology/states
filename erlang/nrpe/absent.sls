@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Lam Dang Tung
+Copyright (c) 2014, Hung Nguyen Viet
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,17 +22,8 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Lam Dang Tung <lamdt@familug.org>
-Maintainer: Lam Dang Tung <lamdt@familug.org>
--#}
-{%- if salt['pillar.get']('openerp:company_db', False) -%}
-openerp_cron:
-  description: OpenERP Scheduler Daemon (cron)
-  command: '/usr/lib/nagios/plugins/check_procs -C openerp-cron.py -u openerp -w 1:1'
-{%- endif -%}
-
-{%- from 'uwsgi/nrpe/instance.jinja2' import uwsgi_instance with context -%}
-{%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
-{%- set deployment = 'openerp' %}
-{{ uwsgi_instance(deployment) }}
-{{ nginx_instance(deployment, timeout=120, extra_service_dependencies=('openerp_uwsgi_worker',)) }}
+Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
+Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
+#}
+{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{{ passive_absent('erlang') }}

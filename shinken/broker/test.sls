@@ -30,7 +30,7 @@ include:
   - shinken.broker.diamond
   - shinken.broker.nrpe
 
-{%- set check_set = (('shinken_broker_web', 'Connection refused'),
+{%- set check_set = (('shinken_broker_http_port', 'Connection refused'),
                     ('shinken_broker_http', 'Connection refused'),
                     ('shinken.broker_nginx_http', 'Invalid HTTP response')) %}
 

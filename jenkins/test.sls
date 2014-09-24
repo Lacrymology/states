@@ -42,7 +42,8 @@ run_cron_cleanup_jenkins_old_workspace:
 test:
   cmd:
     - run
-    - name: /etc/cron.daily/backup-jenkins
+    {#- wait some seconds for Jenkins service to be functional and create files #}
+    - name: sleep 30 && /etc/cron.daily/backup-jenkins
     - require:
       - sls: jenkins
       - sls: jenkins.backup

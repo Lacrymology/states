@@ -32,23 +32,25 @@ Institute for Institutional Innovation by Data Driven Design Inc.
 Author: Hung Nguyen Viet hvnsweeting@gmail.com
 Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
 -#}
-djangopypi2:
-  uwsgi:
-    - absent
-    - require:
-      - file: /etc/nginx/conf.d/djangopypi2.conf
+/etc/nginx/conf.d/djangopypi2.conf:
   file:
     - absent
-    - name: /usr/local/djangopypi2
+
+djangopypi2-uwsgi:
+  file:
+    - absent
+    - name: /etc/uwsgi/djangopypi2.yml
     - require:
-      - uwsgi: djangopypi2
+      - file: /etc/nginx/conf.d/djangopypi2.conf
+
+/usr/local/djangopypi2:
+  file:
+    - absent
+    - require:
+      - file: djangopypi2-uwsgi
 
 /var/lib/deployments/djangopypi2:
   file:
     - absent
     - require:
-      - uwsgi: djangopypi2
-
-/etc/nginx/conf.d/djangopypi2.conf:
-  file:
-    - absent
+      - file: djangopypi2-uwsgi

@@ -107,19 +107,31 @@ sentry:
     - require:
       - postgres_user: sentry
       - service: postgresql
-  uwsgi:
-    - available
-    - enable: True
-    - name: sentry
+
+sentry-uwsgi:
+  file:
+    - managed
+    - name: /etc/uwsgi/sentry.yml
     - template: jinja
     - user: www-data
     - group: www-data
     - mode: 440
     - source: salt://sentry/uwsgi.jinja2
+    - context:
+      appname: sentry
+      module: sentry.wsgi
+      virtualenv: /usr/local/sentry
+      chdir: /usr/local/sentry
     - require:
       - service: memcached
       - service: uwsgi_emperor
       - service: rsyslog
+  module:
+    - wait
+    - name: file.touch
+    - m_name: /etc/uwsgi/sentry.yml
+    - require:
+      - file: /etc/uwsgi/sentry.yml
     - watch:
       - file: sentry
       - cmd: sentry_settings
@@ -204,7 +216,7 @@ sentry-migrate-fake:
     - source: salt://sentry/nginx.jinja2
     - require:
       - pkg: nginx
-      - uwsgi: sentry
+      - file: sentry-uwsgi
 
 extend:
   memcached:

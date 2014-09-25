@@ -41,14 +41,15 @@ roundcube_password_plugin_ldap_driver_dependency:
   file:
     - absent
 
-roundcube:
-  uwsgi:
+roundcube-uwsgi:
+  file:
     - absent
+    - name: /etc/uwsgi/roundcube.yml
 
 {%- for suffix in ('', '-stats') %}
 /var/lib/uwsgi/roundcube{{ suffix }}.sock:
   file:
     - absent
     - require:
-      - uwsgi: roundcube
+      - file: roundcube-uwsgi
 {%- endfor -%}

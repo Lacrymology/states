@@ -170,15 +170,24 @@ graphite-web:
     - bin_env: /usr/local/graphite/bin/pip
     - require:
       - module: graphite-web
-  uwsgi:
-    - available
-    - enable: True
-    - name: graphite
+
+graphite-web-uwsgi:
+  file:
+    - managed
+    - name: /etc/uwsgi/graphite.yml
     - template: jinja
     - user: www-data
     - group: www-data
     - mode: 440
-    - source: salt://graphite/uwsgi.jinja2
+    - source: salt://uwsgi/template.jinja2
+    - context:
+      appname: graphite
+      django_settings: graphite.settings
+      module: graphite.wsgi
+      uid: www-data
+      gid: graphite
+      virtualenv: /usr/local/graphite
+      chdir: /usr/local/graphite
     - require:
       - module: graphite_initial_fixture
       - service: uwsgi_emperor
@@ -187,6 +196,12 @@ graphite-web:
       - user: web
       - service: rsyslog
       - service: memcached
+  module:
+    - wait
+    - name: file.touch
+    - m_name: /etc/uwsgi/graphite.yml
+    - require:
+      - file: /etc/uwsgi/graphite.yml
     - watch:
       - user: graphite
       - module: graphite_settings
@@ -318,7 +333,7 @@ graphite_admin_user:
     - group: www-data
     - mode: 440
     - require:
-      - uwsgi: graphite-web
+      - file: graphite-web-uwsgi
       - pkg: nginx
 
 extend:

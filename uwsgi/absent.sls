@@ -35,7 +35,7 @@ uwsgi_emperor:
     - dead
     - name: uwsgi
 
-{%- for file in ('/etc/uwsgi', '/etc/uwsgi.ini', '/etc/init/uwsgi.conf', '/var/lib/uwsgi', extracted_dir) %}
+{%- for file in ('/etc/uwsgi', '/etc/uwsgi.yaml', '/etc/init/uwsgi.conf', '/var/lib/uwsgi', extracted_dir) %}
 {{ file }}:
   file:
     - absent

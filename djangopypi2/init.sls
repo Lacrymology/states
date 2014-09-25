@@ -105,10 +105,11 @@ djangopypi2:
     - require:
       - postgres_user: djangopypi2
       - service: postgresql
-  uwsgi:
-    - available
-    - enable: True
-    - name: djangopypi2
+
+djangopypi2-uwsgi:
+  file:
+    - managed
+    - name: /etc/uwsgi/djangopypi2.yml
     - template: jinja
     - user: www-data
     - group: www-data
@@ -126,6 +127,12 @@ djangopypi2:
       - service: memcached
       - service: rsyslog
       - cmd: djangopypi2-django_contrib_sites
+  module:
+    - wait
+    - name: file.touch
+    - m_name: /etc/uwsgi/djangopypi2.yml
+    - require:
+      - file: /etc/uwsgi/djangopypi2.yml
     - watch:
       - cmd: djangopypi2
       - file: djangopypi2_settings
@@ -270,7 +277,7 @@ djangomod module, which is just a helper to build our command and run it.
       - group
     - require:
       - user: web
-      - uwsgi: djangopypi2
+      - file: djangopypi2-uwsgi
 
 /etc/nginx/conf.d/djangopypi2.conf:
   file:
@@ -287,7 +294,7 @@ djangomod module, which is just a helper to build our command and run it.
         - static
     - require:
       - pkg: nginx
-      - uwsgi: djangopypi2
+      - file: djangopypi2-uwsgi
 
 extend:
   nginx:

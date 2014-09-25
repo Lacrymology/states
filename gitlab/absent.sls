@@ -44,18 +44,20 @@ gitlab:
     - name: {{ user }}
     - force: True
     - require:
-      - uwsgi: gitlab
+      - file: gitlab-uwsgi
       - service: gitlab
   group:
     - absent
     - name: {{ user }}
     - require:
       - user: gitlab
-  uwsgi:
-    - absent
-    - name: gitlab
   service:
     - dead
+
+gitlab-uwsgi:
+  file:
+    - absent
+    - name: /etc/uwsgi/gitlab.yml
 
 {%- for file in ('/etc/nginx/conf.d/gitlab.conf', web_dir, '/home/' + user, '/etc/init/gitlab.conf', '/etc/logrotate.d/gitlab') %}
 {{ file }}:

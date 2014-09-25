@@ -79,20 +79,28 @@ roundcube:
     - runas: postgres
     - require:
       - postgres_user: roundcube
-  uwsgi:
-    - available
-    - enable: True
-    - name: roundcube
-    - source: salt://roundcube/uwsgi.jinja2
+
+roundcube-uwsgi:
+  file:
+    - managed
+    - name: /etc/uwsgi/roundcube.yml
+    - source: salt://uwsgi/template.jinja2
     - template: jinja
     - user: www-data
     - group: www-data
     - mode: 440
     - context:
-      dir: {{ roundcubedir }}
+      appname: roundcube
+      chdir: {{ roundcubedir }}
     - require:
       - service: uwsgi_emperor
       - module: roundcube_initial
+  module:
+    - wait
+    - name: file.touch
+    - m_name: /etc/uwsgi/roundcube.yml
+    - require:
+      - file: /etc/uwsgi/roundcube.yml
     - watch:
       - file: {{ roundcubedir }}/config/config.inc.php
       - archive: roundcube
@@ -200,7 +208,7 @@ roundcube_password_plugin_ldap_driver_dependency:
       - file: {{ roundcubedir }}
       - user: web
     - require_in:
-      - uwsgi: roundcube
+      - file: roundcube-uwsgi
 {% endfor %}
 
 /etc/nginx/conf.d/roundcube.conf:
@@ -214,7 +222,7 @@ roundcube_password_plugin_ldap_driver_dependency:
     - require:
       - pkg: nginx
       - user: web
-      - uwsgi: roundcube
+      - file: roundcube-uwsgi
     - context:
       dir: {{ roundcubedir }}
 

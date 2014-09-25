@@ -186,9 +186,6 @@ graylog2-web:
     - require:
       - file: /var/run/{{ user }}
       - file: /var/log/{{ user }}
-  uwsgi:
-    - absent
-    - name: graylog2
 
 {% for command in ('streamalarms', 'subscriptions') %}
 /etc/cron.hourly/graylog2-web-{{ command }}:
@@ -224,3 +221,11 @@ extend:
 - file: /var/run/{{ user }}
 - pkg: rsyslog
 {%- endcall %}
+
+{#-
+  we have to explicit remove the old uwsgi config file here because
+  graylog2.web doesn't include uwsgi anymore
+#}
+/etc/uwsgi/apps-enabled/graylog2.ini:
+  file:
+    - absent

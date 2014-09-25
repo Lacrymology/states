@@ -239,11 +239,11 @@ def main():
     try:
         config = pysc.Util(args.config, debug=args.log, drop_privilege=False)
 
-        minion_config = config['file']['salt_minion']
         try:
-            minion_id = pysc.unserialize_yaml(minion_config)['id']
-        except KeyError:
-            logger.error("Can't get minion id from '%s'", minion_config)
+            f = open('/etc/hostname', 'r')
+            minion_id = f.read().rstrip()
+        except IOError as err:
+            logger.error("Can't get minion id from '/etc/hostname': %r", err)
             sys.exit(1)
 
         try:

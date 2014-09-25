@@ -49,8 +49,10 @@ test:
     - order: last
     - exclude:
       - graylog2_server-es_cluster
-      - graylog2_elasticsearch_port_transport
+      - graylog2_server-es_port_transport
       - graylog2_incoming_logs
+      - graylog2_api_port
+      - graylog2_api
   cmd:
     - run
     - name: /etc/cron.daily/backup-graylog2

@@ -42,7 +42,7 @@ test:
       - graylog2_server-es_cluster
       - graylog2_incoming_logs
 
-graylog2_elasticsearch_cluster:
+graylog2_server-es_cluster:
   monitoring:
     - run_check
     - wait: 60

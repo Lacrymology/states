@@ -42,6 +42,7 @@ import boto
 import nagiosplugin as nap
 
 import pysc
+from pysc import nrpe as bfe
 
 log = logging.getLogger('nagiosplugin.s3lite.backup_age')
 
@@ -112,10 +113,12 @@ class BackupAge(nap.Resource):
 @nap.guarded
 @pysc.profile(log=log)
 def main():
-    argp = pysc.common_argparser(default_config_path='/etc/nagios/s3lite.yml')
+    argp = bfe.ArgumentParser()
     argp.add_argument('path', type=str, help='Path used when backup')
     argp.add_argument('bucket',
                       help='s3://bucket/prefix to check uploaded file')
+    argp.add_argument('-c', '--config', default='/etc/nagios/s3lite.yml',
+                      help='path to config file')
     argp.add_argument('-e', '--empty', action='store_true',
                       help='Allow backup source to be empty')
     argp.add_argument('-w', '--warning', metavar='HOURS', default='48',
@@ -124,14 +127,14 @@ def main():
     argp.add_argument('--timeout', default=None)
     args = argp.parse_args()
 
-    util = pysc.Util(args.config, debug=args.log, drop_privilege=False)
+    util = pysc.Util(args.config, drop_privilege=False)
 
     try:
         parsed = boto.urlparse.urlparse(args.bucket)
         bucket_name, prefix = parsed.netloc, parsed.path
         prefix = prefix[1:]  # prefix must not start with /
 
-        check = nap.Check(BackupAge(util['s3']['key_id'],
+        check = bfe.Check(BackupAge(util['s3']['key_id'],
                                     util['s3']['secret_key'],
                                     bucket_name,
                                     prefix,
@@ -140,7 +143,7 @@ def main():
                                     allow_empty=args.empty
                                     ),
                           nap.ScalarContext('age', args.warning, args.warning))
-        check.main(timeout=args.timeout)
+        check.main(args)
     except boto.exception.S3ResponseError:
         raise ValueError('Bad or non-existing bucket name')
     except Exception:

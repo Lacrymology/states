@@ -89,8 +89,9 @@ class S3Util(object):
 
         logger.info('Uploading files')
         for lfn in localfiles(bucket, path, prefix):
-            rfile = bucket.get_key(self._gen_path(lfn['prefix'],
-                                                  lfn['fullpath']))
+            rpath = self._gen_path(lfn['prefix'], lfn['fullpath'])
+            logger.debug('To: %s', rpath)
+            rfile = bucket.get_key(rpath)
             if rfile:
                 # etag is usually md5sum of that file
                 rmd5 = rfile.etag.strip('"')
@@ -157,7 +158,7 @@ class S3Util(object):
 @pysc.profile(log=logger)
 def main():
     import sys
-    # TODO: use same backup.yaml as backup.client.s3
+
     argp = pysc.common_argparser(default_config_path='/etc/s3lite.yml')
     argp.add_argument('path', type=str, help='Path to file/dir to upload')
     argp.add_argument('bucket', help='s3://bucket/prefix to upload file to')
@@ -172,16 +173,15 @@ def main():
         parsed = boto.urlparse.urlparse(args.bucket)
         bucket_name, prefix = parsed.netloc, parsed.path
         prefix = prefix[1:]  # prefix must not start with /
+        logger.debug('Bucket name: %s, Prefix: %s', bucket_name, prefix)
         bucket = s3u.conn.get_bucket(bucket_name)
+    except boto.exception.S3ResponseError as e:
+        logger.error('Bucket name %r is bad or does not exist. %r',
+                     args.bucket, e, exc_info=True)
+        sys.exit(1)
+    else:
         counter = s3u.sync(bucket, args.path, prefix)
         logger.info(counter)
-    except boto.exception.S3ResponseError as e:
-        logger.error('Bucket name %r is bad or does not exist.', args.bucket,
-                     exc_info=True)
-        sys.exit(1)
-    except Exception as e:
-        logger.error(e, exc_info=True)
-        sys.exit(1)
 
 
 if __name__ == "__main__":

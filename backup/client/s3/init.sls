@@ -28,9 +28,9 @@ Maintainer: Nicolas Plessis <nicolasp@microsigns.com>
 include:
   - bash
   - local
-  - s3cmd
-  - s3lite
   - backup.client.base
+  - s3cmd
+  - virtualenv
 
 /usr/local/bin/backup-store:
   file:
@@ -44,3 +44,52 @@ include:
       - pkg: s3cmd
       - file: /usr/local
       - file: bash
+
+s3lite:
+  virtualenv:
+    - manage
+    - name: /usr/local/s3lite
+    - system_site_packages: False
+    - require:
+      - module: virtualenv
+      - file: /usr/local
+  file:
+    - managed
+    - name: /usr/local/s3lite/salt-requirements.txt
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - source: salt://backup/client/s3/s3lite/requirements.jinja2
+    - require:
+      - virtualenv: s3lite
+  module:
+    - wait
+    - name: pip.install
+    - upgrade: True
+    - bin_env: /usr/local/s3lite/bin/pip
+    - requirements: /usr/local/s3lite/salt-requirements.txt
+    - watch:
+      - file: s3lite
+
+/etc/s3lite.yml:
+  file:
+    - managed
+    - template: jinja
+    - mode: 400
+    - user: root
+    - group: root
+    - source: salt://backup/client/s3/s3lite/config.jinja2
+
+{#- anyuser/program should can run this script, it just needs to provide
+the config file as default config file is only for root #}
+/usr/local/s3lite/bin/s3lite:
+  file:
+    - managed
+    - source: salt://backup/client/s3/s3lite/s3lite.py
+    - user: root
+    - group: root
+    - mode: 551
+    - require:
+      - module: s3lite
+      - file: /etc/s3lite.yml

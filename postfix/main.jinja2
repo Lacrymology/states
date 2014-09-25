@@ -74,11 +74,10 @@ smtpd_recipient_restrictions = permit_mynetworks, permit_sasl_authenticated, rej
 {%- endif %}
 {%- if salt['pillar.get']('postfix:aliases', False) %}
 virtual_alias_maps = hash:/etc/postfix/virtual
+virtual_alias_domains = {%- for i in salt['pillar.get']('postfix:alias_domains', []) %} {{ i }}{%- endfor %}
 {%- endif %}
 {%- if salt['pillar.get']('postfix:virtual_mailbox', False) %}
-{#- set to $mydomain make this host receive mail for your domain
-MAKE SURE YOU ARE NOT SET postfix:mydestination pillar #}
-virtual_mailbox_domains = {{ salt['pillar.get']('postfix:virtual_mailbox_domains', '$mydomain') }}
+virtual_mailbox_domains = {%- for i in salt['pillar.get']('postfix:virtual_mailbox_domains', ['$mydomain']) %} {{ i }}{%- endfor %}
 virtual_mailbox_base = /var/mail/vhosts
 virtual_mailbox_maps = hash:/etc/postfix/vmailbox
 virtual_minimum_uid = 100

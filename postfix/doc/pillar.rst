@@ -59,6 +59,9 @@ Example::
     aliases: |
         user1.abc@example.com user1@example.com
         user2.xyz@example.com user2@example.com
+    alias_domains:
+      - saltlint.org
+      - saltci.org
     message_size_limit: 15360000
     mydestination:
       - saltlab.com
@@ -93,7 +96,7 @@ amavis, too.
 ldap:data
 ~~~~~~~~~
 
-Nested dict contain user infomation, that will be used for create LDAP users
+Nested dict contain user information, that will be used for create LDAP users
 and mapping emails (user@mailname) to mailboxes.
 
 postfix:spam_filter
@@ -118,6 +121,16 @@ Enable using virtual mailbox.
 
 Default: ``False``.
 
+postfix:virtual_mailbox_domains
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+List of domains that Postfix will receive emails for and they are delivered
+via the ``virtual_transport``.
+WARNING! ensuring that these values must not be set in
+``postfix:mydestination`` pillar.
+
+Default: ``$mydomain`` if ``postfix:virtual_mailbox`` set to ``True``.
+
 postfix:aliases
 ~~~~~~~~~~~~~~~
 
@@ -127,6 +140,24 @@ Support alias(mail forwarding) on :doc:`index`. Uses below syntax::
   <source_addr2> <dest_addr2>
 
 Use it carefully, or it may cause recursive forwarding.
+
+postfix:alias_domains
+~~~~~~~~~~~~~~~~~~~~~
+
+Postfix will receive email for those domains and forward to addresses specified
+in ``postfix:aliases``. WARNING! ensuring that these values must not be set
+in ``postfix:mydestination`` pillar.
+
+Default: ``[]`` - empty list.
+
+Example, if one wants to receive email for address salt@example.org then
+forward it to email saltstack@example.com, those pillar keys should be set::
+
+  postfix:
+    alias_domains:
+      - example.org
+    aliases:
+      salt@example.org saltstack@example.com
 
 postfix:message_size_limit
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -167,7 +198,7 @@ Default: all values defined in ``postfix:mydestination``.
 postfix:inet_interfaces
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-Intefaces that this mail server listen to.
+Network interfaces that this mail server listen to.
 
 Default: ``all``.
 

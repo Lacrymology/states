@@ -74,7 +74,7 @@ smtpd_recipient_restrictions = permit_mynetworks, permit_sasl_authenticated, rej
 {%- endif %}
 {%- if salt['pillar.get']('postfix:aliases', False) %}
 virtual_alias_maps = hash:/etc/postfix/virtual
-virtual_alias_domains = {%- for i in salt['pillar.get']('postfix:alias_domains', []) %} {{ i }}{%- endfor %}
+virtual_alias_domains = {%- for i in salt['pillar.get']('postfix:alias_domains', ['$virtual_alias_maps']) %} {{ i }}{%- endfor %}
 {%- endif %}
 {%- if salt['pillar.get']('postfix:virtual_mailbox', False) %}
 virtual_mailbox_domains = {%- for i in salt['pillar.get']('postfix:virtual_mailbox_domains', ['$mydomain']) %} {{ i }}{%- endfor %}

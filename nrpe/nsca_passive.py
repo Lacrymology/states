@@ -239,12 +239,13 @@ def main():
     try:
         config = pysc.Util(args.config, debug=args.log, drop_privilege=False)
 
-        try:
-            f = open('/etc/hostname', 'r')
-            minion_id = f.read().rstrip()
-        except IOError as err:
-            logger.error("Can't get minion id from '/etc/hostname': %r", err)
-            sys.exit(1)
+        with open('/etc/hostname') as f:
+            try:
+                minion_id = f.read().rstrip()
+            except IOError as err:
+                logger.error("Can't get minion id from '/etc/hostname': %r", err,
+                             exc_info=True)
+                sys.exit(1)
 
         try:
             nsca_servers = config['nsca']['servers']

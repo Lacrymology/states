@@ -30,12 +30,14 @@ Nagios NRPE check for uWSGI.
 {%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - bash
+  - bash.nrpe
   - git.nrpe
   - nrpe
   - python.dev.nrpe
   - rsyslog.nrpe
   - ruby.nrpe
   - sudo
+  - sudo.nrpe
   - web
   - xml.nrpe
 

@@ -29,7 +29,13 @@ Install Nagios NRPE Agent.
 -#}
 include:
   - apt
+{#- include $formula.nrpe here as this is root of all nrpe SLSes,
+    there is no nrpe.nrpe to do that as other formulas.
+    Although, this looks recursive as apt.nrpe includes nrpe but Salt
+    can handle that properly #}
   - apt.nrpe
+  - bash
+  - bash.nrpe
   - cron
   - cron.nrpe
   - local
@@ -43,6 +49,7 @@ include:
   - rsyslog.nrpe
   - ssh.client
   - sudo
+  - sudo.nrpe
   - virtualenv
   - virtualenv.nrpe
 
@@ -153,6 +160,7 @@ service: nagios-nrpe-server #}
       - pkg: nagios-plugins
       - cmd: apt_sources
       - module: nrpe-virtualenv
+      - file: bash
   file:
     - managed
     - name: /etc/nagios/nrpe.d/000.nagios.servers.cfg

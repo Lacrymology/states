@@ -43,6 +43,7 @@ Install Varnish.
 
 include:
   - apt
+  - bash
 
 varnish:
   pkg:
@@ -69,6 +70,7 @@ varnish:
     - unless: test -f "{{ file_path }}"
     - require:
       - pkg: varnish
+      - file: bash
 {% endif %}
 
 /etc/varnish/default.vcl:

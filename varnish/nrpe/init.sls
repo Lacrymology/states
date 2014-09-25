@@ -31,7 +31,7 @@ Nagios NRPE check for varnish.
 {%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - apt.nrpe
+  - bash.nrpe
   - nrpe
-  - rsyslog.nrpe
 
 {{ passive_check('varnish') }}

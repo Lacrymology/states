@@ -170,6 +170,7 @@ def main(Collector):
                             than HOURS')
     argp.add_argument('-c', '--config', metavar="PATH",
                       default='/etc/nagios/backup.yml')
+    # TODO: initialize logging from /etc/nagios/backup.yaml
 
     args = argp.parse_args()
 

@@ -72,6 +72,7 @@ class SiteMapLink(nagiosplugin.Resource):
         return [nagiosplugin.Metric('sitemaplink', self.failed(),
                                     context="sitemaplink")]
 
+# TODO: switch to pyfs.nrpe
 
 @nagiosplugin.guarded
 @pysc.profile("nrpe.check_sitemaplink")

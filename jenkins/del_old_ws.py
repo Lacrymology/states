@@ -33,6 +33,8 @@ __author__ = 'Hung Nguyen Viet <hvnsweeting@gmail.com>'
 __maintainer__ = 'Hung Nguyen Viet <hvnsweeting@gmail.com>'
 __email__ = 'hvnsweeting@gmail.com'
 
+# TODO: switch pysc
+
 import os
 import shutil
 import sys

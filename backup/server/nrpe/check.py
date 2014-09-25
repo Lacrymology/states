@@ -132,6 +132,8 @@ class BackupDirectory(UserList):
                 logger.debug("%s isn't a file", absolute_filename)
         UserList.__init__(self, data)
 
+# TODO: switch to pysc.nrpe and nagiosplugin
+
 @pysc.profile(log=logger)
 def main():
     """

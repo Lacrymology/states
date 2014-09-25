@@ -61,10 +61,7 @@ class HalfInstalled(nagiosplugin.Resource):
 @pysc.profile(log=log)
 def main():
     argp = argparse.ArgumentParser(description=__doc__)
-    argp.add_argument(
-        '-w', '--warning', metavar='VALUE', default='0',
-        help='warning if number of half-installed packages not in range VALUE')
-    args = argp.parse_args()
+    # TODO: migrate to pysc.nrpe and take warning from apt_rc:arguments:warning
     check = nagiosplugin.Check(
         HalfInstalled(),
         nagiosplugin.ScalarContext(

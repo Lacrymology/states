@@ -30,3 +30,5 @@ salt_cloud_configurations_check:
   check_interval: {{ 24 * 60 }} {# 1 day #}
   arguments:
     timeout: {{ 15 * 60 }}
+    profiles: /etc/salt/cloud.profiles
+    providers: /etc/salt/cloud.providers

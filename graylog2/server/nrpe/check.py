@@ -39,7 +39,7 @@ __email__ = 'favadi@robotinfra.com'
 import logging
 import time
 import pysc
-import pysc.nrpe as bfe
+import pysc.nrpe
 import nagiosplugin
 import requests
 
@@ -92,9 +92,9 @@ class Graylog2Throughput(nagiosplugin.Resource):
 @nagiosplugin.guarded
 @pysc.profile(log=log)
 def main():
-    argp = bfe.ArgumentParser(description=__doc__)
+    argp = pysc.nrpe.ArgumentParser(description=__doc__)
     args = argp.parse_args()
-    config = bfe.ConfigFile.from_arguments(args)
+    config = pysc.nrpe.ConfigFile.from_arguments(args)
     kwargs = config.kwargs('api_url', 'username', 'password')
     crit_range = config.get_argument('crit_range', '1:10000')
     kwargs['max_retry'] = config.get_argument('max_retry', '20')

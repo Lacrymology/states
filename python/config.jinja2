@@ -1,9 +1,9 @@
 {#-
  General use template of YAML data for Python logging
 -#}
-{%- macro logging(process_name, sentry_dsn_pillar_key) -%}
-{%- set default_dsn = salt['pillar.get']('sentry_dsn', False) -%}
-{%- set sentry_dsn = salt['pillar.get'](sentry_dsn_pillar_key, default_dsn) %}
+{%- macro logging(process_name=None, sentry_dsn_pillar_key='sentry_dsn') -%}
+    {%- set default_dsn = salt['pillar.get']('sentry_dsn', False) -%}
+    {%- set sentry_dsn = salt['pillar.get'](sentry_dsn_pillar_key, default_dsn) %}
 logging:
   version: 1
   disable_existing_loggers: False
@@ -11,14 +11,18 @@ logging:
     only_message:
       format: '%(message)s'
     syslog:
+    {%- if not process_name %}
+      format: '%(processName)s[%(process)d]: %(message)s'
+    {%- else %}
       format: '{{ process_name }}[%(process)d]: %(message)s'
+    {%- endif %}
   handlers:
     syslog:
-{%- if salt['pillar.get']('debug', False) %}
+    {%- if salt['pillar.get']('debug', False) %}
       level: DEBUG
-{%- else %}
+    {%- else %}
       level: INFO
-{%- endif %}
+    {%- endif %}
       class: logging.handlers.SysLogHandler
       address: /dev/log
       facility: local7
@@ -27,19 +31,25 @@ logging:
       level: ERROR
       class: logging.StreamHandler
       formatter: only_message
-{%- if sentry_dsn %}
+    {%- if sentry_dsn %}
     sentry:
       level: WARNING
       class: raven.handlers.logging.SentryHandler
       dsn: requests+{{ sentry_dsn }}
-{%- endif %}
+    {%- endif %}
   loggers:
     '':
       level: DEBUG
       handlers:
         - syslog
         - console
-{%- if sentry_dsn %}
+    {%- if sentry_dsn %}
         - sentry
-{%- endif -%}
+    {%- endif -%}
 {%- endmacro -%}
+{{ logging() }}
+
+{%- set default_dsn = salt['pillar.get']('sentry_dsn', False) -%}
+{%- if default_dsn %}
+sentry_dsn: {{ default_dsn }}
+{%- endif -%}

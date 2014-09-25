@@ -60,31 +60,12 @@ backup-server:
 
 backup-archiver-dependency:
   file:
-    - managed
+    - absent
     - name: {{ opts['cachedir'] }}/pip/backup.server
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 440
-    - source: salt://backup/server/requirements.jinja2
-    - require:
-      - module: pip
-  module:
-    - wait
-    - name: pip.install
-    - upgrade: True
-    - requirements: {{ opts['cachedir'] }}/pip/backup.server
-    - watch:
-      - file: backup-archiver-dependency
 
 /etc/backup-archive.conf:
   file:
-    - managed
-    - template: jinja
-    - source: salt://backup/server/config.jinja2
-    - mode: 500
-    - user: root
-    - group: root
+    - absent
 
 /etc/cron.weekly/backup-archiver:
   file:

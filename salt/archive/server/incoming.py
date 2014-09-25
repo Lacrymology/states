@@ -100,6 +100,7 @@ def move_incoming(directory, category, incoming_sub_directory='incoming',
         if (path != source_directory) and not (dirs or files):
             os.rmdir(path)
 
+# TODO: switch to pysc.Util
 @pysc.profile(log=logger)
 def main():
     move_incoming('/var/lib/salt_archive', 'pip')

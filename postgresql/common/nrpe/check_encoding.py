@@ -77,10 +77,9 @@ class Encoding(nap.Resource):
 @nap.guarded
 @pysc.profile(log=log)
 def main():
+    # TODO: switch to pysc.nrpe and use arguments
     argp = argparse.ArgumentParser()
-    argp.add_argument('--name', '-n', help='Database name', default='template0')
     argp.add_argument('--encoding', '-e', help='Encoding name', default='UTF8')
-    argp.add_argument('-v', '--verbose', action='count', default=0)
     args = argp.parse_args()
     enc = Encoding(args.name, args.encoding)
     check = nap.Check(enc, nap.ScalarContext('encoding', '0:0', '0:0'))

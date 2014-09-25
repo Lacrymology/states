@@ -66,8 +66,7 @@ class ClusterNodes(nagiosplugin.Resource):
 @pysc.profile(log=log)
 def main():
     argp = argparse.ArgumentParser(description=__doc__)
-    argp.add_argument('-c', '--critical', metavar='VALUE', default='2',
-                      help='critical if number of nodes not in range VALUE')
+    # TODO switch to pysc.nrpe and use arguments:nodes instead of cli args
     args = argp.parse_args()
     check = nagiosplugin.Check(
         ClusterNodes(),

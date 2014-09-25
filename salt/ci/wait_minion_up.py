@@ -58,6 +58,7 @@ def wait_minion_up(client, minion_id, max_wait):
             logger.info("Minion %s is finally up after %d seconds", minion_id,
                         delta.total_seconds())
 
+# todo: switch to pysc.Util
 @pysc.profile(log=logger)
 def main():
     import salt.client

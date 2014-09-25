@@ -40,7 +40,7 @@ from datetime import datetime
 
 import nagiosplugin as nap
 import pysc
-import pysc.nrpe as bfe
+import pysc.nrpe
 
 from plugins import PluginCertInfo, PluginOpenSSLCipherSuites
 from utils.SSLyzeSSLConnection import SSLHandshakeRejected
@@ -223,15 +223,15 @@ class SslSummary(nap.Summary):
 @nap.guarded
 @pysc.profile(log=__name__)
 def main():
-    parser = bfe.ArgumentParser()
+    parser = pysc.nrpe.ArgumentParser()
     parser.add_argument('-H', '--host', type=str)
     parser.add_argument('-p', '--port', type=int, default=443)
     parser.add_argument('-t', '--timeout', type=int, default=60)
     args = parser.parse_args()
-    config = bfe.ConfigFile.from_arguments(args)
+    config = pysc.nrpe.ConfigFile.from_arguments(args)
     kwargs = config.kwargs('host', 'port')
 
-    check = bfe.Check(
+    check = pysc.nrpe.Check(
         SslConfiguration(**kwargs),
         nap.ScalarContext('sslscore',
                           nap.Range('@65:80'), nap.Range('@0:65')),

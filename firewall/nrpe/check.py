@@ -63,8 +63,7 @@ class Rules(nagiosplugin.Resource):
 @pysc.profile(log=log)
 def main():
     argp = argparse.ArgumentParser(description=__doc__)
-    argp.add_argument('-w', '--warning', metavar='VALUE', default='2',
-                      help='warning if number of rules no in range VALUE')
+    # TODO: switch pysc.nrpe and use firewall_rules:arguments instead of cli args
     args = argp.parse_args()
     check = nagiosplugin.Check(
         Rules(),

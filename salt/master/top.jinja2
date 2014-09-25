@@ -59,7 +59,20 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
     {%- endfor -%}
 {%- endif -%}
 
+{#-
+  NOTE: This was manually merged by me (Tomas), and I'm not
+  100% sure if the resolution is right
+#}
+{#- local mode don't support gitfs and multiple branches, force to use
+   'base' environment -#}
+{%- if opts['file_client'] == 'local' %}
+base:
+{%- else -%}
+  {#- file_client not in local mode.
+      salt gitfs rename master branch into base. which is also the default
+      value #}
 {{ local.saltenv }}:
+{%- endif -%}
   {#- target all minions #}
   '*':
 {%- if not local.roles and not local.global_roles -%}

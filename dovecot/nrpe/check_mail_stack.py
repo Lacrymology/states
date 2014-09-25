@@ -35,7 +35,6 @@ __email__ = 'hvnsweeting@gmail.com'
 import imaplib
 import logging
 import smtplib
-import sys
 import time
 import uuid
 
@@ -177,6 +176,8 @@ Subject: %s
 @nap.guarded
 @pysc.profile(log=log)
 def main():
+    # TODO: use pysc.nrpe no pysc.Util
+    # TODO: use /etc/python/config.yaml and mailstack_functionality:arguments
     config = pysc.Util('/etc/nagios/check_mail_stack.yml', lock=False)
     mail = config['mail']
     waittime = mail['smtp_wait']

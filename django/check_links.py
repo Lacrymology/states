@@ -78,7 +78,7 @@ def failed(link):
         dump(link, ret)
         return ret
 
-
+# TODO: switch to pyfs.nrpe
 @pysc.profile(log='django.check_links')
 def main():
     argp = argparse.ArgumentParser(description=__doc__)

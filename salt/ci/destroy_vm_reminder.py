@@ -135,6 +135,7 @@ def main(*args):
         )
         smtp.send(envelope)
 
+# TODO: switch to pysc.Util
 if __name__ == '__main__':
     import sys
     main(*sys.argv[1:])

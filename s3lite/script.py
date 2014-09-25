@@ -157,7 +157,7 @@ class S3Util(object):
 @pysc.profile(log=logger)
 def main():
     import sys
-
+    # TODO: use same backup.yaml as backup.client.s3
     argp = pysc.common_argparser(default_config_path='/etc/s3lite.yml')
     argp.add_argument('path', type=str, help='Path to file/dir to upload')
     argp.add_argument('bucket', help='s3://bucket/prefix to upload file to')

@@ -78,8 +78,7 @@ class OOM_Message(nap.Resource):
 @pysc.profile(log='nrpe.check_oom')
 def main():
     argp = argparse.ArgumentParser()
-    argp.add_argument('-s', '--seconds', type=int,
-                      help='check messages since X seconds ago')
+    # switch to pysc.nrpe and use arguments seconds
     args = argp.parse_args()
     oom = OOM_Message(args.seconds) if args.seconds else OOM_Message()
     check = nap.Check(oom, nap.ScalarContext('msg', '0:0', '0:0'))

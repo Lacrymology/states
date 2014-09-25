@@ -78,6 +78,7 @@ def filter_ips(filename, ips):
     else:
         logger.debug("File %s don't had any changes, leave as is.", filename)
 
+# TODO: migrate to pysc
 @pysc.profile(log=logger)
 def main():
     # list of denyhosts files

@@ -41,3 +41,12 @@ python:
     - name: python{{ grains['pythonversion'][0] }}.{{ grains['pythonversion'][1] }}
     - require:
       - cmd: apt_sources
+  file:
+    - managed
+    - name: /etc/python/config.yaml
+    - source: salt://python/config.jinja2
+    - user: root
+    - group: root
+    - mode: 444
+    - require:
+      - file: /etc/python

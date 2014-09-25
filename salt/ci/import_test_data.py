@@ -87,5 +87,6 @@ def main():
         print str(err)
         sys.exit(1)
 
+# TODO; switch to pysc.Util
 if __name__ == '__main__':
     main()

@@ -35,7 +35,9 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
     {%- if loop.last %}
 {{ formula|replace('.', '_') }}-es_cluster:
   description: {{ formula|title }} Elasticsearch cluster
-  command: '/usr/lib/nagios/plugins/check_elasticsearch_cluster.py -c {{ nodes_total }}:{{ nodes_total }}'
+  command: /usr/lib/nagios/plugins/check_elasticsearch_cluster.py
+  arguments:
+    nodes: {{ nodes_total }}
     {%- endif %}
 {%- endfor %}
 

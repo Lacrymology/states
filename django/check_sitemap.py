@@ -36,6 +36,7 @@ import sitemap
 import sys
 import pysc
 
+# TODO: switch to pyfs.nrpe
 
 class SiteMap(nagiosplugin.Resource):
     def __init__(self, sitemap):

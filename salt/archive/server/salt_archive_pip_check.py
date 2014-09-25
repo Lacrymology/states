@@ -86,6 +86,7 @@ def validate(dirname):
         else:
             logger.debug("Ignore non tar %s", absolute_filename)
 
+# TODO: use pysc.Util
 @pysc.profile(log=logger)
 def main():
     validate('/var/lib/salt_archive/pip')

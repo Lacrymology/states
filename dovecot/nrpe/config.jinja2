@@ -85,6 +85,18 @@ mailstack_functionality:
   command: /usr/lib/nagios/plugins/check_mail_stack.py
   dependencies:
     - dovecot_{% if salt['pillar.get']('dovecot:ssl', False) %}s{% endif %}imap
+  arguments:
+    {%- set mail_pillar = pillar['mail']['check_mail_stack'] %}
+    mail:
+      username: {{ username }}
+      password: "{{ password }}"
+      imap_server: localhost
+      smtp_server: {{ mail_pillar['smtp_server'] }}
+      {#- wait N seconds after sending mail #}
+      smtp_wait: {{ salt['pillar.get']('mail:check_mail_stack:smtp_wait', 10) }}
+      {#- Assuming that if dovecot is configured to use SSL,
+          means all the stack uses SSL #}
+      ssl: {{ salt['pillar.get']('dovecot:ssl', False) }}
 {%- endif %}
 
 dovecot_managesieve_port:

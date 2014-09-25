@@ -41,6 +41,10 @@ import logging
 import logging.handlers
 import copy
 
+# TODO:
+# use pysc.Util and use it to initialize logging
+# add or use (if already there) pysc Raven client initialization
+
 def configure_logging():
     log = logging.getLogger('sentry.errors')
     fmt = logging.Formatter("%(asctime)-15s mail[%(process)d] %(message)s",

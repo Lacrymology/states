@@ -60,12 +60,7 @@ def percentFreeMem():
 @pysc.profile('nrpe.check_memory')
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('-w', '--warning', default='80', type=int)
-    parser.add_argument('-c', '--critical', default='90', type=int)
-    args = parser.parse_args()
-
-    critical = args.critical
-    warning = args.warning
+    # TODO: switch to pysc.nrpe + nagiosplugin and use config arguments
 
     pmemUsage = 100 - percentFreeMem()
 

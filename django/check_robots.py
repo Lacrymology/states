@@ -40,6 +40,7 @@ import robotparser
 import sys
 import pysc
 
+# TODO: switch to pyfs.nrpe
 
 @pysc.profile(log=__name__)
 def main():

@@ -57,6 +57,7 @@ def archive_directory(root_directory='/var/lib/backup'):
             archive.close()
             logger.info("Archive %s created from %s", absolute_filename)
 
+# TODO: switch to /etc/python/config.yaml and pysc.Util
 @pysc.profile(log=logger)
 def main():
     logging.config.fileConfig('/etc/backup-archive.conf')

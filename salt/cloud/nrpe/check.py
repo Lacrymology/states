@@ -83,6 +83,7 @@ class ImageIds(nagiosplugin.Resource):
 
     def probe(self):
         log.info("ImageIds.probe started")
+        # TODO: use pysc yaml func and not yaml directly
         # get cloud.profile data
         profile_list = {}
         with open(self.profile_file) as f:
@@ -121,12 +122,7 @@ class ImageIds(nagiosplugin.Resource):
 @nagiosplugin.guarded
 @pysc.profile(log=log)
 def main():
-    argp = bfe.ArgumentParser()
-    argp.add_argument("--profile-file", metavar="PATH",
-                      default="/etc/salt/cloud.profiles")
-    argp.add_argument("--providers-file", metavar="PATH",
-                      default="/etc/salt/cloud.providers")
-    args = argp.parse_args()
+    # switch to pysc.nrpe and use arguments instead
 
     check = bfe.Check(ImageIds(args.profile_file, args.providers_file),
                       MissingImageContext('missing'),

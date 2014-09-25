@@ -37,7 +37,7 @@ import logging
 import pymysql
 import nagiosplugin as nap
 import pysc
-import pysc.nrpe as bfe
+import pysc.nrpe
 
 
 log = logging.getLogger('nagiosplugin.mariadb.server.query')
@@ -77,14 +77,14 @@ class MysqlQuery(nap.Resource):
 @nap.guarded
 @pysc.profile(log=log)
 def main():
-    argp = bfe.ArgumentParser(description=__doc__)
+    argp = pysc.nrpe.ArgumentParser(description=__doc__)
     args = argp.parse_args()
-    config = bfe.ConfigFile.from_arguments(args)
+    config = pysc.nrpe.ConfigFile.from_arguments(args)
     kwargs = config.kwargs('host', 'user', 'passwd', 'database')
     kwargs['query'] = config.get_argument('query', 'select @@max_connections;')
     critical = config.get_argument('critical', '1:')
-    check = bfe.Check(MysqlQuery(**kwargs),
-                      nap.ScalarContext('records', critical, critical))
+    check = pysc.nrpe.Check(MysqlQuery(**kwargs),
+                            nap.ScalarContext('records', critical, critical))
     check.main(args)
 
 

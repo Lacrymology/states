@@ -43,7 +43,6 @@ import pysc
 import nagiosplugin as nap
 
 
-logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger(__name__)
 
 

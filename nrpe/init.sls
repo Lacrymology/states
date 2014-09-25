@@ -38,6 +38,7 @@ include:
   - bash.nrpe
   - cron
   - cron.nrpe
+  - hostname
   - local
 {% if 'graphite_address' in pillar %}
   - nrpe.diamond
@@ -305,6 +306,7 @@ nsca_passive:
       - module: nrpe-virtualenv
       - file: /etc/nagios/nsca.yaml
       - file: /etc/nagios/nsca.d
+      - file: hostname
 
 {% from 'nrpe/passive.sls' import passive_check with context %}
 {{ passive_check('nrpe') }}

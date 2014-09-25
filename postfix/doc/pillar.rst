@@ -148,7 +148,7 @@ Postfix will receive email for those domains and forward to addresses specified
 in ``postfix:aliases``. WARNING! ensuring that these values must not be set
 in ``postfix:mydestination`` pillar.
 
-Default: ``[]`` - empty list.
+Default: ``$virtual_alias_maps`` - Postfix default value.
 
 Example, if one wants to receive email for address salt@example.org then
 forward it to email saltstack@example.com, those pillar keys should be set::

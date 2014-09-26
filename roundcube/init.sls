@@ -65,6 +65,17 @@ roundcube:
     - if_missing: {{ roundcubedir }}
     - require:
       - file: /usr/local
+  cmd:
+    - wait
+{#- Roundcube after extracting has weird uid:gid (501:80), change them once.
+    This does not use recurse with file.directory as its buggy and change
+    file mode even when that option not specified (tested in 0.17.5)
+#}
+    - name: chown -R www-data:www-data {{ roundcubedir }}
+    - require:
+      - user: web
+    - watch:
+      - archive: roundcube
   postgres_user:
     - present
     - name: {{ dbuser }}
@@ -87,14 +98,14 @@ roundcube:
     - group: www-data
     - mode: 750
     - require:
-      - archive: roundcube
+      - cmd: roundcube
       - user: web
 
 {{ roundcubedir }}/installer:
   file:
     - absent
     - require:
-      - archive: roundcube
+      - cmd: roundcube
 
 {{ roundcubedir }}/bin:
   file:
@@ -129,7 +140,7 @@ roundcube:
     - require:
       - file: {{ roundcubedir }}
       - user: web
-      - archive: roundcube
+      - cmd: roundcube
       - file: {{ roundcubedir }}/config/main.inc.php
       - file: {{ roundcubedir }}/config/db.inc.php
 
@@ -149,7 +160,7 @@ roundcube_password_plugin_ldap_driver_dependency:
     - require:
       - file: {{ roundcubedir }}
       - user: web
-      - archive: roundcube
+      - cmd: roundcube
       - pkg: roundcube_password_plugin_ldap_driver_dependency
 
 {{ roundcubedir }}/plugins/managesieve/config.inc.php:
@@ -163,7 +174,7 @@ roundcube_password_plugin_ldap_driver_dependency:
     - require:
       - file: {{ roundcubedir }}
       - user: web
-      - archive: roundcube
+      - cmd: roundcube
 
 {% for dir in ('logs', 'temp') %}
 {{ roundcubedir }}/{{ dir }}:
@@ -237,7 +248,7 @@ roundcube-uwsgi:
       - file: /etc/uwsgi/roundcube.yml
     - watch:
       - file: {{ roundcubedir }}/config/config.inc.php
-      - archive: roundcube
+      - cmd: roundcube
       - pkg: php5-pgsql
       - pkg: roundcube_password_plugin_ldap_driver_dependency
 

@@ -47,6 +47,8 @@ symlink-libphp5.so:
     - name: /sbin/ldconfig
     - watch:
       - file: symlink-libphp5.so
+    - watch_in:
+      - cmd: uwsgi_emperor
 {%- endif %}
 
 extend:
@@ -58,8 +60,3 @@ extend:
     file:
       - require:
         - pkg: php-dev
-{%- if grains['osrelease']|float == 12.04 %}
-    cmd:
-      - watch:
-        - cmd: symlink-libphp5.so
-{%- endif -%}

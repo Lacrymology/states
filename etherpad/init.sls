@@ -216,12 +216,13 @@ etherpad:
     - require:
       - pkg: nginx
       - service: etherpad
+    - watch_in:
+      - service: nginx
 
+{%- if salt['pillar.get']('etherpad:ssl', False) %}
 extend:
   nginx:
     service:
       - watch:
-        - file: /etc/nginx/conf.d/etherpad.conf
-{%- if salt['pillar.get']('etherpad:ssl', False) %}
         - cmd: ssl_cert_and_key_for_{{ pillar['etherpad']['ssl'] }}
 {%- endif %}

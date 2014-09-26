@@ -59,9 +59,5 @@ cron_sendmail_patch:
     - require:
       - pkg: cron
       - file: /usr/bin/ravenmail
-
-extend:
-  cron:
-    service:
-      - watch:
-        - cmd: cron_sendmail_patch
+    - watch_in:
+      - service: cron

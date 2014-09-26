@@ -148,6 +148,8 @@ graphite-web:
       - pkg: graphite-web
       - pkg: python-dev
       - pkg: postgresql-dev
+    - watch_in:
+      - service: memcached
   pkg:
     - installed
     - name: libcairo2-dev
@@ -240,6 +242,8 @@ graphite_settings:
       - user: web
       - user: graphite
       - module: graphite-web
+    - watch_in:
+      - service: memcached
   postgres_user:
     - present
     - name: {{ salt['pillar.get']('graphite:db:username', 'graphite') }}
@@ -269,6 +273,8 @@ graphite_settings:
       - service: rsyslog
     - watch:
       - module: graphite-web
+    - watch_in:
+      - service: memcached
 
 {#-
  load default user this way to prevent race condition between uWSGI process
@@ -335,18 +341,13 @@ graphite_admin_user:
     - require:
       - file: graphite-web-uwsgi
       - pkg: nginx
+    - watch_in:
+      - service: nginx
 
 extend:
-  memcached:
-    service:
-      - watch:
-        - module: graphite_settings
-        - file: graphite_settings
-        - module: graphite-web
   nginx:
     service:
       - watch:
-        - file: /etc/nginx/conf.d/graphite.conf
         - user: graphite
 {% if salt['pillar.get']('graphite:ssl', False) %}
         - cmd: ssl_cert_and_key_for_{{ pillar['graphite']['ssl'] }}

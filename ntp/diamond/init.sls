@@ -55,11 +55,11 @@ diamond_ntp:
     - source: salt://diamond/basic_collector.jinja2
     - require:
       - file: /etc/diamond/collectors
+    - watch_in:
+      - service: diamond
 
 extend:
   diamond:
     service:
       - require:
         - service: ntp
-      - watch:
-        - file: diamond_ntp

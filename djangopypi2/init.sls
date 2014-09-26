@@ -295,12 +295,13 @@ djangomod module, which is just a helper to build our command and run it.
     - require:
       - pkg: nginx
       - file: djangopypi2-uwsgi
+    - watch_in:
+      - service: nginx
 
+{% if salt['pillar.get']('djangopypi2:ssl', False) %}
 extend:
   nginx:
     service:
       - watch:
-        - file: /etc/nginx/conf.d/djangopypi2.conf
-{% if salt['pillar.get']('djangopypi2:ssl', False) %}
         - cmd: ssl_cert_and_key_for_{{ pillar['djangopypi2']['ssl'] }}
 {% endif %}

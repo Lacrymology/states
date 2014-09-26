@@ -45,6 +45,8 @@ postfix_diamond_collector:
     - source: salt://postfix/diamond/config.jinja2
     - require:
       - file: /etc/diamond/collectors
+    - watch_in:
+      - service: diamond
 
 postfix_diamond_resources:
   file:
@@ -124,15 +126,14 @@ postfix_stats:
       - virtualenv: diamond
     - watch:
       - file: postfix_stats-requirements
+    - watch_in:
+      - service: diamond
 
 {{ manage_upstart_log('postfix_stats') }}
 
 extend:
   diamond:
     service:
-      - watch:
-        - file: postfix_diamond_collector
-        - module: postfix_stats
       - require:
         - service: rsyslog
         - service: postfix

@@ -54,6 +54,8 @@ mysql_diamond_collector:
     - require:
       - file: /etc/diamond/collectors
       - service: mysql-server
+    - watch_in:
+      - service: diamond
 
 mysql_diamond_resources:
   file:
@@ -98,12 +100,11 @@ diamond_mysql_python:
       - pkg: libmariadbclient-dev
     - watch:
       - file: diamond_mysql_python
+    - watch_in:
+      - service: diamond
 
 extend:
   diamond:
     service:
-      - watch:
-        - file: mysql_diamond_collector
-        - module: diamond_mysql_python
       - require:
         - service: mysql-server

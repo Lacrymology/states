@@ -142,12 +142,13 @@ shinken-broker:
     - require:
       - file: /etc/shinken
       - user: shinken
+    - watch_in:
+      - service: nginx
 
+{% if ssl %}
 extend:
   nginx:
     service:
       - watch:
-        - file: /etc/nginx/conf.d/shinken-web.conf
-{% if ssl %}
         - cmd: ssl_cert_and_key_for_{{ pillar['shinken']['ssl'] }}
 {% endif %}

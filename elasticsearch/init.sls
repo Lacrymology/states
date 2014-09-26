@@ -159,9 +159,11 @@ elasticsearch_old_version:
     - template: jinja
     - user: www-data
     - group: www-data
+    - mode: 400
     - require:
       - pkg: nginx
-    - mode: 400
+    - watch_in:
+      - service: nginx
     - source: salt://nginx/proxy.jinja2
     - context:
       destination: http://127.0.0.1:9200
@@ -175,14 +177,11 @@ elasticsearch_old_version:
 {% for allowed in salt['pillar.get']('elasticsearch:https_allowed', []) %}
         - {{ allowed }}
 {% endfor %}
-{% endif %}
 
-{% if ssl %}
 extend:
   nginx:
     service:
       - watch:
-        - file: /etc/nginx/conf.d/elasticsearch.conf
         - cmd: ssl_cert_and_key_for_{{ pillar['elasticsearch']['ssl'] }}
 {% endif %}
 

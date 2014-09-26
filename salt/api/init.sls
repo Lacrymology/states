@@ -67,6 +67,8 @@ user_{{ user }}:
 /etc/salt/master.d/ui.conf:
   file:
     - absent
+    - watch_in:
+      - service: salt-master
 
 /etc/salt/master.d/api.conf:
   file:
@@ -78,6 +80,8 @@ user_{{ user }}:
     - mode: 400
     - require:
       - pkg: salt-master
+    - watch_in:
+      - service: salt-master
 
 {#- TODO: remove that statement in >= 2014-04 #}
 {{ opts['cachedir'] }}/salt-api-requirements.txt:
@@ -117,6 +121,9 @@ salt-ui:
     - mode: 440
     - require:
       - pkg: nginx
+      - {{ salt_ui_module }}: salt-ui
+    - watch_in:
+      - service: nginx
 
 {#- PID file owned by root, no need to manage #}
 {%- from "macros.jinja2" import salt_version with context %}
@@ -166,16 +173,10 @@ salt_api_old_version:
       - pkg: salt-api
 {%- endif %}
 
+{% if salt['pillar.get']('salt_master:ssl', False) %}
 extend:
   nginx:
     service:
       - watch:
-        - file: /etc/nginx/conf.d/salt-api.conf
-{% if salt['pillar.get']('salt_master:ssl', False) %}
         - cmd: ssl_cert_and_key_for_{{ pillar['salt_master']['ssl'] }}
 {% endif %}
-  salt-master:
-    service:
-      - watch:
-        - file: /etc/salt/master.d/api.conf
-        - file: /etc/salt/master.d/ui.conf

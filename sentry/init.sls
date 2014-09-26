@@ -86,6 +86,8 @@ sentry:
       - pkg: python-dev
       - pkg: postgresql-dev
       - file: sentry
+    - watch_in:
+      - service: memcached
   cmd:
     - wait
     - name: find /usr/local/sentry -name '*.pyc' -delete
@@ -162,6 +164,8 @@ sentry_settings:
     - watch:
       - module: sentry
       - file: sentry_settings
+    - watch_in:
+      - service: memcached
 
 /usr/local/sentry/manage:
   file:
@@ -219,6 +223,8 @@ sentry-migrate-fake:
       - pkg: nginx
       - file: sentry-uwsgi
       - file: /var/lib/deployments/sentry
+    - watch_in:
+      - service: nginx
 
 /var/lib/deployments/sentry:
     file:
@@ -248,16 +254,10 @@ sentry_collectstatic:
       - file: sentry_settings
       - module: sentry
 
+{% if salt['pillar.get']('sentry:ssl', False) %}
 extend:
-  memcached:
-    service:
-      - watch:
-        - module: sentry
-        - cmd: sentry_settings
   nginx:
     service:
       - watch:
-        - file: /etc/nginx/conf.d/sentry.conf
-{% if salt['pillar.get']('sentry:ssl', False) %}
         - cmd: ssl_cert_and_key_for_{{ pillar['sentry']['ssl'] }}
 {% endif %}

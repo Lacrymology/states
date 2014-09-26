@@ -235,13 +235,14 @@ host_{{ node }}:
       destination: http://127.0.0.1:15672
       ssl: {{ salt['pillar.get']('rabbitmq:ssl', False) }}
       hostnames: {{ pillar['rabbitmq']['hostnames'] }}
+    - watch_in:
+      - service: nginx
 
+{% if salt['pillar.get']('rabbitmq:ssl', False) %}
 extend:
   nginx:
     service:
       - watch:
-        - file: /etc/nginx/conf.d/rabbitmq.conf
-{% if salt['pillar.get']('rabbitmq:ssl', False) %}
         - cmd: ssl_cert_and_key_for_{{ pillar['rabbitmq']['ssl'] }}
 {% endif %}
 

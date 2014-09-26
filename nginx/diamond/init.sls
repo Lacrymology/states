@@ -55,11 +55,11 @@ nginx_diamond_collector:
     - source: salt://nginx/diamond/config.jinja2
     - require:
       - file: /etc/diamond/collectors
+    - watch_in:
+      - service: diamond
 
 extend:
   diamond:
     service:
-      - watch:
-        - file: nginx_diamond_collector
       - require:
         - service: nginx

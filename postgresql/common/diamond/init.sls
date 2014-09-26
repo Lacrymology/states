@@ -57,6 +57,8 @@ diamond_collector-psycopg2:
       - pkg: python-dev
       - pkg: postgresql-dev
       - file: diamond_collector-psycopg2
+    - watch_in:
+      - service: diamond
 
 postgresql_diamond_resources:
   file:
@@ -81,11 +83,11 @@ postgresql_diamond_collector:
     - source: salt://postgresql/common/diamond/config.jinja2
     - require:
       - file: /etc/diamond/collectors
+    - watch_in:
+      - service: diamond
 
 extend:
   diamond:
     service:
       - watch:
-        - file: postgresql_diamond_collector
-        - module: diamond_collector-psycopg2
         - postgres_database: postgresql_monitoring

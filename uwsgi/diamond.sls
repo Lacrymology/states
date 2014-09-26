@@ -55,10 +55,6 @@ diamond_ksm:
     - source: salt://diamond/basic_collector.jinja2
     - require:
       - file: /etc/diamond/collectors
-
-extend:
-  diamond:
-    service:
-      - watch:
-        - file: diamond_ksm
+    - watch_in:
+      - service: diamond
 {%- endif -%}

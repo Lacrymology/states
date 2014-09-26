@@ -57,9 +57,5 @@ elasticsearch_diamond_resources:
     - source: salt://elasticsearch/diamond/config.jinja2
     - require:
       - file: /etc/diamond/collectors
-
-extend:
-  diamond:
-    service:
-      - watch:
-        - file: /etc/diamond/collectors/ElasticSearchCollector.conf
+    - watch_in:
+      - service: diamond

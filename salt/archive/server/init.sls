@@ -145,6 +145,8 @@ archive_rsync:
     - require:
       - file: salt_archive
       - pkg: nginx
+    - watch_in:
+      - service: nginx
 
 salt-archive-clamav:
   file:
@@ -186,10 +188,6 @@ salt_archive_{{ key }}:
 {%- endfor %}
 
 extend:
-  cron:
-    service:
-      - watch:
-        - file: /etc/cron.d/salt-archive
   web:
     user:
       - groups:
@@ -199,7 +197,6 @@ extend:
   nginx:
     service:
       - watch:
-        - file: /etc/nginx/conf.d/salt_archive.conf
         - user: salt_archive
 {%- if ssl %}
         - cmd: ssl_cert_and_key_for_{{ ssl }}

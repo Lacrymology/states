@@ -56,11 +56,11 @@ varnish_diamond_VarnishCollector:
     - source: salt://varnish/diamond/config.jinja2
     - require:
       - file: /etc/diamond/collectors
+    - watch_in:
+      - service: diamond
 
 extend:
   diamond:
     service:
-      - watch:
-        - file: varnish_diamond_VarnishCollector
       - require:
         - service: varnish

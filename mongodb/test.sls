@@ -51,9 +51,5 @@ test:
       - file: /usr/local/bin/backup-mongodb-all
       - cmd: mongodb_test_generate_sample_db_for_backup_test
       - sls: mongodb.backup
-
-extend:
-  mongodb_repair_post:
-    service:
-      - require_in:
-        - cmd: test
+    - require_in:
+      - service: mongodb_repair_post

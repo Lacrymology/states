@@ -76,6 +76,10 @@ diamond-pyrabbit:
       - virtualenv: diamond
     - watch:
       - file: diamond-pyrabbit
+{%- if grains['id'] != master_id %}
+    - require_in:
+      - rabbitmq_cluster: in_rabbitmq_cluster
+{%- endif %}
 
 diamond_rabbitmq:
   file:
@@ -89,18 +93,19 @@ diamond_rabbitmq:
     - require:
       - module: diamond-pyrabbit
       - file: /etc/diamond/collectors
+{%- if grains['id'] != master_id %}
+    - watch_in:
+      - service: diamond
+{%- endif %}
   pkg:
     - latest
     - name: python-httplib2
     - require:
       - cmd: apt_sources
 
+{% if grains['id'] != master_id %}
 extend:
   diamond:
-    service:
-      - watch:
-        - file: diamond_rabbitmq
-{% if grains['id'] != master_id %}
       - require:
         - service: rabbitmq-server
   join_rabbitmq_cluster:

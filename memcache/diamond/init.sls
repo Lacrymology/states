@@ -55,11 +55,11 @@ memcached_diamond_collector:
     - source: salt://memcache/diamond/config.jinja2
     - require:
       - file: /etc/diamond/collectors
+    - watch_in:
+      - service: diamond
 
 extend:
   diamond:
     service:
-      - watch:
-        - file: memcached_diamond_collector
       - require:
         - service: memcached

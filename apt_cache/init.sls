@@ -28,12 +28,13 @@ apt_cache:
     - require:
       - pkg: nginx
       - service: apt_cache
+    - watch_in:
+      - service: nginx
 
+{%- if salt['pillar.get']('apt_cache:ssl', False) %}
 extend:
   nginx:
     service:
       - watch:
-        - file: /etc/nginx/conf.d/apt_cache.conf
-{%- if salt['pillar.get']('apt_cache:ssl', False) %}
         - cmd: ssl_cert_and_key_for_{{ pillar['apt_cache']['ssl'] }}
 {%- endif %}

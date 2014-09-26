@@ -47,6 +47,8 @@ openvpn_diamond_collector:
 {%- endfor %}
     - require:
       - file: /etc/diamond/collectors
+    - watch_in:
+      - service: diamond
 
 openvpn_diamond_resources:
   file:
@@ -59,9 +61,3 @@ openvpn_diamond_resources:
       - |
         [[openvpn]]
         exe = ^\/usr\/sbin\/openvpn$
-
-extend:
-  diamond:
-    service:
-      - watch:
-        - file: openvpn_diamond_collector

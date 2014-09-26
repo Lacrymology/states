@@ -71,6 +71,8 @@ diamond_mongodb:
     - require:
       - module: diamond-pymongo
       - file: /etc/diamond/collectors
+    - watch_in:
+      - service: diamond
 
 mongodb_diamond_resources:
   file:
@@ -87,7 +89,5 @@ mongodb_diamond_resources:
 extend:
   diamond:
     service:
-      - watch:
-        - file: diamond_mongodb
       - require:
         - service: mongodb

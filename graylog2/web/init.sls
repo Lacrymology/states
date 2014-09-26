@@ -195,15 +195,16 @@ graylog2-web:
     - mode: 440
     - require:
       - pkg: nginx
+    - watch_in:
+      - service: nginx
     - context:
       version: {{ version }}
 
+{% if salt['pillar.get']('graylog2:ssl', False) %}
 extend:
   nginx:
     service:
       - watch:
-        - file: /etc/nginx/conf.d/graylog2-web.conf
-{% if salt['pillar.get']('graylog2:ssl', False) %}
         - cmd: ssl_cert_and_key_for_{{ pillar['graylog2']['ssl'] }}
 {% endif %}
 

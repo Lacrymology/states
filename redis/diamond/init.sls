@@ -61,6 +61,8 @@ redis_diamond_resources:
     - source: salt://redis/diamond/config.jinja2
     - require:
       - file: /etc/diamond/collectors
+    - watch_in:
+      - service: diamond
 
 {#- TODO: remove that statement in >= 2014-04 #}
 /usr/local/diamond/redis-requirements.txt:
@@ -88,12 +90,11 @@ diamond_redis:
       - virtualenv: diamond
     - watch:
       - file: diamond_redis
+    - watch_in:
+      - service: diamond
 
 extend:
   diamond:
     service:
-      - watch:
-        - file: /etc/diamond/collectors/RedisCollector.conf
-        - module: diamond_redis
       - require:
         - service: redis

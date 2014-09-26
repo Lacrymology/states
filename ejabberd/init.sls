@@ -168,9 +168,8 @@ ejabberd_reg_user:
     - require:
       - pkg: nginx
       - service: ejabberd
-{%- if salt['pillar.get']('ejabberd:ssl', False) %}
-      - cmd: ssl_cert_and_key_for_{{ pillar['ejabberd']['ssl'] }}
 
+{%- if salt['pillar.get']('ejabberd:ssl', False) %}
 extend:
   nginx:
     service:

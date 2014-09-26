@@ -91,6 +91,8 @@ jenkins_old_version:
     - require:
       - pkg: nginx
       - service: jenkins
+    - watch_in:
+      - service: nginx
 
 /etc/cron.daily/jenkins_delete_old_workspaces.py:
   file:
@@ -107,13 +109,12 @@ jenkins_old_version:
       - pkg: cron
       - module: pysc
 
+{% if salt['pillar.get']('jenkins:ssl', False) %}
 extend:
 {%- from 'macros.jinja2' import change_ssh_key_owner with context %}
 {{ change_ssh_key_owner('jenkins', {'pkg': 'jenkins'}) }}
   nginx:
     service:
       - watch:
-        - file: /etc/nginx/conf.d/jenkins.conf
-{% if salt['pillar.get']('jenkins:ssl', False) %}
         - cmd: ssl_cert_and_key_for_{{ pillar['jenkins']['ssl'] }}
 {% endif %}

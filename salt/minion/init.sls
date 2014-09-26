@@ -44,6 +44,8 @@ salt_minion_master_key:
     - path: /etc/salt/pki/minion/minion_master.pub
     - watch:
       - file: salt-minion
+    - watch_in:
+      - service: salt-minion
 
 {{ opts['cachedir'] }}/pkg_installed.pickle:
   file:
@@ -56,8 +58,6 @@ extend:
     service:
       - require:
         - service: rsyslog
-      - watch:
-        - module: salt_minion_master_key
     pkg:
       - installed
       - require:

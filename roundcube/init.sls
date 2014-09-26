@@ -193,6 +193,8 @@ roundcube_password_plugin_ldap_driver_dependency:
       - file: roundcube-uwsgi
     - context:
       dir: {{ roundcubedir }}
+    - watch_in:
+      - service: nginx
 
 roundcube_initial:
   cmd:
@@ -242,11 +244,10 @@ roundcube-uwsgi:
       - pkg: php5-pgsql
       - pkg: roundcube_password_plugin_ldap_driver_dependency
 
+{%- if salt['pillar.get']('roundcube:ssl', False) %}
 extend:
   nginx:
     service:
       - watch:
-        - file: /etc/nginx/conf.d/roundcube.conf
-{%- if salt['pillar.get']('roundcube:ssl', False) %}
         - cmd: ssl_cert_and_key_for_{{ pillar['roundcube']['ssl'] }}
 {% endif %}

@@ -54,8 +54,10 @@ mode: permission of PID file
   /etc/ssh/keys/{{ owner }}:
     file:
       - user: {{ owner }}
+      - file_mode: 400
       - recurse:
         - user
+        - mode
       - require:
   {%- for k, v in requisites.iteritems() %}
         - {{ k }}: {{ v }}

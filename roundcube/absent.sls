@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
-{% set version = "0.9.0" %}
+{%- set version = "1.0.1" %}
 {% set roundcubedir = "/usr/local/roundcubemail-" + version %}
 
 roundcube_password_plugin_ldap_driver_dependency:

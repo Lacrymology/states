@@ -128,12 +128,13 @@ elasticsearch:
       - file: elasticsearch
       - pkg: elasticsearch
       - pkg: openjdk_jre_headless
-{% if grains['cpuarch'] == 'i686' %}
+{%- if grains['cpuarch'] == 'i686' %}
       - file: /usr/lib/jvm/java-7-openjdk
-{% endif %}
-{% if 'aws' in pillar['elasticsearch'] %}
+{%- endif -%}
+{%- if 'aws' in pillar['elasticsearch'] %}
       - elasticsearch_plugins: elasticsearch
-{% endif %}
+{%- endif %}
+      - user: elasticsearch
   pkg:
     - installed
     - sources:
@@ -144,6 +145,11 @@ elasticsearch:
 {%- endif %}
     - require:
       - pkg: openjdk_jre_headless
+  user:
+    - present
+    - shell: /bin/false
+    - require:
+      - pkg: elasticsearch
 
 {%- if salt['pkg.version']('elasticsearch') not in ('', version) %}
 elasticsearch_old_version:

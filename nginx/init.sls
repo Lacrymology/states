@@ -160,6 +160,7 @@ nginx:
       - file: /etc/nginx/conf.d/{{ filename }}.conf
 {%- endfor %}
       - pkg: nginx
+      - user: nginx
       - file: /usr/bin/mail
 {%- if not salt['pillar.get']('sentry_dsn', False) %}
       - pkg: ssmtp
@@ -178,6 +179,11 @@ nginx:
 {%- for log_type in logger_types %}
       - file: nginx-logger-{{ log_type }}
 {%- endfor %}
+  user:
+    - present
+    - shell: /bin/false
+    - require:
+      - pkg: nginx
 
 {%- if salt['pkg.version']('nginx') not in ('', sub_version) %}
 nginx_old_version:

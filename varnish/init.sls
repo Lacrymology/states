@@ -48,6 +48,8 @@ include:
 varnish:
   pkg:
     - installed
+    - require:
+      - cmd: apt_sources
   service:
     - running
     - enable: True
@@ -60,6 +62,7 @@ varnish:
       - pkg: varnish
       - file: /etc/varnish/default.vcl
       - file: /etc/default/varnish
+      - user: varnish_user
 {# preallocate file to prevent fragment #}
 {# K is too small and T is too large #}
 {% if storage_backend == 'file' and file_size_unit in ['M', 'G'] %}
@@ -72,6 +75,16 @@ varnish:
       - pkg: varnish
       - file: bash
 {% endif %}
+
+{%- for user in ('varnish', 'varnishlog') %}
+{{ user }}_user:
+  user:
+    - present
+    - name: {{ user }}
+    - shell: /bin/false
+    - require:
+      - pkg: varnish
+{%- endfor %}
 
 /etc/varnish/default.vcl:
   file:

@@ -70,6 +70,7 @@ slapd:
 openldap:
   user:
     - present
+    - shell: /bin/false
     - groups:
 {% if ssl %}
       - ssl-cert

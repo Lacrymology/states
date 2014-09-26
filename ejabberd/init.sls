@@ -102,6 +102,7 @@ ejabberd:
       dbuserpass: {{ dbuserpass }}
   user:
     - present
+    - shell: /usr/sbin/nologin
   {%- if salt['pillar.get']('ejabberd:ssl', False) %}
     - groups:
       - ssl-cert

@@ -55,6 +55,7 @@ mongodb:
     - watch:
       - pkg: mongodb
       - file: /etc/mongodb.conf
+      - user: mongodb
   pkg:
     - installed
     - require:
@@ -65,6 +66,11 @@ mongodb:
 {%- else %}
       - mongodb-10gen: http://downloads-distro.mongodb.org/repo/ubuntu-upstart/dists/dist/10gen/binary-{{ grains['debian_arch'] }}/{{ filename }}
 {%- endif %}
+  user:
+    - present
+    - shell: /bin/false
+    - require:
+      - pkg: mongodb
 
 {#- does not use PID, no need to manage #}
 

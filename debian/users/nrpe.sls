@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Bruno Clermont
+Copyright (c) 2014, Quan Tong Anh
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,61 +22,8 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Bruno Clermont <patate@fastmail.cn>
-Maintainer: Bruno Clermont <patate@fastmail.cn>
-
-Install NTP (Network time protocol) server and/or client.
+Author: Quan Tong Anh <quanta@robotinfra.com>
+Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
 include:
-  - apt
-  - rsyslog
-
-{% if 'servers' in pillar['ntp'] %}
-ntpdate:
-  pkg:
-    - installed
-    - require:
-      - cmd: apt_sources
-  file:
-    - managed
-    - name: /etc/default/ntpdate
-    - template: jinja
-    - source: salt://ntp/ntpdate.jinja2
-    - user: root
-    - group: root
-    - mode: 440
-    - require:
-      - pkg: ntpdate
-{% endif %}
-
-ntp:
-  pkg:
-    - installed
-    - require:
-      - cmd: apt_sources
-  user:
-    - present
-    - shell: /bin/false
-    - require:
-      - pkg: ntp
-  file:
-    - managed
-    - name: /etc/ntp.conf
-    - template: jinja
-    - source: salt://ntp/config.jinja2
-    - user: root
-    - group: root
-    - mode: 440
-    - require:
-      - pkg: ntp
-  service:
-    - running
-    - enable: True
-    - order: 50
-    - require:
-      - pkg: ntp
-      - service: rsyslog
-    - watch:
-      - file: ntp
-      - user: ntp
-{#- PID file owned by root, no need to manage #}
+  - apt.nrpe

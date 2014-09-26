@@ -117,6 +117,20 @@ Not so good::
       - require:
         - pkg: mariadb-server
 
+``pkg`` state module
+~~~~~~~~~~~~~~~~~~~~
+
+Whenever you install a package using ``pkg`` state module, check if there is an
+user created. Then please make sure that the shell of that user is
+``/usr/sbin/nologin`` instead of leaving it as default (for e.g, ``/bin/sh``)::
+
+  dovecot-agent:
+    user:
+      - present
+      - shell: /usr/sbin/nologin
+      - groups:
+        - mail
+
 StateID
 -------
 

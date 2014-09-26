@@ -34,7 +34,7 @@ web:
     - gid_from_name: True
     - system: True
     - fullname: www-data
-    - shell: /bin/false
+    - shell: /usr/sbin/nologin
     - home: /var/www
     - createhome: True
     - password: "*"

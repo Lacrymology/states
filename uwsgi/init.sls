@@ -55,12 +55,19 @@ uwsgi_upgrade_remove_old_app_config_{{ filename }}:
     {%- endif %}
 {%- endfor %}
 
+{%- for previous_version in ('1.9.17.1', ) %}
+/usr/local/uwsgi-{{ previous_version }}:
+  file:
+    - absent
+{%- endfor %}
+
 uwsgi_upgrade_remove_old_version:
   file:
     - absent
     - name: /usr/local/uwsgi
 
-{%- set version = '1.9.17.1' -%}
+{%- set version = '2.0.7' -%}
+{%- set source_hash = 'c18da6536f2f47a204814225ba695042' %}
 {%- set extracted_dir = '/usr/local/uwsgi-{0}'.format(version) %}
 
 /etc/init/uwsgi.conf:
@@ -81,20 +88,6 @@ uwsgi_upgrade_remove_old_version:
     - source: salt://uwsgi/config.jinja2
     - mode: 440
 
-uwsgi_patch_carbon_name_order:
-  pkg:
-    - installed
-    - name: patch
-{#- https://github.com/unbit/uwsgi/issues/534 #}
-  file:
-    - patch
-    - name: {{ extracted_dir }}/plugins/carbon/carbon.c
-    - source: salt://uwsgi/carbon.patch
-    - hash: md5=1f96187b79550be801a9ab1397cb66ca
-    - require:
-      - archive: uwsgi_build
-      - pkg: uwsgi_patch_carbon_name_order
-
 uwsgi_build:
   archive:
     - extracted
@@ -104,7 +97,7 @@ uwsgi_build:
 {%- else %}
     - source: http://projects.unbit.it/downloads/uwsgi-{{ version }}.tar.gz
 {%- endif %}
-    - source_hash: md5=501f29ad4538193c0ef585b4cef46bcf
+    - source_hash: md5={{ source_hash }}
     - archive_format: tar
     - tar_options: z
     - if_missing: {{ extracted_dir }}
@@ -130,7 +123,6 @@ uwsgi_build:
       - archive: uwsgi_build
       - file: uwsgi_build
       - pkg: python-dev
-      - file: uwsgi_patch_carbon_name_order
 
 uwsgi_sockets:
   file:

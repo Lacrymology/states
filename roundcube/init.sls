@@ -85,11 +85,7 @@ roundcube:
     - directory
     - user: www-data
     - group: www-data
-    - dir_mode: 750
-    - file_mode: 640
-    - recurse:
-      - user
-      - group
+    - mode: 750
     - require:
       - archive: roundcube
       - user: web
@@ -123,7 +119,6 @@ roundcube:
     - managed
     - source: salt://roundcube/config.jinja2
     - template: jinja
-    - makedirs: True
     - user: www-data
     - group: www-data
     - mode: 440

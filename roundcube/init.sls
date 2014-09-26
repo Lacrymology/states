@@ -62,7 +62,7 @@ roundcube:
     - source_hash: md5=2e1629ea21615005b0a991e591f36363
     - archive_format: tar
     - tar_options: z
-    - if_missing: /usr/local/roundcubemail-{{ version }}
+    - if_missing: {{ roundcubedir }}
     - require:
       - file: /usr/local
   postgres_user:
@@ -79,33 +79,6 @@ roundcube:
     - runas: postgres
     - require:
       - postgres_user: roundcube
-
-roundcube-uwsgi:
-  file:
-    - managed
-    - name: /etc/uwsgi/roundcube.yml
-    - source: salt://uwsgi/template.jinja2
-    - template: jinja
-    - user: www-data
-    - group: www-data
-    - mode: 440
-    - context:
-      appname: roundcube
-      chdir: {{ roundcubedir }}
-    - require:
-      - service: uwsgi_emperor
-      - module: roundcube_initial
-  module:
-    - wait
-    - name: file.touch
-    - m_name: /etc/uwsgi/roundcube.yml
-    - require:
-      - file: /etc/uwsgi/roundcube.yml
-    - watch:
-      - file: {{ roundcubedir }}/config/config.inc.php
-      - archive: roundcube
-      - pkg: php5-pgsql
-      - pkg: roundcube_password_plugin_ldap_driver_dependency
 
 {{ roundcubedir }}:
   file:
@@ -245,6 +218,33 @@ roundcube_initial:
     - runas: postgres
     - watch:
       - cmd: roundcube_initial
+
+roundcube-uwsgi:
+  file:
+    - managed
+    - name: /etc/uwsgi/roundcube.yml
+    - source: salt://uwsgi/template.jinja2
+    - template: jinja
+    - user: www-data
+    - group: www-data
+    - mode: 440
+    - context:
+      appname: roundcube
+      chdir: {{ roundcubedir }}
+    - require:
+      - service: uwsgi_emperor
+      - module: roundcube_initial
+  module:
+    - wait
+    - name: file.touch
+    - m_name: /etc/uwsgi/roundcube.yml
+    - require:
+      - file: /etc/uwsgi/roundcube.yml
+    - watch:
+      - file: {{ roundcubedir }}/config/config.inc.php
+      - archive: roundcube
+      - pkg: php5-pgsql
+      - pkg: roundcube_password_plugin_ldap_driver_dependency
 
 extend:
   nginx:

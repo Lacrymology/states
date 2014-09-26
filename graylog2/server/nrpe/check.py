@@ -43,7 +43,7 @@ import pysc.nrpe
 import nagiosplugin
 import requests
 
-log = logging.getLogger('nagiosplugin.graylog2.server.throughput')
+log = logging.getLogger('nagiosplugin.graylog2.server.new_logs')
 
 
 class Graylog2Throughput(nagiosplugin.Resource):

@@ -44,7 +44,7 @@ import nagiosplugin as nap
 import pysc
 from pysc import nrpe as bfe
 
-log = logging.getLogger('nagiosplugin.s3lite.backup_age')
+log = logging.getLogger('nagiosplugin.backup.client.s3lite')
 
 
 class BackupAge(nap.Resource):

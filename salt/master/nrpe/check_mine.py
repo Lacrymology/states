@@ -50,7 +50,7 @@ import nagiosplugin as nap
 import pysc
 import pysc.nrpe
 
-log = logging.getLogger('nagiosplugin.salt.master.mine_minion')
+log = logging.getLogger('nagiosplugin.salt.master.mine')
 
 
 class MineMinion(nap.Resource):

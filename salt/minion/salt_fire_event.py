@@ -41,6 +41,7 @@ import json
 import argparse
 import logging
 
+# TODO: switch to pyrc
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
@@ -64,7 +65,7 @@ def main():
 
     caller.sminion.functions['event.fire_master'](data=payload, tag=tag)
 
-    logger = logging.getLogger(sys.argv[0])
+    logger = logging.getLogger(__name__)
     handler = logging.FileHandler(filename=os.path.join(syspaths.LOGS_DIR, 'event'))
     formatter = logging.Formatter('%(asctime)s [%(name)s] [%(levelname)s] %(message)s')
     handler.setFormatter(formatter)

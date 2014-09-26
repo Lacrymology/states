@@ -40,7 +40,7 @@ import pysc
 import pysc.nrpe
 
 
-log = logging.getLogger('nagiosplugin.mariadb.server.query')
+log = logging.getLogger('nagiosplugin.mysql.query')
 
 
 class MysqlQuery(nap.Resource):

@@ -40,7 +40,7 @@ import boto
 import pysc
 from check_backup_base import BackupFile, main
 
-log = logging.getLogger('nagiosplugin.backup.s3')
+log = logging.getLogger('nagiosplugin.backup.client.s3')
 
 
 class S3BackupFile(BackupFile):

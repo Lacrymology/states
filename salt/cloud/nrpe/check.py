@@ -30,7 +30,6 @@ file
 """
 import logging
 import subprocess
-import yaml
 
 __author__ = 'Tomas Neme'
 __maintainer__ = 'Tomas Neme'
@@ -40,7 +39,7 @@ import nagiosplugin
 import pysc
 from pysc import nrpe as bfe
 
-log = logging.getLogger("nagiosplugin.salt.cloud.image_ids")
+log = logging.getLogger("nagiosplugin.salt.cloud.images")
 
 
 class Summary(nagiosplugin.Summary):

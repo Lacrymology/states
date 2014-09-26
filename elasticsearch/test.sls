@@ -38,7 +38,7 @@ include:
   - ssl.nrpe
 {% endif %}
 
-elasticsearch_cluster:
+elasticsearch-es_cluster:
   monitoring:
     - run_check
     - wait: 60

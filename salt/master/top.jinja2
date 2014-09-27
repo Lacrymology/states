@@ -28,35 +28,11 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 {#- empty is True if no roles (or roles.absent) are applied -#}
 {%- set local = {
     'empty': True,
-    'saltenv': salt['pillar.get']('branch', 'base'),
     'roles': salt['pillar.get']('roles', []),
-    'global_roles': salt['pillar.get']('global_roles', [])
+    'global_roles': salt['common.global_roles']()
     } -%}
-{%- if local.saltenv == 'master' -%}
-  {%- do local.update({'saltenv': 'base'}) -%}
-{%- endif -%}
-{%- if local.global_roles in ('', []) -%}
-    {%- do local.update({'global_roles': []}) -%}
-    {%- for role_dir in salt['cp.list_master_dirs'](local.saltenv, 'roles') -%}
-        {#- cp.list_master_dirs return 'roles' which is root dir, ignore.
-            only consider sub-directories -#}
-        {%- if '/' in role_dir -%}
-            {#- append the roles/*$rolename* -#}
-            {%- do local.global_roles.append(role_dir.split('/')[1]) -%}
-        {%- endif -%}
-    {%- endfor -%}
-{%- endif -%}
 
-{#- local mode don't support gitfs and multiple branches, force to use
-   'base' environment -#}
-{%- if opts['file_client'] == 'local' %}
-base:
-{%- else -%}
-  {#- file_client not in local mode.
-      salt gitfs rename master branch into base. which is also the default
-      value #}
-{{ local.saltenv }}:
-{%- endif -%}
+{{ salt['common.saltenv']() }}:
   {#- target all minions #}
   '*':
 {%- if not local.roles and not local.global_roles -%}

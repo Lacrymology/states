@@ -25,46 +25,56 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-{%- set saltenv =  salt['pillar.get']('branch', 'base') -%}
-{%- if saltenv == 'master' -%}
-  {%- set saltenv = 'base' -%}
-{%- endif %}
-{%- set roles = salt['pillar.get']('roles', []) -%}
-{%- set global_roles = salt['pillar.get']('global_roles', []) -%}
-{%- if global_roles in ('', []) -%}
-    {%- set global_roles = salt['cp.list_master_dirs'](saltenv, 'roles') -%}
+{#- empty is True if no roles (or roles.absent) are applied -#}
+{%- set local = {
+    'empty': True,
+    'saltenv': salt['pillar.get']('branch', 'base'),
+    'roles': salt['pillar.get']('roles', []),
+    'global_roles': salt['pillar.get']('global_roles', [])
+    } -%}
+{%- if local.saltenv == 'master' -%}
+  {%- do local.update({'saltenv': 'base'}) -%}
+{%- endif -%}
+{%- if local.global_roles in ('', []) -%}
+    {%- do local.update({'global_roles': []}) -%}
+    {%- for role_dir in salt['cp.list_master_dirs'](local.saltenv, 'roles') -%}
+        {#- cp.list_master_dirs return 'roles' which is root dir, ignore.
+            only consider sub-directories -#}
+        {%- if '/' in role_dir -%}
+            {#- append the roles/*$rolename* -#}
+            {%- do local.global_roles.append(role_dir.split('/')[1]) -%}
+        {%- endif -%}
+    {%- endfor -%}
 {%- endif -%}
 
 {#- local mode don't support gitfs and multiple branches, force to use
-   'base' environment #}
+   'base' environment -#}
 {%- if opts['file_client'] == 'local' %}
 base:
 {%- else -%}
   {#- file_client not in local mode.
       salt gitfs rename master branch into base. which is also the default
       value #}
-{{ saltenv }}:
+{{ local.saltenv }}:
 {%- endif -%}
   {#- target all minions #}
   '*':
-{%- if not roles and not global_roles -%}
+{%- if not local.roles and not local.global_roles -%}
     {#- do nothing #}
     - salt.noop
 {%- else -%}
-    {#- empty is True if no roles (or roles.absent) are applied -#}
-    {%- set check = {'empty': True} -%}
     {#- list all minion's role and absent role it's not member of -#}
-    {%- for role in global_roles -%}
-        {%- if role in roles -%}
-            {%- do check.update({'empty': False}) %}
+    {%- for role in local.global_roles -%}
+        {%- if role in local.roles -%}
+            {%- do local.update({'empty': False}) %}
     - roles.{{ role }}
         {%- elif salt['pillar.get']('roles_absent', False) -%}
-            {%- do check.update({'empty': False}) %}
+            {%- do local.update({'empty': False}) %}
     - roles.{{ role }}.absent
         {%- endif -%}
     {%- endfor -%}
     {#- it's possible that a minion don't have any roles, so do nothing -#}
-    {%- if check.empty %}
+    {%- if local.empty %}
     - salt.noop
     {%- endif -%}
 {%- endif -%}

@@ -216,43 +216,6 @@ def passive_checks_for_formula(state_name):
     return output
 
 
-def update():
-    '''
-    Run a salt function specified in pillar data.
-    Pass specified kwargs to it.
-
-    This intead to be used to run arbitrary salt module and any kwargs to work
-    around a limitation of salt regarding the scheduler.
-
-    example of pillar data:
-        monitoring:
-          update:
-            - salutil.refresh_pillar
-            - state.sls:
-                mods: whatever
-                test: True
-
-    or:
-
-        monitoring:
-           update:
-             - state.highstate
-    '''
-    pillar = __salt__['pillar.get']('monitoring:update', [])
-    if not pillar:
-        logger.warn("Not pillar key defined, do nothing.")
-    else:
-        for mod in pillar:
-            if isinstance(mod, basestring):
-                logger.debug("output of %s: %s", mod, str(__salt__[mod]()))
-            elif isinstance(mod, dict):
-                func_name = mod.keys()[0]
-                logger.debug("output of %s: %s", str(mod),
-                             __salt__[func_name](**mod[func_name]))
-            else:
-                logger.error("Invalid update value %s", str(mod))
-
-
 class Check(object):
     def __init__(self, check_data, minions=None):
         self.data = check_data

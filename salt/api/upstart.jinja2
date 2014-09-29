@@ -34,6 +34,4 @@ start on (net-device-up
           and runlevel [2345])
 stop on runlevel [!2345]
 
-script
-exec salt-api
-end script
+exec /usr/bin/salt-api

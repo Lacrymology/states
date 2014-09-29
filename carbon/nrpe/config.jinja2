@@ -58,27 +58,27 @@ carbon_relay_procs:
   description: Carbon Relay Instance
   command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -u graphite -C python -a "/usr/local/graphite/bin/carbon-relay.py --config=/etc/graphite/carbon.conf start"'
 
-carbone_plaintext_port_remote:
+carbon_plaintext_port_remote:
   description: Carbon Remote Port PlainText Protocol
   check: check_tcp!2003
   passive: False
   dependencies:
-    - carbone_pickle_port
+    - carbon_pickle_port
 
-carbone_pickle_port_remote:
+carbon_pickle_port_remote:
   description: Carbon Remote Port Pickle Protocol
   check: check_tcp!2004
   passive: False
   dependencies:
-    - carbone_pickle_port
+    - carbon_pickle_port
 
-carbone_plaintext_port:
+carbon_plaintext_port:
   description: Carbon Local Port PlainText Protocol
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 2003
   dependencies:
     - carbon_cache_procs
 
-carbone_pickle_port:
+carbon_pickle_port:
   description: Carbon Local Port Pickle Protocol
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 2004
   dependencies:

@@ -279,7 +279,7 @@ define service {
 {%- endfor -%}
 
 {%- if pillar['shinken']['architecture']['broker']|length == 2 -%}
-    {%- for service in ('shinken_broker_http', 'shinken_broker_web') %}
+    {%- for service in ('shinken_broker_http', 'shinken_broker_http_port') %}
 define service {
     use salt-service
     host_name {{ pillar['shinken']['architecture']['broker'][0] }}

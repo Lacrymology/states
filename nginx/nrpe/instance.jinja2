@@ -78,7 +78,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
   dependencies:
     - nginx_master
     {%- for extra_dependency in extra_dependencies %}
-    -{{ extra_dependency }}
+    - {{ extra_dependency }}
     {%- endfor -%}
 
 {{ formula }}_nginx_https_certificate:

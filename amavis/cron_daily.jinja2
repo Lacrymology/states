@@ -25,12 +25,17 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
-#!/bin/sh
+#!/bin/bash
 # {{ pillar['message_do_not_modify'] }}
 #
 #  Daily maintenance for amavisd-new
 #  $Id: amavisd-new.cron.daily 930 2006-08-10 13:38:45Z hmh $
-#
+
+# log start stop time to syslog
+source /usr/local/share/salt_common.sh
+log_start_script "$@"
+trap "log_stop_script \$?" EXIT
+
 export TERM=dumb
 test -e /usr/sbin/amavisd-new-cronjob && exec /usr/sbin/amavisd-new-cronjob sa-clean
 exit 0

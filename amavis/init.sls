@@ -30,6 +30,7 @@ Amavis: A Email Virus Scanner.
 {%- from 'macros.jinja2' import manage_pid with context %}
 include:
   - apt
+  - bash
   - cron
   - mail
   - spamassassin

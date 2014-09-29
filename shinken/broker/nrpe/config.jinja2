@@ -28,7 +28,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 shinken_broker_procs:
   description: Shinken Broker Deamon
   passive: False
-  command: "/usr/lib/nagios/plugins/check_procs -c 1:10 -u shinken -C python -a 'shinken-broker -c /etc/shinken/broker.conf'"
+  command: "/usr/lib/nagios/plugins/check_procs -c 1:10 -u shinken -C shinken-broker -a /etc/shinken/broker.conf"
 
 shinken_broker_port:
   description: Shinken Broker Local Port

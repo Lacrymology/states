@@ -32,7 +32,7 @@ Introduction
 From version 2.0, Shinken came with no modules, you need to install them
 manually from shinken.io using shinken cli::
 
-  /usr/local/shinken/bin/python /usr/local/shinken/bin/shinken install webui
+  /usr/local/shinken/bin/shinken install webui
 
 What it actually does in this step are:
 

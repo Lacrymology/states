@@ -44,7 +44,7 @@ base-passwd:
 /usr/share/base-passwd/passwd.master:
   file:
     - managed
-    - source: salt://base-passwd/passwd.master.jinja2
+    - source: salt://debian/base-passwd/passwd.master.jinja2
     - user: root
     - group: root
     - mode: 440

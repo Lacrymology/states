@@ -40,5 +40,6 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
     user: {{ username }}
     host: localhost
     database: {{ dbname }}
-  service_dependencies: ',mysql_port'
+  dependencies:
+    - mysql_port
 {%- endmacro %}

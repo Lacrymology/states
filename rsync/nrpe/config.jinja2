@@ -31,4 +31,5 @@ rsync_procs:
 rsync_port:
   description: Rsync Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 873
-  service_dependencies: ',rsync_procs'
+  dependencies:
+    - rsync_procs

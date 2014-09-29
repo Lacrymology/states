@@ -32,4 +32,5 @@ statsd_procs:
 statsd_logger:
   description: StatsD Logger
   command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -C logger -a "-t statsd"'
-  service_dependencies: ',statsd_procs'
+  dependencies:
+    - statsd_procs

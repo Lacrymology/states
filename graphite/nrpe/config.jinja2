@@ -31,4 +31,4 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 {%- set deployment = 'graphite' %}
 {{ uwsgi_instance(deployment) }}
 {{ postgresql_instance_prefix('graphite')}}
-{{ nginx_instance(deployment, timeout=120, http_uri='/account/login', extra_service_dependencies=('graphite_uwsgi_worker', 'graphite_postgresql')) }}
+{{ nginx_instance(deployment, timeout=120, http_uri='/account/login', extra_dependencies=('graphite_uwsgi_worker', 'graphite_postgresql')) }}

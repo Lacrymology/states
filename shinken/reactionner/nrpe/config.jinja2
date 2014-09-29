@@ -33,10 +33,12 @@ shinken_reactionner_procs:
 shinken_reactionner_port:
   description: Shinken Reactionner Local Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 7769
-  service_dependencies: ',shinken_reactionner_procs'
+  dependencies:
+    - shinken_reactionner_procs
 
 shinken_reactionner_port_remote:
   description: Shinken Reactionner Remote Port
   check: check_tcp!7769
   passive: False
-  service_dependencies: ',shinken_reactionner_port'
+  dependencies:
+    - shinken_reactionner_port

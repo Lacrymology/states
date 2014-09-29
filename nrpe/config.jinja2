@@ -77,7 +77,8 @@ nrpe-remote-port:
   description: Remote NRPE Port
   check: check_tcp!5666
   passive: False
-  service_dependencies: ',nrpe_procs'
+  dependencies:
+    - nrpe_procs
 
 {% if salt['pillar.get']('__test__', False) %}
 {# TODO: add check that only run during test

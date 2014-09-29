@@ -63,6 +63,10 @@ user_{{ user }}:
       - user: user_{{ user }}
 {% endfor %}
 
+/etc/salt/master.d/ui.conf:
+  file:
+    - absent
+
 /etc/salt/master.d/api.conf:
   file:
     - managed

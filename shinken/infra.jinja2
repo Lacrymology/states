@@ -254,9 +254,9 @@ define service {
         {%- endif %}
     check_command {{ check.data.get('check', 'check_nrpe!' + check_name) }}
     {% for dependency in check.data.get('dependencies', []) -%}
-        {%- if loop.first %}service_dependencies '{% endif -%}
+        {%- if loop.first %}service_dependencies {% endif -%}
         ,{{ dependency.shinken_service_description() }}
-        {%- if loop.last %}'{% endif -%}
+        {%- if not loop.last %},{% endif -%}
     {%- endfor -%}
     {#- everything else -#}
         {%- for key_name in check.data -%}

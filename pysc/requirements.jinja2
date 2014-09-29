@@ -26,7 +26,7 @@ Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 #}
 {%- if 'files_archive' in pillar %}
-{{ pillar['files_archive'] }}/pip/pysc-0.2.9.tar.gz
+pysc==0.2.9
 {%- else %}
-http://archive.robotinfra.com/pip/pysc-0.2.9.tar.gz
+http://archive.robotinfra.com/pip/pysc-0.2.9.tar.bz2
 {%- endif %}

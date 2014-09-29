@@ -253,7 +253,7 @@ define service {
     check_freshness 0
         {%- endif -%}
     check_command {{ check.data.get('check', 'check_nrpe!' + check_name) }}
-    {% for dependency in check.data.dependencies -%}
+    {% for dependency in check.data.get('dependencies', []) -%}
         {%- if loop.first %}service_dependencies '{% endif -%}
         ,{{ dependency.shinken_service_description }}
         {%- if loop.last %}'{% endif -%}

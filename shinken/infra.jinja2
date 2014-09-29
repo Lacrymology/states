@@ -234,13 +234,13 @@ define servicegroup {
 }
 {%- endfor -%}
 
-{%- set reserved_keys = ('check', 'description', 'passive', 'service_dependencies') -%}
+{%- set reserved_keys = ('check', 'description', 'passive', 'dependencies', 'service_dependencies') -%}
 {%- set data = salt['monitoring.shinken'](mine) -%}
 {%- for check_name in data -%}
     {%- for check in data[check_name] %}
 define service {
     use salt-service
-    service_description {{ check.shinken_service_description }}
+    service_description {{ check.shinken_service_description() }}
     host_name {% for minion in check.minions -%}
         {{ minion }}
         {%- if not loop.last %},{% endif -%}
@@ -255,7 +255,7 @@ define service {
     check_command {{ check.data.get('check', 'check_nrpe!' + check_name) }}
     {% for dependency in check.data.get('dependencies', []) -%}
         {%- if loop.first %}service_dependencies '{% endif -%}
-        ,{{ dependency.shinken_service_description }}
+        ,{{ dependency.shinken_service_description() }}
         {%- if loop.last %}'{% endif -%}
     {%- endfor -%}
     {#- everything else -#}

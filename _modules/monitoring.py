@@ -285,9 +285,10 @@ class CheckData(UserDict):
     Consumed by ``shinken/infra.jinja2``
     '''
 
-    def __init__(self, name, minions=(), **kwargs):
+    def __init__(self, name, check_list, minions=(), **kwargs):
         self.minions = []
         self.name = name
+        self.check_list = check_list
         for minion in minions:
             self.minions.append(minion)
         UserDict.__init__(self, **kwargs)
@@ -295,6 +296,18 @@ class CheckData(UserDict):
     def __repr__(self):
         return '%s (%d minions) %s' % (self.name, len(self.minions),
                                        repr(self.data))
+
+    def shinken_service_description(self):
+        '''
+        Return shinken compatible name. append ``-2``, ``-3`` and so on
+        based on different check with same name but different configuration.
+        Note: to work at it's best self.check_list should be ``sort()``
+        which :func:`shinken` do.
+        '''
+        check_list_index = self.check_list.index(self)
+        if check_list_index > 0:
+            return '%s-%d' % (self.name, check_list_index + 1)
+        return self.name
 
 
 class Check(UserList):
@@ -336,7 +349,8 @@ class Check(UserList):
             index = self.check_index(salt_mine_check)
             check = self[index]
         except IndexError:
-            check = CheckData(salt_mine_check.name, dict=salt_mine_check.data)
+            check = CheckData(salt_mine_check.name, self,
+                              dict=salt_mine_check.data)
             self.append(check)
         check.minions.append(salt_mine_check.minion)
 

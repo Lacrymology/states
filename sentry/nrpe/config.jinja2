@@ -31,4 +31,4 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 {%- set deployment = 'sentry' %}
 {{ uwsgi_instance(deployment) }}
 {{ postgresql_instance_prefix(deployment) }}
-{{ nginx_instance(deployment, http_uri='/login/', extra_service_dependencies=('sentry_uwsgi_worker', 'sentry_postgresql')) }}
+{{ nginx_instance(deployment, http_uri='/login/', extra_dependencies=('sentry_uwsgi_worker', 'sentry_postgresql')) }}

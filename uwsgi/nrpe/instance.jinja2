@@ -34,15 +34,18 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 {{ deployment }}_uwsgi_master:
   description: {{ deployment|capitalize }} uWSGI Master Process
   command: /usr/lib/nagios/plugins/check_procs -c 1:1 -a {{ deployment }}-master -C uwsgi
-  service_dependencies: ',uwsgi_emperor'
+  dependencies:
+    - uwsgi_emperor
 
 {{ deployment }}_uwsgi_worker:
   description: {{ deployment|capitalize }} uWSGI Workers Process
   command: /usr/lib/nagios/plugins/check_procs -c {{ salt['pillar.get'](prefix + ':cheaper', workers) }}:{{ workers }} -a {{ deployment }}-worker -C uwsgi
-  service_dependencies: ',{{ deployment }}_uwsgi_master'
+  dependencies:
+    - {{ deployment }}_uwsgi_master
 
 {{ deployment }}_uwsgi_ping:
   description: {{ deployment|capitalize }} uWSGI Ping
   command: sudo /usr/lib/nagios/plugins/check_uwsgi_nostderr {{ deployment }}
-  service_dependencies: ',{{ deployment }}_uwsgi_worker'
+  dependencies:
+    - {{ deployment }}_uwsgi_worker
 {%- endmacro -%}

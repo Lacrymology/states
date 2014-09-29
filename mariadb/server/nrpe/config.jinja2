@@ -39,7 +39,8 @@ mysql_procs:
 mysql_port:
   description: MariaDB Local Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 3306
-  service_dependencies: ',mysql_procs'
+  dependencies:
+    - mysql_procs
 
 {%- if not salt['pillar.get']('__test__', False) -%}
 {%- from 'mariadb/server/nrpe/instance.jinja2' import mysql_instance with context %}
@@ -51,5 +52,6 @@ mysql_port_remote:
   check: check_tcp!3306
   description: MariaDB Remote Port
   passive: False
-  service_dependencies: ',mysql_port'
+  dependencies:
+    - mysql_port
 {%- endif %}

@@ -31,4 +31,4 @@ salt_api_procs:
 
 {%- set expected = '401 Unauthorized' -%}
 {%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
-{{ nginx_instance('salt.api', pillar_prefix='salt_master', https_result=expected, http_result=expected, deployment='salt_api', extra_service_dependencies=('salt_api_procs',)) }}
+{{ nginx_instance('salt.api', pillar_prefix='salt_master', https_result=expected, http_result=expected, deployment='salt_api', extra_dependencies=('salt_api_procs',)) }}

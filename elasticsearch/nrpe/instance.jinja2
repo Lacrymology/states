@@ -44,16 +44,19 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 {{ formula|replace('.', '_') }}-es_http_port:
   description: {{ formula|title }} ES HTTP Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 9200
-  service_dependencies: ',{{ process_check_name }}'
+  dependencies:
+    - {{ process_check_name }}
 
 {{ formula|replace('.', '_') }}-es_http:
   description: {{ formula|title }} ES HTTP Interface
   command: /usr/lib/nagios/plugins/check_http -H 127.0.0.1 -u / -p 9200 -e '200 OK'
-  service_dependencies: ',{{ formula|replace('.', '_') }}-es_http_port'
+  dependencies:
+    - {{ formula|replace('.', '_') }}-es_http_port
 {%- endif %}
 
 {{ formula|replace('.', '_') }}-es_port_transport:
   description: {{ formula|title }} ES Transport Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p {{ salt['pillar.get'](pillar_string + ':port', 9300) }}
-  service_dependencies: ',{{ process_check_name }}'
+  dependencies:
+    - {{ process_check_name }}
 {%- endmacro %}

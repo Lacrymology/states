@@ -35,9 +35,11 @@ varnish_procs:
 varnish_port:
   description: Varnish HTTP Port
   command: /usr/lib/nagios/plugins/check_tcp -H {{ listen_address }} -p {{ listen_port }}
-  service_dependencies: ',varnish_procs'
+  dependencies:
+    - varnish_procs
 
 varnish_status:
   description: Varnish HTTP status
   command: /usr/lib/nagios/plugins/check_http -I {{ listen_address }} -p {{ listen_port }}
-  service_dependencies: ',varnish_port'
+  dependencies:
+    - varnish_port

@@ -34,12 +34,14 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 nginx_status:
   description: Nginx Status Page
   command: '/usr/lib/nagios/plugins/check_http -H 127.0.0.1 -I 127.0.0.1 -u /nginx_status -p 80 -e "200 OK"{%- if salt["pillar.get"]("__test__", False) %} -v{%- endif %}'
-  service_dependencies: ',nginx_worker'
+  dependencies:
+    - nginx_worker
 
 nginx_worker:
   description: Nginx Worker Processes
   command: '/usr/lib/nagios/plugins/check_procs -c {{ num_workers }}:{{ num_workers }} -a "nginx: worker process" -u www-data'
-  service_dependencies: ',nginx_master'
+  dependencies:
+    - nginx_master
 
 nginx_master:
   description: Nginx Master Process

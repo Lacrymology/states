@@ -31,4 +31,4 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 {%- set deployment = 'roundcube' %}
 {{ uwsgi_instance(deployment) }}
 {{ postgresql_instance_prefix(deployment) }}
-{{ nginx_instance(deployment, extra_service_dependencies=('roundcube_uwsgi_worker', 'roundcube_postgresql')) }}
+{{ nginx_instance(deployment, extra_dependencies=('roundcube_uwsgi_worker', 'roundcube_postgresql')) }}

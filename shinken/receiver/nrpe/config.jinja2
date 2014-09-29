@@ -32,10 +32,12 @@ shinken_receiver_procs:
 shinken_receiver_port:
   description: Shinken Receiver Local Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 7773
-  service_dependencies: ',shinken_receiver_procs'
+  dependencies:
+    - shinken_receiver_procs
 
 shinken_receiver_port_remote:
   description: Shinken Receiver Remote Port
   check: check_tcp!7773
   passive: False
-  service_dependencies: ',shinken_receiver_port'
+  dependencies:
+    - shinken_receiver_port

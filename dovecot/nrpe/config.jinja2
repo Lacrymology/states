@@ -45,42 +45,50 @@ dovecot_anvil:
 dovecot_port_imaps:
   description: Dovecot IMAPS Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 993
-  service_dependencies: ',dovecot_procs'
+  dependencies:
+    - dovecot_procs
 
 dovecot_port_pop3s:
   description: Dovecot POP3S Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 995
-  service_dependencies: ',dovecot_procs'
+  dependencies:
+    - dovecot_procs
 
 dovecot_simap:
   description: Dovecot SIMAP
   command: /usr/lib/nagios/plugins/check_simap -H 127.0.0.1 -p 993
-  service_dependencies: ',dovecot_port_imaps'
+  dependencies:
+    - dovecot_port_imaps
 {%- endif %}
 
 dovecot_port_imap:
   description: Dovecot IMAPS Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 143
-  service_dependencies: ',dovecot_procs'
+  dependencies:
+    - dovecot_procs
 
 dovecot_imap:
   description: Dovecot IMAP
   command: /usr/lib/nagios/plugins/check_imap -H 127.0.0.1 -p 143
-  service_dependencies: ',dovecot_port_imap'
+  dependencies:
+    - dovecot_port_imap
 
 dovecot_port_pop3:
   description: Dovecot POP3 Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 110
-  service_dependencies: ',dovecot_procs'
+  dependencies:
+    - dovecot_procs
 
 {%- if not salt['pillar.get']('__test__', False) and salt['pillar.get']('mail:check_mail_stack', False) %}
 mailstack_functionality:
   description: Mail Stack Functionality
   command: /usr/lib/nagios/plugins/check_mail_stack.py
-  service_dependencies: ',dovecot_{% if salt['pillar.get']('dovecot:ssl', False) %}s{% endif %}imap'
+  dependencies:
+    - dovecot_{% if salt['pillar.get']('dovecot:ssl', False) %}s{% endif %}imap
 {%- endif %}
 
 dovecot_managesieve_port:
   description: Dovecot Managesieve Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 4190
-  service_dependencies: ',dovecot_procs'
+  dependencies:
+    - dovecot_procs

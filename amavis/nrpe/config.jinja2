@@ -34,4 +34,5 @@ amavis_procs:
 amavis_port:
   description: Amavis Listen Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 10024
-  service_dependencies: ',amavis_procs'
+  dependencies:
+    - amavis_procs

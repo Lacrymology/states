@@ -6,4 +6,5 @@ erlang_procs:
 erlang_port:
   description: RabbitMQ Erlang Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 4369
-  service_dependencies: ',erlang_procs'
+  dependencies:
+    - erlang_procs

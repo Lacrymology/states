@@ -39,10 +39,12 @@ redis_procs:
 redis_port:
   description: Redis Local Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 6379
-  service_dependencies: ',redis_procs'
+  dependencies:
+    - redis_procs
 
 redis_remote_port:
   check: check_tcp!6379
   description: Redis Remote Port
   passive: False
-  service_dependencies: ',redis_procs'
+  dependencies:
+    - redis_procs

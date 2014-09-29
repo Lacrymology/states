@@ -29,6 +29,7 @@ include:
   - bash.nrpe
   - nrpe
   - pip.nrpe
+  - salt.master.nrpe
   - sudo.nrpe
 
 {%- from 'nrpe/passive.sls' import passive_check, passive_absent with context %}

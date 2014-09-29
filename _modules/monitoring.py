@@ -40,6 +40,7 @@ MINE_DATA_FUNC_NAME = 'monitoring.data'
 MINE_DATA_KEY = 'checks'
 __NRPE_RE = re.compile('^command\[([^\]]+)\]=(.+)$')
 
+
 def _yaml(filename):
     with open(filename, 'r') as stream:
         try:
@@ -158,65 +159,6 @@ def data():
             logger.error("Unknown key type '%s'", key_type)
     output['extra'] = extra_data
 
-    return output
-
-
-def checks_for_formula(state_name):
-    '''
-    Return dict of all data in salt://$statename/monitor.jinja2.
-    Check ``doc/state.rst`` for details on this file.
-    '''
-    source = 'salt://{0}/monitor.jinja2'.format(state_name.replace('.', '/'))
-
-    logger.debug("Try to fetch %s", source)
-    temp_dest = tempfile.NamedTemporaryFile(delete=False)
-    temp_dest.close()
-
-    # until a better way to get the value of the environment, do that
-    env = __salt__['pillar.get']('branch', 'base')
-    if env == 'master':
-        env = 'base'
-
-    logger.debug("Running `salt %s cp.get_template %s %s env='%s'`",
-                 __grains__['id'],
-                 source,
-                 temp_dest.name,
-                 env)
-
-    __salt__['cp.get_template'](source, temp_dest.name, env=env)
-
-    with open(temp_dest.name, 'r') as rendered_template:
-        try:
-            unserialized = _yaml(rendered_template)
-        except Exception:
-            __salt__['file.remove'](temp_dest.name)
-            return {}
-    __salt__['file.remove'](temp_dest.name)
-    if not unserialized:
-        logger.critical("Cannot copy %s to the minion. Make sure that it exists "
-                        "and the environment '%s' is correct", source, env)
-        return {}
-    return unserialized
-
-
-def passive_checks_for_formula(state_name):
-    '''
-    Return a dict of all checks that are passive in specified state
-    '''
-    output = {}
-    checks = checks_for_formula(state_name)
-    if not checks:
-        logger.debug("checks_for_formula('%s') returned nothing", state_name)
-        return output
-
-    for check_name in checks:
-        check = checks[check_name]
-        # default is checks are passive
-        if check.get('passive', True):
-            output[check_name] = check
-
-    if not output:
-        logger.info("No passive checks for '%s'", state_name)
     return output
 
 

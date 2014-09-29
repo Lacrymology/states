@@ -255,7 +255,7 @@ class CheckList(UserList):
             self.data.append(check)
 
 
-def shinken(data=None):
+def shinken(mine_data=None):
     '''
     Pre-process all salt mine monitoring data for all minions to let
     shinken build a monitoring configuration.
@@ -267,21 +267,21 @@ def shinken(data=None):
     # which dict key data() put data processed by this function
     data_key = 'checks'
     checks = {}
-    if not data:
-        data = __salt__['mine.get']('*', func_name)
-    for minion in data:
+    if not mine_data:
+        mine_data = __salt__['mine.get']('*', func_name)
+    for minion in mine_data:
         logger.debug("Processing mine data of '%s' for '%s'",
                      minion, func_name)
-        if data[minion]['monitor']:
+        if mine_data[minion]['monitor']:
             logger.debug("Minion '%s' is monitored", minion)
             try:
-                for check_name in data[minion][data_key]:
+                for check_name in mine_data[minion][data_key]:
                     try:
                         check_list = checks[check_name]
                     except KeyError:
                         checks[check_name] = CheckList()
                         check_list = checks[check_name]
-                    check_list.append(data[minion][data_key][check_name],
+                    check_list.append(mine_data[minion][data_key][check_name],
                                       minion)
             except KeyError:
                 logger.warning("Minion %s don't have %s in mine data of %s",

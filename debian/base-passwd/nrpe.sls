@@ -24,29 +24,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author: Quan Tong Anh <quanta@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
-
-Change shell of predefined user (UID <= 99) from `/bin/sh` to `/usr/sbin/nologin`
 -#}
 include:
-  - apt
-
-base-passwd:
-  pkg:
-    - installed
-    - require:
-      - cmd: apt_sources
-  cmd:
-    - wait
-    - name: yes | dpkg-reconfigure base-passwd
-    - watch:
-      - file: /usr/share/base-passwd/passwd.master
-
-/usr/share/base-passwd/passwd.master:
-  file:
-    - managed
-    - source: salt://base-passwd/passwd.master.jinja2
-    - user: root
-    - group: root
-    - mode: 440
-    - require:
-      - pkg: base-passwd
+  - apt.nrpe

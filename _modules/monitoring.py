@@ -434,9 +434,8 @@ def shinken(mine_data=None):
             logger.debug("Processed %d salt mine check, %d for next batch",
                          before - after, after)
 
+    logger.debug("Processed successfully all checks from all minions.")
     # sort all :class:`Check`
-    # print output.keys()
     for check_name in output.keys():
-        # print check_name
         output[check_name].sort()
     return output

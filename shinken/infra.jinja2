@@ -214,11 +214,6 @@ define service {
     _httpstink NO
 }
 
-{%- set saltenv =  salt['pillar.get']('branch', 'base') -%}
-{%- if saltenv == 'master' -%}
-    {%- set saltenv = 'base' -%}
-{%- endif -%}
-
 {%- for role in salt['common.global_roles']() %}
 define hostgroup {
     hostgroup_name {{ role }}

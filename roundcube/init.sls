@@ -94,9 +94,9 @@ roundcube:
 {{ roundcubedir }}:
   file:
     - directory
-    - user: www-data
+    - user: root
     - group: www-data
-    - mode: 750
+    - mode: 550
     - require:
       - cmd: roundcube
       - user: web
@@ -110,8 +110,10 @@ roundcube:
 {{ roundcubedir }}/bin:
   file:
     - directory
-    - user: www-data
-    - mode: 550
+    - user: root
+    - group: root
+    - mode: 700
+    - file_mode: 500
     - recurse:
       - mode
     - require:
@@ -195,8 +197,8 @@ roundcube_password_plugin_ldap_driver_dependency:
     - managed
     - source: salt://roundcube/nginx.jinja2
     - template: jinja
-    - user: www-data
-    - group: www-data
+    - user: root
+    - group: root
     - mode: 440
     - require:
       - pkg: nginx
@@ -231,8 +233,8 @@ roundcube-uwsgi:
     - name: /etc/uwsgi/roundcube.yml
     - source: salt://uwsgi/template.jinja2
     - template: jinja
-    - user: www-data
-    - group: www-data
+    - user: root
+    - group: root
     - mode: 440
     - context:
       appname: roundcube

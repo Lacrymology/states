@@ -30,11 +30,15 @@ __email__ = 'patate@fastmail.cn'
 import re
 import logging
 from UserList import UserList
+from UserDict import IterableUserDict, UserDict
 
 import yaml
 
 logger = logging.getLogger(__name__)
 
+MINE_DATA_FUNC_NAME = 'monitoring.data'
+MINE_DATA_KEY = 'checks'
+__NRPE_RE = re.compile('^command\[([^\]]+)\]=(.+)$')
 
 def _yaml(filename):
     with open(filename, 'r') as stream:
@@ -216,83 +220,6 @@ def passive_checks_for_formula(state_name):
     return output
 
 
-class Check(object):
-    def __init__(self, check_data, minions=None):
-        self.data = check_data
-        if not minions:
-            self.minions = []
-        else:
-            self.minions = minions
-
-    def __repr__(self):
-        return 'Check(%r, %r)' % (self.data, self.minions)
-
-
-class CheckList(UserList):
-    @property
-    def check_datas(self):
-        output = []
-        for check in self.data:
-            output.append(check.data)
-        return output
-
-    def __contains__(self, item):
-        return item in self.check_datas
-
-    def append(self, item, minion):
-        check_datas = self.check_datas
-        try:
-            index = check_datas.index(item)
-            self.data[index].minions.append(minion)
-            logger.debug("Existing checks '%s', now %d minions: %s",
-                         item, len(self.data[index].minions),
-                         self.data[index].minions)
-        except ValueError:
-            logger.debug("New check '%s' start with minion '%s'",
-                         item, minion)
-            check = Check(item)
-            check.minions = [minion]
-            self.data.append(check)
-
-
-def shinken(mine_data=None):
-    '''
-    Pre-process all salt mine monitoring data for all minions to let
-    shinken build a monitoring configuration.
-
-    The
-    '''
-    # salt module function name
-    func_name = 'monitoring.data'
-    # which dict key data() put data processed by this function
-    data_key = 'checks'
-    checks = {}
-    if not mine_data:
-        mine_data = __salt__['mine.get']('*', func_name)
-    for minion in mine_data:
-        logger.debug("Processing mine data of '%s' for '%s'",
-                     minion, func_name)
-        if mine_data[minion]['monitor']:
-            logger.debug("Minion '%s' is monitored", minion)
-            try:
-                for check_name in mine_data[minion][data_key]:
-                    try:
-                        check_list = checks[check_name]
-                    except KeyError:
-                        checks[check_name] = CheckList()
-                        check_list = checks[check_name]
-                    check_list.append(mine_data[minion][data_key][check_name],
-                                      minion)
-            except KeyError:
-                logger.warning("Minion %s don't have %s in mine data of %s",
-                               minion, data_key, func_name)
-        else:
-            logger.debug("Minion '%s' is NOT monitored", minion)
-
-    return checks
-
-__NRPE_RE = re.compile('^command\[([^\]]+)\]=(.+)$')
-
 def list_checks(config_dir='/etc/nagios/nrpe.d'):
     '''
     List all available NRPE check.
@@ -360,4 +287,200 @@ def run_all_checks(return_only_failure=False):
                 output[check_name] = check_result
         else:
             output[check_name] = check_result
+    return output
+
+
+class SaltMineCheck(object):
+    '''
+    Raw check from salt mine ``monitoring.data``.
+    '''
+    def __init__(self, minion_id, name, data):
+        self.minion = minion_id
+        self.name = name
+        self.data = data
+        self.resolved = False
+
+    def __repr__(self):
+        return '%s (minion %s) %s' % (self.name, self.minion, repr(self.data))
+
+    def resolve_dependencies(self, existing_resolved):
+        '''
+        Resolve all dependencies to other checks.
+        Replace data['dependencies'] with list of :class:`CheckData`
+        '''
+        if self.resolved:
+            return True
+
+        dep_names = self.data.get('dependencies', ())
+        if not dep_names:
+            logger.debug("%s: no dependencies required", self)
+            self.resolved = True
+            return True
+
+        logger.debug('%s: %d dependencies', self, len(dep_names))
+        deps = []
+        try:
+            for dep_name in dep_names:
+                try:
+                    deps.append(existing_resolved.get_minion_check(
+                                self.minion, dep_name))
+                except (KeyError, IndexError):
+                    logger.debug("%s: dependency of %s don't exist.", self,
+                                 dep_name)
+                    raise
+        except (KeyError, IndexError):
+            logger.debug("Can't resolve all dependencies of %s, skip.", self)
+            return False
+
+        self.resolved = True
+        self.data['dependencies'] = deps
+        return True
+
+
+class CheckData(UserDict):
+    '''
+    Unique monitoring check and it's linked minions.
+    Consumed by ``shinken/infra.jinja2``
+    '''
+
+    def __init__(self, name, minions=(), **kwargs):
+        self.minions = []
+        self.name = name
+        for minion in minions:
+            self.minions.append(minion)
+        UserDict.__init__(self, **kwargs)
+
+    def __repr__(self):
+        return '%s (%d minions) %s' % (self.name, len(self.minions),
+                                       repr(self.data))
+
+
+class Check(UserList):
+    '''
+    List of :class:`CheckData`
+    '''
+
+    def __init__(self, name, *args, **kwargs):
+        self.name = name
+        UserList.__init__(self, *args, **kwargs)
+
+    def __repr__(self):
+        return ' '.join((self.name, repr(self.data)))
+
+    def minion_index(self, minion):
+        for check_data in self:
+            if minion in check_data.minions:
+                return self.index(check_data)
+        raise IndexError("No CheckData with minion %s" % minion)
+
+    def check_index(self, salt_mine_check):
+        '''
+        Return index in the list of an existing :class:`CheckData`.
+        '''
+        for check_data in self:
+            if salt_mine_check.data == check_data.data:
+                return self.index(check_data)
+        raise IndexError("No existing check for %s" % salt_mine_check)
+
+    def check_append(self, salt_mine_check):
+        '''
+        Append to it's appropriate :class:`CheckData` a :class:`SaltMineCheck`
+        minion.
+        '''
+        if not salt_mine_check.resolved:
+            raise ValueError("Can't check_append unresolved %s",
+                             salt_mine_check)
+        try:
+            index = self.check_index(salt_mine_check)
+            check = self[index]
+        except IndexError:
+            check = CheckData(salt_mine_check.name, dict=salt_mine_check.data)
+            self.append(check)
+        check.minions.append(salt_mine_check.minion)
+
+    def sort(self, *args, **kwds):
+        # reverse sort by number of minions, more = first in list
+        self.data.sort(cmp=lambda y, x: cmp(len(x.minions), len(y.minions)))
+
+
+class Checks(IterableUserDict):
+
+    def get_check_list(self, check_name):
+        try:
+            return self[check_name]
+        except KeyError:
+            self[check_name] = Check(check_name)
+            logger.debug("Found new check name %s", check_name)
+            return self[check_name]
+
+    def get_minion_check(self, minion, check_name):
+        check = self[check_name]
+        return check[check.minion_index(minion)]
+
+    def process_salt_mine_checks(self, salt_mine_checks):
+        '''
+        Loop trough a list of :class:`SaltMineCheck`
+        remove instance that are all resolved processed.
+        '''
+        for salt_mine_check in salt_mine_checks:
+            if salt_mine_check.resolve_dependencies(self):
+                logger.debug("%s all dependencies are ok, process.",
+                             salt_mine_check)
+                check_list = self.get_check_list(salt_mine_check.name)
+                check_list.check_append(salt_mine_check)
+                salt_mine_checks.remove(salt_mine_check)
+
+
+def _flatten_mine_data(mine_data):
+    '''
+    flatten to a single list all monitor checks for all minions that are
+    monitored.
+    '''
+    output = []
+    for minion in mine_data.keys():
+        if not mine_data[minion]['monitor']:
+            logger.info("Ignore unmonitored minion %s", minion)
+        else:
+            logger.debug("Monitor minion %s %d checks", minion,
+                         len(mine_data[minion][MINE_DATA_KEY]))
+            for check_name in mine_data[minion][MINE_DATA_KEY]:
+                output.append(SaltMineCheck(minion, check_name,
+                              mine_data[minion][MINE_DATA_KEY][check_name]))
+    logger.debug("Total of %d checks to process", len(output))
+    return output
+
+
+def shinken(mine_data=None):
+    '''
+    Pre-process all salt mine monitoring data for all minions to let
+    shinken build a monitoring configuration.
+
+    The
+    '''
+    # which dict key data() put data processed by this function
+    if not mine_data:
+        mine_data = __salt__['mine.get']('*', MINE_DATA_FUNC_NAME)
+    flat = _flatten_mine_data(mine_data)
+    del mine_data
+    output = Checks()
+    # loop trough all flatten checks until it's resolved and processed
+    while flat:
+        before = len(flat)
+        output.process_salt_mine_checks(flat)
+        after = len(flat)
+        if after == before:
+            unresolvable = []
+            for check in flat:
+                unresolvable.append('%s(%s)' % (check.name, check.minion))
+            raise ValueError("Can't resolve all dependencies of: " %
+                             ','.join(unresolvable))
+        else:
+            logger.debug("Processed %d salt mine check, %d for next batch",
+                         before - after, after)
+
+    # sort all :class:`Check`
+    # print output.keys()
+    for check_name in output.keys():
+        # print check_name
+        output[check_name].sort()
     return output

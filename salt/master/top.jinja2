@@ -25,32 +25,42 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-{#- empty is True if no roles (or roles.absent) are applied -#}
-{%- set local = {
-    'empty': True,
-    'roles': salt['pillar.get']('roles', []),
-    'global_roles': salt['common.global_roles']()
-    } -%}
+{#- handle the case where a module is required to render top.sls and it's not
+    available -#}
+{%- if 'common.global_roles' not in salt -%}
+    {#- TODO: change to something else than 'develop' once it's released #}
+develop:
+  '*':
+    - salt.minion.sync
+{%- else -%}
+    {#- empty is True if no roles (or roles.absent) are applied -#}
+    {%- set local = {
+        'empty': True,
+        'roles': salt['pillar.get']('roles', []),
+        'global_roles': salt['common.global_roles']()
+        } -%}
 
 {{ salt['common.saltenv']() }}:
   {#- target all minions #}
   '*':
-{%- if not local.roles and not local.global_roles -%}
+    {%- if not local.roles and not local.global_roles -%}
     {#- do nothing #}
     - salt.noop
-{%- else -%}
-    {#- list all minion's role and absent role it's not member of -#}
-    {%- for role in local.global_roles -%}
-        {%- if role in local.roles -%}
-            {%- do local.update({'empty': False}) %}
+    {%- else -%}
+        {#- list all minion's role and absent role it's not member of -#}
+        {%- for role in local.global_roles -%}
+            {#- if a minion role is valid, apply it -#}
+            {%- if role in local.roles -%}
+                {%- do local.update({'empty': False}) %}
     - roles.{{ role }}
-        {%- elif salt['pillar.get']('roles_absent', False) -%}
-            {%- do local.update({'empty': False}) %}
+            {%- elif salt['pillar.get']('roles_absent', False) -%}
+                {%- do local.update({'empty': False}) %}
     - roles.{{ role }}.absent
-        {%- endif -%}
-    {%- endfor -%}
-    {#- it's possible that a minion don't have any roles, so do nothing -#}
-    {%- if local.empty %}
+            {%- endif -%}
+        {%- endfor -%}
+        {#- it's possible that a minion don't have any roles, so do nothing -#}
+        {%- if local.empty %}
     - salt.noop
+        {%- endif -%}
     {%- endif -%}
 {%- endif -%}

@@ -1,3 +1,4 @@
+
 {#-
 Copyright (c) 2013, Bruno Clermont
 All rights reserved.
@@ -25,42 +26,55 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-{#- handle the case where a module is required to render top.sls and it's not
-    available -#}
-{%- if 'common.global_roles' not in salt -%}
-    {#- TODO: change to something else than 'develop' once it's released #}
-develop:
-  '*':
-    - salt.minion.sync
-{%- else -%}
-    {#- empty is True if no roles (or roles.absent) are applied -#}
-    {%- set local = {
-        'empty': True,
-        'roles': salt['pillar.get']('roles', []),
-        'global_roles': salt['common.global_roles']()
-        } -%}
+{#- empty is True if no roles (or roles.absent) are applied -#}
+{%- set local = {
+    'empty': True,
+    'saltenv': salt['pillar.get']('branch', 'base'),
+    'roles': salt['pillar.get']('roles', []),
+    'global_roles': salt['pillar.get']('global_roles', [])
+    } -%}
+{#-
+ WARNING: The following logic of jinja2 code is re-implemented into python
+ module in ``common.global_roles`` and ``common.saltenv``.
+ So, any change in it's logic must be applied in both.
+ -#}
+{#- 'master' branch is automatically mapped as 'base' by salt master.
+    salt minion 'local mode don't support gitfs and multiple branches, force to
+    use 'base' environment. -#}
+{%- if local.saltenv == 'master' or opts['file_client'] == 'local' -%}
+    {%- do local.update({'saltenv': 'base'}) -%}
+{%- endif -%}
+{%- if local.global_roles in ('', []) -%}
+    {%- do local.update({'global_roles': []}) -%}
+    {%- for role_dir in salt['cp.list_master_dirs'](local.saltenv, 'roles') -%}
+        {#- cp.list_master_dirs return 'roles' which is root dir, ignore.
+            only consider sub-directories -#}
+        {%- if '/' in role_dir -%}
+            {#- append the roles/*$rolename* -#}
+            {%- do local.global_roles.append(role_dir.split('/')[1]) -%}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endif -%}
 
-{{ salt['common.saltenv']() }}:
+{{ local.saltenv }}:
   {#- target all minions #}
   '*':
-    {%- if not local.roles and not local.global_roles -%}
+{%- if not local.roles and not local.global_roles -%}
     {#- do nothing #}
     - salt.noop
-    {%- else -%}
-        {#- list all minion's role and absent role it's not member of -#}
-        {%- for role in local.global_roles -%}
-            {#- if a minion role is valid, apply it -#}
-            {%- if role in local.roles -%}
-                {%- do local.update({'empty': False}) %}
+{%- else -%}
+    {#- list all minion's role and absent role it's not member of -#}
+    {%- for role in local.global_roles -%}
+        {%- if role in local.roles -%}
+            {%- do local.update({'empty': False}) %}
     - roles.{{ role }}
-            {%- elif salt['pillar.get']('roles_absent', False) -%}
-                {%- do local.update({'empty': False}) %}
+        {%- elif salt['pillar.get']('roles_absent', False) -%}
+            {%- do local.update({'empty': False}) %}
     - roles.{{ role }}.absent
-            {%- endif -%}
-        {%- endfor -%}
-        {#- it's possible that a minion don't have any roles, so do nothing -#}
-        {%- if local.empty %}
-    - salt.noop
         {%- endif -%}
+    {%- endfor -%}
+    {#- it's possible that a minion don't have any roles, so do nothing -#}
+    {%- if local.empty %}
+    - salt.noop
     {%- endif -%}
 {%- endif -%}

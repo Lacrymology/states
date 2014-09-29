@@ -1,0 +1,108 @@
+--- a/plugins/carbon/carbon.c	2014-09-29 11:21:02.130960350 +0700
++++ b/plugins/carbon/carbon.c	2014-09-29 11:36:55.698986948 +0700
+@@ -252,7 +252,7 @@
+ 
+ 		int do_avg_push;
+ 
+-		wok = carbon_write(fd, "%s%s.%s.requests %llu %llu\n", u_carbon.root_node, u_carbon.hostname, u_carbon.id, (unsigned long long) uwsgi.workers[0].requests, (unsigned long long) now);
++		wok = carbon_write(fd, "%s.%s%s.requests %llu %llu\n", u_carbon.hostname, u_carbon.root_node, u_carbon.id, (unsigned long long) uwsgi.workers[0].requests, (unsigned long long) now);
+ 		if (!wok) goto clear;
+ 
+ 		for(i=1;i<=uwsgi.numproc;i++) {
+@@ -291,14 +291,14 @@
+ 			//skip per worker metrics when disabled
+ 			if (u_carbon.no_workers) continue;
+ 
+-			wok = carbon_write(fd, "%s%s.%s.worker%d.requests %llu %llu\n", u_carbon.root_node, u_carbon.hostname, u_carbon.id, i, (unsigned long long) uwsgi.workers[i].requests, (unsigned long long) now);
++			wok = carbon_write(fd, "%s.%s%s.worker%d.requests %llu %llu\n", u_carbon.hostname, u_carbon.root_node, u_carbon.id, i, (unsigned long long) uwsgi.workers[i].requests, (unsigned long long) now);
+ 			if (!wok) goto clear;
+ 
+ 			if (uwsgi.logging_options.memory_report == 1 || uwsgi.force_get_memusage) {
+-				wok = carbon_write(fd, "%s%s.%s.worker%d.rss_size %llu %llu\n", u_carbon.root_node, u_carbon.hostname, u_carbon.id, i, (unsigned long long) uwsgi.workers[i].rss_size, (unsigned long long) now);
++				wok = carbon_write(fd, "%s.%s%s.worker%d.rss_size %llu %llu\n", u_carbon.hostname, u_carbon.root_node, u_carbon.id, i, (unsigned long long) uwsgi.workers[i].rss_size, (unsigned long long) now);
+ 				if (!wok) goto clear;
+ 
+-				wok = carbon_write(fd, "%s%s.%s.worker%d.vsz_size %llu %llu\n", u_carbon.root_node, u_carbon.hostname, u_carbon.id, i, (unsigned long long) uwsgi.workers[i].vsz_size, (unsigned long long) now);
++				wok = carbon_write(fd, "%s.%s%s.worker%d.vsz_size %llu %llu\n", u_carbon.hostname, u_carbon.root_node, u_carbon.id, i, (unsigned long long) uwsgi.workers[i].vsz_size, (unsigned long long) now);
+ 				if (!wok) goto clear;
+ 			}
+ 
+@@ -312,26 +312,26 @@
+ 				}
+ 			}
+ 			if (do_avg_push) {
+-				wok = carbon_write(fd, "%s%s.%s.worker%d.avg_rt %llu %llu\n", u_carbon.root_node, u_carbon.hostname, u_carbon.id, i, (unsigned long long) avg_rt, (unsigned long long) now);
++				wok = carbon_write(fd, "%s.%s%s.worker%d.avg_rt %llu %llu\n", u_carbon.hostname, u_carbon.root_node, u_carbon.id, i, (unsigned long long) avg_rt, (unsigned long long) now);
+ 				if (!wok) goto clear;
+ 			}
+ 
+-			wok = carbon_write(fd, "%s%s.%s.worker%d.tx %llu %llu\n", u_carbon.root_node, u_carbon.hostname, u_carbon.id, i, (unsigned long long) uwsgi.workers[i].tx, (unsigned long long) now);
++			wok = carbon_write(fd, "%s.%s%s.worker%d.tx %llu %llu\n", u_carbon.hostname, u_carbon.root_node, u_carbon.id, i, (unsigned long long) uwsgi.workers[i].tx, (unsigned long long) now);
+ 			if (!wok) goto clear;
+ 
+-			wok = carbon_write(fd, "%s%s.%s.worker%d.busyness %llu %llu\n", u_carbon.root_node, u_carbon.hostname, u_carbon.id, i, (unsigned long long) worker_busyness, (unsigned long long) now);
++			wok = carbon_write(fd, "%s.%s%s.worker%d.busyness %llu %llu\n", u_carbon.hostname, u_carbon.root_node, u_carbon.id, i, (unsigned long long) worker_busyness, (unsigned long long) now);
+ 			if (!wok) goto clear;
+ 
+-			wok = carbon_write(fd, "%s%s.%s.worker%d.harakiri %llu %llu\n", u_carbon.root_node, u_carbon.hostname, u_carbon.id, i, (unsigned long long) uwsgi.workers[i].harakiri_count, (unsigned long long) now);
++			wok = carbon_write(fd, "%s.%s%s.worker%d.harakiri %llu %llu\n", u_carbon.hostname, u_carbon.root_node, u_carbon.id, i, (unsigned long long) uwsgi.workers[i].harakiri_count, (unsigned long long) now);
+ 			if (!wok) goto clear;
+ 
+ 		}
+ 
+ 		if (uwsgi.logging_options.memory_report == 1 || uwsgi.force_get_memusage) {
+-			wok = carbon_write(fd, "%s%s.%s.rss_size %llu %llu\n", u_carbon.root_node, u_carbon.hostname, u_carbon.id, (unsigned long long) total_rss, (unsigned long long) now);
++			wok = carbon_write(fd, "%s.%s%s.rss_size %llu %llu\n", u_carbon.hostname, u_carbon.root_node, u_carbon.id, (unsigned long long) total_rss, (unsigned long long) now);
+ 			if (!wok) goto clear;
+ 
+-			wok = carbon_write(fd, "%s%s.%s.vsz_size %llu %llu\n", u_carbon.root_node, u_carbon.hostname, u_carbon.id, (unsigned long long) total_vsz, (unsigned long long) now);
++			wok = carbon_write(fd, "%s.%s%s.vsz_size %llu %llu\n", u_carbon.hostname, u_carbon.root_node, u_carbon.id, (unsigned long long) total_vsz, (unsigned long long) now);
+ 			if (!wok) goto clear;
+ 		}
+ 
+@@ -346,11 +346,11 @@
+ 			}
+ 		}
+ 		if (do_avg_push) {
+-			wok = carbon_write(fd, "%s%s.%s.avg_rt %llu %llu\n", u_carbon.root_node, u_carbon.hostname, u_carbon.id, (unsigned long long) c_total_avg_rt, (unsigned long long) now);
++			wok = carbon_write(fd, "%s.%s%s.avg_rt %llu %llu\n", u_carbon.hostname, u_carbon.root_node, u_carbon.id, (unsigned long long) c_total_avg_rt, (unsigned long long) now);
+ 			if (!wok) goto clear;
+ 		}
+ 
+-		wok = carbon_write(fd, "%s%s.%s.tx %llu %llu\n", u_carbon.root_node, u_carbon.hostname, u_carbon.id, (unsigned long long) total_tx, (unsigned long long) now);
++		wok = carbon_write(fd, "%s.%s%s.tx %llu %llu\n", u_carbon.hostname, u_carbon.root_node, u_carbon.id, (unsigned long long) total_tx, (unsigned long long) now);
+ 		if (!wok) goto clear;
+ 
+ 		if (active_workers > 0) {
+@@ -359,18 +359,18 @@
+ 		} else {
+ 			total_avg_busyness = 0;
+ 		}
+-		wok = carbon_write(fd, "%s%s.%s.busyness %llu %llu\n", u_carbon.root_node, u_carbon.hostname, u_carbon.id, (unsigned long long) total_avg_busyness, (unsigned long long) now);
++		wok = carbon_write(fd, "%s.%s%s.busyness %llu %llu\n", u_carbon.hostname, u_carbon.root_node, u_carbon.id, (unsigned long long) total_avg_busyness, (unsigned long long) now);
+ 		if (!wok) goto clear;
+ 
+-		wok = carbon_write(fd, "%s%s.%s.active_workers %llu %llu\n", u_carbon.root_node, u_carbon.hostname, u_carbon.id, (unsigned long long) active_workers, (unsigned long long) now);
++		wok = carbon_write(fd, "%s.%s%s.active_workers %llu %llu\n", u_carbon.hostname, u_carbon.root_node, u_carbon.id, (unsigned long long) active_workers, (unsigned long long) now);
+ 		if (!wok) goto clear;
+ 
+ 		if (uwsgi.cheaper) {
+-			wok = carbon_write(fd, "%s%s.%s.cheaped_workers %llu %llu\n", u_carbon.root_node, u_carbon.hostname, u_carbon.id, (unsigned long long) uwsgi.numproc - active_workers, (unsigned long long) now);
++			wok = carbon_write(fd, "%s.%s%s.cheaped_workers %llu %llu\n", u_carbon.hostname, u_carbon.root_node, u_carbon.id, (unsigned long long) uwsgi.numproc - active_workers, (unsigned long long) now);
+ 			if (!wok) goto clear;
+ 		}
+ 
+-		wok = carbon_write(fd, "%s%s.%s.harakiri %llu %llu\n", u_carbon.root_node, u_carbon.hostname, u_carbon.id, (unsigned long long) total_harakiri, (unsigned long long) now);
++		wok = carbon_write(fd, "%s.%s%s.harakiri %llu %llu\n", u_carbon.hostname, u_carbon.root_node, u_carbon.id, (unsigned long long) total_harakiri, (unsigned long long) now);
+ 		if (!wok) goto clear;
+ 
+ metrics_loop:
+@@ -378,7 +378,7 @@
+ 			struct uwsgi_metric *um = uwsgi.metrics;
+ 			while(um) {
+ 				uwsgi_rlock(uwsgi.metrics_lock);
+-				wok = carbon_write(fd, "%s%s.%s.%.*s %llu %llu\n", u_carbon.root_node, u_carbon.hostname, u_carbon.id, um->name_len, um->name, (unsigned long long) *um->value, (unsigned long long) now);
++				wok = carbon_write(fd, "%s.%s%s.%.*s %llu %llu\n", u_carbon.hostname, u_carbon.root_node, u_carbon.id, um->name_len, um->name, (unsigned long long) *um->value, (unsigned long long) now);
+ 				uwsgi_rwunlock(uwsgi.metrics_lock);
+ 				if (um->reset_after_push){
+ 					uwsgi_wlock(uwsgi.metrics_lock);

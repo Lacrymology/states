@@ -196,9 +196,6 @@ shinken:
       - file: shinken_replace_etc_shinken
       - file: shinken_replace_etc
       - file: shinken_replace_init
-{%- for suffix in ('', '-arbiter', '-broker', '-discovery', '-poller', '-reactionner', '-receiver', '-scheduler') %}
-      - file: shinken{{ suffix }}_python_path
-{%- endfor %}
     - require:
       - module: shinken
   user:
@@ -254,6 +251,8 @@ shinken{{ suffix }}_python_path:
     - backup: False
     - require:
       - archive: shinken
+    - watch_in:
+      - cmd: shinken
 {%- endfor %}
 
 /var/lib/shinken/.shinken.ini:

@@ -79,7 +79,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
     - nginx_master
     {%- for extra_dependency in extra_dependencies %}
     - {{ extra_dependency }}
-    {%- endfor -%}
+    {%- endfor %}
 
 {{ formula }}_nginx_https_certificate:
   description: {{ deployment|capitalize }} HTTPS Certificate Expiration

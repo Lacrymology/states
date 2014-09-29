@@ -430,11 +430,12 @@ def shinken(mine_data=None):
                 unresolvable.append('%s(%s)' % (check.name, check.minion))
             raise ValueError("Can't resolve all dependencies of: " %
                              ','.join(unresolvable))
+        elif not after:
+            logger.debug("Processed successfully all checks from all minions.")
         else:
             logger.debug("Processed %d salt mine check, %d for next batch",
                          before - after, after)
 
-    logger.debug("Processed successfully all checks from all minions.")
     # sort all :class:`Check`
     for check_name in output.keys():
         output[check_name].sort()

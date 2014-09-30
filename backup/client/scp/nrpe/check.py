@@ -133,7 +133,7 @@ class SCPBackupFile(BackupFile):
             f[key]['filename'] = file
             # this code is taken from BackupFile.create_manifest, it keeps only
             # the newest file for each facility
-            if (not key in files) or (value['date'] > files[key]['date']):
+            if (key not in files) or (value['date'] > files[key]['date']):
                 log.debug('first or newer.')
                 files.update(f)
             else:

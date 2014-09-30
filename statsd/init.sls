@@ -27,6 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Install PyStatsD daemon, a statsd nodejs equivalent in python.
 -#}
+{%- set version='0.1.10' %}
 {%- from 'upstart/rsyslog.jinja2' import manage_upstart_log with context -%}
 include:
   - hostname
@@ -38,6 +39,15 @@ include:
 /var/log/statsd.log:
   file:
     - absent
+
+/usr/local/statsd/src:
+  file:
+    - directory
+    - user: root
+    - group: root
+    - mode: 755
+    - require:
+      - virtualenv: statsd
 
 statsd:
   file:
@@ -67,6 +77,20 @@ statsd:
       - file: statsd
       - virtualenv: statsd
       - module: statsd
+{%- if 'files_archive' in pillar %}
+  archive:
+    - extracted
+    - name: /usr/local/statsd/src
+    - source: {{ pillar['files_archive'] }}/pip/py-statsd-{{ version }}.tar.bz2
+    - source_hash: md5=536f1f28f527c2e7848ef3ce0bb613af
+    - archive_format: tar
+    - tar_options: j
+    - if_missing: /usr/local/statsd/src/py-statsd-{{ version }}
+    - require:
+      - file: /usr/local/statsd/src
+    - watch_in:
+      - module: statsd
+{%- endif %}
   module:
     - wait
     - name: pip.install
@@ -89,5 +113,7 @@ statsd_requirements:
     - group: root
     - mode: 440
     - source: salt://statsd/requirements.jinja2
+    - context:
+      version: {{ version }}
     - require:
       - virtualenv: statsd

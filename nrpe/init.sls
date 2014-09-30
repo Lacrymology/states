@@ -42,7 +42,6 @@ include:
   - local
 {% if 'graphite_address' in pillar %}
   - nrpe.diamond
-  - statsd
 {% endif %}
   - pip
   - pip.nrpe

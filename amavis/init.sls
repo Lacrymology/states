@@ -70,7 +70,7 @@ amavis:
     - mode: 500
     - require:
       - pkg: cron
-      - file: /usr/local/share/salt_common.sh
+      - file: bash
 
 {%- call manage_pid('/var/run/amavis/amavisd.pid', 'amavis', 'amavis', 'amavis', 640) %}
 - pkg: amavis

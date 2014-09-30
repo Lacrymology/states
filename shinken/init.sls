@@ -193,10 +193,10 @@ shinken:
     - name: /usr/local/shinken/bin/python setup.py install --install-scripts=/usr/local/shinken/bin --record=/usr/local/shinken/install.log
     - watch:
       - archive: shinken
+    - require:
       - file: shinken_replace_etc_shinken
       - file: shinken_replace_etc
       - file: shinken_replace_init
-    - require:
       - module: shinken
   user:
     - present
@@ -251,7 +251,7 @@ shinken{{ suffix }}_python_path:
     - backup: False
     - require:
       - archive: shinken
-    - watch_in:
+    - require_in:
       - cmd: shinken
 {%- endfor %}
 

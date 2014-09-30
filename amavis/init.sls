@@ -34,7 +34,6 @@ include:
   - cron
   - mail
   - spamassassin
-  - amavis.clamav
 
 amavis:
   pkg:
@@ -43,6 +42,14 @@ amavis:
     - require:
       - cmd: apt_sources
       - file: /etc/mailname
+  amavis:
+    user:
+      - present
+      - shell: /usr/sbin/nologin
+      - require:
+        - pkg: amavis
+      - watch_in:
+        - service: amavis
   service:
     - running
     - order: 50

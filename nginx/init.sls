@@ -31,6 +31,7 @@ include:
   - apt
   - rsyslog
   - ssl.dev
+  - ssmtp
   - web
 
 {% set bad_configs = ('default', 'example_ssl') %}
@@ -159,6 +160,7 @@ nginx:
       - file: /etc/nginx/conf.d/{{ filename }}.conf
 {%- endfor %}
       - pkg: nginx
+      - pkg: ssmtp
   pkg:
     - installed
     - sources:

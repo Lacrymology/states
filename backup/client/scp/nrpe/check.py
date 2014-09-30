@@ -100,10 +100,10 @@ class SCPBackupFile(BackupFile):
 
         # paramiko wrongly parses %u/%r@%h as it use same value for %u and %r
         # replace %r with the configured username
-        self.kwargs['key_filename'] = (
+        self.kwargs['key_filename'] = [
             path.replace(local_user + '@', self.kwargs['username'] + '@')
             for path in sshconf.lookup(self.hostname)['identityfile']
-            if '@' in os.path.basename(path))
+            if '@' in os.path.basename(path)]
 
         log.info("connecting to %s", self.hostname)
         log.debug("kwargs: %s", str(self.kwargs))

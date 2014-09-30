@@ -29,7 +29,6 @@ Install the Nginx web server.
 -#}
 include:
   - apt
-  - raven.mail
   - rsyslog
   - ssl.dev
   - ssmtp

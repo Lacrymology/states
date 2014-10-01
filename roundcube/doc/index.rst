@@ -1,6 +1,8 @@
 RoundCube
 =========
 
+Consult :doc:`/mail/doc/index` for setting up a full-stack mail system.
+
 .. TODO: Intro
 
 To works properly, Roundcube need to have installed:

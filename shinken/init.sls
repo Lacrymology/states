@@ -253,7 +253,7 @@ shinken{{ suffix }}_python_path:
     - backup: False
     - require:
       - archive: shinken
-    - require_in:
+    - watch_in:
       - cmd: shinken
 {%- endfor %}
 

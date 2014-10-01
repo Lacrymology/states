@@ -52,6 +52,8 @@ define host {
     poller_tag all
 }
 
+{#- dummy host for command: bp_rule
+    https://shinken.readthedocs.org/en/latest/06_medium/business-rules.html -#}
 define host {
     use salt-host
     host_name dummy
@@ -250,14 +252,25 @@ define servicegroup {
 {%- set reserved_keys = ('check', 'description', 'passive', 'dependencies', 'service_dependencies') -%}
 {%- set data = salt['monitoring.shinken'](mine) -%}
 {%- for check_name in data -%}
-    {%- for check in data[check_name] %}
+    {%- for check in data[check_name] -%}
+        {%- set check_command = check.data.get('check', 'check_nrpe!' + check_name) %}
 define service {
     use salt-service
     service_description {{ check.shinken_service_description() }}
+        {#-
+          https://shinken.readthedocs.org/en/latest/06_medium/business-rules.html
+          bp_rule is an internal shinken command that can't be changed.
+          it's special and is always linked to dummy host.
+          -#}
+        {%- if check_command.startswith('bp_rule!') %}
+    host_name: dummy
+        {%- else %}
+            {#- not a bp_rule, so set real hostname. #}
     host_name {% for minion in check.minions -%}
-        {{ minion }}
-        {%- if not loop.last %},{% endif -%}
-    {%- endfor %}
+                {{ minion }}
+                {%- if not loop.last %},{% endif -%}
+              {%- endfor -%}
+        {%- endif %}
     display_name {{ check.data['description'] }}
         {%- if not check.data.get('passive', True) -%}
             {#- by default check are passive #}
@@ -265,7 +278,7 @@ define service {
     passive_checks_enabled 0
     check_freshness 0
         {%- endif %}
-    check_command {{ check.data.get('check', 'check_nrpe!' + check_name) }}
+    check_command {{ check_command }}
     {% for dependency in check.data.get('dependencies', []) -%}
         {%- if loop.first %}service_dependencies {% endif -%}
         ,{{ dependency.shinken_service_description() }}

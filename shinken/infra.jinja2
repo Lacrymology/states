@@ -29,7 +29,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 {%- set mine = salt['mine.get']('*', 'monitoring.data') %}
 
 define host {
-    name salt-host
+    host_name salt-host
     contact_groups admins
     notification_interval 0
     first_notification_delay 0
@@ -49,6 +49,15 @@ define host {
     retain_nonstatus_information 1
     business_impact 5
     register 0
+    poller_tag all
+}
+
+define host {
+    use salt-host
+    host_name dummy
+    check_command check_dummy
+    business_impact 0
+    address 127.0.0.1
 }
 
 {%- for host in mine -%}
@@ -71,7 +80,6 @@ define host {
     {%- endif %}
     alias {{ host }}
     hostgroups {% for role in mine[host]['roles'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
-    poller_tag all
 }
     {%- endif -%}
 {%- endfor %}
@@ -150,6 +158,11 @@ define command {
 define command {
     command_name check_tcp
     command_line /usr/lib/nagios/plugins/check_tcp -H $HOSTADDRESS$ -p $ARG1$
+}
+
+define command {
+    command_name check_dummy
+    command_line /usr/lib/nagios/plugins/check_dummy 0
 }
 
 define command {
@@ -267,20 +280,3 @@ define service {
 }
     {%- endfor -%}
 {%- endfor -%}
-
-{# TODO: replace with resolvable check name
-{%- if pillar['shinken']['architecture']['broker']|length == 2 -%}
-    {%- for service in ('shinken_broker_http', 'shinken_broker_http_port') %}
-define service {
-    use salt-service
-    host_name {{ pillar['shinken']['architecture']['broker'][0] }}
-    service_description {{ service }}_cluster
-    check_command bp_rule!({{ pillar['shinken']['architecture']['broker'][0] }},{{ service }} | {{ pillar['shinken']['architecture']['broker'][1] }},{{ service }})
-    business_rule_service_notification_options n
-    business_rule_smart_notifications 1
-    active_checks_enabled 1
-    passive_checks_enabled 0
-}
-    {%- endfor -%}
-{%- endif %}
-#}

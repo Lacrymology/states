@@ -109,3 +109,15 @@ apt_sources:
     - watch:
       - pkg: apt_sources
       - cmd: apt_update
+
+{%- if salt['pillar.get']('apt:upgrade', False) %}
+pkg.refresh_db:
+  module:
+    - run
+
+pkg.upgrade:
+  module:
+    - run
+    - require:
+      - module: pkg.refresh_db
+{%- endif %}

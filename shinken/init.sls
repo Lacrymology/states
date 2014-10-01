@@ -54,6 +54,8 @@ shinken-module-{{ module_name }}:
     - name: /usr/local/shinken/bin/shinken install {{ module_name }}
     {%- endif %}
     - onlyif: test $(/usr/local/shinken/bin/shinken inventory | grep -c {{ module_name }}) -eq 0
+    - require:
+      - file: shinken_python_path
     - watch:
       - file: /var/lib/shinken/.shinken.ini
       - cmd: shinken

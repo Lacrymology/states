@@ -46,7 +46,7 @@ shinken-module-{{ module_name }}:
       - file: /usr/local/shinken/modules
     {%- endif %}
   cmd:
-    - run
+    - wait
     - user: shinken
     {%- if 'files_archive' in pillar %}
     - name: /usr/local/shinken/bin/shinken install --local /usr/local/shinken/modules/{{ module_name }}
@@ -253,7 +253,7 @@ shinken{{ suffix }}_python_path:
     - backup: False
     - require:
       - archive: shinken
-    - require_in:
+    - watch_in:
       - cmd: shinken
 {%- endfor %}
 

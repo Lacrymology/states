@@ -55,5 +55,12 @@ shinken_broker_http:
   dependencies:
     - shinken_broker_http_port
 
+shinken_broker_web_cluster:
+  description: Shinken Broker Web UI Cluster
+  check: bp_rule!*,r:^shinken_broker_http
+  passive: False
+  business_rule_service_notification_options: n
+  business_rule_smart_notifications: 1
+
 {%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context %}
 {{ nginx_instance('shinken.broker', deployment='shinken', pillar_prefix='shinken', http_uri='/user/login', extra_dependencies=('shinken_broker_http',)) }}

@@ -59,12 +59,22 @@ Optional
 
 Example::
 
+  raven_mail: True
+
   mail:
     mailname: robotinfra.com
     postmaster: test@robotinfra.com
     check_mail_stack:
       username: check_mail_stack
       smtp_server: localhost
+
+raven_mail
+~~~~~~~~~~
+
+Whether you want to send an email to Sentry using ``raven`` or just normal email
+using ``ssmtp``.
+
+Default: ``False``
 
 mail:check_mail_stack
 ~~~~~~~~~~~~~~~~~~~~~

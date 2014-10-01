@@ -251,7 +251,9 @@ define servicegroup {
 
 {%- set reserved_keys = ('check', 'description', 'passive', 'dependencies', 'service_dependencies') -%}
 {%- set data = salt['monitoring.shinken'](mine) -%}
-{%- for check_name in data -%}
+{%- set data_keys = data.keys() -%}
+{%- do data_keys.sort() -%}
+{%- for check_name in data_keys -%}
     {%- for check in data[check_name] -%}
         {%- set check_command = check.data.get('check', 'check_nrpe!' + check_name) %}
 define service {

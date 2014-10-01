@@ -29,9 +29,9 @@ Install the Nginx web server.
 -#}
 include:
   - apt
+  - mail
   - rsyslog
   - ssl.dev
-  - ssmtp
   - web
 
 {% set bad_configs = ('default', 'example_ssl') %}
@@ -160,7 +160,10 @@ nginx:
       - file: /etc/nginx/conf.d/{{ filename }}.conf
 {%- endfor %}
       - pkg: nginx
+      - file: /usr/bin/mail
+{%- if 'raven_mail' not in pillar %}
       - pkg: ssmtp
+{%- endif %}
   pkg:
     - installed
     - sources:

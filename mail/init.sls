@@ -25,6 +25,14 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
+include:
+{%- if 'raven_mail' in pillar %}
+  - raven.mail
+{%- else %}
+  - raven.mail.absent
+  - ssmtp
+{%- endif %}
+
 /etc/mailname:
   file:
     - managed

@@ -49,11 +49,11 @@ shinken-module-{{ module_name }}:
     - run
     - user: shinken
     {%- if 'files_archive' in pillar %}
-    - name: /usr/local/shinken/bin/python /usr/local/shinken/bin/shinken install --local /usr/local/shinken/modules/{{ module_name }}
+    - name: /usr/local/shinken/bin/shinken install --local /usr/local/shinken/modules/{{ module_name }}
     {%- else %}
-    - name: /usr/local/shinken/bin/python /usr/local/shinken/bin/shinken install {{ module_name }}
+    - name: /usr/local/shinken/bin/shinken install {{ module_name }}
     {%- endif %}
-    - onlyif: test $(/usr/local/shinken/bin/python /usr/local/shinken/bin/shinken inventory | grep -c {{ module_name }}) -eq 0
+    - onlyif: test $(/usr/local/shinken/bin/shinken inventory | grep -c {{ module_name }}) -eq 0
     - watch:
       - file: /var/lib/shinken/.shinken.ini
       - cmd: shinken
@@ -194,10 +194,10 @@ shinken:
     - watch:
       - archive: shinken
     - require:
-      - module: shinken
       - file: shinken_replace_etc_shinken
       - file: shinken_replace_etc
       - file: shinken_replace_init
+      - module: shinken
   user:
     - present
     - shell: /bin/false
@@ -240,6 +240,20 @@ shinken_replace_init:
     - repl: "'/usr/local/shinken/etc/init.d/shinken"
     - require:
       - archive: shinken
+
+{%- for suffix in ('', '-arbiter', '-broker', '-discovery', '-poller', '-reactionner', '-receiver', '-scheduler') %}
+shinken{{ suffix }}_python_path:
+  file:
+    - replace
+    - name: /usr/local/shinken/src/Shinken-{{ version }}/bin/shinken{{ suffix }}
+    - pattern: "#!/usr/bin/env python"
+    - repl: "#!/usr/local/shinken/bin/python"
+    - backup: False
+    - require:
+      - archive: shinken
+    - require_in:
+      - cmd: shinken
+{%- endfor %}
 
 /var/lib/shinken/.shinken.ini:
   file:

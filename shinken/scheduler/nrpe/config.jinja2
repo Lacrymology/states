@@ -28,7 +28,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 shinken_scheduler_procs:
   description: Shinken Scheduler Deamon
   passive: False
-  command: "/usr/lib/nagios/plugins/check_procs -c 1:10 -u shinken -C python -a 'shinken-scheduler -c /etc/shinken/scheduler.conf'"
+  command: "/usr/lib/nagios/plugins/check_procs -c 1:10 -u shinken -C shinken-schedul -a /etc/shinken/scheduler.conf"
 
 shinken_scheduler_port:
   description: Shinken Scheduler Local Port

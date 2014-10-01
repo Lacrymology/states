@@ -50,15 +50,6 @@ apt_sources_backup:
     - source: /etc/apt/sources.list
 {%- endif %}
 
-{#-
-  cmd.wait is used instead of:
-
-  module:
-    - name: pkg.refresh_db
-
-  because the watch directive didn't seem to be respected back in older version.
-  this should be test to switch back to module.name instead.
-#}
 apt_update:
   file:
     - managed
@@ -75,9 +66,9 @@ apt_update:
 {%- if salt['file.file_exists'](backup) %}
       - file: apt_sources_backup
 {%- endif %}
-  cmd:
+  module:
     - wait
-    - name: apt-get update
+    - name: pkg.refresh_db
     - watch:
       - file: apt_update
       - file: /etc/apt/apt.conf.d/99local
@@ -102,26 +93,19 @@ apt_sources:
       - python-apt
       - python-software-properties
     - require:
-      - cmd: apt_update
+      - module: apt_update
   cmd:
     - wait
     - name: touch /etc/apt/sources.list
     - watch:
       - pkg: apt_sources
-      - cmd: apt_update
+      - module: apt_update
 
 {%- if salt['pillar.get']('apt:upgrade', False) %}
-apt_refresh_db:
-  module:
-    - run
-    - name: pkg.refresh_db
-    - require:
-      - cmd: apt_sources
-
 apt_upgrade:
   module:
     - run
     - name: pkg.upgrade
     - require:
-      - module: pkg.refresh_db
+      - module: apt_update
 {%- endif %}

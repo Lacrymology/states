@@ -100,9 +100,7 @@ apt_sources:
     - watch:
       - pkg: apt_sources
       - module: apt_update
-
 {%- if salt['pillar.get']('apt:upgrade', False) %}
-apt_upgrade:
   module:
     - run
     - name: pkg.upgrade

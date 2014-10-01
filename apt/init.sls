@@ -111,13 +111,17 @@ apt_sources:
       - cmd: apt_update
 
 {%- if salt['pillar.get']('apt:upgrade', False) %}
-pkg.refresh_db:
+apt_refresh_db:
   module:
     - run
+    - name: pkg.refresh_db
+    - require:
+      - cmd: apt_sources
 
-pkg.upgrade:
+apt_upgrade:
   module:
     - run
+    - name: pkg.upgrade
     - require:
       - module: pkg.refresh_db
 {%- endif %}

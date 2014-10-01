@@ -50,8 +50,11 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
         {#- cp.list_master_dirs return 'roles' which is root dir, ignore.
             only consider sub-directories -#}
         {%- if '/' in role_dir -%}
+            {%- set role = role_dir.split('/')[1] -%}
             {#- append the roles/*$rolename* -#}
-            {%- do local.global_roles.append(role_dir.split('/')[1]) -%}
+            {%- if role not in local.global_roles -%}
+                {%- do local.global_roles.append(role) -%}
+            {%- endif -%}
         {%- endif -%}
     {%- endfor -%}
 {%- endif -%}

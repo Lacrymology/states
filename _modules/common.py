@@ -71,6 +71,8 @@ def global_roles():
             # cp.list_master_dirs return 'roles' which is root dir, ignore.
             # only consider sub-directories
             if '/' in role_dir:
-                # append the roles/*$rolename*
-                output.append(role_dir.split('/')[1])
+                # append the roles/*$rolename*(/other_optional_dir)
+                role = role_dir.split('/')[1]
+                if role not in output:
+                    output.append(role)
     return output

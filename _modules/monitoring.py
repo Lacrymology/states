@@ -439,4 +439,6 @@ def shinken(mine_data=None):
     # sort all :class:`Check`
     for check_name in output.keys():
         output[check_name].sort()
+        for check_data in output[check_name]:
+            check_data.minions.sort()
     return output

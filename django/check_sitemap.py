@@ -30,13 +30,13 @@ __author__ = 'Bruno Clermont'
 __maintainer__ = 'Bruno Clermont'
 __email__ = 'patate@fastmail.cn'
 
-import argparse
+import sys
+
 import nagiosplugin
 import sitemap
-import sys
-import pysc
 
-# TODO: switch to pyfs.nrpe
+from pysc import nrpe
+
 
 class SiteMap(nagiosplugin.Resource):
     def __init__(self, sitemap):
@@ -56,18 +56,22 @@ class SiteMap(nagiosplugin.Resource):
         return [nagiosplugin.Metric('sitemap', self.loc(), context="sitemap")]
 
 
-@nagiosplugin.guarded
-@pysc.profile(log='nrpe.check_sitemap')
-def main():
-    argp = argparse.ArgumentParser(description=__doc__)
-    argp.add_argument('-w', '--warning', metavar='RANGE', default='')
-    argp.add_argument('-c', '--critical', metavar='RANGE', default='')
-    argp.add_argument('-s', '--sitemap')
-    args = argp.parse_args()
-    check = nagiosplugin.Check(
-            SiteMap(args.sitemap),
-            nagiosplugin.ScalarContext('sitemap', args.warning, args.critical))
-    check.main()
+def check_sitemap(config):
+    """
+    Required configs:
+
+    - sitemap
+    """
+    return (
+        SiteMap(config['sitemap']),
+        nagiosplugin.ScalarContext('sitemap',
+                                   config['warning'], config['critical']),
+    )
+
 
 if __name__ == "__main__":
-    main()
+    defaults = {
+        'warning': '',
+        'critical': '',
+    }
+    nrpe.check(check_sitemap)

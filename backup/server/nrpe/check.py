@@ -133,62 +133,62 @@ class BackupDirectory(UserList):
         UserList.__init__(self, data)
 
 # TODO: switch to pysc.nrpe and nagiosplugin
+class CheckBackups(pysc.Application):
+    logger = logger
+    def main(self):
+        """
+        main loop
+        """
+        logger.info("check started")
+        now = datetime.datetime.now()
+        max_time = datetime.timedelta(hours=36)
+        hosts = {}
+        backup = BackupDirectory('/var/lib/backup')
+        logger.info("iterating directory /var/lib/backup")
+        for file in backup:
+            try:
+                host = hosts[file.hostname]
+            except KeyError:
+                host = hosts[file.hostname] = {}
+            try:
+                name = host[file.name]
+            except KeyError:
+                name = host[file.name] = {}
+            try:
+                type = name[file.type]
+            except KeyError:
+                type = name[file.type] = {}
+            type[file.date] = file
 
-@pysc.profile(log=logger)
-def main():
-    """
-    main loop
-    """
-    logger.info("check started")
-    now = datetime.datetime.now()
-    max_time = datetime.timedelta(hours=36)
-    hosts = {}
-    backup = BackupDirectory('/var/lib/backup')
-    logger.info("iterating directory /var/lib/backup")
-    for file in backup:
-        try:
-            host = hosts[file.hostname]
-        except KeyError:
-            host = hosts[file.hostname] = {}
-        try:
-            name = host[file.name]
-        except KeyError:
-            name = host[file.name] = {}
-        try:
-            type = name[file.type]
-        except KeyError:
-            type = name[file.type] = {}
-        type[file.date] = file
+        logger.debug("Built files map: %s", str(hosts))
+        number_backups = 0
+        missing_backup = []
+        logger.info("Iterating hosts")
+        for host in hosts:
+            for name in hosts[host]:
+                for type in hosts[host][name]:
+                    logger.debug("Process %s - %s type %s", host, name, type)
+                    dates = hosts[host][name][type].keys()
+                    dates.sort()
+                    latest = hosts[host][name][type][dates[-1]]
+                    logger.debug("Latest backup %s", latest.date.isoformat())
+                    if now - latest.date > max_time:
+                        logger.debug("Expired backup %s", latest)
+                        missing_backup.append('-'.join((host, type)))
+                    else:
+                        logger.debug("Good backup %s", latest)
+                        number_backups += 1
 
-    logger.debug("Built files map: %s", str(hosts))
-    number_backups = 0
-    missing_backup = []
-    logger.info("Iterating hosts")
-    for host in hosts:
-        for name in hosts[host]:
-            for type in hosts[host][name]:
-                logger.debug("Process %s - %s type %s", host, name, type)
-                dates = hosts[host][name][type].keys()
-                dates.sort()
-                latest = hosts[host][name][type][dates[-1]]
-                logger.debug("Latest backup %s", latest.date.isoformat())
-                if now - latest.date > max_time:
-                    logger.debug("Expired backup %s", latest)
-                    missing_backup.append('-'.join((host, type)))
-                else:
-                    logger.debug("Good backup %s", latest)
-                    number_backups += 1
-
-    logger.info("check finished")
-    logger.debug("missing backups: %s", str(missing_backup))
-    if not missing_backup:
-        print 'BACKUP OK - no missing backup|backups={0}'.format(
-            number_backups)
-        sys.exit(0)
-    else:
-        print 'BACKUP WARNING - {0} missing backup|backups={1}'.format(
-            len(missing_backup), number_backups)
-        sys.exit(1)
+        logger.info("check finished")
+        logger.debug("missing backups: %s", str(missing_backup))
+        if not missing_backup:
+            print 'BACKUP OK - no missing backup|backups={0}'.format(
+                number_backups)
+            sys.exit(0)
+        else:
+            print 'BACKUP WARNING - {0} missing backup|backups={1}'.format(
+                len(missing_backup), number_backups)
+            sys.exit(1)
 
 if __name__ == '__main__':
-    main()
+    CheckBackups().run()

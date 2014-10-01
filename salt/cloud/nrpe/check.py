@@ -7,37 +7,41 @@
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
 #
-# 1. Redistributions of source code must retain the above copyright notice, this
-#    list of conditions and the following disclaimer.
+# 1. Redistributions of source code must retain the above copyright notice,
+#    this list of conditions and the following disclaimer.
 # 2. Redistributions in binary form must reproduce the above copyright notice,
 #    this list of conditions and the following disclaimer in the documentation
 #    and/or other materials provided with the distribution.
 #
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
-# ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-# (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-# ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
 
 """
 Nagios plugin to check that saltcloud images are as listed in the cloud.profile
 file
 """
-import logging
-import subprocess
 
 __author__ = 'Tomas Neme'
 __maintainer__ = 'Tomas Neme'
 __email__ = 'lacrymology@gmail.com'
 
+import logging
+import subprocess
+
 import nagiosplugin
+import yaml
+
 import pysc
-from pysc import nrpe as bfe
+from pysc import nrpe
 
 log = logging.getLogger("nagiosplugin.salt.cloud.images")
 
@@ -57,6 +61,7 @@ class Summary(nagiosplugin.Summary):
             msg = "%d missing images [%s]" % (count, ", ".join(value))
         return "{metric}: {msg}".format(metric=result.metric.name, msg=msg)
 
+
 class MissingImageContext(nagiosplugin.Context):
     def describe(self, metric):
         if len(metric.value) > 0:
@@ -71,6 +76,7 @@ class MissingImageContext(nagiosplugin.Context):
 
         return nagiosplugin.Result(state, metric=metric)
 
+
 class ImageIds(nagiosplugin.Resource):
     """
     Checks the salt-cloud instances list against cloud.profile
@@ -82,15 +88,8 @@ class ImageIds(nagiosplugin.Resource):
 
     def probe(self):
         log.info("ImageIds.probe started")
-        # TODO: use pysc yaml func and not yaml directly
-        # get cloud.profile data
-        profile_list = {}
-        with open(self.profile_file) as f:
-            profile_list = yaml.load(f)
-
-        providers = {}
-        with open(self.providers_file) as f:
-            providers = yaml.safe_load(f)
+        profile_list = pysc.unserialize_yaml(self.profile_file, critical=True)
+        providers = pysc.unserialize_yaml(self.providers_file, critical=True)
 
         # get salt-cloud output
         try:
@@ -118,15 +117,17 @@ class ImageIds(nagiosplugin.Resource):
         log.info("ImageIds.probe ended")
 
 
-@nagiosplugin.guarded
-@pysc.profile(log=log)
-def main():
-    # switch to pysc.nrpe and use arguments instead
+def check_saltcloud_images(config):
+    return (
+        ImageIds(config['profile_file'],
+                 config['providers_file']),
+        MissingImageContext('missing'),
+        Summary())
 
-    check = bfe.Check(ImageIds(args.profile_file, args.providers_file),
-                      MissingImageContext('missing'),
-                      Summary())
-    check.main(args)
 
 if __name__ == '__main__':
-    main()
+    defaults = {
+        'profile_file': '/etc/salt/cloud.profiles',
+        'providers_file': '/etc/salt/cloud.providers',
+    }
+    nrpe.check(check_saltcloud_images, defaults)

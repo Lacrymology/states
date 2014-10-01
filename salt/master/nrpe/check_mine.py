@@ -47,8 +47,7 @@ import salt.client
 import salt.config as config
 
 import nagiosplugin as nap
-import pysc
-import pysc.nrpe
+from pysc import nrpe
 
 log = logging.getLogger('nagiosplugin.salt.master.mine')
 
@@ -88,14 +87,9 @@ class MineMinion(nap.Resource):
                                min=0, context='minions')]
 
 
-@nap.guarded
-@pysc.profile(log=log)
-def main():
-    argp = pysc.nrpe.ArgumentParser()
-    args = argp.parse_args()
-    m_ids = MineMinion()
-    check = pysc.nrpe.Check(m_ids, nap.ScalarContext('minions', '0:0', '0:0'))
-    check.main(args)
+def check_mine_minions(_):
+    return (MineMinion(), nap.ScalarContext('minions', '0:0', '0:0'))
+
 
 if __name__ == "__main__":
-    main()
+    nrpe.check(check_mine_minions)

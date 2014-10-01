@@ -30,11 +30,12 @@ __author__ = 'Hung Nguyen Viet <hvnsweeting@gmail.com>'
 __maintainer__ = 'Hung Nguyen Viet <hvnsweeting@gmail.com>'
 __email__ = 'hvnsweeting@gmail.com'
 
-import argparse
 import logging
 import subprocess
+
 import nagiosplugin as nap
-import pysc
+
+from pysc import nrpe
 
 log = logging.getLogger('nagiosplugin.postgresql.common.encoding')
 
@@ -61,7 +62,7 @@ class Encoding(nap.Resource):
         for line in output:
             cols = line.split(' | ')
             if (self.dbname == cols[0].strip() and
-                self.encoding == cols[2].strip()):
+                    self.encoding == cols[2].strip()):
                 log.info(self.dbname)
                 log.info('Expect: {0}, found {1}'.format(self.encoding,
                                                          cols[2].strip()))
@@ -74,16 +75,17 @@ class Encoding(nap.Resource):
         return [nap.Metric('encoding', 1, context='encoding')]
 
 
-@nap.guarded
-@pysc.profile(log=log)
-def main():
-    # TODO: switch to pysc.nrpe and use arguments
-    argp = argparse.ArgumentParser()
-    argp.add_argument('--encoding', '-e', help='Encoding name', default='UTF8')
-    args = argp.parse_args()
-    enc = Encoding(args.name, args.encoding)
-    check = nap.Check(enc, nap.ScalarContext('encoding', '0:0', '0:0'))
-    check.main(args.verbose)
+def check_psql_encoding(config):
+    """
+    Required configurations:
+    - ('name', help="The database name to check")
+    """
+    enc = Encoding(config['name'], config['encoding'])
+    return (enc, nap.ScalarContext('encoding', '0:0', '0:0'))
+
 
 if __name__ == "__main__":
-    main()
+    defaults = {
+        'encoding': 'UTF8',
+    }
+    nrpe.check(check_psql_encoding, defaults)

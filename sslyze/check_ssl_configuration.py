@@ -7,22 +7,23 @@
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
 #
-# 1. Redistributions of source code must retain the above copyright notice, this
-#    list of conditions and the following disclaimer.
+# 1. Redistributions of source code must retain the above copyright notice,
+# this list of conditions and the following disclaimer.
 # 2. Redistributions in binary form must reproduce the above copyright notice,
 #    this list of conditions and the following disclaimer in the documentation
 #    and/or other materials provided with the distribution.
 #
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
-# ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-# (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-# ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
 
 """
 Nagios plugin to check the SSL configuration of a server.
@@ -39,11 +40,10 @@ import re
 from datetime import datetime
 
 import nagiosplugin as nap
-import pysc
-import pysc.nrpe
-
 from plugins import PluginCertInfo, PluginOpenSSLCipherSuites
 from utils.SSLyzeSSLConnection import SSLHandshakeRejected
+
+from pysc import nrpe
 
 
 class SslConfiguration(nap.Resource):
@@ -109,7 +109,8 @@ class SslConfiguration(nap.Resource):
                 hostname_validation = c.split(':')[1].lstrip()
                 for i in range(cert_result_list.index(c) + 1,
                                cert_result_list.index(c) + 5):
-                    if not cert_result_list[i].split(':')[1].lstrip().startswith('OK'):
+                    if not (cert_result_list[i].split(':')[1].lstrip()
+                            .startswith('OK')):
                         is_trusted = re.split(r':\s{2}',
                                               cert_result_list[i])[1].lstrip()
                         break
@@ -119,7 +120,8 @@ class SslConfiguration(nap.Resource):
 
         if (hostname_validation.startswith('OK') and expire_in.days > 0
                 and is_trusted == 'OK'):
-            cipher_plugin = PluginOpenSSLCipherSuites.PluginOpenSSLCipherSuites()
+            cipher_plugin = (
+                PluginOpenSSLCipherSuites.PluginOpenSSLCipherSuites())
             cipher_plugin._shared_settings = shared_settings
 
             protocols = ['sslv2', 'sslv3', 'tlsv1', 'tlsv1_1', 'tlsv1_2']
@@ -220,18 +222,18 @@ class SslSummary(nap.Summary):
         return self.status_line(results)
 
 
-@nap.guarded
-@pysc.profile(log=__name__)
-def main():
-    parser = pysc.nrpe.ArgumentParser()
-    parser.add_argument('-H', '--host', type=str)
-    parser.add_argument('-p', '--port', type=int, default=443)
-    parser.add_argument('-t', '--timeout', type=int, default=60)
-    args = parser.parse_args()
-    config = pysc.nrpe.ConfigFile.from_arguments(args)
-    kwargs = config.kwargs('host', 'port')
+def main(config):
+    """
+    Required configs:
 
-    check = pysc.nrpe.Check(
+    - host
+    """
+    kwargs = dict(
+        host=config['host'],
+        port=config['port']
+    )
+
+    return (
         SslConfiguration(**kwargs),
         nap.ScalarContext('sslscore',
                           nap.Range('@65:80'), nap.Range('@0:65')),
@@ -241,9 +243,13 @@ def main():
                           nap.Range('@65:80'), nap.Range('@0:65')),
         nap.ScalarContext('expireInDays',
                           nap.Range('@65:80'), nap.Range('@0:65')),
-        SslSummary(**kwargs))
-    check.main(args)
+        SslSummary(**kwargs)
+    )
 
 
 if __name__ == "__main__":
-    main()
+    defaults = {
+        'port': 443,
+        'timeout': 60,
+    }
+    nrpe.check(main, defaults)

@@ -57,7 +57,7 @@ def validate(dirname):
     """
     tar_extensions = ('bz2', 'gz')
     for filename in os.listdir(dirname):
-        prefix, ext = os.path.splitext(filename)
+        _, ext = os.path.splitext(filename)
         absolute_filename = os.path.join(dirname, filename)
         extension = ext.lstrip(os.extsep)
         if extension in tar_extensions:
@@ -86,10 +86,12 @@ def validate(dirname):
         else:
             logger.debug("Ignore non tar %s", absolute_filename)
 
-# TODO: use pysc.Util
-@pysc.profile(log=logger)
-def main():
-    validate('/var/lib/salt_archive/pip')
+
+class SaltArchivePipCheck(pysc.Application):
+    logger = logger
+
+    def main(self):
+        validate('/var/lib/salt_archive/pip')
 
 if __name__ == '__main__':
-    main()
+    SaltArchivePipCheck().run()

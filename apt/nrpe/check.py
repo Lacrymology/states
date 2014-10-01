@@ -38,7 +38,7 @@ import logging
 import os
 
 import nagiosplugin
-import pysc
+from pysc import nrpe
 
 log = logging.getLogger("nagiosplugin.apt.half_installed")
 
@@ -57,17 +57,18 @@ class HalfInstalled(nagiosplugin.Resource):
         log.debug("returning %d", len(pkgs))
         return [nagiosplugin.Metric('halfinstalled', len(pkgs), min=0)]
 
-@nagiosplugin.guarded
-@pysc.profile(log=log)
-def main():
-    argp = argparse.ArgumentParser(description=__doc__)
-    # TODO: migrate to pysc.nrpe and take warning from apt_rc:arguments:warning
-    check = nagiosplugin.Check(
+
+def half_installed_check(config):
+    return (
         HalfInstalled(),
         nagiosplugin.ScalarContext(
-            'halfinstalled', args.warning, args.warning,
+            'halfinstalled',
+            config['warning'],
+            config['warning'],
             fmt_metric='{value} half-installed packages'))
-    check.main()
 
 if __name__ == '__main__':
-    main()
+    defaults = {
+        'warning': '0',
+    }
+    nrpe.check(half_installed_check, defaults)

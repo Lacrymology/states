@@ -8,22 +8,23 @@
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
 #
-# 1. Redistributions of source code must retain the above copyright notice, this
-#    list of conditions and the following disclaimer.
+# 1. Redistributions of source code must retain the above copyright notice,
+# this list of conditions and the following disclaimer.
 # 2. Redistributions in binary form must reproduce the above copyright notice,
 #    this list of conditions and the following disclaimer in the documentation
 #    and/or other materials provided with the distribution.
 #
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
-# ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-# (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-# ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
 #
 # Author: Bruno Clermont <patate@fastmail.cn>
 # Maintainer: Bruno Clermont <patate@fastmail.cn>
@@ -41,9 +42,11 @@ import logging
 import logging.handlers
 import copy
 
+import pysc
+
 # TODO:
-# use pysc.Util and use it to initialize logging
 # add or use (if already there) pysc Raven client initialization
+
 
 def configure_logging():
     log = logging.getLogger('sentry.errors')
@@ -56,42 +59,39 @@ def configure_logging():
 
 log = configure_logging()
 
-def main():
+
+class Mail(pysc.Application):
     """
-    main loop
+    Send an email
     """
-    # consume standard input early
-    body = os.linesep.join(sys.stdin.readlines())
-    if not len(body):
-        sys.stderr.write("Empty stdin, nothing to report")
-        sys.stderr.write(os.linesep)
-        sys.exit(1)
+    def get_argument_parser(self):
+        argp = super(Mail, self).get_argument_parser()
+        argp.add_argument('-s', '--subject', help="Subject")
+        argp.add_argument('extra_args', nargs='*')
+        return argp
 
-    # init raven quickly, so if something is wrong it get logged early
-    from raven import Client
-    if 'SENTRY_DSN' not in os.environ.keys():
-        os.environ['SENTRY_DSN'] = "requests+{{ pillar['sentry_dsn'] }}"
-    client = Client()
+        # init raven quickly, so if something is wrong it get logged early
+        from raven import Client
+        if 'SENTRY_DSN' not in os.environ.keys():
+            os.environ['SENTRY_DSN'] = "requests+{{ pillar['sentry_dsn'] }}"
+        client = Client()
 
-    # process command line
-    from argparse import ArgumentParser
-    argpsr = ArgumentParser()
-    argpsr.add_argument('-s', help="Subject")
-    args, unknown = argpsr.parse_known_args()
+        # init raven quickly, so if something is wrong it get logged early
+        from raven import Client
+        if 'SENTRY_DSN' not in os.environ.keys():
+            os.environ['SENTRY_DSN'] = "{{ pillar['sentry_dsn'] }}"
+        client = Client()
 
-    if args.s:
-        msg = os.linesep.join((args.s, body))
-    else:
-        msg = body
+        if self.config['subject']:
+            msg = os.linesep.join((self.config['subject'], body))
+        else:
+            msg = body
 
-    # copy os.environ and remove DSN
-    environ = copy.copy(dict(os.environ))
-    environ['command-line'] = unknown
-    environ.pop('SENTRY_DSN', None)
-    client.captureMessage(msg, extra=environ)
+        # copy os.environ and remove DSN
+        environ = copy.copy(dict(os.environ))
+        environ['command-line'] = self.config['extra_args']
+        environ.pop('SENTRY_DSN', None)
+        client.captureMessage(msg, extra=environ)
 
 if __name__ == "__main__":
-    try:
-        main()
-    except Exception as e:
-        log.critical(e)
+    Mail().run()

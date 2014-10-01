@@ -38,12 +38,10 @@ import smtplib
 import time
 import uuid
 
-import pysc
 import nagiosplugin as nap
 
+from pysc import nrpe
 
-# NOTE: This doesn't use python's nagiosplugin, but let's put the logs in the
-#   same namespace anyways
 log = logging.getLogger('nagiosplugin.dovecot.mail_stack')
 
 
@@ -173,12 +171,18 @@ Subject: %s
         return (not found)
 
 
-@nap.guarded
-@pysc.profile(log=log)
-def main():
-    # TODO: use pysc.nrpe no pysc.Util
-    # TODO: use /etc/python/config.yaml and mailstack_functionality:arguments
-    config = pysc.Util('/etc/nagios/check_mail_stack.yml', lock=False)
+def check_mail_stack(config):
+    """
+    Required configs:
+
+    - mail
+    - smtp_wait
+    - username
+    - password
+    - imap_server
+    - smtp_server
+    - ssl
+    """
     mail = config['mail']
     waittime = mail['smtp_wait']
     username = mail['username']
@@ -187,10 +191,13 @@ def main():
     smtp_server = mail['smtp_server']
     ssl = mail['ssl']
 
-    mshealth = MailStackHealth(imap_server, smtp_server, username, password,
-                               waittime, ssl)
-    check = nap.Check(mshealth)
-    check.main(timeout=300)
+    return [MailStackHealth(imap_server, smtp_server, username, password,
+                            waittime, ssl)]
+
 
 if __name__ == "__main__":
-    main()
+    defaults = {
+        'timeout': 300,
+        'config': '/etc/nagios/check_mail_stack.yml',
+    }
+    nrpe.check(check_mail_stack, defaults)

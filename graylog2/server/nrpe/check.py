@@ -38,10 +38,11 @@ __email__ = 'favadi@robotinfra.com'
 
 import logging
 import time
-import pysc
-import pysc.nrpe
+
 import nagiosplugin
 import requests
+
+from pysc import nrpe
 
 log = logging.getLogger('nagiosplugin.graylog2.server.new_logs')
 
@@ -89,20 +90,19 @@ class Graylog2Throughput(nagiosplugin.Resource):
         ]
 
 
-@nagiosplugin.guarded
-@pysc.profile(log=log)
-def main():
-    argp = pysc.nrpe.ArgumentParser(description=__doc__)
-    args = argp.parse_args()
-    config = pysc.nrpe.ConfigFile.from_arguments(args)
-    kwargs = config.kwargs('api_url', 'username', 'password')
-    crit_range = config.get_argument('crit_range', '1:10000')
-    kwargs['max_retry'] = config.get_argument('max_retry', '20')
-    check = nagiosplugin.Check(
-        Graylog2Throughput(**kwargs),
-        nagiosplugin.ScalarContext('throughput', critical=crit_range))
-    check.main(args.verbose)
+def check_new_logs(config):
+    return (
+        Graylog2Throughput(api_url=config['api_url'],
+                           username=config['username'],
+                           password=config['password'],
+                           max_retry=config['max_retry']),
+        nagiosplugin.ScalarContext('throughput', critical=config['crit_range'])
+    )
 
 
 if __name__ == '__main__':
-    main()
+    defaults = {
+        'crit_range': '1:10000',
+        'max_retry': '20',
+    }
+    nrpe.check(check_new_logs, defaults)

@@ -36,9 +36,7 @@ import logging
 
 import pymysql
 import nagiosplugin as nap
-import pysc
-import pysc.nrpe
-
+from pysc import nrpe
 
 log = logging.getLogger('nagiosplugin.mysql.query')
 
@@ -74,19 +72,21 @@ class MysqlQuery(nap.Resource):
         return [nap.Metric('records', records, context='records')]
 
 
-@nap.guarded
-@pysc.profile(log=log)
-def main():
-    argp = pysc.nrpe.ArgumentParser(description=__doc__)
-    args = argp.parse_args()
-    config = pysc.nrpe.ConfigFile.from_arguments(args)
-    kwargs = config.kwargs('host', 'user', 'passwd', 'database')
-    kwargs['query'] = config.get_argument('query', 'select @@max_connections;')
-    critical = config.get_argument('critical', '1:')
-    check = pysc.nrpe.Check(MysqlQuery(**kwargs),
-                            nap.ScalarContext('records', critical, critical))
-    check.main(args)
+def check_mysql_query(config):
+    critical = config['critical']
+    return (
+        MysqlQuery(host=config['host'],
+                   user=config['user'],
+                   passwd=config['passwd'],
+                   database=config['database'],
+                   query=config['query']),
+        nap.ScalarContext('records', critical, critical)
+    )
 
 
 if __name__ == "__main__":
-    main()
+    defaults = {
+        'critical': '1:',
+        'query': 'select @@max_connections;',
+    }
+    nrpe.check(check_mysql_query, defaults)

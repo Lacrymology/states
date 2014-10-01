@@ -81,10 +81,10 @@ class PassiveDaemon(object):
     runs them somewhat linearly
     """
 
-    def __init__(self, config, minion_id, nsca_servers, nsca_include_directory,
+    def __init__(self, stats, minion_id, nsca_servers, nsca_include_directory,
                  nsca_timeout, default_interval):
 
-        self.config = config
+        self.stats = stats
         self.minion_id = minion_id
         self.nsca_servers = nsca_servers
         self.nsca_include_directory = nsca_include_directory
@@ -148,10 +148,10 @@ class PassiveDaemon(object):
                 logger.debug("Can't send NSCA data to '%s': '%s'",
                              sender.remote_host, err, exc_info=True)
                 counters.increment()
-                self.config.stats.gauge('passive_check.failure',
-                                        counters.failure)
-                self.config.stats.gauge('passive_check.total_failure',
-                                        counters.total_failure)
+                self.stats.gauge('passive_check.failure',
+                                 counters.failure)
+                self.stats.gauge('passive_check.total_failure',
+                                 counters.total_failure)
                 if counters.ever_success:
                     logger.warning(
                         "Can't send to server '%s' as it never worked",
@@ -230,49 +230,63 @@ class PassiveDaemon(object):
             self.sched.shutdown()
 
 
-def main():
-    parser = pysc.common_argparser(default_config_path='/etc/nagios/nsca.yaml')
-    args = parser.parse_args()
+class NscaPassive(pysc.Application):
+    """
+    Main nsca_passive application
 
-    try:
-        config = pysc.Util(args.config, debug=args.log, drop_privilege=False)
+    TODO: document what this does
+    """
+    default = {
+        'config': '/etc/nagios/nsca.yaml',
+    }
+
+    def parse_config(self):
+        # HACK: this test needs to drop its privilege WITHIN main, and this
+        # is not supported by the current workflow. So I have to remove the
+        # UID and GID config values and re-set them aferwards
+        super(NscaPassive, self).parse_config()
+        # this removes the gid and uid settings from config
+        self.uid = self.config.get('process', {}).pop('gid', None)
+        self.gid = self.config.get('process', {}).pop('uid', None)
+
+    def main(self):
 
         with open('/etc/hostname') as f:
             try:
                 minion_id = f.read().rstrip()
             except IOError as err:
-                logger.error("Can't get minion id from '/etc/hostname': %r", err,
-                             exc_info=True)
+                logger.error("Can't get minion id from '/etc/hostname': %r",
+                             err, exc_info=True)
                 sys.exit(1)
 
         try:
-            nsca_servers = config['nsca']['servers']
-            nsca_include_directory = config['file']['monitor_config']
-            default_interval = config['nsca']['default_interval']
-            nsca_timeout = config['nsca']['timeout']
+            nsca_servers = self.config['nsca']['servers']
+            nsca_include_directory = self.config['file']['monitor_config']
+            default_interval = self.config['nsca']['default_interval']
+            nsca_timeout = self.config['nsca']['timeout']
         except KeyError, err:
             logger.error('Bad config %r', err)
             sys.exit(1)
 
-    except Exception as err:
-        logger.error("PassiveDaemon is not configured properly: %r", err,
-                     exc_info=True)
-        sys.exit(1)
-    else:
         try:
             # late drop_privilege because it needs to read salt minion config
-            config.drop_privilege()
-            PassiveDaemon(config,
+            if self.uid:
+                self.config['process']['uid'] = self.uid
+            if self.gid:
+                self.config['process']['gid'] = self.gid
+            # if nothing happened above, this call will do nothing, and luckily
+            # the lock file can be acquired multiple times transparently
+            self.setup_process()
+            PassiveDaemon(self.stats,
                           minion_id,
                           nsca_servers,
                           nsca_include_directory,
                           nsca_timeout,
-                          default_interval
-                          ).main()
+                          default_interval).main()
         except Exception as err:
             logger.error("Encountered error when running PassiveDaemon: %r",
                          err, exc_info=True)
 
 
 if __name__ == '__main__':
-    main()
+    NscaPassive().run()

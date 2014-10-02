@@ -1,6 +1,7 @@
 #! -*- coding: utf-8 -*-
 '''
-Writes timestamps to a file if ret data is the one of success.
+Writes timestamps to a file if return data of calling state.* execution module
+is success.
 '''
 
 import os

@@ -47,7 +47,6 @@ extend:
         - pkg: amavis
   amavis:
     user:
-      - present
       - groups:
         - clamav
       - require:

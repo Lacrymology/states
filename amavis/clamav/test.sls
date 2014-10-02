@@ -26,11 +26,11 @@ Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
 include:
-  - amavis
   - amavis.clamav
   - amavis.diamond
   - amavis.nrpe
   - clamav.nrpe
+  - clamav.diamond
 
 test:
   monitoring:

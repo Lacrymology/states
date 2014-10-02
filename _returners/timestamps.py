@@ -6,6 +6,7 @@ Writes timestamps to a file if ret data is the one of success.
 import os
 import time
 import logging
+import yaml
 
 
 log = logging.getLogger()
@@ -22,5 +23,6 @@ def returner(ret):
                   for state in ret['return'])
     if success:
         log.info('Did this %s run success? %s', ret['fun'], str(success))
+        timestamps = {'last_success': time.time()}
         with open(TS_PATH, 'w+') as f:
-            f.write(str(time.time()))
+            yaml.dump(timestamps, f)

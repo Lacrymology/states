@@ -10,7 +10,7 @@ import logging
 
 log = logging.getLogger()
 __virtualname__ = 'timestamps'
-TS_PATH = os.path.join('/var/cache/salt/minion', 'returner_timestamps')
+TS_PATH = os.path.join(__opts__['cachedir'], 'returner_timestamps')
 
 
 def __virtual__():

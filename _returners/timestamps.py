@@ -11,7 +11,6 @@ import yaml
 
 log = logging.getLogger()
 __virtualname__ = 'timestamps'
-TS_PATH = os.path.join(__opts__['cachedir'], 'returner_timestamps')
 
 
 def __virtual__():
@@ -19,6 +18,7 @@ def __virtual__():
 
 
 def returner(ret):
+    TS_PATH = os.path.join(__opts__['cachedir'], 'returner_timestamps')
     success = all(ret['return'][state]['result']
                   for state in ret['return'])
     if success:

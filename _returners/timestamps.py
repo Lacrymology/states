@@ -30,5 +30,6 @@ def returner(ret):
     if success:
         log.info('Did this %s run success? %s', ret['fun'], str(success))
         timestamps = {'last_success': time.time()}
+        log.debug('Writing timestamps to %s', TS_PATH)
         with open(TS_PATH, 'w+') as f:
             yaml.dump(timestamps, f)

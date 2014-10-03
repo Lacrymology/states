@@ -17,11 +17,11 @@ class LastSuccess(nap.Resource):
             with open(timestamps_path) as f:
                 ts = yaml.load(f)
                 try:
-                    minutes = (datetime.datetime.now() -
-                               datetime.datetime.strptime(ts['last_success'],
-                               "%Y-%m-%dT%H:%M:%S.%f")).total_seconds() / 60
-                    ret = [nap.Metric('last_success', minutes, min=0,
-                                      context='minutes')]
+                    hours = (datetime.datetime.now() -
+                             datetime.datetime.strptime(ts['last_success'],
+                             "%Y-%m-%dT%H:%M:%S.%f")).total_seconds() / 3600
+                    ret = [nap.Metric('last_success', hours, min=0,
+                                      context='hours')]
                     return ret
                 except Exception:
                     log.critical('Not found timestamps of last success')
@@ -35,9 +35,9 @@ class LastSuccess(nap.Resource):
 @nap.guarded
 def main():
     check = nap.Check(LastSuccess(),
-                      nap.ScalarContext('minutes', '0:48',
+                      nap.ScalarContext('hours', '0:48',
                                         '0:48',
-                                        fmt_metric='{value} minutes ago'))
+                                        fmt_metric='{value} hours ago'))
     check.main()
 
 if __name__ == "__main__":

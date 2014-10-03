@@ -56,26 +56,11 @@ def returner(ret):
     success = all(ret['return'][state]['result']
                   for state in ret['return'])
 
-    timestamps = {'last_success': None,
-                  'last_failed': None}
-
-    try:
-        with open(TS_PATH) as f:
-            existing_ts = yaml.load(f)
-            if existing_ts:
-                timestamps.update(existing_ts)
-    except IOError:
-        pass
-
-    now = datetime.datetime.now().isoformat()
+    timestamps = {'last_success': datetime.datetime.now().isoformat()}
 
     log.info('Did this %s run success? %s', ret['fun'], str(success))
-    if success:
-        timestamps.update({'last_success': now})
-    else:
-        timestamps.update({'last_failed': now})
-
     log.debug(timestamps)
-    log.debug('Writing timestamps to %s', TS_PATH)
-    with open(TS_PATH, 'w') as f:
-        yaml.dump(timestamps, f)
+    if success:
+        log.debug('Writing timestamps to %s', TS_PATH)
+        with open(TS_PATH, 'w') as f:
+            yaml.dump(timestamps, f)

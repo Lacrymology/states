@@ -32,7 +32,7 @@ __maintainer__ = 'Hung Nguyen Viet'
 __email__ = 'hvnsweeting@gmail.com'
 
 import os
-import time
+import datetime
 import logging
 import yaml
 
@@ -55,9 +55,26 @@ def returner(ret):
 
     success = all(ret['return'][state]['result']
                   for state in ret['return'])
+
+    timestamps = {'last_success': None,
+                  'last_failed': None}
+
+    try:
+        with open(TS_PATH) as f:
+            existing_ts = yaml.load(f)
+            if existing_ts:
+                timestamps.update(existing_ts)
+    except IOError:
+        pass
+
+    now = datetime.datetime.now()
+
+    log.info('Did this %s run success? %s', ret['fun'], str(success))
     if success:
-        log.info('Did this %s run success? %s', ret['fun'], str(success))
-        timestamps = {'last_success': time.time()}
-        log.debug('Writing timestamps to %s', TS_PATH)
-        with open(TS_PATH, 'w') as f:
-            yaml.dump(timestamps, f)
+        timestamps.update({'last_success': now})
+    else:
+        timestamps.update({'last_failed': now})
+
+    log.debug('Writing timestamps to %s', TS_PATH)
+    with open(TS_PATH, 'w') as f:
+        yaml.dump(timestamps, f)

@@ -1,10 +1,11 @@
-import logging
 import datetime
+import logging
 
 import nagiosplugin as nap
 import yaml
 
 import pysc
+import pysc.nrpe as bfe
 
 
 log = logging.getLogger('nagiosplugin.salt.minion.last_success')
@@ -33,12 +34,15 @@ class LastSuccess(nap.Resource):
 
 
 @nap.guarded
+@pysc.profile(log=log)
 def main():
-    check = nap.Check(LastSuccess(),
+    argp = bfe.ArgumentParser()
+    args = argp.parse_args()
+    check = bfe.Check(LastSuccess(),
                       nap.ScalarContext('hours', '0:48',
                                         '0:48',
                                         fmt_metric='{value} hours ago'))
-    check.main()
+    check.main(args)
 
 if __name__ == "__main__":
     main()

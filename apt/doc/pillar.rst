@@ -57,6 +57,9 @@ Optional
 
 Example::
 
+  apt:
+    upgrade: True
+
   packages:
     blacklist:
       - more
@@ -65,6 +68,13 @@ Example::
       - vim
       - cmon
       - nmap
+
+apt:upgrade
+~~~~~~~~~~~
+
+Whether you want to refresh apt database and upgrade all packages or not.
+
+Default: ``False``.
 
 proxy_server
 ~~~~~~~~~~~~

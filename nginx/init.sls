@@ -161,7 +161,7 @@ nginx:
 {%- endfor %}
       - pkg: nginx
       - file: /usr/bin/mail
-{%- if 'raven_mail' not in pillar %}
+{%- if not salt['pillar.get']('sentry_dsn', False) %}
       - pkg: ssmtp
 {%- endif %}
   pkg:

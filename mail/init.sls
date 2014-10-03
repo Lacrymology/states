@@ -26,7 +26,7 @@ Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
 include:
-{%- if 'raven_mail' in pillar %}
+{%- if salt['pillar.get']('sentry_dsn', False) %}
   - raven.mail
 {%- else %}
   - raven.mail.absent

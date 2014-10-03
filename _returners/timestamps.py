@@ -67,7 +67,7 @@ def returner(ret):
     except IOError:
         pass
 
-    now = datetime.datetime.now()
+    now = datetime.datetime.now().isoformat()
 
     log.info('Did this %s run success? %s', ret['fun'], str(success))
     if success:
@@ -75,6 +75,7 @@ def returner(ret):
     else:
         timestamps.update({'last_failed': now})
 
+    log.debug(timestamps)
     log.debug('Writing timestamps to %s', TS_PATH)
     with open(TS_PATH, 'w') as f:
         yaml.dump(timestamps, f)

@@ -29,6 +29,7 @@ Install the Nginx web server.
 -#}
 include:
   - apt
+  - mail
   - rsyslog
   - ssl.dev
   - web
@@ -159,6 +160,10 @@ nginx:
       - file: /etc/nginx/conf.d/{{ filename }}.conf
 {%- endfor %}
       - pkg: nginx
+      - file: /usr/bin/mail
+{%- if not salt['pillar.get']('sentry_dsn', False) %}
+      - pkg: ssmtp
+{%- endif %}
   pkg:
     - installed
     - sources:

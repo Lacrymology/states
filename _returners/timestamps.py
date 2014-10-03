@@ -62,5 +62,8 @@ def returner(ret):
     log.debug(timestamps)
     if success:
         log.debug('Writing timestamps to %s', TS_PATH)
-        with open(TS_PATH, 'w') as f:
-            yaml.dump(timestamps, f)
+        try:
+            with open(TS_PATH, 'w') as f:
+                yaml.dump(timestamps, f)
+        except Exception:
+            log.error('Cannot write timestamps to %s', TS_PATH)

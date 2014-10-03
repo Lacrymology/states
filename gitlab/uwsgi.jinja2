@@ -1,7 +1,0 @@
-{% extends "uwsgi/template.jinja2" %}
-{% block footer %}
-  post-buffering: 4096
-  buffer-size: 32768
-  env: RAILS_ENV=production
-  rack: {{ rack }}
-{% endblock %}

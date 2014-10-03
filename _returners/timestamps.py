@@ -31,13 +31,11 @@ __author__ = 'Hung Nguyen Viet'
 __maintainer__ = 'Hung Nguyen Viet'
 __email__ = 'hvnsweeting@gmail.com'
 
-import os
 import datetime
 import logging
-import yaml
 
 
-log = logging.getLogger()
+log = logging.getLogger(__name__)
 __virtualname__ = 'timestamps'
 
 
@@ -46,7 +44,6 @@ def __virtual__():
 
 
 def returner(ret):
-    TS_PATH = os.path.join(__opts__['cachedir'], 'returner_timestamps')
     if not isinstance(ret['return'], dict):
         log.warning('%s returner only support returning result of calling '
                     'state module. E.g state.highstate, state.sls, etc..',
@@ -56,14 +53,8 @@ def returner(ret):
     success = all(ret['return'][state]['result']
                   for state in ret['return'])
 
-    timestamps = {'last_success': datetime.datetime.now().isoformat()}
-
     log.info('Did this %s run success? %s', ret['fun'], str(success))
-    log.debug(timestamps)
     if success:
-        log.debug('Writing timestamps to %s', TS_PATH)
-        try:
-            with open(TS_PATH, 'w') as f:
-                yaml.dump(timestamps, f)
-        except Exception:
-            log.error('Cannot write timestamps to %s', TS_PATH)
+        log.debug('Storing timestamps to minion datastore')
+        __salt__['data.update']('returner_timestamps_last_success',
+                                datetime.datetime.now().isoformat())

@@ -55,6 +55,13 @@ def returner(ret):
 
     log.info('Did this %s run success? %s', ret['fun'], str(success))
     if success:
-        log.debug('Storing timestamps to minion datastore')
-        __salt__['data.update']('returner_timestamps_last_success',
-                                datetime.datetime.now().isoformat())
+        ts = ['returner_timestamps_last_success',
+              datetime.datetime.now().isoformat()]
+        try:
+            if __salt__['data.update'](*ts):
+                log.debug('Stored timestamps to minion datastore: %s', ts)
+            else:
+                raise RuntimeError("__salt__['data.update'] did "
+                                   "not return True")
+        except Exception as e:
+            log.error(e, exc_info=True)

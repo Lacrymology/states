@@ -33,4 +33,15 @@ include:
   - nrpe
   - rsyslog.nrpe
 
+/usr/lib/nagios/plugins/check_minion_last_success.py:
+  file:
+    - managed
+    - source: salt://salt/minion/nrpe/check_last_success.py
+    - user: nagios
+    - group: nagios
+    - mode: 550
+    - require:
+      - module: nrpe-virtualenv
+      - pkg: nagios-nrpe-server
+
 {{ passive_check('salt.minion') }}

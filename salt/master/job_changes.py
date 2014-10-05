@@ -109,7 +109,7 @@ def parse(iter_input):
     """
     line_number = 0
     line_re = re.compile(r'^\s+([^:]+):\s+(.+)$')
-    minion_re = re.compile(r'^[a-zA-Z0-9\-_]+:$')
+    minion_re = re.compile(r'^[a-zA-Z0-9\-_\.]+:$')
     state_result = None
     # go trough all lines and handle all possible cases
     for line in iter_input:

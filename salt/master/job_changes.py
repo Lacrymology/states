@@ -19,7 +19,10 @@ logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
 
 
-class Block(object):
+class StateResult(object):
+    """
+    A single state output
+    """
     def __init__(self, minion, state=None, name=None, function=None,
                  result=None, comment='', changes=''):
         self.minion = minion
@@ -86,51 +89,59 @@ class Block(object):
                 self.function, result, self.comment, self.changes)
 
 
-def process(block):
+def process(state_result):
+    """
+    Wrapper around :func:`Block.process` to handle uninitialized instance.
+    """
     try:
-        func = block.process
+        func = state_result.process
     except AttributeError:
         pass
     else:
         func()
-    block = None
+    state_result = None
 
 
 def parse(iter_input):
+    """
+    Go trough multiple lines of strings and parse to outline changes and
+    failures.
+    """
     line_number = 0
     line_re = re.compile(r'^\s+([^:]+):\s+(.+)$')
     minion_re = re.compile(r'^[a-zA-Z0-9\-_]+:$')
-    block = None
+    state_result = None
+    # go trough all lines and handle all possible cases
     for line in iter_input:
         line_number += 1
         line = line.rstrip(os.linesep)
 
         if line.startswith('----------'):
-            process(block)
+            process(state_result)
             continue
         if not line or line.startswith('Succeeded') or \
            line.startswith('Failed') or line.startswith('Total'):
             continue
         if line.startswith('Summary'):
             logger.debug("Reached end of minion at %d.", line_number)
-            process(block)
+            process(state_result)
             continue
         if minion_re.match(line):
-            block = Block(line.rstrip(':'))
+            state_result = StateResult(line.rstrip(':'))
             logger.debug("New minion: %s", line)
             continue
-        if not line.startswith(' ') and not block:
+        if not line.startswith(' ') and not state_result:
             logger.error("Invalid line '%s'", line)
             continue
         match = line_re.match(line)
         if match:
             key, value = match.groups()
-            setattr(block, key.lower(), value)
+            setattr(state_result, key.lower(), value)
         else:
-            if block.changes:
-                block.changes += os.linesep + line
+            if state_result.changes:
+                state_result.changes += os.linesep + line
             else:
-                block.changes += line
+                state_result.changes += line
 
 
 def main():

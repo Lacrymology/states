@@ -31,6 +31,7 @@ If you install a salt master from scratch, check and run bootstrap_archive.py
 and use it to install the master.
 -#}
 include:
+  - local
 {%- if salt['pillar.get']('salt_master:pillar', False) %}
   - pip
 {%- endif %}
@@ -100,6 +101,17 @@ salt-master-requirements:
     - source: salt://salt/master/top.jinja2
     - require:
       - file: /srv/salt
+
+salt-master-job_changes.py:
+  file:
+    - managed
+    - user: root
+    - group: root
+    - mode: 440
+    - mode: 440
+    - source: salt://salt/master/job_changes.py
+    - require:
+      - /usr/local
 
 {%- set version = '0.17.5-1' %}
 {%- set pkg_version = '{0}{1}1'.format(version, grains['lsb_distrib_codename']) %}

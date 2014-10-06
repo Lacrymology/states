@@ -36,6 +36,7 @@ include:
 test:
   monitoring:
     - run_all_checks
+    - wait: 30
     - order: last
   cmd:
     - run

@@ -32,6 +32,7 @@ and use it to install the master.
 -#}
 include:
   - local
+  - git
 {%- if salt['pillar.get']('salt_master:pillar', False) %}
   - pip
 {%- endif %}
@@ -136,6 +137,7 @@ salt-master:
     - order: 90
     - require:
       - service: rsyslog
+      - pkg: git
     - watch:
       - pkg: salt-master
       - file: salt-master

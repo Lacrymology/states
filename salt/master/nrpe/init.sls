@@ -30,6 +30,7 @@ Nagios NRPE check for Salt Master.
 {%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - apt.nrpe
+  - git.nrpe
   - pip.nrpe
   - nrpe
   - python.dev.nrpe

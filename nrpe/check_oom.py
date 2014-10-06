@@ -32,6 +32,7 @@ __email__ = 'hvnsweeting@gmail.com'
 
 import glob
 import datetime
+
 import nagiosplugin as nap
 from pysc import nrpe
 
@@ -80,7 +81,4 @@ def check_oom(config):
 
 
 if __name__ == "__main__":
-    defaults = {
-        'seconds': None,
-    }
-    nrpe.check(check_oom, defaults)
+    nrpe.check(check_oom, {'seconds': None})

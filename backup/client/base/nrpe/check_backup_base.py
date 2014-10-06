@@ -63,16 +63,17 @@ class BackupFile(nagiosplugin.Resource):
 
         log.info("%s in manifest? %s", self.facility,
                  str(not files.get(self.facility, None) is None))
-        file = files.get(self.facility, {
+        backup_file = files.get(self.facility, {
             'date': datetime.datetime.fromtimestamp(0),
             'size': 0,
         })
 
         age_metric = nagiosplugin.Metric(
             'age',
-            (datetime.datetime.now() - file['date']).total_seconds() / (60*60),
+            (datetime.datetime.now() - backup_file['date']).total_seconds() /
+                (60*60),
             min=0)
-        size_metric = nagiosplugin.Metric('size', file['size'], min=0)
+        size_metric = nagiosplugin.Metric('size', backup_file['size'], min=0)
 
         log.info("BackupFile.probe finished")
         log.debug("returning age: %s, size: %s", age_metric, size_metric)
@@ -146,8 +147,8 @@ class BackupFile(nagiosplugin.Resource):
                     'name': name,
                     'size': size,
                     'date': date,
-                    },
                 }
+            }
         else:
             log.warn("Filename didn't match regexp.\
                      This file shouldn't be here: %s", filename)

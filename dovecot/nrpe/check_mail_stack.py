@@ -196,8 +196,7 @@ def check_mail_stack(config):
 
 
 if __name__ == "__main__":
-    defaults = {
+    nrpe.check(check_mail_stack, {
         'timeout': 300,
         'config': '/etc/nagios/check_mail_stack.yml',
-    }
-    nrpe.check(check_mail_stack, defaults)
+    })

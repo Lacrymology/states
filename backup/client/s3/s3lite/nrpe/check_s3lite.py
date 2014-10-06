@@ -101,7 +101,7 @@ class BackupAge(nap.Resource):
                     'Last backup processed %d files',
                     backup_mdata['processed'],
                     loglevel='info',
-                    )
+                )
             except KeyError:
                 log.critical('Log file %s is malformed', log_path)
                 raise KeyError('Malformed s3lite log file %s' % log_path)
@@ -140,10 +140,9 @@ def s3lite_backup_client_check(config):
 
 
 if __name__ == "__main__":
-    defaults = {
+    nrpe.check(s3lite_backup_client_check, {
         'empty': False,
         'warning': '48',
         'timeout': None,
         'config': '/etc/nagios/s3lite.yml',
-    }
-    nrpe.check(s3lite_backup_client_check, defaults)
+    })

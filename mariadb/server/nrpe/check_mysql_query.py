@@ -34,8 +34,8 @@ __email__ = 'hvnsweeting@gmail.com'
 
 import logging
 
-import pymysql
 import nagiosplugin as nap
+import pymysql
 from pysc import nrpe
 
 log = logging.getLogger('nagiosplugin.mysql.query')
@@ -43,9 +43,8 @@ log = logging.getLogger('nagiosplugin.mysql.query')
 
 class MysqlQuery(nap.Resource):
     def __init__(self, host, user, passwd, database, query):
-        log.debug("MysqlQuery(%s, %s, %s, %s, %s)",
-                  host, user, passwd[:2] + "*****" + passwd[-2:],
-                  database, query)
+        log.debug("MysqlQuery(%s, %s, %s, %s)",
+                  host, user, database, query)
         self.user = user
         self.passwd = passwd
         self.host = host
@@ -85,8 +84,7 @@ def check_mysql_query(config):
 
 
 if __name__ == "__main__":
-    defaults = {
+    nrpe.check(check_mysql_query, {
         'critical': '1:',
         'query': 'select @@max_connections;',
-    }
-    nrpe.check(check_mysql_query, defaults)
+    })

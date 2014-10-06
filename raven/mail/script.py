@@ -32,32 +32,12 @@
 
 """
 RavenMail: Emulate /usr/bin/mail(x) but send mail to a Sentry server instead.
-
-To overwrite default Sentry DSN, set environment variable SENTRY_DSN.
 """
 
 import sys
 import os
-import logging
-import logging.handlers
-import copy
 
 import pysc
-
-# TODO:
-# add or use (if already there) pysc Raven client initialization
-
-
-def configure_logging():
-    log = logging.getLogger('sentry.errors')
-    fmt = logging.Formatter("%(asctime)-15s mail[%(process)d] %(message)s",
-                            datefmt='%b %d %H:%M:%S')
-    handler = logging.handlers.SysLogHandler('/dev/log')
-    handler.setFormatter(fmt)
-    log.addHandler(handler)
-    return log
-
-log = configure_logging()
 
 
 class Mail(pysc.Application):
@@ -78,20 +58,13 @@ class Mail(pysc.Application):
 
         # init raven quickly, so if something is wrong it get logged early
         from raven import Client
-        if 'SENTRY_DSN' not in os.environ.keys():
-            os.environ['SENTRY_DSN'] = "{{ pillar['sentry_dsn'] }}"
-        client = Client()
+        client = Client(dsn=self.config['sentry_dsn'])
 
         if self.config['subject']:
             msg = os.linesep.join((self.config['subject'], body))
         else:
             msg = body
-
-        # copy os.environ and remove DSN
-        environ = copy.copy(dict(os.environ))
-        environ['command-line'] = self.config['extra_args']
-        environ.pop('SENTRY_DSN', None)
-        client.captureMessage(msg, extra=environ)
+        client.captureMessage(msg, extra=os.environ)
 
 if __name__ == "__main__":
     Mail().run()

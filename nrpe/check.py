@@ -81,4 +81,4 @@ class MemoryCheck(pysc.Application):
 
 
 if __name__ == "__main__":
-    Check().run()
+    MemoryCheck().run()

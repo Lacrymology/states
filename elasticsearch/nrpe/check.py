@@ -44,7 +44,7 @@ log = logging.getLogger("nagiosplugin.elasticsearch.cluster_nodes")
 def elasticsearch_version():
     req = requests.get('http://127.0.0.1:9200/')
     major, minor, bug = req.json['version']['number'].split('.')
-    return (int(major), int(minor), int(bug))
+    return int(major), int(minor), int(bug)
 
 
 class ClusterNodes(nagiosplugin.Resource):
@@ -73,7 +73,4 @@ def check_procs(config):
 
 
 if __name__ == '__main__':
-    defaults = {
-        'critical': '2',
-    }
-    nrpe.check(check_procs, defaults)
+    nrpe.check(check_procs, {'critical': '2'})

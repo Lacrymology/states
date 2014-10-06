@@ -29,11 +29,12 @@ __author__ = 'Bruno Clermont'
 __maintainer__ = 'Bruno Clermont'
 __email__ = 'patate@fastmail.cn'
 
-import tarfile
-import os
 import datetime
+import os
 import logging
 import logging.config
+import tarfile
+
 import pysc
 
 logger = logging.getLogger('backup-archive')

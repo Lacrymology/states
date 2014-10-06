@@ -32,11 +32,12 @@ __author__ = 'Bruno Clermont'
 __maintainer__ = 'Bruno Clermont'
 __email__ = 'patate@fastmail.cn'
 
-import os
-from UserList import UserList
 import datetime
-import sys
 import logging
+import os
+import sys
+from UserList import UserList
+
 import pysc
 
 # NOTE: This doesn't use python's nagiosplugin, but let's put the logs in the
@@ -110,6 +111,7 @@ class BackupFile(object):
                    datetime.datetime.strptime(date_string, '%Y-%m-%d-%H_%M_%S'),
                    compression)
 
+
 class BackupDirectory(UserList):
     """
     List of all backup in a directory
@@ -132,6 +134,7 @@ class BackupDirectory(UserList):
                 logger.debug("%s isn't a file", absolute_filename)
         UserList.__init__(self, data)
 
+
 # TODO: switch to pysc.nrpe and nagiosplugin
 class CheckBackups(pysc.Application):
     logger = logger
@@ -145,20 +148,20 @@ class CheckBackups(pysc.Application):
         hosts = {}
         backup = BackupDirectory('/var/lib/backup')
         logger.info("iterating directory /var/lib/backup")
-        for file in backup:
+        for backup_file in backup:
             try:
-                host = hosts[file.hostname]
+                host = hosts[backup_file.hostname]
             except KeyError:
-                host = hosts[file.hostname] = {}
+                host = hosts[backup_file.hostname] = {}
             try:
-                name = host[file.name]
+                name = host[backup_file.name]
             except KeyError:
-                name = host[file.name] = {}
+                name = host[backup_file.name] = {}
             try:
-                type = name[file.type]
+                file_type = name[backup_file.type]
             except KeyError:
-                type = name[file.type] = {}
-            type[file.date] = file
+                file_type = name[backup_file.type] = {}
+            file_type[backup_file.date] = backup_file
 
         logger.debug("Built files map: %s", str(hosts))
         number_backups = 0
@@ -166,15 +169,16 @@ class CheckBackups(pysc.Application):
         logger.info("Iterating hosts")
         for host in hosts:
             for name in hosts[host]:
-                for type in hosts[host][name]:
-                    logger.debug("Process %s - %s type %s", host, name, type)
-                    dates = hosts[host][name][type].keys()
+                for file_type in hosts[host][name]:
+                    logger.debug("Process %s - %s type %s", host, name,
+                                 file_type)
+                    dates = hosts[host][name][file_type].keys()
                     dates.sort()
-                    latest = hosts[host][name][type][dates[-1]]
+                    latest = hosts[host][name][file_type][dates[-1]]
                     logger.debug("Latest backup %s", latest.date.isoformat())
                     if now - latest.date > max_time:
                         logger.debug("Expired backup %s", latest)
-                        missing_backup.append('-'.join((host, type)))
+                        missing_backup.append('-'.join((host, file_type)))
                     else:
                         logger.debug("Good backup %s", latest)
                         number_backups += 1

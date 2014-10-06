@@ -92,16 +92,12 @@ class ImageIds(nagiosplugin.Resource):
         providers = pysc.unserialize_yaml(self.providers_file, critical=True)
 
         # get salt-cloud output
-        try:
-            proc = subprocess.Popen(['salt-cloud',
-                                     '--list-images=all',
-                                     '--out=yaml'],
-                                    stdout=subprocess.PIPE)
-        except OSError:
-            log.warn("Could not call salt-cloud", exc_info=True)
-        else:
-            salt_list = yaml.load(proc.stdout)
-            log.debug("salt list: %s", str(salt_list))
+        proc = subprocess.Popen(['salt-cloud',
+                                 '--list-images=all',
+                                 '--out=yaml'],
+                                stdout=subprocess.PIPE)
+        salt_list = yaml.load(proc.stdout)
+        log.debug("salt list: %s", str(salt_list))
 
         ids = set()
         # get the providers and their drivers' names and populate a list of ids

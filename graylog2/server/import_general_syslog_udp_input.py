@@ -34,7 +34,6 @@ __author__ = 'Diep Pham'
 __maintainer__ = 'Diep Pham'
 __email__ = 'favadi@robotinfra.com'
 
-from pymongo import Connection
 import datetime
 import logging
 import subprocess
@@ -42,6 +41,7 @@ import sys
 import time
 import uuid
 
+from pymongo import Connection
 import pysc
 
 

@@ -248,8 +248,7 @@ def main(config):
 
 
 if __name__ == "__main__":
-    defaults = {
+    nrpe.check(main, {
         'port': 443,
         'timeout': 60,
-    }
-    nrpe.check(main, defaults)
+    })

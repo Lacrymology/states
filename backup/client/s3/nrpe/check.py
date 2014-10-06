@@ -79,10 +79,10 @@ class S3BackupFile(BackupFile):
                 # prefix is a concept same as "directory"
                 log.debug('%s is a Prefix, skipping ...', key.name)
                 continue
-            file = self.make_file(os.path.basename(key.name), key.size)
+            backup_file = self.make_file(os.path.basename(key.name), key.size)
             # I expect file to have one and only one element
-            if file:
-                yield file
+            if backup_file:
+                yield backup_file
         log.info("finished iterating files")
 
 

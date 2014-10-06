@@ -85,7 +85,4 @@ def check_psql_encoding(config):
 
 
 if __name__ == "__main__":
-    defaults = {
-        'encoding': 'UTF8',
-    }
-    nrpe.check(check_psql_encoding, defaults)
+    nrpe.check(check_psql_encoding, {'encoding': 'UTF8'})

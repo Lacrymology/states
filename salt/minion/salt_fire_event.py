@@ -33,15 +33,13 @@ __author__ = 'Quan Tong Anh'
 __maintainer__ = 'Quan Tong Anh'
 __email__ = 'tonganhquan.net@gmail.com'
 
-import os
-import sys
-import salt.syspaths as syspaths
-import salt.config
-import salt.client
 import json
 import logging
+import os
 
 import pysc
+
+logger = logging.getLogger(__name__)
 
 
 class SaltFireEvent(pysc.Application):
@@ -57,23 +55,11 @@ class SaltFireEvent(pysc.Application):
         payload = self.config['payload']
         tag = self.config['tag']
 
-        try:
-            caller = salt.client.Caller(os.path.join(syspaths.CONFIG_DIR,
-                                                     'minion'))
-        except IOError as e:
-            print('{0}. You need root permissions to run this script'
-                  .format(e))
-            sys.exit(1)
-
+        import salt.syspaths as syspaths
+        import salt.config
+        import salt.client
+        caller = salt.client.Caller(os.path.join(syspaths.CONFIG_DIR, 'minion'))
         caller.sminion.functions['event.fire_master'](data=payload, tag=tag)
-
-        logger = logging.getLogger(__name__)
-        handler = logging.FileHandler(filename=os.path.join(syspaths.LOGS_DIR,
-                                                            'event'))
-        formatter = logging.Formatter('%(asctime)s [%(name)s] [%(levelname)s] '
-                                      '%(message)s')
-        handler.setFormatter(formatter)
-        logger.addHandler(handler)
         logger.debug("An event has been fired as '%s': data=%s, tag=%s",
                      os.getenv("SUDO_USER"), payload, tag)
 

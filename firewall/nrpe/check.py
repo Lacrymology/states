@@ -71,7 +71,4 @@ def check_firewall(config):
 
 
 if __name__ == '__main__':
-    defaults = {
-        'warning': '2',
-    }
-    nrpe.check(check_firewall, defaults)
+    nrpe.check(check_firewall, {'warning': '2'})

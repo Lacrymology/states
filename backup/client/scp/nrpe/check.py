@@ -124,16 +124,16 @@ class SCPBackupFile(BackupFile):
         # out to only test the newest backup for each facility
         files = {}
         log.debug("running ls")
-        for file in ftp.listdir():
-            log.debug('processing %s', file)
+        for filename in ftp.listdir():
+            log.debug('processing %s', filename)
 
-            f = self.make_file(file, None)
+            f = self.make_file(filename, None)
             if not f:
                 log.debug('skipping')
                 continue
             key, value = f.items()[0]
-            # we may want to run fstat on this file later on
-            f[key]['filename'] = file
+            # we may want to run fstat on this filename later on
+            f[key]['filename'] = filename
             # this code is taken from BackupFile.create_manifest, it keeps only
             # the newest file for each facility
             if (key not in files) or (value['date'] > files[key]['date']):

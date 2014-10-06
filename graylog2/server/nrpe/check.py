@@ -101,8 +101,7 @@ def check_new_logs(config):
 
 
 if __name__ == '__main__':
-    defaults = {
+    nrpe.check(check_new_logs, {
         'crit_range': '1:10000',
         'max_retry': '20',
-    }
-    nrpe.check(check_new_logs, defaults)
+    })

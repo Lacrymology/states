@@ -33,14 +33,14 @@ __maintainer__ = 'Bruno Clermont'
 __email__ = 'patate@fastmail.cn'
 
 
-import argparse
-import logging
 import os
+import logging
 
 import nagiosplugin
 from pysc import nrpe
 
 log = logging.getLogger("nagiosplugin.apt.half_installed")
+
 
 class HalfInstalled(nagiosplugin.Resource):
     def probe(self):
@@ -68,7 +68,4 @@ def half_installed_check(config):
             fmt_metric='{value} half-installed packages'))
 
 if __name__ == '__main__':
-    defaults = {
-        'warning': '0',
-    }
-    nrpe.check(half_installed_check, defaults)
+    nrpe.check(half_installed_check, {'warning': '0'})

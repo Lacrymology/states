@@ -78,12 +78,14 @@ __maintainer__ = 'Bruno Clermont, Hung Nguyen Viet, Tomas Neme'
 __email__ = 'patate@fastmail.cn, hvnsweeting@gmail.com, lacrymology@gmail.com'
 
 import re
-import requests
 import json
+
+from envelopes import Envelope, SMTP
 from jinja2 import Template
+import requests
 from salt.utils.parsers import SaltKeyOptionParser
 from salt.key import Key
-from envelopes import Envelope, SMTP
+
 
 def main(*args):
     parser = SaltKeyOptionParser()

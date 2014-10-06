@@ -34,7 +34,6 @@ include:
 /usr/bin/mail:
   file:
     - managed
-    - template: jinja
     - user: root
     - group: root
     - mode: 775

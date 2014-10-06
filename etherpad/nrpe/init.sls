@@ -26,6 +26,7 @@ Author: Dang Tung Lam <lamdt@familug.org>
 Maintainer: Dang Tung Lam <lamdt@familug.org>
 
 -#}
+{%- set formula = 'etherpad' -%}
 {%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - apt.nrpe
@@ -36,8 +37,14 @@ include:
   - postgresql.server.nrpe
   - python.dev.nrpe
   - rsyslog.nrpe
-{%- if salt['pillar.get']('etherpad:ssl', False) %}
+{%- if salt['pillar.get'](formula + ':ssl', False) %}
   - ssl.nrpe
 {%- endif %}
 
-{{ passive_check('etherpad', check_ssl_score=True) }}
+{{ passive_check(formula, check_ssl_score=True) }}
+
+extend:
+  check_psql_encoding.py:
+    file:
+      - require:
+        - file: nsca-{{ formula }}

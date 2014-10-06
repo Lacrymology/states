@@ -31,9 +31,12 @@ gitlab_backup_postgres_procs:
 
 gitlab_backup_postgres_age:
   description: GitLab PostgreSQL Database Backup Age
-  command: /usr/lib/nagios/plugins/check_backup.py -w {{ salt['pillar.get']('backup:age', 48) }} postgresql-gitlab
+  command: /usr/lib/nagios/plugins/check_backup.py --formula=gitlab.backup --check=gitlab_backup_postgres_age
   check_interval: {{ 12 * 60 }} {#- 12 hours  #}
   freshness_threshold: {{ ((12 * 60) + 10) * 60 }} {#- 12 hours + 10 minutes #}
+  arguments:
+    facility: postgresql-gitlab
+    warning: {{ salt['pillar.get']('backup:age', 48) }}
 
 gitlab_backup_file_procs:
   description: Gitlab Backup File Process
@@ -41,6 +44,9 @@ gitlab_backup_file_procs:
 
 gitlab_backup_file_age:
   description: Gitlab File Backup Age
-  command: /usr/lib/nagios/plugins/check_backup.py -w {{ salt['pillar.get']('backup:age', 48) }} gitlab
+  command: /usr/lib/nagios/plugins/check_backup.py --formula=gitlab.backup --check=gitlab_backup_file_age
   check_interval: {{ 12 * 60 }} {#- 12 hours  #}
   freshness_threshold: {{ ((12 * 60) + 10) * 60 }} {#- 12 hours + 10 minutes #}
+  arguments:
+    facility: gitlab
+    warning: {{ salt['pillar.get']('backup:age', 48) }}

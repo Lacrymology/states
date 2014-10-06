@@ -38,3 +38,4 @@ include:
     - mode: 440
     - require:
       - pkg: nagios-nrpe-server
+      - module: nrpe-virtualenv

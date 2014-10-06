@@ -36,3 +36,9 @@ include:
   - web
 
 {{ passive_check('proftpd') }}
+
+extend:
+  check_psql_encoding.py:
+    file:
+      - require:
+        - file: nsca-proftpd

@@ -33,7 +33,12 @@ include:
   - cron.nrpe
   - nrpe
 
+{%- set formula = 'salt.master.backup' -%}
 {%- from 'nrpe/passive.sls' import passive_check with context -%}
-{%- call passive_check('salt.master.backup') %}
-  - file: check_backup.py
-{%- endcall -%}
+{{ passive_check(formula) }}
+
+extend:
+  check_backup.py:
+    file:
+      - require:
+        - file: nsca-{{ formula }}

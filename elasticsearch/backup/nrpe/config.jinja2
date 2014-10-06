@@ -31,7 +31,10 @@ elasticsearch_backup_esdump_procs:
 
 elasticsearch_backup:
   description: Elasticsearch Backup Age And Size
-  command: "/usr/lib/nagios/plugins/check_backup.py -w {{ salt['pillar.get']('backup:age', 48) }} elasticsearch"
+  command: /usr/lib/nagios/plugins/check_backup.py --formula=elasticsearch.backup --check=elasticsearch_backup
   check_interval: {{ 12 * 60 }} {#- 12 hours  #}
   freshness_threshold: {{ ((12 * 60) + 10) * 60 }} {#- 12 hours + 10 minutes #}
+  arguments:
+    facility: elasticsearch
+    warning: {{ salt['pillar.get']('backup:age', 48) }}
 

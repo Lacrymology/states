@@ -79,24 +79,25 @@ dovecot_port_pop3:
   dependencies:
     - dovecot_procs
 
-{%- if not salt['pillar.get']('__test__', False) and salt['pillar.get']('mail:check_mail_stack', False) %}
+{%- if not salt['pillar.get']('__test__', False) and salt['pillar.get']('mail:check_mail_stack', False) -%}
 mailstack_functionality:
   description: Mail Stack Functionality
-  command: /usr/lib/nagios/plugins/check_mail_stack.py
+  command: /usr/lib/nagios/plugins/check_mail_stack.py --formula=dovecot --check=mailstack_functionality
   dependencies:
     - dovecot_{% if salt['pillar.get']('dovecot:ssl', False) %}s{% endif %}imap
   arguments:
-    {%- set mail_pillar = pillar['mail']['check_mail_stack'] %}
-    mail:
-      username: {{ username }}
-      password: "{{ password }}"
-      imap_server: localhost
-      smtp_server: {{ mail_pillar['smtp_server'] }}
-      {#- wait N seconds after sending mail #}
-      smtp_wait: {{ salt['pillar.get']('mail:check_mail_stack:smtp_wait', 10) }}
-      {#- Assuming that if dovecot is configured to use SSL,
-          means all the stack uses SSL #}
-      ssl: {{ salt['pillar.get']('dovecot:ssl', False) }}
+    {%- set mail_pillar = pillar['mail']['check_mail_stack'] -%}
+    {%- set username = mail_pillar['username'] -%}
+    {%- set mailname = pillar['mail']['mailname'] %}
+    username: {{ username + '@' + mailname }}
+    password: "{{ pillar['ldap']['data'][mailname][username]['passwd'] }}"
+    imap_server: localhost
+    smtp_server: {{ mail_pillar['smtp_server'] }}
+    {#- wait N seconds after sending mail #}
+    smtp_wait: {{ salt['pillar.get']('mail:check_mail_stack:smtp_wait', 10) }}
+    {#- Assuming that if dovecot is configured to use SSL,
+        means all the stack uses SSL #}
+    ssl: {{ salt['pillar.get']('dovecot:ssl', False) }}
 {%- endif %}
 
 dovecot_managesieve_port:

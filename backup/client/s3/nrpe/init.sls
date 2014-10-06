@@ -101,3 +101,4 @@ check_backup.py:
     - require:
       - file: /etc/nagios/s3lite.yml
       - pkg: nagios-nrpe-server
+      - module: nrpe-virtualenv

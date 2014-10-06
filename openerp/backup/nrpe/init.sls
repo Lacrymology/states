@@ -36,6 +36,11 @@ include:
 
 {%- from 'nrpe/passive.sls' import passive_check with context -%}
 {%- call passive_check('openerp.backup') %}
-  - file: check_backup.py
   - service: postgresql
-{%- endcall -%}
+{%- endcall %}
+
+extend:
+  check_backup.py:
+    file:
+      - require:
+        - file: nsca-openerp.backup

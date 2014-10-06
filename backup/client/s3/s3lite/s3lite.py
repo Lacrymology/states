@@ -166,8 +166,6 @@ class S3Util(object):
 class S3lite(pysc.Application):
     """
     Main application class.
-
-    TODO: document this application
     """
     defaults = {
         'config': '/etc/s3lite.yml',

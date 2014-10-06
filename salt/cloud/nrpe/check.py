@@ -122,8 +122,7 @@ def check_saltcloud_images(config):
 
 
 if __name__ == '__main__':
-    defaults = {
+    nrpe.check(check_saltcloud_images, {
         'profile_file': '/etc/salt/cloud.profiles',
         'providers_file': '/etc/salt/cloud.providers',
-    }
-    nrpe.check(check_saltcloud_images, defaults)
+    })

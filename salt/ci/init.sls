@@ -31,6 +31,7 @@ include:
   - jenkins
   - jenkins.git
   - local
+  - pysc
   - rsync
   - salt.cloud
   - salt.master
@@ -57,6 +58,7 @@ extend:
     - mode: 755
     - require:
       - file: /usr/local
+      - module: pysc
 {%- endfor %}
 
 /etc/salt/master.d/ci.conf:

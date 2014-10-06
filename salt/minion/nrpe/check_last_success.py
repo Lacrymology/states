@@ -80,13 +80,13 @@ class LastSuccess(nap.Resource):
 
 
 def check_last_success(config):
+    threshold = '0:' + config['max_hours']
     return (
         LastSuccess(),
-        nap.ScalarContext('hours', '0:48',
-                          '0:48',
+        nap.ScalarContext('hours', threshold, threshold,
                           fmt_metric='{value} hours ago')
     )
 
 
 if __name__ == "__main__":
-    nrpe.check(check_last_success)
+    nrpe.check(check_last_success, {'max_hours': 24})

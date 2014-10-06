@@ -80,7 +80,7 @@ def filter_ips(filename, ips):
 
 class DenyhostsUnblock(pysc.Application):
     logger = logger
-    
+
     def get_argument_parser(self):
         argp = super(DenyhostsUnblock, self).get_argument_parser()
         argp.add_argument("ips", nargs='+')

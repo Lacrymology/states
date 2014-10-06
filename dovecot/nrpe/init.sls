@@ -49,26 +49,11 @@ dovecot_check_mail_stack:
     - absent
     - name: /usr/local/nagios/salt-check-mail-stack-requirements.txt
 
-{%- if salt['pillar.get']('mail:check_mail_stack', False) %}
-{%- set username = pillar['mail']['check_mail_stack']['username'] %}
-{%- set mailname = pillar['mail']['mailname'] %}
-{%- set mailaddr = username + '@' + mailname %}
-{%- set password = pillar['ldap']['data'][mailname][username]['passwd'] %}
-
 /etc/nagios/check_mail_stack.yml:
   file:
-    - managed
-    - source: salt://dovecot/nrpe/check_mail_stack.yml
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - template: jinja
-    - context:
-        username: {{ mailaddr }}
-        password: {{ password }}
-    - require:
-      - pkg: nagios-nrpe-server
+    - absent
 
+{%- if salt['pillar.get']('mail:check_mail_stack', False) %}
 /usr/lib/nagios/plugins/check_mail_stack.py:
   file:
     - managed
@@ -79,14 +64,12 @@ dovecot_check_mail_stack:
     - require:
       - module: nrpe-virtualenv
       - pkg: nagios-nrpe-server
-      - file: /etc/nagios/check_mail_stack.yml
+      - file: nsca-dovecot
+    - require_in:
+      - service: nagios-nrpe-server
+      - service: nsca_passive
 {%- else %}
-/etc/nagios/check_mail_stack.yml:
-  file:
-    - absent
-
 /usr/lib/nagios/plugins/check_mail_stack.py:
   file:
     - absent
-
 {%- endif -%}

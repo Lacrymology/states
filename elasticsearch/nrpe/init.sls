@@ -27,8 +27,9 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
  Nagios NRPE checks for elasticsearch
 -#}
+{%- set formula = 'elasticsearch' -%}
 {%- from 'nrpe/passive.sls' import passive_check with context %}
-{% set ssl = salt['pillar.get']('elasticsearch:ssl', False) %}
+{% set ssl = salt['pillar.get'](formula + ':ssl', False) %}
 include:
   - apt.nrpe
   - bash.nrpe
@@ -40,4 +41,10 @@ include:
   - nginx.nrpe
 {%- endif %}
 
-{{ passive_check('elasticsearch') }}
+{{ passive_check(formula) }}
+
+extend:
+  /usr/lib/nagios/plugins/check_elasticsearch_cluster.py:
+    file:
+      - require:
+        - file: nsca-{{ formula }}

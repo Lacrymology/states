@@ -32,6 +32,7 @@ include:
   - java.7.jdk
   - local
   - nginx
+  - pysc
   - ssh.client
 {% if salt['pillar.get']('jenkins:ssl', False) %}
   - ssl
@@ -97,6 +98,7 @@ jenkins_old_version:
       - file: /usr/local
       - service: jenkins
       - pkg: cron
+      - module: pysc
 
 extend:
 {%- from 'macros.jinja2' import change_ssh_key_owner with context %}

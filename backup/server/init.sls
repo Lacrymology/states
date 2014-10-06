@@ -75,7 +75,7 @@ backup-archiver-dependency:
     - user: root
     - group: root
     - require:
-      - module: backup-archiver-dependency
+      - module: pysc
       - pkg: cron
       - service: rsyslog
       - module: pysc

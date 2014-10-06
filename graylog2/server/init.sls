@@ -36,6 +36,7 @@ include:
   - graylog2
   - local
   - rsyslog
+  - pysc
 
 {%- set version = '0.20.6' %}
 {%- set checksum = 'md5=a9105a4fb5c950b3760df02dface6465' %}
@@ -231,5 +232,6 @@ import_general_syslog_udp_input:
     - require:
       - service: graylog2-server
       - pkg: graylog2-old-mongodb
+      - module: pysc
     - watch:
       - archive: graylog2-server

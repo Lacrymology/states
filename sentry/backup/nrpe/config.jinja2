@@ -33,6 +33,9 @@ sentry_backup_postgres_procs:
 
 sentry_backup:
   description: Sentry Backup Age And Size
-  command: /usr/lib/nagios/plugins/check_backup.py -w {{ salt['pillar.get']('backup:age', 48) }} postgresql-sentry
+  command: /usr/lib/nagios/plugins/check_backup.py --formula=sentry.backup --check=sentry_backup
   check_interval: {{ 12 * 60 }} {#- 12 hours  #}
   freshness_threshold: {{ ((12 * 60) + 10) * 60 }} {#- 12 hours + 10 minutes #}
+  arguments:
+    facility: postgresql-sentry
+    warning: {{ salt['pillar.get']('backup:age', 48) }}

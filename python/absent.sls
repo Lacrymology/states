@@ -39,4 +39,4 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 python:
   file:
     - absent
-    - name: /etc/python/config.yaml
+    - name: /etc/python/config.yml

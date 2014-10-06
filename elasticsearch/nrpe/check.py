@@ -73,4 +73,4 @@ def check_procs(config):
 
 
 if __name__ == '__main__':
-    nrpe.check(check_procs, {'critical': '2'})
+    nrpe.check(check_procs)

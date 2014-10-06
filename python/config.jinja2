@@ -28,7 +28,11 @@ logging:
       facility: local7
       formatter: syslog
     console:
+    {%- if salt['pillar.get']('__test__', False) %}
+      level: DEBUG
+    {%- else %}
       level: ERROR
+    {%- endif %}
       class: logging.StreamHandler
       formatter: only_message
     {%- if sentry_dsn %}

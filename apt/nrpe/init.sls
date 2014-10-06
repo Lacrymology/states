@@ -45,7 +45,9 @@ include:
     - require:
       - module: nrpe-virtualenv
       - pkg: nagios-nrpe-server
+      - file: nsca-apt
+    - require_in:
+      - service: nagios-nrpe-server
+      - service: nsca_passive
 
-{% call passive_check('apt') %}
-- file: /usr/lib/nagios/plugins/check_apt-rc.py
-{% endcall %}
+{{ passive_check('apt') }}

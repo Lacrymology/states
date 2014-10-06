@@ -27,3 +27,4 @@ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
  -#}
 include:
   - pip.nrpe
+  - python.nrpe

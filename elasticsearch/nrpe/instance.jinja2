@@ -35,10 +35,10 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
     {%- if loop.last %}
 {{ formula|replace('.', '_') }}-es_cluster:
   description: {{ formula|title }} Elasticsearch cluster
-  command: /usr/lib/nagios/plugins/check_elasticsearch_cluster.py
+  command: /usr/lib/nagios/plugins/check_elasticsearch_cluster.py --formula={{ formula }} --check={{ formula|replace('.', '_') }}-es_cluster
   arguments:
-    nodes: {{ nodes_total }}
-    {%- endif %}
+    critical: {{ nodes_total }}
+    {%- endif -%}
 {%- endfor %}
 
 {%- set pillar_string = 'elasticsearch:cluster:nodes:{0}:{1}'.format(grains['id'], formula) %}

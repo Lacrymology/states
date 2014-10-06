@@ -172,31 +172,10 @@ Subject: %s
 
 
 def check_mail_stack(config):
-    """
-    Required configs:
-
-    - mail
-    - smtp_wait
-    - username
-    - password
-    - imap_server
-    - smtp_server
-    - ssl
-    """
-    mail = config['mail']
-    waittime = mail['smtp_wait']
-    username = mail['username']
-    password = mail['password']
-    imap_server = mail['imap_server']
-    smtp_server = mail['smtp_server']
-    ssl = mail['ssl']
-
-    return [MailStackHealth(imap_server, smtp_server, username, password,
-                            waittime, ssl)]
+    return [MailStackHealth(config['imap_server'], config['smtp_server'],
+                            config['username'], config['password'],
+                            config['smtp_wait'], config['ssl'])]
 
 
 if __name__ == "__main__":
-    nrpe.check(check_mail_stack, {
-        'timeout': 300,
-        'config': '/etc/nagios/check_mail_stack.yml',
-    })
+    nrpe.check(check_mail_stack, {'timeout': 300})

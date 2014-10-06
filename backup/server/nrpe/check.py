@@ -163,8 +163,9 @@ class Backups(nagiosplugin.Resource):
         now = datetime.datetime.now()
         max_time = datetime.timedelta(hours=self.max_hours)
         hosts = {}
-        backup = BackupDirectory('/var/lib/backup')
-        log.info("iterating directory /var/lib/backup")
+        backup_dir = self.config['backup_directory']
+        backup = BackupDirectory(backup_dir)
+        log.info("iterating directory %s", backup_dir)
         for backup_file in backup:
             try:
                 host = hosts[backup_file.hostname]
@@ -205,12 +206,14 @@ class Backups(nagiosplugin.Resource):
         yield nagiosplugin.Metric('missing', (missing_backup, number_backups))
 
 
-# TODO: switch to pysc.nrpe and nagiosplugin
 def check_backups(config):
     return (
         Backups(max_hours=config['max_hours']),
         MissingBackupsContext('missing'),
-        )
+    )
 
 if __name__ == '__main__':
-    nrpe.check(check_backups, {'max_hours': 36})
+    nrpe.check(check_backups, {
+        'max_hours': 36,
+        'backup_dir': '/var/lib/backup'
+    })

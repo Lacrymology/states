@@ -34,6 +34,7 @@ Maintainer: Lam Dang Tung <lamdt@familug.org>
 
 Install a GitLab Nagios NRPE checks.
 -#}
+{%- set formula = 'gitlab' -%}
 {%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - apt.nrpe
@@ -53,8 +54,14 @@ include:
   - ssh.server.nrpe
   - uwsgi.nrpe
   - xml.nrpe
-{%- if salt['pillar.get']('gitlab:ssl', False) %}
+{%- if salt['pillar.get'](formula + ':ssl', False) %}
   - ssl.nrpe
 {%- endif %}
 
-{{ passive_check('gitlab', check_ssl_score=True) }}
+{{ passive_check(formula, check_ssl_score=True) }}
+
+extend:
+  check_psql_encoding.py:
+    file:
+      - require:
+        - file: nsca-{{ formula }}

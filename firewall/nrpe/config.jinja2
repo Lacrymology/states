@@ -33,6 +33,6 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 #}
 firewall_rules:
   description: Firewall Rules
-  command: 'sudo /usr/lib/nagios/plugins/check_firewall.py -w 1:300'
+  command: 'sudo /usr/lib/nagios/plugins/check_firewall.py --formula=firewall --check=firewall_rules'
   arguments:
     warning: 2

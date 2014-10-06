@@ -233,8 +233,6 @@ class PassiveDaemon(object):
 class NscaPassive(pysc.Application):
     """
     Main nsca_passive application
-
-    TODO: document what this does
     """
     default = {
         'config': '/etc/nagios/nsca.yaml',

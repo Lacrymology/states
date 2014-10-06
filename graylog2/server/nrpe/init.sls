@@ -46,7 +46,15 @@ include:
     - require:
       - module: nrpe-virtualenv
       - pkg: nagios-nrpe-server
+      - file: nsca-graylog2.server
+    - require_in:
+      - service: nagios-nrpe-server
+      - service: nsca_passive
 
-{%- call passive_check('graylog2.server') %}
-  - file: /usr/lib/nagios/plugins/check_new_logs.py
-{%- endcall %}
+{{ passive_check('graylog2.server') }}
+
+extend:
+  /usr/lib/nagios/plugins/check_elasticsearch_cluster.py:
+    file:
+      - require:
+        - file: nsca-graylog2.server

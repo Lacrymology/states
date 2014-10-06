@@ -69,15 +69,17 @@ check_postgres:
       - pkg: nagios-nrpe-server
       - archive: check_postgres
 
-/usr/lib/nagios/plugins/check_psql_encoding.py:
+check_psql_encoding.py:
   file:
     - managed
+    - name: /usr/lib/nagios/plugins/check_psql_encoding.py
     - source: salt://postgresql/common/nrpe/check_encoding.py
     - user: nagios
     - group: nagios
     - mode: 555
     - require:
       - pkg: nagios-nrpe-server
+      - file: nsca-postgresql.common
 
 /etc/sudoers.d/nrpe_postgresql_common:
   file:
@@ -93,11 +95,11 @@ check_postgres:
 /etc/nagios/nrpe.d/postgresql.cfg:
   file:
     - absent
+    - watch_in:
+      - service: nagios-nrpe-server
 
 {%- from 'nrpe/passive.sls' import passive_check with context %}
-{%- call passive_check('postgresql.common') %}
-- file: /etc/nagios/nrpe.d/postgresql.cfg
-{%- endcall %}
+{{ passive_check('postgresql.common') }}
 
 extend:
   nagios-nrpe-server:

@@ -38,38 +38,60 @@ __maintainer__ = 'Bruno Clermont'
 __email__ = 'patate@fastmail.cn'
 
 import robotparser
-import sys
-import pysc
+import nagiosplugin
+
+from pysc import nrpe
 
 
-# TODO: switch to pyfs.nrpe
-class CheckRobots(pysc.Application):
-    def get_argument_parser(self):
-        argp = super(CheckRobots, self).get_argument_parser()
-        argp.add_argument("domain")
-        return argp
+class BoolishContext(nagiosplugin.Context):
+    """
+    Returns OK if the value is empty and Critical otherwise
 
-    def main(self):
+    The result hint is set to the value itself
+    """
+    def evaluate(self, metric, resource):
+        state = nagiosplugin.state.Ok
+        if metric.value:
+            state = nagiosplugin.state.Critical
+
+        return self.result_cls(state, metric.value, metric)
+
+
+class RobotsFile(nagiosplugin.Resource):
+    def __init__(self, domain=None, *args, **kwargs):
+        if domain is None:
+            raise ValueError("You must pass a domain kwarg to RobotsFile")
+        super(RobotsFile, self).__init__(*args, **kwargs)
+        self.domain = domain
+
+    def probe(self):
         rp = robotparser.RobotFileParser()
-        url = "http://%s/robots.txt" % self.config["domain"]
+        url = "http://%s/robots.txt" % self.domain
 
         rp.set_url(url)
         try:
             rp.read()
         except Exception, err:
-            print "ROBOTS WARNING - Can't get %s: %s" % (url, err)
-            sys.exit(1)
-
-        # if rp.can_fetch("*", "/admin/"):
-        #     print 'ROBOTS WARNING - Can fetch /admin/'
-        #     sys.exit(1)
+            yield nagiosplugin.Metric("robotsfile",
+                                      "Can't get %s: %s" % (url, err))
 
         if not rp.can_fetch("*", "/"):
-            print "ROBOTS WARNING - Can't fetch /"
-            sys.exit(1)
+            yield nagiosplugin.Metric("robotsfile", "Can't fetch /")
 
-        print 'ROBOTS OK - everything alright'
+        # "None" is a successful result
+        yield nagiosplugin.Metric("robotsfile", None)
 
+
+def check_robots(config):
+    """
+    Required configs:
+
+    - domain
+    """
+    return (
+        RobotsFile(domain=config['domain']),
+        BoolishContext("robotsfile")
+    )
 
 if __name__ == '__main__':
-    CheckRobots().run()
+    nrpe.check(check_robots)

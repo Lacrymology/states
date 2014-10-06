@@ -43,8 +43,9 @@ python:
       - cmd: apt_sources
   file:
     - managed
-    - name: /etc/python/config.yaml
+    - name: /etc/python/config.yml
     - source: salt://python/config.jinja2
+    - template: jinja
     - user: root
     - group: root
     - mode: 444

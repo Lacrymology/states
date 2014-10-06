@@ -29,6 +29,7 @@ Install Salt Minion (client).
 -#}
 
 include:
+  - pysc
   - raven
   - requests
   - rsyslog
@@ -88,3 +89,4 @@ salt-fire-event:
     - group: root
     - require:
       - pkg: salt-minion
+      - module: pysc

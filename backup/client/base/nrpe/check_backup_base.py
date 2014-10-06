@@ -32,7 +32,6 @@ __author__ = 'Tomas Neme'
 __maintainer__ = 'Tomas Neme'
 __email__ = 'lacrymology@gmail.com'
 
-import argparse
 import datetime
 import logging
 import os
@@ -40,7 +39,6 @@ import pickle
 import re
 import nagiosplugin
 import pysc
-from pysc import nrpe
 
 log = logging.getLogger('nagiosplugin.backup.client.base')
 CACHE_TIMEOUT = 15

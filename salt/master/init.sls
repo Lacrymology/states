@@ -111,7 +111,7 @@ salt-master-job_changes.py:
     - mode: 550
     - source: salt://salt/master/job_changes.py
     - require:
-      - /usr/local
+      - file: /usr/local
 
 {%- set version = '0.17.5-1' %}
 {%- set pkg_version = '{0}{1}1'.format(version, grains['lsb_distrib_codename']) %}

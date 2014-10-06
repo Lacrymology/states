@@ -109,7 +109,6 @@ salt-master-job_changes.py:
     - user: root
     - group: root
     - mode: 550
-    - mode: 550
     - source: salt://salt/master/job_changes.py
     - require:
       - /usr/local

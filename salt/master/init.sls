@@ -108,8 +108,8 @@ salt-master-job_changes.py:
     - name /usr/local/bin/salt-master-job_changes.py
     - user: root
     - group: root
-    - mode: 440
-    - mode: 440
+    - mode: 550
+    - mode: 550
     - source: salt://salt/master/job_changes.py
     - require:
       - /usr/local

@@ -27,10 +27,17 @@ Maintainer: Quan Tong Anh <tonganhquan.net@gmail.com>
 -#}
 {%- from 'pysc/config.jinja2' import logging with context %}
 # {{ pillar['message_do_not_modify'] }}
-{{ pysc_config('passive_check', 'sentry_dsn', '/var/run/nagios/passive_check.lock', 'nagios', 'nagios') }}
+lock: /var/run/nagios/passive_check.lock
+{% if 'graphite_address' in pillar %}
+graphite: {{ pillar['graphite_address'] }}
+{%- endif %}
 
 file:
   monitor_config: /etc/nagios/nsca.d
+
+daemon:
+  user: nagios
+  group: nagios
 
 nsca:
   default_interval: 5
@@ -39,3 +46,5 @@ nsca:
 {%- for receiver in pillar['nrpe']['nsca']['servers'] %}
     {{ receiver }}: {{ pillar['nrpe']['nsca']['password'] }}
 {%- endfor %}
+
+{{ logging('passive_check', 'sentry_dsn') }}

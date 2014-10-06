@@ -35,7 +35,6 @@ __maintainer__ = 'Diep Pham'
 __email__ = 'favadi@robotinfra.com'
 
 import datetime
-import logging
 import subprocess
 import sys
 import time
@@ -45,47 +44,47 @@ from pymongo import Connection
 import pysc
 
 
-logger = logging.getLogger(__name__)
+class ImportGeneralSyslogUdpInput(pysc.Application):
+    def get_argument_parser(self):
+        argp = super(ImportGeneralSyslogUdpInput, self).get_argument_parser()
+        argp.add_argument('db_name')
+        return argp
 
-@pysc.profile(log=logger)
-def main():
-    if len(sys.argv) <= 1:
-        logger.error('need exactly one argument: db_name')
-        sys.exit(1)
+    def main(self):
+        # create the collection object
+        db_name = self.config['db_name']
+        connection = Connection()
+        db = connection[db_name]
+        inputs_collection = db['inputs']
 
-    # create the collection object
-    db_name = sys.argv[1]
-    connection = Connection()
-    db = connection[db_name]
-    inputs_collection = db['inputs']
+        general_udp_input = {
+            "title": "General Syslog UDP",
+            "global": True,
+            "created_at": datetime.datetime.now(),
+            "input_id": str(uuid.uuid4()),
+            "configuration": {
+                "port": 1514,
+                "allow_override_date": True,
+                "store_full_message": True,
+                "bind_address": "0.0.0.0",
+                "recv_buffer_size": 1048576
+            },
+            "creator_user_id": "admin",
+            "type": "org.graylog2.inputs.syslog.udp.SyslogUDPInput"
+        }
 
-    general_udp_input = {
-        "title": "General Syslog UDP",
-        "global": True,
-        "created_at": datetime.datetime.now(),
-        "input_id": str(uuid.uuid4()),
-        "configuration": {
-            "port": 1514,
-            "allow_override_date": True,
-            "store_full_message": True,
-            "bind_address": "0.0.0.0",
-            "recv_buffer_size": 1048576
-        },
-        "creator_user_id": "admin",
-        "type": "org.graylog2.inputs.syslog.udp.SyslogUDPInput"
-    }
+        if not inputs_collection.find_one({"title": "General Syslog UDP"}):
+            # insert general syslog input object
+            inputs_collection.insert(general_udp_input)
 
-    if not inputs_collection.find_one({"title": "General Syslog UDP"}):
-        # insert general syslog input object
-        inputs_collection.insert(general_udp_input)
+            # restart mongodb
+            try:
+                subprocess.check_output(['restart', 'graylog2-server'])
+                time.sleep(15)
+            except subprocess.CalledProcessError as err:
+                self.logger.error(err.output)
+                sys.exit(1)
 
-        # restart mongodb
-        try:
-            subprocess.check_output(['restart', 'graylog2-server'])
-            time.sleep(15)
-        except subprocess.CalledProcessError as err:
-            logger.error(err.output)
-            sys.exit(1)
 
 if __name__ == '__main__':
-    main()
+    ImportGeneralSyslogUdpInput().run()

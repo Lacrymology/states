@@ -32,7 +32,9 @@ __author__ = 'David Hannequin <david.hannequin@gmail.com>, ' \
 __maintainer__ = 'Bruno Clermont'
 __email__ = 'patate@fastmail.cn'
 
-import pysc
+import nagiosplugin
+
+from pysc import nrpe
 
 def MemValues():
     """
@@ -56,29 +58,28 @@ def percentFreeMem():
     return (((int(memFree) + int(memCached)) * 100) / int(memTotal))
 
 
-# TODO: do we need to migrate this to a nagiosplugin check?
-class MemoryCheck(pysc.Application):
-    defaults = {
-        'warning': '80',
-        'critical': '90',
-    }
-
-    def main(self):
+class UsedMemory(nagiosplugin.Resource):
+    def probe(self):
         pmemUsage = 100 - percentFreeMem()
-
-        if pmemUsage >= self.config['critical']:
-            print ('CRITICAL - Memory usage: %2.1f%% |mem=%s' % (pmemUsage,
-                                                                 pmemUsage))
-            raise SystemExit(2)
-        elif pmemUsage >= self.config['warning']:
-            print ('WARNING - Memory usage: %2.1f%% |mem=%s' % (pmemUsage,
-                                                                pmemUsage))
-            raise SystemExit(1)
-        else:
-            print ('OK - Memory usage: %2.1f%% |mem=%s' % (pmemUsage,
-                                                           pmemUsage))
-            raise SystemExit(0)
+        yield nagiosplugin.Metric('usedmemory', pmemUsage)
 
 
-if __name__ == "__main__":
-    MemoryCheck().run()
+def memory_check(config):
+    return (
+        UsedMemory(),
+        nagiosplugin.ScalarContext(
+            'usedmemory', warning=':{}'.format(config['warning']),
+            critical=":{}".format(config['critical']),
+            fmt_metric="Memory usage: {value:2.1f}%"),
+    )
+
+
+
+if __name__ == '__main__':
+    nrpe.check(
+        memory_check,
+        {
+            'warning': '80',
+            'critical': '90',
+        }
+    )

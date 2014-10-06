@@ -37,7 +37,6 @@ import logging
 import os
 import socket
 import subprocess
-import sys
 
 import pysc
 
@@ -78,27 +77,31 @@ def filter_ips(filename, ips):
     else:
         logger.debug("File %s don't had any changes, leave as is.", filename)
 
-# TODO: migrate to pysc
-@pysc.profile(log=logger)
-def main():
-    # list of denyhosts files
-    denyhosts_files = (
-        '/etc/hosts.deny',
-        '/var/lib/denyhosts/hosts',
-        '/var/lib/denyhosts/hosts-restricted',
-        '/var/lib/denyhosts/hosts-root',
-        '/var/lib/denyhosts/hosts-valid',
-        '/var/lib/denyhosts/users-hosts',
-    )
 
-    # get list of arguments, each arg is one ip address to unban
-    ips = sys.argv[1:]
+class DenyhostsUnblock(pysc.Application):
+    logger = logger
+    
+    def get_argument_parser(self):
+        argp = super(DenyhostsUnblock, self).get_argument_parser()
+        argp.add_argument("ips", nargs='+')
+        return argp
 
-    # need one or more arg
-    if ips:
+    def main(self):
+        # list of denyhosts files
+        denyhosts_files = (
+            '/etc/hosts.deny',
+            '/var/lib/denyhosts/hosts',
+            '/var/lib/denyhosts/hosts-restricted',
+            '/var/lib/denyhosts/hosts-root',
+            '/var/lib/denyhosts/hosts-valid',
+            '/var/lib/denyhosts/users-hosts',
+        )
+
         init_script = '/etc/init.d/denyhosts'
         logger.debug("stop %s", init_script)
         subprocess.check_call([init_script, 'stop'])
+
+        ips = self.config['ips']
 
         # removed invalid ips
         valid_ips = []
@@ -114,9 +117,7 @@ def main():
         # start denyhosts
         logger.debug("start %s", init_script)
         subprocess.check_call([init_script, 'start'])
-    else:
-        print 'usage: denyhosts-unblock <ip_address> ...'
 
 
 if __name__ == '__main__':
-    main()
+    DenyhostsUnblock().run()

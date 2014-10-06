@@ -33,26 +33,35 @@ __author__ = 'Hung Nguyen Viet <hvnsweeting@gmail.com>'
 __maintainer__ = 'Hung Nguyen Viet <hvnsweeting@gmail.com>'
 __email__ = 'hvnsweeting@gmail.com'
 
-# TODO: switch pysc
 
 import os
 import shutil
 import sys
 
-WS = '/var/lib/jenkins/workspace/'
-JOBS_DIR = '/var/lib/jenkins/jobs/'
+import pysc
 
-# No workspace has created yet. This is likely a new installed Jenkins
-if not os.path.isdir(WS):
-    sys.exit(0)
 
-workspaces = os.listdir(WS)
-ws_without_jobs = []
-for ws in workspaces:
-    job_is_existing = False
-    for jdir in os.listdir(JOBS_DIR):
-        if ws.startswith(jdir):
-            job_is_existing = True
-            break
-    if not job_is_existing:
-        shutil.rmtree(os.path.join(WS, ws))
+class DelOldWs(pysc.Application):
+    defaults = {
+        'workspace': '/var/lib/jenkins/workspace/',
+        'jobs_dir': '/var/lib/jenkins/jobs/',
+    }
+
+    def main(self):
+        # No workspace has created yet. This is likely a new installed Jenkins
+        if not os.path.isdir(self.config['workspace']):
+            sys.exit(0)
+
+        workspaces = os.listdir(self.config['workspace'])
+        for ws in workspaces:
+            job_is_existing = False
+            for jdir in os.listdir(self.config['jobs_dir']):
+                if ws.startswith(jdir):
+                    job_is_existing = True
+                    break
+            if not job_is_existing:
+                shutil.rmtree(os.path.join(self.config['workspace'], ws))
+
+
+if __name__ == '__main__':
+    DelOldWs().run()

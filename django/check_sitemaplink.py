@@ -78,6 +78,8 @@ def check_sitemaplink(config):
     Required configs:
 
     - sitemap
+    - warning
+    - critical
     """
     return (
         SiteMapLink(config['sitemap']),
@@ -88,8 +90,4 @@ def check_sitemaplink(config):
 
 
 if __name__ == "__main__":
-    defaults = {
-        'warning': '',
-        'critical': '',
-    }
-    nrpe.check(check_sitemaplink, defaults)
+    nrpe.check(check_sitemaplink)

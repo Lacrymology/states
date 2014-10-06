@@ -32,6 +32,6 @@ is because of security reason.
 to force nagios user to only be able to run this check with uwsgi.
 this prevent a user to run uwsgi in a way it overwrite running instance
 or run arbitrary code. -#}
-{%- set version = '2.0.7' -%}
+{%- set version = '2.0.c72fde' -%}
 {%- set extracted_dir = '/usr/local/uwsgi-{0}'.format(version) %}
 {{ extracted_dir }}/uwsgi --socket /var/lib/uwsgi/${1}.sock --nagios

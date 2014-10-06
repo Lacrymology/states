@@ -1,5 +1,5 @@
---- a/plugins/carbon/carbon.c	2014-09-29 11:21:02.130960350 +0700
-+++ b/plugins/carbon/carbon.c	2014-09-29 11:36:55.698986948 +0700
+--- a/plugins/carbon/carbon.c	2014-10-03 13:32:03.000000000 +0700
++++ b/plugins/carbon/carbon.c	2014-10-06 09:58:04.931076302 +0700
 @@ -252,7 +252,7 @@
  
  		int do_avg_push;

@@ -105,7 +105,7 @@ salt-master-requirements:
 salt-master-job_changes.py:
   file:
     - managed
-    - name /usr/local/bin/salt-master-job_changes.py
+    - name: /usr/local/bin/salt-master-job_changes.py
     - user: root
     - group: root
     - mode: 550

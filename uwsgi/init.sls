@@ -67,7 +67,7 @@ uwsgi_upgrade_remove_old_version:
     - name: /usr/local/uwsgi
 
 {%- set version = '2.0.c72fde' -%}
-{%- set source_hash = '178f98363c4347e33ebbe08fc19d81ac' %}
+{%- set source_hash = '9c326068aed8400209306d760407a9aa' %}
 {%- set extracted_dir = '/usr/local/uwsgi-{0}'.format(version) %}
 
 /etc/init/uwsgi.conf:

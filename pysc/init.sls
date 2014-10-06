@@ -31,10 +31,14 @@ Mange pysc pip package, which provide lib support for python scrips in salt comm
 include:
   - pip
 
+{{ opts['cachedir'] }}/salt-pysc-requirements.txt:
+  file:
+    - absent
+
 pysc:
   file:
     - managed
-    - name: {{ opts['cachedir'] }}/salt-pysc-requirements.txt
+    - name: {{ opts['cachedir'] }}/pip/pysc
     - template: jinja
     - user: root
     - group: root
@@ -44,7 +48,7 @@ pysc:
     - wait
     - name: pip.install
     - upgrade: True
-    - requirements: {{ opts['cachedir'] }}/salt-pysc-requirements.txt
+    - requirements: {{ opts['cachedir'] }}/pip/pysc
     - require:
       - module: pip
     - watch:

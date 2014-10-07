@@ -501,6 +501,21 @@ class States(unittest.TestCase):
 
     __metaclass__ = TestStateMeta
 
+    def _check_same_status(self, original, function, messages):
+        global clean_up_failed
+        # check processes
+        if original is None:
+            original = function()
+            logger.debug(messages[0], len(original))
+        else:
+            current = function()
+            logger.debug(messages[1], len(actual))
+            unclean = current - original
+
+            if unclean:
+                clean_up_failed = True
+                self.fail(messages[2] % os.linesep.join(unclean))
+
     def setUp(self):
         """
         Clean up the minion before each test.
@@ -540,35 +555,15 @@ class States(unittest.TestCase):
                 self.fail(output)
 
         # check processes
-        if process_list is None:
-            process_list = list_non_minion_processes()
-            logger.debug("First cleanup, keep list of %d process",
-                         len(process_list))
-        else:
-            actual = list_non_minion_processes()
-            logger.debug("Check %d proccess", len(actual))
-            unclean = []
-            for process in actual:
-                if process not in process_list:
-                    unclean.append(process)
-
-            if unclean:
-                clean_up_failed = True
-                self.fail("Process that still run after cleanup: %s" % (
-                          os.linesep.join(unclean)))
-
+        self._check_same_status(process_list, list_non_minion_processes, [
+            "First cleanup, keep list of %d process",
+            "Check %d proccess",
+            "Process that still run after cleanup: %s"])
         # check files
-        if files_list is None:
-            files_list = list_system_files()
-            logger.debug("First cleanup, keep list of %d files",
-                         len(files_list))
-        else:
-            current = list_system_files()
-            unclean = current - files_list
-            if unclean:
-                clean_up_failed = True
-                self.fail("Newly created files after cleanup: %s" %
-                          sorted(unclean))
+        self._check_same_status(files_list, list_system_files, [
+            "First cleanup, keep list of %d files",
+            "Check %d files",
+            "Newly created files after cleanup: %s"])
 
         is_clean = True
 

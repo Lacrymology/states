@@ -54,12 +54,14 @@ def returner(ret):
     """
     def send_sentry(message, result=None):
         pillar_data = __salt__['pillar.data']()
+        logger.debug("Building sentry data")
         sentry_data = {
             'result': result,
             'returned': ret,
             'pillar': pillar_data,
             'grains': __salt__['grains.items']()
         }
+        logger.debug("Sending to sentry")
         try:
             __salt__['raven.alert'](pillar_data['sentry_dsn'], message, 'ERROR', sentry_data)
         except Exception, err:
@@ -68,7 +70,11 @@ def returner(ret):
 
     requisite_error = 'One or more requisite failed'
     try:
+        logger.debug("Checking to see if there is a failed state")
+        logger.debug("ret['success']: {0}".format(ret.get('success', True)))
+        logger.debug("ret['retcode']: {0}".format(ret.get('retcode')))
         is_failed = not ret.get('success', True) or ret.get('retcode') != 0
+        logger.debug("is_failed: {0}".format(is_failed))
     except KeyError:
         send_sentry('No success or retcode returned')
     else:
@@ -83,3 +89,5 @@ def returner(ret):
                        ret['return'][state]['comment'] != requisite_error:
                         send_sentry(ret['return'][state]['comment'],
                                     ret['return'][state])
+        else:
+            logger.debug("All states run successfully")

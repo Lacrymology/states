@@ -33,18 +33,32 @@ include:
   - locale
   - ssl
 
-ruby2:
-  pkgrepo17:
-    - managed
-    - ppa: brightbox/ruby-ng
-    - require:
-      - pkg: apt_sources
+ruby2_deps:
   pkg:
     - installed
     - pkgs:
-      - ruby2.1
-      - ruby2.1-dev
+      - libgmp-dev
+      - ruby
     - require:
-      - pkgrepo17: ruby2
+      - cmd: apt_sources
+
+{%- set version = "2.1.2-1bbox1~precise1" %}
+{%- set arch = grains['osarch'] %}
+{%- if 'files_archive' in pillar %}
+  {%- set repo_url = pillar['files_archive'] ~ "/mirror" %}
+{%- else %}
+  {%- set repo_url = "http://ppa.launchpad.net/brightbox/ruby-ng/ubuntu/pool/main/r" %}
+{%- endif %}
+
+ruby2:
+  pkg:
+    - installed
+    - sources:
+      - rubygems-integration: {{ repo_url }}/rubygems-integration/rubygems-integration_1.5-1bbox1_all.deb
+      - ruby2.1: {{ repo_url }}/ruby2.1/ruby2.1_{{ version }}_{{ arch }}.deb
+      - ruby2.1-dev: {{ repo_url }}/ruby2.1/ruby2.1-dev_{{ version }}_{{ arch }}.deb
+      - libruby2.1: {{ repo_url }}/ruby2.1/libruby2.1_{{ version }}_{{ arch }}.deb
+    - require:
       - pkg: ssl-cert
       - cmd: system_locale
+      - pkg: ruby2_deps

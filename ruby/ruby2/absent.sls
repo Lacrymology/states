@@ -27,11 +27,10 @@ Maintainer: Diep Pham <favadi@robotinfra.com>
 -#}
 
 ruby2:
-  pkgrepo17:
-    - absent
-    - ppa: brightbox/ruby-ng
   pkg:
     - purged
     - pkgs:
       - ruby2.1
       - ruby2.1-dev
+      - libruby2.1
+      - rubygems-integration

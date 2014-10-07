@@ -246,7 +246,7 @@ def list_non_minion_processes(cmd_name='/usr/bin/python /usr/bin/salt-minion'):
     by a minion
     """
     procs = list_user_space_processes()
-    output = []
+    output = set()
     minion_pids = []
 
     # list all minions process
@@ -270,20 +270,17 @@ def list_non_minion_processes(cmd_name='/usr/bin/python /usr/bin/salt-minion'):
                     run_trough_minion = True
                     break
 
-            if not run_trough_minion and procs[pid] not in output:
-                output.append(procs[pid])
+            if not run_trough_minion:
+                output.add(procs[pid])
     return output
 
 
 def list_groups():
     """
-    return the list of groups
+    return a set of groups
     """
     global client
-    output = []
-    for group in client('group.getent'):
-        output.append(group['name'])
-    return output
+    return set(group['name'] for group in client('group.getent'))
 
 
 def list_system_files(dirs=["/etc", "/usr/local", "/var"]):

@@ -62,6 +62,15 @@ rsyslog:
     - watch:
       - pkg: rsyslog
       - file: rsyslog
+      - file: /var/spool/rsyslog
+
+/var/spool/rsyslog:
+  file:
+    - directory
+    - mode: 755
+    - user: syslog
+    - require:
+      - pkg: rsyslog
 
 gsyslogd:
   service:

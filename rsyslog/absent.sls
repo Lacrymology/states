@@ -52,3 +52,9 @@ rsyslog:
 /etc/apt/sources.list.d/rsyslogv7.list:
   file:
     - absent
+
+/var/spool/rsyslog:
+  file:
+    - absent
+    - require:
+      - pkg: rsyslog

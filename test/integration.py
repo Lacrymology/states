@@ -79,6 +79,10 @@ clean_up_failed = False
 process_list = None
 # list of files before tests ran
 files_list = None
+# groups list
+groups_list = None
+# users list
+users_list = None
 
 NO_TEST_STRING = '-*- ci-automatic-discovery: off -*-'
 
@@ -281,6 +285,11 @@ def list_groups():
     """
     global client
     return set(group['name'] for group in client('group.getent'))
+
+
+def list_users():
+    global client
+    return set(user['name'] for user in client('user.getent'))
 
 
 def list_system_files(dirs=["/etc", "/usr/local", "/var"]):
@@ -520,7 +529,8 @@ class States(unittest.TestCase):
         """
         Clean up the minion before each test.
         """
-        global is_clean, clean_up_failed, process_list, files_list
+        global (is_clean, clean_up_failed, process_list,
+                files_list, users_list, groups_list)
         if clean_up_failed:
             self.skipTest("Previous cleanup failed")
         else:
@@ -564,6 +574,16 @@ class States(unittest.TestCase):
             "First cleanup, keep list of %d files",
             "Check %d files",
             "Newly created files after cleanup: %s"])
+        # check groups
+        self._check_same_status(groups_list, list_groups, [
+            "First cleanup, keep list of %d groups",
+            "Check %d groups",
+            "Newly created groups after cleanup: %s"])
+        # check users
+        self._check_same_status(users_list, list_users, [
+            "First cleanup, keep list of %d users",
+            "Check %d users",
+            "Newly created users after cleanup: %s"])
 
         is_clean = True
 

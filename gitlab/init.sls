@@ -124,10 +124,11 @@ gitlab:
       - archive: gitlab
   cmd:
     - wait
-    - name: force=yes bundle exec rake gitlab:setup
+    - name: bundle exec rake gitlab:setup
     - env:
+      - force: "yes"
       - RAILS_ENV: production
-      - GITLAB_ROOT_PASSWORD: {{ pillar['gitlab']['admin']['password'] }}
+      - GITLAB_ROOT_PASSWORD: "{{ pillar['gitlab']['admin']['password'] }}"
     - user: gitlab
     - cwd: /home/gitlab/gitlabhq-{{ version }}
     - require:

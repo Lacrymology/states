@@ -220,6 +220,17 @@ gitlab_upstart:
     - require:
       - file: gitlab
 
+/home/gitlab/gitlabhq-{{ version }}/.gitconfig:
+  file:
+    - managed
+    - source: salt://gitlab/gitconfig.jinja2
+    - template: jinja
+    - user: gitlab
+    - group: gitlab
+    - mode: 440
+    - require:
+        - file: gitlab
+
 {%- if salt['pillar.get']('gitlab:smtp:enabled', False) %}
 /home/gitlab/gitlabhq-{{ version }}/config/initializers/smtp_settings.rb:
   file:

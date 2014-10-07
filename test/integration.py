@@ -511,6 +511,22 @@ class States(unittest.TestCase):
     __metaclass__ = TestStateMeta
 
     def _check_same_status(self, original, function, messages):
+        """
+        Checks that a set of things is invariant between runs. If `original`
+        is None, `function` gets called and its return value saved in
+        `original`. If not, `function` is called and its result value is
+        compared against `original`. If they differ, the test fails.
+
+        :params original: a set or None
+        :params function: a function that returns a set
+        :params messages: a list of 3 strings used for logging.
+            - the first element must take an integer and is used when the set
+              is first filled in (original is None)
+            - the second element must take an integer and is used when the
+              current value of `function` is compared to `original`
+            - the third value must take a string, and it's used for the failure
+              message
+        """
         global clean_up_failed
         # check processes
         if original is None:

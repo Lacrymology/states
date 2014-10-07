@@ -29,6 +29,7 @@ Install Salt Minion (client).
 -#}
 
 include:
+  - requests
   - rsyslog
   - salt.minion.upgrade
   - sudo

@@ -338,6 +338,20 @@ gitlab_precompile_assets:
       - cmd: gitlab
       - cmd: gitlab_gems
 
+/etc/logrotate.d/gitlab:
+  file:
+    - managed
+    - source: salt://gitlab/logrotate.jinja2
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - require:
+      - pkg: logrotate
+      - file: gitlab_upstart
+    - context:
+      version: {{ version }}
+
 extend:
   uwsgi_build:
     file:

@@ -33,9 +33,7 @@ include:
   - build
   - gitlab.git
   - logrotate
-{#-
   - nginx
-#}
   - postgresql.server
   - python
   - redis
@@ -72,6 +70,7 @@ gitlab_dependencies:
       - python-docutils
       - zlib1g-dev
     - require:
+      - pkg: postgresql-dev
       - cmd: apt_sources
 
 gitlab:
@@ -80,9 +79,11 @@ gitlab:
     - name: gitlab
     - groups:
       - www-data
+      - redis
     - shell: /bin/bash
     - require:
       - pkg: gitlab_dependencies
+      - pkg: redis
       - user: web
   postgres_user:
     - present
@@ -121,6 +122,48 @@ gitlab:
       - group
     - require:
       - archive: gitlab
+  cmd:
+    - wait
+    - name: force=yes bundle exec rake gitlab:setup
+    - env:
+      - RAILS_ENV: production
+      - GITLAB_ROOT_PASSWORD: {{ pillar['gitlab']['admin']['password'] }}
+    - user: gitlab
+    - cwd: /home/gitlab/gitlabhq-{{ version }}
+    - require:
+      - service: redis
+      - cmd: gitlab_gems
+      - file: gitlab
+      - file: /home/gitlab/gitlabhq-{{ version }}/config/database.yml
+    - watch:
+      - postgres_database: gitlab
+  service:
+    - running
+    - require:
+      - user: gitlab
+    - watch:
+      - archive: gitlab
+      - cmd: gitlab
+      - cmd: gitlab_gems
+      - file: gitlab_upstart
+      - file: /home/gitlab/gitlabhq-{{ version }}/config/database.yml
+      - file: /home/gitlab/gitlabhq-{{ version }}/config/gitlab.yml
+      - file: /home/gitlab/gitlabhq-{{ version }}/config/initializers/rack_attack.rb
+      - file: /home/gitlab/gitlabhq-{{ version }}/config/resque.yml
+
+gitlab_upstart:
+  file:
+    - managed
+    - name: /etc/init/gitlab.conf
+    - source: salt://gitlab/upstart.jinja2
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - context:
+      version: {{ version }}
+    - require:
+      - file: gitlab
 
 /home/gitlab/gitlab-satellites:
   file:
@@ -200,13 +243,16 @@ gitlab_shell:
     - user: gitlab
     - cwd: /home/gitlab/gitlabhq-{{ version }}
     - env:
-        - REDIS_URL: unix:/var/run/redis/redis.sock
-        - RAILS_ENV: production
+      - REDIS_URL: unix:/var/run/redis/redis.sock
+      - RAILS_ENV: production
     - require:
-      - gem: gitlab_gems
+      - cmd: gitlab_gems
     - watch:
       - archive: gitlab
+      - file: /home/gitlab/gitlabhq-{{ version }}/config/database.yml
       - file: /home/gitlab/gitlabhq-{{ version }}/config/gitlab.yml
+      - file: /home/gitlab/gitlabhq-{{ version }}/config/initializers/rack_attack.rb
+      - file: /home/gitlab/gitlabhq-{{ version }}/config/resque.yml
 
 gitlab-uwsgi:
   file:
@@ -241,6 +287,39 @@ gitlab-uwsgi:
       - file: /home/gitlab/gitlabhq-{{ version }}/config/resque.yml
       - user: gitlab
 
+/etc/nginx/conf.d/gitlab.conf:
+  file:
+    - managed
+    - source: salt://gitlab/nginx.jinja2
+    - template: jinja
+    - group: www-data
+    - user: www-data
+    - mode: 440
+    - require:
+      - pkg: nginx
+      - user: web
+      - file: gitlab-uwsgi
+{%- if salt['pillar.get']('gitlab:ssl', False) %}
+      - cmd: ssl_cert_and_key_for_{{ pillar['gitlab']['ssl'] }}
+{%- endif %}
+    - watch_in:
+      - service: nginx
+    - context:
+      version: {{ version }}
+
+gitlab_precompile_assets:
+  cmd:
+    - wait
+    - name: bundle exec rake assets:precompile
+    - env:
+        RAILS_ENV: production
+    - user: gitlab
+    - cwd: /home/gitlab/gitlabhq-{{ version }}
+    - unless: test -d /home/gitlab/gitlabhq-{{ version }}/public/assets/
+    - watch:
+      - cmd: gitlab
+      - cmd: gitlab_gems
+
 extend:
   uwsgi_build:
     file:
@@ -251,3 +330,9 @@ extend:
         - RUBYPATH: ruby2.1
       - watch:
         - pkg: ruby2
+{%- if salt['pillar.get']('gitlab:ssl', False) %}
+  nginx:
+    service:
+      - watch:
+        - cmd: ssl_cert_and_key_for_{{ pillar['gitlab']['ssl'] }}
+{%- endif %}

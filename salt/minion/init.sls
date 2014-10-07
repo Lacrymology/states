@@ -29,6 +29,7 @@ Install Salt Minion (client).
 -#}
 
 include:
+  - raven
   - requests
   - rsyslog
   - salt.minion.upgrade

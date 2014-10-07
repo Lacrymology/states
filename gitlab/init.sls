@@ -220,6 +220,22 @@ gitlab_upstart:
     - require:
       - file: gitlab
 
+{%- if salt['pillar.get']('gitlab:smtp:enabled', False) %}
+/home/gitlab/gitlabhq-{{ version }}/config/initializers/smtp_settings.rb:
+  file:
+    - managed
+    - source: salt://gitlab/smtp.jinja2
+    - user: {{ user }}
+    - group: {{ user }}
+    - template: jinja
+    - mode: 440
+    - require:
+      - user: gitlab
+      - file: gitlab
+    - require_in:
+      - cmd: gitlab_gems
+{%- endif %}
+
 gitlab_gems:
   gem:
     - installed

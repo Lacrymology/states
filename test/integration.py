@@ -77,6 +77,8 @@ is_clean = False
 clean_up_failed = False
 # list of process before tests ran
 process_list = None
+# list of files before tests ran
+files_list = None
 
 NO_TEST_STRING = '-*- ci-automatic-discovery: off -*-'
 
@@ -506,7 +508,7 @@ class States(unittest.TestCase):
         """
         Clean up the minion before each test.
         """
-        global is_clean, clean_up_failed, process_list
+        global is_clean, clean_up_failed, process_list, files_list
         if clean_up_failed:
             self.skipTest("Previous cleanup failed")
         else:
@@ -557,6 +559,19 @@ class States(unittest.TestCase):
                 clean_up_failed = True
                 self.fail("Process that still run after cleanup: %s" % (
                           os.linesep.join(unclean)))
+
+        # check files
+        if files_list is None:
+            files_list = list_system_files()
+            logger.debug("First cleanup, keep list of %d files",
+                         len(files_list))
+        else:
+            current = list_system_files()
+            unclean = current - files_list
+            if unclean:
+                clean_up_failed = True
+                self.fail("Newly created files after cleanup: %s" %
+                          sorted(unclean))
 
         is_clean = True
 

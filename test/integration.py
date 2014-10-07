@@ -284,6 +284,18 @@ def list_groups():
     return output
 
 
+def list_system_files(dirs=["/etc", "/usr/local", "/var"]):
+    """
+    Returns a set of the files present in each of the directories listed.
+
+    Most of the time it will only make sense to be called with absolute paths
+    """
+    ret = set()
+    for directory in dirs:
+        ret.update(subprocess.check_output(["find", directory]).split("\n"))
+    return ret
+
+
 def render_state_template(state):
     """
     Return de-serialized data of specified state name

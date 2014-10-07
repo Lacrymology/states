@@ -50,7 +50,13 @@ TS_KEY = 'returner_timestamps_last_success'
 class LastSuccess(nap.Resource):
     def probe(self):
         try:
-            __opts__ = salt.config.minion_config('/etc/salt/minion')
+            # only load config from /etc/salt/minion, not configs in
+            # minion.d as that may require higher permission and they are
+            # unnecessary for this check
+            default_config = salt.config.DEFAULT_MINION_OPTS.update(
+                {'default_include': None})
+            __opts__ = salt.config.minion_config('/etc/salt/minion',
+                                                 defaults=default_config)
             datamod = salt.loader.raw_mod(__opts__, 'data', None)
             ts = datamod['data.getval'](TS_KEY)
         except Exception as e:

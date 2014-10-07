@@ -207,3 +207,47 @@ gitlab_shell:
     - watch:
       - archive: gitlab
       - file: /home/gitlab/gitlabhq-{{ version }}/config/gitlab.yml
+
+gitlab-uwsgi:
+  file:
+    - managed
+    - name: /etc/uwsgi/gitlab.yml
+    - source: salt://gitlab/uwsgi.jinja2
+    - template: jinja
+    - user: gitlab
+    - group: gitlab
+    - mode: 440
+    - context:
+      appname: gitlab
+      chdir: /home/gitlab/gitlabhq-{{ version }}
+      rack: config.ru
+      uid: gitlab
+      gid: gitlab
+    - require:
+      - file: gitlab
+      - cmd: gitlab_shell
+  module:
+    - wait
+    - name: file.touch
+    - m_name: /etc/uwsgi/gitlab.yml
+    - require:
+      - file: gitlab-uwsgi
+    - watch:
+      - cmd: gitlab_gems
+      - cmd: gitlab_shell
+      - file: /home/gitlab/gitlabhq-{{ version }}/config/database.yml
+      - file: /home/gitlab/gitlabhq-{{ version }}/config/gitlab.yml
+      - file: /home/gitlab/gitlabhq-{{ version }}/config/initializers/rack_attack.rb
+      - file: /home/gitlab/gitlabhq-{{ version }}/config/resque.yml
+      - user: gitlab
+
+extend:
+  uwsgi_build:
+    file:
+      - require:
+        - pkg: ruby2
+    cmd:
+      - env:
+        - RUBYPATH: ruby2.1
+      - watch:
+        - pkg: ruby2

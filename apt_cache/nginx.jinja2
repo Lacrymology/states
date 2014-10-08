@@ -1,0 +1,42 @@
+# {{ pillar['message_do_not_modify'] }}
+
+upstream apt_cache {
+    server localhost:3142;
+}
+
+server {
+    listen 80;
+{% if salt['pillar.get']('apt_cache:ssl', False) %}
+{%- from 'nginx/macro.jinja2' import ssl_config with context %}
+    {{ ssl_config(pillar['apt_cache']['ssl']) }}
+{% endif %}
+    server_name {% for hostname in pillar['apt_cache']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+
+{#    root /var/cache/jenkins/war/;#}
+
+{#    location ~ "^/static/[0-9a-fA-F]{8}\/(.*)$" {#}
+{#        rewrite "^/static/[0-9a-fA-F]{8}\/(.*)" /$1 last;#}
+{#    }#}
+{##}
+{#    location ~ /securityRealm/user/(.*)/api/  {#}
+{#        deny all;#}
+{#    }#}
+
+{% include "nginx/block_hacks.jinja2" %}
+
+    location / {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto https;
+        proxy_set_header Host $http_host;
+        proxy_next_upstream error;
+        proxy_pass http://apt_cache;
+    }
+
+{% include 'nginx/location_robots.jinja2' %}
+
+    location /favicon.ico {
+        deny all;
+        return 404;
+    }
+}

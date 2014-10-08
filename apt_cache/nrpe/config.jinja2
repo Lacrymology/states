@@ -1,0 +1,12 @@
+apt_cache_procs:
+  description: Apt Cache Daemon
+  command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -C apt-cacher-ng -u apt-cacher-ng'
+
+apt_cache_port:
+  description: Apt Cache TCP Port
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 3142
+  dependencies:
+    - apt_cache_procs
+
+{%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
+{{ nginx_instance('apt_cache', extra_dependencies=('apt_cache_port',), http_result="404 OK", https_result="404 OK") }}

@@ -46,11 +46,6 @@ openerp-uwsgi:
     - name: /etc/uwsgi/openerp.yml
     - require:
       - file: /etc/nginx/conf.d/openerp.conf
-  cmd:
-    - run
-    - name: sleep 60 && pkill -9 -f [o]penerp-master || true
-    - require:
-      - file: openerp-uwsgi
 
 /usr/local/openerp/config.yaml:
   file:

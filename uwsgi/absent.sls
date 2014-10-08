@@ -27,7 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Uninstall uWSGI Web app server.
 -#}
-{%- set version = '2.0.c72fde' -%}
+{%- set version = '1.9.17.1' -%}
 {%- set extracted_dir = '/usr/local/uwsgi-{0}'.format(version) %}
 
 uwsgi_emperor:
@@ -35,7 +35,7 @@ uwsgi_emperor:
     - dead
     - name: uwsgi
 
-{%- for file in ('/etc/uwsgi', '/etc/uwsgi.yml', '/etc/init/uwsgi.conf', '/var/lib/uwsgi', extracted_dir) %}
+{%- for file in ('/etc/uwsgi', '/etc/uwsgi.yaml', '/etc/init/uwsgi.conf', '/var/lib/uwsgi', extracted_dir) %}
 {{ file }}:
   file:
     - absent

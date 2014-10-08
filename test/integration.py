@@ -43,6 +43,7 @@ import StringIO
 import pprint
 import tempfile
 import collections
+import subprocess
 try:
     import unittest2 as unittest
 except ImportError:
@@ -545,8 +546,9 @@ class States(unittest.TestCase):
         """
         Clean up the minion before each test.
         """
-        global (is_clean, clean_up_failed, process_list,
-                files_list, users_list, groups_list)
+        global is_clean, clean_up_failed, process_list
+        global files_list, users_list, groups_list
+        
         if clean_up_failed:
             self.skipTest("Previous cleanup failed")
         else:

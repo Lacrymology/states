@@ -48,7 +48,7 @@ openerp-uwsgi:
       - file: /etc/nginx/conf.d/openerp.conf
   cmd:
     - run
-    - name: sleep 60 && pkill -9 -f [o]penerp-master || true
+    - name: pkill -9 -f [o]penerp-master || true
     - require:
       - file: openerp-uwsgi
 

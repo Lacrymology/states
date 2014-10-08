@@ -58,17 +58,16 @@ include:
     - require:
       - user: salt_archive
       - file: bash
-{%- if not salt['pillar.get']('salt_archive:source', False) %}
+{%- if pillar['salt_archive']['source'] is defined %}
       - file: /usr/local/bin/salt_archive_incoming.py
     {#-
      if pillar['salt_archive']['source'] is not defined, create an incoming
      directory.
     #}
 
-salt_archive_incoming:
+/var/lib/salt_archive/incoming:
   file:
     - directory
-    - name: /var/lib/salt_archive/incoming
     - user: salt_archive
     - group: salt_archive
     - mode: 550
@@ -84,7 +83,7 @@ salt_archive_incoming:
     - mode: 750
     - require:
       - user: salt_archive
-      - file: salt_archive_incoming
+      - file: /var/lib/salt_archive/incoming
     {%- endfor %}
 
 /usr/local/bin/salt_archive_incoming.py:
@@ -96,6 +95,7 @@ salt_archive_incoming:
     - mode: 550
     - require:
       - file: /usr/local
+      - file: /var/lib/salt_archive/incoming
       - module: pysc
 {%- else %}
     {#-
@@ -142,7 +142,34 @@ archive_rsync:
       - file: salt_archive
       - pkg: nginx
 
-{% for key in salt['pillar.get']('salt_archive:keys', []) -%}
+salt-archive-clamav:
+  file:
+    - name: /usr/local/bin/salt_archive_clamav.sh
+{%- if pillar['salt_archive']['source'] is defined %}
+    - absent
+{%- else %}
+    - managed
+    - source: salt://salt/archive/server/clamav.jinja2
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 550
+    - require:
+      - pkg: salt-archive-clamav
+  cmd:
+    - run
+    - name: /usr/local/bin/salt_archive_clamav.sh
+    - require:
+      - file: salt-archive-clamav
+      - user: salt_archive
+  pkg:
+    - installed
+    - name: wget
+    - require:
+      - cmd: apt_sources
+{%- endif -%}
+
+{%- for key in salt['pillar.get']('salt_archive:keys', []) %}
 salt_archive_{{ key }}:
   ssh_auth:
     - present

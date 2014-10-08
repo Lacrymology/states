@@ -29,6 +29,8 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 {%- set home = salt['user.info']('salt_archive')['home'] -%}
 {%- if pillar['salt_archive']['source'] is defined %}
 */15 * * * * root /usr/local/bin/salt_archive_sync.sh
+{%- else %}
+0 0 * * * root /usr/local/bin/salt_archive_clamav.sh
 {%- endif -%}
 {%- if not salt['pillar.get']('salt_archive:source', False) %}
 {#- make sure everything is owner root:salt_archive #}

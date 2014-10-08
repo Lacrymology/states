@@ -56,6 +56,10 @@ server {
         return 404;
     }
 
+    location ~* /[a-z]+.cvd {
+        root /var/lib/salt_archive/mirror/clamav;
+    }
+
 {% include "nginx/block_hacks.jinja2" %}
 
     location ~* \.(gz|txt|zip)$ {

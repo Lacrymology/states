@@ -1,0 +1,14 @@
+#!/bin/bash
+# {{ pillar['message_do_not_modify'] }}
+
+set -e
+
+source /usr/local/share/salt_common.sh
+log_start_script "$@"
+trap "log_stop_script \$?" EXIT
+
+{%- set dir = '/var/lib/salt_archive/mirror/clamav' %}
+mkdir -p {{ dir }}
+{%- for filename in ('bytecode', 'daily', 'main') %}
+wget {% if salt['pillar.get']('__test__', False) %}v{% else %}q{% endif %} -O {{ dir }}/{{ filename }}.cvd http://db.local.clamav.net/{{ filename }}.cvd
+{%- endfor -%}

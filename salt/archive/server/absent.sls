@@ -41,3 +41,8 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 /etc/cron.d/salt-archive:
   file:
     - absent
+
+salt-archive-clamav:
+  file:
+    - absent
+    - name: /usr/local/bin/salt_archive_clamav.sh

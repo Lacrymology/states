@@ -60,6 +60,12 @@ uwsgi_upgrade_remove_old_version:
     - absent
     - name: /usr/local/uwsgi
 
+{%- for previous_version in ('2.0.c72fde', ) %}
+/usr/local/uwsgi-{{ previous_version }}:
+  file:
+    - absent
+{%- endfor %}
+
 {%- set version = '1.9.17.1' -%}
 {%- set extracted_dir = '/usr/local/uwsgi-{0}'.format(version) %}
 

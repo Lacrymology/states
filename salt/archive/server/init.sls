@@ -58,7 +58,7 @@ include:
     - require:
       - user: salt_archive
       - file: bash
-{%- if pillar['salt_archive']['source'] is defined %}
+{%- if not pillar['salt_archive']['source'] is defined %}
       - file: /usr/local/bin/salt_archive_incoming.py
     {#-
      if pillar['salt_archive']['source'] is not defined, create an incoming

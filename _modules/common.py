@@ -2,6 +2,8 @@
 
 import logging
 
+import salt._compat
+
 logger = logging.getLogger(__name__)
 
 
@@ -76,3 +78,7 @@ def global_roles():
                 if role not in output:
                     output.append(role)
     return output
+
+
+def urlparse(url):
+    return salt._compat.urlparse(url)

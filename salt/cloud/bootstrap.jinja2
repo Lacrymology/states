@@ -46,6 +46,7 @@ chmod 400 /etc/salt/pki/minion/minion.pem
 {%- block installation %}
 apt-get update
 apt-get install -y python-software-properties python-pip
+pip install requests==0.14.2 raven==4.1.1
     {%- if 'files_archive' in pillar %}
 echo "deb {{ pillar['files_archive'].rstrip('/')|replace('https://', 'http://') }}/mirror/salt/{{ version }}/ `lsb_release -c -s` main" > /etc/apt/sources.list.d/saltstack-salt-`lsb_release -c -s`.list
     {%- else %}

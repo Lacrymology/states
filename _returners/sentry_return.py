@@ -40,18 +40,9 @@ __email__ = 'patate@fastmail.cn'
 
 import logging
 
-try:
-    from raven import Client
-    has_raven = True
-except ImportError:
-    has_raven = False
-
 logger = logging.getLogger(__name__)
 
 def __virtual__():
-    if not has_raven:
-        logger.warning("Can't find raven client library")
-        return False
     if not 'sentry_dsn' in __salt__['pillar.data']():
         logger.warning("Missing 'sentry_dsn' value in pillar")
         return False
@@ -70,8 +61,7 @@ def returner(ret):
             'grains': __salt__['grains.items']()
         }
         try:
-            client = Client(pillar_data['sentry_dsn'])
-            client.captureMessage(message, extra=sentry_data)
+            __salt__['raven.alert'](pillar_data['sentry_dsn'], message, 'ERROR', sentry_data)
         except Exception, err:
             logger.error("Can't send message '%s' extra '%s' to sentry: %s",
                          message, sentry_data, err)

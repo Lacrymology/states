@@ -29,6 +29,9 @@ include:
   - amavis
   - amavis.nrpe
   - amavis.diamond
+  - amavis.clamav
+  - clamav.nrpe
+  - clamav.diamond
   - dovecot
   - dovecot.backup
   - dovecot.backup.nrpe

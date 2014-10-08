@@ -54,14 +54,14 @@ def returner(ret):
     """
     def send_sentry(message, result=None):
         pillar_data = __salt__['pillar.data']()
-        logger.debug("Building sentry data")
         sentry_data = {
             'result': result,
             'returned': ret,
             'pillar': pillar_data,
             'grains': __salt__['grains.items']()
         }
-        logger.debug("Sending to sentry")
+        logger.debug("Sentry data {0}".format(sentry_data))
+        logger.debug("Sending {0} to sentry {1}".format(message, pillar_data['sentry_dsn']))
         try:
             __salt__['raven.alert'](pillar_data['sentry_dsn'], message, 'ERROR', sentry_data)
         except Exception, err:

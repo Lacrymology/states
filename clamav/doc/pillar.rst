@@ -53,7 +53,12 @@ Database verification domain, DNS used to verify virus database version.
 Link to the
 `public list of available mirrors <http://www.clamav.net/mirrors.html>`__.
 
-Default: ``current.cvd.clamav.net``.
+Default:
+
+If ``files_archive`` is not defined, ``current.cvd.clamav.net``.
+
+If ``files_archive`` is defined, it use mirror of Clamav database from the
+archive.
 
 clamav:connect_timeout
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -83,6 +88,12 @@ Tuple of spam database servers.
 Link to the
 `public list of available mirrors <http://www.clamav.net/mirrors.html>`__.
 
-Default: list with:
+Default:
+
+If ``files_archive`` is not defined, list with:
+
  - ``db.local.clamav.net``
  - ``database.clamav.net``
+
+If ``files_archive`` is defined, it use mirror of Clamav database from the
+archive.

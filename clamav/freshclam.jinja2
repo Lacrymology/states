@@ -45,19 +45,28 @@ Debug false
 {%- endif %}
 MaxAttempts 5
 DatabaseDirectory /var/lib/clamav
-{%- for mirror in salt['pillar.get']('clamav:dns_db', ('current.cvd.clamav.net',)) %}
-DNSDatabaseInfo {{ mirror }}
-{%- endfor %}
 AllowSupplementaryGroups false
 PidFile /var/run/clamav/freshclam.pid
 ConnectTimeout {{ salt['pillar.get']('clamav:connect_timeout', 30) }}
 ReceiveTimeout {{ salt['pillar.get']('clamav:receive_timeout', 30) }}
 TestDatabases yes
-ScriptedUpdates yes
 CompressLocalDatabase no
 Bytecode true
 {#- Check for new database 24 times a day #}
 Checks {{ salt['pillar.get']('clamav:times_of_check', 24) }}
-{%- for mirror in salt['pillar.get']('clamav:db_mirrors', ('db.local.clamav.net', 'database.clamav.net')) %}
+
+{%- if salt['pillar.get']('files_archive', False) and not salt['pillar.get']('clamav:db_mirrors', False) -%}
+    {% set netloc = salt['common.urlparse'](pillar['files_archive']).netloc %}
+ScriptedUpdates no
+DatabaseMirror {{ netloc }}
+DNSDatabaseInfo {{ netloc }}
+
+{%- else %}
+ScriptedUpdates yes
+    {%- for mirror in salt['pillar.get']('clamav:db_mirrors', ('db.local.clamav.net', 'database.clamav.net')) %}
 DatabaseMirror {{ mirror }}
-{%- endfor %}
+    {%- endfor -%}
+    {%- for mirror in salt['pillar.get']('clamav:dns_db', ('current.cvd.clamav.net',)) %}
+DNSDatabaseInfo {{ mirror }}
+    {%- endfor %}
+{%- endif -%}

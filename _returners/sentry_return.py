@@ -63,7 +63,8 @@ def returner(ret):
         try:
             __salt__['raven.alert'](pillar_data['sentry_dsn'], message, 'ERROR', sentry_data)
         except Exception, err:
-            logger.error("Can't return to sentry: %s", err)
+            logger.error("Can't send message '%s' extra '%s' to sentry: %s",
+                         message, sentry_data, err)
 
     requisite_error = 'One or more requisite failed'
     try:

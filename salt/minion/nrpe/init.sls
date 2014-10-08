@@ -31,6 +31,8 @@ Nagios NRPE check for Salt Minion.
 include:
   - apt.nrpe
   - nrpe
+  - raven.nrpe
+  - requests.nrpe
   - rsyslog.nrpe
 
 /usr/lib/nagios/plugins/check_minion_last_success.py:

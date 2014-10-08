@@ -118,6 +118,8 @@ include:
     - require:
       - file: /usr/local
       - file: bash
+    - require_in:
+      - file: /etc/cron.d/salt-archive
 
 archive_rsync:
   cmd:

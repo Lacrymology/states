@@ -301,7 +301,8 @@ def list_system_files(dirs=["/etc", "/usr/local", "/var"]):
     """
     ret = set()
     for directory in dirs:
-        ret.update(subprocess.check_output(["find", directory]).split("\n"))
+        if os.path.isdir(directory):
+            ret.update(subprocess.check_output(["find", directory]).split("\n"))
     return ret
 
 

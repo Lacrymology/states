@@ -178,8 +178,14 @@ roundcube_password_plugin_ldap_driver_dependency:
       - user: web
       - cmd: roundcube
 
-{% for dir in ('logs', 'temp') %}
-{{ roundcubedir }}/{{ dir }}:
+{#- this app logs directly to syslog, then there is no need for this dir #}
+{{ roundcubedir }}/logs:
+  file:
+    - absent
+    - require:
+      - file: {{ roundcubedir }}
+
+{{ roundcubedir }}/temp:
   file:
     - directory
     - user: www-data
@@ -190,7 +196,6 @@ roundcube_password_plugin_ldap_driver_dependency:
       - user: web
     - require_in:
       - file: roundcube-uwsgi
-{% endfor %}
 
 /etc/nginx/conf.d/roundcube.conf:
   file:

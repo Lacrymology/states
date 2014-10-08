@@ -41,7 +41,8 @@ $final_spam_destiny=D_PASS;
 {#- who will receive notify when there is REAL spam email #}
 $spam_admin = '{{ pillar['mail']['postmaster'] }}';
 {#- send a template mail to warn spam sender #}
-$warnspamsender = {{ salt['pillar.get']('amavis:warnspamsender', 1) }};
+
+$warnspamsender = {% if salt['pillar.get']('amavis:warn_spam_sender', False) %}1{% else %}0{% endif %};
 
 {#- ------------ Do not modify anything below this line ------------- #}
 1;  # ensure a defined return

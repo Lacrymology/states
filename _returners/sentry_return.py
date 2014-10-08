@@ -71,23 +71,18 @@ def returner(ret):
     requisite_error = 'One or more requisite failed'
     try:
         logger.debug("Checking to see if there is a failed state")
-        logger.debug("ret['success']: {0}".format(ret.get('success', True)))
-        logger.debug("ret['retcode']: {0}".format(ret.get('retcode')))
-        is_failed = not ret.get('success', True) or ret.get('retcode') != 0
-        logger.debug("is_failed: {0}".format(is_failed))
+        success = all(ret['return'][state]['result']
+                      for state in ret['return'])
+        logger.debug("success: {0}".format(success))
     except KeyError:
-        send_sentry('No success or retcode returned')
+        send_sentry("Can't find 'return'")
     else:
-        if is_failed:
-            try:
-                returned = ret['return']
-            except KeyError:
-                send_sentry("Can't find 'return'")
-            else:
-                for state in returned:
-                    if not ret['return'][state]['result'] and \
-                       ret['return'][state]['comment'] != requisite_error:
-                        send_sentry(ret['return'][state]['comment'],
-                                    ret['return'][state])
+        if not success:
+            returned = ret['return']
+            for state in returned:
+                if not returned[state]['result'] and \
+                   returned[state]['comment'] != requisite_error:
+                    send_sentry(returned[state]['comment'],
+                                returned[state])
         else:
             logger.debug("All states run successfully")

@@ -59,6 +59,8 @@ elasticsearch_test_create_sample_data:
       - sls: elasticsearch.backup
       - pkg: elasticsearch_test_create_sample_data
 
+{# TODO: /etc/cron.d/sslyze_check_* #}
+
 test:
   cmd:
     - run

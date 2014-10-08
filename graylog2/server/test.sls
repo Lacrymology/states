@@ -59,3 +59,30 @@ test:
     - require:
       - sls: graylog2.server
       - sls: graylog2.server.backup
+
+test_import_general_syslog_udp_input:
+  cmd:
+    - script
+    - name: import_general_syslog_udp_input graylog2-0-20
+    - source: salt://graylog2/server/import_general_syslog_udp_input.py
+    - require:
+      - service: graylog2-server
+      - pkg: graylog2-old-mongodb
+      - archive: graylog2-server
+
+test_log_generator:
+  file:
+    - managed
+    - name: /usr/local/graylog2-server-0.20.6/bin/log_generator
+    - template: jinja
+    - source: salt://graylog2/server/log_generator.py
+    - user: graylog2
+    - group: graylog2
+    - mode: 750
+    - require:
+      - file: /usr/local/graylog2-server-0.20.6
+  cmd:
+    - run
+    - name: /usr/local/graylog2-server-0.20.6/bin/log_generator
+    - require:
+      - file: test_log_generator

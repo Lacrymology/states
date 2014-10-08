@@ -34,3 +34,5 @@ test:
   monitoring:
     - run_all_checks
     - order: last
+
+{# TODO: run a ssh to itself and run /bin/true #}

@@ -30,6 +30,8 @@ include:
   - graylog2.web.nrpe
   - graylog2.web.diamond
 
+{# TODO: /etc/cron.d/sslyze_check_* #}
+
 test:
   monitoring:
     - run_all_checks

@@ -45,6 +45,8 @@ include:
       - sls: shinken.broker.nrpe
 {%- endfor %}
 
+{# TODO: /etc/cron.d/sslyze_check_* #}
+
 test:
   monitoring:
     - run_all_checks

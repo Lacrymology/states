@@ -39,6 +39,8 @@ run_cron_cleanup_jenkins_old_workspace:
     - require:
       - sls: jenkins
 
+{# /etc/cron.d/sslyze_check_* #}
+
 test:
   cmd:
     - run

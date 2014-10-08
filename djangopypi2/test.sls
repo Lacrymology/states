@@ -39,6 +39,7 @@ include:
   - djangopypi2.diamond
   - djangopypi2.nrpe
 
+{#- run /etc/cron.d/sslyze_check_* before ? #}
 test:
   monitoring:
     - run_all_checks

@@ -32,6 +32,8 @@ include:
   - {{ state }}.nrpe
 {%- endfor %}
 
+{# todo: should this include graylog2.server.test and graylog2.web.test ? #}
+
 test:
   monitoring:
     - run_all_checks

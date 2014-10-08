@@ -42,3 +42,5 @@ test:
     - require:
       - sls: openldap
       - sls: openldap.backup
+
+{# todo: perform ldap query #}

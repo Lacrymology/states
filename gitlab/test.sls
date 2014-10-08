@@ -40,6 +40,8 @@ include:
   - gitlab.backup.nrpe
   - gitlab.nrpe
 
+{# /etc/cron.d/sslyze_check_ ? #}
+
 test:
   monitoring:
     - run_all_checks

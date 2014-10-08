@@ -34,6 +34,8 @@ include:
   - etherpad.diamond
   - etherpad.nrpe
 
+{# /etc/cron.d/sslyze_check_ * #}
+
 test:
   cmd:
     - run

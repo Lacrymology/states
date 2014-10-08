@@ -37,8 +37,16 @@ ruby2_deps:
   pkg:
     - installed
     - pkgs:
+      - libffi6
+      - libgdbm3
       - libgmp-dev
+      - libgmp10
+      - libjs-jquery
+      - libreadline6
+      - libssl1.0.0
+      - libyaml-0-2
       - ruby
+      - zlib1g
     - require:
       - cmd: apt_sources
 

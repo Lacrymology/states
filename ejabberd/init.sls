@@ -129,13 +129,15 @@ ejabberd_psql:
 
 ejabberd_reg_user:
   cmd:
-    - script
+    - wait_script
     - source: salt://ejabberd/ejabberd_reg_user.jinja2
     - template: jinja
     - user: root
     - require:
       - pkg: ejabberd
       - service: ejabberd
+    - watch:
+      - postgres_database: ejabberd
 
 /etc/nginx/conf.d/ejabberd.conf:
   file:

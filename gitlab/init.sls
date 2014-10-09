@@ -373,7 +373,7 @@ extend:
         - pkg: ruby2
     cmd:
       - env:
-        - RUBYPATH: ruby2.1
+        - UWSGICONFIG_RUBYPATH: /usr/bin/ruby2.1
       - watch:
         - pkg: ruby2
 {%- if salt['pillar.get']('gitlab:ssl', False) %}

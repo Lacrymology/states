@@ -29,9 +29,13 @@ Some following bits help correctly setting owner, permission for files:
     for upload must writable for NGINX worker.
   - If app write to any file, uWSGI does interpret those codes so uWSGI worker
     needs write permission to where it needs to write.
-  - As ``www-data`` often is user who owns NGINX process and it can
-    be config to owns uWSGI worker process too, then these config can be
-    simplify by set all to ``www-data``
+  - As ``www-data`` is often user who owns NGINX process and it can
+    be config to own uWSGI worker process too, if app does not need to
+    write file and support upload. Then these config can be
+    simplify by set all source code files to owned by user ``root`` and
+    group ``www-data``, with read permission only (440).
+    Otherwise, a dedicated user can be used for uUWSGI. Write permission should
+    only set to either who need to write.
 
 Processes
 ---------

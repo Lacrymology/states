@@ -46,6 +46,17 @@ roundcube-uwsgi:
     - absent
     - name: /etc/uwsgi/roundcube.yml
 
+roundcube:
+  user:
+    - absent
+    - require:
+      - file: roundcube-uwsgi
+  file:
+    - absent
+    - name: /var/lib/roundcube
+    - require:
+      - user: roundcube
+
 {%- for suffix in ('', '-stats') %}
 /var/lib/uwsgi/roundcube{{ suffix }}.sock:
   file:

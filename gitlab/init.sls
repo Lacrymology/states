@@ -133,6 +133,7 @@ gitlab:
     - user: gitlab
     - cwd: /home/gitlab/gitlabhq-{{ version }}
     - require:
+      - cmd: gitlab_shell
       - service: redis
       - cmd: gitlab_gems
       - file: gitlab
@@ -276,6 +277,7 @@ gitlab_shell:
       - RAILS_ENV: production
     - require:
       - cmd: gitlab_gems
+      - pkg: gitlab_git
     - watch:
       - archive: gitlab
       - file: /home/gitlab/gitlabhq-{{ version }}/config/database.yml
@@ -301,6 +303,7 @@ gitlab-uwsgi:
     - require:
       - file: gitlab
       - cmd: gitlab_shell
+      - service: uwsgi_emperor
   module:
     - wait
     - name: file.touch

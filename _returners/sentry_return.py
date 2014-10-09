@@ -42,11 +42,13 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+__virtualname__ = 'sentry_common'
+
 def __virtual__():
     if not 'sentry_dsn' in __salt__['pillar.data']():
         logger.warning("Missing 'sentry_dsn' value in pillar")
         return False
-    return 'sentry_common'
+    return __virtualname__
 
 def returner(ret):
     """

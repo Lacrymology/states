@@ -35,13 +35,29 @@ Maintainer: Dang Tung Lam <lamdt@familug.org>
 include:
   - apt
 
+{#-
+
+Creating mariadb mirror:
+
+    wget -m -I /repo/5.5/ubuntu/ http://mariadb.biz.net.id/repo/5.5/ubuntu/
+    mv mariadb.biz.net.id/repo/5.5/ubuntu/{dist,pool} .
+    rm -rf mariadb.biz.net.id/
+    find . -type f -name 'index.*' -delete
+    find pool/ -type f ! -name '*.deb' -delete
+
+To keep only precise and trusty:
+
+    find dists/ -maxdepth 1 -mindepth 1 ! \( -name precise -or -name trusty \) | xargs rm -r
+    find pool/ \( -type f -name '*.deb' ! \( -name '*precise*' -or -name '*trusty*' \) \) -delete
+#}
+
 mariadb:
   pkgrepo17:
     - managed
     - keyid: '0xcbcb082a1bb943db'
     - keyserver: keyserver.ubuntu.com
 {%- if 'files_archive' in pillar %}
-    - name: deb {{ pillar['files_archive']|replace('https://', 'http://') }}/mirror/mariadb/5.5.31 {{ grains['lsb_distrib_codename'] }} main
+    - name: deb {{ pillar['files_archive']|replace('https://', 'http://') }}/mirror/mariadb/5.5.39 {{ grains['lsb_distrib_codename'] }} main
 {%- else %}
     - name: deb http://mariadb.biz.net.id//repo/5.5/ubuntu precise main
 {%- endif %}

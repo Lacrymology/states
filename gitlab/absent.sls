@@ -34,15 +34,20 @@ gitlab-uwsgi:
     - name: /etc/uwsgi/gitlab.yml
 
 gitlab:
+  service:
+    - dead
+  cmd:
+    - run
+    - name: sleep 30
+    - require:
+      - file: gitlab-uwsgi
+      - service: gitlab
   user:
     - absent
     - force: True
     - purge: True
     - require:
-      - file: gitlab-uwsgi
-      - service: gitlab
-  service:
-    - dead
+      - cmd: gitlab
 
 /etc/nginx/conf.d/gitlab.conf:
   file:

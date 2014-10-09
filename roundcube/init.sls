@@ -51,6 +51,20 @@ php5-pgsql:
       - pkg: php-dev
 
 roundcube:
+  user:
+    - present
+    - shell: /sbin/nologin
+{#- temp dir for roundcube app, it needs to write temp data in this dir #}
+    - home: /var/lib/roundcube
+    - password: "*"
+    - enforce_password: True
+    - gid_from_name: True
+    - groups:
+      - www-data
+    - require:
+      - user: web
+    - require_in:
+      - file: roundcube-uwsgi
   archive:
     - extracted
     - name: /usr/local/
@@ -71,7 +85,7 @@ roundcube:
     This does not use recurse with file.directory as its buggy and change
     file mode even when that option not specified (tested in 0.17.5)
 #}
-    - name: chown -R www-data:www-data {{ roundcubedir }}
+    - name: chown -R root:www-data {{ roundcubedir }}
     - require:
       - user: web
     - watch:
@@ -97,6 +111,12 @@ roundcube:
     - user: root
     - group: www-data
     - mode: 550
+    - dir_mode: 550
+    - file_mode: 440
+    - recurse:
+      - mode
+      - user
+      - group
     - require:
       - cmd: roundcube
       - user: web
@@ -120,7 +140,7 @@ roundcube:
     - managed
     - source: salt://roundcube/config.jinja2
     - template: jinja
-    - user: www-data
+    - user: root
     - group: www-data
     - mode: 440
     - context:
@@ -144,7 +164,7 @@ roundcube_password_plugin_ldap_driver_dependency:
     - managed
     - source: salt://roundcube/password_plugin.jinja2
     - template: jinja
-    - user: www-data
+    - user: root
     - group: www-data
     - mode: 440
     - require:
@@ -158,7 +178,7 @@ roundcube_password_plugin_ldap_driver_dependency:
     - managed
     - source: salt://roundcube/sieve_plugin.jinja2
     - template: jinja
-    - user: www-data
+    - user: root
     - group: www-data
     - mode: 440
     - require:
@@ -172,18 +192,6 @@ roundcube_password_plugin_ldap_driver_dependency:
     - absent
     - require:
       - file: {{ roundcubedir }}
-
-{{ roundcubedir }}/temp:
-  file:
-    - directory
-    - user: www-data
-    - recurse:
-      - user
-    - require:
-      - file: {{ roundcubedir }}
-      - user: web
-    - require_in:
-      - file: roundcube-uwsgi
 
 /etc/nginx/conf.d/roundcube.conf:
   file:
@@ -232,6 +240,7 @@ roundcube-uwsgi:
     - context:
       appname: roundcube
       chdir: {{ roundcubedir }}
+      uid: roundcube
     - require:
       - service: uwsgi_emperor
       - module: roundcube_initial

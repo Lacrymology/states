@@ -28,6 +28,7 @@ Maintainer: Diep Pham <favadi@robotinfra.com>
 {%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - apt.nrpe
+  - build.nrpe
   - logrotate.nrpe
   - nginx.nrpe
   - postgresql.server.nrpe

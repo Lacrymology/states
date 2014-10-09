@@ -28,6 +28,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 include:
   - backup.diamond
   - cron.diamond
+  - sudo.diamond
 
 gitlab_backup_diamond_resources:
   file:

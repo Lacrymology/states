@@ -107,18 +107,6 @@ roundcube:
     - require:
       - cmd: roundcube
 
-{{ roundcubedir }}/bin:
-  file:
-    - directory
-    - user: root
-    - group: root
-    - mode: 700
-    - file_mode: 500
-    - recurse:
-      - mode
-    - require:
-      - file: {{ roundcubedir }}
-
 {{ roundcubedir }}/config/db.inc.php:
   file:
     - absent

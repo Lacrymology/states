@@ -1,4 +1,4 @@
 kernel-headers:
   pkg:
-    - absent
+    - purged
     - name: linux-headers-{{ grains['kernelrelease'] }}

@@ -31,7 +31,7 @@ logging:
     sentry:
       level: WARNING
       class: raven.handlers.logging.SentryHandler
-      dsn: {{ sentry_dsn }}
+      dsn: requests+{{ sentry_dsn }}
 {%- endif %}
   loggers:
     '':

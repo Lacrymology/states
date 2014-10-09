@@ -86,8 +86,7 @@ $config['support_url'] = '';
 $config['skin_logo'] = null;
 $config['auto_create_user'] = true;
 $config['user_aliases'] = false;
-$config['log_dir'] = 'logs/';
-$config['temp_dir'] = 'temp/';
+$config['temp_dir'] = '/var/lib/roundcube';
 $config['message_cache_lifetime'] = '10d';
 {%- if salt['pillar.get']('roundcube:ssl', False) %}
 $config['force_https'] = true;

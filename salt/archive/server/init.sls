@@ -57,6 +57,7 @@ include:
     - source: salt://salt/archive/server/cron.jinja2
     - require:
       - user: salt_archive
+      - pkg: rsync
       - file: bash
 {%- if not pillar['salt_archive']['source'] is defined %}
       - file: /usr/local/bin/salt_archive_incoming.py

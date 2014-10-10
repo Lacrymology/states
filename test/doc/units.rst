@@ -130,11 +130,3 @@ Just don't forget to define ``- order: last`` in the first of the state that
 will be executed to make sure they all run **after** the states to tests are
 executed. More details
 `on order <http://docs.saltstack.com/ref/states/ordering.html#the-order-option>`__
-
-Run tests
----------
-
-From the multiple ways to perform tests, two ways are fully documengted:
-
-- :doc:`salt/ci/doc/index`
-- :doc:`test/virtualbox/doc/index`

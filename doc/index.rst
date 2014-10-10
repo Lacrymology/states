@@ -10,7 +10,7 @@ Welcome to Infrastructure Documentation:
     pillar
     state
     install
-    tests
+    test/doc/index
     monitoring
     dev
     hacking

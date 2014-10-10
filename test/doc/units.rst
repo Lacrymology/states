@@ -68,7 +68,7 @@ Sometimes, some formulas must adapt themselves to be more verbose during
 execution of test units. Or work around limitation of testing environments.
 
 There is a special pillar key ``__test__`` so to ``True`` that is always defined
-during test execution. See :doc:`pillar` for additional details.
+during test execution. See :doc:`/doc/pillar` for additional details.
 
 You can use the following condition::
 
@@ -103,7 +103,7 @@ Test Validation
 
 Common states rely :doc:`/nrpe/doc/index` checks for monitoring, but the same
 checks are reused to perform tests validation. For more details on monitoring
-checks, look at :doc:`monitoring`.
+checks, look at :doc:`/doc/monitoring`.
 
 While testing, the monitoring checks are not executed through NRPE, as it might
 not be installed or available during all test steps.

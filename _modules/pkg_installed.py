@@ -80,7 +80,7 @@ def snapshot():
     '''
     Save the list of installed packages for :func:`revert`
     '''
-    installed = pkg_list()
+    installed = list_pkgs()
     __salt__['data.update'](__virtual__(), installed)
     return {'name': 'snapshot',
             'changes': {},

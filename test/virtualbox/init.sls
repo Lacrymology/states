@@ -74,6 +74,13 @@ root_only-{{ user }}:
     - force: True
         {%- endfor %}
 
+virtualbox-guest-utils:
+  cmd:
+    - wait
+    - name: echo 'virtualbox-guest-utils hold' | dpkg --set-selections
+    - watch:
+      - pkg: virtualbox-guest
+
 virtualbox-modules:
   cmd:
     - run
@@ -150,5 +157,6 @@ extend:
       - order: last
       - require:
         - cmd: depmod
+        - cmd: virtualbox-guest-utils
     {%- endif -%}
 {%- endif -%}

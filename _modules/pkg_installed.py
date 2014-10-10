@@ -36,10 +36,12 @@ import logging
 
 log = logging.getLogger(__name__)
 
+
 def __virtual__():
     return 'pkg_installed'
 
-def _installed():
+
+def list_pkgs():
     # for some reasons, if dctrl-tools is installed, salt.modules.apt.list_pkgs
     # return virtual packages as well.
     if __salt__['cmd.has_exec']('grep-available'):
@@ -53,6 +55,7 @@ def _installed():
     else:
         return __salt__['pkg.list_pkgs']().keys()
 
+
 def exists():
     '''
     Return True/False if there is a frozen state.
@@ -65,22 +68,25 @@ def exists():
         pass
     return False
 
+
 def forget():
     '''
     Forget any frozen state.
     '''
     __salt__['data.update'](__virtual__(), [])
 
+
 def snapshot():
     '''
     Save the list of installed packages for :func:`revert`
     '''
-    installed = _installed()
+    installed = pkg_list()
     __salt__['data.update'](__virtual__(), installed)
     return {'name': 'snapshot',
             'changes': {},
             'comment': "%d saved packages" % len(installed),
             'result': True}
+
 
 def revert():
     '''
@@ -102,7 +108,7 @@ def revert():
         ret['result'] = False
         return ret
 
-    installed_list = _installed()
+    installed_list = list_pkgs()
     installed = set(installed_list)
     install = saved - installed
     purge = installed - saved
@@ -124,7 +130,7 @@ def revert():
             ret['result'] = False
             ret['changes']['purged'] = out['stderr']
         else:
-            new_pkgs = _installed()
+            new_pkgs = list_pkgs()
             for pkg in installed_list:
                 if pkg not in new_pkgs:
                     ret['changes']['purged'].append(pkg)

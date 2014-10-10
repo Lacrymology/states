@@ -44,7 +44,14 @@ import subprocess
 import os
 from UserList import UserList
 
-TEST_SCRIPT = "/root/salt/states/test/integration.py"
+
+def test_script():
+    script_path = os.path.abspath(__file__)
+    jenkins_dir = os.path.dirname(script_path)
+    salt_test = os.path.abspath(
+        os.path.join(jenkins_dir, '..')
+    )
+    return os.path.join(salt_test, 'integration.py')
 
 
 # http://stackoverflow.com/questions/2130016/
@@ -73,7 +80,7 @@ class Tests(UserList):
         """
         :return: build list of all available tests
         """
-        lines = subprocess.check_output((TEST_SCRIPT, '--list')).split(
+        lines = subprocess.check_output((test_script(), '--list')).split(
             os.linesep)
         lines.reverse()
         # remove empty line
@@ -103,6 +110,7 @@ class Tests(UserList):
 
 
 def main(suffix='> /root/salt/stdout.log 2> /root/salt/stderr.log'):
+    integration_py = test_script()
     if len(sys.argv) > 1:
         tests = Tests()
         args = sys.argv[1:]
@@ -113,12 +121,12 @@ def main(suffix='> /root/salt/stdout.log 2> /root/salt/stderr.log'):
                 tests.add_chunk(int(str_index), int(str_size))
         tests.add_filtered(args)
         command = ' '.join((
-            TEST_SCRIPT,
+            integration_py,
             ' '.join(tests),
             suffix
         ))
     else:
-        command = ' '.join((TEST_SCRIPT, suffix))
+        command = ' '.join((integration_py, suffix))
     os.system(command)
 
 if __name__ == '__main__':

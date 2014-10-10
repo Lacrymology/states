@@ -51,6 +51,7 @@ clean_pkg:
       - apt-xapian-index
       - aptitude
       - at
+      - bash-completion
       - bc
       - bind9-host
       - busybox-static

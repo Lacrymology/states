@@ -80,7 +80,9 @@ def files_dir_iter(dir_name):
     for (path, dirs, files) in os.walk(dir_name):
         if not path.endswith('/.git') and '/.git/' not in path:
             for filename in files:
-                yield os.path.abspath(os.path.join(path, filename))[l_dir_name:]
+                if not filename.endswith('.pyc'):
+                    yield os.path.abspath(
+                        os.path.join(path, filename))[l_dir_name:]
 
 
 def unique_states(states_dir, root_states='root/salt/states'):

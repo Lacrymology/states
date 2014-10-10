@@ -110,8 +110,8 @@ test steps.
 It's rather executed by a :doc:`/salt/doc/index` state module available in these
 Common states: ``monitoring.run_check`` and ``monitoring.run_all_checks``.
 
-For more details on this, look :doc:`/doc/tests` section *Automatic Tests* and
-*Test validation*.
+For more details on this, look :doc:`/test/doc/units` section *Automatic Tests*
+and *Test validation*.
 
 Monitoring Usage
 ----------------

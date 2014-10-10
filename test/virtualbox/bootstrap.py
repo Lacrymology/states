@@ -26,6 +26,11 @@ def main():
     insert_common_path()
     import bootstrap_archive as ba
     args = ba.parse_args()
+    os.chdir('/')
+    try:
+        shutil.rmtree('/root/salt')
+    except OSError:
+        pass
     for src, dst in ba.files_iter(args[0], args[1]):
         try:
             os.makedirs(os.path.dirname(dst))

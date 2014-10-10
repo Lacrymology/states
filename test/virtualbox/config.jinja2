@@ -1,0 +1,16 @@
+# {{ pillar['message_do_not_modify'] }}
+
+auto lo
+iface lo inet loopback
+
+{% if salt['pillar.get']('test:dhcp', True) %}
+auto eth0
+iface eth0 inet dhcp
+{% else %}
+#auto eth0
+iface eth0 inet static
+ address 192.168.x.y
+ gateway 192.168.x.1
+ netmask 255.255.255.0
+ dns-nameservers 8.8.4.4 8.8.8.8
+{%- endif -%}

@@ -213,9 +213,7 @@ clean_pkg:
       - usbutils
       - uuid-runtime
       - vim
-      - vim-common
       - vim-runtime
-      - vim-tiny
       - w3m
       - wget
       - whiptail

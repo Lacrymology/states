@@ -41,6 +41,30 @@ Edit ``/etc/network/interfaces`` if pillar key ``test:dhcp`` is ``False``.
     This way it's easy to track the test logs in ``test_results`` VirtualBox
     shared folder.
 
+Copy formulas and pillars
+-------------------------
+
+Instead of running ``bootstrap_archive.py`` from the root of salt-common, take
+it's ``.tar.gz`` output and extract it in ``/root/salt``, you can use
+``/media/sf_salt/$path-to-common/test/virtualbox/bootstrap.py`` to recreated
+``/root/salt``. Just need to use the same command line arguments as for
+``bootstrap_archive.py``.
+
+Run minion straight from sandbox
+--------------------------------
+
+Instead of ``/root/salt``, the minion can take it's formulas and formulas
+directly from desktop sandbox.
+
+This can be achieved by edit ``/etc/salt/minion`` and replace the following::
+
+  file_roots:
+    base:
+      - /media/sf_salt/$path-to-common
+  pillar_roots:
+    base:
+      - /media/sf_salt/$path-to-pillars
+
 Run tests
 ---------
 

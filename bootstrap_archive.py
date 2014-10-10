@@ -97,7 +97,9 @@ def unique_states(states_dir, root_states='root/salt/states'):
     output['top.sls'] = output['salt/master/top.jinja2']
 
     clean_root_states = root_states.rstrip(os.sep)
-    for filename in output:
+    filenames = output.keys()
+    filenames.sort()
+    for filename in filenames:
         yield (os.path.join(clean_root_states, filename),
                output[filename])
 

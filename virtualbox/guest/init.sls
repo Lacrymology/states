@@ -16,6 +16,12 @@ virtualbox-guest:
     - persist: True
     - require:
       - pkg: virtualbox-guest
+  service:
+    - running
+    - name: virtualbox-guest-utils
+    - require:
+      - kmod: virtualbox-guest
+
 
 {%- else %}
 include:

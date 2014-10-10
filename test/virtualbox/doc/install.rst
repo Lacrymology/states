@@ -8,9 +8,9 @@ This VM run the following services:
 
 - Salt archive mirror with:
 
-  * Mirror of internally used :doc:`python/doc/index` :doc:`pip/doc/index`
+  * Mirror of internally used :doc:`/python/doc/index` :doc:`/pip/doc/index`
     packages.
-  * :doc:`clamav/doc/index` database mirror, updated daily.
+  * :doc:`/clamav/doc/index` database mirror, updated daily.
   * Multiple Ubuntu PPA and mirrored files.
 
 - APT cache proxy server
@@ -28,7 +28,7 @@ http://releases.ubuntu.com/12.04/ubuntu-12.04.5-server-amd64.iso.torrent or
 - Start with 512 Mb of memory. This will be changed later.
 - Bridge network
 - Use ``virtnet`` network card type
-- Define two **Shared Folders** in :doc:`virtualbox/doc/index` UI, both
+- Define two **Shared Folders** in :doc:`/virtualbox/doc/index` UI, both
   ``Auto-mount``:
 
   * ``salt`` that point to the local checkout of salt-common and

@@ -22,7 +22,7 @@ Root password in clear text.
 .. warning::
 
   As this VM is intended to be run inside a private
-  virtual network in :doc:`virtualbox/doc/index`. Clear text pillar password are
+  virtual network in :doc:`/virtualbox/doc/index`. Clear text pillar password are
   acceptable.
 
 Default: ``pass``.

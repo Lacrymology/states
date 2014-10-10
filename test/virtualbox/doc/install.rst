@@ -8,8 +8,7 @@ This VM run the following services:
 
 - Salt archive mirror with:
 
-  * Mirror of internally used :doc:`/python/doc/index` :doc:`/pip/doc/index`
-    packages.
+  * Mirror of internally used :doc:`/pip/doc/index` packages.
   * :doc:`/clamav/doc/index` database mirror, updated daily.
   * Multiple Ubuntu PPA and mirrored files.
 

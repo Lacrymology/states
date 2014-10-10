@@ -5,7 +5,6 @@ include:
 virtualbox-guest:
   pkg:
     - installed
-    - name: virtualbox-guest-dkms
     - pkgs:
       - virtualbox-guest-utils
       - virtualbox-guest-dkms

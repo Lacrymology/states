@@ -13,4 +13,8 @@ folders are ``auto-mount``.
 
   If ``auto-mount`` is turned off, volume must be mounted using
   ``mount.mounted`` state, or ``mount.mount`` module, or with
-  ``mount -t vboxsf $share_name $mount_point``.
+  ``mount -t vboxsf sf_$share_name $mount_point``.
+
+.. note::
+
+  All shared auto-mounted start with ``sf_`` prefix.

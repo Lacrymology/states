@@ -102,8 +102,7 @@ class Tests(UserList):
                     self.data.append(test)
 
 
-def main():
-    suffix = '> /root/salt/stdout.log 2> /root/salt/stderr.log'
+def main(suffix='> /root/salt/stdout.log 2> /root/salt/stderr.log'):
     if len(sys.argv) > 1:
         tests = Tests()
         args = sys.argv[1:]

@@ -47,8 +47,8 @@ __author__ = 'Bruno Clermont'
 __maintainer__ = 'Bruno Clermont'
 __email__ = 'patate@fastmail.cn'
 
-import sys
 import os
+import sys
 import tarfile
 
 
@@ -71,57 +71,88 @@ def validate_git_dir(dirname):
     return abs_path
 
 
-def add_symlink(tar, src, dst):
-    tmpfile = '/tmp/{0}_{1}'.format(os.getpid(), src.replace('/', '_'))
-    try:
-        os.symlink(src, tmpfile)
-    except OSError:
-        pass
-    tar.add(tmpfile, dst)
-    os.remove(tmpfile)
-    return
-
-
-def main():
+def files_dir_iter(dir_name):
     """
-    main loop.
-    :return: None
+    iter trough a directory and list all files that aren't in a .git
+    directory
     """
-    if len(sys.argv) >= 3:
-        states_root = (validate_git_dir(git_dir) for git_dir in sys.argv[2:])
-    elif len(sys.argv) == 2:
-        states_root = None
-    else:
-        print ('%s <path to pillar> [repo1_dir] [repo2_dir] ...'
-               % sys.argv[0])
-        sys.exit(1)
+    l_dir_name = len(dir_name) + 1
+    for (path, dirs, files) in os.walk(dir_name):
+        if not path.endswith('/.git') and '/.git/' not in path:
+            for filename in files:
+                yield os.path.abspath(os.path.join(path, filename))[l_dir_name:]
 
-    tar = tarfile.open(mode='w:gz', fileobj=sys.stdout)
 
+def unique_states(states_dir, root_states='root/salt/states'):
+    """
+    Return unique states files and their relative path in /root/salt/states.
+    If a single file is multiple repository, only the last one is considered.
+    """
+    output = {}
+    for dirname in states_dir:
+        for filename in files_dir_iter(dirname):
+            output[filename] = os.path.join(dirname, filename)
+
+    # top.sls is copy of salt/master/top.jinja2 but not rendered
+    output['top.sls'] = output['salt/master/top.jinja2']
+
+    clean_root_states = root_states.rstrip(os.sep)
+    for filename in output:
+        yield (os.path.join(clean_root_states, filename),
+               output[filename])
+
+
+def files_iter(pillar_root, extra_states_dir=None):
+    """
+    List all files in pillar and states required to run tests
+    :param pillar_root: directory that hold pillars
+    :param extra_states_dir: list of states directory
+    :return: iterator that yield tuple of files to archive.
+    """
     # pillar
-    pillar_root = validate_git_dir(sys.argv[1])
-    for filename in os.listdir(pillar_root):
-        if filename != '.git':
-            tar.add(os.path.join(pillar_root, filename),
-                    'root/salt/pillar/' + filename)
+    for filename in files_dir_iter(pillar_root):
+        yield (os.path.join(pillar_root, filename),
+               'root/salt/pillar/' + filename)
 
     # guess the common repository from the path to reach this file
     common_root = os.path.dirname(os.path.abspath(__file__))
     # states
     all_states = [common_root]
-    if states_root:
-        all_states.extend(states_root)
+    if extra_states_dir:
+        all_states.extend(extra_states_dir)
 
-    for state_dir in all_states:
-        for filename in os.listdir(state_dir):
-            if filename != '.git':
-                tar.add(os.path.join(state_dir, filename),
-                        'root/salt/states/' + filename)
+    for source, destination in unique_states(all_states):
+        yield destination, source
 
-    tar.add(os.path.join(common_root, 'salt', 'master', 'top.jinja2'),
-            'root/salt/states/top.sls')
 
+def create_archive(pillar_root, states_root, fileobj=sys.stdout,
+                   compression=True):
+    if compression:
+        mode = 'w:gz'
+    else:
+        mode = 'w:'
+    tar = tarfile.open(mode=mode, fileobj=fileobj)
+    for source, destination in files_iter(pillar_root, states_root):
+        tar.add(source, destination)
     tar.close()
+
+
+def parse_args():
+    if len(sys.argv) >= 3:
+        states = []
+        for dirname in sys.argv[2]:
+            states.append(validate_git_dir(dirname))
+        return validate_git_dir(sys.argv[1]), states
+    elif len(sys.argv) == 2:
+        return validate_git_dir(sys.argv[1]), None
+    else:
+        print ('%s <path to pillar> [repo1_dir] [repo2_dir] ...'
+               % sys.argv[0])
+        sys.exit(1)
+
+
+def main():
+    create_archive(*parse_args())
 
 if __name__ == '__main__':
     main()

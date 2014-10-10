@@ -186,7 +186,7 @@ Bad mandatory pillar key::
   and the pillar key isn't defined in pillar will result with an empty string
   and might have dangerous consequence.
 
-Document those pillar keys in the ``doc/pillar.rst`` file in formula directory.
+Document those pillar keys in the :doc:`/doc/pillar` file in formula directory.
 
 Configs
 -------

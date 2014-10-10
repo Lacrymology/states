@@ -34,10 +34,14 @@ __email__ = 'patate@fastmail.cn'
 
 
 import argparse
+import logging
 import os
 
 import nagiosplugin
 import pysc
+
+log = logging.getLogger("nagiosplugin.apt.half_installed")
+
 
 class HalfInstalled(nagiosplugin.Resource):
     def probe(self):

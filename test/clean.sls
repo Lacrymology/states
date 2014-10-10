@@ -122,9 +122,11 @@ clean_pkg:
       - locales
       - lockfile-progs
       - logrotate
+      - lsb-release
       - lshw
       - lsof
       - ltrace
+      - make
       - man-db
       - manpages
       - memtest86+
@@ -184,6 +186,7 @@ clean_pkg:
       - python-wadllib
       - python-xapian
       - python-zope.interface
+      - resolvconf
       - rsync
       - rsyslog
       - screen
@@ -220,6 +223,7 @@ clean_pkg:
       - wireless-tools
       - wpasupplicant
       - xauth
+      - xz-lzma
       - xkb-data
       - xml-core
 

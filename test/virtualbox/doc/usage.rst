@@ -44,7 +44,7 @@ Edit ``/etc/network/interfaces`` if pillar key ``test:dhcp`` is ``False``.
 Run tests
 ---------
 
-Follow :doc:`/doc/run_tests.rst` as usual.
+Follow :doc:`/doc/run_tests` as usual.
 
 The wrapper ``test/virtualbox/run.py`` can be used to ease test runs and
 redirect logs to the ``test_results`` VirtualBox shared folder to save on disk

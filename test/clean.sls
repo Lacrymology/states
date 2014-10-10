@@ -231,34 +231,34 @@ clean_pkg:
       - pkg: clean_pkg
 {% endfor %}
 
-{% for pkg in ('cloud-init', 'ufw') %}
+{%- for pkg in ('cloud-init', 'ufw') %}
 /var/log/{{ pkg }}.log:
   file:
     - absent
     - require:
       - pkg: clean_pkg
-{% endfor %}
+{%- endfor -%}
 
-{% for file in ('/tmp/bootstrap-salt.log', '/var/lib/cloud', '/var/cache/apt-xapian-index') %}
+{%- for file in ('/tmp/bootstrap-salt.log', '/var/lib/cloud', '/var/cache/apt-xapian-index') %}
 {{ file }}:
   file:
     - absent
     - require:
       - pkg: clean_pkg
-{% endfor %}
+{%- endfor -%}
 
-{% if salt['cmd.has_exec']('deborphan') %}
-{% for pkg in salt['cmd.run']('deborphan').split("\n") %}
-{% if pkg != '' %}
-{% if loop.first %}
+{%- if salt['cmd.has_exec']('deborphan') -%}
+    {%- for pkg in salt['cmd.run']('deborphan').split("\n") -%}
+        {%- if pkg != '' -%}
+            {%- if loop.first %}
 orphans:
   pkg:
     - purged
     - require:
       - pkg: clean_pkg
     - pkgs:
-{% endif %}
+            {%- endif %}
       -  {{ pkg }}
-{% endif %}
-{% endfor %}
-{% endif %}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endif -%}

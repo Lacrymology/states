@@ -46,6 +46,7 @@ class HalfInstalled(nagiosplugin.Resource):
         for line in dpkg.readlines():
             cols = line.split()
             if cols[0] == 'rc':
+                log.debug("Half-Installed package: %s", cols[0])
                 pkgs.append(cols[1])
 
         return [nagiosplugin.Metric('halfinstalled', len(pkgs), min=0)]

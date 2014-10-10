@@ -5,5 +5,5 @@ Tests
     :glob:
 
     *
-    salt/ci/doc/index
-    test/virtualbox/doc/index
+    /salt/ci/doc/index
+    /test/virtualbox/doc/index

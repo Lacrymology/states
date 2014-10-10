@@ -67,8 +67,8 @@ mysql.default_file: '/etc/mysql/debian.cnf'
 file_log_level: debug
 file_client: local
 file_roots:
-   base:
-     - /root/salt/states
+  base:
+    - /root/salt/states
 pillar_roots:
   base:
     - /root/salt/pillar""" > /etc/salt/minion

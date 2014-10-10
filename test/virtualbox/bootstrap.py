@@ -38,7 +38,7 @@ def main():
             pass
         sys.stdout.write(dst)
         sys.stdout.write(os.linesep)
-        shutil.copyfile(src, dst)
+        shutil.copy2(src, dst)
 
 if __name__ == '__main__':
     main()

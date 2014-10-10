@@ -144,7 +144,7 @@ Tests
 *Status: Optional*
 
 Test are executed automatically and all available monitoring checks are
-executed. For more details, check :doc:`tests`.
+executed. For more details, check :doc:`/test/doc/index`.
 
 But your state might need custom steps to setup the test, or just need to wait
 few seconds to let the cluster initialize before running all the tests.

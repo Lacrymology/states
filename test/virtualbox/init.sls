@@ -4,9 +4,8 @@
  -#}
 {%- if grains['virtual'] == 'VirtualBox' and salt['pillar.get']('__test__', True) -%}
 include:
-    {%- if not grains['kernelrelease'].endswith('-virtual') %}
-  - apt
-    {%- else %}
+  - salt
+    {%- if grains['kernelrelease'].endswith('-virtual') %}
   - virtualbox.guest
   - test.clean
     {%- endif %}

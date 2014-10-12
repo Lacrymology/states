@@ -255,7 +255,7 @@ service: nagios-nrpe-server #}
     - directory
     - user: nagios
     - group: nagios
-    - mode: 500
+    - mode: 550
     - require:
       - pkg: nagios-nrpe-server
 

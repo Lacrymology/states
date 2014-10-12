@@ -108,3 +108,9 @@ extend:
     user:
       - groups:
         - nagios
+    {%- if salt['pillar.get']('postgresql:ssl', False) %}
+        - ssl-cert
+    {%- endif %}
+      - require:
+        - pkg: ssl-cert
+        - pkg: nagios-nrpe-server

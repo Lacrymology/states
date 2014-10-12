@@ -41,15 +41,6 @@ include:
 {{ passive_absent('postgresql.server') }}
 
 extend:
-  postgresql:
-    user:
-      - groups:
-        - nagios
-    {%- if ssl %}
-        - ssl-cert
-    {%- endif %}
-      - require:
-        - pkg: nagios-nrpe-server
   postgresql_monitoring:
     postgres_user:
       - require:

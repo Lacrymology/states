@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Hung Nguyen Viet
+Copyright (c) 2014, Quan Tong Anh
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,44 +22,8 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
-Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
-
-PDNSd Nagios NRPE checks.
+Author: Quan Tong Anh <quanta@robotinfra.com>
+Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
-{%- from 'nrpe/passive.sls' import passive_check with context %}
-include:
-  - apt.nrpe
-  - nrpe
-  - pip
-
-pydns:
-  file:
-    - managed
-    - name: {{ opts['cachedir'] }}/pip/pydns
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 440
-    - source: salt://pdnsd/nrpe/requirements.jinja2
-  module:
-    - wait
-    - name: pip.install
-    - upgrade: True
-    - requirements: {{ opts['cachedir'] }}/pip/pydns
-    - require:
-      - module: pip
-    - watch:
-      - file: pydns
-
-/usr/lib/nagios/plugins/check_dns_caching.py:
-  file:
-    - managed
-    - source: salt://pdnsd/nrpe/check_dns_caching.py
-    - user: nagios
-    - group: nagios
-    - mode: 550
-    - require:
-      - pkg: nagios-nrpe-server
-
-{{ passive_check('pdnsd') }}
+# {{ pillar['message_do_not_modify'] }}
+pydns==2.3.6

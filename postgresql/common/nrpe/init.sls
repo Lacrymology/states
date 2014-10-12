@@ -104,3 +104,7 @@ extend:
     service:
       - require:
         - postgres_database: postgresql_monitoring
+  postgresql:
+    user:
+      - groups:
+        - nagios

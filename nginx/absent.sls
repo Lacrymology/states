@@ -50,6 +50,10 @@ nginx:
       - file: nginx-old-init
   service:
     - dead
+  user:
+    - absent
+    - require:
+      - pkg: nginx
 
 nginx-upstart-log:
   cmd:

@@ -202,8 +202,6 @@ clean_pkg:
       - time
       - tmux
       - ubuntu-minimal
-      - ubuntu-minimal
-      - ubuntu-standard
       - ubuntu-standard
       - ufw
       - unattended-upgrades

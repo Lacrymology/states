@@ -44,6 +44,17 @@ nagios-nrpe-server:
   service:
     - dead
     - enable: False
+  user:
+    - absent
+    - name: nagios
+    - require:
+      - pkg: nagios-nrpe-server
+      - service: nsca_passive
+  group:
+    - absent
+    - name: nagios
+    - require:
+      - user: nagios-nrpe-server
 
 {#
  For some reason, purge nagios-nrpe-server Ubuntu package don't clean these.
@@ -75,13 +86,6 @@ nsca_passive:
 /usr/local/nagios/bin/nsca_passive:
   file:
     - absent
-
-nagios:
-  user:
-    - absent
-    - require:
-      - pkg: nagios-nrpe-server
-      - service: nsca_passive
 
 /usr/lib/nagios/plugins:
   file:

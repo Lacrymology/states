@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Luan Vo Ngoc
+Copyright (c) 2014, Hung Nguyen Viet
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,12 +22,8 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Luan Vo Ngoc <ngocluanvo@gmail.com>
-Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
--#}
-include:
-  - bash.nrpe
-  - cron.nrpe
-
-{%- from 'nrpe/passive.sls' import passive_check with context -%}
-{{ passive_check('redis.backup') }}
+Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
+Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
+#}
+{%- from 'nrpe/passive.sls' import passive_absent with context -%}
+{{ passive_absent('redis.backup') }}

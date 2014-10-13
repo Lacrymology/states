@@ -25,9 +25,5 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Luan Vo Ngoc <ngocluanvo@gmail.com>
 Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
 -#}
-include:
-  - cron.nrpe
-  - bash.nrpe
-
-{%- from 'nrpe/passive.sls' import passive_check with context -%}
-{{ passive_check('openldap.backup') }}
+{%- from 'nrpe/passive.sls' import passive_absent with context -%}
+{{ passive_absent('openldap.backup') }}

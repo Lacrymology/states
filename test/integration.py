@@ -503,8 +503,11 @@ class States(unittest.TestCase):
             logger.debug("Don't cleanup, it's already done")
             return
 
-        logger.info("Run absent for all states")
+        logger.info("Run absent for all states, process before:")
+        logger.info(client('cmd.run_stdout', "ps -A -F"))
         self.sls(self.absent)
+        logger.info("Absent executed,, process after:")
+        logger.info(client('cmd.run_stdout', "ps -A -F"))
 
         # Go back on the same installed packages as after :func:`setUpClass`
         logger.info("Unfreeze installed packages")

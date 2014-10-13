@@ -227,6 +227,7 @@ class PassiveDaemon(object):
             self.sched.start()
         except (KeyboardInterrupt, SystemExit):
             # This accepts sigterm cleanly
+            logger.debug("stopping scheduler")
             self.sched.shutdown()
 
 
@@ -234,7 +235,7 @@ class NscaPassive(pysc.Application):
     """
     Main nsca_passive application
     """
-    default = {
+    defaults = {
         'config': '/etc/nagios/nsca.yaml',
     }
 

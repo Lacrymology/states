@@ -151,7 +151,7 @@ class SCPBackupFile(BackupFile):
 
 
 def check_backup(config):
-    base_check(config, SCPBackupFile)
+    return base_check(SCPBackupFile, config)
 
 
 if __name__ == '__main__':

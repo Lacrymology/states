@@ -41,3 +41,13 @@ clamav-daemon:
     - name: /etc/clamav
     - require:
       - pkg: clamav-daemon
+  user:
+    - absent
+    - name: clamav
+    - require:
+      - pkg: clamav-daemon
+  group:
+    - absent
+    - name: clamav
+    - require:
+      - user: clamav-daemon

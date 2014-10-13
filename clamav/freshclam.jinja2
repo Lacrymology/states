@@ -60,19 +60,17 @@ Checks {{ salt['pillar.get']('clamav:times_of_check', 24) }}
         {%- if netloc %}
 ScriptedUpdates no
 DatabaseMirror {{ netloc }}
-DNSDatabaseInfo {{ netloc }}
         {%- else -%}
             {#- netloc == '' mean it's a local mirror, use default #}
 DatabaseMirror db.local.clamav.net
 DatabaseMirror database.clamav.net
-DNSDatabaseInfo current.cvd.clamav.net
         {%- endif -%}
 {%- else %}
 ScriptedUpdates yes
     {%- for mirror in salt['pillar.get']('clamav:db_mirrors', ('db.local.clamav.net', 'database.clamav.net')) %}
 DatabaseMirror {{ mirror }}
     {%- endfor -%}
-    {%- for mirror in salt['pillar.get']('clamav:dns_db', ('current.cvd.clamav.net',)) %}
-DNSDatabaseInfo {{ mirror }}
-    {%- endfor %}
 {%- endif -%}
+{%- for mirror in salt['pillar.get']('clamav:dns_db', ('current.cvd.clamav.net',)) %}
+DNSDatabaseInfo {{ mirror }}
+{%- endfor %}

@@ -37,7 +37,6 @@ salt_archive:
     - directory
     - name: /var/lib/salt_archive
     - user: root
-    - group: salt_archive
     - mode: 755
     - require:
       - user: salt_archive

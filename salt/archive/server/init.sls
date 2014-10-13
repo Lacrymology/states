@@ -129,7 +129,6 @@ archive_rsync:
     - user: root
     - require:
       - pkg: rsync
-      - user: salt_archive
       - file: /usr/local/bin/salt_archive_sync.sh
     - watch:
       - file: salt_archive

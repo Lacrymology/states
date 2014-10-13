@@ -1,0 +1,8 @@
+# {{ pillar['message_do_not_modify'] }}
+no-debsig
+{%- if salt['pillar.get']('debug', False) %}
+debug 1000
+log /dev/stdout
+{%- else %}
+log /var/log/dpkg.log
+{%- endif -%}

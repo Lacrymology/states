@@ -41,6 +41,15 @@ include:
     - mode: 444
     - template: jinja
 
+/etc/dpkg/dpkg.cfg:
+  file:
+    - managed
+    - source: salt://apt/dpkg.jinja2
+    - user: root
+    - group: root
+    - mode: 444
+    - template: jinja
+
 {%- set backup = '/etc/apt/sources.list.salt-backup' %}
 {%- if salt['file.file_exists'](backup) %}
 apt_sources_backup:
@@ -62,6 +71,7 @@ apt_update:
         # {{ pillar['message_do_not_modify'] }}
         {{ pillar['apt']['sources'] | indent(8) }}
     - require:
+      - file: /etc/dpkg/dpkg.cfg
       - file: /etc/apt/apt.conf.d/99local
 {%- if salt['file.file_exists'](backup) %}
       - file: apt_sources_backup

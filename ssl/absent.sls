@@ -52,3 +52,7 @@ Undo SSL state.
 ssl-cert:
   pkg:
     - purged
+  group:
+    - absent
+    - require:
+      - pkg: ssl-cert

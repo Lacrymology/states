@@ -36,10 +36,11 @@ include:
 test:
   monitoring:
     - run_all_checks
+    - wait: 30
     - order: last
   cmd:
     - run
     - name: /etc/cron.daily/backup-roundcube
     - require:
-      - file: backup-roundcube
-    - order: last
+      - sls: roundcube.backup
+      - sls: roundcube

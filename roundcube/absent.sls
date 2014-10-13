@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
-{% set version = "0.9.0" %}
+{%- set version = "1.0.1" %}
 {% set roundcubedir = "/usr/local/roundcubemail-" + version %}
 
 roundcube_password_plugin_ldap_driver_dependency:
@@ -45,6 +45,17 @@ roundcube-uwsgi:
   file:
     - absent
     - name: /etc/uwsgi/roundcube.yml
+
+roundcube:
+  user:
+    - absent
+    - require:
+      - file: roundcube-uwsgi
+  file:
+    - absent
+    - name: /var/lib/roundcube
+    - require:
+      - user: roundcube
 
 {%- for suffix in ('', '-stats') %}
 /var/lib/uwsgi/roundcube{{ suffix }}.sock:

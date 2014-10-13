@@ -28,3 +28,9 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 pdnsd_procs:
   description: Proxy DNS Daemon
   command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -C pdnsd -u pdnsd'
+
+pdnsd_caching:
+  description: DNS Caching
+  command: /usr/lib/nagios/plugins/check_dns_caching.py
+  dependencies:
+    - pdnsd_procs

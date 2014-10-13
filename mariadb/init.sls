@@ -54,8 +54,7 @@ To keep only precise and trusty:
 mariadb:
   pkgrepo17:
     - managed
-    - keyid: '0xcbcb082a1bb943db'
-    - keyserver: keyserver.ubuntu.com
+    - key_url: salt://mariadb/key.gpg
 {%- if 'files_archive' in pillar %}
     - name: deb {{ pillar['files_archive']|replace('https://', 'http://') }}/mirror/mariadb/5.5.39 {{ grains['lsb_distrib_codename'] }} main
 {%- else %}

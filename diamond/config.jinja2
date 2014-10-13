@@ -212,7 +212,7 @@ args = ('{{ pillar['graylog2_address'] }}', 12201)
 level = ERROR
 class = raven.handlers.logging.SentryHandler
 formatter = message_only
-args = ('{{ pillar['sentry_dsn'] }}',)
+args = ('requests+{{ pillar['sentry_dsn'] }}',)
 {%- endif %}
 
 [handler_syslog]

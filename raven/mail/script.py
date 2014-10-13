@@ -66,7 +66,7 @@ def main():
     # init raven quickly, so if something is wrong it get logged early
     from raven import Client
     if 'SENTRY_DSN' not in os.environ.keys():
-        os.environ['SENTRY_DSN'] = "{{ pillar['sentry_dsn'] }}"
+        os.environ['SENTRY_DSN'] = "requests+{{ pillar['sentry_dsn'] }}"
     client = Client()
 
     # process command line

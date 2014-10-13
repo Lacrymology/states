@@ -18,7 +18,7 @@ test-proxy-server:
       - apt.local
       - archive.local
     - watch_in:
-      - module: apt_update
+      - module: apt
 
     {%- if not grains['kernelrelease'].endswith('-virtual') -%}
         {#- set root password #}

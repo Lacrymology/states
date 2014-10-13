@@ -32,6 +32,7 @@ include:
   - apt
   - erlang
   - erlang.pgsql
+  - locale
   - nginx
   - postgresql.server
 {%- if salt['pillar.get']('ejabberd:ssl', False) %}
@@ -65,6 +66,7 @@ ejabberd:
       - cmd: hostname
       - pkg: postgresql
       - cmd: erlang_mod_pgsql
+      - cmd: system_locale
   service:
     - running
     - name: ejabberd

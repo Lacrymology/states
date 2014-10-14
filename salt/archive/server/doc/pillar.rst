@@ -102,5 +102,5 @@ You can change the name 'archive' by something else. but you need to change your
 Clamav
 ------
 
-:doc:`clamav/doc/index` formula :doc:`clamav/doc/pillar` key
+:doc:`/clamav/doc/index` formula :doc:`/clamav/doc/pillar` key
 ``clamav:db_mirrors`` is also used to mirror clamav databases.

@@ -125,7 +125,7 @@ include:
 archive_rsync:
   cmd:
     - run
-    - name: /usr/local/bin/salt_archive_sync.sh
+    - name: /usr/local/bin/salt_archive_sync.sh -v
     - user: root
     - require:
       - pkg: rsync

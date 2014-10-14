@@ -35,7 +35,12 @@ source /usr/local/share/salt_common.sh
 log_start_script "$@"
 trap "log_stop_script \$?" EXIT
 
-rsync -a{% if salt['pillar.get']('__test__', False) %}v{% else %}q{% endif %} {% if salt['pillar.get']('salt_archive:delete', False) %} --delete{% endif %} --exclude ".*" {{ pillar['salt_archive']['source'] }} /var/lib/salt_archive/
+if [ $1 = '-v' ]; then
+  verbosity=verbose
+else
+  verbosity=quiet
+fi
+rsync --archive --${verbosity}{% if salt['pillar.get']('salt_archive:delete', False) %} --delete{% endif %} --exclude ".*" {{ pillar['salt_archive']['source'] }} /var/lib/salt_archive/
 
 if [ $? -eq 0 ]; then
   mkdir -p /var/cache/salt/master

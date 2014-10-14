@@ -25,5 +25,5 @@ virtualbox-guest:
 
 {%- else %}
 include:
-  - virtual.guest.absent
+  - virtualbox.guest.absent
 {%- endif -%}

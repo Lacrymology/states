@@ -32,4 +32,10 @@ stop on runlevel [!2345]
 expect fork
 respawn
 
+nice 19
+
+pre-start script
+  ionice -c idle -p $PPID
+end script
+
 exec /usr/bin/rsync --daemon

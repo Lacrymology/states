@@ -30,6 +30,10 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 set -e
 
+# limit resources usage
+renice -n 19 -p $$ > /dev/null
+ionice -c idle -p $$
+
 # log start stop time to syslog
 source /usr/local/share/salt_common.sh
 log_start_script "$@"

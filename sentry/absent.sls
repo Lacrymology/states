@@ -72,3 +72,7 @@ sentry-uwsgi:
 /etc/nginx/conf.d/sentry.conf:
   file:
     - absent
+
+/var/lib/deployments/sentry:
+  file:
+    - absent

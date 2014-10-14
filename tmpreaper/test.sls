@@ -27,6 +27,8 @@ Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
 include:
   - tmpreaper
+  - tmpreaper.diamond
+  - tmpreaper.nrpe
 
 test_tmpreaper:
   cmd:

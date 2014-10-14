@@ -27,6 +27,7 @@ Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
 include:
   - backup.server
+  - backup.server.diamond
   - backup.server.nrpe
   - backup.server.ssh
 

@@ -29,6 +29,7 @@ Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 include:
   - openerp
   - openerp.backup
+  - openerp.backup.nrpe
   - openerp.diamond
   - openerp.nrpe
 

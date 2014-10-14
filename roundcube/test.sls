@@ -29,8 +29,8 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 include:
   - roundcube
   - roundcube.backup
-  - roundcube.backup.nrpe
   - roundcube.backup.diamond
+  - roundcube.backup.nrpe
   - roundcube.diamond
   - roundcube.nrpe
 

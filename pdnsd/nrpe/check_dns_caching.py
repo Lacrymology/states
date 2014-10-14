@@ -39,9 +39,6 @@ import shlex
 import subprocess
 import sys
 
-import socket
-import errno
-
 import nagiosplugin as nap
 import pysc
 import pysc.nrpe as bfe
@@ -55,7 +52,7 @@ class DnsCaching(nap.Resource):
 
     def get_query_time(self):
         domain = self.domain
-        request = DNS.Request(name=domain, server='127.0.0.1', qtype=self.record)
+        request = DNS.Request(name=domain, server=self.server, qtype=self.record)
         cmd = 'pdnsd-ctl empty-cache ' + domain
         devnull = open(os.devnull, 'w')
         p = subprocess.Popen(shlex.split(cmd), stdout=devnull, stderr=subprocess.PIPE)

@@ -27,6 +27,11 @@ Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
 include:
   - uwsgi
+  - uwsgi.diamond
+  - uwsgi.nrpe
+  - uwsgi.php
+  - uwsgi.ruby
+  - uwsgi.top
 
 test_uwsgi:
   cmd:

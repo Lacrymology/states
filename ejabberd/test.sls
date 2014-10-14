@@ -29,6 +29,8 @@ Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 include:
   - ejabberd
   - ejabberd.backup
+  - ejabberd.backup.nrpe
+  - ejabberd.diamond
   - ejabberd.nrpe
 
 {{ test_sslyze('ejabberd') }}

@@ -26,7 +26,10 @@ Author: Quan Tong Anh <quanta@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
 include:
+  - mariadb.server
   - mariadb.server.backup
+  - mariadb.server.diamond
+  - mariadb.server.nrpe
 
 test_backup_mysql:
   cmd:

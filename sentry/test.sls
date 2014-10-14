@@ -29,6 +29,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 include:
   - sentry
   - sentry.backup
+  - sentry.backup.diamond
   - sentry.backup.nrpe
   - sentry.diamond
   - sentry.nrpe

@@ -25,6 +25,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
+{% include "erlang/nrpe/config.jinja2" %}
+
 rabbitmq_console_port:
   description: RabbitMQ Console Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 55672

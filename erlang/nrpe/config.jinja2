@@ -4,7 +4,7 @@ erlang_procs:
   command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -C epmd'
 
 erlang_port:
-  description: RabbitMQ Erlang Port
+  description: Erlang Port Mapper Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 4369
   dependencies:
     - erlang_procs

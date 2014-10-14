@@ -36,9 +36,10 @@ gitlab-uwsgi:
 gitlab:
   service:
     - dead
-  cmd:
-    - run
-    - name: sleep 30
+  process:
+    - wait_for_dead
+    - name: ''
+    - user: gitlab
     - require:
       - file: gitlab-uwsgi
       - service: gitlab
@@ -47,7 +48,7 @@ gitlab:
     - force: True
     - purge: True
     - require:
-      - cmd: gitlab
+      - process: gitlab
 
 /etc/nginx/conf.d/gitlab.conf:
   file:

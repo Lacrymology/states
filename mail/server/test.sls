@@ -42,21 +42,9 @@ include:
   - openldap
   - openldap.diamond
   - openldap.nrpe
+  - mail.server.nrpe
 
 test:
   monitoring:
     - run_all_checks
     - order: last
-  cmd:
-    - run
-    - name: /etc/cron.daily/backup-dovecot
-    - require:
-      - file: backup-dovecot
-    - order: last
-
-test_check_mail_stack:
-  cmd:
-    - run
-    - name: /usr/lib/nagios/plugins/check_mail_stack.py
-    - require:
-      - file: /usr/lib/nagios/plugins/check_mail_stack.py

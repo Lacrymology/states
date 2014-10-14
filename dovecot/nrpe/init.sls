@@ -27,49 +27,14 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 Nagios NRPE check for Dovecot.
 -#}
-{%- set ssl = salt['pillar.get']('dovecot:ssl', False) %}
 {%- from 'nrpe/passive.sls' import passive_check with context %}
-{%- from 'openldap/init.sls' import ldap_adduser with context %}
 include:
   - apt.nrpe
   - dovecot
   - nrpe
   - postfix.nrpe
-  - openldap
-  - openldap.nrpe
-{%- if ssl %}
+{%- if salt['pillar.get']('dovecot:ssl', False)  %}
   - ssl.nrpe
 {%- endif %}
 
 {{ passive_check('dovecot') }}
-
-{#- check_mail_stack use common pkgs managed by nrpe, no need to install them again #}
-dovecot_check_mail_stack:
-  file:
-    - absent
-    - name: /usr/local/nagios/salt-check-mail-stack-requirements.txt
-
-/etc/nagios/check_mail_stack.yml:
-  file:
-    - absent
-
-{%- if salt['pillar.get']('mail:check_mail_stack', False) %}
-/usr/lib/nagios/plugins/check_mail_stack.py:
-  file:
-    - managed
-    - source: salt://dovecot/nrpe/check_mail_stack.py
-    - user: nagios
-    - group: nagios
-    - mode: 550
-    - require:
-      - module: nrpe-virtualenv
-      - pkg: nagios-nrpe-server
-      - file: nsca-dovecot
-    - require_in:
-      - service: nagios-nrpe-server
-      - service: nsca_passive
-{%- else %}
-/usr/lib/nagios/plugins/check_mail_stack.py:
-  file:
-    - absent
-{%- endif -%}

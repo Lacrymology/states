@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Bruno Clermont
+Copyright (c) 2013, Luan Vo Ngoc
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,26 +22,8 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Bruno Clermont <patate@fastmail.cn>
-Maintainer: Bruno Clermont <patate@fastmail.cn>
+Author: Luan Vo Ngoc <ngocluanvo@gmail.com>
+Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
 -#}
-#!/bin/bash
-# {{ pillar['message_do_not_modify'] }}
-
-set -e
-
-# limit resources usage
-renice -n 19 -p $$ > /dev/null
-ionice -c idle -p $$
-
-# log start stop time to syslog
-source /usr/local/share/salt_common.sh
-log_start_script "$@"
-trap "log_stop_script \$?" EXIT
-
-rsync --archive --no-owner --no-group --${verbosity}{% if salt['pillar.get']('__test__', False) %}v{% else %}q{% endif %} {% if salt['pillar.get']('salt_archive:delete', False) %} --delete{% endif %} --exclude ".*" {{ pillar['salt_archive']['source'] }} /var/lib/salt_archive/
-
-if [ $? -eq 0 ]; then
-  mkdir -p /var/cache/salt/master
-  touch /var/cache/salt/master/sync_timestamp.dat
-fi
+{%- from 'nrpe/passive.sls' import passive_absent with context -%}
+{{ passive_absent('openldap.backup') }}

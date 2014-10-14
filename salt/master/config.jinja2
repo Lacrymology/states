@@ -52,3 +52,6 @@ log_fmt_logfile: '%(asctime)-15s salt-master[%(process)d] %(name)s: %(message)s'
 log_datefmt_logfile: '%b %d %H:%M:%S'
 loop_interval: {{ salt['pillar.get']('salt_master:loop_interval', 60) }}
 keep_jobs: {{ salt['pillar.get']('salt_master:keep_jobs_hours', 24) }}
+{%- if 'sentry_dsn' in pillar %}
+ext_job_cache: sentry_common
+{%- endif %}

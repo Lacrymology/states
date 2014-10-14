@@ -82,7 +82,8 @@ def returner(ret):
         if not success:
             returned = ret['return']
             for state in returned:
-                if not returned[state]['result'] and \
+                result = returned[state]['result']
+                if result is not None and not result and \
                    returned[state]['comment'] != requisite_error:
                     send_sentry(returned[state]['comment'],
                                 returned[state])

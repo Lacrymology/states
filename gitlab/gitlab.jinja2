@@ -144,5 +144,3 @@ production: &base
     bin_path: /usr/bin/git
     max_size: {{ salt['pillar.get']('gitlab:max_size', 5242880) }}
     timeout: {{ salt['pillar.get']('gitlab:commit_timeout', 30) }}
-
-  extra:

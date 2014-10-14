@@ -91,36 +91,6 @@ uwsgi_patch_carbon_name_order:
       - archive: uwsgi_build
       - pkg: uwsgi_patch_carbon_name_order
 
-uwsgi_patch_fiber:
-  file:
-    - patch
-    - name: {{ extracted_dir }}/plugins/fiber/uwsgiplugin.py
-    - source: salt://uwsgi/fiber_uwsgiplugin.patch
-    - hash: md5=fccd209c50eff070b62e03c18880f688
-    - require:
-      - archive: uwsgi_build
-      - pkg: uwsgi_patch_carbon_name_order
-
-uwsgi_patch_rack:
-  file:
-    - patch
-    - name: {{ extracted_dir }}/plugins/rack/uwsgiplugin.py
-    - source: salt://uwsgi/rack_uwsgiplugin.patch
-    - hash: md5=6eb5b904fc74e673b73c02a27c511170
-    - require:
-      - archive: uwsgi_build
-      - pkg: uwsgi_patch_carbon_name_order
-
-uwsgi_patch_rbthreads:
-  file:
-    - patch
-    - name: {{ extracted_dir }}/plugins/rbthreads/uwsgiplugin.py
-    - source: salt://uwsgi/rbthreads_uwsgiplugin.patch
-    - hash: md5=f7a8556a012dd7cf78e8adaa854a55d2
-    - require:
-      - archive: uwsgi_build
-      - pkg: uwsgi_patch_carbon_name_order
-
 uwsgi_build:
   archive:
     - extracted
@@ -157,9 +127,6 @@ uwsgi_build:
       - file: uwsgi_build
       - pkg: python-dev
       - file: uwsgi_patch_carbon_name_order
-      - file: uwsgi_patch_fiber
-      - file: uwsgi_patch_rack
-      - file: uwsgi_patch_rbthreads
 
 uwsgi_sockets:
   file:

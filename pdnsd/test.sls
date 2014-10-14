@@ -27,10 +27,16 @@ Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
 include:
   - pdnsd
+  - pdnsd.diamond
+  - pdnsd.nrpe
 
-test_pdnsd:
+test:
   cmd:
     - run
     - name: /usr/lib/nagios/plugins/check_dns_caching.py
     - require:
       - service: pdnsd
+  monitoring:
+    - run_all_checks
+    - wait: 60
+    - order: last

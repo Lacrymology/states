@@ -32,6 +32,7 @@ Institute for Institutional Innovation by Data Driven Design Inc.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
+{%- from 'nrpe/passive.sls' import test_sslyze with context %}
 include:
   - djangopypi2
   - djangopypi2.backup
@@ -39,7 +40,8 @@ include:
   - djangopypi2.diamond
   - djangopypi2.nrpe
 
-{#- run /etc/cron.d/sslyze_check_* before ? #}
+{{ test_sslyze('djangopypi2') }}
+
 test:
   monitoring:
     - run_all_checks

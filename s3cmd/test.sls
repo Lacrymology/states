@@ -27,10 +27,15 @@ Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
 include:
   - s3cmd
+  - s3cmd.diamond
 
-test_s3cmd:
+test:
   cmd:
     - run
     - name: s3cmd ls
     - require:
       - pkg: s3cmd
+  monitoring:
+    - run_all_checks
+    - wait: 60
+    - order: last

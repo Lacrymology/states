@@ -25,6 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
+{%- from 'nrpe/passive.sls' import test_sslyze with context %}
 include:
   - shinken.broker
   - shinken.broker.diamond
@@ -44,8 +45,6 @@ include:
     - require:
       - sls: shinken.broker.nrpe
 {%- endfor %}
-
-{# TODO: /etc/cron.d/sslyze_check_* #}
 
 test:
   monitoring:

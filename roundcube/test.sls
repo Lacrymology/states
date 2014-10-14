@@ -25,6 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
+{%- from 'nrpe/passive.sls' import test_sslyze with context %}
 include:
   - roundcube
   - roundcube.backup
@@ -33,7 +34,7 @@ include:
   - roundcube.diamond
   - roundcube.nrpe
 
-{# TODO: /etc/cron.d/sslyze_check_* #}
+{{ test_sslyze('roundcube') }}
 
 test:
   monitoring:

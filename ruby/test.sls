@@ -27,6 +27,7 @@ Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
 include:
   - ruby
+  - ruby.nrpe
 
 test_ruby:
   cmd:
@@ -34,3 +35,7 @@ test_ruby:
     - name: ruby -v
     - require:
       - pkg: ruby
+  monitoring:
+    - run_all_checks
+    - wait: 60
+    - order: last

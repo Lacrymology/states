@@ -26,8 +26,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Quan Tong Anh <quanta@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
+{%- from 'nrpe/passive.sls' import test_sslyze with context %}
 include:
   - salt.archive.server
+  - salt.archive.server.diamond
+  - salt.archive.server.nrpe
 
 test_salt_archive:
   cmd:
@@ -35,3 +38,9 @@ test_salt_archive:
     - name: /etc/cron.d/salt-archive
     - require:
       - file: /etc/cron.d/salt-archive
+  monitoring:
+    - run_all_checks
+    - wait: 60
+    - order: last
+
+{{ test_sslyze('salt.archiver.server', pillar_prefix='salt_archive') }}

@@ -27,6 +27,7 @@ Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
 include:
   - apt
+  - apt.nrpe
 
 screen:
   pkg:
@@ -42,5 +43,13 @@ screen:
 apt_rc:
   monitoring:
     - run_check
-    - order: last
     - accepted_failure: 'HALFINSTALLED CRITICAL'
+    - require:
+      - file: /usr/lib/nagios/plugins/check_apt-rc.py
+      - cmd: screen
+
+test:
+  monitoring:
+    - run_all_checks
+    - wait: 60
+    - order: last

@@ -27,10 +27,15 @@ Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
 include:
   - pysc
+  - pysc.nrpe
 
-test_pysc:
+test:
   cmd:
     - run
     - name: pip list | grep pysc
     - require:
       - module: pysc
+  monitoring:
+    - run_all_checks
+    - wait: 60
+    - order: last

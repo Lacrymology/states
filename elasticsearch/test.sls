@@ -25,6 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
+{%- from 'nrpe/passive.sls' import test_sslyze with context %}
 {%- set ssl = salt['pillar.get']('elasticsearch:ssl', False) %}
 include:
   - elasticsearch
@@ -59,7 +60,7 @@ elasticsearch_test_create_sample_data:
       - sls: elasticsearch.backup
       - pkg: elasticsearch_test_create_sample_data
 
-{# TODO: /etc/cron.d/sslyze_check_* #}
+{{ test_sslyze('elasticsearch') }}
 
 test:
   cmd:

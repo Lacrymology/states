@@ -124,13 +124,15 @@ include:
 
 archive_rsync:
   cmd:
-    - run
+    - wait
     - name: /usr/local/bin/salt_archive_sync.sh -v
     - user: root
     - require:
       - pkg: rsync
       - user: salt_archive
       - file: /usr/local/bin/salt_archive_sync.sh
+    - watch:
+      - file: salt_archive
 {%- endif %}
 
 /etc/nginx/conf.d/salt_archive.conf:

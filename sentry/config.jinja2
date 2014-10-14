@@ -154,3 +154,6 @@ STATSD_CLIENT = 'django_statsd.clients.normal'
 {% endif %}
 
 ALLOWED_HOSTS = [{% for hostname in pillar['sentry']['hostnames'] %}"{{ hostname }}"{% if not loop.last %} , {% endif %}{% endfor %}]
+
+STATIC_ROOT = '/var/lib/deployments/sentry/static'
+STATIC_URL = '/_static/'

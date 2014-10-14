@@ -135,6 +135,7 @@ sentry-uwsgi:
     - watch:
       - file: sentry
       - cmd: sentry_settings
+      - file: /var/lib/deployments/sentry
 
 sentry_settings:
   file:
@@ -217,6 +218,35 @@ sentry-migrate-fake:
     - require:
       - pkg: nginx
       - file: sentry-uwsgi
+      - file: /var/lib/deployments/sentry
+
+/var/lib/deployments/sentry:
+    file:
+    - directory
+    - user: www-data
+    - group: www-data
+    - mode: 750
+    - recurse:
+      - user
+      - group
+    - require:
+      - user: web
+      - file: sentry-uwsgi
+
+sentry_collectstatic:
+  module:
+    - wait
+    - name: django.collectstatic
+    - settings_module: sentry.conf.server
+    - bin_env: /usr/local/sentry
+    - env:
+        SENTRY_CONF: /etc/sentry.conf.py
+    - require:
+      - cmd: sentry_settings
+      - cmd: sentry
+    - watch:
+      - file: sentry_settings
+      - module: sentry
 
 extend:
   memcached:

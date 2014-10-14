@@ -31,7 +31,7 @@ GitLab main config
 
 production: &base
   gitlab:
-    host: {{ salt['pillar.get']('gitlab:hostnames')[0] }}
+    host: {{ pillar['gitlab']['hostnames'][0] }}
     port: {% if salt['pillar.get']('gitlab:ssl', False) %}443{% else %}80{% endif %}
     {%- if salt['pillar.get']('gitlab:ssl', False) %}
     https: true
@@ -41,9 +41,7 @@ production: &base
 
     user: gitlab
 
-    email_from: {{ salt['pillar.get']('gitlab:smtp:from', salt['pillar.get']('smtp:from')) }}
-
-    # Email server smtp settings are in [a separate file](initializers/smtp_settings.rb.sample).
+    email_from: {{ salt['pillar.get']('gitlab:smtp:from', pillar['smtp']['from']) }}
 
     default_projects_limit: {{ salt['pillar.get']('gitlab:default_projects_limit', 10) }}
 
@@ -101,7 +99,7 @@ production: &base
 
   ldap:
     {%- if salt['pillar.get']('gitlab:ldap:enabled', False) %}
-    {%- set ldap =  salt['pillar.get']('gitlab:ldap') %}
+    {%- set ldap =  pillar['gitlab']['ldap'] %}
     enabled: true
     host: '{{ ldap['host'] }}'
     base: '{{ ldap['base'] }}'

@@ -144,7 +144,7 @@ def create_archive(pillar_root, states_root, fileobj=sys.stdout,
 def parse_args():
     if len(sys.argv) >= 3:
         states = []
-        for dirname in sys.argv[2]:
+        for dirname in sys.argv[2:]:
             states.append(validate_git_dir(dirname))
         return validate_git_dir(sys.argv[1]), states
     elif len(sys.argv) == 2:

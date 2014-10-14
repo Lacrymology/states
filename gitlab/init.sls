@@ -38,7 +38,7 @@ include:
   - python
   - redis
   - rsyslog
-  - ruby.ruby2
+  - ruby.2
   - ssh.server
 {%- if salt['pillar.get']('gitlab:ssl', False) %}
   - ssl

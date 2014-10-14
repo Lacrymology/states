@@ -143,7 +143,6 @@ clean_pkg:
       - os-prober
       - parted
       - patch
-      - pciutils
       - perl
       - perl-modules
       - popularity-contest

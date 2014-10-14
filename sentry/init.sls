@@ -230,7 +230,7 @@ sentry-migrate-fake:
       - user
       - group
     - require:
-      - user: web
+      - file: web
       - file: sentry-uwsgi
 
 sentry_collectstatic:

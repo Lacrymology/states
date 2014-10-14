@@ -42,7 +42,13 @@ import time
 log = logging.getLogger(__name__)
 
 
-def wait(name, timeout=30, **kargs):
+def __current_time():
+    """return current time in seconds from epoch
+    """
+    return time.time()
+
+
+def wait(name, timeout=30, user=None, **kargs):
     """
     Sate that wait to a process to appear in process list, return
     False if exceed a timeout value
@@ -57,16 +63,14 @@ def wait(name, timeout=30, **kargs):
     name
         name of the process to wait
 
+    user
+       limit match to given username, default: all users
+
     timeout
         time period in second that this state wait for process before
         return False
 
     """
-    def current_time():
-        """return current time in seconds from epoch
-        """
-        return time.time()
-
     # template for return dictonary
     ret = {'name': name, 'changes': {}, 'result': None, 'comment': ''}
 
@@ -77,16 +81,21 @@ def wait(name, timeout=30, **kargs):
         return ret
 
     if __opts__['test']:
-        ret['comment'] = 'Process {} is found'.format(name)
+        ret['comment'] = 'Found (pattern: "{}", user: "{}")'.format(name, user)
         return ret
 
     # record timestamp before wait for process
-    start_time = current_time()
+    start_time = __current_time()
 
     pids = []
     while not pids:
         try:
-            pids = __salt__['ps.pgrep'](name, full=True)
+            if user:
+                pids = __salt__['ps.pgrep'](
+                    name, user=user, full=True)
+            else:
+                pids = __salt__['ps.pgrep'](
+                    name, full=True)
         except KeyError:
             log.debug('salt module ps.pgrep is not available')
             ret['result'] = False
@@ -94,15 +103,80 @@ def wait(name, timeout=30, **kargs):
             return ret
 
         # timeout exceed
-        if current_time() - start_time > timeout:
+        if __current_time() - start_time > timeout:
             ret['result'] = False
-            ret['comment'] = \
-                'Timeout exceed, process {} is not found'.format(name)
+            ret['comment'] = 'Timeout exceed (pattern: "{}", '.format(name)
+            ret['comment'] += 'user: "{}")'.format(user)
             return ret
 
     # process is found
     ret['result'] = True
-    ret['comment'] = 'Found process {}. PIDs: {}'.format(
-        name, ','.join([str(pid) for pid in pids]))
+    ret['comment'] = 'PIDs: {} (pattern: "{}", user: "{}")'.format(
+        ','.join([str(pid) for pid in pids]), name, user)
+    return ret
+
+
+def wait_for_dead(name, timeout=30, user=None, **kargs):
+    """
+    Sate that wait to a process to disappear in process list, return
+    False if exceed a timeout value
+
+    .. code-block:: yaml
+
+    vim:
+      process:
+        - wait_for_dead
+        - timeout: 10
+
+    name
+        name of the process to wait
+
+    user
+       limit match to given username, default: all users
+
+    timeout
+        time period in second that this state wait for process before
+        return False
+
+    """
+    # template for return dictonary
+    ret = {'name': name, 'changes': {}, 'result': None, 'comment': ''}
+
+    # validate arguments
+    if type(timeout) != int:
+        ret['result'] = False
+        ret['comment'] = 'Invalid timeout value: {}'.format(str(timeout))
+        return ret
+
+    if __opts__['test']:
+        ret['comment'] = 'Dead (pattern: "{}", user: "{}")'.format(name, user)
+        return ret
+
+    # record timestamp before wait for process
+    start_time = __current_time()
+
+    is_dead = False
+    while not is_dead:
+        try:
+            if user:
+                is_dead = not __salt__['ps.pgrep'](name, user=user, full=True)
+            else:
+                is_dead = not __salt__['ps.pgrep'](name, full=True)
+        except KeyError:
+            log.debug('salt module ps.pgrep is not available')
+            ret['result'] = False
+            ret['comment'] = 'salt module ps.pgrep is not available'
+            return ret
+
+        # timeout exceed
+        if __current_time() - start_time > timeout:
+            ret['result'] = False
+            ret['comment'] = 'Timeout exceed (pattern: "{}", '.format(name)
+            ret['comment'] += 'user: "{}")'.format(user)
+            return ret
+
+    # process is dead
+    ret['result'] = True
+    ret['comment'] = 'Dead (pattern: "{}", user: "{}")'.format(name, user)
 
     return ret

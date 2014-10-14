@@ -26,8 +26,9 @@ Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 #}
 boto==2.29.1
+requests==0.14.2
 {%- if 'files_archive' in pillar %}
-pysc==0.3.1
+pysc==0.3.4
 {%- else %}
-http://archive.robotinfra.com/pip/pysc-0.3.1.tar.bz2
+http://archive.robotinfra.com/pip/pysc-0.3.4.tar.bz2
 {%- endif %}

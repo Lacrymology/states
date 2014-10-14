@@ -35,4 +35,4 @@ firewall_rules:
   description: Firewall Rules
   command: 'sudo /usr/lib/nagios/plugins/check_firewall.py --formula=firewall --check=firewall_rules'
   arguments:
-    warning: 2
+    warning: 300

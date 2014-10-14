@@ -29,6 +29,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 Nagios NRPE check for PostgreSQL Server.
 -#}
+{%- set ssl = salt['pillar.get']('postgresql:ssl', False) -%}
 include:
   - apt.nrpe
   - nrpe
@@ -36,9 +37,9 @@ include:
   - postgresql.common.user
   - rsyslog.nrpe
   - sudo
-{% if salt['pillar.get']('postgresql:ssl', False) %}
+{%- if ssl %}
   - ssl.nrpe
-{% endif %}
+{%- endif -%}
 
 {%- set check_pg_version = "2.21.0" %}
 
@@ -80,6 +81,7 @@ check_psql_encoding.py:
     - require:
       - pkg: nagios-nrpe-server
       - file: nsca-postgresql.common
+      - module: nrpe-virtualenv
 
 /etc/sudoers.d/nrpe_postgresql_common:
   file:
@@ -110,9 +112,11 @@ extend:
     user:
       - groups:
         - nagios
-    {%- if salt['pillar.get']('postgresql:ssl', False) %}
+    {%- if ssl %}
         - ssl-cert
     {%- endif %}
       - require:
-        - pkg: ssl-cert
         - pkg: nagios-nrpe-server
+    {%- if ssl %}
+        - pkg: ssl-cert
+    {%- endif -%}

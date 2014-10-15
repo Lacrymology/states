@@ -33,6 +33,10 @@ include:
   - locale
   - ssl
 
+{#-
+  ruby2.1 requires ruby, see:
+  https://bugs.launchpad.net/ubuntu/+source/ruby2.0/+bug/1310292
+#}
 ruby2_deps:
   pkg:
     - installed
@@ -43,7 +47,6 @@ ruby2_deps:
       - libgmp10
       - libjs-jquery
       - libreadline6
-      - libssl1.0.0
       - libyaml-0-2
       - ruby
       - zlib1g

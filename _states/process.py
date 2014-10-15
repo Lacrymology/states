@@ -93,12 +93,7 @@ def wait(name, timeout=30, user=None, **kargs):
     pids = []
     while not pids:
         try:
-            if user:
-                pids = __salt__['ps.pgrep'](
-                    name, user=user, full=True)
-            else:
-                pids = __salt__['ps.pgrep'](
-                    name, full=True)
+            pids = __salt__['ps.pgrep'](name, user=user, full=True)
         except KeyError:
             log.debug('salt module ps.pgrep is not available')
             ret['result'] = False
@@ -108,8 +103,8 @@ def wait(name, timeout=30, user=None, **kargs):
         # timeout exceed
         if __current_time() - start_time > timeout:
             ret['result'] = False
-            ret['comment'] = 'Timeout exceed (pattern: "{}", '.format(name)
-            ret['comment'] += 'user: "{}")'.format(user)
+            ret['comment'] = ('Timeout exceed (pattern: "{}", '
+                              'user: "{}")'.format(name, user))
             return ret
 
     # process is found
@@ -197,8 +192,8 @@ def wait_for_dead(name, timeout=30, user=None, **kargs):
         # timeout exceed
         if __current_time() - start_time > timeout:
             ret['result'] = False
-            ret['comment'] = 'Timeout exceed (pattern: "{}", '.format(name)
-            ret['comment'] += 'user: "{}")'.format(user)
+            ret['comment'] = ('Timeout exceed (pattern: "{}",'
+                              'user: "{}")'.format(name, user))
             return ret
 
     # process is dead

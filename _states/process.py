@@ -51,6 +51,35 @@ def __current_time():
     return time.time()
 
 
+def __validate_arguments(name, timeout):
+    # template for return dictonary
+    return_dict = {'name': name, 'changes': {}, 'result': None, 'comment': ''}
+
+    if type(timeout) is not int:
+        return_dict['result'] = False
+        return_dict['comment'] = 'Invalid timeout value: {}'.format(
+            str(timeout))
+        return False, return_dict
+
+    # arguments valid
+    return True, return_dict
+
+
+def __is_timeouted(start_time, timeout):
+    """check if wait is timeouted if yes, return a function to format
+    return dict
+
+    """
+    # timeout exceed
+    if __current_time() - start_time > timeout:
+        return (True,
+                lambda return_dict, name, user: return_dict.update(
+                    {'result': False,
+                     'comment': ('Timeout exceed (pattern: "{}",'
+                                 'user: "{}")'.format(name, user))}))
+    return (False, None)
+
+
 def wait(name, timeout=30, user=None, **kargs):
     """
     Sate that wait to a process to appear in process list, return
@@ -74,13 +103,10 @@ def wait(name, timeout=30, user=None, **kargs):
         return False
 
     """
-    # template for return dictonary
-    ret = {'name': name, 'changes': {}, 'result': None, 'comment': ''}
 
     # validate arguments
-    if type(timeout) != int:
-        ret['result'] = False
-        ret['comment'] = 'Invalid timeout value: {}'.format(str(timeout))
+    is_valid, ret = __validate_arguments(name, timeout)
+    if not is_valid:
         return ret
 
     if __opts__['test']:
@@ -100,12 +126,13 @@ def wait(name, timeout=30, user=None, **kargs):
             ret['comment'] = 'salt module ps.pgrep is not available'
             return ret
 
-        # timeout exceed
-        if __current_time() - start_time > timeout:
-            ret['result'] = False
-            ret['comment'] = ('Timeout exceed (pattern: "{}", '
-                              'user: "{}")'.format(name, user))
+        # check timeout
+        is_timeouted, ret_fmt = __is_timeouted(start_time, timeout)
+        if is_timeouted:
+            ret_fmt(ret, name, user)
             return ret
+
+        time.sleep(0.5)
 
     # process is found
     ret['result'] = True
@@ -139,8 +166,10 @@ def wait_for_dead(name, timeout=30, user=None, **kargs):
     """
 
     def is_process_dead(pattern, user=None):
-        """
-        return True if process is not existed, False otherwise
+        """return True if process is not existed, False otherwise.
+        Note that we can't use __salt__['ps.pgrep']() because
+        process.wait_for_dead is to used in absent.sls files
+
         """
 
         # if a user is not exist, return True
@@ -169,13 +198,9 @@ def wait_for_dead(name, timeout=30, user=None, **kargs):
                 raise RuntimeError('pgrep: unknown error')
         return bool(is_dead)
 
-    # template for return dictonary
-    ret = {'name': name, 'changes': {}, 'result': None, 'comment': ''}
-
     # validate arguments
-    if type(timeout) != int:
-        ret['result'] = False
-        ret['comment'] = 'Invalid timeout value: {}'.format(str(timeout))
+    is_valid, ret = __validate_arguments(name, timeout)
+    if not is_valid:
         return ret
 
     if __opts__['test']:
@@ -189,12 +214,13 @@ def wait_for_dead(name, timeout=30, user=None, **kargs):
     while not is_dead:
         is_dead = is_process_dead(name, user=user)
 
-        # timeout exceed
-        if __current_time() - start_time > timeout:
-            ret['result'] = False
-            ret['comment'] = ('Timeout exceed (pattern: "{}",'
-                              'user: "{}")'.format(name, user))
+        # check timeout
+        is_timeouted, ret_fmt = __is_timeouted(start_time, timeout)
+        if is_timeouted:
+            ret_fmt(ret, name, user)
             return ret
+
+        time.sleep(0.5)
 
     # process is dead
     ret['result'] = True

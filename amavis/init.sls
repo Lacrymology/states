@@ -32,6 +32,7 @@ include:
   - apt
   - bash
   - cron
+  - locale
   - mail
   - spamassassin
 
@@ -77,6 +78,7 @@ amavis:
     - require:
       - pkg: cron
       - file: bash
+      - cmd: system_locale
 
 {%- call manage_pid('/var/run/amavis/amavisd.pid', 'amavis', 'amavis', 'amavis', 640) %}
 - pkg: amavis

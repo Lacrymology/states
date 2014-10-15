@@ -32,7 +32,6 @@ Useful to identify if dependencies are missing.
 
 include:
   - deborphan
-  - kernel_modules
   - ttys
 
 clean_pkg:

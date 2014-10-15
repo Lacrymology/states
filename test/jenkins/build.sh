@@ -76,15 +76,15 @@ done
 
 sudo salt-cloud --profile $profile integration-$JOB_NAME-$BUILD_NUMBER
 sudo salt integration-$JOB_NAME-$BUILD_NUMBER test.ping | grep True
-sudo salt -t 60 "integration-$JOB_NAME-$BUILD_NUMBER" cmd.run "hostname integration-$JOB_NAME-$BUILD_NUMBER"
+sudo salt -t 10 "integration-$JOB_NAME-$BUILD_NUMBER" cmd.run "hostname integration-$JOB_NAME-$BUILD_NUMBER"
 sudo salt -t 60 "integration-$JOB_NAME-$BUILD_NUMBER" cp.get_file salt://jenkins_archives/$JOB_NAME-$BUILD_NUMBER.tar.gz /tmp/bootstrap-archive.tar.gz
 sudo salt -t 60 "integration-$JOB_NAME-$BUILD_NUMBER" archive.tar xzf /tmp/bootstrap-archive.tar.gz cwd=/
-master_ip=$(sudo salt -t 20 "integration-$JOB_NAME-$BUILD_NUMBER" --out=yaml grains.item master | cut -f2- -d ':' | tr -d '\n')
+master_ip=$(sudo salt -t 60 "integration-$JOB_NAME-$BUILD_NUMBER" --out=yaml grains.item master | cut -f2- -d ':' | tr -d '\n')
 sudo salt -t 10 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "sed -i \"s/master:.*/master: $master_ip/g\" /root/salt/states/test/minion"
 # sync extmod from extracted archive to bootstrapped salt instance
 sudo salt -t 60 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call -c /root/salt/states/test/ saltutil.sync_all"
-sudo salt -t 200 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call -c /root/salt/states/test/ state.sls test.sync" | ./test/jenkins/retcode_check.py
-sudo salt -t 100 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call -c /root/salt/states/test/ state.sls test.jenkins" | ./test/jenkins/retcode_check.py
+sudo salt -t 600 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call -c /root/salt/states/test/ state.sls test.sync" | ./test/jenkins/retcode_check.py
+sudo salt -t 600 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call -c /root/salt/states/test/ state.sls test.jenkins" | ./test/jenkins/retcode_check.py
 echo '------------ From here, salt with version supported by salt-common is running ------------'
 sudo salt -t 5 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call test.ping"
 sudo salt -t 20 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call -c /root/salt/states/test/ saltutil.sync_all"

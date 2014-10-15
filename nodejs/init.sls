@@ -30,7 +30,7 @@ Install NodeJS platform for Javascript.
 include:
   - apt
 
-{% set version = '0.10.12' %}
+{% set version = '0.10.32' %}
 {%- set sub_version = version + "-1chl1~" +  grains['lsb_distrib_codename']  + "1" %}
 {% set filename = "nodejs_" +  version  + "-1chl1~" +  grains['lsb_distrib_codename']  + "1_" +  grains['debian_arch']  + ".deb" %}
 

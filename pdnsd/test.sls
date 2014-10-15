@@ -31,13 +31,6 @@ include:
   - pdnsd.nrpe
 
 test:
-  cmd:
-    - run
-    - name: /usr/lib/nagios/plugins/check_dns_caching.py
-    - require:
-      - service: pdnsd
-      - module: pydns
-      - file: /usr/lib/nagios/plugins/check_dns_caching.py
   monitoring:
     - run_all_checks
     - wait: 60

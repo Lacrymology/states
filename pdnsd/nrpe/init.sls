@@ -55,7 +55,7 @@ pydns:
 /usr/lib/nagios/plugins/check_dns_caching.py:
   file:
     - managed
-    - source: salt://pdnsd/nrpe/check_dns_caching.py
+    - source: salt://pdnsd/nrpe/check.py
     - user: nagios
     - group: nagios
     - mode: 550

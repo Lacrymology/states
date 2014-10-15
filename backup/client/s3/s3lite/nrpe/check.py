@@ -144,5 +144,5 @@ if __name__ == "__main__":
         'empty': False,
         'warning': '48',
         'timeout': None,
-        'config': '/etc/nagios/s3lite.yml',
+        'config': '/etc/s3lite.yml',
     })

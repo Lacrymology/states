@@ -28,6 +28,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 include:
   - nrpe
   - backup.client.base.nrpe
+  - backup.client.s3
   - bash.nrpe
   - python.dev.nrpe
   - virtualenv.nrpe
@@ -79,18 +80,9 @@ check_backup.py:
       - pkg: nagios-nrpe-server
       - module: backup_client_nrpe-requirements
 
-{#- use this file instead of using /etc/s3lite.yml because it needs another
-    process name - for bfs config #}
 /etc/nagios/s3lite.yml:
   file:
-    - managed
-    - template: jinja
-    - source: salt://backup/client/s3/s3lite/nrpe/check_config.jinja2
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - require:
-      - pkg: nagios-nrpe-server
+    - absent
 
 /usr/lib/nagios/plugins/check_backup_s3lite.py:
   file:
@@ -100,6 +92,6 @@ check_backup.py:
     - group: nagios
     - mode: 550
     - require:
-      - file: /etc/nagios/s3lite.yml
+      - file: /etc/s3lite.yml
       - pkg: nagios-nrpe-server
       - module: nrpe-virtualenv

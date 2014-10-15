@@ -27,7 +27,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 #}
 
 {%- from 'pysc/config.jinja2' import pysc_config with context %}
-{{ pysc_config(process_name='s3lite') }}
+{{ pysc_config() }}
 
 s3:
   key_id: {{ pillar['aws']['access_key'] }}

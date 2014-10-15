@@ -95,7 +95,7 @@ check_backup.py:
 /usr/lib/nagios/plugins/check_backup_s3lite.py:
   file:
     - managed
-    - source: salt://backup/client/s3/s3lite/nrpe/check_s3lite.py
+    - source: salt://backup/client/s3/s3lite/nrpe/check.py
     - user: nagios
     - group: nagios
     - mode: 550

@@ -36,9 +36,7 @@ __email__ = 'patate@fastmail.cn'
 import json
 import logging
 import httplib
-import pickle
 import socket
-import os
 import datetime
 
 # Set up logging

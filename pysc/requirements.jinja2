@@ -27,6 +27,12 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 #}
 {%- if 'files_archive' in pillar %}
 requests==0.14.2
+{#- psutil 2.0.0 don't work with
+  http://docs.saltstack.com/en/latest/ref/modules/all/salt.modules.ps.html#module-salt.modules.ps
+  at least in 0.75.5-1.
+  as pysc formula ends in the same python environment as salt, hardcode a
+  working version. #}
+psutil==1.2.1
 pysc==0.3.4
 {%- else %}
 http://archive.robotinfra.com/pip/pysc-0.3.4.tar.bz2

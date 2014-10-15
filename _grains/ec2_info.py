@@ -96,6 +96,7 @@ def _get_ec2_hostinfo():
 
     grains['public-ipv4'] = _call_aws("/latest/meta-data/public-ipv4")
     grains['public-hostname'] = _call_aws("/latest/meta-data/public-hostname")
+    grains['is_on_ec2'] = True
 
     return grains
 

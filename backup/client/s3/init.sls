@@ -29,6 +29,7 @@ include:
   - bash
   - local
   - backup.client.base
+  - python.dev
   - s3cmd
   - virtualenv
 
@@ -71,6 +72,7 @@ s3lite:
     - requirements: /usr/local/s3lite/salt-requirements.txt
     - watch:
       - file: s3lite
+      - pkg: python-dev
 
 /etc/s3lite.yml:
   file:

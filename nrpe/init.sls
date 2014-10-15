@@ -46,6 +46,7 @@ include:
 {% endif %}
   - pip
   - pip.nrpe
+  - python.dev
   - rsyslog
   - rsyslog.nrpe
   - ssh.client
@@ -132,6 +133,7 @@ nrpe-virtualenv:
     - watch:
       - file: nrpe-virtualenv
       - pkg: nrpe-virtualenv
+      - pkg: python-dev
   pkg:
     - installed
     - name: libyaml-dev {#- PyYAML needs this pkg #}

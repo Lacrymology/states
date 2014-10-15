@@ -29,6 +29,7 @@ include:
   - nrpe
   - backup.client.base.nrpe
   - bash.nrpe
+  - python.dev.nrpe
   - virtualenv.nrpe
 
 /etc/nagios/backup.yml:

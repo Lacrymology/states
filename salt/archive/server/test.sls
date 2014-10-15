@@ -1,4 +1,3 @@
-{# TODO: /etc/cron.d/sslyze_check_* #}
 {#-
 Copyright (c) 2014, Quan Tong Anh
 All rights reserved.

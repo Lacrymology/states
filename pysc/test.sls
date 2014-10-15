@@ -30,9 +30,10 @@ include:
   - pysc.nrpe
 
 test:
-  cmd:
+  module:
     - run
-    - name: pip list | grep pysc
+    - name: pip.list
+    - prefix: pysc
     - require:
       - module: pysc
   monitoring:

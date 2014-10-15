@@ -36,6 +36,6 @@ include:
 test_uwsgi:
   cmd:
     - run
-    - name: /usr/local/uwsgi-2.0.c72fde/uwsgi --version
+    - name: /usr/local/uwsgi-1.9.17.1/uwsgi --version
     - require:
       - cmd: uwsgi_build

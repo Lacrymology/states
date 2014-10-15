@@ -24,21 +24,26 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author: Quan Tong Anh <quanta@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
+
+Install a dummy package, then remove it and expect a HALF INSTALLED after checking
 -#}
 include:
   - apt
   - apt.nrpe
 
-screen:
+install_screen:
   pkg:
     - installed
+    - name: screen
     - require:
       - cmd: apt_sources
-  cmd:
-    - run
-    - name: dpkg --remove less
+
+remove_screen:
+  pkg:
+    - removed
+    - name: screen
     - require:
-      - pkg: screen
+      - pkg: install_screen
 
 apt_rc:
   monitoring:
@@ -46,10 +51,12 @@ apt_rc:
     - accepted_failure: 'HALFINSTALLED CRITICAL'
     - require:
       - file: /usr/lib/nagios/plugins/check_apt-rc.py
-      - cmd: screen
+      - pkg: remove_screen
 
 test:
   monitoring:
     - run_all_checks
     - wait: 60
     - order: last
+    - exclude:
+      - apt_rc

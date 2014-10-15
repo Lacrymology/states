@@ -36,8 +36,7 @@ test:
     - run
     - name: /etc/cron.weekly/backup-archiver
     - require:
-      - file: /etc/cron.weekly/backup-archiver
+      - sls: backup.server
   monitoring:
     - run_all_checks
-    - wait: 60
     - order: last

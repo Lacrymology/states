@@ -26,6 +26,8 @@ Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 include:
+  - ssh.client
+  - ssh.client.nrpe
   - ssh.server
   - ssh.server.diamond
   - ssh.server.nrpe
@@ -35,4 +37,17 @@ test:
     - run_all_checks
     - order: last
 
-{# TODO: run a ssh to itself and run /bin/true #}
+ssh_add_key:
+  cmd:
+    - run
+    - name: cat {{ salt['user.info']('root')['home'] }}/.ssh/id_{{ pillar['deployment_key']['type'] }}.pub >> {{ salt['user.info']('root')['home'] }}/.ssh/authorized_keys
+    - unless: grep $(cat cat {{ salt['user.info']('root')['home'] }}/.ssh/id_{{ pillar['deployment_key']['type'] }}.pub) {{ salt['user.info']('root')['home'] }}/.ssh/authorized_keys
+    - require:
+      - cmd: root_ssh_public_key
+
+test_ssh:
+  cmd:
+    - run
+    - name: ssh root@localhost '/bin/true'
+    - require:
+      - cmd: ssh_add_key

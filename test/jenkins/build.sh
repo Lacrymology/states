@@ -74,6 +74,7 @@ done
 ./bootstrap_archive.py ../pillar ${repos[@]} > /srv/salt/jenkins_archives/$JOB_NAME-$BUILD_NUMBER.tar.gz
 
 sudo salt-cloud --profile $profile integration-$JOB_NAME-$BUILD_NUMBER
+sudo salt integration-$JOB_NAME-$BUILD_NUMBER test.ping | grep True
 sudo salt -t 600 "integration-$JOB_NAME-$BUILD_NUMBER" cmd.run "hostname integration-$JOB_NAME-$BUILD_NUMBER"
 sudo salt -t 600 "integration-$JOB_NAME-$BUILD_NUMBER" cp.get_file salt://jenkins_archives/$JOB_NAME-$BUILD_NUMBER.tar.gz /tmp/bootstrap-archive.tar.gz
 sudo salt -t 600 "integration-$JOB_NAME-$BUILD_NUMBER" archive.tar xzf /tmp/bootstrap-archive.tar.gz cwd=/

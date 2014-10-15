@@ -25,14 +25,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Quan Tong Anh <quanta@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
+{%- from 'cron/test.sls' import test_cron with context %}
 include:
   - tmpreaper
   - tmpreaper.diamond
   - tmpreaper.nrpe
 
-test_tmpreaper:
-  cmd:
-    - run
-    - name: tmpreaper -t 30d /tmp
-    - require:
-      - pkg: tmpreaper
+{{ test_cron() }}

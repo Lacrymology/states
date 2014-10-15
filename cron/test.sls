@@ -7,9 +7,9 @@ modification, are permitted provided that the following conditions are met:
 
 1. Redistributions of source code must retain the above copyright notice, this
    list of conditions and the following disclaimer.
-   2. Redistributions in binary form must reproduce the above copyright notice,
-      this list of conditions and the following disclaimer in the documentation
-         and/or other materials provided with the distribution.
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -25,21 +25,20 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Quan Tong Anh <quanta@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
-{%- from 'nrpe/passive.sls' import test_sslyze with context %}
-{%- from 'cron/test.sls' import test_cron with context %}
-include:
-  - ejabberd
-  - ejabberd.backup
-  - ejabberd.backup.nrpe
-  - ejabberd.diamond
-  - ejabberd.nrpe
-
-{{ test_sslyze('ejabberd') }}
-
-{{ test_cron }}
-
-test:
-  monitoring:
-    - run_all_checks
-    - wait: 60
+{%- macro test_cron() -%}
+    {%- for suffix in ('daily', 'weekly', 'monthly') %}
+test_cron_{{ suffix }}:
+  cmd:
+    - run
+    - name: run-parts --report /etc/cron.{{ suffix }}
+    - onlyif: test -d /etc/cron.{{ suffix }}
     - order: last
+    {%- endfor %}
+
+test_cron_d:
+  cmd:
+    - run
+    - name: grep -lr 'this is handled by Salt' /etc/cron.d | xargs grep -v '^#' $file | sed '/^$/d' | awk '{ print substr($0, index($0, $7)) }' | bash
+    - onlyif: test -d /etc/cron.d
+    - order: last
+{%- endmacro %}

@@ -44,7 +44,7 @@ test_s3lite_run_sample_backup:
 test_s3lite_check_s3lite_sync:
   cmd:
     - run
-    - name: /usr/lib/nagios/plugins/check_backup_s3lite.py s3lite s3://{{ pillar['aws']['s3']['bucket'] }}/{{ pillar['aws']['s3']['path'].strip('/') }}
+    - name: '/usr/lib/nagios/plugins/check_backup_s3lite.py --set=''{"path": "s3lite", "bucket": "s3://{{ pillar['aws']['s3']['bucket'] }}/{{ pillar['aws']['s3']['path'].strip('/') }}"}'''
     - require:
       - cmd: test_s3lite_run_sample_backup
 

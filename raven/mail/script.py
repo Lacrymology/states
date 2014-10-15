@@ -50,15 +50,20 @@ class Mail(pysc.Application):
         argp.add_argument('extra_args', nargs='*')
         return argp
 
-        # init raven quickly, so if something is wrong it get logged early
-        from raven import Client
-        if 'SENTRY_DSN' not in os.environ.keys():
-            os.environ['SENTRY_DSN'] = "requests+{{ pillar['sentry_dsn'] }}"
-        client = Client()
+    def main(self):
+        # consume standard input early
+        body = os.linesep.join(sys.stdin.readlines())
+        if not len(body):
+            sys.stderr.write("Empty stdin, nothing to report")
+            sys.stderr.write(os.linesep)
+            sys.exit(1)
 
         # init raven quickly, so if something is wrong it get logged early
         from raven import Client
-        client = Client(dsn=self.config['sentry_dsn'])
+        dsn = self.config['sentry_dsn']
+        if not dsn.startswith("requests+"):
+            dsn = "requests+" + dsn
+        client = Client(dsn=dsn)
 
         if self.config['subject']:
             msg = os.linesep.join((self.config['subject'], body))

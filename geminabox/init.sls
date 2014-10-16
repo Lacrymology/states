@@ -100,7 +100,8 @@ geminabox:
 /usr/local/geminabox/config.ru:
   file:
     - managed
-    - source: salt://geminabox/config.ru
+    - source: salt://geminabox/config.ru.jinja2
+    - template: jinja
     - user: geminabox
     - group: geminabox
     - mode: 440

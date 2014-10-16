@@ -29,6 +29,7 @@ Maintainer: Diep Pham <favadi@robotinfra.com>
 include:
   - apt.nrpe
   - build.nrpe
+  - git.nrpe
   - logrotate.nrpe
   - nginx.nrpe
   - postgresql.server.nrpe

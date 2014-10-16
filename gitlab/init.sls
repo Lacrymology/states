@@ -277,7 +277,7 @@ gitlab_shell:
       - RAILS_ENV: production
     - require:
       - cmd: gitlab_gems
-      - pkg: gitlab_git
+      - pkg: git
     - watch:
       - archive: gitlab
       - file: /home/gitlab/gitlabhq-{{ version }}/config/database.yml

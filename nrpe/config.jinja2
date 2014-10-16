@@ -58,11 +58,16 @@ loopback_interface:
 
 oom_messages:
   description: Out Of Memory Messages
-  command: sudo /usr/lib/nagios/plugins/check_oom.py
+  command: sudo /usr/lib/nagios/plugins/check_oom.py --formula=nrpe --check=oom_messages
+  arguments:
+    seconds: 3600
 
 free_memory:
   description: Memory Usage
-  command: /usr/lib/nagios/plugins/check_memory.py -w 90 -c 95
+  command: /usr/lib/nagios/plugins/check_memory.py --formula=nrpe --check=free_memory
+  arguments:
+    warning: 90
+    critical: 95
 
 {%- if salt['file.contains_regex']('/proc/swaps','^/') and grains['virtual'] != 'openvzve' %}
 free_swap_space:

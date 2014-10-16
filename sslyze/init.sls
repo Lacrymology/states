@@ -80,10 +80,14 @@ check_ssl_configuration.py:
     - mode: 550
     - require:
       - pkg: nagios-nrpe-server
+      - module: nrpe-virtualenv
       - cmd: sslyze
       - pkg: salt_minion_deps
 {#- consumers of sslyze check use cron, make them only require sslyze check script #}
       - pkg: cron
+    - require_in:
+      - service: nagios-nrpe-server
+      - service: nsca_passive
 
 sslyze_requirements:
   file:

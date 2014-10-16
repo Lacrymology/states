@@ -31,6 +31,7 @@ include:
 test_sslyze_with_gmail:
   cmd:
     - run
-    - name: /usr/lib/nagios/plugins/check_ssl_configuration.py -H mail.google.com
+{#- use --set= as it's not yet linked to any formula and check yet  #}
+    - name: '/usr/lib/nagios/plugins/check_ssl_configuration.py --set=''{"host": "mail.google.com"}'''
     - require:
       - sls: sslyze

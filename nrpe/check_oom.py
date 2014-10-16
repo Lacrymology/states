@@ -31,10 +31,10 @@ __maintainer__ = 'Hung Nguyen Viet <hvnsweeting@gmail.com>'
 __email__ = 'hvnsweeting@gmail.com'
 
 import glob
-import argparse
 import datetime
+
 import nagiosplugin as nap
-import pysc
+from pysc import nrpe
 
 
 class OOM_Message(nap.Resource):
@@ -74,16 +74,11 @@ class OOM_Message(nap.Resource):
         return cntr
 
 
-@nap.guarded
-@pysc.profile(log='nrpe.check_oom')
-def main():
-    argp = argparse.ArgumentParser()
-    argp.add_argument('-s', '--seconds', type=int,
-                      help='check messages since X seconds ago')
-    args = argp.parse_args()
-    oom = OOM_Message(args.seconds) if args.seconds else OOM_Message()
-    check = nap.Check(oom, nap.ScalarContext('msg', '0:0', '0:0'))
-    check.main()
+def check_oom(config):
+    oom = (OOM_Message(config['seconds']) if config['seconds']
+           else OOM_Message())
+    return (oom, nap.ScalarContext('msg', '0:0', '0:0'))
+
 
 if __name__ == "__main__":
-    main()
+    nrpe.check(check_oom, {'seconds': None})

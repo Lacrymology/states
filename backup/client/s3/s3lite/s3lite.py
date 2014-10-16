@@ -37,6 +37,7 @@ import hashlib
 import json
 import os
 import logging
+import sys
 
 import boto
 from boto.s3.key import Key
@@ -46,10 +47,12 @@ import pysc
 
 
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.DEBUG)
 
 
 def md5hash(filepath):
+    """
+    Get the md5 hash of a file
+    """
     md5 = hashlib.md5()
     with open(filepath, 'rb') as f:
         for chunk in iter(lambda: f.read(128 * md5.block_size), b''):
@@ -58,6 +61,9 @@ def md5hash(filepath):
 
 
 class S3Util(object):
+    """
+    Helper class that holds s3 functions
+    """
     def __init__(self, key_id, secret_key, minion_id=None):
         self.conn = S3Connection(key_id, secret_key)
         self.buckets = self.conn.get_all_buckets()
@@ -90,8 +96,9 @@ class S3Util(object):
 
         logger.info('Uploading files')
         for lfn in localfiles(bucket, path, prefix):
-            rfile = bucket.get_key(self._gen_path(lfn['prefix'],
-                                                  lfn['fullpath']))
+            rpath = self._gen_path(lfn['prefix'], lfn['fullpath'])
+            logger.debug('To: %s', rpath)
+            rfile = bucket.get_key(rpath)
             if rfile:
                 # etag is usually md5sum of that file
                 rmd5 = rfile.etag.strip('"')
@@ -131,12 +138,13 @@ class S3Util(object):
     def get_filedatas(self, bucket, path, prefix):
 
         def _get_filedata(bucket, fullpath, prefix):
-            return {'md5': md5hash(fullpath),
-                    'fullpath': fullpath,
-                    'bucket': bucket,
-                    'prefix': prefix,
-                    'on_remote': False
-                    }
+            return {
+                'md5': md5hash(fullpath),
+                'fullpath': fullpath,
+                'bucket': bucket,
+                'prefix': prefix,
+                'on_remote': False,
+            }
 
         if os.path.isdir(path):
             for dirname, _, filenames in os.walk(path):
@@ -155,35 +163,42 @@ class S3Util(object):
                                       'directory.')
 
 
-@pysc.profile(log=logger)
-def main():
-    import sys
+class S3lite(pysc.Application):
+    """
+    Main application class.
+    """
+    defaults = {
+        'config': '/etc/s3lite.yml',
+    }
 
-    argp = pysc.common_argparser(default_config_path='/etc/s3lite.yml')
-    argp.add_argument('path', type=str, help='Path to file/dir to upload')
-    argp.add_argument('bucket', help='s3://bucket/prefix to upload file to')
-    args = argp.parse_args()
+    logger = logger
 
-    util = pysc.Util(args.config, debug=args.log, drop_privilege=False)
+    def get_argument_parser(self):
+        argp = super(S3lite, self).get_argument_parser()
+        argp.add_argument('path', type=str, help='Path to file/dir to upload')
+        argp.add_argument('bucket',
+                          help='s3://bucket/prefix to upload file to')
+        return argp
 
-    s3u = S3Util(util['s3']['key_id'], util['s3']['secret_key'],
-                 minion_id=util['minion_id'])
+    def main(self):
+        s3u = S3Util(self.config['s3']['key_id'],
+                     self.config['s3']['secret_key'],
+                     minion_id=self.config['minion_id'])
 
-    try:
-        parsed = boto.urlparse.urlparse(args.bucket)
-        bucket_name, prefix = parsed.netloc, parsed.path
-        prefix = prefix[1:]  # prefix must not start with /
-        bucket = s3u.conn.get_bucket(bucket_name)
-        counter = s3u.sync(bucket, args.path, prefix)
-        logger.info(counter)
-    except boto.exception.S3ResponseError as e:
-        logger.error('Bucket name %r is bad or does not exist.', args.bucket,
-                     exc_info=True)
-        sys.exit(1)
-    except Exception as e:
-        logger.error(e, exc_info=True)
-        sys.exit(1)
+        try:
+            parsed = boto.urlparse.urlparse(self.config['bucket'])
+            bucket_name, prefix = parsed.netloc, parsed.path
+            prefix = prefix[1:]  # prefix must not start with /
+            logger.debug('Bucket name: %s, Prefix: %s', bucket_name, prefix)
+            bucket = s3u.conn.get_bucket(bucket_name)
+        except boto.exception.S3ResponseError as e:
+            logger.error('Bucket name %r is bad or does not exist. %r',
+                         self.config['bucket'], e, exc_info=True)
+            sys.exit(1)
+        else:
+            counter = s3u.sync(bucket, self.config['path'], prefix)
+            logger.info(counter)
 
 
 if __name__ == "__main__":
-    main()
+    S3lite().run()

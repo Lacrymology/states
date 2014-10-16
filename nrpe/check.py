@@ -2,16 +2,16 @@
 
 # Copyright (c) 2013, David Hannequin
 # All rights reserved.
-# 
+#
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
-# 
+#
 # 1. Redistributions of source code must retain the above copyright notice, this
 #    list of conditions and the following disclaimer.
 # 2. Redistributions in binary form must reproduce the above copyright notice,
 #    this list of conditions and the following disclaimer in the documentation
 #    and/or other materials provided with the distribution.
-# 
+#
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 # ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -32,8 +32,9 @@ __author__ = 'David Hannequin <david.hannequin@gmail.com>, ' \
 __maintainer__ = 'Bruno Clermont'
 __email__ = 'patate@fastmail.cn'
 
-import argparse
-import pysc
+import nagiosplugin
+
+from pysc import nrpe
 
 def MemValues():
     """
@@ -57,27 +58,28 @@ def percentFreeMem():
     return (((int(memFree) + int(memCached)) * 100) / int(memTotal))
 
 
-@pysc.profile('nrpe.check_memory')
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-w', '--warning', default='80', type=int)
-    parser.add_argument('-c', '--critical', default='90', type=int)
-    args = parser.parse_args()
+class UsedMemory(nagiosplugin.Resource):
+    def probe(self):
+        pmemUsage = 100 - percentFreeMem()
+        yield nagiosplugin.Metric('usedmemory', pmemUsage)
 
-    critical = args.critical
-    warning = args.warning
 
-    pmemUsage = 100 - percentFreeMem()
+def memory_check(config):
+    return (
+        UsedMemory(),
+        nagiosplugin.ScalarContext(
+            'usedmemory', warning=':{}'.format(config['warning']),
+            critical=":{}".format(config['critical']),
+            fmt_metric="Memory usage: {value:2.1f}%"),
+    )
 
-    if pmemUsage >= critical:
-        print ('CRITICAL - Memory usage: %2.1f%% |mem=%s' % (pmemUsage, pmemUsage))
-        raise SystemExit(2)
-    elif pmemUsage >= warning:
-        print ('WARNING - Memory usage: %2.1f%% |mem=%s' % (pmemUsage, pmemUsage))
-        raise SystemExit(1)
-    else:
-        print ('OK - Memory usage: %2.1f%% |mem=%s' % (pmemUsage, pmemUsage))
-        raise SystemExit(0)
 
-if __name__ == "__main__":
-    main()
+
+if __name__ == '__main__':
+    nrpe.check(
+        memory_check,
+        {
+            'warning': '80',
+            'critical': '90',
+        }
+    )

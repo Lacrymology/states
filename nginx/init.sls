@@ -29,7 +29,7 @@ Install the Nginx web server.
 -#}
 include:
   - apt
-  - mail
+  - mail.client
   - rsyslog
   - ssl.dev
   - web

@@ -25,9 +25,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-/etc/apt/apt.conf.d/99local:
+
+apt.conf:
   file:
     - absent
+    - name: /etc/apt/apt.conf.d/99local
 
 apt_sources:
   file:
@@ -35,15 +37,14 @@ apt_sources:
     - name: /etc/apt/sources.list
     - source: /etc/apt/sources.list.bak
     - force: True
-  cmd:
-    - wait
-    - name: apt-get update
-    - watch:
-      - file: apt_sources
-      - file: /etc/apt/apt.conf.d/99local
   pkg:
     - purged
     - pkgs:
       - debconf-utils
       - python-apt
       - python-software-properties
+
+apt-key:
+  file:
+    - absent
+    - name: {{ opts['cachedir'] }}/apt.gpg

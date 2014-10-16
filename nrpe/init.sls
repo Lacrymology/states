@@ -46,6 +46,7 @@ include:
 {% endif %}
   - pip
   - pip.nrpe
+  - python.dev
   - rsyslog
   - rsyslog.nrpe
   - ssh.client
@@ -82,6 +83,17 @@ nrpe_remove_old_config_files_{{ filepath }}:
     - watch_in:
       - service: nagios-nrpe-server
 {%- endfor %}
+
+/etc/nagios/python.yml:
+  file:
+    - managed
+    - template: jinja
+    - source: salt://nrpe/python.jinja2
+    - user: root
+    - group: nagios
+    - mode: 440
+    - require:
+      - pkg: nagios-nrpe-server
 
 nrpe-virtualenv:
   {# remove system-wide nagiosplugin, only use one in our nrpe-virtualenv #}
@@ -121,6 +133,7 @@ nrpe-virtualenv:
     - watch:
       - file: nrpe-virtualenv
       - pkg: nrpe-virtualenv
+      - pkg: python-dev
   pkg:
     - installed
     - name: libyaml-dev {#- PyYAML needs this pkg #}
@@ -177,6 +190,8 @@ service: nagios-nrpe-server #}
     - running
     - enable: True
     - order: 50
+    - require:
+      - file: /etc/nagios/python.yml
     - watch:
       - pkg: nagios-nrpe-server
       - file: nagios-nrpe-server
@@ -224,6 +239,11 @@ service: nagios-nrpe-server #}
     - mode: 550
     - require:
       - pkg: nagios-nrpe-server
+      - module: nrpe-virtualenv
+      - file: nsca-nrpe
+    - require_in:
+      - service: nagios-nrpe-server
+      - service: nsca_passive
 
 /usr/lib/nagios/plugins/check_oom.py:
   file:
@@ -234,6 +254,11 @@ service: nagios-nrpe-server #}
     - mode: 550
     - require:
       - pkg: nagios-nrpe-server
+      - module: nrpe-virtualenv
+      - file: nsca-nrpe
+    - require_in:
+      - service: nagios-nrpe-server
+      - service: nsca_passive
 
 /etc/sudoers.d/nrpe_oom:
   file:
@@ -245,6 +270,8 @@ service: nagios-nrpe-server #}
     - group: root
     - require:
       - pkg: sudo
+    - require_in:
+      - file: nsca-nrpe
 
 /etc/nagios/nsca.conf:
   file:
@@ -300,6 +327,7 @@ nsca_passive:
     - require:
       - service: rsyslog
       - pkg: nagios-nrpe-server
+      - file: /etc/nagios/python.yml
     - watch:
       - file: nsca_passive
       - file: /usr/local/nagios/bin/nsca_passive

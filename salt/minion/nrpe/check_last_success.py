@@ -40,8 +40,7 @@ import salt.config
 import salt.loader
 import nagiosplugin as nap
 
-import pysc
-import pysc.nrpe as bfe
+from pysc import nrpe
 
 log = logging.getLogger('nagiosplugin.salt.minion.last_success')
 TS_KEY = 'returner_timestamps_last_success'
@@ -66,8 +65,9 @@ class LastSuccess(nap.Resource):
         else:
             try:
                 hours = (datetime.datetime.now() -
-                         datetime.datetime.strptime(ts,
-                         "%Y-%m-%dT%H:%M:%S.%f")).total_seconds() / 3600
+                         datetime.datetime.strptime(
+                             ts,
+                             "%Y-%m-%dT%H:%M:%S.%f")).total_seconds() / 3600
                 ret = [nap.Metric('last_success', hours, min=0,
                                   context='hours')]
                 return ret
@@ -79,16 +79,14 @@ class LastSuccess(nap.Resource):
                 raise
 
 
-@nap.guarded
-@pysc.profile(log=log)
-def main():
-    argp = bfe.ArgumentParser()
-    args = argp.parse_args()
-    check = bfe.Check(LastSuccess(),
-                      nap.ScalarContext('hours', '0:48',
-                                        '0:48',
-                                        fmt_metric='{value} hours ago'))
-    check.main(args)
+def check_last_success(config):
+    threshold = '0:' + config['max_hours']
+    return (
+        LastSuccess(),
+        nap.ScalarContext('hours', threshold, threshold,
+                          fmt_metric='{value} hours ago')
+    )
+
 
 if __name__ == "__main__":
-    main()
+    nrpe.check(check_last_success, {'max_hours': 24})

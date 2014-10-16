@@ -34,6 +34,10 @@ include:
   - nrpe
 
 {%- from 'nrpe/passive.sls' import passive_check with context -%}
-{%- call passive_check('postfix.backup') %}
-  - file: check_backup.py
-{%- endcall -%}
+{{ passive_check('postfix.backup')  }}
+
+extend:
+  check_backup.py:
+    file:
+      - require:
+        - file: nsca-postfix.backup

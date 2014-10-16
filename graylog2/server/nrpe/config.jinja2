@@ -45,7 +45,7 @@ graylog2_api:
 
 graylog2_incoming_logs:
   description: Incoming Logs Rate
-  command: /usr/lib/nagios/plugins/check_new_logs.py -F graylog2.server -N graylog2_incoming_logs
+  command: /usr/lib/nagios/plugins/check_new_logs.py --formula=graylog2.server --check=graylog2_incoming_logs
   dependencies:
     - graylog2_api
   arguments:

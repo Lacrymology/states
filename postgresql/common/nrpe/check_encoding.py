@@ -3,17 +3,17 @@
 
 # Copyright (c) 2013, Hung Nguyen Viet
 # All rights reserved.
-# 
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-# 
+#
 # The above copyright notice and this permission notice shall be included in
 # all copies or substantial portions of the Software.
-# 
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -30,13 +30,14 @@ __author__ = 'Hung Nguyen Viet <hvnsweeting@gmail.com>'
 __maintainer__ = 'Hung Nguyen Viet <hvnsweeting@gmail.com>'
 __email__ = 'hvnsweeting@gmail.com'
 
-import argparse
 import logging
 import subprocess
-import nagiosplugin as nap
-import pysc
 
-log = logging.getLogger('nagiosplugin')
+import nagiosplugin as nap
+
+from pysc import nrpe
+
+log = logging.getLogger('nagiosplugin.postgresql.common.encoding')
 
 
 class Encoding(nap.Resource):
@@ -53,6 +54,7 @@ class Encoding(nap.Resource):
                   |          |           |         |       | postgres=CTc/postgres
 
         '''
+        log.info("Encoding.probe started")
         cmd = ['psql', '-l']
         log.info(cmd)
         output = subprocess.check_output(cmd).split('\n')
@@ -60,25 +62,27 @@ class Encoding(nap.Resource):
         for line in output:
             cols = line.split(' | ')
             if (self.dbname == cols[0].strip() and
-                self.encoding == cols[2].strip()):
+                    self.encoding == cols[2].strip()):
                 log.info(self.dbname)
                 log.info('Expect: {0}, found {1}'.format(self.encoding,
                                                          cols[2].strip()))
+                log.info("Encoding.probe finished")
+                log.debug("returning %d", 0)
                 return [nap.Metric('encoding', 0, context='encoding')]
+
+        log.info("Ecoding.probe finished")
+        log.debug("returning %d", 1)
         return [nap.Metric('encoding', 1, context='encoding')]
 
 
-@nap.guarded
-@pysc.profile(log=log)
-def main():
-    argp = argparse.ArgumentParser()
-    argp.add_argument('--name', '-n', help='Database name', default='template0')
-    argp.add_argument('--encoding', '-e', help='Encoding name', default='UTF8')
-    argp.add_argument('-v', '--verbose', action='count', default=0)
-    args = argp.parse_args()
-    enc = Encoding(args.name, args.encoding)
-    check = nap.Check(enc, nap.ScalarContext('encoding', '0:0', '0:0'))
-    check.main(args.verbose)
+def check_psql_encoding(config):
+    """
+    Required configurations:
+    - ('name', help="The database name to check")
+    """
+    enc = Encoding(config['name'], config['encoding'])
+    return (enc, nap.ScalarContext('encoding', '0:0', '0:0'))
+
 
 if __name__ == "__main__":
-    main()
+    nrpe.check(check_psql_encoding, {'encoding': 'UTF8'})

@@ -29,4 +29,14 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 /etc/python:
   file:
     - absent
-    - name: /etc/python/logging.conf
+    - require:
+      - file: python
+
+/etc/python/logging.conf:
+  file:
+    - absent
+
+python:
+  file:
+    - absent
+    - name: /etc/python/config.yml

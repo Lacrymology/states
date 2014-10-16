@@ -60,3 +60,7 @@ include:
       - pkg: nagios-nrpe-server
       - module: nrpe-virtualenv
       - file: /etc/sudoers.d/nrpe_salt_cloud
+      - file: nsca-salt.cloud
+    - require_in:
+      - service: nagios-nrpe-server
+      - service: nsca_passive

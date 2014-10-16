@@ -35,7 +35,7 @@ include:
 run_cron_cleanup_jenkins_old_workspace:
   cmd:
     - run
-    - name: /etc/cron.daily/jenkins_delete_old_workspaces.py
+    - name: /etc/cron.daily/jenkins_delete_old_workspaces
     - require:
       - sls: jenkins
 

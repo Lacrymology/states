@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Hung Nguyen Viet
+Copyright (c) 2014, Hung Nguyen Viet
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -24,39 +24,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
--#}
-include:
-  - amavis
-  - amavis.nrpe
-  - amavis.diamond
-  - amavis.clamav
-  - clamav.nrpe
-  - clamav.diamond
-  - dovecot
-  - dovecot.backup
-  - dovecot.backup.nrpe
-  - dovecot.diamond
-  - dovecot.nrpe
-  - postfix.nrpe
-  - postfix.diamond
-  - openldap
-  - openldap.diamond
-  - openldap.nrpe
+#}
 
-test:
-  monitoring:
-    - run_all_checks
-    - order: last
-  cmd:
-    - run
-    - name: /etc/cron.daily/backup-dovecot
-    - require:
-      - file: backup-dovecot
-    - order: last
+{%- from 'pysc/config.jinja2' import pysc_config with context %}
+{{ pysc_config() }}
 
-test_check_mail_stack:
-  cmd:
-    - run
-    - name: /usr/lib/nagios/plugins/check_mail_stack.py
-    - require:
-      - file: /usr/lib/nagios/plugins/check_mail_stack.py
+s3:
+  key_id: {{ pillar['aws']['access_key'] }}
+  secret_key: {{ pillar['aws']['secret_key'] }}
+
+minion_id: {{ grains['id'] }}

@@ -53,6 +53,10 @@ include:
     - require:
       - virtualenv: nrpe-virtualenv
       - pkg: nagios-nrpe-server
+      - file: nsca-backup.server
+    - require_in:
+      - service: nagios-nrpe-server
+      - service: nsca_passive
 
 /etc/sudoers.d/nrpe_backups:
   file:
@@ -64,13 +68,13 @@ include:
     - template: jinja
     - require:
       - pkg: sudo
+    - require_in:
+      - file: nsca-backup.server
 
 /etc/nagios/nrpe.d/backups.cfg:
   file:
     - absent
+    - watch_in:
+      - service: nagios-nrpe-server
 
-{%- call passive_check('backup.server') %}
-  - file: /etc/sudoers.d/nrpe_backups
-  - file: /usr/lib/nagios/plugins/check_backups.py
-  - file: /etc/nagios/nrpe.d/backups.cfg
-{%- endcall %}
+{{ passive_check('backup.server') }}

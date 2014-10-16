@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2014, Hung Nguyen Viet
+Copyright (c) 2013, Hung Nguyen Viet
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -24,18 +24,27 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
-#}
+-#}
 include:
-  - s3lite
-  - s3lite.nrpe
+  - amavis
+  - amavis.nrpe
+  - amavis.diamond
+  - amavis.clamav
+  - clamav.nrpe
+  - clamav.diamond
+  - dovecot
+  - dovecot.backup
+  - dovecot.backup.nrpe
+  - dovecot.diamond
+  - dovecot.nrpe
+  - postfix.nrpe
+  - postfix.diamond
+  - openldap
+  - openldap.diamond
+  - openldap.nrpe
+  - mail.server.nrpe
 
 test:
   monitoring:
     - run_all_checks
     - order: last
-  cmd:
-    - run
-    - cwd: /usr/local/s3lite/bin/
-    - name: /usr/local/s3lite/bin/s3lite s3lite s3://{{ pillar['aws']['s3']['bucket'] }}/{{ pillar['aws']['s3']['path'].strip('/') }}
-    - require:
-      - file: /usr/local/s3lite/bin/s3lite

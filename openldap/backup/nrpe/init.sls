@@ -26,11 +26,16 @@ Author: Luan Vo Ngoc <ngocluanvo@gmail.com>
 Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
 -#}
 include:
-  - cron.nrpe
   - backup.client.{{ pillar['backup_storage'] }}.nrpe
   - bash.nrpe
+  - cron.nrpe
+  - nrpe
 
 {%- from 'nrpe/passive.sls' import passive_check with context -%}
-{%- call passive_check('openldap.backup') %}
-  - file: check_backup.py
-{%- endcall -%}
+{{ passive_check('openldap.backup') }}
+
+extend:
+  check_backup.py:
+    file:
+      - require:
+        - file: nsca-openldap.backup

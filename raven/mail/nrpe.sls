@@ -26,6 +26,7 @@ Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 include:
+  - pysc.nrpe
   - raven.nrpe
   - rsyslog.nrpe
   - cron.nrpe

@@ -30,6 +30,7 @@ Mange pysc pip package, which provide lib support for python scrips in salt comm
 
 include:
   - pip
+  - python.dev
 
 {{ opts['cachedir'] }}/salt-pysc-requirements.txt:
   file:
@@ -51,5 +52,7 @@ pysc:
     - requirements: {{ opts['cachedir'] }}/pip/pysc
     - require:
       - module: pip
+      - file: python
     - watch:
       - file: pysc
+      - pkg: python-dev

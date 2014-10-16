@@ -35,15 +35,14 @@ __email__ = 'hvnsweeting@gmail.com'
 import imaplib
 import logging
 import smtplib
-import sys
 import time
 import uuid
 
-import pysc
 import nagiosplugin as nap
 
+from pysc import nrpe
 
-log = logging.getLogger(__name__)
+log = logging.getLogger('nagiosplugin.dovecot.mail_stack')
 
 
 def pad_uuid(msg):
@@ -63,7 +62,8 @@ class MailStackHealth(nap.Resource):
                  password,
                  smtp_wait,
                  ssl):
-
+        log.info("MailStackHealth(%s, %s, %s, <password>, %s, %s)",
+                 imap_server, smtp_server, username, smtp_wait, ssl)
         if ssl:
             self.imap = imaplib.IMAP4_SSL(imap_server)
             self.smtp = smtplib.SMTP_SSL(smtp_server, 465)
@@ -94,14 +94,18 @@ class MailStackHealth(nap.Resource):
         self.waittime = smtp_wait
 
     def probe(self):
+        log.info("MailStackHealth.probe started")
         inboxtest = self.test_send_and_receive_email_in_inbox_mailbox()
         spamtest = self.test_send_and_receive_GTUBE_spam_in_spam_folder()
         virustest = self.test_send_virus_email_and_discarded_by_amavis()
+        log.info("MailStackHealth.probe finished")
+        log.debug("returning all(%s)", str((spamtest, inboxtest, virustest)))
         return [nap.Metric('mail_stack_health',
                            all((spamtest, inboxtest, virustest)),
                            context='null')]
 
     def send_email(self, subject, rcpts, body, _from=None, wait=0):
+        log.info("Sending email to %s", rcpts)
         if _from is None:
             _from = self.username
         msg = '''\
@@ -159,34 +163,19 @@ Subject: %s
 
     def test_send_virus_email_and_discarded_by_amavis(self):
         # http://en.wikipedia.org/wiki/EICAR_test_file
-        body = ('X5O!P%@AP[4\PZX54(P^)7CC)7}$'
-                'EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*')
+        body = (r'X5O!P%@AP[4\PZX54(P^)7CC)7}$'
+                r'EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*')
         self._send_email_for_test('Testing send virus email ', body)
         found = self.grep_msg(body, 'INBOX', msg_set='latest')
         # not found the msg means antivirus worked
         return (not found)
 
 
-@nap.guarded
-@pysc.profile(log=log)
-def main():
-    try:
-        config = pysc.Util('/etc/nagios/check_mail_stack.yml', lock=False)
-        mail = config['mail']
-        waittime = mail['smtp_wait']
-        username = mail['username']
-        password = mail['password']
-        imap_server = mail['imap_server']
-        smtp_server = mail['smtp_server']
-        ssl = mail['ssl']
-    except Exception as e:
-        log.critical('Bad config: %s', e, exc_info=True)
-        sys.exit(1)
+def check_mail_stack(config):
+    return [MailStackHealth(config['imap_server'], config['smtp_server'],
+                            config['username'], config['password'],
+                            config['smtp_wait'], config['ssl'])]
 
-    mshealth = MailStackHealth(imap_server, smtp_server, username, password,
-                               waittime, ssl)
-    check = nap.Check(mshealth)
-    check.main(timeout=300)
 
 if __name__ == "__main__":
-    main()
+    nrpe.check(check_mail_stack, {'timeout': 300})

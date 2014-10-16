@@ -33,15 +33,11 @@ argparse==1.2.1
 lockfile==0.9.1
 nagiosplugin==1.2.1
 pycrypto==2.6.1
-pystatsd==0.1.10
+requests==0.14.2
 {%- if 'files_archive' in pillar %}
 send_nsca==0.1.4.2-hvn
-pysc==0.2.9
+pysc==0.3.5
 {%- else %}
-https://github.com/hvnsweeting/send_nsca/archive/v0.1.4.2-hvn.tar.gz
-http://archive.robotinfra.com/pip/pysc-0.2.9.tar.bz2
-{%- endif %}
-{%- if salt['pillar.get']('sentry_dsn', False) %}
-requests==0.14.2
-raven==4.1.1
-{%- endif %}
+http://archive.robotinfra.com/pip/send_nsca-0.1.4.2-hvn.tar.bz2
+http://archive.robotinfra.com/pip/pysc-0.3.5.tar.bz2
+{%- endif -%}

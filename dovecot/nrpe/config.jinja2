@@ -79,14 +79,6 @@ dovecot_port_pop3:
   dependencies:
     - dovecot_procs
 
-{%- if not salt['pillar.get']('__test__', False) and salt['pillar.get']('mail:check_mail_stack', False) %}
-mailstack_functionality:
-  description: Mail Stack Functionality
-  command: /usr/lib/nagios/plugins/check_mail_stack.py
-  dependencies:
-    - dovecot_{% if salt['pillar.get']('dovecot:ssl', False) %}s{% endif %}imap
-{%- endif %}
-
 dovecot_managesieve_port:
   description: Dovecot Managesieve Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 4190

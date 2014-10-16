@@ -31,6 +31,7 @@ Nagios NRPE check for Salt Minion.
 include:
   - apt.nrpe
   - nrpe
+  - pysc.nrpe
   - raven.nrpe
   - requests.nrpe
   - rsyslog.nrpe
@@ -45,5 +46,9 @@ include:
     - require:
       - module: nrpe-virtualenv
       - pkg: nagios-nrpe-server
+      - file: nsca-salt.minion
+    - require_in:
+      - service: nagios-nrpe-server
+      - service: nsca_passive
 
 {{ passive_check('salt.minion') }}

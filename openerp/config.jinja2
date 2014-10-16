@@ -1,4 +1,4 @@
-{%- from 'python/logging.sls' import logging with context %}
+{%- from 'python/config.jinja2' import logging with context %}
 db:
   host: 127.0.0.1
   user: {{ username }}

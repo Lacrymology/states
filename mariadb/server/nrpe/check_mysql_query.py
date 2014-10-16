@@ -34,17 +34,17 @@ __email__ = 'hvnsweeting@gmail.com'
 
 import logging
 
-import pymysql
 import nagiosplugin as nap
-import pysc
-import pysc.nrpe as bfe
+import pymysql
+from pysc import nrpe
 
-
-log = logging.getLogger('nagiosplugin')
+log = logging.getLogger('nagiosplugin.mysql.query')
 
 
 class MysqlQuery(nap.Resource):
     def __init__(self, host, user, passwd, database, query):
+        log.debug("MysqlQuery(%s, %s, %s, %s)",
+                  host, user, database, query)
         self.user = user
         self.passwd = passwd
         self.host = host
@@ -52,33 +52,39 @@ class MysqlQuery(nap.Resource):
         self.query = query
 
     def probe(self):
+        log.info("MysqlQuery.probe started")
         try:
+            log.debug("connecting with pymysql")
             c = pymysql.connect(self.host, self.user,
                                 self.passwd, self.database)
             cursor = c.cursor()
+            log.debug("about to execute query: %s", self.query)
             records = cursor.execute(self.query)
-            log.debug(records)
+            log.debug("resulted in %d records", records)
             log.debug(cursor.fetchall())
         except Exception as e:
             log.critical(e)
             records = -1
 
+        log.info("MysqlQuery.probe finished")
+        log.debug("returning %d", records)
         return [nap.Metric('records', records, context='records')]
 
 
-@nap.guarded
-@pysc.profile(log=log)
-def main():
-    argp = bfe.ArgumentParser(description=__doc__)
-    args = argp.parse_args()
-    config = bfe.ConfigFile.from_arguments(args)
-    kwargs = config.kwargs('host', 'user', 'passwd', 'database')
-    kwargs['query'] = config.get_argument('query', 'select @@max_connections;')
-    critical = config.get_argument('critical', '1:')
-    check = bfe.Check(MysqlQuery(**kwargs),
-                      nap.ScalarContext('records', critical, critical))
-    check.main(args)
+def check_mysql_query(config):
+    critical = config['critical']
+    return (
+        MysqlQuery(host=config['host'],
+                   user=config['user'],
+                   passwd=config['passwd'],
+                   database=config['database'],
+                   query=config['query']),
+        nap.ScalarContext('records', critical, critical)
+    )
 
 
 if __name__ == "__main__":
-    main()
+    nrpe.check(check_mysql_query, {
+        'critical': '1:',
+        'query': 'select @@max_connections;',
+    })

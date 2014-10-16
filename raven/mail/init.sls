@@ -27,6 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
             Quan Tong Anh <tonganhquan.net@gmail.com>
 -#}
 include:
+  - pysc
   - raven
   - rsyslog
   - cron
@@ -34,7 +35,6 @@ include:
 /usr/bin/mail:
   file:
     - managed
-    - template: jinja
     - user: root
     - group: root
     - mode: 775
@@ -42,6 +42,7 @@ include:
     - require:
       - module: raven
       - service: rsyslog
+      - module: pysc
 
 /usr/bin/ravenmail:
   file:

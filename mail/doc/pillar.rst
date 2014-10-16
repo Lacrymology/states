@@ -49,11 +49,6 @@ Example::
   mail:
     mailname: somehost.fqdn.com
 
-mail:mailname
-~~~~~~~~~~~~~
-
-Fully qualified domain (if possible) of the mail server hostname.
-
 Optional
 --------
 

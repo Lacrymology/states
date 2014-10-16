@@ -3,7 +3,7 @@ import sys
 import os
 
 
-def _grep(paths, pattern):
+def _grep(paths, pattern, exts=None):
     all_found = {}
     repat = re.compile(pattern)
 
@@ -14,6 +14,12 @@ def _grep(paths, pattern):
                 if repat.findall(line):
                     found.append(' '.join((str(lineno), line.strip('\n'))))
         return found
+
+    if isinstance(exts, str):
+        exts = exts.split(',')
+
+    if isinstance(exts, list):
+        paths = (p for p in paths if any(p.endswith(e) for e in exts))
 
     for path in paths:
         found = _find_tab_char(path)
@@ -43,7 +49,7 @@ def lint_check_tab_char(paths):
     return True
 
 
-def lint_check_numbers_of_order_last(paths):
+def lint_check_numbers_of_order_last(paths, exts=['jinja2', 'sls']):
     found = _grep(paths, '- order: last')
     many_last = {k: v for k, v in found.iteritems() if len(v) == 2}
 

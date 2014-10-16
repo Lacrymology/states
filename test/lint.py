@@ -102,5 +102,6 @@ def main():
     sys.exit(falses)
 
 
+# TODO: lint check for pip.installed usage - it needs to check 2 continue lines
 if __name__ == "__main__":
     main()

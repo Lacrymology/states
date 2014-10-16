@@ -77,13 +77,13 @@ is_clean = False
 # has previous cleanup failed
 clean_up_failed = False
 # list of process before tests ran
-process_list = None
+process_list = set()
 # list of files before tests ran
-files_list = None
+files_list = set()
 # groups list
-groups_list = None
+groups_list = set()
 # users list
-users_list = None
+users_list = set()
 
 NO_TEST_STRING = '-*- ci-automatic-discovery: off -*-'
 
@@ -531,17 +531,18 @@ class States(unittest.TestCase):
         """
         global clean_up_failed
         # check processes
-        if original is None:
-            original = function()
+        if not original:
+            original.update(function())
             logger.debug(messages[0], len(original))
         else:
             current = function()
-            logger.debug(messages[1], len(actual))
+            logger.debug(messages[1], len(current))
             unclean = current - original
 
             if unclean:
                 clean_up_failed = True
-                self.fail(messages[2] % os.linesep.join(unclean))
+                return messages[2] % os.linesep.join(unclean)
+        return ""
 
     def setUp(self):
         """
@@ -549,7 +550,7 @@ class States(unittest.TestCase):
         """
         global is_clean, clean_up_failed, process_list
         global files_list, users_list, groups_list
-        
+
         if clean_up_failed:
             self.skipTest("Previous cleanup failed")
         else:
@@ -583,26 +584,33 @@ class States(unittest.TestCase):
                 logger.error("Catch error: %s", err, exc_info=True)
                 self.fail(output)
 
+        clean_up_errors = []
         # check processes
-        self._check_same_status(process_list, list_non_minion_processes, [
-            "First cleanup, keep list of %d process",
-            "Check %d proccess",
-            "Process that still run after cleanup: %s"])
+        clean_up_errors.append(
+            self._check_same_status(process_list, list_non_minion_processes, [
+                "First cleanup, keep list of %d process",
+                "Check %d proccess",
+                "Process that still run after cleanup: %s"]))
         # check files
-        self._check_same_status(files_list, list_system_files, [
-            "First cleanup, keep list of %d files",
-            "Check %d files",
-            "Newly created files after cleanup: %s"])
+        clean_up_errors.append(
+            self._check_same_status(files_list, list_system_files, [
+                "First cleanup, keep list of %d files",
+                "Check %d files",
+                "Newly created files after cleanup: %s"]))
         # check groups
-        self._check_same_status(groups_list, list_groups, [
-            "First cleanup, keep list of %d groups",
-            "Check %d groups",
-            "Newly created groups after cleanup: %s"])
+        clean_up_errors.append(
+            self._check_same_status(groups_list, list_groups, [
+                "First cleanup, keep list of %d groups",
+                "Check %d groups",
+                "Newly created groups after cleanup: %s"]))
         # check users
-        self._check_same_status(users_list, list_users, [
-            "First cleanup, keep list of %d users",
-            "Check %d users",
-            "Newly created users after cleanup: %s"])
+        clean_up_errors.append(
+            self._check_same_status(users_list, list_users, [
+                "First cleanup, keep list of %d users",
+                "Check %d users",
+                "Newly created users after cleanup: %s"]))
+        if clean_up_failed:
+            self.fail(os.linesep.join([e for e in clean_up_errors if e]))
 
         is_clean = True
 

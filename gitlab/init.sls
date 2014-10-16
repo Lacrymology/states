@@ -138,6 +138,7 @@ gitlab:
       - cmd: gitlab_gems
       - file: gitlab
       - file: /home/gitlab/gitlabhq-{{ version }}/config/database.yml
+      - file: /home/gitlab/gitlabhq-{{ version }}/log
     - watch:
       - postgres_database: gitlab
   service:
@@ -153,6 +154,7 @@ gitlab:
       - file: /home/gitlab/gitlabhq-{{ version }}/config/gitlab.yml
       - file: /home/gitlab/gitlabhq-{{ version }}/config/initializers/rack_attack.rb
       - file: /home/gitlab/gitlabhq-{{ version }}/config/resque.yml
+      - file: /home/gitlab/gitlabhq-{{ version }}/log
 
 gitlab_upstart:
   file:
@@ -317,6 +319,7 @@ gitlab-uwsgi:
       - file: /home/gitlab/gitlabhq-{{ version }}/config/gitlab.yml
       - file: /home/gitlab/gitlabhq-{{ version }}/config/initializers/rack_attack.rb
       - file: /home/gitlab/gitlabhq-{{ version }}/config/resque.yml
+      - file: /home/gitlab/gitlabhq-{{ version }}/log
       - user: gitlab
 
 /etc/nginx/conf.d/gitlab.conf:
@@ -351,6 +354,33 @@ gitlab_precompile_assets:
     - watch:
       - cmd: gitlab
       - cmd: gitlab_gems
+
+/var/log/gitlab:
+  file:
+    - directory
+    - user: gitlab
+    - group: gitlab
+    - require:
+      - user: gitlab
+
+/var/log/gitlab/gitlabhq:
+  file:
+    - directory
+    - user: gitlab
+    - group: gitlab
+    - require:
+      - file: /var/log/gitlab
+
+/home/gitlab/gitlabhq-{{ version }}/log:
+  file:
+    - symlink
+    - target: /var/log/gitlab/gitlabhq
+    - force: True
+    - user: gitlab
+    - group: gitlab
+    - require:
+      - file: /var/log/gitlab/gitlabhq
+      - archive: gitlab
 
 /etc/logrotate.d/gitlab:
   file:

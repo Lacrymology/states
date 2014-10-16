@@ -12,7 +12,7 @@ def _grep(paths, pattern, exts=None):
         with open(filename, 'rt') as f:
             for lineno, line in enumerate(f):
                 if repat.findall(line):
-                    found.append(' '.join((str(lineno), line.strip('\n'))))
+                    found.append(' '.join((str(lineno + 1), line.strip('\n'))))
         return found
 
     if isinstance(exts, str):

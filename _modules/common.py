@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import datetime
 import logging
 
 import salt._compat
@@ -82,3 +83,15 @@ def global_roles():
 
 def urlparse(url):
     return salt._compat.urlparse(url)
+
+
+def day_of_month(days):
+    '''
+    Return the day of the month in specified number of days.
+    Usefull to make sure crontab are in some future time.
+    '''
+    now = datetime.datetime.now()
+    today = now.date()
+    delta = datetime.timedelta(days=days)
+    future_day = today + delta
+    return future_day.day

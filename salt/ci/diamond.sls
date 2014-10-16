@@ -31,4 +31,3 @@ include:
   - rsync.diamond
   - salt.cloud.diamond
   - salt.master.diamond
-  - sudo.diamond

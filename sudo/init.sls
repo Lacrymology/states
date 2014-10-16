@@ -28,7 +28,6 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 include:
   - apt
   - hostname
-  - rsyslog
 
 sudo:
   file:
@@ -45,4 +44,3 @@ sudo:
     - installed
     - require:
       - cmd: apt_sources
-      - service: rsyslog

@@ -34,5 +34,4 @@ Diamond statistics for Sentry.
 - postgresql.server.diamond
 - rsyslog.diamond
 - statsd.diamond
-- sudo.diamond
 {%- endcall %}

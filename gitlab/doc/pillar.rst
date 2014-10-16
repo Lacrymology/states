@@ -75,7 +75,7 @@ Example::
     timeout: 60
     ssl: example_com
     port: 80
-    email_from: support@exmple.com
+    email_from: support@example.com
     default_projects_limit: 10
     default_can_create_group: True
     username_changing_enabled: True

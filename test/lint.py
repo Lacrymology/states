@@ -51,4 +51,7 @@ def process_args():
 
 if __name__ == "__main__":
     paths = process_args()
-    lint_check_tab_char(paths)
+    res = []
+    res.append(lint_check_tab_char(paths))
+    no_of_false = [i for i in res if i is False]
+    sys.exit(no_of_false)

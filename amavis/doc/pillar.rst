@@ -37,6 +37,9 @@ Example::
 
   mail:
     maxproc: 2
+  amavis:
+    transport_spam_to_postmaster: True
+
 
 mail:maxproc
 ~~~~~~~~~~~~
@@ -44,3 +47,16 @@ mail:maxproc
 Maximum number of process.
 
 Default: ``2``.
+
+amavis:warn_spam_sender
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Default: ``False``.
+
+amavis:transport_spam_to_postmaster
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Default: ``False``.
+
+If set to ``True``, this will transport spam email to user defined in pillar
+:doc:`mail:postmaster</mail/doc/pillar>`

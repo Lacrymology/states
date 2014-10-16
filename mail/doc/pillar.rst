@@ -49,11 +49,6 @@ Example::
   mail:
     mailname: somehost.fqdn.com
 
-mail:mailname
-~~~~~~~~~~~~~
-
-Fully qualified domain (if possible) of the mail server hostname.
-
 Optional
 --------
 
@@ -65,6 +60,12 @@ Example::
     check_mail_stack:
       username: check_mail_stack
       smtp_server: localhost
+
+mail:postmaster
+~~~~~~~~~~~~~~~
+
+Address of who act as postmaster, this address will receive all problems
+that happen in mail system (E.g: spam report, virus report, ...)
 
 mail:check_mail_stack
 ~~~~~~~~~~~~~~~~~~~~~

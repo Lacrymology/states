@@ -47,6 +47,7 @@ try:
     import unittest2 as unittest
 except ImportError:
     import unittest
+import socket
 import sys
 import os
 try:
@@ -66,7 +67,10 @@ import salt.client
 # global variables
 logger = logging.getLogger()
 # salt client
-client = salt.client.Caller('/root/salt/states/test/minion').function
+caller = salt.client.Caller('/root/salt/states/test/minion')
+caller.opts.update({'id': socket.gethostname()})
+caller.sminion = salt.minion.SMinion(caller.opts)
+client = caller.function
 # is a cleanup required before next test
 is_clean = False
 # has previous cleanup failed

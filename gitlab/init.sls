@@ -44,7 +44,7 @@ include:
   - ssl
 {%- endif %}
   - ssl.dev
-  - uwsgi
+  - uwsgi.ruby2
   - web
   - xml
   - yaml
@@ -367,15 +367,9 @@ gitlab_precompile_assets:
       version: {{ version }}
 
 extend:
-  uwsgi_build:
-    file:
-      - require:
-        - pkg: ruby2
     cmd:
       - env:
         - UWSGICONFIG_RUBYPATH: /usr/bin/ruby2.1
-      - watch:
-        - pkg: ruby2
 {%- if salt['pillar.get']('gitlab:ssl', False) %}
   nginx:
     service:

@@ -28,9 +28,16 @@ def _grep(paths, pattern):
     return all_found
 
 
+def _print_tips(content):
+    print 'TIPS: {0}'.format(content)
+
+
 def lint_check_tab_char(paths):
     found = _grep(paths, '\t')
-    return not found
+    if found:
+        _print_tips('Must use spaces instead of tab char')
+        return False
+    return True
 
 
 def process_args():

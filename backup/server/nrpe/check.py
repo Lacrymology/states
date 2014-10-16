@@ -154,18 +154,18 @@ class MissingBackupsContext(nagiosplugin.Context):
 
 
 class Backups(nagiosplugin.Resource):
-    def __init__(self, max_hours=36, *args, **kwargs):
+    def __init__(self, backup_dir, max_hours=36, *args, **kwargs):
         super(Backups, self).__init__(*args, **kwargs)
         self.max_hours = max_hours
+        self.backup_dir = backup_dir
 
     def probe(self):
         log.info("check started")
         now = datetime.datetime.now()
         max_time = datetime.timedelta(hours=self.max_hours)
         hosts = {}
-        backup_dir = self.config['backup_directory']
-        backup = BackupDirectory(backup_dir)
-        log.info("iterating directory %s", backup_dir)
+        backup = BackupDirectory(self.backup_dir)
+        log.info("iterating directory %s", self.backup_dir)
         for backup_file in backup:
             try:
                 host = hosts[backup_file.hostname]
@@ -208,7 +208,8 @@ class Backups(nagiosplugin.Resource):
 
 def check_backups(config):
     return (
-        Backups(max_hours=config['max_hours']),
+        Backups(max_hours=config['max_hours'],
+                backup_dir=config['backup_dir']),
         MissingBackupsContext('missing'),
     )
 

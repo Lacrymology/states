@@ -37,7 +37,9 @@ def _print_grep_result(all_found):
 
 
 def _print_tips(content):
+    print
     print 'TIPS: {0}'.format(content)
+    print '-' * 10
 
 
 def lint_check_tab_char(paths):
@@ -94,6 +96,7 @@ if __name__ == "__main__":
     res.append(lint_check_numbers_of_order_last(paths))
     res.append(check_bad_state_style(paths))
     falses = [i for i in res if i is False]
-    print 'Total checks: {0}, total failures: {1}'.format(len(res),
-                                                          len(falses))
+
+    print '\nTotal checks: {0}, total failures: {1}'.format(len(res),
+                                                            len(falses))
     sys.exit(falses)

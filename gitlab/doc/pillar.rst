@@ -93,6 +93,8 @@ Example::
     ssh_port: 22
     max_size: 5242880
     commit_timeout: 10
+    db:
+      password: randompassword
     ldap:
       enabled: False
 

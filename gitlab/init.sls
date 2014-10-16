@@ -89,7 +89,7 @@ gitlab:
     - present
     - name: gitlab
     - createdb: True
-    - password: {{ salt['password.generate']('gitlab') }}
+    - password: {{ salt['password.pillar']('gitlab:db:password') }}
     - require:
       - service: postgresql
       - user: gitlab

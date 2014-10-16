@@ -48,6 +48,12 @@ rsyslog:
       - cmd: apt_sources
       - pkg: gsyslogd
       - pkgrepo17: rsyslog
+  user:
+    - present
+    - name: syslog
+    - shell: /bin/false
+    - require:
+      - pkg: rsyslog
   file:
     - managed
     - name: /etc/rsyslog.conf
@@ -63,6 +69,7 @@ rsyslog:
       - pkg: rsyslog
       - file: rsyslog
       - file: /var/spool/rsyslog
+      - user: rsyslog
 
 /var/spool/rsyslog:
   file:

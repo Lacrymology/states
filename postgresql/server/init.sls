@@ -87,6 +87,7 @@ postgresql:
   user:
     - present
     - name: postgres
+    - shell: /usr/sbin/nologin
     {%- if ssl %}
     - groups:
       - ssl-cert

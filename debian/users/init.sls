@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Bruno Clermont
+Copyright (c) 2014, Quan Tong Anh
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,61 +22,31 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Bruno Clermont <patate@fastmail.cn>
-Maintainer: Bruno Clermont <patate@fastmail.cn>
+Author: Quan Tong Anh <quanta@robotinfra.com>
+Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 
-Install NTP (Network time protocol) server and/or client.
+Change shell of predefined user (UID <= 99) from `/bin/sh` to `/usr/sbin/nologin`
 -#}
 include:
   - apt
-  - rsyslog
 
-{% if 'servers' in pillar['ntp'] %}
-ntpdate:
+base-passwd:
   pkg:
     - installed
     - require:
       - cmd: apt_sources
-  file:
-    - managed
-    - name: /etc/default/ntpdate
-    - template: jinja
-    - source: salt://ntp/ntpdate.jinja2
-    - user: root
-    - group: root
-    - mode: 440
-    - require:
-      - pkg: ntpdate
-{% endif %}
-
-ntp:
-  pkg:
-    - installed
-    - require:
-      - cmd: apt_sources
-  user:
-    - present
-    - shell: /bin/false
-    - require:
-      - pkg: ntp
-  file:
-    - managed
-    - name: /etc/ntp.conf
-    - template: jinja
-    - source: salt://ntp/config.jinja2
-    - user: root
-    - group: root
-    - mode: 440
-    - require:
-      - pkg: ntp
-  service:
-    - running
-    - enable: True
-    - order: 50
-    - require:
-      - pkg: ntp
-      - service: rsyslog
+  cmd:
+    - wait
+    - name: update-passwd
     - watch:
-      - file: ntp
-      - user: ntp
-{#- PID file owned by root, no need to manage #}
+      - file: /usr/share/base-passwd/passwd.master
+
+/usr/share/base-passwd/passwd.master:
+  file:
+    - managed
+    - source: salt://debian/users/config.jinja2
+    - user: root
+    - group: root
+    - mode: 440
+    - require:
+      - pkg: base-passwd

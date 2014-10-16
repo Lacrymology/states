@@ -42,6 +42,12 @@ memcached:
     - installed
     - require:
       - cmd: apt_sources
+  user:
+    - present
+    - name: memcache
+    - shell: /bin/false
+    - require:
+      - pkg: memcached
   module:
     - wait
     - name: cmd.run
@@ -68,6 +74,7 @@ memcached:
     - watch:
       - user: web
       - file: upstart_memcached
+      - user: memcached
 
 /etc/memcached.conf:
   file:

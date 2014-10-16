@@ -175,6 +175,12 @@ service: nagios-nrpe-server #}
       - cmd: apt_sources
       - module: nrpe-virtualenv
       - file: bash
+  user:
+    - present
+    - name: nagios
+    - shell: /bin/false
+    - require:
+      - pkg: nagios-nrpe-server
   file:
     - managed
     - name: /etc/nagios/nrpe.d/000.nagios.servers.cfg

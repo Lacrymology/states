@@ -66,6 +66,7 @@ redis:
     - watch:
       - file: redis
       - pkg: redis
+      - user: redis
   pkg:
     - installed
     - sources:
@@ -78,6 +79,11 @@ redis:
       - redis-server: http://ppa.launchpad.net/chris-lea/redis-server/ubuntu/pool/main/r/redis/{{ filename }}
       - redis-tools: http://ppa.launchpad.net/chris-lea/redis-server/ubuntu/pool/main/r/redis/{{ redistools }}
 {%- endif %}
+  user:
+    - present
+    - shell: /bin/false
+    - require:
+      - pkg: redis
 
 {%- call manage_pid('/var/run/redis/redis-server.pid', 'redis', 'redis', 'redis-server') %}
 - pkg: redis

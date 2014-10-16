@@ -28,5 +28,6 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 dovecot-agent:
   user:
     - present
+    - shell: /usr/sbin/nologin
     - groups:
       - mail

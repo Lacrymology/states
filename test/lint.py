@@ -3,15 +3,15 @@ import sys
 import os
 
 
-def lint_check_tab_char(paths):
+def _grep(paths, pattern):
     all_found = {}
-    tabpat = re.compile('\t')
+    repat = re.compile(pattern)
 
     def _find_tab_char(filename):
         found = []
         with open(filename, 'rt') as f:
             for lineno, line in enumerate(f):
-                if tabpat.findall(line):
+                if repat.findall(line):
                     found.append(' '.join((str(lineno), line.strip('\n'))))
         return found
 
@@ -25,8 +25,12 @@ def lint_check_tab_char(paths):
         for line in all_found[fn]:
             print line
 
-    if all_found:
-        sys.exit(1)
+    return all_found
+
+
+def lint_check_tab_char(paths):
+    found = _grep(paths, '\t')
+    return not found
 
 
 def process_args():

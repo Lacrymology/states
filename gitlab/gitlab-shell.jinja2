@@ -25,22 +25,19 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Diep Pham <favadi@robotinfra.com>
 Maintainer: Diep Pham <favadi@robotinfra.com>
 
+gitlab-shell config file
 -#}
-
-/home/gitlab/gitlabhq-{{ version }}/log/*.log {
-    daily
-    missingok
-    rotate 90
-    compress
-    notifempty
-    copytruncate
-}
-
-/var/log/gitlab/gitlab-shell/gitlab-shell.log {
-    daily
-    missingok
-    rotate 90
-    compress
-    notifempty
-    copytruncate
-}
+---
+user: gitlab
+gitlab_url: {% if salt['pillar.get']('gitlab:ssl', False) %}https{% else %}http{% endif %}://{{ pillar['gitlab']['hostnames'][0] }}/
+http_settings:
+  self_signed_cert: {% if salt['pillar.get']('__test__', False) %}true{% else %}false{% endif %}
+repos_path: "/home/gitlab/repositories/"
+auth_file: "/home/gitlab/.ssh/authorized_keys"
+redis:
+  bin: "/usr/bin/redis-cli"
+  namespace: resque:gitlab
+  socket: "/var/run/redis/redis.sock"
+log_file: "/var/log/gitlab/gitlab-shell/gitlab-shell.log"
+log_level: INFO
+audit_usernames: false

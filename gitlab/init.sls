@@ -133,7 +133,7 @@ gitlab:
     - user: gitlab
     - cwd: /home/gitlab/gitlabhq-{{ version }}
     - require:
-      - cmd: gitlab_shell
+      - file: gitlab_shell
       - service: redis
       - cmd: gitlab_gems
       - file: gitlab
@@ -286,6 +286,16 @@ gitlab_shell:
       - file: /home/gitlab/gitlabhq-{{ version }}/config/gitlab.yml
       - file: /home/gitlab/gitlabhq-{{ version }}/config/initializers/rack_attack.rb
       - file: /home/gitlab/gitlabhq-{{ version }}/config/resque.yml
+  file:
+    - managed
+    - name: /home/gitlab/gitlab-shell/config.yml
+    - source: salt://gitlab/gitlab-shell.jinja2
+    - template: jinja
+    - user: gitlab
+    - group: gitlab
+    - mode: 440
+    - require:
+      - file: /var/log/gitlab/gitlab-shell
 
 gitlab-uwsgi:
   file:
@@ -304,7 +314,7 @@ gitlab-uwsgi:
       gid: gitlab
     - require:
       - file: gitlab
-      - cmd: gitlab_shell
+      - file: gitlab_shell
       - service: uwsgi_emperor
   module:
     - wait
@@ -314,7 +324,7 @@ gitlab-uwsgi:
       - file: gitlab-uwsgi
     - watch:
       - cmd: gitlab_gems
-      - cmd: gitlab_shell
+      - file: gitlab_shell
       - file: /home/gitlab/gitlabhq-{{ version }}/config/database.yml
       - file: /home/gitlab/gitlabhq-{{ version }}/config/gitlab.yml
       - file: /home/gitlab/gitlabhq-{{ version }}/config/initializers/rack_attack.rb
@@ -364,6 +374,14 @@ gitlab_precompile_assets:
       - user: gitlab
 
 /var/log/gitlab/gitlabhq:
+  file:
+    - directory
+    - user: gitlab
+    - group: gitlab
+    - require:
+      - file: /var/log/gitlab
+
+/var/log/gitlab/gitlab-shell:
   file:
     - directory
     - user: gitlab

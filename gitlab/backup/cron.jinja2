@@ -35,5 +35,5 @@ trap "log_stop_script \$?" EXIT
 
 cd /home/gitlab/gitlabhq-{{ version }}
 sudo -u gitlab -H bundle exec rake gitlab:backup:create RAILS_ENV=production
-cd tmp/backups/
+cd /tmp/gitlab-backups
 /usr/local/bin/backup-file gitlab . *

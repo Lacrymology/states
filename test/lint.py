@@ -33,10 +33,12 @@ def process_args():
     filepath = sys.argv[1]
     if os.path.isdir(filepath):
         paths = []
-        for root, _, fns in os.walk(filepath):
+        for root, dirs, fns in os.walk(filepath):
+            # skip dot files / dirs
+            fns = [f for f in fns if not f[0] == '.']
+            dirs[:] = [d for d in dirs if not d[0] == '.']
             for fn in fns:
-                if any(fn.endswith(ext) for ext in ('.sls', '.jinja2')):
-                    paths.append(os.path.join(root, fn))
+                paths.append(os.path.join(root, fn))
     else:
         paths = sys.argv[1:]
 

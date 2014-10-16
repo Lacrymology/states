@@ -75,3 +75,5 @@ extend:
         - file: uwsgi_patch_fiber
         - file: uwsgi_patch_rack
         - file: uwsgi_patch_rbthreads
+      - env:
+        - UWSGICONFIG_RUBYPATH: /usr/bin/ruby2.1

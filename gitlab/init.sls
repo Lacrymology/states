@@ -366,12 +366,8 @@ gitlab_precompile_assets:
     - context:
       version: {{ version }}
 
-extend:
-  uwsgi_build:
-    cmd:
-      - env:
-        - UWSGICONFIG_RUBYPATH: /usr/bin/ruby2.1
 {%- if salt['pillar.get']('gitlab:ssl', False) %}
+extend:
   nginx:
     service:
       - watch:

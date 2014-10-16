@@ -367,6 +367,7 @@ gitlab_precompile_assets:
       version: {{ version }}
 
 extend:
+  uwsgi_build:
     cmd:
       - env:
         - UWSGICONFIG_RUBYPATH: /usr/bin/ruby2.1

@@ -89,7 +89,7 @@ def process_args():
     return paths
 
 
-if __name__ == "__main__":
+def main():
     paths = process_args()
     res = []
     res.append(lint_check_tab_char(paths))
@@ -100,3 +100,7 @@ if __name__ == "__main__":
     print '\nTotal checks: {0}, total failures: {1}'.format(len(res),
                                                             len(falses))
     sys.exit(falses)
+
+
+if __name__ == "__main__":
+    main()

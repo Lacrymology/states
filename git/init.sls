@@ -32,6 +32,11 @@ include:
   - ssh.client
 
 git:
+  pkgrepo17:
+    - managed
+    - ppa: git-core/ppa
+    - require:
+      - pkg: apt_sources
   pkg:
     - latest
 {%- if grains['osrelease']|float < 12.04 %}
@@ -41,3 +46,4 @@ git:
       - pkg: openssh-client
       - cmd: apt_sources
       - file: known_hosts
+      - pkgrepo17: git

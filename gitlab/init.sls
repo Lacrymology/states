@@ -31,7 +31,7 @@ Install gitlab
 include:
   - apt
   - build
-  - gitlab.git
+  - git
   - logrotate
   - nginx
   - postgresql.server

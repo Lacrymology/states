@@ -62,6 +62,15 @@ def lint_check_numbers_of_order_last(paths, exts=['jinja2', 'sls']):
     return True
 
 
+def check_bad_state_style(paths, exts=['sls']):
+    found = _grep(paths, '^  \w*\.\w*:$')
+    if found:
+        _print_tips("Use \nstate:\n  - function\nstyle instead")
+        _print_grep_result(found)
+        return False
+    return True
+
+
 def process_args():
     filepath = sys.argv[1]
     if os.path.isdir(filepath):
@@ -83,5 +92,8 @@ if __name__ == "__main__":
     res = []
     res.append(lint_check_tab_char(paths))
     res.append(lint_check_numbers_of_order_last(paths))
-    no_of_false = [i for i in res if i is False]
-    sys.exit(no_of_false)
+    res.append(check_bad_state_style(paths))
+    falses = [i for i in res if i is False]
+    print 'Total checks: {0}, total failures: {1}'.format(len(res),
+                                                          len(falses))
+    sys.exit(falses)

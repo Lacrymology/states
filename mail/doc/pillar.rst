@@ -66,6 +66,12 @@ Example::
       username: check_mail_stack
       smtp_server: localhost
 
+mail:postmaster
+~~~~~~~~~~~~~~~
+
+Address of who act as postmaster, this address will receive all problems
+that happen in mail system (E.g: spam report, virus report, ...)
+
 mail:check_mail_stack
 ~~~~~~~~~~~~~~~~~~~~~
 

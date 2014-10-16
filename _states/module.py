@@ -203,11 +203,11 @@ def run(name, **kwargs):
     try:
         if ret['changes']['ret'].get('retcode', 0) != 0:
             ret['result'] = False
-    except AttributeError, KeyError:
+    except Exception, e:
         # the key error shouldn't be necessary, 'ret' should always be there,
         # but I'll catch it nonetheless. AttributeError means .get doesn't
         # exist so ret is not a dictionary. Just ignore that case
-        pass
+        print "module.run Unexpected error:", e
     return ret
 
 mod_watch = run  # pylint: disable=C0103

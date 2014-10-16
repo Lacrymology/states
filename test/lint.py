@@ -52,7 +52,7 @@ def lint_check_tab_char(paths):
 
 
 def lint_check_numbers_of_order_last(paths, exts=['jinja2', 'sls']):
-    found = _grep(paths, '- order: last')
+    found = _grep(paths, '- order: last', exts)
     many_last = {k: v for k, v in found.iteritems() if len(v) == 2}
 
     if many_last:
@@ -65,7 +65,7 @@ def lint_check_numbers_of_order_last(paths, exts=['jinja2', 'sls']):
 
 
 def check_bad_state_style(paths, exts=['sls']):
-    found = _grep(paths, '^  \w*\.\w*:$')
+    found = _grep(paths, '^  \w*\.\w*:$', exts)
     if found:
         _print_tips("Use \nstate:\n  - function\nstyle instead")
         _print_grep_result(found)

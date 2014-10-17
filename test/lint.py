@@ -41,7 +41,7 @@ def _grep(paths, pattern, exts=None):
     all_found = {}
     repat = re.compile(pattern)
 
-    def _find_tab_char(filename):
+    def _grep_file(filename):
         found = []
         with open(filename, 'rt') as f:
             for lineno, line in enumerate(f):
@@ -56,7 +56,7 @@ def _grep(paths, pattern, exts=None):
         paths = (p for p in paths if any(p.endswith(e) for e in exts))
 
     for path in paths:
-        found = _find_tab_char(path)
+        found = _grep_file(path)
         if found:
             all_found[path] = found
 

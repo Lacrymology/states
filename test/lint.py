@@ -38,6 +38,18 @@ import os
 
 
 def _grep(paths, pattern, *exts):
+    '''
+    A function that acts like ``grep`` command line tool, but simpler
+
+    paths
+        filenames to grep on
+
+    pattern
+        regex pattern
+
+    exts
+        list of file extensions that grep will only work on
+    '''
     all_found = {}
     repat = re.compile(pattern)
 
@@ -75,6 +87,9 @@ def _print_tips(content):
 
 
 def lint_check_tab_char(paths):
+    '''
+    Checks whether files in ``paths`` contain tab character or not.
+    '''
     found = _grep(paths, '\t')
     if found:
         _print_tips('Must use spaces instead of tab char')
@@ -84,6 +99,10 @@ def lint_check_tab_char(paths):
 
 
 def lint_check_numbers_of_order_last(paths, *exts):
+    '''
+    Checks whether files in ``paths`` contain multiple lines of '- order: last'
+    or not. A SLS file should only contain one.
+    '''
     if not exts:
         exts = ['jinja2', 'sls']
     found = _grep(paths, '- order: last', *exts)
@@ -99,6 +118,10 @@ def lint_check_numbers_of_order_last(paths, *exts):
 
 
 def lint_check_bad_state_style(paths, *exts):
+    '''
+    Checks whether files in ``paths`` use alternate style to write a state.
+    It should be consistent and uses the original form.
+    '''
     if not exts:
         exts = ['sls']
     found = _grep(paths, '^  \w*\.\w*:$', *exts)

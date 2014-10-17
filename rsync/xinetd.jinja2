@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Hung Nguyen Viet
+Copyright (c) 2014, Diep Pham
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -21,21 +21,20 @@ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-Author: Hung Nguyen Viet hvnsweeting@gmail.com
-Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
- -#}
+
+Author: Diep Pham <imeo@favadi.com>
+Maintainer: Diep Pham <imeo@favadi.com>
+
+-#}
 # {{ pillar['message_do_not_modify'] }}
-description "Rsync daemon"
-start on runlevel [2345]
-stop on runlevel [!2345]
-
-expect fork
-respawn
-
-nice 19
-
-pre-start script
-  ionice -c idle -p $PPID
-end script
-
-exec /usr/bin/rsync --daemon
+service rsync
+{
+    disable = no
+    socket_type = stream
+    wait = no
+    user = root
+    server = /usr/bin/rsync
+    server_args = --daemon
+    log_on_failure += USERID
+    per_source = {{ per_source }}
+}

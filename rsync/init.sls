@@ -27,35 +27,31 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 A file-copying tool.
 -#}
-{%- from 'upstart/rsyslog.jinja2' import manage_upstart_log with context -%}
 include:
-  - apt
   - rsyslog
+  - xinetd
 
 rsync:
   pkg:
     - installed
   file:
-    - managed
+    - absent
     - name: /etc/init/rsync.conf
+  service:
+    - dead
+
+/etc/xinetd.d/rsync:
+  file:
+    - managed
+    - source: salt://rsync/xinetd.jinja2
     - template: jinja
-    - source: salt://rsync/upstart.jinja2
+    - mode: 444
     - user: root
     - group: root
-    - mode: 440
+    - context:
+      per_source: {{ salt['pillar.get']('rsync:limit_per_ip', '"UNLIMITED"') }}
     - require:
-      - pkg: rsync
-  service:
-    - running
-    - order: 50
-    - enable: True
-    - watch:
-      - file: rsync
-      - file: /etc/rsyncd.conf
-      - pkg: rsync
-
-{#- PID file owned by root, no need to manage #}
-{{ manage_upstart_log('rsync') }}
+      - file: /etc/xinetd.d
 
 /etc/rsyncd.conf:
   file:
@@ -67,3 +63,11 @@ rsync:
     - source: salt://rsync/config.jinja2
     - require:
       - pkg: rsync
+
+extend:
+  xinetd:
+    service:
+      - watch:
+        - file: /etc/rsyncd.conf
+        - file: /etc/xinetd.d/rsync
+        - pkg: rsync

@@ -35,6 +35,7 @@ Optional
 Example::
 
   rsync:
+    limit_per_ip: 1
     attribute: value
       'other attrib': other value
     module_name:
@@ -42,6 +43,18 @@ Example::
       attrib: value
     module_name2:
       ...
+
+rsync:limit_per_ip
+~~~~~~~~~~~~~~~~~~
+
+Takes an integer or "UNLIMITED" as an argument.
+This specifies the maximum instances of this ser- vice per source IP
+address.
+
+Default: ``"UNLIMITED"``.
+
+other
+~~~~~
 
 Attributes and values is mapped to rsync daemon's attributes and values. If
 attribute contains space, wrap quotes about it. All attributes and values

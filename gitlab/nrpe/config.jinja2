@@ -35,5 +35,5 @@ gitlab_sidekiq_procs:
 {%- from 'postgresql/server/nrpe/instance.jinja2' import postgresql_instance with context -%}
 {%- set deployment = 'gitlab' %}
 {{ uwsgi_instance(deployment) }}
-{{ postgresql_instance("gitlabhq_production", salt['password.pillar']("gitlab:db:password"), username="gitlab") }}
+{{ postgresql_instance("gitlab", "gitlabhq_production", salt['password.pillar']("gitlab:db:password"), username="gitlab") }}
 {{ nginx_instance(deployment, timeout=120, http_uri='/users/sign_in', extra_dependencies=('gitlab_uwsgi_worker', 'gitlab_postgresql')) }}

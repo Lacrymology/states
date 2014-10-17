@@ -100,7 +100,7 @@ graylog2-web-{{ user }}:
   use setuid and setguid), this upstart job creates runtime directory
   for it.
 #}
-graylog2-web_upstart_prep:
+graylog2-web-prep:
   file:
     - managed
     - name: /etc/init/graylog2-web-prep.conf
@@ -124,7 +124,7 @@ graylog2-web_upstart:
     - mode: 400
     - source: salt://graylog2/web/upstart.jinja2
     - context:
-      file: graylog2-web_upstart_prep
+      file: graylog2-web-prep
       web_root_dir: {{ web_root_dir }}
       user: {{ user }}
 
@@ -180,7 +180,8 @@ graylog2-web:
     - enable: True
     - watch:
       - file: graylog2-web_upstart
-      - pkg: openjdk_jre_headless
+      - pkg: jre-7
+      - file: jre-7
       - archive: graylog2-web
       - user: graylog2-web-{{ user }}
     - require:

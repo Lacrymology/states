@@ -32,7 +32,10 @@ Institute for Institutional Innovation by Data Driven Design Inc.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
-remove_java_6_env:
+jre-6:
+  pkg:
+    - purged
+    - name: openjdk-6-jre-headless
   cmd:
     - run
     - name: sed -i '\:/usr/lib/jvm/java-6-openjdk:d' /etc/environment

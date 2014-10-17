@@ -174,7 +174,8 @@ graylog2-server:
     - order: 50
     - watch:
       - file: graylog2-server_upstart
-      - pkg: openjdk_jre_headless
+      - pkg: jre-7
+      - file: jre-7
       - file: graylog2-server
       - file: /etc/graylog2/elasticsearch.yml
       - archive: graylog2-server

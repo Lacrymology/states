@@ -63,7 +63,7 @@ terracotta:
     - running
     - order: 50
     - require:
-      - pkg: openjdk_jdk
+      - pkg: jdk-7
       - archive: terracotta
       - file: /var/lib/terracotta/server-statistics
       - file: /var/log/terracotta/server-logs
@@ -73,6 +73,8 @@ terracotta:
       - user: terracotta
       - file: terracotta
       - file: /etc/terracotta.conf
+      - pkg: jre-7
+      - file: jre-7
 
 {% from 'rsyslog/upstart.sls' import manage_upstart_log with context %}
 {{ manage_upstart_log('terracotta') }}

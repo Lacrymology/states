@@ -296,6 +296,7 @@ gitlab_shell:
     - mode: 440
     - require:
       - file: /var/log/gitlab/gitlab-shell
+      - cmd: gitlab_shell
 
 gitlab-uwsgi:
   file:

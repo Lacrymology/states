@@ -37,7 +37,7 @@ import sys
 import os
 
 
-def _grep(paths, pattern, exts=None):
+def _grep(paths, pattern, *exts):
     all_found = {}
     repat = re.compile(pattern)
 
@@ -49,11 +49,8 @@ def _grep(paths, pattern, exts=None):
                     found.append(' '.join((str(lineno + 1), line.strip('\n'))))
         return found
 
-    if isinstance(exts, str):
-        exts = exts.split(',')
-
-    if isinstance(exts, list):
-        paths = (p for p in paths if any(p.endswith(e) for e in exts))
+    if exts:
+        paths = filter(lambda p: any(p.endswith(e) for e in exts), paths)
 
     for path in paths:
         found = _grep_file(path)
@@ -85,8 +82,10 @@ def lint_check_tab_char(paths):
     return True
 
 
-def lint_check_numbers_of_order_last(paths, exts=['jinja2', 'sls']):
-    found = _grep(paths, '- order: last', exts)
+def lint_check_numbers_of_order_last(paths, *exts):
+    if not exts:
+        exts = ['jinja2', 'sls']
+    found = _grep(paths, '- order: last', *exts)
     many_last = {k: v for k, v in found.iteritems() if len(v) == 2}
 
     if many_last:
@@ -98,8 +97,10 @@ def lint_check_numbers_of_order_last(paths, exts=['jinja2', 'sls']):
     return True
 
 
-def lint_check_bad_state_style(paths, exts=['sls']):
-    found = _grep(paths, '^  \w*\.\w*:$', exts)
+def lint_check_bad_state_style(paths, *exts):
+    if not exts:
+        exts = ['sls']
+    found = _grep(paths, '^  \w*\.\w*:$', *exts)
     if found:
         _print_tips("Use \nstate:\n  - function\nstyle instead")
         _print_grep_result(found)

@@ -90,7 +90,7 @@ def lint_check_numbers_of_order_last(paths, *exts):
 
     if many_last:
         _print_tips("Only one '- order: last' takes effect, use only one"
-                    " of that and replace other with specific requisite"
+                    " of that and replace other with explicit requirement"
                     " (you may want to require ``sls: sls_file`` instead)")
         _print_grep_result(many_last)
         return False

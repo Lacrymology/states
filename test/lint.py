@@ -109,17 +109,27 @@ def lint_check_bad_state_style(paths, *exts):
 
 
 def process_args():
-    filepath = sys.argv[1]
-    if os.path.isdir(filepath):
-        paths = []
-        for root, dirs, fns in os.walk(filepath):
+    args = sys.argv[1:]
+    argdirs = []
+    paths = []
+    for i in args:
+        if os.path.isdir(i):
+            argdirs.append(i)
+        elif os.path.isfile(i):
+            paths.append(i)
+        else:
+            print 'Bad argument: {0} is not a directory or file'.format(i)
+            sys.exit(1)
+
+    for argdir in argdirs:
+        _paths = []
+        for root, dirs, fns in os.walk(argdir):
             # skip dot files / dirs
             fns = [f for f in fns if not f[0] == '.']
             dirs[:] = [d for d in dirs if not d[0] == '.']
             for fn in fns:
-                paths.append(os.path.join(root, fn))
-    else:
-        paths = sys.argv[1:]
+                _paths.append(os.path.join(root, fn))
+        paths.extend(_paths)
 
     return paths
 

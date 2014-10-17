@@ -75,7 +75,7 @@ olcTLSVerifyClient: never
 -
 replace: olcTLSCipherSuite
 {# use openssl CipherSuite here cause a segfault -#}
-olcTLSCipherSuite: SECURE256:!AES-128-CBC
+olcTLSCipherSuite: SECURE256:!AES-128-CBC:-VERS-SSL3.0
 -
 replace: olcLocalSSF
 olcLocalSSF: 128

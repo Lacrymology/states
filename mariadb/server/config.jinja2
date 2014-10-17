@@ -77,6 +77,7 @@ nice = 0
 [mysqld]
 {%- if salt['pillar.get']('mysql:ssl', False) %}
 {%- set certname = pillar['mysql']['ssl'] %}
+ssl-cipher=EDH+CAMELLIA:EDH+aRSA:EECDH+aRSA+AESGCM:EECDH+aRSA+SHA384:EECDH+aRSA+SHA256:EECDH:+CAMELLIA256:+AES256:+CAMELLIA128:+AES128:!SSLv3:!aNULL:!eNULL:!LOW:!3DES:!MD5:!EXP:!PS
 ssl-cert = /etc/ssl/certs/{{ certname }}.crt
 ssl-key = /etc/ssl/private/{{ certname }}.pem
 {%- endif %}

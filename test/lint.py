@@ -63,9 +63,9 @@ def _grep(paths, pattern, *exts):
 
 def _print_grep_result(all_found):
     for fn in all_found:
-        print fn
+        print 'In file: {0}'.format(fn)
         for line in all_found[fn]:
-            print ' ', line
+            print ' line ', line
 
 
 def _print_tips(content):

@@ -71,3 +71,13 @@ log_stop_script() {
             "Finish after N/A seconds, return code: ${_return_code}"
     fi
 }
+
+locking_script() {
+    local _prog_name=$(basename "$0")
+    _pid_file="/var/run/${_prog_name}"
+
+    exec 8>$_pid_file
+    flock -n 8 || exit 1
+    pid=$$
+    echo $pid 1>&8
+}

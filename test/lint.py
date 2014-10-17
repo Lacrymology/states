@@ -130,8 +130,7 @@ def main():
     res.append(lint_check_tab_char(paths))
     res.append(lint_check_numbers_of_order_last(paths))
     res.append(lint_check_bad_state_style(paths))
-    falses = [i for i in res if i is False]
-    no_of_false = len(falses)
+    no_of_false = res.count(False)
 
     print '\nTotal checks: {0}, total failures: {1}'.format(len(res),
                                                             no_of_false)

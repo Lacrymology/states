@@ -1,0 +1,3 @@
+/etc/.java:
+  file:
+    - absent

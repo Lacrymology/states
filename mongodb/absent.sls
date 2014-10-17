@@ -43,6 +43,20 @@ mongodb:
     - name: /etc/logrotate.d/mongodb
   service:
     - dead
+  user:
+    - absent
+    - require:
+      - pkg: mongodb
+  group:
+    - absent
+    - require:
+      - user: mongodb
+
+/etc/mongodb.conf:
+  file:
+    - absent
+    - require:
+      - pkg: mongodb
 
 {% if salt['pillar.get']('destructive_absent', False) %}
 /var/lib/mongodb:

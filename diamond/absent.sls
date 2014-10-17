@@ -42,3 +42,7 @@ diamond:
 /etc/rsyslog.d/diamond-upstart.conf:
   file:
     - absent
+
+{{ opts['cachedir'] }}/diamond.archive.log:
+  file:
+    - absent

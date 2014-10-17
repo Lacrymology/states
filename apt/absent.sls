@@ -44,7 +44,23 @@ apt_sources:
       - python-apt
       - python-software-properties
 
+apt_clean:
+  cmd:
+    - run
+    - name: apt-get clean
+
 apt-key:
   file:
     - absent
     - name: {{ opts['cachedir'] }}/apt.gpg
+
+{#- cache file from salt.states.pkg  #}
+{{ opts['cachedir'] }}/pkg_refresh:
+  file:
+    - absent
+
+{%- for log_file in salt['file.find']('/etc/apt/sources.list.d/', name='*.save', type='f') %}
+{{ log_file }}:
+  file:
+    - absent
+{%- endfor -%}

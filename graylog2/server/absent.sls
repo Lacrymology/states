@@ -61,3 +61,14 @@ graylog2-upstart-log:
     - name: find /var/log/upstart/ -maxdepth 1 -type f -name 'graylog2.log*' -delete
     - require:
       - service: graylog2-server
+
+/var/lib/graylog2/server-node-id:
+  file:
+    - absent
+    - require:
+      - service: graylog2-server
+
+graylog2_rsyslog_config:
+  file:
+    - absent
+    - name: /etc/rsyslog.d/graylog2-server.conf

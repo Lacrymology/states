@@ -31,6 +31,12 @@ web:
     - name: www-data
   file:
     - absent
-    - name: /var/www
+    - name: /var/lib/deployments
+    - require:
+      - user: web
+
+/var/www:
+  file:
+    - absent
     - require:
       - user: web

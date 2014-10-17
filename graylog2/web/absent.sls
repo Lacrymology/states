@@ -63,3 +63,14 @@ graylog2-web:
   file:
     - absent
 {% endfor %}
+
+graylog2-web-prep:
+  service:
+    - dead
+    - require:
+      - service: graylog2-web
+  file:
+    - managed
+    - name: /etc/init/graylog2-web-prep.conf
+    - require:
+      - service: graylog2-web-prep

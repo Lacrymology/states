@@ -2,7 +2,7 @@
 # -*- encoding: utf-8
 
 """
-A lint script check for SaltStack SLS and relate stuffs.
+A lint script for SaltStack SLS
 """
 
 # Copyright (c) 2014, Hung Nguyen Viet All rights reserved.

@@ -86,7 +86,7 @@ def lint_check_numbers_of_order_last(paths, *exts):
     if not exts:
         exts = ['jinja2', 'sls']
     found = _grep(paths, '- order: last', *exts)
-    many_last = {k: v for k, v in found.iteritems() if len(v) == 2}
+    many_last = {k: v for k, v in found.iteritems() if len(v) >= 2}
 
     if many_last:
         _print_tips("Only one '- order: last' takes effect, use only one"

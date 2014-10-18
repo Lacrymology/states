@@ -58,10 +58,12 @@ except ImportError:
 
 import yaml
 
+# TODO: turn off "salt.loader" logger
 # until https://github.com/saltstack/salt/issues/4994 is fixed, logger must
 # be configured before importing salt.client
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG,
-                    format="%(asctime)s %(name)s %(message)s")
+                    format="%(asctime)s %(name)s (%(module)s.%(funcName)s:"
+                           "%(lineno)d) %(message)s")
 
 import salt.client
 
@@ -276,8 +278,17 @@ def list_non_minion_processes(cmd_name='/usr/bin/python /usr/bin/salt-minion'):
                     break
 
             if not run_trough_minion:
+                logger.debug("Running non-minion process %s[%d]", procs[pid],
+                             pid)
                 output.add(procs[pid])
+    logger.debug("Running processes: %s", os.linesep.join(output))
     return output
+
+
+def _list_debug(data_type, data_set):
+    output = list(data_set)
+    output.sort()
+    logger.debug("Existing %s: %s", data_type, os.linesep.join(output))
 
 
 def list_groups():
@@ -285,15 +296,23 @@ def list_groups():
     return a set of groups
     """
     global client
-    return set(group['name'] for group in client('group.getent'))
+    ret = set(group['name'] for group in client('group.getent'))
+    _list_debug("Groups", ret)
+    return ret
 
 
 def list_users():
     global client
-    return set(user['name'] for user in client('user.getent'))
+    output = set(user['name'] for user in client('user.getent'))
+    _list_debug("Users", output)
+    return output
 
 
-def list_system_files(dirs=["/etc", "/usr/local", "/var"]):
+def list_system_files(dirs=("/bin", "/etc", "/usr", "/lib", "/sbin", "/var"),
+                      ignored=('/var/lib/ucf/',
+                               '/var/lib/apt/lists/',
+                               '/var/cache/apt/',
+                               '/var/cache/salt/minion/extrn_files')):
     """
     Returns a set of the files present in each of the directories listed.
 
@@ -302,7 +321,18 @@ def list_system_files(dirs=["/etc", "/usr/local", "/var"]):
     ret = set()
     for directory in dirs:
         if os.path.isdir(directory):
-            ret.update(subprocess.check_output(["find", directory]).split("\n"))
+
+            for filename in subprocess.check_output(["find",
+                                                     directory]).split(
+                    os.linesep):
+                is_ignored = False
+                for path in ignored:
+                    if filename.startswith(path):
+                        is_ignored = True
+                        break
+                if not is_ignored:
+                    ret.add(filename)
+    _list_debug("Files", ret)
     return ret
 
 
@@ -560,16 +590,30 @@ class States(unittest.TestCase):
             logger.debug("Don't cleanup, it's already done")
             return
 
-        logger.info("Run absent for all states, process before:")
-        logger.info(client('cmd.run_stdout', "ps -A -F"))
-        self.sls(self.absent)
-        logger.info("Absent executed,, process after:")
-        logger.info(client('cmd.run_stdout', "ps -A -F"))
+        logger.debug("Going to setUp, show resources to check before all "
+                     "absents applied.")
+        list_non_minion_processes()
+        list_groups()
+        list_users()
+        list_system_files()
+        try:
+            self.sls(self.absent)
+        except AssertionError, err:
+            clean_up_failed = True
+            logger.error("Can't run all .absent: %s", err)
+            self.fail(err)
+
+        logger.debug("All absent applied, show resources to check before "
+                     "pkg_installed.revert.")
+        list_non_minion_processes()
+        list_groups()
+        list_users()
+        list_system_files()
 
         # Go back on the same installed packages as after :func:`setUpClass`
         logger.info("Unfreeze installed packages")
         try:
-            output = client('pkg_installed.revert')
+            output = client('pkg_installed.revert', True)
         except Exception, err:
             clean_up_failed = True
             logger.error("Catch error: %s", err, exc_info=True)
@@ -578,39 +622,43 @@ class States(unittest.TestCase):
             try:
                 if not output['result']:
                     clean_up_failed = True
-                    self.fail(output['result'])
+                    self.fail(repr(output))
             except TypeError, err:
                 clean_up_failed = True
                 logger.error("Catch error: %s", err, exc_info=True)
                 self.fail(output)
 
         clean_up_errors = []
-        # check processes
+        logger.debug("Check running processes")
         clean_up_errors.append(
             self._check_same_status(process_list, list_non_minion_processes, [
                 "First cleanup, keep list of %d process",
                 "Check %d proccess",
                 "Process that still run after cleanup: %s"]))
-        # check files
+        logger.debug("Check files")
         clean_up_errors.append(
             self._check_same_status(files_list, list_system_files, [
                 "First cleanup, keep list of %d files",
                 "Check %d files",
                 "Newly created files after cleanup: %s"]))
-        # check groups
+        logger.debug("Check groups")
         clean_up_errors.append(
             self._check_same_status(groups_list, list_groups, [
                 "First cleanup, keep list of %d groups",
                 "Check %d groups",
                 "Newly created groups after cleanup: %s"]))
-        # check users
+        logger.debug("Check users")
         clean_up_errors.append(
             self._check_same_status(users_list, list_users, [
                 "First cleanup, keep list of %d users",
                 "Check %d users",
                 "Newly created users after cleanup: %s"]))
-        if clean_up_failed:
-            self.fail(os.linesep.join([e for e in clean_up_errors if e]))
+
+        clean_up_errors_msg = os.linesep.join([e for e in clean_up_errors if e])
+        if clean_up_errors_msg:
+            logger.error(clean_up_errors)
+            clean_up_failed = True
+            self.fail(clean_up_errors_msg)
 
         is_clean = True
 

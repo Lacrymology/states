@@ -51,6 +51,10 @@ def list_pkgs():
             # virtual packages always have version '1', ignore them
             if packages[pkg_name] != '1':
                 output.append(pkg_name)
+
+        output.sort()
+        for pkg_name in output:
+            log.debug("Installed package: %s", pkg_name)
         return output
     else:
         return __salt__['pkg.list_pkgs']().keys()
@@ -73,6 +77,7 @@ def forget():
     '''
     Forget any frozen state.
     '''
+    log.info("Forget data")
     __salt__['data.update'](__virtual__(), [])
 
 
@@ -81,14 +86,16 @@ def snapshot():
     Save the list of installed packages for :func:`revert`
     '''
     installed = list_pkgs()
+    msg = "%d saved packages" % len(installed)
+    log.debug(msg)
     __salt__['data.update'](__virtual__(), installed)
     return {'name': 'snapshot',
             'changes': {},
-            'comment': "%d saved packages" % len(installed),
+            'comment': msg,
             'result': True}
 
 
-def revert():
+def revert(purge_only=False):
     '''
     Take a list of packages, uninstall from the OS packages not in the list
     and install those that are missing.
@@ -117,14 +124,17 @@ def revert():
         ret['comment'] = "Nothing to change"
         return ret
 
-    ret['comment'] = '%d install %d purge' % (len(install), len(purge))
-    if install:
+    if install and not purge_only:
+        ret['comment'] = '%d install %d purge' % (len(install), len(purge))
         ret['changes'].update(__salt__['pkg.install'](pkgs=list(install)))
+    else:
+        ret['comment'] = '%d purge' % len(purge)
     if purge:
+        purge_str = ' '.join(purge)
+        log.debug("Uninstall: %s", purge_str)
         # until 0.16 is stable, we have to use that dirty trick
         ret['changes']['purged'] = []
-        purge_cmd = 'apt-get -q -y --force-yes purge {0}'.format(
-            ' '.join(purge))
+        purge_cmd = 'apt-get -q -y --force-yes purge {0}'.format(purge_str)
         out = __salt__['cmd.run_all'](purge_cmd)
         if out['retcode'] != 0:
             ret['result'] = False

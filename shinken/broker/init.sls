@@ -126,6 +126,9 @@ shinken-broker:
 {% endif %}
 {#- does not use PID, no need to manage #}
 
+{% from 'upstart/rsyslog.sls' import manage_upstart_log with context %}
+{{ manage_upstart_log('shinken-broker') }}
+
 /etc/shinken/broker.conf:
   file:
     - managed

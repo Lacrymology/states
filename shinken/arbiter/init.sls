@@ -134,5 +134,5 @@ shinken-arbiter:
       - user: shinken
 {% endfor %}
 
-{% from 'rsyslog/upstart.sls' import manage_upstart_log with context %}
+{% from 'upstart/rsyslog.sls' import manage_upstart_log with context %}
 {{ manage_upstart_log('shinken-arbiter') }}

@@ -33,6 +33,7 @@ Arbiter or Scheduler for processing.
 {%- from 'shinken/init.sls' import shinken_install_module with context -%}
 {% set ssl = salt['pillar.get']('shinken:ssl', False) %}
 include:
+  - rsyslog
   - shinken
 {% if ssl %}
   - ssl
@@ -74,6 +75,8 @@ shinken-receiver:
       - cmd: ssl_cert_and_key_for_{{ pillar['shinken']['ssl'] }}
 {% endif %}
 {#- does not use PID, no need to manage #}
+{% from 'upstart/rsyslog.sls' import manage_upstart_log with context %}
+{{ manage_upstart_log('shinken-receiver') }}
 
 /etc/shinken/receiver.conf:
   file:

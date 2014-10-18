@@ -26,19 +26,23 @@ Author: Lam Dang Tung <lamdt@familug.org>
 Maintainer: Lam Dang Tung <lamdt@familug.org>
 -#}
 {%- set web_root_dir = "/usr/local/openerp" %}
+{%- from "upstart/absent.sls" import upstart_absent with context -%}
+{{ upstart_absent('openerp') }}
 
-openerp:
-  group:
-    - absent
-    - require:
-      - user: openerp
-  user:
-    - absent
-    - name: openerp
-    - force: True
-  file:
-    - absent
-    - name: {{ web_root_dir }}
+extend:
+  openerp:
+    group:
+      - absent
+      - require:
+        - user: openerp
+    user:
+      - absent
+      - name: openerp
+      - force: True
+
+{{ web_root_dir }}:
+    file:
+      - absent
 
 openerp-uwsgi:
   file:
@@ -54,19 +58,6 @@ openerp-uwsgi:
 /etc/nginx/conf.d/openerp.conf:
   file:
     - absent
-
-/etc/rsyslog.d/openerp-upstart.conf:
-  file:
-    - absent
-
-openerp-cron:
-  service:
-    - dead
-  file:
-    - absent
-    - name: /etc/init/openerp.conf
-    - require:
-      - service: openerp-cron
 
 {{ opts['cachedir'] }}/pip/openerp:
   file:

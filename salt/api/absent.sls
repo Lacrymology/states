@@ -27,6 +27,8 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Uninstall a Salt API REST server.
 -#}
+{%- from "upstart/absent.sls" import upstart_absent with context -%}
+{{ upstart_absent('salt-api') }}
 
 salt_api:
   group:
@@ -45,11 +47,12 @@ user_{{ user }}:
     - absent
 {% endfor %}
 
-salt-api:
-  pkg:
-    - purged
-    - require:
-      - service: salt-api
+extend:
+  salt-api:
+    pkg:
+      - purged
+      - require:
+        - service: salt-api
 {#{% if salt['cmd.has_exec']('pip') %}
   pip:
     - removed
@@ -57,13 +60,6 @@ salt-api:
     - require:
       - pkg: salt-api
 {% endif %}#}
-  file:
-    - absent
-    - name: /etc/init/salt-api.conf
-    - require:
-      - service: salt-api
-  service:
-    - dead
 
 /etc/salt/master.d/api.conf:
   file:
@@ -71,11 +67,9 @@ salt-api:
     - require:
       - pkg: salt-api
 
-/var/log/upstart/salt-api.log:
+/usr/local/salt-ui:
   file:
     - absent
-    - require:
-      - service: salt-api
 
 /etc/nginx/conf.d/salt-api.conf:
   file:
@@ -88,9 +82,5 @@ salt-api-requirements:
 
 {#- TODO: remove that statement in >= 2014-04 #}
 {{ opts['cachedir'] }}/salt-api-requirements.txt:
-  file:
-    - absent
-
-/etc/rsyslog.d/salt-api-upstart.conf:
   file:
     - absent

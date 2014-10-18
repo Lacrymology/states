@@ -27,6 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Install PyStatsD daemon, a statsd nodejs equivalent in python.
 -#}
+{%- from 'upstart/rsyslog.sls' import manage_upstart_log with context -%}
 include:
   - hostname
   - local
@@ -77,7 +78,6 @@ statsd:
       - pkg: python-dev
       - file: statsd_requirements
 
-{% from 'rsyslog/upstart.sls' import manage_upstart_log with context %}
 {{ manage_upstart_log('statsd') }}
 
 statsd_requirements:

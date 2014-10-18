@@ -25,6 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
+{%- from 'upstart/rsyslog.sls' import manage_upstart_log with context -%}
 include:
   - hostname
   - java.7.jdk
@@ -76,7 +77,6 @@ terracotta:
       - pkg: jre-7
       - file: jre-7
 
-{% from 'rsyslog/upstart.sls' import manage_upstart_log with context %}
 {{ manage_upstart_log('terracotta') }}
 
 /etc/terracotta.conf:

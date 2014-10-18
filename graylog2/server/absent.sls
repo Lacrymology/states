@@ -27,40 +27,34 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Uninstall a Graylog2 logging server backend.
 -#}
+{%- from "upstart/absent.sls" import upstart_absent with context -%}
+{%- set version = '0.20.3' -%}
+{%- set server_root_dir = '/usr/local/graylog2-server-' + version -%}
+{%- set user = salt['pillar.get']('graylog2:server:user', 'graylog2') -%}
 
-{%- set version = '0.20.3' %}
-{%- set server_root_dir = '/usr/local/graylog2-server-' + version %}
-{%- set user = salt['pillar.get']('graylog2:server:user', 'graylog2') %}
+{{ upstart_absent('graylog2-server') }}
+{{ upstart_absent('graylog2-server-prep') }}
 
-graylog2-server:
-  user:
-    - absent
-    - name: {{ user }}
-    - require:
-      - service: graylog2-server
-  group:
-    - absent
-    - name: {{ user }}
-    - require:
-      - user: graylog2-server
-  service:
-    - dead
+extend:
+  graylog2-server:
+    user:
+      - absent
+      - name: {{ user }}
+      - require:
+        - service: graylog2-server
+    group:
+      - absent
+      - name: {{ user }}
+      - require:
+        - user: graylog2-server
 
-{%- for file in ('/etc/graylog2.conf', server_root_dir,
-                '/etc/init/graylog2-server.conf', '/etc/rsyslog.d/graylog2-server.conf', '/etc/graylog2') %}
+{%- for file in ('/etc/graylog2.conf', server_root_dir, '/etc/graylog2') %}
 {{ file }}:
   file:
     - absent
     - require:
       - service: graylog2-server
 {% endfor %}
-
-graylog2-upstart-log:
-  cmd:
-    - run
-    - name: find /var/log/upstart/ -maxdepth 1 -type f -name 'graylog2.log*' -delete
-    - require:
-      - service: graylog2-server
 
 /var/lib/graylog2/server-node-id:
   file:

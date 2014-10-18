@@ -34,46 +34,43 @@ Maintainer: Lam Dang Tung <lamdt@familug.org>
 
 Unistalling GitLab.
 -#}
-{%- set version = '6.4.3' %}
-{%- set web_dir = "/usr/local/gitlabhq-" + version  %}
-{%- set user = 'gitlab' %}
+{%- from "upstart/absent.sls" import upstart_absent with context -%}
+{%- set version = '6.4.3' -%}
+{%- set web_dir = "/usr/local/gitlabhq-" + version  -%}
+{%- set user = 'gitlab' -%}
 
-gitlab:
-  user:
-    - absent
-    - name: {{ user }}
-    - force: True
-    - require:
-      - file: gitlab-uwsgi
-      - service: gitlab
-  group:
-    - absent
-    - name: {{ user }}
-    - require:
-      - user: gitlab
-  service:
-    - dead
+{{ upstart_absent('gitlab') }}
+
+extend:
+  gitlab:
+    user:
+      - absent
+      - name: {{ user }}
+      - force: True
+      - require:
+        - file: gitlab-uwsgi
+        - service: gitlab
+    group:
+      - absent
+      - name: {{ user }}
+      - require:
+        - user: gitlab
 
 gitlab-uwsgi:
   file:
     - absent
     - name: /etc/uwsgi/gitlab.yml
 
-{%- for file in ('/etc/nginx/conf.d/gitlab.conf', web_dir, '/home/' + user, '/etc/init/gitlab.conf', '/etc/logrotate.d/gitlab') %}
+/etc/nginx/conf.d/gitlab.conf:
+  file:
+    - absent
+    - require_in:
+      - service: gitlab
+
+{%- for file in ( web_dir, '/home/' + user, '/etc/logrotate.d/gitlab') %}
 {{ file }}:
   file:
     - absent
     - require:
       - service: gitlab
-{%- endfor %}
-
-gitlab-upstart-log:
-  cmd:
-    - run
-    - name: find /var/log/upstart/ -maxdepth 1 -type f -name 'gitlab.log*' -delete
-    - require:
-      - service: gitlab
-
-/etc/rsyslog.d/gitlab-upstart.conf:
-  file:
-    - absent
+{%- endfor -%}

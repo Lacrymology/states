@@ -38,6 +38,7 @@ Once this state is installed, you need to:
 - Add a Sentry DSN to each of your users (can be the same) at:
   /users/
 -#}
+{%- from 'upstart/rsyslog.sls' import manage_upstart_log with context -%}
 include:
   - graylog2
   - java.7
@@ -114,19 +115,7 @@ graylog2-web-prep:
     - require:
       - user: graylog2-web-{{ user }}
 
-graylog2-web_upstart:
-  file:
-    - managed
-    - name: /etc/init/graylog2-web.conf
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 400
-    - source: salt://graylog2/web/upstart.jinja2
-    - context:
-      file: graylog2-web-prep
-      web_root_dir: {{ web_root_dir }}
-      user: {{ user }}
+{{ manage_upstart_log('graylog2-web-prep') }}
 
 {{ web_root_dir }}/logs:
   file:
@@ -148,8 +137,8 @@ graylog2-web-logrotate:
     - source: salt://graylog2/web/logrotate.jinja2
     - require:
       - pkg: logrotate
-        
-graylog2-web:
+
+graylog2-web.conf:
   file:
     - managed
     - name: {{ web_root_dir }}/conf/graylog2-web-interface.conf
@@ -161,6 +150,20 @@ graylog2-web:
     - require:
       - archive: graylog2-web
       - user: graylog2-web-{{ user }}
+
+graylog2-web:
+  file:
+    - managed
+    - name: /etc/init/graylog2-web.conf
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 400
+    - source: salt://graylog2/web/upstart.jinja2
+    - context:
+      file: graylog2-web-prep
+      web_root_dir: {{ web_root_dir }}
+      user: {{ user }}
   archive:
     - extracted
     - name: /usr/local/
@@ -179,7 +182,8 @@ graylog2-web:
     - running
     - enable: True
     - watch:
-      - file: graylog2-web_upstart
+      - file: graylog2-web
+      - file: graylog2-web.conf
       - pkg: jre-7
       - file: jre-7
       - archive: graylog2-web
@@ -187,6 +191,8 @@ graylog2-web:
     - require:
       - file: /var/run/{{ user }}
       - file: /var/log/{{ user }}
+
+{{ manage_upstart_log('graylog2-web') }}
 
 {% for command in ('streamalarms', 'subscriptions') %}
 /etc/cron.hourly/graylog2-web-{{ command }}:

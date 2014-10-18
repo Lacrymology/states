@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Lam Dang Tung <lamdt@familug.org>
 Maintainer: Lam Dang Tung <lamdt@familug.org>
 -#}
-
+{%- from 'upstart/rsyslog.sls' import manage_upstart_log with context -%}
 include:
   - build
   - openldap.dev
@@ -101,6 +101,22 @@ openerp_depends:
     - watch:
       - module: openerp_depends
 
+{{ web_root_dir }}:
+  file:
+    - directory
+    - user: root
+    - group: openerp
+    - dir_mode: 750
+    - file_mode: 640
+    - recurse:
+      - user
+      - group
+      - mode
+    - require:
+      - archive: openerp
+      - user: openerp
+      - cmd: openerp_depends
+
 openerp:
   user:
     - present
@@ -125,20 +141,21 @@ openerp:
     - require:
       - service: postgresql
   file:
-    - directory
-    - name: {{ web_root_dir }}
+    - name: /etc/init/openerp.conf
+{%- if salt['pillar.get']('openerp:company_db', False) %}
+    - managed
+    - source: salt://openerp/upstart.jinja2
+    - template: jinja
     - user: root
-    - group: openerp
-    - dir_mode: 750
-    - file_mode: 640
-    - recurse:
-      - user
-      - group
-      - mode
+    - group: root
+    - mode: 400
+    - context:
+      home: {{ web_root_dir }}
     - require:
-      - archive: openerp
-      - user: openerp
-      - cmd: openerp_depends
+      - file: {{ web_root_dir }}/openerp-cron.py
+{%- else %}
+    - absent
+{%- endif %}
   archive:
     - extracted
     - name: {{ home }}/
@@ -153,6 +170,21 @@ openerp:
     - if_missing: {{ web_root_dir }}
     - require:
       - file: /usr/local
+  service:
+    - name: openerp
+{%- if salt['pillar.get']('openerp:company_db', False) %}
+    - running
+    - watch:
+      - user: openerp
+      - file: openerp
+    - require:
+      - file: {{ home }}/config.yaml
+{%- else %}
+    - dead
+{%- endif %}
+{#- does not use PID, no need to manage #}
+
+{{ manage_upstart_log('openerp') }}
 
 openerp-uwsgi:
   file:
@@ -171,9 +203,9 @@ openerp-uwsgi:
       wsgi_file: {{ web_root_dir }}/openerp.wsgi
       virtualenv: {{ home }}
     - require:
-      - service: uwsgi_emperor
+      - service: uwsgi
       - postgres_user: openerp
-      - file: openerp
+      - file: {{ web_root_dir }}
   module:
     - wait
     - name: file.touch
@@ -195,7 +227,7 @@ openerp-uwsgi:
     - mode: 440
     - source: salt://openerp/wsgi.py
     - require:
-      - file: openerp
+      - file: {{ web_root_dir }}
       - file: {{ home }}/config.yaml
 
 {{ web_root_dir }}/openerp-cron.py:
@@ -207,7 +239,7 @@ openerp-uwsgi:
     - mode: 550
     - source: salt://openerp/cron.py
     - require:
-      - file: openerp
+      - file: {{ web_root_dir }}
       - file: {{ home }}/config.yaml
 {%- else %}
     - absent
@@ -222,42 +254,10 @@ openerp-uwsgi:
     - template: jinja
     - mode: 440
     - require:
-      - file: openerp
+      - file: {{ web_root_dir }}
     - context:
       password: {{ password }}
       username: {{ username }}
-
-openerp-cron:
-  file:
-    - name: /etc/init/openerp.conf
-{%- if salt['pillar.get']('openerp:company_db', False) %}
-    - managed
-    - source: salt://openerp/upstart.jinja2
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 400
-    - context:
-      home: {{ web_root_dir }}
-    - require:
-      - file: {{ web_root_dir }}/openerp-cron.py
-{%- else %}
-    - absent
-{%- endif %}
-  service:
-    - name: openerp
-{%- if salt['pillar.get']('openerp:company_db', False) %}
-    - running
-    - watch:
-      - user: openerp
-    - require:
-      - file: {{ home }}/config.yaml
-{%- else %}
-    - dead
-    - require_in:
-{%- endif %}
-      - file: openerp-cron
-{#- does not use PID, no need to manage #}
 
 /etc/nginx/conf.d/openerp.conf:
   file:

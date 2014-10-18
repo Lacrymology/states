@@ -34,6 +34,7 @@ Maintainer: Lam Dang Tung <lamdt@familug.org>
 
 Self hosted Git management software.
 -#}
+{%- from 'upstart/rsyslog.sls' import manage_upstart_log with context -%}
 include:
   - apt
   - build
@@ -193,6 +194,17 @@ gitlab_remove_old_version:
     - absent
     - name: /usr/local/gitlabhq-6-0-stable
 
+{{ web_dir }}:
+  file:
+    - directory
+    - user: {{ user }}
+    - group: {{ user }}
+    - recurse:
+      - user
+      - group
+    - require:
+      - archive: gitlab
+
 gitlab:
   user:
     - present
@@ -236,15 +248,17 @@ gitlab:
       - file: /usr/local
       - file: gitlab_remove_old_version
   file:
-    - directory
-    - name: {{ web_dir }}
-    - user: {{ user }}
-    - group: {{ user }}
-    - recurse:
-      - user
-      - group
+    - managed
+    - name: /etc/init/gitlab.conf
+    - user: root
+    - mode: 440
+    - source: salt://gitlab/upstart.jinja2
+    - template: jinja
     - require:
-      - archive: gitlab
+      - cmd: gitlab
+    - context:
+      web_dir: {{ web_dir }}
+      user: {{ user }}
   cmd:
     - wait
     - name: force=yes bundle exec rake gitlab:setup
@@ -268,7 +282,7 @@ gitlab:
       - cmd: gitlab
       - cmd: bundler
       - cmd: gitlab_precompile_assets
-      - file: gitlab_upstart
+      - file: gitlab
       - file: {{ web_dir }}/config.ru
       - file: {{ web_dir }}/config/gitlab.yml
       - file: {{ web_dir }}/config/initializers/rack_attack.rb
@@ -276,6 +290,8 @@ gitlab:
       - file: {{ web_dir }}/config/environments/production.rb
       - file: {{ web_dir }}/config/initializers/smtp_settings.rb
 {%- endif %}
+
+{{ manage_upstart_log('gitlab') }}
 
 gitlab-uwsgi:
   file:
@@ -293,8 +309,8 @@ gitlab-uwsgi:
     - require:
       - cmd: gitlab
       - cmd: gitlab_precompile_assets
-      - service: uwsgi_emperor
-      - file: gitlab_upstart
+      - service: uwsgi
+      - file: gitlab
       - gem: rack
       - file: {{ web_dir }}/config.ru
       - postgres_database: gitlab
@@ -475,7 +491,7 @@ gitlab_clean_redis_db:
     - mode: 440
     - require:
       - pkg: logrotate
-      - file: gitlab_upstart
+      - file: gitlab
     - context:
       web_dir: {{ web_dir }}
       user: {{ user }}
@@ -557,23 +573,6 @@ gitlab_rack_gem:
     - require:
       - user: {{ user }}
 
-gitlab_upstart:
-  file:
-    - managed
-    - name: /etc/init/gitlab.conf
-    - user: root
-    - mode: 440
-    - source: salt://gitlab/upstart.jinja2
-    - template: jinja
-    - require:
-      - cmd: gitlab
-    - context:
-      web_dir: {{ web_dir }}
-      user: {{ user }}
-
-{% from 'rsyslog/upstart.sls' import manage_upstart_log with context %}
-{{ manage_upstart_log('gitlab') }}
-
 {%- if salt['pillar.get']('gitlab:smtp:enabled', False) %}
 {{ web_dir }}/config/environments/production.rb:
   file:
@@ -627,7 +626,7 @@ gitlab_upstart:
     - mode: 440
     - require:
       - user: gitlab
-      - file: gitlab
+      - file: {{ web_dir }}
     - require_in:
       - cmd: bundler
 {%- endfor %}

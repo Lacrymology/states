@@ -122,7 +122,7 @@ djangopypi2-uwsgi:
       django_settings: djangopypi2.website.settings
       virtualenv: {{ root_dir }}
     - require:
-      - service: uwsgi_emperor
+      - service: uwsgi
       - postgres_database: djangopypi2
       - service: memcached
       - service: rsyslog

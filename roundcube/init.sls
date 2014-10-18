@@ -228,7 +228,7 @@ roundcube-uwsgi:
       chdir: {{ roundcubedir }}
       uid: roundcube
     - require:
-      - service: uwsgi_emperor
+      - service: uwsgi
       - module: roundcube_initial
   module:
     - wait

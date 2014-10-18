@@ -25,37 +25,30 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
+{%- from "upstart/absent.sls" import upstart_absent with context -%}
+{{ upstart_absent('dovecot') }}
+
 /var/mail/vhosts/indexes:
   file:
     - absent
 
-dovecot:
-  service:
-    - dead
-    - enable: False
-  pkg:
-    - purged
-    - pkgs:
-      - dovecot-imapd
-      - dovecot-pop3d
-      - dovecot-ldap
-      - dovecot-core
-      - dovecot-managesieved
-    - require:
-      - service: dovecot
-  file:
-    - absent
-    - name: /etc/dovecot
-    - require:
-      - pkg: dovecot
+extend:
+  dovecot:
+    pkg:
+      - purged
+      - pkgs:
+        - dovecot-imapd
+        - dovecot-pop3d
+        - dovecot-ldap
+        - dovecot-core
+        - dovecot-managesieved
+      - require:
+        - service: dovecot
+    file:
+      - absent
+      - name: /etc/dovecot
 
 /var/lib/dovecot:
-  file:
-    - absent
-    - require:
-      - pkg: dovecot
-
-/var/log/upstart/dovecot.log:
   file:
     - absent
     - require:

@@ -27,50 +27,45 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Uninstall a graylog2 web interface server.
 -#}
-{% set version = '0.20.3' %}
-{% set web_root_dir = '/usr/local/graylog2-web-interface-' + version %}
-{% set user = salt['pillar.get']('graylog2:web:user', 'graylog2-ui') %}
+{%- from "upstart/absent.sls" import upstart_absent with context -%}
+{%- set version = '0.20.3' -%}
+{%- set web_root_dir = '/usr/local/graylog2-web-interface-' + version -%}
+{%- set user = salt['pillar.get']('graylog2:server:user', 'graylog2-ui') -%}
+
+{{ upstart_absent('graylog2-web') }}
+{{ upstart_absent('graylog2-web-prep') }}
 
 /etc/logrotate.d/graylog2-web:
   file:
     - absent
 
-graylog2-web:
-  user:
-    - absent
-    - name: {{ user }}
-    - require:
-      - service: graylog2-web
-  group:
-    - absent
-    - name: {{ user }}
-    - require:
-      - service: graylog2-web
-  service:
-    - dead
-    - enable: False
+extend:
+  graylog2-web:
+    user:
+      - absent
+      - name: {{ user }}
+      - require:
+        - service: graylog2-web
+    group:
+      - absent
+      - name: {{ user }}
+      - require:
+        - service: graylog2-web
 
-{% for file in ('/etc/nginx/conf.d/graylog2-web.conf', web_root_dir, '/etc/init/graylog2-web.conf') %}
-{{ file }}:
+/etc/nginx/conf.d/graylog2-web.conf:
+  file:
+    - absent
+    - require_in:
+      - service: graylog2-web
+
+{{ web_root_dir }}:
   file:
     - absent
     - require:
       - service: graylog2-web
-{% endfor %}
 
-{% for command in ('streamalarms', 'subscriptions') %}
+{%- for command in ('streamalarms', 'subscriptions') %}
 /etc/cron.hourly/graylog2-web-{{ command }}:
   file:
     - absent
-{% endfor %}
-
-graylog2-web-prep:
-  service:
-    - dead
-    - require:
-      - service: graylog2-web
-  file:
-    - managed
-    - name: /etc/init/graylog2-web-prep.conf
-    - require:
-      - service: graylog2-web-prep
+{%- endfor -%}

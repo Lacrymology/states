@@ -28,6 +28,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 include:
   - diamond
   - nrpe.diamond
+  - rsyslog.diamond
 
 shinken_poller_diamond_resources:
   file:

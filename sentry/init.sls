@@ -124,7 +124,7 @@ sentry-uwsgi:
       chdir: /usr/local/sentry
     - require:
       - service: memcached
-      - service: uwsgi_emperor
+      - service: uwsgi
       - service: rsyslog
   module:
     - wait

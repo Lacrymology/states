@@ -27,7 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Uninstall and OpenVPN servers.
 -#}
-
+{%- from "upstart/absent.sls" import upstart_absent with context -%}
 openvpn:
   pkg:
     - purged
@@ -36,17 +36,7 @@ openvpn:
 {%- set upstart_files = salt['file.find'](prefix, name='openvpn-*.conf', type='f') -%}
 {%- for filename in upstart_files -%}
   {%- set tunnel = filename.replace(prefix + 'openvpn-', '').replace('.conf', '') %}
-openvpn-{{ tunnel }}:
-  file:
-    - absent
-    - name: {{ filename }}
-    - require:
-      - service: openvpn-{{ tunnel }}
-  service:
-    - dead
-    - enable: False
-    - require_in:
-      - cmd: openvpn-upstart-log
+{{ upstart_absent('openvpn-' + tunnel ) }}
 {%- endfor %}
 
 /etc/default/openvpn:
@@ -60,12 +50,3 @@ openvpn-{{ tunnel }}:
   file:
     - absent
 {%- endfor %}
-
-openvpn-upstart-log:
-  cmd:
-    - run
-    - name: find /var/log/upstart/ -maxdepth 1 -type f -name 'openvpn-*.log*' -delete
-
-/etc/rsyslog.d/openvpn-upstart.conf:
-  file:
-    - absent

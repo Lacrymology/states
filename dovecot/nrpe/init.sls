@@ -32,6 +32,7 @@ include:
   - apt.nrpe
   - dovecot
   - nrpe
+  - rsyslog.nrpe
   - postfix.nrpe
 {%- if salt['pillar.get']('dovecot:ssl', False)  %}
   - ssl.nrpe

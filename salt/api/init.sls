@@ -27,6 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Setup a Salt API REST server.
 -#}
+{%- from 'upstart/rsyslog.sls' import manage_upstart_log with context -%}
 {%- set api_version = '0.8.4' -%}
 include:
   - git
@@ -154,6 +155,8 @@ salt-api:
       - pkg: salt-master
       - module: salt-api-requirements
 
+{{ manage_upstart_log('salt-api') }}
+
 {%- if salt['pkg.version']('salt-api') not in ('', api_version) %}
 salt_api_old_version:
   pkg:
@@ -162,9 +165,6 @@ salt_api_old_version:
     - require_in:
       - pkg: salt-api
 {%- endif %}
-
-{% from 'rsyslog/upstart.sls' import manage_upstart_log with context %}
-{{ manage_upstart_log('salt-api') }}
 
 extend:
   nginx:
@@ -178,3 +178,4 @@ extend:
     service:
       - watch:
         - file: /etc/salt/master.d/api.conf
+        - file: /etc/salt/master.d/ui.conf

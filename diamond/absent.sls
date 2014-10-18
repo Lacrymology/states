@@ -27,21 +27,16 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Uninstall diamond.
 -#}
-diamond:
-  service:
-    - dead
+{%- from "upstart/absent.sls" import upstart_absent with context -%}
+{{ upstart_absent('diamond') }}
 
-{% for filename in ('/etc/diamond', '/usr/local/diamond', '/etc/init/diamond.conf', '/var/log/upstart/diamond.log') %}
+{%- for filename in ('/etc/diamond', '/usr/local/diamond') %}
 {{ filename }}:
   file:
     - absent
     - require:
       - service: diamond
-{% endfor %}
-
-/etc/rsyslog.d/diamond-upstart.conf:
-  file:
-    - absent
+{%- endfor %}
 
 {{ opts['cachedir'] }}/diamond.archive.log:
   file:

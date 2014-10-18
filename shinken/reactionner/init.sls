@@ -32,8 +32,10 @@ centralizes communication channels with external systems in order to simplify
 SMTP authorizations or RSS feed sources (only one for all hosts/services).
 There can be many reactionners for load-balancing and spare roles
 -#}
+{%- from 'upstart/rsyslog.sls' import manage_upstart_log with context -%}
 {% set ssl = salt['pillar.get']('shinken:ssl', False) %}
 include:
+  - rsyslog
   - shinken
 {% if ssl %}
   - ssl
@@ -66,6 +68,8 @@ shinken-reactionner:
       - cmd: ssl_cert_and_key_for_{{ pillar['shinken']['ssl'] }}
 {% endif %}
 {#- does not use PID, no need to manage #}
+
+{{ manage_upstart_log('shinken-reactionner') }}
 
 /etc/shinken/reactionner.conf:
   file:

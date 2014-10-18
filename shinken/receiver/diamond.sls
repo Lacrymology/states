@@ -27,6 +27,7 @@ Maintainer: Quan Tong Anh <tonganhquan.net@gmail.com>
 -#}
 include:
   - diamond
+  - rsyslog.diamond
 
 shinken_receiver_diamond_resources:
   file:

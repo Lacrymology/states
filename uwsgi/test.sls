@@ -33,9 +33,8 @@ include:
   - uwsgi.ruby
   - uwsgi.top
 
-test_uwsgi:
-  cmd:
-    - run
-    - name: /usr/local/uwsgi-1.9.17.1/uwsgi --version
-    - require:
-      - cmd: uwsgi_build
+test:
+  monitoring:
+    - run_all_checks
+    - wait: 60
+    - order: last

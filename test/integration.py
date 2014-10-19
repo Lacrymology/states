@@ -296,7 +296,7 @@ def list_groups():
     return a set of groups
     """
     global client
-    ret = set(group['name'] for group in client('group.getent'))
+    ret = set(group['name'] for group in client('group.getent', True))
     _list_debug("Groups", ret)
     return ret
 

@@ -26,17 +26,15 @@ Author: Quan Tong Anh <quanta@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
 {%- from 'nrpe/passive.sls' import test_sslyze with context %}
+{%- from 'cron/test.sls' import test_cron_d with context %}
 include:
   - salt.archive.server
   - salt.archive.server.diamond
   - salt.archive.server.nrpe
 
+{{ test_cron_d('salt-archive') }}
+
 test_salt_archive:
-  cmd:
-    - run
-    - name: /etc/cron.d/salt-archive
-    - require:
-      - file: /etc/cron.d/salt-archive
   monitoring:
     - run_all_checks
     - wait: 60

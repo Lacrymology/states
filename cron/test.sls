@@ -34,11 +34,15 @@ test_cron_{{ suffix }}:
     - onlyif: test -d /etc/cron.{{ suffix }}
     - order: last
     {%- endfor %}
+{%- endmacro %}
 
-test_cron_d:
+{%- macro test_cron_d(file) %}
+test_cron_d_{{ file }}:
   cmd:
     - run
-    - name: grep -lr 'this is handled by Salt' /etc/cron.d | xargs grep -v '^#' $file | sed '/^$/d' | awk '{ print substr($0, index($0, $7)) }' | bash
+    - name: grep -v '^#' /etc/cron.d/{{ file }} | sed '/^$/d' | awk '{ print substr($0, index($0, $7)) }' | bash
     - onlyif: test -d /etc/cron.d
     - order: last
+    - require:
+      - file: /etc/cron.d/{{ file }}
 {%- endmacro %}

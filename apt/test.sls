@@ -52,11 +52,15 @@ apt_rc:
     - require:
       - file: /usr/lib/nagios/plugins/check_apt-rc.py
       - pkg: remove_screen
+  pkg:
+    - purged
+    - require:
+      - monitoring: apt_rc
+    - require_in:
+      - monitoring: test
 
 test:
   monitoring:
     - run_all_checks
     - wait: 60
     - order: last
-    - exclude:
-      - apt_rc

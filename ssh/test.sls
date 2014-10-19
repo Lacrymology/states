@@ -37,11 +37,12 @@ test:
     - run_all_checks
     - order: last
 
+{%- set root_home = salt['user.info']('root')['home'] %}
 ssh_add_key:
   cmd:
     - run
-    - name: cat {{ salt['user.info']('root')['home'] }}/.ssh/id_{{ pillar['deployment_key']['type'] }}.pub >> {{ salt['user.info']('root')['home'] }}/.ssh/authorized_keys
-    - unless: grep $(cat cat {{ salt['user.info']('root')['home'] }}/.ssh/id_{{ pillar['deployment_key']['type'] }}.pub) {{ salt['user.info']('root')['home'] }}/.ssh/authorized_keys
+    - name: cat {{ root_home }}/.ssh/id_{{ pillar['deployment_key']['type'] }}.pub >> {{ root_home }}/.ssh/authorized_keys
+    - unless: grep $(cat {{ root_home }}/.ssh/id_{{ pillar['deployment_key']['type'] }}.pub) {{ root_home }}/.ssh/authorized_keys
     - require:
       - cmd: root_ssh_public_key
 
@@ -51,3 +52,10 @@ test_ssh:
     - name: ssh root@localhost '/bin/true'
     - require:
       - cmd: ssh_add_key
+
+ssh_remove_key:
+  cmd:
+    - run
+    - name: cat {{ root_home }}/.ssh/id_{{ pillar['deployment_key']['type'] }}.pub | xargs -i sed -i '/{}/d' {{ root_home }}/.ssh/authorized_keys
+    - require:
+      - cmd: test_ssh

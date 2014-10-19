@@ -25,7 +25,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-{%- from 'nrpe/passive.sls' import test_sslyze with context %}
+{%- from 'cron/test.sls' import test_cron_d with context %}
+{%- from 'sslyze/test.sls' import test_sslyze with context %}
 include:
   - sentry
   - sentry.backup
@@ -33,6 +34,8 @@ include:
   - sentry.backup.nrpe
   - sentry.diamond
   - sentry.nrpe
+
+{{ test_cron_d('sslyze_check_sentry') }}
 
 {{ test_sslyze('sentry') }}
 

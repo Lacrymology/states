@@ -50,7 +50,7 @@ include:
   - yaml
 
 {%- set version = '7.3.2' %}
-{%- set gitlab_shell_version = '2.1' %}
+{%- set gitlab_shell_version = '2.0.1' %}
 
 gitlab_dependencies:
   pkg:

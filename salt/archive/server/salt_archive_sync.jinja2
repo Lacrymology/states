@@ -45,6 +45,8 @@ else
   verbosity=quiet
 fi
 
+locking_script
+
 rsync --archive --no-owner --no-group --${verbosity}{% if salt['pillar.get']('salt_archive:delete', False) %} --delete{% endif %} --exclude ".*" {{ pillar['salt_archive']['source'] }} /var/lib/salt_archive/
 
 if [ $? -eq 0 ]; then

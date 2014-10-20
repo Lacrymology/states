@@ -33,6 +33,10 @@ include:
   - sudo.nrpe
 
 {%- from 'nrpe/passive.sls' import passive_check with context %}
-{%- call passive_check('gitlab.backup') %}
-  - file: check_backup.py
-{%- endcall -%}
+{{ passive_check('gitlab.backup') }}
+
+extend:
+  check_backup.py:
+    file:
+      - require:
+        - file: nsca-gitlab.backup

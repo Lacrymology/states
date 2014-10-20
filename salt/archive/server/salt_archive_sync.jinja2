@@ -49,5 +49,5 @@ rsync --archive --no-owner --no-group --${verbosity}{% if salt['pillar.get']('sa
 
 if [ $? -eq 0 ]; then
   mkdir -p /var/cache/salt/master
-  touch /var/cache/salt/master/sync_timestamp.dat
+  touch {{ opts['cachedir'] }}/sync_timestamp.dat
 fi

@@ -32,6 +32,7 @@ include:
   - jenkins
   - jenkins.git
   - local
+  - pysc
   - salt.cloud
   - salt.master
   - ssh.client

@@ -30,6 +30,7 @@ include:
   - bash.nrpe
   - cron.nrpe
   - jenkins.nrpe
+  - pysc.nrpe
   - salt.cloud.nrpe
   - salt.master.nrpe
   - ssh.client.nrpe

@@ -66,7 +66,7 @@ production: &base
     default_projects_features:
       issues: {{ salt['pillar.get']('gitlab:default_projects_features:issues', True)|lower() }}
 
-      merge_requests:{% if salt['pillar.get']('gitlab:default_projects_features:merge_requests', True) %}true{% else %}false{% endif %}
+      merge_requests: {% if salt['pillar.get']('gitlab:default_projects_features:merge_requests', True) %}true{% else %}false{% endif %}
 
       {%- if salt['pillar.get']('gitlab:default_projects_features:wiki', True) %}
       wiki: true

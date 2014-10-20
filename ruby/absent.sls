@@ -25,6 +25,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Dang Tung Lam <lamdt@familug.org>
 -#}
+{#-
+  Can't uninstall the following as they're used elsewhere
 ruby:
   pkg:
     - purged
@@ -39,6 +41,7 @@ ruby:
       - ruby1.9.3
       - ruby1.9.1-dev
       - ruby1.9.1
+#}
 
 /.gem:
   file:

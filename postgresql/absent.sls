@@ -37,9 +37,12 @@ apt-key del 8683D8A2:
     - onlyif: apt-key list | grep -q 8683D8A2
 
 postgresql-dev:
+{#-
+  Can't uninstall the following as they're used elsewhere
   pkg:
     - purged
     - name: libpq-dev
+#}
   pkgrepo:
     - absent
 {%- if 'files_archive' in pillar %}

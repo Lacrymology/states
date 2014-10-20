@@ -28,10 +28,6 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 {%- from "upstart/absent.sls" import upstart_absent with context -%}
 {{ upstart_absent('shinken-poller') }}
 
-nagios-nrpe-plugin:
-  pkg:
-    - purged
-
 /etc/shinken/poller.conf:
   file:
     - absent

@@ -33,9 +33,14 @@ Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
 jre-7:
+{#-
+  Can't uninstall the following as they're used elsewhere
   pkg:
     - purged
-    - name: openjdk-7-jre-headless
+    - pkgs:
+      - openjdk-7-jre-headless
+      - default-jre
+#}
   cmd:
     - run
     - name: sed -i '\:/usr/lib/jvm/java-7-openjdk:d' /etc/environment

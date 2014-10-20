@@ -37,12 +37,15 @@ apt_sources:
     - name: /etc/apt/sources.list
     - source: /etc/apt/sources.list.bak
     - force: True
+{#-
+  Can't uninstall the following as they're used elsewhere
   pkg:
     - purged
     - pkgs:
       - debconf-utils
       - python-apt
       - python-software-properties
+#}
 
 apt_clean:
   cmd:

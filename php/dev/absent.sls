@@ -33,6 +33,8 @@ Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Dang Tung Lam <lamdt@familug.org>
 -#}
 php-dev:
+{#-
+  Can't uninstall these packages as they're used by others
   pkg:
     - purged
     - pkgs:
@@ -41,6 +43,7 @@ php-dev:
       - php-config
     - require:
       - file: php-dev
+#}
   file:
     - absent
     - name: /etc/php5/conf.d/salt.ini
@@ -48,5 +51,7 @@ php-dev:
 /usr/lib/{% if grains['cpuarch'] == 'i686' %}i386{% else %}x86_64{% endif %}-linux-gnu/libphp5-5.4.3-5-uwsgi1.so:
   file:
     - absent
+{#
     - require:
       - pkg: php-dev
+#}

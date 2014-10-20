@@ -19,11 +19,24 @@
   file:
     - absent
 
-    {%- for log_file in salt['file.find']('/var/log/upstart/', name=service + '.log*', type='f') %}
+{{ service }}.log:
+  file:
+    - absent
+    - name: /var/log/upstart/{{ service }}.log
+    - require:
+      - service: {{ service }}
+
+    {%- for log_file in salt['file.find']('/var/log/upstart/', name=service + '.log.*', type='f') %}
 {{ log_file }}:
   file:
     - absent
     - require:
-      - service: {{ service }}
+      - file: {{ service }}.log
     {%- endfor -%}
 {%- endmacro -%}
+
+{%- for log_file in salt['file.find']('/var/log/upstart/', name='network-interface-*', type='f') %}
+{{ log_file }}:
+  file:
+    - absent
+{%- endfor -%}

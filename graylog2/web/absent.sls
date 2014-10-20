@@ -50,7 +50,7 @@ extend:
       - absent
       - name: {{ user }}
       - require:
-        - service: graylog2-web
+        - user: graylog2-web
 
 /etc/nginx/conf.d/graylog2-web.conf:
   file:
@@ -68,4 +68,10 @@ extend:
 /etc/cron.hourly/graylog2-web-{{ command }}:
   file:
     - absent
-{%- endfor -%}
+{%- endfor %}
+
+/var/log/graylog2-ui:
+  file:
+    - absent
+    - require:
+      - service: graylog2-web

@@ -50,3 +50,9 @@ php:
 {%- else %}
     - ppa: l-mierzwa/lucid-php5
 {%- endif %}
+
+/etc/apt/sources.list.d/l-mierzwa-lucid-php5-{{ grains['oscodename'] }}.list:
+  file:
+    - absent
+    - require:
+      - pkgrepo17: php

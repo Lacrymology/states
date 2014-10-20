@@ -35,4 +35,16 @@ Maintainer: Dang Tung Lam <lamdt@familug.org>
 php-dev:
   pkg:
     - purged
-    - name: php5-dev
+    - pkgs:
+      - php5-dev
+      - libphp5-embed
+      - php-config
+  file:
+    - absent
+    - name: /etc/php5/embed
+
+/usr/lib/{% if grains['cpuarch'] == 'i686' %}i386{% else %}x86_64{% endif %}-linux-gnu/libphp5-5.4.3-5-uwsgi1.so:
+  file:
+    - absent
+    - require:
+      - pkg: php-dev

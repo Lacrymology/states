@@ -31,13 +31,20 @@ postfix:
     - pkgs:
       - postfix
       - postfix-ldap
+  service:
+    - dead
+    - enable: False
+    - require:
+      - pkg: postfix
 
 /var/mail/vhosts:
   file:
     - absent
 
-/etc/postfix:
+{%- for file in ('postfix', 'aliases', 'aliases.db') %}
+/etc/{{ file }}:
   file:
     - absent
     - require:
       - pkg: postfix
+{%- endfor -%}

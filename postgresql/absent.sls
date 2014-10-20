@@ -47,3 +47,8 @@ postgresql-dev:
 {%- else %}
     - ppa: pitti/postgresql
 {%- endif %}
+  file:
+    - absent
+    - name: /etc/apt/sources.list.d/pitti-postgresql-{{ grains['oscodename'] }}.list
+    - require:
+      - pkgrepo17: postgresql-dev

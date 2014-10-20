@@ -45,3 +45,8 @@ mariadb_remove_key:
 mariadb:
   pkgrepo:
     - absent
+  file:
+    - absent
+    - name: /etc/apt/sources.list.d/l-mierzwa-lucid-php5-{{ grains['oscodename'] }}.list
+    - require:
+      - pkgrepo17: mariadb

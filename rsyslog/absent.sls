@@ -49,6 +49,18 @@ rsyslog:
     - ppa: tmortensen/rsyslogv7
 {%- endif %}
 
+/etc/apt/sources.list.d/tmortensen-rsyslogv7-{{ grains['oscodename'] }}.list:
+  file:
+    - absent
+    - require:
+      - pkgrepo17: rsyslog
+
+/etc/rsyslog.d:
+  file:
+    - absent
+    - require:
+      - service: rsyslog
+
 /etc/apt/sources.list.d/rsyslogv7.list:
   file:
     - absent

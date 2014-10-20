@@ -33,18 +33,14 @@ Uninstall a Salt API REST server.
 salt_api:
   group:
     - absent
-{% for user in salt['pillar.get']('salt_master:external_auth:pam', []) %}
-{% if loop.first %}
-    - require:
-{% endif %}
-      - user: user_{{ user }}
-{% endfor %}
 
-{# You need to set the password for each of those users #}
 {% for user in salt['pillar.get']('salt_master:external_auth:pam', []) %}
 user_{{ user }}:
   user:
     - absent
+    - name: {{ user }}
+    - require_in:
+      - group: salt_api
 {% endfor %}
 
 extend:
@@ -61,6 +57,18 @@ extend:
       - pkg: salt-api
 {% endif %}#}
 
+/usr/lib/python2.7/dist-packages/saltapi:
+  file:
+    - absent
+    - require:
+      - pkg: salt-api
+
+/etc/salt/master.d/ui.conf:
+  file:
+    - absent
+    - require:
+      - pkg: salt-api
+
 /etc/salt/master.d/api.conf:
   file:
     - absent
@@ -68,6 +76,10 @@ extend:
       - pkg: salt-api
 
 /usr/local/salt-ui:
+  file:
+    - absent
+
+/etc/nginx/conf.d/salt.conf:
   file:
     - absent
 

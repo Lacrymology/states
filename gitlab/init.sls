@@ -443,7 +443,7 @@ gitlab_clean_redis_db:
       - group
       - mode
     - require:
-      - file: gitlab
+      - file: {{ web_dir }}
     - require_in:
       - file: {{ home_dir }}/gitlab-satellites
 {%- endfor %}
@@ -458,7 +458,7 @@ gitlab_clean_redis_db:
     - group: {{ user }}
     - mode: 440
     - require:
-      - file: gitlab
+      - file: {{ web_dir }}
     - require_in:
       - file: {{ home_dir }}/gitlab-satellites
     - context:
@@ -477,7 +477,7 @@ gitlab_clean_redis_db:
     - group: {{ user }}
     - mode: 440
     - require:
-      - file: gitlab
+      - file: {{ web_dir }}
     - require_in:
       - file: {{ home_dir }}/gitlab-satellites
 
@@ -502,7 +502,7 @@ charlock_holmes:
     - version: 0.6.9.4
     - runas: root
     - require:
-      - file: gitlab
+      - file: {{ web_dir }}
       - file: {{ home_dir }}/gitlab-satellites
       - pkg: gitlab_dependencies
 
@@ -584,7 +584,7 @@ gitlab_rack_gem:
     - mode: 440
     - require:
       - user: gitlab
-      - file: gitlab
+      - file: {{ web_dir }}
     - require_in:
       - cmd: bundler
 
@@ -598,7 +598,7 @@ gitlab_rack_gem:
     - mode: 440
     - require:
       - user: gitlab
-      - file: gitlab
+      - file: {{ web_dir }}
     - require_in:
       - cmd: bundler
 {%- endif %}
@@ -612,7 +612,7 @@ gitlab_rack_gem:
     - group: {{ user }}
     - mode: 640
     - require:
-      - file: gitlab
+      - file: {{ web_dir }}
     - require_in:
       - file: {{ home_dir }}/gitlab-satellites
 

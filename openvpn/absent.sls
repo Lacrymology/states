@@ -37,6 +37,16 @@ openvpn:
 {%- for filename in upstart_files -%}
   {%- set tunnel = filename.replace(prefix + 'openvpn-', '').replace('.conf', '') %}
 {{ upstart_absent('openvpn-' + tunnel ) }}
+
+/etc/openvpn/{{ tunnel }}:
+  file:
+    - absent
+    - require:
+      - service: openvpn-{{ tunnel }}
+    - require_in:
+      - file: /etc/openvpn
+    {# /var/log/upstart/network-interface- #}
+
 {%- endfor %}
 
 /etc/default/openvpn:
@@ -50,3 +60,7 @@ openvpn:
   file:
     - absent
 {%- endfor %}
+
+/etc/openvpn:
+  file:
+    - absent

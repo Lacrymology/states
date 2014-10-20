@@ -27,12 +27,16 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 Installing MS core fonts.
 -#}
+include:
+  - apt
+
 mscorefonts:
   pkg:
     - installed
     - name: ttf-mscorefonts-installer
     - require:
       - debconf: set_mscorefonts
+      - cmd: apt_sources
 
 set_mscorefonts:
   debconf:
@@ -40,3 +44,5 @@ set_mscorefonts:
     - name: ttf-mscorefonts-installer
     - data:
         msttcorefonts/accepted-mscorefonts-eula: {'type': 'boolean', 'value': True}
+    - require:
+      - pkg: apt_sources

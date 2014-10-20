@@ -294,7 +294,7 @@ gitlab_shell:
     - template: jinja
     - user: gitlab
     - group: gitlab
-    - mode: 440
+    - mode: 640  {# gitlab_shell setup needs write permission #}
     - require:
       - file: /var/log/gitlab/gitlab-shell
       - cmd: gitlab_shell

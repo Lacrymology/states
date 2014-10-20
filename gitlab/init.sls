@@ -189,6 +189,7 @@ gitlab_upstart:
     - mode: 440
     - require:
       - file: gitlab
+      - file: /var/lib/gitlab
 
 /home/gitlab/gitlabhq-{{ version }}/config/initializers/rack_attack.rb:
   file:
@@ -414,6 +415,14 @@ gitlab_precompile_assets:
       - file: gitlab_upstart
     - context:
       version: {{ version }}
+
+/var/lib/gitlab:
+  file:
+    - directory
+    - user: gitlab
+    - group: gitlab
+    - require:
+      - user: gitlab
 
 {%- if salt['pillar.get']('gitlab:ssl', False) %}
 extend:

@@ -88,7 +88,7 @@ production: &base
 
     webhook_timeout: 10
 
-    repository_downloads_path: /tmp/repositories
+    repository_downloads_path: /var/lib/gitlab/repositories
 
   gravatar:
     enabled: true
@@ -121,7 +121,7 @@ production: &base
     timeout: 30
 
   backup:
-    path: "/tmp/gitlab-backups"
+    path: "/var/lib/gitlab/gitlab-backups"
 
   gitlab_shell:
     path: /home/gitlab/gitlab-shell/

@@ -77,3 +77,15 @@ salt-master-requirements:
 {{ opts['cachedir'] }}/salt-master-requirements.txt:
   file:
     - absent
+
+/var/cache/salt/master:
+  file:
+    - absent
+    - require:
+      - pkg: salt-master
+
+/etc/salt/master.d:
+  file:
+    - absent
+    - require:
+      - pkg: salt-master

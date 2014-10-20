@@ -57,4 +57,13 @@ varnish:
     - name: {{ user }}
     - require:
       - user: {{ user }}_user
-{%- endfor -%}
+{%- endfor %}
+
+varnishlog_statoverride:
+  file:
+    - replace
+    - name: /var/lib/dpkg/statoverride
+    - pattern: "^varnishlog .+\n"
+    - repl: ''
+    - require:
+      - group: varnishlog_user

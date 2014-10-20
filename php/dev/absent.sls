@@ -39,9 +39,11 @@ php-dev:
       - php5-dev
       - libphp5-embed
       - php-config
+    - require:
+      - file: php-dev
   file:
     - absent
-    - name: /etc/php5/embed
+    - name: /etc/php5/conf.d/salt.ini
 
 /usr/lib/{% if grains['cpuarch'] == 'i686' %}i386{% else %}x86_64{% endif %}-linux-gnu/libphp5-5.4.3-5-uwsgi1.so:
   file:

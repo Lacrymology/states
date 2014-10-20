@@ -63,3 +63,9 @@ tomcat6:
 /usr/share/tomcat6/server:
   file:
     - absent
+
+/var/lib/tomcat6:
+  file:
+    - absent
+    - require:
+      - pkg: tomcat6

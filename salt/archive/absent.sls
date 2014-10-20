@@ -30,6 +30,10 @@ salt_archive:
     - absent
     - require:
       - file: salt_archive
+  group:
+    - absent
+    - require:
+      - user: salt_archive
   file:
     - absent
     - name: /var/lib/salt_archive

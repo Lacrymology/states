@@ -58,3 +58,10 @@ ejabberd:
     - require:
       - pkg: ejabberd
 {%- endfor %}
+
+ejabberd-backups:
+  cmd:
+    - wait
+    - name: rm -rf /var/backups/ejabberd-*
+    - watch:
+      - pkg: ejabberd

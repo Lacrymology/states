@@ -45,7 +45,7 @@ rsync:
     - managed
     - source: salt://rsync/xinetd.jinja2
     - template: jinja
-    - mode: 444
+    - mode: 440
     - user: root
     - group: root
     - context:

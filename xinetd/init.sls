@@ -41,7 +41,7 @@ xinetd:
     - name: /etc/xinetd.conf
     - source: salt://xinetd/config.jinja2
     - template: jinja
-    - mode: 444
+    - mode: 440
     - user: root
     - group: root
     - require:
@@ -56,6 +56,6 @@ xinetd:
     - directory
     - user: root
     - groupt: root
-    - mode: 755
+    - mode: 750
     - require:
       - pkg: xinetd

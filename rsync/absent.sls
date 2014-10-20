@@ -60,3 +60,5 @@ rsync-upstart-log:
 /etc/xinetd.d/rsync:
   file:
     - absent
+    - require:
+      - pkg: rsync

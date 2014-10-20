@@ -37,6 +37,8 @@ rsync:
   file:
     - absent
     - name: /etc/init/rsync.conf
+    - require:
+      - service: rsync
   service:
     - dead
 
@@ -67,6 +69,8 @@ rsync:
 extend:
   xinetd:
     service:
+      - require:
+        - service: rsync
       - watch:
         - file: /etc/rsyncd.conf
         - file: /etc/xinetd.d/rsync

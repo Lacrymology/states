@@ -29,7 +29,7 @@ gitlab-shell config file
 -#}
 ---
 user: gitlab
-gitlab_url: {% if salt['pillar.get']('gitlab:ssl', False) %}https{% else %}http{% endif %}://{{ pillar['gitlab']['hostnames'][0] }}/
+gitlab_url: http{% if salt['pillar.get']('gitlab:ssl', False) %}s{% endif %}://{{ pillar['gitlab']['hostnames'][0] }}/
 http_settings:
   self_signed_cert: {% if salt['pillar.get']('__test__', False) %}true{% else %}false{% endif %}
 repos_path: "/home/gitlab/repositories/"

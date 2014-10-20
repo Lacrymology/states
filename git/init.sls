@@ -34,7 +34,13 @@ include:
 git:
   pkgrepo17:
     - managed
+{%- if 'files_archive' in pillar %}
+    - name: deb {{ pillar['files_archive']|replace('https://', 'http://') }}/mirror/git {{ grains['lsb_distrib_codename'] }} main
+    - key_url: salt://git/key.gpg
+{%- else %}
     - ppa: git-core/ppa
+{%- endif %}
+    - file: /etc/apt/sources.list.d/git-core.list
     - require:
       - pkg: apt_sources
   pkg:

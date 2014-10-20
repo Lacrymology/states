@@ -311,7 +311,10 @@ def list_users():
 def list_system_files(dirs=("/bin", "/etc", "/usr", "/lib", "/sbin", "/var"),
                       ignored=('/var/lib/ucf/',
                                '/var/lib/apt/lists/',
+                               '/var/lib/libuuid/',
+                               '/var/lib/dpkg/',
                                '/var/cache/apt/',
+                               '/var/log/upstart/network-interface-',
                                '/var/cache/salt/minion/extrn_files')):
     """
     Returns a set of the files present in each of the directories listed.

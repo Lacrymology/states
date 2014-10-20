@@ -75,8 +75,7 @@ def test(name, map):
 
         if retcode != 0:
             _remove_log(logfile)
-            ret['comment'] = '%s failed with retcode %d'.format(command,
-                                                                retcode)
+            ret['comment'] = '%s failed with retcode %d' % (command, retcode)
             ret['result'] = False
             return ret
 

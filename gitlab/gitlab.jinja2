@@ -64,11 +64,7 @@ production: &base
     issue_closing_pattern: {{ salt['pillar.get']('gitlab:issue_closing_pattern', '([Cc]lose[sd]|[Ff]ixe[sd]) +#(\d+)') }}
 
     default_projects_features:
-      {%- if salt['pillar.get']('gitlab:default_projects_features:issues', True) %}
-      issues: true
-      {%- else %}
-      issues: false
-      {%- endif %}
+      issues: {{ salt['pillar.get']('gitlab:default_projects_features:issues', True)|lower() }}
 
       {%- if salt['pillar.get']('gitlab:default_projects_features:merge_requests', True) %}
       merge_requests: true

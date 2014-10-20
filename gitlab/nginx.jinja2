@@ -68,6 +68,8 @@ server {
         gzip off;
         uwsgi_modifier1 7;
         include uwsgi_params;
+        uwsgi_read_timeout {{ salt['pillar.get']('gitlab:timeout', 60) }};
+        uwsgi_send_timeout {{ salt['pillar.get']('gitlab:timeout', 60) }};
         uwsgi_pass gitlab;
     }
 

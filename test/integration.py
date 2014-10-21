@@ -58,7 +58,6 @@ except ImportError:
 
 import yaml
 
-# TODO: turn off "salt.loader" logger
 # until https://github.com/saltstack/salt/issues/4994 is fixed, logger must
 # be configured before importing salt.client
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG,
@@ -269,15 +268,15 @@ def list_non_minion_processes(cmd_name='/usr/bin/python /usr/bin/salt-minion'):
         except IOError:
             pass
         else:
-            run_trough_minion = False
+            run_through_minion = False
             for minion_pid in minion_pids:
                 if minion_pid in ancestors:
                     logger.debug("Ignore %d proc %s as it's run by minion %d",
                                  pid, procs[pid], minion_pid)
-                    run_trough_minion = True
+                    run_through_minion = True
                     break
 
-            if not run_trough_minion:
+            if not run_through_minion:
                 logger.debug("Running non-minion process %s[%d]", procs[pid],
                              pid)
                 output.add(procs[pid])
@@ -285,27 +284,17 @@ def list_non_minion_processes(cmd_name='/usr/bin/python /usr/bin/salt-minion'):
     return output
 
 
-def _list_debug(data_type, data_set):
-    output = list(data_set)
-    output.sort()
-    logger.debug("Existing %s: %s", data_type, os.linesep.join(output))
-
-
-def list_groups():
+def get_groups():
     """
     return a set of groups
     """
     global client
-    ret = set(group['name'] for group in client('group.getent', True))
-    _list_debug("Groups", ret)
-    return ret
+    return set(group['name'] for group in client('group.getent', True))
 
 
-def list_users():
+def get_users():
     global client
-    output = set(user['name'] for user in client('user.getent'))
-    _list_debug("Users", output)
-    return output
+    return set(user['name'] for user in client('user.getent'))
 
 
 def list_system_files(dirs=("/bin", "/etc", "/usr", "/lib", "/sbin", "/var"),
@@ -335,7 +324,6 @@ def list_system_files(dirs=("/bin", "/etc", "/usr", "/lib", "/sbin", "/var"),
                         break
                 if not is_ignored:
                     ret.add(filename)
-    _list_debug("Files", ret)
     return ret
 
 
@@ -593,25 +581,12 @@ class States(unittest.TestCase):
             logger.debug("Don't cleanup, it's already done")
             return
 
-        logger.debug("Going to setUp, show resources to check before all "
-                     "absents applied.")
-        list_non_minion_processes()
-        list_groups()
-        list_users()
-        list_system_files()
         try:
             self.sls(self.absent)
         except AssertionError, err:
             clean_up_failed = True
             logger.error("Can't run all .absent: %s", err)
             self.fail(err)
-
-        logger.debug("All absent applied, show resources to check before "
-                     "pkg_installed.revert.")
-        list_non_minion_processes()
-        list_groups()
-        list_users()
-        list_system_files()
 
         # Go back on the same installed packages as after :func:`setUpClass`
         logger.info("Unfreeze installed packages")
@@ -632,27 +607,23 @@ class States(unittest.TestCase):
                 self.fail(output)
 
         clean_up_errors = []
-        logger.debug("Check running processes")
         clean_up_errors.append(
             self._check_same_status(process_list, list_non_minion_processes, [
                 "First cleanup, keep list of %d process",
                 "Check %d proccess",
                 "Process that still run after cleanup: %s"]))
-        logger.debug("Check files")
         clean_up_errors.append(
             self._check_same_status(files_list, list_system_files, [
                 "First cleanup, keep list of %d files",
                 "Check %d files",
                 "Newly created files after cleanup: %s"]))
-        logger.debug("Check groups")
         clean_up_errors.append(
-            self._check_same_status(groups_list, list_groups, [
+            self._check_same_status(groups_list, get_groups, [
                 "First cleanup, keep list of %d groups",
                 "Check %d groups",
                 "Newly created groups after cleanup: %s"]))
-        logger.debug("Check users")
         clean_up_errors.append(
-            self._check_same_status(users_list, list_users, [
+            self._check_same_status(users_list, get_users, [
                 "First cleanup, keep list of %d users",
                 "Check %d users",
                 "Newly created users after cleanup: %s"]))

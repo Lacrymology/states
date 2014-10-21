@@ -30,5 +30,5 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 {%- from 'postgresql/server/nrpe/instance.jinja2' import postgresql_instance_prefix with context -%}
 {%- set deployment = 'sentry' %}
 {{ uwsgi_instance(deployment) }}
-{{ postgresql_instance_prefix(deployment) }}
+{{ postgresql_instance_prefix(deployment, check_empty=True) }}
 {{ nginx_instance(deployment, http_uri='/login/', extra_dependencies=('sentry_uwsgi_worker', 'sentry_postgresql')) }}

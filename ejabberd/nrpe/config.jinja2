@@ -60,5 +60,5 @@ ejabberd_admin_http:
 {%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context %}
 {%- from 'postgresql/server/nrpe/instance.jinja2' import postgresql_instance_prefix with context %}
 {%- set deployment = 'ejabberd' %}
-{{ postgresql_instance_prefix(deployment) }}
+{{ postgresql_instance_prefix(deployment, check_empty=True) }}
 {{ nginx_instance(deployment, http_uri='/admin', https_result='401 Unauthorized', http_result='401 Unauthorized', extra_dependencies=('ejabberd_postgresql', 'ejabberd_admin_http')) }}

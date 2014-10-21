@@ -36,7 +36,7 @@ proftpd_port:
     - proftpd_procs
 
 {%- from 'postgresql/server/nrpe/instance.jinja2' import postgresql_instance_prefix with context %}
-{{ postgresql_instance_prefix('proftpd') }}
+{{ postgresql_instance_prefix('proftpd', check_empty=True) }}
 
 proftpd_ftp:
   description: ProFTPD FTP Connection

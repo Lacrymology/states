@@ -48,9 +48,10 @@ php-dev:
     - absent
     - name: /etc/php5/conf.d/salt.ini
 
-/usr/lib/{% if grains['cpuarch'] == 'i686' %}i386{% else %}x86_64{% endif %}-linux-gnu/libphp5-5.4.3-5-uwsgi1.so:
+/usr/lib/{% if grains['cpuarch'] == 'i686' %}i386{% else %}x86_64{% endif %}-linux-gnu/libphp5-5.4.3-5uwsgi1.so:
   file:
     - absent
+
 {#
     - require:
       - pkg: php-dev

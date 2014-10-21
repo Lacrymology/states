@@ -58,7 +58,7 @@ test:
       - monitoring: {{ name }}
 {%- endfor %}
 
-{% for name, failure in check_set %}
+{% for name, failure in check_list %}
 {{ name }}:
   monitoring:
     - run_check

@@ -48,7 +48,3 @@ python-libcloud:
 /etc/salt/cloud.deploy.d:
   file:
     - absent
-
-/etc/salt/cloud.providers:
-  file:
-    - absent

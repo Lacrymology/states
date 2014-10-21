@@ -153,9 +153,15 @@ def _is_binary_file(fn):
 
 
 def process_args():
-    args = sys.argv[1:]
     argdirs = []
     paths = []
+
+    if len(sys.argv) == 1:
+        args = [os.curdir]
+        print 'No argument passed, check all files under current directory.'
+    else:
+        args = sys.argv[1:]
+
     for i in args:
         if os.path.isdir(i):
             argdirs.append(i)

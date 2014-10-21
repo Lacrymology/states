@@ -78,4 +78,4 @@ mysql-common:
   pkg:
     - installed
     - require:
-      - pkgrepo17: mariadb
+      - pkgrepo: mariadb

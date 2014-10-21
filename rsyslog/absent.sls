@@ -53,7 +53,7 @@ rsyslog:
   file:
     - absent
     - require:
-      - pkgrepo17: rsyslog
+      - pkgrepo: rsyslog
 
 /etc/rsyslog.d:
   file:

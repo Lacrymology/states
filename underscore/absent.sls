@@ -44,4 +44,4 @@ libjs-underscore:
     - absent
     - name: /etc/apt/sources.list.d/chris-lea-libjs-underscore-{{ grains['oscodename'] }}.list
     - require:
-      - pkgrepo17: libjs-underscore
+      - pkgrepo: libjs-underscore

@@ -39,7 +39,7 @@ salt_absent_old_apt_salt_{{ i }}:
 {%- endfor %}
 
 salt:
-  pkgrepo17:
+  pkgrepo:
     - absent
 {%- if 'files_archive' in pillar %}
     - name: deb {{ pillar['files_archive']|replace('https://', 'http://') }}/mirror/salt/{{ version }} {{ grains['lsb_distrib_codename'] }} main
@@ -51,4 +51,4 @@ salt:
     - absent
     - name: /etc/apt/sources.list.d/saltstack-salt.list
     - require:
-      - pkgrepo17: salt
+      - pkgrepo: salt

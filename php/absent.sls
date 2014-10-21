@@ -58,4 +58,4 @@ php:
   file:
     - absent
     - require:
-      - pkgrepo17: php
+      - pkgrepo: php

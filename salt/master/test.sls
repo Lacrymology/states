@@ -41,5 +41,5 @@ test:
     - run
     - name: /etc/cron.daily/backup-saltmaster
     - require:
-      - file: backup-saltmaster
-    - order: last
+      - sls: salt.master
+      - sls: salt.master.backup

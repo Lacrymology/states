@@ -42,6 +42,7 @@ if [ "${with_ssl:-true}" = "false" ]; then
 fi
 
 cd common
+test/lint.py
 pip install -r doc/requirements.txt
 doc/build.py
 

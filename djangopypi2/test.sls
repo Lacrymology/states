@@ -48,5 +48,5 @@ test:
     - run
     - name: /etc/cron.daily/backup-djangopypi2
     - require:
-      - file: backup-djangopypi2
-    - order: last
+      - sls: djangopypi2
+      - sls: djangopypi2.backup

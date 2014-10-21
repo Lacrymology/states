@@ -41,5 +41,5 @@ test:
     - run
     - name: /etc/cron.daily/backup-redis
     - require:
-      - file: backup-redis
-    - order: last
+      - sls: redis
+      - sls: redis.backup

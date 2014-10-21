@@ -40,6 +40,5 @@ test:
     - run
     - name: /etc/cron.daily/backup-openldap
     - require:
-      - file: backup-openldap
-      - service: slapd
-    - order: last
+      - sls: openldap
+      - sls: openldap.backup

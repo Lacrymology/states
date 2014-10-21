@@ -123,10 +123,22 @@ def lint_check_bad_state_style(paths, *exts):
     '''
     if not exts:
         exts = ['sls']
-    found = _grep(paths, '^  \w*\.\w*:$', *exts)
-    if found:
+    all_found = _grep(paths, '^  \w*\.\w*:$', *exts)
+    filtered_found = {}
+    for fn, data in all_found.iteritems():
+        # A state ID under ``extend`` and contains ``.`` can be miss understood
+        # by our regex. If it's a .py file, then it will be skipped.
+        # TODO find a better solution for this than just skip .py files
+        # e.g. if file name is .cfg or whatever contains '.'  in its name
+        # currently, this works because we only extend *.py states.
+        data_without_pystates = {lino: sid for lino, sid in
+                                 data.iteritems() if not sid.endswith('.py:')}
+        if data_without_pystates:
+            filtered_found.update({fn: data_without_pystates})
+
+    if filtered_found:
         _print_tips("Use \nstate:\n  - function\nstyle instead")
-        _print_grep_result(found)
+        _print_grep_result(filtered_found)
         return False
     return True
 

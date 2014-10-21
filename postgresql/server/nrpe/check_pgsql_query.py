@@ -36,10 +36,9 @@ import logging
 
 import psycopg2
 import nagiosplugin as nap
-import pysc
-import pysc.nrpe as bfe
+from pysc import nrpe
 
-log = logging.getLogger('nagiosplugin')
+log = logging.getLogger('nagiosplugin.postgresql.server.query')
 
 
 class PgSQLQuery(nap.Resource):
@@ -51,32 +50,40 @@ class PgSQLQuery(nap.Resource):
         self.query = query
 
     def probe(self):
+        log.info("PgSQLQuery.probe started")
         try:
+            log.debug("connecting with postgresql")
             c = psycopg2.connect(host=self.host, user=self.user,
-                                 passwd=self.passwd, database=self.database)
+                                 password=self.passwd, database=self.database)
             cursor = c.cursor()
-            records = cursor.execute(self.query)
+            log.debug("about to execute query: %s", self.query)
+            cursor.execute(self.query)
+            records = cursor.rowcount
+            log.debug("resulted in %d records", records)
             log.debug(records)
-            log.debug(records.fetch_all())
+            log.debug(cursor.fetchall())
         except Exception as e:
             log.critical(e)
             records = -1
 
+        log.info("PgSQLQuery.probe finished")
+        log.debug("returning %d", records)
         return [nap.Metric('record', records, context='records')]
 
 
-@nap.guarded
-@pysc.profile(log=log)
-def main():
-    argp = bfe.ArgumentParser(description=__doc__)
-    args = argp.parse_args()
-    config = bfe.ConfigFile.from_arguments(args)
-    kwargs = config.kwargs('host', 'user', 'passwd', 'database')
-    kwargs['query'] = config.get_argument('query', 'SHOW max_connections;')
-    critical = config.get_arguments('critical', '1:')
-    check = bfe.Check(PgSQLQuery(**kwargs),
-                      nap.ScalarContext('records', critical, critical))
-    check.main(args)
+def check_pgsql_query(config):
+    critical = config['critical']
+    return (
+        PgSQLQuery(host=config['host'],
+                   user=config['user'],
+                   passwd=config['passwd'],
+                   database=config['database'],
+                   query=config['query']),
+        nap.ScalarContext('records', critical, critical)
+    )
 
 if __name__ == "__main__":
-    main()
+    nrpe.check(check_pgsql_query, {
+        'critical': '1:',
+        'query': 'show max_connections;',
+    })

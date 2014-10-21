@@ -178,7 +178,9 @@ def process_args():
             fns = [f for f in fns if not f[0] == '.']
             dirs[:] = [d for d in dirs if not d[0] == '.']
             for fn in fns:
-                _paths.append(os.path.join(root, fn))
+                path = os.path.join(root, fn)
+                if not _is_binary_file(path):
+                    _paths.append(path)
         paths.extend(_paths)
 
     return paths

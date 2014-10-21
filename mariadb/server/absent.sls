@@ -35,6 +35,8 @@ Maintainer: Dang Tung Lam <lamdt@familug.org>
 /etc/mysql:
   file:
     - absent
+    - require:
+      - pkg: mysql-server
 
 mysql-server:
   service:
@@ -47,3 +49,31 @@ mysql-server:
       - file: /etc/mysql
     - require:
       - service: mysql-server
+  user:
+    - absent
+    - name: mysql
+    - require:
+      - pkg: mysql-server
+  group:
+    - absent
+    - name: mysql
+    - require:
+      - user: mysql-server
+  cmd:
+    - run
+    - name: update-rc.d -f mysql remove
+    - require:
+      - pkg: mysql-server
+  file:
+    - absent
+    - name: /var/lib/mysql
+    - require:
+      - pkg: mysql-server
+
+{%- for extension in ('/', '.log', '.err') %}
+/var/log/mysql{{ extension }}:
+  file:
+    - absent
+    - require:
+      - pkg: mysql-server
+{%- endfor -%}

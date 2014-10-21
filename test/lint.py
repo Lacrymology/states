@@ -132,6 +132,26 @@ def lint_check_bad_state_style(paths, *exts):
     return True
 
 
+def _is_binary_file(fn):
+    '''
+    Check if ``fn`` is binary file.
+    '''
+
+    def _is_binary_string(bytes_):
+        '''
+        A hack to determine whether input string is binary or not base on
+        file utility behavior.
+
+        http://stackoverflow.com/a/7392391/807703
+        '''
+        textchars = (bytearray([7, 8, 9, 10, 12, 13, 27]) +
+                     bytearray(range(0x20, 0x100)))
+        return bool(bytes_.translate(None, textchars))
+
+    with open(fn, 'rb') as f:
+        return _is_binary_string(f.read(1024))
+
+
 def process_args():
     args = sys.argv[1:]
     argdirs = []
@@ -139,10 +159,10 @@ def process_args():
     for i in args:
         if os.path.isdir(i):
             argdirs.append(i)
-        elif os.path.isfile(i):
+        elif os.path.isfile(i) and not _is_binary_file(i):
             paths.append(i)
         else:
-            print 'Bad argument: {0} is not a directory or file'.format(i)
+            print 'Bad argument: {0} is not a directory or text file'.format(i)
             sys.exit(1)
 
     for argdir in argdirs:

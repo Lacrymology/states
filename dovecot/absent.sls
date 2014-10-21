@@ -47,7 +47,7 @@ extend:
     file:
       - absent
       - name: /etc/dovecot
-  dovecot.log:
+  dovecot-log:
     file:
       - require:
         - pkg: dovecot

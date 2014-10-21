@@ -19,7 +19,7 @@
   file:
     - absent
 
-{{ service }}.log:
+{{ service }}-log:
   file:
     - absent
     - name: /var/log/upstart/{{ service }}.log
@@ -31,7 +31,7 @@
   file:
     - absent
     - require:
-      - file: {{ service }}.log
+      - file: {{ service }}-log
     {%- endfor -%}
 {%- endmacro -%}
 

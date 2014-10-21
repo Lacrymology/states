@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2014, Dang Tung Lam
+Copyright (c) 2013, Bruno Clermont
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,10 +22,16 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Dang Tung Lam <lamdt@familug.org>
-Maintainer: Dang Tung Lam <lamdt@familug.org>
-#}
+Author: Bruno Clermont <patate@fastmail.cn>
+Maintainer: Bruno Clermont <patate@fastmail.cn>
+-#}
+include:
+  - salt.cloud
+  - salt.cloud.diamond
+  - salt.cloud.nrpe
 
-/etc/cron.daily/backup-ejabberd:
-  file:
-    - absent
+test:
+  monitoring:
+    - run_all_checks
+    - order: last
+    - wait: 60

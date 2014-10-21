@@ -65,7 +65,7 @@ salt-api:
   service:
     - dead
 
-/etc/salt/master.d/ui.conf:
+/etc/salt/master.d/api.conf:
   file:
     - absent
     - require:
@@ -77,11 +77,7 @@ salt-api:
     - require:
       - service: salt-api
 
-/usr/local/salt-ui:
-  file:
-    - absent
-
-/etc/nginx/conf.d/salt.conf:
+/etc/nginx/conf.d/salt-api.conf:
   file:
     - absent
 

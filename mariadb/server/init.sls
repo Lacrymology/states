@@ -88,7 +88,7 @@ mysql-server:
     - installed
     - name: mariadb-server
     - require:
-      - pkgrepo17: mariadb
+      - pkgrepo: mariadb
       - pkg: mariadb
       - file: /etc/mysql/my.cnf
       - debconf: mysql-server

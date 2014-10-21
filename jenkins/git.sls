@@ -42,7 +42,7 @@ include:
     - directory
     - user: jenkins
     - group: nogroup # default groups of jenkins
-    - mode: 550
+    - mode: 700
     - require:
       - pkg: jenkins
 

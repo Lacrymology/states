@@ -43,7 +43,7 @@ php:
     - run
     - name: 'apt-key del 67E15F46'
     - onlyif: apt-key list | grep -q 67E15F46
-  pkgrepo17:
+  pkgrepo:
     - absent
 {%- if 'files_archive' in pillar %}
     - name: deb {{ pillar['files_archive']|replace('https://', 'http://') }}/mirror/lucid-php5 {{ grains['lsb_distrib_codename'] }} main

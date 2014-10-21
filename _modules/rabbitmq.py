@@ -6,7 +6,7 @@ data.
 '''
 
 # Import salt libs
-from salt import exceptions, utils
+import salt.utils
 
 # Import python libs
 import logging
@@ -17,24 +17,43 @@ log = logging.getLogger(__name__)
 
 
 def __virtual__():
-    '''Verify RabbitMQ is installed.
     '''
-    command = 'rabbitmqctl'
-    try:
-        utils.check_or_die(command)
-    except exceptions.CommandNotFoundError:
-        log.debug("Can't find command '%s", command)
-        return False
-    return 'rabbitmq'
+    Verify RabbitMQ is installed.
+    '''
+    return salt.utils.which('rabbitmqctl') is not None
 
 
 def _format_response(response, msg):
-    if 'Error' in response:
-        msg = 'Error'
-
+    if isinstance(response, dict):
+        if response['retcode'] != 0:
+            msg = 'Error'
+        else:
+            msg = response['stdout']
+    else:
+        if 'Error' in response:
+            msg = 'Error'
     return {
         msg: response
     }
+
+
+def _get_rabbitmq_plugin():
+    '''
+    Returns the rabbitmq-plugin command path if we're running an OS that
+    doesn't put it in the standard /usr/bin or /usr/local/bin
+    This works by taking the rabbitmq-server version and looking for where it
+    seems to be hidden in /usr/lib.
+    '''
+    rabbitmq = salt.utils.which('rabbitmq-plugins')
+
+    if rabbitmq is None:
+        version = __salt__['pkg.version']('rabbitmq-server').split('-')[0]
+
+        path = '/usr/lib/rabbitmq/lib/rabbitmq_server-{0}/\
+                sbin/rabbitmq-plugins'
+        rabbitmq = path.format(version)
+
+    return rabbitmq
 
 
 def list_users(runas=None):
@@ -126,6 +145,7 @@ def add_user(name, password=None, runas=None):
 
     res = __salt__['cmd.run'](
         'rabbitmqctl add_user {0} {1!r}'.format(name, password),
+        output_loglevel='quiet',
         runas=runas)
 
     if clear_pw:
@@ -172,6 +192,7 @@ def change_password(name, password, runas=None):
     '''
     res = __salt__['cmd.run'](
         'rabbitmqctl change_password {0} {1!r}'.format(name, password),
+        output_loglevel='quiet',
         runas=runas)
     msg = 'Password Changed'
 
@@ -229,7 +250,7 @@ def delete_vhost(vhost, runas=None):
 
 
 def set_permissions(vhost, user, conf='.*', write='.*', read='.*',
-        runas=None):
+                    runas=None):
     '''
     Sets permissions for vhost via rabbitmqctl set_permissions
 
@@ -280,7 +301,7 @@ def list_user_permissions(name, user=None):
 
 
 def set_user_tags(name, tags, runas=None):
-    '''Add user tags via rabbitctl set_user_tags
+    '''Add user tags via rabbitmqctl set_user_tags
 
     CLI Example:
 
@@ -329,7 +350,7 @@ def cluster_status(user=None):
     return res
 
 
-def join_cluster(host, user='rabbit', runas=None):
+def join_cluster(host, user='rabbit', ram_node=None, runas=None):
     '''
     Join a rabbit cluster
 
@@ -337,13 +358,15 @@ def join_cluster(host, user='rabbit', runas=None):
 
     .. code-block:: bash
 
-        salt '*' rabbitmq.join_cluster 'rabbit' 'rabbit.example.com'
+        salt '*' rabbitmq.join_cluster 'rabbit.example.com' 'rabbit'
     '''
+    if ram_node:
+        cmd = 'rabbitmqctl join_cluster --ram {0}@{1}'.format(user, host)
+    else:
+        cmd = 'rabbitmqctl join_cluster {0}@{1}'.format(user, host)
 
     stop_app(runas)
-    res = __salt__['cmd.run'](
-        'rabbitmqctl join_cluster {0}@{1}'.format(user, host),
-        runas=runas)
+    res = __salt__['cmd.run'](cmd, runas=runas)
     start_app(runas)
 
     return _format_response(res, 'Join')
@@ -445,8 +468,8 @@ def list_queues_vhost(vhost, *kwargs):
 
         salt '*' rabbitmq.list_queues messages consumers
     '''
-    res = __salt__['cmd.run'](
-        'rabbitmqctl list_queues -p {0} {1}'.format(vhost, ' '.join(list(kwargs))))
+    res = __salt__['cmd.run']('rabbitmqctl list_queues -p\
+                              {0} {1}'.format(vhost, ' '.join(list(kwargs))))
     return res
 
 
@@ -555,7 +578,9 @@ def plugin_is_enabled(name, runas=None):
 
         salt '*' rabbitmq.plugin_is_enabled foo
     '''
-    ret = __salt__['cmd.run']('rabbitmq-plugins list -m -e', runas=runas)
+    rabbitmq = _get_rabbitmq_plugin()
+    cmd = '{0} list -m -e'.format(rabbitmq)
+    ret = __salt__['cmd.run'](cmd, runas=runas)
     return bool(name in ret)
 
 
@@ -569,9 +594,11 @@ def enable_plugin(name, runas=None):
 
         salt '*' rabbitmq.enable_plugin foo
     '''
-    ret = __salt__['cmd.run'](
-            'rabbitmq-plugins enable {0}'.format(name),
-            runas=runas)
+    rabbitmq = _get_rabbitmq_plugin()
+    cmd = '{0} enable {1}'.format(rabbitmq, name)
+
+    ret = __salt__['cmd.run_all'](cmd, runas=runas)
+
     return _format_response(ret, 'Enabled')
 
 
@@ -586,7 +613,9 @@ def disable_plugin(name, runas=None):
         salt '*' rabbitmq.disable_plugin foo
     '''
 
-    ret = __salt__['cmd.run'](
-            'rabbitmq-plugins disable {0}'.format(name),
-            runas=runas)
+    rabbitmq = _get_rabbitmq_plugin()
+    cmd = '{0} disable {1}'.format(rabbitmq, name)
+
+    ret = __salt__['cmd.run_all'](cmd, runas=runas)
+
     return _format_response(ret, 'Disabled')

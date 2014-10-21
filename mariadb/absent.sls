@@ -43,5 +43,5 @@ mariadb_remove_key:
     - onlyif: apt-key list | grep -q 0xcbcb082a1bb943db
 
 mariadb:
-  pkgrepo17:
+  pkgrepo:
     - absent

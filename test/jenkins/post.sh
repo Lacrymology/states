@@ -2,16 +2,16 @@
 # {{ pillar['message_do_not_modify'] }}
 # Copyright (c) 2013, Hung Nguyen Viet
 # All rights reserved.
-# 
+#
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
-# 
+#
 # 1. Redistributions of source code must retain the above copyright notice, this
 #    list of conditions and the following disclaimer.
 # 2. Redistributions in binary form must reproduce the above copyright notice,
 #    this list of conditions and the following disclaimer in the documentation
 #    and/or other materials provided with the distribution.
-# 
+#
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 # ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -22,12 +22,10 @@
 # ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-# 
+#
 # Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 # Maintainer: Bruno Clermont <patate@fastmail.cn>
 #             Hung Nguyen Viet <hvnsweeting@gmail.com>
 set -e
 set -x
 sudo salt-cloud --destroy --assume-yes integration-$JOB_NAME-$BUILD_NUMBER
-rm -f /srv/salt/jenkins_archives/$JOB_NAME-$BUILD_NUMBER.tar.gz
-sudo salt `hostname` file.remove /var/cache/salt/master/minions/integration-$JOB_NAME-$BUILD_NUMBER

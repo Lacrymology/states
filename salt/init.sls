@@ -35,26 +35,33 @@ How to create a snapshot of saltstack Ubuntu PPA::
   find . -type f -name 'index.*' -delete
   find pool/ -type f ! -name '*.deb' -delete
 
-To only keep precise::
+To only keep precise & trusty::
 
-   rm -rf `find dists/ -maxdepth 1 -mindepth 1 ! -name precise`
-   find pool/ -type f -name '*.deb' ! -name '*precise*' -delete
+   rm -rf `find dists/ -maxdepth 1 -mindepth 1 ! -name precise ! -name trusty`
+   # because some deb can be used for all (E.g: salt-api)
+   find pool/ \( -type f -name '*.deb' \( -name '*lucid*' -or  -name '*oneiric*' -or  -name '*quantal*' -or  -name '*raring*' -or -name '*saucy*' \) \) -delete
 -#}
 include:
   - apt
 
-{%- set version = '0.17.5-1' %}
 {%- for i in ('list', 'list.save') %}
 salt_absent_old_apt_salt_{{ i }}:
   file:
     - absent
     - name: /etc/apt/sources.list.d/saltstack-salt-{{ grains['lsb_distrib_codename'] }}.{{ i }}
-    - require_in:
-      - pkgrepo17: salt
 {%- endfor %}
 
+{%- from "macros.jinja2" import salt_version with context %}
+{%- set version = salt_version() %}
 salt:
+  pkg:
+    - installed
+    - name: salt-common
+{%- if grains['saltversion'].startswith('0.17') %}
   pkgrepo17:
+{%- else %}
+  pkgrepo:
+{%- endif %}
     - managed
 {%- if 'files_archive' in pillar %}
     - name: deb {{ pillar['files_archive']|replace('https://', 'http://') }}/mirror/salt/{{ version }} {{ grains['lsb_distrib_codename'] }} main
@@ -65,8 +72,7 @@ salt:
     - key_url: salt://salt/key.gpg
     - require:
       - cmd: apt_sources
-  pkg:
-    - installed
-    - name: salt-common
-    - require:
-      - pkgrepo17: salt
+      - file: salt_absent_old_apt_salt_list
+      - file: salt_absent_old_apt_salt_list.save
+    - require_in:
+      - pkg: salt

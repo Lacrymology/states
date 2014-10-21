@@ -1,5 +1,21 @@
 {#- file contains all common macros #}
 
+{#- when upgrading salt, it should only change salt version here and in
+    bootstrap.sh (not managed by salt),
+    all consumer of these macros should got it automatically,
+    Changing directly in consumer only needed when new version of salt
+    change a lot in ppa structure.
+-#}
+{%- macro salt_version() -%}
+    2014.1.10-1
+{%- endmacro -%}
+
+{%- macro salt_deb_version() -%}
+{#- example: salt-minion_0.17.5-1precise1_all.deb
+    this macro will provide ``0.17.5-1precise1`` -#}
+    {{ salt_version() }}{{ grains['lsb_distrib_codename'] }}1
+{%- endmacro -%}
+
 {#- manage pid file owner/mode only if it exists, as if always manage it may
 cause problem because each daemon handles existed pid file different way.
 
@@ -9,48 +25,49 @@ user: user that PID file should belong
 group: group that PID file should belong
 watch_in_service: service which watches the PID file
 mode: permission of PID file
-#}
-{%- macro manage_pid(path, user, group, watch_in_service, mode=644) %}
-  {%- if salt['file.file_exists'](path) %}
+-#}
+{%- macro manage_pid(path, user, group, watch_in_service, mode=644) -%}
+    {%- if salt['file.file_exists'](path) %}
 {{ path }}:
   file:
     - managed
     - user: {{ user }}
     - group: {{ group }}
     - mode: {{ mode }}
-    {%- if caller is defined %}
-      {%- for line in caller().split("\n") %}
-        {%- if loop.first %}
+        {%- if caller is defined -%}
+            {%- for line in caller().split("\n") -%}
+                {%- if loop.first %}
     - require:
-        {%- endif %}
+                {%- endif %}
 {{ line|trim|indent(6, indentfirst=True) }}
-      {%- endfor %}
-    {%- endif %}
+            {%- endfor -%}
+        {%- endif %}
     - watch_in:
       - service: {{ watch_in_service }}
     {%- else %}
 # {{ path }} does not exist, no need to manage
-    {%- endif %}
-{%- endmacro %}
+    {%- endif -%}
+{%- endmacro -%}
 
-{#- extend for change owner of ssh keys #}
-{%- macro change_ssh_key_owner(owner, requisites) %}
-{#- a dirty hack to make sure this macro will render at least one state to extend #}
+{#- extend for change owner of ssh keys -#}
+{%- macro change_ssh_key_owner(owner, requisites) -%}
+    {#- a dirty hack to make sure this macro will render at least one state to
+        extend #}
   /etc/ssh/keys:
     file:
       - directory
 
-{%- set managed_users = [] -%}
-{%- for elem in salt['pillar.get']('ssh:keys', []) -%}
-  {%- set maps = elem['map'] %}
-  {%- for hostname in maps %}
-    {%- set local_remotes = maps[hostname] if maps[hostname] != none else {'root': 'root'} %}
-    {%- for local in local_remotes %}
-    {% do managed_users.append(local) %}
-    {%- endfor %}
-  {%- endfor %}
-{%- endfor %}
-{%- if owner in managed_users %}
+    {%- set managed_users = [] -%}
+    {%- for elem in salt['pillar.get']('ssh:keys', []) -%}
+        {%- set maps = elem['map'] -%}
+        {%- for hostname in maps -%}
+            {%- set local_remotes = maps[hostname] if maps[hostname] != none else {'root': 'root'} -%}
+            {%- for local in local_remotes -%}
+                {%- do managed_users.append(local) -%}
+            {%- endfor -%}
+        {%- endfor -%}
+    {%- endfor -%}
+    {%- if owner in managed_users %}
   /etc/ssh/keys/{{ owner }}:
     file:
       - user: {{ owner }}
@@ -59,8 +76,8 @@ mode: permission of PID file
         - user
         - mode
       - require:
-  {%- for k, v in requisites.iteritems() %}
+        {%- for k, v in requisites.iteritems() %}
         - {{ k }}: {{ v }}
-  {%- endfor %}
-{%- endif %}
-{%- endmacro %}
+        {%- endfor -%}
+    {%- endif -%}
+{%- endmacro -%}

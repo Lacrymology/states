@@ -121,6 +121,7 @@ def setUpModule():
     os.environ['HOME'] = pwd.getpwnam('root').pw_dir
 
     client('saltutil.sync_all')
+    client('saltutil.refresh_modules')
     logger.info("Rendering all *.test SLS to quickly find malformed ones")
     for sls in all_states:
         if sls.endswith('.test'):

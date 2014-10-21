@@ -1,107 +1,76 @@
 # -*- coding: utf-8 -*-
+'''
+Manage RabbitMQ Clusters
+========================
 
-# Copyright (c) 2013, Bruno Clermont
-# All rights reserved.
-#
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions are met:
-#
-# 1. Redistributions of source code must retain the above copyright notice, this
-#    list of conditions and the following disclaimer.
-# 2. Redistributions in binary form must reproduce the above copyright notice,
-#    this list of conditions and the following disclaimer in the documentation
-#    and/or other materials provided with the distribution.
-#
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
-# ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-# (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-# ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+Example:
 
-"""
-RabbitMQ cluster states.
-"""
+.. code-block:: yaml
 
-__author__ = 'Bruno Clermont'
-__maintainer__ = 'Bruno Clermont'
-__email__ = 'patate@fastmail.cn'
+    rabbit@rabbit.example.com:
+        rabbitmq_cluster.join:
+          - user: rabbit
+          - host: rabbit.example.com
+'''
 
-import os
+# Import python libs
 import logging
 
-from salt import exceptions, utils
+# Import salt libs
+import salt.utils
 
 log = logging.getLogger(__name__)
-log.debug("module rabbitmq_cluster loaded")
+
 
 def __virtual__():
     '''
-    Verify RabbitMQ are installed.
+    Only load if RabbitMQ is installed.
     '''
-    command = 'rabbitmqctl'
-    try:
-        utils.check_or_die(command)
-    except exceptions.CommandNotFoundError:
-        log.debug("Can't find command '%s'", command)
-        return False
-    return 'rabbitmq_cluster'
+    return salt.utils.which('rabbitmqctl') is not None
 
-def _convert_env(env):
-    output = {}
-    for var in env.split():
-        k, v = var.split('=')
-        output[k] = v
-    return output
 
-def joined(master, user, password, disk_node=False, env=(),
-           host='127.0.0.1:15672'):
-    ret = {'name': 'rabbitmq cluster join master %s' % master, 'result': None,
-           'comment': '', 'changes': {}}
-    _env = _convert_env(env)
+def joined(name, host, user='rabbit', ram_node=None, runas=None):
+    '''
+    Ensure the node user@host is joined to cluster
 
-    cluster_status = 'rabbitmqctl cluster_status | grep -q %s' % master
-    code = __salt__['cmd.retcode'](cluster_status, env=_env)
-    if code == 1:
-        if __opts__['test']:
-            ret['result'] = None
-            ret['comment'] = \
-                'Would have been in cluster with master {0}'.format(master)
-            return ret
-        log.info("Not joined")
-        if disk_node:
-            command_add = 'rabbitmqctl join_cluster rabbit@%s' % master
-        else:
-            command_add = 'rabbitmqctl join_cluster --ram rabbit@%s' % master
-        commands = (
-            'rabbitmqctl stop_app',
-#            'rabbitmqctl reset',
-            command_add,
-            'rabbitmqctl start_app'
-        )
-        log.debug("Going to run the following: %s", os.linesep.join(commands))
-        for command in commands:
-            log.debug("run %s", command)
-            sub_ret = __salt__['cmd.run_all'](command, env=_env)
-            log.debug("command stdout: %s", sub_ret['stdout'])
-            log.debug("command stderr: %s", sub_ret['stderr'])
-            if sub_ret['retcode'] != 0:
-                ret['result'] = False
-                ret['comment'] = sub_ret['stdout']
-                return ret
+    name
+        Irrelevant, not used (recommended: user@host)
+    user
+        The user to join the cluster as (default: rabbit)
+    host
+        The host to join to cluster
+    ram_node
+        Join node as a RAM node
+    runas
+        The user to run the rabbitmq command as
+    '''
 
-        code = __salt__['cmd.retcode'](cluster_status, env=_env)
-        if code == 1:
-            ret['result'] = False
-            ret['comment'] = "Can't add to master %s" % master
-        else:
-            ret['result'] = True
-            ret['comment'] = "Added to master %s" % master
-    else:
-        ret['result'] = True
-        ret['comment'] = "already in cluster"
+    ret = {'name': name, 'result': True, 'comment': '', 'changes': {}}
+    result = {}
+
+    joined = __salt__['rabbitmq.cluster_status']()
+    if '{0}@{1}'.format(user, host) in joined:
+        ret['comment'] = 'Already in cluster'
+        return ret
+
+    if __opts__['test']:
+        ret['result'] = None
+        ret['comment'] = 'Node {0}@{1} is set to join cluster'.format(
+            user, host)
+        return ret
+
+    result = __salt__['rabbitmq.join_cluster'](host, user,
+                                               ram_node, runas=runas)
+
+    if 'Error' in result:
+        ret['result'] = False
+        ret['comment'] = result['Error']
+    elif 'Join' in result:
+        ret['comment'] = result['Join']
+        ret['changes'] = {'old': '', 'new': '{0}@{1}'.format(user, host)}
+
     return ret
+
+
+# Alias join to preserve backward compat
+join = joined

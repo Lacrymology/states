@@ -46,7 +46,7 @@ salt-minion:
     - group: root
     - mode: 444
     - source: salt://salt/minion/config.jinja2
-    - require:
+    - require_in:
       - pkg: salt-minion
   pkg:
     - latest
@@ -68,7 +68,7 @@ salt-minion:
     - group: root
     - mode: 440
     - source: salt://salt/minion/{{ file }}.jinja2
-    - require:
+    - require_in:
       - pkg: salt-minion
     - watch_in:
       - service: salt-minion

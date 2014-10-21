@@ -28,6 +28,7 @@ include:
   - apt
   - bash
   - salt
+  - salt.master
   - pip
 
 {%- for type in ('profiles', 'providers') %}
@@ -51,26 +52,39 @@ include:
       - pkg: salt-cloud
 
 salt_cloud_remove_old_version:
-  pkg:
+  pip:
     - removed
     - name: salt-cloud
+    - require:
+      - module: pip
 
-{%- set version = '0.8.11' %}
 salt-cloud:
   pkg:
     - installed
-    - name: python-libcloud
     - skip_verify: True
     - require:
       - pkg: salt
-      - pkgrepo17: salt
-      - pkg: salt_cloud_remove_old_version
-  pip:
-    - installed
-    - name: salt-cloud=={{ version }}
+      - pip: salt_cloud_remove_old_version
+  file:
+    - managed
+    - name: {{ opts['cachedir'] }}/pip/salt.cloud
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - source: salt://salt/cloud/requirements.jinja2
     - require:
       - module: pip
+  module:
+    - wait
+    - name: pip.install
+    - upgrade: True
+    - requirements: {{ opts['cachedir'] }}/pip/salt.cloud
+    - watch:
+      - file: salt-cloud
+      - module: pip
       - pkg: salt-cloud
+      - service: salt-master
 
 salt-cloud-boostrap-script:
   file:
@@ -83,5 +97,5 @@ salt-cloud-boostrap-script:
     - mkdirs: True
     - template: jinja
     - require:
-      - pkg: salt-cloud
+      - module: salt-cloud
       - file: bash

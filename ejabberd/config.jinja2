@@ -92,34 +92,34 @@ Hostname
 {listen,
  [
   {5222, ejabberd_c2s, [
-			{access, c2s},
-			{shaper, c2s_shaper},
-            %%zlib,
+                       {access, c2s},
+                       {shaper, c2s_shaper},
+                       %%zlib,
 {%- if salt['pillar.get']('ejabberd:ssl', False) %}
-			{max_stanza_size, 65536},
-  			starttls, {certfile, "/etc/ssl/private/{{ pillar['ejabberd']['ssl'] }}.pem"}
+                       {max_stanza_size, 65536},
+                       starttls, {certfile, "/etc/ssl/private/{{ pillar['ejabberd']['ssl'] }}.pem"}
 {%- else %}
-			{max_stanza_size, 65536}
+                       {max_stanza_size, 65536}
 {%- endif %}
-		       ]},
+                       ]},
 
 {%- if salt['pillar.get']('ejabberd:server_to_server', False) %}
   {5269, ejabberd_s2s_in, [
-			   {shaper, s2s_shaper},
-			   {max_stanza_size, 131072}
-			  ]},
+                          {shaper, s2s_shaper},
+                          {max_stanza_size, 131072}
+                          ]},
 {%- endif %}
 
   {5280, ejabberd_http, [
-			 %%{request_handlers,
-			 %% [
-			 %%  {["pub", "archive"], mod_http_fileserver}
-			 %% ]},
-			 %%captcha,
-			 http_bind,
-			 http_poll,
-			 web_admin
-			]}
+                        %%{request_handlers,
+                        %% [
+                        %%  {["pub", "archive"], mod_http_fileserver}
+                        %% ]},
+                        %%captcha,
+                        http_bind,
+                        http_poll,
+                        web_admin
+                        ]}
 
  ]}.
 {#-
@@ -316,13 +316,13 @@ Hostname
  Only non-blocked users can use c2s connections:
 #}
 {access, c2s, [{deny, blocked},
-	       {allow, all}]}.
+              {allow, all}]}.
 
 {#-
  For all users except admins used "normal" shaper
 #}
 {access, c2s_shaper, [{none, admin},
-		      {normal, all}]}.
+                     {normal, all}]}.
 
 {#-
  For all S2S connections used "fast" shaper
@@ -411,48 +411,48 @@ Hostname
   %%                      ]},
   {mod_last,     []},
   {mod_muc,      [
-		  %%{host, "conference.@HOST@"},
-		  {access, muc},
-		  {access_create, muc},
-		  {access_persistent, muc},
-		  {access_admin, muc_admin},
-		  {max_users, 500}
-		 ]},
+                 %%{host, "conference.@HOST@"},
+                 {access, muc},
+                 {access_create, muc},
+                 {access_persistent, muc},
+                 {access_admin, muc_admin},
+                 {max_users, 500}
+                ]},
   %%{mod_muc_log,[]},
   {mod_offline,  [{access_max_user_messages, max_user_offline_messages}]},
   {mod_privacy,  []},
   {mod_private,  []},
   {mod_proxy65,  [
-		  {access, local},
-		  {shaper, c2s_shaper}
-		 ]},
+                 {access, local},
+                 {shaper, c2s_shaper}
+                ]},
   {mod_pubsub,   [ % requires mod_caps
-		  {access_createnode, pubsub_createnode},
-		  {pep_sendlast_offline, false},
-		  {last_item_cache, false},
-		  %%{plugins, ["default", "pep"]}
-		  {plugins, ["flat", "hometree", "pep"]}  % pep requires mod_caps
-		 ]},
+                 {access_createnode, pubsub_createnode},
+                 {pep_sendlast_offline, false},
+                 {last_item_cache, false},
+                 %%{plugins, ["default", "pep"]}
+                 {plugins, ["flat", "hometree", "pep"]}  % pep requires mod_caps
+                ]},
   {mod_register, [
-		  %%
-		  %% After successful registration, the user receives
-		  %% a message with this subject and body.
-		  %%
-		  {welcome_message, {"Welcome!",
-				     "Welcome to a Jabber service powered by Debian. "
-				     "For information about Jabber visit "
-				     "http://www.jabber.org"}},
-		  %% Replace it with 'none' if you don't want to send such message:
-		  %%{welcome_message, none},
+                 %%
+                 %% After successful registration, the user receives
+                 %% a message with this subject and body.
+                 %%
+                 {welcome_message, {"Welcome!",
+                            "Welcome to a Jabber service powered by Debian. "
+                            "For information about Jabber visit "
+                            "http://www.jabber.org"}},
+                 %% Replace it with 'none' if you don't want to send such message:
+                 %%{welcome_message, none},
 
-		  %%
-		  %% When a user registers, send a notification to
-		  %% these Jabber accounts.
-		  %%
-		  %%{registration_watchers, ["admin1@example.org"]},
+                 %%
+                 %% When a user registers, send a notification to
+                 %% these Jabber accounts.
+                 %%
+                 %%{registration_watchers, ["admin1@example.org"]},
 
-		  {access, register}
-		 ]},
+                 {access, register}
+                 ]},
   {mod_roster,   []},
   %%{mod_service_log,[]},
   %%{mod_shared_roster,[]},

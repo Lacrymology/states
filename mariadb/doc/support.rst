@@ -39,10 +39,10 @@ Run the following command::
 
 Output will be::
 
-  mariadb-server-5.5	mysql-server/root_password_again \	
-  password	KPMRB22Hh93yDiyZOqKe
-  mariadb-server-5.5	mysql-server/root_password \
-  password	KPMRB22Hh93yDiyZOqKe
+  mariadb-server-5.5    mysql-server/root_password_again \
+  password  KPMRB22Hh93yDiyZOqKe
+  mariadb-server-5.5    mysql-server/root_password \
+  password  KPMRB22Hh93yDiyZOqKe
 
 So password of `root` user maridb is ``KPMRB22Hh93yDiyZOqKe``.
 

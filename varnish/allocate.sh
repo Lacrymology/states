@@ -50,4 +50,4 @@ else
 fi
 
 [[ -f "$file_path" ]] || ( mkdir -p $(dirname $file_path) && \
-	dd if=/dev/zero of="$file_path" bs="${bs}M" count="${count}" )
+    dd if=/dev/zero of="$file_path" bs="${bs}M" count="${count}" )

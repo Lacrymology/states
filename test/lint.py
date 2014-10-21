@@ -54,12 +54,11 @@ def _grep(paths, pattern, *exts):
     repat = re.compile(pattern)
 
     def _grep_file(filename):
-        found = []
+        found = {}
         with open(filename, 'rt') as f:
             for lineno, line in enumerate(f):
                 if repat.findall(line):
-                    found.append(': '.join((str(lineno + 1),
-                                 line.strip('\n'))))
+                    found.update({str(lineno + 1): line.strip('\n')})
         return found
 
     if exts:
@@ -76,8 +75,8 @@ def _grep(paths, pattern, *exts):
 def _print_grep_result(all_found):
     for fn in all_found:
         print 'In file: {0}'.format(fn)
-        for line in all_found[fn]:
-            print ' line ', line
+        for line, content in all_found[fn].iteritems():
+            print ' line {0}: {1}'.format(line, content)
 
 
 def _print_tips(content):

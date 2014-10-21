@@ -36,6 +36,8 @@ ionice -c idle -p $$
 
 # log start stop time to syslog
 source /usr/local/share/salt_common.sh
+# Ensure that only one instance of this script is running at a time
+locking_script
 log_start_script "$@"
 trap "log_stop_script \$?" EXIT
 

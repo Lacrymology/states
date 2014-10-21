@@ -52,7 +52,11 @@ log_start_script() {
     local _log_tag="${_prog_name}[$$]"
     _log_start_time=$(date +%s)
 
-    logger -t "${_log_tag}" -p 'local7.info' "Start with args: $*"
+    if [ "$#" -gt 0 ]; then
+        logger -t "${_log_tag}" -p 'local7.debug' "Started with args: $*"
+    else
+        logger -t "${_log_tag}" -p 'local7.debug' "Started at $(date -d @$_log_start_time)"
+    fi
 }
 
 log_stop_script() {
@@ -69,5 +73,27 @@ log_stop_script() {
     else
         logger -t "${_log_tag}" -p 'local7.info' \
             "Finish after N/A seconds, return code: ${_return_code}"
+    fi
+
+    test -f "${_pid_file}" && rm -f "${_pid_file}"
+}
+
+locking_script() {
+    local _prog_name=$(basename "$0")
+    local _log_tag="${_prog_name}[$$]"
+    _pid_file="/var/run/${_prog_name}.pid"
+
+    if test -f "${_pid_file}"; then
+        test -n $(cat "${_pid_file}") && local _prev_pid=$(cat "${_pid_file}")
+    fi
+    exec 8>"${_pid_file}"
+    if flock -n 8; then
+        pid=$$
+        echo $pid 1>&8
+    else
+        logger -t "${_log_tag}" -p 'local7.warning' \
+            "Cannot run multiple instances at the same time. The first instance is running as PID $_prev_pid"
+        echo $_prev_pid > "${_pid_file}"
+        exit 1
     fi
 }

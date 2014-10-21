@@ -57,7 +57,11 @@ bash:
 /usr/local/share/salt_common.sh:
   pkg:
     - installed
-    - name: bsdutils {#- for /usr/bin/logger #}
+    - pkgs:
+      - bsdutils {#- for /usr/bin/logger #}
+      - util-linux {#- for /usr/bin/flock #}
+    - require:
+      - cmd: apt_sources
   file:
     - managed
     - template: jinja

@@ -38,7 +38,7 @@ uwsgi:
   master: true
   processes: {{ web['workers']|default(2) }}
   harakiri: {{ web['timeout']|default(60) }}
-  harakiri-verbose: true
+  harakiri-verbose: {% if salt['pillar.get']('debug', False) %}false{% else %}true{% endif %}
 {%- if django_settings|default(False) %}
   env: DJANGO_SETTINGS_MODULE={{ django_settings }}
 {%- endif %}

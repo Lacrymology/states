@@ -41,5 +41,5 @@ test:
     - run
     - name: /etc/cron.daily/backup-proftpd
     - require:
-      - file: backup-proftpd
-    - order: last
+      - sls: proftpd
+      - sls: proftpd.backup

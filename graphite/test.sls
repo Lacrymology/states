@@ -41,5 +41,5 @@ test:
     - run
     - name: /etc/cron.daily/backup-graphite
     - require:
-      - file: backup-graphite
-    - order: last
+      - sls: graphite
+      - sls: graphite.backup

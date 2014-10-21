@@ -42,5 +42,5 @@ test:
     - run
     - name: /etc/cron.daily/backup-postfix
     - require:
-      - file: backup-postfix
-    - order: last
+      - sls: postfix
+      - sls: postfix.backup

@@ -41,5 +41,5 @@ test:
     - run
     - name: /etc/cron.daily/backup-sentry
     - require:
-      - file: backup-sentry
-    - order: last
+      - sls: sentry
+      - sls: sentry.backup

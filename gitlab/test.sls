@@ -49,5 +49,5 @@ test:
     - run
     - name: /etc/cron.daily/backup-gitlab
     - require:
-      - file: backup-gitlab
-    - order: last
+      - sls: gitlab
+      - sls: gitlab.backup

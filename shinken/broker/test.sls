@@ -57,3 +57,23 @@ test:
 {%- for name, _ in check_list %}
       - monitoring: {{ name }}
 {%- endfor %}
+
+{% for name, failure in check_set %}
+{{ name }}:
+  monitoring:
+    - run_check
+    - accepted_failure: {{ failure }}
+    - require:
+      - sls: shinken.broker
+      - sls: shinken.broker.nrpe
+{%- endfor %}
+
+{%- if ssl %}
+shinken.broker_nginx_https:
+  monitoring:
+    - run_check
+    - accepted_failure: 'Invalid HTTP response'
+    - require:
+      - sls: shinken.broker
+      - sls: shinken.broker.nrpe
+{%- endif %}

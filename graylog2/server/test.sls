@@ -57,5 +57,5 @@ test:
     - run
     - name: /etc/cron.daily/backup-graylog2
     - require:
-      - file: backup-graylog2
-    - order: last
+      - sls: graylog2.server
+      - sls: graylog2.server.backup

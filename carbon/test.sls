@@ -40,5 +40,5 @@ test:
     - run
     - name: /etc/cron.daily/backup-carbon
     - require:
-      - file: backup-carbon
-    - order: last
+      - sls: carbon.backup
+      - sls: carbon

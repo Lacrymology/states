@@ -47,14 +47,14 @@ rsyslog:
     - require:
       - cmd: apt_sources
       - pkg: gsyslogd
-      - pkgrepo17: rsyslog
+      - pkgrepo: rsyslog
   user:
     - present
     - name: syslog
     - shell: /bin/false
     - require:
       - pkg: rsyslog
-      - pkgrepo17: rsyslog
+      - pkgrepo: rsyslog
   file:
     - managed
     - name: /etc/rsyslog.conf

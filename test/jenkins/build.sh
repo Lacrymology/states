@@ -42,7 +42,7 @@ if [ "${with_ssl:-true}" = "false" ]; then
 fi
 
 cd common
-test/lint.py *
+test/lint.py $(find * \( -type f ! -name '*.patch' \))
 pip install -r doc/requirements.txt
 doc/build.py
 

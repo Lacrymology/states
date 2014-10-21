@@ -37,6 +37,13 @@ import sys
 import os
 
 
+IGNORED_EXTS = ['patch']
+
+
+def _filter_files_with_exts(paths, exts):
+    return set(filter(lambda p: any(p.endswith('.' + e) for e in exts), paths))
+
+
 def _grep(paths, pattern, *exts):
     '''
     A function that acts like ``grep`` command line tool, but simpler
@@ -62,7 +69,7 @@ def _grep(paths, pattern, *exts):
         return found
 
     if exts:
-        paths = filter(lambda p: any(p.endswith(e) for e in exts), paths)
+        paths = _filter_files_with_exts(paths, exts)
 
     for path in paths:
         found = _grep_file(path)
@@ -194,7 +201,7 @@ def process_args():
                     _paths.append(path)
         paths.extend(_paths)
 
-    return paths
+    return set(paths) - _filter_files_with_exts(paths, IGNORED_EXTS)
 
 
 def main():

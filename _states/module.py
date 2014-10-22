@@ -200,8 +200,19 @@ def run(name, **kwargs):
             returners[kwargs['returner']](ret_ret)
     ret['comment'] = 'Module function {0} executed'.format(name)
     ret['result'] = True
-    if ret['changes'].get('ret', {}).get('retcode', 0) != 0:
-        ret['result'] = False
+    try:
+        if ret['changes']['ret'].get('retcode', 0) != 0:
+            ret['result'] = False
+    except TypeError, e:
+        print "module.run TypeError should be 'no get':", e
+        # the key error shouldn't be necessary, 'ret' should always be there,
+        # but I'll catch it nonetheless. AttributeError means .get doesn't
+        # exist so ret is not a dictionary. Just ignore that case
+    except KeyError, e:
+        print "module.run KeyError should be 'no ret':", e
+    except Exception, e:
+        import traceback
+        print "module.run Unexpected error:", traceback.format_exc()
     return ret
 
 mod_watch = run  # pylint: disable=C0103

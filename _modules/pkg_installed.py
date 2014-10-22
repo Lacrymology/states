@@ -117,20 +117,21 @@ def revert(purge_only=False):
 
     installed_list = list_pkgs()
     installed = set(installed_list)
-    install = saved - installed
-    purge = installed - saved
+    install_pkgs = saved - installed
+    purge_pkgs = installed - saved
 
-    if not install and not purge:
+    if not install_pkgs and not purge_pkgs:
         ret['comment'] = "Nothing to change"
         return ret
 
-    if install and not purge_only:
-        ret['comment'] = '%d install %d purge' % (len(install), len(purge))
-        ret['changes'].update(__salt__['pkg.install'](pkgs=list(install)))
+    if install_pkgs and not purge_only:
+        ret['comment'] = '%d install %d purge' % (len(install_pkgs),
+                                                  len(purge_pkgs))
+        ret['changes'].update(__salt__['pkg.install'](pkgs=list(install_pkgs)))
     else:
-        ret['comment'] = '%d purge' % len(purge)
-    if purge:
-        purge_str = ' '.join(purge)
+        ret['comment'] = '%d purge' % len(purge_pkgs)
+    if purge_pkgs:
+        purge_str = ' '.join(purge_pkgs)
         log.debug("Uninstall: %s", purge_str)
         # until 0.16 is stable, we have to use that dirty trick
         ret['changes']['purged'] = []
@@ -144,7 +145,7 @@ def revert(purge_only=False):
             for pkg in installed_list:
                 if pkg not in new_pkgs:
                     ret['changes']['purged'].append(pkg)
-        # the following will be used in 0.16
+        # TODO: the following will be used in 0.16
         # ret['changes']['purged'] = __salt__['pkg.purge'](
         # pkgs=list(purge)))
     return ret

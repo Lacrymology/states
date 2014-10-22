@@ -160,6 +160,9 @@ def lint_check_bad_cron_filename(paths, *exts):
     all_found = _grep(paths, '\/etc\/cron\.[^\/]+\/.+\.', *exts)
     filtered_found = {}
     for fn, data in all_found.iteritems():
+        # no check absent SLS
+        if fn.endswith('absent.sls'):
+            continue
         data_without_jinja2_in_sid = {
             lino: sid for lino, sid in
             data.iteritems() if "{{" not in sid and "{%" not in sid

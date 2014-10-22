@@ -30,7 +30,7 @@ include:
   - graylog2.server.absent
   - graylog2.web.absent
 
-{%- for file in ['/var/log/graylog2', '/var/run/graylog2', '/var/lib/graylog2'] %}
+{%- for file in ['/var/run/graylog2', '/var/lib/graylog2'] %}
 {{ file }}:
   file:
     - absent

@@ -241,3 +241,13 @@ import_general_syslog_udp_input:
       - module: pysc
     - watch:
       - archive: graylog2-server
+
+/var/log/graylog2:
+  file:
+    - directory
+    - user: {{ user }}
+    - group: {{ user }}
+    - mode: 755  {# syslog user needs to read the fifo in this folder #}
+    - makedirs: True
+    - require:
+      - user: graylog2

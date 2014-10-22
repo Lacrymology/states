@@ -56,6 +56,11 @@ extend:
       - service: graylog2-server
 {% endfor %}
 
+/var/log/graylog2:
+  file:
+    - require:
+      - service: graylog2-server
+
 /var/lib/graylog2/server-node-id:
   file:
     - absent

@@ -71,17 +71,11 @@ nagios-nrpe-server:
     - absent
     - require:
       - user: nagios
+      - service: nsca_passive
 {% endfor %}
 
-nsca_passive:
-  file:
-    - absent
-    - name: /etc/init/nsca_passive.conf
-    - require:
-      - service: nsca_passive
-  service:
-    - dead
-    - enable: False
+{%- from "upstart/absent.sls" import upstart_absent with context -%}
+{{ upstart_absent('nsca_passive') }}
 
 /usr/local/nagios/bin/nsca_passive:
   file:
@@ -98,6 +92,10 @@ nsca_passive:
     - absent
 
 /usr/local/nagios:
+  file:
+    - absent
+
+/usr/lib/nagios:
   file:
     - absent
 

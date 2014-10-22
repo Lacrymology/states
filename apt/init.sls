@@ -134,6 +134,7 @@ apt_sources:
   module:
     - run
     - name: pkg.upgrade
+    - upgrade: True
     - require:
       - module: apt
     - watch_in:

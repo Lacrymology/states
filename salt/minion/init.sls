@@ -27,7 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Install Salt Minion (client).
 -#}
-
+{%- from 'upstart/rsyslog.jinja2' import manage_upstart_log with context -%}
 include:
   - pysc
   - raven
@@ -48,6 +48,8 @@ salt_minion_master_key:
 {{ opts['cachedir'] }}/pkg_installed.pickle:
   file:
     - absent
+
+{{ manage_upstart_log('salt-minion') }}
 
 extend:
   salt-minion:

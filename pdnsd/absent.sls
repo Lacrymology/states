@@ -35,6 +35,10 @@ pdnsd:
   service:
     - dead
     - enable: False
+  user:
+    - absent
+    - require:
+      - pkg: pdnsd
 
 {% for file in ('default/pdnsd', 'pdnsd.conf') %}
 /etc/{{ file }}:

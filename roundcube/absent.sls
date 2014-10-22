@@ -28,10 +28,17 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 {%- set version = "1.0.1" %}
 {% set roundcubedir = "/usr/local/roundcubemail-" + version %}
 
+{#-
+  Can't uninstall the following as they're used elsewhere
+php5-pgsql:
+  pkg:
+    - purged
+
 roundcube_password_plugin_ldap_driver_dependency:
   pkg:
     - purged
     - name: php-net-ldap2
+#}
 
 {{ roundcubedir }}:
   file:

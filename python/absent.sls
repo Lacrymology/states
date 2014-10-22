@@ -40,3 +40,9 @@ python:
   file:
     - absent
     - name: /etc/python/config.yml
+
+{%- for log_file in salt['file.find']('/usr/lib/python2.7/', name='*.pyo', type='f') %}
+{{ log_file }}:
+  file:
+    - absent
+{%- endfor -%}

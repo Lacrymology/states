@@ -27,6 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Install and run one or multiple OpenVPN servers.
 -#}
+{%- from 'upstart/rsyslog.jinja2' import manage_upstart_log with context -%}
 include:
   - apt
   - rsyslog
@@ -48,9 +49,6 @@ openvpn:
     - require:
       - pkg: openvpn
 
-{% from 'rsyslog/upstart.sls' import manage_upstart_log with context %}
-{{ manage_upstart_log('openvpn') }}
-
 {%- for type in ('lib', 'log') %}
 /var/{{ type }}/openvpn:
   file:
@@ -59,6 +57,7 @@ openvpn:
     - group: root
     - mode: 770
 {%- endfor %}
+
 {%- macro service_openvpn(tunnels) %}
     {%- for tunnel in tunnels %}
 openvpn-{{ tunnel }}:
@@ -79,6 +78,9 @@ openvpn-{{ tunnel }}:
     - order: 50
     - watch:
       - file: openvpn-{{ tunnel }}
+
+{{ manage_upstart_log('openvpn-' + tunnel) }}
+
     {%- endfor -%}
 {%- endmacro -%}
 {#- does not use PID, no need to manage #}

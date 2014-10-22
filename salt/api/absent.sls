@@ -27,29 +27,28 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Uninstall a Salt API REST server.
 -#}
+{%- from "upstart/absent.sls" import upstart_absent with context -%}
+{{ upstart_absent('salt-api') }}
 
 salt_api:
   group:
     - absent
-{% for user in salt['pillar.get']('salt_master:external_auth:pam', []) %}
-{% if loop.first %}
-    - require:
-{% endif %}
-      - user: user_{{ user }}
-{% endfor %}
 
-{# You need to set the password for each of those users #}
 {% for user in salt['pillar.get']('salt_master:external_auth:pam', []) %}
 user_{{ user }}:
   user:
     - absent
+    - name: {{ user }}
+    - require_in:
+      - group: salt_api
 {% endfor %}
 
-salt-api:
-  pkg:
-    - purged
-    - require:
-      - service: salt-api
+extend:
+  salt-api:
+    pkg:
+      - purged
+      - require:
+        - service: salt-api
 {#{% if salt['cmd.has_exec']('pip') %}
   pip:
     - removed
@@ -57,13 +56,18 @@ salt-api:
     - require:
       - pkg: salt-api
 {% endif %}#}
+
+/usr/lib/python2.7/dist-packages/saltapi:
   file:
     - absent
-    - name: /etc/init/salt-api.conf
     - require:
-      - service: salt-api
-  service:
-    - dead
+      - pkg: salt-api
+
+/etc/salt/master.d/ui.conf:
+  file:
+    - absent
+    - require:
+      - pkg: salt-api
 
 /etc/salt/master.d/api.conf:
   file:
@@ -71,11 +75,13 @@ salt-api:
     - require:
       - pkg: salt-api
 
-/var/log/upstart/salt-api.log:
+/usr/local/salt-ui:
   file:
     - absent
-    - require:
-      - service: salt-api
+
+/etc/nginx/conf.d/salt.conf:
+  file:
+    - absent
 
 /etc/nginx/conf.d/salt-api.conf:
   file:
@@ -88,9 +94,5 @@ salt-api-requirements:
 
 {#- TODO: remove that statement in >= 2014-04 #}
 {{ opts['cachedir'] }}/salt-api-requirements.txt:
-  file:
-    - absent
-
-/etc/rsyslog.d/salt-api-upstart.conf:
   file:
     - absent

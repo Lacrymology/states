@@ -73,15 +73,6 @@ include:
       - pkg: cron
       - file: bash
 
-{% if grains['cpuarch'] == 'i686' %}
-/usr/lib/jvm/java-7-openjdk:
-  file:
-    - symlink
-    - target: /usr/lib/jvm/java-7-openjdk-i386
-    - require:
-      - pkg: openjdk_jre_headless
-{% endif %}
-
 {%- call manage_pid('/var/run/elasticsearch.pid', 'elasticsearch', 'elasticsearch', 'elasticsearch') %}
 - pkg: elasticsearch
 {%- endcall %}
@@ -127,9 +118,10 @@ elasticsearch:
       - file: /etc/elasticsearch/logging.yml
       - file: elasticsearch
       - pkg: elasticsearch
-      - pkg: openjdk_jre_headless
+      - pkg: jre-7
+      - file: jre-7
 {%- if grains['cpuarch'] == 'i686' %}
-      - file: /usr/lib/jvm/java-7-openjdk
+      - file: jre-7-i386
 {%- endif -%}
 {%- if 'aws' in pillar['elasticsearch'] %}
       - elasticsearch_plugins: elasticsearch
@@ -144,7 +136,7 @@ elasticsearch:
         - elasticsearch: http://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-{{ version }}.deb
 {%- endif %}
     - require:
-      - pkg: openjdk_jre_headless
+      - pkg: jre-7
   user:
     - present
     - shell: /bin/false

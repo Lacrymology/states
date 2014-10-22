@@ -25,14 +25,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-shinken-reactionner:
-  file:
-    - absent
-    - name: /etc/init/shinken-reactionner.conf
-    - require:
-      - service: shinken-reactionner
-  service:
-    - dead
+{%- from "upstart/absent.sls" import upstart_absent with context -%}
+{{ upstart_absent('shinken-reactionner') }}
 
 /etc/shinken/reactionner.conf:
   file:

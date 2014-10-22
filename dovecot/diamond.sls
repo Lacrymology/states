@@ -31,6 +31,7 @@ Diamond statistics for dovecot.
 include:
   - diamond
   - postfix.diamond
+  - rsyslog.diamond
 
 dovecot_diamond_resources:
   file:

@@ -37,15 +37,13 @@ Install Java.
 include:
   - apt
 
-openjdk_jre_headless:
+jre-6:
   pkg:
     - installed
     - name: openjdk-6-jre-headless
     - require:
       - cmd: apt_sources
-      - file: append_java_path
-
-append_java_path:
+      - file: jre-6
   file:
     - append
     - name: /etc/environment

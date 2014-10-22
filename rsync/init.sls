@@ -27,7 +27,9 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 A file-copying tool.
 -#}
+{%- from 'upstart/rsyslog.jinja2' import manage_upstart_log with context -%}
 include:
+  - apt
   - rsyslog
 
 rsync:
@@ -51,7 +53,9 @@ rsync:
       - file: rsync
       - file: /etc/rsyncd.conf
       - pkg: rsync
+
 {#- PID file owned by root, no need to manage #}
+{{ manage_upstart_log('rsync') }}
 
 /etc/rsyncd.conf:
   file:
@@ -63,6 +67,3 @@ rsync:
     - source: salt://rsync/config.jinja2
     - require:
       - pkg: rsync
-
-{% from 'rsyslog/upstart.sls' import manage_upstart_log with context %}
-{{ manage_upstart_log('rsync') }}

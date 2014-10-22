@@ -42,6 +42,10 @@ def main():
     os.mkdir(log_dir)
     print 'Logs of this build will be in: %s' % log_dir
     run.main(suffix='> {0}/stdout.log 2> {0}/stderr.log'.format(log_dir))
+    # write to stderr the results
+    with open('{0}/stderr.log'.format(log_dir)) as stderr:
+        for line in stderr:
+            sys.stderr.write(line)
 
 if __name__ == '__main__':
     main()

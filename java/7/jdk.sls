@@ -2,11 +2,10 @@ include:
   - apt
   - java.7
 
-openjdk_jdk:
+jdk-7:
   pkg:
     - installed
-    - pkgs:
-      - openjdk-7-jdk
+    - name: openjdk-7-jdk
     - require:
-      - pkg: openjdk_jre_headless
+      - pkg: jre-7
       - cmd: apt_sources

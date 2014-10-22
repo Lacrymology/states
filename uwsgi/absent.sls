@@ -27,15 +27,13 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Uninstall uWSGI Web app server.
 -#}
+{%- from "upstart/absent.sls" import upstart_absent with context -%}
 {%- set version = '1.9.17.1' -%}
 {%- set extracted_dir = '/usr/local/uwsgi-{0}'.format(version) %}
 
-uwsgi_emperor:
-  service:
-    - dead
-    - name: uwsgi
+{{ upstart_absent('uwsgi') }}
 
-{%- for file in ('/etc/uwsgi', '/etc/uwsgi.yml', '/etc/init/uwsgi.conf', '/var/lib/uwsgi', extracted_dir) %}
+{%- for file in ('/etc/uwsgi', '/etc/uwsgi.yml', '/var/lib/uwsgi', extracted_dir) %}
 {{ file }}:
   file:
     - absent
@@ -47,14 +45,3 @@ apt-key del 67E15F46:
   cmd:
     - run
     - onlyif: apt-key list | grep -q 67E15F46
-
-uwsgi-upstart-log:
-  cmd:
-    - run
-    - name: find /var/log/upstart/ -maxdepth 1 -type f -name 'uwsgi.log*' -delete
-    - require:
-      - service: uwsgi
-
-/etc/rsyslog.d/uwsgi-upstart.conf:
-  file:
-    - absent

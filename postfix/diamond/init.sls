@@ -27,6 +27,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 Diamond statistics for postfix.
 -#}
+{%- from 'upstart/rsyslog.jinja2' import manage_upstart_log with context -%}
 include:
   - diamond
   - postfix
@@ -86,21 +87,7 @@ postfix_diamond_resources:
     - watch_in:
       - service: rsyslog
 
-/etc/init/postfix_stats.conf:
-  file:
-    - managed
-    - source: salt://postfix/diamond/upstart.jinja2
-    - template: jinja
-    - require:
-      - module: postfix_stats
-      - file: /var/log/mail.log
-      - file: /etc/rsyslog.d/postfix_stats.conf
-
-postfix_stats:
-  service:
-    - running
-    - watch:
-      - file: /etc/init/postfix_stats.conf
+postfix_stats-requirements:
   file:
     - managed
     - name: /usr/local/diamond/salt-postfix-requirements.txt
@@ -111,6 +98,22 @@ postfix_stats:
     - source: salt://postfix/diamond/requirements.jinja2
     - require:
       - virtualenv: diamond
+
+postfix_stats:
+  service:
+    - running
+    - watch:
+      - file: postfix_stats
+      - module: postfix_stats
+  file:
+    - managed
+    - name: /etc/init/postfix_stats.conf
+    - source: salt://postfix/diamond/upstart.jinja2
+    - template: jinja
+    - require:
+      - module: postfix_stats
+      - file: /var/log/mail.log
+      - file: /etc/rsyslog.d/postfix_stats.conf
   module:
     - wait
     - name: pip.install
@@ -120,7 +123,9 @@ postfix_stats:
     - require:
       - virtualenv: diamond
     - watch:
-      - file: postfix_stats
+      - file: postfix_stats-requirements
+
+{{ manage_upstart_log('postfix_stats') }}
 
 extend:
   diamond:

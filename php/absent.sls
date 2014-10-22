@@ -36,9 +36,12 @@ php:
   file:
     - absent
     - name: /etc/apt/sources.list.d/lucid-php5.list
+{#-
+  Can't uninstall the following as they're used elsewhere
   pkg:
     - purged
     - name: php5
+#}
   cmd:
     - run
     - name: 'apt-key del 67E15F46'
@@ -50,3 +53,9 @@ php:
 {%- else %}
     - ppa: l-mierzwa/lucid-php5
 {%- endif %}
+
+/etc/apt/sources.list.d/l-mierzwa-lucid-php5-{{ grains['oscodename'] }}.list:
+  file:
+    - absent
+    - require:
+      - pkgrepo: php

@@ -190,7 +190,7 @@ graphite-web-uwsgi:
       chdir: /usr/local/graphite
     - require:
       - module: graphite_initial_fixture
-      - service: uwsgi_emperor
+      - service: uwsgi
       - file: graphite_logdir
       - file: /usr/local/graphite/bin/build-index.sh
       - user: web

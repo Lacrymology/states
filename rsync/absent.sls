@@ -24,19 +24,15 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet hvnsweeting@gmail.com
 Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
  -#}
-rsync:
-  pkg:
-    - purged
-    - require:
-      - service: rsync
-  file:
-    - absent
-    - name: /etc/init/rsync.conf
-    - require:
-      - pkg: rsync
-      - service: rsync
-  service:
-    - dead
+{%- from "upstart/absent.sls" import upstart_absent with context -%}
+{{ upstart_absent('rsync') }}
+
+extend:
+  rsync:
+    pkg:
+      - purged
+      - require:
+        - service: rsync
 
 /etc/rsyncd.conf:
   file:
@@ -44,15 +40,3 @@ rsync:
     - require:
       - pkg: rsync
       - service: rsync
-
-rsync-upstart-log:
-  cmd:
-    - run
-    - name: find /var/log/upstart/ -maxdepth 1 -type f -name 'rsync.log*' -delete
-    - require:
-      - pkg: rsync
-      - service: rsync
-
-/etc/rsyslog.d/rsync-upstart.conf:
-  file:
-    - absent

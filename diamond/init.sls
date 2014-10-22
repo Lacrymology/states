@@ -25,6 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
+{%- from 'upstart/rsyslog.jinja2' import manage_upstart_log with context -%}
 include:
 {% if 'shinken_pollers' in pillar %}
   - diamond.nrpe
@@ -52,18 +53,6 @@ include:
     - require:
       - file: /etc/diamond
 
-diamond_upstart:
-  file:
-    - managed
-    - name: /etc/init/diamond.conf
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 440
-    - source: salt://diamond/upstart.jinja2
-    - require:
-      - module: diamond
-
 diamond_requirements:
   file:
     - managed
@@ -79,6 +68,25 @@ diamond_requirements:
 /etc/diamond/collectors/ProcessMemoryCollector.conf:
   file:
     - absent
+
+diamond.conf:
+  file:
+    - managed
+    - name: /etc/diamond/diamond.conf
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - source: salt://diamond/config.jinja2
+    - require:
+      - file: /etc/diamond
+{%- for host in salt['pillar.get']('diamond:ping', []) -%}
+    {%- if loop.first %}
+    - context:
+      ping_hosts:
+    {%- endif %}
+        {{ host }}: {{ pillar['diamond']['ping'][host] }}
+{%- endfor %}
 
 diamond:
   virtualenv:
@@ -101,21 +109,14 @@ diamond:
       - file: diamond_requirements
   file:
     - managed
-    - name: /etc/diamond/diamond.conf
+    - name: /etc/init/diamond.conf
     - template: jinja
     - user: root
     - group: root
     - mode: 440
-    - source: salt://diamond/config.jinja2
+    - source: salt://diamond/upstart.jinja2
     - require:
-      - file: /etc/diamond
-{%- for host in salt['pillar.get']('diamond:ping', []) -%}
-    {%- if loop.first %}
-    - context:
-      ping_hosts:
-    {%- endif %}
-        {{ host }}: {{ pillar['diamond']['ping'][host] }}
-{%- endfor %}
+      - module: diamond
   service:
     {#- does not use PID, no need to manage #}
     - running
@@ -125,8 +126,8 @@ diamond:
       - service: rsyslog
     - watch:
       - virtualenv: diamond
+      - file: diamond.conf
       - file: diamond
-      - file: diamond_upstart
       - module: diamond
       - cmd: diamond
       - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
@@ -136,6 +137,8 @@ diamond:
     - stateful: False
     - watch:
       - module: diamond
+
+{{ manage_upstart_log('diamond') }}
 
 /etc/diamond/collectors/ProcessResourcesCollector.conf:
   file:
@@ -148,6 +151,3 @@ diamond:
     - require:
       - file: /etc/diamond/collectors
       - file: /etc/diamond/collectors/ProcessMemoryCollector.conf
-
-{% from 'rsyslog/upstart.sls' import manage_upstart_log with context %}
-{{ manage_upstart_log('diamond') }}

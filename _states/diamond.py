@@ -30,6 +30,9 @@ import logging
 
 log = logging.getLogger(__name__)
 
+def _remove_log(logfile):
+    if __salt__['file.file_exists'](logfile):
+        __salt__['file.remove'](logfile)
 
 def test(name, map):
     """
@@ -58,8 +61,7 @@ def test(name, map):
 
     for collector, metrics in map.items():
         ret['changes'][collector] = change = {}
-        if __salt__['file.file_exists'](logfile):
-            __salt__['file.remove'](logfile)
+        _remove_log(logfile)
 
         if (not collector.startswith('/') and
            not collector.endswith("Collector")):
@@ -72,12 +74,13 @@ def test(name, map):
         retcode = cret['retcode']
 
         if retcode != 0:
-            ret['comment'] = '%s failed with retcode %d'.format(command,
-                                                                retcode)
+            _remove_log(logfile)
+            ret['comment'] = '%s failed with retcode %d' % (command, retcode)
             ret['result'] = False
             return ret
 
         if 'Initialized Collector: {}'.format(collector) not in cret['stdout']:
+            _remove_log(logfile)
             ret['comment'] = ('{0} was not been initialized, recheck collector'
                               ' name or its config').format(collector)
             ret['result'] = False
@@ -89,7 +92,7 @@ def test(name, map):
             for line in file:
                 metric, value, timestamp = line.split()
                 collected_metrics[metric] = value
-        __salt__['file.remove'](logfile)
+        _remove_log(logfile)
         log.debug('Collected: %s', collected_metrics)
 
         for metric in metrics:

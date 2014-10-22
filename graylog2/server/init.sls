@@ -27,7 +27,8 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Install a Graylog2 logging server backend.
 -#}
-{%- from 'macros.jinja2' import manage_pid with context %}
+{%- from 'macros.jinja2' import manage_pid with context -%}
+{%- from 'upstart/rsyslog.jinja2' import manage_upstart_log with context -%}
 include:
   - python
   - apt
@@ -70,7 +71,7 @@ graylog2-old-mongodb:
   use setuid and setguid), this upstart job creates runtime directory
   for it.
 #}
-graylog2-server_upstart_prep:
+graylog2-server-prep:
   file:
     - managed
     - name: /etc/init/graylog2-server-prep.conf
@@ -84,20 +85,7 @@ graylog2-server_upstart_prep:
     - require:
       - user: graylog2
 
-graylog2-server_upstart:
-  file:
-    - managed
-    - name: /etc/init/graylog2-server.conf
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 400
-    - source: salt://graylog2/server/upstart.jinja2
-    - context:
-      version: {{ version }}
-      user: {{ user }}
-    - require:
-      - file: graylog2-server_upstart_prep
+{{ manage_upstart_log('graylog2-server-prep') }}
 
 /var/log/graylog2/server.log:
   file:
@@ -139,6 +127,22 @@ graylog2-server_upstart:
       - archive: graylog2-server
       - user: graylog2
 
+graylog2.conf:
+  file:
+    - managed
+    - name: /etc/graylog2.conf
+    - template: jinja
+    - user: {{ user }}
+    - group: {{ user }}
+    - mode: 440
+    - source: salt://graylog2/server/config.jinja2
+    - context:
+      version: {{ version }}
+      mongodb_suffix: {{ mongodb_suffix }}
+      elasticsearch_prefix: {{ elasticsearch_prefix }}
+    - require:
+      - user: graylog2
+
 graylog2-server:
   archive:
     - extracted
@@ -156,26 +160,26 @@ graylog2-server:
       - file: /usr/local
   file:
     - managed
-    - name: /etc/graylog2.conf
+    - name: /etc/init/graylog2-server.conf
     - template: jinja
-    - user: {{ user }}
-    - group: {{ user }}
-    - mode: 440
-    - source: salt://graylog2/server/config.jinja2
+    - user: root
+    - group: root
+    - mode: 400
+    - source: salt://graylog2/server/upstart.jinja2
     - context:
       version: {{ version }}
-      mongodb_suffix: {{ mongodb_suffix }}
-      elasticsearch_prefix: {{ elasticsearch_prefix }}
+      user: {{ user }}
     - require:
-      - user: graylog2
+      - file: graylog2-server-prep
   service:
     - running
     - enable: True
     - order: 50
     - watch:
-      - file: graylog2-server_upstart
-      - pkg: openjdk_jre_headless
       - file: graylog2-server
+      - pkg: jre-7
+      - file: jre-7
+      - file: graylog2.conf
       - file: /etc/graylog2/elasticsearch.yml
       - archive: graylog2-server
       - user: graylog2
@@ -186,6 +190,8 @@ graylog2-server:
       - service: mongodb
       - file: {{ server_root_dir }}
       - file: /var/run/graylog2
+
+{{ manage_upstart_log('graylog2-server') }}
 
 {%- call manage_pid('/var/run/graylog2/graylog2.pid', user, 'syslog', 'graylog2-server') %}
 - user: graylog2
@@ -235,3 +241,13 @@ import_general_syslog_udp_input:
       - module: pysc
     - watch:
       - archive: graylog2-server
+
+/var/log/graylog2:
+  file:
+    - directory
+    - user: {{ user }}
+    - group: {{ user }}
+    - mode: 755  {# syslog user needs to read the fifo in this folder #}
+    - makedirs: True
+    - require:
+      - user: graylog2

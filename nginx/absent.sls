@@ -27,6 +27,9 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Uninstall the Nginx web server.
 -#}
+{%- from "upstart/absent.sls" import upstart_absent with context -%}
+{{ upstart_absent('nginx') }}
+
 nginx-old-init:
   cmd:
     - wait
@@ -37,30 +40,17 @@ nginx-old-init:
     - absent
     - name: /usr/share/nginx/init.d
 
-nginx:
-  file:
-    - absent
-    - name: /etc/init/nginx.conf
-    - require:
-      - service: nginx
-  pkg:
-    - purged
-    - require:
-      - service: nginx
-      - file: nginx-old-init
-  service:
-    - dead
-  user:
-    - absent
-    - require:
-      - pkg: nginx
-
-nginx-upstart-log:
-  cmd:
-    - run
-    - name: find /var/log/upstart/ -maxdepth 1 -type f -name 'nginx.log*' -delete
-    - require:
-      - service: nginx
+extend:
+  nginx:
+    pkg:
+      - purged
+      - require:
+        - service: nginx
+        - file: nginx-old-init
+    user:
+      - absent
+      - require:
+        - pkg: nginx
 
 {% for type in ('etc', 'var/log', 'etc/logrotate.d') %}
 /{{ type }}/nginx:
@@ -69,10 +59,6 @@ nginx-upstart-log:
     - require:
       - pkg: nginx
 {% endfor %}
-
-/etc/rsyslog.d/nginx-upstart.conf:
-  file:
-    - absent
 
 /var/www/robots.txt:
   file:

@@ -55,6 +55,9 @@ jenkins:
     - running
     - require:
       - pkg: jenkins
+    - watch:
+      - pkg: jre-7
+      - file: jre-7
   pkg:
     - installed
     - sources:
@@ -65,7 +68,7 @@ jenkins:
 {%- endif %}
     - require:
       - cmd: apt_sources
-      - pkg: openjdk_jdk
+      - pkg: jdk-7
       - pkg: jenkins_dependencies
 
 {%- if salt['pkg.version']('jenkins') not in ('', version) %}

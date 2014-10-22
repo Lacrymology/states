@@ -27,32 +27,18 @@ Maintainer: Dang Tung Lam <lamdt@familug.org>
 
 Uninstall Etherpad
 -#}
+{%- set version = "1.3.0" -%}
+{%- from "upstart/absent.sls" import upstart_absent with context -%}
+{{ upstart_absent('etherpad') }}
 
-{%- set version = "1.3.0" %}
-
-etherpad:
-  file:
-    - absent
-    - name: /usr/local/etherpad-lite-{{ version }}
-    - require:
-      - service: etherpad
-  service:
-    - dead
-
-/etc/init/etherpad.conf:
+/usr/local/etherpad-lite-{{ version }}:
   file:
     - absent
     - require:
       - service: etherpad
-
-/var/log/upstart/etherpad.log:
-  file:
-    - absent
 
 /etc/nginx/conf.d/etherpad.conf:
   file:
     - absent
-
-/etc/rsyslog.d/etherpad-upstart.conf:
-  file:
-    - absent
+    - require_in:
+      - service: etherpad

@@ -27,26 +27,13 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Uninstall Salt Minion (client).
 -#}
+{%- from "upstart/absent.sls" import upstart_absent with context -%}
+{{ upstart_absent('salt-minion') }}
 
-salt-minion:
-  file:
-    - absent
-    - name: /etc/salt/minion
-    - require:
-      - pkg: salt-minion
-  pkg:
-{% if salt['pillar.get']('destructive_absent', False) %}
-    - purged
-{% else %}
-    - removed
-{% endif %}
-    - require:
-      - service: salt-minion
-  service:
-    - dead
-
-/var/log/upstart/salt-minion.log:
-  file:
-    - absent
-    - require:
-      - service: salt-minion
+extend:
+  salt-minion:
+    file:
+      - absent
+      - name: /etc/salt/minion
+      - require:
+        - pkg: salt-minion

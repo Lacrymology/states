@@ -49,20 +49,9 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
   file:
     - absent
 
+{#
+  Can't uninstall the following as they're used elsewhere
 python-setuptools:
   pkg:
     - purged
-{#
-{% if salt['cmd.has_exec']('pip') %}
-    - require:
-      - pip: pip
-
-/tmp/pip-build-root:
-  file:
-    - absent
-
-pip:
-  pip:
-    - removed
-{% endif %}
 #}

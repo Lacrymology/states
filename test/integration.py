@@ -43,6 +43,7 @@ import StringIO
 import pprint
 import tempfile
 import collections
+import subprocess
 try:
     import unittest2 as unittest
 except ImportError:
@@ -60,7 +61,8 @@ import yaml
 # until https://github.com/saltstack/salt/issues/4994 is fixed, logger must
 # be configured before importing salt.client
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG,
-                    format="%(asctime)s %(name)s %(message)s")
+                    format="%(asctime)s %(name)s (%(module)s.%(funcName)s:"
+                           "%(lineno)d) %(message)s")
 
 import salt.client
 
@@ -76,7 +78,13 @@ is_clean = False
 # has previous cleanup failed
 clean_up_failed = False
 # list of process before tests ran
-process_list = None
+process_list = set()
+# list of files before tests ran
+files_list = set()
+# groups list
+groups_list = set()
+# users list
+users_list = set()
 
 NO_TEST_STRING = '-*- ci-automatic-discovery: off -*-'
 
@@ -244,7 +252,7 @@ def list_non_minion_processes(cmd_name='/usr/bin/python /usr/bin/salt-minion'):
     by a minion
     """
     procs = list_user_space_processes()
-    output = []
+    output = set()
     minion_pids = []
 
     # list all minions process
@@ -260,28 +268,63 @@ def list_non_minion_processes(cmd_name='/usr/bin/python /usr/bin/salt-minion'):
         except IOError:
             pass
         else:
-            run_trough_minion = False
+            run_through_minion = False
             for minion_pid in minion_pids:
                 if minion_pid in ancestors:
                     logger.debug("Ignore %d proc %s as it's run by minion %d",
                                  pid, procs[pid], minion_pid)
-                    run_trough_minion = True
+                    run_through_minion = True
                     break
 
-            if not run_trough_minion and procs[pid] not in output:
-                output.append(procs[pid])
+            if not run_through_minion:
+                logger.debug("Running non-minion process %s[%d]", procs[pid],
+                             pid)
+                output.add(procs[pid])
+    logger.debug("Running processes: %s", os.linesep.join(output))
     return output
 
 
-def list_groups():
+def get_groups():
     """
-    return the list of groups
+    return a set of groups
     """
     global client
-    output = []
-    for group in client('group.getent'):
-        output.append(group['name'])
-    return output
+    return set(group['name'] for group in client('group.getent', True))
+
+
+def get_users():
+    global client
+    return set(user['name'] for user in client('user.getent'))
+
+
+def list_system_files(dirs=("/bin", "/etc", "/usr", "/lib", "/sbin", "/var"),
+                      ignored=('/var/lib/ucf/',
+                               '/var/lib/apt/lists/',
+                               '/var/lib/libuuid/',
+                               '/var/lib/dpkg/',
+                               '/var/cache/apt/',
+                               '/var/log/upstart/network-interface-',
+                               '/var/cache/salt/minion/extrn_files')):
+    """
+    Returns a set of the files present in each of the directories listed.
+
+    Most of the time it will only make sense to be called with absolute paths
+    """
+    ret = set()
+    for directory in dirs:
+        if os.path.isdir(directory):
+
+            for filename in subprocess.check_output(["find",
+                                                     directory]).split(
+                    os.linesep):
+                is_ignored = False
+                for path in ignored:
+                    if filename.startswith(path):
+                        is_ignored = True
+                        break
+                if not is_ignored:
+                    ret.add(filename)
+    return ret
 
 
 def render_state_template(state):
@@ -490,11 +533,45 @@ class States(unittest.TestCase):
 
     __metaclass__ = TestStateMeta
 
+    def _check_same_status(self, original, function, messages):
+        """
+        Checks that a set of things is invariant between runs. If `original`
+        is None, `function` gets called and its return value saved in
+        `original`. If not, `function` is called and its result value is
+        compared against `original`. If they differ, the test fails.
+
+        :params original: a set or None
+        :params function: a function that returns a set
+        :params messages: a list of 3 strings used for logging.
+            - the first element must take an integer and is used when the set
+              is first filled in (original is None)
+            - the second element must take an integer and is used when the
+              current value of `function` is compared to `original`
+            - the third value must take a string, and it's used for the failure
+              message
+        """
+        global clean_up_failed
+        # check processes
+        if not original:
+            original.update(function())
+            logger.debug(messages[0], len(original))
+        else:
+            current = function()
+            logger.debug(messages[1], len(current))
+            unclean = current - original
+
+            if unclean:
+                clean_up_failed = True
+                return messages[2] % os.linesep.join(unclean)
+        return ""
+
     def setUp(self):
         """
         Clean up the minion before each test.
         """
         global is_clean, clean_up_failed, process_list
+        global files_list, users_list, groups_list
+
         if clean_up_failed:
             self.skipTest("Previous cleanup failed")
         else:
@@ -504,16 +581,17 @@ class States(unittest.TestCase):
             logger.debug("Don't cleanup, it's already done")
             return
 
-        logger.info("Run absent for all states, process before:")
-        logger.info(client('cmd.run_stdout', "ps -A -F"))
-        self.sls(self.absent)
-        logger.info("Absent executed,, process after:")
-        logger.info(client('cmd.run_stdout', "ps -A -F"))
+        try:
+            self.sls(self.absent)
+        except AssertionError, err:
+            clean_up_failed = True
+            logger.error("Can't run all .absent: %s", err)
+            self.fail(err)
 
         # Go back on the same installed packages as after :func:`setUpClass`
         logger.info("Unfreeze installed packages")
         try:
-            output = client('pkg_installed.revert')
+            output = client('pkg_installed.revert', True)
         except Exception, err:
             clean_up_failed = True
             logger.error("Catch error: %s", err, exc_info=True)
@@ -522,29 +600,39 @@ class States(unittest.TestCase):
             try:
                 if not output['result']:
                     clean_up_failed = True
-                    self.fail(output['result'])
+                    self.fail(repr(output))
             except TypeError, err:
                 clean_up_failed = True
                 logger.error("Catch error: %s", err, exc_info=True)
                 self.fail(output)
 
-        # check processes
-        if process_list is None:
-            process_list = list_non_minion_processes()
-            logger.debug("First cleanup, keep list of %d process",
-                         len(process_list))
-        else:
-            actual = list_non_minion_processes()
-            logger.debug("Check %d proccess", len(actual))
-            unclean = []
-            for process in actual:
-                if process not in process_list:
-                    unclean.append(process)
+        clean_up_errors = []
+        clean_up_errors.append(
+            self._check_same_status(process_list, list_non_minion_processes, [
+                "First cleanup, keep list of %d process",
+                "Check %d proccess",
+                "Process that still run after cleanup: %s"]))
+        clean_up_errors.append(
+            self._check_same_status(files_list, list_system_files, [
+                "First cleanup, keep list of %d files",
+                "Check %d files",
+                "Newly created files after cleanup: %s"]))
+        clean_up_errors.append(
+            self._check_same_status(groups_list, get_groups, [
+                "First cleanup, keep list of %d groups",
+                "Check %d groups",
+                "Newly created groups after cleanup: %s"]))
+        clean_up_errors.append(
+            self._check_same_status(users_list, get_users, [
+                "First cleanup, keep list of %d users",
+                "Check %d users",
+                "Newly created users after cleanup: %s"]))
 
-            if unclean:
-                clean_up_failed = True
-                self.fail("Process that still run after cleanup: %s" % (
-                          os.linesep.join(unclean)))
+        clean_up_errors_msg = os.linesep.join([e for e in clean_up_errors if e])
+        if clean_up_errors_msg:
+            logger.error(clean_up_errors)
+            clean_up_failed = True
+            self.fail(clean_up_errors_msg)
 
         is_clean = True
 

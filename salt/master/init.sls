@@ -30,6 +30,7 @@ Install a Salt Management Master (server).
 If you install a salt master from scratch, check and run bootstrap_archive.py
 and use it to install the master.
 -#}
+{%- from 'upstart/rsyslog.jinja2' import manage_upstart_log with context -%}
 include:
   - local
   - git
@@ -81,7 +82,7 @@ salt-master-requirements:
     - require_in:
       - pkg: salt-master
 {%- else %}
-/srv/pillar:
+/srv/pillars:
   file:
     - directory
     - user: root
@@ -155,6 +156,8 @@ salt-master:
       - pkg: salt
 {%- if salt['pkg.version']('salt-master') not in ('', pkg_version) %}
       - pkg: salt_master_old_version
+
+{{ manage_upstart_log('salt-master') }}
 
 salt_master_old_version:
   pkg:

@@ -77,7 +77,8 @@ def forget():
     '''
     Forget any frozen state.
     '''
-    log.info("Forget data")
+    log.info("Clear list of installed packages, need to run "
+             "``snapshot`` before ``revert``.")
     __salt__['data.update'](__virtual__(), [])
 
 
@@ -95,10 +96,13 @@ def snapshot():
             'result': True}
 
 
-def revert(purge_only=False):
+def revert(only_uninstall=False):
     '''
     Take a list of packages, uninstall from the OS packages not in the list
     and install those that are missing.
+
+    If ``only_uninstall`` is set to ``True``, this will only remove new packages
+    and don't install those who disapeared since ``snapshot`` was executed.
     '''
     ret = {
         'name': 'revert',
@@ -124,7 +128,7 @@ def revert(purge_only=False):
         ret['comment'] = "Nothing to change"
         return ret
 
-    if install_pkgs and not purge_only:
+    if install_pkgs and not only_uninstall:
         ret['comment'] = '%d install %d purge' % (len(install_pkgs),
                                                   len(purge_pkgs))
         ret['changes'].update(__salt__['pkg.install'](pkgs=list(install_pkgs)))

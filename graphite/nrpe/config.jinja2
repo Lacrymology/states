@@ -30,5 +30,5 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 {%- from 'postgresql/server/nrpe/instance.jinja2' import postgresql_instance_prefix with context -%}
 {%- set deployment = 'graphite' %}
 {{ uwsgi_instance(deployment) }}
-{{ postgresql_instance_prefix('graphite', check_empty=True)}}
+{{ postgresql_instance_prefix('graphite')}}
 {{ nginx_instance(deployment, timeout=120, http_uri='/account/login', extra_dependencies=('graphite_uwsgi_worker', 'graphite_postgresql')) }}

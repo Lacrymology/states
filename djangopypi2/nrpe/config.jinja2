@@ -37,5 +37,5 @@ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
 {%- from 'postgresql/server/nrpe/instance.jinja2' import postgresql_instance_prefix with context -%}
 {%- set deployment = 'djangopypi2' %}
 {{ uwsgi_instance(deployment) }}
-{{ postgresql_instance_prefix(deployment, check_empty=True) }}
+{{ postgresql_instance_prefix(deployment) }}
 {{ nginx_instance(deployment, timeout=120, http_uri='/packages/', extra_dependencies=('djangopypi2_uwsgi_worker', 'djangopypi2_postgresql')) }}

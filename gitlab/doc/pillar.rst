@@ -1,3 +1,6 @@
+.. TODO:: check missing pillars
+.. TODO:: check deprecated pillars
+
 .. Copyright (c) 2013, Lam Dang Tung
 .. All rights reserved.
 ..
@@ -56,10 +59,14 @@ gitlab:hostnames
 
 .. include:: /nginx/doc/hostnames.inc
 
+.. TODO:: define test value example (from integration.sls)
+
 gitlab:admin:password
 ~~~~~~~~~~~~~~~~~~~~~
 
 Password for :doc:`/gitlab/doc/index` Administrator account.
+
+.. TODO:: define test value example (from integration.sls)
 
 Optional
 --------

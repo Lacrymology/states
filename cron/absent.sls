@@ -32,3 +32,9 @@ cron:
 /etc/cron.daily/apt-clean:
   file:
     - absent
+
+/etc/cron.twice_daily:
+  file:
+    - absent
+    - require:
+      - pkg: cron

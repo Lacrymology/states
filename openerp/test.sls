@@ -25,7 +25,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Quan Tong Anh <quanta@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
-{%- from 'nrpe/passive.sls' import test_sslyze with context %}
 include:
   - openerp
   - openerp.backup
@@ -43,5 +42,3 @@ test:
     - run_all_checks
     - wait: 60
     - order: last
-
-{{ test_sslyze('openerp') }}

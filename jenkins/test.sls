@@ -25,7 +25,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
-{%- from 'nrpe/passive.sls' import test_sslyze with context %}
 include:
   - jenkins
   - jenkins.backup
@@ -39,8 +38,6 @@ run_cron_cleanup_jenkins_old_workspace:
     - name: /etc/cron.daily/jenkins_delete_old_workspaces
     - require:
       - sls: jenkins
-
-{{ test_sslyze('jenkins') }}
 
 test:
   cmd:

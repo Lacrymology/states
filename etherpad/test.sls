@@ -25,7 +25,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Dang Tung Lam <lamdt@familug.org>
 Maintainer: Dang Tung Lam <lamdt@familug.org>
 -#}
-{%- from 'nrpe/passive.sls' import test_sslyze with context %}
 include:
   - etherpad
   - etherpad.backup
@@ -33,8 +32,6 @@ include:
   - etherpad.backup.diamond
   - etherpad.diamond
   - etherpad.nrpe
-
-{{ test_sslyze('etherpad') }}
 
 test:
   cmd:

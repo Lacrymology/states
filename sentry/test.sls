@@ -26,7 +26,6 @@ Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 {%- from 'cron/test.sls' import test_cron_d with context %}
-{%- from 'sslyze/test.sls' import test_sslyze with context %}
 include:
   - sentry
   - sentry.backup
@@ -36,8 +35,6 @@ include:
   - sentry.nrpe
 
 {{ test_cron_d('sslyze_check_sentry') }}
-
-{{ test_sslyze('sentry') }}
 
 test:
   monitoring:

@@ -32,7 +32,6 @@ Institute for Institutional Innovation by Data Driven Design Inc.
 Author: Lam Dang Tung <lamdt@familug.org>
 Maintainer: Lam Dang Tung <lamdt@familug.org>
 -#}
-{%- from 'nrpe/passive.sls' import test_sslyze with context %}
 include:
   - gitlab
   - gitlab.diamond
@@ -40,8 +39,6 @@ include:
   - gitlab.backup.diamond
   - gitlab.backup.nrpe
   - gitlab.nrpe
-
-{{ test_sslyze('gitlab') }}
 
 test:
   monitoring:

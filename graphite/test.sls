@@ -25,7 +25,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
-{%- from 'nrpe/passive.sls' import test_sslyze with context %}
 include:
   - graphite
   - graphite.backup
@@ -33,8 +32,6 @@ include:
   - graphite.backup.nrpe
   - graphite.diamond
   - graphite.nrpe
-
-{{ test_sslyze('graphite') }}
 
 test:
   monitoring:

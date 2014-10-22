@@ -25,13 +25,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
-{%- from 'nrpe/passive.sls' import test_sslyze with context %}
 include:
   - graylog2.web
   - graylog2.web.nrpe
   - graylog2.web.diamond
-
-{{ test_sslyze('graylog2.web', pillar_prefix='graylog2') }}
 
 test:
   monitoring:

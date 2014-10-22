@@ -25,7 +25,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Quan Tong Anh <quanta@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
-{%- from 'nrpe/passive.sls' import test_sslyze with context %}
 {%- from 'cron/test.sls' import test_cron with context %}
 include:
   - ejabberd
@@ -33,8 +32,6 @@ include:
   - ejabberd.backup.nrpe
   - ejabberd.diamond
   - ejabberd.nrpe
-
-{{ test_sslyze('ejabberd') }}
 
 {{ test_cron }}
 

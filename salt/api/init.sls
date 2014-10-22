@@ -27,7 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Setup a Salt API REST server.
 -#}
-{%- from 'upstart/rsyslog.sls' import manage_upstart_log with context -%}
+{%- from 'upstart/rsyslog.jinja2' import manage_upstart_log with context -%}
 {%- set api_version = '0.8.4' -%}
 include:
   - git

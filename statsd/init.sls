@@ -27,7 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Install PyStatsD daemon, a statsd nodejs equivalent in python.
 -#}
-{%- from 'upstart/rsyslog.sls' import manage_upstart_log with context -%}
+{%- from 'upstart/rsyslog.jinja2' import manage_upstart_log with context -%}
 include:
   - hostname
   - local

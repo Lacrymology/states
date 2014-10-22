@@ -27,7 +27,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 Dovecot: A POP3/IMAP server.
 -#}
-{%- from 'upstart/rsyslog.sls' import manage_upstart_log with context -%}
+{%- from 'upstart/rsyslog.jinja2' import manage_upstart_log with context -%}
 {% set ssl = salt['pillar.get']('dovecot:ssl', False) %}
 include:
   - apt

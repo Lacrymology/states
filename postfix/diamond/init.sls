@@ -27,7 +27,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 Diamond statistics for postfix.
 -#}
-{%- from 'upstart/rsyslog.sls' import manage_upstart_log with context -%}
+{%- from 'upstart/rsyslog.jinja2' import manage_upstart_log with context -%}
 include:
   - diamond
   - postfix

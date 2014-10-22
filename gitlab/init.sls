@@ -34,7 +34,7 @@ Maintainer: Lam Dang Tung <lamdt@familug.org>
 
 Self hosted Git management software.
 -#}
-{%- from 'upstart/rsyslog.sls' import manage_upstart_log with context -%}
+{%- from 'upstart/rsyslog.jinja2' import manage_upstart_log with context -%}
 include:
   - apt
   - build

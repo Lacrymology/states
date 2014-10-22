@@ -38,7 +38,7 @@ Once this state is installed, you need to:
 - Add a Sentry DSN to each of your users (can be the same) at:
   /users/
 -#}
-{%- from 'upstart/rsyslog.sls' import manage_upstart_log with context -%}
+{%- from 'upstart/rsyslog.jinja2' import manage_upstart_log with context -%}
 include:
   - graylog2
   - java.7

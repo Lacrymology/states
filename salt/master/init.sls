@@ -30,7 +30,7 @@ Install a Salt Management Master (server).
 If you install a salt master from scratch, check and run bootstrap_archive.py
 and use it to install the master.
 -#}
-{%- from 'upstart/rsyslog.sls' import manage_upstart_log with context -%}
+{%- from 'upstart/rsyslog.jinja2' import manage_upstart_log with context -%}
 include:
   - local
   - git

@@ -32,7 +32,7 @@ centralizes communication channels with external systems in order to simplify
 SMTP authorizations or RSS feed sources (only one for all hosts/services).
 There can be many reactionners for load-balancing and spare roles
 -#}
-{%- from 'upstart/rsyslog.sls' import manage_upstart_log with context -%}
+{%- from 'upstart/rsyslog.jinja2' import manage_upstart_log with context -%}
 {% set ssl = salt['pillar.get']('shinken:ssl', False) %}
 include:
   - rsyslog

@@ -27,7 +27,7 @@ Maintainer: Dang Tung Lam <lamdt@familug.org>
 
 Installing Etherpad - Real-time document editing
 -#}
-{%- from 'upstart/rsyslog.sls' import manage_upstart_log with context -%}
+{%- from 'upstart/rsyslog.jinja2' import manage_upstart_log with context -%}
 include:
   - apt
   - debian.package_build

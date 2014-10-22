@@ -75,7 +75,7 @@ shinken-receiver:
       - cmd: ssl_cert_and_key_for_{{ pillar['shinken']['ssl'] }}
 {% endif %}
 {#- does not use PID, no need to manage #}
-{% from 'upstart/rsyslog.sls' import manage_upstart_log with context %}
+{% from 'upstart/rsyslog.jinja2' import manage_upstart_log with context %}
 {{ manage_upstart_log('shinken-receiver') }}
 
 /etc/shinken/receiver.conf:

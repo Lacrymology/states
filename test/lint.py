@@ -150,6 +150,31 @@ def lint_check_bad_state_style(paths, *exts):
     return True
 
 
+def lint_check_bad_cron_filename(paths, *exts):
+    '''
+    Check whether a state manage a cron file with filename contains ``.`` (dot)
+    in it because cron ignores that file.
+    '''
+    if not exts:
+        exts = ['sls']
+    all_found = _grep(paths, '\/etc\/cron\.[^\/]+\/.+\.', *exts)
+    filtered_found = {}
+    for fn, data in all_found.iteritems():
+        data_without_jinja2_in_sid = {
+            lino: sid for lino, sid in
+            data.iteritems() if "{{" not in sid and "{%" not in sid
+        }
+        if data_without_jinja2_in_sid:
+            filtered_found.update({fn: data_without_jinja2_in_sid})
+
+    if filtered_found:
+        _print_tips('Remove the dot ``.`` in cron filename, or cron will '
+                    'ignore it')
+        _print_grep_result(filtered_found)
+        return False
+    return True
+
+
 def _is_binary_file(fn):
     '''
     Check if ``fn`` is binary file.
@@ -210,6 +235,7 @@ def main():
     res.append(lint_check_tab_char(paths))
     res.append(lint_check_numbers_of_order_last(paths))
     res.append(lint_check_bad_state_style(paths))
+    res.append(lint_check_bad_cron_filename(paths))
     no_of_false = res.count(False)
 
     print '\nTotal checks: {0}, total failures: {1}'.format(len(res),

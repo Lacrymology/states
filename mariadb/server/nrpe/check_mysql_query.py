@@ -62,9 +62,11 @@ class MysqlQuery(nap.Resource):
             records = cursor.execute(self.query)
             log.debug("resulted in %d records", records)
             log.debug(cursor.fetchall())
-        except Exception as e:
-            log.critical(e)
-            records = -1
+        except pymysql.err.Error as err:
+            log.critical(err)
+            raise nap.CheckError(
+                'Something went wrong with '
+                'MySQL query operation, Error: ()'.format(err))
 
         log.info("MysqlQuery.probe finished")
         log.debug("returning %d", records)

@@ -62,9 +62,11 @@ class PgSQLQuery(nap.Resource):
             log.debug("resulted in %d records", records)
             log.debug(records)
             log.debug(cursor.fetchall())
-        except Exception as e:
-            log.critical(e)
-            records = -1
+        except psycopg2.Error as err:
+            log.critical(err)
+            raise nap.CheckError(
+                'Something went wrong with '
+                'PostgreSQL query operation, Error: {}'.format(err))
 
         log.info("PgSQLQuery.probe finished")
         log.debug("returning %d", records)

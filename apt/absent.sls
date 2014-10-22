@@ -62,8 +62,8 @@ apt-key:
   file:
     - absent
 
-{%- for log_file in salt['file.find']('/etc/apt/sources.list.d/', name='*.save', type='f') %}
-{{ log_file }}:
+{%- for save_file in salt['file.find']('/etc/apt/sources.list.d/', name='*.save', type='f') %}
+{{ save_file }}:
   file:
     - absent
 {%- endfor -%}

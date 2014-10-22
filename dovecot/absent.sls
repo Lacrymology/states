@@ -44,6 +44,9 @@ extend:
         - dovecot-managesieved
       - require:
         - service: dovecot
+{#- ``upstart_absent`` absent of ``{{ formula }}.file`` if for upstart
+    ``/etc/init`` file, but dovecot handle that already remove that file.
+    then, recycle that statement to remove something else. #}
     file:
       - absent
       - name: /etc/dovecot

@@ -28,6 +28,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Nagios NRPE check for jenkins.
 -#}
 {%- from 'nrpe/passive.sls' import passive_check with context %}
+{%- from 'sslyze/test.sls' import add_hostname with context %}
 include:
   - apt.nrpe
   - cron.nrpe
@@ -36,6 +37,10 @@ include:
   - ssh.client.nrpe
 {% if salt['pillar.get']('jenkins:ssl', False) %}
   - ssl.nrpe
+
+    {%- if pillar['jenkins']['ssl'] == 'local' %}
+{{ add_hostname('jenkins') }}
+    {%- endif %}
 {%- endif %}
 
 {{ passive_check('jenkins', check_ssl_score=True) }}

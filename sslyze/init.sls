@@ -70,6 +70,17 @@ sslyze:
       - archive: sslyze
       - virtualenv: nrpe-virtualenv
 
+{%- for trust_store in ('apple', 'java', 'microsoft', 'mozilla') %}
+sslyze_{{ trust_store }}:
+  file:
+    - append
+    - name: /usr/local/src/sslyze-{{ version|replace(".", "_") }}-linux{{ bits }}/plugins/data/trust_stores/{{ trust_store }}.pem
+    - text: |
+        {{ pillar['ssl']['local']['server_crt']|indent(8) }}
+    - require_in:
+      - cmd: sslyze
+{%- endfor %}
+
 check_ssl_configuration.py:
   file:
     - managed

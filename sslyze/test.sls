@@ -36,19 +36,13 @@ test_sslyze_with_gmail:
     - require:
       - sls: sslyze
 
-{%- macro test_sslyze(formula, pillar_prefix=None, domain_name=None) -%}
-    {%- if not pillar_prefix -%}
-        {%- set pillar_prefix = formula -%}
-    {%- endif -%}
-    {%- if not domain_name -%}
-        {%- set domain_name = salt['pillar.get'](pillar_prefix + ':hostnames', ['127.0.0.1'])[0] -%}
-    {%- endif -%}
-    {%- if salt['pillar.get'](pillar_prefix + ':ssl', False) %}
-{{ formula }}_ssl_configuration:
-  monitoring:
-    - run_check
-    - accepted_failure: 'sslscore is 0 (FAILED - Certificate does NOT match alerts.local)'
-    - require:
-      - cmd: test_cron_d
-    {%- endif -%}
+{%- macro add_hostname(formula) %}
+    {%- set domain_name = salt['pillar.get'](formula + ':hostnames', ['127.0.0.1'])[0] -%}
+    {%- if domain_name|replace('.', '')|int == 0 %} {# only check if it is a domain, not IP. int returns 0 for unconvertible value #}
+{{ formula }}_hostname:
+  host:
+    - present
+    - name: {{ domain_name }}
+    - ip: 127.0.0.1
+    {%- endif %}
 {%- endmacro %}

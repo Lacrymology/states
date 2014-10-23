@@ -58,6 +58,7 @@ extend:
 
 /var/log/graylog2:
   file:
+    - absent
     - require:
       - service: graylog2-server
 

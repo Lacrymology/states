@@ -26,9 +26,9 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-Metrics
-=======
+uWSGI Metrics
+=============
+   
+.. |deployment| replace:: uwsgi.gitlab
 
-.. |deployment| replace:: gitlab
-                          
 .. include:: /diamond/doc/process.inc

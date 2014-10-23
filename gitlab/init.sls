@@ -317,7 +317,7 @@ gitlab-uwsgi:
     - require:
       - file: gitlab
       - file: gitlab_shell
-      - service: uwsgi_emperor
+      - service: uwsgi
   module:
     - wait
     - name: file.touch

@@ -2,10 +2,10 @@
 # -*- encoding: utf-8
 
 """
-NRPE script for checking mysql query
+NRPE script for checking postgresql query
 """
 
-# Copyright (c) 2014, Hung Nguyen Viet All rights reserved.
+# Copyright (c) 2014, Diep Pham All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -28,23 +28,21 @@ NRPE script for checking mysql query
 # OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 # IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-__author__ = 'Hung Nguyen Viet'
-__maintainer__ = 'Hung Nguyen Viet'
-__email__ = 'hvnsweeting@gmail.com'
+__author__ = 'Diep Pham'
+__maintainer__ = 'Diep Pham'
+__email__ = 'favadi@robotinfra.com'
 
 import logging
 
+import psycopg2
 import nagiosplugin as nap
-import pymysql
 from pysc import nrpe
 
-log = logging.getLogger('nagiosplugin.mysql.query')
+log = logging.getLogger('nagiosplugin.postgresql.server.query')
 
 
-class MysqlQuery(nap.Resource):
+class PgSQLQuery(nap.Resource):
     def __init__(self, host, user, passwd, database, query):
-        log.debug("MysqlQuery(%s, %s, %s, %s)",
-                  host, user, database, query)
         self.user = user
         self.passwd = passwd
         self.host = host
@@ -52,31 +50,33 @@ class MysqlQuery(nap.Resource):
         self.query = query
 
     def probe(self):
-        log.info("MysqlQuery.probe started")
+        log.info("PgSQLQuery.probe started")
         try:
-            log.debug("connecting with pymysql")
-            c = pymysql.connect(self.host, self.user,
-                                self.passwd, self.database)
+            log.debug("connecting with postgresql")
+            c = psycopg2.connect(host=self.host, user=self.user,
+                                 password=self.passwd, database=self.database)
             cursor = c.cursor()
             log.debug("about to execute query: %s", self.query)
-            records = cursor.execute(self.query)
+            cursor.execute(self.query)
+            records = cursor.rowcount
             log.debug("resulted in %d records", records)
+            log.debug(records)
             log.debug(cursor.fetchall())
-        except pymysql.err.Error as err:
+        except psycopg2.Error as err:
             log.critical(err)
             raise nap.CheckError(
                 'Something went wrong with '
-                'MySQL query operation, Error: ()'.format(err))
+                'PostgreSQL query operation, Error: {}'.format(err))
 
-        log.info("MysqlQuery.probe finished")
+        log.info("PgSQLQuery.probe finished")
         log.debug("returning %d", records)
-        return [nap.Metric('records', records, context='records')]
+        return [nap.Metric('record', records, context='records')]
 
 
-def check_mysql_query(config):
+def check_pgsql_query(config):
     critical = config['critical']
     return (
-        MysqlQuery(host=config['host'],
+        PgSQLQuery(host=config['host'],
                    user=config['user'],
                    passwd=config['passwd'],
                    database=config['database'],
@@ -84,9 +84,8 @@ def check_mysql_query(config):
         nap.ScalarContext('records', critical, critical)
     )
 
-
 if __name__ == "__main__":
-    nrpe.check(check_mysql_query, {
+    nrpe.check(check_pgsql_query, {
         'critical': '1:',
-        'query': 'select @@max_connections;',
+        'query': 'show max_connections;',
     })

@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 #}
-{%- macro postgresql_instance(formula, dbname, password, username=None) %}
+{%- macro postgresql_instance(formula, dbname, password, username=None, check_empty=True) %}
 {{ dbname }}_postgresql:
   description: {{ dbname|capitalize }} PostgreSQL Database
   command: /usr/lib/nagios/plugins/check_pgsql -H 127.0.0.1 -P 5432 -d {{ dbname }} -l {{ username|default(dbname, boolean=True) }} -p {{ password }}
@@ -40,24 +40,31 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
   arguments:
     name: {{ dbname }}
     encoding: UTF8
+
+{%- if check_empty %}
+{{ dbname }}_postgresql_empty:
+  description: {{ formula|capitalize }} PostgreSQL Database Empty {{ dbname }}
+  command: /usr/lib/nagios/plugins/check_pgsql_query.py --formula={{ formula }} --check={{ dbname }}_postgresql_empty
+  arguments:
+    timeout: 15 {#- 15 seconds to run statement  #}
+    passwd: {{ password }}
+    user: {{ username }}
+    host: localhost
+    database: {{ dbname }}
+    query: "select * from information_schema.tables where table_schema = 'public';"
+    critical: "1:"
+  dependencies:
+    - {{ dbname }}_postgresql
+{%- endif  %}
 {%- endmacro %}
 
-{%- macro postgresql_instance_prefix(deployment, prefix=None) -%}
+{%- macro postgresql_instance_prefix(deployment, prefix=None, check_empty=True) -%}
     {%- if not prefix -%}
         {%- set prefix = deployment -%}
     {%- endif %}
-{{ deployment }}_postgresql:
-  description: {{ deployment|capitalize }} PostgreSQL Database
-  command: /usr/lib/nagios/plugins/check_pgsql -H 127.0.0.1 -P 5432 -d {{ salt['pillar.get'](prefix + ':db:name', deployment) }} -l {{ salt['pillar.get'](prefix + ':db:username', deployment) }} -p {{ salt['password.pillar'](prefix + ':db:password', 10) }}
-  dependencies:
-    - postgresql_procs
-
-{{ deployment }}_postgresql_encoding:
-  description: {{ deployment|capitalize }} PostgreSQL Database Encoding
-  command: sudo -u postgres /usr/lib/nagios/plugins/check_psql_encoding.py --formula={{ deployment }} --check={{ deployment }}_postgresql_encoding
-  dependencies:
-    - postgresql_procs
-  arguments:
-    name: {{ salt['pillar.get'](prefix + ':db:name', deployment) }}
-    encoding: UTF8
-{%- endmacro %}
+    {%- set formula = deployment %}
+    {%- set dbname = salt['pillar.get'](prefix + ':db:name', deployment)  %}
+    {%- set password = salt['password.pillar'](prefix + ':db:password', 10) %}
+    {%- set username = salt['pillar.get'](prefix + ':db:username', deployment)  %}
+    {{ postgresql_instance(formula, dbname, password, username, check_empty) }}
+{%- endmacro  %}

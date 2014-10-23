@@ -36,6 +36,7 @@ include:
 test:
   monitoring:
     - run_all_checks
+    - wait: 5  {# wait for proftpd create database structure #}
     - order: last
   cmd:
     - run

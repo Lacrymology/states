@@ -38,4 +38,4 @@ postgresql_port:
     - postgresql_procs
 
 {%- from 'postgresql/server/nrpe/instance.jinja2' import postgresql_instance with context %}
-{{ postgresql_instance('postgresql.common', 'monitoring', username='monitoring', password=salt['password.pillar']('postgresql:monitoring:password', 10)) }}
+{{ postgresql_instance('postgresql.common', 'monitoring', username='monitoring', password=salt['password.pillar']('postgresql:monitoring:password', 10), check_empty=False) }}

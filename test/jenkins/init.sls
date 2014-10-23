@@ -52,15 +52,9 @@ salt-minion:
 {%- endif %}
       - pkg: python-pip
       - pip: unittest-xml-reporting
-  file:
-    - patch
-    - name: /usr/share/pyshared/salt/state.py
-    - hash: md5=cb303bf87a7584e1de6843049c122dd8
-    - source: salt://salt/require_sls.patch
   service:
     - running
     - enable: True
     - skip_verify: True
     - watch:
       - pkg: salt-minion
-      - file: salt-minion

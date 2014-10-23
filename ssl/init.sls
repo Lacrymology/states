@@ -92,6 +92,20 @@ that support SSL.
     - require:
       - pkg: ssl-cert
 
+{#- This is for ejabberd #}
+/etc/ssl/private/{{ name }}_allinone.pem:
+  file:
+    - managed
+    - contents: |
+        {{ pillar['ssl'][name]['server_crt'] | indent(8) }}
+        {{ pillar['ssl'][name]['server_key'] | indent(8) }}
+        {{ pillar['ssl'][name]['ca_crt'] | indent(8) }}
+    - user: root
+    - group: ssl-cert
+    - mode: 440
+    - require:
+      - pkg: ssl-cert
+
 {#-
 Some browsers may complain about a certificate signed by a well-known
 certificate authority, while other browsers may accept the certificate without

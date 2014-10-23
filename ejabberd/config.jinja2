@@ -97,7 +97,7 @@ Hostname
                        %%zlib,
 {%- if salt['pillar.get']('ejabberd:ssl', False) %}
                        {max_stanza_size, 65536},
-                       starttls, {certfile, "/etc/ssl/private/{{ pillar['ejabberd']['ssl'] }}.pem"}
+                       starttls, {certfile, "/etc/ssl/private/{{ pillar['ejabberd']['ssl'] }}_allinone.pem"}
 {%- else %}
                        {max_stanza_size, 65536}
 {%- endif %}
@@ -155,7 +155,7 @@ Hostname
  s2s_certfile: Specify a certificate file.
 
 #}
-{s2s_certfile, "/etc/ssl/private/{{ pillar['ejabberd']['ssl'] }}.pem"}.
+{s2s_certfile, "/etc/ssl/private/{{ pillar['ejabberd']['ssl'] }}_allinone.pem"}.
 {%- endif %}
 {#-
  domain_certfile: Specify a different certificate for each served hostname.

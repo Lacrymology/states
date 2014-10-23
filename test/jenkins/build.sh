@@ -81,7 +81,7 @@ sudo salt -t 10 "integration-$JOB_NAME-$BUILD_NUMBER" cmd.run "hostname integrat
 sudo salt -t 60 "integration-$JOB_NAME-$BUILD_NUMBER" cp.get_file salt://jenkins_archives/$JOB_NAME-$BUILD_NUMBER.tar.gz /tmp/bootstrap-archive.tar.gz
 sudo salt -t 60 "integration-$JOB_NAME-$BUILD_NUMBER" archive.tar xzf /tmp/bootstrap-archive.tar.gz cwd=/
 master_ip=$(sudo salt -t 60 "integration-$JOB_NAME-$BUILD_NUMBER" --out=yaml grains.item master | cut -f2- -d ':' | tr -d '\n')
-sudo salt -t 10 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "sed -i \"s/master:.*/master: $master_ip/g\" /root/salt/states/test/minion"
+sudo salt -t 10 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "sed -i \"s/master:.*/master: $master_ip/g\" /root/salt/states/test/minion" | ./test/jenkins/retcode_check.py
 # sync extmod from extracted archive to bootstrapped salt instance
 sudo salt -t 60 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call -c /root/salt/states/test/ saltutil.sync_all"
 sudo salt -t 600 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call -c /root/salt/states/test/ state.sls test.sync" | ./test/jenkins/retcode_check.py

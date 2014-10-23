@@ -29,7 +29,6 @@ Nagios NRPE check for Sentry.
 -#}
 {%- set formula = 'sentry' -%}
 {%- from 'nrpe/passive.sls' import passive_check with context %}
-{%- from 'sslyze/test.sls' import add_hostname with context %}
 include:
   - apt.nrpe
   - bash.nrpe
@@ -49,8 +48,6 @@ include:
   - virtualenv.nrpe
 {%- if salt['pillar.get'](formula + ':ssl', False) %}
   - ssl.nrpe
-
-{{ add_hostname(formula) }}
 {%- endif %}
 
 {{ passive_check(formula, check_ssl_score=True) }}

@@ -28,7 +28,6 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 Nagios NRPE check for RabbitMQ.
 -#}
 {%- from 'nrpe/passive.sls' import passive_check with context %}
-{%- from 'sslyze/test.sls' import add_hostname with context %}
 include:
   - apt.nrpe
   - erlang.nrpe
@@ -37,8 +36,6 @@ include:
   - nginx.nrpe
 {%- if salt['pillar.get']('rabbitmq:ssl', False) %}
   - ssl.nrpe
-
-{{ add_hostname('rabbitmq') }}
 {%- endif %}
 
 {{ passive_check('rabbitmq') }}

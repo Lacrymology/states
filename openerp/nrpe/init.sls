@@ -28,7 +28,6 @@ Maintainer: Lam Dang Tung <lamdt@familug.org>
 Nagios NRPE check for OpenERP.
 -#}
 {%- from 'nrpe/passive.sls' import passive_check with context %}
-{%- from 'sslyze/test.sls' import add_hostname with context %}
 include:
   - apt.nrpe
   - build.nrpe
@@ -44,8 +43,6 @@ include:
   - xml.nrpe
 {%- if salt['pillar.get']('openerp:ssl', False) %}
   - ssl.nrpe
-
-{{ add_hostname('openerp') }}
 {%- endif %}
 
 {{ passive_check('openerp', check_ssl_score=True) }}

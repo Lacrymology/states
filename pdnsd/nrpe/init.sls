@@ -42,6 +42,8 @@ pydns:
     - group: root
     - mode: 440
     - source: salt://pdnsd/nrpe/requirements.jinja2
+    - require:
+      - file: {{ opts['cachedir'] }}/pip
   module:
     - wait
     - name: pip.install

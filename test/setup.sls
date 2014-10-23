@@ -79,3 +79,11 @@ upgrade_pkg:
       - module: sync_all
     - watch:
       - user: root
+
+{%- for hostname in salt['common.unique_hostname'](pillar) %}
+hostname-{{ hostname }}:
+  host:
+    - present
+    - name: {{ hostname }}
+    - ip: 127.0.0.1
+{%- endfor %}

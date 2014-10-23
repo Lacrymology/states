@@ -63,9 +63,10 @@ def _grep(paths, pattern, *exts):
     def _grep_file(filename):
         found = {}
         with open(filename, 'rt') as f:
-            for lineno, line in enumerate(f):
+            for idx, line in enumerate(f):
                 if repat.findall(line):
-                    found.update({str(lineno + 1): line.strip('\n')})
+                    # idx count from 0, line number count from 1
+                    found.update({idx + 1: line.strip('\n')})
         return found
 
     if exts:
@@ -150,6 +151,44 @@ def lint_check_bad_state_style(paths, *exts):
     return True
 
 
+def lint_check_bad_cron_filename(paths, *exts):
+    '''
+    Check whether a state manage a cron file with filename contains ``.`` (dot)
+    in it because cron ignores that file.
+    '''
+    if not exts:
+        exts = ['sls']
+    all_found = _grep(paths, '\/etc\/cron\.[^\/]+\/.+\.', *exts)
+    filtered_found = {}
+    for fn, data in all_found.iteritems():
+        # no check absent SLS
+        if fn.endswith('absent.sls'):
+            continue
+        data_without_jinja2_in_sid = {
+            lino: sid for lino, sid in
+            data.iteritems() if "{{" not in sid and "{%" not in sid
+        }
+        if data_without_jinja2_in_sid:
+            for_modify = data_without_jinja2_in_sid.copy()
+            for lino in data_without_jinja2_in_sid:
+                with open(fn) as f:
+                    for idx, line in enumerate(f):
+                        # see two lines below state ID to check if it is an
+                        # absent state
+                        if idx == ((lino - 1) + 2) and '- absent' in line:
+                            for_modify.pop(lino)
+
+            if for_modify:
+                filtered_found.update({fn: for_modify})
+
+    if filtered_found:
+        _print_tips('Remove the dot ``.`` in cron filename, or cron will '
+                    'ignore it')
+        _print_grep_result(filtered_found)
+        return False
+    return True
+
+
 def _is_binary_file(fn):
     '''
     Check if ``fn`` is binary file.
@@ -210,6 +249,7 @@ def main():
     res.append(lint_check_tab_char(paths))
     res.append(lint_check_numbers_of_order_last(paths))
     res.append(lint_check_bad_state_style(paths))
+    res.append(lint_check_bad_cron_filename(paths))
     no_of_false = res.count(False)
 
     print '\nTotal checks: {0}, total failures: {1}'.format(len(res),

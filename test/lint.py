@@ -168,7 +168,15 @@ def lint_check_bad_cron_filename(paths, *exts):
             data.iteritems() if "{{" not in sid and "{%" not in sid
         }
         if data_without_jinja2_in_sid:
-            filtered_found.update({fn: data_without_jinja2_in_sid})
+            for_modify = data_without_jinja2_in_sid.copy()
+            for lino in data_without_jinja2_in_sid:
+                with open(fn) as f:
+                    for i, line in enumerate(f):
+                        if i == (int(lino) - 1 + 2) and '- absent' in line:
+                            for_modify.pop(lino)
+
+            if for_modify:
+                filtered_found.update({fn: for_modify})
 
     if filtered_found:
         _print_tips('Remove the dot ``.`` in cron filename, or cron will '

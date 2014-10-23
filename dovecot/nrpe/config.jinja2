@@ -54,11 +54,13 @@ dovecot_port_pop3s:
   dependencies:
     - dovecot_procs
 
+    {%- if grains['oscodename'] != 'precise' %}
 dovecot_simap:
   description: Dovecot SIMAP
   command: /usr/lib/nagios/plugins/check_simap -H 127.0.0.1 -p 993
   dependencies:
     - dovecot_port_imaps
+    {%- endif -%}
 {%- endif %}
 
 dovecot_port_imap:

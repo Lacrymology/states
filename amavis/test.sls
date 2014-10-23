@@ -25,18 +25,18 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
+{%- from 'cron/test.sls' import test_cron with context %}
 include:
   - amavis
   - amavis.diamond
   - amavis.nrpe
+
+{%- call test_cron() %}
+- sls: amavis
+{%- endcall %}
 
 test:
   monitoring:
     - run_all_checks
     - wait: 60
     - order: last
-  cmd:
-    - run
-    - name: /etc/cron.daily/amavisd-new
-    - require:
-      - service: amavis

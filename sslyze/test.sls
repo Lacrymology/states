@@ -37,8 +37,9 @@ test_sslyze_with_gmail:
       - sls: sslyze
 
 {%- macro add_hostname(formula) %}
+    {%- set ssl = pillar[formula]['ssl'] -%}
     {%- set domain_name = salt['pillar.get'](formula + ':hostnames', ['127.0.0.1'])[0] -%}
-    {%- if domain_name|replace('.', '')|int == 0 %} {# only check if it is a domain, not IP. int returns 0 for unconvertible value #}
+    {%- if ssl == 'local' and domain_name|replace('.', '')|int == 0 %}
 {{ formula }}_hostname:
   host:
     - present

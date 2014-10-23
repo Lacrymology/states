@@ -42,9 +42,9 @@ ssh_add_key:
   cmd:
     - run
     - name: cat {{ root_home }}/.ssh/id_{{ pillar['deployment_key']['type'] }}.pub >> {{ root_home }}/.ssh/authorized_keys
-    - unless: grep $(cat {{ root_home }}/.ssh/id_{{ pillar['deployment_key']['type'] }}.pub) {{ root_home }}/.ssh/authorized_keys
+    - unless: grep "$(cat {{ root_home }}/.ssh/id_{{ pillar['deployment_key']['type'] }}.pub)" {{ root_home }}/.ssh/authorized_keys
     - require:
-      - cmd: root_ssh_public_key
+      - sls: ssh.client
 
 test_ssh:
   cmd:

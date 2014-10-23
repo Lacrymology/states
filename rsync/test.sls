@@ -33,12 +33,12 @@ include:
 test:
   cmd:
     - run
-    - name: rsync -avz /srv/salt/ /tmp/salt/
+    - name: rsync -avz /etc/ /tmp/etc/
     - require:
       - pkg: rsync
   file:
     - absent
-    - name: /tmp/salt/
+    - name: /tmp/etc/
     - require:
       - cmd: test
   monitoring:

@@ -32,6 +32,7 @@ Institute for Institutional Innovation by Data Driven Design Inc.
 Author: Lam Dang Tung <lamdt@familug.org>
 Maintainer: Lam Dang Tung <lamdt@familug.org>
 -#}
+{%- from 'cron/test.sls' import test_cron with context %}
 include:
   - gitlab
   - gitlab.diamond
@@ -40,14 +41,14 @@ include:
   - gitlab.backup.nrpe
   - gitlab.nrpe
 
+{%- call test_cron() %}
+- sls: gitlab
+- sls: gitlab.backup
+- sls: gitlab.nrpe
+{%- endcall %}
+
 test:
   monitoring:
     - run_all_checks
     - wait: 120
     - order: last
-  cmd:
-    - run
-    - name: /etc/cron.daily/backup-gitlab
-    - require:
-      - sls: gitlab
-      - sls: gitlab.backup

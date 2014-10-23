@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-{%- from 'cron/test.sls' import test_cron_d with context %}
+{%- from 'cron/test.sls' import test_cron with context %}
 include:
   - sentry
   - sentry.backup
@@ -34,16 +34,14 @@ include:
   - sentry.diamond
   - sentry.nrpe
 
-{{ test_cron_d('sslyze_check_sentry') }}
+{%- call test_cron() %}
+- sls: sentry
+- sls: sentry.backup
+- sls: sentry.nrpe
+{%- endcall %}
 
 test:
   monitoring:
     - run_all_checks
     - wait: 60
     - order: last
-  cmd:
-    - run
-    - name: /etc/cron.daily/backup-sentry
-    - require:
-      - sls: sentry
-      - sls: sentry.backup

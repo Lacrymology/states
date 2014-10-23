@@ -25,16 +25,18 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Quan Tong Anh <quanta@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
-{%- from 'cron/test.sls' import test_cron_d with context %}
+{%- from 'cron/test.sls' import test_cron with context %}
 include:
   - salt.archive.server
   - salt.archive.server.diamond
   - salt.archive.server.nrpe
 
-{{ test_cron_d('salt-archive') }}
+{%- call test_cron() %}
+- sls: salt.archive.server
+- sls: salt.archive.server.nrpe
+{%- endcall %}
 
 test_salt_archive:
   monitoring:
     - run_all_checks
-    - wait: 60
     - order: last

@@ -28,6 +28,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 Install a graylog2 web Nagios NRPE checks.
 -#}
 {%- from 'nrpe/passive.sls' import passive_check with context %}
+{%- from 'sslyze/test.sls' import add_hostname with context %}
 include:
   - logrotate.nrpe
   - mongodb.nrpe
@@ -36,6 +37,8 @@ include:
   - rsyslog.nrpe
 {% if salt['pillar.get']('graylog2:ssl', False) %}
   - ssl.nrpe
+
+{{ add_hostname('graylog2') }}
 {%- endif %}
 
 {{ passive_check('graylog2.web', pillar_prefix='graylog2', check_ssl_score=True) }}

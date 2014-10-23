@@ -25,18 +25,18 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Quan Tong Anh <quanta@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
+{%- from 'cron/test.sls' import test_cron with context %}
 include:
   - backup.server
   - backup.server.diamond
   - backup.server.nrpe
   - backup.server.ssh
 
+{%- call test_cron() %}
+- sls: backup.server
+{%- endcall %}
+
 test:
-  cmd:
-    - run
-    - name: /etc/cron.weekly/backup-archiver
-    - require:
-      - sls: backup.server
   monitoring:
     - run_all_checks
     - order: last

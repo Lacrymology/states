@@ -29,6 +29,7 @@ Install a roundcube Nagios NRPE checks.
 -#}
 {%- set formula = 'roundcube' -%}
 {%- from 'nrpe/passive.sls' import passive_check with context %}
+{%- from 'sslyze/test.sls' import add_hostname with context %}
 include:
   - apt.nrpe
   - build.nrpe
@@ -40,6 +41,8 @@ include:
   - uwsgi.nrpe
 {%- if salt['pillar.get'](formula + ':ssl', False) %}
   - ssl.nrpe
+
+{{ add_hostname(formula) }}
 {%- endif %}
 
 {{ passive_check(formula, check_ssl_score=True) }}

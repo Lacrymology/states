@@ -41,13 +41,12 @@ nsca-{{ formula }}:
   {%- set domain_name = salt['pillar.get'](pillar_prefix + ':hostnames', ['127.0.0.1'])[0] if not domain_name -%}
   {%- if domain_name|replace('.', '')|int == 0 -%}
     {#- only check if it is a domain, not IP. int returns 0 for unconvertible value #}
-/etc/cron.d/sslyze_check_{{ formula|replace('.', '-') }}:
+/etc/cron.twice_daily/sslyze_check_{{ formula|replace('.', '-') }}:
   file:
     - managed
-    - name: /etc/cron.d/sslyze_check_{{ formula|replace('.', '-') }}
     - user: root
     - group: root
-    - mode: 400
+    - mode: 500
     - template: jinja
     - source: salt://sslyze/cron_template.jinja2
     - context:
@@ -58,19 +57,19 @@ nsca-{{ formula }}:
       - file: nsca-{{ formula }}
 
     {%- if formula|replace('.', '') != formula %}
-/etc/cron.d/sslyze_check_{{ formula }}:
+/etc/cron.twice_daily/sslyze_check_{{ formula }}:
   file:
     - absent
     {%- endif -%}
 
   {%- else %}
-/etc/cron.d/sslyze_check_{{ formula|replace('.', '-') }}:
+/etc/cron.twice_daily/sslyze_check_{{ formula|replace('.', '-') }}:
   file:
     - absent
   {%- endif -%}
 
 {%- else %}
-/etc/cron.d/sslyze_check_{{ formula|replace('.', '-') }}:
+/etc/cron.twice_daily/sslyze_check_{{ formula|replace('.', '-') }}:
   file:
     - absent
 {%- endif %}
@@ -105,8 +104,7 @@ nsca-{{ formula }}:
     - absent
     - name: /etc/nagios/nsca.d/{{ formula }}.yml
 
-/etc/cron.d/sslyze_check_{{ formula|replace('.', '-') }}:
+/etc/cron.twice_daily/sslyze_check_{{ formula|replace('.', '-') }}:
   file:
     - absent
-    - name: /etc/cron.d/sslyze_check_{{ formula|replace('.', '-') }}
 {%- endmacro %}

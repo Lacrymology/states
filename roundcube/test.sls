@@ -25,6 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
+{%- from 'cron/test.sls' import test_cron with context %}
 include:
   - roundcube
   - roundcube.backup
@@ -33,14 +34,14 @@ include:
   - roundcube.diamond
   - roundcube.nrpe
 
+{%- call test_cron() %}
+- sls: roundcube
+- sls: roundcube.backup
+- sls: roundcube.nrpe
+{%- endcall %}
+
 test:
   monitoring:
     - run_all_checks
     - wait: 30
     - order: last
-  cmd:
-    - run
-    - name: /etc/cron.daily/backup-roundcube
-    - require:
-      - sls: roundcube.backup
-      - sls: roundcube

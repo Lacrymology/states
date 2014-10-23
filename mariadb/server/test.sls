@@ -39,5 +39,4 @@ test_backup_mysql:
       - file: /usr/local/bin/backup-mysql-all
   monitoring:
     - run_all_checks
-    - wait: 60
     - order: last

@@ -33,10 +33,13 @@ include:
   - ejabberd.diamond
   - ejabberd.nrpe
 
-{{ test_cron }}
+{%- call test_cron() %}
+- sls: cron
+- sls: ejabberd
+- sls: ejabberd.nrpe
+{%- endcall %}
 
 test:
   monitoring:
     - run_all_checks
-    - wait: 60
     - order: last

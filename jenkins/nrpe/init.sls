@@ -38,9 +38,7 @@ include:
 {% if salt['pillar.get']('jenkins:ssl', False) %}
   - ssl.nrpe
 
-    {%- if pillar['jenkins']['ssl'] == 'local' %}
 {{ add_hostname('jenkins') }}
-    {%- endif %}
 {%- endif %}
 
 {{ passive_check('jenkins', check_ssl_score=True) }}

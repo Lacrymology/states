@@ -25,6 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
+{%- from 'cron/test.sls' import test_cron with context %}
 include:
   - carbon
   - carbon.nrpe
@@ -32,13 +33,12 @@ include:
   - carbon.backup.diamond
   - carbon.backup.nrpe
 
+{%- call test_cron() %}
+- sls: carbon
+- sls: carbon.backup
+{%- endcall %}
+
 test:
   monitoring:
     - run_all_checks
     - order: last
-  cmd:
-    - run
-    - name: /etc/cron.daily/backup-carbon
-    - require:
-      - sls: carbon.backup
-      - sls: carbon

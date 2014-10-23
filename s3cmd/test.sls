@@ -28,6 +28,7 @@ Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 include:
   - s3cmd
   - s3cmd.diamond
+  - s3cmd.nrpe
 
 test:
   cmd:
@@ -37,5 +38,4 @@ test:
       - pkg: s3cmd
   monitoring:
     - run_all_checks
-    - wait: 60
     - order: last

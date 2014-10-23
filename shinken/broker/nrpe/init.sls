@@ -28,6 +28,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 Nagios NRPE check for Shinken.
 -#}
 {%- from 'nrpe/passive.sls' import passive_check with context %}
+{%- from 'sslyze/test.sls' import add_hostname with context %}
 include:
   - apt.nrpe
   - nginx.nrpe
@@ -38,6 +39,8 @@ include:
   - virtualenv.nrpe
 {% if salt['pillar.get']('shinken:ssl', False) %}
   - ssl.nrpe
+
+{{ add_hostname('shinken') }}
 {%- endif %}
 
 {{ passive_check('shinken.broker', pillar_prefix='shinken', check_ssl_score=True) }}

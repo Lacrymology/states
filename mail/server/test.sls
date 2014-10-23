@@ -25,6 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
+{%- from 'cron/test.sls' import test_cron with context %}
 include:
   - amavis
   - amavis.nrpe
@@ -44,15 +45,11 @@ include:
   - openldap.nrpe
   - mail.server.nrpe
 
+{{ test_cron }}
+
 test:
   monitoring:
     - run_all_checks
-    - order: last
-  cmd:
-    - run
-    - name: /etc/cron.daily/backup-dovecot
-    - require:
-      - file: backup-dovecot
     - order: last
 
 test_check_mail_stack:
@@ -60,4 +57,9 @@ test_check_mail_stack:
     - run
     - name: /usr/lib/nagios/plugins/check_mail_stack.py
     - require:
-      - file: /usr/lib/nagios/plugins/check_mail_stack.py
+      - sls: amavis
+      - sls: clamav
+      - sls: dovecot
+      - sls: postfix
+      - sls: openldap
+      - sls: mail.server.nrpe

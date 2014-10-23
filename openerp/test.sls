@@ -25,6 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Quan Tong Anh <quanta@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
+{%- from 'cron/test.sls' import test_cron with context %}
 include:
   - openerp
   - openerp.backup
@@ -32,13 +33,12 @@ include:
   - openerp.diamond
   - openerp.nrpe
 
+{%- call test_cron() %}
+- sls: openerp.backup
+- sls: openerp.nrpe
+{%- endcall %}
+
 test:
-  cmd:
-    - run
-    - name: /etc/cron.daily/backup-openerp
-    - require:
-      - file: backup-openerp
   monitoring:
     - run_all_checks
-    - wait: 60
     - order: last

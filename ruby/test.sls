@@ -37,5 +37,4 @@ test_ruby:
       - pkg: ruby
   monitoring:
     - run_all_checks
-    - wait: 60
     - order: last

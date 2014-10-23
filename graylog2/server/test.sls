@@ -25,6 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
+{%- from 'cron/test.sls' import test_cron with context %}
 include:
   - graylog2.server
   - graylog2.server.diamond
@@ -42,6 +43,11 @@ graylog2_log_one_msg:
     - require:
       - service: graylog2-server
 
+{%- call test_cron() %}
+- sls: graylog2.server
+- sls: graylog2.server.backup
+{%- endcall %}
+
 test:
   monitoring:
     - run_all_checks
@@ -53,12 +59,6 @@ test:
       - graylog2_incoming_logs
       - graylog2_api_port
       - graylog2_api
-  cmd:
-    - run
-    - name: /etc/cron.daily/backup-graylog2
-    - require:
-      - sls: graylog2.server
-      - sls: graylog2.server.backup
 
 test_import_general_syslog_udp_input:
   cmd:
@@ -66,23 +66,13 @@ test_import_general_syslog_udp_input:
     - name: import_general_syslog_udp_input graylog2-0-20
     - source: salt://graylog2/server/import_general_syslog_udp_input.py
     - require:
-      - service: graylog2-server
-      - pkg: graylog2-old-mongodb
-      - archive: graylog2-server
+      - sls: graylog2.server
 
 test_log_generator:
-  file:
-    - managed
+  script:
+    - run
     - name: /usr/local/graylog2-server-0.20.6/bin/log_generator
     - template: jinja
     - source: salt://graylog2/server/log_generator.py
-    - user: graylog2
-    - group: graylog2
-    - mode: 750
     - require:
-      - file: /usr/local/graylog2-server-0.20.6
-  cmd:
-    - run
-    - name: /usr/local/graylog2-server-0.20.6/bin/log_generator
-    - require:
-      - file: test_log_generator
+      - sls: graylog2.server

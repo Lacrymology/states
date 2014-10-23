@@ -26,23 +26,19 @@ Author: Quan Tong Anh <quanta@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
 {%- macro test_cron() -%}
-    {%- for suffix in ('daily', 'weekly', 'monthly') %}
+    {%- for suffix in ('twice_daily', 'daily', 'weekly', 'monthly') %}
 test_cron_{{ suffix }}:
   cmd:
     - run
     - name: run-parts --report /etc/cron.{{ suffix }}
     - onlyif: test -d /etc/cron.{{ suffix }}
-    - order: last
-    {%- endfor %}
-{%- endmacro %}
-
-{%- macro test_cron_d(file) %}
-test_cron_d_{{ file }}:
-  cmd:
-    - run
-    - name: grep -v '^#' /etc/cron.d/{{ file }} | sed '/^$/d' | awk '{ print substr($0, index($0, $7)) }' | bash
-    - onlyif: test -d /etc/cron.d
-    - order: last
+        {%- if caller is defined -%}
+            {%- for line in caller().split("\n") -%}
+                {%- if loop.first %}
     - require:
-      - file: /etc/cron.d/{{ file }}
+                {%- endif %}
+{{ line|trim|indent(6, indentfirst=True) }}
+            {%- endfor -%}
+        {%- endif -%}
+    {%- endfor -%}
 {%- endmacro %}

@@ -26,6 +26,7 @@ Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 {%- from 'nrpe/passive.sls' import passive_check with context %}
+{%- from 'sslyze/test.sls' import add_hostname with context %}
 include:
   - apt.nrpe
   - bash.nrpe
@@ -38,6 +39,8 @@ include:
   - ssh.server.nrpe
 {% if salt['pillar.get']('salt_archive:ssl', False) %}
   - ssl.nrpe
+
+{{ add_hostname('salt_archive') }}
 {%- endif %}
 
 {{ passive_check('salt.archive.server', pillar_prefix='salt_archive', check_ssl_score=True) }}

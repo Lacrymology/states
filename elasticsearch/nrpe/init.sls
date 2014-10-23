@@ -39,6 +39,8 @@ include:
 {%- if ssl %}
   - ssl.nrpe
   - nginx.nrpe
+
+{{ add_hostname(formula) }}
 {%- endif %}
 
 {{ passive_check(formula) }}

@@ -25,6 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
+{%- from 'cron/test.sls' import test_cron with context %}
 include:
   - jenkins
   - jenkins.backup
@@ -32,12 +33,10 @@ include:
   - jenkins.diamond
   - jenkins.nrpe
 
-run_cron_cleanup_jenkins_old_workspace:
-  cmd:
-    - run
-    - name: /etc/cron.daily/jenkins_delete_old_workspaces
-    - require:
-      - sls: jenkins
+{%- call test_cron() %}
+- sls: jenkins
+- sls: jenkins.nrpe
+{%- endcall %}
 
 test:
   cmd:

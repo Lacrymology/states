@@ -43,5 +43,3 @@ test:
     - require:
       - sls: salt.master
       - sls: salt.master.backup
-
-{#- run bootstrap_archive.py  #}

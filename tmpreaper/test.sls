@@ -31,4 +31,8 @@ include:
   - tmpreaper.diamond
   - tmpreaper.nrpe
 
-{{ test_cron() }}
+{%- call test_cron() %}
+- sls: tmpreaper
+- sls: tmpreaper.diamond
+- sls: tmpreaper.nrpe
+{%- endcall %}

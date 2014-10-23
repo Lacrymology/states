@@ -34,6 +34,7 @@ include:
 {%- call test_cron() %}
 - sls: graylog2.web
 - sls: graylog2.web.nrpe
+- sls: graylog2.web.diamond
 {%- endcall %}
 
 test:

@@ -38,14 +38,32 @@ include:
   - dovecot.backup.nrpe
   - dovecot.diamond
   - dovecot.nrpe
-  - postfix.nrpe
-  - postfix.diamond
+  - mail.server.nrpe
   - openldap
   - openldap.diamond
   - openldap.nrpe
-  - mail.server.nrpe
+  - postfix.nrpe
+  - postfix.diamond
 
-{{ test_cron }}
+{%- call test_cron() %}
+- sls: amavis
+- sls: amavis.nrpe
+- sls: amavis.diamond
+- sls: amavis.clamav
+- sls: clamav.nrpe
+- sls: clamav.diamond
+- sls: dovecot
+- sls: dovecot.backup
+- sls: dovecot.backup.nrpe
+- sls: dovecot.diamond
+- sls: dovecot.nrpe
+- sls: mail.server.nrpe
+- sls: openldap
+- sls: openldap.diamond
+- sls: openldap.nrpe
+- sls: postfix.nrpe
+- sls: postfix.diamond
+{%- endcall %}
 
 test:
   monitoring:

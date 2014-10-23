@@ -37,6 +37,9 @@ include:
 {%- call test_cron() %}
 - sls: etherpad
 - sls: etherpad.backup
+- sls: etherpad.backup.nrpe
+- sls: etherpad.backup.diamond
+- sls: etherpad.diamond
 - sls: etherpad.nrpe
 {%- endcall %}
 

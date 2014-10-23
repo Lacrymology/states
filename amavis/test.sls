@@ -33,6 +33,8 @@ include:
 
 {%- call test_cron() %}
 - sls: amavis
+- sls: amavis.diamond
+- sls: amavis.nrpe
 {%- endcall %}
 
 test:

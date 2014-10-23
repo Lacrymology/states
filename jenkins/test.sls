@@ -35,6 +35,9 @@ include:
 
 {%- call test_cron() %}
 - sls: jenkins
+- sls: jenkins.backup
+- sls: jenkins.backup.nrpe
+- sls: jenkins.diamond
 - sls: jenkins.nrpe
 {%- endcall %}
 

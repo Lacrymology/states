@@ -39,6 +39,7 @@ include:
 
 {%- call test_cron() %}
 - sls: shinken.broker
+- sls: shinken.broker.diamond
 - sls: shinken.broker.nrpe
 {%- endcall %}
 

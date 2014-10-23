@@ -38,6 +38,11 @@ include:
 {%- call test_cron() %}
 - sls: postfix
 - sls: postfix.backup
+- sls: postfix.diamond
+- sls: postfix.nrpe
+- sls: openldap
+- sls: openldap.diamond
+- sls: openldap.nrpe
 {%- endcall %}
 
 test:

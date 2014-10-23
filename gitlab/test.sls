@@ -43,7 +43,10 @@ include:
 
 {%- call test_cron() %}
 - sls: gitlab
+- sls: gitlab.diamond
 - sls: gitlab.backup
+- sls: gitlab.backup.diamond
+- sls: gitlab.backup.nrpe
 - sls: gitlab.nrpe
 {%- endcall %}
 

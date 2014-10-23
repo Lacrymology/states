@@ -37,6 +37,9 @@ include:
 {%- call test_cron() %}
 - sls: graphite
 - sls: graphite.backup
+- sls: graphite.backup.diamond
+- sls: graphite.backup.nrpe
+- sls: graphite.diamond
 - sls: graphite.nrpe
 {%- endcall %}
 

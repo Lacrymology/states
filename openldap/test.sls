@@ -36,6 +36,9 @@ include:
 {%- call test_cron() %}
 - sls: openldap
 - sls: openldap.backup
+- sls: openldap.backup.nrpe
+- sls: openldap.diamond
+- sls: openldap.nrpe
 {%- endcall %}
 
 test:

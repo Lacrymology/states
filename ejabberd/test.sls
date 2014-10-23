@@ -34,8 +34,10 @@ include:
   - ejabberd.nrpe
 
 {%- call test_cron() %}
-- sls: cron
 - sls: ejabberd
+- sls: ejabberd.backup
+- sls: ejabberd.backup.nrpe
+- sls: ejabberd.diamond
 - sls: ejabberd.nrpe
 {%- endcall %}
 

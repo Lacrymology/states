@@ -45,7 +45,10 @@ graylog2_log_one_msg:
 
 {%- call test_cron() %}
 - sls: graylog2.server
+- sls: graylog2.server.diamond
+- sls: graylog2.server.nrpe
 - sls: graylog2.server.backup
+- sls: graylog2.server.backup.nrpe
 {%- endcall %}
 
 test:

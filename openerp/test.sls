@@ -34,7 +34,10 @@ include:
   - openerp.nrpe
 
 {%- call test_cron() %}
+- sls: openerp
 - sls: openerp.backup
+- sls: openerp.backup.nrpe
+- sls: openerp.diamond
 - sls: openerp.nrpe
 {%- endcall %}
 

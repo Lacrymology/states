@@ -37,6 +37,10 @@ include:
 {%- call test_cron() %}
 - sls: proftpd
 - sls: proftpd.backup
+- sls: proftpd.backup.nrpe
+- sls: proftpd.backup.diamond
+- sls: proftpd.diamond
+- sls: proftpd.nrpe
 {%- endcall %}
 
 test:

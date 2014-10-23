@@ -43,6 +43,9 @@ include:
 {%- call test_cron() %}
 - sls: djangopypi2
 - sls: djangopypi2.backup
+- sls: djangopypi2.backup.nrpe
+- sls: djangopypi2.diamond
+- sls: djangopypi2.nrpe
 {%- endcall %}
 
 test:

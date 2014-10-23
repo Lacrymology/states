@@ -37,6 +37,9 @@ include:
 {%- call test_cron() %}
 - sls: sentry
 - sls: sentry.backup
+- sls: sentry.backup.diamond
+- sls: sentry.backup.nrpe
+- sls: sentry.diamond
 - sls: sentry.nrpe
 {%- endcall %}
 

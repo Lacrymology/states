@@ -37,6 +37,9 @@ include:
 {%- call test_cron() %}
 - sls: roundcube
 - sls: roundcube.backup
+- sls: roundcube.backup.diamond
+- sls: roundcube.backup.nrpe
+- sls: roundcube.diamond
 - sls: roundcube.nrpe
 {%- endcall %}
 

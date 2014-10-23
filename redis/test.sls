@@ -36,6 +36,9 @@ include:
 {%- call test_cron() %}
 - sls: redis
 - sls: redis.backup
+- sls: redis.backup.nrpe
+- sls: redis.diamond
+- sls: redis.nrpe
 {%- endcall %}
 
 test:

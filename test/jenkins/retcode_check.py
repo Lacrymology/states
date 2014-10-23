@@ -45,13 +45,15 @@ json_text = sys.stdin.read()
 try:
     data = json.loads(json_text)
 except ValueError:
-    sys.stderr.write(json_text)
+    sys.stderr.write('Malformed JSON: %s' % json_text)
     sys.exit(1)
+
 keys = data.keys()
 if len(keys) != 1:
     print 'More than 1 key: %d: %s' % (len(data), keys)
 
 result = data[keys[0]]
+print 'Result: {0}'.format(result)
 
 if type(result) == bool:
     if result:
@@ -73,11 +75,17 @@ def write_output(output_type):
 write_output('stdout')
 write_output('stderr')
 
-pattern = re.compile('Failed: .*(\d+)')
 if int(result['retcode']) == 0:
     try:
-        if pattern.findall(result['stdout'])[0] == '0':
+        # it is result of calling state.*
+        if 'Failed: ' in result['stdout']:
+            pattern = re.compile('Failed: .*(\d+)')
+            if pattern.findall(result['stdout'])[0] == '0':
+                sys.exit(0)
+        else:
+            # result of another command, exits with retcode
             sys.exit(0)
+
     except Exception as e:
         print e
 

@@ -63,9 +63,10 @@ def _grep(paths, pattern, *exts):
     def _grep_file(filename):
         found = {}
         with open(filename, 'rt') as f:
-            for lineno, line in enumerate(f):
+            for idx, line in enumerate(f):
                 if repat.findall(line):
-                    found.update({str(lineno + 1): line.strip('\n')})
+                    # idx count from 0, line number count from 1
+                    found.update({idx + 1: line.strip('\n')})
         return found
 
     if exts:
@@ -171,8 +172,10 @@ def lint_check_bad_cron_filename(paths, *exts):
             for_modify = data_without_jinja2_in_sid.copy()
             for lino in data_without_jinja2_in_sid:
                 with open(fn) as f:
-                    for i, line in enumerate(f):
-                        if i == (int(lino) - 1 + 2) and '- absent' in line:
+                    for idx, line in enumerate(f):
+                        # see two lines below state ID to check if it is an
+                        # absent state
+                        if idx == ((lino - 1) + 2) and '- absent' in line:
                             for_modify.pop(lino)
 
             if for_modify:

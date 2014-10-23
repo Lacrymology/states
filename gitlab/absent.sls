@@ -57,3 +57,15 @@ gitlab:
 /etc/init/gitlab.conf:
   file:
     - absent
+
+/var/log/gitlab:
+  file:
+    - absent
+
+/var/lib/gitlab:
+  file:
+    - absent
+
+/etc/logrotate.d/gitlab:
+  file:
+    - absent

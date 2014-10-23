@@ -54,6 +54,7 @@ apt_rc:
       - pkg: remove_screen
   pkg:
     - purged
+    - name: screen
     - require:
       - monitoring: apt_rc
     - require_in:

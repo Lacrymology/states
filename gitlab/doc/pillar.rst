@@ -1,6 +1,3 @@
-.. todo:: check missing pillars
-.. todo:: check deprecated pillars
-
 .. Copyright (c) 2013, Lam Dang Tung
 .. All rights reserved.
 ..
@@ -59,14 +56,14 @@ gitlab:hostnames
 
 .. include:: /nginx/doc/hostnames.inc
 
-.. todo:: define test value example (from integration.sls)
+Example: ``__salt__['network.ip_addrs']('eth0')[0]``
 
 gitlab:admin:password
 ~~~~~~~~~~~~~~~~~~~~~
 
 Password for :doc:`/gitlab/doc/index` Administrator account.
 
-.. todo:: define test value example (from integration.sls)
+Example: ``'123456789'``
 
 Optional
 --------
@@ -81,7 +78,6 @@ Example::
     cheaper: 1
     timeout: 60
     ssl: example_com
-    port: 80
     email_from: support@example.com
     default_projects_limit: 10
     default_can_create_group: True
@@ -228,10 +224,6 @@ gitlab:default_projects_limit
 Default maximum number of projects a single user can create.
 
 Default: ``10``.
-
-.. gitlab:port
-.. Port listen on web
-.. Default: ``80``. You should not change it.
 
 gitlab:ssl
 ~~~~~~~~~~

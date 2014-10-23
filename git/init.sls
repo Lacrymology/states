@@ -32,7 +32,7 @@ include:
   - ssh.client
 
 git:
-  pkgrepo17:
+  pkgrepo:
     - managed
 {%- if 'files_archive' in pillar %}
     - name: deb {{ pillar['files_archive']|replace('https://', 'http://') }}/mirror/git {{ grains['lsb_distrib_codename'] }} main
@@ -52,4 +52,4 @@ git:
       - pkg: openssh-client
       - cmd: apt_sources
       - file: known_hosts
-      - pkgrepo17: git
+      - pkgrepo: git

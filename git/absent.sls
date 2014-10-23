@@ -32,7 +32,7 @@ git:
     - run
     - name: 'apt-key del E1DF1F24'
     - onlyif: apt-key list | grep -q E1DF1F24
-  pkgrepo17:
+  pkgrepo:
     - absent
 {%- if 'files_archive' in pillar %}
     - name: deb {{ pillar['files_archive']|replace('https://', 'http://') }}/mirror/git {{ grains['lsb_distrib_codename'] }} main
@@ -43,4 +43,4 @@ git:
     - absent
     - name: /etc/apt/sources.list.d/git-core.list
     - require:
-      - pkgrepo17: git
+      - pkgrepo: git

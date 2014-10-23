@@ -40,8 +40,7 @@ import subprocess
 import sys
 
 import nagiosplugin as nap
-import pysc
-import pysc.nrpe as bfe
+from pysc import nrpe
 
 
 class DnsCaching(nap.Resource):
@@ -65,7 +64,8 @@ class DnsCaching(nap.Resource):
                 print("DNSCACHING WARNING - {0}".format(e))
                 sys.exit(1)
         else:
-            print("DNSCACHING WARNING - Cannot remove {0} from the cache.\n{1}".format(domain, stderr))
+            print("DNSCACHING WARNING - Cannot remove {0} from the cache.\n{1}" \
+                  .format(domain, stderr))
             sys.exit(1)
         return answer.args['elapsed']
 
@@ -74,29 +74,28 @@ class DnsCaching(nap.Resource):
         return [nap.Metric('query time', query_time)]
 
 
-@nap.guarded
-@pysc.profile(log=__name__)
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-s', '--server', default='127.0.0.1', type=str, 
-                        help="the name or IP address of the name server to query")
-    parser.add_argument('-d', '--domain', type=str, default='robotinfra.com',
-                        help="the domain to be looked up")
-    parser.add_argument('-r', '--record', type=str, default='a',
-                        help="the resource record")
-    parser.add_argument('-w', '--warning', metavar='RANGE', default=1,
-                        help="return warning if query time is outside of RANGE")
-    parser.add_argument('-c', '--critical', metavar='RANGE', default=2,
-                        help="return critical if query time is outside of RANGE")
-    parser.add_argument('-v', '--verbose', action='count', default=0,
-                        help="increase the output verbosity (use up to 3 times)")
-    args = parser.parse_args()
-    check = nap.Check(
-        DnsCaching(args.domain, args.record, args.server),
-        nap.ScalarContext('query time', args.warning, args.critical,
-                          fmt_metric="Query time: {value} msec"))
-    check.main(args.verbose)
+def main(config):
+    kwargs = dict(
+        server = config['server'],
+        domain = config['domain'],
+        record = config['record']
+    )
+
+    warning = config['warning']
+    critical = config['critical']
+
+    return (
+        DnsCaching(**kwargs),
+        nap.ScalarContext('query time', warning, critical,
+                          fmt_metric="Query time: {value} msec")
+    )
 
 
 if __name__ == '__main__':
-    main()
+    nrpe.check(main, {
+        'server': '127.0.0.1',
+        'domain': 'robotinfra.com',
+        'record': 'a',
+        'warning': '1',
+        'critical': '2',
+    })

@@ -56,6 +56,10 @@ nsca-{{ formula }}:
       - pkg: cron
       - file: nsca-{{ formula }}
 
+/etc/cron.d/sslyze_check_{{ formula|replace('.', '-') }}:
+  file:
+    - absent
+
     {%- if formula|replace('.', '') != formula %}
 /etc/cron.twice_daily/sslyze_check_{{ formula }}:
   file:

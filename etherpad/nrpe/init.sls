@@ -50,5 +50,5 @@ extend:
         - file: nsca-{{ formula }}
   /usr/lib/nagios/plugins/check_pgsql_query.py:
     file:
-       - require:
-         - file: nsca-{{ formula }}
+      - require:
+        - file: nsca-{{ formula }}

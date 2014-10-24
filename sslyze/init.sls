@@ -76,7 +76,9 @@ sslyze_{{ trust_store }}:
     - append
     - name: /usr/local/src/sslyze-{{ version|replace(".", "_") }}-linux{{ bits }}/plugins/data/trust_stores/{{ trust_store }}.pem
     - text: |
-        {{ pillar['ssl']['local']['server_crt']|indent(8) }}
+        {{ pillar['ssl']['robotinfra.com']['server_crt']|indent(8) }}
+    - require:
+      - archive: sslyze
     - require_in:
       - cmd: sslyze
 {%- endfor %}

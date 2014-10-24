@@ -43,12 +43,18 @@ fake_ssh_login:
       - sls: bash
 
 test:
+  module:
+    - run
+    - name: service.restart
+    - m_name: denyhosts
+    - require:
+      - cmd: fake_ssh_login
   cmd:
     - run
-    - name: sleep 30; /usr/local/bin/denyhosts-unblock {{ fake_ip }}
+    - name: /usr/local/bin/denyhosts-unblock {{ fake_ip }}
     - require:
       - sls: denyhosts
-      - cmd: fake_ssh_login
+      - module: test
   monitoring:
     - run_all_checks
     - order: last

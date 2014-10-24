@@ -123,7 +123,7 @@ openssh-client:
     - require:
       - cmd: apt_sources
 {%- if salt['pillar.get']('deployment_key', False) %}
-      - file: {{ root_home }}/.ssh/id_{{ pillar['deployment_key']['type'] }}
+      - file: root_ssh_private_key
 
 {%- set ssh_private_path = root_home + '/.ssh/id_' + pillar['deployment_key']['type'] %}
 root_ssh_private_key:

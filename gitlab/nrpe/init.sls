@@ -25,6 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Diep Pham <favadi@robotinfra.com>
 Maintainer: Diep Pham <favadi@robotinfra.com>
 -#}
+{%- set formula = 'gitlab' -%}
 {%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - apt.nrpe
@@ -44,3 +45,13 @@ include:
   - xml.nrpe
 
 {{ passive_check('gitlab', check_ssl_score=True) }}
+
+extend:
+  check_psql_encoding.py:
+    file:
+      - require:
+        - file: nsca-{{ formula }}
+  /usr/lib/nagios/plugins/check_pgsql_query.py:
+    file:
+       - require:
+         - file: nsca-{{ formula }}

@@ -70,17 +70,19 @@ sslyze:
       - archive: sslyze
       - virtualenv: nrpe-virtualenv
 
-{%- for trust_store in ('apple', 'java', 'microsoft', 'mozilla') %}
+{%- for name in salt['pillar.get']('ssl', []) -%}
+    {%- for trust_store in ('apple', 'java', 'microsoft', 'mozilla') %}
 sslyze_{{ trust_store }}:
   file:
     - append
     - name: /usr/local/src/sslyze-{{ version|replace(".", "_") }}-linux{{ bits }}/plugins/data/trust_stores/{{ trust_store }}.pem
     - text: |
-        {{ pillar['ssl']['robotinfra.com']['server_crt']|indent(8) }}
+        {{ pillar['ssl'][name]['server_crt']|indent(8) }}
     - require:
       - archive: sslyze
     - require_in:
       - cmd: sslyze
+    {%- endfor -%}
 {%- endfor %}
 
 check_ssl_configuration.py:

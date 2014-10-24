@@ -40,7 +40,7 @@ include:
 extend:
   {#- if used in conjunction with salt.ci just used a slightly different
     config.jinja2 #}
-  /etc/nagios/nsca.d/salt.master.yml:
+  nsca-salt.master:
     file:
       - source: salt://salt/ci/nrpe/config.jinja2
   salt.master-monitoring:

@@ -56,7 +56,7 @@ cron:
       - service: rsyslog
     - watch:
       - pkg: cron
-      - file: /etc/crontab
+      - file: cron
 
 {#-
  ``cron.twice_daily`` is script that need to run more than 1 a day, mostly

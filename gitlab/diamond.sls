@@ -53,4 +53,4 @@ gitlab_diamond_resources:
     - text:
       - |
         [[gitlab]]
-        cmdline = ^\.\/bin\/background_jobs start_no_deamonize$
+        cmdline = ^\/bin\/sh \.\/bin\/background_jobs start_no_deamonize$

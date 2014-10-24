@@ -46,4 +46,8 @@ test:
     - run_all_checks
     - order: last
 
-{# todo: perform ldap query #}
+{#- 
+By default, check_ldap already do a search with (objectclass=*). 
+Moreover, mail stack check also perform query to LDAP.
+So, no need to do a test like ldapsearch here.
+-#}

@@ -27,34 +27,31 @@ Maintainer: Diep Pham <favadi@robotinfra.com>
 
 Uninstall GitLab
 -#}
+{%- from "upstart/absent.sls" import upstart_absent with context %}
+{{ upstart_absent('gitlab') }}
 
 gitlab-uwsgi:
   file:
     - absent
     - name: /etc/uwsgi/gitlab.yml
 
-gitlab:
-  service:
-    - dead
-  process:
-    - wait_for_dead
-    - name: ''
-    - user: gitlab
-    - require:
-      - file: gitlab-uwsgi
-      - service: gitlab
-  user:
-    - absent
-    - force: True
-    - purge: True
-    - require:
-      - process: gitlab
+extend:
+  gitlab:
+    process:
+      - wait_for_dead
+      - name: ''
+      - user: gitlab
+      - require:
+        - file: gitlab-uwsgi
+        - service: gitlab
+    user:
+      - absent
+      - force: True
+      - purge: True
+      - require:
+        - process: gitlab
 
 /etc/nginx/conf.d/gitlab.conf:
-  file:
-    - absent
-
-/etc/init/gitlab.conf:
   file:
     - absent
 

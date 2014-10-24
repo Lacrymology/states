@@ -56,7 +56,7 @@ cron:
       - service: rsyslog
     - watch:
       - pkg: cron
-      - file: /etc/crontab
+      - file: cron
 
 /etc/cron.daily/apt-clean:
   file:

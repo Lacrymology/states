@@ -25,6 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
+{%- from 'cron/test.sls' import test_cron with context %}
 include:
   - amavis
   - amavis.nrpe
@@ -37,14 +38,46 @@ include:
   - dovecot.backup.nrpe
   - dovecot.diamond
   - dovecot.nrpe
-  - postfix.nrpe
-  - postfix.diamond
+  - mail.server.nrpe
   - openldap
   - openldap.diamond
   - openldap.nrpe
-  - mail.server.nrpe
+  - postfix.nrpe
+  - postfix.diamond
+
+{%- call test_cron() %}
+- sls: amavis
+- sls: amavis.nrpe
+- sls: amavis.diamond
+- sls: amavis.clamav
+- sls: clamav.nrpe
+- sls: clamav.diamond
+- sls: dovecot
+- sls: dovecot.backup
+- sls: dovecot.backup.nrpe
+- sls: dovecot.diamond
+- sls: dovecot.nrpe
+- sls: mail.server.nrpe
+- sls: openldap
+- sls: openldap.diamond
+- sls: openldap.nrpe
+- sls: postfix.nrpe
+- sls: postfix.diamond
+{%- endcall %}
 
 test:
   monitoring:
     - run_all_checks
     - order: last
+
+test_check_mail_stack:
+  cmd:
+    - run
+    - name: /usr/lib/nagios/plugins/check_mail_stack.py
+    - require:
+      - sls: amavis
+      - sls: clamav
+      - sls: dovecot
+      - sls: postfix
+      - sls: openldap
+      - sls: mail.server.nrpe

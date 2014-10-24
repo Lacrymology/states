@@ -25,6 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
+{%- from 'cron/test.sls' import test_cron with context %}
 include:
   - shinken.broker
   - shinken.broker.diamond
@@ -35,6 +36,12 @@ include:
                     ('shinken.broker_nginx_http', 'Invalid HTTP response')] %}
 
 {%- set check_list = check_list + [('shinken.broker_nginx_https', 'Invalid HTTP response')] %}
+
+{%- call test_cron() %}
+- sls: shinken.broker
+- sls: shinken.broker.diamond
+- sls: shinken.broker.nrpe
+{%- endcall %}
 
 {% for name, failure in check_list %}
 {{ name }}:

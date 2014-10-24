@@ -75,7 +75,8 @@ def filter_ips(filename, ips):
         with open(filename, 'w') as fh:
             fh.writelines(lines)
     else:
-        logger.debug("File %s don't had any changes, leave as is.", filename)
+        logger.debug("None of the IP address in %s exists in %s.", str(ips), filename)
+    return is_black
 
 
 class DenyhostsUnblock(pysc.Application):
@@ -97,26 +98,37 @@ class DenyhostsUnblock(pysc.Application):
             '/var/lib/denyhosts/users-hosts',
         )
 
-        init_script = '/etc/init.d/denyhosts'
-        logger.debug("stop %s", init_script)
-        subprocess.check_call([init_script, 'stop'])
-
         ips = self.config['ips']
 
-        # removed invalid ips
-        valid_ips = []
-        for ip in ips:
-            if is_valid_ip(ip):
-                valid_ips.append(ip)
+        if ips:
+            if any(is_valid_ip(ip) for ip in ips):
+                init_script = '/etc/init.d/denyhosts'
+                logger.debug("stop %s", init_script)
+                subprocess.check_call([init_script, 'stop'])
+
+                # removed invalid ips
+                valid_ips = []
+                for ip in ips:
+                    if is_valid_ip(ip):
+                        valid_ips.append(ip)
+                    else:
+                        logger.debug("Not a valid IP address: %s", ip)
+
+                    results = []
+                    for filename in denyhosts_files:
+                        results.append(filter_ips(filename, valid_ips))
+
+                # start denyhosts
+                logger.debug("start %s", init_script)
+                subprocess.check_call([init_script, 'start'])
+
+                if not any(result for result in results):
+                    sys.exit(1)
             else:
-                logger.debug("Not a valid IP address: %s", ip)
-
-        for filename in denyhosts_files:
-            filter_ips(filename, valid_ips)
-
-        # start denyhosts
-        logger.debug("start %s", init_script)
-        subprocess.check_call([init_script, 'start'])
+                print("None of the IP address in {0} is valid".format(ips))
+                sys.exit(1)
+        else:
+            print 'usage: denyhosts-unblock <ip_address> ...'
 
 
 if __name__ == '__main__':

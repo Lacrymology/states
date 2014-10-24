@@ -25,10 +25,17 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
+{%- from 'cron/test.sls' import test_cron with context %}
 include:
   - salt.api
   - salt.api.diamond
   - salt.api.nrpe
+
+{%- call test_cron() %}
+- sls: salt.api
+- sls: salt.api.diamond
+- sls: salt.api.nrpe
+{%- endcall %}
 
 test:
   monitoring:

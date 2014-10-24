@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Bruno Clermont
+Copyright (c) 2014, Quan Tong Anh
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,28 +22,23 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Bruno Clermont <patate@fastmail.cn>
-Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
+Author: Quan Tong Anh <quanta@robotinfra.com>
+Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
-{%- from 'cron/test.sls' import test_cron with context %}
-include:
-  - graphite
-  - graphite.backup
-  - graphite.backup.diamond
-  - graphite.backup.nrpe
-  - graphite.diamond
-  - graphite.nrpe
-
-{%- call test_cron() %}
-- sls: graphite
-- sls: graphite.backup
-- sls: graphite.backup.diamond
-- sls: graphite.backup.nrpe
-- sls: graphite.diamond
-- sls: graphite.nrpe
-{%- endcall %}
-
-test:
-  monitoring:
-    - run_all_checks
-    - order: last
+{%- macro test_cron() -%}
+    {%- for suffix in ('twice_daily', 'daily', 'weekly', 'monthly') %}
+test_cron_{{ suffix }}:
+  cmd:
+    - run
+    - name: run-parts --report /etc/cron.{{ suffix }}
+    - onlyif: test -d /etc/cron.{{ suffix }}
+        {%- if caller is defined -%}
+            {%- for line in caller().split("\n") -%}
+                {%- if loop.first %}
+    - require:
+                {%- endif %}
+{{ line|trim|indent(6, indentfirst=True) }}
+            {%- endfor -%}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endmacro %}

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import collections
 import datetime
 import logging
 
@@ -95,3 +96,36 @@ def day_of_month(days):
     delta = datetime.timedelta(days=days)
     future_day = today + delta
     return future_day.day
+
+
+def nested_dict_iter(d):
+    '''
+    iterator that return flattened key, value of a dictionnary.
+    '''
+    stack = d.items()
+    while stack:
+        k, v = stack.pop()
+        if isinstance(v, dict):
+            stack.extend(v.iteritems())
+        else:
+            yield k, v
+
+
+def unique_hostname(pillar):
+    '''
+    Loop trough all pillars and return every single hostnames
+    '''
+    output = []
+    for key, values in nested_dict_iter(pillar):
+        if key == 'hostnames':
+            # is a string
+            if not isinstance(values, (tuple, list)):
+                if values not in output:
+                    output.append(values)
+            # is a list or tuple
+            else:
+                for value in values:
+                    if value not in output:
+                        output.append(value)
+    return output
+

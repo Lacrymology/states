@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Bruno Clermont
+Copyright (c) 2014, Quan Tong Anh
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -7,9 +7,9 @@ modification, are permitted provided that the following conditions are met:
 
 1. Redistributions of source code must retain the above copyright notice, this
    list of conditions and the following disclaimer.
-2. Redistributions in binary form must reproduce the above copyright notice,
-   this list of conditions and the following disclaimer in the documentation
-   and/or other materials provided with the distribution.
+   2. Redistributions in binary form must reproduce the above copyright notice,
+      this list of conditions and the following disclaimer in the documentation
+         and/or other materials provided with the distribution.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -22,28 +22,19 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Bruno Clermont <patate@fastmail.cn>
-Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
+Author: Quan Tong Anh <quanta@robotinfra.com>
+Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
-{%- from 'cron/test.sls' import test_cron with context %}
 include:
-  - graphite
-  - graphite.backup
-  - graphite.backup.diamond
-  - graphite.backup.nrpe
-  - graphite.diamond
-  - graphite.nrpe
+  - ruby
+  - ruby.nrpe
 
-{%- call test_cron() %}
-- sls: graphite
-- sls: graphite.backup
-- sls: graphite.backup.diamond
-- sls: graphite.backup.nrpe
-- sls: graphite.diamond
-- sls: graphite.nrpe
-{%- endcall %}
-
-test:
+test_ruby:
+  cmd:
+    - run
+    - name: ruby -v
+    - require:
+      - pkg: ruby
   monitoring:
     - run_all_checks
     - order: last

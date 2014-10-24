@@ -58,6 +58,19 @@ cron:
       - pkg: cron
       - file: /etc/crontab
 
+{#-
+ ``cron.twice_daily`` is script that need to run more than 1 a day, mostly
+ monitoring checks.
+ #}
+/etc/cron.twice_daily:
+  file:
+    - directory
+    - user: root
+    - group: root
+    - mode: 550
+    - require:
+      - pkg: cron
+
 /etc/cron.daily/apt-clean:
   file:
     - managed

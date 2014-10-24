@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Bruno Clermont
+Copyright (c) 2014, Quan Tong Anh
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,28 +22,22 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Bruno Clermont <patate@fastmail.cn>
-Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
+Author: Quan Tong Anh <quanta@robotinfra.com>
+Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
 {%- from 'cron/test.sls' import test_cron with context %}
 include:
-  - graphite
-  - graphite.backup
-  - graphite.backup.diamond
-  - graphite.backup.nrpe
-  - graphite.diamond
-  - graphite.nrpe
+  - salt.archive.server
+  - salt.archive.server.diamond
+  - salt.archive.server.nrpe
 
 {%- call test_cron() %}
-- sls: graphite
-- sls: graphite.backup
-- sls: graphite.backup.diamond
-- sls: graphite.backup.nrpe
-- sls: graphite.diamond
-- sls: graphite.nrpe
+- sls: salt.archive.server
+- sls: salt.archive.server.diamond
+- sls: salt.archive.server.nrpe
 {%- endcall %}
 
-test:
+test_salt_archive:
   monitoring:
     - run_all_checks
     - order: last

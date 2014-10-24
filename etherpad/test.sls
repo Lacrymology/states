@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Dang Tung Lam <lamdt@familug.org>
 Maintainer: Dang Tung Lam <lamdt@familug.org>
 -#}
-
+{%- from 'cron/test.sls' import test_cron with context %}
 include:
   - etherpad
   - etherpad.backup
@@ -34,13 +34,16 @@ include:
   - etherpad.diamond
   - etherpad.nrpe
 
+{%- call test_cron() %}
+- sls: etherpad
+- sls: etherpad.backup
+- sls: etherpad.backup.nrpe
+- sls: etherpad.backup.diamond
+- sls: etherpad.diamond
+- sls: etherpad.nrpe
+{%- endcall %}
+
 test:
-  cmd:
-    - run
-    - name: /etc/cron.daily/backup-etherpad
-    - require:
-      - sls: etherpad
-      - sls: etherpad.backup
   monitoring:
     - run_all_checks
     - wait: 60

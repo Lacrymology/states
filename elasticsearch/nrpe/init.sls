@@ -29,7 +29,6 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 {%- set formula = 'elasticsearch' -%}
 {%- from 'nrpe/passive.sls' import passive_check with context %}
-{% set ssl = salt['pillar.get'](formula + ':ssl', False) %}
 include:
   - apt.nrpe
   - bash.nrpe

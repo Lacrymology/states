@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Bruno Clermont
+Copyright (c) 2014, Quan Tong Anh
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,26 +22,43 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Bruno Clermont <patate@fastmail.cn>
-Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
--#}
-{%- from 'cron/test.sls' import test_cron with context %}
-include:
-  - graphite
-  - graphite.backup
-  - graphite.backup.diamond
-  - graphite.backup.nrpe
-  - graphite.diamond
-  - graphite.nrpe
+Author: Quan Tong Anh <quanta@robotinfra.com>
+Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 
-{%- call test_cron() %}
-- sls: graphite
-- sls: graphite.backup
-- sls: graphite.backup.diamond
-- sls: graphite.backup.nrpe
-- sls: graphite.diamond
-- sls: graphite.nrpe
-{%- endcall %}
+Install a dummy package, then remove it and expect a HALF INSTALLED after checking
+-#}
+include:
+  - apt
+  - apt.nrpe
+
+install_screen:
+  pkg:
+    - installed
+    - name: screen
+    - require:
+      - cmd: apt_sources
+
+remove_screen:
+  pkg:
+    - removed
+    - name: screen
+    - require:
+      - pkg: install_screen
+
+apt_rc:
+  monitoring:
+    - run_check
+    - accepted_failure: 'HALFINSTALLED CRITICAL'
+    - require:
+      - file: /usr/lib/nagios/plugins/check_apt-rc.py
+      - pkg: remove_screen
+  pkg:
+    - purged
+    - name: screen
+    - require:
+      - monitoring: apt_rc
+    - require_in:
+      - monitoring: test
 
 test:
   monitoring:

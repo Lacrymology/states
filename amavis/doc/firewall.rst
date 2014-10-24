@@ -1,4 +1,5 @@
 .. Copyright (c) 2013, Luan Vo Ngoc
+.. Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 .. All rights reserved.
 ..
 .. Redistribution and use in source and binary forms, with or without

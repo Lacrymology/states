@@ -24,31 +24,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author: Diep Pham <favadi@robotinfra.com>
 Maintainer: Diep Pham <favadi@robotinfra.com>
-
-Backup GitLab
 -#}
-include:
-  - backup.client
-  - bash
-  - cron
-  - sudo
 
-{%- set version = '7.3.2' %}
-
-backup-gitlab:
-  file:
-    - managed
-    - name: /etc/cron.daily/backup-gitlab
-    - user: root
-    - group: root
-    - mode: 500
-    - template: jinja
-    - source: salt://gitlab/backup/cron.jinja2
-    - context:
-      version: {{ version }}
-    - require:
-      - pkg: cron
-      - pkg: sudo
-      - file: /usr/local/bin/backup-file
-      - file: bash
-      - file: /usr/local/share/salt_common.sh
+ruby2:
+  pkg:
+    - purged
+    - pkgs:
+      - ruby2.1
+      - ruby2.1-dev
+      - libruby2.1
+      - rubygems-integration

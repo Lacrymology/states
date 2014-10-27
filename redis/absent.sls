@@ -47,6 +47,16 @@ redis:
   service:
     - dead
     - name: redis-server
+  user:
+    - absent
+    - force: True
+    - purge: True
+    - require:
+      - pkg: redis
+  group:
+    - absent
+    - require:
+      - user: redis
 
 {% for filename in ('/var/log', '/etc') %}
 {{ filename }}/redis:

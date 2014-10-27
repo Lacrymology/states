@@ -25,30 +25,51 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Diep Pham <favadi@robotinfra.com>
 Maintainer: Diep Pham <favadi@robotinfra.com>
 
-Backup GitLab
+Install ruby version 2.1
 -#}
+
 include:
-  - backup.client
-  - bash
-  - cron
-  - sudo
+  - apt
+  - locale
+  - ssl
 
-{%- set version = '7.3.2' %}
-
-backup-gitlab:
-  file:
-    - managed
-    - name: /etc/cron.daily/backup-gitlab
-    - user: root
-    - group: root
-    - mode: 500
-    - template: jinja
-    - source: salt://gitlab/backup/cron.jinja2
-    - context:
-      version: {{ version }}
+{#-
+  ruby2.1 requires ruby, see:
+  https://bugs.launchpad.net/ubuntu/+source/ruby2.0/+bug/1310292
+#}
+ruby2_deps:
+  pkg:
+    - installed
+    - pkgs:
+      - libffi6
+      - libgdbm3
+      - libgmp-dev
+      - libgmp10
+      - libjs-jquery
+      - libreadline6
+      - libyaml-0-2
+      - ruby
+      - zlib1g
     - require:
-      - pkg: cron
-      - pkg: sudo
-      - file: /usr/local/bin/backup-file
-      - file: bash
-      - file: /usr/local/share/salt_common.sh
+      - cmd: apt_sources
+
+{%- set version = "2.1.2-1bbox1~precise1" %}
+{%- set arch = grains['osarch'] %}
+{%- if 'files_archive' in pillar %}
+  {%- set repo_url = pillar['files_archive']|replace('file://', '')|replace('https://', 'http://') ~ "/mirror" %}
+{%- else %}
+  {%- set repo_url = "http://ppa.launchpad.net/brightbox/ruby-ng/ubuntu/pool/main/r" %}
+{%- endif %}
+
+ruby2:
+  pkg:
+    - installed
+    - sources:
+      - rubygems-integration: {{ repo_url }}/rubygems-integration/rubygems-integration_1.5-1bbox1_all.deb
+      - ruby2.1: {{ repo_url }}/ruby2.1/ruby2.1_{{ version }}_{{ arch }}.deb
+      - ruby2.1-dev: {{ repo_url }}/ruby2.1/ruby2.1-dev_{{ version }}_{{ arch }}.deb
+      - libruby2.1: {{ repo_url }}/ruby2.1/libruby2.1_{{ version }}_{{ arch }}.deb
+    - require:
+      - pkg: ssl-cert
+      - cmd: system_locale
+      - pkg: ruby2_deps

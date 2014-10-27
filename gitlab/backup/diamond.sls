@@ -39,5 +39,5 @@ gitlab_backup_diamond_resources:
       - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
     - text:
       - |
-        [[backup-gitlab-postgres]]
-        cmdline = ^\/usr\/local\/bin\/backup-postgresql {{ salt['pillar.get']('gitlab:db:name', 'gitlab') }}$
+        [[backup-gitlab]]
+        cmdline = ^.+gitlab:backup:create.+$

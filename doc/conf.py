@@ -27,11 +27,10 @@
 # Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 # Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
-import sys, os
 import sphinx_rtd_theme
 
-
-extensions = []
+extensions = ['sphinx.ext.todo', ]
+todo_include_todos = True
 templates_path = ''
 source_suffix = '.rst'
 master_doc = 'doc/index'

@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2014, Hung Nguyen Viet
+Copyright (c) 2014, Diep Pham
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,29 +22,17 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
-Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
+Author: Diep Pham <favadi@robotinfra.com>
+Maintainer: Diep Pham <favadi@robotinfra.com>
 -#}
-gitlab_backup_postgres_procs:
-  description: GitLab Backup PostgreSQL Database Process
-  command: '/usr/lib/nagios/plugins/check_procs -c 0:1 -u root -a "/usr/local/bin/backup-postgresql {{ salt["pillar.get"]("gitlab:db:name", "gitlab") }}"'
 
-gitlab_backup_postgres_age:
-  description: GitLab PostgreSQL Database Backup Age
-  command: /usr/lib/nagios/plugins/check_backup.py --formula=gitlab.backup --check=gitlab_backup_postgres_age
-  check_interval: {{ 12 * 60 }} {#- 12 hours  #}
-  freshness_threshold: {{ ((12 * 60) + 10) * 60 }} {#- 12 hours + 10 minutes #}
-  arguments:
-    facility: postgresql-gitlab
-    warning: {{ salt['pillar.get']('backup:age', 48) }}
+gitlab_backup_procs:
+  description: GitLab Backup Process
+  command: '/usr/lib/nagios/plugins/check_procs -c 0:1 -u root -a "gitlab:backup:create"'
 
-gitlab_backup_file_procs:
-  description: Gitlab Backup File Process
-  command: '/usr/lib/nagios/plugins/check_procs -c 0:1 -u root -a "/usr/local/bin/backup-file gitlab /home/gitlab repositories .ssh gitlab-satellites"'
-
-gitlab_backup_file_age:
-  description: Gitlab File Backup Age
-  command: /usr/lib/nagios/plugins/check_backup.py --formula=gitlab.backup --check=gitlab_backup_file_age
+gitlab_backup:
+  description: Gitlab Backup Age
+  command: /usr/lib/nagios/plugins/check_backup.py --formula=gitlab.backup --check=gitlab_backup
   check_interval: {{ 12 * 60 }} {#- 12 hours  #}
   freshness_threshold: {{ ((12 * 60) + 10) * 60 }} {#- 12 hours + 10 minutes #}
   arguments:

@@ -54,7 +54,7 @@ server {
 {% endif %}
 {# web app logic #}
     server_name {% for hostname in  pillar['gitlab']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
-    root {{ web_dir }}/public;
+    root /home/gitlab/gitlabhq-{{ version }}/public;
     client_max_body_size 5m;
     server_tokens off;
 
@@ -68,14 +68,14 @@ server {
         gzip off;
         uwsgi_modifier1 7;
         include uwsgi_params;
-        uwsgi_read_timeout {{ salt['pillar.get']('gitlab:timeout', 60) }};
-        uwsgi_send_timeout {{ salt['pillar.get']('gitlab:timeout', 60) }};
         uwsgi_pass gitlab;
     }
 
 {% include 'nginx/location_robots.jinja2' %}
 
     location /assets/ {
+        gzip_static on;
         expires max;
+        add_header Cache-Control public;
     }
 }

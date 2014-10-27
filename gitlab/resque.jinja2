@@ -25,30 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Diep Pham <favadi@robotinfra.com>
 Maintainer: Diep Pham <favadi@robotinfra.com>
 
-Backup GitLab
+GitLab resque config
 -#}
-include:
-  - backup.client
-  - bash
-  - cron
-  - sudo
 
-{%- set version = '7.3.2' %}
-
-backup-gitlab:
-  file:
-    - managed
-    - name: /etc/cron.daily/backup-gitlab
-    - user: root
-    - group: root
-    - mode: 500
-    - template: jinja
-    - source: salt://gitlab/backup/cron.jinja2
-    - context:
-      version: {{ version }}
-    - require:
-      - pkg: cron
-      - pkg: sudo
-      - file: /usr/local/bin/backup-file
-      - file: bash
-      - file: /usr/local/share/salt_common.sh
+production: unix:/var/run/redis/redis.sock

@@ -93,7 +93,7 @@ that support SSL.
       - pkg: ssl-cert
 
 {#- This is for ejabberd #}
-/etc/ssl/private/{{ name }}_allinone.pem:
+/etc/ssl/private/{{ name }}_bundle.pem:
   file:
     - managed
     - contents: |

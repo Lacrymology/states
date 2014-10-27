@@ -44,3 +44,5 @@ xinetd:
 /etc/xinetd.d:
   file:
     - absent
+    - require:
+      - pkg: xinetd

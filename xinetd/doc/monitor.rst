@@ -30,7 +30,7 @@ Monitor
 =======
 
 xinetd_daemon_proc
-==================
+------------------
 
 Monitor xinetd process.
 

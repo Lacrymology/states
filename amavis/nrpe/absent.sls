@@ -24,8 +24,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
-
-Remove Nagios NRPE check for Amavis.
 -#}
 {%- from 'nrpe/passive.sls' import passive_absent with context %}
 {{ passive_absent('amavis') }}

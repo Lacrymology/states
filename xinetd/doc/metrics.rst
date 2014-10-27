@@ -1,4 +1,4 @@
-.. Copyright (c) 2013, Hung Nguyen Viet
+.. Copyright (c) 2014, Diep Pham
 .. All rights reserved.
 ..
 .. Redistribution and use in source and binary forms, with or without
@@ -10,7 +10,7 @@
 ..        notice, this list of conditions and the following disclaimer in the
 ..        documentation and/or other materials provided with the distribution.
 ..
-.. Neither the name of Hung Nguyen Viet nor the names of its contributors may be used
+.. Neither the name of Diep Pham  nor the names of its contributors may be used
 .. to endorse or promote products derived from this software without specific
 .. prior written permission.
 ..
@@ -26,45 +26,9 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-Pillar
-======
+Metrics
+=======
 
-Optional
---------
-
-Example::
-
-  rsync:
-    limit_per_ip: 1
-    attribute: value
-      'other attrib': other value
-    module_name:
-      'mod attrib 2': value
-      attrib: value
-    module_name2:
-      ...
-
-rsync:limit_per_ip
-~~~~~~~~~~~~~~~~~~
-
-Takes an integer or "UNLIMITED" as an argument.
-This specifies the maximum instances of this service per source IP
-address.
-
-Default: ``"UNLIMITED"``.
-
-rsync:<key>:<value>
-~~~~~~~~~~~~~~~~~~~
-
-Attributes and values is mapped to rsync daemon's attributes and values. If
-attribute contains space, wrap quotes about it. All attributes and values
-are `available here <http://rsync.samba.org/documentation.html>`__.
-
-Example::
-
-  rsync:
-    'max connections': 4
-    documents:
-      path: /home/foo/docs
-      comment: many serious documents...
-      'read only': true
+.. |deployment| replace:: xinetd
+                          
+.. include:: /diamond/doc/process.inc

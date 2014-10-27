@@ -24,12 +24,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet hvnsweeting@gmail.com
 Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
  -#}
-rsync_procs:
-  description: Rsync Daemon
-  command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -u root -C rsync -a '--daemon'"
-
 rsync_port:
   description: Rsync Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 873
   dependencies:
-    - rsync_procs
+    - xinetd_daemon_proc

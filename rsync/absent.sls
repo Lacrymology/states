@@ -40,3 +40,9 @@ extend:
     - require:
       - pkg: rsync
       - service: rsync
+
+/etc/xinetd.d/rsync:
+  file:
+    - absent
+    - require:
+      - pkg: rsync

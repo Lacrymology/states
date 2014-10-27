@@ -38,6 +38,7 @@ include:
   - local
   - rsyslog
   - pysc
+  - sudo
 
 {%- set version = '0.20.6' %}
 {%- set checksum = 'md5=a9105a4fb5c950b3760df02dface6465' %}
@@ -73,19 +74,8 @@ graylog2-old-mongodb:
 #}
 graylog2-server-prep:
   file:
-    - managed
+    - absent
     - name: /etc/init/graylog2-server-prep.conf
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 400
-    - source: salt://graylog2/server/upstart_prep.jinja2
-    - context:
-      user: {{ user }}
-    - require:
-      - user: graylog2
-
-{{ manage_upstart_log('graylog2-server-prep') }}
 
 /var/log/graylog2/server.log:
   file:
@@ -171,6 +161,7 @@ graylog2-server:
       user: {{ user }}
     - require:
       - file: graylog2-server-prep
+      - pkg: sudo
   service:
     - running
     - enable: True

@@ -35,11 +35,12 @@ stop on runlevel [!2345]
 nice 10
 respawn
 
-setuid {{ user }}
-setgid syslog # for reading by rsyslog
+env JAVA_OPTS='{% if heap_size %} -Xms{{ heap_size }} -Xmx{{ heap_size }}{% endif %}'
 
-env JAVA_OPTS='{% if heap_size %} -Xms{{ heap_size }} -Xmx{{ heap_size }}{% endif %}' 
+pre-start script
+    exec install -o {{ user }} -g  {{ user }} -d /var/run/graylog2-web
+end script
 
 script
-  exec {{ web_root_dir }}/bin/graylog2-web-interface -Dhttp.port=9000 -Dhttp.address=127.0.0.1 -Dpidfile.path=/var/run/graylog2-web/graylog2-web.pid
+  exec sudo -H -u {{ user }} -g syslog {{ web_root_dir }}/bin/graylog2-web-interface -Dhttp.port=9000 -Dhttp.address=127.0.0.1 -Dpidfile.path=/var/run/graylog2-web/graylog2-web.pid
 end script

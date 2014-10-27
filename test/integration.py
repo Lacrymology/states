@@ -303,6 +303,7 @@ def list_system_files(dirs=("/bin", "/etc", "/usr", "/lib", "/sbin", "/var"),
                                '/var/lib/libuuid/',
                                '/var/lib/dpkg/',
                                '/var/cache/apt/',
+                               '/var/backups/',
                                '/var/log/upstart/network-interface-',
                                '/var/cache/salt/minion/extrn_files')):
     """

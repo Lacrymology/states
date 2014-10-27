@@ -61,18 +61,3 @@ shinken_pollers
 
 As documented in :doc:`/doc/pillar`, IPs address of system load balancing
 :doc:`/shinken/doc/index`.
-
-Optional
---------
-
-Example::
-
-  nrpe:
-    max_proc: 500
-
-nrpe:max_proc
-~~~~~~~~~~~~~
-
-How many process can run on the system before it raise a warning.
-
-Default: ``150``

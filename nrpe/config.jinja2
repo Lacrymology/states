@@ -34,11 +34,12 @@ free_disks_space:
   command: /usr/lib/nagios/plugins/check_disk -w 20% -c 10% -X tmpfs
 {%- if grains['virtual'] == 'VirtualBox' %} -X vboxsf{% endif %}
 
-{%- set max_proc = salt['pillar.get']('nrpe:max_proc', 150)|int -%}
-{%- set max_proc_15_percent = max_proc + (max_proc / 100.0 * 15) %}
 total_procs:
   description: Total Processes
-  command: /usr/lib/nagios/plugins/check_procs -w {{ max_proc }} -c {{ max_proc_15_percent|int }}
+  command: /usr/lib/nagios/plugins/check_procs -w 20 -c 100
+  {#- send only notification if it's critical for more than 10 minutes #}
+  first_notification_delay: 10
+  notification_options: c
 
 zombie_procs:
   description: Zombie Processes

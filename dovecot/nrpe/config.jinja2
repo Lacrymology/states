@@ -54,6 +54,10 @@ dovecot_port_pop3s:
   dependencies:
     - dovecot_procs
 
+    {#- OpenSSL on Ubuntu 12.04 disabled TLS 1.2 in the client side:
+    https://bugs.launchpad.net/ubuntu/+source/openssl/+bug/1256576
+    If we disable SSLv3, then `check_simap` will failed because 
+    all ciphers specified by `ssl_cipher_list` is TLS 1.2 or SSLv3 #}
     {%- if grains['oscodename'] != 'precise' %}
 dovecot_simap:
   description: Dovecot SIMAP

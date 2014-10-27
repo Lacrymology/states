@@ -32,3 +32,8 @@ spamassassin:
       - pyzor
       - spamassassin
       - razor
+  file:
+    - absent
+    - name: /root/.pyzor
+    - require:
+      - pkg: spamassassin

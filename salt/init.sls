@@ -58,6 +58,8 @@ salt:
   pkg:
     - installed
     - name: salt-common
+    - require_in:
+      - file: patch_salt_fix_require_sls
 {%- if grains['saltversion'].startswith('0.17') %}
   pkgrepo17:
 {%- else %}

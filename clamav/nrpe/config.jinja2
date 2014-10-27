@@ -32,3 +32,9 @@ freshclam_procs:
 clamav_procs:
   description: ClamAV Daemon
   command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -u clamav -C clamd'
+
+clamav_last_update:
+  description: ClamAV Last Update
+  command: /usr/lib/nagios/plugins/clamav_check_update.py --formula=clamav --check=clamav_last_update
+  arguments:
+    critical: '0:24'

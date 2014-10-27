@@ -34,3 +34,16 @@ include:
   - rsyslog.nrpe
 
 {{ passive_check('clamav') }}
+
+clamav_check_update:
+  file:
+    - managed
+    - name: /usr/lib/nagios/plugins/clamav_check_update.py
+    - source: salt://clamav/nrpe/check_update.py
+    - user: nagios
+    - group: nagios
+    - mode: 550
+    - require:
+      - module: nrpe-virtualenv
+      - pkg: nagios-nrpe-server
+      - file: nsca-clamav

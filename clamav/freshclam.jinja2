@@ -74,3 +74,4 @@ DatabaseMirror {{ mirror }}
 {%- for mirror in salt['pillar.get']('clamav:dns_db', ('current.cvd.clamav.net',)) %}
 DNSDatabaseInfo {{ mirror }}
 {%- endfor %}
+OnUpdateExecute date +%s > /var/lib/clamav/last-update

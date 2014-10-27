@@ -38,3 +38,8 @@ Example::
         - file: /etc/xinetd.d
       - watch_in:
         - service: xinetd
+
+.. toctree::
+    :glob:
+
+    *

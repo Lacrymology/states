@@ -34,19 +34,23 @@ include:
   - gitlab.backup.nrpe
   - gitlab.nrpe
 
+{%- from 'cron/test.sls' import test_cron with context %}
 {%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
+
+{%- call test_cron() %}
+- sls: gitlab
+- sls: gitlab.diamond
+- sls: gitlab.backup
+- sls: gitlab.backup.diamond
+- sls: gitlab.backup.nrpe
+- sls: gitlab.nrpe
+{%- endcall %}
 
 test:
   monitoring:
     - run_all_checks
     - wait: 60
     - order: last
-  cmd:
-    - run
-    - name: /etc/cron.daily/backup-gitlab
-    - require:
-      - sls: gitlab
-      - sls: gitlab.backup
   diamond:
     - test
     - map:

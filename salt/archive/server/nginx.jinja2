@@ -56,7 +56,7 @@ server {
         return 404;
     }
 
-    location ~* /[a-z]+.cvd {
+    location ~* ^/[a-z]+.cvd {
         root /var/lib/salt_archive/mirror/clamav;
     }
 

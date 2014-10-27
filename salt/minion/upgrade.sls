@@ -57,6 +57,7 @@ salt-minion:
     - watch:
       - pkg: salt-minion
       - file: salt-minion
+      - cmd: salt
 
 {%- for file in ('logging', 'graphite', 'mysql') %}
   {%- if (file == 'graphite' and 'graphite_address' in pillar) or file != 'graphite' %}

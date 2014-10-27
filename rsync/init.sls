@@ -31,16 +31,16 @@ include:
   - rsyslog
   - xinetd
 
-rsync:
-  pkg:
-    - installed
-  file:
-    - absent
-    - name: /etc/init/rsync.conf
-    - require:
-      - service: rsync
-  service:
-    - dead
+{%- from "upstart/absent.sls" import upstart_absent with context -%}
+{{ upstart_absent('rsync') }}
+
+extend:
+  rsync:
+    pkg:
+      - installed
+    service:
+      - require_in:
+        - service: xinetd
 
 /etc/xinetd.d/rsync:
   file:
@@ -54,6 +54,8 @@ rsync:
       per_source: {{ salt['pillar.get']('rsync:limit_per_ip', '"UNLIMITED"') }}
     - require:
       - file: /etc/xinetd.d
+    - watch_in:
+      - service: xinetd
 
 /etc/rsyncd.conf:
   file:
@@ -65,13 +67,5 @@ rsync:
     - source: salt://rsync/config.jinja2
     - require:
       - pkg: rsync
-
-extend:
-  xinetd:
-    service:
-      - require:
-        - service: rsync
-      - watch:
-        - file: /etc/rsyncd.conf
-        - file: /etc/xinetd.d/rsync
-        - pkg: rsync
+    - watch_in:
+      - service: xinetd

@@ -31,10 +31,13 @@ openssh-client:
   file:
     - absent
     - name: /etc/ssh/ssh_config
+{#- this cannot be purged because it is required to run another absent state.
+    (ssh-keygen for backup.client.scp.absent)
     - require:
       - pkg: openssh-client
   pkg:
     - purged
+#}
 
 {{ salt['user.info']('root')['home'] }}/.ssh:
   file:

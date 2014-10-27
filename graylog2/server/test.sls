@@ -72,10 +72,9 @@ test_import_general_syslog_udp_input:
       - sls: graylog2.server
 
 test_log_generator:
-  script:
-    - run
-    - name: /usr/local/graylog2-server-0.20.6/bin/log_generator
-    - template: jinja
+  cmd:
+    - script
+    - name: /usr/local/graylog2-server-0.20.6/bin/log_generator -p {{ salt['pillar.get']('graylog2:log_generator:number_processes', 1) }} -t {{ salt['pillar.get']('graylog2:log_generator:number_threads', 2) }} -s {{ pillar['graylog2']['hostnames'][0] }}
     - source: salt://graylog2/server/log_generator.py
     - require:
       - sls: graylog2.server

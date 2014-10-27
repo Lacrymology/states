@@ -59,7 +59,7 @@ Checks {{ salt['pillar.get']('clamav:times_of_check', 24) }}
     {%- set netloc = salt['common.urlparse'](pillar['files_archive']).netloc -%}
         {%- if netloc %}
 ScriptedUpdates no
-DatabaseMirror {{ netloc }}
+PrivateMirror {{ netloc }}
         {%- else -%}
             {#- netloc == '' mean it's a local mirror, use default #}
 DatabaseMirror db.local.clamav.net

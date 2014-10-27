@@ -81,9 +81,11 @@ upgrade_pkg:
       - user: root
 
 {%- for hostname in salt['common.unique_hostname'](pillar) %}
+    {%- if hostname|replace('.', '')|int == 0 %}
 hostname-{{ hostname }}:
   host:
     - present
     - name: {{ hostname }}
     - ip: 127.0.0.1
+    {% endif %}
 {%- endfor %}

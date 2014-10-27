@@ -32,5 +32,6 @@ salt_minion_procs:
 salt_minion_last_success:
   description: Salt Minion last success highstate call
   command: /usr/lib/nagios/plugins/check_minion_last_success.py --formula=salt.minion --check=salt_minion_last_success
+  first_notification_delay: 30
   arguments:
     max_hours: 48

@@ -50,6 +50,7 @@ delay_warning_time = 4h
 readme_directory = no
 {#- TLS parameters -#}
 {% if salt['pillar.get']('postfix:ssl', False) %}
+smtpd_tls_mandatory_protocols=!SSLv2, !SSLv3
 smtpd_tls_cert_file=/etc/ssl/certs/{{ pillar['postfix']['ssl'] }}_chained.crt
 smtpd_tls_key_file=/etc/ssl/private/{{ pillar['postfix']['ssl'] }}.key
 smtpd_use_tls=yes

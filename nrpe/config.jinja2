@@ -78,6 +78,9 @@ free_swap_space:
 load_average:
   description: Load Average
   command: /usr/lib/nagios/plugins/check_load -w {% if salt['pillar.get']('__test__', False) -%}90,85,83 -c 100,95,91{% else %}10,5,3 -c 20,15,11{% endif %}
+  {#- send only notification if it's critical for more than 10 minutes #}
+  first_notification_delay: 10
+  notification_options: c
 
 nrpe-remote-port:
   description: Remote NRPE Port

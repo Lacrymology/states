@@ -51,3 +51,7 @@ clamav-daemon:
     - name: clamav
     - require:
       - user: clamav-daemon
+
+/var/lib/clamav:
+  file:
+    - absent

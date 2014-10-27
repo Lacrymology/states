@@ -28,6 +28,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
  Nagios NRPE checks for elasticsearch
 -#}
 {%- set formula = 'elasticsearch' -%}
+{%- set ssl = salt['pillar.get'](formula + ':ssl', False) -%}
 {%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - apt.nrpe

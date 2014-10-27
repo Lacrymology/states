@@ -46,6 +46,7 @@ xinetd:
     - group: root
     - require:
       - pkg: xinetd
+      - file: /etc/xinetd.d
   service:
     - running
     - watch:

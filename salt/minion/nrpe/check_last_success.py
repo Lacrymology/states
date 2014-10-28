@@ -80,7 +80,7 @@ class LastSuccess(nap.Resource):
 
 
 def check_last_success(config):
-    threshold = '0:' + config['max_hours']
+    threshold = '0:%s' % config['max_hours']
     return (
         LastSuccess(),
         nap.ScalarContext('hours', threshold, threshold,

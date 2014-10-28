@@ -56,6 +56,9 @@ loop_interval: {{ salt['pillar.get']('salt_master:loop_interval', 60) }}
 keep_jobs: {{ salt['pillar.get']('salt_master:keep_jobs_hours', 24) }}
 {%- if 'sentry_dsn' in pillar %}
 ext_job_cache: sentry_common
-{%- endif %}
+{%- endif -%}
+
+{#- access same modules as minion #}
+extension_modules: var/cache/salt/minion/extmods
 
 sentry_common: {{ salt['pillar.get']('sentry_dsn', False) }}

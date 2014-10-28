@@ -59,7 +59,7 @@ def absent(name):
 
 def managed(name, source=None, template='jinja',
             user='nagios', group='nagios', mode='440',
-            saltenv='base', context={},
+            context={},
             makedirs=False,
             show_diff=True,
             backup=False,

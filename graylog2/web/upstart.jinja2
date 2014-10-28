@@ -38,7 +38,7 @@ respawn
 env JAVA_OPTS='{% if heap_size %} -Xms{{ heap_size }} -Xmx{{ heap_size }}{% endif %}'
 
 pre-start script
-    exec install -o {{ user }} -g  {{ user }} -d /var/run/graylog2-web
+    install -o {{ user }} -g  {{ user }} -m 750 -d /var/run/graylog2-web
 end script
 
 script

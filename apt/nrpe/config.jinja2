@@ -35,10 +35,9 @@ apt:
   #}
   check_interval: {{ 6 * 60 }}
   freshness_threshold: {{ ((6 * 60) + 10) * 60 }} {#- 6 hours + 10 minutes #}
-  retry_interval: 5
   notifications_enabled: 0
   {#- enable only notification for real error #}
-  notification_options: c,u,r
+  notification_options: n
   {#- if error, retry 5 times every 3 minutes after any failure, for a max of 15
       minutes #}
   retry_interval: 3
@@ -50,9 +49,8 @@ apt_rc:
   description: APT Not-Purged
   check_interval: {{ 6 * 60 }}
   freshness_threshold: {{ ((6 * 60) + 10) * 60 }} {#- 6 hours + 10 minutes #}
-  retry_interval: 5
   notifications_enabled: 0
-  notification_options: c,u,r
+  notification_options: n
   {#- if error, retry 5 times every 3 minutes after any failure, for a max of 15
       minutes #}
   retry_interval: 3

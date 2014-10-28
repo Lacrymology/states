@@ -35,3 +35,5 @@ salt_minion_last_success:
   first_notification_delay: 30
   arguments:
     max_hours: 48
+  check_interval: {{ 1 * 60 }} {#- 1 hour  #}
+  freshness_threshold: {{ ((1 * 60) + 10) * 60 }} {#- 1 hours + 10 minutes #}

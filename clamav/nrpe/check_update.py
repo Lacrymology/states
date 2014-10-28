@@ -54,15 +54,14 @@ class ClamAVLastUpdate(nap.Resource):
                 last_update = int(f.readline().strip())
         except IOError as err:
             log.critical(err)
-            raise(IOError,
-                  'Could not find ClamAV update log file: {}'.format(
-                      self.update_log))
+            raise IOError(
+                'Could not find ClamAV update log file: {}'.format(
+                    self.update_log))
         except ValueError as err:
             log.critical(err)
-            raise(ValueError,
-                  'Invalid time stamp in file: {}'.format(
-                      self.update_log
-                  ))
+            raise ValueError(
+                'Invalid time stamp in file: {}'.format(
+                    self.update_log))
 
         # Time from last update in hours
         update_age = int((time.time() - last_update) / 60 / 60)

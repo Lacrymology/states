@@ -67,7 +67,7 @@ class ClamAVLastUpdate(nap.Resource):
         update_age = int((time.time() - last_update) / 60 / 60)
 
         log.info("ClamAVLastUpdate.probe finished")
-        log.debug("returning %d", last_update)
+        log.debug("returning %d", update_age)
         return [nap.Metric(
             'Hours from last update', update_age, context='update_age')]
 
@@ -82,5 +82,5 @@ def check_clamav_update(config):
 
 if __name__ == "__main__":
     nrpe.check(check_clamav_update, {
-        'critical': '0:24:',
+        'critical': '0:24',
     })

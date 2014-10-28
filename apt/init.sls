@@ -50,7 +50,7 @@ dpkg.conf:
     - source: salt://apt/dpkg.jinja2
     - user: root
     - group: root
-    - mode: 444
+    - mode: 440
     - template: jinja
 
 {%- set backup = '/etc/apt/sources.list.salt-backup' %}

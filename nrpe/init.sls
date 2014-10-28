@@ -175,12 +175,16 @@ service: nagios-nrpe-server #}
       - cmd: apt_sources
       - module: nrpe-virtualenv
       - file: bash
+  group:
+    - present
+    - name: nagios
   user:
     - present
     - name: nagios
     - shell: /bin/false
     - require:
       - pkg: nagios-nrpe-server
+      - group: nagios-nrpe-server
   file:
     - managed
     - name: /etc/nagios/nrpe.d/000.nagios.servers.cfg
@@ -361,5 +365,16 @@ nsca_passive:
 {% endif %}
 
 extend:
+  apt.conf:
+    file:
+      - group: nagios
+      - require:
+        - group: nagios-nrpe-server
+  dpkg.conf:
+    file:
+      - group: nagios
+      - require:
+        - group: nagios-nrpe-server
+
 {%- from 'macros.jinja2' import change_ssh_key_owner with context %}
 {{ change_ssh_key_owner('nagios', {'pkg': 'nagios-nrpe-server'}) }}

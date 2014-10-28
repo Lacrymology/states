@@ -43,3 +43,5 @@ id: {{ grains['id'] }}
 mine_functions:
   monitoring.data: []
 {%- endif -%}
+
+sentry_common: {{ salt['pillar.get']('sentry_dsn', False) }}

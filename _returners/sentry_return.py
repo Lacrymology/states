@@ -27,9 +27,9 @@
 """
 Salt returner that report error back to sentry
 
-Pillar need something like:
+Configuration need something like:
 
-sentry_dsn: http://deadbeef:beefdead@sentry.example.com/1
+sentry_common: http://deadbeef:beefdead@sentry.example.com/1
 
 and http://pypi.python.org/pypi/raven installed
 """
@@ -44,11 +44,17 @@ logger = logging.getLogger(__name__)
 
 __virtualname__ = 'sentry_common'
 
+
 def __virtual__():
-    if not 'sentry_dsn' in __salt__['pillar.data']():
-        logger.warning("Missing 'sentry_dsn' value in pillar")
+    if not __virtualname__ in __opts__:
+        logger.info("Missing '%s' value in configuration, skip.",
+                    __virtualname__)
+        return False
+    if not __opts__[__virtualname__]:
+        logger.info("Sentry returned turned off in configuration.")
         return False
     return __virtualname__
+
 
 def returner(ret):
     """
@@ -63,9 +69,11 @@ def returner(ret):
             'grains': __salt__['grains.items']()
         }
         logger.debug("Sentry data {0}".format(sentry_data))
-        logger.debug("Sending {0} to sentry {1}".format(message, pillar_data['sentry_dsn']))
+        logger.debug("Sending {0} to sentry {1}".format(
+            message, __opts__[__virtualname__]))
         try:
-            __salt__['raven.alert'](pillar_data['sentry_dsn'], message, 'ERROR', sentry_data)
+            __salt__['raven.alert'](__opts__[__virtualname__], message, 'ERROR',
+                                    sentry_data)
         except Exception, err:
             logger.error("Can't send message '%s' extra '%s' to sentry: %s",
                          message, sentry_data, err)

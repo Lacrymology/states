@@ -57,3 +57,5 @@ keep_jobs: {{ salt['pillar.get']('salt_master:keep_jobs_hours', 24) }}
 {%- if 'sentry_dsn' in pillar %}
 ext_job_cache: sentry_common
 {%- endif %}
+
+sentry_common: {{ salt['pillar.get']('sentry_dsn', False) }}

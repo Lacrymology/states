@@ -101,15 +101,16 @@ def managed(name, source=None, template='jinja',
         return _error(ret, 'Unable to manage file: {0}'.format(exc))
 
     # generate nrpe config from rendered yaml file
-    log.debug("Parsing yaml file from %s", sfn)
+    log.debug("Parsing yaml file %s from %s", source, sfn)
     with open(sfn) as f:
         try:
             loaded = yamlloader.load(f, Loader=yamlloader.CustomLoader)
-            log.debug(str(loaded))
+            log.debug("Content of %s(%s):%s%s", source, sfn, os.linesep,
+                      str(loaded))
         except Exception, err:
             f.seek(0)
-            log.error("Content of failed YAML for %s:%s%s", name, os.linesep,
-                      f.read())
+            log.error("Content of failed YAML for %s(%s):%s%s", source, sfn,
+                      os.linesep, f.read())
             raise err
 
     lines = []

@@ -34,12 +34,14 @@ free_disks_space:
   command: /usr/lib/nagios/plugins/check_disk -w 20% -c 10% -X tmpfs
 {%- if grains['virtual'] == 'VirtualBox' %} -X vboxsf{% endif %}
 
+{%- set max_proc = salt['pillar.get']('nrpe:max_proc', 150)|int -%}
+{%- set max_proc_15_percent = max_proc + (max_proc / 100.0 * 15) %}
 total_procs:
   description: Total Processes
-  command: /usr/lib/nagios/plugins/check_procs -w 200 -c 300
   {#- send only notification if it's critical for more than 10 minutes #}
   first_notification_delay: 10
-  notification_options: c
+  notification_options: c,u,r
+  command: /usr/lib/nagios/plugins/check_procs -w {{ max_proc }} -c {{ max_proc_15_percent|int }}
 
 zombie_procs:
   description: Zombie Processes
@@ -47,17 +49,14 @@ zombie_procs:
 
 nrpe_procs:
   description: NRPE Processes
-  command: /usr/lib/nagios/plugins/check_procs -u nagios -C nrpe -w 50 -c 75
-  {#- send only notification if it's critical for more than 10 minutes #}
+  command: '/usr/lib/nagios/plugins/check_procs -u nagios -C nrpe -c 1:50'
   first_notification_delay: 10
-  notification_options: c
+  notification_options: c,u,r
 
 logged_users:
   description: Logged Users
-  command: /usr/lib/nagios/plugins/check_users -w 15 -c 20
-  {#- send only notification if it's critical for more than 10 minutes #}
+  command: /usr/lib/nagios/plugins/check_users -w 5 -c 10
   first_notification_delay: 10
-  notification_options: c
 
 loopback_interface:
   description: Loopback Interface
@@ -87,7 +86,7 @@ load_average:
   command: /usr/lib/nagios/plugins/check_load -w {% if salt['pillar.get']('__test__', False) -%}90,85,83 -c 100,95,91{% else %}10,5,3 -c 20,15,11{% endif %}
   {#- send only notification if it's critical for more than 10 minutes #}
   first_notification_delay: 10
-  notification_options: c
+  notification_options: c,u,r
 
 nrpe-remote-port:
   description: Remote NRPE Port

@@ -38,7 +38,7 @@ apt:
   retry_interval: 5
   notifications_enabled: 0
   {#- enable only notification for real error #}
-  notification_options: c
+  notification_options: c,u,r
   command: /usr/lib/nagios/plugins/check_apt
 {%- endif %}
 
@@ -48,5 +48,5 @@ apt_rc:
   freshness_threshold: {{ ((6 * 60) + 10) * 60 }} {#- 6 hours + 10 minutes #}
   retry_interval: 5
   notifications_enabled: 0
-  notification_options: c
+  notification_options: c,u,r
   command: /usr/lib/nagios/plugins/check_apt-rc.py --formula=apt --check=apt_rc

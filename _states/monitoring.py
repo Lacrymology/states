@@ -86,7 +86,7 @@ def managed(name, source=None, template='jinja',
             user,
             group,
             mode,
-            env,
+            __env__,
             context,
             defaults,
             **kwargs

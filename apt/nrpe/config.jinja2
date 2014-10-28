@@ -39,6 +39,10 @@ apt:
   notifications_enabled: 0
   {#- enable only notification for real error #}
   notification_options: c,u,r
+  {#- if error, retry 5 times every 3 minutes after any failure, for a max of 15
+      minutes #}
+  retry_interval: 3
+  max_check_attempts: 5
   command: /usr/lib/nagios/plugins/check_apt
 {%- endif %}
 
@@ -49,4 +53,8 @@ apt_rc:
   retry_interval: 5
   notifications_enabled: 0
   notification_options: c,u,r
+  {#- if error, retry 5 times every 3 minutes after any failure, for a max of 15
+      minutes #}
+  retry_interval: 3
+  max_check_attempts: 5
   command: /usr/lib/nagios/plugins/check_apt-rc.py --formula=apt --check=apt_rc

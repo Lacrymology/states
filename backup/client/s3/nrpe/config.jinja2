@@ -31,6 +31,8 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 {{ logging() }}
 
+nsca_dir: /etc/nagios/nsca.d
+
 s3:
   key: {{ pillar['aws']['access_key'] }}
   secret: {{ pillar['aws']['secret_key'] }}

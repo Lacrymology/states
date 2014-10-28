@@ -30,6 +30,8 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 {{ logging() }}
 
+nsca_dir: /etc/nagios/nsca.d
+
 ssh:
   hostname: {{ pillar['backup_server']['address'] }}
   username: root

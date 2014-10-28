@@ -25,6 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
+{%- from 'cron/test.sls' import test_cron with context %}
 include:
   - graphite
   - graphite.backup
@@ -33,13 +34,16 @@ include:
   - graphite.diamond
   - graphite.nrpe
 
+{%- call test_cron() %}
+- sls: graphite
+- sls: graphite.backup
+- sls: graphite.backup.diamond
+- sls: graphite.backup.nrpe
+- sls: graphite.diamond
+- sls: graphite.nrpe
+{%- endcall %}
+
 test:
   monitoring:
     - run_all_checks
-    - order: last
-  cmd:
-    - run
-    - name: /etc/cron.daily/backup-graphite
-    - require:
-      - file: backup-graphite
     - order: last

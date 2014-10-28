@@ -25,6 +25,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Dang Tung Lam <lamdt@familug.org>
 Maintainer: Dang Tung Lam <lamdt@familug.org>
 #}
+{% include "erlang/nrpe/config.jinja2" %}
+
 ejabberd_proc:
   description: ejabberd Process
   command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -C beam -u ejabberd"

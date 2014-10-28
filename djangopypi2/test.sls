@@ -32,6 +32,7 @@ Institute for Institutional Innovation by Data Driven Design Inc.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
+{%- from 'cron/test.sls' import test_cron with context %}
 include:
   - djangopypi2
   - djangopypi2.backup
@@ -39,14 +40,16 @@ include:
   - djangopypi2.diamond
   - djangopypi2.nrpe
 
+{%- call test_cron() %}
+- sls: djangopypi2
+- sls: djangopypi2.backup
+- sls: djangopypi2.backup.nrpe
+- sls: djangopypi2.diamond
+- sls: djangopypi2.nrpe
+{%- endcall %}
+
 test:
   monitoring:
     - run_all_checks
     - wait: 60
-    - order: last
-  cmd:
-    - run
-    - name: /etc/cron.daily/backup-djangopypi2
-    - require:
-      - file: backup-djangopypi2
     - order: last

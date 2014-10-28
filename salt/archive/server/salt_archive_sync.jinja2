@@ -36,6 +36,8 @@ ionice -c idle -p $$
 
 # log start stop time to syslog
 source /usr/local/share/salt_common.sh
+# Ensure that only one instance of this script is running at a time
+locking_script
 log_start_script "$@"
 trap "log_stop_script \$?" EXIT
 
@@ -49,5 +51,5 @@ rsync --archive --no-owner --no-group --${verbosity}{% if salt['pillar.get']('sa
 
 if [ $? -eq 0 ]; then
   mkdir -p /var/cache/salt/master
-  touch /var/cache/salt/master/sync_timestamp.dat
+  touch {{ opts['cachedir'] }}/sync_timestamp.dat
 fi

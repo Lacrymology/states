@@ -29,8 +29,13 @@ include:
   - backup.client.{{ pillar['backup_storage'] }}.nrpe
   - bash.nrpe
   - cron.nrpe
+  - nrpe
 
 {%- from 'nrpe/passive.sls' import passive_check with context -%}
-{%- call passive_check('redis.backup') %}
-  - file: check_backup.py
-{%- endcall -%}
+{{ passive_check('redis.backup') }}
+
+extend:
+  check_backup.py:
+    file:
+      - require:
+        - file: nsca-redis.backup

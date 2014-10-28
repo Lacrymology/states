@@ -61,8 +61,9 @@ include:
       - module: nrpe-virtualenv
       - file: /etc/sudoers.d/nrpe_firewall
       - pkg: nagios-nrpe-server
+      - file: nsca-firewall
+    - require_in:
+      - service: nagios-nrpe-server
+      - service: nsca_passive
 
-{%- call passive_check('firewall') %}
-  - file: /usr/lib/nagios/plugins/check_firewall.py
-  - file: /etc/sudoers.d/nrpe_firewall
-{%- endcall %}
+{{ passive_check('firewall') }}

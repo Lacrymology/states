@@ -34,6 +34,7 @@ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
 
 Nagios NRPE check for djangopypi2.
 -#}
+{%- set formula = 'djangopypi2' -%}
 {%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - apt.nrpe
@@ -52,8 +53,18 @@ include:
   - sudo.nrpe
   - uwsgi.nrpe
   - virtualenv.nrpe
-{% if salt['pillar.get']('djangopypi2:ssl', False) %}
+{% if salt['pillar.get'](formula + ':ssl', False) %}
   - ssl.nrpe
 {%- endif %}
 
-{{ passive_check('djangopypi2', check_ssl_score=True) }}
+{{ passive_check(formula, check_ssl_score=True) }}
+
+extend:
+  check_psql_encoding.py:
+    file:
+      - require:
+        - file: nsca-{{ formula }}
+  /usr/lib/nagios/plugins/check_pgsql_query.py:
+    file:
+       - require:
+         - file: nsca-{{ formula }}

@@ -27,9 +27,10 @@
 # Author: Bruno Clermont <patate@fastmail.cn>
 # Maintainer: Bruno Clermont <patate@fastmail.cn>
 
-import os, sys
 import logging
 import logging.config
+import os
+import sys
 import yaml
 
 full_path = os.path.realpath(__file__)

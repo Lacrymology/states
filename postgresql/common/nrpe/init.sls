@@ -29,6 +29,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 Nagios NRPE check for PostgreSQL Server.
 -#}
+{%- set ssl = salt['pillar.get']('postgresql:ssl', False) -%}
 include:
   - apt.nrpe
   - nrpe
@@ -36,9 +37,9 @@ include:
   - postgresql.common.user
   - rsyslog.nrpe
   - sudo
-{% if salt['pillar.get']('postgresql:ssl', False) %}
+{%- if ssl %}
   - ssl.nrpe
-{% endif %}
+{%- endif -%}
 
 {%- set check_pg_version = "2.21.0" %}
 
@@ -69,15 +70,18 @@ check_postgres:
       - pkg: nagios-nrpe-server
       - archive: check_postgres
 
-/usr/lib/nagios/plugins/check_psql_encoding.py:
+check_psql_encoding.py:
   file:
     - managed
+    - name: /usr/lib/nagios/plugins/check_psql_encoding.py
     - source: salt://postgresql/common/nrpe/check_encoding.py
     - user: nagios
     - group: nagios
     - mode: 555
     - require:
       - pkg: nagios-nrpe-server
+      - file: nsca-postgresql.common
+      - module: nrpe-virtualenv
 
 /etc/sudoers.d/nrpe_postgresql_common:
   file:
@@ -93,14 +97,26 @@ check_postgres:
 /etc/nagios/nrpe.d/postgresql.cfg:
   file:
     - absent
+    - watch_in:
+      - service: nagios-nrpe-server
 
 {%- from 'nrpe/passive.sls' import passive_check with context %}
-{%- call passive_check('postgresql.common') %}
-- file: /etc/nagios/nrpe.d/postgresql.cfg
-{%- endcall %}
+{{ passive_check('postgresql.common') }}
 
 extend:
   nagios-nrpe-server:
     service:
       - require:
         - postgres_database: postgresql_monitoring
+  postgresql:
+    user:
+      - groups:
+        - nagios
+    {%- if ssl %}
+        - ssl-cert
+    {%- endif %}
+      - require:
+        - pkg: nagios-nrpe-server
+    {%- if ssl %}
+        - pkg: ssl-cert
+    {%- endif -%}

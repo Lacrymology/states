@@ -6,22 +6,23 @@
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
 #
-# 1. Redistributions of source code must retain the above copyright notice, this
-#    list of conditions and the following disclaimer.
+# 1. Redistributions of source code must retain the above copyright notice,
+#    this list of conditions and the following disclaimer.
 # 2. Redistributions in binary form must reproduce the above copyright notice,
 #    this list of conditions and the following disclaimer in the documentation
 #    and/or other materials provided with the distribution.
 #
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
-# ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-# (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-# ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
 
 """
 Common code for backup file checking nrpe plugins
@@ -31,7 +32,6 @@ __author__ = 'Tomas Neme'
 __maintainer__ = 'Tomas Neme'
 __email__ = 'lacrymology@gmail.com'
 
-import argparse
 import datetime
 import logging
 import os
@@ -39,16 +39,15 @@ import pickle
 import re
 import nagiosplugin
 import pysc
-from pysc import nrpe as pysce, unserialize_yaml
 
-log = logging.getLogger('nagiosplugin')
+log = logging.getLogger('nagiosplugin.backup.client.base')
 CACHE_TIMEOUT = 15
 
 
 class BackupFile(nagiosplugin.Resource):
     def __init__(self, config, facility):
         log.debug("Reading config file: %s", config)
-        self.config = unserialize_yaml(config)
+        self.config = pysc.unserialize_yaml(config)
 
         self.prefix = self.config['backup']['prefix']
         self.manifest = self.config['backup']['manifest']
@@ -56,22 +55,25 @@ class BackupFile(nagiosplugin.Resource):
         self.facility = facility
 
     def probe(self):
+        log.info("BackupFile probe started")
         log.info("Probe backup for facility: %s", self.facility)
         files = self.get_manifest()
 
         log.info("%s in manifest? %s", self.facility,
                  str(not files.get(self.facility, None) is None))
-        file = files.get(self.facility, {
+        backup_file = files.get(self.facility, {
             'date': datetime.datetime.fromtimestamp(0),
             'size': 0,
         })
 
         age_metric = nagiosplugin.Metric(
             'age',
-            (datetime.datetime.now() - file['date']).total_seconds() / (60*60),
+            (datetime.datetime.now() - backup_file['date']).total_seconds() /
+                (60*60),
             min=0)
-        size_metric = nagiosplugin.Metric('size', file['size'], min=0)
+        size_metric = nagiosplugin.Metric('size', backup_file['size'], min=0)
 
+        log.info("BackupFile.probe finished")
         log.debug("returning age: %s, size: %s", age_metric, size_metric)
         return [age_metric, size_metric]
 
@@ -143,8 +145,8 @@ class BackupFile(nagiosplugin.Resource):
                     'name': name,
                     'size': size,
                     'date': date,
-                    },
                 }
+            }
         else:
             log.warn("Filename didn't match regexp.\
                      This file shouldn't be here: %s", filename)
@@ -152,29 +154,20 @@ class BackupFile(nagiosplugin.Resource):
         return {}
 
 
-@nagiosplugin.guarded
-@pysc.profile(log=log)
-def main(Collector):
-    """
-    :param Collector: A BackupFile subclass to be instantiated
-    :return:
-    """
-    argp = pysce.ArgumentParser(
-        description=__doc__,
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    argp.add_argument('facility', help='facility name to check backups for')
-    argp.add_argument('-w', '--warning', metavar='HOURS', default='48',
-                      help='Emit a warning if a backup file is older\
-                            than HOURS')
-    argp.add_argument('-c', '--config', metavar="PATH",
-                      default='/etc/nagios/backup.yml')
-
-    args = argp.parse_args()
-
-    check = pysce.Check(
-        Collector(args.config,
-                  args.facility,),
-        nagiosplugin.ScalarContext('age', args.warning, args.warning),
+def check_backup(Collector, config):
+    return (
+        Collector(
+            config['config'],
+            config['facility'],
+        ),
+        nagiosplugin.ScalarContext('age',
+                                   config['warning'],
+                                   config['warning']),
         nagiosplugin.ScalarContext('size', "1:", "1:"),
     )
-    check.main(args)
+
+
+defaults = {
+    'warning': '48',
+    'config': '/etc/nagios/backup.yml',
+}

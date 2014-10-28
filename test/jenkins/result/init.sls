@@ -25,8 +25,48 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-{%- set result_file = '/root/salt/result.xml' -%}
+{#- run these stuff AFTER integration.py to make sure them do not be deleted/changed by integration.py #}
+ci-agent:
+  user:
+    - present
+  file:
+    - name: /home/ci-agent/.ssh
+    - directory
+    - user: ci-agent
+    - group: ci-agent
+    - mode: 750
+    - require:
+      - user: ci-agent
+
+/home/ci-agent/.ssh/id_rsa:
+  file:
+    - managed
+    - name: /home/ci-agent/.ssh/id_rsa
+    - user: ci-agent
+    - group: ci-agent
+    - mode: 400
+    - contents: |
+        {{ pillar['salt']['ci']['private_key']|indent(8) }}
+    - require:
+      - file: ci-agent
+
+/home/ci-agent/.ssh/known_hosts:
+  file:
+    - managed
+    - user: ci-agent
+    - group: ci-agent
+    - mode: 644
+    - contents: |
+        {{ pillar['salt']['ci']['host_key']|indent(8) }}
+    - require:
+      - file: ci-agent
+
+{%- set result_file = '/home/ci-agent/result.xml' -%}
 {%- set test_files = salt['file.find']('/root/salt/', name='TEST-*-salt.xml') %}
+
+openssh-client:
+  pkg:
+    - installed
 
 test_result:
   file:
@@ -40,22 +80,31 @@ test_result:
     - source: salt://test/jenkins/result/failure.xml
 {%- endif %}
     - name: {{ result_file }}
-  module:
+  cmd:
     - run
-    - name: cp.push
+    - user: ci-agent
+    - name: scp {{ result_file }} ci-agent@{{ grains['master'] }}:/home/ci-agent/{{ grains['id'] }}-result.xml
     - path: {{ result_file }}
     - require:
       - file: test_result
+      - file: /home/ci-agent/.ssh/known_hosts
+      - file: /home/ci-agent/.ssh/id_rsa
+      - pkg: openssh-client
 
 {%- for type in ('stdout', 'stderr') %}
 {{ type }}:
   cmd:
     - run
-    - name: xz /root/salt/{{ type }}.log
-  module:
+    - name: xz -c /root/salt/{{ type }}.log > /home/ci-agent/{{ type }}.log.xz
+
+scp_{{ type }}_to_master:
+  cmd:
     - run
-    - name: cp.push
-    - path: /root/salt/{{ type }}.log.xz
+    - name: scp /home/ci-agent/{{ type }}.log.xz ci-agent@{{ grains['master'] }}:/home/ci-agent/{{ grains['id'] }}-{{ type }}.log.xz
+    - user: ci-agent
     - require:
       - cmd: {{ type }}
+      - file: /home/ci-agent/.ssh/known_hosts
+      - file: /home/ci-agent/.ssh/id_rsa
+      - pkg: openssh-client
 {%- endfor %}

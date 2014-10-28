@@ -33,7 +33,6 @@ include:
   - diamond.nrpe
   - rsyslog.diamond
   - statsd.diamond
-  - sudo.diamond
 
 nrpe_diamond_resources:
   file:
@@ -48,4 +47,4 @@ nrpe_diamond_resources:
         exe = ^\/usr\/sbin\/nrpe$
         cmdline = ^\/usr\/lib\/nagios\/plugins\/check_
         [[nsca_passive]]
-        cmdline = python \/usr\/local\/nagios\/bin\/nsca_passive
+        cmdline = ^nsca_passive$

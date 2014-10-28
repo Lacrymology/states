@@ -1,245 +1,123 @@
 {#-
-Copyright (C) 2013 the Institute for Institutional Innovation by Data
-Driven Design Inc.
+Copyright (c) 2014, Diep Pham
+All rights reserved.
 
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-"Software"), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE  MASSACHUSETTS INSTITUTE OF
-TECHNOLOGY AND THE INSTITUTE FOR INSTITUTIONAL INNOVATION BY DATA
-DRIVEN DESIGN INC. BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-USE OR OTHER DEALINGS IN THE SOFTWARE.
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Except as contained in this notice, the names of the Institute for
-Institutional Innovation by Data Driven Design Inc. shall not be used in
-advertising or otherwise to promote the sale, use or other dealings
-in this Software without prior written authorization from the
-Institute for Institutional Innovation by Data Driven Design Inc.
+Author: Diep Pham <favadi@robotinfra.com>
+Maintainer: Diep Pham <favadi@robotinfra.com>
 
-Author: Lam Dang Tung <lamdt@familug.org>
-Maintainer: Lam Dang Tung <lamdt@familug.org>
-
-Self hosted Git management software.
+Install gitlab
 -#}
+
 include:
   - apt
   - build
   - git
   - logrotate
   - nginx
-  - nodejs
-  - postgresql
   - postgresql.server
   - python
   - redis
-  - ruby
   - rsyslog
+  - ruby.2
   - ssh.server
 {%- if salt['pillar.get']('gitlab:ssl', False) %}
   - ssl
 {%- endif %}
-  - uwsgi.ruby
+  - ssl.dev
+  - uwsgi.ruby2
   - web
   - xml
+  - yaml
 
-{%- set database_name = salt['pillar.get']('gitlab:db:name', 'gitlab') %}
-{%- set database_username = salt['pillar.get']('gitlab:db:username', 'gitlab') %}
-{%- set database_password = salt['password.pillar']('gitlab:db:password', 10) %}
-
-{%- set user = 'gitlab' %}
-{%- set version = '6.4.3' %}
-{%- set root_dir = "/usr/local" %}
-{%- set home_dir = "/home/" + user %}
-{%- set web_dir = root_dir +  "/gitlabhq-" + version %}
-{%- set repos_dir = home_dir + "/repositories" %}
-{%- set shell_dir = home_dir + "/gitlab-shell" %}
+{%- set version = '7.3.2' %}
+{%- set gitlab_shell_version = '2.0.1' %}
 
 gitlab_dependencies:
   pkg:
     - installed
     - pkgs:
-      - adduser
-      - libicu-dev
-      - libcurl4-openssl-dev
-      - libicu-dev
       - build-essential
+      - checkinstall
+      - cmake
+      - curl
+      - libcurl4-openssl-dev
+      - libffi-dev
+      - libgdbm-dev
+      - libicu-dev
+      - libncurses5-dev
+      - libreadline-dev
+      - pkg-config
       - python-docutils
+      - zlib1g-dev
     - require:
-      - cmd: apt_sources
-      - pkg: build
-      - pkg: git
-      - pkg: python
-      - pkg: nodejs
       - pkg: postgresql-dev
-      - pkg: xml-dev
-
-gitlab_stop_old_sidekiq_process:
-  cmd:
-    - run
-    - name: kill -9 `pgrep -u git -f 'sidekiq 2.12.4'` || true
-    - onlyif: pgrep -u git -f 'sidekiq 2.12.4'
-
-remove_old_gitlab_shell:
-  file:
-    - absent
-    - name: {{ home_dir }}/gitlab-shell
-    - require:
-      - cmd: gitlab_stop_old_sidekiq_process
-      - cmd: gitlab_rename_home_folder
-
-gitlab-shell:
-  archive:
-    - extracted
-    - name: {{ home_dir }}/
-    {%- if 'files_archive' in pillar %}
-    - source: {{ pillar['files_archive'] }}/mirror/gitlab/shell-1.8.0.tar.gz
-    {%- else %}
-    - source:  https://github.com/gitlabhq/gitlab-shell/archive/v1.8.0.tar.gz
-    {%- endif %}
-    - source_hash: md5=6f82c0917dc1a65019ec04dec4e9a7d5
-    - archive_format: tar
-    - tar_options: z
-    - if_missing: {{ shell_dir }}
-    - require:
-      - user: gitlab
-      - file: remove_old_gitlab_shell
-  file:
-    - directory
-    - name: {{ home_dir }}
-    - user: {{ user }}
-    - group: {{ user }}
-    - recurse:
-      - user
-      - group
-    - require:
-      - cmd: gitlab-shell
-  cmd:
-    - run
-    - name: mv gitlab-shell-1.8.0 gitlab-shell
-    - cwd: {{ home_dir }}
-    - onlyif: test -d {{ home_dir }}/gitlab-shell-1.8.0
-    - require:
-      - archive: gitlab-shell
-
-install_gitlab_shell:
-  cmd:
-    - run
-    - name: {{ shell_dir }}/bin/install
-    - user: {{ user }}
-    - require:
-      - pkg: ruby
-      - cmd: gitlab-shell
-    - watch:
-      - file: {{ shell_dir }}/config.yml
-      - archive: gitlab-shell
-
-gitlab_shell_logfile:
-  file:
-    - managed
-    - name: {{ shell_dir }}/gitlab-shell.log
-    - mode: 660
-    - user: {{ user }}
-    - group: {{ user }}
-    - require:
-      - file: gitlab-shell
-
-{{ shell_dir }}/config.yml:
-  file:
-    - managed
-    - source: salt://gitlab/gitlab-shell.jinja2
-    - template: jinja
-    - user: {{ user }}
-    - group: {{ user }}
-    - mode: 440
-    - require:
-      - file: gitlab-shell
-      - pkg: ruby
-    - context:
-      repos_dir: {{ repos_dir }}
-      shell_dir: {{ shell_dir }}
-      user: {{ user }}
-
-{#- move old data in to new home folder #}
-gitlab_rename_home_folder:
-  cmd:
-    - run
-    - name: mv /home/git {{ home_dir }}
-    - user: root
-    - onlyif: test -d /home/git
-
-replace_git_home_in_file:
-  cmd:
-    - wait
-    - name:  find {{ home_dir }} -type f -exec sed -i 's:/home/git/:/home/gitlab/:g' {} \;
-    - user: root
-    - watch:
-      - cmd: gitlab_rename_home_folder
-
-gitlab_remove_old_version:
-  file:
-    - absent
-    - name: /usr/local/gitlabhq-6-0-stable
+      - cmd: apt_sources
 
 gitlab:
   user:
     - present
-    - name: {{ user }}
-    - home: {{ home_dir }}
+    - name: gitlab
     - groups:
       - www-data
+      - redis
     - shell: /bin/bash
     - require:
       - pkg: gitlab_dependencies
-      - group: web
-      - cmd: gitlab_rename_home_folder
-      - cmd: replace_git_home_in_file
+      - pkg: redis
+      - user: web
   postgres_user:
     - present
-    - name: {{ database_username }}
-    - password: {{ database_password }}
+    - name: gitlab
+    - createdb: True
+    - password: {{ salt['password.pillar']('gitlab:db:password') }}
     - require:
       - service: postgresql
-      - cmd: install_gitlab_shell
+      - user: gitlab
   postgres_database:
     - present
-    - name: {{ database_name }}
-    - owner: {{ database_username }}
+    - name: gitlabhq_production
+    - owner: gitlab
     - require:
       - postgres_user: gitlab
   archive:
     - extracted
-    - name: {{ root_dir }}/
+    - name: /home/gitlab
 {%- if 'files_archive' in pillar %}
-    - source: {{ pillar['files_archive'] }}/mirror/gitlab/{{ version }}.tar.gz
+    - source: {{ pillar['files_archive'] }}/mirror/gitlab-{{ version }}.tar.gz
 {%- else %}
     - source: https://github.com/gitlabhq/gitlabhq/archive/v{{ version }}.tar.gz
 {%- endif %}
-    - source_hash: md5=a66d5504b154aacc68aefae9445f3fd2
+    - source_hash: md5=e8e83ec258f621edea4214d3c0330c87
     - archive_format: tar
     - tar_options: z
-    - if_missing: {{ web_dir }}
+    - if_missing: /home/gitlab/gitlabhq-{{ version }}
     - require:
       - postgres_database: gitlab
-      - file: /usr/local
-      - file: gitlab_remove_old_version
   file:
     - directory
-    - name: {{ web_dir }}
-    - user: {{ user }}
-    - group: {{ user }}
+    - name: /home/gitlab/gitlabhq-{{ version }}
+    - user: gitlab
+    - group: gitlab
     - recurse:
       - user
       - group
@@ -247,284 +125,214 @@ gitlab:
       - archive: gitlab
   cmd:
     - wait
-    - name: force=yes bundle exec rake gitlab:setup
+    - name: bundle exec rake gitlab:setup
     - env:
-        RAILS_ENV: production
-    - user: {{ user }}
-    - cwd: {{ web_dir }}
+      - force: "yes"
+      - RAILS_ENV: production
+      - GITLAB_ROOT_PASSWORD: "{{ pillar['gitlab']['admin']['password'] }}"
+    - user: gitlab
+    - cwd: /home/gitlab/gitlabhq-{{ version }}
     - require:
+      - file: gitlab_shell
       - service: redis
-      - cmd: bundler
-      - file: {{ web_dir }}/db/fixtures/production/001_admin.rb
+      - cmd: gitlab_gems
+      - file: gitlab
+      - file: /home/gitlab/gitlabhq-{{ version }}/config/database.yml
+      - file: /home/gitlab/gitlabhq-{{ version }}/log
     - watch:
       - postgres_database: gitlab
   service:
     - running
-    - name: gitlab
     - require:
       - user: gitlab
     - watch:
       - archive: gitlab
       - cmd: gitlab
-      - cmd: bundler
-      - cmd: gitlab_precompile_assets
+      - cmd: gitlab_gems
       - file: gitlab_upstart
-      - file: {{ web_dir }}/config.ru
-      - file: {{ web_dir }}/config/gitlab.yml
-      - file: {{ web_dir }}/config/initializers/rack_attack.rb
+      - file: /home/gitlab/gitlabhq-{{ version }}/config/database.yml
+      - file: /home/gitlab/gitlabhq-{{ version }}/config/gitlab.yml
+      - file: /home/gitlab/gitlabhq-{{ version }}/config/initializers/rack_attack.rb
+      - file: /home/gitlab/gitlabhq-{{ version }}/config/resque.yml
+      - file: /home/gitlab/gitlabhq-{{ version }}/log
+
+gitlab_upstart:
+  file:
+    - managed
+    - name: /etc/init/gitlab.conf
+    - source: salt://gitlab/upstart.jinja2
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - context:
+      version: {{ version }}
+    - require:
+      - file: gitlab
+
+/home/gitlab/gitlab-satellites:
+  file:
+    - directory
+    - user: gitlab
+    - group: gitlab
+    - mode: 750
+    - require:
+      - user: gitlab
+
+/home/gitlab/gitlabhq-{{ version }}/config/gitlab.yml:
+  file:
+    - managed
+    - source: salt://gitlab/gitlab.jinja2
+    - template: jinja
+    - user: gitlab
+    - group: gitlab
+    - mode: 440
+    - require:
+      - file: gitlab
+      - file: /var/lib/gitlab
+
+/home/gitlab/gitlabhq-{{ version }}/config/initializers/rack_attack.rb:
+  file:
+    - managed
+    - source: salt://gitlab/rack_attack.rb.jinja2
+    - template: jinja
+    - user: gitlab
+    - group: gitlab
+    - mode: 440
+    - require:
+      - file: gitlab
+
+/home/gitlab/gitlabhq-{{ version }}/config/resque.yml:
+  file:
+    - managed
+    - source: salt://gitlab/resque.jinja2
+    - template: jinja
+    - user: gitlab
+    - group: gitlab
+    - mode: 440
+    - require:
+      - file: gitlab
+
+/home/gitlab/gitlabhq-{{ version }}/config/database.yml:
+  file:
+    - managed
+    - source: salt://gitlab/database.jinja2
+    - template: jinja
+    - user: gitlab
+    - group: gitlab
+    - mode: 440
+    - require:
+      - file: gitlab
+
+/home/gitlab/gitlabhq-{{ version }}/.gitconfig:
+  file:
+    - managed
+    - source: salt://gitlab/gitconfig.jinja2
+    - template: jinja
+    - user: gitlab
+    - group: gitlab
+    - mode: 440
+    - require:
+        - file: gitlab
+
 {%- if salt['pillar.get']('gitlab:smtp:enabled', False) %}
-      - file: {{ web_dir }}/config/environments/production.rb
-      - file: {{ web_dir }}/config/initializers/smtp_settings.rb
+/home/gitlab/gitlabhq-{{ version }}/config/initializers/smtp_settings.rb:
+  file:
+    - managed
+    - source: salt://gitlab/smtp.jinja2
+    - user: {{ user }}
+    - group: {{ user }}
+    - template: jinja
+    - mode: 440
+    - require:
+      - user: gitlab
+      - file: gitlab
+    - require_in:
+      - cmd: gitlab_gems
 {%- endif %}
+
+gitlab_gems:
+  gem:
+    - installed
+    - name: bundler
+    - version: 1.7.3
+    - user: root
+    - require:
+      - pkg: ruby2
+  cmd:
+    - wait
+    - name: bundle install --deployment --without development test mysql aws
+    - user: gitlab
+    - cwd: /home/gitlab/gitlabhq-{{ version }}
+    - require:
+      - gem: gitlab_gems
+    - watch:
+      - archive: gitlab
+
+gitlab_shell:
+  cmd:
+    - wait
+    - name: bundle exec rake gitlab:shell:install[v{{ gitlab_shell_version}}]
+    - user: gitlab
+    - cwd: /home/gitlab/gitlabhq-{{ version }}
+    - env:
+      - REDIS_URL: unix:/var/run/redis/redis.sock
+      - RAILS_ENV: production
+    - require:
+      - cmd: gitlab_gems
+      - pkg: git
+    - watch:
+      - archive: gitlab
+      - file: /home/gitlab/gitlabhq-{{ version }}/config/database.yml
+      - file: /home/gitlab/gitlabhq-{{ version }}/config/gitlab.yml
+      - file: /home/gitlab/gitlabhq-{{ version }}/config/initializers/rack_attack.rb
+      - file: /home/gitlab/gitlabhq-{{ version }}/config/resque.yml
+  file:
+    - managed
+    - name: /home/gitlab/gitlab-shell/config.yml
+    - source: salt://gitlab/gitlab-shell.jinja2
+    - template: jinja
+    - user: gitlab
+    - group: gitlab
+    - mode: 640  {# gitlab_shell setup needs write permission #}
+    - require:
+      - file: /var/log/gitlab/gitlab-shell
+      - cmd: gitlab_shell
 
 gitlab-uwsgi:
   file:
     - managed
     - name: /etc/uwsgi/gitlab.yml
     - source: salt://gitlab/uwsgi.jinja2
-    - group: www-data
-    - user: www-data
     - template: jinja
+    - user: gitlab
+    - group: gitlab
     - mode: 440
     - context:
       appname: gitlab
-      chdir: {{ web_dir }}
-      rack: {{ web_dir }}/config.ru
+      chdir: /home/gitlab/gitlabhq-{{ version }}
+      rack: config.ru
+      uid: gitlab
+      gid: gitlab
     - require:
-      - cmd: gitlab
-      - cmd: gitlab_precompile_assets
-      - service: uwsgi_emperor
-      - file: gitlab_upstart
-      - gem: rack
-      - file: {{ web_dir }}/config.ru
-      - postgres_database: gitlab
+      - file: gitlab
+      - file: gitlab_shell
+      - service: uwsgi
   module:
     - wait
     - name: file.touch
     - m_name: /etc/uwsgi/gitlab.yml
     - require:
-      - file: /etc/uwsgi/gitlab.yml
+      - file: gitlab-uwsgi
     - watch:
+      - cmd: gitlab_gems
+      - file: gitlab_shell
+      - file: /home/gitlab/gitlabhq-{{ version }}/config/database.yml
+      - file: /home/gitlab/gitlabhq-{{ version }}/config/gitlab.yml
+      - file: /home/gitlab/gitlabhq-{{ version }}/config/initializers/rack_attack.rb
+      - file: /home/gitlab/gitlabhq-{{ version }}/config/resque.yml
+      - file: /home/gitlab/gitlabhq-{{ version }}/log
       - user: gitlab
-      - file: {{ web_dir }}/config/gitlab.yml
-      - file: {{ web_dir }}/config/database.yml
-{%- if salt['pillar.get']('gitlab:smtp:enabled', False) %}
-      - file: {{ web_dir }}/config/environments/production.rb
-      - file: {{ web_dir }}/config/initializers/smtp_settings.rb
-{%- endif %}
-      - archive: gitlab
-
-gitlab_migrate_db:
-  cmd:
-    - run
-    - name: bundle exec rake db:migrate
-    - env:
-        RAILS_ENV: production
-    - user: {{ user }}
-    - cwd: {{ web_dir }}
-    - require:
-      - cmd: gitlab
-      - archive: gitlab
-      - service: redis
-      - cmd: bundler
-      - file: {{ web_dir }}/db/fixtures/production/001_admin.rb
-
-gitlab_coppy_images:
-  cmd:
-    - run
-    - name: cp {{ web_dir }}/app/assets/images/* {{ web_dir }}/public/assets/
-    - user: {{ user }}
-    - unless: test -f {{ web_dir }}/public/assets/logo-black.png
-    - require:
-      - archive: gitlab
-      - user: gitlab
-      - cmd: gitlab_precompile_assets
-
-gitlab_precompile_assets:
-  cmd:
-    - wait
-    - name: bundle exec rake assets:precompile
-    - env:
-        RAILS_ENV: production
-    - user: {{ user }}
-    - cwd: {{ web_dir }}
-    - unless: test -d {{ web_dir }}/public/assets/
-    - watch:
-      - cmd: gitlab_migrate_db
-      - cmd: gitlab
-      - cmd: bundler
-
-{%- if version == '6.4.3' %}
-gitlab_migrate_miids:
-  cmd:
-    - run
-    - name: bundle exec rake migrate_iids RAILS_ENV=production
-    - env:
-        RAILS_ENV: production
-    - user: {{ user }}
-    - cwd: {{ web_dir }}
-    - require:
-      - cmd: gitlab_migrate_db
-      - archive: gitlab
-{%- endif %}
-
-gitlab_update_hook:
-  cmd:
-    - script
-    - name: rewrite-hooks.sh {{ repos_dir }}
-    - source: salt://gitlab/rewrite-hooks.sh
-    - template: jinja
-    - shell: /bin/bash
-    - user: {{ user }}
-    - cwd: {{ shell_dir }}/support
-    - require:
-      - file: gitlab-shell
-    - watch:
-      - archive: gitlab
-    - context:
-      user: {{ user }}
-
-gitlab_clean_redis_db:
-  cmd:
-    - wait
-    - name: redis-cli flushdb
-    - require:
-      - service: redis
-    - watch:
-      - cmd: gitlab
-      - archive: gitlab
-
-{{ web_dir }}/config.ru:
-  file:
-    - managed
-    - source: salt://gitlab/config.jinja2
-    - user: {{ user }}
-    - group: {{ user }}
-    - template: jinja
-    - mode: 440
-    - require:
-      - cmd: gitlab
-
-{{ home_dir }}/gitlab-satellites:
-  file:
-    - directory
-    - user: {{ user }}
-    - group: {{ user }}
-    - mode: 775
-    - require:
-      - user: {{ user }}
-
-{%- for dir in ('log', 'tmp', 'public/uploads', 'tmp/pids', 'tmp/cache') %}
-{{ web_dir }}/{{ dir }}:
-  file:
-    - directory
-    - user: {{ user }}
-    - group: {{ user }}
-    - dir_mode: 775
-    - file_mode: 664
-    - recurse:
-      - user
-      - group
-      - mode
-    - require:
-      - file: gitlab
-    - require_in:
-      - file: {{ home_dir }}/gitlab-satellites
-{%- endfor %}
-
-{%- for file in ('gitlab.yml', 'database.yml') %}
-{{ web_dir }}/config/{{ file }}:
-  file:
-    - managed
-    - source: salt://gitlab/{{ file }}.jinja2
-    - template: jinja
-    - user: {{ user }}
-    - group: {{ user }}
-    - mode: 440
-    - require:
-      - file: gitlab
-    - require_in:
-      - file: {{ home_dir }}/gitlab-satellites
-    - context:
-      home_dir: {{ home_dir }}
-      repos_dir: {{ repos_dir }}
-      shell_dir: {{ shell_dir }}
-      user: {{ user }}
-{%- endfor %}
-
-{{ web_dir }}/config/initializers/rack_attack.rb:
-  file:
-    - managed
-    - source: salt://gitlab/rack_attack.rb.jinja2
-    - template: jinja
-    - user: {{ user }}
-    - group: {{ user }}
-    - mode: 440
-    - require:
-      - file: gitlab
-    - require_in:
-      - file: {{ home_dir }}/gitlab-satellites
-
-/etc/logrotate.d/gitlab:
-  file:
-    - managed
-    - source: salt://gitlab/logrotate.jinja2
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 440
-    - require:
-      - pkg: logrotate
-      - file: gitlab_upstart
-    - context:
-      web_dir: {{ web_dir }}
-      user: {{ user }}
-
-charlock_holmes:
-  gem:
-    - installed
-    - version: 0.6.9.4
-    - runas: root
-    - require:
-      - file: gitlab
-      - file: {{ home_dir }}/gitlab-satellites
-      - pkg: gitlab_dependencies
-
-bundler:
-  gem:
-    - installed
-    - version: 1.3.5
-    - runas: root
-    - require:
-      - gem: charlock_holmes
-  cmd:
-    - run
-    - name: bundle install --deployment --without development test mysql aws
-    - cwd: {{ web_dir }}
-    - user: {{ user }}
-    - require:
-      - gem: bundler
-
-{%- set rack_version = '1.5.2' %}
-
-{#- Can not use gem.removed function here, because it does not support uninstall
-without confirmation option #}
-gitlab_rack_gem:
-  cmd:
-    - run
-    - name: gem uninstall -Iax rack --version '<{{ rack_version }}'
-    - onlyif: gem list | grep rack
-    - require:
-      - pkg: ruby
-  gem:
-    - installed
-    - name: rack
-    - version: {{ rack_version }}
-    - runas: root
-    - require:
-      - pkg: ruby
-      - pkg: build
-      - cmd: gitlab_rack_gem
 
 /etc/nginx/conf.d/gitlab.conf:
   file:
@@ -544,104 +352,80 @@ gitlab_rack_gem:
     - watch_in:
       - service: nginx
     - context:
-      web_dir: {{ web_dir }}
+      version: {{ version }}
 
-{{ home_dir }}/.gitconfig:
-  file:
-    - managed
-    - source: salt://gitlab/gitconfig.jinja2
-    - template: jinja
-    - user: {{ user }}
-    - group: {{ user }}
-    - mode: 640
-    - require:
-      - user: {{ user }}
-
-gitlab_upstart:
-  file:
-    - managed
-    - name: /etc/init/gitlab.conf
-    - user: root
-    - mode: 440
-    - source: salt://gitlab/upstart.jinja2
-    - template: jinja
-    - require:
+gitlab_precompile_assets:
+  cmd:
+    - wait
+    - name: bundle exec rake assets:precompile
+    - env:
+        RAILS_ENV: production
+    - user: gitlab
+    - cwd: /home/gitlab/gitlabhq-{{ version }}
+    - unless: test -d /home/gitlab/gitlabhq-{{ version }}/public/assets/
+    - watch:
       - cmd: gitlab
+      - cmd: gitlab_gems
+
+/var/log/gitlab:
+  file:
+    - directory
+    - user: gitlab
+    - group: gitlab
+    - require:
+      - user: gitlab
+
+/var/log/gitlab/gitlabhq:
+  file:
+    - directory
+    - user: gitlab
+    - group: gitlab
+    - require:
+      - file: /var/log/gitlab
+
+/var/log/gitlab/gitlab-shell:
+  file:
+    - directory
+    - user: gitlab
+    - group: gitlab
+    - require:
+      - file: /var/log/gitlab
+
+/home/gitlab/gitlabhq-{{ version }}/log:
+  file:
+    - symlink
+    - target: /var/log/gitlab/gitlabhq
+    - force: True
+    - user: gitlab
+    - group: gitlab
+    - require:
+      - file: /var/log/gitlab/gitlabhq
+      - archive: gitlab
+
+/etc/logrotate.d/gitlab:
+  file:
+    - managed
+    - source: salt://gitlab/logrotate.jinja2
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - require:
+      - pkg: logrotate
+      - file: gitlab_upstart
     - context:
-      web_dir: {{ web_dir }}
-      user: {{ user }}
+      version: {{ version }}
 
-{% from 'rsyslog/upstart.sls' import manage_upstart_log with context %}
-{{ manage_upstart_log('gitlab') }}
-
-{%- if salt['pillar.get']('gitlab:smtp:enabled', False) %}
-{{ web_dir }}/config/environments/production.rb:
+/var/lib/gitlab:
   file:
-    - managed
-    - source: salt://gitlab/production.jinja2
-    - user: {{ user }}
-    - group: {{ user }}
-    - template: jinja
-    - mode: 440
+    - directory
+    - user: gitlab
+    - group: gitlab
     - require:
       - user: gitlab
-      - file: gitlab
-    - require_in:
-      - cmd: bundler
 
-{{ web_dir }}/config/initializers/smtp_settings.rb:
-  file:
-    - managed
-    - source: salt://gitlab/smtp.jinja2
-    - user: {{ user }}
-    - group: {{ user }}
-    - template: jinja
-    - mode: 440
-    - require:
-      - user: gitlab
-      - file: gitlab
-    - require_in:
-      - cmd: bundler
-{%- endif %}
-
-{{ web_dir }}/db/fixtures/production/001_admin.rb:
-  file:
-    - managed
-    - source: salt://gitlab/admin.jinja2
-    - template: jinja
-    - user: {{ user }}
-    - group: {{ user }}
-    - mode: 640
-    - require:
-      - file: gitlab
-    - require_in:
-      - file: {{ home_dir }}/gitlab-satellites
-
-{%- for file in ('Gemfile', 'Gemfile.lock') %}
-{{ web_dir }}/{{ file }}:
-  file:
-    - managed
-    - source: salt://gitlab/{{ file }}
-    - user: {{ user }}
-    - group: {{ user }}
-    - mode: 440
-    - require:
-      - user: gitlab
-      - file: gitlab
-    - require_in:
-      - cmd: bundler
-{%- endfor %}
-
-extend:
-  web:
-    user:
-      - groups:
-        - gitlab
-      - require:
-        - user: gitlab
-      - watch_in:
-        - file: gitlab-uwsgi
 {%- if salt['pillar.get']('gitlab:ssl', False) %}
+extend:
   nginx:
     service:
       - watch:

@@ -34,33 +34,43 @@ import sys
 import logging
 import datetime
 
-logging.basicConfig(stream=sys.stdout, level=logging.DEBUG,
-                    format="%(asctime)s %(message)s")
-
 import salt.client
 
-client = salt.client.LocalClient()
+import pysc
+
 logger = logging.getLogger(__name__)
 
 
-def wait_minion_up(minion_id, max_wait):
-    output = {}
-    start = datetime.datetime.now()
-    while minion_id not in output:
-        output = client.cmd_full_return(minion_id, 'test.ping', timeout=2)
-        delta = datetime.datetime.now() - start
-        if not output:
-            logger.info("Minion %s is still not up after %d seconds",
-                        minion_id,
-                        delta.total_seconds())
-            if delta.total_seconds() > max_wait:
-                print "Timeout of %d seconds reached to connect minion %s" % (
-                    max_wait, minion_id
-                )
-                sys.exit(1)
-        else:
-            logger.info("Minion %s is finally up after %d seconds", minion_id,
-                        delta.total_seconds())
+class WaitMinionUp(pysc.Application):
+    def get_argument_parser(self):
+        argp = super(WaitMinionUp, self).get_argument_parser()
+        argp.add_argument("minion_id")
+        argp.add_argument("--max-wait", "-w", type=int, default=300)
+        return argp
+
+    def main(self):
+        client = salt.client.LocalClient()
+        self.wait_minion_up(
+            client, self.config['minion'], self.config['max_wait'])
+
+    def wait_minion_up(self, client, minion_id, max_wait):
+        output = {}
+        start = datetime.datetime.now()
+        while minion_id not in output:
+            output = client.cmd_full_return(minion_id, 'test.ping', timeout=2)
+            delta = datetime.datetime.now() - start
+            if not output:
+                logger.info("Minion %s is still not up after %d seconds",
+                            minion_id,
+                            delta.total_seconds())
+                if delta.total_seconds() > max_wait:
+                    print ("Timeout of %d seconds reached to connect minion %s"
+                           % (max_wait, minion_id))
+                    sys.exit(1)
+            else:
+                logger.info("Minion %s is finally up after %d seconds",
+                            minion_id, delta.total_seconds())
+
 
 if __name__ == '__main__':
-    wait_minion_up(sys.argv[1], 300)
+    WaitMinionUp().run()

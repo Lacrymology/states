@@ -18,21 +18,21 @@ warning=30
 # Parse arguments
 args=$(getopt -o hd:w:c:P: --long help,domain:,warning:,critical:,path: -u -n $PROGRAM -- "$@")
 if [ $? != 0 ]; then
-	echo >&2 "$PROGRAM: Could not parse arguments"
-	echo "Usage: $PROGRAM -h | -d <domain> [-c <critical>] [-w <warning>]"
-	exit 1
+    echo >&2 "$PROGRAM: Could not parse arguments"
+    echo "Usage: $PROGRAM -h | -d <domain> [-c <critical>] [-w <warning>]"
+    exit 1
 fi
 set -- $args
 
 die() {
-	local rc=$1
-	local msg="$2"
-	echo "$msg"
-	exit $rc
+    local rc=$1
+    local msg="$2"
+    echo "$msg"
+    exit $rc
 }
 
 fullusage() {
-	cat <<EOF
+    cat <<EOF
 check_domain - v1.2.9
 Copyright (c) 2005 Tomàs Núñez Lirola <tnunez@criptos.com>, 2009-2014 Elan Ruusamäe <glen@pld-linux.org>
 Under GPL v2 License
@@ -61,53 +61,53 @@ EOF
 
 # convert long month name to month number (Month Of Year)
 month2moy() {
-	awk -vmonth="$1" 'BEGIN {
-		split("January February March April May June July August September October November December", months, " ");
-		for (i in months) {
-			Month[months[i]] = i;
-		}
-		print Month[month];
-	}'
+    awk -vmonth="$1" 'BEGIN {
+        split("January February March April May June July August September October November December", months, " ");
+        for (i in months) {
+            Month[months[i]] = i;
+        }
+        print Month[month];
+    }'
 }
 
 # convert short month name to month number (Month Of Year)
 mon2moy() {
-	awk -vmonth="$1" 'BEGIN {
-		split("Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec", months, " ");
-		for (i in months) {
-			Month[months[i]] = i;
-		}
-		print Month[month];
-	}'
+    awk -vmonth="$1" 'BEGIN {
+        split("Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec", months, " ");
+        for (i in months) {
+            Month[months[i]] = i;
+        }
+        print Month[month];
+    }'
 }
 
 while :; do
-	case "$1" in
-		-c|--critical) critical=$2; shift 2;;
-		-w|--warning)  warning=$2; shift 2;;
-		-d|--domain)   domain=$2; shift 2;;
-		-P|--path)     whoispath=$2; shift 2;;
-		-h|--help)     fullusage; exit;;
-		--) shift; break;;
-		*)  die $STATE_UNKNOWN "Internal error!";;
-	esac
+    case "$1" in
+        -c|--critical) critical=$2; shift 2;;
+        -w|--warning)  warning=$2; shift 2;;
+        -d|--domain)   domain=$2; shift 2;;
+        -P|--path)     whoispath=$2; shift 2;;
+        -h|--help)     fullusage; exit;;
+        --) shift; break;;
+        *)  die $STATE_UNKNOWN "Internal error!";;
+    esac
 done
 
 if [ -z $domain ]; then
-	die $STATE_UNKNOWN "UNKNOWN - There is no domain name to check"
+    die $STATE_UNKNOWN "UNKNOWN - There is no domain name to check"
 fi
 
 # Looking for whois binary
 if [ -n "$whoispath" ]; then
-	if [ -f "$whoispath" ] && [ -x "$whoispath" ]; then
-		whois=$whoispath
-	elif [ -x "$whoispath/whois" ]; then
-		whois=$whoispath/whois
-	fi
-	[ -n "$whois" ] || die $STATE_UNKNOWN "UNKNOWN - Unable to find whois binary, you specified an incorrect path"
+    if [ -f "$whoispath" ] && [ -x "$whoispath" ]; then
+        whois=$whoispath
+    elif [ -x "$whoispath/whois" ]; then
+        whois=$whoispath/whois
+    fi
+    [ -n "$whois" ] || die $STATE_UNKNOWN "UNKNOWN - Unable to find whois binary, you specified an incorrect path"
 else
-	type whois > /dev/null 2>&1 || die $STATE_UNKNOWN "UNKNOWN - Unable to find whois binary in your path. Is it installed? Please specify path."
-	whois=whois
+    type whois > /dev/null 2>&1 || die $STATE_UNKNOWN "UNKNOWN - Unable to find whois binary in your path. Is it installed? Please specify path."
+    whois=whois
 fi
 
 out=$($whois $domain)
@@ -117,69 +117,69 @@ out=$($whois $domain)
 # Calculate days until expiration
 case "$domain" in
 *.ru)
-	# paid-till: 2013.11.01
-	expiration=$(echo "$out" | awk '/paid-till:/ {split($2, a, "."); printf("%s-%s-%s", a[1], a[2], a[3])}')
-	;;
+    # paid-till: 2013.11.01
+    expiration=$(echo "$out" | awk '/paid-till:/ {split($2, a, "."); printf("%s-%s-%s", a[1], a[2], a[3])}')
+    ;;
 
 *.ee)
-	# expire: 16.11.2013
-	expiration=$(echo "$out" | awk '/expire:/ {split($2, a, "."); printf("%s-%s-%s", a[3], a[2], a[1])}')
-	;;
+    # expire: 16.11.2013
+    expiration=$(echo "$out" | awk '/expire:/ {split($2, a, "."); printf("%s-%s-%s", a[3], a[2], a[1])}')
+    ;;
 
 *.tv)
-	# Expiration Date: 2017-01-26T10:14:11Z
-	# Registrar Registration Expiration Date: 2015-02-22T00:00:00Z
-	expiration=$(echo "$out" | awk '/Expiration Date/ {split($NF, a, "-"); a[3]=substr(a[3],0,2);printf("%s-%s-%s", a[1], a[2], a[3]); exit}')
-	;;
+    # Expiration Date: 2017-01-26T10:14:11Z
+    # Registrar Registration Expiration Date: 2015-02-22T00:00:00Z
+    expiration=$(echo "$out" | awk '/Expiration Date/ {split($NF, a, "-"); a[3]=substr(a[3],0,2);printf("%s-%s-%s", a[1], a[2], a[3]); exit}')
+    ;;
 *.ca)
-	# Expiry date: 2017/07/16
-	expiration=$(echo "$out" | awk '/Expiry date:/ {split($3, a, "/"); printf("%s-%s-%s", a[1], a[2], a[3]); exit}')
-	;;
+    # Expiry date: 2017/07/16
+    expiration=$(echo "$out" | awk '/Expiry date:/ {split($3, a, "/"); printf("%s-%s-%s", a[1], a[2], a[3]); exit}')
+    ;;
 
 *.ie)
-	# renewal: 31-March-2016
-	set -- $(echo "$out" | awk '/renewal:/{split($2, a, "-"); printf("%s %s %s\n", a[3], a[2], a[1])}')
-	set -- "$1" "$(month2moy $2)" "$3"
-	expiration="$1-$2-$3"
-	;;
+    # renewal: 31-March-2016
+    set -- $(echo "$out" | awk '/renewal:/{split($2, a, "-"); printf("%s %s %s\n", a[3], a[2], a[1])}')
+    set -- "$1" "$(month2moy $2)" "$3"
+    expiration="$1-$2-$3"
+    ;;
 
 *.dk)
-	# Expires: 2014-01-31
-	expiration=$(echo "$out" | awk '/Expires:/ {print $2}')
-	;;
+    # Expires: 2014-01-31
+    expiration=$(echo "$out" | awk '/Expires:/ {print $2}')
+    ;;
 
 *.ac.uk|*.gov.uk)
-	# Renewal date:
-	#   Monday 21st Sep 2015
-	set -- $(echo "$out" | awk '/Renewal date:/{renewal = 1; next} {if (renewal) { sub(/[^0-9]+/, "", $2); printf("%s %s %s", $4, $3, $2); ; exit}}')
-	set -- "$1" "$(mon2moy $2)" "$3"
-	expiration="$1-$2-$3"
-	;;
+    # Renewal date:
+    #   Monday 21st Sep 2015
+    set -- $(echo "$out" | awk '/Renewal date:/{renewal = 1; next} {if (renewal) { sub(/[^0-9]+/, "", $2); printf("%s %s %s", $4, $3, $2); ; exit}}')
+    set -- "$1" "$(mon2moy $2)" "$3"
+    expiration="$1-$2-$3"
+    ;;
 
 *.uk)
-	# Expiry date:  05-Dec-2014
-	set -- $(echo "$out" | awk '/Expiry date:/{split($3, a, "-"); printf("%s %s %s\n", a[3], a[2], a[1])}')
-	set -- "$1" "$(mon2moy $2)" "$3"
-	expiration="$1-$2-$3"
-	;;
+    # Expiry date:  05-Dec-2014
+    set -- $(echo "$out" | awk '/Expiry date:/{split($3, a, "-"); printf("%s %s %s\n", a[3], a[2], a[1])}')
+    set -- "$1" "$(mon2moy $2)" "$3"
+    expiration="$1-$2-$3"
+    ;;
 
 *.is)
-	# expires:      March  5 2014
-	set -- $(echo "$out" | awk '/expires:/{print($4, $2, $3)}')
-	set -- "$1" "$(month2moy $2)" "$3"
-	expiration="$1-$2-$3"
-	;;
+    # expires:      March  5 2014
+    set -- $(echo "$out" | awk '/expires:/{print($4, $2, $3)}')
+    set -- "$1" "$(month2moy $2)" "$3"
+    expiration="$1-$2-$3"
+    ;;
 
 *.io)
-	# Expiry : 2014-03-08
-	expiration=$(echo "$out" | awk -F: '/Expir(ation|y)/{print $2}')
-	;;
+    # Expiry : 2014-03-08
+    expiration=$(echo "$out" | awk -F: '/Expir(ation|y)/{print $2}')
+    ;;
 
 *)
-	# Expiration Date: 21-sep-2018
-	# Registry Expiry Date: 2015-08-03T04:00:00Z
-	expiration=$(echo "$out" | awk -F: '/Expir(ation|y) Date:/{s=substr($0, length($1) + 2); if (split(s,d,/T/)) print d[1]; exit}')
-	;;
+    # Expiration Date: 21-sep-2018
+    # Registry Expiry Date: 2015-08-03T04:00:00Z
+    expiration=$(echo "$out" | awk -F: '/Expir(ation|y) Date:/{s=substr($0, length($1) + 2); if (split(s,d,/T/)) print d[1]; exit}')
+    ;;
 esac
 
 [ -z "$expiration" ] && die $STATE_UNKNOWN "UNKNOWN - Unable to figure out expiration date for $domain Domain."

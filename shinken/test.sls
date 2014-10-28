@@ -42,11 +42,14 @@ stop_shinken:
   cmd:
     - run
     - name: /usr/local/bin/shinken-ctl.sh stop
+    - require:
+{%- for role in ('arbiter', 'broker', 'poller', 'reactionner', 'scheduler', 'receiver') %}
+      - sls: shinken.{{ role }}
+{%- endfor %}
 
 start_shinken:
   cmd:
     - run
     - name: /usr/local/bin/shinken-ctl.sh start
-    - order: last
     - require:
       - cmd: stop_shinken

@@ -27,6 +27,8 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 # {{ pillar['message_do_not_modify'] }}
 
+description "Salt API"
+
 start on (net-device-up
           and local-filesystems
           and runlevel [2345])

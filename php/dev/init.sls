@@ -53,10 +53,10 @@ php-dev:
       - php5-dev
       - php-config
     - require:
-      - pkgrepo17: php
+      - pkgrepo: php
   file:
     - managed
-    - name: /etc/php5/embed/conf.d/salt.ini
+    - name: /etc/php5/conf.d/salt.ini
     - source: salt://php/config.jinja2
     - mode: 444
     - template: jinja

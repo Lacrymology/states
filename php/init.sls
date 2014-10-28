@@ -36,12 +36,11 @@ include:
   - apt
 
 php:
-  pkgrepo17:
+  pkgrepo:
     - managed
 {%- if 'files_archive' in pillar %}
     - name: deb {{ pillar['files_archive']|replace('https://', 'http://') }}/mirror/lucid-php5 {{ grains['lsb_distrib_codename'] }} main
-    - keyid: 67E15F46
-    - keyserver: keyserver.ubuntu.com
+    - key_url: salt://php/key.gpg
 {%- else %}
     - ppa: l-mierzwa/lucid-php5
 {%- endif %}

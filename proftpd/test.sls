@@ -25,6 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
+{%- from 'cron/test.sls' import test_cron with context %}
 include:
   - proftpd
   - proftpd.backup
@@ -33,13 +34,17 @@ include:
   - proftpd.diamond
   - proftpd.nrpe
 
+{%- call test_cron() %}
+- sls: proftpd
+- sls: proftpd.backup
+- sls: proftpd.backup.nrpe
+- sls: proftpd.backup.diamond
+- sls: proftpd.diamond
+- sls: proftpd.nrpe
+{%- endcall %}
+
 test:
   monitoring:
     - run_all_checks
-    - order: last
-  cmd:
-    - run
-    - name: /etc/cron.daily/backup-proftpd
-    - require:
-      - file: backup-proftpd
+    - wait: 5  {# wait for proftpd create database structure #}
     - order: last

@@ -27,9 +27,10 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Install the Nginx web server.
 -#}
+{%- from 'upstart/rsyslog.jinja2' import manage_upstart_log with context -%}
 include:
   - apt
-  - mail
+  - mail.client
   - rsyslog
   - ssl.dev
   - web
@@ -160,6 +161,7 @@ nginx:
       - file: /etc/nginx/conf.d/{{ filename }}.conf
 {%- endfor %}
       - pkg: nginx
+      - user: nginx
       - file: /usr/bin/mail
 {%- if not salt['pillar.get']('sentry_dsn', False) %}
       - pkg: ssmtp
@@ -178,6 +180,13 @@ nginx:
 {%- for log_type in logger_types %}
       - file: nginx-logger-{{ log_type }}
 {%- endfor %}
+  user:
+    - present
+    - shell: /bin/false
+    - require:
+      - pkg: nginx
+
+{{ manage_upstart_log('nginx') }}
 
 {%- if salt['pkg.version']('nginx') not in ('', sub_version) %}
 nginx_old_version:
@@ -216,6 +225,3 @@ nginx_verify_version:
     - name: nginx -v 2>&1 | grep -q '{{ version }}'
     - watch:
       - service: nginx
-
-{% from 'rsyslog/upstart.sls' import manage_upstart_log with context %}
-{{ manage_upstart_log('nginx') }}

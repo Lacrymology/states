@@ -27,6 +27,7 @@ Maintainer: Dang Tung Lam <lamdt@familug.org>
 
 Installing Etherpad - Real-time document editing
 -#}
+{%- from 'upstart/rsyslog.jinja2' import manage_upstart_log with context -%}
 include:
   - apt
   - debian.package_build
@@ -64,6 +65,21 @@ etherpad-dependencies:
 {%- set dbhost = salt['pillar.get']('etherpad:db:host', 'localhost') %}
 {%- set dbname = salt['pillar.get']('etherpad:db:name', 'etherpad') %}
 
+{{ web_root_dir }}:
+  file:
+    - directory
+    - user: www-data
+    - group: www-data
+    - dir_mode: 750
+    - file_mode: 640
+    - recurse:
+      - user
+      - group
+    - require:
+      - user: web
+      - archive: etherpad
+      - pkg: etherpad-dependencies
+
 etherpad:
   postgres_user:
     - present
@@ -94,33 +110,29 @@ etherpad:
     - require:
       - file: /usr/local
   file:
-    - directory
-    - name: {{ web_root_dir }}
-    - user: www-data
-    - group: www-data
-    - dir_mode: 750
-    - file_mode: 640
-    - recurse:
-      - user
-      - group
-    - require:
-      - user: web
-      - archive: etherpad
-      - pkg: etherpad-dependencies
+    - managed
+    - name: /etc/init/etherpad.conf
+    - source: salt://etherpad/upstart.jinja2
+    - template: jinja
+    - mode: 440
+    - context:
+      web_root_dir: {{ web_root_dir }}
+      user: www-data
   service:
     - running
     - order: 50
     - enable: True
     - require:
-      - file: etherpad
+      - file: {{ web_root_dir }}
       - file: {{ web_root_dir }}/bin
       - postgres_database: etherpad
     - watch:
       - user: web
       - file: {{ web_root_dir }}/APIKEY.txt
       - file: {{ web_root_dir }}/settings.json
-      - file: /etc/init/etherpad.conf
-{#- does not use PID, no need to manage #}
+      - file: etherpad
+
+{{ manage_upstart_log('etherpad') }}
 
 {{ web_root_dir }}/bin:
   file:
@@ -129,7 +141,7 @@ etherpad:
     - recurse:
       - mode
     - require:
-      - file: etherpad
+      - file: {{ web_root_dir }}
 
 {{ web_root_dir }}/APIKEY.txt:
   file:
@@ -140,7 +152,7 @@ etherpad:
     - source: salt://etherpad/api.jinja2
     - template: jinja
     - require:
-      - file: etherpad
+      - file: {{ web_root_dir }}
       - user: web
 
 {{ web_root_dir }}/settings.json:
@@ -157,18 +169,8 @@ etherpad:
       dbname: {{ dbname }}
       dbhost: {{ dbhost }}
     - require:
-      - file: etherpad
+      - file: {{ web_root_dir }}
       - user: web
-
-/etc/init/etherpad.conf:
-  file:
-    - managed
-    - source: salt://etherpad/upstart.jinja2
-    - template: jinja
-    - mode: 440
-    - context:
-      web_root_dir: {{ web_root_dir }}
-      user: www-data
 
 /etc/nginx/conf.d/etherpad.conf:
   file:
@@ -181,9 +183,6 @@ etherpad:
     - require:
       - pkg: nginx
       - service: etherpad
-
-{% from 'rsyslog/upstart.sls' import manage_upstart_log with context %}
-{{ manage_upstart_log('etherpad') }}
 
 extend:
   nginx:

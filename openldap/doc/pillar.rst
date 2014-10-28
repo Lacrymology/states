@@ -96,32 +96,6 @@ Nested dict contain usernames under each domain, formula will delete these
 user if exist in LDAP tree. Make sure one username under a domain does not
 in both ``ldap:data`` and ``ldap:absent``
 
-ldap:debug
-~~~~~~~~~~
-
-Log verbose level, some values of this can be: -1, 256, 16383, ...
-See `See slapdconfig <http://www.openldap.org/doc/admin24/slapdconfig.html>`__
-for more details.
-
-Below is some values:
-
-- ``-1``: enable all debugging
-- ``1``: trace function calls
-- ``2``: debug packet handling
-- ``4``: heavy trace debugging
-- ``8``: connection management
-- ``16``: print out packets sent and received
-- ``32``: search filter processing
-- ``64``: configuration processing
-- ``128``: access control list processing
-- ``256``: stats log connections/operations/results
-- ``512``: stats log entries sent
-- ``1024``: print communication with shell backends
-- ``2048``: print entry parsing debugging
-- ``16384``: syncrepl consumer processing
-
-Default is ``256`` (OpenLDAP default).
-
 ldap:ssl
 ~~~~~~~~
 

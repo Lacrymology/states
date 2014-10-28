@@ -46,6 +46,8 @@ include:
 /etc/nagios/nrpe.d/mysql.cfg:
   file:
     - absent
+    - watch_in:
+      - service: nagios-nrpe-server
 
 nrpe_mysql_check_querry:
   file:
@@ -79,6 +81,4 @@ nrpe_mysql_check_querry:
       - module: nrpe_mysql_check_querry
       - pkg: nagios-nrpe-server
 
-{%- call passive_check('mariadb.server') %}
-- file: /etc/nagios/nrpe.d/mysql.cfg
-{%- endcall %}
+{{ passive_check('mariadb.server') }}

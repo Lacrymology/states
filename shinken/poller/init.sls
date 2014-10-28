@@ -39,6 +39,7 @@ include:
   - apt
   - nrpe
   - shinken
+  - rsyslog
   - ssl.dev
 {% if ssl %}
   - ssl
@@ -89,6 +90,8 @@ shinken-poller:
       - cmd: ssl_cert_and_key_for_{{ ssl }}
 {% endif %}
 {#- does not use PID, no need to manage #}
+{% from 'upstart/rsyslog.jinja2' import manage_upstart_log with context %}
+{{ manage_upstart_log('shinken-poller') }}
 
 /etc/shinken/poller.conf:
   file:

@@ -54,11 +54,17 @@ dovecot_port_pop3s:
   dependencies:
     - dovecot_procs
 
+    {#- OpenSSL on Ubuntu 12.04 disabled TLS 1.2 in the client side:
+    https://bugs.launchpad.net/ubuntu/+source/openssl/+bug/1256576
+    If we disable SSLv3, then `check_simap` will failed because 
+    all ciphers specified by `ssl_cipher_list` is TLS 1.2 or SSLv3 #}
+    {%- if grains['oscodename'] != 'precise' %}
 dovecot_simap:
   description: Dovecot SIMAP
   command: /usr/lib/nagios/plugins/check_simap -H 127.0.0.1 -p 993
   dependencies:
     - dovecot_port_imaps
+    {%- endif -%}
 {%- endif %}
 
 dovecot_port_imap:
@@ -78,14 +84,6 @@ dovecot_port_pop3:
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 110
   dependencies:
     - dovecot_procs
-
-{%- if not salt['pillar.get']('__test__', False) and salt['pillar.get']('mail:check_mail_stack', False) %}
-mailstack_functionality:
-  description: Mail Stack Functionality
-  command: /usr/lib/nagios/plugins/check_mail_stack.py
-  dependencies:
-    - dovecot_{% if salt['pillar.get']('dovecot:ssl', False) %}s{% endif %}imap
-{%- endif %}
 
 dovecot_managesieve_port:
   description: Dovecot Managesieve Port

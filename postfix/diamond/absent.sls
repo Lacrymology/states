@@ -27,6 +27,9 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 Turn off Diamond statistics for postfix.
 -#}
+{%- from "upstart/absent.sls" import upstart_absent with context -%}
+{{ upstart_absent('postfix_stats') }}
+
 postfix_diamond_collector:
   file:
     - absent
@@ -40,16 +43,10 @@ postfix_diamond_collector:
   file:
     - absent
 
-postfix_stats:
-  service:
-    - dead
+postfix_stats-requirements:
   file:
     - absent
     - name: /usr/local/diamond/salt-postfix-requirements.txt
-
-/etc/init/postfix_stats.conf:
-  file:
-    - absent
 
 {#- TODO: remove that statement in >= 2014-04 #}
 /usr/local/diamond/postfix-requirements.txt:

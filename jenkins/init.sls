@@ -32,6 +32,7 @@ include:
   - java.7.jdk
   - local
   - nginx
+  - pysc
   - ssh.client
 {% if salt['pillar.get']('jenkins:ssl', False) %}
   - ssl
@@ -54,6 +55,9 @@ jenkins:
     - running
     - require:
       - pkg: jenkins
+    - watch:
+      - pkg: jre-7
+      - file: jre-7
   pkg:
     - installed
     - sources:
@@ -64,7 +68,7 @@ jenkins:
 {%- endif %}
     - require:
       - cmd: apt_sources
-      - pkg: openjdk_jdk
+      - pkg: jdk-7
       - pkg: jenkins_dependencies
 
 {%- if salt['pkg.version']('jenkins') not in ('', version) %}
@@ -90,6 +94,10 @@ jenkins_old_version:
 
 /etc/cron.daily/jenkins_delete_old_workspaces.py:
   file:
+    - absent
+
+/etc/cron.daily/jenkins_delete_old_workspaces:
+  file:
     - managed
     - source: salt://jenkins/del_old_ws.py
     - mode: 500
@@ -97,6 +105,7 @@ jenkins_old_version:
       - file: /usr/local
       - service: jenkins
       - pkg: cron
+      - module: pysc
 
 extend:
 {%- from 'macros.jinja2' import change_ssh_key_owner with context %}

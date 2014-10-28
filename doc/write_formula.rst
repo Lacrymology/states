@@ -117,6 +117,20 @@ Not so good::
       - require:
         - pkg: mariadb-server
 
+``pkg`` state module
+~~~~~~~~~~~~~~~~~~~~
+
+Whenever you install a package using ``pkg`` state module, check if there is an
+user created. Then please make sure that the shell of that user is
+``/usr/sbin/nologin`` instead of leaving it as default (for e.g, ``/bin/sh``)::
+
+  dovecot-agent:
+    user:
+      - present
+      - shell: /usr/sbin/nologin
+      - groups:
+        - mail
+
 StateID
 -------
 
@@ -138,6 +152,10 @@ Good::
 
 * Do not mix ``-`` and ``_`` in StateID
 * Do not use too generic StateID, it will be easy to conflict.
+* Try to avoid absolute path to filename such as ``/usr/local/myapp-1/script.sh``
+  or very specific one such as ``/etc/daemon-x/config-1.0.1.conf``. Hide the
+  real ``name`` or ``path`` in argument key in state definition. This make
+  refactor a lot easier and improve readability.
 
 Grains
 ------

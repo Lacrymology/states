@@ -60,6 +60,11 @@ check_backup.py:
       - file: /etc/nagios/backup.yml
       - file: /usr/local/nagios/lib/python2.7/check_backup_base.py
       - module: backup_client_nrpe-requirements
+      - module: nrpe-virtualenv
+      - pkg: nagios-nrpe-server
+    - require_in:
+      - service: nagios-nrpe-server
+      - service: nsca_passive
 
 backup_client_nrpe-requirements:
   file:

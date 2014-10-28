@@ -105,6 +105,7 @@ def managed(name, source=None, template='jinja',
     with open(sfn) as f:
         try:
             loaded = yamlloader.load(f, Loader=yamlloader.CustomLoader)
+            log.debug(str(loaded))
         except Exception, err:
             f.seek(0)
             log.error("Content of failed YAML for %s:%s%s", name, os.linesep,
@@ -164,6 +165,7 @@ def managed(name, source=None, template='jinja',
                 mode,
                 env,
                 backup,
+                makedirs,
                 template,
                 show_diff,
                 contents,

@@ -30,3 +30,10 @@ Remove pDNSd Nagios NRPE checks.
 {%- from 'nrpe/passive.sls' import passive_absent with context %}
 {{ passive_absent('pdnsd') }}
 
+/usr/lib/nagios/plugins/check_dns_caching.py:
+  file:
+    - absent
+
+{{ opts['cachedir'] }}/pip/pydns:
+  file:
+    - absent

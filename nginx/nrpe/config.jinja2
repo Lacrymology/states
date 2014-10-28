@@ -25,10 +25,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-{%- if salt['pillar.get']('nginx:worker_processes', 'auto') == 'auto' %}
-{%- set num_workers = grains['num_cpus'] %}
-{%- else %}
-{%- set num_workers = pillar['nginx']['worker_processes'] %}
+{%- set config = {'num_workers': grains['num_cpus']} -%}
+{%- if not salt['pillar.get']('nginx:worker_processes', 'auto') %}
+    {%- do config.update({'num_workers': pillar['nginx']['worker_processes']}) -%}
 {%- endif %}
 
 nginx_status:
@@ -39,7 +38,7 @@ nginx_status:
 
 nginx_worker:
   description: Nginx Worker Processes
-  command: '/usr/lib/nagios/plugins/check_procs -c {{ num_workers }}:{{ num_workers }} -a "nginx: worker process" -u www-data'
+  command: '/usr/lib/nagios/plugins/check_procs -c {{ config['num_workers'] }}:{{ config['num_workers'] }} -a "nginx: worker process" -u www-data'
   dependencies:
     - nginx_master
 

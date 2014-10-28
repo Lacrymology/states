@@ -39,25 +39,28 @@ include:
 
 Creating mariadb mirror:
 
-    wget -m -I /repo/5.5/ubuntu/ http://mariadb.biz.net.id/repo/5.5/ubuntu/
-    mv mariadb.biz.net.id/repo/5.5/ubuntu/{dist,pool} .
-    rm -rf mariadb.biz.net.id/
+    export MDB_VERSION=5.5.40 # set version to mirror here
+    mkdir mariadb_mirror mariadb_essential
+    rsync -av rsync.osuosl.org::mariadb/mariadb-${MDB_VERSION}/repo/ubuntu/ mariadb_mirror
+    # see another sources here: https://mariadb.com/kb/en/mariadb/download/mirroring-mariadb/
+
+    cp -R mariadb_mirror/{dists,pool}  mariadb_essential
+    cd mariadb_essential
     find . -type f -name 'index.*' -delete
     find pool/ -type f ! -name '*.deb' -delete
 
-To keep only precise and trusty:
+    #To keep only precise and trusty:
 
     find dists/ -maxdepth 1 -mindepth 1 ! \( -name precise -or -name trusty \) | xargs rm -r
     find pool/ \( -type f -name '*.deb' ! \( -name '*precise*' -or -name '*trusty*' \) \) -delete
 #}
 
 mariadb:
-  pkgrepo17:
+  pkgrepo:
     - managed
-    - keyid: '0xcbcb082a1bb943db'
-    - keyserver: keyserver.ubuntu.com
+    - key_url: salt://mariadb/key.gpg
 {%- if 'files_archive' in pillar %}
-    - name: deb {{ pillar['files_archive']|replace('https://', 'http://') }}/mirror/mariadb/5.5.39 {{ grains['lsb_distrib_codename'] }} main
+    - name: deb {{ pillar['files_archive']|replace('https://', 'http://') }}/mirror/mariadb/5.5.40 {{ grains['lsb_distrib_codename'] }} main
 {%- else %}
     - name: deb http://mariadb.biz.net.id//repo/5.5/ubuntu precise main
 {%- endif %}
@@ -68,11 +71,11 @@ mariadb:
     - installed
     - name: libmysqlclient18
     - require:
-      - pkgrepo17: mariadb
+      - pkgrepo: mariadb
       - pkg: mysql-common
 
 mysql-common:
   pkg:
     - installed
     - require:
-      - pkgrepo17: mariadb
+      - pkgrepo: mariadb

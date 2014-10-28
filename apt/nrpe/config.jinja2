@@ -49,4 +49,4 @@ apt_rc:
   retry_interval: 5
   notifications_enabled: 0
   notification_options: c
-  command: /usr/lib/nagios/plugins/check_apt-rc.py
+  command: /usr/lib/nagios/plugins/check_apt-rc.py --formula=apt --check=apt_rc

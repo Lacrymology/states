@@ -32,6 +32,7 @@ To turn on Ruby support, include uwsgi.ruby instead of this file.
 For PHP include uwsgi.php instead.
 You can include both uwsgi.php and uwsgi.ruby.
 -#}
+{% from 'upstart/rsyslog.jinja2' import manage_upstart_log with context %}
 include:
   - git
   - local
@@ -68,17 +69,6 @@ uwsgi_upgrade_remove_old_version:
 
 {%- set version = '1.9.17.1' -%}
 {%- set extracted_dir = '/usr/local/uwsgi-{0}'.format(version) %}
-
-/etc/init/uwsgi.conf:
-  file:
-    - managed
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 440
-    - context:
-      extracted_dir: {{ extracted_dir }}
-    - source: salt://uwsgi/upstart.jinja2
 
 /etc/uwsgi.yml:
   file:
@@ -151,8 +141,29 @@ uwsgi_sockets:
       - archive: uwsgi_build
       - file: uwsgi_build
 
-{#- does not use PID, no need to manage #}
-uwsgi_emperor:
+/etc/uwsgi:
+  file:
+    - directory
+    - user: www-data
+    - group: www-data
+    - mode: 550
+    - require:
+      - user: web
+
+{#-
+  uWSGI emperor
+#}
+uwsgi:
+  file:
+    - managed
+    - name: /etc/init/uwsgi.conf
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - context:
+      extracted_dir: {{ extracted_dir }}
+    - source: salt://uwsgi/upstart.jinja2
   cmd:
     - wait
     - name: strip {{ extracted_dir }}/uwsgi
@@ -167,26 +178,18 @@ uwsgi_emperor:
     - enable: True
     - order: 50
     - require:
-      - file: uwsgi_emperor
+      - file: /etc/uwsgi
       - file: uwsgi_sockets
       - service: rsyslog
       - pkg: salt_minion_deps
     - watch:
-      - cmd: uwsgi_emperor
+      - cmd: uwsgi
       - file: uwsgi_upgrade_remove_old_version
-      - file: /etc/init/uwsgi.conf
+      - file: uwsgi
       - file: /etc/uwsgi.yml
       - user: web
-  file:
-    - directory
-    - name: /etc/uwsgi
-    - user: www-data
-    - group: www-data
-    - mode: 550
-    - require:
-      - user: web
+{#- does not use PID, no need to manage #}
 
-{% from 'rsyslog/upstart.sls' import manage_upstart_log with context %}
 {{ manage_upstart_log('uwsgi') }}
 
 {#- remove old uwsgi .ini config files #}

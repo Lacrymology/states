@@ -27,6 +27,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 Install a roundcube Nagios NRPE checks.
 -#}
+{%- set formula = 'roundcube' -%}
 {%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - apt.nrpe
@@ -37,8 +38,18 @@ include:
   - postgresql.server.nrpe
   - rsyslog.nrpe
   - uwsgi.nrpe
-{% if salt['pillar.get']('roundcube:ssl', False) %}
+{%- if salt['pillar.get'](formula + ':ssl', False) %}
   - ssl.nrpe
 {%- endif %}
 
-{{ passive_check('roundcube', check_ssl_score=True) }}
+{{ passive_check(formula, check_ssl_score=True) }}
+
+extend:
+  check_psql_encoding.py:
+    file:
+      - require:
+        - file: nsca-{{ formula }}
+  /usr/lib/nagios/plugins/check_pgsql_query.py:
+    file:
+       - require:
+         - file: nsca-{{ formula }}

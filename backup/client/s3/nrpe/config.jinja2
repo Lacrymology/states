@@ -27,6 +27,10 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 # {{ pillar['message_do_not_modify'] }}
 
+{%- from 'python/config.jinja2' import logging with context %}
+
+{{ logging() }}
+
 s3:
   key: {{ pillar['aws']['access_key'] }}
   secret: {{ pillar['aws']['secret_key'] }}

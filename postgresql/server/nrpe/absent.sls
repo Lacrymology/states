@@ -28,3 +28,7 @@ Maintainer: Quan Tong Anh <tonganhquan.net@gmail.com>
 /etc/cron.d/passive-checks-postgresql.server:
   file:
     - absent
+
+/usr/lib/nagios/plugins/check_pgsql_query.py:
+  file:
+    - absent

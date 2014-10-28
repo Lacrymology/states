@@ -27,28 +27,16 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Undo SSL state.
 -#}
-{%- for name in salt['pillar.get']('ssl', []) %}
-/etc/ssl/{{ name }}:
-  file:
-    - absent
-
-/etc/ssl/private/{{ name }}.key:
-  file:
-    - absent
-
-/etc/ssl/certs/{{ name }}.crt:
-  file:
-    - absent
-
-/etc/ssl/certs/{{ name }}_ca.crt:
-  file:
-    - absent
-
-/etc/ssl/private/{{ name }}.pem:
-  file:
-    - absent
-{%- endfor %}
 
 ssl-cert:
   pkg:
     - purged
+  group:
+    - absent
+    - require:
+      - pkg: ssl-cert
+  file:
+    - absent
+    - name: /etc/ssl
+    - require:
+      - pkg: ssl-cert

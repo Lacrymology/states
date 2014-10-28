@@ -50,7 +50,7 @@ alarm = false
 ipv6 = false
 debug = false
 unbit = false
-{%- set ruby_version = '1.9.1' -%}
+{%- set ruby_version = '2.1.0' -%}
 {%- if salt['file.file_exists']('/usr/include/ruby-' + ruby_version + '/ruby/ruby.h') %}
 rack = true
 {%- endif -%}

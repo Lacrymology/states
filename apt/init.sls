@@ -31,47 +31,77 @@ Configure APT minimal configuration to get Debian packages from repositories.
 include:
   - packages
 
-{#- 99 prefix is to make sure the config file is the last one to be applied #}
-/etc/apt/apt.conf.d/99local:
+apt.conf:
   file:
     - managed
+    {#- 99 prefix is to make sure the config file is the last one to be
+        applied #}
+    - name: /etc/apt/apt.conf.d/99local
     - source: salt://apt/config.jinja2
     - user: root
     - group: root
-    - mode: 444
+    - mode: 440
+    - template: jinja
+
+dpkg.conf:
+  file:
+    - managed
+    - name: /etc/dpkg/dpkg.cfg
+    - source: salt://apt/dpkg.jinja2
+    - user: root
+    - group: root
+    - mode: 440
     - template: jinja
 
 {%- set backup = '/etc/apt/sources.list.salt-backup' %}
 {%- if salt['file.file_exists'](backup) %}
-apt_sources_backup:
+apt.conf.bak:
   file:
     - rename
     - name: {{ backup }}
     - source: /etc/apt/sources.list
+    - require_in:
+      - file: apt
 {%- endif %}
 
-apt_update:
+{#- make sure basic ubuntu keys are there #}
+apt-key:
+  file:
+    - managed
+    - name: {{ opts['cachedir'] }}/apt.gpg
+    - source: salt://apt/key.gpg
+    - user: root
+    - group: root
+    - mode: 440
+  cmd:
+    - wait
+    - name: apt-key add {{ opts['cachedir'] }}/apt.gpg
+    - watch:
+      - file: apt-key
+
+{#- minimum configuration of apt and make sure basic packages required by salt
+    to work correctly (mostly for pkgrepo, but that aren't required dependencies
+    are installed. #}
+apt:
   file:
     - managed
     - name: /etc/apt/sources.list
     - template: jinja
     - user: root
     - group: root
-    - mode: 444
+    - mode: 440
     - contents: |
         # {{ pillar['message_do_not_modify'] }}
         {{ pillar['apt']['sources'] | indent(8) }}
-    - require:
-      - file: /etc/apt/apt.conf.d/99local
-{%- if salt['file.file_exists'](backup) %}
-      - file: apt_sources_backup
-{%- endif %}
   module:
     - wait
     - name: pkg.refresh_db
     - watch:
-      - file: apt_update
-      - file: /etc/apt/apt.conf.d/99local
+      - file: apt
+      - file: apt.conf
+    - require:
+      - file: dpkg.conf
+      - cmd: apt-key
 {%- set packages_blacklist = salt['pillar.get']('packages:blacklist', False) -%}
 {%- set packages_whitelist = salt['pillar.get']('packages:whitelist', False) -%}
 {%- if packages_blacklist or packages_whitelist %}
@@ -84,7 +114,7 @@ apt_update:
     {%- endif -%}
 {%- endif %}
 
-{#- dump state, just keep the API as others used it #}
+{#- simple state, just keep the API as others used it #}
 apt_sources:
   pkg:
     - installed
@@ -93,17 +123,20 @@ apt_sources:
       - python-apt
       - python-software-properties
     - require:
-      - module: apt_update
+      - module: apt
   cmd:
     - wait
     - name: touch /etc/apt/sources.list
     - watch:
       - pkg: apt_sources
-      - module: apt_update
+      - module: apt
 {%- if salt['pillar.get']('apt:upgrade', False) %}
   module:
     - run
     - name: pkg.upgrade
+    - upgrade: True
     - require:
-      - module: apt_update
+      - module: apt
+    - watch_in:
+      - cmd: apt_sources
 {%- endif %}

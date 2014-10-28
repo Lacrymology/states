@@ -41,5 +41,4 @@ Diamond statistics for djangopypi2
 - postgresql.server.diamond
 - rsyslog.diamond
 - statsd.diamond
-- sudo.diamond
 {%- endcall %}

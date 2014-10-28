@@ -51,10 +51,11 @@ olcAccess: {3}to * by self write by dn="{{ rootdn }}" write
 dn: cn=config
 changetype: modify
 replace: olcLogLevel
-{%- set debug = salt['pillar_ext.debug']('ldap:debug') %}
-{%- if debug %}
-olcLogLevel: {{ debug }}
-{%- endif %}
+{%- if salt['pillar.get']('debug', False) %}
+olcLogLevel: -1
+{%- else %}
+olcLogLevel: 256
+{%- endif -%}
 {%- if salt['pillar.get']('ldap:ssl', False) %}
 -
 replace: olcTLSCACertificateFile
@@ -74,7 +75,7 @@ olcTLSVerifyClient: never
 -
 replace: olcTLSCipherSuite
 {# use openssl CipherSuite here cause a segfault -#}
-olcTLSCipherSuite: SECURE256:!AES-128-CBC
+olcTLSCipherSuite: SECURE256:!AES-128-CBC:-VERS-SSL3.0
 -
 replace: olcLocalSSF
 olcLocalSSF: 128

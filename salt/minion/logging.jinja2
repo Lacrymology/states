@@ -26,7 +26,6 @@ Author: Quan Tong Anh <tonganhquan.net@gmail.com>
 Maintainer: Quan Tong Anh <tonganhquan.net@gmail.com>
 -#}
 # {{ pillar['message_do_not_modify'] }}
-{#- TODO: add support for GELF logging #}
 log_file: file:///dev/log
 {%- if salt['pillar.get']('debug', False) %}
 log_level: debug

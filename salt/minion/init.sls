@@ -27,8 +27,9 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Install Salt Minion (client).
 -#}
-
+{%- from 'upstart/rsyslog.jinja2' import manage_upstart_log with context -%}
 include:
+  - pysc
   - raven
   - requests
   - rsyslog
@@ -48,6 +49,8 @@ salt_minion_master_key:
   file:
     - absent
 
+{{ manage_upstart_log('salt-minion') }}
+
 extend:
   salt-minion:
     service:
@@ -58,7 +61,7 @@ extend:
     pkg:
       - installed
       - require:
-        - pkgrepo17: salt
+        - pkgrepo: salt
         - cmd: apt_sources
         - pkg: apt_sources
 
@@ -88,3 +91,4 @@ salt-fire-event:
     - group: root
     - require:
       - pkg: salt-minion
+      - module: pysc

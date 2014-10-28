@@ -26,8 +26,15 @@ Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 
-{% for file in ['/var/log/graylog2', '/var/run/graylog2'] %}
+include:
+  - graylog2.server.absent
+  - graylog2.web.absent
+
+{%- for file in ['/var/run/graylog2', '/var/lib/graylog2'] %}
 {{ file }}:
   file:
     - absent
-{% endfor %}
+    - require:
+      - service: graylog2-server
+      - service: graylog2-web
+{%- endfor -%}

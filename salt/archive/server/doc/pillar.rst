@@ -49,7 +49,7 @@ Example::
       - archive.example.com
 
 salt_archive:hostnames
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
 
 .. include:: /nginx/doc/hostnames.inc
 
@@ -71,7 +71,7 @@ salt_archive:source
 :doc:`/rsync/doc/index` server used as the source for archived files.
 
 salt_archive:ssl
-~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~
 
 .. include:: /nginx/doc/ssl.inc
 
@@ -98,3 +98,9 @@ This state also need the following pillar for :doc:`/rsync/doc/index` formula::
 
 You can change the name 'archive' by something else. but you need to change your
 ``files_archive`` pillar value accordingly.
+
+Clamav
+------
+
+:doc:`/clamav/doc/index` formula :doc:`/clamav/doc/pillar` key
+``clamav:db_mirrors`` is also used to mirror clamav databases.

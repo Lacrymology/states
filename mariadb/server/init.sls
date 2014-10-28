@@ -88,7 +88,7 @@ mysql-server:
     - installed
     - name: mariadb-server
     - require:
-      - pkgrepo17: mariadb
+      - pkgrepo: mariadb
       - pkg: mariadb
       - file: /etc/mysql/my.cnf
       - debconf: mysql-server
@@ -103,6 +103,7 @@ mysql-server:
 {%- if salt['pillar.get']('mysql:ssl', False) %}
       - cmd: ssl_cert_and_key_for_{{ pillar['mysql']['ssl'] }}
 {%- endif %}
+      - user: mysql-server
     - require:
       - pkg: mysql-server
   debconf:
@@ -116,6 +117,7 @@ mysql-server:
   user:
     - present
     - name: mysql
+    - shell: /bin/false
   {%- if salt['pillar.get']('mysql:ssl', False) %}
     - groups:
       - ssl-cert

@@ -35,6 +35,10 @@ include:
   - pip.nrpe
 
 {%- from 'nrpe/passive.sls' import passive_check with context %}
-{%- call passive_check('elasticsearch.backup') %}
-  - file: check_backup.py
-{%- endcall -%}
+{{ passive_check('elasticsearch.backup') }}
+
+extend:
+  check_backup.py:
+    file:
+      - require:
+        - file: nsca-elasticsearch.backup

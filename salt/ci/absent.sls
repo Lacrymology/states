@@ -51,3 +51,20 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 /srv/salt/jenkins_archives:
   file:
     - absent
+
+ci-agent:
+  user:
+    - absent
+  group:
+    - absent
+    - require:
+      - user: ci-agent
+  file:
+    - absent
+    - name: /home/ci-agent
+    - require:
+      - group: ci-agent
+
+/etc/cron.daily/ci-agent-cleanup-build-logs:
+  file:
+    - absent

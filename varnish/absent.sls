@@ -44,3 +44,26 @@ varnish:
     - require:
       - pkg: varnish
 {% endfor %}
+
+{%- for user in ('varnish', 'varnishlog') %}
+{{ user }}_user:
+  user:
+    - absent
+    - name: {{ user }}
+    - require:
+      - pkg: varnish
+  group:
+    - absent
+    - name: {{ user }}
+    - require:
+      - user: {{ user }}_user
+{%- endfor %}
+
+varnishlog_statoverride:
+  file:
+    - replace
+    - name: /var/lib/dpkg/statoverride
+    - pattern: "^varnishlog .+\n"
+    - repl: ''
+    - require:
+      - group: varnishlog_user

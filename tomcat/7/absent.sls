@@ -55,3 +55,9 @@ tomcat7:
     - absent
     - require:
       - pkg: tomcat7
+
+/var/lib/tomcat7:
+  file:
+    - absent
+    - require:
+      - pkg: tomcat7

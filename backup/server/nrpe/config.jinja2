@@ -27,4 +27,6 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 backups_last:
   description: Backups
-  command: sudo /usr/lib/nagios/plugins/check_backups.py
+  command: sudo /usr/lib/nagios/plugins/check_backups.py --formula=backup.server --check=backups_last
+  check_interval: 60 {#- 1 hour  #}
+  freshness_threshold: {{ (60 + 10) * 60 }} {#- 1 hour + 10 minutes #}

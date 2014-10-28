@@ -27,4 +27,3 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 include:
   - apt.nrpe
-  - rsyslog.nrpe

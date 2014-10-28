@@ -85,6 +85,11 @@ postfix:
       - cmd: apt_sources
       - file: /etc/mailname
       - pkg: apt-utils
+  user:
+    - present
+    - shell: /bin/false
+    - require:
+      - pkg: postfix
   file:
     - managed
     - name: /etc/postfix/main.cf
@@ -101,6 +106,7 @@ postfix:
     - order: 50
     - watch:
       - pkg: postfix
+      - user: postfix
       - file: /etc/postfix/master.cf
       - file: /etc/postfix
       - file: postfix

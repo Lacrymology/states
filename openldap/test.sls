@@ -25,6 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
+{%- from 'cron/test.sls' import test_cron with context %}
 include:
   - openldap
   - openldap.backup
@@ -32,14 +33,21 @@ include:
   - openldap.diamond
   - openldap.nrpe
 
+{%- call test_cron() %}
+- sls: openldap
+- sls: openldap.backup
+- sls: openldap.backup.nrpe
+- sls: openldap.diamond
+- sls: openldap.nrpe
+{%- endcall %}
+
 test:
   monitoring:
     - run_all_checks
     - order: last
-  cmd:
-    - run
-    - name: /etc/cron.daily/backup-openldap
-    - require:
-      - file: backup-openldap
-      - service: slapd
-    - order: last
+
+{#- 
+By default, check_ldap already do a search with (objectclass=*). 
+Moreover, mail stack check also perform query to LDAP.
+So, no need to do a test like ldapsearch here.
+-#}

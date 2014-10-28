@@ -41,13 +41,25 @@ rsyslog:
     - run
     - name: 'apt-key del 431533D8'
     - onlyif: apt-key list | grep -q 431533D8
-  pkgrepo17:
+  pkgrepo:
     - absent
 {%- if 'files_archive' in pillar %}
     - name: deb {{ pillar['files_archive']|replace('https://', 'http://') }}/mirror/rsyslog/7.4.4 {{ grains['lsb_distrib_codename'] }} main
 {%- else %}
     - ppa: tmortensen/rsyslogv7
 {%- endif %}
+
+/etc/apt/sources.list.d/tmortensen-rsyslogv7-{{ grains['oscodename'] }}.list:
+  file:
+    - absent
+    - require:
+      - pkgrepo: rsyslog
+
+/etc/rsyslog.d:
+  file:
+    - absent
+    - require:
+      - service: rsyslog
 
 /etc/apt/sources.list.d/rsyslogv7.list:
   file:

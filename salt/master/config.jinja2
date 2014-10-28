@@ -37,10 +37,12 @@ ext_pillar:
 {%- endif %}
 
 worker_threads: {{ salt['pillar.get']('salt_master:workers', 5) }}
+{%- if 'gitfs_remotes' in pillar['salt_master'] %}
 gitfs_remotes:
-{% for repo in pillar['salt_master']['gitfs_remotes'] %}
+  {% for repo in pillar['salt_master']['gitfs_remotes'] %}
   - {{ repo }}
-{%- endfor %}
+  {%- endfor %}
+{%- endif %}
 
 log_file: file:///dev/log
 {%- if salt['pillar.get']('debug', False) %}

@@ -28,31 +28,6 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 include:
   - salt
 
-salt-minion:
-  pkg:
-    - installed
-    - version: 0.17.5-1precise1
-    - require:
-      - pkgrepo17: salt
-  service:
-    - running
-    - enable: True
-    - skip_verify: True
-    - require:
-      - pip: unittest-xml-reporting
-    - watch:
-      - pkg: salt-minion
-{#- PID file owned by root, no need to manage #}
-
-{#- sync after install newest version, because custom module maybe one
-that override main modules, that may not work on old minion version #}
-sync_all:
-  module:
-    - run
-    - name: saltutil.sync_all
-    - require:
-      - service: salt-minion
-
 python-pip:
   pkg:
     - installed
@@ -63,3 +38,23 @@ unittest-xml-reporting:
     - name: http://archive.robotinfra.com/mirror/unittest-xml-reporting-a4d6593eb9b85996021285cc2ca3830701fcfe9b.tar.gz
     - require:
       - pkg: python-pip
+
+{%- from "macros.jinja2" import salt_deb_version with context %}
+salt-minion:
+  pkg:
+    - installed
+    - version: {{ salt_deb_version() }}
+    - require:
+{%- if grains['saltversion'].startswith('0.17') %}
+      - pkgrepo17: salt
+{%- else %}
+      - pkgrepo: salt
+{%- endif %}
+      - pkg: python-pip
+      - pip: unittest-xml-reporting
+  service:
+    - running
+    - enable: True
+    - skip_verify: True
+    - watch:
+      - pkg: salt-minion

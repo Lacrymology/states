@@ -27,33 +27,18 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Uninstall memcache.
 -#}
-memcached:
-  service:
-    - dead
-  file:
-    - absent
-    - name: /etc/init/memcached.conf
-    - require:
-      - service: memcached
-  pkg:
-    - purged
-    - require:
-      - service: memcached
+{%- from "upstart/absent.sls" import upstart_absent with context -%}
+{{ upstart_absent('memcached') }}
+
+extend:
+  memcached:
+    pkg:
+      - purged
+      - require:
+        - service: memcached
 
 /tmp/memcached.sock:
   file:
     - absent
     - require:
       - service: memcached
-
-memcached-upstart-log:
-  cmd:
-    - run
-    - name: find /var/log/upstart/ -maxdepth 1 -type f -name 'memcached.log*' -delete
-    - require:
-      - service: memcached
-
-/etc/rsyslog.d/memcached-upstart.conf:
-  file:
-    - absent
-

@@ -49,7 +49,7 @@ postgresql:
       - postgresql-client-{{ version }}
     - require:
       - cmd: system_locale
-      - pkgrepo17: postgresql-dev
+      - pkgrepo: postgresql-dev
       - cmd: apt_sources
 {% set encoding = salt['pillar.get']('encoding', 'en_US.UTF-8') %}
     - env:
@@ -87,6 +87,7 @@ postgresql:
   user:
     - present
     - name: postgres
+    - shell: /usr/sbin/nologin
     {%- if ssl %}
     - groups:
       - ssl-cert

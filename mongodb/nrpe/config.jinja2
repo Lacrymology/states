@@ -27,7 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 mongodb_http:
   description: MongoDB HTTP Interface
-  command: /usr/lib/nagios/plugins/check_http -I 127.0.0.1 -p 28017{%- if salt['pillar.get']('__test__', False) %} -v{%- endif %}
+  command: /usr/lib/nagios/plugins/check_http -I 127.0.0.1 -p 28017{%- if salt['pillar.get']('debug', False) %} -v{%- endif %}
   dependencies:
     - mongodb_http_port
 

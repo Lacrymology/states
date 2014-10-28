@@ -70,6 +70,21 @@ sslyze:
       - archive: sslyze
       - virtualenv: nrpe-virtualenv
 
+{%- for name in salt['pillar.get']('ssl', []) -%}
+    {%- for trust_store in ('apple', 'java', 'microsoft', 'mozilla') %}
+sslyze_{{ trust_store }}:
+  file:
+    - append
+    - name: /usr/local/src/sslyze-{{ version|replace(".", "_") }}-linux{{ bits }}/plugins/data/trust_stores/{{ trust_store }}.pem
+    - text: |
+        {{ pillar['ssl'][name]['server_crt']|indent(8) }}
+    - require:
+      - archive: sslyze
+    - require_in:
+      - cmd: sslyze
+    {%- endfor -%}
+{%- endfor %}
+
 check_ssl_configuration.py:
   file:
     - managed
@@ -80,10 +95,14 @@ check_ssl_configuration.py:
     - mode: 550
     - require:
       - pkg: nagios-nrpe-server
+      - module: nrpe-virtualenv
       - cmd: sslyze
       - pkg: salt_minion_deps
 {#- consumers of sslyze check use cron, make them only require sslyze check script #}
       - pkg: cron
+    - require_in:
+      - service: nagios-nrpe-server
+      - service: nsca_passive
 
 sslyze_requirements:
   file:

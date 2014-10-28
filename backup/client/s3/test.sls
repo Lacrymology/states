@@ -26,10 +26,27 @@ Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
 {%- if salt['pillar.get']('aws:s3', False) %}
+
 include:
   - backup.client.s3
   - backup.client.s3.nrpe
   - backup.dumb
+
+test_s3lite_run_sample_backup:
+  cmd:
+    - run
+    - cwd: /usr/local/s3lite/bin/
+    - name: /usr/local/s3lite/bin/s3lite s3lite s3://{{ pillar['aws']['s3']['bucket'] }}/{{ pillar['aws']['s3']['path'].strip('/') }}
+    - require:
+      - sls: backup.client.s3
+      - sls: backup.client.s3.nrpe
+
+test_s3lite_check_s3lite_sync:
+  cmd:
+    - run
+    - name: '/usr/lib/nagios/plugins/check_backup_s3lite.py --set=''{"path": "s3lite", "bucket": "s3://{{ pillar['aws']['s3']['bucket'] }}/{{ pillar['aws']['s3']['path'].strip('/') }}"}'''
+    - require:
+      - cmd: test_s3lite_run_sample_backup
 
 test:
   monitoring:
@@ -42,4 +59,12 @@ test:
     - require:
       - file: /usr/local/bin/backup-store
       - file: /usr/local/bin/create_dumb
+
+{%- else %}
+
+test_s3lite_run_sample_backup:
+  cmd:
+    - run
+    - name: echo 'No S3 credential for testing backup'
+
 {%- endif %}

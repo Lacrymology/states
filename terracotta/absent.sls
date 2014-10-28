@@ -25,20 +25,17 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
-{% set version = '3.7.0' %}
-terracotta:
-  file:
-    - absent
-    - name: /etc/init/terracotta.conf
-    - require:
-      - service: terracotta
-  service:
-    - dead
-    - order: first
-  user:
-    - absent
-    - require:
-      - service: terracotta
+{%- from "upstart/absent.sls" import upstart_absent with context -%}
+{%- set version = '3.7.0' %}
+
+{{ upstart_absent('terracotta') }}
+
+extend:
+  terracotta:
+    user:
+      - absent
+      - require:
+        - service: terracotta
 
 /usr/local/terracotta-{{ version }}:
   file:
@@ -64,14 +61,3 @@ terracotta:
     - absent
     - require:
       - service: terracotta
-
-terracotta-upstart-log:
-  cmd:
-    - run
-    - name: find /var/log/upstart/ -maxdepth 1 -type f -name 'terracotta.log*' -delete
-    - require:
-      - service: terracotta
-
-/etc/rsyslog.d/terracotta-upstart.conf:
-  file:
-    - absent

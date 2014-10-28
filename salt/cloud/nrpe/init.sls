@@ -29,6 +29,7 @@ include:
   - bash.nrpe
   - nrpe
   - pip.nrpe
+  - salt.master.nrpe
   - sudo.nrpe
 
 {%- from 'nrpe/passive.sls' import passive_check, passive_absent with context %}
@@ -60,3 +61,7 @@ include:
       - pkg: nagios-nrpe-server
       - module: nrpe-virtualenv
       - file: /etc/sudoers.d/nrpe_salt_cloud
+      - file: nsca-salt.cloud
+    - require_in:
+      - service: nagios-nrpe-server
+      - service: nsca_passive

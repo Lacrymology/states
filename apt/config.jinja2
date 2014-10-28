@@ -27,6 +27,26 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 # {{ pillar['message_do_not_modify'] }}
 APT::Install-Recommends "0";
-{% if salt['pillar.get']('proxy_server', False) %}
+APT::Clean-Installed "true";
+{%- if salt['pillar.get']('proxy_server', False) %}
 Acquire::http::Proxy "http://{{ pillar['proxy_server'] }}";
-{% endif %}
+{%- endif -%}
+{%- if salt['pillar.get']('debug', False) %}
+quiet "0";
+quiet::NoUpdate "false";
+Debug::pkgDPkgProgressReporting "true";
+Debug::pkgOrderList "true";
+Debug::pkgPackageManager "true";
+Debug::BuildDeps "true";
+Debug::pkgInitialize "true";
+Debug::NoLocking "false";
+Debug::Acquire::Http "true";
+Debug::pkgDepCache::AutoInstall "true";
+Debug::pkgCacheGen "true";
+{%- endif -%}
+{#-
+Debug::pkgDepCache::Marker "true";
+Debug::pkgAcquire "true";
+Debug::pkgProblemResolver "true";
+Debug::pkgProblemResolver::ShowScores "true";
+#}

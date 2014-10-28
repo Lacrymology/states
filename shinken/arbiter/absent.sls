@@ -25,28 +25,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-shinken-arbiter:
-  file:
-    - absent
-    - name: /etc/init/shinken-arbiter.conf
-    - require:
-      - service: shinken-arbiter
-  service:
-    - dead
+{%- from "upstart/absent.sls" import upstart_absent with context -%}
+{{ upstart_absent('shinken-arbiter') }}
 
 /etc/shinken/arbiter.conf:
   file:
     - absent
     - require:
       - service: shinken-arbiter
-
-shinken-arbiter-upstart-log:
-  cmd:
-    - run
-    - name: find /var/log/upstart/ -maxdepth 1 -type f -name 'shinken-arbiter.log*' -delete
-    - require:
-      - service: shinken-arbiter
-
-/etc/rsyslog.d/shinken-arbiter-upstart.conf:
-  file:
-    - absent

@@ -28,12 +28,14 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 include:
   - bash.nrpe
+  - cron.nrpe
   - jenkins.nrpe
-  - rsync.nrpe
+  - pysc.nrpe
   - salt.cloud.nrpe
   - salt.master.nrpe
   - ssh.client.nrpe
   - sudo.nrpe
+  - virtualenv.nrpe
 
 extend:
   {#- if used in conjunction with salt.ci just used a slightly different

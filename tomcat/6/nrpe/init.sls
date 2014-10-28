@@ -43,7 +43,7 @@ include:
 /etc/nagios/nrpe.d/tomcat.cfg:
   file:
     - absent
+    - watch_in:
+      - service: nagios-nrpe-server
 
-{%- call passive_check('tomcat.6') %}
-  - file: /etc/nagios/nrpe.d/tomcat.cfg
-{%- endcall %}
+{{ passive_check('tomcat.6') }}

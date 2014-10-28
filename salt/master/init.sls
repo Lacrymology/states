@@ -30,8 +30,10 @@ Install a Salt Management Master (server).
 If you install a salt master from scratch, check and run bootstrap_archive.py
 and use it to install the master.
 -#}
+{%- from 'upstart/rsyslog.jinja2' import manage_upstart_log with context -%}
 include:
   - local
+  - git
 {%- if salt['pillar.get']('salt_master:pillar', False) %}
   - pip
 {%- endif %}
@@ -80,7 +82,7 @@ salt-master-requirements:
     - require_in:
       - pkg: salt-master
 {%- else %}
-/srv/pillar:
+/srv/pillars:
   file:
     - directory
     - user: root
@@ -113,8 +115,9 @@ salt-master-job_changes.py:
     - require:
       - file: /usr/local
 
-{%- set version = '0.17.5-1' %}
-{%- set pkg_version = '{0}{1}1'.format(version, grains['lsb_distrib_codename']) %}
+{%- from "macros.jinja2" import salt_version,salt_deb_version with context %}
+{%- set version = salt_version() %}
+{%- set pkg_version =  salt_deb_version() %}
 {#- check deb filename carefully, number `1` after {1} is added only on 0.17.5-1
     pkg sub-version can be anything #}
 {%- set master_path = '{0}/pool/main/s/salt/salt-master_{1}_all.deb'.format(version, pkg_version) %}
@@ -135,6 +138,7 @@ salt-master:
     - order: 90
     - require:
       - service: rsyslog
+      - pkg: git
     - watch:
       - pkg: salt-master
       - file: salt-master
@@ -152,6 +156,8 @@ salt-master:
       - pkg: salt
 {%- if salt['pkg.version']('salt-master') not in ('', pkg_version) %}
       - pkg: salt_master_old_version
+
+{{ manage_upstart_log('salt-master') }}
 
 salt_master_old_version:
   pkg:

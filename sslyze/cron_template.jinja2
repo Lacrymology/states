@@ -1,3 +1,4 @@
+#!/bin/bash
 # {{ pillar['message_do_not_modify'] }}
 {#-
 Copyright (c) 2014, Hung Nguyen Viet
@@ -26,4 +27,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmil.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmil.com>
 #}
-5 */12 * * *   root /usr/lib/nagios/plugins/check_ssl_configuration.py --cronjob -F {{ formula }} -N {{ formula }}_ssl_configuration
+
+# log start stop time to syslog
+source /usr/local/share/salt_common.sh
+# Ensure that only one instance of this script is running at a time
+locking_script
+log_start_script "$@"
+trap "log_stop_script \$?" EXIT
+
+/usr/lib/nagios/plugins/check_ssl_configuration.py --cronjob --formula={{ formula }} --check={{ formula }}_ssl_configuration

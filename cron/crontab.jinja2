@@ -37,9 +37,21 @@ SHELL=/bin/sh
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 
 # m h dom mon dow user command
-17 * * * * root nice -n 19 ionice -c3 run-parts --report /etc/cron.hourly
+{%- if salt['pillar.get']('__test__', False) -%}
+    {#- in test mode, some cronjob might interfer with execution of tests,
+        make sure they exists but don't run -#}
+    {%- set next_week = salt['common.day_of_month'](7) %}
+5 * {{ next_week }} * * root nice -n 19 ionice -c3 run-parts --report /etc/cron.hourly
+20 {{ salt['pillar.get']('crontab_hour', 6) + 6 }} {{ next_week }} * * root nice -n 19 ionice -c3 run-parts --report /etc/cron.twice_daily
+20 {{ salt['pillar.get']('crontab_hour', 6) + 12 }} {{ next_week }} * * root nice -n 19 ionice -c3 run-parts --report /etc/cron.twice_daily
+25 {{ salt['pillar.get']('crontab_hour', 6) }} {{ next_week }} * * root nice -n 19 ionice -c3 run-parts --report /etc/cron.daily
+47 {{ salt['pillar.get']('crontab_hour', 6) }} {{ next_week }} * 7 root nice -n 19 ionice -c3 run-parts --report /etc/cron.weekly
+52 {{ salt['pillar.get']('crontab_hour', 6) }} {{ next_week }} * * root nice -n 19 ionice -c3 run-parts --report /etc/cron.monthly
+{%- else -%}
+5 * * * * root nice -n 19 ionice -c3 run-parts --report /etc/cron.hourly
+20 {{ salt['pillar.get']('crontab_hour', 6) + 6 }} * * * root nice -n 19 ionice -c3 run-parts --report /etc/cron.twice_daily
+20 {{ salt['pillar.get']('crontab_hour', 6) + 12 }} * * * root nice -n 19 ionice -c3 run-parts --report /etc/cron.twice_daily
 25 {{ salt['pillar.get']('crontab_hour', 6) }} * * * root nice -n 19 ionice -c3 run-parts --report /etc/cron.daily
 47 {{ salt['pillar.get']('crontab_hour', 6) }} * * 7 root nice -n 19 ionice -c3 run-parts --report /etc/cron.weekly
 52 {{ salt['pillar.get']('crontab_hour', 6) }} 1 * * root nice -n 19 ionice -c3 run-parts --report /etc/cron.monthly
-
-# end of file
+{%- endif -%}

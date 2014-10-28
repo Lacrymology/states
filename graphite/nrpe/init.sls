@@ -27,6 +27,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 Nagios NRPE check for Graphite.
 -#}
+{%- set formula = 'graphite' -%}
 {%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - apt.nrpe
@@ -44,8 +45,18 @@ include:
   - sudo.nrpe
   - uwsgi.nrpe
   - virtualenv.nrpe
-{% if salt['pillar.get']('graphite:ssl', False) %}
+{% if salt['pillar.get'](formula + ':ssl', False) %}
   - ssl.nrpe
 {%- endif %}
 
-{{ passive_check('graphite', check_ssl_score=True) }}
+{{ passive_check(formula, check_ssl_score=True) }}
+
+extend:
+  check_psql_encoding.py:
+    file:
+      - require:
+        - file: nsca-{{ formula }}
+  /usr/lib/nagios/plugins/check_pgsql_query.py:
+    file:
+       - require:
+         - file: nsca-{{ formula }}

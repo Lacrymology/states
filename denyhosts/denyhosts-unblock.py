@@ -37,7 +37,8 @@ import logging
 import os
 import socket
 import subprocess
-import sys
+
+import pysc
 
 logger = logging.getLogger(__name__)
 
@@ -74,47 +75,61 @@ def filter_ips(filename, ips):
         with open(filename, 'w') as fh:
             fh.writelines(lines)
     else:
-        logger.debug("File %s don't had any changes, leave as is.", filename)
+        logger.debug("None of the IP address in %s exists in %s.", str(ips), filename)
+    return is_black
 
 
-def main():
-    # list of denyhosts files
-    denyhosts_files = (
-        '/etc/hosts.deny',
-        '/var/lib/denyhosts/hosts',
-        '/var/lib/denyhosts/hosts-restricted',
-        '/var/lib/denyhosts/hosts-root',
-        '/var/lib/denyhosts/hosts-valid',
-        '/var/lib/denyhosts/users-hosts',
-    )
+class DenyhostsUnblock(pysc.Application):
+    logger = logger
 
-    # get list of arguments, each arg is one ip address to unban
-    ips = sys.argv[1:]
+    def get_argument_parser(self):
+        argp = super(DenyhostsUnblock, self).get_argument_parser()
+        argp.add_argument("ips", nargs='+')
+        return argp
 
-    # need one or more arg
-    if ips:
-        init_script = '/etc/init.d/denyhosts'
-        logger.debug("stop %s", init_script)
-        subprocess.check_call([init_script, 'stop'])
+    def main(self):
+        # list of denyhosts files
+        denyhosts_files = (
+            '/etc/hosts.deny',
+            '/var/lib/denyhosts/hosts',
+            '/var/lib/denyhosts/hosts-restricted',
+            '/var/lib/denyhosts/hosts-root',
+            '/var/lib/denyhosts/hosts-valid',
+            '/var/lib/denyhosts/users-hosts',
+        )
 
-        # removed invalid ips
-        valid_ips = []
-        for ip in ips:
-            if is_valid_ip(ip):
-                valid_ips.append(ip)
+        ips = self.config['ips']
+
+        if ips:
+            if any(is_valid_ip(ip) for ip in ips):
+                init_script = '/etc/init.d/denyhosts'
+                logger.debug("stop %s", init_script)
+                subprocess.check_call([init_script, 'stop'])
+
+                # removed invalid ips
+                valid_ips = []
+                for ip in ips:
+                    if is_valid_ip(ip):
+                        valid_ips.append(ip)
+                    else:
+                        logger.debug("Not a valid IP address: %s", ip)
+
+                    results = []
+                    for filename in denyhosts_files:
+                        results.append(filter_ips(filename, valid_ips))
+
+                # start denyhosts
+                logger.debug("start %s", init_script)
+                subprocess.check_call([init_script, 'start'])
+
+                if not any(result for result in results):
+                    sys.exit(1)
             else:
-                logger.debug("Not a valid IP address: %s", ip)
-
-        for filename in denyhosts_files:
-            filter_ips(filename, valid_ips)
-
-        # start denyhosts
-        logger.debug("start %s", init_script)
-        subprocess.check_call([init_script, 'start'])
-    else:
-        print 'usage: denyhosts-unblock <ip_address> ...'
+                print("None of the IP address in {0} is valid".format(ips))
+                sys.exit(1)
+        else:
+            print 'usage: denyhosts-unblock <ip_address> ...'
 
 
 if __name__ == '__main__':
-    logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
-    main()
+    DenyhostsUnblock().run()

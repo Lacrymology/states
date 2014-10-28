@@ -25,6 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
 -#}
+{%- from 'cron/test.sls' import test_cron with context %}
 include:
   - redis
   - redis.backup
@@ -32,14 +33,16 @@ include:
   - redis.diamond
   - redis.nrpe
 
+{%- call test_cron() %}
+- sls: redis
+- sls: redis.backup
+- sls: redis.backup.nrpe
+- sls: redis.diamond
+- sls: redis.nrpe
+{%- endcall %}
+
 test:
   monitoring:
     - run_all_checks
     - wait: 60
-    - order: last
-  cmd:
-    - run
-    - name: /etc/cron.daily/backup-redis
-    - require:
-      - file: backup-redis
     - order: last

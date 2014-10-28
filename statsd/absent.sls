@@ -27,28 +27,11 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Uninstall PyStatsD daemon, a statsd nodejs equivalent in python.
 -#}
-statsd:
-  file:
-    - absent
-    - name: /etc/init/statsd.conf
-    - require:
-      - service: statsd
-  service:
-    - dead
+{%- from "upstart/absent.sls" import upstart_absent with context -%}
+{{ upstart_absent('statsd') }}
 
 /usr/local/statsd:
   file:
     - absent
     - require:
       - service: statsd
-
-statsd-upstart-log:
-  cmd:
-    - run
-    - name: find /var/log/upstart/ -maxdepth 1 -type f -name 'statsd.log*' -delete
-    - require:
-      - service: statsd
-
-/etc/rsyslog.d/statsd-upstart.conf:
-  file:
-    - absent

@@ -37,9 +37,20 @@ Diamond statistics for GitLab.
 -#}
 {%- from 'diamond/macro.jinja2' import uwsgi_diamond with context %}
 {%- call uwsgi_diamond('gitlab') %}
-- nodejs.diamond
 - postgresql.server.diamond
 - redis.diamond
 - rsyslog.diamond
 - ssh.server.diamond
 {%- endcall %}
+
+gitlab_diamond_resources:
+  file:
+    - accumulated
+    - name: processes
+    - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
+    - require_in:
+      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
+    - text:
+      - |
+        [[gitlab]]
+        cmdline = ^\/bin\/sh \.\/bin\/background_jobs start_no_deamonize$

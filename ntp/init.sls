@@ -54,6 +54,11 @@ ntp:
     - installed
     - require:
       - cmd: apt_sources
+  user:
+    - present
+    - shell: /bin/false
+    - require:
+      - pkg: ntp
   file:
     - managed
     - name: /etc/ntp.conf
@@ -73,4 +78,5 @@ ntp:
       - service: rsyslog
     - watch:
       - file: ntp
+      - user: ntp
 {#- PID file owned by root, no need to manage #}

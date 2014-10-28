@@ -28,3 +28,8 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 sudo:
   pkg:
     - purged
+  file:
+    - absent
+    - name: /etc/sudoers.d
+    - require:
+      - pkg: sudo

@@ -29,8 +29,19 @@ web:
   user:
     - absent
     - name: www-data
+  group:
+    - absent
+    - name: www-data
+    - require:
+      - user: web
   file:
     - absent
-    - name: /var/www
+    - name: /var/lib/deployments
+    - require:
+      - user: web
+
+/var/www:
+  file:
+    - absent
     - require:
       - user: web

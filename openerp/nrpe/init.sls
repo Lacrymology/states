@@ -28,7 +28,6 @@ Maintainer: Lam Dang Tung <lamdt@familug.org>
 Nagios NRPE check for OpenERP.
 -#}
 {%- from 'nrpe/passive.sls' import passive_check with context %}
-
 include:
   - apt.nrpe
   - build.nrpe

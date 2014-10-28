@@ -37,6 +37,7 @@ PrintMotd no
 AcceptEnv LANG LC_*
 Subsystem sftp /usr/lib/openssh/sftp-server
 UsePAM yes
+MaxAuthTries 3
 # end of default values. here start overwrite:
 {%- for cfg in salt['pillar.get']('ssh:server:extra_configs', []) %}
 {{ cfg }}

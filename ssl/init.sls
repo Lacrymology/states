@@ -92,6 +92,20 @@ that support SSL.
     - require:
       - pkg: ssl-cert
 
+{#- This is for ejabberd #}
+/etc/ssl/private/{{ name }}_bundle.pem:
+  file:
+    - managed
+    - contents: |
+        {{ pillar['ssl'][name]['server_crt'] | indent(8) }}
+        {{ pillar['ssl'][name]['server_key'] | indent(8) }}
+        {{ pillar['ssl'][name]['ca_crt'] | indent(8) }}
+    - user: root
+    - group: ssl-cert
+    - mode: 440
+    - require:
+      - pkg: ssl-cert
+
 {#-
 Some browsers may complain about a certificate signed by a well-known
 certificate authority, while other browsers may accept the certificate without
@@ -126,5 +140,23 @@ ssl_cert_and_key_for_{{ name }}:
       - file: /etc/ssl/certs/{{ name }}.crt
       - file: /etc/ssl/certs/{{ name }}_ca.crt
       - file: /etc/ssl/private/{{ name }}.pem
+      - file: /etc/ssl/certs/{{ name }}_chained.crt
+
+{#- OpenSSL expects to find each certificate in a file named by the certificate
+    subject's hashed name, plus a number extension that starts with 0.
+
+    That means you can't just drop My_Awesome_CA_Cert.pem in the directory and
+    expect it to be picked up automatically. However, OpenSSL ships with 
+    a utility called c_rehash which you can invoke on a directory 
+    to have all certificates indexed with appropriately named symlinks. 
+    
+    http://mislav.uniqpath.com/2013/07/ruby-openssl/#SSL_CERT_DIR #}
+ssl_create_symlink_by_hash:
+  cmd:
+    - wait
+    - name: c_rehash /etc/ssl/certs
+    - watch:
+      - file: /etc/ssl/certs/{{ name }}.crt
+      - file: /etc/ssl/certs/{{ name }}_ca.crt
       - file: /etc/ssl/certs/{{ name }}_chained.crt
 {% endfor -%}

@@ -25,10 +25,17 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
+{%- from 'cron/test.sls' import test_cron with context %}
 include:
   - graylog2.web
   - graylog2.web.nrpe
   - graylog2.web.diamond
+
+{%- call test_cron() %}
+- sls: graylog2.web
+- sls: graylog2.web.nrpe
+- sls: graylog2.web.diamond
+{%- endcall %}
 
 test:
   monitoring:

@@ -37,13 +37,21 @@ apt-key del 8683D8A2:
     - onlyif: apt-key list | grep -q 8683D8A2
 
 postgresql-dev:
+{#-
+  Can't uninstall the following as they're used elsewhere
   pkg:
     - purged
     - name: libpq-dev
-  pkgrepo17:
+#}
+  pkgrepo:
     - absent
 {%- if 'files_archive' in pillar %}
     - name: deb {{ pillar['files_archive']|replace('https://', 'http://') }}/mirror/postgresql/ {{ grains['lsb_distrib_codename'] }} main
 {%- else %}
     - ppa: pitti/postgresql
 {%- endif %}
+  file:
+    - absent
+    - name: /etc/apt/sources.list.d/pitti-postgresql-{{ grains['oscodename'] }}.list
+    - require:
+      - pkgrepo: postgresql-dev

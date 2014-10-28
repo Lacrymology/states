@@ -40,3 +40,6 @@ pyelasticsearch:
     - require:
       - module: pyelasticsearch
       - pkg: nagios-nrpe-server
+    - require_in:
+      - service: nagios-nrpe-server
+      - service: nsca_passive

@@ -44,3 +44,6 @@ download-cache = /var/cache/pip
 {%- if salt['pillar.get']('proxy_server', False) %}
 proxy = {{ pillar['proxy_server'] }}
 {%- endif -%}
+{%- if salt['pillar.get']('debug', False) %}
+verbose = true
+{%- endif %}

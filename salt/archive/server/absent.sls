@@ -46,3 +46,11 @@ salt-archive-clamav:
   file:
     - absent
     - name: /usr/local/bin/salt_archive_clamav.sh
+
+{{ opts['cachedir'] }}/sync_timestamp.dat:
+  file:
+    - absent
+
+/var/cache/salt/master/sync_timestamp.dat:
+  file:
+    - absent

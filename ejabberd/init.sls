@@ -32,6 +32,7 @@ include:
   - apt
   - erlang
   - erlang.pgsql
+  - locale
   - nginx
   - postgresql.server
 {%- if salt['pillar.get']('ejabberd:ssl', False) %}
@@ -65,6 +66,7 @@ ejabberd:
       - cmd: hostname
       - pkg: postgresql
       - cmd: erlang_mod_pgsql
+      - cmd: system_locale
   service:
     - running
     - name: ejabberd
@@ -75,6 +77,7 @@ ejabberd:
       - pkg: ejabberd
       - cmd: erlang_mod_pgsql
       - cmd: hostname
+      - file: ejabberd_init
     - watch:
     {%- if salt['pillar.get']('ejabberd:ssl', False) %}
       - cmd: ssl_cert_and_key_for_{{ pillar['ejabberd']['ssl'] }}
@@ -100,10 +103,21 @@ ejabberd:
       dbuserpass: {{ dbuserpass }}
   user:
     - present
+    - shell: /usr/sbin/nologin
   {%- if salt['pillar.get']('ejabberd:ssl', False) %}
     - groups:
       - ssl-cert
   {%- endif %}
+    - require:
+      - pkg: ejabberd
+
+ejabberd_init:
+  file:
+    - replace
+    - name: /etc/init.d/ejabberd
+    - pattern: 'EJABBERDUSER -c'
+    - repl: 'EJABBERDUSER -s /bin/sh -c'
+    - backup: False
     - require:
       - pkg: ejabberd
 
@@ -113,6 +127,8 @@ ejabberd_psql:
     - name: /var/lib/ejabberd/pg.sql
     - source: salt://ejabberd/database.jinja2
     - template: jinja
+    - user: ejabberd
+    - group: ejabberd
     - mode: 644
     - require:
       - pkg: ejabberd

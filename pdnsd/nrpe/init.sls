@@ -31,5 +31,37 @@ PDNSd Nagios NRPE checks.
 include:
   - apt.nrpe
   - nrpe
+  - pip
+
+pydns:
+  file:
+    - managed
+    - name: {{ opts['cachedir'] }}/pip/pydns
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - source: salt://pdnsd/nrpe/requirements.jinja2
+    - require:
+      - file: {{ opts['cachedir'] }}/pip
+  module:
+    - wait
+    - name: pip.install
+    - upgrade: True
+    - requirements: {{ opts['cachedir'] }}/pip/pydns
+    - require:
+      - module: pip
+    - watch:
+      - file: pydns
+
+/usr/lib/nagios/plugins/check_dns_caching.py:
+  file:
+    - managed
+    - source: salt://pdnsd/nrpe/check.py
+    - user: nagios
+    - group: nagios
+    - mode: 550
+    - require:
+      - pkg: nagios-nrpe-server
 
 {{ passive_check('pdnsd') }}

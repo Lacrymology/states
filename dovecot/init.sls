@@ -27,11 +27,13 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 
 Dovecot: A POP3/IMAP server.
 -#}
+{%- from 'upstart/rsyslog.jinja2' import manage_upstart_log with context -%}
 {% set ssl = salt['pillar.get']('dovecot:ssl', False) %}
 include:
   - apt
   - dovecot.agent
   - postfix
+  - rsyslog
 {% if ssl %}
   - ssl
 {% endif %}
@@ -54,6 +56,7 @@ dovecot:
     - running
     - order: 50
     - watch:
+      - user: dovecot_user
       - user: dovecot-agent
       - file: /etc/dovecot/dovecot.conf
       - pkg: dovecot
@@ -62,6 +65,18 @@ dovecot:
 {% if ssl %}
       - cmd: ssl_cert_and_key_for_{{ ssl }}
 {% endif %}
+
+{{ manage_upstart_log('dovecot') }}
+
+{%- for user in ('dovecot', 'dovenull') %}
+{{ user }}_user:
+  user:
+    - present
+    - name: {{ user }}
+    - shell: /bin/false
+    - require:
+      - pkg: dovecot
+{%- endfor %}
 
 {#- this setup uses only dovecot.conf config file, remove this dir for avoiding
     confusing #}

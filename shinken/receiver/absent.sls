@@ -25,14 +25,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Quan Tong Anh <tonganhquan.net@gmail.com>
 Maintainer: Quan Tong Anh <tonganhquan.net@gmail.com>
 -#}
-shinken-receiver:
-  file:
-    - absent
-    - name: /etc/init/shinken-receiver.conf
-    - require:
-      - service: shinken-receiver
-  service:
-    - dead
+{%- from "upstart/absent.sls" import upstart_absent with context -%}
+{{ upstart_absent('shinken-receiver') }}
 
 /etc/shinken/receiver.conf:
   file:

@@ -8,9 +8,10 @@ __email__ = 'patate@fastmail.cn'
 import logging
 import os
 import shutil
-import sys
 import tarfile
 import tempfile
+
+import pysc
 
 logger = logging.getLogger(__name__)
 
@@ -56,7 +57,7 @@ def validate(dirname):
     """
     tar_extensions = ('bz2', 'gz')
     for filename in os.listdir(dirname):
-        prefix, ext = os.path.splitext(filename)
+        _, ext = os.path.splitext(filename)
         absolute_filename = os.path.join(dirname, filename)
         extension = ext.lstrip(os.extsep)
         if extension in tar_extensions:
@@ -86,6 +87,11 @@ def validate(dirname):
             logger.debug("Ignore non tar %s", absolute_filename)
 
 
+class SaltArchivePipCheck(pysc.Application):
+    logger = logger
+
+    def main(self):
+        validate('/var/lib/salt_archive/pip')
+
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.DEBUG, stream=sys.stderr)
-    validate('/var/lib/salt_archive/pip')
+    SaltArchivePipCheck().run()

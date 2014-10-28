@@ -24,9 +24,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
-/etc/salt/cloud.profiles:
+{%- for type in ('profiles', 'providers') %}
+/etc/salt/cloud.{{ type }}:
   file:
     - absent
+{%- endfor %}
 
 /etc/salt/cloud:
   file:
@@ -35,11 +37,9 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 salt-cloud:
   pkg:
     - purged
-{%- if salt['cmd.has_exec']('pip') %}
-  pip:
-    - removed
-    - order: 1
-{%- endif %}
+  file:
+    - absent
+    - name: {{ opts['cachedir'] }}/pip/salt.cloud
 
 python-libcloud:
   pkg:

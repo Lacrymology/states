@@ -110,16 +110,15 @@ rabbitmq-server:
     - watch:
       - user: rabbitmq
       - file: rabbitmq-server
-      - rabbitmq_plugins: rabbitmq-server
+      - rabbitmq_plugin: rabbitmq-server
 {% for node in pillar['rabbitmq']['cluster']['nodes'] %}
     {% if node != grains['id'] %}
       - host: host_{{ node }}
     {% endif %}
 {% endfor %}
-  rabbitmq_plugins:
+  rabbitmq_plugin:
     - enabled
     - name: rabbitmq_management
-    - env: HOME=/var/lib/rabbitmq
     - require:
       - pkg: rabbitmq-server
   pkg:
@@ -137,46 +136,8 @@ rabbitmq-server:
       - host: hostname
       - file: rabbitmq_erlang_cookie
 {% if grains['id'] == master_id %}
-monitor_user:
-  rabbitmq_user:
-    - present
-    - name: {{ pillar['rabbitmq']['monitor']['user'] }}
-    - password: {{ salt['password.pillar']('rabbitmq:monitor:password') }}
-    - force: True
-    - require:
-      - service: rabbitmq-server
-  module:
-    - run
-    - name: rabbitmq.set_user_tags
-    - m_name: {{ pillar['rabbitmq']['monitor']['user'] }}
-    - tags: monitoring
-    - require:
-      - rabbitmq_user: monitor_user
-
-admin_user:
-  rabbitmq_user:
-    - present
-    - name: {{ pillar['rabbitmq']['management']['user'] }}
-    - password: {{ salt['password.pillar']('rabbitmq:management:password') }}
-    - force: True
-    - require:
-      - service: rabbitmq-server
-  module:
-    - run
-    - name: rabbitmq.set_user_tags
-    - m_name: {{ pillar['rabbitmq']['management']['user'] }}
-    - tags: administrator
-    - require:
-      - rabbitmq_user: admin_user
-
-rabbitmq_delete_guest:
-  rabbitmq_user:
-    - absent
-    - name: guest
-    - require:
-      - service: rabbitmq-server
-
-{% for vhost in salt['pillar.get']('rabbitmq:vhosts', []) %}
+{% set vhosts = salt['pillar.get']('rabbitmq:vhosts', []) %}
+{% for vhost in vhosts %}
 rabbitmq-vhost-{{ vhost }}:
   rabbitmq_user:
     - present
@@ -191,45 +152,62 @@ rabbitmq-vhost-{{ vhost }}:
     - user: {{ vhost }}
     - require:
       - rabbitmq_user: rabbitmq-vhost-{{ vhost }}
-  module:
-    - run
-    - name: rabbitmq.set_permissions
-    - vhost: {{ vhost }}
-    - user: {{ pillar['rabbitmq']['monitor']['user'] }}
-    - conf: ""
-    - write: ""
-    - read: ".*"
-    - require:
-      - rabbitmq_vhost: rabbitmq-vhost-{{ vhost }}
-      - rabbitmq_user: monitor_user
 {% endfor %}
 
-rabbitmq-root-vhost:
-  module:
-    - run
-    - name: rabbitmq.set_permissions
-    - vhost: /
-    - user: {{ pillar['rabbitmq']['monitor']['user'] }}
-    - conf: ""
-    - write: ""
-    - read: ".*"
+monitor_user:
+  rabbitmq_user:
+    - present
+    - name: {{ pillar['rabbitmq']['monitor']['user'] }}
+    - password: {{ salt['password.pillar']('rabbitmq:monitor:password') }}
+    - force: True
+    - tags:
+      - monitoring
+    - perms:
+      - '/':
+        - ""
+        - ""
+        - ".*"
+{% for vhost in vhosts %}
+  {%- if vhost != '/' %}
+      - {{ vhost }}:
+        - ""
+        - ""
+        - ".*"
+  {%- endif %}
+{%- endfor %}
+    - require:
+{% for vhost in vhosts %}
+      - rabbitmq_vhost: rabbitmq-vhost-{{ vhost }}
+{%- endfor %}
+      - service: rabbitmq-server
+
+admin_user:
+  rabbitmq_user:
+    - present
+    - name: {{ pillar['rabbitmq']['management']['user'] }}
+    - password: {{ salt['password.pillar']('rabbitmq:management:password') }}
+    - force: True
     - require:
       - service: rabbitmq-server
-      - rabbitmq_user: monitor_user
+    - tags:
+      - administrator
 
+rabbitmq_delete_guest:
+  rabbitmq_user:
+    - absent
+    - name: guest
+    - require:
+      - service: rabbitmq-server
 {% endif %}
 
 {% if grains['id'] != master_id %}
-in_rabbitmq_cluster:
+join_rabbitmq_cluster:
   rabbitmq_cluster:
     - joined
-    - master: {{ master_id }}
-    - env: HOME=/var/lib/rabbitmq
-    - user: {{ pillar['rabbitmq']['management']['user'] }}
-    - password: {{ pillar['rabbitmq']['management']['password'] }}
-    - disk_node: True
+    - host: {{ master_id }}
+    - user: rabbit
     - require:
-      - rabbitmq_plugins: rabbitmq-server
+      - rabbitmq_plugin: rabbitmq-server
       - service: rabbitmq-server
 {% endif %}
 

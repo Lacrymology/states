@@ -7,22 +7,23 @@
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
 #
-# 1. Redistributions of source code must retain the above copyright notice, this
-#    list of conditions and the following disclaimer.
+# 1. Redistributions of source code must retain the above copyright notice,
+#    this list of conditions and the following disclaimer.
 # 2. Redistributions in binary form must reproduce the above copyright notice,
 #    this list of conditions and the following disclaimer in the documentation
 #    and/or other materials provided with the distribution.
 #
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
-# ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-# (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-# ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
 
 """
 Nagios plugin to check old or badly uploaded backups to an s3 bucket..
@@ -37,9 +38,10 @@ import os
 
 import boto
 
-from check_backup_base import BackupFile, main
+from check_backup_base import BackupFile, check_backup as base_check, defaults
+from pysc import nrpe
 
-log = logging.getLogger('nagiosplugin')
+log = logging.getLogger('nagiosplugin.backup.client.s3')
 
 
 class S3BackupFile(BackupFile):
@@ -53,6 +55,7 @@ class S3BackupFile(BackupFile):
         self.bucket = self.config['s3']['bucket']
 
     def files(self):
+        log.info("started iterating files")
         s3 = boto.connect_s3(self.key, self.secret)
 
         log.debug("searching bucket %s", self.bucket)
@@ -76,11 +79,16 @@ class S3BackupFile(BackupFile):
                 # prefix is a concept same as "directory"
                 log.debug('%s is a Prefix, skipping ...', key.name)
                 continue
-            file = self.make_file(os.path.basename(key.name), key.size)
+            backup_file = self.make_file(os.path.basename(key.name), key.size)
             # I expect file to have one and only one element
-            if file:
-                yield file
+            if backup_file:
+                yield backup_file
+        log.info("finished iterating files")
+
+
+def check_backup(config):
+    base_check(config, S3BackupFile)
 
 
 if __name__ == '__main__':
-    main(S3BackupFile)
+    nrpe.check(check_backup, defaults)

@@ -56,10 +56,14 @@ gitlab:hostnames
 
 .. include:: /nginx/doc/hostnames.inc
 
+Example: ``__salt__['network.ip_addrs']('eth0')[0]``
+
 gitlab:admin:password
 ~~~~~~~~~~~~~~~~~~~~~
 
 Password for :doc:`/gitlab/doc/index` Administrator account.
+
+Example: ``'123456789'``
 
 Optional
 --------
@@ -74,14 +78,12 @@ Example::
     cheaper: 1
     timeout: 60
     ssl: example_com
-    port: 80
-    support_email: support@exmple.com
+    email_from: support@example.com
     default_projects_limit: 10
-    default_theme: 2
     default_can_create_group: True
-    default_can_create_team: True
     username_changing_enabled: True
     signup_enabled: False
+    signin_enabled: False
     restricted_visibility_levels: public
     issue_closing_pattern: ([Cc]lose[sd]|[Ff]ixe[sd]) +#\d+
     default_projects_features:
@@ -95,18 +97,9 @@ Example::
     max_size: 5242880
     commit_timeout: 10
     db:
-      host: localhost
-      name: gitlab
-      username: gitlab
-      password: xxxxx
-      port: 5432
+      password: randompassword
     ldap:
       enabled: False
-    admin:
-      email: admin@example.com
-      name: root
-      username: root
-      projects_limit: 1000
 
 gitlab:commit_timeout
 ~~~~~~~~~~~~~~~~~~~~~
@@ -191,17 +184,16 @@ Account passwords are not sent via the email if signup is enabled.
 
 Default: ``False``.
 
+gitlab:signin_enabled
+~~~~~~~~~~~~~~~~~~~~~
+The standard login can be disabled to force login via LDAP
+
+Default: ``False``.
+
 gitlab:default_can_create_group
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 User can create group.
-
-Default: ``True``.
-
-gitlab:default_can_create_team
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-User can create team.
 
 Default: ``True``.
 
@@ -212,39 +204,6 @@ User can change username/namespace.
 
 Default: ``True``.
 
-gitlab:default_theme
-~~~~~~~~~~~~~~~~~~~~
-
-Default theme. The correct values are:
-BASIC  = 1
-MARS   = 2
-MODERN = 3
-GRAY   = 4
-COLOR  = 5
-
-Default: ``2``.
-
-gitlab:admin:email
-~~~~~~~~~~~~~~~~~~
-
-Email of administrator. This use for login.
-
-Default: ``admin@local.host``.
-
-gitlab:admin:name
-~~~~~~~~~~~~~~~~~
-
-Name of administrator.
-
-Default: ``Administrator``.
-
-gitlab:admin:username
-~~~~~~~~~~~~~~~~~~~~~
-
-Username of administrator. This use for Gitlab's namespace.
-
-Default: ``root``.
-
 gitlab:admin:projects_limit
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -252,10 +211,10 @@ Max projects that administrator can be created.
 
 Default: ``1000``.
 
-gitlab:support_email
-~~~~~~~~~~~~~~~~~~~~
+gitlab:email_from
+~~~~~~~~~~~~~~~~~
 
-Email for support.
+Email address used in the "From" field in mails sent by GitLab
 
 Default: empty list (``[]``).
 
@@ -265,33 +224,6 @@ gitlab:default_projects_limit
 Default maximum number of projects a single user can create.
 
 Default: ``10``.
-
-.. gitlab:port
-.. Port listen on web
-.. Default: ``80``. You should not change it.
-
-gitlab:db:username
-~~~~~~~~~~~~~~~~~~
-
-.. include:: /postgresql/doc/username.inc
-
-Default: ``gitlab``.
-
-gitlab:db:name
-~~~~~~~~~~~~~~
-
-.. include:: /postgresql/doc/name.inc
-
-Default: ``gitlab``.
-
-gitlab:db:password
-~~~~~~~~~~~~~~~~~~
-
-.. include:: /postgresql/doc/password.inc
-
-.. gitlab:db:hostname
-.. PostgreSQL hostname.
-.. Default: ``localhost``.
 
 gitlab:ssl
 ~~~~~~~~~~

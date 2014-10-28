@@ -30,13 +30,13 @@ __author__ = 'Bruno Clermont'
 __maintainer__ = 'Bruno Clermont'
 __email__ = 'patate@fastmail.cn'
 
-import argparse
-import nagiosplugin
 import os
 import pickle
-import sitemap
 import sys
-import pysc
+
+import nagiosplugin
+
+from pysc import nrpe
 
 
 RESULT_PREFIX = '/var/lib/nagios'
@@ -73,21 +73,21 @@ class SiteMapLink(nagiosplugin.Resource):
                                     context="sitemaplink")]
 
 
-@nagiosplugin.guarded
-@pysc.profile("nrpe.check_sitemaplink")
-def main():
-    argp = argparse.ArgumentParser(description=__doc__)
-    argp.add_argument('-w', '--warning', metavar='RANGE', default='')
-    argp.add_argument('-c', '--critical', metavar='RANGE', default='')
-    argp.add_argument('-s', '--sitemap')
-    args = argp.parse_args()
-    check = nagiosplugin.Check(
-                SiteMapLink(args.sitemap),
-                nagiosplugin.ScalarContext('sitemaplink',
-                                           args.warning,
-                                           args.critical),)
-    check.main(verbose=0)
+def check_sitemaplink(config):
+    """
+    Required configs:
+
+    - sitemap
+    - warning
+    - critical
+    """
+    return (
+        SiteMapLink(config['sitemap']),
+        nagiosplugin.ScalarContext('sitemaplink',
+                                   config['warning'],
+                                   config['critical']),
+    )
 
 
 if __name__ == "__main__":
-    main()
+    nrpe.check(check_sitemaplink)

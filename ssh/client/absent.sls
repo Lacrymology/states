@@ -36,8 +36,7 @@ openssh-client:
   pkg:
     - purged
 
-{% set root_home = salt['user.info']('root')['home'] %}
-{{ root_home }}/.ssh:
+{{ salt['user.info']('root')['home'] }}/.ssh:
   file:
     - absent
 

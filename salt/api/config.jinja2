@@ -34,13 +34,13 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
  Until that issue is fixed, each users will have access to everything.
 #}
 external_auth:
-{% for auth_type in pillar['salt_master']['external_auth'] %}
+{%- for auth_type in pillar['salt_master']['external_auth'] %}
   {{ auth_type }}:
- {% for username in pillar['salt_master']['external_auth'][auth_type] %}
+ {%- for username in pillar['salt_master']['external_auth'][auth_type] %}
     {{ username }}:
       - .*
- {% endfor %}
-{% endfor %}
+ {%- endfor %}
+{%- endfor %}
 
 rest_cherrypy:
   port: 8000
@@ -49,5 +49,4 @@ rest_cherrypy:
 {%- else %}
   debug: False
 {%- endif %}
-  static: /usr/local/salt-ui/
   disable_ssl: True

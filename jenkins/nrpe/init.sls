@@ -31,8 +31,8 @@ Nagios NRPE check for jenkins.
 include:
   - apt.nrpe
   - cron.nrpe
-  - java.7.jdk
   - nginx.nrpe
+  - pysc.nrpe
   - ssh.client.nrpe
 {% if salt['pillar.get']('jenkins:ssl', False) %}
   - ssl.nrpe

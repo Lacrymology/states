@@ -32,6 +32,7 @@ include:
   - apt.nrpe
   - denyhosts
   - nrpe
+  - pysc.nrpe
   - rsyslog.nrpe
 
 {{ passive_check('denyhosts') }}

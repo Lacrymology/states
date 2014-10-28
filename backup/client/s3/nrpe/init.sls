@@ -28,8 +28,10 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 include:
   - nrpe
   - backup.client.base.nrpe
+  - backup.client.s3
   - bash.nrpe
-  - s3lite.nrpe
+  - python.dev.nrpe
+  - virtualenv.nrpe
 
 /etc/nagios/backup.yml:
   file:
@@ -77,3 +79,19 @@ check_backup.py:
       - file: /usr/local/nagios/lib/python2.7/check_backup_base.py
       - pkg: nagios-nrpe-server
       - module: backup_client_nrpe-requirements
+
+/etc/nagios/s3lite.yml:
+  file:
+    - absent
+
+/usr/lib/nagios/plugins/check_backup_s3lite.py:
+  file:
+    - managed
+    - source: salt://backup/client/s3/s3lite/nrpe/check.py
+    - user: nagios
+    - group: nagios
+    - mode: 550
+    - require:
+      - file: /etc/s3lite.yml
+      - pkg: nagios-nrpe-server
+      - module: nrpe-virtualenv

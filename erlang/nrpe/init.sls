@@ -32,8 +32,6 @@ Institute for Institutional Innovation by Data Driven Design Inc.
 Author: Lam Dang Tung <lamdt@familug.org>
 Maintainer: Lam Dang Tung <lamdt@familug.org>
 #}
-{%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
   - apt.nrpe
-
-{{ passive_check('erlang') }}
+  - erlang.nrpe.absent

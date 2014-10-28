@@ -25,44 +25,42 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
+{%- from 'cron/test.sls' import test_cron with context %}
 include:
   - shinken.broker
   - shinken.broker.diamond
   - shinken.broker.nrpe
 
-{%- set check_set = (('shinken_broker_http_port', 'Connection refused'),
+{%- set check_list = [('shinken_broker_http_port', 'Connection refused'),
                     ('shinken_broker_http', 'Connection refused'),
-                    ('shinken.broker_nginx_http', 'Invalid HTTP response')) %}
+                    ('shinken.broker_nginx_http', 'Invalid HTTP response')] %}
 
-{%- set ssl = salt['pillar.get']('shinken:ssl', False) %}
+{%- set check_list = check_list + [('shinken.broker_nginx_https', 'Invalid HTTP response')] %}
+
+{%- call test_cron() %}
+- sls: shinken.broker
+- sls: shinken.broker.diamond
+- sls: shinken.broker.nrpe
+{%- endcall %}
+
+{% for name, failure in check_list %}
+{{ name }}:
+  monitoring:
+    - run_check
+    - accepted_failure: {{ failure }}
+    - require:
+      - sls: shinken.broker.nrpe
+{%- endfor %}
 
 test:
   monitoring:
     - run_all_checks
+    - order: last
     - exclude:
-{%- for name, _ in check_set %}
+{%- for name, _ in check_list %}
       - {{ name }}
 {%- endfor %}
-{%- if ssl %}
-      - shinken.broker_nginx_https
-{%- endif %}
     - require:
-{% for name, failure in check_set %}
+{%- for name, _ in check_list %}
       - monitoring: {{ name }}
 {%- endfor %}
-
-{% for name, failure in check_set %}
-{{ name }}:
-  monitoring:
-    - run_check
-    - order: last
-    - accepted_failure: {{ failure }}
-{%- endfor %}
-
-{%- if ssl %}
-shinken.broker_nginx_https:
-  monitoring:
-    - run_check
-    - order: last
-    - accepted_failure: 'Invalid HTTP response'
-{%- endif %}

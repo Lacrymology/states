@@ -35,8 +35,13 @@ Maintainer: Lam Dang Tung <lamdt@familug.org>
 Removing Underscore.
 -#}
 libjs-underscore:
-  pkgrepo17:
+  pkgrepo:
     - absent
     - ppa: chris-lea/libjs-underscore
   pkg:
     - purged
+  file:
+    - absent
+    - name: /etc/apt/sources.list.d/chris-lea-libjs-underscore-{{ grains['oscodename'] }}.list
+    - require:
+      - pkgrepo: libjs-underscore

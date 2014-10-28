@@ -48,3 +48,17 @@ include:
         [[uwsgi.{{ state }}]]
         cmdline = ^{{ state }}-(worker|master)$
 {%- endmacro %}
+
+{%- macro diamond_process_test(state) %}
+          process.{{ state }}.cpu_times.system: True
+          process.{{ state }}.cpu_times.user: True
+          process.{{ state }}.io_counters.read_count: True
+          process.{{ state }}.io_counters.write_count: True
+          process.{{ state }}.io_counters.read_bytes: True
+          process.{{ state }}.io_counters.write_bytes: True
+          process.{{ state }}.num_ctx_switches.involuntary: True
+          process.{{ state }}.num_ctx_switches.voluntary: True
+          process.{{ state }}.cpu_percent: True
+          process.{{ state }}.memory_percent: True
+          process.{{ state }}.num_threads: False
+{%- endmacro  %}

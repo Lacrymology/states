@@ -27,7 +27,8 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 
 Setup a Salt API REST server.
 -#}
-{%- set version = '0.8.3' -%}
+{%- from 'upstart/rsyslog.jinja2' import manage_upstart_log with context -%}
+{%- set api_version = '0.8.4' -%}
 include:
   - git
   - local
@@ -65,6 +66,10 @@ user_{{ user }}:
 
 /etc/salt/master.d/ui.conf:
   file:
+    - absent
+
+/etc/salt/master.d/api.conf:
+  file:
     - managed
     - template: jinja
     - source: salt://salt/api/config.jinja2
@@ -98,31 +103,13 @@ salt-api-requirements:
       - file: salt-api-requirements
 
 salt-ui:
-{%- if 'files_archive' in pillar %}
-  archive:
-    - extracted
-    - name: /usr/local
-    - source: {{ pillar['files_archive']|replace('https://', 'http://') }}/mirror/salt-ui-6e8eee0477fdb0edaa9432f1beb5003aeda56ae6.tar.bz2
-    - source_hash: md5=61c814fb27e1e86006cdbaf8dc3ce6df
-    - archive_format: tar
-    - tar_options: j
-    - if_missing: /usr/local/salt-ui/
-    - require:
-      - file: /usr/local
-  {%- set salt_ui_module = 'archive' %}
-{%- else %}
-  git:
-    - latest
-    - rev: 6e8eee0477fdb0edaa9432f1beb5003aeda56ae6
-    - name: git://github.com/saltstack/salt-ui.git
-    - target: /usr/local/salt-ui/
-    - require:
-      - pkg: git
-    {%- set salt_ui_module = 'git' %}
-{%- endif %}
+  file:
+    - absent
+    - name: /usr/local/salt-ui
+
+/etc/nginx/conf.d/salt-api.conf:
   file:
     - managed
-    - name: /etc/nginx/conf.d/salt.conf
     - template: jinja
     - source: salt://salt/api/nginx.jinja2
     - user: www-data
@@ -130,10 +117,10 @@ salt-ui:
     - mode: 440
     - require:
       - pkg: nginx
-      - {{ salt_ui_module }}: salt-ui
 
 {#- PID file owned by root, no need to manage #}
-{%- set api_path = '0.17.5-1/pool/main/s/salt-api/salt-api_' + version + '_all.deb' %}
+{%- from "macros.jinja2" import salt_version with context %}
+{%- set api_path = salt_version() ~ '/pool/main/s/salt-api/salt-api_' + api_version + '_all.deb' %}
 salt-api:
   file:
     - managed
@@ -154,9 +141,8 @@ salt-api:
     - watch:
       - file: salt-api
       - module: salt-api-requirements
-      - file: /etc/salt/master.d/ui.conf
+      - file: /etc/salt/master.d/api.conf
       - pkg: salt-api
-      - {{ salt_ui_module }}: salt-ui
   pkg:
     - installed
     - sources:
@@ -169,7 +155,9 @@ salt-api:
       - pkg: salt-master
       - module: salt-api-requirements
 
-{%- if salt['pkg.version']('salt-api') not in ('', version) %}
+{{ manage_upstart_log('salt-api') }}
+
+{%- if salt['pkg.version']('salt-api') not in ('', api_version) %}
 salt_api_old_version:
   pkg:
     - purged
@@ -178,18 +166,16 @@ salt_api_old_version:
       - pkg: salt-api
 {%- endif %}
 
-{% from 'rsyslog/upstart.sls' import manage_upstart_log with context %}
-{{ manage_upstart_log('salt-api') }}
-
 extend:
   nginx:
     service:
       - watch:
-        - file: salt-ui
+        - file: /etc/nginx/conf.d/salt-api.conf
 {% if salt['pillar.get']('salt_master:ssl', False) %}
         - cmd: ssl_cert_and_key_for_{{ pillar['salt_master']['ssl'] }}
 {% endif %}
   salt-master:
     service:
       - watch:
+        - file: /etc/salt/master.d/api.conf
         - file: /etc/salt/master.d/ui.conf

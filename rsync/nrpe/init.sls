@@ -31,5 +31,6 @@ include:
   - apt.nrpe
   - nrpe
   - rsyslog.nrpe
+  - xinetd.nrpe
 
 {{ passive_check('rsync') }}

@@ -25,6 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
+{%- from 'cron/test.sls' import test_cron with context %}
 include:
   - postfix
   - postfix.backup
@@ -34,13 +35,17 @@ include:
   - openldap.diamond
   - openldap.nrpe
 
+{%- call test_cron() %}
+- sls: postfix
+- sls: postfix.backup
+- sls: postfix.diamond
+- sls: postfix.nrpe
+- sls: openldap
+- sls: openldap.diamond
+- sls: openldap.nrpe
+{%- endcall %}
+
 test:
   monitoring:
     - run_all_checks
-    - order: last
-  cmd:
-    - run
-    - name: /etc/cron.daily/backup-postfix
-    - require:
-      - file: backup-postfix
     - order: last

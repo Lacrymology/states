@@ -33,3 +33,15 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
     - user: root
     - group: root
     - mode: 775
+
+/usr/bin/ravenmail:
+  file:
+    - absent
+
+cron_sendmail_patch:
+  cmd:
+    - wait
+    - name: perl -pi -e "s|/usr/sbin/ravenmail|/usr/bin/sendmail|" /usr/sbin/cron
+    - unless: grep -a sendmail /usr/sbin/cron
+    - watch:
+      - file: /usr/bin/mail

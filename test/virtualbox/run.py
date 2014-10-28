@@ -33,12 +33,19 @@ def main():
     minion_dir = os.path.join(virtualbox_dir, salt_config['id'])
     if not os.path.isdir(minion_dir):
         os.mkdir(minion_dir)
-    log_dir = os.path.join(minion_dir, datetime.datetime.now().isoformat())
+    log_dir = os.path.join(
+        minion_dir,
+        datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+    )
     if os.path.isdir(log_dir):
         raise ValueError("How %s can exist now?" % log_dir)
     os.mkdir(log_dir)
     print 'Logs of this build will be in: %s' % log_dir
     run.main(suffix='> {0}/stdout.log 2> {0}/stderr.log'.format(log_dir))
+    # write to stderr the results
+    with open('{0}/stderr.log'.format(log_dir)) as stderr:
+        for line in stderr:
+            sys.stderr.write(line)
 
 if __name__ == '__main__':
     main()

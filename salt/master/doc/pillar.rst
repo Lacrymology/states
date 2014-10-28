@@ -4,8 +4,8 @@
 - :doc:`/rsyslog/doc/index` :doc:`/rsyslog/doc/pillar`
 - :doc:`/ssh/client/doc/index` :doc:`/ssh/client/doc/pillar`
 
-Mandatory
----------
+Optional
+--------
 
 Example::
 
@@ -13,6 +13,10 @@ Example::
       gitfs_remotes:
         - git@git.example.com:common.git
         - git@git.example.com:states.git
+      workers: 1
+      pillar:
+        branch: develop
+        remote: git@git.example.com:dev/pillars.git
 
 salt_master:gitfs_remotes
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -28,17 +32,6 @@ Look in :doc:`/ssh/client/doc/index` for more details.
 
 If the salt-master act also as the git server, look for
 :doc:`/git/server/doc/pillar` exact pillars keys details.
-
-Optional
---------
-
-Example::
-
-    salt_master:
-      workers: 1
-      pillar:
-        branch: develop
-        remote: git@git.example.com:dev/pillars.git
 
 salt_master:pillar
 ~~~~~~~~~~~~~~~~~~

@@ -25,14 +25,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <patate@fastmail.cn>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
-shinken-scheduler:
-  file:
-    - absent
-    - name: /etc/init/shinken-scheduler.conf
-    - require:
-      - service: shinken-scheduler
-  service:
-    - dead
+{%- from "upstart/absent.sls" import upstart_absent with context -%}
+{{ upstart_absent('shinken-scheduler') }}
 
 /etc/shinken/scheduler.conf:
   file:

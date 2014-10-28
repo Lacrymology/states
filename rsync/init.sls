@@ -29,29 +29,33 @@ A file-copying tool.
 -#}
 include:
   - rsyslog
+  - xinetd
 
-rsync:
-  pkg:
-    - installed
+{%- from "upstart/absent.sls" import upstart_absent with context -%}
+{{ upstart_absent('rsync') }}
+
+extend:
+  rsync:
+    pkg:
+      - installed
+    service:
+      - require_in:
+        - service: xinetd
+
+/etc/xinetd.d/rsync:
   file:
     - managed
-    - name: /etc/init/rsync.conf
+    - source: salt://rsync/xinetd.jinja2
     - template: jinja
-    - source: salt://rsync/upstart.jinja2
+    - mode: 440
     - user: root
     - group: root
-    - mode: 440
+    - context:
+      per_source: {{ salt['pillar.get']('rsync:limit_per_ip', '"UNLIMITED"') }}
     - require:
-      - pkg: rsync
-  service:
-    - running
-    - order: 50
-    - enable: True
-    - watch:
-      - file: rsync
-      - file: /etc/rsyncd.conf
-      - pkg: rsync
-{#- PID file owned by root, no need to manage #}
+      - file: /etc/xinetd.d
+    - watch_in:
+      - service: xinetd
 
 /etc/rsyncd.conf:
   file:
@@ -63,6 +67,5 @@ rsync:
     - source: salt://rsync/config.jinja2
     - require:
       - pkg: rsync
-
-{% from 'rsyslog/upstart.sls' import manage_upstart_log with context %}
-{{ manage_upstart_log('rsync') }}
+    - watch_in:
+      - service: xinetd

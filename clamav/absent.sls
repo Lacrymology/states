@@ -55,3 +55,5 @@ clamav-daemon:
 /var/lib/clamav:
   file:
     - absent
+    - require:
+      - pkg: clamav-daemon

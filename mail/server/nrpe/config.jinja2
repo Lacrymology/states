@@ -3,7 +3,7 @@ mailstack_functionality:
   description: Mail Stack Functionality
   command: /usr/lib/nagios/plugins/check_mail_stack.py --formula=mail.server --check=mailstack_functionality
   dependencies:
-    - dovecot_{% if salt['pillar.get']('dovecot:ssl', False) %}s{% endif %}imap
+    - dovecot_{% if salt['pillar.get']('dovecot:ssl', False) and grains['oscodename'] != 'precise' %}s{% endif %}imap
   arguments:
     {%- set mail_pillar = pillar['mail']['check_mail_stack'] -%}
     {%- set username = mail_pillar['username'] -%}

@@ -34,8 +34,6 @@ __email__ = 'lacrymology@gmail.com'
 
 import datetime
 import logging
-import os
-import pickle
 import re
 import nagiosplugin
 import pysc
@@ -50,16 +48,15 @@ class BackupFile(nagiosplugin.Resource):
         self.config = pysc.unserialize_yaml(config)
 
         self.prefix = self.config['backup']['prefix']
-        self.manifest = self.config['backup']['manifest']
 
         self.facility = facility
 
     def probe(self):
         log.info("BackupFile probe started")
         log.info("Probe backup for facility: %s", self.facility)
-        files = self.get_manifest()
+        files = self.files()
 
-        log.info("%s in manifest? %s", self.facility,
+        log.info("%s on S3? %s", self.facility,
                  str(not files.get(self.facility, None) is None))
         backup_file = files.get(self.facility, {
             'date': datetime.datetime.fromtimestamp(0),
@@ -69,7 +66,7 @@ class BackupFile(nagiosplugin.Resource):
         age_metric = nagiosplugin.Metric(
             'age',
             (datetime.datetime.now() - backup_file['date']).total_seconds() /
-                (60*60),
+            (60*60),
             min=0)
         size_metric = nagiosplugin.Metric('size', backup_file['size'], min=0)
 
@@ -77,56 +74,12 @@ class BackupFile(nagiosplugin.Resource):
         log.debug("returning age: %s, size: %s", age_metric, size_metric)
         return [age_metric, size_metric]
 
-    def get_manifest(self):
-        '''
-        Using manifest cache file for saving multiple connections if there
-        are multiple check_backup run on the same machine.
-        '''
-        log.info('manifest requested')
-        if not os.path.exists(self.manifest):
-            log.debug("manifest file doesn't exist")
-            return self.create_manifest()
-
-        stat = os.stat(self.manifest)
-        time = datetime.datetime.fromtimestamp(stat.st_mtime)
-        now = datetime.datetime.now()
-        log.debug("Manifest file mtime: %s", time.strftime("%Y-%m-%d-%H_%M_%S"))
-
-        if ((now - time).total_seconds() / 60) >= CACHE_TIMEOUT:
-            log.debug("manifest file is too old")
-            return self.create_manifest()
-        else:
-            log.debug("returning cached manifest file")
-            return pickle.load(open(self.manifest, 'rb'))
-
     def files(self):
         """
         Subclasses must implement this method to create the list of files using
         `make_file(name, size)`
         """
         raise NotImplementedError()
-
-    def create_manifest(self):
-        """
-        Creates the manifest file from the s3 bucket. This is the only part of
-        this class that is s3-dependant
-        """
-        log.info("Creating new manifest file")
-        files = {}
-
-        log.debug("Searching keys with prefix %s", self.prefix)
-        for file in self.files():
-            log.debug("File created")
-            key, value = file.items()[0]
-            # update this if it's the first time this appears, or if the date
-            # is newer
-            if (key not in files) or (value['date'] > files[key]['date']):
-                log.debug("Adding file to return dict")
-                files.update(file)
-
-        log.debug("dumping files: %s", str(files))
-        pickle.dump(files, open(self.manifest, 'wb+'))
-        return files
 
     def make_file(self, filename, size):
         log.info("Creating file dict for: %s(%sB)", filename, size)

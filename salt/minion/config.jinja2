@@ -42,6 +42,6 @@ id: {{ grains['id'] }}
 {%- if 'shinken_pollers' in pillar %}
 mine_functions:
   monitoring.data: []
-{%- endif -%}
+{%- endif %}
 
 sentry_common: {{ salt['pillar.get']('sentry_dsn', False) }}

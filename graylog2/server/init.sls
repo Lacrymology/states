@@ -29,6 +29,7 @@ Install a Graylog2 logging server backend.
 -#}
 {%- from 'macros.jinja2' import manage_pid with context -%}
 {%- from 'upstart/rsyslog.jinja2' import manage_upstart_log with context -%}
+{%- from "upstart/absent.sls" import upstart_absent with context %}
 include:
   - python
   - apt
@@ -67,15 +68,7 @@ graylog2-old-mongodb:
     - name: python-pymongo
     - installed
 
-{#-
-  graylog2-server upstart job can't create folder in /var/run (we
-  use setuid and setguid), this upstart job creates runtime directory
-  for it.
-#}
-graylog2-server-prep:
-  file:
-    - absent
-    - name: /etc/init/graylog2-server-prep.conf
+{{ upstart_absent('graylog2-server-prep') }}
 
 /var/log/graylog2/server.log:
   file:

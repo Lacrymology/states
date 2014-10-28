@@ -56,6 +56,9 @@ test_ssh:
 ssh_remove_key:
   cmd:
     - run
-    - name: cat {{ root_home }}/.ssh/id_{{ pillar['deployment_key']['type'] }}.pub | xargs -i sed -i '/{}/d' {{ root_home }}/.ssh/authorized_keys
+    {#- The body of the public key file is the base64 encoded: A-Za-z0-9+/.
+    Use different delimiter than slash to avoid an error.
+    The first occurrence of the separator must be escaped to have `sed` use it, unless you are using the `s` command #}
+    - name: cat {{ root_home }}/.ssh/id_{{ pillar['deployment_key']['type'] }}.pub | xargs -i sed -i '\|{}|d' {{ root_home }}/.ssh/authorized_keys
     - require:
       - cmd: test_ssh

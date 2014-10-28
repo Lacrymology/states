@@ -46,3 +46,7 @@ openssh-client:
 /etc/ssh/keys:
   file:
     - absent
+
+/etc/ssh/ssh_known_hosts:
+  file:
+    - absent

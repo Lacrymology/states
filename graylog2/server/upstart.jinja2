@@ -42,8 +42,10 @@ pre-start script
     if [ ! -p /var/log/graylog2/server.fifo ]; then
         rm -f /var/log/graylog2/server.fifo
         mkfifo /var/log/graylog2/server.fifo
-        chmod 640 /var/log/graylog2/server.fifo
     fi
+    chmod 640 /var/log/graylog2/server.fifo
+    chown {{ user }}:syslog /var/log/graylog2/server.fifo
+
 end script
 
 script

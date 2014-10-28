@@ -65,17 +65,12 @@ def managed(name, source=None, template='jinja',
             backup=False,
             dir_mode=755,
             contents=None,
-            defaults=None, env=None, **kwargs):
+            defaults=None, **kwargs):
 
     ret = {'name': name,
            'changes': {},
            'result': True,
            'comment': ''}
-
-    if env is None:
-        env = kwargs.get('__env__', 'base')
-
-    context.update({'env': env})
 
     source_hash = ''
 
@@ -164,7 +159,7 @@ def managed(name, source=None, template='jinja',
                 user,
                 group,
                 mode,
-                env,
+                __env__,
                 backup,
                 makedirs,
                 template,

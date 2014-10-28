@@ -31,6 +31,7 @@ include:
   - backup.client.s3
   - bash.nrpe
   - python.dev.nrpe
+  - s3cmd.nrpe
   - virtualenv.nrpe
 
 /etc/nagios/backup.yml:

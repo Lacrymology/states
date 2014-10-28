@@ -428,7 +428,7 @@ def shinken(mine_data=None):
             unresolvable = []
             for check in flat:
                 unresolvable.append('%s(%s)' % (check.name, check.minion))
-            raise ValueError("Can't resolve all dependencies of: " %
+            raise ValueError("Can't resolve all dependencies of: %s" %
                              ','.join(unresolvable))
         elif not after:
             logger.debug("Processed successfully all checks from all minions.")

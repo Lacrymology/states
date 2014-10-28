@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Hung Nguyen Viet
+Copyright (c) 2014, Diep Pham
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -21,25 +21,35 @@ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-Author: Hung Nguyen Viet hvnsweeting@gmail.com
-Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
 
- Diamond statistics for rsync
+Author: Diep Pham <favadi@robotinfra.com>
+Maintainer: Diep Pham <favadi@robotinfra.com>
 -#}
 
 include:
-  - diamond
-  - rsyslog.diamond
+  - xinetd
   - xinetd.diamond
+  - xinetd.nrpe
 
-rsync_diamond_resources:
-  file:
-    - accumulated
-    - name: processes
-    - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - require_in:
-      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - text:
-      - |
-        [[rsync]]
-        exe = ^\/usr\/bin\/rsync$
+{%- from 'cron/test.sls' import test_cron with context %}
+{%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
+
+{%- call test_cron() %}
+- sls: xinetd
+- sls: xinetd.diamond
+- sls: xinetd.nrpe
+{%- endcall %}
+
+test:
+  monitoring:
+    - run_all_checks
+    - wait: 60
+    - order: last
+  diamond:
+    - test
+    - map:
+        ProcessResources:
+    {{ diamond_process_test('xinetd') }}
+    - require:
+      - sls: xinetd
+      - sls: xinetd.diamond

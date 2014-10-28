@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Hung Nguyen Viet
+Copyright (c) 2014, Diep Pham
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -21,25 +21,28 @@ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-Author: Hung Nguyen Viet hvnsweeting@gmail.com
-Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
 
- Diamond statistics for rsync
+Author: Diep Pham <imeo@favadi.com>
+Maintainer: Diep Pham <imeo@favadi.com>
+
+Uninstall xinetd.
 -#}
 
-include:
-  - diamond
-  - rsyslog.diamond
-  - xinetd.diamond
-
-rsync_diamond_resources:
+xinetd:
+  service:
+    - dead
+  pkg:
+    - purged
+    - require:
+      - service: xinetd
   file:
-    - accumulated
-    - name: processes
-    - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - require_in:
-      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - text:
-      - |
-        [[rsync]]
-        exe = ^\/usr\/bin\/rsync$
+    - absent
+    - name: /etc/xinetd.conf
+    - require:
+      - pkg: xinetd
+
+/etc/xinetd.d:
+  file:
+    - absent
+    - require:
+      - pkg: xinetd

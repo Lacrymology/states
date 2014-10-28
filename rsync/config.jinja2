@@ -29,7 +29,7 @@ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
 {%- set rsync = salt['pillar.get']('rsync', []) -%}
 {#- global settings -#}
 {%- for key in rsync -%}
-{%- if key != 'shares' %}
+{%- if key not in ('shares', 'limit_per_ip') %}
 {{ key }} = {{ rsync[key] }}
 {%- endif -%}
 {%- endfor -%}

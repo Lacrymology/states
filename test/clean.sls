@@ -136,7 +136,6 @@ clean_pkg:
       - netcat-openbsd
       - ntfs-3g
       - ntpdate
-      - openssh-client
       - openssh-server
       - openssl
       - os-prober

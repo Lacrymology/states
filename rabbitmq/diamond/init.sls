@@ -103,7 +103,7 @@ extend:
 {% if grains['id'] != master_id %}
       - require:
         - service: rabbitmq-server
-  in_rabbitmq_cluster:
+  join_rabbitmq_cluster:
     rabbitmq_cluster:
       - require:
         - module: diamond-pyrabbit

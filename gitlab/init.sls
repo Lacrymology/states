@@ -240,8 +240,8 @@ gitlab_upstart:
   file:
     - managed
     - source: salt://gitlab/smtp.jinja2
-    - user: {{ user }}
-    - group: {{ user }}
+    - user: gitlab
+    - group: gitlab
     - template: jinja
     - mode: 440
     - require:

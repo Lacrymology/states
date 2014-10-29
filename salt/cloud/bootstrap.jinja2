@@ -28,7 +28,6 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 # {{ pillar['message_do_not_modify'] }}
 set -e
 {%- from "macros.jinja2" import salt_version with context %}
-{%- set version = salt_version %}
 
 {%- block preparation %}
 mkdir -p /etc/salt/pki/minion
@@ -49,9 +48,9 @@ apt-get update
 apt-get install -y python-software-properties python-pip
 pip install requests==0.14.2 raven==4.1.1
     {%- if 'files_archive' in pillar %}
-echo "deb {{ pillar['files_archive'].rstrip('/')|replace('https://', 'http://') }}/mirror/salt/{{ version }}/ `lsb_release -c -s` main" > /etc/apt/sources.list.d/saltstack-salt-`lsb_release -c -s`.list
+echo "deb {{ pillar['files_archive'].rstrip('/')|replace('https://', 'http://') }}/mirror/salt/{{ salt_version() }}/ `lsb_release -c -s` main" > /etc/apt/sources.list.d/saltstack-salt-`lsb_release -c -s`.list
     {%- else %}
-echo "deb http://archive.robotinfra.com/mirror/salt/{{ version }}/ `lsb_release -c -s` main" > /etc/apt/sources.list.d/saltstack-salt-`lsb_release -c -s`.list
+echo "deb http://archive.robotinfra.com/mirror/salt/{{ salt_version() }}/ `lsb_release -c -s` main" > /etc/apt/sources.list.d/saltstack-salt-`lsb_release -c -s`.list
     {%- endif  %}
 apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0E27C0A6
 apt-get update

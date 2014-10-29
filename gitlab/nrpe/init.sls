@@ -54,6 +54,6 @@ extend:
         - postgres_database: gitlab
   /usr/lib/nagios/plugins/check_pgsql_query.py:
     file:
-       - require:
-         - file: nsca-{{ formula }}
-         - postgres_database: gitlab
+      - require:
+        - file: nsca-{{ formula }}
+        - postgres_database: gitlab

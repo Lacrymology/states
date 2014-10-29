@@ -140,7 +140,8 @@ def lint_check_bad_state_style(paths, *exts):
         # e.g. if file name is .cfg or whatever contains '.'  in its name
         # currently, this works because we only extend *.py states.
         data_without_pystates = {lino: sid for lino, sid in
-                                 data.iteritems() if not sid.endswith('.py:')}
+                                 data.iteritems() if not sid.endswith('.py:')
+                                 and not sid.endswith('.conf:')}
         if data_without_pystates:
             filtered_found.update({fn: data_without_pystates})
 

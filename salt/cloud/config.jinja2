@@ -27,7 +27,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 # {{ pillar['message_do_not_modify'] }}
 script: bootstrap_salt
 minion:
-  master: {{ pillar['salt']['cloud']['master'] }}
+  master: {{ pillar['salt_cloud']['master'] }}
 
 log_file: file:///dev/log
 

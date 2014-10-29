@@ -60,6 +60,7 @@ if Gitlab::Application.config.action_mailer.delivery_method == :smtp
     enable_starttls_auto: true,
 {%- else %}
     enable_starttls_auto: false,
+    tls: true,
 {%- endif %}
   }
 end

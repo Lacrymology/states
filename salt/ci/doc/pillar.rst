@@ -32,10 +32,29 @@
 - :doc:`/salt/cloud/doc/index` :doc:`/salt/cloud/doc/pillar`
 - :doc:`/salt/master/doc/index` :doc:`/salt/master/doc/pillar`
 
+Mandatory
+---------
+
+salt_ci:host_key
+~~~~~~~~~~~~~~~~
+
+Host key of CI host. This need to be filled after setup CI server.
+
+salt_ci:agent_pubkey
+~~~~~~~~~~~~~~~~~~~~
+
+SSH public key of ci-agent, who in charge of copying test result files
+to CI server.
+
+salt_ci:agent_privkey
+~~~~~~~~~~~~~~~~~~~~~
+
+SSH private key of ci-agent.
+
 Optional
 --------
 
-salt:ci:timeout
+salt_ci:timeout
 ~~~~~~~~~~~~~~~
 
 Time before salt considers running test suite took too long and exits with

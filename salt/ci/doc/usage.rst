@@ -11,7 +11,7 @@ scp command instead of salt-cp to avoid security problems. To make scp work,
 it must set pillar ``salt_ci:host_key`` to host key of CI server. See
 :doc:`/ssh/doc/index` for instruction.
 NOTICE: the address part in this key should be the same as value in
-``salt_ci:master`` (do not use domain in one and IP in another)
+``salt_cloud:master`` (do not use domain in one and IP in another)
 
 Plugins
 -------

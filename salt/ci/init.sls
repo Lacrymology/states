@@ -131,7 +131,7 @@ ci-agent:
     - group: ci-agent
     - mode: 400
     - contents: |
-        {{ pillar['salt']['ci']['authorized_keys']|indent(8) }}
+        {{ pillar['salt_ci']['agent_pubkey']|indent(8) }}
     - require:
       - file: ci-agent
 

@@ -27,8 +27,9 @@ __author__ = 'Bruno Clermont'
 __maintainer__ = 'Bruno Clermont'
 __email__ = 'patate@fastmail.cn'
 
-import re
 import logging
+import os
+import re
 from UserList import UserList
 from UserDict import IterableUserDict, UserDict
 
@@ -38,6 +39,7 @@ logger = logging.getLogger(__name__)
 
 MINE_DATA_FUNC_NAME = 'monitoring.data'
 MINE_DATA_KEY = 'checks'
+NSCA_D = '/etc/nagios/nsca.d'
 __NRPE_RE = re.compile('^command\[([^\]]+)\]=(.+)$')
 
 
@@ -54,32 +56,52 @@ def _yaml(filename):
             raise err
 
 
-def discover_checks(directory='/etc/nagios/nsca.d'):
+def list_check_formulas():
     '''
-    Return all monitor.jinja2 rendered data for a single minion.
+    List all formula that have a monitoring check on this minions.
+    '''
+    output = []
+    logger.debug("Check for yaml file in %s", NSCA_D)
+    for filename in __salt__['file.find'](NSCA_D, type='f'):
+        basename = os.path.basename(filename)
+        output.append(os.path.splitext(basename)[0])
+    return output
+
+
+def load_check(formula, remove_sensitive_data=True):
+    '''
+    Load monitoring data for a single formula.
+    '''
+    basename = '%s.yml' % formula
+    filename = os.path.join(NSCA_D, basename)
+    try:
+        check = _yaml(filename)
+    except Exception, err:
+        logger.error("Can't load '%s': %s", filename, err)
+        return {}
+    if remove_sensitive_data:
+        # Remove the key that hold NRPE command that is executed as
+        # check.
+        # That must not be copied in salt mine as it's not used by
+        # shinken and it might contains sensible information.
+        # same with subkey 'context' that hold context passed to NRPE
+        # check.
+        for subkey in ('command', 'arguments'):
+            for key in check:
+                try:
+                    del check[key][subkey]
+                except KeyError:
+                    pass
+    return check
+
+
+def discover_checks():
+    '''
+    Return all monitor check data for all formula for this minion.
     '''
     checks = {}
-    logger.debug("Check for yaml file in %s", directory)
-    for filename in __salt__['file.find'](directory, type='f'):
-        try:
-            check = _yaml(filename)
-        except Exception:
-            logger.debug("Skip '%s'", filename)
-        else:
-            # Remove the key that hold NRPE command that is executed as
-            # check.
-            # That must not be copied in salt mine as it's not used by
-            # shinken and it might contains sensible information.
-            # same with subkey 'context' that hold context passed to NRPE
-            # check.
-            for subkey in ('command', 'arguments'):
-                for key in check:
-                    try:
-                        del check[key][subkey]
-                    except KeyError:
-                        pass
-            checks.update(check)
-            logger.debug("Processed '%s' succesfully", filename)
+    for formula in list_check_formulas():
+        checks.update(load_check(formula))
     return checks
 
 

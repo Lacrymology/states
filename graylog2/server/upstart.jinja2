@@ -49,5 +49,5 @@ pre-start script
 end script
 
 script
-  exec sudo -H -u {{ user }} -g syslog java -server -jar /usr/local/graylog2-server-{{ version }}/graylog2-server.jar --pidfile /var/run/graylog2/graylog2.pid >> /var/log/graylog2/server.fifo
+  exec sudo -E -H -u {{ user }} -g syslog java -server -jar /usr/local/graylog2-server-{{ version }}/graylog2-server.jar --pidfile /var/run/graylog2/graylog2.pid >> /var/log/graylog2/server.fifo
 end script

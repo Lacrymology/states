@@ -36,11 +36,10 @@ Mandatory
 
 Example::
 
-  salt:
-    cloud:
-      master: 1.2.3.4
+  salt_cloud:
+    master: 1.2.3.4
 
-salt:cloud:master
+salt_cloud:master
 ~~~~~~~~~~~~~~~~~
 
 Address of salt-master for all salt-cloud managed VMs.
@@ -50,30 +49,29 @@ Optional
 
 Example::
 
-  salt:
-    cloud:
-      profiles:
-        <profile_name>:
-          <attribute_name>: <value>
-      providers:
-        <provider_name>:
-          <attribute_name>: <value>
+  salt_cloud:
+    profiles:
+      <profile_name>:
+        <attribute_name>: <value>
+    providers:
+      <provider_name>:
+        <attribute_name>: <value>
 
-salt:cloud:profiles:<profile_name>
+salt_cloud:profiles:<profile_name>
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Name of profile.
 
 Default: None (``[]``).
 
-salt:cloud:providers:<provider_name>
+salt_cloud:providers:<provider_name>
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Name of provider.
 
 Default: None (``[]``).
 
-salt:cloud:(<profiles>|<providers>):<attribute_name>
+salt_cloud:(<profiles>|<providers>):<attribute_name>
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Name of attribute, it comes with a value.

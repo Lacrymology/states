@@ -25,7 +25,7 @@ Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
 # {{ pillar['message_do_not_modify'] }}
-{%- set providers = salt['pillar.get']('salt:cloud:providers', []) %}
+{%- set providers = salt['pillar.get']('salt_cloud:providers', []) %}
 {%- for alias in providers %}
 {{ alias }}:
   {%- for attr in providers[alias] %}

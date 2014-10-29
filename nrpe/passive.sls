@@ -111,4 +111,8 @@ nsca-{{ formula }}:
 /etc/cron.twice_daily/sslyze_check_{{ formula|replace('.', '-') }}:
   file:
     - absent
+
+/var/lib/nagios/{{ formula }}_ssl_configuration.yml:
+  file:
+    - absent
 {%- endmacro %}

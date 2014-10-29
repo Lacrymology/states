@@ -32,6 +32,15 @@ include:
   - {{ state }}.nrpe
 {%- endfor %}
 
+{%- from 'cron/test.sls' import test_cron with context %}
+{%- call test_cron() %}
+  {%- for state in ('graylog2.server', 'graylog2.web', 'elasticsearch') %}
+- sls: {{ state }}
+- sls: {{ state }}.diamond
+- sls: {{ state }}.nrpe
+  {%- endfor %}
+{%- endcall %}
+
 test:
   monitoring:
     - run_all_checks

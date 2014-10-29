@@ -1,4 +1,3 @@
-# {{ pillar['message_do_not_modify'] }}
 {#-
 Copyright (c) 2014, Hung Nguyen Viet
 All rights reserved.
@@ -25,5 +24,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author: Hung Nguyen Viet <hvnsweeting@gmil.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmil.com>
-#}
-0 */6 * * *   root /usr/lib/nagios/plugins/check_mine_minions.py -F salt.master -N salt_master_mine --cronjob
+-#}
+#!/bin/bash
+# {{ pillar['message_do_not_modify'] }}
+set -e
+/usr/lib/nagios/plugins/check_mine_minions.py --formula=salt.master --check=salt_master_mine --cronjob

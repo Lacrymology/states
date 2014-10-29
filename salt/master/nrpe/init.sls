@@ -78,15 +78,19 @@ salt_check_mine_nrpe_check:
 salt_mine_collect_minions_data:
   file:
     - managed
-    - name: /etc/cron.d/salt_mine_data
+    - name: /etc/cron.twice_daily/salt_mine_data
     - user: root
     - group: root
     - mode: 400
     - template: jinja
     - source: salt://salt/master/nrpe/cron.jinja2
     - require:
-      - pkg: cron
+      - file: /etc/cron.twice_daily
       - file: /usr/lib/nagios/plugins/check_mine_minions.py
+
+/etc/cron.d/salt_mine_data:
+  file:
+    - absent
     - watch_in:
       - service: cron
 

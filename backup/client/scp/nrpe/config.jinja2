@@ -39,4 +39,3 @@ ssh:
 
 backup:
   prefix: /var/lib/backup/{{ salt['pillar.get']('backup_server:subdir', grains['id']) }}
-  manifest: /var/lib/nagios/backup.manifest.pickle

@@ -25,7 +25,7 @@ Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
 # {{ pillar['message_do_not_modify'] }}
-{%- set profiles = salt['pillar.get']('salt:cloud:profiles', []) %}
+{%- set profiles = salt['pillar.get']('salt_cloud:profiles', []) %}
 {%- for profile in profiles %}
 {{ profile }}:
   {%- for attr in profiles[profile] %}

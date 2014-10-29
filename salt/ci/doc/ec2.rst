@@ -68,10 +68,10 @@ Server Installation
 Create a security only for the C.I. server. Allow in :doc:`/ssh/doc/index`,
 HTTP and HTTPs (if you turned on :doc:`/ssl/doc/index`).
 Allow all TCP, UDP and ICMP traffic from security group
-``salt:cloud:providers:amazon_ec2:securitygroup`` in.
+``salt_cloud:providers:amazon_ec2:securitygroup`` in.
 
 Create a VM in the same region and availabilty zone as in
-``salt:cloud:providers:availability_zone:location``. You don't have to use the
+``salt_cloud:providers:availability_zone:location``. You don't have to use the
 same keypair previously created.
 
 A **t1.micro** instance is not enough for you, as salt-cloud leak memory you

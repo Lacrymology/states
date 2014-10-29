@@ -134,8 +134,7 @@ class SCPBackupFile(BackupFile):
             key, value = f.items()[0]
             # we may want to run fstat on this filename later on
             f[key]['filename'] = filename
-            # this code is taken from BackupFile.create_manifest, it keeps only
-            # the newest file for each facility
+            # keeps only the newest file for each facility
             if (key not in files) or (value['date'] > files[key]['date']):
                 log.debug('first or newer.')
                 files.update(f)

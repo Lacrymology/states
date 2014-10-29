@@ -36,6 +36,7 @@ include:
   - rsyslog.nrpe
   - pysc.nrpe
   - python.nrpe
+  - sudo.nrpe
 
 /usr/lib/nagios/plugins/check_new_logs.py:
   file:

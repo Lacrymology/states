@@ -39,6 +39,7 @@ Once this state is installed, you need to:
   /users/
 -#}
 {%- from 'upstart/rsyslog.jinja2' import manage_upstart_log with context -%}
+{%- from "upstart/absent.sls" import upstart_absent with context %}
 include:
   - graylog2
   - java.7
@@ -51,6 +52,7 @@ include:
   - ssl
 {% endif %}
   - web
+  - sudo
 
 {% set version = '0.20.6' %}
 {% set checksum = 'md5=27d20967a7de68ead66f66ff07de281c' %}
@@ -96,26 +98,7 @@ graylog2-web-{{ user }}:
     - absent
 {% endfor %}
 
-{#-
-  graylog2-web upstart job can't create folder in /var/run (we
-  use setuid and setguid), this upstart job creates runtime directory
-  for it.
-#}
-graylog2-web-prep:
-  file:
-    - managed
-    - name: /etc/init/graylog2-web-prep.conf
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 400
-    - source: salt://graylog2/web/upstart_prep.jinja2
-    - context:
-      user: {{ user }}
-    - require:
-      - user: graylog2-web-{{ user }}
-
-{{ manage_upstart_log('graylog2-web-prep') }}
+{{ upstart_absent('graylog2-web-prep') }}
 
 {{ web_root_dir }}/logs:
   file:
@@ -161,9 +144,11 @@ graylog2-web:
     - mode: 400
     - source: salt://graylog2/web/upstart.jinja2
     - context:
-      file: graylog2-web-prep
       web_root_dir: {{ web_root_dir }}
       user: {{ user }}
+    - require:
+      - file: graylog2-web-prep
+      - pkg: sudo
   archive:
     - extracted
     - name: /usr/local/

@@ -59,7 +59,6 @@ test:
   monitoring:
     - run_all_checks
     - order: last
-    - wait: 30
   cmd:
     - run
     - name: /usr/local/bin/backup-store `/usr/local/bin/create_dumb`

@@ -54,20 +54,6 @@ include:
     - absent
 {% endfor %}
 
-{# remove old mongodb db: graylog2 #}
-graylog2-old-mongodb:
-  mongodb_database:
-    - absent
-    - name: graylog2
-    - host: 127.0.0.1
-    - port: 27017
-    - require:
-      - pkg: mongodb
-      - pkg: graylog2-old-mongodb
-  pkg:
-    - name: python-pymongo
-    - installed
-
 {{ upstart_absent('graylog2-server-prep') }}
 
 /var/log/graylog2/server.log:
@@ -215,13 +201,16 @@ graylog2_rsyslog_config:
 
 {# Auto add General Syslog UDP input #}
 import_general_syslog_udp_input:
+  pkg:
+    - name: python-pymongo
+    - installed
   cmd:
     - name: import_general_syslog_udp_input graylog2-{{ mongodb_suffix }}
     - wait_script
     - source: salt://graylog2/server/import_general_syslog_udp_input.py
     - require:
       - service: graylog2-server
-      - pkg: graylog2-old-mongodb
+      - pkg: import_general_syslog_udp_input
       - module: pysc
     - watch:
       - archive: graylog2-server

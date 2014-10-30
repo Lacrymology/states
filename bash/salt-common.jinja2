@@ -75,7 +75,9 @@ log_stop_script() {
             "Finish after N/A seconds, return code: ${_return_code}"
     fi
 
-    test -f "${_pid_file}" && rm -f "${_pid_file}"
+    if [[ -z "${_pid_file}" ]]; then
+        test -f "${_pid_file}" && rm -f "${_pid_file}"
+    fi
 }
 
 locking_script() {

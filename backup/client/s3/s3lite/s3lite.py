@@ -181,7 +181,7 @@ class S3lite(pysc.Application):
         return argp
 
     def main(self):
-        s3u = S3Util(self.config['s3']['key_id'],
+        s3u = S3Util(self.config['s3']['access_key'],
                      self.config['s3']['secret_key'],
                      minion_id=self.config['minion_id'])
 

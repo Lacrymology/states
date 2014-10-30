@@ -124,7 +124,7 @@ def s3lite_backup_client_check(config):
 
         return (
             BackupAge(
-                config['s3']['key_id'],
+                config['s3']['access_key'],
                 config['s3']['secret_key'],
                 bucket_name,
                 prefix,
@@ -144,5 +144,5 @@ if __name__ == "__main__":
         'empty': False,
         'warning': '48',
         'timeout': None,
-        'config': '/etc/s3lite.yml',
+        'config': '/etc/nagios/backup.yml',
     })

@@ -30,7 +30,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 {{ pysc_config() }}
 
 s3:
-  key_id: {{ pillar['aws']['access_key'] }}
+  access_key: {{ pillar['aws']['access_key'] }}
   secret_key: {{ pillar['aws']['secret_key'] }}
 
 minion_id: {{ grains['id'] }}

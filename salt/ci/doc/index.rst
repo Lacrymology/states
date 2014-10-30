@@ -85,51 +85,16 @@ Run state.highstate on a specific set of minions, basically::
 Those minions pillars need to have their branch set to the same branch name
 as the CI jobs is watched.
 
-Run test suite
-``````````````
-
-- CI job need git pull all states branches.
-- Run ``bootstrap_archive.py`` and create a single artifact that will copied to
-  the :doc:`/salt/minion/doc/index` by the bootstrap script.
-- Run a CI specific bootstrap script. This alternate script copy the artifact
-  and follow the testing framework steps:
-
-  - chdir /
-  - extract the artifact
-  - install minion (like
-    :download:`bootstrap.jinja2 </salt/minion/bootstrap.jinja2>`)
-  - run ``/root/salt/states/test/integration.py``
-
 Installation
 ------------
 
 As this formula depends on previously specified dependencies,
 
-You have to go trough each of them and configure pillar and follow their own doc
-before doing this formula. But you can apply all the formulas simultaneously
-with a single ``state.highstate`` if you have appropriate role.
+You have to go through each of them and configure pillar and follow their own
+doc before doing this formula. But you can apply all the formulas
+simultaneously with a single ``state.highstate`` if you have appropriate role.
 
 Here are ``salt.ci`` specific consideration with those dependencies:
-
-Jenkins
-~~~~~~~
-
-Once :doc:`/jenkins/doc/index` is deployed, go in one of the hostname you
-specified at ``jenkins:hostnames`` :doc:`/jenkins/doc/pillar`.
-
-Set ``[a-zA-Z0-9\-]*`` as regular expression for job name. As job name are
-used to create VM hostname, this need to be a valid hostname.
-
-Install
-`Multiple SCM plugin <https://wiki.jenkins-ci.org/display/JENKINS/Multiple+SCMs+Plugin>`__
-to have it check all 3 git repositories required:
-
-- Common states
-- Non-common states
-- Pillars repo
-
-Raise number of executor to large value such as ``20`` if you want to let it
-run multiple tests in parallels.
 
 .. toctree::
     :glob:

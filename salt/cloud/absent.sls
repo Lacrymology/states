@@ -24,15 +24,19 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
-{%- for type in ('profiles', 'providers', 'profiles.d', 'providers.d') %}
+{%- for type in ('profiles', 'providers', 'profiles.d', 'providers.d', 'deploy.d') %}
 /etc/salt/cloud.{{ type }}:
   file:
     - absent
+    - require:
+      - pkg: salt-cloud
 {%- endfor %}
 
 /etc/salt/cloud:
   file:
     - absent
+    - require:
+      - pkg: salt-cloud
 
 salt-cloud:
   pkg:
@@ -44,7 +48,3 @@ salt-cloud:
 python-libcloud:
   pkg:
     - purged
-
-/etc/salt/cloud.deploy.d:
-  file:
-    - absent

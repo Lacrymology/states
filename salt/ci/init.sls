@@ -39,11 +39,6 @@ include:
   - sudo
   - virtualenv
 
-extend:
-  salt-cloud-boostrap-script:
-    file:
-      - source: salt://salt/ci/bootstrap.jinja2
-
 {#- this file no longer managed on salt ci VM, use one provided by build #}
 /usr/local/bin/retcode_check.py:
   file:

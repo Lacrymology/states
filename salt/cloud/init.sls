@@ -24,6 +24,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
+{%- from "macros.jinja2" import salt_version with context %}
 include:
   - apt
   - bash
@@ -88,13 +89,13 @@ salt-cloud:
 
 salt-cloud-boostrap-script:
   file:
-    - managed
-    - name: /etc/salt/cloud.deploy.d/bootstrap_salt.sh
-    - source: salt://salt/cloud/bootstrap.jinja2
+    - replace
+    - name: /etc/salt/cloud.deploy.d/bootstrap-salt.sh
+    - pattern: 'add-apt-repository -y ppa:saltstack/salt'
+    - repl: echo "deb http://archive.robotinfra.com/mirror/salt/{{ salt_version() }}/ `lsb_release -c -s` main" > /etc/apt/sources.list.d/saltstack-salt-`lsb_release -c -s`.list && apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0E27C0A6
     - mode: 500
     - user: root
     - group: root
-    - mkdirs: True
     - template: jinja
     - require:
       - module: salt-cloud

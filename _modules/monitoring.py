@@ -29,7 +29,6 @@ __email__ = 'patate@fastmail.cn'
 
 import logging
 import os
-import re
 from UserList import UserList
 from UserDict import IterableUserDict, UserDict
 
@@ -40,13 +39,12 @@ logger = logging.getLogger(__name__)
 MINE_DATA_FUNC_NAME = 'monitoring.data'
 MINE_DATA_KEY = 'checks'
 NSCA_D = '/etc/nagios/nsca.d'
-__NRPE_RE = re.compile('^command\[([^\]]+)\]=(.+)$')
 
 
 def _yaml(filename):
     with open(filename, 'r') as stream:
         try:
-            return yaml.safe_load(stream)
+            return yaml.load(stream)
         except Exception, err:
             logger.critical("YAML data from failed to parse for '%s'",
                             filename, exc_info=True)
@@ -95,13 +93,13 @@ def load_check(formula, remove_sensitive_data=True):
     return check
 
 
-def discover_checks():
+def discover_checks(remove_sensitive_data=True):
     '''
     Return all monitor check data for all formula for this minion.
     '''
     checks = {}
     for formula in list_check_formulas():
-        checks.update(load_check(formula))
+        checks.update(load_check(formula, remove_sensitive_data))
     return checks
 
 
@@ -184,26 +182,7 @@ def data():
     return output
 
 
-def list_checks(config_dir='/etc/nagios/nrpe.d'):
-    '''
-    List all available NRPE check.
-
-    CLI Exaple::
-
-        salt '*' nrpe.list_checks
-
-    '''
-    output = {}
-    for filename in __salt__['file.find'](config_dir, type="f"):
-        with open(filename, 'r') as input_fh:
-            for line in input_fh:
-                match = __NRPE_RE.match(line)
-                if match:
-                    output[match.group(1)] = match.group(2)
-    return output
-
-
-def run_check(check_name):
+def run_check(check_name, checks=None):
     '''
     Run a specific nagios check
 
@@ -212,7 +191,8 @@ def run_check(check_name):
         salt '*' nrpe.run_check <check name>
 
     '''
-    checks = list_checks()
+    if checks is None:
+        checks = discover_checks(False)
     logger.debug("Found %d checks", len(checks.keys()))
     ret = {
         'name': check_name,
@@ -224,7 +204,14 @@ def run_check(check_name):
         ret['comment'] = "Can't find check '{0}'".format(check_name)
         return ret
 
-    output = __salt__['cmd.run_all'](checks[check_name], runas='nagios')
+    command = 'command'
+    if command not in checks[check_name]:
+        ret['result'] = False
+        ret['comment'] = "'{0}' isn't a NRPE check".format(check_name)
+        return ret
+
+    output = __salt__['cmd.run_all'](checks[check_name][command],
+                                     runas='nagios')
     ret['comment'] = "stdout: '{0}' stderr: '{1}'".format(output['stdout'],
                                                           output['stderr'])
     ret['result'] = output['retcode'] == 0
@@ -242,15 +229,18 @@ def run_all_checks(return_only_failure=False):
 
     '''
     output = {}
-    for check_name in list_checks():
-        check_result = run_check(check_name)
-        del check_result['changes']
-        del check_result['name']
-        if return_only_failure:
-            if not check_result['result']:
+    all_checks = discover_checks(False)
+    for check_name in all_checks:
+        # only handle real NRPE checks
+        if 'command' in all_checks[check_name]:
+            check_result = run_check(check_name, all_checks)
+            del check_result['changes']
+            del check_result['name']
+            if return_only_failure:
+                if not check_result['result']:
+                    output[check_name] = check_result
+            else:
                 output[check_name] = check_result
-        else:
-            output[check_name] = check_result
     return output
 
 

@@ -69,15 +69,3 @@ test:
   monitoring:
     - run_all_checks
     - order: last
-
-test_check_mail_stack:
-  cmd:
-    - run
-    - name: /usr/lib/nagios/plugins/check_mail_stack.py
-    - require:
-      - sls: amavis
-      - sls: clamav
-      - sls: dovecot
-      - sls: postfix
-      - sls: openldap
-      - sls: mail.server.nrpe

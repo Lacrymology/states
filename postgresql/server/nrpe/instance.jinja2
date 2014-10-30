@@ -48,7 +48,7 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
   arguments:
     timeout: 15 {#- 15 seconds to run statement  #}
     passwd: {{ password }}
-    user: {{ username }}
+    user: {{ username|default(dbname, boolean=True) }}
     host: localhost
     database: {{ dbname }}
     query: "select * from information_schema.tables where table_schema = 'public';"

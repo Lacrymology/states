@@ -28,10 +28,25 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 include:
   - sslyze
 
-test_sslyze_with_gmail:
-  cmd:
-    - run
-{#- use --set= as it's not yet linked to any formula and check yet  #}
-    - name: '/usr/lib/nagios/plugins/check_ssl_configuration.py --set=''{"host": "mail.google.com"}'''
+nsca-test:
+  file:
+    - serialize
+    - name: /etc/nagios/nsca.d/test.yml
     - require:
-      - sls: sslyze
+      - file: /etc/nagios/nsca.d
+    - dataset:
+        sslyze:
+          command: /usr/lib/nagios/plugins/check_ssl_configuration.py --formula=test --check=sslyze
+          arguments:
+            host: mail.google.com
+
+test:
+  monitoring:
+    - run_check
+    - name: sslyze
+    - order: last
+  file:
+    - absent
+    - name: /etc/nagios/nsca.d/test.yml
+    - require:
+      - monitoring: test

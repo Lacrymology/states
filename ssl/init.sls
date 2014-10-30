@@ -141,6 +141,7 @@ ssl_cert_and_key_for_{{ name }}:
       - file: /etc/ssl/certs/{{ name }}_ca.crt
       - file: /etc/ssl/private/{{ name }}.pem
       - file: /etc/ssl/certs/{{ name }}_chained.crt
+      - file: /etc/ssl/private/{{ name }}_bundle.pem
 
 {#- OpenSSL expects to find each certificate in a file named by the certificate
     subject's hashed name, plus a number extension that starts with 0.

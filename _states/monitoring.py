@@ -189,7 +189,7 @@ def run_all_checks(**kwargs):
         exclude = []
 
     # all checks without check in exception list
-    checks_name = list(set(__salt__['monitoring.list_checks']())
+    checks_name = list(set(__salt__['monitoring.list_nrpe_checks']())
                        - set(exclude))
 
     if __opts__['test']:

@@ -93,7 +93,7 @@ def load_check(formula, remove_sensitive_data=True):
     return check
 
 
-def discover_checks(remove_sensitive_data=True):
+def list_checks(remove_sensitive_data=True):
     '''
     Return all monitor check data for all formula for this minion.
     '''
@@ -101,6 +101,15 @@ def discover_checks(remove_sensitive_data=True):
     for formula in list_check_formulas():
         checks.update(load_check(formula, remove_sensitive_data))
     return checks
+
+
+def list_nrpe_checks():
+    output = {}
+    all_checks = list_checks(False)
+    for check in all_checks:
+        if 'command' in all_checks[check]:
+            output.update({check: all_checks[check]})
+    return output
 
 
 class _DontExistData(object):
@@ -114,7 +123,7 @@ def data():
     output = {
         'shinken_pollers': __salt__['pillar.get']('shinken_pollers', []),
         'roles': __salt__['pillar.get']('roles', []),
-        'checks': discover_checks(),
+        'checks': list_checks(),
         'monitor': __salt__['pillar.get']('monitor', True)
     }
 
@@ -192,7 +201,7 @@ def run_check(check_name, checks=None):
 
     '''
     if checks is None:
-        checks = discover_checks(False)
+        checks = list_nrpe_checks()
     logger.debug("Found %d checks", len(checks.keys()))
     ret = {
         'name': check_name,
@@ -204,13 +213,7 @@ def run_check(check_name, checks=None):
         ret['comment'] = "Can't find check '{0}'".format(check_name)
         return ret
 
-    command = 'command'
-    if command not in checks[check_name]:
-        ret['result'] = False
-        ret['comment'] = "'{0}' isn't a NRPE check".format(check_name)
-        return ret
-
-    output = __salt__['cmd.run_all'](checks[check_name][command],
+    output = __salt__['cmd.run_all'](checks[check_name]['command'],
                                      runas='nagios')
     ret['comment'] = "stdout: '{0}' stderr: '{1}'".format(output['stdout'],
                                                           output['stderr'])
@@ -229,18 +232,16 @@ def run_all_checks(return_only_failure=False):
 
     '''
     output = {}
-    all_checks = discover_checks(False)
+    all_checks = list_nrpe_checks()
     for check_name in all_checks:
-        # only handle real NRPE checks
-        if 'command' in all_checks[check_name]:
-            check_result = run_check(check_name, all_checks)
-            del check_result['changes']
-            del check_result['name']
-            if return_only_failure:
-                if not check_result['result']:
-                    output[check_name] = check_result
-            else:
+        check_result = run_check(check_name, all_checks)
+        del check_result['changes']
+        del check_result['name']
+        if return_only_failure:
+            if not check_result['result']:
                 output[check_name] = check_result
+        else:
+            output[check_name] = check_result
     return output
 
 

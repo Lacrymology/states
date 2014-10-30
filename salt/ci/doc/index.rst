@@ -91,14 +91,13 @@ Run test suite
 - CI job need git pull all states branches.
 - Run ``bootstrap_archive.py`` and create a single artifact that will copied to
   the :doc:`/salt/minion/doc/index` by the bootstrap script.
-- Run a CI specific bootstrap script (not the one that come with
-  :doc:`/salt/cloud/doc/index` state. This alternate script copy the artifact
+- Run a CI specific bootstrap script. This alternate script copy the artifact
   and follow the testing framework steps:
 
   - chdir /
   - extract the artifact
   - install minion (like
-    :download:`bootstrap.jinja2 </salt/cloud/bootstrap.jinja2>`)
+    :download:`bootstrap.jinja2 </salt/minion/bootstrap.jinja2>`)
   - run ``/root/salt/states/test/integration.py``
 
 Installation

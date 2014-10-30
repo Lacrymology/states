@@ -32,3 +32,8 @@ freshclam_procs:
 clamav_procs:
   description: ClamAV Daemon
   command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -u clamav -C clamd'
+
+{%- set max_age = 24 * 60 * 60 %}  {# one day #}
+clamav_last_update:
+  description: ClamAV Last Update
+  command: '/usr/lib/nagios/plugins/check_file_age -w {{ max_age }} -c {{ max_age }} /var/lib/clamav/last-update'

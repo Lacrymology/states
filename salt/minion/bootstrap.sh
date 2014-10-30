@@ -46,8 +46,6 @@ fi
 # force HOME to be root user one
 export HOME=`cat /etc/passwd | grep ^root\: | cut -d ':' -f 6`
 
-# if you change the following section, please also change
-# salt/cloud/bootstrap.jinja2
 apt-get update
 apt-get install -y --no-install-recommends python-software-properties python-pip
 pip install requests==0.14.2 raven==4.1.1

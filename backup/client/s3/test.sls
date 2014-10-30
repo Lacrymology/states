@@ -41,12 +41,19 @@ test_s3lite_run_sample_backup:
       - sls: backup.client.s3
       - sls: backup.client.s3.nrpe
 
-test_s3lite_check_s3lite_sync:
-  cmd:
-    - run
-    - name: '/usr/lib/nagios/plugins/check_backup_s3lite.py --set=''{"path": "s3lite", "bucket": "s3://{{ pillar['aws']['s3']['bucket'] }}/{{ pillar['aws']['s3']['path'].strip('/') }}"}'''
+{#- test check_backup_s3lite.py  #}
+nsca-test:
+  file:
+    - serialize
+    - name: /etc/nagios/nsca.d/test.yml
     - require:
-      - cmd: test_s3lite_run_sample_backup
+      - file: /etc/nagios/nsca.d
+    - dataset:
+        s3lite:
+          command: /usr/lib/nagios/plugins/check_backup_s3lite.py --formula=test --check=s3lite
+          arguments:
+            path: s3lite
+            bucket: s3://{{ pillar['aws']['s3']['bucket'] }}/{{ pillar['aws']['s3']['path'].strip('/') }}
 
 test:
   monitoring:
@@ -59,6 +66,12 @@ test:
     - require:
       - file: /usr/local/bin/backup-store
       - file: /usr/local/bin/create_dumb
+  file:
+    - absent
+    - name: /etc/nagios/nsca.d/test.yml
+    - require:
+      - monitoring: test
+
 
 {%- else %}
 

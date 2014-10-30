@@ -74,7 +74,11 @@ ssl = yes
     {%- if version|int >= 21 %}
 ssl_protocols = !SSLv3 !SSLv2
     {%- else %}
-ssl_cipher_list = EDH+CAMELLIA:EDH+aRSA:EECDH+aRSA+AESGCM:EECDH+aRSA+SHA384:EECDH+aRSA+SHA256:EECDH:+CAMELLIA256:+AES256:+CAMELLIA128:+AES128:+SSLv3:!aNULL:!eNULL:!LOW:!3DES:!MD5:!EXP:!PSK:!DSS:!RC4:!SEED:!ECDSA:CAMELLIA256-SHA:AES256-SHA:CAMELLIA128-SHA:AES128-SHA
+    {#- Ubuntu 12.04 disable TLSv1.2 in the client side.
+    TLSv1.0 uses same ciphers suite as SSLv3.
+    So, don't disable all SSLv3 ciphers suite here, it will break something.
+    Just disable CBC-mode ciphers with SSL 3.0 to mitigate POODLE #}
+ssl_cipher_list = EDH+CAMELLIA:EDH+aRSA:EECDH+aRSA+AESGCM:EECDH+aRSA+SHA384:EECDH+aRSA+SHA256:EECDH:+CAMELLIA256:+AES256:+CAMELLIA128:+AES128:+SSLv3:!aNULL:!eNULL:!LOW:!3DES:!MD5:!EXP:!PSK:!DSS:!RC4:!SEED:!ECDSA:CAMELLIA256-SHA:CAMELLIA128-SHA:!DHE-RSA-AES256-SHA
     {%- endif %}
 ssl_cert = </etc/ssl/certs/{{ ssl }}_chained.crt
 ssl_key = </etc/ssl/private/{{ ssl }}.key

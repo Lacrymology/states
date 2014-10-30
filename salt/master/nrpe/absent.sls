@@ -41,7 +41,11 @@ Remove Nagios NRPE check for Salt Master.
 
 salt_mine_collect_minions_data:
   file:
-    - name: /etc/cron.d/salt_mine_data
+    - name: /etc/cron.twice_daily/salt_mine_data
+    - absent
+
+/etc/cron.d/salt_mine_data:
+  file:
     - absent
 
 /usr/lib/nagios/plugins/check_mine_minions.py:

@@ -155,6 +155,8 @@ gitlab:
       - file: /home/gitlab/gitlabhq-{{ version }}/config/initializers/rack_attack.rb
       - file: /home/gitlab/gitlabhq-{{ version }}/config/resque.yml
       - file: /home/gitlab/gitlabhq-{{ version }}/log
+      - file: /home/gitlab/gitlabhq-{{ version }}/config/environments/production.rb
+      - file: /home/gitlab/gitlabhq-{{ version }}/config/initializers/smtp_settings.rb
 
 gitlab_upstart:
   file:
@@ -236,6 +238,19 @@ gitlab_upstart:
         - file: gitlab
 
 {%- if salt['pillar.get']('gitlab:smtp:enabled', False) %}
+/home/gitlab/gitlabhq-{{ version }}/config/environments/production.rb:
+  file:
+    - managed
+    - source: salt://gitlab/production.rb
+    - user: gitlab
+    - group: gitlab
+    - mode: 440
+    - require:
+      - user: gitlab
+      - file: gitlab
+    - require_in:
+      - cmd: gitlab_gems
+
 /home/gitlab/gitlabhq-{{ version }}/config/initializers/smtp_settings.rb:
   file:
     - managed

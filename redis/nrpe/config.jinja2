@@ -34,7 +34,8 @@ Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
 redis_procs:
   description: Redis Daemon
-  command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -u redis -C redis-server'
+{#- 2nd process is the dump that save on disk data for persistence #}
+  command: '/usr/lib/nagios/plugins/check_procs -c 1:2 -u redis -C redis-server'
 
 redis_port:
   description: Redis Local Port

@@ -106,7 +106,9 @@ def managed(name, source=None, template='jinja',
             f.seek(0)
             log.error("Content of failed YAML for %s(%s):%s%s", source, sfn,
                       os.linesep, f.read())
+            __salt__['file.remove'](sfn)
             raise err
+    __salt__['file.remove'](sfn)
 
     lines = []
     if loaded is None:  # config.jinja2 is empty

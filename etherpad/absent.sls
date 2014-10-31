@@ -31,6 +31,14 @@ Uninstall Etherpad
 {%- from "upstart/absent.sls" import upstart_absent with context -%}
 {{ upstart_absent('etherpad') }}
 
+extend:
+  etherpad:
+    user:
+      - absent
+      - purge: True
+      - require:
+        - service: etherpad
+
 /usr/local/etherpad-lite-{{ version }}:
   file:
     - absent

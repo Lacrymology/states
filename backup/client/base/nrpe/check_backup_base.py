@@ -54,10 +54,19 @@ class BackupFile(nagiosplugin.Resource):
     def probe(self):
         log.info("BackupFile probe started")
         log.info("Probe backup for facility: %s", self.facility)
-        files = self.files()
 
+        files = {}
+        log.debug("Searching keys with prefix %s", self.prefix)
+        for file in self.files():
+            key, value = file.items()[0]
+            # update this if it's the first time this appears, or if the date
+            # is newer
+            if (key not in files) or (value['date'] > files[key]['date']):
+                log.debug("Adding file to return dict")
+                files.update(file)
         log.info("%s on S3? %s", self.facility,
                  str(not files.get(self.facility, None) is None))
+
         backup_file = files.get(self.facility, {
             'date': datetime.datetime.fromtimestamp(0),
             'size': 0,

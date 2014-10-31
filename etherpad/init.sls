@@ -70,15 +70,18 @@ etherpad-dependencies:
     - directory
     - user: www-data
     - group: www-data
-    - dir_mode: 750
-    - file_mode: 640
-    - recurse:
-      - user
-      - group
+    - mode: 750
     - require:
       - user: web
       - archive: etherpad
       - pkg: etherpad-dependencies
+  cmd:
+    - wait
+    - name: chown -R www-data:www-data {{ web_root_dir }}
+    - require:
+      - file: {{ web_root_dir }}
+    - watch:
+      - archive: etherpad
 
 etherpad:
   postgres_user:
@@ -123,7 +126,7 @@ etherpad:
     - order: 50
     - enable: True
     - require:
-      - file: {{ web_root_dir }}
+      - cmd: {{ web_root_dir }}
       - file: {{ web_root_dir }}/bin
       - postgres_database: etherpad
     - watch:
@@ -141,7 +144,7 @@ etherpad:
     - recurse:
       - mode
     - require:
-      - file: {{ web_root_dir }}
+      - cmd: {{ web_root_dir }}
 
 {{ web_root_dir }}/APIKEY.txt:
   file:
@@ -152,7 +155,7 @@ etherpad:
     - source: salt://etherpad/api.jinja2
     - template: jinja
     - require:
-      - file: {{ web_root_dir }}
+      - cmd: {{ web_root_dir }}
       - user: web
 
 {{ web_root_dir }}/settings.json:
@@ -169,7 +172,7 @@ etherpad:
       dbname: {{ dbname }}
       dbhost: {{ dbhost }}
     - require:
-      - file: {{ web_root_dir }}
+      - cmd: {{ web_root_dir }}
       - user: web
 
 /etc/nginx/conf.d/etherpad.conf:

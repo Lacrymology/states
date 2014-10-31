@@ -55,6 +55,11 @@ nagios-nrpe-server:
     - name: nagios
     - require:
       - user: nagios-nrpe-server
+  file:
+    - absent
+    - name: /var/lib/nagios
+    - require:
+      - pkg: nagios-nrpe-server
 
 {#
  For some reason, purge nagios-nrpe-server Ubuntu package don't clean these.

@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2014, Hung Nguyen Viet
+Copyright (c) 2014, Quan Tong Anh
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,34 +22,40 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Viet Hung Nguyen <hvn@robotinfra.com>
-Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
+Author: Quan Tong Anh <quanta@robotinfra.com>
+Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
-{%- if pillar['backup_server'] is defined %}
-include:
-  - backup.client.scp
-  - backup.client.scp.nrpe
-  - backup.dumb
+{%- macro add_key() -%}
+{%- set root_home = salt['user.info']('root')['home'] %}
+ssh_backup_key:
+  file:
+    - copy
+    - name: {{ root_home }}/.ssh/authorized_keys.bak
+    - source: {{ root_home }}/.ssh/authorized_keys
+    - require:
+      - sls: ssh.client
 
-{%- if pillar['backup_server']['address'] in grains['ipv4'] or
-       pillar['backup_server']['address'] in ('localhost', grains['host']) -%}
-    {%- from 'ssh/key.sls' import add_key with context -%}
-    {%- from 'ssh/key.sls' import remove_key with context %}
-{{ add_key() }}
-{%- call remove_key() %}
-- cmd: test
-{%- endcall -%}
-{%- endif %}
-
-test:
-  monitoring:
-    - run_all_checks
-    - order: last
+ssh_add_key:
   cmd:
     - run
-    - name: /usr/local/bin/backup-store `/usr/local/bin/create_dumb`
+    - name: cat {{ root_home }}/.ssh/id_{{ pillar['deployment_key']['type'] }}.pub >> {{ root_home }}/.ssh/authorized_keys
+    - unless: grep "$(cat {{ root_home }}/.ssh/id_{{ pillar['deployment_key']['type'] }}.pub)" {{ root_home }}/.ssh/authorized_keys
     - require:
-      - file: /usr/local/bin/backup-store
-      - file: /usr/local/bin/create_dumb
-      - cmd: ssh_add_key
-{%- endif %}
+      - file: ssh_backup_key
+{%- endmacro %}
+
+{%- macro remove_key() -%}
+{%- set root_home = salt['user.info']('root')['home'] %}
+ssh_remove_key:
+  cmd:
+    - run
+    - name: mv {{ root_home }}/.ssh/authorized_keys.bak {{ root_home }}/.ssh/authorized_keys
+    {%- if caller is defined -%}
+        {%- for line in caller().split("\n") -%}
+            {%- if loop.first %}
+    - require:
+            {%- endif %}
+{{ line|trim|indent(6, indentfirst=True) }}
+        {%- endfor -%}
+    {%- endif -%}
+{%- endmacro %}

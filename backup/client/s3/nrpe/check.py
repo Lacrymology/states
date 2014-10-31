@@ -87,7 +87,7 @@ class S3BackupFile(BackupFile):
 
 
 def check_backup(config):
-    base_check(S3BackupFile, config)
+    return base_check(S3BackupFile, config)
 
 
 if __name__ == '__main__':

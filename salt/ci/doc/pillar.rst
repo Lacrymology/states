@@ -54,6 +54,13 @@ SSH private key of ci-agent.
 Optional
 --------
 
+salt_ci:ssh_port
+~~~~~~~~~~~~~~~~
+
+SSH port to copy result files through
+
+Default: ``22``
+
 salt_ci:timeout
 ~~~~~~~~~~~~~~~
 

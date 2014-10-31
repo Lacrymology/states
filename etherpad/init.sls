@@ -68,7 +68,7 @@ etherpad-dependencies:
 {{ web_root_dir }}:
   file:
     - directory
-    - user: www-data
+    - user: root
     - group: www-data
     - mode: 750
     - require:
@@ -77,11 +77,10 @@ etherpad-dependencies:
       - pkg: etherpad-dependencies
   cmd:
     - wait
-    - name: chown -R www-data:www-data {{ web_root_dir }}
-    - require:
-      - file: {{ web_root_dir }}
+    - name: chown -R root:www-data {{ web_root_dir }}
     - watch:
       - archive: etherpad
+      - file: {{ web_root_dir }}
 
 etherpad:
   postgres_user:
@@ -112,6 +111,13 @@ etherpad:
     - if_missing: {{ web_root_dir }}
     - require:
       - file: /usr/local
+  user:
+    - present
+    - groups:
+      - www-data
+    - shell: /usr/sbin/nologin
+    - require:
+      - user: web
   file:
     - managed
     - name: /etc/init/etherpad.conf
@@ -120,37 +126,29 @@ etherpad:
     - mode: 440
     - context:
       web_root_dir: {{ web_root_dir }}
-      user: www-data
+      user: etherpad
+    - require:
+      - user: etherpad
   service:
     - running
     - order: 50
     - enable: True
     - require:
       - cmd: {{ web_root_dir }}
-      - file: {{ web_root_dir }}/bin
       - postgres_database: etherpad
     - watch:
-      - user: web
+      - user: etherpad
       - file: {{ web_root_dir }}/APIKEY.txt
       - file: {{ web_root_dir }}/settings.json
       - file: etherpad
 
 {{ manage_upstart_log('etherpad') }}
 
-{{ web_root_dir }}/bin:
-  file:
-    - directory
-    - file_mode: 550
-    - recurse:
-      - mode
-    - require:
-      - cmd: {{ web_root_dir }}
-
 {{ web_root_dir }}/APIKEY.txt:
   file:
     - managed
-    - user: www-data
-    - group: www-data
+    - user: etherpad
+    - group: root
     - mode: 400
     - source: salt://etherpad/api.jinja2
     - template: jinja
@@ -161,9 +159,9 @@ etherpad:
 {{ web_root_dir }}/settings.json:
   file:
     - managed
-    - user: www-data
-    - group: www-data
-    - mode: 640
+    - user: etherpad
+    - group: root
+    - mode: 400
     - source: salt://etherpad/settings.jinja2
     - template: jinja
     - context:

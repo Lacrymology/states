@@ -75,7 +75,7 @@ log_stop_script() {
             "Finish after N/A seconds, return code: ${_return_code}"
     fi
 
-    if [[ -z "${_pid_file}" ]]; then
+    if [[ -n "${_pid_file}" ]]; then
         test -f "${_pid_file}" && rm -f "${_pid_file}"
     fi
 }

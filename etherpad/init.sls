@@ -123,6 +123,8 @@ etherpad:
     - name: /etc/init/etherpad.conf
     - source: salt://etherpad/upstart.jinja2
     - template: jinja
+    - user: root
+    - group: root
     - mode: 440
     - context:
       web_root_dir: {{ web_root_dir }}

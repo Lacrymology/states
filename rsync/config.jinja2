@@ -36,7 +36,6 @@ Maintainer: Hung Nguyen Viet hvnsweeting@gmail.com
 {#- overwrite previously defined key for the following #}
 log file =
 syslog facility = daemon
-pid file = /var/run/rsyncd.pid
 
 {% for share in rsync['shares']|default([]) %}
 [{{ share }}]

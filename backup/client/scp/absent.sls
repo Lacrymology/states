@@ -30,3 +30,11 @@ Remove Poor man backup client NRPE check.
 include:
   - backup.absent
   - backup.client.absent
+
+{% if salt['pillar.get']('backup_server:address', False) %}
+backup-client:
+  ssh_known_hosts:
+    - absent
+    - name: {{ pillar['backup_server']['address'] }}
+    - order: 1
+{% endif %}

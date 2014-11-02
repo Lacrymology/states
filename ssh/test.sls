@@ -38,13 +38,22 @@ test:
     - order: last
 
 {%- set root_home = salt['user.info']('root')['home'] %}
+ssh_backup_key:
+  module:
+    - run
+    - name: file.copy
+    - src: {{ root_home }}/.ssh/authorized_keys
+    - dst: {{ root_home }}/.ssh/authorized_keys.bak
+    - require:
+      - sls: ssh.client
+
 ssh_add_key:
   cmd:
     - run
     - name: cat {{ root_home }}/.ssh/id_{{ pillar['deployment_key']['type'] }}.pub >> {{ root_home }}/.ssh/authorized_keys
     - unless: grep "$(cat {{ root_home }}/.ssh/id_{{ pillar['deployment_key']['type'] }}.pub)" {{ root_home }}/.ssh/authorized_keys
     - require:
-      - sls: ssh.client
+      - module: ssh_backup_key
 
 test_ssh:
   cmd:
@@ -56,9 +65,6 @@ test_ssh:
 ssh_remove_key:
   cmd:
     - run
-    {#- The body of the public key file is the base64 encoded: A-Za-z0-9+/.
-    Use different delimiter than slash to avoid an error.
-    The first occurrence of the separator must be escaped to have `sed` use it, unless you are using the `s` command #}
-    - name: cat {{ root_home }}/.ssh/id_{{ pillar['deployment_key']['type'] }}.pub | xargs -i sed -i '\|{}|d' {{ root_home }}/.ssh/authorized_keys
+    - name: mv {{ root_home }}/.ssh/authorized_keys.bak {{ root_home }}/.ssh/authorized_keys
     - require:
       - cmd: test_ssh

@@ -33,6 +33,10 @@ stop on runlevel [!2345]
 
 respawn
 
+pre-start script
+  install -o shinken -g  shinken -m 750 -d /var/run/shinken
+end script
+
 script
 {%- if max_filedescriptors|default(False) %}
   ulimit -Hn {{ max_filedescriptors }}

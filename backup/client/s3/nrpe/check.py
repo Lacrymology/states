@@ -50,8 +50,8 @@ class S3BackupFile(BackupFile):
     """
     def __init__(self, *args, **kwargs):
         super(S3BackupFile, self).__init__(*args, **kwargs)
-        self.key = self.config['s3']['key']
-        self.secret = self.config['s3']['secret']
+        self.key = self.config['s3']['access_key']
+        self.secret = self.config['s3']['secret_key']
         self.bucket = self.config['s3']['bucket']
 
     def files(self):

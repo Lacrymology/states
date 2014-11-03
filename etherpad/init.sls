@@ -77,7 +77,7 @@ etherpad-dependencies:
       - pkg: etherpad-dependencies
   cmd:
     - wait
-    - name: chown -R root:www-data {{ web_root_dir }}
+    - name: chown -R root:www-data {{ web_root_dir }} && chmod -R u=rwX,g=rX,o= {{ web_root_dir }}
     - watch:
       - archive: etherpad
       - file: {{ web_root_dir }}
@@ -116,6 +116,7 @@ etherpad:
     - groups:
       - www-data
     - shell: /usr/sbin/nologin
+    - home: /home/etherpad
     - require:
       - user: web
   file:
@@ -140,11 +141,42 @@ etherpad:
       - postgres_database: etherpad
     - watch:
       - user: etherpad
+      - file: {{ web_root_dir }}/node_modules
+      - file: {{ web_root_dir }}/src
+      - file: {{ web_root_dir }}/src/static/custom
       - file: {{ web_root_dir }}/APIKEY.txt
       - file: {{ web_root_dir }}/settings.json
       - file: etherpad
+      - pkg: git
 
 {{ manage_upstart_log('etherpad') }}
+
+{{ web_root_dir }}/node_modules:
+  file:
+    - directory
+    - user: etherpad
+    - group: root
+    - mode: 700
+    - require:
+      - cmd: {{ web_root_dir }}
+
+{{ web_root_dir }}/src:
+  file:
+    - directory
+    - user: etherpad
+    - group: root
+    - mode: 700
+    - require:
+      - cmd: {{ web_root_dir }}
+
+{{ web_root_dir }}/src/static/custom:
+  file:
+    - directory
+    - user: etherpad
+    - group: root
+    - mode: 700
+    - require:
+      - cmd: {{ web_root_dir }}
 
 {{ web_root_dir }}/APIKEY.txt:
   file:
@@ -156,7 +188,6 @@ etherpad:
     - template: jinja
     - require:
       - cmd: {{ web_root_dir }}
-      - user: web
 
 {{ web_root_dir }}/settings.json:
   file:
@@ -173,7 +204,6 @@ etherpad:
       dbhost: {{ dbhost }}
     - require:
       - cmd: {{ web_root_dir }}
-      - user: web
 
 /etc/nginx/conf.d/etherpad.conf:
   file:

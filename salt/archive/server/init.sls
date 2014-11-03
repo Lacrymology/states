@@ -112,7 +112,10 @@ include:
       - pkg: /usr/local/bin/salt_archive_incoming.py
       - pkg: rsync
       - file: /usr/local
-      - file: /var/lib/salt_archive/incoming
+      - file: /var/lib/salt_archive/incoming/pip
+      - file: /var/lib/salt_archive/incoming/mirror
+      - file: /var/lib/salt_archive/pip
+      - file: /var/lib/salt_archive/mirror
       - module: pysc
 {%- else %}
     {#-

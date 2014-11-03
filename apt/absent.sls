@@ -31,6 +31,10 @@ apt.conf:
     - absent
     - name: /etc/apt/apt.conf.d/99local
 
+/etc/apt/sources.list.save:
+  file:
+    - absent
+
 apt_sources:
   file:
     - rename

@@ -11,12 +11,12 @@ trap "log_stop_script \$?" EXIT
 
 {%- set dir = '/var/lib/salt_archive/mirror/clamav' %}
 mkdir -p {{ dir }}
-TEMP_DIR=`mktemp -d -t salt-archive-clamav`
+TEMP_DIR=`mktemp -d`
 {%- for filename in ('bytecode', 'daily', 'main') -%}
     {#- use a temporary directory to make sure that it don't change file
         directly served by web server and have freshclam client ends with
         corrupted incomplete file while wget run #}
 wget -{% if salt['pillar.get']('__test__', False) %}v{% else %}q{% endif %} -O $TEMP_DIR/{{ filename }}.cvd http://{{ salt['pillar.get']('clamav:db_mirrors', ('db.local.clamav.net', 'database.clamav.net'))[0] }}/{{ filename }}.cvd
 mv $TEMP_DIR/{{ filename }}.cvd {{ dir }}/{{ filename }}.cvd
-{%- endfor -%}
+{%- endfor %}
 rm -rf $TEMP_DIR

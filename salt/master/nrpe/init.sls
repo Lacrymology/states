@@ -81,7 +81,7 @@ salt_mine_collect_minions_data:
     - name: /etc/cron.twice_daily/salt_mine_data
     - user: root
     - group: root
-    - mode: 400
+    - mode: 500
     - template: jinja
     - source: salt://salt/master/nrpe/cron.jinja2
     - require:

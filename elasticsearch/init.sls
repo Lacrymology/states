@@ -67,7 +67,7 @@ include:
     - template: jinja
     - user: root
     - group: root
-    - mode: 550
+    - mode: 500
     - source: salt://elasticsearch/cron_daily.jinja2
     - require:
       - pkg: cron

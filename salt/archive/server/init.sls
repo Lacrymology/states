@@ -53,7 +53,7 @@ include:
     - template: jinja
     - user: root
     - group: root
-    - mode: 550
+    - mode: 500
     - source: salt://salt/archive/server/cron.jinja2
     - require:
       - user: salt_archive

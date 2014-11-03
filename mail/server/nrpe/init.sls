@@ -20,6 +20,7 @@ include:
     - source: salt://mail/server/nrpe/cron.jinja2
     - user: root
     - group: root
+    - template: jinja
     - mode: 400
     - require:
       - pkg: cron

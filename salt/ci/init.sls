@@ -135,6 +135,7 @@ ci-agent:
     - managed
     - mode: 500
     - contents: |
+        #!/bin/bash
         find /home/ci-agent \( -name '*.xz' -or -name '*.xml' -mtime +1 \) -delete
     - require:
       - pkg: cron

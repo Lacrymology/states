@@ -149,7 +149,7 @@ archive_rsync:
 salt-archive-clamav:
   file:
     - name: /usr/local/bin/salt_archive_clamav.sh
-{%- if pillar['salt_archive']['source'] is defined %}
+{%- if not salt['pillar.get']('salt_archive:source', False) %}
     - absent
 {%- else %}
     - managed

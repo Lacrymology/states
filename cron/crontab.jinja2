@@ -30,7 +30,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 SHELL=/bin/sh
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 
-{%- if not salt['pillar.get']('__test__', False) -%}
+{%- if not salt['pillar.get']('__test__', False) %}
 # in salt.ci test mode, some cronjob might interfer with execution of tests
 # make sure they exists but don't run
 {%- else %}

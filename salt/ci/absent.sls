@@ -26,7 +26,7 @@ Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Bruno Clermont <patate@fastmail.cn>
             Hung Nguyen Viet <hvnsweeting@gmail.com>
 -#}
-{%- for script in ('import_test_data', 'wait_minion_up') %}
+{%- for script in ('import_test_data', ) %}
 /usr/local/bin/{{ script }}.py:
   file:
     - absent

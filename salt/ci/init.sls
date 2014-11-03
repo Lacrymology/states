@@ -44,7 +44,7 @@ include:
   file:
     - absent
 
-{%- for script in ('import_test_data', 'wait_minion_up') %}
+{%- for script in ('import_test_data', ) %}
 /usr/local/bin/{{ script }}.py:
   file:
     - managed

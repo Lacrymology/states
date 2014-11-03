@@ -42,7 +42,7 @@ if [ "${with_ssl:-true}" = "false" ]; then
 fi
 
 cd common
-test/lint.py
+test/lint.py --tabonly
 pip install -r doc/requirements.txt
 doc/build.py
 
@@ -90,7 +90,6 @@ echo '------------ From here, salt with version supported by salt-common is runn
 sudo salt -t 5 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call test.ping"
 sudo salt -t 20 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call -c /root/salt/states/test/ saltutil.sync_all"
 sudo salt -t 10 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call -c /root/salt/states/test/ saltutil.refresh_modules"
-sudo /usr/local/bin/wait_minion_up.py integration-$JOB_NAME-$BUILD_NUMBER
 start_run_test_time=$(date +%s)
 echo "TIME-METER: Preparing for test took: $((start_run_test_time - start_time)) seconds"
 echo '------------ Running CI test  ------------'

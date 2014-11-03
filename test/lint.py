@@ -35,6 +35,7 @@ __email__ = 'hvnsweeting@gmail.com'
 import re
 import sys
 import os
+import argparse
 
 
 IGNORED_EXTS = ['patch']
@@ -210,17 +211,11 @@ def _is_binary_file(fn):
         return _is_binary_string(f.read(1024))
 
 
-def process_args():
+def _parse_paths(raw_paths):
     argdirs = []
     paths = []
 
-    if len(sys.argv) == 1:
-        args = [os.curdir]
-        print 'No argument passed, check all files under current directory.'
-    else:
-        args = sys.argv[1:]
-
-    for i in args:
+    for i in raw_paths:
         if os.path.isdir(i):
             argdirs.append(i)
         elif os.path.isfile(i) and not _is_binary_file(i):
@@ -245,12 +240,20 @@ def process_args():
 
 
 def main():
-    paths = process_args()
+    argp = argparse.ArgumentParser()
+    argp.add_argument('--tabonly', '-t', action='store_true',
+                      help='only run lint check for tab character')
+    argp.add_argument('paths', nargs='*', default=['.'],
+                      help='paths to check lint')
+    args = argp.parse_args()
+
+    paths = _parse_paths(args.paths)
     res = []
     res.append(lint_check_tab_char(paths))
-    res.append(lint_check_numbers_of_order_last(paths))
-    res.append(lint_check_bad_state_style(paths))
-    res.append(lint_check_bad_cron_filename(paths))
+    if not args.tabonly:
+        res.append(lint_check_numbers_of_order_last(paths))
+        res.append(lint_check_bad_state_style(paths))
+        res.append(lint_check_bad_cron_filename(paths))
     no_of_false = res.count(False)
 
     print '\nTotal checks: {0}, total failures: {1}'.format(len(res),

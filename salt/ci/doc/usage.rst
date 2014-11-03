@@ -3,6 +3,14 @@ Usage
 
 .. TODO: FIX
 
+Notice
+------
+
+Since each build job clones code from git server, user may need to specify
+the Credential for each git link if needed. If git server uses ``denyhosts``,
+user must specify Credential before adding git link, or add address of
+CI server to whitelist of ``denyhosts`` of git server.
+
 Update pillar
 -------------
 

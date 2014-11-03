@@ -7,12 +7,17 @@
 logging:
   version: 1
   disable_existing_loggers: False
+    {%- if not process_name %}
+  filters:
+    process_name:
+      (): pysc.ProcessName
+    {%- endif %}
   formatters:
     only_message:
       format: '%(message)s'
     syslog:
     {%- if not process_name %}
-      format: '%(processName)s[%(process)d]: %(message)s'
+      format: '%(process_name)s[%(process)d]: %(message)s'
     {%- else %}
       format: '{{ process_name }}[%(process)d]: %(message)s'
     {%- endif %}
@@ -27,6 +32,10 @@ logging:
       address: /dev/log
       facility: local7
       formatter: syslog
+    {%- if not process_name %}
+      filters:
+        - process_name
+    {%- endif %}
     console:
     {%- if salt['pillar.get']('__test__', False) %}
       level: DEBUG

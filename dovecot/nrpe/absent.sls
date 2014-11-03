@@ -29,15 +29,3 @@ Remove Nagios NRPE check for Dovecot.
 -#}
 {%- from 'nrpe/passive.sls' import passive_absent with context %}
 {{ passive_absent('dovecot') }}
-
-/etc/cron.d/passive-checks-dovecot:
-  file:
-    - absent
-
-/usr/lib/nagios/plugins/check_mail_stack.py:
-  file:
-    - absent
-
-/etc/nagios/check_mail_stack.yml:
-  file:
-    - absent

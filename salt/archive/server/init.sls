@@ -183,7 +183,7 @@ salt_archive_{{ key }}:
     - require:
       - user: salt_archive
       - service: openssh-server
-{% endfor -%}
+{%- endfor %}
 
 extend:
   cron:

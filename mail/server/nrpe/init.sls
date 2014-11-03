@@ -4,6 +4,7 @@
  #}
 {%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
+  - cron
   - nrpe
 
 {{ passive_check('mail.server') }}
@@ -13,6 +14,19 @@ include:
     - absent
 
 {%- if salt['pillar.get']('mail:check_mail_stack', False) %}
+/etc/cron.d/mail-server-nrpe:
+  file:
+    - managed
+    - source: salt://mail/server/nrpe/cron.jinja2
+    - user: root
+    - group: root
+    - mode: 400
+    - require:
+      - pkg: cron
+      - file: /usr/lib/nagios/plugins/check_mail_stack.py
+    - watch_in:
+      - service: cron
+
 /usr/lib/nagios/plugins/check_mail_stack.py:
   file:
     - managed

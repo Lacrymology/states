@@ -36,5 +36,5 @@ XZ_DEFAULTS=--memlimit={{ salt['pillar.get']('backup:xz_memlimit', 64) }}MiB
 
 NOW=`date '+%Y-%m-%d-%H_%M_%S'`
 export TERM=dumb
-sudo -H -i -u postgres -g postgres pg_dumpall | xz > /tmp/postgresql-all-$NOW.sql.xz
+su -s /bin/sh postgres --command pg_dumpall | xz > /tmp/postgresql-all-$NOW.sql.xz
 /usr/local/bin/backup-store /tmp/postgresql-all-$NOW.sql.xz

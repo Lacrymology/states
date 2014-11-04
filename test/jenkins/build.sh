@@ -82,16 +82,21 @@ sudo salt -t 10 "$BUILD_IDENTITY" cmd.run "hostname $BUILD_IDENTITY"
 sudo salt -t 60 "$BUILD_IDENTITY" cp.get_file salt://jenkins_archives/$BUILD_IDENTITY.tar.gz /tmp/bootstrap-archive.tar.gz
 sudo salt -t 60 "$BUILD_IDENTITY" archive.tar xzf /tmp/bootstrap-archive.tar.gz cwd=/
 master_ip=$(sudo salt -t 60 "$BUILD_IDENTITY" --out=yaml grains.item master | cut -f2- -d ':' | tr -d '\n')
-sudo salt -t 10 "$BUILD_IDENTITY" --output json cmd.run_all "sed -i \"s/master:.*/master: $master_ip/g\" /root/salt/states/test/minion" | ./test/jenkins/retcode_check.py
+
+function run_and_check_return_code {
+    sudo salt -t $1 "$BUILD_IDENTITY" --output json cmd.run_all $2 | ./test/jenkins/retcode_check.py
+}
+run_and_check_return_code 10 "sed -i \"s/master:.*/master: $master_ip/g\" /root/salt/states/test/minion"
 # sync extmod from extracted archive to bootstrapped salt instance
-sudo salt -t 60 "$BUILD_IDENTITY" --output json cmd.run_all "salt-call -c /root/salt/states/test/ saltutil.sync_all >> /root/salt/stdout.prepare 2>> /root/salt/stderr.prepare"
-sudo salt -t 600 "$BUILD_IDENTITY" --output json cmd.run_all "salt-call -c /root/salt/states/test/ state.sls test.sync >> /root/salt/stdout.prepare 2>> /root/salt/stderr.prepare"
-sudo salt -t 600 "$BUILD_IDENTITY" --output json cmd.run_all "salt-call -c /root/salt/states/test/ state.sls test.jenkins >> /root/salt/stdout.prepare 2>> /root/salt/stderr.prepare"
+run_and_check_return_code 60 "salt-call -c /root/salt/states/test/ saltutil.sync_all >> /root/salt/stdout.prepare 2>> /root/salt/stderr.prepare"
+run_and_check_return_code 600 "salt-call -c /root/salt/states/test/ state.sls test.sync >> /root/salt/stdout.prepare 2>> /root/salt/stderr.prepare"
+run_and_check_return_code 600 "salt-call -c /root/salt/states/test/ state.sls test.jenkins >> /root/salt/stdout.prepare 2>> /root/salt/stderr.prepare"
 echo '------------ From here, salt with version supported by salt-common is running ------------'
 sudo salt -t 5 "$BUILD_IDENTITY" --output json cmd.run_all "salt-call test.ping"
-sudo salt -t 10 "$BUILD_IDENTITY" --output json cmd.run_all "salt-call -c /root/salt/states/test/ state.sls salt.patch_salt >> /root/salt/stdout.prepare 2>> /root/salt/stderr.prepare"
-sudo salt -t 20 "$BUILD_IDENTITY" --output json cmd.run_all "salt-call -c /root/salt/states/test/ saltutil.sync_all >> /root/salt/stdout.prepare 2>> /root/salt/stderr.prepare"
-sudo salt -t 10 "$BUILD_IDENTITY" --output json cmd.run_all "salt-call -c /root/salt/states/test/ saltutil.refresh_modules >> /root/salt/stdout.prepare 2>> /root/salt/stderr.prepare"
+run_and_check_return_code 10 "salt-call -c /root/salt/states/test/ state.sls salt.patch_salt >> /root/salt/stdout.prepare 2>> /root/salt/stderr.prepare"
+run_and_check_return_code 20 "salt-call -c /root/salt/states/test/ saltutil.sync_all >> /root/salt/stdout.prepare 2>> /root/salt/stderr.prepare"
+run_and_check_return_code 10 "salt-call -c /root/salt/states/test/ saltutil.refresh_modules >> /root/salt/stdout.prepare 2>> /root/salt/stderr.prepare"
+
 start_run_test_time=$(date +%s)
 echo "TIME-METER: Preparing for test took: $((start_run_test_time - start_time)) seconds"
 echo '------------ Running CI test  ------------'

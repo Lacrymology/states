@@ -31,6 +31,11 @@ include:
   - backup.client.scp.nrpe
   - backup.dumb
 
+{#- Test monitoring check for `scp`:
+    - add ssh public key into localhost
+    - run some backup using `scp`
+    - remove that key
+    #}
 {%- if pillar['backup_server']['address'] in grains['ipv4'] or
        pillar['backup_server']['address'] in ('localhost', grains['host']) -%}
     {%- from 'ssh/key.sls' import add_key with context -%}

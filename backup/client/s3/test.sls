@@ -32,6 +32,11 @@ include:
   - backup.client.s3.nrpe
   - backup.dumb
 
+{#- Test monitoring check for `s3lite`:
+    - upload a dummy file to the S3 using `s3lite`
+    - create a NSCA file to perform a check
+    - run check then delete test files
+    #}
 test_s3lite:
   cmd:
     - run
@@ -71,6 +76,8 @@ cleanup_s3lite:
     - require:
       - monitoring: test_s3lite
 
+{#- This is similar to the above, 
+    but using `s3cmd` to backup instead of `s3lite` #}
 test_s3cmd:
   cmd:
     - run

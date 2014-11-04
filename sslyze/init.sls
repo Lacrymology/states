@@ -72,7 +72,7 @@ sslyze:
 
 {%- for name in salt['pillar.get']('ssl', []) -%}
     {%- for trust_store in ('apple', 'java', 'microsoft', 'mozilla') %}
-sslyze_{{ trust_store }}:
+sslyze_{{ name }}_{{ trust_store }}:
   file:
     - append
     - name: /usr/local/src/sslyze-{{ version|replace(".", "_") }}-linux{{ bits }}/plugins/data/trust_stores/{{ trust_store }}.pem

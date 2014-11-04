@@ -38,7 +38,7 @@ respawn
 
 chdir {{ web_root_dir }}
 setuid {{ user }}
-setgid {{ user }}
+setgid www-data
 
 script
   exec /bin/bash bin/run.sh | logger -t etherpad

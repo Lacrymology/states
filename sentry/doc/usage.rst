@@ -55,7 +55,7 @@ Delete group Manually
 ---------------------
 
 Sometimes it take so much time to delete a group that it timeout
-:doc:`nginx/doc/index` and :doc:`uwsgi/doc/index`. A hack for this is to note
+:doc:`/nginx/doc/index` and :doc:`/uwsgi/doc/index`. A hack for this is to note
 the group ID in the URL, such as:
 https://sentry.example.com/team/project/group/1234/ the id is ``1234``.
 

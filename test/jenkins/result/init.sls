@@ -91,20 +91,12 @@ test_result:
       - file: /home/ci-agent/.ssh/id_rsa
       - pkg: openssh-client
 
-{%- for type in ('stdout', 'stderr') %}
-{{ type }}:
+scp_logs_to_master:
   cmd:
     - run
-    - name: xz -c /root/salt/{{ type }}.log > /home/ci-agent/{{ type }}.log.xz
-
-scp_{{ type }}_to_master:
-  cmd:
-    - run
-    - name: scp -P {{ salt['pillar.get']('salt_ci:ssh_port', 22) }} /home/ci-agent/{{ type }}.log.xz ci-agent@{{ grains['master'] }}:/home/ci-agent/{{ grains['id'] }}-{{ type }}.log.xz
+    - name: scp -P {{ salt['pillar.get']('salt_ci:ssh_port', 22) }} /tmp/*.log.xz ci-agent@{{ grains['master'] }}:/home/ci-agent/
     - user: ci-agent
     - require:
-      - cmd: {{ type }}
       - file: /home/ci-agent/.ssh/known_hosts
       - file: /home/ci-agent/.ssh/id_rsa
       - pkg: openssh-client
-{%- endfor %}

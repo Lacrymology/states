@@ -83,21 +83,29 @@ sudo salt -t 60 "integration-$JOB_NAME-$BUILD_NUMBER" archive.tar xzf /tmp/boots
 master_ip=$(sudo salt -t 60 "integration-$JOB_NAME-$BUILD_NUMBER" --out=yaml grains.item master | cut -f2- -d ':' | tr -d '\n')
 sudo salt -t 10 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "sed -i \"s/master:.*/master: $master_ip/g\" /root/salt/states/test/minion" | ./test/jenkins/retcode_check.py
 # sync extmod from extracted archive to bootstrapped salt instance
-sudo salt -t 60 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call -c /root/salt/states/test/ saltutil.sync_all >> /root/salt/stdout.log 2>> /root/salt/stderr.log"
-sudo salt -t 600 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call -c /root/salt/states/test/ state.sls test.sync >> /root/salt/stdout.log 2>> /root/salt/stderr.log"
-sudo salt -t 600 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call -c /root/salt/states/test/ state.sls test.jenkins >> /root/salt/stdout.log 2>> /root/salt/stderr.log"
+sudo salt -t 60 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call -c /root/salt/states/test/ saltutil.sync_all >> /root/salt/stdout.prepare 2>> /root/salt/stderr.prepare"
+sudo salt -t 600 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call -c /root/salt/states/test/ state.sls test.sync >> /root/salt/stdout.prepare 2>> /root/salt/stderr.prepare"
+sudo salt -t 600 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call -c /root/salt/states/test/ state.sls test.jenkins >> /root/salt/stdout.prepare 2>> /root/salt/stderr.prepare"
 echo '------------ From here, salt with version supported by salt-common is running ------------'
 sudo salt -t 5 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call test.ping"
-sudo salt -t 10 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call -c /root/salt/states/test/ state.sls salt.patch_salt >> /root/salt/stdout.log 2>> /root/salt/stderr.log"
-sudo salt -t 20 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call -c /root/salt/states/test/ saltutil.sync_all >> /root/salt/stdout.log 2>> /root/salt/stderr.log"
-sudo salt -t 10 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call -c /root/salt/states/test/ saltutil.refresh_modules >> /root/salt/stdout.log 2>> /root/salt/stderr.log"
+sudo salt -t 10 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call -c /root/salt/states/test/ state.sls salt.patch_salt >> /root/salt/stdout.prepare 2>> /root/salt/stderr.prepare"
+sudo salt -t 20 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call -c /root/salt/states/test/ saltutil.sync_all >> /root/salt/stdout.prepare 2>> /root/salt/stderr.prepare"
+sudo salt -t 10 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call -c /root/salt/states/test/ saltutil.refresh_modules >> /root/salt/stdout.prepare 2>> /root/salt/stderr.prepare"
 start_run_test_time=$(date +%s)
 echo "TIME-METER: Preparing for test took: $((start_run_test_time - start_time)) seconds"
 echo '------------ Running CI test  ------------'
 sudo salt -t 86400 "integration-$JOB_NAME-$BUILD_NUMBER" cmd.run "/root/salt/states/test/jenkins/run.py $*"
 finish_run_test_time=$(date +%s)
 echo "TIME-METER: Run integration.py took: $((finish_run_test_time - start_run_test_time)) seconds"
-sudo salt -t 60 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call -c /root/salt/states/test/ state.sls test.jenkins.result >> /root/salt/stdout.log 2>> /root/salt/stderr.log"
+
+BUILD_IDENTITY="integration-$JOB_NAME-$BUILD_NUMBER"
+for ltype in stdout stderr; do
+    xz -c /root/salt/$ltype.prepare > /tmp/$BUILD_IDENTITY-$ltype.prepare.log.xz
+    xz -c /root/salt/$ltype.log > /tmp/$BUILD_IDENTITY-$ltype.log.xz
+done
+
+sudo salt -t 60 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call -l info -c /root/salt/states/test/ state.sls test.jenkins.result"
+
 cp /home/ci-agent/integration-$JOB_NAME-$BUILD_NUMBER-stderr.log.xz $WORKSPACE/stderr.log.xz
 xz -d -c $WORKSPACE/stderr.log.xz
 cp /home/ci-agent/integration-$JOB_NAME-$BUILD_NUMBER-stdout.log.xz $WORKSPACE/stdout.log.xz

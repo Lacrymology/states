@@ -1,4 +1,7 @@
-{%- from 'python/config.jinja2' import logging with context %}
+{%- extends "python/config.jinja2" -%}
+
+{%- block body %}
+    {{ super() }}
 db:
   host: 127.0.0.1
   user: {{ username }}
@@ -18,5 +21,4 @@ admin:
  WARNING=30, ERROR=40, CRITICAL=50
 -#}
 log_level: {% if salt['pillar.get']('debug', False) %}1{% else %}3{% endif %}0
-
-{{ logging('openerp', 'openerp:sentry_dsn') }}
+{%- endblock -%}

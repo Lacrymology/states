@@ -258,6 +258,8 @@ openerp-uwsgi:
     - context:
       password: {{ password }}
       username: {{ username }}
+      sentry_dsn: {{ salt['pillar.get']('openerp:sentry_dsn', False) }}
+      process_name: openerp
 
 /etc/nginx/conf.d/openerp.conf:
   file:

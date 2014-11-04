@@ -1,5 +1,6 @@
-{%- from 'python/config.jinja2' import logging with context -%}
+{%- extends "pysc/config.jinja2" -%}
 
-{{ logging() }}
-
+{%- block body %}
+    {{ super() }}
 nsca_dir: /etc/nagios/nsca.d
+{%- endblock -%}

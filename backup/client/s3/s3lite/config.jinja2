@@ -26,11 +26,13 @@ Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
 Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
 #}
 
-{%- from 'pysc/config.jinja2' import pysc_config with context %}
-{{ pysc_config() }}
+{% extends "pysc/config.jinja2" %}
 
+{% block body %}
+    {{ super() }}
 s3:
   access_key: {{ pillar['aws']['access_key'] }}
   secret_key: {{ pillar['aws']['secret_key'] }}
 
 minion_id: {{ grains['id'] }}
+{% endblock %}

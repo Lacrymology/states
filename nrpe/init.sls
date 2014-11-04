@@ -306,6 +306,9 @@ service: nagios-nrpe-server #}
     - mode: 440
     - require:
       - pkg: nagios-nrpe-server
+    - context:
+      daemon_user: nagios
+      daemon_group: nagios
 
 /etc/send_nsca.conf:
   file:

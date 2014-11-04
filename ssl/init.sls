@@ -152,7 +152,7 @@ ssl_cert_and_key_for_{{ name }}:
     to have all certificates indexed with appropriately named symlinks. 
     
     http://mislav.uniqpath.com/2013/07/ruby-openssl/#SSL_CERT_DIR #}
-ssl_create_symlink_by_hash:
+ssl_create_symlink_by_hash_for_{{ name }}:
   cmd:
     - wait
     - name: c_rehash /etc/ssl/certs

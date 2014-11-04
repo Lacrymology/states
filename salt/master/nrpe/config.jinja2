@@ -58,8 +58,7 @@ salt_master_return_port_remote:
   dependencies:
     - salt_master_return_port
 
-{%- block salt_master_mine -%}
-    {%- if not salt['pillar.get']('__test__', False) %}
+{%- block salt_master_mine %}
 salt_master_mine:
   description: Salt Master Unfinished Minions
   check_interval: {{ 12 * 60 }} {#- 12 hours  #}
@@ -71,5 +70,4 @@ salt_master_mine:
     timeout: {{ 15 * 60 }} {#- this should never need more than 15 minutes to -#}
 {#- sudo for reading salt config files #}
   command: sudo /usr/lib/nagios/plugins/check_mine_minions.py --formula=salt.master --check=salt_master_mine --cronresult
-    {%- endif -%}
 {%- endblock -%}

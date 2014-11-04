@@ -75,40 +75,40 @@ done
 # create archive from common, pillar, and all user-specific formulas repos
 ./bootstrap_archive.py ../pillar ${repos[@]} > /srv/salt/jenkins_archives/$JOB_NAME-$BUILD_NUMBER.tar.gz
 
-sudo salt-cloud --profile $profile integration-$JOB_NAME-$BUILD_NUMBER
-sudo salt integration-$JOB_NAME-$BUILD_NUMBER test.ping | grep True
-sudo salt -t 10 "integration-$JOB_NAME-$BUILD_NUMBER" cmd.run "hostname integration-$JOB_NAME-$BUILD_NUMBER"
-sudo salt -t 60 "integration-$JOB_NAME-$BUILD_NUMBER" cp.get_file salt://jenkins_archives/$JOB_NAME-$BUILD_NUMBER.tar.gz /tmp/bootstrap-archive.tar.gz
-sudo salt -t 60 "integration-$JOB_NAME-$BUILD_NUMBER" archive.tar xzf /tmp/bootstrap-archive.tar.gz cwd=/
-master_ip=$(sudo salt -t 60 "integration-$JOB_NAME-$BUILD_NUMBER" --out=yaml grains.item master | cut -f2- -d ':' | tr -d '\n')
-sudo salt -t 10 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "sed -i \"s/master:.*/master: $master_ip/g\" /root/salt/states/test/minion" | ./test/jenkins/retcode_check.py
+BUILD_IDENTITY="integration-$JOB_NAME-$BUILD_NUMBER"
+sudo salt-cloud --profile $profile $BUILD_IDENTITY
+sudo salt $BUILD_IDENTITY test.ping | grep True
+sudo salt -t 10 "$BUILD_IDENTITY" cmd.run "hostname $BUILD_IDENTITY"
+sudo salt -t 60 "$BUILD_IDENTITY" cp.get_file salt://jenkins_archives/$JOB_NAME-$BUILD_NUMBER.tar.gz /tmp/bootstrap-archive.tar.gz
+sudo salt -t 60 "$BUILD_IDENTITY" archive.tar xzf /tmp/bootstrap-archive.tar.gz cwd=/
+master_ip=$(sudo salt -t 60 "$BUILD_IDENTITY" --out=yaml grains.item master | cut -f2- -d ':' | tr -d '\n')
+sudo salt -t 10 "$BUILD_IDENTITY" --output json cmd.run_all "sed -i \"s/master:.*/master: $master_ip/g\" /root/salt/states/test/minion" | ./test/jenkins/retcode_check.py
 # sync extmod from extracted archive to bootstrapped salt instance
-sudo salt -t 60 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call -c /root/salt/states/test/ saltutil.sync_all >> /root/salt/stdout.prepare 2>> /root/salt/stderr.prepare"
-sudo salt -t 600 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call -c /root/salt/states/test/ state.sls test.sync >> /root/salt/stdout.prepare 2>> /root/salt/stderr.prepare"
-sudo salt -t 600 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call -c /root/salt/states/test/ state.sls test.jenkins >> /root/salt/stdout.prepare 2>> /root/salt/stderr.prepare"
+sudo salt -t 60 "$BUILD_IDENTITY" --output json cmd.run_all "salt-call -c /root/salt/states/test/ saltutil.sync_all >> /root/salt/stdout.prepare 2>> /root/salt/stderr.prepare"
+sudo salt -t 600 "$BUILD_IDENTITY" --output json cmd.run_all "salt-call -c /root/salt/states/test/ state.sls test.sync >> /root/salt/stdout.prepare 2>> /root/salt/stderr.prepare"
+sudo salt -t 600 "$BUILD_IDENTITY" --output json cmd.run_all "salt-call -c /root/salt/states/test/ state.sls test.jenkins >> /root/salt/stdout.prepare 2>> /root/salt/stderr.prepare"
 echo '------------ From here, salt with version supported by salt-common is running ------------'
-sudo salt -t 5 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call test.ping"
-sudo salt -t 10 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call -c /root/salt/states/test/ state.sls salt.patch_salt >> /root/salt/stdout.prepare 2>> /root/salt/stderr.prepare"
-sudo salt -t 20 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call -c /root/salt/states/test/ saltutil.sync_all >> /root/salt/stdout.prepare 2>> /root/salt/stderr.prepare"
-sudo salt -t 10 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call -c /root/salt/states/test/ saltutil.refresh_modules >> /root/salt/stdout.prepare 2>> /root/salt/stderr.prepare"
+sudo salt -t 5 "$BUILD_IDENTITY" --output json cmd.run_all "salt-call test.ping"
+sudo salt -t 10 "$BUILD_IDENTITY" --output json cmd.run_all "salt-call -c /root/salt/states/test/ state.sls salt.patch_salt >> /root/salt/stdout.prepare 2>> /root/salt/stderr.prepare"
+sudo salt -t 20 "$BUILD_IDENTITY" --output json cmd.run_all "salt-call -c /root/salt/states/test/ saltutil.sync_all >> /root/salt/stdout.prepare 2>> /root/salt/stderr.prepare"
+sudo salt -t 10 "$BUILD_IDENTITY" --output json cmd.run_all "salt-call -c /root/salt/states/test/ saltutil.refresh_modules >> /root/salt/stdout.prepare 2>> /root/salt/stderr.prepare"
 start_run_test_time=$(date +%s)
 echo "TIME-METER: Preparing for test took: $((start_run_test_time - start_time)) seconds"
 echo '------------ Running CI test  ------------'
-sudo salt -t 86400 "integration-$JOB_NAME-$BUILD_NUMBER" cmd.run "/root/salt/states/test/jenkins/run.py $*"
+sudo salt -t 86400 "$BUILD_IDENTITY" cmd.run "/root/salt/states/test/jenkins/run.py $*"
 finish_run_test_time=$(date +%s)
 echo "TIME-METER: Run integration.py took: $((finish_run_test_time - start_run_test_time)) seconds"
 
-BUILD_IDENTITY="integration-$JOB_NAME-$BUILD_NUMBER"
 for ltype in stdout stderr; do
     xz -c /root/salt/$ltype.prepare > /tmp/$BUILD_IDENTITY-$ltype.prepare.log.xz
     xz -c /root/salt/$ltype.log > /tmp/$BUILD_IDENTITY-$ltype.log.xz
 done
 
-sudo salt -t 60 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call -l info -c /root/salt/states/test/ state.sls test.jenkins.result"
+sudo salt -t 60 "$BUILD_IDENTITY" --output json cmd.run_all "salt-call -l info -c /root/salt/states/test/ state.sls test.jenkins.result"
 
-cp /home/ci-agent/integration-$JOB_NAME-$BUILD_NUMBER-stderr.log.xz $WORKSPACE/stderr.log.xz
+cp /home/ci-agent/$BUILD_IDENTITY-stderr.log.xz $WORKSPACE/stderr.log.xz
 xz -d -c $WORKSPACE/stderr.log.xz
-cp /home/ci-agent/integration-$JOB_NAME-$BUILD_NUMBER-stdout.log.xz $WORKSPACE/stdout.log.xz
-cp /home/ci-agent/integration-$JOB_NAME-$BUILD_NUMBER-result.xml $WORKSPACE/result.xml
+cp /home/ci-agent/$BUILD_IDENTITY-stdout.log.xz $WORKSPACE/stdout.log.xz
+cp /home/ci-agent/$BUILD_IDENTITY-result.xml $WORKSPACE/result.xml
 mv /srv/salt/jenkins_archives/$JOB_NAME-$BUILD_NUMBER.tar.gz $WORKSPACE/bootstrap-archive.tar.gz
 echo "TIME-METER: Total time: $(($(date +%s) - start_time)) seconds"

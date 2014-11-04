@@ -61,7 +61,7 @@ deployed and then change it to any hostname in ``salt_archive:hostnames``.
 Salt Master
 -----------
 
-As the entire infrastructure is installed trough Salt, you first need to
+As the entire infrastructure is installed through Salt, you first need to
 install the initial salt master VM.
 
 Define the role of that master host to include or not other formulas that might
@@ -78,7 +78,7 @@ deployed :doc:`/salt/master/doc/install`.
 Support Infrastructure
 ----------------------
 
-Once that :doc:`/salt/master/doc/index` if fully functionnal,
+Once that :doc:`/salt/master/doc/index` if fully functional,
 the hosting/support infrastructure need to be deployed.
 
 You can install each of them by :doc:`/salt/minion/doc/install`
@@ -88,7 +88,7 @@ And then on :doc:`/salt/master/doc/index` run::
 
   salt [minion-id] state.highstate
 
-Here is a sugestion of sequence. This is a list of formulas
+Here is a suggestion of sequence. This is a list of formulas
 and not roles:
 
 #. :doc:`/salt/archive/server/doc/index`. After that you should change

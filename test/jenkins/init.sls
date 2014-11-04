@@ -58,3 +58,4 @@ salt-minion:
     - skip_verify: True
     - watch:
       - pkg: salt-minion
+      - cmd: salt

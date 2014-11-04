@@ -43,6 +43,7 @@ To only keep precise & trusty::
 -#}
 include:
   - apt
+  - salt.patch_salt
 
 {%- for i in ('list', 'list.save') %}
 salt_absent_old_apt_salt_{{ i }}:
@@ -57,6 +58,8 @@ salt:
   pkg:
     - installed
     - name: salt-common
+    - require_in:
+      - file: patch_salt_fix_require_sls
 {%- if grains['saltversion'].startswith('0.17') %}
   pkgrepo17:
 {%- else %}
@@ -76,3 +79,9 @@ salt:
       - file: salt_absent_old_apt_salt_list.save
     - require_in:
       - pkg: salt
+  cmd: {#- the state which act as an API, consumer only need to watch this if it need to watch changes of this SLS #}
+    - wait
+    - name: echo "state(s) in ``salt`` have been changed"
+    - watch:
+      - pkg: salt
+      - file: patch_salt_fix_require_sls

@@ -1,0 +1,30 @@
+1488a1489,1494
+>                         if req_key == 'sls':
+>                             # Allow requisite tracking of entire sls files
+>                             if fnmatch.fnmatch(chunk['__sls__'], req_val):
+>                                 found = True
+>                                 reqs[r_state].append(chunk)
+>                             continue
+1494,1498d1499
+<                         elif req_key == 'sls':
+<                             # Allow requisite tracking of entire sls files
+<                             if fnmatch.fnmatch(chunk['__sls__'], req_val):
+<                                 found = True
+<                                 reqs[r_state].append(chunk)
+1579a1581,1588
+>                         if req_key == 'sls':
+>                             # Allow requisite tracking of entire sls files
+>                             if fnmatch.fnmatch(chunk['__sls__'], req_val):
+>                                 if requisite == 'prereq':
+>                                     chunk['__prereq__'] = True
+>                                 reqs.append(chunk)
+>                                 found = True
+>                             continue
+1587,1593d1595
+<                                 reqs.append(chunk)
+<                                 found = True
+<                         elif req_key == 'sls':
+<                             # Allow requisite tracking of entire sls files
+<                             if fnmatch.fnmatch(chunk['__sls__'], req_val):
+<                                 if requisite == 'prereq':
+<                                     chunk['__prereq__'] = True

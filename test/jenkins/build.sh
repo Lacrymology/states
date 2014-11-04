@@ -88,6 +88,7 @@ sudo salt -t 600 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all
 sudo salt -t 600 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call -c /root/salt/states/test/ state.sls test.jenkins >> /root/salt/stdout.log 2>> /root/salt/stderr.log"
 echo '------------ From here, salt with version supported by salt-common is running ------------'
 sudo salt -t 5 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call test.ping"
+sudo salt -t 10 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call -c /root/salt/states/test/ state.sls salt.patch_salt >> /root/salt/stdout.log 2>> /root/salt/stderr.log"
 sudo salt -t 20 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call -c /root/salt/states/test/ saltutil.sync_all >> /root/salt/stdout.log 2>> /root/salt/stderr.log"
 sudo salt -t 10 "integration-$JOB_NAME-$BUILD_NUMBER" --output json cmd.run_all "salt-call -c /root/salt/states/test/ saltutil.refresh_modules >> /root/salt/stdout.log 2>> /root/salt/stderr.log"
 start_run_test_time=$(date +%s)

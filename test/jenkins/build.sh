@@ -54,7 +54,7 @@ else
     profile='ci-minion'
 fi
 
-# allow multiple --repo options to get all non-common reporitories
+# allow multiple --repo options to get all non-common repositories
 # each value passed to  --repo is relative path to user-specific directory from
 # $WORKSPACE. The structure after all SCM checkout looks like:
 #  - common

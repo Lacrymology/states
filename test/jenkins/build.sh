@@ -72,14 +72,14 @@ while [ "${1}" = '--repo' ]; do
     shift
 done
 
-# create archive from common, pillar, and all user-specific formulas repos
-./bootstrap_archive.py ../pillar ${repos[@]} > /srv/salt/jenkins_archives/$JOB_NAME-$BUILD_NUMBER.tar.gz
-
 BUILD_IDENTITY="integration-$JOB_NAME-$BUILD_NUMBER"
+# create archive from common, pillar, and all user-specific formulas repos
+./bootstrap_archive.py ../pillar ${repos[@]} > /srv/salt/jenkins_archives/$BUILD_IDENTITY.tar.gz
+
 sudo salt-cloud --profile $profile $BUILD_IDENTITY
 sudo salt $BUILD_IDENTITY test.ping | grep True
 sudo salt -t 10 "$BUILD_IDENTITY" cmd.run "hostname $BUILD_IDENTITY"
-sudo salt -t 60 "$BUILD_IDENTITY" cp.get_file salt://jenkins_archives/$JOB_NAME-$BUILD_NUMBER.tar.gz /tmp/bootstrap-archive.tar.gz
+sudo salt -t 60 "$BUILD_IDENTITY" cp.get_file salt://jenkins_archives/$BUILD_IDENTITY.tar.gz /tmp/bootstrap-archive.tar.gz
 sudo salt -t 60 "$BUILD_IDENTITY" archive.tar xzf /tmp/bootstrap-archive.tar.gz cwd=/
 master_ip=$(sudo salt -t 60 "$BUILD_IDENTITY" --out=yaml grains.item master | cut -f2- -d ':' | tr -d '\n')
 sudo salt -t 10 "$BUILD_IDENTITY" --output json cmd.run_all "sed -i \"s/master:.*/master: $master_ip/g\" /root/salt/states/test/minion" | ./test/jenkins/retcode_check.py
@@ -110,5 +110,5 @@ cp /home/ci-agent/$BUILD_IDENTITY-stderr.log.xz $WORKSPACE/stderr.log.xz
 xz -d -c $WORKSPACE/stderr.log.xz
 cp /home/ci-agent/$BUILD_IDENTITY-stdout.log.xz $WORKSPACE/stdout.log.xz
 cp /home/ci-agent/$BUILD_IDENTITY-result.xml $WORKSPACE/result.xml
-mv /srv/salt/jenkins_archives/$JOB_NAME-$BUILD_NUMBER.tar.gz $WORKSPACE/bootstrap-archive.tar.gz
+mv /srv/salt/jenkins_archives/$BUILD_IDENTITY.tar.gz $WORKSPACE/bootstrap-archive.tar.gz
 echo "TIME-METER: Total time: $(($(date +%s) - start_time)) seconds"

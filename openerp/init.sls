@@ -106,16 +106,17 @@ openerp_depends:
     - directory
     - user: root
     - group: openerp
-    - dir_mode: 750
-    - file_mode: 640
-    - recurse:
-      - user
-      - group
-      - mode
+    - mode: 750
     - require:
       - archive: openerp
       - user: openerp
       - cmd: openerp_depends
+  cmd:
+    - wait
+    - name: chown -R root:openerp {{ web_root_dir }} && chmod -R u=rwX,g=rX,o= {{ web_root_dir }}
+    - watch:
+      - file: {{ web_root_dir }}
+      - user: openerp
 
 openerp:
   user:
@@ -205,7 +206,7 @@ openerp-uwsgi:
     - require:
       - service: uwsgi
       - postgres_user: openerp
-      - file: {{ web_root_dir }}
+      - cmd: {{ web_root_dir }}
   module:
     - wait
     - name: file.touch
@@ -227,7 +228,7 @@ openerp-uwsgi:
     - mode: 440
     - source: salt://openerp/wsgi.py
     - require:
-      - file: {{ web_root_dir }}
+      - cmd: {{ web_root_dir }}
       - file: {{ home }}/config.yaml
 
 {{ web_root_dir }}/openerp-cron.py:
@@ -239,7 +240,7 @@ openerp-uwsgi:
     - mode: 550
     - source: salt://openerp/cron.py
     - require:
-      - file: {{ web_root_dir }}
+      - cmd: {{ web_root_dir }}
       - file: {{ home }}/config.yaml
 {%- else %}
     - absent
@@ -254,7 +255,7 @@ openerp-uwsgi:
     - template: jinja
     - mode: 440
     - require:
-      - file: {{ web_root_dir }}
+      - cmd: {{ web_root_dir }}
     - context:
       password: {{ password }}
       username: {{ username }}

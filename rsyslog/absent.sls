@@ -70,3 +70,9 @@ rsyslog:
     - absent
     - require:
       - pkg: rsyslog
+
+/var/log/lastlog:
+  file:
+    - absent
+    - require:
+      - pkg: rsyslog

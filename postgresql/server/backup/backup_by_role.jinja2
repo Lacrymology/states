@@ -37,8 +37,7 @@ export TERM=dumb
 role=$1
 query="SELECT pg_database.datname FROM pg_database, pg_authid
        WHERE pg_database.datdba=pg_authid.oid AND pg_authid.rolname='${role}'";
-cd /
-databases=$(su -s /bin/sh postgres --command "psql --tuples-only --no-align -c \"${query}\"")
+databases=$(sudo -H -s -u postgres psql --tuples-only --no-align -c "${query}")
 for db in ${databases}; do
   /usr/local/bin/backup-postgresql --prefix ${role} ${db}
 done

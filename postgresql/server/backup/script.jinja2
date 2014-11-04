@@ -44,5 +44,5 @@ else
   dbname=$1
 fi
 
-su -s /bin/sh postgres --command "pg_dump $dbname | xz" > ${temp_path}
+sudo -H -s -u postgres -g postgres pg_dump $dbname | xz > ${temp_path}
 /usr/local/bin/backup-store ${temp_path}

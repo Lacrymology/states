@@ -39,3 +39,4 @@ cd /home/gitlab/gitlabhq-{{ version }}
 sudo -u gitlab -H bundle exec rake gitlab:backup:create RAILS_ENV=production 2>&1 | logger -t "backup-gitlab" -p 'local7.info'
 cd /var/lib/gitlab/gitlab-backups
 /usr/local/bin/backup-file gitlab . *
+rm *.tar  # remove old backup files

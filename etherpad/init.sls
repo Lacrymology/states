@@ -68,17 +68,19 @@ etherpad-dependencies:
 {{ web_root_dir }}:
   file:
     - directory
-    - user: www-data
+    - user: root
     - group: www-data
-    - dir_mode: 750
-    - file_mode: 640
-    - recurse:
-      - user
-      - group
+    - mode: 750
     - require:
       - user: web
       - archive: etherpad
       - pkg: etherpad-dependencies
+  cmd:
+    - wait
+    - name: chown -R root:www-data {{ web_root_dir }} && chmod -R u=rwX,g=rX,o= {{ web_root_dir }}
+    - watch:
+      - archive: etherpad
+      - file: {{ web_root_dir }}
 
 etherpad:
   postgres_user:
@@ -109,58 +111,90 @@ etherpad:
     - if_missing: {{ web_root_dir }}
     - require:
       - file: /usr/local
+  user:
+    - present
+    - groups:
+      - www-data
+    - shell: /usr/sbin/nologin
+    - home: /home/etherpad
+    - require:
+      - user: web
   file:
     - managed
     - name: /etc/init/etherpad.conf
     - source: salt://etherpad/upstart.jinja2
     - template: jinja
+    - user: root
+    - group: root
     - mode: 440
     - context:
       web_root_dir: {{ web_root_dir }}
-      user: www-data
+      user: etherpad
+    - require:
+      - user: etherpad
   service:
     - running
     - order: 50
     - enable: True
     - require:
-      - file: {{ web_root_dir }}
-      - file: {{ web_root_dir }}/bin
+      - cmd: {{ web_root_dir }}
       - postgres_database: etherpad
     - watch:
-      - user: web
+      - user: etherpad
+      - file: {{ web_root_dir }}/node_modules
+      - file: {{ web_root_dir }}/src
+      - file: {{ web_root_dir }}/src/static/custom
       - file: {{ web_root_dir }}/APIKEY.txt
       - file: {{ web_root_dir }}/settings.json
       - file: etherpad
+      - pkg: git
 
 {{ manage_upstart_log('etherpad') }}
 
-{{ web_root_dir }}/bin:
+{{ web_root_dir }}/node_modules:
   file:
     - directory
-    - file_mode: 550
-    - recurse:
-      - mode
+    - user: etherpad
+    - group: root
+    - mode: 700
     - require:
-      - file: {{ web_root_dir }}
+      - cmd: {{ web_root_dir }}
+
+{{ web_root_dir }}/src:
+  file:
+    - directory
+    - user: etherpad
+    - group: root
+    - mode: 700
+    - require:
+      - cmd: {{ web_root_dir }}
+
+{{ web_root_dir }}/src/static/custom:
+  file:
+    - directory
+    - user: etherpad
+    - group: root
+    - mode: 700
+    - require:
+      - cmd: {{ web_root_dir }}
 
 {{ web_root_dir }}/APIKEY.txt:
   file:
     - managed
-    - user: www-data
-    - group: www-data
+    - user: etherpad
+    - group: root
     - mode: 400
     - source: salt://etherpad/api.jinja2
     - template: jinja
     - require:
-      - file: {{ web_root_dir }}
-      - user: web
+      - cmd: {{ web_root_dir }}
 
 {{ web_root_dir }}/settings.json:
   file:
     - managed
-    - user: www-data
-    - group: www-data
-    - mode: 640
+    - user: etherpad
+    - group: root
+    - mode: 400
     - source: salt://etherpad/settings.jinja2
     - template: jinja
     - context:
@@ -169,8 +203,7 @@ etherpad:
       dbname: {{ dbname }}
       dbhost: {{ dbhost }}
     - require:
-      - file: {{ web_root_dir }}
-      - user: web
+      - cmd: {{ web_root_dir }}
 
 /etc/nginx/conf.d/etherpad.conf:
   file:

@@ -40,6 +40,6 @@ jenkins_port:
 
 jenkins_http:
   description: Jenkins HTTP
-  command: /usr/lib/nagios/plugins/check_http -I 127.0.0.1 -p 8080 -e 'HTTP/1.1 200 OK'
+  command: /usr/lib/nagios/plugins/check_http -I 127.0.0.1 -p 8080 -u '/login' -e 'HTTP/1.1 200 OK'
   dependencies:
     - jenkins_port

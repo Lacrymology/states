@@ -31,7 +31,7 @@ openerp_backup_postgres_procs:
 
 {#- \\\ for escaping quote as this cmd will be process by jinja2 then by bash
  su will let new user in /root, it need cd to other dir before running psql #}
-{%- set cmd = 'cd /; su --command "psql --tuples-only --no-align -c \\\"SELECT pg_database.datname FROM pg_database, pg_authid WHERE pg_database.datdba=pg_authid.oid AND pg_authid.rolname=' + "'openerp'" + '\\\"" postgres' %}
+{%- set cmd = 'cd /; su -s /bin/sh --command "psql --tuples-only --no-align -c \\\"SELECT pg_database.datname FROM pg_database, pg_authid WHERE pg_database.datdba=pg_authid.oid AND pg_authid.rolname=' + "'openerp'" + '\\\"" postgres' %}
 {%- for db in salt['cmd.run'](cmd).split() %}
 openerp_backup_postgres_{{ db }}_age:
   description: OpenERP Backup Database {{ db }} Age

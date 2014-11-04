@@ -142,6 +142,7 @@ salt-master:
     - watch:
       - pkg: salt-master
       - file: salt-master
+      - cmd: salt
 {#- PID file owned by root, no need to manage #}
   pkg:
     - installed
@@ -153,7 +154,7 @@ salt-master:
       - salt-master: http://archive.robotinfra.com/mirror/salt/{{ master_path }}
 {%- endif %}
     - require:
-      - pkg: salt
+      - cmd: salt
 {%- if salt['pkg.version']('salt-master') not in ('', pkg_version) %}
       - pkg: salt_master_old_version
 

@@ -33,12 +33,19 @@ include:
   - openerp.diamond
   - openerp.nrpe
 
+{#- require manually create openerp database first #}
+test-backup-openerp:
+  file:
+    - name: /etc/cron.daily/backup-openerp
+    - absent
+
 {%- call test_cron() %}
 - sls: openerp
 - sls: openerp.backup
 - sls: openerp.backup.nrpe
 - sls: openerp.diamond
 - sls: openerp.nrpe
+- file: test-backup-openerp
 {%- endcall %}
 
 test:

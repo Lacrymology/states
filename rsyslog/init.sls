@@ -71,6 +71,14 @@ rsyslog:
       - file: rsyslog
       - file: /var/spool/rsyslog
       - user: rsyslog
+      - file: /var/log/lastlog
+
+/var/log/lastlog:
+  file:
+    - managed
+    - user: root
+    - group: utmp
+    - mode: 660
 
 /var/spool/rsyslog:
   file:

@@ -39,13 +39,14 @@ include:
 - sls: jenkins.backup.nrpe
 - sls: jenkins.diamond
 - sls: jenkins.nrpe
+- cmd: test
 {%- endcall %}
 
 test:
   cmd:
     - run
     {#- wait some seconds for Jenkins service to be functional and create files #}
-    - name: sleep 30 && /etc/cron.daily/backup-jenkins
+    - name: sleep 30
     - require:
       - sls: jenkins
       - sls: jenkins.backup

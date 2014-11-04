@@ -84,7 +84,7 @@ sudo salt -t 60 "$BUILD_IDENTITY" archive.tar xzf /tmp/bootstrap-archive.tar.gz 
 master_ip=$(sudo salt -t 60 "$BUILD_IDENTITY" --out=yaml grains.item master | cut -f2- -d ':' | tr -d '\n')
 
 function run_and_check_return_code {
-    sudo salt -t $1 "$BUILD_IDENTITY" --output json cmd.run_all $2 | ./test/jenkins/retcode_check.py
+    sudo salt -t $1 "$BUILD_IDENTITY" --output json cmd.run_all "$2" | ./test/jenkins/retcode_check.py
 }
 run_and_check_return_code 10 "sed -i \"s/master:.*/master: $master_ip/g\" /root/salt/states/test/minion"
 # sync extmod from extracted archive to bootstrapped salt instance
@@ -105,8 +105,8 @@ finish_run_test_time=$(date +%s)
 echo "TIME-METER: Run integration.py took: $((finish_run_test_time - start_run_test_time)) seconds"
 
 for ltype in stdout stderr; do
-    xz -c /root/salt/$ltype.prepare > /tmp/$BUILD_IDENTITY-$ltype.prepare.log.xz
-    xz -c /root/salt/$ltype.log > /tmp/$BUILD_IDENTITY-$ltype.log.xz
+    run_and_check_return_code 30 "salt-call -c /root/salt/states/test/ cmd.run \"xz -c /root/salt/$ltype.prepare > /tmp/$BUILD_IDENTITY-$ltype.prepare.log.xz\""
+    run_and_check_return_code 30 "salt-call -c /root/salt/states/test/ cmd.run \"xz -c /root/salt/$ltype.log > /tmp/$BUILD_IDENTITY-$ltype.log.xz\""
 done
 
 sudo salt -t 60 "$BUILD_IDENTITY" --output json cmd.run_all "salt-call -l info -c /root/salt/states/test/ state.sls test.jenkins.result"

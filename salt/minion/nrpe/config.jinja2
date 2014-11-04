@@ -27,7 +27,7 @@ Maintainer: Bruno Clermont <patate@fastmail.cn>
 -#}
 salt_minion_procs:
   description: Salt Minion Daemon
-  command: /usr/lib/nagios/plugins/check_procs -c 1:2 -C salt-minion -u root
+  command: /usr/lib/nagios/plugins/check_procs -c 1:3 -C salt-minion -u root
 
 salt_minion_last_success:
   description: Salt Minion last success highstate call

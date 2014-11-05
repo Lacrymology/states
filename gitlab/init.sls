@@ -250,7 +250,6 @@ gitlab_upstart:
     - require_in:
       - cmd: gitlab_gems
 
-{%- if salt['pillar.get']('gitlab:smtp:enabled', False) %}
 /home/gitlab/gitlabhq-{{ version }}/config/initializers/smtp_settings.rb:
   file:
     - managed
@@ -264,11 +263,6 @@ gitlab_upstart:
       - file: gitlab
     - require_in:
       - cmd: gitlab_gems
-{%- else %}
-/home/gitlab/gitlabhq-{{ version }}/config/initializers/smtp_settings.rb:
-  file:
-    - absent
-{%- endif %}
 
 gitlab_gems:
   gem:

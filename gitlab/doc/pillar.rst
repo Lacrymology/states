@@ -71,8 +71,6 @@ Optional
 Example::
 
   gitlab:
-    smtp:
-      enabled: False
     workers: 2
     idle: 300
     cheaper: 1

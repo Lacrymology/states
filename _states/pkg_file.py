@@ -36,9 +36,10 @@ import os
 
 log = logging.getLogger(__name__)
 
+
 def installed(name, version, source, source_hash):
     ret = {'name': name, 'result': None, 'changes': {}, 'comment': ''}
-    if  __salt__['pkg.version'](name) == version:
+    if __salt__['pkg.version'](name) == version:
         ret['result'] = True
         ret['comment'] = '{0} is already at version {1}'.format(name, version)
     else:
@@ -88,7 +89,7 @@ def installed(name, version, source, source_hash):
         })
         __salt__['cmd.run']('dpkg --install --force-confnew {0}'.format(
             filename))
-        if  __salt__['pkg.version'](name) == version:
+        if __salt__['pkg.version'](name) == version:
             ret['result'] = True
             ret['comment'] = '{0} version {1} is installed'.format(name,
                                                                    version)
@@ -97,18 +98,6 @@ def installed(name, version, source, source_hash):
             os.unlink(filename)
         else:
             ret['result'] = False
-            ret['comment']  = "Can't install {0} version {1}".format(name,
+            ret['comment'] = "Can't install {0} version {1}".format(name,
                                                                      version)
-#        ret['changes'] = __salt__['pkg.install'](
-#            name, sources=[{'cache_file': filename}])
-#        log.debug("BCBC OUTPUT %s", str(ret['changes']))
-#        try:
-#            ret['result'] = ret['changes'][name]['new'] == version
-#        except KeyError:
-#            ret['result'] = False
-#        log.debug("BCBC2 %s - new:'%s' version:'%s'", ret['result'], ret['changes'][name]['new'],version)
-#        if ret['result']:
-#            log.debug("package %s(%s) is installed, remove cache file", name,
-#                      version)
-#            os.unlink(filename)
     return ret

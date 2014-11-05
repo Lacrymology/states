@@ -143,6 +143,7 @@ etherpad:
       - user: etherpad
       - file: {{ web_root_dir }}/node_modules
       - file: {{ web_root_dir }}/src
+      - file: {{ web_root_dir }}/src/package.json
       - file: {{ web_root_dir }}/src/static/custom
       - file: {{ web_root_dir }}/APIKEY.txt
       - file: {{ web_root_dir }}/settings.json
@@ -168,6 +169,17 @@ etherpad:
     - mode: 700
     - require:
       - cmd: {{ web_root_dir }}
+
+{{ web_root_dir }}/src/package.json:
+  file:
+    - managed
+    - template: jinja
+    - source: salt://etherpad/package.jinja2
+    - user: root
+    - group: www-data
+    - mode: 440
+    - require:
+      - file: {{ web_root_dir }}/src
 
 {{ web_root_dir }}/src/static/custom:
   file:

@@ -32,7 +32,6 @@ include:
   - diamond
   - diamond.nrpe
   - rsyslog.diamond
-  - sudo.diamond
 
 nrpe_diamond_resources:
   file:

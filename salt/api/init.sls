@@ -121,7 +121,6 @@ salt-ui:
     - mode: 440
     - require:
       - pkg: nginx
-      - {{ salt_ui_module }}: salt-ui
     - watch_in:
       - service: nginx
 

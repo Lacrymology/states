@@ -118,6 +118,8 @@ sudo salt -t 60 "$BUILD_IDENTITY" --output json cmd.run_all "salt-call -l info -
 
 xz -d -c /home/ci-agent/$BUILD_IDENTITY-stderr.log.xz
 cp /home/ci-agent/$BUILD_IDENTITY-result.xml $WORKSPACE/result.xml
-cp /home/ci-agent/$BUILD_IDENTITY-*.log.xz $WORKSPACE/
+for f in /home/ci-agent/$BUILD_IDENTITY-*.log.xz; do
+  cp $f $WORKSPACE/`echo $f | sed "s/$BUILD_IDENTITY/$JOB_NAME/"`
+done
 mv /srv/salt/jenkins_archives/$BUILD_IDENTITY.tar.gz $WORKSPACE/bootstrap-archive.tar.gz
 echo "TIME-METER: Total time: $(($(date +%s) - start_time)) seconds"

@@ -29,8 +29,8 @@ advertising or otherwise to promote the sale, use or other dealings
 in this Software without prior written authorization from the
 Institute for Institutional Innovation by Data Driven Design Inc.
 
-Author: Lam Dang Tung <lamdt@familug.org>
-Maintainer: Lam Dang Tung <lamdt@familug.org>
+Author: Lam Dang Tung <lam@robotinfra.com>
+Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
 include:
   - apt.nrpe

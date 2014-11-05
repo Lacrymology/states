@@ -22,11 +22,9 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Bruno Clermont <patate@fastmail.cn>
-Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
+Author: Bruno Clermont <bruno@robotinfra.com>
+Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
             Quan Tong Anh <quanta@robotinfra.com>
-
-Diamond statistics for Graphite.
 -#}
 {%- from 'diamond/macro.jinja2' import uwsgi_diamond with context %}
 {%- call uwsgi_diamond('graphite') %}

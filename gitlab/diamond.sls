@@ -29,11 +29,8 @@ advertising or otherwise to promote the sale, use or other dealings
 in this Software without prior written authorization from the
 Institute for Institutional Innovation by Data Driven Design Inc.
 
-Author: Lam Dang Tung <lamdt@familug.org>
-Maintainer: Lam Dang Tung <lamdt@familug.org>
-            Quan Tong Anh <quanta@robotinfra.com>
-
-Diamond statistics for GitLab.
+Author: Lam Dang Tung <lam@robotinfra.com>
+Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
 {%- from 'diamond/macro.jinja2' import uwsgi_diamond with context %}
 {%- call uwsgi_diamond('gitlab') %}

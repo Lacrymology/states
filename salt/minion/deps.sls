@@ -23,7 +23,7 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author: Quan Tong Anh <quanta@robotinfra.com>
-Maintainer: Quan Tong Anh <quanta@robotinfra.com>
+Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 
 These are required to run some Salt states/modules
 for e.g, `salt.modules.dig` need `dnsutils` to be installed

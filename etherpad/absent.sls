@@ -22,10 +22,8 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Dang Tung Lam <lamdt@familug.org>
-Maintainer: Dang Tung Lam <lamdt@familug.org>
-
-Uninstall Etherpad
+Author: Dang Tung Lam <lam@robotinfra.com>
+Maintainer: Van Pham Diep <favadi@robotinfra.com>
 -#}
 {%- set version = "1.3.0" -%}
 {%- from "upstart/absent.sls" import upstart_absent with context -%}

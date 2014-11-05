@@ -45,7 +45,7 @@ Note: - first argument is always the pillar path
 
 __author__ = 'Bruno Clermont'
 __maintainer__ = 'Bruno Clermont'
-__email__ = 'patate@fastmail.cn'
+__email__ = 'bruno@robotinfra.com'
 
 import os
 import sys

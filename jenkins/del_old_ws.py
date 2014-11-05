@@ -29,9 +29,9 @@ corresponding jobs
 # OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 # IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-__author__ = 'Hung Nguyen Viet <hvnsweeting@gmail.com>'
-__maintainer__ = 'Hung Nguyen Viet <hvnsweeting@gmail.com>'
-__email__ = 'hvnsweeting@gmail.com'
+__author__ = 'Viet Hung Nguyen <hvn@robotinfra.com>'
+__maintainer__ = 'Viet Hung Nguyen <hvn@robotinfra.com>'
+__email__ = 'hvn@robotinfra.com'
 
 
 import os

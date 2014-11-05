@@ -36,9 +36,9 @@ NRPE check script that checks whether minion ids in salt mine monitoring.data
 match exactly salt-key accepted minion ids or not.
 """
 
-__author__ = 'Hung Nguyen Viet <hvnsweeting@gmail.com>'
-__maintainer__ = 'Hung Nguyen Viet <hvnsweeting@gmail.com>'
-__email__ = 'hvnsweeting@gmail.com'
+__author__ = 'Viet Hung Nguyen <hvn@robotinfra.com>'
+__maintainer__ = 'Viet Hung Nguyen <hvn@robotinfra.com>'
+__email__ = 'hvn@robotinfra.com'
 
 import logging
 

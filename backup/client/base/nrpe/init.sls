@@ -22,8 +22,8 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Tomas Neme <lacrymology@gmail.com>
-Maintainer: Tomas Neme <lacrymology@gmail.com>
+Author: Tomas Neme <tomas@robotinfra.com>
+Maintainer: Tomas Neme <tomas@robotinfra.com>
 -#}
 include:
   - bash.nrpe

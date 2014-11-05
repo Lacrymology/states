@@ -22,12 +22,9 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Luan Vo Ngoc <ngocluanvo@gmail.com>
-Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
-
-Remove Backup client for Elasticsearch.
+Author: Luan Vo Ngoc <luan@robotinfra.com>
+Maintainer: Van Pham Diep <favadi@robotinfra.com>
 -#}
-
 backup-elasticsearch:
   file:
     - absent

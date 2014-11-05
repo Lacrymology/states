@@ -29,7 +29,7 @@
              OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
              SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
              DAMAGE.
-:Authors: - Diep Pham <imeo@favadi.com>
+:Authors: - Van Diep Pham <favadi@robotinfra.com>
 
 Pillar
 =======

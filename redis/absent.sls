@@ -29,12 +29,9 @@ advertising or otherwise to promote the sale, use or other dealings
 in this Software without prior written authorization from the
 Institute for Institutional Innovation by Data Driven Design Inc.
 
-Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
-Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
-
-Uninstall Redis.
+Author: Viet Hung Nguyen <hvn@robotinfra.com>
+Maintainer: Van Diep Pham <favadi@robotinfra.com>
 -#}
-
 redis:
   pkg:
     - purged

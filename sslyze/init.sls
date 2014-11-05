@@ -22,10 +22,8 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Quan Tong Anh <tonganhquan.net@gmail.com>
-Maintainer: Quan Tong Anh <tonganhquan.net@gmail.com>
-
-A Python tool that can analyze the SSL configuration of a server
+Author: Quan Tong Anh <quanta@robotinfra.com>
+Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
 {% set version = "0.9" %}
 include:

@@ -29,8 +29,8 @@ Nagios plugin to check an half-installed packages.
 """
 
 __author__ = 'Bruno Clermont'
-__maintainer__ = 'Bruno Clermont'
-__email__ = 'patate@fastmail.cn'
+__maintainer__ = 'Viet Hung Nguyen'
+__email__ = 'hvn@robotinfra.com'
 
 
 import os

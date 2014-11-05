@@ -30,7 +30,7 @@ Run a single Passive Check and send result to NSCA server
 
 __author__ = 'Hung Nguyen Viet'
 __maintainer__ = 'Hung Nguyen Viet'
-__email__ = 'hvnsweeting@gmail.com'
+__email__ = 'hvn@robotinfra.com'
 
 import glob
 import logging

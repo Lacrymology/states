@@ -24,11 +24,15 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
+__author__ = 'Tomas Neme'
+__maintainer__ = 'Tomas Neme'
+__email__ = 'tomas@robotinfra.com'
+
 import os
 import logging
 
-
 log = logging.getLogger(__name__)
+
 
 def _remove_log(logfile):
     if __salt__['file.file_exists'](logfile):

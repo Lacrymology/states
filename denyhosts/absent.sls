@@ -22,10 +22,8 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Bruno Clermont <patate@fastmail.cn>
-Maintainer: Bruno Clermont <patate@fastmail.cn>
-
-Uninstall Denyhosts used to block SSH brute-force attack.
+Author: Bruno Clermont <bruno@robotinfra.com>
+Maintainer: Van Pham Diep <favadi@robotinfra.com>
 -#}
 denyhosts:
   pkg:

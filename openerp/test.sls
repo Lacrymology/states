@@ -23,7 +23,7 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author: Quan Tong Anh <quanta@robotinfra.com>
-Maintainer: Quan Tong Anh <quanta@robotinfra.com>
+Maintainer: Van Diep Pham <favadi@robotinfra.com>
 -#}
 {%- from 'cron/test.sls' import test_cron with context %}
 include:

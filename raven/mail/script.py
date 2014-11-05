@@ -26,9 +26,8 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-# Author: Bruno Clermont <patate@fastmail.cn>
-# Maintainer: Bruno Clermont <patate@fastmail.cn>
-#             Quan Tong Anh <tonganhquan.net@gmail.com>
+# Author: Bruno Clermont <bruno@robotinfra.com>
+# Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 
 """
 RavenMail: Emulate /usr/bin/mail(x) but send mail to a Sentry server instead.

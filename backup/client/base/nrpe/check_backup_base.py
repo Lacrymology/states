@@ -30,7 +30,7 @@ Common code for backup file checking nrpe plugins
 
 __author__ = 'Tomas Neme'
 __maintainer__ = 'Tomas Neme'
-__email__ = 'lacrymology@gmail.com'
+__email__ = 'tomas@robotinfra.com'
 
 import datetime
 import logging

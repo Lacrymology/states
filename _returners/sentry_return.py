@@ -35,8 +35,8 @@ and http://pypi.python.org/pypi/raven installed
 """
 
 __author__ = 'Bruno Clermont'
-__maintainer__ = 'Bruno Clermont'
-__email__ = 'patate@fastmail.cn'
+__maintainer__ = 'Quan Tong Anh'
+__email__ = 'quanta@robotinfra.com'
 
 import logging
 

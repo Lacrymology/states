@@ -29,10 +29,8 @@ advertising or otherwise to promote the sale, use or other dealings
 in this Software without prior written authorization from the
 Institute for Institutional Innovation by Data Driven Design Inc.
 
-Author: Luan Vo Ngoc <ngocluanvo@gmail.com>
-Maintainer: Luan Vo Ngoc <ngocluanvo@gmail.com>
-
-Undo openerp state.
+Author: Luan Vo Ngoc <luan@robotinfra.com>
+Maintainer: Van Diep Pham <favadi@robotinfra.com>
 -#}
 backup-openerp:
   file:

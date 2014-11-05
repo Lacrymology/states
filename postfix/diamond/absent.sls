@@ -22,10 +22,8 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
-Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
-
-Turn off Diamond statistics for postfix.
+Author: Viet Hung Nguyen <hvn@robotinfra.com>
+Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
 {%- from "upstart/absent.sls" import upstart_absent with context -%}
 {{ upstart_absent('postfix_stats') }}

@@ -26,9 +26,9 @@
 NRPE script checks whether encoding of a database is same as expected.
 """
 
-__author__ = 'Hung Nguyen Viet <hvnsweeting@gmail.com>'
-__maintainer__ = 'Hung Nguyen Viet <hvnsweeting@gmail.com>'
-__email__ = 'hvnsweeting@gmail.com'
+__author__ = 'Viet Hung Nguyen <hvn@robotinfra.com>'
+__maintainer__ = 'Viet Hung Nguyen <hvn@robotinfra.com>'
+__email__ = 'hvn@robotinfra.com'
 
 import logging
 import subprocess

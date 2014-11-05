@@ -31,7 +31,7 @@ Source: https://github.com/saltstack/salt/issues/1825
 
 __author__ = 'Erik Günther'
 __maintainer__ = 'Bruno Clermont'
-__email__ = 'patate@fastmail.cn'
+__email__ = 'bruno@robotinfra.com'
 
 import json
 import logging

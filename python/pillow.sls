@@ -22,11 +22,9 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Dang Tung Lam <lamdt@familug.org>
-Maintainer: Dang Tung Lam <lamdt@familug.org>
-
-Installing dependencies for Pillow (Python Imaging Library)
-#}
+Author: Dang Tung Lam <lam@robotinfra.com>
+Maintainer: Van Pham Diep <favadi@robotinfra.com>
+-#}
 include:
   - apt
   - python.dev

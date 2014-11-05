@@ -22,11 +22,8 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Bruno Clermont <patate@fastmail.cn>
-Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
-
-Install Carbon, daemon that store on disk statistics database used by Graphite
-to render graphics.
+Author: Bruno Clermont <bruno@robotinfra.com>
+Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
 {%- set filter_type = salt['pillar.get']('graphite:carbon:filter:type', False) -%}
 {%- set supported_filter_types = ('white', 'black')  %}

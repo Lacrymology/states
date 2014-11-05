@@ -24,13 +24,15 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author: Quan Tong Anh <quanta@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
-
-Install a dummy package, then remove it and expect a HALF INSTALLED after checking
 -#}
 include:
   - apt
   - apt.nrpe
 
+{#-
+ Install a dummy package, then remove it and expect a HALF INSTALLED after
+ checking.
+#}
 install_screen:
   pkg:
     - installed

@@ -30,7 +30,7 @@ Backup script which syncs files to S3 with small memory using.
 
 __author__ = 'Hung Nguyen Viet'
 __maintainer__ = 'Hung Nguyen Viet'
-__email__ = 'hvnsweeting@gmail.com'
+__email__ = 'hvn@robotinfra.com'
 
 import collections
 import hashlib

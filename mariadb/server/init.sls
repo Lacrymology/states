@@ -29,10 +29,8 @@ advertising or otherwise to promote the sale, use or other dealings
 in this Software without prior written authorization from the
 Institute for Institutional Innovation by Data Driven Design Inc.
 
-Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
-Maintainer: Dang Tung Lam <lamdt@familug.org>
-
-Install MariaDB, a database server which is a drop-in replacement for MySQL.
+Author: Viet Hung Nguyen <hvn@robotinfra.com>
+Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
 {%- from 'macros.jinja2' import manage_pid with context %}
 include:

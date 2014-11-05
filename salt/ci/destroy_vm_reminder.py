@@ -75,7 +75,7 @@ destroy_vm_reminder:
 
 __author__ = 'Tomas Neme'
 __maintainer__ = 'Bruno Clermont, Hung Nguyen Viet, Tomas Neme'
-__email__ = 'patate@fastmail.cn, hvnsweeting@gmail.com, lacrymology@gmail.com'
+__email__ = 'bruno@robotinfra.com, hvn@robotinfra.com, tomas@robotinfra.com'
 
 import re
 import json

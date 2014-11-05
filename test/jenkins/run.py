@@ -37,7 +37,7 @@ in a single line.
 
 __author__ = 'Bruno Clermont'
 __maintainer__ = 'Bruno Clermont'
-__email__ = 'patate@fastmail.cn'
+__email__ = 'bruno@robotinfra.com'
 
 import sys
 import subprocess

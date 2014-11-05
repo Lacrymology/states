@@ -22,21 +22,8 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Bruno Clermont <patate@fastmail.cn>
-Maintainer: Bruno Clermont <patate@fastmail.cn>
-
-Install a graylog2 web interface server.
-
-Once this state is installed, you need to:
-
-- Create initial admin user.
-  You can do it with your web browser by opening the Graylog2 Web interface
-  of your deployed instance at URL:
-  /users/first
-- Configure the Sentry DSN to receive alerts, in URL:
-  /plugin_configuration/configure/transport/com.bitflippers.sentrytransport.transport.SentryTransport
-- Add a Sentry DSN to each of your users (can be the same) at:
-  /users/
+Author: Bruno Clermont <bruno@robotinfra.com>
+Maintainer: Van Pham Diep <favadi@robotinfra.com>
 -#}
 {%- from 'upstart/rsyslog.jinja2' import manage_upstart_log with context -%}
 {%- from "upstart/absent.sls" import upstart_absent with context %}

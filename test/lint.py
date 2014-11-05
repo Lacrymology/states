@@ -30,7 +30,7 @@ A lint script for SaltStack SLS
 
 __author__ = 'Hung Nguyen Viet'
 __maintainer__ = 'Hung Nguyen Viet'
-__email__ = 'hvnsweeting@gmail.com'
+__email__ = 'hvn@robotinfra.com'
 
 import re
 import sys

@@ -22,11 +22,8 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Bruno Clermont <patate@fastmail.cn>
-Maintainer: Bruno Clermont <patate@fastmail.cn>
-
-Setup motd (message of the day).
-http://en.wikipedia.org/wiki/Motd_(Unix).
+Author: Bruno Clermont <bruno@robotinfra.com>
+Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
 /etc/update-motd.d/10-help-text:
   file:

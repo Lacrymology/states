@@ -31,7 +31,7 @@ raven (sentry client) module.
 
 __author__ = 'Tomas Neme'
 __maintainer__ = 'Tomas Neme'
-__email__ = 'lacrymology@gmail.com'
+__email__ = 'tomas@robotinfra.com'
 
 import logging
 try:

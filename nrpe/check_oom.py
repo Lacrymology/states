@@ -26,9 +26,9 @@
 nrpe check for Out Of Memory (OOM) message in syslog files.
 """
 
-__author__ = 'Hung Nguyen Viet <hvnsweeting@gmail.com>'
-__maintainer__ = 'Hung Nguyen Viet <hvnsweeting@gmail.com>'
-__email__ = 'hvnsweeting@gmail.com'
+__author__ = 'Viet Hung Nguyen <hvn@robotinfra.com>'
+__maintainer__ = 'Viet Hung Nguyen <hvn@robotinfra.com>'
+__email__ = 'hvn@robotinfra.com'
 
 import glob
 import datetime

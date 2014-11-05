@@ -29,10 +29,8 @@ advertising or otherwise to promote the sale, use or other dealings
 in this Software without prior written authorization from the
 Institute for Institutional Innovation by Data Driven Design Inc.
 
-Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
-Maintainer: Dang Tung Lam <lamdt@familug.org>
-
-Remove Nagios NRPE checks for MariaDB.
+Author: Viet Hung Nguyen <hvn@robotinfra.com>
+Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
 /etc/nagios/nrpe.d/mysql.cfg:
   file:

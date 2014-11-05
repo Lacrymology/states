@@ -28,9 +28,9 @@ Script for testing functionality of a whole mail stack.
 Check send normal mail, spam mail and virus email
 '''
 
-__author__ = 'Hung Nguyen Viet <hvnsweeting@gmail.com>'
-__maintainer__ = 'Hung Nguyen Viet <hvnsweeting@gmail.com>'
-__email__ = 'hvnsweeting@gmail.com'
+__author__ = 'Viet Hung Nguyen'
+__maintainer__ = 'Viet Hung Nguyen'
+__email__ = 'hvn@robotinfra.com'
 
 import imaplib
 import logging

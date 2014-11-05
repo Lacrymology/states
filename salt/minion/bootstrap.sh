@@ -24,8 +24,8 @@ set -e
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
-# Author: Bruno Clermont <patate@fastmail.cn>
-# Maintainer: Bruno Clermont <patate@fastmail.cn>
+# Author: Bruno Clermont <bruno@robotinfra.com>
+# Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 
 # TODO: rewrite in Python
 if [ -d /root/salt/states/salt/minion ]; then

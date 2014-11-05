@@ -30,7 +30,7 @@ manage part of content in hosts.allow and hosts.deny
 
 __author__ = 'Bruno Clermont'
 __maintainer__ = 'Hung Nguyen Viet'
-__email__ = 'hvnsweeting@gmail.com'
+__email__ = 'hvn@robotinfra.com'
 
 import logging
 

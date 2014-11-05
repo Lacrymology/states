@@ -22,15 +22,8 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Bruno Clermont <patate@fastmail.cn>
-Maintainer: Bruno Clermont <patate@fastmail.cn>
-
-Install uWSGI Web app server.
-This build come with only Python support.
-
-To turn on Ruby support, include uwsgi.ruby instead of this file.
-For PHP include uwsgi.php instead.
-You can include both uwsgi.php and uwsgi.ruby.
+Author: Bruno Clermont <bruno@robotinfra.com>
+Maintainer: Van Pham Diep <favadi@robotinfra.com>
 -#}
 {% from 'upstart/rsyslog.jinja2' import manage_upstart_log with context %}
 include:

@@ -30,7 +30,7 @@ NRPE script for checking age of backup files synced by s3lite
 
 __author__ = 'Hung Nguyen Viet'
 __maintainer__ = 'Hung Nguyen Viet'
-__email__ = 'hvnsweeting@gmail.com'
+__email__ = 'hvn@robotinfra.com'
 
 import json
 import logging

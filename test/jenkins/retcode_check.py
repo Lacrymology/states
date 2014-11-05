@@ -34,7 +34,7 @@ during execution.
 
 __author__ = 'Hung Nguyen Viet'
 __maintainer__ = 'Bruno Clermont, Hung Nguyen viet'
-__email__ = 'patate@fastmail.cn, hvnsweeting@gmail.com'
+__email__ = 'bruno@robotinfra.com, hvn@robotinfra.com'
 
 import json
 import sys

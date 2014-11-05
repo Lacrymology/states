@@ -31,7 +31,7 @@ A script to fire events as non-root user
 
 __author__ = 'Quan Tong Anh'
 __maintainer__ = 'Quan Tong Anh'
-__email__ = 'tonganhquan.net@gmail.com'
+__email__ = 'quanta@robotinfra.com'
 
 import json
 import logging

@@ -30,7 +30,7 @@ Nagios plugin to check the memory usage.
 __author__ = 'David Hannequin <david.hannequin@gmail.com>, ' \
     'Hartmut Goebel <h.goebel@crazy-compilers.com>'
 __maintainer__ = 'Bruno Clermont'
-__email__ = 'patate@fastmail.cn'
+__email__ = 'bruno@robotinfra.com'
 
 import nagiosplugin
 

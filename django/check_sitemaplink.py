@@ -28,7 +28,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 __author__ = 'Bruno Clermont'
 __maintainer__ = 'Bruno Clermont'
-__email__ = 'patate@fastmail.cn'
+__email__ = 'bruno@robotinfra.com'
 
 import os
 import pickle

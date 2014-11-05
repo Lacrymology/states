@@ -3,7 +3,7 @@
 Remove license from a file and adding new license.
 Used for internal only.
 
-Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
+Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Version: 0.1
 '''
 import logging

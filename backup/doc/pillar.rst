@@ -28,7 +28,7 @@
              LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
              ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
              POSSIBILITY OF SUCH DAMAGE.
-:Authors: - Hung Nguyen Viet <hvnsweeting@gmail.com>
+:Authors: - Viet Hung Nguyen <hvn@robotinfra.com>
 
 Pillar
 ======

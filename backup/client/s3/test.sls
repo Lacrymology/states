@@ -95,7 +95,7 @@ test_s3cmd:
         test_s3cmd:
           command: /usr/lib/nagios/plugins/check_backup.py --formula=backup.client.s3cmd --check=test_s3cmd
           arguments:
-            facility: test_s3cmd
+            facility: backup-client-test
   monitoring:
     - run_check
     - name: test_s3cmd

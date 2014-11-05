@@ -75,6 +75,7 @@ salt_check_mine_nrpe_check:
     - absent
     - name: /usr/local/nagios/salt-check-mine-requirements.txt
 
+{%- if not salt['pillar.get']('__test__', False) %}
 salt_mine_collect_minions_data:
   file:
     - managed
@@ -87,6 +88,7 @@ salt_mine_collect_minions_data:
     - require:
       - file: /etc/cron.twice_daily
       - file: /usr/lib/nagios/plugins/check_mine_minions.py
+{%- endif %}
 
 /etc/cron.d/salt_mine_data:
   file:

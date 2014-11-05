@@ -29,8 +29,7 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 {%- set spam_filter = salt['pillar.get']('postfix:spam_filter', False) %}
 include:
 {%- if spam_filter %}
-  - amavis
-  - clamav
+  - amavis.clamav
 {%- endif %}
   - apt
   - mail

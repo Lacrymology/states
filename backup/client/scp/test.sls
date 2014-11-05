@@ -36,15 +36,15 @@ include:
     - run some backup using `scp`
     - remove that key
     #}
-{%- if pillar['backup_server']['address'] in grains['ipv4'] or
-       pillar['backup_server']['address'] in ('localhost', grains['host']) -%}
-    {%- from 'ssh/key.sls' import add_key with context -%}
-    {%- from 'ssh/key.sls' import remove_key with context %}
+    {%- if pillar['backup_server']['address'] in grains['ipv4'] or
+           pillar['backup_server']['address'] in ('localhost', grains['host']) -%}
+        {%- from 'ssh/key.sls' import add_key with context -%}
+        {%- from 'ssh/key.sls' import remove_key with context %}
 {{ add_key() }}
 {%- call remove_key() %}
 - cmd: test
 {%- endcall -%}
-{%- endif %}
+    {%- endif %}
 
 test:
   monitoring:
@@ -56,5 +56,8 @@ test:
     - require:
       - file: /usr/local/bin/backup-store
       - file: /usr/local/bin/create_dumb
+    {%- if pillar['backup_server']['address'] in grains['ipv4'] or
+           pillar['backup_server']['address'] in ('localhost', grains['host']) -%}
       - cmd: ssh_add_key
+    {%- endif %}
 {%- endif %}

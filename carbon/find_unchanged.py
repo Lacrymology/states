@@ -97,8 +97,7 @@ class FindUnchanged(pysc.Application):
         argp.add_argument('--delete', help='delete found directory',
                           action='store_true')
         argp.add_argument('rootdirs', nargs='+',
-                          help=('root dir(s) of a cache storage, base on '
-                                'suffix of carbon-cache process'))
+                          help='root dir(s) to find old files/directories')
         return argp
 
     def main(self):

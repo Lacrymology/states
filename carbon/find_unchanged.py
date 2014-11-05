@@ -3,9 +3,8 @@
 
 """
 A script for finding (and/or deleting) all old files/directories under
-given path(s).
-A directory is considered old if ALL files it contains have not changed since
-last N days - N passed by user.
+given path.  A directory is considered old if ALL files it contains have not
+changed since last N days, N passed by user.
 """
 
 # Copyright (c) 2014, Hung Nguyen Viet All rights reserved.
@@ -74,7 +73,7 @@ def _delete_or_print(fpath, delete=False):
 
 
 def main():
-    argp = argparse.ArgumentParser()
+    argp = argparse.ArgumentParser(__doc__)
     argp.add_argument('--days', help=('number of days that file should '
                       'be considered old'), default=10, metavar='DAYS',
                       type=int)

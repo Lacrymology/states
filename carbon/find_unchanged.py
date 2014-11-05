@@ -34,13 +34,14 @@ __author__ = 'Hung Nguyen Viet'
 __maintainer__ = 'Hung Nguyen Viet'
 __email__ = 'hvnsweeting@gmail.com'
 
-import argparse
 import os
 import logging
 import shutil
 from datetime import datetime, timedelta
 
-logging.basicConfig(level=logging.WARNING)
+import pysc
+
+
 log = logging.getLogger()
 
 
@@ -72,29 +73,37 @@ def _delete_or_print(fpath, delete=False):
         print fpath
 
 
-def main():
-    argp = argparse.ArgumentParser(__doc__)
-    argp.add_argument('--days', help=('number of days that file should '
-                      'be considered old'), default=10, metavar='DAYS',
-                      type=int)
-    argp.add_argument('--delete', help='delete found directory',
-                      action='store_true')
-    argp.add_argument('rootdirs', nargs='+',
-                      help=('root dir(s) of a cache storage, base on '
-                            'suffix of carbon-cache process'))
-    args = argp.parse_args()
-
-    for rootdir in args.rootdirs:
-        log.info('Checking old directories under %s', args.rootdir)
+def find_unchanged(rootdirs, days, delete):
+    for rootdir in rootdirs:
+        log.info('Checking old directories under %s', rootdir)
         for adir in os.listdir(rootdir):
             fpath = os.path.join(os.path.abspath(rootdir), adir)
             if os.path.isdir(fpath):
-                if _contains_all_old_files(fpath, args.days):
-                    _delete_or_print(fpath, args.delete)
+                if _contains_all_old_files(fpath, days):
+                    _delete_or_print(fpath, delete)
             else:
-                if not _is_new(fpath, args.days):
-                    _delete_or_print(fpath, args.delete)
+                if not _is_new(fpath, days):
+                    _delete_or_print(fpath, delete)
 
 
-if __name__ == "__main__":
-    main()
+class FindUnchanged(pysc.Application):
+    logger = log
+
+    def get_argument_parser(self):
+        argp = super(FindUnchanged, self).get_argument_parser()
+        argp.add_argument('--days', help=('number of days that file should '
+                          'be considered old'), default=10, metavar='DAYS',
+                          type=int)
+        argp.add_argument('--delete', help='delete found directory',
+                          action='store_true')
+        argp.add_argument('rootdirs', nargs='+',
+                          help=('root dir(s) of a cache storage, base on '
+                                'suffix of carbon-cache process'))
+        return argp
+
+    def main(self):
+        find_unchanged(self.config['rootdirs'], self.config['days'],
+                       self.config['delete'])
+
+if __name__ == '__main__':
+    FindUnchanged().run()

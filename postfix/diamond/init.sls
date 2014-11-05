@@ -139,5 +139,4 @@ extend:
         - service: postfix
       {#- make sure postfix_stat service runs before diamond postfix collector
           which gets data from it #}
-      - require_in:
         - service: postfix_stats

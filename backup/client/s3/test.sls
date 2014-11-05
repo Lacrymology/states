@@ -68,7 +68,7 @@ cleanup_s3lite:
     - run
     - name: s3cmd ls s3://{{ pillar['aws']['s3']['bucket'] }}/{{ pillar['aws']['s3']['path'].strip('/') }}/s3lite* | awk '{ print $4 }' | xargs s3cmd del
     - require:
-      - pkg: s3cmd
+      - file: /root/.s3cfg
       - monitoring: test_s3lite
   file:
     - absent
@@ -109,7 +109,7 @@ cleanup_s3cmd:
     - run
     - name: s3cmd ls s3://{{ pillar['aws']['s3']['bucket'] }}/{{ pillar['aws']['s3']['path'].strip('/') }}/backup-client-test* | awk '{ print $4 }' | xargs s3cmd del
     - require:
-      - pkg: s3cmd
+      - file: /root/.s3cfg
       - monitoring: test_s3cmd
   file:
     - absent

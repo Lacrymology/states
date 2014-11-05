@@ -173,8 +173,7 @@ etherpad:
 {{ web_root_dir }}/src/package.json:
   file:
     - managed
-    - template: jinja
-    - source: salt://etherpad/package.jinja2
+    - source: salt://etherpad/package.json
     - user: root
     - group: www-data
     - mode: 440

@@ -29,6 +29,8 @@ Nagios NRPE check for Carbon.
 -#}
 {%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
+  - cron.nrpe
+  - pysc.nrpe
   - graphite.common.nrpe
   - nrpe
   - logrotate.nrpe

@@ -76,3 +76,11 @@ carbon-relay:
   {% endfor %}
       - service: carbon-relay
 {% endfor %}
+
+/usr/local/bin/find_unchanged.py:
+  file:
+    - absent
+
+/etc/cron.daily/graphite_find_unchanged_data:
+  file:
+    - absent

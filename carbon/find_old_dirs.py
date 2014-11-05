@@ -3,7 +3,7 @@
 
 """
 A script for finding (and/or deleting) all old files/directories under
-a given path.
+given path(s).
 A directory is considered old if ALL files it contains have not changed since
 last N days - N passed by user.
 """
@@ -80,19 +80,21 @@ def main():
                       type=int)
     argp.add_argument('--delete', help='delete found directory',
                       action='store_true')
-    argp.add_argument('rootdir', help=('root dir of a cache storage, base on '
-                      'suffix of carbon-cache process'))
+    argp.add_argument('rootdirs', nargs='+',
+                      help=('root dir(s) of a cache storage, base on '
+                            'suffix of carbon-cache process'))
     args = argp.parse_args()
 
-    log.info('Checking old directories under %s', args.rootdir)
-    for adir in os.listdir(args.rootdir):
-        fpath = os.path.join(os.path.abspath(args.rootdir), adir)
-        if os.path.isdir(fpath):
-            if _contains_all_old_files(fpath, args.days):
-                _delete_or_print(fpath, args.delete)
-        else:
-            if not _is_new(fpath, args.days):
-                _delete_or_print(fpath, args.delete)
+    for rootdir in args.rootdirs:
+        log.info('Checking old directories under %s', args.rootdir)
+        for adir in os.listdir(rootdir):
+            fpath = os.path.join(os.path.abspath(rootdir), adir)
+            if os.path.isdir(fpath):
+                if _contains_all_old_files(fpath, args.days):
+                    _delete_or_print(fpath, args.delete)
+            else:
+                if not _is_new(fpath, args.days):
+                    _delete_or_print(fpath, args.delete)
 
 
 if __name__ == "__main__":

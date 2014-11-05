@@ -28,6 +28,7 @@ Maintainer: Diep Pham <favadi@robotinfra.com>
 {%- set formula = 'gitlab' -%}
 {%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
+  - gitlab
   - apt.nrpe
   - build.nrpe
   - git.nrpe

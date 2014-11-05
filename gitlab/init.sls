@@ -226,7 +226,7 @@ gitlab_upstart:
     - require:
       - file: gitlab
 
-/home/gitlab/gitlabhq-{{ version }}/.gitconfig:
+/home/gitlab/.gitconfig:
   file:
     - managed
     - source: salt://gitlab/gitconfig.jinja2

@@ -29,9 +29,12 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 {%- set supported_filter_types = ('white', 'black')  %}
 
 include:
+  - cron
   - graphite.common
   - logrotate
+  - local
   - pip
+  - pysc
   - python.dev
 
 /etc/logrotate.d/carbon:
@@ -291,4 +294,28 @@ carbon-relay:
   {%- else %}
     - absent
   {%- endif -%}
-{%- endfor -%}
+{%- endfor %}
+
+/usr/local/bin/find_unchanged.py:
+  file:
+    - managed
+    - source: salt://carbon/find_unchanged.py
+    - mode: 551
+    - user: root
+    - group: root
+    - require:
+      - file: /usr/local
+      - module: pysc
+
+/etc/cron.daily/graphite_find_unchanged_data:
+  file:
+    - managed
+    - mode: 500
+    - user: root
+    - group: root
+    - contents: |
+        #!/bin/bash
+        /usr/local/bin/find_unchanged.py --days 10 --delete /var/lib/graphite/whisper/*
+    - require:
+      - service: cron
+      - file: /usr/local/bin/find_unchanged.py

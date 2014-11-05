@@ -25,10 +25,17 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
+{%- from 'cron/test.sls' import test_cron with context %}
 include:
   - salt.ci
   - salt.ci.nrpe
   - salt.ci.diamond
+
+{%- call test_cron() %}
+- sls: salt.ci
+- sls: salt.ci.diamond
+- sls: salt.ci.nrpe
+{%- endcall %}
 
 test:
   monitoring:

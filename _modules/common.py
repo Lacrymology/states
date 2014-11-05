@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 
-import collections
+__author__ = 'Bruno Clermont'
+__maintainer__ = 'Bruno Clermont'
+__email__ = 'bruno@robotinfra.com'
+
 import datetime
 import logging
 

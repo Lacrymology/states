@@ -174,9 +174,9 @@ etherpad:
   file:
     - managed
     - source: salt://etherpad/package.json
-    - user: root
-    - group: www-data
-    - mode: 440
+    - user: etherpad
+    - group: root
+    - mode: 400
     - require:
       - file: {{ web_root_dir }}/src
 

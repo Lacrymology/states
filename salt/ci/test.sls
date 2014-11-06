@@ -33,7 +33,6 @@ include:
 
 {%- call test_cron() %}
 - sls: salt.ci
-- sls: salt.ci.diamond
 - sls: salt.ci.nrpe
 {%- endcall %}
 

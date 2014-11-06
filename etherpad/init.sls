@@ -141,6 +141,7 @@ etherpad:
       - user: etherpad
       - file: {{ web_root_dir }}/node_modules
       - file: {{ web_root_dir }}/src
+      - file: {{ web_root_dir }}/src/package.json
       - file: {{ web_root_dir }}/src/static/custom
       - file: {{ web_root_dir }}/APIKEY.txt
       - file: {{ web_root_dir }}/settings.json
@@ -166,6 +167,16 @@ etherpad:
     - mode: 700
     - require:
       - cmd: {{ web_root_dir }}
+
+{{ web_root_dir }}/src/package.json:
+  file:
+    - managed
+    - source: salt://etherpad/package.json
+    - user: etherpad
+    - group: root
+    - mode: 400
+    - require:
+      - file: {{ web_root_dir }}/src
 
 {{ web_root_dir }}/src/static/custom:
   file:

@@ -41,6 +41,13 @@ include:
 - sls: carbon.nrpe
 {%- endcall %}
 
+carbon_relay_pid_check:
+  file:
+    - exists
+    - name: /var/run/carbon-relay-a.pid
+    - require:
+      - sls: carbon
+
 test:
   monitoring:
     - run_all_checks

@@ -7,9 +7,9 @@ modification, are permitted provided that the following conditions are met:
 
 1. Redistributions of source code must retain the above copyright notice, this
    list of conditions and the following disclaimer.
-   2. Redistributions in binary form must reproduce the above copyright notice,
-      this list of conditions and the following disclaimer in the documentation
-         and/or other materials provided with the distribution.
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -25,19 +25,16 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Quan Tong Anh <quanta@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
-{%- from 'cron/test.sls' import test_cron with context %}
-include:
-  - rabbitmq
-  - rabbitmq.diamond
-  - rabbitmq.nrpe
+#!/bin/bash
+# {{ pillar['message_do_not_modify'] }}
 
-{%- call test_cron() %}
-- sls: rabbitmq
-- sls: rabbitmq.diamond
-- sls: rabbitmq.nrpe
-{%- endcall %}
+set -e
 
-test:
-  monitoring:
-    - run_all_checks
-    - order: last
+# log start stop time to syslog
+source /usr/local/share/salt_common.sh
+# Ensure that only one instance of this script is running at a time
+locking_script
+log_start_script "$@"
+trap "log_stop_script \$?" EXIT
+
+find /home/ci-agent \( -name '*.xz' -or -name '*.xml' -mtime +1 \) -delete

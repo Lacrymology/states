@@ -25,12 +25,21 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
+{%- from 'cron/test.sls' import test_cron with context %}
 include:
 {%- for role in ('arbiter', 'broker', 'poller', 'reactionner', 'scheduler', 'receiver') %}
   - shinken.{{ role }}
   - shinken.{{ role }}.diamond
   - shinken.{{ role }}.nrpe
 {%- endfor %}
+
+{%- call test_cron() -%}
+    {%- for role in ('arbiter', 'broker', 'poller', 'reactionner', 'scheduler', 'receiver') %}
+- sls: shinken.{{ role }}
+- sls: shinken.{{ role }}.diamond
+- sls: shinken.{{ role }}.nrpe
+    {%- endfor -%}
+{%- endcall %}
 
 test:
   monitoring:

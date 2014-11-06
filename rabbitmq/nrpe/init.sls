@@ -36,4 +36,4 @@ include:
   - ssl.nrpe
 {%- endif %}
 
-{{ passive_check('rabbitmq') }}
+{{ passive_check('rabbitmq', check_ssl_score=True) }}

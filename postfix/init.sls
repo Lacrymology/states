@@ -25,13 +25,21 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
-{% set ssl = salt['pillar.get']('postfix:ssl', False) %}
+{%- set ssl = salt['pillar.get']('postfix:ssl', False) -%}
+{%- set spam_filter = salt['pillar.get']('postfix:spam_filter', False) %}
 include:
+{%- if spam_filter %}
+    {%- if salt['pillar.get']('amavis:check_virus', True) %}
+  - amavis.clamav
+    {%- else %}
+  - amavis
+    {%- endif -%}
+{%- endif %}
   - apt
   - mail
-{% if ssl %}
+{%- if ssl %}
   - ssl
-{% endif %}
+{%- endif %}
 {%- if salt['pillar.get']('postfix:virtual_mailbox', False) %}
   - dovecot.agent
 
@@ -102,6 +110,13 @@ postfix:
   service:
     - running
     - order: 50
+{%- if spam_filter %}
+    - require:
+      - service: amavis
+    {%- if salt['pillar.get']('amavis:check_virus', True) %}
+      - service: clamav-daemon
+    {%- endif -%}
+{%- endif %}
     - watch:
       - pkg: postfix
       - user: postfix

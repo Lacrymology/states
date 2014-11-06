@@ -27,6 +27,12 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
 {%- from 'upstart/rsyslog.jinja2' import manage_upstart_log with context -%}
 include:
+{%- if salt['pillar.get']('postfix:spam_filter', False) %}
+  - amavis.diamond
+    {%- if salt['pillar.get']('amavis:check_virus', True) %}
+  - clamav.diamond
+    {%- endif %}
+{%- endif %}
   - diamond
   - postfix
   - rsyslog

@@ -27,6 +27,12 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
 {%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
+{%- if salt['pillar.get']('postfix:spam_filter', False) %}
+  - amavis.nrpe
+    {%- if salt['pillar.get']('amavis:check_virus', True) %}
+  - clamav.nrpe
+    {%- endif %}
+{%- endif %}
   - apt.nrpe
   - nrpe
 {% if salt['pillar.get']('postfix:ssl', False) %}

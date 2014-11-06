@@ -46,3 +46,9 @@ extend:
   salt.master-monitoring:
     monitoring:
       - source: salt://salt/ci/nrpe/config.jinja2
+
+{#- workaround for include sls bug #}
+salt_ci_dummy:
+  cmd:
+    - run
+    - name: echo 'nothing'

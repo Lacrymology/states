@@ -59,6 +59,17 @@ salt-minion:
       - file: salt-minion
       - cmd: salt
 
+/etc/salt/minion.d:
+  file:
+    - directory
+    - user: root
+    - group: root
+    - mode: 750
+    - require_in:
+      - pkg: salt-minion
+    - watch_in:
+      - service: salt-minion
+
 {%- for file in ('logging', 'graphite', 'mysql') %}
   {%- if (file == 'graphite' and 'graphite_address' in pillar) or file != 'graphite' %}
 /etc/salt/minion.d/{{ file }}.conf:
@@ -69,6 +80,8 @@ salt-minion:
     - group: root
     - mode: 440
     - source: salt://salt/minion/{{ file }}.jinja2
+    - require:
+      - file: /etc/salt/minion.d
     - require_in:
       - pkg: salt-minion
     - watch_in:

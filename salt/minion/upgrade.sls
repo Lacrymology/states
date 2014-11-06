@@ -37,6 +37,16 @@ include:
   - apt
   - salt
 
+salt-minion_upstart:
+  file:
+    - managed
+    - name: /etc/init/salt-minion.conf
+    - template: jinja
+    - source: salt://salt/minion/upstart.jinja2
+    - user: root
+    - group: root
+    - mode: 440
+
 salt-minion:
   file:
     - managed
@@ -57,6 +67,7 @@ salt-minion:
     - watch:
       - pkg: salt-minion
       - file: salt-minion
+      - file: salt-minion_upstart
       - cmd: salt
 
 /etc/salt/minion.d:

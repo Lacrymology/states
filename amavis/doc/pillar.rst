@@ -38,6 +38,8 @@ Example::
   mail:
     maxproc: 2
   amavis:
+    check_virus: False
+    warn_spam_sender: True
     transport_spam_to_postmaster: True
 
 
@@ -48,8 +50,17 @@ Maximum number of process.
 
 Default: ``2``.
 
+amavis:check_virus
+~~~~~~~~~~~~~~~~~~
+
+Enable or disable virus checking.
+
+Default: ``True``.
+
 amavis:warn_spam_sender
 ~~~~~~~~~~~~~~~~~~~~~~~
+
+Notify spam sender or not.
 
 Default: ``False``.
 

@@ -29,7 +29,9 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 include:
 {%- if salt['pillar.get']('postfix:spam_filter', False) %}
   - amavis.nrpe
+    {%- if salt['pillar.get']('amavis:check_virus', True) %}
   - clamav.nrpe
+    {%- endif %}
 {%- endif %}
   - apt.nrpe
   - nrpe

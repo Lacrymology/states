@@ -29,7 +29,11 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 {%- set spam_filter = salt['pillar.get']('postfix:spam_filter', False) %}
 include:
 {%- if spam_filter %}
+    {%- if salt['pillar.get']('amavis:check_virus', True) %}
   - amavis.clamav
+    {%- else %}
+  - amavis
+    {%- endif -%}
 {%- endif %}
   - apt
   - mail
@@ -109,7 +113,9 @@ postfix:
 {%- if spam_filter %}
     - require:
       - service: amavis
+    {%- if salt['pillar.get']('amavis:check_virus', True) %}
       - service: clamav-daemon
+    {%- endif -%}
 {%- endif %}
     - watch:
       - pkg: postfix

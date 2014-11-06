@@ -31,15 +31,38 @@ include:
   - backup.client.scp.nrpe
   - backup.dumb
 
+{#- Test monitoring check for `scp`:
+    - add ssh public key into localhost
+    - run some backup using `scp`
+    - remove that key and the backup files
+    #}
+    {%- if pillar['backup_server']['address'] in grains['ipv4'] or
+           pillar['backup_server']['address'] in ('localhost', grains['host']) -%}
+        {%- from 'ssh/test.sls' import add_key with context -%}
+        {%- from 'ssh/test.sls' import remove_key with context %}
+{{ add_key() }}
+{%- call remove_key() %}
+- cmd: test
+{%- endcall -%}
+    {%- endif %}
+
 test:
   monitoring:
     - run_all_checks
     - order: last
-    - wait: 30
   cmd:
     - run
     - name: /usr/local/bin/backup-store `/usr/local/bin/create_dumb`
     - require:
       - file: /usr/local/bin/backup-store
       - file: /usr/local/bin/create_dumb
+    {%- if pillar['backup_server']['address'] in grains['ipv4'] or
+           pillar['backup_server']['address'] in ('localhost', grains['host']) %}
+      - cmd: ssh_add_key
+    {%- endif %}
+  file:
+    - absent
+    - name: /var/lib/backup/{{ salt['pillar.get']('backup_server:subdir', grains['id']) }}
+    - require:
+      - cmd: test
 {%- endif %}

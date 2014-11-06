@@ -25,25 +25,16 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
-include:
-  - ssh.client
-  - ssh.client.nrpe
-  - ssh.server
-  - ssh.server.diamond
-  - ssh.server.nrpe
-
-test:
-  monitoring:
-    - run_all_checks
-    - order: last
-
+{%- macro add_key() -%}
+{#- Add public key to the `authorized_keys` on localhost.
+    This is used to perform some tests like: ssh, rsync, ...
+    #}
 {%- set root_home = salt['user.info']('root')['home'] %}
 ssh_backup_key:
-  module:
-    - run
-    - name: file.copy
-    - src: {{ root_home }}/.ssh/authorized_keys
-    - dst: {{ root_home }}/.ssh/authorized_keys.bak
+  file:
+    - copy
+    - name: {{ root_home }}/.ssh/authorized_keys.bak
+    - source: {{ root_home }}/.ssh/authorized_keys
     - require:
       - sls: ssh.client
 
@@ -53,7 +44,34 @@ ssh_add_key:
     - name: cat {{ root_home }}/.ssh/id_{{ pillar['deployment_key']['type'] }}.pub >> {{ root_home }}/.ssh/authorized_keys
     - unless: grep "$(cat {{ root_home }}/.ssh/id_{{ pillar['deployment_key']['type'] }}.pub)" {{ root_home }}/.ssh/authorized_keys
     - require:
-      - module: ssh_backup_key
+      - file: ssh_backup_key
+{%- endmacro %}
+
+{%- macro remove_key() -%}
+{#- Remove local ssh public key after testing #}
+{%- set root_home = salt['user.info']('root')['home'] %}
+ssh_remove_key:
+  cmd:
+    - run
+    - name: mv {{ root_home }}/.ssh/authorized_keys.bak {{ root_home }}/.ssh/authorized_keys
+    {%- if caller is defined -%}
+        {%- for line in caller().split("\n") -%}
+            {%- if loop.first %}
+    - require:
+            {%- endif %}
+{{ line|trim|indent(6, indentfirst=True) }}
+        {%- endfor -%}
+    {%- endif -%}
+{%- endmacro %}
+
+include:
+  - ssh.client
+  - ssh.client.nrpe
+  - ssh.server
+  - ssh.server.diamond
+  - ssh.server.nrpe
+
+{{ add_key() }}
 
 test_ssh:
   cmd:
@@ -62,9 +80,11 @@ test_ssh:
     - require:
       - cmd: ssh_add_key
 
-ssh_remove_key:
-  cmd:
-    - run
-    - name: mv {{ root_home }}/.ssh/authorized_keys.bak {{ root_home }}/.ssh/authorized_keys
-    - require:
-      - cmd: test_ssh
+{%- call remove_key() %}
+- cmd: test_ssh
+{%- endcall %}
+
+test:
+  monitoring:
+    - run_all_checks
+    - order: last

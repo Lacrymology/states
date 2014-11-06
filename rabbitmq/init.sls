@@ -111,6 +111,7 @@ rabbitmq-server:
     {% endif %}
 {% endfor %}
   rabbitmq_plugin:
+    - runas: root
     - enabled
     - name: rabbitmq_management
     - require:
@@ -135,6 +136,7 @@ rabbitmq-server:
 rabbitmq-vhost-{{ vhost }}:
   rabbitmq_user:
     - present
+    - runas: root
     - name: {{ vhost }}
     - password: {{ pillar['rabbitmq']['vhosts'][vhost] }}
     - force: True
@@ -142,6 +144,7 @@ rabbitmq-vhost-{{ vhost }}:
       - service: rabbitmq-server
   rabbitmq_vhost:
     - present
+    - runas: root
     - name: {{ vhost }}
     - user: {{ vhost }}
     - require:
@@ -151,6 +154,7 @@ rabbitmq-vhost-{{ vhost }}:
 monitor_user:
   rabbitmq_user:
     - present
+    - runas: root
     - name: {{ pillar['rabbitmq']['monitor']['user'] }}
     - password: {{ salt['password.pillar']('rabbitmq:monitor:password') }}
     - force: True
@@ -178,6 +182,7 @@ monitor_user:
 admin_user:
   rabbitmq_user:
     - present
+    - runas: root
     - name: {{ pillar['rabbitmq']['management']['user'] }}
     - password: {{ salt['password.pillar']('rabbitmq:management:password') }}
     - force: True
@@ -189,6 +194,7 @@ admin_user:
 rabbitmq_delete_guest:
   rabbitmq_user:
     - absent
+    - runas: root
     - name: guest
     - require:
       - service: rabbitmq-server
@@ -198,6 +204,7 @@ rabbitmq_delete_guest:
 join_rabbitmq_cluster:
   rabbitmq_cluster:
     - joined
+    - runas: root
     - host: {{ master_id }}
     - user: rabbit
     - require:

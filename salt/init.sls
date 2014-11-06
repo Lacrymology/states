@@ -60,11 +60,7 @@ salt:
     - name: salt-common
     - require_in:
       - file: patch_salt_fix_require_sls
-{%- if grains['saltversion'].startswith('0.17') %}
-  pkgrepo17:
-{%- else %}
   pkgrepo:
-{%- endif %}
     - managed
 {%- if 'files_archive' in pillar %}
     - name: deb {{ pillar['files_archive']|replace('https://', 'http://') }}/mirror/salt/{{ version }} {{ grains['lsb_distrib_codename'] }} main

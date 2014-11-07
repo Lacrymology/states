@@ -64,6 +64,8 @@ salt-minion:
     - running
     - enable: True
     - skip_verify: True
+    - require:
+      - file: /var/cache/salt
     - watch:
       - pkg: salt-minion
       - file: salt-minion

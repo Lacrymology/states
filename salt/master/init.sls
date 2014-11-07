@@ -149,6 +149,7 @@ salt-master:
     - require:
       - service: rsyslog
       - pkg: git
+      - file: /var/cache/salt
     - watch:
       - pkg: salt-master
       - file: salt-master

@@ -81,3 +81,12 @@ salt:
     - watch:
       - pkg: salt
       - file: patch_salt_fix_require_sls
+
+salt_patch_util:
+  pkg:
+    - installed
+    - name: patch
+    - require:
+      - cmd: apt_sources
+    - require_in:
+      - file: patch_salt_fix_require_sls

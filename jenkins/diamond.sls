@@ -32,9 +32,7 @@ include:
   - diamond
   - nginx.diamond
 
-{# TODO: nothing is monitoring jenkins process?
-
-etherpad_diamond_resources:
+jenkins_diamond_resources:
   file:
     - accumulated
     - name: processes
@@ -43,8 +41,5 @@ etherpad_diamond_resources:
       - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
     - text:
       - |
-        [[etherpad]]
-        cmdline = ^node node_modules\/ep_etherpad\-lite\/node\/server\.js$
-
-
-#}
+        [[jenkins]]
+        cmdline = \/usr\/bin\/daemon --name=jenkins

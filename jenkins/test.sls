@@ -26,6 +26,7 @@ Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
 {%- from 'cron/test.sls' import test_cron with context %}
+{%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
   - jenkins
   - jenkins.backup
@@ -50,6 +51,14 @@ test:
     - require:
       - sls: jenkins
       - sls: jenkins.backup
+  diamond:
+    - test
+    - map:
+        ProcessResources:
+    {{ diamond_process_test('jenkins') }}
+    - require:
+      - sls: jenkins
+      - sls: jenkins.diamond
   monitoring:
     - run_all_checks
     - order: last

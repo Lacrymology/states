@@ -115,6 +115,16 @@ salt-master-job_changes.py:
     - require:
       - file: /usr/local
 
+salt-master_upstart:
+  file:
+    - managed
+    - name: /etc/init/salt-master.conf
+    - template: jinja
+    - source: salt://salt/master/upstart.jinja2
+    - user: root
+    - group: root
+    - mode: 440
+
 {%- from "macros.jinja2" import salt_version,salt_deb_version with context %}
 {%- set version = salt_version() %}
 {%- set pkg_version =  salt_deb_version() %}
@@ -142,6 +152,7 @@ salt-master:
     - watch:
       - pkg: salt-master
       - file: salt-master
+      - file: salt-master_upstart
       - cmd: salt
 {#- PID file owned by root, no need to manage #}
   pkg:

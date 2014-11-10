@@ -41,4 +41,4 @@ include:
   - ssl.nrpe
 {%- endif %}
 
-{{ passive_check('salt.api', check_ssl_score=True) }}
+{{ passive_check('salt.api', pillar_prefix='salt_master', check_ssl_score=True) }}

@@ -29,17 +29,5 @@ include:
   - backup.diamond
   - cron.diamond
 
-djangopypi2_backup_diamond_resources:
-  file:
-    - accumulated
-    - name: processes
-    - template: jinja
-    - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - require_in:
-      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - text:
-      - |
-        [[backup-djangopypi2-postgres]]
-        cmdline = ^\/usr\/local\/bin\/backup-postgresql {{ salt['pillar.get']('djangopypi2:db:name', 'djangopypi2') }}$
-        [[backup-djangopypi2-file]]
-        cmdline = ^\/usr\/local\/bin\/backup-file djangopypi2
+{%- from "postgresql/server/backup/diamond.jinja2" import postgresql_backup_diamond with context %}
+{{ postgresql_backup_diamond('djangopypi2') }}

@@ -111,15 +111,17 @@ gitlab:
     - require:
       - postgres_database: gitlab
   file:
-    - directory
-    - name: /home/gitlab/gitlabhq-{{ version }}
-    - user: gitlab
-    - group: gitlab
-    - recurse:
-      - user
-      - group
+    - managed
+    - name: /etc/init/gitlab.conf
+    - source: salt://gitlab/upstart.jinja2
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - context:
+      version: {{ version }}
     - require:
-      - archive: gitlab
+      - file: gitlabhq-{{ version }}
   cmd:
     - wait
     - name: bundle exec rake gitlab:setup
@@ -133,7 +135,7 @@ gitlab:
       - file: gitlab_shell
       - service: redis
       - cmd: gitlab_gems
-      - file: gitlab
+      - file: gitlabhq-{{ version }}
       - file: /home/gitlab/gitlabhq-{{ version }}/config/database.yml
       - file: /home/gitlab/gitlabhq-{{ version }}/log
     - watch:
@@ -146,7 +148,7 @@ gitlab:
       - archive: gitlab
       - cmd: gitlab
       - cmd: gitlab_gems
-      - file: gitlab_upstart
+      - file: gitlab
       - file: /home/gitlab/gitlabhq-{{ version }}/config/database.yml
       - file: /home/gitlab/gitlabhq-{{ version }}/config/gitlab.yml
       - file: /home/gitlab/gitlabhq-{{ version }}/config/initializers/rack_attack.rb
@@ -155,19 +157,17 @@ gitlab:
       - file: /home/gitlab/gitlabhq-{{ version }}/config/environments/production.rb
       - file: /home/gitlab/gitlabhq-{{ version }}/config/initializers/smtp_settings.rb
 
-gitlab_upstart:
+gitlabhq-{{ version }}:
   file:
-    - managed
-    - name: /etc/init/gitlab.conf
-    - source: salt://gitlab/upstart.jinja2
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 440
-    - context:
-      version: {{ version }}
+    - directory
+    - name: /home/gitlab/gitlabhq-{{ version }}
+    - user: gitlab
+    - group: gitlab
+    - recurse:
+      - user
+      - group
     - require:
-      - file: gitlab
+      - archive: gitlab
 
 /home/gitlab/gitlab-satellites:
   file:
@@ -187,7 +187,7 @@ gitlab_upstart:
     - group: gitlab
     - mode: 440
     - require:
-      - file: gitlab
+      - file: gitlabhq-{{ version }}
       - file: /var/lib/gitlab
 
 /home/gitlab/gitlabhq-{{ version }}/config/initializers/rack_attack.rb:
@@ -199,7 +199,7 @@ gitlab_upstart:
     - group: gitlab
     - mode: 440
     - require:
-      - file: gitlab
+      - file: gitlabhq-{{ version }}
 
 /home/gitlab/gitlabhq-{{ version }}/config/resque.yml:
   file:
@@ -210,7 +210,7 @@ gitlab_upstart:
     - group: gitlab
     - mode: 440
     - require:
-      - file: gitlab
+      - file: gitlabhq-{{ version }}
 
 /home/gitlab/gitlabhq-{{ version }}/config/database.yml:
   file:
@@ -221,7 +221,7 @@ gitlab_upstart:
     - group: gitlab
     - mode: 440
     - require:
-      - file: gitlab
+      - file: gitlabhq-{{ version }}
 
 /home/gitlab/.gitconfig:
   file:
@@ -232,7 +232,7 @@ gitlab_upstart:
     - group: gitlab
     - mode: 440
     - require:
-        - file: gitlab
+        - file: gitlabhq-{{ version }}
 
 /home/gitlab/gitlabhq-{{ version }}/config/environments/production.rb:
   file:
@@ -243,7 +243,7 @@ gitlab_upstart:
     - mode: 440
     - require:
       - user: gitlab
-      - file: gitlab
+      - file: gitlabhq-{{ version }}
     - require_in:
       - cmd: gitlab_gems
 
@@ -257,7 +257,7 @@ gitlab_upstart:
     - mode: 440
     - require:
       - user: gitlab
-      - file: gitlab
+      - file: gitlabhq-{{ version }}
     - require_in:
       - cmd: gitlab_gems
 
@@ -325,7 +325,7 @@ gitlab-uwsgi:
       uid: gitlab
       gid: gitlab
     - require:
-      - file: gitlab
+      - file: gitlabhq-{{ version }}
       - file: gitlab_shell
       - service: uwsgi
   module:
@@ -422,7 +422,7 @@ gitlab_precompile_assets:
     - mode: 440
     - require:
       - pkg: logrotate
-      - file: gitlab_upstart
+      - file: gitlab
     - context:
       version: {{ version }}
 

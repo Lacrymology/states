@@ -47,5 +47,5 @@ mine_functions:
 {%- if salt['pillar.get']('sentry_dsn', False) %}
 sentry_common: {{ salt['pillar.get']('sentry_dsn', False) }}
 sentry_handler:
-  - dsn: requests+{{ salt['pillar.get']('sentry_dsn', False) }}
+  dsn: requests+{{ salt['pillar.get']('sentry_dsn', False) }}
 {%- endif %}

@@ -133,10 +133,11 @@ ci-agent:
 /etc/cron.daily/ci-agent-cleanup-build-logs:
   file:
     - managed
+    - user: root
+    - group: root
     - mode: 500
-    - contents: |
-        #!/bin/bash
-        find /home/ci-agent \( -name '*.xz' -or -name '*.xml' -mtime +1 \) -delete
+    - source: salt://salt/ci/cron.jinja2
+    - template: jinja
     - require:
       - pkg: cron
       - user: ci-agent

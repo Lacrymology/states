@@ -52,6 +52,8 @@ include:
     - require:
       - pkg: nginx
       - user: web
+    - watch_in:
+      - service: nginx
 
 {%- if 'files_archive' in pillar -%}
     {%- if 'graphite_address' in pillar -%}
@@ -142,8 +144,6 @@ shinken-broker:
     - require:
       - file: /etc/shinken
       - user: shinken
-    - watch_in:
-      - service: nginx
 
 {% if ssl %}
 extend:

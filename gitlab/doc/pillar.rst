@@ -65,6 +65,15 @@ Password for :doc:`/gitlab/doc/index` Administrator account.
 
 Example: ``'123456789'``
 
+
+.. note::
+
+    If multiple ports are set and ``22`` is set in
+    pillar key ``ssh:server:ports`` (see :doc:`/ssh/server/doc/index`)
+    , use ``22`` as preferred value.
+    Otherwise use the only value provided. In that case, user
+    will need to specify their port in :doc:`/git/doc/index` config file.
+
 Optional
 --------
 
@@ -91,7 +100,6 @@ Example::
       wall: False
       snippets: False
       visibility_level: private
-    ssh_port: 22
     max_size: 5242880
     commit_timeout: 10
     db:
@@ -113,13 +121,6 @@ Max size of a git object (e.g. a commit), in bytes.
 This value can be increased if you have very large commits
 
 Default: ``5242880``. It's 5 megabytes.
-
-gitlab:ssh_port
-~~~~~~~~~~~~~~~
-
-Specify your ssh port.
-
-Default: ``22``.
 
 gitlab:default_projects_features:visibility_level
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

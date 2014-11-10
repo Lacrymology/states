@@ -128,7 +128,11 @@ production: &base
     upload_pack: true
     receive_pack: true
 
-    ssh_port: {{ salt['pillar.get']('gitlab:ssh_port', 22) }}
+{%- if 22 in salt['pillar.get']('ssh:server:ports', [22]) %}
+    ssh_port: 22
+{%- else %}
+    ssh_port: {{ salt['pillar.get']('ssh:server:ports', [22])[0] %}
+{%- endif %}
 
   git:
     bin_path: /usr/bin/git

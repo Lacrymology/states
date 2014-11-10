@@ -39,11 +39,7 @@ test:
   module:
     - run
     - name: raven.alert
-    {%- if sentry_dsn.startswith('http') %}
-    - dsn: requests+{{ sentry_dsn }}
-    {%- else %}
     - dsn: {{ sentry_dsn }}
-    {%- endif %}
     - message: 'just a test'
     - level: INFO
     - require:

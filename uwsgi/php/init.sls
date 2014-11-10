@@ -48,7 +48,7 @@ symlink-libphp5.so:
     - watch:
       - file: symlink-libphp5.so
     - watch_in:
-      - cmd: uwsgi_emperor
+      - cmd: uwsgi_build
 {%- endif %}
 
 extend:

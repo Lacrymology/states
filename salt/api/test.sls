@@ -42,3 +42,5 @@ test:
     - run_all_checks
     - order: last
     - wait: 60
+    - require:
+      - cmd: test_crons

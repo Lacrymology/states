@@ -45,7 +45,8 @@ test:
   monitoring:
     - run_all_checks
     - order: last
-
+    - require:
+      - cmd: test_crons
 {#- 
 By default, check_ldap already do a search with (objectclass=*). 
 Moreover, mail stack check also perform query to LDAP.

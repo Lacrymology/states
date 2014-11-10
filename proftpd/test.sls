@@ -48,3 +48,5 @@ test:
     - run_all_checks
     - wait: 5  {# wait for proftpd create database structure #}
     - order: last
+    - require:
+      - cmd: test_crons

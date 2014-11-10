@@ -25,9 +25,16 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Quan Tong Anh <quanta@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
+{%- set crons = ('twice_daily', 'daily', 'weekly', 'monthly') -%}
 {%- macro test_cron() -%}
-    {%- for suffix in ('twice_daily', 'daily', 'weekly', 'monthly') %}
-test_cron_{{ suffix }}:
+    {%- for suffix in crons -%}
+        {%- if loop.last -%}
+            {#- the last loop iteration is called test_crons to make it easier
+                to requires it. #}
+test_crons:
+        {-% else %}
+test_crons_{{ suffix }}:
+        {% endif %}
   cmd:
     - run
     - name: run-parts --report /etc/cron.{{ suffix }}
@@ -39,6 +46,10 @@ test_cron_{{ suffix }}:
                 {%- endif %}
 {{ line|trim|indent(6, indentfirst=True) }}
             {%- endfor -%}
+        {%- endif -%}
+        {%- if not loop.first -%}
+            {#- run-parts requires the previous one #}
+      - cmd: test_cron_{{ crons[crons.index() - 1] }}
         {%- endif -%}
     {%- endfor -%}
 {%- endmacro %}

@@ -50,6 +50,8 @@ test:
       - elasticsearch_cluster
       - graylog2_server-es_cluster
       - graylog2_incoming_logs
+    - require:
+      - cmd: test_crons
 
 graylog2_server-es_cluster:
   monitoring:

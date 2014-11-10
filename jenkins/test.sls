@@ -44,13 +44,6 @@ include:
 {%- endcall %}
 
 test:
-  cmd:
-    - run
-    {#- wait some seconds for Jenkins service to be functional and create files #}
-    - name: sleep 30
-    - require:
-      - sls: jenkins
-      - sls: jenkins.backup
   diamond:
     - test
     - map:
@@ -61,4 +54,7 @@ test:
       - sls: jenkins.diamond
   monitoring:
     - run_all_checks
+    - wait: 30
     - order: last
+    - require:
+      - cmd: test_crons

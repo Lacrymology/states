@@ -62,6 +62,8 @@ test:
       - graylog2_incoming_logs
       - graylog2_api_port
       - graylog2_api
+    - require:
+      - cmd: test_crons
 
 test_import_general_syslog_udp_input:
   cmd:

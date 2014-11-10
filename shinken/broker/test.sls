@@ -61,6 +61,7 @@ test:
       - {{ name }}
 {%- endfor %}
     - require:
+      - cmd: test_crons
 {%- for name, _ in check_list %}
       - monitoring: {{ name }}
 {%- endfor %}

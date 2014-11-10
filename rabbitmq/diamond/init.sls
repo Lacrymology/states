@@ -104,6 +104,7 @@ diamond_rabbitmq:
 {% if grains['id'] != master_id %}
 extend:
   diamond:
+    service:
       - require:
         - service: rabbitmq-server
   join_rabbitmq_cluster:

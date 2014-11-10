@@ -69,25 +69,39 @@ include:
 /var/lib/salt_archive/incoming:
   file:
     - directory
-    - user: salt_archive
+    - user: root
     - group: salt_archive
-    - mode: 550
+    - mode: 750
     - require:
-      - user: salt_archive
+      - file: salt_archive
 
     {%- for type in ('pip', 'mirror') %}
 /var/lib/salt_archive/incoming/{{ type }}:
   file:
     - directory
-    - user: salt_archive
+    - user: root
     - group: salt_archive
-    - mode: 750
+    - mode: 770
     - require:
       - user: salt_archive
       - file: /var/lib/salt_archive/incoming
     {%- endfor %}
 
+    {%- for type in ('pip', 'mirror') %}
+/var/lib/salt_archive/{{ type }}:
+  file:
+    - directory
+    - user: root
+    - group: salt_archive
+    - mode: 750
+    - require:
+      - file: salt_archive
+    {%- endfor %}
+
 /usr/local/bin/salt_archive_incoming.py:
+  pkg:
+    - installed
+    - name: lsof
   file:
     - managed
     - user: root
@@ -95,8 +109,13 @@ include:
     - source: salt://salt/archive/server/incoming.py
     - mode: 550
     - require:
+      - pkg: /usr/local/bin/salt_archive_incoming.py
+      - pkg: rsync
       - file: /usr/local
-      - file: /var/lib/salt_archive/incoming
+      - file: /var/lib/salt_archive/incoming/pip
+      - file: /var/lib/salt_archive/incoming/mirror
+      - file: /var/lib/salt_archive/pip
+      - file: /var/lib/salt_archive/mirror
       - module: pysc
 {%- else %}
     {#-
@@ -183,7 +202,7 @@ salt_archive_{{ key }}:
     - user: salt_archive
     - enc: {{ pillar['salt_archive']['keys'][key] }}
     - require:
-      - user: salt_archive
+      - file: salt_archive
       - service: openssh-server
 {%- endfor %}
 

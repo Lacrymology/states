@@ -114,5 +114,9 @@ class Incoming(pysc.Application):
         move_incoming('/var/lib/salt_archive', 'pip')
         move_incoming('/var/lib/salt_archive', 'mirror')
 
+        # restore correct permisions
+        os.chmod('/var/lib/salt_archive/pip', 0750)
+        os.chmod('/var/lib/salt_archive/mirror', 0750)
+
 if __name__ == '__main__':
     Incoming().run()

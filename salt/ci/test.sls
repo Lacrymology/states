@@ -35,6 +35,11 @@ include:
 - sls: salt.ci
 {%- endcall %}
 
+{%- call test_cron() %}
+- sls: salt.ci
+- sls: salt.ci.nrpe
+{%- endcall %}
+
 test:
   monitoring:
     - run_all_checks

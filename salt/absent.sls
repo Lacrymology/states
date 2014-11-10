@@ -52,7 +52,3 @@ salt:
     - name: /etc/apt/sources.list.d/saltstack-salt.list
     - require:
       - pkgrepo: salt
-
-/var/cache/salt:
-  file:
-    - absent

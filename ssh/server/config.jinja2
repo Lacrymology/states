@@ -39,6 +39,11 @@ Subsystem sftp /usr/lib/openssh/sftp-server
 UsePAM yes
 MaxAuthTries 3
 # end of default values. here start overwrite:
+{%- for port in salt['pillar.get']('ssh:server:ports', [22]) %}
+Port {{ port }}
+{%- endfor %}
 {%- for cfg in salt['pillar.get']('ssh:server:extra_configs', []) %}
+  {%- if not cfg.startswith('Port ') %}
 {{ cfg }}
+  {%- endif %}
 {%- endfor %}

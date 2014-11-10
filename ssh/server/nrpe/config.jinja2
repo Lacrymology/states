@@ -29,8 +29,9 @@ ssh_procs:
   description: SSH Server Daemon
   command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -C sshd -u root -a /usr/sbin/sshd'
 
+{#- check only one port to see if ssh daemon works, no need to check all ports #}
 ssh_port:
   description: SSH Server Local Port
-  command: "/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p {{ salt['pillar.get']('ssh:ports', [22])[0] }}"
+  command: "/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p {{ salt['pillar.get']('ssh:server:ports', [22])[0] }}"
   dependencies:
     - ssh_procs

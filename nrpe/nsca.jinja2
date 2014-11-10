@@ -23,4 +23,14 @@ nsca:
         - syslog
         - console
         - sentry
+    {#- During CI tests, there is no working Shinken Receiver online to receive
+        NSCA data.
+        This led to Thousands of sentry alerts.
+        Skip sentry log handler in CI test mode. -#}
+    {%- if salt['pillar.get']('__test__', False) %}
+    nsca_passive.transport:
+      handlers:
+        - syslog
+        - console
+    {%- endif -%}
 {%- endblock -%}

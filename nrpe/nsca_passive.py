@@ -47,6 +47,7 @@ import pysc
 
 
 logger = logging.getLogger(__name__)
+transport_logger = logging.getLogger('nsca_passive.transport')
 
 
 class NSCAServerMetrics(object):
@@ -136,28 +137,28 @@ class PassiveDaemon(object):
             # hardcode encryption method (equivalent of 1)
             sender.Crypter = send_nsca.nsca.XORCrypter
             counters = self.counters[address]
-            logger.debug("sending result to NSCA server %s",
-                         sender.remote_host)
+            transport_logger.debug("sending result to NSCA server %s",
+                                   sender.remote_host)
             try:
                 sender.send_service(self.minion_id, check_name, status, output)
                 if not counters.failure:
-                    logger.debug("Sent to %s", sender.remote_host)
+                    transport_logger.debug("Sent to %s", sender.remote_host)
                 else:
                     counters.reset()
             except Exception, err:
-                logger.debug("Can't send NSCA data to '%s': '%s'",
-                             sender.remote_host, err, exc_info=True)
+                transport_logger.debug("Can't send NSCA data to '%s': '%s'",
+                                       sender.remote_host, err, exc_info=True)
                 counters.increment()
                 self.stats.gauge('passive_check.failure',
                                  counters.failure)
                 self.stats.gauge('passive_check.total_failure',
                                  counters.total_failure)
                 if counters.ever_success:
-                    logger.warning(
+                    transport_logger.warning(
                         "Can't send to server '%s' as it never worked",
                         sender.remote_host)
                 else:
-                    logger.info(
+                    transport_logger.info(
                         "Can't send '%s' check to '%s', %d failure (total %d)",
                         check_name, sender.remote_host,
                         counters.failure, counters.total_failure)

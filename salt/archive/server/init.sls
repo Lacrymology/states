@@ -71,7 +71,7 @@ include:
     - directory
     - user: root
     - group: salt_archive
-    - mode: 775
+    - mode: 750
     - require:
       - file: salt_archive
 
@@ -81,7 +81,7 @@ include:
     - directory
     - user: root
     - group: salt_archive
-    - mode: 775
+    - mode: 770
     - require:
       - user: salt_archive
       - file: /var/lib/salt_archive/incoming
@@ -93,7 +93,7 @@ include:
     - directory
     - user: root
     - group: salt_archive
-    - mode: 775
+    - mode: 750
     - require:
       - file: salt_archive
     {%- endfor %}

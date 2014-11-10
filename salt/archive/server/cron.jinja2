@@ -37,8 +37,8 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 0 * * * * root find {{ home }}/* ! -user root -exec chown root {} \;
 0 * * * * root find {{ home }}/* ! -group salt_archive -exec chgrp salt_archive {} \;
 {#- make sure file are 644 #}
-0 * * * * root find {{ home }}/* -type f ! -perm 644 -exec chmod 644 {} \;
+0 * * * * root find {{ home }}/* -type f -not \( -perm 640 -or -path {{ home }}/incoming\* \) -exec chmod 640 {} \;
 {#- make sure directory are 775 #}
-0 * * * * root find {{ home }}/* -type d ! -perm 755 -exec chmod 775 {} \;
+0 * * * * root find {{ home }}/* -type d -not \( -perm 750 -or -path {{ home }}/incoming\* \) -exec chmod 750 {} \;
 */5 * * * * root /usr/local/bin/salt_archive_incoming.py
 {%- endif %}

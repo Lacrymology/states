@@ -76,7 +76,7 @@ diamond-pyrabbit:
       - file: diamond-pyrabbit
 {%- if grains['id'] != master_id %}
     - require_in:
-      - rabbitmq_cluster: in_rabbitmq_cluster
+      - rabbitmq_cluster: join_rabbitmq_cluster
 {%- endif %}
 
 diamond_rabbitmq:

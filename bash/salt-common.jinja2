@@ -43,6 +43,8 @@
 #   trap "log_stop_script \$?" EXIT                  #
 ######################################################
 
+set -e
+
 {% if salt['pillar.get']('debug', False) %}set -x{% endif %}
 
 _log_start_time=0

@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Bruno Clermont
+Copyright (c) 2014, Quan Tong Anh
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,32 +22,24 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Bruno Clermont <bruno@robotinfra.com>
-Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
-
-Remove Nagios NRPE check for Salt Minion.
+Author: Quan Tong Anh <quanta@robotinfra.com>
+Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
-{%- from 'nrpe/passive.jinja2' import passive_absent with context %}
-/usr/lib/nagios/plugins/check_minion_last_success.py:
-  file:
-    - absent
+#!/bin/bash
+# {{ pillar['message_do_not_modify'] }}
 
-sudo_salt_minion_nrpe:
-  file:
-    - absent
-    - name: /etc/sudoers.d/salt_minion_nrpe
+# log start stop time to syslog
+source /usr/local/share/salt_common.sh
+# Ensure that only one instance of this script is running at a time
+locking_script
+log_start_script "$@"
+trap "log_stop_script \$?" EXIT
 
-/usr/lib/nagios/plugins/check_minion_pillar_render.py:
-  file:
-    - absent
-
-salt_minion_pillar_render_data_collector:
-  file:
-    - name: /etc/cron.twice_daily/salt_minion_pillar
-    - absent
-
-{{ passive_absent('salt.minion') }}
-
-/etc/cron.daily/salt_highstate:
-  file:
-    - absent
+if [ -x /etc/cron.twice_daily/salt_minion_pillar ]; then
+    /etc/cron.twice_daily/salt_minion_pillar
+    /usr/lib/nagios/plugins/check_minion_pillar_render.py --formula=salt.minion --check=salt_minion_pillar_render --cronresult
+else
+    logger -t "$(basename "$0")[$$]" -p 'local0.info' \
+        "Cannot validate the pillar data first, just run highstate anyway"
+fi
+/usr/bin/salt-call state.highstate --return syslog,timestamps{% if 'sentry_dsn' in pillar %},sentry_common{% endif %}

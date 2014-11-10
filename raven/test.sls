@@ -40,7 +40,10 @@ test:
     - run
     - name: raven.alert
     - dsn: {{ sentry_dsn }}
-    - message: 'just a test'
+    - message: |
+        This is just a test to make sure that the raven module is working fine.
+        Please ignore.
+        In the future, it will be removed automatically after testing.
     - level: INFO
     - require:
       - module: raven

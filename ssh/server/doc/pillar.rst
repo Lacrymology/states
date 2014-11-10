@@ -37,6 +37,9 @@ Example::
 
   ssh:
     server:
+      ports:
+        - 22
+        - 22022
       extra_configs:
         - RhostsRSAAuthentication no
         - HostbasedAuthentication no
@@ -54,6 +57,13 @@ Example::
         - X11DisplayOffset 10
         - PrintLastLog yes
         - TCPKeepAlive yes
+
+ssh:server:ports
+~~~~~~~~~~~~~~~~
+
+List of SSH port that allowed.
+
+Default: ``[22]``
 
 ssh:server:extra_configs
 ~~~~~~~~~~~~~~~~~~~~~~~~

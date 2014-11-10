@@ -51,4 +51,4 @@ extend:
 salt_ci_dummy:
   cmd:
     - run
-    - name: true
+    - name: 'true'

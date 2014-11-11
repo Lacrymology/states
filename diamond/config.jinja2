@@ -219,7 +219,7 @@ args = ('requests+{{ pillar['sentry_dsn'] }}',)
 level = NOTSET
 formatter = syslog
 class = logging.handlers.SysLogHandler
-args = ('/dev/log', handlers.SysLogHandler.LOG_LOCAL7)
+args = ('/dev/log', handlers.SysLogHandler.{% if salt['pillar.get']('graylog2_address', False) %}LOG_LOCAL7{% else %}LOG_DAEMON{% endif %})
 
 [formatter_syslog]
 class = logging.Formatter

@@ -25,11 +25,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Quan Tong Anh <quanta@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
-{%- macro mariadb_backup_diamond(deployment, prefix=None)  %}
-  {%- if not prefix  %}
+{%- macro mariadb_backup_diamond(deployment, prefix=None) %}
+  {%- if not prefix %}
     {%- set prefix = deployment %}
-  {%- endif  %}
-  {%- set db_name = salt['pillar.get'](prefix + ':db:name', deployment) %}
+  {%- endif %}
 {{ deployment }}_backup_diamond_resources:
   file:
     - accumulated
@@ -41,5 +40,5 @@ Maintainer: Quan Tong Anh <quanta@robotinfra.com>
     - text:
       - |
         [[backup-{{ deployment }}-mysql]]
-        cmdline = ^\/usr\/local\/bin\/backup-mysql {{ db_name }}
-{%- endmacro  %}
+        cmdline = ^\/usr\/local\/bin\/backup-mysql {{ salt['pillar.get'](prefix + ':db:name', deployment) }}
+{%- endmacro %}

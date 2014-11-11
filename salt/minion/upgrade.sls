@@ -46,6 +46,8 @@ salt-minion_upstart:
     - user: root
     - group: root
     - mode: 440
+    - require:
+      - pkg: salt-minion
 
 salt-minion:
   file:

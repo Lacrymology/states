@@ -124,6 +124,8 @@ salt-master_upstart:
     - user: root
     - group: root
     - mode: 440
+    - require:
+      - pkg: salt-master
 
 {%- from "macros.jinja2" import salt_version,salt_deb_version with context %}
 {%- set version = salt_version() %}

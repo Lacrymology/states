@@ -26,17 +26,8 @@ Author: Dang Tung Lam <lam@robotinfra.com>
 Maintainer: Van Pham Diep <favadi@robotinfra.com>
 -#}
 include:
+  - backup.diamond
   - cron.diamond
 
-etherpad_backup_diamond_resources:
-  file:
-    - accumulated
-    - name: processes
-    -  template: jinja
-    - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - require_in:
-      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - text:
-      - |
-        [[backup-etherpad-postgres]]
-        cmdline = ^\/usr\/local\/bin\/backup-postgresql {{ salt['pillar.get']('etherpad:db:name', 'etherpad') }}$
+{%- from "postgresql/server/backup/diamond.jinja2" import postgresql_backup_diamond with context -%}
+{{ postgresql_backup_diamond('etherpad') }}

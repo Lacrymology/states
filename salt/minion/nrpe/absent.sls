@@ -36,5 +36,9 @@ sudo_salt_minion_nrpe:
     - absent
     - name: /etc/sudoers.d/salt_minion_nrpe
 
+/usr/lib/nagios/plugins/check_minion_pillar_render.py:
+  file:
+    - absent
+
 {%- from 'nrpe/passive.jinja2' import passive_absent with context %}
 {{ passive_absent('salt.minion') }}

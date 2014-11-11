@@ -66,4 +66,19 @@ sudo_salt_minion_nrpe:
       - service: nagios-nrpe-server
       - service: nsca_passive
 
+/usr/lib/nagios/plugins/check_minion_pillar_render.py:
+  file:
+    - managed
+    - source: salt://salt/minion/nrpe/check_pillar.py
+    - user: nagios
+    - group: nagios
+    - mode: 550
+    - require:
+      - module: nrpe-virtualenv
+      - pkg: nagios-nrpe-server
+      - file: nsca-salt.minion
+    - require_in:
+      - service: nagios-nrpe-server
+      - service: nsca_passive
+
 {{ passive_check('salt.minion') }}

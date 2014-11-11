@@ -37,3 +37,9 @@ salt_minion_last_success:
     max_hours: 48
   check_interval: {{ 1 * 60 }} {#- 1 hour  #}
   freshness_threshold: {{ ((1 * 60) + 10) * 60 }} {#- 1 hours + 10 minutes #}
+
+salt_minion_pillar_render:
+  description: Salt Minion pillar render
+  command: /usr/lib/nagios/plugins/check_minion_pillar_render.py --formula=salt.minion --check=salt_minion_pillar_render
+  check_interval: {{ 1 * 60 }} {#- 1 hour  #}
+  freshness_threshold: {{ ((1 * 60) + 10) * 60 }} {#- 1 hours + 10 minutes #}

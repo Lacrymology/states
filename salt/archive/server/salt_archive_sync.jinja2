@@ -48,6 +48,8 @@ else
 fi
 
 rsync --archive --no-owner --no-group --${verbosity}{% if salt['pillar.get']('salt_archive:delete', False) %} --delete{% endif %} --exclude ".*" {{ pillar['salt_archive']['source'] }} /var/lib/salt_archive/
+find /var/lib/salt_archive ! -user root -exec chown root {} \;
+find /var/lib/salt_archive ! -group salt_archive -exec chgrp salt_archive {} \;
 
 if [ $? -eq 0 ]; then
   mkdir -p /var/cache/salt/master

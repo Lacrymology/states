@@ -38,12 +38,9 @@ import subprocess
 
 import nagiosplugin as nap
 
-
-logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger('nagiosplugin.salt.minion.pillar_render')
 
-
-# from pysc import nrpe
+from pysc import nrpe
 
 
 class PillarRender(nap.Resource):
@@ -65,11 +62,9 @@ class PillarRender(nap.Resource):
 def check_good_pillar(config):
     return (
         PillarRender(),
+        nap.ScalarContext('errors', warning='0:0', critical='0:0'),
     )
 
 
 if __name__ == "__main__":
-    c = nap.Check(PillarRender(),
-                  nap.ScalarContext('errors', warning='0:0', critical='0:0'))
-    c.main()
-    # nrpe.check(check_good_pillar, {})
+    nrpe.check(check_good_pillar, {})

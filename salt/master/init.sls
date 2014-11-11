@@ -115,7 +115,23 @@ salt-master-job_changes.py:
     - require:
       - file: /usr/local
 
-salt-master_upstart:
+{%- from "macros.jinja2" import salt_version,salt_deb_version with context %}
+{%- set version = salt_version() %}
+{%- set pkg_version =  salt_deb_version() %}
+{#- check deb filename carefully, number `1` after {1} is added only on 0.17.5-1
+    pkg sub-version can be anything #}
+{%- set master_path = '{0}/pool/main/s/salt/salt-master_{1}_all.deb'.format(version, pkg_version) %}
+/etc/salt/master:
+  file:
+    - managed
+    - source: salt://salt/master/config.jinja2
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 400
+    - require:
+      - pkg: salt-master
+salt-master:
   file:
     - managed
     - name: /etc/init/salt-master.conf
@@ -124,24 +140,6 @@ salt-master_upstart:
     - user: root
     - group: root
     - mode: 440
-    - require:
-      - pkg: salt-master
-
-{%- from "macros.jinja2" import salt_version,salt_deb_version with context %}
-{%- set version = salt_version() %}
-{%- set pkg_version =  salt_deb_version() %}
-{#- check deb filename carefully, number `1` after {1} is added only on 0.17.5-1
-    pkg sub-version can be anything #}
-{%- set master_path = '{0}/pool/main/s/salt/salt-master_{1}_all.deb'.format(version, pkg_version) %}
-salt-master:
-  file:
-    - managed
-    - name: /etc/salt/master
-    - source: salt://salt/master/config.jinja2
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 400
     - require:
       - pkg: salt-master
   service:
@@ -154,8 +152,8 @@ salt-master:
       - file: /var/cache/salt
     - watch:
       - pkg: salt-master
+      - file: /etc/salt/master
       - file: salt-master
-      - file: salt-master_upstart
       - cmd: salt
 {#- PID file owned by root, no need to manage #}
   pkg:

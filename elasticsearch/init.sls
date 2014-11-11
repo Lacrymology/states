@@ -197,7 +197,7 @@ old_graylog2_index:
       check if graylog2 indices exist
       graylog2 prefix: graylog2-{{ grains['id'] }}_
     #}
-    - onlyif: /bin/sleep 30 && curl --fail -XGET 'http://127.0.0.1:9200/graylog2-{{ grains['id'] }}_*/_search?'
+    - onlyif: /bin/sleep 30 && curl --silent --fail -XGET 'http://127.0.0.1:9200/graylog2-{{ grains['id'] }}_*/_search?'
     - require:
       - pkg: old_graylog2_index
       - process: elasticsearch

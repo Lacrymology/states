@@ -30,6 +30,7 @@ include:
   - ejabberd
   - ejabberd.backup
   - ejabberd.backup.nrpe
+  - ejabberd.backup.diamond
   - ejabberd.diamond
   - ejabberd.nrpe
 
@@ -37,6 +38,7 @@ include:
 - sls: ejabberd
 - sls: ejabberd.backup
 - sls: ejabberd.backup.nrpe
+- sls: ejabberd.backup.diamond
 - sls: ejabberd.diamond
 - sls: ejabberd.nrpe
 {%- endcall %}

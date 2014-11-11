@@ -29,15 +29,5 @@ include:
   - backup.diamond
   - cron.diamond
 
-proftpd_backup_diamond_resources:
-  file:
-    - accumulated
-    - name: processes
-    - template: jinja
-    - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - require_in:
-      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - text:
-      - |
-        [[backup-proftpd-postgres]]
-        cmdline = ^\/usr\/local\/bin\/backup-postgresql {{ salt['pillar.get']('proftpd:db:name', 'proftpd') }}$
+{%- from "postgresql/server/backup/diamond.jinja2" import postgresql_backup_diamond with context %}
+{{ postgresql_backup_diamond('proftpd') }}

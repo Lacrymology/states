@@ -29,15 +29,5 @@ include:
   - backup.diamond
   - cron.diamond
 
-openerp_backup_diamond_resources:
-  file:
-    - accumulated
-    - name: processes
-    - template: jinja
-    - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - require_in:
-      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - text:
-      - |
-        [[backup-openerp-postgres]]
-        cmdline = ^\/usr\/local\/bin\/backup-postgresql-by-role {{ salt['pillar.get']('openerp:db:name', 'openerp') }}$
+{%- from "postgresql/server/backup/diamond.jinja2" import postgresql_backup_diamond with context %}
+{{ postgresql_backup_diamond('openerp') }}

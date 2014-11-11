@@ -35,6 +35,7 @@ include:
   - clamav.diamond
   - dovecot
   - dovecot.backup
+  - dovecot.backup.diamond
   - dovecot.backup.nrpe
   - dovecot.diamond
   - dovecot.nrpe
@@ -68,6 +69,7 @@ include:
 test:
   monitoring:
     - run_all_checks
+    - wait: 60
     - order: last
     - require:
       - cmd: test_crons

@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2014, Quan Tong Anh
+Copyright (c) 2014, Diep Pham
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -7,9 +7,9 @@ modification, are permitted provided that the following conditions are met:
 
 1. Redistributions of source code must retain the above copyright notice, this
    list of conditions and the following disclaimer.
-   2. Redistributions in binary form must reproduce the above copyright notice,
-      this list of conditions and the following disclaimer in the documentation
-         and/or other materials provided with the distribution.
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -22,28 +22,12 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Quan Tong Anh <quanta@robotinfra.com>
-Maintainer: Quan Tong Anh <quanta@robotinfra.com>
+Author: Van Diep Pham <favadi@robotinfra.com>
+Maintainer: Van Diep Pham <favadi@robotinfra.com>
 -#}
-{%- from 'cron/test.sls' import test_cron with context %}
 include:
-  - ejabberd
-  - ejabberd.backup
-  - ejabberd.backup.nrpe
-  - ejabberd.backup.diamond
-  - ejabberd.diamond
-  - ejabberd.nrpe
+  - backup.diamond
+  - cron.diamond
 
-{%- call test_cron() %}
-- sls: ejabberd
-- sls: ejabberd.backup
-- sls: ejabberd.backup.nrpe
-- sls: ejabberd.backup.diamond
-- sls: ejabberd.diamond
-- sls: ejabberd.nrpe
-{%- endcall %}
-
-test:
-  monitoring:
-    - run_all_checks
-    - order: last
+{%- from "postgresql/server/backup/diamond.jinja2" import postgresql_backup_diamond with context %}
+{{ postgresql_backup_diamond('ejabberd') }}

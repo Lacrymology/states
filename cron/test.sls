@@ -32,8 +32,8 @@ Maintainer: Quan Tong Anh <quanta@robotinfra.com>
             {#- the last loop iteration is called test_crons to make it easier
                 to requires it. #}
 test_crons:
-        {-% else %}
-test_crons_{{ suffix }}:
+        {%- else %}
+test_cron_{{ suffix }}:
         {% endif %}
   cmd:
     - run
@@ -48,8 +48,8 @@ test_crons_{{ suffix }}:
             {%- endfor -%}
         {%- endif -%}
         {%- if not loop.first -%}
-            {#- run-parts requires the previous one #}
-      - cmd: test_cron_{{ crons[crons.index() - 1] }}
+            {#- run-parts requires the previous one, loop.index counts from 1, list index counts from 0 #}
+      - cmd: test_cron_{{ crons[loop.index - 2] }}
         {%- endif -%}
     {%- endfor -%}
 {%- endmacro %}

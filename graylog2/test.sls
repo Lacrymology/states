@@ -25,21 +25,35 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Van Pham Diep <favadi@robotinfra.com>
 -#}
+{%- from 'cron/test.sls' import test_cron with context -%}
 include:
-{%- for state in ('graylog2.server', 'graylog2.web', 'elasticsearch') %}
-  - {{ state }}
-  - {{ state }}.diamond
-  - {{ state }}.nrpe
-{%- endfor %}
+  - graylog2.server
+  - graylog2.server.backup
+  - graylog2.server.backup.diamond
+  - graylog2.server.backup.nrpe
+  - graylog2.server.diamond
+  - graylog2.server.nrpe
+  - graylog2.web
+  - graylog2.web.nrpe
+  - graylog2.web.diamond
 
-{%- from 'cron/test.sls' import test_cron with context %}
 {%- call test_cron() %}
-  {%- for state in ('graylog2.server', 'graylog2.web', 'elasticsearch') %}
-- sls: {{ state }}
-- sls: {{ state }}.diamond
-- sls: {{ state }}.nrpe
-  {%- endfor %}
+- sls: graylog2.server
+- sls: graylog2.server.diamond
+- sls: graylog2.server.nrpe
+- sls: graylog2.server.backup
+- sls: graylog2.server.backup.nrpe
+- sls: graylog2.web
+- sls: graylog2.web.nrpe
+- sls: graylog2.web.diamond
 {%- endcall %}
+
+graylog2_log_one_msg:
+  cmd:
+    - run
+    - name: logger test
+    - require:
+      - service: graylog2-server
 
 test:
   monitoring:
@@ -52,6 +66,7 @@ test:
       - graylog2_incoming_logs
     - require:
       - cmd: test_crons
+      - cmd: graylog2_log_one_msg
 
 graylog2_server-es_cluster:
   monitoring:
@@ -60,3 +75,11 @@ graylog2_server-es_cluster:
     - accepted_failure: 1 nodes in cluster (outside range 2:2)
     - require:
       - sls: graylog2.server.nrpe
+
+test_import_general_syslog_udp_input:
+  cmd:
+    - script
+    - name: import_general_syslog_udp_input graylog2-0-20
+    - source: salt://graylog2/server/import_general_syslog_udp_input.py
+    - require:
+      - sls: graylog2.server

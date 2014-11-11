@@ -131,7 +131,7 @@ production: &base
 {%- if 22 in salt['pillar.get']('ssh:server:ports', [22]) %}
     ssh_port: 22
 {%- else %}
-    ssh_port: {{ salt['pillar.get']('ssh:server:ports', [22])[0] %}
+    ssh_port: {{ salt['pillar.get']('ssh:server:ports', [22])[0] }}
 {%- endif %}
 
   git:

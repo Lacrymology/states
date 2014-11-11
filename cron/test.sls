@@ -49,7 +49,7 @@ test_crons_{{ suffix }}:
         {%- endif -%}
         {%- if not loop.first -%}
             {#- run-parts requires the previous one #}
-      - cmd: test_cron_{{ crons[crons.index() - 1] }}
+      - cmd: test_cron_{{ crons[loop.index - 1] }}
         {%- endif -%}
     {%- endfor -%}
 {%- endmacro %}

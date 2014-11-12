@@ -59,6 +59,102 @@ call ``run``::
     if __name__ == '__main__':
         MyApp().run()
 
+Usage
+-----
+
+Subclass ``pysc.Application`` and call the ``run`` method, as
+described above. Optionally, you can also override the following
+class-level attributes:
+
+- `name`: This will be used to change the process name instead of the
+  filename.
+- `defaults`: An optional dictionary of default configuration values.
+  Notice that this has lower priority than command line arguments, so
+  if you want to, for example, change the default value of the config
+  file, this won't work. To do it, please do the following::
+
+    class MyApp(Application):
+        def get_config_parser(self):
+            argp = super(MyApp, self).get_config_parser()
+            argp.set_defaults(config="/custom/config/path.yml")
+            return argp
+
+- `logger`: the logger to be used in case of errors. This can be
+  either a string or an instance of ``logging.Logger``, and it
+  defaults to the calling class' containing ``__module__``
+
+A more complete example::
+
+    #!/usr/bin/env python
+
+    import pysc
+
+    class MyApp(pysc.Application):
+        name = 'my-custom-command'
+        defaults = {
+            'foo': 1,
+            'bar': 2,
+        }
+        logger = 'custom.logger'
+
+        def get_argument_parser(self):
+            argp = super(MyApp, self).get_argument_parser()
+            argp.add_argument("--baz", default=3)
+            argp.set_defaults(config="/etc/custom/config.yml")
+            return argp
+
+        def main(self):
+            self.logger.info("Ready to do my thing")
+            print "foo", self.config['foo']
+            print "bar", self.config['bar']
+            print "baz", self.config['baz']
+            self.logger.debug("This was configured with %s",
+                              self.config['config'])
+
+    if __name__ == '__main__':
+        MyApp().run()
+
+And when invoked::
+
+    $ ./myapp
+    foo 1
+    bar 2
+    baz 3
+
+    $ ./myapp --debug
+    DEBUG:custom.logger:running main
+    INFO:custom.logger:Ready to do my thing
+    foo 1
+    bar 2
+    baz 3
+    DEBUG:custom.logger:main finished
+
+    $ ./myapp --debug --set='{"profile": true}'
+    DEBUG:custom.logger:running main
+    INFO:profile:main started at 2014-11-12 22:42:17.663816
+    INFO:custom.logger:Ready to do my thing
+    foo 1
+    bar 2
+    baz 3
+    DEBUG:custom.logger:This was configured with /etc/custom/config.yml
+    INFO:profile:main ended at 2014-11-12 22:42:17.717612
+    INFO:profile:main ran in 0.053796 seconds. (pcputimes(user=0.27, system=0.06))
+    DEBUG:custom.logger:main finished
+
+    $ ./myapp --baz BAZ
+    foo 1
+    bar 2
+    baz BAZ
+
+    $ ./myapp --set='{"foo": "FOO", "bar": 42, "baz": 1024}'
+    foo FOO
+    bar 42
+    baz 1024
+
+    $ ps awwx | grep command
+    31056 pts/16   T      0:00 my-custom-command
+    31064 pts/16   S+     0:00 grep --color=auto command
+
 
 Options and configurations
 --------------------------

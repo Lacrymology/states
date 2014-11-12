@@ -58,7 +58,7 @@ pysc:
       - file: pysc
       - pkg: python-dev
 
-log_test:
+pysc_log_test:
   file:
     - managed
     - name: /usr/local/bin/log_test.py

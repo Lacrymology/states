@@ -21,6 +21,7 @@ Welcome to Infrastructure Documentation:
     troubleshoot
     changelog
     /_pillars/index
+    pysc
 
 
 Formulas Document:

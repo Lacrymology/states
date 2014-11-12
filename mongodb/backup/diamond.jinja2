@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Hung Nguyen Viet
+Copyright (c) 2014, Diep Pham
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,33 +22,20 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Viet Hung Nguyen <hvn@robotinfra.com>
-Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
-            Viet Hung Nguyen <hvn@robotinfra.com>
+Author: Van Diep Pham <favadi@robotinfra.com>
+Maintainer: Van Pham Diep <favadi@robotinfra.com>
 -#}
-include:
-  - bash.nrpe
-  - cron.nrpe
-  - jenkins.nrpe
-  - pysc.nrpe
-  - salt.cloud.nrpe
-  - salt.master.nrpe
-  - ssh.client.nrpe
-  - sudo.nrpe
-  - virtualenv.nrpe
-
-extend:
-  {#- if used in conjunction with salt.ci just used a slightly different
-    config.jinja2 #}
-  nsca-salt.master:
-    file:
-      - source: salt://salt/ci/nrpe/config.jinja2
-  salt.master-monitoring:
-    monitoring:
-      - source: salt://salt/ci/nrpe/config.jinja2
-
-{#- workaround for include sls bug #}
-salt_ci_dummy:
-  cmd:
-    - run
-    - name: 'true'
+{%- macro mongodb_backup_diamond(deployment)  %}
+{{ deployment }}_backup_diamond_resources:
+  file:
+    - accumulated
+    - name: processes
+    - template: jinja
+    - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
+    - require_in:
+      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
+    - text:
+      - |
+        [[backup-{{ deployment }}-mongodb]]
+        cmdline = ^\/usr\/local\/bin\/backup-mongodb {{ deployment }}$
+{%- endmacro  %}

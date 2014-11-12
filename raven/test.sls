@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Hung Nguyen Viet
+Copyright (c) 2014, Quan Tong Anh
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,33 +22,30 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Viet Hung Nguyen <hvn@robotinfra.com>
-Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
-            Viet Hung Nguyen <hvn@robotinfra.com>
+Author: Quan Tong Anh <quanta@robotinfra.com>
+Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
 include:
-  - bash.nrpe
-  - cron.nrpe
-  - jenkins.nrpe
-  - pysc.nrpe
-  - salt.cloud.nrpe
-  - salt.master.nrpe
-  - ssh.client.nrpe
-  - sudo.nrpe
-  - virtualenv.nrpe
+  - raven
+  - raven.mail
+  - raven.mail.diamond
+  - raven.mail.nrpe
+  - raven.nrpe
+  - requests
 
-extend:
-  {#- if used in conjunction with salt.ci just used a slightly different
-    config.jinja2 #}
-  nsca-salt.master:
-    file:
-      - source: salt://salt/ci/nrpe/config.jinja2
-  salt.master-monitoring:
-    monitoring:
-      - source: salt://salt/ci/nrpe/config.jinja2
-
-{#- workaround for include sls bug #}
-salt_ci_dummy:
-  cmd:
+{%- set sentry_dsn = salt['pillar.get']('sentry_dsn', False) -%}
+{%- if sentry_dsn %}
+test:
+  module:
     - run
-    - name: 'true'
+    - name: raven.alert
+    - dsn: {{ sentry_dsn }}
+    - message: |
+        This is just a test to make sure that the raven module is working fine.
+        Please ignore.
+        In the future, it will be removed automatically after testing.
+    - level: INFO
+    - require:
+      - module: raven
+      - module: requests
+{%- endif %}

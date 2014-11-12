@@ -43,7 +43,7 @@ salt_minion_master_key:
     - name: file.remove
     - path: /etc/salt/pki/minion/minion_master.pub
     - watch:
-      - file: salt-minion
+      - file: /etc/salt/minion
     - watch_in:
       - service: salt-minion
 

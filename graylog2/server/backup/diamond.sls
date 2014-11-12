@@ -29,15 +29,5 @@ include:
   - backup.diamond
   - cron.diamond
 
-graylog2_backup_diamond_resources:
-  file:
-    - accumulated
-    - name: processes
-    - template: jinja
-    - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - require_in:
-      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - text:
-      - |
-        [[backup-graylog2-mongodb]]
-        cmdline = ^\/usr\/local\/bin\/backup-mongodb graylog2$
+{%- from "mongodb/backup/diamond.jinja2" import mongodb_backup_diamond with context %}
+{{ mongodb_backup_diamond('graylog2') }}

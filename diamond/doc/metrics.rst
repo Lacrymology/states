@@ -82,3 +82,302 @@ cpu:user
 ~~~~~~~~
 
 Time spent in user mode.
+
+DiskSpaceCollector
+------------------
+
+byte_avail
+~~~~~~~~~~
+
+Free bytes available to non-super user.
+
+byte_free
+~~~~~~~~~
+
+Total number of free bytes.
+
+byte_percentfree
+~~~~~~~~~~~~~~~~
+
+Percentage of free bytes.
+
+byte_used
+~~~~~~~~~
+
+Total number of used bytes.
+
+inode_avail
+~~~~~~~~~~~
+
+Free inodes for unprivileged user.
+
+inode_free
+~~~~~~~~~~
+
+Total free inodes.
+
+inode_percentfree
+~~~~~~~~~~~~~~~~~
+
+Percentage of free inodes.
+
+inode_used
+~~~~~~~~~~
+
+Total number of used inodes.
+
+DiskUsageCollector
+------------------
+
+Take a look at .. _this: https://www.kernel.org/doc/Documentation/iostats.txt
+for more details.
+
+FilestatCollector
+-----------------
+
+files:assigned
+~~~~~~~~~~~~~~
+
+The total allocated file handles
+
+files:unused
+~~~~~~~~~~~~
+
+The number of unused-but-allocated file handles.
+
+files:max
+~~~~~~~~~
+
+The maximum file handles that can be allocated
+
+InterruptCollector
+------------------
+
+Details .. _here:
+https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/s2-proc-interrupts.html
+
+LoadAverageCollector
+--------------------
+
+loadavg:(01|05|15)
+~~~~~~~~~~~~~~~~~~
+
+The number of jobs in the run queue (state R) or waiting for disk I/O (state D)
+aver‐ aged over 1, 5, and 15 minutes.
+
+loadavg:processes_running
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The number of currently runnable kernel scheduling entities (processes, threads).
+
+loadavg:processes_total
+~~~~~~~~~~~~~~~~~~~~~~~
+
+The number of kernel scheduling entities that currently exist on the system.
+
+MemoryCollector
+---------------
+
+Check out .. _this:
+https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/s2-proc-meminfo.html
+
+NetworkCollector
+----------------
+
+See details .. _here:
+http://www.onlamp.com/pub/a/linux/2000/11/16/LinuxAdmin.html
+
+PingCollector
+-------------
+
+
+
+ProcessStatCollector
+--------------------
+
+proc:btime
+~~~~~~~~~~
+
+Boot time, in seconds since the Epoch, 1970-01-01.
+
+proc:ctxt
+~~~~~~~~~
+
+The number of context switches that the system underwent.
+
+proc:processes
+~~~~~~~~~~~~~~
+
+Number of forks since boot.
+
+proc:procs_blocked
+~~~~~~~~~~~~~~~~~~
+
+Number of processes blocked waiting for I/O to complete.
+
+proc:procs_running
+~~~~~~~~~~~~~~~~~~
+
+Number of processes in runable state.
+
+IPVSCollector
+-------------
+
+
+
+SockstatCollector
+-----------------
+
+sockets:tcp_alloc
+~~~~~~~~~~~~~~~~~
+
+The number of TCP sockets allocated.
+
+sockets:tcp_inuse
+~~~~~~~~~~~~~~~~~
+
+The number of TCP sockets in use.
+
+sockets:tcp_mem
+~~~~~~~~~~~~~~~
+
+Memory (in bytes) allocated for TCP sockets.
+
+sockets:tcp_orphan
+~~~~~~~~~~~~~~~~~~
+
+Number of orphan TCP sockets (not attached to any file descriptor)
+
+sockets:tcp_tw
+~~~~~~~~~~~~~~
+
+Number of TCP sockets currently in TIME_WAIT state.
+
+sockets:udp_inuse
+~~~~~~~~~~~~~~~~~
+
+The number of UDP sockets in use.
+
+sockets:udp_mem
+~~~~~~~~~~~~~~~
+
+Memory (in bytes) allocated for UDP sockets.
+
+sockets:used
+~~~~~~~~~~~~
+
+?
+
+TCPCollector
+------------
+
+tcp:ActiveOpens
+~~~~~~~~~~~~~~~
+
+?
+
+tcp:AttemptFails
+~~~~~~~~~~~~~~~~
+
+?
+
+tcp:CurrEstab
+~~~~~~~~~~~~~
+
+Number of current TCP sockets in ESTABLISHED state.
+
+tcp:EstabResets
+~~~~~~~~~~~~~~~
+
+?
+
+tcp:InErrs
+~~~~~~~~~~
+
+?
+
+tcp:ListenDrops
+~~~~~~~~~~~~~~~
+
+Number of SYNs to LISTEN sockets dropped.
+
+tcp:ListenOverflows
+~~~~~~~~~~~~~~~~~~~
+
+Number of times the listen queue of a socket overflowed.
+
+tcp:PassiveOpens
+~~~~~~~~~~~~~~~~
+
+Number of successful passive fast opens.
+
+tcp:TCPAbortOnMemory
+~~~~~~~~~~~~~~~~~~~~
+
+Number of connections aborted due to memory pressure.
+
+tcp:TCPBacklogDrop
+~~~~~~~~~~~~~~~~~~
+
+Number of frames dropped because of full backlog queue.
+
+tcp:TCPFastRetrans
+~~~~~~~~~~~~~~~~~~
+
+Number of fast retransmits.
+
+tcp:TCPForwardRetrans
+~~~~~~~~~~~~~~~~~~~~~
+
+Number of forward retransmits.
+
+tcp:TCPLoss
+~~~~~~~~~~~
+
+?
+
+tcp:TCPLostRetransmit
+~~~~~~~~~~~~~~~~~~~~~
+
+Number of retransmits lost.
+
+tcp:TCPSlowStartRetrans
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Number of retransmits in slow start.
+
+tcp:TCPTimeouts
+~~~~~~~~~~~~~~~
+
+Number of other TCP timeouts.
+
+UptimeCollector
+---------------
+
+uptime:minutes
+~~~~~~~~~~~~~~
+
+The number of minutes the system has been up.
+
+VMStatCollector
+---------------
+
+vmstat:pgpgin
+~~~~~~~~~~~~~
+
+Number of kilobytes the system has paged in from disk per second.
+
+vmstat:pgpgout
+~~~~~~~~~~~~~~
+
+Number of kilobytes the system has paged out to disk per second.
+
+vmstat:pswpin
+~~~~~~~~~~~~~
+
+Number of kilobytes the system has swapped in from disk per second.
+
+vmstat:pwwpout
+~~~~~~~~~~~~~~
+
+Number of kilobytes the system has swapped out to disk per second.

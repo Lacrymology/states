@@ -228,3 +228,37 @@ Wherever possible, we encourage to avoid adding command line options.
 Usage of the ``--set`` option or config files is preferred, but if the
 script is designed to be used manually by the sysadmins then this is
 probably the best way.
+
+Configuration values
+++++++++++++++++++++
+
+The following configuration values are expected or supported:
+
+- `logging`: Is expected to be a valid configuration dictionary for
+  python's `logging.config.dictConfig
+  <https://docs.python.org/2/library/logging.config.html#logging.config.dictConfig>`__.
+  A default is provided in ``/etc/python/config.yml``
+- `profile` (optional): Should be a boolean. If ``True`` a
+  ``log.debug`` message is emitted when the application starts, after
+  it ends, and counting the total time
+- `process` (optional): If present, the process user and groups will
+  be changed to the provided values. It should be a dictionary like
+  this::
+
+    process:
+        user: someusername
+        group: somegroupname
+
+- `graphite` (optional): ``"<server>[:<port>]"``. If present, a
+  ``pystatsd.Client`` is created and available to the Application at
+  ``self.stats``. If the port is omitted, graphite's default (2003) is
+  used.
+- `lock` (optional): ``/path/to/lock``. If present, a lockfile is
+  created when the application runs. If the lockfile already exists,
+  the application exits with an error.
+- `extra_configs` (optional): If present it should be a list of paths
+  to config files. The configuration keys defined in those files will
+  be added to the ``config`` dictionary. This has the lowest priority,
+  so any values redefined either in the main config file or from the
+  command line take precedence.
+

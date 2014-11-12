@@ -37,16 +37,27 @@ include:
   - apt
   - salt
 
-salt-minion:
+/etc/salt/minion:
   file:
     - managed
     - template: jinja
-    - name: /etc/salt/minion
     - user: root
     - group: root
     - mode: 444
     - source: salt://salt/minion/config.jinja2
     - require_in:
+      - pkg: salt-minion
+
+salt-minion:
+  file:
+    - managed
+    - name: /etc/init/salt-minion.conf
+    - template: jinja
+    - source: salt://salt/minion/upstart.jinja2
+    - user: root
+    - group: root
+    - mode: 440
+    - require:
       - pkg: salt-minion
   pkg:
     - latest
@@ -54,10 +65,24 @@ salt-minion:
     - running
     - enable: True
     - skip_verify: True
+    - require:
+      - file: /var/cache/salt
     - watch:
       - pkg: salt-minion
+      - file: /etc/salt/minion
       - file: salt-minion
       - cmd: salt
+
+/etc/salt/minion.d:
+  file:
+    - directory
+    - user: root
+    - group: root
+    - mode: 750
+    - require_in:
+      - pkg: salt-minion
+    - watch_in:
+      - service: salt-minion
 
 {%- for file in ('logging', 'graphite', 'mysql') %}
   {%- if (file == 'graphite' and 'graphite_address' in pillar) or file != 'graphite' %}
@@ -69,6 +94,8 @@ salt-minion:
     - group: root
     - mode: 440
     - source: salt://salt/minion/{{ file }}.jinja2
+    - require:
+      - file: /etc/salt/minion.d
     - require_in:
       - pkg: salt-minion
     - watch_in:

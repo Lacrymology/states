@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Bruno Clermont
+Copyright (c) 2014, Diep Pham
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,48 +22,20 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Bruno Clermont <bruno@robotinfra.com>
-Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
-
-Nagios NRPE check for Salt Minion.
+Author: Van Diep Pham <favadi@robotinfra.com>
+Maintainer: Van Pham Diep <favadi@robotinfra.com>
 -#}
-{%- from 'nrpe/passive.sls' import passive_check with context %}
-include:
-  - apt.nrpe
-  - nrpe
-  - pysc.nrpe
-  - raven.nrpe
-  - requests.nrpe
-  - rsyslog.nrpe
-  - sudo
-  - sudo.nrpe
-
-sudo_salt_minion_nrpe:
+{%- macro mongodb_backup_diamond(deployment)  %}
+{{ deployment }}_backup_diamond_resources:
   file:
-    - managed
-    - name: /etc/sudoers.d/salt_minion_nrpe
+    - accumulated
+    - name: processes
     - template: jinja
-    - source: salt://salt/minion/nrpe/sudo.jinja2
-    - mode: 440
-    - user: root
-    - group: root
-    - require:
-      - pkg: sudo
-
-/usr/lib/nagios/plugins/check_minion_last_success.py:
-  file:
-    - managed
-    - source: salt://salt/minion/nrpe/check_last_success.py
-    - user: nagios
-    - group: nagios
-    - mode: 550
-    - require:
-      - module: nrpe-virtualenv
-      - pkg: nagios-nrpe-server
-      - file: nsca-salt.minion
-      - file: sudo_salt_minion_nrpe
+    - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
     - require_in:
-      - service: nagios-nrpe-server
-      - service: nsca_passive
-
-{{ passive_check('salt.minion') }}
+      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
+    - text:
+      - |
+        [[backup-{{ deployment }}-mongodb]]
+        cmdline = ^\/usr\/local\/bin\/backup-mongodb {{ deployment }}$
+{%- endmacro  %}

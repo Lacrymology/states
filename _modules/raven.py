@@ -89,6 +89,4 @@ def alert(dsn, message, level='INFO', data=None):
     log.info('message object: %s', str(data))
     client.send(**data)
 
-    return {
-        'message': data
-    }
+    return True

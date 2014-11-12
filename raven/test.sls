@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Bruno Clermont
+Copyright (c) 2014, Quan Tong Anh
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,48 +22,30 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Bruno Clermont <bruno@robotinfra.com>
-Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
-
-Nagios NRPE check for Salt Minion.
+Author: Quan Tong Anh <quanta@robotinfra.com>
+Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
-{%- from 'nrpe/passive.sls' import passive_check with context %}
 include:
-  - apt.nrpe
-  - nrpe
-  - pysc.nrpe
+  - raven
+  - raven.mail
+  - raven.mail.diamond
+  - raven.mail.nrpe
   - raven.nrpe
-  - requests.nrpe
-  - rsyslog.nrpe
-  - sudo
-  - sudo.nrpe
+  - requests
 
-sudo_salt_minion_nrpe:
-  file:
-    - managed
-    - name: /etc/sudoers.d/salt_minion_nrpe
-    - template: jinja
-    - source: salt://salt/minion/nrpe/sudo.jinja2
-    - mode: 440
-    - user: root
-    - group: root
+{%- set sentry_dsn = salt['pillar.get']('sentry_dsn', False) -%}
+{%- if sentry_dsn %}
+test:
+  module:
+    - run
+    - name: raven.alert
+    - dsn: {{ sentry_dsn }}
+    - message: |
+        This is just a test to make sure that the raven module is working fine.
+        Please ignore.
+        In the future, it will be removed automatically after testing.
+    - level: INFO
     - require:
-      - pkg: sudo
-
-/usr/lib/nagios/plugins/check_minion_last_success.py:
-  file:
-    - managed
-    - source: salt://salt/minion/nrpe/check_last_success.py
-    - user: nagios
-    - group: nagios
-    - mode: 550
-    - require:
-      - module: nrpe-virtualenv
-      - pkg: nagios-nrpe-server
-      - file: nsca-salt.minion
-      - file: sudo_salt_minion_nrpe
-    - require_in:
-      - service: nagios-nrpe-server
-      - service: nsca_passive
-
-{{ passive_check('salt.minion') }}
+      - module: raven
+      - module: requests
+{%- endif %}

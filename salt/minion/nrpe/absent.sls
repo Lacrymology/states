@@ -31,5 +31,10 @@ Remove Nagios NRPE check for Salt Minion.
   file:
     - absent
 
+sudo_salt_minion_nrpe:
+  file:
+    - absent
+    - name: /etc/sudoers.d/salt_minion_nrpe
+
 {%- from 'nrpe/passive.sls' import passive_absent with context %}
 {{ passive_absent('salt.minion') }}

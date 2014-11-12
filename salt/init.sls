@@ -90,3 +90,10 @@ salt_patch_util:
       - cmd: apt_sources
     - require_in:
       - file: patch_salt_fix_require_sls
+
+/var/cache/salt:
+  file:
+    - directory
+    - user: root
+    - group: root
+    - mode: 750

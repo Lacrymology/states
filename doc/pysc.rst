@@ -38,6 +38,26 @@ base class to create python command line applications that use common
 configurations and command line interfaces, and a simplified approach
 to crating nrpe checks for your formulas.
 
+Helper functions
+~~~~~~~~~~~~~~~~
+
+The following functions are defined in the ``pysc`` module:
+
+- ``unserialize_yaml(filename, critical=False)``: unserializes the
+  yaml file indicated by ``filename`` and returs its value. It expects
+  the file to unserialize as a dictionary. If not, or if an exception
+  is raised when opening or unserializing the file, an error is logged
+  and an empty dictionary is returned unless ``critical`` is True-ish,
+  in which case an exception is raised.
+- ``dict_merge``: deep merge of two dictionaries.
+- ``set_logging_debug``: sets logging to print to stdout at level
+  ``DEBUG``
+- ``drop_privilage(user_name, group_name)``: Changes the process user
+  and group accordingly.
+- ``profile``: decorator that profiles a function call.
+- ``ignore_errors``: decorator that ignores any non system-terminating
+  exceptions and continues execution.
+
 Base Application
 ~~~~~~~~~~~~~~~~
 

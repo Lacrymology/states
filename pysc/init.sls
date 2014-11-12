@@ -65,7 +65,7 @@ pysc_log_test:
     - source: salt://pysc/log_test.py
     - user: root
     - group: root
-    - mode 550
+    - mode: 550
     - require:
       - module: pysc
       - file: /usr/local

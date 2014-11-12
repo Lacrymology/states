@@ -87,6 +87,11 @@ Advantages
 A list of the things that get taken care for you if you use
 ``pysc.Application``:
 
+- **standardization**: Using this class and following the guidelines
+  will help you make all of your applications callable in a similar
+  way and have them accept the same format of config files, which will
+  help to keep your system coherent and maintainable, and to minimize
+  the cost of training new users.
 - **configuration files loading**: A config file is required (but a
   default is provided by **robotinfra** (?? **Common** ??)), the
   config file may define other config files to be loaded as well. All

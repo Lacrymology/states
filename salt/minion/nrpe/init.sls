@@ -35,6 +35,20 @@ include:
   - raven.nrpe
   - requests.nrpe
   - rsyslog.nrpe
+  - sudo
+  - sudo.nrpe
+
+sudo_salt_minion_nrpe:
+  file:
+    - managed
+    - name: /etc/sudoers.d/salt_minion_nrpe
+    - template: jinja
+    - source: salt://salt/minion/nrpe/sudo.jinja2
+    - mode: 440
+    - user: root
+    - group: root
+    - require:
+      - pkg: sudo
 
 /usr/lib/nagios/plugins/check_minion_last_success.py:
   file:
@@ -47,6 +61,7 @@ include:
       - module: nrpe-virtualenv
       - pkg: nagios-nrpe-server
       - file: nsca-salt.minion
+      - file: sudo_salt_minion_nrpe
     - require_in:
       - service: nagios-nrpe-server
       - service: nsca_passive

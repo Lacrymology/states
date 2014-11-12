@@ -166,10 +166,35 @@ files and command line options are aggregated into a dictionary that
 the application class can refer to as ``self.config``. All
 configuration files must be yaml files representing a dictionary.
 
+Command line options
+++++++++++++++++++++
+
 --config
 ********
+
 The path to the main configuration file. Defaults to
-``/etc/python/config.yml"``
+``/etc/python/config.yml"``.
+
+--debug
+*******
+
+Ignores other logging configs and logs to console at all levels. It
+also opens a python debugger on error
+
+--set=<json>
+************
+
+Set arbitrary configuration options, the option value must be a valid
+JSON dictionary (object). This has priority so it overrides any other
+configuration sources that might define the same value. Please
+remember that strings in JSON are delimited by ``"``, not by ``'``, so
+this is valid::
+
+    $ myapp --set='{"profile": true}'
+
+but this is not::
+
+    $ myapp --set="{'profile': true}"
 
 Adding custom command line options
 **********************************

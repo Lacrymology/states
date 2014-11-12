@@ -38,6 +38,8 @@ base class to create python command line applications that use common
 configurations and command line interfaces, and a simplified approach
 to crating nrpe checks for your formulas.
 
+.. contents::
+
 Helper functions
 ~~~~~~~~~~~~~~~~
 

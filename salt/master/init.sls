@@ -52,7 +52,7 @@ include:
     - directory
     - user: root
     - group: root
-    - mode: 550
+    - mode: 551
 
 /srv/pillars:
   file:

@@ -59,6 +59,27 @@ call ``run``::
     if __name__ == '__main__':
         MyApp().run()
 
+Advantages
+----------
+
+A list of the things that get taken care for you if you use
+``pysc.Application``:
+
+- **configuration files loading**: A config file is required (but a
+  default is provided by **robotinfra** (?? **Common** ??)), the
+  config file may define other config files to be loaded as well. All
+  config files are deserialized as yaml.
+- **debug mode**: a simple ``--debug`` flag to override logging
+  configuration so everything gets logged to console
+- **profiling** of your script.
+- **process name**: the process name will be automatically changed to
+  match the name of the file your ``Application`` subclass is defined
+  in
+- **logging configuration**: define a logging config dictionary in
+  your config file (again, there's a reasonable default provided by
+  **robotinfra**) and ``Application`` gracefully falls back to
+  printing to the console if there's any problem in it.
+
 Usage
 -----
 

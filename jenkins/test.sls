@@ -40,8 +40,13 @@ include:
 - sls: jenkins.backup.nrpe
 - sls: jenkins.diamond
 - sls: jenkins.nrpe
-- cmd: test
+- cmd: wait_for_jenkins_to_start_and_create_file_before_running_crons
 {%- endcall %}
+
+wait_for_jenkins_to_start_and_create_file_before_running_crons:
+  cmd:
+    - run
+    - name: sleep 30
 
 test:
   diamond:
@@ -54,7 +59,6 @@ test:
       - sls: jenkins.diamond
   monitoring:
     - run_all_checks
-    - wait: 30
     - order: last
     - require:
       - cmd: test_crons

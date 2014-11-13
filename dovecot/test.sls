@@ -1,7 +1,7 @@
 {#-
  -*- ci-automatic-discovery: off -*-
 
- Amavis is only used on a complete mail server integrated with:
+ Dovecot is only used on a complete mail server integrated with:
 
  - clamav
  - postfix

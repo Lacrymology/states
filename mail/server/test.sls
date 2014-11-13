@@ -35,6 +35,7 @@ include:
   - clamav.diamond
   - dovecot
   - dovecot.backup
+  - dovecot.backup.diamond
   - dovecot.backup.nrpe
   - dovecot.diamond
   - dovecot.nrpe
@@ -49,7 +50,7 @@ include:
 - sls: amavis
 - sls: amavis.nrpe
 - sls: amavis.diamond
-- sls: amavis.clamav
+{# - sls: amavis.clamav this formula only extend this requirement fail #}
 - sls: clamav.nrpe
 - sls: clamav.diamond
 - sls: dovecot
@@ -68,6 +69,7 @@ include:
 test:
   monitoring:
     - run_all_checks
+    - wait: 60
     - order: last
     - require:
       - cmd: test_crons

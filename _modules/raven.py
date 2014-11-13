@@ -50,7 +50,7 @@ def __virtual__():
     return False
 
 
-def alert(dsn, message, level='INFO', extra=None):
+def alert(dsn, message, level='INFO', data=None):
     """
     Send a sentry alert
 
@@ -65,8 +65,8 @@ def alert(dsn, message, level='INFO', extra=None):
     :param level: The level of the message (DEBUG, INFO, WARN, ERROR)
     :param extra: Any extra parameters you want sent with the message
     """
-    if extra is None:
-        extra = {}
+    if data is None:
+        data = {}
     if dsn is not None:
         parsed = urlparse.urlparse(dsn)
         protocol = parsed.scheme
@@ -79,16 +79,14 @@ def alert(dsn, message, level='INFO', extra=None):
                 protocol = 'sync+' + protocol
         dsn = urlparse.urlunparse([protocol] + list(parsed[1:]))
     log.debug('raven.alert called with: %s, %s, %s, %s',
-              dsn, message, level, str(extra))
+              dsn, message, level, str(data))
 
     client = raven.Client(dsn=dsn)
     level = getattr(logging, level.upper(), 'INFO')
-    extra.update({'level': level})
+    data.update({'level': level})
     data = client.build_msg('raven.events.Message',
-                            message=message, data=extra)
+                            message=message, data=data)
     log.info('message object: %s', str(data))
     client.send(**data)
 
-    return {
-        'message': data
-    }
+    return True

@@ -30,6 +30,7 @@ nsca:
             Skip sentry log handler in CI test mode. -#}
         {%- if salt['pillar.get']('__test__', False) %}
     nsca_passive.transport:
+      propagate: False
       handlers:
         - syslog
         - console

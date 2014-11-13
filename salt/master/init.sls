@@ -52,7 +52,7 @@ include:
     - directory
     - user: root
     - group: root
-    - mode: 555
+    - mode: 551
 
 /srv/pillars:
   file:
@@ -121,15 +121,25 @@ salt-master-job_changes.py:
 {#- check deb filename carefully, number `1` after {1} is added only on 0.17.5-1
     pkg sub-version can be anything #}
 {%- set master_path = '{0}/pool/main/s/salt/salt-master_{1}_all.deb'.format(version, pkg_version) %}
-salt-master:
+/etc/salt/master:
   file:
     - managed
-    - name: /etc/salt/master
     - source: salt://salt/master/config.jinja2
     - template: jinja
     - user: root
     - group: root
     - mode: 400
+    - require:
+      - pkg: salt-master
+salt-master:
+  file:
+    - managed
+    - name: /etc/init/salt-master.conf
+    - template: jinja
+    - source: salt://salt/master/upstart.jinja2
+    - user: root
+    - group: root
+    - mode: 440
     - require:
       - pkg: salt-master
   service:
@@ -139,8 +149,10 @@ salt-master:
     - require:
       - service: rsyslog
       - pkg: git
+      - file: /var/cache/salt
     - watch:
       - pkg: salt-master
+      - file: /etc/salt/master
       - file: salt-master
       - cmd: salt
 {#- PID file owned by root, no need to manage #}

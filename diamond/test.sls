@@ -48,6 +48,10 @@ test:
           cpu.total.iowait: True
         DiskSpace:
           diskspace.root.byte_free: True
+{%- if grains['virtual'] != 'openvzve' %}
+        DiskUsage:
+          iostat.(md[0-9]*|[vs]d[a-z][0-9]*|xvd[a-z][0-9]*|dm\-[0-9]*).iops: True
+{%- endif %}
         Filestat:
           files.max: True
         Interrupt:
@@ -59,6 +63,17 @@ test:
         Network:
           network.lo.rx_byte: True
           network.lo.tx_byte: True
+{%- if pillar['diamond'] is defined -%}
+    {%- if pillar['diamond']['ping'] is defined -%}
+        {%- for host in pillar['diamond']['ping'] -%}
+            {%- if loop.first %}
+        Ping:
+            {%- else %}
+          ping.{{ pillar['diamond']['ping'][host]|replace('.', '_') }}: True
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endif -%}
+{%- endif %}
         ProcessStat:
           proc.procs_running: True
         Sockstat:

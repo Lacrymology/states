@@ -141,6 +141,7 @@ etherpad:
       - user: etherpad
       - file: {{ web_root_dir }}/node_modules
       - file: {{ web_root_dir }}/src
+      - file: {{ web_root_dir }}/var
       - file: {{ web_root_dir }}/src/package.json
       - file: {{ web_root_dir }}/src/static/custom
       - file: {{ web_root_dir }}/APIKEY.txt
@@ -160,6 +161,15 @@ etherpad:
       - cmd: {{ web_root_dir }}
 
 {{ web_root_dir }}/src:
+  file:
+    - directory
+    - user: etherpad
+    - group: root
+    - mode: 700
+    - require:
+      - cmd: {{ web_root_dir }}
+
+{{ web_root_dir }}/var:
   file:
     - directory
     - user: etherpad

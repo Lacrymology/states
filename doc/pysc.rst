@@ -60,6 +60,8 @@ The following functions are defined in the ``pysc`` module:
 - ``ignore_errors``: decorator that ignores any non system-terminating
   exceptions and continues execution.
 
+.. _pysc.Application:
+
 Base Application
 ~~~~~~~~~~~~~~~~
 
@@ -309,4 +311,48 @@ The following configuration values are expected or supported:
   be added to the ``config`` dictionary. This has the lowest priority,
   so any values redefined either in the main config file or from the
   command line take precedence.
+
+
+NRPE
+~~~~
+
+The ``pysc.nrpe`` module provides a simplified functional way of
+creating NRPE checks (nagios plugins) for your services and formulas.
+Its main concerns are:
+
+- **standardization** of interfaces in order to create checks that are
+  called identically across the system. This simplifies maintenance,
+  development and training of new sysadmins and developers.
+- offering a **simple** interface to generate checks.
+
+A ``pysce.nrpe.check`` application is a :ref:`pysc.Application
+<pysc.Application>` and it supports all of its command line arguments
+and configuration values. It also adds some arguments of its own and
+changes the default config file.
+
+However, to maintain readability of the nrpe formulas and
+predictability of usage ``pysc.nrpe`` does **not** allow to extend
+command line arguments.
+(????? HELP TO WORD THIS BETTER)
+Users are encouraged instead to add the required arguments to the
+``arguments`` key of the check configuration in
+``<formula>.nrpe.config.jinja2``. In the case that this is not
+possible or advaiceable for some reason, as a last resort you can use
+the ``--set='{"key": "value"}'`` command line argument, but this is
+not recommended.
+
+``pysc.nrpe``-based checks use `nagiosplugin`_ so there is a minimum of
+boilerplate involved. `nagiosplugin`_ takes care of transforming the
+output of some python classes into the nrpe standard output format and
+response codes, etc. so you can concentrate on writing your code, but
+there's still some pretty rigid conventions to follow.
+
+A check usually consists on one or more ``nagiosplugin.Resource``s
+which represent the things to be measured, and one or more
+``nagiosplugin.Context``s which are classes that analyze the
+``Resource``'s output and decide whether the result is valid or not. A
+number of other classes can be used to customize output format and
+result interpretation, but a basic ``ScalarContext`` is provided by
+``nagiosplugin`` which should serve for most basic cases. Please see
+the `nagiosplugin`_ documentation for more details.
 

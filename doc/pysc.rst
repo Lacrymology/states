@@ -356,3 +356,58 @@ result interpretation, but a basic ``ScalarContext`` is provided by
 ``nagiosplugin`` which should serve for most basic cases. Please see
 the `nagiosplugin`_ documentation for more details.
 
+Usage
+-----
+
+To create a nagios plugin you need at the very least to create your
+``Resource`` class and then register it with ``pysc.nrpe.check``.
+Here's an adaptation of an example provided in the ``nagiosplugin``
+documentation::
+
+    import nagiosplugin
+    from pysc import nrpe
+
+    class Universe(nagiosplugin.Resource):
+        def probe(self):
+            return [nagiosplugin.Metric("answer", 42)]
+
+    def check_universe(config):
+        return (
+            Universe(),
+            nagiosplugin.ScalarContext("answer", "{0}:{0}".format(
+                config['answer'])),
+        )
+
+    nrpe.check(check_universe, {"answer": 42})
+
+Let's take a look to what's going on there: In the last line, the
+function ``check_universe`` is registered as the function that will
+receive the parsed config options and command line arguments as its
+first parameter and return a sequence of arguments to be passed to a
+``nagiosplugin.Check`` instance that will be prepared by the ``pysc``
+library with some custom settings. The second argument to the
+``nrpe.check`` function is an optional dictionary of default values
+which will be inserted into the configuration values pipeline. The
+call to this check should be something similar to this::
+
+    $ universe_check --formula universe --check universe_check
+    UNIVERSE OK - answer is 42 | answer=42;42:42
+
+If you want, you can pass it a different expected answer than the
+default, just to test that the check works as expected::
+
+    $ universe_check --formula universe --check universe_check --set='{"answer": 60}'
+    UNIVERSE WARNING - answer is 42 (outside range 60:60) | answer=42;60:60
+    $ universe_check --formula universe --check universe_check --set='{"answer": 30}'
+    UNIVERSE WARNING - answer is 42 (outside range 30:30) | answer=42;30:30
+
+You can also change the value for the `answer` parameter in the
+formula configuration file (by default
+``/etc/nagios/nsca.d/universe.yml``, in this case)::
+
+    universe_check:
+      ...
+      arguments:
+        answer: 36
+
+.. _nagiosplugin: https://pythonhosted.org/nagiosplugin/

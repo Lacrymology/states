@@ -34,7 +34,6 @@ include:
 
 {%- call test_cron() %}
 - sls: backup.server
-- sls: backup.server.diamond
 - sls: backup.server.nrpe
 - sls: backup.server.ssh
 {%- endcall %}

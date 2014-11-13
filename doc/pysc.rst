@@ -448,4 +448,34 @@ ran with the ``--cronjob`` flag and formats the results for nrpe.
 The standard ``-v`` flag for nagios plugins, adds verbosity to the
 plugin output.
 
+Migrating old nrpe checks
+-------------------------
+
+There's two main things you have to take care of when migrating old
+nagios plugins:
+
+1. you have to fix any usage of custom command line arguments you
+   might have added. For the sake of standardization, ``pysc.nrpe``
+   is quite inflexible and doesn't allow you to define custom command
+   line arguments. Any command line arguments or configuration values,
+   including the keys added to the ``arguments`` dictionary in
+   ``/etc/nsca.d/<formula>.yml`` are accessible through the ``config``
+   parameter of the check preparation function, so adding them there
+   is encouraged.
+2. Instead of creating a ``nagiosplugin.Check`` instance yourself, you
+   return the parameters you would pass to its constructor as a
+   sequence (normally a tuple) from the ``prepare function``. In it
+   you can use the config values to pass parameters to the
+   ``Resource`` class constructors to be used by the check.
+
+As a little extra, remember that:
+
+3. If you are using a logger in your check (you should be), the logger
+   name should start with ``nagiosplugin.`` (so for example
+   ``nagiosplugin.universe`` would be a good name for the example
+   check above), and it should be saved to a variable called ``log``
+   at the module level. ``pysc.nrpe`` does magic to retrieve this
+   variable, and if it doesn't exist it uses a logger called
+   ``nagiosplugin.<filename of the test>``.
+
 .. _nagiosplugin: https://pythonhosted.org/nagiosplugin/

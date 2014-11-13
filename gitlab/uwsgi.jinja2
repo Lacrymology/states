@@ -6,4 +6,11 @@
   buffer-size: 32768
   env: RAILS_ENV=production
   rack: {{ rack }}
+{#-
+  GitLab create git subprocess to perform all git operations, but don't
+  handle it correctly.
+  Add `reaper: true` to force gitlab-workers call
+  waitpid -1 after each request to get rid of git zombie processes.
+#}
+  reaper: true
 {% endblock %}

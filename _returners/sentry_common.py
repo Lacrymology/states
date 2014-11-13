@@ -61,21 +61,42 @@ def returner(ret):
     If an error occurs, log it to sentry
     """
     def send_sentry(message, result=None):
+
         pillar_data = __salt__['pillar.data']()
+
+        # prepare grains
+        grains = __salt__['grains.items']()
+        # remove useless grains
+        remove_grains = ('cpu_flags', 'gpus', 'id', 'kernel', 'path', 'ps',
+                         'pythonpath', 'pythonversion', 'saltpath')
+        for key in remove_grains:
+            try:
+                del grains[key]
+            except KeyError:
+                pass
+
         sentry_data = {
-            'result': result,
-            'returned': ret,
-            'pillar': pillar_data,
-            'grains': __salt__['grains.items']()
+            'event_id': ret['jid'],
+            'logger': "sentry_common.returner",
+            'server_name': ret['id'],
+            'platform': 'python',
+            'culprit': result['name'],
         }
-        logger.debug("Sentry data {0}".format(sentry_data))
-        logger.debug("Sending {0} to sentry {1}".format(
-            message, __opts__[__virtualname__]))
+        del ret['jid']
+        del ret['id']
+        del result['name']
+
+        sentry_data['extra'] = {
+            'result': ret,
+            'pillar': pillar_data,
+            'grains': grains,
+            'striped_grains': remove_grains
+        }
         try:
             __salt__['raven.alert'](__opts__[__virtualname__], message, 'ERROR',
                                     sentry_data)
         except Exception, err:
-            logger.error("Can't send message '%s' extra '%s' to sentry: %s",
+            logger.error("Can't send message '%s' data '%s' to sentry: %s",
                          message, sentry_data, err)
 
     requisite_error = 'One or more requisite failed'

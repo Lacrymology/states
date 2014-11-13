@@ -686,9 +686,18 @@ class States(unittest.TestCase):
         Somekind of top.sls
         Mostly, just a wrapper around :func:`sls` to specify that the state is
         not clean.
+
+        If all states are .absent, no need to run a cleanup process between
+        test units execution.
         """
         global is_clean
-        is_clean = False
+        for state in states:
+            if state not in self.absent:
+                logger.debug("state '%s' isn't an absent, mark unclean", state)
+                is_clean = False
+        if is_clean:
+            logger.debug("All %d states (%s) are absent, don't mark unclean",
+                         len(states), ','.join(states))
         logger.info("Run top: %s", ', '.join(states))
         self.sls(states)
 

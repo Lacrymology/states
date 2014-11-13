@@ -190,7 +190,10 @@ http://www.onlamp.com/pub/a/linux/2000/11/16/LinuxAdmin.html
 PingCollector
 -------------
 
+ping:<host>
+~~~~~~~~~~~
 
+ICMP round trip times to that host.
 
 ProcessStatCollector
 --------------------
@@ -219,11 +222,6 @@ proc:procs_running
 ~~~~~~~~~~~~~~~~~~
 
 Number of processes in runable state.
-
-IPVSCollector
--------------
-
-
 
 SockstatCollector
 -----------------
@@ -266,7 +264,7 @@ Memory (in bytes) allocated for UDP sockets.
 sockets:used
 ~~~~~~~~~~~~
 
-?
+Total number of sockets used.
 
 TCPCollector
 ------------
@@ -274,12 +272,16 @@ TCPCollector
 tcp:ActiveOpens
 ~~~~~~~~~~~~~~~
 
-?
+The number of times TCP connections have made a direct transition to the
+SYN-SENT state from the CLOSED state.
 
 tcp:AttemptFails
 ~~~~~~~~~~~~~~~~
 
-?
+The number of times TCP connections have made a direct transition to the CLOSED
+state from either the SYN-SENT state or the SYN-RCVD state, plus the number of
+times TCP connections have made a direct transition to the LISTEN state from
+the SYN-RCVD state.
 
 tcp:CurrEstab
 ~~~~~~~~~~~~~
@@ -289,12 +291,14 @@ Number of current TCP sockets in ESTABLISHED state.
 tcp:EstabResets
 ~~~~~~~~~~~~~~~
 
-?
+The number of times TCP connections have made a direct transition to the CLOSED
+state from either the ESTABLISHED state or the CLOSE-WAIT state.
 
 tcp:InErrs
 ~~~~~~~~~~
 
-?
+The total number of segments received in error (for example, bad TCP
+checksums).
 
 tcp:ListenDrops
 ~~~~~~~~~~~~~~~

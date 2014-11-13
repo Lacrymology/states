@@ -66,6 +66,10 @@ apt-key:
   file:
     - absent
 
+/var/lib/apt/periodic/autoclean-stamp:
+  file:
+    - absent
+
 {%- for save_file in salt['file.find']('/etc/apt/sources.list.d/', name='*.save', type='f') %}
 {{ save_file }}:
   file:

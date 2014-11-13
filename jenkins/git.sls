@@ -60,7 +60,7 @@ jenkins_set_git_email:
 
 jenkins_set_git_user:
   cmd:
-    - run
+    - wait
     - name: git config --global user.name "Continous Integration"
     - user: jenkins
     - watch:

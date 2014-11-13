@@ -93,7 +93,7 @@ LOGGING = {
             'formatter': 'syslog',
             'class': 'logging.handlers.SysLogHandler',
             'address': '/dev/log',
-            'facility': 'local7'
+            'facility': '{% if 'graylog2_address' in pillar %}local7{% else %}daemon{% endif %}'
         },
         'sentry': {
             'level': 'ERROR',

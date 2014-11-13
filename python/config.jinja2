@@ -30,7 +30,7 @@ logging:
       level: {% if salt['pillar.get']('debug', False) %}DEBUG{% else %}INFO{% endif %}
       class: logging.handlers.SysLogHandler
       address: /dev/log
-      facility: local7
+      facility: daemon
       formatter: syslog
         {%- if not process_name|default(False) %}
       filters:

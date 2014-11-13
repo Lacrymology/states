@@ -29,6 +29,7 @@ Mange pysc pip package, which provide lib support for python scrips in salt comm
 #}
 
 include:
+  - local
   - pip
   - python.dev
 
@@ -56,3 +57,15 @@ pysc:
     - watch:
       - file: pysc
       - pkg: python-dev
+
+pysc_log_test:
+  file:
+    - managed
+    - name: /usr/local/bin/log_test.py
+    - source: salt://pysc/log_test.py
+    - user: root
+    - group: root
+    - mode: 550
+    - require:
+      - module: pysc
+      - file: /usr/local

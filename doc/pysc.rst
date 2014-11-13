@@ -381,11 +381,12 @@ documentation::
     nrpe.check(check_universe, {"answer": 42})
 
 Let's take a look to what's going on there: In the last line, the
-function ``check_universe`` is registered as the function that will
-receive the parsed config options and command line arguments as its
-first parameter and return a sequence of arguments to be passed to a
-``nagiosplugin.Check`` instance that will be prepared by the ``pysc``
-library with some custom settings. The second argument to the
+function ``check_universe`` is registered as the ``prepare function``.
+This is the function that will receive the parsed config options as
+the first (and only) parameter ``config`` and command line arguments
+as its first parameter and return a sequence of arguments to be passed
+to a ``nagiosplugin.Check`` instance that will be prepared by the
+``pysc`` library with some custom settings. The second argument to the
 ``nrpe.check`` function is an optional dictionary of default values
 which will be inserted into the configuration values pipeline. The
 call to this check should be something similar to this::

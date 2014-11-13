@@ -410,4 +410,42 @@ formula configuration file (by default
       arguments:
         answer: 36
 
+Command Line arguments
+----------------------
+
+In addition to the arguments defined by :ref:`pysc.Application
+<pysc.Application>`, the following arguments are supported:
+
+--formula
++++++++++
+
+**Mandatory**. The name of the formula. This is used together with the
+``nsca_dir`` configuration key to build the filename of the checks
+configuration.
+
+--check
++++++++
+
+**Mandatory**. This is expected to be one of the keys in the formula
+configuration file selected by ``--formula``
+
+--cronjob
++++++++++
+
+Set this flag when the check is ran from a cronjob rather than from
+nrpe or the nsca daemon. This makes the check write its results to a
+file to be collected later.
+
+--cronresult
+++++++++++++
+
+When this flag is set, the job reads the results from the file a check
+ran with the ``--cronjob`` flag and formats the results for nrpe.
+
+--verbose
++++++++++
+
+The standard ``-v`` flag for nagios plugins, adds verbosity to the
+plugin output.
+
 .. _nagiosplugin: https://pythonhosted.org/nagiosplugin/

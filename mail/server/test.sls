@@ -50,7 +50,7 @@ include:
 - sls: amavis
 - sls: amavis.nrpe
 - sls: amavis.diamond
-- sls: amavis.clamav
+{# - sls: amavis.clamav this formula only extend this requirement fail #}
 - sls: clamav.nrpe
 - sls: clamav.diamond
 - sls: dovecot

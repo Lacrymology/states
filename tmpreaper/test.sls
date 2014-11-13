@@ -33,7 +33,6 @@ include:
 
 {%- call test_cron() %}
 - sls: tmpreaper
-- sls: tmpreaper.diamond
 - sls: tmpreaper.nrpe
 {%- endcall %}
 

@@ -26,6 +26,7 @@ Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
 # {{ pillar['message_do_not_modify'] }}
+APT::Periodic::AutocleanInterval "1";
 APT::Install-Recommends "0";
 APT::Clean-Installed "true";
 {%- if salt['pillar.get']('proxy_server', False) %}

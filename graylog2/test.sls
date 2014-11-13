@@ -34,18 +34,18 @@ include:
   - graylog2.server.diamond
   - graylog2.server.nrpe
   - graylog2.web
-  - graylog2.web.nrpe
   - graylog2.web.diamond
+  - graylog2.web.nrpe
 
 {%- call test_cron() %}
 - sls: graylog2.server
-- sls: graylog2.server.diamond
-- sls: graylog2.server.nrpe
 - sls: graylog2.server.backup
 - sls: graylog2.server.backup.nrpe
+- sls: graylog2.server.diamond
+- sls: graylog2.server.nrpe
 - sls: graylog2.web
-- sls: graylog2.web.nrpe
 - sls: graylog2.web.diamond
+- sls: graylog2.web.nrpe
 {%- endcall %}
 
 graylog2_log_one_msg:
@@ -54,6 +54,14 @@ graylog2_log_one_msg:
     - name: logger test
     - require:
       - service: graylog2-server
+
+test_import_general_syslog_udp_input:
+  cmd:
+    - script
+    - name: import_general_syslog_udp_input graylog2-0-20
+    - source: salt://graylog2/server/import_general_syslog_udp_input.py
+    - require:
+      - sls: graylog2.server
 
 test:
   monitoring:
@@ -71,15 +79,6 @@ test:
 graylog2_server-es_cluster:
   monitoring:
     - run_check
-    - wait: 60
     - accepted_failure: 1 nodes in cluster (outside range 2:2)
     - require:
-      - sls: graylog2.server.nrpe
-
-test_import_general_syslog_udp_input:
-  cmd:
-    - script
-    - name: import_general_syslog_udp_input graylog2-0-20
-    - source: salt://graylog2/server/import_general_syslog_udp_input.py
-    - require:
-      - sls: graylog2.server
+      - monitoring: test

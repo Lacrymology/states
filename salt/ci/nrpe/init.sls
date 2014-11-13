@@ -50,5 +50,5 @@ extend:
 {#- workaround for include sls bug #}
 salt_ci_dummy:
   cmd:
-    - run
+    - wait
     - name: 'true'

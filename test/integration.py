@@ -691,6 +691,7 @@ class States(unittest.TestCase):
         test units execution.
         """
         global is_clean
+        is_clean = True
         for state in states:
             if state not in self.absent:
                 logger.debug("state '%s' isn't an absent, mark unclean", state)

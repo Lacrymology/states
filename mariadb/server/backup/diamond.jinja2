@@ -7,9 +7,9 @@ modification, are permitted provided that the following conditions are met:
 
 1. Redistributions of source code must retain the above copyright notice, this
    list of conditions and the following disclaimer.
-   2. Redistributions in binary form must reproduce the above copyright notice,
-      this list of conditions and the following disclaimer in the documentation
-         and/or other materials provided with the distribution.
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -25,22 +25,20 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Quan Tong Anh <quanta@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
-{%- from 'cron/test.sls' import test_cron with context %}
-include:
-  - backup.server
-  - backup.server.diamond
-  - backup.server.nrpe
-  - backup.server.ssh
-
-{%- call test_cron() %}
-- sls: backup.server
-- sls: backup.server.nrpe
-- sls: backup.server.ssh
-{%- endcall %}
-
-test:
-  monitoring:
-    - run_all_checks
-    - order: last
-    - require:
-      - cmd: test_crons
+{%- macro mariadb_backup_diamond(deployment, prefix=None) %}
+  {%- if not prefix %}
+    {%- set prefix = deployment %}
+  {%- endif %}
+{{ deployment }}_backup_diamond_resources:
+  file:
+    - accumulated
+    - name: processes
+    - template: jinja
+    - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
+    - require_in:
+      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
+    - text:
+      - |
+        [[backup-{{ deployment }}-mysql]]
+        cmdline = ^\/usr\/local\/bin\/backup-mysql {{ salt['pillar.get'](prefix + ':db:name', deployment) }}
+{%- endmacro %}

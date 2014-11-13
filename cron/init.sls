@@ -71,14 +71,6 @@ cron:
 
 /etc/cron.daily/apt-clean:
   file:
-    - managed
-    - user: root
-    - group: root
-    - mode: 500
-    - template: jinja
-    - source: salt://cron/apt_clean.jinja2
-    - require:
-      - pkg: cron
-      - file: bash
+    - absent
 
 {#- PID file owned by root, no need to manage #}

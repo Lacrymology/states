@@ -65,13 +65,9 @@ test:
           network.lo.tx_byte: True
 {%- if pillar['diamond'] is defined -%}
     {%- if pillar['diamond']['ping'] is defined -%}
-        {%- for host in pillar['diamond']['ping'] -%}
-            {%- if loop.first %}
+        {%- set first_host = pillar['diamond']['ping']|first %}
         Ping:
-            {%- else %}
-          ping.{{ pillar['diamond']['ping'][host]|replace('.', '_') }}: True
-            {%- endif -%}
-        {%- endfor -%}
+          ping.{{ pillar['diamond']['ping'][first_host]|replace('.', '_') }}: True
     {%- endif -%}
 {%- endif %}
         ProcessStat:

@@ -104,7 +104,7 @@ def test(name, map):
             fullpath = '.'.join((__grains__['id'], 'os', metric))
             fullpathObj = re.compile(fullpath)
             found = False
-            for k in collected_metrics.keys():
+            for k in collected_metrics:
                 if fullpathObj.match(k):
                     found = True
                     key = k
@@ -119,17 +119,17 @@ def test(name, map):
                     value = None
 
                 if (not metrics[metric]) and (not value):
+                    ret['comment'] = 'Expected non-zero value '
+                    'for the {0}'.format(key)
+                else:
                     change[key] = {
-                        'old': 'Expected non-zero numerical value',
-                        'new': collected_metrics[key],
+                        'old': 'Expected {0} will be recorded'.format(key),
+                        'new': '{0} = {1}'.format(key, collected_metrics[key])
                     }
             else:
-                change[fullpath] = {
-                    'old': "Expected",
-                    'new': 'Not collected',
-                }
+                ret['comment'] = '{0} is not collected'.format(fullpath)
 
-        if change:
+        if ret['comment']:
             ret['result'] = False
             return ret
 

@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Dang Tung Lam <lam@robotinfra.com>
 Maintainer: Van Pham Diep <favadi@robotinfra.com>
 -#}
-{%- from 'cron/test.sls' import test_cron with context %}
+{%- from 'cron/test.jinja2' import test_cron with context %}
 include:
   - etherpad
   - etherpad.backup

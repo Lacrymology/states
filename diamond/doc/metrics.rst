@@ -26,11 +26,19 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-Default Diamond Metrics
-=======================
+Metrics
+=======
 
 CPUCollector
 ------------
+
+Take a look at section 1.8 in .. _this:
+https://www.kernel.org/doc/Documentation/filesystems/proc.txt document for more
+details.
+
+These numbers identify the amount of time the CPU has spent performing
+different kinds of work. Time units are in USER_HZ (typically hundredths of a
+second).
 
 cpu:guest
 ~~~~~~~~~
@@ -76,7 +84,7 @@ Time spent in other operating system when running in a virtualized environment.
 cpu:system
 ~~~~~~~~~~
 
-Time spent in system mode.
+Time spent in kernel mode.
 
 cpu:user
 ~~~~~~~~
@@ -99,7 +107,9 @@ Total number of free bytes.
 byte_percentfree
 ~~~~~~~~~~~~~~~~
 
-Percentage of free bytes.
+Percentage of free bytes::
+
+  byte_free * 100 / total
 
 byte_used
 ~~~~~~~~~
@@ -138,7 +148,7 @@ FilestatCollector
 files:assigned
 ~~~~~~~~~~~~~~
 
-The total allocated file handles
+The total allocated file handles.
 
 files:unused
 ~~~~~~~~~~~~
@@ -153,8 +163,9 @@ The maximum file handles that can be allocated
 InterruptCollector
 ------------------
 
-Details .. _here:
+Take a look at .. _this:
 https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/s2-proc-interrupts.html
+for more details.
 
 LoadAverageCollector
 --------------------
@@ -163,7 +174,7 @@ loadavg:(01|05|15)
 ~~~~~~~~~~~~~~~~~~
 
 The number of jobs in the run queue (state R) or waiting for disk I/O (state D)
-aver‐ aged over 1, 5, and 15 minutes.
+averaged over 1, 5, and 15 minutes.
 
 loadavg:processes_running
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -178,8 +189,9 @@ The number of kernel scheduling entities that currently exist on the system.
 MemoryCollector
 ---------------
 
-Check out .. _this:
+Take a look at .. _this:
 https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/s2-proc-meminfo.html
+for more details.
 
 NetworkCollector
 ----------------
@@ -338,7 +350,7 @@ Number of forward retransmits.
 tcp:TCPLoss
 ~~~~~~~~~~~
 
-?
+.. todo:: Find out what it is.
 
 tcp:TCPLostRetransmit
 ~~~~~~~~~~~~~~~~~~~~~
@@ -366,6 +378,9 @@ The number of minutes the system has been up.
 VMStatCollector
 ---------------
 
+Take a look at .. _this: http://www.tldp.org/LDP/tlk/mm/memory.html for more
+details.
+
 vmstat:pgpgin
 ~~~~~~~~~~~~~
 
@@ -381,7 +396,7 @@ vmstat:pswpin
 
 Number of kilobytes the system has swapped in from disk per second.
 
-vmstat:pwwpout
+vmstat:pswpout
 ~~~~~~~~~~~~~~
 
 Number of kilobytes the system has swapped out to disk per second.

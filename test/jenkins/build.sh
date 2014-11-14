@@ -110,8 +110,8 @@ finish_run_test_time=$(date +%s)
 echo "TIME-METER: Run integration.py took: $((finish_run_test_time - start_run_test_time)) seconds"
 
 for ltype in stdout stderr; do
-    run_and_check_return_code 30 "salt-call -c $CUSTOM_CONFIG_DIR cmd.run \"xz -c /root/salt/$ltype.prepare > /tmp/$BUILD_IDENTITY-$ltype.prepare.log.xz\""
-    run_and_check_return_code 30 "salt-call -c $CUSTOM_CONFIG_DIR cmd.run \"xz -c /root/salt/$ltype.log > /tmp/$BUILD_IDENTITY-$ltype.log.xz\""
+    sudo salt -t 30 "$BUILD_IDENTITY" --output json cmd.run_all "salt-call -c $CUSTOM_CONFIG_DIR cmd.run \"xz -c /root/salt/$ltype.prepare > /tmp/$BUILD_IDENTITY-$ltype.prepare.log.xz\""
+    sudo salt -t 30 "$BUILD_IDENTITY" --output json cmd.run_all "salt-call -c $CUSTOM_CONFIG_DIR cmd.run \"xz -c /root/salt/$ltype.log > /tmp/$BUILD_IDENTITY-$ltype.log.xz\""
 done
 
 sudo salt -t 60 "$BUILD_IDENTITY" --output json cmd.run_all "salt-call -l info -c $CUSTOM_CONFIG_DIR state.sls test.jenkins.result"

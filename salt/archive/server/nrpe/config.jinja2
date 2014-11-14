@@ -34,5 +34,5 @@ salt_archive_timestamp:
   description: Salt Archive Synchronization
   check_interval: {{ 15 * 60 }} {#- 15 hours #}
   freshness_threshold: {{ ((15 * 60) + 10) * 60 }} {#- 24 hours + 10 minutes #}
-  command: '/usr/lib/nagios/plugins/check_file_age -w {{ max_age }} -c {{ max_age }} {{ opts['cachedir'] }}/sync_timestamp.dat'
+  command: 'sudo /usr/lib/nagios/plugins/check_file_age -w {{ max_age }} -c {{ max_age }} {{ opts['cachedir'] }}/sync_timestamp.dat'
 {%- endif -%}

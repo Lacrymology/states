@@ -28,7 +28,7 @@ Maintainer: Van Pham Diep <favadi@robotinfra.com>
 Nagios NRPE check for Sentry.
 -#}
 {%- set formula = 'sentry' -%}
-{%- from 'nrpe/passive.sls' import passive_check with context %}
+{%- from 'nrpe/passive.jinja2' import passive_check with context %}
 include:
   - apt.nrpe
   - bash.nrpe

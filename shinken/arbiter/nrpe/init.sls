@@ -27,7 +27,7 @@ Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 
 Nagios NRPE check for Shinken Arbiter.
 -#}
-{%- from 'nrpe/passive.sls' import passive_check with context %}
+{%- from 'nrpe/passive.jinja2' import passive_check with context %}
 include:
   - apt.nrpe
   - nrpe

@@ -26,5 +26,5 @@ Author: Van Diep Pham <favadi@robotinfra.com>
 Maintainer: Van Diep Pham <favadi@robotinfra.com>
 -#}
 
-{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{%- from 'nrpe/passive.jinja2' import passive_absent with context %}
 {{ passive_absent('gitlab.backup') }}

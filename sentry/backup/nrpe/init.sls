@@ -33,7 +33,7 @@ include:
   - cron.nrpe
   - nrpe
 
-{%- from 'nrpe/passive.sls' import passive_check with context -%}
+{%- from 'nrpe/passive.jinja2' import passive_check with context -%}
 {{ passive_check('sentry.backup') }}
 
 extend:

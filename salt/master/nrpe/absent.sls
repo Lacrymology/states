@@ -54,5 +54,5 @@ salt_mine_collect_minions_data:
     - require:
       - file: salt_mine_collect_minions_data
 
-{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{%- from 'nrpe/passive.jinja2' import passive_absent with context %}
 {{ passive_absent('salt.master') }}

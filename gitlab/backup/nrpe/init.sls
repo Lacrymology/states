@@ -32,7 +32,7 @@ include:
   - cron.nrpe
   - sudo.nrpe
 
-{%- from 'nrpe/passive.sls' import passive_check with context %}
+{%- from 'nrpe/passive.jinja2' import passive_check with context %}
 {{ passive_check('gitlab.backup') }}
 
 extend:

@@ -2,7 +2,7 @@
  Monitoring check to test the entire mail stack (IMAP, SMTP, LDAP, antivirus,
  antispam, etc.
  #}
-{%- from 'nrpe/passive.sls' import passive_check with context %}
+{%- from 'nrpe/passive.jinja2' import passive_check with context %}
 include:
   - cron
   - nrpe

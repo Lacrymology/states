@@ -38,5 +38,5 @@ Remove Nagios NRPE check for tomcat.
   file:
     - absent
 
-{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{%- from 'nrpe/passive.jinja2' import passive_absent with context %}
 {{ passive_absent('tomcat.6') }}

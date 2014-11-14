@@ -32,7 +32,7 @@ include:
   - nrpe
   - postgresql.server
 
-{%- from 'nrpe/passive.sls' import passive_check with context -%}
+{%- from 'nrpe/passive.jinja2' import passive_check with context -%}
 {%- call passive_check('openerp.backup') %}
   - service: postgresql
 {%- endcall %}

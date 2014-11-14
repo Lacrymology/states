@@ -34,7 +34,7 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 
 Nagios NRPE check for Tomcat6.
 -#}
-{%- from 'nrpe/passive.sls' import passive_check with context %}
+{%- from 'nrpe/passive.jinja2' import passive_check with context %}
 include:
   - apt.nrpe
   - nrpe

@@ -27,7 +27,7 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 
 Nagios NRPE check for Salt-API Server.
 -#}
-{%- from 'nrpe/passive.sls' import passive_check with context %}
+{%- from 'nrpe/passive.jinja2' import passive_check with context %}
 {%- set ssl = salt['pillar.get']('salt_master:ssl', False) -%}
 include:
   - apt.nrpe

@@ -346,7 +346,7 @@ nsca_passive:
       - file: /etc/nagios/nsca.d
       - file: hostname
 
-{% from 'nrpe/passive.sls' import passive_check with context %}
+{% from 'nrpe/passive.jinja2' import passive_check with context %}
 {{ passive_check('nrpe') }}
 
 {% if not salt['pillar.get']('debug', False) %}

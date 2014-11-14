@@ -49,12 +49,33 @@ server {
 
 {% include "nginx/block_hacks.jinja2" %}
 
+{%- if salt['pillar.get']('etherpad:secret_url', False) %}
+  {%- set secret_url = pillar['etherpad']['secret_url'] %}
+    location = /{{ secret_url}} {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $http_host;
+        proxy_pass http://etherpad/;
+    }
+
+    location /{{ secret_url}}/ {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $http_host;
+        proxy_pass http://etherpad/;
+    }
+
+    location / {
+        return 403;
+    }
+{%- else  %}
     location / {
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header Host $http_host;
         proxy_pass http://etherpad;
     }
+{%- endif  %}
 
 {%- if salt['pillar.get']('etherpad:restrict_referer', False) %}
     if ($request_method ~ GET) {

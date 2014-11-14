@@ -119,17 +119,18 @@ def test(name, map):
                     value = None
 
                 if (not metrics[metric]) and (not value):
-                    ret['comment'] = 'Expected non-zero value '
-                    'for the {0}'.format(key)
+                    ret['comment'] = ('{0}: Expected non-zero value '
+                                      'for the {1}').format(collector, key)
                 else:
                     change[key] = {
-                        'old': 'Expected {0} will be recorded'.format(key),
-                        'new': '{0} = {1}'.format(key, collected_metrics[key])
+                        'old': 'Expected to be recorded',
+                        'new': 'Value = {0}'.format(collected_metrics[key])
                     }
             else:
-                ret['comment'] = '{0} is not collected'.format(fullpath)
+                ret['comment'] = '{0}: {1} is not collected'.format(
+                    collector, fullpath)
 
-        if ret['comment']:
+        if not change:
             ret['result'] = False
             return ret
 

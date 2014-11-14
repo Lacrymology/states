@@ -45,7 +45,7 @@ include:
 sudo_salt_archive_server_nrpe:
   file:
     - managed
-    - name: /etc/sudoers.d/salt_server_nrpe
+    - name: /etc/sudoers.d/salt_archive_server_nrpe
     - template: jinja
     - source: salt://salt/archive/server/nrpe/sudo.jinja2
     - mode: 440

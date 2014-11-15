@@ -66,4 +66,32 @@ sudo_salt_minion_nrpe:
       - service: nagios-nrpe-server
       - service: nsca_passive
 
+/usr/lib/nagios/plugins/check_minion_pillar_render.py:
+  file:
+    - managed
+    - source: salt://salt/minion/nrpe/check_pillar.py
+    - user: nagios
+    - group: nagios
+    - mode: 550
+    - require:
+      - module: nrpe-virtualenv
+      - pkg: nagios-nrpe-server
+      - file: nsca-salt.minion
+    - require_in:
+      - service: nagios-nrpe-server
+      - service: nsca_passive
+
+salt_minion_pillar_render_data_collector:
+  file:
+    - name: /etc/cron.twice_daily/salt_minion_pillar
+    - managed
+    - user: root
+    - group: root
+    - mode: 500
+    - template: jinja
+    - source: salt://salt/minion/nrpe/cron.jinja2
+    - require:
+      - file: /etc/cron.twice_daily
+      - file: /usr/lib/nagios/plugins/check_minion_pillar_render.py
+
 {{ passive_check('salt.minion') }}

@@ -26,7 +26,7 @@ Author: Dang Tung Lam <lam@robotinfra.com>
 Maintainer: Van Pham Diep <favadi@robotinfra.com>
 -#}
 {%- set formula = 'ejabberd' -%}
-{%- from 'nrpe/passive.sls' import passive_check with context %}
+{%- from 'nrpe/passive.jinja2' import passive_check with context %}
 include:
   - apt.nrpe
   - erlang.nrpe

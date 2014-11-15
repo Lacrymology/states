@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Nicolas Plessis <niplessis@gmail.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
-{%- from 'nrpe/passive.sls' import passive_check with context %}
+{%- from 'nrpe/passive.jinja2' import passive_check with context %}
 include:
   - apt.nrpe
   - cron.nrpe

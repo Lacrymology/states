@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Lam Dang Tung <lam@robotinfra.com>
 Maintainer: Van Diep Pham <favadi@robotinfra.com>
 -#}
-{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{%- from 'nrpe/passive.jinja2' import passive_absent with context %}
 {{ passive_absent('openerp') }}
 
 /etc/nagios/nrpe.d/openerp-uwsgi.cfg:

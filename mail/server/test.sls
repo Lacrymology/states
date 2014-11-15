@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
-{%- from 'cron/test.sls' import test_cron with context %}
+{%- from 'cron/test.jinja2' import test_cron with context %}
 include:
   - amavis
   - amavis.nrpe

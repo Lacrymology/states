@@ -276,7 +276,7 @@ Service
 
 Services which run with other user than root, an have a PID file belong to
 that custom user should manage the PID file. Macro ``manage_pid`` in
-``macro.sls`` helps handle that case.
+``macros.jinja2`` helps handle that case.
 
 Logging
 -------
@@ -331,6 +331,11 @@ later, if that pillar is deleted as user don't want to use it anymore, the file
 still located on file, it still takes effect, it just not managed by Salt.
 Therefore, it's good to have an ``{%- else %}`` and absent that file to avoid
 this pitfall.
+
+Macros
+------
+
+File which contains only Jinja2 macros must end with ``.jinja2``.
 
 Documentation
 -------------

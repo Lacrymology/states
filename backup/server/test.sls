@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Quan Tong Anh <quanta@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
-{%- from 'cron/test.sls' import test_cron with context %}
+{%- from 'cron/test.jinja2' import test_cron with context %}
 include:
   - backup.server
   - backup.server.diamond

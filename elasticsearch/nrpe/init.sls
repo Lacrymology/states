@@ -27,7 +27,7 @@ Maintainer: Van Pham Diep <favadi@robotinfra.com>
 -#}
 {%- set formula = 'elasticsearch' -%}
 {%- set ssl = salt['pillar.get'](formula + ':ssl', False) -%}
-{%- from 'nrpe/passive.sls' import passive_check with context %}
+{%- from 'nrpe/passive.jinja2' import passive_check with context %}
 include:
   - apt.nrpe
   - bash.nrpe

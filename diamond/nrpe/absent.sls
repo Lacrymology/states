@@ -27,6 +27,6 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 
 Remove Nagios NRPE checks for diamond.
 -#}
-{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{%- from 'nrpe/passive.jinja2' import passive_absent with context %}
 {{ passive_absent('diamond') }}
 

@@ -26,7 +26,7 @@ Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 
 -#}
-{%- from 'nrpe/passive.sls' import passive_check with context %}
+{%- from 'nrpe/passive.jinja2' import passive_check with context %}
 include:
   - apt.nrpe
   - nrpe

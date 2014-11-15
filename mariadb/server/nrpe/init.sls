@@ -32,7 +32,7 @@ Institute for Institutional Innovation by Data Driven Design Inc.
 Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
-{%- from 'nrpe/passive.sls' import passive_check with context %}
+{%- from 'nrpe/passive.jinja2' import passive_check with context %}
 include:
   - apt.nrpe
   - mariadb.nrpe

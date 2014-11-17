@@ -209,7 +209,9 @@ Document those pillar keys in the :doc:`/doc/pillar` file in formula directory.
 Configs
 -------
 
-All app/daemon log messages must be sent to syslog or graylog2 (if support).
+All app/daemon log messages must be sent to syslog to :doc:`/rsyslog/doc/index`
+and :doc:`/graylog2/doc/index` (if support). See below for more details on
+logging.
 
 All comments must be commented by jinja2 comment. User should only get a config
 file with no comment. Reason for this is make user in trouble if they do
@@ -274,7 +276,34 @@ Service
 
 Services which run with other user than root, an have a PID file belong to
 that custom user should manage the PID file. Macro ``manage_pid`` in
-``macro.sls`` helps handle that case.
+``macros.jinja2`` helps handle that case.
+
+Logging
+-------
+
+Some applications have the ability to send logs directly to
+:doc:`/graylog2/doc/index` using `GELF <http://www.graylog2.org/gelf>`__
+protocol. Which itself is better suited than ``syslog`` protocol as it contains
+additional metadata.
+
+But, logs must also be sent (with less useful data) to syslog daemon
+:doc:`/rsyslog/doc/index` in case :doc:`/graylog2/doc/index` is unreachable and
+to have all logs copied locally.
+
+As :doc:`/rsyslog/doc/index` forward incoming logs received over syslog protocol
+to :doc:`/graylog2/doc/index`, an application that send logs to both
+:doc:`/graylog2/doc/index` over `GELF <http://www.graylog2.org/gelf>`__ and
+:doc:`/rsyslog/doc/index` over syslog will cause :doc:`/graylog2/doc/index` to
+receive and index two separate message for the same log record. The one
+forwarded by :doc:`/rsyslog/doc/index` will even be less useful, as it will
+contains no metadata. And it might even looklook as two duplicate log records.
+
+To avoid duplication, :doc:`/rsyslog/doc/index` is configured to forward all
+logs except those in ``local7`` facility to :doc:`/graylog2/doc/index`. So, all
+applications that send log records to :doc:`/graylog2/doc/index` over
+`GELF <http://www.graylog2.org/gelf>`__ send a copy to :doc:`/rsyslog/doc/index`
+over syslog with ``local7`` facility.
+All other applications must never use ``local7``.
 
 Backup
 ------
@@ -302,6 +331,11 @@ later, if that pillar is deleted as user don't want to use it anymore, the file
 still located on file, it still takes effect, it just not managed by Salt.
 Therefore, it's good to have an ``{%- else %}`` and absent that file to avoid
 this pitfall.
+
+Macros
+------
+
+File which contains only Jinja2 macros must end with ``.jinja2``.
 
 Documentation
 -------------

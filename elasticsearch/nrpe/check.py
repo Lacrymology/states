@@ -43,7 +43,7 @@ log = logging.getLogger("nagiosplugin.elasticsearch.cluster_nodes")
 
 def elasticsearch_version():
     req = requests.get('http://127.0.0.1:9200/')
-    major, minor, bug = req.json['version']['number'].split('.')
+    major, minor, bug = req.json()['version']['number'].split('.')
     return int(major), int(minor), int(bug)
 
 
@@ -59,7 +59,7 @@ class ClusterNodes(nagiosplugin.Resource):
         req = requests.get('http://127.0.0.1:9200/_cluster/' + rsc)
         log.debug("response: %s", req.content)
         log.info("ClusterNode.probe finished")
-        return [nagiosplugin.Metric('nodes', len(req.json['nodes']), min=0)]
+        return [nagiosplugin.Metric('nodes', len(req.json()['nodes']), min=0)]
 
 
 def check_procs(config):

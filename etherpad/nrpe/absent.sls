@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Dang Tung Lam <lam@robotinfra.com>
 Maintainer: Van Pham Diep <favadi@robotinfra.com>
 -#}
-{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{%- from 'nrpe/passive.jinja2' import passive_absent with context %}
 {{ passive_absent('etherpad') }}
 
 /etc/nagios/nrpe.d/etherpad-nginx.cfg:

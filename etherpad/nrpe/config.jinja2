@@ -40,6 +40,23 @@ etherpad_logger:
   command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -C logger -a "-t etherpad"'
   dependencies:
     - etherpad_procs
+{%- if salt['pillar.get']('__test__', False) %}
+  {%- if salt['pillar.get']('etherpad' + ':ssl', False) %}
+    {%- set http_result = "301 Moved Permanently" %}
+etherpad_javascript_https:
+  description: Etherpad JavaScript HTTPs
+  command: /usr/lib/nagios/plugins/check_http -S -H "{{ salt['pillar.get']('etherpad' ~ ':hostnames', ['127.0.0.1'])[0] }}" -u "/javascripts/lib/ep_etherpad-lite/static/js/pad.js?callback=require.define" -I "{{ salt['network.ip_addrs']()[0] }}"
+  dependencies:
+    - etherpad_procs
+  {%- else %}
+    {%- set http_result = "200 OK" %}
+  {%- endif %}
+etherpad_javascript_http:
+  description: Etherpad JavaScript
+  command: /usr/lib/nagios/plugins/check_http -H "{{ salt['pillar.get']('etherpad' ~ ':hostnames', ['127.0.0.1'])[0] }}" -u "/javascripts/lib/ep_etherpad-lite/static/js/pad.js?callback=require.define" -I "{{ salt['network.ip_addrs']()[0] }}" -e "{{ http_result }}"
+  dependencies:
+    - etherpad_procs
+{%- endif  %}
 
 {%- from 'postgresql/server/nrpe/instance.jinja2' import postgresql_instance_prefix with context %}
 {{ postgresql_instance_prefix('etherpad') }}

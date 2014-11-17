@@ -98,7 +98,7 @@ check_psql_encoding.py:
     - watch_in:
       - service: nagios-nrpe-server
 
-{%- from 'nrpe/passive.sls' import passive_check with context %}
+{%- from 'nrpe/passive.jinja2' import passive_check with context %}
 {{ passive_check('postgresql.common') }}
 
 extend:

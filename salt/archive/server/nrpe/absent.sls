@@ -33,5 +33,9 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
   file:
     - absent
 
-{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{%- from 'nrpe/passive.jinja2' import passive_absent with context %}
 {{ passive_absent('salt.archive.server') }}
+
+/etc/sudoers.d/salt_archive_server_nrpe:
+  file:
+    - absent

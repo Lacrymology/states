@@ -34,7 +34,7 @@ Maintainer: Lam Dang Tung <lam@robotinfra.com>
 
 Remove GitLab NRPE checks.
 -#}
-{%- from 'nrpe/passive.sls' import passive_absent with context %}
+{%- from 'nrpe/passive.jinja2' import passive_absent with context %}
 {{ passive_absent('gitlab') }}
 
 /etc/nagios/nrpe.d/gitlab-nginx.cfg:

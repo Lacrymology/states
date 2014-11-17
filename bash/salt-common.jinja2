@@ -53,9 +53,9 @@ log_start_script() {
     _log_start_time=$(date +%s)
 
     if [ "$#" -gt 0 ]; then
-        logger -t "${_log_tag}" -p 'local7.debug' "Started with args: $*"
+        logger -t "${_log_tag}" -p 'local0.debug' "Started with args: $*"
     else
-        logger -t "${_log_tag}" -p 'local7.debug' "Started at $(date -d @$_log_start_time)"
+        logger -t "${_log_tag}" -p 'local0.debug' "Started at $(date -d @$_log_start_time)"
     fi
 }
 
@@ -68,19 +68,19 @@ log_stop_script() {
 
     if [[ ${_log_start_time} -ne 0 ]]; then
         _log_execution_time=$(( _log_stop_time - _log_start_time ))
-        logger -t "${_log_tag}" -p 'local7.info' \
+        logger -t "${_log_tag}" -p 'local0.info' \
             "Finish after ${_log_execution_time} seconds, return code: ${_return_code}"
     else
-        logger -t "${_log_tag}" -p 'local7.info' \
+        logger -t "${_log_tag}" -p 'local0.info' \
             "Finish after N/A seconds, return code: ${_return_code}"
     fi
 
     if [[ -n "${_pid_file}" ]]; then
         test -f "${_pid_file}" && rm -f "${_pid_file}"
-        logger -t "${_log_tag}" -p 'local7.info' \
+        logger -t "${_log_tag}" -p 'local0.info' \
             "PID file: ${_pid_file} deleted"
     else
-        logger -t "${_log_tag}" -p 'local7.info' \
+        logger -t "${_log_tag}" -p 'local0.info' \
             "PID file does not exist"
     fi
 }
@@ -98,7 +98,7 @@ locking_script() {
         pid=$$
         echo $pid 1>&8
     else
-        logger -t "${_log_tag}" -p 'local7.warning' \
+        logger -t "${_log_tag}" -p 'local0.warning' \
             "Cannot run multiple instances at the same time. The first instance is running as PID $_prev_pid"
         echo $_prev_pid > "${_pid_file}"
         exit 1

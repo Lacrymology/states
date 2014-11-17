@@ -3,7 +3,7 @@ include:
   - clamav.nrpe
   - clamav.diamond
 
-{%- from 'cron/test.sls' import test_cron with context %}
+{%- from 'cron/test.jinja2' import test_cron with context %}
 {%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 
 {%- call test_cron() %}

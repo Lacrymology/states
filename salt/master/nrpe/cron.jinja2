@@ -27,5 +27,4 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
 #!/bin/bash
 # {{ pillar['message_do_not_modify'] }}
-set -e
 /usr/lib/nagios/plugins/check_mine_minions.py --formula=salt.master --check=salt_master_mine --cronjob

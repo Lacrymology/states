@@ -36,3 +36,8 @@ pysc:
     - requirements: {{ opts['cachedir'] }}/pip/pysc
     - require_in:
       - file: pysc
+
+pysc_log_test:
+  file:
+    - absent
+    - name: /usr/local/bin/log_test.py

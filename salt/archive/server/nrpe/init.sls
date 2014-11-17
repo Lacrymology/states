@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
-{%- from 'nrpe/passive.sls' import passive_check with context %}
+{%- from 'nrpe/passive.jinja2' import passive_check with context %}
 include:
   - apt.nrpe
   - bash.nrpe
@@ -39,5 +39,21 @@ include:
 {% if salt['pillar.get']('salt_archive:ssl', False) %}
   - ssl.nrpe
 {%- endif %}
+  - sudo
+  - sudo.nrpe
+
+sudo_salt_archive_server_nrpe:
+  file:
+    - managed
+    - name: /etc/sudoers.d/salt_archive_server_nrpe
+    - template: jinja
+    - source: salt://salt/archive/server/nrpe/sudo.jinja2
+    - mode: 440
+    - user: root
+    - group: root
+    - require:
+      - pkg: sudo
+    - require_in:
+        - monitoring: salt.archive.server-monitoring
 
 {{ passive_check('salt.archive.server', pillar_prefix='salt_archive', check_ssl_score=True) }}

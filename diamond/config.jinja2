@@ -77,8 +77,9 @@ batch = {{ salt['pillar.get']('diamond:batch', 256) }}
 {#- File to write archive log files #}
 log_file = {{ opts['cachedir'] }}/diamond.archive.log
 
-{#- Number of days to keep archive log files #}
-days = 7
+{#- Only keep the current archive log file, 
+    which is used to test collectors #}
+days = 0
 {%- endif %}
 
 #[[StatsdHandler]]
@@ -219,7 +220,7 @@ args = ('requests+{{ pillar['sentry_dsn'] }}',)
 level = NOTSET
 formatter = syslog
 class = logging.handlers.SysLogHandler
-args = ('/dev/log', handlers.SysLogHandler.LOG_LOCAL7)
+args = ('/dev/log', handlers.SysLogHandler.{% if salt['pillar.get']('graylog2_address', False) %}LOG_LOCAL7{% else %}LOG_DAEMON{% endif %})
 
 [formatter_syslog]
 class = logging.Formatter

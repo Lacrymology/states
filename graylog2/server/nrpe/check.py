@@ -67,7 +67,7 @@ class Graylog2Throughput(nagiosplugin.Resource):
                 r = requests.get(
                     self._api_url, auth=(self._username, self._password))
                 log.debug("response: %s", r.content)
-                throughput = r.json['throughput']
+                throughput = r.json()['throughput']
                 log.debug("throughput : %s", str(throughput))
                 if throughput != 0:
                     break

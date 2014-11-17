@@ -97,7 +97,7 @@ run_and_check_return_code 60 "salt-call -c $CUSTOM_CONFIG_DIR saltutil.sync_all 
 run_and_check_return_code 600 "salt-call -c $CUSTOM_CONFIG_DIR state.sls test.sync >> $PREPARE_STDOUT_LOG 2>> $PREPARE_STDERR_LOG"
 run_and_check_return_code 600 "salt-call -c $CUSTOM_CONFIG_DIR state.sls test.jenkins >> $PREPARE_STDOUT_LOG 2>> $PREPARE_STDERR_LOG"
 echo '------------ From here, salt with version supported by salt-common is running ------------'
-sudo salt -t 5 "$BUILD_IDENTITY" --output json cmd.run_all "salt-call test.ping"
+sudo salt -t 5 "$BUILD_IDENTITY" --output json cmd.run "salt-call test.ping"
 run_and_check_return_code 10 "salt-call -c $CUSTOM_CONFIG_DIR state.sls salt.patch_salt >> $PREPARE_STDOUT_LOG 2>> $PREPARE_STDERR_LOG"
 run_and_check_return_code 20 "salt-call -c $CUSTOM_CONFIG_DIR saltutil.sync_all >> $PREPARE_STDOUT_LOG 2>> $PREPARE_STDERR_LOG"
 run_and_check_return_code 10 "salt-call -c $CUSTOM_CONFIG_DIR saltutil.refresh_modules >> $PREPARE_STDOUT_LOG 2>> $PREPARE_STDERR_LOG"
@@ -110,10 +110,11 @@ finish_run_test_time=$(date +%s)
 echo "TIME-METER: Run integration.py took: $((finish_run_test_time - start_run_test_time)) seconds"
 
 for ltype in stdout stderr; do
-    run_and_check_return_code 30 "salt-call -c $CUSTOM_CONFIG_DIR cmd.run \"xz -c /root/salt/$ltype.prepare > /tmp/$BUILD_IDENTITY-$ltype.prepare.log.xz\""
-    run_and_check_return_code 30 "salt-call -c $CUSTOM_CONFIG_DIR cmd.run \"xz -c /root/salt/$ltype.log > /tmp/$BUILD_IDENTITY-$ltype.log.xz\""
+    sudo salt -t 30 "$BUILD_IDENTITY" --output json cmd.run "xz -c /root/salt/$ltype.prepare > /tmp/$BUILD_IDENTITY-$ltype.prepare.log.xz"
+    sudo salt -t 30 "$BUILD_IDENTITY" --output json cmd.run "xz -c /root/salt/$ltype.log > /tmp/$BUILD_IDENTITY-$ltype.log.xz"
 done
 
+sudo salt -t 30 "$BUILD_IDENTITY" --output json cmd.run "grep COUNTER: /root/salt/stdout.log"
 sudo salt -t 60 "$BUILD_IDENTITY" --output json cmd.run_all "salt-call -l info -c $CUSTOM_CONFIG_DIR state.sls test.jenkins.result"
 
 xz -d -c /home/ci-agent/$BUILD_IDENTITY-stderr.log.xz

@@ -162,6 +162,14 @@ nagios-plugins:
       - nagios-plugins-standard
       - nagios-plugins-basic
 
+/etc/nagios/nrpe_local.cfg:
+  file:
+    - absent
+
+/etc/nagios/nrpe.d/000.nagios.servers.cfg:
+  file:
+    - absent
+
 nagios-nrpe-server:
 {#- all states that require nrpe should require this state or
 service: nagios-nrpe-server #}
@@ -184,7 +192,7 @@ service: nagios-nrpe-server #}
       - group: nagios-nrpe-server
   file:
     - managed
-    - name: /etc/nagios/nrpe.d/000.nagios.servers.cfg
+    - name: /etc/nagios/nrpe.cfg
     - template: jinja
     - user: nagios
     - group: nagios
@@ -202,6 +210,8 @@ service: nagios-nrpe-server #}
     - watch:
       - pkg: nagios-nrpe-server
       - file: nagios-nrpe-server
+      - file: /etc/nagios/nrpe_local.cfg
+      - file: /etc/nagios/nrpe.d/000.nagios.servers.cfg
 
 {%- from 'macros.jinja2' import manage_pid with context %}
 {%- call manage_pid('/var/run/nagios/nrpe.pid', 'nagios', 'nagios', 'nagios-nrpe-server') %}

@@ -27,6 +27,7 @@ Maintainer: Van Pham Diep <favadi@robotinfra.com>
 -#}
 {% set ssl = salt['pillar.get']('elasticsearch:ssl', False) %}
 include:
+  - elasticsearch
   - cron.diamond
   - diamond
 {% if ssl %}
@@ -38,6 +39,8 @@ elasticsearch_diamond_resources:
     - accumulated
     - name: processes
     - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
+    - require:
+      - service: elasticsearch
     - require_in:
       - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
     - text:
@@ -55,5 +58,6 @@ elasticsearch_diamond_resources:
     - source: salt://elasticsearch/diamond/config.jinja2
     - require:
       - file: /etc/diamond/collectors
+      - service: elasticsearch
     - watch_in:
       - service: diamond

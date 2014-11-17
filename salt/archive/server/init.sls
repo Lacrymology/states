@@ -36,6 +36,9 @@ include:
   - local
   - nginx
   - pysc
+{%- if not salt['pillar.get']('salt_archive:source', False) %}
+  - requests
+{%- endif %}
   - rsync
   - salt.archive
   - ssh.server
@@ -183,6 +186,7 @@ salt-archive-clamav:
     - group: root
     - mode: 550
     - require:
+      - module: module
       - pkg: salt-archive-clamav
   cmd:
     - run

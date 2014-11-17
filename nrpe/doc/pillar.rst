@@ -76,3 +76,11 @@ nrpe:max_proc
 How many process can run on the system before it raise a warning.
 
 Default: ``150``
+
+nrpe:timeout
+~~~~~~~~~~~~
+
+This specifies the maximum number of seconds that the daemon will allow plugins
+to finish executing before killing them off.
+
+Default: ``60``.

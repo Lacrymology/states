@@ -126,6 +126,16 @@ filesystems = ext2,ext3,ext4,xfs,glusterfs,nfs,ntfs,hfs,fat32,fat16,rootfs,jfs,s
 enabled = True
 
 devices = md[0-9]*$|[vs]d[a-z][0-9]*$|xvd[a-z][0-9]*$|dm\-[0-9]*$
+
+    {%- if salt['pillar.get']('__test__', False) -%}
+        {#- in test mode using _states/diamond.py the collector is executed
+            only once.
+            as it need more than 1 execution to get metrics for a time delta
+            all metrics are 0 or 0.0.
+            to test that metrics get at least generated, set the following
+            configuration. #}
+send_zero = True
+    {%- endif -%}
 {% endif %}
 
 [[FilestatCollector]]
@@ -171,6 +181,10 @@ enabled = False
 enabled = True
 
 [[TCPCollector]]
+
+enabled = True
+
+[[UptimeCollector]]
 
 enabled = True
 

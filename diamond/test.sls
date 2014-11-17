@@ -40,3 +40,43 @@ test:
           process.diamond.memory_percent: True
           process.init.num_threads: False
           process.udev.num_threads: False
+        CPU:
+          cpu.total.user: True
+          cpu.total.nice: True
+          cpu.total.system: True
+          cpu.total.idle: True
+          cpu.total.iowait: True
+        DiskSpace:
+          diskspace.root.byte_free: True
+{%- if grains['virtual'] != 'openvzve' %}
+        DiskUsage:
+          iostat.(md[0-9]*|[vs]d[a-z][0-9]*|xvd[a-z][0-9]*|dm\-[0-9]*).iops: True
+{%- endif %}
+        Filestat:
+          files.max: True
+        Interrupt:
+          interrupts.ERR: True
+        LoadAverage:
+          loadavg.01: True
+        Memory:
+          memory.MemFree: True
+        Network:
+          network.lo.rx_byte: True
+          network.lo.tx_byte: True
+{%- if pillar['diamond'] is defined -%}
+    {%- if pillar['diamond']['ping'] is defined -%}
+        {%- set first_host = pillar['diamond']['ping']|first %}
+        Ping:
+          ping.{{ pillar['diamond']['ping'][first_host]|replace('.', '_') }}: True
+    {%- endif -%}
+{%- endif %}
+        ProcessStat:
+          proc.procs_running: True
+        Sockstat:
+          sockets.tcp_tw: True
+        TCP:
+          tcp.CurrEstab: True
+        Uptime:
+          uptime.minutes: True
+        VMStat:
+          vmstat.pgpgin: True

@@ -30,6 +30,7 @@ __email__ = 'tomas@robotinfra.com'
 
 import os
 import logging
+import re
 
 log = logging.getLogger(__name__)
 
@@ -101,26 +102,35 @@ def test(name, map):
 
         for metric in metrics:
             fullpath = '.'.join((__grains__['id'], 'os', metric))
-            if fullpath not in collected_metrics:
-                change[fullpath] = {
-                    'old': "Expected",
-                    'new': 'Not collected',
-                }
-            else:
+            fullpathObj = re.compile(fullpath)
+            found = False
+            for k in collected_metrics:
+                if fullpathObj.match(k):
+                    found = True
+                    key = k
+                    break
+
+            if found:
                 log.info('Received metric: %s %s',
-                         fullpath, collected_metrics[fullpath])
+                         key, collected_metrics[key])
                 try:
-                    value = float(collected_metrics[fullpath])
+                    value = float(collected_metrics[key])
                 except ValueError:
                     value = None
 
                 if (not metrics[metric]) and (not value):
-                    change[fullpath] = {
-                        'old': 'Expected non-zero numerical value',
-                        'new': collected_metrics[fullpath],
+                    ret['comment'] = ('{0}: Expected non-zero value '
+                                      'for the {1}').format(collector, key)
+                else:
+                    change[key] = {
+                        'old': 'Expected to be recorded',
+                        'new': 'Value = {0}'.format(collected_metrics[key])
                     }
+            else:
+                ret['comment'] = '{0}: {1} is not collected'.format(
+                    collector, fullpath)
 
-        if change:
+        if not change:
             ret['result'] = False
             return ret
 

@@ -66,7 +66,7 @@ Base Application
 ~~~~~~~~~~~~~~~~
 
 The target of the ``pysc.Application`` class is both to facilitate
-creation of command line applications for robotinfra-based (????)
+creation of command line applications for robotinfra-based
 systems and to enforce some kind of standardization on command-line
 arguments and configuration files format and locations.
 
@@ -95,7 +95,7 @@ A list of the things that get taken care for you if you use
   help to keep your system coherent and maintainable, and to minimize
   the cost of training new users.
 - **configuration files loading**: A config file is required (but a
-  default is provided by **robotinfra** (?? **Common** ??)), the
+  default is provided by **robotinfra**), the
   config file may define other config files to be loaded as well. All
   config files are deserialized as yaml.
 - **debug mode**: a simple ``--debug`` flag to override logging
@@ -333,7 +333,6 @@ changes the default config file.
 However, to maintain readability of the nrpe formulas and
 predictability of usage ``pysc.nrpe`` does **not** allow to extend
 command line arguments.
-(????? HELP TO WORD THIS BETTER)
 Users are encouraged instead to add the required arguments to the
 ``arguments`` key of the check configuration in
 ``<formula>.nrpe.config.jinja2``. In the case that this is not
@@ -347,9 +346,9 @@ output of some python classes into the nrpe standard output format and
 response codes, etc. so you can concentrate on writing your code, but
 there's still some pretty rigid conventions to follow.
 
-A check usually consists on one or more ``nagiosplugin.Resource``s
-which represent the things to be measured, and one or more
-``nagiosplugin.Context``s which are classes that analyze the
+A check usually consists on one or more ``nagiosplugin.Resource``
+instances which represent the things to be measured, and one or more
+``nagiosplugin.Context`` instances which are classes that analyze the
 ``Resource``'s output and decide whether the result is valid or not. A
 number of other classes can be used to customize output format and
 result interpretation, but a basic ``ScalarContext`` is provided by
@@ -361,8 +360,7 @@ Usage
 
 To create a nagios plugin you need at the very least to create your
 ``Resource`` class and then register it with ``pysc.nrpe.check``.
-Here's an adaptation of an example provided in the ``nagiosplugin``
-documentation::
+Here's a simple example::
 
     import nagiosplugin
     from pysc import nrpe
@@ -381,12 +379,12 @@ documentation::
     nrpe.check(check_universe, {"answer": 42})
 
 Let's take a look to what's going on there: In the last line, the
-function ``check_universe`` is registered as the ``prepare function``.
-This is the function that will receive the parsed config options as
-the first (and only) parameter ``config`` and command line arguments
-as its first parameter and return a sequence of arguments to be passed
-to a ``nagiosplugin.Check`` instance that will be prepared by the
-``pysc`` library with some custom settings. The second argument to the
+function ``check_universe`` is registered as the `prepare function`.
+This is the function that will receive the parsed config options and
+command line arguments as the first (and only) parameter ``config``
+and return a sequence of arguments to be passed to a
+``nagiosplugin.Check`` instance that will be prepared by the ``pysc``
+library with some custom settings. The second argument to the
 ``nrpe.check`` function is an optional dictionary of default values
 which will be inserted into the configuration values pipeline. The
 call to this check should be something similar to this::
@@ -402,7 +400,7 @@ default, just to test that the check works as expected::
     $ universe_check --formula universe --check universe_check --set='{"answer": 30}'
     UNIVERSE WARNING - answer is 42 (outside range 30:30) | answer=42;30:30
 
-You can also change the value for the `answer` parameter in the
+You can also change the value for the ``answer`` parameter in the
 formula configuration file (by default
 ``/etc/nagios/nsca.d/universe.yml``, in this case)::
 
@@ -465,7 +463,7 @@ nagios plugins:
    is encouraged.
 2. Instead of creating a ``nagiosplugin.Check`` instance yourself, you
    return the parameters you would pass to its constructor as a
-   sequence (normally a tuple) from the ``prepare function``. In it
+   sequence (normally a tuple) from the `prepare function`. In it
    you can use the config values to pass parameters to the
    ``Resource`` class constructors to be used by the check.
 

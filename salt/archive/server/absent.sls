@@ -45,7 +45,11 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 salt-archive-clamav:
   file:
     - absent
-    - name: /usr/local/bin/salt_archive_clamav.sh
+    - name: /usr/local/bin/salt_archive_clamav.py
+
+/usr/local/bin/salt_archive_clamav.sh:
+  file:
+    - absent
 
 {{ opts['cachedir'] }}/sync_timestamp.dat:
   file:

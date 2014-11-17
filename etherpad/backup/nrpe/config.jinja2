@@ -38,4 +38,7 @@ etherpad_backup:
   arguments:
     facility: postgresql-etherpad
     warning: {{ salt['pillar.get']('backup:age', 48) }}
-
+  timeout: 55
+  dependencies:
+    {#- no alert if load is too high #}
+    - load_average

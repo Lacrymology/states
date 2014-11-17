@@ -25,6 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Nicolas Plessis <niplessis@gmail.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
+{%- set timeout = 45 -%}
 {%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
 {{ nginx_instance('jenkins', http_uri='/login', extra_dependencies=('jenkins_http',)) }}
 
@@ -34,12 +35,14 @@ jenkins_procs:
 
 jenkins_port:
   description: Jenkins Port
-  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 8080
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 8080 -t {{ timeout }}
+  timeout: {{ timeout }}
   dependencies:
     - jenkins_procs
 
 jenkins_http:
   description: Jenkins HTTP
-  command: /usr/lib/nagios/plugins/check_http -I 127.0.0.1 -p 8080 -u '/login' -e 'HTTP/1.1 200 OK'
+  command: /usr/lib/nagios/plugins/check_http -I 127.0.0.1 -p 8080 -u '/login' -e 'HTTP/1.1 200 OK' -t {{ timeout }}
+  timeout: {{ timeout }}
   dependencies:
     - jenkins_port

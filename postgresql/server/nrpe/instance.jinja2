@@ -25,16 +25,19 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 #}
-{%- macro postgresql_instance(formula, dbname, password, username=None, check_empty=True) %}
+{%- macro postgresql_instance(formula, dbname, password, username=None, check_empty=True) -%}
+    {%- set timeout = 45 %}
 {{ dbname }}_postgresql:
   description: {{ dbname|capitalize }} PostgreSQL Database
-  command: /usr/lib/nagios/plugins/check_pgsql -H 127.0.0.1 -P 5432 -d {{ dbname }} -l {{ username|default(dbname, boolean=True) }} -p {{ password }}
+  command: /usr/lib/nagios/plugins/check_pgsql -H 127.0.0.1 -P 5432 -d {{ dbname }} -l {{ username|default(dbname, boolean=True) }} -p {{ password }} --timeout={{ timeout }}
+  timeout: {{ timeout }}
   dependencies:
     - postgresql_procs
 
 {{ dbname }}_postgresql_encoding:
   description: {{ dbname|capitalize }} PostgreSQL Database Encoding
-  command: sudo -u postgres /usr/lib/nagios/plugins/check_psql_encoding.py --formula={{ formula }} --check={{ dbname }}_postgresql_encoding
+  command: sudo -u postgres /usr/lib/nagios/plugins/check_psql_encoding.py --formula={{ formula }} --check={{ dbname }}_postgresql_encoding --timeout={{ timeout }}
+  timeout: {{ timeout }}
   dependencies:
     - postgresql_procs
   arguments:
@@ -44,9 +47,9 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 {%- if check_empty %}
 {{ dbname }}_postgresql_empty:
   description: {{ formula|capitalize }} PostgreSQL Database Empty {{ dbname }}
-  command: /usr/lib/nagios/plugins/check_pgsql_query.py --formula={{ formula }} --check={{ dbname }}_postgresql_empty
+  command: /usr/lib/nagios/plugins/check_pgsql_query.py --formula={{ formula }} --check={{ dbname }}_postgresql_empty --timeout={{ timeout }}
+  timeout: {{ timeout }}
   arguments:
-    timeout: 15 {#- 15 seconds to run statement  #}
     passwd: {{ password }}
     user: {{ username|default(dbname, boolean=True) }}
     host: localhost

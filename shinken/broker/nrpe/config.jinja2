@@ -25,6 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
+{%- set timeout = 30 -%}
 shinken_broker_procs:
   description: Shinken Broker Deamon
   passive: False
@@ -32,26 +33,30 @@ shinken_broker_procs:
 
 shinken_broker_port:
   description: Shinken Broker Local Port
-  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 7772
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 7772 -t {{ timeout }}
+  timeout: {{ timeout }}
   dependencies:
     - shinken_broker_procs
 
 shinken_broker_port_remote:
   description: Shinken Broker Remote Port
   check: check_tcp!7772
+  timeout: {{ timeout }}
   passive: False
   dependencies:
     - shinken_broker_port
 
 shinken_broker_http_port:
   description: Shinken Broker Web UI Port
-  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 7767
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 7767 -t {{ timeout }}
+  timeout: {{ timeout }}
   dependencies:
     - shinken_broker_procs
 
 shinken_broker_http:
   description: Shinken Broker Web UI HTTP
-  command: "/usr/lib/nagios/plugins/check_http -H 127.0.0.1 -u /user/login -p 7767 -e '200 OK' -I 127.0.0.1{%- if salt['pillar.get']('__test__', False) %} -v{%- endif %}"
+  command: "/usr/lib/nagios/plugins/check_http -H 127.0.0.1 -u /user/login -p 7767 -e '200 OK' -I 127.0.0.1{%- if salt['pillar.get']('__test__', False) %} -v{%- endif %}" -t {{ timeout }}
+  timeout: {{ timeout }}
   dependencies:
     - shinken_broker_http_port
 

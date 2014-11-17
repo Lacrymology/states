@@ -35,6 +35,10 @@ carbon_backup:
   command: /usr/lib/nagios/plugins/check_backup.py --formula=carbon.backup --check=carbon_backup
   check_interval: {{ 12 * 60 }} {#- 12 hours  #}
   freshness_threshold: {{ ((12 * 60) + 10) * 60 }} {#- 12 hours + 10 minutes #}
+  timeout: 55
   arguments:
     facility: carbon
     warning: {{ salt['pillar.get']('backup:age', 48) }}
+  dependencies:
+    {#- no alert if load is too high #}
+    - load_average

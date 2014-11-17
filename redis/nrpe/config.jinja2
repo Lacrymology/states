@@ -32,6 +32,7 @@ Institute for Institutional Innovation by Data Driven Design Inc.
 Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Van Diep Pham <favadi@robotinfra.com>
 -#}
+{%- set timeout = 30 %}
 redis_procs:
   description: Redis Daemon
 {#- 2nd process is the dump that save on disk data for persistence #}
@@ -39,13 +40,15 @@ redis_procs:
 
 redis_port:
   description: Redis Local Port
-  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 6379
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 6379 -t {{ timeout }}
+  timeout: {{ timeout }}
   dependencies:
     - redis_procs
 
 redis_remote_port:
   check: check_tcp!6379
   description: Redis Remote Port
+  timeout: {{ timeout }}
   passive: False
   dependencies:
     - redis_procs

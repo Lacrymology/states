@@ -25,15 +25,18 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Van Pham Diep <favadi@robotinfra.com>
 -#}
+{%- set timeout = 30 -%}
 mongodb_http:
   description: MongoDB HTTP Interface
-  command: /usr/lib/nagios/plugins/check_http -I 127.0.0.1 -p 28017{%- if salt['pillar.get']('debug', False) %} -v{%- endif %}
+  command: /usr/lib/nagios/plugins/check_http -t {{ timeout }} -I 127.0.0.1 -p 28017{%- if salt['pillar.get']('debug', False) %} -v{%- endif %}
+  timeout: {{ timeout }}
   dependencies:
     - mongodb_http_port
 
 mongodb_port:
   description: MongoDB Port
-  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 27017
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 27017 -t {{ timeout }}
+  timeout: {{ timeout }}
   dependencies:
     - mongodb_procs
 
@@ -43,6 +46,7 @@ mongodb_procs:
 
 mongodb_http_port:
   description: MongoDB HTTP Port
-  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 28017
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 28017 -t {{ timeout }}
+  timeout: {{ timeout }}
   dependencies:
     - mongodb_procs

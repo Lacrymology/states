@@ -4,14 +4,16 @@
     {%- set mailname = pillar['mail']['mailname'] %}
 mailstack_functionality:
   description: Mail Stack Functionality
-  command: /usr/lib/nagios/plugins/check_mail_stack.py --formula=mail.server --check=mailstack_functionality --cronresult
+  command: /usr/lib/nagios/plugins/check_mail_stack.py --formula=mail.server --check=mailstack_functionality
   check_interval: 10 {#- minutes #}
   freshness_threshold: {{ 12 * 60 }} {#- 12 minutes #}
   dependencies:
     - dovecot_{% if salt['pillar.get']('dovecot:ssl', False) and grains['oscodename'] != 'precise' %}s{% endif %}imap
+    {#- no alert if load is too high #}
+    - load_average
+  timeout: 55
   arguments:
     freshness: 12 {#- minutes #}
-    timeout: {{ 8 * 60 }} {#- 8 minutes #}
     username: {{ username + '@' + mailname }}
     password: "{{ pillar['ldap']['data'][mailname][username]['passwd'] }}"
     imap_server: localhost

@@ -69,6 +69,8 @@ openvpn-{{ tunnel }}:
     - template: jinja
     - require:
       - file: /etc/openvpn/{{ tunnel }}/config
+      - file: /var/lib/openvpn
+      - file: /var/log/openvpn
     - context:
       identifier: {{ tunnel }}
   service:

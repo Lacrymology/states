@@ -36,7 +36,7 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 
 {{ dbname }}_postgresql_encoding:
   description: {{ dbname|capitalize }} PostgreSQL Database Encoding
-  command: sudo -u postgres /usr/lib/nagios/plugins/check_psql_encoding.py --formula={{ formula }} --check={{ dbname }}_postgresql_encoding --timeout={{ timeout }}
+  command: sudo -u postgres /usr/lib/nagios/plugins/check_psql_encoding.py --formula={{ formula }} --check={{ dbname }}_postgresql_encoding
   timeout: {{ timeout }}
   dependencies:
     - postgresql_procs
@@ -47,7 +47,7 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 {%- if check_empty %}
 {{ dbname }}_postgresql_empty:
   description: {{ formula|capitalize }} PostgreSQL Database Empty {{ dbname }}
-  command: /usr/lib/nagios/plugins/check_pgsql_query.py --formula={{ formula }} --check={{ dbname }}_postgresql_empty --timeout={{ timeout }}
+  command: /usr/lib/nagios/plugins/check_pgsql_query.py --formula={{ formula }} --check={{ dbname }}_postgresql_empty
   timeout: {{ timeout }}
   arguments:
     passwd: {{ password }}

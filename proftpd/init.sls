@@ -79,9 +79,9 @@ proftpd-users:
       - pkg: postgresql
   cmd:
     - wait
-    - name: psql -f {{ opts['cachedir'] }}/proftpd.sql proftpd
-    - user: postgres
-    - group: postgres
+    - name: cat {{ opts['cachedir'] }}/proftpd.sql | su - postgres -s /bin/bash -c 'psql proftpd'
+    - user: root
+    - group: root
     - require:
       - postgres_database: proftpd-mod-pgsql
       - service: postgresql

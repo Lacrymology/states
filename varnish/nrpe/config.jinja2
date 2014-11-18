@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Van Diep Pham <favadi@robotinfra.com>
 Maintainer: Van Diep Pham <favadi@robotinfra.com>
 -#}
-{%- set timeout = 15 -s%}
+{%- set timeout = 15 -%}
 {%- set listen_port = salt['pillar.get']('varnish:listen_port', '80') -%}
 {%- set listen_address = salt['pillar.get']('varnish:listen_address', '127.0.0.1') -%}
 varnish_procs:

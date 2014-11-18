@@ -41,6 +41,7 @@ import os
 import pwd
 import time
 import subprocess
+import socket
 
 log = logging.getLogger(__name__)
 
@@ -225,5 +226,78 @@ def wait_for_dead(name, timeout=30, user=None, **kargs):
     # process is dead
     ret['result'] = True
     ret['comment'] = 'Dead (pattern: "{}", user: "{}")'.format(name, user)
+
+    return ret
+
+
+def wait_socket(name=None, address="127.0.0.1", port=None, frequency=1,
+                timeout=60):
+    """
+    Wait until a socket is open and return True. If timeout is reached, return
+    False instead
+
+    .. code-block:: yaml
+
+    elasticsearch:
+      process:
+        - wait_socket
+        - port: 9200
+        - timeout: 60
+
+    address
+        The ip address to wait for, default: localhost
+    port
+        The port to try to connect to. Mandatory
+    frequency
+        How often to try to connect, in seconds, Default: 1 second
+    timeout
+        Time period this state will wait before it returns False,
+        in seconds, default 60 seconds
+    """
+    if not port:
+        raise TypeError("wait_socket() has one mandatory argument (port)")
+
+    ret = {
+        'name': name,
+        'changes': {},
+        'result': False,
+        'comment': "Could not connect to {address}:{port}".format(
+            address=address, port=port)
+    }
+
+    start = time.time()
+    end = start + timeout
+
+    def success():
+        """
+        Modify 'ret' with success values. Just DRY between test and live modes
+        """
+        ret['comment'] = ("Connected to {address}:{port} after "
+                          "{time:.2f} seconds".format(
+                              address=address,
+                              port=port,
+                              time=time.time() - start
+                          ))
+        ret['result'] = True
+
+    if __opts__['test']:
+        success()
+        return ret
+
+    sock = socket.socket()
+    sock.settimeout(timeout)
+    while time.time() < end:
+        try:
+            sock.connect((address, port))
+        except socket.timeout:
+            # timed out. Abort
+            break
+        except socket.error:
+            # keep waiting
+            time.sleep(frequency)
+        else:
+            success()
+            sock.close()
+            break
 
     return ret

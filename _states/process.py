@@ -230,9 +230,10 @@ def wait_for_dead(name, timeout=30, user=None, **kargs):
     return ret
 
 
-def wait_socket(address="127.0.0.1", port=None, frequency=1,timeout=60):
+def wait_socket(address="127.0.0.1", port=None, frequency=1, timeout=60):
     """
-    Wait until a socket is open and return True. If timeout is reached, return False instead
+    Wait until a socket is open and return True. If timeout is reached, return
+    False instead
 
     :param address: The ip address to wait for. Defaults to localhost
     :param port: The port to try to connect to. Mandatory
@@ -241,20 +242,20 @@ def wait_socket(address="127.0.0.1", port=None, frequency=1,timeout=60):
     """
     if not port:
         raise TypeError("wait_socket() has one mandatory argument (port)")
-    s = socket.socket()
-    s.settimeout(timeout)
+    sock = socket.socket()
+    sock.settimeout(timeout)
     start = time.time()
     end = start + timeout
     while time.time() < end:
         try:
-            s.connect((address, port))
-        except socket.timeout, err:
+            sock.connect((address, port))
+        except socket.timeout:
             break
         except socket.error:
             # keep waiting
             time.sleep(frequency)
         else:
-            s.close()
+            sock.close()
             return True
 
     return False

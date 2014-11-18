@@ -36,6 +36,9 @@ include:
   - local
   - nginx
   - pysc
+{%- if not salt['pillar.get']('salt_archive:source', False) %}
+  - requests
+{%- endif %}
   - rsync
   - salt.archive
   - ssh.server
@@ -167,23 +170,27 @@ archive_rsync:
     - watch_in:
       - service: nginx
 
+/usr/local/bin/salt_archive_clamav.sh:
+  file:
+    - absent
+
 salt-archive-clamav:
   file:
-    - name: /usr/local/bin/salt_archive_clamav.sh
+    - name: /usr/local/bin/salt_archive_clamav.py
 {%- if salt['pillar.get']('salt_archive:source', False) %}
     - absent
 {%- else %}
     - managed
-    - source: salt://salt/archive/server/clamav.jinja2
-    - template: jinja
+    - source: salt://salt/archive/server/clamav.py
     - user: root
     - group: root
     - mode: 550
     - require:
+      - module: module
       - pkg: salt-archive-clamav
   cmd:
     - run
-    - name: /usr/local/bin/salt_archive_clamav.sh
+    - name: /usr/local/bin/salt_archive_clamav.py
     - require:
       - file: salt-archive-clamav
       - user: salt_archive

@@ -25,5 +25,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Quan Tong Anh <quanta@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
+include:
+  - backup.diamond
+  - cron.diamond
+
 {%- from 'backup/client/diamond.jinja2' import backup_diamond_resources with context %}
 {{ backup_diamond_resources('redis') }}

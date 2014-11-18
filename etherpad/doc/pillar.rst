@@ -84,6 +84,7 @@ Example::
         admin: True
     apikey: 23jlLJKHJSK9saf92hasajJHAds==
     default_pad_text: Welcome to Pad
+    secret_url: noonecanguessthatlongURL
 
 etherpad:db:username
 ~~~~~~~~~~~~~~~~~~~~
@@ -184,3 +185,18 @@ etherpad:session_key
 ~~~~~~~~~~~~~~~~~~~~
 
 TODO
+
+etherpad:secret_url
+~~~~~~~~~~~~~~~~~~~
+
+If set, only allow access etherpad by this URL, don't allow access
+directly.
+
+For example, if ``etherpad:hostnames`` is ``['example_pad.com']`` and
+``etherpad:secrect_url`` is ``'top_secret'``, we can only use etherpad with
+URL: example_pad.com/top_secret, request to example_pad.com will
+return 403 error
+
+Example: ``'a_secret_string'``
+
+Default: ``None``

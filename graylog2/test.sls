@@ -27,6 +27,9 @@ Maintainer: Van Pham Diep <favadi@robotinfra.com>
 -#}
 {%- from 'cron/test.jinja2' import test_cron with context -%}
 include:
+  - elasticsearch
+  - elasticsearch.diamond
+  - elasticsearch.nrpe
   - graylog2.server
   - graylog2.server.backup
   - graylog2.server.backup.diamond
@@ -38,6 +41,9 @@ include:
   - graylog2.web.nrpe
 
 {%- call test_cron() %}
+- sls: elasticsearch
+- sls: elasticsearch.diamond
+- sls: elasticsearch.nrpe
 - sls: graylog2.server
 - sls: graylog2.server.backup
 - sls: graylog2.server.backup.nrpe

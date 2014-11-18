@@ -12,3 +12,4 @@ Salt
    ../api/doc/index
    ../archive/server/doc/index
    ../ci/doc/index
+   *

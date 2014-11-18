@@ -105,13 +105,13 @@ def managed(name, source=None, template='jinja',
             yaml = f.read()
             __salt__['file.remove'](sfn)
             return _error(ret,
-                          os.linesep.join(
+                          os.linesep.join((
                               "Content of failed YAML for %s(%s):" % (source,
                                                                       sfn),
                               '-' * 8,
                               err,
                               '-' * 8,
-                              yaml))
+                              yaml)))
         else:
             log.debug("Content of %s(%s):%s%s", source, sfn, os.linesep,
                       str(loaded))

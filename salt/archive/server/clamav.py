@@ -57,7 +57,7 @@ class ClamavMirror(pysc.Application):
             stat = os.stat(destination)
         except OSError:
             logger.info("File %s don't already exist, download.", filename)
-            save(destination, req.iter_lines, source_timestamp)
+            save(destination, req.iter_content(), source_timestamp)
         else:
             destination_timestamp = datetime.datetime.fromtimestamp(
                 stat.st_mtime)
@@ -65,13 +65,13 @@ class ClamavMirror(pysc.Application):
                 delta = source_timestamp - destination_timestamp
                 logger.info("Local file %s is outdated of %d seconds, download",
                             destination, delta.total_seconds())
-                save(destination, req.iter_lines, source_timestamp)
+                save(destination, req.iter_content(), source_timestamp)
             elif destination_timestamp > source_timestamp:
                 logger.warning("URL %s timestamp is '%s' and local %s timestamp"
                                " is '%s': invalid, download again",
                                url, destination, source_timestamp,
                                destination_timestamp)
-                save(destination, req.iter_lines, source_timestamp)
+                save(destination, req.iter_content(), source_timestamp)
             else:
                 logger.info("Local and remote file have same timestamp")
                 remote_size = int(req.headers['content-length'])
@@ -83,7 +83,7 @@ class ClamavMirror(pysc.Application):
                                    "both have same last modified,"
                                    " download again", destination, stat.st_size,
                                    url, remote_size)
-                    save(destination, req.iter_lines, source_timestamp)
+                    save(destination, req.iter_content(), source_timestamp)
 
     def main(self):
         for prefix in self.config['files']:

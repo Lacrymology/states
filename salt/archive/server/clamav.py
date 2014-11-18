@@ -39,6 +39,7 @@ class ClamavMirror(pysc.Application):
     logger = logger
 
     def mirror_file(self, filename):
+        http_header_size = 'content-length'
         url = 'http://%s/%s' % (self.config['mirror'], filename)
         logger.debug("Going to check %s", url)
         req = requests.get(url, stream=True)
@@ -74,16 +75,21 @@ class ClamavMirror(pysc.Application):
                 save(destination, req.iter_content(), source_timestamp)
             else:
                 logger.info("Local and remote file have same timestamp")
-                remote_size = int(req.headers['content-length'])
-                if stat.st_size == remote_size:
-                    logger.info("Local and remote file have same size %d, "
-                                "everything ok", remote_size)
+                try:
+                    remote_size = int(req.headers[http_header_size])
+                except KeyError:
+                    logger.warning("URL %s didn't returned a %s header, skip"
+                                   "size validation.", url, http_header_size)
                 else:
-                    logger.warning("%s size is %d while %s size is %d, even if "
-                                   "both have same last modified,"
-                                   " download again", destination, stat.st_size,
-                                   url, remote_size)
-                    save(destination, req.iter_content(), source_timestamp)
+                    if stat.st_size == remote_size:
+                        logger.info("Local and remote file have same size %d, "
+                                    "everything ok", remote_size)
+                    else:
+                        logger.warning("%s size is %d while %s size is %d, "
+                                       "even if both have same last modified,"
+                                       " download again", destination,
+                                       stat.st_size, url, remote_size)
+                        save(destination, req.iter_content(), source_timestamp)
 
     def main(self):
         for prefix in self.config['files']:

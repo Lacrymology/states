@@ -235,10 +235,23 @@ def wait_socket(address="127.0.0.1", port=None, frequency=1, timeout=60):
     Wait until a socket is open and return True. If timeout is reached, return
     False instead
 
-    :param address: The ip address to wait for. Defaults to localhost
-    :param port: The port to try to connect to. Mandatory
-    :param frequency: How often to try to connect, in seconds. Defaults to 1
-    :param timeout: How long to keep trying, in seconds. Defaults to 60
+    .. code-block:: yaml
+
+    elasticsearch:
+      process:
+        - wait_socket
+        - port: 9200
+        - timeout: 60
+
+    address
+        The ip address to wait for, default: localhost
+    port
+        The port to try to connect to. Mandatory
+    frequency
+        How often to try to connect, in seconds, Default: 1 second
+    timeout
+        Time period this state will wait before it returns False,
+        in seconds, default 60 seconds
     """
     if not port:
         raise TypeError("wait_socket() has one mandatory argument (port)")

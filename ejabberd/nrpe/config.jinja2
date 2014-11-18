@@ -25,7 +25,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Dang Tung Lam <lam@robotinfra.com>
 Maintainer: Van Pham Diep <favadi@robotinfra.com>
 -#}
-{% include "erlang/nrpe/config.jinja2" %}
+{%- include "erlang/nrpe/config.jinja2" -%}
+{%- set timeout = 30 %}
 
 ejabberd_proc:
   description: ejabberd Process
@@ -33,27 +34,31 @@ ejabberd_proc:
 
 ejabberd_c2s_port:
   description: ejabberd XMPP Port (C2S)
-  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 5222
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 5222 -t {{ timeout }}
+  timeout: {{ timeout }}
   dependencies:
     - ejabberd_proc
 
 {%- if salt['pillar.get']('ejabberd:server_to_server', False) %}
 ejabberd_s2s_port:
   description: ejabberd Server-to-Server(S2S) Port
-  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 5269
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 5269 -t {{ timeout }}
+  timeout: {{ timeout }}
   dependencies:
     - ejabberd_proc
 {%- endif %}
 
 ejabberd_admin_port:
   description: ejabberd admin Port
-  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 5280
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 5280 -t {{ timeout }}
+  timeout: {{ timeout }}
   dependencies:
     - ejabberd_proc
 
 ejabberd_admin_http:
   description: ejabberd admin HTTP
-  command: /usr/lib/nagios/plugins/check_http -H 127.0.0.1 -p 5280 -u /admin -e '401 Unauthorized'
+  command: /usr/lib/nagios/plugins/check_http -H 127.0.0.1 -p 5280 -u /admin -e '401 Unauthorized' -t {{ timeout }}
+  timeout: {{ timeout }}
   dependencies:
     - ejabberd_admin_port
 

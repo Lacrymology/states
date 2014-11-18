@@ -69,4 +69,4 @@ etherpad_javascript_http:
 {{ postgresql_instance_prefix('etherpad') }}
 
 {%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
-{{ nginx_instance('etherpad', timeout=60, http_uri=http_uri ~ '/', extra_dependencies=('etherpad_port', 'etherpad_postgresql')) }}
+{{ nginx_instance('etherpad', timeout=55, http_uri=http_uri ~ '/', extra_dependencies=('etherpad_port', 'etherpad_postgresql')) }}

@@ -33,5 +33,6 @@ pdnsd_procs:
 pdnsd_caching:
   description: DNS Caching
   command: /usr/lib/nagios/plugins/check_dns_caching.py --formula=pdnsd --check=pdnsd_caching
+  timeout: 30
   dependencies:
     - pdnsd_procs

@@ -32,13 +32,15 @@ Institute for Institutional Innovation by Data Driven Design Inc.
 Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
+{%- set timeout = 30 -%}
 mysql_procs:
   description: MariaDB Daemon
   command: /usr/lib/nagios/plugins/check_procs -c 1:1 -u mysql -C mysqld -a '--basedir=/usr --datadir=/var/lib/mysql --plugin-dir=/usr/lib/mysql/plugin --user=mysql --pid-file=/var/run/mysqld/mysqld.pid --socket=/var/run/mysqld/mysqld.sock'
 
 mysql_port:
   description: MariaDB Local Port
-  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 3306
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 3306 -t {{ timeout }}
+  timeout: {{ timeout }}
   dependencies:
     - mysql_procs
 
@@ -51,6 +53,7 @@ mysql_port:
 mysql_port_remote:
   check: check_tcp!3306
   description: MariaDB Remote Port
+  timeout: {{ timeout }}
   passive: False
   dependencies:
     - mysql_port

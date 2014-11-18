@@ -55,6 +55,7 @@ Maintainer: Quan Tong Anh <quanta@robotinfra.com>
     {%- if salt['pillar.get']('__test__', False) %} -v{%- endif %}
     {%- if check_interval %}
   check_interval: {{ check_interval }}
+  timeout: {{ timeout }}
   freshness_threshold: {{ (check_interval + 10) * 60 }} {#- check_interval + 10 minutes in seconds #}
     {%- endif %}
   dependencies:
@@ -72,6 +73,7 @@ Maintainer: Quan Tong Anh <quanta@robotinfra.com>
         {%- if timeout %} --timeout={{ timeout }}{% endif -%}
         {%- if salt['pillar.get']('__test__', False) %} -v{%- endif %}
     {%- if check_interval %}
+  timeout: {{ timeout }}
   check_interval: {{ check_interval }}
   freshness_threshold: {{ (check_interval + 10) * 60 }} {#- check_interval + 10 minutes in seconds #}
     {%- endif %}
@@ -86,6 +88,9 @@ Maintainer: Quan Tong Anh <quanta@robotinfra.com>
   check_interval: {{ 24 * 60 }} {#- a day  #}
   freshness_threshold: {{ ((24 * 60) + 10) * 60 }} {#- 24 hours + 10 minutes #}
   command: /usr/lib/nagios/plugins/check_http -S -H {{ domain_name }} -C {{ expire_days }} -I {{ first_ip }}
+        {%- if timeout %} --timeout={{ timeout }}{% endif -%}
+        {%- if salt['pillar.get']('__test__', False) %} -v{%- endif %}
+  timeout: {{ timeout }}
   dependencies:
     - {{ formula }}_nginx_https
 
@@ -94,14 +99,16 @@ Maintainer: Quan Tong Anh <quanta@robotinfra.com>
   description: {{ deployment|capitalize }} SSL Configuration
   check_interval: {{ 24 * 60 }} {#- a day  #}
   freshness_threshold: {{ ((24 * 60) + 10) * 60 }} {#- 24 hours + 10 minutes #}
-  command: /usr/lib/nagios/plugins/check_ssl_configuration.py --cronresult --formula={{ formula }} --check={{ formula }}_ssl_configuration
+  command: /usr/lib/nagios/plugins/check_ssl_configuration.py --formula={{ formula }} --check={{ formula }}_ssl_configuration
+  timeout: 55
   arguments:
     host: {{ domain_name }}
     port: 443
-    timeout: {{ 3 * 60 }} {#- 3 minutes #}
     freshness: {{ ((24 * 60) + 10) * 60 }}
   dependencies:
     - {{ formula }}_nginx_https_certificate
+    {#- no alert if load is too high #}
+    - load_average
   {%- endif %}
 {%- endif -%}
 {%- endmacro %}

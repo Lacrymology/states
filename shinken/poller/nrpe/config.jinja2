@@ -25,6 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
+{%- set timeout = 30 -%}
 shinken_poller_procs:
   description: Shinken Poller Deamon
   passive: False
@@ -32,13 +33,15 @@ shinken_poller_procs:
 
 shinken_poller_port:
   description: Shinken Poller Local Port
-  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 7771
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 7771 -t {{ timeout }}
+  timeout: {{ timeout }}
   dependencies:
     - shinken_poller_procs
 
 shinken_poller_port_remote:
   description: Shinken Poller Remote Port
   check: check_tcp!7771
+  timeout: {{ timeout }}
   passive: False
   dependencies:
     - shinken_poller_port

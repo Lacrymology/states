@@ -25,6 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
+{%- set timeout = 30 -%}
 postfix_qmgr:
   description: Postfix Queue manager
   command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -u postfix -C qmgr -a '-l -t fifo -u'"
@@ -39,14 +40,16 @@ postfix_master:
 
 postfix_port_smtp:
   description: Postfix SMTP Port
-  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 25
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 25 -t {{ timeout }}
+  timeout: {{ timeout }}
   dependencies:
     - postfix_master
 
 {%- if salt['pillar.get']('postfix:spam_filter', False) %}
 port_spam_handler:
   description: Port SPAM handler
-  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 10025
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 10025 -t {{ timeout }}
+  timeout: {{ timeout }}
   dependencies:
     - postfix_master
 {%- endif %}
@@ -54,7 +57,8 @@ port_spam_handler:
 {%- if salt['pillar.get']('postfix:ssl', False) %}
 port_smtps:
   description: SMTP over SSL Port
-  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 465
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 465 -t {{ timeout }}
+  timeout: {{ timeout }}
   dependencies:
     - postfix_master
 {%- endif %}

@@ -33,6 +33,7 @@ elasticsearch-es_remote_port_http:
   description: Elasticsearch Remote HTTP Port
   check: check_tcp!9200
   passive: False
+  timeout: 30
   dependencies:
     - elasticsearch_procs
 
@@ -40,6 +41,7 @@ elasticsearch-es_remote_port-transport:
   description: Elasticsearch Remote Transport Port
   check: check_tcp!9300
   passive: False
+  timeout: 30
   dependencies:
     - elasticsearch_procs
 

@@ -25,13 +25,15 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
+{%- set timeout = 30 -%}
 proftpd_procs:
   description: ProFTPD Daemon
   command: '/usr/lib/nagios/plugins/check_procs -C proftpd -w 1:1 -u www-data -a "proftpd: (accepting connections)"'
 
 proftpd_port:
   description: ProFTPD Port
-  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 21
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 21 -t {{ timeout }}
+  timeout: {{ timeout }}
   dependencies:
     - proftpd_procs
 
@@ -40,7 +42,8 @@ proftpd_port:
 
 proftpd_ftp:
   description: ProFTPD FTP Connection
-  command: /usr/lib/nagios/plugins/check_ftp -H 127.0.0.1 -p 21
+  command: /usr/lib/nagios/plugins/check_ftp -H 127.0.0.1 -p 21 -t {{ timeout }}
+  timeout: {{ timeout }}
   dependencies:
     - proftpd_port
     - proftpd_postgresql

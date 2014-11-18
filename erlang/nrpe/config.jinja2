@@ -3,7 +3,9 @@ erlang_procs:
   command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -C epmd'
 
 erlang_port:
+  {%- set timeout = 30 %}
   description: Erlang Port Mapper Port
-  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 4369
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 4369 -t {{ timeout }}
+  timeout: {{ timeout }}
   dependencies:
     - erlang_procs

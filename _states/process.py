@@ -230,7 +230,7 @@ def wait_for_dead(name, timeout=30, user=None, **kargs):
     return ret
 
 
-def wait_socket(address="127.0.0.1", port=None, frequency=1, timeout=60):
+def wait_socket(name, address="127.0.0.1", port=None, frequency=1, timeout=60):
     """
     Wait until a socket is open and return True. If timeout is reached, return
     False instead
@@ -255,6 +255,15 @@ def wait_socket(address="127.0.0.1", port=None, frequency=1, timeout=60):
     """
     if not port:
         raise TypeError("wait_socket() has one mandatory argument (port)")
+
+    ret = {
+        'name': name,
+        'changes': {},
+        'result': False,
+        'comment': "Could not connect to {address}:{port}".format(
+            address=address, port=port)
+    }
+
     sock = socket.socket()
     sock.settimeout(timeout)
     start = time.time()
@@ -263,12 +272,21 @@ def wait_socket(address="127.0.0.1", port=None, frequency=1, timeout=60):
         try:
             sock.connect((address, port))
         except socket.timeout:
+            # timed out. Abort
             break
         except socket.error:
             # keep waiting
             time.sleep(frequency)
         else:
+            # success
+            ret['result'] = True
+            ret['comment'] = ("Connected to {address}:{port} after {time}"
+                              "seconds".format(
+                                  address=address,
+                                  port=port,
+                                  time=time.time() - start
+                              ))
             sock.close()
-            return True
+            break
 
-    return False
+    return ret

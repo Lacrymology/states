@@ -109,7 +109,7 @@ def managed(name, source=None, template='jinja',
                               "Content of failed YAML for %s(%s):" % (source,
                                                                       sfn),
                               '-' * 8,
-                              err,
+                              str(err),
                               '-' * 8,
                               yaml)))
         else:

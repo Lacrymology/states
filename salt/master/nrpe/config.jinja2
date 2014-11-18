@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
-
+{% set timeout = 30 %}
 {% set workers = salt['pillar.get']('salt_master:workers', 5) %}
 
 salt_master_procs:

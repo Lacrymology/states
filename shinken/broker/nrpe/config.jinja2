@@ -55,7 +55,7 @@ shinken_broker_http_port:
 
 shinken_broker_http:
   description: Shinken Broker Web UI HTTP
-  command: "/usr/lib/nagios/plugins/check_http -H 127.0.0.1 -u /user/login -p 7767 -e '200 OK' -I 127.0.0.1{%- if salt['pillar.get']('__test__', False) %} -v{%- endif %}" -t {{ timeout }}
+  command: "/usr/lib/nagios/plugins/check_http -H 127.0.0.1 -u /user/login -p 7767 -e '200 OK' -I 127.0.0.1{%- if salt['pillar.get']('__test__', False) %} -v{%- endif %} -t {{ timeout }}"
   timeout: {{ timeout }}
   dependencies:
     - shinken_broker_http_port

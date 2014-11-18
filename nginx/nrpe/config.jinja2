@@ -25,14 +25,16 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
+{%- set timeout = 20 -%}
 {%- set config = {'num_workers': grains['num_cpus']} -%}
-{%- if not salt['pillar.get']('nginx:worker_processes', 'auto') %}
+{%- if not salt['pillar.get']('nginx:worker_processes', 'auto') -%}
     {%- do config.update({'num_workers': pillar['nginx']['worker_processes']}) -%}
 {%- endif %}
 
 nginx_status:
   description: Nginx Status Page
-  command: '/usr/lib/nagios/plugins/check_http -H 127.0.0.1 -I 127.0.0.1 -u /nginx_status -p 80 -e "200 OK"{%- if salt["pillar.get"]("__test__", False) %} -v{%- endif %}'
+  command: '/usr/lib/nagios/plugins/check_http -t {{ timeout }} -H 127.0.0.1 -I 127.0.0.1 -u /nginx_status -p 80 -e "200 OK"{%- if salt["pillar.get"]("__test__", False) %} -v{%- endif %}'
+  timeout: {{ timeout }}
   dependencies:
     - nginx_worker
 

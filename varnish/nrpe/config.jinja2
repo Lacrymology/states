@@ -25,21 +25,23 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Van Diep Pham <favadi@robotinfra.com>
 Maintainer: Van Diep Pham <favadi@robotinfra.com>
 -#}
-
-{%- set listen_port = salt['pillar.get']('varnish:listen_port', '80') %}
-{%- set listen_address = salt['pillar.get']('varnish:listen_address', '127.0.0.1') %}
+{%- set timeout = 15 -s%}
+{%- set listen_port = salt['pillar.get']('varnish:listen_port', '80') -%}
+{%- set listen_address = salt['pillar.get']('varnish:listen_address', '127.0.0.1') -%}
 varnish_procs:
   description: Varnish Daemon Process
   command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -a 'varnishd' -u root"
 
 varnish_port:
   description: Varnish HTTP Port
-  command: /usr/lib/nagios/plugins/check_tcp -H {{ listen_address }} -p {{ listen_port }}
+  command: /usr/lib/nagios/plugins/check_tcp -H {{ listen_address }} -p {{ listen_port }} -t {{ timeout }}
+  timeout: {{ timeout }}
   dependencies:
     - varnish_procs
 
 varnish_status:
   description: Varnish HTTP status
-  command: /usr/lib/nagios/plugins/check_http -I {{ listen_address }} -p {{ listen_port }}
+  command: /usr/lib/nagios/plugins/check_http -I {{ listen_address }} -p {{ listen_port }} -t {{ timeout }}
+  timeout: {{ timeout }}
   dependencies:
     - varnish_port

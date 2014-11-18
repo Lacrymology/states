@@ -28,7 +28,7 @@ salt_cloud_configurations_check:
   description: Salt-Cloud Image Monitor
   command: sudo /usr/lib/nagios/plugins/check_saltcloud_images.py --formula=salt.cloud --check=salt_cloud_configurations_check
   check_interval: {{ 24 * 60 }} {# 1 day #}
+  timeout: 30
   arguments:
-    timeout: {{ 15 * 60 }}
     profiles: /etc/salt/cloud.profiles
     providers: /etc/salt/cloud.providers

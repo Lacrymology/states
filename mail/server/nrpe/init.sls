@@ -13,23 +13,15 @@ include:
   file:
     - absent
 
-{%- if salt['pillar.get']('mail:check_mail_stack', False) %}
 /etc/cron.d/mail-server-nrpe:
   file:
-    - managed
-    - source: salt://mail/server/nrpe/cron.jinja2
-    - user: root
-    - group: root
-    - template: jinja
-    - mode: 400
-    - require:
-      - pkg: cron
-      - file: /usr/lib/nagios/plugins/check_mail_stack.py
+    - absent
     - watch_in:
       - service: cron
 
 /usr/lib/nagios/plugins/check_mail_stack.py:
   file:
+{%- if salt['pillar.get']('mail:check_mail_stack', False) %}
     - managed
     - source: salt://mail/server/nrpe/check_mail_stack.py
     - user: nagios
@@ -43,7 +35,5 @@ include:
       - service: nagios-nrpe-server
       - service: nsca_passive
 {%- else %}
-/usr/lib/nagios/plugins/check_mail_stack.py:
-  file:
     - absent
 {%- endif -%}

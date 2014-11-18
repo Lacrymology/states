@@ -68,37 +68,20 @@ nagios-nrpe-server:
  /var/run/nagios. As the ownership is not for itself, it can't write the PID.
  This cause stopping the service to fail, as it can't find a PID.
 #}
-{% for dirname in ('/etc', '/var/run') %}
+{% for dirname in ('/etc', '/var/run', '/usr/lib', '/usr/local') %}
 {{ dirname }}/nagios:
   file:
     - absent
     - require:
       - user: nagios
       - service: nsca_passive
+      - pkg: nagios-nrpe-server
 {% endfor %}
 
 {%- from "upstart/absent.sls" import upstart_absent with context -%}
 {{ upstart_absent('nsca_passive') }}
 
-/usr/local/nagios/bin/nsca_passive:
-  file:
-    - absent
-
-/usr/lib/nagios/plugins:
-  file:
-    - absent
-    - require:
-      - pkg: nagios-nrpe-server
-
 /usr/local/nagiosplugin:
-  file:
-    - absent
-
-/usr/local/nagios:
-  file:
-    - absent
-
-/usr/lib/nagios:
   file:
     - absent
 
@@ -107,35 +90,11 @@ nagios-nrpe-server:
   file:
     - absent
 
-/usr/lib/nagios/plugins/check_memory.py:
-  file:
-    - absent
-
-/usr/lib/nagios/plugins/check_oom.py:
-  file:
-    - absent
-
 /etc/sudoers.d/nrpe_oom:
   file:
     - absent
 
 /etc/cron.d/passive-checks-nrpe.cfg:
-  file:
-    - absent
-
-/etc/nagios/nsca.conf:
-  file:
-    - absent
-
-/etc/nagios/nsca.yaml:
-  file:
-    - absent
-
-/etc/nagios/nsca.d:
-  file:
-    - absent
-
-/var/run/nagios/passive_check.lock:
   file:
     - absent
 

@@ -84,14 +84,6 @@ sudo_salt_minion_nrpe:
 salt_minion_pillar_render_data_collector:
   file:
     - name: /etc/cron.twice_daily/salt_minion_pillar
-    - managed
-    - user: root
-    - group: root
-    - mode: 500
-    - template: jinja
-    - source: salt://salt/minion/nrpe/cron.jinja2
-    - require:
-      - file: /etc/cron.twice_daily
-      - file: /usr/lib/nagios/plugins/check_minion_pillar_render.py
+    - absent
 
 {{ passive_check('salt.minion') }}

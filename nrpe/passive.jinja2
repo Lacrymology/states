@@ -43,18 +43,7 @@ nsca-{{ formula }}:
     {#- only check if it is a domain, not IP. int returns 0 for unconvertible value #}
 /etc/cron.twice_daily/sslyze_check_{{ formula|replace('.', '-') }}:
   file:
-    - managed
-    - user: root
-    - group: root
-    - mode: 500
-    - template: jinja
-    - source: salt://sslyze/cron_template.jinja2
-    - context:
-      formula: {{ formula }}
-    - require:
-      - file: check_ssl_configuration.py
-      - pkg: cron
-      - file: nsca-{{ formula }}
+    - absent
 
 /etc/cron.d/sslyze_check_{{ formula|replace('.', '-') }}:
   file:

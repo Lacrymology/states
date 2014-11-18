@@ -5,9 +5,15 @@
 file:
   monitor_config: /etc/nagios/nsca.d
 
+nrpe:
+  {#- same as nrpe/server.jinja2 ``command_timeout`` configuration key. #}
+  timeout: {{ salt['pillar.get']('nrpe:timeout', 60) }}
+
 nsca:
   default_interval: 5
+  {#- connection timeout to NSCA server in seconds #}
   timeout: 10
+  {#- list of NSCA server and their password #}
   servers:
     {%- for receiver in pillar['nrpe']['nsca']['servers'] %}
     {{ receiver }}: {{ pillar['nrpe']['nsca']['password'] }}
@@ -24,9 +30,8 @@ nsca:
         - console
     {%- if salt['pillar.get']('sentry_dsn', False) %}
         - sentry
-        {#- During CI tests, there is no working Shinken Receiver online to receive
-            NSCA data.
-            This led to Thousands of sentry alerts.
+        {#- During CI tests, there is no working Shinken Receiver online to
+            receive NSCA data. This led to Thousands of sentry alerts.
             Skip sentry log handler in CI test mode. -#}
         {%- if salt['pillar.get']('__test__', False) %}
     nsca_passive.transport:

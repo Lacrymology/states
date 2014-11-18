@@ -25,20 +25,23 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Van Pham Diep <favadi@robotinfra.com>
 -#}
-{% set version = '0.20.6' %}
+{%- set version = '0.20.6' -%}
+{%- set timeout = 45 %}
 graylog2_procs:
   description: Graylog2 Daemon
   command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -C java -a '-jar /usr/local/graylog2-server-{{ version }}/graylog2-server'"
 
 graylog2_api_port:
   description: Graylog2 API Port
-  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 12900
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 12900 -t {{ timeout }}
+  timeout: {{ timeout }}
   dependencies:
     - graylog2_procs
 
 graylog2_api:
   description: Graylog2 API Interface
-  command: /usr/lib/nagios/plugins/check_http -I 127.0.0.1 -u /system -p 12900 -e '401 Unauthorized'
+  command: /usr/lib/nagios/plugins/check_http -I 127.0.0.1 -u /system -p 12900 -e '401 Unauthorized' -t {{ timeout }}
+  timeout: {{ timeout }}
   dependencies:
     - graylog2_api_port
 
@@ -47,6 +50,7 @@ graylog2_incoming_logs:
   command: /usr/lib/nagios/plugins/check_new_logs.py --formula=graylog2.server --check=graylog2_incoming_logs
   dependencies:
     - graylog2_api
+  timeout: 55
   arguments:
     api_url: 'http://127.0.0.1:12900/system/throughput'
     username: '{{ salt['pillar.get']('graylog2:root_username', 'admin') }}'

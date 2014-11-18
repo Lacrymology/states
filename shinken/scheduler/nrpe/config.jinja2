@@ -25,6 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
+{%- set timeout = 30 -%}
 shinken_scheduler_procs:
   description: Shinken Scheduler Deamon
   passive: False
@@ -32,12 +33,14 @@ shinken_scheduler_procs:
 
 shinken_scheduler_port:
   description: Shinken Scheduler Local Port
-  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 7768
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 7768 -t {{ timeout }}
+  timeout: {{ timeout }}
   dependencies:
     - shinken_scheduler_procs
 
 shinken_scheduler_port_remote:
   description: Shinken Scheduler Remote Port
+  timeout: {{ timeout }}
   check: check_tcp!7768
   passive: False
   dependencies:

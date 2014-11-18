@@ -34,7 +34,8 @@ salt_master_procs:
 
 salt_master_publish_port:
   description: Salt Master Local Port Publish
-  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 4505
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 4505 -t {{ timeout }}
+  timeout: {{ timeout }}
   dependencies:
     - salt_master_procs
 
@@ -47,13 +48,15 @@ salt_master_publish_port_remote:
 
 salt_master_return_port:
   description: Salt Master Local Port Return
-  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 4506
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 4506 -t {{ timeout }}
+  timeout: {{ timeout }}
   dependencies:
     - salt_master_procs
 
 salt_master_return_port_remote:
   description: Salt Master Remote Port Return
   check: check_tcp!4506
+  timeout: {{ timeout }}
   passive: False
   dependencies:
     - salt_master_return_port
@@ -66,10 +69,12 @@ salt_master_mine:
   freshness_threshold: {{ ((12 * 60) + 10) * 60 }} {#- 12 hours + 10 minutes #}
   dependencies:
     - salt_master_procs
+    {#- no alert if load is too high #}
+    - load_average
+  timeout: 55
   arguments:
     freshness: {{ 12 * 60 + 20 }} {#- cron interval + timeout + 5 mins #}
-    timeout: {{ 15 * 60 }} {#- this should never need more than 15 minutes to -#}
 {#- sudo for reading salt config files #}
-  command: sudo /usr/lib/nagios/plugins/check_mine_minions.py --formula=salt.master --check=salt_master_mine --cronresult
+  command: sudo /usr/lib/nagios/plugins/check_mine_minions.py --formula=salt.master --check=salt_master_mine
     {%- endif -%}
 {%- endblock -%}

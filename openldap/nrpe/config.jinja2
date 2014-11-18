@@ -25,22 +25,21 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
+{%- set timeout = 30 -%}
 openldap_procs:
   description: OpenLDAP Daemon (slapd)
   command: /usr/lib/nagios/plugins/check_procs -u openldap -C slapd
 
 openldap_port:
   description: LDAP Port
-  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 389
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 389 -t {{ timeout }}
+  timeout: {{ timeout }}
   dependencies:
     - openldap_procs
 
 openldap_base:
   description: LDAP Base
-{% if salt['pillar.get']('ldap:ssl', False) %}
-  command: /usr/lib/nagios/plugins/check_ldap -H 127.0.0.1 -p 389 -b '{{ pillar['ldap']['suffix'] }}' -T -3
-{% else %}
-  command: /usr/lib/nagios/plugins/check_ldap -H 127.0.0.1 -p 389 -b '{{ pillar['ldap']['suffix'] }}' -3
-{% endif %}
+  command: /usr/lib/nagios/plugins/check_ldap -H 127.0.0.1 -p 389 -b '{{ pillar['ldap']['suffix'] }}' {% if salt['pillar.get']('ldap:ssl', False) %} -T{% endif %} -3 -t {{ timeout }}
+  timeout: {{ timeout }}
   dependencies:
     - openldap_port

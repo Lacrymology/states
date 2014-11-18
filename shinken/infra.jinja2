@@ -148,7 +148,7 @@ define command {
 
 define command {
     command_name check_nrpe
-    command_line /usr/lib/nagios/plugins/check_nrpe -H $HOSTADDRESS$ -t {{ salt['pillar.get']('shinken:nrpe:timeout', 9) }} -u -c $ARG1$
+    command_line /usr/lib/nagios/plugins/check_nrpe -H $HOSTADDRESS$ -t $ARG2$ -u -c $ARG1$
     module_type nrpe_poller
 }
 
@@ -159,7 +159,7 @@ define command {
 
 define command {
     command_name check_tcp
-    command_line /usr/lib/nagios/plugins/check_tcp -H $HOSTADDRESS$ -p $ARG1$
+    command_line /usr/lib/nagios/plugins/check_tcp -H $HOSTADDRESS$ -p $ARG1$ -t $ARG2$
 }
 
 define command {
@@ -167,6 +167,7 @@ define command {
     command_line /usr/lib/nagios/plugins/check_dummy 0
 }
 
+{#- no timeout argument for this command as it's not really used for now. #}
 define command {
     command_name check_ssl_configuration
     command_line /usr/lib/nagios/plugins/check_ssl_configuration.py -H $ARG1$
@@ -249,13 +250,14 @@ define servicegroup {
 }
 {%- endfor -%}
 
-{%- set reserved_keys = ('check', 'description', 'passive', 'dependencies', 'service_dependencies') -%}
+{%- set reserved_keys = ('check', 'description', 'passive', 'dependencies', 'service_dependencies', 'timeout') -%}
 {%- set data = salt['monitoring.shinken'](mine) -%}
 {%- set data_keys = data.keys() -%}
 {%- do data_keys.sort() -%}
 {%- for check_name in data_keys -%}
     {%- for check in data[check_name] -%}
-        {%- set check_command = check.data.get('check', 'check_nrpe!' + check_name) %}
+        {%- set check_command = check.data.get('check', 'check_nrpe!' + check_name) -%}
+        {%- set check_timeout = check.data.get('timeout', 10) %}
 define service {
     use salt-service
     service_description {{ check.shinken_service_description() }}
@@ -266,12 +268,14 @@ define service {
           -#}
         {%- if check_command.startswith('bp_rule!') %}
     host_name: dummy
+    check_command {{ check_command }}
         {%- else %}
             {#- not a bp_rule, so set real hostname. #}
     host_name {% for minion in check.minions -%}
                 {{ minion }}
                 {%- if not loop.last %},{% endif -%}
-              {%- endfor -%}
+              {%- endfor %}
+    check_command {{ check_command }}!{{ check_timeout }}
         {%- endif %}
     display_name {{ check.data['description'] }}
         {%- if not check.data.get('passive', True) -%}
@@ -280,7 +284,6 @@ define service {
     passive_checks_enabled 0
     check_freshness 0
         {%- endif %}
-    check_command {{ check_command }}
     {% for dependency in check.data.get('dependencies', []) -%}
         {%- if loop.first %}service_dependencies {% endif -%}
         ,{{ dependency.shinken_service_description() }}

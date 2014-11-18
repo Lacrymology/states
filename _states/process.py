@@ -230,7 +230,8 @@ def wait_for_dead(name, timeout=30, user=None, **kargs):
     return ret
 
 
-def wait_socket(name, address="127.0.0.1", port=None, frequency=1, timeout=60):
+def wait_socket(name=None, address="127.0.0.1", port=None, frequency=1,
+                timeout=60):
     """
     Wait until a socket is open and return True. If timeout is reached, return
     False instead
@@ -264,10 +265,27 @@ def wait_socket(name, address="127.0.0.1", port=None, frequency=1, timeout=60):
             address=address, port=port)
     }
 
-    sock = socket.socket()
-    sock.settimeout(timeout)
     start = time.time()
     end = start + timeout
+
+    def success():
+        """
+        Modify 'ret' with success values. Just DRY between test and live modes
+        """
+        ret['comment'] = ("Connected to {address}:{port} after "
+                          "{time:.2f} seconds".format(
+                              address=address,
+                              port=port,
+                              time=time.time() - start
+                          ))
+        ret['result'] = True
+
+    if __opts__['test']:
+        success()
+        return ret
+
+    sock = socket.socket()
+    sock.settimeout(timeout)
     while time.time() < end:
         try:
             sock.connect((address, port))
@@ -278,14 +296,7 @@ def wait_socket(name, address="127.0.0.1", port=None, frequency=1, timeout=60):
             # keep waiting
             time.sleep(frequency)
         else:
-            # success
-            ret['result'] = True
-            ret['comment'] = ("Connected to {address}:{port} after {time}"
-                              "seconds".format(
-                                  address=address,
-                                  port=port,
-                                  time=time.time() - start
-                              ))
+            success()
             sock.close()
             break
 

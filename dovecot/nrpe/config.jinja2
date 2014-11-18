@@ -25,6 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
+{%- set timeout = 30 -%}
 dovecot_config:
   description: Dovecot Config daemon
   command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -u root -a 'dovecot/config' -C config"
@@ -44,43 +45,50 @@ dovecot_anvil:
 {%- if salt['pillar.get']('dovecot:ssl', False) %}
 dovecot_port_imaps:
   description: Dovecot IMAPS Port
-  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 993
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 993 -t {{ timeout }}
+  timeout: {{ timeout }}
   dependencies:
     - dovecot_procs
 
 dovecot_port_pop3s:
   description: Dovecot POP3S Port
-  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 995
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 995 -t {{ timeout }}
+  timeout: {{ timeout }}
   dependencies:
     - dovecot_procs
 
 dovecot_simap:
   description: Dovecot SIMAP
-  command: /usr/lib/nagios/plugins/check_simap -H 127.0.0.1 -p 993
+  command: /usr/lib/nagios/plugins/check_simap -H 127.0.0.1 -p 993 -t {{ timeout }}
+  timeout: {{ timeout }}
   dependencies:
     - dovecot_port_imaps
 {%- endif %}
 
 dovecot_port_imap:
   description: Dovecot IMAPS Port
-  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 143
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 143 -t {{ timeout }}
+  timeout: {{ timeout }}
   dependencies:
     - dovecot_procs
 
 dovecot_imap:
   description: Dovecot IMAP
-  command: /usr/lib/nagios/plugins/check_imap -H 127.0.0.1 -p 143
+  command: /usr/lib/nagios/plugins/check_imap -H 127.0.0.1 -p 143 -t {{ timeout }}
+  timeout: {{ timeout }}
   dependencies:
     - dovecot_port_imap
 
 dovecot_port_pop3:
   description: Dovecot POP3 Port
-  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 110
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 110 -t {{ timeout }}
+  timeout: {{ timeout }}
   dependencies:
     - dovecot_procs
 
 dovecot_managesieve_port:
   description: Dovecot Managesieve Port
-  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 4190
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 4190 -t {{ timeout }}
+  timeout: {{ timeout }}
   dependencies:
     - dovecot_procs

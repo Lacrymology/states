@@ -32,7 +32,8 @@ Institute for Institutional Innovation by Data Driven Design Inc.
 Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
-{%- macro tomcat_monitor(version) %}
+{%- macro tomcat_monitor(version) -%}
+    {%- set timeout = 15 %}
 tomcat_procs:
   description: Tomcat Daemon
   command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -C java -u tomcat{{ version }}'
@@ -40,19 +41,22 @@ tomcat_procs:
 tomcat_port_remote:
   check: check_tcp!8080
   description: Tomcat HTTP Remote Port
+  timeout: {{ timeout }}
   passive: False
   dependencies:
     - tomcat_port
 
 tomcat_port:
   description: Tomcat HTTP Local Port
-  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 8080
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 8080 -t {{ timeout }}
+  timeout: {{ timeout }}
   dependencies:
     - tomcat_procs
 
 tomcat_command_port:
   description: Tomcat Command Port
-  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 8005
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 8005 -t {{ timeout }}
+  timeout: {{ timeout }}
   dependencies:
     - tomcat_procs
 {%- endmacro %}

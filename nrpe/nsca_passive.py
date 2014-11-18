@@ -36,7 +36,7 @@ import glob
 import logging
 import os
 import shlex
-import subprocess
+import subprocess32 as subprocess
 import sys
 
 import send_nsca
@@ -80,10 +80,13 @@ class PassiveDaemon(object):
     Daemon that collects all monitoring NRPE commands, checks some
     configurations to see if they should be ran passively and how often, and
     runs them somewhat linearly
+
+    exec_timeout: how many seconds to let sub process to run before kill them
+        off.
     """
 
     def __init__(self, stats, minion_id, nsca_servers, nsca_include_directory,
-                 nsca_timeout, default_interval):
+                 nsca_timeout, exec_timeout, default_interval):
 
         self.stats = stats
         self.minion_id = minion_id
@@ -91,6 +94,7 @@ class PassiveDaemon(object):
         self.nsca_include_directory = nsca_include_directory
         self.default_interval = default_interval
         self.nsca_timeout = nsca_timeout
+        self.exec_timeout = exec_timeout
 
         self.sched = scheduler.Scheduler(standalone=True)
         self.checks = self.collect_passive_checks()
@@ -120,7 +124,15 @@ class PassiveDaemon(object):
                          check_name, command, e, exc_info=True)
             return
 
-        output, errors = p.communicate()
+        # execute command and fail if it take more than ``self.exec_timeout``
+        # to behave like nagios-nrpe-server ``command_timeout``.
+        try:
+            output, errors = p.communicate(timeout=self.exec_timeout)
+        except subprocess.TimeoutExpired:
+            logger.error('Check %s with command %s timeout (%d seconds).',
+                         check_name, command, self.exec_timeout)
+            return
+
         if p.returncode not in (0, 1, 2, 3) or errors:
             status = 3
             output = errors
@@ -264,6 +276,7 @@ class NscaPassive(pysc.Application):
             nsca_include_directory = self.config['file']['monitor_config']
             default_interval = self.config['nsca']['default_interval']
             nsca_timeout = self.config['nsca']['timeout']
+            exec_timeout = self.config['nrpe']['timeout']
         except KeyError, err:
             logger.error('Bad config %r', err)
             sys.exit(1)
@@ -282,6 +295,7 @@ class NscaPassive(pysc.Application):
                           nsca_servers,
                           nsca_include_directory,
                           nsca_timeout,
+                          exec_timeout,
                           default_interval).main()
         except Exception as err:
             logger.error("Encountered error when running PassiveDaemon: %r",

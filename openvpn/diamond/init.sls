@@ -27,6 +27,7 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
 include:
   - diamond
+  - openvpn.static
   - rsyslog.diamond
 
 openvpn_diamond_collector:
@@ -45,6 +46,9 @@ openvpn_diamond_collector:
 {%- endfor %}
     - require:
       - file: /etc/diamond/collectors
+{%- for tunnel in pillar['openvpn'] %}
+      - service: openvpn-{{ tunnel }}
+{%- endfor %}
     - watch_in:
       - service: diamond
 
@@ -55,6 +59,10 @@ openvpn_diamond_resources:
     - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
     - require_in:
       - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
+    - require:
+{%- for tunnel in pillar['openvpn'] %}
+      - service: openvpn-{{ tunnel }}
+{%- endfor %}
     - text:
       - |
         [[openvpn]]

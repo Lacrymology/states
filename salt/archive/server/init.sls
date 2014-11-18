@@ -186,7 +186,7 @@ salt-archive-clamav:
     - group: root
     - mode: 550
     - require:
-      - module: module
+      - module: requests
       - pkg: salt-archive-clamav
   cmd:
     - run

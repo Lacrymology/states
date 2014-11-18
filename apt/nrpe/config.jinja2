@@ -25,15 +25,17 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
+
+{#-
+ Services that don't affect production and that have high cost in CPU, I/O
+ and RAM to performs.
+ Run them only each 6 hours.
+-#}
 {%- if not salt['pillar.get']('__test__', False) %}
 apt:
+  {%- set timeout = 50 %} {#- seconds  #}
   description: APT Updates
-  {#-
-  Services that don't affect production and that have high cost in CPU, I/O
-  and RAM to performs.
-  Run them only each 6 hours.
-  #}
-  check_interval: {{ 6 * 60 }}
+  check_interval: {{ 6 * 60 }} {#- 6 hours #}
   freshness_threshold: {{ ((6 * 60) + 10) * 60 }} {#- 6 hours + 10 minutes #}
   notifications_enabled: 0
   {#- enable only notification for real error #}
@@ -42,12 +44,13 @@ apt:
       minutes #}
   retry_interval: 3
   max_check_attempts: 5
-  command: /usr/lib/nagios/plugins/check_apt
+  timeout: {{ timeout }}
+  command: /usr/lib/nagios/plugins/check_apt -t {{ timeout }}
 {%- endif %}
 
 apt_rc:
   description: APT Not-Purged
-  check_interval: {{ 6 * 60 }}
+  check_interval: {{ 6 * 60 }} {#- 6 hours #}
   freshness_threshold: {{ ((6 * 60) + 10) * 60 }} {#- 6 hours + 10 minutes #}
   notifications_enabled: 0
   notification_options: n
@@ -55,4 +58,5 @@ apt_rc:
       minutes #}
   retry_interval: 3
   max_check_attempts: 5
+  timeout: 50
   command: /usr/lib/nagios/plugins/check_apt-rc.py --formula=apt --check=apt_rc

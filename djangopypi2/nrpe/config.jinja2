@@ -38,4 +38,4 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 {%- set deployment = 'djangopypi2' %}
 {{ uwsgi_instance(deployment) }}
 {{ postgresql_instance_prefix(deployment) }}
-{{ nginx_instance(deployment, timeout=120, http_uri='/packages/', extra_dependencies=('djangopypi2_uwsgi_worker', 'djangopypi2_postgresql')) }}
+{{ nginx_instance(deployment, timeout=55, http_uri='/packages/', extra_dependencies=('djangopypi2_uwsgi_worker', 'djangopypi2_postgresql')) }}

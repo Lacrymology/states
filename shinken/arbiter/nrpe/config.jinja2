@@ -25,6 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
+{%- set timeout = 30 -%}
 shinken_arbiter_procs:
   description: Shinken Arbiter Daemon
 {#- for some reason arbiter don't change it's user id to shinken #}
@@ -32,13 +33,15 @@ shinken_arbiter_procs:
 
 shinken_arbiter_port:
   description: Shinken Arbiter Local Port
-  command: "/usr/lib/nagios/plugins/check_tcp -H {{ salt['mine.get'](grains['id'], 'monitoring.data')[grains['id']]['ip_addrs']['private'] }} -p 7770"
+  command: "/usr/lib/nagios/plugins/check_tcp -H {{ salt['mine.get'](grains['id'], 'monitoring.data')[grains['id']]['ip_addrs']['private'] }} -p 7770 -t {{ timeout }}"
+  timeout: {{ timeout }}
   dependencies:
     - shinken_arbiter_procs
 
 shinken_arbiter_port_remote:
   description: Shinken Arbiter Remote Port
   check: check_tcp!7770
+  timeout: {{ timeout }}
   passive: False
   dependencies:
     - shinken_arbiter_port

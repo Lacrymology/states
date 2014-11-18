@@ -70,6 +70,7 @@ loopback_interface:
 oom_messages:
   description: Out Of Memory Messages
   command: sudo /usr/lib/nagios/plugins/check_oom.py --formula=nrpe --check=oom_messages
+  timeout: 30
   arguments:
     seconds: 3600
 
@@ -97,6 +98,7 @@ nrpe-remote-port:
   description: Remote NRPE Port
   check: check_tcp!5666
   passive: False
+  timeout: 20
   dependencies:
     - nrpe_procs
 

@@ -25,6 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
+{%- set timeout = 30 -%}
 {%- set instances_count = pillar['graphite']['carbon']['instances'] %}
 {% for instance in range(instances_count) %}
 carbon_cache_{{ instance }}_procs:
@@ -33,19 +34,22 @@ carbon_cache_{{ instance }}_procs:
 
 carbon_cache_{{ instance }}_plaintext_port:
   description: Carbon Cache {{ instance }} Port Plaintext
-  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 20{{ instance|int + 1 }}3
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 20{{ instance|int + 1 }}3 -t {{ timeout }}
+  timeout: {{ timeout }}
   dependencies:
     - carbon_cache_{{ instance }}_procs
 
 carbon_cache_{{ instance }}_pickle_port:
   description: Carbon Cache {{ instance }} Port Pickle
-  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 20{{ instance|int + 1 }}4
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 20{{ instance|int + 1 }}4 -t {{ timeout }}
+  timeout: {{ timeout }}
   dependencies:
     - carbon_cache_{{ instance }}_procs
 
 carbon_cache_{{ instance }}_cache_query_port:
   description: Carbon Cache {{ instance }} Port Cache Query
-  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 70{{ instance|int + 1 }}2
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 70{{ instance|int + 1 }}2 -t {{ timeout }}
+  timeout: {{ timeout }}
   dependencies:
     - carbon_cache_{{ instance }}_procs
 {% endfor %}
@@ -62,6 +66,7 @@ carbon_plaintext_port_remote:
   description: Carbon Remote Port PlainText Protocol
   check: check_tcp!2003
   passive: False
+  timeout: {{ timeout }}
   dependencies:
     - carbon_pickle_port
 
@@ -69,17 +74,20 @@ carbon_pickle_port_remote:
   description: Carbon Remote Port Pickle Protocol
   check: check_tcp!2004
   passive: False
+  timeout: {{ timeout }}
   dependencies:
     - carbon_pickle_port
 
 carbon_plaintext_port:
   description: Carbon Local Port PlainText Protocol
-  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 2003
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 2003 -t {{ timeout }}
+  timeout: {{ timeout }}
   dependencies:
     - carbon_cache_procs
 
 carbon_pickle_port:
   description: Carbon Local Port Pickle Protocol
-  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 2004
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 2004 -t {{ timeout }}
+  timeout: {{ timeout }}
   dependencies:
     - carbon_cache_procs

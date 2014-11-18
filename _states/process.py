@@ -41,6 +41,7 @@ import os
 import pwd
 import time
 import subprocess
+import socket
 
 log = logging.getLogger(__name__)
 
@@ -227,3 +228,33 @@ def wait_for_dead(name, timeout=30, user=None, **kargs):
     ret['comment'] = 'Dead (pattern: "{}", user: "{}")'.format(name, user)
 
     return ret
+
+
+def wait_socket(address="127.0.0.1", port=None, frequency=1,timeout=60):
+    """
+    Wait until a socket is open and return True. If timeout is reached, return False instead
+
+    :param address: The ip address to wait for. Defaults to localhost
+    :param port: The port to try to connect to. Mandatory
+    :param frequency: How often to try to connect, in seconds. Defaults to 1
+    :param timeout: How long to keep trying, in seconds. Defaults to 60
+    """
+    if not port:
+        raise TypeError("wait_socket() has one mandatory argument (port)")
+    s = socket.socket()
+    s.settimeout(timeout)
+    start = time.time()
+    end = start + timeout
+    while time.time() < end:
+        try:
+            s.connect((address, port))
+        except socket.timeout, err:
+            break
+        except socket.error:
+            # keep waiting
+            time.sleep(frequency)
+        else:
+            s.close()
+            return True
+
+    return False

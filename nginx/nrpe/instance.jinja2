@@ -52,10 +52,12 @@ Maintainer: Quan Tong Anh <quanta@robotinfra.com>
   description: {{ deployment|capitalize }} HTTP Protocol
   command: /usr/lib/nagios/plugins/check_http -H {{ domain_name }} -u {{ http_uri }} -p {{ http_port }} -e '{{ http_result }}' -I {{ first_ip }}
     {%- if timeout %} --timeout={{ timeout }}{% endif -%}
-    {%- if salt['pillar.get']('__test__', False) %} -v{%- endif %}
+    {%- if salt['pillar.get']('__test__', False) %} -v{%- endif -%}
+    {%- if timeout %}
+  timeout: {{ timeout }}
+    {%- endif %}
     {%- if check_interval %}
   check_interval: {{ check_interval }}
-  timeout: {{ timeout }}
   freshness_threshold: {{ (check_interval + 10) * 60 }} {#- check_interval + 10 minutes in seconds #}
     {%- endif %}
   dependencies:

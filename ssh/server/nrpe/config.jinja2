@@ -33,7 +33,7 @@ ssh_procs:
 {#- check only one port to see if ssh daemon works, no need to check all ports #}
 ssh_port:
   description: SSH Server Local Port
-  command: "/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p {{ salt['pillar.get']('ssh:server:ports', [22])[0] }}" -t {{ timeout }}
+  command: "/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p {{ salt['pillar.get']('ssh:server:ports', [22])[0] }} -t {{ timeout }}"
   timeout: {{ timeout }}
   dependencies:
     - ssh_procs

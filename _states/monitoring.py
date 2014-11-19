@@ -100,14 +100,21 @@ def managed(name, source=None, template='jinja',
     with open(sfn) as f:
         try:
             loaded = yamlloader.load(f, Loader=yamlloader.CustomLoader)
-            log.debug("Content of %s(%s):%s%s", source, sfn, os.linesep,
-                      str(loaded))
         except Exception, err:
             f.seek(0)
-            log.error("Content of failed YAML for %s(%s):%s%s", source, sfn,
-                      os.linesep, f.read())
+            yaml = f.read()
             __salt__['file.remove'](sfn)
-            raise err
+            return _error(ret,
+                          os.linesep.join((
+                              "Content of failed YAML for %s(%s):" % (source,
+                                                                      sfn),
+                              '-' * 8,
+                              str(err),
+                              '-' * 8,
+                              yaml)))
+        else:
+            log.debug("Content of %s(%s):%s%s", source, sfn, os.linesep,
+                      str(loaded))
     __salt__['file.remove'](sfn)
 
     lines = []

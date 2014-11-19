@@ -74,8 +74,10 @@ Maintainer: Quan Tong Anh <quanta@robotinfra.com>
   command: /usr/lib/nagios/plugins/check_http -S -H {{ domain_name }} -u {{ https_uri }} -e '{{ https_result }}' -I {{ first_ip }}
         {%- if timeout %} --timeout={{ timeout }}{% endif -%}
         {%- if salt['pillar.get']('__test__', False) %} -v{%- endif %}
-    {%- if check_interval %}
+    {%- if timeout %}
   timeout: {{ timeout }}
+    {%- endif -%}
+    {%- if check_interval %}
   check_interval: {{ check_interval }}
   freshness_threshold: {{ (check_interval + 10) * 60 }} {#- check_interval + 10 minutes in seconds #}
     {%- endif %}
@@ -92,7 +94,9 @@ Maintainer: Quan Tong Anh <quanta@robotinfra.com>
   command: /usr/lib/nagios/plugins/check_http -S -H {{ domain_name }} -C {{ expire_days }} -I {{ first_ip }}
         {%- if timeout %} --timeout={{ timeout }}{% endif -%}
         {%- if salt['pillar.get']('__test__', False) %} -v{%- endif %}
+    {%- if timeout %}
   timeout: {{ timeout }}
+    {%- endif %}
   dependencies:
     - {{ formula }}_nginx_https
 

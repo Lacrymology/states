@@ -53,6 +53,16 @@ include:
     - require:
       - file: /etc/diamond
 
+{# directory for scripts to be ran by the UserScripts collector -#}
+/etc/diamond/user_scripts:
+  file:
+    - directory
+    - user: root
+    - group: root
+    - mode: 550
+    - require:
+      - file: /etc/diamond
+
 diamond_requirements:
   file:
     - managed
@@ -151,3 +161,14 @@ diamond:
     - require:
       - file: /etc/diamond/collectors
       - file: /etc/diamond/collectors/ProcessMemoryCollector.conf
+
+/etc/diamond/collectors/UserScriptsCollector.conf:
+  file:
+    - managed
+    - template: jinja
+    - source: salt://diamond/UserScriptsCollector.jinja2
+    - user: root
+    - group: root
+    - mode: 440
+    - require:
+      - file: /etc/diamond/collectors

@@ -40,13 +40,19 @@ elasticsearch_diamond_resources:
     - name: processes
     - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
     - require:
-      - service: elasticsearch
+      - process: elasticsearch_diamond_resources
     - require_in:
       - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
     - text:
       - |
         [[elasticsearch]]
         cmdline = .+java.+\-cp \:\/usr\/share\/elasticsearch\/lib\/elasticsearch\-.+\.jar
+  process:
+    - wait_socket
+    - address: "127.0.0.1"
+    - port: 9200
+    - require:
+      - service: elasticsearch
 
 /etc/diamond/collectors/ElasticSearchCollector.conf:
   file:

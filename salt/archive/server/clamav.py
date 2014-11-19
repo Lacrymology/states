@@ -33,7 +33,8 @@ class ClamavMirror(pysc.Application):
     defaults = {
         'mirror': 'db.local.clamav.net',
         'files': ('bytecode', 'daily', 'main'),
-        'output': '/var/lib/salt_archive/mirror/clamav'
+        'output': '/var/lib/salt_archive/mirror/clamav',
+        'lock': '/var/run/clamav_mirror.pid'
     }
 
     logger = logger

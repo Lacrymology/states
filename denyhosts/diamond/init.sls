@@ -42,3 +42,15 @@ denyhosts_diamond_resources:
       - |
         [[denyhosts]]
         cmdline = ^python \/usr\/sbin\/denyhosts
+
+/etc/diamond/user_scripts/count_denyhosts.sh:
+  file:
+    - managed
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 550
+    - source: salt://denyhosts/diamond/count_denyhosts.sh
+    - require:
+      - file: /etc/diamond/user_scripts
+      - file: /etc/diamond/collectors/UserScriptsCollector.conf

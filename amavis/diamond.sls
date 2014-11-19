@@ -42,4 +42,4 @@ amavis_diamond_resources:
     - text:
       - |
         [[amavis]]
-        name = ^amavisd\ \(master\)
+        name = ^amavisd\ \(.+\)

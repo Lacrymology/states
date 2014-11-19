@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Hung Nguyen Viet
+Copyright (c) 2014, Diep Pham
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,18 +22,14 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Viet Hung Nguyen <hvn@robotinfra.com>
-Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
-
-Diamond statistics for amavis.
+Author: Van Diep Pham <favadi@robotinfra.com>
+Maintainer: Van Pham Diep <favadi@robotinfra.com>
 -#}
 
 include:
-  - cron.diamond
-  - spamassassin.diamond
   - diamond
 
-amavis_diamond_resources:
+spamassassin_diamond_resources:
   file:
     - accumulated
     - name: processes
@@ -42,5 +38,17 @@ amavis_diamond_resources:
       - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
     - text:
       - |
-        [[amavis]]
-        name = ^amavisd\ \(.+\)
+        [[spamassassin]]
+        exe = ^\/usr\/bin\/spamassassin$
+
+pyzor_diamond_resources:
+  file:
+    - accumulated
+    - name: processes
+    - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
+    - require_in:
+      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
+    - text:
+      - |
+        [[pyzor]]
+        exe = ^\/usr\/bin\/pyzor$

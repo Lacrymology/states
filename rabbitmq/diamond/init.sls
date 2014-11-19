@@ -30,9 +30,7 @@ include:
   - apt
   - diamond
   - pip
-{%- if grains['id'] != master_id %}
   - rabbitmq
-{%- endif %}
   - nginx.diamond
 
 rabbitmq_diamond_resources:
@@ -91,10 +89,9 @@ diamond_rabbitmq:
     - require:
       - module: diamond-pyrabbit
       - file: /etc/diamond/collectors
-{%- if grains['id'] != master_id %}
+      - rabbitmq_user: monitor_user
     - watch_in:
       - service: diamond
-{%- endif %}
   pkg:
     - latest
     - name: python-httplib2

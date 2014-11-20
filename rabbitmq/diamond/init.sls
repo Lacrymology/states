@@ -89,7 +89,9 @@ diamond_rabbitmq:
     - require:
       - module: diamond-pyrabbit
       - file: /etc/diamond/collectors
+{%- if grains['id'] == master_id %}
       - rabbitmq_user: monitor_user
+{%- endif %}
     - watch_in:
       - service: diamond
   pkg:

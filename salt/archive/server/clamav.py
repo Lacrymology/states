@@ -79,7 +79,7 @@ class ClamavMirror(pysc.Application):
                 try:
                     remote_size = int(req.headers[http_header_size])
                 except KeyError:
-                    logger.warning("URL %s didn't returned a %s header, skip"
+                    logger.info("URL %s didn't returned a %s header, skip"
                                    "size validation.", url, http_header_size)
                 else:
                     if stat.st_size == remote_size:

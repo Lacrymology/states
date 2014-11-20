@@ -36,12 +36,27 @@ Mandatory
 Example::
 
   dns_proxy:
-    dns_server: resolv.conf
+    dns_server:
+      - resolvconf
 
 dns_proxy:dns_server
 ~~~~~~~~~~~~~~~~~~~~~
 
-To enable status control if you are using ``/etc/resolv.conf``.
+A list. The first one is the configuration method which can be:
+
+- ``resolvconf``: use informations provided by resolvconf.
+- The label of a server section. It is completely arbitrary, but one good
+  choice is the name of your ISP.
+
+If using the second method (make pdnsd behave like a caching,
+recursive DNS server), then list at least one DNS server to collect DNS
+information from, something like this::
+
+  dns_proxy:
+    dns_server:
+      - isp-servers
+      - 1.2.3.4
+      - 5.6.7.8
 
 Optional
 --------

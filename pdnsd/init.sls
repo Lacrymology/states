@@ -26,8 +26,17 @@ Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 
 -#}
+{%- set method = pillar['dns_proxy']['dns_server'][0] %}
 include:
   - apt
+
+{%- if method == 'resolvconf' %}
+resolvconf:
+  pkg:
+    - installed
+    - require:
+      - cmd: apt_sources
+{%- endif %}
 
 pdnsd:
   pkg:
@@ -35,6 +44,9 @@ pdnsd:
     - require:
       - cmd: apt_sources
       - debconf: pdnsd
+{%- if method == 'resolvconf' %}
+      - pkg: resolvconf
+{%- endif %}
   debconf:
     - set
     - data:

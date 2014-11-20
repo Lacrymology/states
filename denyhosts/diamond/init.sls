@@ -50,7 +50,7 @@ denyhosts_diamond_resources:
     - user: root
     - group: root
     - mode: 550
-    - source: salt://denyhosts/diamond/count_denyhosts.sh
+    - source: salt://denyhosts/diamond/count_denyhosts.jinja2
     - require:
       - file: /etc/diamond/user_scripts
-      - file: /etc/diamond/collectors/UserScriptsCollector.conf
+      - file: diamond.conf

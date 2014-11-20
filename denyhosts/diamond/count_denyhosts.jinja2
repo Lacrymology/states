@@ -1,6 +1,5 @@
-#!/bin/bash
-
-# script for use with diamond collector userscripts
+#!/bin/sh
+# {{ pillar['message_do_not_modify'] }}
 
 count=`grep -v '^[\s]*\(#\|$\)' /etc/hosts.deny | wc -l`
 echo "denyhosts.blocked $count"

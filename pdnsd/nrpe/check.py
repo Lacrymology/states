@@ -34,6 +34,7 @@ __email__ = 'quanta@robotinfra.com'
 
 import argparse
 import DNS
+import logging
 import os
 import shlex
 import subprocess
@@ -41,6 +42,8 @@ import sys
 
 import nagiosplugin as nap
 from pysc import nrpe
+
+logger = logging.getLogger('pdnsd.caching')
 
 
 class DnsCaching(nap.Resource):
@@ -58,8 +61,11 @@ class DnsCaching(nap.Resource):
         stderr = p.communicate()[1]
         if p.returncode == 0:
             try:
+                # Run a DNS query two times consecutively.
+                # In most cases, the second time is much faster.
+                logger.debug('First query took %f ms', request.req().args['elapsed'])
                 answer = request.req()
-                answer = request.req()
+                logger.debug('Second query took %f ms', answer.args['elapsed'])
             except Exception as e:
                 print("DNSCACHING WARNING - {0}".format(e))
                 sys.exit(1)

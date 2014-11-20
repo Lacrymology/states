@@ -29,6 +29,10 @@ Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 {%- from 'nrpe/passive.jinja2' import passive_absent with context %}
 {{ passive_absent('pdnsd') }}
 
+/etc/sudoers.d/pdnsd_nrpe:
+  file:
+    - absent
+
 /usr/lib/nagios/plugins/check_dns_caching.py:
   file:
     - absent

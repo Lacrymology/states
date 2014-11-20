@@ -91,6 +91,39 @@ mysql-server:
       - file: /etc/mysql/my.cnf
       - debconf: mysql-server
       - pkg: python-mysqldb
+  {#-
+  mysqld_safe used the logger command to log the error messages to the syslog.
+  With `ps`, you will see something like this:
+
+    logger -t mysqld -p daemon.error
+
+  `-t` for tag and `-p` for priority.
+
+  The tag can be configured with `--syslog-tag` parameter:
+  http://dev.mysql.com/doc/refman/5.5/en/mysqld-safe.html#option_mysqld_safe_syslog-tag
+
+  The priority defines which facility and level the message should be logged.
+  Unfortunately, this is hard-coded in the `mysqld_safe` script.
+
+  This hack is to make it configurable as well.
+
+  After patching, to log to the `local3.info` for example,
+  change the configuration file `/etc/mysql/conf.d/mysqld_safe_syslog.cnf` as follows:
+
+    [mysqld_safe]
+    syslog
+    syslog-priority = local3.info
+
+  Source: http://shinguz.blogspot.com/2010/01/mysql-reporting-to-syslog.html
+  #}
+  cmd:
+    - run
+    - name: sed -i -e '/syslog_tag_mysqld_safe=mysqld_safe/a syslog_priority=daemon.info' -e 's|daemon.error|$syslog_priority|g' -e '/syslog_tag="$val" ;;/a\      --syslog-priority=*) syslog_priority="$val" ;;' /usr/bin/mysqld_safe
+    - unless: egrep 'daemon.info|syslog_priority|--syslog-priority' /usr/bin/mysqld_safe
+    - require:
+      - pkg: mysql-server
+    - watch_in:
+      - service: mysql-server
   service:
     - name: mysql
     - running

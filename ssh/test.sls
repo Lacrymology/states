@@ -76,7 +76,7 @@ include:
 test_ssh:
   cmd:
     - run
-    - name: ssh root@localhost '/bin/true'
+    - name: ssh -o NoHostAuthenticationForLocalhost=yes root@localhost '/bin/true'
     - require:
       - cmd: ssh_add_key
 

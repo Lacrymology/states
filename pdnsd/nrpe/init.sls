@@ -31,6 +31,20 @@ include:
   - apt.nrpe
   - nrpe
   - pip
+  - sudo
+  - sudo.nrpe
+
+sudo_pdnsd_nrpe:
+  file:
+    - managed
+    - name: /etc/sudoers.d/pdnsd_nrpe
+    - template: jinja
+    - source: salt://pdnsd/nrpe/sudo.jinja2
+    - mode: 440
+    - user: root
+    - group: root
+    - require:
+      - pkg: sudo
 
 pydns:
   file:
@@ -61,6 +75,11 @@ pydns:
     - group: nagios
     - mode: 550
     - require:
+      - module: nrpe-virtualenv
       - pkg: nagios-nrpe-server
+      - file: nsca-pdnsd
+    - require_in:
+      - service: nagios-nrpe-server
+      - service: nsca_passive
 
 {{ passive_check('pdnsd') }}

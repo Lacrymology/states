@@ -33,7 +33,7 @@ global {
     cache_dir = "/var/cache/pdnsd";
     run_as = "pdnsd";
     server_ip = {{ salt['pillar.get']('dns_proxy:ip_address', '0.0.0.0') }};
-    status_ctl = {% if pillar['dns_proxy']['dns_server'] == 'resolv.conf' %}on{% else %}off{% endif %};
+    status_ctl = on;
     paranoid = on;
     min_ttl = {{ salt['pillar.get']('dns_proxy:minimum_ttl', 900) }};
     max_ttl = {{ salt['pillar.get']('dns_proxy:maximum_ttl', 604800) }};
@@ -50,10 +50,10 @@ global {
 }
 
 server {
-    label="{{ pillar['dns_proxy']['dns_server'] }}";
-{% if pillar['dns_proxy']['dns_server'] != 'resolv.conf' %}
-    root_server=on;
-    ip = {{ pillar['dns_proxy']['dns_server'] }};
+    label="{{ pillar['dns_proxy']['dns_server'][0] }}";
+{%- if pillar['dns_proxy']['dns_server'][0] != 'resolvconf' %}
+    root_server = on;
+    ip = {% for server in pillar['dns_proxy']['dns_server'] %}{% if not loop.first %}{{ server }}{% if not loop.last %}, {% endif %}{% endif %}{% endfor %};
     timeout = 5;
     uptest = query;
     interval = 30m;
@@ -62,5 +62,5 @@ server {
     exclude = .localdomain;
     policy = included;
     preset = off;
-{% endif %}
+{%- endif %}
 }

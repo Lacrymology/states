@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Nicolas Plessis
+Copyright (c) 2014, Quan Tong Anh
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,30 +22,35 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Nicolas Plessis <niplessis@gmail.com>
-Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
+Author: Quan Tong Anh <quanta@robotinfra.com>
+Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
-jenkins:
-  service:
-    - dead
-  pkg:
-    - purged
-    - require:
-      - service: jenkins
-  file:
-    - absent
-    - name: /var/tmp/jna
-    - require:
-      - pkg: jenkins
+# {{ pillar['message_do_not_modify'] }}
 
-/etc/nginx/conf.d/jenkins.conf:
-  file:
-    - absent
+NAME=jenkins
 
-/etc/cron.daily/jenkins_delete_old_workspaces.py:
-  file:
-    - absent
+JAVA=/usr/bin/java
 
-/etc/cron.daily/jenkins_delete_old_workspaces:
-  file:
-    - absent
+JAVA_ARGS="-Djava.io.tmpdir=/var/tmp"
+
+PIDFILE=/var/run/jenkins/jenkins.pid
+
+JENKINS_USER=jenkins
+
+JENKINS_WAR=/usr/share/jenkins/jenkins.war
+
+JENKINS_HOME=/var/lib/jenkins
+
+RUN_STANDALONE=true
+
+JENKINS_LOG=/var/log/jenkins/$NAME.log
+
+MAXOPENFILES=8192
+
+HTTP_PORT=8080
+
+AJP_PORT=-1
+
+PREFIX=/jenkins
+
+JENKINS_ARGS="--webroot=/var/cache/jenkins/war --httpPort=$HTTP_PORT --ajp13Port=$AJP_PORT"

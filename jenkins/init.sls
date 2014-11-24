@@ -24,6 +24,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author: Nicolas Plessis <niplessis@gmail.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
+            Quan Tong Anh <quanta@robotinfra.com>
 -#}
 {%- from 'macros.jinja2' import manage_pid with context %}
 include:
@@ -51,13 +52,6 @@ jenkins_dependencies:
 
 {%- set version = '1.545' %}
 jenkins:
-  service:
-    - running
-    - require:
-      - pkg: jenkins
-    - watch:
-      - pkg: jre-7
-      - file: jre-7
   pkg:
     - installed
     - sources:
@@ -70,6 +64,22 @@ jenkins:
       - cmd: apt_sources
       - pkg: jdk-7
       - pkg: jenkins_dependencies
+  file:
+    - managed
+    - name: /etc/default/jenkins
+    - source: salt://jenkins/config.jinja2
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 644
+    - require:
+      - pkg: jenkins
+  service:
+    - running
+    - watch:
+      - file: jenkins
+      - pkg: jre-7
+      - file: jre-7
 
 {%- if salt['pkg.version']('jenkins') not in ('', version) %}
 jenkins_old_version:

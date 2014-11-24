@@ -159,13 +159,18 @@ http {
 {% endblock %}
     }
 
-{% if salt['pillar.get']('nginx:redirect_numeric_ip', False) %}
+    {#- Block request without a "Host" field in HTTP headers.
+        or any unhandled hostnames.
+        http://nginx.org/en/docs/http/request_processing.html#how_to_prevent_undefined_server_names
+        #}
     server {
-        server_name {% for ip in salt['network.ip_addrs']() %}{{ ip }}:80{% if not loop.last %} {% endif %}{% endfor %};
-        return 302 {{ salt['pillar.get']('nginx:redirect_numeric_ip') }};
+        listen 80 default_server;
+        server_name  _;
+        return 404;
+{%- if not pillar.get('debug', False) %}
         access_log off;
+{%- endif %}
     }
-{% endif %}
 
     include /etc/nginx/conf.d/*.conf;
 }

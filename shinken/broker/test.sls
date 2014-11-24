@@ -35,7 +35,9 @@ include:
                     ('shinken_broker_http', 'Connection refused'),
                     ('shinken.broker_nginx_http', 'Invalid HTTP response')] %}
 
-{%- set check_list = check_list + [('shinken.broker_nginx_https', 'Invalid HTTP response')] %}
+{%- if salt['pillar.get']('shinken:ssl', False) %}
+    {%- set check_list = check_list + [('shinken.broker_nginx_https', 'Invalid HTTP response')] %}
+{%- endif %}
 
 {%- call test_cron() %}
 - sls: shinken.broker

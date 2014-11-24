@@ -35,9 +35,8 @@ locking_script
 log_start_script "$@"
 trap "log_stop_script \$?" EXIT
 
-if [ -x /etc/cron.twice_daily/salt_minion_pillar ]; then
-    /etc/cron.twice_daily/salt_minion_pillar
-    /usr/lib/nagios/plugins/check_minion_pillar_render.py --formula=salt.minion --check=salt_minion_pillar_render --cronresult
+if [ -x /usr/lib/nagios/plugins/check_minion_pillar_render.py ]; then
+    /usr/lib/nagios/plugins/check_minion_pillar_render.py --formula=salt.minion --check=salt_minion_pillar_render
 else
     logger -t "$(basename "$0")[$$]" -p 'local0.info' \
         "Cannot validate the pillar data first, just run highstate anyway"

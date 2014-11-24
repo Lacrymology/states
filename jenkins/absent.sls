@@ -26,8 +26,17 @@ Author: Nicolas Plessis <niplessis@gmail.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
 jenkins:
+  service:
+    - dead
   pkg:
     - purged
+    - require:
+      - service: jenkins
+  file:
+    - absent
+    - name: /var/tmp/jna
+    - require:
+      - pkg: jenkins
 
 /etc/nginx/conf.d/jenkins.conf:
   file:

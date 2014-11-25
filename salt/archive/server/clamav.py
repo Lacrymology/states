@@ -69,10 +69,9 @@ class ClamavMirror(pysc.Application):
                             local, delta.total_seconds())
                 save(local, req.iter_content(), source_timestamp)
             elif local_timestamp > source_timestamp:
-                logger.warning("URL %s timestamp is '%s' and local %s timestamp"
-                               " is '%s': mirror is outdated, skip.",
-                               url, local, source_timestamp,
-                               local_timestamp)
+                logger.warning("URL '%s' timestamp is '%s' and local '%s' "
+                               "timestamp is '%s': mirror is outdated, skip.",
+                               url, source_timestamp, local, local_timestamp)
             else:
                 logger.info("Local and remote file have same timestamp")
                 try:

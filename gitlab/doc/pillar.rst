@@ -58,6 +58,11 @@ gitlab:hostnames
 
 Example: ``__salt__['network.ip_addrs']('eth0')[0]``
 
+.. warning::
+
+   Consider destroy Administrator account after created an another
+   admin.
+
 gitlab:admin:email
 ~~~~~~~~~~~~~~~~~~
 

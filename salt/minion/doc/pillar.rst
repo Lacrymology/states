@@ -45,7 +45,15 @@ Optional
 Example::
 
   salt:
+    highstate: False
     master: 2.3.4.5
+
+salt:highstate
+~~~~~~~~~~~~~~
+
+Run highstate as a daily cron job or not.
+
+Default: ``True``.
 
 salt:master
 ~~~~~~~~~~~

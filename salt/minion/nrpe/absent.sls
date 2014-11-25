@@ -47,7 +47,3 @@ salt_minion_pillar_render_data_collector:
     - absent
 
 {{ passive_absent('salt.minion') }}
-
-/etc/cron.daily/salt_highstate:
-  file:
-    - absent

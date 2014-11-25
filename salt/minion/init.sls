@@ -29,7 +29,7 @@ Install Salt Minion (client).
 -#}
 {%- from 'upstart/rsyslog.jinja2' import manage_upstart_log with context -%}
 include:
-{%- if salt['pillar.get']('salt_highstate', True) %}
+{%- if salt['pillar.get']('salt:highstate', True) %}
   - bash
   - cron
 {%- endif %}
@@ -97,9 +97,9 @@ salt-fire-event:
       - pkg: salt-minion
       - module: pysc
 
-{%- if salt['pillar.get']('salt_highstate', True) %}
 /etc/cron.daily/salt_highstate:
   file:
+{%- if salt['pillar.get']('salt:highstate', True) %}
     - managed
     - user: root
     - group: root
@@ -109,4 +109,6 @@ salt-fire-event:
     - require:
       - pkg: cron
       - file: bash
+{%- else %}
+    - absent
 {%- endif %}

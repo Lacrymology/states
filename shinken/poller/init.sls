@@ -54,7 +54,7 @@ nagios-nrpe-plugin:
 
 {%- if 'files_archive' in pillar %}
     {%- call shinken_install_module('booster-nrpe') %}
-- source_hash: md5=667d7d941f3156a93f3396654ee631dc
+- source_hash: md5=e8fa66f1360d2cc3cea10abf35e228d5
     {%- endcall %}
 {%- else %}
     {{ shinken_install_module('booster-nrpe') }}

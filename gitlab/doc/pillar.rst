@@ -58,6 +58,11 @@ gitlab:hostnames
 
 Example: ``__salt__['network.ip_addrs']('eth0')[0]``
 
+gitlab:admin:email
+~~~~~~~~~~~~~~~~~~
+
+Email for :doc:`/gitlab/doc/index` Administrator account.
+
 gitlab:admin:password
 ~~~~~~~~~~~~~~~~~~~~~
 

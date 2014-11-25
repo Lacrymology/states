@@ -28,14 +28,10 @@ Maintainer: Van Diep Pham <favadi@robotinfra.com>
 GitLab Administrator Config
 -#}
 
-password = if ENV['GITLAB_ROOT_PASSWORD'].nil? || ENV['GITLAB_ROOT_PASSWORD'].empty?
-             "5iveL!fe"
-           else
-             ENV['GITLAB_ROOT_PASSWORD']
-           end
+password = ENV['GITLAB_ROOT_PASSWORD']
 
 admin = User.create(
-  email: "admin@example.com",
+  email: "{{ salt['pillar.get']('gitlab:admin:email', salt['pillar.get']('smtp']['from']) }}",
   name: "Administrator",
   username: 'root',
   password: password,

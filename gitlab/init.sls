@@ -261,6 +261,20 @@ gitlabhq-{{ version }}:
     - require_in:
       - cmd: gitlab_gems
 
+/home/gitlab/gitlabhq-{{ version }}/db/fixtures/production/001_admin.rb:
+  file:
+    - managed
+    - source: salt://gitlab/admin.jinja2
+    - user: gitlab
+    - group: gitlab
+    - template: jinja
+    - mode: 440
+    - require:
+      - user: gitlab
+      - file: gitlabhq-{{ version }}
+    - require_in:
+      - cmd: gitlab_gems
+
 gitlab_gems:
   gem:
     - installed

@@ -46,14 +46,15 @@ Example::
 dns_proxy:servers
 ~~~~~~~~~~~~~~~~~
 
-If using the second method (make :doc:`/pdnsd/doc/index` behave like a caching,
-recursive DNS server), it need at least one DNS server to collect DNS
-information from, something like this::
+List of, at least one, DNS server to perform DNS resolution upstream, like::
 
   dns_proxy:
     servers:
       - 1.2.3.4
       - 5.6.7.8
+
+If defined, it makes :doc:`/pdnsd/doc/index` behave like a caching,
+recursive DNS server.
 
 Default: empty list of servers (``[]``), which mean use ``/etc/resolv.conf`` and
 automatically configure from DNS servers listed there.

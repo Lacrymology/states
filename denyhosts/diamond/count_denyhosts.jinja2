@@ -1,5 +1,5 @@
 #!/bin/sh
 # {{ pillar['message_do_not_modify'] }}
 
-count=`grep -v '^[\s]*\(#\|$\)' /etc/hosts.deny | wc -l`
+count=`grep -vc '^[\s]*\(#\|$\)' /etc/hosts.deny`
 echo "denyhosts.blocked $count"

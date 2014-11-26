@@ -55,6 +55,13 @@ test:
     - require:
       - sls: denyhosts
       - module: test
+  diamond:
+    - test
+    - map:
+        UserScripts:
+          denyhosts.blocked: True
+    - require:
+      - file: /usr/local/diamond/share/diamond/user_scripts/count_denyhosts.sh
   monitoring:
     - run_all_checks
     - order: last

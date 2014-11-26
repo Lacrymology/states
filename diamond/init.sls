@@ -53,16 +53,6 @@ include:
     - require:
       - file: /etc/diamond
 
-{# directory for scripts to be ran by the UserScripts collector -#}
-/etc/diamond/user_scripts:
-  file:
-    - directory
-    - user: root
-    - group: root
-    - mode: 550
-    - require:
-      - file: /etc/diamond
-
 diamond_requirements:
   file:
     - managed

@@ -375,6 +375,14 @@ uptime:minutes
 
 The number of minutes the system has been up.
 
+UserScriptsCollector
+--------------------
+
+denyhosts:blocked
+~~~~~~~~~~~~~~~~~
+
+The number of hosts has been blocked by DenyHosts.
+
 VMStatCollector
 ---------------
 

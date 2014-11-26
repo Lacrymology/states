@@ -26,17 +26,9 @@ Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 
 -#}
-{%- set method = pillar['dns_proxy']['dns_server'][0] %}
+{%- set dns_servers = salt['pillar.get']('dns_proxy:servers', []) -%}
 include:
   - apt
-
-{%- if method == 'resolvconf' %}
-resolvconf:
-  pkg:
-    - installed
-    - require:
-      - cmd: apt_sources
-{%- endif %}
 
 pdnsd:
   pkg:
@@ -44,8 +36,11 @@ pdnsd:
     - require:
       - cmd: apt_sources
       - debconf: pdnsd
-{%- if method == 'resolvconf' %}
-      - pkg: resolvconf
+{%- if not dns_servers -%}
+    {#- if empty list of dns servers, use /etc/resolv.conf #}
+      - pkgs:
+        - pdnsd
+        - resolvconf
 {%- endif %}
   debconf:
     - set
@@ -84,3 +79,5 @@ pdnsd:
     - user: root
     - group: root
     - mode: 440
+    - context:
+      dns_servers: {{ dns_servers }}

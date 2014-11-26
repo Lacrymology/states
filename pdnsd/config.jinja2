@@ -50,10 +50,12 @@ global {
 }
 
 server {
-    label="{{ pillar['dns_proxy']['dns_server'][0] }}";
-{%- if pillar['dns_proxy']['dns_server'][0] != 'resolvconf' %}
+{%- if not dns_servers %}
+    label="resolvconf";
+{%- else %}
+    label="pillars_provided";
     root_server = on;
-    ip = {% for server in pillar['dns_proxy']['dns_server'] %}{% if not loop.first %}{{ server }}{% if not loop.last %}, {% endif %}{% endif %}{% endfor %};
+    ip = {% for server in dns_servers %}{% if not loop.first %}{{ server }}{% if not loop.last %}, {% endif %}{% endif %}{% endfor %};
     timeout = 5;
     uptest = query;
     interval = 30m;

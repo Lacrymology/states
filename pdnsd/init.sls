@@ -26,7 +26,7 @@ Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 
 -#}
-{%- set sections = salt['pillar.get']('pdnsd:sections', False) %}
+{%- set sections = salt['pillar.get']('pdnsd:sections', {}) %}
 include:
   - apt
 
@@ -36,7 +36,7 @@ pdnsd:
     - require:
       - cmd: apt_sources
       - debconf: pdnsd
-{%- if not sections -%}
+{%- if sections is not mapping -%}
     {#- if `pdnsd:sections` is not defined, use /etc/resolv.conf #}
     - pkgs:
       - pdnsd

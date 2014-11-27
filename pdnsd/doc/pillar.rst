@@ -51,21 +51,12 @@ pdnsd:sections
 ~~~~~~~~~~~~~~
 
 Define multiple server sections. Each section specifies a list of DNS
-servers that pdnsd should try to get information from::
-
-  pdnsd:
-    sections:
-      isp:
-        - 1.2.3.4
-        - 5.6.7.8
-      google:
-        - 8.8.8.8
-        - 8.8.4.4
+servers that pdnsd should try to get information from.
 
 If defined, it makes :doc:`/pdnsd/doc/index` behave like a caching,
 recursive DNS server.
 
-Default: not defined  (``False``), which mean use ``/etc/resolv.conf`` and
+Default: empty dictionary  (``{}``), which mean use ``/etc/resolv.conf`` and
 automatically configure from DNS servers listed there.
 
 pdnsd:ip_address

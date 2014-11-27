@@ -49,7 +49,7 @@ global {
     #}
 }
 
-{%- if sections -%}
+{%- if sections is mapping -%}
     {%- for label, servers in sections.items() %}
 {# This will be rendered to a blank line as separator between server sections #}
 server {

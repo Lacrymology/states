@@ -49,11 +49,11 @@ global {
     #}
 }
 
-{%- for label, servers in salt['pillar.get']('pdnsd:sections').items() %}
+{%- if sections -%}
+    {%- for label, servers in sections.items() %}
 {# This will be rendered to a blank line as separator between server sections #}
 server {
-    label="{{ label }}";
-    {%- if label != 'resolvconf' %}
+    label = "{{ label }}";
     root_server = on;
     ip = {% for server in servers %}{{ server }}{% if not loop.last %}, {% endif %}{% endfor %};
     timeout = 5;
@@ -64,6 +64,10 @@ server {
     exclude = .localdomain;
     policy = included;
     preset = off;
-    {%- endif %}
 }
-{%- endfor %}
+    {%- endfor -%}
+{%- else %}
+server {
+    label = "resolvconf";
+}
+{%- endif %}

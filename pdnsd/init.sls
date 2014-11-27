@@ -26,6 +26,7 @@ Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 
 -#}
+{%- set sections = salt['pillar.get']('pdnsd:sections', False) %}
 include:
   - apt
 
@@ -35,8 +36,8 @@ pdnsd:
     - require:
       - cmd: apt_sources
       - debconf: pdnsd
-{%- if salt['pillar.get']('pdnsd:sections:resolvconf', False) -%}
-    {#- if `pdnsd:sections:resolvconf` is defined, use /etc/resolv.conf #}
+{%- if not sections -%}
+    {#- if `pdnsd:sections` is not defined, use /etc/resolv.conf #}
     - pkgs:
       - pdnsd
       - resolvconf
@@ -71,10 +72,12 @@ pdnsd:
 /etc/pdnsd.conf:
   file:
     - managed
-    - require:
-      - pkg: pdnsd
     - template: jinja
     - source: salt://pdnsd/config.jinja2
     - user: root
     - group: root
     - mode: 440
+    - require:
+      - pkg: pdnsd
+    - context:
+      sections: {{ sections }}

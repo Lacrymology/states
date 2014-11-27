@@ -30,27 +30,6 @@
 
 - :doc:`/apt/doc/index` :doc:`/apt/doc/pillar`
 
-Mandatory
----------
-
-Example::
-
-  pdnsd:
-    sections:
-      resolvconf:
-      isp:
-        - 1.2.3.4
-        - 5.6.7.8
-      google:
-        - 8.8.8.8
-        - 8.8.4.4
-
-pdnsd:sections
-~~~~~~~~~~~~~~
-
-At least one server section to get information from.
-The label for the section can be ``resolvconf`` or something else.
-
 Optional
 --------
 
@@ -58,7 +37,6 @@ Example::
 
   pdnsd:
     sections:
-      resolvconf:
       isp:
         - 1.2.3.4
         - 5.6.7.8
@@ -69,28 +47,25 @@ Example::
     minimum_ttl: 900
     maximum_ttl: 604800
 
-pdnsd:sections:resolvconf
-~~~~~~~~~~~~~~~~~~~~~~~~~
+pdnsd:sections
+~~~~~~~~~~~~~~
 
-Define this means that use informations provided by ``resolvconf``.
-
-Default: ``False``.
-
-pdnsd:sections:{{ label }}
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-List of, at least one, DNS server to perform DNS resolution upstream, like::
+Define multiple server sections. Each section specifies a list of DNS
+servers that pdnsd should try to get information from::
 
   pdnsd:
     sections:
       isp:
         - 1.2.3.4
         - 5.6.7.8
+      google:
+        - 8.8.8.8
+        - 8.8.4.4
 
 If defined, it makes :doc:`/pdnsd/doc/index` behave like a caching,
 recursive DNS server.
 
-Default: empty list of servers (``[]``), which mean use ``/etc/resolv.conf`` and
+Default: not defined  (``False``), which mean use ``/etc/resolv.conf`` and
 automatically configure from DNS servers listed there.
 
 pdnsd:ip_address

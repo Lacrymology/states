@@ -26,17 +26,9 @@ Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 
 -#}
-{%- set method = pillar['dns_proxy']['dns_server'][0] %}
+{%- set sections = salt['pillar.get']('pdnsd:sections', {}) %}
 include:
   - apt
-
-{%- if method == 'resolvconf' %}
-resolvconf:
-  pkg:
-    - installed
-    - require:
-      - cmd: apt_sources
-{%- endif %}
 
 pdnsd:
   pkg:
@@ -44,8 +36,11 @@ pdnsd:
     - require:
       - cmd: apt_sources
       - debconf: pdnsd
-{%- if method == 'resolvconf' %}
-      - pkg: resolvconf
+{%- if sections is not mapping -%}
+    {#- if `pdnsd:sections` is not defined, use /etc/resolv.conf #}
+    - pkgs:
+      - pdnsd
+      - resolvconf
 {%- endif %}
   debconf:
     - set
@@ -69,7 +64,7 @@ pdnsd:
     - require:
       - pkg: pdnsd
     - template: jinja
-    - source: salt://pdnsd/init.jinja2
+    - source: salt://pdnsd/default.jinja2
     - user: root
     - group: root
     - mode: 440
@@ -77,10 +72,12 @@ pdnsd:
 /etc/pdnsd.conf:
   file:
     - managed
-    - require:
-      - pkg: pdnsd
     - template: jinja
     - source: salt://pdnsd/config.jinja2
     - user: root
     - group: root
     - mode: 440
+    - require:
+      - pkg: pdnsd
+    - context:
+      sections: {{ sections }}

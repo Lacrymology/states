@@ -32,28 +32,30 @@ global {
     perm_cache = 2048;
     cache_dir = "/var/cache/pdnsd";
     run_as = "pdnsd";
-    server_ip = {{ salt['pillar.get']('dns_proxy:ip_address', '0.0.0.0') }};
+    server_ip = {{ salt['pillar.get']('pdnsd:ip_address', '0.0.0.0') }};
     status_ctl = on;
     paranoid = on;
-    min_ttl = {{ salt['pillar.get']('dns_proxy:minimum_ttl', 900) }};
-    max_ttl = {{ salt['pillar.get']('dns_proxy:maximum_ttl', 604800) }};
+    min_ttl = {{ salt['pillar.get']('pdnsd:minimum_ttl', 900) }};
+    max_ttl = {{ salt['pillar.get']('pdnsd:maximum_ttl', 604800) }};
     timeout = 10;
 {%- if salt['pillar.get']('debug', False) %}
     debug = on;
 {%- else %}
     debug = off;
 {%- endif %}
-    {#
+    {#-
     Don't enable if you don't recurse yourself, can lead to problems
     delegation_only="com","net";
     #}
 }
 
+{%- if sections is mapping -%}
+    {%- for label, servers in sections.items() %}
+{# This will be rendered to a blank line as separator between server sections #}
 server {
-    label="{{ pillar['dns_proxy']['dns_server'][0] }}";
-{%- if pillar['dns_proxy']['dns_server'][0] != 'resolvconf' %}
+    label = "{{ label }}";
     root_server = on;
-    ip = {% for server in pillar['dns_proxy']['dns_server'] %}{% if not loop.first %}{{ server }}{% if not loop.last %}, {% endif %}{% endif %}{% endfor %};
+    ip = {% for server in servers %}{{ server }}{% if not loop.last %}, {% endif %}{% endfor %};
     timeout = 5;
     uptest = query;
     interval = 30m;
@@ -62,5 +64,10 @@ server {
     exclude = .localdomain;
     policy = included;
     preset = off;
-{%- endif %}
 }
+    {%- endfor -%}
+{%- else %}
+server {
+    label = "resolvconf";
+}
+{%- endif %}

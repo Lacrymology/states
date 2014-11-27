@@ -40,53 +40,53 @@ These numbers identify the amount of time the CPU has spent performing
 different kinds of work. Time units are in USER_HZ (typically hundredths of a
 second).
 
-cpu:guest
+cpu.guest
 ~~~~~~~~~
 
 Time spent running a virtual CPU for a guest operating system.
 
-cpu:guest_nice
+cpu.guest_nice
 ~~~~~~~~~~~~~~
 
 Time spent running a virtual CPU for a guest operating system with low
 priority.
 
-cpu:idle
+cpu.idle
 ~~~~~~~~
 
 Time spent in the idle task.
 
-cpu:iowait
+cpu.iowait
 ~~~~~~~~~~
 
 Time waiting for I/O to complete.
 
-cpu:irq
+cpu.irq
 ~~~~~~~
 
 Time servicing interrupts.
 
-cpu:nice
+cpu.nice
 ~~~~~~~~
 
 Time spent in user mode with low priority.
 
-cpu:softirq
+cpu.softirq
 ~~~~~~~~~~~
 
 Time servicing softirqs.
 
-cpu:steal
+cpu.steal
 ~~~~~~~~~
 
 Time spent in other operating system when running in a virtualized environment.
 
-cpu:system
+cpu.system
 ~~~~~~~~~~
 
 Time spent in kernel mode.
 
-cpu:user
+cpu.user
 ~~~~~~~~
 
 Time spent in user mode.
@@ -145,17 +145,17 @@ for more details.
 FilestatCollector
 -----------------
 
-files:assigned
+files.assigned
 ~~~~~~~~~~~~~~
 
 The total allocated file handles.
 
-files:unused
+files.unused
 ~~~~~~~~~~~~
 
 The number of unused-but-allocated file handles.
 
-files:max
+files.max
 ~~~~~~~~~
 
 The maximum file handles that can be allocated
@@ -170,18 +170,18 @@ for more details.
 LoadAverageCollector
 --------------------
 
-loadavg:(01|05|15)
+loadavg.(01|05|15)
 ~~~~~~~~~~~~~~~~~~
 
 The number of jobs in the run queue (state R) or waiting for disk I/O (state D)
 averaged over 1, 5, and 15 minutes.
 
-loadavg:processes_running
+loadavg.processes_running
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The number of currently runnable kernel scheduling entities (processes, threads).
 
-loadavg:processes_total
+loadavg.processes_total
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 The number of kernel scheduling entities that currently exist on the system.
@@ -202,7 +202,7 @@ http://www.onlamp.com/pub/a/linux/2000/11/16/LinuxAdmin.html
 PingCollector
 -------------
 
-ping:<host>
+ping.<host>
 ~~~~~~~~~~~
 
 ICMP round trip times to that host.
@@ -210,27 +210,27 @@ ICMP round trip times to that host.
 ProcessStatCollector
 --------------------
 
-proc:btime
+proc.btime
 ~~~~~~~~~~
 
 Boot time, in seconds since the Epoch, 1970-01-01.
 
-proc:ctxt
+proc.ctxt
 ~~~~~~~~~
 
 The number of context switches that the system underwent.
 
-proc:processes
+proc.processes
 ~~~~~~~~~~~~~~
 
 Number of forks since boot.
 
-proc:procs_blocked
+proc.procs_blocked
 ~~~~~~~~~~~~~~~~~~
 
 Number of processes blocked waiting for I/O to complete.
 
-proc:procs_running
+proc.procs_running
 ~~~~~~~~~~~~~~~~~~
 
 Number of processes in runable state.
@@ -238,42 +238,42 @@ Number of processes in runable state.
 SockstatCollector
 -----------------
 
-sockets:tcp_alloc
+sockets.tcp_alloc
 ~~~~~~~~~~~~~~~~~
 
 The number of TCP sockets allocated.
 
-sockets:tcp_inuse
+sockets.tcp_inuse
 ~~~~~~~~~~~~~~~~~
 
 The number of TCP sockets in use.
 
-sockets:tcp_mem
+sockets.tcp_mem
 ~~~~~~~~~~~~~~~
 
 Memory (in bytes) allocated for TCP sockets.
 
-sockets:tcp_orphan
+sockets.tcp_orphan
 ~~~~~~~~~~~~~~~~~~
 
 Number of orphan TCP sockets (not attached to any file descriptor)
 
-sockets:tcp_tw
+sockets.tcp_tw
 ~~~~~~~~~~~~~~
 
 Number of TCP sockets currently in TIME_WAIT state.
 
-sockets:udp_inuse
+sockets.udp_inuse
 ~~~~~~~~~~~~~~~~~
 
 The number of UDP sockets in use.
 
-sockets:udp_mem
+sockets.udp_mem
 ~~~~~~~~~~~~~~~
 
 Memory (in bytes) allocated for UDP sockets.
 
-sockets:used
+sockets.used
 ~~~~~~~~~~~~
 
 Total number of sockets used.
@@ -281,13 +281,13 @@ Total number of sockets used.
 TCPCollector
 ------------
 
-tcp:ActiveOpens
+tcp.ActiveOpens
 ~~~~~~~~~~~~~~~
 
 The number of times TCP connections have made a direct transition to the
 SYN-SENT state from the CLOSED state.
 
-tcp:AttemptFails
+tcp.AttemptFails
 ~~~~~~~~~~~~~~~~
 
 The number of times TCP connections have made a direct transition to the CLOSED
@@ -295,74 +295,74 @@ state from either the SYN-SENT state or the SYN-RCVD state, plus the number of
 times TCP connections have made a direct transition to the LISTEN state from
 the SYN-RCVD state.
 
-tcp:CurrEstab
+tcp.CurrEstab
 ~~~~~~~~~~~~~
 
 Number of current TCP sockets in ESTABLISHED state.
 
-tcp:EstabResets
+tcp.EstabResets
 ~~~~~~~~~~~~~~~
 
 The number of times TCP connections have made a direct transition to the CLOSED
 state from either the ESTABLISHED state or the CLOSE-WAIT state.
 
-tcp:InErrs
+tcp.InErrs
 ~~~~~~~~~~
 
 The total number of segments received in error (for example, bad TCP
 checksums).
 
-tcp:ListenDrops
+tcp.ListenDrops
 ~~~~~~~~~~~~~~~
 
 Number of SYNs to LISTEN sockets dropped.
 
-tcp:ListenOverflows
+tcp.ListenOverflows
 ~~~~~~~~~~~~~~~~~~~
 
 Number of times the listen queue of a socket overflowed.
 
-tcp:PassiveOpens
+tcp.PassiveOpens
 ~~~~~~~~~~~~~~~~
 
 Number of successful passive fast opens.
 
-tcp:TCPAbortOnMemory
+tcp.TCPAbortOnMemory
 ~~~~~~~~~~~~~~~~~~~~
 
 Number of connections aborted due to memory pressure.
 
-tcp:TCPBacklogDrop
+tcp.TCPBacklogDrop
 ~~~~~~~~~~~~~~~~~~
 
 Number of frames dropped because of full backlog queue.
 
-tcp:TCPFastRetrans
+tcp.TCPFastRetrans
 ~~~~~~~~~~~~~~~~~~
 
 Number of fast retransmits.
 
-tcp:TCPForwardRetrans
+tcp.TCPForwardRetrans
 ~~~~~~~~~~~~~~~~~~~~~
 
 Number of forward retransmits.
 
-tcp:TCPLoss
+tcp.TCPLoss
 ~~~~~~~~~~~
 
 .. todo:: Find out what it is.
 
-tcp:TCPLostRetransmit
+tcp.TCPLostRetransmit
 ~~~~~~~~~~~~~~~~~~~~~
 
 Number of retransmits lost.
 
-tcp:TCPSlowStartRetrans
+tcp.TCPSlowStartRetrans
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 Number of retransmits in slow start.
 
-tcp:TCPTimeouts
+tcp.TCPTimeouts
 ~~~~~~~~~~~~~~~
 
 Number of other TCP timeouts.
@@ -370,7 +370,7 @@ Number of other TCP timeouts.
 UptimeCollector
 ---------------
 
-uptime:minutes
+uptime.minutes
 ~~~~~~~~~~~~~~
 
 The number of minutes the system has been up.
@@ -381,22 +381,22 @@ VMStatCollector
 Take a look at .. _this: http://www.tldp.org/LDP/tlk/mm/memory.html for more
 details.
 
-vmstat:pgpgin
+vmstat.pgpgin
 ~~~~~~~~~~~~~
 
 Number of kilobytes the system has paged in from disk per second.
 
-vmstat:pgpgout
+vmstat.pgpgout
 ~~~~~~~~~~~~~~
 
 Number of kilobytes the system has paged out to disk per second.
 
-vmstat:pswpin
+vmstat.pswpin
 ~~~~~~~~~~~~~
 
 Number of kilobytes the system has swapped in from disk per second.
 
-vmstat:pswpout
+vmstat.pswpout
 ~~~~~~~~~~~~~~
 
 Number of kilobytes the system has swapped out to disk per second.

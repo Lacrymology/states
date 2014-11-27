@@ -72,7 +72,7 @@ port = 2003
 timeout = 15
 batch = {{ salt['pillar.get']('diamond:batch', 256) }}
 
-{%- if salt['pillar.get']("__test__", False) %}
+{% if salt['pillar.get']("__test__", False) %}
 [[ArchiveHandler]]
 {#- File to write archive log files #}
 log_file = {{ opts['cachedir'] }}/diamond.archive.log
@@ -187,6 +187,11 @@ enabled = True
 [[UptimeCollector]]
 
 enabled = True
+
+[[UserScriptsCollector]]
+enabled = True
+
+scripts_path = /usr/local/diamond/share/diamond/user_scripts/
 
 [[VMStatCollector]]
 

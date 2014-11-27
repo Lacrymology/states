@@ -32,11 +32,11 @@ global {
     perm_cache = 2048;
     cache_dir = "/var/cache/pdnsd";
     run_as = "pdnsd";
-    server_ip = {{ salt['pillar.get']('dns_proxy:ip_address', '0.0.0.0') }};
+    server_ip = {{ salt['pillar.get']('pdnsd:ip_address', '0.0.0.0') }};
     status_ctl = on;
     paranoid = on;
-    min_ttl = {{ salt['pillar.get']('dns_proxy:minimum_ttl', 900) }};
-    max_ttl = {{ salt['pillar.get']('dns_proxy:maximum_ttl', 604800) }};
+    min_ttl = {{ salt['pillar.get']('pdnsd:minimum_ttl', 900) }};
+    max_ttl = {{ salt['pillar.get']('pdnsd:maximum_ttl', 604800) }};
     timeout = 10;
 {%- if salt['pillar.get']('debug', False) %}
     debug = on;
@@ -49,8 +49,8 @@ global {
     #}
 }
 
-{%- for label, servers in salt['pillar.get']('dns_proxy').items() %}
-{# Keep a blank line as separator between server sections #}
+{%- for label, servers in salt['pillar.get']('pdnsd:sections').items() %}
+{# This will be rendered to a blank line as separator between server sections #}
 server {
     label="{{ label }}";
     {%- if label != 'resolvconf' %}

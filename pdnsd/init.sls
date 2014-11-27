@@ -35,8 +35,8 @@ pdnsd:
     - require:
       - cmd: apt_sources
       - debconf: pdnsd
-{%- if 'resolvconf' in salt['pillar.get']('dns_proxy') -%}
-    {#- if empty list of dns servers, use /etc/resolv.conf #}
+{%- if salt['pillar.get']('pdnsd:sections:resolvconf', False) -%}
+    {#- if `pdnsd:sections:resolvconf` is defined, use /etc/resolv.conf #}
     - pkgs:
       - pdnsd
       - resolvconf
@@ -63,7 +63,7 @@ pdnsd:
     - require:
       - pkg: pdnsd
     - template: jinja
-    - source: salt://pdnsd/init.jinja2
+    - source: salt://pdnsd/default.jinja2
     - user: root
     - group: root
     - mode: 440

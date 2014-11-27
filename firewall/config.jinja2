@@ -50,7 +50,7 @@ COMMIT
 :FORWARD {% if grains['virtual'] == 'openvzve' %}ACCEPT{% else %}DROP{% endif %} [0:0]
 -A INPUT -i lo -j ACCEPT
 -A INPUT -p icmp -j ACCEPT
--A INPUT -i {% if grains['virtual'] == 'openvzve' %}venet0{% else %}eth0{% endif %} -m state --state RELATED,ESTABLISHED -j ACCEPT
+-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
 {%- for host in mine -%}
   {#- if private == public only process public -#}
   {%- if mine[host]['ip_addrs']['public'] == mine[host]['ip_addrs']['private'] -%}

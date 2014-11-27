@@ -26,7 +26,6 @@ Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 
 -#}
-{%- set dns_servers = salt['pillar.get']('dns_proxy:servers', []) -%}
 include:
   - apt
 
@@ -36,11 +35,11 @@ pdnsd:
     - require:
       - cmd: apt_sources
       - debconf: pdnsd
-{%- if not dns_servers -%}
+{%- if 'resolvconf' in salt['pillar.get']('dns_proxy') -%}
     {#- if empty list of dns servers, use /etc/resolv.conf #}
-      - pkgs:
-        - pdnsd
-        - resolvconf
+    - pkgs:
+      - pdnsd
+      - resolvconf
 {%- endif %}
   debconf:
     - set
@@ -79,5 +78,3 @@ pdnsd:
     - user: root
     - group: root
     - mode: 440
-    - context:
-      dns_servers: {{ dns_servers }}

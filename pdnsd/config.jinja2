@@ -43,19 +43,19 @@ global {
 {%- else %}
     debug = off;
 {%- endif %}
-    {#
+    {#-
     Don't enable if you don't recurse yourself, can lead to problems
     delegation_only="com","net";
     #}
 }
 
+{%- for label, servers in salt['pillar.get']('dns_proxy').items() %}
+{# Keep a blank line as separator between server sections #}
 server {
-{%- if not dns_servers %}
-    label="resolvconf";
-{%- else %}
-    label="pillars_provided";
+    label="{{ label }}";
+    {%- if label != 'resolvconf' %}
     root_server = on;
-    ip = {% for server in dns_servers %}{% if not loop.first %}{{ server }}{% if not loop.last %}, {% endif %}{% endif %}{% endfor %};
+    ip = {% for server in servers %}{{ server }}{% if not loop.last %}, {% endif %}{% endfor %};
     timeout = 5;
     uptest = query;
     interval = 30m;
@@ -64,5 +64,6 @@ server {
     exclude = .localdomain;
     policy = included;
     preset = off;
-{%- endif %}
+    {%- endif %}
 }
+{%- endfor %}

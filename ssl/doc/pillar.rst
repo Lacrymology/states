@@ -172,14 +172,15 @@ Optional
 ssl:expiry_days
 ~~~~~~~~~~~~~~~
 
-Number of days remaining before the SSL certificate expires.
+Warning if the number of days until the SSL certificate expires less than given
+days.
 
 Default: ``15``.
 
 ssl:certs
 ~~~~~~~~~
 
-List of SSL certificates.
+Define one or multiple SSL certificates.
 
 Default: ``{}``.
 

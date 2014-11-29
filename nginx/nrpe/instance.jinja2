@@ -26,7 +26,6 @@ Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
 {%- macro nginx_instance(formula, http=True, http_uri='/', http_result=None, http_port=80, https_uri=None, https_result="200 OK", pillar_prefix=None, timeout=False, domain_name=None, allow_ssl_redirect=True, check_interval=False, deployment=None, extra_dependencies=()) -%}
-    {%- set expire_days = salt['pillar.get']('ssl:warning_certificate', 15) -%}
     {%- set first_ip = salt['network.ip_addrs']()[0] -%}
     {%- if not pillar_prefix -%}
         {%- set pillar_prefix = formula -%}
@@ -91,7 +90,7 @@ Maintainer: Quan Tong Anh <quanta@robotinfra.com>
   description: {{ deployment|capitalize }} HTTPS Certificate Expiration
   check_interval: {{ 24 * 60 }} {#- a day  #}
   freshness_threshold: {{ ((24 * 60) + 10) * 60 }} {#- 24 hours + 10 minutes #}
-  command: /usr/lib/nagios/plugins/check_http -S -H {{ domain_name }} -C {{ expire_days }} -I {{ first_ip }}
+  command: /usr/lib/nagios/plugins/check_http -S -H {{ domain_name }} -C {{ salt['pillar.get']('ssl:expiry_days', 15) }} -I {{ first_ip }}
         {%- if timeout %} --timeout={{ timeout }}{% endif -%}
         {%- if salt['pillar.get']('__test__', False) %} -v{%- endif %}
     {%- if timeout %}

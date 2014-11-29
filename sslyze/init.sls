@@ -68,14 +68,14 @@ sslyze:
       - archive: sslyze
       - virtualenv: nrpe-virtualenv
 
-{%- for name in salt['pillar.get']('ssl', []) -%}
+{%- for name in salt['pillar.get']('ssl:certs', {}) -%}
     {%- for trust_store in ('apple', 'java', 'microsoft', 'mozilla') %}
 sslyze_{{ name }}_{{ trust_store }}:
   file:
     - append
     - name: /usr/local/src/sslyze-{{ version|replace(".", "_") }}-linux{{ bits }}/plugins/data/trust_stores/{{ trust_store }}.pem
     - text: |
-        {{ pillar['ssl'][name]['server_crt']|indent(8) }}
+        {{ salt['pillar.get']('ssl:certs:' + name + ':server_crt') | indent(8) }}
     - require:
       - archive: sslyze
     - require_in:

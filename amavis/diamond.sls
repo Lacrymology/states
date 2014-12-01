@@ -44,3 +44,14 @@ amavis_diamond_resources:
       - |
         [[amavis]]
         name = ^amavisd\ \(.+\)
+
+/etc/diamond/collectors/AmavisCollector.conf
+  file:
+    - managed
+    - user: root
+    - group: root
+    - mode: 440
+    - text:
+        - |
+          # {{ salt['pillar.get']('message_do_not_modify') }}
+          enabled=True

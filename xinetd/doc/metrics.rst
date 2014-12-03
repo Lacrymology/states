@@ -29,6 +29,8 @@
 Metrics
 =======
 
-.. |deployment| replace:: xinetd
-                          
-.. include:: /diamond/doc/process.inc
+See ProcessResources collector :doc:`document </diamond/doc/process>`.
+
+Processes:
+
+* xinetd

@@ -26,10 +26,12 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-.. |deployment| replace:: jenkins
+Metrics
+=======
 
+See ProcessResources collector :doc:`document </diamond/doc/process>`.
 
-Jenkins Metrics
-===============
+Processes:
 
-.. include:: /diamond/doc/process.inc
+* jenkins
+

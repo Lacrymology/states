@@ -26,12 +26,14 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-.. |deployment| replace:: denyhosts
-
 Metrics
 =======
 
-.. include:: /diamond/doc/process.inc
+See ProcessResources collector :doc:`document </diamond/doc/process>`.
+
+Processes:
+
+* denyhosts
 
 UserScriptsCollector
 --------------------

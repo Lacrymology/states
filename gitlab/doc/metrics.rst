@@ -26,16 +26,13 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-.. |deployment| replace:: gitlab
-
-.. |uwsgi_deployment| replace:: uwsgi.gitlab
-   
-GitLab Metrics
-==============
+Metrics
+=======
                           
-.. include:: /diamond/doc/process.inc
+See ProcessResources collector :doc:`document </diamond/doc/process>`.
 
-uWSGI Metrics
-=============
-                          
-.. include:: /uwsgi/doc/process.inc
+Processes:
+
+* gitlab
+
+* uwsgi/gitlab

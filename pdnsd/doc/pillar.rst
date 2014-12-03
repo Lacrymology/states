@@ -30,60 +30,51 @@
 
 - :doc:`/apt/doc/index` :doc:`/apt/doc/pillar`
 
-Mandatory
----------
-
-Example::
-
-  dns_proxy:
-    dns_server:
-      - resolvconf
-
-dns_proxy:dns_server
-~~~~~~~~~~~~~~~~~~~~~
-
-A list. The first one is the configuration method which can be:
-
-- ``resolvconf``: use informations provided by resolvconf.
-- The label of a server section. It is completely arbitrary, but one good
-  choice is the name of your ISP.
-
-If using the second method (make pdnsd behave like a caching,
-recursive DNS server), then list at least one DNS server to collect DNS
-information from, something like this::
-
-  dns_proxy:
-    dns_server:
-      - isp-servers
-      - 1.2.3.4
-      - 5.6.7.8
-
 Optional
 --------
 
 Example::
 
-  dns_proxy:
+  pdnsd:
+    sections:
+      isp:
+        - 1.2.3.4
+        - 5.6.7.8
+      google:
+        - 8.8.8.8
+        - 8.8.4.4
     ip_address: 0.0.0.0
     minimum_ttl: 900
     maximum_ttl: 604800
 
-dns_proxy:ip_address
-~~~~~~~~~~~~~~~~~~~~~
+pdnsd:sections
+~~~~~~~~~~~~~~
+
+Define multiple server sections. Each section specifies a list of DNS
+servers that pdnsd should try to get information from.
+
+If defined, it makes :doc:`/pdnsd/doc/index` behave like a caching,
+recursive DNS server.
+
+Default: empty dictionary  (``{}``), which mean use ``/etc/resolv.conf`` and
+automatically configure from DNS servers listed there.
+
+pdnsd:ip_address
+~~~~~~~~~~~~~~~~
 
 The IP address daemon listens on for requests.
 
 Default: ``0.0.0.0``.
 
-dns_proxy:minimum_ttl
-~~~~~~~~~~~~~~~~~~~~~
+pdnsd:minimum_ttl
+~~~~~~~~~~~~~~~~~
 
 The minimum time a record is held in cache.
 
 Default: ``900``.
 
-dns_proxy:maximum_ttl
-~~~~~~~~~~~~~~~~~~~~~
+pdnsd:maximum_ttl
+~~~~~~~~~~~~~~~~~
 
 The maximum time a record is held in cache.
 

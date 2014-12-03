@@ -44,3 +44,17 @@ amavis_diamond_resources:
       - |
         [[amavis]]
         name = ^amavisd\ \(.+\)
+
+diamond_amavis
+  file:
+    - managed
+    - name: /etc/diamond/collectors/AmavisCollector.conf
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - source: salt://diamond/basic_collector.jinja2
+    - require:
+      - file: /etc/diamond/collectors
+    - watch_in:
+      - service: diamond

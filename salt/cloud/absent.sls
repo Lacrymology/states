@@ -48,3 +48,8 @@ salt-cloud:
 python-libcloud:
   pkg:
     - purged
+
+salt_cloud_digital_ocean_v2_module:
+  file:
+    - absent
+    - name: /usr/lib/pymodules/python2.7/salt/cloud/clouds/digital_ocean_v2.py

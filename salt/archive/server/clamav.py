@@ -8,6 +8,7 @@ import datetime
 from email.utils import parsedate
 import logging
 import os
+import tempfile
 import time
 
 import requests
@@ -20,11 +21,15 @@ logger = logging.getLogger(__name__)
 
 def save(local, stream, last_modified):
     size = 0
-    with open(local, 'wb') as output:
+    tmp = tempfile.NamedTemporaryFile(delete=False)
+    logger.debug("Create temp file %s", tmp.name)
+    with open(tmp.name, 'wb') as output:
         for chunk in stream:
             size += len(chunk)
             output.write(chunk)
-    logger.debug("Wrote %d bytes to %s", size, local)
+    logger.debug("Wrote %d bytes to %s", size, tmp.name)
+    logger.debug("Move %s to %s", tmp.name, local)
+    os.rename(tmp.name, local)
     mtime = time.mktime(last_modified.timetuple())
     os.utime(local, (mtime, mtime))
 

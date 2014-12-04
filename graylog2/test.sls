@@ -26,6 +26,7 @@ Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Van Pham Diep <favadi@robotinfra.com>
 -#}
 {%- from 'cron/test.jinja2' import test_cron with context -%}
+{%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
   - elasticsearch
   - elasticsearch.diamond
@@ -81,6 +82,17 @@ test:
     - require:
       - cmd: test_crons
       - cmd: graylog2_log_one_msg
+  diamond:
+    - test
+    - map:
+        ProcessResources:
+    {{ diamond_process_test('graylog2-web') }}
+    {{ diamond_process_test('graylog2') }}
+    - require:
+      - sls: graylog2.server
+      - sls: graylog2.server.diamond
+      - sls: graylog2.web
+      - sls: graylog2.web.diamond
 
 graylog2_server-es_cluster:
   monitoring:

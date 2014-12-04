@@ -4,8 +4,6 @@ Custom additions to module state
 ================================
 '''
 
-from salt.states import module
-
 def check_output(name, output, **kwargs):
     """
     Compares the output of an execution module with the provided value. If
@@ -16,7 +14,13 @@ def check_output(name, output, **kwargs):
         'changes': {},
         'comment': '',
         'result': None}
-    res = module.run(name, **kwargs)
+
+    high_data = {
+        name: {
+            "module": ["run"] + [{k:v} for k, v in kwargs.iteritems()]
+        }
+    }
+    res = __salt__['state.high'](high_data)
     module_ret = res['changes'].get('ret')
 
     if __opts__['test']:

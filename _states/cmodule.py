@@ -21,6 +21,13 @@ def check_output(name, output, **kwargs):
         }
     }
     res = __salt__['state.high'](high_data)
+    # len(res) should be 1
+    assert len(res) == 1, "%r" % res
+
+    res = res.values()[0]
+    if not res['result']:
+        return res
+
     module_ret = res['changes'].get('ret')
 
     if __opts__['test']:

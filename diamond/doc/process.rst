@@ -32,8 +32,13 @@
 ProcessResources
 ================
    
-Process resources data locate in ``os > process > {{ name }}`` in graphite
-web interface.
+Process resources data locate at ``os > process > {{ process_name }}``
+in graphite web interface.
+
+.. note::
+
+   If a process name is documented as ``xxx/yyy`` (e.g:
+   uwsgi/djangopypi2), it is located at ``os > process > xxx > yyy``.
 
 cpu_times:system
 ----------------

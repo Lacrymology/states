@@ -124,6 +124,10 @@ test:
 
 {% set doc = {"_id": 1, "name": "somename", "surname": "somesurname"} -%}
 
+python-pymongo:
+  package:
+    - installed
+
 test_mongodb_insert:
   cmodule:
     - check_output
@@ -136,6 +140,7 @@ test_mongodb_insert:
     - database: citest
     - require:
         - cmd: mongodb_test_generate_sample_db_for_backup_test
+        - pkg: python-pymongo
 
 test_mongodb_find:
   cmodule:

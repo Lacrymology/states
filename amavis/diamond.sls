@@ -45,7 +45,7 @@ amavis_diamond_resources:
         [[amavis]]
         name = ^amavisd\ \(.+\)
 
-diamond_amavis
+diamond_amavis:
   file:
     - managed
     - name: /etc/diamond/collectors/AmavisCollector.conf

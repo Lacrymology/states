@@ -154,8 +154,7 @@ test_mongodb_delete:
   cmodule:
     - check_output
     - name: mongodb.remove
-    - output:
-        - 1 objects removed
+    - output: 1 objects removed
     - query:
         _id: {{ doc._id }}
     - collection: test

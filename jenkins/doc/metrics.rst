@@ -1,9 +1,9 @@
 Metrics
 =======
 
-See ProcessResources collector :doc:`document </diamond/doc/process>`.
+See ProcessResources collector :doc:`/diamond/doc/process`.
 
 Processes:
 
-* jenkins
+* :doc:`/jenkins/doc/index` process
 

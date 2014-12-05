@@ -2,32 +2,34 @@ ProcessResources
 ================
    
 Process resources data locate at ``os > process > {{ process_name }}``
-in graphite web interface.
+in :doc:`/graphite/doc/index` web interface.
 
 .. note::
 
    If a process name is documented as ``xxx/yyy`` (e.g:
-   uwsgi/djangopypi2), it is located at ``os > process > xxx > yyy``.
+   eg: :doc:`/uwsgi/doc/index`\ /\ :doc:`/djangopypi2/doc/index`), it is located at ``os > process > xxx > yyy``.
 
 cpu_times:system
 ----------------
 
-Total time in seconds the process spent in kernel mode.
+Total time in seconds the process spent in `kernel mode
+<http://www.linfo.org/kernel_mode.html>`_.
 
 cpu_times:user
 --------------
 
-Total time in seconds the process spent in user mode.
+Total time in seconds the process spent in `user mode
+<http://www.linfo.org/user_mode.html>`_.
 
 io_counters:read_count
 ----------------------
 
-Number of times the process made a read operation.
+Number of times the process read from disk.
 
 io_counters:write_count
 -----------------------
 
-Number of times the process made a write operation.
+Number of times the process wrote to disk.
 
 io_counters: read_bytes
 -----------------------
@@ -42,22 +44,24 @@ Total amount of data the process has written presents in bytes.
 num_ctx_switches:involuntary
 ----------------------------
 
-The number involuntary context switches performed by the process.
+The number involuntary `context switches
+<http://www.linfo.org/context_switch.html>`_ performed by the process.
 
 num_ctx_switches:voluntary
 --------------------------
 
-The number voluntary context switches performed by the process.
+The number voluntary `context switches
+<http://www.linfo.org/context_switch.html>`_ performed by the process.
 
 cpu_percent
 -----------
 
-CPU utilization as a percentage.
+CPU utilization by the process as a percentage.
 
 memory_percent
 --------------
 
-Memory utilization as a percentage.
+Memory utilization by the process as a percentage.
 
 num_threads
 -----------

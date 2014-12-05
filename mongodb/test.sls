@@ -138,6 +138,8 @@ test_mongodb_insert:
         - {{ doc }}
     - collection: test
     - database: citest
+    - host: localhost
+    - port: 27017
     - require:
         - cmd: mongodb_test_generate_sample_db_for_backup_test
         - pkg: python-pymongo
@@ -152,6 +154,8 @@ test_mongodb_find:
         _id: {{ doc._id }}
     - collection: test
     - database: citest
+    - host: localhost
+    - port: 27017
     - require:
       - cmodule: test_mongodb_insert
 
@@ -164,6 +168,8 @@ test_mongodb_delete:
         _id: {{ doc._id }}
     - collection: test
     - database: citest
+    - host: localhost
+    - port: 27017
     - require:
       - cmodule: test_mongodb_find
     - require_in:

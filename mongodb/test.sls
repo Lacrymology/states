@@ -25,6 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Van Pham Diep <favadi@robotinfra.com>
 -#}
+{%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
   - mongodb
   - mongodb.backup
@@ -52,3 +53,71 @@ test:
       - sls: mongodb.backup
     - require:
       - service: mongodb_repair_post
+  diamond:
+    - test
+    - map:
+        ProcessResources:
+    {{ diamond_process_test('mongodb') }}
+        MongoDB:
+          mongo.asserts.regular: True
+          mongo.asserts.warning: True
+          mongo.asserts.msg: True
+          mongo.asserts.user: True
+          mongo.backgroundFlushing.flushes: True
+          mongo.backgroundFlushing.total_ms: True
+          mongo.backgroundFlushing.average_ms: True
+          mongo.backgroundFlushing.last_ms: True
+          mongo.connections.current: True
+          mongo.connections.available: True
+          mongo.connections.totalCreated: True
+          mongo.cursors.clientCursors_size: True
+          mongo.cursors.timedOut: True
+          mongo.cursors.totalNoTimeout: True
+          mongo.cursors.totalOpen: True
+          mongo.serverStatus.dur.timeMS.dt: True
+          mongo.dur.timeMS.prepLogBuffer: True
+          mongo.dur.timeMS.remapPrivateView: True
+          mongo.dur.timeMS.writeToJournal: True
+          mongo.dur.commits: True
+          mongo.dur.commitsInWriteLock: True
+          mongo.dur.compression: True
+          mongo.dur.earlyCommits: True
+          mongo.dur.journaledMB: True
+          mongo.dur.writeToDataFilesMB: True
+          mongo.globalLock.totalTime: True
+          mongo.globalLock.lockTime: True
+          mongo.globalLock.currentQueue.total: True
+          mongo.globalLock.currentQueue.readers: True
+          mongo.globalLock.currentQueue.writers: True
+          mongo.globalLock.activeClients.total: True
+          mongo.globalLock.activeClients.readers: True
+          mongo.globalLock.activeClients.writers: True
+          mongo.indexCounters.accesses: True
+          mongo.indexCounters.hits: True
+          mongo.indexCounters.misses: True
+          mongo.indexCounters.resets: True
+          mongo.indexCounters.missRatio: True
+          mongo.mem.bits: True
+          mongo.mem.resident: True
+          mongo.mem.virtual: True
+          mongo.mem.supported: True
+          mongo.mem.mapped: True
+          mongo.mem.mappedWithJournal: True
+          mongo.network.bytesIn: True
+          mongo.network.bytesOut: True
+          mongo.network.numRequests: True
+          mongo.opcounters.insert: True
+          mongo.opcounters.query: True
+          mongo.opcounters.update: True
+          mongo.opcounters.delete: True
+          mongo.opcounters.getmore: True
+          mongo.opcounters.command: True
+          mongo.opcountersRepl.insert: True
+          mongo.opcountersRepl.query: True
+          mongo.opcountersRepl.update: True
+          mongo.opcountersRepl.delete: True
+          mongo.opcountersRepl.getmore: True
+          mongo.opcountersRepl.command: True
+    - require:
+      - sls: mongodb
+      - sls: mongodb.diamond

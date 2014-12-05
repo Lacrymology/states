@@ -125,7 +125,7 @@ test:
 {% set doc = {"_id": 1, "name": "somename", "surname": "somesurname"} -%}
 
 python-pymongo:
-  package:
+  pkg:
     - installed
 
 test_mongodb_insert:

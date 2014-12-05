@@ -10,6 +10,8 @@ Processes:
 ElasticSearch
 -------------
 
+Locate at ``os > elasticsearch`` in graphite web interface.
+
 cache:bloom:size
 ~~~~~~~~~~~~~~~~
 

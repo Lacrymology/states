@@ -10,6 +10,8 @@ Processes:
 OpenVPN
 -------
 
+Locate at ``os > openvpn`` in graphite web interface.
+
 {{ instance }}.clients.connected
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

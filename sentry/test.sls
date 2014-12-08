@@ -26,6 +26,7 @@ Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Van Pham Diep <favadi@robotinfra.com>
 -#}
 {%- from 'cron/test.jinja2' import test_cron with context %}
+{%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
   - sentry
   - sentry.backup
@@ -50,3 +51,11 @@ test:
     - order: last
     - require:
       - cmd: test_crons
+  diamond:
+    - test
+    - map:
+        ProcessResources:
+    {{ diamond_process_test('uwsgi.sentry') }}
+    - require:
+      - sls: sentry
+      - sls: sentry.diamond

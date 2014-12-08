@@ -40,7 +40,7 @@ test:
     - test
     - map:
         ProcessResources:
-    {{ diamond_process_test('tomcat') }}
+    {{ diamond_process_test('tomcat', zmempct=False) }}
     - require:
       - sls: tomcat.7
       - service: diamond

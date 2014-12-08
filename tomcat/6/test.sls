@@ -13,7 +13,7 @@ test:
     - test
     - map:
         ProcessResources:
-    {{ diamond_process_test('tomcat') }}
+    {{ diamond_process_test('tomcat', zmempct=False) }}
     - require:
       - sls: tomcat.6
       - service: diamond

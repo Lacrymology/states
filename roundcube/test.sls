@@ -55,7 +55,7 @@ test:
     - test
     - map:
         ProcessResources:
-    {{ diamond_process_test('uwsgi.roundcube') }}
+    {{ diamond_process_test('uwsgi.roundcube', zmempct=False) }}
     - require:
       - sls: roundcube
       - sls: roundcube.diamond

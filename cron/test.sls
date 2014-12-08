@@ -44,3 +44,6 @@ test:
     - require:
       - sls: cron
       - sls: cron.diamond
+  monitoring:
+    - run_all_checks
+    - order: last

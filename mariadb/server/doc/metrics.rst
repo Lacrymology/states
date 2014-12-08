@@ -7,7 +7,7 @@ Processes:
 
 * `mysqld_safe <http://dev.mysql.com/doc/refman/5.5/en/mysqld-safe.html>`_ 
 
-* `mysqld <http://dev.mysql.com/doc/refman/5.5/en/mysqld.html`_
+* `mysqld <http://dev.mysql.com/doc/refman/5.5/en/mysqld.html>`_
 
 MySQLCollector
 --------------

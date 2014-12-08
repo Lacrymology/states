@@ -25,6 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Quan Tong Anh <quanta@robotinfra.com>
 Maintainer: Van Pham Diep <favadi@robotinfra.com>
 -#}
+{%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
   - uwsgi
   - uwsgi.diamond
@@ -37,3 +38,20 @@ test:
   monitoring:
     - run_all_checks
     - order: last
+  diamond:
+    - test
+    - map:
+        ProcessResources:
+    {{ diamond_process_test('uwsgi') }}
+        KSM:
+          ksm.full_scans: True
+          ksm.pages_shared: True
+          ksm.pages_sharing: True
+          ksm.pages_to_scan: True
+          ksm.pages_unshared: True
+          ksm.pages_volatile: True
+          ksm.run: True
+          ksm.sleep_milisecs: True
+    - require:
+      - sls: uwsgi
+      - sls: uwsgi.diamond

@@ -26,6 +26,7 @@ Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
 {%- from 'cron/test.jinja2' import test_cron with context %}
+{%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
   - roundcube
   - roundcube.backup
@@ -50,3 +51,11 @@ test:
     - order: last
     - require:
       - cmd: test_crons
+  diamond:
+    - test
+    - map:
+        ProcessResources:
+    {{ diamond_process_test('uwsgi.roundcube') }}
+    - require:
+      - sls: roundcube
+      - sls: roundcube.diamond

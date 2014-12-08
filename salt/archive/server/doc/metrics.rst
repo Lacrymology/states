@@ -2,5 +2,7 @@ Metrics
 =======
 
 No special metric for this formula. Please see metrics of all components
-which this formula consists of. Mainly components are:
-:doc:`/rsync/doc/index` and :doc:`/nginx/doc/index`.
+which this formula consists of. Main components are:
+
+* :doc:`/rsync/doc/index`
+* :doc:`/nginx/doc/index`

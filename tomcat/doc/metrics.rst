@@ -1,8 +1,6 @@
 Metrics
 =======
 
-See ProcessResources collector :doc:`/diamond/doc/process`.
+:doc:`/diamond/doc/process`:
 
-Processes:
-
-* ``tomcat`` - Tomcat daemon processes.
+* ``tomcat`` - :doc:`tomcat/doc/index` daemon processes.

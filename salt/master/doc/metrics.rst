@@ -1,8 +1,6 @@
 Metrics
 =======
 
-See ProcessResources collector :doc:`/diamond/doc/process`.
+:doc:`/diamond/doc/process`:
 
-Processes:
-
-* ``salt.master`` - salt-master daemon processes.
+* ``salt.master`` - :doc:`/salt/master/doc/index` daemon processes.

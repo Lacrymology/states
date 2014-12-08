@@ -1,8 +1,6 @@
 Metrics
 =======
 
-See ProcessResources collector :doc:`/diamond/doc/process`.
+:doc:`/diamond/doc/process`:
 
-Processes:
-
-* ``openldap`` (slapd - OpenLDAP deamon).
+* ``openldap`` (``slapd`` - :doc:`/openldap/doc/index` deamon).

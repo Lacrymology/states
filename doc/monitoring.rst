@@ -48,7 +48,7 @@ for Nagios Remote
 Process Execution. A mechanism used by Nagios server to securely run monitoring
 check on monitored hosts.
 
-:doc:`/nrpe/doc/index` is a deamon that run on each monitored
+:doc:`/nrpe/doc/index` is a daemon that run on each monitored
 :doc:`/salt/minion/doc/index`. It allow check to be performed only by a specific
 list of monitoring server (:doc:`/shinken/doc/index` poller).
 

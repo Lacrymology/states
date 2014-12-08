@@ -1,8 +1,6 @@
 Metrics
 =======
                           
-See ProcessResources collector :doc:`/diamond/doc/process`.
+:doc:`/diamond/doc/process`:
 
-Processes:
-
-* :doc:`/shinken/doc/index`
+* :doc:`/shinken/doc/index` daemon processes

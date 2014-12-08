@@ -1,13 +1,9 @@
 Metrics
 =======
                           
-See ProcessResources collector :doc:`/diamond/doc/process`.
+:doc:`/diamond/doc/process`:
 
-Processes:
-
-* `mysqld_safe <http://dev.mysql.com/doc/refman/5.5/en/mysqld-safe.html>`_ 
-
-* `mysqld <http://dev.mysql.com/doc/refman/5.5/en/mysqld.html>`_
+* ``mysql`` - :doc:`/apt_cache/doc/index` daemon
 
 MySQLCollector
 --------------

@@ -1,8 +1,6 @@
 Metrics
 =======
                           
-See ProcessResources collector :doc:`/diamond/doc/process`.
+:doc:`/diamond/doc/process`:
 
-Processes:
-
-* `nginx <http://nginx.org/en/docs/beginners_guide.html>`_
+* :doc:`/nginx/doc/index` daemon

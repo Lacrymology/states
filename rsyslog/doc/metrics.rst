@@ -1,8 +1,6 @@
 Metrics
 =======
                           
-See ProcessResources collector :doc:`/diamond/doc/process`.
+:doc:`/diamond/doc/process`:
 
-Processes:
-
-* :doc:`/rsyslog/doc/index`
+* :doc:`/rsyslog/doc/index` daemon process

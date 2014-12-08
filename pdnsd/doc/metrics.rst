@@ -1,8 +1,6 @@
 Metrics
 =======
                           
-See ProcessResources collector :doc:`/diamond/doc/process`.
+:doc:`/diamond/doc/process`:
 
-Processes:
-
-* `pdnsd <http://members.home.nl/p.a.rombouts/pdnsd/index.html>`_
+* :doc:`/pdnsd/doc/index` daemon process

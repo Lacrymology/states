@@ -1,8 +1,6 @@
 Metrics
 =======
                           
-See ProcessResources collector :doc:`/diamond/doc/process`.
+:doc:`/diamond/doc/process`:
 
-Processes:
-
-* `s3cmd <http://s3tools.org/s3cmd>`_
+* :doc:`/s3cmd/doc/index` process

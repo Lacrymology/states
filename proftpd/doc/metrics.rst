@@ -1,8 +1,6 @@
 Metrics
 =======
                           
-See ProcessResources collector :doc:`/diamond/doc/process`.
+:doc:`/diamond/doc/process`:
 
-Processes:
-
-* :doc:`/proftpd/doc/index`
+* :doc:`/proftpd/doc/index` daemon process

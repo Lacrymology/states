@@ -1,8 +1,6 @@
 Metrics
 =======
                           
-See ProcessResources collector :doc:`/diamond/doc/process`.
+:doc:`/diamond/doc/process`:
 
-Processes:
-
-* :doc:`/ssh/server/doc/index`
+* :doc:`/ssh/server/doc/index` daemon process

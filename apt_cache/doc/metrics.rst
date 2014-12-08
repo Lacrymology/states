@@ -1,8 +1,6 @@
 Metrics
 =======
 
-See ProcessResources collector :doc:`/diamond/doc/process`.
+:doc:`/diamond/doc/process`:
 
-Processes:
-
-* `apt-cacher-ng <https://www.unix-ag.uni-kl.de/~bloch/acng/>`_
+* :doc:`/apt_cache/doc/index` daemon

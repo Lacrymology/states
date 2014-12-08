@@ -25,6 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 #}
+{%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
   - tomcat.7
   - tomcat.7.nrpe
@@ -35,3 +36,11 @@ test:
     - run_all_checks
     - order: last
     - wait: 30
+  diamond:
+    - test
+    - map:
+        ProcessResources:
+    {{ diamond_process_test('tomcat') }}
+    - require:
+      - sls: tomcat.7
+      - service: diamond

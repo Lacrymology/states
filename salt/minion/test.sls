@@ -1,5 +1,6 @@
 {#-
-Copyright (c) 2013, Hung Nguyen Viet
+Copyright (c) 2013, Bruno Clermont
+All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
@@ -21,24 +22,23 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Viet Hung Nguyen <hvn@robotinfra.com>
+Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
-
-Diamond statistics for salt_cloud.
 -#}
-
+{%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
-  - diamond
-  - salt.master.diamond
+  - salt.minion.diamond
+  - salt.minion.nrpe
 
-salt_cloud_diamond_resources:
-  file:
-    - accumulated
-    - name: processes
-    - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - require_in:
-      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - text:
-      - |
-        [[salt.cloud]]
-        exe = ^python \/usr\/bin\/salt-cloud
+test:
+  monitoring:
+    - run_all_checks
+    - order: last
+    - wait: 60
+  diamond:
+    - test
+    - map:
+        ProcessResources:
+    {{ diamond_process_test('salt.minion', zmempct=False) }}
+    - require:
+      - sls: salt.minion.diamond

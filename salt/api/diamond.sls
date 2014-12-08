@@ -43,4 +43,4 @@ salt_api_diamond_resources:
     - text:
       - |
         [[salt.api]]
-        cmdline = ^\/usr\/bin\/python \/usr\/bin\/salt\-api$
+        cmdline = ^python \/usr\/bin\/salt\-api$

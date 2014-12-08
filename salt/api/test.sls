@@ -26,6 +26,7 @@ Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
 {%- from 'cron/test.jinja2' import test_cron with context %}
+{%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
   - salt.api
   - salt.api.diamond
@@ -44,3 +45,11 @@ test:
     - wait: 60
     - require:
       - cmd: test_crons
+  diamond:
+    - test
+    - map:
+        ProcessResources:
+    {{ diamond_process_test('salt.api', zmempct=False) }}
+    - require:
+      - sls: salt.api
+      - sls: salt.api.diamond

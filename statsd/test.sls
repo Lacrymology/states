@@ -25,6 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
+{%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
   - statsd
   - statsd.diamond
@@ -34,3 +35,11 @@ test:
   monitoring:
     - run_all_checks
     - order: last
+  diamond:
+    - test
+    - map:
+        ProcessResources:
+    {{ diamond_process_test('statsd') }}
+    - require:
+      - sls: statsd
+      - sls: statsd.diamond

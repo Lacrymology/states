@@ -26,6 +26,7 @@ Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
 {%- from 'cron/test.jinja2' import test_cron with context %}
+{%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
   - graphite
   - graphite.backup
@@ -49,3 +50,11 @@ test:
     - order: last
     - require:
       - cmd: test_crons
+  diamond:
+    - test
+    - map:
+        ProcessResources:
+    {{ diamond_process_test('uwsgi.graphite', zmempct=False) }}
+    - require:
+      - sls: graphite
+      - sls: graphite.diamond

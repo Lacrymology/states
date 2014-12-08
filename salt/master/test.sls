@@ -25,6 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
+{%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
   - salt.master
   - salt.master.backup
@@ -43,3 +44,11 @@ test:
     - require:
       - sls: salt.master
       - sls: salt.master.backup
+  diamond:
+    - test
+    - map:
+        ProcessResources:
+    {{ diamond_process_test('salt.master', zmempct=False) }}
+    - require:
+      - sls: salt.master
+      - sls: salt.master.diamond

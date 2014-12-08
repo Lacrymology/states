@@ -32,6 +32,3 @@ include:
   - ssh.server.diamond
   - rsync.diamond
   - rsyslog.diamond
-
-
-

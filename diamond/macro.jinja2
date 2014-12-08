@@ -49,16 +49,16 @@ include:
         cmdline = ^{{ state }}-(worker|master)$
 {%- endmacro %}
 
-{%- macro diamond_process_test(state) %}
-          process.{{ state }}.cpu_times.system: True
-          process.{{ state }}.cpu_times.user: True
-          process.{{ state }}.io_counters.read_count: True
-          process.{{ state }}.io_counters.write_count: True
-          process.{{ state }}.io_counters.read_bytes: True
-          process.{{ state }}.io_counters.write_bytes: True
-          process.{{ state }}.num_ctx_switches.involuntary: True
-          process.{{ state }}.num_ctx_switches.voluntary: True
-          process.{{ state }}.cpu_percent: True
-          process.{{ state }}.memory_percent: True
+{#-
+zcpupct: accept value=0 for cpu_percent metric (z stands for zero).
+zmempct: accept value=0 for mem_percent metric.
+If it is obvious that these value ares not equal zero, set them to False
+to make sure receiving the expected metrics. E.g. jenkins daemon process sure
+will use > 0 % memory percent, wrong diamond config may collect the value=0,
+set zmempct=False to fail the test if that happens.
+#}
+{%- macro diamond_process_test(state, zcpupct=True, zmempct=True) %}
+          process.{{ state }}.cpu_percent: {{ zcpupct }}
+          process.{{ state }}.memory_percent: {{ zmempct }}
           process.{{ state }}.num_threads: False
 {%- endmacro  %}

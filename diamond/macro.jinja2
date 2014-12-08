@@ -49,6 +49,14 @@ include:
         cmdline = ^{{ state }}-(worker|master)$
 {%- endmacro %}
 
+{#-
+zcpupct: accept value=0 for cpu percent
+zmempct: accept value=0 for mem percent
+If it is obvious that these value ares not equal zero, set them to False
+to make sure receiving the expected metrics. E.g. jenkins daemon process sure
+will use > 0 % memory percent, wrong diamond config may collect the value=0,
+set zmempct=False to fail the test if that happens.
+#}
 {%- macro diamond_process_test(state, zcpupct=True, zmempct=True) %}
           process.{{ state }}.cpu_percent: {{ zcpupct }}
           process.{{ state }}.memory_percent: {{ zmempct }}

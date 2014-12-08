@@ -38,6 +38,12 @@ Example::
 
   salt_cloud:
     master: 1.2.3.4
+    profiles:
+      <profile_name>:
+        <attribute_name>: <value>
+    providers:
+      <provider_name>:
+        <attribute_name>: <value>
 
 salt_cloud:master
 ~~~~~~~~~~~~~~~~~
@@ -47,31 +53,24 @@ Address of salt-master for all salt-cloud managed VMs.
 Optional
 --------
 
-Example::
+salt_cloud:profiles
+~~~~~~~~~~~~~~~~~~~
 
-  salt_cloud:
-    profiles:
-      <profile_name>:
-        <attribute_name>: <value>
-    providers:
-      <provider_name>:
-        <attribute_name>: <value>
+Dict of {profile_name: {attribute_name: value}}, each dict contains data
+to configure a salt-cloud profile.
 
-salt_cloud:profiles:<profile_name>
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Consult http://docs.saltstack.com/en/latest/topics/cloud/index.html#salt-cloud
+for more information.
 
-Name of profile.
+Default: ``{}``.
 
-Default: None (``[]``).
+salt_cloud:providers
+~~~~~~~~~~~~~~~~~~~~
 
-salt_cloud:providers:<provider_name>
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Dict of {provider_name: {attribute_name: value}}, each dict contains data
+to configure a salt-cloud provider.
 
-Name of provider.
+Consult http://docs.saltstack.com/en/latest/topics/cloud/index.html#salt-cloud
+for more information.
 
-Default: None (``[]``).
-
-salt_cloud:(<profiles>|<providers>):<attribute_name>
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Name of attribute, it comes with a value.
+Default: ``{}``.

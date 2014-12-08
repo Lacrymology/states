@@ -100,3 +100,12 @@ salt-cloud-boostrap-script:
     - require:
       - module: salt-cloud
       - file: bash
+
+salt_cloud_digital_ocean_v2_module:
+  file:
+    - managed
+    - source: salt://salt/cloud/digital_ocean_v2.py
+    - name: /usr/lib/pymodules/python2.7/salt/cloud/clouds/digital_ocean_v2.py
+    - require:
+      - pkg: salt
+      - pkg: salt-cloud

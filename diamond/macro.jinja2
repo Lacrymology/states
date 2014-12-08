@@ -49,7 +49,7 @@ include:
         cmdline = ^{{ state }}-(worker|master)$
 {%- endmacro %}
 
-{%- macro diamond_process_test(state, zcpusys=True, zcpucpt=True, zmempct=True) %}
+{%- macro diamond_process_test(state, zcpusys=True, zcpupct=True, zmempct=True) %}
           process.{{ state }}.cpu_times.system: {{ zcpusys }}
           process.{{ state }}.cpu_times.user: False
           process.{{ state }}.io_counters.read_count: False
@@ -58,7 +58,7 @@ include:
           process.{{ state }}.io_counters.write_bytes: False
           process.{{ state }}.num_ctx_switches.involuntary: False
           process.{{ state }}.num_ctx_switches.voluntary: False
-          process.{{ state }}.cpu_percent: {{ zcpucpt }}
+          process.{{ state }}.cpu_percent: {{ zcpupct }}
           process.{{ state }}.memory_percent: {{ zmempct }}
           process.{{ state }}.num_threads: False
 {%- endmacro  %}

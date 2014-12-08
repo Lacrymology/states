@@ -5,4 +5,4 @@ See ProcessResources collector :doc:`/diamond/doc/process`.
 
 Processes:
 
-* salt.cloud
+* ``salt.cloud`` - salt-cloud processes.

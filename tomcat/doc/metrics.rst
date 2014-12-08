@@ -5,4 +5,4 @@ See ProcessResources collector :doc:`/diamond/doc/process`.
 
 Processes:
 
-* tomcat
+* ``tomcat`` - Tomcat daemon processes.

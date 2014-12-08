@@ -26,15 +26,17 @@ Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
 {%- from 'cron/test.jinja2' import test_cron with context %}
+{%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
+{%- set roles = ('arbiter', 'broker', 'poller', 'reactionner', 'scheduler', 'receiver') %}
 include:
-{%- for role in ('arbiter', 'broker', 'poller', 'reactionner', 'scheduler', 'receiver') %}
+{%- for role in roles %}
   - shinken.{{ role }}
   - shinken.{{ role }}.diamond
   - shinken.{{ role }}.nrpe
 {%- endfor %}
 
 {%- call test_cron() -%}
-    {%- for role in ('arbiter', 'broker', 'poller', 'reactionner', 'scheduler', 'receiver') %}
+    {%- for role in roles %}
 - sls: shinken.{{ role }}
 - sls: shinken.{{ role }}.diamond
 - sls: shinken.{{ role }}.nrpe
@@ -42,6 +44,18 @@ include:
 {%- endcall %}
 
 test:
+  diamond:
+    - test
+    - map:
+        ProcessResources:
+{%- for role in roles %}
+          {{ diamond_process_test('shinken.' + role) }}
+{%- endfor %}
+    - require:
+{%- for role in roles %}
+      - sls: shinken.{{ role }}
+      - sls: shinken.{{ role }}.diamond
+{%- endfor %}
   monitoring:
     - run_all_checks
     - wait: 60

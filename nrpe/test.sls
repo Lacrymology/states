@@ -25,6 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
+{%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
   - nrpe
   - nrpe.diamond
@@ -37,5 +38,8 @@ test:
     - test
     - map:
         ProcessResources:
-          process.nrpe.num_threads: False
-          process.nsca_passive.cpu_percent: True
+          {{ diamond_process_test('nrpe') }}
+          {{ diamond_process_test('nsca_passive') }}
+    - require:
+      - sls: nrpe
+      - sls: nrpe.diamond

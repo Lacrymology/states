@@ -25,6 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
+{%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
   - ssmtp
   - ssmtp.diamond
@@ -40,3 +41,11 @@ test:
     - require:
       - file: /etc/ssmtp/ssmtp.conf
       - file: /etc/ssmtp/revaliases
+  diamond:
+    - test
+    - map:
+        ProcessResources:
+          {{ diamond_process_test('ssmtp') }}
+    - require:
+      - sls: ssmtp
+      - sls: ssmtp.diamond

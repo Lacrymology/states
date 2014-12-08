@@ -64,6 +64,7 @@ ssh_remove_key:
     {%- endif -%}
 {%- endmacro %}
 
+{%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
   - ssh.client
   - ssh.client.nrpe
@@ -73,18 +74,24 @@ include:
 
 {{ add_key() }}
 
-test_ssh:
+test:
   cmd:
     - run
     - name: ssh -o NoHostAuthenticationForLocalhost=yes root@localhost '/bin/true'
     - require:
       - cmd: ssh_add_key
-
-{%- call remove_key() %}
-- cmd: test_ssh
-{%- endcall %}
-
-test:
+  diamond:
+    - test
+    - map:
+        ProcessResources:
+          {{ diamond_process_test('sshd') }}
+    - require:
+      - sls: ssh.server
+      - sls: ssh.server.diamond
   monitoring:
     - run_all_checks
     - order: last
+
+{%- call remove_key() %}
+- cmd: test
+{%- endcall %}

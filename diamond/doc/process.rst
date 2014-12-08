@@ -9,45 +9,45 @@ in :doc:`/graphite/doc/index` web interface.
    If a process name is documented as ``xxx/yyy`` (e.g:
    eg: :doc:`/uwsgi/doc/index`\ /\ :doc:`/djangopypi2/doc/index`), it is located at ``os > process > xxx > yyy``.
 
-cpu_times:system
+cpu_times.system
 ----------------
 
 Total time in seconds the process spent in `kernel mode
 <http://www.linfo.org/kernel_mode.html>`_.
 
-cpu_times:user
+cpu_times.user
 --------------
 
 Total time in seconds the process spent in `user mode
 <http://www.linfo.org/user_mode.html>`_.
 
-io_counters:read_count
+io_counters.read_count
 ----------------------
 
 Number of times the process read from disk.
 
-io_counters:write_count
+io_counters.write_count
 -----------------------
 
 Number of times the process wrote to disk.
 
-io_counters: read_bytes
------------------------
+io_counters.read_bytes
+----------------------
 
 Total amount of data the process has read presents in bytes.
 
-io_counters: write_bytes
-------------------------
+io_counters.write_bytes
+-----------------------
 
 Total amount of data the process has written presents in bytes.
 
-num_ctx_switches:involuntary
+num_ctx_switches.involuntary
 ----------------------------
 
 The number involuntary `context switches
 <http://www.linfo.org/context_switch.html>`_ performed by the process.
 
-num_ctx_switches:voluntary
+num_ctx_switches.voluntary
 --------------------------
 
 The number voluntary `context switches

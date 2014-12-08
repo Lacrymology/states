@@ -26,6 +26,7 @@ Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
 {%- from 'cron/test.jinja2' import test_cron with context %}
+{%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
   - proftpd
   - proftpd.backup
@@ -44,6 +45,14 @@ include:
 {%- endcall %}
 
 test:
+  diamond:
+    - test
+    - map:
+        ProcessResources:
+          {{ diamond_process_test('proftpd') }}
+    - require:
+      - sls: proftpd
+      - sls: proftpd.diamond
   monitoring:
     - run_all_checks
     - wait: 5  {# wait for proftpd create database structure #}

@@ -5,7 +5,7 @@ See ProcessResources collector :doc:`/diamond/doc/process`.
 
 Processes:
 
-* denyhosts
+* :doc:`/denyhosts/doc/index`
 
 UserScriptsCollector
 --------------------

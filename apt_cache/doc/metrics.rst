@@ -1,7 +1,9 @@
 Metrics
 =======
 
-apt_cache
----------
+See ProcessResources collector :doc:`/diamond/doc/process`.
 
-.. TODO fill me
+Processes:
+
+* `apt-cacher-ng <https://www.unix-ag.uni-kl.de/~bloch/acng/>`_: a caching
+  proxy for software packages.

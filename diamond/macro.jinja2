@@ -50,8 +50,8 @@ include:
 {%- endmacro %}
 
 {#-
-zcpupct: accept value=0 for cpu percent
-zmempct: accept value=0 for mem percent
+zcpupct: accept value=0 for cpu_percent metric (z stands for zero).
+zmempct: accept value=0 for mem_percent metric.
 If it is obvious that these value ares not equal zero, set them to False
 to make sure receiving the expected metrics. E.g. jenkins daemon process sure
 will use > 0 % memory percent, wrong diamond config may collect the value=0,

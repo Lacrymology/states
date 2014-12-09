@@ -1,8 +1,8 @@
 Metrics
 =======
 
-See ProcessResources collector :doc:`document </diamond/doc/process>`.
+See ProcessResources collector :doc:`/diamond/doc/process`.
 
 Processes:
 
-* graylog2-web
+* :doc:`/graylog2/web/doc/index`

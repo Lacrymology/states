@@ -1,8 +1,8 @@
 Metrics
 =======
 
-See ProcessResources collector :doc:`document </diamond/doc/process>`.
+See ProcessResources collector :doc:`/diamond/doc/process`.
 
 Processes:
 
-* nodejs
+* :doc:`/nodejs/doc/index`

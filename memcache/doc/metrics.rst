@@ -1,11 +1,11 @@
 Metrics
 =======
 
-See ProcessResources collector :doc:`document </diamond/doc/process>`.
+See ProcessResources collector :doc:`/diamond/doc/process`.
 
 Processes:
 
-* memcached
+* :doc:`/memcache/doc/index`
 
 Memcached
 ---------

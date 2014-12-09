@@ -1,8 +1,8 @@
 Metrics
 =======
 
-See ProcessResources collector :doc:`document </diamond/doc/process>`.
+See ProcessResources collector :doc:`/diamond/doc/process`.
 
 Processes:
 
-* uwsgi/djangopypi2
+* :doc:`/uwsgi/doc/index` master and worker(s) process of :doc:`/djangopypi2/doc/index`

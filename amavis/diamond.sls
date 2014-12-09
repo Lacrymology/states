@@ -43,7 +43,7 @@ amavis_diamond_resources:
     - text:
       - |
         [[amavis]]
-        name = ^amavisd\ \(.+\)
+        cmdline = ^amavisd\ \(.+\)
 
 diamond_amavis:
   file:

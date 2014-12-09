@@ -70,6 +70,7 @@ Example::
     mynetworks:
       - 127.0.0.0/8
       - 192.168.122.0/24
+    queue_length: 50
 
   ldap:
     data:
@@ -208,3 +209,10 @@ postfix:ssl
 :doc:`/ssl/doc/index` key to use to support SMTP over :doc:`/ssl/doc/index`.
 
 Default: not used.
+
+postfix:queue_length
+~~~~~~~~~~~~~~~~~~~~
+
+Warning if the number of items in the mail queue reach the defined threshold.
+
+Default: ``20``.

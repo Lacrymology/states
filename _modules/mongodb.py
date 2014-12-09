@@ -25,6 +25,7 @@ from salt._compat import string_types
 # Import third party libs
 try:
     import pymongo
+    import bson
     HAS_MONGODB = True
 except ImportError:
     HAS_MONGODB = False

@@ -24,6 +24,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
+            Quan Tong Anh <quanta@robotinfra.com>
 -#}
 # {{ pillar['message_do_not_modify'] }}
 
@@ -31,7 +32,11 @@ configobj==5.0.2
 pip==1.5.2
 psutil==2.0.0
 six==1.5.2
-diamond==3.4.11
+{%- if salt['pillar.get']('files_archive', False) %}
+diamond==3.4.12
+{%- else %}
+https://archive.robotinfra.com/pip/diamond-3.4.12.tar.bz2
+{%- endif -%}
 {%- if 'graylog2_address' in pillar %}
 graypy==0.2.9
 {%- endif %}

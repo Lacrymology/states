@@ -26,6 +26,7 @@ Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
 {%- from 'cron/test.jinja2' import test_cron with context %}
+{%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
   - amavis
   - amavis.nrpe
@@ -67,6 +68,16 @@ include:
 {%- endcall %}
 
 test:
+  diamond:
+    - test
+    - map:
+        Amavis:
+          amavis.sysUpTime.time: False
+        ProcessResources:
+          {{ diamond_process_test('amavis') }}
+    - require:
+      - sls: amavis
+      - sls: amavis.diamond
   monitoring:
     - run_all_checks
     - wait: 60

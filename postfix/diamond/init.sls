@@ -64,6 +64,19 @@ postfix_diamond_resources:
         [[postfix]]
         exe = ^\/usr\/lib\/postfix\/master$
 
+postfix_diamond_queue_length:
+  file:
+    - managed
+    - name: /usr/local/diamond/share/diamond/user_scripts/postfix_queue_length.sh
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 550
+    - source: salt://postfix/diamond/queue_length.jinja2
+    - require:
+      - module: diamond
+      - file: diamond.conf
+
 {#- TODO: remove that statement in >= 2014-04 #}
 /usr/local/diamond/postfix-requirements.txt:
   file:

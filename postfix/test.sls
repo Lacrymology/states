@@ -26,6 +26,7 @@ Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
 {%- from 'cron/test.jinja2' import test_cron with context %}
+{%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
   - postfix
   - postfix.backup
@@ -46,6 +47,18 @@ include:
 {%- endcall %}
 
 test:
+  diamond:
+    - test
+    - map:
+        Postfix:
+          postfix.(recv|send).status.sent: True
+        ProcessResources:
+          {{ diamond_process_test('postfix') }}
+        UserScripts:
+          postfix.queue_length: True
+    - require:
+      - sls: postfix
+      - sls: postfix.diamond
   monitoring:
     - run_all_checks
     - order: last

@@ -25,6 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Quan Tong Anh <quanta@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
+{%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
   - s3cmd
   - s3cmd.diamond
@@ -36,6 +37,14 @@ test:
     - name: s3cmd ls
     - require:
       - pkg: s3cmd
+  diamond:
+    - test
+    - map:
+        ProcessResources:
+          {{ diamond_process_test('s3cmd') }}
+    - require:
+      - sls: s3cmd
+      - sls: s3cmd.diamond
   monitoring:
     - run_all_checks
     - order: last

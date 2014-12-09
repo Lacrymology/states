@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2013, Bruno Clermont
+Copyright (c) 2014, Quan Tong Anh
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -7,9 +7,14 @@ modification, are permitted provided that the following conditions are met:
 
 1. Redistributions of source code must retain the above copyright notice, this
    list of conditions and the following disclaimer.
+
 2. Redistributions in binary form must reproduce the above copyright notice,
    this list of conditions and the following disclaimer in the documentation
    and/or other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its contributors
+   may be used to endorse or promote products derived from this software
+   without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -22,34 +27,23 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Bruno Clermont <bruno@robotinfra.com>
+Author: Quan Tong Anh <quanta@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
 {%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
-  - raven.mail
-  - raven.mail.diamond
-  - raven.mail.nrpe
+  - cron
+  - cron.diamond
 
 test:
   diamond:
     - test
     - map:
         ProcessResources:
-          {{ diamond_process_test('rsyslog') }}
           {{ diamond_process_test('cron') }}
     - require:
-      - sls: raven.mail
-      - file: rsyslog_diamond_resources
-      - file: cron_diamond_resources
+      - sls: cron
+      - sls: cron.diamond
   monitoring:
     - run_all_checks
-    - require:
-      - cmd: send_unittest_mail
-      - file: /usr/bin/mail
-
-send_unittest_mail:
-  cmd:
-    - run
     - order: last
-    - name:  echo unittest | /usr/bin/mail -s unittest root@localhost

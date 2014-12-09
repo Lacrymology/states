@@ -1,7 +1,7 @@
 APT Cache
 =========
 
-.. TODO: INTRO
+A caching proxy for software packages.
 
 .. toctree::
     :glob:

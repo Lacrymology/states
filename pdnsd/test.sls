@@ -25,12 +25,21 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Quan Tong Anh <quanta@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
+{%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
   - pdnsd
   - pdnsd.diamond
   - pdnsd.nrpe
 
 test:
+  diamond:
+    - test
+    - map:
+        ProcessResources:
+          {{ diamond_process_test('pdnsd') }}
+    - require:
+      - sls: pdnsd
+      - sls: pdnsd.diamond
   monitoring:
     - run_all_checks
     - order: last

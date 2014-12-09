@@ -1,7 +1,6 @@
 Metrics
 =======
 
-apt_cache
----------
+:doc:`/diamond/doc/process`:
 
-.. TODO fill me
+* :doc:`/apt_cache/doc/index` daemon

@@ -26,6 +26,7 @@ Author: Quan Tong Anh <quanta@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
 {%- from 'cron/test.jinja2' import test_cron with context %}
+{%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
   - apt_cache
   - apt_cache.diamond
@@ -38,6 +39,14 @@ include:
 {%- endcall %}
 
 test:
+  diamond:
+    - test
+    - map:
+        ProcessResources:
+          {{ diamond_process_test('apt_cache') }}
+    - require:
+      - sls: apt_cache
+      - sls: apt_cache.diamond
   monitoring:
     - run_all_checks
     - order: last

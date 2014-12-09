@@ -25,18 +25,30 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Quan Tong Anh <quanta@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
+{%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
   - mariadb.server
   - mariadb.server.backup
   - mariadb.server.diamond
   - mariadb.server.nrpe
 
-test_backup_mysql:
+test:
   cmd:
     - run
     - name: /usr/local/bin/backup-mysql-all
     - require:
       - file: /usr/local/bin/backup-mysql-all
+  diamond:
+    - test
+    - map:
+        {#- Why there is no metrics in diamond.archive.log?
+        MySQL:
+          #}
+        ProcessResources:
+          {{ diamond_process_test('mysql') }}
+    - require:
+      - sls: mariadb.server
+      - sls: mariadb.server.diamond
   monitoring:
     - run_all_checks
     - order: last

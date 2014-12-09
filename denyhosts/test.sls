@@ -25,6 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Quan Tong Anh <quanta@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
+{%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
   - bash
   - denyhosts
@@ -58,6 +59,8 @@ test:
   diamond:
     - test
     - map:
+        ProcessResources:
+          {{ diamond_process_test('denyhosts') }}
         UserScripts:
           denyhosts.blocked: True
     - require:

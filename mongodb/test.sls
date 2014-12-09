@@ -172,5 +172,3 @@ test_mongodb_delete:
     - port: 27017
     - require:
       - cmodule: test_mongodb_find
-    - require_in:
-      - qa: test

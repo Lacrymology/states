@@ -290,10 +290,13 @@ def insert(objects, collection, user=None, password=None,
         mdb = pymongo.database.Database(conn, database)
         col = getattr(mdb, collection)
         ids = col.insert(objects)
-        return ids
+        return [str(_id) if isinstance(_id, bson.ObjectId) else _id
+                for _id in ids]
     except pymongo.errors.PyMongoError as err:
-        log.error("Inserting objects %r failed with error %s", objects, err.message)
+        log.error("Inserting objects %r failed with error %s",
+                  objects, err.message)
         return err.message
+
 
 def find(collection, query=None, user=None, password=None,
          host=None, port=None, database='admin'):

@@ -31,6 +31,7 @@ include:
   - mongodb.backup
   - mongodb.diamond
   - mongodb.nrpe
+  - mongodb.pymongo
   - mongodb.repair
 
 mongodb_test_generate_sample_db_for_backup_test:
@@ -123,10 +124,6 @@ test:
       - sls: mongodb.diamond
 
 {% set doc = {"_id": 1, "name": "somename", "surname": "somesurname"} -%}
-
-python-pymongo:
-  pkg:
-    - installed
 
 test_mongodb_insert:
   cmodule:

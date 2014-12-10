@@ -90,7 +90,7 @@ You can always list the already existing checks on a running Minion by running::
 Write Check
 -----------
 
-See :doc:`doc/monitoring/python`
+See :doc:`/doc/monitoring/python`
 
 It's very easy to write in any language. It's simply an binary of script that
 run, send text to standard output and exit with a specific code.

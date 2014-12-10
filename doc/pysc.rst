@@ -313,6 +313,8 @@ The following configuration values are expected or supported:
   command line take precedence.
 
 
+.. _pysc.nrpe:
+
 NRPE
 ~~~~
 
@@ -336,7 +338,7 @@ command line arguments.
 Users are encouraged instead to add the required arguments to the
 ``arguments`` key of the check configuration in
 ``<formula>.nrpe.config.jinja2``. In the case that this is not
-possible or advaiceable for some reason, as a last resort you can use
+possible or adviceable for some reason, as a last resort you can use
 the ``--set='{"key": "value"}'`` command line argument, but this is
 not recommended.
 

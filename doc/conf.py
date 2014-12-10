@@ -29,7 +29,7 @@
 
 import sphinx_rtd_theme
 
-extensions = ['sphinx.ext.todo', ]
+extensions = ['sphinx.ext.todo', 'sphinx.ext.autodoc']
 todo_include_todos = True
 templates_path = ''
 source_suffix = '.rst'

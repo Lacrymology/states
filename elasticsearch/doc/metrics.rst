@@ -10,6 +10,12 @@ ElasticSearch
 
 Locate at ``os > elasticsearch``.
 
+.. note::
+
+   This document is incomplete, for a complete reference, please use
+   `Elasticsearch reference
+   <http://www.elasticsearch.org/guide/en/elasticsearch/reference/0.90/>`_.
+
 cache.bloom.size
 ~~~~~~~~~~~~~~~~
 

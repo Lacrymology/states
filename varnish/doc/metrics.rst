@@ -8,6 +8,11 @@ Metrics
 Varnish
 -------
 
+.. note::
+
+   This document is incomplete, for a complete reference, please use
+   `Varnish documentation <https://www.varnish-cache.org/docs/3.0/>`_.
+
 accept_fail
 ~~~~~~~~~~~
 

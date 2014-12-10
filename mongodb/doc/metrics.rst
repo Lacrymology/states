@@ -3,7 +3,7 @@ Metrics
 
 :doc:`/diamond/doc/process`:
 
-* :doc:`/mongodb/doc/index`
+* ``mongodb`` - :doc:`/mongodb/doc/index`
 
 MongoDB
 -------

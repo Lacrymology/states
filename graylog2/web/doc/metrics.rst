@@ -3,4 +3,4 @@ Metrics
 
 :doc:`/diamond/doc/process`:
 
-* :doc:`/graylog2/web/doc/index`
+* ``graylog2-web`` - :doc:`/graylog2/web/doc/index`

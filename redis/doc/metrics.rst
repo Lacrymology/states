@@ -3,7 +3,7 @@ Metrics
                           
 :doc:`/diamond/doc/process`:
 
-* :doc:`/redis/doc/index`.
+* ``redis`` - :doc:`/redis/doc/index`.
 
 Redis
 -----

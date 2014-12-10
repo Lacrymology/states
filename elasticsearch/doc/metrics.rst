@@ -3,7 +3,7 @@ Metrics
 
 :doc:`/diamond/doc/process`:
 
-* :doc:`/elasticsearch/doc/index`.
+* ``elasticsearch`` - :doc:`/elasticsearch/doc/index`.
 
 elasticsearch
 -------------

@@ -3,4 +3,4 @@ Metrics
 
 :doc:`/diamond/doc/process`:
 
-* :doc:`/ejabberd/doc/index`
+* ``ejabberd`` - :doc:`/ejabberd/doc/index`

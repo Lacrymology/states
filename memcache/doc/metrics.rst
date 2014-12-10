@@ -3,7 +3,7 @@ Metrics
 
 :doc:`/diamond/doc/process`:
 
-* :doc:`/memcache/doc/index`
+* ``memcached`` - :doc:`/memcache/doc/index`
 
 Memcached
 ---------

@@ -3,7 +3,7 @@ Metrics
 
 :doc:`/diamond/doc/process`:
 
-* :doc:`/varnish/doc/index`
+* ``varnish`` - :doc:`/varnish/doc/index`
 
 Varnish
 -------

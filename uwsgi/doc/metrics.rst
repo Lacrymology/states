@@ -3,7 +3,7 @@ Metrics
                           
 :doc:`/diamond/doc/process`:
 
-* :doc:`/uwsgi/doc/index`
+* ``uwsgi`` - :doc:`/uwsgi/doc/index`
 
 KSM
 ---

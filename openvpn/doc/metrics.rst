@@ -3,7 +3,7 @@ Metrics
 
 :doc:`/diamond/doc/process`:
 
-* :doc:`/openvpn/doc/index`
+* ``openvpn`` - :doc:`/openvpn/doc/index`
 
 OpenVPN
 -------

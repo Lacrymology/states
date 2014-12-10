@@ -13,7 +13,7 @@ Locate at ``os > memcached``.
 main.auth_cmds
 ~~~~~~~~~~~~~~
 
-Number of authentication commands processed by the server - if you use
+Number of authentication commands processed by the server - if use
 authentication within your installation.
 
 main.auth_erros
@@ -39,9 +39,12 @@ Total number of bytes send to the network by this server.
 main.cas_badval
 ~~~~~~~~~~~~~~~
 
-The ``cas`` command is some kind of :doc:`Memcached </memcache/doc/index>`'s way to avoid
-locking. ``cas`` calls with bad identifier are counted in this stats
-key.
+The ``cas`` command is some kind of :doc:`Memcached
+</memcache/doc/index>`\ 's way to avoid locking. ``cas`` calls with
+bad identifier are counted in this stats key.
+
+If this value is high, there is something wrong with the application
+that uses :doc:`Memcached`.
 
 main.cas_hits
 ~~~~~~~~~~~~~
@@ -181,7 +184,7 @@ main.limit_maxbytes
 
 Maximum configured cache size (set on the command line while starting
 the memcached server), look at `main.bytes`_ value for the actual
-usage.
+usage. Changes this value by adjusting ``memcache:memory`` pillar key.
 
 main.listen_disabled_num
 ~~~~~~~~~~~~~~~~~~~~~~~~

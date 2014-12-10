@@ -321,13 +321,13 @@ Number of times a thread has been created.
 n_wrk_drop
 ~~~~~~~~~~
 
-Number of requests doc:`/varnish/doc/index` has given up trying to
+Number of requests :doc:`/varnish/doc/index` has given up trying to
 handle due to a full queue.
 
 n_wrk_failed
 ~~~~~~~~~~~~
 
-Number of times doc:`/varnish/doc/index` tried but failed to create a
+Number of times :doc:`/varnish/doc/index` tried but failed to create a
 worker thread.
 
 n_wrk_lqueue
@@ -336,7 +336,7 @@ n_wrk_lqueue
 n_wrk_max
 ~~~~~~~~~
 
-Number of times doc:`/varnish/doc/index` wanted to create a worker
+Number of times :doc:`/varnish/doc/index` wanted to create a worker
 thread, but wasn't able to because of the thread_pool_max setting.
 
 n_wrk_queued
@@ -353,7 +353,7 @@ Bytes of object body sent to clients.
 s_fetch
 ~~~~~~~
 
-Number of time doc:`/varnish/doc/index` fetched a response from
+Number of time :doc:`/varnish/doc/index` fetched a response from
 backend.
 
 s_hdrbytes
@@ -365,20 +365,20 @@ s_pass
 ~~~~~~
 
 Number of times the request pass to the backend (see
-doc:`/varnish/doc/index` documentation for all available `actions
+:doc:`/varnish/doc/index` documentation for all available `actions
 <https://www.varnish-cache.org/docs/3.0/tutorial/vcl.html#actions>`_).
 
 s_pipe
 ~~~~~~
 
-Number of times doc:`/varnish/doc/index` use pipe to serve the request
-(doc:`/varnish/doc/index` acts like a TCP proxy, more `details
+Number of times :doc:`/varnish/doc/index` use pipe to serve the
+request (:doc:`/varnish/doc/index` acts like a TCP proxy, more `details
 <https://www.varnish-software.com/blog/using-pipe-varnish>`_).
 
 s_req
 ~~~~~
 
-Total number of requests doc:`/varnish/doc/index` received.
+Total number of requests :doc:`/varnish/doc/index` received.
 
 s_sess
 ~~~~~~

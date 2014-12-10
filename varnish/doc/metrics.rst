@@ -1,7 +1,7 @@
 Metrics
 =======
 
-:doc:`/diamond/doc/process`
+:doc:`/diamond/doc/process`:
 
 * :doc:`/varnish/doc/index`
 

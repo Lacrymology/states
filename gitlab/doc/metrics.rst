@@ -1,7 +1,7 @@
 Metrics
 =======
                           
-:doc:`/diamond/doc/process`
+:doc:`/diamond/doc/process`:
 
 * `sidekiq <http://sidekiq.org/>`_ use by :doc:`/gitlab/doc/index` for
   background processing.

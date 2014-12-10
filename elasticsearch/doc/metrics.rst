@@ -106,7 +106,7 @@ Number of documents in the index.
 indices.{{ index_name }}.docs.deleted
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Number of documents deleted in the index.
+Number of deleted documents in the index.
 
 indices.{{ index_name }}.get_exists_time_in_millis
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -334,10 +334,11 @@ process.mem.virtual
 thread_pool
 ~~~~~~~~~~~
 
-A node holds several thread pools in order to improve how threads
-memory consumption are managed within a node. Many of these pools
-also have queues associated with them, which allow pending requests
-to be held instead of discarded.
+A node holds several `thread pools
+<http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/modules-threadpool.html>`_
+in order to improve how threads memory consumption are managed within
+a node. Many of these pools also have queues associated with them,
+which allow pending requests to be held instead of discarded.
 
 List of important thread pools:
 

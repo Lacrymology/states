@@ -1,7 +1,7 @@
 #!/bin/bash -x
-{%- for user in pillar['ejabberd']['admins'] %}
-{%- set password = pillar['ejabberd']['admins'][user] %}
-{%- set hostname = pillar['ejabberd']['hostnames'][0] %}
+{%- for user in salt['pillar.get']('ejabberd:admins') %}
+  {%- set password = salt['pillar.get']('ejabberd:admins')[user] %}
+  {%- set hostname = salt['pillar.get']('ejabberd:hostnames')[0] %}
 
 ejabberdctl check-account {{ user }} {{ hostname }} || \
     ejabberdctl register {{ user }} {{ hostname }} '{{ password }}'

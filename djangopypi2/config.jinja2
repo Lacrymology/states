@@ -32,7 +32,7 @@ Institute for Institutional Innovation by Data Driven Design Inc.
 Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 
 DEBUG = False
 TEMPLATE_DEBUG = False
@@ -134,7 +134,7 @@ INSTALLED_APPS = (
 
 ACCOUNT_ACTIVATION_DAYS = 7
 
-{%- set smtp = salt['pillar.get']('djangopypi2:email', pillar['smtp']) %}
+{%- set smtp = salt['pillar.get']('djangopypi2:email', False)|default(salt['pillar.get']('smtp'), boolean=True) -%}
 EMAIL_HOST = '{{ smtp['server'] }}'
 EMAIL_HOST_PASSWORD = '{{ smtp['password']|default('') }}'
 EMAIL_HOST_USER = '{{ smtp['user']|default('') }}'
@@ -174,11 +174,11 @@ LOGGING = {
         }
     },
     'handlers': {
-{%- if 'graylog2_address' in pillar %}
+{%- if salt['pillar.get']('graylog2_address', False) %}
         'gelf': {
             'level': 'NOTSET',
             'class': 'graypy.handler.GELFHandler',
-            'host': '{{ pillar['graylog2_address'] }}',
+            'host': '{{ salt['pillar.get']('graylog2_address', False) }}',
             'formatter': 'message_only'
         },
 {%- endif %}
@@ -206,32 +206,32 @@ LOGGING = {
             'propagate': True,
         },
         'django': {
-            'handlers': ['sentry', 'syslog'{% if 'graylog2_address' in pillar %}, 'gelf'{% endif %}],
+            'handlers': ['sentry', 'syslog'{% if salt['pillar.get']('graylog2_address', False) %}, 'gelf'{% endif %}],
             'propagate': True,
             'level':'DEBUG'
         },
         'raven': {
-            'handlers': ['sentry', 'syslog'{% if 'graylog2_address' in pillar %}, 'gelf'{% endif %}],
+            'handlers': ['sentry', 'syslog'{% if salt['pillar.get']('graylog2_address', False) %}, 'gelf'{% endif %}],
             'level': 'WARN',
             'propagate': False
         },
         'sentry.errors': {
-            'handlers': ['syslog'{% if 'graylog2_address' in pillar %}, 'gelf'{% endif %}],
+            'handlers': ['syslog'{% if salt['pillar.get']('graylog2_address', False) %}, 'gelf'{% endif %}],
             'level': 'DEBUG',
             'propagate': False
         },
      },
     'root': {
-        'handlers': ['sentry', 'syslog'{% if 'graylog2_address' in pillar %}, 'gelf'{% endif %}],
+        'handlers': ['sentry', 'syslog'{% if salt['pillar.get']('graylog2_address', False) %}, 'gelf'{% endif %}],
         'propagate': True,
         'level': 'NOTSET'
     },
 }
 RAVEN_CONFIG = {
-    'dsn': 'requests+{{ salt['pillar.get']('djangopypi2:sentry', pillar['sentry_dsn']) }}',
+    'dsn': 'requests+{{ salt['pillar.get']('djangopypi2:sentry', False)|default(salt['pillar.get']('sentry_dsn', False), boolean=True) }}',
 }
 
-{%- if 'graphite_address' in pillar %}
+{%- if salt['pillar.get']('graphite_address', False) %}
 MIDDLEWARE_CLASSES = MIDDLEWARE_CLASSES + (
     'django_statsd.middleware.GraphiteRequestTimingMiddleware',
     'django_statsd.middleware.GraphiteMiddleware'
@@ -241,4 +241,4 @@ STATSD_PREFIX = 'djangopypi2'
 STATSD_CLIENT = 'django_statsd.clients.normal'
 {%- endif %}
 
-ALLOWED_HOSTS = [{% for hostname in pillar['djangopypi2']['hostnames'] %}"{{ hostname }}"{% if not loop.last %} , {% endif %}{% endfor %}]
+ALLOWED_HOSTS = [{% for hostname in salt['pillar.get']('djangopypi2:hostnames') %}"{{ hostname }}"{% if not loop.last %} , {% endif %}{% endfor %}]

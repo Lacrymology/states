@@ -34,8 +34,8 @@ git:
     - onlyif: apt-key list | grep -q E1DF1F24
   pkgrepo:
     - absent
-{%- if 'files_archive' in pillar %}
-    - name: deb {{ pillar['files_archive']|replace('https://', 'http://') }}/mirror/git {{ grains['lsb_distrib_codename'] }} main
+{%- if salt['pillar.get']('files_archive', False) %}
+    - name: deb {{ salt['pillar.get']('files_archive', False)|replace('https://', 'http://') }}/mirror/git {{ grains['lsb_distrib_codename'] }} main
 {%- else %}
     - ppa: git-core/ppa
 {%- endif %}

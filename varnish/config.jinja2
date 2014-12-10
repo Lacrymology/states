@@ -25,17 +25,17 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Van Diep Pham <favadi@robotinfra.com>
 Maintainer: Van Pham Diep <favadi@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 
 START=yes
-NFILES={{ salt['pillar.get']('varnish:nfiles', '131072') }}
-MEMLOCK={{ salt['pillar.get']('varnish:memlock', '82000') }}
-INSTANCE={{ grains.host }}
+NFILES={{ salt['pillar.get']('varnish:nfiles', 131072) }}
+MEMLOCK={{ salt['pillar.get']('varnish:memlock', 82000) }}
+INSTANCE={{ grains['host'] }}
 
 {% set listen_address = salt['pillar.get']('varnish:listen_address', '') -%}
-{%- set listen_port = salt['pillar.get']('varnish:listen_port', '80') -%}
+{%- set listen_port = salt['pillar.get']('varnish:listen_port', 80) -%}
 {%- set telnet_address = salt['pillar.get']('varnish:telnet_address', 'localhost') -%}
-{%- set telnet_port = salt['pillar.get']('varnish:telnet_port', '6082') -%}
+{%- set telnet_port = salt['pillar.get']('varnish:telnet_port', 6082) -%}
 
 {%- set malloc_size = salt['pillar.get']('varnish:malloc_size', '256M') -%}
 

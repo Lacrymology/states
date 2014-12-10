@@ -9,11 +9,11 @@ db:
   password: {{ password }}
 
 {%- if salt['pillar.get']('openerp:company_db', False) %}
-company_db: {{ pillar['openerp']['company_db'] }}
+company_db: {{ salt['pillar.get']('openerp:company_db') }}
 {%- endif %}
 
 admin:
-  password: {{ pillar['openerp']['password'] }}
+  password: {{ salt['pillar.get']('openerp:password') }}
 
 {#
  OpenERP Log Level

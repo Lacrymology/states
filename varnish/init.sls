@@ -34,7 +34,9 @@ Maintainer: Van Pham Diep <favadi@robotinfra.com>
 {% endif %}
 
 {% if storage_backend == 'file' %}
-  {% set file_path = salt['pillar.get']('varnish:file_path', '/var/lib/varnish/' ~ grains.host ~ '/varnish_storage.bin') %}
+  {% if not salt['pillar.get']('varnish:file_path', None) %}
+    {% set file_path = '/var/lib/varnish/' ~ grains['host'] ~ '/varnish_storage.bin' %}
+  {% endif %}
   {% set file_size = salt['pillar.get']('varnish:file_size', '2G') | upper %}
   {% set file_size_unit = file_size | list | last %}
 {% endif %}

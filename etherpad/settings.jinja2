@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Dang Tung Lam <lam@robotinfra.com>
 Maintainer: Van Pham Diep <favadi@robotinfra.com>
 -#}
-// {{ pillar['message_do_not_modify'] }}
+// {{ salt['pillar.get']('message_do_not_modify') }}
 {
   "title": "{{ salt['pillar.get']('etherpad:title', 'Etherpad') }}",
   "favicon": "favicon.ico",
@@ -59,8 +59,8 @@ Maintainer: Van Pham Diep <favadi@robotinfra.com>
   "users": {
 {%- for user in salt['pillar.get']('etherpad:users', []) %}
     "{{ user }}": {
-      "password": "{{ pillar['etherpad']['users'][user]['password'] }}"
-  {%- if salt['pillar.get']('etherpad:users:' + user + ':admin', False) %}
+      "password": "{{ salt['pillar.get']('etherpad:users')[user]['password'] }}"
+  {%- if salt['pillar.get']('etherpad:users')[user]['admin'] | default(False, boolean=True) %}
       , "is_admin": true
   {%- endif %}
     }{% if not loop.last %},{% endif %}

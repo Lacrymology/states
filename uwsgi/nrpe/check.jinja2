@@ -26,7 +26,7 @@ Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Van Pham Diep <favadi@robotinfra.com>
 -#}
 #!/bin/bash
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 {#- the reason this script is used instead of /usr/local/uwsgi/uwsgi
 is because of security reason.
 to force nagios user to only be able to run this check with uwsgi.

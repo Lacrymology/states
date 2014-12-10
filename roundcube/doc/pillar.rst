@@ -95,6 +95,8 @@ Default: ``False``.
 roundcube:(workers|cheapers|idle|timeout)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+.. |deployment| replace:: roundcube
+
 .. include:: /uwsgi/doc/pillar.inc
 
 roundcube:ldap:suffix

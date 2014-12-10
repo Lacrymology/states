@@ -21,3 +21,10 @@ apt_cache_port
 ...
 
 .. include:: /nginx/doc/monitor.inc
+
+Conditional
+-----------
+
+Only use if :ref:`pillar-apt_cache-ssl` is turned on.
+
+.. include:: /nginx/doc/monitor_ssl.inc

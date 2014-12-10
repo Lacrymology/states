@@ -25,18 +25,18 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Van Diep Pham <favadi@robotinfra.com>
 Maintainer: Van Pham Diep <favadi@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 {#- graylog2-server REST URIs (one or more, comma separated) For example: "http://127.0.0.1:12900/,http://127.0.0.1:12910/" #}
 {%- if  salt['pillar.get']('graylog2:rest_transport_uri', None) %}
-graylog2-server.uris="{{ pillar['graylog2']['rest_transport_uri'] }}"
+graylog2-server.uris="{{ salt['pillar.get']('graylog2:rest_transport_uri', None) }}"
 {%- else %}
-graylog2-server.uris="{{ salt['pillar.get']('graylog2:rest_listen_uri', 'http://127.0.0.1:12900/') }}"  
+graylog2-server.uris="{{ salt['pillar.get']('graylog2:rest_listen_uri', 'http://127.0.0.1:12900') }}"
 {%- endif %}
 
 {#- The secret key is used to secure cryptographics functions. Set this to a long and randomly generated string. #}
 {#- If you deploy your application to several instances be sure to use the same key! #}
 {#- Generate for example with: pwgen -s 96 #}
-application.secret="{{ salt['password.pillar']('graylog2:application_secret', 128) }}"
+application.secret="{{ salt['pillar.get']('graylog2:web:application_secret', False)|default(salt['password.generate']('graylog2:web:application_secret', 128), boolean=True) }}"
 
 {#- Message field limit #}
 {#- Your web interface can cause high load in your browser when you have a lot of different message fields. The default #}

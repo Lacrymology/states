@@ -28,7 +28,7 @@ Maintainer: Van Pham Diep <favadi@robotinfra.com>
 {%- from "upstart/absent.sls" import upstart_absent with context -%}
 {%- set version = '0.20.3' -%}
 {%- set web_root_dir = '/usr/local/graylog2-web-interface-' + version -%}
-{%- set user = salt['pillar.get']('graylog2:server:user', 'graylog2-ui') -%}
+{%- set user = salt['pillar.get']('graylog2:web:user', 'graylog2-ui') -%}
 
 {{ upstart_absent('graylog2-web') }}
 {{ upstart_absent('graylog2-web-prep') }}

@@ -37,9 +37,11 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 include:
   - djangopypi2
   - djangopypi2.backup
+  - djangopypi2.backup.diamond
   - djangopypi2.backup.nrpe
   - djangopypi2.diamond
   - djangopypi2.nrpe
+  - doc
 
 {%- call test_cron() %}
 - sls: djangopypi2
@@ -56,6 +58,13 @@ test:
     - order: last
     - require:
       - cmd: test_crons
+  qa:
+    - test
+    - name: djangopypi2
+    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - require:
+      - monitoring: test
+      - cmd: doc
   diamond:
     - test
     - map:

@@ -9,27 +9,27 @@ Homepage: https://uwsgi-docs.readthedocs.org/en/latest
 How it works with NGINX
 -----------------------
 
-NGINX interacts with uWSGI through a socket (TCP or UNIX socket). When user
+:doc:`/nginx/doc/index` interacts with uWSGI through a socket (TCP or UNIX socket). When user
 send a request to NGINX, it follows the rule in its config file and if the
 rule is ``pass_uwsgi``, it passes (writes to specified socket)
 that request to uWSGI. uWSGI process the request (often to interpret Python,
-PHP or Ruby code), after that, it returns HTML, write it to above socket,
+:doc:`/php/doc/index` or Ruby code), after that, it returns HTML, write it to above socket,
 NGINX reads it, does some another process (e.g. adding HTTP headers)
 then returns to user.
 
 Some following bits help correctly setting owner, permission for files:
-  - both NGINX worker process(es) and uWSGI worker process(es) need to
+  - both :doc:`/nginx/doc/index` worker process(es) and uWSGI worker process(es) need to
     read and write to socket by which they communicate.
-  - NGINX worker process(es) needs to read any files which it will serve
+  - :doc:`/nginx/doc/index` worker process(es) needs to read any files which it will serve
     directly (images, css, js ...) and any files it needs to pass to uWSGI.
-    So, NGINX worker needs to read permission for the source code.
+    So, :doc:`/nginx/doc/index` worker needs to read permission for the source code.
   - uWSGI worker process(es) needs to read the source code files to be able to
     interpret them.
-  - If app supports user to upload file, it done by NGINX so the directory
-    for upload must writable for NGINX worker.
+  - If app supports user to upload file, it done by :doc:`/nginx/doc/index` so the directory
+    for upload must writable for :doc:`/nginx/doc/index` worker.
   - If app write to any file, uWSGI does interpret those codes so uWSGI worker
     needs write permission to where it needs to write.
-  - As ``www-data`` is often user who owns NGINX process and it can
+  - As ``www-data`` is often user who owns :doc:`/nginx/doc/index` process and it can
     be config to own uWSGI worker process too, if app does not need to
     write file and support upload. Then these config can be
     simplify by set all source code files to owned by user ``root`` and
@@ -52,7 +52,6 @@ The ``roundcube-master`` process and all of its sub-processes owned by
 user ``1002``, which is configured by its instance config file
 with ``uid`` set to ``1002``. Numbers of worker can be set through instance
 config directive ``processes``.
-
 
 .. toctree::
     :glob:

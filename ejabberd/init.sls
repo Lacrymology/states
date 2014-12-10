@@ -78,7 +78,7 @@ ejabberd:
       - file: ejabberd_init
     - watch:
     {%- if salt['pillar.get']('ejabberd:ssl', False) %}
-      - cmd: ssl_cert_and_key_for_{{ pillar['ejabberd']['ssl'] }}
+      - cmd: ssl_cert_and_key_for_{{ salt['pillar.get']('ejabberd:ssl') }}
     {%- endif %}
       - user: ejabberd
       - file: ejabberd
@@ -172,5 +172,5 @@ extend:
   nginx:
     service:
       - watch:
-        - cmd: ssl_cert_and_key_for_{{ pillar['ejabberd']['ssl'] }}
+        - cmd: ssl_cert_and_key_for_{{ salt['pillar.get']('ejabberd:ssl') }}
 {%- endif %}

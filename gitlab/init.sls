@@ -99,8 +99,8 @@ gitlab:
   archive:
     - extracted
     - name: /home/gitlab
-{%- if 'files_archive' in pillar %}
-    - source: {{ pillar['files_archive'] }}/mirror/gitlab-{{ version }}.tar.gz
+{%- if salt['pillar.get']('files_archive', False) %}
+    - source: {{ salt['pillar.get']('files_archive', False) }}/mirror/gitlab-{{ version }}.tar.gz
 {%- else %}
     - source: https://github.com/gitlabhq/gitlabhq/archive/v{{ version }}.tar.gz
 {%- endif %}
@@ -128,7 +128,7 @@ gitlab:
     - env:
       - force: "yes"
       - RAILS_ENV: production
-      - GITLAB_ROOT_PASSWORD: "{{ pillar['gitlab']['admin']['password'] }}"
+      - GITLAB_ROOT_PASSWORD: "{{ salt['pillar.get']('gitlab:admin:password') }}"
     - user: gitlab
     - cwd: /home/gitlab/gitlabhq-{{ version }}
     - require:
@@ -371,7 +371,7 @@ gitlab-uwsgi:
       - user: web
       - file: gitlab-uwsgi
 {%- if salt['pillar.get']('gitlab:ssl', False) %}
-      - cmd: ssl_cert_and_key_for_{{ pillar['gitlab']['ssl'] }}
+      - cmd: ssl_cert_and_key_for_{{ salt['pillar.get']('gitlab:ssl', False) }}
 {%- endif %}
     - watch_in:
       - service: nginx
@@ -453,5 +453,5 @@ extend:
   nginx:
     service:
       - watch:
-        - cmd: ssl_cert_and_key_for_{{ pillar['gitlab']['ssl'] }}
+        - cmd: ssl_cert_and_key_for_{{ salt['pillar.get']('gitlab:ssl', False) }}
 {%- endif %}

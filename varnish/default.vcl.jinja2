@@ -25,11 +25,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Van Diep Pham <favadi@robotinfra.com>
 Maintainer: Van Diep Pham <favadi@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 
 backend default {
     .host = "{{ salt['pillar.get']('varnish:default_backend_host', '127.0.0.1') }}";
-    .port = "{{ salt['pillar.get']('varnish:default_backend_port', '8080') }}";
+    .port = "{{ salt['pillar.get']('varnish:default_backend_port', 8080) }}";
 }
 
 {% set extra_config = salt['pillar.get']('varnish:extra_config', None) -%}

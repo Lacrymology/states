@@ -1,30 +1,5 @@
-.. Copyright (c) 2013, Bruno Clermont
-.. All rights reserved.
-..
-.. Redistribution and use in source and binary forms, with or without
-.. modification, are permitted provided that the following conditions are met:
-..
-..     1. Redistributions of source code must retain the above copyright notice,
-..        this list of conditions and the following disclaimer.
-..     2. Redistributions in binary form must reproduce the above copyright
-..        notice, this list of conditions and the following disclaimer in the
-..        documentation and/or other materials provided with the distribution.
-..
-.. Neither the name of Bruno Clermont nor the names of its contributors may be used
-.. to endorse or promote products derived from this software without specific
-.. prior written permission.
-..
-.. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-.. AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
-.. THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-.. PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
-.. BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-.. CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-.. SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-.. INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-.. CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-.. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-.. POSSIBILITY OF SUCH DAMAGE.
+Pillar
+======
 
 .. include:: /doc/include/add_pillar.inc
 
@@ -37,7 +12,7 @@
 .. warning::
 
   Make sure that :doc:`/ssh/server/doc/index` :doc:`/ssh/server/doc/pillar`
-  key ``ssh:server:extra_configs`` allow the user ``git`` in.
+  key :ref:`pillar-ssh-server-extra_configs` allow the user `git` in.
 
 Mandatory
 ---------
@@ -47,6 +22,8 @@ Example::
   salt_archive:
     hostnames:
       - archive.example.com
+
+.. _pillar-salt_archive-hostnames:
 
 salt_archive:hostnames
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -65,20 +42,56 @@ Example::
     keys:
       00daedbeef: ssh-dss
 
+.. _pillar-salt_archive-source:
+
 salt_archive:source
 ~~~~~~~~~~~~~~~~~~~
 
 :doc:`/rsync/doc/index` server used as the source for archived files.
+
+Default: Act as an upstream server (``False``).
+
+.. _pillar-salt_archive-ssl:
 
 salt_archive:ssl
 ~~~~~~~~~~~~~~~~
 
 .. include:: /nginx/doc/ssl.inc
 
+.. _pillar-salt_archive-keys:
+
 salt_archive:keys
 ~~~~~~~~~~~~~~~~~
 
 Dict of :doc:`/ssh/client/doc/index` keys allowed to log in user.
+
+Default: allow no :doc:`/ssh/client/doc/index` key (``{}``).
+
+.. _pillar-salt_archive-delete:
+
+salt_archive:delete
+~~~~~~~~~~~~~~~~~~~
+
+Delete file in target server that does not exist in source server.
+
+Default: don't delete file in target server (``False``).
+
+.. _pillar-salt_archive-max_age:
+
+salt_archive:max_age
+~~~~~~~~~~~~~~~~~~~~
+
+Max time in seconds before an archive server is considered out of sync.
+
+Default: archive server with last synchronization time excesss
+``3600`` seconds is considered out of sync.
+
+.. _pillar-salt_archive-ssl_redirect:
+
+salt_archive:ssl_redirect
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. include:: /nginx/doc/ssl_redirect.inc
 
 Rsync
 -----
@@ -103,4 +116,4 @@ Clamav
 ------
 
 :doc:`/clamav/doc/index` formula :doc:`/clamav/doc/pillar` key
-``clamav:db_mirrors`` is also used to mirror clamav databases.
+:ref:`pillar-clamav-db_mirrors` is also used to mirror :doc:`/clamav/doc/index` databases.

@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 # memcached upstart script
 
 start on (filesystem and net-device-up IFACE=lo)
@@ -33,8 +33,8 @@ stop on runlevel [!2345]
 
 respawn
 respawn limit 10 5
-{%- if salt['pillar.get']('memcache:memory', False) %}
-exec /usr/bin/memcached -m {{ pillar['memcache']['memory'] }} -s /tmp/memcached.sock -u www-data
+{%- if salt['pillar.get']('memcache:memory', 64) %}
+exec /usr/bin/memcached -m {{ salt['pillar.get']('memcache:memory', 64) }} -s /tmp/memcached.sock -u www-data
 {%- else %}
 exec /usr/bin/memcached -s /tmp/memcached.sock -u www-data
 {%- endif %}

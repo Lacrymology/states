@@ -160,8 +160,8 @@ openerp:
   archive:
     - extracted
     - name: {{ home }}/
-{%- if 'files_archive' in pillar %}
-    - source: {{ pillar['files_archive'] }}/mirror/openerp/{{ filename }}.tar.gz
+{%- if salt['pillar.get']('files_archive', False) %}
+    - source: {{ salt['pillar.get']('files_archive', False) }}/mirror/openerp/{{ filename }}.tar.gz
 {%- else %}
     - source: http://nightly.openerp.com/7.0/nightly/src/{{ filename }}.tar.gz
 {%- endif %}
@@ -274,7 +274,7 @@ openerp-uwsgi:
       - pkg: nginx
       - file: openerp-uwsgi
 {%- if salt['pillar.get']('openerp:ssl', False) %}
-      - cmd: ssl_cert_and_key_for_{{ pillar['openerp']['ssl'] }}
+      - cmd: ssl_cert_and_key_for_{{ salt['pillar.get']('openerp:ssl', False) }}
 {%- endif %}
     - watch_in:
       - service: nginx

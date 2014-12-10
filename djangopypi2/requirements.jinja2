@@ -32,11 +32,11 @@ Institute for Institutional Innovation by Data Driven Design Inc.
 Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
-{%- if 'graphite_address' in pillar %}
+# {{ salt['pillar.get']('message_do_not_modify') }}
+{%- if salt['pillar.get']('graphite_address', False) %}
 django-statsd-mozilla==0.3.8.7
 {%- endif -%}
-{%- if 'graylog2_address' in pillar %}
+{%- if salt['pillar.get']('graylog2_address', False) %}
 graypy==0.2.9
 {%- endif %}
 pip==1.5.2
@@ -50,13 +50,13 @@ pytz==2013b
 psycopg2==2.5.1
 requests==0.14.2
 raven==4.1.1
-{%- if 'files_archive' in pillar %}
+{%- if salt['pillar.get']('files_archive', False) %}
 django-insecure==0.1
 {%- else %}
 -e git+git@github.com:bclermont/django-insecure.git@ce529583fc02db20a5ea2b34f1ee8f3d4538a14e#egg=django-insecure
 {%- endif %}
 ipython==0.13.2
-{%- set smtp = salt['pillar.get']('djangopypi2:email', pillar['smtp']) -%}
+{%- set smtp = salt['pillar.get']('djangopypi2:email', False)|default(salt['pillar.get']('smtp'), boolean=True) -%}
 {%- if smtp['encryption']|default('plain') == 'ssl' %}
 django-smtp-ssl==1.0
 {%- endif -%}

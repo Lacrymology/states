@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Van Pham Diep <favadi@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 
 BeautifulSoup==3.2.1
 Django==1.5.5
@@ -44,10 +44,10 @@ django-static-compiler==0.3.3
 django-templatetag-sugar==0.1
 email-reply-parser==0.2.0
 django-social-auth==0.7.28
-    {%- if 'graphite_address' in pillar %}
+    {%- if salt['pillar.get']('graphite_address', False) %}
 django-statsd-mozilla==0.3.8.7
     {%- endif -%}
-    {%- if 'graylog2_address' in pillar %}
+    {%- if salt['pillar.get']('graylog2_address', False) %}
 graypy==0.2.9
     {%- endif %}
 gunicorn==0.17.4
@@ -75,12 +75,12 @@ simplejson==3.3.2
 six==1.5.2
 statsd==1.0.0
 urllib3==1.7.1
-{%- if 'files_archive' in pillar %}
+{%- if salt['pillar.get']('files_archive', False) %}
 django-insecure==0.2
 {%- else %}
 https://github.com/bclermont/django-insecure/archive/v0.2.tar.gz
 {%- endif %}
-{%- set smtp = salt['pillar.get']('sentry:email', pillar['smtp']) -%}
+{%- set smtp = salt['pillar.get']('sentry:smtp', False)|default(salt['pillar.get']('smtp'), boolean=True) -%}
 {%- if smtp['encryption']|default('plain') == 'ssl' %}
 django-smtp-ssl==1.0
 {%- endif -%}

@@ -9,7 +9,7 @@ Daemon
 In case of problem, have a look at
 ``/var/log/upstart/graylog2-server.log``. This file exists when graylog2-server
 produces log to stderr. Other graylog2-server output goes to
-syslog (``/var/log/syslog``). Since graylog2 is a logging server,
+syslog (``/var/log/syslog``). Since :doc:`/graylog2/doc/index` is a logging server,
 for troubleshooting it, one should look into these log files as its log
 messages go nowhere than these files (you would not see them on graylog2-web
 user interface).
@@ -17,7 +17,7 @@ user interface).
 Elasticsearch Cluster
 ---------------------
 
-Check the log on the Elasticsearch nodes to make sure that the graylog2-server
+Check the log on the :doc:`/elasticsearch/doc/index` nodes to make sure that the graylog2-server
 was discovered::
 
   [2013-12-11 02:27:20,308][INFO ][cluster.service          ]

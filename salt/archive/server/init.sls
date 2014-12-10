@@ -62,10 +62,10 @@ include:
       - user: salt_archive
       - pkg: rsync
       - file: bash
-{%- if not pillar['salt_archive']['source'] is defined %}
+{%- if not salt['pillar.get']('salt_archive:source', False) %}
       - file: /usr/local/bin/salt_archive_incoming.py
     {#-
-     if pillar['salt_archive']['source'] is not defined, create an incoming
+     if salt['pillar.get']('salt_archive:source', False) is not defined, create an incoming
      directory.
     #}
 
@@ -122,7 +122,7 @@ include:
       - module: pysc
 {%- else %}
     {#-
-     if pillar['salt_archive']['source'] is defined, can't have an incoming
+     if salt['pillar.get']('salt_archive:source', False) is defined, can't have an incoming
      directory.
     #}
 
@@ -201,13 +201,13 @@ salt-archive-clamav:
       - cmd: apt_sources
 {%- endif -%}
 
-{%- for key in salt['pillar.get']('salt_archive:keys', []) %}
+{%- for key, enc in salt['pillar.get']('salt_archive:keys', {}).iteritems() %}
 salt_archive_{{ key }}:
   ssh_auth:
     - present
     - name: {{ key }}
     - user: salt_archive
-    - enc: {{ pillar['salt_archive']['keys'][key] }}
+    - enc: {{ enc }}
     - require:
       - file: salt_archive
       - service: openssh-server

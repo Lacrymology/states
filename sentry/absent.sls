@@ -36,14 +36,14 @@ include:
 sentry:
   postgres_database:
     - absent
-    - name: {{ pillar['sentry']['db']['name'] }}
+    - name: {{ salt['pillar.get']('sentry:db:name') }}
     - runas: postgres
     - require:
       - service: postgresql
       - file: /etc/uwsgi/sentry.ini
   postgres_user:
     - absent
-    - name: {{ pillar['sentry']['db']['username'] }}
+    - name: {{ salt['pillar.get']('sentry:db:username') }}
     - runas: postgres
     - require:
       - service: postgresql

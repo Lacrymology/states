@@ -1,5 +1,5 @@
-uwsgi_master
-------------
+|deployment|\_uwsgi_master
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Monitor |deployment| :doc:`/uwsgi/doc/index` master process.
 
@@ -8,8 +8,8 @@ Critical:
   * There is no |deployment|-master process running
   * There are more than one |deployment|-master processes running
 
-uwsgi_woker
------------
+|deployment|\_uwsgi_worker
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Monitor |deployment| :doc:`/uwsgi/doc/index` worker processes.  The
 maximum number of woker processes running is specified with
@@ -34,7 +34,7 @@ Critical:
     - There are not exactly ``pillar_prefix:workers`` number of
       ``pillar_prefix-woker`` processes running
       
-uwsgi_ping
-----------
+|deployment|\_uwsgi_ping
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 Check |deployment| :doc:`/uwsgi/doc/index` response via unix socket.

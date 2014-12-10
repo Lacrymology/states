@@ -28,6 +28,7 @@ Maintainer: Van Pham Diep <favadi@robotinfra.com>
 {%- from 'cron/test.jinja2' import test_cron with context %}
 {%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
+  - doc
   - etherpad
   - etherpad.backup
   - etherpad.backup.nrpe
@@ -51,6 +52,15 @@ test:
     - order: last
     - require:
       - cmd: test_crons
+  qa:
+    - test
+    - name: etherpad
+    - additional:
+      - etherpad.backup
+    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - require:
+      - monitoring: test
+      - cmd: doc
   diamond:
     - test
     - map:

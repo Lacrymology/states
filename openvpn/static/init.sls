@@ -66,7 +66,7 @@ include:
 {%- for tunnel in salt['pillar.get']('openvpn', {}) -%}
     {%- set config_dir = '/etc/openvpn/' + tunnel -%}
     {#- only 2 remotes are supported -#}
-    {%- if pillar['openvpn'][tunnel]['peers']|length == 2 %}
+    {%- if salt['pillar.get']('openvpn', {})[tunnel]['peers']|length == 2 %}
 {{ config_dir }}:
   file:
     - directory
@@ -81,7 +81,7 @@ include:
     - managed
     - name: {{ config_dir }}/secret.key
     - contents: |
-        {{ pillar['openvpn'][tunnel]['secret'] | indent(8) }}
+        {{ salt['pillar.get']('openvpn', {})[tunnel]['secret'] | indent(8) }}
     - user: nobody
     - group: nogroup
     - mode: 400

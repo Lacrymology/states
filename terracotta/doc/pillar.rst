@@ -14,7 +14,7 @@ terracotta:environment
 ~~~~~~~~~~~~~~~~~~~~~~
 
 .. Copied from
-http://terracotta.org/documentation/3.7.4/bigmemorymax/terracotta-server-array/config-reference#tctc-configsystemconfiguration-model
+.. http://terracotta.org/documentation/3.7.4/bigmemorymax/terracotta-server-array/config-reference#tctc-configsystemconfiguration-model
 
 The configuration-model element is for informational purposes. The two
 configuration-model options are 'development' and 'production'. These values

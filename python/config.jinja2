@@ -1,4 +1,4 @@
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 {#- use default DSN or one specified in context -#}
 {%- set config = {
         'dsn': sentry_dsn|default(False),

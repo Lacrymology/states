@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2014, Quan Tong Anh
+Copyright (c) 2014, Hung Nguyen Viet
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without

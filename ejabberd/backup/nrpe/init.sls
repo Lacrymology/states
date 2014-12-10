@@ -26,7 +26,7 @@ Author: Van Diep Pham <favadi@robotinfra.com>
 Maintainer: Van Diep Pham <favadi@robotinfra.com>
 -#}
 include:
-  - backup.client.{{ pillar['backup_storage'] }}.nrpe
+  - backup.client.{{ salt['pillar.get']('backup_storage') }}.nrpe
   - bash.nrpe
   - cron.nrpe
   - nrpe

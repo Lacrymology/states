@@ -139,8 +139,8 @@ graylog2-web:
   archive:
     - extracted
     - name: /usr/local/
-{%- if 'files_archive' in pillar %}
-    - source: {{ pillar['files_archive'] }}/mirror/graylog2-web-interface-{{ version }}.tar.gz
+{%- if salt['pillar.get']('files_archive', False) %}
+    - source: {{ salt['pillar.get']('files_archive', False) }}/mirror/graylog2-web-interface-{{ version }}.tar.gz
 {%- else %}
     - source: http://packages.graylog2.org/releases/graylog2-web-interface/graylog2-web-interface-{{ version }}.tgz
 {%- endif %}
@@ -192,7 +192,7 @@ extend:
   nginx:
     service:
       - watch:
-        - cmd: ssl_cert_and_key_for_{{ pillar['graylog2']['ssl'] }}
+        - cmd: ssl_cert_and_key_for_{{ salt['pillar.get']('graylog2:ssl', False) }}
 {% endif %}
 
 {%- from 'macros.jinja2' import manage_pid with context %}

@@ -26,28 +26,26 @@ Author: Dang Tung Lam <lam@robotinfra.com>
 Maintainer: Van Pham Diep <favadi@robotinfra.com>
 -#}
 
-%%% {{ pillar['message_do_not_modify'] }}
+%%% {{ salt['pillar.get']('message_do_not_modify') }}
 {#-
 Options which are set by Debconf and managed by ucf
 
 Admin user
 #}
 
-{%- for user in pillar['ejabberd']['admins'] %}
-{acl, admin, {user, "{{ user }}", "{{ pillar['ejabberd']['hostnames'][0] }}"}}.
+{%- for user in salt['pillar.get']('ejabberd:admins') %}
+{acl, admin, {user, "{{ user }}", "{{ salt['pillar.get']('ejabberd:hostnames')[0] }}"}}.
 {%- endfor %}
 
 {# Blocked user #}
-{%- if salt['pillar.get']('ejabberd:blocked', None) %}
-{%- for user in pillar['ejabberd']['blocked'] %}
-{acl, blocked, {user, "{{ user }}", "{{ pillar['ejabberd']['hostnames'][0] }}"}}.
+{%- for user in salt['pillar.get']('ejabberd:blocked', []) %}
+{acl, blocked, {user, "{{ user }}", "{{ salt['pillar.get']('ejabberd:hostnames')[0] }}"}}.
 {%- endfor %}
-{%- endif  %}
 
 {#-
 Hostname
 #}
-{hosts, [{% for hostname in pillar['ejabberd']['hostnames'] %}"{{ hostname }}"{% if not loop.last %}, {% endif %}{% endfor %}]}.
+{hosts, [{% for hostname in salt['pillar.get']('ejabberd:hostnames') %}"{{ hostname }}"{% if not loop.last %}, {% endif %}{% endfor %}]}.
 
 {#-
   DEBUGGING
@@ -73,7 +71,7 @@ Hostname
 
 #}
 {%- if salt['pillar.get']('ejabberd:watchdog_admins', False) %}
-  {watchdog_admins, ["{{ pillar['ejabberd']['watchdog_admins'] }}"]}.
+  {watchdog_admins, ["{{ salt['pillar.get']('ejabberd:watchdog_admins') }}"]}.
 {%- endif %}
 
 {#-
@@ -97,7 +95,7 @@ Hostname
                        %%zlib,
 {%- if salt['pillar.get']('ejabberd:ssl', False) %}
                        {max_stanza_size, 65536},
-                       starttls, {certfile, "/etc/ssl/private/{{ pillar['ejabberd']['ssl'] }}_bundle.pem"}
+                       starttls, {certfile, "/etc/ssl/private/{{ salt['pillar.get']('ejabberd:ssl') }}_bundle.pem"}
 {%- else %}
                        {max_stanza_size, 65536}
 {%- endif %}
@@ -155,7 +153,7 @@ Hostname
  s2s_certfile: Specify a certificate file.
 
 #}
-{s2s_certfile, "/etc/ssl/private/{{ pillar['ejabberd']['ssl'] }}_bundle.pem"}.
+{s2s_certfile, "/etc/ssl/private/{{ salt['pillar.get']('ejabberd:ssl') }}_bundle.pem"}.
 {%- endif %}
 {#-
  domain_certfile: Specify a different certificate for each served hostname.

@@ -1,5 +1,5 @@
 #!/bin/sh
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 #
 # wrap around check_uwsgi to silence it's stderr output
 # as current version show those 2 noisy and useless message:

@@ -53,7 +53,7 @@ Arbiter
 -------
 
 The :doc:`/shinken/arbiter/doc/index` daemon reads the configuration, divides it into parts
-(N :doc:`/shinken/scheduler/doc/index`s = N parts), and distributes them to the appropriate :doc:`/shinken/doc/index`
+(N :doc:`/shinken/scheduler/doc/index`\ s = N parts), and distributes them to the appropriate :doc:`/shinken/doc/index`
 daemons.
 
 Formula: ``shinken.arbiter``.

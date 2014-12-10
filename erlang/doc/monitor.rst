@@ -1,4 +1,4 @@
-.. Copyright (c) 2013, Bruno Clermont
+.. Copyright (c) 2014, Diep Pham
 .. All rights reserved.
 ..
 .. Redistribution and use in source and binary forms, with or without
@@ -10,7 +10,7 @@
 ..        notice, this list of conditions and the following disclaimer in the
 ..        documentation and/or other materials provided with the distribution.
 ..
-.. Neither the name of Bruno Clermont nor the names of its contributors may be used
+.. Neither the name of Diep Pham  nor the names of its contributors may be used
 .. to endorse or promote products derived from this software without specific
 .. prior written permission.
 ..
@@ -26,15 +26,22 @@
 .. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .. POSSIBILITY OF SUCH DAMAGE.
 
-.. include:: /doc/include/pillar.inc
+Monitor
+=======
 
-Example::
+Mandatory
+---------
 
-  destructive_absent: False
+.. _monitor-erlang_procs:
 
-destructive_absent
-~~~~~~~~~~~~~~~~~~
+erlang_procs
+~~~~~~~~~~~~
 
-Remove data directory when run absent SLS.
+.. include:: /nrpe/doc/check_procs.inc
 
-Default: ``False``.
+.. _monitor-erlang_port:
+             
+erlang_port
+~~~~~~~~~~~
+
+Monitor :doc:`/erlang/doc/index` port mapper port ``4396/tcp``.

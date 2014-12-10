@@ -1,30 +1,5 @@
-.. Copyright (c) 2013, Hung Nguyen Viet
-.. All rights reserved.
-..
-.. Redistribution and use in source and binary forms, with or without
-.. modification, are permitted provided that the following conditions are met:
-..
-..     1. Redistributions of source code must retain the above copyright notice,
-..        this list of conditions and the following disclaimer.
-..     2. Redistributions in binary form must reproduce the above copyright
-..        notice, this list of conditions and the following disclaimer in the
-..        documentation and/or other materials provided with the distribution.
-..
-.. Neither the name of Hung Nguyen Viet nor the names of its contributors may be used
-.. to endorse or promote products derived from this software without specific
-.. prior written permission.
-..
-.. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-.. AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
-.. THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-.. PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
-.. BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-.. CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-.. SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-.. INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-.. CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-.. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-.. POSSIBILITY OF SUCH DAMAGE.
+Pillar
+======
 
 .. include:: /doc/include/pillar.inc
 
@@ -47,35 +22,47 @@ Example::
     policy: volatile-lru
     samples: 3
 
+.. _pillar-redis-port:
+
 redis:port
 ~~~~~~~~~~
 
 Accept connections on the specified port, default is ``6379``.
 
-If port ``0`` is specified Redis will not listen on a TCP socket.
+If port ``0`` is specified :doc:`/redis/doc/index` will not listen on a TCP socket.
 
 Default: ``6379``.
+
+.. _pillar-redis-timeout:
 
 redis:timeout
 ~~~~~~~~~~~~~
 
 Close the connection after a client is idle for N seconds (``0`` to disable)
 
-Default: ``0``.
+Default: don't close idle connection (``0``).
+
+.. _pillar-redis-keepalive:
 
 redis:keepalive
 ~~~~~~~~~~~~~~~
 
-TCP keepalive. Period to send ACKs (in seconds).
+TCP keepalive. Period to send ACKs (more `details
+<http://en.wikipedia.org/wiki/Transmission_Control_Protocol>`__ ) in
+seconds.
 
-Default: ``60``.
+Default: send ACK every ``60`` seconds.
+
+.. _pillar-redis-number_of_dbs:
 
 redis:number_of_dbs
 ~~~~~~~~~~~~~~~~~~~
 
 Set the number of databases.
 
-Default: ``16``.
+Default: use ``16`` databases.
+
+.. _pillar-redis-save:
 
 redis:save
 ~~~~~~~~~~
@@ -108,42 +95,50 @@ Save the DB on disk:
   points by adding a save directive with a single empty string argument
   like in the following example:
 
-Default: None
+Default: disable saving (``[]``).
+
+.. _pillar-redis-maxclients:
 
 redis:maxclients
 ~~~~~~~~~~~~~~~~
 
 Set the max number of connected clients at the same time. By default
-this limit is set to ``10000`` clients, however if the :doc:`index` server is
-not able to configure the process file limit to allow for the specified limit
-the max number of allowed clients is set to the current file limit
-minus 32 (as Redis reserves a few file descriptors for internal uses).
+this limit is set to ``10000`` clients, however if the :doc:`index`
+server is not able to configure the process file limit to allow for
+the specified limit the max number of allowed clients is set to the
+current file limit minus 32 (as :doc:`/redis/doc/index` reserves a few
+file descriptors for internal uses).
 
-Default: ``10000``.
+Default: allow no more than ``10000`` clients connect at the same
+time.
+
+.. _pillar-redis-maxmemory:
 
 redis:maxmemory
 ~~~~~~~~~~~~~~~
 
 Don't use more memory than the specified amount of bytes.
-When the memory limit is reached Redis will try to remove keys
+When the memory limit is reached :doc:`/redis/doc/index` will try to remove keys
 accordingly to the eviction policy selected (see maxmemmory-policy).
 
-Default: ``300mb``.
+Default: use no more than ``300mb`` memory.
+
+.. _pillar-redis-policy:
 
 redis:policy
 ~~~~~~~~~~~~
 
-MAXMEMORY POLICY: how Redis will select what to remove when maxmemory
+MAXMEMORY POLICY: how :doc:`/redis/doc/index` will select what to remove when maxmemory
 is reached. You can select among five behaviors:
 
-volatile-lru -> remove the key with an expire set using an LRU algorithm.
+volatile-lru -> remove the key with an expire set using an `LRU <http://en.wikipedia.org/wiki/Cache_algorithms#LRU>`_ algorithm.
 allkeys-lru -> remove any key accordingly to the LRU algorithm.
 volatile-random -> remove a random key with an expire set.
 allkeys-random -> remove a random key, any key.
 volatile-ttl -> remove the key with the nearest expire time (minor TTL).
 noeviction -> don't expire at all, just return an error on write operations.
 
-Note: with any of the above policies, Redis will return an error on write
+Note: with any of the above policies, :doc:`/redis/doc/index` will return an error on write
       operations, when there are not suitable keys for eviction.
 
       At the date of writing this commands are: set setnx setex append
@@ -154,13 +149,15 @@ Note: with any of the above policies, Redis will return an error on write
 
 Default: ``volatile-lru``.
 
+.. _pillar-redis-samples:
+
 redis:samples
 ~~~~~~~~~~~~~
 
 LRU and minimal TTL algorithms are not precise algorithms but approximated
 algorithms (in order to save memory), so you can select as well the sample
-size to check. For instance for default Redis will check three keys and
+size to check. For instance for default :doc:`/redis/doc/index` will check three keys and
 pick the one that was used less recently, you can change the sample size
 using the following configuration directive.
 
-Default: ``3``.
+Default: use ``3`` samples to check for every eviction.

@@ -47,7 +47,7 @@ include:
 {% if salt['pillar.get']('djangopypi2:ssl', False) %}
   - ssl
 {% endif %}
-{% if 'graphite_address' in pillar %}
+{% if salt['pillar.get']('graphite_address', False) %}
   - statsd
 {% endif %}
   - uwsgi
@@ -219,7 +219,7 @@ djangopypi2_admin_user:
   module:
     - wait
     - name: django.command
-    - command: createsuperuser_plus --username={{ pillar['djangopypi2']['initial_admin_user']['username'] }} --email={{ salt['pillar.get']('djangopypi2:initial_admin_user:email', 'root@example.com') }} --password={{ pillar['djangopypi2']['initial_admin_user']['password'] }}
+    - command: createsuperuser_plus --username={{ salt['pillar.get']('djangopypi2:initial_admin_user:username') }} --email={{ salt['pillar.get']('djangopypi2:initial_admin_user:email', 'root@example.com') }} --password={{ salt['pillar.get']('djangopypi2:initial_admin_user:password') }}
     - settings_module: djangopypi2.website.settings
     - bin_env: {{ root_dir }}
     - require:
@@ -239,7 +239,7 @@ djangopypi2-django_contrib_sites:
     - source: salt://django/site.jinja2
     - template: jinja
     - context:
-      domain_name: {{ pillar['djangopypi2']['hostnames'][0] }}
+      domain_name: {{ salt['pillar.get']('djangopypi2:hostnames')[0] }}
     - user: root
     - group: root
     - mode: 440
@@ -303,5 +303,5 @@ extend:
   nginx:
     service:
       - watch:
-        - cmd: ssl_cert_and_key_for_{{ pillar['djangopypi2']['ssl'] }}
+        - cmd: ssl_cert_and_key_for_{{ salt['pillar.get']('djangopypi2:ssl') }}
 {% endif %}

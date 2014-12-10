@@ -1,30 +1,5 @@
-.. Copyright (c) 2013, Bruno Clermont
-.. All rights reserved.
-..
-.. Redistribution and use in source and binary forms, with or without
-.. modification, are permitted provided that the following conditions are met:
-..
-..     1. Redistributions of source code must retain the above copyright notice,
-..        this list of conditions and the following disclaimer.
-..     2. Redistributions in binary form must reproduce the above copyright
-..        notice, this list of conditions and the following disclaimer in the
-..        documentation and/or other materials provided with the distribution.
-..
-.. Neither the name of Bruno Clermont nor the names of its contributors may be used
-.. to endorse or promote products derived from this software without specific
-.. prior written permission.
-..
-.. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-.. AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
-.. THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-.. PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
-.. BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-.. CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-.. SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-.. INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-.. CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-.. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-.. POSSIBILITY OF SUCH DAMAGE
+Pillar
+======
 
 .. include:: /doc/include/add_pillar.inc
 
@@ -56,15 +31,21 @@ Example::
 Mandatory
 ---------
 
+.. _pillar-djangopypi2-hostnames:
+
 djangopypi2:hostnames
 ~~~~~~~~~~~~~~~~~~~~~
 
 .. include:: /nginx/doc/hostnames.inc
 
+.. _pillar-djangopypi2-initial_admin_user-username:
+
 djangopypi2:initial_admin_user:username
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. include:: /django/doc/initial_username.inc
+
+.. _pillar-djangopypi2-initial_admin_user-password:
 
 djangopypi2:initial_admin_user:password
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -74,15 +55,31 @@ djangopypi2:initial_admin_user:password
 Optional
 --------
 
+.. _pillar-djangopypi2-initial_admin_user-email:
+
 djangopypi2:initial_admin_user:email
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. include:: /django/doc/initial_email.inc
 
+.. _pillar-djangopypi2-sentry:
+
 djangopypi2:sentry
 ~~~~~~~~~~~~~~~~~~
 
 .. include:: /sentry/doc/dsn.inc
+
+.. _pillar-djangopypi2-db-host:
+
+djangopypi2:db:host
+~~~~~~~~~~~~~~~~~~~
+
+Address of :doc:`/djangopypi2/doc/index` :doc:`/postgresql/doc/index`
+database.
+
+Default: ``127.0.0.1``
+
+.. _pillar-djangopypi2-db-username:
 
 djangopypi2:db:username
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -91,6 +88,8 @@ djangopypi2:db:username
 
 Default: ``djangopypi2``.
 
+.. _pillar-djangopypi2-db-name:
+
 djangopypi2:db:name
 ~~~~~~~~~~~~~~~~~~~
 
@@ -98,32 +97,60 @@ djangopypi2:db:name
 
 Default: ``djangopypi2``.
 
+.. _pillar-djangopypi2-db-password:
+
 djangopypi2:db:password
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 .. include:: /postgresql/doc/password.inc
+
+Default: randomly generated (``False``).
+
+.. _pillar-djangopypi2-django_key:
 
 djangopypi2:django_key
 ~~~~~~~~~~~~~~~~~~~~~~
 
 .. include:: /django/doc/key.inc
 
-djangopypi2:smtp
-~~~~~~~~~~~~~~~~
+Default: randomly generated with length ``32``.
+
+.. _pillar-djangopypi2-email:
+
+djangopypi2:email
+~~~~~~~~~~~~~~~~~
+
+Default: Use value of :ref:`pillar-smtp` (``False``).
 
 .. include:: /mail/doc/smtp.inc
 
-djangopypi2:(workers|cheapers|idle|timeout)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. |deployment| replace:: djangopypi2
 
 .. include:: /uwsgi/doc/pillar.inc
+
+.. _pillar-djangopypi2-ssl:
 
 djangopypi2:ssl
 ~~~~~~~~~~~~~~~
 
 .. include:: /nginx/doc/ssl.inc
 
+.. _pillar-djangopypi2-ssl_redirect:
+
 djangopypi2:ssl_redirect
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. include:: /nginx/doc/ssl_redirect.inc
+
+.. _pillar-djangopypi2-allow_version_overwrite:
+
+djangopypi2:allow_version_overwrite
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Allow to selectively allow clients to overwrite package
+distributions based on the version number.
+
+This is a regular expression, with the default empty string meaning
+'deny all'.
+
+Default: Don't allow overwriting packages ``''``.

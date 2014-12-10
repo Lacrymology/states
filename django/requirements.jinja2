@@ -25,10 +25,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Van Pham Diep <favadi@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 
 lxml==3.2.1
-{%- if 'files_archive' in pillar %}
+{%- if salt['pillar.get']('files_archive', False) %}
 python-sitemap==0.1.0
 {%- else %}
 -e git+git://github.com/andreisavu/python-sitemap.git#egg=sitemap

@@ -28,6 +28,7 @@ Maintainer: Van Diep Pham <favadi@robotinfra.com>
 {%- from 'cron/test.jinja2' import test_cron with context %}
 {%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
+  - doc
   - redis
   - redis.backup
   - redis.backup.nrpe
@@ -50,6 +51,15 @@ test:
     - order: last
     - require:
       - cmd: test_crons
+  qa:
+    - test
+    - name: redis
+    - additional:
+      - redis.backup
+    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - require:
+      - monitoring: test
+      - cmd: doc
   diamond:
     - test
     - map:

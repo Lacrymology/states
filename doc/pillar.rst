@@ -34,6 +34,8 @@ The following Pillar values are commonly used across all states.
 Required
 --------
 
+.. _pillar-roles:
+
 roles
 ~~~~~
 
@@ -41,6 +43,8 @@ List of roles that apply to a minion.
 See :doc:`intro` and :doc:`usage` for details on roles.
 
 Default: empty list ``[]``.
+
+.. _pillar-salt-master:
 
 salt:master
 ~~~~~~~~~~~
@@ -50,6 +54,8 @@ As all deployed hosts are done trough salt, the minion need to know where is the
 
 Look in :doc:`/salt/minion/doc/index` for details.
 
+.. _pillar-message_do_not_modify:
+
 message_do_not_modify
 ~~~~~~~~~~~~~~~~~~~~~
 
@@ -58,6 +64,8 @@ Warning message to not modify file.
 Optional
 --------
 
+.. _pillar-branch:
+
 branch
 ~~~~~~
 
@@ -65,16 +73,22 @@ Which git branch to use during ``state.highstate``.
 
 Default: ``master``.
 
+.. _pillar-files_archive:
+
 files_archive
 ~~~~~~~~~~~~~
 
 Path to :doc:`/salt/archive/server/doc/index` where download most files
 (archives, packages, pip) to apply states.
 
+.. _pillar-graylog2_address:
+
 graylog2_address
 ~~~~~~~~~~~~~~~~
 
 IP/Hostname of centralized :doc:`/graylog2/server/doc/index` server.
+
+.. _pillar-graphite_address:
 
 graphite_address
 ~~~~~~~~~~~~~~~~
@@ -83,12 +97,16 @@ IP/Hostname of :doc:`/carbon/doc/index` server.
 This key is required if ``diamond`` integration of formulas had been included in
 roles.
 
+.. _pillar-shinken_pollers:
+
 shinken_pollers
 ~~~~~~~~~~~~~~~
 
 List of monitoring hosts that can perform checks on this host.
 This is required if any :doc:`/nrpe/doc/index` integration of formula had been
 included in roles.
+
+.. _pillar-smtp:
 
 smtp
 ~~~~
@@ -109,25 +127,35 @@ Example::
 
 See below for details on each keys.
 
+.. _pillar-smtp-server:
+
 smtp:server
 ~~~~~~~~~~~
 
 Your SMTP server. Ex: ``smtp.yourdomain.com``
+
+.. _pillar-smtp-port:
 
 smtp:port
 ~~~~~~~~~
 
 SMTP server port.
 
+.. _pillar-smtp-domain:
+
 smtp:domain
 ~~~~~~~~~~~
 
 Domain name to use.
 
+.. _pillar-smtp-from:
+
 smtp:from
 ~~~~~~~~~
 
 SMTP account use in FROM field.
+
+.. _pillar-smtp-user:
 
 smtp:user
 ~~~~~~~~~
@@ -137,12 +165,18 @@ SMTP account username, if applicable.
 smtp:password
 ~~~~~~~~~~~~~
 
+.. _pillar-smtp-password:
+
 Password for account login, if specified user.
 
 smtp:authentication
 ~~~~~~~~~~~~~~~~~~~
 
+.. _pillar-smtp-authentication:
+
 Authentication method. Default is: ``plain``.
+
+.. _pillar-smtp-encryption:
 
 smtp:encryption
 ~~~~~~~~~~~~~~~
@@ -153,12 +187,16 @@ Possible values: `ssl <http://en.wikipedia.org/wiki/Transport_Layer_Security>`_,
 
 Default: ``plain``
 
+.. _pillar-encoding:
+
 encoding
 ~~~~~~~~
 
 Default system locale.
 
 Default: ``en_US.UTF-8``.
+
+.. _pillar-global_roles:
 
 global_roles
 ~~~~~~~~~~~~
@@ -168,6 +206,8 @@ List of all available roles.
 Default: automatically built by listing sub-directories of ``/roles``.
 
 This key is usefull to restrict the list of available roles for an hosts.
+
+.. _pillar-roles_absent:
 
 roles_absent
 ~~~~~~~~~~~~
@@ -191,7 +231,7 @@ Not following this rule will result in lost data and broken system.
 
 Default: ``False``.
 
-.. _root_keys:
+.. _pillar-root_keys:
 
 root_keys
 ~~~~~~~~~

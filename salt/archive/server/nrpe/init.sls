@@ -54,6 +54,6 @@ sudo_salt_archive_server_nrpe:
     - require:
       - pkg: sudo
     - require_in:
-        - monitoring: salt.archive.server-monitoring
+      - service: nagios-nrpe-server
 
 {{ passive_check('salt.archive.server', pillar_prefix='salt_archive', check_ssl_score=True) }}

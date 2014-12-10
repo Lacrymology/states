@@ -35,7 +35,7 @@ Developers: How to upload packages
 Uploading to your PyPI
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Assuming you are running your Django site locally for now, add the following to
+Assuming you are running your :doc:`/django/doc/index` site locally for now, add the following to
 your ``~/.pypirc`` file::
 
   [distutils]

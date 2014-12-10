@@ -32,7 +32,7 @@ Institute for Institutional Innovation by Data Driven Design Inc.
 Author: Lam Dang Tung <lam@robotinfra.com>
 Maintainer: Van Diep Pham <favadi@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 
 upstream gitlab {
     server unix:///var/lib/uwsgi/gitlab.sock;
@@ -43,17 +43,17 @@ server {
 {% if salt['pillar.get']('gitlab:ssl', False) %}
 {% if salt['pillar.get']('gitlab:ssl_redirect', False) %}
     {# if https, redirect http port 80 to https port 443 #}
-    server_name {% for hostname in pillar['gitlab']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
-    return 301 https://{{ pillar['gitlab']['hostnames'][0] }}$request_uri;
+    server_name {% for hostname in salt['pillar.get']('gitlab:hostnames') %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+    return 301 https://{{ salt['pillar.get']('gitlab:hostnames')[0] }}$request_uri;
 }
 {# https server #}
 server {
 {% endif %}{# redirect http to https #}
 {%- from 'nginx/macro.jinja2' import ssl_config with context %}
-    {{ ssl_config(pillar['gitlab']['ssl']) }}
+    {{ ssl_config(salt['pillar.get']('gitlab:ssl', False)) }}
 {% endif %}
 {# web app logic #}
-    server_name {% for hostname in  pillar['gitlab']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+    server_name {% for hostname in  salt['pillar.get']('gitlab:hostnames') %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
     root /home/gitlab/gitlabhq-{{ version }}/public;
     client_max_body_size 5m;
     server_tokens off;

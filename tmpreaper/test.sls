@@ -27,6 +27,7 @@ Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
 {%- from 'cron/test.jinja2' import test_cron with context %}
 include:
+  - doc
   - tmpreaper
   - tmpreaper.diamond
   - tmpreaper.nrpe

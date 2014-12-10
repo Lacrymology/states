@@ -20,7 +20,7 @@ shinken_broker_port_remote
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Check if the :doc:`/shinken/broker/doc/index` port can be reached from the
-:doc:`</shinken/doc/index>` :doc:`/shinken/poller/doc/index`.
+:doc:`/shinken/doc/index` :doc:`/shinken/poller/doc/index`.
 
 shinken_broker_http_port
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -48,3 +48,12 @@ This uses `business rules <http://shinken.readthedocs.org/en/latest/06_medium/bu
 If both are down, only one notification would be sent, rather than two.
 
 .. include:: /nginx/doc/monitor.inc
+
+Conditional
+-----------
+
+Only use if :ref:`pillar-shinken-ssl` is turned on.
+
+.. include:: /nginx/doc/monitor_ssl.inc
+             
+             

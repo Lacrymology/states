@@ -45,7 +45,7 @@ include:
     - group: root
     - mode: 700
 
-{%- if 'files_archive' in pillar %}
+{%- if salt['pillar.get']('files_archive', False) %}
 /var/cache/pip:
   file:
     - absent
@@ -102,8 +102,8 @@ pip:
   archive:
     - extracted
     - name: {{ opts['cachedir'] }}/pip
-{%- if 'files_archive' in pillar %}
-    - source: {{ pillar['files_archive'] }}/pip/pip-{{ version }}.tar.gz
+{%- if salt['pillar.get']('files_archive', False) %}
+    - source: {{ salt['pillar.get']('files_archive', False) }}/pip/pip-{{ version }}.tar.gz
 {%- else %}
     - source: https://pypi.python.org/packages/source/p/pip/pip-{{ version }}.tar.gz
 {%- endif %}

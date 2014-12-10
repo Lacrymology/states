@@ -6,7 +6,7 @@ Graylog2 Server
 .. TODO: REFER TO MONGODB REQIUREMENTS
 .. TODO: LINK TO ELASTICSEARCH DOC
 
-The server come with a built-in Elasticsearch node. It need to be part of the
+The server come with a built-in :doc:`/elasticsearch/doc/index` node. It need to be part of the
 cluster.
 
 .. toctree::

@@ -27,11 +27,11 @@ Maintainer: Van Diep Pham <favadi@robotinfra.com>
 
 GitLab main config
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 
 production: &base
   gitlab:
-    host: {{ pillar['gitlab']['hostnames'][0] }}
+    host: {{ salt['pillar.get']('gitlab:hostnames')[0] }}
     port: {% if salt['pillar.get']('gitlab:ssl', False) %}443{% else %}80{% endif %}
     {%- if salt['pillar.get']('gitlab:ssl', False) %}
     https: true
@@ -41,7 +41,12 @@ production: &base
 
     user: gitlab
 
-    email_from: {{ salt['pillar.get']('gitlab:smtp:from', pillar['smtp']['from']) }}
+    {%- if salt['pillar.get']('gitlab:smtp', False) %}
+      {%- set smtp = salt['pillar.get']('gitlab:smtp', False) %}
+    {%- else %}
+      {%- set smtp = salt['pillar.get']('smtp') %}
+    {%- endif %}
+    email_from: {{ smtp['from'] }}
 
     default_projects_limit: {{ salt['pillar.get']('gitlab:default_projects_limit', 10) }}
 
@@ -91,7 +96,7 @@ production: &base
 
   ldap:
     {%- if salt['pillar.get']('gitlab:ldap:enabled', False) %}
-    {%- set ldap =  pillar['gitlab']['ldap'] %}
+    {%- set ldap =  salt['pillar.get']('gitlab:ldap') %}
     enabled: true
     host: '{{ ldap['host'] }}'
     base: '{{ ldap['base'] }}'
@@ -128,7 +133,8 @@ production: &base
     upload_pack: true
     receive_pack: true
 
-{%- if 22 in salt['pillar.get']('ssh:server:ports', [22]) %}
+{%- set ports = salt['pillar.get']('ssh:server:ports', [22]) %}
+{%- if 22 in ports %}
     ssh_port: 22
 {%- else %}
     ssh_port: {{ salt['pillar.get']('ssh:server:ports', [22])[0] }}

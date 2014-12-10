@@ -26,6 +26,7 @@ Author: Quan Tong Anh <quanta@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
 include:
+  - doc
   - rsync
   - rsync.diamond
   - rsync.nrpe
@@ -44,3 +45,10 @@ test:
   monitoring:
     - run_all_checks
     - order: last
+  qa:
+    - test
+    - name: rsync
+    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - require:
+      - monitoring: test
+      - cmd: doc

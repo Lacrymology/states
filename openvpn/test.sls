@@ -27,6 +27,8 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
 {%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
+  - doc
+  - openvpn
   - openvpn.diamond
   - openvpn.nrpe
   - openvpn.static
@@ -35,6 +37,13 @@ test:
   monitoring:
     - run_all_checks
     - order: last
+  qa:
+    - test
+    - name: openvpn
+    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - require:
+      - monitoring: test
+      - cmd: doc
   diamond:
     - test
     - map:

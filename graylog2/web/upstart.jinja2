@@ -25,9 +25,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Van Diep Pham <favadi@robotinfra.com>
 Maintainer: Van Pham Diep <favadi@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 # ubuntu upstart script for graylog2-web
-{% set heap_size = salt['pillar.get']('graylog2:web_heap_size', False) %}
+{% set heap_size = salt['pillar.get']('graylog2:web:heap_size', False) %}
 start on (filesystem and net-device-up IFACE=eth0)
 stop on runlevel [!2345]
 

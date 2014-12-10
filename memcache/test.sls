@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2014, Diep Pham
+Copyright (c) 2014, Quan Tong Anh
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,13 +22,13 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Diep Pham <favadi@robotinfra.com>
-Maintainer: Diep Pham <favadi@robotinfra.com>
+Author: Quan Tong Anh <quanta@robotinfra.com>
+Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
-
 {%- from 'cron/test.jinja2' import test_cron with context %}
 {%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
+  - doc
   - memcache
   - memcache.nrpe
   - memcache.diamond
@@ -42,7 +42,6 @@ include:
 test:
   monitoring:
     - run_all_checks
-    - wait: 60
     - order: last
     - require:
       - cmd: test_crons
@@ -96,3 +95,11 @@ test:
     - require:
       - sls: memcache
       - sls: memcache.diamond
+    - order: last
+  qa:
+    - test
+    - name: memcache
+    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - require:
+      - monitoring: test
+      - cmd: doc

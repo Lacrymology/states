@@ -32,7 +32,7 @@ Institute for Institutional Innovation by Data Driven Design Inc.
 Author: Lam Dang Tung <lam@robotinfra.com>
 Maintainer: Van Diep Pham <favadi@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 {#-
  To enable smtp email delivery for your GitLab instance do next:
  1. Change config/environments/production.rb to use smtp
@@ -42,10 +42,10 @@ Maintainer: Van Diep Pham <favadi@robotinfra.com>
  4. Restart GitLab instance
 #}
 
-{%- if salt['pillar.get']('gitlab:smtp:default', True) %}
-{%- set smtp = pillar['smtp'] %}
+{%- if salt['pillar.get']('gitlab:smtp', False) %}
+  {%- set smtp = salt['pillar.get']('gitlab:smtp', False) %}
 {%- else %}
-{%- set smtp = pillar['gitlab']['smtp'] %}
+  {%- set smtp = salt['pillar.get']('smtp') %}
 {%- endif %}
 
 if Gitlab::Application.config.action_mailer.delivery_method == :smtp

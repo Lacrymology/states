@@ -28,7 +28,7 @@ Maintainer: Van Pham Diep <favadi@robotinfra.com>
 Nagios NRPE check for Sentry backup
 -#}
 include:
-  - backup.client.{{ pillar['backup_storage'] }}.nrpe
+  - backup.client.{{ salt['pillar.get']('backup_storage') }}.nrpe
   - bash.nrpe
   - cron.nrpe
   - nrpe

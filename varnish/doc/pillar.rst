@@ -1,38 +1,5 @@
-:Copyrights: Copyright (c) 2013, Diep Pham
-             All rights reserved.
-
-             Redistribution and use in source and binary forms, with
-             or without modification, are permitted provided that the
-             following conditions are met:
-
-             1. Redistributions of source code must retain the above
-             copyright notice, this list of conditions and the following
-             disclaimer.
-
-             2. Redistributions in binary form must reproduce the
-             above copyright notice, this list of conditions and the following
-             disclaimer in the documentation and/or other materials provided
-             with the distribution.
-
-             THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
-             CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED
-             WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-             WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
-             PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
-             COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
-             INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-             CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-             PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-             DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-             CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-             CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
-             OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-             SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
-             DAMAGE.
-:Authors: - Van Diep Pham <favadi@robotinfra.com>
-
 Pillar
-=======
+======
 
 Optional
 --------
@@ -45,24 +12,32 @@ Example::
   storage_backend: file
   file_size: 2G
 
+.. _pillar-varnish-default_backend_host:
+
 varnish:default_backend_host
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-IP address of default varnish backend.
+IP address of default :doc:`/varnish/doc/index` backend.
 
 Default: ``127.0.0.1``.
+
+.. _pillar-varnish-default_backend_port:
 
 varnish:default_backend_port
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Port of default varnish backend.
+TCP port of default :doc:`/varnish/doc/index` backend.
 
 Default: ``8080``.
+
+.. _pillar-varnish-extra_config:
 
 varnish:extra_config
 ~~~~~~~~~~~~~~~~~~~~
 
 Extra config to put in ``/etc/varnish/default.vcl``.
+
+Default: don't use any extra configuration (``None``).
 
 .. caution::
 
@@ -70,22 +45,29 @@ Extra config to put in ``/etc/varnish/default.vcl``.
    Document (VCL)
    <https://www.varnish-cache.org/docs/3.0/reference/vcl.html>`_.
 
-   Invalid VCL will cause varnish daemon fail to start.
+   Invalid VCL will cause :doc:`/varnish/doc/index` daemon fail to start.
+
+.. _pillar-varnish-nfiles:
 
 varnish:nfiles
 ~~~~~~~~~~~~~~
 
-Maximum number of open files (for ulimit -n)
+Maximum number of open files (for ``ulimit -n``).
 
-Default: ``131072``
+Default: use no more than ``131072`` open files.
+
+.. _pillar-varnish-memlock:
 
 varnish:memlock
 ~~~~~~~~~~~~~~~
 
-Maximum locked memory size (for ulimit -l). Used for locking the
+Maximum locked memory size (for ``ulimit -l``). Used for locking the
 shared memory login memory.
 
-Default: ``82000``
+Default: :doc:`/varnish/doc/index` will lock no more than `82000``
+bytes memory to prevent swap out.
+
+.. _pillar-varnish-listen_address:
 
 varnish:listen_address
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -95,7 +77,9 @@ IP address to listen for client requests.
 Possible values: A valid host name, IPv4 or IPv6 adress. If empty,
 varnish will listen on all interfaces.
 
-Default: empty
+Default: listen on all interfaces (``''``).
+
+.. _pillar-varnish-listen_port:
 
 varnish:listen_port
 ~~~~~~~~~~~~~~~~~~~
@@ -103,6 +87,8 @@ varnish:listen_port
 TCP port to listen for client requests.
 
 Default: ``80``
+
+.. _pillar-varnish-telnet_address:
 
 varnish:telnet_address
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -112,7 +98,9 @@ IP address to listen for management commands.
 Possible values: A valid host name, IPv4 or IPv6 adress. If empty,
 varnish will listen on all interfaces.
 
-Default: ``127.0.0.1``
+Default: ``localhost``
+
+.. _pillar-varnish-telnet_port:
 
 varnish:telnet_port
 ~~~~~~~~~~~~~~~~~~~
@@ -121,10 +109,12 @@ TCP port to listen for management commands.
 
 Default: ``6082``
 
+.. _pillar-varnish-storage_backend:
+
 varnish:storage_backend
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-What storage backend varnish should use. See `varnish user's guide
+What storage backend :doc:`/varnish/doc/index` should use. See `varnish user's guide
 <https://www.varnish-cache.org/docs/trunk/users-guide/storage-backends.html>`_
 for more information.
 
@@ -136,10 +126,12 @@ Possible values: ``file``, ``malloc``
 
 Default: ``malloc``
 
+.. _pillar-varnish-malloc_size:
+
 varnish:malloc_size
 ~~~~~~~~~~~~~~~~~~~
 
-Maximum size varnish will allocate when using malloc storage backend.
+Maximum size :doc:`/varnish/doc/index` will allocate when using malloc storage backend.
 
 Possible values: a number and one of following suffixes.
 
@@ -148,19 +140,23 @@ Possible values: a number and one of following suffixes.
 - G, g: gigabytes
 - T, t: terabytes
 
-Default: ``2G``
+Default: use maxium ``256M`` bytes memory when use malloc storage backend.
+
+.. _pillar-varnish-file_path:
 
 varnish:file_path
 ~~~~~~~~~~~~~~~~~
 
-The path to varnish storage file when using file storage backend.
+The path to :doc:`/varnish/doc/index` storage file when using file storage backend.
 
-Default: ``/var/lib/varnish/<hostname>/varnish_storage.bin``
+Default: use /var/lib/varnish/<hostname>/varnish_storage.bin (``None``).
+
+.. _pillar-varnish-file_size:
 
 varnish:file_size
 ~~~~~~~~~~~~~~~~~
 
-The file size of varnish storage file when using file storage backend.
+The file size of :doc:`/varnish/doc/index` storage file when using file storage backend.
 
 Possible values: a number and one of following suffixes.
 
@@ -170,7 +166,7 @@ Possible values: a number and one of following suffixes.
 - T, t: terabytes
 - %: use up to this percent of available disk space
 
-Default: ``2G``
+Default: allocate ``2G`` bytes to use as :doc:`/varnish/doc/index` storage backend.
 
 .. note::
 

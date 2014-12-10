@@ -27,6 +27,7 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
 {%- from 'cron/test.jinja2' import test_cron with context %}
 include:
+  - doc
   - salt.archive.server
   - salt.archive.server.diamond
   - salt.archive.server.nrpe
@@ -42,3 +43,10 @@ test_salt_archive:
     - order: last
     - require:
       - cmd: test_crons
+  qa:
+    - test
+    - name: salt.archive.server
+    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - require:
+      - monitoring: test_salt_archive
+      - cmd: doc

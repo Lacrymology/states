@@ -48,8 +48,8 @@ php:
     - onlyif: apt-key list | grep -q 67E15F46
   pkgrepo:
     - absent
-{%- if 'files_archive' in pillar %}
-    - name: deb {{ pillar['files_archive']|replace('https://', 'http://') }}/mirror/lucid-php5 {{ grains['lsb_distrib_codename'] }} main
+{%- if salt['pillar.get']('files_archive', False) %}
+    - name: deb {{ salt['pillar.get']('files_archive', False)|replace('https://', 'http://') }}/mirror/lucid-php5 {{ grains['lsb_distrib_codename'] }} main
 {%- else %}
     - ppa: l-mierzwa/lucid-php5
 {%- endif %}

@@ -9,7 +9,7 @@ shinken_arbiter_procs
 
 .. include:: /nrpe/doc/check_procs.inc
 
-.. _shinken_arbiter_port
+.. _shinken_arbiter_port:
 
 shinken_arbiter_port
 ~~~~~~~~~~~~~~~~~~~~

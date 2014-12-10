@@ -28,8 +28,10 @@ Maintainer: Van Pham Diep <favadi@robotinfra.com>
 {%- set ssl = salt['pillar.get']('elasticsearch:ssl', False) %}
 {%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
+  - doc
   - elasticsearch
   - elasticsearch.backup
+  - elasticsearch.backup.diamond
   - elasticsearch.backup.nrpe
   - elasticsearch.diamond
   - elasticsearch.nrpe
@@ -74,6 +76,15 @@ test:
     - wait: 60
     - exclude:
       - elasticsearch-es_cluster
+  qa:
+    - test
+    - name: elasticsearch
+    - additional:
+      - elasticsearch.backup
+    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - require:
+      - monitoring: test
+      - cmd: doc
   diamond:
     - test
     - map:

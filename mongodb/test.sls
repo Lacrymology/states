@@ -27,6 +27,7 @@ Maintainer: Van Pham Diep <favadi@robotinfra.com>
 -#}
 {%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
+  - doc
   - mongodb
   - mongodb.backup
   - mongodb.diamond
@@ -53,6 +54,15 @@ test:
       - sls: mongodb.backup
     - require:
       - service: mongodb_repair_post
+  qa:
+    - test_monitor
+    - name: mongodb
+    - additional:
+      - mongodb.backup
+    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - require:
+      - monitoring: test
+      - cmd: doc
   diamond:
     - test
     - map:

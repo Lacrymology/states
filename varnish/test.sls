@@ -28,6 +28,7 @@ Maintainer: Van Pham Diep <favadi@robotinfra.com>
 {%- from 'cron/test.jinja2' import test_cron with context %}
 {%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
+  - doc
   - varnish
   - varnish.diamond
   - varnish.nrpe
@@ -143,3 +144,11 @@ test:
     - require:
       - sls: varnish
       - sls: varnish.diamond
+      - monitoring: test
+  qa:
+    - test
+    - name: varnish
+    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - require:
+      - monitoring: test
+      - cmd: doc

@@ -1,3 +1,3 @@
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 {%- set max_age = salt['pillar.get']('salt_archive:max_age', 3600) %}
 nagios ALL=(root)NOPASSWD:/usr/lib/nagios/plugins/check_file_age -w {{ max_age }} -c {{ max_age }} {{ opts['cachedir'] }}/sync_timestamp.dat

@@ -32,7 +32,7 @@ Institute for Institutional Innovation by Data Driven Design Inc.
 Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Van Diep Pham <favadi@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 {#-
  Redis configuration file example
 
@@ -164,7 +164,7 @@ databases {{ salt['pillar.get']('redis:number_of_dbs', 16) }}
 
    save ""
 #}
-{%- set save = salt['pillar.get']('redis:save', None) %}
+{%- set save = salt['pillar.get']('redis:save', []) %}
 {%- if save %}
     {%- for numbs in salt['pillar.get']('redis:save', []) %}
 save {{ numbs }}

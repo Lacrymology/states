@@ -25,4 +25,4 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Dang Tung Lam <lam@robotinfra.com>
 Maintainer: Van Pham Diep <favadi@robotinfra.com>
 -#}
-{{ pillar['etherpad']['apikey'] }}
+{{ salt['pillar.get']('etherpad:apikey') }}

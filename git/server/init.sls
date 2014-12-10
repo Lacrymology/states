@@ -39,7 +39,7 @@ git-server:
     - require:
       - pkg: git
 
-{% for key in pillar['git-server']['keys'] %}
+{% for key in salt['pillar.get']('git-server:keys') %}
 git_server_{{ key }}:
   ssh_auth:
     - present
@@ -47,10 +47,10 @@ git_server_{{ key }}:
     - user: git
     - require:
       - user: git-server
-    - enc: {{ pillar['git-server']['keys'][key] }}
+    - enc: {{ salt['pillar.get']('git-server:keys')[key] }}
 {% endfor %}
 
-{% for repository in pillar['git-server']['repositories'] %}
+{% for repository in salt['pillar.get']('git-server:repositories') %}
 /var/lib/git-server/{{ repository }}.git:
   file:
     - directory

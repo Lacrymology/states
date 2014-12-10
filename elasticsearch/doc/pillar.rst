@@ -1,30 +1,5 @@
-.. Copyright (c) 2013, Bruno Clermont
-.. All rights reserved.
-..
-.. Redistribution and use in source and binary forms, with or without
-.. modification, are permitted provided that the following conditions are met:
-..
-..     1. Redistributions of source code must retain the above copyright notice,
-..        this list of conditions and the following disclaimer.
-..     2. Redistributions in binary form must reproduce the above copyright
-..        notice, this list of conditions and the following disclaimer in the
-..        documentation and/or other materials provided with the distribution.
-..
-.. Neither the name of Bruno Clermont nor the names of its contributors may be used
-.. to endorse or promote products derived from this software without specific
-.. prior written permission.
-..
-.. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-.. AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
-.. THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-.. PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
-.. BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-.. CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-.. SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-.. INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-.. CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-.. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-.. POSSIBILITY OF SUCH DAMAGE.
+Pillar
+======
 
 .. include:: /doc/include/add_pillar.inc
 
@@ -54,34 +29,46 @@ Example::
     hostnames:
       - search.example.com
 
+.. _pillar-elasticsearch-cluster-name:
+
 elasticsearch:cluster:name
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Name of this :doc:`index` cluster for all listed nodes.
 
-elasticsearch:nodes
-~~~~~~~~~~~~~~~~~~~
+.. _pillar-elasticsearch-cluster-nodes:
 
-Dict of nodes part of the cluster.
+elasticsearch:cluster:nodes
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-elasticsearch:nodes:{{ node minion ID }}:_network:public
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Dictionary contains :doc:`/elasticsearch/doc/index` nodes information.
+
+.. _pillar-elasticsearch-cluster-nodes-nodeminionID-_network-public:
+
+elasticsearch:cluster:nodes:{{ node minion ID }}:_network:public
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This node hostname or public IP to reach it from Internet.
 
-elasticsearch:nodes:{{ node minion ID }}:_network:private
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. _pillar-elasticsearch-cluster-nodes-nodeminionID-_network-private:
+
+elasticsearch:cluster:nodes:{{ node minion ID }}:_network:private
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This node hostname or public IP to reach it from internal network.
 
-elasticsearch:nodes:{{ node minion ID }}:{{ state }}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. _pillar-elasticsearch-cluster-nodes-nodeminionID-state:
 
-A node can only actual run a :doc:`index` standalone node, or a
-``graylog2.server``.
+elasticsearch:cluster:nodes:{{ node minion ID }}:{{ state }}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-elasticsearch:nodes:{{ node minion ID }}:{{ state }}:name
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+A node can only actual run a :doc:`index` node, or a
+:doc:`/graylog2/server/doc/index`.
+
+.. _pillar-elasticsearch-cluster-nodes-nodeminionID-state-name:
+
+elasticsearch:cluster:nodes:{{ node minion ID }}:{{ state }}:name
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Node ID, must be unique across all node instances.
 
@@ -95,10 +82,20 @@ Example::
     ssl: example.com
     https_allowed:
       - 192.168.0.0/24
-  destructive_absent: False
 
-elasticsearch:nodes:{{ node minion ID }}:{{ state }}:port
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. _pillar-elasticsearch-version:
+
+elasticsearch:version
+~~~~~~~~~~~~~~~~~~~~~
+
+The version of :doc:`/elasticsearch/doc/index` to install.
+
+Default: ``0.90.10``
+
+.. _pillar-elasticsearch-cluster-nodes-nodeminionID-state-port:
+
+elasticsearch:cluster:nodes:{{ node minion ID }}:{{ state }}:port
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 :doc:`index` transport port.
 
@@ -107,19 +104,26 @@ different.
 
 Default: ``9300``.
 
-elasticsearch:nodes:{{ node minion ID }}:{{ state }}:http
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. _pillar-elasticsearch-cluster-nodes-nodeminionID-state-http:
+
+elasticsearch:cluster:nodes:{{ node minion ID }}:{{ state }}:http
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If this instance handle :doc:`index` HTTP API port. Only one HTTP API instance
 is required for each host.
 
-Default: ``True``.
+Default: disable HTTP API, (``True``).
+
+.. _pillar-elasticsearch-heap_size:
 
 elasticsearch:heap_size
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 Java format of max memory consumed by JVM heap.
-default is JVM default.
+
+Default: use JVM default (``False``).
+
+.. _pillar-elasticsearch-ssl:
 
 elasticsearch:ssl
 ~~~~~~~~~~~~~~~~~
@@ -131,20 +135,31 @@ elasticsearch:ssl
   Only used to make :doc:`/elasticsearch/doc/index` trough
   `HTTPS <https://en.wikipedia.org/wiki/Https>`__.
 
+.. _pillar-elasticsearch-https_allowed:
+
 elasticsearch:https_allowed
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Only used if ``elasticsearch:ssl`` is defined.
+Only used if :ref:`pillar-elasticsearch-ssl` is defined.
 
-List of CIDR format network where :doc:`/elasticsearch/doc/index` over HTTPS is
-allowed.
+List of `CIDR
+<http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing>`_ format
+network where :doc:`/elasticsearch/doc/index` over HTTPS is allowed.
 
-Default: Empty list.
+Default: do not allow (``[]``).
 
-destructive_absent
-~~~~~~~~~~~~~~~~~~
+elasticsearch:aws
+~~~~~~~~~~~~~~~~~
 
-If True, :doc:`/elasticsearch/doc/index` data saved on disk is purged when
-``elasticsearch.absent`` is executed.
+If True, install `elasticsearch-cloud-aws
+<https://github.com/elasticsearch/elasticsearch-cloud-aws>`_ for
+:doc:`/elasticsearch/doc/index`.
 
-Default: ``False``.
+The `Amazon Web Service <http://aws.amazon.com/>`_ (AWS) Cloud plugin
+allows to use `AWS API <https://github.com/aws/aws-sdk-java>`_ for the
+unicast discovery mechanism and add `S3 <http://aws.amazon.com/s3/>`_
+repositories.
+
+Default: don't install `elasticsearch-cloud-aws
+<https://github.com/elasticsearch/elasticsearch-cloud-aws>`_
+(``False``).

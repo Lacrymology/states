@@ -25,24 +25,22 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 [global]
 
-{%- if 'files_archive' in pillar %}
-find-links = {{ pillar['files_archive'] }}/pip/
-    {%- if pillar['pip'] is defined %}
-        {%- if pillar['pip']['allow_pypi'] is defined and pillar['pip']['allow_pypi'] %}
+{%- if salt['pillar.get']('files_archive', False) %}
+find-links = {{ salt['pillar.get']('files_archive', False) }}/pip/
+    {%- if salt['pillar.get']('pip:allow_pypi', False) %}
 no-index = false
-        {%- else %}
+    {%- else %}
 no-index = true
-        {%- endif %}
     {%- endif %}
 {%- else %}
 download-cache = /var/cache/pip
 {%- endif -%}
 
 {%- if salt['pillar.get']('proxy_server', False) %}
-proxy = {{ pillar['proxy_server'] }}
+proxy = {{ salt['pillar.get']('proxy_server') }}
 {%- endif -%}
 {%- if salt['pillar.get']('debug', False) %}
 verbose = true

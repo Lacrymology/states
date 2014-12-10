@@ -27,6 +27,7 @@ Maintainer: Van Diep Pham <favadi@robotinfra.com>
 -#}
 
 include:
+  - doc
   - gitlab
   - gitlab.diamond
   - gitlab.backup
@@ -62,3 +63,12 @@ test:
     - require:
       - sls: gitlab
       - sls: gitlab.diamond
+  qa:
+    - test
+    - name: gitlab
+    - additional:
+      - gitlab
+    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - require:
+      - monitoring: test
+      - cmd: doc

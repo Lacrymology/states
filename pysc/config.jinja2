@@ -6,8 +6,8 @@
 {#{%- macro pysc_config(process_name=None, sentry_dsn_pillar_key='sentry_dsn', lock=None, daemon_user=None, daemon_group=None) %}#}
 lock: {{ lock|default(False) }}
 
-        {%- if 'graphite_address' in pillar %}
-graphite: {{ pillar['graphite_address'] }}
+        {%- if salt['pillar.get']('graphite_address', False) %}
+graphite: {{ salt['pillar.get']('graphite_address', False) }}
         {%- endif -%}
 
         {%- if daemon_user|default(False) and daemon_group|default(False) %}

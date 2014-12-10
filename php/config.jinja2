@@ -32,8 +32,8 @@ Institute for Institutional Innovation by Data Driven Design Inc.
 Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Dang Tung Lam <lam@robotinfra.com>
 -#}
-; {{ pillar['message_do_not_modify'] }}
+; {{ salt['pillar.get']('message_do_not_modify') }}
 date.timezone = "{{ salt['pillar.get']('timezone', 'UTC') }}"
 expose_php = "Off"
-max_input_vars = {{ salt['pillar.get']('php:max_input_vars', '1000') }}
+max_input_vars = {{ salt['pillar.get']('php:max_input_vars', 1000) }}
 error_reporting = {{ salt['pillar.get']('php:error_reporting', 'E_ALL & ~E_DEPRECATED & ~E_STRICT') }}

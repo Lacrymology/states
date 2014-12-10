@@ -53,8 +53,8 @@ graylog2_incoming_logs:
   timeout: 55
   arguments:
     api_url: 'http://127.0.0.1:12900/system/throughput'
-    username: '{{ salt['pillar.get']('graylog2:root_username', 'admin') }}'
-    password: '{{ pillar['graylog2']['admin_password'] }}'
+    username: '{{ salt['pillar.get']('graylog2:admin_username', 'admin') }}'
+    password: '{{ salt['pillar.get']('graylog2:admin_password') }}'
     crit_range: '1:50000'
     max_retry: 20
 

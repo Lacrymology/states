@@ -25,8 +25,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Van Pham Diep <favadi@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
-{% set email = salt['pillar.get']('graylog2:smtp', pillar['smtp']) %}
+# {{ salt['pillar.get']('message_do_not_modify') }}
+{% set email = salt['pillar.get']('graylog2:smtp', False)|default(salt['pillar.get']('smtp'), boolean=True) %}
 {#-
 If you are running more than one instances of graylog2-server you have to select one of these
 instances as master. The master will perform some periodical tasks that non-masters won't perform.
@@ -46,7 +46,7 @@ password_secret = {{ salt['password.pillar']('graylog2:password_secret', 128) }}
 {#-
 the default root user is named 'admin'
 #}
-root_username = {{ salt['pillar.get']('graylog2:root_username', 'admin')}}
+admin_username = {{ salt['pillar.get']('graylog2:admin_username', 'admin')}}
 {#-
 You MUST specify a hash password for the root user (which you only need to initially set up the
 system and in case you lose connectivity to your authentication backend)
@@ -55,7 +55,7 @@ modify it in this file.
 Create one by using for example: echo -n yourpassword | shasum -a 256
 and put the resulting hash value into the following line
 #}
-root_password_sha2 = {{ salt['password.sha256'](pillar['graylog2']['admin_password']) }}
+root_password_sha2 = {{ salt['password.sha256'](salt['pillar.get']('graylog2:admin_password')) }}
 
 {#-
 Set plugin directory here (relative or absolute)
@@ -65,7 +65,7 @@ plugin_dir = /usr/local/graylog2-server-{{ version }}/plugin
 {#-
 REST API listen URI. Must be reachable by other graylog2-server nodes if you run a cluster.
 #}
-rest_listen_uri = {{ salt['pillar.get']('graylog2:rest_listen_uri', 'http://127.0.0.1:12900/') }}
+rest_listen_uri = {{ salt['pillar.get']('graylog2:rest_listen_uri', 'http://127.0.0.1:12900') }}
 {#-
 REST API transport address. Defaults to the value of rest_listen_uri. Exception: If rest_listen_uri
 is set to a wildcard IP address (0.0.0.0) the first non-loopback IPv4 system address is used.
@@ -73,8 +73,8 @@ This will be promoted in the cluster discovery APIs and other nodes may try to c
 address. (see rest_listen_uri)
 rest_transport_uri = http://192.168.1.1:12900/
 #}
-{%- if  salt['pillar.get']('graylog2:rest_transport_uri', None) %}
-rest_transport_uri = pillar['graylog2']['rest_transport_uri']
+{%- if salt['pillar.get']('graylog2:rest_transport_uri', None) %}
+rest_transport_uri = salt['pillar.get']('graylog2:rest_transport_uri', None)
 {%-  endif %}
 
 {#-
@@ -226,4 +226,4 @@ transport_email_from_name = Graylog2
 Specify and uncomment this if you want to include links to the stream in your stream alert mails.
 This should define the fully qualified base url to your web interface exactly the same way as it is accessed by your users.
 #}
-transport_email_web_interface_url = http{% if ssl|default(False) %}s:{% endif %}://{{ pillar['graylog2']['hostnames'][0] }}
+transport_email_web_interface_url = http{% if ssl|default(False) %}s:{% endif %}://{{ salt['pillar.get']('graylog2:hostnames')[0] }}

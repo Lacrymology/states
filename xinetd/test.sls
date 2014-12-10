@@ -27,6 +27,7 @@ Maintainer: Van Diep Pham <favadi@robotinfra.com>
 -#}
 
 include:
+  - doc
   - xinetd
   - xinetd.diamond
   - xinetd.nrpe
@@ -53,5 +54,13 @@ test:
         ProcessResources:
     {{ diamond_process_test('xinetd') }}
     - require:
+      - monitoring: test
       - sls: xinetd
       - sls: xinetd.diamond
+  qa:
+    - test
+    - name: xinetd
+    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - require:
+      - monitoring: test
+      - cmd: doc

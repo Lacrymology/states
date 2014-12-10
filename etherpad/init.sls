@@ -98,8 +98,8 @@ etherpad:
   archive:
     - extracted
     - name: /usr/local/
-{%- if 'files_archive' in pillar %}
-    - source: {{ pillar['files_archive'] }}/mirror/etherpad-lite-{{ version }}.tar.gz
+{%- if salt['pillar.get']('files_archive', False) %}
+    - source: {{ salt['pillar.get']('files_archive', False) }}/mirror/etherpad-lite-{{ version }}.tar.gz
 {%- else %}
     - source: https://github.com/ether/etherpad-lite/archive/{{ version }}.tar.gz
 {%- endif %}
@@ -243,5 +243,5 @@ extend:
   nginx:
     service:
       - watch:
-        - cmd: ssl_cert_and_key_for_{{ pillar['etherpad']['ssl'] }}
+        - cmd: ssl_cert_and_key_for_{{ salt['pillar.get']('etherpad:ssl') }}
 {%- endif %}

@@ -41,7 +41,7 @@ openvpn_diamond_collector:
     - source: salt://openvpn/diamond/config.jinja2
     - context:
       instances:
-{%- for tunnel in pillar['openvpn'] %}
+{%- for tunnel in salt['pillar.get']('openvpn', {}) %}
         {{ tunnel }}: file:///var/lib/openvpn/{{ tunnel }}.log
 {%- endfor %}
     - require:

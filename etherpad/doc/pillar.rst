@@ -1,34 +1,5 @@
-.. TODO: FIX LICENSE FORMAT
-
-:Copyrights: Copyright (c) 2014, Lam Dang Tung
-
-             All rights reserved.
-
-             Redistribution and use in source and binary forms, with or without
-             modification, are permitted provided that the following conditions
-             are met:
-
-             1. Redistributions of source code must retain the above copyright
-             notice, this list of conditions and the following disclaimer.
-
-             2. Redistributions in binary form must reproduce the above
-             copyright notice, this list of conditions and the following
-             disclaimer in the documentation and/or other materials provided
-             with the distribution.
-
-             THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-             "AS IS" AND ANY EXPRESS OR IMPLIED ARRANTIES, INCLUDING, BUT NOT
-             LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
-             FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
-             COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-             INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING,
-             BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-             LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-             CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-             LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
-             ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-             POSSIBILITY OF SUCH DAMAGE.
-:Authors: - Lam Dang Tung
+Pillar
+======
 
 .. include:: /doc/include/add_pillar.inc
 
@@ -47,10 +18,14 @@ Example::
       - pad.example.com
     apikey: blahlabhlabh
 
+.. _pillar-etherpad-hostnames:
+
 etherpad:hostnames
 ~~~~~~~~~~~~~~~~~~
 
 .. include:: /nginx/doc/hostnames.inc
+
+.. _pillar-etherpad-apikey:
 
 etherpad:apikey
 ~~~~~~~~~~~~~~~
@@ -79,12 +54,14 @@ Example::
         admin: True
       user2:
         password: 321321321
-      <username>:
-        password: <userpass>
+      {{ username }}:
+        password: {{ userpass }}
         admin: True
     apikey: 23jlLJKHJSK9saf92hasajJHAds==
     default_pad_text: Welcome to Pad
     secret_url: noonecanguessthatlongURL
+
+.. _pillar-etherpad-db-username:
 
 etherpad:db:username
 ~~~~~~~~~~~~~~~~~~~~
@@ -93,6 +70,8 @@ etherpad:db:username
 
 Default: ``etherpad``.
 
+.. _pillar-etherpad-db-name:
+
 etherpad:db:name
 ~~~~~~~~~~~~~~~~
 
@@ -100,24 +79,39 @@ etherpad:db:name
 
 Default: ``etherpad``.
 
+.. _pillar-etherpad-db-password:
+
 etherpad:db:password
 ~~~~~~~~~~~~~~~~~~~~
 
 .. include:: /postgresql/doc/password.inc
 
-.. etherpad:db:host
-.. PostgreSQL server address.
-.. Default: ``localhost``.
+Default: randomly generated (``False``).
+
+.. _pillar-etherpad-db-host:
+
+etherpad:db:host
+~~~~~~~~~~~~~~~~
+
+:doc:`/postgresql/doc/index` server address.
+
+Default: ``localhost``.
+
+.. _pillar-etherpad-ssl:
 
 etherpad:ssl
 ~~~~~~~~~~~~
 
 .. include:: /nginx/doc/ssl.inc
 
+.. _pillar-etherpad-ssl_redirect:
+
 etherpad:ssl_redirect
 ~~~~~~~~~~~~~~~~~~~~~
 
 .. include:: /nginx/doc/ssl_redirect.inc
+
+.. _pillar-etherpad-require_session:
 
 etherpad:require_session
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -125,7 +119,9 @@ etherpad:require_session
 Users must have a session to access pads. This effectively allows only group
 pads to be accessed.
 
-Default: ``False``.
+Default: don't require session (``False``).
+
+.. _pillar-etherpad-require_authentication:
 
 etherpad:require_authentication
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -133,43 +129,36 @@ etherpad:require_authentication
 This setting is used if you require authentication of all users.
 Note: /admin always requires authentication.
 
-Default: ``False``.
+Default: don't require authentication (``False``).
+
+.. _pillar-etherpad-require_authorization:
 
 etherpad:require_authorization
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Require authorization by a module, or a user with ``admin: True`` set.
 
-Default: ``False``.
+Default: don't require authorization (``False``).
+
+.. _pillar-etherpad-users:
 
 etherpad:users
 ~~~~~~~~~~~~~~
 
 List of users.
 
-etherpad:users:<username>
-~~~~~~~~~~~~~~~~~~~~~~~~~
+Default: don't create any user (``[]``).
 
-Username of user who uses :doc:`index`.
-
-etherpad:users:<username>:password
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Password of user.
-
-etherpad:users:<username>:admin
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Grant admin access for this user.
-
-Default: ``False``.
+.. _pillar-etherpad-default_pad_text:
 
 etherpad:default_pad_text
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The default text of a pad.
 
-Default: ``None``.
+Default: dont use default text (``None``).
+
+.. _pillar-etherpad-restrict_referer:
 
 etherpad:restrict_referer
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -179,24 +168,70 @@ Regex for referer URL restriction. When you want block direct access to
 
 Example: ``^(.*)(sometext|othertex)(.*)$``
 
-Default: ``False``.
+Default: allow access from all referers, (``False``).
 
-etherpad:session_key
+.. _pillar-etherpad-title:
+
+etherpad:title
+~~~~~~~~~~~~~~
+
+:doc:`/etherpad/doc/index` title display in browser.
+
+Default: ``Etherpad``.
+
+.. _pillar-etherpad-listen_port:
+
+etherpad:listen_port
 ~~~~~~~~~~~~~~~~~~~~
 
-TODO
+:doc:`/etherpad/doc/index` listen TCP port.
+
+Default: listen on port ``9001``.
+
+.. _pillar-etherpad-secret_url:
 
 etherpad:secret_url
 ~~~~~~~~~~~~~~~~~~~
 
-If set, only allow access etherpad by this URL, don't allow access
-directly.
+If set, only allow access :doc:`/etherpad/doc/index` by this URL,
+don't allow access directly.
 
-For example, if ``etherpad:hostnames`` is ``['example_pad.com']`` and
-``etherpad:secrect_url`` is ``'top_secret'``, we can only use etherpad with
-URL: example_pad.com/top_secret, request to example_pad.com will
-return 403 error
+For example, if :ref:`pillar-etherpad-hostnames` is
+``['example_pad.com']`` and :ref:`pillar-etherpad-secret_url` is
+``'top_secret'``, we can only use :doc:`/etherpad/doc/index` with URL:
+example_pad.com/top_secret, request to example_pad.com will return 403
+error
 
 Example: ``'a_secret_string'``
 
-Default: ``None``
+Default: don't use secret url, (``None``).
+
+Conditional
+-----------
+
+.. _pillar-etherpad-users-username:
+
+etherpad:users:{{ username }}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Username of user who uses :doc:`index`.
+
+Used only if :ref:`pillar-etherpad-users` is defined.
+
+.. _pillar-etherpad-users-username-admin:
+
+etherpad:users:{{ username }}:admin
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Grant admin access for this user.
+
+Default: don't make this user a admin, (``False``).
+
+.. _pillar-etherpad-users-username-password:
+
+etherpad:users:{{ username }}:password
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Password of user {{ username }}.
+
+Used only if :ref:`pillar-etherpad-users-username` is defined.

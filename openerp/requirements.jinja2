@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Lam Dang Tung <lam@robotinfra.com>
 Maintainer: Van Diep Pham <favadi@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 
 Babel==0.9.6
 Jinja2==2.6
@@ -61,7 +61,7 @@ vatnumber==1.1
 vobject==0.8.1c
 xlwt==0.7.5
 {%- set default_dsn = salt['pillar.get']('sentry_dsn', False) -%}
-{%- set sentry_dsn = salt['pillar.get']('openerp:sentry_dsn', default_dsn) -%}
+{%- set sentry_dsn = salt['pillar.get']('openerp:sentry_dsn', False)|default(default_dsn, boolean=True) -%}
 {%- if sentry_dsn %}
 requests==2.4.3
 raven==4.1.1

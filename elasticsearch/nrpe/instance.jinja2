@@ -29,7 +29,7 @@ Maintainer: Van Pham Diep <favadi@robotinfra.com>
 
 {%- set nodes_total = 0 -%}
 {#- this ugly hack is required to get the total number of nodes #}
-{%- for item in pillar['elasticsearch']['cluster']['nodes'].viewitems() -%}
+{%- for item in salt['pillar.get']('elasticsearch:cluster:nodes').viewitems() -%}
     {#- take 1 off the length to remove the _network key -#}
     {%- set nodes_total = nodes_total - 1 + item[1]|length -%}
     {%- if loop.last %}

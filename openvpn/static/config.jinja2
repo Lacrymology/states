@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 {%- set reserved_keys = ('secret', 'user', 'group', 'syslog', 'writepid', 'port', 'ifconfig', 'remote') -%}
 {%- set blocked_keys = ('log', 'log-append') -%}
 {%- set configs = salt['pillar.get']('openvpn:' + tunnel + ':config', {}) %}
@@ -51,13 +51,13 @@ dev tun
 # ignore "{{ key }}: {{ configs[key] }}" {{ key }} is a reserved key!
     {%- endif -%}
 {%- endfor -%}
-{%- if 'port' in pillar['openvpn'][tunnel]['peers'][grains['id']] %}
-port {{ pillar['openvpn'][tunnel]['peers'][grains['id']]['port'] }}
-{%- endif -%}
-{%- for peer in pillar['openvpn'][tunnel]['peers'] -%}
+{%- set port = salt['pillar.get']('openvpn', {})[tunnel]['peers'][grains['id']]['port']|default(False) %}
+{% if port %}port {{ port }}{% endif %}
+{%- set peers = salt['pillar.get']('openvpn', {})[tunnel]['peers'] %}
+{%- for peer, peer_data in peers.iteritems() -%}
     {%- if peer != grains['id'] %}
-ifconfig {{ pillar['openvpn'][tunnel]['peers'][grains['id']]['vpn_address'] }} {{ pillar['openvpn'][tunnel]['peers'][peer]['vpn_address'] }}
-remote {{ pillar['openvpn'][tunnel]['peers'][peer]['address'] }} {{ salt['pillar.get']('openvpn:' + tunnel + ':peers:' + peer + ':port', '') }}
+ifconfig {{ peers[grains['id']]['vpn_address'] }} {{ peer_data['vpn_address'] }}
+remote {{ peer_data['address'] }} {% if 'port' in peer_data %} {{ peer_data['port'] }}{% endif %}
     {%- endif -%}
 {%- endfor -%}
 {%- if salt['pillar.get']('debug', False) %}

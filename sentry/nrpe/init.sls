@@ -40,7 +40,7 @@ include:
   - postgresql.server.nrpe
   - python.dev.nrpe
   - rsyslog.nrpe
-{% if 'graphite_address' in pillar %}
+{% if salt['pillar.get']('graphite_address', False) %}
   - statsd.nrpe
 {% endif %}
   - sudo.nrpe

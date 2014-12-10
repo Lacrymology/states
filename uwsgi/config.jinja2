@@ -5,9 +5,9 @@ uwsgi:
 {%- if salt['pillar.get']('debug', False) %}
   req-logger: syslog:uwsgi
 {%- endif -%}
-{%- if 'graphite_address' in pillar %}
+{%- if salt['pillar.get']('graphite_address', False) %}
   carbon-id: emperor
-  carbon: {{ pillar['graphite_address'] }}:2003
+  carbon: {{ salt['pillar.get']('graphite_address', False) }}:2003
 {%- endif %}
   emperor: /etc/uwsgi
   no-orphans: True

@@ -25,11 +25,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Van Pham Diep <favadi@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 
 # Heap Size (defaults to 256m min, 1g max)
-{% if 'heap_size' in pillar['elasticsearch'] %}
-ES_HEAP_SIZE={{ pillar['elasticsearch']['heap_size'] }}
+{% if salt['pillar.get']('elasticsearch:heap_size', False) %}
+ES_HEAP_SIZE={{ salt['pillar.get']('elasticsearch:heap_size', False) }}
 # Maximum locked memory size. Set to "unlimited" if you use the
 # bootstrap.mlockall option in elasticsearch.yml. You must also set
 # ES_HEAP_SIZE.

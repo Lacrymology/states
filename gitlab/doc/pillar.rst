@@ -1,30 +1,5 @@
-.. Copyright (c) 2013, Lam Dang Tung
-.. All rights reserved.
-..
-.. Redistribution and use in source and binary forms, with or without
-.. modification, are permitted provided that the following conditions are met:
-..
-..     1. Redistributions of source code must retain the above copyright notice,
-..        this list of conditions and the following disclaimer.
-..     2. Redistributions in binary form must reproduce the above copyright
-..        notice, this list of conditions and the following disclaimer in the
-..        documentation and/or other materials provided with the distribution.
-..
-.. Neither the name of Lam Dang Tung nor the names of its contributors may be used
-.. to endorse or promote products derived from this software without specific
-.. prior written permission.
-..
-.. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-.. AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
-.. THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-.. PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
-.. BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-.. CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-.. SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-.. INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-.. CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-.. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-.. POSSIBILITY OF SUCH DAMAGE.
+Pillar
+======
 
 .. include:: /doc/include/add_pillar.inc
 
@@ -37,9 +12,8 @@
 
 .. warning::
 
-  Make sure that :doc:`/ssh/server/doc/index` :doc:`/ssh/server/doc/pillar`
-  key ``ssh:server:extra_configs`` allow the user ``gitlab`` in.
-
+   See :ref:`pillar-ssh-server-extra_configs`.
+  
 Mandatory
 ---------
 
@@ -51,12 +25,16 @@ Example::
     admin:
       password: mypass
 
+.. _pillar-gitlab-hostnames:
+
 gitlab:hostnames
 ~~~~~~~~~~~~~~~~
 
 .. include:: /nginx/doc/hostnames.inc
 
 Example: ``__salt__['network.ip_addrs']('eth0')[0]``
+
+.. _pillar-gitlab-admin-password:
 
 .. warning::
 
@@ -75,11 +53,10 @@ Password for :doc:`/gitlab/doc/index` Administrator account.
 
 Example: ``'123456789'``
 
-
 .. note::
 
     If multiple ports are set and ``22`` is set in
-    pillar key ``ssh:server:ports`` (see :doc:`/ssh/server/doc/index`)
+    pillar key :ref:`pillar-ssh-server-ports` (see :doc:`/ssh/server/doc/index`)
     , use ``22`` as preferred value.
     Otherwise use the only value provided. In that case, user
     will need to specify their port in :doc:`/git/doc/index` config file.
@@ -117,63 +94,87 @@ Example::
     ldap:
       enabled: False
 
+.. _pillar-gitlab-commit_timeout:
+
 gitlab:commit_timeout
 ~~~~~~~~~~~~~~~~~~~~~
 
 Git timeout to read a commit, in seconds
 
-Default: ``10``.
+Default: abort if can't read a commit in ``30`` seconds.
+
+.. _pillar-gitlab-max_size:
 
 gitlab:max_size
 ~~~~~~~~~~~~~~~
 
-Max size of a git object (e.g. a commit), in bytes.
+Max size of a :doc:`/git/doc/index` object (e.g. a commit), in bytes.
 This value can be increased if you have very large commits
 
-Default: ``5242880``. It's 5 megabytes.
+Default: max size of a :doc:`/git/doc/index` object is 5 megabytes (``5242880``).
+
+.. _pillar-gitlab-default_projects_features-visibility_level:
 
 gitlab:default_projects_features:visibility_level
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Set default visibility level when create new project.
-Can be "private" | "internal" | "public"
+Set default `visibility level
+<https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/public_access/public_access.md>`_
+when create new project.  Can be:
+
+ * private
+   
+ * internal
+   
+ * public
 
 Default: ``private``.
+
+.. _pillar-gitlab-default_projects_features-snippets:
 
 gitlab:default_projects_features:snippets
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Enable snippets feature as default option for new project.
+Enable `snippets
+<http://en.wikipedia.org/wiki/Snippet_%28programming%29>`_ feature as
+default option for new project.
 
-Default: ``False``.
+Default: disable snippers for new project (``False``).
 
-gitlab:default_projects_features:wall
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Enable wall feature as default option for new project.
-
-Default: ``False``.
+.. _pillar-gitlab-default_projects_features-wiki:
 
 gitlab:default_projects_features:wiki
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Enable wiki feature as default option for new project.
+Enable `wiki
+<https://github.com/gitlabhq/gitlabhq/blob/master/doc/workflow/project_features.md#wiki>`_
+feature as default option for new project.
 
-Default: ``True``.
+Default: enable wiki for new project (``True``).
+
+.. _pillar-gitlab-default_projects_features-merge_requests:
 
 gitlab:default_projects_features:merge_requests
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Enable merge requests feature as default option for new project.
+Enable `merge requests
+<https://github.com/gitlabhq/gitlabhq/blob/master/doc/workflow/project_features.md#merge-requests>`_
+feature as default option for new project.
 
-Default: ``True``.
+Default: enable merge requests for new project (``True``).
+
+.. _pillar-gitlab-default_projects_features-issues:
 
 gitlab:default_projects_features:issues
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Enable issue feature as default option for new project.
+Enable `issue
+<https://github.com/gitlabhq/gitlabhq/blob/master/doc/workflow/project_features.md#issues>`_
+feature as default option for new project.
 
-Default: ``True``.
+Default: enable issues for new project (``True``).
+
+.. _pillar-gitlab-issue_closing_pattern:
 
 gitlab:issue_closing_pattern
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -183,7 +184,9 @@ If a commit message matches this regular expression, all issues referenced from
 the matched text will be closed. This happens when the commit is pushed or
 merged into the default branch of a project.
 
-Default: ``([Cc]lose[sd]|[Ff]ixe[sd]) +#\d+``.
+Default: ``([Cc]lose[sd]|[Ff]ixe[sd]) +#(\d+)``.
+
+.. _pillar-gitlab-signup_enabled:
 
 gitlab:signup_enabled
 ~~~~~~~~~~~~~~~~~~~~~
@@ -191,63 +194,64 @@ gitlab:signup_enabled
 User can sign up.
 Account passwords are not sent via the email if signup is enabled.
 
-Default: ``False``.
+Default: disable signup (``False``).
+
+.. _pillar-gitlab-signin_enabled:
 
 gitlab:signin_enabled
 ~~~~~~~~~~~~~~~~~~~~~
-The standard login can be disabled to force login via LDAP
 
-Default: ``False``.
+The standard login can be disabled to force login via
+:doc:`/openldap/doc/index`.
+
+Default: enable standard login (``False``).
+
+.. _pillar-gitlab-default_can_create_group:
 
 gitlab:default_can_create_group
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 User can create group.
 
-Default: ``True``.
+Default: allow user to creat group (``True``).
+
+.. _pillar-gitlab-username_changing_enabled:
 
 gitlab:username_changing_enabled
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 User can change username/namespace.
 
-Default: ``True``.
+Default: allow changing username/namespace (``True``).
 
-gitlab:admin:projects_limit
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Max projects that administrator can be created.
-
-Default: ``1000``.
-
-gitlab:email_from
-~~~~~~~~~~~~~~~~~
-
-Email address used in the "From" field in mails sent by GitLab
-
-Default: empty list (``[]``).
+.. _pillar-gitlab-default_projects_limit:
 
 gitlab:default_projects_limit
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Default maximum number of projects a single user can create.
 
-Default: ``10``.
+Default: a user can create up to ``10`` projects.
+
+.. _pillar-gitlab-ssl:
 
 gitlab:ssl
 ~~~~~~~~~~
 
 .. include:: /nginx/doc/ssl.inc
 
+.. _pillar-gitlab-ssl_redirect:
+
 gitlab:ssl_redirect
 ~~~~~~~~~~~~~~~~~~~
 
 .. include:: /nginx/doc/ssl_redirect.inc
 
-gitlab::(workers|cheapers|idle|timeout)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. |deployment| replace:: gitlab
 
 .. include:: /uwsgi/doc/pillar.inc
+
+.. _pillar-gitlab-ldap-enabled:
 
 gitlab:ldap:enabled
 ~~~~~~~~~~~~~~~~~~~
@@ -255,10 +259,48 @@ gitlab:ldap:enabled
 If it's true, you must define the following :doc:`/openldap/doc/index`
 :doc:`/openldap/doc/pillar` keys:
 
-- ``gitlab:ldap:uid`` to ``sAMAccountName``
-- ``gitlab:ldap:allow_username_or_email_login``: ``True``
+- :ref:`pillar-gitlab-ldap-uid` to `sAMAccountName`
+- :ref:`pillar-gitlab-ldap-allow_username_or_email_login`- `True`
+
+Default: disable :doc:`/openldap/doc/pillar` integration (``False``).
+
+.. _pillar-gitlab-smtp:
 
 gitlab:smtp
 ~~~~~~~~~~~
 
+Override following SMTP settings.
+
 .. include:: /mail/doc/smtp.inc
+
+.. _pillar-gitlab-db-password:
+
+gitlab:db:password
+~~~~~~~~~~~~~~~~~~
+
+:doc:`/gitlab/doc/index` :doc:`/postgresql/doc/index` database
+password.
+
+Default: randomly generated (``False``).
+
+Conditional
+-----------
+
+.. _pillar-gitlab-ldap-uid:
+
+gitlab:ldap:uid
+~~~~~~~~~~~~~~~
+
+:doc:`/openldap/doc/pillar` attribute name for the user name in the
+login form.
+
+Only use if :ref:`pillar-gitlab-ldap-enabled` is ``True``.
+
+.. _pillar-gitlab-ldap-allow_username_or_email_login:
+
+gitlab:ldap:allow_username_or_email_login
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Allow both username or email for login.
+
+Only use if :ref:`pillar-gitlab-ldap-enabled` is ``True``.

@@ -25,9 +25,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 {%- set home = salt['user.info']('salt_archive')['home'] -%}
-{%- if pillar['salt_archive']['source'] is defined %}
+{%- if salt['pillar.get']('salt_archive:source', False) %}
 */15 * * * * root /usr/local/bin/salt_archive_sync.sh
 {%- else %}
 0 0 * * * root /usr/local/bin/salt_archive_clamav.py

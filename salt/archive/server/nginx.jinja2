@@ -25,15 +25,15 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 
 server {
     listen 80;
 {%- if salt['pillar.get']('salt_archive:ssl', False) %}
 {%- from 'nginx/macro.jinja2' import ssl_config with context %}
-    {{ ssl_config(pillar['salt_archive']['ssl']) }}
+    {{ ssl_config(salt['pillar.get']('salt_archive:ssl', False)) }}
 {%- endif %}
-    server_name {% for hostname in pillar['salt_archive']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+    server_name {% for hostname in salt['pillar.get']('salt_archive:hostnames') %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
 
     root /var/lib/salt_archive;
 

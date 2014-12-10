@@ -25,22 +25,21 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Van Diep Pham <favadi@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 
-{%- set rsync = salt['pillar.get']('rsync', []) -%}
+{%- set configs = salt['pillar.get']('rsync:global_settings', {}) -%}
 {#- global settings -#}
-{%- for key in rsync -%}
-{%- if key not in ('shares', 'limit_per_ip') %}
-{{ key }} = {{ rsync[key] }}
-{%- endif -%}
+{%- for attrib, value in configs.iteritems() -%}
+{{ attrib }} = {{ value }}
 {%- endfor -%}
 {#- overwrite previously defined key for the following #}
 log file =
 syslog facility = daemon
 
-{% for share in rsync['shares']|default([]) %}
-[{{ share }}]
-{% for key in rsync['shares'][share] %}
-{{ key }} = {{ rsync['shares'][share][key] }}
-{% endfor -%}
+{%- set modules = salt['pillar.get']('rsync:modules', {}) -%}
+{% for module in modules %}
+[{{ module }}]
+  {% for key, val in modules[module].iteritems() %}
+{{ key }} = {{ val }}
+  {% endfor -%}
 {% endfor -%}

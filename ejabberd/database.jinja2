@@ -26,7 +26,7 @@ Author: Process-one
 Maintainer: Van Pham Diep <favadi@robotinfra.com>
 -#}
 
--- {{ pillar['message_do_not_modify'] }}
+-- {{ salt['pillar.get']('message_do_not_modify') }}
 
 {#-
 ejabberd, Copyright (C) 2002-2008   Process-one

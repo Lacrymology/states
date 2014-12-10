@@ -81,6 +81,8 @@ Numbers of database server checks per day.
 
 Default: ``24``.
 
+.. _pillar-clamav-db_mirrors:
+
 clamav:db_mirrors
 ~~~~~~~~~~~~~~~~~
 

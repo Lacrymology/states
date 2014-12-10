@@ -20,7 +20,6 @@ Usage
 Create a file within ``/etc/xinetd.d`` directory and extend service
 ``xinetd`` to watch it.
 
-
 Example::
 
   include:

@@ -1,9 +1,7 @@
 Metrics
 =======
                           
-See ProcessResources collector :doc:`/diamond/doc/process`.
-
-Processes:
+:doc:`/diamond/doc/process`
 
 * `sidekiq <http://sidekiq.org/>`_ use by :doc:`/gitlab/doc/index` for
   background processing.

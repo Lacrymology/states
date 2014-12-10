@@ -1,8 +1,6 @@
 Metrics
 =======
 
-See ProcessResources collector :doc:`/diamond/doc/process`.
-
-Processes:
+:doc:`/diamond/doc/process`
 
 * :doc:`/xinetd/doc/index`

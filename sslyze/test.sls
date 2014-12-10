@@ -27,6 +27,7 @@ Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
 include:
   - sslyze
+  - sslyze.nrpe
 
 nsca-test:
   file:
@@ -42,8 +43,7 @@ nsca-test:
 
 test:
   monitoring:
-    - run_check
-    - name: sslyze
+    - run_all_checks
     - order: last
   file:
     - absent

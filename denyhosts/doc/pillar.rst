@@ -1,30 +1,5 @@
-.. Copyright (c) 2013, Bruno Clermont
-.. All rights reserved.
-..
-.. Redistribution and use in source and binary forms, with or without
-.. modification, are permitted provided that the following conditions are met:
-..
-..     1. Redistributions of source code must retain the above copyright notice,
-..        this list of conditions and the following disclaimer.
-..     2. Redistributions in binary form must reproduce the above copyright
-..        notice, this list of conditions and the following disclaimer in the
-..        documentation and/or other materials provided with the distribution.
-..
-.. Neither the name of Bruno Clermont nor the names of its contributors may be used
-.. to endorse or promote products derived from this software without specific
-.. prior written permission.
-..
-.. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-.. AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
-.. THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-.. PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
-.. BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-.. CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-.. SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-.. INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-.. CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-.. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-.. POSSIBILITY OF SUCH DAMAGE.
+Pillar
+======
 
 .. include:: /doc/include/add_pillar.inc
 
@@ -45,38 +20,46 @@ Example::
     reset_root: 5d
     reset_restricted: 25d
     reset_invalid: 10d
-    reset_on_success: no
+    reset_on_success: False
     sync:
       server: 192.168.1.1
       interval: 1h
-      upload: yes
-      download: yes
+      upload: True
+      download: True
       download_threshold: 3
       download_resiliency: 5h
     whitelist:
       - 127.0.0.1
+
+.. _pillar-denyhosts-purge:
 
 denyhosts:purge
 ~~~~~~~~~~~~~~~
 
 Removed denied hosts entries that are older than this.
 
-Default: ``1d``.
+Default: 1 day (``1d``).
+
+.. _pillar-denyhosts-whitelist:
 
 denyhosts:whitelist
 ~~~~~~~~~~~~~~~~~~~
 
 List white-list hosts.
 
-Default: empty list (``[]``).
+Default: Unused (empty list ``[]``).
 
-timedenyhosts:deny_threshold_invalid_user
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. _pillar-denyhosts-deny_threshold_invalid_user:
+
+denyhosts:deny_threshold_invalid_user
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Block each host after the number of failed login attempts has exceeded
 this value for non-existent user account.
 
-Default: ``5``.
+Default: ``5`` attempts.
+
+.. _pillar-denyhosts-deny_threshold_valid_user:
 
 denyhosts:deny_threshold_valid_user
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -85,7 +68,9 @@ Block each host after the number of failed login attempts has exceeded this
 value for user accounts that exist in ``/etc/passwd``) except for the ``root``
 user.
 
-Default: ``10``.
+Default: ``10`` attempts.
+
+.. _pillar-denyhosts-deny_threshold_root:
 
 denyhosts:deny_threshold_root
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -93,7 +78,9 @@ denyhosts:deny_threshold_root
 Block each host after the number of failed login attempts has exceeded
 this value. for ``root`` user login attempts only.
 
-Default: ``1``.
+Default: ``1`` attempt.
+
+.. _pillar-denyhosts-reset_valid:
 
 denyhosts:reset_valid
 ~~~~~~~~~~~~~~~~~~~~~
@@ -104,7 +91,9 @@ When exceeded will result in the failed count for this host to be reset to
 This value applies for all valid users (those within ``/etc/passwd``)
 with the exception of ``root``.
 
-Default: ``5d``.
+Default: Reset after 5 days (``5d``).
+
+.. _pillar-denyhosts-reset_root:
 
 denyhosts:reset_root
 ~~~~~~~~~~~~~~~~~~~~
@@ -114,7 +103,9 @@ When exceeded will result in the failed count for this host to be reset to
 ``0``.
 This value applies for ``root`` user.
 
-Default: ``5d``.
+Default: Reset after 5 days (``5d``).
+
+.. _pillar-denyhosts-reset_restricted:
 
 denyhosts:reset_restricted
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -125,7 +116,9 @@ when exceeded will result in the failed count for this host to be reset to
 This value applies to all login attempts to entries found in the
 ``/var/lib/denyhosts/restricted-usernames`` file.
 
-Default: ``25d``.
+Default: Reset after 25 days (``25d``).
+
+.. _pillar-denyhosts-reset_invalid:
 
 denyhosts:reset_invalid
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -136,48 +129,67 @@ when exceeded will result in the failed count for this host to be reset to
 This value applies to login attempts made to any invalid username
 (those that do not  appear in ``/etc/passwd``).
 
-Default: ``10d``.
+Default: Reset after 10 days (``10d``).
+
+.. _pillar-denyhosts-reset_on_success:
 
 denyhosts:reset_on_success
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If this parameter is set to ``yes`` then the failed count for
+If this parameter is set to ``True`` then the failed count for
 the respective ip address will be reset to ``0`` if the login is successful.
 
-Default: ``no``.
+Default: Not reset (``False``).
+
+.. _pillar-denyhosts-sync:
 
 denyhosts:sync
 ~~~~~~~~~~~~~~
 
-Enable Synchonization.
+Enable `synchronization mode <http://denyhosts.sourceforge.net/faq.html#4_0>`_.
 
-Default: ``False``.
+Default: Disabled (``False``).
+
+Conditional
+-----------
+
+.. _pillar-denyhosts-sync-server:
 
 denyhosts:sync:server
 ~~~~~~~~~~~~~~~~~~~~~
 
-Server for synchonization.
+Server for `synchonization <http://denyhosts.sourceforge.net/faq.html#4_5>`_.
+
+Default: ``http://xmlrpc.denyhosts.net:9911``
+
+.. _pillar-denyhosts-sync-interval:
 
 denyhosts:sync:interval
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-The interval of time to perform synchronizations.
+The interval of time to perform `synchronizations <http://denyhosts.sourceforge.net/faq.html#4_0>`_.
 
-Default: ``1h``.
+Default: 1 hour (``1h``).
+
+.. _pillar-denyhosts-sync-upload:
 
 denyhosts:sync:upload
 ~~~~~~~~~~~~~~~~~~~~~
 
-Allow your DenyHosts daemon to transmit denied hosts.
+Allow DenyHosts daemon to upload data to ``denyhosts.net`` or not.
 
-Default: ``yes``.
+Default: Upload data (``True``).
+
+.. _pillar-denyhosts-sync-download:
 
 denyhosts:sync:download
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 Allow your DenyHosts daemon to receive hosts that have been denied by others.
 
-Default: ``yes``.
+Default: ``True``.
+
+.. _pillar-denyhosts-sync-download_threshold:
 
 denyhosts:sync:download_threshold
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -187,7 +199,9 @@ hosts to those that have been blocked this many times by others. That is, if set
 to ``1``, then if a single DenyHosts server has denied an ip address then you
 will receive the denied host.
 
-Default: ``3``.
+Default: Blocked by ``3`` other DenyHosts daemons will be downloaded.
+
+.. _pillar-denyhosts-sync-download_resiliency:
 
 denyhosts:sync:download_resiliency
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -1,30 +1,5 @@
-.. Copyright (c) 2013, Bruno Clermont
-.. All rights reserved.
-..
-.. Redistribution and use in source and binary forms, with or without
-.. modification, are permitted provided that the following conditions are met:
-..
-..     1. Redistributions of source code must retain the above copyright notice,
-..        this list of conditions and the following disclaimer.
-..     2. Redistributions in binary form must reproduce the above copyright
-..        notice, this list of conditions and the following disclaimer in the
-..        documentation and/or other materials provided with the distribution.
-..
-.. Neither the name of Bruno Clermont nor the names of its contributors may be used
-.. to endorse or promote products derived from this software without specific
-.. prior written permission.
-..
-.. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-.. AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
-.. THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-.. PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
-.. BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-.. CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-.. SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-.. INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-.. CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-.. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-.. POSSIBILITY OF SUCH DAMAGE.
+Pillar
+======
 
 .. include:: /doc/include/add_pillar.inc
 
@@ -45,60 +20,90 @@ Example::
         password:
     architecture:
       broker:
+        - integration-0
       arbiter:
+        - integration-0
       scheduler:
+        - integration-0
       reactionner:
+        - integration-0
       poller:
-        id:
+        integration-0: all
     hostname:
       - shinken.example.com
+
+.. _pillar-shinken-graphite_url:
 
 shinken:graphite_url
 ~~~~~~~~~~~~~~~~~~~~
 
 :doc:`/graphite/doc/index` address.
-Should be one value in :doc:`/graphite/doc/pillar` ``graphite:hostnames``.
+Should be one value in :ref:`pillar-graphite-hostnames`.
+
+.. _pillar-shinken-users:
 
 shinken:users
 ~~~~~~~~~~~~~
 
 List contact users.
-Please replace <username> by real username.
+Please replace {{ username }} by real username.
 
-shinken:poller_max_fd
-~~~~~~~~~~~~~~~~~~~~~
+.. _pillar-shinken-username-email:
 
-Maximum number of file descriptors poller can allocate.
-
-Default: ``16384``.
-
-shinken:<username>:email
-~~~~~~~~~~~~~~~~~~~~~~~~
+shinken:users:{{ username }}:email
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 :doc:`index` user's email
 
-shinken:<username>:password
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+shinken:users:{{ username }}:password
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 :doc:`index` user's password
+
+.. _pillar-shinken-architecture-broker:
 
 shinken:architecture:broker
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+List of :ref:`shinken-broker` IDs.
+
+.. _pillar-shinken-architecture-arbiter:
+
 shinken:architecture:arbiter
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+List of :ref:`shinken-arbiter` IDs.
+
+.. _pillar-shinken-architecture-scheduler:
 
 shinken:architecture:scheduler
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+List of :ref:`shinken-scheduler` IDs.
+
+.. _pillar-shinken-architecture-reactionner:
+
 shinken:architecture:reactionner
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-shinken:architecture:poller:id
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+List of :ref:`shinken-reactionner` IDs.
+
+.. _pillar-shinken-architecture-poller:
+
+shinken:architecture:poller
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+List of :ref:`shinken-poller` IDs.
+
+.. _pillar-shinken-architecture-poller-id:
+
+shinken:architecture:poller:{{ id }}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Data formed as a dictionary: ``id``:``poller_tags``
 
 shinken:hostnames
-~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~
 
 .. include:: /nginx/doc/hostnames.inc
 
@@ -108,22 +113,54 @@ Optional
 Example::
 
   shinken:
+    architecture:
+      receiver: 
+        - integration-0
+    poller_max_fd: 16384
     ssl: False
     ssl_redirect: False
+    log_level: DEBUG
+    nrpe:
+      timeout: 30
+
+.. _pillar-shinken-architecture-receiver:
+
+shinken:architecture:receiver
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+List of :ref:`shinken-receiver` IDs.
+
+Default: Unused (empty list ``[]``).
+
+.. _pillar-shinken-poller_max_fd:
+
+shinken:poller_max_fd
+~~~~~~~~~~~~~~~~~~~~~
+
+Maximum number of `file descriptors
+<http://en.wikipedia.org/wiki/File_descriptor>`_ poller can allocate.
+
+Default: ``16384``.
+
+.. _pillar-shinken-ssl:
 
 shinken:ssl
 ~~~~~~~~~~~
 
 .. include:: /nginx/doc/ssl.inc
 
+.. _pillar-shinken-ssl_redirect:
+
 shinken:ssl_redirect
 ~~~~~~~~~~~~~~~~~~~~
 
 .. include:: /nginx/doc/ssl_redirect.inc
+
+.. _pillar-shinken-log_level:
 
 shinken:log_level
 ~~~~~~~~~~~~~~~~~
 
 Define level of logging.
 
-Default: ``INFO``.
+Default: just log informational messages (``INFO``).

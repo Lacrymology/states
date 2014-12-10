@@ -56,7 +56,7 @@ include:
       - service: nginx
 
 {%- if 'files_archive' in pillar -%}
-    {%- if 'graphite_address' in pillar -%}
+    {%- if salt['pillar.get']('graphite_address', False) -%}
         {%- call shinken_install_module('graphite') %}
 - source_hash: md5=56b393c9970275327644123480ffd413
         {%- endcall %}
@@ -81,7 +81,7 @@ include:
 - source_hash: md5=396be5667ca41b57d65239d7bd4b061a
     {%- endcall %}
 {%- else %}
-    {%- if 'graphite_address' in pillar -%}
+    {%- if salt['pillar.get']('graphite_address', False) -%}
         {{ shinken_install_module('graphite') }}
         {{ shinken_install_module('ui-graphite') }}
     {%- endif %}
@@ -110,7 +110,7 @@ shinken-broker:
       - file: /var/lib/shinken
     - watch:
       - cmd: shinken
-{%- if 'graphite_address' in pillar %}
+{%- if salt['pillar.get']('graphite_address', False) %}
       - cmd: shinken-module-graphite
       - cmd: shinken-module-ui-graphite
 {%- endif %}
@@ -124,7 +124,7 @@ shinken-broker:
       - service: rsyslog
       - user: shinken
 {% if ssl %}
-      - cmd: ssl_cert_and_key_for_{{ pillar['shinken']['ssl'] }}
+      - cmd: ssl_cert_and_key_for_{{ ssl }}
 {% endif %}
 {#- does not use PID, no need to manage #}
 
@@ -150,5 +150,5 @@ extend:
   nginx:
     service:
       - watch:
-        - cmd: ssl_cert_and_key_for_{{ pillar['shinken']['ssl'] }}
+        - cmd: ssl_cert_and_key_for_{{ ssl }}
 {% endif %}

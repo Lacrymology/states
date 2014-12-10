@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 export PS1="\[$(tput bold)\]\[$(tput setaf 4)\][\[$(tput setaf 8)\]\t\[$(tput setaf 4)\]] \u\[$(tput setaf 8)\]@\[$(tput setaf 4)\]\h\[$(tput setaf 1)\]
 {%- if 'availabilityZone' in grains -%}
 (\[$(tput setaf 2)\]{{ grains['availabilityZone'] }}:{{ grains['instanceId'] }}\[$(tput setaf 1)\])

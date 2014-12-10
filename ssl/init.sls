@@ -39,15 +39,11 @@ ssl-cert:
   file:
     - absent
 
-{%- set server_key = salt['pillar.get']('ssl:certs:' + name + ':server_key') | indent(8) -%}
-{%- set server_crt = salt['pillar.get']('ssl:certs:' + name + ':server_crt') | indent(8) -%}
-{%- set ca_crt = salt['pillar.get']('ssl:certs:' + name + ':ca_crt') | indent(8) %}
-
 /etc/ssl/private/{{ name }}.key:
   file:
     - managed
     - contents: |
-        {{ server_key }}
+        {{ salt['pillar.get']('ssl:' + name + ':server_key') | indent(8) }}
     - user: root
     - group: ssl-cert
     - mode: 440
@@ -58,7 +54,7 @@ ssl-cert:
   file:
     - managed
     - contents: |
-        {{ server_crt }}
+        {{ salt['pillar.get']('ssl:' + name + ':server_crt') | indent(8) }}
     - user: root
     - group: ssl-cert
     - mode: 444
@@ -69,7 +65,7 @@ ssl-cert:
   file:
     - managed
     - contents: |
-        {{ ca_crt }}
+        {{ salt['pillar.get']('ssl:' + name + ':ca_crt') | indent(8) }}
     - user: root
     - group: ssl-cert
     - mode: 444
@@ -84,8 +80,8 @@ that support SSL.
   file:
     - managed
     - contents: |
-        {{ server_crt }}
-        {{ server_key }}
+        {{ salt['pillar.get']('ssl:' + name + ':server_crt') | indent(8) }}
+        {{ salt['pillar.get']('ssl:' + name + ':server_key') | indent(8) }}
     - user: root
     - group: ssl-cert
     - mode: 440
@@ -97,9 +93,9 @@ that support SSL.
   file:
     - managed
     - contents: |
-        {{ server_crt }}
-        {{ server_key }}
-        {{ ca_crt }}
+        {{ salt['pillar.get']('ssl:' + name + ':server_crt') | indent(8) }}
+        {{ salt['pillar.get']('ssl:' + name + ':server_key') | indent(8) }}
+        {{ salt['pillar.get']('ssl:' + name + ':ca_crt') | indent(8) }}
     - user: root
     - group: ssl-cert
     - mode: 440
@@ -121,8 +117,8 @@ in the combined file:
   file:
     - managed
     - contents: |
-        {{ server_crt }}
-        {{ ca_crt }}
+        {{ salt['pillar.get']('ssl:' + name + ':server_crt') | indent(8) }}
+        {{ salt['pillar.get']('ssl:' + name + ':ca_crt') | indent(8) }}
     - user: root
     - group: ssl-cert
     - mode: 444

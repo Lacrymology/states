@@ -46,7 +46,7 @@ include:
   - ssl
 {%- endif %}
 
-{%- if 'files_archive' in pillar %}
+{%- if salt['pillar.get']('files_archive', False) %}
     {%- call shinken_install_module('pickle-retention-file-scheduler') %}
 - source_hash: md5=216da06b322f72fab4f7c7c0673f96cd
     {%- endcall %}
@@ -79,7 +79,7 @@ shinken-scheduler:
       - file: /etc/shinken/scheduler.conf
       - file: shinken-scheduler
 {%- if ssl %}
-      - cmd: ssl_cert_and_key_for_{{ pillar['shinken']['ssl'] }}
+      - cmd: ssl_cert_and_key_for_{{ ssl }}
 {% endif %}
 {#- does not use PID, no need to manage #}
 

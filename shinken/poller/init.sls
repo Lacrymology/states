@@ -52,7 +52,7 @@ nagios-nrpe-plugin:
       - cmd: apt_sources
       - pkg: nagios-plugins
 
-{%- if 'files_archive' in pillar %}
+{%- if salt['pillar.get']('files_archive', False) %}
     {%- call shinken_install_module('booster-nrpe') %}
 - source_hash: md5=e8fa66f1360d2cc3cea10abf35e228d5
     {%- endcall %}

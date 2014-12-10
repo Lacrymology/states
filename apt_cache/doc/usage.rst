@@ -14,7 +14,7 @@ Or run on the target host itself::
 
 The URL will be::
 
-  deb http://{{ pillar['apt_cache:hostnames'] first value }}/{{ MIRROR }}/ubuntu {{ grains['oscodename'] }} ...
+  deb http://{{ salt['pillar.get']('apt_cache:hostnames')[0] }}/{{ MIRROR }}/ubuntu {{ salt['grains.get'('oscodename') }} ...
 
 Such as::
 
@@ -31,8 +31,8 @@ Set pillar ``apt:sources`` like::
   apt:
     cache: False
     sources: |
-      deb http://192.168.111.112:3142/mirror-fpt-telecom.fpt.net/ubuntu {{ grains['oscodename'] }} main restricted universe multiverse
-      deb http://192.168.111.112:3142/mirror-fpt-telecom.fpt.net/ubuntu {{ grains['oscodename'] }}-updates main restricted universe multiverse
+      deb http://192.168.111.112:3142/mirror-fpt-telecom.fpt.net/ubuntu {{ salt['grains.get']('oscodename') }} main restricted universe multiverse
+      deb http://192.168.111.112:3142/mirror-fpt-telecom.fpt.net/ubuntu {{ salt['grains.get']('oscodename') }}-updates main restricted universe multiverse
 
 
 Non Salt common managed host

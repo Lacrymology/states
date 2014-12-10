@@ -31,6 +31,7 @@ include:
   - apt_cache
   - apt_cache.diamond
   - apt_cache.nrpe
+  - doc
 
 {%- call test_cron() %}
 - sls: apt_cache
@@ -52,3 +53,10 @@ test:
     - order: last
     - require:
       - cmd: test_crons
+  qa:
+    - test
+    - name: apt_cache
+    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - require:
+      - monitoring: test
+      - cmd: doc

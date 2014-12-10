@@ -32,8 +32,10 @@ Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
 {%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
+  - doc
   - ntp
   - ntp.diamond
+  - ntp.nrpe
 
 test:
   diamond:
@@ -47,3 +49,10 @@ test:
   monitoring:
     - run_all_checks
     - order: last
+  qa:
+    - test
+    - name: ntp
+    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - require:
+      - monitoring: test
+      - cmd: doc

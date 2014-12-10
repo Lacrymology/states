@@ -42,14 +42,14 @@ ssmtp:
   debconf:
     - set
     - data:
-        'ssmtp/mailhub': {'type': 'string', 'value': '{{ pillar['smtp']['server'] }}'}
-        'ssmtp/hostname': {'type': 'string', 'value': '{{ pillar['mail']['mailname'] }}'}
-        'ssmtp/root': {'type': 'string', 'value': '{{ pillar['smtp']['root'] }}'}
+        'ssmtp/mailhub': {'type': 'string', 'value': '{{ salt['pillar.get']('smtp:server') }}'}
+        'ssmtp/hostname': {'type': 'string', 'value': '{{ salt['pillar.get']('mail:mailname') }}'}
+        'ssmtp/root': {'type': 'string', 'value': '{{ salt['pillar.get']('smtp:root') }}'}
         'ssmtp/rewritedomain': {'type': 'string', 'value': ''}
         {# unused by the package itself, why? #}
         'ssmtp/overwriteconfig': {'type': 'boolean', 'value': False}
-        'ssmtp/mailname': {'type': 'string', 'value': '{{ pillar['mail']['mailname'] }}'}
-        'ssmtp/port': {'type': 'string', 'value': '{{ pillar['smtp']['port'] }}'}
+        'ssmtp/mailname': {'type': 'string', 'value': '{{ salt['pillar.get']('mail:mailname') }}'}
+        'ssmtp/port': {'type': 'string', 'value': '{{ salt['pillar.get']('smtp:port') }}'}
         'ssmtp/fromoverride': {'type': 'boolean', 'value': False}
     - require:
       - pkg: apt_sources

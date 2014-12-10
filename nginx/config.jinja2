@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 
 user www-data www-data;
 worker_processes {{ salt['pillar.get']('nginx:worker_processes', 'auto') }};
@@ -129,7 +129,7 @@ http {
     }
 
     default_type application/octet-stream;
-    client_body_buffer_size {{ salt['pillar.get']('nginx:client_body_buffer_size', '200') }}k;
+    client_body_buffer_size {{ salt['pillar.get']('nginx:client_body_buffer_size', 200) }}k;
     log_format main '{{ salt['pillar.get']('nginx:log_format', '$scheme://$host:$server_port$uri$is_args$args $remote_addr:$remote_user "$request" $request_time $request_length:$bytes_sent $status "$http_referer" "$http_user_agent" "$http_x_forwarded_for"') }}';
     access_log syslog:server=localhost main;
     sendfile on;
@@ -162,7 +162,7 @@ http {
 {% if salt['pillar.get']('nginx:redirect_numeric_ip', False) %}
     server {
         server_name {% for ip in salt['network.ip_addrs']() %}{{ ip }}:80{% if not loop.last %} {% endif %}{% endfor %};
-        return 302 {{ pillar['nginx']['redirect_numeric_ip'] }};
+        return 302 {{ salt['pillar.get']('nginx:redirect_numeric_ip') }};
         access_log off;
     }
 {% endif %}

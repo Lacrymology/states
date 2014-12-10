@@ -28,12 +28,42 @@ Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 Common stuff for all shinken components.
 -#}
 {%- macro shinken_install_module(module_name) %}
+{#-
+From version 2.0, :doc:`/shinken/doc/index` came with no modules, you need to
+install them manually from `shinken.io <http://shinken.io/>`_ using shinken cli::
+
+  /usr/local/shinken/bin/shinken install webui
+
+What it actually does in this step are:
+
+- download the file from ``shinken.io/grab/webui.tar``
+- extract the module code into ``/var/lib/shinken/modules/webui/``
+- and put the configuration file in ``/etc/shinken/modules/webui.cfg``
+
+By default, the timeout value (300 seconds) is hard-coded in ``cli/shinkenio/cli.py``.
+So, you may got an error when installing via a slow network::
+
+  Sep 18 11:13:15 salt-minion[8893] salt.state: {'pid': 9780, 'retcode': 0,
+  'stderr': '', 'stdout': "Grabbing : \nwebui\nThere was a critical error : (28,
+  'Operation timed out after 300000 milliseconds with 3912 out of 3580384 bytes
+  received')\nThe package webui cannot be found"}
+
+It's the reason why we would like to mirror these modules to our archive
+server, then install from that via ``--local`` option.
+
+- Go to shinken.io
+- Search for specific module
+- Go to homepage ``https://github.com/shinken-monitoring/mod-webui``
+- Download source ``https://github.com/shinken-monitoring/mod-webui/archive/master.zip``
+- Extract, rename the folder to the same as the package name (``webui``)
+- Re-pack, copy to the archive server
+#}
 shinken-module-{{ module_name }}:
-    {%- if 'files_archive' in pillar %}
+    {%- if salt['pillar.get']('files_archive', False) %}
   archive:
     - extracted
     - name: /usr/local/shinken/modules
-    - source: {{ pillar['files_archive'] }}/mirror/shinken/{{ module_name }}.tar.xz
+    - source: {{ salt['pillar.get']('files_archive', False) }}/mirror/shinken/{{ module_name }}.tar.xz
     {%- if caller is defined -%}
         {%- for line in caller().split("\n") %}
 {{ line|trim|indent(4, indentfirst=True) }}
@@ -48,7 +78,7 @@ shinken-module-{{ module_name }}:
   cmd:
     - wait
     - user: shinken
-    {%- if 'files_archive' in pillar %}
+    {%- if salt['pillar.get']('files_archive', False) %}
     - name: /usr/local/shinken/bin/shinken install --local /usr/local/shinken/modules/{{ module_name }}
     {%- else %}
     - name: /usr/local/shinken/bin/shinken install {{ module_name }}
@@ -59,7 +89,7 @@ shinken-module-{{ module_name }}:
     - watch:
       - file: /var/lib/shinken/.shinken.ini
       - cmd: shinken
-    {%- if 'files_archive' in pillar %}
+    {%- if salt['pillar.get']('files_archive', False) %}
       - archive: shinken-module-{{ module_name }}
     {%- endif %}
 {%- endmacro %}
@@ -153,8 +183,8 @@ shinken:
   archive:
     - extracted
     - name: /usr/local/shinken/src
-{%- if 'files_archive' in pillar %}
-    - source: {{ pillar['files_archive'] }}/mirror/shinken/{{ version }}.tar.gz
+{%- if salt['pillar.get']('files_archive', False) %}
+    - source: {{ salt['pillar.get']('files_archive', False) }}/mirror/shinken/{{ version }}.tar.gz
 {%- else %}
     - source: https://pypi.python.org/packages/source/S/Shinken/Shinken-{{ version }}.tar.gz
 {%- endif %}
@@ -267,7 +297,7 @@ shinken{{ suffix }}_python_path:
     - require:
       - user: shinken
 
-{%- if 'files_archive' in pillar %}
+{%- if salt['pillar.get']('files_archive', False) %}
     {%- call shinken_install_module('pickle-retention-file-generic') %}
 - source_hash: md5=a5f37f78caa61c92d8de75c20f4bf999
     {%- endcall %}

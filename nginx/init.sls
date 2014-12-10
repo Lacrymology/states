@@ -167,8 +167,8 @@ nginx:
   pkg:
     - installed
     - sources:
-{%- if 'files_archive' in pillar %}
-      - nginx: {{ pillar['files_archive']|replace('file://', '')|replace('https://', 'http://') }}/mirror/{{ filename }}
+{%- if salt['pillar.get']('files_archive', False) %}
+      - nginx: {{ salt['pillar.get']('files_archive', False)|replace('file://', '')|replace('https://', 'http://') }}/mirror/{{ filename }}
 {%- else %}
       - nginx: http://nginx.org/packages/mainline/ubuntu/pool/nginx/n/nginx/{{ filename }}
 {%- endif %}

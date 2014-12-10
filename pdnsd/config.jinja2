@@ -26,17 +26,18 @@ Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 
 -#}
-// {{ pillar['message_do_not_modify'] }}
+// {{ salt['pillar.get']('message_do_not_modify') }}
+{%- set dns_server = salt['pillar.get']('dns_proxy:dns_server') %}
 
 global {
     perm_cache = 2048;
     cache_dir = "/var/cache/pdnsd";
     run_as = "pdnsd";
-    server_ip = {{ salt['pillar.get']('pdnsd:ip_address', '0.0.0.0') }};
-    status_ctl = on;
+    server_ip = {{ salt['pillar.get']('dns_proxy:ip_address', '0.0.0.0') }};
+    status_ctl = {% if dns_server == 'resolv.conf' %}on{% else %}off{% endif %};
     paranoid = on;
-    min_ttl = {{ salt['pillar.get']('pdnsd:minimum_ttl', 900) }};
-    max_ttl = {{ salt['pillar.get']('pdnsd:maximum_ttl', 604800) }};
+    min_ttl = {{ salt['pillar.get']('dns_proxy:minimum_ttl', 900) }};
+    max_ttl = {{ salt['pillar.get']('dns_proxy:maximum_ttl', 604800) }};
     timeout = 10;
 {%- if salt['pillar.get']('debug', False) %}
     debug = on;

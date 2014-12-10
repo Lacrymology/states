@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 
 APScheduler==2.1.2
 PyYAML==3.11
@@ -35,7 +35,7 @@ nagiosplugin==1.2.1
 pycrypto==2.6.1
 requests==2.4.3
 subprocess32==3.2.6
-{%- if 'files_archive' in pillar %}
+{%- if salt['pillar.get']('files_archive', False) %}
 send_nsca==0.1.4.2-hvn
 pysc==0.3.11
 {%- else %}

@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 {%- set mine = salt['mine.get']('*', 'monitoring.data') %}
 
 define realm {
@@ -40,7 +40,7 @@ Description: The Arbiter is responsible for:
 - Issuing global directives to Shinken daemons (kill, activate-spare, etc.)
 http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects/arbiter
 -#}
-{%- for id in pillar['shinken']['architecture']['arbiter'] -%}
+{%- for id in salt['pillar.get']('shinken:architecture:arbiter') -%}
   {%- if id in mine %}
 define arbiter {
     arbiter_name arbiter-{{ id }}
@@ -78,7 +78,7 @@ Description: The scheduler is responsible for:
 - Buffering and forwarding results its associated broker
 http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects/scheduler
 -#}
-{%- for id in pillar['shinken']['architecture']['scheduler'] -%}
+{%- for id in salt['pillar.get']('shinken:architecture:scheduler') -%}
   {%- if id in mine %}
 define scheduler {
     scheduler_name scheduler-{{ id }}
@@ -117,13 +117,13 @@ define module{
     module_type nrpe_poller
 }
 
-{%- for id in pillar['shinken']['architecture']['poller'] -%}
+{%- for id in salt['pillar.get']('shinken:architecture:poller') -%}
   {%- if id in mine %}
 define poller {
     poller_name poller-{{ id }}
     address {{ mine[id]['ip_addrs']['public'] }}
     port 7771
-    poller_tags {{ pillar['shinken']['architecture']['poller'][id] }}
+    poller_tags {{ salt['pillar.get']('shinken:architecture:poller:' + id) }}
     realm All
     modules booster-nrpe
     {%- if salt['pillar.get']('shinken:ssl', False) %}
@@ -147,13 +147,13 @@ Description: The broker is responsible for:
   - Command interface
 http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects/broker
 -#}
-{%- for id in pillar['shinken']['architecture']['broker'] -%}
+{%- for id in salt['pillar.get']('shinken:architecture:broker') -%}
   {%- if id in mine %}
 define broker {
     broker_name broker-{{ id }}
     address {{ mine[id]['ip_addrs']['public'] }}
     port 7772
-    modules Syslog, PickleRetentionBroker, webui{% if 'graphite_address' in pillar %}, graphite{% endif %}
+    modules Syslog, PickleRetentionBroker, webui{% if salt['pillar.get']('graphite_address', False) %}, graphite{% endif %}
     realm All
     manage_arbiters 1
     {%- if not loop.first %}
@@ -186,11 +186,11 @@ define module {
     module_type syslog
 }
 
-{%- if 'graphite_address' in pillar %}
+{%- if salt['pillar.get']('graphite_address', False) %}
 define module {
     module_name graphite
     module_type graphite_perfdata
-    host {{ pillar['graphite_address'] }}
+    host {{ salt['pillar.get']('graphite_address', False) }}
     {#- Or 2004 if using use_pickle 1 #}
     port 2003
     #tick_limit 300 ; Default value 300
@@ -200,7 +200,7 @@ define module {
 define module {
     module_name ui-graphite
     module_type graphite-webui
-    uri {{ pillar['shinken']['graphite_url'] }}
+    uri {{ salt['pillar.get']('shinken:graphite_url') }}
     templates_path /usr/local/shinken/share/templates/graphite/
     graphite_data_source shinken
 }
@@ -215,7 +215,7 @@ define module {
 define module {
     module_name webui
     module_type webui
-{%- if pillar['shinken']['architecture']['broker']|length == 1 %}
+{%- if salt['pillar.get']('shinken:architecture:broker')|length == 1 %}
     host 127.0.0.1
 {%- else %}
     host 0.0.0.0
@@ -229,7 +229,7 @@ define module {
     max_output_length   100     ; Maximum output length for plugin output in webui
     play_sound          0       ; Play sound on new non-acknowledged problems.#}
 
-    modules SQLitedb, auth-cfg-password{% if 'graphite_address' in pillar %}, ui-graphite{% endif %}
+    modules SQLitedb, auth-cfg-password{% if salt['pillar.get']('graphite_address', False) %}, ui-graphite{% endif %}
 
 {#-    ## Advanced Options
     # Don't use them as long as you don't know what you are doing!
@@ -272,7 +272,7 @@ Description: The reactionner is responsible for:
 - Executing event handler actions
 http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects/reactionner
 -#}
-{%- for id in pillar['shinken']['architecture']['reactionner'] %}
+{%- for id in salt['pillar.get']('shinken:architecture:reactionner') %}
 define reactionner {
   {%- if id in mine %}
     reactionner_name reactionner-{{ id }}
@@ -304,7 +304,7 @@ define module {
     host *
     port 5667
     encryption_method 1
-    password {{ pillar['nrpe']['nsca']['password'] }}
+    password {{ salt['pillar.get']('nrpe:nsca:password') }}
 }
 
 {#-

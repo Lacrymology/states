@@ -30,23 +30,21 @@ include:
   - ssh.common
 
 {%- from 'ssh/common.sls' import root_home with context %}
-{%- set root_home = root_home() %}
+{%- set root_home = root_home() -%}
 
-{%- for domain in salt['pillar.get']('ssh:known_hosts', []) %}
-  {%- if pillar['ssh']['known_hosts'][domain] is string %}
+{%- for domain, id in salt['pillar.get']('ssh:known_hosts', {}).items() %}
 ssh_{{ domain }}:
   file:
     - append
     - name: /etc/ssh/ssh_known_hosts
     - makedirs: True
     - text: |
-        {{ pillar['ssh']['known_hosts'][domain] }}
+        {{ id }}
     - require:
       - file: {{ root_home }}/.ssh
       - pkg: openssh-client
     - require_in:
       - file: known_hosts
-  {%- endif %}
 {%- endfor %}
 
 known_hosts:
@@ -120,28 +118,50 @@ openssh-client:
     - latest
     - require:
       - cmd: apt_sources
-{%- if salt['pillar.get']('deployment_key', False) %}
-      - file: root_ssh_private_key
 
-{%- set ssh_private_path = root_home + '/.ssh/id_' + pillar['deployment_key']['type'] %}
+{%- set root_key = salt['pillar.get']('ssh:root_key', False) -%}
+{%- set extensions = ('', '.pub') -%}
+{%- if root_key -%}
+    {%- set type = 'rsa' if 'BEGIN RSA PRIVATE' in root_key else 'dsa' %}
 root_ssh_private_key:
   file:
     - managed
-    - name: {{ ssh_private_path }}
+    - name: {{ root_home }}/.ssh/id_{{ type }}
     - contents: |
-        {{ pillar['deployment_key']['contents'] | indent(8) }}
+        {{ root_key | indent(8) }}
     - user: root
     - group: root
     - mode: 400
     - require:
       - file: {{ root_home }}/.ssh
-
-root_ssh_public_key:
+    - require_in:
+      - pkg: openssh-client
   cmd:
     - wait
-    - name: ssh-keygen -y -f {{ ssh_private_path }} > {{ ssh_private_path }}.pub
+    - name: ssh-keygen -y -f {{ root_home }}/.ssh/id_{{ type }} > {{ root_home }}/.ssh/id_{{ type }}.pub
     - watch:
       - file: root_ssh_private_key
     - require:
       - pkg: openssh-client
+
+    {#- remove the other private and public key #}
+    {%- for extension in extensions %}
+{{ root_home }}/.ssh/id_{{ 'dsa' if type == 'rsa' else 'rsa' }}{{ extension }}:
+  file:
+    - absent
+    - require_in:
+      - file: root_ssh_private_key
+    {%- endfor -%}
+
+{%- else -%}
+    {#-  remove all public and private key of root user -#}
+    {%- for type in ('rsa', 'dsa') -%}
+        {%- for extension in extensions %}
+{{ root_home }}/.ssh/id_{{ type }}{{ extension }}:
+  file:
+    - absent
+    - require_in:
+      - pkg: openssh-client
+        {%- endfor -%}
+    {%- endfor -%}
 {%- endif -%}

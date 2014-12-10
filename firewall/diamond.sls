@@ -36,7 +36,7 @@ firewall_nf_conntrack_diamond_collector:
     - managed
     - name: /etc/diamond/collectors/ConnTrackCollector.conf
     - contents: |
-        # {{ pillar['message_do_not_modify'] }}
+        # {{ salt['pillar.get']('message_do_not_modify') }}
 
         enabled = True
         dir = /proc/sys/net/netfilter

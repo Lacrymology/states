@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 {#- config file used for all shinken components, except the arbiter #}
 
 [daemon]
@@ -37,6 +37,7 @@ workdir=/var/lib/shinken
 
 use_local_log=0
 use_syslog=1
+log_level={{ salt['pillar.get']('shinken:log_level', 'INFO') }}
 
 host=0.0.0.0
 daemon_enabled=1
@@ -45,12 +46,13 @@ daemon_enabled=1
 {#-maxfd=1024#}
 idontcareaboutsecurity=0
 
-{% if salt['pillar.get']('shinken:ssl', False) %}
+{%- set ssl = salt['pillar.get']('shinken:ssl', False) %}
+{% if ssl %}
 use_ssl=1
 certs_dir=/etc/ssl/certs/
-ca_cert=/etc/ssl/certs/{{ pillar['shinken']['ssl'] }}_chained.crt
-server_cert=/etc/ssl/certs/{{ pillar['shinken']['ssl'] }}.crt
-server_key=/etc/ssl/private/{{ pillar['shinken']['ssl'] }}.pem
+ca_cert=/etc/ssl/certs/{{ ssl }}_chained.crt
+server_cert=/etc/ssl/certs/{{ ssl }}.crt
+server_key=/etc/ssl/private/{{ ssl }}.pem
 hard_ssl_name_check=0
 {% else %}
 use_ssl=0

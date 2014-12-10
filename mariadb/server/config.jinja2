@@ -32,7 +32,7 @@ Institute for Institutional Innovation by Data Driven Design Inc.
 Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 {#-
 MariaDB database server configuration file.
 
@@ -56,14 +56,16 @@ Remember to edit /etc/mysql/debian.cnf when changing the socket location.
 Default is Latin1. Use utf-8 if global pillar encoding contain
 'UTF-8'.
 #}
-{%- if 'UTF-8' in salt['pillar.get']('encoding', 'en_US.UTF-8') %}
+{%- set encoding = salt['pillar.get']('encoding', 'en_US.UTF-8') %}
+{%- if 'UTF-8' in encoding %}
 {%- set use_utf8 = True %}
 {%- endif %}
 
 [client]
-{%- if salt['pillar.get']('mysql:ssl', False) %}
+{%- set ssl = salt['pillar.get']('mysql:ssl', False) -%}
+{%- if ssl %}
 {#- self signed cert expect this to work #}
-ssl-ca = /etc/ssl/certs/{{ pillar['mysql']['ssl'] }}_chained.crt
+ssl-ca = /etc/ssl/certs/{{ ssl }}_chained.crt
 {%- endif %}
 port = 3306
 socket = /var/run/mysqld/mysqld.sock
@@ -76,13 +78,12 @@ socket = /var/run/mysqld/mysqld.sock
 nice = 0
 
 [mysqld]
-{%- if salt['pillar.get']('mysql:ssl', False) %}
-{%- set certname = pillar['mysql']['ssl'] %}
+{%- if ssl %}
 {#- No way to disable entire protocol of the SSL/TLS spec within MySQL.
     So, just disable SSLv3 ciphers in CBC-mode to mitigate POODLE #}
 ssl-cipher = EDH+CAMELLIA:EDH+aRSA:EECDH+aRSA+AESGCM:EECDH+aRSA+SHA384:EECDH+aRSA+SHA256:EECDH:+CAMELLIA256:+AES256:+CAMELLIA128:+AES128:+SSLv3:!aNULL:!eNULL:!LOW:!3DES:!MD5:!EXP:!PSK:!DSS:!RC4:!SEED:!ECDSA:CAMELLIA256-SHA:CAMELLIA128-SHA:!DHE-RSA-AES256-SHA
-ssl-cert = /etc/ssl/certs/{{ certname }}.crt
-ssl-key = /etc/ssl/private/{{ certname }}.pem
+ssl-cert = /etc/ssl/certs/{{ ssl }}.crt
+ssl-key = /etc/ssl/private/{{ ssl }}.pem
 {%- endif %}
 user = mysql
 pid-file = /var/run/mysqld/mysqld.pid

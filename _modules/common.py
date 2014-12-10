@@ -131,4 +131,3 @@ def unique_hostname(pillar):
                     if value not in output:
                         output.append(value)
     return output
-

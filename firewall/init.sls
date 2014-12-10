@@ -65,7 +65,7 @@ firewall_nf_conntrack:
     - present
     - name: nf_conntrack
 
-  {% if salt['pillar.get']('firewall:filter', False) and 21 in salt['pillar.get']('firewall:filter:tcp', []) %}
+  {% if salt['pillar.get']('firewall:filter', {})|length > 0 and 21 in salt['pillar.get']('firewall:filter:tcp', []) %}
 nf_conntrack_ftp:
    kmod:
      - present

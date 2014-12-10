@@ -47,8 +47,8 @@ include:
 {%- endif %}
   - ssmtp
 
-{#{% if 'arbiter' in pillar['shinken']['roles'] %}#}
-{#    {% if pillar['shinken']['arbiter']['use_mongodb'] %}#}
+{#{% if salt['pillar.get']('shinken:roles', False) %}#}
+{#    {% if salt['pillar.get']('shinken:arbiter:use_mongodb', False) %}#}
 {#  - mongodb#}
 {#    {% endif %}#}
 {#{% endif %}#}
@@ -89,7 +89,7 @@ shinken-arbiter:
       - file: /etc/shinken/{{ config }}.conf
     {% endfor %}
 {%- if ssl %}
-      - cmd: ssl_cert_and_key_for_{{ pillar['shinken']['ssl'] }}
+      - cmd: ssl_cert_and_key_for_{{ ssl }}
 {% endif %}
 
 /etc/shinken/arbiter.conf:

@@ -177,6 +177,8 @@ assigned to.
 
 Default: ``False``.
 
+.. _pillar-__test__:
+
 __test__
 ~~~~~~~~
 

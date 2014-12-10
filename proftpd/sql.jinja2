@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
-/* {{ pillar['message_do_not_modify'] }} */
+/* {{ salt['pillar.get']('message_do_not_modify') }} */
 
 {#- I don't care, I recreate it each time #}
 DROP TABLE IF EXISTS users;
@@ -42,6 +42,6 @@ CREATE TABLE users (
 
 GRANT SELECT ON users TO proftpd;
 
-{% for deployment in salt['pillar.get']('proftpd:deployments', []) %}
-INSERT INTO users (userid, passwd, shell, homedir) VALUES ('{{ deployment }}', '{{ pillar['proftpd']['deployments'][deployment] }}', '/bin/bash', '/var/lib/deployments/{{ deployment }}/static/ftp/');
+{% for userid, passwd in salt['pillar.get']('proftpd:accounts', {}).iteritems() %}
+INSERT INTO users (userid, passwd, shell, homedir) VALUES ('{{ userid }}', '{{ passwd }}', '/bin/bash', '/var/lib/deployments/{{ userid }}/static/ftp/');
 {% endfor %}

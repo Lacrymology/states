@@ -1,30 +1,5 @@
-.. Copyright (c) 2013, Hung Nguyen Viet
-.. All rights reserved.
-..
-.. Redistribution and use in source and binary forms, with or without
-.. modification, are permitted provided that the following conditions are met:
-..
-..     1. Redistributions of source code must retain the above copyright notice,
-..        this list of conditions and the following disclaimer.
-..     2. Redistributions in binary form must reproduce the above copyright
-..        notice, this list of conditions and the following disclaimer in the
-..        documentation and/or other materials provided with the distribution.
-..
-.. Neither the name of Hung Nguyen Viet nor the names of its contributors may be used
-.. to endorse or promote products derived from this software without specific
-.. prior written permission.
-..
-.. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-.. AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
-.. THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-.. PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
-.. BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-.. CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-.. SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-.. INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-.. CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-.. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-.. POSSIBILITY OF SUCH DAMAGE.
+Pillar
+======
 
 .. include:: /doc/include/add_pillar.inc
 
@@ -33,19 +8,46 @@
 Optional
 --------
 
+.. _pillar-terracotta-environment:
+
 terracotta:environment
 ~~~~~~~~~~~~~~~~~~~~~~
 
+.. Copied from
+http://terracotta.org/documentation/3.7.4/bigmemorymax/terracotta-server-array/config-reference#tctc-configsystemconfiguration-model
+
+The configuration-model element is for informational purposes. The two
+configuration-model options are 'development' and 'production'. These values
+have no effect on the functioning of Terracotta servers or clients, but instead
+allow you to designate the intended use of a configuration file using one of
+two recommended modes.
+
+In development, you may want each client might have its own configuration,
+independent of the server or any other client. This approach is useful for
+development, but should not be used in production as it can result in
+unpredictable behavior should conflicts arise. To note that a configuration
+file is intended for direct use by a client, set the configuration-model to
+'development'.
+
+In production, each client should obtain its configuration from a Terracotta
+server instance. To note that a configuration file is intended be be fetched
+from a server, set the configuration-model to 'production'.
+
 Default: ``production``.
+
+.. _pillar-terracotta-java_ms:
 
 terracotta:java_ms
 ~~~~~~~~~~~~~~~~~~
 
-Set initial Java heap size (-Xms).
+Set initial `Java heap size
+<https://docs.oracle.com/cd/E13222_01/wls/docs81/perform/JVMTuning.html#1131866>`_ (-Xms).
 
 Format: <size>[g|G|m|M|k|K].
 
-Default: ``512m``.
+Default: 512 megabytes (``512m``).
+
+.. _pillar-terracotta-java_mx:
 
 terracotta:java_mx
 ~~~~~~~~~~~~~~~~~~
@@ -54,4 +56,4 @@ Set maximum Java heap size (-Xmx).
 
 Format: <size>[g|G|m|M|k|K].
 
-Default: ``512m``.
+Default: 512 megabytes (``512m``).

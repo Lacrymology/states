@@ -34,7 +34,7 @@ Maintainer: Quan Tong Anh <quanta@robotinfra.com>
         {%- set deployment = formula -%}
     {%- endif -%}
     {%- if not domain_name -%}
-        {%- set domain_name = salt['pillar.get'](pillar_prefix + ':hostnames', ['127.0.0.1'])[0] -%}
+        {%- set domain_name = salt['pillar.get'](pillar_prefix + ':hostnames')[0] -%}
     {%- endif %}
     {#- if allow_ssl_redirect is True (because we can't trust pillar value in
         every cases.
@@ -48,7 +48,7 @@ Maintainer: Quan Tong Anh <quanta@robotinfra.com>
     {%- endif %}
 
 {{ formula }}_nginx_http:
-  description: {{ deployment|capitalize }} HTTP Protocol
+  description: {{ deployment|capitalize }} NGINX HTTP Protocol
   command: /usr/lib/nagios/plugins/check_http -H {{ domain_name }} -u {{ http_uri }} -p {{ http_port }} -e '{{ http_result }}' -I {{ first_ip }}
     {%- if timeout %} --timeout={{ timeout }}{% endif -%}
     {%- if salt['pillar.get']('__test__', False) %} -v{%- endif -%}
@@ -69,7 +69,7 @@ Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 {%- set https_uri = http_uri if not https_uri %}
 
 {{ formula }}_nginx_https:
-  description: {{ deployment|capitalize }} HTTPS Protocol
+  description: {{ deployment|capitalize }} NGINX HTTPS Protocol
   command: /usr/lib/nagios/plugins/check_http -S -H {{ domain_name }} -u {{ https_uri }} -e '{{ https_result }}' -I {{ first_ip }}
         {%- if timeout %} --timeout={{ timeout }}{% endif -%}
         {%- if salt['pillar.get']('__test__', False) %} -v{%- endif %}

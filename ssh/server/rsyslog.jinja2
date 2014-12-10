@@ -25,9 +25,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 
-{% for host in pillar['shinken_pollers'] %}
+{% for host in salt['pillar.get']('shinken_pollers', []) %}
 :msg, contains, "Connection closed by {{ host }} [preauth]" stop
 :msg, contains, "Did not receive identification string from {{ host }}" stop
 {%- endfor -%}

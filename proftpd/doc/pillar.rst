@@ -1,30 +1,5 @@
-.. Copyright (c) 2013, Bruno Clermont
-.. All rights reserved.
-..
-.. Redistribution and use in source and binary forms, with or without
-.. modification, are permitted provided that the following conditions are met:
-..
-..     1. Redistributions of source code must retain the above copyright notice,
-..        this list of conditions and the following disclaimer.
-..     2. Redistributions in binary form must reproduce the above copyright
-..        notice, this list of conditions and the following disclaimer in the
-..        documentation and/or other materials provided with the distribution.
-..
-.. Neither the name of Bruno Clermont nor the names of its contributors may be used
-.. to endorse or promote products derived from this software without specific
-.. prior written permission.
-..
-.. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-.. AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
-.. THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-.. PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
-.. BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-.. CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-.. SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-.. INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-.. CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-.. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-.. POSSIBILITY OF SUCH DAMAGE.
+Pillar
+======
 
 .. include:: /doc/include/add_pillar.inc
 
@@ -40,6 +15,8 @@ Example::
   proftpd:
     password: userpass
 
+.. _pillar-proftpd-password:
+
 proftpd:password
 ~~~~~~~~~~~~~~~~
 
@@ -51,19 +28,44 @@ Optional
 Example::
 
   proftpd:
-    deployments:
-  destructive_absent: False
+    accounts:
+      bob: pass
+    db:
+      name: proftpd
+      password: foo
+      username: proftpd
 
-proftpd:deployments
+proftpd:accounts
+~~~~~~~~~~~~~~~~
+
+Accounts that will be inserted into :doc:`/postgresql/doc/index` database.
+Data formed as a dictionary ``userid``:``passwd``.
+
+Default: Empty dictionary (``{}``) - no accounts.
+
+proftpd:db:name
+~~~~~~~~~~~~~~~
+
+.. include:: /postgresql/doc/name.inc
+
+Default: ``proftpd``.
+
+proftpd:db:username
 ~~~~~~~~~~~~~~~~~~~
 
-List deployments of :doc:`index`.
+.. include:: /postgresql/doc/username.inc
 
-Default: Empty list (``[]``).
+Default: ``proftpd``.
 
-destructive_absent
-~~~~~~~~~~~~~~~~~~
+proftpd:db:password
+~~~~~~~~~~~~~~~~~~~
 
-Remove all data when run ``absent.sls``.
+.. include:: /postgresql/doc/password.inc
 
-Default: ``False``.
+Conditional
+-----------
+
+proftpd:accounts:{{ username }}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Username to login.

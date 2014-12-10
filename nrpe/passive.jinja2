@@ -27,8 +27,10 @@ nsca-{{ formula }}:
     - watch_in:
       - service: nsca_passive
     - require_in:
-{%- if salt['pillar.get'](pillar_prefix ~ ':ssl', False) and check_ssl_score %}
+{%- if check_ssl_score -%}
+    {%- if salt['pillar.get'](pillar_prefix ~ ':ssl', False) %}
       - file: check_ssl_configuration.py
+    {%- endif -%}
 {%- endif %}
       - service: nagios-nrpe-server
 
@@ -36,10 +38,11 @@ nsca-{{ formula }}:
   file:
     - absent
 
-{% if salt['pillar.get'](pillar_prefix ~ ':ssl', False) and check_ssl_score -%}
-{#- manage cron file for sslyze NRPE check consumer -#}
-  {%- set domain_name = salt['pillar.get'](pillar_prefix + ':hostnames', ['127.0.0.1'])[0] if not domain_name -%}
-  {%- if domain_name|replace('.', '')|int == 0 -%}
+{% if check_ssl_score -%}
+    {%- if salt['pillar.get'](pillar_prefix ~ ':ssl', False) -%}
+        {#- manage cron file for sslyze NRPE check consumer -#}
+        {%- set domain_name = salt['pillar.get'](pillar_prefix + ':hostnames')[0] if not domain_name -%}
+        {%- if domain_name|replace('.', '')|int == 0 -%}
     {#- only check if it is a domain, not IP. int returns 0 for unconvertible value #}
 /etc/cron.twice_daily/sslyze_check_{{ formula|replace('.', '-') }}:
   file:
@@ -49,19 +52,25 @@ nsca-{{ formula }}:
   file:
     - absent
 
-    {%- if formula|replace('.', '') != formula %}
+            {%- if formula|replace('.', '') != formula %}
 /etc/cron.twice_daily/sslyze_check_{{ formula }}:
   file:
     - absent
-    {%- endif -%}
+            {%- endif -%}
 
-  {%- else %}
+        {%- else %}
 /etc/cron.twice_daily/sslyze_check_{{ formula|replace('.', '-') }}:
   file:
     - absent
-  {%- endif -%}
-
-{%- else %}
+        {%- endif -%}
+    {%- else -%}
+{#- same as next statement #}
+/etc/cron.twice_daily/sslyze_check_{{ formula|replace('.', '-') }}:
+  file:
+    - absent
+    {%- endif -%}
+{%- else -%}
+{#- same as other previous statement  #}
 /etc/cron.twice_daily/sslyze_check_{{ formula|replace('.', '-') }}:
   file:
     - absent

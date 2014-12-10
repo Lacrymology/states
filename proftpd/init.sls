@@ -129,8 +129,8 @@ proftpd:
     - require:
       - service: proftpd
 
-{% for deployment in salt['pillar.get']('proftpd:deployments', []) %}
-/var/lib/deployments/{{ deployment }}/static/ftp:
+{% for account in salt['pillar.get']('proftpd:accounts', {}) %}
+/var/lib/deployments/{{ account }}/static/ftp:
   file:
     - directory
     - user: www-data

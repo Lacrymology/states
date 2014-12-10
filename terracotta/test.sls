@@ -27,6 +27,7 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
 {%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
+  - doc
   - terracotta
   - terracotta.diamond
   - terracotta.nrpe
@@ -44,3 +45,10 @@ test:
     - run_all_checks
     - order: last
     - wait: 30
+  qa:
+    - test
+    - name: terracotta
+    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - require:
+      - monitoring: test
+      - cmd: doc

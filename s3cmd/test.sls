@@ -27,6 +27,7 @@ Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
 {%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
+  - doc
   - s3cmd
   - s3cmd.diamond
   - s3cmd.nrpe
@@ -48,3 +49,10 @@ test:
   monitoring:
     - run_all_checks
     - order: last
+  qa:
+    - test_pillar
+    - name: s3cmd
+    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - require:
+      - monitoring: test
+      - cmd: doc

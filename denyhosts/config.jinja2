@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Van Pham Diep <favadi@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 {#-
  All time format are in this one:
  format is: i[dhwmy]
@@ -132,7 +132,7 @@ AGE_RESET_INVALID = {{ salt['pillar.get']('denyhosts:reset_invalid', '10d') }}
  If this parameter is set to "yes" then the failed count for the respective ip
  address will be reset to 0 if the login is successful.
 #}
-RESET_ON_SUCCESS = {{ salt['pillar.get']('denyhosts:reset_on_success', 'no') }}
+RESET_ON_SUCCESS = {% if salt['pillar.get']('denyhosts:reset_on_success', False) %}yes{% else %}no{% endif %}
 {#-
  Synchronization mode allows the DenyHosts daemon the ability to periodically
  send and receive denied host data such that DenyHosts daemons worldwide can
@@ -148,7 +148,7 @@ RESET_ON_SUCCESS = {{ salt['pillar.get']('denyhosts:reset_on_success', 'no') }}
 {#- to set sync you need to set this to http://xmlrpc.denyhosts.net:9911
    in your pillar. #}
 {% if salt['pillar.get']('denyhosts:sync', False) %}
-SYNC_SERVER = {{ pillar['denyhosts']['sync']['server'] }}
+SYNC_SERVER = {{ salt['pillar.get']('denyhosts:sync:server') }}
 {#-
  The interval of time to perform synchronizations.
 #}
@@ -156,11 +156,11 @@ SYNC_INTERVAL = {{ salt['pillar.get']('denyhosts:sync:interval', '1h') }}
 {#-
  Allow your DenyHosts daemon to transmit hosts that have been denied?
 #}
-SYNC_UPLOAD = {{ salt['pillar.get']('denyhosts:sync:upload', 'yes') }}
+SYNC_UPLOAD = {% if salt['pillar.get']('denyhosts:sync:upload', True) %}yes{% else %}no{% endif %}
 {#-
  allow your DenyHosts daemon to receive hosts that have been denied by others?
 #}
-SYNC_DOWNLOAD = {{ salt['pillar.get']('denyhosts:sync:download', 'yes') }}
+SYNC_DOWNLOAD = {% if salt['pillar.get']('denyhosts:sync:download', True) %}yes{% else %}no{% endif %}
 {#-
  If SYNC_DOWNLOAD is enabled this parameter filters the returned hosts to those
  that have been blocked this many times by others. That is, if set to 1, then if

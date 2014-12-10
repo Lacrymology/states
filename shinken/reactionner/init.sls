@@ -65,7 +65,7 @@ shinken-reactionner:
       - user: shinken
       - file: shinken-reactionner
 {% if ssl %}
-      - cmd: ssl_cert_and_key_for_{{ pillar['shinken']['ssl'] }}
+      - cmd: ssl_cert_and_key_for_{{ ssl }}
 {% endif %}
 {#- does not use PID, no need to manage #}
 

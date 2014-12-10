@@ -15,8 +15,8 @@ nsca:
   timeout: 10
   {#- list of NSCA server and their password #}
   servers:
-    {%- for receiver in pillar['nrpe']['nsca']['servers'] %}
-    {{ receiver }}: {{ pillar['nrpe']['nsca']['password'] }}
+    {%- for receiver in salt['pillar.get']('nrpe:nsca:servers') %}
+    {{ receiver }}: {{ salt['pillar.get']('nrpe:nsca:password') }}
     {%- endfor -%}
 {%- endblock -%}
 

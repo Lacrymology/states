@@ -25,16 +25,16 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 {%- set mine = salt['mine.get']('*', 'monitoring.data') -%}
 {%- from 'nginx/macro.jinja2' import ssl_config with context %}
 
 upstream shinken-backend {
     ip_hash;
-{%- if pillar['shinken']['architecture']['broker']|length == 1 %}
+{%- if salt['pillar.get']('shinken:architecture:broker')|length == 1 %}
     server 127.0.0.1:7767;
 {%- else -%}
-  {%- for host in pillar['shinken']['architecture']['broker'] -%}
+  {%- for host in salt['pillar.get']('shinken:architecture:broker') -%}
     {%- if host in mine %}
     server {{ mine[host]['ip_addrs']['private'] }}:7767;
     {%- endif -%}
@@ -44,19 +44,20 @@ upstream shinken-backend {
 
 server {
     listen 80;
-{%- if salt['pillar.get']('shinken:ssl', False) -%}
+{%- set ssl = salt['pillar.get']('shinken:ssl', False) -%}
+{%- if ssl -%}
   {%- if salt['pillar.get']('shinken:ssl_redirect', False) %}
     {# if https, redirect http port 80 to https port 443 #}
-    server_name {% for hostname in pillar['shinken']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
-    return 301 https://{{ pillar['shinken']['hostnames'][0] }}$request_uri;
+    server_name {% for hostname in salt['pillar.get']('shinken:hostnames') %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+    return 301 https://{{ salt['pillar.get']('shinken:hostnames')[0] }}$request_uri;
 }
 {#- https server #}
 server {
   {%- endif %}{# redirect http to https -#}
-    {{ ssl_config(pillar['shinken']['ssl']) }}
+    {{ ssl_config(ssl) }}
 {%- endif -%}
 {#- web app logic #}
-    server_name {% for hostname in pillar['shinken']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+    server_name {% for hostname in salt['pillar.get']('shinken:hostnames') %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
 
 {% include "nginx/block_hacks.jinja2" %}
 

@@ -1,30 +1,5 @@
-.. Copyright (c) 2013, Bruno Clermont
-.. All rights reserved.
-..
-.. Redistribution and use in source and binary forms, with or without
-.. modification, are permitted provided that the following conditions are met:
-..
-..     1. Redistributions of source code must retain the above copyright notice,
-..        this list of conditions and the following disclaimer.
-..     2. Redistributions in binary form must reproduce the above copyright
-..        notice, this list of conditions and the following disclaimer in the
-..        documentation and/or other materials provided with the distribution.
-..
-.. Neither the name of Bruno Clermont nor the names of its contributors may be used
-.. to endorse or promote products derived from this software without specific
-.. prior written permission.
-..
-.. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-.. AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
-.. THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-.. PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
-.. BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-.. CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-.. SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-.. INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-.. CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-.. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-.. POSSIBILITY OF SUCH DAMAGE.
+Pillar
+======
 
 .. include:: /doc/include/add_pillar.inc
 
@@ -55,17 +30,17 @@ Example::
         map:
           www.bleh.com:
 
-  deployment_key:
-    contents: |
-       -----BEGIN RSA PRIVATE KEY-----
-       MIIEdsfadsfsdaXXXXXXXXXXX...
-       -----END RSA PRIVATE KEY-----
-    type: rsa
+    root_key: |
+        -----BEGIN RSA PRIVATE KEY-----
+        MIIEdsfadsfsdaXXXXXXXXXXX...
+        -----END RSA PRIVATE KEY-----
+
+.. _pillar-ssh-known_hosts:
 
 ssh:known_hosts
 ~~~~~~~~~~~~~~~
 
-Known hosts that will added to ``.ssh/known_hosts``.
+`Known hosts <http://en.wikibooks.org/wiki/OpenSSH/Client_Configuration_Files#.7E.2F.ssh.2Fknown_hosts>`_ that will added to ``.ssh/known_hosts``.
 Data formed as a dictionary ``domain_name``:``server public key``
 with server public key can be obtained by run ``ssh-keyscan domain``
 
@@ -81,8 +56,13 @@ Though, prefix the key with ``github.com ssh-rsa`` still valid and improve
 redability.
 
 .. note::
+
   github.com and `bitbucket.org <https://bitbucket.org>`__ public keys are
   already managed by this formula as they are often required by other one.
+
+Default: no custom known hosts (``{}``).
+
+.. _pillar-ssh-keys:
 
 ssh:keys
 ~~~~~~~~
@@ -108,12 +88,13 @@ can also be a list of remote users.
 
 If no ``localuser``:``remoteuser`` provided, use ``root``:``root``
 
-deployment_key:contents
-~~~~~~~~~~~~~~~~~~~~~~~
+Default: Unused (``[]``).
 
-:doc:`/ssh/doc/index` private key content.
+.. _pillar-ssh-root_key:
 
-deployment_key:type
-~~~~~~~~~~~~~~~~~~~
+ssh:root_key
+~~~~~~~~~~~~
 
-Type of :doc:`/ssh/doc/index` private key: ``rsa`` or ``dsa``.
+Content of :doc:`/ssh/doc/index` private key of ``root`` user.
+
+Default: No private root key (``False``).

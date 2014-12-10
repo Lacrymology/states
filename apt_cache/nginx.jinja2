@@ -1,4 +1,6 @@
-# {{ pillar['message_do_not_modify'] }}
+{%- from 'nginx/macro.jinja2' import ssl_config with context -%}
+{%- set ssl = salt['pillar.get']('apt_cache:ssl', False) -%}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 
 upstream apt_cache {
     server localhost:3142;
@@ -6,11 +8,10 @@ upstream apt_cache {
 
 server {
     listen 80;
-{% if salt['pillar.get']('apt_cache:ssl', False) %}
-{%- from 'nginx/macro.jinja2' import ssl_config with context %}
-    {{ ssl_config(pillar['apt_cache']['ssl']) }}
-{% endif %}
-    server_name {% for hostname in pillar['apt_cache']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+{%- if ssl %}
+    {{ ssl_config(ssl) }}
+{%- endif %}
+    server_name {% for hostname in salt['pillar.get']('apt_cache:hostnames') %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
 
 {#    root /var/cache/jenkins/war/;#}
 

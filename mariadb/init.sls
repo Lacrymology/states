@@ -59,8 +59,8 @@ mariadb:
   pkgrepo:
     - managed
     - key_url: salt://mariadb/key.gpg
-{%- if 'files_archive' in pillar %}
-    - name: deb {{ pillar['files_archive']|replace('https://', 'http://') }}/mirror/mariadb/5.5.40 {{ grains['lsb_distrib_codename'] }} main
+{%- if salt['pillar.get']('files_archive', False) %}
+    - name: deb {{ salt['pillar.get']('files_archive', False)|replace('https://', 'http://') }}/mirror/mariadb/5.5.40 {{ grains['lsb_distrib_codename'] }} main
 {%- else %}
     - name: deb http://mariadb.biz.net.id//repo/5.5/ubuntu precise main
 {%- endif %}

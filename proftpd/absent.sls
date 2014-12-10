@@ -55,7 +55,7 @@ proftpd-users:
     - name: {{ opts['cachedir'] }}/proftpd.sql
 
 {% if salt['pillar.get']('destructive_absent', False) %}
-{% for deployment in salt['pillar.get']('proftpd:deployments', []) %}
+{% for deployment in salt['pillar.get']('proftpd:deployments', {}) %}
 /var/lib/deployments/{{ deployment }}/static/ftp:
   file:
     - absent

@@ -32,11 +32,11 @@ Institute for Institutional Innovation by Data Driven Design Inc.
 Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 
 {#- Switch to use `mysqlclient-python` 1.3.4 instead of `MySQL-python` 1.2.4
     to fix this bug: https://github.com/farcepest/MySQLdb1/issues/80 #}
-{%- if 'files_archive' in pillar %}
+{%- if salt['pillar.get']('files_archive', False) %}
 mysqlclient-python==1.3.4
 {%- else %}
 https://github.com/PyMySQL/mysqlclient-python/archive/1.3.4.tar.gz

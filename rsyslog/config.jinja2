@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 
 $LocalHostName {{ grains['id'] }}
 
@@ -176,7 +176,7 @@ daemon.*;mail.*;\
 
 *.*           -/var/log/syslog
 {%- block remote_logging %}
-    {%- if 'graylog2_address' in pillar %}
-*.*;local7.none {% if salt['pillar.get']('rsyslog:tcp', False) %}@{% endif %}@{{ pillar['graylog2_address'] }}:1514
+    {%- if salt['pillar.get']('graylog2_address', False) %}
+*.*;local7.none {% if salt['pillar.get']('rsyslog:tcp', False) %}@{% endif %}@{{ salt['pillar.get']('graylog2_address', False) }}:1514
     {%- endif -%}
 {%- endblock -%}

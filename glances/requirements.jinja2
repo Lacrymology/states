@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Nicolas Plessis <niplessis@gmail.com>
 Maintainer: Nicolas Plessis <niplessis@gmail.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 
 pip==1.5.2
 Glances==1.7.4

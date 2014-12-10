@@ -45,8 +45,8 @@ sslyze:
   archive:
     - extracted
     - name: /usr/local/src
-{%- if 'files_archive' in pillar %}
-    - source: {{ pillar['files_archive'] }}/mirror/sslyze-{{ version|replace(".", "_") }}-linux{{ bits }}.zip
+{%- if salt['pillar.get']('files_archive', False) %}
+    - source: {{ salt['pillar.get']('files_archive', False) }}/mirror/sslyze-{{ version|replace(".", "_") }}-linux{{ bits }}.zip
 {%- else %}
     - source: https://github.com/iSECPartners/sslyze/releases/download/release-{{ version }}/sslyze-{{ version|replace(".", "_") }}-linux{{ bits }}.zip
 {%- endif %}
@@ -68,14 +68,14 @@ sslyze:
       - archive: sslyze
       - virtualenv: nrpe-virtualenv
 
-{%- for name in salt['pillar.get']('ssl:certs', {}) -%}
+{%- for name in salt['pillar.get']('ssl', []) -%}
     {%- for trust_store in ('apple', 'java', 'microsoft', 'mozilla') %}
 sslyze_{{ name }}_{{ trust_store }}:
   file:
     - append
     - name: /usr/local/src/sslyze-{{ version|replace(".", "_") }}-linux{{ bits }}/plugins/data/trust_stores/{{ trust_store }}.pem
     - text: |
-        {{ salt['pillar.get']('ssl:certs:' + name + ':server_crt') | indent(8) }}
+        {{ salt['pillar.get']('ssl:' + name + ':server_crt')|indent(8) }}
     - require:
       - archive: sslyze
     - require_in:

@@ -39,7 +39,7 @@ include:
   - ssl
 {% endif %}
 
-{%- if 'files_archive' in pillar %}
+{%- if salt['pillar.get']('files_archive', False) %}
     {%- call shinken_install_module('nsca') %}
 - source_hash: md5=7dd8c372864bce48eb204a1444ad2ebd
     {%- endcall %}
@@ -72,7 +72,7 @@ shinken-receiver:
       - file: shinken-receiver
       - user: shinken
 {% if ssl %}
-      - cmd: ssl_cert_and_key_for_{{ pillar['shinken']['ssl'] }}
+      - cmd: ssl_cert_and_key_for_{{ ssl }}
 {% endif %}
 {#- does not use PID, no need to manage #}
 {% from 'upstart/rsyslog.jinja2' import manage_upstart_log with context %}

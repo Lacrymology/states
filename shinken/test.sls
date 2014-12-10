@@ -29,6 +29,7 @@ Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 {%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 {%- set roles = ('arbiter', 'broker', 'poller', 'reactionner', 'scheduler', 'receiver') %}
 include:
+  - doc
 {%- for role in roles %}
   - shinken.{{ role }}
   - shinken.{{ role }}.diamond
@@ -62,6 +63,28 @@ test:
     - order: last
     - require:
       - cmd: test_crons
+  qa:
+    - test_pillar
+    - name: shinken
+    - additional:
+{%- for role in roles %}
+      - shinken.{{ role }}
+{%- endfor %}
+    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - require:
+      - monitoring: test
+      - cmd: doc
+
+{%- for role in roles %}
+test_{{ role }}:
+  qa:
+    - test_monitor
+    - name: shinken.{{ role }}
+    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - require:
+      - monitoring: test
+      - cmd: doc
+{%- endfor %}
 
 stop_shinken:
   cmd:

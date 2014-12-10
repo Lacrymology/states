@@ -27,7 +27,7 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 
 Enable mouse scrolling in screen.
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 deflogin on
 {# turn visual bell on #}
 vbell on

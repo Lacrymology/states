@@ -29,7 +29,7 @@ Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 {#- Add public key to the `authorized_keys` on localhost.
     This is used to perform some tests like: ssh, rsync, ...
     #}
-{%- set root_home = salt['user.info']('root')['home'] %}
+    {%- set root_home = salt['user.info']('root')['home'] %}
 ssh_backup_key:
   file:
     - copy
@@ -41,27 +41,18 @@ ssh_backup_key:
 ssh_add_key:
   cmd:
     - run
-    - name: cat {{ root_home }}/.ssh/id_{{ pillar['deployment_key']['type'] }}.pub >> {{ root_home }}/.ssh/authorized_keys
-    - unless: grep "$(cat {{ root_home }}/.ssh/id_{{ pillar['deployment_key']['type'] }}.pub)" {{ root_home }}/.ssh/authorized_keys
+    - name: cat {{ root_home }}/.ssh/id_*.pub >> {{ root_home }}/.ssh/authorized_keys
     - require:
       - file: ssh_backup_key
 {%- endmacro %}
 
 {%- macro remove_key() -%}
-{#- Remove local ssh public key after testing #}
-{%- set root_home = salt['user.info']('root')['home'] %}
+    {#- Remove local ssh public key after testing #}
+    {%- set root_home = salt['user.info']('root')['home'] %}
 ssh_remove_key:
   cmd:
     - run
     - name: mv {{ root_home }}/.ssh/authorized_keys.bak {{ root_home }}/.ssh/authorized_keys
-    {%- if caller is defined -%}
-        {%- for line in caller().split("\n") -%}
-            {%- if loop.first %}
-    - require:
-            {%- endif %}
-{{ line|trim|indent(6, indentfirst=True) }}
-        {%- endfor -%}
-    {%- endif -%}
 {%- endmacro %}
 
 {%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
@@ -74,12 +65,21 @@ include:
 
 {{ add_key() }}
 
-test:
+test_ssh:
   cmd:
     - run
     - name: ssh -o NoHostAuthenticationForLocalhost=yes root@localhost '/bin/true'
     - require:
       - cmd: ssh_add_key
+    - require_in:
+      - cmd: ssh_remove_key
+
+{{ remove_key() }}
+
+test:
+  monitoring:
+    - run_all_checks
+    - order: last
   diamond:
     - test
     - map:
@@ -88,10 +88,3 @@ test:
     - require:
       - sls: ssh.server
       - sls: ssh.server.diamond
-  monitoring:
-    - run_all_checks
-    - order: last
-
-{%- call remove_key() %}
-- cmd: test
-{%- endcall %}

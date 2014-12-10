@@ -1,14 +1,23 @@
-Monitoring
-==========
+Monitor
+=======
+
+Mandatory
+---------
+
+.. |deployment| replace:: apt_cache
+
+.. _monitor-apt_cache_procs:
 
 apt_cache_procs
----------------
+~~~~~~~~~~~~~~~
 
 ...
+
+.. _monitor-apt_cache_port:
 
 apt_cache_port
---------------
+~~~~~~~~~~~~~~
 
 ...
 
-.. todo: nginx
+.. include:: /nginx/doc/monitor.inc

@@ -27,6 +27,7 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
 {%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
+  - doc
   - nrpe
   - nrpe.diamond
 
@@ -43,3 +44,10 @@ test:
     - require:
       - sls: nrpe
       - sls: nrpe.diamond
+  qa:
+    - test
+    - name: nrpe
+    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - require:
+      - monitoring: test
+      - cmd: doc

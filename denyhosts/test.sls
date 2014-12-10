@@ -31,6 +31,7 @@ include:
   - denyhosts
   - denyhosts.diamond
   - denyhosts.nrpe
+  - doc
 
 {%- set fake_ip = '127.8.9.10' %}
 
@@ -68,3 +69,10 @@ test:
   monitoring:
     - run_all_checks
     - order: last
+  qa:
+    - test
+    - name: denyhosts
+    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - require:
+      - monitoring: test
+      - cmd: doc

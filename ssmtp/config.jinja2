@@ -25,15 +25,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 
-mailhub={{ pillar['smtp']['server'] }}:{{ pillar['smtp']['port'] }}
-root={{ pillar['smtp']['root'] }}
-hostname={{ pillar['mail']['mailname'] }}
-{%- if salt['pillar.get']('smtp:user', False) %}
-AuthUser={{ pillar['smtp']['user'] }}
-AuthPass={{ pillar['smtp']['password'] }}
-{%- endif -%}
+mailhub={{ salt['pillar.get']('smtp:server') }}:{{ salt['pillar.get']('smtp:port') }}
+root={{ salt['pillar.get']('smtp:root') }}
+hostname={{ salt['pillar.get']('mail:mailname') }}
+AuthUser={{ salt['pillar.get']('smtp:user') }}
+AuthPass={{ salt['pillar.get']('smtp:password') }}
 {%- set encryption = salt['pillar.get']('smtp:encryption', 'plain') -%}
 {%- if encryption in ('ssl', 'starttls') -%}
     {%- if encryption == 'ssl' %}

@@ -29,7 +29,7 @@ include:
   - apt
   - rsyslog
 
-{% if 'servers' in pillar['ntp'] %}
+{% if salt['pillar.get']('ntp:servers', []) | length > 0 %}
 ntpdate:
   pkg:
     - installed

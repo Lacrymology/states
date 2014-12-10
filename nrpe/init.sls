@@ -38,7 +38,7 @@ include:
   - cron.nrpe
   - hostname
   - local
-{% if 'graphite_address' in pillar %}
+{% if salt['pillar.get']('graphite_address', False) %}
   - nrpe.diamond
 {% endif %}
   - pip

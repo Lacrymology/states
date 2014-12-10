@@ -25,9 +25,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 
 Host *
+{% block config %}
     ForwardAgent yes
     SendEnv LANG LC_*
     HashKnownHosts yes
@@ -36,7 +37,5 @@ Host *
     IdentityFile /etc/ssh/keys/%u/%r@%h
     IdentityFile ~/.ssh/id_rsa
     IdentityFile ~/.ssh/id_dsa
-{%- if salt['pillar.get']('backup_server:address', False) in ('localhost', '127.0.0.1') -%}
-{#- because we can't get fingerprint of localhost for each test VM #}
-    NoHostAuthenticationForLocalhost yes
-{%- endif %}
+{% endblock %}
+

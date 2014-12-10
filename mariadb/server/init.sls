@@ -32,11 +32,12 @@ Institute for Institutional Innovation by Data Driven Design Inc.
 Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
-{%- from 'macros.jinja2' import manage_pid with context %}
+{%- from 'macros.jinja2' import manage_pid with context -%}
+{%- set ssl = salt['pillar.get']('mysql:ssl', False) %}
 include:
   - apt
   - mariadb
-{% if salt['pillar.get']('mysql:ssl', False) %}
+{% if ssl %}
   - ssl
 {% endif %}
 
@@ -131,8 +132,8 @@ mysql-server:
     - order: 50
     - watch:
       - file: /etc/mysql/my.cnf
-{%- if salt['pillar.get']('mysql:ssl', False) %}
-      - cmd: ssl_cert_and_key_for_{{ pillar['mysql']['ssl'] }}
+{%- if ssl %}
+      - cmd: ssl_cert_and_key_for_{{ ssl }}
 {%- endif %}
       - user: mysql-server
     - require:
@@ -149,7 +150,7 @@ mysql-server:
     - present
     - name: mysql
     - shell: /bin/false
-  {%- if salt['pillar.get']('mysql:ssl', False) %}
+  {%- if ssl %}
     - groups:
       - ssl-cert
   {%- endif %}

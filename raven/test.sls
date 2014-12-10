@@ -26,6 +26,7 @@ Author: Quan Tong Anh <quanta@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
 include:
+  - doc
   - raven
   - raven.mail
   - raven.mail.diamond
@@ -48,4 +49,14 @@ test:
     - require:
       - module: raven
       - module: requests
+  monitoring:
+    - run_all_checks
+    - order: last
+  qa:
+    - test_pillar
+    - name: raven
+    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - require:
+      - monitoring: test
+      - cmd: doc
 {%- endif %}

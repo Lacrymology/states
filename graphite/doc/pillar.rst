@@ -45,8 +45,10 @@ Example::
     hostnames:
       - graphite.example.com
 
+.. _pillar-graphite-hostnames:
+
 graphite:hostnames
-~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~
 
 .. include:: /nginx/doc/hostnames.inc
 

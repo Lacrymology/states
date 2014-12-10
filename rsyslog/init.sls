@@ -32,8 +32,8 @@ include:
 rsyslog:
   pkgrepo:
     - managed
-{%- if 'files_archive' in pillar %}
-    - name: deb {{ pillar['files_archive']|replace('https://', 'http://') }}/mirror/rsyslog/7.4.4 {{ grains['lsb_distrib_codename'] }} main
+{%- if salt['pillar.get']('files_archive', False) %}
+    - name: deb {{ salt['pillar.get']('files_archive', False)|replace('https://', 'http://') }}/mirror/rsyslog/7.4.4 {{ grains['lsb_distrib_codename'] }} main
     - key_url: salt://rsyslog/key.gpg
 {%- else %}
     - ppa: tmortensen/rsyslogv7

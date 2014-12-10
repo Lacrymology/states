@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 
 {#-driftfile /var/lib/ntp/ntp.drift#}
 
@@ -35,7 +35,7 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 {#-filegen clockstats file clockstats type day enable#}
 
 {#- internal server used to synchronize peers with ourselves #}
-{% if salt['pillar.get']('ntp:server', False) %}
+{% if salt['pillar.get']('ntp:is_server', False) %}
 server 127.127.1.1
 fudge 127.127.1.1 stratum 3 refid NIST
 {% endif %}

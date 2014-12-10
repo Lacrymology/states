@@ -1,9 +1,10 @@
+{%- set ssl = salt['pillar.get']('apt_cache:ssl', False) -%}
 include:
   - apt
   - nginx
-{% if salt['pillar.get']('apt_cache:ssl', False) %}
+{%- if ssl %}
   - ssl
-{% endif %}
+{%- endif %}
 
 apt_cache:
   pkg:
@@ -31,10 +32,10 @@ apt_cache:
     - watch_in:
       - service: nginx
 
-{%- if salt['pillar.get']('apt_cache:ssl', False) %}
+{%- if ssl %}
 extend:
   nginx:
     service:
       - watch:
-        - cmd: ssl_cert_and_key_for_{{ pillar['apt_cache']['ssl'] }}
+        - cmd: ssl_cert_and_key_for_{{ ssl }}
 {%- endif %}

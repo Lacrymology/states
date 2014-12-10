@@ -27,7 +27,7 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
 {%- set mine = salt['mine.get']('*', 'monitoring.data') -%}
 {%- set pillars_ip = salt['pillar.get']('ip_addresses', []) -%}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 *nat
 :PREROUTING ACCEPT [0:0]
 :POSTROUTING ACCEPT [0:0]
@@ -45,7 +45,8 @@ COMMIT
 COMMIT
 *filter
 :OUTPUT ACCEPT [0:0]
-{%- if salt['pillar.get']('firewall:filter', False) %}
+{%- set filter = salt['pillar.get']('firewall:filter', {}) -%}
+{%- if filter|length > 0 %}
 :INPUT {% if grains['virtual'] == 'openvzve' %}ACCEPT{% else %}DROP{% endif %} [0:0]
 :FORWARD {% if grains['virtual'] == 'openvzve' %}ACCEPT{% else %}DROP{% endif %} [0:0]
 -A INPUT -i lo -j ACCEPT
@@ -67,11 +68,12 @@ COMMIT
 {%- for host in pillars_ip %}
 -A INPUT -i {% if grains['virtual'] == 'openvzve' %}venet0{% else %}eth0{% endif %} -s {{ host }}/32 -j ACCEPT
 {%- endfor -%}
-{%- for protocol in pillar['firewall']['filter'] -%}
-  {%- if pillar['firewall']['filter'][protocol]|length == 1 %}
--A INPUT -i {% if grains['virtual'] == 'openvzve' %}venet0{% else %}eth0{% endif %} -p {{ protocol }} -m {{ protocol }} --dport {{ pillar['firewall']['filter'][protocol][0] }} -j ACCEPT
+{%- for protocol in filter -%}
+  {%- set ports = salt['pillar.get']('firewall:filter:' + protocol, []) -%}
+  {%- if ports|length == 1 %}
+-A INPUT -i {% if grains['virtual'] == 'openvzve' %}venet0{% else %}eth0{% endif %} -p {{ protocol }} -m {{ protocol }} --dport {{ ports[0] }} -j ACCEPT
   {%- else %}
--A INPUT -i {% if grains['virtual'] == 'openvzve' %}venet0{% else %}eth0{% endif %} -p {{ protocol }} -m multiport --dports {% for port in pillar['firewall']['filter'][protocol] %}{{ port }}{% if not loop.last %},{% endif %}{% endfor %} -j ACCEPT
+-A INPUT -i {% if grains['virtual'] == 'openvzve' %}venet0{% else %}eth0{% endif %} -p {{ protocol }} -m multiport --dports {% for port in ports %}{{ port }}{% if not loop.last %},{% endif %}{% endfor %} -j ACCEPT
   {%- endif %}{# if length == 1 -#}
   {%- if grains['virtual'] == 'openvzve' %}
 -A INPUT -i venet0 -j DROP
@@ -82,4 +84,3 @@ COMMIT
 :FORWARD ACCEPT [0:0]
 {% endif %}
 COMMIT
-

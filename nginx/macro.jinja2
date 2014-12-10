@@ -13,7 +13,7 @@
   {%- if salt['pillar.get']('nginx:redirect_numeric_ip', False) %}
     {%- for ip in salt['network.ip_addrs']() %}
     if ( $host = {{ ip }} ) {
-        return 302 {{ pillar['nginx']['redirect_numeric_ip'] }};
+        return 302 {{ salt['pillar.get']('nginx:redirect_numeric_ip') }};
     }
     {%- endfor -%}
   {%- endif -%}

@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 {% for user in salt['user.list_users']() -%}
-{{ user }}:{{ pillar['smtp']['from'] }}:{{ pillar['smtp']['server'] }}:{{ pillar['smtp']['port'] }}
+{{ user }}:{{ salt['pillar.get']('smtp:from') }}:{{ salt['pillar.get']('smtp:server') }}:{{ salt['pillar.get']('smtp:port') }}
 {% endfor %}

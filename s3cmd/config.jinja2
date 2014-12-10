@@ -25,11 +25,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Nicolas Plessis <niplessis@gmail.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 
 [default]
-access_key = {{ pillar['aws']['access_key'] }}
-secret_key = {{ pillar['aws']['secret_key'] }}
+access_key = {{ salt['pillar.get']('s3cmd:access_key') }}
+secret_key = {{ salt['pillar.get']('s3cmd:secret_key') }}
 bucket_location = US
 cloudfront_host = cloudfront.amazonaws.com
 cloudfront_resource = /2010-07-15/distribution

@@ -1,2 +1,2 @@
-# {{ pillar['message_do_not_modify'] }}
-nagios ALL=(root)NOPASSWD:/usr/lib/nagios/plugins/check_minion_last_success.py,/usr/lib/nagios/plugins/check_minion_pillar_render.py
+# {{ salt['pillar.get']('message_do_not_modify') }}
+nagios ALL=(root)NOPASSWD:/usr/lib/nagios/plugins/check_minion_last_success.py

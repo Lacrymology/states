@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 {#-
  Memory units:
  kB = kilobytes
@@ -78,12 +78,13 @@ max_connections = {{ salt['pillar.get']('postgresql:max_connections', 100) }}
 bonjour = off
 {#-authentication_timeout = 1min#}
 
-{% if salt['pillar.get']('postgresql:ssl', False) %}
+{%- set pgsql_ssl = salt['pillar.get']('postgresql:ssl', False) %}
+{%- if pgsql_ssl %}
 ssl = true
 ssl_renegotiation_limit = 512MB
 ssl_ciphers = 'EDH+CAMELLIA:EDH+aRSA:EECDH+aRSA+AESGCM:EECDH+aRSA+SHA384:EECDH+aRSA+SHA256:EECDH:+CAMELLIA256:+AES256:+CAMELLIA128:+AES128:!SSLv3:!aNULL:!eNULL:!LOW:!3DES:!MD5:!EXP:!PS'
-ssl_cert_file = '/etc/ssl/certs/{{ pillar['postgresql']['ssl'] }}_chained.crt'
-ssl_key_file = '/etc/ssl/private/{{ pillar['postgresql']['ssl'] }}.pem'
+ssl_cert_file = '/etc/ssl/certs/{{ pgsql_ssl }}_chained.crt'
+ssl_key_file = '/etc/ssl/private/{{ pgsql_ssl }}.pem'
 {% else %}
 ssl = false
 {% endif %}

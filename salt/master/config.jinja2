@@ -25,24 +25,24 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 
 fileserver_backend:
   - roots
   - git
 
-{%- if salt['pillar.get']('salt_master:pillar', False) %}
+{%- if use_ext_pillar %}
 ext_pillar:
-  - git: {{ pillar['salt_master']['pillar']['branch'] }} {{ pillar['salt_master']['pillar']['remote'] }}
+  - git: {{ salt['pillar.get']('salt_master:pillar:branch', False) }} {{ salt['pillar.get']('salt_master:pillar:remote', False) }}
 {%- endif %}
 
 worker_threads: {{ salt['pillar.get']('salt_master:workers', 5) }}
-{%- if 'gitfs_remotes' in pillar['salt_master'] %}
+{%- for repo in salt['pillar.get']('salt_master:gitfs_remotes', []) %}
+    {%- if loop.first %}
 gitfs_remotes:
-  {% for repo in pillar['salt_master']['gitfs_remotes'] %}
+    {%- endif %}
   - {{ repo }}
-  {%- endfor %}
-{%- endif %}
+{%- endfor %}
 
 log_file: file:///dev/log
 {%- if salt['pillar.get']('debug', False) %}
@@ -56,7 +56,7 @@ loop_interval: {{ salt['pillar.get']('salt_master:loop_interval', 60) }}
 keep_jobs: {{ salt['pillar.get']('salt_master:keep_jobs_hours', 24) }}
 {#
 TODO: in salt 2014.7 use http://docs.saltstack.com/en/latest/ref/configuration/master.html#master-job-cache
-{%- if 'sentry_dsn' in pillar %}
+{%- if salt['pillar.get']('sentry_dsn', False) %}
 ext_job_cache: sentry_common
 {%- endif -%}
 #}

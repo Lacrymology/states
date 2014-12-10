@@ -11,3 +11,11 @@ patch_salt_fix_require_sls:
 {%- else %}
     - exists
 {%- endif %}
+
+/usr/share/pyshared/salt/utils/__init__.py:
+  file:
+    - managed
+    - user: root
+    - group: root
+    - mode: 755
+    - source: salt://salt/salt.utils.py

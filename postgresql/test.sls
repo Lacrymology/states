@@ -24,7 +24,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
+{%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
+  - doc
   - postgresql.server
   - postgresql.server.backup
   - postgresql.server.diamond
@@ -48,3 +50,23 @@ test_backup_all:
     - require:
       - sls: postgresql.server
       - sls: postgresql.server.backup
+  diamond:
+    - test
+    - map:
+        ProcessResources:
+    {{ diamond_process_test('postgresql') }}
+        Postgresql:
+          postgres.database.monitoring.connections: False
+          postgres.database.monitoring.size: False
+    - require:
+      - sls: postgresql.server
+      - service: diamond
+  qa:
+    - test
+    - name: postgresql
+    - additional:
+      - postgresql.backup
+    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - require:
+      - monitoring: test
+      - cmd: doc

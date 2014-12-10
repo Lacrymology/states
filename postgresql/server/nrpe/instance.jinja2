@@ -45,9 +45,9 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
     encoding: UTF8
 
 {%- if check_empty %}
-{{ dbname }}_postgresql_empty:
-  description: {{ formula|capitalize }} PostgreSQL Database Empty {{ dbname }}
-  command: /usr/lib/nagios/plugins/check_pgsql_query.py --formula={{ formula }} --check={{ dbname }}_postgresql_empty
+{{ dbname }}_postgresql_not_empty:
+  description: {{ formula|capitalize }} PostgreSQL Database "{{ dbname }}" Is Not Empty
+  command: /usr/lib/nagios/plugins/check_pgsql_query.py --formula={{ formula }} --check={{ dbname }}_postgresql_not_empty
   timeout: {{ timeout }}
   arguments:
     passwd: {{ password }}

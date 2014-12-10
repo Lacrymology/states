@@ -1,3 +1,6 @@
+Pillar
+======
+
 .. include:: /doc/include/add_pillar.inc
 
 - :doc:`/rsyslog/doc/index` :doc:`/rsyslog/doc/pillar`

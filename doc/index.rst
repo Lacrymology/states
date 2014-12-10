@@ -11,11 +11,13 @@ Welcome to Infrastructure Documentation:
     state
     install
     /test/doc/index
+    base_knowledge
     monitoring
     dev
     hacking
     build_doc
     write_formula
+    write_doc
     execution_logging
     run_tests
     troubleshoot

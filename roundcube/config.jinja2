@@ -26,7 +26,7 @@ Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
 <?php
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 $config = array();
 $config['log_driver'] = 'syslog';
 $config['log_date_format'] = 'd-M-Y H:i:s O';
@@ -209,7 +209,7 @@ $config['ldap_public']['public'] = array(
   'name'          => 'Public LDAP adress book',
   'hosts'         => array('localhost'),
   'port'          => 389,
-{%- if salt['pillar.get']('roundcube:ldap:ssl', salt['pillar.get']('ldap:ssl', False)) %}
+{%- if salt['pillar.get']('roundcube:ldap:ssl', False)|default(salt['pillar.get']('ldap:ssl', False), boolean=True) %}
   'use_tls'           => true,
 {%- else %}
   'use_tls'           => false,
@@ -217,7 +217,7 @@ $config['ldap_public']['public'] = array(
   'ldap_version'  => 3,
   'network_timeout' => 10,
   'user_specific' => false,
-  'base_dn'       => 'ou=people,{{ salt['pillar.get']('roundcube:ldap:suffix', pillar['ldap']['suffix']) }}',
+  'base_dn'       => 'ou=people,{{ salt['pillar.get']('roundcube:ldap:suffix', False)|default(salt['pillar.get']('ldap:suffix'), boolean=True) }}',
   'bind_dn'       => '',
   'bind_pass'     => '',
   'hidden'        => false,

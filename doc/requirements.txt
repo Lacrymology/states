@@ -1,4 +1,4 @@
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 
 # Copyright (C) 2013 the Institute for Institutional Innovation by Data
 # Driven Design Inc.
@@ -33,5 +33,5 @@
 # Author: Dang Tung Lam <lam@robotinfra.com>
 # Maintainer: Dang Tung Lam <lam@robotinfra.com>
 
-sphinx_rtd_theme==0.1.5
-Sphinx==1.2.1
+sphinx_rtd_theme==0.1.6
+Sphinx==1.2.3

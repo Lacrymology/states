@@ -28,7 +28,7 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 Nagios NRPE check for Salt Master backup
 -#}
 include:
-  - backup.client.{{ pillar['backup_storage'] }}.nrpe
+  - backup.client.{{ salt['pillar.get']('backup_storage') }}.nrpe
   - bash.nrpe
   - cron.nrpe
   - nrpe

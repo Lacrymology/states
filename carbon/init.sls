@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
-{%- set filter_type = salt['pillar.get']('graphite:carbon:filter:type', False) -%}
+{%- set filter_type = salt['pillar.get']('carbon:filter:type', None) -%}
 {%- set supported_filter_types = ('white', 'black')  %}
 
 include:
@@ -59,11 +59,11 @@ include:
       - user: graphite
       - file: /var/log/graphite
 
-{% if 'file-max' in pillar['graphite'] %}
+{% if salt['pillar.get']('carbon:file_max', False) %}
 fs.file-max:
   sysctl:
     - present
-    - value: {{ pillar['graphite']['file-max'] }}
+    - value: {{ salt['pillar.get']('carbon:file_max', False) }}
 {% endif %}
 
 /etc/graphite/storage-schemas.conf:
@@ -153,7 +153,7 @@ carbon:
     - require:
       - file: /etc/graphite
 
-{%- set instances_count = pillar['graphite']['carbon']['instances'] %}
+{%- set instances_count = salt['pillar.get']('carbon:cache_daemons') %}
 
 {#- PID file owned by root, no need to manage #}
 {% for instance in range(instances_count) %}
@@ -280,7 +280,7 @@ carbon-relay:
     - group: graphite
     - mode: 440
     - contents: |
-     {%- for rule in salt['pillar.get']('graphite:carbon:filter:rules', []) %}
+     {%- for rule in salt['pillar.get']('carbon:filter:rules', []) %}
         {{ rule }}
      {%- endfor %}
     - require:

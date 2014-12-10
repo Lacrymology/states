@@ -42,4 +42,4 @@ jenkins_diamond_resources:
     - text:
       - |
         [[jenkins]]
-        cmdline = \/usr\/bin\/daemon --name=jenkins
+        cmdline = \/usr\/bin\/daemon --name=jenkins,\/usr\/bin\/java -jar \/usr\/share\/jenkins\/jenkins.war

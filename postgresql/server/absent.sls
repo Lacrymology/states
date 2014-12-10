@@ -31,11 +31,7 @@ Uninstall a PostgreSQL database server.
 
 postgresql:
   pkg:
-{% if salt['pillar.get']('destructive_absent', False) %}
     - purged
-{% else %}
-    - removed
-{% endif %}
     - pkgs:
       - postgresql-{{ version }}
       - postgresql-client-{{ version }}

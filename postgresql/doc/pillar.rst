@@ -1,30 +1,9 @@
-.. Copyright (c) 2013, Bruno Clermont
-.. All rights reserved.
-..
-.. Redistribution and use in source and binary forms, with or without
-.. modification, are permitted provided that the following conditions are met:
-..
-..     1. Redistributions of source code must retain the above copyright notice,
-..        this list of conditions and the following disclaimer.
-..     2. Redistributions in binary form must reproduce the above copyright
-..        notice, this list of conditions and the following disclaimer in the
-..        documentation and/or other materials provided with the distribution.
-..
-.. Neither the name of Bruno Clermont nor the names of its contributors may be used
-.. to endorse or promote products derived from this software without specific
-.. prior written permission.
-..
-.. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-.. AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
-.. THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-.. PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
-.. BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-.. CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-.. SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-.. INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-.. CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-.. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-.. POSSIBILITY OF SUCH DAMAGE.
+Pillar
+======
+
+For more detail information and concepts explanation, see
+http://www.postgresql.org/docs/9.1/static/runtime-config-connection.html. Most
+of bellow explanation copied from that source.
 
 .. include:: /doc/include/add_pillar.inc
 
@@ -48,89 +27,116 @@ Example::
 Optional
 --------
 
-postgresql:replication:master
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Ip address of master server.
-
-This key is mandatory if you are setting up a cluster.
-
-encoding
-~~~~~~~~
-
-Encoding for using with postgresql.
-
-Default: ``en_US.UTF-8``.
+.. _pillar-postgresql-listen_addresses:
 
 postgresql:listen_addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Ip address for listening to.
+Specifies the TCP/IP address(es) on which the server is to listen for
+connections from client applications. The value takes the form of a
+comma-separated list of host names and/or numeric IP addresses. The special
+entry * corresponds to all available IP interfaces. The entry 0.0.0.0 allows
+listening for all IPv4 addresses and :: allows listening for all IPv6
+addresses. If the list is empty, the server does not listen on any IP interface
+at all, in which case only Unix-domain sockets can be used to connect to it.
 
-Default: ``localhost``.
+Default: allows only local TCP/IP "loopback" connections to be made
+(``localhost``).
+
+.. _pillar-postgresql-listen_port:
+
+postgresql:listen_port
+~~~~~~~~~~~~~~~~~~~~~~
+
+The TCP port the server listens on.
+Note that the same port number is used for all IP addresses the server listens on.
+
+Default: :doc:`index` default value (``5432``).
+
+.. _pillar-postgresql-shared_buffers:
 
 postgresql:shared_buffers
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Size of shared buffers.
+Sets the amount of memory the database server uses for shared memory buffers.
 
-Default: ``24MB``.
+Default: :doc:`index` default value (``24MB``).
+
+.. _pillar-postgresql-temp_buffers:
 
 postgresql:temp_buffers
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-Size of temp buffer.
+Sets the maximum number of temporary buffers used by each database session.
 
-Default: ``8MB``.
+Default: :doc:`index` default value (``8MB``).
 
-postgresql:destructive_absent
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Remove data directory when run absent SLS.
-
-Default: ``False``.
+.. _pillar-postgresql-max_connections:
 
 postgresql:max_connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Default: ``100``.
+Determines the maximum number of concurrent connections to the database server.
+
+Default: allows (``100``) connections at the same time.
+
+.. _pillar-postgresql-monitoring-password:
 
 postgresql:monitoring:password
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Password for monitoring user.
 
-Default: ``auto-generate by salt``.
+Default: auto-generate by Salt (``None``).
 
-postgresql:listen_port
-~~~~~~~~~~~~~~~~~~~~~~
-
-Port to listen to.
-
-Default: ``5432``.
+.. _pillar-postgresql-ssl:
 
 postgresql:ssl
 ~~~~~~~~~~~~~~
 
 Name of :doc:`/ssl/doc/index` key used for encrypted postgresql connection.
 
+Default: does not use SSL/TLS (``False``).
+
+.. _pillar-postgresql-log_slow_query:
+
 postgresql:log_slow_query
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Onfig log for query statement.
+Logging for query statement.
 
--1 is disabled.
+``-1`` is disabled.
 
-0 logs all statements.
+``0`` logs all statements.
 
-> 0 logs only statements running at least this number of milliseconds.
+> ``0`` logs only statements running at least this number of milliseconds.
 
-Default: ``-1``.
+Default: :doc:`index` default value (``-1``).
+
+Conditional
+-----------
+
+.. _pillar-postgresql-replication:
 
 postgresql:replication
 ~~~~~~~~~~~~~~~~~~~~~~
 
 Keys prefix with 'postgresql:replication' are only used for cluster setup.
+For more details on PostgresSQL replication setting up, consult
+http://www.postgresql.org/docs/9.1/static/high-availability.html.
+This formula uses http://www.postgresql.org/docs/9.1/static/continuous-archiving.html
+method for replication and high availability.
+
+.. _pillar-postgresql-replication-master:
+
+postgresql:replication:master
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+IP address of `master server <http://www.postgresql.org/docs/9.1/static/high-availability.html>`_.
+
+This key is mandatory in setting up a cluster.
+
+.. _pillar-postgresql-replication-username:
 
 postgresql:replication:username
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -139,23 +145,21 @@ Postgresql username used for replication.
 
 Default: ``replication_agent``.
 
+.. _pillar-postgresql-replication-hot_standby:
+
 postgresql:replication:hot_standby
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Run standby servers in hot standby mode.
+Run standby servers in
+`hot standby mode <http://www.postgresql.org/docs/9.1/static/hot-standby.html>`_
 
-Default: ``True``.
+Default: run standby servers in hot standby mode (``True``).
 
-postgresql:replication:password
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Password for postgresql user that do replication.
-
-Default: ``auto-generate by salt``.
+.. _pillar-postgresql-replication-standby:
 
 postgresql:replication:standby
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 List of addresses of standby nodes in cluster.
 
-Default: [].
+Default: no standby node (``[]``).

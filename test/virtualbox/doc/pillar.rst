@@ -4,6 +4,8 @@ Pillar
 Mandatory
 ---------
 
+.. _pillar-test-proxy_server:
+
 test:proxy_server
 ~~~~~~~~~~~~~~~~~
 
@@ -13,6 +15,8 @@ IP address of the VirtualBox VM `Archive VM`.
 
 Optional
 --------
+
+.. _pillar-test-root_password:
 
 test:root_password
 ~~~~~~~~~~~~~~~~~~
@@ -26,6 +30,8 @@ Root password in clear text.
   acceptable.
 
 Default: ``pass``.
+
+.. _pillar-test-dhcp:
 
 test:dhcp
 ~~~~~~~~~

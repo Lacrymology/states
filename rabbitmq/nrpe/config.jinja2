@@ -28,20 +28,6 @@ Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 {%- set timeout = 30 -%}
 {%- include "erlang/nrpe/config.jinja2" %}
 
-rabbitmq_console_port:
-  description: RabbitMQ Console Port
-  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 55672 -t {{ timeout }}
-  timeout: {{ timeout }}
-  dependencies:
-    - rabbitmq_procs
-
-rabbitmq_console_http:
-  description: RabbitMQ Console HTTP
-  command: /usr/lib/nagios/plugins/check_http -I 127.0.0.1 -p 55672 -e 'HTTP/1.0 301 Moved Permanently' -t {{ timeout }}
-  timeout: {{ timeout }}
-  dependencies:
-    - rabbitmq_console_port
-
 rabbitmq_procs:
   description: RabbitMQ Daemon
   command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -C beam{% if grains['num_cpus'] > 1 %}.smp{% endif %} -u rabbitmq"
@@ -62,7 +48,7 @@ rabbitmq_amqp_port:
 
 rabbitmq_http:
   description: RabbitMQ HTTP Protocol
-  command: /usr/lib/nagios/plugins/check_http -H 127.0.0.1 -u / -p 15672 -e '200 OK' -I {{ salt['network.ip_addrs']('eth0')[0] }} -t {{ timeout }}
+  command: /usr/lib/nagios/plugins/check_http -H 127.0.0.1 -u / -p 15672 -e '200 OK' -I 127.0.0.1 -t {{ timeout }}
   timeout: {{ timeout }}
   dependencies:
     - rabbitmq_management_port
@@ -74,7 +60,7 @@ rabbitmq_http:
 
 rabbitmq_amqp_port_remote:
   description: Remote RabbitMQ AMQP Port
-  check: check_tcp!55672
+  check: check_tcp!15672
   timeout: {{ timeout }}
   passive: False
   dependencies:

@@ -25,12 +25,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 {% set ssl = salt['pillar.get']('ldap:ssl', False) %}
 
 {% if ssl %}
 SSL ON
-TLS_CACERT      /etc/ssl/certs/{{ pillar['ldap']['ssl'] }}_ca.crt
+TLS_CACERT      /etc/ssl/certs/{{ salt['pillar.get']('ldap:ssl') }}_ca.crt
 TLS_REQCERT never
 {% endif %}
 HOST {{ grains['id'] }}

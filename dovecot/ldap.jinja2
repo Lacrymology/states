@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 {#-
 # This file is opened as root, so it should be owned by root and mode 0600.
 #
@@ -93,14 +93,14 @@ tls = no
 #}
 {#- %u mean full username (e.g. user@domain) #}
 auth_bind = yes
-auth_bind_userdn = uid=%u,ou=people,{{ pillar['ldap']['suffix'] }}
+auth_bind_userdn = uid=%u,ou=people,{{ salt['pillar.get']('ldap:suffix') }}
 ldap_version = 3
 
 {#-
 # LDAP base. %variables can be used here.
 # For example: dc=mail, dc=example, dc=org
 #}
-base = ou=people,{{ pillar['ldap']['suffix'] }}
+base = ou=people,{{ salt['pillar.get']('ldap:suffix') }}
 
 {#-
 # Dereference: never, searching, finding, always

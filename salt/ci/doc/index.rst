@@ -26,12 +26,13 @@ Salt Archive
 
 As many minions will be created over time, we don't want the tests to run for
 extra hours just to download files over public internet. that is costly and
-ineffective. The salt archive is mandatory to have effective CI.
-And that reduce the risks of test that failed because some public resource is
-unavailable such as github.com.
+ineffective. The :doc:`/salt/archive/server/doc/index` is mandatory to have
+effective CI. And that reduce the risks of tests that failed because some
+public resource is unavailable such as github.com.
 
 To make sure that archive is up to date, the synchronization with upstream
-salt archive server is executed each 5 minutes trough a cronjob.
+:doc:`/salt/archive/server/doc/index` is executed each 5 minutes trough a
+cronjob.
 
 Look in :doc:`/salt/archive/server/doc/index` for more details.
 
@@ -39,7 +40,8 @@ Salt Cloud
 ~~~~~~~~~~
 
 Most CI jobs are tests that are triggered trough various reasons such as a
-schedule or a git branch updated. Those will create a new minion to execute the
+schedule or a :doc:`/git/doc/index` branch updated.
+Those will create a new minion to execute the
 states of the tip of the branch at that exact moment.
 Multiple tests (minions) can run in parallels, all on their own VMs.
 
@@ -58,11 +60,13 @@ Jenkins
 CI server is a web UI that allow users to create jobs that are triggered one
 some conditions such as:
 
-- A job is configured to run a git fetch at some specific frequency (5 minutes).
-  If someone git push a branch, in max 5 minutes, CI server detect the change
-  and then git pull and run the job.
-- A private git repo come with hook that perform a call back to CI server notify
-  that changes were pushed to that branch and job need to run.
+- A job is configured to run a :doc:`/git/doc/index` fetch at some specific
+  frequency (5 minutes).
+  If someone :doc:`/git/doc/index` push a branch, in max 5 minutes, CI server
+  detect the change and then :doc:`/git/doc/index` pull and run the job.
+- A private :doc:`/git/doc/index` repo come with hook that perform a call back
+  to CI server notify that changes were pushed to that branch and job need to
+  run.
 - Github is configured to perform a callback to CI server when a push occurs.
 - :doc:`/gitlab/doc/index` plugins:
   - `Gitlab merge request <https://wiki.jenkins-ci.org/display/JENKINS/Gitlab+Merge+Request+Builder+Plugin>`__

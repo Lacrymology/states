@@ -42,7 +42,7 @@ salt_archive:
     - mode: 775
   cmd:
     - run
-    - name: rsync -av --delete --exclude ".*" {{ pillar['salt_archive']['source'] }} {{ archive_dir }}/
+    - name: rsync -av --delete --exclude ".*" {{ salt['pillar.get']('salt_archive:source', False) }} {{ archive_dir }}/
     - require:
       - pkg: salt_archive
       - file: salt_archive

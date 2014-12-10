@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 [cache]
 
 STORAGE_DIR = /var/lib/graphite
@@ -43,17 +43,10 @@ USER = graphite
  Sorts and serving cache queries gets more expensive as the cache grows.
  Use the value "inf" (infinity) for an unlimited cache size.
 #}
-MAX_CACHE_SIZE = {{ salt['pillar.get']('graphite:carbon:max_cache_size', 'inf') }}
+MAX_CACHE_SIZE = {{ salt['pillar.get']('carbon:max_cache_size', 'inf') }}
 
-{#-
- See carbon/doc/pillar.rst graphite:carbon:max_creates_per_minute
-#}
-MAX_UPDATES_PER_SECOND = {{ salt['pillar.get']('graphite:carbon:max_updates_per_second', 500) }}
-
-{#-
- See carbon/doc/pillar.rst graphite:carbon:max_creates_per_minute
-#}
-MAX_CREATES_PER_MINUTE = {{ salt['pillar.get']('graphite:carbon:max_creates_per_minute', 'inf') }}
+MAX_UPDATES_PER_SECOND = {{ salt['pillar.get']('carbon:max_updates_per_second', 500) }}
+MAX_CREATES_PER_MINUTE = {{ salt['pillar.get']('carbon:max_creates_per_minute', 'inf') }}
 
 {#-
  Set this to True to enable the UDP listener. By default this is off
@@ -62,7 +55,7 @@ MAX_CREATES_PER_MINUTE = {{ salt['pillar.get']('graphite:carbon:max_creates_per_
 #}
 ENABLE_UDP_LISTENER = False
 {#-
-UDP_RECEIVER_INTERFACE = {{ salt['pillar.get']('graphite:carbon:interface', '0.0.0.0') }}
+UDP_RECEIVER_INTERFACE = {{ salt['pillar.get']('carbon:interface', '0.0.0.0') }}
 UDP_RECEIVER_PORT = 2013
 
  Per security concerns outlined in Bug #817247 the pickle receiver
@@ -166,7 +159,7 @@ WHISPER_FALLOCATE_CREATE = True
  BIND_PATTERNS = #
 #}
 
-{%- set instances_count = pillar['graphite']['carbon']['instances'] %}
+{%- set instances_count = salt['pillar.get']('carbon:cache_daemons') %}
 {% for instance in range(instances_count) %}
 [cache:{{ instance }}]
 LINE_RECEIVER_PORT = 20{{ loop.index }}3
@@ -185,7 +178,7 @@ To configure special settings for the carbon-cache instance 'b', uncomment this:
 
 [relay]
 USER = graphite
-{%- set receiver_interface = salt['pillar.get']('graphite:carbon:interface', '0.0.0.0') %}
+{%- set receiver_interface = salt['pillar.get']('carbon:interface', '0.0.0.0') %}
 LINE_RECEIVER_INTERFACE = {{ receiver_interface }}
 LINE_RECEIVER_PORT = 2003
 PICKLE_RECEIVER_INTERFACE = {{ receiver_interface }}
@@ -206,7 +199,7 @@ RELAY_METHOD = consistent-hashing
  of your data by replicating every datapoint to more than
  one machine.
 #}
-REPLICATION_FACTOR = {{ salt['pillar.get']('graphite:carbon:replication', 1) }}
+REPLICATION_FACTOR = {{ salt['pillar.get']('carbon:replication', 1) }}
 
 {#-
  This is a list of carbon daemons we will send any relayed or
@@ -263,9 +256,9 @@ USE_WHITELIST = {{ filtering }}
 
 {#-
 [aggregator]
-LINE_RECEIVER_INTERFACE = {{ salt['pillar.get']('graphite:carbon:interface', '0.0.0.0') }}
+LINE_RECEIVER_INTERFACE = {{ salt['pillar.get']('carbon:interface', '0.0.0.0') }}
 LINE_RECEIVER_PORT = 2023
 
-PICKLE_RECEIVER_INTERFACE = {{ salt['pillar.get']('graphite:carbon:interface', '0.0.0.0') }}
+PICKLE_RECEIVER_INTERFACE = {{ salt['pillar.get']('carbon:interface', '0.0.0.0') }}
 PICKLE_RECEIVER_PORT = 2024
 #}

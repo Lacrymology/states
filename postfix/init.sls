@@ -40,7 +40,7 @@ include:
 {%- if ssl %}
   - ssl
 {%- endif %}
-{%- if salt['pillar.get']('postfix:virtual_mailbox', False) %}
+{%- if salt['pillar.get']('postfix:virtual_mailbox_domains', [])|length > 0 %}
   - dovecot.agent
 
 /var/mail/vhosts:
@@ -157,7 +157,7 @@ postfix:
     - user: postfix
     - group: postfix
     - contents: |
-        {{ pillar['postfix']['aliases'] | indent(8) }}
+        {{ salt['pillar.get']('postfix:aliases', False) | indent(8) }}
     - require:
       - pkg: postfix
   cmd:

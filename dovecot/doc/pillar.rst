@@ -1,30 +1,5 @@
-.. Copyright (c) 2013, Hung Nguyen Viet
-.. All rights reserved.
-..
-.. Redistribution and use in source and binary forms, with or without
-.. modification, are permitted provided that the following conditions are met:
-..
-..     1. Redistributions of source code must retain the above copyright notice,
-..        this list of conditions and the following disclaimer.
-..     2. Redistributions in binary form must reproduce the above copyright
-..        notice, this list of conditions and the following disclaimer in the
-..        documentation and/or other materials provided with the distribution.
-..
-.. Neither the name of Hung Nguyen Viet nor the names of its contributors may be used
-.. to endorse or promote products derived from this software without specific
-.. prior written permission.
-..
-.. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-.. AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
-.. THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-.. PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
-.. BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-.. CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-.. SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-.. INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-.. CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-.. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-.. POSSIBILITY OF SUCH DAMAGE.
+Pillar
+======
 
 .. include:: /doc/include/add_pillar.inc
 
@@ -34,16 +9,6 @@
 
 Mandatory
 ---------
-
-Example::
-
-  mail:
-    postmaster: admin@example.com
-
-mail:postmaster
-~~~~~~~~~~~~~~~
-
-Email address of postmaster.
 
 ldap:suffix
 ~~~~~~~~~~~
@@ -58,12 +23,17 @@ Example::
   ldap:
     host: ldap://127.0.0.1
 
+.. _pillar-ldap-host:
+
 ldap:host
 ~~~~~~~~~
 
-LDAP URIs that be used for authentication.
+`LDAP URIs <http://www.openldap.org/faq/data/cache/532.html>`_
+that be used for authentication.
 
-Default: ``ldap://127.0.0.1``.
+Default: uses LDAP server on the same host (``ldap://127.0.0.1``).
+
+.. _pillar-dovecot-max_userip_connections:
 
 dovecot:max_userip_connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -72,16 +42,11 @@ Max number of connections for one user from an IP.
 
 Default: ``20``
 
+.. _pillar-dovecot-ssl:
+
 dovecot:ssl
 ~~~~~~~~~~~
 
 Name of the :doc:`/ssl/doc/index` key used for IMAPS and/or POP3S.
 
-Default: ``False``.
-
-ldap:ssl
-~~~~~~~~
-
-Name of the :doc:`/ssl/doc/index` key used for LDAPS.
-
-Default: ``False``.
+Default: do not use SSL/TLS (``False``).

@@ -160,7 +160,7 @@ graphite-web:
       - module: graphite-web
   pip:
     - installed
-{%- if 'files_archive' in pillar %}
+{%- if salt['pillar.get']('files_archive', False) %}
     - name: django-decorator-include==0.1
 {% else %}
     - name: ""
@@ -305,7 +305,7 @@ graphite_admin_user:
   module:
     - wait
     - name: django.command
-    - command: createsuperuser_plus --username={{ pillar['graphite']['initial_admin_user']['username'] }} --email={{ salt['pillar.get']('graphite:initial_admin_user:email', 'root@example.com') }} --password={{ pillar['graphite']['initial_admin_user']['password'] }}
+    - command: createsuperuser_plus --username={{ salt['pillar.get']('graphite:initial_admin_user:username') }} --email={{ salt['pillar.get']('graphite:initial_admin_user:email', 'root@example.com') }} --password={{ salt['pillar.get']('graphite:initial_admin_user:password') }}
     - settings_module: graphite.settings
     - bin_env: /usr/local/graphite
     - stateful: False
@@ -347,5 +347,5 @@ extend:
       - watch:
         - user: graphite
 {% if salt['pillar.get']('graphite:ssl', False) %}
-        - cmd: ssl_cert_and_key_for_{{ pillar['graphite']['ssl'] }}
+        - cmd: ssl_cert_and_key_for_{{ salt['pillar.get']('graphite:ssl', False) }}
 {% endif %}

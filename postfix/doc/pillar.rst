@@ -1,35 +1,12 @@
-.. Copyright (c) 2013, Hung Nguyen Viet
-.. All rights reserved.
-..
-.. Redistribution and use in source and binary forms, with or without
-.. modification, are permitted provided that the following conditions are met:
-..
-..     1. Redistributions of source code must retain the above copyright notice,
-..        this list of conditions and the following disclaimer.
-..     2. Redistributions in binary form must reproduce the above copyright
-..        notice, this list of conditions and the following disclaimer in the
-..        documentation and/or other materials provided with the distribution.
-..
-.. Neither the name of Hung Nguyen Viet nor the names of its contributors may be used
-.. to endorse or promote products derived from this software without specific
-.. prior written permission.
-..
-.. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-.. AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
-.. THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-.. PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
-.. BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-.. CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-.. SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-.. INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-.. CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-.. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-.. POSSIBILITY OF SUCH DAMAGE.
+Pillar
+======
 
 .. include:: /doc/include/add_pillar.inc
 
 - :doc:`/apt/doc/index` :doc:`/apt/doc/pillar`
 - :doc:`/mail/doc/index` :doc:`/mail/doc/pillar`
+- :doc:`/openldap/doc/index` :doc:`/openldap/doc/pillar`
+- :doc:`/ssl/doc/index` :doc:`/ssl/doc/pillar` if :ref:`pillar-postfix-ssl` is set.
 
 Mandatory
 ---------
@@ -39,10 +16,13 @@ Example::
   mail:
     mailname: domain.ltd
 
-mail:mailname
-~~~~~~~~~~~~~
+.. note::
 
-See :doc:`mail:mailname</mail/doc/pillar>`
+    To create a full-featured email stack, with :doc:`/openldap/doc/index`,
+    :doc:`/dovecot/doc/index`, ...
+    value of :ref:`pillar-mail-mailname` must be put into pillar
+    :ref:`pillar-postfix-virtual_mailbox_domains`,
+    :doc:`index` variable "$mydomain" can be used as well.
 
 Optional
 --------
@@ -55,7 +35,6 @@ Example::
   postfix:
     spam_filter: True
     sasl: True
-    virtual_mailbox: True
     aliases: |
         user1.abc@example.com user1@example.com
         user2.xyz@example.com user2@example.com
@@ -88,24 +67,16 @@ Example::
           desc:
           email:
 
-mail:maxproc
-~~~~~~~~~~~~
-
-Number of processes for passing email to amavis.  This value is used for
-amavis, too.
-
-ldap:data
-~~~~~~~~~
-
-Nested dict contain user information, that will be used for create LDAP users
-and mapping emails (user@mailname) to mailboxes.
+.. _pillar-postfix-spam_filter:
 
 postfix:spam_filter
 ~~~~~~~~~~~~~~~~~~~
 
-Set configuration for :doc:`/amavis/doc/index` spam filter.
+Enable :doc:`/amavis/doc/index` spam filter.
 
-Default: ``False``.
+Default: disabled (``False``).
+
+.. _pillar-postfix-sasl:
 
 postfix:sasl
 ~~~~~~~~~~~~
@@ -113,46 +84,43 @@ postfix:sasl
 Set configuration for authentication by :doc:`/dovecot/doc/index`
 `SASL <https://en.wikipedia.org/wiki/Simple_Authentication_and_Security_Layer>`__.
 
-Default:``False``.
+Default: not used (``False``). Set it to ``True`` will add some SASL-relate
+configuration directive into :doc:`index` configuration file.
 
-postfix:virtual_mailbox
-~~~~~~~~~~~~~~~~~~~~~~~
-
-Enable using virtual mailbox.
-
-Default: ``False``.
-
-postfix:virtual_mailbox_domains
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-List of domains that Postfix will receive emails for and they are delivered
-via the ``virtual_transport``.
-WARNING! ensuring that these values must not be set in
-``postfix:mydestination`` pillar.
-
-Default: ``$mydomain`` if ``postfix:virtual_mailbox`` set to ``True``.
+.. _pillar-postfix-aliases:
 
 postfix:aliases
 ~~~~~~~~~~~~~~~
 
-Support alias(mail forwarding) on :doc:`index`. Uses below syntax::
+Support `alias(mail forwarding) <http://www.postfix.org/postconf.5.html#virtual_alias_maps>`__.
+Multiple lines string, uses below syntax::
 
   <source_addr> <dest_addr>
   <source_addr2> <dest_addr2>
 
-Use it carefully, or it may cause recursive forwarding.
+Be carefully, or it may cause recursive forwarding.
+
+Default: no aliasing (``False``).
+
+.. _pillar-postfix-alias_domains:
 
 postfix:alias_domains
 ~~~~~~~~~~~~~~~~~~~~~
 
-Postfix will receive email for those domains and forward to addresses specified
-in ``postfix:aliases``. WARNING! ensuring that these values must not be set
-in ``postfix:mydestination`` pillar.
+:doc:`index` will receive email for those domains and forward to addresses
+specified in :ref:`pillar-postfix-aliases`.
 
-Default: ``$virtual_alias_maps`` - Postfix default value.
+.. warning::
 
-Example, if one wants to receive email for address salt@example.org then
-forward it to email saltstack@example.com, those pillar keys should be set::
+   ensuring these values must not be set in :ref:`pillar-postfix-mydestination`
+   pillar key.
+
+Default: ``['$virtual_alias_maps']`` - uses same value with $virtual_alias_maps
+This is :doc:`index` `default value <http://www.postfix.org/postconf.5.html#virtual_alias_domains>`__.
+
+Example, if one wants to receive email for address ``salt@example.org`` then
+forward it to email ``saltstack@example.com``, following pillar keys should be
+set::
 
   postfix:
     alias_domains:
@@ -160,53 +128,73 @@ forward it to email saltstack@example.com, those pillar keys should be set::
     aliases:
       salt@example.org saltstack@example.com
 
+.. _pillar-postfix-message_size_limit:
+
 postfix:message_size_limit
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The maximal size in bytes of a message.
 
-Defaults: ``10240000``.
+Default: default value of :doc:`index` (``10240000``).
+
+.. _pillar-postfix-mynetworks:
 
 postfix:mynetworks
 ~~~~~~~~~~~~~~~~~~
 
 List of trusted networks that :doc:`index` will relay mail from.
+Consults http://www.postfix.org/postconf.5.html#mynetworks for more detail.
 
-Default: ``127.0.0.0/8``.
+Default: Trust only `loopback network <http://en.wikipedia.org/wiki/Localhost#Name_resolution>`_ (``['127.0.0.0/8']``).
+
+.. _pillar-postfix-mydestination:
 
 postfix:mydestination
 ~~~~~~~~~~~~~~~~~~~~~
 
-Host that this mail server will be final destination.
+List of canonical domains <http://www.postfix.org/VIRTUAL_README.html#canonical>
+that this mail server will be final `destination <http://www.postfix.org/postconf.5.html#mydestination>__`.
+Consult http://www.postfix.org/postconf.5.html#mydestination for more detail.
 
-Default: empty list.
+Default: serve no domain (``[]``). `Hosted domains <http://www.postfix.org/VIRTUAL_README.html#canonical>`
+can be specified in :ref:`pillar-postfix-virtual_mailbox_domains`.
+
+.. _pillar-postfix-relayhost:
 
 postfix:relayhost
 ~~~~~~~~~~~~~~~~~
 
 The next-hop destination of non-local mail; overrides non-local domains in
-recipient addresses.
+recipient addresses. Consult http://www.postfix.org/postconf.5.html#relayhost
+for more details.
 
-Default: ''.
+Default: send all emails directly - set value to an empty string(``''``).
+
+.. _pillar-postfix-relay_domains:
 
 postfix:relay_domains
 ~~~~~~~~~~~~~~~~~~~~~
 
 Domains that this mail server will relay mail to.
 
-Default: all values defined in ``postfix:mydestination``.
+Default: relays mails to all domain defined in
+:ref:`pillar-postfix-mydestination` (``[]``).
+
+.. _pillar-postfix-inet_interfaces:
 
 postfix:inet_interfaces
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 Network interfaces that this mail server listen to.
 
-Default: ``all``.
+Default: listen to all interfaces available (``all``).
+
+.. _pillar-postfix-ssl:
 
 postfix:ssl
 ~~~~~~~~~~~
 
-:doc:`/ssl/doc/index` key to use to support SMTP over :doc:`/ssl/doc/index`.
+Name of :doc:`/ssl/doc/index` key to support SMTP over :doc:`/ssl/doc/index`.
 
 Default: not used.
 
@@ -218,3 +206,23 @@ postfix:queue_length
 Warning if the number of items in the mail queue reach the defined threshold.
 
 Default: ``20`` items in queue to raise warning.
+
+.. _pillar-postfix-virtual_mailbox_domains:
+
+postfix:virtual_mailbox_domains
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+List of domains that :doc:`/postfix/doc/index` will receive emails for and they are delivered
+via the ``virtual_transport``. Consult http://www.postfix.org/postconf.5.html#virtual_mailbox_domains
+for more information.
+
+.. warning::
+
+  ensuring these values must not be set in :ref:`pillar-postfix-mydestination` pillar.
+
+.. note::
+
+  it is possible to use :doc:`index` variable such as ``$mydomain``,
+  ``$myhostname``, etc...
+
+Default: not used (``[]``).

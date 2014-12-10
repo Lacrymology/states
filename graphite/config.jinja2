@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 
 {#-
  General Configuration
@@ -104,14 +104,18 @@ RRD_DIR = '/opt/graphite/storage/rrd'
 DATA_DIRS = ['/var/lib/graphite/whisper']
 #}
 DATA_DIRS = [
-{%- set instances_count = pillar['graphite']['carbon']['instances'] %}
+{%- set instances_count = salt['pillar.get']('carbon:instances') %}
 {%- for instance in range(instances_count) -%}
 "/var/lib/graphite/whisper/{{ instance }}"{% if not loop.last %}, {% endif %}
 {%- endfor -%}]
 LOG_DIR = '/var/log/graphite/graphite'
 INDEX_FILE = STORAGE_DIR + '/index'
 
-{%- set smtp = salt['pillar.get']('graphite:smtp', pillar['smtp']) %}
+{%- if salt['pillar.get']('graphite:smtp', False) %}
+    {%- set smtp = salt['pillar.get']('graphite:smtp', False) %}
+{%- else %}
+    {%- set smtp = salt['pillar.get']('smtp') %}
+{%- endif %}
 EMAIL_HOST = '{{ smtp['server'] }}'
 EMAIL_HOST_PASSWORD = '{{ smtp['password']|default('') }}'
 EMAIL_HOST_USER = '{{ smtp['user']|default('') }}'
@@ -204,11 +208,11 @@ LOGGING = {
         }
     },
     'handlers': {
-{% if 'graylog2_address' in pillar %}
+{% if salt['pillar.get']('graylog2_address', False) %}
         'gelf': {
             'level': 'NOTSET',
             'class': 'graypy.handler.GELFHandler',
-            'host': '{{ pillar['graylog2_address'] }}',
+            'host': '{{ salt['pillar.get']('graylog2_address', False) }}',
             'formatter': 'message_only'
         },
 {% endif %}
@@ -226,24 +230,24 @@ LOGGING = {
     },
     'loggers': {
         'django': {
-            'handlers': ['sentry', 'syslog'{% if 'graylog2_address' in pillar %}, 'gelf'{% endif %}],
+            'handlers': ['sentry', 'syslog'{% if salt['pillar.get']('graylog2_address', False) %}, 'gelf'{% endif %}],
             'propagate': True,
             'level':'DEBUG'
         },
         'raven': {
-            'handlers': ['sentry', 'syslog'{% if 'graylog2_address' in pillar %}, 'gelf'{% endif %}],
+            'handlers': ['sentry', 'syslog'{% if salt['pillar.get']('graylog2_address', False) %}, 'gelf'{% endif %}],
             'level': 'WARN',
             'propagate': False
         },
         'sentry.errors': {
-            'handlers': ['syslog'{% if 'graylog2_address' in pillar %}, 'gelf'{% endif %}],
+            'handlers': ['syslog'{% if salt['pillar.get']('graylog2_address', False) %}, 'gelf'{% endif %}],
             'level': 'DEBUG',
             'propagate': False
         },
 {% if not salt['pillar.get']('graphite:debug', False) %}
 {% for logger in ('cache', 'rendering', 'metric_access') %}
         '{{ logger }}': {
-            'handlers': ['sentry', 'syslog'{% if 'graylog2_address' in pillar %}, 'gelf'{% endif %}],
+            'handlers': ['sentry', 'syslog'{% if salt['pillar.get']('graylog2_address', False) %}, 'gelf'{% endif %}],
             'level': 'ERROR',
             'propagate': False
         },
@@ -251,14 +255,14 @@ LOGGING = {
 {% endif %}
      },
     'root': {
-        'handlers': ['sentry', 'syslog'{% if 'graylog2_address' in pillar %}, 'gelf'{% endif %}],
+        'handlers': ['sentry', 'syslog'{% if salt['pillar.get']('graylog2_address', False) %}, 'gelf'{% endif %}],
         'propagate': True,
         'level': 'NOTSET'
     }
 }
 
 RAVEN_CONFIG = {
-    'dsn': 'requests+{{ salt['pillar.get']('graphite:sentry', pillar['sentry_dsn']) }}',
+    'dsn': 'requests+{{ salt['pillar.get']('graphite:sentry', False)|default(salt['pillar.get']('sentry_dsn', False), boolean=True) }}',
 }
 
 {#-
@@ -325,10 +329,10 @@ MIDDLEWARE_CLASSES = MIDDLEWARE_CLASSES + (
     'django_statsd.middleware.GraphiteMiddleware'
 )
 
-SECRET_KEY = "{{ salt['password.pillar']('graphite:django_key') }}"
+SECRET_KEY = "{{ salt['password.pillar']('graphite:django_key', False) }}"
 STATSD_PREFIX = 'graphite'
 STATSD_CLIENT = 'django_statsd.clients.normal'
 INSTALLED_APPS = list(INSTALLED_APPS)
 INSTALLED_APPS.extend(['django_insecure'])
 
-ALLOWED_HOSTS = ["{% for hostname in pillar['graphite']['hostnames'] %}{{ hostname }}{% if not loop.last %}", "{% endif %}{% endfor %}"]
+ALLOWED_HOSTS = ["{% for hostname in salt['pillar.get']('graphite:hostnames') %}{{ hostname }}{% if not loop.last %}", "{% endif %}{% endfor %}"]

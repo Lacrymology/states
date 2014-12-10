@@ -31,6 +31,7 @@ include:
   - backup.server.diamond
   - backup.server.nrpe
   - backup.server.ssh
+  - doc
 
 {%- call test_cron() %}
 - sls: backup.server
@@ -44,3 +45,10 @@ test:
     - order: last
     - require:
       - cmd: test_crons
+  qa:
+    - test
+    - name: backup.server
+    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - require:
+      - monitoring: test
+      - cmd: doc

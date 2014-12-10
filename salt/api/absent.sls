@@ -34,13 +34,18 @@ salt_api:
   group:
     - absent
 
-{% for user in salt['pillar.get']('salt_master:external_auth:pam', []) %}
+{%- set external_auth = salt['pillar.get']('salt_api:external_auth', {}) %}
+{%- for authen_system in external_auth %}
+    {%- if authen_system == 'pam' %}
+        {%- for user in external_auth[authen_system] %}
 user_{{ user }}:
   user:
     - absent
     - name: {{ user }}
     - require_in:
       - group: salt_api
+        {%- endfor %}
+    {%- endif %}
 {% endfor %}
 
 extend:

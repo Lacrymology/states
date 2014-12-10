@@ -62,8 +62,8 @@ salt:
       - file: patch_salt_fix_require_sls
   pkgrepo:
     - managed
-{%- if 'files_archive' in pillar %}
-    - name: deb {{ pillar['files_archive']|replace('https://', 'http://') }}/mirror/salt/{{ version }} {{ grains['lsb_distrib_codename'] }} main
+{%- if salt['pillar.get']('files_archive', False) %}
+    - name: deb {{ salt['pillar.get']('files_archive', False)|replace('https://', 'http://') }}/mirror/salt/{{ version }} {{ grains['lsb_distrib_codename'] }} main
 {%- else %}
     - name: deb http://archive.robotinfra.com/mirror/salt/{{ version }} {{ grains['lsb_distrib_codename'] }} main
 {%- endif %}

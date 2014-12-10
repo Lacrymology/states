@@ -26,7 +26,10 @@ Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
 {%- from 'cron/test.jinja2' import test_cron with context %}
+{%- from 'ssh/test.sls' import add_key, remove_key with context -%}
 include:
+  - doc
+  - ssh.client
   - salt.ci
   - salt.ci.diamond
   - salt.ci.nrpe
@@ -43,3 +46,24 @@ test:
     - wait: 60
     - require:
       - cmd: test_crons
+  qa:
+    - test
+    - name: salt.ci
+    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - require:
+      - monitoring: test
+      - cmd: doc
+
+{{ add_key() }}
+
+test_salt_ci_ssh_port:
+  cmd:
+    - run
+    - name: scp -o 'NoHostAuthenticationForLocalhost yes' -P {{ salt['pillar.get']('salt_ci:ssh_port', 22) }} /etc/hostname root@localhost:/tmp
+    - require:
+      - cmd: ssh_add_key
+      - sls: salt.ci
+    - require_in:
+      - cmd: ssh_remove_key
+
+{{ remove_key() }}

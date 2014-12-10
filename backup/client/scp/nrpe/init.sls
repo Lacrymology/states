@@ -31,8 +31,8 @@ include:
   - bash.nrpe
   - nrpe
   - ssh.client.nrpe
-{%- if pillar['backup_server']['address'] in grains['ipv4'] or
-       pillar['backup_server']['address'] in ('localhost', grains['host']) %}
+{%- if salt['pillar.get']('backup_server:address') in grains['ipv4'] or
+       salt['pillar.get']('backup_server:address') in ('localhost', grains['host']) %}
   {#- If backup_server address set to localhost (mainly in CI testing), install backup.server first #}
   - backup.server.nrpe
 {%- endif %}

@@ -41,6 +41,210 @@ import argparse
 IGNORED_EXTS = ['patch']
 
 
+class LintCheck(object):
+    stable = False
+
+    def __init__(self, paths, warn_only=False, *exts):
+        self.paths = paths
+        self.exts = exts
+        self.warn_only = warn_only
+
+    def run(self):
+        raise NotImplementedError
+
+    def print_header(self, content, warn_only=False):
+        warn_only = warn_only or self.warn_only
+        if warn_only:
+            print 'WARNING: bellow lines MAYBE problems due to rule'
+            print '{0!r}'.format(content)
+        else:
+            print 'TIPS: {0}'.format(content)
+        print '-' * 10
+
+
+class LintCheckTabCharacter(LintCheck):
+    stable = True
+
+    def run(self):
+        '''
+        Checks whether files in ``paths`` contain tab character or not.
+        '''
+        found = _grep(self.paths, '\t')
+        if found:
+            self.print_header('Must use spaces instead of tab char')
+            _print_grep_result(found)
+            return False
+        return True
+
+
+class LintCheckBadCronFilename(LintCheck):
+    '''
+    Check whether a state manage a cron file with filename contains ``.``
+    (dot) in it because cron ignores that file.
+    '''
+    stable = False
+
+    def run(self):
+        exts = self.exts
+        paths = self.paths
+        if not exts:
+            exts = ['sls']
+        all_found = _grep(paths, '\/etc\/cron\.[^\/]+\/.+\.', *exts)
+        filtered_found = {}
+        for fn, data in all_found.iteritems():
+            # no check absent SLS
+            if fn.endswith('absent.sls'):
+                continue
+            data_without_jinja2_in_sid = {
+                lino: sid for lino, sid in
+                data.iteritems() if "{{" not in sid and "{%" not in sid
+            }
+            if data_without_jinja2_in_sid:
+                for_modify = data_without_jinja2_in_sid.copy()
+                for lino in data_without_jinja2_in_sid:
+                    with open(fn) as f:
+                        for idx, line in enumerate(f):
+                            # see two lines below state ID to check if it is an
+                            # absent state
+                            if idx == ((lino - 1) + 2) and '- absent' in line:
+                                for_modify.pop(lino)
+
+                if for_modify:
+                    filtered_found.update({fn: for_modify})
+
+        if filtered_found:
+            self.print_header('Remove the dot ``.`` in cron filename,'
+                              'or cron will ignore it')
+            _print_grep_result(filtered_found)
+            return False
+        return True
+
+
+class LintCheckBadStateStyle(LintCheck):
+    '''
+    Checks whether files in ``paths`` use alternate style to write a state.
+    It should be consistent and uses the original form.
+    '''
+    stable = False
+
+    def run(self):
+        exts = self.exts
+        paths = self.paths
+
+        if not exts:
+            exts = ['sls']
+        all_found = _grep(paths, '^  \w*\.\w*:$', *exts)
+        filtered_found = {}
+        for fn, data in all_found.iteritems():
+            # A state ID under ``extend`` and contains ``.`` can be miss
+            # understood by our regex.
+            # If it's a .py file, then it will be skipped.
+            # TODO find a better solution for this than just skip .py files
+            # e.g. if file name is .cfg or whatever contains '.'  in its name
+            # currently, this works because we only extend *.py states.
+            data_without_pystates = {lino: sid for lino, sid in
+                                     data.iteritems()
+                                     if not sid.endswith('.py:')
+                                     and not sid.endswith('.conf:')}
+            if data_without_pystates:
+                filtered_found.update({fn: data_without_pystates})
+
+        if filtered_found:
+            self.print_header("Use \nstate:\n  - function\nstyle instead")
+            _print_grep_result(filtered_found)
+            return False
+        return True
+
+
+class LintCheckNumbersOfOrderLast(LintCheck):
+    '''
+    Checks whether files in ``paths`` contain multiple lines of
+    '- order: last' or not. A SLS file should only contain one.
+    '''
+    stable = True
+
+    def run(self):
+        exts = self.exts
+        paths = self.paths
+        if not exts:
+            exts = ['jinja2', 'sls']
+        found = _grep(paths, '- order: last', *exts)
+        many_last = {k: v for k, v in found.iteritems() if len(v) > 1}
+
+        if many_last:
+            self.print_header(
+                "Only one '- order: last' takes effect, use only one"
+                " of that and replace other with explicit requirement"
+                " (you may want to require ``sls: sls_file`` instead)"
+            )
+            _print_grep_result(many_last)
+            return False
+        return True
+
+
+class CheckPillarStyleBase(LintCheck):
+    '''
+    Base class for check pillar style.
+    '''
+    stable = False
+
+    def __init__(self, patterns, rule, *args, **kwargs):
+        super(CheckPillarStyleBase, self).__init__(*args, **kwargs)
+        self.patterns = patterns
+        self.rule = rule
+
+    def run(self):
+        if not self.exts:
+            self.exts = ['jinja2', 'sls']
+
+        paths = _filter_files_with_exts(self.paths, self.exts)
+        all_found = {}
+        for path in paths:
+            found = {}
+            with open(path) as f:
+                for idx, line in enumerate(f):
+                    if 'pillar' in line:
+                        line = line.replace('"', "'")
+                        for pt in self.patterns:
+                            if re.findall(pt, line):
+                                found.update({idx + 1: line.strip('\n')})
+
+            if found:
+                all_found[path] = found
+
+        if all_found:
+            self.print_header(self.rule)
+            _print_grep_result(all_found)
+            return False
+        return True
+
+
+class LintCheckPillarStyle(CheckPillarStyleBase):
+    '''
+    Check bad using of pillar. Only ``salt['pillar.get']`` is allowed.
+    '''
+    stable = True
+
+    def __init__(self, *args, **kwargs):
+        rule = "only form salt['pillar.get'](...) is allowed"
+        super(LintCheckPillarStyle, self).__init__(
+            (" pillar\[",), rule, *args, **kwargs
+        )
+
+
+class LintCheckSubkeyInSaltPillar(CheckPillarStyleBase):
+    '''
+    Check bad using check ``if subkey in salt['pillar.get']``
+    '''
+    def __init__(self, *args, **kwargs):
+        patterns = ("if\s+[^ ]+\s*[a-z]*\s+in\s+salt\['pillar.get'\]", )
+        rule = ("do not check if subkey in salt['pillar.get']('key'), use "
+                "salt['pillar.get']('key:subkey') instead.")
+        super(LintCheckSubkeyInSaltPillar, self).__init__(
+            patterns, rule, *args, **kwargs
+        )
+
+
 def _filter_files_with_exts(paths, exts):
     return set(filter(lambda p: any(p.endswith('.' + e) for e in exts), paths))
 
@@ -86,109 +290,6 @@ def _print_grep_result(all_found):
         print 'In file: {0}'.format(fn)
         for line, content in all_found[fn].iteritems():
             print ' line {0}: {1}'.format(line, content)
-
-
-def _print_tips(content):
-    print
-    print 'TIPS: {0}'.format(content)
-    print '-' * 10
-
-
-def lint_check_tab_char(paths):
-    '''
-    Checks whether files in ``paths`` contain tab character or not.
-    '''
-    found = _grep(paths, '\t')
-    if found:
-        _print_tips('Must use spaces instead of tab char')
-        _print_grep_result(found)
-        return False
-    return True
-
-
-def lint_check_numbers_of_order_last(paths, *exts):
-    '''
-    Checks whether files in ``paths`` contain multiple lines of '- order: last'
-    or not. A SLS file should only contain one.
-    '''
-    if not exts:
-        exts = ['jinja2', 'sls']
-    found = _grep(paths, '- order: last', *exts)
-    many_last = {k: v for k, v in found.iteritems() if len(v) > 1}
-
-    if many_last:
-        _print_tips("Only one '- order: last' takes effect, use only one"
-                    " of that and replace other with explicit requirement"
-                    " (you may want to require ``sls: sls_file`` instead)")
-        _print_grep_result(many_last)
-        return False
-    return True
-
-
-def lint_check_bad_state_style(paths, *exts):
-    '''
-    Checks whether files in ``paths`` use alternate style to write a state.
-    It should be consistent and uses the original form.
-    '''
-    if not exts:
-        exts = ['sls']
-    all_found = _grep(paths, '^  \w*\.\w*:$', *exts)
-    filtered_found = {}
-    for fn, data in all_found.iteritems():
-        # A state ID under ``extend`` and contains ``.`` can be miss understood
-        # by our regex. If it's a .py file, then it will be skipped.
-        # TODO find a better solution for this than just skip .py files
-        # e.g. if file name is .cfg or whatever contains '.'  in its name
-        # currently, this works because we only extend *.py states.
-        data_without_pystates = {lino: sid for lino, sid in
-                                 data.iteritems() if not sid.endswith('.py:')
-                                 and not sid.endswith('.conf:')}
-        if data_without_pystates:
-            filtered_found.update({fn: data_without_pystates})
-
-    if filtered_found:
-        _print_tips("Use \nstate:\n  - function\nstyle instead")
-        _print_grep_result(filtered_found)
-        return False
-    return True
-
-
-def lint_check_bad_cron_filename(paths, *exts):
-    '''
-    Check whether a state manage a cron file with filename contains ``.`` (dot)
-    in it because cron ignores that file.
-    '''
-    if not exts:
-        exts = ['sls']
-    all_found = _grep(paths, '\/etc\/cron\.[^\/]+\/.+\.', *exts)
-    filtered_found = {}
-    for fn, data in all_found.iteritems():
-        # no check absent SLS
-        if fn.endswith('absent.sls'):
-            continue
-        data_without_jinja2_in_sid = {
-            lino: sid for lino, sid in
-            data.iteritems() if "{{" not in sid and "{%" not in sid
-        }
-        if data_without_jinja2_in_sid:
-            for_modify = data_without_jinja2_in_sid.copy()
-            for lino in data_without_jinja2_in_sid:
-                with open(fn) as f:
-                    for idx, line in enumerate(f):
-                        # see two lines below state ID to check if it is an
-                        # absent state
-                        if idx == ((lino - 1) + 2) and '- absent' in line:
-                            for_modify.pop(lino)
-
-            if for_modify:
-                filtered_found.update({fn: for_modify})
-
-    if filtered_found:
-        _print_tips('Remove the dot ``.`` in cron filename, or cron will '
-                    'ignore it')
-        _print_grep_result(filtered_found)
-        return False
-    return True
 
 
 def _is_binary_file(fn):
@@ -243,17 +344,41 @@ def main():
     argp = argparse.ArgumentParser()
     argp.add_argument('--tabonly', '-t', action='store_true',
                       help='only run lint check for tab character')
+    argp.add_argument('--stable', '-s', action='store_true',
+                      help='only run lint checks that considered stable')
+    argp.add_argument('--warn-nonstable', '-w', action='store_true',
+                      help='only print warning messages for non stable checks'
+                      ' always treat their results as passed checks')
     argp.add_argument('paths', nargs='*', default=['.'],
                       help='paths to check lint')
     args = argp.parse_args()
 
     paths = _parse_paths(args.paths)
+
+    all_lints = (LintCheckTabCharacter,
+                 LintCheckBadCronFilename,
+                 LintCheckBadStateStyle,
+                 LintCheckNumbersOfOrderLast,
+                 LintCheckPillarStyle,
+                 LintCheckSubkeyInSaltPillar,
+                 )
+
+    if args.stable:
+        all_lints = filter(lambda x: x.stable, all_lints)
+    elif args.tabonly:
+        all_lints = (LintCheckTabCharacter)
+
     res = []
-    res.append(lint_check_tab_char(paths))
-    if not args.tabonly:
-        res.append(lint_check_numbers_of_order_last(paths))
-        res.append(lint_check_bad_state_style(paths))
-        res.append(lint_check_bad_cron_filename(paths))
+    for lint in all_lints:
+        if lint.stable:
+            res.append(lint(paths, args.warn_nonstable).run())
+        else:
+            if args.warn_nonstable:
+                lint(paths, warn_only=True).run()
+                res.append(True)
+            else:
+                res.append(lint(paths, args.warn_nonstable).run())
+
     no_of_false = res.count(False)
 
     print '\nTotal checks: {0}, total failures: {1}'.format(len(res),

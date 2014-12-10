@@ -25,11 +25,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 
 {%- if salt['pillar.get']('salt:master', False) %}
-master: {{ pillar['salt']['master'] }}
-{%- else %}{# masterless #}
+master: {{ salt['pillar.get']('salt:master', False) }}
+{%- else %}{# master-less #}
 file_roots:
   base:
     - /srv/salt/states
@@ -39,7 +39,7 @@ pillar_roots:
 {%- endif %}
 id: {{ grains['id'] }}
 
-{%- if 'shinken_pollers' in pillar %}
+{%- if salt['pillar.get']('shinken_pollers', []) %}
 mine_functions:
   monitoring.data: []
 {%- endif %}

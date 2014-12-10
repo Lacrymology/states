@@ -31,8 +31,8 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 {% block body %}
     {{ super() }}
 s3:
-  access_key: {{ pillar['aws']['access_key'] }}
-  secret_key: {{ pillar['aws']['secret_key'] }}
+  access_key: {{ salt['pillar.get']('backup:s3:access_key') }}
+  secret_key: {{ salt['pillar.get']('backup:s3:secret_key') }}
 
 minion_id: {{ grains['id'] }}
 {% endblock %}

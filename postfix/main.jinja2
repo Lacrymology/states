@@ -25,9 +25,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 inet_protocols = ipv4
-mydomain = {{ pillar['mail']['mailname'] }}
+mydomain = {{ salt['pillar.get']('mail:mailname') }}
 smtpd_banner = $myhostname ESMTP $mail_name
 biff = no
 mydestination = {%- for i in salt['pillar.get']('postfix:mydestination', []) %} {{ i }}{%- endfor %}
@@ -35,11 +35,11 @@ mydestination = {%- for i in salt['pillar.get']('postfix:mydestination', []) %} 
 mynetworks = {%- for i in salt['pillar.get']('postfix:mynetworks', ["127.0.0.0/8"]) %} {{ i }}{%- endfor %}
 {%- endblock %}
 relayhost = {{ salt['pillar.get']('postfix:relayhost', '') }}
-relay_domains = {{ salt['pillar.get']('postfix:relay_domains', '$mydestination') }}
+relay_domains = {%- for i in salt['pillar.get']('postfix:relay_domains', [])|default(salt['pillar.get']('postfix:mydestination', []), boolean=True) %} {{ i }}{%- endfor %}
 alias_maps = hash:/etc/aliases
 alias_database = hash:/etc/aliases
 mailbox_size_limit = 0
-message_size_limit = {{ salt['pillar.get']('postfix:message_size_limit', '10240000') }}
+message_size_limit = {{ salt['pillar.get']('postfix:message_size_limit', 10240000) }}
 recipient_delimiter = +
 inet_interfaces = {{ salt['pillar.get']('postfix:inet_interfaces', 'all') }}
 append_dot_mydomain = no
@@ -49,10 +49,11 @@ delay_warning_time = 4h
 #}
 readme_directory = no
 {#- TLS parameters -#}
-{% if salt['pillar.get']('postfix:ssl', False) %}
+{%- set postfix_ssl = salt['pillar.get']('postfix:ssl', False) %}
+{%- if postfix_ssl %}
 smtpd_tls_mandatory_protocols=!SSLv2, !SSLv3
-smtpd_tls_cert_file=/etc/ssl/certs/{{ pillar['postfix']['ssl'] }}_chained.crt
-smtpd_tls_key_file=/etc/ssl/private/{{ pillar['postfix']['ssl'] }}.key
+smtpd_tls_cert_file=/etc/ssl/certs/{{ postfix_ssl }}_chained.crt
+smtpd_tls_key_file=/etc/ssl/private/{{ postfix_ssl }}.key
 smtpd_use_tls=yes
 smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
 smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
@@ -77,8 +78,8 @@ smtpd_recipient_restrictions = permit_mynetworks, permit_sasl_authenticated, rej
 virtual_alias_maps = hash:/etc/postfix/virtual
 virtual_alias_domains = {%- for i in salt['pillar.get']('postfix:alias_domains', ['$virtual_alias_maps']) %} {{ i }}{%- endfor %}
 {%- endif %}
-{%- if salt['pillar.get']('postfix:virtual_mailbox', False) %}
-virtual_mailbox_domains = {%- for i in salt['pillar.get']('postfix:virtual_mailbox_domains', ['$mydomain']) %} {{ i }}{%- endfor %}
+{%- if salt['pillar.get']('postfix:virtual_mailbox_domains', [])|length > 0 %}
+virtual_mailbox_domains = {%- for i in salt['pillar.get']('postfix:virtual_mailbox_domains', []) %} {{ i }}{%- endfor %}
 virtual_mailbox_base = /var/mail/vhosts
 virtual_mailbox_maps = hash:/etc/postfix/vmailbox
 virtual_minimum_uid = 100

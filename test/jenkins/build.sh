@@ -1,5 +1,5 @@
 #!/bin/bash
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 set -e
 
 # Copyright (c) 2013, Hung Nguyen Viet
@@ -42,7 +42,7 @@ if [ "${with_ssl:-true}" = "false" ]; then
 fi
 
 cd common
-test/lint.py --tabonly
+test/lint.py --warn-nonstable
 pip install -r doc/requirements.txt
 doc/build.py
 

@@ -31,8 +31,8 @@ include:
 postgresql-dev:
   pkgrepo:
     - managed
-{%- if 'files_archive' in pillar %}
-    - name: deb {{ pillar['files_archive']|replace('https://', 'http://') }}/mirror/postgresql/ {{ grains['lsb_distrib_codename'] }} main
+{%- if salt['pillar.get']('files_archive', False) %}
+    - name: deb {{ salt['pillar.get']('files_archive', False)|replace('https://', 'http://') }}/mirror/postgresql/ {{ grains['lsb_distrib_codename'] }} main
     - key_url: salt://postgresql/key.gpg
 {%- else %}
     - ppa: pitti/postgresql

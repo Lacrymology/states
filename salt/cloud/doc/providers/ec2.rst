@@ -41,14 +41,8 @@ Create a new security group for Salt CI server, set it's name to
 
 Create a key pair for minions that perform tests, set it's name to
 ``salt_cloud:providers:amazon_ec2:keyname``. Take the content of the private
-key and put it into ``deployment_key:contents`` this way::
-
-  deployment_key:
-    type: rsa
-    contents: |
-        -----BEGIN RSA PRIVATE KEY-----
-        {# followed by the content #}
-        -----END RSA PRIVATE KEY-----
+key and put it into ``deployment_keys``, see :doc:`/ssh/client/doc/pillar` for
+details.
 
 Choose a EC2 image in
 `Ubuntu releases <http://cloud-images.ubuntu.com/releases/precise/release/>`__

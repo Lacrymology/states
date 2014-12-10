@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
-{% set master_id = pillar['rabbitmq']['cluster']['master'] %}
+{% set master_id = salt['pillar.get']('rabbitmq:cluster:master') %}
 include:
   - apt
   - diamond
@@ -43,8 +43,8 @@ rabbitmq_diamond_resources:
     - text:
       - |
         [[rabbitmq]]
-        exe = ^\/usr\/lib\/erlang\/erts-.+\/bin\/inet_gethost$,^\/usr\/lib\/erlang\/erts-.+\/bin\/beam.+rabbitmq.+$,^\/usr\/lib\/erlang\/erts-.+\/bin\/epmd$
-        cmdline = ^inet_gethost 4$
+        exe = ^\/usr\/lib\/erlang\/erts-.+\/bin\/inet_gethost$,^\/usr\/lib\/erlang\/erts-.+\/bin\/epmd$
+        cmdline = ^inet_gethost 4$,^\/usr\/lib\/erlang\/erts-.+\/bin\/beam.+rabbitmq.+$,
 
 {#- TODO: remove that statement in >= 2014-04 #}
 /usr/local/diamond/salt-pyrabbit-requirements.txt:

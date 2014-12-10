@@ -64,8 +64,8 @@ jenkins:
   pkg:
     - installed
     - sources:
-{%- if 'files_archive' in pillar %}
-      - jenkins: {{ pillar['files_archive']|replace('file://', '')|replace('https://', 'http://') }}/mirror/jenkins_{{ version }}_all.deb
+{%- if salt['pillar.get']('files_archive', False) %}
+      - jenkins: {{ salt['pillar.get']('files_archive', False)|replace('file://', '')|replace('https://', 'http://') }}/mirror/jenkins_{{ version }}_all.deb
 {%- else %}
       - jenkins: http://pkg.jenkins-ci.org/debian/binary/jenkins_{{ version }}_all.deb
 {%- endif %}
@@ -136,5 +136,5 @@ extend:
   nginx:
     service:
       - watch:
-        - cmd: ssl_cert_and_key_for_{{ pillar['jenkins']['ssl'] }}
+        - cmd: ssl_cert_and_key_for_{{ salt['pillar.get']('jenkins:ssl', False) }}
 {% endif %}

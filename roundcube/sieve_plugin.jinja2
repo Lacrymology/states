@@ -27,7 +27,7 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
 <?php
 
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 {#-
 managesieve server port. When empty the port will be determined automatically
 using getservbyname() function, with 4190 as a fallback.

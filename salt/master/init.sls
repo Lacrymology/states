@@ -31,10 +31,13 @@ If you install a salt master from scratch, check and run bootstrap_archive.py
 and use it to install the master.
 -#}
 {%- from 'upstart/rsyslog.jinja2' import manage_upstart_log with context -%}
+
+{%- set use_ext_pillar = salt['pillar.get']('salt_master:pillar:branch', False) and salt['pillar.get']('salt_master:pillar:remote', False) -%}
+
 include:
   - local
   - git
-{%- if salt['pillar.get']('salt_master:pillar', False) %}
+{%- if use_ext_pillar %}
   - pip
 {%- endif %}
   - python.dev
@@ -58,7 +61,7 @@ include:
   file:
     - absent
 
-{%- if salt['pillar.get']('salt_master:pillar', False) %}
+{%- if use_ext_pillar %}
 salt-master-requirements:
   file:
     - managed
@@ -131,6 +134,8 @@ salt-master-job_changes.py:
     - mode: 400
     - require:
       - pkg: salt-master
+    - context:
+      use_ext_pillar: {{ use_ext_pillar }}
 salt-master:
   file:
     - managed
@@ -160,8 +165,8 @@ salt-master:
     - installed
     - skip_verify: True
     - sources:
-{%- if 'files_archive' in pillar %}
-      - salt-master: {{ pillar['files_archive']|replace('file://', '')|replace('https://', 'http://') }}/mirror/salt/{{ master_path }}
+{%- if salt['pillar.get']('files_archive', False) %}
+      - salt-master: {{ salt['pillar.get']('files_archive', False)|replace('file://', '')|replace('https://', 'http://') }}/mirror/salt/{{ master_path }}
 {%- else %}
       - salt-master: http://archive.robotinfra.com/mirror/salt/{{ master_path }}
 {%- endif %}

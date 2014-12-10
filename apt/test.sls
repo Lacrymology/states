@@ -28,6 +28,7 @@ Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 include:
   - apt
   - apt.nrpe
+  - doc
 
 {#-
  Install a dummy package, then remove it and expect a HALF INSTALLED after
@@ -66,3 +67,10 @@ test:
   monitoring:
     - run_all_checks
     - order: last
+  qa:
+    - test
+    - name: apt
+    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - require:
+      - monitoring: test
+      - cmd: doc

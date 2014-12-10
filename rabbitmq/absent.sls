@@ -27,11 +27,7 @@ Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
 rabbitmq-server:
   pkg:
-{% if salt['pillar.get']('destructive_absent', False) %}
     - purged
-{% else %}
-    - removed
-{% endif %}
     - require:
       - service: rabbitmq-server
   service:

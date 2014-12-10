@@ -1,18 +1,18 @@
 #!/bin/bash
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 
 # Copyright (c) 2013, Hung Nguyen Viet
 # All rights reserved.
-# 
+#
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
-# 
+#
 # 1. Redistributions of source code must retain the above copyright notice, this
 #    list of conditions and the following disclaimer.
 # 2. Redistributions in binary form must reproduce the above copyright notice,
 #    this list of conditions and the following disclaimer in the documentation
 #    and/or other materials provided with the distribution.
-# 
+#
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 # ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -23,7 +23,7 @@
 # ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-# 
+#
 # Author: Viet Hung Nguyen <hvn@robotinfra.com>
 # Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 set -e
@@ -37,11 +37,11 @@ validate_archive "$1"
 
 archive_path="$1"
 archive_name=$(basename $archive_path)
-subdir={{ salt['pillar.get']('backup_server:subdir', grains['id']) }}
+subdir={{ salt['pillar.get']('backup_server:subdir', False)|default(grains['id'], boolean=True) }}
 tmpdir=$(mktemp -d)
 cd ${tmpdir}
 mkdir "${subdir}"
 mv $archive_path "${subdir}"
-rsync --archive --quiet --relative ./"${subdir}"/ root@{{ pillar['backup_server']['address'] }}:/var/lib/backup
+rsync --archive --quiet --relative ./"${subdir}"/ root@{{ salt['pillar.get']('backup_server:address') }}:/var/lib/backup
 cd /
 rm -rf ${tmpdir}

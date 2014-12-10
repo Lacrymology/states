@@ -1,30 +1,5 @@
-.. Copyright (c) 2013, Nicolas Plessis
-.. All rights reserved.
-..
-.. Redistribution and use in source and binary forms, with or without
-.. modification, are permitted provided that the following conditions are met:
-..
-..     1. Redistributions of source code must retain the above copyright notice,
-..        this list of conditions and the following disclaimer.
-..     2. Redistributions in binary form must reproduce the above copyright
-..        notice, this list of conditions and the following disclaimer in the
-..        documentation and/or other materials provided with the distribution.
-..
-.. Neither the name of Nicolas Plessis nor the names of its contributors may be used
-.. to endorse or promote products derived from this software without specific
-.. prior written permission.
-..
-.. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-.. AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
-.. THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-.. PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
-.. BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-.. CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-.. SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-.. INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-.. CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-.. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-.. POSSIBILITY OF SUCH DAMAGE.
+Pillar
+======
 
 .. include:: /doc/include/add_pillar.inc
 
@@ -35,19 +10,40 @@ Mandatory
 
 Example::
 
-  aws:
+  backup:
     s3:
+      secret_key: aws_s3secretkey
+      access_key: aws_s3acccesskey
       bucket: example
       path: /path/to/backup
 
-aws:s3:bucket
-~~~~~~~~~~~~~
+.. _pillar-backup-s3-secret_key:
+
+backup:s3:secret_key
+~~~~~~~~~~~~~~~~~~~~
+
+`Amazon <https://aws-portal.amazon.com/gp/aws/developer/account/index.html?action=access-key>`__
+access key.
+
+.. _pillar-backup-s3-access_key:
+
+backup:s3:access_key
+~~~~~~~~~~~~~~~~~~~~
+
+Amazon secret key.
+
+.. _pillar-backup-s3-bucket:
+
+backup:s3:bucket
+~~~~~~~~~~~~~~~~
 
 `Amazon S3 bucket <http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html>`__
 name.
 
-aws:s3:path
-~~~~~~~~~~~
+.. _pillar-backup-s3-path:
+
+backup:s3:path
+~~~~~~~~~~~~~~
 
 Path in
 `S3 bucket <http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html>`__

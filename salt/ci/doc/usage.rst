@@ -6,20 +6,22 @@ Usage
 Notice
 ------
 
-Since each build job clones code from git server, user may need to specify
-the Credential for each git link if needed. If git server uses ``denyhosts``,
-user must specify Credential before adding git link, or add address of
-CI server to whitelist of ``denyhosts`` of git server.
+Since each build job clones code from :doc:`/gitlab/doc/index` server, user may
+need to specify the Credential for each git link if needed. If
+:doc:`/gitlab/doc/index` server uses :doc:`/denyhosts/doc/index`,
+user must specify Credential before adding git link,
+or adds address of CI server to :ref:`pillar-denyhosts-whitelist` of
+:doc:`/gitlab/doc/index` server.
 
 Update pillar
 -------------
 
 Test VMs will copy result to CI server after done testing, it is done through
 scp command instead of salt-cp to avoid security problems. To make scp work,
-it must set pillar ``salt_ci:host_key`` to host key of CI server. See
+it must set pillar :ref:`pillar-salt_ci-host_key` to host key of CI server. See
 :doc:`/ssh/doc/index` for instruction.
 NOTICE: the address part in this key should be the same as value in
-``salt_cloud:master`` (do not use domain in one and IP in another)
+:ref:`pillar-salt_cloud-master` (do not use domain in one and IP in another)
 
 Plugins
 -------
@@ -36,9 +38,9 @@ Configuration
 Notices that some config options only available after installing all needed
 plugins, so do install above plugins before doing followings steps.
 
-- Configure SSH private key
-  for user ``jenkins`` through Jenkins Web UI. (Dashboard => Credential
-  => Add credential => ``Kind: SSH username with private key``)
+- Configure :doc:`/ssh/doc/index` private key
+  for user ``jenkins`` through :doc:`/jenkins/doc/index` Web UI. (Dashboard => Credential
+  => Add credential => `Kind: SSH username with private key`
 
 Jobs
 ----

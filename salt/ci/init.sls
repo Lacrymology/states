@@ -126,7 +126,7 @@ ci-agent:
     - group: ci-agent
     - mode: 400
     - contents: |
-        {{ pillar['salt_ci']['agent_pubkey']|indent(8) }}
+        {{ salt['pillar.get']('salt_ci:agent_pubkey')|indent(8) }}
     - require:
       - file: ci-agent
 

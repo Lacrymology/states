@@ -1,7 +1,7 @@
-{%- if salt['pillar.get']('mail:check_mail_stack', False) %}
-    {%- set mail_pillar = pillar['mail']['check_mail_stack'] -%}
-    {%- set username = mail_pillar['username'] -%}
-    {%- set mailname = pillar['mail']['mailname'] %}
+{%- set check_mail_stack = salt['pillar.get']('mail:check_mail_stack', {}) -%}
+{%- if check_mail_stack is mapping and check_mail_stack|length > 0 %}
+    {%- set username = salt['pillar.get']('mail:check_mail_stack:username') -%}
+    {%- set mailname = salt['pillar.get']('mail:mailname') %}
 mailstack_functionality:
   description: Mail Stack Functionality
   command: /usr/lib/nagios/plugins/check_mail_stack.py --formula=mail.server --check=mailstack_functionality
@@ -15,9 +15,9 @@ mailstack_functionality:
   arguments:
     freshness: 12 {#- minutes #}
     username: {{ username + '@' + mailname }}
-    password: "{{ pillar['ldap']['data'][mailname][username]['passwd'] }}"
+    password: "{{ salt['pillar.get']('ldap:data', {})[mailname][username]['passwd'] }}"
     imap_server: localhost
-    smtp_server: {{ mail_pillar['smtp_server'] }}
+    smtp_server: {{ salt['pillar.get']('mail:check_mail_stack:smtp_server') }}
     {#- wait N seconds after sending mail #}
     smtp_wait: {{ salt['pillar.get']('mail:check_mail_stack:smtp_wait', 10) }}
     {#- Assuming that if dovecot is configured to use SSL,

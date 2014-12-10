@@ -27,6 +27,7 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
 {%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
+  - doc
   - salt.master
   - salt.master.backup
   - salt.master.backup.nrpe
@@ -44,6 +45,15 @@ test:
     - require:
       - sls: salt.master
       - sls: salt.master.backup
+  qa:
+    - test
+    - name: salt.master
+    - additional:
+      - salt.master.backup
+    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - require:
+      - monitoring: test
+      - cmd: doc
   diamond:
     - test
     - map:

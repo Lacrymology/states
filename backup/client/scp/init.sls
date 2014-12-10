@@ -31,8 +31,8 @@ include:
   - bash
   - local
   - ssh.client
-{%- if pillar['backup_server']['address'] in grains['ipv4'] or
-       pillar['backup_server']['address'] in ('localhost', grains['host']) %}
+{%- if salt['pillar.get']('backup_server:address') in grains['ipv4'] or
+       salt['pillar.get']('backup_server:address') in ('localhost', grains['host']) %}
   {#- If backup_server address set to localhost (mainly in CI testing), install backup.server first #}
   - backup.server
 {%- else %}
@@ -40,9 +40,9 @@ include:
 backup-client:
   ssh_known_hosts:
     - present
-    - name: {{ pillar['backup_server']['address'] }}
+    - name: {{ salt['pillar.get']('backup_server:address') }}
     - user: root
-    - fingerprint: {{ pillar['backup_server']['fingerprint'] }}
+    - fingerprint: {{ salt['pillar.get']('backup_server:fingerprint') }}
     - require:
       - pkg: openssh-client
 {%- endif %}
@@ -62,7 +62,12 @@ backup-client:
       - file: /usr/local
       - file: bash
       - pkg: /usr/local/bin/backup-store
-{%- if pillar['backup_server']['address'] in grains['ipv4'] or
-       pillar['backup_server']['address'] in ('localhost', grains['host']) %}
+{%- if salt['pillar.get']('backup_server:address') in grains['ipv4'] or
+       salt['pillar.get']('backup_server:address') in ('localhost', grains['host']) %}
       - file: /var/lib/backup
 {%- endif %}
+
+extend:
+  openssh-client:
+    file:
+      - source: salt://backup/client/scp/config.jinja2

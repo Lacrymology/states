@@ -63,6 +63,7 @@ postfix_diamond_resources:
       - |
         [[postfix]]
         exe = ^\/usr\/lib\/postfix\/master$
+        cmdline = ^trivial-rewrite, ^tlsmgr, ^smtp -n amavisfeed, ^smtpd -n smtp, ^smtpd -n.* -t inet, ^qmgr -l -t fifo -u, ^proxymap -t unix -u, ^pickup -l -t fifo -u -c, ^lmtp -t unix -u -c, ^cleanup -z -t unix -u -c, ^anvil -l -t unix -u -c,
 
 postfix_diamond_queue_length:
   file:

@@ -1,5 +1,5 @@
-Cloud
-=====
+Salt Cloud
+==========
 
 Introduction
 ------------

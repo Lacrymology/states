@@ -1,3 +1,6 @@
+Pillar
+======
+
 .. include:: /doc/include/add_pillar.inc
 
 - :doc:`/pip/doc/index` :doc:`/pip/doc/pillar`
@@ -18,42 +21,54 @@ Example::
         branch: develop
         remote: git@git.example.com:dev/pillars.git
 
+.. _pillar-salt_master-gitfs_remotes:
+
 salt_master:gitfs_remotes
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. copied from https://github.com/saltstack/salt/blob/2014.1/conf/master#L385
 
-Git fileserver backend configuration.
-When using the git fileserver backend at least one git remote needs to be
-defined.
+`Git fileserver <http://docs.saltstack.com/en/latest/topics/tutorials/gitfs.html>`_
+backend configuration.
+When using the fileserver backend at least one :doc:`/git/doc/index` remote
+needs to be defined.
 
-The user running the salt master will need read access to the repo.
+The user running the :doc:`/salt/master/doc/index` will need read access to
+the repo.
 Look in :doc:`/ssh/client/doc/index` for more details.
 
-If the salt-master act also as the git server, look for
+If the salt-master act also as the :doc:`/git/server/doc/index`, look for
 :doc:`/git/server/doc/pillar` exact pillars keys details.
 
-salt_master:pillar
-~~~~~~~~~~~~~~~~~~
+Default: ``[]``.
 
-Specify a remote git repo for using as ext pillar.
-
-Default: ``False``
-
-``False`` means not use.
-
-If the :doc:`index` act also as the :doc:`/git/server/doc/index`, look for
-exact :doc:`/git/server/doc/pillar` keys details.
-
-salt_master:pillar:branch
-~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Git branch when checkout remote git repo.
+.. _pillar-salt_master-pillar-remote:
 
 salt_master:pillar:remote
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Git path to use for remote git repo.
+:doc:`/git/doc/index` remote address to use for pillar source repository.
+
+Default: ``False`` - not used.
+
+.. warning::
+
+  To work it also need :ref:`pillar-salt_master-pillar-branch` defined.
+
+.. _pillar-salt_master-pillar-branch:
+
+salt_master:pillar:branch
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+:doc:`/git/doc/index` branch to checkout and use as a pillar source repository.
+
+Default: ``False`` - not used.
+
+.. warning::
+
+  To work it also need :ref:`pillar-salt_master-pillar-remote` defined.
+
+.. _pillar-salt_master-workers:
 
 salt_master:workers
 ~~~~~~~~~~~~~~~~~~~
@@ -62,7 +77,9 @@ Numbers of workers.
 
 .. TODO: use number of cores
 
-Default: ``5``
+Default: ``5``.
+
+.. _pillar-salt_master-loop_interval:
 
 salt_master:loop_interval
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -73,7 +90,9 @@ The loop_interval option controls the seconds for the master's maintinance
 process check cycle. This process updates file server backends, cleans the
 job cache and executes the scheduler.
 
-Default: ``60``
+Default: ``60``.
+
+.. _pillar-salt_master-keep_jobs_hours:
 
 salt_master:keep_jobs_hours
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -82,4 +101,4 @@ salt_master:keep_jobs_hours
 
 Set the number of hours to keep old job information in the job cache
 
-Default: ``24``
+Default: ``24``.

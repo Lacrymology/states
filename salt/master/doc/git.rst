@@ -4,7 +4,8 @@ Git Server for Salt-Master
 Introduction
 ------------
 
-The same host that run the salt master can also host the required git server.
+The same host that run the :doc:`/salt/master/doc/index` can also host
+the required :doc:`/git/server/doc/index`.
 If there is no existing hosted or self-hosted.
 
 Role
@@ -20,7 +21,8 @@ Pillar
 ------
 
 Follow the instruction in the :doc:`/git/server/doc/pillar` to create the
-pillar data for git server, but most importantly the following values::
+pillar data for :doc:`/git/server/doc/index`,
+but most important are the following values::
 
   git-server:
     repositories:
@@ -32,7 +34,7 @@ pillar data for git server, but most importantly the following values::
         push_notification: False
 
 The public key of local :doc:`/ssh/doc/index` client must be listed in
-``git-server:keys`` for last step during the ``git push``.
+:ref:`pillar-git-server-keys`` for last step during the ``git push``.
 
 On the master side the following pillars values are required to be set::
 
@@ -48,7 +50,7 @@ Usage
 -----
 
 Once the salt-master (and :doc:`/git/server/doc/index`) had been installed,
-the Git repositories is available.
+the :doc:`/git/doc/index` repositories is available.
 
 After authoring the pillar data in local sandbox, it can be pushed on the
 master::

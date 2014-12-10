@@ -1,46 +1,18 @@
-.. Copyright (c) 2013, Bruno Clermont
-.. All rights reserved.
-..
-.. Redistribution and use in source and binary forms, with or without
-.. modification, are permitted provided that the following conditions are met:
-..
-..     1. Redistributions of source code must retain the above copyright notice,
-..        this list of conditions and the following disclaimer.
-..     2. Redistributions in binary form must reproduce the above copyright
-..        notice, this list of conditions and the following disclaimer in the
-..        documentation and/or other materials provided with the distribution.
-..
-.. Neither the name of Bruno Clermont nor the names of its contributors may be used
-.. to endorse or promote products derived from this software without specific
-.. prior written permission.
-..
-.. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-.. AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
-.. THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-.. PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
-.. BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-.. CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-.. SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-.. INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-.. CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-.. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-.. POSSIBILITY OF SUCH DAMAGE.
-
 Salt-Master Installation
 ========================
 
 Git Server
 ----------
 
-As explained in :doc:`/doc/usage`, first you need three git repositories
-localy checked out:
+As explained in :doc:`/doc/usage`, first you need
+three :doc:`/git/doc/index` repositories locally checked out:
 
 - Common (where this file is)
 - Client specifics (where the roles are)
 - Pillar repository
 
-An existing Git server or hosting provider can be used or a self-host those
-repositories.
+An existing :doc:`/git/doc/index` server or hosting provider
+can be used or a self-host those repositories.
 
 Self-Hosted
 ^^^^^^^^^^^
@@ -48,20 +20,21 @@ Self-Hosted
 Basic
 """""
 
-The salt master can be used to host it's own Git repositories.
+The :doc:`/salt/master/doc/index` can be used to host
+it's own :doc:`/git/doc/index` repositories.
 See :doc:`/salt/master/doc/index` for details.
 
 GitLab
 """"""
 
 A :doc:`/gitlab/doc/index` is also available to act as a
-git server for a salt master. It requires manual settings and need more
-preparation but can answers other needs.
+git server for a :doc:`/salt/master/doc/index`. It requires manual settings
+and need more preparation but can satisfy other needs.
 
 Externally Hosted
 ^^^^^^^^^^^^^^^^^
 
-Existing git hosting service can be used such as:
+Existing :doc:`/git/doc/index` hosting service can be used such as:
 
 - `Github <https://github.com/>`__
 - `BitBucket <https://bitbucket.org/>`__
@@ -75,7 +48,8 @@ To perform the following steps the some requirements are needed to be installed:
 - `Python 2.7 <https://www.python.org/>`__
 - `SSH Client <http://en.wikipedia.org/wiki/Comparison_of_SSH_clients>`__
 
-And you need to have access to Salt Master host with :doc:`/ssh/doc/index`.
+And you need to have access to :doc:`/salt/master/doc/index` host
+with :doc:`/ssh/doc/index`.
 
 .. note::
 
@@ -85,14 +59,14 @@ And you need to have access to Salt Master host with :doc:`/ssh/doc/index`.
 Git Repositories
 ----------------
 
-As explained in :doc:`/doc/usage`, three git repositories need to be localy
-checked out:
+As explained in :doc:`/doc/usage`, three :doc:`/git/doc/index` repositories
+need to be locally checked out:
 
 - Common
 - Client specifics
 - Pillar repository
 
-If starting from scratch, create localy repositories with::
+If starting from scratch, create locally repositories with::
 
   git init pillars
   git init non_common
@@ -109,7 +83,7 @@ Pillar Top file
 ---------------
 
 In Pillar repository, the salt-master minion ID must be linked to pillar
-data for the salt master and it's related roles:
+data for the :doc:`/salt/master/doc/index` and it's related roles:
 
 Note that pillar ``top.sls`` need something similar to::
 

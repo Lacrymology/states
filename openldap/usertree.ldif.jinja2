@@ -26,7 +26,7 @@ Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
 {#- ldiff simple example -#}
-{% set suffix = pillar['ldap']['suffix'] %}
+{% set suffix = salt['pillar.get']('ldap:suffix') %}
 dn: {{ suffix }}
 objectClass: top
 objectClass: dcObject

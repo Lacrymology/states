@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 auth_mechanisms = plain login
 lmtp_save_to_detail_mailbox = yes
 mail_gid = mail
@@ -92,7 +92,7 @@ userdb {
 }
 protocol lmtp {
   mail_plugins = " sieve"
-  postmaster_address = {{ pillar['mail']['postmaster'] }}
+  postmaster_address = {{ salt['pillar.get']('mail:postmaster') }}
 }
 protocol sieve {
   mail_max_userip_connections = 10

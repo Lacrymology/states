@@ -36,7 +36,7 @@ include:
   - pip
   - rsyslog
   - salt.master
-{% if salt['pillar.get']('salt_master:ssl', False) %}
+{% if salt['pillar.get']('salt_api:ssl', False) %}
   - ssl
 {% endif %}
 
@@ -44,7 +44,10 @@ salt_api:
   group:
     - present
 
-{% for user in pillar['salt_master']['external_auth']['pam'] %}
+{%- set external_auth = salt['pillar.get']('salt_api:external_auth', {}) %}
+{%- for authen_system in external_auth %}
+    {%- if authen_system == 'pam' %}
+        {%- for user in external_auth[authen_system] %}
 user_{{ user }}:
   user:
     - present
@@ -59,10 +62,12 @@ user_{{ user }}:
     - wait
     - name: shadow.set_password
     - m_name: {{ user }}
-    - password: {{ salt['password.encrypt_shadow'](pillar['salt_master']['external_auth']['pam'][user]) }}
+    - password: {{ salt['password.encrypt_shadow'](external_auth[authen_system][user]) }}
     - watch:
       - user: user_{{ user }}
-{% endfor %}
+        {%- endfor %}
+    {%- endif %}
+{%- endfor %}
 
 /etc/salt/master.d/ui.conf:
   file:
@@ -152,8 +157,8 @@ salt-api:
   pkg:
     - installed
     - sources:
-{%- if 'files_archive' in pillar %}
-      - salt-api: {{ pillar['files_archive']|replace('file://', '')|replace('https://', 'http://') }}/mirror/salt/{{ api_path }}
+{%- if salt['pillar.get']('files_archive', False) %}
+      - salt-api: {{ salt['pillar.get']('files_archive', False)|replace('file://', '')|replace('https://', 'http://') }}/mirror/salt/{{ api_path }}
 {%- else %}
       - salt-api: http://archive.robotinfra.com/mirror/salt/{{ api_path }}
 {%- endif %}
@@ -172,10 +177,10 @@ salt_api_old_version:
       - pkg: salt-api
 {%- endif %}
 
-{% if salt['pillar.get']('salt_master:ssl', False) %}
+{% if salt['pillar.get']('salt_api:ssl', False) %}
 extend:
   nginx:
     service:
       - watch:
-        - cmd: ssl_cert_and_key_for_{{ pillar['salt_master']['ssl'] }}
+        - cmd: ssl_cert_and_key_for_{{ salt['pillar.get']('salt_api:ssl', False) }}
 {% endif %}

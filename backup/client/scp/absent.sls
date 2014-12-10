@@ -34,7 +34,7 @@ include:
 backup-client:
   ssh_known_hosts:
     - absent
-    - name: {{ pillar['backup_server']['address'] }}
+    - name: {{ salt['pillar.get']('backup_server:address') }}
     - order: 1
  endif
  #}

@@ -39,8 +39,6 @@ __email__ = 'bruno@robotinfra.com'
 
 import logging
 import pwd
-import StringIO
-import pprint
 import tempfile
 import collections
 import subprocess
@@ -305,7 +303,8 @@ def list_system_files(dirs=("/bin", "/etc", "/usr", "/lib", "/sbin", "/var"),
                                '/var/cache/apt/',
                                '/var/backups/',
                                '/var/log/upstart/network-interface-',
-                               '/var/cache/salt/minion/extrn_files')):
+                               '/var/cache/salt/minion/extrn_files',
+                               '/var/cache/salt/minion/doc')):
     """
     Returns a set of the files present in each of the directories listed.
 
@@ -652,7 +651,7 @@ class States(unittest.TestCase):
 
         # check that all state had been executed properly.
         # build a list of comment of all failed state.
-        errors = StringIO.StringIO()
+        str_errors = ""
 
         # A sample output:
         #   pkg_|-vim_|-vim_|-latest:
@@ -666,15 +665,23 @@ class States(unittest.TestCase):
         for state in output:
             if not output[state]['result']:
                 # remove not useful keys
-                try:
-                    del output[state]['result']
-                    del output[state]['__run_num__']
-                except KeyError:
-                    pass
-                pprint.pprint(output[state], errors)
-        errors.seek(0)
-        str_errors = errors.read()
-        errors.close()
+                for key in ('result', '__run_num__'):
+                    try:
+                        del output[state][key]
+                    except KeyError:
+                        pass
+                for key in ('comment', 'name'):
+                    if key not in output[state]:
+                        output[state][key] = \
+                            "WARNING: no '%s' in result of '%s'" % (key, state)
+                    logger.warning("Missing key '%s' in output[%s]: %s", key,
+                                   state, output[state])
+                str_errors += os.linesep.join((
+                    output[state]['name'],
+                    '=' * len(output[state]['name']),
+                    output[state]['comment'],
+                    ''
+                ))
 
         if str_errors:
             self.fail("Failure to apply states '%s': %s%s" %

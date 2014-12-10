@@ -142,7 +142,7 @@ standby_mode = on
 #}
 
 {%- set username = salt['pillar.get']('postgresql:replication:username', 'replication_agent') %}
-primary_conninfo = 'host={{ pillar['postgresql']['replication']['master'] }} port=5432 user={{ username }}'
+primary_conninfo = 'host={{ salt['pillar.get']('postgresql:replication:master') }} port=5432 user={{ username }}'
 
 {#-
  By default, a standby server keeps restoring XLOG records from the

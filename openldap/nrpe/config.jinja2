@@ -39,7 +39,7 @@ openldap_port:
 
 openldap_base:
   description: LDAP Base
-  command: /usr/lib/nagios/plugins/check_ldap -H 127.0.0.1 -p 389 -b '{{ pillar['ldap']['suffix'] }}' {% if salt['pillar.get']('ldap:ssl', False) %} -T{% endif %} -3 -t {{ timeout }}
+  command: /usr/lib/nagios/plugins/check_ldap -H 127.0.0.1 -p 389 -b '{{ salt['pillar.get']('ldap:suffix') }}' {% if salt['pillar.get']('ldap:ssl', False) %} -T{% endif %} -3 -t {{ timeout }}
   timeout: {{ timeout }}
   dependencies:
     - openldap_port

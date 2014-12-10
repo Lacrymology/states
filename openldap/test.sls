@@ -28,6 +28,7 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 {%- from 'cron/test.jinja2' import test_cron with context %}
 {%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
+  - doc
   - openldap
   - openldap.backup
   - openldap.backup.nrpe
@@ -56,8 +57,18 @@ test:
     - require:
       - sls: openldap
       - sls: openldap.diamond
-{#-
-By default, check_ldap already do a search with (objectclass=*).
+  qa:
+    - test
+    - name: openldap
+    - aditional:
+      - openldap.backup
+    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - require:
+      - monitoring: test
+      - cmd: doc
+
+{#- 
+By default, check_ldap already do a search with (objectclass=*). 
 Moreover, mail stack check also perform query to LDAP.
 So, no need to do a test like ldapsearch here.
 -#}

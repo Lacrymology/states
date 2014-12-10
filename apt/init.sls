@@ -88,8 +88,8 @@ apt:
     - group: root
     - mode: 440
     - contents: |
-        # {{ pillar['message_do_not_modify'] }}
-        {{ pillar['apt']['sources'] | indent(8) }}
+        # {{ salt['pillar.get']('message_do_not_modify') }}
+        {{ salt['pillar.get']('apt:sources')|indent(8) }}
   module:
     - wait
     - name: pkg.refresh_db
@@ -99,8 +99,8 @@ apt:
     - require:
       - file: dpkg.conf
       - cmd: apt-key
-{%- set packages_blacklist = salt['pillar.get']('packages:blacklist', False) -%}
-{%- set packages_whitelist = salt['pillar.get']('packages:whitelist', False) -%}
+{%- set packages_blacklist = salt['pillar.get']('packages:blacklist', []) -%}
+{%- set packages_whitelist = salt['pillar.get']('packages:whitelist', []) -%}
 {%- if packages_blacklist or packages_whitelist %}
     - require_in:
     {%- if packages_blacklist %}

@@ -26,6 +26,7 @@ Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
 include:
+  - doc
   - salt.cloud
   - salt.cloud.diamond
   - salt.cloud.nrpe
@@ -35,3 +36,10 @@ test:
     - run_all_checks
     - order: last
     - wait: 60
+  qa:
+    - test
+    - name: salt.cloud
+    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - require:
+      - monitoring: test
+      - cmd: doc

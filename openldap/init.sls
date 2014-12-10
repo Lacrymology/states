@@ -161,16 +161,18 @@ ldap_{{ domain }}_{{ uid }}:
 {%- endmacro %}
 
 {#- create / delete user entries #}
-{% set suffix = pillar['ldap']['suffix'] %}
-{%- for domain in pillar['ldap']['data'] %}
-  {%- for uid in pillar['ldap']['data'][domain] %}
-    {% set u = pillar['ldap']['data'][domain][uid] %}
+{% set suffix = salt['pillar.get']('ldap:suffix') %}
+{%- set ldapdata = salt['pillar.get']('ldap:data', {}) %}
+{%- for domain in ldapdata %}
+  {%- for uid in ldapdata[domain] %}
+    {% set u = ldapdata[domain][uid] %}
 {{ ldap_adduser(uid, domain, suffix, u['cn'], u['sn'], u['passwd']) }}
   {%- endfor %}
 {%- endfor %}
 
-{%- for domain in salt['pillar.get']('ldap:absent', []) %}
-  {%- for uid in pillar['ldap']['absent'][domain] %}
+{%- set absent_data = salt['pillar.get']('ldap:absent', {}) %}
+{%- for domain in absent_data %}
+  {%- for uid in absent_data[domain] %}
 ldap_{{ domain }}_{{ uid }}: # make it will conflict if one DN in both ``data`` and ``absent``
   cmd:
     - run

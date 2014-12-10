@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 
 {#-
  There is a security issue with salt:
@@ -33,14 +33,18 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
  the permissions application is pretty much random.
  Until that issue is fixed, each users will have access to everything.
 #}
+
+{%- set external_auth = salt['pillar.get']('salt_api:external_auth', {}) %}
+{%- if (external_auth|length > 0) %}
 external_auth:
-{%- for auth_type in pillar['salt_master']['external_auth'] %}
-  {{ auth_type }}:
- {%- for username in pillar['salt_master']['external_auth'][auth_type] %}
+  {%- for authen_system in external_auth %}
+  {{ authen_system }}:
+    {%- for username in external_auth[authen_system] %}
     {{ username }}:
       - .*
- {%- endfor %}
-{%- endfor %}
+    {%- endfor %}
+  {%- endfor %}
+{%- endif %}
 
 rest_cherrypy:
   port: 8000

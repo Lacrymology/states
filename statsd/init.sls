@@ -75,11 +75,11 @@ statsd:
       - file: statsd
       - virtualenv: statsd
       - module: statsd
-{%- if 'files_archive' in pillar %}
+{%- if salt['pillar.get']('files_archive', False) %}
   archive:
     - extracted
     - name: /usr/local/statsd/src
-    - source: {{ pillar['files_archive'] }}/pip/py-statsd-{{ version }}.tar.bz2
+    - source: {{ salt['pillar.get']('files_archive', False) }}/pip/py-statsd-{{ version }}.tar.bz2
     - source_hash: md5=536f1f28f527c2e7848ef3ce0bb613af
     - archive_format: tar
     - tar_options: j

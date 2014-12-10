@@ -25,9 +25,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Quan Tong Anh <quanta@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 
-{%- if 'graphite_address' in pillar %}
-carbon.host: {{ pillar['graphite_address'] }}
+{%- if salt['pillar.get']('graphite_address', False) %}
+carbon.host: {{ salt['pillar.get']('graphite_address', False) }}
 carbon.port: 2003
 {%- endif -%}

@@ -57,7 +57,7 @@ recovery_from_master_base_backup:
   cmd:
     - run
     - cwd: /var/lib/postgresql/{{ version }}/main/
-    - name: pg_basebackup -U {{ username }} -h {{ pillar['postgresql']['replication']['master'] }} -p 5432 -D .
+    - name: pg_basebackup -U {{ username }} -h {{ salt['pillar.get']('postgresql:replication:master') }} -p 5432 -D .
     - user: postgres
     - group: postgres
     - require:

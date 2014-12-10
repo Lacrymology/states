@@ -4,7 +4,7 @@ Salt API
 Introduction
 ------------
 
-.. TODO: put intro
+http://docs.saltstack.com/en/latest/topics/netapi/index.html
 
 .. toctree::
     :glob:

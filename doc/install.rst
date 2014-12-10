@@ -24,7 +24,7 @@ at:
 - :doc:`/diamond/doc/index` :doc:`/diamond/doc/pillar`
 
 Dynamic DNS
-^^^^^^^^^^^
+~~~~~~~~~~~
 
 Actually there is two salt state that allow to use salt formula to define
 hostname:

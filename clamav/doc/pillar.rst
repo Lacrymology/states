@@ -1,30 +1,5 @@
-.. Copyright (c) 2013, Hung Nguyen Viet
-.. All rights reserved.
-..
-.. Redistribution and use in source and binary forms, with or without
-.. modification, are permitted provided that the following conditions are met:
-..
-..     1. Redistributions of source code must retain the above copyright notice,
-..        this list of conditions and the following disclaimer.
-..     2. Redistributions in binary form must reproduce the above copyright
-..        notice, this list of conditions and the following disclaimer in the
-..        documentation and/or other materials provided with the distribution.
-..
-.. Neither the name of Hung Nguyen Viet nor the names of its contributors may be used
-.. to endorse or promote products derived from this software without specific
-.. prior written permission.
-..
-.. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-.. AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
-.. THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-.. PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
-.. BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-.. CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-.. SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-.. INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-.. CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-.. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-.. POSSIBILITY OF SUCH DAMAGE.
+Pillar
+======
 
 .. include:: /doc/include/add_pillar.inc
 
@@ -46,6 +21,61 @@ Example::
       - db.local.clamav.net
       - database.clamav.net
 
+.. _pillar-clamav-connect_timeout:
+
+clamav:connect_timeout
+~~~~~~~~~~~~~~~~~~~~~~
+
+Timeout in seconds for connecting to virus database server when updating local
+database.
+
+Default: :doc:`/clamav/doc/index` default value (``30``).
+
+.. _pillar-clamav-receive_timeout:
+
+clamav:receive_timeout
+~~~~~~~~~~~~~~~~~~~~~~
+
+Timeout in seconds for reading from database server when updating local
+database.
+
+Default: :doc:`/clamav/doc/index` default value (``30``).
+
+.. _pillar-clamav-times_of_check:
+
+clamav:times_of_check
+~~~~~~~~~~~~~~~~~~~~~
+
+Number of database checks for updating per day performed by Freshclam.
+
+Default: :doc:`/clamav/doc/index` default value (``24``).
+
+Conditional
+-----------
+
+.. _pillar-clamav-db_mirrors:
+
+.. _pillar-clamav-db_mirrors:
+
+clamav:db_mirrors
+~~~~~~~~~~~~~~~~~
+
+List of spam database servers.
+Link to the
+`public list of available mirrors <http://www.clamav.net/mirrors.html>`__.
+
+Default:
+
+If ``files_archive`` is not defined, list with:
+
+ - ``db.local.clamav.net``
+ - ``database.clamav.net``
+
+If ``files_archive`` is defined, it use mirror of :doc:`/clamav/doc/index` database from the
+archive.
+
+.. _pillar-clamav-dns_db:
+
 clamav:dns_db
 ~~~~~~~~~~~~~
 
@@ -57,45 +87,5 @@ Default:
 
 If ``files_archive`` is not defined, ``current.cvd.clamav.net``.
 
-If ``files_archive`` is defined, it use mirror of Clamav database from the
-archive.
-
-clamav:connect_timeout
-~~~~~~~~~~~~~~~~~~~~~~
-
-Timeout in seconds when connecting to virus database server.
-
-Default: ``30``.
-
-clamav:receive_timeout
-~~~~~~~~~~~~~~~~~~~~~~
-
-Timeout in seconds when reading from database server.
-
-Default: ``30``.
-
-clamav:times_of_check
-~~~~~~~~~~~~~~~~~~~~~
-
-Numbers of database server checks per day.
-
-Default: ``24``.
-
-.. _pillar-clamav-db_mirrors:
-
-clamav:db_mirrors
-~~~~~~~~~~~~~~~~~
-
-Tuple of spam database servers.
-Link to the
-`public list of available mirrors <http://www.clamav.net/mirrors.html>`__.
-
-Default:
-
-If ``files_archive`` is not defined, list with:
-
- - ``db.local.clamav.net``
- - ``database.clamav.net``
-
-If ``files_archive`` is defined, it use mirror of Clamav database from the
+If ``files_archive`` is defined, it use mirror of :doc:`/clamav/doc/index` database from the
 archive.

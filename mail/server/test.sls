@@ -27,6 +27,8 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
 {%- from 'cron/test.jinja2' import test_cron with context %}
 {%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
+{%- set check_mail_stack = salt['pillar.get']('mail:check_mail_stack', {}) %}
+
 include:
   - amavis
   - amavis.nrpe
@@ -34,6 +36,7 @@ include:
   - amavis.clamav
   - clamav.nrpe
   - clamav.diamond
+  - doc
   - dovecot
   - dovecot.backup
   - dovecot.backup.diamond
@@ -92,3 +95,14 @@ test:
       - sls: postfix
       - sls: postfix.diamond
       - monitoring: test
+  qa:
+{%- if check_mail_stack is mapping and check_mail_stack|length > 0 %}
+    - test
+{%- else %}
+    - test_pillar
+{%- endif %}
+    - name: mail.server
+    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - require:
+      - monitoring: test
+      - cmd: doc

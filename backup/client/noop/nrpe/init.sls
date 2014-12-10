@@ -37,7 +37,7 @@ check_backup.py:
     - template: jinja
     - contents: |
         #!/usr/local/nagios/bin/python
-        # # {{ pillar['message_do_not_modify'] }}
+        # # {{ salt['pillar.get']('message_do_not_modify') }}
         # A place-holder script always return 0
         # Which replaces check_backup.py in test mode
     - user: nagios

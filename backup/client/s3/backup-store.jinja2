@@ -1,5 +1,5 @@
 #!/bin/bash
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 {#-
 Copyright (c) 2013, Nicolas Plessis
 All rights reserved.
@@ -40,9 +40,9 @@ validate_archive "$1"
 
 archive_path="$1"
 archive_name=$(basename $archive_path)
-{%- if pillar['aws']['s3']['path'] == '/' %}
-s3cmd --config=/root/.s3cfg --no-progress put $archive_path s3://{{ pillar['aws']['s3']['bucket'] }}/$archive_name | logger -t s3cmd
+{%- if salt['pillar.get']('backup:s3:path') == '/' %}
+s3cmd --config=/root/.s3cfg --no-progress put $archive_path s3://{{ salt['pillar.get']('backup:s3:bucket') }}/$archive_name | logger -t s3cmd
 {%- else %}
-s3cmd --config=/root/.s3cfg --no-progress put $archive_path s3://{{ pillar['aws']['s3']['bucket'] }}/{{ pillar['aws']['s3']['path'].strip('/') }}/$archive_name | logger -t s3cmd
+s3cmd --config=/root/.s3cfg --no-progress put $archive_path s3://{{ salt['pillar.get']('backup:s3:bucket') }}/{{ salt['pillar.get']('backup:s3:path').strip('/') }}/$archive_name | logger -t s3cmd
 {%- endif %}
 rm -f $archive_path

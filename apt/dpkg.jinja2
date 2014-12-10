@@ -1,4 +1,4 @@
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 no-debsig
 {%- if salt['pillar.get']('debug', False) %}
 debug 1000

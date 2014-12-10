@@ -27,7 +27,7 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
 {%- from 'upstart/rsyslog.jinja2' import manage_upstart_log with context -%}
 include:
-{% if 'shinken_pollers' in pillar %}
+{% if salt['pillar.get']('shinken_pollers', []) %}
   - diamond.nrpe
 {% endif %}
   - git
@@ -80,13 +80,6 @@ diamond.conf:
     - source: salt://diamond/config.jinja2
     - require:
       - file: /etc/diamond
-{%- for host in salt['pillar.get']('diamond:ping', []) -%}
-    {%- if loop.first %}
-    - context:
-      ping_hosts:
-    {%- endif %}
-        {{ host }}: {{ pillar['diamond']['ping'][host] }}
-{%- endfor %}
 
 diamond:
   virtualenv:

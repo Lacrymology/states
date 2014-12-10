@@ -13,7 +13,7 @@ include:
 test-proxy-server:
   host:
     - present
-    - ip: {{ pillar['test']['proxy_server'] }}
+    - ip: {{ salt['pillar.get']('test:proxy_server') }}
     - names:
       - apt.local
       - archive.local

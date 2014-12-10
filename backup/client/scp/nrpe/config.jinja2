@@ -5,10 +5,10 @@
 nsca_dir: /etc/nagios/nsca.d
 
 ssh:
-  hostname: {{ pillar['backup_server']['address'] }}
+  hostname: {{ salt['pillar.get']('backup_server:address') }}
   username: root
   host_key_auto_add: true
 
 backup:
-  prefix: /var/lib/backup/{{ salt['pillar.get']('backup_server:subdir', grains['id']) }}
+  prefix: /var/lib/backup/{{ salt['pillar.get']('backup_server:subdir', False)|default(grains['id'], boolean=True) }}
 {%- endblock -%}

@@ -35,7 +35,7 @@ include:
 {%- endif %}
   - nginx
 
-{% set master_id = pillar['rabbitmq']['cluster']['master'] %}
+{% set master_id = salt['pillar.get']('rabbitmq:cluster:master') %}
 
 rabbitmq:
   user:
@@ -86,13 +86,30 @@ rabbitmq_old_version:
 {%- endif %}
 
 {#- does not use PID, no need to manage #}
+
+rabbitmq_config_file:
+  file:
+    - managed
+    - name: /etc/rabbitmq/rabbitmq.config
+    - template: jinja
+    - user: rabbitmq
+    - group: rabbitmq
+    - mode: 400
+    - source: salt://rabbitmq/config.jinja2
+    - require:
+      - pkg: rabbitmq-server
+      - user: rabbitmq
+
 rabbitmq-server:
   file:
     - directory
     - name: /etc/rabbitmq/rabbitmq.conf.d
     - mode: 550
+    - user: rabbitmq
+    - group: rabbitmq
     - require:
       - pkg: rabbitmq-server
+      - user: rabbitmq
   service:
     - running
     - enable: True
@@ -104,8 +121,10 @@ rabbitmq-server:
     - watch:
       - user: rabbitmq
       - file: rabbitmq-server
+      - file: rabbitmq_config_file
       - rabbitmq_plugin: rabbitmq-server
-{% for node in pillar['rabbitmq']['cluster']['nodes'] %}
+{%- set nodes = salt['pillar.get']('rabbitmq:cluster:nodes') %}
+{% for node in nodes %}
     {% if node != grains['id'] %}
       - host: host_{{ node }}
     {% endif %}
@@ -119,8 +138,8 @@ rabbitmq-server:
   pkg:
     - installed
     - sources:
-{%- if 'files_archive' in pillar %}
-      - rabbitmq-server: {{ pillar['files_archive']|replace('file://', '')|replace('https://', 'http://') }}/mirror/rabbitmq-server_{{ sub_version }}_all.deb
+{%- if salt['pillar.get']('files_archive', False) %}
+      - rabbitmq-server: {{ salt['pillar.get']('files_archive', False)|replace('file://', '')|replace('https://', 'http://') }}/mirror/rabbitmq-server_{{ sub_version }}_all.deb
 {%- else %}
       - rabbitmq-server: http://www.rabbitmq.com/releases/rabbitmq-server/v{{ version }}/rabbitmq-server_{{ sub_version }}_all.deb
 {%- endif %}
@@ -130,15 +149,16 @@ rabbitmq-server:
       - pkg: logrotate
       - host: hostname
       - file: rabbitmq_erlang_cookie
+
 {% if grains['id'] == master_id %}
-{% set vhosts = salt['pillar.get']('rabbitmq:vhosts', []) %}
-{% for vhost in vhosts %}
+  {% set vhosts = salt['pillar.get']('rabbitmq:vhosts', {}) %}
+  {% for vhost in vhosts %}
 rabbitmq-vhost-{{ vhost }}:
   rabbitmq_user:
     - present
     - runas: root
     - name: {{ vhost }}
-    - password: {{ pillar['rabbitmq']['vhosts'][vhost] }}
+    - password: {{ salt['pillar.get']('rabbitmq:vhosts:' ~ vhost) }}
     - force: True
     - require:
       - service: rabbitmq-server
@@ -149,14 +169,14 @@ rabbitmq-vhost-{{ vhost }}:
     - user: {{ vhost }}
     - require:
       - rabbitmq_user: rabbitmq-vhost-{{ vhost }}
-{% endfor %}
+  {% endfor %}
 
 monitor_user:
   rabbitmq_user:
     - present
     - runas: root
-    - name: {{ pillar['rabbitmq']['monitor']['user'] }}
-    - password: {{ salt['password.pillar']('rabbitmq:monitor:password') }}
+    - name: {{ salt['pillar.get']('rabbitmq:monitor:user') }}
+    - password: {{ salt['pillar.get']('rabbitmq:monitor:password', None)|default(salt['password.pillar']('rabbitmq:monitor:password'), boolean=True) }}
     - force: True
     - tags:
       - monitoring
@@ -165,26 +185,26 @@ monitor_user:
         - ""
         - ""
         - ".*"
-{% for vhost in vhosts %}
-  {%- if vhost != '/' %}
+  {% for vhost in vhosts %}
+    {%- if vhost != '/' %}
       - {{ vhost }}:
         - ""
         - ""
         - ".*"
-  {%- endif %}
-{%- endfor %}
+    {%- endif %}
+  {%- endfor %}
     - require:
-{% for vhost in vhosts %}
+  {% for vhost in vhosts %}
       - rabbitmq_vhost: rabbitmq-vhost-{{ vhost }}
-{%- endfor %}
+  {%- endfor %}
       - service: rabbitmq-server
 
 admin_user:
   rabbitmq_user:
     - present
     - runas: root
-    - name: {{ pillar['rabbitmq']['management']['user'] }}
-    - password: {{ salt['password.pillar']('rabbitmq:management:password') }}
+    - name: {{ salt['pillar.get']('rabbitmq:management:user') }}
+    - password: {{ salt['pillar.get']('rabbitmq:management:password', None)|default(salt['password.pillar']('rabbitmq:management:password'), boolean=True) }}
     - force: True
     - require:
       - service: rabbitmq-server
@@ -198,7 +218,7 @@ rabbitmq_delete_guest:
     - name: guest
     - require:
       - service: rabbitmq-server
-{% endif %}
+{% endif %} {#- END OF states only for MASTER NODE #}
 
 {% if grains['id'] != master_id %}
 join_rabbitmq_cluster:
@@ -212,13 +232,13 @@ join_rabbitmq_cluster:
       - service: rabbitmq-server
 {% endif %}
 
-{% for node in pillar['rabbitmq']['cluster']['nodes'] -%}
+{% for node in nodes -%}
     {% if node != grains['id'] -%}
 host_{{ node }}:
   host:
     - present
     - name: {{ node }}
-    - ip: {{ pillar['rabbitmq']['cluster']['nodes'][node]['private'] }}
+    - ip: {{ nodes[node]['private'] }}
     {% endif %}
 {% endfor %}
 
@@ -235,7 +255,8 @@ host_{{ node }}:
     - context:
       destination: http://127.0.0.1:15672
       ssl: {{ salt['pillar.get']('rabbitmq:ssl', False) }}
-      hostnames: {{ pillar['rabbitmq']['hostnames'] }}
+      ssl_redirect: {{ salt['pillar.get']('rabbitmq:ssl_redirect', False) }}
+      hostnames: {{ salt['pillar.get']('rabbitmq:hostnames') }}
     - watch_in:
       - service: nginx
 
@@ -244,7 +265,7 @@ extend:
   nginx:
     service:
       - watch:
-        - cmd: ssl_cert_and_key_for_{{ pillar['rabbitmq']['ssl'] }}
+        - cmd: ssl_cert_and_key_for_{{ salt['pillar.get']('rabbitmq:ssl', False) }}
 {% endif %}
 
 

@@ -46,7 +46,7 @@ ci-agent:
     - group: ci-agent
     - mode: 400
     - contents: |
-        {{ pillar['salt_ci']['agent_privkey']|indent(8) }}
+        {{ salt['pillar.get']('salt_ci:agent_privkey')|indent(8) }}
     - require:
       - file: ci-agent
 
@@ -57,7 +57,7 @@ ci-agent:
     - group: ci-agent
     - mode: 644
     - contents: |
-        {{ pillar['salt_ci']['host_key']|indent(8) }}
+        {{ salt['pillar.get']('salt_ci:host_key')|indent(8) }}
     - require:
       - file: ci-agent
 

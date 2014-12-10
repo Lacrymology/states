@@ -27,6 +27,7 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
 {%- from 'cron/test.jinja2' import test_cron with context %}
 include:
+  - doc
   - carbon
   - carbon.backup
   - carbon.backup.diamond
@@ -54,3 +55,12 @@ test:
     - order: last
     - require:
       - cmd: test_crons
+  qa:
+    - test
+    - name: carbon
+    - additional:
+      - carbon.backup
+    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - require:
+      - monitoring: test
+      - cmd: doc

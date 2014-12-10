@@ -1,7 +1,4 @@
-Pillar
-======
-
-This formula include optional integration with support for monitoring and
+This formula includes optional integration with support for monitoring and
 stats.
 
 If ``nrpe`` and ``diamond`` had been included role, the following additional

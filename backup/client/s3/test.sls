@@ -25,23 +25,27 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
-{%- if salt['pillar.get']('aws:s3', False) %}
+{%- if salt['pillar.get']('backup:s3:access_key') %}
 
 include:
   - backup.client.s3
   - backup.client.s3.nrpe
   - backup.dumb
+  - doc
 
 {#- Test monitoring check for `s3lite`:
     - upload a dummy file to the S3 using `s3lite`
     - create a NSCA file to perform a check
     - run check then delete test files
     #}
+
+{%- set s3bucket = salt['pillar.get']('backup:s3:bucket') %}
+{%- set s3path =  salt['pillar.get']('backup:s3:path').strip('/') %}
 test_s3lite:
   cmd:
     - run
     - cwd: /usr/local/s3lite/bin/
-    - name: /usr/local/s3lite/bin/s3lite s3lite s3://{{ pillar['aws']['s3']['bucket'] }}/{{ pillar['aws']['s3']['path'].strip('/') }}
+    - name: /usr/local/s3lite/bin/s3lite s3lite s3://{{ s3bucket }}/{{ s3path }}
     - require:
       - sls: backup.client.s3
       - sls: backup.client.s3.nrpe
@@ -55,7 +59,7 @@ test_s3lite:
           command: /usr/lib/nagios/plugins/check_backup_s3lite.py --formula=backup.client.s3lite --check=test_s3lite
           arguments:
             path: s3lite
-            bucket: s3://{{ pillar['aws']['s3']['bucket'] }}/{{ pillar['aws']['s3']['path'].strip('/') }}
+            bucket: s3://{{ s3bucket }}/{{ s3path }}
   monitoring:
     - run_check
     - name: test_s3lite
@@ -66,7 +70,7 @@ test_s3lite:
 cleanup_s3lite:
   cmd:
     - run
-    - name: s3cmd ls s3://{{ pillar['aws']['s3']['bucket'] }}/{{ pillar['aws']['s3']['path'].strip('/') }}/s3lite* | awk '{ print $4 }' | xargs s3cmd del
+    - name: s3cmd ls s3://{{ s3bucket }}/{{ s3path }}/s3lite* | awk '{ print $4 }' | xargs s3cmd del
     - require:
       - file: /root/.s3cfg
       - monitoring: test_s3lite
@@ -76,7 +80,7 @@ cleanup_s3lite:
     - require:
       - monitoring: test_s3lite
 
-{#- This is similar to the above, 
+{#- This is similar to the above,
     but using `s3cmd` to backup instead of `s3lite` #}
 test_s3cmd:
   cmd:
@@ -107,7 +111,7 @@ test_s3cmd:
 cleanup_s3cmd:
   cmd:
     - run
-    - name: s3cmd ls s3://{{ pillar['aws']['s3']['bucket'] }}/{{ pillar['aws']['s3']['path'].strip('/') }}/backup-client-test* | awk '{ print $4 }' | xargs s3cmd del
+    - name: s3cmd ls s3://{{ s3bucket }}/{{ s3path }}/backup-client-test* | awk '{ print $4 }' | xargs s3cmd del
     - require:
       - file: /root/.s3cfg
       - monitoring: test_s3cmd
@@ -124,6 +128,13 @@ test:
     - exclude:
       - test_s3lite
       - test_s3cmd
+  qa:
+    - test
+    - name: backup.client.s3
+    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - require:
+      - monitoring: test
+      - cmd: doc
 
 {%- else %}
 

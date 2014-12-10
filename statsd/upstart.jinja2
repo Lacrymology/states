@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 # ubuntu upstart script for statsd
 
 start on filesystem or runlevel [2345]
@@ -35,4 +35,4 @@ respawn
 respawn limit 10 5
 umask 022
 
-exec /usr/local/statsd/bin/pystatsd-server --transport graphite --flush-interval 10000 --name {{ grains['id'] }} --graphite-host {{ pillar['graphite_address'] }} --gauges-prefix '{{ grains['id'] }}.stats' --counters-prefix '{{ grains['id'] }}.stats' --timers-prefix '{{ grains['id'] }}.stats' --pidfile /var/run/pystatsd.pid {% if salt['pillar.get']('debug', False) %}--debug {% endif %}| logger -t "statsd" -p debug
+exec /usr/local/statsd/bin/pystatsd-server --transport graphite --flush-interval 10000 --name {{ grains['id'] }} --graphite-host {{ salt['pillar.get']('graphite_address', False) }} --gauges-prefix '{{ grains['id'] }}.stats' --counters-prefix '{{ grains['id'] }}.stats' --timers-prefix '{{ grains['id'] }}.stats' --pidfile /var/run/pystatsd.pid {% if salt['pillar.get']('debug', False) %}--debug {% endif %}| logger -t "statsd" -p debug

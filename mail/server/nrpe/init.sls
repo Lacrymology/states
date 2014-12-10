@@ -2,16 +2,19 @@
  Monitoring check to test the entire mail stack (IMAP, SMTP, LDAP, antivirus,
  antispam, etc.
  #}
-{%- from 'nrpe/passive.jinja2' import passive_check with context %}
 include:
   - cron
   - nrpe
 
-{{ passive_check('mail.server') }}
-
 /etc/nagios/check_mail_stack.yml:
   file:
     - absent
+
+{%- set check_mail_stack = salt['pillar.get']('mail:check_mail_stack', {}) -%}
+{%- if check_mail_stack is mapping and check_mail_stack|length > 0 -%}
+{%- from 'nrpe/passive.sls' import passive_check with context %}
+
+{{ passive_check('mail.server') }}
 
 /etc/cron.d/mail-server-nrpe:
   file:
@@ -21,7 +24,6 @@ include:
 
 /usr/lib/nagios/plugins/check_mail_stack.py:
   file:
-{%- if salt['pillar.get']('mail:check_mail_stack', False) %}
     - managed
     - source: salt://mail/server/nrpe/check_mail_stack.py
     - user: nagios
@@ -34,6 +36,12 @@ include:
     - require_in:
       - service: nagios-nrpe-server
       - service: nsca_passive
-{%- else %}
+{%- else -%}
+{%- from 'nrpe/passive.jinja2' import passive_absent with context %}
+
+{{ passive_absent('mail.server') }}
+
+/usr/lib/nagios/plugins/check_mail_stack.py:
+  file:
     - absent
 {%- endif -%}

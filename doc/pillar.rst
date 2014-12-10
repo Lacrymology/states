@@ -1,38 +1,84 @@
-.. Copyright (c) 2013, Bruno Clermont
-.. All rights reserved.
-..
-.. Redistribution and use in source and binary forms, with or without
-.. modification, are permitted provided that the following conditions are met:
-..
-..     1. Redistributions of source code must retain the above copyright notice,
-..        this list of conditions and the following disclaimer.
-..     2. Redistributions in binary form must reproduce the above copyright
-..        notice, this list of conditions and the following disclaimer in the
-..        documentation and/or other materials provided with the distribution.
-..
-.. Neither the name of Bruno Clermont nor the names of its contributors may be used
-.. to endorse or promote products derived from this software without specific
-.. prior written permission.
-..
-.. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-.. AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
-.. THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-.. PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
-.. BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-.. CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-.. SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-.. INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-.. CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-.. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-.. POSSIBILITY OF SUCH DAMAGE.
-
-Global Pillars
-==============
+Global Pillar
+=============
 
 The following Pillar values are commonly used across all states.
 
-Required
+Mandatory
+---------
+
+Example::
+
+  message_do_not_modify: Don't edit this file manually
+  smtp:
+    server: smtp.example.com
+    port: 25
+    root: tom
+    domain: example.com
+    from: joe@example.com
+    user: yyy
+    password: xxx
+    encryption: plain
+
+.. _pillar-message_do_not_modify:
+
+message_do_not_modify
+~~~~~~~~~~~~~~~~~~~~~
+
+Warning message to not modify file.
+
+smtp:server
+~~~~~~~~~~~
+
+The SMTP server where the mail is sent to.
+
+smtp:port
+~~~~~~~~~
+
+SMTP server port.
+
+smtp:root
+~~~~~~~~~
+
+The user that gets all the mails for User ID below 1000 - the system users
+(normal users are given a User ID above 1000).
+
+smtp:from
+~~~~~~~~~
+
+The address that will appear in the "From:" field of the email.
+
+smtp:user
+~~~~~~~~~
+
+The username used to log into the remote SMTP server.
+
+smtp:password
+~~~~~~~~~~~~~
+
+Password for account login, if specified smtp:user.
+
+Optional
 --------
+
+smtp:encryption
+~~~~~~~~~~~~~~~
+
+SMTP encryption type.
+
+Possible values: `ssl <http://en.wikipedia.org/wiki/Transport_Layer_Security>`_, `starttls <http://en.wikipedia.org/wiki/Starttls>`_, ``plain``.
+
+Default: Sending the username and password over plaintext (``plain``)
+
+.. _pillar-debug:
+
+debug
+~~~~~
+
+If ``False``, drop all noisy log and extra verboseness of most log settings.
+
+If ``True``, turn on as much debugging logging as possible.
+
+Default: turn off debug (``False``).
 
 .. _pillar-roles:
 
@@ -42,27 +88,7 @@ roles
 List of roles that apply to a minion.
 See :doc:`intro` and :doc:`usage` for details on roles.
 
-Default: empty list ``[]``.
-
-.. _pillar-salt-master:
-
-salt:master
-~~~~~~~~~~~
-
-As all deployed hosts are done trough salt, the minion need to know where is the
-:doc:`/salt/master/doc/index` to connect.
-
-Look in :doc:`/salt/minion/doc/index` for details.
-
-.. _pillar-message_do_not_modify:
-
-message_do_not_modify
-~~~~~~~~~~~~~~~~~~~~~
-
-Warning message to not modify file.
-
-Optional
---------
+Default: no role (``[]``).
 
 .. _pillar-branch:
 
@@ -81,12 +107,28 @@ files_archive
 Path to :doc:`/salt/archive/server/doc/index` where download most files
 (archives, packages, pip) to apply states.
 
+Default: directly get files from public Internet resources. There is no
+guarantee that those hosting services will be up during file
+transfer (``False``).
+
+.. _pillar-sentry_dsn:
+
+sentry_dsn
+~~~~~~~~~~
+
+`DSN <http://raven.readthedocs.org/en/latest/config/#the-sentry-dsn>`_
+or API key (URL) of :doc:`/sentry/doc/index` where to send errors to.
+
+Default: do not send errors to Sentry (``False``).
+
 .. _pillar-graylog2_address:
 
 graylog2_address
 ~~~~~~~~~~~~~~~~
 
-IP/Hostname of centralized :doc:`/graylog2/server/doc/index` server.
+IP/Hostname of centralized logging server (:doc:`/graylog2/server/doc/index`).
+
+Default: do not send log to centralized server (``False``).
 
 .. _pillar-graphite_address:
 
@@ -94,8 +136,10 @@ graphite_address
 ~~~~~~~~~~~~~~~~
 
 IP/Hostname of :doc:`/carbon/doc/index` server.
-This key is required if ``diamond`` integration of formulas had been included in
-roles.
+This key is required if ``diamond`` integration of formulas had been included
+in roles.
+
+Default: do not send metric to :doc:`/carbon/doc/index` server (``False``).
 
 .. _pillar-shinken_pollers:
 
@@ -105,6 +149,8 @@ shinken_pollers
 List of monitoring hosts that can perform checks on this host.
 This is required if any :doc:`/nrpe/doc/index` integration of formula had been
 included in roles.
+
+Default: no monitoring host allowed to perform checks on this host (``[]``).
 
 .. _pillar-smtp:
 
@@ -162,17 +208,17 @@ smtp:user
 
 SMTP account username, if applicable.
 
+.. _pillar-smtp-password:
+
 smtp:password
 ~~~~~~~~~~~~~
 
-.. _pillar-smtp-password:
-
 Password for account login, if specified user.
+
+.. _pillar-smtp-authentication:
 
 smtp:authentication
 ~~~~~~~~~~~~~~~~~~~
-
-.. _pillar-smtp-authentication:
 
 Authentication method. Default is: ``plain``.
 
@@ -185,7 +231,7 @@ SMTP encryption type.
 
 Possible values: `ssl <http://en.wikipedia.org/wiki/Transport_Layer_Security>`_, `starttls <http://en.wikipedia.org/wiki/Starttls>`_, ``plain``.
 
-Default: ``plain``
+Default: transfers email in `plaintext <http://en.wikipedia.org/wiki/Plaintext>`_ (``plain``).
 
 .. _pillar-encoding:
 
@@ -203,9 +249,11 @@ global_roles
 
 List of all available roles.
 
-Default: automatically built by listing sub-directories of ``/roles``.
-
 This key is usefull to restrict the list of available roles for an hosts.
+
+If undefined, it's automatically built by listing sub-directories of ``/roles``.
+
+Default: no roles (``[]``).
 
 .. _pillar-roles_absent:
 
@@ -229,7 +277,7 @@ And it must **ALWAYS** be defined and set to ``True`` in testing pillars.
 
 Not following this rule will result in lost data and broken system.
 
-Default: ``False``.
+Default: run formulas in production (``False``).
 
 .. _pillar-root_keys:
 
@@ -251,3 +299,13 @@ Example::
     santos:
       AAAAB3NzaC1yc2EAAAADAQABAAABAQDB+hcS+d/V0cmEDX9zv07jXcH+b5DB4YD9ptx0kVtpfkQWc+TtYH/eY2jmTXUZWVx+kfn5qDI3Ojq9jRgfgM0tuICqTW78Vi2P4Qd5ektFkkAa9ERhhZRMzi0tbpQdyOQxEkflh3Upmuwm+im9Y4TdWNvVO3cM+DOCH1JNpEgh5OGo52/Tq/FUgzt750Ls1/QPzbmkgUYd9SmEknrS/dHm9XRm5D0RumQzW75CniuyZEx+Gn/C/+h+mHapBCXizUZEK9+y7er9MOmHTZ5Er9tb/bc6k7cQYXVzIGqLm8ENV1SYeSwxuTsPrvTsBGHqURBAnz3OllQD2yws5XmmIJ2L: ssh-rsa
 
+Default: do not allow to login by any public key (``{}``).
+
+.. _pillar-root_keys-user:
+
+root_keys:{{ user }}
+~~~~~~~~~~~~~~~~~~~~
+
+Data formed as a dictionary ``pubkey``:``type``.
+
+Default: ``{}``.

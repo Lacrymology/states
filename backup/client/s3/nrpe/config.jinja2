@@ -8,10 +8,10 @@ minion_id: {{ grains['id'] }}
 nsca_dir: /etc/nagios/nsca.d
 
 s3:
-  access_key: {{ pillar['aws']['access_key'] }}
-  secret_key: {{ pillar['aws']['secret_key'] }}
-  bucket: {{ pillar['aws']['s3']['bucket'] }}
+  access_key: {{ salt['pillar.get']('backup:s3:access_key') }}
+  secret_key: {{ salt['pillar.get']('backup:s3:secret_key') }}
+  bucket: {{ salt['pillar.get']('backup:s3:bucket') }}
 
 backup:
-  prefix: {{ pillar['aws']['s3']['path'] }}
+  prefix: {{ salt['pillar.get']('backup:s3:path') }}
 {%- endblock -%}

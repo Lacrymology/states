@@ -26,7 +26,7 @@ Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
             Quan Tong Anh <quanta@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 
 configobj==5.0.2
 pip==1.5.2
@@ -38,6 +38,8 @@ diamond==3.4.12
 https://archive.robotinfra.com/pip/diamond-3.4.12.tar.bz2
 {%- endif -%}
 {%- if 'graylog2_address' in pillar %}
+diamond==3.4.11
+{%- if salt['pillar.get']('graylog2_address', False) %}
 graypy==0.2.9
 {%- endif %}
 {%- if salt['pillar.get']('sentry_dsn', False) %}

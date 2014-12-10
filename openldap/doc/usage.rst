@@ -1,31 +1,3 @@
-.. Copyright (c) 2013, Hung Nguyen Viet
-.. All rights reserved.
-..
-.. Redistribution and use in source and binary forms, with or without
-.. modification, are permitted provided that the following conditions are met:
-..
-..     1. Redistributions of source code must retain the above copyright notice,
-..        this list of conditions and the following disclaimer.
-..     2. Redistributions in binary form must reproduce the above copyright
-..        notice, this list of conditions and the following disclaimer in the
-..        documentation and/or other materials provided with the distribution.
-..
-.. Neither the name of Hung Nguyen Viet nor the names of its contributors may be used
-.. to endorse or promote products derived from this software without specific
-.. prior written permission.
-..
-.. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-.. AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
-.. THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-.. PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
-.. BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-.. CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-.. SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-.. INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-.. CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-.. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-.. POSSIBILITY OF SUCH DAMAGE.
-
 Usage
 =====
 
@@ -34,14 +6,14 @@ How to add an LDAP user entry?
 
 This formula only creates LDAP users the first time it run (when install
 ``slapd``). List of users to create provided through pillar, see :doc:`pillar`
-``ldap:data`` for more details.
+:ref:`pillar-ldap-data` for more details.
 
 To add more user entry after the first time formula run, any LDAP tool
 can be used, includes:
 
 - CLI: ``ldapadd`` from ``ldap-utils`` package that is installed by ``openldap``
   state.
-- The following GUI aren't yet available as salt states in `common` repository,
+- The following GUI aren't yet available as Salt states in `common` repository,
   but can be used if installed:
   - `LAT <http://sourceforge.net/p/ldap-at/wiki/Home/>`__
   - `Apache Directory Studio <http://directory.apache.org/studio/>`__
@@ -104,14 +76,15 @@ How do email accounts created?
 When used in conjunction with formula :doc:`/postfix/doc/index` and
 :doc`/dovecot/doc/index`.
 If ``postfix`` is configured to serve virtual host
-(set ``postfix:virtual_mailbox`` to ``True``),
+(set :ref:`pillar-postfix-virtual_mailbox_domains` to a list of domains),
 OpenLDAP  will be used as authenticate backend, so, each LDAP entry which has
 DN form ``uid=USERNAME,ou=people,dc=DOMAIN,dc=TLD`` will be used as an email
 account.
 
 Postfix need to maintain an alias database, that map LDAP entries to virtual
 mailboxes. This is done by ``vmailbox`` in ``postfix`` formula, which is
-rendered from ``ldap:data`` and will be applied each time ``ldap:data`` changed.
+rendered from :ref:`pillar-ldap-data` and will be applied each time
+:ref:`pillar-ldap-data` changed.
 
 So, with above pillar, an email account is created named ``bob@example.com``.
 

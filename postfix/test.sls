@@ -26,9 +26,13 @@ Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
 {%- from 'cron/test.jinja2' import test_cron with context %}
+{%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
+  - doc
   - postfix
   - postfix.backup
+  - postfix.backup.diamond
+  - postfix.backup.nrpe
   - postfix.diamond
   - postfix.nrpe
   - openldap
@@ -51,3 +55,19 @@ test:
     - order: last
     - require:
       - cmd: test_crons
+  qa:
+    - test
+    - name: postfix
+    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - require:
+      - monitoring: test
+      - cmd: doc
+  diamond:
+    - test
+    - map:
+        ProcessResources:
+    {{ diamond_process_test('postfix', zmempct=False) }}
+    {#- TODO fix postfix collector to get more meaning metric and test it. #}
+    - require:
+      - sls: postfix
+      - sls: postfix.diamond

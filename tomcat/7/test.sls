@@ -27,6 +27,7 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 #}
 {%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
+  - doc
   - tomcat.7
   - tomcat.7.nrpe
   - tomcat.7.diamond
@@ -40,7 +41,14 @@ test:
     - test
     - map:
         ProcessResources:
-    {{ diamond_process_test('tomcat', zmempct=False) }}
+    {{ diamond_process_test('tomcat') }}
     - require:
       - sls: tomcat.7
       - service: diamond
+  qa:
+    - test
+    - name: tomcat
+    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - require:
+      - monitoring: test
+      - cmd: doc

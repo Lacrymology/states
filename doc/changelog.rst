@@ -96,8 +96,8 @@ Fixes
 - No absent states are doing more than the minimum expected. no more include.
 - Many minor fixes
 
-Pillars
-=======
+Pillar
+======
 
 - two pillar key that used to be a URL/path to a file that contains private data
   had been replaced by pillar key that hold the contains of the file, so

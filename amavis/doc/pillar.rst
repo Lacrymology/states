@@ -1,30 +1,5 @@
-.. Copyright (c) 2013, Hung Nguyen Viet
-.. All rights reserved.
-..
-.. Redistribution and use in source and binary forms, with or without
-.. modification, are permitted provided that the following conditions are met:
-..
-..     1. Redistributions of source code must retain the above copyright notice,
-..        this list of conditions and the following disclaimer.
-..     2. Redistributions in binary form must reproduce the above copyright
-..        notice, this list of conditions and the following disclaimer in the
-..        documentation and/or other materials provided with the distribution.
-..
-.. Neither the name of Hung Nguyen Viet nor the names of its contributors may be used
-.. to endorse or promote products derived from this software without specific
-.. prior written permission.
-..
-.. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-.. AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
-.. THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-.. PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
-.. BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-.. CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-.. SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-.. INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-.. CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-.. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-.. POSSIBILITY OF SUCH DAMAGE.
+Pillar
+======
 
 .. include:: /doc/include/add_pillar.inc
 
@@ -40,34 +15,88 @@ Example::
   amavis:
     check_virus: False
     warn_spam_sender: True
-    transport_spam_to_postmaster: True
+    notify_admin_for_spam: True
 
-
-mail:maxproc
-~~~~~~~~~~~~
-
-Maximum number of process.
-
-Default: ``2``.
+.. _pillar-amavis-check_virus:
 
 amavis:check_virus
 ~~~~~~~~~~~~~~~~~~
 
-Enable or disable virus checking.
+Enable or disable virus checking for mail content.
 
-Default: ``True``.
+Default: enable virus checking (``True``).
+
+.. _pillar-amavis-warn_spam_sender:
 
 amavis:warn_spam_sender
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 Notify spam sender or not.
 
-Default: ``False``.
+Default: do not notify (``False``).
 
-amavis:transport_spam_to_postmaster
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. warning::
 
-Default: ``False``.
+  It's not recommended to set this to ``True`` as it might generate a
+  lot of new email to probably non-existing email account.
 
-If set to ``True``, this will transport spam email to user defined in pillar
-:doc:`mail:postmaster</mail/doc/pillar>`
+.. _pillar-amavis-notify_admin_for_spam:
+
+amavis:notify_admin_for_spam
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Whether to send notifications to admin about spam emails.
+
+Default: do not send (``False``).
+
+If set to ``True``, notifications email will be sent
+to user defined in :ref:`pillar-mail-postmaster`.
+
+.. _pillar-amavis-sa_tag_level:
+
+amavis:sa_tag_level
+~~~~~~~~~~~~~~~~~~~
+
+Add :doc:`/spamassassin/doc/index` tag to all emails have score greater than set value.
+
+Default: a very low value to set spam info headers for all emails (``-999``).
+This help user ensuring that email is processed by :doc:`/amavis/doc/index` by
+just looking into email header.
+
+.. _pillar-amavis-sa_tag2_level:
+
+amavis:sa_tag2_level
+~~~~~~~~~~~~~~~~~~~~
+
+Emails which have score greater than this value considered "spammy"
+(looks like spam), add spammy tag for it.
+
+Default: value from example configuration file comes with amavasd-new package
+on Ubuntu 12.04 which locates at
+`/usr/share/doc/amavisd-new/examples/amavisd.conf-sample.gz` (``2``).
+According to this example file,
+this value should set to :ref:`pillar-amavis-sa_tag_level` but because that
+pillar key is used in special purpose explained in
+:ref:`pillar-amavis-sa_tag_level` , then this pillar value will act
+as spammy threshold.
+
+.. _pillar-amavis-sa_kill_level:
+
+amavis:sa_kill_level
+~~~~~~~~~~~~~~~~~~~~
+
+Email spam score exceeds this value is considered spam.
+
+Default: Using same value in example file mentioned in
+:ref:`pillar-amavis-sa_tag_level` (``6.31``) .
+
+.. _pillar-amavis-dsn_cutoff_level:
+
+amavis:dsn_cutoff_level
+~~~~~~~~~~~~~~~~~~~~~~~
+
+When spam score exceeds this pillar value, do not send delivery status
+notification message.
+
+Default: Using same value in example file mentioned in
+:ref:`pillar-amavis-sa_tag_level` (``9``).

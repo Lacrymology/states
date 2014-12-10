@@ -25,9 +25,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 
-{%- if 'files_archive' in pillar %}
+{%- if salt['pillar.get']('files_archive', False) %}
 -e /usr/local/statsd/src/py-statsd-{{ version }}
 {%- else %}
 -e git://github.com/Jonty/py-statsd.git@ad234af2932fd7e0f9f7c6fb8d9c8fdb8e6deb3a#egg=py-statsd

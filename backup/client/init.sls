@@ -27,4 +27,4 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
 
 include:
-  - backup.client.{{ pillar['backup_storage'] }}
+  - backup.client.{{ salt['pillar.get']('backup_storage') }}

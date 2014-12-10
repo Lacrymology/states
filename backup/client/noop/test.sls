@@ -28,6 +28,7 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 include:
   - backup.client.noop
   - backup.client.noop.nrpe
+  - doc
 
 test:
   monitoring:

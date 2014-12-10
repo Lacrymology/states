@@ -25,25 +25,25 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
-{%- if pillar['backup_server'] is defined %}
+{%- if salt['pillar.get']('backup_server:address') %}
 include:
   - backup.client.scp
   - backup.client.scp.nrpe
   - backup.dumb
+  - doc
 
 {#- Test monitoring check for `scp`:
     - add ssh public key into localhost
     - run some backup using `scp`
     - remove that key and the backup files
     #}
-    {%- if pillar['backup_server']['address'] in grains['ipv4'] or
-           pillar['backup_server']['address'] in ('localhost', grains['host']) -%}
+    {%- if salt['pillar.get']('backup_server:address') in grains['ipv4'] or
+           salt['pillar.get']('backup_server:address') in ('localhost', grains['host']) -%}
         {%- from 'ssh/test.sls' import add_key with context -%}
         {%- from 'ssh/test.sls' import remove_key with context %}
+
 {{ add_key() }}
-{%- call remove_key() %}
-- cmd: test
-{%- endcall -%}
+{{ remove_key() }}
     {%- endif %}
 
 test:
@@ -56,13 +56,22 @@ test:
     - require:
       - file: /usr/local/bin/backup-store
       - file: /usr/local/bin/create_dumb
-    {%- if pillar['backup_server']['address'] in grains['ipv4'] or
-           pillar['backup_server']['address'] in ('localhost', grains['host']) %}
+    {%- if salt['pillar.get']('backup_server:address') in grains['ipv4'] or
+           salt['pillar.get']('backup_server:address') in ('localhost', grains['host']) %}
       - cmd: ssh_add_key
     {%- endif %}
+    - require_in:
+      - cmd: ssh_remove_key
   file:
     - absent
-    - name: /var/lib/backup/{{ salt['pillar.get']('backup_server:subdir', grains['id']) }}
+    - name: /var/lib/backup/{{ salt['pillar.get']('backup_server:subdir', False)|default(grains['id'], boolean=True) }}
     - require:
       - cmd: test
+  qa:
+    - test
+    - name: backup.client.scp
+    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - require:
+      - monitoring: test
+      - cmd: doc
 {%- endif %}

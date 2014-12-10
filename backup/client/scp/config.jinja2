@@ -1,0 +1,9 @@
+{%- extends "ssh/client/config.jinja2" -%}
+
+{%- block body %}
+    {{ super() }}
+    {%- if salt['pillar.get']('backup_server:address') in ('localhost', '127.0.0.1') -%}
+{#- because we can't get fingerprint of localhost for each test VM #}
+    NoHostAuthenticationForLocalhost yes
+    {%- endif -%}
+{%- endblock -%}

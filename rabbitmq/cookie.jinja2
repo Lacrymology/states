@@ -25,4 +25,4 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
-{{ pillar['rabbitmq']['cluster']['cookie'] }}
+{{ salt['pillar.get']('rabbitmq:cluster:cookie') }}

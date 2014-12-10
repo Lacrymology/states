@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 [server]
 
 # Handlers for published metrics.
@@ -67,7 +67,7 @@ keys = syslog
 [[default]]
 
 [[GraphiteHandler]]
-host = {{ pillar['graphite_address'] }}
+host = {{ salt['pillar.get']('graphite_address', False) }}
 port = 2003
 timeout = 15
 batch = {{ salt['pillar.get']('diamond:batch', 256) }}
@@ -159,13 +159,13 @@ enabled = True
 enabled = True
 interfaces = {% for interface in salt['pillar.get']('diamond:interfaces', ('eth0', 'lo')) %}{{ interface }}{% if not loop.last %}, {% endif %}{% endfor %}
 
-{% for host in ping_hosts|default({}) -%}
-{%- if loop.first %}
+{%- for host, address in salt['pillar.get']('diamond:ping', {}).items() -%}
+    {%- if loop.first %}
 [[PingCollector]]
 
 enabled = True
-{% endif %}
-target_{{ host }} = {{ ping_hosts[host] }}
+    {%- endif %}
+target_{{ host }} = {{ address }}
 {%- endfor %}
 
 [[ProcessStatCollector]]
@@ -224,7 +224,7 @@ handlers = syslog
 level = NOTSET
 class = graypy.handler.GELFHandler
 formatter = message_only
-args = ('{{ pillar['graylog2_address'] }}', 12201)
+args = ('{{ salt['pillar.get']('graylog2_address', False) }}', 12201)
 {%- endif %}
 
 {%- if salt['pillar.get']('sentry_dsn', False) %}
@@ -232,7 +232,7 @@ args = ('{{ pillar['graylog2_address'] }}', 12201)
 level = ERROR
 class = raven.handlers.logging.SentryHandler
 formatter = message_only
-args = ('requests+{{ pillar['sentry_dsn'] }}',)
+args = ('requests+{{ salt['pillar.get']('sentry_dsn', False) }}',)
 {%- endif %}
 
 [handler_syslog]

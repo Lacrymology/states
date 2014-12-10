@@ -1,4 +1,4 @@
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 # -*- coding: utf-8 -*-
 
 # Copyright (c) 2014, Hung Nguyen Viet

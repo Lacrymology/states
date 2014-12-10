@@ -49,8 +49,8 @@ check_postgres:
   archive:
     - extracted
     - name: /usr/local/nagios/src
-{%- if 'files_archive' in pillar %}
-    - source: {{ pillar['files_archive'] }}/mirror/check_postgres-{{ check_pg_version }}.tar.gz
+{%- if salt['pillar.get']('files_archive', False) %}
+    - source: {{ salt['pillar.get']('files_archive', False) }}/mirror/check_postgres-{{ check_pg_version }}.tar.gz
 {%- else %}
     - source: http://bucardo.org/downloads/check_postgres-{{ check_pg_version }}.tar.gz
 {%- endif %}

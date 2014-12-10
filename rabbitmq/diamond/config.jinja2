@@ -25,10 +25,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 
 enabled = True
 
 host = 127.0.0.1:55672
-user = {{ pillar['rabbitmq']['monitor']['user'] }}
-password = {{ pillar['rabbitmq']['monitor']['password'] }}
+user = {{ salt['pillar.get']('rabbitmq:monitor:user') }}
+password = {{ salt['pillar.get']('rabbitmq:monitor:password', None)|default(salt['password.pillar']('rabbitmq:monitor:password'), boolean=True) }}

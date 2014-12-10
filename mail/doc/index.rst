@@ -44,3 +44,4 @@ use ``clamav`` directly)
     :glob:
 
     *
+    ../server/doc/index

@@ -1,2 +1,2 @@
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 %salt-fire-event ALL=(root) NOPASSWD:/usr/local/bin/salt_fire_event.py

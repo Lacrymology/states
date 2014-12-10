@@ -25,17 +25,17 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
-{% set rootdn = pillar['ldap']['rootdn'] %}
+{% set rootdn = salt['pillar.get']('ldap:rootdn') %}
 dn: olcDatabase={1}hdb,cn=config
 changetype: modify
 replace: olcSuffix
-olcSuffix: {{ pillar['ldap']['suffix'] }}
+olcSuffix: {{ salt['pillar.get']('ldap:suffix') }}
 -
 replace: olcRootDN
 olcRootDN: {{ rootdn }}
 -
 replace: olcRootPW
-olcRootPW: {{ pillar['ldap']['rootpw'] }}
+olcRootPW: {{ salt['pillar.get']('ldap:rootpw') }}
 -
 delete: olcAccess
 -
@@ -59,13 +59,13 @@ olcLogLevel: 256
 {%- if salt['pillar.get']('ldap:ssl', False) %}
 -
 replace: olcTLSCACertificateFile
-olcTLSCACertificateFile: /etc/ssl/certs/{{ pillar['ldap']['ssl'] }}_ca.crt
+olcTLSCACertificateFile: /etc/ssl/certs/{{ salt['pillar.get']('ldap:ssl') }}_ca.crt
 -
 replace: olcTLSCertificateFile
-olcTLSCertificateFile: /etc/ssl/certs/{{ pillar['ldap']['ssl'] }}.crt
+olcTLSCertificateFile: /etc/ssl/certs/{{ salt['pillar.get']('ldap:ssl') }}.crt
 -
 replace: olcTLSCertificateKeyFile
-olcTLSCertificateKeyFile: /etc/ssl/private/{{ pillar['ldap']['ssl'] }}.pem
+olcTLSCertificateKeyFile: /etc/ssl/private/{{ salt['pillar.get']('ldap:ssl') }}.pem
 -
 replace: olcSecurity
 olcSecurity: ssf=128

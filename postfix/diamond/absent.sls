@@ -33,6 +33,11 @@ postfix_diamond_collector:
     - absent
     - name: /etc/diamond/collectors/PostfixCollector.conf
 
+postfix_diamond_queue_length:
+  file:
+    - absent
+    - name: /usr/local/diamond/share/diamond/user_scripts/postfix_queue_length.sh
+
 /etc/rsyslog.d/postfix_stats.conf:
   file:
     - absent

@@ -68,19 +68,27 @@ include:
 {%- endcall %}
 
 test:
-  diamond:
-    - test
-    - map:
-        Amavis:
-          amavis.sysUpTime.time: False
-        ProcessResources:
-          {{ diamond_process_test('amavis') }}
-    - require:
-      - sls: amavis
-      - sls: amavis.diamond
   monitoring:
     - run_all_checks
     - wait: 60
     - order: last
     - require:
       - cmd: test_crons
+  diamond:
+    - test
+    - map:
+        Amavis:
+          amavis.sysUpTime.time: False
+        Postfix:
+          postfix.(recv|send).status.sent: True
+        ProcessResources:
+          {{ diamond_process_test('amavis') }}
+          {{ diamond_process_test('postfix') }}
+        UserScripts:
+          postfix.queue_length: True
+    - require:
+      - sls: amavis
+      - sls: amavis.diamond
+      - sls: postfix
+      - sls: postfix.diamond
+      - monitoring: test

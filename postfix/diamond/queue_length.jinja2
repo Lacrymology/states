@@ -1,0 +1,5 @@
+#!/bin/sh
+# {{ pillar['message_do_not_modify'] }}
+
+queue_length=$(mailq | grep -v "Mail queue is empty" | grep -c '^\w')
+echo "postfix.queue_length $queue_length"

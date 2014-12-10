@@ -8,7 +8,7 @@ Metrics
 OpenVPN
 -------
 
-Locate at ``os > openvpn`` in graphite web interface.
+Locate at ``os > openvpn``.
 
 {{ instance }}.clients.connected
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -8,7 +8,7 @@ Metrics
 MongoDB
 -------
 
-Locate at ``os > mongo`` in graphite web interface.
+Locate at ``os > mongo``.
 
 See the :doc:`/mongodb/doc/index` `documentation
 <http://docs.mongodb.org/v2.4/reference/command/serverStatus>`_ for

@@ -8,7 +8,7 @@ Metrics
 Memcached
 ---------
 
-Locate at ``os > memcached`` in graphite web interface.
+Locate at ``os > memcached``.
 
 main:auth_cmds
 ~~~~~~~~~~~~~~

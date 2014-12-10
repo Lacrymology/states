@@ -8,7 +8,7 @@ Metrics
 ElasticSearch
 -------------
 
-Locate at ``os > elasticsearch`` in graphite web interface.
+Locate at ``os > elasticsearch``.
 
 cache:bloom:size
 ~~~~~~~~~~~~~~~~

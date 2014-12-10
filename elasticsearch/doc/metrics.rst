@@ -5,10 +5,10 @@ Metrics
 
 * :doc:`/elasticsearch/doc/index`.
 
-ElasticSearch
+elasticsearch
 -------------
 
-Locate at ``os > elasticsearch``.
+locate at ``os > elasticsearch``.
 
 .. note::
 
@@ -340,7 +340,7 @@ process.mem.virtual
 thread_pool
 ~~~~~~~~~~~
 
-A node holds several `thread pools
+A :doc:`/elasticsearch/doc/index` node holds several `thread pools
 <http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/modules-threadpool.html>`_
 in order to improve how threads memory consumption are managed within
 a node. Many of these pools also have queues associated with them,

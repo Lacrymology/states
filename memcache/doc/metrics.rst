@@ -14,7 +14,7 @@ main.auth_cmds
 ~~~~~~~~~~~~~~
 
 Number of authentication commands processed by the server - if use
-authentication within your installation.
+authentication.
 
 main.auth_erros
 ~~~~~~~~~~~~~~~
@@ -39,12 +39,12 @@ Total number of bytes send to the network by this server.
 main.cas_badval
 ~~~~~~~~~~~~~~~
 
-The ``cas`` command is some kind of :doc:`Memcached
-</memcache/doc/index>`\ 's way to avoid locking. ``cas`` calls with
-bad identifier are counted in this stats key.
+The ``cas`` command is some kind of :doc:`/memcache/doc/index`\ 's way
+to avoid locking. ``cas`` calls with bad identifier are counted in
+this stats key.
 
 If this value is high, there is something wrong with the application
-that uses :doc:`Memcached`.
+that uses :doc:`/memcache/doc/index`.
 
 main.cas_hits
 ~~~~~~~~~~~~~

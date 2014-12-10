@@ -12,7 +12,8 @@ Locate at ``os > mongo``.
 
 See the :doc:`/mongodb/doc/index` `documentation
 <http://docs.mongodb.org/v2.4/reference/command/serverStatus>`_ for
-complete reference.
+complete reference, almost everything in this document is copied from
+that.
 
 asserts
 ~~~~~~~

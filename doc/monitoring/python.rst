@@ -41,8 +41,8 @@ allows for automatically adapting long-running checks to be run
 outside of the nsca [#nsca]_ daemon and allows for a common,
 maintainable configuration schema.
 
-Subtitle
---------
+Writing checks
+--------------
 
 Since NRPE dictates a simple but strict protocol regarding plugins
 return values, syntax, nagiosplugin simplifies a lot of the

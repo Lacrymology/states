@@ -134,6 +134,40 @@ be evaluated by the same context, ``ScalarContext('percentage', ":80",
             Metric("disk1-free", disk1_free_perc, context='percentage')
         ]
 
+You will likely want to make your checks configurable. The most common
+configurable values are the ``WARNING`` and ``CRITICAL`` ranges.
+Regardless of what's considered a critical amount of free memory in
+different contexts, the actual metric acquisition remains the same,
+the only change would be in the context definition.
+
+The changes needed in the python code are quite trivial. To simplify,
+we'll use a single metric, the free percentage. We'll also provide
+default values for the config keys:
+
+.. code-block:: python
+
+    ...
+    def prepare_check(config):
+	    return [
+            DiskSpace(),
+            nagiosplugin.ScalarContext("percentage",
+            ":{}".format(config['warning']),
+            ":{}".format(config['critical']))
+        ]
+
+    check(prepare_check, {'warning': 80, 'critical': 95})
+
+The second argument to :py:mod:`pysc.nrpe.check` is the dictionary of
+default config values. Now to use this check from a specific formula,
+you can add the use the ``arguments`` key in the check configuration
+file for your formula's nrpe checks. The following is an excerpt of
+``/salt/master/backup/nrpe/config.jinja2``:
+
+.. literalinclude:: /salt/master/backup/nrpe/config.jinja2
+   :language: yaml
+   :lines: 32-
+   :emphasize-lines: 6-8
+
 If the output the default ``Summary`` class is too simplified for your
 test and you want something that helps you debug problems a little
 better, you can define your own ``Summary`` class and return it
@@ -145,7 +179,13 @@ of the processing chain automagically.
 
 Likewise, if you'd like to return values different than numbers in
 your ``Metric`` instances and want to evaluate them in a custom
-manner, you will need to implement a ``Context`` class of your own as well.
+manner, you will need to implement a ``Context`` class of your own as
+well. The custom ``Context`` can then evaluate the ``Metric`` object
+and emit a ``nagiosplugin.Result`` object that should use the classes
+defined in ``nagiosplugin.state``. See
+:py:mod:`backup.server.nrpe.check` for a real-world example and don't
+forget to read `the official nagiosplugin docs
+<http://pythonhosted.org/nagiosplugin/>`_ for a better understanding.
 
 .. rubric:: Footnotes
 

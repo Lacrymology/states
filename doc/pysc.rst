@@ -327,6 +327,18 @@ Its main concerns are:
   development and training of new sysadmins and developers.
 - offering a **simple** interface to generate checks.
 
+.. This should really be documented as a function, but now may not be
+   the right moment
+   .. py:function:\: pysc.nrpe.check(function, defaults=None)
+
+   \:param func function: The nagiosplugin check preparation function
+   \:param dict defaults: A dictionary of default config values
+
+   It is not a module, but module creates no output, so it's what we
+   need right now
+
+.. py:module:: pysc.nrpe.check
+
 A ``pysce.nrpe.check`` application is a :ref:`pysc.Application
 <pysc.Application>` and it supports all of its command line arguments
 and configuration values. It also adds some arguments of its own and

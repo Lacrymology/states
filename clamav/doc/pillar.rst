@@ -87,3 +87,11 @@ If ``files_archive`` is not defined, ``current.cvd.clamav.net``.
 
 If ``files_archive`` is defined, it use mirror of :doc:`/clamav/doc/index` database from the
 archive.
+
+clamav:daily_scan
+~~~~~~~~~~~~~~~~~
+
+Run a full scan every day or not.
+
+Default: ``False``, don't run full scan daily.
+

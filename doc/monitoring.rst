@@ -35,9 +35,9 @@ important part of the integration tests and it help administrator the ability to
 check a running Minion without a monitoring server deployed.
 
 .. toctree::
-    :glob:
+    :hidden:
 
-    monitoring/*
+    monitoring/python
 
 
 NRPE

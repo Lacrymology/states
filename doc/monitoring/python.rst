@@ -27,6 +27,11 @@
    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
    POSSIBILITY OF SUCH DAMAGE.
 
+.. toctree::
+   :hidden:
+
+   backup_check
+
 Python
 ======
 
@@ -48,6 +53,8 @@ monitoring scripts: it provides centralized logging configuration,
 allows for automatically adapting long-running checks to be run
 outside of the nsca [#nsca]_ daemon and allows for a common,
 maintainable configuration schema.
+
+.. contents::
 
 Writing checks
 --------------

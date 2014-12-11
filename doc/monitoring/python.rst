@@ -74,6 +74,9 @@ representation of the "worse" metric when there's a problem, and a
 string representation of the first metric when the overall result is
 ``OK``. It may seem poor, but it's enough in most cases.
 
+Basic example
+~~~~~~~~~~~~~
+
 The following is a minimal but possibly useful check to retrieve the used
 diskspace on the root partition. It shall be our working example:
 
@@ -115,7 +118,12 @@ used, ``WARNING`` if between 800MB and 950MB are used, and
 ``CRITICAL`` if 950MB or more are used. The three metrics it emits are
 really redundant, since they can all be calculated from one another,
 but it's a way to show that a single ``Resource`` can emit more than
-one ``Metric``. Metrics are matched to Contexts by name. If for some
+one ``Metric``.
+
+Expicit Contexts
+~~~~~~~~~~~~~~~~
+
+Metrics are matched to Contexts by name. If for some
 reason you have a metric that you wish to evaluate with a context with
 a different name, you can pass a ``context=context_name`` kwarg to the
 ``Metric`` constructor. For example, you might want to measure the
@@ -133,6 +141,9 @@ be evaluated by the same context, ``ScalarContext('percentage', ":80",
             Metric("disk0-free", disk0_free_perc, context='percentage')
             Metric("disk1-free", disk1_free_perc, context='percentage')
         ]
+
+Configuration keys
+~~~~~~~~~~~~~~~~~~
 
 You will likely want to make your checks configurable. The most common
 configurable values are the ``WARNING`` and ``CRITICAL`` ranges.
@@ -167,6 +178,9 @@ file for your formula's nrpe checks. The following is an excerpt of
    :language: yaml
    :lines: 32-
    :emphasize-lines: 6-8
+
+Further customization
+~~~~~~~~~~~~~~~~~~~~~
 
 If the output the default ``Summary`` class is too simplified for your
 test and you want something that helps you debug problems a little

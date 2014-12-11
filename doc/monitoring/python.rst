@@ -41,7 +41,7 @@ monitoring, like interpreting the `nagios range syntax
 evaluating the collected metrics according to said range syntax, and
 setting the application's exit code according to the NRPE protocol.
 
-:doc:`salt-common </doc/intro>` provides :ref:`pysc.nrpe` as a
+:doc:`salt-common </doc/intro>` provides :py:mod:`pysc.nrpe` as a
 not-so-light wrapper nagiosplugin library that takes away some of
 the boilerplate and helps achieve some desireable qualities in the
 monitoring scripts: it provides centralized logging configuration,
@@ -64,18 +64,18 @@ in nagiosplugin is as follows: *data acquisition* is done by a
 class, and *results presentation* is done by a ``Summary`` class. In
 most cases, you will only need to extend a single ``nagiosplugin``
 class: ``Resource``, and to use two more classes: ``Metric``, which is
-the value class with which collected  ``Resource`` s are passed on to
-``Context`` s and ``ScalarContext``, which is a class that knows how to
-evaluate a number according to a range and set it as ``OK``,
+the value class with which a collected ``Resource`` is passed on to a
+``Context``, and ``ScalarContext``, which is a class that knows how to
+evaluate a number according to a range and set the result as ``OK``,
 ``WARNING`` or ``CRITICAL``.
 
 The default ``Summary`` class returns a very simple output, a string
 representation of the "worse" metric when there's a problem, and a
 string representation of the first metric when the overall result is
-``OK``. It's poor, but it's enough in most cases.
+``OK``. It may seem poor, but it's enough in most cases.
 
 The following is a minimal but possibly useful check to retrieve the used
-diskspace on the root partition:
+diskspace on the root partition. It shall be our working example:
 
 .. code-block:: python
 
@@ -99,12 +99,12 @@ diskspace on the root partition:
 
 
     def prepare_check(config):
-	    return (
+	    return [
             DiskSpace(),
             nagiosplugin.ScalarContext("used", ":800000000", ":950000000")
             nagiosplugin.ScalarContext("free", ":200000000", ":50000000")
             nagiosplugin.ScalarContext("percentage", ":80", ":95")
-        )
+        ]
 
     check(prepare_check)
 
@@ -126,9 +126,9 @@ be evaluated by the same context, ``ScalarContext('percentage', ":80",
 
 .. code-block:: python
 
-    ....
+    ...
     def probe(self):
-        ....
+        ...
         return [
             Metric("disk0-free", disk0_free_perc, context='percentage')
             Metric("disk1-free", disk1_free_perc, context='percentage')
@@ -136,12 +136,12 @@ be evaluated by the same context, ``ScalarContext('percentage', ":80",
 
 If the output the default ``Summary`` class is too simplified for your
 test and you want something that helps you debug problems a little
-better, you can define your own ``Summary`` class and add it to the
-constructor of the ``Check`` class, just have in mind that NRPE requires
-the output length to be less than 512B. The ``Check`` constructor
-doesn't really care about the order of the parameters, it checks its
-classes and adds them at the right point of the processing chain
-automagically.
+better, you can define your own ``Summary`` class and return it
+together with the rest of the objects in the ``prepare_check``
+function. Just have in mind that NRPE requires the output length to be
+less than 512B. The order of the parameters is not important.
+``nagiosplugin`` checks the classes and adds them at the right point
+of the processing chain automagically.
 
 Likewise, if you'd like to return values different than numbers in
 your ``Metric`` instances and want to evaluate them in a custom

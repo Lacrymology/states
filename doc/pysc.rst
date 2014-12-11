@@ -313,7 +313,7 @@ The following configuration values are expected or supported:
   command line take precedence.
 
 
-.. _pysc.nrpe:
+.. py:module:: pysc.nrpe
 
 NRPE
 ~~~~

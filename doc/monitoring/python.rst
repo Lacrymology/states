@@ -82,6 +82,8 @@ diskspace on the root partition:
     import subprocess
     import nagiosplugin
 
+    from pysc.nrpe import check
+
     class DiskSpace(nagiosplugin.Resource):
         def probe(self):
             line = subprocess.check_output("df /".split()).split("\n")[1]
@@ -95,13 +97,16 @@ diskspace on the root partition:
                 nagiosplugin.Metric("percentage", perc)
             ]
 
-    check = nagiosplugin.Check(
-        DiskSpace(),
-        nagiosplugin.ScalarContext("used", ":800000000", ":950000000")
-        nagiosplugin.ScalarContext("free", ":200000000", ":50000000")
-        nagiosplugin.ScalarContext("percentage", ":80", ":95")
-    )
-    check.main()
+
+    def prepare_check(config):
+	    return (
+            DiskSpace(),
+            nagiosplugin.ScalarContext("used", ":800000000", ":950000000")
+            nagiosplugin.ScalarContext("free", ":200000000", ":50000000")
+            nagiosplugin.ScalarContext("percentage", ":80", ":95")
+        )
+
+    check(prepare_check)
 
 This check measures the free space in the hard drive, and emits three
 metrics from it, ``used``, ``free`` and ``percentage``. Assuming a

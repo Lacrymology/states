@@ -36,7 +36,13 @@ Python
 ======
 
 Writing monitoring scripts in python is quite simple using `the
-nagiosplugin library <http://pythonhosted.org/nagiosplugin/>`__.
+nagiosplugin library <http://pythonhosted.org/nagiosplugin/>`__. These
+docs are supposed to be explanations and clarifications, and details
+on the specifics on how to write checks for this architecture, but
+they're not a replacement for the official ``nagiosplugin``
+documentation. But they should be enough to get you started. Please
+refer to the official docs and to the :py:mod:`pysc.nrpe` docs for any
+missing details.
 
 Since NRPE dictates a simple but strict protocol regarding plugins
 return values, syntax, nagiosplugin simplifies a lot of the
@@ -127,8 +133,8 @@ really redundant, since they can all be calculated from one another,
 but it's a way to show that a single ``Resource`` can emit more than
 one ``Metric``.
 
-Expicit Contexts
-~~~~~~~~~~~~~~~~
+Explicit Contexts
+~~~~~~~~~~~~~~~~~
 
 Metrics are matched to Contexts by name. If for some
 reason you have a metric that you wish to evaluate with a context with

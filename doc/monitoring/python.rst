@@ -45,7 +45,7 @@ refer to the official docs and to the :py:mod:`pysc.nrpe` docs for any
 missing details.
 
 Since NRPE dictates a simple but strict protocol regarding plugins
-return values, syntax, nagiosplugin simplifies a lot of the
+return values and output syntax, nagiosplugin simplifies a lot of the
 boilerplate asociated with the common tasks of nagios plugin
 monitoring, like interpreting the `nagios range syntax
 <https://nagios-plugins.org/doc/guidelines.html#THRESHOLDFORMAT>`_,
@@ -53,9 +53,9 @@ evaluating the collected metrics according to said range syntax, and
 setting the application's exit code according to the NRPE protocol.
 
 :doc:`salt-common </doc/intro>` provides :py:mod:`pysc.nrpe` as a
-not-so-light wrapper nagiosplugin library that takes away some of
-the boilerplate and helps achieve some desireable qualities in the
-monitoring scripts: it provides centralized logging configuration,
+not-so-light wrapper around the nagiosplugin library that takes away
+some of the boilerplate and helps achieve some desireable qualities in
+the monitoring scripts: it provides centralized logging configuration,
 allows for automatically adapting long-running checks to be run
 outside of the nsca [#nsca]_ daemon and allows for a common,
 maintainable configuration schema.
@@ -68,7 +68,7 @@ Writing checks
 The nagiosplugin library provides good default classes that know how
 to handle scalar (numeric) metrics and how to evaluate them according
 to the standard nagios range syntax, which should serve for most
-monitoring purposes and it's flexible and overrideable enough to
+monitoring purposes, and it's flexible and overrideable enough to
 generate custom output and evaluation modes.
 
 As explained in the official documentation, the separation of concerns
@@ -154,6 +154,23 @@ be evaluated by the same context, ``ScalarContext('percentage', ":80",
             Metric("disk0-free", disk0_free_perc, context='percentage')
             Metric("disk1-free", disk1_free_perc, context='percentage')
         ]
+
+Actually, since the results of ``probe`` are iterated, you can make it
+into a `generator <https://wiki.python.org/moin/Generators>`_:
+
+.. code-block:: python
+
+    ...
+    def probe(self):
+        # get all disks
+        lines = subprocess.check_output(["df"] + self.mount_points)
+        # skip the first line
+        for line in (lines.split("\n")[1:]):
+            dev, size, used, free, perc, mount = line.split()
+            perc = int(perc[:-1]) # drop the '%' before converting
+            yield nagiosplugin.Metric("%s-free" % dev, perc,
+                                      context='percentage')
+
 
 Configuration keys
 ~~~~~~~~~~~~~~~~~~

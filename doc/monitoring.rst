@@ -90,18 +90,10 @@ You can always list the already existing checks on a running Minion by running::
 Write Check
 -----------
 
-See :doc:`/doc/monitoring/python`
-
-It's very easy to write in any language. It's simply an binary of script that
-run, send text to standard output and exit with a specific code.
-`More on the expected output <http://nagiosplug.sourceforge.net/developer-guidelines.html#PLUGOUTPUT>`__.
-
-To make it even easier, the following Python module is always available in
-``/usr/local/nagios``
-`Python virtualenv <https://pypi.python.org/pypi/nagiosplugin/>`__.
-
-You can look at `the doc <http://pythonhosted.org/nagiosplugin/>`__ or look
-in the common states you can find some of it's usage as example.
+Nagios monitoring plugins are very easy to write in any language, but
+this library provides special support for writing them in Python.
+Please see <:doc:`monitoring/python`> for details on how to write
+them.
 
 Non-Monitoring Usage
 --------------------

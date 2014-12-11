@@ -33,6 +33,14 @@ Python
 Writing monitoring scripts in python is quite simple using `the
 nagiosplugin library <http://pythonhosted.org/nagiosplugin/>`__.
 
+Since NRPE dictates a simple but strict protocol regarding plugins
+return values, syntax, nagiosplugin simplifies a lot of the
+boilerplate asociated with the common tasks of nagios plugin
+monitoring, like interpreting the `nagios range syntax
+<https://nagios-plugins.org/doc/guidelines.html#THRESHOLDFORMAT>`_,
+evaluating the collected metrics according to said range syntax, and
+setting the application's exit code according to the NRPE protocol.
+
 :doc:`salt-common </doc/intro>` provides :ref:`pysc.nrpe` as a
 not-so-light wrapper nagiosplugin library that takes away some of
 the boilerplate and helps achieve some desireable qualities in the
@@ -43,14 +51,6 @@ maintainable configuration schema.
 
 Writing checks
 --------------
-
-Since NRPE dictates a simple but strict protocol regarding plugins
-return values, syntax, nagiosplugin simplifies a lot of the
-boilerplate asociated with the common tasks of nagios plugin
-monitoring, like interpreting the `nagios range syntax
-<https://nagios-plugins.org/doc/guidelines.html#THRESHOLDFORMAT>`_,
-evaluating the collected metrics according to said range syntax, and
-setting the application's exit code according to the NRPE protocol.
 
 The nagiosplugin library provides good default classes that know how
 to handle scalar (numeric) metrics and how to evaluate them according

@@ -13,6 +13,11 @@ Module to provide MongoDB functionality to Salt
     This data can also be passed into pillar. Options passed into opts will
     overwrite options passed into pillar.
 '''
+
+# This module is based on revision
+# 2f1feeabfcc744a3e052332cf9d450c575fc8d76 of salt/modules/mongodb.py in
+# the original saltstack source. It has modifications.
+
 from __future__ import absolute_import
 
 # Import python libs

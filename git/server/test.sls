@@ -1,5 +1,5 @@
 {#-
-Copyright (c) 2014, Dang Tung Lam
+Copyright (c) 2014, Diep Pham
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -17,31 +17,25 @@ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
 DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
 ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
 (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Author: Dang Tung Lam <lam@robotinfra.com>
-Maintainer: Van Pham Diep <favadi@robotinfra.com>
+Author: Diep Pham <favadi@robotinfra.com>
+Maintainer: Pham Diep <favadi@robotinfra.com>
 -#}
-{%- from 'cron/test.jinja2' import test_cron with context %}
-{%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
+
 include:
-  - etherpad
-  - etherpad.backup
-  - etherpad.backup.nrpe
-  - etherpad.backup.diamond
-  - etherpad.diamond
-  - etherpad.nrpe
+  - git.server
+  - git.server.diamond
+  - git.server.nrpe
+
+{%- from 'cron/test.jinja2' import test_cron with context %}
 
 {%- call test_cron() %}
-- sls: etherpad
-- sls: etherpad.backup
-- sls: etherpad.backup.nrpe
-- sls: etherpad.backup.diamond
-- sls: etherpad.diamond
-- sls: etherpad.nrpe
+- sls: git.server
+- sls: git.server.diamond
 {%- endcall %}
 
 test:
@@ -51,11 +45,3 @@ test:
     - order: last
     - require:
       - cmd: test_crons
-  diamond:
-    - test
-    - map:
-        ProcessResources:
-    {{ diamond_process_test('etherpad') }}
-    - require:
-      - sls: etherpad
-      - sls: etherpad.diamond

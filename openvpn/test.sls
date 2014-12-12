@@ -25,6 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
+{%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
   - openvpn.diamond
   - openvpn.nrpe
@@ -34,6 +35,23 @@ test:
   monitoring:
     - run_all_checks
     - order: last
+  diamond:
+    - test
+    - map:
+        ProcessResources:
+    {{ diamond_process_test('openvpn') }}
+    {%- for tunnel in salt['pillar.get']('openvpn', {}) %}
+        OpenVPN:
+          openvpn.{{ tunnel }}.clients.connected: True
+          openvpn.{{ tunnel }}.global.auth_read_bytes: True
+          openvpn.{{ tunnel }}.global.tcp-udp_read_bytes: True
+          openvpn.{{ tunnel }}.global.tcp-udp_write_bytes: True
+          openvpn.{{ tunnel }}.global.tun-tap_read_bytes: True
+          openvpn.{{ tunnel }}.global.tun-tap_write_bytes: True
+    {%- endfor %}
+    - require:
+      - sls: openvpn.static
+      - sls: openvpn.diamond
 
 extend:
   openvpn_diamond_collector:

@@ -26,6 +26,7 @@ Author: Quan Tong Anh <quanta@robotinfra.com>
 Maintainer: Van Diep Pham <favadi@robotinfra.com>
 -#}
 {%- from 'cron/test.jinja2' import test_cron with context %}
+{%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
   - openerp
   - openerp.backup
@@ -54,3 +55,14 @@ test:
     - order: last
     - require:
       - cmd: test_crons
+  diamond:
+    - test
+    - map:
+        ProcessResources:
+    {{ diamond_process_test('uwsgi.openerp') }}
+{%- if salt['pillar.get']('openerp:company_db', False) %}
+    {{ diamond_process_test('openerp') }}
+{%- endif %}
+    - require:
+      - sls: openerp
+      - sls: openerp.diamond

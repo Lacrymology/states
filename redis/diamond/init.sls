@@ -47,7 +47,7 @@ redis_diamond_resources:
     - text:
       - |
         [[redis]]
-        exe = ^\/usr\/local\/bin\/redis-server$
+        exe = ^\/usr\/bin\/redis-server$
 
 /etc/diamond/collectors/RedisCollector.conf:
   file:

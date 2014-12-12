@@ -33,6 +33,7 @@ Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
 {%- from 'cron/test.jinja2' import test_cron with context %}
+{%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
   - djangopypi2
   - djangopypi2.backup
@@ -55,3 +56,11 @@ test:
     - order: last
     - require:
       - cmd: test_crons
+  diamond:
+    - test
+    - map:
+        ProcessResources:
+    {{ diamond_process_test('uwsgi.djangopypi2') }}
+    - require:
+      - sls: djangopypi2
+      - sls: djangopypi2.diamond

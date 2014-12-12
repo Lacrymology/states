@@ -115,7 +115,7 @@ diskspace on the root partition. It shall be our working example:
 
 
     def prepare_check(config):
-	    return [
+        return [
             DiskSpace(),
             nagiosplugin.ScalarContext("used", ":800000000", ":950000000")
             nagiosplugin.ScalarContext("free", ":200000000", ":50000000")
@@ -189,7 +189,7 @@ default values for the config keys:
 
     ...
     def prepare_check(config):
-	    return [
+        return [
             DiskSpace(),
             nagiosplugin.ScalarContext("percentage",
             ":{}".format(config['warning']),
@@ -234,5 +234,5 @@ forget to read `the official nagiosplugin docs
 .. rubric:: Footnotes
 
 .. [#nsca] Nagios Service Checks Acceptor: The passive checks daemon.
-		   See `<http://exchange.nagios.org/directory/Addons/Passive-Checks/NSCA--2D-Nagios-Service-Check-Acceptor/details>`_
-		   for details
+           See `<http://exchange.nagios.org/directory/Addons/Passive-Checks/NSCA--2D-Nagios-Service-Check-Acceptor/details>`_
+           for details

@@ -50,6 +50,15 @@ jenkins_dependencies:
 - pkg: jenkins
 {%- endcall %}
 
+/var/lib/jenkins/tmp:
+  file:
+    - directory
+    - user: jenkins
+    - group: nogroup
+    - mode: 750
+    - require:
+      - pkg: jenkins
+
 {%- set version = '1.545' %}
 jenkins:
   pkg:
@@ -77,6 +86,7 @@ jenkins:
   service:
     - running
     - watch:
+      - file: /var/lib/jenkins/tmp
       - file: jenkins
       - pkg: jre-7
       - file: jre-7

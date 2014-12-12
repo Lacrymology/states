@@ -47,15 +47,14 @@ amavis_diamond_resources:
         [[amavis]]
         cmdline = ^amavisd\ \(.+\)
 
-diamond_amavis:
+/etc/diamond/collectors/AmavisCollector.conf:
   file:
     - managed
-    - name: /etc/diamond/collectors/AmavisCollector.conf
+    - source: salt://diamond/basic_collector.jinja2
     - template: jinja
     - user: root
     - group: root
     - mode: 440
-    - source: salt://diamond/basic_collector.jinja2
     - require:
       - file: /etc/diamond/collectors
       - service: amavis

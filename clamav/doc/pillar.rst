@@ -93,5 +93,4 @@ clamav:daily_scan
 
 Run a full scan every day or not.
 
-Default: ``False``, don't run full scan daily.
-
+Default: don't scan daily (``False``).

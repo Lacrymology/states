@@ -26,6 +26,8 @@
 # Author: Van Diep Pham <favadi@robotinfra.com>
 # Maintainer: Van Diep Pham <favadi@robotinfra.com>
 
+# Run a full scan on / except some directories ( /sys, /dev, /proc, /run)
+
 # safe guard
 set -o nounset
 set -o errexit

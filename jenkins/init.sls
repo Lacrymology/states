@@ -85,9 +85,8 @@ jenkins:
       - pkg: jenkins
   service:
     - running
-    - require:
-      - file: /var/lib/jenkins/tmp
     - watch:
+      - file: /var/lib/jenkins/tmp
       - file: jenkins
       - pkg: jre-7
       - file: jre-7

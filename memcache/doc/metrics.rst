@@ -84,7 +84,7 @@ item without fetching it.
 main.conn_yields
 ~~~~~~~~~~~~~~~~
 
-:doc:`Memcached </memcache/doc/index>` has a configurable maximum number of requests per event (-R
+:doc:`/memcache/doc/index` has a configurable maximum number of requests per event (-R
 command line argument), this counter shows the number of times any
 client hit this limit.
 
@@ -96,12 +96,12 @@ Number of internal connection handles currently held by the server.
 main.curr_connections
 ~~~~~~~~~~~~~~~~~~~~~
 
-Number of open connections to the :doc:`Memcached </memcache/doc/index>` server.
+Number of open connections to the :doc:`/memcache/doc/index` server.
 
 main.curr_items
 ~~~~~~~~~~~~~~~
 
-Number of items currently in this :doc:`Memcached </memcache/doc/index>` server's cache. 
+Number of items currently in this :doc:`/memcache/doc/index` server's cache. 
 
 main.decr_hits
 ~~~~~~~~~~~~~~
@@ -128,14 +128,14 @@ main.evicted_unfetched
 ~~~~~~~~~~~~~~~~~~~~~~
 
 Number of objects removed from the cache to free up memory for new
-items because :doc:`Memcached </memcache/doc/index>` reached it's maximum memory setting (see
+items because :doc:`/memcache/doc/index` reached it's maximum memory setting (see
 `main.limit_maxbytes`_ ) that never has been fetched.
 
 main.evictions
 ~~~~~~~~~~~~~~
 
 Number of objects removed from the cache to free up memory for new
-items because :doc:`Memcached </memcache/doc/index>` reached it's maximum memory setting (see
+items because :doc:`/memcache/doc/index` reached it's maximum memory setting (see
 `main.limit_maxbytes`_).
 
 main.expired_unfetched
@@ -206,17 +206,17 @@ Number of misc file descriptors used internally.
 main.rusage_system
 ~~~~~~~~~~~~~~~~~~
 
-Number of system time in seconds for this :doc:`Memcached </memcache/doc/index>` instance process.
+Number of system time in seconds for this :doc:`/memcache/doc/index` instance process.
 
 main.rusage_user
 ~~~~~~~~~~~~~~~~
 
-Number of user time in seconds for this :doc:`Memcached </memcache/doc/index>` instance process.
+Number of user time in seconds for this :doc:`/memcache/doc/index` instance process.
 
 main.threads
 ~~~~~~~~~~~~
 
-Number of threads used by the current :doc:`Memcached </memcache/doc/index>` server process.
+Number of threads used by the current :doc:`/memcache/doc/index` server process.
 
 main.total_connections
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -243,4 +243,4 @@ Number of failed ``touch`` commands.
 main.uptime
 ~~~~~~~~~~~
 
-Uptime of :doc:`Memcached </memcache/doc/index>` server in seconds.
+Uptime of :doc:`/memcache/doc/index` server in seconds.

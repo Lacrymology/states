@@ -40,7 +40,7 @@ test:
     - test
     - map:
         ProcessResources:
-    {{ diamond_process_test('statsd') }}
+          {{ diamond_process_test('statsd') }}
     - require:
       - sls: statsd
       - sls: statsd.diamond
@@ -51,11 +51,3 @@ test:
     - require:
       - monitoring: test
       - cmd: doc
-  diamond:
-    - test
-    - map:
-        ProcessResources:
-    {{ diamond_process_test('statsd') }}
-    - require:
-      - sls: statsd
-      - sls: statsd.diamond

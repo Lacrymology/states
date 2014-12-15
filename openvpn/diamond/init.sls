@@ -46,7 +46,7 @@ openvpn_diamond_collector:
 {%- endfor %}
     - require:
       - file: /etc/diamond/collectors
-{%- for tunnel in pillar['openvpn'] %}
+{%- for tunnel in salt['pillar.get']('openvpn', {}) %}
       - service: openvpn-{{ tunnel }}
 {%- endfor %}
     - watch_in:
@@ -60,7 +60,7 @@ openvpn_diamond_resources:
     - require_in:
       - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
     - require:
-{%- for tunnel in pillar['openvpn'] %}
+{%- for tunnel in salt['pillar.get']('openvpn', {}) %}
       - service: openvpn-{{ tunnel }}
 {%- endfor %}
     - text:

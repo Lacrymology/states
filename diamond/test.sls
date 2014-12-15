@@ -63,12 +63,10 @@ test:
         Network:
           network.lo.rx_byte: True
           network.lo.tx_byte: True
-{%- if pillar['diamond'] is defined -%}
-    {%- if pillar['diamond']['ping'] is defined -%}
-        {%- set first_host = pillar['diamond']['ping']|first %}
+{%- if salt['pillar.get']('diamond:ping', {}) %}
+        {%- set first_host = salt['pillar.get']('diamond:ping', {})|first %}
         Ping:
-          ping.{{ pillar['diamond']['ping'][first_host]|replace('.', '_') }}: True
-    {%- endif -%}
+          ping.{{ salt['pillar.get']('diamond:ping:' ~ first_host)|replace('.', '_') }}: True
 {%- endif %}
         ProcessStat:
           proc.procs_running: True

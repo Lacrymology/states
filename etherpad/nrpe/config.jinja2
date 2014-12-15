@@ -42,7 +42,7 @@ etherpad_logger:
     - etherpad_procs
 
 {%- if salt['pillar.get']('etherpad:secret_url', False) %}
-  {%- set http_uri = '/' ~ pillar['etherpad']['secret_url'] %}
+  {%- set http_uri = '/' ~ salt['pillar.get']('etherpad:secret_url', False) %}
 {%- else  %}
   {%- set http_uri = '' %}
 {%- endif  %}

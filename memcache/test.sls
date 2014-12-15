@@ -95,7 +95,6 @@ test:
     - require:
       - sls: memcache
       - sls: memcache.diamond
-    - order: last
   qa:
     - test
     - name: memcache

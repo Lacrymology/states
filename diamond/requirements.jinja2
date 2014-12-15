@@ -37,8 +37,6 @@ diamond==3.4.12
 {%- else %}
 https://archive.robotinfra.com/pip/diamond-3.4.12.tar.bz2
 {%- endif -%}
-{%- if 'graylog2_address' in pillar %}
-diamond==3.4.11
 {%- if salt['pillar.get']('graylog2_address', False) %}
 graypy==0.2.9
 {%- endif %}

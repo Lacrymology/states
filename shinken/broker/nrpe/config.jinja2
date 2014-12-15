@@ -62,7 +62,7 @@ shinken_broker_http:
 
 shinken_broker_web_cluster:
   description: Shinken Broker Web UI Cluster
-  check: bp_rule!*,r:^shinken_broker_http
+  check: bp_rule!{%- for host in salt['pillar.get']('shinken:architecture:broker') -%}{%- if loop.first -%}({%- endif -%}{{ host }},shinken_broker_http{%- if not loop.last -%} | {%- else -%} ){%- endif -%}{%- endfor %}
   passive: False
   business_rule_service_notification_options: n
   business_rule_smart_notifications: 1

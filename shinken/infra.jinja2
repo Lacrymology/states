@@ -267,7 +267,7 @@ define service {
           it's special and is always linked to dummy host.
           -#}
         {%- if check_command.startswith('bp_rule!') %}
-    host_name: dummy
+    host_name dummy
     check_command {{ check_command }}
         {%- else %}
             {#- not a bp_rule, so set real hostname. #}

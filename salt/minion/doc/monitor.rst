@@ -30,7 +30,7 @@ salt_minion_pillar_render
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 :doc:`/salt/minion/doc/index` rendered its
- `pillar <http://docs.saltstack.com/en/latest/topics/tutorials/pillar.html>`__
+`pillar <http://docs.saltstack.com/en/latest/topics/tutorials/pillar.html>`__
 successfully.
 
 This check will fail if rendering pillar encounters any error. It is necessary

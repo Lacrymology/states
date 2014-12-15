@@ -39,6 +39,28 @@ def inputs():
         return res.json()['inputs']
 
 
+def _create_input(title, jtype, creator, configuration):
+    """
+    Creates an input in the graylog server with the given configuration.
+    Crates only GLOBAL inputs
+    """
+    params = {
+        'creator_user_id': creator or _auth[0],
+        'title': title,
+        'type': jtype,
+        'global': True,
+        'configuration': configuration,
+    }
+
+    res = requests.post(_base_url + '/system/inputs', data=json.dumps(params),
+                        auth=_auth, headers={
+                            'content-type': 'application/json'})
+    if res.ok:
+        return res.json()
+    else:
+        res.raise_for_status()
+
+
 def create_gelf_input(title='gelf', stype="udp", port=12201, creator=None,
                       bind_address='0.0.0.0', buffer_size=1048576):
     """
@@ -60,22 +82,10 @@ def create_gelf_input(title='gelf', stype="udp", port=12201, creator=None,
     }
     jtype = jtypes[stype.lower()]
 
-    params = {
-        'creator_user_id': creator or _auth[0],
-        'title': title,
-        'type': jtype,
-        'global': True,
-        'configuration': {
-            'bind_address': bind_address,
-            'port': port,
-            'recv_buffer_size': buffer_size
-        },
+    configuration = {
+        'bind_address': bind_address,
+        'port': port,
+        'recv_buffer_size': buffer_size
     }
 
-    res = requests.post(_base_url + '/system/inputs', data=json.dumps(params),
-                        auth=_auth, headers={
-                            'content-type': 'application/json'})
-    if res.ok:
-        return res.json()
-    else:
-        res.raise_for_status()
+    return _create_input(title, jtype, creator, configuration)

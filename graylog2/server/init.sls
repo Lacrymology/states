@@ -198,16 +198,15 @@ graylog2_rsyslog_config:
       - archive: graylog2-server
       - user: graylog2
 
-{# Auto add General Syslog UDP input #}
-import_general_syslog_udp_input:
-  cmd:
-    - name: import_general_syslog_udp_input graylog2-{{ mongodb_suffix }}
-    - wait_script
-    - source: salt://graylog2/server/import_general_syslog_udp_input.py
-    - require:
-      - service: graylog2-server
-      - pkg: python-pymongo
-      - module: pysc
+import_graylog2_inputs:
+  graylog:
+    - gelf_input
+    {#- The following parameters have their default values and are unnecessary #}
+    - title: gelf
+    - stype: udp
+    - port: 12201
+    - bind_address: 0.0.0.0
+    - buffer_size: 1048576
     - watch:
       - archive: graylog2-server
 

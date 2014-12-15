@@ -48,7 +48,7 @@ def _create_input(name, params, function):
         'name': name,
         'changes': {},
         'result': True,
-        'comment': "".
+        'comment': "",
     }
 
     found = _find_inputs(params['title'], params['port'])
@@ -68,7 +68,7 @@ def _create_input(name, params, function):
         res = __salt__[function](**params)
     except requests.exceptions.HTTPError, e:
         ret['result'] = False
-        ret['changes']['error']: str(e)
+        ret['changes']['error'] = str(e)
         return ret
 
     ret['changes'] = res
@@ -127,7 +127,8 @@ def syslog_input(name, title='gelf', stype="udp", port=1514, creator=None,
     params = dict(
         title=title, stype=stype, port=port, creator=creator,
         bind_address=bind_address, buffer_size=buffer_size,
-        allow_override_date, store_full_message, force_rdns)
+        allow_override_date=allow_override_date,
+        store_full_message=store_full_message, force_rdns=force_rdns)
 
     return _create_input(name, params, 'graylog.create_syslog_input')
 

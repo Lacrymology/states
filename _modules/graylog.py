@@ -13,6 +13,8 @@ try:
 except ImportError:
     requests = None
 
+import json
+
 
 def __virtual__():
     if requests is None:
@@ -20,21 +22,23 @@ def __virtual__():
     return 'graylog'
 
 
-_auth = (
-    __salt__['pillar.get']('graylog2:root_username', 'admin'),
-    password = __salt__['pillar.get']('graylog2:admin_password')
-)
+def _auth():
+    return (
+        __salt__['pillar.get']('graylog2:root_username', 'admin'),
+        __salt__['pillar.get']('graylog2:admin_password')
+        )
 
-_base_url = "{}://{}/api".format(
-    'https' if __salt__['pillar.get']('graylog2:ssl', False) else 'http',
-    __salt__['pillar.get']('graylog2_address'))
+def _base_url():
+    return "{}://{}/api".format(
+        'https' if __salt__['pillar.get']('graylog2:ssl', False) else 'http',
+        __salt__['pillar.get']('graylog2_address'))
 
 
 def inputs():
     """
     Return the list
     """
-    res = requests.get(_base_url + '/system/inputs', auth=_auth)
+    res = requests.get(_base_url() + '/system/inputs', auth=_auth())
     if res.ok:
         return res.json()['inputs']
 
@@ -45,15 +49,15 @@ def _create_input(title, jtype, creator, configuration):
     Crates only GLOBAL inputs
     """
     params = {
-        'creator_user_id': creator or _auth[0],
+        'creator_user_id': creator or _auth()[0],
         'title': title,
         'type': jtype,
         'global': True,
         'configuration': configuration,
     }
 
-    res = requests.post(_base_url + '/system/inputs', data=json.dumps(params),
-                        auth=_auth, headers={
+    res = requests.post(_base_url() + '/system/inputs', data=json.dumps(params),
+                        auth=_auth(), headers={
                             'content-type': 'application/json'})
     if res.ok:
         return res.json()

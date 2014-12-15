@@ -28,6 +28,7 @@ __author__ = 'Tomas Neme'
 __maintainer__ = 'Tomas Neme'
 __email__ = 'tomas@robotinfra.com'
 
+import glob
 import os
 import logging
 import re
@@ -36,8 +37,8 @@ log = logging.getLogger(__name__)
 
 
 def _remove_log(logfile):
-    if __salt__['file.file_exists'](logfile):
-        __salt__['file.remove'](logfile)
+    for fl in glob.glob(logfile + '*'):
+        __salt__['file.remove'](fl)
 
 def test(name, map):
     """

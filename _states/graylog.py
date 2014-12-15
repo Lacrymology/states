@@ -99,3 +99,35 @@ def gelf_input(name, title='gelf', stype="udp", port=12201, creator=None,
     return _create_input(name, params, 'graylog.create_gelf_input')
 
 
+def syslog_input(name, title='gelf', stype="udp", port=1514, creator=None,
+                 bind_address='0.0.0.0', buffer_size=1048576,
+                 allow_override_date=True, store_full_message=False,
+                 force_rdns=False):
+    """
+    Makes sure a gelf input in the graylog server with the given parameters
+    exists. Works only for UDP and TCP GELF Inputs that run globally.
+    Identifies the input by title or port. If either are used, it doesn't do
+    anything.
+
+    :param title: Descriptive name of the node. Defaults to 'gelf'
+    :param stype: Socket type. One of ['tcp', 'udp']. Defaults to udp
+    :param port: Port to listen on. Default 12201
+    :param creator: The user ID for the creator of this input. Defaults to the
+                    admin user.
+    :param bind_address: Address to listen on
+    :param buffer_size: The size in bytes of the recvBufferSize for network
+                        connections to this input. Default 1048576
+    :param allow_override_date: Allow to override with current date if date
+                                could not be parsed
+    :param store_full_message: Store the full original syslog message as
+                               ``full_message``
+    :param force_rdns: Force rDNS resolution of hostname? Use if hostname
+                       cannot be parsed
+    """
+    params = dict(
+        title=title, stype=stype, port=port, creator=creator,
+        bind_address=bind_address, buffer_size=buffer_size,
+        allow_override_date, store_full_message, force_rdns)
+
+    return _create_input(name, params, 'graylog.create_syslog_input')
+

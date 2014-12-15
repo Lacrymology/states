@@ -89,3 +89,38 @@ def create_gelf_input(title='gelf', stype="udp", port=12201, creator=None,
     }
 
     return _create_input(title, jtype, creator, configuration)
+
+
+def create_syslog_input(title='syslog', stype="udp", port=1514, creator=None,
+                        bind_address='0.0.0.0', buffer_size=1048576,
+                        allow_override_date=True, store_full_message=False,
+                        force_rdns=False):
+    """
+    Creates an input in the graylog server with the given parameters.
+    Works only for UDP and TCP GELF Inputs that run globally.
+
+    :param title: Descriptive name of the node. Defaults to 'gelf'
+    :param stype: Socket type. One of ['tcp', 'udp']. Defaults to udp
+    :param port: Port to listen on. Default 12201
+    :param creator: The user ID for the creator of this input. Defaults to the
+                    admin user.
+    :param bind_address: Address to listen on
+    :param buffer_size: The size in bytes of the recvBufferSize for network
+                        connections to this input. Default 1048576
+    """
+    jtypes = {
+        'tcp': 'org.graylog2.inputs.syslog.tcp.SYSLOGTCPInput',
+        'udp': 'org.graylog2.inputs.syslog.udp.SYSLOGUDPInput',
+    }
+    jtype = jtypes[stype.lower()]
+
+    configuration = {
+        'bind_address': bind_address,
+        'port': port,
+        'recv_buffer_size': buffer_size,
+        'allow_override_date': allow_override_date,
+        'store_full_message': store_full_message,
+        'force_rdns': force_rdns,
+    }
+
+    return _create_input(title, jtype, creator, configuration)

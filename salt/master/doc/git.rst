@@ -34,7 +34,7 @@ but most important are the following values::
         push_notification: False
 
 The public key of local :doc:`/ssh/doc/index` client must be listed in
-:ref:`pillar-git-server-keys`` for last step during the ``git push``.
+:ref:`pillar-git-server-keys` for last step during the ``git push``.
 
 On the master side the following pillars values are required to be set::
 

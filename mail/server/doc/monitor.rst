@@ -17,4 +17,4 @@ it may caused by the slowness of mail processing, then raising
 this. Spam-filter (:doc:`/amavis/doc/index`) or virus scanner
 (:doc:`/clamav/doc/index`) did not work may also cause failure of this.
 
-Only check if :ref:`mail:check_mail_stack` is defined.
+Only check if :ref:`pillar-mail-check_mail_stack` is defined.

@@ -55,8 +55,6 @@ Conditional
 
 .. _pillar-clamav-db_mirrors:
 
-.. _pillar-clamav-db_mirrors:
-
 clamav:db_mirrors
 ~~~~~~~~~~~~~~~~~
 

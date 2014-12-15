@@ -45,6 +45,14 @@ postfix_port_smtp:
   dependencies:
     - postfix_master
 
+{%- set queue_length = salt['pillar.get']('postfix:queue_length', 20) %}
+{%- set queue_length_120_percent = queue_length + (queue_length * 20 / 100)|int %}
+postfix_queue_length:
+  description: Postfix Queue Length
+  command: /usr/lib/nagios/plugins/check_mailq -M postfix -w {{ queue_length }} -c {{ queue_length_120_percent }}
+  dependencies:
+    - postfix_master
+
 {%- if salt['pillar.get']('postfix:spam_filter', False) %}
 port_spam_handler:
   description: Port SPAM handler

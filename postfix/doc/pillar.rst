@@ -210,9 +210,11 @@ postfix:ssl
 
 Default: not used.
 
+.. pillar-postfix-queue_length:
+
 postfix:queue_length
 ~~~~~~~~~~~~~~~~~~~~
 
 Warning if the number of items in the mail queue reach the defined threshold.
 
-Default: ``20``.
+Default: ``20`` items in queue to raise warning.

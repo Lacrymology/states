@@ -46,7 +46,7 @@ def inputs():
 def _create_input(title, jtype, creator, configuration):
     """
     Creates an input in the graylog server with the given configuration.
-    Crates only GLOBAL inputs
+    Creates only GLOBAL inputs
     """
     params = {
         'creator_user_id': creator or _auth()[0],
@@ -68,7 +68,7 @@ def _create_input(title, jtype, creator, configuration):
 def create_gelf_input(title='gelf', stype="udp", port=12201, creator=None,
                       bind_address='0.0.0.0', buffer_size=1048576):
     """
-    Creates an input in the graylog server with the given parameters.
+    Creates a gelf input in the graylog server with the given parameters.
     Works only for UDP and TCP GELF Inputs that run globally.
 
     :param title: Descriptive name of the node. Defaults to 'gelf'
@@ -100,12 +100,12 @@ def create_syslog_input(title='syslog', stype="udp", port=1514, creator=None,
                         allow_override_date=True, store_full_message=False,
                         force_rdns=False):
     """
-    Creates an input in the graylog server with the given parameters.
-    Works only for UDP and TCP GELF Inputs that run globally.
+    Creates a syslog input in the graylog server with the given parameters.
+    Works only for UDP and TCP Syslog Inputs that run globally.
 
-    :param title: Descriptive name of the node. Defaults to 'gelf'
+    :param title: Descriptive name of the node. Defaults to 'syslog'
     :param stype: Socket type. One of ['tcp', 'udp']. Defaults to udp
-    :param port: Port to listen on. Default 12201
+    :param port: Port to listen on. Default 1514
     :param creator: The user ID for the creator of this input. Defaults to the
                     admin user.
     :param bind_address: Address to listen on
@@ -113,8 +113,8 @@ def create_syslog_input(title='syslog', stype="udp", port=1514, creator=None,
                         connections to this input. Default 1048576
     """
     jtypes = {
-        'tcp': 'org.graylog2.inputs.syslog.tcp.SYSLOGTCPInput',
-        'udp': 'org.graylog2.inputs.syslog.udp.SYSLOGUDPInput',
+        'tcp': 'org.graylog2.inputs.syslog.tcp.SyslogTCPInput',
+        'udp': 'org.graylog2.inputs.syslog.udp.SyslogUDPInput',
     }
     jtype = jtypes[stype.lower()]
 

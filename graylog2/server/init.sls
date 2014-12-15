@@ -198,15 +198,32 @@ graylog2_rsyslog_config:
       - archive: graylog2-server
       - user: graylog2
 
-import_graylog2_inputs:
+import_graylog2_gelf:
   graylog:
     - gelf_input
     {#- The following parameters have their default values and are unnecessary #}
     - title: gelf
     - stype: udp
     - port: 12201
+    - creator: {{ __salt__['pillar.get']('graylog2:root_username', 'admin') }}
     - bind_address: 0.0.0.0
     - buffer_size: 1048576
+    - watch:
+      - archive: graylog2-server
+
+import_graylog2_syslog:
+  graylog:
+    - syslog_input
+    {#- The following parameters have their default values and are unnecessary #}
+    - title: syslog
+    - stype: udp
+    - port: 1514
+    - creator: {{ __salt__['pillar.get']('graylog2:root_username', 'admin') }}
+    - bind_address: 0.0.0.0
+    - buffer_size: 1048576
+    - allow_override_date: true
+    - store_full_message: false
+    - force_rdns: false
     - watch:
       - archive: graylog2-server
 

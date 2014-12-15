@@ -85,8 +85,6 @@ Default: ``False``.
 
 .. |deployment| replace:: roundcube
 
-.. |deployment| replace:: roundcube
-
 .. include:: /uwsgi/doc/pillar.inc
 
 .. _pillar-roundcube-ldap-suffix:

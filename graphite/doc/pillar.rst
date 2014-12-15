@@ -187,6 +187,4 @@ graphite:ssl_redirect
 
 .. |deployment| replace:: graphite
 
-.. |deployment| replace:: graphite
-
 .. include:: /uwsgi/doc/pillar.inc

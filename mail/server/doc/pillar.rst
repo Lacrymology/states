@@ -46,13 +46,13 @@ mail:maxproc
 Maximum number of processes of:
 
 - ``amavisd`` child processes (not including the main process).
-- ``amavisfeed``, :doc:`/amavis/doc/index` service of :doc:`/doc/postfix/index`
+- ``amavisfeed``, :doc:`/amavis/doc/index` service of :doc:`/postfix/doc/index`
 
 Default: ``2`` processes each.  This value reflects the default of 2
 amavisd-daemon children processes and is a good setting to start from.
 The value may be raised later, when the system works stable and still
 can take a higher load. Same value used to configurate both software
-as one of :doc:`/doc/postfix/index` should never exceed one of
+as one of :doc:`/postfix/doc/index` should never exceed one of
 :doc:/doc/amavis/index`.
 Consult http://www.ijs.si/software/amavisd/README.postfix for more detail.
 

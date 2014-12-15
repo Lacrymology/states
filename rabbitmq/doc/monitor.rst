@@ -11,22 +11,6 @@ Monitor
 Mandatory
 ---------
 
-.. _monitor-erlang_procs:
-
-erlang_procs
-~~~~~~~~~~~~
-
-:doc:`/erlang/doc/index` Port Mapper Daemon.
-
-.. include:: /nrpe/doc/check_procs.inc
-
-.. _monitor-erlang_port:
-
-erlang_port
-~~~~~~~~~~~
-
-:doc:`/erlang/doc/index` Port Mapper port can be accessed locally.
-
 rabbitmq_procs
 ~~~~~~~~~~~~~~
 
@@ -40,7 +24,7 @@ rabbitmq_procs
 rabbitmq_management_port
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-:doc:`/rabbitmq/doc/index` `Management Port <http://previous.rabbitmq.com/v3_1_x/management.html`__ is open.
+:doc:`/rabbitmq/doc/index` `Management Port <http://previous.rabbitmq.com/v3_1_x/management.html>`__ is open.
 
 .. _monitor-rabbitmq_amqp_port:
 

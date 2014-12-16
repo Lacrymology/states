@@ -85,7 +85,7 @@ salt-minion:
       - service: salt-minion
 
 {%- for file in ('logging', 'graphite', 'mysql') %}
-  {%- if (file == 'graphite' and 'graphite_address' in pillar) or file != 'graphite' %}
+  {%- if (file == 'graphite' and salt['pillar.get']('graphite_address', False) or file != 'graphite' %}
 /etc/salt/minion.d/{{ file }}.conf:
   file:
     - managed

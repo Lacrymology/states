@@ -41,4 +41,4 @@ else
     logger -t "$(basename "$0")[$$]" -p 'local0.info' \
         "Cannot validate the pillar data first, just run highstate anyway"
 fi
-/usr/bin/salt-call state.highstate --return syslog,timestamps{% if 'sentry_dsn' in pillar %},sentry_common{% endif %}
+/usr/bin/salt-call state.highstate --return syslog,timestamps{% if salt['pillar.get']('sentry_dsn', False) %},sentry_common{% endif %}

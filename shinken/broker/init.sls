@@ -55,7 +55,7 @@ include:
     - watch_in:
       - service: nginx
 
-{%- if 'files_archive' in pillar -%}
+{%- if salt['pillar.get']('files_archive', False) -%}
     {%- if salt['pillar.get']('graphite_address', False) -%}
         {%- call shinken_install_module('graphite') %}
 - source_hash: md5=56b393c9970275327644123480ffd413
@@ -64,19 +64,19 @@ include:
 - source_hash: md5=497dafa1036c84f2c5722fb557060c50
         {%- endcall %}
     {%- endif %}
-    
+
     {%- call shinken_install_module('auth-cfg-password') %}
 - source_hash: md5=c91aef6581d2d4ef33cccd50bd16faf4
     {%- endcall %}
-    
+
     {%- call shinken_install_module('sqlitedb') %}
 - source_hash: md5=ef0bc27efbcadc4f9056a263cd698cbd
     {%- endcall %}
-    
+
     {%- call shinken_install_module('syslog-sink') %}
 - source_hash: md5=41acd03bc4f0579debc6b0402d257a9a
     {%- endcall %}
-    
+
     {%- call shinken_install_module('webui') %}
 - source_hash: md5=396be5667ca41b57d65239d7bd4b061a
     {%- endcall %}

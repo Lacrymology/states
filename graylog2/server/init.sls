@@ -39,6 +39,9 @@ include:
   - rsyslog
   - pysc
   - sudo
+{%- if salt['pillar.get']("__test__", False) %}
+  - elasticsearch
+{%- endif %}
 
 {%- set version = '0.20.6' %}
 {%- set checksum = 'md5=a9105a4fb5c950b3760df02dface6465' %}

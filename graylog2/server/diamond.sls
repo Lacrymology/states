@@ -29,6 +29,9 @@ include:
   - diamond
   - mongodb.diamond
   - rsyslog.diamond
+{%- if salt['pillar.get']("__test__", False) %}
+  - elasticsearch.diamond
+{%- endif %}
 
 graylog2_server_diamond_resources:
   file:

@@ -32,6 +32,7 @@ include:
   - mongodb.backup
   - mongodb.diamond
   - mongodb.nrpe
+  - mongodb.pymongo
   - mongodb.repair
 
 mongodb_test_generate_sample_db_for_backup_test:
@@ -131,3 +132,50 @@ test:
     - require:
       - sls: mongodb
       - sls: mongodb.diamond
+
+{% set doc = {"_id": 1, "name": "somename", "surname": "somesurname"} -%}
+
+test_mongodb_insert:
+  cmodule:
+    - check_output
+    - name: mongodb.insert
+    - output:
+        - 1
+    - objects:
+        - {{ doc }}
+    - collection: test
+    - database: citest
+    - host: localhost
+    - port: 27017
+    - require:
+        - cmd: mongodb_test_generate_sample_db_for_backup_test
+        - pkg: python-pymongo
+
+test_mongodb_find:
+  cmodule:
+    - check_output
+    - name: mongodb.find
+    - output:
+        - {{ doc }}
+    - query:
+        _id: {{ doc._id }}
+    - collection: test
+    - database: citest
+    - host: localhost
+    - port: 27017
+    - require:
+      - cmodule: test_mongodb_insert
+
+test_mongodb_delete:
+  cmodule:
+    - check_output
+    - name: mongodb.remove
+    - output: 1 objects removed
+    - query:
+        _id: {{ doc._id }}
+    - collection: test
+    - database: citest
+    - host: localhost
+    - port: 27017
+    - require:
+      - cmodule: test_mongodb_find

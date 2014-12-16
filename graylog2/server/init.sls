@@ -32,6 +32,7 @@ include:
   - python
   - apt
   - mongodb
+  - mongodb.pymongo
   - java.7
   - graylog2
   - local
@@ -199,16 +200,13 @@ graylog2_rsyslog_config:
 
 {# Auto add General Syslog UDP input #}
 import_general_syslog_udp_input:
-  pkg:
-    - name: python-pymongo
-    - installed
   cmd:
     - name: import_general_syslog_udp_input graylog2-{{ mongodb_suffix }}
     - wait_script
     - source: salt://graylog2/server/import_general_syslog_udp_input.py
     - require:
       - service: graylog2-server
-      - pkg: import_general_syslog_udp_input
+      - pkg: python-pymongo
       - module: pysc
     - watch:
       - archive: graylog2-server

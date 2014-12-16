@@ -165,7 +165,7 @@ http {
         #}
     server {
         listen 80 default_server;
-        server_name  _;
+        server_name "";
         return 404;
 {%- if not pillar.get('debug', False) %}
         access_log off;

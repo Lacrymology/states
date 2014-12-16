@@ -18,3 +18,21 @@
     {%- endfor -%}
   {%- endif -%}
 {%- endmacro %}
+
+{%- macro ssl_default_server(certname) %}
+/etc/nginx/conf.d/ssl.conf:
+  file:
+    - managed
+    - template: jinja
+    - source: salt://nginx/ssl.jinja2
+    - user: www-data
+    - group: www-data
+    - mode: 440
+    - context:
+        certname: {{ certname }}
+    - require:
+      - pkg: nginx
+      - user: web
+    - watch_in:
+      - service: nginx
+{%- endmacro %}

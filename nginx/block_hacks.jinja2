@@ -16,7 +16,7 @@
         return 404;
     }
 
-    # deny scan admin 
+    # deny scan admin
     location ~* ^/(admn|admm|_admin|padmin) {
         deny all;
         return 404;

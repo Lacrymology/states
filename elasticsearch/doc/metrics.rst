@@ -256,15 +256,15 @@ jvm.mem.pools
 List of JVM memory pools:
 
 * CMS_Old_Gen
-  
+
 * CMS_Perm_Gen
-  
+
 * Code_Cache
-  
+
 * Par_Eden_Space
-  
+
 * Par_Survivor_Space
-  
+
 * old
 
 * survivor
@@ -349,7 +349,7 @@ which allow pending requests to be held instead of discarded.
 List of important thread pools:
 
 * index
-  
+
 * search
 
 * suggest

@@ -28,7 +28,7 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 include:
   - diamond
   - rsyslog.diamond
- 
+
 
 clamav_diamond_resources:
   file:

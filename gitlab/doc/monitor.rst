@@ -22,7 +22,7 @@ Monitor :doc:`/gitlab/doc/index` `Sidekiq <http://sidekiq.org/>`_
 process.
 
 Critical:
-  
+
   * There is no `Sidekiq <http://sidekiq.org/>`_ process running
   * There are more than one `Sidekiq <http://sidekiq.org/>`_ processes running
 

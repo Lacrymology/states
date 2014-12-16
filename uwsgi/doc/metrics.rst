@@ -1,6 +1,6 @@
 Metrics
 =======
-                          
+
 :doc:`/diamond/doc/process`:
 
 * ``uwsgi`` - :doc:`/uwsgi/doc/index`

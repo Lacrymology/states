@@ -13,7 +13,7 @@ Mandatory
 
 .. include:: /postgresql/doc/monitor.inc
 
-.. include:: /nginx/doc/monitor.inc             
+.. include:: /nginx/doc/monitor.inc
 
 .. _monitor-etherpad_procs:
 

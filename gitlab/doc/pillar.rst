@@ -13,7 +13,7 @@ Pillar
 .. warning::
 
    See :ref:`pillar-ssh-server-extra_configs`.
-  
+
 Mandatory
 ---------
 
@@ -123,9 +123,9 @@ Set default `visibility level
 when create new project.  Can be:
 
  * private
-   
+
  * internal
-   
+
  * public
 
 Default: ``private``.

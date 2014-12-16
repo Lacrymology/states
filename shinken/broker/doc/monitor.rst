@@ -55,5 +55,5 @@ Conditional
 Only use if :ref:`pillar-shinken-ssl` is turned on.
 
 .. include:: /nginx/doc/monitor_ssl.inc
-             
-             
+
+

@@ -13,11 +13,11 @@ the account that is defined in :doc:`pillar`
 Here you can see all the metrics, such as those that :doc:`/diamond/doc/index`
 sent to Carbon under: Graphite -> `Your minion name` -> ``os``.
 
-A few functions to get the data you want: 
+A few functions to get the data you want:
 
 - **sumSeries()**: aggregating events from different sources into one series,
   for e.g::
-    
+
     sum(shinken-*.os.cpu.total.system)
 
 - **summarize()**: aggregates the values into "buckets" of a specific time
@@ -39,7 +39,7 @@ A few functions to get the data you want:
 - **mostDeviant()**: accept an integer N, averages the entire series, and
   filter out the top N deviant metrics from the overall average::
 
-    mostDeviant(3,*.os.memory.MemFree)    
+    mostDeviant(3,*.os.memory.MemFree)
 
 `Full list of function <http://graphite.readthedocs.org/en/latest/functions.html>`__
 

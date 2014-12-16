@@ -101,7 +101,7 @@ Number of open connections to the :doc:`/memcache/doc/index` server.
 main.curr_items
 ~~~~~~~~~~~~~~~
 
-Number of items currently in this :doc:`/memcache/doc/index` server's cache. 
+Number of items currently in this :doc:`/memcache/doc/index` server's cache.
 
 main.decr_hits
 ~~~~~~~~~~~~~~

@@ -1,6 +1,6 @@
 Metrics
 =======
-                          
+
 :doc:`/diamond/doc/process`:
 
 * ``redis`` - :doc:`/redis/doc/index`.

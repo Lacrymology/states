@@ -1,6 +1,6 @@
 ProcessResources
 ================
-   
+
 Process resources data locate at ``os > process > {{ process_name }}``
 in :doc:`/graphite/doc/index` web interface.
 

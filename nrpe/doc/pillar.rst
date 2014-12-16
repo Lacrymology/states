@@ -12,7 +12,7 @@ Example::
         - 192.168.1.1
         - 192.168.1.2
       password: Dba1dwjx
-      
+
 .. _pillar-nrpe-nsca-servers:
 
 nrpe:nsca:servers

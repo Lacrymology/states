@@ -67,8 +67,8 @@ test:
       - monitoring: test
       - cmd: doc
 
-{#- 
-By default, check_ldap already do a search with (objectclass=*). 
+{#-
+By default, check_ldap already do a search with (objectclass=*).
 Moreover, mail stack check also perform query to LDAP.
 So, no need to do a test like ldapsearch here.
 -#}

@@ -147,10 +147,10 @@ ssl_cert_and_key_for_{{ name }}:
     subject's hashed name, plus a number extension that starts with 0.
 
     That means you can't just drop My_Awesome_CA_Cert.pem in the directory and
-    expect it to be picked up automatically. However, OpenSSL ships with 
-    a utility called c_rehash which you can invoke on a directory 
-    to have all certificates indexed with appropriately named symlinks. 
-    
+    expect it to be picked up automatically. However, OpenSSL ships with
+    a utility called c_rehash which you can invoke on a directory
+    to have all certificates indexed with appropriately named symlinks.
+
     http://mislav.uniqpath.com/2013/07/ruby-openssl/#SSL_CERT_DIR #}
 ssl_create_symlink_by_hash_for_{{ name }}:
   cmd:

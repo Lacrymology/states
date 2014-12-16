@@ -348,11 +348,14 @@ def parse_doctrees(docs_dir):
     '''
     Parse sphinx doctrees
     :param docs_dir: TODO FIX ME
-    :return: a dictionary like: {
-         formula: {
-             <structure documented in _parse_pillar()>
-             '_monitor': _parse_monitor()
-         }
+    :return: a dictionary like::
+
+             {
+                 formula: {
+                     <structure documented in _parse_pillar()>
+                     '_monitor': _parse_monitor()
+                 }
+             }
     '''
     ret = {}
     doctrees = _get_doctrees(docs_dir)

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 '''
-Module to provide MongoDB functionality to Salt
+Module to provide MongoDB functionality to Salt. This is based on the salt
+official mongodb module, but adds some extra functionality.
 
 :configuration: This module uses PyMongo, and accepts configuration details as
     parameters as well as configuration settings::
@@ -306,6 +307,17 @@ def insert(objects, collection, user=None, password=None,
 
 def find(collection, query=None, user=None, password=None,
          host=None, port=None, database='admin'):
+    """
+    Run a query on a mongodb collection.
+
+    CLI Example:
+
+    .. code-block:: bash
+
+        salt '*' mongodb.find users '{"username": "john"}' <user> <password> <host> <port> <database>
+
+    :param json query: The query to run on the database
+    """
     conn = _connect(user, password, host, port)
     if not conn:
         return 'Failed to connect to mongo database'

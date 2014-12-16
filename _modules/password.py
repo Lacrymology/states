@@ -95,7 +95,8 @@ def encrypt_shadow(unencrypted_password, salt_key=None, hash_type='6'):
     Encrypt a password consumable by shadow.set_password.
 
     salt_key: up to 16 characters.
-    hash_type:
+    hash_type::
+
         ID  | Method
         ---------------------------------------------------------
         1   | MD5

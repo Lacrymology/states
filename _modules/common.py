@@ -20,7 +20,8 @@ def update():
     This intead to be used to run arbitrary salt module and any kwargs to work
     around a limitation of salt regarding the scheduler.
 
-    example of pillar data:
+    example of pillar data::
+
         monitoring:
           update:
             - salutil.refresh_pillar
@@ -28,7 +29,7 @@ def update():
                 mods: whatever
                 test: True
 
-    or:
+    or::
 
         monitoring:
            update:

@@ -45,18 +45,13 @@ def present(name,
     '''
     Ensure the RabbitMQ user exists.
 
-    name
-        User name
-    password
-        User's password, if one needs to be set
-    force
-        If user exists, forcibly change the password
-    tags
-        Optionally set user tags for user
-    perms
-        A list of dicts with vhost keys and 3-tuple values
-    runas
-        Name of the user to run the command
+    :param user name: User name
+    :param string password: User's password, if one needs to be set
+    :param boolean force: If user exists, forcibly change the password
+    :param string tag: Optionally set user tags for user
+    :param perms: A list of dicts with vhost keys and 3-tuple values
+    :type perms: list of dict
+    :param user runas: Name of the user to run the command
     '''
 
     ret = {'name': name, 'result': True, 'comment': '', 'changes': {}}
@@ -143,10 +138,8 @@ def absent(name,
     '''
     Ensure the named user is absent
 
-    name
-        The name of the user to remove
-    runas
-        User to run the command
+    :param name: The name of the user to remove
+    :param runas: User to run the command
     '''
     ret = {'name': name, 'result': True, 'comment': '', 'changes': {}}
 

@@ -63,14 +63,6 @@ graylog2_log_one_msg:
     - require:
       - service: graylog2-server
 
-test_import_general_syslog_udp_input:
-  cmd:
-    - script
-    - name: import_general_syslog_udp_input graylog2-0-20
-    - source: salt://graylog2/server/import_general_syslog_udp_input.py
-    - require:
-      - sls: graylog2.server
-
 test:
   monitoring:
     - run_all_checks

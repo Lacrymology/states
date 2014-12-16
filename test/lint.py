@@ -227,8 +227,9 @@ class LintCheckPillarStyle(CheckPillarStyleBase):
 
     def __init__(self, *args, **kwargs):
         rule = "only form salt['pillar.get'](...) is allowed"
+        patterns = (" pillar\[", "in pillar[^a-zA-Z_0-9]", )
         super(LintCheckPillarStyle, self).__init__(
-            (" pillar\[",), rule, *args, **kwargs
+            patterns, rule, *args, **kwargs
         )
 
 

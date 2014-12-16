@@ -196,8 +196,10 @@ def _parse_pillar(document, root_name="pillar"):
                 else:
                     # I know default_sections is a list of 1
                     child, = default_sections
-                    defaults = child.traverse(nodes.literal,
-                                              include_self=False)
+                    defaults = child.traverse(
+                        lambda x: (x.parent == child and
+                                   isinstance(x, nodes.literal)),
+                        include_self=False)
                     if not defaults:
                         data['_errors'].append(
                             SyntaxError("No default values"))
@@ -249,8 +251,10 @@ def _parse_pillar(document, root_name="pillar"):
                 elif default_sections:
                     # I know default_sections is a list of 1
                     child, = default_sections
-                    defaults = filter(lambda x: x.tagname == 'literal',
-                                      child.children)
+                    defaults = child.traverse(
+                        lambda x: (x.parent == child and
+                                   isinstance(x, nodes.literal)),
+                        include_self=False)
                     if not defaults:
                         data['_errors'].append(
                             SyntaxError("No default values"))

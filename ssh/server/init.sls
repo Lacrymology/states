@@ -86,7 +86,7 @@ ssh_server_root_authorized_keys:
 
 /etc/rsyslog.d/ssh.conf:
   file:
-{% if not salt['pillar.get']('debug', False) and 'shinken_pollers' in pillar %}
+{% if not salt['pillar.get']('debug', False) and salt['pillar.get']('shinken_pollers', False) %}
     - managed
     - template: jinja
     - source: salt://ssh/server/rsyslog.jinja2

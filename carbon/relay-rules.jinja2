@@ -28,7 +28,7 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 # {{ salt['pillar.get']('message_do_not_modify') }}
 [default]
 default = true
-{%- set instances_count = salt['pillar.get']('carbon:instances') %}
+{%- set instances_count = salt['pillar.get']('carbon:cache_daemons') %}
 destinations = {%- for i in range(instances_count) -%}
 127.0.0.1:20{{ loop.index }}4:{{ i }}{% if not loop.last %}, {% endif %}
 {%- endfor %}

@@ -74,7 +74,7 @@ graphite:
       - user: graphite
       - file: /var/lib/graphite
 
-{%- set instances_count = salt['pillar.get']('carbon:instances') %}
+{%- set instances_count = salt['pillar.get']('carbon:cache_daemons') %}
 {% for instance in range(instances_count) %}
 /var/lib/graphite/whisper/{{ instance }}:
   file:

@@ -11,10 +11,13 @@ __maintainer__ = 'Tomas Neme'
 __email__ = 'lacrymology@gmail.com'
 
 
+import requests
+
+
 def __virtual__():
-    if 'graylog' in __salt__:
-        return 'graylog'
-    return False
+    if 'graylog.inputs' not in __salt__:
+        return False
+    return 'graylog'
 
 
 def _find_input(title, port):
@@ -23,7 +26,7 @@ def _find_input(title, port):
     """
     found = False
 
-    inputs = __salt__['graylog.inputs']
+    inputs = __salt__['graylog.inputs']()
     for iput in inputs:
         if iput['message_input']['title'] == title:
             found = iput
@@ -51,7 +54,7 @@ def _create_input(name, params, function):
         'comment': "",
     }
 
-    found = _find_inputs(params['title'], params['port'])
+    found = _find_input(params['title'], params['port'])
 
     if found:
         ret['comment'] = "Matching Input found: {}".format(found)

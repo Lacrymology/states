@@ -48,13 +48,14 @@ def test(name, map):
     Expects diamond to have the ArchiveHandler active, which is the case
     if ``__test__`` pillar key is turned on when state ``diamond`` is applied
 
-    :param map: a map in the form
-        { collectorName: { metric: boolean, metric: .. }, collectorName: ..}
+    :param dict map: a map in the form::
+
+          { collectorName: { metric: boolean, metric: .. }, collectorName: ..}
+
         where collectorName must be just the name of the diamond collectors to
         be run, and each metric maps to a boolean that defines whether 0 is an
         acceptable value for the metric. Metrics must not prefix with the
         <hostname>.os, as this module will do that instead.
-    :return:
     """
     logfile = os.path.join(__opts__['cachedir'], 'diamond.archive.log')
 

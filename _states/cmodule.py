@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
+
 '''
 Custom additions to module state
-================================
 '''
+
 
 def check_output(name, output, **kwargs):
     """
@@ -17,7 +18,7 @@ def check_output(name, output, **kwargs):
 
     high_data = {
         name: {
-            "module": ["run"] + [{k:v} for k, v in kwargs.iteritems()]
+            "module": ["run"] + [{k: v} for k, v in kwargs.iteritems()]
         }
     }
     res = __salt__['state.high'](high_data)

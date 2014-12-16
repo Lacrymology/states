@@ -88,10 +88,10 @@ def wait(name, timeout=30, user=None, **kargs):
 
     .. code-block:: yaml
 
-    vim:
-      process:
-        - wait
-        - timeout: 10
+      vim:
+        process:
+          - wait
+          - timeout: 10
 
     name
         name of the process to wait
@@ -149,10 +149,10 @@ def wait_for_dead(name, timeout=30, user=None, **kargs):
 
     .. code-block:: yaml
 
-    vim:
-      process:
-        - wait_for_dead
-        - timeout: 10
+      vim:
+        process:
+          - wait_for_dead
+          - timeout: 10
 
     name
         name of the process to wait
@@ -238,11 +238,11 @@ def wait_socket(name=None, address="127.0.0.1", port=None, frequency=1,
 
     .. code-block:: yaml
 
-    elasticsearch:
-      process:
-        - wait_socket
-        - port: 9200
-        - timeout: 60
+      elasticsearch:
+        process:
+          - wait_socket
+          - port: 9200
+          - timeout: 60
 
     address
         The ip address to wait for, default: localhost

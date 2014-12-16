@@ -127,26 +127,26 @@ def records_exists(name, email, token, records):
     Update records.
     If any error happens, no changes are applied.
 
-    sls example
+    sls example::
 
-    state_name:
-      dnsimple.records_exists:
-      - email: xxx
-      - token: xxx
-      - records:
-          blahblah.com:
-            A:
-              www:
-                content: 123.11.1.11
-                ttl: 123
-                prio: 2
-              blog:
-                content: 122.2.2.2
-          adomain.org:
-            A:
-              www:
-                content: 12.1.1.2
-                ...
+      state_name:
+        dnsimple.records_exists:
+        - email: xxx
+        - token: xxx
+        - records:
+            blahblah.com:
+              A:
+                www:
+                  content: 123.11.1.11
+                  ttl: 123
+                  prio: 2
+                blog:
+                  content: 122.2.2.2
+            adomain.org:
+              A:
+                www:
+                  content: 12.1.1.2
+                  ...
     '''
 
     ret = {'name': 'existed',

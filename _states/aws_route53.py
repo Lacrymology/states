@@ -108,29 +108,29 @@ def records_exists(access_key, secret_key, records):
 
     only simple values such as TTL and records/values are supported so far.
 
-    Example:
+    Example::
 
-    mess_with_yahoo_and_google:
-      route53.records_exists:
-        - access_key: xxx
-        - secret_key: yyy
-        - records:
-           Z2ESDHL3365N3AQ: {# Amazon hosted zone ID #}
-             a: {# can be a, aaaa, txt, ns, cname, mx, ptr, spf and srv #}
-               .google.com:
-                 values: {# set multiple values for round-robin #}
-                   - 127.0.0.1
-                   - 127.0.0.2
-                 ttl: 1200
-               www.google.com:
-                 values:
-                   - 127.0.0.3
-           Z2000003365N3AQ:
-             cname:
-               www.yahoo.com:
-                 values:
-                   - www.google.com
-                 ttl: 1200
+      mess_with_yahoo_and_google:
+        route53.records_exists:
+          - access_key: xxx
+          - secret_key: yyy
+          - records:
+             Z2ESDHL3365N3AQ: {# Amazon hosted zone ID #}
+               a: {# can be a, aaaa, txt, ns, cname, mx, ptr, spf and srv #}
+                 .google.com:
+                   values: {# set multiple values for round-robin #}
+                     - 127.0.0.1
+                     - 127.0.0.2
+                   ttl: 1200
+                 www.google.com:
+                   values:
+                     - 127.0.0.3
+             Z2000003365N3AQ:
+               cname:
+                 www.yahoo.com:
+                   values:
+                     - www.google.com
+                   ttl: 1200
     '''
     log.debug("Run records_exists: %s", records)
     ret = {'name': 'records_exists', 'result': None, 'comment': '',

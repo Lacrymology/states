@@ -29,9 +29,19 @@
 
 import sphinx_rtd_theme
 
-extensions = ['sphinx.ext.todo', 'sphinx.ext.autodoc',]
+extensions = ['sphinx.ext.todo',
+              'sphinx.ext.autodoc',
+              'sphinx.ext.intersphinx',
+              'sphinx.ext.extlinks']
 todo_include_todos = True
-autodoc_default_flags = ['members', 'undoc-members',]
+autodoc_default_flags = ['members', 'undoc-members']
+intersphinx_mapping = {
+    'salt': ('http://docs.saltstack.com/', None),
+}
+extlinks = {
+    'salt': ('http://docs.saltstack.com/en/latest%s.html', '')
+}
+
 templates_path = ''
 source_suffix = '.rst'
 master_doc = 'doc/index'

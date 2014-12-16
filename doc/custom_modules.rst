@@ -4,8 +4,9 @@ Custom salt execution modules
 A number of custom execution modules are provided by this library to
 facilitate interfacing with the provided services.
 
-Submodules
-----------
+.. contents::
+   :local:
+   :backlinks: top
 
 _modules.common
 ---------------
@@ -15,112 +16,112 @@ _modules.common
     :undoc-members:
     :show-inheritance:
 
-_modules.elasticsearch_plugins module
--------------------------------------
+_modules.elasticsearch_plugins
+------------------------------
 
 .. automodule:: _modules.elasticsearch_plugins
     :members:
     :undoc-members:
     :show-inheritance:
 
-_modules.mongodb module
------------------------
+_modules.mongodb
+----------------
 
 .. automodule:: _modules.mongodb
     :members:
     :undoc-members:
     :show-inheritance:
 
-_modules.monitoring module
---------------------------
+_modules.monitoring
+-------------------
 
 .. automodule:: _modules.monitoring
     :members:
     :undoc-members:
     :show-inheritance:
 
-_modules.password module
-------------------------
+_modules.password
+-----------------
 
 .. automodule:: _modules.password
     :members:
     :undoc-members:
     :show-inheritance:
 
-_modules.pillar module
-----------------------
+_modules.pillar
+---------------
 
 .. automodule:: _modules.pillar
     :members:
     :undoc-members:
     :show-inheritance:
 
-_modules.pkg_installed module
------------------------------
+_modules.pkg_installed
+----------------------
 
 .. automodule:: _modules.pkg_installed
     :members:
     :undoc-members:
     :show-inheritance:
 
-_modules.qa module
-------------------
+_modules.qa
+-----------
 
 .. automodule:: _modules.qa
     :members:
     :undoc-members:
     :show-inheritance:
 
-_modules.rabbitmq module
-------------------------
+_modules.rabbitmq
+-----------------
 
 .. automodule:: _modules.rabbitmq
     :members:
     :undoc-members:
     :show-inheritance:
 
-_modules.rabbitmq_cluster module
---------------------------------
+_modules.rabbitmq_cluster
+-------------------------
 
 .. automodule:: _modules.rabbitmq_cluster
     :members:
     :undoc-members:
     :show-inheritance:
 
-_modules.rabbitmq_plugins module
---------------------------------
+_modules.rabbitmq_plugins
+-------------------------
 
 .. automodule:: _modules.rabbitmq_plugins
     :members:
     :undoc-members:
     :show-inheritance:
 
-_modules.raven module
----------------------
+_modules.raven
+--------------
 
 .. automodule:: _modules.raven
     :members:
     :undoc-members:
     :show-inheritance:
 
-_modules.ssh module
--------------------
+_modules.ssh
+------------
 
 .. automodule:: _modules.ssh
     :members:
     :undoc-members:
     :show-inheritance:
 
-_modules.state module
----------------------
+_modules.state
+--------------
 
 .. automodule:: _modules.state
     :members:
     :undoc-members:
     :show-inheritance:
 
-_modules.tech_support module
-----------------------------
+_modules.tech_support
+---------------------
 
 .. automodule:: _modules.tech_support
     :members:

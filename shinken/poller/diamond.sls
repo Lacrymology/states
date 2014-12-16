@@ -39,5 +39,5 @@ shinken_poller_diamond_resources:
       - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
     - text:
       - |
-        [[shinken.poller]]
+        [[shinken-poller]]
         cmdline = ^\/usr\/local\/shinken\/bin\/python \/usr\/local\/shinken\/bin\/shinken-poller

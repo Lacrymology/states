@@ -59,7 +59,7 @@ test:
     - map:
         ProcessResources:
     {{ diamond_process_test('gitlab') }}
-    {{ diamond_process_test('uwsgi.gitlab') }}
+    {{ diamond_process_test('uwsgi-gitlab') }}
     - require:
       - sls: gitlab
       - sls: gitlab.diamond

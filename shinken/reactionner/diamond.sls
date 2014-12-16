@@ -38,5 +38,5 @@ shinken_reactionner_diamond_resources:
       - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
     - text:
       - |
-        [[shinken.reactionner]]
+        [[shinken-reactionner]]
         cmdline = ^\/usr\/local\/shinken\/bin\/python \/usr\/local\/shinken\/bin\/shinken-reactionner

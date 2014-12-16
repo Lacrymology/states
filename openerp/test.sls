@@ -70,7 +70,7 @@ test:
     - test
     - map:
         ProcessResources:
-    {{ diamond_process_test('uwsgi.openerp') }}
+    {{ diamond_process_test('uwsgi-openerp') }}
 {%- if salt['pillar.get']('openerp:company_db', False) %}
     {{ diamond_process_test('openerp') }}
 {%- endif %}

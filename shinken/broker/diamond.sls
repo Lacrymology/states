@@ -41,5 +41,5 @@ shinken_broker_diamond_resources:
       - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
     - text:
       - |
-        [[shinken.broker]]
+        [[shinken-broker]]
         cmdline = ^\/usr\/local\/shinken\/bin\/python \/usr\/local\/shinken\/bin\/shinken-broker

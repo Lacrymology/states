@@ -50,7 +50,7 @@ test:
     - test
     - map:
         ProcessResources:
-    {{ diamond_process_test('salt.api', zmempct=False) }}
+    {{ diamond_process_test('salt-api', zmempct=False) }}
     - require:
       - sls: salt.api
       - sls: salt.api.diamond

@@ -40,5 +40,5 @@ salt_cloud_diamond_resources:
       - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
     - text:
       - |
-        [[salt.cloud]]
+        [[salt-cloud]]
         exe = ^python \/usr\/bin\/salt-cloud

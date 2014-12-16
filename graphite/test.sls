@@ -62,7 +62,7 @@ test:
     - test
     - map:
         ProcessResources:
-    {{ diamond_process_test('uwsgi.graphite', zmempct=False) }}
+    {{ diamond_process_test('uwsgi-graphite', zmempct=False) }}
     - require:
       - sls: graphite
       - sls: graphite.diamond

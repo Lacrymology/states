@@ -12,7 +12,7 @@ include:
 
 {%- set check_mail_stack = salt['pillar.get']('mail:check_mail_stack', {}) -%}
 {%- if check_mail_stack is mapping and check_mail_stack|length > 0 -%}
-{%- from 'nrpe/passive.sls' import passive_check with context %}
+{%- from 'nrpe/passive.jinja2' import passive_check with context %}
 
 {{ passive_check('mail.server') }}
 
@@ -38,7 +38,6 @@ include:
       - service: nsca_passive
 {%- else -%}
 {%- from 'nrpe/passive.jinja2' import passive_absent with context %}
-
 {{ passive_absent('mail.server') }}
 
 /usr/lib/nagios/plugins/check_mail_stack.py:

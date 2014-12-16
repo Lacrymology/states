@@ -37,7 +37,7 @@ $sa_dsn_cutoff_level = {{ salt['pillar.get']('amavis:dsn_cutoff_level', 9) }};
 $final_spam_destiny=D_PASS;
 
 {#- who will receive notify when there is REAL spam email #}
-{%- if pillar.get('amavis:notify_admin_for_spam', False) %}
+{%- if salt['pillar.get']('amavis:notify_admin_for_spam', False) %}
 $spam_admin = '{{ salt['pillar.get']('mail:postmaster') }}';
 {%- endif %}
 {#- send a template mail to warn spam sender #}

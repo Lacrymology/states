@@ -29,8 +29,9 @@
 
 import sphinx_rtd_theme
 
-extensions = ['sphinx.ext.todo', 'sphinx.ext.autodoc']
+extensions = ['sphinx.ext.todo', 'sphinx.ext.autodoc',]
 todo_include_todos = True
+autodoc_default_flags = ['members', 'undoc-members',]
 templates_path = ''
 source_suffix = '.rst'
 master_doc = 'doc/index'
@@ -44,3 +45,8 @@ html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 html_static_path = ['']
 html_show_copyright = True
 htmlhelp_basename = ''
+
+import sys
+import os
+
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))

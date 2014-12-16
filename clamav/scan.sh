@@ -28,6 +28,10 @@
 
 # Run a full scan on / except some directories ( /sys, /dev, /proc, /run)
 
+# limit resources usage
+renice -n 19 -p $$ > /dev/null
+ionice -c idle -p $$
+
 # safe guard
 set -o nounset
 set -o errexit

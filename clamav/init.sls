@@ -120,14 +120,12 @@ clamav-daemon:
 
 /etc/cron.daily/clamav_scan:
   file:
-    - managed
-    - source: salt://clamav/cron_daily.jinja2
-    - template: jinja
+    - symlink
+    - target: /usr/local/bin/clamav-scan.sh
     - user: root
     - group: root
     - mode: 500
     - require:
-      - file: bash
       - file: /usr/local/bin/clamav-scan.sh
       - pkg: cron
 {%- endif %}

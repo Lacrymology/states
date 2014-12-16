@@ -59,7 +59,7 @@ do
 #  - repo2
 # then use --repo repo1 --repo repo2
     --repo)
-	  repos+=("../$1")
+      repos+=("../$1")
       shift
       ;;
     --doc-pillar-output)

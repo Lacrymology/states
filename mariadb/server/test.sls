@@ -42,9 +42,8 @@ test:
   diamond:
     - test
     - map:
-        {#- Why there is no metrics in diamond.archive.log?
         MySQL:
-          #}
+          mysql.Threads_running: False
         ProcessResources:
           {{ diamond_process_test('mysql') }}
     - require:

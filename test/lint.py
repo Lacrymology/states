@@ -71,7 +71,10 @@ class LintCheckEndingSpace(LintCheck):
         '''
         found = _grep(self.paths, ' $')
         if found:
-            self.print_header('Line must not end with space or tab.')
+            self.print_header('Line must not end with space. '
+                              ' Using GNU sed command'
+                              " ``sed -i 's/ *$//g' FILENAME``"
+                              " will remove ending spaces from FILENAME.")
             _print_grep_result(found)
             return False
         return True

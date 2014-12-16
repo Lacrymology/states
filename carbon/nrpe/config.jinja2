@@ -25,6 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
+{%- set timeout = 30 -%}
 {%- set instances_count = salt['pillar.get']('carbon:cache_daemons') %}
 {% for instance in range(instances_count) %}
 carbon_cache_{{ instance }}_procs:

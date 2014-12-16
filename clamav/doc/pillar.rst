@@ -62,7 +62,7 @@ List of spam database servers.
 Link to the
 `public list of available mirrors <http://www.clamav.net/mirrors.html>`__.
 
-Default:
+Default: ``False``.
 
 If ``files_archive`` is not defined, list with:
 
@@ -81,7 +81,7 @@ Database verification domain, DNS used to verify virus database version.
 Link to the
 `public list of available mirrors <http://www.clamav.net/mirrors.html>`__.
 
-Default:
+Default: ``False``.
 
 If ``files_archive`` is not defined, ``current.cvd.clamav.net``.
 

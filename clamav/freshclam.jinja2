@@ -67,11 +67,11 @@ DatabaseMirror database.clamav.net
         {%- endif -%}
 {%- else %}
 ScriptedUpdates yes
-    {%- for mirror in salt['pillar.get']('clamav:db_mirrors', ('db.local.clamav.net', 'database.clamav.net')) %}
+  {%- for mirror in salt['pillar.get']('clamav:db_mirrors', False)|default(('db.local.clamav.net', 'database.clamav.net'), boolean=True) %}
 DatabaseMirror {{ mirror }}
-    {%- endfor -%}
+  {%- endfor -%}
 {%- endif -%}
-{%- for mirror in salt['pillar.get']('clamav:dns_db', ('current.cvd.clamav.net',)) %}
+{%- for mirror in salt['pillar.get']('clamav:dns_db', False)|default(('current.cvd.clamav.net',), boolean=True) %}
 DNSDatabaseInfo {{ mirror }}
 {%- endfor %}
 OnUpdateExecute touch /var/lib/clamav/last-update

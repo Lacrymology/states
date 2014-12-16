@@ -51,7 +51,7 @@ remove_screen:
 apt_rc:
   monitoring:
     - run_check
-    - accepted_failure: 'HALFINSTALLED CRITICAL'
+    - accepted_failure: 'HALFREMOVED CRITICAL'
     - require:
       - file: /usr/lib/nagios/plugins/check_apt-rc.py
       - pkg: remove_screen

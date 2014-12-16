@@ -58,7 +58,7 @@ test:
     - test
     - map:
         ProcessResources:
-    {{ diamond_process_test('salt.master', zmempct=False) }}
+    {{ diamond_process_test('salt-master', zmempct=False) }}
     - require:
       - sls: salt.master
       - sls: salt.master.diamond

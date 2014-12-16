@@ -42,5 +42,5 @@ salt_api_diamond_resources:
       - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
     - text:
       - |
-        [[salt.api]]
+        [[salt-api]]
         cmdline = ^python \/usr\/bin\/salt\-api$

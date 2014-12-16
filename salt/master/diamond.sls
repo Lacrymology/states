@@ -40,5 +40,5 @@ salt_master_diamond_resources:
       - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
     - text:
       - |
-        [[salt.master]]
+        [[salt-master]]
         cmdline = ^\/usr\/bin\/python \/usr\/bin\/salt\-master$

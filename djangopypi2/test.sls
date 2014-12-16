@@ -69,7 +69,7 @@ test:
     - test
     - map:
         ProcessResources:
-    {{ diamond_process_test('uwsgi.djangopypi2') }}
+    {{ diamond_process_test('uwsgi-djangopypi2') }}
     - require:
       - sls: djangopypi2
       - sls: djangopypi2.diamond

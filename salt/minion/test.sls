@@ -40,7 +40,7 @@ test:
     - test
     - map:
         ProcessResources:
-    {{ diamond_process_test('salt.minion', zmempct=False) }}
+    {{ diamond_process_test('salt-minion', zmempct=False) }}
     - require:
       - sls: salt.minion.diamond
   qa:

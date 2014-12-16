@@ -45,7 +45,7 @@ include:
       - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
     - text:
       - |
-        [[uwsgi.{{ state }}]]
+        [[uwsgi-{{ state }}]]
         cmdline = ^{{ state }}-(worker|master)$
 {%- endmacro %}
 

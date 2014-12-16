@@ -38,5 +38,5 @@ shinken_receiver_diamond_resources:
       - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
     - text:
       - |
-        [[shinken.receiver]]
+        [[shinken-receiver]]
         cmdline = ^\/usr\/local\/shinken\/bin\/python \/usr\/local\/shinken\/bin\/shinken-receiver

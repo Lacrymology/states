@@ -50,7 +50,7 @@ test:
     - map:
         ProcessResources:
 {%- for role in roles %}
-          {{ diamond_process_test('shinken.' + role) }}
+          {{ diamond_process_test('shinken-' + role) }}
 {%- endfor %}
     - require:
 {%- for role in roles %}

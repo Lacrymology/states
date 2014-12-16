@@ -65,7 +65,7 @@ test:
     - test
     - map:
         ProcessResources:
-    {{ diamond_process_test('uwsgi.sentry') }}
+    {{ diamond_process_test('uwsgi-sentry') }}
     - require:
       - sls: sentry
       - sls: sentry.diamond

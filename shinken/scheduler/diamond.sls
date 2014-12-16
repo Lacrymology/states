@@ -38,5 +38,5 @@ shinken_scheduler_diamond_resources:
       - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
     - text:
       - |
-        [[shinken.scheduler]]
+        [[shinken-scheduler]]
         cmdline = ^\/usr\/local\/shinken\/bin\/python \/usr\/local\/shinken\/bin\/shinken-scheduler

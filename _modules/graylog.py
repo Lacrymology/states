@@ -28,10 +28,10 @@ def _auth():
         __salt__['pillar.get']('graylog2:admin_password')
         )
 
+
 def _base_url():
-    return "{}://{}/api".format(
-        'https' if __salt__['pillar.get']('graylog2:ssl', False) else 'http',
-        __salt__['pillar.get']('graylog2_address'))
+    return __salt__['pillar.get']('graylog2:rest_listen_uri',
+                                  'http://127.0.0.1:12900')
 
 
 def inputs():

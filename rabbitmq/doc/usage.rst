@@ -16,4 +16,4 @@ Use user admin on PILLAR KEY USERNAME AND PASSWORD to login web UI management Ra
 
 To create one user. Let click `Add a user`. Then put `Username`, `Password`, `Tags`. And click `Add user`
 
-Notice that kind of tags: `Admin`, `Monitoring`, `Management` that effect to permission of that user. 
+Notice that kind of tags: `Admin`, `Monitoring`, `Management` that effect to permission of that user.

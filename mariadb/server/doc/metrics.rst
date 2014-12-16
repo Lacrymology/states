@@ -1,6 +1,6 @@
 Metrics
 =======
-                          
+
 :doc:`/diamond/doc/process`:
 
 * ``mysql`` - :doc:`/apt_cache/doc/index` daemon

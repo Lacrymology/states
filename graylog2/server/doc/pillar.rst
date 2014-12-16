@@ -11,7 +11,7 @@ Mandatory
 ---------
 
 Example::
-  
+
   graylog2:
     admin_password: 06f8a1541ca80cfe08fe6fe7576c7e37a3480e8d1a12486fc9d85880478ab2cb
 
@@ -124,13 +124,13 @@ Possible types:
 
 yielding
   Compromise between performance and CPU usage.
-   
+
 sleeping
   Compromise between performance and CPU usage. Latency spikes can occur after quiet periods.
-  
+
 blocking
   High throughput, low latency, higher CPU usage.
-  
+
 busy_spinning
   Avoids syscalls which could introduce latency jitter. Best when
   threads can be bound to specific CPU cores.

@@ -30,7 +30,7 @@ the notifications:
   * **Grace period (minutes)**: 1
 
   Don't forget to click on **Save** button.
-  
+
 Go to `users` tab and add the email address for each user that you want to
 send him email notifications.
 

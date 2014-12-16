@@ -8,7 +8,7 @@ Monitor
    In this document, when refer to a pillar key ``pillar_prefix``
    means ``graylog2.web``.
 
-.. include:: /nginx/doc/monitor.inc             
+.. include:: /nginx/doc/monitor.inc
 
 graylog2_web_procs
 ------------------

@@ -40,7 +40,7 @@ erlang_procs
 .. include:: /nrpe/doc/check_procs.inc
 
 .. _monitor-erlang_port:
-             
+
 erlang_port
 ~~~~~~~~~~~
 

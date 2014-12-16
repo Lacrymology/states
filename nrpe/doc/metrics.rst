@@ -1,6 +1,6 @@
 Metrics
 =======
-                          
+
 :doc:`/diamond/doc/process`:
 
 * :doc:`/nrpe/doc/index`

@@ -511,7 +511,7 @@ These numbers will grow over time and in response to database
 use. Analyze these values over time to track database utilization.
 
 .. note::
-   
+
    The data in opcounters treats operations that affect multiple
    documents, such as bulk insert or multi-update operations, as a
    single operation. See document for more granular document-level

@@ -114,7 +114,7 @@ Example::
 
   shinken:
     architecture:
-      receiver: 
+      receiver:
         - integration-0
     poller_max_fd: 16384
     ssl: False

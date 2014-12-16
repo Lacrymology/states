@@ -9,7 +9,7 @@ How to remove an IP address that DenyHosts blocked?
 ---------------------------------------------------
 
 - Stop DenyHosts by running::
- 
+
     service denyhosts stop
 
 - Remove the lines that contains the blocked IP address from the following
@@ -22,8 +22,8 @@ How to remove an IP address that DenyHosts blocked?
   - ``/var/lib/denyhosts/hosts-valid``
   - ``/var/lib/denyhosts/user-hosts``
 
-- Start DenyHosts:: 
-  
+- Start DenyHosts::
+
     service denyhosts start
 
 Instead of doing 3 above steps manually, use this script

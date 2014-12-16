@@ -21,7 +21,7 @@ To create team. You need to login by admin account. Then click `Create a New Tea
 Create project
 --------------
 
-After you already create team. You can create project. Only put `Project Name*`, `Platform*` and `Owner`. And then click `Save Changes.` 
+After you already create team. You can create project. Only put `Project Name*`, `Platform*` and `Owner`. And then click `Save Changes.`
 
 Delete group Manually
 ---------------------

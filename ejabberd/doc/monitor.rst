@@ -80,7 +80,7 @@ Check :doc:`/ejabberd/doc/index` backup age and size.
 
 .. include:: /postgresql/doc/monitor.inc
 
-.. include:: /nginx/doc/monitor.inc             
+.. include:: /nginx/doc/monitor.inc
 
 Conditional
 -----------

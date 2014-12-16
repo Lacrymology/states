@@ -77,7 +77,7 @@ batch = {{ salt['pillar.get']('diamond:batch', 256) }}
 {#- File to write archive log files #}
 log_file = {{ opts['cachedir'] }}/diamond.archive.log
 
-{#- Only keep the current archive log file, 
+{#- Only keep the current archive log file,
     which is used to test collectors #}
 days = 0
 {%- endif %}

@@ -211,7 +211,7 @@ import_graylog2_gelf:
     - creator: {{ salt['pillar.get']('graylog2:root_username', 'admin') }}
     - bind_address: 0.0.0.0
     - buffer_size: 1048576
-    - watch:
+    - require:
       - archive: graylog2-server
 
 import_graylog2_syslog:
@@ -227,7 +227,7 @@ import_graylog2_syslog:
     - allow_override_date: true
     - store_full_message: false
     - force_rdns: false
-    - watch:
+    - require:
       - archive: graylog2-server
 
 /var/log/graylog2:

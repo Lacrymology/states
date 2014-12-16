@@ -205,7 +205,7 @@ import_graylog2_gelf:
     - title: gelf
     - stype: udp
     - port: 12201
-    - creator: {{ __salt__['pillar.get']('graylog2:root_username', 'admin') }}
+    - creator: {{ salt['pillar.get']('graylog2:root_username', 'admin') }}
     - bind_address: 0.0.0.0
     - buffer_size: 1048576
     - watch:
@@ -218,7 +218,7 @@ import_graylog2_syslog:
     - title: syslog
     - stype: udp
     - port: 1514
-    - creator: {{ __salt__['pillar.get']('graylog2:root_username', 'admin') }}
+    - creator: {{ salt['pillar.get']('graylog2:root_username', 'admin') }}
     - bind_address: 0.0.0.0
     - buffer_size: 1048576
     - allow_override_date: true

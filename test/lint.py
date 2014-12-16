@@ -62,6 +62,21 @@ class LintCheck(object):
         print '-' * 10
 
 
+class LintCheckEndingSpace(LintCheck):
+    stable = True
+
+    def run(self):
+        '''
+        Checks whether a line ends with space characters
+        '''
+        found = _grep(self.paths, ' $')
+        if found:
+            self.print_header('Line must not end with space or tab.')
+            _print_grep_result(found)
+            return False
+        return True
+
+
 class LintCheckTabCharacter(LintCheck):
     stable = True
 
@@ -362,6 +377,7 @@ def main():
                  LintCheckNumbersOfOrderLast,
                  LintCheckPillarStyle,
                  LintCheckSubkeyInSaltPillar,
+                 LintCheckEndingSpace,
                  )
 
     if args.stable:

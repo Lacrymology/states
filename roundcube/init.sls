@@ -249,5 +249,5 @@ extend:
   nginx:
     service:
       - watch:
-        - cmd: ssl_cert_and_key_for_{{ salt['pillar.get']('roundcube:ssl') }}
+        - cmd: ssl_cert_and_key_for_{{ salt['pillar.get']('roundcube:ssl', False) }}
 {% endif %}

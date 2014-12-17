@@ -39,6 +39,12 @@ include:
   - rsyslog
   - pysc
   - sudo
+{#-
+  graylog2.server require elasticsearch, install it when testing to
+  make the inputs importing work.  In production environment,
+  elasticsearch doesn't need to be install in same machine as
+  graylog2.server
+#}
 {%- if salt['pillar.get']("__test__", False) %}
   - elasticsearch
 {%- endif %}

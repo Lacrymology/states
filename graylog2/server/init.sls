@@ -39,6 +39,15 @@ include:
   - rsyslog
   - pysc
   - sudo
+{#-
+  graylog2.server require elasticsearch, install it when testing to
+  make the inputs importing work.  In production environment,
+  elasticsearch doesn't need to be install in same machine as
+  graylog2.server
+#}
+{%- if salt['pillar.get']("__test__", False) %}
+  - elasticsearch
+{%- endif %}
 
 {%- set version = '0.20.6' %}
 {%- set checksum = 'md5=a9105a4fb5c950b3760df02dface6465' %}
@@ -198,17 +207,33 @@ graylog2_rsyslog_config:
       - archive: graylog2-server
       - user: graylog2
 
-{# Auto add General Syslog UDP input #}
-import_general_syslog_udp_input:
-  cmd:
-    - name: import_general_syslog_udp_input graylog2-{{ mongodb_suffix }}
-    - wait_script
-    - source: salt://graylog2/server/import_general_syslog_udp_input.py
+import_graylog2_gelf:
+  graylog:
+    - gelf_input
+    {#- The following parameters have their default values and are unnecessary #}
+    - title: gelf
+    - stype: udp
+    - port: 12201
+    - creator: {{ salt['pillar.get']('graylog2:root_username', 'admin') }}
+    - bind_address: 0.0.0.0
+    - buffer_size: 1048576
     - require:
-      - service: graylog2-server
-      - pkg: python-pymongo
-      - module: pysc
-    - watch:
+      - archive: graylog2-server
+
+import_graylog2_syslog:
+  graylog:
+    - syslog_input
+    {#- The following parameters have their default values and are unnecessary #}
+    - title: syslog
+    - stype: udp
+    - port: 1514
+    - creator: {{ salt['pillar.get']('graylog2:root_username', 'admin') }}
+    - bind_address: 0.0.0.0
+    - buffer_size: 1048576
+    - allow_override_date: true
+    - store_full_message: false
+    - force_rdns: false
+    - require:
       - archive: graylog2-server
 
 /var/log/graylog2:

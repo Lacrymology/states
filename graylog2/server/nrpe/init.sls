@@ -35,6 +35,9 @@ include:
   - pysc.nrpe
   - python.nrpe
   - sudo.nrpe
+{%- if salt['pillar.get']("__test__", False) %}
+  - elasticsearch.nrpe
+{%- endif %}
 
 /usr/lib/nagios/plugins/check_new_logs.py:
   file:

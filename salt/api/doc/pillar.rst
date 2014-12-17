@@ -1,3 +1,6 @@
+Pillar
+======
+
 .. include:: /doc/include/pillar.inc
 
 - :doc:`/git/doc/index` :doc:`/git/doc/pillar`

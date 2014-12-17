@@ -32,8 +32,8 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 cmd="/usr/local/graphite/bin/python /usr/local/graphite/bin/carbon-cache.py --config=/etc/graphite/carbon.conf --instance={{ instance }}"
 {%- else %}
 cmd="/usr/local/graphite/bin/python /usr/local/graphite/bin/carbon-relay.py --config=/etc/graphite/carbon.conf"
-ulimit -Hn {{ salt['pillar.get']('ulimit:openfiles', 16384) }}
-ulimit -Sn {{ salt['pillar.get']('ulimit:openfiles', 16384) }}
+ulimit -Hn {{ salt['pillar.get']('carbon:max_files', 16384) }}
+ulimit -Sn {{ salt['pillar.get']('carbon:max_files', 16384) }}
 {%- endif %}
 
 cntr=0

@@ -27,11 +27,7 @@ Maintainer: Van Pham Diep <favadi@robotinfra.com>
 -#}
 mongodb:
   pkg:
-{% if salt['pillar.get']('destructive_absent', False) %}
     - purged
-{% else %}
-    - removed
-{% endif %}
     - name: mongodb-10gen
     - require:
       - service: mongodb
@@ -55,13 +51,11 @@ mongodb:
     - require:
       - pkg: mongodb
 
-{% if salt['pillar.get']('destructive_absent', False) %}
 /var/lib/mongodb:
   file:
     - absent
     - require:
       - pkg: mongodb
-{% endif %}
 
 {% for log in ('mongodb', 'upstart/mongodb.log') %}
 /var/log/{{ log }}:

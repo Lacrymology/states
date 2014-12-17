@@ -35,11 +35,9 @@ include:
     - absent
 {% endfor %}
 
-{% if salt['pillar.get']('destructive_absent', False) %}
 /var/lib/graphite:
   file:
     - absent
-{% endif %}
 
 {%- set prefix = '/etc/init.d/' %}
 {%- set init_files = salt['file.find'](prefix, name='carbon-cache-*', type='f') %}

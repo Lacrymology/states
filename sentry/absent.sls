@@ -27,29 +27,6 @@ Maintainer: Van Pham Diep <favadi@robotinfra.com>
 
 Uninstall a Sentry web server.
 -#}
-
-{#
-{% if salt['pillar.get']('destructive_absent', 'False) and salt['pillar.get']('sentry:db', False') %}
-include:
-  - postgresql.server
-
-sentry:
-  postgres_database:
-    - absent
-    - name: {{ salt['pillar.get']('sentry:db:name') }}
-    - runas: postgres
-    - require:
-      - service: postgresql
-      - file: /etc/uwsgi/sentry.ini
-  postgres_user:
-    - absent
-    - name: {{ salt['pillar.get']('sentry:db:username') }}
-    - runas: postgres
-    - require:
-      - service: postgresql
-      - postgres_database: sentry
-{% endif %}
-#}
 sentry-uwsgi:
   file:
     - absent

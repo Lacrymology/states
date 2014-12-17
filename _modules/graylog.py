@@ -24,7 +24,7 @@ def __virtual__():
 
 def _auth():
     return (
-        __salt__['pillar.get']('graylog2:root_username', 'admin'),
+        __salt__['pillar.get']('graylog2:admin_username', 'admin'),
         __salt__['pillar.get']('graylog2:admin_password')
         )
 

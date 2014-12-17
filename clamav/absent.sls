@@ -57,3 +57,7 @@ clamav-daemon:
     - absent
     - require:
       - pkg: clamav-daemon
+
+/etc/cron.daily/clamav_scan:
+  file:
+    - absent

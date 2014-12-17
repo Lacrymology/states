@@ -28,6 +28,8 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 {%- from 'nrpe/passive.jinja2' import passive_check with context %}
 include:
   - apt.nrpe
+  - bash.nrpe
+  - cron
   - nrpe
   - rsyslog.nrpe
 

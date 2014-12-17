@@ -27,3 +27,9 @@ clamav_last_update
 ~~~~~~~~~~~~~~~~~~
 
 ClamAV database was updated since 1 day ago or less.
+
+clamav_last_scan
+~~~~~~~~~~~~~~~~
+
+:doc:`/clamav/doc/index` full scan was run and no virus found since 1
+day ago or less.

@@ -28,6 +28,9 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 {%- from 'macros.jinja2' import manage_pid with context %}
 include:
   - apt
+  - bash
+  - cron
+  - local
   - rsyslog
 
 clamav-freshclam:
@@ -101,6 +104,49 @@ clamav-daemon:
       - pkg: clamav-daemon
       - file: clamav-daemon
       - user: clamav-freshclam
+
+/usr/local/bin/clamav-scan.sh:
+  file:
+{%- if salt['pillar.get']('clamav:daily_scan', False) %}
+    - managed
+    - source: salt://clamav/scan.sh
+    - user: root
+    - group: root
+    - mode: 500
+    - require:
+      - file: bash
+      - file: /usr/local
+      - service: clamav-freshclam
+{%- else %}
+    - absent
+{%- endif %}
+
+
+/etc/cron.daily/clamav_scan:
+  file:
+{%- if salt['pillar.get']('clamav:daily_scan', False) %}
+    - symlink
+    - target: /usr/local/bin/clamav-scan.sh
+    - user: root
+    - group: root
+    - mode: 500
+    - require:
+      - file: /usr/local/bin/clamav-scan.sh
+      - pkg: cron
+{%- else %}
+    - absent
+{%- endif %}
+
+/var/lib/clamav/last-scan:
+  file:
+{%- if salt['pillar.get']('clamav:daily_scan', False) %}
+    - managed
+    - require:
+      - service: clamav-freshclam
+      - file: /etc/cron.daily/clamav_scan
+{%- else %}
+   - absent
+{%- endif %}
 
 {%- call manage_pid('/var/run/clamav/freshclam.pid', 'clamav', 'clamav', 'clamav-freshclam', 660) %}
 - pkg: clamav-freshclam

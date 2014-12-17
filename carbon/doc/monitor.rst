@@ -85,3 +85,9 @@ carbon_pickle_port
 ~~~~~~~~~~~~~~~~~~
 
 Carbon-relay Pickle Port is listening on localhost.
+
+.. |deployment| replace:: carbon
+
+.. include:: /backup/doc/monitor_proc.inc
+
+.. include:: /backup/doc/monitor.inc

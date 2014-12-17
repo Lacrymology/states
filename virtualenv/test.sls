@@ -34,10 +34,3 @@ test:
   monitoring:
     - run_all_checks
     - order: last
-  qa:
-    - test
-    - name: virtualenv
-    - pillar_doc: {{ opts['cachedir'] }}/doc/output
-    - require:
-      - monitoring: test
-      - cmd: doc

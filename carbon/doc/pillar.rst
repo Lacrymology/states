@@ -30,23 +30,23 @@ Optional
 
 Example::
 
-  graphite:
-    carbon:
-      file_max: 65535
-      replication: 1
-      interface: 0.0.0.0
-      max_creates_per_minute: inf
-      max_updates_per_second: 500
+  carbon:
+    files_max: 65535
+    replication: 1
+    interface: 0.0.0.0
+    max_creates_per_minute: inf
+    max_updates_per_second: 500
 
 
-.. _pillar-carbon-file_max:
+.. _pillar-carbon-files_max:
 
-carbon:file_max
-~~~~~~~~~~~~~~~
+carbon:files_max
+~~~~~~~~~~~~~~~~
 
-Maximum of open files for the daemon.
+Maximum of open files allowed for each carbon daemons (relay and cache).
 
-Default: ``False``.
+Default: a sensible high value, as carbon daemons often
+need to open many files (``16384``).
 
 .. _pillar-carbon-interface:
 

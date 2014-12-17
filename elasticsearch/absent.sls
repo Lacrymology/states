@@ -44,11 +44,7 @@ Maintainer: Van Pham Diep <favadi@robotinfra.com>
 
 elasticsearch:
   pkg:
-{% if salt['pillar.get']('destructive_absent', False) %}
     - purged
-{% else %}
-    - removed
-{% endif %}
     - require:
       - service: elasticsearch
   service:

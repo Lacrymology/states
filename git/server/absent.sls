@@ -35,10 +35,7 @@ git-server:
     - absent
     - name: git
     - force: True
-{% if salt['pillar.get']('destructive_absent', False) %}
     - purge: True
-{% else %}
   file:
     - absent
     - name: /var/lib/git-server/.ssh
-{% endif %}

@@ -42,7 +42,7 @@ server {
 server {
   {%- endif %}{# redirect http to https #}
 {%- from 'nginx/macro.jinja2' import ssl_config with context %}
-    {{ ssl_config(salt['pillar.get']('etherpad:ssl')) }}
+    {{ ssl_config(salt['pillar.get']('etherpad:ssl', False)) }}
 {%- endif %}
 {# web app logic #}
     server_name {% for hostname in salt['pillar.get']('etherpad:hostnames') %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};

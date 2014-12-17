@@ -73,6 +73,12 @@ def _matches(iterable, template):
     return ''
 
 def test_pillar(name, pillar_doc):
+    """
+    Test pillar documentation for the given formula
+
+    :param name: The name of the formula to test
+    :param pillar_doc: Absolute path to the doc build output directory
+    """
     ret = {'name': name,
            'changes': {},
            'result': True,
@@ -209,7 +215,14 @@ def test_pillar(name, pillar_doc):
 
 def test_monitor(name, pillar_doc, additional=()):
     '''
-    Sometimes it need $formula and $formula.backup to have all checks
+    Test monitor documentation for the given formula
+
+    .. note:: Sometimes it needs `$formula` and `$formula.backup` to have all
+              checks
+
+    :param name: The name of the formula to test
+    :param pillar_doc: Absolute path to the doc build output directory
+    :param additional: Additional formulas to test
     '''
     formulas = [name]
     formulas.extend(additional)
@@ -285,6 +298,13 @@ def test_monitor(name, pillar_doc, additional=()):
 
 
 def test(name, pillar_doc, additional=()):
+    """
+    Test both pillars and monitoring documentation for the given formula
+
+    :param name: The name of the formula to test
+    :param pillar_doc: Absolute path to the doc build output directory
+    :param additional: Additional formulas to test
+    """
     pillar = test_pillar(name, pillar_doc)
     monitor = test_monitor(name, pillar_doc, additional=additional)
     ret = {'name': name,

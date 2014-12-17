@@ -53,7 +53,7 @@ def _process_args(name, type, service):
 
 def present(name, type, service):
     '''
-    Make sure that entry `service`:`name` is present in hosts.`type` file
+    Make sure that entry `service`:`name` is present in hosts.<`type`> file
 
     Example::
 
@@ -95,7 +95,7 @@ def present(name, type, service):
 
 def absent(name, type, service):
     '''
-    Make sure entry `service`:`name` does not exist in /etc/hosts.`type` file
+    Make sure entry `service`:`name` does not exist in /etc/hosts.<`type`> file
     Example::
 
         123.32.12.12:

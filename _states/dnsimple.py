@@ -56,13 +56,13 @@ def created(name, email, token):
     '''
     Create/Register domain name.
 
-    sls example
+    sls example::
 
-    example.com:
-      dnsimple:
-        - registered
-        - email: xxx
-        - token: xxx
+      example.com:
+        dnsimple:
+          - registered
+          - email: xxx
+          - token: xxx
     '''
     domain = name
     ret = {'name': domain,

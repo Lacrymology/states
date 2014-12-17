@@ -26,7 +26,7 @@
 """
 Amazon Route53 state
 
-requires: http://pypi.python.org/pypi/route53
+.. note:: requires: http://pypi.python.org/pypi/route53
 """
 
 __author__ = 'Bruno Clermont'
@@ -66,14 +66,14 @@ def record_absent(name, record_type, zone_id, access_key, secret_key):
     '''
     Make sure an Amazon Route53 DNS record is absent.
 
-    Example:
+    Example::
 
-    www.google.com:
-      route53.record_absent:
-        - type: a
-        - zone_id: Z2ESDHL3365N3AQ
-        - access_key: xxx
-        - secret_key: yyy
+      www.google.com:
+        route53.record_absent:
+          - type: a
+          - zone_id: Z2ESDHL3365N3AQ
+          - access_key: xxx
+          - secret_key: yyy
     '''
 
     ret = {'name': 'Record {0} type {1}'.format(name, record_type.upper()),

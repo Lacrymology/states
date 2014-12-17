@@ -53,8 +53,13 @@ def _error(ret, err_msg):
 
 
 def absent(name):
-    # this should remove "/etc/nagios/nrpe.d/{0}.cfg".format(name)
-    pass
+    """
+    Make sure a check is not present in the system
+
+    .. warning:: not implemented
+
+    .. todo:: this should remove ``"/etc/nagios/nrpe.d/{0}.cfg".format(name)``
+    """
 
 
 def managed(name, source=None, template='jinja',
@@ -66,6 +71,11 @@ def managed(name, source=None, template='jinja',
             dir_mode=755,
             contents=None,
             defaults=None, **kwargs):
+    """
+    Make sure a monitoring check is present in the system
+
+    .. todo:: document this better
+    """
 
     ret = {'name': name,
            'changes': {},
@@ -122,8 +132,8 @@ def managed(name, source=None, template='jinja',
         loaded = []
     for check_name in loaded:
         if 'command' in loaded[check_name]:
-            lines.append("command[{0}]={1}\n".format(check_name,
-                         loaded[check_name]['command']))
+            lines.append("command[{0}]={1}\n".format(
+                check_name, loaded[check_name]['command']))
         else:
             log.info(('Check "%s" has no "command" attribute, it maybe a'
                       ' check which performed by Shinken or %s is malformed'),
@@ -184,8 +194,7 @@ def run_all_checks(**kwargs):
     '''
     Run all NRPE check, excepted listed.
 
-    exclude:
-        List of check to skip.
+    :param list exclude: List of check to skip.
     '''
     try:
         exclude = kwargs['exclude']

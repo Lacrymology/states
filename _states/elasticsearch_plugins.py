@@ -36,8 +36,7 @@ def uninstalled(name, es_home=None):
     '''
     Make sure that a plugin is uninstalled.
 
-    name
-        The name of the plugin to disable
+    :param string name: The name of the plugin to disable
     '''
     ret = {'name': name, 'result': None, 'comment': '', 'changes': {}}
 
@@ -66,8 +65,7 @@ def installed(name, url, es_home=None):
     '''
     Make sure that a plugin is installed.
 
-    name
-        The name of the plugin to install
+    :param type name: The name of the plugin to install
     '''
     ret = {'name': name, 'result': None, 'comment': '', 'changes': {}}
 

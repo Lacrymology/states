@@ -194,11 +194,12 @@ Default: listen to all interfaces available (``all``).
 postfix:ssl
 ~~~~~~~~~~~
 
-Name of :doc:`/ssl/doc/index` key to support SMTP over :doc:`/ssl/doc/index`.
+Name of :doc:`/ssl/doc/index` key to support SMTP over :doc:`/ssl/doc/index`
+(`SMTPS <http://en.wikipedia.org/wiki/SMTPS>`__).
 
-Default: not used.
+Default: not support SMTPS (``False``).
 
-.. pillar-postfix-queue_length:
+.. _pillar-postfix-queue_length:
 
 postfix:queue_length
 ~~~~~~~~~~~~~~~~~~~~

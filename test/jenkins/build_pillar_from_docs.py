@@ -43,7 +43,7 @@ def main(doc_path, modules_path, output):
     pillar = {}
 
     for details in docs.itervalues():
-        if details['mandatory']['keys']:
+        if 'examples' in details.get('mandatory', {}):
             for example in details['mandatory']['examples']:
                 pillar = update(pillar, example)
 

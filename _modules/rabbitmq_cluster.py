@@ -43,6 +43,7 @@ from salt import exceptions, utils
 
 log = logging.getLogger(__name__)
 
+
 def __virtual__():
     '''
     Verify PyRabbit and RabbitMQ are installed.
@@ -58,7 +59,13 @@ def __virtual__():
         return False
     return 'rabbitmq_cluster'
 
+
 def listeners(host, user, password):
+    """
+    Configure RabbitMQ listeners?
+
+    .. todo:: docme
+    """
     log.debug("Connect to RabbitMQ instance %s user: %s", host, user)
     client = pyrabbit.api.Client(host, user, password)
     log.debug("call get_overview()")

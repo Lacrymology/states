@@ -101,8 +101,8 @@ def revert(only_uninstall=False):
     Take a list of packages, uninstall from the OS packages not in the list
     and install those that are missing.
 
-    If ``only_uninstall`` is set to ``True``, this will only remove new packages
-    and don't install those who disapeared since ``snapshot`` was executed.
+    If `only_uninstall` is set to ``True``, this will only remove new packages
+    and don't install those who disapeared since :func:`snapshot` was executed.
     '''
     ret = {
         'name': 'revert',

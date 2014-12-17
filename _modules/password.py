@@ -61,14 +61,14 @@ def generate(name, length=20):
     minion for things such as local account used to connect components such as
     monitoring check and database.
 
-    Example, in a pillar file:
+    Example, in a pillar file::
 
-    monitoring:
-
-    postgresql:
       monitoring:
-        user: zabbix
-        password: {{ salt['password.generate']('monitoring_user', 30) }}
+
+      postgresql:
+        monitoring:
+          user: zabbix
+          password: {{ salt['password.generate']('monitoring_user', 30) }}
     '''
     key_name = '-'.join((__virtual__(), name))
     existing_passwd = __salt__['data.getval'](key_name)
@@ -114,6 +114,6 @@ def encrypt_shadow(unencrypted_password, salt_key=None, hash_type='6'):
 
 def sha256(data):
     """
-    return shasum -a 256 of data string
+    return shasum -a 256 of `data` string
     """
     return hashlib.sha256(str(data)).hexdigest()

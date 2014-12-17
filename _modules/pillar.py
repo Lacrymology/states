@@ -37,7 +37,7 @@ _cached_calls = None
 
 def reset():
     '''
-    Reset data kept on pillar usage.
+    Reset pillar usage list.
     '''
     global _cached_calls
     __salt__['data.update'](DATA_KEY, None)
@@ -45,6 +45,15 @@ def reset():
 
 
 def get(key, default=KeyError, *args, **kwargs):
+    """
+    Proxy function for stock :py:func:`salt.modules.pillar.get` which raises a
+    ``KeyError`` if a default value is not provided and an non-existent pillar
+    is requested.
+
+    It also keeps a record of the requested pillars and the provided default
+    values if the pillar key ``__test__`` is set to ``True``, which is used in
+    :mod:`_states.qa`
+    """
     DEBUG = pillar.get('__test__', False)
 
     if DEBUG:
@@ -61,10 +70,14 @@ def get(key, default=KeyError, *args, **kwargs):
 
 def get_calls(value=Exception, *args, **kwargs):
     """
-    Returs the calls collected with _save_calls
+    Returns a list of ``pillar.get`` calls made since :func:`clear`
+    was last called.
 
-    if `value` is not `None`, it sets it as well (returns the value before
+    if `value` is provided, it records a new list (returns the value before
     changing it)
+
+    :param value: If provided, it's saved as the list of calls.
+    :type value: defaultdict(list)
     """
     global _cached_calls
 
@@ -81,6 +94,10 @@ def get_calls(value=Exception, *args, **kwargs):
 
     return _cached_calls
 
+
 def get_call_desc():
+    """
+    Returns a string with the description of the calls to :func:`pillar.get`.
+    """
     return ["{}: {}".format(key, "|".join(map(str, val)))
             for key, val in __salt__['pillar.get_calls']().iteritems()]

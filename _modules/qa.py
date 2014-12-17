@@ -21,7 +21,8 @@ def __virtual__():
 
 def _get_doctrees(docs_dir):
     '''
-    TODO: doc me
+    .. todo:: doc me
+
     :param docs_dir:
     :return:
     '''
@@ -334,7 +335,7 @@ def _example_pillars(parsed_doctree):
     Returns a list of pillar dictionaries as they have been documented in
     doc/pillar.rst
 
-    :param parsed_doctree: the return value of `parse_doctrees`
+    :param parsed_doctree: the return value of :func:`parse_doctrees`
     """
     ret = []
     for fdata in parsed_doctree.itervalues():
@@ -347,15 +348,17 @@ def _example_pillars(parsed_doctree):
 def parse_doctrees(docs_dir):
     '''
     Parse sphinx doctrees
-    :param docs_dir: TODO FIX ME
-    :return: a dictionary like::
 
-             {
-                 formula: {
-                     <structure documented in _parse_pillar()>
-                     '_monitor': _parse_monitor()
+    :param docs_dir: TODO FIX ME
+    :return: a dictionary
+             like::
+
+                 {
+                     formula: {
+                         <structure documented in _parse_pillar()>
+                         '_monitor': _parse_monitor()
+                     }
                  }
-             }
     '''
     ret = {}
     doctrees = _get_doctrees(docs_dir)

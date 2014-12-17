@@ -68,8 +68,9 @@ sslyze:
       - archive: sslyze
       - virtualenv: nrpe-virtualenv
 
-{%- for name in salt['pillar.get']('ssl:certs', {}) -%}
-    {%- for trust_store in ('apple', 'java', 'microsoft', 'mozilla') %}
+{%- if salt['pillar.get']('__test__', False) -%}
+    {%- for name in salt['pillar.get']('ssl:certs', {}) -%}
+        {%- for trust_store in ('apple', 'java', 'microsoft', 'mozilla') %}
 sslyze_{{ name }}_{{ trust_store }}:
   file:
     - append
@@ -80,8 +81,9 @@ sslyze_{{ name }}_{{ trust_store }}:
       - archive: sslyze
     - require_in:
       - cmd: sslyze
+        {%- endfor -%}
     {%- endfor -%}
-{%- endfor %}
+{%- endif %}
 
 check_ssl_configuration.py:
   file:

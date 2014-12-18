@@ -168,6 +168,16 @@ graylog2-server:
       - service: mongodb
       - file: {{ server_root_dir }}
       - file: /var/run/graylog2
+{%- if salt['pillar.get']("__test__", False) %}
+      - process: elasticsearch
+{%- endif %}
+  cmd:
+    - wait
+    - name: sleep 60
+    - require:
+      - service: graylog2-server
+    - watch:
+      - archive: graylog2-server
 
 {{ manage_upstart_log('graylog2-server') }}
 
@@ -218,7 +228,7 @@ import_graylog2_gelf:
     - bind_address: 0.0.0.0
     - buffer_size: 1048576
     - require:
-      - archive: graylog2-server
+      - cmd: graylog2-server
 
 import_graylog2_syslog:
   graylog:
@@ -234,7 +244,7 @@ import_graylog2_syslog:
     - store_full_message: false
     - force_rdns: false
     - require:
-      - archive: graylog2-server
+      - cmd: graylog2-server
 
 /var/log/graylog2:
   file:

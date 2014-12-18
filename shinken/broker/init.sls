@@ -149,8 +149,8 @@ shinken-broker:
 extend:
   nginx.conf:
     file:
-      context:
-        ssl: {{ ssl }}
+      - context:
+          ssl: {{ ssl }}
   nginx:
     service:
       - watch:

@@ -33,13 +33,12 @@ apt_cache:
       - service: nginx
 
 {%- if ssl %}
-{{ ssl_default_server('apt_cache') }}
 
 extend:
   nginx.conf:
     file:
-      context:
-        ssl: {{ ssl }}
+      - context:
+          ssl: {{ ssl }}
   nginx:
     service:
       - watch:

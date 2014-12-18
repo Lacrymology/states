@@ -34,7 +34,7 @@ apt_cache:
       - service: nginx
 
 {%- if ssl %}
-{{ ssl_default_server(ssl) }}
+{{ ssl_default_server('apt_cache') }}
 
 extend:
   nginx:

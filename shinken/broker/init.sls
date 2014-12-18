@@ -147,7 +147,7 @@ shinken-broker:
       - user: shinken
 
 {% if ssl %}
-{{ ssl_default_server(ssl) }}
+{{ ssl_default_server('shinken') }}
 
 extend:
   nginx:

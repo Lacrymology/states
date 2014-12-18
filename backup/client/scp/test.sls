@@ -68,7 +68,7 @@ test:
     - require:
       - cmd: test
   qa:
-    - test
+    - test_pillar
     - name: backup.client.scp
     - pillar_doc: {{ opts['cachedir'] }}/doc/output
     - require:

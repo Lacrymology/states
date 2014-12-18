@@ -44,6 +44,18 @@ carbon_cache_{{ instance }}_cache_query_port
 
 Carbon Cache {{ instance }} Cache Query port is listening on localhost.
 
+.. _monitor-carbon_cache_procs:
+
+carbon_cache_procs
+~~~~~~~~~~~~~~~~~~
+
+Number of `carbon-cache` processes equal to value set in
+:ref:`pillar-carbon-cache_daemons`.
+
+Alert if missing any process (daemon died) or there are more than expected
+processes - maybe a :doc:`/carbon/doc/index` formula bug or someone ran
+those daemon manually.
+
 .. _monitor-carbon_relay_procs:
 
 carbon_relay_procs
@@ -85,3 +97,9 @@ carbon_pickle_port
 ~~~~~~~~~~~~~~~~~~
 
 Carbon-relay Pickle Port is listening on localhost.
+
+.. |deployment| replace:: carbon
+
+.. include:: /backup/doc/monitor_proc.inc
+
+.. include:: /backup/doc/monitor.inc

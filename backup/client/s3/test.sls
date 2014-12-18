@@ -129,7 +129,7 @@ test:
       - test_s3lite
       - test_s3cmd
   qa:
-    - test
+    - test_pillar
     - name: backup.client.s3
     - pillar_doc: {{ opts['cachedir'] }}/doc/output
     - require:

@@ -59,13 +59,6 @@ include:
       - user: graphite
       - file: /var/log/graphite
 
-{% if salt['pillar.get']('carbon:file_max', False) %}
-fs.file-max:
-  sysctl:
-    - present
-    - value: {{ salt['pillar.get']('carbon:file_max', False) }}
-{% endif %}
-
 /etc/graphite/storage-schemas.conf:
   file:
     - managed

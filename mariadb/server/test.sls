@@ -43,6 +43,13 @@ test:
     - test
     - map:
         MySQL:
+          {#- 
+          Most of metrics values are zero because it's the derivative
+          (http://en.wikipedia.org/wiki/Derivative) of the actual value.
+
+          https://github.com/BrightcoveOS/Diamond/blob/v3.5/src/collectors/mysql/mysql.py#L420
+          https://github.com/BrightcoveOS/Diamond/blob/v3.5/src/diamond/collector.py#L438
+          -#}
           mysql.Threads_running: False
         ProcessResources:
           {{ diamond_process_test('mysql') }}

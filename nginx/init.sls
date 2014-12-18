@@ -49,9 +49,10 @@ include:
     - require:
       - pkg: nginx
 
-/etc/nginx/nginx.conf:
+nginx.conf:
   file:
     - managed
+    - name: /etc/nginx/nginx.conf
     - template: jinja
     - user: root
     - group: root
@@ -153,7 +154,7 @@ nginx:
     - watch:
       - user: web
       - file: nginx
-      - file: /etc/nginx/nginx.conf
+      - file: nginx.conf
       - file: /etc/nginx/mime.types
 {%- for filename in bad_configs %}
       - file: /etc/nginx/conf.d/{{ filename }}.conf

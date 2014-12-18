@@ -1,4 +1,3 @@
-{%- from 'nginx/macro.jinja2' import ssl_default_server with context -%}
 {%- set ssl = salt['pillar.get']('apt_cache:ssl', False) -%}
 include:
   - apt
@@ -37,6 +36,10 @@ apt_cache:
 {{ ssl_default_server('apt_cache') }}
 
 extend:
+  nginx.conf:
+    file:
+      context:
+        ssl: {{ ssl }}
   nginx:
     service:
       - watch:

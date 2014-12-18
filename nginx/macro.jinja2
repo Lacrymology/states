@@ -18,23 +18,3 @@
     {%- endfor -%}
   {%- endif -%}
 {%- endmacro %}
-
-{%- macro ssl_default_server(formula) -%}
-{%- set certname = salt['pillar.get'](formula + ':ssl', False) %}
-{{ formula }}_nginx_ssl_default_server:
-  file:
-    - managed
-    - name: /etc/nginx/conf.d/ssl.conf
-    - template: jinja
-    - source: salt://nginx/ssl.jinja2
-    - user: www-data
-    - group: www-data
-    - mode: 440
-    - context:
-        certname: {{ certname }}
-    - require:
-      - pkg: nginx
-      - user: web
-    - watch_in:
-      - service: nginx
-{%- endmacro %}

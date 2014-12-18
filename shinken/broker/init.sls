@@ -31,7 +31,6 @@ The broker daemon exports and manages data from schedulers. The broker uses
 modules exclusively to get the job done.
 -#}
 {%- from 'shinken/init.sls' import shinken_install_module with context -%}
-{%- from 'nginx/macro.jinja2' import ssl_default_server with context -%}
 {% set ssl = salt['pillar.get']('shinken:ssl', False) %}
 include:
   - nginx
@@ -147,9 +146,11 @@ shinken-broker:
       - user: shinken
 
 {% if ssl %}
-{{ ssl_default_server('shinken') }}
-
 extend:
+  nginx.conf:
+    file:
+      context:
+        ssl: {{ ssl }}
   nginx:
     service:
       - watch:

@@ -159,6 +159,16 @@ http {
 {% endblock %}
     }
 
+    {#- Block request without a "Host" field in HTTP headers.
+        or any unhandled hostnames.
+        http://nginx.org/en/docs/http/request_processing.html#how_to_prevent_undefined_server_names
+        #}
+    server {
+        listen 80 default_server;
+        server_name "";
+        return 404;
+    }
+
 {% if ssl|default(False) %}
     server {
         listen 443 default_server ssl;
@@ -169,16 +179,6 @@ http {
         return 404;
     }
 {% endif %}
-
-    {#- Block request without a "Host" field in HTTP headers.
-        or any unhandled hostnames.
-        http://nginx.org/en/docs/http/request_processing.html#how_to_prevent_undefined_server_names
-        #}
-    server {
-        listen 80 default_server;
-        server_name "";
-        return 404;
-    }
 
     include /etc/nginx/conf.d/*.conf;
 }

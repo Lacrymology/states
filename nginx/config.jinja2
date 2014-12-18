@@ -167,9 +167,6 @@ http {
         listen 80 default_server;
         server_name "";
         return 404;
-{%- if not pillar.get('debug', False) %}
-        access_log off;
-{%- endif %}
     }
 
     include /etc/nginx/conf.d/*.conf;

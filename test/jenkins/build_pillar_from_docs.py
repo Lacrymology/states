@@ -10,9 +10,13 @@ import sys
 import argparse
 import collections
 import os
+import logging
 
 import yaml
 
+
+logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+log = logging.getLogger('build-pillar-from-docs')
 
 def update(dest, upd):
     """
@@ -36,10 +40,12 @@ def main(doc_path, modules_path, output):
     :param modules_path: the path to the _modules directory of salt-common
     :param output: the output file
     """
+    log.info("running main")
     sys.path.append(modules_path)
     import qa
 
     docs = qa.parse_doctrees(doc_path)
+    log.debug("docs: %r", docs)
     pillar = {}
 
     for details in docs.itervalues():
@@ -47,6 +53,7 @@ def main(doc_path, modules_path, output):
             for example in details['mandatory']['examples']:
                 pillar = update(pillar, example)
 
+    log.debug("generated pillar: %r", pillar)
     with open(output, 'w') as out:
         yaml.dump(pillar, out, default_flow_style=False, default_style='|')
 

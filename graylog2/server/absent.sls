@@ -26,7 +26,7 @@ Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Van Pham Diep <favadi@robotinfra.com>
 -#}
 {%- from "upstart/absent.sls" import upstart_absent with context -%}
-{%- set version = '0.20.3' -%}
+{%- set version = '0.20.6' -%}
 {%- set server_root_dir = '/usr/local/graylog2-server-' + version -%}
 {%- set user = salt['pillar.get']('graylog2:server:user', 'graylog2') -%}
 

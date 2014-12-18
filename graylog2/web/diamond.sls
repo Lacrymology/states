@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Van Pham Diep <favadi@robotinfra.com>
 -#}
-{% set version = '0.20.3' %}
+{% set version = '0.20.6' %}
 
 include:
   - diamond

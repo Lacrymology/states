@@ -75,7 +75,7 @@ def _render(data):
         return salt.template.compile_template_str(
             data, default=__opts__['renderer'],
             renderers=salt.loader.render(__opts__, __salt__))
-    except NameError, ImportError:
+    except (NameError, ImportError):
         # this was called from outside of salt or even from a system that
         # doesn't have salt installed. Render as simple yaml instead
         return yaml.load(StringIO.StringIO(data))

@@ -82,6 +82,12 @@ Check :doc:`/ejabberd/doc/index` backup age and size.
 
 .. include:: /nginx/doc/monitor.inc
 
+ejabberd_xmpp
+~~~~~~~~~~~~~
+
+Test :doc:`/ejabberd/doc/index` functionality by logging in and
+sending a message.
+
 Conditional
 -----------
 

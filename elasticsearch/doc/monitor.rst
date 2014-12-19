@@ -11,8 +11,6 @@ Mandatory
    In this document, when refer to a pillar key ``pillar_prefix``
    means ``elasticsearch``.
 
-.. include:: /nginx/doc/monitor.inc
-
 .. _monitor-elasticsearch_procs:
 
 elasticsearch_procs
@@ -53,6 +51,8 @@ Monitor :doc:`/elasticsearch/doc/index` backup age and size.
 
 Conditional
 -----------
+
+.. include:: /nginx/doc/monitor.inc
 
 Only use if :ref:`pillar-elasticsearch-ssl` is turned on.
 

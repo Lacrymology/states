@@ -30,6 +30,7 @@ include:
   - elasticsearch
   - cron.diamond
   - diamond
+  - tmpreaper.diamond
 {% if ssl %}
   - nginx.diamond
 {% endif %}

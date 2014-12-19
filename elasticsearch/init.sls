@@ -33,6 +33,7 @@ include:
   - cron
   - java.7
   - salt.minion.deps
+  - tmpreaper
 {% if ssl %}
   - nginx
   - ssl

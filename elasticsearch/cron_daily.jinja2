@@ -35,4 +35,4 @@ log_start_script "$@"
 trap "log_stop_script \$?" EXIT
 
 # flush old logs of one week old
-find /var/log/elasticsearch -type f -mtime +7 -delete
+tmpreaper -m 7d /var/log/elasticsearch

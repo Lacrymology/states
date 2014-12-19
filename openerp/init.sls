@@ -151,7 +151,7 @@ openerp:
     - group: root
     - mode: 400
     - context:
-      home: {{ web_root_dir }}
+        home: {{ web_root_dir }}
     - require:
       - file: {{ web_root_dir }}/openerp-cron.py
 {%- else %}
@@ -197,12 +197,12 @@ openerp-uwsgi:
     - group: www-data
     - mode: 440
     - context:
-      appname: openerp
-      chdir: {{ web_root_dir }}/openerp
-      uid: openerp
-      gid: openerp
-      wsgi_file: {{ web_root_dir }}/openerp.wsgi
-      virtualenv: {{ home }}
+        appname: openerp
+        chdir: {{ web_root_dir }}/openerp
+        uid: openerp
+        gid: openerp
+        wsgi_file: {{ web_root_dir }}/openerp.wsgi
+        virtualenv: {{ home }}
     - require:
       - service: uwsgi
       - postgres_user: openerp
@@ -257,10 +257,10 @@ openerp-uwsgi:
     - require:
       - cmd: {{ web_root_dir }}
     - context:
-      password: {{ password }}
-      username: {{ username }}
-      sentry_dsn: {{ salt['pillar.get']('openerp:sentry_dsn', False) }}
-      process_name: openerp
+        password: {{ password }}
+        username: {{ username }}
+        sentry_dsn: {{ salt['pillar.get']('openerp:sentry_dsn', False) }}
+        process_name: openerp
 
 /etc/nginx/conf.d/openerp.conf:
   file:
@@ -279,7 +279,7 @@ openerp-uwsgi:
     - watch_in:
       - service: nginx
     - context:
-      web_root_dir: {{ web_root_dir }}
+        web_root_dir: {{ web_root_dir }}
 
 extend:
   web:

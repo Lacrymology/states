@@ -101,9 +101,9 @@ shinken-arbiter:
     - mode: 440
     - source: salt://shinken/arbiter/config.jinja2
     - context:
-      configs:
+        configs:
 {% for config in configs %}
-        - {{ config }}
+          - {{ config }}
 {% endfor %}
     - require:
       - file: /etc/shinken

@@ -51,7 +51,7 @@ shinken-reactionner:
     - mode: 440
     - source: salt://shinken/upstart.jinja2
     - context:
-      shinken_component: reactionner
+        shinken_component: reactionner
   service:
     - running
     - enable: True
@@ -80,7 +80,7 @@ shinken-reactionner:
     - mode: 440
     - source: salt://shinken/config.jinja2
     - context:
-      shinken_component: reactionner
+        shinken_component: reactionner
     - require:
       - virtualenv: shinken
       - user: shinken

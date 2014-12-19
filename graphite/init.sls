@@ -108,8 +108,8 @@ graphite_wsgi:
     - mode: 550
     - source: salt://django/manage.jinja2
     - context:
-      settings: graphite.settings
-      virtualenv: /usr/local/graphite
+        settings: graphite.settings
+        virtualenv: /usr/local/graphite
     - require:
       - virtualenv: graphite
       - pkg: sudo
@@ -180,13 +180,13 @@ graphite-web-uwsgi:
     - mode: 440
     - source: salt://uwsgi/template.jinja2
     - context:
-      appname: graphite
-      django_settings: graphite.settings
-      module: graphite.wsgi
-      uid: www-data
-      gid: graphite
-      virtualenv: /usr/local/graphite
-      chdir: /usr/local/graphite
+        appname: graphite
+        django_settings: graphite.settings
+        module: graphite.wsgi
+        uid: www-data
+        gid: graphite
+        virtualenv: /usr/local/graphite
+        chdir: /usr/local/graphite
     - require:
       - module: graphite_initial_fixture
       - service: uwsgi

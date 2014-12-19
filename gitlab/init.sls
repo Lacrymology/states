@@ -119,7 +119,7 @@ gitlab:
     - group: root
     - mode: 440
     - context:
-      version: {{ version }}
+        version: {{ version }}
     - require:
       - file: gitlabhq-{{ version }}
   cmd:
@@ -333,11 +333,11 @@ gitlab-uwsgi:
     - group: gitlab
     - mode: 440
     - context:
-      appname: gitlab
-      chdir: /home/gitlab/gitlabhq-{{ version }}
-      rack: config.ru
-      uid: gitlab
-      gid: gitlab
+        appname: gitlab
+        chdir: /home/gitlab/gitlabhq-{{ version }}
+        rack: config.ru
+        uid: gitlab
+        gid: gitlab
     - require:
       - file: gitlabhq-{{ version }}
       - file: gitlab_shell
@@ -376,7 +376,7 @@ gitlab-uwsgi:
     - watch_in:
       - service: nginx
     - context:
-      version: {{ version }}
+        version: {{ version }}
 
 gitlab_precompile_assets:
   cmd:
@@ -438,7 +438,7 @@ gitlab_precompile_assets:
       - pkg: logrotate
       - file: gitlab
     - context:
-      version: {{ version }}
+        version: {{ version }}
 
 /var/lib/gitlab:
   file:

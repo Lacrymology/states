@@ -107,10 +107,10 @@ varnish:
     - mode: 644
     - source: salt://varnish/config.jinja2
     - context:
-      storage_backend: {{ storage_backend }}
+        storage_backend: {{ storage_backend }}
     {% if storage_backend == 'file' %}
-      file_size: {{ file_size }}
-      file_path: {{ file_path }}
+        file_size: {{ file_size }}
+        file_path: {{ file_path }}
     {% endif %}
     - require:
       - pkg: varnish

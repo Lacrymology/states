@@ -116,11 +116,11 @@ djangopypi2-uwsgi:
     - mode: 440
     - source: salt://uwsgi/template.jinja2
     - context:
-      chdir: {{ root_dir }}
-      appname: djangopypi2
-      module: djangopypi2.website.wsgi
-      django_settings: djangopypi2.website.settings
-      virtualenv: {{ root_dir }}
+        chdir: {{ root_dir }}
+        appname: djangopypi2
+        module: djangopypi2.website.wsgi
+        django_settings: djangopypi2.website.settings
+        virtualenv: {{ root_dir }}
     - require:
       - service: uwsgi
       - postgres_database: djangopypi2
@@ -149,8 +149,8 @@ djangopypi2-uwsgi:
     - mode: 550
     - source: salt://django/manage.jinja2
     - context:
-      settings: djangopypi2.website.settings
-      virtualenv: {{ root_dir }}
+        settings: djangopypi2.website.settings
+        virtualenv: {{ root_dir }}
     - require:
       - virtualenv: djangopypi2
       - pkg: sudo
@@ -239,7 +239,7 @@ djangopypi2-django_contrib_sites:
     - source: salt://django/site.jinja2
     - template: jinja
     - context:
-      domain_name: {{ salt['pillar.get']('djangopypi2:hostnames')[0] }}
+        domain_name: {{ salt['pillar.get']('djangopypi2:hostnames')[0] }}
     - user: root
     - group: root
     - mode: 440
@@ -288,10 +288,10 @@ djangomod module, which is just a helper to build our command and run it.
     - mode: 440
     - source: salt://nginx/template.jinja2
     - context:
-      appname: djangopypi2
-      root: /var/lib/deployments/djangopypi2
-      statics:
-        - static
+        appname: djangopypi2
+        root: /var/lib/deployments/djangopypi2
+        statics:
+          - static
     - require:
       - pkg: nginx
       - file: djangopypi2-uwsgi

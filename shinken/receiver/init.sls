@@ -57,7 +57,7 @@ shinken-receiver:
     - mode: 440
     - source: salt://shinken/upstart.jinja2
     - context:
-      shinken_component: receiver
+        shinken_component: receiver
   service:
     - running
     - order: 50
@@ -87,7 +87,7 @@ shinken-receiver:
     - mode: 440
     - source: salt://shinken/config.jinja2
     - context:
-      shinken_component: receiver
+        shinken_component: receiver
     - require:
       - virtualenv: shinken
       - user: shinken

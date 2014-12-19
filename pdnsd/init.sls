@@ -80,4 +80,4 @@ pdnsd:
     - require:
       - pkg: pdnsd
     - context:
-      sections: {{ sections }}
+        sections: {{ sections }}

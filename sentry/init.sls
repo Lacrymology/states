@@ -120,10 +120,10 @@ sentry-uwsgi:
     - mode: 440
     - source: salt://sentry/uwsgi.jinja2
     - context:
-      appname: sentry
-      module: sentry.wsgi
-      virtualenv: /usr/local/sentry
-      chdir: /usr/local/sentry
+        appname: sentry
+        module: sentry.wsgi
+        virtualenv: /usr/local/sentry
+        chdir: /usr/local/sentry
     - require:
       - service: memcached
       - service: uwsgi
@@ -176,7 +176,7 @@ sentry_settings:
     - mode: 550
     - source: salt://django/manage.jinja2
     - context:
-      alternate_admin_cmd: /usr/local/sentry/bin/sentry --config=/etc/sentry.conf.py
+        alternate_admin_cmd: /usr/local/sentry/bin/sentry --config=/etc/sentry.conf.py
     - require:
       - virtualenv: sentry
       - pkg: sudo

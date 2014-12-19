@@ -96,9 +96,9 @@ ejabberd:
       - postgres_database: ejabberd
       - cmd: ejabberd_psql
     - context:
-      dbname: {{ dbname }}
-      dbuser: {{ dbuser }}
-      dbuserpass: {{ dbuserpass }}
+        dbname: {{ dbname }}
+        dbuser: {{ dbuser }}
+        dbuserpass: {{ dbuserpass }}
   user:
     - present
     - shell: /usr/sbin/nologin

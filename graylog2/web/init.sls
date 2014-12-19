@@ -131,8 +131,8 @@ graylog2-web:
     - mode: 400
     - source: salt://graylog2/web/upstart.jinja2
     - context:
-      web_root_dir: {{ web_root_dir }}
-      user: {{ user }}
+        web_root_dir: {{ web_root_dir }}
+        user: {{ user }}
     - require:
       - file: graylog2-web-prep
       - pkg: sudo
@@ -185,7 +185,7 @@ graylog2-web:
     - watch_in:
       - service: nginx
     - context:
-      version: {{ version }}
+        version: {{ version }}
 
 {% if salt['pillar.get']('graylog2:ssl', False) %}
 extend:

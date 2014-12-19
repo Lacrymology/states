@@ -95,9 +95,9 @@ elasticsearch:
     - mode: 440
     - source: salt://elasticsearch/config.jinja2
     - context:
-      master: 'true'
-      data: 'true'
-      origin_state: elasticsearch
+        master: 'true'
+        data: 'true'
+        origin_state: elasticsearch
     - require:
       - pkg: elasticsearch
   process:
@@ -166,16 +166,16 @@ elasticsearch_old_version:
       - service: nginx
     - source: salt://nginx/proxy.jinja2
     - context:
-      destination: http://127.0.0.1:9200
-      http_port: False
-      ssl: {{ salt['pillar.get']('elasticsearch:ssl') }}
-      hostnames: {{ salt['pillar.get']('elasticsearch:hostnames') }}
-      allowed:
+        destination: http://127.0.0.1:9200
+        http_port: False
+        ssl: {{ salt['pillar.get']('elasticsearch:ssl') }}
+        hostnames: {{ salt['pillar.get']('elasticsearch:hostnames') }}
+        allowed:
 {% for ip_address in grains['ipv4'] %}
-        - {{ ip_address }}/32
+          - {{ ip_address }}/32
 {% endfor %}
 {% for allowed in salt['pillar.get']('elasticsearch:https_allowed', []) %}
-        - {{ allowed }}
+          - {{ allowed }}
 {% endfor %}
 
 extend:

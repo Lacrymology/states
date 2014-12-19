@@ -99,7 +99,7 @@ include:
     - template: jinja
     - mode: 400
     - context:
-      tunnel: {{ tunnel }}
+        tunnel: {{ tunnel }}
     - watch_in:
       - service: openvpn-{{ tunnel }}
     - require:

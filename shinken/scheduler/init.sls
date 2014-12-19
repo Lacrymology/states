@@ -64,7 +64,7 @@ shinken-scheduler:
     - mode: 440
     - source: salt://shinken/upstart.jinja2
     - context:
-      shinken_component: scheduler
+        shinken_component: scheduler
   service:
     - running
     - order: 50
@@ -95,7 +95,7 @@ shinken-scheduler:
     - mode: 440
     - source: salt://shinken/config.jinja2
     - context:
-      shinken_component: scheduler
+        shinken_component: scheduler
     - require:
       - virtualenv: shinken
       - user: shinken

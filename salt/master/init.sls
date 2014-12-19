@@ -135,7 +135,7 @@ salt-master-job_changes.py:
     - require:
       - pkg: salt-master
     - context:
-      use_ext_pillar: {{ use_ext_pillar }}
+        use_ext_pillar: {{ use_ext_pillar }}
 salt-master:
   file:
     - managed

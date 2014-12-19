@@ -112,6 +112,6 @@ statsd_requirements:
     - mode: 440
     - source: salt://statsd/requirements.jinja2
     - context:
-      version: {{ version }}
+        version: {{ version }}
     - require:
       - virtualenv: statsd

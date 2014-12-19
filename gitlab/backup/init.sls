@@ -45,7 +45,7 @@ backup-gitlab:
     - template: jinja
     - source: salt://gitlab/backup/cron.jinja2
     - context:
-      version: {{ version }}
+        version: {{ version }}
     - require:
       - pkg: cron
       - pkg: sudo

@@ -72,7 +72,7 @@ openvpn-{{ tunnel }}:
       - file: /var/lib/openvpn
       - file: /var/log/openvpn
     - context:
-      identifier: {{ tunnel }}
+        identifier: {{ tunnel }}
   service:
     - running
     - order: 50

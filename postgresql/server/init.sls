@@ -67,7 +67,7 @@ postgresql:
       - pkg: postgresql
       - user: postgresql
     - context:
-      version: {{ version }}
+        version: {{ version }}
   service:
     - running
     - enable: True

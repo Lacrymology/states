@@ -79,7 +79,7 @@ git_server_{{ key }}:
     - template: jinja
     - source: salt://git/server/description.jinja2
     - context:
-      repository: {{ repository }}
+        repository: {{ repository }}
     - require:
       - module: /var/lib/git-server/{{ repository }}.git
 {% endfor %}

@@ -133,9 +133,9 @@ roundcube:
     - group: www-data
     - mode: 440
     - context:
-      password: {{ dbuserpass }}
-      dbname: {{ dbname }}
-      username: {{ dbuser }}
+        password: {{ dbuserpass }}
+        dbname: {{ dbname }}
+        username: {{ dbuser }}
     - require:
       - file: {{ roundcubedir }}
       - user: web
@@ -192,7 +192,7 @@ roundcube_password_plugin_ldap_driver_dependency:
       - user: web
       - file: roundcube-uwsgi
     - context:
-      dir: {{ roundcubedir }}
+        dir: {{ roundcubedir }}
     - watch_in:
       - service: nginx
 
@@ -226,9 +226,9 @@ roundcube-uwsgi:
     - group: root
     - mode: 440
     - context:
-      appname: roundcube
-      chdir: {{ roundcubedir }}
-      uid: roundcube
+        appname: roundcube
+        chdir: {{ roundcubedir }}
+        uid: roundcube
     - require:
       - service: uwsgi
       - module: roundcube_initial

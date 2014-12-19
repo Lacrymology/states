@@ -11,8 +11,8 @@
     - watch_in:
       - service: rsyslog
     - context:
-      file_path: /var/log/upstart/{{ service }}.log
-      tag_name: {{ service }}-upstart
-      severity: error
-      facility: daemon
+        file_path: /var/log/upstart/{{ service }}.log
+        tag_name: {{ service }}-upstart
+        severity: error
+        facility: daemon
 {%- endmacro %}

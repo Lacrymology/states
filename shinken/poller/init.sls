@@ -70,8 +70,8 @@ shinken-poller:
     - mode: 440
     - source: salt://shinken/upstart.jinja2
     - context:
-      shinken_component: poller
-      max_filedescriptors: {{ salt['pillar.get']('shinken:poller_max_fd', 16384) }}
+        shinken_component: poller
+        max_filedescriptors: {{ salt['pillar.get']('shinken:poller_max_fd', 16384) }}
   service:
     - running
     - enable: True
@@ -102,7 +102,7 @@ shinken-poller:
     - mode: 440
     - source: salt://shinken/config.jinja2
     - context:
-      shinken_component: poller
+        shinken_component: poller
     - require:
       - virtualenv: shinken
       - user: shinken

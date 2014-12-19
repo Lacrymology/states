@@ -155,7 +155,7 @@ uwsgi:
     - group: root
     - mode: 440
     - context:
-      extracted_dir: {{ extracted_dir }}
+        extracted_dir: {{ extracted_dir }}
     - source: salt://uwsgi/upstart.jinja2
   cmd:
     - wait

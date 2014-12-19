@@ -49,7 +49,7 @@ extend:
     - user: root
     - group: root
     - context:
-      per_source: {{ salt['pillar.get']('rsync:limit_per_ip', '"UNLIMITED"') }}
+        per_source: {{ salt['pillar.get']('rsync:limit_per_ip', '"UNLIMITED"') }}
     - require:
       - file: /etc/xinetd.d
     - watch_in:

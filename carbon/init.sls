@@ -142,7 +142,7 @@ carbon:
     - mode: 440
     - source: salt://carbon/config.jinja2
     - context:
-      filtering: {% if filter_type in supported_filter_types %}True{% else %}False{% endif %}
+        filtering: {% if filter_type in supported_filter_types %}True{% else %}False{% endif %}
     - require:
       - file: /etc/graphite
 
@@ -160,7 +160,7 @@ carbon-cache-{{ instance }}:
     - mode: 550
     - source: salt://carbon/init.jinja2
     - context:
-      instance: {{ instance }}
+        instance: {{ instance }}
   service:
     - running
     - enable: True

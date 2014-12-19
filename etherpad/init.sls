@@ -126,8 +126,8 @@ etherpad:
     - group: root
     - mode: 440
     - context:
-      web_root_dir: {{ web_root_dir }}
-      user: etherpad
+        web_root_dir: {{ web_root_dir }}
+        user: etherpad
     - require:
       - user: etherpad
   service:
@@ -217,10 +217,10 @@ etherpad:
     - source: salt://etherpad/settings.jinja2
     - template: jinja
     - context:
-      dbuser: {{ dbuser }}
-      dbuserpass: {{ dbuserpass }}
-      dbname: {{ dbname }}
-      dbhost: {{ dbhost }}
+        dbuser: {{ dbuser }}
+        dbuserpass: {{ dbuserpass }}
+        dbname: {{ dbname }}
+        dbhost: {{ dbhost }}
     - require:
       - cmd: {{ web_root_dir }}
 

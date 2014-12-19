@@ -60,8 +60,8 @@ extend:
   postgresql:
     file:
       - context:
-        version: {{ version }}
-        role: master
+          version: {{ version }}
+          role: master
 
 /etc/postgresql/9.2/main/pg_hba.conf:
   file:

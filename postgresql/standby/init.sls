@@ -35,8 +35,8 @@ extend:
   postgresql:
     file:
       - context:
-        version: {{ version }}
-        role: standby
+          version: {{ version }}
+          role: standby
 
 {%- if not salt['file.file_exists']('/var/lib/postgresql/' + version + '/main/recovery.done') -%}
 {%- set password = salt['password.pillar']('postgresql:replication:password') -%}
@@ -77,7 +77,7 @@ recovery_from_master_base_backup:
       - pkg: postgresql
       - cmd: recovery_from_master_base_backup
     - context:
-      version: {{ version }}
+        version: {{ version }}
     - require_in:
       - service: postgresql
 

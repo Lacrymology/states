@@ -87,9 +87,9 @@ include:
     - group: {{ user }}
     - mode: 440
     - context:
-      master: 'false'
-      data: 'false'
-      origin_state: graylog2.server
+        master: 'false'
+        data: 'false'
+        origin_state: graylog2.server
     - require:
       - file: /etc/graylog2
       - user: graylog2
@@ -114,9 +114,9 @@ graylog2.conf:
     - mode: 440
     - source: salt://graylog2/server/config.jinja2
     - context:
-      version: {{ version }}
-      mongodb_suffix: {{ mongodb_suffix }}
-      elasticsearch_prefix: {{ elasticsearch_prefix }}
+        version: {{ version }}
+        mongodb_suffix: {{ mongodb_suffix }}
+        elasticsearch_prefix: {{ elasticsearch_prefix }}
     - require:
       - user: graylog2
 
@@ -144,8 +144,8 @@ graylog2-server:
     - mode: 400
     - source: salt://graylog2/server/upstart.jinja2
     - context:
-      version: {{ version }}
-      user: {{ user }}
+        version: {{ version }}
+        user: {{ user }}
     - require:
       - file: graylog2-server-prep
       - pkg: sudo
@@ -189,10 +189,10 @@ graylog2_rsyslog_config:
     - watch_in:
       - service: rsyslog
     - context:
-      file_path: /var/log/graylog2/server.fifo
-      tag_name: graylog2-server
-      severity: info
-      facility: local7
+        file_path: /var/log/graylog2/server.fifo
+        tag_name: graylog2-server
+        severity: info
+        facility: local7
 
 {{ server_root_dir }}:
   file:

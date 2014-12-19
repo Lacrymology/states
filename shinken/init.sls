@@ -203,7 +203,7 @@ shinken:
     - mode: 440
     - source: salt://shinken/requirements.jinja2
     - context:
-      version: {{ version }}
+        version: {{ version }}
     - require:
       - virtualenv: shinken
   module:

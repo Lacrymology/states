@@ -57,7 +57,7 @@ terracotta:
     - group: root
     - mode: 440
     - context:
-      version: {{ version }}
+        version: {{ version }}
   user:
     - present
   service:

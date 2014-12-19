@@ -100,7 +100,7 @@ shinken-broker:
     - mode: 440
     - source: salt://shinken/upstart.jinja2
     - context:
-      shinken_component: broker
+        shinken_component: broker
   service:
     - running
     - order: 50
@@ -140,7 +140,7 @@ shinken-broker:
     - mode: 440
     - source: salt://shinken/config.jinja2
     - context:
-      shinken_component: broker
+        shinken_component: broker
     - require:
       - file: /etc/shinken
       - user: shinken

@@ -25,7 +25,8 @@
 
 """
 DNSimple state
-requires: requests==1.2.0
+
+.. note:: requires: requests==1.2.0
 """
 
 __author__ = 'Bruno Clermont'

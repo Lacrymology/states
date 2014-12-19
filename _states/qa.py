@@ -37,12 +37,12 @@ def _comment(iterable, message, comments):
         )
 
 
-_key_re = re.compile(r'{{ ([\w\-\_\.]+) }}')
 def _contains(iterable, elem):
     """
     Returns whether an element matches any of an iterable
     of "template" names (such as `foo:{{ id }}:bar`)
     """
+    _key_re = re.compile(r'{{ ([\w\-\_\.]+) }}')
     sub_key = r"([\w\-\_\.]+)"
     key_list = []
     for key in iterable:
@@ -52,15 +52,8 @@ def _contains(iterable, elem):
         if re.match(key_re, elem):
             return key
 
-        #print "sub", key, _key_re.pattern, sub_key
-        #key_list.append(key_re)
-        #print "res", key_list[-1]
-        #print
-
-    #compare_re = re.compile("({})".format(
-    #    "|".join("({})".format(k) for k in key_list)))
-    #return bool(compare_re.match(elem)), compare_re.pattern
     return ""
+
 
 def _matches(iterable, template):
     """
@@ -71,6 +64,7 @@ def _matches(iterable, template):
         if _contains([template], elem):
             return elem
     return ''
+
 
 def test_pillar(name, pillar_doc):
     """

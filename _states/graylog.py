@@ -3,7 +3,7 @@
 """
 Graylog2 state
 
-requires: requests
+.. note:: requires: requests
 """
 
 __author__ = 'Tomas Neme'

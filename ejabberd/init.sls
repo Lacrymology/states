@@ -153,6 +153,20 @@ ejabberd_reg_user:
     - watch:
       - postgres_database: ejabberd
 
+{%- set monitor_user = "ejabberd_monitor" %}
+{%- set hostname = salt['pillar.get']('ejabberd:hostnames')[0] %}
+{%- set monitor_password = salt['password.generate']('ejabberd_monitor') %}
+ejabberd_reg_monitor_user:
+  cmd:
+    - run
+    - name: ejabberdctl register {{ monitor_user }} {{ hostname }} {{ monitor_password }}
+    - user: root
+    - user: root
+    - unless: ejabberdctl check-account {{ monitor_user }} {{ hostname }}
+    - require:
+      - pkg: ejabberd
+      - service: ejabberd
+
 /etc/nginx/conf.d/ejabberd.conf:
   file:
     - managed

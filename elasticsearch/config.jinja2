@@ -46,17 +46,17 @@ transport:
     port: {{ salt['pillar.get'](pillar_string + ':port', 9300) }}
 
 node:
-  name: {{ salt['pillar.get'](pillar_string + ':name', grains['id']) }}
+  name: {{ salt['pillar.get'](pillar_string + ':name', False)|default(grains['id'], boolean=True) }}
   master: {{ salt['pillar.get'](pillar_string + ':master', master) }}
   data: {{ salt['pillar.get'](pillar_string + ':data', data) }}
 
 {#- configure amazon ec2 cloud auto-discovery #}
-{% if es['aws']|default(false) %}
+{% if salt['pillar.get']('elasticsearch:aws', False) %}
 cloud:
   region: {{ grains['region'] }}
   aws:
-    access_key: {{ es['aws']['access_key'] }}
-    secret_key: {{ es['aws']['secret_key'] }}
+    access_key: {{ salt['pillar.get']('elasticsearch:aws:access_key') }}
+    secret_key: {{ salt['pillar.get']('elasticsearch:aws:secret_key') }}
   node:
     auto_attributes: true
 discovery:

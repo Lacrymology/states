@@ -36,6 +36,8 @@ elasticsearch:cluster:name
 
 Name of this :doc:`index` cluster for all listed nodes.
 
+Default: use minion ID (``False``).
+
 .. _pillar-elasticsearch-cluster-nodes:
 
 elasticsearch:cluster:nodes
@@ -64,13 +66,6 @@ elasticsearch:cluster:nodes:{{ node minion ID }}:{{ state }}
 
 A node can only actual run a :doc:`index` node, or a
 :doc:`/graylog2/server/doc/index`.
-
-.. _pillar-elasticsearch-cluster-nodes-nodeminionID-state-name:
-
-elasticsearch:cluster:nodes:{{ node minion ID }}:{{ state }}:name
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Node ID, must be unique across all node instances.
 
 Optional
 --------
@@ -114,6 +109,32 @@ is required for each host.
 
 Default: disable HTTP API, (``True``).
 
+.. _pillar-elasticsearch-cluster-nodes-nodeminionID-state-data:
+
+elasticsearch:cluster:nodes:{{ node minion ID }}:{{ state }}:data
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If this instance :doc:`index` is allowed to store data.
+
+Default: allow to store data (``True``).
+
+.. _pillar-elasticsearch-cluster-nodes-nodeminionID-state-master:
+
+elasticsearch:cluster:nodes:{{ node minion ID }}:{{ state }}:master
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If this instance :doc:`index` is allowed to become master node.
+
+Default: eligible as a master (``True``).
+
+.. _pillar-elasticsearch-cluster-nodes-nodeminionID-state-name:
+
+elasticsearch:cluster:nodes:{{ node minion ID }}:{{ state }}:name
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Name of the :doc:`index` instance.
+
+
 .. _pillar-elasticsearch-heap_size:
 
 elasticsearch:heap_size
@@ -135,18 +156,7 @@ elasticsearch:ssl
   Only used to make :doc:`/elasticsearch/doc/index` trough
   `HTTPS <https://en.wikipedia.org/wiki/Https>`__.
 
-.. _pillar-elasticsearch-https_allowed:
-
-elasticsearch:https_allowed
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Only used if :ref:`pillar-elasticsearch-ssl` is defined.
-
-List of `CIDR
-<http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing>`_ format
-network where :doc:`/elasticsearch/doc/index` over HTTPS is allowed.
-
-Default: do not allow (``[]``).
+.. _pillar-elasticsearch-aws:
 
 elasticsearch:aws
 ~~~~~~~~~~~~~~~~~
@@ -163,3 +173,35 @@ repositories.
 Default: don't install `elasticsearch-cloud-aws
 <https://github.com/elasticsearch/elasticsearch-cloud-aws>`_
 (``False``).
+
+Conditional
+-----------
+
+.. _pillar-elasticsearch-aws-secret_key:
+
+elasticsearch:aws:secret_key
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+AWS secret access key for config the AWS cloud plugin (more `details
+<http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSGettingStartedGuide/AWSCredentials.html>`__).
+
+.. _pillar-elasticsearch-aws-access_key:
+
+elasticsearch:aws:access_key
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+AWS access key ID for config the AWS cloud plugin (more `details
+<http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSGettingStartedGuide/AWSCredentials.html>`__).
+
+.. _pillar-elasticsearch-https_allowed:
+
+elasticsearch:https_allowed
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Only used if :ref:`pillar-elasticsearch-ssl` is defined.
+
+List of `CIDR
+<http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing>`_ format
+network where :doc:`/elasticsearch/doc/index` over HTTPS is allowed.
+
+Default: do not allow (``[]``).

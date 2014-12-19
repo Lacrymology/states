@@ -36,6 +36,7 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
       - service: diamond
 {%- endfor %}
 
-{{ opts['cachedir'] }}/diamond.archive.log:
-  file:
-    - absent
+diamond_clean_archive_logs:
+  cmd:
+    - run
+    - name: rm -f {{ opts['cachedir'] }}/diamond.archive.log*

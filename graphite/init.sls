@@ -26,6 +26,7 @@ Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
 {%- set python_version = '%d.%d' % (grains['pythonversion'][0], grains['pythonversion'][1]) %}
+{%- set ssl = salt['pillar.get']('graphite:ssl', False) %}
 
 include:
   - apt
@@ -44,7 +45,7 @@ include:
   - uwsgi
   - virtualenv
   - web
-{% if salt['pillar.get']('graphite:ssl', False) %}
+{% if ssl %}
   - ssl
 {% endif %}
 
@@ -346,6 +347,10 @@ extend:
     service:
       - watch:
         - user: graphite
-{% if salt['pillar.get']('graphite:ssl', False) %}
-        - cmd: ssl_cert_and_key_for_{{ salt['pillar.get']('graphite:ssl', False) }}
+{% if ssl %}
+        - cmd: ssl_cert_and_key_for_{{ ssl }}
+  nginx.conf:
+    file:
+      - context:
+        ssl: {{ ssl }}
 {% endif %}

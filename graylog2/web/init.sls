@@ -27,6 +27,8 @@ Maintainer: Van Pham Diep <favadi@robotinfra.com>
 -#}
 {%- from 'upstart/rsyslog.jinja2' import manage_upstart_log with context -%}
 {%- from "upstart/absent.sls" import upstart_absent with context %}
+{%- set ssl = salt['pillar.get']('graylog2:ssl', False) %}
+
 include:
   - graylog2
   - java.7
@@ -35,7 +37,7 @@ include:
   - mongodb
   - nginx
   - rsyslog
-{% if salt['pillar.get']('graylog2:ssl', False) %}
+{% if ssl %}
   - ssl
 {% endif %}
   - web
@@ -187,12 +189,16 @@ graylog2-web:
     - context:
         version: {{ version }}
 
-{% if salt['pillar.get']('graylog2:ssl', False) %}
+{% if ssl %}
 extend:
+  nginx.conf:
+    file:
+      - context:
+        ssl: {{ ssl }}
   nginx:
     service:
       - watch:
-        - cmd: ssl_cert_and_key_for_{{ salt['pillar.get']('graylog2:ssl', False) }}
+        - cmd: ssl_cert_and_key_for_{{ ssl }}
 {% endif %}
 
 {%- from 'macros.jinja2' import manage_pid with context %}

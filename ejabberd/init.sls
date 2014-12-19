@@ -25,6 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Dang Tung Lam <lam@robotinfra.com>
 Maintainer: Van Pham Diep <favadi@robotinfra.com>
 -#}
+{%- set ssl = salt['pillar.get']('ejabberd:ssl', False) %}
 
 include:
   - apt
@@ -33,7 +34,7 @@ include:
   - locale
   - nginx
   - postgresql.server
-{%- if salt['pillar.get']('ejabberd:ssl', False) %}
+{%- if ssl %}
   - ssl
 {%- endif %}
 
@@ -77,8 +78,8 @@ ejabberd:
       - cmd: hostname
       - file: ejabberd_init
     - watch:
-    {%- if salt['pillar.get']('ejabberd:ssl', False) %}
-      - cmd: ssl_cert_and_key_for_{{ salt['pillar.get']('ejabberd:ssl', False) }}
+    {%- if ssl %}
+      - cmd: ssl_cert_and_key_for_{{ ssl }}
     {%- endif %}
       - user: ejabberd
       - file: ejabberd
@@ -102,7 +103,7 @@ ejabberd:
   user:
     - present
     - shell: /usr/sbin/nologin
-  {%- if salt['pillar.get']('ejabberd:ssl', False) %}
+  {%- if ssl %}
     - groups:
       - ssl-cert
   {%- endif %}
@@ -184,10 +185,14 @@ ejabberd_reg_monitor_user:
       - pkg: nginx
       - service: ejabberd
 
-{%- if salt['pillar.get']('ejabberd:ssl', False) %}
+{%- if ssl %}
 extend:
+  nginx.conf:
+    file:
+      - context:
+        ssl: {{ ssl }}
   nginx:
     service:
       - watch:
-        - cmd: ssl_cert_and_key_for_{{ salt['pillar.get']('ejabberd:ssl', False) }}
+        - cmd: ssl_cert_and_key_for_{{ ssl }}
 {%- endif %}

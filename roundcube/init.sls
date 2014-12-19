@@ -27,13 +27,15 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 
 A webmail software.
 -#}
+{%- set ssl = salt['pillar.get']('roundcube:ssl', False) %}
+
 include:
   - local
   - nginx
   - php.dev
   - postgresql.server
   - uwsgi.php
-{%- if salt['pillar.get']('roundcube:ssl', False) %}
+{%- if ssl %}
   - ssl
 {%- endif %}
   - web
@@ -244,10 +246,14 @@ roundcube-uwsgi:
       - pkg: php5-pgsql
       - pkg: roundcube_password_plugin_ldap_driver_dependency
 
-{%- if salt['pillar.get']('roundcube:ssl', False) %}
+{%- if ssl %}
 extend:
+  nginx.conf:
+    file:
+      - context:
+        ssl: {{ ssl }}
   nginx:
     service:
       - watch:
-        - cmd: ssl_cert_and_key_for_{{ salt['pillar.get']('roundcube:ssl', False) }}
+        - cmd: ssl_cert_and_key_for_{{ ssl }}
 {% endif %}

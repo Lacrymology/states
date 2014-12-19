@@ -226,4 +226,8 @@ extend:
         - user: salt_archive
 {%- if ssl %}
         - cmd: ssl_cert_and_key_for_{{ ssl }}
+  nginx.conf:
+    file:
+      - context:
+        ssl: {{ ssl }}
 {%- endif -%}

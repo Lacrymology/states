@@ -11,6 +11,8 @@ Mandatory
    In this document, when refer to a pillar key ``pillar_prefix``
    means ``ejabberd``.
 
+.. include:: /erlang/doc/monitor.inc
+
 .. _monitor-ejabberd_proc:
 
 ejabberd_proc
@@ -29,6 +31,8 @@ ejabberd_c2s_port
 ~~~~~~~~~~~~~~~~~
 
 Monitor :doc:`/ejabberd/doc/index` client to server port ``5222/tcp``.
+
+.. _monitor-ejabberd_admin_port:
 
 ejabberd_admin_port
 ~~~~~~~~~~~~~~~~~~~

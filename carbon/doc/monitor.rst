@@ -42,7 +42,7 @@ Carbon Cache {{ instance }} pickle port is listening on localhost.
 carbon_cache_{{ instance }}_cache_query_port
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Carbon Cache {{ instance }} Cache Query port is listening on localhost.
+Carbon Cache {{ instance }} query port is listening on localhost.
 
 .. _monitor-carbon_cache_procs:
 

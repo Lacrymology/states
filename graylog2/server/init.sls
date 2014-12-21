@@ -39,6 +39,7 @@ include:
   - rsyslog
   - pysc
   - sudo
+  - requests
 {#-
   graylog2.server require elasticsearch, install it when testing to
   make the inputs importing work.  In production environment,
@@ -174,7 +175,7 @@ graylog2-server:
   cmd:
     - wait
     - name: sleep 60
-    - require:
+    - watch:
       - service: graylog2-server
     - watch:
       - archive: graylog2-server
@@ -229,6 +230,7 @@ import_graylog2_gelf:
     - buffer_size: 1048576
     - require:
       - cmd: graylog2-server
+      - module: requests
 
 import_graylog2_syslog:
   graylog:
@@ -245,6 +247,7 @@ import_graylog2_syslog:
     - force_rdns: false
     - require:
       - cmd: graylog2-server
+      - module: requests
 
 /var/log/graylog2:
   file:

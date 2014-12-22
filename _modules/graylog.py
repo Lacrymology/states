@@ -40,7 +40,7 @@ def inputs():
     """
     res = requests.get(_base_url() + '/system/inputs', auth=_auth())
     if res.ok:
-        return res.json()['inputs']
+        return json.loads(res.content)['inputs']
 
 
 def _create_input(title, jtype, creator, configuration):
@@ -60,7 +60,7 @@ def _create_input(title, jtype, creator, configuration):
                         auth=_auth(), headers={
                             'content-type': 'application/json'})
     if res.ok:
-        return res.json()
+        return json.loads(res.content)
     else:
         res.raise_for_status()
 

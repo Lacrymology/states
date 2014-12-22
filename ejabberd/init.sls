@@ -141,26 +141,29 @@ ejabberd_psql:
       - file: ejabberd_psql
       - postgres_database: ejabberd
 
-ejabberd_reg_user:
+{%- set monitor_user = "ejabberd_monitor" %}
+{%- set hostname = salt['pillar.get']('ejabberd:hostnames')[0] %}
+{%- set monitor_password = salt['password.generate']('ejabberd_monitor') %}
+
+{%- for user in salt['pillar.get']('ejabberd:admins') %}
+  {%- set password = salt['pillar.get']('ejabberd:admins')[user] %}
+ejabberd_reg_{{ user }}:
   cmd:
-    - wait_script
-    - source: salt://ejabberd/ejabberd_reg_user.jinja2
-    - template: jinja
+    - wait
+    - name: ejabberdctl register '{{ user }}' '{{ hostname }}' '{{ password }}'
     - user: root
+    - unless: ejabberdctl check-account '{{ user }}' '{{ hostname }}'
     - require:
       - pkg: ejabberd
       - service: ejabberd
     - watch:
       - postgres_database: ejabberd
+{%- endfor %}
 
-{%- set monitor_user = "ejabberd_monitor" %}
-{%- set hostname = salt['pillar.get']('ejabberd:hostnames')[0] %}
-{%- set monitor_password = salt['password.generate']('ejabberd_monitor') %}
 ejabberd_reg_monitor_user:
   cmd:
     - run
     - name: ejabberdctl register {{ monitor_user }} {{ hostname }} {{ monitor_password }}
-    - user: root
     - user: root
     - unless: ejabberdctl check-account {{ monitor_user }} {{ hostname }}
     - require:

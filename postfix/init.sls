@@ -147,17 +147,35 @@ postfix:
     - require:
       - file: /etc/postfix
 
-{%- if salt['pillar.get']('postfix:aliases', False) %}
-{# contains alias for email forwarding #}
-/etc/postfix/virtual:
+postfix_local_aliases:
   file:
     - managed
+    - name: /etc/aliases
+    - template: jinja
+    - mode: 644
+    - user: root
+    - group: root
+    - source: salt://postfix/aliases.jinja2
+    - require:
+      - pkg: postfix
+  cmd:
+    - wait
+    - name: newaliases
+    - watch:
+      - file: postfix_local_aliases
+
+{%- if salt['pillar.get']('postfix:virtual_aliases', False) %}
+{# contains alias for email forwarding #}
+postfix_virtual_aliases:
+  file:
+    - managed
+    - file: /etc/postfix/virtual
     - template: jinja
     - mode: 400
     - user: postfix
     - group: postfix
     - contents: |
-        {{ salt['pillar.get']('postfix:aliases', False) | indent(8) }}
+        {{ salt['pillar.get']('postfix:virtual_aliases', False) | indent(8) }}
     - require:
       - pkg: postfix
   cmd:
@@ -168,11 +186,12 @@ postfix:
     {%- endif %}
     - name: postmap /etc/postfix/virtual
     - watch:
-      - file: /etc/postfix/virtual
+      - file: postfix_virtual_aliases
 {%- else %}
-/etc/postfix/virtual:
+postfix_virtual_aliases:
   file:
     - absent
+    - name: /etc/postfix/virtual
     - require:
       - pkg: postfix
 

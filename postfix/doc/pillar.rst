@@ -8,14 +8,6 @@ Pillar
 - :doc:`/openldap/doc/index` :doc:`/openldap/doc/pillar`
 - :doc:`/ssl/doc/index` :doc:`/ssl/doc/pillar` if :ref:`pillar-postfix-ssl` is set.
 
-Mandatory
----------
-
-Example::
-
-  mail:
-    mailname: domain.ltd
-
 .. note::
 
     To create a full-featured email stack, with :doc:`/openldap/doc/index`,
@@ -23,6 +15,14 @@ Example::
     value of :ref:`pillar-mail-mailname` must be put into pillar
     :ref:`pillar-postfix-virtual_mailbox_domains`,
     :doc:`index` variable "$mydomain" can be used as well.
+
+Mandatory
+---------
+
+Example::
+
+  mail:
+    mailname: domain.ltd
 
 Optional
 --------
@@ -35,7 +35,7 @@ Example::
   postfix:
     spam_filter: True
     sasl: True
-    aliases: |
+    virtual_aliases: |
         user1.abc@example.com user1@example.com
         user2.xyz@example.com user2@example.com
     alias_domains:
@@ -67,6 +67,44 @@ Example::
           desc:
           email:
 
+.. _pillar-postfix-mydestination:
+
+postfix:mydestination
+~~~~~~~~~~~~~~~~~~~~~
+
+List of canonical domains <http://www.postfix.org/VIRTUAL_README.html#canonical>
+that this mail server will be final `destination <http://www.postfix.org/postconf.5.html#mydestination>__`.
+Consult http://www.postfix.org/postconf.5.html#mydestination for more detail.
+
+To support multiple domains on one server, using virtual mailboxes will
+help without any problem compared to the canonical domain. List of domains
+(called `Hosted domains <http://www.postfix.org/VIRTUAL_README.html#canonical>`)
+can be specified in :ref:`pillar-postfix-virtual_mailbox_domains`.
+
+Default: allow sending local mail to UNIX mailboxes
+(``['localhost', 'localhost.$mydomain']``). It's possible to redirect those
+mails to other addresses (see :ref:`pillar-postfix-aliases`)
+
+.. _pillar-postfix-virtual_mailbox_domains:
+
+postfix:virtual_mailbox_domains
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+List of domains that :doc:`/postfix/doc/index` will receive emails for and they are delivered
+via the ``virtual_transport``. Consult http://www.postfix.org/postconf.5.html#virtual_mailbox_domains
+for more information.
+
+.. warning::
+
+  ensuring these values must not be set in :ref:`pillar-postfix-mydestination` pillar.
+
+.. note::
+
+  it is possible to use :doc:`index` variable such as ``$mydomain``,
+  ``$myhostname``, etc...
+
+Default: not used (``[]``).
+
 .. _pillar-postfix-spam_filter:
 
 postfix:spam_filter
@@ -92,7 +130,31 @@ configuration directive into :doc:`index` configuration file.
 postfix:aliases
 ~~~~~~~~~~~~~~~
 
+Aliases table content for redirecting mail for
+`local recipients <http://www.postfix.org/LOCAL_RECIPIENT_README.html>`__.
+
+Multiple lines string, use below syntax::
+
+  <local_addr>:    <dest_addr>
+  <local_addr2>:    <dest_addr2>
+
+For example, to redirect all mail to ``root`` account to another address, set
+this pillar as bellow::
+
+  postfix:
+    aliases: |
+      root:    admin@yourdomain.com
+
+Default: forward UNIX `root`'s mails to address defined
+in :ref:`pillar-mail-postmaster` (``False``).
+
+.. _pillar-postfix-virtual_aliases:
+
+postfix:virtual_aliases
+~~~~~~~~~~~~~~~~~~~~~~~
+
 Support `alias(mail forwarding) <http://www.postfix.org/postconf.5.html#virtual_alias_maps>`__.
+for virtual mailboxes.
 Multiple lines string, uses below syntax::
 
   <source_addr> <dest_addr>
@@ -108,7 +170,7 @@ postfix:alias_domains
 ~~~~~~~~~~~~~~~~~~~~~
 
 :doc:`index` will receive email for those domains and forward to addresses
-specified in :ref:`pillar-postfix-aliases`.
+specified in :ref:`pillar-postfix-virtual_aliases`.
 
 .. warning::
 
@@ -125,7 +187,7 @@ set::
   postfix:
     alias_domains:
       - example.org
-    aliases:
+    virtual_aliases:
       salt@example.org saltstack@example.com
 
 .. _pillar-postfix-message_size_limit:
@@ -147,18 +209,6 @@ Consults http://www.postfix.org/postconf.5.html#mynetworks for more detail.
 
 Default: Trust only `loopback network <http://en.wikipedia.org/wiki/Localhost#Name_resolution>`_ (``['127.0.0.0/8']``).
 
-.. _pillar-postfix-mydestination:
-
-postfix:mydestination
-~~~~~~~~~~~~~~~~~~~~~
-
-List of canonical domains <http://www.postfix.org/VIRTUAL_README.html#canonical>
-that this mail server will be final `destination <http://www.postfix.org/postconf.5.html#mydestination>__`.
-Consult http://www.postfix.org/postconf.5.html#mydestination for more detail.
-
-Default: serve no domain (``[]``). `Hosted domains <http://www.postfix.org/VIRTUAL_README.html#canonical>`
-can be specified in :ref:`pillar-postfix-virtual_mailbox_domains`.
-
 .. _pillar-postfix-relayhost:
 
 postfix:relayhost
@@ -178,7 +228,7 @@ postfix:relay_domains
 Domains that this mail server will relay mail to.
 
 Default: relays mails to all domain defined in
-:ref:`pillar-postfix-mydestination` (``[]``).
+:ref:`pillar-postfix-mydestination` (``['$mydestination']``).
 
 .. _pillar-postfix-inet_interfaces:
 
@@ -207,23 +257,3 @@ postfix:queue_length
 Warning if the number of items in the mail queue reach the defined threshold.
 
 Default: ``20`` items in queue to raise warning.
-
-.. _pillar-postfix-virtual_mailbox_domains:
-
-postfix:virtual_mailbox_domains
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-List of domains that :doc:`/postfix/doc/index` will receive emails for and they are delivered
-via the ``virtual_transport``. Consult http://www.postfix.org/postconf.5.html#virtual_mailbox_domains
-for more information.
-
-.. warning::
-
-  ensuring these values must not be set in :ref:`pillar-postfix-mydestination` pillar.
-
-.. note::
-
-  it is possible to use :doc:`index` variable such as ``$mydomain``,
-  ``$myhostname``, etc...
-
-Default: not used (``[]``).

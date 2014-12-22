@@ -29,11 +29,6 @@ requests:
   file:
     - absent
     - name: {{ opts['cachedir'] }}/pip/requests
-{%- if salt['cmd.has_exec']('pip') %}
-  pip:
-    - removed
-    - order: 1
-{%- endif %}
 
 {#- TODO: remove that statement in >= 2014-04 #}
 {{ opts['cachedir'] }}/requests-requirements.txt:

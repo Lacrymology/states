@@ -35,7 +35,8 @@ start_time=$(date +%s)
 # parse command line arguments:
 # [--profile]
 # [--repo <repo1>[ --repo <repo2> [...]]]
-# --doc-pillar-output is MANDATORY
+# [--pillar-from-doc]
+# [--doc-pillar-output]
 profile='ci-minion'
 repos=()
 tests=()
@@ -66,6 +67,10 @@ do
       doc_pillar_output="$1"
       shift
       ;;
+    --pillar-from-doc)
+      pillar_from_doc="$1"
+      shift
+      ;;
 # the rest of the parameters should be the tests to be run. In any case they'll
 # be passed to run.py
     *)
@@ -75,8 +80,7 @@ do
 done
 
 if [[ -z "$doc_pillar_output" ]]; then
-  echo "--doc-pillar-output parameter is mandatory"
-  exit 1
+  doc_pillar_output="$WORKSPACE/pillar/from_doc.sls"
 fi
 
 if [[ "$doc_pillar_output" != *.sls ]]; then
@@ -100,7 +104,9 @@ pip install -r doc/requirements.txt
 doc/build.py "$DOCS_OUTPUT"
 
 # build the pillars from docs
-"$WORKSPACE"/common/test/jenkins/build_pillar_from_docs.py --doc-path="$DOCS_OUTPUT" --modules-path="$WORKSPACE"/common/_modules --output="$doc_pillar_output"
+if [[ "${pillar_from_doc:-true}" = "true" ]]; then
+  "$WORKSPACE"/common/test/jenkins/build_pillar_from_docs.py --doc-path="$DOCS_OUTPUT" --modules-path="$WORKSPACE"/common/_modules --output="$doc_pillar_output"
+fi
 
 BUILD_IDENTITY="integration-$JOB_NAME-$BUILD_NUMBER"
 # create archive from common, pillar, and all user-specific formulas repos

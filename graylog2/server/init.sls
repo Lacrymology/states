@@ -172,6 +172,15 @@ graylog2-server:
 {%- if salt['pillar.get']("__test__", False) %}
       - process: elasticsearch
 {%- endif %}
+{%- set parsed_url = salt['common.urlparse'](salt['pillar.get']('graylog2:rest_listen_uri', 'http://127.0.0.1:12900')) -%}
+{%- set hostname = parsed_url.hostname %}
+{%- set port = parsed_url.port %}
+  process:
+    - wait_socket
+    - address: {{ hostname }}
+    - port: {{ port }}
+    - require:
+      - service: graylog2-server
   cmd:
     - wait
     - name: sleep 60
@@ -229,7 +238,7 @@ import_graylog2_gelf:
     - bind_address: 0.0.0.0
     - buffer_size: 1048576
     - require:
-      - cmd: graylog2-server
+      - process: graylog2-server
       - module: requests
 
 import_graylog2_syslog:
@@ -246,7 +255,7 @@ import_graylog2_syslog:
     - store_full_message: false
     - force_rdns: false
     - require:
-      - cmd: graylog2-server
+      - process: graylog2-server
       - module: requests
 
 /var/log/graylog2:

@@ -86,8 +86,6 @@ etherpad:db:password
 
 .. include:: /postgresql/doc/password.inc
 
-Default: randomly generated (``False``).
-
 .. _pillar-etherpad-db-host:
 
 etherpad:db:host
@@ -145,9 +143,9 @@ Default: don't require authorization (``False``).
 etherpad:users
 ~~~~~~~~~~~~~~
 
-List of users.
+A dictionary of users.
 
-Default: don't create any user (``[]``).
+Default: don't create any user (``{}``).
 
 .. _pillar-etherpad-default_pad_text:
 
@@ -156,7 +154,7 @@ etherpad:default_pad_text
 
 The default text of a pad.
 
-Default: dont use default text (``None``).
+Default: dont use default text (``False``).
 
 .. _pillar-etherpad-restrict_referer:
 
@@ -204,7 +202,7 @@ error
 
 Example: ``'a_secret_string'``
 
-Default: don't use secret url, (``None``).
+Default: don't use secret url, (``False``).
 
 Conditional
 -----------

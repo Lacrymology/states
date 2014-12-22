@@ -61,3 +61,15 @@ Conditional
 Only use if :ref:`pillar-etherpad-ssl` is turned on.
 
 .. include:: /nginx/doc/monitor_ssl.inc
+
+etherpad_javascript_http
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Check if the JavaScript page is loaded successfully.
+
+Only use in the test mode.
+
+etherpad_javascript_https
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Only use in the test mode and if :ref:`pillar-etherpad-ssl` is turned on.

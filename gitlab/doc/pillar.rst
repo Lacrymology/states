@@ -41,11 +41,6 @@ Example: ``__salt__['network.ip_addrs']('eth0')[0]``
    Consider destroy Administrator account after created an another
    admin.
 
-gitlab:admin:email
-~~~~~~~~~~~~~~~~~~
-
-Email for :doc:`/gitlab/doc/index` Administrator account.
-
 gitlab:admin:password
 ~~~~~~~~~~~~~~~~~~~~~
 
@@ -67,6 +62,8 @@ Optional
 Example::
 
   gitlab:
+    admin:
+      email: admin@example.com
     workers: 2
     idle: 300
     cheaper: 1
@@ -93,6 +90,13 @@ Example::
       password: randompassword
     ldap:
       enabled: False
+
+.. _gitlab-admin-email:
+
+gitlab:admin:email
+~~~~~~~~~~~~~~~~~~
+
+Email for :doc:`/gitlab/doc/index` Administrator account.
 
 .. _pillar-gitlab-commit_timeout:
 
@@ -204,7 +208,7 @@ gitlab:signin_enabled
 The standard login can be disabled to force login via
 :doc:`/openldap/doc/index`.
 
-Default: enable standard login (``False``).
+Default: enable standard login (``True``).
 
 .. _pillar-gitlab-default_can_create_group:
 
@@ -273,6 +277,13 @@ Override following SMTP settings.
 
 .. include:: /mail/doc/smtp.inc
 
+.. _pillar-gitlab-smtp-from:
+
+gitlab:smtp:from
+~~~~~~~~~~~~~~~~
+
+The address that will appear in the "From:" field of the email.
+
 .. _pillar-gitlab-db-password:
 
 gitlab:db:password
@@ -280,8 +291,6 @@ gitlab:db:password
 
 :doc:`/gitlab/doc/index` :doc:`/postgresql/doc/index` database
 password.
-
-Default: randomly generated (``False``).
 
 Conditional
 -----------

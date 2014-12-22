@@ -112,6 +112,8 @@ Optional
 
 Example::
 
+  ip_addrs: 1.2.3.4
+  monitor: False
   shinken:
     architecture:
       receiver:
@@ -122,6 +124,36 @@ Example::
     log_level: DEBUG
     nrpe:
       timeout: 30
+
+.. _pillar-ip_addrs:
+
+ip_addrs
+~~~~~~~~
+
+In the ``_modules/monitoring.py``, there is a function name `data()` that is
+used to gather specific data of a minion for monitoring.
+
+Define public and private IP of a minion.
+
+Default: Unused (``False``)
+
+.. _pillar-monitor:
+
+monitor
+~~~~~~~
+
+Whether this minion is monitored by Shinken or not
+
+Default: is monitored (``True``)
+
+.. _pillar-monitoring_data:
+
+monitoring_data
+~~~~~~~~~~~~~~~
+
+Extra valued can be passed to the Shinken for monitoring
+
+Default: Nothing (``{}`` - empty dictionary)
 
 .. _pillar-shinken-architecture-receiver:
 
@@ -164,3 +196,17 @@ shinken:log_level
 Define level of logging.
 
 Default: just log informational messages (``INFO``).
+
+Conditional
+-----------
+
+.. _pillar-network-interface:
+
+network_interface
+~~~~~~~~~~~~~~~~~
+
+The network interface of a minion which is used for monitoring
+
+Default: The first network interface (``eth0``)
+
+Only used if :ref:`pillar-ip_addrs` is not defined.

@@ -1,8 +1,11 @@
 Mail
 ====
 
+Setup a full-stack mail system
+------------------------------
+
 Components
-----------
+~~~~~~~~~~
 
 There are several formulas can be used together to create a full-stack mail
 system.
@@ -14,7 +17,7 @@ system.
   - Webmail: :doc:`/roundcube/doc/index`
 
 Architecture
-------------
+~~~~~~~~~~~~
 
 Those formulas must assume some assumption, predefine some choices
 on technology and architect.
@@ -31,7 +34,7 @@ filtering and virus scanning. After processing, ``amavis`` passes it back to
 user's password (in LDAP) through its UI.
 
 Notice for Amavis
------------------
+~~~~~~~~~~~~~~~~~
 
 To enable spam filtering support for ``postfix``, just use ``amavis`` formula
 and set appropriate pillar value for ``postfix``

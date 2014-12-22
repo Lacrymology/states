@@ -32,6 +32,7 @@ include:
   - erlang.nrpe
   - nginx.nrpe
   - nrpe
+  - pip
   - postgresql.server.nrpe
 {%- if salt['pillar.get'](formula + ':ssl', False) %}
   - ssl.nrpe
@@ -52,7 +53,7 @@ extend:
 check_xmpp-requirements:
   file:
     - managed
-    - name: /usr/local/nagios/check_xmpp-requirements.txt
+    - name: {{ opts['cachedir'] }}/pip/nagios-xmpp
     - template: jinja
     - user: root
     - group: root
@@ -60,12 +61,13 @@ check_xmpp-requirements:
     - source: salt://ejabberd/nrpe/requirements.txt
     - require:
       - virtualenv: nrpe-virtualenv
+      - file: {{ opts['cachedir'] }}/pip
   module:
     - wait
     - name: pip.install
     - upgrade: True
     - bin_env: /usr/local/nagios
-    - requirements: /usr/local/nagios/check_xmpp-requirements.txt
+    - requirements: {{ opts['cachedir'] }}/pip/nagios-xmpp
     - require:
       - virtualenv: nrpe-virtualenv
     - watch:

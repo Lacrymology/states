@@ -1,0 +1,8 @@
+# {{ salt['pillar.get']('message_do_not_modify') }}
+postmaster:    root
+{%- set aliases = salt['pillar.get']('postfix:aliases', False) %}
+{%- if aliases %}
+{{ aliases }}
+{%- else %}
+root:    {{ salt['pillar.get']('mail:postmaster') }}
+{%- endif %}

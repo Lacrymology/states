@@ -30,12 +30,12 @@ inet_protocols = ipv4
 mydomain = {{ salt['pillar.get']('mail:mailname') }}
 smtpd_banner = $myhostname ESMTP $mail_name
 biff = no
-mydestination = {%- for i in salt['pillar.get']('postfix:mydestination', []) %} {{ i }}{%- endfor %}
+mydestination = {%- for i in salt['pillar.get']('postfix:mydestination', ['localhost', 'localhost.$mydomain']) %} {{ i }}{%- endfor %}
 {%- block mynetworks %}
 mynetworks = {%- for i in salt['pillar.get']('postfix:mynetworks', ["127.0.0.0/8"]) %} {{ i }}{%- endfor %}
 {%- endblock %}
 relayhost = {{ salt['pillar.get']('postfix:relayhost', '') }}
-relay_domains = {%- for i in salt['pillar.get']('postfix:relay_domains', [])|default(salt['pillar.get']('postfix:mydestination', []), boolean=True) %} {{ i }}{%- endfor %}
+relay_domains = {%- for i in salt['pillar.get']('postfix:relay_domains', ['$mydestination']) %} {{ i }}{%- endfor %}
 alias_maps = hash:/etc/aliases
 alias_database = hash:/etc/aliases
 mailbox_size_limit = 0

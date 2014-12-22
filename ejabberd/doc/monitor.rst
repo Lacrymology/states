@@ -30,20 +30,6 @@ ejabberd_c2s_port
 
 Monitor :doc:`/ejabberd/doc/index` client to server port ``5222/tcp``.
 
-.. _monitor-ejabberd_s2s_port:
-
-ejabberd_s2s_port
-~~~~~~~~~~~~~~~~~
-
-Monitor :doc:`/ejabberd/doc/index` server to server port ``5269/tcp``.
-
-.. note::
-
-   This check only exists if pillar key
-   :ref:`pillar-ejabberd-server_to_server` has value ``True``
-
-.. _monitor-ejabberd_admin_port:
-
 ejabberd_admin_port
 ~~~~~~~~~~~~~~~~~~~
 
@@ -94,3 +80,15 @@ Conditional
 Only use if :ref:`pillar-ejabberd-ssl` is turned on.
 
 .. include:: /nginx/doc/monitor_ssl.inc
+
+.. _monitor-ejabberd_s2s_port:
+
+ejabberd_s2s_port
+~~~~~~~~~~~~~~~~~
+
+Monitor :doc:`/ejabberd/doc/index` server to server port ``5269/tcp``.
+
+.. note::
+
+   This check only exists if pillar key
+   :ref:`pillar-ejabberd-server_to_server` has value ``True``

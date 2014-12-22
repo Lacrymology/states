@@ -28,7 +28,6 @@ Maintainer: Van Pham Diep <favadi@robotinfra.com>
 {%- set formula = 'ejabberd' -%}
 {%- from 'nrpe/passive.jinja2' import passive_check with context %}
 include:
-  - apt
   - apt.nrpe
   - erlang.nrpe
   - nginx.nrpe
@@ -73,13 +72,6 @@ check_xmpp-requirements:
       - file: check_xmpp-requirements
 
 check_xmpp.py:
-  pkg:
-    - installed
-    - pkgs:
-        - python-dnspython
-        - python-pyasn1
-    - require:
-      - cmd: apt_sources
   file:
     - managed
     - name: /usr/lib/nagios/plugins/check_xmpp.py
@@ -91,7 +83,6 @@ check_xmpp.py:
       - module: check_xmpp-requirements
       - module: nrpe-virtualenv
       - pkg: nagios-nrpe-server
-      - pkg: check_xmpp.py
     - require_in:
       - service: nagios-nrpe-server
       - service: nsca_passive

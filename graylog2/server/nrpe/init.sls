@@ -34,6 +34,7 @@ include:
   - rsyslog.nrpe
   - pysc.nrpe
   - python.nrpe
+  - requests.nrpe
   - sudo.nrpe
 {%- if salt['pillar.get']("__test__", False) %}
   - elasticsearch.nrpe

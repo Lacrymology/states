@@ -280,6 +280,7 @@ def get_users():
 
 def list_system_files(dirs=("/bin", "/etc", "/usr", "/lib", "/sbin", "/var"),
                       ignored=('/var/lib/ucf/',
+                               '/etc/systemd',
                                '/var/lib/apt/lists/',
                                '/var/lib/libuuid/',
                                '/var/lib/dpkg/',

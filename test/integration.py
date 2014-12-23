@@ -279,13 +279,13 @@ def get_users():
 
 
 def list_system_files(dirs=("/bin", "/etc", "/usr", "/lib", "/sbin", "/var"),
-                      ignored=('/var/lib/ucf/',
+                      ignored=('/var/lib/ucf',
                                '/etc/systemd',
-                               '/var/lib/apt/lists/',
-                               '/var/lib/libuuid/',
-                               '/var/lib/dpkg/',
-                               '/var/cache/apt/',
-                               '/var/backups/',
+                               '/var/lib/apt/lists',
+                               '/var/lib/libuuid',
+                               '/var/lib/dpkg',
+                               '/var/cache/apt',
+                               '/var/backups',
                                '/var/log/upstart/network-interface-',
                                '/var/cache/salt/minion/extrn_files',
                                '/var/cache/salt/minion/doc')):

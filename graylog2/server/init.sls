@@ -181,13 +181,6 @@ graylog2-server:
     - port: {{ port }}
     - require:
       - service: graylog2-server
-  cmd:
-    - wait
-    - name: sleep 60
-    - watch:
-      - service: graylog2-server
-    - watch:
-      - archive: graylog2-server
 
 {{ manage_upstart_log('graylog2-server') }}
 

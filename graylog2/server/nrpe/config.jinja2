@@ -61,12 +61,14 @@ graylog2_incoming_logs:
 graylog2_input_gelf:
   description: Graylog2 GELF Input
   command: /usr/lib/nagios/plugins/check_udp_listen 12201
+  check_interval: 60
   dependencies:
     - graylog2_procs
 
 graylog2_input_syslog:
   description: Graylog2 GELF Input
   command: /usr/lib/nagios/plugins/check_udp_listen 1514
+  check_interval: 60
   dependencies:
     - graylog2_procs
 

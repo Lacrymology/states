@@ -25,7 +25,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Dang Tung Lam <lam@robotinfra.com>
 Maintainer: Van Pham Diep <favadi@robotinfra.com>
 -#}
-{%- include "erlang/nrpe/config.jinja2" -%}
 {%- set timeout = 30 %}
 
 ejabberd_proc:
@@ -61,6 +60,23 @@ ejabberd_admin_http:
   timeout: {{ timeout }}
   dependencies:
     - ejabberd_admin_port
+
+{%- set monitor_user = "ejabberd_monitor" %}
+{%- set hostname = salt['pillar.get']('ejabberd:hostnames')[0] %}
+{%- set monitor_password = salt['password.generate']('ejabberd_monitor') %}
+ejabberd_xmpp:
+  description: Check XMPP server functionality
+  command: /usr/lib/nagios/plugins/check_xmpp.py --formula=ejabberd --check=ejabberd_xmpp
+  timeout: 60
+  dependencies:
+    - ejabberd_proc
+  arguments:
+    jid: {{ monitor_user }}@{{ hostname }}
+    password: {{ monitor_password }}
+{%- if salt['pillar.get']("__test__", False) %}
+    address: "127.0.0.1"
+    use_tls: False
+{%- endif %}
 
 {%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context %}
 {%- from 'postgresql/server/nrpe/instance.jinja2' import postgresql_instance_prefix with context %}

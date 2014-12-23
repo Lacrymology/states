@@ -136,8 +136,6 @@ ejabberd:db:password
 
 .. include:: /postgresql/doc/password.inc
 
-Default: randomly generated (``False``).
-
 .. _pillar-ejabberd-db-username:
 
 ejabberd:db:username

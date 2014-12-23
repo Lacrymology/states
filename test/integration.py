@@ -28,6 +28,7 @@ except ImportError:
     import unittest
 import socket
 import sys
+import shutil
 import os
 try:
     import xmlrunner
@@ -63,6 +64,8 @@ files_list = set()
 groups_list = set()
 # users list
 users_list = set()
+
+unclean = set()
 
 NO_TEST_STRING = '-*- ci-automatic-discovery: off -*-'
 
@@ -408,7 +411,7 @@ class TestStateMeta(type):
                 logger.debug("State %s do have a custom test state, "
                              "don't create automatically one", state)
                 mcs.wrap_test_func(attrs, 'top', mcs.func_name(state),
-                                  'Test state %s' % state, [state])
+                                   'Test state %s' % state, [state])
             else:
                 logger.debug("State %s don't have custom test state", state)
                 doc = 'Test states %s and run all NRPE checks after' % \
@@ -416,15 +419,15 @@ class TestStateMeta(type):
                 states.append(mcs.nrpe_test_all_state)
                 # add test for the .sls file
                 mcs.wrap_test_func(attrs, 'top', mcs.func_name(state),
-                                  'Test state %s' % state, [state])
+                                   'Test state %s' % state, [state])
                 # and test for SLS file, and all corresponding integrations
                 mcs.wrap_test_func(attrs, 'top',
-                                  mcs.func_name(state) + '_with_checks',
-                                  doc, states)
+                                   mcs.func_name(state) + '_with_checks',
+                                   doc, states)
         else:
             logger.debug("No diamond/NRPE integration for state %s", state)
             mcs.wrap_test_func(attrs, 'top', mcs.func_name(state),
-                              'Test state %s' % state, [state])
+                               'Test state %s' % state, [state])
 
     def __new__(mcs, name, bases, attrs):
         '''
@@ -470,8 +473,9 @@ class TestStateMeta(type):
                                   'Try salt://{0}/init.sls').format(spath))
                     try:
                         content = run_salt_module(
-                                    'cp.get_file_str',
-                                    'salt://{0}/init.sls'.format(spath))
+                            'cp.get_file_str',
+                            'salt://{0}/init.sls'.format(spath)
+                        )
                         logger.debug(('Got content of '
                                       'salt://{0}/init.sls').format(spath))
                     except Exception:
@@ -489,7 +493,7 @@ class TestStateMeta(type):
                                                                     '')
                     # create test_$(SLS_name)_absent
                     mcs.wrap_test_func(attrs, 'top', mcs.func_name(state),
-                                      doc, [state])
+                                       doc, [state])
                 else:
                     logger.debug("%s is not an absent state", state)
 
@@ -497,7 +501,7 @@ class TestStateMeta(type):
                        or state.endswith('.test'):
                         logger.debug("Add single test for %s", state)
                         mcs.wrap_test_func(attrs, 'top', mcs.func_name(state),
-                                          'Run test %s' % state, [state])
+                                           'Run test %s' % state, [state])
                     else:
                         # all remaining SLSes
                         mcs.add_test_integration(attrs, state)
@@ -538,6 +542,7 @@ class States(unittest.TestCase):
         else:
             current = function()
             logger.debug(messages[1], len(current))
+            global unclean
             unclean = current - original
 
             if unclean:
@@ -593,11 +598,6 @@ class States(unittest.TestCase):
                 "Check %d proccess",
                 "Process that still run after cleanup: %s"]))
         clean_up_errors.append(
-            self._check_same_status(files_list, list_system_files, [
-                "First cleanup, keep list of %d files",
-                "Check %d files",
-                "Newly created files after cleanup: %s"]))
-        clean_up_errors.append(
             self._check_same_status(groups_list, get_groups, [
                 "First cleanup, keep list of %d groups",
                 "Check %d groups",
@@ -607,12 +607,42 @@ class States(unittest.TestCase):
                 "First cleanup, keep list of %d users",
                 "Check %d users",
                 "Newly created users after cleanup: %s"]))
+        clean_up_errors_msg = os.linesep.join([e for e in
+                                              clean_up_errors if e])
 
-        clean_up_errors_msg = os.linesep.join([e for e in clean_up_errors if e])
         if clean_up_errors_msg:
             logger.error(clean_up_errors)
             clean_up_failed = True
             self.fail(clean_up_errors_msg)
+
+        cleanup_files_msg = self._check_same_status(
+            files_list,
+            list_system_files, [
+                "First cleanup, keep list of %d files",
+                "Check %d files",
+                "Newly created files after cleanup: %s"])
+
+        if cleanup_files_msg:
+            logger.error(cleanup_files_msg)
+
+            # attempt to remove files, if okay, just mark this test fail
+            # but keep running other test.
+
+            global unclean
+            logger.debug('Attempting to remove existing files: %s', unclean)
+            origin_unclean = unclean.copy()
+            for path in origin_unclean:
+                if os.path.isdir(path):
+                    shutil.rmtree(path)
+                else:
+                    os.remove(path)
+
+                unclean.remove(path)
+            logger.debug('After cleaned up: %s', unclean)
+
+            clean_up_failed = True if unclean else False
+            is_clean = True
+            self.fail(cleanup_files_msg)
 
         is_clean = True
 

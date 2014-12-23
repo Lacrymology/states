@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 '''
-Module to provide MongoDB functionality to Salt. This is based on the salt
-official mongodb module, but adds some extra functionality.
+Module to provide :doc:`/mongodb/doc/index` functionality to Salt. This is
+based on the salt official mongodb module, but adds some extra functionality.
 
 :configuration: This module uses PyMongo, and accepts configuration details as
     parameters as well as configuration settings::

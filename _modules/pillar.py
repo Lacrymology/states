@@ -51,7 +51,7 @@ def get(key, default=KeyError, *args, **kwargs):
     is requested.
 
     It also keeps a record of the requested pillars and the provided default
-    values if the pillar key ``__test__`` is set to ``True``, which is used in
+    values if :ref:`pillar-__test__` is set to ``True``, which is used in
     :mod:`_states.qa`
     """
     DEBUG = pillar.get('__test__', False)

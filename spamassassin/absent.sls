@@ -15,3 +15,13 @@ spamassassin:
     - name: /root/.pyzor
     - require:
       - pkg: spamassassin
+  user:
+    - absent
+    - name: debian-spamd
+    - require:
+      - pkg: spamassassin
+  group:
+    - absent
+    - name: debian-spamd
+    - require:
+      - user: spamassassin

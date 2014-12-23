@@ -293,7 +293,7 @@ service: nagios-nrpe-server #}
 /usr/lib/nagios/plugins/check_udp_listen:
   pkg:
     - installed
-    - name: net-tools  {# for netstat #}
+    - name: iproute  {# for ss #}
   file:
     - managed
     - source: salt://nrpe/check_udp_listen.sh

@@ -25,7 +25,8 @@
 
 """
 DNSimple state
-requires: requests==1.2.0
+
+.. note:: requires: requests==1.2.0
 """
 
 __author__ = 'Bruno Clermont'
@@ -56,13 +57,13 @@ def created(name, email, token):
     '''
     Create/Register domain name.
 
-    sls example
+    sls example::
 
-    example.com:
-      dnsimple:
-        - registered
-        - email: xxx
-        - token: xxx
+      example.com:
+        dnsimple:
+          - registered
+          - email: xxx
+          - token: xxx
     '''
     domain = name
     ret = {'name': domain,
@@ -127,26 +128,26 @@ def records_exists(name, email, token, records):
     Update records.
     If any error happens, no changes are applied.
 
-    sls example
+    sls example::
 
-    state_name:
-      dnsimple.records_exists:
-      - email: xxx
-      - token: xxx
-      - records:
-          blahblah.com:
-            A:
-              www:
-                content: 123.11.1.11
-                ttl: 123
-                prio: 2
-              blog:
-                content: 122.2.2.2
-          adomain.org:
-            A:
-              www:
-                content: 12.1.1.2
-                ...
+      state_name:
+        dnsimple.records_exists:
+        - email: xxx
+        - token: xxx
+        - records:
+            blahblah.com:
+              A:
+                www:
+                  content: 123.11.1.11
+                  ttl: 123
+                  prio: 2
+                blog:
+                  content: 122.2.2.2
+            adomain.org:
+              A:
+                www:
+                  content: 12.1.1.2
+                  ...
     '''
 
     ret = {'name': 'existed',

@@ -53,22 +53,21 @@ def _process_args(name, type, service):
 
 def present(name, type, service):
     '''
-    Make sure that entry `service`:`name` is present in hosts.`type` file
+    Make sure that entry `service`:`name` is present in hosts.<`type`> file
 
-    Example:
+    Example::
 
-    192.168.32.12:
-      tcp_wrappers:
-        - present
-        - type: allow
-        - service: ftp
+      192.168.32.12:
+        tcp_wrappers:
+          - present
+          - type: allow
+          - service: ftp
 
-    3.3.3.3, 3.4.5.6:
-      tcp_wrappers:
-        - present
-        - type: deny
-        - service: http
-
+      3.3.3.3, 3.4.5.6:
+        tcp_wrappers:
+          - present
+          - type: deny
+          - service: http
     '''
     path, service_clients, ret = _process_args(name, type, service)
     if not ret['result']:
@@ -96,7 +95,7 @@ def present(name, type, service):
 
 def absent(name, type, service):
     '''
-    Make sure entry `service`:`name` does not exist in /etc/hosts.`type` file
+    Make sure entry `service`:`name` does not exist in /etc/hosts.<`type`> file
     Example::
 
         123.32.12.12:

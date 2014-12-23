@@ -24,6 +24,8 @@ Welcome to Infrastructure Documentation:
     changelog
     /_pillars/index
     pysc
+    custom_modules
+    custom_states
 
 
 Formulas Document:

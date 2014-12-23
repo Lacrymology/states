@@ -32,34 +32,31 @@ def mounted(name,
     '''
     Verify that a device is mounted
 
-    name
-        The path to the location where the device is to be mounted
+    :param string name: The path to the location where the device is to be
+                        mounted
 
-    device
-        The device name, typically the device node, such as /dev/sdb1
+    :param string device: The device name, typically the device node, such as
+                          /dev/sdb1
 
-    fstype
-        The filesystem type, this will be xfs, ext2/3/4 in the case of classic
-        filesystems, and fuse in the case of fuse mounts
+    :param fstype: The filesystem type, this will be xfs, ext2/3/4 in the case
+                   of classic filesystems, and fuse in the case of fuse mounts
 
-    mkmnt
-        If the mount point is not present then the state will fail, set mkmnt
-        to True to create the mount point if it is otherwise not present
+    :param boolean mkmnt: If the mount point is not present then the state will
+                          fail, set mkmnt to True to create the mount point if
+                          it is otherwise not present
 
-    opts
-        A list object of options or a comma delimited list
+    :param opts: A list object of options or a comma delimited list
+    :type opts: list or comma-separated string
 
-    dump
-        The dump value to be passed into the fstab, default to 0
+    :param dump: The dump value to be passed into the fstab, default to 0
 
-    pass_num
-        The pass value to be passed into the fstab, default to 0
+    :param pass_num: The pass value to be passed into the fstab, default to 0
 
-    config
-        Set an alternative location for the fstab, default to /etc/fstab
+    :param config: Set an alternative location for the fstab, default to
+                   /etc/fstab
 
-    persist
-        Set if the mount should be saved in the fstab, default to True
+    :param boolean persist: Set if the mount should be saved in the fstab,
+                            default to True
     '''
     ret = {'name': name,
            'changes': {},
@@ -242,14 +239,14 @@ def unmounted(name,
 
     Verify that a device is not mounted
 
-    name
-        The path to the location where the device is to be unmounted from
+    :param name: The path to the location where the device is to be unmounted
+                 from
 
-    config
-        Set an alternative location for the fstab, default to /etc/fstab
+    :param config: Set an alternative location for the fstab, default to
+                   /etc/fstab
 
-    persist
-        Set if the mount should be purged from the fstab, default to False
+    :param persist: Set if the mount should be purged from the fstab, default
+                    to False
     '''
     ret = {'name': name,
            'changes': {},

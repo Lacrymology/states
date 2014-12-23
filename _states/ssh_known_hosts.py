@@ -39,33 +39,28 @@ def present(
     ``enc`` option must be set, only openssh 5 and above can detect the key
     type.
 
-    name
-        The name of the remote host (e.g. "github.com")
+    :param name: The name of the remote host (e.g. "github.com")
 
-    user
-        The user who owns the ssh authorized keys file to modify
+    :param user: The user who owns the ssh authorized keys file to modify
 
-    enc
-        Defines what type of key is being used, can be ed25519, ecdsa ssh-rsa
-        or ssh-dss
+    :param enc: Defines what type of key is being used, can be ed25519, ecdsa
+                ssh-rsa or ssh-dss
 
-    fingerprint
-        The fingerprint of the key which must be presented in the known_hosts
-        file
+    :param fingerprint: The fingerprint of the key which must be presented in
+                        the known_hosts file
 
-    port
-        optional parameter, denoting the port of the remote host, which will be
-        used in case, if the public key will be requested from it. By default
-        the port 22 is used.
+    :param port: optional parameter, denoting the port of the remote host,
+                 which will be used in case, if the public key will be
+                 requested from it. By default the port 22 is used.
 
-    config
-        The location of the authorized keys file relative to the user's home
-        directory, defaults to ".ssh/known_hosts". If no user is specified,
-        defaults to "/etc/ssh/ssh_known_hosts". If present, must be an
-        absolute path when a user is not specified.
+    :param config: The location of the authorized keys file relative to the
+                   user's home directory, defaults to ".ssh/known_hosts". If no
+                   user is specified, defaults to "/etc/ssh/ssh_known_hosts".
+                   If present, must be an absolute path when a user is not
+                   specified.
 
-    hash_hostname : True
-        Hash all hostnames and addresses in the output.
+    :param boolean hash_hostname: Hash all hostnames and addresses in the
+                                  output. Default: ``True``
     '''
     ret = {'name': name,
            'changes': {},
@@ -113,16 +108,16 @@ def present(
             return dict(ret, comment=comment)
         else:  # 'update'
             comment = 'Key for {0} is set to be updated in {1}'.format(name,
-                                                                     config)
+                                                                       config)
             return dict(ret, comment=comment)
 
     result = __salt__['ssh.set_known_host'](user=user, hostname=name,
-                fingerprint=fingerprint,
-                key=key,
-                port=port,
-                enc=enc,
-                config=config,
-                hash_hostname=hash_hostname)
+                                            fingerprint=fingerprint,
+                                            key=key,
+                                            port=port,
+                                            enc=enc,
+                                            config=config,
+                                            hash_hostname=hash_hostname)
     if result['status'] == 'exists':
         return dict(ret,
                     Gcomment='{0} already exists in {1}'.format(name, config))
@@ -132,32 +127,31 @@ def present(
         if key:
             new_key = result['new']['key']
             return dict(ret,
-                    changes={'old': result['old'], 'new': result['new']},
-                    comment='{0}\'s key saved to {1} (key: {2})'.format(
-                             name, config, new_key))
+                        changes={'old': result['old'], 'new': result['new']},
+                        comment='{0}\'s key saved to {1} (key: {2})'.format(
+                            name, config, new_key))
         else:
             fingerprint = result['new']['fingerprint']
-            return dict(ret,
-                    changes={'old': result['old'], 'new': result['new']},
-                    comment='{0}\'s key saved to {1} (fingerprint: {2})'.format(
-                             name, config, fingerprint))
+            return dict(
+                ret,
+                changes={'old': result['old'], 'new': result['new']},
+                comment='{0}\'s key saved to {1} (fingerprint: {2})'.format(
+                    name, config, fingerprint))
 
 
 def absent(name, user=None, config=None):
     '''
     Verifies that the specified host is not known by the given user
 
-    name
-        The host name
+    :param name: The host name
 
-    user
-        The user who owns the ssh authorized keys file to modify
+    :param user: The user who owns the ssh authorized keys file to modify
 
-    config
-        The location of the authorized keys file relative to the user's home
-        directory, defaults to ".ssh/known_hosts". If no user is specified,
-        defaults to "/etc/ssh/ssh_known_hosts". If present, must be an
-        absolute path when a user is not specified.
+    :param config: The location of the authorized keys file relative to the
+                   user's home directory, defaults to ".ssh/known_hosts". If no
+                   user is specified, defaults to "/etc/ssh/ssh_known_hosts".
+                   If present, must be an absolute path when a user is not
+                   specified.
     '''
     ret = {'name': name,
            'changes': {},
@@ -174,7 +168,8 @@ def absent(name, user=None, config=None):
         ret['result'] = False
         return dict(ret, comment=comment)
 
-    known_host = __salt__['ssh.get_known_host'](user=user, hostname=name, config=config)
+    known_host = __salt__['ssh.get_known_host'](user=user, hostname=name,
+                                                config=config)
     if not known_host:
         return dict(ret, comment='Host is already absent')
 
@@ -183,7 +178,8 @@ def absent(name, user=None, config=None):
                                                                      config)
         return dict(ret, comment=comment)
 
-    rm_result = __salt__['ssh.rm_known_host'](user=user, hostname=name, config=config)
+    rm_result = __salt__['ssh.rm_known_host'](user=user, hostname=name,
+                                              config=config)
     if rm_result['status'] == 'error':
         return dict(ret, result=False, comment=rm_result['error'])
     else:

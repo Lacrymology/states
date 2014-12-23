@@ -26,7 +26,7 @@
 """
 Amazon Route53 state
 
-requires: http://pypi.python.org/pypi/route53
+.. note:: requires: http://pypi.python.org/pypi/route53
 """
 
 __author__ = 'Bruno Clermont'
@@ -66,14 +66,14 @@ def record_absent(name, record_type, zone_id, access_key, secret_key):
     '''
     Make sure an Amazon Route53 DNS record is absent.
 
-    Example:
+    Example::
 
-    www.google.com:
-      route53.record_absent:
-        - type: a
-        - zone_id: Z2ESDHL3365N3AQ
-        - access_key: xxx
-        - secret_key: yyy
+      www.google.com:
+        route53.record_absent:
+          - type: a
+          - zone_id: Z2ESDHL3365N3AQ
+          - access_key: xxx
+          - secret_key: yyy
     '''
 
     ret = {'name': 'Record {0} type {1}'.format(name, record_type.upper()),
@@ -108,29 +108,29 @@ def records_exists(access_key, secret_key, records):
 
     only simple values such as TTL and records/values are supported so far.
 
-    Example:
+    Example::
 
-    mess_with_yahoo_and_google:
-      route53.records_exists:
-        - access_key: xxx
-        - secret_key: yyy
-        - records:
-           Z2ESDHL3365N3AQ: {# Amazon hosted zone ID #}
-             a: {# can be a, aaaa, txt, ns, cname, mx, ptr, spf and srv #}
-               .google.com:
-                 values: {# set multiple values for round-robin #}
-                   - 127.0.0.1
-                   - 127.0.0.2
-                 ttl: 1200
-               www.google.com:
-                 values:
-                   - 127.0.0.3
-           Z2000003365N3AQ:
-             cname:
-               www.yahoo.com:
-                 values:
-                   - www.google.com
-                 ttl: 1200
+      mess_with_yahoo_and_google:
+        route53.records_exists:
+          - access_key: xxx
+          - secret_key: yyy
+          - records:
+             Z2ESDHL3365N3AQ: {# Amazon hosted zone ID #}
+               a: {# can be a, aaaa, txt, ns, cname, mx, ptr, spf and srv #}
+                 .google.com:
+                   values: {# set multiple values for round-robin #}
+                     - 127.0.0.1
+                     - 127.0.0.2
+                   ttl: 1200
+                 www.google.com:
+                   values:
+                     - 127.0.0.3
+             Z2000003365N3AQ:
+               cname:
+                 www.yahoo.com:
+                   values:
+                     - www.google.com
+                   ttl: 1200
     '''
     log.debug("Run records_exists: %s", records)
     ret = {'name': 'records_exists', 'result': None, 'comment': '',

@@ -28,8 +28,9 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 """
-process state
-require: python-psutil package
+Run processes and wait until they are running
+
+.. note:: requires python-psutil package
 """
 
 __author__ = 'Diep Pham'
@@ -88,20 +89,17 @@ def wait(name, timeout=30, user=None, **kargs):
 
     .. code-block:: yaml
 
-    vim:
-      process:
-        - wait
-        - timeout: 10
+      vim:
+        process:
+          - wait
+          - timeout: 10
 
-    name
-        name of the process to wait
+    :param name: name of the process to wait
 
-    user
-       limit match to given username, default: all users
+    :param user: limit match to given username, default: all users
 
-    timeout
-        time period in second that this state wait for process before
-        return False
+    :param timeout: time period in second that this state wait for process
+                    before returning ``False``
 
     """
 
@@ -149,20 +147,17 @@ def wait_for_dead(name, timeout=30, user=None, **kargs):
 
     .. code-block:: yaml
 
-    vim:
-      process:
-        - wait_for_dead
-        - timeout: 10
+      vim:
+        process:
+          - wait_for_dead
+          - timeout: 10
 
-    name
-        name of the process to wait
+    :param name: name of the process to wait for
 
-    user
-       limit match to given username, default: all users
+    :param user: limit match to given username, default: all users
 
-    timeout
-        time period in second that this state wait for process before
-        return False
+    :param timeout: time period in second that this state wait for process
+                    before returning ``False``
 
     """
 
@@ -233,26 +228,23 @@ def wait_for_dead(name, timeout=30, user=None, **kargs):
 def wait_socket(name=None, address="127.0.0.1", port=None, frequency=1,
                 timeout=60):
     """
-    Wait until a socket is open and return True. If timeout is reached, return
-    False instead
+    Wait until a socket is open and return ``True``. If timeout is reached,
+    return ``False`` instead
 
     .. code-block:: yaml
 
-    elasticsearch:
-      process:
-        - wait_socket
-        - port: 9200
-        - timeout: 60
+      elasticsearch:
+        process:
+          - wait_socket
+          - port: 9200
+          - timeout: 60
 
-    address
-        The ip address to wait for, default: localhost
-    port
-        The port to try to connect to. Mandatory
-    frequency
-        How often to try to connect, in seconds, Default: 1 second
-    timeout
-        Time period this state will wait before it returns False,
-        in seconds, default 60 seconds
+    :param address: The ip address to wait for. Default: ``localhost``
+    :param port: The port to try to connect to. Mandatory
+    :param frequency: How often to try to connect, in seconds,
+                      Default: 1 second
+    :param timeout: Time period this state will wait before it returns
+                    ``False``, in seconds. Default: 60 seconds
     """
     if not port:
         raise TypeError("wait_socket() has one mandatory argument (port)")

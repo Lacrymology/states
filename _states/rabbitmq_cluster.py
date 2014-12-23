@@ -33,16 +33,13 @@ def joined(name, host, user='rabbit', ram_node=None, runas=None):
     '''
     Ensure the node user@host is joined to cluster
 
-    name
-        Irrelevant, not used (recommended: user@host)
-    user
-        The user to join the cluster as (default: rabbit)
-    host
-        The host to join to cluster
-    ram_node
-        Join node as a RAM node
-    runas
-        The user to run the rabbitmq command as
+    .. note:: :func:`join` and :func:`joined` are synonyms
+
+    :param name: Irrelevant, not used (recommended: ``user@host``)
+    :param user: The user to join the cluster as (default: ``rabbit``)
+    :param host: The host to join to cluster
+    :param ram_node: Join node as a RAM node
+    :param runas: The user to run the rabbitmq command as
     '''
 
     ret = {'name': name, 'result': True, 'comment': '', 'changes': {}}

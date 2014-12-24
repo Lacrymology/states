@@ -66,7 +66,7 @@ python-setuptools:
     - group: root
     - mode: 550
 
-{%- set version='1.5.2' %}
+{%- set version='6.0.3' %}
 
 pip:
   file:
@@ -81,7 +81,7 @@ pip:
 {%- else %}
     - source: https://pypi.python.org/packages/source/p/pip/pip-{{ version }}.tar.gz
 {%- endif %}
-    - source_hash: md5=5da30919f732d68b1c666e484e7676f5
+    - source_hash: md5=1ca6788e57a176abbdf6d99d69f54ae0
     - archive_format: tar
     - tar_options: z
     - if_missing: {{ opts['cachedir'] }}/pip/pip-{{ version }}
@@ -109,20 +109,3 @@ pip:
 {%- if not salt['file.file_exists']('/usr/local/bin/pip') %}
       - archive: pip
 {%- endif %}
-{#-
- Upgrade distribute to avoid the following error:
- $ pip freeze
- Warning: cannot find svn location for distribute==0.6.24dev-r0
- [snip]
- ## FIXME: could not find svn URL in dependency_links for this package:
- distribute==0.6.24dev-r0
- [snip]
-distribute:
-  module:
-    - wait
-    - name: pip.install
-    - pkgs: distribute
-    - upgrade: True
-    - watch:
-      - module: pip
--#}

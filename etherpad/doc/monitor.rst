@@ -62,14 +62,18 @@ Only use if :ref:`pillar-etherpad-ssl` is turned on.
 
 .. include:: /nginx/doc/monitor_ssl.inc
 
+.. _pillar-etherpad_javascript_http:
+
 etherpad_javascript_http
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-Check if the JavaScript page is loaded successfully.
+Monitor etherpad functionality by request to a javascript URL.
 
 Only use in the test mode.
 
 etherpad_javascript_https
 ~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Same as :ref:`pillar-etherpad_javascript_http` but connect via SSL.
 
 Only use in the test mode and if :ref:`pillar-etherpad-ssl` is turned on.

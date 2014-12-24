@@ -633,10 +633,14 @@ class States(unittest.TestCase):
             logger.debug('Attempting to remove existing files: %s', unclean)
             origin_unclean = unclean.copy()
             for path in origin_unclean:
-                if os.path.isdir(path):
-                    shutil.rmtree(path)
-                else:
-                    os.remove(path)
+                try:
+                    if os.path.isdir(path):
+                        shutil.rmtree(path)
+                    else:
+                        os.remove(path)
+                except Exception as e:
+                    logger.debug('Failed when try to remove newly created '
+                                 'files: %s', e)
 
                 unclean.remove(path)
             logger.debug('After cleaned up: %s', unclean)

@@ -641,8 +641,8 @@ class States(unittest.TestCase):
                 except Exception as e:
                     logger.debug('Failed when try to remove newly created '
                                  'files: %s', e)
-
-                unclean.remove(path)
+                else:
+                    unclean.remove(path)
             logger.debug('After cleaned up: %s', unclean)
 
             clean_up_failed = True if unclean else False

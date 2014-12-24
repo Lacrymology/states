@@ -34,7 +34,7 @@ set -x
 start_time=$(date +%s)
 rm -f $WORKSPACE/bootstrap-archive.tar.gz $WORKSPACE/stderr.log.xz $WORKSPACE/stdout.log.xz $WORKSPACE/result.xml
 rm -rf $WORKSPACE/salt-common-doc
-virtualenv $WORKSPACE/virtualenv
+virtualenv --system-site-packages $WORKSPACE/virtualenv
 . $WORKSPACE/virtualenv/bin/activate
 
 if [ "${with_ssl:-true}" = "false" ]; then

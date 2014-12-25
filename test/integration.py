@@ -644,7 +644,8 @@ class States(unittest.TestCase):
                         'directory is deleted before the files they contain.',
                         e)
 
-            cleanup_files_msg = self._check_same_status(
+            # check again and recalculate unclean
+            self._check_same_status(
                 files_list,
                 list_system_files, [
                     "First cleanup, keep list of %d files",

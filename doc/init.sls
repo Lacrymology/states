@@ -46,6 +46,7 @@ doc:
   virtualenv:
     - manage
     - name: {{ opts['cachedir'] }}/doc
+    - system_site_packages: True
     - require:
       - module: virtualenv
   file:

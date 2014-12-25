@@ -631,8 +631,7 @@ class States(unittest.TestCase):
 
             global unclean
             logger.debug('Attempting to remove existing files: %s', unclean)
-            origin_unclean = unclean.copy()
-            for path in origin_unclean:
+            for path in unclean:
                 try:
                     if os.path.isdir(path):
                         shutil.rmtree(path)

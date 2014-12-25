@@ -8,8 +8,6 @@ import StringIO
 import collections
 from ast import literal_eval
 
-import salt
-
 logger = logging.getLogger(__name__)
 
 __virtualname__ = 'qa'
@@ -74,11 +72,13 @@ def _render(data):
         pass
 
     try:
+        import salt
         return salt.template.compile_template_str(
             data, default=__opts__['renderer'],
             renderers=salt.loader.render(__opts__, __salt__))
-    except NameError:
-        # this was called from outside of salt. Render as simple yaml instead
+    except (NameError, ImportError):
+        # this was called from outside of salt or even from a system that
+        # doesn't have salt installed. Render as simple yaml instead
         return yaml.load(StringIO.StringIO(data))
 
 

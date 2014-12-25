@@ -32,6 +32,62 @@ set -e
 
 set -x
 start_time=$(date +%s)
+# parse command line arguments:
+# [--profile]
+# [--repo <repo1>[ --repo <repo2> [...]]]
+# [--pillar-from-doc]
+# [--doc-pillar-output]
+profile='ci-minion'
+repos=()
+tests=()
+
+while (( "$#" > 0 ))
+do
+  key="$1"
+  shift
+
+  case "$key" in
+    --profile)
+      profile="$1"
+      shift
+      ;;
+# allow multiple --repo options to get all non-common repositories
+# each value passed to  --repo is relative path to user-specific directory from
+# $WORKSPACE. The structure after all SCM checkout looks like:
+#  - common
+#  - pillar
+#  - repo1
+#  - repo2
+# then use --repo repo1 --repo repo2
+    --repo)
+      repos+=("../$1")
+      shift
+      ;;
+    --doc-pillar-output)
+      doc_pillar_output="$1"
+      shift
+      ;;
+    --pillar-from-doc)
+      pillar_from_doc="$1"
+      shift
+      ;;
+# the rest of the parameters should be the tests to be run. In any case they'll
+# be passed to run.py
+    *)
+      tests+=("$key")
+      ;;
+  esac
+done
+
+if [[ -z "$doc_pillar_output" ]]; then
+  doc_pillar_output="$WORKSPACE/pillar/from_doc.sls"
+fi
+
+if [[ "$doc_pillar_output" != *.sls ]]; then
+  echo "--doc-pillar-output parameter needs to be an .sls file"
+  exit 1
+fi
+
 rm -f $WORKSPACE/bootstrap-archive.tar.gz $WORKSPACE/stderr.log.xz $WORKSPACE/stdout.log.xz $WORKSPACE/result.xml
 rm -rf $WORKSPACE/salt-common-doc
 virtualenv --system-site-packages $WORKSPACE/virtualenv
@@ -41,36 +97,16 @@ if [ "${with_ssl:-true}" = "false" ]; then
   $WORKSPACE/common/test/jenkins/generate_non_ssl_pillar.sh pillar
 fi
 
+DOCS_OUTPUT="${WORKSPACE}/salt-doc"
 cd common
 test/lint.py --warn-nonstable
 pip install -r doc/requirements.txt
-doc/build.py
+doc/build.py "$DOCS_OUTPUT"
 
-if [ "$1" == "--profile" ]; then
-    profile=$2
-    shift
-    shift
-else
-    profile='ci-minion'
+# build the pillars from docs
+if [[ "${pillar_from_doc:-true}" = "true" ]]; then
+  "$WORKSPACE"/common/test/jenkins/build_pillar_from_docs.py --doc-path="$DOCS_OUTPUT" --modules-path="$WORKSPACE"/common/_modules --output="$doc_pillar_output"
 fi
-
-# allow multiple --repo options to get all non-common repositories
-# each value passed to  --repo is relative path to user-specific directory from
-# $WORKSPACE. The structure after all SCM checkout looks like:
-#  - common
-#  - pillar
-#  - repo1
-#  - repo2
-# then use --repo repo1 --repo repo2
-# NOTICE --repo must come after --profile if --profile is used.
-repos=()
-cntr=0
-while [ "${1}" = '--repo' ]; do
-    repos[${cntr}]="../${2}"
-    cntr+=1
-    shift
-    shift
-done
 
 BUILD_IDENTITY="integration-$JOB_NAME-$BUILD_NUMBER"
 # create archive from common, pillar, and all user-specific formulas repos
@@ -105,7 +141,7 @@ run_and_check_return_code 10 "salt-call -c $CUSTOM_CONFIG_DIR saltutil.refresh_m
 start_run_test_time=$(date +%s)
 echo "TIME-METER: Preparing for test took: $((start_run_test_time - start_time)) seconds"
 echo '------------ Running CI test  ------------'
-sudo salt -t 86400 "$BUILD_IDENTITY" cmd.run "$CUSTOM_CONFIG_DIR/jenkins/run.py $*"
+sudo salt -t 86400 "$BUILD_IDENTITY" cmd.run "$CUSTOM_CONFIG_DIR/jenkins/run.py ${tests[*]}"
 finish_run_test_time=$(date +%s)
 echo "TIME-METER: Run integration.py took: $((finish_run_test_time - start_run_test_time)) seconds"
 

@@ -13,8 +13,7 @@ Critical:
 
 Monitor |deployment| :doc:`/uwsgi/doc/index` worker processes.  The
 maximum number of woker processes running is specified with
-``pillar_prefix:workers`` pillar key (see :doc:`/uwsgi/doc/pillar` for
-detail).
+``pillar_prefix:workers`` pillar key.
 
 If ``pillar_prefix:cheaper`` pillar key is defined, there are always at
 least this number of workers running |deployment|.

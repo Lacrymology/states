@@ -251,7 +251,7 @@ extend:
   nginx.conf:
     file:
       - context:
-        ssl: {{ ssl }}
+          ssl: {{ ssl }}
   nginx:
     service:
       - watch:

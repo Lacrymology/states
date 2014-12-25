@@ -229,5 +229,5 @@ extend:
   nginx.conf:
     file:
       - context:
-        ssl: {{ ssl }}
+          ssl: {{ ssl }}
 {%- endif -%}

@@ -290,6 +290,24 @@ service: nagios-nrpe-server #}
     - require_in:
       - file: nsca-nrpe
 
+/usr/lib/nagios/plugins/check_udp_listen:
+  pkg:
+    - installed
+    - name: iproute  {# for ss #}
+  file:
+    - managed
+    - source: salt://nrpe/check_udp_listen.sh
+    - user: nagios
+    - group: nagios
+    - mode: 550
+    - require:
+      - pkg: nagios-nrpe-server
+      - module: nrpe-virtualenv
+      - file: nsca-nrpe
+    - require_in:
+      - service: nagios-nrpe-server
+      - service: nsca_passive
+
 /etc/nagios/nsca.conf:
   file:
     - absent

@@ -96,7 +96,10 @@ Example::
 gitlab:admin:email
 ~~~~~~~~~~~~~~~~~~
 
-Email for :doc:`/gitlab/doc/index` Administrator account.
+The email address for the default Administrator account.
+This can be used to login at the first time after installing.
+
+Default: Use the value from :ref:`pillar-smtp-from` pillar key.
 
 .. _pillar-gitlab-commit_timeout:
 
@@ -208,7 +211,8 @@ gitlab:signin_enabled
 The standard login can be disabled to force login via
 :doc:`/openldap/doc/index`.
 
-Default: enable standard login (``True``).
+Default: The standard login form (username and password) will be shown on the
+sign-in page (``True``).
 
 .. _pillar-gitlab-default_can_create_group:
 
@@ -282,7 +286,7 @@ Override following SMTP settings.
 gitlab:smtp:from
 ~~~~~~~~~~~~~~~~
 
-The address that will appear in the "From:" field of the email.
+The address that will appear in the "From:" field of the email sent by GitLab.
 
 .. _pillar-gitlab-db-password:
 

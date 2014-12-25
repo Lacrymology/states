@@ -154,7 +154,7 @@ etherpad:default_pad_text
 
 The default text of a pad.
 
-Default: dont use default text (``False``).
+Default: does not use default text (``False``).
 
 .. _pillar-etherpad-restrict_referer:
 
@@ -202,7 +202,7 @@ error
 
 Example: ``'a_secret_string'``
 
-Default: don't use secret url, (``False``).
+Default: Allow to access directly via domain, without an secret URI (``False``).
 
 Conditional
 -----------

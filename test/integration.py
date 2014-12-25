@@ -639,11 +639,18 @@ class States(unittest.TestCase):
                     else:
                         os.remove(path)
                 except Exception as e:
-                    logger.debug('Failed when try to remove newly created '
-                                 'files: %s', e)
-                else:
-                    unclean.remove(path)
-            logger.debug('After cleaned up: %s', unclean)
+                    logger.debug(
+                        'Failed when removing newly created '
+                        'files: %s. Sometimes because of the parent '
+                        'directory is deleted before the files they contain.',
+                        e)
+
+            cleanup_files_msg = self._check_same_status(
+                files_list,
+                list_system_files, [
+                    "First cleanup, keep list of %d files",
+                    "Check %d files",
+                    "Newly created files after cleanup: %s"])
 
             clean_up_failed = True if unclean else False
             is_clean = True

@@ -57,11 +57,11 @@ include:
     - group: root
     - mode: 551
 
+{%- if use_ext_pillar %}
 /srv/pillars:
   file:
     - absent
 
-{%- if use_ext_pillar %}
 salt-master-requirements:
   file:
     - managed

@@ -195,6 +195,7 @@ elasticsearch_old_version:
     - mode: 400
     - require:
       - pkg: nginx
+      - pkg: elasticsearch
     - watch_in:
       - service: nginx
 {%- else %}

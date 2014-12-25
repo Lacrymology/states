@@ -45,10 +45,16 @@ elasticsearch-es_remote_port-transport:
   dependencies:
     - elasticsearch_procs
 
-{%- if salt['pillar.get']('elasticsearch:ssl', False) -%}
-    {%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
+{%- set username = salt['pillar.get']('elasticsearch:username', False) %}
+{%- set password = salt['pillar.get']('elasticsearch:password', False) %}
+{%- if salt['pillar.get']('elasticsearch:ssl', False) %}
+    {%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context %}
+  {%- if username and password %}
+{{ nginx_instance('elasticsearch', https_result='401 Unauthorized', http_result='401 Unauthorized', extra_dependencies=('elasticsearch_http',)) }}
+  {%- else %}
 {{ nginx_instance('elasticsearch', extra_dependencies=('elasticsearch_http',)) }}
-{%- endif -%}
+  {%- endif %}
+{%- endif %}
 
 {%- from 'elasticsearch/nrpe/instance.jinja2' import elasticsearch_instance with context -%}
 {{ elasticsearch_instance('elasticsearch', 'elasticsearch_procs') }}

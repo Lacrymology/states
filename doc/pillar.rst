@@ -42,6 +42,8 @@ smtp:root
 The user that gets all the mails for User ID below 1000 - the system users
 (normal users are given a User ID above 1000).
 
+.. _pillar-smtp-from:
+
 smtp:from
 ~~~~~~~~~
 

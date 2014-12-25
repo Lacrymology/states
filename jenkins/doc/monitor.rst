@@ -37,6 +37,10 @@ jenkins_http
 
 .. include:: /nginx/doc/monitor.inc
 
+.. include:: /backup/doc/monitor.inc
+
+.. include:: /backup/doc/monitor_procs.inc
+
 Optional
 --------
 

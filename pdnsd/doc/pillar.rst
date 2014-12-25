@@ -5,19 +5,6 @@ Pillar
 
 - :doc:`/apt/doc/index` :doc:`/apt/doc/pillar`
 
-Mandatory
----------
-
-Example::
-
-  dns_proxy:
-    dns_server: resolv.conf
-
-pdnsd:dns_server
-~~~~~~~~~~~~~~~~
-
-To enable status control if you are using ``/etc/resolv.conf``.
-
 Optional
 --------
 

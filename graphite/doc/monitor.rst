@@ -4,6 +4,8 @@ Monitor
 Mandatory
 ---------
 
+.. |deployment| replace:: graphite
+
 .. _monitor-graphite_uwsgi_master:
 
 graphite_uwsgi_master
@@ -73,3 +75,5 @@ graphite_ssl_configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Graphite SSL Configuration is good.
+
+.. include:: /postgresql/doc/monitor.inc

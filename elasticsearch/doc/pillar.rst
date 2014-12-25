@@ -67,6 +67,11 @@ elasticsearch:cluster:nodes:{{ node minion ID }}:{{ state }}
 A node can only actual run a :doc:`index` node, or a
 :doc:`/graylog2/server/doc/index`.
 
+elasticsearch:hostnames
+~~~~~~~~~~~~~~~~~~~~~~~
+
+.. include:: /nginx/doc/hostnames.inc
+
 Optional
 --------
 
@@ -134,6 +139,7 @@ elasticsearch:cluster:nodes:{{ node minion ID }}:{{ state }}:name
 
 Name of the :doc:`index` instance.
 
+Default: Unused (``False``)
 
 .. _pillar-elasticsearch-heap_size:
 

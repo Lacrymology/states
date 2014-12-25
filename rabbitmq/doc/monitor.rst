@@ -43,6 +43,11 @@ Internet.
 
 .. include:: /nginx/doc/monitor.inc
 
+rabbitmq_http
+~~~~~~~~~~~~~
+
+:doc:`/rabbitmq/doc/index` daemon HTTP port (``15672/tcp``) works properly.
+
 Optional
 --------
 

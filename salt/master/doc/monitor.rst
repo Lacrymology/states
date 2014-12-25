@@ -40,6 +40,12 @@ salt_master_return_port_remote
 
 :doc:`/salt/master/doc/index` Return port can be accessed remotely.
 
+.. |deployment| replace:: salt_master
+
+.. include:: /backup/doc/monitor_procs.inc
+
+.. include:: /backup/doc/monitor.inc
+
 Optional
 --------
 

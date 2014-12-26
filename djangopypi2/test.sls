@@ -61,6 +61,8 @@ test:
   qa:
     - test
     - name: djangopypi2
+    - additional:
+      - djangopypi2.backup
     - pillar_doc: {{ opts['cachedir'] }}/doc/output
     - require:
       - monitoring: test

@@ -6,6 +6,8 @@ in the doc/license.rst file.
 sudo:
   pkg:
     - purged
+    - env:
+        'SUDO_FORCE_REMOVE': 'yes'
   file:
     - absent
     - name: /etc/sudoers.d

@@ -15,6 +15,8 @@ include:
 clean_pkg:
   pkg:
     - purged
+    - env:
+        'SUDO_FORCE_REMOVE': 'yes'
     - pkgs:
       - accountsservice
       - acpid

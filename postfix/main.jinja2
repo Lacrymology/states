@@ -48,9 +48,10 @@ append_dot_mydomain = no
 delay_warning_time = 4h
 #}
 readme_directory = no
-{#- TLS parameters -#}
 {%- set postfix_ssl = salt['pillar.get']('postfix:ssl', False) %}
+{%- set sasl_authen = salt['pillar.get']('postfix:allow_remote_client', False) %}
 {%- if postfix_ssl %}
+{#- TLS parameters -#}
 smtpd_tls_mandatory_protocols=!SSLv2, !SSLv3
 smtpd_tls_cert_file=/etc/ssl/certs/{{ postfix_ssl }}_chained.crt
 smtpd_tls_key_file=/etc/ssl/private/{{ postfix_ssl }}.key
@@ -63,10 +64,11 @@ smtpd_tls_security_level = may
 smtp_tls_security_level = may
 smtp_tls_loglevel = 1
 {#- if you have authentication enabled, only offer it after STARTTLS #}
+  {%- if sasl_authen %}
 smtpd_tls_auth_only = yes
+  {%- endif %}
 {% endif %}
-
-{%- if salt['pillar.get']('postfix:sasl', False) %}
+{%- if sasl_authen %}
 smtpd_sasl_auth_enable = yes
 broken_sasl_auth_clients = yes
 smtpd_sasl_type = dovecot
@@ -78,8 +80,8 @@ smtpd_recipient_restrictions = permit_mynetworks, permit_sasl_authenticated, rej
 virtual_alias_maps = hash:/etc/postfix/virtual
 virtual_alias_domains = {%- for i in salt['pillar.get']('postfix:alias_domains', ['$virtual_alias_maps']) %} {{ i }}{%- endfor %}
 {%- endif %}
-{%- if salt['pillar.get']('postfix:virtual_mailbox_domains', [])|length > 0 %}
-virtual_mailbox_domains = {%- for i in salt['pillar.get']('postfix:virtual_mailbox_domains', []) %} {{ i }}{%- endfor %}
+{%- if salt['pillar.get']('postfix:domains', [])|length > 0 %}
+virtual_mailbox_domains = {%- for i in salt['pillar.get']('postfix:domains', []) %} {{ i }}{%- endfor %}
 virtual_mailbox_base = /var/mail/vhosts
 virtual_mailbox_maps = hash:/etc/postfix/vmailbox
 virtual_minimum_uid = 100

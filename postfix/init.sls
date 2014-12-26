@@ -169,7 +169,7 @@ postfix_local_aliases:
 postfix_virtual_aliases:
   file:
     - managed
-    - file: /etc/postfix/virtual
+    - name: /etc/postfix/virtual
     - template: jinja
     - mode: 400
     - user: postfix

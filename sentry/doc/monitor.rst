@@ -17,22 +17,9 @@ Mandatory
 
 .. include:: /nginx/doc/monitor.inc
 
-.. _monitor-sentry_backup_postgres_procs:
+.. include:: /backup/doc/monitor_postgres_procs.inc
 
-sentry_backup_postgres_procs
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. include:: /nrpe/doc/check_procs.inc
-
-Monitor :doc:`/sentry/doc/index` :doc:`/postgresql/doc/index` database
-backup process, critical if more than one backup processes running.
-
-.. _monitor-sentry_backup:
-
-sentry_backup
-~~~~~~~~~~~~~
-
-Monitor :doc:`/sentry/doc/index` backup age and size.
+.. include:: /backup/doc/monitor.inc
 
 Optional
 --------

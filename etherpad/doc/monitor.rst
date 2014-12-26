@@ -40,20 +40,9 @@ etherpad_logger
 
 Critical: not exactly one process with command line name logger and argument ``-t etherpad``.
 
-.. _monitor-etherpad_backup_postgres_procs:
+.. include:: /backup/doc/monitor.inc
 
-etherpad_backup_postgres_procs
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Monitor :doc:`/etherpad/doc/index` backup process, critical if more
-than one backup processes running.
-
-.. _monitor-etherpad_backup:
-
-etherpad_backup
-~~~~~~~~~~~~~~~
-
-Check :doc:`/etherpad/doc/index` backup age and size.
+.. include:: /backup/doc/monitor_postgres_procs.inc
 
 Optional
 --------

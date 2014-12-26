@@ -34,11 +34,6 @@ recursive DNS server.
 Default: empty dictionary  (``{}``), which mean use ``/etc/resolv.conf`` and
 automatically configure from DNS servers listed there.
 
-pdnsd:sections:{{ section }}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-List of DNS servers to get information from.
-
 pdnsd:ip_address
 ~~~~~~~~~~~~~~~~
 

@@ -44,10 +44,7 @@ Monitor :doc:`/elasticsearch/doc/index` dump process.
 
 .. _monitor-elasticsearch_backup:
 
-elasticsearch_backup
-~~~~~~~~~~~~~~~~~~~~
-
-Monitor :doc:`/elasticsearch/doc/index` backup age and size.
+.. include:: /backup/doc/monitor.inc
 
 Optional
 --------

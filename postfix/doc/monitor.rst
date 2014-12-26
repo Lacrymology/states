@@ -4,6 +4,8 @@ Monitor
 Mandatory
 ---------
 
+.. |deployment| replace:: postfix
+
 .. _monitor-postfix_qmgr:
 
 postfix_qmgr
@@ -56,6 +58,10 @@ postfix_port_smtps
 
 :doc:`/postfix/doc/index` SMTP Port over :doc:`/ssl/doc/index` is listening
 locally.
+
+.. include:: /backup/doc/monitor.inc
+
+.. include:: /backup/doc/monitor_procs.inc
 
 Optional
 --------

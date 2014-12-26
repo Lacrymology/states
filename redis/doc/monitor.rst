@@ -4,6 +4,8 @@ Monitor
 Mandatory
 ---------
 
+.. |deployment| replace:: redis
+
 .. _monitor-redis_procs:
 
 redis_procs
@@ -28,20 +30,6 @@ redis_remote_port
 
 Monitor :doc:`/redis/doc/index` remote port ``6379/tcp``.
 
-.. _monitor-redis_backup_procs:
+.. include:: /backup/doc/monitor.inc
 
-redis_backup_procs
-~~~~~~~~~~~~~~~~~~
-
-Monitor :doc:`/redis/doc/index` backup process.
-
-Expected status: there is 0 or 1 process with name
-``/etc/cron.daily/backup-redis`` running by user ``root``.
-
-.. _monitor-redis_backup:
-
-redis_backup
-~~~~~~~~~~~~
-
-Monitor :doc:`/redis/doc/index` backup age and size.
-
+.. include:: /backup/doc/monitor_procs.inc

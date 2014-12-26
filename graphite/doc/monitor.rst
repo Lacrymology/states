@@ -39,3 +39,7 @@ Graphite NGINX HTTP Protocol works properly
 .. include:: /nginx/doc/monitor_ssl.inc
 
 .. include:: /postgresql/doc/monitor.inc
+
+.. include:: /backup/doc/monitor_postgres_procs.inc
+
+.. include:: /backup/doc/monitor_postgres_age.inc

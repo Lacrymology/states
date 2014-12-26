@@ -4,6 +4,8 @@ Monitor
 Mandatory
 ---------
 
+.. |deployment| replace:: openldap
+
 .. _monitor-openldap_procs:
 
 openldap_procs
@@ -31,6 +33,10 @@ A local client is able to `bind <http://en.wikipedia.org/wiki/Lightweight_Direct
 to :ref:`pillar-ldap-rootdn`. This check return OK means the
 :doc:`/openldap/doc/index` server can be accessed by a local client and returned
 expected query result for the configured query in this check.
+
+.. include:: /backup/doc/monitor.inc
+
+.. include:: /backup/doc/monitor_procs.inc
 
 Optional
 --------

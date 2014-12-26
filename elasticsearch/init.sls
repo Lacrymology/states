@@ -154,6 +154,8 @@ elasticsearch_old_version:
 {%- endif %}
 
 {% if ssl %}
+  {%- set username = salt['pillar.get']('elasticsearch:username', False) %}
+  {%- set password = salt['pillar.get']('elasticsearch:password', False) %}
 /etc/nginx/conf.d/elasticsearch.conf:
   file:
     - managed
@@ -163,6 +165,9 @@ elasticsearch_old_version:
     - mode: 400
     - require:
       - pkg: nginx
+  {%- if username and password %}
+      - file: /etc/elasticsearch/nginx_basic_auth
+  {%- endif %}
     - watch_in:
       - service: nginx
     - source: salt://nginx/proxy.jinja2
@@ -172,18 +177,43 @@ elasticsearch_old_version:
         ssl: {{ salt['pillar.get']('elasticsearch:ssl') }}
         hostnames: {{ salt['pillar.get']('elasticsearch:hostnames') }}
         allowed:
-{% for ip_address in grains['ipv4'] %}
+  {% for ip_address in grains['ipv4'] %}
           - {{ ip_address }}/32
-{% endfor %}
-{% for allowed in salt['pillar.get']('elasticsearch:https_allowed', []) %}
+  {% endfor %}
+  {% for allowed in salt['pillar.get']('elasticsearch:https_allowed', []) %}
           - {{ allowed }}
-{% endfor %}
+  {% endfor %}
+  {%- if username and password %}
+        auth_file: /etc/elasticsearch/nginx_basic_auth
+
+/etc/elasticsearch/nginx_basic_auth:
+  file:
+    - managed
+    - user: root
+    - group: www-data
+    - contents: {{ username }}:{{ salt['password.encrypt_shadow'](password|string, salt_key=salt['password.generate']('elasticsearch_nginx_basic_auth')) }}
+    - mode: 440
+    - require:
+      - pkg: nginx
+      - pkg: elasticsearch
+    - watch_in:
+      - service: nginx
+  {%- else %}
+
+/etc/elasticsearch/nginx_basic_auth:
+  file:
+    - absent
+  {%- endif %}
 
 extend:
   nginx:
     service:
       - watch:
         - cmd: ssl_cert_and_key_for_{{ salt['pillar.get']('elasticsearch:ssl') }}
+{%- else %}
+/etc/nginx/conf.d/elasticsearch.conf:
+  file:
+    - absent
 {% endif %}
 
 {#- remove old graylog2 indices #}

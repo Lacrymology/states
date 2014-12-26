@@ -50,3 +50,9 @@ elasticsearch:
   service:
     - dead
     - enable: False
+
+/etc/elasticsearch/nginx_basic_auth:
+  file:
+    - absent
+    - require:
+      - service: elasticsearch

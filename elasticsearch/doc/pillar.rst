@@ -205,3 +205,25 @@ List of `CIDR
 network where :doc:`/elasticsearch/doc/index` over HTTPS is allowed.
 
 Default: do not allow (``[]``).
+
+.. _pillar-elasticsearch-username:
+
+elasticsearch:username
+~~~~~~~~~~~~~~~~~~~~~~
+
+Username for :doc:`/elasticsearch/doc/index` API access via
+:doc:`/nginx/doc/index`.
+
+.. _pillar-elasticsearch-password:
+
+elasticsearch:password
+~~~~~~~~~~~~~~~~~~~~~~
+
+Password for :doc:`/elasticsearch/doc/index` API access via
+:doc:`/nginx/doc/index`.
+
+.. warning::
+
+   Authentication is turned on only if both
+   :ref:`pillar-elasticsearch-username` and
+   :ref:`pillar-elasticsearch-password` are defined.

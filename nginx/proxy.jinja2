@@ -126,6 +126,10 @@ server {
         deny all;
     {% endif -%}
 {%- endfor %}
+{% if auth_file|default(False) %}
+        auth_basic "require authentication";
+        auth_basic_user_file {{ auth_file }};
+{% endif %}
     }
 
 {% include 'nginx/location_robots.jinja2' %}

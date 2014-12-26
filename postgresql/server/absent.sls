@@ -11,8 +11,7 @@ postgresql:
   pkg:
     - purged
     - pkgs:
-      - postgresql-{{ version }}
-      - postgresql-client-{{ version }}
+      - postgresql-client-common
     - require:
       - service: postgresql
   file:

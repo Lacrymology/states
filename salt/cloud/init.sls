@@ -3,6 +3,7 @@ Use of this source code is governed by a BSD license that can be found
 in the doc/license.rst file.
 
 -#}
+{%- from "python/init.sls" import root_bin_py with context -%}
 {%- from "macros.jinja2" import salt_version with context %}
 include:
   - apt
@@ -85,7 +86,7 @@ salt_cloud_digital_ocean_v2_module:
   file:
     - managed
     - source: salt://salt/cloud/digital_ocean_v2.py
-    - name: /usr/lib/pymodules/python2.7/salt/cloud/clouds/digital_ocean_v2.py
+    - name: {{ root_bin_py() }}/salt/cloud/clouds/digital_ocean_v2.py
     - require:
       - pkg: salt
       - pkg: salt-cloud

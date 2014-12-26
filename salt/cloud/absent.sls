@@ -1,8 +1,9 @@
 {#-
 Use of this source code is governed by a BSD license that can be found
 in the doc/license.rst file.
-
 -#}
+{%- from "python/init.sls" import root_bin_py with context -%}
+
 {%- for type in ('profiles', 'providers', 'profiles.d', 'providers.d', 'deploy.d') %}
 /etc/salt/cloud.{{ type }}:
   file:
@@ -31,9 +32,9 @@ python-libcloud:
 salt_cloud_digital_ocean_v2_module:
   file:
     - absent
-    - name: /usr/lib/pymodules/python2.7/salt/cloud/clouds/digital_ocean_v2.py
+    - name: {{ root_bin_py() }}/salt/cloud/clouds/digital_ocean_v2.py
 
 salt_cloud_digital_ocean_v2_module_pyc:
   file:
     - absent
-    - name: /usr/lib/pymodules/python2.7/salt/cloud/clouds/digital_ocean_v2.pyc
+    - name: {{ root_bin_py() }}/salt/cloud/clouds/digital_ocean_v2.pyc

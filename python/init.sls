@@ -29,3 +29,14 @@ python:
     - mode: 444
     - require:
       - file: /etc/python
+
+{#-
+ Return path to
+-#}
+{%- macro root_bin_py() -%}
+    {%- if grains['lsb_distrib_codename'] == 'precise' -%}
+        /usr/share/pyshared
+    {%- else -%}
+        /usr/lib/python2.7/dist-packages
+    {%- endif -%}
+{%- endmacro -%}

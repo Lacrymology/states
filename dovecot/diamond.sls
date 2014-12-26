@@ -34,6 +34,7 @@ dovecot_diamond_resources:
     - require:
       - file: /etc/diamond/collectors
       - service: dovecot
+      - file: /usr/local/diamond/share/diamond/collectors/mail/mail.py
     - watch_in:
       - service: diamond
 
@@ -43,8 +44,8 @@ dovecot_diamond_resources:
     - user: root
     - group: root
     - mode: 550
-  require:
-    virtualenv: diamond
+    - require:
+      - virtualenv: diamond
 
 /usr/local/diamond/share/diamond/collectors/mail/mail.py:
   file:
@@ -53,5 +54,5 @@ dovecot_diamond_resources:
     - group: root
     - mode: 440
     - source: salt://diamond/collectors/mail/mail.py
-  require:
-    file: /usr/local/diamond/share/diamond/collectors/mail
+    - require:
+      - file: /usr/local/diamond/share/diamond/collectors/mail

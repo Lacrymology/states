@@ -47,7 +47,7 @@ Maintainer: Quan Tong Anh <quanta@robotinfra.com>
         {%- set http_result="200 OK" -%}
     {%- endif %}
 
-{%- if http  %}
+{%- if http %}
 {{ formula }}_nginx_http:
   description: {{ deployment|capitalize }} NGINX HTTP Protocol
   command: /usr/lib/nagios/plugins/check_http -H {{ domain_name }} -u {{ http_uri }} -p {{ http_port }} -e '{{ http_result }}' -I {{ first_ip }}
@@ -65,7 +65,7 @@ Maintainer: Quan Tong Anh <quanta@robotinfra.com>
     {%- for extra_dependency in extra_dependencies %}
     - {{ extra_dependency }}
     {%- endfor -%}
-{%- endif  %}
+{%- endif %}
 
 {%- if salt['pillar.get'](pillar_prefix + ':ssl', False) %}
 {%- set https_uri = http_uri if not https_uri %}

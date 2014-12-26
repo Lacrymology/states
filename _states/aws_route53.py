@@ -40,6 +40,8 @@ try:
 except ImportError:
     route53 = None
 
+__virtualname__ = 'aws_route53'
+
 log = logging.getLogger(__name__)
 
 
@@ -50,7 +52,7 @@ def __virtual__():
     if route53 is None:
         log.debug("Can't find python module 'route53'")
         return False
-    return 'route53'
+    return __virtualname__
 
 
 def _connect(access_key, secret_key):

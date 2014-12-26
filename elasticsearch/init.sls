@@ -189,10 +189,10 @@ elasticsearch_old_version:
 /etc/elasticsearch/nginx_basic_auth:
   file:
     - managed
-    - user: www-data
+    - user: root
     - group: www-data
     - contents: {{ username }}:{{ salt['password.encrypt_shadow'](password|string, salt_key=salt['password.generate']('elasticsearch_nginx_basic_auth')) }}
-    - mode: 400
+    - mode: 440
     - require:
       - pkg: nginx
       - pkg: elasticsearch

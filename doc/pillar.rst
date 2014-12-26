@@ -26,6 +26,15 @@ message_do_not_modify
 
 Warning message to not modify file.
 
+.. _pillar-smtp:
+
+smtp
+~~~~
+
+Email server configuration.
+
+See below for details on each keys.
+
 smtp:server
 ~~~~~~~~~~~
 

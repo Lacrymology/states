@@ -15,9 +15,9 @@ Example::
   shinken:
     graphite_url: http://graphite.example.com
     users:
-      <username>:
-        email:
-        password:
+      username:
+        email: noreply@example.com
+        password: secr3t
     architecture:
       broker:
         - integration-0

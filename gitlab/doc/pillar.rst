@@ -99,7 +99,7 @@ gitlab:admin:email
 The email address for the default Administrator account.
 This can be used to login at the first time after installing.
 
-Default: Use the value from :ref:`pillar-smtp-from` pillar key.
+Default: Use the value of :ref:`pillar-smtp-from` pillar key (``False``).
 
 .. _pillar-gitlab-commit_timeout:
 
@@ -288,13 +288,14 @@ gitlab:smtp:from
 
 The address that will appear in the "From:" field of the email sent by GitLab.
 
+Default: Use the value of :ref:`pillar-smtp-from` (``False``).
+
 .. _pillar-gitlab-db-password:
 
 gitlab:db:password
 ~~~~~~~~~~~~~~~~~~
 
-:doc:`/gitlab/doc/index` :doc:`/postgresql/doc/index` database
-password.
+.. include:: /postgresql/doc/password.inc
 
 Conditional
 -----------

@@ -27,6 +27,6 @@ Maintainer: Van Diep Pham <favadi@robotinfra.com>
 -#}
 [user]
     name = GitLab
-    email = {{ salt['pillar.get']('gitlab:smtp:from', salt['pillar.get']('smtp:from')) }}
+    email = {{ salt['pillar.get']('gitlab:smtp:from', False)|default(salt['pillar.get']('smtp:from'), boolean=True) }}
 [core]
     autocrlf = input

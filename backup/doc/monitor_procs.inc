@@ -1,5 +1,5 @@
-|deployment|\_backup_proc
-~~~~~~~~~~~~~~~~~~~~~~~~~
+|deployment|\_backup_procs
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 At most one process backup for |deployment| is running.
 

@@ -55,3 +55,10 @@ rsyslog:
     - absent
     - require:
       - pkg: rsyslog
+
+rsyslog_absent_mail_logs:
+  cmd:
+    - run
+    - name: rm -f /var/log/mail.*
+    - require:
+      - service: rsyslog

@@ -47,21 +47,21 @@ Dictionary contains :doc:`/elasticsearch/doc/index` nodes information.
 
 .. _pillar-elasticsearch-cluster-nodes-nodeminionID-_network-public:
 
-elasticsearch:cluster:nodes:{{ node minion ID }}:_network:public
+elasticsearch:cluster:nodes:{{ node_minion_ID }}:_network:public
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This node hostname or public IP to reach it from Internet.
 
 .. _pillar-elasticsearch-cluster-nodes-nodeminionID-_network-private:
 
-elasticsearch:cluster:nodes:{{ node minion ID }}:_network:private
+elasticsearch:cluster:nodes:{{ node_minion_ID }}:_network:private
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This node hostname or public IP to reach it from internal network.
 
 .. _pillar-elasticsearch-cluster-nodes-nodeminionID-state:
 
-elasticsearch:cluster:nodes:{{ node minion ID }}:{{ state }}
+elasticsearch:cluster:nodes:{{ node_minion_ID }}:{{ state }}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 A node can only actual run a :doc:`index` node, or a
@@ -94,7 +94,7 @@ Default: ``0.90.10``
 
 .. _pillar-elasticsearch-cluster-nodes-nodeminionID-state-port:
 
-elasticsearch:cluster:nodes:{{ node minion ID }}:{{ state }}:port
+elasticsearch:cluster:nodes:{{ node_minion_ID }}:{{ state }}:port
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 :doc:`index` transport port.
@@ -106,7 +106,7 @@ Default: ``9300``.
 
 .. _pillar-elasticsearch-cluster-nodes-nodeminionID-state-http:
 
-elasticsearch:cluster:nodes:{{ node minion ID }}:{{ state }}:http
+elasticsearch:cluster:nodes:{{ node_minion_ID }}:{{ state }}:http
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If this instance handle :doc:`index` HTTP API port. Only one HTTP API instance
@@ -116,7 +116,7 @@ Default: disable HTTP API, (``True``).
 
 .. _pillar-elasticsearch-cluster-nodes-nodeminionID-state-data:
 
-elasticsearch:cluster:nodes:{{ node minion ID }}:{{ state }}:data
+elasticsearch:cluster:nodes:{{ node_minion_ID }}:{{ state }}:data
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If this instance :doc:`index` is allowed to store data.
@@ -125,7 +125,7 @@ Default: allow to store data (``True``).
 
 .. _pillar-elasticsearch-cluster-nodes-nodeminionID-state-master:
 
-elasticsearch:cluster:nodes:{{ node minion ID }}:{{ state }}:master
+elasticsearch:cluster:nodes:{{ node_minion_ID }}:{{ state }}:master
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If this instance :doc:`index` is allowed to become master node.
@@ -134,7 +134,7 @@ Default: eligible as a master (``True``).
 
 .. _pillar-elasticsearch-cluster-nodes-nodeminionID-state-name:
 
-elasticsearch:cluster:nodes:{{ node minion ID }}:{{ state }}:name
+elasticsearch:cluster:nodes:{{ node_minion_ID }}:{{ state }}:name
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Name of the :doc:`index` instance.

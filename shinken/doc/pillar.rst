@@ -142,7 +142,7 @@ Default: Unused (``False``)
 monitor
 ~~~~~~~
 
-Whether this minion is monitored by Shinken or not
+Whether this minion is monitored by Shinken or not.
 
 Default: is monitored (``True``)
 
@@ -151,9 +151,9 @@ Default: is monitored (``True``)
 monitoring_data
 ~~~~~~~~~~~~~~~
 
-Extra valued can be passed to the Shinken for monitoring
+Extra value can be passed to the Shinken for monitoring.
 
-Default: Nothing (``{}`` - empty dictionary)
+Default: No extra value (empty dictionary ``{}``).
 
 .. _pillar-shinken-architecture-receiver:
 
@@ -205,7 +205,7 @@ Conditional
 network_interface
 ~~~~~~~~~~~~~~~~~
 
-The network interface of a minion which is used for monitoring
+The network interface of a minion which is used for monitoring.
 
 Default: The first network interface (``eth0``)
 

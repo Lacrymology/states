@@ -32,7 +32,7 @@ postfix_qmgr:
 
 postfix_pickup:
   description: Postfix Local mail pickup
-  command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -u postfix -C pickup -a '-l -t fifo -u -c'"
+  command: "/usr/lib/nagios/plugins/check_procs -c 0:1 -u postfix -C pickup -a '-l -t fifo -u -c'"
 
 postfix_master:
   description: Postfix Master

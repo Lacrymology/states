@@ -22,3 +22,17 @@ dovecot_diamond_resources:
       - |
         [[dovecot]]
         exe = ^\/usr\/sbin\/dovecot$
+
+/etc/diamond/collectors/MailCollector.conf:
+  file:
+    - managed
+    - source: salt://dovecot/collector_config.jinja2
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - require:
+      - file: /etc/diamond/collectors
+      - service: dovecot
+    - watch_in:
+      - service: diamond

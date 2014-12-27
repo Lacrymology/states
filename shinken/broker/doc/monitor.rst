@@ -49,8 +49,8 @@ If both are down, only one notification would be sent, rather than two.
 
 .. include:: /nginx/doc/monitor.inc
 
-Conditional
------------
+Optional
+--------
 
 Only use if :ref:`pillar-shinken-ssl` is turned on.
 

@@ -55,8 +55,8 @@ etherpad_backup
 
 Check :doc:`/etherpad/doc/index` backup age and size.
 
-Conditional
------------
+Optional
+--------
 
 Only use if :ref:`pillar-etherpad-ssl` is turned on.
 

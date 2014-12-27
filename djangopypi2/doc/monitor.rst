@@ -17,8 +17,8 @@ Mandatory
 
 .. include:: /nginx/doc/monitor.inc
 
-Conditional
------------
+Optional
+--------
 
 Only use if :ref:`pillar-djangopypi2-ssl` is turned on.
 

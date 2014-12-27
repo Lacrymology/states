@@ -34,8 +34,8 @@ sentry_backup
 
 Monitor :doc:`/sentry/doc/index` backup age and size.
 
-Conditional
------------
+Optional
+--------
 
 Only use if :ref:`pillar-sentry-ssl` is turned on.
 

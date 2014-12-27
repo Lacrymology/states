@@ -53,8 +53,12 @@ gitlabhq_production_postgresql_not_empty
 
 Check if :doc:`/postgresql/doc/index` database is not empty.
 
-Conditional
------------
+.. include:: /backup/doc/monitor.inc
+
+.. include:: /backup/doc/monitor_procs.inc
+
+Optional
+--------
 
 Only use if :ref:`pillar-gitlab-ssl` is turned on.
 

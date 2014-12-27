@@ -40,7 +40,8 @@ Maintainer: Van Pham Diep <favadi@robotinfra.com>
                     "password": "{{ dbuserpass }}",
                     "database": "{{ dbname }}"
                   },
-  "defaultPadText" : "{{ salt['pillar.get']('etherpad:default_pad_text', '') }}",
+{%- set default_pad_text = salt['pillar.get']('etherpad:default_pad_text', False) %}
+  "defaultPadText" : "{%- if default_pad_text %}{{ default_pad_text }}{%- endif %}",
 {%- if salt['pillar.get']('etherpad:require_session', False) %}
   "requireSession": true,
 {%- endif %}
@@ -57,10 +58,11 @@ Maintainer: Van Pham Diep <favadi@robotinfra.com>
   "trustProxy": true,
   "disableIPlogging": false,
   "users": {
-{%- for user in salt['pillar.get']('etherpad:users', []) %}
+{%- set users = salt['pillar.get']('etherpad:users', {}) %}
+{%- for user in users %}
     "{{ user }}": {
-      "password": "{{ salt['pillar.get']('etherpad:users')[user]['password'] }}"
-  {%- if salt['pillar.get']('etherpad:users')[user]['admin'] | default(False, boolean=True) %}
+      "password": "{{ users[user]['password'] }}"
+  {%- if users[user]['admin'] | default(False, boolean=True) %}
       , "is_admin": true
   {%- endif %}
     }{% if not loop.last %},{% endif %}

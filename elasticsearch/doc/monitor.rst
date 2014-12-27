@@ -49,8 +49,8 @@ elasticsearch_backup
 
 Monitor :doc:`/elasticsearch/doc/index` backup age and size.
 
-Conditional
------------
+Optional
+--------
 
 .. include:: /nginx/doc/monitor.inc
 

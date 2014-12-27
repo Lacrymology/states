@@ -24,8 +24,8 @@ salt_archive_timestamp
 
 Check last archive synchronization time stamp.
 
-Conditional
------------
+Optional
+--------
 
 Only use if :ref:`pillar-salt_archive-ssl` is turned on.
 

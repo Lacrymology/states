@@ -26,6 +26,7 @@ Author: Dang Tung Lam <lam@robotinfra.com>
 Maintainer: Van Pham Diep <favadi@robotinfra.com>
 -#}
 {%- from 'upstart/rsyslog.jinja2' import manage_upstart_log with context -%}
+{%- set ssl = salt['pillar.get']('etherpad:ssl', False) %}
 include:
   - apt
   - debian.package_build
@@ -35,7 +36,7 @@ include:
   - postgresql.server
   - python.dev
   - rsyslog
-{%- if salt['pillar.get']('etherpad:ssl', False) %}
+{%- if ssl %}
   - ssl
 {%- endif %}
 {#- Etherpad depends on libssl-dev #}
@@ -238,10 +239,14 @@ etherpad:
     - watch_in:
       - service: nginx
 
-{%- if salt['pillar.get']('etherpad:ssl', False) %}
+{%- if ssl %}
 extend:
+  nginx.conf:
+    file:
+      - context:
+          ssl: {{ ssl }}
   nginx:
     service:
       - watch:
-        - cmd: ssl_cert_and_key_for_{{ salt['pillar.get']('etherpad:ssl', False) }}
+        - cmd: ssl_cert_and_key_for_{{ ssl }}
 {%- endif %}

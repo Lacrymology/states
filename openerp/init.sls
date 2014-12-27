@@ -26,6 +26,8 @@ Author: Lam Dang Tung <lam@robotinfra.com>
 Maintainer: Van Diep Pham <favadi@robotinfra.com>
 -#}
 {%- from 'upstart/rsyslog.jinja2' import manage_upstart_log with context -%}
+{%- set ssl = salt['pillar.get']('openerp:ssl', False) %}
+
 include:
   - build
   - openldap.dev
@@ -35,7 +37,7 @@ include:
   - python.dev
   - python.pillow
   - rsyslog
-{%- if salt['pillar.get']('openerp:ssl', False) %}
+{%- if ssl %}
   - ssl
 {%- endif %}
   - ssl.dev
@@ -273,8 +275,8 @@ openerp-uwsgi:
     - require:
       - pkg: nginx
       - file: openerp-uwsgi
-{%- if salt['pillar.get']('openerp:ssl', False) %}
-      - cmd: ssl_cert_and_key_for_{{ salt['pillar.get']('openerp:ssl', False) }}
+{%- if ssl %}
+      - cmd: ssl_cert_and_key_for_{{ ssl }}
 {%- endif %}
     - watch_in:
       - service: nginx
@@ -282,6 +284,12 @@ openerp-uwsgi:
         web_root_dir: {{ web_root_dir }}
 
 extend:
+{% if ssl %}
+  nginx.conf:
+    file:
+      - context:
+          ssl: {{ ssl }}
+{% endif %}
   web:
     user:
       - groups:

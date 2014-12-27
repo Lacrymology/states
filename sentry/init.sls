@@ -27,6 +27,8 @@ Maintainer: Van Pham Diep <favadi@robotinfra.com>
 
 Install a Sentry (error management and reporting tool) web server.
 -#}
+{%- set ssl = salt['pillar.get']('sentry:ssl', False) %}
+
 include:
   - apt
   - bash
@@ -38,7 +40,7 @@ include:
   - python.dev
   - memcache
   - rsyslog
-{% if salt['pillar.get']('sentry:ssl', False) %}
+{% if ssl %}
   - ssl
 {% endif %}
 {% if salt['pillar.get']('graphite_address', False) %}
@@ -254,10 +256,14 @@ sentry_collectstatic:
       - file: sentry_settings
       - module: sentry
 
-{% if salt['pillar.get']('sentry:ssl', False) %}
+{% if ssl %}
 extend:
+  nginx.conf:
+    file:
+      - context:
+          ssl: {{ ssl }}
   nginx:
     service:
       - watch:
-        - cmd: ssl_cert_and_key_for_{{ salt['pillar.get']('sentry:ssl', False) }}
+        - cmd: ssl_cert_and_key_for_{{ ssl }}
 {% endif %}

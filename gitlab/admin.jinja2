@@ -32,7 +32,7 @@ GitLab Administrator Config
 password = ENV['GITLAB_ROOT_PASSWORD']
 
 admin = User.create(
-  email: "{{ salt['pillar.get']('gitlab:admin:email', salt['pillar.get']('smtp:from')) }}",
+  email: "{{ salt['pillar.get']('gitlab:admin:email', False)|default(salt['pillar.get']('smtp:from'), boolean=True) }}",
   name: "Administrator",
   username: 'root',
   password: password,

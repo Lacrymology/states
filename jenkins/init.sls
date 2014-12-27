@@ -27,6 +27,8 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
             Quan Tong Anh <quanta@robotinfra.com>
 -#}
 {%- from 'macros.jinja2' import manage_pid with context %}
+{%- set ssl = salt['pillar.get']('jenkins:ssl', False) %}
+
 include:
   - apt
   - cron
@@ -35,7 +37,7 @@ include:
   - nginx
   - pysc
   - ssh.client
-{% if salt['pillar.get']('jenkins:ssl', False) %}
+{% if ssl %}
   - ssl
 {% endif %}
 
@@ -129,12 +131,16 @@ jenkins_old_version:
       - pkg: cron
       - module: pysc
 
-{% if salt['pillar.get']('jenkins:ssl', False) %}
+{% if ssl %}
 extend:
 {%- from 'macros.jinja2' import change_ssh_key_owner with context %}
 {{ change_ssh_key_owner('jenkins', {'pkg': 'jenkins'}) }}
+  nginx.conf:
+    file:
+      - context:
+          ssl: {{ ssl }}
   nginx:
     service:
       - watch:
-        - cmd: ssl_cert_and_key_for_{{ salt['pillar.get']('jenkins:ssl', False) }}
+        - cmd: ssl_cert_and_key_for_{{ ssl }}
 {% endif %}

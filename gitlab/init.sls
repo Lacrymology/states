@@ -25,6 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Van Diep Pham <favadi@robotinfra.com>
 Maintainer: Van Diep Pham <favadi@robotinfra.com>
 -#}
+{%- set ssl = salt['pillar.get']('gitlab:ssl', False) %}
 include:
   - apt
   - build
@@ -37,7 +38,7 @@ include:
   - rsyslog
   - ruby.2
   - ssh.server
-{%- if salt['pillar.get']('gitlab:ssl', False) %}
+{%- if ssl %}
   - ssl
 {%- endif %}
   - ssl.dev
@@ -370,8 +371,8 @@ gitlab-uwsgi:
       - pkg: nginx
       - user: web
       - file: gitlab-uwsgi
-{%- if salt['pillar.get']('gitlab:ssl', False) %}
-      - cmd: ssl_cert_and_key_for_{{ salt['pillar.get']('gitlab:ssl', False) }}
+{%- if ssl %}
+      - cmd: ssl_cert_and_key_for_{{ ssl }}
 {%- endif %}
     - watch_in:
       - service: nginx
@@ -448,10 +449,14 @@ gitlab_precompile_assets:
     - require:
       - user: gitlab
 
-{%- if salt['pillar.get']('gitlab:ssl', False) %}
+{%- if ssl %}
 extend:
+  nginx.conf:
+    file:
+      - context:
+          ssl: {{ ssl }}
   nginx:
     service:
       - watch:
-        - cmd: ssl_cert_and_key_for_{{ salt['pillar.get']('gitlab:ssl', False) }}
+        - cmd: ssl_cert_and_key_for_{{ ssl }}
 {%- endif %}

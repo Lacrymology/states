@@ -33,7 +33,12 @@ apt_cache:
       - service: nginx
 
 {%- if ssl %}
+
 extend:
+  nginx.conf:
+    file:
+      - context:
+          ssl: {{ ssl }}
   nginx:
     service:
       - watch:

@@ -147,6 +147,10 @@ shinken-broker:
 
 {% if ssl %}
 extend:
+  nginx.conf:
+    file:
+      - context:
+          ssl: {{ ssl }}
   nginx:
     service:
       - watch:

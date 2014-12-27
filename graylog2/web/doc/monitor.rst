@@ -29,8 +29,8 @@ Monitor :doc:`/graylog2/web/doc/index` web HTTP ``9000/tcp``.
 
 Expect return code: ``303 See Other`` (redirect to login page).
 
-Conditional
------------
+Optional
+--------
 
 Only use if :ref:`pillar-graylog2-ssl` is turned on.
 

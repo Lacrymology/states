@@ -29,6 +29,8 @@ Setup a Salt API REST server.
 -#}
 {%- from 'upstart/rsyslog.jinja2' import manage_upstart_log with context -%}
 {%- set api_version = '0.8.4' -%}
+{%- set ssl = salt['pillar.get']('salt_api:ssl', False) %}
+
 include:
   - git
   - local
@@ -36,7 +38,7 @@ include:
   - pip
   - rsyslog
   - salt.master
-{% if salt['pillar.get']('salt_api:ssl', False) %}
+{% if ssl %}
   - ssl
 {% endif %}
 
@@ -177,10 +179,14 @@ salt_api_old_version:
       - pkg: salt-api
 {%- endif %}
 
-{% if salt['pillar.get']('salt_api:ssl', False) %}
+{% if ssl %}
 extend:
+  nginx.conf:
+    file:
+      - context:
+          ssl: {{ ssl }}
   nginx:
     service:
       - watch:
-        - cmd: ssl_cert_and_key_for_{{ salt['pillar.get']('salt_api:ssl', False) }}
+        - cmd: ssl_cert_and_key_for_{{ ssl }}
 {% endif %}

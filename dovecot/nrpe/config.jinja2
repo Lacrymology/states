@@ -26,19 +26,19 @@ Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
 {%- set timeout = 30 -%}
-dovecot_config:
+dovecot_config_procs:
   description: Dovecot Config daemon
   command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -u root -a 'dovecot/config' -C config"
 
-dovecot_log:
+dovecot_log_procs:
   description: Dovecot Logger
   command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -u root -a 'dovecot/log' -C log"
 
-dovecot_procs:
+dovecot_master_procs:
   description: Dovecot Master
   command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -u root -C dovecot'
 
-dovecot_anvil:
+dovecot_anvil_procs:
   description: Dovecot Users connection tracker
   command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -u dovecot -a 'dovecot/anvil' -C anvil"
 
@@ -57,6 +57,13 @@ dovecot_port_pop3s:
   dependencies:
     - dovecot_procs
 
+dovecot_spop:
+  description: Dovecot SPOP3
+  command: /usr/lib/nagios/plugins/check_spop -H 127.0.0.1 -p 995 -t {{ timeout }}
+  timeout: {{ timeout }}
+  dependencies:
+    - dovecot_port_pop3s
+
 dovecot_simap:
   description: Dovecot SIMAP
   command: /usr/lib/nagios/plugins/check_simap -H 127.0.0.1 -p 993 -t {{ timeout }}
@@ -66,7 +73,7 @@ dovecot_simap:
 {%- endif %}
 
 dovecot_port_imap:
-  description: Dovecot IMAPS Port
+  description: Dovecot IMAP Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 143 -t {{ timeout }}
   timeout: {{ timeout }}
   dependencies:
@@ -85,6 +92,13 @@ dovecot_port_pop3:
   timeout: {{ timeout }}
   dependencies:
     - dovecot_procs
+
+dovecot_pop:
+  description: Dovecot POP
+  command: /usr/lib/nagios/plugins/check_pop -H 127.0.0.1 -p 110 -t {{ timeout }}
+  timeout: {{ timeout }}
+  dependencies:
+    - dovecot_port_pop3
 
 dovecot_managesieve_port:
   description: Dovecot Managesieve Port

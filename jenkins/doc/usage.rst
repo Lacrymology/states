@@ -4,7 +4,8 @@ Usage
 Follow the generic logic of pillar, apply formula and run checks, then perform
 the followings.
 
-First go in one of the hostname you specified at ``jenkins:hostnames``.
+Firstly, access one of the hostname that was specified at
+:ref:`pillar-jenkins-hostnames` to access :doc:`/jenkins/doc/index` web UI.
 
 Things you **should** do
 ------------------------
@@ -21,3 +22,32 @@ Things you **should** do
 - Raise number of executor (``# of executors``) to large value such as ``20``.
 - Set ``Jenkins URL`` to first value of ``jenkins:hostnames``.
 - Configure SMTP to send email for build status change.
+
+Useful plugins
+--------------
+
+.. note::
+
+  all paths such as ``/log/all``, ``/configure`` are parts of URL after
+  address of running :doc:`/jenkins/doc/index` server.
+
+jabber
+~~~~~~
+
+`jabber <https://wiki.jenkins-ci.org/display/JENKINS/Jabber+Plugin>`__
+enables Jenkins to send build notifications via Jabber, as well as let users
+talk to Jenkins via a 'bot' to run commands, query build status etc...
+Jabber is also know as XMPP, an Jabber server can be installed using formula
+:doc:`/ejabberd/doc/index`. After installing this plugin,
+:doc:`/jenkins/doc/index` needs to restart. For troubleshooting, look at
+``/log/all``.
+
+Configure Jabber through ``/configure``, check ``Enable Jabber Notification``
+fill in Jabber ID and password, server, port should suffice to make it work.
+Additional configuration (such as setup jabber bot, choosing room to join,
+...) can be made after choosing ``Advanced...`` button in this section.
+Then, in each CI build configuration, choose ``Add post-build action``, then
+``Jabber notification``, fill in the Jabber ID whom should receive notify
+for the build job status.
+
+Written at ``Jenkins ver. 1.545`` and plugin ``jabber 1.25``.

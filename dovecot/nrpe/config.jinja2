@@ -57,6 +57,13 @@ dovecot_port_pop3s:
   dependencies:
     - dovecot_procs
 
+dovecot_spop:
+  description: Dovecot SPOP3
+  command: /usr/lib/nagios/plugins/check_spop -H 127.0.0.1 -p 995 -t {{ timeout }}
+  timeout: {{ timeout }}
+  dependencies:
+    - dovecot_port_pop3s
+
 dovecot_simap:
   description: Dovecot SIMAP
   command: /usr/lib/nagios/plugins/check_simap -H 127.0.0.1 -p 993 -t {{ timeout }}
@@ -85,6 +92,13 @@ dovecot_port_pop3:
   timeout: {{ timeout }}
   dependencies:
     - dovecot_procs
+
+dovecot_pop:
+  description: Dovecot POP
+  command: /usr/lib/nagios/plugins/check_pop -H 127.0.0.1 -p 110 -t {{ timeout }}
+  timeout: {{ timeout }}
+  dependencies:
+    - dovecot_port_pop3
 
 dovecot_managesieve_port:
   description: Dovecot Managesieve Port

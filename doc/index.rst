@@ -7,6 +7,7 @@ Welcome to Infrastructure Documentation:
 
     intro
     usage
+    license
     pillar
     state
     install

@@ -4,7 +4,8 @@ Usage
 Follow the generic logic of pillar, apply formula and run checks, then perform
 the followings.
 
-First go in one of the hostname you specified at ``jenkins:hostnames``.
+Firstly, access one of the hostname that was specified at
+:ref:`pillar-jenkins-hostnames` to access :doc:`/jenkins/doc/index` web UI.
 
 Things you **should** do
 ------------------------

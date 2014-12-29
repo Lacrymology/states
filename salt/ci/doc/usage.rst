@@ -3,6 +3,11 @@ Usage
 
 .. TODO: FIX
 
+.. note::
+
+  consults :doc:`/jenkins/doc/usage` for configure :doc:`/jenkins/doc/index`
+  guide.
+
 Notice
 ------
 

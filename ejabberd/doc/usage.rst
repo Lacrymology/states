@@ -1,10 +1,29 @@
 Usage
 =====
 
-After the installation is finished, you can login and modify all the
-settings in :doc:`/ejabberd/doc/index` web administrator interface at
-`http(s)://im.example.com/admin` (as specify in pillar key
-:ref:`pillar-ejabberd-hostnames`).
+.. _ejabberd-login_admin:
+
+Login administrative interface
+------------------------------
+
+After the installation is finished, you can change all settings in
+:doc:`/ejabberd/doc/index` web administrator interface by login in
+one of the :ref:`pillar-ejabberd-hostnames` in ``/admin`` path.
+Use the credential defined in :ref:`pillar-ejabberd-admins`.
+
+.. warning::
+
+  For security reason, it's suggested to change password after installation.
+
+.. _ejabberd-usage-user_creation:
+
+User creation
+-------------
+
+#. :ref:`ejabberd-login_admin`
+#. Go in ``Virtual Hosts``  (``/admin/vhosts/``), pick one.
+#. Go in ``Users`` sub-section (``/admin/server/{{ vhost }}/users/``).
+#. Fill ``User`` and ``Password``, save.
 
 Client Configuration
 --------------------

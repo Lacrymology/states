@@ -48,7 +48,7 @@ XMPP Integration
 .. note::
 
   This plugin is configured **per project**, so different alerts can be sent to
-  different chat room, these steps are required for each projects.
+  different conference room, these steps are required for each projects.
 
 #. Create :doc:`/ejabberd/doc/index` user for :doc:`/sentry/doc/index`, look in
    :ref:`ejabberd-usage-user_creation` for details.
@@ -65,9 +65,8 @@ XMPP Integration
 #. Set ``Password`` , ``Nick`` that should be same username as in ``Jid``, the
    prefix before ``@``.
 #. Fill ``Room`` and ``Room Password`` if required.
-#. Save, perform same operations in all other projects.
+#. Save, perform same operations in all other project.
 
 .. warning::
 
-  If the room is on invitation only, don't forget to add the new user to your
-  buddy list and invite it to the room.
+  If the room is on invitation only, don't forget to invite it to the room.

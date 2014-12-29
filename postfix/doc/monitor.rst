@@ -51,13 +51,10 @@ postfix_port_smtp
 :doc:`/postfix/doc/index` `SMTP <http://en.wikipedia.org/wiki/Simple_Mail_Transfer_Protocol>`__
 Port is listening locally.
 
-.. _monitor-postfix_port_smtps:
+postfix_queue_length
+~~~~~~~~~~~~~~~~~~~~
 
-postfix_port_smtps
-~~~~~~~~~~~~~~~~~~
-
-:doc:`/postfix/doc/index` SMTP Port over :doc:`/ssl/doc/index` is listening
-locally.
+Check the number of messages in the :doc:`/postfix/doc/index` queue.
 
 .. include:: /backup/doc/monitor.inc
 
@@ -74,3 +71,13 @@ postfix_port_spam_handler
 `Postfix SPAM handler port <http://www.ijs.si/software/amavisd/README.postfix.txt>`__
 is listening locally.
 Only check if :ref:`pillar-postfix-spam_filter` enabled.
+
+.. _monitor-postfix_port_smtps:
+
+postfix_port_smtps
+~~~~~~~~~~~~~~~~~~
+
+:doc:`/postfix/doc/index` SMTP Port over :doc:`/ssl/doc/index` is listening
+locally.
+
+Only check if :ref:`pillar-postfix-ssl` is turned on.

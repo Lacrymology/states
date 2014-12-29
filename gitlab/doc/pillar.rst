@@ -277,13 +277,8 @@ Default: disable :doc:`/openldap/doc/pillar` integration (``False``).
 gitlab:smtp
 ~~~~~~~~~~~
 
-Override following SMTP settings.
-
-Default: Unused (``False``)
-
 .. include:: /mail/doc/smtp.inc
 
-<<<<<<< HEAD
 .. _pillar-gitlab-smtp-from:
 
 gitlab:smtp:from
@@ -292,16 +287,6 @@ gitlab:smtp:from
 The address that will appear in the "From:" field of the email sent by GitLab.
 
 Default: Use the value of :ref:`pillar-smtp-from` (``False``).
-=======
-gitlab:smtp:from
-~~~~~~~~~~~~~~~~
-
-The address that will appear in the "From:" field of the email sending from
-GitLab.
-
-Default: Got value from :ref:`pillar-smtp-from` pillar key
-(``salt['pillar.get']('smtp:from')``)
->>>>>>> erp2041: fix the remaining doc errors
 
 .. _pillar-gitlab-db-password:
 

@@ -47,3 +47,32 @@ lastone `Role`.
 Note that if you want to user has full permission. Click choose Admin on `Role`.
 Or you only want user has permission read permission. Let choose Reader on
 `Role`.
+
+Stream
+------
+
+For creating :doc:`/graylog2/doc/index` streams, see the `official
+documentation
+<https://www.graylog2.org/resources/documentation/general/streams>`__.
+
+We predefined two streams for two common errors:
+
+* Out of memory:
+
+  * level must be smaller than `5`
+
+    Messages with log levels: warn, err, crit, alert, emerg
+
+  * message must match regular expression `(?i)(\boom\b|out of memory)`
+
+    Messages must contains `oom` or `out of memory` string (case insensitive).
+
+* Shinken Errors:
+
+  * source must match regular expression `shinken.+`
+
+    Source name must start with `shinken` string.
+
+  * level must be smaller than `4`
+
+    Messages with log levels: err, crit, alert, emerg

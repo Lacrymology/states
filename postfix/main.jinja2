@@ -51,7 +51,7 @@ readme_directory = no
 {%- set postfix_ssl = salt['pillar.get']('postfix:ssl', False) %}
 {%- set sasl_authen = salt['pillar.get']('postfix:allow_remote_client', False) %}
 {%- if postfix_ssl %}
-{#- TLS parameters -#}
+{#- TLS parameters #}
 smtpd_tls_mandatory_protocols=!SSLv2, !SSLv3
 smtpd_tls_cert_file=/etc/ssl/certs/{{ postfix_ssl }}_chained.crt
 smtpd_tls_key_file=/etc/ssl/private/{{ postfix_ssl }}.key

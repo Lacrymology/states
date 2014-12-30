@@ -131,9 +131,6 @@ def test(name, map):
             else:
                 ret['comment'] = '{0}: {1} is not collected'.format(
                     collector, fullpath)
-
-        if not change:
-            ret['result'] = False
-            return ret
+                ret['result'] = False
 
     return ret

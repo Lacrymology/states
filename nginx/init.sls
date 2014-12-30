@@ -129,7 +129,7 @@ nginx_dependencies:
       - pkg: ssl-dev
       - cmd: apt_sources
 
-{%- set version = '1.7.4' %}
+{%- set version = '1.7.9' %}
 {%- set sub_version = '{0}-1~{1}'.format(version, grains['lsb_distrib_codename']) %}
 {%- set filename = 'nginx_{0}_{1}.deb'.format(sub_version, grains['debian_arch']) %}
 
@@ -165,11 +165,12 @@ nginx:
 {%- if not salt['pillar.get']('sentry_dsn', False) %}
       - pkg: ssmtp
 {%- endif %}
+{%- set files_archive = salt['pillar.get']('files_archive', False) %}
   pkg:
     - installed
     - sources:
-{%- if salt['pillar.get']('files_archive', False) %}
-      - nginx: {{ salt['pillar.get']('files_archive', False)|replace('file://', '')|replace('https://', 'http://') }}/mirror/{{ filename }}
+{%- if files_archive %}
+      - nginx: {{ files_archive|replace('file://', '')|replace('https://', 'http://') }}/mirror/{{ filename }}
 {%- else %}
       - nginx: http://nginx.org/packages/mainline/ubuntu/pool/nginx/n/nginx/{{ filename }}
 {%- endif %}

@@ -38,22 +38,6 @@ in :doc:`/nginx/doc/index` log file.
 
 Default: ``$scheme://$host:$server_port$uri$is_args$args $remote_addr:$remote_user "$request" $request_time $request_length:$bytes_sent $status "$http_referer" "$http_user_agent" "$http_x_forwarded_for"``
 
-.. _pillar-nginx-redirect_numeric_ip:
-
-nginx:redirect_numeric_ip
-~~~~~~~~~~~~~~~~~~~~~~~~~
-
-URL where connection to this host using the numeric IP
-(such as ``http://1.2.3.4``) get permanently redirected to.
-
-This affect all resources under that URL, not only the root (``/``).
-
-This is mostly used to trick bot to go elsewhere.
-
-Suggested value is ``http://www.google.com``.
-
-Default: Do not redirect (``False``).
-
 .. _pillar-nginx-client_body_buffer_size:
 
 nginx:client_body_buffer_size
@@ -73,3 +57,24 @@ nginx:gzip_compression
 Gzip compression level: from ``1`` to ``9``.
 
 Default: level ``6``.
+
+Conditional
+-----------
+
+.. _pillar-nginx-redirect_numeric_ip:
+
+nginx:redirect_numeric_ip
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+URL where connection to this host using the numeric IP
+(such as ``http://1.2.3.4``) get permanently redirected to.
+
+This affect all resources under that URL, not only the root (``/``).
+
+This is mostly used to trick bot to go elsewhere.
+
+Suggested value is ``http://www.google.com``.
+
+Default: Do not redirect (``False``).
+
+Only use if the pillar key `{{ app }}:ssl` is turned on.

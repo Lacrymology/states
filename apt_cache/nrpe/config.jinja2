@@ -11,4 +11,19 @@ apt_cache_port:
     - apt_cache_procs
 
 {%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
-{{ nginx_instance('apt_cache', extra_dependencies=('apt_cache_port',), http_result="404 OK", https_result="404 OK") }}
+{#-
+curl -I http://localhost:3142
+
+Precise:
+  HTTP/1.1 404 OK
+  Connection: close
+  Content-Type: text/html
+  Content-Length: 4144
+
+Trusty:
+  HTTP/1.1 404 Usage Information
+  Connection: close
+  Content-Type: text/html
+  Content-Length: 4145
+  #}
+{{ nginx_instance('apt_cache', extra_dependencies=('apt_cache_port',), http_result="404", https_result="404") }}

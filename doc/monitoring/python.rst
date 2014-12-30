@@ -177,7 +177,7 @@ file for your formula's nrpe checks. The following is an excerpt of
 
 .. literalinclude:: /salt/master/backup/nrpe/config.jinja2
    :language: yaml
-   :lines: 32-
+   :lines: 12-
    :emphasize-lines: 6-8
 
 Further customization

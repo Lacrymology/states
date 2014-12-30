@@ -76,9 +76,10 @@ smtpd_sasl_path = private/auth
 smtpd_sasl_security_options = noanonymous
 smtpd_recipient_restrictions = permit_mynetworks, permit_sasl_authenticated, reject_unauth_destination
 {%- endif %}
+{%- set alias_domains = salt['pillar.get']('postfix:alias_domains', ['$virtual_alias_maps']) %}
 {%- if salt['pillar.get']('postfix:aliases', False) %}
 virtual_alias_maps = hash:/etc/postfix/virtual
-virtual_alias_domains = {%- for i in salt['pillar.get']('postfix:alias_domains', ['$virtual_alias_maps']) %} {{ i }}{%- endfor %}
+virtual_alias_domains = {%- for i in alias_domains %} {{ i }}{%- endfor %}
 {%- endif %}
 {%- if salt['pillar.get']('postfix:domains', [])|length > 0 %}
 virtual_mailbox_domains = {%- for i in salt['pillar.get']('postfix:domains', []) %} {{ i }}{%- endfor %}

@@ -29,6 +29,6 @@ Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 
 enabled = True
 
-host = 127.0.0.1:55672
+host = 127.0.0.1:15672
 user = {{ salt['pillar.get']('rabbitmq:monitor:user') }}
 password = {{ salt['pillar.get']('rabbitmq:monitor:password', None)|default(salt['password.pillar']('rabbitmq:monitor:password'), boolean=True) }}

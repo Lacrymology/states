@@ -55,7 +55,7 @@ python-mysqldb:
 
 mysql-server:
   pkg:
-    - installed
+    - latest
     - name: mariadb-server
     - require:
       - pkgrepo: mariadb

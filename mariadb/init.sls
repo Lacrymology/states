@@ -26,11 +26,12 @@ Creating mariadb mirror:
     find pool/ \( -type f -name '*.deb' ! \( -name '*precise*' -or -name '*trusty*' \) \) -delete
 #}
 
+{%- set files_archive = salt['pillar.get']('files_archive', False) %}
+
 mariadb:
   pkgrepo:
     - managed
     - key_url: salt://mariadb/key.gpg
-{%- set files_archive = salt['pillar.get']('files_archive', False) %}
 {%- if files_archive %}
     - name: deb {{ files_archive|replace('https://', 'http://') }}/mirror/mariadb/5.5.41 {{ grains['lsb_distrib_codename'] }} main
 {%- else %}
@@ -49,6 +50,6 @@ mariadb:
 
 mysql-common:
   pkg:
-    - installed
+    - latest
     - require:
       - pkgrepo: mariadb

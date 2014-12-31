@@ -7,12 +7,13 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
 # {{ salt['pillar.get']('message_do_not_modify') }}
 {%- set home = salt['user.info']('salt_archive')['home'] -%}
-{%- if salt['pillar.get']('salt_archive:source', False) %}
+{%- set source = salt['pillar.get']('salt_archive:source', False) %}
+{%- if source %}
 */15 * * * * root /usr/local/bin/salt_archive_sync.sh
 {%- else %}
 0 0 * * * root /usr/local/bin/salt_archive_clamav.py
 {%- endif -%}
-{%- if not salt['pillar.get']('salt_archive:source', False) %}
+{%- if not source %}
 {#- make sure everything is owner root:salt_archive #}
 0 * * * * root find {{ home }}/* ! -user root -exec chown root {} \;
 0 * * * * root find {{ home }}/* ! -group salt_archive -exec chgrp salt_archive {} \;

@@ -8,8 +8,9 @@ Maintainer: Van Pham Diep <favadi@robotinfra.com>
 # {{ salt['pillar.get']('message_do_not_modify') }}
 
 # Heap Size (defaults to 256m min, 1g max)
-{% if salt['pillar.get']('elasticsearch:heap_size', False) %}
-ES_HEAP_SIZE={{ salt['pillar.get']('elasticsearch:heap_size', False) }}
+{%- set heap_size = salt['pillar.get']('elasticsearch:heap_size', False) %}
+{% if heap_size %}
+ES_HEAP_SIZE={{ heap_size }}
 # Maximum locked memory size. Set to "unlimited" if you use the
 # bootstrap.mlockall option in elasticsearch.yml. You must also set
 # ES_HEAP_SIZE.

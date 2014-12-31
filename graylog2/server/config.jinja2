@@ -53,8 +53,9 @@ This will be promoted in the cluster discovery APIs and other nodes may try to c
 address. (see rest_listen_uri)
 rest_transport_uri = http://192.168.1.1:12900/
 #}
-{%- if salt['pillar.get']('graylog2:rest_transport_uri', None) %}
-rest_transport_uri = salt['pillar.get']('graylog2:rest_transport_uri', None)
+{%- set rest_transport_uri = salt['pillar.get']('graylog2:rest_transport_uri', None) %}
+{%- if rest_transport_uri %}
+rest_transport_uri = rest_transport_uri
 {%-  endif %}
 
 {#-

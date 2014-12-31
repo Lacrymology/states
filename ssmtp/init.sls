@@ -23,12 +23,13 @@ ssmtp:
     - set
     - data:
         'ssmtp/mailhub': {'type': 'string', 'value': '{{ salt['pillar.get']('smtp:server') }}'}
-        'ssmtp/hostname': {'type': 'string', 'value': '{{ salt['pillar.get']('mail:mailname') }}'}
+{%- set mailname = salt['pillar.get']('mail:mailname') %}
+        'ssmtp/hostname': {'type': 'string', 'value': '{{ mailname }}'}
         'ssmtp/root': {'type': 'string', 'value': '{{ salt['pillar.get']('smtp:root') }}'}
         'ssmtp/rewritedomain': {'type': 'string', 'value': ''}
         {# unused by the package itself, why? #}
         'ssmtp/overwriteconfig': {'type': 'boolean', 'value': False}
-        'ssmtp/mailname': {'type': 'string', 'value': '{{ salt['pillar.get']('mail:mailname') }}'}
+        'ssmtp/mailname': {'type': 'string', 'value': '{{ mailname }}'}
         'ssmtp/port': {'type': 'string', 'value': '{{ salt['pillar.get']('smtp:port') }}'}
         'ssmtp/fromoverride': {'type': 'boolean', 'value': False}
     - require:

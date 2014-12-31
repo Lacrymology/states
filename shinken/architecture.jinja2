@@ -32,7 +32,8 @@ define arbiter {
     {%- if not loop.first %}
     spare 1
     {%- endif %}
-    {%- if salt['pillar.get']('shinken:ssl', False) %}
+{%- set ssl = salt['pillar.get']('shinken:ssl', False) %}
+    {%- if ssl %}
     use_ssl 1
     {%- endif %}
 }
@@ -70,7 +71,7 @@ define scheduler {
 {#-    # Skip initial broks creation. Boot fast, but some broker modules won't-#}
 {#-    # work with it!-#}
 {#-   skip_initial_broks 0#}
-    {%- if salt['pillar.get']('shinken:ssl', False) %}
+    {%- if ssl %}
     use_ssl 1
     {%- endif %}
 }
@@ -106,7 +107,7 @@ define poller {
     poller_tags {{ salt['pillar.get']('shinken:architecture:poller:' + id) }}
     realm All
     modules booster-nrpe
-    {%- if salt['pillar.get']('shinken:ssl', False) %}
+    {%- if ssl %}
     use_ssl 1
     {%- endif %}
 }
@@ -127,10 +128,12 @@ Description: The broker is responsible for:
   - Command interface
 http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects/broker
 -#}
-{%- for id in salt['pillar.get']('shinken:architecture:broker') -%}
+{%- set broker = salt['pillar.get']('shinken:architecture:broker') %}
+{%- for id in broker -%}
   {%- if id in mine %}
 define broker {
     broker_name broker-{{ id }}
+{%- set graphite_address = salt['pillar.get']('graphite_address', False) %}
     address {{ mine[id]['ip_addrs']['public'] }}
     port 7772
     modules Syslog, PickleRetentionBroker, webui{% if salt['pillar.get']('graphite_address', False) %}, graphite{% endif %}
@@ -195,7 +198,7 @@ define module {
 define module {
     module_name webui
     module_type webui
-{%- if salt['pillar.get']('shinken:architecture:broker')|length == 1 %}
+{%- if broker|length == 1 %}
     host 127.0.0.1
 {%- else %}
     host 0.0.0.0

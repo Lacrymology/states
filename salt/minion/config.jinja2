@@ -7,8 +7,9 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
 # {{ salt['pillar.get']('message_do_not_modify') }}
 
-{%- if salt['pillar.get']('salt:master', False) %}
-master: {{ salt['pillar.get']('salt:master', False) }}
+{%- set master = salt['pillar.get']('salt:master', False) %}
+{%- if master %}
+master: {{ master }}
 {%- else %}{# master-less #}
 file_roots:
   base:
@@ -24,8 +25,9 @@ mine_functions:
   monitoring.data: []
 {%- endif %}
 
-{%- if salt['pillar.get']('sentry_dsn', False) %}
-sentry_common: {{ salt['pillar.get']('sentry_dsn', False) }}
+{%- set sentry_dsn = salt['pillar.get']('sentry_dsn', False) %}
+{%- if sentry_dsn %}
+sentry_common: {{ sentry_dsn }}
 sentry_handler:
-  dsn: requests+{{ salt['pillar.get']('sentry_dsn', False) }}
+  dsn: requests+{{ sentry_dsn }}
 {%- endif %}

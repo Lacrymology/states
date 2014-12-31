@@ -19,7 +19,8 @@ git-server:
     - require:
       - pkg: git
 
-{% for key in salt['pillar.get']('git-server:keys') %}
+{%- set keys = salt['pillar.get']('git-server:keys') %}
+{% for key in keys %}
 git_server_{{ key }}:
   ssh_auth:
     - present
@@ -27,7 +28,7 @@ git_server_{{ key }}:
     - user: git
     - require:
       - user: git-server
-    - enc: {{ salt['pillar.get']('git-server:keys')[key] }}
+    - enc: {{ keys[key] }}
 {% endfor %}
 
 {% for repository in salt['pillar.get']('git-server:repositories') %}

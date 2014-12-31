@@ -32,7 +32,8 @@ Maintainer: Quan Tong Anh <quanta@robotinfra.com>
   description: {{ deployment|capitalize }} NGINX HTTP Protocol
   command: /usr/lib/nagios/plugins/check_http -H {{ domain_name }} -u {{ http_uri }} -p {{ http_port }} -e '{{ http_result }}' -I {{ first_ip }}
     {%- if timeout %} --timeout={{ timeout }}{% endif -%}
-    {%- if salt['pillar.get']('__test__', False) %} -v{%- endif -%}
+{%- set __test__ = salt['pillar.get']('__test__', False) %}
+    {%- if __test__ %} -v{%- endif -%}
     {%- if timeout %}
   timeout: {{ timeout }}
     {%- endif %}
@@ -54,7 +55,7 @@ Maintainer: Quan Tong Anh <quanta@robotinfra.com>
   description: {{ deployment|capitalize }} NGINX HTTPS Protocol
   command: /usr/lib/nagios/plugins/check_http -S -H {{ domain_name }} -u {{ https_uri }} -e '{{ https_result }}' -I {{ first_ip }}
         {%- if timeout %} --timeout={{ timeout }}{% endif -%}
-        {%- if salt['pillar.get']('__test__', False) %} -v{%- endif %}
+        {%- if __test__ %} -v{%- endif %}
     {%- if timeout %}
   timeout: {{ timeout }}
     {%- endif -%}
@@ -74,7 +75,7 @@ Maintainer: Quan Tong Anh <quanta@robotinfra.com>
   freshness_threshold: {{ ((24 * 60) + 10) * 60 }} {#- 24 hours + 10 minutes #}
   command: /usr/lib/nagios/plugins/check_http -S -H {{ domain_name }} -C {{ salt['pillar.get']('ssl:expiry_days', 15) }} -I {{ first_ip }}
         {%- if timeout %} --timeout={{ timeout }}{% endif -%}
-        {%- if salt['pillar.get']('__test__', False) %} -v{%- endif %}
+        {%- if __test__ %} -v{%- endif %}
     {%- if timeout %}
   timeout: {{ timeout }}
     {%- endif %}

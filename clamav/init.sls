@@ -87,7 +87,8 @@ clamav-daemon:
 
 /usr/local/bin/clamav-scan.sh:
   file:
-{%- if salt['pillar.get']('clamav:daily_scan', False) %}
+{%- set daily_scan = salt['pillar.get']('clamav:daily_scan', False) %}
+{%- if daily_scan %}
     - managed
     - source: salt://clamav/scan.sh
     - user: root
@@ -104,7 +105,7 @@ clamav-daemon:
 
 /etc/cron.daily/clamav_scan:
   file:
-{%- if salt['pillar.get']('clamav:daily_scan', False) %}
+{%- if daily_scan %}
     - symlink
     - target: /usr/local/bin/clamav-scan.sh
     - user: root
@@ -119,7 +120,7 @@ clamav-daemon:
 
 /var/lib/clamav/last-scan:
   file:
-{%- if salt['pillar.get']('clamav:daily_scan', False) %}
+{%- if daily_scan %}
     - managed
     - require:
       - service: clamav-freshclam

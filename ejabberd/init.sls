@@ -126,8 +126,9 @@ ejabberd_psql:
 {%- set hostname = salt['pillar.get']('ejabberd:hostnames')[0] %}
 {%- set monitor_password = salt['password.generate']('ejabberd_monitor') %}
 
-{%- for user in salt['pillar.get']('ejabberd:admins') %}
-  {%- set password = salt['pillar.get']('ejabberd:admins')[user] %}
+{%- set admins = salt['pillar.get']('ejabberd:admins') %}
+{%- for user in admins %}
+  {%- set password = admins[user] %}
 ejabberd_reg_{{ user }}:
   cmd:
     - wait

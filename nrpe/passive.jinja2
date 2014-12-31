@@ -28,7 +28,8 @@ nsca-{{ formula }}:
       - service: nsca_passive
     - require_in:
 {%- if check_ssl_score -%}
-    {%- if salt['pillar.get'](pillar_prefix ~ ':ssl', False) %}
+    {%- set ssl = salt['pillar.get'](pillar_prefix ~ ':ssl', False) %}
+    {%- if ssl %}
       - file: check_ssl_configuration.py
     {%- endif -%}
 {%- endif %}
@@ -39,7 +40,7 @@ nsca-{{ formula }}:
     - absent
 
 {% if check_ssl_score -%}
-    {%- if salt['pillar.get'](pillar_prefix ~ ':ssl', False) -%}
+    {%- if ssl %}
         {#- manage cron file for sslyze NRPE check consumer -#}
         {%- set domain_name = salt['pillar.get'](pillar_prefix + ':hostnames')[0] if not domain_name -%}
         {%- if domain_name|replace('.', '')|int == 0 -%}

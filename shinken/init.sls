@@ -39,11 +39,12 @@ server, then install from that via ``--local`` option.
 - Re-pack, copy to the archive server
 #}
 shinken-module-{{ module_name }}:
-    {%- if salt['pillar.get']('files_archive', False) %}
+{%- set files_archive = salt['pillar.get']('files_archive', False) %}
+    {%- if files_archive %}
   archive:
     - extracted
     - name: /usr/local/shinken/modules
-    - source: {{ salt['pillar.get']('files_archive', False) }}/mirror/shinken/{{ module_name }}.tar.xz
+    - source: {{ files_archive }}/mirror/shinken/{{ module_name }}.tar.xz
     {%- if caller is defined -%}
         {%- for line in caller().split("\n") %}
 {{ line|trim|indent(4, indentfirst=True) }}
@@ -58,7 +59,7 @@ shinken-module-{{ module_name }}:
   cmd:
     - wait
     - user: shinken
-    {%- if salt['pillar.get']('files_archive', False) %}
+    {%- if files_archive %}
     - name: /usr/local/shinken/bin/shinken install --local /usr/local/shinken/modules/{{ module_name }}
     {%- else %}
     - name: /usr/local/shinken/bin/shinken install {{ module_name }}
@@ -69,7 +70,7 @@ shinken-module-{{ module_name }}:
     - watch:
       - file: /var/lib/shinken/.shinken.ini
       - cmd: shinken
-    {%- if salt['pillar.get']('files_archive', False) %}
+    {%- if files_archive %}
       - archive: shinken-module-{{ module_name }}
     {%- endif %}
 {%- endmacro %}
@@ -163,8 +164,8 @@ shinken:
   archive:
     - extracted
     - name: /usr/local/shinken/src
-{%- if salt['pillar.get']('files_archive', False) %}
-    - source: {{ salt['pillar.get']('files_archive', False) }}/mirror/shinken/{{ version }}.tar.gz
+{%- if files_archive %}
+    - source: {{ files_archive }}/mirror/shinken/{{ version }}.tar.gz
 {%- else %}
     - source: https://pypi.python.org/packages/source/S/Shinken/Shinken-{{ version }}.tar.gz
 {%- endif %}
@@ -277,7 +278,7 @@ shinken{{ suffix }}_python_path:
     - require:
       - user: shinken
 
-{%- if salt['pillar.get']('files_archive', False) %}
+{%- if files_archive %}
     {%- call shinken_install_module('pickle-retention-file-generic') %}
 - source_hash: md5=a5f37f78caa61c92d8de75c20f4bf999
     {%- endcall %}

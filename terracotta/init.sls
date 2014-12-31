@@ -17,8 +17,9 @@ terracotta:
   archive:
     - name: /usr/local
     - extracted
-{%- if salt['pillar.get']('files_archive', False) %}
-    - source: {{ salt['pillar.get']('files_archive', False) }}/mirror/terracotta-{{ version }}.tar.gz
+{%- set files_archive = salt['pillar.get']('files_archive', False) %}
+{%- if files_archive %}
+    - source: {{ files_archive }}/mirror/terracotta-{{ version }}.tar.gz
 {%- else %}
     - source: http://d2zwv9pap9ylyd.cloudfront.net/terracotta-3.7.0.tar.gz
 {%- endif %}

@@ -7,7 +7,8 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
 # {{ salt['pillar.get']('message_do_not_modify') }}
 
-{%- if salt['pillar.get']('graphite_address', False) %}
-carbon.host: {{ salt['pillar.get']('graphite_address', False) }}
+{%- set graphite_address = salt['pillar.get']('graphite_address', False) %}
+{%- if graphite_address %}
+carbon.host: {{ graphite_address }}
 carbon.port: 2003
 {%- endif -%}

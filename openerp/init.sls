@@ -125,7 +125,8 @@ openerp:
       - service: postgresql
   file:
     - name: /etc/init/openerp.conf
-{%- if salt['pillar.get']('openerp:company_db', False) %}
+{%- set company_db = salt['pillar.get']('openerp:company_db', False) %}
+{%- if company_db %}
     - managed
     - source: salt://openerp/upstart.jinja2
     - template: jinja
@@ -142,8 +143,9 @@ openerp:
   archive:
     - extracted
     - name: {{ home }}/
-{%- if salt['pillar.get']('files_archive', False) %}
-    - source: {{ salt['pillar.get']('files_archive', False) }}/mirror/openerp/{{ filename }}.tar.gz
+{%- set files_archive = salt['pillar.get']('files_archive', False) %}
+{%- if files_archive %}
+    - source: {{ files_archive }}/mirror/openerp/{{ filename }}.tar.gz
 {%- else %}
     - source: http://nightly.openerp.com/7.0/nightly/src/{{ filename }}.tar.gz
 {%- endif %}

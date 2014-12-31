@@ -11,10 +11,11 @@ Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 
 upstream shinken-backend {
     ip_hash;
-{%- if salt['pillar.get']('shinken:architecture:broker')|length == 1 %}
+{%- set broker = salt['pillar.get']('shinken:architecture:broker') %}
+{%- if broker|length == 1 %}
     server 127.0.0.1:7767;
 {%- else -%}
-  {%- for host in salt['pillar.get']('shinken:architecture:broker') -%}
+  {%- for host in broker -%}
     {%- if host in mine %}
     server {{ mine[host]['ip_addrs']['private'] }}:7767;
     {%- endif -%}
@@ -27,8 +28,9 @@ server {
 {%- set ssl = salt['pillar.get']('shinken:ssl', False) -%}
 {%- if ssl -%}
   {%- if salt['pillar.get']('shinken:ssl_redirect', False) %}
+{%- set hostnames = salt['pillar.get']('shinken:hostnames') %}
     {# if https, redirect http port 80 to https port 443 #}
-    server_name {% for hostname in salt['pillar.get']('shinken:hostnames') %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+    server_name {% for hostname in hostnames %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
     return 301 https://{{ salt['pillar.get']('shinken:hostnames')[0] }}$request_uri;
 }
 {#- https server #}

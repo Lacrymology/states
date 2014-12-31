@@ -68,8 +68,9 @@ uwsgi_build:
   archive:
     - extracted
     - name: /usr/local
-{%- if salt['pillar.get']('files_archive', False) %}
-    - source: {{ salt['pillar.get']('files_archive', False) }}/mirror/uwsgi-{{ version }}.tar.gz
+{%- set files_archive = salt['pillar.get']('files_archive', False) %}
+{%- if files_archive %}
+    - source: {{ files_archive }}/mirror/uwsgi-{{ version }}.tar.gz
 {%- else %}
     - source: http://projects.unbit.it/downloads/uwsgi-{{ version }}.tar.gz
 {%- endif %}

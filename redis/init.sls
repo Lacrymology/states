@@ -41,10 +41,11 @@ redis:
   pkg:
     - installed
     - sources:
-{%- if salt['pillar.get']('files_archive', False) %}
-      - libjemalloc1: {{ salt['pillar.get']('files_archive', False)|replace('file://', '')|replace('https://', 'http://') }}/mirror/{{ jemalloc }}
-      - redis-server: {{ salt['pillar.get']('files_archive', False)|replace('file://', '')|replace('https://', 'http://') }}/mirror/{{ filename }}
-      - redis-tools: {{ salt['pillar.get']('files_archive', False)|replace('file://', '')|replace('https://', 'http://') }}/mirror/{{ redistools }}
+{%- set files_archive = salt['pillar.get']('files_archive', False) %}
+{%- if files_archive %}
+      - libjemalloc1: {{ files_archive|replace('file://', '')|replace('https://', 'http://') }}/mirror/{{ jemalloc }}
+      - redis-server: {{ files_archive|replace('file://', '')|replace('https://', 'http://') }}/mirror/{{ filename }}
+      - redis-tools: {{ files_archive|replace('file://', '')|replace('https://', 'http://') }}/mirror/{{ redistools }}
 {%- else %}
       - libjemalloc1: http://ppa.launchpad.net/chris-lea/redis-server/ubuntu/pool/main/j/jemalloc/{{ jemalloc }}
       - redis-server: http://ppa.launchpad.net/chris-lea/redis-server/ubuntu/pool/main/r/redis/{{ filename }}

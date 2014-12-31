@@ -21,7 +21,8 @@ djangopypi2_backup_postgres_age:
   timeout: 55
   arguments:
     facility: postgresql-djangopypi2
-    warning: {{ salt['pillar.get']('backup:age', 48) }}
+{%- set age = salt['pillar.get']('backup:age', 48) %}
+    warning: {{ age }}
   dependencies:
     {#- no alert if load is too high #}
     - load_average
@@ -34,7 +35,7 @@ djangopypi2_backup:
   timeout: 55
   arguments:
     facility: djangopypi2
-    warning: {{ salt['pillar.get']('backup:age', 48) }}
+    warning: {{ age }}
   dependencies:
     {#- no alert if load is too high #}
     - load_average

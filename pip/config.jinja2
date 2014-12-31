@@ -8,8 +8,9 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 # {{ salt['pillar.get']('message_do_not_modify') }}
 [global]
 
-{%- if salt['pillar.get']('files_archive', False) %}
-find-links = {{ salt['pillar.get']('files_archive', False) }}/pip/
+{%- set files_archive = salt['pillar.get']('files_archive', False) %}
+{%- if files_archive %}
+find-links = {{ files_archive }}/pip/
     {%- if salt['pillar.get']('pip:allow_pypi', False) %}
 no-index = false
     {%- else %}

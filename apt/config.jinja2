@@ -10,8 +10,9 @@ APT::Periodic::AutocleanInterval "1";
 APT::Periodic::RandomSleep "0";
 APT::Install-Recommends "0";
 APT::Clean-Installed "true";
-{%- if salt['pillar.get']('apt:proxy_server', False) %}
-Acquire::http::Proxy "http://{{ salt['pillar.get']('apt:proxy_server', False) }}";
+{%- set proxy_server = salt['pillar.get']('apt:proxy_server', False) %}
+{%- if proxy_server %}
+Acquire::http::Proxy "http://{{ proxy_server }}";
 {%- endif -%}
 {%- if salt['pillar.get']('debug', False) %}
 quiet "0";

@@ -9,7 +9,8 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 {%- set spam_filter = salt['pillar.get']('postfix:spam_filter', False) %}
 include:
 {%- if spam_filter %}
-    {%- if salt['pillar.get']('amavis:check_virus', True) %}
+{%- set check_virus = salt['pillar.get']('amavis:check_virus', True) %}
+    {%- if check_virus %}
   - amavis.clamav
     {%- else %}
   - amavis
@@ -93,7 +94,7 @@ postfix:
 {%- if spam_filter %}
     - require:
       - service: amavis
-    {%- if salt['pillar.get']('amavis:check_virus', True) %}
+    {%- if check_virus %}
       - service: clamav-daemon
     {%- endif -%}
 {%- endif %}
@@ -143,6 +144,7 @@ postfix_local_aliases:
     - name: newaliases
     - watch:
       - file: postfix_local_aliases
+{%- set virtual_aliases = salt['pillar.get']('postfix:virtual_aliases', False) %}
 
 {%- if salt['pillar.get']('postfix:virtual_aliases', False) %}
 {# contains alias for email forwarding #}

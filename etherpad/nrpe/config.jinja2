@@ -21,8 +21,9 @@ etherpad_logger:
   dependencies:
     - etherpad_procs
 
-{%- if salt['pillar.get']('etherpad:secret_url', False) %}
-  {%- set http_uri = '/' ~ salt['pillar.get']('etherpad:secret_url', False) %}
+{%- set secret_url = salt['pillar.get']('etherpad:secret_url', False) %}
+{%- if secret_url %}
+  {%- set http_uri = '/' ~ secret_url %}
 {%- else  %}
   {%- set http_uri = '' %}
 {%- endif  %}
@@ -31,6 +32,7 @@ etherpad_logger:
   {%- if salt['pillar.get']('etherpad' + ':ssl', False) %}
     {%- set http_result = "301 Moved Permanently" %}
 etherpad_javascript_https:
+{%- set hostnames = salt['pillar.get']('etherpad:hostnames') %}
   description: Etherpad JavaScript HTTPs
   command: /usr/lib/nagios/plugins/check_http -S -H "{{ salt['pillar.get']('etherpad:hostnames')[0] }}" -u "{{ http_uri }}/javascripts/lib/ep_etherpad-lite/static/js/pad.js?callback=require.define" -I "{{ salt['network.ip_addrs']()[0] }}"
   dependencies:

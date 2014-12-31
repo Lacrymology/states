@@ -16,7 +16,8 @@ include:
   - local
   - nginx
   - pysc
-{%- if not salt['pillar.get']('salt_archive:source', False) %}
+{%- set source = salt['pillar.get']('salt_archive:source', False) %}
+{%- if not source %}
   - requests
 {%- endif %}
   - rsync
@@ -42,10 +43,10 @@ include:
       - user: salt_archive
       - pkg: rsync
       - file: bash
-{%- if not salt['pillar.get']('salt_archive:source', False) %}
+{%- if not source %}
       - file: /usr/local/bin/salt_archive_incoming.py
     {#-
-     if salt['pillar.get']('salt_archive:source', False) is not defined, create an incoming
+     if source is not defined, create an incoming
      directory.
     #}
 
@@ -102,7 +103,7 @@ include:
       - module: pysc
 {%- else %}
     {#-
-     if salt['pillar.get']('salt_archive:source', False) is defined, can't have an incoming
+     if source is defined, can't have an incoming
      directory.
     #}
 
@@ -157,7 +158,7 @@ archive_rsync:
 salt-archive-clamav:
   file:
     - name: /usr/local/bin/salt_archive_clamav.py
-{%- if salt['pillar.get']('salt_archive:source', False) %}
+{%- if source %}
     - absent
 {%- else %}
     - managed

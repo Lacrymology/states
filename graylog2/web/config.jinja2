@@ -7,8 +7,9 @@ Maintainer: Van Pham Diep <favadi@robotinfra.com>
 -#}
 # {{ salt['pillar.get']('message_do_not_modify') }}
 {#- graylog2-server REST URIs (one or more, comma separated) For example: "http://127.0.0.1:12900/,http://127.0.0.1:12910/" #}
-{%- if  salt['pillar.get']('graylog2:rest_transport_uri', None) %}
-graylog2-server.uris="{{ salt['pillar.get']('graylog2:rest_transport_uri', None) }}"
+{%- set rest_transport_uri = salt['pillar.get']('graylog2:rest_transport_uri', None) %}
+{%- if  rest_transport_uri %}
+graylog2-server.uris="{{ rest_transport_uri }}"
 {%- else %}
 graylog2-server.uris="{{ salt['pillar.get']('graylog2:rest_listen_uri', 'http://127.0.0.1:12900') }}"
 {%- endif %}

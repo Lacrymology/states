@@ -31,9 +31,10 @@ dev tun
 # ignore "{{ key }}: {{ configs[key] }}" {{ key }} is a reserved key!
     {%- endif -%}
 {%- endfor -%}
-{%- set port = salt['pillar.get']('openvpn', {})[tunnel]['peers'][grains['id']]['port']|default(False) %}
+{%- set openvpn = salt['pillar.get']('openvpn', {}) %}
+{%- set port = openvpn[tunnel]['peers'][grains['id']]['port']|default(False) %}
 {% if port %}port {{ port }}{% endif %}
-{%- set peers = salt['pillar.get']('openvpn', {})[tunnel]['peers'] %}
+{%- set peers = openvpn[tunnel]['peers'] %}
 {%- for peer, peer_data in peers.iteritems() -%}
     {%- if peer != grains['id'] %}
 ifconfig {{ peers[grains['id']]['vpn_address'] }} {{ peer_data['vpn_address'] }}

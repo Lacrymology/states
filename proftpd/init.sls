@@ -33,7 +33,8 @@ proftpd-mod-pgsql:
       - cmd: apt_sources
   postgres_user:
     - present
-    - name: {{ salt['pillar.get']('proftpd:db:username', 'proftpd') }}
+{%- set username = salt['pillar.get']('proftpd:db:username', 'proftpd') %}
+    - name: {{ username }}
     - password: {{ salt['password.pillar']('proftpd:db:password', 10) }}
     - runas: postgres
     - require:
@@ -41,7 +42,7 @@ proftpd-mod-pgsql:
   postgres_database:
     - present
     - name: {{ salt['pillar.get']('proftpd:db:name', 'proftpd') }}
-    - owner: {{ salt['pillar.get']('proftpd:db:username', 'proftpd') }}
+    - owner: {{ username }}
     - runas: postgres
     - require:
       - postgres_user: proftpd-mod-pgsql

@@ -121,8 +121,9 @@ graylog2-web:
   archive:
     - extracted
     - name: /usr/local/
-{%- if salt['pillar.get']('files_archive', False) %}
-    - source: {{ salt['pillar.get']('files_archive', False) }}/mirror/graylog2-web-interface-{{ version }}.tar.gz
+{%- set files_archive = salt['pillar.get']('files_archive', False) %}
+{%- if files_archive %}
+    - source: {{ files_archive }}/mirror/graylog2-web-interface-{{ version }}.tar.gz
 {%- else %}
     - source: http://packages.graylog2.org/releases/graylog2-web-interface/graylog2-web-interface-{{ version }}.tgz
 {%- endif %}

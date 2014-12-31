@@ -10,7 +10,8 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 
 # Handlers for published metrics.
 handlers = diamond.handler.graphite.GraphiteHandler,
-{%- if salt['pillar.get']("__test__", False) -%}
+{%- set __test__ = salt['pillar.get']("__test__", False) %}
+{%- if __test__ -%}
          diamond.handler.archive.ArchiveHandler
 {%- endif %}
 
@@ -37,8 +38,10 @@ handlers_config_path = /etc/diamond/handlers/
 
 # logging handlers
 keys = syslog
-{%- if salt['pillar.get']('graylog2_address', False) -%}
+{%- set graylog2_address = salt['pillar.get']('graylog2_address', False) %}
+{%- if graylog2_address -%}
 ,gelf
+{%- set sentry_dsn = salt['pillar.get']('sentry_dsn', False) %}
 {%- endif -%}
 {%- if salt['pillar.get']('sentry_dsn', False) -%}
 ,raven
@@ -192,19 +195,19 @@ level = DEBUG
 level = WARNING
   {%- endif %}
 handlers = syslog
-{%- if salt['pillar.get']('graylog2_address', False) -%}
+{%- if graylog2_address -%}
 ,gelf
 {%- endif -%}
 {%- if salt['pillar.get']('sentry_dsn', False) -%}
 ,raven
 {%- endif %}
 
-{%- if salt['pillar.get']('graylog2_address', False) %}
+{%- if graylog2_address %}
 [handler_gelf]
 level = NOTSET
 class = graypy.handler.GELFHandler
 formatter = message_only
-args = ('{{ salt['pillar.get']('graylog2_address', False) }}', 12201)
+args = ('{{ graylog2_address }}', 12201)
 {%- endif %}
 
 {%- if salt['pillar.get']('sentry_dsn', False) %}
@@ -219,7 +222,7 @@ args = ('requests+{{ salt['pillar.get']('sentry_dsn', False) }}',)
 level = NOTSET
 formatter = syslog
 class = logging.handlers.SysLogHandler
-args = ('/dev/log', handlers.SysLogHandler.{% if salt['pillar.get']('graylog2_address', False) %}LOG_LOCAL7{% else %}LOG_DAEMON{% endif %})
+args = ('/dev/log', handlers.SysLogHandler.{% if graylog2_address %}LOG_LOCAL7{% else %}LOG_DAEMON{% endif %})
 
 [formatter_syslog]
 class = logging.Formatter

@@ -76,8 +76,6 @@ elasticsearch:
     - mode: 440
     - source: salt://elasticsearch/config.jinja2
     - context:
-        master: 'true'
-        data: 'true'
         origin_state: elasticsearch
     - require:
       - pkg: elasticsearch

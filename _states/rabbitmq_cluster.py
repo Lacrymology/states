@@ -33,7 +33,9 @@ def joined(name, host, user='rabbit', ram_node=None, runas=None):
     '''
     Ensure the node user@host is joined to cluster
 
-    .. note:: :func:`join` and :func:`joined` are synonyms
+    .. note::
+
+      :func:`join` and :func:`joined` are synonyms
 
     :param name: Irrelevant, not used (recommended: ``user@host``)
     :param user: The user to join the cluster as (default: ``rabbit``)

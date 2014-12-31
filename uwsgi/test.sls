@@ -30,7 +30,8 @@ test:
     - test
     - map:
         ProcessResources:
-    {{ diamond_process_test('uwsgi') }}
+          {{ diamond_process_test('uwsgi') }}
+{%- if grains['virtual'] == 'kvm' and salt['file.file_exists']('/sys/kernel/mm/ksm/run') %}
         KSM:
           ksm.full_scans: True
           ksm.pages_shared: True
@@ -39,7 +40,8 @@ test:
           ksm.pages_unshared: True
           ksm.pages_volatile: True
           ksm.run: True
-          ksm.sleep_milisecs: True
+          ksm.sleep_millisecs: True
+{%- endif %}
     - require:
       - sls: uwsgi
       - sls: uwsgi.diamond

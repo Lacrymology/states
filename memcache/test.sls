@@ -32,7 +32,7 @@ test:
     {{ diamond_process_test('memcached') }}
         Memcached:
           memcached.main.auth_cmds: True
-          memcached.main.auth_erros: True
+          memcached.main.auth_errors: True
           memcached.main.bytes: True
           memcached.main.bytes_read: True
           memcached.main.bytes_written: True

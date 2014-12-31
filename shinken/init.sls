@@ -7,6 +7,7 @@ Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 
 Common stuff for all shinken components.
 -#}
+{%- set files_archive = salt['pillar.get']('files_archive', False) %}
 {%- macro shinken_install_module(module_name) %}
 {#-
 From version 2.0, :doc:`/shinken/doc/index` came with no modules, you need to
@@ -39,7 +40,6 @@ server, then install from that via ``--local`` option.
 - Re-pack, copy to the archive server
 #}
 shinken-module-{{ module_name }}:
-{%- set files_archive = salt['pillar.get']('files_archive', False) %}
     {%- if files_archive %}
   archive:
     - extracted

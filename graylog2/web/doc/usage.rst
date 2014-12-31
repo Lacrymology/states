@@ -19,7 +19,7 @@ the notifications:
 * Define filter rules for stream in `Rules` tab:
 
   * Level (or higher): Warn
-  * Short Message (regex): :code:`[Ff]ailed|[Mm]issing|connection lost|down`
+  * Short Message (regex): `[Ff]ailed|[Mm]issing|connection lost|down`
 
 * `Settings` tab: uncheck **Stream disabled**
 * `Alarms` tab: check on **Active** and **I want to receive alarms of this
@@ -35,7 +35,7 @@ Go to `users` tab and add the email address for each user that you want to
 send him email notifications.
 
 A usefull alarm is to check for Linux out of memory error, you can use this
-regex: :code:`[Oo]ut of [Mm]emory: [Kk]illed process|oom-killer`.
+regex: `[Oo]ut of [Mm]emory: [Kk]illed process|oom-killer`.
 
 Create user
 -----------

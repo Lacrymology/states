@@ -33,6 +33,7 @@ Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
 # {{ salt['pillar.get']('message_do_not_modify') }}
+{%- set allow_version_overwrite = salt["pillar.get"]("djangopypi2:allow_version_overwrite", False) %}
 
 DEBUG = False
 TEMPLATE_DEBUG = False
@@ -40,7 +41,7 @@ TEMPLATE_DEBUG = False
 ADMINS = ()
 TIME_ZONE = '{{ salt['pillar.get']('timezone', 'UTC') }}'
 LANGUAGE_CODE = 'en_US'
-ALLOW_VERSION_OVERWRITE = {{ salt["pillar.get"]("djangopypi2:allow_version_overwrite", False) }}
+ALLOW_VERSION_OVERWRITE = {%- if allow_version_overwrite %}{{ allow_version_overwrite }}{%- else %} ''{%- endif %}
 
 MANAGERS = ()
 

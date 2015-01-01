@@ -277,8 +277,6 @@ Default: disable :doc:`/openldap/doc/pillar` integration (``False``).
 gitlab:smtp
 ~~~~~~~~~~~
 
-Override following SMTP settings.
-
 .. include:: /mail/doc/smtp.inc
 
 .. _pillar-gitlab-smtp-from:

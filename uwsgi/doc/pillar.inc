@@ -11,7 +11,7 @@ Default: ``1``.
 How long in seconds until a :doc:`index` worker is killed while running a single
 request.
 
-Default: ``30``.
+Default: ``60``.
 
 |deployment|\:cheaper
 ~~~~~~~~~~~~~~~~~~~~~

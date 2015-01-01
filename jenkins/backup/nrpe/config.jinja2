@@ -5,7 +5,7 @@ in the doc/license.rst file.
 Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
-jenkins_backup_file_procs:
+jenkins_backup_procs:
   description: Jenkins Backup File Process
   command: "/usr/lib/nagios/plugins/check_procs -c 0:1 -u root -a '/usr/local/bin/backup-file jenkins /var/lib jenkins --exclude=workspace'"
 

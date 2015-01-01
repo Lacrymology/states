@@ -15,15 +15,7 @@ Mandatory
 
 .. include:: /nginx/doc/monitor.inc
 
-.. _monitor-openerp_backup_postgres_procs:
-
-openerp_backup_postgres_procs
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. include:: /nrpe/doc/check_procs.inc
-
-Monitor :doc:`/openerp/doc/index` :doc:`/postgresql/doc/index`
-database backup process, critical if more than one process running.
+.. include:: /backup/doc/monitor_postgres_procs.inc
 
 Optional
 --------

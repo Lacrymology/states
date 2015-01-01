@@ -71,6 +71,8 @@ test_graylog2_server:
   qa:
     - test
     - name: graylog2.server
+    - additional:
+      - graylog2.server.backup
     - pillar_doc: {{ opts['cachedir'] }}/doc/output
     - require:
       - monitoring: test

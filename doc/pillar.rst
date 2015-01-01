@@ -26,6 +26,15 @@ message_do_not_modify
 
 Warning message to not modify file.
 
+.. _pillar-smtp:
+
+smtp
+~~~~
+
+Email server configuration.
+
+See below for details on each keys.
+
 smtp:server
 ~~~~~~~~~~~
 
@@ -42,10 +51,19 @@ smtp:root
 The user that gets all the mails for User ID below 1000 - the system users
 (normal users are given a User ID above 1000).
 
+smtp:domain
+~~~~~~~~~~~
+
+Domain name to use.
+
+.. _pillar-smtp-from:
+
 smtp:from
 ~~~~~~~~~
 
 The address that will appear in the "From:" field of the email.
+
+.. _pillar-smtp-user:
 
 smtp:user
 ~~~~~~~~~
@@ -55,7 +73,7 @@ The username used to log into the remote SMTP server.
 smtp:password
 ~~~~~~~~~~~~~
 
-Password for account login, if specified smtp:user.
+Password for account login, if :ref:`pillar-smtp-user` is defined.
 
 Optional
 --------
@@ -151,87 +169,6 @@ This is required if any :doc:`/nrpe/doc/index` integration of formula had been
 included in roles.
 
 Default: no monitoring host allowed to perform checks on this host (``[]``).
-
-.. _pillar-smtp:
-
-smtp
-~~~~
-
-Email server configuration.
-
-Example::
-
-  smtp:
-    server: smtp.example.com
-    port: 25
-    domain: example.com
-    from: joe@example.com
-    user: yyy
-    password: xxx
-    authentication: plain
-    encryption: plain
-
-See below for details on each keys.
-
-.. _pillar-smtp-server:
-
-smtp:server
-~~~~~~~~~~~
-
-Your SMTP server. Ex: ``smtp.yourdomain.com``
-
-.. _pillar-smtp-port:
-
-smtp:port
-~~~~~~~~~
-
-SMTP server port.
-
-.. _pillar-smtp-domain:
-
-smtp:domain
-~~~~~~~~~~~
-
-Domain name to use.
-
-.. _pillar-smtp-from:
-
-smtp:from
-~~~~~~~~~
-
-SMTP account use in FROM field.
-
-.. _pillar-smtp-user:
-
-smtp:user
-~~~~~~~~~
-
-SMTP account username, if applicable.
-
-.. _pillar-smtp-password:
-
-smtp:password
-~~~~~~~~~~~~~
-
-Password for account login, if specified user.
-
-.. _pillar-smtp-authentication:
-
-smtp:authentication
-~~~~~~~~~~~~~~~~~~~
-
-Authentication method. Default is: ``plain``.
-
-.. _pillar-smtp-encryption:
-
-smtp:encryption
-~~~~~~~~~~~~~~~
-
-SMTP encryption type.
-
-Possible values: `ssl <http://en.wikipedia.org/wiki/Transport_Layer_Security>`_, `starttls <http://en.wikipedia.org/wiki/Starttls>`_, ``plain``.
-
-Default: transfers email in `plaintext <http://en.wikipedia.org/wiki/Plaintext>`_ (``plain``).
 
 .. _pillar-encoding:
 

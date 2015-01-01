@@ -154,32 +154,6 @@ Be carefully, or it may cause recursive forwarding.
 
 Default: no aliasing (``False``).
 
-.. _pillar-postfix-alias_domains:
-
-postfix:alias_domains
-~~~~~~~~~~~~~~~~~~~~~
-
-:doc:`index` will receive email for those domains and forward to addresses
-specified in :ref:`pillar-postfix-virtual_aliases`.
-
-.. warning::
-
-   ensuring these values must not be set in :ref:`pillar-postfix-mydestination`
-   pillar key.
-
-Default: ``['$virtual_alias_maps']`` - uses same value with $virtual_alias_maps
-This is :doc:`index` `default value <http://www.postfix.org/postconf.5.html#virtual_alias_domains>`__.
-
-Example, if one wants to receive email for address ``salt@example.org`` then
-forward it to email ``saltstack@example.com``, following pillar keys should be
-set::
-
-  postfix:
-    alias_domains:
-      - example.org
-    virtual_aliases:
-      salt@example.org saltstack@example.com
-
 .. _pillar-postfix-ssl:
 
 postfix:ssl
@@ -270,3 +244,34 @@ this pillar as bellow::
 
 Default: forward UNIX `root`'s mails to address defined
 in :ref:`pillar-mail-postmaster` (``False``).
+
+Conditional
+-----------
+
+.. _pillar-postfix-alias_domains:
+
+postfix:alias_domains
+~~~~~~~~~~~~~~~~~~~~~
+
+:doc:`index` will receive email for those domains and forward to addresses
+specified in :ref:`pillar-postfix-virtual_aliases`.
+
+.. warning::
+
+   ensuring these values must not be set in :ref:`pillar-postfix-mydestination`
+   pillar key.
+
+Default: ``['$virtual_alias_maps']`` - uses same value with $virtual_alias_maps
+This is :doc:`index` `default value <http://www.postfix.org/postconf.5.html#virtual_alias_domains>`__.
+
+Example, if one wants to receive email for address ``salt@example.org`` then
+forward it to email ``saltstack@example.com``, following pillar keys should be
+set::
+
+  postfix:
+    alias_domains:
+      - example.org
+    virtual_aliases:
+      salt@example.org saltstack@example.com
+
+Only use if the :ref:`pillar-postfix-aliases` is ``True``.

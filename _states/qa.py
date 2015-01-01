@@ -148,11 +148,12 @@ def test_pillar(name, pillar_doc):
     for key, kcall in calls.iteritems():
         # I don't report keys already reported as multiple defaults or that's
         #  not in the docs
+        match_name = _contains(doctrees[name]['optional'], key)
         if (key not in multiple_defaults and
             key not in undocumented and
             key not in unused and
-            _contains(doctrees[name]['optional'], key)):
-            doc_default = doctrees[name]['optional'][key]['default']
+            match_name):
+            doc_default = doctrees[name]['optional'][match_name]['default']
             kcall = copy.copy(kcall)
             if len(kcall) > 1:
                 bad_defaults.add("%s: should be in multiple defaults" % key)

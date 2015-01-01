@@ -71,10 +71,6 @@ test:
         ProcessResources:
     {{ diamond_process_test('elasticsearch') }}
         ElasticSearch:
-          elasticsearch.cache.bloom.size: True
-          elasticsearch.cache.fielddata.evictions: True
-          elasticsearch.cache.fielddata.size: True
-          elasticsearch.cache.filter.count: True
           elasticsearch.cache.filter.evictions: True
           elasticsearch.cache.filter.size: True
           elasticsearch.cache.id.size: True
@@ -82,6 +78,8 @@ test:
           elasticsearch.disk.reads.size: True
           elasticsearch.disk.writes.count: True
           elasticsearch.disk.writes.size: True
+          elasticsearch.fielddata.evictions: True
+          elasticsearch.fielddata.size: True
           elasticsearch.indices.datastore.size: True
           elasticsearch.indices.docs.count: True
           elasticsearch.indices.docs.deleted: True
@@ -89,7 +87,7 @@ test:
           elasticsearch.indices._all.datastore.size: True
           elasticsearch.indices._all.docs.count: True
           elasticsearch.indices._all.docs.deleted: True
-          elasticsearch.indices._all.get_exists_time_in_millis: True
+          elasticsearch.indices._all.get.exists_time_in_millis: True
           elasticsearch.indices._all.get.exists_total: True
           elasticsearch.indices._all.get.missing_time_in_millis: True
           elasticsearch.indices._all.get.missing_total: True
@@ -104,18 +102,14 @@ test:
           elasticsearch.indices._all.search.query_time_in_millis: True
           elasticsearch.indices._all.search.query_total: True
           elasticsearch.indices._all.store.throttle_time_in_millis: True
-          elasticsearch.jvm.gc.collection.ConcurrentMarkSweep.count: True
-          elasticsearch.jvm.gc.collection.ConcurrentMarkSweep.time: True
           elasticsearch.jvm.gc.collection.count: True
           elasticsearch.jvm.gc.collection.time: True
           elasticsearch.jvm.mem.pools: True
-          elasticsearch.jvm.mem.pools.CMS_Old_Gen.max: True
-          elasticsearch.jvm.mem.pools.CMS_Old_Gen.used: True
-          elasticsearch.jvm.heap_committed: True
-          elasticsearch.jvm.heap_used: True
-          elasticsearch.jvm.heap_used_percent: True
-          elasticsearch.jvm.non_heap_committed: True
-          elasticsearch.jvm.non_heap_used: True
+          elasticsearch.jvm.mem.heap_committed: True
+          elasticsearch.jvm.mem.heap_used: True
+          elasticsearch.jvm.mem.heap_used_percent: True
+          elasticsearch.jvm.mem.non_heap_committed: True
+          elasticsearch.jvm.mem.non_heap_used: True
           elasticsearch.jvm.threads.count: True
           elasticsearch.network.tcp.active_opens: True
           elasticsearch.network.tcp.attempt_fails: True

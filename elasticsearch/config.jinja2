@@ -6,12 +6,13 @@ Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Van Pham Diep <favadi@robotinfra.com>
 -#}
 # {{ salt['pillar.get']('message_do_not_modify') }}
-{% set es = salt['pillar.get']('elasticsearch') %}
+{% set nodes = salt['pillar.get']('elasticsearch:cluster:nodes') %}
+
 bootstrap:
   mlockall: true
 
 cluster:
-  name: {{ es['cluster']['name'] }}
+  name: {{ salt['pillar.get']('elasticsearch:cluster:name') }}
   routing:
     allocation:
       node_concurrent_recoveries: 2
@@ -27,8 +28,8 @@ transport:
 
 node:
   name: {{ salt['pillar.get'](pillar_string + ':name', False)|default(grains['id'], boolean=True) }}
-  master: {{ salt['pillar.get'](pillar_string + ':master', master) }}
-  data: {{ salt['pillar.get'](pillar_string + ':data', data) }}
+  master: {% if salt['pillar.get'](pillar_string + ':master', True) %}true{% else %}false{% endif %}
+  data: {% if salt['pillar.get'](pillar_string + ':data', True) %}true{% else %}false{% endif %}
 
 {#- configure amazon ec2 cloud auto-discovery #}
 {% if salt['pillar.get']('elasticsearch:aws', False) %}
@@ -67,10 +68,10 @@ discovery:
         enabled: false
       unicast:
         hosts: [
-{%- for node in es['cluster']['nodes'] -%}
-    {%- for origin_state in es['cluster']['nodes'][node] -%}
+{%- for node in nodes -%}
+    {%- for origin_state in nodes[node] -%}
         {%- if origin_state != '_network' -%}
-"{{ es['cluster']['nodes'][node]['_network']['private'] }}:{{ es['cluster']['nodes'][node][origin_state]['port']|default(9300) }}",
+"{{ nodes[node]['_network']['private'] }}:{{ nodes[node][origin_state]['port']|default(9300) }}",
         {%- endif -%}
     {%- endfor -%}
 {%- endfor %}]

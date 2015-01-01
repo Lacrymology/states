@@ -13,7 +13,7 @@ This template need:
 -#}
 {%- set cheaper = salt['pillar.get'](appname + ':cheaper', False) %}
 {%- set workers = salt['pillar.get'](appname + ':workers', 1) %}
-{%- set timeout = salt['pillar.get'](appname + ':timeout', 30) %}
+{%- set timeout = salt['pillar.get'](appname + ':timeout', 60) %}
 {%- set idle = salt['pillar.get'](appname + ':idle', 300) %}
 uwsgi:
 {%- block header %}

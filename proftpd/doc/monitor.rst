@@ -24,12 +24,6 @@ Check that a complete FTP handshake works.
 
 .. include:: /postgresql/doc/monitor.inc
 
-proftpd_backup_postgres_procs
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Monitor :doc:`/proftpd/doc/index` backup process, critical if more than one backup processes running.
-
-proftpd_backup
-~~~~~~~~~~~~~~
+.. include:: /backup/doc/monitor_postgres_procs.inc
 
 .. include:: /backup/doc/monitor.inc

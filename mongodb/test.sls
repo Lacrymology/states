@@ -38,8 +38,6 @@ test:
   qa:
     - test_monitor
     - name: mongodb
-    - additional:
-      - mongodb.backup
     - pillar_doc: {{ opts['cachedir'] }}/doc/output
     - require:
       - monitoring: test
@@ -63,12 +61,11 @@ test:
           mongo.connections.totalCreated: True
           mongo.cursors.clientCursors_size: True
           mongo.cursors.timedOut: True
-          mongo.cursors.totalNoTimeout: True
           mongo.cursors.totalOpen: True
-          mongo.serverStatus.dur.timeMS.dt: True
-          mongo.dur.timeMS.prepLogBuffer: True
-          mongo.dur.timeMS.remapPrivateView: True
-          mongo.dur.timeMS.writeToJournal: True
+          mongo.dur.timeMs.dt: True
+          mongo.dur.timeMs.prepLogBuffer: True
+          mongo.dur.timeMs.remapPrivateView: True
+          mongo.dur.timeMs.writeToJournal: True
           mongo.dur.commits: True
           mongo.dur.commitsInWriteLock: True
           mongo.dur.compression: True

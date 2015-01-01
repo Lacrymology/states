@@ -17,6 +17,14 @@ Mandatory
 
 .. include:: /nginx/doc/monitor.inc
 
+.. include:: /backup/doc/monitor.inc
+
+.. include:: /backup/doc/monitor_procs.inc
+
+.. include:: /backup/doc/monitor_postgres_procs.inc
+
+.. include:: /backup/doc/monitor_postgres_age.inc
+
 Optional
 --------
 

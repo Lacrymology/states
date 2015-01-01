@@ -64,7 +64,7 @@ varnish:memlock
 Maximum locked memory size (for ``ulimit -l``). Used for locking the
 shared memory login memory.
 
-Default: :doc:`/varnish/doc/index` will lock no more than `82000``
+Default: :doc:`/varnish/doc/index` will lock no more than ``82000``
 bytes memory to prevent swap out.
 
 .. _pillar-varnish-listen_address:

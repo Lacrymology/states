@@ -12,9 +12,8 @@ Options which are set by Debconf and managed by ucf
 
 Admin user
 #}
-
-{%- for user in salt['pillar.get']('ejabberd:admins') %}
 {%- set hostnames = salt['pillar.get']('ejabberd:hostnames') %}
+{%- for user in salt['pillar.get']('ejabberd:admins') %}
 {acl, admin, {user, "{{ user }}", "{{ hostnames[0] }}"}}.
 {%- endfor %}
 

@@ -87,7 +87,7 @@ jenkins_old_version:
     - managed
     - template: jinja
     - source: salt://jenkins/nginx.jinja2
-    - user: www-data
+    - user: root
     - group: www-data
     - mode: 440
     - require:

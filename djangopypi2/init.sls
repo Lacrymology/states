@@ -256,7 +256,7 @@ djangomod module, which is just a helper to build our command and run it.
   file:
     - managed
     - template: jinja
-    - user: www-data
+    - user: root
     - group: www-data
     - mode: 440
     - source: salt://nginx/template.jinja2

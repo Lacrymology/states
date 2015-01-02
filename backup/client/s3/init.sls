@@ -33,7 +33,7 @@ s3lite:
       - file: /usr/local
   file:
     - managed
-    - name: /usr/local/s3lite/salt-requirements.txt
+    - name: {{ opts['cachedir'] }}/pip/s3lite
     - template: jinja
     - user: root
     - group: root
@@ -46,7 +46,7 @@ s3lite:
     - name: pip.install
     - upgrade: True
     - bin_env: /usr/local/s3lite/bin/pip
-    - requirements: /usr/local/s3lite/salt-requirements.txt
+    - requirements: {{ opts['cachedir'] }}/pip/s3lite
     - watch:
       - file: s3lite
       - pkg: python-dev

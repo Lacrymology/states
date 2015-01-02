@@ -31,7 +31,7 @@ include:
 diamond_requirements:
   file:
     - managed
-    - name: /usr/local/diamond/salt-requirements.txt
+    - name: {{ opts['cachedir'] }}/pip/diamond
     - template: jinja
     - user: root
     - group: root
@@ -65,7 +65,7 @@ diamond:
     - name: pip.install
     - upgrade: True
     - bin_env: /usr/local/diamond
-    - requirements: /usr/local/diamond/salt-requirements.txt
+    - requirements: {{ opts['cachedir'] }}/pip/diamond
     - require:
       - pkg: git
     - watch:

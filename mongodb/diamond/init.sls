@@ -8,7 +8,7 @@ include:
 diamond-pymongo:
   file:
     - managed
-    - name: /usr/local/diamond/salt-mongodb-requirements.txt
+    - name: {{ opts['cachedir'] }}/pip/mongodb.diamond
     - template: jinja
     - user: root
     - group: root
@@ -21,7 +21,7 @@ diamond-pymongo:
     - name: pip.install
     - upgrade: True
     - bin_env: /usr/local/diamond
-    - requirements: /usr/local/diamond/salt-mongodb-requirements.txt
+    - requirements: {{ opts['cachedir'] }}/pip/mongodb.diamond
     - require:
       - virtualenv: diamond
     - watch:

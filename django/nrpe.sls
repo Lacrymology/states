@@ -11,7 +11,7 @@ include:
 python-sitemap:
   file:
     - managed
-    - name: /usr/local/nagios/salt-django-requirements.txt
+    - name: {{ opts['cachedir'] }}/pip/django
     - template: jinja
     - user: root
     - group: root
@@ -24,7 +24,7 @@ python-sitemap:
     - name: pip.install
     - upgrade: True
     - bin_env: /usr/local/nagios
-    - requirements: /usr/local/nagios/salt-django-requirements.txt
+    - requirements: {{ opts['cachedir'] }}/pip/django
     - require:
       - pkg: xml-dev
     - watch:

@@ -45,7 +45,7 @@ check_backup.py:
 backup_client_nrpe-requirements:
   file:
     - managed
-    - name: /usr/local/nagios/backup.client.scp.nrpe-requirements.txt
+    - name: {{ opts['cachedir'] }}/pip/backup.client.scp.nrpe
     - template: jinja
     - user: root
     - group: root
@@ -58,7 +58,7 @@ backup_client_nrpe-requirements:
     - name: pip.install
     - upgrade: True
     - bin_env: /usr/local/nagios
-    - requirements: /usr/local/nagios/backup.client.scp.nrpe-requirements.txt
+    - requirements: {{ opts['cachedir'] }}/pip/backup.client.scp.nrpe
     - require:
       - virtualenv: nrpe-virtualenv
     - watch:

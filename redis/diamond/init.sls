@@ -32,7 +32,7 @@ redis_diamond_resources:
 diamond_redis:
   file:
     - managed
-    - name: /usr/local/diamond/salt-redis-requirements.txt
+    - name: {{ opts['cachedir'] }}/pip/redis.diamond
     - template: jinja
     - user: root
     - group: root
@@ -45,7 +45,7 @@ diamond_redis:
     - name: pip.install
     - upgrade: True
     - bin_env: /usr/local/diamond
-    - requirements: /usr/local/diamond/salt-redis-requirements.txt
+    - requirements: {{ opts['cachedir'] }}/pip/redis.diamond
     - require:
       - virtualenv: diamond
     - watch:

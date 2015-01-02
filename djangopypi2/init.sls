@@ -34,7 +34,7 @@ djangopypi2:
       - file: /usr/local
   file:
     - managed
-    - name: /usr/local/djangopypi2/salt-requirements.txt
+    - name: {{ opts['cachedir'] }}/pip/djangopypi2
     - template: jinja
     - user: root
     - group: root
@@ -47,7 +47,7 @@ djangopypi2:
     - name: pip.install
     - upgrade: True
     - bin_env: /usr/local/djangopypi2/bin/pip
-    - requirements: /usr/local/djangopypi2/salt-requirements.txt
+    - requirements: {{ opts['cachedir'] }}/pip/djangopypi2
     - watch:
       - pkg: python-dev
       - pkg: postgresql-dev

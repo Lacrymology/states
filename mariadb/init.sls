@@ -34,7 +34,7 @@ mariadb:
 {%- if files_archive %}
     - name: deb {{ files_archive|replace('https://', 'http://') }}/mirror/mariadb/5.5.41 {{ grains['lsb_distrib_codename'] }} main
 {%- else %}
-    - name: deb http://mariadb.biz.net.id//repo/5.5/ubuntu precise main
+    - name: deb http://mariadb.biz.net.id//repo/5.5/ubuntu {{ grains['lsb_distrib_codename'] }} main
 {%- endif %}
     - file: /etc/apt/sources.list.d/mariadb.list
     - clean_file: True

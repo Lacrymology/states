@@ -69,7 +69,7 @@ We predefined two streams for two common errors:
 
 * Shinken Errors:
 
-  * source must match regular expression `shinken.+`
+  * source must match regular expression `^shinken.+`
 
     Source name must start with `shinken` string.
 

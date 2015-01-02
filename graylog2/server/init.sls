@@ -231,6 +231,55 @@ import_graylog2_syslog:
       - process: graylog2-server
       - module: requests
 
+{%- set stream_receivers = salt['pillar.get']('graylog2:stream_receivers', []) %}
+out_of_memory_stream:
+  graylog:
+    - stream
+    - name: "Out Of Memory"
+    - rules:
+      - field: "level"
+        value: "5"
+        inverted: False
+        type: 4
+      - field: "message"
+        value: |
+          (?i)(\boom\b|out of memory)
+        inverted: False
+        type: 2
+{%- if stream_receivers %}
+    - receivers:
+  {%- for receiver in stream_receivers %}
+      - {{ receiver }}
+  {%- endfor %}
+{%- endif %}
+    - require:
+      - process: graylog2-server
+      - module: requests
+
+shinken_errors_stream:
+  graylog:
+    - stream
+    - name: "Shinken Errors"
+    - rules:
+      - field: "level"
+        value: "4"
+        inverted: False
+        type: 4
+      - field: "source"
+        value: |
+          ^shinken.+`
+        inverted: False
+        type: 2
+{%- if stream_receivers %}
+    - receivers:
+  {%- for receiver in stream_receivers %}
+      - {{ receiver }}
+  {%- endfor %}
+{%- endif %}
+    - require:
+      - process: graylog2-server
+      - module: requests
+
 /var/log/graylog2:
   file:
     - directory

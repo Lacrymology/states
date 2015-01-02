@@ -28,8 +28,8 @@ transport:
 
 node:
   name: {{ salt['pillar.get'](pillar_string + ':name', False)|default(grains['id'], boolean=True) }}
-  master: {% if salt['pillar.get'](pillar_string + ':master', True) %}true{% else %}false{% endif %}
-  data: {% if salt['pillar.get'](pillar_string + ':data', True) %}true{% else %}false{% endif %}
+  master: {{ salt['pillar.get'](pillar_string + ':master', master) }}
+  data: {{ salt['pillar.get'](pillar_string + ':data', data) }}
 
 {#- configure amazon ec2 cloud auto-discovery #}
 {% if salt['pillar.get']('elasticsearch:aws', False) %}

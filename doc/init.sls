@@ -1,23 +1,29 @@
 {#-
- Build salt-common (and non-common) documentation in salt minion cache
- directory.
- This is mainly used as source of data to perform tests on pillars and metrics.
+Use of this source code is governed by a BSD license that can be found
+in the doc/license.rst file.
 
- To manually rebuild doc perform the following::
+Author: Bruno Clermont <bruno@robotinfra.com>
+Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 
-   source /var/cache/salt/minion/doc/bin/activate
+Build salt-common (and non-common) documentation in salt minion cache
+directory.
+This is mainly used as source of data to perform tests on pillars and metrics.
 
- And go where the source code is, it might be in:
- ``/var/cache/salt/minion/files/$YOUR_ENV``
+To manually rebuild doc perform the following::
 
- or in ``/root/salt/states``
+  source /var/cache/salt/minion/doc/bin/activate
 
- maybe in ``/media/sf_salt`` somewhere.
+And go where the source code is, it might be in:
+``/var/cache/salt/minion/files/$YOUR_ENV``
 
- And run::
+or in ``/root/salt/states``
 
-   doc/build.py /var/cache/salt/minion/doc/output
- -#}
+maybe in ``/media/sf_salt`` somewhere.
+
+And run::
+
+  doc/build.py /var/cache/salt/minion/doc/output
+-#}
 include:
   - locale
   - pip

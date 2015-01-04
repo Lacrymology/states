@@ -12,7 +12,7 @@ postgresql-dev:
   pkgrepo:
     - managed
 {%- if salt['pillar.get']('files_archive', False) %}
-    - name: deb {{ salt['pillar.get']('files_archive', False)|replace('https://', 'http://') }}/mirror/postgresql/ {{ grains['lsb_distrib_codename'] }} main
+    - name: deb {{ salt['pillar.get']('files_archive', False)|replace('https://', 'http://') }}/mirror/postgresql/9.2.4-0 {{ grains['lsb_distrib_codename'] }} main
     - key_url: salt://postgresql/key.gpg
 {%- else %}
     - ppa: pitti/postgresql

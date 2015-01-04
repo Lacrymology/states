@@ -12,13 +12,7 @@ Mandatory
 Example::
 
   salt_cloud:
-    master: 1.2.3.4
-    profiles:
-      <profile_name>:
-        <attribute_name>: <value>
-    providers:
-      <provider_name>:
-        <attribute_name>: <value>
+    master: localhost
 
 .. _pillar-salt_cloud-master:
 
@@ -29,6 +23,16 @@ Address of salt-master for all salt-cloud managed VMs.
 
 Optional
 --------
+
+Example::
+
+  salt_cloud:
+    profiles:
+      <profile_name>:
+        <attribute_name>: <value>
+    providers:
+      <provider_name>:
+        <attribute_name>: <value>
 
 .. _pillar-salt_cloud-profiles:
 

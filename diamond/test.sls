@@ -5,6 +5,7 @@ in the doc/license.rst file.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
+{%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
   - diamond
   - diamond.nrpe
@@ -17,9 +18,9 @@ test:
     - test
     - map:
         ProcessResources:
-          process.diamond.memory_percent: True
-          process.init.num_threads: False
-          process.udev.num_threads: False
+    {{ diamond_process_test('diamond') }}
+    {{ diamond_process_test('init') }}
+    {{ diamond_process_test('udev') }}
         CPU:
           cpu.total.user: True
           cpu.total.nice: True

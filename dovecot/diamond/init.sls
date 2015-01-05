@@ -26,7 +26,7 @@ dovecot_diamond_resources:
 /etc/diamond/collectors/MailCollector.conf:
   file:
     - managed
-    - source: salt://dovecot/collector_config.jinja2
+    - source: salt://dovecot/diamond/config.jinja2
     - template: jinja
     - user: root
     - group: root
@@ -53,6 +53,6 @@ dovecot_diamond_resources:
     - user: root
     - group: root
     - mode: 440
-    - source: salt://diamond/collectors/mail/mail.py
+    - source: salt://dovecot/diamond/collector.py
     - require:
       - file: /usr/local/diamond/share/diamond/collectors/mail

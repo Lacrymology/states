@@ -284,27 +284,3 @@ shinken{{ suffix }}_python_path:
 {%- else %}
     {{ shinken_install_module('pickle-retention-file-generic') }}
 {%- endif %}
-
-{%- if salt['cmd.retcode']("/usr/local/shinken/bin/pip show shinken | grep 'Version: 1.4'") == 0 -%}
-    {%- if salt['file.directory_exists']('/usr/local/shinken/src/shinken-1.4') %}
-shinken_stop_old_daemons:
-  cmd:
-    - run
-    - name: /usr/local/bin/shinken-ctl.sh stop
-
-shinken_remove_old_scripts:
-  cmd:
-    - run
-    - name: rm -f /usr/local/shinken/bin/shinken*
-    - onlyif: ls /usr/local/shinken/bin/shinken*
-
-/usr/local/shinken/src/shinken-1.4:
-  file:
-    - absent
-    - require:
-      - cmd: shinken_stop_old_daemons
-      - cmd: shinken_remove_old_scripts
-    - require_in:
-      - cmd: shinken
-    {%- endif -%}
-{%- endif %}

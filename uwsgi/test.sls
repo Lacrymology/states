@@ -31,7 +31,8 @@ test:
     - map:
         ProcessResources:
           {{ diamond_process_test('uwsgi') }}
-{%- if grains['virtual'] == 'kvm' and salt['file.file_exists']('/sys/kernel/mm/ksm/run') %}
+{%- set test = salt['pillar.get']('__test__', False) %}
+{%- if test or (grains['virtual'] == 'kvm' and salt['file.file_exists']('/sys/kernel/mm/ksm/run')) %}
         KSM:
           ksm.full_scans: True
           ksm.pages_shared: True

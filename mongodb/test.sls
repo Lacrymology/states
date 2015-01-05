@@ -19,7 +19,7 @@ include:
 mongodb_test_generate_sample_db_for_backup_test:
   cmd:
     - run
-    - name: "mongo sample_db --eval \"db.msg.insert({'name': 'sample_db'});\""
+    - name: "mongo {{ sample_db }} --eval \"db.msg.insert({'name': '{{ sample_db }}'});\""
     - require:
       - sls: mongodb
 

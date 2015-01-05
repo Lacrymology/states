@@ -19,7 +19,7 @@ Conditional
 All below pillar keys have default ``False``, which means not change
 its respective parameter of kernel.
 
-sysctl:max-file
-~~~~~~~~~~~~~~~
+sysctl:fs.file-max
+~~~~~~~~~~~~~~~~~~
 
 The maximum number of file-handles that the Linux kernel will allocate.

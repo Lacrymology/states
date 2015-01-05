@@ -41,6 +41,7 @@ test:
           memcached.main.cas_misses: True
           memcached.main.cmd_flush: True
           memcached.main.cmd_get: True
+          memcached.main.cmd_set: True
           memcached.main.cmd_touch: True
           memcached.main.conn_yields: True
           memcached.main.connection_structures: True

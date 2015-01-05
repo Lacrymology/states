@@ -11,6 +11,7 @@ include:
 - sls: git.server.diamond
 {%- endcall %}
 
+{#- Can't test diamond metrics, git-shell is not a daemon #}
 test:
   monitoring:
     - run_all_checks
@@ -24,3 +25,4 @@ test:
     - require:
       - monitoring: test
       - cmd: doc
+

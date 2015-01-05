@@ -83,15 +83,6 @@ Example::
     https_allowed:
       - 192.168.0.0/24
 
-.. _pillar-elasticsearch-version:
-
-elasticsearch:version
-~~~~~~~~~~~~~~~~~~~~~
-
-The version of :doc:`/elasticsearch/doc/index` to install.
-
-Default: ``0.90.10``
-
 .. _pillar-elasticsearch-cluster-nodes-nodeminionID-state-port:
 
 elasticsearch:cluster:nodes:{{ node_minion_ID }}:{{ state }}:port

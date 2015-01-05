@@ -141,14 +141,6 @@ To use those SSL files in your states, you need to do the following:
     /etc/ssl/certs/{{ pillar['my_app']['ssl'] }}_chained.crt;
     tls_key = /etc/ssl/private/{{ pillar['my_app']['ssl'] }}.pem;
 
-ssl:expiry_days
-~~~~~~~~~~~~~~~
-
-Warning if the number of days until the SSL certificate expires less than given
-days.
-
-Default: ``15``.
-
 ssl:certs
 ~~~~~~~~~
 
@@ -158,6 +150,16 @@ Default: ``{}``.
 
 Conditional
 -----------
+
+ssl:expiry_days
+~~~~~~~~~~~~~~~
+
+Warning if the number of days until the SSL certificate expires less than given
+days.
+
+Default: ``15``.
+
+Used only if ``{{ appname }}:ssl`` is turned on.
 
 ssl:certs:{{ name }}:server_key
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

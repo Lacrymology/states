@@ -38,9 +38,22 @@ will use > 0 % memory percent, wrong diamond config may collect the value=0,
 set zmempct=False to fail the test if that happens.
 #}
 {%- macro diamond_process_test(state, zcpupct=True, zmempct=True) %}
-          process.{{ state }}.memory_info_ex.vms: False
-          process.{{ state }}.memory_info_ex.rss: False
           process.{{ state }}.cpu_percent: {{ zcpupct }}
+          process.{{ state }}.cpu_times.system: True
+          process.{{ state }}.cpu_times.user: True
+          process.{{ state }}.io_counters.read_bytes: True
+          process.{{ state }}.io_counters.read_count: True
+          process.{{ state }}.io_counters.write_bytes: True
+          process.{{ state }}.io_counters.write_count: True
+          process.{{ state }}.memory_info_ex.data: True
+          process.{{ state }}.memory_info_ex.dirty: True
+          process.{{ state }}.memory_info_ex.lib: True
+          process.{{ state }}.memory_info_ex.rss: False
+          process.{{ state }}.memory_info_ex.shared: True
+          process.{{ state }}.memory_info_ex.text: True
+          process.{{ state }}.memory_info_ex.vms: False
           process.{{ state }}.memory_percent: {{ zmempct }}
+          process.{{ state }}.num_ctx_switches.involuntary: True
+          process.{{ state }}.num_ctx_switches.voluntary: True
           process.{{ state }}.num_threads: False
 {%- endmacro %}

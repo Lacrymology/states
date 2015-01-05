@@ -49,19 +49,22 @@ test:
           redis.{{ redis_port }}.clients.blocked: True
           redis.{{ redis_port }}.clients.connected: True
           redis.{{ redis_port }}.clients.longest_output_list: True
-          redis.{{ redis_port }}.cpu.parent.system: True
-          redis.{{ redis_port }}.cpu.user.system: True
-          redis.{{ redis_port }}.cpu.children.system: True
+          redis.{{ redis_port }}.cpu.children.sys: True
           redis.{{ redis_port }}.cpu.children.user: True
-          redis.{{ redis_port }}.keys.expired_keys: True
-          redis.{{ redis_port }}.keys.evicted_keys: True
+          redis.{{ redis_port }}.cpu.parent.sys: True
+          redis.{{ redis_port }}.cpu.parent.user: True
+          redis.{{ redis_port }}.keys.evicted: True
+          redis.{{ redis_port }}.keys.expired: True
           redis.{{ redis_port }}.keyspace.hits: True
           redis.{{ redis_port }}.keyspace.misses: True
+          redis.{{ redis_port }}.last_save.changes_since: True
+          redis.{{ redis_port }}.last_save.time: True
+          redis.{{ redis_port }}.last_save.time_since: True
           redis.{{ redis_port }}.memory.external_view: True
-          redis.{{ redis_port }}.memory.internal_view: True
           redis.{{ redis_port }}.memory.fragmentation_ratio: True
+          redis.{{ redis_port }}.memory.internal_view: True
           redis.{{ redis_port }}.process.commands_processed: True
-          redis.{{ redis_port }}.process.connection_received: True
+          redis.{{ redis_port }}.process.connections_received: True
           redis.{{ redis_port }}.process.uptime: True
           redis.{{ redis_port }}.pubsub.channels: True
           redis.{{ redis_port }}.pubsub.patterns: True

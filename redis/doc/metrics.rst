@@ -70,13 +70,13 @@ Number of keys in database {{ db_name }}.
 
 Number of expired keys in database {{ db_name }}.
 
-keys.expired_keys
-~~~~~~~~~~~~~~~~~
+keys.expired
+~~~~~~~~~~~~
 
 Total number of key expiration events.
 
-keys.evicted_keys
-~~~~~~~~~~~~~~~~~
+keys.evicted
+~~~~~~~~~~~~
 
 Number of evicted keys due to maxmemory limit.
 
@@ -131,8 +131,8 @@ process.commands_processed
 Total number of commands processed by the :doc:`/redis/doc/index`
 server.
 
-process.connection_received
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+process.connections_received
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Total number of connections accepted by the :doc:`/redis/doc/index`
 server.

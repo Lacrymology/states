@@ -47,8 +47,6 @@ test:
           mysql.Com_alter_tablespace: True
           mysql.Com_analyze: True
           mysql.Com_assign_to_keycache: True
-          {#- Removed in 5.5
-          mysql.Com_backup_table: True #}
           mysql.Com_begin: True
           mysql.Com_binlog: True
           mysql.Com_call_procedure: True
@@ -95,9 +93,6 @@ test:
           mysql.Com_install_plugin: True
           mysql.Com_kill: True
           mysql.Com_load: True
-          {#- Removed in 5.5
-          mysql.Com_load_master_data: True
-          mysql.Com_load_master_table: True #}
           mysql.Com_lock_tables: True
           mysql.Com_optimize: True
           mysql.Com_preload_keys: True
@@ -111,8 +106,6 @@ test:
           mysql.Com_replace: True
           mysql.Com_replace_select: True
           mysql.Com_reset: True
-          {#- Removed in 5.5
-          mysql.Com_restore_table: True #}
           mysql.Com_revoke: True
           mysql.Com_revoke_all: True
           mysql.Com_rollback: True
@@ -125,8 +118,6 @@ test:
           mysql.Com_show_binlogs: True
           mysql.Com_show_charsets: True
           mysql.Com_show_collations: True
-          {#- Removed in 5.5
-          mysql.Com_show_column_types: True #}
           mysql.Com_show_contributors: True
           mysql.Com_show_create_db: True
           mysql.Com_show_create_event: True
@@ -145,8 +136,6 @@ test:
           mysql.Com_show_grants: True
           mysql.Com_show_keys: True
           mysql.Com_show_master_status: True
-          {#- Removed in 5.5
-          mysql.Com_show_new_master: True #}
           mysql.Com_show_open_tables: True
           mysql.Com_show_plugins: True
           mysql.Com_show_privileges: True
@@ -183,8 +172,6 @@ test:
           mysql.Com_xa_recover: True
           mysql.Com_xa_rollback: True
           mysql.Com_xa_start: True
-          {#- Disabled by default
-          mysql.Compression: True #}
           mysql.Connections: True
           mysql.Created_tmp_disk_tables: True
           mysql.Created_tmp_files: True
@@ -192,8 +179,6 @@ test:
           mysql.Delayed_errors: True
           mysql.Delayed_insert_threads: True
           mysql.Delayed_writes: True
-          {#- Only avaiable on a slave
-          mysql.Exec_Master_Log_Pos: True #}
           mysql.Flush_commands: True
           mysql.Handler_commit: True
           mysql.Handler_delete: True
@@ -217,8 +202,6 @@ test:
           mysql.Innodb_buffer_pool_pages_misc: True
           mysql.Innodb_buffer_pool_pages_total: True
           mysql.Innodb_buffer_pool_read_ahead_rnd: True
-          {#- Removed in 5.1.51
-          mysql.Innodb_buffer_pool_read_ahead_seq: True #}
           mysql.Innodb_buffer_pool_read_requests: True
           mysql.Innodb_buffer_pool_reads: True
           mysql.Innodb_buffer_pool_wait_free: True
@@ -270,8 +253,6 @@ test:
           mysql.Opened_files: True
           mysql.Opened_table_definitions: True
           mysql.Opened_tables: True
-          {#- Unknown/Non-existent
-          mysql.Position: True #}
           mysql.Prepared_stmt_count: True
           mysql.Qcache_free_blocks: True
           mysql.Qcache_free_memory: True
@@ -283,14 +264,6 @@ test:
           mysql.Qcache_total_blocks: True
           mysql.Queries: True
           mysql.Questions: True
-          {#- Only available on the slave
-          mysql.Read_Master_Log_Pos: True
-          mysql.Relay_Log_Pos: True
-          mysql.Relay_Log_Space: True #}
-          {#- Variable type is string, not numeric
-          mysql.Rpl_status: True #}
-          {#- Only available on the slave
-          mysql.Seconds_Behind_Master: True #}
           mysql.Select_full_join: True
           mysql.Select_full_range_join: True
           mysql.Select_range: True
@@ -298,8 +271,6 @@ test:
           mysql.Select_scan: True
           mysql.Slave_open_temp_tables: True
           mysql.Slave_retried_transactions: True
-          {#- Only available on the slave
-          mysql.Slave_running: True #}
           mysql.Slow_launch_threads: True
           mysql.Slow_queries: True
           mysql.Sort_merge_passes: True
@@ -309,9 +280,6 @@ test:
           mysql.Ssl_accept_renegotiates: True
           mysql.Ssl_accepts: True
           mysql.Ssl_callback_cache_hits: True
-          {#- Variable type is string, not numeric
-          mysql.Ssl_cipher: True
-          mysql.Ssl_cipher_list: True #}
           mysql.Ssl_client_connects: True
           mysql.Ssl_connect_renegotiates: True
           mysql.Ssl_ctx_verify_depth: True
@@ -321,8 +289,6 @@ test:
           mysql.Ssl_finished_connects: True
           mysql.Ssl_session_cache_hits: True
           mysql.Ssl_session_cache_misses: True
-          {#- Variable type is string, not numeric
-          mysql.Ssl_session_cache_mode: True #}
           mysql.Ssl_session_cache_overflows: True
           mysql.Ssl_session_cache_size: True
           mysql.Ssl_session_cache_timeouts: True
@@ -330,8 +296,6 @@ test:
           mysql.Ssl_used_session_cache_entries: True
           mysql.Ssl_verify_depth: True
           mysql.Ssl_verify_mode: True
-          {#- Variable type is string, not numeric
-          mysql.Ssl_version: True #}
           mysql.Table_locks_immediate: True
           mysql.Table_locks_waited: True
           mysql.Tc_log_max_pages_used: True

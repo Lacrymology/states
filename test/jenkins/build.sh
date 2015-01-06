@@ -106,5 +106,6 @@ xz -d -c /home/ci-agent/$BUILD_IDENTITY-stderr.log.xz
 for f in /home/ci-agent/$BUILD_IDENTITY-*.log.xz; do
   cp $f $WORKSPACE/`basename $f | sed "s/$BUILD_IDENTITY/$JOB_NAME/"`
 done
+cp /home/ci-agent/$BUILD_IDENTITY-upstart.log.tar.xz $WORKSPACE/$JOB_NAME-upstart.log.tar.xz
 mv /srv/salt/jenkins_archives/$BUILD_IDENTITY.tar.gz $WORKSPACE/bootstrap-archive.tar.gz
 echo "TIME-METER: Total time: $(($(date +%s) - start_time)) seconds"

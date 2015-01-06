@@ -70,6 +70,9 @@ apt:
     - contents: |
         # {{ salt['pillar.get']('message_do_not_modify') }}
         {{ salt['pillar.get']('apt:sources')|indent(8) }}
+  cmd:
+    - run
+    - name: dpkg --configure -a
   module:
     - wait
     - name: pkg.refresh_db
@@ -79,6 +82,7 @@ apt:
     - require:
       - file: dpkg.conf
       - cmd: apt-key
+      - cmd: apt
 {%- set packages_blacklist = salt['pillar.get']('packages:blacklist', []) -%}
 {%- set packages_whitelist = salt['pillar.get']('packages:whitelist', []) -%}
 {%- if packages_blacklist or packages_whitelist %}

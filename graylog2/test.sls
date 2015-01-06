@@ -93,3 +93,17 @@ graylog2_server-es_cluster:
     - accepted_failure: 1 nodes in cluster (outside range 2:2)
     - require:
       - monitoring: test
+
+test_create_graylog_stream:
+  graylog_stream:
+    - present
+    - name: "CI Test Stream"
+    - require:
+      - sls: graylog2.server
+
+test_absent_graylog_stream:
+  graylog_stream:
+    - absent
+    - name: "CI Test Stream"
+    - require:
+      - graylog_stream: test_create_graylog_stream

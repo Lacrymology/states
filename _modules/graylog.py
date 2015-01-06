@@ -225,3 +225,33 @@ def create_stream(
     raise_if_error(res_create_alert)
 
     return stream
+
+
+def delete_stream(title):
+
+    """
+    Delete a stream with given title.
+
+    :param title: Descriptive name of the stream.
+    """
+    # Check if stream with same title exists
+    is_exist = False
+    stream_ids = []
+    gl2_streams = streams()
+    for stream in gl2_streams:
+        if stream['title'] == title:
+            is_exist = True
+            stream_ids.append(stream['id'])
+
+    if not is_exist:
+        return
+
+    for stream_id in stream_ids:
+        res_delete_stream = requests.delete(
+            _base_url() + '/streams/{}'.format(stream_id),
+            auth=_auth(),
+            headers={'content-type': 'application/json'})
+
+        if not res_delete_stream.ok:
+            res_delete_stream.raise_for_status()
+    return {'stream_ids': stream_ids}

@@ -70,3 +70,41 @@ def present(
 
     ret['changes'] = res
     return ret
+
+
+def absent(name):
+    """
+    Delete a stream with given title.
+
+    :param title: Descriptive name of the stream.
+    """
+    ret = {
+        'name': name,
+        'changes': {},
+        'result': True,
+        'comment': "",
+    }
+
+    # Check if stream with same title exists
+    is_exist = False
+    stream_ids = []
+    streams = __salt__['graylog.streams']()
+    for stream in streams:
+        if stream['title'] == name:
+            is_exist = True
+            stream_ids.append(stream['id'])
+
+    if __opts__['test']:
+        if is_exist:
+            ret['comment'] = {'stream_id', stream_ids}
+        return ret
+
+    try:
+        res = __salt__['graylog.delete_stream'](name)
+    except requests.exceptions.HTTPError, e:
+        ret['result'] = False
+        ret['changes']['error'] = str(e)
+        return ret
+
+    ret['changes'] = res
+    return ret

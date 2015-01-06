@@ -61,10 +61,6 @@ check_backup.py:
       - pkg: nagios-nrpe-server
       - module: backup_client_nrpe-requirements
 
-/etc/nagios/s3lite.yml:
-  file:
-    - absent
-
 /usr/lib/nagios/plugins/check_backup_s3lite.py:
   file:
     - managed

@@ -9,10 +9,6 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
   file:
     - absent
 
-/etc/backup-archive.conf:
-  file:
-    - absent
-
 /etc/cron.weekly/backup-archiver:
   file:
     - absent

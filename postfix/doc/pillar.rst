@@ -33,6 +33,8 @@ Example::
     maxproc: 2
 
   postfix:
+    domains:
+      - domain.ltd
     spam_filter: True
     allow_remote_client: True
     virtual_aliases: |
@@ -42,9 +44,6 @@ Example::
       - saltlint.org
       - saltci.org
     message_size_limit: 15360000
-    mydestination:
-      - localhost.localdomain
-      - localhost
     mynetworks:
       - 127.0.0.0/8
       - 192.168.122.0/24
@@ -105,7 +104,9 @@ for more information.
 
 .. warning::
 
-  ensuring these values must not be set in :ref:`pillar-postfix-mydestination` pillar.
+  ensuring these values must not be set in :ref:`pillar-postfix-mydestination`
+  pillar.  $mydomain and $myhostname must not set in
+  :ref:`pillar-postfix-mydestination`, too.
 
 .. note::
 

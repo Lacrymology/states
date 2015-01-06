@@ -230,7 +230,6 @@ test:
           amavis.OpsDecType-asc.count: False
           amavis.OpsDecType-asc.percentage: False
           amavis.OpsDecType-asc.frequency: False
-          amavis.sysUpTime.time: False
         Postfix:
           postfix.(recv|send).status.sent: True
         ProcessResources:

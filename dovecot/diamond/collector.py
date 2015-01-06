@@ -24,6 +24,7 @@ import mailbox
 
 import diamond.collector
 
+
 class MailCollector(diamond.collector.Collector):
 
     def get_default_config_help(self):
@@ -48,6 +49,7 @@ class MailCollector(diamond.collector.Collector):
         config.update({
             'spool_path': '/var/mail/',
             'mailbox_prefix': '',
+            'path': 'mail',
             'prefixes': {}
         })
         return config
@@ -73,7 +75,7 @@ class MailCollector(diamond.collector.Collector):
                 prefix = ""
 
             for uname in os.listdir(path):
-                fpath = os.path.join(self.config['spool_path'], uname)
+                fpath = os.path.join(path, uname)
                 if os.path.isfile(fpath):
                     mbox = mailbox.mbox(fpath)
                     mname = "{0}{1}.count".format(prefix, uname)

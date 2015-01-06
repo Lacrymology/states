@@ -94,6 +94,8 @@ for ltype in stdout stderr; do
     sudo salt -t 30 "$BUILD_IDENTITY" --output json cmd.run "xz -c /root/salt/$ltype.log > /tmp/$BUILD_IDENTITY-$ltype.log.xz"
 done
 
+sudo salt -t 30 "$BUILD_IDENTITY" --output json cmd.run "cd /var/log && tar -cJf /tmp/$BUILD_IDENTITY-upstart.log.tar.xz upstart"
+
 sudo salt -t 30 "$BUILD_IDENTITY" --output json cmd.run "grep COUNTER: /root/salt/stdout.log"
 sudo salt -t 60 "$BUILD_IDENTITY" --output json cmd.run_all "salt-call -l info -c $CUSTOM_CONFIG_DIR state.sls test.jenkins.result"
 

@@ -193,20 +193,3 @@ extend:
   file:
     - absent
 {% endif %}
-
-{#- remove old graylog2 indices #}
-old_graylog2_index:
-  pkg:
-    - installed
-    - name: curl
-  cmd:
-    - run
-    - name: curl -XDELETE 'http://127.0.0.1:9200/graylog2-{{ grains['id'] }}_*'
-    {#-
-      check if graylog2 indices exist
-      graylog2 prefix: graylog2-{{ grains['id'] }}_
-    #}
-    - onlyif: /bin/sleep 30 && curl --silent --fail -XGET 'http://127.0.0.1:9200/graylog2-{{ grains['id'] }}_*/_search?'
-    - require:
-      - pkg: old_graylog2_index
-      - process: elasticsearch

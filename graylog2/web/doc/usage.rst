@@ -59,20 +59,21 @@ We predefined two streams for two common errors:
 
 * Out of memory:
 
-  * level must be smaller than `5`
+  * level must be smaller than ``5``
 
     Messages with log levels: warn, err, crit, alert, emerg
 
-  * message must match regular expression `(?i)(\boom\b|out of memory)`
+  * message must match regular expression ``(?i)(\boom\b|out of memory)``
 
-    Messages must contains `oom` or `out of memory` string (case insensitive).
+    Messages must contains ``oom`` or ``out of memory`` string (case
+    insensitive).
 
 * Shinken Errors:
 
-  * source must match regular expression `^shinken.+`
+  * source must match regular expression ``^shinken.+``
 
-    Source name must start with `shinken` string.
+    Source name must start with ``shinken`` string
 
-  * level must be smaller than `4`
+  * level must be smaller than ``4``
 
     Messages with log levels: err, crit, alert, emerg

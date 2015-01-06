@@ -70,7 +70,7 @@ server {
 {% include 'nginx/location_robots.jinja2' %}
 
     location / {
-{%- set timeout = salt['pillar.get']('graphite:timeout', 30) %}
+{%- set timeout = salt['pillar.get']('graphite:timeout', 60) %}
         uwsgi_pass graphite;
         include uwsgi_params;
         uwsgi_read_timeout {{ salt['pillar.get']('graphite:timeout', 60) }};

@@ -177,10 +177,27 @@ characters.
 
 Default: randomly generated (``None``).
 
-graylog2:stream_receivers
-~~~~~~~~~~~~~~~~~~~~~~~~~
+graylog2:streams
+~~~~~~~~~~~~~~~~
 
-List of email addresses to receive predefined
-:doc:`/graylog2/doc/index` streams.
+List of :doc:`/graylog2/doc/index` streams to created.
 
-Default: don't send alert emails (``[]``).
+Format::
+
+  graylog2:
+    streams:
+      {{ stream_name }}:
+        rules:
+          - field: {{ field_name }}
+            value: {{ value }}
+            inverted: {{ True or False }}
+            type: {{ rule type }}
+          - ...
+        receivers:
+          - {{ email }}
+          - ...
+        receivers_type: {{ "emails" or "users" }}
+
+Only ``{{ stream_name }}`` is mandatory.
+
+Default: don't send alert emails (``{}``).

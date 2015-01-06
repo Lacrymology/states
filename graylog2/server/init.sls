@@ -231,52 +231,33 @@ import_graylog2_syslog:
       - process: graylog2-server
       - module: requests
 
-{%- set stream_receivers = salt['pillar.get']('graylog2:stream_receivers', []) %}
-out_of_memory_stream:
+{%- set streams = salt['pillar.get']('graylog2:streams', {}) %}
+{%- for stream_name, stream_data in streams.iteritems() %}
+  {%- set rules = stream_data['rules']|default([]) %}
+  {%- set receivers = stream_data['receivers']|default([]) %}
+  {% set receivers_type = stream_data['receivers_type']|default("emails") %}
+{{ stream_name|lower|replace(' ', '_') }}_graylog2_stream:
   graylog_stream:
     - present
-    - name: "Out Of Memory"
+    - name: {{ stream_name }}
+  {%- if rules %}
     - rules:
-      - field: "level"
-        value: "5"
-        inverted: False
-        type: 4
-      - field: "message"
-        value: |
-          (?i)(\boom\b|out of memory)
-        inverted: False
-        type: 2
+      {%- for rule in rules %}
+      - field: {{ rule['field'] }}
+        value: {{ rule['value'] }}
+        inverted: {{ rule['inverted'] }}
+        type: {{ rule['type'] }}
+      {%- endfor %}
+  {%- endif %}
     - receivers:
-{%- for receiver in stream_receivers %}
-      - {{ receiver }}
-{%- endfor %}
-    - require:
-      - process: graylog2-server
-      - module: requests
-
-shinken_errors_stream:
-  graylog_stream:
-    - present
-    - name: "Shinken Errors"
-    - rules:
-      - field: "level"
-        value: "4"
-        inverted: False
-        type: 4
-      - field: "source"
-        value: |
-          ^shinken.+`
-        inverted: False
-        type: 2
-{%- if stream_receivers %}
-    - receivers:
-  {%- for receiver in stream_receivers %}
+  {%- for receiver in receivers %}
       - {{ receiver }}
   {%- endfor %}
-{%- endif %}
+    - receivers_type: {{ receivers_type }}
     - require:
       - process: graylog2-server
       - module: requests
+{%- endfor %}
 
 /var/log/graylog2:
   file:

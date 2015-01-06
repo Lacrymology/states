@@ -304,7 +304,7 @@ def test(name, pillar_doc, additional=()):
     monitor = test_monitor(name, pillar_doc, additional=additional)
     ret = {'name': name,
            'changes': {},
-           'result': pillar['result'],
+           'result': pillar['result'] and monitor['result'],
            'comment': ""}
     if not pillar['result']:
         ret['comment'] = os.linesep.join(("Pillar", "=" * 6,

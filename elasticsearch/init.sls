@@ -18,7 +18,7 @@ include:
   - nginx
   - ssl
 {% endif %}
-{%- set version = salt['pillar.get']('elasticsearch:version', '0.90.10') %}
+{%- set version = '0.90.10' %}
 
 /etc/default/elasticsearch:
   file:

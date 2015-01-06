@@ -20,8 +20,8 @@ uwsgi_diamond_resources:
       - |
         [[uwsgi]]
         cmdline = ^\/usr\/local\/uwsgi.*\/uwsgi
-
-{%- if grains['virtual'] == 'kvm' and salt['file.file_exists']('/sys/kernel/mm/ksm/run') %}
+{%- set test = salt['pillar.get']('__test__', False) %}
+{%- if test or (grains['virtual'] == 'kvm' and salt['file.file_exists']('/sys/kernel/mm/ksm/run')) %}
 diamond_ksm:
   file:
     - managed

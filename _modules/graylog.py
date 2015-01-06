@@ -141,7 +141,7 @@ def streams():
 
 def create_stream(
         title, description='', creator=None, rules=[],
-        receivers_type="emails", receivers=[]):
+        receivers_type="emails", receivers=None):
 
     """
     Create a stream.
@@ -153,7 +153,7 @@ def create_stream(
                   syntax: [{"field": "source", "value": "aaaa",
                             "inverted": false, "type": 1}]
     :receivers_type: "emails" or "users". Default to "emails".
-    :receivers: List of alerts receivers of the streams. Default to [].
+    :receivers: List of alerts receivers of the streams. Default to None.
     """
 
     stream_params = {
@@ -193,6 +193,9 @@ def create_stream(
         )
 
         raise_if_error(res_create_rule)
+
+    if not receivers:
+        receivers = []
 
     for receiver in receivers:
         payload = {"entity": receiver, "type": receivers_type}

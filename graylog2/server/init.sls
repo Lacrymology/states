@@ -246,12 +246,10 @@ out_of_memory_stream:
           (?i)(\boom\b|out of memory)
         inverted: False
         type: 2
-{%- if stream_receivers %}
     - receivers:
-  {%- for receiver in stream_receivers %}
+{%- for receiver in stream_receivers %}
       - {{ receiver }}
-  {%- endfor %}
-{%- endif %}
+{%- endfor %}
     - require:
       - process: graylog2-server
       - module: requests

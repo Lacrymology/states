@@ -46,7 +46,7 @@ apt-key:
   file:
     - absent
 
-/var/lib/apt/periodic/autoclean-stamp:
+/var/lib/apt/periodic:
   file:
     - absent
 

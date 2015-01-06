@@ -23,4 +23,4 @@ graylog2_web_diamond_resource:
     - text:
       - |
         [[graylog2-web]]
-        cmdline = ^java.+-Duser\.dir=/usr/local/graylog2-web-interface.*$
+        cmdline = java.+\-Duser\.dir=/usr/local/graylog2\-web\-interface

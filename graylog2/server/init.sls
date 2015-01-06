@@ -233,8 +233,8 @@ import_graylog2_syslog:
 
 {%- set stream_receivers = salt['pillar.get']('graylog2:stream_receivers', []) %}
 out_of_memory_stream:
-  graylog:
-    - stream
+  graylog_stream:
+    - present
     - name: "Out Of Memory"
     - rules:
       - field: "level"
@@ -257,8 +257,8 @@ out_of_memory_stream:
       - module: requests
 
 shinken_errors_stream:
-  graylog:
-    - stream
+  graylog_stream:
+    - present
     - name: "Shinken Errors"
     - rules:
       - field: "level"

@@ -70,11 +70,6 @@ user_{{ user }}:
     - watch_in:
       - service: salt-master
 
-{#- TODO: remove that statement in >= 2014-04 #}
-{{ opts['cachedir'] }}/salt-api-requirements.txt:
-  file:
-    - absent
-
 salt-api-requirements:
   file:
     - managed

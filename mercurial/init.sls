@@ -9,11 +9,6 @@ include:
   - pip
   - python.dev
 
-{#- TODO: remove that statement in >= 2014-04 #}
-{{ opts['cachedir'] }}/salt-mercurial-requirements.txt:
-  file:
-    - absent
-
 mercurial:
   pkg:
     - purged

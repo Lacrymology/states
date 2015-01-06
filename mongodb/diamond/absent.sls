@@ -15,8 +15,3 @@ diamond_mongodb:
   file:
     - absent
     - name: /etc/diamond/collectors/MongoDBCollector.conf
-
-{#- TODO: remove that statement in >= 2014-04 #}
-/usr/local/diamond/salt-pymongo-requirements.txt:
-  file:
-    - absent

@@ -31,11 +31,6 @@ backup-server:
     - require:
       - pkg: backup-server
 
-{#- TODO: remove that statement in >= 2014-04 #}
-{{ opts['cachedir'] }}/backup-requirements.txt:
-  file:
-    - absent
-
 backup-archiver-dependency:
   file:
     - absent

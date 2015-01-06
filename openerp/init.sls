@@ -34,12 +34,6 @@ include:
 {%- set password = salt['password.pillar']('openerp:db:password', 10)  %}
 {%- set username = salt['pillar.get']('openerp:db:username', 'openerp') %}
 
-{#- TODO: remove that statement in >= 2014-04 #}
-{%- for prefix in ('salt', 'salt-openerp') %}
-{{ home }}/{{ prefix }}-requirements.txt:
-  file:
-    - absent
-{%- endfor %}
 
 openerp_depends:
   file:

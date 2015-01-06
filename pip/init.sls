@@ -69,11 +69,6 @@ python-setuptools:
 
 {%- set version='1.5.2' -%}
 
-{#- TODO: remove that statement in >= 2014-04 #}
-{{ opts['cachedir'] }}/pip-1.3.1: {#- leave the old version there #}
-  file:
-    - absent
-
 pip:
   file:
     - directory

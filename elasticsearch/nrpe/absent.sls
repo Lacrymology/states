@@ -24,9 +24,3 @@ pyelasticsearch:
   file:
     - absent
     - name: /usr/local/nagios/salt-elasticsearch-requirements.txt
-
-{#- TODO: remove that statement in >= 2014-04 #}
-/usr/local/nagios/elasticsearch-requirements.txt:
-  file:
-    - absent
-

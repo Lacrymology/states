@@ -14,8 +14,3 @@ esclient:
   file:
     - absent
     - name: {{ opts['cachedir'] }}/pip/elasticsearch.backup
-
-{#- TODO: remove that statement in >= 2014-04 #}
-{{ opts['cachedir'] }}/esclient-requirements.txt:
-  file:
-    - absent

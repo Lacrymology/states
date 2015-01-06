@@ -26,11 +26,6 @@ backup-elasticsearch:
       - file: bash
       - module: esclient
 
-{#- TODO: remove that statement in >= 2014-04 #}
-{{ opts['cachedir'] }}/esclient-requirements.txt:
-  file:
-    - absent
-
 esclient:
   file:
     - managed

@@ -25,11 +25,6 @@ include:
   - salt
   - ssh.client
 
-{#- TODO: remove that statement in >= 2014-04 #}
-{{ opts['cachedir'] }}/salt-master-requirements.txt:
-  file:
-    - absent
-
 /srv/salt:
   file:
     - directory

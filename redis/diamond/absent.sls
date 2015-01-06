@@ -13,8 +13,3 @@ diamond_redis:
   file:
     - absent
     - name: /usr/local/diamond/salt-redis-requirements.txt
-
-{#- TODO: remove that statement in >= 2014-04 #}
-/usr/local/diamond/redis-requirements.txt:
-  file:
-    - absent

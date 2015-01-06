@@ -9,8 +9,3 @@ requests:
   file:
     - absent
     - name: {{ opts['cachedir'] }}/pip/requests
-
-{#- TODO: remove that statement in >= 2014-04 #}
-{{ opts['cachedir'] }}/requests-requirements.txt:
- file:
-   - absent

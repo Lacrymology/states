@@ -53,11 +53,6 @@ salt-master-requirements:
     - absent
     - name: {{ opts['cachedir'] }}/pip/salt.master
 
-{#- TODO: remove that statement in >= 2014-04 #}
-{{ opts['cachedir'] }}/salt-master-requirements.txt:
-  file:
-    - absent
-
 /var/cache/salt/master:
   file:
     - absent

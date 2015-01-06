@@ -10,11 +10,6 @@ include:
   - mongodb
   - pip
 
-{#- TODO: remove that statement in >= 2014-04 #}
-/usr/local/diamond/salt-pymongo-requirements.txt:
-  file:
-    - absent
-
 diamond-pymongo:
   file:
     - managed

@@ -10,11 +10,6 @@ uwsgitop:
     - absent
     - name: {{ opts['cachedir'] }}/pip/uwsgi.top
 
-{#- TODO: remove that statement in >= 2014-04 #}
-{{ opts['cachedir'] }}/salt-uwsgitop-requirements.txt:
-  file:
-    - absent
-
 {#
 {% if salt['cmd.has_exec']('pip') %}
 uwsgitop:

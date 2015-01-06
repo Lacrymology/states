@@ -14,8 +14,3 @@ route53:
     - removed
     - order: 1
 {%- endif %}
-
-{#- TODO: remove that statement in >= 2014-04 #}
-{{ opts['cachedir'] }}/salt-route53-requirements.txt:
-  file:
-    - absent

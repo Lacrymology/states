@@ -33,7 +33,6 @@ dovecot_diamond_resources:
     - mode: 440
     - require:
       - file: /etc/diamond/collectors
-      - service: dovecot
       - file: /usr/local/diamond/share/diamond/collectors/mail/mail.py
     - watch_in:
       - service: diamond

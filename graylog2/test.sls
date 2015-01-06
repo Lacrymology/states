@@ -66,6 +66,7 @@ test:
       - sls: graylog2.server.diamond
       - sls: graylog2.web
       - sls: graylog2.web.diamond
+      - monitoring: test
 
 test_graylog2:
   qa:

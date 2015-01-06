@@ -67,21 +67,13 @@ test:
       - sls: graylog2.web
       - sls: graylog2.web.diamond
 
-test_graylog2_server:
+test_graylog2:
   qa:
     - test
     - name: graylog2.server
     - additional:
+      - graylog2.web
       - graylog2.server.backup
-    - pillar_doc: {{ opts['cachedir'] }}/doc/output
-    - require:
-      - monitoring: test
-      - cmd: doc
-
-test_graylog2_web:
-  qa:
-    - test
-    - name: graylog2.web
     - pillar_doc: {{ opts['cachedir'] }}/doc/output
     - require:
       - monitoring: test

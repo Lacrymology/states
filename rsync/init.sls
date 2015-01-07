@@ -9,9 +9,6 @@ include:
   - rsyslog
   - xinetd
 
-{%- from "upstart/absent.sls" import upstart_absent with context -%}
-{{ upstart_absent('rsync') }}
-
 extend:
   rsync:
     pkg:

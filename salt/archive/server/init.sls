@@ -26,10 +26,6 @@ include:
   - ssl
 {%- endif %}
 
-/etc/cron.hourly/salt_archive:
-  file:
-    - absent
-
 /etc/cron.d/salt-archive:
   file:
     - managed

@@ -88,12 +88,11 @@ elasticsearch:
     - require:
       - pkg: elasticsearch
       - pkg: salt_minion_deps
+      - service: elasticsearch
   service:
     - running
     - enable: True
     - order: 50
-    - require:
-      - process: elasticsearch
     - watch:
       - file: /etc/default/elasticsearch
       - file: /etc/elasticsearch/logging.yml

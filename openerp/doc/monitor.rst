@@ -27,9 +27,8 @@ openerp_cron
 
 Monitor :doc:`/openerp/doc/index` scheduler daemon, expect exactly one process.
 
-Optional
---------
-
-Only use if :ref:`pillar-openerp-ssl` is turned on.
+.. note:: Only check if :ref:`pillar-openerp-company_db` is defined.
 
 .. include:: /nginx/doc/monitor_ssl.inc
+
+.. note:: Only check if :ref:`pillar-openerp-ssl` is turned on.

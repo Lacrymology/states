@@ -45,10 +45,6 @@ diamond_requirements:
     - require:
       - virtualenv: diamond
 
-/etc/diamond/collectors/ProcessMemoryCollector.conf:
-  file:
-    - absent
-
 diamond.conf:
   file:
     - managed
@@ -123,4 +119,3 @@ diamond:
     - mode: 440
     - require:
       - file: /etc/diamond/collectors
-      - file: /etc/diamond/collectors/ProcessMemoryCollector.conf

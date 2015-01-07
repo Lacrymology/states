@@ -67,7 +67,7 @@ python-setuptools:
     - group: root
     - mode: 550
 
-{%- set version='1.5.2' -%}
+{%- set version='1.5.2' %}
 
 pip:
   file:

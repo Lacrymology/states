@@ -245,7 +245,7 @@ class LintCheckSubkeyInSaltPillar(CheckPillarStyleBase):
 
 
 def _filter_files_with_exts(paths, exts):
-    return set(filter(lambda p: any(p.endswith('.' + e) for e in exts), paths))
+    return set(filter(lambda p: any(p.endswith(e) for e in exts), paths))
 
 
 def _grep(paths, pattern, *exts):

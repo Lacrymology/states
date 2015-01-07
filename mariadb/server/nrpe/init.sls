@@ -14,12 +14,6 @@ include:
   - ssl.nrpe
 {%- endif %}
 
-/etc/nagios/nrpe.d/mysql.cfg:
-  file:
-    - absent
-    - watch_in:
-      - service: nagios-nrpe-server
-
 nrpe_mysql_check_querry:
   file:
     - managed

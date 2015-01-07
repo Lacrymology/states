@@ -11,10 +11,6 @@ include:
   - local
   - backup.client
 
-/etc/cron.daily/backup-mysql:
-  file:
-    - absent
-
 /usr/local/bin/backup-mysql:
   file:
     - managed

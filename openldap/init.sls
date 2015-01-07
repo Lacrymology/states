@@ -60,14 +60,6 @@ openldap:
       - pkg: ssl-cert
 {% endif %}
 
-/tmp/tls.ldif:
-  file:
-    - absent
-
-/tmp/logging.ldif:
-  file:
-    - absent
-
 {{ opts['cachedir'] }}/dbconfig.ldif:
   file:
     - managed

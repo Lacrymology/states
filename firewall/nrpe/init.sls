@@ -24,10 +24,6 @@ include:
     - require:
       - pkg: sudo
 
-/usr/local/bin/check_firewall.py:
-  file:
-    - absent
-
 /usr/lib/nagios/plugins/check_firewall.py:
   file:
     - managed

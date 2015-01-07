@@ -21,10 +21,6 @@ include:
 
 {%- set check_pg_version = "2.21.0" %}
 
-/usr/local/check_postgres-2.21.0:
-  file:
-    - absent
-
 check_postgres:
   archive:
     - extracted
@@ -71,12 +67,6 @@ check_psql_encoding.py:
     - group: root
     - require:
       - pkg: sudo
-
-/etc/nagios/nrpe.d/postgresql.cfg:
-  file:
-    - absent
-    - watch_in:
-      - service: nagios-nrpe-server
 
 {%- from 'nrpe/passive.jinja2' import passive_check with context %}
 {{ passive_check('postgresql.common') }}

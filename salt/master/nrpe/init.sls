@@ -19,10 +19,6 @@ include:
   - sudo
   - sudo.nrpe
 
-/etc/sudoers.d/nrpe_salt_mine:
-  file:
-    - absent
-
 /etc/sudoers.d/nrpe_salt_master:
   file:
     - managed
@@ -49,21 +45,5 @@ include:
     - require_in:
       - service: nagios-nrpe-server
       - service: nsca_passive
-
-salt_check_mine_nrpe_check:
-  file:
-    - absent
-    - name: /usr/local/nagios/salt-check-mine-requirements.txt
-
-salt_mine_collect_minions_data:
-  file:
-    - name: /etc/cron.twice_daily/salt_mine_data
-    - absent
-
-/etc/cron.d/salt_mine_data:
-  file:
-    - absent
-    - watch_in:
-      - service: cron
 
 {{ passive_check('salt.master') }}

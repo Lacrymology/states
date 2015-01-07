@@ -200,10 +200,6 @@ djangopypi2_admin_user:
     - watch:
       - postgres_database: djangopypi2
 
-{{ root_dir }}/django_contrib_sites.yaml:
-  file:
-    - absent
-
 {# set django.contrib.sites.models.Site id=1 #}
 djangopypi2-django_contrib_sites:
   file:

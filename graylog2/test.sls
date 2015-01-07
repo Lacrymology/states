@@ -100,3 +100,16 @@ test_absent_graylog_stream:
     - name: "CI Test Stream"
     - require:
       - graylog_stream: test_create_graylog_stream
+
+{#- workaround for file.accumulated reload_modules bug #}
+extend:
+  graylog2_web_diamond_resource:
+    file:
+      - require:
+        - sls: graylog2.server
+        - sls: graylog2.web
+  graylog2_server_diamond_resources:
+    file:
+      - require:
+        - sls: graylog2.server
+        - sls: graylog2.web

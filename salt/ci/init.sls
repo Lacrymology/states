@@ -19,11 +19,6 @@ include:
   - sudo
   - virtualenv
 
-{#- this file no longer managed on salt ci VM, use one provided by build #}
-/usr/local/bin/retcode_check.py:
-  file:
-    - absent
-
 {%- for script in ('import_test_data', ) %}
 /usr/local/bin/{{ script }}.py:
   file:
@@ -60,22 +55,6 @@ include:
     - group: root
     - require:
       - pkg: sudo
-
-/var/lib/jenkins/salt-test.sh:
-  file:
-    - absent
-
-/var/lib/jenkins/salt-build.sh:
-  file:
-    - absent
-
-/var/lib/jenkins/salt-post.sh:
-  file:
-    - absent
-
-/etc/cron.d/salt-archive-ci:
-  file:
-    - absent
 
 /srv/salt/jenkins_archives:
   file:

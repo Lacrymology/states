@@ -24,9 +24,8 @@ salt_archive_timestamp
 
 Check last archive synchronization time stamp.
 
-Optional
---------
-
-Only use if :ref:`pillar-salt_archive-ssl` is turned on.
+.. note:: Only check if :ref:`pillar-salt_archive-source` is defined.
 
 .. include:: /nginx/doc/monitor_ssl.inc
+
+.. note:: Only check if :ref:`pillar-salt_archive-ssl` is turned on.

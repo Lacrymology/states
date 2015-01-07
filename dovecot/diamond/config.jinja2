@@ -1,8 +1,2 @@
 enabled = True
 spool_path = /var/mail/vhosts
-
-[prefixes]
-{%- for prefix in salt['pillar.get']('ldap:data', {}).keys() %}
-[[{{ prefix|replace(".", "_") }}]]
-spool_path = {{ prefix }}
-{% endfor %}

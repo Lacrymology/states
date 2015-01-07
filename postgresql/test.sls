@@ -36,8 +36,18 @@ test_backup_all:
         ProcessResources:
     {{ diamond_process_test('postgresql') }}
         Postgresql:
+          postgres.database.monitoring.blks_hit: True
+          postgres.database.monitoring.blks_read: True
           postgres.database.monitoring.connections: False
+          postgres.database.monitoring.numbackends: True
           postgres.database.monitoring.size: False
+          postgres.database.monitoring.tup_deleted: True
+          postgres.database.monitoring.tup_fetched: True
+          postgres.database.monitoring.tup_inserted: True
+          postgres.database.monitoring.tup_returned: True
+          postgres.database.monitoring.tup_updated: True
+          postgres.database.monitoring.xact_commit: True
+          postgres.database.monitoring.xact_rollback: True
     - require:
       - sls: postgresql.server
       - service: diamond

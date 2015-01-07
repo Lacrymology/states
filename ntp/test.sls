@@ -18,6 +18,17 @@ test:
     - map:
         ProcessResources:
           {{ diamond_process_test('ntp') }}
+        NtpdCollector:
+            ntpd.delay: True
+            ntpd.est_error: True
+            ntpd.frequency: True
+            ntpd.jitter: True
+            ntpd.max_error: True
+            ntpd.offset: True
+            ntpd.poll: True
+            ntpd.reach: True
+            ntpd.stratum: False
+            ntpd.when: True
     - require:
       - sls: ntp
       - sls: ntp.diamond

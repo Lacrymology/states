@@ -31,7 +31,20 @@ test:
         ProcessResources:
     {{ diamond_process_test('rabbitmq') }}
         RabbitMQ:
+          rabbitmq.health.fd_used: False
+          rabbitmq.health.fd_total: False
+          rabbitmq.health.mem_used: False
+          rabbitmq.health.mem_limit: False
+          rabbitmq.health.sockets_used: False
+          rabbitmq.health.sockets_total: False
+          rabbitmq.health.disk_free_limit: False
           rabbitmq.health.disk_free: False
+          rabbitmq.health.proc_used: False
+          rabbitmq.health.proc_total: False
+          rabbitmq.object_totals.connections: False
+          rabbitmq.object_totals.channels: False
+          rabbitmq.object_totals.queues: False
+          rabbitmq.object_totals.consumers: False
           rabbitmq.object_totals.exchanges: False
     - require:
       - sls: rabbitmq

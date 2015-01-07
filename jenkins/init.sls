@@ -96,10 +96,6 @@ jenkins_old_version:
     - watch_in:
       - service: nginx
 
-/etc/cron.daily/jenkins_delete_old_workspaces.py:
-  file:
-    - absent
-
 /etc/cron.daily/jenkins_delete_old_workspaces:
   file:
     - managed

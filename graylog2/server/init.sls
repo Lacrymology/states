@@ -43,8 +43,6 @@ include:
     - absent
 {% endfor %}
 
-{{ upstart_absent('graylog2-server-prep') }}
-
 /var/log/graylog2/server.log:
   file:
     - absent
@@ -128,7 +126,6 @@ graylog2-server:
         version: {{ version }}
         user: {{ user }}
     - require:
-      - file: graylog2-server-prep
       - pkg: sudo
   service:
     - running

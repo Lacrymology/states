@@ -61,8 +61,6 @@ graylog2-web-{{ user }}:
     - require:
       - user: graylog2-web-{{ user }}
 
-{{ upstart_absent('graylog2-web-prep') }}
-
 {{ web_root_dir }}/logs:
   file:
     - symlink
@@ -110,7 +108,6 @@ graylog2-web:
         web_root_dir: {{ web_root_dir }}
         user: {{ user }}
     - require:
-      - file: graylog2-web-prep
       - pkg: sudo
   archive:
     - extracted

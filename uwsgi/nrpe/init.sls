@@ -19,10 +19,6 @@ include:
   - web
   - xml.nrpe
 
-/etc/sudoers.d/nagios_uwsgi:
-  file:
-    - absent
-
 /etc/sudoers.d/nrpe_uwsgi:
   file:
     - managed
@@ -35,10 +31,6 @@ include:
       - pkg: sudo
     - require_in:
       - pkg: nagios-nrpe-server
-
-/usr/local/bin/uwsgi-nagios.sh:
-  file:
-   - absent
 
 /usr/lib/nagios/plugins/check_uwsgi_nostderr:
   file:

@@ -226,7 +226,7 @@ host_{{ node }}:
   file:
     - managed
     - template: jinja
-    - user: www-data
+    - user: root
     - group: www-data
     - mode: 400
     - source: salt://nginx/proxy.jinja2

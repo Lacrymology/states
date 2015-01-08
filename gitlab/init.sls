@@ -344,8 +344,8 @@ gitlab-uwsgi:
     - managed
     - source: salt://gitlab/nginx.jinja2
     - template: jinja
+    - user: root
     - group: www-data
-    - user: www-data
     - mode: 440
     - require:
       - pkg: nginx

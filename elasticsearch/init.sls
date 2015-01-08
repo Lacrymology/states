@@ -139,7 +139,7 @@ elasticsearch_old_version:
   file:
     - managed
     - template: jinja
-    - user: www-data
+    - user: root
     - group: www-data
     - mode: 400
     - require:

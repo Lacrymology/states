@@ -156,7 +156,7 @@ ejabberd_reg_monitor_user:
     - managed
     - template: jinja
     - source: salt://ejabberd/nginx.jinja2
-    - user: www-data
+    - user: root
     - group: www-data
     - mode: 440
     - watch_in:

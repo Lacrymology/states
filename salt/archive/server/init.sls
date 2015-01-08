@@ -141,7 +141,7 @@ archive_rsync:
     - managed
     - template: jinja
     - source: salt://salt/archive/server/nginx.jinja2
-    - user: www-data
+    - user: root
     - group: www-data
     - mode: 440
     - require:

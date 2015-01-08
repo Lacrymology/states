@@ -8,14 +8,14 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
 # {{ salt['pillar.get']('message_do_not_modify') }}
 
-configobj==5.0.2
+configobj==5.0.6
 pip==1.5.2
-psutil==2.0.0
-six==1.5.2
+psutil==2.1.3
+six==1.9.0
 {%- if salt['pillar.get']('files_archive', False) %}
-diamond==3.4.12
+diamond==3.7.1
 {%- else %}
-https://archive.robotinfra.com/pip/diamond-3.4.12.tar.bz2
+https://github.com/hvnsweeting/Diamond/archive/v3.7.1.tar.gz
 {%- endif -%}
 {%- if salt['pillar.get']('graylog2_address', False) %}
 graypy==0.2.9

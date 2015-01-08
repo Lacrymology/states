@@ -134,4 +134,3 @@ def syslog_input(name, title='gelf', stype="udp", port=1514, creator=None,
         store_full_message=store_full_message, force_rdns=force_rdns)
 
     return _create_input(name, params, 'graylog.create_syslog_input')
-

@@ -27,7 +27,7 @@ openldap_port
 .. _monitor-openldap_base:
 
 openldap_base
--------------
+~~~~~~~~~~~~~
 
 A local client is able to `bind <http://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol#Bind_.28authenticate.29>`
 to :ref:`pillar-ldap-rootdn`. This check return OK means the

@@ -50,3 +50,25 @@ graylog2_incoming_logs
 Monitor incoming logs rate.
 
 Critical: ``0`` msg/seccond
+
+graylog2_input_gelf
+~~~~~~~~~~~~~~~~~~~
+
+Monitor :doc:`/graylog2/doc/index` `GELF
+<http://www.graylog2.org/gelf>`__ input port ``12201/udp``.
+
+graylog2_input_syslog
+~~~~~~~~~~~~~~~~~~~~~
+
+Monitor :doc:`/graylog2/doc/index` syslog input port ``1514/udp``.
+
+graylog2_backup_mongodb_procs
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+At most one process backup for :doc:`/graylog2/doc/index`
+:doc:`/mongodb/doc/index` is running.
+
+graylog2_backup
+~~~~~~~~~~~~~~~
+
+Monitor :doc:`/graylog2/doc/index` backup age and size.

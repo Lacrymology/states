@@ -12,6 +12,7 @@ include:
   - salt
   - salt.master
   - pip
+  - requests
 
 {%- for type in ('profiles', 'providers') %}
 /etc/salt/cloud.{{ type }}:
@@ -90,3 +91,4 @@ salt_cloud_digital_ocean_v2_module:
     - require:
       - pkg: salt
       - pkg: salt-cloud
+      - module: requests

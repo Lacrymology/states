@@ -231,6 +231,34 @@ import_graylog2_syslog:
       - process: graylog2-server
       - module: requests
 
+{%- set streams = salt['pillar.get']('graylog2:streams', {}) %}
+{%- for stream_name, stream_data in streams.iteritems() %}
+  {%- set rules = stream_data['rules']|default([]) %}
+  {%- set receivers = stream_data['receivers']|default([]) %}
+  {% set receivers_type = stream_data['receivers_type']|default("emails") %}
+{{ stream_name|lower|replace(' ', '_') }}_graylog2_stream:
+  graylog_stream:
+    - present
+    - name: {{ stream_name }}
+  {%- if rules %}
+    - rules:
+      {%- for rule in rules %}
+      - field: {{ rule['field'] }}
+        value: {{ rule['value'] }}
+        inverted: {{ rule['inverted'] }}
+        type: {{ rule['type'] }}
+      {%- endfor %}
+  {%- endif %}
+    - receivers:
+  {%- for receiver in receivers %}
+      - {{ receiver }}
+  {%- endfor %}
+    - receivers_type: {{ receivers_type }}
+    - require:
+      - process: graylog2-server
+      - module: requests
+{%- endfor %}
+
 /var/log/graylog2:
   file:
     - directory

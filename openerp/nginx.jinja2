@@ -34,10 +34,12 @@ server {
 
 {% include 'nginx/location_robots.jinja2' %}
 
+{%- set timeout = salt['pillar.get']('openerp:timeout', 60) %}
+
     location / {
         uwsgi_pass openerp;
         include uwsgi_params;
-        uwsgi_read_timeout {{ salt['pillar.get']('openerp:timeout', 30) }};
-        uwsgi_send_timeout {{ salt['pillar.get']('openerp:timeout', 30) }};
+        uwsgi_read_timeout {{ timeout }};
+        uwsgi_send_timeout {{ timeout }};
     }
 }

@@ -210,7 +210,7 @@ etherpad:
     - managed
     - source: salt://etherpad/nginx.jinja2
     - template: jinja
-    - user: www-data
+    - user: root
     - group: www-data
     - mode: 440
     - require:

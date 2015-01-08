@@ -70,6 +70,17 @@ apt:
     - contents: |
         # {{ salt['pillar.get']('message_do_not_modify') }}
         {{ salt['pillar.get']('apt:sources')|indent(8) }}
+  {#- handle the case when dpkg is interrupted due to OOM:
+
+      dpkg: unrecoverable fatal error, aborting:
+        #012 fork failed: Cannot allocate memory
+        #012E: Sub-process /usr/bin/dpkg returned an error code (2)
+
+      salt.loaded.int.module.cmdmod: stderr: E: dpkg was interrupted,
+      you must manually run 'dpkg --configure -a' to correct the problem. #}
+  cmd:
+    - run
+    - name: dpkg --configure -a
   module:
     - wait
     - name: pkg.refresh_db
@@ -79,6 +90,7 @@ apt:
     - require:
       - file: dpkg.conf
       - cmd: apt-key
+      - cmd: apt
 {%- set packages_blacklist = salt['pillar.get']('packages:blacklist', []) -%}
 {%- set packages_whitelist = salt['pillar.get']('packages:whitelist', []) -%}
 {%- if packages_blacklist or packages_whitelist %}

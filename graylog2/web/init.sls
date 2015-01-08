@@ -159,7 +159,7 @@ graylog2-web:
     - managed
     - template: jinja
     - source: salt://graylog2/web/nginx.jinja2
-    - user: www-data
+    - user: root
     - group: www-data
     - mode: 440
     - require:

@@ -1,11 +1,13 @@
 Usage
 =====
 
+More can be find at `Apt-Cacher NG Help`_ page.
+
 Cached APT URL
 --------------
 
-Go to http://mirrors.ubuntu.com/mirrors.txt and pick a local mirror for the
-physical location of the installed host.
+Go to :ref:`glossary-Ubuntu` http://mirrors.ubuntu.com/mirrors.txt and pick a
+local mirror for the physical location of the installed host.
 
 Or run on the target host itself::
 
@@ -24,9 +26,7 @@ Such as::
 Salt common host
 ----------------
 
-.. TODO: link
-
-Set pillar ``apt:sources`` like::
+Set :ref:`pillar-apt-sources` to something like::
 
   apt:
     cache: False
@@ -34,8 +34,9 @@ Set pillar ``apt:sources`` like::
       deb http://192.168.111.112:3142/mirror-fpt-telecom.fpt.net/ubuntu {{ salt['grains.get']('oscodename') }} main restricted universe multiverse
       deb http://192.168.111.112:3142/mirror-fpt-telecom.fpt.net/ubuntu {{ salt['grains.get']('oscodename') }}-updates main restricted universe multiverse
 
-
-Non Salt common managed host
+Non Salt-common managed host
 ----------------------------
 
-Edit ``/etc/apt/sources.list`` and switch the URLs.
+Edit ``/etc/apt/sources.list`` and switch the :ref:`glossary-URL`.
+
+.. _Apt-Cacher NG Help: https://www.unix-ag.uni-kl.de/~bloch/acng/html/

@@ -180,6 +180,24 @@ class LintCheckNumbersOfOrderLast(LintCheck):
         return True
 
 
+class LintCheckMaintainer(LintCheck):
+    stable = True
+
+    def run(self):
+        exts = self.exts
+        paths = self.paths
+        if not exts:
+            exts = ['init.sls']
+        notfound = _grep_reverse(paths, 'Maintainer', *exts)
+
+        if notfound:
+            self.print_header("init.sls must contain information "
+                              "about its maintainers.")
+            _print_grep_result(notfound)
+            return False
+        return True
+
+
 class CheckPillarStyleBase(LintCheck):
     '''
     Base class for check pillar style.
@@ -245,7 +263,17 @@ class LintCheckSubkeyInSaltPillar(CheckPillarStyleBase):
 
 
 def _filter_files_with_exts(paths, exts):
-    return set(filter(lambda p: any(p.endswith('.' + e) for e in exts), paths))
+    return set(filter(lambda p: any(p.endswith(e) for e in exts), paths))
+
+
+def _grep_file(filename, regex_ptr):
+    found = {}
+    with open(filename, 'rt') as f:
+        for idx, line in enumerate(f):
+            if regex_ptr.findall(line):
+                # idx count from 0, line number count from 1
+                found.update({idx + 1: line.strip('\n')})
+    return found
 
 
 def _grep(paths, pattern, *exts):
@@ -264,24 +292,30 @@ def _grep(paths, pattern, *exts):
     all_found = {}
     repat = re.compile(pattern)
 
-    def _grep_file(filename):
-        found = {}
-        with open(filename, 'rt') as f:
-            for idx, line in enumerate(f):
-                if repat.findall(line):
-                    # idx count from 0, line number count from 1
-                    found.update({idx + 1: line.strip('\n')})
-        return found
+    if exts:
+        paths = _filter_files_with_exts(paths, exts)
+
+    for path in paths:
+        found = _grep_file(path, repat)
+        if found:
+            all_found[path] = found
+
+    return all_found
+
+
+def _grep_reverse(paths, pattern, *exts):
+    all_not_found = {}
+    repat = re.compile(pattern)
 
     if exts:
         paths = _filter_files_with_exts(paths, exts)
 
     for path in paths:
-        found = _grep_file(path)
-        if found:
-            all_found[path] = found
+        found = _grep_file(path, repat)
+        if not found:
+            all_not_found[path] = {}
 
-    return all_found
+    return all_not_found
 
 
 def _print_grep_result(all_found):
@@ -359,6 +393,7 @@ def main():
                  LintCheckBadStateStyle,
                  LintCheckNumbersOfOrderLast,
                  LintCheckPillarStyle,
+                 LintCheckMaintainer,
                  LintCheckSubkeyInSaltPillar,
                  LintCheckEndingSpace,
                  )

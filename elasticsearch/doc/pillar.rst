@@ -83,15 +83,6 @@ Example::
     https_allowed:
       - 192.168.0.0/24
 
-.. _pillar-elasticsearch-version:
-
-elasticsearch:version
-~~~~~~~~~~~~~~~~~~~~~
-
-The version of :doc:`/elasticsearch/doc/index` to install.
-
-Default: ``0.90.10``
-
 .. _pillar-elasticsearch-cluster-nodes-nodeminionID-state-port:
 
 elasticsearch:cluster:nodes:{{ node_minion_ID }}:{{ state }}:port
@@ -121,7 +112,10 @@ elasticsearch:cluster:nodes:{{ node_minion_ID }}:{{ state }}:data
 
 If this instance :doc:`index` is allowed to store data.
 
-Default: allow to store data (``True``).
+Default: use formula default value (``None``).
+
+* :doc:`/elasticsearch/doc/index`: ``True``
+* :doc:`/graylog2/doc/index`: ``False``
 
 .. _pillar-elasticsearch-cluster-nodes-nodeminionID-state-master:
 
@@ -130,7 +124,10 @@ elasticsearch:cluster:nodes:{{ node_minion_ID }}:{{ state }}:master
 
 If this instance :doc:`index` is allowed to become master node.
 
-Default: eligible as a master (``True``).
+Default: use formula default value (``None``).
+
+* :doc:`/elasticsearch/doc/index`: ``True``
+* :doc:`/graylog2/doc/index`: ``False``
 
 .. _pillar-elasticsearch-cluster-nodes-nodeminionID-state-name:
 

@@ -45,7 +45,7 @@ Default: do not notify (``False``).
 amavis:notify_admin_for_spam
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Whether to send notifications to admin about spam emails.
+Whether to send notifications to mail server administrator about spam emails.
 
 Default: do not send (``False``).
 
@@ -57,7 +57,8 @@ to user defined in :ref:`pillar-mail-postmaster`.
 amavis:sa_tag_level
 ~~~~~~~~~~~~~~~~~~~
 
-Add :doc:`/spamassassin/doc/index` tag to all emails have score greater than set value.
+Add :doc:`/spamassassin/doc/index` tag to all emails have score greater than set
+value.
 
 Default: a very low value to set spam info headers for all emails (``-999``).
 This help user ensuring that email is processed by :doc:`/amavis/doc/index` by
@@ -71,7 +72,7 @@ amavis:sa_tag2_level
 Emails which have score greater than this value considered "spammy"
 (looks like spam), add spammy tag for it.
 
-Default: value from example configuration file comes with amavasd-new package
+Default: value from example configuration file comes with amavisd-new package
 on Ubuntu 12.04 which locates at
 `/usr/share/doc/amavisd-new/examples/amavisd.conf-sample.gz` (``2``).
 According to this example file,

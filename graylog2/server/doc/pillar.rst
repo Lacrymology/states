@@ -176,3 +176,28 @@ To secure/pepper the stored user passwords, use at least 64
 characters.
 
 Default: randomly generated (``None``).
+
+graylog2:streams
+~~~~~~~~~~~~~~~~
+
+List of :doc:`/graylog2/doc/index` streams to created.
+
+Format::
+
+  graylog2:
+    streams:
+      {{ stream_name }}:
+        rules:
+          - field: {{ field_name }}
+            value: {{ value }}
+            inverted: {{ True or False }}
+            type: {{ rule type }}
+          - ...
+        receivers:
+          - {{ email }}
+          - ...
+        receivers_type: {{ "emails" or "users" }}
+
+Only ``{{ stream_name }}`` is mandatory.
+
+Default: don't send alert emails (``{}``).

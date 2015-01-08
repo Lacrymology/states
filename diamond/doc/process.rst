@@ -67,3 +67,52 @@ num_threads
 -----------
 
 The number of threads currently used by the process.
+
+.. note::
+
+   The following terms will be used throughout this document:
+
+   * `Code segment <http://en.wikipedia.org/wiki/Code_segment>`_
+   * `Data segment <http://en.wikipedia.org/wiki/Data_segment>`_
+   * `Dirty pages <http://en.wikipedia.org/wiki/Page_cache>`_
+   * `Shared memory <http://en.wikipedia.org/wiki/Shared_memory>`_
+   * `Stack segment <http://en.wikipedia.org/wiki/Data_segment#Stack>`_
+   * `Text segment <http://en.wikipedia.org/wiki/Text_segmentation>`_
+
+   For complete reference, see `Linux kernel proc documentation
+   <https://www.kernel.org/doc/Documentation/filesystems/proc.txt>`_.
+
+memory_info_ex.data
+-------------------
+
+Size in bytes of data, stack pages.
+
+memory_info_ex.dirty
+--------------------
+
+Size in bytes of dirty pages.
+
+memory_info_ex.lib
+------------------
+
+Size in bytes of library pages.
+
+memory_info_ex.rss
+------------------
+
+Size in bytes of memory portions.
+
+memory_info_ex.shared
+---------------------
+
+Size in bytes of pages that are shared.
+
+memory_info_ex.text
+-------------------
+
+Size in bytes of code pages.
+
+memory_info_ex.vms
+------------------
+
+Total program size in bytes.

@@ -197,7 +197,7 @@ sentry-migrate-fake:
   file:
     - managed
     - template: jinja
-    - user: www-data
+    - user: root
     - group: www-data
     - mode: 440
     - source: salt://sentry/nginx.jinja2

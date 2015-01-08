@@ -94,6 +94,8 @@ for ltype in stdout stderr; do
     sudo salt -t 30 "$BUILD_IDENTITY" --output json cmd.run "xz -c /root/salt/$ltype.log > /tmp/$BUILD_IDENTITY-$ltype.log.xz"
 done
 
+sudo salt -t 30 "$BUILD_IDENTITY" --output json cmd.run "tar -C /var/log -cJf /tmp/$BUILD_IDENTITY-upstart.log.tar.xz upstart"
+
 sudo salt -t 30 "$BUILD_IDENTITY" --output json cmd.run "grep COUNTER: /root/salt/stdout.log"
 sudo salt -t 60 "$BUILD_IDENTITY" --output json cmd.run_all "salt-call -l info -c $CUSTOM_CONFIG_DIR state.sls test.jenkins.result"
 
@@ -101,7 +103,7 @@ cp /home/ci-agent/$BUILD_IDENTITY-result.xml $WORKSPACE/result.xml
 # Got the build result, all steps from here should not fail the build if they failed.
 set +e
 xz -d -c /home/ci-agent/$BUILD_IDENTITY-stderr.log.xz
-for f in /home/ci-agent/$BUILD_IDENTITY-*.log.xz; do
+for f in /home/ci-agent/$BUILD_IDENTITY-*.xz; do
   cp $f $WORKSPACE/`basename $f | sed "s/$BUILD_IDENTITY/$JOB_NAME/"`
 done
 mv /srv/salt/jenkins_archives/$BUILD_IDENTITY.tar.gz $WORKSPACE/bootstrap-archive.tar.gz

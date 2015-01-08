@@ -10,6 +10,7 @@ include:
   - bash.nrpe
   - nrpe
   - pip.nrpe
+  - requests.nrpe
   - salt.master.nrpe
   - sudo.nrpe
 

@@ -18,7 +18,7 @@ include:
   - nginx
   - ssl
 {% endif %}
-{%- set version = salt['pillar.get']('elasticsearch:version', '0.90.10') %}
+{%- set version = '0.90.10' %}
 
 /etc/default/elasticsearch:
   file:
@@ -76,6 +76,8 @@ elasticsearch:
     - mode: 440
     - source: salt://elasticsearch/config.jinja2
     - context:
+        master: 'true'
+        data: 'true'
         origin_state: elasticsearch
     - require:
       - pkg: elasticsearch
@@ -86,12 +88,11 @@ elasticsearch:
     - require:
       - pkg: elasticsearch
       - pkg: salt_minion_deps
+      - service: elasticsearch
   service:
     - running
     - enable: True
     - order: 50
-    - require:
-      - process: elasticsearch
     - watch:
       - file: /etc/default/elasticsearch
       - file: /etc/elasticsearch/logging.yml
@@ -138,7 +139,7 @@ elasticsearch_old_version:
   file:
     - managed
     - template: jinja
-    - user: www-data
+    - user: root
     - group: www-data
     - mode: 400
     - require:

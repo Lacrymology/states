@@ -26,7 +26,7 @@ include:
     - managed
     - template: jinja
     - source: salt://shinken/broker/nginx.jinja2
-    - user: www-data
+    - user: root
     - group: www-data
     - mode: 440
     - require:

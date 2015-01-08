@@ -32,7 +32,7 @@ Graphite uWSGI Ping checks successfully.
 graphite_nginx_http
 ~~~~~~~~~~~~~~~~~~~
 
-Graphite NGINX HTTP Protocol works properly
+:doc:`/graphite/doc/index` :doc:`/nginx/doc/index` :ref:`glossary-HTTP` Protocol works properly
 
 .. _monitor-graphite_nginx_https:
 

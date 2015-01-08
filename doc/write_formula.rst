@@ -13,7 +13,7 @@ Terminology
   should be in.
 - State module is a python module, which is responsible for system will be
   in the declared state. For example, ``file`` state module is a
-  `python module <https://github.com/saltstack/salt/blob/develop/salt/states/file.py>`__
+  `python module <https://github.com/saltstack/salt/blob/develop/salt/states/file.py>`_
   or ``/usr/share/pyshared/salt/states/file.py`` on Ubuntu OS. It is
   responsible for a file will be managed, with user/group and mode set to
   what user declared in his state.
@@ -254,7 +254,7 @@ Logging
 -------
 
 Some applications have the ability to send logs directly to
-:doc:`/graylog2/doc/index` using `GELF <http://www.graylog2.org/gelf>`__
+:doc:`/graylog2/doc/index` using `GELF <http://www.graylog2.org/gelf>`_
 protocol. Which itself is better suited than ``syslog`` protocol as it contains
 additional metadata.
 
@@ -264,7 +264,7 @@ to have all logs copied locally.
 
 As :doc:`/rsyslog/doc/index` forward incoming logs received over syslog protocol
 to :doc:`/graylog2/doc/index`, an application that send logs to both
-:doc:`/graylog2/doc/index` over `GELF <http://www.graylog2.org/gelf>`__ and
+:doc:`/graylog2/doc/index` over `GELF <http://www.graylog2.org/gelf>`_ and
 :doc:`/rsyslog/doc/index` over syslog will cause :doc:`/graylog2/doc/index` to
 receive and index two separate message for the same log record. The one
 forwarded by :doc:`/rsyslog/doc/index` will even be less useful, as it will
@@ -273,7 +273,7 @@ contains no metadata. And it might even looklook as two duplicate log records.
 To avoid duplication, :doc:`/rsyslog/doc/index` is configured to forward all
 logs except those in ``local7`` facility to :doc:`/graylog2/doc/index`. So, all
 applications that send log records to :doc:`/graylog2/doc/index` over
-`GELF <http://www.graylog2.org/gelf>`__ send a copy to :doc:`/rsyslog/doc/index`
+`GELF <http://www.graylog2.org/gelf>`_ send a copy to :doc:`/rsyslog/doc/index`
 over syslog with ``local7`` facility.
 All other applications must never use ``local7``.
 

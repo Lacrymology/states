@@ -3,7 +3,7 @@ Metrics
 
 :doc:`/diamond/doc/process`:
 
-* ``uwsgi`` - :doc:`/uwsgi/doc/index`
+* ``uwsgi`` - :doc:`index`
 
 KSM
 ---
@@ -50,8 +50,8 @@ frequently. These pages are not merged.
 run
 ~~~
 
-* 1: `KSM <http://www.linux-kvm.org/page/KSM>`_ is enabled.
-* 0: `KSM <http://www.linux-kvm.org/page/KSM>`_ is disabled.
+* ``1``: `KSM <http://www.linux-kvm.org/page/KSM>`_ is enabled.
+* ``0``: `KSM <http://www.linux-kvm.org/page/KSM>`_ is disabled.
 
 sleep_milisecs
 ~~~~~~~~~~~~~~

@@ -1,8 +1,6 @@
 Pillar
 ======
 
-Consult https://www.kernel.org/doc/Documentation/sysctl/ for more information.
-
 Optional
 --------
 
@@ -22,4 +20,4 @@ its respective parameter of kernel.
 sysctl:max-file
 ~~~~~~~~~~~~~~~
 
-The maximum number of file-handles that the Linux kernel will allocate.
+The maximum number of file-handlers that the Linux kernel will allocate.

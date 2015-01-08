@@ -1,6 +1,9 @@
 Cron
 ====
 
+.. TODO
+.. More can be find at official `Amavisd page`_.
+
 .. Copied from http://en.wikipedia.org/wiki/Cron on 2014-12-13
 
 The software utility Cron is a time-based job scheduler in Unix-like computer

@@ -4,9 +4,9 @@ Metrics
 CPUCollector
 ------------
 
-Take a look at section 1.8 in .. _this:
-https://www.kernel.org/doc/Documentation/filesystems/proc.txt document for more
-details.
+Take a look at
+`section 1.8 in <https://www.kernel.org/doc/Documentation/filesystems/proc.txt>`_
+document for more details.
 
 These numbers identify the amount of time the CPU has spent performing
 different kinds of work. Time units are in USER_HZ (typically hundredths of a
@@ -15,7 +15,7 @@ second).
 cpu.guest
 ~~~~~~~~~
 
-Time spent running a virtual CPU for a guest operating system.
+Time spent running a virtual CPU for a guest operating system (virtual machine).
 
 cpu.guest_nice
 ~~~~~~~~~~~~~~
@@ -56,10 +56,14 @@ Time spent in other operating system when running in a virtualized environment.
 cpu.system
 ~~~~~~~~~~
 
+.. TODO: define kernel mode
+
 Time spent in kernel mode.
 
 cpu.user
 ~~~~~~~~
+
+.. TODO: define user mode
 
 Time spent in user mode.
 
@@ -68,6 +72,8 @@ DiskSpaceCollector
 
 byte_avail
 ~~~~~~~~~~
+
+.. TODO: define non-super user
 
 Free bytes available to non-super user.
 
@@ -96,6 +102,8 @@ Free inodes for unprivileged user.
 inode_free
 ~~~~~~~~~~
 
+.. TODO: define inodes
+
 Total free inodes.
 
 inode_percentfree
@@ -111,7 +119,8 @@ Total number of used inodes.
 DiskUsageCollector
 ------------------
 
-Take a look at .. _this: https://www.kernel.org/doc/Documentation/iostats.txt
+Take a look at
+`iostats kernel doc <https://www.kernel.org/doc/Documentation/iostats.txt>`_
 for more details.
 
 FilestatCollector
@@ -120,23 +129,23 @@ FilestatCollector
 files.assigned
 ~~~~~~~~~~~~~~
 
-The total allocated file handles.
+The total allocated file handlers.
 
 files.unused
 ~~~~~~~~~~~~
 
-The number of unused-but-allocated file handles.
+The number of unused-but-allocated file handlers.
 
 files.max
 ~~~~~~~~~
 
-The maximum file handles that can be allocated
+The maximum file handlers that can be allocated
 
 InterruptCollector
 ------------------
 
-Take a look at .. _this:
-https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/s2-proc-interrupts.html
+Take a look at
+`Process Interrupts documentation <https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/s2-proc-interrupts.html>`_
 for more details.
 
 LoadAverageCollector
@@ -146,12 +155,13 @@ loadavg.(01|05|15)
 ~~~~~~~~~~~~~~~~~~
 
 The number of jobs in the run queue (state R) or waiting for disk I/O (state D)
-averaged over 1, 5, and 15 minutes.
+averaged over ``1``, ``5``, and ``15`` minutes.
 
 loadavg.processes_running
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The number of currently runnable kernel scheduling entities (processes, threads).
+The number of currently runnable kernel scheduling entities (processes,
+threads).
 
 loadavg.processes_total
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -161,21 +171,23 @@ The number of kernel scheduling entities that currently exist on the system.
 MemoryCollector
 ---------------
 
-Take a look at .. _this:
-https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/s2-proc-meminfo.html
+Take a look at
+`/proc/meminfo documentation <https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/s2-proc-meminfo.html>`_
 for more details.
 
 NetworkCollector
 ----------------
 
-See details .. _here:
-http://www.onlamp.com/pub/a/linux/2000/11/16/LinuxAdmin.html
+See details in
+`/proc/net/ article <http://www.onlamp.com/pub/a/linux/2000/11/16/LinuxAdmin.html>`_.
 
 PingCollector
 -------------
 
 ping.<host>
 ~~~~~~~~~~~
+
+.. TODO: define ICMP
 
 ICMP round trip times to that host.
 
@@ -185,15 +197,19 @@ ProcessStatCollector
 proc.btime
 ~~~~~~~~~~
 
-Boot time, in seconds since the Epoch, 1970-01-01.
+Boot time, in seconds since the Epoch (January 1st 1970).
 
 proc.ctxt
 ~~~~~~~~~
+
+.. TODO: define context switch
 
 The number of context switches that the system underwent.
 
 proc.processes
 ~~~~~~~~~~~~~~
+
+.. TODO: define forks?
 
 Number of forks since boot.
 
@@ -213,37 +229,37 @@ SockstatCollector
 sockets.tcp_alloc
 ~~~~~~~~~~~~~~~~~
 
-The number of TCP sockets allocated.
+The number of :ref:`glossary-TCP` sockets allocated.
 
 sockets.tcp_inuse
 ~~~~~~~~~~~~~~~~~
 
-The number of TCP sockets in use.
+The number of :ref:`glossary-TCP` sockets in use.
 
 sockets.tcp_mem
 ~~~~~~~~~~~~~~~
 
-Memory (in bytes) allocated for TCP sockets.
+Memory (in bytes) allocated for :ref:`glossary-TCP` sockets.
 
 sockets.tcp_orphan
 ~~~~~~~~~~~~~~~~~~
 
-Number of orphan TCP sockets (not attached to any file descriptor)
+Number of orphan :ref:`glossary-TCP` sockets (not attached to any file descriptor)
 
 sockets.tcp_tw
 ~~~~~~~~~~~~~~
 
-Number of TCP sockets currently in TIME_WAIT state.
+Number of :ref:`glossary-TCP` sockets currently in TIME_WAIT state.
 
 sockets.udp_inuse
 ~~~~~~~~~~~~~~~~~
 
-The number of UDP sockets in use.
+The number of :ref:`glossary-UDP` sockets in use.
 
 sockets.udp_mem
 ~~~~~~~~~~~~~~~
 
-Memory (in bytes) allocated for UDP sockets.
+Memory (in bytes) allocated for :ref:`glossary-UDP` sockets.
 
 sockets.used
 ~~~~~~~~~~~~
@@ -256,32 +272,32 @@ TCPCollector
 tcp.ActiveOpens
 ~~~~~~~~~~~~~~~
 
-The number of times TCP connections have made a direct transition to the
+The number of times :ref:`glossary-TCP` connections have made a direct transition to the
 SYN-SENT state from the CLOSED state.
 
 tcp.AttemptFails
 ~~~~~~~~~~~~~~~~
 
-The number of times TCP connections have made a direct transition to the CLOSED
+The number of times :ref:`glossary-TCP` connections have made a direct transition to the CLOSED
 state from either the SYN-SENT state or the SYN-RCVD state, plus the number of
-times TCP connections have made a direct transition to the LISTEN state from
+times :ref:`glossary-TCP` connections have made a direct transition to the LISTEN state from
 the SYN-RCVD state.
 
 tcp.CurrEstab
 ~~~~~~~~~~~~~
 
-Number of current TCP sockets in ESTABLISHED state.
+Number of current :ref:`glossary-TCP` sockets in ESTABLISHED state.
 
 tcp.EstabResets
 ~~~~~~~~~~~~~~~
 
-The number of times TCP connections have made a direct transition to the CLOSED
+The number of times :ref:`glossary-TCP` connections have made a direct transition to the CLOSED
 state from either the ESTABLISHED state or the CLOSE-WAIT state.
 
 tcp.InErrs
 ~~~~~~~~~~
 
-The total number of segments received in error (for example, bad TCP
+The total number of segments received in error (for example, bad :ref:`glossary-TCP`
 checksums).
 
 tcp.ListenDrops
@@ -337,7 +353,7 @@ Number of retransmits in slow start.
 tcp.TCPTimeouts
 ~~~~~~~~~~~~~~~
 
-Number of other TCP timeouts.
+Number of other :ref:`glossary-TCP` timeouts.
 
 UptimeCollector
 ---------------
@@ -350,7 +366,7 @@ The number of minutes the system has been up.
 VMStatCollector
 ---------------
 
-Take a look at .. _this: http://www.tldp.org/LDP/tlk/mm/memory.html for more
+Look in `Memory Management <http://www.tldp.org/LDP/tlk/mm/memory.html>`_ for more
 details.
 
 vmstat.pgpgin

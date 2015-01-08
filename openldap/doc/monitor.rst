@@ -12,7 +12,7 @@ openldap_procs
 ~~~~~~~~~~~~~~
 
 :doc:`/openldap/doc/index` daemon (slapd) is an
-`LDAP <http://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol>`__
+`LDAP <http://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol>`_
 server
 
 .. include:: /nrpe/doc/check_procs.inc

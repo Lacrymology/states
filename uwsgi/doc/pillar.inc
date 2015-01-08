@@ -17,7 +17,7 @@ Default: ``60``.
 ~~~~~~~~~~~~~~~~~~~~~
 
 Minimum number of processes will run in :doc:`index`
-`cheaper mode <http://uwsgi-docs.readthedocs.org/en/latest/Cheaper.html>`__
+`cheaper mode <http://uwsgi-docs.readthedocs.org/en/latest/Cheaper.html>`_
 
 Given value must less than (<) |deployment|:workers.
 

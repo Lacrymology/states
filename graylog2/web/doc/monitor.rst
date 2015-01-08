@@ -20,18 +20,18 @@ Expect status: exactly one :doc:`/graylog2/doc/index` web daemon process running
 graylog2_web_port
 -----------------
 
-Monitor :doc:`/graylog2/web/doc/index` web port ``9000/tcp``.
+Monitor :doc:`/graylog2/web/doc/index` web port :ref:`glossary-TCP` ``9000``.
 
 graylog2_web_http
 -----------------
 
-Monitor :doc:`/graylog2/web/doc/index` web HTTP ``9000/tcp``.
+Monitor :doc:`/graylog2/web/doc/index` web :ref:`glossary-HTTP` :ref:`glossary-TCP` ``9000``.
 
 Expect return code: ``303 See Other`` (redirect to login page).
 
 Optional
 --------
 
-Only use if :ref:`pillar-graylog2-ssl` is turned on.
+Only use if :ref:`pillar-graylog2-ssl` is defined.
 
 .. include:: /nginx/doc/monitor_ssl.inc

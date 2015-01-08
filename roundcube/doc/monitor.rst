@@ -11,21 +11,21 @@ Mandatory
 roundcube_uwsgi_master
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Roundcube uWSGI Master Process.
+:doc:`/roundcube/doc/index` :doc:`/uwsgi/doc/index` Master Process.
 
 .. _monitor-roundcube_uwsgi_worker:
 
 roundcube_uwsgi_worker
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Roundcube uWSGI Workers Processes.
+:doc:`/roundcube/doc/index` :doc:`/uwsgi/doc/index` Workers Processes.
 
 .. _monitor-roundcube_uwsgi_ping:
 
 roundcube_uwsgi_ping
 ~~~~~~~~~~~~~~~~~~~~
 
-Roundcube uWSGI Ping.
+:doc:`/roundcube/doc/index` :doc:`/uwsgi/doc/index` Ping.
 
 .. include:: /postgresql/doc/monitor.inc
 
@@ -34,28 +34,30 @@ Roundcube uWSGI Ping.
 roundcube_nginx_http
 ~~~~~~~~~~~~~~~~~~~~
 
-Roundcube HTTP Protocol work properly.
+:doc:`/roundcube/doc/index` :ref:`glossary-HTTP` Protocol work properly.
 
 .. _monitor-roundcube_nginx_https:
 
 roundcube_nginx_https
 ~~~~~~~~~~~~~~~~~~~~~
 
-Roundcube HTTPS Protocol work properly.
+.. TODO: REFER TO SSL PILLAR!!!
+
+:doc:`/roundcube/doc/index` :ref:`glossary-HTTPS` Protocol work properly.
 
 .. _monitor-roundcube_nginx_https_certificate:
 
 roundcube_nginx_https_certificate
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Roundcube HTTPS Certificate Expiration is reached or not.
+:doc:`/roundcube/doc/index` :ref:`glossary-HTTPS` Certificate Expiration is reached or not.
 
 .. _monitor-roundcube_ssl_configuration:
 
 roundcube_ssl_configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Roundcube SSL Configuration is good or not.
+:doc:`/roundcube/doc/index` :doc:`/ssl/doc/index` Configuration is good or not.
 
 .. include:: /backup/doc/monitor_postgres_procs.inc
 

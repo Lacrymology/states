@@ -22,8 +22,10 @@ Example::
 carbon:cache_daemons
 ~~~~~~~~~~~~~~~~~~~~
 
+.. TODO: link to carbon-cache
+
 Number of Carbon-cache daemons to deploy, should <= numbers of
-`CPU cores <https://en.wikipedia.org/wiki/Multi-core_processor>`__.
+`CPU cores <https://en.wikipedia.org/wiki/Multi-core_processor>`_.
 
 Optional
 --------
@@ -141,7 +143,7 @@ Notice that it will all ``.wsp`` files in ``/var/lib/graphite/whisper``,
 it may change files which use other retention policy.
 
 List of data retention rules, see the
-`Graphite doc <http://graphite.readthedocs.org/en/latest/config-carbon.html#storage-schemas-conf>`__
+`Graphite doc <http://graphite.readthedocs.org/en/latest/config-carbon.html#storage-schemas-conf>`_
 for details of syntax.
 
 Default: all metrics will be stored each 60 seconds,

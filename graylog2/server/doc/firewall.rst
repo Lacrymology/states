@@ -9,6 +9,6 @@ All hosts that need to send their logs to the centralized
 :doc:`/graylog2/server/doc/index` need to access the server with the
 following ports:
 
-- ``TCP`` ``12201``: `GELF <http://www.graylog2.org/gelf>`__ over TCP
-- ``UDP`` ``12201``: GELF over UDP
-- ``UDP`` ``1514``: receive `Syslog <http://en.wikipedia.org/wiki/Syslog>`__
+- :ref:`glossary-TCP` ``12201``: `GELF <http://www.graylog2.org/gelf>`_ over :ref:`glossary-TCP`
+- :ref:`glossary-UDP` ``12201``: GELF over :ref:`glossary-UDP`
+- :ref:`glossary-UDP` ``1514``: receive `Syslog <http://en.wikipedia.org/wiki/Syslog>`_

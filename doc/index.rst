@@ -27,6 +27,7 @@ Welcome to Infrastructure Documentation:
     pysc
     custom_modules
     custom_states
+    glossary
 
 
 Formulas Document:

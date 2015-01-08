@@ -23,4 +23,4 @@ monitoring_postgresql_encoding
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 :doc:`/postgresql/doc/index/` Database ``monitoring`` uses
-`character encoding UTF8 <http://en.wikipedia.org/wiki/UTF-8>`__.
+`character encoding UTF8 <http://en.wikipedia.org/wiki/UTF-8>`_.

@@ -6,8 +6,8 @@ in :doc:`/graphite/doc/index` web interface.
 
 .. note::
 
-   If a process name is documented as ``xxx/yyy`` (e.g:
-   eg: :doc:`/uwsgi/doc/index`\ /\ :doc:`/djangopypi2/doc/index`), it is located at ``os > process > xxx > yyy``.
+   If a process name is documented as ``xxx/yyy``, it is located at
+   ``os > process > xxx > yyy``.
 
 cpu_times.system
 ----------------

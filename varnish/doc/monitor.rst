@@ -11,18 +11,16 @@ varnish_procs
 
 .. include:: /nrpe/doc/check_procs.inc
 
-Monitor :doc:`/varnish/doc/index` daemon process, expect only one process with name ``varnishd``.
-
 .. _monitor-varnish_port:
 
 varnish_port
 ~~~~~~~~~~~~
 
-Monitor :doc:`/varnish/doc/index` TCP port.
+Monitor :doc:`index` :ref:`glossary-TCP` port.
 
 .. _monitor-varnish_status:
 
 varnish_status
 ~~~~~~~~~~~~~~
 
-Monitor :doc:`/varnish/doc/index` HTTP connection status.
+Monitor :doc:`index` :ref:`glossary-HTTP` connection status.

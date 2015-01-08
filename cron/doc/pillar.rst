@@ -18,12 +18,13 @@ Example::
 crontab_hour
 ~~~~~~~~~~~~
 
-Each days cron launch a daily group of tasks, they are located in
-``/etc/cron.daily/``.
+Each days :doc:`index` launch a daily group of tasks, they are located
+in ``/etc/cron.daily/``.
 
 This is the time of the day when they're executed.
 
-Default: ``6``. Six hours in the morning, local time.
+Default: Six hours (``6`` AM, in the morning), local time (look
+:doc:`/timezone/doc/index` for details).
 
 The hour can be from ``0`` to ``23``. Any invalid entry can lead to cron to not
 ``run-parts`` properly ``/etc/cron.*``.

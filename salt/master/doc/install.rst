@@ -36,17 +36,17 @@ Externally Hosted
 
 Existing :doc:`/git/doc/index` hosting service can be used such as:
 
-- `Github <https://github.com/>`__
-- `BitBucket <https://bitbucket.org/>`__
+- `Github <https://github.com/>`_
+- `BitBucket <https://bitbucket.org/>`_
 
 Requirements
 ------------
 
 To perform the following steps the some requirements are needed to be installed:
 
-- `Git <http://git-scm.com/>`__
-- `Python 2.7 <https://www.python.org/>`__
-- `SSH Client <http://en.wikipedia.org/wiki/Comparison_of_SSH_clients>`__
+- `Git <http://git-scm.com/>`_
+- `Python 2.7 <https://www.python.org/>`_
+- `SSH Client <http://en.wikipedia.org/wiki/Comparison_of_SSH_clients>`_
 
 And you need to have access to :doc:`/salt/master/doc/index` host
 with :doc:`/ssh/doc/index`.

@@ -5,7 +5,7 @@ Why? ``_pillars/``?
 -------------------
 
 Because we needed custom
-`ext_pillar <http://docs.saltstack.com/en/latest/topics/development/external_pillars.html>`__
+`ext_pillar <http://docs.saltstack.com/en/latest/topics/development/external_pillars.html>`_
 , but it need to be in a specific place in the Python path:
 
 https://github.com/saltstack/salt/issues/3949

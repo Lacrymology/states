@@ -8,7 +8,7 @@ The testing framework is in ``test/`` sub-folder in common states.
 It contains some states used to prepare the host for tests and the file
 ``integration.py``.
 
-This script uses Python Unittest version 2 library to run tests on minion used
+This script uses :doc:`/python/doc/index` Unittest version 2 library to run tests on minion used
 for this specific usage.
 
 .. warning::
@@ -39,8 +39,9 @@ Formula's Test Specifics
 Sometimes, some formulas must adapt themselves to be more verbose during
 execution of test units. Or work around limitation of testing environments.
 
-There is a special pillar key ``__test__`` so to ``True`` that is always defined
-during test execution. See :doc:`/doc/pillar` for additional details.
+There is a special pillar key ``__test__`` so to ``True`` that is
+always defined during test execution. See :ref:`pillar-__test__` for more
+details.
 
 You can use the following condition::
 
@@ -84,8 +85,8 @@ It's rather executed by a :doc:`/salt/doc/index` state module available in these
 Common states: ``monitoring.run_check`` and ``monitoring.run_all_checks``.
 
 By default, all available checks are executed after all states had been executed
-for a test unit using ``monitoring.run_all_checks`` module. This step is insured by
-the ``test/nrpe.sls`` state file, which is added automatically to the list or
+for a test unit using ``monitoring.run_all_checks`` module. This step is insured
+by the ``test/nrpe.sls`` state file, which is added automatically to the list or
 executed state file tested.
 
 There is a way to change this behaviour, is to add a ``test.sls`` file to root
@@ -101,4 +102,4 @@ don't need to learn an other language or framework for that.
 Just don't forget to define ``- order: last`` in the first of the state that
 will be executed to make sure they all run **after** the states to tests are
 executed. More details
-`on order <http://docs.saltstack.com/ref/states/ordering.html#the-order-option>`__
+`on order <http://docs.saltstack.com/ref/states/ordering.html#the-order-option>`_

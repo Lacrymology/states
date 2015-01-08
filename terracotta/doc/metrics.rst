@@ -3,4 +3,4 @@ Metrics
 
 :doc:`/diamond/doc/process`:
 
-* :doc:`/terracotta/doc/index` daemon process
+* :doc:`index` :ref:`glossary-daemon` process

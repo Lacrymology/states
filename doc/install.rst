@@ -29,8 +29,8 @@ Dynamic DNS
 Actually there is two salt state that allow to use salt formula to define
 hostname:
 
-- ``dnsimple`` for `DNSimple <https://dnsimple.com>`__
-- ``route53`` for `Amazon Route53 <http://aws.amazon.com/route53/>`__
+- ``dnsimple`` for `DNSimple <https://dnsimple.com>`_
+- ``route53`` for `Amazon Route53 <http://aws.amazon.com/route53/>`_
 
 Feel free to use them in your roles to also automatically set DNS hostnames.
 

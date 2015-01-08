@@ -7,12 +7,12 @@ Mandatory
 mongodb_http
 ~~~~~~~~~~~~
 
-Check if HTTP interface is working properly.
+Check if :ref:`glossary-HTTP` interface is working properly.
 
 mongodb_port
 ~~~~~~~~~~~~
 
-Check if port ``27017/tcp`` is open.
+Check if port :ref:`glossary-TCP` ``27017`` is open.
 
 mongodb_procs
 ~~~~~~~~~~~~~
@@ -22,4 +22,4 @@ mongodb_procs
 mongodb_http_port
 ~~~~~~~~~~~~~~~~~
 
-Check if HTTP port ``28017/tcp`` is open.
+Check if :ref:`glossary-HTTP` port :ref:`glossary-TCP` ``28017`` is open.

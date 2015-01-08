@@ -1,7 +1,7 @@
 VirtualBox
 ==========
 
-http://www.virtualbox.org
+More can be find at official `Virtualbox page <http://www.virtualbox.org>`_.
 
 .. toctree::
     :glob:

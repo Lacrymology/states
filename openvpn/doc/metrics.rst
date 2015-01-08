@@ -23,13 +23,13 @@ instance.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Total amount of data :doc:`/openvpn/doc/index` instance has read via
-TCP/UDP in bytes.
+:ref:`glossary-TCP`/:ref:`glossary-UDP` in bytes.
 
 {{ instance }}.global.tcp-udp_write_bytes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Total amount of data :doc:`/openvpn/doc/index` instance has written
-via TCP/UDP in bytes.
+via :ref:`glossary-TCP`/:ref:`glossary-UDP` in bytes.
 
 {{ instance }}.global.tun-tap_read_bytes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

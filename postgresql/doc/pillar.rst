@@ -32,15 +32,15 @@ Optional
 postgresql:listen_addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Specifies the TCP/IP address(es) on which the server is to listen for
+Specifies the :ref:`glossary-TCP`/IP address(es) on which the server is to listen for
 connections from client applications. The value takes the form of a
 comma-separated list of host names and/or numeric IP addresses. The special
-entry * corresponds to all available IP interfaces. The entry 0.0.0.0 allows
+entry ``*`` corresponds to all available IP interfaces. The entry ``0.0.0.0`` allows
 listening for all IPv4 addresses and :: allows listening for all IPv6
 addresses. If the list is empty, the server does not listen on any IP interface
 at all, in which case only Unix-domain sockets can be used to connect to it.
 
-Default: allows only local TCP/IP "loopback" connections to be made
+Default: allows only local :ref:`glossary-TCP`/IP "loopback" connections to be made
 (``localhost``).
 
 .. _pillar-postgresql-listen_port:
@@ -48,7 +48,7 @@ Default: allows only local TCP/IP "loopback" connections to be made
 postgresql:listen_port
 ~~~~~~~~~~~~~~~~~~~~~~
 
-The TCP port the server listens on.
+The :ref:`glossary-TCP` port the server listens on.
 Note that the same port number is used for all IP addresses the server listens on.
 
 Default: :doc:`index` default value (``5432``).
@@ -94,9 +94,9 @@ Default: auto-generate by Salt (``None``).
 postgresql:ssl
 ~~~~~~~~~~~~~~
 
-Name of :doc:`/ssl/doc/index` key used for encrypted postgresql connection.
+Name of :doc:`/ssl/doc/index` key used for encrypted :doc:`index` connection.
 
-Default: does not use SSL/TLS (``False``).
+Default: does not use :doc:`/ssl/doc/index`/TLS (``False``).
 
 .. _pillar-postgresql-log_slow_query:
 
@@ -121,8 +121,8 @@ Conditional
 postgresql:replication
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Keys prefix with 'postgresql:replication' are only used for cluster setup.
-For more details on PostgresSQL replication setting up, consult
+Keys prefix with ``postgresql:replication:`` are only used for cluster setup.
+For more details on :doc:`/postgresql/doc/index` replication setting up, consult
 http://www.postgresql.org/docs/9.1/static/high-availability.html.
 This formula uses http://www.postgresql.org/docs/9.1/static/continuous-archiving.html
 method for replication and high availability.
@@ -141,7 +141,7 @@ This key is mandatory in setting up a cluster.
 postgresql:replication:username
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Postgresql username used for replication.
+:doc:`/postgresql/doc/index` username used for replication.
 
 Default: ``replication_agent``.
 

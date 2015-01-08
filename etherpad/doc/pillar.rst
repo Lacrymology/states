@@ -125,7 +125,7 @@ etherpad:require_authentication
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This setting is used if you require authentication of all users.
-Note: /admin always requires authentication.
+Note: ``/admin`` always requires authentication.
 
 Default: don't require authentication (``False``).
 
@@ -161,7 +161,7 @@ Default: does not use default text (``False``).
 etherpad:restrict_referer
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Regex for referer URL restriction. When you want block direct access to
+Regular Expression for referer :ref:`glossary-URL` restriction. When you want block direct access to
 :doc:`index`.
 
 Example: ``^(.*)(sometext|othertex)(.*)$``
@@ -173,7 +173,7 @@ Default: allow access from all referers, (``False``).
 etherpad:title
 ~~~~~~~~~~~~~~
 
-:doc:`/etherpad/doc/index` title display in browser.
+:doc:`index` title display in browser.
 
 Default: ``Etherpad``.
 
@@ -182,7 +182,7 @@ Default: ``Etherpad``.
 etherpad:listen_port
 ~~~~~~~~~~~~~~~~~~~~
 
-:doc:`/etherpad/doc/index` listen TCP port.
+:doc:`index` listen :ref:`glossary-TCP` port.
 
 Default: listen on port ``9001``.
 
@@ -191,18 +191,17 @@ Default: listen on port ``9001``.
 etherpad:secret_url
 ~~~~~~~~~~~~~~~~~~~
 
-If set, only allow access :doc:`/etherpad/doc/index` by this URL,
+If set, only allow access :doc:`index` by this :ref:`glossary-URL`,
 don't allow access directly.
 
 For example, if :ref:`pillar-etherpad-hostnames` is
 ``['example_pad.com']`` and :ref:`pillar-etherpad-secret_url` is
-``'top_secret'``, we can only use :doc:`/etherpad/doc/index` with URL:
-example_pad.com/top_secret, request to example_pad.com will return 403
-error
+``'top_secret'``, we can only use :doc:`index` with :ref:`glossary-URL`:
+``example_pad.com/top_secret``, request to ``example_pad.com`` will return ``403 error``
 
 Example: ``'a_secret_string'``
 
-Default: Allow to access directly via domain, without an secret URI (``False``).
+Default: Allow to access directly via domain, without an secret :ref:`glossary-URL` (``False``).
 
 Conditional
 -----------
@@ -230,6 +229,6 @@ Default: don't make this user a admin, (``False``).
 etherpad:users:{{ username }}:password
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Password of user {{ username }}.
+Password of this user.
 
 Used only if :ref:`pillar-etherpad-users-username` is defined.

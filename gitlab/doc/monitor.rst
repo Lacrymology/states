@@ -18,7 +18,7 @@ gitlab_sidekiq_procs
 
 .. include:: /nrpe/doc/check_procs.inc
 
-Monitor :doc:`/gitlab/doc/index` `Sidekiq <http://sidekiq.org/>`_
+Monitor :doc:`index` `Sidekiq <http://sidekiq.org/>`_
 process.
 
 Critical:
@@ -60,6 +60,6 @@ Check if :doc:`/postgresql/doc/index` database is not empty.
 Optional
 --------
 
-Only use if :ref:`pillar-gitlab-ssl` is turned on.
+Only use if :ref:`pillar-gitlab-ssl` is turned defined.
 
 .. include:: /nginx/doc/monitor_ssl.inc

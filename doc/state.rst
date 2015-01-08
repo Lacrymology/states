@@ -86,7 +86,7 @@ send it to :doc:`/graphite/doc/index` (``graphite`` state) stats server.
 So it's integration in your state need to be in ``$statename.diamond``.
 
 It support many
-`collectors <https://github.com/BrightcoveOS/Diamond/tree/master/src/collectors>`__
+`collectors <https://github.com/BrightcoveOS/Diamond/tree/master/src/collectors>`_
 if any of these collectors are specific to deployed software, please turn it on.
 Check in salt common states for many examples of that.
 
@@ -134,7 +134,7 @@ Ordering
 *Status: Mandatory*
 
 All services should have the
-`order <http://docs.saltstack.com/ref/states/ordering.html?highlight=order#the-order-option>`__
+`order <http://docs.saltstack.com/ref/states/ordering.html?highlight=order#the-order-option>`_
 argument specified with value ``50``:
 
 such as::
@@ -169,8 +169,8 @@ checks. Monitoring server will auto-discover in other ways which
 :doc:`/salt/minion/doc/index` perform those checks and how to send alert.
 
 The state must only declare the list of check in the
-`YAML <http://en.wikipedia.org/wiki/YAML>`__
-`Jinja2 <https://en.wikipedia.org/wiki/Jinja_(Template_engine)>`__
+`YAML <http://en.wikipedia.org/wiki/YAML>`_
+`Jinja2 <https://en.wikipedia.org/wiki/Jinja_(Template_engine)>`_
 template file ``salt://$state/monitor.jinja2``.
 
 It must match the checks you created into *Monitoring Checks* section.

@@ -36,7 +36,7 @@ rsync:global_settings
 
 Attributes and values is mapped to :doc:`/rsync/doc/index` daemon's attributes and values. If
 attribute contains space, wrap quotes about it. All attributes and values
-are `available here <http://rsync.samba.org/documentation.html>`__.
+are `available here <http://rsync.samba.org/documentation.html>`_.
 
 Default: use default settings (``{}``).
 

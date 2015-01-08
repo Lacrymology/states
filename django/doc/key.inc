@@ -1,6 +1,6 @@
 Random string.
 
-:doc:`/django/doc/index` `SECRET_KEY <https://docs.djangoproject.com/en/1.4/ref/settings/#secret-key>`__.
+:doc:`/django/doc/index` `SECRET_KEY <https://docs.djangoproject.com/en/1.4/ref/settings/#secret-key>`_.
 
 .. note::
 

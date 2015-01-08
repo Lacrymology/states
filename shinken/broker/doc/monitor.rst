@@ -38,7 +38,7 @@ and loaded. Also take a look at the log file
 shinken_broker_http
 ~~~~~~~~~~~~~~~~~~~
 
-Check if the web UI is working by sending a HTTP request to the ``/user/login``
+Check if the web UI is working by sending a :ref:`glossary-http` request to the ``/user/login``
 URI and expect a ``200 OK`` response.
 
 shinken_broker_web_cluster

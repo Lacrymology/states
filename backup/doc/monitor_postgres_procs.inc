@@ -2,4 +2,4 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Monitor |deployment| :doc:`/postgresql/doc/index` database backup process,
-critical if more than one backup processes running.
+status is ``CRITICAL`` if more than one backup processes running.

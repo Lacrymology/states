@@ -11,7 +11,7 @@ Mandatory
 postfix_qmgr
 ~~~~~~~~~~~~
 
-`Postfix Queue manager <http://www.postfix.org/qmgr.8.html>`__ daemon awaits
+`Postfix Queue manager <http://www.postfix.org/qmgr.8.html>`_ daemon awaits
 the arrival of incoming mail and arranges for its delivery via
 :doc:`/postfix/doc/index` delivery processes.
 
@@ -22,10 +22,10 @@ the arrival of incoming mail and arranges for its delivery via
 postfix_pickup
 ~~~~~~~~~~~~~~
 
-`Postfix Local mail pickup <http://www.postfix.org/pickup.8.html>`__
+`Postfix Local mail pickup <http://www.postfix.org/pickup.8.html>`_
 daemon waits for hints that new mail has been dropped
 into the ``maildrop`` directory, and feeds it into the
-`cleanup <http://www.postfix.org/cleanup.8.html>`__ daemon.
+`cleanup <http://www.postfix.org/cleanup.8.html>`_ daemon.
 
 .. include:: /nrpe/doc/check_procs.inc
 
@@ -34,7 +34,7 @@ into the ``maildrop`` directory, and feeds it into the
 postfix_master
 ~~~~~~~~~~~~~~
 
-`Postfix Master <www.postfix.org/master.8.html>`__ daemon is the resident
+`Postfix Master <www.postfix.org/master.8.html>`_ daemon is the resident
 process that runs :doc:`/postfix/doc/index` daemons on demand:
 daemons to send or receive messages via the network,
 daemons to deliver mail locally, etc.
@@ -48,7 +48,7 @@ service.
 postfix_port_smtp
 ~~~~~~~~~~~~~~~~~
 
-:doc:`/postfix/doc/index` `SMTP <http://en.wikipedia.org/wiki/Simple_Mail_Transfer_Protocol>`__
+:doc:`/postfix/doc/index` `SMTP <http://en.wikipedia.org/wiki/Simple_Mail_Transfer_Protocol>`_
 Port is listening locally.
 
 postfix_queue_length
@@ -68,7 +68,7 @@ Optional
 postfix_port_spam_handler
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-`Postfix SPAM handler port <http://www.ijs.si/software/amavisd/README.postfix.txt>`__
+`Postfix SPAM handler port <http://www.ijs.si/software/amavisd/README.postfix.txt>`_
 is listening locally.
 Only check if :ref:`pillar-postfix-spam_filter` enabled.
 

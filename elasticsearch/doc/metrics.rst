@@ -3,7 +3,7 @@ Metrics
 
 :doc:`/diamond/doc/process`:
 
-* ``elasticsearch`` - :doc:`/elasticsearch/doc/index`.
+* ``elasticsearch`` - :doc:`index`.
 
 elasticsearch
 -------------
@@ -63,41 +63,47 @@ in bytes, 0 means unlimited.
 disk.reads.count
 ~~~~~~~~~~~~~~~~
 
-Number of times :doc:`/elasticsearch/doc/index` read from disk.
+Number of times :doc:`index` read from disk.
 
 disk.reads.size
 ~~~~~~~~~~~~~~~
 
-Total amount of data :doc:`/elasticsearch/doc/index` has read presents in bytes.
+Total amount of data :doc:`index` has read presents in bytes.
 
 disk.writes.count
 ~~~~~~~~~~~~~~~~~
 
-Number of times :doc:`/elasticsearch/doc/index` wrote to disk.
+Number of times :doc:`index` wrote to disk.
 
 disk.writes.size
 ~~~~~~~~~~~~~~~~
 
-Total amount of data :doc:`/elasticsearch/doc/index` has read presents in bytes.
+Total amount of data :doc:`index` has read presents in bytes.
 
 http\.current
 ~~~~~~~~~~~~~
 
-Number of HTTP connections currently open.
+Number of :ref:`glossary-HTTP` connections currently open.
 
 indices.datastore.size
 ~~~~~~~~~~~~~~~~~~~~~~
 
+.. TODO: doc me
+
 indices.docs.count
 ~~~~~~~~~~~~~~~~~~
+
+.. TODO: doc me
 
 indices.docs.deleted
 ~~~~~~~~~~~~~~~~~~~~
 
+.. TODO: doc me
+
 indices.{{ index_name }}
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-Contains data of all current present ElasticSearch indices.
+Contains data of all current present :doc:`index` indices.
 
 indices.{{ index_name }}.datastore.size
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -117,14 +123,14 @@ Number of deleted documents in the index.
 indices.{{ index_name }}.get_exists_time_in_millis
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Number of times :doc:`/elasticsearch/doc/index` received a `get
+Number of times :doc:`index` received a `get
 <http://www.elasticsearch.org/guide/en/elasticsearch/reference/0.90/docs-get.html>`_
 request to a existing document in one millisecond.
 
 indices.{{ index_name }}.get.exists_total
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This counter is increased one when :doc:`/elasticsearch/doc/index`
+This counter is increased one when :doc:`index`
 received a `get
 <http://www.elasticsearch.org/guide/en/elasticsearch/reference/0.90/docs-get.html>`_
 request to a existing document.
@@ -132,14 +138,14 @@ request to a existing document.
 indices.{{ index_name }}.get.missing_time_in_millis
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Number of times :doc:`/elasticsearch/doc/index` received a `get
+Number of times :doc:`index` received a `get
 <http://www.elasticsearch.org/guide/en/elasticsearch/reference/0.90/docs-get.html>`_
 request to a missing document in one millisecond.
 
 indices.{{ index_name }}.get.missing_total
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This counter is increased one when :doc:`/elasticsearch/doc/index`
+This counter is increased one when :doc:`index`
 received a `get
 <http://www.elasticsearch.org/guide/en/elasticsearch/reference/0.90/docs-get.html>`_
 request to a missing document.
@@ -147,14 +153,14 @@ request to a missing document.
 indices.{{ index_name }}.get.time_in_millis
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Number of times :doc:`/elasticsearch/doc/index` received a `get
+Number of times :doc:`index` received a `get
 <http://www.elasticsearch.org/guide/en/elasticsearch/reference/0.90/docs-get.html>`_
 request to a document in one millisecond.
 
 indices.{{ index_name }}.get.total
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This counter is increased one when :doc:`/elasticsearch/doc/index`
+This counter is increased one when :doc:`index`
 received a `get
 <http://www.elasticsearch.org/guide/en/elasticsearch/reference/0.90/docs-get.html>`_
 request to a document.
@@ -162,14 +168,14 @@ request to a document.
 indices.{{ index_name }}.indexing.delete_time_in_millis
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Number of times :doc:`/elasticsearch/doc/index` received a `delete
+Number of times :doc:`index` received a `delete
 <http://www.elasticsearch.org/guide/en/elasticsearch/reference/0.90/docs-delete.html>`_
 request in one millisecond.
 
 indices.{{ index_name }}.indexing.delete_total
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This counter is increased one when :doc:`/elasticsearch/doc/index`
+This counter is increased one when :doc:`index`
 received a `delete
 <http://www.elasticsearch.org/guide/en/elasticsearch/reference/0.90/docs-delete.html>`_
 request.
@@ -177,14 +183,14 @@ request.
 indices.{{ index_name }}.indexing.index_time_in_millis
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Number of times :doc:`/elasticsearch/doc/index` received a `index
+Number of times :doc:`index` received a `index
 <http://www.elasticsearch.org/guide/en/elasticsearch/reference/0.90/docs-index_.html>`_
 request in one millisecond.
 
 indices.{{ index_name }}.indexing.index_total
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This counter is increased one when :doc:`/elasticsearch/doc/index`
+This counter is increased one when :doc:`index`
 received a `index
 <http://www.elasticsearch.org/guide/en/elasticsearch/reference/0.90/docs-index_.html>`_
 request.
@@ -192,25 +198,25 @@ request.
 indices.{{ index_name }}.search.fetch_time_in_millis
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Number of times :doc:`/elasticsearch/doc/index` fetched a document in
+Number of times :doc:`index` fetched a document in
 one millisecond.
 
 indices.{{ index_name }}.search.fetch_total
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This counter is increased one when :doc:`/elasticsearch/doc/index`
+This counter is increased one when :doc:`index`
 fetched a document.
 
 indices.{{ index_name }}.search.query_time_in_millis
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Number of times :doc:`/elasticsearch/doc/index` did a query in one
+Number of times :doc:`index` did a query in one
 millisecond.
 
 indices.{{ index_name }}.search.query_total
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This counter is increased one when :doc:`/elasticsearch/doc/index` did
+This counter is increased one when :doc:`index` did
 a query.
 
 indices.{{ index_name }}.store.throttle_time_in_millis
@@ -222,7 +228,7 @@ Number of times the segment merging process paused in a millisecond
 
 .. note::
 
-   See documentation for :doc:`/elasticsearch/doc/index` `nodes stats
+   See documentation for :doc:`index` `nodes stats
    <http://www.elasticsearch.org/guide/en/elasticsearch/reference/0.90/cluster-nodes-stats.html#_nodes_statistics>`_.
 
 jvm.gc.collection
@@ -231,24 +237,29 @@ jvm.gc.collection
 List of JVM collectors:
 
 * ConcurrentMarkSweep
-
 * ParNew
-
 * old
-
 * young
 
 jvm.gc.collection.{{ collector }}.count
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+.. TODO: Doc me
+
 jvm.gc.collection.{{ collector }}.time
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. TODO: Doc me
 
 jvm.gc.collection.count
 ~~~~~~~~~~~~~~~~~~~~~~~
 
+.. TODO: Doc me
+
 jvm.gc.collection.time
 ~~~~~~~~~~~~~~~~~~~~~~
+
+.. TODO: Doc me
 
 jvm.mem.pools
 ~~~~~~~~~~~~~
@@ -256,19 +267,12 @@ jvm.mem.pools
 List of JVM memory pools:
 
 * CMS_Old_Gen
-
 * CMS_Perm_Gen
-
 * Code_Cache
-
 * Par_Eden_Space
-
 * Par_Survivor_Space
-
 * old
-
 * survivor
-
 * young
 
 jvm.mem.pools.{{ memory_pool }}.max
@@ -340,7 +344,7 @@ process.mem.virtual
 thread_pool
 ~~~~~~~~~~~
 
-A :doc:`/elasticsearch/doc/index` node holds several `thread pools
+A :doc:`index` node holds several `thread pools
 <http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/modules-threadpool.html>`_
 in order to improve how threads memory consumption are managed within
 a node. Many of these pools also have queues associated with them,
@@ -349,23 +353,14 @@ which allow pending requests to be held instead of discarded.
 List of important thread pools:
 
 * index
-
 * search
-
 * suggest
-
 * get
-
 * bulk
-
 * percolate
-
 * snapshot
-
 * warmer
-
 * refresh
-
 * listener
 
 thread_pool.{{ thread_pool_name }}.active

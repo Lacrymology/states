@@ -29,7 +29,7 @@ clamav:connect_timeout
 Timeout in seconds for connecting to virus database server when updating local
 database.
 
-Default: :doc:`/clamav/doc/index` default value (``30``).
+Default: :doc:`index` default value (``30``).
 
 .. _pillar-clamav-receive_timeout:
 
@@ -39,16 +39,17 @@ clamav:receive_timeout
 Timeout in seconds for reading from database server when updating local
 database.
 
-Default: :doc:`/clamav/doc/index` default value (``30``).
+Default: :doc:`index` default value (``30``).
 
 .. _pillar-clamav-times_of_check:
 
 clamav:times_of_check
 ~~~~~~~~~~~~~~~~~~~~~
 
-Number of database checks for updating per day performed by Freshclam.
+Number of database checks for updating per day performed by
+:ref:`clamav-freshclam`.
 
-Default: :doc:`/clamav/doc/index` default value (``24``).
+Default: :doc:`index` default value (``24``).
 
 Conditional
 -----------
@@ -60,33 +61,35 @@ clamav:db_mirrors
 
 List of spam database servers.
 Link to the
-`public list of available mirrors <http://www.clamav.net/mirrors.html>`__.
+`public list of available mirrors <http://www.clamav.net/mirrors.html>`_.
 
-Default: ``False``.
+Default: don't have a custom defined list of mirrors (``False``).
 
-If ``files_archive`` is not defined, list with:
+If :ref:`pillar-files_archive` is not defined, list with:
 
  - ``db.local.clamav.net``
  - ``database.clamav.net``
 
-If ``files_archive`` is defined, it use mirror of :doc:`/clamav/doc/index` database from the
-archive.
+If :ref:`pillar-files_archive` is defined, it use mirror of
+:doc:`index` database from the archive.
 
 .. _pillar-clamav-dns_db:
 
 clamav:dns_db
 ~~~~~~~~~~~~~
 
-Database verification domain, DNS used to verify virus database version.
+Database verification domain, :ref:`glossary-DNS` used to verify virus database
+version.
+
 Link to the
-`public list of available mirrors <http://www.clamav.net/mirrors.html>`__.
+`public list of available mirrors <http://www.clamav.net/mirrors.html>`_.
 
-Default: ``False``.
+Default: Don't validate domain (``False``).
 
-If ``files_archive`` is not defined, ``current.cvd.clamav.net``.
+If :ref:`pillar-files_archive` is not defined, ``current.cvd.clamav.net``.
 
-If ``files_archive`` is defined, it use mirror of :doc:`/clamav/doc/index` database from the
-archive.
+If :ref:`pillar-files_archive` is defined, it use mirror of
+:doc:`index` database from the archive.
 
 clamav:daily_scan
 ~~~~~~~~~~~~~~~~~

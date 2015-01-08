@@ -18,7 +18,7 @@ NRPE
 Common states use a centralized clustered monitoring open-source application
 :doc:`/shinken/doc/index` http://www.shinken-monitoring.org
 It's a drop-in replacement for the more well known
-`Nagios <http://www.nagios.org>`__ but it's built in Python instead of C and
+`Nagios <http://www.nagios.org>`_ but it's built in Python instead of C and
 Perl and fix most of Nagios architecture limitation.
 
 The only Nagios related component that is being used is :doc:`/nrpe/doc/index`,

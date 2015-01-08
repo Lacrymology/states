@@ -12,7 +12,7 @@ Have a dedicated development VM added to :doc:`/salt/master/doc/index`.
 A new formula can be created in a sandbox, git used to push those files into
 the :doc:`/git/server/doc/index` and wait until :doc:`/salt/master/doc/index`
 refresh
-`gitfs <http://salt.readthedocs.org/en/latest/topics/tutorials/gitfs.html>`__.
+`gitfs <http://salt.readthedocs.org/en/latest/topics/tutorials/gitfs.html>`_.
 
 Do the same for develoment pillars.
 
@@ -22,11 +22,11 @@ If any bug or additional need to be done, repeat the process.
 
 Here is a faster way to develop formulas, :doc:`/salt/minion/doc/index` do have
 the ability to
-`run without a master <http://salt.readthedocs.org/en/latest/topics/tutorials/quickstart.html>`__
+`run without a master <http://salt.readthedocs.org/en/latest/topics/tutorials/quickstart.html>`_
 
 There is limitations, some feature don't work such as:
 
-- `mine <http://salt.readthedocs.org/en/latest/topics/mine/>`__
+- `mine <http://salt.readthedocs.org/en/latest/topics/mine/>`_
 - gitfs
 - pillar gitfs
 
@@ -73,7 +73,7 @@ Check the :download:`/bootstrap_archive.py` script at the root of the common
 repository for instruction.
 
 Copy the file with
-`scp <http://www.openbsd.org/cgi-bin/man.cgi?query=scp&sektion=1>`__
+`scp <http://www.openbsd.org/cgi-bin/man.cgi?query=scp&sektion=1>`_
 to test VM. And extract it there, but make sure it you use ``tar`` from the root
 of the file-system (``/``). As everything must be in a specific directory:
 ``/root/salt``. A safe place to copy it is in ``/tmp/archive.tar.gz``.

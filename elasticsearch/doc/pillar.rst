@@ -109,10 +109,10 @@ Default: ``9300``.
 elasticsearch:cluster:nodes:{{ node_minion_ID }}:{{ state }}:http
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If this instance handle :doc:`index` HTTP API port. Only one HTTP API instance
+If this instance handle :doc:`index` :ref:`glossary-HTTP` API port. Only one :ref:`glossary-HTTP` API instance
 is required for each host.
 
-Default: disable HTTP API, (``True``).
+Default: disable :ref:`glossary-HTTP` API, (``True``).
 
 .. _pillar-elasticsearch-cluster-nodes-nodeminionID-state-data:
 
@@ -160,7 +160,7 @@ elasticsearch:ssl
 .. note::
 
   Only used to make :doc:`/elasticsearch/doc/index` trough
-  `HTTPS <https://en.wikipedia.org/wiki/Https>`__.
+  `HTTPS <https://en.wikipedia.org/wiki/Https>`_.
 
 .. _pillar-elasticsearch-aws:
 
@@ -189,7 +189,7 @@ elasticsearch:aws:secret_key
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 AWS secret access key for config the AWS cloud plugin (more `details
-<http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSGettingStartedGuide/AWSCredentials.html>`__).
+<http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSGettingStartedGuide/AWSCredentials.html>`_).
 
 .. _pillar-elasticsearch-aws-access_key:
 
@@ -197,7 +197,7 @@ elasticsearch:aws:access_key
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 AWS access key ID for config the AWS cloud plugin (more `details
-<http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSGettingStartedGuide/AWSCredentials.html>`__).
+<http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSGettingStartedGuide/AWSCredentials.html>`_).
 
 .. _pillar-elasticsearch-https_allowed:
 
@@ -208,7 +208,7 @@ Only used if :ref:`pillar-elasticsearch-ssl` is defined.
 
 List of `CIDR
 <http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing>`_ format
-network where :doc:`/elasticsearch/doc/index` over HTTPS is allowed.
+network where :doc:`/elasticsearch/doc/index` over :ref:`glossary-HTTPS` is allowed.
 
 Default: do not allow (``[]``).
 

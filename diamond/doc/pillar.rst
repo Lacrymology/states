@@ -38,7 +38,7 @@ diamond:ping
 ~~~~~~~~~~~~
 
 List of IPs/hostnames to monitor their ping
-`round trip time <http://en.wikipedia.org/wiki/Round-trip_delay_time>`__
+`round trip time <http://en.wikipedia.org/wiki/Round-trip_delay_time>`_
 from this host.
 
 Default: monitors no address (``{}``).

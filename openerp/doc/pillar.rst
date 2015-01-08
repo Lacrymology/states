@@ -98,7 +98,7 @@ openerp:max_upload_file_size
 
 Sets the maximum allowed size of the client request body,
 specified in the "Content-Length"
-`HTTP <https://en.wikipedia.org/wiki/Http>`__ request header field.
+:ref:`glossary-HTTP` request header field.
 Unit is in megabytes.
 
 Default: only allow request with size less than or equal to ``1`` MB.

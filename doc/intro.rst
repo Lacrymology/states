@@ -4,8 +4,9 @@ Introduction to this repository
 Welcome to **Common** repository.
 
 This repository targets Linux only. It actually only supports Ubuntu 12.04
-Precise LTS but support for other releases of `Ubuntu <http://www.ubuntu.com>`__
-or `Debian <http://www.debian.org>`__ based distributions can be easily added.
+Precise LTS and Ubuntu 14.04 Trusty LTS but support for other releases of
+`Ubuntu <http://www.ubuntu.com>`_
+or `Debian <http://www.debian.org>`_ based distributions can be easily added.
 
 It contains the low-level salt states for various operating-system services,
 such as:
@@ -84,7 +85,7 @@ Other states, such as:
 
 - Salt web UI
 - :doc:`Salt web UI </salt/api/doc/index>`
-- An APT repository server to host your own Debian packages
+- An :ref:`glossary-APT` repository server to host your own :ref:`glossary-Debian` packages
 
 States for testing and its requirements.
 More details on this topic in file testing document.

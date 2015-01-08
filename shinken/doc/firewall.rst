@@ -3,25 +3,25 @@ Firewall
 
 .. include:: /doc/include/add_firewall.inc
 
-- Broker also run a web interface :doc:`/nginx/doc/index`
+- :doc:`/shinken/broker/doc/index` also run a web interface :doc:`/nginx/doc/index`
   :doc:`/nginx/doc/firewall`
 
-Shinken monitoring server includes the following daemons:
+:doc:`/shinken/doc/index` monitoring server includes the following :ref:`glossary-daemon`:
 
-- shinken.arbiter
-- shinken.broker
-- shinken.poller
-- shinken.reactionner
-- shinken.receiver
-- shinken.scheduler
+- :doc:`/shinken/arbiter/doc/index`
+- :doc:`/shinken/broker/doc/index`
+- :doc:`/shinken/poller/doc/index`
+- :doc:`/shinken/reactionner/doc/index`
+- :doc:`/shinken/receiver/doc/index`
+- :doc:`/shinken/scheduler/doc/index`
 
-Arbiter need to access all other nodes that run Shinken daemons on the following
+:doc:`/shinken/arbiter/doc/index` need to access all other nodes that run :doc:`/shinken/doc/index` :ref:`glossary-daemon` on the following
 ports:
 
-- ``7768/tcp``: Shinken Scheduler
-- ``7769/tcp``: Shinken Reactionner
-- ``7770/tcp``: Shinken Arbiter
-- ``7771/tcp``: Shinken Poller
-- ``7772/tcp``: Shinken Broker
-- ``7773/tcp``: Shinken Receiver
-- ``5667/tcp``: NSCA Daemon (Receiver)
+- :ref:`glossary-TCP` ``7768``: Shinken :doc:`/shinken/scheduler/doc/index`
+- :ref:`glossary-TCP` ``7769``: Shinken :doc:`/shinken/reactionner/doc/index`
+- :ref:`glossary-TCP` ``7770``: Shinken :doc:`/shinken/arbiter/doc/index`
+- :ref:`glossary-TCP` ``7771``: Shinken :doc:`/shinken/poller/doc/index`
+- :ref:`glossary-TCP` ``7773```: Shinken :doc:`/shinken/broker/doc/index`
+- :ref:`glossary-TCP` ``7774``: Shinken :doc:`/shinken/receiver/doc/index`
+- :ref:`glossary-TCP` ``5667``: NSCA Daemon (:doc:`/shinken/receiver/doc/index`)

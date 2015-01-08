@@ -19,7 +19,7 @@ Example::
 s3cmd:access_key
 ~~~~~~~~~~~~~~~~
 
-`Amazon <https://aws-portal.amazon.com/gp/aws/developer/account/index.html?action=access-key>`__
+`Amazon <https://aws-portal.amazon.com/gp/aws/developer/account/index.html?action=access-key>`_
 access key.
 
 .. _pillar-s3cmd-secret_key:

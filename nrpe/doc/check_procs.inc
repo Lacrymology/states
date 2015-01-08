@@ -1,5 +1,7 @@
-Check that the minimal number of command instance process to provide service
-run. If no process run, report CRITICAL.
+If status is ``CRITICAL``:
+
+  * There is no :ref:`glossary-daemon` running
+  * There are more than one :ref:`glossary-daemon` running
 
 Also look if extra command process instance run that might interfere with
 others instance. This might be caused by misconfiguration, erased lock and

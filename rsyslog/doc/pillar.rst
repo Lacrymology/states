@@ -13,9 +13,9 @@ Optional
 rsyslog:tcp
 ~~~~~~~~~~~
 
-Use TCP for transfering log to remote destination.
+Use :ref:`glossary-TCP` for transfering log to remote destination.
 
-Default: Use UDP (``False``).
+Default: Use :ref:`glossary-UDP` (``False``).
 
 .. _pillar-rsyslog-rotate:
 

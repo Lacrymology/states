@@ -5,7 +5,7 @@ ProFPTD
 
 .. warning::
 
-  `FTP <https://en.wikipedia.org/wiki/Ftp>`__ is an insecure protocol,
+  `FTP <https://en.wikipedia.org/wiki/Ftp>`_ is an insecure protocol,
   You should never use that. Please do not use this state.
 
 But a client wanted to upload files from a special software used

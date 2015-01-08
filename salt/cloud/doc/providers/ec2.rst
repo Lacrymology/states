@@ -45,12 +45,12 @@ key and put it into ``deployment_keys``, see :doc:`/ssh/client/doc/pillar` for
 details.
 
 Choose a EC2 image in
-`Ubuntu releases <http://cloud-images.ubuntu.com/releases/precise/release/>`__
+`Ubuntu releases <http://cloud-images.ubuntu.com/releases/precise/release/>`_
 in the region you choosed. Set the ``ami-XXX`` value to
 ``salt_cloud:profiles:ci-minion:image``.
 
 Pick VM size in
-`salt cloud ec2 python module <https://github.com/saltstack/salt-cloud/blob/0.8.9/saltcloud/clouds/ec2.py#L99>`__
+`salt cloud ec2 python module <https://github.com/saltstack/salt-cloud/blob/0.8.9/saltcloud/clouds/ec2.py#L99>`_
 such as ``Micro Instance`` and set it to
 ``salt_cloud:profiles:ci-minion:size``
 

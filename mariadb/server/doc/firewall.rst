@@ -1,4 +1,6 @@
 Firewall
 ========
 
-Allow all MySQL client to connect using ``3306/tcp``.
+.. TODO: mysql
+
+Allow all MySQL client to connect using :ref:`glossary-TCP` ``3306``.

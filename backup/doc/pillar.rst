@@ -14,10 +14,10 @@ Example::
 backup:xz_memlimit
 ~~~~~~~~~~~~~~~~~~
 
-Memory limit to `xz <https://en.wikipedia.org/wiki/Xz>`__ compressor when it run
-(in MiB).
+Memory limit to `xz <https://en.wikipedia.org/wiki/Xz>`_ compressor when it run
+(in MB).
 
-Default: limits to ``64`` MiB.
+Default: limits to ``64`` MB.
 
 .. _pillar-backup-age:
 

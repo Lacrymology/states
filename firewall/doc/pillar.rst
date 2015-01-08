@@ -33,7 +33,7 @@ Default: Unused (empty list ``[]``).
 firewall:filter
 ~~~~~~~~~~~~~~~
 
-Dict of protocol (``tcp`` and ``udp``) with inside it the list of ports that are
+Dict of protocol (:ref:`glossary-TCP` and :ref:`glossary-UDP`) with inside it the list of ports that are
 allowed from external networks.
 
 Default: Empty dict (``{}``).
@@ -46,6 +46,6 @@ Conditional
 firewall:filter:tcp
 ~~~~~~~~~~~~~~~~~~~
 
-List of TCP ports which are allowed to access from outside.
+List of :ref:`glossary-TCP` ports which are allowed to access from outside.
 
 Default: Empty list (``[]``).

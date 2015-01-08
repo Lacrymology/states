@@ -9,7 +9,7 @@ Mandatory
 dovecot_master_procs
 ~~~~~~~~~~~~~~~~~~~~
 
-``dovecot`` process is the Dovecot master process which keeps everything
+``dovecot`` process is the :doc:`index` master process which keeps everything
 running.
 
 .. include:: /nrpe/doc/check_procs.inc
@@ -19,7 +19,7 @@ running.
 dovecot_config_procs
 ~~~~~~~~~~~~~~~~~~~~
 
-``dovecot/config`` daemon parses the configuration file and sends the
+``dovecot/config`` :ref:`glossary-daemon` parses the configuration file and sends the
 configuration to other processes.
 
 .. include:: /nrpe/doc/check_procs.inc
@@ -62,7 +62,7 @@ dovecot_pop
 dovecot_managesieve_port
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-`Dovecot Managesieve <http://wiki2.dovecot.org/Pigeonhole/ManageSieve>`__
+`Dovecot Managesieve <http://wiki2.dovecot.org/Pigeonhole/ManageSieve>`_
 port is listening and can be accessed locally.
 
 dovecot_port_imap

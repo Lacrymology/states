@@ -28,16 +28,16 @@ backup_server:fingerprint
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 :doc:`/ssh/doc/index`
-`fingerprint <http://en.wikipedia.org/wiki/Public_key_fingerprint>`__
+`fingerprint <http://en.wikipedia.org/wiki/Public_key_fingerprint>`_
 of backup :doc:`/backup/server/doc/index`.
 
-This is an example how to retrieve `github <https://github.com>`__
-:doc:`/ssh/doc/index` fingerprint::
+This is an example how to retrieve :ref:`glossary-Github`
+:doc:`/ssh/doc/index` ref:`glossary-key-fingerprint`::
 
   ssh-keyscan github.com > /tmp/github.pub
   ssh-keygen -lf /tmp/github.pub
 
-Output is key's fingerprint::
+Output is key's ref:`glossary-key-fingerprint`::
 
   2048 16:27:ac:a5:76:28:2d:36:63:1b:56:4d:eb:df:a6:48 github.com (RSA)
 
@@ -49,8 +49,10 @@ Optional
 backup_server:subdir
 ~~~~~~~~~~~~~~~~~~~~
 
-Sub directory of ``/var/lib/backup`` to backup file to. This uses salt minion
-IDs of backup clients as default value. With this value, each minion will
-backup files to a separate directory under ``/var/lib/backup``.
+Sub-directory of ``/var/lib/backup`` to backup file to. This uses
+:doc:`/salt/minion/doc/index`
+IDs of :doc:`/backup/client/doc/index` as default value. With this value, each
+:doc:`/salt/minion/doc/index` will backup files to a separate directory under
+``/var/lib/backup``.
 
-Default: use minion ID (``False``).
+Default: use :doc:`/salt/minion/doc/index` ID (``False``).

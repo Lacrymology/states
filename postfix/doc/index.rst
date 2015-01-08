@@ -4,7 +4,7 @@ Postfix
 Consult :doc:`/mail/doc/index` for setting up a full-stack mail system.
 
 Postfix is a
-`SMTP <https://en.wikipedia.org/wiki/Simple_Mail_Transfer_Protocol>`__
+`SMTP <https://en.wikipedia.org/wiki/Simple_Mail_Transfer_Protocol>`_
 server as an alternative to the ``sendmail``.
 
 .. toctree::

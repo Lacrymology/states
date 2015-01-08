@@ -1,6 +1,7 @@
 Django
 ======
 
-.. TODO: INTRO
+More can be find at official
+`Django Python web framework <http://www.djangoproject.com>`_.
 
-`Django Python web framework <http://www.djangoproject.com>`__.
+This directory contains helpers to deploy Django applications.

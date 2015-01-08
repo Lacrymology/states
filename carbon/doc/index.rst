@@ -1,13 +1,11 @@
 Carbon
 ======
 
-Introduction
-------------
-
 Carbon is a backend storage application. The role of it is to receive the data
-from the agents and make that data available for real-time graphing.
+from agents and make that data available for real-time graphing.
 
-Official documentation: `<http://graphite.readthedocs.org/en/latest/>`__.
+More can be find at officia
+ `Graphite page <http://graphite.readthedocs.org/en/latest/>`_.
 
 .. toctree::
     :glob:

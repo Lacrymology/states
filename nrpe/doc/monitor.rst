@@ -83,7 +83,7 @@ The system `load averages
 nrpe-remote-port
 ~~~~~~~~~~~~~~~~
 
-Check if port 5666/tcp can be reached from the outside.
+Check if port :ref:`glossary-TCP` ``5666`` can be reached from the outside.
 
 Optional
 --------
@@ -93,7 +93,7 @@ Optional
 free_swap_space
 ~~~~~~~~~~~~~~~
 
-Warning if the free swap less than 30%.
+Warning if the free swap less than ``30%``.
 
 Only perform this check if the swap partition/file exists and the minion is not
 running on `OpenVZ <http://openvz.org/Main_Page>`_.

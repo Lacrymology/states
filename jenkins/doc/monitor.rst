@@ -26,14 +26,14 @@ jenkins_procs
 jenkins_port
 ~~~~~~~~~~~~
 
-:doc:`/jenkins/doc/index` daemon HTTP Port is listening locally.
+:doc:`/jenkins/doc/index` :ref:`glossary-daemon` :ref:`glossary-HTTP` Port is listening locally.
 
 .. _monitor-jenkins_http:
 
 jenkins_http
 ~~~~~~~~~~~~
 
-:doc:`/jenkins/doc/index` daemon HTTP port works properly.
+:doc:`/jenkins/doc/index` :ref:`glossary-daemon` :ref:`glossary-HTTP` port works properly.
 
 .. include:: /nginx/doc/monitor.inc
 

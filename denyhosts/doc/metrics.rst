@@ -11,4 +11,4 @@ UserScriptsCollector
 denyhosts.blocked
 ~~~~~~~~~~~~~~~~~
 
-The number of hosts has been blocked by DenyHosts.
+The number of hosts has been blocked by :doc:`/denyhosts/doc/index`.

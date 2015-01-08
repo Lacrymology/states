@@ -16,8 +16,6 @@ Poller
 The :doc:`/shinken/poller/doc/index` daemon launches check plugins as requested
 by :doc:`/shinken/scheduler/doc/index`.
 
-Formula: ``shinken.poller``.
-
 .. _shinken-scheduler:
 
 Scheduler

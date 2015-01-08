@@ -1,7 +1,9 @@
 Usage
 =====
 
-``bash/salt-common.jinja2`` contains some common bash functions:
+This formula also provide the bash library file
+``/usr/local/share/salt_common.sh`` that contains some bash functions used in
+salt-common:
 
 * ``log_start_script()``: write a message to :doc:`/rsyslog/doc/index` that
   said when it is started and with which arguments.

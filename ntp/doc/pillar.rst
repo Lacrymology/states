@@ -21,7 +21,7 @@ Example::
 ntp:is_server
 ~~~~~~~~~~~~~
 
-Does it act as a `NTP <https://en.wikipedia.org/wiki/Network_Time_Protocol>`__
+Does it act as a `NTP <https://en.wikipedia.org/wiki/Network_Time_Protocol>`_
 server for other hosts?
 
 Default: Not used to synchronize peers with ourselves (``False``).

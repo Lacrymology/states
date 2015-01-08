@@ -53,7 +53,7 @@ openvpn:{{ tunnelname }}:config
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Map to :doc:`/openvpn/doc/index` configuration options. Please consult
-`OpenVPN document <http://openvpn.net/index.php/open-source/documentation.html>`__
+`OpenVPN document <http://openvpn.net/index.php/open-source/documentation.html>`_
 for more details.
 
 Note: some keys is "reserved" or "blocked" when provide throught this salt
@@ -100,6 +100,6 @@ Address of remote peer.
 openvpn:{{ tunnelname }}:peers:{{ peername }}:port
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-TCP/UDP port number for both local and remote.
+:ref:`glossary-TCP`/:ref:`glossary-UDP` port number for both local and remote.
 
 Default: use port 1194 (``''``).

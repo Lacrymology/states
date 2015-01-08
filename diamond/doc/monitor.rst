@@ -9,6 +9,6 @@ Mandatory
 diamond_procs
 ~~~~~~~~~~~~~
 
-:doc:`/diamond/doc/index` daemon which collects metrics on host it installed.
+:doc:`index` :ref:`glossary-daemon` which collects metrics on host it installed.
 
 .. include:: /nrpe/doc/check_procs.inc

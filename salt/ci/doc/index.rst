@@ -69,8 +69,8 @@ some conditions such as:
   run.
 - Github is configured to perform a callback to CI server when a push occurs.
 - :doc:`/gitlab/doc/index` plugins:
-  - `Gitlab merge request <https://wiki.jenkins-ci.org/display/JENKINS/Gitlab+Merge+Request+Builder+Plugin>`__
-  - `Gitlab hook plugin <https://wiki.jenkins-ci.org/display/JENKINS/Gitlab+Hook+Plugin>`__
+  - `Gitlab merge request <https://wiki.jenkins-ci.org/display/JENKINS/Gitlab+Merge+Request+Builder+Plugin>`_
+  - `Gitlab hook plugin <https://wiki.jenkins-ci.org/display/JENKINS/Gitlab+Hook+Plugin>`_
 - A job is configured to run at specific time (such as each day at midnight)
 
 The jobs can 2 different things:

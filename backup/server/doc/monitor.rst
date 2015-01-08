@@ -9,4 +9,4 @@ Mandatory
 backups_last
 ~~~~~~~~~~~~
 
-All backups are performed.
+Is all backups are performed and recently enough.

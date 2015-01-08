@@ -16,7 +16,7 @@ Check :doc:`/elasticsearch/doc/index` cluster status.
 graylog2_server-es_port_transport
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Check :doc:`/elasticsearch/doc/index` transport port TCP connection.
+Check :doc:`/elasticsearch/doc/index` transport port :ref:`glossary-TCP` connection.
 
 .. _monitor-graylog2_procs:
 
@@ -30,14 +30,14 @@ graylog2_procs
 graylog2_api_port
 ~~~~~~~~~~~~~~~~~
 
-Monitor :doc:`/graylog2/doc/index` API port ``12900/tcp``.
+Monitor :doc:`/graylog2/doc/index` API port :ref:`glossary-TCP` ``12900``.
 
 .. _monitor-graylog2_api:
 
 graylog2_api
 ~~~~~~~~~~~~
 
-Monitor :doc:`/graylog2/doc/index` API HTTP ``12900/tcp``.
+Monitor :doc:`/graylog2/doc/index` API :ref:`glossary-HTTP` :ref:`glossary-TCP` ``12900``.
 
 Expect return code: '401 Unauthorized' (:doc:`/graylog2/doc/index` API
 require authentication)
@@ -49,4 +49,4 @@ graylog2_incoming_logs
 
 Monitor incoming logs rate.
 
-Critical: 0 msg/seccond
+Critical: ``0`` msg/seccond

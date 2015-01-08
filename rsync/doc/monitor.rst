@@ -9,5 +9,5 @@ Mandatory
 rsync_port
 ~~~~~~~~~~
 
-Monitor :doc:`/rsync/doc/index` port ``873/tcp``.
+Monitor :doc:`/rsync/doc/index` port :ref:`glossary-TCP` ``873``.
 

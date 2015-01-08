@@ -16,7 +16,7 @@ mysql_procs
 mysql_port
 ~~~~~~~~~~
 
-Check if TCP port ``3306`` is open.
+Check if :ref:`glossary-TCP` port ``3306`` is open.
 
 Optional
 --------
@@ -26,4 +26,4 @@ Optional
 mysql_port_remote
 ~~~~~~~~~~~~~~~~~
 
-Check if TCP port ``3306`` can be reached from the outside.
+Check if :ref:`glossary-TCP` port ``3306`` can be reached from the outside.

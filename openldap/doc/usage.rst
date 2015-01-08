@@ -15,13 +15,13 @@ can be used, includes:
   state.
 - The following GUI aren't yet available as Salt states in `common` repository,
   but can be used if installed:
-  - `LAT <http://sourceforge.net/p/ldap-at/wiki/Home/>`__
-  - `Apache Directory Studio <http://directory.apache.org/studio/>`__
-  - `Web: phpLDAPAdmin <http://phpldapadmin.sourceforge.net>`__
+  - `LAT <http://sourceforge.net/p/ldap-at/wiki/Home/>`_
+  - `Apache Directory Studio <http://directory.apache.org/studio/>`_
+  - `Web: phpLDAPAdmin <http://phpldapadmin.sourceforge.net>`_
 
 For ``ldapadd``, below example is how to create user ``testfoo`` entry. First
 create an
-`LPAD Data Interchange formated file <http://en.wikipedia.org/wiki/LDAP_Data_Interchange_Format>`__
+`LPAD Data Interchange formated file <http://en.wikipedia.org/wiki/LDAP_Data_Interchange_Format>`_
 with the expected value, in this case ``testfoo.ldif``:
 
     dn: uid=testfoo,ou=people,dc=example,dc=com

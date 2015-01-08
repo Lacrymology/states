@@ -17,7 +17,7 @@ rabbitmq_procs
 ~~~~~~~~~~~~~~
 
 :doc:`/rabbitmq/doc/index` daemon is an
-`AMQP <http://en.wikipedia.org/wiki/Advanced_Message_Queuing_Protocol>`__ broker.
+`AMQP <http://en.wikipedia.org/wiki/Advanced_Message_Queuing_Protocol>`_ broker.
 
 .. include:: /nrpe/doc/check_procs.inc
 
@@ -26,7 +26,7 @@ rabbitmq_procs
 rabbitmq_management_port
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-:doc:`/rabbitmq/doc/index` `Management Port <http://previous.rabbitmq.com/v3_1_x/management.html>`__ is open.
+:doc:`/rabbitmq/doc/index` `Management Port <http://previous.rabbitmq.com/v3_1_x/management.html>`_ is open.
 
 .. _monitor-rabbitmq_amqp_port:
 
@@ -41,14 +41,14 @@ rabbitmq_amqp_port_remote
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 :doc:`/rabbitmq/doc/index` AMQP Port is open and can be reached from
-Internet.
+outside (Internet).
 
 .. include:: /nginx/doc/monitor.inc
 
 rabbitmq_http
 ~~~~~~~~~~~~~
 
-:doc:`/rabbitmq/doc/index` daemon HTTP port (``15672/tcp``) works properly.
+:doc:`/rabbitmq/doc/index` :ref:`glossary-daemon` :ref:`glossary-HTTP` port (:ref:`glossary-TCP` ``15672``) works properly.
 
 Optional
 --------

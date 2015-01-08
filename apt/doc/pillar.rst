@@ -21,13 +21,13 @@ Example::
 apt:sources
 ~~~~~~~~~~~
 
-Content of `APT sources.list <https://help.ubuntu.com/community/SourcesList>`__
+Content of `APT sources.list <https://help.ubuntu.com/community/SourcesList>`_
 file as multiline pillar.
 
-Don't use `HTTPS <https://en.wikipedia.org/wiki/Https>`__
-`URL <http://en.wikipedia.org/wiki/Uniform_resource_locator>`__, as Ubuntu 12.04
-``apt-transport-https`` does not support
-many :doc:`/ssl/doc/index` certificate properly.
+Don't use
+:ref:`glossary-URL`, as Ubuntu 12.04
+``apt-transport-https`` does not support :ref:`glossary-HTTPS` many
+:doc:`/ssl/doc/index` certificate properly.
 
 Optional
 --------
@@ -53,34 +53,33 @@ apt:upgrade
 
 Whether to refresh :doc:`/apt/doc/index` database and upgrade all packages.
 
-Default: do not refresh and upgrade (``False``).
+Default: do not refresh and don't upgrade (``False``).
 
 .. _pillar-apt-proxy_server:
 
 apt:proxy_server
 ~~~~~~~~~~~~~~~~
 
-If ``True``, the specific
-`HTTP proxy server <https://en.wikipedia.org/wiki/Proxy_server#Web_proxy_servers>`_
+If ``True``, the specific :ref:`glossary-HTTP` `HTTP proxy server <https://en.wikipedia.org/wiki/Proxy_server#Web_proxy_servers>`_
 (without authentication) is used to download ``.deb`` and reach
-`APT <http://en.wikipedia.org/wiki/Advanced_Packaging_Tool>`_ server.
+:ref:`glossary-APT` server.
 
-Default: not use a proxy (``False``).
+Default: don't use a proxy (``False``).
 
 .. _pillar-packages-blacklist:
 
 packages:blacklist
 ~~~~~~~~~~~~~~~~~~
 
-List of packages to keep uninstalled.
+List of :ref:`glossary-Debian` packages to keep uninstalled.
 
-Default: no package (``[]``).
+Default: no package (empty list ``[]``).
 
 .. _pillar-packages-whitelist:
 
 packages:whitelist
 ~~~~~~~~~~~~~~~~~~
 
-List of packages to keep installed.
+List of :ref:`glossary-Debian` packages to keep installed.
 
-Default: no package (``[]``).
+Default: no package (empty list ``[]``).

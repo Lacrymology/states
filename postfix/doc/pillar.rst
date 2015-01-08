@@ -131,7 +131,7 @@ postfix:allow_remote_client
 Allowing remote SMTP client (who does not in the same network with
 :doc:`/postfix/doc/index`) to authenticate and if it successes,
 allow it to send email. This done by using :doc:`/dovecot/doc/index`
-`SASL <http://wiki2.dovecot.org/Sasl>`__.
+`SASL <http://wiki2.dovecot.org/Sasl>`_.
 
 Default: allow only clients in the same network to send mail (``False``).
 Set it to ``True`` will add several SASL-relate
@@ -143,7 +143,7 @@ clients to login and send email remotely.
 postfix:virtual_aliases
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-Support `alias(mail forwarding) <http://www.postfix.org/postconf.5.html#virtual_alias_maps>`__.
+Support `alias(mail forwarding) <http://www.postfix.org/postconf.5.html#virtual_alias_maps>`_.
 for virtual mailboxes.
 Multiple lines string, uses below syntax::
 
@@ -160,7 +160,7 @@ postfix:ssl
 ~~~~~~~~~~~
 
 Name of :doc:`/ssl/doc/index` key to support SMTP over :doc:`/ssl/doc/index`
-(`SMTPS <http://en.wikipedia.org/wiki/SMTPS>`__).
+(`SMTPS <http://en.wikipedia.org/wiki/SMTPS>`_).
 
 Default: not support SMTPS (``False``).
 
@@ -228,7 +228,7 @@ postfix:aliases
 ~~~~~~~~~~~~~~~
 
 Aliases table content for redirecting mail for
-`local recipients <http://www.postfix.org/LOCAL_RECIPIENT_README.html>`__.
+`local recipients <http://www.postfix.org/LOCAL_RECIPIENT_README.html>`_.
 
 Multiple lines string, use below syntax::
 
@@ -262,7 +262,7 @@ specified in :ref:`pillar-postfix-virtual_aliases`.
    pillar key.
 
 Default: ``['$virtual_alias_maps']`` - uses same value with $virtual_alias_maps
-This is :doc:`index` `default value <http://www.postfix.org/postconf.5.html#virtual_alias_domains>`__.
+This is :doc:`index` `default value <http://www.postfix.org/postconf.5.html#virtual_alias_domains>`_.
 
 Example, if one wants to receive email for address ``salt@example.org`` then
 forward it to email ``saltstack@example.com``, following pillar keys should be

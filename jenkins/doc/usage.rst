@@ -34,7 +34,7 @@ Useful plugins
 jabber
 ~~~~~~
 
-`jabber <https://wiki.jenkins-ci.org/display/JENKINS/Jabber+Plugin>`__
+`jabber <https://wiki.jenkins-ci.org/display/JENKINS/Jabber+Plugin>`_
 enables Jenkins to send build notifications via Jabber, as well as let users
 talk to Jenkins via a 'bot' to run commands, query build status etc...
 Jabber is also know as XMPP, an Jabber server can be installed using formula
@@ -51,3 +51,17 @@ Then, in each CI build configuration, choose ``Add post-build action``, then
 for the build job status.
 
 Written at ``Jenkins ver. 1.545`` and plugin ``jabber 1.25``.
+
+Multiple SCMs
+~~~~~~~~~~~~~
+
+https://wiki.jenkins-ci.org/display/JENKINS/Multiple+SCMs+Plugin
+
+Allow to checkout multiple repositories for a single project, such as more than
+one :doc:`/git/server/doc/index`.
+
+.. warning::
+
+  This plugin don't work as expected on Jenkins slaves. You need to specify an
+  ``Additional Behaviours``, choose ``Checkout to a sub directory`` and set
+  ``Local subdirectory for repo``.

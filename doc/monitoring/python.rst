@@ -7,7 +7,7 @@ Python
 ======
 
 Writing monitoring scripts in python is quite simple using `the
-nagiosplugin library <http://pythonhosted.org/nagiosplugin/>`__. These
+nagiosplugin library <http://pythonhosted.org/nagiosplugin/>`_. These
 docs are supposed to be explanations and clarifications, and details
 on the specifics on how to write checks for this architecture, but
 they're not a replacement for the official ``nagiosplugin``

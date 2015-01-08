@@ -32,7 +32,7 @@ authorized users to upload new file.
 
 To upload you have to copy the new file in ``incoming/pip`` (if it's a Python
 package) or ``incoming/mirror`` directory on the server using
-`SFTP <https://en.wikipedia.org/wiki/SSH_File_Transfer_Protocol>`__ with the
+`SFTP <https://en.wikipedia.org/wiki/SSH_File_Transfer_Protocol>`_ with the
 username ``salt_archive``.
 
 The access to this user is granted using :doc:`/ssh/doc/index` keys, you have your public key in

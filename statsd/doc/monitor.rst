@@ -10,7 +10,7 @@ statsd_procs
 ~~~~~~~~~~~~
 
 :doc:`/statsd/doc/index` daemon process listens for statistics,
-like counters and timers, sent over UDP or TCP and sends aggregates to one or
+like counters and timers, sent over :ref:`glossary-UDP` or :ref:`glossary-TCP` and sends aggregates to one or
 more pluggable backend services.
 
 .. include:: /nrpe/doc/check_procs.inc
@@ -20,8 +20,7 @@ more pluggable backend services.
 statsd_logger
 ~~~~~~~~~~~~~
 
-process which does logging for :doc:`/statsd/doc/index`. It pipelined with
-:ref:`monitor-statsd_procs` and sends log to syslog service such as
-:doc:`/rsyslog/doc/index`.
+Process which does logging for :doc:`/statsd/doc/index`. It pipelined with
+:ref:`monitor-statsd_procs` and sends log to :doc:`/rsyslog/doc/index`.
 
 .. include:: /nrpe/doc/check_procs.inc

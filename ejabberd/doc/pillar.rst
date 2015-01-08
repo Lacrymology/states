@@ -24,7 +24,7 @@ Example::
 ejabberd:hostnames
 ~~~~~~~~~~~~~~~~~~
 
-List of `HTTP hostname <https://en.wikipedia.org/wiki/Hostname>`__ to
+List of `HTTP hostname <https://en.wikipedia.org/wiki/Hostname>`_ to
 reach :doc:`/ejabberd/doc/index`.
 
 .. _pillar-ejabberd-admins:

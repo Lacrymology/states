@@ -17,7 +17,7 @@ Example::
 varnish:default_backend_host
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-IP address of default :doc:`/varnish/doc/index` backend.
+IP address of default :doc:`index` backend.
 
 Default: ``127.0.0.1``.
 
@@ -26,9 +26,9 @@ Default: ``127.0.0.1``.
 varnish:default_backend_port
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-TCP port of default :doc:`/varnish/doc/index` backend.
+:ref:`glossary-TCP` port of default :doc:`index` backend.
 
-Default: ``8080``.
+Default: port ``8080``.
 
 .. _pillar-varnish-extra_config:
 
@@ -45,7 +45,7 @@ Default: don't use any extra configuration (``None``).
    Document (VCL)
    <https://www.varnish-cache.org/docs/3.0/reference/vcl.html>`_.
 
-   Invalid VCL will cause :doc:`/varnish/doc/index` daemon fail to start.
+   Invalid VCL will cause :doc:`index` :ref:`glossary-daemon` fail to start.
 
 .. _pillar-varnish-nfiles:
 
@@ -64,7 +64,7 @@ varnish:memlock
 Maximum locked memory size (for ``ulimit -l``). Used for locking the
 shared memory login memory.
 
-Default: :doc:`/varnish/doc/index` will lock no more than ``82000``
+Default: :doc:`index` will lock no more than ``82000``
 bytes memory to prevent swap out.
 
 .. _pillar-varnish-listen_address:
@@ -84,9 +84,9 @@ Default: listen on all interfaces (``''``).
 varnish:listen_port
 ~~~~~~~~~~~~~~~~~~~
 
-TCP port to listen for client requests.
+:ref:`glossary-TCP` port to listen for client requests.
 
-Default: ``80``
+Default: port ``80``
 
 .. _pillar-varnish-telnet_address:
 
@@ -105,16 +105,16 @@ Default: ``localhost``
 varnish:telnet_port
 ~~~~~~~~~~~~~~~~~~~
 
-TCP port to listen for management commands.
+:ref:`glossary-TCP` port to listen for management commands.
 
-Default: ``6082``
+Default: port ``6082``
 
 .. _pillar-varnish-storage_backend:
 
 varnish:storage_backend
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-What storage backend :doc:`/varnish/doc/index` should use. See `varnish user's guide
+What storage backend :doc:`index` should use. See `varnish user's guide
 <https://www.varnish-cache.org/docs/trunk/users-guide/storage-backends.html>`_
 for more information.
 
@@ -131,7 +131,7 @@ Default: ``malloc``
 varnish:malloc_size
 ~~~~~~~~~~~~~~~~~~~
 
-Maximum size :doc:`/varnish/doc/index` will allocate when using malloc storage backend.
+Maximum size :doc:`index` will allocate when using malloc storage backend.
 
 Possible values: a number and one of following suffixes.
 
@@ -147,7 +147,7 @@ Default: use maxium ``256M`` bytes memory when use malloc storage backend.
 varnish:file_path
 ~~~~~~~~~~~~~~~~~
 
-The path to :doc:`/varnish/doc/index` storage file when using file storage backend.
+The path to :doc:`index` storage file when using file storage backend.
 
 Default: use /var/lib/varnish/<hostname>/varnish_storage.bin (``None``).
 
@@ -156,7 +156,7 @@ Default: use /var/lib/varnish/<hostname>/varnish_storage.bin (``None``).
 varnish:file_size
 ~~~~~~~~~~~~~~~~~
 
-The file size of :doc:`/varnish/doc/index` storage file when using file storage backend.
+The file size of :doc:`index` storage file when using file storage backend.
 
 Possible values: a number and one of following suffixes.
 
@@ -166,7 +166,7 @@ Possible values: a number and one of following suffixes.
 - T, t: terabytes
 - %: use up to this percent of available disk space
 
-Default: allocate ``2G`` bytes to use as :doc:`/varnish/doc/index` storage backend.
+Default: allocate ``2G`` bytes to use as :doc:`index` storage backend.
 
 .. note::
 

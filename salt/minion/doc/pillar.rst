@@ -5,11 +5,6 @@ Pillar
 
 - :doc:`/rsyslog/doc/index` :doc:`/rsyslog/doc/pillar`
 
-Mandatory
----------
-
-None
-
 Optional
 --------
 
@@ -19,12 +14,16 @@ Example::
     highstate: False
     master: 2.3.4.5
 
+.. _pillar-salt-highstate:
+
 salt:highstate
 ~~~~~~~~~~~~~~
 
-Run highstate as a daily cron job or not.
+.. TODO: replace highstate with link to salt doc for this module
 
-Default: ``True``.
+Run highstate every day.
+
+Default: Apply ``highstate`` every day (`True``).
 
 .. _pillar-salt-master:
 

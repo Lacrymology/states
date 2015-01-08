@@ -45,9 +45,9 @@ Default: 1 day (``1d``).
 denyhosts:whitelist
 ~~~~~~~~~~~~~~~~~~~
 
-List white-list hosts.
+List of protected hosts that won't ever be blacklisted.
 
-Default: Unused (empty list ``[]``).
+Default: Empty list (``[]``).
 
 .. _pillar-denyhosts-deny_threshold_invalid_user:
 
@@ -66,7 +66,7 @@ denyhosts:deny_threshold_valid_user
 
 Block each host after the number of failed login attempts has exceeded this
 value for user accounts that exist in ``/etc/passwd``) except for the ``root``
-user.
+user. For ``root`` see :ref:`pillar-denyhosts-deny_threshold_root`.
 
 Default: ``10`` attempts.
 
@@ -76,7 +76,8 @@ denyhosts:deny_threshold_root
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Block each host after the number of failed login attempts has exceeded
-this value. for ``root`` user login attempts only.
+this value. for ``root`` user login attempts only. For non-``root`` see
+:ref:`pillar-denyhosts-deny_threshold_valid_user`.
 
 Default: ``1`` attempt.
 
@@ -89,7 +90,8 @@ Specifies the period of time between failed login attempts that.
 When exceeded will result in the failed count for this host to be reset to
 ``0``.
 This value applies for all valid users (those within ``/etc/passwd``)
-with the exception of ``root``.
+with the exception of ``root``. For ``root``, see
+:ref:`pillar-denyhosts-reset_root`
 
 Default: Reset after 5 days (``5d``).
 
@@ -101,7 +103,8 @@ denyhosts:reset_root
 Specifies the period of time between failed login attempts that.
 When exceeded will result in the failed count for this host to be reset to
 ``0``.
-This value applies for ``root`` user.
+This value applies for ``root`` user. For non-``root``, see
+:ref:`pillar-denyhosts-reset_valid`
 
 Default: Reset after 5 days (``5d``).
 
@@ -129,7 +132,7 @@ when exceeded will result in the failed count for this host to be reset to
 This value applies to login attempts made to any invalid username
 (those that do not  appear in ``/etc/passwd``).
 
-Default: Reset after 10 days (``10d``).
+Default: Reset after ten days (``10d``).
 
 .. _pillar-denyhosts-reset_on_success:
 
@@ -176,16 +179,21 @@ Default: 1 hour (``1h``).
 denyhosts:sync:upload
 ~~~~~~~~~~~~~~~~~~~~~
 
-Allow DenyHosts daemon to upload data to ``denyhosts.net`` or not.
+Allow :doc:`/denyhosts/doc/index` :ref:`glossary-daemon` to upload data to
+``denyhosts.net`` or not.
 
 Default: Upload data (``True``).
+
+.. TODO: REALLY WTF?
 
 .. _pillar-denyhosts-sync-download:
 
 denyhosts:sync:download
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-Allow your DenyHosts daemon to receive hosts that have been denied by others.
+Allow your :doc:`/denyhosts/doc/index` :ref:`glossary-daemon` to receive hosts
+that have been denied by others participating members (not other
+:doc:`/salt/minion/doc/index` hosts).
 
 Default: ``True``.
 
@@ -196,10 +204,11 @@ denyhosts:sync:download_threshold
 
 If ``denyhosts:sync:download`` is enabled this parameter filters the returned
 hosts to those that have been blocked this many times by others. That is, if set
-to ``1``, then if a single DenyHosts server has denied an ip address then you
-will receive the denied host.
+to ``1``, then if a single :doc:`/denyhosts/doc/index` server has denied an IP
+address then you will receive the denied host.
 
-Default: Blocked by ``3`` other DenyHosts daemons will be downloaded.
+Default: Blocked by ``3`` other :doc:`/denyhosts/doc/index`
+:ref:`glossary-daemon` will be downloaded.
 
 .. _pillar-denyhosts-sync-download_resiliency:
 
@@ -212,4 +221,4 @@ resiliency period or greater.
 Additional details on many of these pillar are documented in
 :download:`config <../config.jinja2>`.
 
-Default: ``5h``.
+Default: Five hours (``5h``).

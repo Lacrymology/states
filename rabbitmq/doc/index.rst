@@ -3,7 +3,7 @@ RabbitMQ
 
 :doc:`/rabbitmq/doc/index` is open source message broker software (sometimes called
 message-oriented middleware) that implements the `Advanced Message Queuing
-Protocol (AMQP) <http://en.wikipedia.org/wiki/Advanced_Message_Queuing_Protocol>`__.
+Protocol (AMQP) <http://en.wikipedia.org/wiki/Advanced_Message_Queuing_Protocol>`_.
 The :doc:`/rabbitmq/doc/index` server is written in the
 :doc:`/erlang/doc/index` programming
 language and is built on the Open Telecom Platform framework for clustering and

@@ -39,8 +39,8 @@ Server Installation
 -------------------
 
 Create a security only for the C.I. server. Allow in :doc:`/ssh/doc/index`,
-HTTP and HTTPs (if you turned on :doc:`/ssl/doc/index`).
-Allow all TCP, UDP and ICMP traffic from security group
+:ref:`glossary-HTTP` and :ref:`glossary-HTTPS` (if you turned on :doc:`/ssl/doc/index`).
+Allow all :ref:`glossary-TCP`, :ref:`glossary-UDP` and ICMP traffic from security group
 ``salt_cloud:providers:amazon_ec2:securitygroup`` in.
 
 Create a VM in the same region and availabilty zone as in

@@ -51,13 +51,13 @@ Example::
     github.com ssh-rsa
     AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==
 
-The public key of `github.com <https://github.com>`__ is ``AAAAB......aQ==``.
+The public key of `github.com <https://github.com>`_ is ``AAAAB......aQ==``.
 Though, prefix the key with ``github.com ssh-rsa`` still valid and improve
 redability.
 
 .. note::
 
-  github.com and `bitbucket.org <https://bitbucket.org>`__ public keys are
+  github.com and `bitbucket.org <https://bitbucket.org>`_ public keys are
   already managed by this formula as they are often required by other one.
 
 Default: no custom known hosts (``{}``).

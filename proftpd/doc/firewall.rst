@@ -1,6 +1,6 @@
 Firewall
 ========
 
-FTP run on the following port:
+FTP protocol run on the following port:
 
-- TCP 21: FTP
+- :doc:`/postgresql/doc/index` ``21``

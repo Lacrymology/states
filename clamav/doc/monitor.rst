@@ -9,8 +9,7 @@ Mandatory
 freshclam_procs
 ~~~~~~~~~~~~~~~
 
-`FreshClam Daemon <https://packages.debian.org/sid/clamav-freshclam>`__  is
-the daemon which automate virus database updating.
+:ref:`clamav-freshclam` :ref:`glossary-daemon` check.
 
 .. include:: /nrpe/doc/check_procs.inc
 
@@ -19,17 +18,17 @@ the daemon which automate virus database updating.
 clamav_procs
 ~~~~~~~~~~~~
 
-ClamAV daemon provides virus scanning service.
+:doc:`index` :ref:`glossary-daemon` provides virus scanning service.
 
 .. _monitor-clamav_last_update:
 
 clamav_last_update
 ~~~~~~~~~~~~~~~~~~
 
-ClamAV database was updated since 1 day ago or less.
+:doc:`index` database was updated since ``1`` day ago or less.
 
 clamav_last_scan
 ~~~~~~~~~~~~~~~~
 
-:doc:`/clamav/doc/index` full scan was run and no virus found since 1
+:doc:`index` full scan was run and no virus found since ``1``
 day ago or less.

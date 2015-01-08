@@ -28,7 +28,7 @@ Default: allow no more than ``1000`` input variables.
 php:error_reporting
 ~~~~~~~~~~~~~~~~~~~
 
-Set the `error reporting level <http://php.net/error-reporting>`__.
+Set the `error reporting level <http://php.net/error-reporting>`_.
 
 Common Values:
 Default Value: ``E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED``

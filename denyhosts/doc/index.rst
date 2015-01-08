@@ -1,8 +1,7 @@
 DenyHosts
 =========
 
-Introduction
-------------
+More can be find at official `DenyHosts page <http://denyhosts.sourceforge.net>`_.
 
 DenyHosts is a script that analyzes the :doc:`/ssh/server/doc/index` log
 messages to determine what hosts are attempting to hack into your system.

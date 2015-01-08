@@ -36,4 +36,4 @@ Critical:
 |deployment|\_uwsgi_ping
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-Check |deployment| :doc:`/uwsgi/doc/index` response via unix socket.
+Check |deployment| :doc:`/uwsgi/doc/index` response via UNIX socket.

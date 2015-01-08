@@ -29,7 +29,7 @@ redis:port
 
 Accept connections on the specified port, default is ``6379``.
 
-If port ``0`` is specified :doc:`/redis/doc/index` will not listen on a TCP socket.
+If port ``0`` is specified :doc:`/redis/doc/index` will not listen on a :ref:`glossary-TCP` socket.
 
 Default: ``6379``.
 
@@ -38,7 +38,7 @@ Default: ``6379``.
 redis:timeout
 ~~~~~~~~~~~~~
 
-Close the connection after a client is idle for N seconds (``0`` to disable)
+Close the connection after a client is idle for some seconds (``0`` to disable)
 
 Default: don't close idle connection (``0``).
 
@@ -47,8 +47,8 @@ Default: don't close idle connection (``0``).
 redis:keepalive
 ~~~~~~~~~~~~~~~
 
-TCP keepalive. Period to send ACKs (more `details
-<http://en.wikipedia.org/wiki/Transmission_Control_Protocol>`__ ) in
+:ref:`glossary-TCP` keepalive. Period to send ACKs (more `details
+<http://en.wikipedia.org/wiki/Transmission_Control_Protocol>`_ ) in
 seconds.
 
 Default: send ACK every ``60`` seconds.

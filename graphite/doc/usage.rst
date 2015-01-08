@@ -41,7 +41,7 @@ A few functions to get the data you want:
 
     mostDeviant(3,*.os.memory.MemFree)
 
-`Full list of function <http://graphite.readthedocs.org/en/latest/functions.html>`__
+`Full list of function <http://graphite.readthedocs.org/en/latest/functions.html>`_
 
 Cleanup Metrics
 ---------------

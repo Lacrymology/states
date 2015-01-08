@@ -50,7 +50,7 @@ ssh:server:extra_configs
 List extra configurations for :doc:`index`.
 
 See more in
-`SSH man <http://www.openbsd.org/cgi-bin/man.cgi?query=sshd_config&sektion=5>`__.
+`SSH man <http://www.openbsd.org/cgi-bin/man.cgi?query=sshd_config&sektion=5>`_.
 
 Default: No extra configs will be used (``[]``).
 

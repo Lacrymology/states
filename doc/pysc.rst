@@ -258,7 +258,7 @@ The following configuration values are expected or supported:
 
 - `logging`: Is expected to be a valid configuration dictionary for
   python's `logging.config.dictConfig
-  <https://docs.python.org/2/library/logging.config.html#logging.config.dictConfig>`__.
+  <https://docs.python.org/2/library/logging.config.html#logging.config.dictConfig>`_.
   A default is provided in ``/etc/python/config.yml``
 - `profile` (optional): Should be a boolean. If ``True`` a
   ``log.debug`` message is emitted when the application starts, after

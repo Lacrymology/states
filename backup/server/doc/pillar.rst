@@ -13,6 +13,7 @@ Optional
 backup:ssh:retention
 ~~~~~~~~~~~~~~~~~~~~
 
-Days to keep backup files on backup server before they get deleted.
+Days to keep backup files on :doc:`/backup/server/doc/index` before they get
+deleted.
 
-Default: ``30``.
+Default: ``30`` days.

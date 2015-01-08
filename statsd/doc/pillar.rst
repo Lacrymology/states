@@ -5,4 +5,4 @@ Pillar
 
 - :doc:`/rsyslog/doc/index` :doc:`/rsyslog/doc/pillar`
 
-:doc:`index` need the :doc:`/doc/pillar` key ``graphite_address`` value.
+:doc:`index` need :ref:`pillar-graphite_address` defined.

@@ -22,14 +22,14 @@ etherpad_procs
 
 .. include:: /nrpe/doc/check_procs.inc
 
-Critical: not exactly one process with name ``node_modules/ep_etherpad-lite`` running by user etherpad.
+Process ``node_modules/ep_etherpad-lite`` running by user ``etherpad``.
 
 .. _monitor-etherpad_port:
 
 etherpad_port
 ~~~~~~~~~~~~~
 
-Monitor :doc:`/etherpad/doc/index` port ``9001/tcp``.
+Monitor :doc:`/etherpad/doc/index` port :ref:`glossary-TCP` ``9001``.
 
 .. _monitor-etherpad_logger:
 
@@ -38,8 +38,6 @@ etherpad_logger
 
 .. include:: /nrpe/doc/check_procs.inc
 
-Critical: not exactly one process with command line name logger and argument ``-t etherpad``.
-
 .. include:: /backup/doc/monitor.inc
 
 .. include:: /backup/doc/monitor_postgres_procs.inc
@@ -47,7 +45,7 @@ Critical: not exactly one process with command line name logger and argument ``-
 Optional
 --------
 
-Only use if :ref:`pillar-etherpad-ssl` is turned on.
+Only use if :ref:`pillar-etherpad-ssl` is defined.
 
 .. include:: /nginx/doc/monitor_ssl.inc
 
@@ -56,13 +54,13 @@ Only use if :ref:`pillar-etherpad-ssl` is turned on.
 etherpad_javascript_http
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-Monitor etherpad functionality by request to a javascript URL.
+Monitor :doc:`index` functionality by request to a javascript :ref:`glossary-URL`.
 
-Only use in the test mode.
+Only use if :ref:`pillar-__test__` is ``True``.
 
 etherpad_javascript_https
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Same as :ref:`pillar-etherpad_javascript_http` but connect via SSL.
+Same as :ref:`pillar-etherpad_javascript_http` but connect via :doc:`/ssl/doc/index`.
 
-Only use in the test mode and if :ref:`pillar-etherpad-ssl` is turned on.
+Only use if :ref:`pillar-__test__` is ``True`` and if :ref:`pillar-etherpad-ssl` is defined.

@@ -1,17 +1,17 @@
 Tomcat
 ======
 
-Apache Tomcat is an open source software implementation of the Java Servlet and
-JavaServer Pages technologies. The Java Servlet and JavaServer Pages
-specifications are developed under the Java Community Process.
+More can be find at official `Apache Tomcat page <http://tomcat.apache.org/>`_.
 
-Homepage: http://tomcat.apache.org/
+Apache Tomcat is an open source software implementation of the :doc:`/java/doc/index` Servlet and
+JavaServer Pages technologies. The :doc:`/java/doc/index` Servlet and JavaServer Pages
+specifications are developed under the :doc:`/java/doc/index` Community Process.
 
 Tomcat6 or Tomcat7
 ------------------
 
 Users should choose the version which they used for developing
-Java application.
+:doc:`/java/doc/index` application.
 Consults `this page for more information <http://tomcat.apache.org/whichversion.html>`_.
 
 - Apache Tomcat 6.x builds upon the improvements made in Tomcat 5.5.x and

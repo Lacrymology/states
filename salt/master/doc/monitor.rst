@@ -57,7 +57,7 @@ salt_master_mine
 ~~~~~~~~~~~~~~~~
 
 Comparing number of hosts which have data in
-`Salt mine <http://docs.saltstack.com/en/latest/topics/mine/index.html>`__
+`Salt mine <http://docs.saltstack.com/en/latest/topics/mine/index.html>`_
 against number of :doc:`/salt/minion/doc/index` managed by this
 :doc:`/salt/master/doc/index`.
 

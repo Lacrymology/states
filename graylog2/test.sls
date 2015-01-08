@@ -66,22 +66,15 @@ test:
       - sls: graylog2.server.diamond
       - sls: graylog2.web
       - sls: graylog2.web.diamond
+      - monitoring: test
 
-test_graylog2_server:
+test_graylog2:
   qa:
     - test
     - name: graylog2.server
     - additional:
+      - graylog2.web
       - graylog2.server.backup
-    - pillar_doc: {{ opts['cachedir'] }}/doc/output
-    - require:
-      - monitoring: test
-      - cmd: doc
-
-test_graylog2_web:
-  qa:
-    - test
-    - name: graylog2.web
     - pillar_doc: {{ opts['cachedir'] }}/doc/output
     - require:
       - monitoring: test
@@ -93,3 +86,30 @@ graylog2_server-es_cluster:
     - accepted_failure: 1 nodes in cluster (outside range 2:2)
     - require:
       - monitoring: test
+
+test_create_graylog_stream:
+  graylog_stream:
+    - present
+    - name: "CI Test Stream"
+    - require:
+      - sls: graylog2.server
+
+test_absent_graylog_stream:
+  graylog_stream:
+    - absent
+    - name: "CI Test Stream"
+    - require:
+      - graylog_stream: test_create_graylog_stream
+
+{#- workaround for file.accumulated reload_modules bug #}
+extend:
+  graylog2_web_diamond_resource:
+    file:
+      - require:
+        - sls: graylog2.server
+        - sls: graylog2.web
+  graylog2_server_diamond_resources:
+    file:
+      - require:
+        - sls: graylog2.server
+        - sls: graylog2.web

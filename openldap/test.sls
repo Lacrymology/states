@@ -40,7 +40,7 @@ test:
   qa:
     - test
     - name: openldap
-    - aditional:
+    - additional:
       - openldap.backup
     - pillar_doc: {{ opts['cachedir'] }}/doc/output
     - require:

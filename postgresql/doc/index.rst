@@ -7,6 +7,7 @@ PostgreSQL
     :glob:
 
     *
+    ../common/doc/index
 
 Concepts
 --------

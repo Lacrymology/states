@@ -18,15 +18,9 @@ test:
     - order: last
   cmd:
     - run
-    - name: /usr/local/bin/backup-postgresql postgres
-    - require:
-      - sls: postgresql.server
-      - sls: postgresql.server.backup
-
-test_backup_all:
-  cmd:
-    - run
-    - name: /usr/local/bin/backup-postgresql-all
+    - name: |
+        /usr/local/bin/backup-postgresql postgres
+        /usr/local/bin/backup-postgresql-all
     - require:
       - sls: postgresql.server
       - sls: postgresql.server.backup
@@ -34,7 +28,7 @@ test_backup_all:
     - test
     - map:
         ProcessResources:
-    {{ diamond_process_test('postgresql') }}
+          {{ diamond_process_test('postgresql') }}
         Postgresql:
           postgres.database.monitoring.blks_hit: True
           postgres.database.monitoring.blks_read: True
@@ -52,10 +46,20 @@ test_backup_all:
       - sls: postgresql.server
       - service: diamond
   qa:
-    - test
+    - test_pillar
     - name: postgresql
     - additional:
-      - postgresql.backup
+      - postgresql.server
+      - postgresql.server.backup
+    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - require:
+      - monitoring: test
+      - cmd: doc
+
+test_postgresql_common:
+  qa:
+    - test_monitor
+    - name: postgresql.common
     - pillar_doc: {{ opts['cachedir'] }}/doc/output
     - require:
       - monitoring: test

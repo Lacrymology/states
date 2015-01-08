@@ -7,6 +7,8 @@
 # Author: Viet Hung Nguyen <hvn@robotinfra.com>
 # Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 
+import datetime
+
 import sphinx_rtd_theme
 
 extensions = ['sphinx.ext.todo',
@@ -28,9 +30,9 @@ extlinks = {
 templates_path = ''
 source_suffix = '.rst'
 master_doc = 'doc/index'
-project = u'Salt common'
-copyright = u'BFS'
-version = '2014.1'
+project = u'RobotInfra'
+copyright = project
+version = str(datetime.datetime.now())
 release = 'dev'
 pygments_style = 'sphinx'
 html_theme = 'sphinx_rtd_theme'

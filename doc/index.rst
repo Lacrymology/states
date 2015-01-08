@@ -1,3 +1,6 @@
+RobotInfra
+==========
+
 Welcome to Infrastructure Documentation:
 
 .. toctree::
@@ -12,7 +15,6 @@ Welcome to Infrastructure Documentation:
     state
     install
     /test/doc/index
-    base_knowledge
     monitoring
     dev
     hacking

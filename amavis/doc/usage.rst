@@ -7,7 +7,7 @@ More can be find at official
 Scan email content
 ------------------
 
-:doc:`/amavis/doc/index/` is a high-performance interface between mailer
+:doc:`/amavis/doc/index` is a high-performance interface between mailer
 (:ref:`glossary-MTA`) and content checkers:
 
 - virus scanners (:doc:`/clamav/doc/index`)
@@ -18,11 +18,11 @@ Scan email content
 action depends on the check results.
 
 For spam scanning with :doc:`/spamassassin/doc/index`, after received an email
-from :ref:`glossary-MTA`, :doc:`/amavis/doc/index/` passes it to
+from :ref:`glossary-MTA`, :doc:`/amavis/doc/index` passes it to
 :doc:`/spamassassin/doc/index`. :doc:`/spamassassin/doc/index` then scans it,
 returns a spam score (spam level, hits) which is an floating number represents
 for spaminess. The higher the number, the more spamy the message is considered.
-:doc:`/amavis/doc/index/` compares that score with three configured values then
+:doc:`/amavis/doc/index` compares that score with three configured values then
 decide what to do base on the comparation results.
 
 - tag level::

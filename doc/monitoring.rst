@@ -10,6 +10,7 @@ check a running Minion without a monitoring server deployed.
     :hidden:
 
     monitoring/python
+    monitoring/checks
 
 
 NRPE

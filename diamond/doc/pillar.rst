@@ -37,9 +37,11 @@ Default: list of:
 diamond:ping
 ~~~~~~~~~~~~
 
-List of IPs/hostnames to monitor their ping
-`round trip time <http://en.wikipedia.org/wiki/Round-trip_delay_time>`_
+IPs/hostnames to monitor their ping
+`round trip time <http://en.wikipedia.org/wiki/Round-trip_delay_time>`__
 from this host.
+
+Data formed as a dictionary: ``target``: ``ip/hostname``.
 
 Default: monitors no address (``{}``).
 
@@ -51,3 +53,13 @@ diamond:batch
 How many metrics to store before sending to the :doc:`/carbon/doc/index` server.
 
 Default: :doc:`/diamond/doc/index` default value (``256``).
+
+Conditional
+-----------
+
+diamond:ping:{{ target }}
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The IP/hostname of the ``{{ target }}``.
+
+.. note:: Only used if :ref:`pillar-diamond-ping` is defined.

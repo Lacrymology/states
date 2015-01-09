@@ -1,12 +1,12 @@
 Monitoring Checks
 =================
 
-For writing :doc:`/nrpe/doc/index` check with Python (recommend), see
-:doc:`/doc/monitoring/python`.
+For writing :doc:`/nrpe/doc/index` check with :doc:`/python/doc/index`
+(recommend), see :doc:`/doc/monitoring/python`.
 
 Writing monitoring check is easy, and can be done with any programming
 languages. We often use :doc:`/bash/doc/index` beside of
-Python.
+:doc:`/python/doc/index`.
 
 Return code
 -----------
@@ -46,7 +46,6 @@ space.
 
 .. code-block:: bash
 
-
    df_output=$(df -h / | sed 1d)
    disk_used=$(echo "$df_output" | awk '{print $3}')
    disk_used_percent=$(echo "$df_output" | awk '{sub(/%/, "", $5); print $5}')
@@ -70,9 +69,9 @@ the script, it only reads the output and return code.
 NRPE checks repositories
 ------------------------
 
-Before decide to write your own monitoring check, check if you can use
-a existed one instead.
+Before decide to write your own monitoring check, check if one already
+exists.
 
-* `<http://nagios-plugins.org/>`__
-* `<https://www.monitoring-plugins.org/>`__
-* `<http://exchange.nagios.org/directory/Plugins>`__
+* http://nagios-plugins.org
+* https://www.monitoring-plugins.org
+* http://exchange.nagios.org/directory/Plugins

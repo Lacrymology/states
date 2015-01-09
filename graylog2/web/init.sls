@@ -28,11 +28,13 @@ include:
 {% set user = salt['pillar.get']('graylog2:web:user', 'graylog2-ui') %}
 {% set web_root_dir = '/usr/local/graylog2-web-interface-' + version %}
 
+{#-
 {% for previous_version in () %}
 /usr/local/graylog2-web-interface-{{ previous_version }}:
   file:
     - absent
 {% endfor %}
+#}
 
 graylog2-web-{{ user }}:
   user:

@@ -15,11 +15,13 @@ include:
   - web
   - xml
 
+{#-
 {%- for previous_version in () %}
 /usr/local/uwsgi-{{ previous_version }}:
   file:
     - absent
 {%- endfor %}
+#}
 
 {%- set version = '1.9.17.1' -%}
 {%- set extracted_dir = '/usr/local/uwsgi-{0}'.format(version) %}

@@ -37,11 +37,13 @@ include:
 {%- set mongodb_suffix = '0-20' %}
 {%- set elasticsearch_prefix = '0-20' %}
 
+{#-
 {% for previous_version in () %}
 /usr/local/graylog2-server-{{ previous_version }}:
   file:
     - absent
 {% endfor %}
+#}
 
 /var/log/graylog2/server.log:
   file:

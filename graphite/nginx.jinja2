@@ -13,17 +13,19 @@ upstream graphite {
 
 server {
     listen 80;
-{% if salt['pillar.get']('graphite:ssl', False) %}
+{%- set ssl = salt['pillar.get']('graphite:ssl', False) %}
+{% if ssl %}
 {% if salt['pillar.get']('graphite:ssl_redirect', False) %}
+{%- set hostnames = salt['pillar.get']('graphite:hostnames') %}
     {# if https, redirect http port 80 to https port 443 #}
-    server_name {% for hostname in salt['pillar.get']('graphite:hostnames') %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+    server_name {% for hostname in hostnames %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
     return 301 https://{{ salt['pillar.get']('graphite:hostnames')[0] }}$request_uri;
 }
 {#- https server #}
 server {
 {% endif %}{# redirect http to https #}
 {%- from 'nginx/macro.jinja2' import ssl_config with context %}
-    {{ ssl_config(salt['pillar.get']('graphite:ssl', False)) }}
+    {{ ssl_config(ssl) }}
 {% endif %}
 {#- web app logic #}
     server_name {% for hostname in salt['pillar.get']('graphite:hostnames') %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
@@ -68,6 +70,7 @@ server {
 {% include 'nginx/location_robots.jinja2' %}
 
     location / {
+{%- set timeout = salt['pillar.get']('graphite:timeout', 60) %}
         uwsgi_pass graphite;
         include uwsgi_params;
         uwsgi_read_timeout {{ salt['pillar.get']('graphite:timeout', 60) }};

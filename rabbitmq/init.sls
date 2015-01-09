@@ -10,7 +10,8 @@ include:
   - erlang
   - logrotate
   - hostname
-{%- if salt['pillar.get']('rabbitmq:ssl', False) %}
+{%- set ssl = salt['pillar.get']('rabbitmq:ssl', False) %}
+{%- if ssl %}
   - ssl
 {%- endif %}
   - nginx
@@ -118,8 +119,9 @@ rabbitmq-server:
   pkg:
     - installed
     - sources:
-{%- if salt['pillar.get']('files_archive', False) %}
-      - rabbitmq-server: {{ salt['pillar.get']('files_archive', False)|replace('file://', '')|replace('https://', 'http://') }}/mirror/rabbitmq-server_{{ sub_version }}_all.deb
+{%- set files_archive = salt['pillar.get']('files_archive', False) %}
+{%- if files_archive %}
+      - rabbitmq-server: {{ files_archive|replace('file://', '')|replace('https://', 'http://') }}/mirror/rabbitmq-server_{{ sub_version }}_all.deb
 {%- else %}
       - rabbitmq-server: http://www.rabbitmq.com/releases/rabbitmq-server/v{{ version }}/rabbitmq-server_{{ sub_version }}_all.deb
 {%- endif %}

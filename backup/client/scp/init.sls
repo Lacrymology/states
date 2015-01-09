@@ -11,8 +11,9 @@ include:
   - bash
   - local
   - ssh.client
-{%- if salt['pillar.get']('backup_server:address') in grains['ipv4'] or
-       salt['pillar.get']('backup_server:address') in ('localhost', grains['host']) %}
+{%- set address = salt['pillar.get']('backup_server:address') %}
+{%- if address in grains['ipv4'] or
+       address in ('localhost', grains['host']) %}
   {#- If backup_server address set to localhost (mainly in CI testing), install backup.server first #}
   - backup.server
 {%- else %}
@@ -20,7 +21,7 @@ include:
 backup-client:
   ssh_known_hosts:
     - present
-    - name: {{ salt['pillar.get']('backup_server:address') }}
+    - name: {{ address }}
     - user: root
     - fingerprint: {{ salt['pillar.get']('backup_server:fingerprint') }}
     - require:
@@ -42,8 +43,8 @@ backup-client:
       - file: /usr/local
       - file: bash
       - pkg: /usr/local/bin/backup-store
-{%- if salt['pillar.get']('backup_server:address') in grains['ipv4'] or
-       salt['pillar.get']('backup_server:address') in ('localhost', grains['host']) %}
+{%- if address in grains['ipv4'] or
+       address in ('localhost', grains['host']) %}
       - file: /var/lib/backup
 {%- endif %}
 

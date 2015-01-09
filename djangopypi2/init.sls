@@ -17,7 +17,8 @@ include:
   - python.dev
   - rsyslog
   - sudo
-{% if salt['pillar.get']('djangopypi2:ssl', False) %}
+{%- set ssl = salt['pillar.get']('djangopypi2:ssl', False) %}
+{% if ssl %}
   - ssl
 {% endif %}
 {% if salt['pillar.get']('graphite_address', False) %}
@@ -64,6 +65,7 @@ djangopypi2:
     - watch:
       - module: djangopypi2
   postgres_user:
+{%- set username = salt['pillar.get']('djangopypi2:db:username', 'djangopypi2') %}
     - present
     - name: {{ salt['pillar.get']('djangopypi2:db:username', 'djangopypi2') }}
     - password: {{ salt['password.pillar']('djangopypi2:db:password', 10) }}
@@ -271,10 +273,10 @@ djangomod module, which is just a helper to build our command and run it.
     - watch_in:
       - service: nginx
 
-{% if salt['pillar.get']('djangopypi2:ssl', False) %}
+{% if ssl %}
 extend:
   nginx:
     service:
       - watch:
-        - cmd: ssl_cert_and_key_for_{{ salt['pillar.get']('djangopypi2:ssl', False) }}
+        - cmd: ssl_cert_and_key_for_{{ ssl }}
 {% endif %}

@@ -224,7 +224,8 @@ graphite_settings:
       - service: memcached
   postgres_user:
     - present
-    - name: {{ salt['pillar.get']('graphite:db:username', 'graphite') }}
+{%- set username = salt['pillar.get']('graphite:db:username', 'graphite') %}
+    - name: {{ username }}
     - password: {{ salt['password.pillar']('graphite:db:password', 10) }}
     - runas: postgres
     - require:
@@ -232,7 +233,7 @@ graphite_settings:
   postgres_database:
     - present
     - name: {{ salt['pillar.get']('graphite:db:name', 'graphite') }}
-    - owner: {{ salt['pillar.get']('graphite:db:username', 'graphite') }}
+    - owner: {{ username }}
     - runas: postgres
     - require:
       - postgres_user: graphite_settings

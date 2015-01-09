@@ -26,7 +26,8 @@ include:
   elasticsearch doesn't need to be install in same machine as
   graylog2.server
 #}
-{%- if salt['pillar.get']("__test__", False) %}
+{%- set __test__ = salt['pillar.get']("__test__", False) %}
+{%- if __test__ %}
   - elasticsearch
 {%- endif %}
 
@@ -105,8 +106,9 @@ graylog2-server:
   archive:
     - extracted
     - name: /usr/local/
-{%- if salt['pillar.get']('files_archive', False) %}
-    - source: {{ salt['pillar.get']('files_archive', False) }}/mirror/graylog2-server-{{ version }}.tar.gz
+{%- set files_archive = salt['pillar.get']('files_archive', False) %}
+{%- if files_archive %}
+    - source: {{ files_archive }}/mirror/graylog2-server-{{ version }}.tar.gz
 {%- else %}
     - source: http://packages.graylog2.org/releases/graylog2-server/graylog2-server-{{ version }}.tgz
 {%- endif %}
@@ -205,6 +207,7 @@ import_graylog2_gelf:
     - gelf_input
     {#- The following parameters have their default values and are unnecessary #}
     - title: gelf
+{%- set admin_username = salt['pillar.get']('graylog2:admin_username', 'admin') %}
     - stype: udp
     - port: 12201
     - creator: {{ salt['pillar.get']('graylog2:admin_username', 'admin') }}

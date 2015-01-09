@@ -20,9 +20,11 @@ validate_archive "$1"
 
 archive_path="$1"
 archive_name=$(basename $archive_path)
-{%- if salt['pillar.get']('backup:s3:path') == '/' %}
-s3cmd --config=/root/.s3cfg --no-progress put $archive_path s3://{{ salt['pillar.get']('backup:s3:bucket') }}/$archive_name | logger -t s3cmd
+{%- set path = salt['pillar.get']('backup:s3:path') %}
+{%- set bucket = salt['pillar.get']('backup:s3:bucket') %}
+{%- if path == '/' %}
+s3cmd --config=/root/.s3cfg --no-progress put $archive_path s3://{{ bucket }}/$archive_name | logger -t s3cmd
 {%- else %}
-s3cmd --config=/root/.s3cfg --no-progress put $archive_path s3://{{ salt['pillar.get']('backup:s3:bucket') }}/{{ salt['pillar.get']('backup:s3:path').strip('/') }}/$archive_name | logger -t s3cmd
+s3cmd --config=/root/.s3cfg --no-progress put $archive_path s3://{{ bucket }}/{{ path.strip('/') }}/$archive_name | logger -t s3cmd
 {%- endif %}
 rm -f $archive_path

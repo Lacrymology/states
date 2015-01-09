@@ -21,8 +21,9 @@ salt_absent_old_apt_salt_{{ i }}:
 salt:
   pkgrepo:
     - absent
-{%- if salt['pillar.get']('files_archive', False) %}
-    - name: deb {{ salt['pillar.get']('files_archive', False)|replace('https://', 'http://') }}/mirror/salt/{{ version }} {{ grains['lsb_distrib_codename'] }} main
+{%- set files_archive = salt['pillar.get']('files_archive', False) %}
+{%- if files_archive %}
+    - name: deb {{ files_archive|replace('https://', 'http://') }}/mirror/salt/{{ version }} {{ grains['lsb_distrib_codename'] }} main
 {%- else %}
     - name: deb http://archive.robotinfra.com/mirror/salt/{{ version }} {{ grains['lsb_distrib_codename'] }} main
 {%- endif %}

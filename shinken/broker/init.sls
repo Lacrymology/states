@@ -36,7 +36,8 @@ include:
       - service: nginx
 
 {%- if salt['pillar.get']('files_archive', False) -%}
-    {%- if salt['pillar.get']('graphite_address', False) -%}
+{%- set graphite_address = salt['pillar.get']('graphite_address', False) %}
+    {%- if graphite_address -%}
         {%- call shinken_install_module('graphite') %}
 - source_hash: md5=56b393c9970275327644123480ffd413
         {%- endcall %}
@@ -61,7 +62,7 @@ include:
 - source_hash: md5=396be5667ca41b57d65239d7bd4b061a
     {%- endcall %}
 {%- else %}
-    {%- if salt['pillar.get']('graphite_address', False) -%}
+    {%- if graphite_address -%}
         {{ shinken_install_module('graphite') }}
         {{ shinken_install_module('ui-graphite') }}
     {%- endif %}
@@ -90,7 +91,7 @@ shinken-broker:
       - file: /var/lib/shinken
     - watch:
       - cmd: shinken
-{%- if salt['pillar.get']('graphite_address', False) %}
+{%- if graphite_address %}
       - cmd: shinken-module-graphite
       - cmd: shinken-module-ui-graphite
 {%- endif %}

@@ -32,10 +32,11 @@ $config['ldap_debug'] = false;
 $config['smtp_debug'] = false;
 {%- endif %}
 {%- if salt['pillar.get']('roundcube:imap:ssl', False) %}
-$config['default_host'] = 'ssl://{{ salt['pillar.get']('roundcube:imap:server', '127.0.0.1') }}';
+{%- set server = salt['pillar.get']('roundcube:imap:server', '127.0.0.1') %}
+$config['default_host'] = 'ssl://{{ server }}';
 $config['default_port'] = 993;
 {%- else %}
-$config['default_host'] = '{{ salt['pillar.get']('roundcube:imap:server', '127.0.0.1') }}';
+$config['default_host'] = '{{ server }}';
 $config['default_port'] = 143;
 {%- endif %}
 $config['imap_auth_type'] = null;

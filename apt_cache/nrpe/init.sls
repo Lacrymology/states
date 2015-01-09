@@ -11,13 +11,14 @@ include:
   - apt.nrpe
   - nginx.nrpe
   - nrpe
-{%- if salt['pillar.get'](formula + ':ssl', False) %}
+{%- set ssl =  salt['pillar.get'](formula + ':ssl', False) %}
+{%- if ssl %}
   - ssl.nrpe
 {%- endif %}
 
 {{ passive_check(formula, check_ssl_score=True) }}
 
-{%- if salt['pillar.get'](formula + ':ssl', False) %}
+{%- if ssl %}
 extend:
   check_ssl_configuration.py:
     file:

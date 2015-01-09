@@ -139,8 +139,9 @@ salt-api:
   pkg:
     - installed
     - sources:
-{%- if salt['pillar.get']('files_archive', False) %}
-      - salt-api: {{ salt['pillar.get']('files_archive', False)|replace('file://', '')|replace('https://', 'http://') }}/mirror/salt/{{ api_path }}
+{%- set files_archive = salt['pillar.get']('files_archive', False) %}
+{%- if files_archive %}
+      - salt-api: {{ files_archive|replace('file://', '')|replace('https://', 'http://') }}/mirror/salt/{{ api_path }}
 {%- else %}
       - salt-api: http://archive.robotinfra.com/mirror/salt/{{ api_path }}
 {%- endif %}

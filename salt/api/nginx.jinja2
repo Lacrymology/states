@@ -14,8 +14,9 @@ server {
 {% if ssl %}
 {% if salt['pillar.get']('salt_api:ssl_redirect', False) %}
     {# if https, redirect http port 80 to https port 443 #}
-    server_name {% for hostname in salt['pillar.get']('salt_api:hostnames') %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
-    return 301 https://{{ salt['pillar.get']('salt_api:hostnames')[0] }}$request_uri;
+{%- set hostnames = salt['pillar.get']('salt_api:hostnames') %}
+    server_name {% for hostname in hostnames %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+    return 301 https://{{ hostnames[0] }}$request_uri;
 }
 {#- https server #}
 server {
@@ -24,7 +25,7 @@ server {
     {{ ssl_config(ssl) }}
 {% endif %}
 {#- web app logic #}
-    server_name {% for hostname in salt['pillar.get']('salt_api:hostnames') %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+    server_name {% for hostname in hostnames %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
 
     root /usr/local/salt-ui;
     index index.html;

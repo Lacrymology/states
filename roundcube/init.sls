@@ -50,8 +50,9 @@ roundcube:
   archive:
     - extracted
     - name: /usr/local/
-{%- if salt['pillar.get']('files_archive', False) %}
-    - source: {{ salt['pillar.get']('files_archive', False) }}/mirror/roundcubemail-{{ version }}.tar.gz
+{%- set files_archive = salt['pillar.get']('files_archive', False) %}
+{%- if files_archive %}
+    - source: {{ files_archive }}/mirror/roundcubemail-{{ version }}.tar.gz
 {%- else %}
     - source: http://jaist.dl.sourceforge.net/project/roundcubemail/roundcubemail/{{ version }}/roundcubemail-{{ version }}.tar.gz
 {%- endif %}

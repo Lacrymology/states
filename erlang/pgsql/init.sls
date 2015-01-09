@@ -14,8 +14,9 @@ erlang_mod_pgsql:
   archive:
     - extracted
     - name: {{ build_dir }}
-{%- if salt['pillar.get']('files_archive', False) %}
-    - source: {{ salt['pillar.get']('files_archive', False) }}/mirror/erlang_mod_pgsql-1.0.tar.gz
+{%- set files_archive = salt['pillar.get']('files_archive', False) %}
+{%- if files_archive %}
+    - source: {{ files_archive }}/mirror/erlang_mod_pgsql-1.0.tar.gz
 {%- else %}
     - source: https://github.com/lamoanh/pgsql/archive/v1.0.tar.gz
 {%- endif %}

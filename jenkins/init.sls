@@ -46,8 +46,9 @@ jenkins:
   pkg:
     - installed
     - sources:
-{%- if salt['pillar.get']('files_archive', False) %}
-      - jenkins: {{ salt['pillar.get']('files_archive', False)|replace('file://', '')|replace('https://', 'http://') }}/mirror/jenkins_{{ version }}_all.deb
+{%- set files_archive = salt['pillar.get']('files_archive', False) %}
+{%- if files_archive %}
+      - jenkins: {{ files_archive|replace('file://', '')|replace('https://', 'http://') }}/mirror/jenkins_{{ version }}_all.deb
 {%- else %}
       - jenkins: http://pkg.jenkins-ci.org/debian/binary/jenkins_{{ version }}_all.deb
 {%- endif %}

@@ -44,8 +44,9 @@ test:
         Network:
           network.lo.rx_byte: True
           network.lo.tx_byte: True
-{%- if salt['pillar.get']('diamond:ping', {}) %}
-        {%- set first_host = salt['pillar.get']('diamond:ping', {})|first %}
+{%- set ping = salt['pillar.get']('diamond:ping', {}) %}
+{%- if ping %}
+        {%- set first_host = ping|first %}
         Ping:
           ping.{{ salt['pillar.get']('diamond:ping:' ~ first_host)|replace('.', '_') }}: True
 {%- endif %}

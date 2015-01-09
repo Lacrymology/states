@@ -35,8 +35,9 @@ ruby2_deps:
 
 {%- set version = "2.1.2-1bbox1~precise1" %}
 {%- set arch = grains['osarch'] %}
-{%- if salt['pillar.get']('files_archive', False) %}
-  {%- set repo_url = salt['pillar.get']('files_archive', False)|replace('file://', '')|replace('https://', 'http://') ~ "/mirror" %}
+{%- set files_archive = salt['pillar.get']('files_archive', False) %}
+{%- if files_archive %}
+  {%- set repo_url = files_archive|replace('file://', '')|replace('https://', 'http://') ~ "/mirror" %}
 {%- else %}
   {%- set repo_url = "http://ppa.launchpad.net/brightbox/ruby-ng/ubuntu/pool/main/r" %}
 {%- endif %}

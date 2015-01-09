@@ -38,7 +38,8 @@ SENTRY_PUBLIC = False
 
 # You should configure the absolute URI to Sentry. It will attempt to guess it if you don't
 # but proxies may interfere with this.
-SENTRY_URL_PREFIX = '{% if salt['pillar.get']('sentry:ssl', False) %}https{% else %}http{% endif %}://{{ salt['pillar.get']('sentry:hostnames')[0] }}'  # No trailing slash!
+{%- set hostnames = salt['pillar.get']('sentry:hostnames') %}
+SENTRY_URL_PREFIX = '{% if salt['pillar.get']('sentry:ssl', False) %}https{% else %}http{% endif %}://{{ hostnames[0] }}'  # No trailing slash!
 
 {#-SENTRY_WEB_HOST = '0.0.0.0'#}
 {#-SENTRY_WEB_PORT = 8080#}
@@ -60,11 +61,12 @@ LOGGING = {
         }
     },
     'handlers': {
-{%- if salt['pillar.get']('graylog2_address', False) %}
+{%- set graylog2_address = salt['pillar.get']('graylog2_address', False) %}
+{%- if graylog2_address %}
         'gelf': {
             'level': 'NOTSET',
             'class': 'graypy.handler.GELFHandler',
-            'host': '{{ salt['pillar.get']('graylog2_address', False) }}',
+            'host': '{{ graylog2_address }}',
             'formatter': 'message_only'
         },
 {% endif %}
@@ -73,13 +75,14 @@ LOGGING = {
             'formatter': 'syslog',
             'class': 'logging.handlers.SysLogHandler',
             'address': '/dev/log',
-            'facility': '{% if salt['pillar.get']('graylog2_address', False) %}local7{% else %}daemon{% endif %}'
+            'facility': '{% if graylog2_address %}local7{% else %}daemon{% endif %}'
         },
         'sentry': {
             'level': 'ERROR',
             'class': 'raven.contrib.django.handlers.SentryHandler'
         }
     },
+{%- set graphite_address = salt['pillar.get']('graphite_address', False) %}
     'loggers': {
         'django': {
             'handlers': ['sentry', 'syslog'{% if salt['pillar.get']('graphite_address', False) %}, 'gelf'{% endif %}],

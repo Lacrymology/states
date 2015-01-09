@@ -43,10 +43,11 @@ To generate a secret key::
 include:
   - openvpn
 
-{%- for tunnel in salt['pillar.get']('openvpn', {}) -%}
+{%- set openvpn = salt['pillar.get']('openvpn', {}) %}
+{%- for tunnel in openvpn -%}
     {%- set config_dir = '/etc/openvpn/' + tunnel -%}
     {#- only 2 remotes are supported -#}
-    {%- if salt['pillar.get']('openvpn', {})[tunnel]['peers']|length == 2 %}
+    {%- if openvpn[tunnel]['peers']|length == 2 %}
 {{ config_dir }}:
   file:
     - directory
@@ -61,7 +62,7 @@ include:
     - managed
     - name: {{ config_dir }}/secret.key
     - contents: |
-        {{ salt['pillar.get']('openvpn', {})[tunnel]['secret'] | indent(8) }}
+        {{ openvpn[tunnel]['secret'] | indent(8) }}
     - user: nobody
     - group: nogroup
     - mode: 400
@@ -87,4 +88,4 @@ include:
     {%- endif -%}
 {%- endfor -%}
 
-{{ service_openvpn(salt['pillar.get']('openvpn', {})) }}
+{{ service_openvpn(openvpn) }}

@@ -13,8 +13,9 @@ stop on runlevel [!2345]
 
 respawn
 respawn limit 10 5
-{%- if salt['pillar.get']('memcache:memory', 64) %}
-exec /usr/bin/memcached -m {{ salt['pillar.get']('memcache:memory', 64) }} -s /tmp/memcached.sock -u www-data
+{%- set memory = salt['pillar.get']('memcache:memory', 64) %}
+{%- if memory %}
+exec /usr/bin/memcached -m {{ memory }} -s /tmp/memcached.sock -u www-data
 {%- else %}
 exec /usr/bin/memcached -s /tmp/memcached.sock -u www-data
 {%- endif %}

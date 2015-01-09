@@ -80,8 +80,9 @@ gitlab:
   archive:
     - extracted
     - name: /home/gitlab
-{%- if salt['pillar.get']('files_archive', False) %}
-    - source: {{ salt['pillar.get']('files_archive', False) }}/mirror/gitlab-{{ version }}.tar.gz
+{%- set files_archive = salt['pillar.get']('files_archive', False) %}
+{%- if files_archive %}
+    - source: {{ files_archive }}/mirror/gitlab-{{ version }}.tar.gz
 {%- else %}
     - source: https://github.com/gitlabhq/gitlabhq/archive/v{{ version }}.tar.gz
 {%- endif %}

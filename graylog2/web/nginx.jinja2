@@ -17,11 +17,13 @@ upstream rest_api {
 
 server {
     listen 80;
-{% if salt['pillar.get']('graylog2:ssl', False) %}
+{%- set ssl = salt['pillar.get']('graylog2:ssl', False) %}
+{% if ssl %}
 {% if salt['pillar.get']('graylog2:ssl_redirect', False) %}
     {# if https, redirect http port 80 to https port 443 #}
-    server_name {% for hostname in salt['pillar.get']('graylog2:hostnames') %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
-    return 301 https://{{ salt['pillar.get']('graylog2:hostnames')[0] }}$request_uri;
+{%- set hostnames = salt['pillar.get']('graylog2:hostnames') %}
+    server_name {% for hostname in hostnames %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+    return 301 https://{{ hostnames[0] }}$request_uri;
 }
 {#- https server #}
 server {
@@ -30,7 +32,7 @@ server {
     {{ ssl_config(salt['pillar.get']('graylog2:ssl', False)) }}
 {% endif %}
 {#- web app logic #}
-    server_name {% for hostname in salt['pillar.get']('graylog2:hostnames') %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+    server_name {% for hostname in hostnames %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
     root /var/www;
 
 {% include "nginx/block_hacks.jinja2" %}

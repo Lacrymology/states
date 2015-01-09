@@ -43,8 +43,9 @@ ext_job_cache: sentry_common
 {#- access same modules as minion #}
 extension_modules: var/cache/salt/minion/extmods
 
-{%- if salt['pillar.get']('sentry_dsn', False) %}
-sentry_common: {{ salt['pillar.get']('sentry_dsn', False) }}
+{%- set sentry_dsn = salt['pillar.get']('sentry_dsn', False) %}
+{%- if sentry_dsn %}
+sentry_common: {{ sentry_dsn }}
 sentry_handler:
-  dsn: requests+{{ salt['pillar.get']('sentry_dsn', False) }}
+  dsn: requests+{{ sentry_dsn }}
 {%- endif %}

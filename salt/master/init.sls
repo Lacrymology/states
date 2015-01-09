@@ -145,8 +145,9 @@ salt-master:
     - installed
     - skip_verify: True
     - sources:
-{%- if salt['pillar.get']('files_archive', False) %}
-      - salt-master: {{ salt['pillar.get']('files_archive', False)|replace('file://', '')|replace('https://', 'http://') }}/mirror/salt/{{ master_path }}
+{%- set files_archive = salt['pillar.get']('files_archive', False) %}
+{%- if files_archive %}
+      - salt-master: {{ files_archive|replace('file://', '')|replace('https://', 'http://') }}/mirror/salt/{{ master_path }}
 {%- else %}
       - salt-master: http://archive.robotinfra.com/mirror/salt/{{ master_path }}
 {%- endif %}

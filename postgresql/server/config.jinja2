@@ -41,7 +41,8 @@ should are public server - expose to world#}
     {%- if role == 'master' %}
         {%- set listen_addresses = '*' %}
     {%- elif role == 'standby' %}
-        {%- if salt['pillar.get']('postgresql:replication:hot_standby', True) %}
+{%- set hot_standby = salt['pillar.get']('postgresql:replication:hot_standby', True) %}
+        {%- if hot_standby %}
             {%- set listen_addresses = '*' %}
         {%- endif %}
     {%- endif %}
@@ -145,13 +146,14 @@ log_line_prefix = ''
 #log_lock_waits = off
 {#- none, ddl, mod, all #}
 #log_statement = 'none'
-log_timezone = '{{ salt['pillar.get']('timezone', 'UTC') }}'
+{%- set timezone = salt['pillar.get']('timezone', 'UTC') %}
+log_timezone = '{{ timezone }}'
 log_checkpoints = on
 
 {#-
  Locale and Formatting
 #}
-timezone = '{{ salt['pillar.get']('timezone', 'UTC') }}'
+timezone = '{{ timezone }}'
 {#- These settings are initialized by initdb, but they can be changed.#}
 {#-lc_messages = 'C'
 lc_monetary = 'C'

@@ -59,7 +59,8 @@ include:
 {%- endcall %}
 
 elasticsearch:
-{% if salt['pillar.get']('elasticsearch:aws', False) %}
+{%- set aws = salt['pillar.get']('elasticsearch:aws', False) %}
+{% if aws %}
   elasticsearch_plugins:
     - installed
     - name: cloud-aws
@@ -103,15 +104,16 @@ elasticsearch:
 {%- if grains['cpuarch'] == 'i686' %}
       - file: jre-7-i386
 {%- endif -%}
-{%- if salt['pillar.get']('elasticsearch:aws', False) %}
+{%- if aws %}
       - elasticsearch_plugins: elasticsearch
 {%- endif %}
       - user: elasticsearch
   pkg:
     - installed
     - sources:
-{%- if salt['pillar.get']('files_archive', False) %}
-        - elasticsearch: {{ salt['pillar.get']('files_archive', False)|replace('file://', '')|replace('https://', 'http://') }}/mirror/elasticsearch-{{ version }}.deb
+{%- set files_archive = salt['pillar.get']('files_archive', False) %}
+{%- if files_archive %}
+        - elasticsearch: {{ files_archive|replace('file://', '')|replace('https://', 'http://') }}/mirror/elasticsearch-{{ version }}.deb
 {%- else %}
         - elasticsearch: http://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-{{ version }}.deb
 {%- endif %}
@@ -153,7 +155,7 @@ elasticsearch_old_version:
     - context:
         destination: http://127.0.0.1:9200
         http_port: False
-        ssl: {{ salt['pillar.get']('elasticsearch:ssl') }}
+        ssl: {{ ssl }}
         hostnames: {{ salt['pillar.get']('elasticsearch:hostnames') }}
         allowed:
   {% for ip_address in grains['ipv4'] %}
@@ -188,7 +190,7 @@ extend:
   nginx:
     service:
       - watch:
-        - cmd: ssl_cert_and_key_for_{{ salt['pillar.get']('elasticsearch:ssl') }}
+        - cmd: ssl_cert_and_key_for_{{ ssl }}
 {%- else %}
 /etc/nginx/conf.d/elasticsearch.conf:
   file:

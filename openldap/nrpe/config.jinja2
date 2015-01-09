@@ -19,7 +19,8 @@ openldap_port:
 
 openldap_base:
   description: LDAP Base
-  command: /usr/lib/nagios/plugins/check_ldap --ver3 -H 127.0.0.1 -p 389 -b '{{ salt['pillar.get']('ldap:suffix') }}' -t {{ timeout }}
+{%- set suffix = salt['pillar.get']('ldap:suffix') %}
+  command: /usr/lib/nagios/plugins/check_ldap --ver3 -H 127.0.0.1 -p 389 -b '{{ suffix }}' -t {{ timeout }}
   timeout: {{ timeout }}
   dependencies:
     - openldap_port
@@ -27,7 +28,7 @@ openldap_base:
 {%- if salt['pillar.get']('ldap:ssl', False) %}
 openldap_base_through_tls_ssl:
   description: LDAP Base though TLS/SSL
-  command: /usr/lib/nagios/plugins/check_ldap --ver3 --starttls -H 127.0.0.1 -p 389 -b '{{ salt['pillar.get']('ldap:suffix') }}' -t {{ timeout }}
+  command: /usr/lib/nagios/plugins/check_ldap --ver3 --starttls -H 127.0.0.1 -p 389 -b '{{ suffix }}' -t {{ timeout }}
   timeout: {{ timeout }}
   dependencies:
     - openldap_port

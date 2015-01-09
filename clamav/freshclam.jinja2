@@ -35,8 +35,10 @@ Bytecode true
 {#- Check for new database 24 times a day #}
 Checks {{ salt['pillar.get']('clamav:times_of_check', 24) }}
 
-{%- if salt['pillar.get']('files_archive', False) and not salt['pillar.get']('clamav:db_mirrors', False) -%}
-    {%- set netloc = salt['common.urlparse'](salt['pillar.get']('files_archive', False)).netloc -%}
+{%- set db_mirrors = salt['pillar.get']('clamav:db_mirrors', False) %}
+{%- set files_archive = salt['pillar.get']('files_archive', False) %}
+{%- if files_archive and not salt['pillar.get']('clamav:db_mirrors', False) -%}
+    {%- set netloc = salt['common.urlparse'](files_archive).netloc -%}
         {%- if netloc %}
 ScriptedUpdates no
 PrivateMirror {{ netloc }}

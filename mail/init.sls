@@ -11,8 +11,9 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
     - source: salt://mail/mailname.jinja2
     - template: jinja
 
-host_{{ salt['pillar.get']('mail:mailname') }}:
+{%- set mailname = salt['pillar.get']('mail:mailname') %}
+host_{{ mailname }}:
   host:
     - present
-    - name: {{ salt['pillar.get']('mail:mailname') }}
+    - name: {{ mailname }}
     - ip: 127.0.0.1

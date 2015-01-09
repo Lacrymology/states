@@ -73,14 +73,15 @@ tls = no
 #}
 {#- %u mean full username (e.g. user@domain) #}
 auth_bind = yes
-auth_bind_userdn = uid=%u,ou=people,{{ salt['pillar.get']('ldap:suffix') }}
+{%- set suffix = salt['pillar.get']('ldap:suffix') %}
+auth_bind_userdn = uid=%u,ou=people,{{ suffix }}
 ldap_version = 3
 
 {#-
 # LDAP base. %variables can be used here.
 # For example: dc=mail, dc=example, dc=org
 #}
-base = ou=people,{{ salt['pillar.get']('ldap:suffix') }}
+base = ou=people,{{ suffix }}
 
 {#-
 # Dereference: never, searching, finding, always

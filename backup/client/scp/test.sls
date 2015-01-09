@@ -5,7 +5,8 @@ in the doc/license.rst file.
 Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
-{%- if salt['pillar.get']('backup_server:address') %}
+{%- set address = salt['pillar.get']('backup_server:address') %}
+{%- if address %}
 include:
   - backup.client.scp
   - backup.client.scp.nrpe
@@ -17,8 +18,8 @@ include:
     - run some backup using `scp`
     - remove that key and the backup files
     #}
-    {%- if salt['pillar.get']('backup_server:address') in grains['ipv4'] or
-           salt['pillar.get']('backup_server:address') in ('localhost', grains['host']) -%}
+    {%- if address in grains['ipv4'] or
+           address in ('localhost', grains['host']) -%}
         {%- from 'ssh/test.sls' import add_key with context -%}
         {%- from 'ssh/test.sls' import remove_key with context %}
 
@@ -36,8 +37,8 @@ test:
     - require:
       - file: /usr/local/bin/backup-store
       - file: /usr/local/bin/create_dumb
-    {%- if salt['pillar.get']('backup_server:address') in grains['ipv4'] or
-           salt['pillar.get']('backup_server:address') in ('localhost', grains['host']) %}
+    {%- if address in grains['ipv4'] or
+           address in ('localhost', grains['host']) %}
       - cmd: ssh_add_key
     {%- endif %}
     - require_in:

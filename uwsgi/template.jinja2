@@ -21,7 +21,8 @@ uwsgi:
   master: true
   workers: {{ workers }}
   harakiri: {{ timeout }}
-  harakiri-verbose: {% if salt['pillar.get']('debug', False) %}false{% else %}true{% endif %}
+{%- set debug = salt['pillar.get']('debug', False) %}
+  harakiri-verbose: {% if debug %}false{% else %}true{% endif %}
 {%- if django_settings|default(False) %}
   env: DJANGO_SETTINGS_MODULE={{ django_settings }}
 {%- endif %}
@@ -58,7 +59,7 @@ uwsgi:
   threaded-logger: true
   no-orphans: true
   logger: syslog:uwsgi-{{ appname }}
-{%- if salt['pillar.get']('debug', False) %}
+{%- if debug %}
   req-logger: syslog:uwsgi-{{ appname }}
 {%- endif %}
 {%- set graphite_address = salt['pillar.get']('graphite_address', False) %}

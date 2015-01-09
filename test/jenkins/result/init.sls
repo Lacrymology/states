@@ -63,7 +63,8 @@ test_result:
   cmd:
     - run
     - user: ci-agent
-    - name: scp -P {{ salt['pillar.get']('salt_ci:ssh_port', 22) }} {{ result_file }} ci-agent@{{ grains['master'] }}:/home/ci-agent/{{ grains['id'] }}-result.xml
+{%- set ssh_port = salt['pillar.get']('salt_ci:ssh_port', 22) %}
+    - name: scp -P {{ ssh_port }} {{ result_file }} ci-agent@{{ grains['master'] }}:/home/ci-agent/{{ grains['id'] }}-result.xml
     - path: {{ result_file }}
     - require:
       - file: test_result
@@ -74,7 +75,7 @@ test_result:
 scp_logs_to_master:
   cmd:
     - run
-    - name: scp -P {{ salt['pillar.get']('salt_ci:ssh_port', 22) }} /tmp/*.xz ci-agent@{{ grains['master'] }}:/home/ci-agent/
+    - name: scp -P {{ ssh_port }} /tmp/*.xz ci-agent@{{ grains['master'] }}:/home/ci-agent/
     - user: ci-agent
     - require:
       - file: /home/ci-agent/.ssh/known_hosts

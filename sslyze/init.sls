@@ -25,8 +25,9 @@ sslyze:
   archive:
     - extracted
     - name: /usr/local/src
-{%- if salt['pillar.get']('files_archive', False) %}
-    - source: {{ salt['pillar.get']('files_archive', False) }}/mirror/sslyze-{{ version|replace(".", "_") }}-linux{{ bits }}.zip
+{%- set files_archive = salt['pillar.get']('files_archive', False) %}
+{%- if files_archive %}
+    - source: {{ files_archive }}/mirror/sslyze-{{ version|replace(".", "_") }}-linux{{ bits }}.zip
 {%- else %}
     - source: https://github.com/iSECPartners/sslyze/releases/download/release-{{ version }}/sslyze-{{ version|replace(".", "_") }}-linux{{ bits }}.zip
 {%- endif %}

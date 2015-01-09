@@ -9,9 +9,10 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 
 server {
     listen 80;
-{%- if salt['pillar.get']('salt_archive:ssl', False) %}
+{%- set ssl = salt['pillar.get']('salt_archive:ssl', False) %}
+{%- if ssl %}
 {%- from 'nginx/macro.jinja2' import ssl_config with context %}
-    {{ ssl_config(salt['pillar.get']('salt_archive:ssl', False)) }}
+    {{ ssl_config(ssl) }}
 {%- endif %}
     server_name {% for hostname in salt['pillar.get']('salt_archive:hostnames') %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
 

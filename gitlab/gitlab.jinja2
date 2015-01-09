@@ -12,8 +12,9 @@ GitLab main config
 production: &base
   gitlab:
     host: {{ salt['pillar.get']('gitlab:hostnames')[0] }}
-    port: {% if salt['pillar.get']('gitlab:ssl', False) %}443{% else %}80{% endif %}
-    {%- if salt['pillar.get']('gitlab:ssl', False) %}
+{%- set ssl = salt['pillar.get']('gitlab:ssl', False) %}
+    port: {% if ssl %}443{% else %}80{% endif %}
+    {%- if ssl %}
     https: true
     {%- else %}
     https: false

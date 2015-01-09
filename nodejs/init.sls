@@ -22,8 +22,9 @@ nodejs:
   pkg:
     - installed
     - sources:
-{%- if salt['pillar.get']('files_archive', False) %}
-      - nodejs: {{ salt['pillar.get']('files_archive', False)|replace('file://', '')|replace('https://', 'http://') }}/mirror/{{ filename }}
+{%- set files_archive = salt['pillar.get']('files_archive', False) %}
+{%- if files_archive %}
+      - nodejs: {{ files_archive|replace('file://', '')|replace('https://', 'http://') }}/mirror/{{ filename }}
 {%- else %}
       - nodejs: http://ppa.launchpad.net/chris-lea/node.js/ubuntu/pool/main/n/nodejs/{{ filename }}
 {%- endif %}

@@ -39,13 +39,14 @@ olcLogLevel: 256
 {%- if salt['pillar.get']('ldap:ssl', False) %}
 -
 replace: olcTLSCACertificateFile
-olcTLSCACertificateFile: /etc/ssl/certs/{{ salt['pillar.get']('ldap:ssl') }}_ca.crt
+{%- set ssl = salt['pillar.get']('ldap:ssl') %}
+olcTLSCACertificateFile: /etc/ssl/certs/{{ ssl }}_ca.crt
 -
 replace: olcTLSCertificateFile
-olcTLSCertificateFile: /etc/ssl/certs/{{ salt['pillar.get']('ldap:ssl') }}.crt
+olcTLSCertificateFile: /etc/ssl/certs/{{ ssl }}.crt
 -
 replace: olcTLSCertificateKeyFile
-olcTLSCertificateKeyFile: /etc/ssl/private/{{ salt['pillar.get']('ldap:ssl') }}.pem
+olcTLSCertificateKeyFile: /etc/ssl/private/{{ ssl }}.pem
 -
 replace: olcSecurity
 olcSecurity: ssf=128

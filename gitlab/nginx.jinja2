@@ -33,6 +33,11 @@ server {
 
 {% include "nginx/block_hacks.jinja2" %}
 
+{#- GitLab clone/push via https is broken, block it #}
+    location ~ \.git$ {
+        return 404;
+    }
+
     location / {
         try_files $uri $uri/index.html $uri.html @gitlab;
     }

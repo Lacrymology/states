@@ -47,4 +47,12 @@ server {
         proxy_pass http://shinken-backend;
         proxy_set_header X-Real-IP $remote_addr;
     }
+
+    location /static/(.*\/)? {
+        try_files htdocs/$uri plugins/$1/htdocs/$uri @webui;
+    }
+
+    location @webui {
+        root /var/lib/shinken/modules/webui/;
+    }
 }

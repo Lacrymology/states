@@ -18,9 +18,9 @@ test:
     - test
     - map:
         ProcessResources:
-    {{ diamond_process_test('diamond') }}
-    {{ diamond_process_test('init') }}
-    {{ diamond_process_test('udev') }}
+          {{ diamond_process_test('diamond') }}
+          {{ diamond_process_test('init') }}
+          {{ diamond_process_test('udev') }}
         CPU:
           cpu.total.user: True
           cpu.total.nice: True

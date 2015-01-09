@@ -41,8 +41,8 @@ Example::
 Example
 -------
 
-Following bash script is a complete check for monitoring free disk
-space.
+Following :doc:`/bash/doc/index` script is a complete check for monitoring free
+disk space.
 
 .. code-block:: bash
 

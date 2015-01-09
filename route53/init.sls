@@ -17,11 +17,6 @@ python-lxml:
   pkg:
     - purged
 
-{#- TODO: remove that statement in >= 2014-04 #}
-{{ opts['cachedir'] }}/salt-route53-requirements.txt:
-  file:
-    - absent
-
 route53:
   file:
     - managed

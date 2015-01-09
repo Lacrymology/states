@@ -28,11 +28,13 @@ include:
 {% set user = salt['pillar.get']('graylog2:web:user', 'graylog2-ui') %}
 {% set web_root_dir = '/usr/local/graylog2-web-interface-' + version %}
 
-{% for previous_version in ('0.20.3', ) %}
+{#-
+{% for previous_version in () %}
 /usr/local/graylog2-web-interface-{{ previous_version }}:
   file:
     - absent
 {% endfor %}
+#}
 
 graylog2-web-{{ user }}:
   user:
@@ -60,14 +62,6 @@ graylog2-web-{{ user }}:
     - makedirs: True
     - require:
       - user: graylog2-web-{{ user }}
-
-{% for previous_version in ('0.9.6p1', '0.11.0') %}
-/usr/local/graylog2-web-interface-{{ previous_version }}:
-  file:
-    - absent
-{% endfor %}
-
-{{ upstart_absent('graylog2-web-prep') }}
 
 {{ web_root_dir }}/logs:
   file:
@@ -116,7 +110,6 @@ graylog2-web:
         web_root_dir: {{ web_root_dir }}
         user: {{ user }}
     - require:
-      - file: graylog2-web-prep
       - pkg: sudo
   archive:
     - extracted
@@ -188,11 +181,3 @@ extend:
 - file: /var/run/{{ user }}
 - pkg: rsyslog
 {%- endcall %}
-
-{#-
-  we have to explicit remove the old uwsgi config file here because
-  graylog2.web doesn't include uwsgi anymore
-#}
-/etc/uwsgi/apps-enabled/graylog2.ini:
-  file:
-    - absent

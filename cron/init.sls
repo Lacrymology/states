@@ -49,8 +49,4 @@ cron:
     - require:
       - pkg: cron
 
-/etc/cron.daily/apt-clean:
-  file:
-    - absent
-
 {#- PID file owned by root, no need to manage #}

@@ -35,11 +35,6 @@ redis_diamond_resources:
     - watch_in:
       - service: diamond
 
-{#- TODO: remove that statement in >= 2014-04 #}
-/usr/local/diamond/redis-requirements.txt:
-  file:
-    - absent
-
 diamond_redis:
   file:
     - managed

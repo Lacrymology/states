@@ -13,11 +13,6 @@ include:
   file:
     - absent
 
-{#- TODO: remove that statement in >= 2014-04 #}
-/usr/local/nagios/salt-sitemap-requirements.txt:
-  file:
-    - absent
-
 python-sitemap:
   file:
     - managed

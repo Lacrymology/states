@@ -61,9 +61,4 @@ sudo_salt_minion_nrpe:
       - service: nagios-nrpe-server
       - service: nsca_passive
 
-salt_minion_pillar_render_data_collector:
-  file:
-    - name: /etc/cron.twice_daily/salt_minion_pillar
-    - absent
-
 {{ passive_check('salt.minion') }}

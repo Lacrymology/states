@@ -38,13 +38,13 @@ include:
 {%- set mongodb_suffix = '0-20' %}
 {%- set elasticsearch_prefix = '0-20' %}
 
-{% for previous_version in ('0.11.0', '0.20.3') %}
+{#-
+{% for previous_version in () %}
 /usr/local/graylog2-server-{{ previous_version }}:
   file:
     - absent
 {% endfor %}
-
-{{ upstart_absent('graylog2-server-prep') }}
+#}
 
 /var/log/graylog2/server.log:
   file:
@@ -130,7 +130,6 @@ graylog2-server:
         version: {{ version }}
         user: {{ user }}
     - require:
-      - file: graylog2-server-prep
       - pkg: sudo
   service:
     - running

@@ -96,11 +96,6 @@ graphite_wsgi:
       - pkg: sudo
       - file: bash
 
-{#- TODO: remove that statement in >= 2014-04 #}
-/usr/local/graphite/salt-graphite-web-requirements.txt:
-  file:
-    - absent
-
 graphite-web:
   file:
     - managed

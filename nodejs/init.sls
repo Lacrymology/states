@@ -39,7 +39,3 @@ nodejs_old_version:
     - require_in:
       - pkg: nodejs
 {%- endif %}
-
-/etc/apt/sources.list.d/chris-lea-node.js-precise.lis:
-  file:
-    - absent

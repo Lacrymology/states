@@ -8,11 +8,6 @@ Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 include:
   - pip
 
-{#- TODO: remove that statement in >= 2014-04 #}
-{{ opts['cachedir'] }}/raven-requirements.txt:
- file:
-   - absent
-
 raven:
   file:
     - managed

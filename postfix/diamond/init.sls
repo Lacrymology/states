@@ -58,11 +58,6 @@ postfix_diamond_queue_length:
       - module: diamond
       - file: diamond.conf
 
-{#- TODO: remove that statement in >= 2014-04 #}
-/usr/local/diamond/postfix-requirements.txt:
-  file:
-    - absent
-
 /var/log/mail.log:
   file:
     - managed

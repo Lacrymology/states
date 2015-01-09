@@ -17,10 +17,6 @@ include:
   - sudo.nrpe
   - ssh.server.nrpe
 
-/usr/local/bin/check_backups.py:
-  file:
-    - absent
-
 /usr/lib/nagios/plugins/check_backups.py:
   file:
     - managed
@@ -48,11 +44,5 @@ include:
       - pkg: sudo
     - require_in:
       - file: nsca-backup.server
-
-/etc/nagios/nrpe.d/backups.cfg:
-  file:
-    - absent
-    - watch_in:
-      - service: nagios-nrpe-server
 
 {{ passive_check('backup.server') }}

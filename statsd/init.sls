@@ -14,10 +14,6 @@ include:
   - rsyslog
   - virtualenv
 
-/var/log/statsd.log:
-  file:
-    - absent
-
 /usr/local/statsd/src:
   file:
     - directory

@@ -5,10 +5,6 @@ in the doc/license.rst file.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
-{#- TODO: remove that statement in >= 2014-04 #}
-{{ opts['cachedir'] }}/nagiosplugin-requirements.txt:
-  file:
-    - absent
 
 nagios-nrpe-server:
   pkg:
@@ -62,11 +58,6 @@ nagios-nrpe-server:
 {{ upstart_absent('nsca_passive') }}
 
 /usr/local/nagiosplugin:
-  file:
-    - absent
-
-{#- TODO: remove that statement in >= 2014-04 #}
-/usr/local/bin/check_memory.py:
   file:
     - absent
 

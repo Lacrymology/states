@@ -249,8 +249,3 @@ extend:
       - watch:
         - cmd: ssl_cert_and_key_for_{{ salt['pillar.get']('rabbitmq:ssl', False) }}
 {% endif %}
-
-
-/etc/apt/sources.list.d/www.rabbitmq.com-debian-testing.list:
-  file:
-    - absent

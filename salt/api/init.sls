@@ -51,12 +51,6 @@ user_{{ user }}:
     {%- endif %}
 {%- endfor %}
 
-/etc/salt/master.d/ui.conf:
-  file:
-    - absent
-    - watch_in:
-      - service: salt-master
-
 /etc/salt/master.d/api.conf:
   file:
     - managed
@@ -69,11 +63,6 @@ user_{{ user }}:
       - pkg: salt-master
     - watch_in:
       - service: salt-master
-
-{#- TODO: remove that statement in >= 2014-04 #}
-{{ opts['cachedir'] }}/salt-api-requirements.txt:
-  file:
-    - absent
 
 salt-api-requirements:
   file:
@@ -92,11 +81,6 @@ salt-api-requirements:
     - requirements: {{ opts['cachedir'] }}/pip/salt.api
     - watch:
       - file: salt-api-requirements
-
-salt-ui:
-  file:
-    - absent
-    - name: /usr/local/salt-ui
 
 /etc/nginx/conf.d/salt-api.conf:
   file:

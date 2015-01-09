@@ -11,9 +11,4 @@ include:
   - nrpe
   - rsyslog.nrpe
 
-/etc/nagios/nrpe.d/tomcat.cfg:
-  file:
-    - absent
-    - service: nagios-nrpe-server
-
 {{ passive_check('tomcat.7') }}

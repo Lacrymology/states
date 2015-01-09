@@ -32,10 +32,6 @@ salt_minion_master_key:
     - watch_in:
       - service: salt-minion
 
-{{ opts['cachedir'] }}/pkg_installed.pickle:
-  file:
-    - absent
-
 {{ manage_upstart_log('salt-minion') }}
 
 extend:

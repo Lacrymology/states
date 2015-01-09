@@ -15,30 +15,13 @@ include:
   - web
   - xml
 
-{#- Upgrade uwsgi from 1.4 to 1.9.17.1 #}
-{% set prefix = '/etc/uwsgi' %}
-{#- salt does not support maxdepth, use this hack to get list of old ini files in /etc/uwsgi, not deeper #}
-{%- for filename in salt['file.find'](prefix, name='*.ini', type='f') %}
-    {%- if (filename.split('/')|length) == 4 %}
-uwsgi_upgrade_remove_old_app_config_{{ filename }}:
-  file:
-    - absent
-    - name: {{ filename }}
-    - require_in:
-      - file: uwsgi_upgrade_remove_old_version
-    {%- endif %}
-{%- endfor %}
-
-uwsgi_upgrade_remove_old_version:
-  file:
-    - absent
-    - name: /usr/local/uwsgi
-
-{%- for previous_version in ('2.0.c72fde', ) %}
+{#-
+{%- for previous_version in () %}
 /usr/local/uwsgi-{{ previous_version }}:
   file:
     - absent
 {%- endfor %}
+#}
 
 {%- set version = '1.9.17.1' -%}
 {%- set extracted_dir = '/usr/local/uwsgi-{0}'.format(version) %}
@@ -158,23 +141,9 @@ uwsgi:
       - pkg: salt_minion_deps
     - watch:
       - cmd: uwsgi
-      - file: uwsgi_upgrade_remove_old_version
       - file: uwsgi
       - file: /etc/uwsgi.yml
       - user: web
 {#- does not use PID, no need to manage #}
 
 {{ manage_upstart_log('uwsgi') }}
-
-{#- remove old uwsgi .ini config files #}
-/etc/uwsgi.ini:
-  file:
-    - absent
-
-/etc/uwsgi/apps-available:
-  file:
-    - absent
-
-/etc/uwsgi/apps-enabled:
-  file:
-    - absent

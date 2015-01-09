@@ -14,8 +14,3 @@ virtualenv:
     - removed
     - order: 1
 {% endif %}
-
-{#- TODO: remove that statement in >= 2014-04 #}
-{{ opts['cachedir'] }}/salt-virtualenv-requirements.txt:
-  file:
-    - absent

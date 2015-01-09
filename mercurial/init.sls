@@ -9,11 +9,6 @@ include:
   - pip
   - python.dev
 
-{#- TODO: remove that statement in >= 2014-04 #}
-{{ opts['cachedir'] }}/salt-mercurial-requirements.txt:
-  file:
-    - absent
-
 mercurial:
   pkg:
     - purged
@@ -36,11 +31,3 @@ mercurial:
       - file: mercurial
     - require:
       - pkg: python-dev
-
-/etc/apt/sources.list.d/mercurial-ppa-releases-precise.list:
-  file:
-    - absent
-
-/etc/apt/sources.list.d/mercurial-ppa-releases-precise.list.save:
-  file:
-    - absent

@@ -84,8 +84,3 @@ check_ssl_configuration.py:
     - require_in:
       - service: nagios-nrpe-server
       - service: nsca_passive
-
-sslyze_requirements:
-  file:
-    - absent
-    - name: /usr/local/nagios/salt-sslyze-requirements.txt

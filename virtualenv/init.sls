@@ -14,11 +14,6 @@ python-virtualenv:
   pkg:
     - purged
 
-{#- TODO: remove that statement in >= 2014-04 #}
-{{ opts['cachedir'] }}/salt-virtualenv-requirements.txt:
-  file:
-    - absent
-
 virtualenv:
   file:
     - managed

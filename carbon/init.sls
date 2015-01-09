@@ -51,38 +51,6 @@ include:
       - user: graphite
       - file: /etc/graphite
 
-stop_old_instance:
-  service:
-    - name: carbon-a
-    - dead
-    - enable: False
-  file:
-    - name: /etc/init.d/carbon-a
-    - absent
-    - require:
-      - service: stop_old_instance
-  cmd:
-    - run
-    - name: mv /var/lib/graphite/whisper/ /var/lib/graphite/old
-    - onlyif: test -d /var/lib/graphite/whisper/carbon
-    - user: graphite
-    - group: graphite
-    - require:
-      - file: stop_old_instance
-    - require_in:
-      - file: /var/lib/graphite/whisper
-
-move_old_data_to_first_instance:
-  cmd:
-    - run
-    - name: mv /var/lib/graphite/old /var/lib/graphite/whisper/0
-    - onlyif: test -d /var/lib/graphite/old
-    - require:
-      - file: /var/lib/graphite/whisper/0
-      - cmd: stop_old_instance
-    - require_in:
-      - file: carbon
-
 carbon:
   file:
     - managed

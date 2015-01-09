@@ -27,7 +27,7 @@ test:
     - require:
       - cmd: test_crons
   qa:
-    - test
+    - test_pillar
     - name: salt.ci
     - pillar_doc: {{ opts['cachedir'] }}/doc/output
     - require:

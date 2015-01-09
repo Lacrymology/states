@@ -6,16 +6,15 @@ Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Van Diep Pham <favadi@robotinfra.com>
 -#}
 include:
+  - apt
   - rsyslog
   - xinetd
 
-extend:
-  rsync:
-    pkg:
-      - installed
-    service:
-      - require_in:
-        - service: xinetd
+rsync:
+  pkg:
+    - installed
+    - require:
+      - cmd: apt_sources
 
 /etc/xinetd.d/rsync:
   file:

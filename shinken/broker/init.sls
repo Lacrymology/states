@@ -35,8 +35,8 @@ include:
     - watch_in:
       - service: nginx
 
-{%- if salt['pillar.get']('files_archive', False) -%}
 {%- set graphite_address = salt['pillar.get']('graphite_address', False) %}
+{%- if salt['pillar.get']('files_archive', False) -%}
     {%- if graphite_address -%}
         {%- call shinken_install_module('graphite') %}
 - source_hash: md5=56b393c9970275327644123480ffd413

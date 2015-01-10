@@ -55,5 +55,7 @@ set zmempct=False to fail the test if that happens.
           process.{{ state }}.memory_percent: {{ zmempct }}
           process.{{ state }}.num_ctx_switches.involuntary: True
           process.{{ state }}.num_ctx_switches.voluntary: True
+          process.{{ state }}.num_fds: False
           process.{{ state }}.num_threads: False
+          process.{{ state }}.uptime: False
 {%- endmacro %}

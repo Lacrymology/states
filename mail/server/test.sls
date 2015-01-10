@@ -235,6 +235,8 @@ test:
         ProcessResources:
           {{ diamond_process_test('amavis') }}
           {{ diamond_process_test('postfix') }}
+        Mail:
+          mail.total: True
         UserScripts:
           postfix.queue_length: True
     - require:

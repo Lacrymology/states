@@ -24,6 +24,7 @@ include:
   - dovecot.diamond
   - dovecot.nrpe
   - mail.server.nrpe
+  - mail.server.diamond
   - openldap
   - openldap.diamond
   - openldap.nrpe

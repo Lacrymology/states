@@ -20,3 +20,7 @@ jenkins:
 /etc/cron.daily/jenkins_delete_old_workspaces:
   file:
     - absent
+
+/etc/cron.daily/jenkins_delete_old_jobs:
+  file:
+    - absent

@@ -39,3 +39,4 @@ route53:
       - pkg: xml-dev
       - file: route53
       - pkg: python-dev
+    - reload_modules: True

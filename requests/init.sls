@@ -26,3 +26,4 @@ requests:
     - requirements: {{ opts['cachedir'] }}/pip/requests
     - watch:
       - file: requests
+    - reload_modules: True

@@ -88,17 +88,17 @@ Number of :ref:`glossary-HTTP` connections currently open.
 indices.datastore.size
 ~~~~~~~~~~~~~~~~~~~~~~
 
-.. TODO: doc me
+Total disk spaces used by :doc:`index` indices in bytes.
 
 indices.docs.count
 ~~~~~~~~~~~~~~~~~~
 
-.. TODO: doc me
+Total number of documents in :doc:`index` cluster.
 
 indices.docs.deleted
 ~~~~~~~~~~~~~~~~~~~~
 
-.. TODO: doc me
+Total number of deleted documents in :doc:`index` cluster.
 
 indices.{{ index_name }}
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -123,9 +123,9 @@ Number of deleted documents in the index.
 indices.{{ index_name }}.get_exists_time_in_millis
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Number of times :doc:`index` received a `get
+Amount of time :doc:`index` spends on serving `get
 <http://www.elasticsearch.org/guide/en/elasticsearch/reference/0.90/docs-get.html>`_
-request to a existing document in one millisecond.
+requests to existing documents in milliseconds.
 
 indices.{{ index_name }}.get.exists_total
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -138,9 +138,9 @@ request to a existing document.
 indices.{{ index_name }}.get.missing_time_in_millis
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Number of times :doc:`index` received a `get
+Amount of time :doc:`index` spends on serving `get
 <http://www.elasticsearch.org/guide/en/elasticsearch/reference/0.90/docs-get.html>`_
-request to a missing document in one millisecond.
+requests to missing documents in milliseconds.
 
 indices.{{ index_name }}.get.missing_total
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -153,9 +153,9 @@ request to a missing document.
 indices.{{ index_name }}.get.time_in_millis
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Number of times :doc:`index` received a `get
+Amount of time :doc:`index` spends on serving `get
 <http://www.elasticsearch.org/guide/en/elasticsearch/reference/0.90/docs-get.html>`_
-request to a document in one millisecond.
+requests to a documents in milliseconds.
 
 indices.{{ index_name }}.get.total
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -168,9 +168,9 @@ request to a document.
 indices.{{ index_name }}.indexing.delete_time_in_millis
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Number of times :doc:`index` received a `delete
+Amount of time :doc:`index` spends on serving `delete
 <http://www.elasticsearch.org/guide/en/elasticsearch/reference/0.90/docs-delete.html>`_
-request in one millisecond.
+requests in milliseconds.
 
 indices.{{ index_name }}.indexing.delete_total
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -183,9 +183,9 @@ request.
 indices.{{ index_name }}.indexing.index_time_in_millis
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Number of times :doc:`index` received a `index
+Amount of time :doc:`index` spends on serving `index
 <http://www.elasticsearch.org/guide/en/elasticsearch/reference/0.90/docs-index_.html>`_
-request in one millisecond.
+requests in milliseconds.
 
 indices.{{ index_name }}.indexing.index_total
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -198,8 +198,7 @@ request.
 indices.{{ index_name }}.search.fetch_time_in_millis
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Number of times :doc:`index` fetched a document in
-one millisecond.
+Amount of time :doc:`index` spends on fetching documents in milliseconds.
 
 indices.{{ index_name }}.search.fetch_total
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -210,8 +209,7 @@ fetched a document.
 indices.{{ index_name }}.search.query_time_in_millis
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Number of times :doc:`index` did a query in one
-millisecond.
+Amount of time :doc:`index` spends on querying documnents in milliseconds.
 
 indices.{{ index_name }}.search.query_total
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -222,7 +220,7 @@ a query.
 indices.{{ index_name }}.store.throttle_time_in_millis
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Number of times the segment merging process paused in a millisecond
+Amount of time the segment merging process paused in milliseconds.
 (more `details
 <http://www.elasticsearch.org/guide/en/elasticsearch/reference/0.90/index-modules-store.html#store-throttling>`_).
 
@@ -234,7 +232,9 @@ Number of times the segment merging process paused in a millisecond
 jvm.gc.collection
 ~~~~~~~~~~~~~~~~~
 
-List of JVM collectors:
+List of :ref:`glossary-JVM` collectors, for complete document refer to
+:doc:`index` `JVM section
+<http://www.elasticsearch.org/guide/en/elasticsearch/guide/current/_monitoring_individual_nodes.html#_jvm_section>`_:
 
 * ConcurrentMarkSweep
 * ParNew
@@ -244,27 +244,30 @@ List of JVM collectors:
 jvm.gc.collection.{{ collector }}.count
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. TODO: Doc me
+Number of times :ref:`glossary-Garbage-Collection` got executed.
 
 jvm.gc.collection.{{ collector }}.time
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. TODO: Doc me
+Amount of time in milliseconds spends on
+:ref:`glossary-Garbage-Collection`.
 
 jvm.gc.collection.count
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-.. TODO: Doc me
+Total number of times :ref:`glossary-Garbage-Collection` got executed.
 
 jvm.gc.collection.time
 ~~~~~~~~~~~~~~~~~~~~~~
 
-.. TODO: Doc me
+Total time in milliseconds spends on
+:ref:`glossary-Garbage-Collection`.
 
 jvm.mem.pools
 ~~~~~~~~~~~~~
 
-List of JVM memory pools:
+List of :ref:`glossary-JVM` memory pools, for complete reference refer
+to :doc:`index`
 
 * CMS_Old_Gen
 * CMS_Perm_Gen
@@ -278,35 +281,58 @@ List of JVM memory pools:
 jvm.mem.pools.{{ memory_pool }}.max
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Maximum size of memory pool can be used in bytes.
+
 jvm.mem.pools.{{ memory_pool }}.used
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Size of current used memory pool in bytes.
 
 jvm.heap_committed
 ~~~~~~~~~~~~~~~~~~
 
+Amount of heap memory is currently allocated in bytes.
+
 jvm.heap_used
 ~~~~~~~~~~~~~
+
+Amount of heap memory is currently in use in bytes.
 
 jvm.heap_used_percent
 ~~~~~~~~~~~~~~~~~~~~~
 
+Percent of heap memory currently in use over commited.
+
 jvm.non_heap_committed
 ~~~~~~~~~~~~~~~~~~~~~~
+
+Amount of non-heap memory is currently allocated in bytes.
 
 jvm.non_heap_used
 ~~~~~~~~~~~~~~~~~
 
+Amount of non-heap memory is currently in use in bytes.
+
 jvm.threads.count
 ~~~~~~~~~~~~~~~~~
+
+Number of current active threads.
 
 network.tcp.active_opens
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
+Number of active :ref:`glossary-TCP` connetions.
+
 network.tcp.attempt_fails
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Number of times :doc:`index` fails to open a :ref:`glossary-TCP`.
+connection.
+
 network.tcp.curr_estab
 ~~~~~~~~~~~~~~~~~~~~~~
+
+Number of current established :ref:`glossary-TCP` connections.
 
 network.tcp.estab_resets
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -326,20 +352,31 @@ network.tcp.out_segs
 network.tcp.passive_opens
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Number of active :ref:`glossary-TCP` connetions.
+
 network.tcp.retrans_segs
 ~~~~~~~~~~~~~~~~~~~~~~~~
+
 
 process.cpu.percent
 ~~~~~~~~~~~~~~~~~~~
 
+Percentage of CPU usage consumed by :doc:`index`.
+
 process.mem.resident
 ~~~~~~~~~~~~~~~~~~~~
+
+Size of resident memory used by :doc:`index` in bytes.
 
 process.mem.share
 ~~~~~~~~~~~~~~~~~
 
+Size of shared memory used by :doc:`index` in bytes.
+
 process.mem.virtual
 ~~~~~~~~~~~~~~~~~~~
+
+Size of virtual memory used by :doc:`index` in bytes.
 
 thread_pool
 ~~~~~~~~~~~
@@ -366,29 +403,55 @@ List of important thread pools:
 thread_pool.{{ thread_pool_name }}.active
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+The number of active threads in the current thread pool.
+
 thread_pool.{{ thread_pool_name }}.completed
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The number of completed threads in the current thread pool.
 
 thread_pool.{{ thread_pool_name }}.largest
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+The highest number of active threads in the current thread pool.
+
 thread_pool.{{ thread_pool_name }}.queue
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The number of tasks in the queue for the current thread pool.
 
 thread_pool.{{ thread_pool_name }}.rejected
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+The number of rejected threads in the current thread pool.
+
 thread_pool.{{ thread_pool_name }}.threads
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The number of threads in the current thread pool
+
+.. note::
+
+   transport shows some basic stats about the transport address. This
+   relates to inter-node communication (often on :ref:`glossary-TCP`
+   port ``9300``) and any transport client or node client connections.
 
 transport.rx.count
 ~~~~~~~~~~~~~~~~~~
 
+Number of times :doc:`index` received a transport request.
+
 transport.rx.size
 ~~~~~~~~~~~~~~~~~
+
+Total size in bytes of received transport requests.
 
 transport.tx.count
 ~~~~~~~~~~~~~~~~~~
 
+Number of times :doc:`index` transmitted a transport request.
+
 transport.tx.size
 ~~~~~~~~~~~~~~~~~
+
+Total size in bytes of transmitted transport requests.

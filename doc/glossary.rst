@@ -41,6 +41,13 @@ HTTPS
 
 Secure :ref:`glossary-HTTP`: `HTTPS <https://en.wikipedia.org/wiki/Https>`_.
 
+.. _glossary-JVM:
+
+JVM
+~~~
+
+`JVM <http://en.wikipedia.org/wiki/Java_virtual_machine>`_.
+
 .. _glossary-key-fingerprint:
 
 Key Fingerprint
@@ -94,6 +101,14 @@ Ubuntu
 ~~~~~~
 
 ... yo
+
+.. _glossary-Garbage-Collection:
+
+Garbage Collection
+~~~~~~~~~~~~~~~~~~
+
+`Garbage Collection
+<http://en.wikipedia.org/wiki/Garbage_collection_%28computer_science%29>`_
 
 .. _glossary-GitHub:
 

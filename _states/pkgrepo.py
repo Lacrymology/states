@@ -182,6 +182,10 @@ def managed(name, **kwargs):
        file.  The consolidate will run every time the state is processed. The
        option only needs to be set on one repo managed by salt to take effect.
 
+    clean_file
+       If set to true, empty file before config repo, dangerous if use
+       multiple sources in one file.
+
     require_in
         Set this to a list of pkg.installed or pkg.latest to trigger the
         running of apt-get update prior to attempting to install these
@@ -258,6 +262,10 @@ def managed(name, **kwargs):
             ret['comment'] = ('Package repo {0!r} already configured'
                               .format(name))
             return ret
+
+    if kwargs.get('clean_file', False):
+        open(kwargs['file'], 'w').close()
+
     if __opts__['test']:
         ret['comment'] = ('Package repo {0!r} will be configured. This may '
                           'cause pkg states to behave differently than stated '

@@ -14,7 +14,7 @@ S3lite
 
 A custom script helps syncing to :ref:`glossary-s3` with small memory using
 (:doc:`/s3cmd/doc/index` consumes a lot of memory when sync many files). It was
-tested with input more than ``500.000`` files without memory problem.
+tested with input more than ``500 000`` files without memory problem.
 To sync a file/directory, use following command::
 
   /usr/local/s3lite/bin/s3lite source s3://bucket/prefix

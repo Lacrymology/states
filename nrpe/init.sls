@@ -55,6 +55,10 @@ nrpe_remove_old_config_files_{{ filepath }}:
     - require:
       - module: nrpe-virtualenv
 
+/usr/local/nagios/salt-requirements.txt:
+  file:
+    - absent
+
 nrpe-virtualenv:
   {# remove system-wide nagiosplugin, only use one in our nrpe-virtualenv #}
   pip:

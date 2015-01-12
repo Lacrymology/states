@@ -8,6 +8,10 @@ include:
   - postgresql.common.user
   - rsyslog.diamond
 
+/usr/local/diamond/salt-postgresql-requirements.txt:
+  file:
+    - absent
+
 diamond_collector-psycopg2:
   file:
     - managed

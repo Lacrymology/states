@@ -9,6 +9,10 @@ include:
   - ssl.nrpe
 {%- endif %}
 
+/usr/local/nagios/salt-mysql-query-check-requirements.txt:
+  file:
+    - absent
+
 nrpe_mysql_check_querry:
   file:
     - managed

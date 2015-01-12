@@ -23,6 +23,10 @@ include:
       - file: /usr/local
       - file: bash
 
+/usr/local/s3lite/salt-requirements.txt:
+  file:
+    - absent
+
 s3lite:
   virtualenv:
     - manage

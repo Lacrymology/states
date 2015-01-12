@@ -90,6 +90,10 @@ graphite_wsgi:
       - pkg: sudo
       - file: bash
 
+/usr/local/graphite/salt-graphite-requirements.txt:
+  file:
+    - absent
+
 graphite-web:
   file:
     - managed

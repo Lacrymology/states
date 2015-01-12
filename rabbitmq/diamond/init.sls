@@ -22,6 +22,10 @@ rabbitmq_diamond_resources:
         exe = ^\/usr\/lib\/erlang\/erts-.+\/bin\/inet_gethost$,^\/usr\/lib\/erlang\/erts-.+\/bin\/epmd$
         cmdline = ^inet_gethost 4$,^\/usr\/lib\/erlang\/erts-.+\/bin\/beam.+rabbitmq.+$,
 
+/usr/local/diamond/salt-rabbitmq-requirements.txt:
+  file:
+    - absent
+
 diamond-pyrabbit:
   file:
     - managed

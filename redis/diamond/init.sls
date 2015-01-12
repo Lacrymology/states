@@ -29,6 +29,10 @@ redis_diamond_resources:
     - watch_in:
       - service: diamond
 
+/usr/local/diamond/salt-redis-requirements.txt:
+  file:
+    - absent
+
 diamond_redis:
   file:
     - managed

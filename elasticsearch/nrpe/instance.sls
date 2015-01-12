@@ -7,6 +7,10 @@ include:
   file:
     - absent
 
+/usr/local/nagios/salt-elasticsearch-requirements.txt:
+  file:
+    - absent
+
 pyelasticsearch:
   file:
     - managed

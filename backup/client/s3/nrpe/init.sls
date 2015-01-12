@@ -20,6 +20,10 @@ include:
     - require:
       - module: nrpe-virtualenv
 
+/usr/local/nagios/backup.client.s3.nrpe-requirements.txt:
+  file:
+    - absent
+
 backup_client_nrpe-requirements:
   file:
     - managed

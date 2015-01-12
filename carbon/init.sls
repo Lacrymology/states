@@ -47,6 +47,10 @@ include:
       - user: graphite
       - file: /etc/graphite
 
+/usr/local/graphite/salt-carbon-requirements.txt:
+  file:
+    - absent
+
 carbon:
   file:
     - managed

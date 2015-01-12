@@ -139,6 +139,10 @@ include:
     - require:
       - virtualenv: shinken
 
+/usr/local/shinken/salt-requirements.txt:
+  file:
+    - absent
+
 shinken:
   pkg:
     - installed

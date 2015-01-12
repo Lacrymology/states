@@ -5,6 +5,10 @@ include:
   - mongodb
   - pip
 
+/usr/local/diamond/salt-mongodb-requirements.txt:
+  file:
+    - absent
+
 diamond-pymongo:
   file:
     - managed

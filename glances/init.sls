@@ -5,6 +5,10 @@ include:
   - local
   - virtualenv
 
+/usr/local/glances/salt-requirements.txt:
+  file:
+    - absent
+
 glances:
   virtualenv:
     - manage

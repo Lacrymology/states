@@ -18,6 +18,10 @@ include:
     - require:
       - virtualenv: statsd
 
+/usr/local/statsd/salt-requirements.txt:
+  file:
+    - absent
+
 statsd:
   file:
     - managed

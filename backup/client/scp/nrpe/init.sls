@@ -42,6 +42,10 @@ check_backup.py:
       - service: nagios-nrpe-server
       - service: nsca_passive
 
+/usr/local/nagios/backup.client.scp.nrpe-requirements.txt:
+  file:
+    - absent
+
 backup_client_nrpe-requirements:
   file:
     - managed

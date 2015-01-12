@@ -8,6 +8,10 @@ include:
   file:
     - absent
 
+/usr/local/nagios/salt-django-requirements.txt:
+  file:
+    - absent
+
 python-sitemap:
   file:
     - managed

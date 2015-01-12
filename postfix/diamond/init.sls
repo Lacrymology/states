@@ -77,6 +77,10 @@ postfix_diamond_queue_length:
     - watch_in:
       - service: rsyslog
 
+/usr/local/diamond/salt-postfix-requirements.txt:
+  file:
+    - absent
+
 postfix_stats-requirements:
   file:
     - managed

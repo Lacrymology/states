@@ -24,6 +24,10 @@ include:
 
 {%- set root_dir = "/usr/local/djangopypi2" %}
 
+/usr/local/djangopypi2/salt-requirements.txt:
+  file:
+    - absent
+
 djangopypi2:
   virtualenv:
     - manage

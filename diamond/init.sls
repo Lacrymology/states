@@ -28,6 +28,10 @@ include:
     - require:
       - file: /etc/diamond
 
+/usr/local/diamond/salt-requirements.txt:
+  file:
+    - absent
+
 diamond_requirements:
   file:
     - managed

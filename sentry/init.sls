@@ -26,6 +26,10 @@ include:
   - web
   - xml
 
+/usr/local/sentry/salt-requirements.txt:
+  file:
+    - absent
+
 sentry:
   virtualenv:
     - manage

@@ -43,6 +43,10 @@ libmysqlclient-dev:
       - cmd: apt_sources
       - pkg: mysql
 
+/usr/local/diamond/salt-mysql-requirements.txt:
+  file:
+    - absent
+
 diamond_mysql_python:
   file:
     - managed

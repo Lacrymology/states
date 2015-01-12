@@ -37,9 +37,8 @@ Default: list of:
 diamond:ping
 ~~~~~~~~~~~~
 
-IPs/hostnames to monitor their ping
-`round trip time <http://en.wikipedia.org/wiki/Round-trip_delay_time>`__
-from this host.
+IPs/hostnames to monitor their ping `round trip time
+<http://en.wikipedia.org/wiki/Round-trip_delay_time>`_ from this host.
 
 Data formed as a dictionary: ``target``: ``ip/hostname``.
 

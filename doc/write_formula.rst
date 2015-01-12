@@ -137,6 +137,10 @@ Good::
   real ``name`` or ``path`` in argument key in state definition. This make
   refactor a lot easier and improve readability.
 
+  This also can help you to avoid getting a `Recursive requisite found
+  <https://github.com/saltstack/salt/issues/5667>`_ error if there are two
+  states that use the same name and one require another.
+
 Extend
 ~~~~~~
 

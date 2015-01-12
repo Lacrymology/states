@@ -23,8 +23,6 @@ openssh-client:
     - require:
       - cmd: apt_sources
 
-{#- Do not use the file name as ID here:
-    https://github.com/saltstack/salt/issues/5667 #}
 ssh_known_hosts:
   file:
     - managed

@@ -100,8 +100,8 @@ Default: ``9300``.
 elasticsearch:cluster:nodes:{{ node_minion_ID }}:{{ state }}:http
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If this instance handle :doc:`index` :ref:`glossary-HTTP` API port. Only one :ref:`glossary-HTTP` API instance
-is required for each host.
+If this instance handle :doc:`index` :ref:`glossary-HTTP` API port. Only one
+:ref:`glossary-HTTP` API instance is required for each host.
 
 Default: disable :ref:`glossary-HTTP` API, (``True``).
 
@@ -168,10 +168,9 @@ If True, install `elasticsearch-cloud-aws
 <https://github.com/elasticsearch/elasticsearch-cloud-aws>`_ for
 :doc:`/elasticsearch/doc/index`.
 
-The `Amazon Web Service <http://aws.amazon.com/>`_ (AWS) Cloud plugin
-allows to use `AWS API <https://github.com/aws/aws-sdk-java>`_ for the
-unicast discovery mechanism and add `S3 <http://aws.amazon.com/s3/>`_
-repositories.
+The `Amazon Web Service <http://aws.amazon.com/>`_ (AWS) Cloud plugin allows to
+use `AWS API <https://github.com/aws/aws-sdk-java>`_ for the unicast discovery
+mechanism and add `S3 <http://aws.amazon.com/s3/>`_ repositories.
 
 Default: don't install `elasticsearch-cloud-aws
 <https://github.com/elasticsearch/elasticsearch-cloud-aws>`_
@@ -203,9 +202,9 @@ elasticsearch:https_allowed
 
 Only used if :ref:`pillar-elasticsearch-ssl` is defined.
 
-List of `CIDR
-<http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing>`_ format
-network where :doc:`/elasticsearch/doc/index` over :ref:`glossary-HTTPS` is allowed.
+List of `CIDR <http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing>`_
+format network where :doc:`/elasticsearch/doc/index` over :ref:`glossary-HTTPS`
+is allowed.
 
 Default: do not allow (``[]``).
 
@@ -227,6 +226,5 @@ Password for :doc:`/elasticsearch/doc/index` API access via
 
 .. warning::
 
-   Authentication is turned on only if both
-   :ref:`pillar-elasticsearch-username` and
-   :ref:`pillar-elasticsearch-password` are defined.
+   Authentication is turned on only if both :ref:`pillar-elasticsearch-username`
+   and :ref:`pillar-elasticsearch-password` are defined.

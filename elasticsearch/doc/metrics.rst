@@ -357,7 +357,6 @@ Number of active :ref:`glossary-TCP` connetions.
 network.tcp.retrans_segs
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-
 process.cpu.percent
 ~~~~~~~~~~~~~~~~~~~
 

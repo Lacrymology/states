@@ -23,8 +23,8 @@ elasticsearch_procs
 elasticsearch-es_remote_port_http
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Monitor :doc:`/elasticsearch/doc/index` remote :ref:`glossary-HTTP`
-port :ref:`glossary-TCP` ``9200``.
+Monitor :doc:`/elasticsearch/doc/index` remote :ref:`glossary-HTTP` port
+:ref:`glossary-TCP` ``9200``.
 
 .. _monitor-elasticsearch-es_remote_port-transport:
 

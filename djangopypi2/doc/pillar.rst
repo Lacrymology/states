@@ -154,7 +154,7 @@ Default: Don't allow overwriting packages ``False``.
 djangopypi2:timeout
 ~~~~~~~~~~~~~~~~~~~
 
-Number of seconds for reading/transmitting a response/request from/to the uwsgi
-server.
+Number of seconds for reading/transmitting a response/request from/to
+the uwsgi server.
 
 Default: ``60`` seconds.

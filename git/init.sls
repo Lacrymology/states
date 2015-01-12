@@ -22,6 +22,7 @@ git:
     - ppa: git-core/ppa
 {%- endif %}
     - file: /etc/apt/sources.list.d/git-core.list
+    - clean_file: True
     - require:
       - pkg: apt_sources
   pkg:

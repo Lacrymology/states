@@ -19,5 +19,6 @@ php:
     - ppa: l-mierzwa/lucid-php5
 {%- endif %}
     - file: /etc/apt/sources.list.d/lucid-php5.list
+    - clean_file: True
     - require:
       - pkg: apt_sources

@@ -20,6 +20,7 @@ rsyslog:
     - ppa: tmortensen/rsyslogv7
 {%- endif %}
     - file: /etc/apt/sources.list.d/rsyslogv7.list
+    - clean_file: True
     - require:
       - pkg: apt_sources
   pkg:

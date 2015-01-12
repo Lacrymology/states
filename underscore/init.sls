@@ -19,6 +19,7 @@ libjs-underscore:
     - ppa: chris-lea/libjs-underscore
 {%- endif %}
     - file: /etc/apt/sources.list.d/chris-lea-libjs-underscore-{{ grains['oscodename'] }}.list
+    - clean_file: True
     - require:
       - cmd: apt_sources
   pkg:

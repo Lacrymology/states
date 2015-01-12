@@ -67,8 +67,9 @@ Default: don't block any users (``[]``).
 ejabberd:watchdog_admins
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-An :doc:`/ejabberd/doc/index` account. If an :doc:`/ejabberd/doc/index` process consumes
- too much memory, send live notifications to those Jabber accounts.
+An :doc:`/ejabberd/doc/index` account. If an
+ :doc:`/ejabberd/doc/index` process consumes too much memory, send
+ live notifications to those Jabber accounts.
 
 Default: send notifications to noone (``False``).
 

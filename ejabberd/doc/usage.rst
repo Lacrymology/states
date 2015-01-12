@@ -7,13 +7,14 @@ Login administrative interface
 ------------------------------
 
 After the installation is finished, you can change all settings in
-:doc:`/ejabberd/doc/index` web administrator interface by login in
-one of the :ref:`pillar-ejabberd-hostnames` in ``/admin`` path.
-Use the credential defined in :ref:`pillar-ejabberd-admins`.
+:doc:`/ejabberd/doc/index` web administrator interface by login in one
+of the :ref:`pillar-ejabberd-hostnames` in ``/admin`` path.  Use the
+credential defined in :ref:`pillar-ejabberd-admins`.
 
 .. warning::
 
-  For security reason, it's suggested to change password after installation.
+  For security reason, it's suggested to change password after
+  installation.
 
 .. _ejabberd-usage-user_creation:
 
@@ -51,12 +52,14 @@ This is XMPP setup intruction for Pigin:
 #. In the Protocol field, select XMPP.
 #. In the Username field, enter your username. For example, ``user1``.
 #. In the Domain field, enter your domain, such as ``im.example.com``.
-#. In the Password field, enter the password used to log in to SmarterMail.
+#. In the Password field, enter the password used to log in to
+   SmarterMail.
 #. Select the Remember password checkbox if you need.
 #. Click the Advanced tab.
-#. In the Connection Security field, select Use encryption if available.
-#. In the Connect Server field, enter XMPP server address,
-   such as ``im.example.com``.
+#. In the Connection Security field, select Use encryption if
+   available.
+#. In the Connect Server field, enter XMPP server address, such as
+   ``im.example.com``.
 #. Click Add.
 
 And wait for connection.

@@ -27,14 +27,14 @@ ejabberd_proc
 ejabberd_c2s_port
 ~~~~~~~~~~~~~~~~~
 
-Monitor :doc:`/ejabberd/doc/index` client to server port ``5222/:ref:`glossary-TCP```.
+Monitor :doc:`/ejabberd/doc/index` client to server port ``5222``/:ref:`glossary-TCP`.
 
 .. _monitor-ejabberd_admin_port:
 
 ejabberd_admin_port
 ~~~~~~~~~~~~~~~~~~~
 
-Monitor :doc:`/ejabberd/doc/index` amin port ``5280/:ref:`glossary-TCP```.
+Monitor :doc:`/ejabberd/doc/index` amin port ``5280``/:ref:`glossary-TCP`.
 
 .. _monitor-ejabberd_admin_http:
 
@@ -86,7 +86,7 @@ Only use if :ref:`pillar-ejabberd-ssl` is turned on.
 ejabberd_s2s_port
 ~~~~~~~~~~~~~~~~~
 
-Monitor :doc:`/ejabberd/doc/index` server to server port ``5269/:ref:`glossary-TCP```.
+Monitor :doc:`/ejabberd/doc/index` server to server port ``5269``/:ref:`glossary-TCP`.
 
 .. note::
 

@@ -84,7 +84,7 @@ def record_absent(name, record_type, zone_id, access_key, secret_key):
     return ret
 
 
-def records_exists(access_key, secret_key, records):
+def records_exists(name, access_key, secret_key, records):
     '''
     make sure the records are applied to specified AWS account.
 
@@ -115,7 +115,7 @@ def records_exists(access_key, secret_key, records):
                    ttl: 1200
     '''
     log.debug("Run records_exists: %s", records)
-    ret = {'name': 'records_exists', 'result': None, 'comment': '',
+    ret = {'name': name, 'result': None, 'comment': '',
            'changes': {}}
     opposite_types = {'a': 'cname', 'cname': 'a'}
 

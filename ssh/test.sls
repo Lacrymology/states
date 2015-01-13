@@ -5,13 +5,13 @@ in the doc/license.rst file.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
+{%- set authorized_keys_exists = salt["file.file_exists"](root_home ~ "/.ssh/authorized_keys") %}
+{%- set root_home = salt['user.info']('root')['home'] %}
 {%- macro add_key() -%}
 {#-
   Add public key to the `authorized_keys` on localhost.
   This is used to perform some tests like: ssh, rsync, ...
 #}
-  {%- set root_home = salt['user.info']('root')['home'] %}
-  {%- set authorized_keys_exists = salt["file.file_exists"](root_home ~ "/.ssh/authorized_keys") %}
   {%- if authorized_keys_exists %}
 ssh_backup_key:
   file:
@@ -33,8 +33,7 @@ ssh_add_key:
 {%- endmacro %}
 
 {%- macro remove_key() -%}
-  {#- Remove local ssh public key after testing #}
-  {%- set root_home = salt['user.info']('root')['home'] %}
+{#- Remove local ssh public key after testing #}
 ssh_remove_key:
   cmd:
     - run

@@ -148,3 +148,10 @@ MD5
 ~~~
 
 `md5 <http://en.wikipedia.org/wiki/MD5>`_
+
+.. _glossary-NoSQL:
+
+NoSQL
+~~~~~
+
+`NoSQL <http://en.wikipedia.org/wiki/NoSQL>`_.

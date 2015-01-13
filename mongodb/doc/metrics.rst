@@ -11,9 +11,11 @@ MongoDB
 Locate at ``os > mongo``.
 
 See the :doc:`/mongodb/doc/index` `documentation
-<http://docs.mongodb.org/v2.4/reference/command/serverStatus>`_ for
-complete reference, almost everything in this document is copied from
-that.
+<http://docs.mongodb.org/v2.4/reference/command/serverStatus>`_ for complete
+reference.
+
+.. Copied from http://docs.mongodb.org/v2.4/reference/command/serverStatus on
+   2014-12-05
 
 asserts
 ~~~~~~~
@@ -52,7 +54,7 @@ The user counter reports the number of “user asserts” that have
 occurred since the last time the server process started. These are
 errors that user may generate, such as out of disk space or duplicate
 key. You can prevent these assertions by fixing a problem with your
-application or deployment. Check the :doc:`/mongodb/doc/index` log for
+application or deployment. Check the :doc:`index` log for
 more information.
 
 asserts.rollovers
@@ -178,8 +180,8 @@ inactivity.
 cursors.totalOpen
 ~~~~~~~~~~~~~~~~~
 
-Provides the number of cursors that :doc:`/mongodb/doc/index` is
-maintaining for clients. Because :doc:`/mongodb/doc/index` exhausts
+Provides the number of cursors that :doc:`index` is
+maintaining for clients. Because :doc:`index` exhausts
 unused cursors, typically this value small or zero. However, if there
 is a queue, stale tailable cursor, or a large number of operations,
 this value may rise.
@@ -188,7 +190,7 @@ databases
 ~~~~~~~~~
 
 Provides specific data about every database in
-:doc:`/mongodb/doc/index` server.
+:doc:`index` server.
 
 dur
 ~~~
@@ -202,7 +204,7 @@ serverStatus.dur.timeMS.dt
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Provides, in milliseconds, the amount of time over which
-:doc:`/mongodb/doc/index` collected the timeMS data.
+:doc:`index` collected the timeMS data.
 
 dur.timeMS.prepLogBuffer
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -234,7 +236,7 @@ dur.commitsInWriteLock
 ~~~~~~~~~~~~~~~~~~~~~~
 
 Provides a count of the commits that occurred while a write lock was
-held. Commits in a write lock indicate a :doc:`/mongodb/doc/index`
+held. Commits in a write lock indicate a :doc:`index`
 node under a heavy write load and call for further diagnosis.
 
 dur.compression
@@ -249,7 +251,7 @@ Represents the compression ratio of the data written to the journal:
 dur.earlyCommits
 ~~~~~~~~~~~~~~~~
 
-Reflects the number of times :doc:`/mongodb/doc/index` requested a
+Reflects the number of times :doc:`index` requested a
 commit before the scheduled journal group commit interval. Use this
 value to ensure that your journal group commit interval is not too
 long for your deployment.
@@ -303,7 +305,7 @@ The value of lockTime represents the time, in microseconds, since the
 database last started, that the globalLock has been held.
 
 Consider this value in combination with the value of
-totalTime. :doc:`/mongodb/doc/index` aggregates these values in the
+totalTime. :doc:`index` aggregates these values in the
 ratio value. If the ratio value is small but totalTime is high the
 globalLock has typically been held frequently for shorter periods of
 time, which may be indicative of a more normal use pattern. If the
@@ -437,7 +439,7 @@ mem.mapped
 ~~~~~~~~~~
 
 Provides the amount of mapped memory, in megabytes (MB), by the
-database. Because :doc:`/mongodb/doc/index` uses memory-mapped files,
+database. Because :doc:`index` uses memory-mapped files,
 this value is likely to be to be roughly equivalent to the total size
 of your database or databases.
 
@@ -453,7 +455,7 @@ metrics
 
 The metrics document holds a number of statistics that reflect the
 current use and state of a running mongod instance. See
-:doc:`/mongodb/doc/index` `metrics documentation
+:doc:`index` `metrics documentation
 <http://docs.mongodb.org/v2.4/reference/command/serverStatus/#metrics>`_
 for detail.
 
@@ -479,7 +481,7 @@ network.numRequests
 The numRequests field is a counter of the total number of distinct
 requests that the server has received. Use this value to provide
 context for the bytesIn and bytesOut values to ensure that
-:doc:`/mongodb/doc/index`\ 's network utilization is consistent with
+:doc:`index`\ 's network utilization is consistent with
 expectations and application use.
 
 network_per_sec.bytesIn
@@ -577,7 +579,7 @@ granular manner. These values only appear when the current host has
 replication enabled.
 
 These values will differ from the opcounters values because of how
-:doc:`/mongodb/doc/index` serializes operations during
+:doc:`index` serializes operations during
 replication. See Replication for more information on replication.
 
 These numbers will grow over time in response to database use. Analyze
@@ -635,11 +637,10 @@ Same as `uptime`_ but in milliseconds.
 uptimeEstimate
 ~~~~~~~~~~~~~~
 
-Provides the uptime as calculated from :doc:`/mongodb/doc/index`'s
+Provides the uptime as calculated from :doc:`index`'s
 internal course-grained time keeping system.
 
 ok
 ~~
 
-Status of :doc:`/mongodb/doc/index` instance (0: critical, 1: normal).
-
+Status of :doc:`index` instance (0: critical, 1: normal).

@@ -25,7 +25,7 @@ ejabberd:hostnames
 ~~~~~~~~~~~~~~~~~~
 
 List of `HTTP hostname <https://en.wikipedia.org/wiki/Hostname>`_ to
-reach :doc:`/ejabberd/doc/index`.
+reach :doc:`index`.
 
 .. _pillar-ejabberd-admins:
 
@@ -67,8 +67,8 @@ Default: don't block any users (``[]``).
 ejabberd:watchdog_admins
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-An :doc:`/ejabberd/doc/index` account. If an
- :doc:`/ejabberd/doc/index` process consumes too much memory, send
+An :doc:`index` account. If an
+ :doc:`index` process consumes too much memory, send
  live notifications to those Jabber accounts.
 
 Default: send notifications to noone (``False``).

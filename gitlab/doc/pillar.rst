@@ -44,7 +44,7 @@ Example: ``__salt__['network.ip_addrs']('eth0')[0]``
 gitlab:admin:password
 ~~~~~~~~~~~~~~~~~~~~~
 
-Password for :doc:`/gitlab/doc/index` Administrator account.
+Password for :doc:`index` Administrator account.
 
 Example: ``'123456789'``
 

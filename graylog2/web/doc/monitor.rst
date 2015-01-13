@@ -24,12 +24,12 @@ running.
 graylog2_web_port
 ~~~~~~~~~~~~~~~~~
 
-Monitor :doc:`/graylog2/web/doc/index` web port :ref:`glossary-TCP` ``9000``.
+Monitor :doc:`index` web port :ref:`glossary-TCP` ``9000``.
 
 graylog2_web_http
 ~~~~~~~~~~~~~~~~~
 
-Monitor :doc:`/graylog2/web/doc/index` web :ref:`glossary-HTTP`
+Monitor :doc:`index` web :ref:`glossary-HTTP`
 :ref:`glossary-TCP` ``9000``.
 
 Expect return code: ``303 See Other`` (redirect to login page).

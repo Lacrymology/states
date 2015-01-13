@@ -74,7 +74,7 @@ djangopypi2:sentry
 djangopypi2:db:host
 ~~~~~~~~~~~~~~~~~~~
 
-Address of :doc:`/djangopypi2/doc/index` :doc:`/postgresql/doc/index`
+Address of :doc:`index` :doc:`/postgresql/doc/index`
 database.
 
 Default: ``127.0.0.1``

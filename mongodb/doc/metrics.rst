@@ -3,14 +3,14 @@ Metrics
 
 :doc:`/diamond/doc/process`:
 
-* ``mongodb`` - :doc:`/mongodb/doc/index`
+* ``mongodb`` - :doc:`index`
 
 MongoDB
 -------
 
 Locate at ``os > mongo``.
 
-See the :doc:`/mongodb/doc/index` `documentation
+See the :doc:`index` `documentation
 <http://docs.mongodb.org/v2.4/reference/command/serverStatus>`_ for complete
 reference.
 

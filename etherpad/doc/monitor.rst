@@ -29,7 +29,7 @@ Process ``node_modules/ep_etherpad-lite`` running by user ``etherpad``.
 etherpad_port
 ~~~~~~~~~~~~~
 
-Monitor :doc:`/etherpad/doc/index` port :ref:`glossary-TCP` ``9001``.
+Monitor :doc:`index` port :ref:`glossary-TCP` ``9001``.
 
 .. _monitor-etherpad_logger:
 

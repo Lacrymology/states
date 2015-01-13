@@ -7,7 +7,7 @@ Login administrative interface
 ------------------------------
 
 After the installation is finished, you can change all settings in
-:doc:`/ejabberd/doc/index` web administrator interface by login in one
+:doc:`index` web administrator interface by login in one
 of the :ref:`pillar-ejabberd-hostnames` in ``/admin`` path.  Use the
 credential defined in :ref:`pillar-ejabberd-admins`.
 

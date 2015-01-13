@@ -40,7 +40,7 @@ graylog2:rest_listen_uri
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 REST API listen URI. Must be reachable by other
-:doc:`/graylog2/server/doc/index` nodes if you run a cluster.
+:doc:`index` nodes if you run a cluster.
 
 Default: ``http://127.0.0.1:12900``.
 
@@ -163,7 +163,7 @@ Default: use JVM default (``False``).
 graylog2:server:user
 ~~~~~~~~~~~~~~~~~~~~
 
-The Unix user (UID) who will run :doc:`/graylog2/server/doc/index`.
+The Unix user (UID) who will run :doc:`index`.
 
 Default: ``graylog2``.
 

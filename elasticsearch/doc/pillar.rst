@@ -43,7 +43,7 @@ Default: use minion ID (``False``).
 elasticsearch:cluster:nodes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Dictionary contains :doc:`/elasticsearch/doc/index` nodes information.
+Dictionary contains :doc:`index` nodes information.
 
 .. _pillar-elasticsearch-cluster-nodes-nodeminionID-_network-public:
 
@@ -114,7 +114,7 @@ If this instance :doc:`index` is allowed to store data.
 
 Default: use formula default value (``None``).
 
-* :doc:`/elasticsearch/doc/index`: ``True``
+* :doc:`index`: ``True``
 * :doc:`/graylog2/doc/index`: ``False``
 
 .. _pillar-elasticsearch-cluster-nodes-nodeminionID-state-master:
@@ -126,7 +126,7 @@ If this instance :doc:`index` is allowed to become master node.
 
 Default: use formula default value (``None``).
 
-* :doc:`/elasticsearch/doc/index`: ``True``
+* :doc:`index`: ``True``
 * :doc:`/graylog2/doc/index`: ``False``
 
 .. _pillar-elasticsearch-cluster-nodes-nodeminionID-state-name:
@@ -156,7 +156,7 @@ elasticsearch:ssl
 
 .. note::
 
-  Only used to make :doc:`/elasticsearch/doc/index` trough
+  Only used to make :doc:`index` trough
   `HTTPS <https://en.wikipedia.org/wiki/Https>`_.
 
 .. _pillar-elasticsearch-aws:
@@ -166,7 +166,7 @@ elasticsearch:aws
 
 If True, install `elasticsearch-cloud-aws
 <https://github.com/elasticsearch/elasticsearch-cloud-aws>`_ for
-:doc:`/elasticsearch/doc/index`.
+:doc:`index`.
 
 The `Amazon Web Service <http://aws.amazon.com/>`_ (AWS) Cloud plugin allows to
 use `AWS API <https://github.com/aws/aws-sdk-java>`_ for the unicast discovery
@@ -203,7 +203,7 @@ elasticsearch:https_allowed
 Only used if :ref:`pillar-elasticsearch-ssl` is defined.
 
 List of `CIDR <http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing>`_
-format network where :doc:`/elasticsearch/doc/index` over :ref:`glossary-HTTPS`
+format network where :doc:`index` over :ref:`glossary-HTTPS`
 is allowed.
 
 Default: do not allow (``[]``).
@@ -213,7 +213,7 @@ Default: do not allow (``[]``).
 elasticsearch:username
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Username for :doc:`/elasticsearch/doc/index` API access via
+Username for :doc:`index` API access via
 :doc:`/nginx/doc/index`.
 
 .. _pillar-elasticsearch-password:
@@ -221,7 +221,7 @@ Username for :doc:`/elasticsearch/doc/index` API access via
 elasticsearch:password
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Password for :doc:`/elasticsearch/doc/index` API access via
+Password for :doc:`index` API access via
 :doc:`/nginx/doc/index`.
 
 .. warning::

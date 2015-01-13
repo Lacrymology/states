@@ -3,7 +3,6 @@
 Remove license from a file and adding new license.
 Used for internal only.
 
-Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Version: 0.1
 '''
 import logging

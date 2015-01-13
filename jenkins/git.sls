@@ -2,8 +2,6 @@
 Use of this source code is governed by a BSD license that can be found
 in the doc/license.rst file.
 
-Author: Viet Hung Nguyen <hvn@robotinfra.com>
-Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 
 Jenkins is optional depends on git, only when you use Jenkins to build
 code from git. This formula setup some things that needed to make jenkins works

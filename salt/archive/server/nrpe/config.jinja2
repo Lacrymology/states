@@ -2,8 +2,6 @@
 Use of this source code is governed by a BSD license that can be found
 in the doc/license.rst file.
 
-Author: Bruno Clermont <bruno@robotinfra.com>
-Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
 {%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
 {{ nginx_instance(formula='salt.archive.server', allow_ssl_redirect=False, deployment='salt_archive', pillar_prefix='salt_archive') }}

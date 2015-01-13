@@ -2,8 +2,6 @@
 Use of this source code is governed by a BSD license that can be found
 in the doc/license.rst file.
 
-Author: Viet Hung Nguyen <hvn@robotinfra.com>
-Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
 {%- from 'upstart/rsyslog.jinja2' import manage_upstart_log with context -%}
 {% set ssl = salt['pillar.get']('dovecot:ssl', False) %}

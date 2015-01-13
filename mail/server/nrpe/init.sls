@@ -5,8 +5,6 @@ in the doc/license.rst file.
 Monitoring check to test the entire mail stack (IMAP, SMTP, LDAP, antivirus,
 antispam, etc.
 
-Author: Viet Hung Nguyen <hvn@robotinfra.com>
-Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
 include:
   - cron

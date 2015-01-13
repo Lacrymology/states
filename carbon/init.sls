@@ -2,8 +2,6 @@
 Use of this source code is governed by a BSD license that can be found
 in the doc/license.rst file.
 
-Author: Bruno Clermont <bruno@robotinfra.com>
-Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
 {%- set filter_type = salt['pillar.get']('carbon:filter:type', None) -%}
 {%- set supported_filter_types = ('white', 'black')  %}

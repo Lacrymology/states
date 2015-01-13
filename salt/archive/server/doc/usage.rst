@@ -20,7 +20,7 @@ No need to specify the path in your ``requirements.txt``.
 How to upload new files
 -----------------------
 
-First, your :doc:`/salt/archive/server/doc/index` need to be a "master" server. It don't have to
+First, your :doc:`index` need to be a "master" server. It don't have to
 act solely as a mirror and :doc:`/rsync/doc/index` to a source. That mean the
 :ref:`pillar-salt_archive-source` pillar key must be undefined.
 
@@ -35,12 +35,12 @@ package) or ``incoming/mirror`` directory on the server using
 `SFTP <https://en.wikipedia.org/wiki/SSH_File_Transfer_Protocol>`_ with the
 username ``salt_archive``.
 
-The access to this user is granted using :doc:`/ssh/doc/index` keys, you have your public key in
-:ref:`pillar-salt_archive-keys` pillar key.
+The access to this user is granted using :doc:`/ssh/doc/index` keys, you have
+your public key in :ref:`pillar-salt_archive-keys` pillar key.
 
-Once your file is uploaded, after a while, a :doc:`/cron/doc/index` job run and if the same file
-don't exists in ``pip/`` and ``mirror/`` it will move it if the file don't
-already exists to avoid the same filename with different content.
+Once your file is uploaded, after a while, a :doc:`/cron/doc/index` job run and
+if the same file don't exists in ``pip/`` and ``mirror/`` it will move it if the
+file don't already exists to avoid the same filename with different content.
 
 If file exists, it get removed.
 

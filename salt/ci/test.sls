@@ -10,6 +10,7 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 include:
   - doc
   - ssh.client
+  - ssh.server
   - salt.ci
   - salt.ci.diamond
   - salt.ci.nrpe
@@ -27,7 +28,7 @@ test:
     - require:
       - cmd: test_crons
   qa:
-    - test
+    - test_pillar
     - name: salt.ci
     - pillar_doc: {{ opts['cachedir'] }}/doc/output
     - require:
@@ -43,6 +44,7 @@ test_salt_ci_ssh_port:
     - require:
       - cmd: ssh_add_key
       - sls: salt.ci
+      - sls: ssh.server
     - require_in:
       - cmd: ssh_remove_key
 

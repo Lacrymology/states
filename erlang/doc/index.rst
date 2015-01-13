@@ -11,6 +11,8 @@ availability. Some of its uses are in telecoms, banking, e-commerce, computer
 telephony and instant messaging. Erlang's runtime system has built-in support
 for concurrency, distribution and fault tolerance.
 
+.. Copied from http://www.erlang.org on 2015-01-13
+
 Contents:
 
 .. toctree::

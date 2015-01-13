@@ -5,9 +5,10 @@
 Etherpad
 ========
 
-More can be find at official `Etherpad page <http://etherpad.org/>`_.
+`Etherpad <http://etherpad.org>`_ is a highly customizable Open Source online
+editor providing collaborative editing in really real-time.
 
-A really-real time collaborative word processor for the web.
+.. Copied from http://etherpad.org on 2015-01-13
 
 .. toctree::
     :glob:

@@ -9,6 +9,8 @@ Memcache
 chunks of arbitrary data (strings, objects) from results of database calls, API
 calls, or page rendering.
 
+.. Copied from http://memcached.org on 2015-01-13
+
 .. toctree::
     :glob:
 

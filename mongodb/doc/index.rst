@@ -5,9 +5,10 @@
 MongoDB
 =======
 
-Install a MongoDB NoSQL server.
+`MongoDB <http://www.mongodb.org>`_ is an open-source document database, and
+the leading :ref:`glossary-NoSQL` database.
 
-.. TODO: INTRO
+.. Copied from http://www.mongodb.org on 2015-01-13
 
 .. toctree::
     :glob:

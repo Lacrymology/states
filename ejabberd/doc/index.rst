@@ -6,10 +6,12 @@ Ejabberd
 ========
 
 :doc:`/ejabberd/doc/index` is a `Jabber/XMPP
-<http://en.wikipedia.org/wiki/XMPP>`_ instant messaging server,
-licensed under GPLv2 (Free and Open Source), written in `Erlang/OTP
-</erlang/doc/index>`_. Among other features, ejabberd is
-cross-platform, fault-tolerant, clusterable and modular.
+<http://en.wikipedia.org/wiki/XMPP>`_ instant messaging server, licensed under
+GPLv2 (Free and Open Source), written in `Erlang/OTP
+</erlang/doc/index>`_. Among other features, ejabberd is cross-platform,
+fault-tolerant, clusterable and modular.
+
+.. Copied from https://www.ejabberd.im on 2015-01-13
 
 Security Issue
 --------------

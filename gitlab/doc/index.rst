@@ -5,9 +5,16 @@
 Gitlab
 ======
 
-.. todo:: write better intro
+Open source software to collaborate on code:
 
-Open Source :doc:`/git/doc/index` Management Software
+* Git repository management, code reviews, issue tracking, activity feeds, wikis
+  and continuous integration
+* 25,000 users on one server or a highly available active/active cluster,
+  LDAP/AD group sync and audit logging
+* Community driven, 700+ contributors, inspect and modify the source, easy to
+  integrate into your infrastructure
+
+Homepage: https://about.gitlab.com
 
 .. warning::
 

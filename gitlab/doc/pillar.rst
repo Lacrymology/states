@@ -118,7 +118,8 @@ gitlab:max_size
 Max size of a :doc:`/git/doc/index` object (e.g. a commit), in bytes.
 This value can be increased if you have very large commits
 
-Default: max size of a :doc:`/git/doc/index` object is 5 megabytes (``5242880``).
+Default: max size of a :doc:`/git/doc/index` object is 5 megabytes
+(``5242880``).
 
 .. _pillar-gitlab-default_projects_features-visibility_level:
 
@@ -284,7 +285,8 @@ gitlab:smtp
 gitlab:smtp:from
 ~~~~~~~~~~~~~~~~
 
-The address that will appear in the "From:" field of the email sent by GitLab.
+The address that will appear in the "From:" field of the email sent by
+:doc:`index`.
 
 Default: Use the value of :ref:`pillar-smtp-from` (``False``).
 

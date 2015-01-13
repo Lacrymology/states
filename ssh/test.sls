@@ -5,8 +5,8 @@ in the doc/license.rst file.
 Author: Bruno Clermont <bruno@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
-{%- set authorized_keys_exists = salt["file.file_exists"](root_home ~ "/.ssh/authorized_keys") %}
 {%- set root_home = salt['user.info']('root')['home'] %}
+{%- set authorized_keys_exists = salt["file.file_exists"](root_home ~ "/.ssh/authorized_keys") %}
 {%- macro add_key() -%}
 {#-
   Add public key to the `authorized_keys` on localhost.

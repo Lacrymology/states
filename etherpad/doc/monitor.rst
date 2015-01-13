@@ -54,13 +54,16 @@ Only use if :ref:`pillar-etherpad-ssl` is defined.
 etherpad_javascript_http
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-Monitor :doc:`index` functionality by request to a javascript :ref:`glossary-URL`.
+Monitor :doc:`index` functionality by request to a javascript
+:ref:`glossary-URL`.
 
 Only use if :ref:`pillar-__test__` is ``True``.
 
 etherpad_javascript_https
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Same as :ref:`pillar-etherpad_javascript_http` but connect via :doc:`/ssl/doc/index`.
+Same as :ref:`pillar-etherpad_javascript_http` but connect via
+:doc:`/ssl/doc/index`.
 
-Only use if :ref:`pillar-__test__` is ``True`` and if :ref:`pillar-etherpad-ssl` is defined.
+Only use if :ref:`pillar-__test__` is ``True`` and if :ref:`pillar-etherpad-ssl`
+is defined.

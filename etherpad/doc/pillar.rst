@@ -161,8 +161,8 @@ Default: does not use default text (``False``).
 etherpad:restrict_referer
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Regular Expression for referer :ref:`glossary-URL` restriction. When you want block direct access to
-:doc:`index`.
+Regular Expression for referer :ref:`glossary-URL` restriction. When you want
+block direct access to :doc:`index`.
 
 Example: ``^(.*)(sometext|othertex)(.*)$``
 
@@ -194,14 +194,15 @@ etherpad:secret_url
 If set, only allow access :doc:`index` by this :ref:`glossary-URL`,
 don't allow access directly.
 
-For example, if :ref:`pillar-etherpad-hostnames` is
-``['example_pad.com']`` and :ref:`pillar-etherpad-secret_url` is
-``'top_secret'``, we can only use :doc:`index` with :ref:`glossary-URL`:
-``example_pad.com/top_secret``, request to ``example_pad.com`` will return ``403 error``
+For example, if :ref:`pillar-etherpad-hostnames` is ``['example_pad.com']`` and
+:ref:`pillar-etherpad-secret_url` is ``'top_secret'``, we can only use
+:doc:`index` with :ref:`glossary-URL`: ``example_pad.com/top_secret``, request
+to ``example_pad.com`` will return ``403 error``
 
 Example: ``'a_secret_string'``
 
-Default: Allow to access directly via domain, without an secret :ref:`glossary-URL` (``False``).
+Default: Allow to access directly via domain, without an secret
+:ref:`glossary-URL` (``False``).
 
 Conditional
 -----------

@@ -9,6 +9,6 @@ Although you has been marked as admin. But when you login again. You can't have
 full permission as complete admin. When click ``Create a New Team``. You will
 get ``You do not have the required permissions to create new teams.``
 
-So that mean on :doc:`/sentry/doc/index` has two kind of admin account.
+So that mean on :doc:`index` has two kind of admin account.
 
 .. TODO: FIX

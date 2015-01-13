@@ -1,9 +1,9 @@
 Usage
 =====
 
-Based from :doc:`pillar` values, log into URL one of the :ref:`pillar-sentry-hostnames`
-(if DNS had been configured properly) using username
-:ref:`pillar-sentry-initial_admin_user-username` and password
+Based from :doc:`pillar` values, log into URL one of the
+:ref:`pillar-sentry-hostnames` (if DNS had been configured properly) using
+username :ref:`pillar-sentry-initial_admin_user-username` and password
 :ref:`pillar-sentry-initial_admin_user-password`.
 
 .. TODO: FIX USAGE DOC
@@ -11,17 +11,20 @@ Based from :doc:`pillar` values, log into URL one of the :ref:`pillar-sentry-hos
 Create user
 -----------
 
-Default user can create account by click `Create a new account`. Then put `Email*`, `Password*`. And then click `Register`.
+Default user can create account by click `Create a new account`. Then put
+`Email*`, `Password*`. And then click `Register`.
 
 Create team
 -----------
 
-To create team. You need to login by admin account. Then click `Create a New Team`. Then put `Team Name*`, `Owner`. And then click `Create Team`.
+To create team. You need to login by admin account. Then click `Create a New
+Team`. Then put `Team Name*`, `Owner`. And then click `Create Team`.
 
 Create project
 --------------
 
-After you already create team. You can create project. Only put `Project Name*`, `Platform*` and `Owner`. And then click `Save Changes.`
+After you already create team. You can create project. Only put `Project Name*`,
+`Platform*` and `Owner`. And then click `Save Changes.`
 
 Delete group Manually
 ---------------------
@@ -43,16 +46,16 @@ XMPP Integration
 ----------------
 
 ``XMPP`` refer to the protocol of :doc:`/ejabberd/doc/index` and that allow
-:doc:`/sentry/doc/index` to send chat notification to a conference room.
+:doc:`index` to send chat notification to a conference room.
 
 .. note::
 
   This plugin is configured **per project**, so different alerts can be sent to
   different conference room, these steps are required for each project.
 
-#. Create :doc:`/ejabberd/doc/index` user for :doc:`/sentry/doc/index`, look in
+#. Create :doc:`/ejabberd/doc/index` user for :doc:`index`, look in
    :ref:`ejabberd-usage-user_creation` for details.
-#. Open in browser deployed :doc:`/sentry/doc/index` server (one of the
+#. Open in browser deployed :doc:`index` server (one of the
    :ref:`pillar-sentry-hostnames`).
 #. Go to project ``Settings`` section
    (``/{{ team }}}/{{ project }}/settings/``).

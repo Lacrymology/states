@@ -3,7 +3,7 @@ Metrics
 
 :doc:`/diamond/doc/process`:
 
-* ``redis`` - :doc:`/redis/doc/index`.
+* ``redis`` - :doc:`index`.
 
 Redis
 -----
@@ -12,7 +12,7 @@ Locate at ``os > redis > {{ port }}``.
 
 .. note::
 
-   Default :doc:`/redis/doc/index` port: ``6379``.
+   Default :doc:`index` port: ``6379``.
 
 clients.blocked
 ~~~~~~~~~~~~~~~
@@ -36,27 +36,27 @@ used_cpu_user:User CPU consumed by the Redis server
 cpu.parent.system
 ~~~~~~~~~~~~~~~~~
 
-System CPU consumed by the :doc:`/redis/doc/index` server.
+System CPU consumed by the :doc:`index` server.
 
 cpu.user.user
 ~~~~~~~~~~~~~
 
-User CPU consumed by the :doc:`/redis/doc/index` server.
+User CPU consumed by the :doc:`index` server.
 
 cpu.children.system
 ~~~~~~~~~~~~~~~~~~~
 
-System CPU consumed by the :doc:`/redis/doc/index` background processes.
+System CPU consumed by the :doc:`index` background processes.
 
 cpu.children.system
 ~~~~~~~~~~~~~~~~~~~
 
-User CPU consumed by the :doc:`/redis/doc/index` background processes.
+User CPU consumed by the :doc:`index` background processes.
 
 {{ db_name }}.avg_ttl
 ~~~~~~~~~~~~~~~~~~~~~
 
-:doc:`/redis/doc/index` continuously checks random keys to check if
+:doc:`index` continuously checks random keys to check if
 their TTL has passed. The `{{ db_name }}.avg_ttl`_ is its estimate of
 the average TTL of your keys, based on the random checks of keys.
 
@@ -109,13 +109,13 @@ Time in seconds since last successful RDB save.
 memory.external_view
 ~~~~~~~~~~~~~~~~~~~~
 
-Number of bytes that :doc:`/redis/doc/index` allocated as seen by the operating system
+Number of bytes that :doc:`index` allocated as seen by the operating system
 (a.k.a resident set size).
 
 memory.internal_view
 ~~~~~~~~~~~~~~~~~~~~
 
-Total number of bytes allocated by :doc:`/redis/doc/index` using its
+Total number of bytes allocated by :doc:`index` using its
 allocator (either standard libc, jemalloc, or an alternative allocator
 such as `tcmalloc <http://code.google.com/p/google-perftools/>`_.
 
@@ -128,19 +128,19 @@ large difference means there is memory fragmentation.
 process.commands_processed
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Total number of commands processed by the :doc:`/redis/doc/index`
+Total number of commands processed by the :doc:`index`
 server.
 
 process.connections_received
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Total number of connections accepted by the :doc:`/redis/doc/index`
+Total number of connections accepted by the :doc:`index`
 server.
 
 process.uptime
 ~~~~~~~~~~~~~~
 
-Number of seconds since :doc:`/redis/doc/index` server start in
+Number of seconds since :doc:`index` server start in
 seconds.
 
 pubsub.channels

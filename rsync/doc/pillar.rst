@@ -34,9 +34,9 @@ Default: ``'"UNLIMITED"'``.
 rsync:global_settings
 ~~~~~~~~~~~~~~~~~~~~~
 
-Attributes and values is mapped to :doc:`/rsync/doc/index` daemon's attributes and values. If
-attribute contains space, wrap quotes about it. All attributes and values
-are `available here <http://rsync.samba.org/documentation.html>`_.
+Attributes and values is mapped to :doc:`index` daemon's attributes and
+values. If attribute contains space, wrap quotes about it. All attributes and
+values are `available here <http://rsync.samba.org/documentation.html>`_.
 
 Default: use default settings (``{}``).
 
@@ -51,7 +51,7 @@ Example::
 rsync:modules
 ~~~~~~~~~~~~~
 
-Dictionay contains information of all :doc:`/rsync/doc/index` modules.
+Dictionay contains information of all :doc:`index` modules.
 
 Default: don't use any module (``{}``).
 

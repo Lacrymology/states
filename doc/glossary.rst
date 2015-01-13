@@ -155,3 +155,11 @@ NoSQL
 ~~~~~
 
 `NoSQL <http://en.wikipedia.org/wiki/NoSQL>`_.
+
+.. _glossary-VPN:
+
+VPN
+~~~
+
+`Virtual private network
+<http://en.wikipedia.org/wiki/Virtual_private_network>`_.

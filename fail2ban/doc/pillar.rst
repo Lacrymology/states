@@ -29,10 +29,10 @@ fail2ban:loglevel
 
 Set the log level output.
 
-1 = ERROR
-2 = WARN
-3 = INFO
-4 = DEBUG
+* 1 = ERROR
+* 2 = WARN
+* 3 = INFO
+* 4 = DEBUG
 
 Default: Log at INFO level (``3``).
 
@@ -74,14 +74,16 @@ The backend used to get files modification.
 Available options are "pyinotify", "gamin", "polling" and "auto".
 This option can be overridden in each jail as well.
 
-pyinotify: requires pyinotify (a file alteration monitor) to be installed.
-           If pyinotify is not installed, Fail2ban will use auto.
-gamin:     requires Gamin (a file alteration monitor) to be installed.
-           If Gamin is not installed, Fail2ban will use auto.
-polling:   uses a polling algorithm which does not require external
-braries.
-auto:      will try to use the following backends, in order:
-           pyinotify, gamin, polling.
+* pyinotify: requires pyinotify (a file alteration monitor) to be installed.
+  If pyinotify is not installed, Fail2ban will use auto.
+
+* gamin: requires Gamin (a file alteration monitor) to be installed.
+  If Gamin is not installed, Fail2ban will use auto.
+
+* polling: uses a polling algorithm which does not require external libraries.
+
+* auto: will try to use the following backends, in order: pyinotify, gamin,
+  polling.
 
 Default: ``False`` - use auto backedn.
 
@@ -92,11 +94,13 @@ fail2ban:usedns
 
 Whether if jails should trust hostnames in logs.
 
-yes:   if a hostname is encountered, a reverse DNS lookup will be performed.
-warn:  if a hostname is encountered, a reverse DNS lookup will be performed,
-       but it will be logged as a warning.
-no:    if a hostname is encountered, will not be used for banning,
-       but it will be logged as info.
+* yes: if a hostname is encountered, a reverse DNS lookup will be performed.
+
+* warn: if a hostname is encountered, a reverse DNS lookup will be performed,
+  but it will be logged as a warning.
+
+* no: if a hostname is encountered, will not be used for banning, but it will
+  be logged as info.
 
 Default: ``False`` - use warn.
 

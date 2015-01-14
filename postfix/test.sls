@@ -2,6 +2,7 @@
 
 {%- from 'cron/macro.jinja2' import test_cron with context %}
 {%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
+{%- from 'fail2ban/macro.jinja2' import fail2ban_regex_test with context %}
 include:
   - doc
   - postfix
@@ -9,6 +10,7 @@ include:
   - postfix.backup.diamond
   - postfix.backup.nrpe
   - postfix.diamond
+  - postfix.fail2ban
   - postfix.nrpe
   - openldap
   - openldap.diamond
@@ -23,6 +25,8 @@ include:
 - sls: openldap.diamond
 - sls: openldap.nrpe
 {%- endcall %}
+
+{{ fail2ban_regex_test('postfix', tag='postfix/smtpd[20228]', message='NOQUEUE: reject: RCPT from sender.com["5.6.7.8"]: 554 5.7.1 <user@example.com>: Recipient address rejected: Access denied; from=<user@sender.com> to=<user@example.com> proto=ESMTP helo=<mg01d1.sender.com>') }}
 
 test:
   monitoring:
@@ -43,7 +47,9 @@ test:
     - test
     - map:
         ProcessResources:
-    {{ diamond_process_test('postfix') }}
+          {{ diamond_process_test('postfix') }}
+        UserScripts:
+          fail2ban.postfix: True
     {#- TODO fix postfix collector to get more meaning metric and test it. #}
     - require:
       - sls: postfix

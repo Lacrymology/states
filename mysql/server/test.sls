@@ -1,12 +1,16 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
 {%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
+{%- from 'fail2ban/macro.jinja2' import fail2ban_regex_test with context %}
 include:
   - doc
   - mysql.server
   - mysql.server.backup
   - mysql.server.diamond
+  - mysql.server.fail2ban
   - mysql.server.nrpe
+
+{{ fail2ban_regex_test('mysql', tag='mysqld', message="150114  3:40:50 [Warning] Access denied for user 'root'@'5.6.7.8' (using password: YES)") }}
 
 test:
   cmd:
@@ -304,6 +308,8 @@ test:
           mysql.Uptime_since_flush_status: True
         ProcessResources:
           {{ diamond_process_test('mysql') }}
+        UserScripts:
+          fail2ban.mysqld: True
     - require:
       - sls: mysql.server
       - sls: mysql.server.diamond

@@ -9,7 +9,7 @@ xinetd_jail:
     - enabled
     - name: xinetd
     - filter: xinetd-fail
-    - port:
+    - ports:
       - all
     - banaction: iptables-multiport-log
     - logpath: /var/log/syslog

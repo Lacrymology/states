@@ -17,6 +17,7 @@ include:
   - dovecot.backup.diamond
   - dovecot.backup.nrpe
   - dovecot.diamond
+  - dovecot.fail2ban
   - dovecot.nrpe
   - mail.server.nrpe
   - mail.server.diamond
@@ -25,6 +26,7 @@ include:
   - openldap.nrpe
   - postfix.nrpe
   - postfix.diamond
+  - postfix.fail2ban
 
 {%- call test_cron() %}
 - sls: amavis

@@ -9,7 +9,7 @@ roundcube_jail:
     - enabled
     - name: roundcube
     - filter: roundcube-auth
-    - port:
+    - ports:
       - http
       - https
     - logpath: /var/log/syslog

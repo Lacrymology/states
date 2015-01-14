@@ -168,9 +168,9 @@ If True, install `elasticsearch-cloud-aws
 <https://github.com/elasticsearch/elasticsearch-cloud-aws>`_ for
 :doc:`index`.
 
-The `Amazon Web Service <http://aws.amazon.com/>`_ (AWS) Cloud plugin allows to
-use `AWS API <https://github.com/aws/aws-sdk-java>`_ for the unicast discovery
-mechanism and add `S3 <http://aws.amazon.com/s3/>`_ repositories.
+The :ref:`glossary-AWS` Cloud plugin allows to use `AWS API
+<https://github.com/aws/aws-sdk-java>`_ for the unicast discovery mechanism and
+add :ref:`glossary-s3` repositories.
 
 Default: don't install `elasticsearch-cloud-aws
 <https://github.com/elasticsearch/elasticsearch-cloud-aws>`_
@@ -202,9 +202,8 @@ elasticsearch:https_allowed
 
 Only used if :ref:`pillar-elasticsearch-ssl` is defined.
 
-List of `CIDR <http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing>`_
-format network where :doc:`index` over :ref:`glossary-HTTPS`
-is allowed.
+List of :ref:`glossary-CIDR` format network where :doc:`index` over
+:ref:`glossary-HTTPS` is allowed.
 
 Default: do not allow (``[]``).
 

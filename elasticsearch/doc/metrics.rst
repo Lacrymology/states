@@ -244,24 +244,24 @@ List of :ref:`glossary-JVM` collectors, for complete document refer to
 jvm.gc.collection.{{ collector }}.count
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Number of times :ref:`glossary-Garbage-Collection` got executed.
+Number of times :ref:`glossary-garbage-collection` got executed.
 
 jvm.gc.collection.{{ collector }}.time
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Amount of time in milliseconds spends on
-:ref:`glossary-Garbage-Collection`.
+:ref:`glossary-garbage-collection`.
 
 jvm.gc.collection.count
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-Total number of times :ref:`glossary-Garbage-Collection` got executed.
+Total number of times :ref:`glossary-garbage-collection` got executed.
 
 jvm.gc.collection.time
 ~~~~~~~~~~~~~~~~~~~~~~
 
 Total time in milliseconds spends on
-:ref:`glossary-Garbage-Collection`.
+:ref:`glossary-garbage-collection`.
 
 jvm.mem.pools
 ~~~~~~~~~~~~~

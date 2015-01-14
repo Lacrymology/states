@@ -11,7 +11,8 @@ is ``pass_uwsgi``, it passes (writes to specified socket) that request to
 :doc:`index`. :doc:`index` process the request (often to interpret
 :doc:`/python/doc/index`, :doc:`/php/doc/index` or Ruby code), after that, it
 returns HTML, write it to above socket, :doc:`/nginx/doc/index` reads it, does
-some another process (e.g. adding HTTP headers) then returns to user.
+some another process (e.g. adding :ref:`glossary-HTTP` headers) then returns to
+user.
 
 Some following bits help correctly setting owner, permission for files:
   - both :doc:`/nginx/doc/index` worker process(es) and :doc:`index` worker
@@ -31,7 +32,7 @@ Some following bits help correctly setting owner, permission for files:
     need to write file and support upload. Then these config can be simplify by
     set all source code files to owned by user ``root`` and group ``www-data``,
     with read permission only (440).  Otherwise, a dedicated user can be used
-    for uUWSGI. Write permission should only set to either who need to write.
+    for uWSGI. Write permission should only set to either who need to write.
 
 Processes
 ---------

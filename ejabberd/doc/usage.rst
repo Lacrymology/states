@@ -49,7 +49,7 @@ This is XMPP setup intruction for Pigin:
 #. Open Pidgin.
 #. Click the Accounts menu and click Manage Accounts.
 #. Click Add.
-#. In the Protocol field, select XMPP.
+#. In the Protocol field, select ``XMPP``.
 #. In the Username field, enter your username. For example, ``user1``.
 #. In the Domain field, enter your domain, such as ``im.example.com``.
 #. In the Password field, enter the password used to log in to

@@ -77,12 +77,12 @@ Example::
       - '300 10'
       - '60 10000'
 
-Save the DB on disk::
+Save the database on disk::
 
   save <seconds> <changes>
 
-Will save the DB if both the given number of seconds and the given
-number of write operations against the DB occurred.
+Will save the database if both the given number of seconds and the given number
+of write operations against the database occurred.
 
 .. note::
 
@@ -124,7 +124,7 @@ Default: use no more than ``300mb`` memory.
 redis:policy
 ~~~~~~~~~~~~
 
-How :doc:`index` will select what to remove when maxmemory is reached.
+How :doc:`index` will select what to remove when ``maxmemory`` is reached.
 There are five behaviors:
 
 volatile-lru
@@ -151,11 +151,43 @@ noeviction
    with any of the above policies, :doc:`index` will return an error on write
    operations, when there are not suitable keys for eviction.
 
-   At the date of writing this commands are: set setnx setex append
-   incr decr rpush lpush rpushx lpushx linsert lset rpoplpush sadd
-   sinter sinterstore sunion sunionstore sdiff sdiffstore zadd zincrby
-   zunionstore zinterstore hset hsetnx hmset hincrby incrby decrby
-   getset mset msetnx exec sort.
+   At the date of writing those commands are:
+
+   * ``set``
+   * ``setnx``
+   * ``setex``
+   * ``append``
+   * ``incr``
+   * ``decr``
+   * ``rpush``
+   * ``lpush``
+   * ``rpushx``
+   * ``lpushx``
+   * ``linsert``
+   * ``lset``
+   * ``rpoplpush``
+   * ``sadd``
+   * ``sinter``
+   * ``sinterstore``
+   * ``sunion``
+   * ``sunionstore``
+   * ``sdiff``
+   * ``sdiffstore``
+   * ``zadd``
+   * ``zincrby``
+   * ``zunionstore``
+   * ``zinterstore``
+   * ``hset``
+   * ``hsetnx``
+   * ``hmset``
+   * ``hincrby``
+   * ``incrby``
+   * ``decrby``
+   * ``getset``
+   * ``mset``
+   * ``msetnx``
+   * ``exec``
+   * ``sort``
 
 Default: ``volatile-lru``.
 

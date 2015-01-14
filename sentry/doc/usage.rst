@@ -1,10 +1,10 @@
 Usage
 =====
 
-Based from :doc:`pillar` values, log into URL one of the
-:ref:`pillar-sentry-hostnames` (if DNS had been configured properly) using
-username :ref:`pillar-sentry-initial_admin_user-username` and password
-:ref:`pillar-sentry-initial_admin_user-password`.
+Based from :doc:`pillar` values, log into :ref:`glossary-URL` one of the
+:ref:`pillar-sentry-hostnames` (if :ref:`glossary-DNS` had been configured
+properly) using username :ref:`pillar-sentry-initial_admin_user-username` and
+password :ref:`pillar-sentry-initial_admin_user-password`.
 
 .. TODO: FIX USAGE DOC
 
@@ -31,7 +31,7 @@ Delete group Manually
 
 Sometimes it take so much time to delete a group that it timeout
 :doc:`/nginx/doc/index` and :doc:`/uwsgi/doc/index`. A hack for this is to note
-the group ID in the URL, such as:
+the group ID in the :ref:`glossary-URL`, such as:
 https://sentry.example.com/team/project/group/1234/ the id is ``1234``.
 
 Then run::

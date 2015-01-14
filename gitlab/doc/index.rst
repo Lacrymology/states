@@ -10,7 +10,7 @@ Open source software to collaborate on code:
 * Git repository management, code reviews, issue tracking, activity feeds, wikis
   and continuous integration
 * 25,000 users on one server or a highly available active/active cluster,
-  LDAP/AD group sync and audit logging
+  :doc:`/openldap/doc/index`/AD group sync and audit logging
 * Community driven, 700+ contributors, inspect and modify the source, easy to
   integrate into your infrastructure
 

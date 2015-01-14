@@ -102,7 +102,7 @@ Ubuntu
 
 ... yo
 
-.. _glossary-Garbage-Collection:
+.. _glossary-garbage-collection:
 
 Garbage Collection
 ~~~~~~~~~~~~~~~~~~
@@ -163,3 +163,56 @@ VPN
 
 `Virtual private network
 <http://en.wikipedia.org/wiki/Virtual_private_network>`_.
+
+.. _glossary-AWS:
+
+AWS
+~~~
+
+`Amazon Web Services <http://aws.amazon.com>`_.
+
+.. _glossary-CIDR:
+
+CIDR
+~~~~
+
+`Classless Inter Domain Routing
+<http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing>`_.
+
+.. _glossary-regular-expression:
+
+Regular Expression
+~~~~~~~~~~~~~~~~~~
+
+A `regular expression <http://en.wikipedia.org/wiki/Regular_expression>`_
+(abbreviated regex or regexp) is a sequence of characters that forms a search
+pattern, mainly for use in pattern matching with strings, or string matching.
+
+.. Copied from http://en.wikipedia.org/wiki/Regular_expression on 2015-01-14
+
+.. _glossary-cplusplus:
+
+C++
+~~~
+
+`C++ <http://en.wikipedia.org/wiki/C%2B%2B>`_ (pronounced cee plus plus) is a
+general-purpose programming language. It has imperative, object-oriented and
+generic programming features, while also providing the facilities for low-level
+memory manipulation.
+
+.. Copied from http://en.wikipedia.org/wiki/C%2B%2B on 2015-01-14
+
+.. _glossary-ttl:
+
+TTL
+~~~
+
+`Time to live <http://en.wikipedia.org/wiki/Time_to_live>`_ (TTL) or hop limit
+is a mechanism that limits the lifespan or lifetime of data in a computer or
+network. TTL may be implemented as a counter or timestamp attached to or
+embedded in the data. Once the prescribed event count or timespan has elapsed,
+data is discarded. In computer networking, TTL prevents a data packet from
+circulating indefinitely. In computing applications, TTL is used to improve
+performance of caching or to improve privacy.
+
+.. Copied from http://en.wikipedia.org/wiki/Time_to_live on 2015-01-14

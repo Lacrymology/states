@@ -1,7 +1,7 @@
 Firewall
 ========
 
-There is 2 way to communicate to a :doc:`index` server, one is native protocol
+There is two way to communicate to a :doc:`index` server, one is native protocol
 and the other is trough an :ref:`glossary-HTTP` API. You need to open the
 following ports to all :doc:`index` clients based on your needs:
 

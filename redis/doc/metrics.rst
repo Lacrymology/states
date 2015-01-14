@@ -56,9 +56,9 @@ User CPU consumed by the :doc:`index` background processes.
 {{ db_name }}.avg_ttl
 ~~~~~~~~~~~~~~~~~~~~~
 
-:doc:`index` continuously checks random keys to check if
-their TTL has passed. The `{{ db_name }}.avg_ttl`_ is its estimate of
-the average TTL of your keys, based on the random checks of keys.
+:doc:`index` continuously checks random keys to check if their
+ref:`glossary-ttl` has passed. The `{{ db_name }}.avg_ttl`_ is its estimate of
+the average ref:`glossary-ttl` of your keys, based on the random checks of keys.
 
 {{ db_name }}.keys
 ~~~~~~~~~~~~~~~~~~

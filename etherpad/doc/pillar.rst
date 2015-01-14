@@ -161,8 +161,8 @@ Default: does not use default text (``False``).
 etherpad:restrict_referer
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Regular Expression for referer :ref:`glossary-URL` restriction. When you want
-block direct access to :doc:`index`.
+:ref:`glossary-regular-expression` for referer :ref:`glossary-URL`
+restriction. When you want block direct access to :doc:`index`.
 
 Example: ``^(.*)(sometext|othertex)(.*)$``
 

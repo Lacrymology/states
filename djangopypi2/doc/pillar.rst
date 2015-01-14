@@ -155,6 +155,6 @@ djangopypi2:timeout
 ~~~~~~~~~~~~~~~~~~~
 
 Number of seconds for reading/transmitting a response/request from/to
-the uwsgi server.
+the :doc:`/uwsgi/doc/index` server.
 
 Default: ``60`` seconds.

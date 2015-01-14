@@ -84,9 +84,9 @@ item without fetching it.
 main.conn_yields
 ~~~~~~~~~~~~~~~~
 
-:doc:`index` has a configurable maximum number of requests per
-event (-R command line argument), this counter shows the number of times any
-client hit this limit.
+:doc:`index` has a configurable maximum number of requests per event (``-R``
+command line argument), this counter shows the number of times any client hit
+this limit.
 
 main.connection_structures
 ~~~~~~~~~~~~~~~~~~~~~~~~~~

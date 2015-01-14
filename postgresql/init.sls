@@ -19,6 +19,7 @@ postgresql-dev:
     - ppa: pitti/postgresql
 {%- endif %}
     - file: /etc/apt/sources.list.d/postgresql.list
+    - clean_file: True
     - require:
       - pkg: apt_sources
   pkg:

@@ -49,6 +49,7 @@ salt:
     - name: deb http://archive.robotinfra.com/mirror/salt/{{ version }} {{ grains['lsb_distrib_codename'] }} main
 {%- endif %}
     - file: /etc/apt/sources.list.d/saltstack-salt.list
+    - clean_file: True
     - key_url: salt://salt/key.gpg
     - require:
       - cmd: apt_sources

@@ -39,6 +39,7 @@ mariadb:
     - name: deb http://mariadb.biz.net.id//repo/5.5/ubuntu precise main
 {%- endif %}
     - file: /etc/apt/sources.list.d/mariadb.list
+    - clean_file: True
     - require:
       - pkg: apt_sources
   pkg:

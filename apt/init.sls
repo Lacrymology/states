@@ -129,3 +129,9 @@ apt_sources:
     - watch_in:
       - cmd: apt_sources
 {%- endif %}
+
+update-notifier-common:
+  pkg:
+    - purged
+    - require:
+      - cmd: apt_sources

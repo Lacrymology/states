@@ -36,7 +36,10 @@ mysql_diamond_resources:
         [[mysql]]
         exe = ^\/usr\/sbin\/mysqld
 
-libmysqlclient-dev:
+{%- from 'diamond/macro.jinja2' import fail2ban_count_ip with context %}
+{{ fail2ban_count_ip('mysqld-auth') }}
+
+libmariadbclient-dev:
   pkg:
     - installed
     - require:

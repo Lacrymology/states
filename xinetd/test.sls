@@ -2,6 +2,7 @@
 
 include:
   - doc
+  - logrotate
   - xinetd
   - xinetd.diamond
   - xinetd.nrpe

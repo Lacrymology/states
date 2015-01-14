@@ -2,6 +2,7 @@
 
 include:
   - diamond
+  - firewall.diamond
 
 xinetd_diamond_resources:
   file:

@@ -1,0 +1,41 @@
+# {{ salt['pillar.get']('message_do_not_modify') }}
+
+[DEFAULT]
+
+ignoreip = 127.0.0.1/8
+
+bantime  = {{ salt['pillar.get']('fail2ban:bantime', 600) }}
+
+findtime = {{ salt['pillar.get']('fail2ban:findtime', 600) }}
+maxretry = {{ salt['pillar.get']('fail2ban:maxretry', 3) }}
+
+{%- set backend = salt['pillar.get']('fail2ban:backend', False) %}
+backend = {% if backend %}{{ backend }}{% else %}auto{% endif %}
+
+{%- set usedns = salt['pillar.get']('fail2ban:usedns', False) %}
+usedns = {% if usedns %}{{ usedns }}{% else %}warn{% endif %}
+
+{%- set destemail = salt['pillar.get']('fail2ban:destemail', False) %}
+destemail = {% if destemail %}{{ destemail }}{% else %}root@localhost{% endif %}
+
+{%- set sendername = salt['pillar.get']('fail2ban:sendername', False) %}
+sendername = {% if sendername %}{{ sendername }}{% else %}Fail2Ban{% endif %}
+
+{%- set banaction = salt['pillar.get']('fail2ban:banaction', False) %}
+banaction = {% if banaction %}{{ banaction }}{% else %}iptables-multiport{% endif %}
+
+mta = sendmail
+
+protocol = tcp
+
+chain = INPUT
+
+action_ = %(banaction)s[name=%(__name__)s, port="%(port)s", protocol="%(protocol)s", chain="%(chain)s"]
+
+action_mw = %(banaction)s[name=%(__name__)s, port="%(port)s", protocol="%(protocol)s", chain="%(chain)s"]
+              %(mta)s-whois[name=%(__name__)s, dest="%(destemail)s", protocol="%(protocol)s", chain="%(chain)s", sendername="%(sendername)s"]
+
+action_mwl = %(banaction)s[name=%(__name__)s, port="%(port)s", protocol="%(protocol)s", chain="%(chain)s"]
+               %(mta)s-whois-lines[name=%(__name__)s, dest="%(destemail)s", logpath=%(logpath)s, chain="%(chain)s", sendername="%(sendername)s"]
+
+action = %(action_)s

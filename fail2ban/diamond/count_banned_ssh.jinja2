@@ -1,5 +1,0 @@
-#!/bin/sh
-# {{ salt['pillar.get']('message_do_not_modify') }}
-
-count=$(iptables -L fail2ban-ssh | grep -c REJECT)
-echo "fail2ban.ssh $count"

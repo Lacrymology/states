@@ -4,6 +4,7 @@
 {%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
   - doc
+  - logrotate
   - roundcube
   - roundcube.backup
   - roundcube.backup.diamond

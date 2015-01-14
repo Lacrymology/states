@@ -5,6 +5,7 @@
 include:
   - apt.nrpe
   - fail2ban
+  - virtualenv.nrpe
   - firewall.nrpe
   - rsyslog.nrpe
 

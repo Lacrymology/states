@@ -1,0 +1,9 @@
+#!/bin/sh
+# {{ salt['pillar.get']('message_do_not_modify') }}
+
+if iptables -nL | grep -q fail2ban-{{ jail }}; then
+    count=$(iptables -nL fail2ban-{{ jail }} | grep -c REJECT)
+else
+    count=0
+fi
+echo "fail2ban.{{ jail }} $count"

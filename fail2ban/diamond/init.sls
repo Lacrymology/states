@@ -14,7 +14,7 @@ fail2ban_diamond_resources:
     - text:
       - |
         [[fail2ban]]
-        cmdline = ^\/usr\/bin\/python \/usr\/bin\/fail2ban-server
+        cmdline = python \/usr\/bin\/fail2ban-server
 
 {%- from 'diamond/macro.jinja2' import fail2ban_count_ip with context %}
 {{ fail2ban_count_ip('ssh') }}

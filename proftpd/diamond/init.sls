@@ -2,6 +2,7 @@
 
 include:
   - diamond
+  - firewall.diamond
   - postgresql.server.diamond
   - rsyslog.diamond
 
@@ -16,3 +17,6 @@ proftpd_diamond_resources:
       - |
         [[proftpd]]
         exe = ^\/usr\/sbin\/proftpd$
+
+{%- from 'diamond/macro.jinja2' import fail2ban_count_ip with context %}
+{{ fail2ban_count_ip('proftpd') }}

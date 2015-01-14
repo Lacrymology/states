@@ -50,10 +50,15 @@ file_roots:
 pillar_roots:
   base:
     - /root/salt/pillar""" > /etc/salt/minion
+
+    salt-call state.sls salt.patch_salt
+    restart salt-minion
     salt-call saltutil.sync_all
 else
     echo """id: $1
 log_level: debug
 master: $2""" > /etc/salt/minion
+    restart salt-minion
+    salt-call state.sls salt.patch_salt
     restart salt-minion
 fi

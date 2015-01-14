@@ -29,6 +29,10 @@ salt-archive-clamav:
   file:
     - absent
 
+/usr/local/bin/salt_archive_set_owner_mode.sh:
+  file:
+    - absent
+
 {{ opts['cachedir'] }}/sync_timestamp.dat:
   file:
     - absent

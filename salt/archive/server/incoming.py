@@ -93,9 +93,10 @@ class Incoming(pysc.Application):
         move_incoming('/var/lib/salt_archive', 'pip')
         move_incoming('/var/lib/salt_archive', 'mirror')
 
-        # restore correct permisions
-        os.chmod('/var/lib/salt_archive/pip', 0750)
-        os.chmod('/var/lib/salt_archive/mirror', 0750)
+        try:
+            subprocess.call('/usr/local/bin/salt_archive_set_owner_mode.sh')
+        except Exception as e:
+            logger.error(e)
 
 if __name__ == '__main__':
     Incoming().run()

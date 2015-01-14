@@ -8,6 +8,7 @@ import datetime
 from email.utils import parsedate
 import logging
 import os
+import subprocess as spr
 import tempfile
 import time
 
@@ -100,6 +101,10 @@ class ClamavMirror(pysc.Application):
     def main(self):
         for prefix in self.config['files']:
             self.mirror_file(prefix + '.cvd')
+        try:
+            spr.call('/usr/local/bin/salt_archive_set_owner_mode.sh')
+        except Exception as e:
+            logger.error(e)
 
 
 if __name__ == "__main__":

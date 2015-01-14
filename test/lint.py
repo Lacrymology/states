@@ -187,11 +187,11 @@ class LintCheckMaintainer(LintCheck):
         exts = self.exts
         paths = self.paths
         if not exts:
-            exts = ['init.sls']
+            exts = ['index.rst']
         notfound = _grep_reverse(paths, 'Maintainer', *exts)
 
         if notfound:
-            self.print_header("init.sls must contain information "
+            self.print_header("index.rst must contain information "
                               "about its maintainers.")
             _print_grep_result(notfound)
             return False

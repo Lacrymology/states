@@ -9,9 +9,9 @@ Elasticsearch
 source, distributed, real-time search and analytics engine. Architected from the
 ground up for use in distributed environments where reliability and scalability
 are must haves, Elasticsearch gives you the ability to move easily beyond simple
-full-text search. Through its robust set of APIs and query DSLs, plus clients
-for the most popular programming languages, Elasticsearch delivers on the near
-limitless promises of search technology.
+full-text search. Through its robust set of :ref:`glossary-api`\s and query
+:ref:`glossary-dsl`\s, plus clients for the most popular programming languages,
+Elasticsearch delivers on the near limitless promises of search technology.
 
 .. Copied from http://www.elasticsearch.org/overview/ on 2015-01-13
 

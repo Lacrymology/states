@@ -182,9 +182,9 @@ Number of failed ``incr`` commands.
 main.limit_maxbytes
 ~~~~~~~~~~~~~~~~~~~
 
-Maximum configured cache size (set on the command line while starting
-the memcached server), look at `main.bytes`_ value for the actual
-usage. Changes this value by adjusting ``memcache:memory`` pillar key.
+Maximum configured cache size (set on the command line while starting the
+memcached server), look at `main.bytes`_ value for the actual usage. Changes
+this value by adjusting ref:`pillar-memcache-memory` pillar key.
 
 main.listen_disabled_num
 ~~~~~~~~~~~~~~~~~~~~~~~~

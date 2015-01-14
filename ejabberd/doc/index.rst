@@ -1,3 +1,7 @@
+..
+   Author: Dang Tung Lam <lam@robotinfra.com>
+   Maintainer: Van Pham Diep <favadi@robotinfra.com>
+
 Ejabberd
 ========
 

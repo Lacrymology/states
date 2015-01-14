@@ -1,3 +1,7 @@
+..
+   Author: Lam Dang Tung <lam@robotinfra.com>
+   Maintainer: Van Pham Diep <favadi@robotinfra.com>
+
 Erlang
 ======
 

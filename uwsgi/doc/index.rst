@@ -1,3 +1,7 @@
+..
+   Author: Bruno Clermont <bruno@robotinfra.com>
+   Maintainer: Van Pham Diep <favadi@robotinfra.com>
+
 uWSGI
 =====
 

@@ -1,3 +1,7 @@
+..
+   Author: Van Diep Pham <favadi@robotinfra.com>
+   Maintainer: Van Diep Pham <favadi@robotinfra.com>
+
 Gitlab
 ======
 

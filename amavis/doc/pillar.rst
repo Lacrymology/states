@@ -72,14 +72,9 @@ amavis:sa_tag2_level
 Emails which have score greater than this value considered "spammy"
 (looks like spam), add spammy tag for it.
 
-Default: value from example configuration file comes with amavisd-new package
-on Ubuntu 12.04 which locates at
-`/usr/share/doc/amavisd-new/examples/amavisd.conf-sample.gz` (``2``).
-According to this example file,
-this value should set to :ref:`pillar-amavis-sa_tag_level` but because that
-pillar key is used in special purpose explained in
-:ref:`pillar-amavis-sa_tag_level` , then this pillar value will act
-as spammy threshold.
+Default: a good value concluded from experiments (``3``).
+As our email used for testing mail stack functionality always got score
+``2.645``, this value must higher than that.
 
 .. _pillar-amavis-sa_kill_level:
 

@@ -19,3 +19,10 @@ extend:
       - name: /etc/salt/minion
       - require:
         - pkg: salt-minion
+
+salt_minion_absent_cache_dir:
+  file:
+    - absent
+    - name: /var/cache/salt/minion
+    - require:
+      - pkg: salt-minion

@@ -27,6 +27,9 @@ clamav_last_update
 
 :doc:`index` database was updated since ``1`` day ago or less.
 
+Optional
+--------
+
 clamav_last_scan
 ~~~~~~~~~~~~~~~~
 

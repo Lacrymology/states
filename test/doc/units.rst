@@ -8,8 +8,8 @@ The testing framework is in ``test/`` sub-folder in common states.
 It contains some states used to prepare the host for tests and the file
 ``integration.py``.
 
-This script uses :doc:`/python/doc/index` Unittest version 2 library to run tests on minion used
-for this specific usage.
+This script uses :doc:`/python/doc/index` Unittest version 2 library to run
+tests on minion used for this specific usage.
 
 .. warning::
 
@@ -90,16 +90,171 @@ by the ``test/nrpe.sls`` state file, which is added automatically to the list or
 executed state file tested.
 
 There is a way to change this behaviour, is to add a ``test.sls`` file to root
-of a state, such as :download:`test.sls </sentry/test.sls>` that add custom
-tests for :doc:`/sentry/doc/index`.
+of a state, such as :download:`test.sls </sentry/test.sls>` that add
+:ref:`custom-tests` for :doc:`/sentry/doc/index`.
 
-Then, in this file you can add custom testing steps you want to execute in your
-state, such as running a script and just after looking at it's output.
+.. _custom-tests:
 
-As the tests are ``.sls`` file, it make a lot easier to write test, the author
-don't need to learn an other language or framework for that.
+Custom Tests
+------------
 
-Just don't forget to define ``- order: last`` in the first of the state that
-will be executed to make sure they all run **after** the states to tests are
-executed. More details
-`on order <http://docs.saltstack.com/ref/states/ordering.html#the-order-option>`_
+Custom tests are regular state files, but use for testing and never execute in
+production environment. They are named ``test.sls`` and place inside of formula
+folder. For example, a formula named ``vim`` should have its custom test file
+named ``vim/test.sls``.
+
+Several formulas can share on custom test file. For example,
+:doc:`/mail/doc/index` server should test all of its components
+(:doc:`/postfix/doc/index`, :doc:`/amavis/doc/index`, :doc:`/dovecot/doc/index`
+...) at once.
+
+.. note::
+
+   If a formula can't be tested, or no need to test, turn off automatically test by
+   placing::
+
+     {#- -*- ci-automatic-discovery: off -*- #}
+
+   to head of its test file.
+
+If a formula contains a custom script, test it with ``cmd.script`` state:
+
+Example::
+
+  test_vim_clean:
+    cmd:
+      - script
+      - source: salt://vim/clean.sh
+
+Includes
+~~~~~~~~
+
+Includes all state files in formula to ``test.sls`` to make sure all states are
+tested.
+
+Example::
+
+  include:
+    - vim
+    - vim.backup
+    - vim.nrpe
+
+Cron Jobs
+~~~~~~~~~
+
+All :doc:`/cron/doc/index` jobs must be tested with ``test_crons()`` macro
+(import from ``diamond/macro.jinja``). List all require states inside macro
+call.
+
+.. warning::
+
+   There is a `known bug <https://github.com/saltstack/salt/issues/10852>`_ with
+   require ``sls``, likes in following example, that salt will report
+   ``requisites not found`` if state file contains no states (only includes).
+
+Example::
+
+  {%- from 'cron/test.jinja2' import test_cron with context -%}
+  {%- call test_cron() %}
+  - sls: vim
+  - sls: vim.backup
+  - sls: vim.nrpe
+  {%- endcall %}
+
+Monitoring
+~~~~~~~~~~
+
+Define a ``monitoring.run_all_checks`` state with argument ``order: last`` to
+make sure they all run **after** the states to tests are executed (more details
+`on order
+<http://docs.saltstack.com/ref/states/ordering.html#the-order-option>`_). Require
+``cmd: test_crons`` if `Cron Jobs`_ test presents in test file.
+
+Some service can require some time after starting until it can work as
+normal. In this case, use ``wait`` argument to make
+``monitoring.run_all_checks`` waits before running monitoring checks.
+
+If a monitoring check can't be tested, exclude it by using ``exclude`` argument
+of ``monitoring.run_all_checks``.
+
+Example::
+
+  test:
+    monitoring:
+      - run_all_checks
+      - wait: 60
+      - order: last
+      - require:
+        - cmd: test_crons
+      - exclude:
+        - check_vim_source_code
+
+
+If a monitoring check returns ``CRITICAL`` when testing, but is expected
+(cluster, master/slave... checks), exclude it from ``monitoring.run_all_checks``
+and use ``monitoring.run_check`` with ``accepted_failure`` argument. The test
+will success if value of ``accepted_failure`` matchs the monitoring check
+output.
+
+Example::
+
+  check_vim_source_code:
+    monitoring:
+      - run_check
+      - accepted_failure: "100 bugs"
+
+Metrics
+~~~~~~~
+
+All :doc:`/diamond/doc/index` metrics should be tested with ``diamond.test``
+state. Macro ``diamond_process_test`` and ``uwsgi_diamond`` from
+``diamond/macro.jinja2`` will make this test simpler.
+
+Example::
+
+  test:
+    diamond:
+      - test
+      - require:
+        - monitoring: test
+      - map:
+        ProcessResources:
+        process.vim.cpu_times.user: True
+
+Backup
+~~~~~~
+
+Make sure that backup state is included in ``test.sls`` file, and there is a
+monitoring check for backup.
+
+Example::
+
+  include:
+    - vim.backup
+
+Data Generator
+~~~~~~~~~~~~~~
+
+Some formula like :doc:`/graylog2/doc/index` may need fake data to complete the
+test, do that by using ``cmd.run`` or ``cmd.script`` if custom script is
+necessary.
+
+
+Quality Assurance
+~~~~~~~~~~~~~~~~~
+
+There is a custom state caleld ``qa.test`` for documentation, coding convention
+testing.
+
+.. note::
+
+   Remember to include ``doc`` state and ``cmd: doc`` as a requirement.
+
+Example::
+
+  test:
+    qa:
+      - test
+      - additional:
+        - vim.backup
+      - pillar_doc: /var/doc/output

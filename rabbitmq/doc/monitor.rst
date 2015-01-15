@@ -43,8 +43,6 @@ rabbitmq_amqp_port_remote
 :doc:`/rabbitmq/doc/index` AMQP Port is open and can be reached from
 outside (Internet).
 
-.. include:: /nginx/doc/monitor.inc
-
 rabbitmq_http
 ~~~~~~~~~~~~~
 
@@ -52,5 +50,7 @@ rabbitmq_http
 
 Optional
 --------
+
+.. include:: /nginx/doc/monitor.inc
 
 .. include:: /nginx/doc/monitor_ssl.inc

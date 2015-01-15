@@ -245,6 +245,7 @@ test:
       - sls: amavis.diamond
       - sls: postfix
       - sls: postfix.diamond
+      - monitoring: test
   qa:
 {%- if check_mail_stack is mapping and check_mail_stack|length > 0 %}
     - test

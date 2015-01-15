@@ -36,10 +36,13 @@ graphite_nginx_http
 
 .. _monitor-graphite_nginx_https:
 
-.. include:: /nginx/doc/monitor_ssl.inc
-
 .. include:: /postgresql/doc/monitor.inc
 
 .. include:: /backup/doc/monitor_postgres_procs.inc
 
 .. include:: /backup/doc/monitor_postgres_age.inc
+
+Optional
+--------
+
+.. include:: /nginx/doc/monitor_ssl.inc

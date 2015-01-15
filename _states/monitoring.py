@@ -6,8 +6,8 @@
 State for managing nrpe config file from a yaml template
 """
 
-__author__ = 'Hung Nguyen Viet'
-__maintainer__ = 'Hung Nguyen Viet'
+__author__ = 'Viet Hung Nguyen'
+__maintainer__ = 'Viet Hung Nguyen'
 __email__ = 'hvn@robotinfra.com'
 
 import contextlib

@@ -8,8 +8,8 @@ NRPE check if pillar for current host can be rendered successfully.
 # Use of this source code is governed by a BSD license that can be
 # found in the doc/license.rst file.
 
-__author__ = 'Hung Nguyen Viet'
-__maintainer__ = 'Hung Nguyen Viet'
+__author__ = 'Viet Hung Nguyen'
+__maintainer__ = 'Viet Hung Nguyen'
 __email__ = 'hvn@robotinfra.com'
 
 import json

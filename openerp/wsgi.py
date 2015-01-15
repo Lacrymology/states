@@ -5,7 +5,7 @@
 # found in the doc/license.rst file.
 #
 #Author: Lam Dang Tung <lam@robotinfra.com>
-#Maintainer: Van Diep Pham <favadi@robotinfra.com>
+#Maintainer: Diep Pham <favadi@robotinfra.com>
 
 import os
 import sys

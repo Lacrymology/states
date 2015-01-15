@@ -3,8 +3,8 @@
 # Use of this source code is governed by a BSD license that can be
 # found in the doc/license.rst file.
 
-# Author: Van Diep Pham <favadi@robotinfra.com>
-# Maintainer: Van Diep Pham <favadi@robotinfra.com>
+# Author: Diep Pham <favadi@robotinfra.com>
+# Maintainer: Diep Pham <favadi@robotinfra.com>
 
 # Nagios plugin for checking if a UDP port is listen on localhost
 #

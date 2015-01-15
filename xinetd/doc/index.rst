@@ -1,6 +1,6 @@
 ..
-   Author: Van Diep Pham <favadi@robotinfra.com>
-   Maintainer: Van Diep Pham <favadi@robotinfra.com>
+   Author: Diep Pham <favadi@robotinfra.com>
+   Maintainer: Diep Pham <favadi@robotinfra.com>
 
 xinetd
 ======

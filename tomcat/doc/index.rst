@@ -32,6 +32,10 @@ Consults `this page for more information <http://tomcat.apache.org/whichversion.
     Support for including external content directly in a web application
     Refactoring (connectors, lifecycle) and lots of internal code clean-up
 
+.. warning::
+
+   Tomcat 6.x and Tomcat 7.x can't both be installed in a machine.
+
 .. toctree::
     :glob:
 

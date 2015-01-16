@@ -6,4 +6,4 @@ Author: Viet Hung Nguyen <hvn@robotinfra.com>
 Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
 {%- from 'nrpe/passive.jinja2' import passive_absent with context %}
-{{ passive_absent('tomcat.7') }}
+{{ passive_absent('tomcat.7', file_name='tomcat') }}

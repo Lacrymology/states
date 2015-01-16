@@ -10,20 +10,13 @@ include:
   - s3cmd.diamond
   - s3cmd.nrpe
 
+{#- can't test diamond metrics, s3cmd is not a daemon #}
 test:
   cmd:
     - run
     - name: s3cmd ls
     - require:
       - pkg: s3cmd
-  diamond:
-    - test
-    - map:
-        ProcessResources:
-          {{ diamond_process_test('s3cmd') }}
-    - require:
-      - sls: s3cmd
-      - sls: s3cmd.diamond
   monitoring:
     - run_all_checks
     - order: last

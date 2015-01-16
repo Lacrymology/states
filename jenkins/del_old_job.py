@@ -73,7 +73,7 @@ def _delete_job(jobname):
     domain = "{{ salt['pillar.get']('jenkins:hostnames')[0] }}"
     scheme = {% if salt['pillar.get']('jenkins:ssl') %}'https'{%- else %}'http'{%- endif %}
 
-    cleaner_user = "{{ pillar.get['jenkins:job_cleaner:username'] }}"
+    cleaner_user = "{{ salt['pillar.get']('jenkins:job_cleaner:username') }}"
     cleaner_token = "{{ salt['pillar.get']('jenkins:job_cleaner:token') }}"
     url = '{0}://{1}:{2}@{3}/job/{4}/doDelete'.format(
             scheme,

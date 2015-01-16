@@ -17,7 +17,7 @@ carbon-cache-{{ instance }}:
     - sig: /usr/local/graphite/bin/python /usr/local/graphite/bin/carbon-cache.py --config=/etc/graphite/carbon.conf --instance={{ instance }} start
 {% endfor %}
 
-/usr/local/graphite/salt-carbon-requirements.txt:
+{{ opts['cachedir'] }}/pip/carbon:
   file:
     - absent
 

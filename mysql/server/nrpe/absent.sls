@@ -8,5 +8,9 @@
   file:
     - absent
 
+{{ opts['cachedir'] }}/pip/mariadb.server.nrpe:
+  file:
+    - absent
+
 {%- from 'nrpe/passive.jinja2' import passive_absent with context %}
 {{ passive_absent('mysql.server') }}

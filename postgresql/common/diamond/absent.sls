@@ -1,8 +1,7 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst
 -*- ci-automatic-discovery: off -*-
 -#}
-
-/usr/local/diamond/salt-postgresql-requirements.txt:
+{{ opts['cachedir'] }}/pip/postgresql.common.diamond:
   file:
     - absent
 

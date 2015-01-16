@@ -3,3 +3,7 @@
 /etc/cron.d/passive-checks-postgresql.server:
   file:
     - absent
+
+{{ opts['cachedir'] }}/pip/postgresql.server.nrpe:
+  file:
+    - absent

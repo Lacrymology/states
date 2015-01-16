@@ -15,3 +15,7 @@ diamond_clean_archive_logs:
   cmd:
     - run
     - name: rm -f {{ opts['cachedir'] }}/diamond.archive.log*
+
+{{ opts['cachedir'] }}/pip/diamond:
+  file:
+    - absent

@@ -8,3 +8,7 @@
     - absent
     - require:
       - service: statsd
+
+{{ opts['cachedir'] }}/pip/statsd:
+  file:
+    - absent

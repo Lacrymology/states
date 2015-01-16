@@ -5,7 +5,6 @@ diamond_rabbitmq:
     - absent
     - name: /etc/diamond/collectors/RabbitMQCollector.conf
 
-diamond-pyrabbit:
+{{ opts['cachedir'] }}/pip/rabbitmq.diamond:
   file:
     - absent
-    - name: /usr/local/diamond/salt-rabbitmq-requirements.txt

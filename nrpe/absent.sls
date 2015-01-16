@@ -78,3 +78,7 @@ nagios-nrpe-server:
     - require:
       - service: nagios-nrpe-server
       - service: nsca_passive
+
+{{ opts['cachedir'] }}/pip/nrpe:
+  file:
+    - absent

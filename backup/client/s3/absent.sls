@@ -16,3 +16,7 @@ s3lite:
 /usr/local/bin/s3lite:
   file:
     - absent
+
+{{ opts['cachedir'] }}/pip/s3lite:
+  file:
+    - absent

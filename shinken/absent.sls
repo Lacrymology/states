@@ -33,3 +33,7 @@ shinken:
 /usr/local/bin/shinken-ctl.sh:
   file:
     - absent
+
+{{ opts['cachedir'] }}/pip/shinken:
+  file:
+    - absent

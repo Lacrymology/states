@@ -5,6 +5,6 @@ mysql_diamond_collector:
     - absent
     - name: /etc/diamond/collectors/MySQLCollector.conf
 
-/usr/local/diamond/salt-mysql-requirements.txt:
+{{ opts['cachedir'] }}/pip/mariadb.server:
   file:
     - absent

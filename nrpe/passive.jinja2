@@ -1,12 +1,15 @@
-{%- macro passive_check(formula, domain_name=None, pillar_prefix=None, check_ssl_score=False) -%}
+{%- macro passive_check(formula, domain_name=None, pillar_prefix=None, check_ssl_score=False, file_name=None) -%}
     {%- if not pillar_prefix -%}
         {%- set pillar_prefix = formula -%}
+    {%- endif %}
+    {%- if not file_name %}
+      {%- set file_name = formula %}
     {%- endif %}
 
 nsca-{{ formula }}:
   file:
     - managed
-    - name: /etc/nagios/nsca.d/{{ formula }}.yml
+    - name: /etc/nagios/nsca.d/{{ file_name }}.yml
     - makedirs: True
     - user: nagios
     - group: nagios
@@ -97,7 +100,11 @@ nsca-{{ formula }}:
       - service: nagios-nrpe-server
 {%- endmacro -%}
 
-{%- macro passive_absent(formula) %}
+{%- macro passive_absent(formula, file_name=None) %}
+    {%- if not file_name %}
+      {%- set file_name = formula %}
+    {%- endif %}
+
 /etc/nagios/nrpe.d/{{ formula }}.cfg:
   file:
     - absent
@@ -105,7 +112,7 @@ nsca-{{ formula }}:
 nsca-{{ formula }}:
   file:
     - absent
-    - name: /etc/nagios/nsca.d/{{ formula }}.yml
+    - name: /etc/nagios/nsca.d/{{ file_name }}.yml
 
 /etc/cron.twice_daily/sslyze_check_{{ formula|replace('.', '-') }}:
   file:

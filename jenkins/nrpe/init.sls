@@ -12,6 +12,9 @@ include:
   - nginx.nrpe
   - pysc.nrpe
   - ssh.client.nrpe
+{%- if salt['pillar.get']('jenkins:job_cleaner') %}
+  - requests.nrpe
+{%- endif %}
 {% if salt['pillar.get']('jenkins:ssl', False) %}
   - ssl.nrpe
 {%- endif %}

@@ -8,11 +8,6 @@ Collects the number of emails for each user, and an aggregate.
 ```
 [MailCollector]
 spool_path = /var/mail/vhosts
-[[prefixes]]
-[[[example_com]]]
-spool_path = example.com
-[[[example_net]]]
-spool_path = example.net
 ```
 
 This will publish metrics with the following pattern:
@@ -58,29 +53,22 @@ class MailCollector(diamond.collector.Collector):
         metrics = {}
         metrics['total'] = 0
 
-        base_path = self.config['spool_path']
-        paths = {
-            '': base_path,
-        }
-        for prefix, conf in self.config['prefixes'].iteritems():
-            # if conf['spool_path'] is an absolute path, os.path.join will
-            # remove base_path automatically
-            path = os.path.join(base_path, conf['spool_path'])
-            paths[prefix] = path
+        base_paths = self.config['spool_path']
+        if isinstance(base_paths, basestring):
+            base_paths = [base_paths]
 
-        for prefix, path in paths.iteritems():
-            if prefix:
-                prefix = "{0}.".format(prefix)
-            else:
-                prefix = ""
+        for base_path in base_paths:
+            for topdir in os.listdir(base_path):
+                dirpath = os.path.join(base_path, topdir)
 
-            for uname in os.listdir(path):
-                fpath = os.path.join(path, uname)
-                if os.path.isfile(fpath):
-                    mbox = mailbox.mbox(fpath)
-                    mname = "{0}{1}.count".format(prefix, uname)
-                    metrics[mname] = len(mbox)
-                    metrics['total'] += metrics[mname]
+                prefix = '{0}.'.format(topdir.replace('.', '_'))
+                for uname in os.listdir(dirpath):
+                    fpath = os.path.join(dirpath, uname)
+                    if os.path.isfile(fpath):
+                        mbox = mailbox.mbox(fpath)
+                        mname = "{0}{1}.count".format(prefix, uname)
+                        metrics[mname] = len(mbox)
+                        metrics['total'] += metrics[mname]
 
         self.publish_metrics(metrics)
 

@@ -3,28 +3,14 @@ Use of this source code is governed by a BSD license that can be found
 in the doc/license.rst file.
 
 -#}
-
 include:
   - diamond
-  - postfix.diamond
-  - rsyslog.diamond
-
-dovecot_diamond_resources:
-  file:
-    - accumulated
-    - name: processes
-    - filename: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - require_in:
-      - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
-    - text:
-      - |
-        [[dovecot]]
-        exe = ^\/usr\/sbin\/dovecot$
+  - postfix
 
 /etc/diamond/collectors/MailCollector.conf:
   file:
     - managed
-    - source: salt://dovecot/diamond/config.jinja2
+    - source: salt://mail/server/diamond/config.jinja2
     - template: jinja
     - user: root
     - group: root
@@ -32,6 +18,7 @@ dovecot_diamond_resources:
     - require:
       - file: /etc/diamond/collectors
       - file: /usr/local/diamond/share/diamond/collectors/mail/mail.py
+      - service: postfix
     - watch_in:
       - service: diamond
 
@@ -50,6 +37,6 @@ dovecot_diamond_resources:
     - user: root
     - group: root
     - mode: 440
-    - source: salt://dovecot/diamond/collector.py
+    - source: salt://mail/server/diamond/collector.py
     - require:
       - file: /usr/local/diamond/share/diamond/collectors/mail

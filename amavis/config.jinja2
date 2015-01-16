@@ -28,7 +28,7 @@ $sa_spam_subject_tag = '';
 {#- add SA tag to all emails #}
 $sa_tag_level_deflt = {{ salt['pillar.get']('amavis:sa_tag_level', -999) }};
 {#- add tags for spammy emails #}
-$sa_tag2_level_deflt = {{ salt['pillar.get']('amavis:sa_tag2_level', 2) }};
+$sa_tag2_level_deflt = {{ salt['pillar.get']('amavis:sa_tag2_level', 3) }};
 {#- real spam score #}
 $sa_kill_level_deflt = {{ salt['pillar.get']('amavis:sa_kill_level', 6.31) }};
 {#- when spam score exceeds this, do not send delivery status notification msg #}

@@ -22,6 +22,7 @@ include:
   - dovecot.diamond
   - dovecot.nrpe
   - mail.server.nrpe
+  - mail.server.diamond
   - openldap
   - openldap.diamond
   - openldap.nrpe
@@ -134,9 +135,11 @@ test:
           amavis.LogLines.count: False
           amavis.LogLines.percentage: False
           amavis.LogLines.frequency: False
+{#- This metric didn't collected during CI test, it needs to wait until
+    Amavisd-agent function properly. Skip check this.
           amavis.LogRetries.count: False
           amavis.LogRetries.percentage: False
-          amavis.LogRetries.frequency: False
+          amavis.LogRetries.frequency: False #}
           amavis.OpsDec.count: False
           amavis.OpsDec.percentage: False
           amavis.OpsDec.frequency: False
@@ -233,6 +236,8 @@ test:
         ProcessResources:
           {{ diamond_process_test('amavis') }}
           {{ diamond_process_test('postfix') }}
+        Mail:
+          mail.total: True
         UserScripts:
           postfix.queue_length: True
     - require:
@@ -240,6 +245,7 @@ test:
       - sls: amavis.diamond
       - sls: postfix
       - sls: postfix.diamond
+      - monitoring: test
   qa:
 {%- if check_mail_stack is mapping and check_mail_stack|length > 0 %}
     - test

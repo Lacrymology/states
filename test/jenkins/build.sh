@@ -1,6 +1,5 @@
 #!/bin/bash
 # {{ salt['pillar.get']('message_do_not_modify') }}
-set -e
 
 # Use of this source code is governed by a BSD license that can be
 # found in the doc/license.rst file.
@@ -9,8 +8,41 @@ set -e
 # Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 #             Bruno Clermont <bruno@robotinfra.com>
 # NOTICE: this script executed as jenkins user
+# NOTICE: this script use special bash trap to handle error, do not set -e
 
 set -x
+
+function collect_logs {
+    for prepare_log in $PREPARE_STDOUT_LOG $PREPARE_STDERR_LOG; do
+        sudo salt -t 30 "$BUILD_IDENTITY" --output json cmd.run "xz -c $prepare_log > /tmp/$BUILD_IDENTITY-$(basename $prepare_log).log.xz"
+    done
+
+    for ltype in stdout stderr; do
+        sudo salt -t 30 "$BUILD_IDENTITY" --output json cmd.run "xz -c /root/salt/$ltype.log > /tmp/$BUILD_IDENTITY-$ltype.log.xz"
+    done
+
+    sudo salt -t 30 "$BUILD_IDENTITY" --output json cmd.run "tar -C /var/log -cJf /tmp/$BUILD_IDENTITY-upstart.log.tar.xz upstart"
+
+    sudo salt -t 30 "$BUILD_IDENTITY" --output json cmd.run "grep COUNTER: /root/salt/stdout.log"
+    sudo salt -t 60 "$BUILD_IDENTITY" --output json cmd.run_all "salt-call -l info -c $CUSTOM_CONFIG_DIR state.sls test.jenkins.result"
+
+    cp /home/ci-agent/$BUILD_IDENTITY-result.xml $WORKSPACE/result.xml
+
+    xz -d -c /home/ci-agent/$BUILD_IDENTITY-stderr.log.xz
+    for f in /home/ci-agent/$BUILD_IDENTITY-*.xz; do
+      cp $f $WORKSPACE/`basename $f | sed "s/$BUILD_IDENTITY/$JOB_NAME/"`
+    done
+    mv /srv/salt/jenkins_archives/$BUILD_IDENTITY.tar.gz $WORKSPACE/bootstrap-archive.tar.gz
+}
+
+function collect_logs_then_fail {
+    collect_logs
+    exit 1
+}
+
+trap collect_logs_then_fail ERR
+trap collect_logs EXIT
+
 start_time=$(date +%s)
 rm -f $WORKSPACE/bootstrap-archive.tar.gz $WORKSPACE/stderr.log.xz $WORKSPACE/stdout.log.xz $WORKSPACE/result.xml
 rm -rf $WORKSPACE/salt-common-doc
@@ -88,23 +120,4 @@ echo '------------ Running CI test  ------------'
 sudo salt -t 86400 "$BUILD_IDENTITY" cmd.run "$CUSTOM_CONFIG_DIR/jenkins/run.py $*"
 finish_run_test_time=$(date +%s)
 echo "TIME-METER: Run integration.py took: $((finish_run_test_time - start_run_test_time)) seconds"
-
-for ltype in stdout stderr; do
-    sudo salt -t 30 "$BUILD_IDENTITY" --output json cmd.run "xz -c /root/salt/$ltype.prepare > /tmp/$BUILD_IDENTITY-$ltype.prepare.log.xz"
-    sudo salt -t 30 "$BUILD_IDENTITY" --output json cmd.run "xz -c /root/salt/$ltype.log > /tmp/$BUILD_IDENTITY-$ltype.log.xz"
-done
-
-sudo salt -t 30 "$BUILD_IDENTITY" --output json cmd.run "tar -C /var/log -cJf /tmp/$BUILD_IDENTITY-upstart.log.tar.xz upstart"
-
-sudo salt -t 30 "$BUILD_IDENTITY" --output json cmd.run "grep COUNTER: /root/salt/stdout.log"
-sudo salt -t 60 "$BUILD_IDENTITY" --output json cmd.run_all "salt-call -l info -c $CUSTOM_CONFIG_DIR state.sls test.jenkins.result"
-
-cp /home/ci-agent/$BUILD_IDENTITY-result.xml $WORKSPACE/result.xml
-# Got the build result, all steps from here should not fail the build if they failed.
-set +e
-xz -d -c /home/ci-agent/$BUILD_IDENTITY-stderr.log.xz
-for f in /home/ci-agent/$BUILD_IDENTITY-*.xz; do
-  cp $f $WORKSPACE/`basename $f | sed "s/$BUILD_IDENTITY/$JOB_NAME/"`
-done
-mv /srv/salt/jenkins_archives/$BUILD_IDENTITY.tar.gz $WORKSPACE/bootstrap-archive.tar.gz
 echo "TIME-METER: Total time: $(($(date +%s) - start_time)) seconds"

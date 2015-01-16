@@ -114,6 +114,7 @@ jenkins_old_version:
 /etc/cron.daily/jenkins_delete_old_jobs:
   file:
     - managed
+    - template: jinja
     - source: salt://jenkins/del_old_job.py
     - mode: 500
     - require:

@@ -6,6 +6,7 @@ Author: Dang Tung Lam <lam@robotinfra.com>
 Maintainer: Van Pham Diep <favadi@robotinfra.com>
 -#}
 # {{ salt['pillar.get']('message_do_not_modify') }}
+{%- set hostnames = salt['pillar.get']('etherpad:hostnames') %}
 upstream etherpad {
     server localhost:9001;
 }
@@ -16,7 +17,6 @@ server {
 {%- if ssl %}
   {%- if salt['pillar.get']('etherpad:ssl_redirect', False) %}
     {# if https, redirect http port 80 to https port 443 #}
-{%- set hostnames = salt['pillar.get']('etherpad:hostnames') %}
     server_name {% for hostname in hostnames %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
     return 301 https://{{ hostnames[0] }}$request_uri;
 }

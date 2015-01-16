@@ -8,7 +8,7 @@ Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
 {%- from 'macros.jinja2' import manage_pid with context %}
 {%- set ssl = salt['pillar.get']('jenkins:ssl', False) %}
-{%- set job_cleaner = salt['pillar.get']('jenkins:job_cleaner') %}
+{%- set job_cleaner = salt['pillar.get']('jenkins:job_cleaner', False) %}
 
 include:
   - apt

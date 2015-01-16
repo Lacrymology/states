@@ -8,7 +8,7 @@
 This script import test data output uploaded by cp.push to jenkins workspace.
 """
 
-__author__ = 'Hung Nguyen Viet'
+__author__ = 'Viet Hung Nguyen'
 __maintainer__ = 'Bruno Clermont, Hung Nguyen viet'
 __email__ = 'bruno@robotinfra.com, hvn@robotinfra.com'
 

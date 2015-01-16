@@ -1,3 +1,7 @@
+..
+   Author: Viet Hung Nguyen <hvn@robotinfra.com>
+   Maintainer: Dang Tung Lam <lam@robotinfra.com>
+
 PHP
 ===
 

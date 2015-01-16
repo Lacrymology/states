@@ -2,8 +2,6 @@
 Use of this source code is governed by a BSD license that can be found
 in the doc/license.rst file.
 
-Author: Bruno Clermont <bruno@robotinfra.com>
-Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
 {%- set python_version = '%d.%d' % (grains['pythonversion'][0], grains['pythonversion'][1]) %}
 {%- set ssl = salt['pillar.get']('graphite:ssl', False) %}

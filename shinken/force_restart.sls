@@ -2,8 +2,6 @@
 Use of this source code is governed by a BSD license that can be found
 in the doc/license.rst file.
 
-Author: Bruno Clermont <bruno@robotinfra.com>
-Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 
 Sometimes some processes get crazy (most of the time, the reactionner)
 and it need to be manually kill. This state force a restart.

@@ -7,8 +7,8 @@
 Run a single Passive Check and send result to NSCA server
 """
 
-__author__ = 'Hung Nguyen Viet'
-__maintainer__ = 'Hung Nguyen Viet'
+__author__ = 'Viet Hung Nguyen'
+__maintainer__ = 'Viet Hung Nguyen'
 __email__ = 'hvn@robotinfra.com'
 
 import glob

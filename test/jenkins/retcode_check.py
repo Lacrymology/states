@@ -12,7 +12,7 @@ This is only used to make a jenkins job fail if something bad happened
 during execution.
 """
 
-__author__ = 'Hung Nguyen Viet'
+__author__ = 'Viet Hung Nguyen'
 __maintainer__ = 'Bruno Clermont, Hung Nguyen viet'
 __email__ = 'bruno@robotinfra.com, hvn@robotinfra.com'
 

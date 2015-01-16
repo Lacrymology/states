@@ -4,8 +4,6 @@
 Use of this source code is governed by a BSD license that can be found
 in the doc/license.rst file.
 
-Author: Bruno Clermont <bruno@robotinfra.com>
-Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -->
 <testsuite errors="1" failures="0" name="States-salt" tests="1" time="0.0">
   <testcase classname="States" name="run" time="0.0">

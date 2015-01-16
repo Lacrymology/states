@@ -4,8 +4,6 @@
 Use of this source code is governed by a BSD license that can be found
 in the doc/license.rst file.
 
-Author: Bruno Clermont <bruno@robotinfra.com>
-Maintainer: Maintainer: Van Pham Diep <favadi@robotinfra.com>
 
 Execute this state only when mongodb or the server crashed and it requires
 a repair.

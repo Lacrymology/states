@@ -1,3 +1,7 @@
+..
+   Author: Viet Hung Nguyen <hvn@robotinfra.com>
+   Maintainer: Quan Tong Anh <quanta@robotinfra.com>
+
 MariaDB
 =======
 

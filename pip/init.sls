@@ -2,8 +2,6 @@
 Use of this source code is governed by a BSD license that can be found
 in the doc/license.rst file.
 
-Author: Viet Hung Nguyen <hvn@robotinfra.com>
-Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 
 Install python-pip, a cache for downloaded archive and a config file
 to force root user to use the cache folder.

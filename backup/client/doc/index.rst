@@ -1,3 +1,7 @@
+..
+   Author: Luan Vo Ngoc <luan@robotinfra.com>
+   Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
+
 Backup Client
 =============
 

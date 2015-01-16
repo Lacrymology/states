@@ -2,8 +2,6 @@
 Use of this source code is governed by a BSD license that can be found
 in the doc/license.rst file.
 
-Author: Bruno Clermont <bruno@robotinfra.com>
-Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 -#}
 {%- set prefix = '/etc/init.d/' %}
 {%- set init_files = salt['file.find'](prefix, name='carbon-cache-*', type='f') %}

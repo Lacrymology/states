@@ -1,3 +1,7 @@
+..
+   Author: Dang Tung Lam <lam@robotinfra.com>
+   Maintainer: Diep Pham <favadi@robotinfra.com>
+
 Etherpad
 ========
 

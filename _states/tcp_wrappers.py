@@ -9,7 +9,7 @@ manage part of content in hosts.allow and hosts.deny
 """
 
 __author__ = 'Bruno Clermont'
-__maintainer__ = 'Hung Nguyen Viet'
+__maintainer__ = 'Viet Hung Nguyen'
 __email__ = 'hvn@robotinfra.com'
 
 import logging

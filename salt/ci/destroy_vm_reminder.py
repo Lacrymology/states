@@ -54,7 +54,7 @@ destroy_vm_reminder:
 """
 
 __author__ = 'Tomas Neme'
-__maintainer__ = 'Bruno Clermont, Hung Nguyen Viet, Tomas Neme'
+__maintainer__ = 'Bruno Clermont, Viet Hung Nguyen, Tomas Neme'
 __email__ = 'bruno@robotinfra.com, hvn@robotinfra.com, tomas@robotinfra.com'
 
 import re

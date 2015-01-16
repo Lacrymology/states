@@ -6,6 +6,7 @@ in the doc/license.rst file.
 -#}
 {%- from 'macros.jinja2' import manage_pid with context %}
 {%- set ssl = salt['pillar.get']('jenkins:ssl', False) %}
+{%- set job_cleaner = salt['pillar.get']('jenkins:job_cleaner', False) %}
 
 include:
   - apt
@@ -15,6 +16,9 @@ include:
   - nginx
   - pysc
   - ssh.client
+{%- if job_cleaner %}
+  - requests
+{%- endif %}
 {% if ssl %}
   - ssl
 {% endif %}
@@ -106,6 +110,7 @@ jenkins_old_version:
       - pkg: cron
       - module: pysc
 
+{%- if job_cleaner %}
 /etc/cron.daily/jenkins_delete_old_jobs:
   file:
     - managed
@@ -114,6 +119,12 @@ jenkins_old_version:
     - require:
       - service: jenkins
       - pkg: cron
+      - module: requests
+{%- else %}
+/etc/cron.daily/jenkins_delete_old_jobs:
+  file:
+    - absent
+{%- endif %}
 
 {% if ssl %}
 extend:

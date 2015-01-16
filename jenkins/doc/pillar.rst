@@ -30,6 +30,22 @@ Example::
   jenkins:
     ssl: example_com
     ssl_redirect: True
+    job_cleaner:
+      username: cleaner
+      token: JENKINS_APITOKEN_FOR_CLEANER
+
+.. _pillar-jenkins-job_cleaner:
+
+jenkins:job_cleaner
+~~~~~~~~~~~~~~~~~~~
+
+:doc:`index` user used for deleting old disabled jobs.
+
+.. note::
+
+  this user must have enough permission to delete job.
+
+Default: does not use ``False``.
 
 .. _pillar-jenkins-ssl:
 
@@ -44,3 +60,30 @@ jenkins:ssl_redirect
 ~~~~~~~~~~~~~~~~~~~~
 
 .. include:: /nginx/doc/ssl_redirect.inc
+
+Conditional
+-----------
+
+.. _pillar-jenkins-job_cleaner-days_to_del:
+
+jenkins:job_cleaner:days_to_del
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Days for job to be considered as old and delete by jobs cleanup script.
+
+Default: ``15`` days.
+
+.. _pillar-jenkins-job_cleaner-username:
+
+jenkins:job_cleaner:username
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+:doc:`index` user's username
+
+.. _pillar-jenkins-job_cleaner-token:
+
+jenkins:job_cleaner:token
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+:doc:`index` user's API token. Visit ``/user/USERNAME/configure`` to
+get this value.

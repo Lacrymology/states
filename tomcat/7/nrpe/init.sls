@@ -9,4 +9,4 @@ include:
   - nrpe
   - rsyslog.nrpe
 
-{{ passive_check('tomcat.7') }}
+{{ passive_check('tomcat.7', file_name='tomcat') }}

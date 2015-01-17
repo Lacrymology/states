@@ -10,6 +10,7 @@ include:
   - ssmtp.diamond
   - ssmtp.nrpe
 
+{#- can't test diamond metrics, ssmtp is not a diamond #}
 test:
   monitoring:
     - run_all_checks
@@ -20,14 +21,6 @@ test:
     - require:
       - file: /etc/ssmtp/ssmtp.conf
       - file: /etc/ssmtp/revaliases
-  diamond:
-    - test
-    - map:
-        ProcessResources:
-          {{ diamond_process_test('ssmtp') }}
-    - require:
-      - sls: ssmtp
-      - sls: ssmtp.diamond
   qa:
     - test_pillar
     - name: ssmtp

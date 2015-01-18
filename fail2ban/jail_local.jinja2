@@ -2,6 +2,14 @@
 
 # {{ salt['pillar.get']('message_do_not_modify') }}
 
+{%- set action = salt['pillar.get']('fail2ban:action', 'action_') %}
+{%- if action != 'action_' %}
+action = %({{ action }})s
+destemail = {{ salt['pillar.get']('fail2ban:destemail') }}
+sendername = {{ salt['pillar.get']('fail2ban:sendername') }}
+mta = {{ salt['pillar.get']('fail2ban:mta') }}
+{%- endif %}
+
 [ssh]
 
 enabled  = true

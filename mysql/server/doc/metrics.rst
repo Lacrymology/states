@@ -77,3 +77,7 @@ Uptime
 ~~~~~~
 
 The derivative of the number of seconds that the server has been up.
+
+.. |jail| replace:: mysqld-auth
+
+.. include:: /fail2ban/doc/metrics.inc

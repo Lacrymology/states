@@ -2,15 +2,14 @@
 
 [DEFAULT]
 
-ignoreip = 127.0.0.1/8
+ignoreip = {% for ip in salt['pillar.get']('fail2ban:whitelist', ['127.0.0.1/8']) %}{{ ip }}{% if not loop.last %} {% endif %}{% endfor %}
 
 bantime  = {{ salt['pillar.get']('fail2ban:bantime', 600) }}
 
 findtime = {{ salt['pillar.get']('fail2ban:findtime', 600) }}
 maxretry = {{ salt['pillar.get']('fail2ban:maxretry', 3) }}
 
-{%- set backend = salt['pillar.get']('fail2ban:backend', False) %}
-backend = {% if backend %}{{ backend }}{% else %}auto{% endif %}
+backend = polling
 
 {%- set usedns = salt['pillar.get']('fail2ban:usedns', False) %}
 usedns = {% if usedns %}{{ usedns }}{% else %}warn{% endif %}

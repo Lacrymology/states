@@ -12,27 +12,33 @@ Optional
 Example::
 
   fail2ban:
-    loglevel: 3
+    whitelist:
+      - 127.0.0.1/8
+      - 192.168.1.1
+    debug: 3
     bantime: 600
     findtime: 600
     maxretry: 3
-    backend: auto
     usedns: warn
-    destemail: root@localhost
-    sendername: Fail2Ban
+    action: action_mw
     banaction: iptables-multiport
 
-.. _pillar-fail2ban-loglevel:
+.. _pillar-fail2ban-whitelist:
 
-fail2ban:loglevel
-~~~~~~~~~~~~~~~~~
+fail2ban:whitelist
+~~~~~~~~~~~~~~~~~~
 
-Set the log level output.
+An IP address, a CIDR mask or a hostname. Fail2ban will not ban a host which
+matches an address in this list.
 
-* 1 = ERROR
-* 2 = WARN
-* 3 = INFO
-* 4 = DEBUG
+Default: Loopback addresses (``['127.0.0.1/8']``).
+
+.. _pillar-fail2ban-debug:
+
+fail2ban:debug
+~~~~~~~~~~~~~~
+
+If ``True``, log at level ``4``. If not, log at level ``3``.
 
 Default: Log at INFO level (``3``).
 
@@ -41,7 +47,7 @@ Default: Log at INFO level (``3``).
 fail2ban:bantime
 ~~~~~~~~~~~~~~~~
 
-The number of seconds that a host is banned.
+The number of seconds that a host is banned (after that, it will be un-banned).
 
 Default: ``600`` seconds.
 
@@ -60,32 +66,10 @@ Default: ``3`` times.
 fail2ban:findtime
 ~~~~~~~~~~~~~~~~~
 
-A host is banned if it has generated :ref:`pillar-fail2ban-maxretry` during the
-given time.
+A host is banned if it has generated :ref:`pillar-fail2ban-maxretry` attempts
+during the given time.
 
 Default: ``600`` seconds.
-
-.. _pillar-fail2ban-backend:
-
-fail2ban:backend
-~~~~~~~~~~~~~~~~
-
-The backend used to get files modification.
-Available options are "pyinotify", "gamin", "polling" and "auto".
-This option can be overridden in each jail as well.
-
-* pyinotify: requires pyinotify (a file alteration monitor) to be installed.
-  If pyinotify is not installed, Fail2ban will use auto.
-
-* gamin: requires Gamin (a file alteration monitor) to be installed.
-  If Gamin is not installed, Fail2ban will use auto.
-
-* polling: uses a polling algorithm which does not require external libraries.
-
-* auto: will try to use the following backends, in order: pyinotify, gamin,
-  polling.
-
-Default: ``False`` - use auto backedn.
 
 .. _pillar-fail2ban-usedns:
 
@@ -102,26 +86,25 @@ Whether if jails should trust hostnames in logs.
 * no: if a hostname is encountered, will not be used for banning, but it will
   be logged as info.
 
-Default: ``False`` - use warn.
+Default: ``warn``.
 
-.. _pillar-fail2ban-destemail:
+.. _pillar-fail2ban-action:
 
-fail2ban:destemail
-~~~~~~~~~~~~~~~~~~
+fail2ban:action
+~~~~~~~~~~~~~~~
 
-Destination email address used solely for the interpolations in
-jail.{conf,local} configuration files.
+The action that :doc:`index` takes when it wants to institute a ban.
 
-Default: ``False`` - use `root@localhost`.
+Available values:
 
-.. _pillar-fail2ban-sendername:
+* ``action_``: ban only
+* ``action_mw``: ban and send an e-mail with whois report to the
+  :ref:`pillar-fail2ban-destemail`
+* ``action_mwl``: ban and send an e-mail with whois report and relevant log
+  lines to the :ref:`pillar-fail2ban-destemail`
 
-fail2ban:sendername
-~~~~~~~~~~~~~~~~~~~
-
-Name of the sender for mta actions.
-
-Default: ``False`` - use `Fail2Ban`.
+Default: ``action_`` (configure the firewall to reject traffic from the
+offending host until the ban time elapses).
 
 .. _pillar-fail2ban-banaction:
 
@@ -133,4 +116,44 @@ shorewall, etc)
 
 It is used to define ``action_*`` variables.
 
-Default: ``False`` - use `iptables-multiport`.
+Default: ``iptables-multiport``.
+
+Conditional
+-----------
+
+Example::
+
+  fail2ban:
+    destemail: team@example.com
+    sendername: Fail2Ban
+    mta: sendmail
+
+Only defined if the value of :ref:`pillar-fail2ban-action` is different than
+`action_`.
+
+.. _pillar-fail2ban-destemail:
+
+fail2ban:destemail
+~~~~~~~~~~~~~~~~~~
+
+Destination email address used solely for the interpolations in
+jail.{conf,local} configuration files.
+
+.. _pillar-fail2ban-sendername:
+
+fail2ban:sendername
+~~~~~~~~~~~~~~~~~~~
+
+Name of the sender for `mta
+<http://en.wikipedia.org/wiki/Message_transfer_agent>`_ actions.
+
+Default: ``Fail2Ban``.
+
+.. _pillar-fail2ban-mta:
+
+fail2ban:mta
+~~~~~~~~~~~~
+
+Which MTA will be used for the mailling.
+
+Default: ``sendmail``.

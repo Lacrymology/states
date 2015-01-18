@@ -11,19 +11,15 @@ maxretry = {{ salt['pillar.get']('fail2ban:maxretry', 3) }}
 
 backend = polling
 
-{%- set usedns = salt['pillar.get']('fail2ban:usedns', False) %}
-usedns = {% if usedns %}{{ usedns }}{% else %}warn{% endif %}
+usedns = {{ salt['pillar.get']('fail2ban:usedns', 'warn') }}
 
-{%- set destemail = salt['pillar.get']('fail2ban:destemail', False) %}
-destemail = {% if destemail %}{{ destemail }}{% else %}root@localhost{% endif %}
+destemail = {{ salt['pillar.get']('fail2ban:destemail', 'root@localhost') }}
 
-{%- set sendername = salt['pillar.get']('fail2ban:sendername', False) %}
-sendername = {% if sendername %}{{ sendername }}{% else %}Fail2Ban{% endif %}
+sendername = {{ salt['pillar.get']('fail2ban:sendername', 'Fail2Ban') }}
 
-{%- set banaction = salt['pillar.get']('fail2ban:banaction', False) %}
-banaction = {% if banaction %}{{ banaction }}{% else %}iptables-multiport{% endif %}
+banaction = {{ salt['pillar.get']('fail2ban:banaction', 'iptables-multiport') }}
 
-mta = sendmail
+mta = {{ salt['pillar.get']('fail2ban:mta', 'sendmail') }}
 
 protocol = tcp
 

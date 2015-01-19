@@ -13,6 +13,16 @@ rsync:
     - installed
     - require:
       - cmd: apt_sources
+  service:
+    - dead
+    - enable: False
+    - require:
+      - pkg: rsync
+  file:
+    - absent
+    - name: /etc/init.d/rsync
+    - require:
+      - service: rsync
 
 /etc/xinetd.d/rsync:
   file:
@@ -26,6 +36,7 @@ rsync:
         per_source: {{ salt['pillar.get']('rsync:limit_per_ip', '"UNLIMITED"') }}
     - require:
       - file: /etc/xinetd.d
+      - file: rsync
     - watch_in:
       - service: xinetd
 
@@ -39,5 +50,6 @@ rsync:
     - source: salt://rsync/config.jinja2
     - require:
       - pkg: rsync
+      - file: rsync
     - watch_in:
       - service: xinetd

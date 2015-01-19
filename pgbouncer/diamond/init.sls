@@ -20,4 +20,4 @@ pgbouncer_diamond_resources:
     - text:
       - |
         [[pgbouncer]]
-        exe = \/usr\/sbin\/pgbouncer -R -d \/etc\/pgbouncer\/pgbouncer.ini
+        exe = ^\/usr\/sbin\/pgbouncer

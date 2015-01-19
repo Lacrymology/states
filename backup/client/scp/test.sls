@@ -29,19 +29,12 @@ test:
   monitoring:
     - run_all_checks
     - order: last
-  ssh_known_hosts:
-    - present
-    - name: localhost
-    - user: root
-    - require:
-      - pkg: openssh-client
   cmd:
     - run
     - name: /usr/local/bin/backup-store `/usr/local/bin/create_dumb`
     - require:
       - file: /usr/local/bin/backup-store
       - file: /usr/local/bin/create_dumb
-      - ssh_known_hosts: test
     {%- if address in grains['ipv4'] or
            address in ('localhost', grains['host']) %}
       - cmd: ssh_add_key

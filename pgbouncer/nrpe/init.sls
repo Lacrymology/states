@@ -9,7 +9,6 @@ Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 include:
   - apt.nrpe
   - nrpe
-  - pgbouncer.user
   - postgresql.nrpe
   - rsyslog.nrpe
 

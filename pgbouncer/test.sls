@@ -10,6 +10,27 @@ include:
   - pgbouncer
   - pgbouncer.diamond
   - pgbouncer.nrpe
+  - postgresql.server
+
+{%- for db, values in salt['pillar.get']('pgbouncer:databases').iteritems() %}
+pgbouncer_{{ db }}:
+  postgres_user:
+    - present
+    - name: {{ values['username'] }}
+    - password: {{ values['password'] }}
+    - superuser: True
+    - runas: postgres
+    - require:
+      - pkg: pgbouncer
+      - service: postgresql
+  postgres_database:
+    - present
+    - name: {{ db }}
+    - owner: {{ values['username'] }}
+    - runas: postgres
+    - require:
+      - postgres_user: pgbouncer_{{ db }}
+{%- endfor %}
 
 test:
   monitoring:

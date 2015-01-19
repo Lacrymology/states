@@ -10,6 +10,7 @@ include:
   - apt.nrpe
   - nrpe
   - pgbouncer.user
+  - postgresql.nrpe
   - rsyslog.nrpe
 
 {{ passive_check('pgbouncer') }}

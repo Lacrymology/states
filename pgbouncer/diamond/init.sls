@@ -9,6 +9,7 @@ Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
 include:
   - diamond
+  - rsyslog.diamond
 
 pgbouncer_diamond_resources:
   file:

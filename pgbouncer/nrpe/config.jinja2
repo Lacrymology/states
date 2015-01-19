@@ -8,18 +8,20 @@ Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 {%- set timeout = 30 -%}
 pgbouncer_procs:
   description: PgBouncer Daemon
-  command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -a '/usr/sbin/pgbouncer -R -d /etc/pgbouncer/pgbouncer.ini' -u postgres"
+  command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -a '-d /etc/pgbouncer/pgbouncer.ini' -u postgres"
 
 pgbouncer_port:
   description: PgBouncer Port
-  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 6432 -t {{ timeout }}
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p {{ salt['pillar.get']('pgbouncer:listen_port', 6432) }} -t {{ timeout }}
   timeout: {{ timeout }}
   dependencies:
     - pgbouncer_procs
 
+{%- for dbname, values in salt['pillar.get']('pgbouncer:databases').iteritems() %}
 {{ dbname }}_pgbouncer:
-  description: {{ dbname|capitalize }} PgBouncer Database
-  command: /usr/lib/nagios/plugins/check_pgsql -H 127.0.0.1 -P 6432 -d {{ dbname }} -l {{ username|default(dbname, boolean=True) }} -p {{ password }} --timeout={{ timeout }}
+  description: {{ dbname|capitalize }} PostgreSQL Database (Connect Via PgBouncer)
+  command: /usr/lib/nagios/plugins/check_pgsql -H 127.0.0.1 -P {{ values['port']|default(6432) }} -d {{ dbname }} -l {{ values['username']|default(dbname, boolean=True) }} -p {{ values['password'] }} --timeout={{ timeout }}
   timeout: {{ timeout }}
   dependencies:
     - pgbouncer_procs
+{%- endfor %}

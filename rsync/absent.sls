@@ -3,22 +3,15 @@ Use of this source code is governed by a BSD license that can be found
 in the doc/license.rst file.
 
 -#}
-{%- from "upstart/absent.sls" import upstart_absent with context -%}
-{{ upstart_absent('rsync') }}
-
-extend:
-  rsync:
-    pkg:
-      - purged
-      - require:
-        - service: rsync
+rsync:
+  pkg:
+    - purged
 
 /etc/rsyncd.conf:
   file:
     - absent
     - require:
       - pkg: rsync
-      - service: rsync
 
 /etc/xinetd.d/rsync:
   file:

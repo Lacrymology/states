@@ -8,7 +8,7 @@ Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 {%- from 'macros.jinja2' import manage_pid with context %}
 include:
   - apt
-  - postgresql.server
+  - postgresql
   - rsyslog
 
 pgbouncer:
@@ -18,7 +18,7 @@ pgbouncer:
       - cmd: apt_sources
   user:
     - present
-    - name: pgbouncer
+    - name: postgres
     - shell: /usr/sbin/nologin
     - require:
       - pkg: pgbouncer
@@ -36,8 +36,6 @@ pgbouncer:
   service:
     - running
     - enable: True
-    - order: 50
-    - name: pgbouncer
     - require:
       - service: rsyslog
     - watch:
@@ -45,6 +43,8 @@ pgbouncer:
       - pkg: pgbouncer
       - file: pgbouncer
       - file: /etc/pgbouncer/userlist.txt
+      - file: /etc/default/pgbouncer
+      - file: /etc/init.d/pgbouncer
 
 {%- call manage_pid('/var/run/postgresql/pgbouncer.pid', 'postgres', 'postgres', 'pgbouncer') %}
 - pkg: pgbouncer
@@ -70,5 +70,13 @@ pgbouncer:
     - user: root
     - group: root
     - mode: 440
+    - require:
+      - pkg: pgbouncer
+
+/etc/init.d/pgbouncer:
+  file:
+    - replace
+    - pattern: '- $RUNASUSER'
+    - repl: '- $RUNASUSER -s /bin/sh'
     - require:
       - pkg: pgbouncer

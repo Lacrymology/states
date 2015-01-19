@@ -17,6 +17,7 @@ import pysc
 
 
 logger = logging.getLogger(__name__)
+CHUNK_SIZE = 1024
 
 
 def save(local, stream, last_modified):
@@ -64,15 +65,15 @@ class ClamavMirror(pysc.Application):
             stat = os.stat(local)
         except OSError:
             logger.info("File %s don't already exist, download.", filename)
-            save(local, req.iter_content(), source_timestamp)
+            save(local, req.iter_content(CHUNK_SIZE), source_timestamp)
         else:
             local_timestamp = datetime.datetime.fromtimestamp(
                 stat.st_mtime)
             if local_timestamp < source_timestamp:
                 delta = source_timestamp - local_timestamp
-                logger.info("Local file %s is outdated of %d seconds, download",
+                logger.info("Local file %s is outdated %d seconds, download",
                             local, delta.total_seconds())
-                save(local, req.iter_content(), source_timestamp)
+                save(local, req.iter_content(CHUNK_SIZE), source_timestamp)
             elif local_timestamp > source_timestamp:
                 logger.warning("URL '%s' timestamp is '%s' and local '%s' "
                                "timestamp is '%s': mirror is outdated, skip.",
@@ -83,7 +84,7 @@ class ClamavMirror(pysc.Application):
                     remote_size = int(req.headers[http_header_size])
                 except KeyError:
                     logger.info("URL %s didn't returned a %s header, skip"
-                                   "size validation.", url, http_header_size)
+                                "size validation.", url, http_header_size)
                 else:
                     if stat.st_size == remote_size:
                         logger.info("Local and remote file have same size %d, "
@@ -93,7 +94,8 @@ class ClamavMirror(pysc.Application):
                                        "even if both have same last modified,"
                                        " download again", local,
                                        stat.st_size, url, remote_size)
-                        save(local, req.iter_content(), source_timestamp)
+                        save(local, req.iter_content(CHUNK_SIZE),
+                             source_timestamp)
 
     def main(self):
         for prefix in self.config['files']:

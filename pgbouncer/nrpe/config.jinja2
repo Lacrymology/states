@@ -1,0 +1,25 @@
+{#-
+Use of this source code is governed by a BSD license that can be found
+in the doc/license.rst file.
+
+Author: Quan Tong Anh <quanta@robotinfra.com>
+Maintainer: Quan Tong Anh <quanta@robotinfra.com>
+-#}
+{%- set timeout = 30 -%}
+pgbouncer_procs:
+  description: PgBouncer Daemon
+  command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -a '/usr/sbin/pgbouncer -R -d /etc/pgbouncer/pgbouncer.ini' -u postgres"
+
+pgbouncer_port:
+  description: PgBouncer Port
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 6432 -t {{ timeout }}
+  timeout: {{ timeout }}
+  dependencies:
+    - pgbouncer_procs
+
+{{ dbname }}_pgbouncer:
+  description: {{ dbname|capitalize }} PgBouncer Database
+  command: /usr/lib/nagios/plugins/check_pgsql -H 127.0.0.1 -P 6432 -d {{ dbname }} -l {{ username|default(dbname, boolean=True) }} -p {{ password }} --timeout={{ timeout }}
+  timeout: {{ timeout }}
+  dependencies:
+    - pgbouncer_procs

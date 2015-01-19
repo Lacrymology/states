@@ -1,0 +1,32 @@
+# {{ salt['pillar.get']('message_do_not_modify') }}
+[databases]
+{% block databases %}
+{%- for db, values in salt['pillar.get']('pgbouncer:databases').iteritems() %}
+{{ db }} = host={{ values['host'] }} port={{ salt['pillar.get']('postgresql:listen_port', 5432) }} dbname={{ db }}
+{%- endfor %}
+{% endblock %}
+[pgbouncer]
+
+user pgbouncer
+syslog 1
+
+logfile = /var/log/postgresql/pgbouncer.log
+pidfile = /var/run/postgresql/pgbouncer.pid
+
+{% block pgbouncer %}
+listen_addr = {{ salt['pillar.get']('pgbouncer:listen_addr', '127.0.0.1') }}
+listen_port = {{ salt['pillar.get']('pgbouncer:listen_port', 6432) }}
+
+unix_socket_dir = /var/run/postgresql
+
+auth_type = {{ salt['pillar.get']('pgbouncer:auth_type', 'trust') }}
+auth_file = /etc/pgbouncer/userlist.txt
+
+pool_mode = session
+
+server_reset_query = DISCARD ALL
+
+max_client_conn = {{ salt['pillar.get']('pgbouncer:max_client_conn', 100) }}
+
+default_pool_size = {{ salt['pillar.get']('pgbouncer:default_pool_size', 20) }}
+{% endblock %}

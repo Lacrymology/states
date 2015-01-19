@@ -20,6 +20,8 @@ unix_socket_dir = /var/run/postgresql
 auth_type = {{ salt['pillar.get']('pgbouncer:auth_type', 'trust') }}
 auth_file = /etc/pgbouncer/userlist.txt
 
+admin_users = {% for value in salt['pillar.get']('pgbouncer:databases').itervalues() %}{{ value['username'] }}{% if not loop.last %} ,{% endif %}{% endfor %}
+
 pool_mode = session
 
 server_reset_query = DISCARD ALL

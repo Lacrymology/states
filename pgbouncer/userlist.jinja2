@@ -5,7 +5,6 @@ in the doc/license.rst file.
 Author: Quan Tong Anh <quanta@robotinfra.com>
 Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
-# {{ pillar['message_do_not_modify'] }}
 {%- for value in salt['pillar.get']('pgbouncer:databases').itervalues() %}
 "{{ value['username'] }}" "{{ value['password'] }}"
 {%- endfor %}

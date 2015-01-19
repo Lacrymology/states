@@ -76,7 +76,8 @@ pgbouncer:
 /etc/init.d/pgbouncer:
   file:
     - replace
-    - pattern: '- $RUNASUSER'
-    - repl: '- $RUNASUSER -s /bin/sh'
+    - pattern: 'RUNASUSER$'
+    - repl: 'RUNASUSER -s /bin/sh'
+    - backup: False
     - require:
       - pkg: pgbouncer

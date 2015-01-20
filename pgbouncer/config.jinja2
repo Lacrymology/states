@@ -12,15 +12,15 @@ syslog = 1
 pidfile = /var/run/postgresql/pgbouncer.pid
 
 {% block pgbouncer %}
-listen_addr = {{ salt['pillar.get']('pgbouncer:listen_addr', '127.0.0.1') }}
+listen_addr = {% for addr in salt['pillar.get']('pgbouncer:listen_addr', ['127.0.0.1']) %}{{ addr }}{% if not loop.last %}, {% endif %}{% endfor %}
 listen_port = {{ salt['pillar.get']('pgbouncer:listen_port', 6432) }}
 
 unix_socket_dir = /var/run/postgresql
 
-auth_type = {{ salt['pillar.get']('pgbouncer:auth_type', 'trust') }}
+auth_type = {{ salt['pillar.get']('pgbouncer:auth_type', 'md5') }}
 auth_file = /etc/pgbouncer/userlist.txt
 
-admin_users = {% for value in salt['pillar.get']('pgbouncer:databases').itervalues() %}{{ value['username'] }}{% if not loop.last %} ,{% endif %}{% endfor %}
+admin_users = {% for value in salt['pillar.get']('pgbouncer:databases').itervalues() %}{{ value['username'] }}{% if not loop.last %}, {% endif %}{% endfor %}
 
 pool_mode = session
 

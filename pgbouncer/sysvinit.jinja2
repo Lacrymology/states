@@ -64,7 +64,7 @@ case "$1" in
         if [ $? -eq 0 ] ; then
             OLDPID=$(cat $PIDFILE)
             log_daemon_msg "Invoking PgBouncer restart" $NAME
-            su -c "$DAEMON -R $OPTS 2> /dev/null" - $RUNASUSER
+            su -c "$DAEMON -R $OPTS 2> /dev/null" - $RUNASUSER -s /bin/sh
             # sleep until the process has changed PID
             for t in 0.1 0.2 0.2 0.5 1.0 1.0 2.0; do # 5s in total
                 NEWPID=$(cat $PIDFILE 2>/dev/null)
@@ -72,8 +72,12 @@ case "$1" in
                 echo sleep $t
                 sleep $t
             done
-            $SSD --stop --signal 0
-            log_end_msg $?
+            if [ "$NEWPID" = "$OLDPID" ]; then
+                log_end_msg 1
+            else
+                $SSD --stop --signal 0
+                log_end_msg $?
+            fi
         else
             $0 start
         fi

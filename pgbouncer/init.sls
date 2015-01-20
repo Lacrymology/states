@@ -69,9 +69,10 @@ pgbouncer:
 
 /etc/init.d/pgbouncer:
   file:
-    - replace
-    - pattern: 'RUNASUSER$'
-    - repl: 'RUNASUSER -s /bin/sh'
-    - backup: False
+    - managed
+    - source: salt://pgbouncer/sysvinit.jinja2
+    - user: root
+    - group: root
+    - mode: 550
     - require:
       - pkg: pgbouncer

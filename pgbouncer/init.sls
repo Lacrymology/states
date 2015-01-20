@@ -16,12 +16,6 @@ pgbouncer:
     - installed
     - require:
       - cmd: apt_sources
-  user:
-    - present
-    - name: postgres
-    - shell: /usr/sbin/nologin
-    - require:
-      - pkg: pgbouncer
   file:
     - managed
     - name: /etc/pgbouncer/pgbouncer.ini
@@ -32,14 +26,14 @@ pgbouncer:
     - mode: 440
     - require:
       - pkg: pgbouncer
-      - user: pgbouncer
+      - user: postgres
   service:
     - running
     - enable: True
     - require:
       - service: rsyslog
     - watch:
-      - user: pgbouncer
+      - user: postgres
       - pkg: pgbouncer
       - file: pgbouncer
       - file: /etc/pgbouncer/userlist.txt
@@ -60,7 +54,7 @@ pgbouncer:
     - mode: 440
     - require:
       - pkg: pgbouncer
-      - user: pgbouncer
+      - user: postgres
 
 /etc/default/pgbouncer:
   file:

@@ -3,8 +3,12 @@ Use of this source code is governed by a BSD license that can be found
 in the doc/license.rst file.
 
 -#}
+{% set ssl = salt['pillar.get']('postgresql:ssl', False) %}
 include:
   - apt
+{% if ssl %}
+  - ssl
+{% endif %}
 
 postgresql-dev:
   pkgrepo:
@@ -26,3 +30,23 @@ postgresql-dev:
     - require:
       - pkgrepo: postgresql-dev
       - cmd: apt_sources
+
+postgresql-common:
+  pkg:
+    - latest
+    - require:
+      - cmd: apt_sources
+
+postgres:
+  user:
+    - present
+    - shell: /usr/sbin/nologin
+    {%- if ssl %}
+    - groups:
+      - ssl-cert
+    {%- endif %}
+    - require:
+      - pkg: postgresql-common
+    {%- if ssl %}
+      - pkg: ssl-cert
+    {%- endif %}

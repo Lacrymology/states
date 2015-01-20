@@ -18,3 +18,11 @@ pgbouncer:
     - name: /etc/pgbouncer
     - require:
       - pkg: pgbouncer
+
+{%- for file in ('/etc/default/pgbouncer', '/etc/init.d/pgbouncer') %}
+{{ file }}:
+  file:
+    - absent
+    - require:
+      - pkg: pgbouncer
+{%- endfor %}

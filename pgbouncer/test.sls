@@ -33,6 +33,12 @@ pgbouncer_{{ db }}:
 {%- endfor %}
 
 test:
+  cmd:
+    - run
+    - name: /usr/sbin/pgbouncer -R -d /etc/pgbouncer/pgbouncer.ini
+    - user: postgres
+    - require:
+      - sls: pgbouncer
   monitoring:
     - run_all_checks
     - order: last

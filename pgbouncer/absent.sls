@@ -18,8 +18,3 @@ pgbouncer:
     - name: /etc/pgbouncer
     - require:
       - pkg: pgbouncer
-  user:
-    - absent
-    - name: pgbouncer
-    - require:
-      - pkg: pgbouncer

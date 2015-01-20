@@ -28,7 +28,7 @@ pgbouncer:databases
 ~~~~~~~~~~~~~~~~~~~
 
 Data formed as a dictionary where key will be taken as a database name and
-value as a libpq connect-string style list of key=value pairs.
+value is a dictionary of key-value.
 
 Optional
 --------
@@ -36,7 +36,8 @@ Optional
 Example::
 
   pgbouncer:
-    listen_addr: 127.0.0.1
+    listen_addr:
+      - 127.0.0.1
     listen_port: 6543
     auth_type: trust
     max_client_conn: 100
@@ -53,16 +54,16 @@ connections are allowed.
 
 Addresses can be specified numerically (IPv4/IPv6) or by name.
 
-Default: Only listen to localhost (``127.0.0.1``).
+Default: only listen to localhost (``[127.0.0.1]``).
 
 .. _pillar-pgbouncer-listen_port:
 
 pgbouncer:listen_port
 ~~~~~~~~~~~~~~~~~~~~~
 
-Which port to listen on. Applies to both TCP and Unix sockets.
+Which port to listen on.
 
-Default: Port ``6432``.
+Default: port ``6432``.
 
 .. _pillar-pgbouncer-auth_type:
 
@@ -85,7 +86,7 @@ How to authenticate users.
   databases are configured to log in as specific user. Additionally, the console
   database allows any user to log in as admin.
 
-Default: ``trust``.
+Default: ``md5``.
 
 .. _pillar-pgbouncer-max_client_conn:
 

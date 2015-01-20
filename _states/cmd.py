@@ -270,7 +270,8 @@ def _run_check(cmd_kwargs, onlyif, unless, group):
                 return {'comment': 'onlyif execution failed',
                         'result': True}
         elif isinstance(onlyif, string_types):
-            if __salt__['cmd.retcode'](onlyif, **cmd_kwargs) != 0:
+            if __salt__['cmd.retcode'](onlyif, ignore_retcode=True,
+                                       **cmd_kwargs) != 0:
                 return {'comment': 'onlyif execution failed',
                         'result': True}
 
@@ -280,7 +281,8 @@ def _run_check(cmd_kwargs, onlyif, unless, group):
                 return {'comment': 'unless execution succeeded',
                         'result': True}
         elif isinstance(unless, string_types):
-            if __salt__['cmd.retcode'](unless, **cmd_kwargs) == 0:
+            if __salt__['cmd.retcode'](unless, ignore_retcode=True,
+                                       **cmd_kwargs) == 0:
                 return {'comment': 'unless execution succeeded',
                         'result': True}
 

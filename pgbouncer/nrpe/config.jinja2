@@ -3,16 +3,25 @@ Use of this source code is governed by a BSD license that can be found
 in the doc/license.rst file.
 -#}
 {%- set timeout = 30 -%}
+{%- set port = salt['pillar.get']('pgbouncer:listen_port', 6432) %}
+
 pgbouncer_procs:
   description: PgBouncer Daemon
   command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -a '-d /etc/pgbouncer/pgbouncer.ini' -u postgres"
 
 pgbouncer_port:
   description: PgBouncer Port
-  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p {{ salt['pillar.get']('pgbouncer:listen_port', 6432) }} -t {{ timeout }}
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p {{ port }} -t {{ timeout }}
   timeout: {{ timeout }}
   dependencies:
     - pgbouncer_procs
+
+pgbouncer_special_virtual_db:
+  description: PgBouncer Special Virtual Database
+  command: /usr/lib/nagios/plugins/check_pgsql -P {{ port }} -d pgbouncer -q "SHOW FDS;"
+  timeout: {{ timeout }}
+  dependencies:
+    - pgbouncer_port
 
 {% set authentication = salt['pillar.get']('pgbouncer:authentication', False) %}
 
@@ -24,10 +33,18 @@ pgbouncer_port:
         {%- set username = value['username']|default(dbname, boolean=True) %}
         {%- set password = value['password'] %}
     {%- endif %}
-{{ dbname }}_pgbouncer:
+pgbouncer_{{ dbname }}_db:
   description: {{ dbname|capitalize }} PostgreSQL Database (Connect Via PgBouncer)
-  command: /usr/lib/nagios/plugins/check_pgsql -H 127.0.0.1 -P {{ value['port']|default(6432) }} -d {{ dbname }} -l {{ username }} -p {{ password }} --timeout={{ timeout }}
+  command: /usr/lib/nagios/plugins/check_pgsql_query.py --formula=pgbouncer --check=pgbouncer_{{ dbname }}_db
   timeout: {{ timeout }}
+  arguments:
+    host: {{ value['host'] }}
+    port: {{ port }}
+    user: {{ username }}
+    passwd: {{ password }}
+    database: {{ dbname }}
+    query: "SELECT * from pg_stat_activity;"
+    critical: "1:"
   dependencies:
     - pgbouncer_port
 {%- endfor %}

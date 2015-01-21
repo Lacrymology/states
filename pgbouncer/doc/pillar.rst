@@ -72,11 +72,12 @@ pgbouncer:auth_type
 
 How to authenticate users.
 
-* md5: Use MD5-based password check. auth_file may contain both MD5-encrypted or
-  plain-text passwords. This is the default authentication method.
+* :ref:`glossary-MD5`: Use MD5-based password check. auth_file may contain both
+  MD5-encrypted or plain-text passwords. This is the default authentication
+  method.
 
-* crypt: Use crypt(3) based password check. auth_file must contain plain-text
-  passwords.
+* `crypt <http://man7.org/linux/man-pages/man3/crypt.3.html>`_: Use crypt(3)
+  based password check. auth_file must contain plain-text passwords.
 
 * plain: Clear-text password is sent over wire.
 

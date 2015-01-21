@@ -27,11 +27,12 @@ pgbouncer_nrpe_check_pgsql_query:
   file:
     - managed
     - name: {{ opts['cachedir'] }}/pip/pgbouncer.nrpe
-    - source: salt://pgbouncer/nrpe/requirements.jinja2
-    - template: jinja
     - user: root
     - group: root
     - mode: 440
+    - contents: |
+        # {{ salt['pillar.get']('message_do_not_modify') }}
+        psycopg2==2.4.5
     - require:
       - module: pip
   module:

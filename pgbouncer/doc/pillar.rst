@@ -58,7 +58,7 @@ from :doc:`/postgresql/doc/index` server.
 
 Data formed as a dictionary with key is the username and value is the password.
 
-Default: ``False`` (use user/password from PostgreSQL).
+Default: ``False`` (use user/password from :ref:`pillar-pgbouncer-databases`).
 
 .. _pillar-pgbouncer-listen_addr:
 
@@ -89,17 +89,16 @@ pgbouncer:auth_type
 
 How to authenticate users.
 
-* :ref:`glossary-MD5`: Use MD5-based password check. auth_file may contain both
-  MD5-encrypted or plain-text passwords. This is the default authentication
-  method.
-
+* :ref:`glossary-MD5`: Use MD5-based password check.
+  `auth_file <http://pgbouncer.projects.pgfoundry.org/doc/config.html#_auth_file>`_
+  may contain both MD5-encrypted or plain-text passwords. This is the default
+  authentication method.
 * `crypt <http://man7.org/linux/man-pages/man3/crypt.3.html>`_: Use crypt(3)
-  based password check. auth_file must contain plain-text passwords.
-
+  based password check.
+  `auth_file <http://pgbouncer.projects.pgfoundry.org/doc/config.html#_auth_file>`_
+  must contain plain-text passwords.
 * plain: Clear-text password is sent over wire.
-
 * trust: No authentication is done. Username must still exist in auth_file.
-
 * any: Like the trust method, but the username given is ignored. Requires that all
   databases are configured to log in as specific user. Additionally, the console
   database allows any user to log in as admin.
@@ -116,9 +115,7 @@ pgbouncer:pool_mode
 Specifies when a server connection can be reused by other clients.
 
 * session: Server is released back to pool after client disconnects.
-
 * transaction: Server is released back to pool after transaction finishes.
-
 * statement: Server is released back to pool after query finishes. Long
   transactions spanning multiple statements are disallowed in this mode.
 

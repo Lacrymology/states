@@ -61,11 +61,13 @@ pgbouncer:
 /etc/default/pgbouncer:
   file:
     - managed
-    - source: salt://pgbouncer/default.jinja2
     - template: jinja
     - user: root
     - group: root
     - mode: 440
+    - contents: |
+        # {{ salt['pillar.get']('message_do_not_modify') }}
+        START=1
     - require:
       - pkg: pgbouncer
 

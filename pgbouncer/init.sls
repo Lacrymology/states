@@ -33,7 +33,6 @@ pgbouncer:
       - user: postgres
       - pkg: pgbouncer
       - file: pgbouncer
-      - file: /etc/pgbouncer/userlist.txt
       - file: /etc/default/pgbouncer
       - file: /etc/init.d/pgbouncer
 
@@ -43,18 +42,21 @@ pgbouncer:
 
 /etc/pgbouncer/userlist.txt:
   file:
+{%- if salt['pillar.get']('pgbouncer:auth_type', 'md5') != 'any' %}
     - managed
+    - source: salt://pgbouncer/userlist.jinja2
     - template: jinja
     - user: root
     - group: postgres
     - mode: 440
-    - contents: |
-        {%- for value in salt['pillar.get']('pgbouncer:databases').itervalues() %}
-        "{{ value['username'] }}" "{{ value['password'] }}"
-        {%- endfor %}
     - require:
       - pkg: pgbouncer
       - user: postgres
+    - watch_in:
+      - service: pgbouncer
+{%- else %}
+    - absent
+{%- endif %}
 
 /etc/default/pgbouncer:
   file:

@@ -36,12 +36,51 @@ Optional
 Example::
 
   pgbouncer:
+    syslog: False
+    logfile: /var/log/postgresql/pgbouncer.log
+    pidfile: /var/run/postgresql/pgbouncer.pid
+    authentication:
+      user1: pass1
     listen_addr:
       - 127.0.0.1
     listen_port: 6543
+    unix_socket_dir: /var/run/postgresql
     auth_type: trust
+    pool_mode: session
     max_client_conn: 100
     default_pool_size: 20
+    server_idle_timeout: 120
+    idle_transaction_timeout: 10
+
+.. _pillar-pgbouncer-syslog:
+
+pgbouncer:syslog
+~~~~~~~~~~~~~~~~
+
+Toggles syslog on/off.
+
+Default: ``True``.
+
+.. _pillar-pgbouncer-pidfile:
+
+pgbouncer:pidfile
+~~~~~~~~~~~~~~~~~
+
+Specifies the pid file. Without a pidfile, daemonization is not allowed.
+
+Default: ``/var/run/postgresql/pgbouncer.pid``.
+
+.. _pillar-pgbouncer-authentication:
+
+pgbouncer:authentication
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Define whether :doc:`/pgbouncer/doc/index` use its own user database or getting
+from :doc:`/postgresql/doc/index` server.
+
+Data formed as a dictionary with key is the username and value is the password.
+
+Default: ``False`` (use user/password from PostgreSQL).
 
 .. _pillar-pgbouncer-listen_addr:
 
@@ -64,6 +103,17 @@ pgbouncer:listen_port
 Which port to listen on.
 
 Default: port ``6432``.
+
+.. _pillar-pgbouncer-unix_socket_dir:
+
+pgbouncer:unix_socket_dir
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Specifies location for Unix sockets. Applies to both listening socket and
+server connections. If set to an empty string, Unix sockets are disabled.
+Required for online reboot (-R) to work.
+
+Default: ``/var/run/postgresql``.
 
 .. _pillar-pgbouncer-auth_type:
 
@@ -91,6 +141,22 @@ Default: ``md5``.
 
 .. _pillar-pgbouncer-max_client_conn:
 
+.. _pillar-pgbouncer-pool_mode:
+
+pgbouncer:pool_mode
+~~~~~~~~~~~~~~~~~~~
+
+Specifies when a server connection can be reused by other clients.
+
+* session: Server is released back to pool after client disconnects.
+
+* transaction: Server is released back to pool after transaction finishes.
+
+* statement: Server is released back to pool after query finishes. Long
+  transactions spanning multiple statements are disallowed in this mode.
+
+Default: ``session``.
+
 pgbouncer:max_client_conn
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -106,3 +172,33 @@ pgbouncer:default_pool_size
 How many server connections to allow per user/database pair.
 
 Default: ``20``.
+
+.. _pillar-pgbouncer-server_idle_timeout:
+
+pgbouncer:server_idle_timeout
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If a server connection has been idle more than this many seconds it will be
+dropped. If 0 then timeout is disabled.
+
+Default: ``600`` seconds.
+
+.. _pillar-pgbouncer-idle_transaction_timeout:
+
+pgbouncer:idle_transaction_timeout
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If client has been in "idle in transaction" state longer, it will be
+disconnected.
+
+Default: ``0`` (disabled)
+
+Conditional
+-----------
+
+pgbouncer:logfile
+~~~~~~~~~~~~~~~~~
+
+Specifies log file.
+
+Only used if :ref:`pillar-pgbouncer-syslog` is ``False``.

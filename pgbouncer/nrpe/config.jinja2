@@ -14,10 +14,19 @@ pgbouncer_port:
   dependencies:
     - pgbouncer_procs
 
-{%- for dbname, values in salt['pillar.get']('pgbouncer:databases').iteritems() %}
+{% set authentication = salt['pillar.get']('pgbouncer:authentication', False) %}
+
+{%- for dbname, value in salt['pillar.get']('pgbouncer:databases').iteritems() %}
+    {%- if authentication %}
+        {%- set username = authentication.keys()[0] %}
+        {%- set password = authentication.values()[0] %}
+    {%- else %}
+        {%- set username = value['username']|default(dbname, boolean=True) %}
+        {%- set password = value['password'] %}
+    {%- endif %}
 {{ dbname }}_pgbouncer:
   description: {{ dbname|capitalize }} PostgreSQL Database (Connect Via PgBouncer)
-  command: /usr/lib/nagios/plugins/check_pgsql -H 127.0.0.1 -P {{ values['port']|default(6432) }} -d {{ dbname }} -l {{ values['username']|default(dbname, boolean=True) }} -p {{ values['password'] }} --timeout={{ timeout }}
+  command: /usr/lib/nagios/plugins/check_pgsql -H 127.0.0.1 -P {{ value['port']|default(6432) }} -d {{ dbname }} -l {{ username }} -p {{ password }} --timeout={{ timeout }}
   timeout: {{ timeout }}
   dependencies:
     - pgbouncer_port

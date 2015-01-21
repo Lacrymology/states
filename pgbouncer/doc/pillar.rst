@@ -36,39 +36,17 @@ Optional
 Example::
 
   pgbouncer:
-    syslog: False
-    logfile: /var/log/postgresql/pgbouncer.log
-    pidfile: /var/run/postgresql/pgbouncer.pid
     authentication:
       user1: pass1
     listen_addr:
       - 127.0.0.1
     listen_port: 6543
-    unix_socket_dir: /var/run/postgresql
     auth_type: trust
     pool_mode: session
     max_client_conn: 100
     default_pool_size: 20
     server_idle_timeout: 120
     idle_transaction_timeout: 10
-
-.. _pillar-pgbouncer-syslog:
-
-pgbouncer:syslog
-~~~~~~~~~~~~~~~~
-
-Toggles syslog on/off.
-
-Default: ``True``.
-
-.. _pillar-pgbouncer-pidfile:
-
-pgbouncer:pidfile
-~~~~~~~~~~~~~~~~~
-
-Specifies the pid file. Without a pidfile, daemonization is not allowed.
-
-Default: ``/var/run/postgresql/pgbouncer.pid``.
 
 .. _pillar-pgbouncer-authentication:
 
@@ -103,17 +81,6 @@ pgbouncer:listen_port
 Which port to listen on.
 
 Default: port ``6432``.
-
-.. _pillar-pgbouncer-unix_socket_dir:
-
-pgbouncer:unix_socket_dir
-~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Specifies location for Unix sockets. Applies to both listening socket and
-server connections. If set to an empty string, Unix sockets are disabled.
-Required for online reboot (-R) to work.
-
-Default: ``/var/run/postgresql``.
 
 .. _pillar-pgbouncer-auth_type:
 
@@ -192,13 +159,3 @@ If client has been in "idle in transaction" state longer, it will be
 disconnected.
 
 Default: ``0`` (disabled)
-
-Conditional
------------
-
-pgbouncer:logfile
-~~~~~~~~~~~~~~~~~
-
-Specifies log file.
-
-Only used if :ref:`pillar-pgbouncer-syslog` is ``False``.

@@ -18,19 +18,15 @@ user database.
 {%- endfor %}
 {% endblock %}
 [pgbouncer]
-{%- set syslog = salt['pillar.get']('pgbouncer:syslog', True) %}
-syslog = {% if syslog %}1{% else %}0{% endif %}
+syslog = 1
 
-{%- if not syslog %}
-logfile = {{ salt['pillar.get']('pgbouncer:logfile', '/var/log/postgresql/pgbouncer.log') }}
-{%- endif %}
-pidfile = {{ salt['pillar.get']('pgbouncer:pidfile', '/var/run/postgresql/pgbouncer.pid') }}
+pidfile = /var/run/postgresql/pgbouncer.pid
 
 {% block pgbouncer %}
 listen_addr = {% for addr in salt['pillar.get']('pgbouncer:listen_addr', ['127.0.0.1']) %}{{ addr }}{% if not loop.last %}, {% endif %}{% endfor %}
 listen_port = {{ salt['pillar.get']('pgbouncer:listen_port', 6432) }}
 
-unix_socket_dir = {{ salt['pillar.get']('pgbouncer:unix_socket_dir', '/var/run/postgresql') }}
+unix_socket_dir = /var/run/postgresql
 auth_type = {{ auth_type }}
 {%- if auth_type != 'any' %}
 auth_file = /etc/pgbouncer/userlist.txt

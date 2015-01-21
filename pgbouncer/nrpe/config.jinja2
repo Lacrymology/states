@@ -18,7 +18,7 @@ pgbouncer_port:
 
 pgbouncer_special_virtual_db:
   description: PgBouncer Special Virtual Database
-  command: /usr/lib/nagios/plugins/check_pgsql -P {{ port }} -d pgbouncer -q "SHOW FDS;"
+  command: sudo -u postgres /usr/lib/nagios/plugins/check_pgsql -P {{ port }} -d pgbouncer -l pgbouncer -q "SHOW FDS;"
   timeout: {{ timeout }}
   dependencies:
     - pgbouncer_port

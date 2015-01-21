@@ -8,8 +8,20 @@ include:
   - nrpe
   - postgresql.nrpe
   - rsyslog.nrpe
+  - sudo
 
 {{ passive_check('pgbouncer') }}
+
+/etc/sudoers.d/nrpe_pgbouncer:
+  file:
+    - managed
+    - source: salt://pgbouncer/nrpe/sudo.jinja2
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - require:
+      - pkg: sudo
 
 /usr/lib/nagios/plugins/check_pgsql_query.py:
   file:

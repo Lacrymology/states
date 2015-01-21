@@ -1,9 +1,6 @@
 {#-
 Use of this source code is governed by a BSD license that can be found
 in the doc/license.rst file.
-
-Author: Quan Tong Anh <quanta@robotinfra.com>
-Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 -#}
 {%- from 'macros.jinja2' import manage_pid with context %}
 include:
@@ -21,7 +18,7 @@ pgbouncer:
     - name: /etc/pgbouncer/pgbouncer.ini
     - source: salt://pgbouncer/config.jinja2
     - template: jinja
-    - user: postgres
+    - user: root
     - group: postgres
     - mode: 440
     - require:
@@ -47,11 +44,14 @@ pgbouncer:
 /etc/pgbouncer/userlist.txt:
   file:
     - managed
-    - source: salt://pgbouncer/userlist.jinja2
     - template: jinja
-    - user: postgres
+    - user: root
     - group: postgres
     - mode: 440
+    - contents: |
+        {%- for value in salt['pillar.get']('pgbouncer:databases').itervalues() %}
+        "{{ value['username'] }}" "{{ value['password'] }}"
+        {%- endfor %}
     - require:
       - pkg: pgbouncer
       - user: postgres

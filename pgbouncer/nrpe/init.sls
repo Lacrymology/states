@@ -23,6 +23,26 @@ include:
     - require:
       - pkg: sudo
 
+pgbouncer_nrpe_check_pgsql_query:
+  file:
+    - managed
+    - name: {{ opts['cachedir'] }}/pip/pgbouncer.nrpe
+    - source: salt://pgbouncer/nrpe/requirements.jinja2
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - require:
+      - module: pip
+  module:
+    - wait
+    - name: pip.install
+    - upgrade: True
+    - bin_env: /usr/local/nagios
+    - requirements: {{ opts['cachedir'] }}/pip/pgbouncer.nrpe
+    - watch:
+      - file: pgbouncer_nrpe_check_pgsql_query
+
 /usr/lib/nagios/plugins/check_pgsql_query.py:
   file:
     - managed
@@ -32,5 +52,6 @@ include:
     - mode: 550
     - require:
       - module: nrpe-virtualenv
+      - module: pgbouncer_nrpe_check_pgsql_query
       - pkg: nagios-nrpe-server
       - file: nsca-pgbouncer

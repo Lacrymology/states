@@ -65,3 +65,10 @@ one :doc:`/git/server/doc/index`.
   This plugin don't work as expected on Jenkins slaves. You need to specify an
   ``Additional Behaviours``, choose ``Checkout to a sub directory`` and set
   ``Local subdirectory for repo``.
+
+Build User Vars Plugin
+~~~~~~~~~~~~~~~~~~~~~~
+
+https://wiki.jenkins-ci.org/display/JENKINS/Build+User+Vars+Plugin
+
+This plugin is used to set user build variables.

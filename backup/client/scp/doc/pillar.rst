@@ -22,6 +22,9 @@ backup_server:address
 
 IP/Hostname of :doc:`/backup/server/doc/index`.
 
+Optional
+--------
+
 .. _pillar-backup_server-fingerprint:
 
 backup_server:fingerprint
@@ -29,7 +32,9 @@ backup_server:fingerprint
 
 :doc:`/ssh/doc/index`
 `fingerprint <http://en.wikipedia.org/wiki/Public_key_fingerprint>`_
-of backup :doc:`/backup/server/doc/index`.
+of :ref:`pillar-backup_server-address`. Using this pillar to avoid backing up
+to compromised server, which has changed host fingerprint or DNS attack, which
+may point domain of backup server to another host.
 
 This is an example how to retrieve :ref:`glossary-Github`
 :doc:`/ssh/doc/index` ref:`glossary-key-fingerprint`::
@@ -41,8 +46,7 @@ Output is key's ref:`glossary-key-fingerprint`::
 
   2048 16:27:ac:a5:76:28:2d:36:63:1b:56:4d:eb:df:a6:48 github.com (RSA)
 
-Optional
---------
+Default: does not specify the fingerprint of backup server (``False``).
 
 .. _pillar-backup_server-subdir:
 

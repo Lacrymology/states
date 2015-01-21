@@ -10,20 +10,27 @@ include:
   - local
   - ssh.client
 {%- set address = salt['pillar.get']('backup_server:address') %}
-{%- if address in grains['ipv4'] or
-       address in ('localhost', grains['host']) %}
+{%- set is_localhost = address in grains['ipv4'] or address in ('localhost', grains['host']) %}
+{%- set backup_fp = salt['pillar.get']('backup_server:fingerprint', False)  %}
+
+{%- if is_localhost %}
   {#- If backup_server address set to localhost (mainly in CI testing), install backup.server first #}
   - backup.server
-{%- else %}
+{%- endif %}
 
 backup-client:
   ssh_known_hosts:
     - present
     - name: {{ address }}
     - user: root
-    - fingerprint: {{ salt['pillar.get']('backup_server:fingerprint') }}
+{%- if backup_fp %}
+    - fingerprint: {{ backup_fp }}
+{%- endif %}
     - require:
       - pkg: openssh-client
+{%- if is_localhost %}
+    {#- when backup server on the same host, make sure ssh service is running, or ssh_known_hosts can not get its host key. #}
+      - service: openssh-server
 {%- endif %}
 
 /usr/local/bin/backup-store:
@@ -41,12 +48,6 @@ backup-client:
       - file: /usr/local
       - file: bash
       - pkg: /usr/local/bin/backup-store
-{%- if address in grains['ipv4'] or
-       address in ('localhost', grains['host']) %}
+{%- if is_localhost %}
       - file: /var/lib/backup
 {%- endif %}
-
-extend:
-  openssh-client:
-    file:
-      - source: salt://backup/client/scp/config.jinja2

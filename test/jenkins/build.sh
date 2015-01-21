@@ -65,6 +65,13 @@ if [ "$1" == "--profile" ]; then
 else
     profile='ci-minion'
 fi
+if [ "$1" == "--find-step-longer" ]; then
+    time_threshold=${2}
+    shift
+    shift
+else
+    time_threshold=30
+fi
 
 # allow multiple --repo options to get all non-common repositories
 # each value passed to  --repo is relative path to user-specific directory from
@@ -121,3 +128,6 @@ sudo salt -t 86400 "$BUILD_IDENTITY" cmd.run "$CUSTOM_CONFIG_DIR/jenkins/run.py 
 finish_run_test_time=$(date +%s)
 echo "TIME-METER: Run integration.py took: $((finish_run_test_time - start_run_test_time)) seconds"
 echo "TIME-METER: Total time: $(($(date +%s) - start_time)) seconds"
+
+echo "Analysing stdout.log"
+$CUSTOM_CONFIG_DIR/findgap.py --verbose --print-name --larger-equal $time_threshold /root/salt/stdout.log

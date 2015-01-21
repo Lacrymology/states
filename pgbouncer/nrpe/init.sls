@@ -6,7 +6,9 @@ in the doc/license.rst file.
 include:
   - apt.nrpe
   - nrpe
+  - postgresql
   - postgresql.nrpe
+  - python.dev
   - rsyslog.nrpe
   - sudo
 
@@ -42,6 +44,8 @@ pgbouncer_nrpe_check_pgsql_query:
     - bin_env: /usr/local/nagios
     - requirements: {{ opts['cachedir'] }}/pip/pgbouncer.nrpe
     - watch:
+      - pkg: python-dev
+      - pkg: postgresql-dev
       - file: pgbouncer_nrpe_check_pgsql_query
 
 /usr/lib/nagios/plugins/check_pgsql_query.py:

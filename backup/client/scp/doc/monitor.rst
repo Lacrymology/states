@@ -1,5 +1,5 @@
-Backup Check
-============
+Monitor
+=======
 
 Using :doc:`index` backup method, to check the backup
 files, the public key of ``nagios`` user need to be added into the file

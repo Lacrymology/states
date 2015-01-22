@@ -46,7 +46,7 @@ def move_incoming(directory, category, incoming_sub_directory='incoming',
                 if line.startswith('n')]
     # get paths relative to source_directory
     filtered = [line[len(source_directory):] for line in filtered]
-    logging.debug("excluding open files: %s", filtered)
+    logger.debug("excluding open files: %s", filtered)
 
     # write files to be excluded to a tmp file for rsync to read
     exclude = tempfile.NamedTemporaryFile()
@@ -66,9 +66,9 @@ def move_incoming(directory, category, incoming_sub_directory='incoming',
 
     out, err = rsync.communicate()
     if out:
-        logging.debug("rsync stdout: %s", out)
+        logger.debug("rsync stdout: %s", out)
     if err:
-        logging.error("Got things in stderr: %s", err)
+        logger.error("Got things in stderr: %s", err)
 
     # sadly there doesn't seem to be a way to easily delete files filtered by
     # the --ignore-existing bit

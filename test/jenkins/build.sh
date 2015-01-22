@@ -26,7 +26,7 @@ function collect_logs {
     timer
 
     echo "Analysing stdout.log"
-    $CUSTOM_CONFIG_DIR/findgap.py --verbose --larger-equal $time_threshold /root/salt/stdout.log
+    sudo salt -t 30 "$BUILD_IDENTITY" --output json cmd.run "$CUSTOM_CONFIG_DIR/findgap.py --verbose --larger-equal $time_threshold /root/salt/stdout.log"
 
     for prepare_log in $PREPARE_STDOUT_LOG $PREPARE_STDERR_LOG; do
         sudo salt -t 30 "$BUILD_IDENTITY" --output json cmd.run "xz -c $prepare_log > /tmp/$BUILD_IDENTITY-$(basename $prepare_log).log.xz"

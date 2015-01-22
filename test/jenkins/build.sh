@@ -12,6 +12,11 @@
 
 set -x
 
+PREPARE_STDOUT_LOG=/root/salt/stdout.prepare
+PREPARE_STDERR_LOG=/root/salt/stderr.prepare
+CUSTOM_CONFIG_DIR=/root/salt/states/test
+BUILD_IDENTITY="integration-$JOB_NAME-$BUILD_NUMBER"
+
 function timer {
     finish_run_test_time=$(date +%s)
     echo "TIME-METER: Run integration.py took: $((finish_run_test_time - start_run_test_time)) seconds"
@@ -102,7 +107,6 @@ while [ "${1}" = '--repo' ]; do
     shift
 done
 
-BUILD_IDENTITY="integration-$JOB_NAME-$BUILD_NUMBER"
 # create archive from common, pillar, and all user-specific formulas repos
 ./bootstrap_archive.py ../pillar ${repos[@]} > /srv/salt/jenkins_archives/$BUILD_IDENTITY.tar.gz
 
@@ -111,10 +115,6 @@ sudo salt $BUILD_IDENTITY test.ping | grep True
 sudo salt -t 10 "$BUILD_IDENTITY" cmd.run "hostname $BUILD_IDENTITY"
 sudo salt -t 60 "$BUILD_IDENTITY" cp.get_file salt://jenkins_archives/$BUILD_IDENTITY.tar.gz /tmp/bootstrap-archive.tar.gz
 sudo salt -t 60 "$BUILD_IDENTITY" archive.tar xzf /tmp/bootstrap-archive.tar.gz cwd=/
-
-PREPARE_STDOUT_LOG=/root/salt/stdout.prepare
-PREPARE_STDERR_LOG=/root/salt/stderr.prepare
-CUSTOM_CONFIG_DIR=/root/salt/states/test
 
 function run_and_check_return_code {
     sudo salt -t $1 "$BUILD_IDENTITY" --output json cmd.run_all "$2" | ./test/jenkins/retcode_check.py

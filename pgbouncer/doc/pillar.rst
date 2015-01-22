@@ -27,8 +27,30 @@ Example::
 pgbouncer:databases
 ~~~~~~~~~~~~~~~~~~~
 
+Define the login information for connecting (from :doc:`/pgbouncer/doc/index`)
+to the backend :doc:`/postgresql/doc/index` server.
+
 Data formed as a dictionary where key will be taken as a database name and
 value is a dictionary of key-value.
+
+* ``example``: an alias of the database name which will be used when connecting
+  via :doc:`/pgbouncer/doc/index`, something like this::
+
+    psql -h localhost -p 6432 -U foo -W example
+
+* ``host``: Hostname or IP address to connect to.
+* ``port``: use the value from this pillar key
+  :ref:`pillar-postgresql-listen_port`.
+* ``dbname``: the actual database name in the :doc:`/postgresql/doc/index`
+  server. If not define, use the above alias (``example`` in this case)
+* ``username``: the database user name.
+* ``password``: the database password to login.
+
+.. note::
+
+   This is different from the accounts which is defined in the pillar key
+   :ref:`pillar-pgbouncer-authentication`. That is used for connecting from
+   client to :doc:`/pgbouncer/doc/index`.
 
 Optional
 --------

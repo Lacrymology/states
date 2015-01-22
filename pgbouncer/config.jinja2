@@ -4,16 +4,6 @@
 [databases]
 {% block databases %}
 {%- for db, value in salt['pillar.get']('pgbouncer:databases').iteritems() %}
-{#-
-There are 2 authentication steps: client --> pgbouncer --> PostgreSQL
-
-The userlist.txt file contains the accounts for connecting from client to
-PgBouncer. The [databases] section contains the login information for
-connecting from PgBouncer to the backend PostgreSQL server.
-
-So, define user/password here if using `any` auth_type or PgBouncer use its own
-user database.
--#}
 {{ value['dbname'] | default(db) }} = host={{ value['host'] }} port={{ salt['pillar.get']('postgresql:listen_port', 5432) }} dbname={{ db }} {% if auth_type == 'any' or authentication %}user={{ value['username'] }} password={{ value['password'] }}{% endif %}
 {%- endfor %}
 {% endblock %}

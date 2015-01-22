@@ -4,13 +4,19 @@ in the doc/license.rst file.
 
 -#}
 # {{ salt['pillar.get']('message_do_not_modify') }}
+{%- set __test__ = salt['pillar.get']("__test__", False) %}
+{%- set graphite_address = salt['pillar.get']('graphite_address', False) %}
 [server]
 
 # Handlers for published metrics.
-handlers = diamond.handler.graphite.GraphiteHandler,
-{%- set __test__ = salt['pillar.get']("__test__", False) %}
+handlers =
+{%- if graphite_address -%}
+diamond.handler.graphite.GraphiteHandler,
+{%- else -%}
+diamond.handler.graphite.NullHandler,
+{%- endif -%}
 {%- if __test__ -%}
-         diamond.handler.archive.ArchiveHandler
+   diamond.handler.archive.ArchiveHandler
 {%- endif %}
 
 # Leave empty to use the current user
@@ -48,7 +54,7 @@ keys = syslog
 [[default]]
 
 [[GraphiteHandler]]
-host = {{ salt['pillar.get']('graphite_address', False) }}
+host = {{ graphite_address }}
 port = 2003
 timeout = 15
 batch = {{ salt['pillar.get']('diamond:batch', 256) }}

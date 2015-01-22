@@ -12,7 +12,16 @@
 
 set -x
 
+function timer {
+    finish_run_test_time=$(date +%s)
+    echo "TIME-METER: Run integration.py took: $((finish_run_test_time - start_run_test_time)) seconds"
+    echo "TIME-METER: Total time: $(($(date +%s) - start_time)) seconds"
+}
+
 function collect_logs {
+    echo "Analysing stdout.log"
+    $CUSTOM_CONFIG_DIR/findgap.py --verbose --print-name --larger-equal $time_threshold /root/salt/stdout.log
+
     for prepare_log in $PREPARE_STDOUT_LOG $PREPARE_STDERR_LOG; do
         sudo salt -t 30 "$BUILD_IDENTITY" --output json cmd.run "xz -c $prepare_log > /tmp/$BUILD_IDENTITY-$(basename $prepare_log).log.xz"
     done
@@ -33,6 +42,8 @@ function collect_logs {
       cp $f $WORKSPACE/`basename $f | sed "s/$BUILD_IDENTITY/$JOB_NAME/"`
     done
     mv /srv/salt/jenkins_archives/$BUILD_IDENTITY.tar.gz $WORKSPACE/bootstrap-archive.tar.gz
+
+    timer
 }
 
 function collect_logs_then_fail {
@@ -125,9 +136,3 @@ start_run_test_time=$(date +%s)
 echo "TIME-METER: Preparing for test took: $((start_run_test_time - start_time)) seconds"
 echo '------------ Running CI test  ------------'
 sudo salt -t 86400 "$BUILD_IDENTITY" cmd.run "$CUSTOM_CONFIG_DIR/jenkins/run.py $*"
-finish_run_test_time=$(date +%s)
-echo "TIME-METER: Run integration.py took: $((finish_run_test_time - start_run_test_time)) seconds"
-echo "TIME-METER: Total time: $(($(date +%s) - start_time)) seconds"
-
-echo "Analysing stdout.log"
-$CUSTOM_CONFIG_DIR/findgap.py --verbose --print-name --larger-equal $time_threshold /root/salt/stdout.log

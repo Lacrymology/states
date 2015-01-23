@@ -27,18 +27,16 @@ include:
   - pip
   - virtualenv
 
+{# installs doc requirements on system-wide python env, required for _module/qa.py #}
 doc_root:
   module:
     - wait
     - name: pip.install
     - requirements: {{ opts['cachedir'] }}/doc/requirements.txt
+    - require:
+      - module: pip
     - watch:
       - file: doc
-      {#- as doc/requirements.txt don't get erased on every *.absent pass,
-         run module every possible time. #}
-      - file: pip
-      - module: pip
-      - archive: pip
 
 {{ opts['cachedir'] }}/doc/output:
   file:

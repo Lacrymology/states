@@ -26,6 +26,22 @@ class Mail(pysc.Application):
         argp = super(Mail, self).get_argument_parser()
         argp.add_argument('-s', '--subject', help="Subject")
         argp.add_argument('extra_args', nargs='*')
+        # cron calls /usr/bin/sendmail with args: -i -FCronDaemon -oem root
+        # handle all other /usr/bin/sendmail args or argparse will fail.
+        # generated options list from
+        # man 1 sendmail (pkg sendmail 8.14.4-2ubuntu2.1)
+        # man sendmail | sed -e '1,/Parameter/d' -e '/Options/,$ d' | awk '{print $1}' | grep '-' | grep -E '\-[a-zA-Z]{1}$' | tr -d '-' | tr -d '\n' # noqa
+        store_true_args = 'DGiLNnORtVvX'
+        # man sendmail | sed -e '1,/Parameter/d' -e '/Options/,$ d' | awk '{print $1}' | grep '-' | grep -E '\-[a-zA-Z]{1}$' -v | grep -oE '\-[a-za-Z]' | tr -d '-' | uniq | tr -d '\n' # noqa
+        # removed -h because it conflict with argparse default option.
+        options_args = 'ABbCdFfopqQr'
+        for arg in store_true_args:
+            argp.add_argument('-' + arg, action='store_true')
+        for arg in options_args:
+            argp.add_argument('-' + arg)
+
+        argp.add_argument('extra_args', nargs='*')
+        # do not use parse_known_args() here because parsing done by pysc
         return argp
 
     def main(self):

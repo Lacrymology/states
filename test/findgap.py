@@ -22,9 +22,6 @@ def main():
     argp = argparse.ArgumentParser()
     argp.add_argument('LOGFILE')
     argp.add_argument('--verbose', '-v', action='store_true')
-    argp.add_argument('--print-name', '-p', action='store_true',
-                      help='print to stdout the test testname where time '
-                           'consuming step happened')
     argp.add_argument('--larger-equal', '-l', metavar='N seconds',
                       help='only print out the step which took >= N seconds',
                       type=int,
@@ -32,7 +29,7 @@ def main():
 
     args = argp.parse_args()
 
-    prior_line = testname = ''
+    prior_line = testname = 'TESTNAME'
     if args.LOGFILE:
         infile = open(args.LOGFILE)
     else:
@@ -40,8 +37,8 @@ def main():
 
     for i, line in enumerate(infile):
         line = line.strip()
-        if 'Run states:' in line and '.absent' not in line:
-            testname = line
+        if 'Run states: ' in line and '.absent' not in line:
+            testname = line.split('Run states: ')[1]
         try:
             timestr = line.split(',')[0]
             timeobj = datetime.datetime.strptime(timestr, '%Y-%m-%d %H:%M:%S')
@@ -71,18 +68,18 @@ def main():
 
         # gap position must be consistent, output must on 1 line to be able to
         # feed output to other UNIX tools - e.g sort -k1,1
-        def _print_output(msg, print_name, testname):
-            if print_name:
-                print testname
-            print msg
-
         if args.verbose:
-            output = '{0} seconds FROM {1} ---> {2}'.format(gap,
-                                                            prior_line, line)
-            _print_output(output, args.print_name, testname)
+            output = '{0} seconds in unittest {1!r} FROM {2} ---> {3}'.format(
+                gap,
+                testname,
+                prior_line,
+                line
+            )
+            print output
         else:
-            output = '{0} {1}'.format(gap, timestr)
-            _print_output(output, args.print_name, testname)
+            output = '{0} seconds in unittest {1!r} {2}'.format(gap, testname,
+                                                                timestr)
+            print output
 
         prior_line = line
 

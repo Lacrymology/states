@@ -534,7 +534,7 @@ def create_self_signed_cert(
     return ret
 
 
-def create_ca_signed_cert(ca_name, CN, days=365):
+def create_ca_signed_cert(ca_name, CN, days=365, **extensions):
     '''
     Create a Certificate (CERT) signed by a
     named Certificate Authority (CA)
@@ -612,6 +612,15 @@ def create_ca_signed_cert(ca_name, CN, days=365):
     cert.set_serial_number(_new_serial(ca_name, CN))
     cert.set_issuer(ca_cert.get_subject())
     cert.set_pubkey(req.get_pubkey())
+    extensions_list = []
+    for name in extensions:
+        log.debug("name: {0}, critical: {1}, options: {2}".format(
+            name, extensions[name]['critical'], extensions[name]['options']))
+        extensions_list.append(OpenSSL.crypto.X509Extension(
+            name,
+            extensions[name]['critical'],
+            extensions[name]['options']))
+    cert.add_extensions(extensions_list)
     cert.sign(ca_key, 'sha1')
 
     crt = salt.utils.fopen('{0}/{1}/certs/{2}.crt'.format(

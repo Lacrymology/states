@@ -119,6 +119,21 @@ include:
     - require_in:
       - file: /etc/cron.d/salt-archive
 
+/usr/local/bin/salt_archive_set_owner_mode.sh:
+  file:
+    - managed
+    - user: root
+    - group: root
+    - source: salt://salt/archive/server/salt_archive_set_owner_mode.jinja2
+    - template: jinja
+    - mode: 550
+    - require:
+      - file: /usr/local
+      - file: bash
+    - require_in:
+      - file: /usr/local/bin/salt_archive_sync.sh
+      - file: /usr/local/bin/salt_archive_incoming.py
+
 archive_rsync:
   cmd:
     - wait
@@ -163,6 +178,7 @@ salt-archive-clamav:
     - require:
       - module: requests
       - pkg: salt-archive-clamav
+      - file: /usr/local/bin/salt_archive_set_owner_mode.sh
   cmd:
     - run
     - name: /usr/local/bin/salt_archive_clamav.py

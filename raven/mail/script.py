@@ -12,8 +12,8 @@
 RavenMail: Emulate /usr/bin/mail(x) but send mail to a Sentry server instead.
 """
 
-import sys
 import os
+import sys
 
 import pysc
 
@@ -50,4 +50,17 @@ class Mail(pysc.Application):
         client.captureMessage(msg, extra=os.environ)
 
 if __name__ == "__main__":
-    Mail().run()
+    try:
+        Mail().run()
+    except Exception as e:
+        # pysc log will not work here, initialize and use new one.
+        # only doing it here, or it might affect pysc's logging feature.
+        import logging
+        import logging.handlers
+        log = logging.getLogger('raven.mail')
+        syslog = logging.handlers.SysLogHandler()
+        syslog.setFormatter(logging.Formatter("%(name)s %(message)s"))
+        log.addHandler(syslog)
+        log.setLevel(logging.ERROR)
+
+        log.error(e, exc_info=True)

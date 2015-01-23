@@ -24,10 +24,10 @@ if [ "$1" = '-v' ]; then
 else
   verbosity=quiet
 fi
+set +e
 
 rsync --archive --no-owner --no-group --${verbosity}{% if salt['pillar.get']('salt_archive:delete', False) %} --delete{% endif %} --exclude ".*" {{ salt['pillar.get']('salt_archive:source', False) }} /var/lib/salt_archive/
-find /var/lib/salt_archive ! -user root -exec chown root {} \;
-find /var/lib/salt_archive ! -group salt_archive -exec chgrp salt_archive {} \;
+/usr/local/bin/salt_archive_set_owner_mode.sh
 
 if [ $? -eq 0 ]; then
   mkdir -p /var/cache/salt/master

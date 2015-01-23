@@ -4,7 +4,6 @@ in the doc/license.rst file.
 
 -#}
 # {{ salt['pillar.get']('message_do_not_modify') }}
-{%- set home = salt['user.info']('salt_archive')['home'] -%}
 {%- set source = salt['pillar.get']('salt_archive:source', False) %}
 {%- if source %}
 */15 * * * * root /usr/local/bin/salt_archive_sync.sh
@@ -12,12 +11,5 @@ in the doc/license.rst file.
 0 0 * * * root /usr/local/bin/salt_archive_clamav.py
 {%- endif -%}
 {%- if not source %}
-{#- make sure everything is owner root:salt_archive #}
-0 * * * * root find {{ home }}/* ! -user root -exec chown root {} \;
-0 * * * * root find {{ home }}/* ! -group salt_archive -exec chgrp salt_archive {} \;
-{#- make sure file are 644 #}
-0 * * * * root find {{ home }}/* -type f -not \( -perm 640 -or -path {{ home }}/incoming\* \) -exec chmod 640 {} \;
-{#- make sure directory are 775 #}
-0 * * * * root find {{ home }}/* -type d -not \( -perm 750 -or -path {{ home }}/incoming\* \) -exec chmod 750 {} \;
 */5 * * * * root /usr/local/bin/salt_archive_incoming.py
 {%- endif %}

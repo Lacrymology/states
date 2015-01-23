@@ -1,0 +1,37 @@
+{%- set vpn_instance = salt['pillar.get']('openvpn:servers:' ~ instance) %}
+
+port {{ vpn_instance['port'] }}
+
+proto {{ vpn_instance['protocol'] }}
+
+dev {{ vpn_instance['device'] }}
+
+ca /etc/openvpn/ca.crt
+cert /etc/openvpn/{{ instance }}/server.crt
+key /etc/openvpn/{{ instance }}/server.key  # This file should be kept secret
+
+dh dh{{ salt['pillar.get']('openvpn:dhparam:key_size', 2048) }}.pem
+
+server {{ vpn_instance['server'] }}
+
+ifconfig-pool-persist ipp.txt
+
+push "redirect-gateway def1 bypass-dhcp"
+
+keepalive 10 120
+
+comp-lzo
+
+user nobody
+group nogroup
+
+persist-key
+persist-tun
+
+status openvpn-status.log
+
+verb 3
+
+{%- for directive in vpn_instance['extra_configs'] %}
+{{ directive }}
+{%- endfor %}

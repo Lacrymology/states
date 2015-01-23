@@ -30,4 +30,4 @@ test_send_raven_event:
   cmd:
     - run
     - order: last
-    - name:  echo ravenmail test | /usr/bin/mail -s CI raven.mail.test -i -FCronDaemon -oem root
+    - name:  echo ravenmail test | /usr/bin/mail -s 'CI raven.mail.test' -i -FCronDaemon -oem root

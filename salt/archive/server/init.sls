@@ -94,6 +94,7 @@ include:
       - file: /var/lib/salt_archive/incoming/mirror
       - file: /var/lib/salt_archive/pip
       - file: /var/lib/salt_archive/mirror
+      - file: /usr/local/bin/salt_archive_sync.sh
       - module: pysc
 {%- else %}
     {#-
@@ -132,7 +133,6 @@ include:
       - file: bash
     - require_in:
       - file: /usr/local/bin/salt_archive_sync.sh
-      - file: /usr/local/bin/salt_archive_incoming.py
 
 archive_rsync:
   cmd:

@@ -23,11 +23,11 @@ test:
   monitoring:
     - run_all_checks
     - require:
-      - cmd: send_unittest_mail
+      - cmd: test_send_raven_event
       - file: /usr/bin/mail
 
-send_unittest_mail:
+test_send_raven_event:
   cmd:
     - run
     - order: last
-    - name:  echo unittest | /usr/bin/mail -s unittest root@localhost
+    - name:  echo unittest | /usr/bin/mail -s unittest

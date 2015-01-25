@@ -10,7 +10,7 @@ include:
 
 Creating mariadb mirror:
 
-    export MDB_VERSION=5.5.40 # set version to mirror here
+    export MDB_VERSION=5.5.41 # set version to mirror here
     mkdir mariadb_mirror mariadb_essential
     rsync -av rsync.osuosl.org::mariadb/mariadb-${MDB_VERSION}/repo/ubuntu/ mariadb_mirror
     # see another sources here: https://mariadb.com/kb/en/mariadb/download/mirroring-mariadb/
@@ -32,7 +32,7 @@ mariadb:
     - key_url: salt://mariadb/key.gpg
 {%- set files_archive = salt['pillar.get']('files_archive', False) %}
 {%- if files_archive %}
-    - name: deb {{ files_archive|replace('https://', 'http://') }}/mirror/mariadb/5.5.40 {{ grains['lsb_distrib_codename'] }} main
+    - name: deb {{ files_archive|replace('https://', 'http://') }}/mirror/mariadb/5.5.41 {{ grains['lsb_distrib_codename'] }} main
 {%- else %}
     - name: deb http://mariadb.biz.net.id//repo/5.5/ubuntu precise main
 {%- endif %}

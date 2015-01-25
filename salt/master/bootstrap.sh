@@ -12,6 +12,11 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
+# some modules/states require HOME environment variable
+# force HOME to be root's home folder
+# so we don't have to use -H when using sudo
+export HOME=$(grep ^root: /etc/passwd | cut -d ':' -f 6)
+
 /root/salt/states/salt/minion/bootstrap.sh $1
 
 salt-call state.highstate

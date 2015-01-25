@@ -116,6 +116,7 @@ carbon-cache-{{ instance }}:
     - name: carbon-cache-{{ instance }}
     - require:
       - user: graphite
+      - file: /etc/graphite/storage-aggregation.conf
       - file: /var/log/graphite/carbon
       - file: /var/lib/graphite/whisper/{{ instance }}
     - watch:
@@ -258,3 +259,13 @@ carbon-relay:
     - require:
       - service: cron
       - file: /usr/local/bin/find_unchanged.py
+
+/etc/graphite/storage-aggregation.conf:
+  file:
+    - managed
+    - mode: 440
+    - user: root
+    - group: graphite
+    - require:
+      - file: /etc/graphite
+      - user: graphite

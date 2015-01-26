@@ -16,6 +16,7 @@ salt_minion_deps:
       - unzip
       - dnsutils
       - python-psutil
+      - python-openssl {#- for tls module #}
 {%- if grains['virtual'] != 'openvzve' %}
       - pciutils
       - dmidecode

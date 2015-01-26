@@ -32,7 +32,7 @@ status /etc/openvpn/{{ instance }}/openvpn-status.log
 
 syslog vpn-{{ instance }}
 
-verb {% if pillar.get('debug', False) %}6{% else %}3{% endif %}
+verb {% if salt['pillar.get']('debug', False) %}6{% else %}3{% endif %}
 
 {%- for directive in vpn_instance['extra_configs'] %}
 {{ directive }}

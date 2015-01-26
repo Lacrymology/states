@@ -13,7 +13,7 @@ openvpn_{{ instance }}:
     - require:
       - cmd: openvpn_{{ instance }}
 
-/etc/openvpn/{{ instance}}.conf:
+/etc/openvpn/{{ instance }}.conf:
   file:
     - absent
     - require:
@@ -25,3 +25,7 @@ openvpn_{{ instance }}:
   file:
     - absent
 {%- endfor %}
+
+/etc/pki/{{ salt['pillar.get']('openvpn:ca:name') }}:
+  file:
+    - absent

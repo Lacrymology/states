@@ -11,3 +11,4 @@ OpenVPN
     :glob:
 
     *
+    ../tls/doc/index

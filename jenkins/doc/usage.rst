@@ -10,8 +10,9 @@ Firstly, access one of the hostname that was specified at
 Things you **should** do
 ------------------------
 
-- Enable security in ``Configure Global Security`` then create an user.
-  After that, switch to Matrix based security to prevent anonymous user to
+- Enable security in **Configure Global Security** to ``/configureSecurity/`` URL
+  and have one account per user.
+  After that, switch to **Matrix-based security** to prevent anonymous user to
   have read-only access to Jenkins.
 - Install https://wiki.jenkins-ci.org/display/JENKINS/Timestamper and turn it
   on to all jobs.
@@ -23,6 +24,38 @@ Things you **should** do
 - Set ``Jenkins URL`` to first value of ``jenkins:hostnames``.
 - Configure SMTP to send email for build status change.
 
+Manage Users
+------------
+
+Create
+~~~~~~
+
+Go to ``/securityRealm/addUser`` and fill the form and use a randomly generated secure
+password. Click on **Sign up**.
+
+Let know that person the username and password of the account with one of the hostname
+in :ref:`pillar-jenkins-hostnames`.
+
+.. warning::
+
+  It's suggested to ask users to change their own password after first time they log in.
+
+Then, grant the permission to that user at ``/configureSecurity/``, in **Authorization**
+section, **Matrix-based security** sub-section, fill the newly created username in
+**User/group to add**, click add. Select the various permission that user requires.
+
+Delete
+~~~~~~
+
+Simply click on the red circle and a line on the user list ``/securityRealm/`` or go to
+``/securityRealm/user/{{ USERNAME }}/delete``. With targeted username.
+
+Edit
+~~~~
+
+Click on the tools icons on the user list ``/securityRealm/`` or go to
+``/securityRealm/user/{{ USERNAME }}/configure``. With targeted username.
+
 Useful plugins
 --------------
 
@@ -31,7 +64,7 @@ Useful plugins
   all paths such as ``/log/all``, ``/configure`` are parts of URL after
   address of running :doc:`/jenkins/doc/index` server.
 
-jabber
+Jabber
 ~~~~~~
 
 `jabber <https://wiki.jenkins-ci.org/display/JENKINS/Jabber+Plugin>`_

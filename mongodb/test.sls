@@ -4,14 +4,18 @@ in the doc/license.rst file.
 
 -#}
 {%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
+{%- from 'logrotate/macro.jinja2' import test_logrotate with context %}
 include:
   - doc
+  - logrotate
   - mongodb
   - mongodb.backup
   - mongodb.diamond
   - mongodb.nrpe
   - mongodb.pymongo
   - mongodb.repair
+
+{{ test_logrotate('mongodb') }}
 
 {%- set sample_db = 'sample_db' %}
 mongodb_test_generate_sample_db_for_backup_test:

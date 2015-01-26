@@ -5,6 +5,7 @@ in the doc/license.rst file.
 -#}
 {%- from 'cron/test.jinja2' import test_cron with context -%}
 {%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
+{%- from 'logrotate/macro.jinja2' import test_logrotate with context %}
 include:
   - doc
   - elasticsearch
@@ -19,6 +20,9 @@ include:
   - graylog2.web
   - graylog2.web.diamond
   - graylog2.web.nrpe
+  - logrotate
+
+{{ test_logrotate('graylog2-web-logrotate') }}
 
 {%- call test_cron() %}
 - sls: elasticsearch

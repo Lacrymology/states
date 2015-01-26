@@ -12,9 +12,13 @@ include:
   - gitlab.backup.diamond
   - gitlab.backup.nrpe
   - gitlab.nrpe
+  - logrotate
 
 {%- from 'cron/test.jinja2' import test_cron with context %}
 {%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
+{%- from 'logrotate/macro.jinja2' import test_logrotate with context %}
+
+{{ test_logrotate('/etc/logrotate.d/gitlab') }}
 
 {%- call test_cron() %}
 - sls: gitlab

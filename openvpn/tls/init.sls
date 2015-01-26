@@ -10,6 +10,15 @@ include:
   - openssl
   - openvpn
 
+openvpn_dh:
+  cmd:
+    - run
+    - name: openssl dhparam -out /etc/openvpn/dh{{ key_size }}.pem {{ key_size }}
+    - unless: test -f /etc/openvpn/dh{{ key_size }}.pem
+    - require:
+      - pkg: openssl
+      - pkg: openvpn
+
 {#-
 `tls._ca_exists` does not work as expected:
 
@@ -41,22 +50,23 @@ openvpn_ca:
       - module: openvpn_ca
 {%- endif %}
 
-openvpn_dh:
-  cmd:
-    - run
-    - name: openssl dhparam -out /etc/openvpn/dh{{ key_size }}.pem {{ key_size }}
-    - unless: test -f /etc/openvpn/dh{{ key_size }}.pem
+{%- for instance in salt['pillar.get']('openvpn:servers', {}) %}
+/etc/openvpn/{{ instance }}:
+  file:
+    - directory
+    - user: root
+    - group: root
+    - mode: 550
     - require:
-      - pkg: openssl
+      - pkg: openvpn
 
 {%- if not ca_exists %}
-    {%- for instance in salt['pillar.get']('openvpn:servers') %}
 openvpn_server_csr_{{ instance }}:
   module:
     - wait
     - name: tls.create_csr
     - ca_name: {{ ca_name }}
-    - CN: server
+    - CN: server_{{ instance }}
     - watch:
       - module: openvpn_ca
 
@@ -65,7 +75,7 @@ openvpn_server_cert_{{ instance }}:
     - wait
     - name: tls.create_ca_signed_cert
     - ca_name: {{ ca_name }}
-    - CN: server
+    - CN: server_{{ instance }}
     - extensions:
         basicConstraints:
           critical: False
@@ -78,13 +88,27 @@ openvpn_server_cert_{{ instance }}:
           options: 'serverAuth'
     - watch:
       - module: openvpn_server_csr_{{ instance }}
+  file:
+    - copy
+    - name: /etc/openvpn/{{ instance }}/server.crt
+    - source: /etc/pki/{{ ca_name }}/certs/server_{{ instance }}.crt
+    - require:
+      - module: openvpn_server_cert_{{ instance }}
+
+openvpn_server_key_{{ instance }}:
+  file:
+    - copy
+    - name: /etc/openvpn/{{ instance }}/server.key
+    - source: /etc/pki/{{ ca_name }}/certs/server_{{ instance }}.key
+    - require:
+      - module: openvpn_server_cert_{{ instance }}
 
 openvpn_client_csr_{{ instance }}:
   module:
     - wait
     - name: tls.create_csr
     - ca_name: {{ ca_name }}
-    - CN: client
+    - CN: client_{{ instance }}
     - watch:
       - module: openvpn_ca
 
@@ -93,7 +117,7 @@ openvpn_client_cert_{{ instance }}:
     - wait
     - name: tls.create_ca_signed_cert
     - ca_name: {{ ca_name }}
-    - CN: client
+    - CN: client_{{ instance }}
     - extensions:
         basicConstraints:
           critical: False
@@ -106,26 +130,25 @@ openvpn_client_cert_{{ instance }}:
           options: 'clientAuth'
     - watch:
       - module: openvpn_client_csr_{{ instance }}
-
-/etc/openvpn/{{ instance }}:
   file:
-    - directory
-    - user: root
-    - group: root
-    - mode: 550
+    - copy
+    - name: /etc/openvpn/{{ instance }}/client.crt
+    - source: /etc/pki/{{ ca_name }}/certs/client_{{ instance }}.crt
     - require:
-      - pkg: openvpn
-
-openvpn_{{ instance }}:
-  cmd:
-    - wait
-    - name: mv /etc/pki/{{ ca_name }}/certs/* /etc/openvpn/{{ instance }}
-    - watch:
       - module: openvpn_server_cert_{{ instance }}
+
+openvpn_client_key_{{ instance }}:
+  file:
+    - copy
+    - name: /etc/openvpn/{{ instance }}/client.key
+    - source: /etc/pki/{{ ca_name }}/certs/client_{{ instance }}.key
+    - require:
       - module: openvpn_client_cert_{{ instance }}
+{%- endif %}
+
+/etc/openvpn/{{ instance }}.conf:
   file:
     - managed
-    - name: /etc/openvpn/{{ instance }}.conf
     - source: salt://openvpn/tls/config.jinja2
     - template: jinja
     - user: root
@@ -136,12 +159,11 @@ openvpn_{{ instance }}:
     - require:
       - file: /etc/openvpn/{{ instance }}
 
-start_openvpn_{{ instance }}:
+restart_openvpn_{{ instance }}:
   cmd:
-    - run
-    - name: service openvpn start {{ instance }}
-    - require:
-      - file: openvpn_{{ instance }}
+    - wait
+    - name: service openvpn restart {{ instance }}
+    - watch:
+      - file: /etc/openvpn/{{ instance }}.conf
       - file: /etc/default/openvpn
-    {%- endfor %}
-{%- endif %}
+{%- endfor %}

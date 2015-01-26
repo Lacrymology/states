@@ -10,10 +10,11 @@ patch_salt_fix_require_sls:
     - mode: 644
     - source: salt://salt/patch/state.py
 
-/usr/share/pyshared/salt/utils/__init__.py:
+patch_salt_utils:
   file:
     - managed
+    - name: /usr/share/pyshared/salt/utils/__init__.py
     - user: root
     - group: root
     - mode: 644
-    - source: salt://salt/salt.utils.py
+    - source: salt://salt/patch/utils.py

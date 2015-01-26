@@ -116,6 +116,7 @@ carbon-cache-{{ instance }}:
     - name: carbon-cache-{{ instance }}
     - require:
       - user: graphite
+{#- carbon periodically reload this file, doesn't need to watch it #}
       - file: /etc/graphite/storage-aggregation.conf
       - file: /var/log/graphite/carbon
       - file: /var/lib/graphite/whisper/{{ instance }}

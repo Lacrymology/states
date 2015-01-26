@@ -1,0 +1,16 @@
+{%- macro test_logrotate(logrotate_script) %}
+test_logrotate:
+  cmd:
+    - run
+    - name: '! logrotate --force /etc/logrotate.conf 2>&1 | grep error'
+    - require:
+      - file: logrotate
+      - file: {{ logrotate_script }}
+
+clean_rotated_logs:
+  cmd:
+    - run
+    - name: find /var/log -type f -regex '.+\.[0-9]+\(\.gz\|\)$' -delete
+    - require:
+      - cmd: test_logrotate
+{% endmacro %}

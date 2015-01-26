@@ -6,7 +6,7 @@ in the doc/license.rst file.
 # {{ salt['pillar.get']('message_do_not_modify') }}
 {%- set reserved_keys = ('secret', 'user', 'group', 'syslog', 'writepid', 'port', 'ifconfig', 'remote') -%}
 {%- set blocked_keys = ('log', 'log-append') -%}
-{%- set configs = salt['pillar.get']('openvpn:' + tunnel + ':config', {}) %}
+{%- set configs = salt['pillar.get']('openvpn:servers:' + tunnel + ':config', {}) %}
 secret /etc/openvpn/{{ tunnel }}/secret.key
 user nobody
 group nogroup
@@ -29,10 +29,10 @@ dev tun
 # ignore "{{ key }}: {{ configs[key] }}" {{ key }} is a reserved key!
     {%- endif -%}
 {%- endfor -%}
-{%- set openvpn = salt['pillar.get']('openvpn', {}) %}
-{%- set port = openvpn[tunnel]['peers'][grains['id']]['port']|default(False) %}
+{%- set servers = salt['pillar.get']('openvpn:servers', {}) %}
+{%- set port = servers[tunnel]['peers'][grains['id']]['port']|default(False) %}
 {% if port %}port {{ port }}{% endif %}
-{%- set peers = openvpn[tunnel]['peers'] %}
+{%- set peers = servers[tunnel]['peers'] %}
 {%- for peer, peer_data in peers.iteritems() -%}
     {%- if peer != grains['id'] %}
 ifconfig {{ peers[grains['id']]['vpn_address'] }} {{ peer_data['vpn_address'] }}

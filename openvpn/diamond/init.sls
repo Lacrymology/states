@@ -3,6 +3,8 @@ Use of this source code is governed by a BSD license that can be found
 in the doc/license.rst file.
 
 -#}
+{%- set tunnels = salt['pillar.get']('openvpn:servers', {}) %}
+
 include:
   - diamond
   - openvpn.static
@@ -19,13 +21,12 @@ openvpn_diamond_collector:
     - source: salt://openvpn/diamond/config.jinja2
     - context:
         instances:
-{%- set openvpn = salt['pillar.get']('openvpn', {}) %}
-{%- for tunnel in openvpn %}
+{%- for tunnel in tunnels %}
           {{ tunnel }}: file:///var/lib/openvpn/{{ tunnel }}.log
 {%- endfor %}
     - require:
       - file: /etc/diamond/collectors
-{%- for tunnel in openvpn %}
+{%- for tunnel in tunnels %}
       - service: openvpn-{{ tunnel }}
 {%- endfor %}
     - watch_in:
@@ -39,7 +40,7 @@ openvpn_diamond_resources:
     - require_in:
       - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
     - require:
-{%- for tunnel in openvpn %}
+{%- for tunnel in tunnels %}
       - service: openvpn-{{ tunnel }}
 {%- endfor %}
     - text:

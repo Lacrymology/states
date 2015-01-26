@@ -26,8 +26,8 @@ test:
     - test
     - map:
         ProcessResources:
-    {{ diamond_process_test('openvpn') }}
-    {%- for tunnel in salt['pillar.get']('openvpn', {}) %}
+          {{ diamond_process_test('openvpn') }}
+        {%- set tunnel = salt['pillar.get']('openvpn:servers', {}).keys()[0] %}
         OpenVPN:
           openvpn.{{ tunnel }}.clients.connected: True
           openvpn.{{ tunnel }}.global.auth_read_bytes: True
@@ -35,7 +35,6 @@ test:
           openvpn.{{ tunnel }}.global.tcp-udp_write_bytes: True
           openvpn.{{ tunnel }}.global.tun-tap_read_bytes: True
           openvpn.{{ tunnel }}.global.tun-tap_write_bytes: True
-    {%- endfor %}
     - require:
       - sls: openvpn.static
       - sls: openvpn.diamond

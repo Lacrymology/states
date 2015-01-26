@@ -13,25 +13,26 @@ Optional
 Example::
 
   openvpn:
-    <tunnelname>:
-      config:
-        key1: value1
-        key2: value2
-      peers:
-        {{ grains['id'] }}:
-          vpn_address: 1.1.1.1
-          address: 2.2.2.1
-          port:
-        <peername>:
-          vpn_address: 1.1.1.1
-          address: 2.2.2.2
-          port:
-      secret:
+    servers:
+      <tunnelname>:
+        config:
+          key1: value1
+          key2: value2
+        peers:
+          {{ grains['id'] }}:
+            vpn_address: 1.1.1.1
+            address: 2.2.2.1
+            port:
+          <peername>:
+            vpn_address: 1.1.1.1
+            address: 2.2.2.2
+            port:
+        secret:
 
-.. _pillar-openvpn:
+.. _pillar-openvpn-servers:
 
-openvpn
-~~~~~~~
+openvpn:servers
+~~~~~~~~~~~~~~~
 
 A dictionnary contains :doc:`/openvpn/doc/index` configs.
 
@@ -40,17 +41,17 @@ Default: don't start any :doc:`/openvpn/doc/index` ``{}`` instance.
 Conditional
 -----------
 
-.. _pillar-openvpn-tunnelname:
+.. _pillar-openvpn-servers-tunnelname:
 
-openvpn:{{ tunnelname }}
-~~~~~~~~~~~~~~~~~~~~~~~~
+openvpn:servers:{{ tunnelname }}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Name of tunnel
 
-.. _pillar-openvpn-tunnelname-config:
+.. _pillar-openvpn-servers-tunnelname-config:
 
-openvpn:{{ tunnelname }}:config
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+openvpn:servers:{{ tunnelname }}:config
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Map to :doc:`/openvpn/doc/index` configuration options. Please consult
 `OpenVPN document <http://openvpn.net/index.php/open-source/documentation.html>`_
@@ -67,38 +68,38 @@ Blocked keys::
 
     log, log-append
 
-.. _pillar-openvpn-tunnelname-secret:
+.. _pillar-openvpn-servers-tunnelname-secret:
 
-openvpn:{{ tunnelname }}:secret
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+openvpn:servers:{{ tunnelname }}:secret
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Secret key used for this tunnel.
 
-.. _pillar-openvpn-tunnelname-peers-peername:
+.. _pillar-openvpn-servers-tunnelname-peers-peername:
 
-openvpn:{{ tunnelname }}:peers:{{ peername }}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+openvpn:servers:{{ tunnelname }}:peers:{{ peername }}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Dictionnary of peers.
 
-.. _pillar-openvpn-tunnelname-peers-peername-vpn_address:
+.. _pillar-openvpn-servers-tunnelname-peers-peername-vpn_address:
 
-openvpn:{{ tunnelname }}:peers:{{ peername }}:vpn_address
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+openvpn:servers:{{ tunnelname }}:peers:{{ peername }}:vpn_address
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Address of VPN endpoint.
 
-.. _pillar-openvpn-tunnelname-peers-peername-address:
+.. _pillar-openvpn-servers-tunnelname-peers-peername-address:
 
-openvpn:{{ tunnelname }}:peers:{{ peername }}:address
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+openvpn:servers:{{ tunnelname }}:peers:{{ peername }}:address
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Address of remote peer.
 
-.. _pillar-openvpn-tunnelname-peers-peername-port:
+.. _pillar-openvpn-servers-tunnelname-peers-peername-port:
 
-openvpn:{{ tunnelname }}:peers:{{ peername }}:port
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+openvpn:servers:{{ tunnelname }}:peers:{{ peername }}:port
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 :ref:`glossary-TCP`/:ref:`glossary-UDP` port number for both local and remote.
 

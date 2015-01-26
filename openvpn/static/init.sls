@@ -37,15 +37,15 @@ To generate a secret key::
   openvpn --genkey --secret /dev/stdout
 -#}
 {%- from 'openvpn/init.sls' import service_openvpn -%}
+{%- set servers = salt['pillar.get']('openvpn:servers', {}) %}
 
 include:
   - openvpn
 
-{%- set openvpn = salt['pillar.get']('openvpn', {}) %}
-{%- for tunnel in openvpn -%}
+{%- for tunnel in servers -%}
     {%- set config_dir = '/etc/openvpn/' + tunnel -%}
     {#- only 2 remotes are supported -#}
-    {%- if openvpn[tunnel]['peers']|length == 2 %}
+    {%- if servers[tunnel]['peers']|length == 2 %}
 {{ config_dir }}:
   file:
     - directory
@@ -60,7 +60,7 @@ include:
     - managed
     - name: {{ config_dir }}/secret.key
     - contents: |
-        {{ openvpn[tunnel]['secret'] | indent(8) }}
+        {{ servers[tunnel]['secret'] | indent(8) }}
     - user: nobody
     - group: nogroup
     - mode: 400
@@ -86,4 +86,4 @@ include:
     {%- endif -%}
 {%- endfor -%}
 
-{{ service_openvpn(openvpn) }}
+{{ service_openvpn(servers) }}

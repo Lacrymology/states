@@ -176,6 +176,12 @@ restart_openvpn_{{ instance }}:
     - wait
     - name: service openvpn restart {{ instance }}
     - watch:
+      - cmd: openvpn_dh
+        {%- if not ca_exists %}
+      - file: openvpn_ca
+      - file: openvpn_server_cert_{{ instance }}
+      - file: openvpn_server_key_{{ instance }}_chmod
+        {%- endif %}
       - file: /etc/openvpn/{{ instance }}.conf
       - file: /etc/default/openvpn
     {%- endif %}

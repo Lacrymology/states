@@ -67,5 +67,6 @@ def check_pgsql_query(config):
 if __name__ == "__main__":
     nrpe.check(check_pgsql_query, {
         'critical': '1:',
+        'port': '5432',
         'query': 'show max_connections;',
     })

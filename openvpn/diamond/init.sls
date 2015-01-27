@@ -22,12 +22,16 @@ openvpn_diamond_collector:
     - context:
         instances:
 {%- for tunnel in tunnels %}
+    {%- if tunnels[tunnel]['mode'] == 'static' %}
           {{ tunnel }}: file:///var/lib/openvpn/{{ tunnel }}.log
+    {%- endif %}
 {%- endfor %}
     - require:
       - file: /etc/diamond/collectors
 {%- for tunnel in tunnels %}
+    {%- if tunnels[tunnel]['mode'] == 'static' %}
       - service: openvpn-{{ tunnel }}
+    {%- endif %}
 {%- endfor %}
     - watch_in:
       - service: diamond
@@ -41,7 +45,9 @@ openvpn_diamond_resources:
       - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
     - require:
 {%- for tunnel in tunnels %}
+    {%- if tunnels[tunnel]['mode'] == 'static' %}
       - service: openvpn-{{ tunnel }}
+    {%- endif %}
 {%- endfor %}
     - text:
       - |

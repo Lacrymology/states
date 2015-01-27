@@ -5,9 +5,11 @@ in the doc/license.rst file.
 -#}
 {%- set vpns = salt['pillar.get']('openvpn:servers', {}) %}
 {%- for instance in vpns %}
+    {%- if vpns[instance]['mode'] == 'static' %}
 openvpn_{{ instance }}:
   description: Openvpn Instance {{ instance }}
   command: "/usr/lib/nagios/plugins/check_procs -C openvpn -c 1:1 -a '--config /etc/openvpn/{{ instance }}/config'"
+    {%- endif %}
 {%- endfor %}
 
 openvpn_procs:

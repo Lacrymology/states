@@ -48,6 +48,14 @@ openvpn:servers:{{ tunnelname }}
 
 Name of tunnel
 
+.. _pillar-openvpn-servers-tunnelname-mode:
+
+openvpn:servers:{{ tunnelname }}:mode
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Which authentication mode will be used for this instance.
+Either ``static`` or ``tls``.
+
 .. _pillar-openvpn-servers-tunnelname-config:
 
 openvpn:servers:{{ tunnelname }}:config

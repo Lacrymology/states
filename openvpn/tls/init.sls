@@ -105,6 +105,16 @@ openvpn_server_key_{{ instance }}:
     - require:
       - module: openvpn_server_cert_{{ instance }}
 
+openvpn_server_key_{{ instance }}_chmod:
+  file:
+    - managed
+    - name: /etc/openvpn/{{ instance }}/server.key
+    - user: root
+    - group: root
+    - mode: 400
+    - require:
+      - file: openvpn_server_key_{{ instance }}
+
 openvpn_client_csr_{{ instance }}:
   module:
     - wait

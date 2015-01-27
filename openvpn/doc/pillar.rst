@@ -17,7 +17,7 @@ Example::
       name: runway
       bits: 2048
       days: 365
-      common_name: {{ grains['id'] }}.{{ domain_name }}
+      common_name: openvpn-ca
       country: US
       state: California
       locality: Redwood City

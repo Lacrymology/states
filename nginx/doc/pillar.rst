@@ -28,6 +28,16 @@ Number of :doc:`/nginx/doc/index` workers.
 
 Default: use the number of available CPU cores (``auto``).
 
+.. _pillar-nginx-worker_connections:
+
+nginx:worker_connections
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+The maximum number of simultaneous connections that can be opened by a worker
+process.
+
+Default: use maximum ``1024`` connections per worker.
+
 .. _pillar-nginx-log_format:
 
 nginx:log_format

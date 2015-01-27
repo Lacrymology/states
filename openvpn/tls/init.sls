@@ -50,7 +50,9 @@ openvpn_ca:
       - module: openvpn_ca
 {%- endif %}
 
-{%- for instance in salt['pillar.get']('openvpn:servers', {}) %}
+{%- set servers = salt['pillar.get']('openvpn:servers', {}) %}
+{%- for instance in servers %}
+    {%- if servers[instance]['mode'] == 'tls' %}
 /etc/openvpn/{{ instance }}:
   file:
     - directory
@@ -60,7 +62,7 @@ openvpn_ca:
     - require:
       - pkg: openvpn
 
-{%- if not ca_exists %}
+        {%- if not ca_exists %}
 openvpn_server_csr_{{ instance }}:
   module:
     - wait
@@ -144,7 +146,7 @@ openvpn_client_key_{{ instance }}:
     - source: /etc/pki/{{ ca_name }}/certs/client_{{ instance }}.key
     - require:
       - module: openvpn_client_cert_{{ instance }}
-{%- endif %}
+        {%- endif %}
 
 /etc/openvpn/{{ instance }}.conf:
   file:
@@ -166,4 +168,5 @@ restart_openvpn_{{ instance }}:
     - watch:
       - file: /etc/openvpn/{{ instance }}.conf
       - file: /etc/default/openvpn
+    {%- endif %}
 {%- endfor %}

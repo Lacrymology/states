@@ -36,6 +36,7 @@ openvpn:
 
 {%- macro service_openvpn(tunnels) %}
     {%- for tunnel in tunnels %}
+        {%- if tunnels[tunnel]['mode'] == 'static' %}
 openvpn-{{ tunnel }}:
   file:
     - managed
@@ -59,6 +60,7 @@ openvpn-{{ tunnel }}:
 
 {{ manage_upstart_log('openvpn-' + tunnel) }}
 
+        {%- endif -%}
     {%- endfor -%}
 {%- endmacro -%}
 {#- does not use PID, no need to manage #}

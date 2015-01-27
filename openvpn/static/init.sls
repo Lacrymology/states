@@ -43,9 +43,10 @@ include:
   - openvpn
 
 {%- for tunnel in servers -%}
-    {%- set config_dir = '/etc/openvpn/' + tunnel -%}
-    {#- only 2 remotes are supported -#}
-    {%- if servers[tunnel]['peers']|length == 2 %}
+    {%- if servers[tunnel]['mode'] == 'static' %}
+        {%- set config_dir = '/etc/openvpn/' + tunnel -%}
+        {#- only 2 remotes are supported -#}
+        {%- if servers[tunnel]['peers']|length == 2 %}
 {{ config_dir }}:
   file:
     - directory
@@ -83,6 +84,7 @@ include:
       - service: openvpn-{{ tunnel }}
     - require:
       - file: {{ config_dir }}
+        {%- endif -%}
     {%- endif -%}
 {%- endfor -%}
 

@@ -9,20 +9,16 @@ include:
   - clamav
 
 extend:
-  clamav-daemon:
-    service:
-      - watch:
-        - user: clamav-daemon
-      - require:
-        - pkg: amavis
+  clamav:
     user:
-      - present
-      - name: clamav
       - groups:
         - amavis
       - require:
         - pkg: clamav-daemon
         - pkg: amavis
+      - watch_in:
+        - service: clamav-daemon
+        - service: clamav-freshclam
   amavis:
     user:
       - groups:

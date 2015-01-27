@@ -16,12 +16,6 @@ clamav-freshclam:
     - latest
     - require:
       - cmd: apt_sources
-  user:
-    - present
-    - name: clamav
-    - shell: /bin/false
-    - require:
-      - pkg: clamav-freshclam
   module:
     - wait
     - name: service.stop
@@ -36,7 +30,7 @@ clamav-freshclam:
       - module: clamav-freshclam
     - watch:
       - pkg: clamav-freshclam
-      - user: clamav-freshclam
+      - user: clamav
   file:
     - managed
     - name: /etc/clamav/freshclam.conf
@@ -55,7 +49,15 @@ clamav-freshclam:
     - watch:
       - file: clamav-freshclam
       - pkg: clamav-freshclam
-      - user: clamav-freshclam
+      - user: clamav
+
+clamav:
+  user:
+    - present
+    - name: clamav
+    - shell: /bin/false
+    - require:
+      - pkg: clamav-freshclam
 
 clamav-daemon:
   pkg:
@@ -81,7 +83,7 @@ clamav-daemon:
     - watch:
       - pkg: clamav-daemon
       - file: clamav-daemon
-      - user: clamav-freshclam
+      - user: clamav
 
 /usr/local/bin/clamav-scan.sh:
   file:

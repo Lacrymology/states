@@ -17,10 +17,8 @@ test:
     - run_all_checks
     - order: last
   qa:
-    - test_pillar
+    - test
     - name: openvpn
-    - additional:
-      - openvpn.tls
     - pillar_doc: {{ opts['cachedir'] }}/doc/output
     - require:
       - monitoring: test
@@ -30,30 +28,37 @@ test:
     - map:
         ProcessResources:
           {{ diamond_process_test('openvpn') }}
-        {%- set tunnel = salt['pillar.get']('openvpn:servers', {}).keys()[0] %}
-        OpenVPN:
-          openvpn.{{ tunnel }}.clients.connected: True
-          openvpn.{{ tunnel }}.global.auth_read_bytes: True
-          openvpn.{{ tunnel }}.global.tcp-udp_read_bytes: True
-          openvpn.{{ tunnel }}.global.tcp-udp_write_bytes: True
-          openvpn.{{ tunnel }}.global.tun-tap_read_bytes: True
-          openvpn.{{ tunnel }}.global.tun-tap_write_bytes: True
     - require:
       - sls: openvpn.diamond
       - sls: openvpn.static
       - sls: openvpn.tls
 
-test_monitor:
-  qa:
-    - test_monitor
-    - name: openvpn
-    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+{%- set servers = salt['pillar.get']('openvpn:servers', {}) %}
+{%- for tunnel in servers %}
+test_openvpn_{{ tunnel }}:
+  diamond:
+    - test
+    - map:
+        OpenVPN:
+          openvpn.{{ tunnel }}.clients.connected: True
+    {%- if servers[tunnel]['mode'] == 'static' %}
+          openvpn.{{ tunnel }}.global.auth_read_bytes: True
+          openvpn.{{ tunnel }}.global.tcp-udp_read_bytes: True
+          openvpn.{{ tunnel }}.global.tcp-udp_write_bytes: True
+          openvpn.{{ tunnel }}.global.tun-tap_read_bytes: True
+          openvpn.{{ tunnel }}.global.tun-tap_write_bytes: True
+    {%- else %}
+          openvpn.{{ tunnel }}.global.max_bcast-mcast_queue_length: True
+    {%- endif %}
     - require:
-      - monitoring: test
-      - cmd: doc
+      - sls: openvpn.diamond
+      - sls: openvpn.static
+      - sls: openvpn.tls
+{%- endfor %}
 
 extend:
   openvpn_diamond_collector:
     file:
       - require:
         - sls: openvpn.static
+        - sls: openvpn.tls

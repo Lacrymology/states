@@ -17,8 +17,10 @@ test:
     - run_all_checks
     - order: last
   qa:
-    - test
+    - test_pillar
     - name: openvpn
+    - additional:
+      - openvpn.tls
     - pillar_doc: {{ opts['cachedir'] }}/doc/output
     - require:
       - monitoring: test
@@ -40,6 +42,15 @@ test:
       - sls: openvpn.diamond
       - sls: openvpn.static
       - sls: openvpn.tls
+
+test_monitor:
+  qa:
+    - test_monitor
+    - name: openvpn
+    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - require:
+      - monitoring: test
+      - cmd: doc
 
 extend:
   openvpn_diamond_collector:

@@ -117,22 +117,9 @@ include:
     - require:
       - file: /usr/local
       - file: bash
+      - file: /usr/local/bin/salt_archive_set_owner_mode.sh
     - require_in:
       - file: /etc/cron.d/salt-archive
-
-/usr/local/bin/salt_archive_set_owner_mode.sh:
-  file:
-    - managed
-    - user: root
-    - group: root
-    - source: salt://salt/archive/server/salt_archive_set_owner_mode.jinja2
-    - template: jinja
-    - mode: 550
-    - require:
-      - file: /usr/local
-      - file: bash
-    - require_in:
-      - file: /usr/local/bin/salt_archive_sync.sh
 
 archive_rsync:
   cmd:
@@ -145,6 +132,18 @@ archive_rsync:
     - watch:
       - file: salt_archive
 {%- endif %}
+
+/usr/local/bin/salt_archive_set_owner_mode.sh:
+  file:
+    - managed
+    - user: root
+    - group: root
+    - source: salt://salt/archive/server/salt_archive_set_owner_mode.jinja2
+    - template: jinja
+    - mode: 550
+    - require:
+      - file: /usr/local
+      - file: bash
 
 /etc/nginx/conf.d/salt_archive.conf:
   file:

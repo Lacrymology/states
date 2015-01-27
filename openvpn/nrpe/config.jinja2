@@ -5,13 +5,30 @@ in the doc/license.rst file.
 -#}
 {%- set vpns = salt['pillar.get']('openvpn:servers', {}) %}
 {%- for instance in vpns %}
-    {%- if vpns[instance]['mode'] == 'static' %}
+{%- set mode = vpns[instance]['mode'] %}
 openvpn_{{ instance }}:
-  description: Openvpn Instance {{ instance }}
+  description: OpenVPN Instance {{ instance }}
+    {%- if mode == 'static' %}
   command: "/usr/lib/nagios/plugins/check_procs -C openvpn -c 1:1 -a '--config /etc/openvpn/{{ instance }}/config'"
+    {%- elif mode == 'tls' %}
+  command: "/usr/lib/nagios/plugins/check_procs -C openvpn -c 1:1 -a '--config /etc/openvpn/{{ instance }}.conf'"
     {%- endif %}
+
+openvpn_{{ instance }}_port:
+  description: OpenVPN Instance {{ instance }} Port
+    {%- if mode == 'static' %}
+  command: "/usr/lib/nagios/plugins/check_udp_listen {{ vpns[instance]['peers'][grains['id']]['port'] | default(1194) }}"
+    {%- elif mode == 'tls' %}
+        {%- if vpns[instance]['protocol'] == 'udp' %}
+  command: "/usr/lib/nagios/plugins/check_udp_listen {{ vpns[instance]['port'] }}"
+        {%- else %}
+  command: "/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p {{ vpns[instance]['port'] }}"
+        {%- endif %}
+    {%- endif %}
+  dependencies:
+    - openvpn_{{ instance }}
 {%- endfor %}
 
 openvpn_procs:
-  description: Openvpn Daemon
+  description: OpenVPN Daemon
   command: '/usr/lib/nagios/plugins/check_procs -c {{ vpns|length }}:{{ vpns|length }} -C openvpn'

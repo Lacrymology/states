@@ -10,6 +10,7 @@ include:
   - openvpn.diamond
   - openvpn.nrpe
   - openvpn.static
+  - openvpn.tls
 
 test:
   monitoring:
@@ -36,8 +37,9 @@ test:
           openvpn.{{ tunnel }}.global.tun-tap_read_bytes: True
           openvpn.{{ tunnel }}.global.tun-tap_write_bytes: True
     - require:
-      - sls: openvpn.static
       - sls: openvpn.diamond
+      - sls: openvpn.static
+      - sls: openvpn.tls
 
 extend:
   openvpn_diamond_collector:

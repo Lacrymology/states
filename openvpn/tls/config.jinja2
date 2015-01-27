@@ -28,7 +28,7 @@ group nogroup
 persist-key
 persist-tun
 
-status /etc/openvpn/{{ instance }}/openvpn-status.log
+status /var/lib/openvpn/{{ instance }}.log
 
 syslog vpn-{{ instance }}
 

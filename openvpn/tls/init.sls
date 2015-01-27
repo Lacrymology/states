@@ -96,6 +96,7 @@ openvpn_server_cert_{{ instance }}:
     - source: /etc/pki/{{ ca_name }}/certs/server_{{ instance }}.crt
     - require:
       - module: openvpn_server_cert_{{ instance }}
+      - file: /etc/openvpn/{{ instance }}
 
 openvpn_server_key_{{ instance }}:
   file:
@@ -104,6 +105,7 @@ openvpn_server_key_{{ instance }}:
     - source: /etc/pki/{{ ca_name }}/certs/server_{{ instance }}.key
     - require:
       - module: openvpn_server_cert_{{ instance }}
+      - file: /etc/openvpn/{{ instance }}
 
 openvpn_server_key_{{ instance }}_chmod:
   file:
@@ -148,6 +150,7 @@ openvpn_client_cert_{{ instance }}:
     - source: /etc/pki/{{ ca_name }}/certs/client_{{ instance }}.crt
     - require:
       - module: openvpn_server_cert_{{ instance }}
+      - file: /etc/openvpn/{{ instance }}
 
 openvpn_client_key_{{ instance }}:
   file:
@@ -156,6 +159,7 @@ openvpn_client_key_{{ instance }}:
     - source: /etc/pki/{{ ca_name }}/certs/client_{{ instance }}.key
     - require:
       - module: openvpn_client_cert_{{ instance }}
+      - file: /etc/openvpn/{{ instance }}
         {%- endif %}
 
 /etc/openvpn/{{ instance }}.conf:
@@ -169,12 +173,14 @@ openvpn_client_key_{{ instance }}:
     - context:
         instance: {{ instance }}
     - require:
-      - file: /etc/openvpn/{{ instance }}
+      - pkg: openvpn
 
 restart_openvpn_{{ instance }}:
   cmd:
     - wait
     - name: service openvpn restart {{ instance }}
+    - require:
+      - file: /var/lib/openvpn
     - watch:
       - cmd: openvpn_dh
         {%- if not ca_exists %}

@@ -7,8 +7,8 @@ in the doc/license.rst file.
 
 include:
   - apt
-  - openssl
   - openvpn
+  - ssl
 
 openvpn_dh:
   cmd:
@@ -16,7 +16,7 @@ openvpn_dh:
     - name: openssl dhparam -out /etc/openvpn/dh{{ key_size }}.pem {{ key_size }}
     - unless: test -f /etc/openvpn/dh{{ key_size }}.pem
     - require:
-      - pkg: openssl
+      - pkg: ssl-cert
       - pkg: openvpn
 
 {#-

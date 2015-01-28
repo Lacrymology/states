@@ -44,7 +44,7 @@ Number of RSA key bits.
 openvpn:ca:days
 ~~~~~~~~~~~~~~~
 
-Number of days the CA will be valid.
+Number of days the Certificate Authority will be valid.
 
 .. _pillar-openvpn-ca-country:
 
@@ -86,7 +86,7 @@ Organizational Unit Name.
 openvpn:ca:common_name
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Common name in the request.
+The certificate `Common Name <http://info.ssl.com/article.aspx?id=10048>`_.
 
 .. _pillar-openvpn-ca-email:
 
@@ -141,7 +141,8 @@ Example::
 openvpn:dhparam:key_size
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-Number of bits of DH parameters.
+Number of bits of `DH
+<http://en.wikipedia.org/wiki/Diffie–Hellman_key_exchange>`_ parameters.
 
 Default: ``2048`` bits.
 
@@ -150,9 +151,9 @@ Default: ``2048`` bits.
 openvpn:servers
 ~~~~~~~~~~~~~~~
 
-A dictionnary contains :doc:`/openvpn/doc/index` configs.
+A dictionnary contains :doc:`index` configs.
 
-Default: don't start any :doc:`/openvpn/doc/index` ``{}`` instance.
+Default: don't start any :doc:`index` ``{}`` instance.
 
 Conditional
 -----------
@@ -177,7 +178,7 @@ Either ``static`` or ``tls``.
 openvpn:servers:{{ instance }}:config
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Map to :doc:`/openvpn/doc/index` configuration options. Please consult
+Map to :doc:`index` configuration options. Please consult
 `OpenVPN document <http://openvpn.net/index.php/open-source/documentation.html>`_
 for more details.
 
@@ -234,7 +235,8 @@ Default: use port 1194 (``''``).
 openvpn:servers:{{ instance }}:port
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Which TCP/UDP port should this instance listen on.
+Which :ref:`glossary-TCP`/:ref:`glossary-UDP` port should this instance listen
+on.
 
 .. _pillar-openvpn-servers-{{ instance }}-protocol:
 
@@ -256,7 +258,7 @@ openvpn:servers:{{ instance }}:device
 openvpn:servers:{{ instance }}:server
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Configure server mode and supply a VPN subnet for OpenVPN to draw client
+Configure server mode and supply a VPN subnet for :doc:`index` to draw client
 addresses from.
 
 .. _pillar-openvpn-servers-{{ instance }}-extra_configs:

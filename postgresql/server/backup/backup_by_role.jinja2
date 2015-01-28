@@ -17,7 +17,12 @@ export TERM=dumb
 role=$1
 query="SELECT pg_database.datname FROM pg_database, pg_authid
        WHERE pg_database.datdba=pg_authid.oid AND pg_authid.rolname='${role}'";
-databases=$(sudo -H -s -u postgres psql --tuples-only --no-align -c "${query}")
-for db in ${databases}; do
-  /usr/local/bin/backup-postgresql --prefix ${role} ${db}
-done
+databases=$(su - postgres -s /bin/bash -c "psql --tuples-only --no-align -c \"${query}\"")
+if [ -z "${databases}" ]; then
+    echo "Cannot get the databases list or it's empty."
+    exit 1
+else
+    for db in ${databases}; do
+        /usr/local/bin/backup-postgresql --prefix ${role} ${db}
+    done
+fi

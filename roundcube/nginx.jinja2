@@ -7,14 +7,15 @@ in the doc/license.rst file.
 upstream roundcube {
     server unix:///var/lib/uwsgi/roundcube.sock;
 }
+{%- set ssl = salt['pillar.get']('roundcube:ssl', False) %}
+{%- set hostnames = salt['pillar.get']('roundcube:hostnames') %}
+{%- set timeout = salt['pillar.get']('roundcube:timeout', 60) %}
 
 server {
     listen 80;
-{%- set ssl = salt['pillar.get']('roundcube:ssl', False) %}
 {%- if ssl -%}
     {%- if salt['pillar.get']('roundcube:ssl_redirect', False) %}
     {# if https, redirect http port 80 to https port 443 #}
-{%- set hostnames = salt['pillar.get']('roundcube:hostnames') %}
     server_name {% for hostname in hostnames %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
     return 301 https://{{ hostnames[0] }}$request_uri;
 }
@@ -47,7 +48,6 @@ server {
 
     location ~ .php$ {
         gzip off;
-{%- set timeout = salt['pillar.get']('roundcube:timeout', 60) %}
         include uwsgi_params;
         uwsgi_read_timeout {{ timeout }};
         uwsgi_send_timeout {{ timeout }};

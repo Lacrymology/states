@@ -14,16 +14,16 @@ Example::
 
   openvpn:
     ca:
-      name: runway
+      name: example
       bits: 2048
       days: 365
-      common_name: openvpn-ca
+      common_name: example-ca
       country: US
       state: California
       locality: Redwood City
-      organization: Runway 20
-      organizational_unit: Dev Team
-      email: info@runway.com
+      organization: My Company Ltd
+      organizational_unit: IT
+      email: info@example.com
 
 .. _pillar-openvpn-ca-name:
 

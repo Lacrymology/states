@@ -40,4 +40,14 @@ default_pool_size = {{ salt['pillar.get']('pgbouncer:default_pool_size', 20) }}
 server_idle_timeout = {{ salt['pillar.get']('pgbouncer:server_idle_timeout', 600) }}
 
 idle_transaction_timeout = {{ salt['pillar.get']('pgbouncer:idle_transaction_timeout', 0) }}
+
+{%- if salt['pillar.get']('debug', False) %}
+log_connections = 1
+
+log_disconnections = 1
+{%- else %}
+log_connections = 0
+
+log_disconnections = 0
+{%- endif %}
 {% endblock %}

@@ -175,10 +175,6 @@ def present(name,
         mode = 'update'
 
     # The user is not present, make it!
-    if __opts__['test']:
-        ret['result'] = None
-        ret['comment'] = 'User {0} is set to be {1}d'.format(name, mode)
-        return ret
     cret = None
     update = {}
     if mode == 'update':
@@ -208,7 +204,14 @@ def present(name,
             update['superuser'] = superuser
         if password is not None and user_attr['password'] != password:
             update['password'] = True
+
     if mode == 'create' or (mode == 'update' and update):
+        if __opts__['test']:
+            if update:
+                ret['changes'][name] = update
+            ret['result'] = None
+            ret['comment'] = 'User {0} is set to be {1}d'.format(name, mode)
+            return ret
         cret = __salt__['postgres.user_{0}'.format(mode)](
             username=name,
             createdb=createdb,
@@ -223,6 +226,7 @@ def present(name,
             **db_args)
     else:
         cret = None
+
     if cret:
         ret['comment'] = 'The user {0} has been {1}d'.format(name, mode)
         if update:

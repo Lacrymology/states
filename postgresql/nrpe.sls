@@ -6,6 +6,8 @@ in the doc/license.rst file.
 {% set ssl = salt['pillar.get']('postgresql:ssl', False) %}
 include:
   - apt.nrpe
+  - postgresql
+  - python.dev
 {% if ssl %}
   - ssl.nrpe
 {% endif %}
@@ -29,6 +31,8 @@ nrpe_check_pgsql_query:
     - bin_env: /usr/local/nagios
     - requirements: {{ opts['cachedir'] }}/pip/postgresql.nrpe
     - watch:
+      - pkg: python-dev
+      - pkg: postgresql-dev
       - file: nrpe_check_pgsql_query
 
 /usr/lib/nagios/plugins/check_pgsql_query.py:

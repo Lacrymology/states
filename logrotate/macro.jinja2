@@ -1,0 +1,9 @@
+{%- macro test_logrotate(logrotate_script) %}
+test_logrotate:
+  cmd:
+    - run
+    - name: '! logrotate --debug /etc/logrotate.conf 2>&1 | grep "^error: "'
+    - require:
+      - file: logrotate
+      - file: {{ logrotate_script }}
+{% endmacro %}

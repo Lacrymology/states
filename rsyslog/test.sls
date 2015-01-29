@@ -4,11 +4,15 @@ in the doc/license.rst file.
 
 -#}
 {%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
+{%- from 'logrotate/macro.jinja2' import test_logrotate with context %}
 include:
   - doc
+  - logrotate
   - rsyslog
   - rsyslog.diamond
   - rsyslog.nrpe
+
+{{ test_logrotate('/etc/logrotate.d/rsyslog') }}
 
 test:
   diamond:

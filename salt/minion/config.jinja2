@@ -29,3 +29,6 @@ sentry_common: {{ sentry_dsn }}
 sentry_handler:
   dsn: requests+{{ sentry_dsn }}
 {%- endif %}
+{%- if salt['pillar.get']('salt:highstate', True) %}
+state_verbose: False
+{%- endif -%}

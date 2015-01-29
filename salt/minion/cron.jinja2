@@ -14,9 +14,9 @@ log_start_script "$@"
 trap "log_stop_script \$?" EXIT
 
 if [ -x /usr/lib/nagios/plugins/check_minion_pillar_render.py ]; then
-    /usr/lib/nagios/plugins/check_minion_pillar_render.py --formula=salt.minion --check=salt_minion_pillar_render
+    /usr/lib/nagios/plugins/check_minion_pillar_render.py --formula=salt.minion --check=salt_minion_pillar_render > /dev/null
 else
     logger -t "$(basename "$0")[$$]" -p 'local0.info' \
         "Cannot validate the pillar data first, just run highstate anyway"
 fi
-/usr/bin/salt-call state.highstate --return syslog,timestamps{% if salt['pillar.get']('sentry_dsn', False) %},sentry_common{% endif %}
+/usr/bin/salt-call state.highstate --return syslog,timestamps{% if salt['pillar.get']('sentry_dsn', False) %},sentry_common{% endif %} > /dev/null

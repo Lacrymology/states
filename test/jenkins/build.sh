@@ -165,3 +165,5 @@ echo "TIME-METER: Preparing for test took: $((start_run_test_time - start_time))
 echo '------------ Running CI test  ------------'
 sudo salt --verbose -t "$master_timeout" "$BUILD_IDENTITY" cmd.run \
     "$CUSTOM_CONFIG_DIR/jenkins/run.py $failfast $tests"
+finish_run_test_time=$(date +%s)
+echo "TIME-METER: Run integration.py took: $((finish_run_test_time - start_run_test_time)) seconds"

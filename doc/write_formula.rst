@@ -94,7 +94,8 @@ Not so good::
 
 Whenever you install a package using ``pkg`` state module, check if there is an
 user created. Then please make sure that the shell of that user is
-``/usr/sbin/nologin`` instead of leaving it as default (for e.g, ``/bin/sh``)::
+``/usr/sbin/nologin`` instead of leaving it as default (for e.g, ``/bin/sh``).
+And ensuring that service run by this user will watch it::
 
   dovecot-agent:
     user:
@@ -102,11 +103,15 @@ user created. Then please make sure that the shell of that user is
       - shell: /usr/sbin/nologin
       - groups:
         - mail
+      - watch_in:
+        - service: dovecot
 
 StateID
--------
+~~~~~~~
 
-* StateID should not contain space. A cmd.run should having ``- name`` argument
+* StateID must not contain space. A
+  `cmd.run <http://docs.saltstack.com/en/latest/ref/states/all/salt.states.cmd.html#salt.states.cmd.run>`_
+  should having ``- name`` argument
   to provide its command instead of put the command in StateID.
 
 Bad::
@@ -117,23 +122,34 @@ Bad::
 
 Good::
 
-  nginx_version:
+  nginx_check_version:
     cmd:
       - run
       - name: nginx --version
 
 * Do not mix ``-`` and ``_`` in StateID
 * Do not use too generic StateID, it will be easy to conflict.
-* Try to avoid absolute path to filename such as ``/usr/local/myapp-1/script.sh``
+  A convention to avoid ID conflicting problem is prefix stateID with formula
+  name.
+* Try to avoid absolute path to filename such as
+  ``/usr/local/myapp-1/script.sh``
   or very specific one such as ``/etc/daemon-x/config-1.0.1.conf``. Hide the
   real ``name`` or ``path`` in argument key in state definition. This make
   refactor a lot easier and improve readability.
+
+Extend
+~~~~~~
+
+Each entity (file, user, ...) must be managed by only one state. Any
+modification must be done by
+`extend <https://salt.readthedocs.org/en/latest/topics/tutorials/starting_states.html#extending-included-sls-data>`_.
+Because having multiple states manage one entity will cause conflict change,
+make the state of that entity indeterminable.
 
 Grains
 ------
 
 States should use grains when possible:
-
 
 Good::
 

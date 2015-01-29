@@ -20,5 +20,5 @@ extend:
         - file: nsca-proftpd
   /usr/lib/nagios/plugins/check_pgsql_query.py:
     file:
-       - require:
-         - file: nsca-proftpd
+      - require:
+        - file: nsca-proftpd

@@ -14,7 +14,6 @@ include:
   - memcache
   - nginx
   - pip
-  - postgresql
   - postgresql.server
   - python.dev
   - rsyslog

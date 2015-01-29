@@ -8,7 +8,6 @@ include:
   - nrpe
   - postgresql.master
   - postgresql.common.nrpe
-  - postgresql.nrpe
   - postgresql.server.nrpe
   - rsyslog.nrpe
 

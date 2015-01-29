@@ -109,6 +109,13 @@ DNS
 
 YO
 
+.. _glossary-CIDR:
+
+CIDR
+~~~~
+
+`Classless Inter-Domain Routing <https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing#CIDR_notation>`_
+
 .. _glossary-localhost:
 
 Localhost

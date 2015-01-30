@@ -38,7 +38,7 @@ nrpe_check_pgsql_query:
 /usr/lib/nagios/plugins/check_pgsql_query.py:
   file:
     - managed
-    - source: salt://postgresql/server/nrpe/check_pgsql_query.py
+    - source: salt://postgresql/nrpe/check_pgsql_query.py
     - user: nagios
     - group: nagios
     - mode: 550

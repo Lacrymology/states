@@ -1,3 +1,6 @@
+{%- extends "openvpn/base.jinja2" %}
+
+{%- block tls %}
 {%- set vpn_instance = salt['pillar.get']('openvpn:servers:' ~ instance) %}
 
 port {{ vpn_instance['port'] }}
@@ -22,18 +25,7 @@ keepalive 10 120
 
 comp-lzo
 
-user nobody
-group nogroup
-
-persist-key
-persist-tun
-
-status /var/lib/openvpn/{{ instance }}.log
-
-syslog vpn-{{ instance }}
-
-verb {% if salt['pillar.get']('debug', False) %}6{% else %}3{% endif %}
-
 {%- for directive in vpn_instance['extra_configs'] %}
 {{ directive }}
 {%- endfor %}
+{%- endblock tls %}

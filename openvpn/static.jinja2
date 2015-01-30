@@ -1,23 +1,17 @@
 {#-
 Use of this source code is governed by a BSD license that can be found
 in the doc/license.rst file.
-
 -#}
-# {{ salt['pillar.get']('message_do_not_modify') }}
+{%- extends "openvpn/base.jinja2" %}
+
+{%- block static %}
 {%- set reserved_keys = ('secret', 'user', 'group', 'syslog', 'writepid', 'port', 'ifconfig', 'remote') -%}
 {%- set blocked_keys = ('log', 'log-append') -%}
-{%- set configs = salt['pillar.get']('openvpn:servers:' + tunnel + ':config', {}) %}
-secret /etc/openvpn/{{ tunnel }}/secret.key
-user nobody
-group nogroup
-writepid /var/run/openvnp-{{ tunnel }}.pid
-status /var/lib/openvpn/{{ tunnel }}.log
-syslog vpn-{{ tunnel }}
-persist-tun
-persist-key
+{%- set configs = salt['pillar.get']('openvpn:servers:' + instance + ':config', {}) %}
 {%- if 'dev' not in configs %}
 dev tun
 {%- endif -%}
+secret /etc/openvpn/{{ instance }}/secret.key
 {%- for key in configs -%}
     {%- if key not in reserved_keys -%}
         {%- if key not in blocked_keys %}
@@ -30,17 +24,13 @@ dev tun
     {%- endif -%}
 {%- endfor -%}
 {%- set servers = salt['pillar.get']('openvpn:servers', {}) %}
-{%- set port = servers[tunnel]['peers'][grains['id']]['port']|default(False) %}
+{%- set port = servers[instance]['peers'][grains['id']]['port']|default(False) %}
 {% if port %}port {{ port }}{% endif %}
-{%- set peers = servers[tunnel]['peers'] %}
+{%- set peers = servers[instance]['peers'] %}
 {%- for peer, peer_data in peers.iteritems() -%}
     {%- if peer != grains['id'] %}
 ifconfig {{ peers[grains['id']]['vpn_address'] }} {{ peer_data['vpn_address'] }}
 remote {{ peer_data['address'] }} {% if 'port' in peer_data %} {{ peer_data['port'] }}{% endif %}
     {%- endif -%}
 {%- endfor -%}
-{%- if salt['pillar.get']('debug', False) %}
-verb 15
-{%- else %}
-verb 4
-{%- endif %}
+{%- endblock static %}

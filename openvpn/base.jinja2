@@ -1,0 +1,21 @@
+{#-
+Use of this source code is governed by a BSD license that can be found
+in the doc/license.rst file.
+-#}
+# {{ salt['pillar.get']('message_do_not_modify') }}
+user nobody
+group nogroup
+writepid /var/run/openvpn-{{ instance }}.pid
+status /var/lib/openvpn/{{ instance }}.log
+syslog vpn-{{ instance }}
+persist-tun
+persist-key
+{%- if salt['pillar.get']('debug', False) %}
+verb 15
+{%- else %}
+verb 4
+{%- endif %}
+{%- block static %}
+{%- endblock static %}
+{%- block tls %}
+{%- endblock tls %}

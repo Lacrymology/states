@@ -9,8 +9,6 @@ include:
   - openvpn
   - openvpn.diamond
   - openvpn.nrpe
-  - openvpn.static
-  - openvpn.tls
 
 test:
   monitoring:
@@ -30,8 +28,7 @@ test:
           {{ diamond_process_test('openvpn') }}
     - require:
       - sls: openvpn.diamond
-      - sls: openvpn.static
-      - sls: openvpn.tls
+      - sls: openvpn
 
 {%- set servers = salt['pillar.get']('openvpn:servers', {}) %}
 {%- for tunnel in servers %}
@@ -52,13 +49,11 @@ test_openvpn_{{ tunnel }}:
     {%- endif %}
     - require:
       - sls: openvpn.diamond
-      - sls: openvpn.static
-      - sls: openvpn.tls
+      - sls: openvpn
 {%- endfor %}
 
 extend:
   openvpn_diamond_collector:
     file:
       - require:
-        - sls: openvpn.static
-        - sls: openvpn.tls
+        - sls: openvpn

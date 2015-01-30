@@ -8,11 +8,7 @@ in the doc/license.rst file.
 {%- set mode = vpns[instance]['mode'] %}
 openvpn_{{ instance }}:
   description: OpenVPN Instance {{ instance }}
-    {%- if mode == 'static' %}
   command: "/usr/lib/nagios/plugins/check_procs -C openvpn -c 1:1 -a '--config /etc/openvpn/{{ instance }}/config'"
-    {%- elif mode == 'tls' %}
-  command: "/usr/lib/nagios/plugins/check_procs -C openvpn -c 1:1 -a '--config /etc/openvpn/{{ instance }}.conf'"
-    {%- endif %}
 
 openvpn_{{ instance }}_port:
   description: OpenVPN Instance {{ instance }} Port

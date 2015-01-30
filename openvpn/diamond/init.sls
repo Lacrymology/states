@@ -3,15 +3,14 @@ Use of this source code is governed by a BSD license that can be found
 in the doc/license.rst file.
 
 -#}
-{%- set tunnels = salt['pillar.get']('openvpn:servers', {}) %}
+{%- set servers = salt['pillar.get']('openvpn:servers', {}) %}
 
 include:
   - diamond
-  - openvpn.static
-  - openvpn.tls
+  - openvpn
   - rsyslog.diamond
 
-{%- if tunnels %}
+{%- if servers %}
 openvpn_diamond_collector:
   file:
     - managed
@@ -23,17 +22,13 @@ openvpn_diamond_collector:
     - source: salt://openvpn/diamond/config.jinja2
     - context:
         instances:
-    {%- for tunnel in tunnels %}
-          {{ tunnel }}: file:///var/lib/openvpn/{{ tunnel }}.log
+    {%- for instance in servers %}
+          {{ instance }}: file:///var/lib/openvpn/{{ instance }}.log
     {%- endfor %}
     - require:
       - file: /etc/diamond/collectors
-    {%- for tunnel in tunnels %}
-        {%- if tunnels[tunnel]['mode'] == 'static' %}
-      - service: openvpn-{{ tunnel }}
-        {%- else %}
-      - cmd: restart_openvpn_{{ tunnel }}
-        {%- endif %}
+    {%- for instance in servers %}
+      - service: openvpn-{{ instance }}
     {%- endfor %}
     - watch_in:
       - service: diamond
@@ -46,12 +41,8 @@ openvpn_diamond_resources:
     - require_in:
       - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
     - require:
-    {%- for tunnel in tunnels %}
-        {%- if tunnels[tunnel]['mode'] == 'static' %}
-      - service: openvpn-{{ tunnel }}
-        {%- else %}
-      - cmd: restart_openvpn_{{ tunnel }}
-        {%- endif %}
+    {%- for instance in servers %}
+      - service: openvpn-{{ instance }}
     {%- endfor %}
     - text:
       - |

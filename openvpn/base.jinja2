@@ -3,19 +3,49 @@ Use of this source code is governed by a BSD license that can be found
 in the doc/license.rst file.
 -#}
 # {{ salt['pillar.get']('message_do_not_modify') }}
+{%- set vpn_instance = salt['pillar.get']('openvpn:servers:' ~ instance) %}
+port {{ vpn_instance['port'] | default(1194) }}
+proto {{ vpn_instance['protocol'] | default('udp') }}
+dev {{ vpn_instance['device'] | default('tun') }}
+keepalive 10 120
+comp-lzo
 user nobody
 group nogroup
-writepid /var/run/openvpn-{{ instance }}.pid
+persist-key
+persist-tun
 status /var/lib/openvpn/{{ instance }}.log
 syslog vpn-{{ instance }}
-persist-tun
-persist-key
 {%- if salt['pillar.get']('debug', False) %}
 verb 15
 {%- else %}
 verb 4
 {%- endif %}
-{%- block static %}
-{%- endblock static %}
-{%- block tls %}
-{%- endblock tls %}
+writepid /var/run/openvpn-{{ instance }}.pid
+
+{%- set common_keys = ('port', 'proto', 'dev', 'keepalive', 'comp-lzo', 'user', 'group', 'persist-key', 'persist-tun', 'status', 'syslog', 'verb', 'writepid') -%}
+{%- if vpn_instance['mode'] == 'static' %}
+    {%- set used_keys = ('secret', 'ifconfig', 'remote') %}
+{%- else %}
+    {%- set used_keys = ('ca', 'cert', 'key', 'dh', 'server', 'ifconfig-pool-persist', 'push') %}
+{%- endif %}
+{%- set reserved_keys = common_keys | list + used_keys | list %}
+{%- set blocked_keys = ('log', 'log-append') -%}
+{%- set configs = vpn_instance['extra_configs'] | default({}) %}
+{%- for key in configs -%}
+    {%- if key not in reserved_keys -%}
+        {%- if key not in blocked_keys %}
+            {%- if configs[key] %}
+{{ key }} {{ configs[key] }}
+            {%- else %}
+{{ key }}
+            {%- endif %}
+        {%- else %}
+# ignore "{{ key }}: {{ configs[key] }}" {{ key }} is a blocked key!
+        {%- endif -%}
+    {%- else %}
+# ignore "{{ key }}: {{ configs[key] }}" {{ key }} is a reserved key!
+    {%- endif -%}
+{%- endfor -%}
+
+{%- block authentication_mode %}
+{%- endblock authentication_mode %}

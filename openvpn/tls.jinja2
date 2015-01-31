@@ -1,31 +1,11 @@
 {%- extends "openvpn/base.jinja2" %}
 
-{%- block tls %}
-{%- set vpn_instance = salt['pillar.get']('openvpn:servers:' ~ instance) %}
-
-port {{ vpn_instance['port'] }}
-
-proto {{ vpn_instance['protocol'] }}
-
-dev {{ vpn_instance['device'] }}
-
+{%- block authentication_mode %}
 ca /etc/openvpn/ca.crt
 cert /etc/openvpn/{{ instance }}/server.crt
 key /etc/openvpn/{{ instance }}/server.key  # This file should be kept secret
-
 dh /etc/openvpn/dh{{ salt['pillar.get']('openvpn:dhparam:key_size', 2048) }}.pem
-
 server {{ vpn_instance['server'] }}
-
 ifconfig-pool-persist /etc/openvpn/{{ instance }}/ipp.txt
-
 push "redirect-gateway def1 bypass-dhcp"
-
-keepalive 10 120
-
-comp-lzo
-
-{%- for directive in vpn_instance['extra_configs'] %}
-{{ directive }}
-{%- endfor %}
-{%- endblock tls %}
+{%- endblock authentication_mode %}

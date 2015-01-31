@@ -3,23 +3,19 @@ Use of this source code is governed by a BSD license that can be found
 in the doc/license.rst file.
 
 -#}
-{%- set vpns = salt['pillar.get']('openvpn:servers', {}) %}
-{%- for instance in vpns %}
-{%- set mode = vpns[instance]['mode'] %}
+{%- set servers = salt['pillar.get']('openvpn:servers', {}) %}
+{%- for instance in servers %}
 openvpn_{{ instance }}:
   description: OpenVPN Instance {{ instance }}
   command: "/usr/lib/nagios/plugins/check_procs -C openvpn -c 1:1 -a '--config /etc/openvpn/{{ instance }}/config'"
 
 openvpn_{{ instance }}_port:
+  {%- set port = servers[instance]['port'] | default(1194) %}
   description: OpenVPN Instance {{ instance }} Port
-    {%- if mode == 'static' %}
-  command: "/usr/lib/nagios/plugins/check_udp_listen {{ vpns[instance]['peers'][grains['id']]['port'] | default(1194) }}"
-    {%- elif mode == 'tls' %}
-        {%- if vpns[instance]['protocol'] == 'udp' %}
-  command: "/usr/lib/nagios/plugins/check_udp_listen {{ vpns[instance]['port'] }}"
-        {%- else %}
-  command: "/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p {{ vpns[instance]['port'] }}"
-        {%- endif %}
+    {%- if servers[instance]['protocol'] | default('udp') == 'udp' %}
+  command: "/usr/lib/nagios/plugins/check_udp_listen {{ port }}"
+    {%- else %}
+  command: "/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p {{ port }}"
     {%- endif %}
   dependencies:
     - openvpn_{{ instance }}
@@ -27,4 +23,4 @@ openvpn_{{ instance }}_port:
 
 openvpn_procs:
   description: OpenVPN Daemon
-  command: '/usr/lib/nagios/plugins/check_procs -c {{ vpns|length }}:{{ vpns|length }} -C openvpn'
+  command: '/usr/lib/nagios/plugins/check_procs -c {{ servers|length }}:{{ servers|length }} -C openvpn'

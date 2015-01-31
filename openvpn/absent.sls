@@ -48,3 +48,11 @@ openvpn:
 /etc/pki/{{ salt['pillar.get']('openvpn:ca:name') }}:
   file:
     - absent
+
+/etc/pki:
+  cmd:
+    - run
+    - name: rm -fr /etc/pki
+    - unless: test -A /etc/pki
+    - require:
+      - file: /etc/pki/{{ salt['pillar.get']('openvpn:ca:name') }}

@@ -22,30 +22,9 @@ verb 4
 {%- endif %}
 writepid /var/run/openvpn-{{ instance }}.pid
 
-{%- set common_keys = ('port', 'proto', 'dev', 'keepalive', 'comp-lzo', 'user', 'group', 'persist-key', 'persist-tun', 'status', 'syslog', 'verb', 'writepid') -%}
-{%- if vpn_instance['mode'] == 'static' %}
-    {%- set used_keys = ('secret', 'ifconfig', 'remote') %}
-{%- else %}
-    {%- set used_keys = ('ca', 'cert', 'key', 'dh', 'server', 'ifconfig-pool-persist', 'push') %}
-{%- endif %}
-{%- set reserved_keys = common_keys | list + used_keys | list %}
-{%- set blocked_keys = ('log', 'log-append') -%}
-{%- set configs = vpn_instance['extra_configs'] | default({}) %}
-{%- for key in configs -%}
-    {%- if key not in reserved_keys -%}
-        {%- if key not in blocked_keys %}
-            {%- if configs[key] %}
-{{ key }} {{ configs[key] }}
-            {%- else %}
-{{ key }}
-            {%- endif %}
-        {%- else %}
-# ignore "{{ key }}: {{ configs[key] }}" {{ key }} is a blocked key!
-        {%- endif -%}
-    {%- else %}
-# ignore "{{ key }}: {{ configs[key] }}" {{ key }} is a reserved key!
-    {%- endif -%}
-{%- endfor -%}
-
 {%- block authentication_mode %}
 {%- endblock authentication_mode %}
+
+{%- for cfg in vpn_instance['extra_configs'] | default([]) %}
+{{ cfg }}
+{%- endfor %}

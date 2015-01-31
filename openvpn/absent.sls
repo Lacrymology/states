@@ -35,12 +35,6 @@ openvpn:
     - absent
 {%- endfor %}
 
-{%- for file in ('ca.crt', 'dh' ~ salt['pillar.get']('openvpn:dhparam:key_size', 2048) ~ '.pem') %}
-/etc/openvpn/{{ file }}:
-  file:
-    - absent
-{%- endfor %}
-
 /etc/openvpn:
   file:
     - absent

@@ -51,27 +51,42 @@ Number of database checks for updating per day performed by
 
 Default: :doc:`index` default value (``24``).
 
-Conditional
------------
-
 .. _pillar-clamav-db_mirrors:
 
 clamav:db_mirrors
 ~~~~~~~~~~~~~~~~~
 
-List of spam database servers.
+List of virus database servers.
 Link to the
 `public list of available mirrors <http://www.clamav.net/mirrors.html>`_.
 
-Default: don't have a custom defined list of mirrors (``False``).
+.. note::
 
-If :ref:`pillar-files_archive` is not defined, list with:
+  :doc:`/salt/archive/server/doc/index` provides mirror for :doc:`index`,
+  set its address for this if it is deployed. That will speed up
+  :doc:`index` update process and save bandwidth a lot.
 
- - ``db.local.clamav.net``
- - ``database.clamav.net``
+Default: Two defaults mirrors
+(``['db.local.clamav.net', 'database.clamav.net']``).
 
-If :ref:`pillar-files_archive` is defined, it use mirror of
-:doc:`index` database from the archive.
+clamav:use_upstream_mirror
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Set this to ``True`` if there is a non-local mirror in
+:ref:`pillar-clamav-db_mirrors`. This will use other method to update the
+virus database, which can save some bandwidth and faster.
+A local mirror does support this method.
+
+Default: ``True``.
+
+.. _pillar-daily_scan:
+
+clamav:daily_scan
+~~~~~~~~~~~~~~~~~
+
+Run a full scan every day or not.
+
+Default: don't scan daily (``False``).
 
 .. _pillar-clamav-dns_db:
 
@@ -84,16 +99,5 @@ version.
 Link to the
 `public list of available mirrors <http://www.clamav.net/mirrors.html>`_.
 
-Default: Don't validate domain (``False``).
-
-If :ref:`pillar-files_archive` is not defined, ``current.cvd.clamav.net``.
-
-If :ref:`pillar-files_archive` is defined, it use mirror of
-:doc:`index` database from the archive.
-
-clamav:daily_scan
-~~~~~~~~~~~~~~~~~
-
-Run a full scan every day or not.
-
-Default: don't scan daily (``False``).
+Default: uses default value provided by the package
+(``['current.cvd.clamav.net']``).

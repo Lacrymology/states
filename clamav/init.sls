@@ -24,6 +24,8 @@ clamav-freshclam:
       - pkg: clamav-freshclam
   cmd:
     - wait
+{#- on the very first run, it may say it cannot notify clamd, it's normal,
+    because clamd cannot run without a db, which is provided by running this cmd #}
     - name: freshclam --stdout -v
     - require:
       - file: clamav-freshclam

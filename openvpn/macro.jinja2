@@ -1,0 +1,32 @@
+{%- macro service_openvpn(instance) %}
+{%- from 'upstart/rsyslog.jinja2' import manage_upstart_log with context %}
+openvpn-{{ instance }}:
+  file:
+    - managed
+    - name: /etc/init/openvpn-{{ instance }}.conf
+    - user: root
+    - group: root
+    - mode: 440
+    - source: salt://openvpn/upstart.jinja2
+    - template: jinja
+    - require:
+      - file: /etc/openvpn/{{ instance }}/config
+      - file: /var/lib/openvpn
+      - file: /var/log/openvpn
+    - context:
+        identifier: {{ instance }}
+  service:
+    - running
+    - order: 50
+    - watch:
+      - file: openvpn-{{ instance }}
+            {%- if caller is defined -%}
+                {%- for line in caller().split("\n") %}
+{{ line|trim|indent(6, indentfirst=True) }}
+                {%- endfor -%}
+            {%- endif %}
+
+{{ manage_upstart_log('openvpn-' + instance) }}
+
+{%- endmacro %}
+{#- does not use PID, no need to manage #}

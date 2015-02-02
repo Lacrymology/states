@@ -1,29 +1,27 @@
 {#-
 Use of this source code is governed by a BSD license that can be found
 in the doc/license.rst file.
-
 -#}
 {%- from "upstart/absent.sls" import upstart_absent with context -%}
-openvpn:
-  pkg:
-    - purged
 
 {%- set prefix = '/etc/init/' -%}
 {%- set upstart_files = salt['file.find'](prefix, name='openvpn-*.conf', type='f') -%}
-{%- for filename in upstart_files -%}
-  {%- set tunnel = filename.replace(prefix + 'openvpn-', '').replace('.conf', '') %}
-{{ upstart_absent('openvpn-' + tunnel ) }}
+    {%- for filename in upstart_files -%}
+        {%- set instance = filename.replace(prefix + 'openvpn-', '').replace('.conf', '') %}
 
-/etc/openvpn/{{ tunnel }}:
+{{ upstart_absent('openvpn-' + instance) }}
+
+/etc/openvpn/{{ instance }}:
   file:
     - absent
     - require:
-      - service: openvpn-{{ tunnel }}
-    - require_in:
-      - file: /etc/openvpn
+      - service: openvpn-{{ instance }}
     {# /var/log/upstart/network-interface- #}
 
-{%- endfor %}
+    {%- endfor %}
+openvpn:
+  pkg:
+    - purged
 
 /etc/default/openvpn:
   file:
@@ -38,5 +36,22 @@ openvpn:
 {%- endfor %}
 
 /etc/openvpn:
+  file:
+    - absent
+
+{%- set ca_name = salt['pillar.get']('openvpn:ca:name') %}
+/etc/pki/{{ ca_name }}:
+  file:
+    - absent
+
+/etc/pki:
+  cmd:
+    - run
+    - name: rm -fr /etc/pki
+    - unless: test -A /etc/pki
+    - require:
+      - file: /etc/pki/{{ ca_name }}
+
+{{ opts['cachedir'] }}/{{ ca_name }}.serial:
   file:
     - absent

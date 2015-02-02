@@ -3,11 +3,14 @@ Use of this source code is governed by a BSD license that can be found
 in the doc/license.rst file.
 
 -#}
+{%- set servers = salt['pillar.get']('openvpn:servers', {}) %}
+
 include:
   - diamond
-  - openvpn.static
+  - openvpn
   - rsyslog.diamond
 
+{%- if servers %}
 openvpn_diamond_collector:
   file:
     - managed
@@ -19,15 +22,14 @@ openvpn_diamond_collector:
     - source: salt://openvpn/diamond/config.jinja2
     - context:
         instances:
-{%- set openvpn = salt['pillar.get']('openvpn', {}) %}
-{%- for tunnel in openvpn %}
-          {{ tunnel }}: file:///var/lib/openvpn/{{ tunnel }}.log
-{%- endfor %}
+    {%- for instance in servers %}
+          {{ instance }}: file:///var/lib/openvpn/{{ instance }}.log
+    {%- endfor %}
     - require:
       - file: /etc/diamond/collectors
-{%- for tunnel in openvpn %}
-      - service: openvpn-{{ tunnel }}
-{%- endfor %}
+    {%- for instance in servers %}
+      - service: openvpn-{{ instance }}
+    {%- endfor %}
     - watch_in:
       - service: diamond
 
@@ -39,10 +41,11 @@ openvpn_diamond_resources:
     - require_in:
       - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
     - require:
-{%- for tunnel in openvpn %}
-      - service: openvpn-{{ tunnel }}
-{%- endfor %}
+    {%- for instance in servers %}
+      - service: openvpn-{{ instance }}
+    {%- endfor %}
     - text:
       - |
         [[openvpn]]
         exe = ^\/usr\/sbin\/openvpn$
+{%- endif %}

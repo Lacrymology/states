@@ -1,0 +1,30 @@
+{#-
+Use of this source code is governed by a BSD license that can be found
+in the doc/license.rst file.
+-#}
+# {{ salt['pillar.get']('message_do_not_modify') }}
+{%- set vpn_instance = salt['pillar.get']('openvpn:servers:' ~ instance) %}
+port {{ vpn_instance['port'] | default(1194) }}
+proto {{ vpn_instance['protocol'] | default('udp') }}
+dev {{ vpn_instance['device'] | default('tun') }}
+keepalive 10 120
+comp-lzo
+user nobody
+group nogroup
+persist-key
+persist-tun
+status /var/lib/openvpn/{{ instance }}.log
+syslog vpn-{{ instance }}
+{%- if salt['pillar.get']('debug', False) %}
+verb 15
+{%- else %}
+verb 4
+{%- endif %}
+writepid /var/run/openvpn-{{ instance }}.pid
+
+{%- block authentication_mode %}
+{%- endblock authentication_mode %}
+
+{%- for cfg in vpn_instance['extra_configs'] | default([]) %}
+{{ cfg }}
+{%- endfor %}

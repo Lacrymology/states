@@ -9,7 +9,6 @@ include:
   - openvpn
   - openvpn.diamond
   - openvpn.nrpe
-  - openvpn.static
 
 test:
   monitoring:
@@ -26,22 +25,35 @@ test:
     - test
     - map:
         ProcessResources:
-    {{ diamond_process_test('openvpn') }}
-    {%- for tunnel in salt['pillar.get']('openvpn', {}) %}
+          {{ diamond_process_test('openvpn') }}
+    - require:
+      - sls: openvpn.diamond
+      - sls: openvpn
+
+{%- set servers = salt['pillar.get']('openvpn:servers', {}) %}
+{%- for tunnel in servers %}
+test_openvpn_{{ tunnel }}:
+  diamond:
+    - test
+    - map:
         OpenVPN:
           openvpn.{{ tunnel }}.clients.connected: True
+    {%- if servers[tunnel]['mode'] == 'static' %}
           openvpn.{{ tunnel }}.global.auth_read_bytes: True
           openvpn.{{ tunnel }}.global.tcp-udp_read_bytes: True
           openvpn.{{ tunnel }}.global.tcp-udp_write_bytes: True
           openvpn.{{ tunnel }}.global.tun-tap_read_bytes: True
           openvpn.{{ tunnel }}.global.tun-tap_write_bytes: True
-    {%- endfor %}
+    {%- else %}
+          openvpn.{{ tunnel }}.global.max_bcast-mcast_queue_length: True
+    {%- endif %}
     - require:
-      - sls: openvpn.static
       - sls: openvpn.diamond
+      - sls: openvpn
+{%- endfor %}
 
 extend:
   openvpn_diamond_collector:
     file:
       - require:
-        - sls: openvpn.static
+        - sls: openvpn

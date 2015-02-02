@@ -3,13 +3,24 @@ Use of this source code is governed by a BSD license that can be found
 in the doc/license.rst file.
 
 -#}
-{%- set vpns = salt['pillar.get']('openvpn', {}) %}
-{%- for instance in vpns %}
+{%- set servers = salt['pillar.get']('openvpn:servers', {}) %}
+{%- for instance in servers %}
 openvpn_{{ instance }}:
-  description: Openvpn Instance {{ instance }}
+  description: OpenVPN Instance {{ instance }}
   command: "/usr/lib/nagios/plugins/check_procs -C openvpn -c 1:1 -a '--config /etc/openvpn/{{ instance }}/config'"
+
+openvpn_{{ instance }}_port:
+  {%- set port = servers[instance]['port'] | default(1194) %}
+  description: OpenVPN Instance {{ instance }} Port
+    {%- if servers[instance]['protocol'] | default('udp') == 'udp' %}
+  command: "/usr/lib/nagios/plugins/check_udp_listen {{ port }}"
+    {%- else %}
+  command: "/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p {{ port }}"
+    {%- endif %}
+  dependencies:
+    - openvpn_{{ instance }}
 {%- endfor %}
 
 openvpn_procs:
-  description: Openvpn Daemon
-  command: '/usr/lib/nagios/plugins/check_procs -c {{ vpns|length }}:{{ vpns|length }} -C openvpn'
+  description: OpenVPN Daemon
+  command: '/usr/lib/nagios/plugins/check_procs -c {{ servers|length }}:{{ servers|length }} -C openvpn'

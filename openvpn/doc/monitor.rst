@@ -22,3 +22,10 @@ openvpn_{{ instance }}
 ~~~~~~~~~~~~~~~~~~~~~~
 
 OpenVPN {{ instance }} is running.
+
+.. _monitor-openvpn_instance_port:
+
+openvpn_{{ instance }}_port
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+OpenVPN {{ instance }} is listening to given port.

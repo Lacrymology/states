@@ -13,6 +13,8 @@ locking_script
 log_start_script "$@"
 trap "log_stop_script \$?" EXIT
 
+export TERM=dumb
+
 if [ -x /usr/lib/nagios/plugins/check_minion_pillar_render.py ]; then
     /usr/lib/nagios/plugins/check_minion_pillar_render.py --formula=salt.minion --check=salt_minion_pillar_render > /dev/null
 else

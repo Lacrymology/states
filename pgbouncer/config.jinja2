@@ -1,0 +1,53 @@
+# {{ salt['pillar.get']('message_do_not_modify') }}
+{%- set authentication = salt['pillar.get']('pgbouncer:authentication', False) %}
+{%- set auth_type = salt['pillar.get']('pgbouncer:auth_type', 'md5') %}
+[databases]
+{% block databases %}
+{%- for db, value in salt['pillar.get']('pgbouncer:databases').iteritems() %}
+{{ value['dbname'] | default(db) }} = host={{ value['host'] }} port={{ salt['pillar.get']('postgresql:listen_port', 5432) }} dbname={{ db }} {% if auth_type == 'any' or authentication %}user={{ value['username'] }} password={{ value['password'] }}{% endif %}
+{%- endfor %}
+{% endblock %}
+[pgbouncer]
+syslog = 1
+
+pidfile = /var/run/postgresql/pgbouncer.pid
+
+{% block pgbouncer %}
+listen_addr = {% for addr in salt['pillar.get']('pgbouncer:listen_addr', ['127.0.0.1']) %}{{ addr }}{% if not loop.last %}, {% endif %}{% endfor %}
+listen_port = {{ salt['pillar.get']('pgbouncer:listen_port', 6432) }}
+
+unix_socket_dir = /var/run/postgresql
+auth_type = {{ auth_type }}
+{%- if auth_type != 'any' %}
+auth_file = /etc/pgbouncer/userlist.txt
+    {%- if authentication %}
+admin_users = {% for username in authentication %}{{ username }}{% if not loop.last %}, {% endif %}{% endfor %}
+    {%- else %}
+admin_users = {% for value in salt['pillar.get']('pgbouncer:databases').itervalues() %}{{ value['username'] }}{% if not loop.last %}, {% endif %}{% endfor %}
+    {%- endif %}
+{%- endif %}
+
+{%- set pool_mode = salt['pillar.get']('pgbouncer:pool_mode', 'session') %}
+pool_mode = {{ pool_mode }}
+{%- if pool_mode != 'transaction' %}
+server_reset_query = DISCARD ALL
+{%- endif %}
+
+max_client_conn = {{ salt['pillar.get']('pgbouncer:max_client_conn', 100) }}
+
+default_pool_size = {{ salt['pillar.get']('pgbouncer:default_pool_size', 20) }}
+
+server_idle_timeout = {{ salt['pillar.get']('pgbouncer:server_idle_timeout', 600) }}
+
+idle_transaction_timeout = {{ salt['pillar.get']('pgbouncer:idle_transaction_timeout', 0) }}
+
+{%- if salt['pillar.get']('debug', False) %}
+log_connections = 1
+
+log_disconnections = 1
+{%- else %}
+log_connections = 0
+
+log_disconnections = 0
+{%- endif %}
+{% endblock %}

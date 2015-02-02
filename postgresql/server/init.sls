@@ -43,7 +43,7 @@ postgresql:
     - template: jinja
     - require:
       - pkg: postgresql
-      - user: postgresql
+      - user: postgres
     - context:
         version: {{ version }}
   service:
@@ -54,25 +54,12 @@ postgresql:
     - require:
       - service: rsyslog
     - watch:
-      - user: postgresql
+      - user: postgres
       - pkg: postgresql
       - file: postgresql
 {% if ssl %}
       - cmd: ssl_cert_and_key_for_{{ ssl }}
 {% endif %}
-  user:
-    - present
-    - name: postgres
-    - shell: /usr/sbin/nologin
-    {%- if ssl %}
-    - groups:
-      - ssl-cert
-    {%- endif %}
-    - require:
-      - pkg: postgresql
-    {%- if ssl %}
-      - pkg: ssl-cert
-    {%- endif %}
 
 {%- call manage_pid('/var/run/postgresql/9.2-main.pid', 'postgres', 'postgres', 'postgresql') %}
 - pkg: postgresql

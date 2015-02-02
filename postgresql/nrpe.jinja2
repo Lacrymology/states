@@ -1,7 +1,0 @@
-{#-
-Use of this source code is governed by a BSD license that can be found
-in the doc/license.rst file.
-
--#}
-# {{ salt['pillar.get']('message_do_not_modify') }}
-command[{{ database }}_postgresql]=/usr/lib/nagios/plugins/check_pgsql -H 127.0.0.1 -P 5432 -d {{ database }} -l {{ username|default(database) }} -p {{ password }}

@@ -22,10 +22,11 @@ log = logging.getLogger('nagiosplugin.postgresql.server.query')
 
 
 class PgSQLQuery(nap.Resource):
-    def __init__(self, host, user, passwd, database, query):
+    def __init__(self, host, port, user, passwd, database, query):
         self.user = user
         self.passwd = passwd
         self.host = host
+        self.port = port
         self.database = database
         self.query = query
 
@@ -33,7 +34,7 @@ class PgSQLQuery(nap.Resource):
         log.info("PgSQLQuery.probe started")
         try:
             log.debug("connecting with postgresql")
-            c = psycopg2.connect(host=self.host, user=self.user,
+            c = psycopg2.connect(host=self.host, port=self.port, user=self.user,
                                  password=self.passwd, database=self.database)
             cursor = c.cursor()
             log.debug("about to execute query: %s", self.query)
@@ -57,6 +58,7 @@ def check_pgsql_query(config):
     critical = config['critical']
     return (
         PgSQLQuery(host=config['host'],
+                   port=config['port'],
                    user=config['user'],
                    passwd=config['passwd'],
                    database=config['database'],

@@ -13,7 +13,6 @@ include:
   - local
   - nginx
   - pip
-  - postgresql
   - postgresql.server
   - python.dev
   - memcache

@@ -13,7 +13,6 @@ include:
   - nginx.nrpe
   - nrpe
   - pip.nrpe
-  - postgresql.nrpe
   - postgresql.server.nrpe
   - python.dev.nrpe
   - rsyslog.nrpe
@@ -34,5 +33,5 @@ extend:
         - file: nsca-{{ formula }}
   /usr/lib/nagios/plugins/check_pgsql_query.py:
     file:
-       - require:
-         - file: nsca-{{ formula }}
+      - require:
+        - file: nsca-{{ formula }}

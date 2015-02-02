@@ -119,3 +119,10 @@ Localhost
 - IPv4: http://en.wikipedia.org/wiki/Internet_Protocol_version_4
 - Regular Expression (regex): http://en.wikipedia.org/wiki/Regular_expression
 - Listen to/ binding: #TODO
+
+.. _glossary-MD5:
+
+MD5
+~~~
+
+`md5 <http://en.wikipedia.org/wiki/MD5>`_

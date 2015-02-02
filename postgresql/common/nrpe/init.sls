@@ -9,6 +9,7 @@ in the doc/license.rst file.
 include:
   - apt.nrpe
   - nrpe
+  - postgresql
   - postgresql.nrpe
   - postgresql.common.user
   - rsyslog.nrpe
@@ -75,7 +76,7 @@ extend:
     service:
       - require:
         - postgres_database: postgresql_monitoring
-  postgresql:
+  postgres:
     user:
       - groups:
         - nagios

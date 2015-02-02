@@ -1,0 +1,14 @@
+{#-
+Use of this source code is governed by a BSD license that can be found
+in the doc/license.rst file.
+-#}
+{%- set authentication = salt['pillar.get']('pgbouncer:authentication', False) %}
+{%- if authentication %}
+    {%- for user, password in authentication.iteritems() %}
+"{{ user }}" "{{ password }}"
+    {%- endfor %}
+{%- else %}
+    {%- for value in salt['pillar.get']('pgbouncer:databases').itervalues() %}
+"{{ value['username'] }}" "{{ value['password'] }}"
+    {%- endfor %}
+{%- endif %}

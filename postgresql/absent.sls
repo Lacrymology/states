@@ -27,3 +27,13 @@ postgresql-dev:
     - name: /etc/apt/sources.list.d/pitti-postgresql-{{ grains['oscodename'] }}.list
     - require:
       - pkgrepo: postgresql-dev
+
+postgresql-common:
+  pkg:
+    - purged
+
+postgres:
+  user:
+    - absent
+    - require:
+      - pkg: postgresql-common

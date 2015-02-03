@@ -19,6 +19,7 @@ def _remove_log(logfile):
     for fl in glob.glob(logfile + '*'):
         __salt__['file.remove'](fl)
 
+
 def test(name, map):
     """
     Run a list of diamond collectors and make sure the right metrics are
@@ -45,6 +46,8 @@ def test(name, map):
         'comment': '',
     }
 
+    unexpected_zero_metrics = []
+    not_collected_metrics = []
     for collector, metrics in map.items():
         ret['changes'][collector] = change = {}
         _remove_log(logfile)
@@ -100,16 +103,26 @@ def test(name, map):
                     value = None
 
                 if (not metrics[metric]) and (not value):
-                    ret['comment'] = ('{0}: Expected non-zero value '
-                                      'for the {1}').format(collector, key)
-                else:
-                    change[key] = {
-                        'old': 'Expected to be recorded',
-                        'new': 'Value = {0}'.format(collected_metrics[key])
-                    }
+                    unexpected_zero_metrics.append(key)
             else:
-                ret['comment'] = '{0}: {1} is not collected'.format(
-                    collector, fullpath)
-                ret['result'] = False
+                not_collected_metrics.append(fullpath)
+
+    if not unexpected_zero_metrics and not not_collected_metrics:
+        ret['comment'] += "All metrics are collected with expected value."
+    else:
+        ret['result'] = False
+        comments = []
+        __salt__['common.state_comment'](
+            sorted(unexpected_zero_metrics),
+            "%d expected non-zero value",
+            comments
+        )
+        __salt__['common.state_comment'](
+            sorted(not_collected_metrics),
+            "%d not collected",
+            comments
+        )
+
+        ret['comment'] = os.linesep.join(comments)
 
     return ret

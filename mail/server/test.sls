@@ -59,12 +59,14 @@ test:
     - test
     - map:
         Amavis:
+          {#-
           amavis.CacheAttempts.count: False
           amavis.CacheAttempts.percentage: False
           amavis.CacheAttempts.frequency: False
           amavis.CacheMisses.count: False
           amavis.CacheMisses.percentage: False
           amavis.CacheMisses.frequency: False
+          #}
           amavis.ContentCleanMsgs.count: False
           amavis.ContentCleanMsgs.percentage: False
           amavis.ContentCleanMsgs.frequency: True

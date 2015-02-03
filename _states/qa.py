@@ -19,26 +19,6 @@ def __virtual__():
     return __virtualname__
 
 
-def _iter_to_bullet_list(iterable):
-    output = ""
-    for item in iterable:
-        output += "- %s%s" % (item, os.linesep)
-    return output
-
-
-def _comment(iterable, message, comments):
-    # if there is no error to append to comments, just skip it
-    if iterable:
-        header = '-' * 10
-        comments.append(
-            os.linesep.join((
-                message % len(iterable),
-                header,
-                _iter_to_bullet_list(iterable)
-            ))
-        )
-
-
 def _contains(iterable, elem):
     """
     Returns whether an element matches any of an iterable
@@ -191,19 +171,19 @@ def test_pillar(name, pillar_doc):
     else:
         ret['result'] = False
         comments = []
-        _comment(sorted(undocumented), "%d undocumented pillars", comments)
-        _comment(sorted(unused), "%d unused documented pillars", comments)
-        _comment(sorted(bad_mandatory_calls), "%d mandatory pillars used with defaults",
+        __salt__['common.state_comment'](sorted(undocumented), "%d undocumented pillars", comments)
+        __salt__['common.state_comment'](sorted(unused), "%d unused documented pillars", comments)
+        __salt__['common.state_comment'](sorted(bad_mandatory_calls), "%d mandatory pillars used with defaults",
                  comments)
-        _comment(sorted(multiple_defaults), "%d pillars with different default value calls",
+        __salt__['common.state_comment'](sorted(multiple_defaults), "%d pillars with different default value calls",
                  comments)
-        _comment(sorted(bad_defaults), ("%d pillars with defaults different than "
+        __salt__['common.state_comment'](sorted(bad_defaults), ("%d pillars with defaults different than "
                                 "documented"), comments)
-        _comment(errors, "%d errors", comments)
+        __salt__['common.state_comment'](errors, "%d errors", comments)
 
         # extra debug output
-        _comment(sorted(all_documented), "%d total documented pillars", comments)
-        _comment(sorted(__salt__['pillar.get_call_desc']()), "%d calls", comments)
+        __salt__['common.state_comment'](sorted(all_documented), "%d total documented pillars", comments)
+        __salt__['common.state_comment'](sorted(__salt__['pillar.get_call_desc']()), "%d calls", comments)
 
         ret['comment'] = os.linesep.join(comments)
     __salt__['pillar.reset']()
@@ -282,13 +262,13 @@ def test_monitor(name, pillar_doc, additional=()):
     else:
         ret['result'] = False
         comments = []
-        _comment(not_documented, "%d undocumented checks", comments)
-        _comment(not_present, "%d documented unused checks", comments)
-        _comment(doc_errors, "%d document errors", comments)
+        __salt__['common.state_comment'](not_documented, "%d undocumented checks", comments)
+        __salt__['common.state_comment'](not_present, "%d documented unused checks", comments)
+        __salt__['common.state_comment'](doc_errors, "%d document errors", comments)
 
         # extra debug output
-        _comment(doc_names, "%d total documented checks", comments)
-        _comment(check_names, "%d total present checks", comments)
+        __salt__['common.state_comment'](doc_names, "%d total documented checks", comments)
+        __salt__['common.state_comment'](check_names, "%d total present checks", comments)
 
         ret['comment'] = os.linesep.join(comments)
     return ret

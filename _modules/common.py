@@ -5,6 +5,7 @@ __author__ = 'Bruno Clermont'
 __maintainer__ = 'Bruno Clermont'
 __email__ = 'bruno@robotinfra.com'
 
+import os
 import datetime
 import logging
 
@@ -133,3 +134,23 @@ def unique_hostname(pillar):
                     if value not in output:
                         output.append(value)
     return output
+
+
+def iter_to_bullet_list(iterable):
+    output = ""
+    for item in iterable:
+        output += "- %s%s" % (item, os.linesep)
+    return output
+
+
+def state_comment(iterable, message, comments):
+    # if there is no error to append to comments, just skip it
+    if iterable:
+        header = '-' * 10
+        comments.append(
+            os.linesep.join((
+                message % len(iterable),
+                header,
+                iter_to_bullet_list(iterable)
+            ))
+        )

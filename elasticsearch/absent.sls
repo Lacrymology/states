@@ -9,7 +9,7 @@ in the doc/license.rst file.
   file:
     - absent
     - require:
-      - service: elasticsearch
+      - process: elasticsearch
 {% endfor %}
 
 {% if grains['cpuarch'] == 'i686' %}
@@ -24,13 +24,19 @@ elasticsearch:
   pkg:
     - purged
     - require:
-      - service: elasticsearch
+      - process: elasticsearch
   service:
     - dead
     - enable: False
+  process:
+    - wait_for_dead
+    - timeout: 60
+    - name: '\-Delasticsearch'
+    - require:
+      - service: elasticsearch
 
 /etc/elasticsearch/nginx_basic_auth:
   file:
     - absent
     - require:
-      - service: elasticsearch
+      - process: elasticsearch

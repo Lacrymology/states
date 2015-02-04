@@ -33,11 +33,16 @@ backend configuration.
 When using the fileserver backend at least one :doc:`/git/doc/index` remote
 needs to be defined.
 
-The user running the :doc:`/salt/master/doc/index` will need read access to
-the repo.
-Look in :doc:`/ssh/client/doc/index` for more details.
+The user ``root`` running the :doc:`/salt/master/doc/index` need read
+access to the :doc:`/git/doc/index` repositories.
+The pillar key :ref:`pillar-ssh-root_key` is probably
+required or :ref:`pillar-ssh-keys` and it's key authorized to read the
+repository. And the server :ref:`pillar-ssh-known_hosts` defined too.
 
-If the salt-master act also as the :doc:`/git/server/doc/index`, look for
+Look in :doc:`/ssh/client/doc/index` for more details, more importantly the
+following pillar keys are probably required:
+
+If the :doc:`index` act also as the :doc:`/git/server/doc/index`, look for
 :doc:`/git/server/doc/pillar` exact pillars keys details.
 
 Default: ``[]``.

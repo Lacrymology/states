@@ -19,4 +19,9 @@ export HOME=$(grep ^root: /etc/passwd | cut -d ':' -f 6)
 
 /root/salt/states/salt/minion/bootstrap.sh $1
 
+# Patch client
+rm -f /var/cache/salt/minion/extmods/states/file.py*
+salt-call state.sls salt.patch_salt
+salt-call saltutil.sync_all
+
 salt-call state.highstate

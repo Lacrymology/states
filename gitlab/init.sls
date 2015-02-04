@@ -44,10 +44,10 @@ gitlab_dependencies:
       - libreadline-dev
       - pkg-config
       - python-docutils
-      - zlib1g-dev
     - require:
       - pkg: postgresql-dev
       - cmd: apt_sources
+      - pkg: build
 
 gitlab:
   user:

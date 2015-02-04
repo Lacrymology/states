@@ -5,6 +5,7 @@ in the doc/license.rst file.
 -#}
 include:
   - apt
+  - build
   - python.dev
 
 pillow-dependencies:
@@ -13,7 +14,7 @@ pillow-dependencies:
     - names:
       - libfreetype6-dev
       - libjpeg-dev
-      - zlib1g-dev
     - require:
       - cmd: apt_sources
       - pkg: python-dev
+      - pkg: build

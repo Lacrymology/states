@@ -16,5 +16,6 @@ build:
       - g++
       - gcc
       - make
+      - zlib1g-dev
     - require:
       - cmd: apt_sources

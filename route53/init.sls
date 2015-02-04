@@ -7,6 +7,7 @@ Install Route53 (Amazon Route53 client-side python library) into OS/root
 site-packages.
 #}
 include:
+  - build
   - pip
   - python.dev
   - xml
@@ -34,6 +35,7 @@ route53:
     - require:
       - pkg: python-lxml
     - watch:
+      - pkg: build
       - pkg: xml-dev
       - file: route53
       - pkg: python-dev

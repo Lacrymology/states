@@ -8,12 +8,24 @@ include:
   - diamond
   - diamond.nrpe
 
+test_diamond_config:
+  cmd:
+    - run
+    {#- if it outputs "Failed", config is wrong, diamond does not die / return fail
+    for that, so this test is needed #}
+    - name: ! /usr/local/diamond/bin/diamond --run processresources --foreground --log-stdout | grep Failed
+    - require:
+      - sls: diamond
+
 test:
   monitoring:
     - run_all_checks
     - order: last
   diamond:
     - test
+    - require:
+      - sls: diamond
+      - sls: diamond.nrpe
     - map:
         ProcessResources:
           {{ diamond_process_test('diamond') }}

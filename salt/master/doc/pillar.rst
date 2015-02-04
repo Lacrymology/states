@@ -47,6 +47,11 @@ If the :doc:`index` act also as the :doc:`/git/server/doc/index`, look for
 
 Default: ``[]``.
 
+.. warning::
+
+  Make sure there is no branch names under a sub-directory namespace
+  (with a ``/`` into it. This cause Salt 2014.1.x to fail.
+
 .. _pillar-salt_master-pillar-remote:
 
 salt_master:pillar:remote

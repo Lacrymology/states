@@ -4,6 +4,8 @@ Pillar
 Optional
 --------
 
+.. _pillar-sysctl:
+
 sysctl
 ~~~~~~
 
@@ -16,6 +18,8 @@ Conditional
 
 All below pillar keys have default ``False``, which means not change
 its respective parameter of kernel.
+
+.. _pillar-sysctl-fs-file-max:
 
 sysctl:fs.file-max
 ~~~~~~~~~~~~~~~~~~

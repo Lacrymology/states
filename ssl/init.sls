@@ -133,7 +133,7 @@ ssl_cert_and_key_for_{{ name }}:
 ssl_create_symlink_by_hash_for_{{ name }}:
   cmd:
     - wait
-    - name: c_rehash /etc/ssl/certs
+    - name: c_rehash /etc/ssl/certs > /dev/null
     - watch:
       - file: /etc/ssl/certs/{{ name }}.crt
       - file: /etc/ssl/certs/{{ name }}_ca.crt

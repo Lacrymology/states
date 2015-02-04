@@ -13,7 +13,7 @@ pid /var/run/nginx.pid;
 daemon off;
 
 events {
-    worker_connections 1024;
+    worker_connections {{ salt['pillar.get']('nginx:worker_connections', 1024) }};
 }
 
 http {

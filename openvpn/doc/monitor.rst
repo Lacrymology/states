@@ -21,11 +21,11 @@ pillar key with command line name ``openvpn``.
 openvpn_{{ instance }}
 ~~~~~~~~~~~~~~~~~~~~~~
 
-OpenVPN {{ instance }} is running.
+:doc:`index` {{ instance }} is running.
 
 .. _monitor-openvpn_instance_port:
 
 openvpn_{{ instance }}_port
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-OpenVPN {{ instance }} is listening to given port.
+:doc:`index` {{ instance }} is listening to given port.

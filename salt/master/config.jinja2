@@ -39,7 +39,7 @@ ext_job_cache: sentry_common
 {%- endif -%}
 #}
 {#- access same modules as minion #}
-extension_modules: var/cache/salt/minion/extmods
+extension_modules: {{ opts['cachedir'] }}/extmods
 
 {%- set sentry_dsn = salt['pillar.get']('sentry_dsn', False) %}
 {%- if sentry_dsn %}

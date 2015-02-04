@@ -70,7 +70,7 @@ ssh:keys
 List of key mapping, each map use below structure::
 
   contents: |
-        {{ PRIVATE_KEY }}
+      {{ PRIVATE_KEY }}
   map:
     {{ address }}:
       {{ localuser1 }}: {{ remoteuser1 }}
@@ -82,9 +82,9 @@ List of key mapping, each map use below structure::
 For private content, see :doc:`/ssh/doc/index`
 
 Use address of remote host (domain or IP) for ``address``
-``localuser`` is linux user, who will run ssh and use the managed key.
-``remoteuser`` is linux user on ``address``, which will be logged in as. This
-can also be a list of remote users.
+``localuser`` is local Linux user, who will run ssh and use the managed key.
+``remoteuser`` is remote :doc:`/ssh/doc/index` user on ``address``, which will
+be logged in as. This can also be a list of remote users.
 
 If no ``localuser``:``remoteuser`` provided, use ``root``:``root``
 

@@ -91,6 +91,8 @@ Note that pillar ``top.sls`` need something similar to::
     minion-id:
       - pillar_of_salt-master
 
+.. _salt_master-installation-bootstrap_archive:
+
 Bootstrap Archive
 -----------------
 

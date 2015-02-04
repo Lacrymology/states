@@ -267,3 +267,10 @@ openvpn:servers:{{ instance }}:extra_configs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 List here all extra configs.
+
+If your :doc:`index` use ``push-route`` option, the :doc:`/sysctl/doc/index`
+formula need to be included and at least the following pillar key defined
+for :ref:`pillar-sysctl`::
+
+  sysctl:
+    net.ipv4.ip_forward: 1

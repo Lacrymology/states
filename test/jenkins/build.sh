@@ -155,18 +155,16 @@ function run_and_check_return_code {
 master_ip=$(sudo salt -t 60 "$BUILD_IDENTITY" --out=yaml grains.item master | cut -f2- -d ':' | tr -d '\n')
 run_and_check_return_code 10 "sed -i \"s/master:.*/master: $master_ip/g\" $CUSTOM_CONFIG_DIR/minion"
 run_and_check_return_code 600 "salt-call -c $CUSTOM_CONFIG_DIR state.sls test.sync >> $PREPARE_STDOUT_LOG 2>> $PREPARE_STDERR_LOG"
-run_and_check_return_code 600 "salt-call -c $CUSTOM_CONFIG_DIR state.sls test.jenkins >> $PREPARE_STDOUT_LOG 2>> $PREPARE_STDERR_LOG"
-
+run_and_check_return_code 600 "salt-call -c $CUSTOM_CONFIG_DIR state.sls salt >> $PREPARE_STDOUT_LOG 2>> $PREPARE_STDERR_LOG"
+sudo salt -t 60 "$BUILD_IDENTITY" cmd.run "$CUSTOM_CONFIG_DIR/jenkins/upgrade_salt.sh"
+sudo salt -t 5 "$BUILD_IDENTITY" --output json cmd.run "salt-call test.ping"
+echo '------------ From here, salt with version supported by salt-common is running ------------'
 run_and_check_return_code 10 "salt-call -c $CUSTOM_CONFIG_DIR state.sls salt.patch_salt >> $PREPARE_STDOUT_LOG 2>> $PREPARE_STDERR_LOG"
 sudo salt -t 20 "$BUILD_IDENTITY" --output json cmd.run "restart salt-minion"
 # first cmd after restart often does not return, just ping
 sudo salt -t 5 "$BUILD_IDENTITY" --output json cmd.run "salt-call test.ping"
-echo '------------ From here, salt with version supported by salt-common is running ------------'
-sudo salt -t 5 "$BUILD_IDENTITY" --output json cmd.run "salt-call test.ping"
-
 run_and_check_return_code 20 "salt-call -c $CUSTOM_CONFIG_DIR saltutil.sync_all >> $PREPARE_STDOUT_LOG 2>> $PREPARE_STDERR_LOG"
 run_and_check_return_code 10 "salt-call -c $CUSTOM_CONFIG_DIR saltutil.refresh_modules >> $PREPARE_STDOUT_LOG 2>> $PREPARE_STDERR_LOG"
-
 # ping again before run integration.py, thing may brake after refresh_modules.
 sudo salt -t 5 "$BUILD_IDENTITY" --output json cmd.run "salt-call test.ping"
 start_run_test_time=$(date +%s)

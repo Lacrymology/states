@@ -13,7 +13,7 @@ handlers =
 {%- if graphite_address -%}
 diamond.handler.graphite.GraphiteHandler,
 {%- else -%}
-diamond.handler.graphite.NullHandler,
+diamond.handler.null.NullHandler,
 {%- endif -%}
 {%- if __test__ -%}
    diamond.handler.archive.ArchiveHandler

@@ -54,6 +54,15 @@ openvpn:
 
 {%- set ca_name = salt['pillar.get']('openvpn:ca:name') %}
 {%- set key_size = salt['pillar.get']('openvpn:dhparam:key_size', 2048) %}
+{%- set bits = salt['pillar.get']('openvpn:ca:bits') %}
+{%- set days = salt['pillar.get']('openvpn:ca:days') %}
+{%- set common_name = salt['pillar.get']('openvpn:ca:common_name') %}
+{%- set country = salt['pillar.get']('openvpn:ca:country') %}
+{%- set state = salt['pillar.get']('openvpn:ca:state') %}
+{%- set locality = salt['pillar.get']('openvpn:ca:locality') %}
+{%- set organization = salt['pillar.get']('openvpn:ca:organization') %}
+{%- set organizational_unit = salt['pillar.get']('openvpn:ca:organizational_unit') %}
+{%- set email = salt['pillar.get']('openvpn:ca:email') %}
 
 openvpn_dh:
   cmd:
@@ -78,15 +87,15 @@ openvpn_ca:
     - run
     - name: tls.create_ca
     - ca_name: {{ ca_name }}
-    - bits: {{ salt['pillar.get']('openvpn:ca:bits') }}
-    - days: {{ salt['pillar.get']('openvpn:ca:days') }}
-    - CN: {{ salt['pillar.get']('openvpn:ca:common_name') }}
-    - C: {{ salt['pillar.get']('openvpn:ca:country') }}
-    - ST: {{ salt['pillar.get']('openvpn:ca:state') }}
-    - L: {{ salt['pillar.get']('openvpn:ca:locality') }}
-    - O: {{ salt['pillar.get']('openvpn:ca:organization') }}
-    - OU: {{ salt['pillar.get']('openvpn:ca:organizational_unit') }}
-    - emailAddress: {{ salt['pillar.get']('openvpn:ca:email') }}
+    - bits: {{ bits }}
+    - days: {{ days }}
+    - CN: {{ common_name }}
+    - C: {{ country }}
+    - ST: {{ state }}
+    - L: {{ locality }}
+    - O: {{ organization }}
+    - OU: {{ organizational_unit }}
+    - emailAddress: {{ email }}
     - require:
       - pkg: salt_minion_deps
   file:
@@ -170,7 +179,14 @@ openvpn_server_csr_{{ instance }}:
     - wait
     - name: tls.create_csr
     - ca_name: {{ ca_name }}
-    - CN: server_{{ instance }}
+    - bits: {{ bits }}
+    - CN: {{ instance }}_server
+    - C: {{ country }}
+    - ST: {{ state }}
+    - L: {{ locality }}
+    - O: {{ organization }}
+    - OU: {{ organizational_unit }}
+    - emailAddress: {{ email }}
     - watch:
       - module: openvpn_ca
 
@@ -179,7 +195,7 @@ openvpn_server_cert_{{ instance }}:
     - wait
     - name: tls.create_ca_signed_cert
     - ca_name: {{ ca_name }}
-    - CN: server_{{ instance }}
+    - CN: {{ instance }}_server
     - extensions:
         basicConstraints:
           critical: False
@@ -195,7 +211,7 @@ openvpn_server_cert_{{ instance }}:
   file:
     - copy
     - name: /etc/openvpn/{{ instance }}/server.crt
-    - source: /etc/pki/{{ ca_name }}/certs/server_{{ instance }}.crt
+    - source: /etc/pki/{{ ca_name }}/certs/{{ instance }}_server.crt
     - require:
       - module: openvpn_server_cert_{{ instance }}
       - file: {{ config_dir }}
@@ -206,7 +222,7 @@ openvpn_server_key_{{ instance }}:
   file:
     - copy
     - name: /etc/openvpn/{{ instance }}/server.key
-    - source: /etc/pki/{{ ca_name }}/certs/server_{{ instance }}.key
+    - source: /etc/pki/{{ ca_name }}/certs/{{ instance }}_server.key
     - require:
       - module: openvpn_server_cert_{{ instance }}
       - file: /etc/openvpn/{{ instance }}
@@ -229,7 +245,14 @@ openvpn_client_csr_{{ instance }}_{{ client }}:
     - wait
     - name: tls.create_csr
     - ca_name: {{ ca_name }}
+    - bits: {{ bits }}
     - CN: {{ instance }}_{{ client }}
+    - C: {{ country }}
+    - ST: {{ state }}
+    - L: {{ locality }}
+    - O: {{ organization }}
+    - OU: {{ organizational_unit }}
+    - emailAddress: {{ email }}
     - watch:
       - module: openvpn_ca
 
@@ -282,16 +305,27 @@ openvpn_client_key_{{ instance }}_{{ client }}:
     - require:
       - file: {{ config_dir }}
             {%- endfor %}
-        {%- endif %}
+
+        {%- endif %} {# ca_exists #}
+
+        {%- for r_client in servers[instance]['revocations'] %}
+openvpn_revoke_client_cert_{{ r_client }}:
+  module:
+    - run
+    - name: tls.revoke_cert
+    - ca_name: {{ ca_name }}
+    - CN: {{ instance }}_{{ r_client }}
+        {%- endfor %}
 
 {% call service_openvpn(instance) %}
       - cmd: openvpn_dh
-    {%- if not ca_exists %}
+        {%- if not ca_exists %}
       - file: openvpn_ca
       - file: openvpn_server_cert_{{ instance }}
       - file: openvpn_server_key_{{ instance }}_chmod
-    {%- endif %}
+        {%- endif %}
       - file: /etc/default/openvpn
 {% endcall %}
-    {%- endif %}
+    {%- endif %} {# tls #}
+
 {%- endfor %}

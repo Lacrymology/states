@@ -18,6 +18,7 @@ import os
 import time
 import logging
 import hashlib
+from datetime import datetime
 
 HAS_SSL = False
 try:
@@ -80,20 +81,14 @@ def _new_serial(ca_name, CN):
     return hashnum
 
 
-def _write_cert_to_database(ca_name, cert):
+def _get_basic_info(ca_name, cert):
     '''
-    write out the index.txt database file in the appropriate directory to
-    track certificates
-
-    ca_name
-        name of the CA
-    cert
-        certificate to be recorded
+    Get basic info to write out to the index.txt
     '''
     index_file = "{0}/{1}/index.txt".format(_cert_base_path(), ca_name)
 
     expire_date = cert.get_notAfter()
-    serial_number = cert.get_serial_number()
+    serial_number = format(cert.get_serial_number(), 'X')
 
     #gotta prepend a /
     subject = '/'
@@ -106,7 +101,23 @@ def _write_cert_to_database(ca_name, cert):
             )
     subject += '\n'
 
-    index_data = 'V\t{0}\t\t{1}\tunknown\t{2}'.format(
+    return (index_file, expire_date, serial_number, subject)
+
+
+def _write_cert_to_database(ca_name, cert, status='V'):
+    '''
+    write out the index.txt database file in the appropriate directory to
+    track certificates
+
+    ca_name
+        name of the CA
+    cert
+        certificate to be recorded
+    '''
+    index_file, expire_date, serial_number, subject = _get_basic_info(ca_name, cert)
+
+    index_data = '{0}\t{1}\t\t{2}\tunknown\t{3}'.format(
+            status,
             expire_date,
             serial_number,
             subject
@@ -644,6 +655,78 @@ def create_ca_signed_cert(ca_name, CN, days=365, **extensions):
                     _cert_base_path(),
                     ca_name,
                     CN
+                    )
+
+
+def revoke_cert(ca_name, CN, CRL='crl.pem'):
+    try:
+        ca_cert = OpenSSL.crypto.load_certificate(
+                OpenSSL.crypto.FILETYPE_PEM,
+                salt.utils.fopen('{0}/{1}/{2}_ca_cert.crt'.format(
+                    _cert_base_path(),
+                    ca_name, ca_name
+                    )).read()
+                )
+        ca_key = OpenSSL.crypto.load_privatekey(
+                OpenSSL.crypto.FILETYPE_PEM,
+                salt.utils.fopen('{0}/{1}/{2}_ca_cert.key'.format(
+                    _cert_base_path(),
+                    ca_name,
+                    ca_name)).read()
+                )
+    except IOError:
+        return 'There is no CA named "{0}"'.format(ca_name)
+
+    try:
+        client_cert = OpenSSL.crypto.load_certificate(
+                OpenSSL.crypto.FILETYPE_PEM,
+                salt.utils.fopen('{0}/{1}/certs/{2}.crt'.format(
+                    _cert_base_path(),
+                    ca_name,
+                    CN)).read()
+                )
+    except IOError:
+        return 'There is no client certificate named "{0}"'.format(CN)
+
+    index_file, expire_date, serial_number, subject = _get_basic_info(ca_name, client_cert)
+
+    index_data = 'R\t{0}\t\t{1}\tunknown\t{2}'.format(
+            expire_date,
+            serial_number,
+            subject
+            )
+
+    with salt.utils.fopen(index_file) as f:
+        for line in f:
+            if index_data in line:
+                return ('"{0}/{1}/certs/{2}.crt" was already revoked, '
+                        'serial number: {3}').format(
+                                _cert_base_path(),
+                                ca_name,
+                                CN,
+                                serial_number
+                                )
+
+    crl = OpenSSL.crypto.CRL()
+    revoked = OpenSSL.crypto.Revoked()
+    revoked.set_serial(serial_number)
+    now = datetime.now().strftime("%Y%m%d%H%M%SZ")
+    revoked.set_rev_date(now)
+
+    crl.add_revoked(revoked)
+    crl_text = crl.export(ca_cert, ca_key)
+
+    with salt.utils.fopen('crl.pem', 'a+') as f:
+        f.write(crl_text)
+
+    _write_cert_to_database(ca_name, client_cert, status = 'R')
+
+    return ('Revoked Certificate: "{0}/{1}/certs/{2}.crt", '
+            'serial number: {3}').format(
+                    _cert_base_path(),
+                    ca_name,
+                    CN,
+                    serial_number
                     )
 
 

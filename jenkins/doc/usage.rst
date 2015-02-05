@@ -105,3 +105,13 @@ Build User Vars Plugin
 https://wiki.jenkins-ci.org/display/JENKINS/Build+User+Vars+Plugin
 
 This plugin is used to set user build variables.
+
+Builds that Disapears
+~~~~~~~~~~~~~~~~~~~~~
+
+https://issues.jenkins-ci.org/browse/JENKINS-15156
+
+The workaround is go ``/manage`` (Manage Jenkins) and click
+**Reload Configuration from Disk**
+
+Even if the bug 15156 had been marked as fixed, the problem still exists.

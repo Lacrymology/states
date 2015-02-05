@@ -295,7 +295,9 @@ def list_system_files(dirs=("/bin", "/etc", "/usr", "/lib", "/sbin", "/var"),
                                '/var/cache/salt/minion/extrn_files',
                                '/var/cache/salt/minion/doc',
                                '/usr/lib/x86_64-linux-gnu/libfakeroot',
-                               '/usr/lib/i386-linux-gnu/libfakeroot',)):
+                               '/usr/lib/i386-linux-gnu/libfakeroot',
+                               '/var/cache/salt/minion/extrn_files',
+                               '/var/cache/salt/minion/')):
     """
     Returns a set of the files present in each of the directories listed.
 

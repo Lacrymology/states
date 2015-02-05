@@ -210,21 +210,22 @@ openvpn_server_key_{{ instance }}_chmod:
     - require:
       - file: openvpn_server_key_{{ instance }}
 
-openvpn_client_csr_{{ instance }}:
+            {%- for client in servers[instance]['clients'] %}
+openvpn_client_csr_{{ instance }}_{{ client }}:
   module:
     - wait
     - name: tls.create_csr
     - ca_name: {{ ca_name }}
-    - CN: client_{{ instance }}
+    - CN: {{ instance }}_{{ client }}
     - watch:
       - module: openvpn_ca
 
-openvpn_client_cert_{{ instance }}:
+openvpn_client_cert_{{ instance }}_{{ client }}:
   module:
     - wait
     - name: tls.create_ca_signed_cert
     - ca_name: {{ ca_name }}
-    - CN: client_{{ instance }}
+    - CN: {{ instance }}_{{ client }}
     - extensions:
         basicConstraints:
           critical: False
@@ -236,23 +237,24 @@ openvpn_client_cert_{{ instance }}:
           critical: False
           options: 'clientAuth'
     - watch:
-      - module: openvpn_client_csr_{{ instance }}
+      - module: openvpn_client_csr_{{ instance }}_{{ client }}
   file:
     - copy
-    - name: /etc/openvpn/{{ instance }}/client.crt
-    - source: /etc/pki/{{ ca_name }}/certs/client_{{ instance }}.crt
+    - name: /etc/openvpn/{{ instance }}/{{ instance }}_{{ client }}.crt
+    - source: /etc/pki/{{ ca_name }}/certs/{{ instance }}_{{ client }}.crt
     - require:
-      - module: openvpn_server_cert_{{ instance }}
+      - module: openvpn_client_cert_{{ instance }}_{{ client }}
       - file: {{ config_dir }}
 
-openvpn_client_key_{{ instance }}:
+openvpn_client_key_{{ instance }}_{{ client }}:
   file:
     - copy
-    - name: /etc/openvpn/{{ instance }}/client.key
-    - source: /etc/pki/{{ ca_name }}/certs/client_{{ instance }}.key
+    - name: /etc/openvpn/{{ instance }}/{{ instance }}_{{ client }}.key
+    - source: /etc/pki/{{ ca_name }}/certs/{{ instance }}_{{ client }}.key
     - require:
-      - module: openvpn_client_cert_{{ instance }}
+      - module: openvpn_client_cert_{{ instance }}_{{ client }}
       - file: {{ config_dir }}
+            {%- endfor %}
         {%- endif %}
 
 {% call service_openvpn(instance) %}

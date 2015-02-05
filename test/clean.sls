@@ -33,7 +33,10 @@ clean_pkg:
       - bind9-host
       - busybox-static
       - byobu
+{# Required for python-requests which in turn depended by salt-common
+    from 2014.7
       - ca-certificates
+#}
       - cloud-init
       - cloud-initramfs-growroot
       - cloud-initramfs-rescuevol
@@ -82,7 +85,9 @@ clean_pkg:
       - language-selector-common
       - laptop-detect
       - less
+{#- required by python-apt - dependency of salt-common
       - libapt-inst1.4
+#}
       - libclass-accessor-perl
       - libclass-isa-perl
       - libcurl3
@@ -128,10 +133,12 @@ clean_pkg:
       - pppoeconf
       - psmisc
       - python-apport
+{#- required by salt-common 2014.7
       - python-apt
       - python-apt-common
-      - python-boto
       - python-chardet
+#}
+      - python-boto
       - python-cheetah
       - python-configobj
       - python-dbus

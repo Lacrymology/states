@@ -149,6 +149,19 @@ openvpn_ca:
 
 {{ service_openvpn(instance) }}
 
+{{ config_dir }}/client.conf:
+  file:
+    - managed
+    - user: nobody
+    - group: nogroup
+    - source: salt://openvpn/client/{{ mode }}.jinja2
+    - template: jinja
+    - mode: 400
+    - context:
+        instance: {{ instance }}
+    - require:
+      - file: {{ config_dir }}
+
     {%- elif servers[instance]['mode'] == 'tls'-%}
 
         {%- if not ca_exists %}
@@ -253,6 +266,20 @@ openvpn_client_key_{{ instance }}_{{ client }}:
     - source: /etc/pki/{{ ca_name }}/certs/{{ instance }}_{{ client }}.key
     - require:
       - module: openvpn_client_cert_{{ instance }}_{{ client }}
+      - file: {{ config_dir }}
+
+{{ config_dir }}/{{ client }}.conf:
+  file:
+    - managed
+    - user: nobody
+    - group: nogroup
+    - source: salt://openvpn/client/{{ mode }}.jinja2
+    - template: jinja
+    - mode: 400
+    - context:
+        instance: {{ instance }}
+        client: {{ client }}
+    - require:
       - file: {{ config_dir }}
             {%- endfor %}
         {%- endif %}

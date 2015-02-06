@@ -68,7 +68,16 @@ salt-cloud:
       - pkg: salt-cloud
       - service: salt-master
 
-salt-cloud-boostrap-script:
+salt_cloud_bootstrap_script:
+  file:
+    - copy
+    - source: {{ root_bin_py() }}/salt/cloud/deploy/bootstrap-salt.sh
+    - name: /etc/salt/cloud.deploy.d/bootstrap-salt.sh
+    - require:
+      - module: salt-cloud
+      - file: bash
+
+salt_cloud_bootstrap_script_patch:
   file:
     - replace
     - name: /etc/salt/cloud.deploy.d/bootstrap-salt.sh
@@ -79,8 +88,7 @@ salt-cloud-boostrap-script:
     - group: root
     - template: jinja
     - require:
-      - module: salt-cloud
-      - file: bash
+      - file: salt_cloud_bootstrap_script
 
 salt_cloud_digital_ocean_v2_module:
   file:

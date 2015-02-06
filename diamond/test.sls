@@ -13,7 +13,7 @@ test_diamond_config:
     - run
     {#- if it outputs "Failed", config is wrong, diamond does not die / return fail
     for that, so this test is needed #}
-    - name: ! /usr/local/diamond/bin/diamond --run processresources --foreground --log-stdout | grep Failed
+    - name: '! /usr/local/diamond/bin/diamond --run processresources --foreground --log-stdout | grep Failed'
     - require:
       - sls: diamond
 

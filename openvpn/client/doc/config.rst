@@ -1,24 +1,38 @@
 Configuration file
 ==================
 
-Here're the common steps to setup :doc:`/index`:
+Here're the common steps to setup :doc:`index`:
 
-* Install OpenVPN client
-* Copy the required files to the client machine
-* Put it into a folder, then run the service
+1. Install OpenVPN client:
 
-Depend on which authentication mode, the required files are different:
+   * Windows: https://openvpn.net/index.php/open-source/downloads.html
+   * Debian/Ubuntu::
 
-Static Key
-----------
+       apt-get install openvpn
 
-* ``/etc/openvpn/{{ instance  }}/client.conf``
-* ``/etc/openvpn/{{ instance  }}/secret.key``
+   * OS X: https://code.google.com/p/tunnelblick/ or via Homebrew::
 
-TLS
----
+       brew install openvpn
 
-* ``/etc/openvpn/ca.crt``
-* ``/etc/openvpn/{{ instance }}/{{ client_name }}.conf``
-* ``/etc/openvpn/{{ instance }}/{{ instance }}_{{ client_name }}.crt``
-* ``/etc/openvpn/{{ instance }}/{{ instance }}_{{ client_name }}.key``
+   Other distributions can install via its own software repositories or from the
+   source tarball.
+
+2. Download the archive file that include a config file, secret key or
+   `Certificate Authority <http://en.wikipedia.org/wiki/Certificate_authority>_`
+   and client certificate depends on which authentication mode. They are
+   located in ``/etc/openvpn/{{ instance }}`` on the OpenVPN server.
+
+3. Unzip the above archive file, then copy the extracted files to the
+   appropriate directory.
+
+   * Windows: ``C:\Program Files\OpenVPN\config\``
+   * Linux: ``/etc/openvpn``
+   * OS X: ``/usr/local/etc/openvpn/``
+
+4. Starting :doc:`index`:
+
+   * Windows: Start Menu -> All Programs -> OpenVPN -> OpenVPN GUI
+   * Linux/OSX::
+
+       cd /path/to/openvpn
+       openvpn client.conf

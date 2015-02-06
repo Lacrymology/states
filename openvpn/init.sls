@@ -108,6 +108,12 @@ openvpn_ca:
 
 {%- set servers = salt['pillar.get']('openvpn:servers', {}) %}
 
+{%- if salt['pkg.version_cmp'](pkg1=salt['pkg.version']('salt-minion'), pkg2='2015.2.0') == -1 %}
+    {%- set archive_function_name = 'archive.zip' %}
+{%- else %}
+    {%- set archive_function_name = 'archive.cmd_zip' %}
+{%- endif %}
+
 {%- for instance in servers -%}
 {%- set config_dir = '/etc/openvpn/' + instance -%}
 {%- set mode = servers[instance]['mode'] %}
@@ -140,7 +146,7 @@ openvpn_ca:
         {#- only 2 remotes are supported -#}
         {%- if servers[instance]['peers']|length == 2 %}
 
-{{ instance }}-secret:
+{{ instance }}_secret:
   file:
     - managed
     - name: {{ config_dir }}/secret.key
@@ -158,9 +164,10 @@ openvpn_ca:
 
 {{ service_openvpn(instance) }}
 
-{{ config_dir }}/client.conf:
+openvpn_{{ instance }}_client:
   file:
     - managed
+    - name: {{ config_dir }}/client.conf
     - user: nobody
     - group: nogroup
     - source: salt://openvpn/client/{{ mode }}.jinja2
@@ -170,6 +177,19 @@ openvpn_ca:
         instance: {{ instance }}
     - require:
       - file: {{ config_dir }}
+  module:
+    - wait
+    - name: {{ archive_function_name }}
+    - zipfile: {{ config_dir }}/client.zip
+    - cwd: {{ config_dir }}
+    - sources:
+      - {{ config_dir }}/client.conf
+      - {{ config_dir }}/secret.key
+    - watch:
+      - file: openvpn_{{ instance }}_client
+      - file: {{ instance }}_secret
+    - require:
+      - pkg: salt_minion_deps
 
     {%- elif servers[instance]['mode'] == 'tls'-%}
 
@@ -291,9 +311,10 @@ openvpn_client_key_{{ instance }}_{{ client }}:
       - module: openvpn_client_cert_{{ instance }}_{{ client }}
       - file: {{ config_dir }}
 
-{{ config_dir }}/{{ client }}.conf:
+openvpn_{{ instance }}_{{ client }}:
   file:
     - managed
+    - name: {{ config_dir }}/{{ instance }}_{{ client }}.conf
     - user: nobody
     - group: nogroup
     - source: salt://openvpn/client/{{ mode }}.jinja2
@@ -304,7 +325,25 @@ openvpn_client_key_{{ instance }}_{{ client }}:
         client: {{ client }}
     - require:
       - file: {{ config_dir }}
-            {%- endfor %}
+  module:
+    - wait
+    - name: {{ archive_function_name }}
+    - zipfile: {{ config_dir }}/{{ client }}.zip
+    - cwd: {{ config_dir }}
+    - sources:
+      - {{ config_dir }}/{{ instance }}_{{ client }}.conf
+      - /etc/openvpn/ca.crt
+      - {{ config_dir }}/{{ instance }}_{{ client }}.crt
+      - {{ config_dir }}/{{ instance }}_{{ client }}.key
+    - watch:
+      - file: openvpn_{{ instance }}_{{ client }}
+      - file: openvpn_ca
+      - file: openvpn_client_cert_{{ instance }}_{{ client }}
+      - file: openvpn_client_key_{{ instance }}_{{ client }}
+    - require:
+      - pkg: salt_minion_deps
+
+            {%- endfor %} {# client cert #}
 
         {%- endif %} {# ca_exists #}
 

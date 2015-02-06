@@ -1,7 +1,7 @@
 {%- extends "openvpn/client/base.jinja2" %}
 
 {%- block authentication_mode %}
-secret /etc/openvpn/{{ instance }}/secret.key
+secret secret.key
 {%- set peers = vpn_instance['peers'] %}
 {%- for peer, peer_data in peers.iteritems() -%}
     {%- if peer != grains['id'] %}

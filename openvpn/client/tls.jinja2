@@ -3,8 +3,8 @@
 {%- block authentication_mode %}
 client
 remote {% if 'availabilityZone' in salt['grains.ls']() %}{{ grains['public-ipv4'] }}{% else %}{{ salt['network.ip_addrs']('eth0')[0] }}{% endif %} {{ vpn_instance['port'] | default(1194) }}
-ca /etc/openvpn/ca.crt
-cert /etc/openvpn/{{ instance }}/{{ instance }}_{{ client }}.crt
-key /etc/openvpn/{{ instance }}/{{ instance }}_{{ client }}.key
+ca ca.crt
+cert {{ instance }}_{{ client }}.crt
+key {{ instance }}_{{ client }}.key
 remote-cert-tls server
 {%- endblock authentication_mode %}

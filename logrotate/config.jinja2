@@ -4,6 +4,12 @@ in the doc/license.rst file.
 
 -#}
 # {{ salt['pillar.get']('message_do_not_modify') }}
+
+{#- in trusty, force 'syslog' group, as /var/log is now owned by this #}
+{%- if grains['lsb_distrib_codename'] == 'trusty' %}
+su root syslog
+{%- endif -%}
+
 {#- rotate log files weekly #}
 weekly
 {#- keep 4 weeks worth of backlogs #}

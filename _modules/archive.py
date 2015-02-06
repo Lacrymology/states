@@ -146,7 +146,7 @@ def gunzip(gzipfile, template=None):
 
 
 @decorators.which('zip')
-def zip_(zipfile, sources, template=None):
+def zip_(zipfile, sources, template=None, cwd=None):
     '''
     Uses the zip command to create zip files
 
@@ -168,7 +168,11 @@ def zip_(zipfile, sources, template=None):
     '''
     if isinstance(sources, salt._compat.string_types):
         sources = [s.strip() for s in sources.split(',')]
-    cmd = 'zip {0} {1}'.format(zipfile, ' '.join(sources))
+    if not cwd:
+        cmd = 'zip {0} {1}'.format(zipfile, ' '.join(sources))
+    else:
+        cmd = 'zip {0} -j {1} {2}'.format(zipfile, cwd, ' '.join(sources))
+
     return __salt__['cmd.run'](cmd, template=template).splitlines()
 
 

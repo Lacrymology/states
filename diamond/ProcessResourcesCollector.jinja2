@@ -21,7 +21,11 @@ exe=^\/sbin\/init$
 
 [[udev]]
 
+{%- if grains['lsb_distrib_codename'] == 'precise' %}
 exe = ^\/sbin\/udevd$
+{%- else %}
+exe = ^\/lib\/systemd\/systemd-udevd$
+{%- endif -%}
 
 {% if accumulator|default(False) %}
 {% for line in accumulator['processes'] %}

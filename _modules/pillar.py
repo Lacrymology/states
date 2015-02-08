@@ -12,7 +12,8 @@ logger = logging.getLogger('pillar_common')
 def __virtual__():
     # HACK: load the core pillar module with the variables injected by salt
     try:
-        pillar.__salt__ = __salt__
+        # the commented one seem unnecessary
+        #pillar.__salt__ = __salt__
         pillar.__pillar__ = __pillar__
         pillar.__opts__ = __opts__
         pillar.__grains__ = __grains__

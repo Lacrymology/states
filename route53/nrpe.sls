@@ -4,6 +4,7 @@ in the doc/license.rst file.
 
 -#}
 include:
+  - build.nrpe
   - pip.nrpe
   - python.dev.nrpe
   - xml.nrpe

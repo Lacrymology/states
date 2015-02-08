@@ -20,8 +20,8 @@ def __virtual__():
         logger.debug("Pillar Common Proxy Initialized")
         return 'pillar'
     except NameError:
-        logger.debug("Pillar Common Proxy can't load at this point, try again"
-                     "later")
+        logger.info("Pillar Common Proxy can't load at this point, try again"
+                    "later", exc_info=True)
         return False
 
 

@@ -658,7 +658,7 @@ def create_ca_signed_cert(ca_name, CN, days=365, **extensions):
                     )
 
 
-def revoke_cert(ca_name, CN, CRL='crl.pem'):
+def revoke_cert(ca_name, CN, crl_path=None):
     try:
         ca_cert = OpenSSL.crypto.load_certificate(
                 OpenSSL.crypto.FILETYPE_PEM,
@@ -716,7 +716,12 @@ def revoke_cert(ca_name, CN, CRL='crl.pem'):
     crl.add_revoked(revoked)
     crl_text = crl.export(ca_cert, ca_key)
 
-    with salt.utils.fopen('crl.pem', 'a+') as f:
+    if crl_path is None:
+        crl_path = '{0}/{1}/crl.pem'.format(
+                _cert_base_path(),
+                ca_name
+                )
+    with salt.utils.fopen(crl_path, 'a+') as f:
         f.write(crl_text)
 
     _write_cert_to_database(ca_name, client_cert, status = 'R')

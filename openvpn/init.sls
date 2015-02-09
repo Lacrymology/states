@@ -127,9 +127,10 @@ openvpn_ca:
     - require:
       - pkg: openvpn
 
-{{ config_dir }}/config:
+openvpn_{{ instance }}_config:
   file:
     - managed
+    - name: {{ config_dir }}/config
     - user: nobody
     - group: nogroup
     - source: salt://openvpn/{{ mode }}.jinja2
@@ -347,17 +348,35 @@ openvpn_{{ instance }}_{{ client }}:
 
         {%- endif %} {# ca_exists #}
 
-        {%- for r_client in servers[instance]['revocations'] %}
+        {%- set crls = servers[instance]['revocations'] | default([]) %}
+        {%- if crls %}
+            {%- for r_client in crls %}
 openvpn_revoke_client_cert_{{ r_client }}:
   module:
     - run
     - name: tls.revoke_cert
     - ca_name: {{ ca_name }}
     - CN: {{ instance }}_{{ r_client }}
-        {%- endfor %}
+    - crl_path: {{ config_dir }}/crl.pem
+    - require:
+      - pkg: salt_minion_deps
+            {%- endfor %}
+
+openvpn_{{ instance }}_config_append:
+  file:
+    - append
+    - name: {{ config_dir }}/config
+    - text: |
+        crl-verify {{ config_dir }}/crl.pem
+    - require:
+      - file: openvpn_{{ instance }}_config
+    - watch_in:
+      - service: openvpn-{{ instance }}
+        {%- endif %}
 
 {% call service_openvpn(instance) %}
       - cmd: openvpn_dh
+      - file: openvpn_{{ instance }}_config
         {%- if not ca_exists %}
       - file: openvpn_ca
       - file: openvpn_server_cert_{{ instance }}

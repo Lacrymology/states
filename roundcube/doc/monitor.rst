@@ -6,59 +6,25 @@ Mandatory
 
 .. |deployment| replace:: roundcube
 
-.. _monitor-roundcube_uwsgi_master:
+.. warning::
 
-roundcube_uwsgi_master
-~~~~~~~~~~~~~~~~~~~~~~
+   In this document, when refer to a pillar key ``pillar_prefix``
+   means ``roundcube``.
 
-:doc:`/roundcube/doc/index` :doc:`/uwsgi/doc/index` Master Process.
-
-.. _monitor-roundcube_uwsgi_worker:
-
-roundcube_uwsgi_worker
-~~~~~~~~~~~~~~~~~~~~~~
-
-:doc:`/roundcube/doc/index` :doc:`/uwsgi/doc/index` Workers Processes.
-
-.. _monitor-roundcube_uwsgi_ping:
-
-roundcube_uwsgi_ping
-~~~~~~~~~~~~~~~~~~~~
-
-:doc:`/roundcube/doc/index` :doc:`/uwsgi/doc/index` Ping.
+.. include:: /uwsgi/doc/monitor.inc
 
 .. include:: /postgresql/doc/monitor.inc
 
-.. _monitor-roundcube_nginx_http:
-
-roundcube_nginx_http
-~~~~~~~~~~~~~~~~~~~~
-
-:doc:`/roundcube/doc/index` :ref:`glossary-HTTP` Protocol work properly.
-
-.. _monitor-roundcube_nginx_https:
-
-roundcube_nginx_https
-~~~~~~~~~~~~~~~~~~~~~
-
-.. TODO: REFER TO SSL PILLAR!!!
-
-:doc:`/roundcube/doc/index` :ref:`glossary-HTTPS` Protocol work properly.
-
-.. _monitor-roundcube_nginx_https_certificate:
-
-roundcube_nginx_https_certificate
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-:doc:`/roundcube/doc/index` :ref:`glossary-HTTPS` Certificate Expiration is reached or not.
-
-.. _monitor-roundcube_ssl_configuration:
-
-roundcube_ssl_configuration
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-:doc:`/roundcube/doc/index` :doc:`/ssl/doc/index` Configuration is good or not.
+.. include:: /nginx/doc/monitor.inc
 
 .. include:: /backup/doc/monitor_postgres_procs.inc
 
 .. include:: /backup/doc/monitor.inc
+
+
+Optional
+--------
+
+Only use if :ref:`pillar-roundcube-ssl` is turned on.
+
+.. include:: /nginx/doc/monitor_ssl.inc

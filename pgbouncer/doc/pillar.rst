@@ -127,8 +127,6 @@ How to authenticate users.
 
 Default: ``md5``.
 
-.. _pillar-pgbouncer-max_client_conn:
-
 .. _pillar-pgbouncer-pool_mode:
 
 pgbouncer:pool_mode
@@ -142,6 +140,8 @@ Specifies when a server connection can be reused by other clients.
   transactions spanning multiple statements are disallowed in this mode.
 
 Default: ``session``.
+
+.. _pillar-pgbouncer-max_client_conn:
 
 pgbouncer:max_client_conn
 ~~~~~~~~~~~~~~~~~~~~~~~~~

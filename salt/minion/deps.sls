@@ -13,6 +13,7 @@ salt_minion_deps:
     - pkgs:
       - lsb-release
       - openssh-client {#- for ssh_known_host #}
+      - zip {#- for archive.zip module #}
       - unzip
       - dnsutils
       - python-psutil

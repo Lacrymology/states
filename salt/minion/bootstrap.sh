@@ -24,9 +24,14 @@ if [ $LOCAL_MODE -eq 0 ] && [ -z "$2" ]; then
 fi
 
 # some modules/states require HOME environment variable
-# force HOME to be root's home folder
-# so we don't have to use -H when using sudo
-export HOME=$(grep ^root: /etc/passwd | cut -d ':' -f 6)
+# if current HOME is not set to HOME of user who run salt (often is root),
+# software may misbehave.
+
+root_home=$(eval echo "~root")
+if [ "$HOME" != "$root_home" ]; then
+    echo "Current \$HOME set to $HOME. Expected '$root_home'. Please set it correctly (maybe run sudo with -H option)"
+    exit 1
+fi
 
 apt-get update
 apt-get install -y --no-install-recommends python-software-properties python-pip

@@ -127,6 +127,9 @@ Example::
         server: 172.16.0.0 255.255.255.0
         extra_configs:
           - client-to-client
+        clients:
+          - client1
+          - client2
       hr:
         mode: tls
         port: 1195
@@ -274,3 +277,12 @@ for :ref:`pillar-sysctl`::
 
   sysctl:
     net.ipv4.ip_forward: 1
+
+.. _pillar-openvpn-servers-{{ instance }}-clients:
+
+openvpn:servers:{{ instance }}:clients
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+A list of client's name that will be appended to the ``{{ instance }}_`` to
+become a `common name <http://info.ssl.com/article.aspx?id=10048>`_ when
+generating client certificates.

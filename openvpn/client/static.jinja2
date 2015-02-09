@@ -1,0 +1,12 @@
+{%- extends "openvpn/client/base.jinja2" %}
+
+{%- block authentication_mode %}
+secret secret.key
+{%- set peers = vpn_instance['peers'] %}
+{%- for peer, peer_data in peers.iteritems() -%}
+    {%- if peer != grains['id'] %}
+ifconfig {{ peer_data['vpn_address'] }} {{ peers[grains['id']]['vpn_address'] }}
+remote {{ peer_data['address'] }} {% if 'port' in peer_data %} {{ peer_data['port'] }}{% endif %}
+    {%- endif -%}
+{%- endfor -%}
+{%- endblock authentication_mode %}

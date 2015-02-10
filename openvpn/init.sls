@@ -73,15 +73,6 @@ openvpn_dh:
       - pkg: ssl-cert
       - pkg: openvpn
 
-{#-
-`tls._ca_exists` does not work as expected:
-
-  Function tls._ca_exists is not available
-
-so, using `file.file_exists` as a workaround
-#}
-{%- set ca_exists = salt['file.file_exists']('/etc/pki/' ~ ca_name ~ '/' ~ ca_name ~ '_ca_cert.crt') %}
-{% if not ca_exists %}
 openvpn_ca:
   module:
     - run
@@ -104,7 +95,6 @@ openvpn_ca:
     - source: /etc/pki/{{ ca_name }}/{{ ca_name }}_ca_cert.crt
     - require:
       - module: openvpn_ca
-{%- endif %}
 
 {%- set servers = salt['pillar.get']('openvpn:servers', {}) %}
 
@@ -192,9 +182,8 @@ openvpn_{{ instance }}_client:
     - require:
       - pkg: salt_minion_deps
 
-    {%- elif servers[instance]['mode'] == 'tls'-%}
+    {%- elif servers[instance]['mode'] == 'tls' %}
 
-        {%- if not ca_exists %}
 openvpn_server_csr_{{ instance }}:
   module:
     - wait
@@ -260,10 +249,10 @@ openvpn_server_key_{{ instance }}_chmod:
     - require:
       - file: openvpn_server_key_{{ instance }}
 
-            {%- for client in servers[instance]['clients'] %}
+        {%- for client in servers[instance]['clients'] %}
 openvpn_client_csr_{{ instance }}_{{ client }}:
   module:
-    - wait
+    - run
     - name: tls.create_csr
     - ca_name: {{ ca_name }}
     - bits: {{ bits }}
@@ -274,7 +263,7 @@ openvpn_client_csr_{{ instance }}_{{ client }}:
     - O: {{ organization }}
     - OU: {{ organizational_unit }}
     - emailAddress: {{ email }}
-    - watch:
+    - require:
       - module: openvpn_ca
 
 openvpn_client_cert_{{ instance }}_{{ client }}:
@@ -344,9 +333,7 @@ openvpn_{{ instance }}_{{ client }}:
     - require:
       - pkg: salt_minion_deps
 
-            {%- endfor %} {# client cert #}
-
-        {%- endif %} {# ca_exists #}
+        {%- endfor %} {# client cert #}
 
         {%- set crls = servers[instance]['revocations'] | default([]) %}
         {%- if crls %}
@@ -360,6 +347,20 @@ openvpn_revoke_client_cert_{{ r_client }}:
     - crl_path: {{ config_dir }}/crl.pem
     - require:
       - pkg: salt_minion_deps
+
+                {%- for file in ( ('/etc/pki/' ~ ca_name ~ '/certs/' ~ instance ~ '_' ~ r_client ~ '.csr',
+                                   '/etc/pki/' ~ ca_name ~ '/certs/' ~ instance ~ '_' ~ r_client ~ '.crt',
+                                   '/etc/pki/' ~ ca_name ~ '/certs/' ~ instance ~ '_' ~ r_client ~ '.key',
+                                   '/etc/openvpn/' ~ instance ~ '/' ~ instance ~ '_' ~ r_client ~ '.crt',
+                                   '/etc/openvpn/' ~ instance ~ '/' ~ instance ~ '_' ~ r_client ~ '.key',
+                                   '/etc/openvpn/' ~ instance ~ '/' ~ instance ~ '_' ~ r_client ~ '.conf',
+                                   '/etc/openvpn/' ~ instance ~ '/' ~ r_client ~ '.zip') ) %}
+{{ file }}:
+  file:
+    - absent
+    - require:
+      - module: openvpn_revoke_client_cert_{{ r_client }}
+                {%- endfor %}
             {%- endfor %}
 
 openvpn_{{ instance }}_config_append:
@@ -372,16 +373,14 @@ openvpn_{{ instance }}_config_append:
       - file: openvpn_{{ instance }}_config
     - watch_in:
       - service: openvpn-{{ instance }}
-        {%- endif %}
+        {%- endif %} {# revocation #}
 
 {% call service_openvpn(instance) %}
       - cmd: openvpn_dh
       - file: openvpn_{{ instance }}_config
-        {%- if not ca_exists %}
       - file: openvpn_ca
       - file: openvpn_server_cert_{{ instance }}
       - file: openvpn_server_key_{{ instance }}_chmod
-        {%- endif %}
       - file: /etc/default/openvpn
 {% endcall %}
     {%- endif %} {# tls #}

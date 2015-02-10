@@ -347,6 +347,8 @@ openvpn_revoke_client_cert_{{ r_client }}:
     - crl_path: {{ config_dir }}/crl.pem
     - require:
       - pkg: salt_minion_deps
+    - require_in:
+      - file: openvpn_{{ instance }}_config_append
 
                 {%- for file in ( ('/etc/pki/' ~ ca_name ~ '/certs/' ~ instance ~ '_' ~ r_client ~ '.csr',
                                    '/etc/pki/' ~ ca_name ~ '/certs/' ~ instance ~ '_' ~ r_client ~ '.crt',

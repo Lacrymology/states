@@ -107,6 +107,7 @@ openvpn_ca:
 {%- for instance in servers -%}
 {%- set config_dir = '/etc/openvpn/' + instance -%}
 {%- set mode = servers[instance]['mode'] %}
+{%- set crls = servers[instance]['revocations'] | default([]) %}
 
 {{ config_dir }}:
   file:
@@ -250,6 +251,7 @@ openvpn_server_key_{{ instance }}_chmod:
       - file: openvpn_server_key_{{ instance }}
 
         {%- for client in servers[instance]['clients'] %}
+            {%- if client not in crls %}
 openvpn_client_csr_{{ instance }}_{{ client }}:
   module:
     - run
@@ -332,10 +334,10 @@ openvpn_{{ instance }}_{{ client }}:
       - file: openvpn_client_key_{{ instance }}_{{ client }}
     - require:
       - pkg: salt_minion_deps
+            {%- endif %} {# client cert not in revocation list #}
 
         {%- endfor %} {# client cert #}
 
-        {%- set crls = servers[instance]['revocations'] | default([]) %}
         {%- if crls %}
             {%- for r_client in crls %}
 openvpn_revoke_client_cert_{{ r_client }}:

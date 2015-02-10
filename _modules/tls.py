@@ -356,7 +356,7 @@ def create_csr(
             ca_name,
             CN)
             ):
-        return 'Certificate Request "{0}" already exists'.format(ca_name)
+        return 'Certificate Request "{0}" already exists'.format(CN)
 
     key = OpenSSL.crypto.PKey()
     key.generate_key(OpenSSL.crypto.TYPE_RSA, bits)
@@ -581,9 +581,9 @@ def create_ca_signed_cert(ca_name, CN, days=365, **extensions):
         salt '*' tls.create_ca_signed_cert test localhost
     '''
     if os.path.exists(
-            '{0}/{1}/{2}.crt'.format(_cert_base_path(), ca_name, CN)
+            '{0}/{1}/certs/{2}.crt'.format(_cert_base_path(), ca_name, CN)
             ):
-        return 'Certificate "{0}" already exists'.format(ca_name)
+        return 'Certificate "{0}" already exists'.format(CN)
 
     try:
         ca_cert = OpenSSL.crypto.load_certificate(

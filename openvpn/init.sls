@@ -75,7 +75,7 @@ openvpn_dh:
 
 openvpn_ca:
   module:
-    - run
+    - wait
     - name: tls.create_ca
     - ca_name: {{ ca_name }}
     - bits: {{ bits }}
@@ -87,7 +87,7 @@ openvpn_ca:
     - O: {{ organization }}
     - OU: {{ organizational_unit }}
     - emailAddress: {{ email }}
-    - require:
+    - watch:
       - pkg: salt_minion_deps
   file:
     - copy

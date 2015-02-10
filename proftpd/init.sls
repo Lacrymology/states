@@ -7,10 +7,11 @@ in the doc/license.rst file.
 include:
   - apt
   - postgresql.server
+  - hostname
   - rsyslog
   - web
 
-proftpd-basic:
+proftpd:
   debconf:
     - set
     - data:
@@ -19,15 +20,42 @@ proftpd-basic:
       - pkg: apt_sources
   pkg:
     - installed
+    - name: proftpd-basic
     - require:
-      - debconf: proftpd-basic
+      - debconf: proftpd
       - cmd: apt_sources
+  file:
+    - managed
+    - name: /etc/proftpd/proftpd.conf
+    - template: jinja
+    - source: salt://proftpd/config.jinja2
+    - user: root
+    - group: root
+    - mode: 440
+    - require:
+      - pkg: proftpd
+  service:
+    - running
+    - enable: True
+    - order: 50
+    - require:
+      - host: hostname
+      - postgres_database: proftpd-mod-pgsql
+      - cmd: proftpd-users
+      - service: postgresql
+      - service: rsyslog
+      - file: web
+    - watch:
+      - file: proftpd
+      - pkg: proftpd-mod-pgsql
+      - pkg: proftpd
+{#- PID file owned by root, no need to manage #}
 
 proftpd-mod-pgsql:
   pkg:
     - installed
     - require:
-      - pkg: proftpd-basic
+      - pkg: proftpd
       - cmd: apt_sources
   postgres_user:
     - present
@@ -67,38 +95,13 @@ proftpd-users:
     - watch:
       - file: proftpd-users
 
-proftpd:
-  file:
-    - managed
-    - name: /etc/proftpd/proftpd.conf
-    - template: jinja
-    - source: salt://proftpd/config.jinja2
-    - user: root
-    - group: root
-    - mode: 440
-    - require:
-      - pkg: proftpd-basic
-  service:
-    - running
-    - enable: True
-    - order: 50
-    - require:
-      - postgres_database: proftpd-mod-pgsql
-      - cmd: proftpd-users
-      - service: postgresql
-      - user: web
-      - service: rsyslog
-    - watch:
-      - file: proftpd
-      - pkg: proftpd-mod-pgsql
-      - pkg: proftpd-basic
-{#- PID file owned by root, no need to manage #}
-
 {% for file in ('virtuals', 'tls', 'sql', 'modules', 'ldap') %}
 /etc/proftpd/{{ file }}.conf:
   file:
     - absent
     - require:
+      - pkg: proftpd
+    - watch_in:
       - service: proftpd
 {% endfor %}
 
@@ -106,7 +109,7 @@ proftpd:
   file:
     - absent
     - require:
-      - service: proftpd
+      - pkg: proftpd
 
 {% for account in salt['pillar.get']('proftpd:accounts', {}) %}
 /var/lib/deployments/{{ account }}/static/ftp:
@@ -118,4 +121,6 @@ proftpd:
     - makedirs: True
     - require:
       - file: web
+    - require_in:
+      - service: proftpd
 {% endfor %}

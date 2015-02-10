@@ -24,6 +24,7 @@ postgresql:
       - postgresql-{{ version }}
       - postgresql-client-{{ version }}
     - require:
+      - host: hostname
       - cmd: system_locale
       - pkgrepo: postgresql-dev
       - cmd: apt_sources
@@ -75,4 +76,6 @@ postgresql:
   file:
     - absent
     - require:
+      - pkg: postgresql
+    - require_in:
       - service: postgresql

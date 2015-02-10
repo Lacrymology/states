@@ -337,6 +337,7 @@ openvpn_{{ instance }}_{{ client }}:
         {%- endfor %} {# client cert #}
 
         {%- if crls %}
+            {%- set crl_exists = salt['file.file_exists'](config_dir ~ '/crl.pem') %}
             {%- for r_client in crls %}
 openvpn_revoke_client_cert_{{ r_client }}:
   module:
@@ -347,14 +348,14 @@ openvpn_revoke_client_cert_{{ r_client }}:
     - crl_path: {{ config_dir }}/crl.pem
     - require:
       - pkg: salt_minion_deps
+                {%- if crl_exists %}
     - require_in:
       - file: openvpn_{{ instance }}_config_append
+                {%- endif %}
 
                 {%- for file in ( ('/etc/pki/' ~ ca_name ~ '/certs/' ~ instance ~ '_' ~ r_client ~ '.csr',
                                    '/etc/pki/' ~ ca_name ~ '/certs/' ~ instance ~ '_' ~ r_client ~ '.crt',
                                    '/etc/pki/' ~ ca_name ~ '/certs/' ~ instance ~ '_' ~ r_client ~ '.key',
-                                   '/etc/openvpn/' ~ instance ~ '/' ~ instance ~ '_' ~ r_client ~ '.crt',
-                                   '/etc/openvpn/' ~ instance ~ '/' ~ instance ~ '_' ~ r_client ~ '.key',
                                    '/etc/openvpn/' ~ instance ~ '/' ~ instance ~ '_' ~ r_client ~ '.conf',
                                    '/etc/openvpn/' ~ instance ~ '/' ~ r_client ~ '.zip') ) %}
 {{ file }}:
@@ -365,6 +366,7 @@ openvpn_revoke_client_cert_{{ r_client }}:
                 {%- endfor %}
             {%- endfor %}
 
+            {%- if crl_exists %}
 openvpn_{{ instance }}_config_append:
   file:
     - append
@@ -375,6 +377,7 @@ openvpn_{{ instance }}_config_append:
       - file: openvpn_{{ instance }}_config
     - watch_in:
       - service: openvpn-{{ instance }}
+            {%- endif %}
         {%- endif %} {# revocation #}
 
 {% call service_openvpn(instance) %}

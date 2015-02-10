@@ -16,4 +16,4 @@ locking_script
 log_start_script "$@"
 trap "log_stop_script \$?" EXIT
 
-/usr/local/bin/backup-file -e jenkins /var/lib jenkins --exclude=workspace --exclude='jobs/*/builds' --exclude=plugins --exclude='*.log'
+/usr/local/bin/backup-file -e jenkins /var/lib jenkins --exclude=workspace --exclude='jobs/*/builds' --exclude=plugins --exclude='*.log' --exclude=tmp

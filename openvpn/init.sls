@@ -88,9 +88,9 @@ openvpn_ca:
     - watch:
       - pkg: salt_minion_deps
   file:
-    - copy
+    - symlink
     - name: /etc/openvpn/ca.crt
-    - source: /etc/pki/{{ ca_name }}/{{ ca_name }}_ca_cert.crt
+    - target: /etc/pki/{{ ca_name }}/{{ ca_name }}_ca_cert.crt
     - require:
       - module: openvpn_ca
 
@@ -218,35 +218,36 @@ openvpn_server_cert_{{ instance }}:
     - watch:
       - module: openvpn_server_csr_{{ instance }}
   file:
-    - copy
+    - symlink
     - name: /etc/openvpn/{{ instance }}/server.crt
-    - source: /etc/pki/{{ ca_name }}/certs/{{ instance }}_server.crt
+    - target: /etc/pki/{{ ca_name }}/certs/{{ instance }}_server.crt
     - require:
       - module: openvpn_server_cert_{{ instance }}
       - file: {{ config_dir }}
     - watch_in:
       - service: openvpn-{{ instance }}
 
-openvpn_server_key_{{ instance }}:
-  file:
-    - copy
-    - name: /etc/openvpn/{{ instance }}/server.key
-    - source: /etc/pki/{{ ca_name }}/certs/{{ instance }}_server.key
-    - require:
-      - module: openvpn_server_cert_{{ instance }}
-      - file: /etc/openvpn/{{ instance }}
-    - watch_in:
-      - service: openvpn-{{ instance }}
-
 openvpn_server_key_{{ instance }}_chmod:
   file:
     - managed
-    - name: /etc/openvpn/{{ instance }}/server.key
+    - name: /etc/pki/{{ ca_name }}/certs/{{ instance }}_server.key
     - user: root
     - group: root
     - mode: 400
     - require:
-      - file: openvpn_server_key_{{ instance }}
+      - module: openvpn_server_cert_{{ instance }}
+
+openvpn_server_key_{{ instance }}:
+  file:
+    - symlink
+    - name: /etc/openvpn/{{ instance }}/server.key
+    - target: /etc/pki/{{ ca_name }}/certs/{{ instance }}_server.key
+    - mode: 400
+    - require:
+      - file: openvpn_server_key_{{ instance }}_chmod
+      - file: /etc/openvpn/{{ instance }}
+    - watch_in:
+      - service: openvpn-{{ instance }}
 
         {%- for client in servers[instance]['clients'] %}
             {%- if client not in crls %}
@@ -285,18 +286,18 @@ openvpn_client_cert_{{ instance }}_{{ client }}:
     - watch:
       - module: openvpn_client_csr_{{ instance }}_{{ client }}
   file:
-    - copy
+    - symlink
     - name: /etc/openvpn/{{ instance }}/{{ instance }}_{{ client }}.crt
-    - source: /etc/pki/{{ ca_name }}/certs/{{ instance }}_{{ client }}.crt
+    - target: /etc/pki/{{ ca_name }}/certs/{{ instance }}_{{ client }}.crt
     - require:
       - module: openvpn_client_cert_{{ instance }}_{{ client }}
       - file: {{ config_dir }}
 
 openvpn_client_key_{{ instance }}_{{ client }}:
   file:
-    - copy
+    - symlink
     - name: /etc/openvpn/{{ instance }}/{{ instance }}_{{ client }}.key
-    - source: /etc/pki/{{ ca_name }}/certs/{{ instance }}_{{ client }}.key
+    - target: /etc/pki/{{ ca_name }}/certs/{{ instance }}_{{ client }}.key
     - require:
       - module: openvpn_client_cert_{{ instance }}_{{ client }}
       - file: {{ config_dir }}
@@ -385,7 +386,7 @@ openvpn_{{ instance }}_config_append:
       - file: openvpn_{{ instance }}_config
       - file: openvpn_ca
       - file: openvpn_server_cert_{{ instance }}
-      - file: openvpn_server_key_{{ instance }}_chmod
+      - file: openvpn_server_key_{{ instance }}
       - file: /etc/default/openvpn
 {% endcall %}
     {%- endif %} {# tls #}

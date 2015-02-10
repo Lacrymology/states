@@ -4,11 +4,15 @@ in the doc/license.rst file.
 
 -#}
 # {{ salt['pillar.get']('message_do_not_modify') }}
+{%- set allow_src_ips = salt['pillar.get']('squid:allow_src_ips', []) -%}
+{%- set allow_dst_domains = salt['pillar.get']('squid:allow_dst_domains', []) -%}
+
+{%- if grains['lsb_distrib_codename'] == 'precise' %}
 acl manager proto cache_object
 acl localhost src 127.0.0.1/32 ::1
 acl to_localhost dst 127.0.0.0/8 0.0.0.0/32 ::1
-{%- set allow_src_ips = salt['pillar.get']('squid:allow_src_ips', []) %}
-{%- set allow_dst_domains = salt['pillar.get']('squid:allow_dst_domains', []) %}
+{%- endif %}
+
 {%- for address in allow_src_ips %}
 acl Allow_ipsrcs_by_SaltStack src {{ address }}
 {%- endfor %}

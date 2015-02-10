@@ -107,20 +107,6 @@ in the combined file:
     - require:
       - pkg: ssl-cert
 
-{#- as service need to watch all cert files, use this cmd as trigger that
-    service restart everywhen cert files changed #}
-ssl_cert_and_key_for_{{ name }}:
-  cmd:
-    - wait
-    - name: echo managed ssl cert for {{ name }}
-    - watch:
-      - file: /etc/ssl/private/{{ name }}.key
-      - file: /etc/ssl/certs/{{ name }}.crt
-      - file: /etc/ssl/certs/{{ name }}_ca.crt
-      - file: /etc/ssl/private/{{ name }}.pem
-      - file: /etc/ssl/certs/{{ name }}_chained.crt
-      - file: /etc/ssl/private/{{ name }}_bundle.pem
-
 {#- OpenSSL expects to find each certificate in a file named by the certificate
     subject's hashed name, plus a number extension that starts with 0.
 
@@ -138,4 +124,20 @@ ssl_create_symlink_by_hash_for_{{ name }}:
       - file: /etc/ssl/certs/{{ name }}.crt
       - file: /etc/ssl/certs/{{ name }}_ca.crt
       - file: /etc/ssl/certs/{{ name }}_chained.crt
+
+{#- as service need to watch all cert files, use this cmd as trigger that
+    service restart everywhen cert files changed #}
+ssl_cert_and_key_for_{{ name }}:
+  cmd:
+    - wait
+    - name: echo managed ssl cert for {{ name }}
+    - watch:
+      - file: /etc/ssl/private/{{ name }}.key
+      - file: /etc/ssl/certs/{{ name }}.crt
+      - file: /etc/ssl/certs/{{ name }}_ca.crt
+      - file: /etc/ssl/private/{{ name }}.pem
+      - file: /etc/ssl/certs/{{ name }}_chained.crt
+      - file: /etc/ssl/private/{{ name }}_bundle.pem
+    - require:
+      - cmd: ssl_create_symlink_by_hash_for_{{ name }}
 {% endfor -%}

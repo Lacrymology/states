@@ -53,7 +53,6 @@ openvpn:
 {% endfor %}
 
 {%- set ca_name = salt['pillar.get']('openvpn:ca:name') %}
-{%- set key_size = salt['pillar.get']('openvpn:dhparam:key_size', 2048) %}
 {%- set bits = salt['pillar.get']('openvpn:ca:bits') %}
 {%- set days = salt['pillar.get']('openvpn:ca:days') %}
 {%- set common_name = salt['pillar.get']('openvpn:ca:common_name') %}
@@ -66,10 +65,9 @@ openvpn:
 
 openvpn_dh:
   cmd:
-    - run
-    - name: openssl dhparam -out /etc/openvpn/dh{{ key_size }}.pem {{ key_size }}
-    - unless: test -f /etc/openvpn/dh{{ key_size }}.pem
-    - require:
+    - wait
+    - name: openssl dhparam -out /etc/openvpn/dh.pem {{ salt['pillar.get']('openvpn:dhparam:key_size', 2048) }}
+    - watch:
       - pkg: ssl-cert
       - pkg: openvpn
 

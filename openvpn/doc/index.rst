@@ -11,4 +11,3 @@ OpenVPN
     :glob:
 
     *
-    ../client/doc/index

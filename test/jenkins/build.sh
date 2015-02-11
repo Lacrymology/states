@@ -12,6 +12,62 @@
 
 set -x
 
+# allow multiple --repo options to get all non-common repositories
+# each value passed to  --repo is relative path to user-specific directory from
+# $WORKSPACE. The structure after all SCM checkout looks like:
+#  - common
+#  - pillar
+#  - repo1
+#  - repo2
+# then use --repo repo1 --repo repo2
+options=$(getopt \
+    --options "" \
+    --longoptions "repo:,profile:,find-step-longer:,master-timeout:,failfast" \
+    -- "$@")
+
+if [[ $? -ne 0 ]]; then
+    exit 1
+fi
+eval set -- "$options"
+repos=()
+profile='ci-minion'
+time_threshold=30
+master_timeout=300
+failfast=""
+tests=""
+
+while true; do
+    case "$1" in
+        --repo)
+            shift
+            repo="$1"
+            repos+=("../$repo")
+            ;;
+        --profile)
+            shift
+            profile="$1"
+            ;;
+        --find-step-longer)
+            shift
+            time_threshold="$1"
+            ;;
+        --master-timeout)
+            shift
+            master_timeout="$1"
+            ;;
+        --failfast)
+            failfast="--failfast"
+            ;;
+        --)
+            shift
+            break
+            ;;
+        esac
+    shift
+done
+
+tests="$*"
+
 PREPARE_STDOUT_LOG=/root/salt/stdout.prepare
 PREPARE_STDERR_LOG=/root/salt/stderr.prepare
 CUSTOM_CONFIG_DIR=/root/salt/states/test
@@ -75,39 +131,6 @@ test/lint.py --warn-nonstable
 pip install -r doc/requirements.txt
 doc/build.py
 
-if [ "$1" == "--profile" ]; then
-    profile=$2
-    shift
-    shift
-else
-    profile='ci-minion'
-fi
-if [ "$1" == "--find-step-longer" ]; then
-    time_threshold=${2}
-    shift
-    shift
-else
-    time_threshold=30
-fi
-
-# allow multiple --repo options to get all non-common repositories
-# each value passed to  --repo is relative path to user-specific directory from
-# $WORKSPACE. The structure after all SCM checkout looks like:
-#  - common
-#  - pillar
-#  - repo1
-#  - repo2
-# then use --repo repo1 --repo repo2
-# NOTICE --repo must come after --profile if --profile is used.
-repos=()
-cntr=0
-while [ "${1}" = '--repo' ]; do
-    repos[${cntr}]="../${2}"
-    cntr+=1
-    shift
-    shift
-done
-
 # create archive from common, pillar, and all user-specific formulas repos
 ./bootstrap_archive.py ../pillar ${repos[@]} > /srv/salt/jenkins_archives/$BUILD_IDENTITY.tar.gz
 
@@ -138,4 +161,5 @@ run_and_check_return_code 10 "salt-call -c $CUSTOM_CONFIG_DIR saltutil.refresh_m
 start_run_test_time=$(date +%s)
 echo "TIME-METER: Preparing for test took: $((start_run_test_time - start_time)) seconds"
 echo '------------ Running CI test  ------------'
-sudo salt -t 86400 "$BUILD_IDENTITY" cmd.run "$CUSTOM_CONFIG_DIR/jenkins/run.py $*"
+sudo salt --verbose -t "$master_timeout" "$BUILD_IDENTITY" cmd.run \
+    "$CUSTOM_CONFIG_DIR/jenkins/run.py $failfast $tests"

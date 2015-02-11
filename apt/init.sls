@@ -54,6 +54,17 @@ apt-key:
     - watch:
       - file: apt-key
 
+
+{#- /etc/cron.daily/apt needs this dir as it will write state file to it #}
+/var/lib/apt/periodic:
+  file:
+    - directory
+    - user: root
+    - group: root
+    - mode: 755
+    - require:
+      - cmd: apt
+
 {#- minimum configuration of apt and make sure basic packages required by salt
     to work correctly (mostly for pkgrepo, but that aren't required dependencies
     are installed. #}
@@ -101,6 +112,15 @@ apt:
     {%- endif -%}
 {%- endif %}
 
+{#- unnecessary pkg on server, which cause high load if use tmux/screen #}
+update-notifier-common:
+  pkg:
+    - purged
+    - require:
+      - pkg: apt_sources
+    - require_in:
+      - cmd: apt_sources
+
 {#- simple state, just keep the API as others used it #}
 apt_sources:
   pkg:
@@ -111,6 +131,7 @@ apt_sources:
       - python-software-properties
     - require:
       - module: apt
+      - file: /var/lib/apt/periodic
   cmd:
     - wait
     - name: touch /etc/apt/sources.list
@@ -127,9 +148,3 @@ apt_sources:
     - watch_in:
       - cmd: apt_sources
 {%- endif %}
-
-update-notifier-common:
-  pkg:
-    - purged
-    - require:
-      - cmd: apt_sources

@@ -49,7 +49,18 @@ proftpd:
       - file: proftpd
       - pkg: proftpd-mod-pgsql
       - pkg: proftpd
-{#- PID file owned by root, no need to manage #}
+      - file: proftpd_sysv
+
+proftpd_sysv:
+  file:
+    - managed
+    - name: /etc/init.d/proftpd
+    - source: salt://proftpd/sysv.jinja2
+    - user: root
+    - group: root
+    - mode: 750
+    - require:
+      - pkg: proftpd
 
 proftpd-mod-pgsql:
   pkg:

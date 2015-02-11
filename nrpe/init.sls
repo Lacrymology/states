@@ -351,13 +351,5 @@ nsca_passive:
 {% endif %}
 
 extend:
-{%- for state_id in ('apt', 'apt.conf', 'dpkg.conf') %}
-  {{ state_id }}:
-    file:
-      - group: nagios
-      - require:
-        - group: nagios-nrpe-server
-{%- endfor %}
-
 {%- from 'macros.jinja2' import change_ssh_key_owner with context %}
 {{ change_ssh_key_owner('nagios', {'pkg': 'nagios-nrpe-server'}) }}

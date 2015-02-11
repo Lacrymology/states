@@ -7,5 +7,4 @@ key /etc/openvpn/{{ instance }}/server.key  # This file should be kept secret
 dh /etc/openvpn/dh.pem
 server {{ vpn_instance['server'] }}
 ifconfig-pool-persist /etc/openvpn/{{ instance }}/ipp.txt
-push "redirect-gateway def1 bypass-dhcp"
 {%- endblock authentication_mode %}

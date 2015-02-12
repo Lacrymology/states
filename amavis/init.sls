@@ -55,6 +55,7 @@ amavis:
       - pkg: cron
       - file: bash
       - cmd: system_locale
+      - pkg: amavis
 
 {%- call manage_pid('/var/run/amavis/amavisd.pid', 'amavis', 'amavis', 'amavis', 640) %}
 - pkg: amavis

@@ -22,18 +22,8 @@ Local logging daemon that can be also used as a gateway to centralized logging.
 Remote Logging
 --------------
 
-.. TODO: this is weird to read. should be simplified.
-
-Once you then take a look at the last line in the configuration file
-
-.. TODO REPLACE TO PATH TO CONFIG FILE
-
-, you will see something like this::
-
-  *.*;local7.none @log.example.com:1514
-
-That means that all the log will be forward via :ref:`glossary-UDP` to
-:doc:`/graylog2/server/doc/index`, on port ``1514``.
+If :ref:`pillar-graylog2_address` is defined, all the log will be forwarded via
+:ref:`glossary-UDP` to :doc:`/graylog2/server/doc/index`, on port ``1514``.
 
 Default syslog port is ``514``, but to avoid possible logging loop,
 :doc:`/graylog2/server/doc/index` is on a separate port.
@@ -47,7 +37,7 @@ Links
 * `Wikipedia <http://en.wikipedia.org/wiki/Rsyslog>`_
 
 Related Formula
-----------------
+---------------
 
 * :doc:`/apt/doc/index`
 

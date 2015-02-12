@@ -12,5 +12,4 @@ log_start_script "$@"
 trap "log_stop_script \$?" EXIT
 
 export TERM=dumb
-test -e /usr/sbin/amavisd-new-cronjob && exec /usr/sbin/amavisd-new-cronjob sa-clean
-exit 0
+test -e /usr/sbin/amavisd-new-cronjob && su amavis -c '/usr/sbin/amavisd-new-cronjob sa-clean' -s /bin/bash

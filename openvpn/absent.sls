@@ -39,19 +39,6 @@ openvpn:
   file:
     - absent
 
-{%- set ca_name = salt['pillar.get']('openvpn:ca:name') %}
-/etc/pki/{{ ca_name }}:
-  file:
-    - absent
-
-/etc/pki:
-  cmd:
-    - run
-    - name: rm -fr /etc/pki
-    - unless: test -A /etc/pki
-    - require:
-      - file: /etc/pki/{{ ca_name }}
-
-{{ opts['cachedir'] }}/{{ ca_name }}.serial:
+{{ opts['cachedir'] }}/{{ salt['pillar.get']('openvpn:ca:name') }}.serial:
   file:
     - absent

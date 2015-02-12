@@ -6,4 +6,4 @@ erlang_procs
 erlang_port
 ~~~~~~~~~~~
 
-Monitor :doc:`/erlang/doc/index` port mapper port ``4396/tcp``.
+Monitor :doc:`/erlang/doc/index` port mapper port ``4396``/:ref:`glossary-TCP`.

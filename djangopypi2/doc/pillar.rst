@@ -74,7 +74,7 @@ djangopypi2:sentry
 djangopypi2:db:host
 ~~~~~~~~~~~~~~~~~~~
 
-Address of :doc:`/djangopypi2/doc/index` :doc:`/postgresql/doc/index`
+Address of :doc:`index` :doc:`/postgresql/doc/index`
 database.
 
 Default: ``127.0.0.1``
@@ -154,7 +154,7 @@ Default: Don't allow overwriting packages ``False``.
 djangopypi2:timeout
 ~~~~~~~~~~~~~~~~~~~
 
-Number of seconds for reading/transmitting a response/request from/to the uwsgi
-server.
+Number of seconds for reading/transmitting a response/request from/to
+the :doc:`/uwsgi/doc/index` server.
 
 Default: ``60`` seconds.

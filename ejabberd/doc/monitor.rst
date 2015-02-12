@@ -27,24 +27,24 @@ ejabberd_proc
 ejabberd_c2s_port
 ~~~~~~~~~~~~~~~~~
 
-Monitor :doc:`/ejabberd/doc/index` client to server port ``5222/:ref:`glossary-TCP```.
+Monitor :doc:`index` client to server port ``5222``/:ref:`glossary-TCP`.
 
 .. _monitor-ejabberd_admin_port:
 
 ejabberd_admin_port
 ~~~~~~~~~~~~~~~~~~~
 
-Monitor :doc:`/ejabberd/doc/index` amin port ``5280/:ref:`glossary-TCP```.
+Monitor :doc:`index` amin port ``5280``/:ref:`glossary-TCP`.
 
 .. _monitor-ejabberd_admin_http:
 
 ejabberd_admin_http
 ~~~~~~~~~~~~~~~~~~~
 
-Monitor :doc:`/ejabberd/doc/index` admin web interface:
+Monitor :doc:`index` admin web interface:
 http://127.0.0.1:5280/admin
 
-Expected return code: '401 Unauthorized' (:doc:`/ejabberd/doc/index`
+Expected return code: '401 Unauthorized' (:doc:`index`
 admin web interface require authentication).
 
 .. _monitor-ejabberd_backup_postgresql_procs:
@@ -62,7 +62,7 @@ Processes with name
 ejabberd_backup
 ~~~~~~~~~~~~~~~
 
-Check :doc:`/ejabberd/doc/index` backup age and size.
+Check :doc:`index` backup age and size.
 
 .. include:: /postgresql/doc/monitor.inc
 
@@ -71,7 +71,7 @@ Check :doc:`/ejabberd/doc/index` backup age and size.
 ejabberd_xmpp
 ~~~~~~~~~~~~~
 
-Test :doc:`/ejabberd/doc/index` functionality by logging in and
+Test :doc:`index` functionality by logging in and
 sending a message.
 
 Optional
@@ -86,7 +86,7 @@ Only use if :ref:`pillar-ejabberd-ssl` is turned on.
 ejabberd_s2s_port
 ~~~~~~~~~~~~~~~~~
 
-Monitor :doc:`/ejabberd/doc/index` server to server port ``5269/:ref:`glossary-TCP```.
+Monitor :doc:`index` server to server port ``5269``/:ref:`glossary-TCP`.
 
 .. note::
 

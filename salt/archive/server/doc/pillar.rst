@@ -116,4 +116,5 @@ Clamav
 ------
 
 :doc:`/clamav/doc/index` formula :doc:`/clamav/doc/pillar` key
-:ref:`pillar-clamav-db_mirrors` is also used to mirror :doc:`/clamav/doc/index` databases.
+:ref:`pillar-clamav-db_mirrors` is also used to mirror :doc:`/clamav/doc/index`
+:databases.

@@ -3,7 +3,7 @@ Metrics
 
 :doc:`/diamond/doc/process`:
 
-* ``memcached`` - :doc:`/memcache/doc/index`
+* ``memcached`` - :doc:`index`
 
 Memcached
 ---------
@@ -39,12 +39,12 @@ Total number of bytes send to the network by this server.
 main.cas_badval
 ~~~~~~~~~~~~~~~
 
-The ``cas`` command is some kind of :doc:`/memcache/doc/index`\ 's way
+The ``cas`` command is some kind of :doc:`index`\ 's way
 to avoid locking. ``cas`` calls with bad identifier are counted in
 this stats key.
 
 If this value is high, there is something wrong with the application
-that uses :doc:`/memcache/doc/index`.
+that uses :doc:`index`.
 
 main.cas_hits
 ~~~~~~~~~~~~~
@@ -84,9 +84,9 @@ item without fetching it.
 main.conn_yields
 ~~~~~~~~~~~~~~~~
 
-:doc:`/memcache/doc/index` has a configurable maximum number of requests per event (-R
-command line argument), this counter shows the number of times any
-client hit this limit.
+:doc:`index` has a configurable maximum number of requests per event (``-R``
+command line argument), this counter shows the number of times any client hit
+this limit.
 
 main.connection_structures
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -96,12 +96,12 @@ Number of internal connection handles currently held by the server.
 main.curr_connections
 ~~~~~~~~~~~~~~~~~~~~~
 
-Number of open connections to the :doc:`/memcache/doc/index` server.
+Number of open connections to the :doc:`index` server.
 
 main.curr_items
 ~~~~~~~~~~~~~~~
 
-Number of items currently in this :doc:`/memcache/doc/index` server's cache.
+Number of items currently in this :doc:`index` server's cache.
 
 main.decr_hits
 ~~~~~~~~~~~~~~
@@ -127,15 +127,15 @@ Number of ``delete`` commands for keys not existing within the cache.
 main.evicted_unfetched
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Number of objects removed from the cache to free up memory for new
-items because :doc:`/memcache/doc/index` reached it's maximum memory setting (see
+Number of objects removed from the cache to free up memory for new items because
+:doc:`index` reached it's maximum memory setting (see
 `main.limit_maxbytes`_ ) that never has been fetched.
 
 main.evictions
 ~~~~~~~~~~~~~~
 
-Number of objects removed from the cache to free up memory for new
-items because :doc:`/memcache/doc/index` reached it's maximum memory setting (see
+Number of objects removed from the cache to free up memory for new items because
+:doc:`index` reached it's maximum memory setting (see
 `main.limit_maxbytes`_).
 
 main.expired_unfetched
@@ -182,9 +182,9 @@ Number of failed ``incr`` commands.
 main.limit_maxbytes
 ~~~~~~~~~~~~~~~~~~~
 
-Maximum configured cache size (set on the command line while starting
-the memcached server), look at `main.bytes`_ value for the actual
-usage. Changes this value by adjusting ``memcache:memory`` pillar key.
+Maximum configured cache size (set on the command line while starting the
+memcached server), look at `main.bytes`_ value for the actual usage. Changes
+this value by adjusting ref:`pillar-memcache-memory` pillar key.
 
 main.listen_disabled_num
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -206,17 +206,19 @@ Number of misc file descriptors used internally.
 main.rusage_system
 ~~~~~~~~~~~~~~~~~~
 
-Number of system time in seconds for this :doc:`/memcache/doc/index` instance process.
+Number of system time in seconds for this :doc:`index` instance
+process.
 
 main.rusage_user
 ~~~~~~~~~~~~~~~~
 
-Number of user time in seconds for this :doc:`/memcache/doc/index` instance process.
+Number of user time in seconds for this :doc:`index` instance
+process.
 
 main.threads
 ~~~~~~~~~~~~
 
-Number of threads used by the current :doc:`/memcache/doc/index` server process.
+Number of threads used by the current :doc:`index` server process.
 
 main.total_connections
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -243,4 +245,4 @@ Number of failed ``touch`` commands.
 main.uptime
 ~~~~~~~~~~~
 
-Uptime of :doc:`/memcache/doc/index` server in seconds.
+Uptime of :doc:`index` server in seconds.

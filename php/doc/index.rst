@@ -5,7 +5,27 @@
 PHP
 ===
 
-Install `PHP <https://en.wikipedia.org/wiki/Php>`_ interpreter.
+Introduction
+------------
+
+PHP is a server-side scripting language designed for web development but also
+used as a general-purpose programming language.
+
+.. Copied from http://en.wikipedia.org/wiki/PHP - 2015-01-22
+
+Links
+-----
+
+* `PHP Homepage <http://php.net/>`_
+* ` Wikipedia <http://en.wikipedia.org/wiki/PHP>`_
+
+Related Formula
+---------------
+
+* :doc:`/apt/doc/index`
+
+Content
+-------
 
 .. toctree::
     :glob:

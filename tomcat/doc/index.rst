@@ -5,11 +5,14 @@
 Tomcat
 ======
 
-More can be find at official `Apache Tomcat page <http://tomcat.apache.org/>`_.
+Introduction
+------------
 
 Apache Tomcat is an open source software implementation of the :doc:`/java/doc/index` Servlet and
 JavaServer Pages technologies. The :doc:`/java/doc/index` Servlet and JavaServer Pages
 specifications are developed under the :doc:`/java/doc/index` Community Process.
+
+.. http://tomcat.apache.org/
 
 Tomcat6 or Tomcat7
 ------------------
@@ -39,6 +42,20 @@ Consults `this page for more information <http://tomcat.apache.org/whichversion.
 .. warning::
 
    Tomcat 6.x and Tomcat 7.x can't both be installed in a machine.
+
+Links
+-----
+
+* `Apache Tomcat page <http://tomcat.apache.org/>`_
+* `Wikipedia <http://en.wikipedia.org/wiki/Apache_Tomcat>`_
+
+Related Formula
+---------------
+
+* :doc:`/apt/doc/index`
+
+Content
+-------
 
 .. toctree::
     :glob:

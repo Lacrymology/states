@@ -25,7 +25,7 @@ Optional
 openerp_cron
 ~~~~~~~~~~~~
 
-Monitor :doc:`/openerp/doc/index` scheduler daemon, expect exactly one process.
+Monitor :doc:`index` scheduler daemon, expect exactly one process.
 
 .. note:: Only check if :ref:`pillar-openerp-company_db` is defined.
 

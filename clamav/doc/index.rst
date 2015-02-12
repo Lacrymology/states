@@ -5,7 +5,14 @@
 Clamav
 ======
 
-More can be find at official `Clamav page <http://www.clamav.net>`_.
+Introduction
+------------
+
+Clam AntiVirus (ClamAV) is a free and open-source, cross-platform antivirus
+software tool-kit able to detect many types of malicious software, including viruses.
+One of its main uses is on mail servers as a server-side email virus scanner
+
+.. http://en.wikipedia.org/wiki/Clam_AntiVirus
 
 .. note::
 
@@ -21,6 +28,23 @@ Freshclam
 virus database.
 
 This is as much important as Clamav itself.
+
+Link
+----
+
+* `Clamav page <http://www.clamav.net>`_
+* `Clamav Wikipedia page <http://en.wikipedia.org/wiki/Clam_AntiVirus>`_
+
+Related Formulas
+----------------
+
+* :doc:`/apt/doc/index`
+* :doc:`/bash/doc/index`
+* :doc:`/cron/doc/index`
+* :doc:`/rsyslog/doc/index`
+
+Content
+-------
 
 .. toctree::
     :glob:

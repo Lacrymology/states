@@ -53,7 +53,7 @@ Stream
 
 For creating :doc:`/graylog2/doc/index` streams, see the `official
 documentation
-<https://www.graylog2.org/resources/documentation/general/streams>`__.
+<https://www.graylog2.org/resources/documentation/general/streams>`_.
 
 We predefined two streams for two common errors:
 

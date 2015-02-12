@@ -60,7 +60,7 @@ Default: randomly generated (``False``).
 graylog2:web:user
 ~~~~~~~~~~~~~~~~~
 
-The Unix user (UID) who will run :doc:`/graylog2/web/doc/index`.
+The Unix user (UID) who will run :doc:`index`.
 
 Default: ``graylog2-ui``
 

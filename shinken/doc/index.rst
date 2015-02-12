@@ -5,12 +5,15 @@
 Shinken
 =======
 
-.. Copied from https://en.wikipedia.org/wiki/Shinken_(software) on 2014-12-13
+Introduction
+------------
 
 Shinken is an open source computer system and network monitoring software
 application compatible with Nagios. It watches hosts and services, gathers
 performance data and alerts users when error conditions occur and again when
 the conditions clear.
+
+.. https://en.wikipedia.org/wiki/Shinken_(software) on 2014-12-13
 
 .. _shinken-poller:
 
@@ -72,6 +75,25 @@ Web UI
 ------
 
 This is a module running in the :doc:`/shinken/broker/doc/index`.
+
+Links
+-----
+
+* `Shinken Homepage <http://shinken-monitoring.org/>`_
+* `Wikipedia <https://en.wikipedia.org/wiki/Shinken_(software)>`_
+
+Related Formulas
+----------------
+
+* :doc:`/apt/doc/index`
+* :doc:`/bash/doc/index`
+* :doc:`/pip/doc/index`
+* :doc:`/python/doc/index`
+* :doc:`/nrpe/doc/index`
+* :doc:`/ssl/doc/index`
+
+Content
+-------
 
 .. toctree::
     :glob:

@@ -8,9 +8,11 @@ Message of the Day
 Introduction
 ------------
 
-The /etc/motd is a file on Unix-like systems that contains a "message of the
-day", used to send a common message to all users, in a more efficient manner
-than sending them all an e-mail message.
+The ``/etc/motd`` is a file on Unix-like systems that contains a
+**message of the day**, used to send a common message to all users that log in
+a Unix shell.
+
+This formula is mostly used to show information about the VM users log into.
 
 Link
 ----

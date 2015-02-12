@@ -4,7 +4,7 @@
 client
 remote {% if 'availabilityZone' in salt['grains.ls']() %}{{ grains['public-ipv4'] }}{% else %}{{ salt['network.ip_addrs']('eth0')[0] }}{% endif %} {{ vpn_instance['port'] | default(1194) }}
 ca ca.crt
-cert {{ instance }}_{{ client }}.crt
-key {{ instance }}_{{ client }}.key
+cert {{ client }}.crt
+key {{ client }}.key
 remote-cert-tls server
 {%- endblock authentication_mode %}

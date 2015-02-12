@@ -21,4 +21,4 @@ gitlab_diamond_resources:
     - text:
       - |
         [[gitlab]]
-        cmdline = ^\/bin\/sh \.\/bin\/background_jobs start_no_deamonize$
+        cmdline = ^sidekiq 2\.17\.0 gitlabhq

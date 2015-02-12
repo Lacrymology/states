@@ -15,7 +15,10 @@ needing to reinvent the wheel. It’s free and open source.
 
 .. https://www.djangoproject.com/
 
-This directory contains helpers to deploy Django applications.
+This directory only contains helpers to deploy Django applications.
+It don't install Django as an application as it's a Python library.
+
+.. include:: /doc/include/building_bloc.inc
 
 Links
 -----

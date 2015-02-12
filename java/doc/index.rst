@@ -14,6 +14,8 @@ implementation dependencies as possible.
 
 .. http://en.wikipedia.org/wiki/Java_%28programming_language%29
 
+.. include:: /doc/include/building_bloc.inc
+
 Links
 -----
 

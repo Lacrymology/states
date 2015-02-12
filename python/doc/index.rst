@@ -17,6 +17,8 @@ scale.
 
 .. http://en.wikipedia.org/wiki/Python_%28programming_language%29 - 2014-12-15
 
+.. include:: /doc/include/building_bloc.inc
+
 Links
 -----
 

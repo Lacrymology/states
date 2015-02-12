@@ -13,6 +13,8 @@ and productivity. It has an elegant syntax that is natural to read and easy to w
 
 .. Copied from https://www.ruby-lang.org/en/ on 2015-01-13
 
+.. include:: /doc/include/building_bloc.inc
+
 Links
 -----
 

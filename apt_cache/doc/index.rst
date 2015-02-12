@@ -5,10 +5,26 @@
 APT Cache
 =========
 
+Introduction
+------------
+
 A caching proxy for :ref:`glossary-Debian` :ref:`glossary-APT` packages
 (``.deb`` files).
 
-More can be found at official `Apt-Cacher NG`_ page.
+Links
+-----
+
+`Apt-Cacher NG`_ page
+
+Related Formulas
+----------------
+
+* :doc:`/apt/doc/index`
+* :doc:`/nginx/doc/index`
+* :doc:`/ssl/doc/index`
+
+Content
+-------
 
 .. toctree::
     :glob:

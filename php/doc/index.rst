@@ -5,13 +5,27 @@
 PHP
 ===
 
-`PHP <http://php.net>`_ is a popular general-purpose scripting language that is
-especially suited to web development.
+Introduction
+------------
 
-Fast, flexible and pragmatic, PHP powers everything from your blog to the most
-popular websites in the world.
+PHP is a server-side scripting language designed for web development but also
+used as a general-purpose programming language.
 
-.. Copied from http://php.net on 2015-01-13
+.. Copied from http://en.wikipedia.org/wiki/PHP - 2015-01-22
+
+Links
+-----
+
+* `PHP Homepage <http://php.net/>`_
+* ` Wikipedia <http://en.wikipedia.org/wiki/PHP>`_
+
+Related Formula
+---------------
+
+* :doc:`/apt/doc/index`
+
+Content
+-------
 
 .. toctree::
     :glob:

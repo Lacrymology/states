@@ -5,7 +5,17 @@
 ProFPTD
 =======
 
-.. TODO: INTRO
+Introduction
+------------
+
+ProFTPD (short for Pro FTP daemon) is a :ref:`glossary-ftp` server. ProFTPD is Free and open-source
+software, compatible with Unix-like systems and Microsoft Windows (via Cygwin).
+Along with vsftpd and Pure-FTPd, ProFTPD is among the most popular :ref:`glossary-ftp` servers
+in Unix-like environments today. Compared to those, which focus e.g. on simplicity,
+speed or security, ProFTPD's primary design goal is to be a highly feature rich
+:ref:`glossary-ftp` server, exposing a large amount of configuration options to the user
+
+.. http://en.wikipedia.org/wiki/ProFTPD
 
 .. warning::
 
@@ -21,6 +31,22 @@ For security reason this state had been designed to be as less intrusive as
 possible in the rest of the system.
 It to depends on already existing PostgreSQL server to not not mess with Unix
 users/passwords.
+
+Links
+-----
+
+* `ProFPTD Homepage <http://www.proftpd.org/>`_
+* `Wikipedia <http://en.wikipedia.org/wiki/ProFTPD>`_
+
+Related Formulas
+----------------
+
+* :doc:`/apt/doc/index`
+* :doc:`/postgresql/doc/index`
+* :doc:`/rsyslog/doc/index`
+
+Content
+-------
 
 .. toctree::
     :glob:

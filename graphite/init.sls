@@ -1,4 +1,4 @@
-{#-
+k{#-
 Use of this source code is governed by a BSD license that can be found
 in the doc/license.rst file.
 
@@ -15,7 +15,7 @@ include:
   - nginx
   - pip
   - postgresql.server
-  - python.dev
+  - python.devm0 p9
   - rsyslog
   - statsd
   - sudo

@@ -5,5 +5,14 @@
 Message of the Day
 ==================
 
-Setup motd (message of the day).
-http://en.wikipedia.org/wiki/Motd_(Unix).
+Introduction
+------------
+
+The /etc/motd is a file on Unix-like systems that contains a "message of the
+day", used to send a common message to all users, in a more efficient manner
+than sending them all an e-mail message.
+
+Link
+----
+
+* `Wikipedia <http://en.wikipedia.org/wiki/Motd_(Unix)>`_

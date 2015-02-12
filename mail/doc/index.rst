@@ -5,6 +5,9 @@
 Mail
 ====
 
+Introduction
+------------
+
 Setup a full-stack mail system
 ------------------------------
 
@@ -88,6 +91,9 @@ Main pillar should set as following::
 Other settings can set through pillar keys of those formulas. After highstate
 successfully, user can login to web UI at address ``mail.mydomain.com``,
 with username ``john@mydomain.com`` and password ``ALongPassWord``.
+
+Content
+-------
 
 .. toctree::
     :glob:

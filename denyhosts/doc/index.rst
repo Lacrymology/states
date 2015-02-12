@@ -5,7 +5,8 @@
 DenyHosts
 =========
 
-More can be find at official `DenyHosts page <http://denyhosts.sourceforge.net>`_.
+Introduction
+------------
 
 DenyHosts is a script that analyzes the :doc:`/ssh/server/doc/index` log
 messages to determine what hosts are attempting to hack into your system.
@@ -24,6 +25,21 @@ This feature is intended to provide the ability to proactively deny ip
 addresses that have attacked other users of DenyHosts. That is, each DenyHosts
 2.0 (or later) user can benefit from other users of Denyhosts. Similarly each
 DenyHosts user can benefit other DenyHosts users.
+
+Links
+-----
+
+* `DenyHosts page <http://denyhosts.sourceforge.net>`_
+* `DenyHosts Wikipedia page <http://en.wikipedia.org/wiki/DenyHosts>`_
+
+Related Formulas
+----------------
+
+* :doc:`/apt/doc/index`
+* :doc:`/rsyslog/doc/index`
+
+Content
+-------
 
 .. toctree::
     :glob:

@@ -5,20 +5,42 @@
 Amavis
 ======
 
-More can be find at official `Amavisd page`_.
+Introduction
+------------
 
-Amavis (more exactly ``amavisd-new``) grew out of ``amavisd``
-(which in turn is a daemonized version of amavis-perl), but through five years
-of development turned into a separate product, hardly resembling its origin.
-The code is several times the size of its predecessor. See
-`Amavisd page`_ for more information. Every use of
-``amavisd`` or ``amavis`` is this documentation implies ``amavisd-new``.
+Amavis is an open source content filter for electronic mail, implementing mail
+message transfer, decoding, some processing and checking, and interfacing with
+external content filters to provide protection against spam, viruses and other
+malware. It can be considered an interface between a :ref:`glossary-mta` and one or more content
+filters.
+
+.. http://en.wikipedia.org/wiki/Amavis - 2015-01-24
+
+Every use of ``amavisd`` or ``amavis`` is this documentation implies ``amavisd-new``.
 
 .. note::
 
     Consult :doc:`/mail/doc/index` for setting up a full-stack mail system.
 
-Contents:
+Links
+-----
+
+* `Amavisd page`_
+* `Amavis Wikipedia page <http://en.wikipedia.org/wiki/Amavis>`_
+
+
+Related Formulas
+----------------
+
+* :doc:`/apt/doc/index`
+* :doc:`/bash/doc/index`
+* :doc:`/cron/doc/index`
+* :doc:`/mail/doc/index`
+* :doc:`/spamassassin/doc/index`
+
+
+Content
+-------
 
 .. toctree::
     :glob:

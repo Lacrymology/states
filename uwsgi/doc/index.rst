@@ -5,10 +5,27 @@
 uWSGI
 =====
 
+Introduction
+------------
+
 uWSGI is an application server, which can serve many different languages
 and used as the application server in :doc:`/doc/intro`.
 
-More can be find at official `uWSGI page <https://uwsgi-docs.readthedocs.org/en/latest>`_.
+Link
+-----
+
+* `uWSGI page <https://uwsgi-docs.readthedocs.org/en/latest>`_
+
+Related Formulas
+----------------
+
+* :doc:`/git/doc/index`
+* :doc:`/python/doc/index`
+* :doc:`/rsyslog/doc/index`
+* :doc:`/salt/minion/doc/index`
+
+Content
+-------
 
 .. toctree::
     :glob:

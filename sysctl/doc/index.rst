@@ -5,13 +5,23 @@
 sysctl
 ======
 
-More can be find at official
-`Sysctl Kernel page <https://www.kernel.org/doc/Documentation/sysctl/>`_.
+Introduction
+------------
 
-Formula for configuring Linux Kernel parameters and persist those configuration
-changes.
+sysctl is an interface for examining and dynamically changing parameters in the
+BSD and Linux operating systems. The implementation mechanism in these two systems
+is very different.
 
-Contents:
+.. http://en.wikipedia.org/wiki/Sysctl - 2-15-01-23
+
+Links
+-----
+
+* `Sysctl Kernel page <https://www.kernel.org/doc/Documentation/sysctl/>`_
+* `Wikipedia <http://en.wikipedia.org/wiki/Sysctl>`_
+
+Content
+-------
 
 .. toctree::
     :glob:

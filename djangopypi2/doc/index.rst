@@ -14,7 +14,27 @@ re-implementation of the `Python Package Index
 <http://getbootstrap.com>`_ for UI, forked from the original DjangoPyPi project,
 DjangoPyPi2 provides an easy to use and manage interface.
 
-Homepage: https://djangopypi2.readthedocs.org/en/latest
+.. https://djangopypi2.readthedocs.org/en/latest
+
+Link
+----
+
+* `DjangoPypi2 Homepage <https://djangopypi2.readthedocs.org/en/latest>`_
+
+Related Formulas
+----------------
+
+* :doc:`/apt/doc/index`
+* :doc:`/bash/doc/index`
+* :doc:`/memcache/doc/index`
+* :doc:`/nginx/doc/index`
+* :doc:`/pip/doc/index`
+* :doc:`/postgresql/doc/index`
+* :doc:`/python/doc/index`
+* :doc:`/rsyslog/doc/index`
+
+Content
+-------
 
 .. toctree::
     :glob:

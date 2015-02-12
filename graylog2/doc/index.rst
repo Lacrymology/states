@@ -5,7 +5,10 @@
 Graylog2
 ========
 
-`Graylog2 <https://www.graylog2.org>`_ is a centralized logging software,
+Introduction
+------------
+
+Graylog2 is a centralized logging software,
 provides a number of benefits than logging on local servers:
 
 - searching through logs and analysis across multiple servers easier
@@ -14,6 +17,15 @@ provides a number of benefits than logging on local servers:
 - log rotation mechanism can also be centralized
 
 .. Copied from https://www.graylog2.org/how-it-works on 2015-01-13
+
+Links
+-----
+
+* `Graylog2 <https://www.graylog2.org>`_
+* `Github <https://github.com/Graylog2>`_
+
+Content
+-------
 
 .. toctree::
     :glob:

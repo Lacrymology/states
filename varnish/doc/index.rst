@@ -5,9 +5,8 @@
 Varnish
 =======
 
-More can be find at official `Varnish page <https://www.varnish-cache.org/>`_.
-
-.. copied from https://en.wikipedia.org/wiki/Varnish_(software) 2015-01-08
+Introduction
+------------
 
 An :ref:`glossary-HTTP` accelerator designed for content-heavy dynamic web sites
 as well as heavily consumed APIs. In contrast to other web accelerators, such as
@@ -18,6 +17,23 @@ client-side cache, or `Apache
 designed as an :ref:`glossary-HTTP` accelerator. Varnish is focused exclusively
 on :ref:`glossary-HTTP`, unlike other proxy servers that often support
 :ref:`glossary-ftp`, :ref:`glossary-smtp` and other network protocols.
+
+.. https://en.wikipedia.org/wiki/Varnish_(software) - 2015-01-08
+
+Links
+-----
+
+* `Varnish page <https://www.varnish-cache.org/>`_
+* `Wikipedia <https://en.wikipedia.org/wiki/Varnish_(software)>`_
+
+Related Formulas
+----------------
+
+* :doc:`/apt/doc/index`
+* :doc:`/bash/doc/index`
+
+Content
+-------
 
 .. toctree::
     :glob:

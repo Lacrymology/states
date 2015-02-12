@@ -11,6 +11,21 @@ chunks of arbitrary data (strings, objects) from results of database calls,
 
 .. Copied from http://memcached.org on 2015-01-13
 
+Links
+-----
+
+* `Memcached Homepage <http://memcached.org>`_
+* ` Wikipedia <http://en.wikipedia.org/wiki/Memcached>`_
+
+Related Formulas
+----------------
+
+* :doc:`/apt/doc/index`
+* :doc:`/rsyslog/doc/index`
+
+Content
+-------
+
 .. toctree::
     :glob:
 

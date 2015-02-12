@@ -5,6 +5,9 @@
 Elasticsearch
 =============
 
+Introduction
+------------
+
 `Elasticsearch <http://www.elasticsearch.org>`_ is a flexible and powerful open
 source, distributed, real-time search and analytics engine. Architected from the
 ground up for use in distributed environments where reliability and scalability
@@ -22,6 +25,29 @@ Elasticsearch delivers on the near limitless promises of search technology.
    over :ref:`glossary-HTTPS` is to proxy a :doc:`/ssl/doc/index` frontend in
    front of Elasticsearch :ref:`glossary-HTTP` interface.  This is why
    :doc:`/nginx/doc/index` is used if :doc:`/ssl/doc/index` is in :doc:`pillar`.
+
+Links
+-----
+
+* `Elasticsearch page <http://www.elasticsearch.org>`_
+* `Wikipedia <http://en.wikipedia.org/wiki/Elasticsearch>`_
+* `Github <https://github.com/elasticsearch>`_
+
+
+Related Formulas
+----------------
+
+* :doc:`/apt/doc/index`
+* :doc:`/bash/doc/index`
+* :doc:`/cron/doc/index`
+* :doc:`/java/doc/index`
+* :doc:`/salt/minion/doc/index`
+* :doc:`/apt/doc/index`
+* :doc:`/ssl/doc/index`
+* :doc:`/nginx/doc/index`
+
+Content
+-------
 
 .. toctree::
     :glob:

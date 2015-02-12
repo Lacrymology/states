@@ -5,11 +5,29 @@
 RoundCube
 =========
 
+Introduction
+------------
+
+Roundcube is a web-based :ref:`glossary-imap` email client. Roundcube's most prominent feature
+is the pervasive use of Ajax technology to present a more fluid and responsive
+user interface than that of traditional webmail clients. After about two years
+of development, the first stable release of Roundcube was announced in early 2008.
+
+.. http://en.wikipedia.org/wiki/Roundcube - 2015-01-23
+
 .. note::
 
   Consult :doc:`/mail/doc/index` for setting up a full-stack mail system.
 
-.. TODO: Intro
+Links
+-----
+
+* `Roundcube Homepage <http://roundcube.net/>`_
+* `Wikipedia <http://en.wikipedia.org/wiki/Roundcube>`_
+
+
+Related Formulas
+----------------
 
 To works properly, Roundcube need to have installed:
 
@@ -21,6 +39,9 @@ On the same **or** separate host, for this reason they can't be included by
 other formulas. Roles and :doc:`pillar` need to define your mail architecture.
 
 .. TODO: WRITE HERE ANYTHING SPECIFIC TO ROUNDCUBE FOR THOSE OTHER STATES
+
+Content
+-------
 
 .. toctree::
     :glob:

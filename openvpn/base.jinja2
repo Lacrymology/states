@@ -13,14 +13,14 @@ user nobody
 group nogroup
 persist-key
 persist-tun
-status /var/lib/openvpn/{{ instance }}.log
+status /var/log/openvpn/{{ instance }}.log
 syslog vpn-{{ instance }}
 {%- if salt['pillar.get']('debug', False) %}
 verb 15
 {%- else %}
 verb 4
 {%- endif %}
-writepid /var/run/openvpn-{{ instance }}.pid
+writepid /var/run/openvpn/{{ instance }}.pid
 
 {%- block authentication_mode %}
 {%- endblock authentication_mode %}

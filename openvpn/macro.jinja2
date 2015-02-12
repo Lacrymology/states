@@ -12,6 +12,7 @@ openvpn-{{ instance }}:
     - require:
       - file: /etc/openvpn/{{ instance }}/config
       - file: /var/lib/openvpn
+      - file: /var/run/openvpn
       - file: /var/log/openvpn
     - context:
         identifier: {{ instance }}

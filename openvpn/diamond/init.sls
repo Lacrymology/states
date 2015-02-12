@@ -23,7 +23,7 @@ openvpn_diamond_collector:
     - context:
         instances:
     {%- for instance in servers %}
-          {{ instance }}: file:///var/lib/openvpn/{{ instance }}.log
+          {{ instance }}: file:///var/log/openvpn/{{ instance }}.log
     {%- endfor %}
     - require:
       - file: /etc/diamond/collectors

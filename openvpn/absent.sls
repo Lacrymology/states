@@ -29,7 +29,7 @@ openvpn:
     - require:
       - pkg: openvpn
 
-{%- for type in ('lib', 'log') %}
+{%- for type in ('lib', 'run', 'log') %}
 /var/{{ type }}/openvpn:
   file:
     - absent

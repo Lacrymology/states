@@ -183,13 +183,6 @@ or a private network.
 
 .. Copied from http://en.wikipedia.org/wiki/Domain_Name_System> - 2015-01-26
 
-.. _glossary-CIDR:
-
-CIDR
-~~~~
-
-`Classless Inter-Domain Routing <https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing#CIDR_notation>`_
-
 .. _glossary-localhost:
 
 Localhost

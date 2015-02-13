@@ -10,7 +10,7 @@ include:
 ldap-dev:
   pkg:
     - installed
-    - names:
+    - pkgs:
       - libldap2-dev
       - libsasl2-dev
     - require:

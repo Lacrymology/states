@@ -26,7 +26,7 @@ include:
 jenkins_dependencies:
   pkg:
     - installed
-    - names:
+    - pkgs:
       - daemon
       - psmisc
 

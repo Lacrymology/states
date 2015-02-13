@@ -127,10 +127,10 @@ jenkins_old_version:
     - absent
 {%- endif %}
 
-{% if ssl %}
 extend:
 {%- from 'macros.jinja2' import change_ssh_key_owner with context %}
 {{ change_ssh_key_owner('jenkins', {'pkg': 'jenkins'}) }}
+{% if ssl %}
   nginx.conf:
     file:
       - context:

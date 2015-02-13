@@ -754,21 +754,28 @@ def revoke_cert(
             client_cert,
             ca_dir)
 
-    index_data = 'R\t{0}\t\t{1}\tunknown\t{2}'.format(
+    index_without_status = '{0}\t\t{1}\tunknown\t{2}'.format(
             expire_date,
             serial_number,
-            subject
-            )
+            subject)
+    index_v_data = 'V\t{0}'.format(index_without_status)
+    index_r_data = 'R\t{0}'.format(index_without_status)
 
     with salt.utils.fopen(index_file) as f:
         for line in f:
-            if index_data in line:
+            if index_r_data in line:
                 return ('"{0}/{1}.crt" was already revoked, '
-                        'serial number: {3}').format(
+                        'serial number: {2}').format(
                                 cert_dir,
                                 cert_filename,
                                 serial_number
                                 )
+            elif index_without_status in line:
+                __salt__['file.replace'](
+                        index_file,
+                        index_v_data,
+                        index_r_data,
+                        backup=False)
 
     crl = OpenSSL.crypto.CRL()
     revoked = OpenSSL.crypto.Revoked()
@@ -784,10 +791,8 @@ def revoke_cert(
                 _cert_base_path(),
                 ca_name
                 )
-    with salt.utils.fopen(crl_path, 'a+') as f:
+    with salt.utils.fopen(crl_path, 'w') as f:
         f.write(crl_text)
-
-    _write_cert_to_database(ca_name, client_cert, ca_dir, status = 'R')
 
     return ('Revoked Certificate: "{0}/{1}.crt", '
             'serial number: {2}').format(

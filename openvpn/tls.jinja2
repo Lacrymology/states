@@ -6,5 +6,5 @@ cert /etc/openvpn/{{ instance }}/server.crt
 key /etc/openvpn/{{ instance }}/server.key  # This file should be kept secret
 dh /etc/openvpn/dh.pem
 server {{ vpn_instance['server'] }}
-ifconfig-pool-persist /var/lib/openvpn/{{ instance }}/ipp.txt
+ifconfig-pool-persist /var/lib/openvpn/{{ instance }}.ipp
 {%- endblock authentication_mode %}

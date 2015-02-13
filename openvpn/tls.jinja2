@@ -7,4 +7,5 @@ key /etc/openvpn/{{ instance }}/server.key  # This file should be kept secret
 dh /etc/openvpn/dh.pem
 server {{ vpn_instance['server'] }}
 ifconfig-pool-persist /var/lib/openvpn/{{ instance }}.ipp
+crl-verify /etc/openvpn/{{ instance }}/crl.pem
 {%- endblock authentication_mode %}

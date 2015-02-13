@@ -11,7 +11,7 @@ include:
 pillow-dependencies:
   pkg:
     - installed
-    - names:
+    - pkgs:
       - libfreetype6-dev
       - libjpeg-dev
     - require:

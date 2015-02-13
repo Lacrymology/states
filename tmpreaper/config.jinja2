@@ -28,7 +28,7 @@ TMPREAPER_DIRS='/tmp/. /var/tmp/.'
 # TMPREAPER_DELAY
 #       defines the maximum (randomized) delay before starting processing.
 #       See the manpage entry for --delay. Default is 256.
-TMPREAPER_DELAY='256'
+TMPREAPER_DELAY={%- if salt['pillar.get']('__test__', False) %}'0'{%- else %}'256'{%- endif %}
 
 # TMPREAPER_ADDITIONALOPTIONS
 #       extra options that are passed to tmpreaper

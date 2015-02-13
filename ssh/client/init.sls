@@ -57,15 +57,18 @@ known_hosts:
       {%- set remotes = local_remotes[local] %}
       {%- set remotes = [remotes] if remotes is string else remotes %}
       {%- for remote in remotes %}
-        {%- set current_key = '/etc/ssh/keys/{0}/{1}@{2}'.format(local, remote, hostname) -%}
-        {%- do managed_keys.append(current_key) %}
-{{ current_key }}:
+        {%- set ssh_priv_key = '/etc/ssh/keys/{0}/{1}@{2}'.format(local, remote, hostname) -%}
+        {%- do managed_keys.append(ssh_priv_key) %}
+{{ ssh_priv_key }}:
   file:
     - managed
+    - makedirs: True {#- file.directory state run after this will set the expected dir mode/owner #}
     - mode: 400
     - contents: |
         {{ elem['contents'] | indent(8) }}
     - require:
+      - file: /etc/ssh/keys
+    - require_in:
       - file: /etc/ssh/keys/{{ local }}
       {%- endfor %}
     {%- endfor -%}

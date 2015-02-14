@@ -33,6 +33,9 @@ import salt.utils
 
 log = logging.getLogger(__name__)
 
+two_digit_year_fmt = "%y%m%d%H%M%SZ"
+four_digit_year_fmt = "%Y%m%d%H%M%SZ"
+
 
 def __virtual__():
     '''
@@ -82,7 +85,7 @@ def _new_serial(ca_name, CN):
 
 
 def _four_digit_year_to_two_digit(datetimeObj):
-    return datetimeObj.strftime("%y%m%d%H%M%SZ")
+    return datetimeObj.strftime(two_digit_year_fmt)
 
 
 def _get_basic_info(ca_name, cert, ca_dir=None):
@@ -97,7 +100,7 @@ def _get_basic_info(ca_name, cert, ca_dir=None):
     expire_date = _four_digit_year_to_two_digit(
             datetime.strptime(
                 cert.get_notAfter(),
-                "%Y%m%d%H%M%SZ")
+                four_digit_year_fmt)
             )
     serial_number = format(cert.get_serial_number(), 'X')
 
@@ -799,8 +802,8 @@ def revoke_cert(
                 fields = line.split('\t')
                 revoked = OpenSSL.crypto.Revoked()
                 revoked.set_serial(fields[3])
-                revoke_date_2_digit = datetime.strptime(fields[2], "%y%m%d%H%M%SZ")
-                revoked.set_rev_date(revoke_date_2_digit.strftime("%Y%m%d%H%M%SZ"))
+                revoke_date_2_digit = datetime.strptime(fields[2], two_digit_year_fmt)
+                revoked.set_rev_date(revoke_date_2_digit.strftime(four_digit_year_fmt))
                 crl.add_revoked(revoked)
 
     crl_text = crl.export(ca_cert, ca_key)

@@ -90,7 +90,9 @@ def _get_basic_info(ca_name, cert, ca_dir=None):
 
     index_file = "{0}/index.txt".format(ca_dir)
 
-    expire_date = cert.get_notAfter()
+    expire_date = datetime.strptime(
+            cert.get_notAfter(),
+            "%Y%m%d%H%M%SZ").strftime("%y%m%d%H%M%SZ")
     serial_number = format(cert.get_serial_number(), 'X')
 
     #gotta prepend a /
@@ -754,12 +756,19 @@ def revoke_cert(
             client_cert,
             ca_dir)
 
-    index_without_status = '{0}\t\t{1}\tunknown\t{2}'.format(
-            expire_date,
+    now = datetime.now()
+    revoke_date = now.strftime("%y%m%d%H%M%SZ")
+
+    index_serial_subject = '{0}\tunknown\t{1}'.format(
             serial_number,
             subject)
-    index_v_data = 'V\t{0}'.format(index_without_status)
-    index_r_data = 'R\t{0}'.format(index_without_status)
+    index_v_data = 'V\t{0}\t\t{1}'.format(
+            expire_date,
+            index_serial_subject)
+    index_r_data = 'R\t{0}\t{1}\t{2}'.format(
+            expire_date,
+            revoke_date,
+            index_serial_subject)
 
     with salt.utils.fopen(index_file) as f:
         for line in f:
@@ -770,7 +779,7 @@ def revoke_cert(
                                 cert_filename,
                                 serial_number
                                 )
-            elif index_without_status in line:
+            elif index_serial_subject in line:
                 __salt__['file.replace'](
                         index_file,
                         index_v_data,

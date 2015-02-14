@@ -12,7 +12,15 @@ ntp_procs
 .. include:: /nrpe/doc/check_procs.inc
 
 Optional
+--------
+
+.. _monitor-ntp_time:
+
+ntp_time
 ~~~~~~~~
+
+Checks the clock offset between the localhost and a remote :doc:`index`
+server is in expected range.
 
 .. _monitor-ntp_sync:
 

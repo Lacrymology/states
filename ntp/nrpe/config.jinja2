@@ -4,9 +4,16 @@ in the doc/license.rst file.
 
 -#}
 {%- set timeout = 30 -%}
+{% set servers = salt['pillar.get']('ntp:servers', []) %}
 ntp_procs:
   description: NTP Daemon
   command: '/usr/lib/nagios/plugins/check_procs -C ntpd -u ntp -w 1:1'
+
+{%- if servers|length > 0 %}
+ntp_time:
+  description: NTP clock offset between the localhost and remote server
+  command: '/usr/lib/nagios/plugins/check_ntp_time -H {{ servers[0] }} -w 2 -c 5'
+{%- endif %}
 
 {% if salt['pillar.get']('ntp:is_server', False) %}
 ntp_sync:

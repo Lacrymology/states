@@ -370,8 +370,8 @@ openvpn_{{ instance }}_config_append:
     - unless: grep ^crl-verify {{ config_dir }}/config
     - require:
       - file: openvpn_{{ instance }}_config
-            {%- for r_client in crls %}
     - watch:
+            {%- for r_client in crls %}
       - module: openvpn_revoke_client_cert_{{ r_client }}
             {%- endfor %}
     - watch_in:

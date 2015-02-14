@@ -81,6 +81,10 @@ def _new_serial(ca_name, CN):
     return hashnum
 
 
+def _four_digit_year_to_two_digit(datetimeObj):
+    return datetimeObj.strftime("%y%m%d%H%M%SZ")
+
+
 def _get_basic_info(ca_name, cert, ca_dir=None):
     '''
     Get basic info to write out to the index.txt
@@ -90,9 +94,11 @@ def _get_basic_info(ca_name, cert, ca_dir=None):
 
     index_file = "{0}/index.txt".format(ca_dir)
 
-    expire_date = datetime.strptime(
-            cert.get_notAfter(),
-            "%Y%m%d%H%M%SZ").strftime("%y%m%d%H%M%SZ")
+    expire_date = _four_digit_year_to_two_digit(
+            datetime.strptime(
+                cert.get_notAfter(),
+                "%Y%m%d%H%M%SZ")
+            )
     serial_number = format(cert.get_serial_number(), 'X')
 
     #gotta prepend a /
@@ -756,8 +762,7 @@ def revoke_cert(
             client_cert,
             ca_dir)
 
-    now = datetime.now()
-    revoke_date = now.strftime("%y%m%d%H%M%SZ")
+    revoke_date = _four_digit_year_to_two_digit(datetime.now())
 
     index_serial_subject = '{0}\tunknown\t{1}'.format(
             serial_number,

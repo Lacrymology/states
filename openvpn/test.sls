@@ -6,6 +6,8 @@ include:
   - openvpn
   - openvpn.diamond
   - openvpn.nrpe
+  - salt.minion.deps
+  - screen
 
 test:
   monitoring:
@@ -27,27 +29,80 @@ test:
       - sls: openvpn.diamond
       - sls: openvpn
 
-{%- set servers = salt['pillar.get']('openvpn:servers', {}) %}
-{%- for tunnel in servers %}
+{%- set servers = salt['pillar.get']('openvpn:servers', {}) -%}
+{%- if servers is iterable and servers | length > 0 -%}
+    {%- for tunnel in servers -%}
+        {%- set mode = servers[tunnel]['mode'] -%}
+        {%- set clients = servers[tunnel]['clients'] | default([]) %}
 test_openvpn_{{ tunnel }}:
   diamond:
     - test
     - map:
         OpenVPN:
           openvpn.{{ tunnel }}.clients.connected: True
-    {%- if servers[tunnel]['mode'] == 'static' %}
+        {%- if mode == 'static' %}
           openvpn.{{ tunnel }}.global.auth_read_bytes: True
           openvpn.{{ tunnel }}.global.tcp-udp_read_bytes: True
           openvpn.{{ tunnel }}.global.tcp-udp_write_bytes: True
           openvpn.{{ tunnel }}.global.tun-tap_read_bytes: True
           openvpn.{{ tunnel }}.global.tun-tap_write_bytes: True
-    {%- else %}
+        {%- else %}
           openvpn.{{ tunnel }}.global.max_bcast-mcast_queue_length: True
-    {%- endif %}
+        {%- endif %}
     - require:
       - sls: openvpn.diamond
       - sls: openvpn
-{%- endfor %}
+
+        {%- if mode == 'tls' -%}
+            {%- if clients is iterable and clients | length > 0 -%}
+                {%- for client in clients -%}
+                    {%- if loop.first %}
+test_openvpn_{{ tunnel }}_tls:
+  file:
+    - directory
+    - name: /tmp/openvpn
+    - user: root
+    - group: root
+    - mode: 750
+    - require:
+      - sls: openvpn
+  module:
+    - run
+    - name: archive.unzip
+    - zipfile: /etc/openvpn/{{ tunnel }}/clients/{{ client }}.zip
+    - dest: /tmp/openvpn
+    - require:
+      - file: test_openvpn_{{ tunnel }}_tls
+  cmd:
+    - wait
+    - name: screen -d -m -S test_openvpn openvpn {{ client }}.conf
+    - cwd: /tmp
+    - require:
+      - pkg: screen
+    - watch:
+      - module: test_openvpn_{{ tunnel }}_tls
+
+test_openvpn_{{ tunnel }}_tls_connect:
+  cmd:
+    - wait
+    {#- The status file is updated every minute #}
+    - name: sleep 60 && grep ^{{ client }} /var/log/openvpn/{{ tunnel }}.log
+    - watch:
+      - cmd: test_openvpn_{{ tunnel }}_tls
+
+test_openvpn_{{ tunnel }}_tls_cleanup:
+  cmd:
+    - run
+    - name: screen -X -S test_openvpn quit
+    - require:
+      - cmd: test_openvpn_{{ tunnel }}_tls_connect
+
+                    {%- endif %}{#- first client cert -#}
+                {%- endfor -%}
+            {%- endif %}{#- clients is iterable -#}
+        {%- endif %}{#- tls mode -#}
+    {%- endfor -%}
+{%- endif %}{#- servers is iterable #}
 
 extend:
   openvpn_diamond_collector:

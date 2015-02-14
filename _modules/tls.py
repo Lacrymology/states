@@ -778,12 +778,17 @@ def revoke_cert(
                         backup=False)
 
     crl = OpenSSL.crypto.CRL()
-    revoked = OpenSSL.crypto.Revoked()
-    revoked.set_serial(serial_number)
-    now = datetime.now().strftime("%Y%m%d%H%M%SZ")
-    revoked.set_rev_date(now)
 
-    crl.add_revoked(revoked)
+    with salt.utils.fopen(index_file) as f:
+        for line in f:
+            if line.startswith('R'):
+                fields = line.split('\t')
+                revoked = OpenSSL.crypto.Revoked()
+                revoked.set_serial(fields[3])
+                revoke_date_2_digit = datetime.strptime(fields[2], "%y%m%d%H%M%SZ")
+                revoked.set_rev_date(revoke_date_2_digit.strftime("%Y%m%d%H%M%SZ"))
+                crl.add_revoked(revoked)
+
     crl_text = crl.export(ca_cert, ca_key)
 
     if crl_path is None:

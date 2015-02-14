@@ -26,7 +26,7 @@ amavis:
  /var/run/amavis. As the ownership is not for itself, it can't write the PID.
  This cause stopping the service to fail, as it can't find a PID.
 #}
-{% for dirname in ('/etc', '/var/run', '/var/lib') %}
+{% for dirname in ('/etc', '/var/run', '/var/mail', '/var/lib') %}
 {{ dirname }}/amavis:
   file:
     - absent

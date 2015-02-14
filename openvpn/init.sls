@@ -109,6 +109,7 @@ openvpn_ca:
 {%- set config_dir = '/etc/openvpn/' + instance -%}
 {%- set client_dir = config_dir ~ '/clients' %}
 {%- set mode = servers[instance]['mode'] %}
+{%- set clients = servers[instance]['clients'] | default([]) %}
 {%- set crls = servers[instance]['revocations'] | default([]) %}
 
 {{ config_dir }}:
@@ -249,8 +250,9 @@ openvpn_server_cert_{{ instance }}:
     - require:
       - module: openvpn_server_cert_{{ instance }}
 
-        {%- for client in servers[instance]['clients'] %}
-            {%- if client not in crls %}
+        {%- if clients is iterable and clients | length > 0 %}
+            {%- for client in clients %}
+                {%- if crls is not iterable or (crls is iterable and client not in crls) %}
 openvpn_client_csr_{{ instance }}_{{ client }}:
   module:
     - run
@@ -333,11 +335,11 @@ openvpn_{{ instance }}_{{ client }}:
       - module: openvpn_client_cert_{{ instance }}_{{ client }}
     - require:
       - pkg: salt_minion_deps
-            {%- endif %} {# client cert not in revocation list #}
+                {%- endif %} {# client cert not in revocation list #}
+            {%- endfor %} {# client cert #}
+        {%- endif %} {# there is at least one client #}
 
-        {%- endfor %} {# client cert #}
-
-        {%- if crls %}
+        {%- if crls is iterable and crls | length > 0 %}
             {%- for r_client in crls %}
 openvpn_revoke_client_cert_{{ r_client }}:
   module:

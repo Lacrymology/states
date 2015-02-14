@@ -9,7 +9,4 @@ key /etc/openvpn/{{ instance }}/server.key
 dh /etc/openvpn/dh.pem
 server {{ vpn_instance['server'] }}
 ifconfig-pool-persist /var/lib/openvpn/{{ instance }}.ipp
-    {%- if data['revocations']|length > 0 -%}
-crl-verify {{ config_dir }}/crl.pem
-    {%- endif -%}
 {%- endblock authentication_mode %}

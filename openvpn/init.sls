@@ -120,16 +120,6 @@ openvpn_ca:
     - require:
       - pkg: openvpn
 
-openvpn_{{ instance }}_crl:
-  file:
-    - managed
-    - name: /etc/openvpn/{{ instance }}/crl.pem
-    - user: root
-    - group: root
-    - mode: 644
-    - require:
-      - file: {{ config_dir }}
-
 {{ config_dir }}/clients:
   file:
     - directory
@@ -361,7 +351,6 @@ openvpn_revoke_client_cert_{{ r_client }}:
     - crl_path: {{ config_dir }}/crl.pem
     - require:
       - pkg: salt_minion_deps
-      - file: openvpn_{{ instance }}_crl
     - watch_in:
       - service: openvpn-{{ instance }}
   cmd:
@@ -370,6 +359,21 @@ openvpn_revoke_client_cert_{{ r_client }}:
     - watch:
       - module: openvpn_revoke_client_cert_{{ r_client }}
             {%- endfor %}
+
+openvpn_{{ instance }}_config_append:
+  cmd:
+    - wait
+    - name: echo "crl-verify {{ config_dir }}/crl.pem" >> {{ config_dir }}/config
+    - onlyif: test -s {{ config_dir }}/crl.pem
+    - unless: grep ^crl-verify {{ config_dir }}/config
+    - require:
+      - file: openvpn_{{ instance }}_config
+            {%- for r_client in crls %}
+    - watch:
+      - module: openvpn_revoke_client_cert_{{ r_client }}
+            {%- endfor %}
+    - watch_in:
+      - service: openvpn-{{ instance }}
 
         {%- endif %} {# revocation #}
 

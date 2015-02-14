@@ -99,6 +99,7 @@ openvpn_ca:
 {%- for instance in servers -%}
     {%- set config_dir = '/etc/openvpn/' + instance -%}
     {%- set client_dir = config_dir ~ '/clients' %}
+    {%- set mode = servers[instance]['mode'] %}
     {{ dict_default(servers[instance], 'clients', []) }}
     {{ dict_default(servers[instance], 'revocations', []) }}
 

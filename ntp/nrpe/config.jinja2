@@ -8,9 +8,11 @@ ntp_procs:
   description: NTP Daemon
   command: '/usr/lib/nagios/plugins/check_procs -C ntpd -u ntp -w 1:1'
 
+{% if salt['pillar.get']('ntp:is_server', False) %}
 ntp_sync:
   description: NTP Synchronization
   command: /usr/lib/nagios/plugins/check_ntp_peer -H 127.0.0.1 -w 2 -C 5 -t {{ timeout }}
   timeout: {{ timeout }}
   dependencies:
     - ntp_procs
+{%- endif %}

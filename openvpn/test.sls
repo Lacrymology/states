@@ -66,6 +66,7 @@ test_openvpn_{{ tunnel }}_tls:
     - mode: 750
     - require:
       - sls: openvpn
+      - monitoring: test
   module:
     - run
     - name: archive.unzip

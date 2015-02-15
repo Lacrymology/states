@@ -95,7 +95,7 @@ test_openvpn_{{ tunnel }}_tls_connect:
 test_openvpn_{{ tunnel }}_tls_cleanup:
   cmd:
     - run
-    - name: screen -X -S test_openvpn quit
+    - name: pkill -f 'openvpn {{ client }}.conf'
     - require:
       - cmd: test_openvpn_{{ tunnel }}_tls_connect
 

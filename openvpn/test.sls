@@ -86,8 +86,9 @@ test_openvpn_{{ tunnel }}_tls:
 test_openvpn_{{ tunnel }}_tls_connect:
   cmd:
     - wait
-    {#- The status file is updated every minute #}
-    - name: sleep 60 && grep ^{{ client }} /var/log/openvpn/{{ tunnel }}.log
+    {#- Wait 10 seconds for OpenVPN client to connect
+    The status file is updated every minute #}
+    - name: sleep 70 && grep ^{{ client }} /var/log/openvpn/{{ tunnel }}.log
     - watch:
       - cmd: test_openvpn_{{ tunnel }}_tls
 

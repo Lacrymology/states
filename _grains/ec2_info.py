@@ -102,19 +102,5 @@ def ec2_info():
         LOG.info("Could not read EC2 data: %s" % (serr))
         return empty
 
-
-def boot_datetime(proc_filename='/proc/uptime'):
-    """
-    When this host booted
-    :return: exact time with microseconds precision when this host had booted
-    :rtype: :class:`datetime.datetime`
-    """
-    uptime_file_handler = open(proc_filename, 'r')
-    now = datetime.datetime.now()
-    uptime_seconds = float(uptime_file_handler.readline().split()[0])
-    delta = datetime.timedelta(seconds=uptime_seconds)
-    return now - delta
-
-
 if __name__ == "__main__":
     print ec2_info()

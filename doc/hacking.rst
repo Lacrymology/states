@@ -108,6 +108,9 @@ For each states repos you will works with, add them to all 3 directives::
   returner_dirs:
     - /absolute/path/to/salt-common/_returners
     - /absolute/path/to/salt-non-common/_returners
+  grains_dirs:
+    - /absolute/path/to/salt-common/_grains
+    - /absolute/path/to/salt-non-common/_grains
 
 You can now run the minion::
 

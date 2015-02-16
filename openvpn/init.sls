@@ -1,7 +1,7 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
-{%- from 'openvpn/macro.jinja2' import service_openvpn with context %}
-
+{%- from 'openvpn/macro.jinja2' import service_openvpn with context -%}
+{%- from 'macros.jinja2' import dict_default with context %}
 include:
   - apt
   - rsyslog
@@ -48,18 +48,17 @@ openvpn:
     - user: root
     - group: root
     - mode: 770
-{% endfor %}
+{%- endfor -%}
 
-{%- set ca_name = salt['pillar.get']('openvpn:ca:name') %}
-{%- set bits = salt['pillar.get']('openvpn:ca:bits') %}
-{%- set days = salt['pillar.get']('openvpn:ca:days') %}
-{%- set common_name = salt['pillar.get']('openvpn:ca:common_name') %}
-{%- set country = salt['pillar.get']('openvpn:ca:country') %}
-{%- set state = salt['pillar.get']('openvpn:ca:state') %}
-{%- set locality = salt['pillar.get']('openvpn:ca:locality') %}
-{%- set organization = salt['pillar.get']('openvpn:ca:organization') %}
-{%- set organizational_unit = salt['pillar.get']('openvpn:ca:organizational_unit') %}
-{%- set email = salt['pillar.get']('openvpn:ca:email') %}
+{%- set ca_name = salt['pillar.get']('openvpn:ca:name') -%}
+{%- set bits = salt['pillar.get']('openvpn:ca:bits') -%}
+{%- set country = salt['pillar.get']('openvpn:ca:country') -%}
+{%- set state = salt['pillar.get']('openvpn:ca:state') -%}
+{%- set locality = salt['pillar.get']('openvpn:ca:locality') -%}
+{%- set organization = salt['pillar.get']('openvpn:ca:organization') -%}
+{%- set organizational_unit = salt['pillar.get']('openvpn:ca:organizational_unit') -%}
+{%- set email = salt['pillar.get']('openvpn:ca:email') -%}
+{%- set servers = salt['pillar.get']('openvpn:servers', {}) %}
 
 openvpn_dh:
   cmd:
@@ -77,8 +76,8 @@ openvpn_ca:
     - ca_filename: 'ca'
     - ca_name: {{ ca_name }}
     - bits: {{ bits }}
-    - days: {{ days }}
-    - CN: {{ common_name }}
+    - days: {{ salt['pillar.get']('openvpn:ca:days') }}
+    - CN: {{ salt['pillar.get']('openvpn:ca:common_name') }}
     - C: {{ country }}
     - ST: {{ state }}
     - L: {{ locality }}
@@ -97,20 +96,11 @@ openvpn_ca:
     - require:
       - module: openvpn_ca
 
-{%- set servers = salt['pillar.get']('openvpn:servers', {}) %}
-
-{%- if salt['pkg.version_cmp'](pkg1=salt['pkg.version']('salt-minion'), pkg2='2015.2.0') == -1 %}
-    {%- set archive_function_name = 'archive.zip' %}
-{%- else %}
-    {%- set archive_function_name = 'archive.cmd_zip' %}
-{%- endif %}
-
 {%- for instance in servers -%}
-{%- set config_dir = '/etc/openvpn/' + instance -%}
-{%- set client_dir = config_dir ~ '/clients' %}
-{%- set mode = servers[instance]['mode'] %}
-{%- set clients = servers[instance]['clients'] | default([]) %}
-{%- set crls = servers[instance]['revocations'] | default([]) %}
+    {%- set config_dir = '/etc/openvpn/' + instance -%}
+    {%- set client_dir = config_dir ~ '/clients' %}
+    {{ dict_default(servers[instance], 'clients', []) }}
+    {{ dict_default(servers[instance], 'revocations', []) }}
 
 {{ config_dir }}:
   file:
@@ -136,11 +126,12 @@ openvpn_{{ instance }}_config:
     - name: {{ config_dir }}/config
     - user: nobody
     - group: nogroup
-    - source: salt://openvpn/{{ mode }}.jinja2
+    - source: salt://openvpn/{{ servers[instance]['mode'] }}.jinja2
     - template: jinja
     - mode: 400
     - context:
         instance: {{ instance }}
+        data: {{ servers[instance] }}
     - watch_in:
       - service: openvpn-{{ instance }}
     - require:
@@ -174,7 +165,7 @@ openvpn_{{ instance }}_client:
     - name: {{ config_dir }}/client.conf
     - user: nobody
     - group: nogroup
-    - source: salt://openvpn/client/{{ mode }}.jinja2
+    - source: salt://openvpn/client/{{ servers[instance]['mode'] }}.jinja2
     - template: jinja
     - mode: 400
     - context:
@@ -183,7 +174,7 @@ openvpn_{{ instance }}_client:
       - file: {{ config_dir }}
   module:
     - wait
-    - name: {{ archive_function_name }}
+    - name: archive.{% if grains['saltversioninfo'] >= (2015, 2, 0, 0) %}cmd_{% endif %}zip
     - zipfile: {{ config_dir }}/client.zip
     - cwd: {{ config_dir }}
     - sources:
@@ -250,9 +241,8 @@ openvpn_server_cert_{{ instance }}:
     - require:
       - module: openvpn_server_cert_{{ instance }}
 
-        {%- if clients is iterable and clients | length > 0 %}
-            {%- for client in clients %}
-                {%- if crls is not iterable or (crls is iterable and client not in crls) %}
+        {%- for client in servers[instance]['clients'] -%}
+            {%- if client not in servers[instance]['revocations'] %}
 openvpn_client_csr_{{ instance }}_{{ client }}:
   module:
     - run
@@ -311,7 +301,7 @@ openvpn_{{ instance }}_{{ client }}:
     - name: {{ config_dir }}/clients/{{ client }}.conf
     - user: nobody
     - group: nogroup
-    - source: salt://openvpn/client/{{ mode }}.jinja2
+    - source: salt://openvpn/client/{{ servers[instance]['mode'] }}.jinja2
     - template: jinja
     - mode: 400
     - context:
@@ -321,7 +311,7 @@ openvpn_{{ instance }}_{{ client }}:
       - file: {{ config_dir }}
   module:
     - wait
-    - name: {{ archive_function_name }}
+    - name: archive.{% if grains['saltversioninfo'] >= (2015, 2, 0, 0) %}cmd_{% endif %}zip
     - zipfile: {{ config_dir }}/clients/{{ client }}.zip
     - cwd: {{ config_dir }}
     - sources:
@@ -335,12 +325,11 @@ openvpn_{{ instance }}_{{ client }}:
       - module: openvpn_client_cert_{{ instance }}_{{ client }}
     - require:
       - pkg: salt_minion_deps
-                {%- endif %} {# client cert not in revocation list #}
-            {%- endfor %} {# client cert #}
-        {%- endif %} {# there is at least one client #}
+            {%- endif %}{# client cert not in revocation list -#}
+        {%- endfor %}{# client cert -#}
 
-        {%- if crls is iterable and crls | length > 0 %}
-            {%- for r_client in crls %}
+        {#- Revoke clients certificate -#}
+        {%- for r_client in servers[instance]['revocations'] -%}
 openvpn_revoke_client_cert_{{ r_client }}:
   module:
     - run
@@ -355,37 +344,14 @@ openvpn_revoke_client_cert_{{ r_client }}:
       - pkg: salt_minion_deps
     - watch_in:
       - service: openvpn-{{ instance }}
-  cmd:
-    - wait
-    - name: rm -f /etc/openvpn/{{ instance }}/clients/{{ r_client }}*
-    - watch:
-      - module: openvpn_revoke_client_cert_{{ r_client }}
-            {%- endfor %}
+        {%- endfor -%}
 
-openvpn_{{ instance }}_config_append:
-  cmd:
-    - wait
-    - name: echo "crl-verify {{ config_dir }}/crl.pem" >> {{ config_dir }}/config
-    - onlyif: test -s {{ config_dir }}/crl.pem
-    - unless: grep ^crl-verify {{ config_dir }}/config
-    - require:
-      - file: openvpn_{{ instance }}_config
-    - watch:
-            {%- for r_client in crls %}
-      - module: openvpn_revoke_client_cert_{{ r_client }}
-            {%- endfor %}
-    - watch_in:
-      - service: openvpn-{{ instance }}
-
-        {%- endif %} {# revocation #}
-
-{% call service_openvpn(instance) %}
+{%- call service_openvpn(instance) %}
       - cmd: openvpn_dh
       - file: openvpn_{{ instance }}_config
       - module: openvpn_ca
       - module: openvpn_server_cert_{{ instance }}
       - file: /etc/default/openvpn
-{% endcall %}
-    {%- endif %} {# tls #}
-
-{%- endfor %}
+{%- endcall -%}
+    {%- endif %}{# tls -#}
+{%- endfor -%}

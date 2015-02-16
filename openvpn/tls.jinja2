@@ -5,8 +5,11 @@
 {%- block authentication_mode %}
 ca /etc/openvpn/ca.crt
 cert /etc/openvpn/{{ instance }}/server.crt
-key /etc/openvpn/{{ instance }}/server.key  # This file should be kept secret
+key /etc/openvpn/{{ instance }}/server.key
 dh /etc/openvpn/dh.pem
 server {{ vpn_instance['server'] }}
 ifconfig-pool-persist /var/lib/openvpn/{{ instance }}.ipp
+    {%- if data['revocations']|length > 0 -%}
+crl-verify {{ config_dir }}/crl.pem
+    {%- endif -%}
 {%- endblock authentication_mode %}

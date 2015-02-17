@@ -227,10 +227,7 @@ def wait_socket(name=None, address="127.0.0.1", port=None, frequency=1,
 
     ret = {
         'name': name,
-        'changes': {},
-        'result': False,
-        'comment': "Could not connect to {address}:{port}".format(
-            address=address, port=port)
+        'changes': {}
     }
 
     start = time.time()
@@ -266,6 +263,12 @@ def wait_socket(name=None, address="127.0.0.1", port=None, frequency=1,
         else:
             success()
             sock.close()
-            break
+            return ret
 
+    ret['comment'] = "Could not connect to {address}:{port} in" \
+                     " {timeout} seconds".format(
+        address=address, port=port, timeout=timeout)
+    ret['result'] = False
+    log.warning("Process during failure: %s",
+                __salt__['cmd.run_stdout']('ps awwx'))
     return ret

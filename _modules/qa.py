@@ -87,7 +87,14 @@ def _parse_pillar(document, root_name="pillar"):
     Returns a dictionary with all necessary data a given document. It expects
     the document to have the structure described above
     """
-    from docutils import nodes
+    try:
+        from docutils import nodes
+        logger.debug("Docutils from", nodes.__file__)
+    except ImportError, err:
+        logger.error("Can't find docutils")
+        logger.debug("packages: ", __salt__['pkg.list_pkgs']().keys())
+        logger.debug("pip list: ", __salt__['pip.list']())
+        raise err
 
     ret = {
         '_errors': [],

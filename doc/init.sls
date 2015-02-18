@@ -32,11 +32,18 @@ doc_root:
   module:
     - wait
     - name: pip.install
-    - requirements: {{ opts['cachedir'] }}/doc/requirements.txt
+    - requirements: {{ opts['cachedir'] }}/pip/doc
+    - watch:
+      - file: doc_root
+  file:
+    - managed
+    - name: {{ opts['cachedir'] }}/pip/doc
+    - source: salt://doc/requirements.txt
+    - user: root
+    - group: root
+    - mode: 440
     - require:
       - module: pip
-    - watch:
-      - file: doc
 
 {{ opts['cachedir'] }}/doc/output:
   file:
@@ -78,7 +85,6 @@ doc:
       - virtualenv: doc
       - module: doc
       - file: {{ opts['cachedir'] }}/doc/output
-      {#- not required but shortcut for doc consumer #}
       - module: doc_root
     - env:
       - VIRTUAL_ENV: {{ opts['cachedir'] }}/doc

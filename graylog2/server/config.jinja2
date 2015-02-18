@@ -84,7 +84,7 @@ How many ElasticSearch shards and replicas should be used per index? Note that t
 elasticsearch_shards = {{ salt['pillar.get']('graylog2:shards', 4) }}
 elasticsearch_replicas = {{ salt['pillar.get']('graylog2:replicas', 0) }}
 
-elasticsearch_index_prefix = graylog2-{{ grains['id'] }}-{{ elasticsearch_prefix }}
+elasticsearch_index_prefix = graylog2-{{ grains['id']|lower }}-{{ elasticsearch_suffix }}
 
 {#-
 Do you want to allow searches with leading wildcards? This can be extremely resource hungry and should only

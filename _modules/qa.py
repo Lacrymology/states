@@ -18,8 +18,8 @@ def __virtual__():
 
 
 def _import_debug():
-    logger.debug("packages: ", __salt__['pkg.list_pkgs']().keys())
-    logger.debug("pip list: ", __salt__['pip.list']())
+    logger.debug("packages: %s", __salt__['pkg.list_pkgs']().keys())
+    logger.debug("pip list: %s", __salt__['pip.list']())
 
 
 def _get_doctrees(docs_dir):
@@ -57,7 +57,16 @@ def _get_doctrees(docs_dir):
                 assert name, ("Couldn't extract the formula name "
                               "from %s" % filename)
             _import_debug()
-            doctrees[name][0] = pickle.load(f)
+            try:
+                doctrees[name][0] = pickle.load(f)
+                try:
+                    from docutils import nodes
+                    logger.debug("Docutils from %s", nodes.__file__)
+                except ImportError, err:
+                    logger.error("Can't find docutils")
+                    pass
+            except ImportError, err:
+                raise err
 
     # load monitors doctrees
     for filename in monitors:
@@ -95,7 +104,7 @@ def _parse_pillar(document, root_name="pillar"):
     """
     try:
         from docutils import nodes
-        logger.debug("Docutils from", nodes.__file__)
+        logger.debug("Docutils from %s", nodes.__file__)
     except ImportError, err:
         logger.error("Can't find docutils")
         _import_debug()

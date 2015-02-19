@@ -2,7 +2,7 @@ Metrics
 =======
 
 Metrics for each database ``dbname``.
-Consult http://www.postgresql.org/docs/9.2/static/monitoring-stats.html for
+Consult http://www.postgresql.org/docs/devel/static/monitoring-stats.html for
 more detail.
 
 .. _metrics-postgres.database.dbname.blks_hit:

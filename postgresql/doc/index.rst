@@ -46,4 +46,4 @@ Content
 Concepts
 --------
 
-- `Database Encoding <http://www.postgresql.org/docs/9.2/static/multibyte.html>`_
+- `Database Encoding <http://www.postgresql.org/docs/devel/static/multibyte.html>`_

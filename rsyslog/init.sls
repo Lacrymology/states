@@ -26,7 +26,6 @@ rsyslog:
     - version: 7.4.4-0ubuntu1ppa1
     - require:
       - cmd: apt_sources
-      - pkg: gsyslogd
       - pkgrepo: rsyslog
   user:
     - present
@@ -67,30 +66,6 @@ rsyslog:
     - user: syslog
     - require:
       - pkg: rsyslog
-
-gsyslogd:
-  service:
-    - dead
-  file:
-    - absent
-    - name: /etc/init/gsyslogd.conf
-    - require:
-      - service: gsyslogd
-  pkg:
-    - purged
-    - pkgs:
-      - klogd
-      - syslogd
-    - require:
-      - service: gsyslogd
-
-{%- for filename in ('/usr/local/gsyslog', '/etc/gsyslog.d', '/etc/gsyslogd.conf') %}
-{{ filename }}:
-  file:
-    - absent
-    - require:
-      - file: gsyslogd
-{%- endfor %}
 
 /etc/rsyslog.d/50-default.conf:
   file:

@@ -7,7 +7,7 @@ in the doc/license.rst file.
 
 {%- set configs = salt['pillar.get']('rsync:global_settings', {}) -%}
 {#- global settings -#}
-{%- for attrib, value in configs.iteritems() -%}
+{%- for attrib, value in configs.iteritems() %}
 {{ attrib }} = {{ value }}
 {%- endfor -%}
 {#- overwrite previously defined key for the following #}
@@ -15,9 +15,9 @@ log file =
 syslog facility = daemon
 
 {%- set modules = salt['pillar.get']('rsync:modules', {}) -%}
-{% for module in modules %}
+{%- for module in modules %}
 [{{ module }}]
-  {% for key, val in modules[module].iteritems() %}
+  {%- for key, val in modules[module].iteritems() %}
 {{ key }} = {{ val }}
-  {% endfor -%}
-{% endfor -%}
+  {%- endfor -%}
+{%- endfor -%}

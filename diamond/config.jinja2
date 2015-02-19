@@ -9,38 +9,29 @@ in the doc/license.rst file.
 [server]
 
 # Handlers for published metrics.
-handlers =
-{%- if graphite_address -%}
-diamond.handler.graphite.GraphiteHandler,
+handlers = {% if graphite_address -%}
+diamond.handler.graphite.GraphiteHandler
 {%- else -%}
-diamond.handler.null.NullHandler,
+diamond.handler.null.NullHandler
 {%- endif -%}
 {%- if __test__ -%}
-   diamond.handler.archive.ArchiveHandler
+,diamond.handler.archive.ArchiveHandler
 {%- endif %}
 
-# Leave empty to use the current user
+{#- empty is run at actual user #}
 user =
-
-# Leave empty to use the current group
 group =
 
 pid_file = /var/run/diamond.pid
-
-# Directory to load collector modules from
 collectors_path = /usr/local/diamond/share/diamond/collectors
-
-# Directory to load collector config from
 collectors_config_path = /etc/diamond/collectors/
-
-# Interval to reload collectors
 collectors_reload_interval = 3600
 
 handlers_config_path = /etc/diamond/handlers/
 
 [handlers]
 
-# logging handlers
+{#- logging handlers #}
 keys = syslog
 {%- set graylog2_address = salt['pillar.get']('graylog2_address', False) %}
 {%- if graylog2_address -%}
@@ -69,33 +60,21 @@ log_file = {{ opts['cachedir'] }}/diamond.archive.log
 days = 0
 {%- endif %}
 
-#[[StatsdHandler]]
-#host = 127.0.0.1
-#port = 8125
-
 [collectors]
 
 [[default]]
 
 hostname_method = uname_short
 
-# All collectors are disabled by default
 enabled = False
 
-# Path Prefix
 path_prefix =
 path_suffix = os
-
-# Default splay time (seconds)
 splay = 1
-
-# Default Poll Interval (seconds)
 interval = 60
 
-# Default collector threading model
 method = Sequential
 
-# Default numeric output
 byte_unit = byte
 
 [[CPUCollector]]

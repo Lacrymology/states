@@ -3,6 +3,7 @@ Use of this source code is governed by a BSD license that can be found
 in the doc/license.rst file.
 
 -#}
+{%- from "postgresql/init.sls" import postgresql_version with context -%}
 {%- from 'macros.jinja2' import manage_pid with context %}
 {% set ssl = salt['pillar.get']('postgresql:ssl', False) %}
 include:
@@ -15,7 +16,7 @@ include:
   - ssl
 {% endif %}
 
-{% set version="9.2" %}
+{% set version = postgresql_version() %}
 
 postgresql:
   pkg:
@@ -62,7 +63,7 @@ postgresql:
       - cmd: ssl_cert_and_key_for_{{ ssl }}
 {% endif %}
 
-{%- call manage_pid('/var/run/postgresql/9.2-main.pid', 'postgres', 'postgres', 'postgresql') %}
+{%- call manage_pid('/var/run/postgresql/' + version + '-main.pid', 'postgres', 'postgres', 'postgresql') %}
 - pkg: postgresql
 {%- endcall %}
 

@@ -10,6 +10,14 @@ include:
   - ssl
 {% endif %}
 
+{%- macro postgresql_version() -%}
+    {%- if grains['lsb_distrib_codename'] == 'precise' -%}
+        9.2
+    {%- else -%}
+        9.3
+    {%- endif -%}
+{%- endmacro -%}
+
 postgresql-dev:
   pkgrepo:
     - managed

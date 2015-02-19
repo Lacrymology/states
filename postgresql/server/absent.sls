@@ -5,7 +5,8 @@ in the doc/license.rst file.
 
 Uninstall a PostgreSQL database server.
 -#}
-{% set version="9.2" %}
+{%- from "postgresql/init.sls" import postgresql_version with context -%}
+{%- set version = postgresql_version() %}
 
 postgresql:
   pkg:

@@ -182,6 +182,15 @@ def run_all_checks(**kwargs):
     ret = {'name': '{0} excluded'.format(len(exclude)), 'result': None,
            'changes': {}, 'comment': ''}
 
+    # check that checks dependencies are valids
+    monitoring_data = __salt__['monitoring.data']()
+    try:
+        __salt__['monitoring.shinken']({__opts__['id']: monitoring_data})
+    except ValueError, err:
+        ret['comment'] = err.message
+        ret['result'] = False
+        return ret
+
     if exclude is None:
         exclude = []
 

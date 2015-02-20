@@ -55,7 +55,7 @@ smtpd_sasl_security_options = noanonymous
 smtpd_recipient_restrictions = permit_mynetworks, permit_sasl_authenticated, reject_unauth_destination
 {%- endif %}
 {%- set alias_domains = salt['pillar.get']('postfix:alias_domains', ['$virtual_alias_maps']) %}
-{%- if salt['pillar.get']('postfix:aliases', False) %}
+{%- if salt['pillar.get']('postfix:virtual_aliases', False) %}
 virtual_alias_maps = hash:/etc/postfix/virtual
 virtual_alias_domains = {%- for i in alias_domains %} {{ i }}{%- endfor %}
 {%- endif %}

@@ -43,17 +43,22 @@ known_hosts:
 
 {#- manage multiple ssh private keys for multiple users #}
 {%- set managed_keys = [] -%}
-{%- for elem in salt['pillar.get']('ssh:keys', []) -%}
-  {%- set maps = elem['map'] %}
+{%- set managed_locals = [] %}{# track which local users exists to make sure it's not file.directory more than once #}
+{%- for key in salt['pillar.get']('ssh:keys', []) -%}
+  {%- set maps = key['map'] %}
   {%- for hostname in maps %}
     {%- set local_remotes = maps[hostname] if maps[hostname] != none else {'root': 'root'} %}
-    {%- for local in local_remotes %}
+    {%- for local in local_remotes -%}
+      {#- make sure /etc/ssh/keys/{{ local }} is managed only once -#}
+      {%- if local not in managed_locals -%}
+        {%- do managed_locals.append(local) %}
 /etc/ssh/keys/{{ local }}:
   file:
     - directory
     - mode: 750
     - require:
       - file: /etc/ssh/keys
+      {%- endif -%}
       {%- set remotes = local_remotes[local] %}
       {%- set remotes = [remotes] if remotes is string else remotes %}
       {%- for remote in remotes %}
@@ -65,11 +70,9 @@ known_hosts:
     - makedirs: True {#- file.directory state run after this will set the expected dir mode/owner #}
     - mode: 400
     - contents: |
-        {{ elem['contents'] | indent(8) }}
+        {{ key['contents'] | indent(8) }}
     - require:
       - file: /etc/ssh/keys
-    - require_in:
-      - file: /etc/ssh/keys/{{ local }}
       {%- endfor %}
     {%- endfor -%}
   {%- endfor -%}

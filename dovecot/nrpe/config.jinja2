@@ -31,6 +31,7 @@ dovecot_port_imaps:
   description: Dovecot IMAPS Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 993 -t {{ timeout }}
   timeout: {{ timeout }}
+  {#- TODO: use real dependency imap-login #}
   dependencies:
     - dovecot_master_procs
 
@@ -60,6 +61,7 @@ dovecot_port_imap:
   description: Dovecot IMAP Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 143 -t {{ timeout }}
   timeout: {{ timeout }}
+  {#- TODO: use real dependency imap-login #}
   dependencies:
     - dovecot_master_procs
 

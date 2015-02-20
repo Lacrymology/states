@@ -7,10 +7,14 @@
 dovecot_config_procs:
   description: Dovecot Config daemon
   command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -u root -a 'dovecot/config' -C config"
+  dependencies:
+    - dovecot_master_procs
 
 dovecot_log_procs:
   description: Dovecot Logger
   command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -u root -a 'dovecot/log' -C log"
+  dependencies:
+    - dovecot_master_procs
 
 dovecot_master_procs:
   description: Dovecot Master
@@ -19,21 +23,24 @@ dovecot_master_procs:
 dovecot_anvil_procs:
   description: Dovecot Users connection tracker
   command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -u dovecot -a 'dovecot/anvil' -C anvil"
+  dependencies:
+    - dovecot_master_procs
 
 {%- if salt['pillar.get']('dovecot:ssl', False) %}
 dovecot_port_imaps:
   description: Dovecot IMAPS Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 993 -t {{ timeout }}
   timeout: {{ timeout }}
+  {#- TODO: use real dependency imap-login #}
   dependencies:
-    - dovecot_procs
+    - dovecot_master_procs
 
 dovecot_port_pop3s:
   description: Dovecot POP3S Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 995 -t {{ timeout }}
   timeout: {{ timeout }}
   dependencies:
-    - dovecot_procs
+    - dovecot_master_procs
 
 dovecot_spop:
   description: Dovecot SPOP3
@@ -54,8 +61,9 @@ dovecot_port_imap:
   description: Dovecot IMAP Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 143 -t {{ timeout }}
   timeout: {{ timeout }}
+  {#- TODO: use real dependency imap-login #}
   dependencies:
-    - dovecot_procs
+    - dovecot_master_procs
 
 dovecot_imap:
   description: Dovecot IMAP
@@ -69,7 +77,7 @@ dovecot_port_pop3:
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 110 -t {{ timeout }}
   timeout: {{ timeout }}
   dependencies:
-    - dovecot_procs
+    - dovecot_master_procs
 
 dovecot_pop:
   description: Dovecot POP
@@ -83,4 +91,4 @@ dovecot_managesieve_port:
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 4190 -t {{ timeout }}
   timeout: {{ timeout }}
   dependencies:
-    - dovecot_procs
+    - dovecot_master_procs

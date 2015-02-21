@@ -1,13 +1,11 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
+# Use of this is governed by a license that can be found in doc/license.rst.
 
 '''
 A cron script for find and delete all workspaces which have no
 corresponding jobs
 '''
-
-# Use of this source code is governed by a BSD license that can be
-# found in the doc/license.rst file.
 
 __author__ = 'Viet Hung Nguyen <hvn@robotinfra.com>'
 __maintainer__ = 'Viet Hung Nguyen <hvn@robotinfra.com>'

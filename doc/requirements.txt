@@ -1,11 +1,5 @@
+# Usage of this is governed by a license that can be found in doc/license.rst
 # {{ salt['pillar.get']('message_do_not_modify') }}
-
-# Use of this source code is governed by a BSD license that can be
-# found in the doc/license.rst file.
-#
-# Author: Dang Tung Lam <lam@robotinfra.com>
-# Maintainer: Dang Tung Lam <lam@robotinfra.com>
-
 -e git+gitlab@git.robotinfra.com:dev/sphinx-theme-doc.git#egg=sphinx_rtd_theme
 Sphinx==1.2.3
 pyyaml==3.11

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# Usage of this is governed by a license that can be found in doc/license.rst
 
 """
 Take standard output of integration.py and report slowest executed lines.

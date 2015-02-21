@@ -1,9 +1,9 @@
-{#-
-Use of this source code is governed by a BSD license that can be found
-in the doc/license.rst file.
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
--#}
 {%- set timeout = 30 -%}
+
+# {{ salt['pillar.get']('message_do_not_modify') }}
+
 proftpd_procs:
   description: ProFTPD Daemon
   command: '/usr/lib/nagios/plugins/check_procs -C proftpd -w 1:1 -u www-data -a "proftpd: (accepting connections)"'

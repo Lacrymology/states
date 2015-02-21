@@ -1,8 +1,7 @@
-{#-
-Use of this source code is governed by a BSD license that can be found
-in the doc/license.rst file.
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
--#}
+# {{ salt['pillar.get']('message_do_not_modify') }}
+
 freshclam_procs:
   description: FreshClam Daemon
   command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -u clamav -C freshclam -a '-d --quiet'"

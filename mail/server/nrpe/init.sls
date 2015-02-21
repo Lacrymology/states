@@ -1,11 +1,5 @@
-{#-
-Use of this source code is governed by a BSD license that can be found
-in the doc/license.rst file.
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
-Monitoring check to test the entire mail stack (IMAP, SMTP, LDAP, antivirus,
-antispam, etc.
-
--#}
 include:
   - cron
   - nrpe

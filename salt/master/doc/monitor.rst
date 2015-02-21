@@ -61,7 +61,8 @@ Comparing number of hosts which have data in
 against number of :doc:`/salt/minion/doc/index` managed by this
 :doc:`/salt/master/doc/index`.
 
-#TODO link to how to send salt mine data.
+.. TODO link to how to send salt mine data.
+
 If this failed, it probably because of missing data of an installed
 :doc:`/salt/minion/doc/index`
 or the mine data existed for a minion which no more managed by

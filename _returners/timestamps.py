@@ -1,11 +1,12 @@
 #! -*- coding: utf-8 -*-
+# Usage of this is governed by a license that can be found in doc/license.rst.
+
 '''
 Writes timestamps to a file if return data of calling state.* execution module
 is success.
 '''
 
-# Use of this source code is governed by a BSD license that can be
-# found in the doc/license.rst file.
+# Use of this is governed by a license that can be found in doc/license.rst.
 
 __author__ = 'Viet Hung Nguyen'
 __maintainer__ = 'Viet Hung Nguyen'

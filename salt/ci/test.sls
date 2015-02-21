@@ -1,8 +1,5 @@
-{#-
-Use of this source code is governed by a BSD license that can be found
-in the doc/license.rst file.
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
--#}
 {%- from 'cron/test.jinja2' import test_cron with context %}
 {%- from 'ssh/test.sls' import add_key, remove_key with context -%}
 include:

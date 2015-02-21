@@ -1,8 +1,7 @@
 #!/usr/local/nagios/bin/python2
 # -*- coding: utf-8 -*-
-
-# Use of this source code is governed by a BSD license that can be
-# found in the doc/license.rst file.
+# {{ salt['pillar.get']('message_do_not_modify') }}
+# Use of this is governed by a license that can be found in doc/license.rst.
 
 """
 NRPE check script that checks whether minion ids in salt mine monitoring.data

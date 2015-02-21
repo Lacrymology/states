@@ -1,9 +1,4 @@
 #!/bin/bash
 # {{ salt['pillar.get']('message_do_not_modify') }}
-
-# Use of this source code is governed by a BSD license that can be found
-# in the doc/license.rst file.
-#
-# Author: Bruno Clermont <bruno@robotinfra.com>
-# Maintainer: Diep Pham <favadi@robotinfra.com>
+# Use of this is governed by a license that can be found in doc/license.rst.
 {{ minute }} {{ hour }} * * * nagios /usr/lib/nagios/plugins/check_links.py http://{{ domain_name }}/sitemap.xml > /dev/null 2> /dev/null

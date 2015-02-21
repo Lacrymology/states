@@ -1,8 +1,5 @@
-{#-
-Use of this source code is governed by a BSD license that can be found
-in the doc/license.rst file.
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
--#}
 {%- macro nginx_instance(formula, http=True, http_uri='/', http_result=None, http_port=80, https_uri=None, https_result="200 OK", pillar_prefix=None, timeout=False, domain_name=None, allow_ssl_redirect=True, check_interval=False, deployment=None, extra_dependencies=()) -%}
     {%- set first_ip = salt['network.ip_addrs']()[0] -%}
     {%- if not pillar_prefix -%}

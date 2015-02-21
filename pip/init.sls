@@ -1,11 +1,5 @@
-{#-
-Use of this source code is governed by a BSD license that can be found
-in the doc/license.rst file.
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
-
-Install python-pip, a cache for downloaded archive and a config file
-to force root user to use the cache folder.
--#}
 include:
   - apt
   - git

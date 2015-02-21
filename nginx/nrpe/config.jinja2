@@ -1,13 +1,12 @@
-{#-
-Use of this source code is governed by a BSD license that can be found
-in the doc/license.rst file.
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
--#}
 {%- set timeout = 20 -%}
 {%- set config = {'num_workers': grains['num_cpus']} -%}
 {%- if not salt['pillar.get']('nginx:worker_processes', 'auto') -%}
     {%- do config.update({'num_workers': salt['pillar.get']('nginx:worker_processes')}) -%}
-{%- endif %}
+{%- endif -%}
+
+# {{ salt['pillar.get']('message_do_not_modify') }}
 
 nginx_status:
   description: Nginx Status Page

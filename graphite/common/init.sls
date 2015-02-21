@@ -1,10 +1,4 @@
-{#-
-Use of this source code is governed by a BSD license that can be found
-in the doc/license.rst file.
-
-
-Common stuff between carbon and graphite.
--#}
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
 include:
   - local

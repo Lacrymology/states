@@ -1,3 +1,6 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+# {{ salt['pillar.get']('message_do_not_modify') }}
+
 Gitlab::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 

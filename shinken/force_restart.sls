@@ -1,11 +1,4 @@
-{#-
-Use of this source code is governed by a BSD license that can be found
-in the doc/license.rst file.
-
-
-Sometimes some processes get crazy (most of the time, the reactionner)
-and it need to be manually kill. This state force a restart.
--#}
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
 {%- set roles = ('broker', 'arbiter', 'reactionner', 'poller', 'scheduler', 'receiver') -%}
 

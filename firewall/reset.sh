@@ -1,4 +1,5 @@
 #!/bin/bash
+# TODO: why?
 iptables -P INPUT ACCEPT
 iptables -P FORWARD ACCEPT
 iptables -P OUTPUT ACCEPT

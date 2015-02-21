@@ -1,10 +1,6 @@
 #!/bin/bash
-
-# Use of this source code is governed by a BSD license that can be
-# found in the doc/license.rst file.
-
-# Author: Diep Pham <favadi@robotinfra.com>
-# Maintainer: Diep Pham <favadi@robotinfra.com>
+# {{ salt['pillar.get']('message_do_not_modify') }}
+# Use of this is governed by a license that can be found in doc/license.rst.
 
 # preallocate a file with given size
 

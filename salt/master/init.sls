@@ -1,13 +1,9 @@
-{#-
-Use of this source code is governed by a BSD license that can be found
-in the doc/license.rst file.
-
-
+{#- Usage of this is governed by a license that can be found in doc/license.rst
 Install a Salt Management Master (server).
-
 If you install a salt master from scratch, check and run bootstrap_archive.py
 and use it to install the master.
 -#}
+
 {%- from 'upstart/rsyslog.jinja2' import manage_upstart_log with context -%}
 
 {%- set use_ext_pillar = salt['pillar.get']('salt_master:pillar:branch', False) and salt['pillar.get']('salt_master:pillar:remote', False) -%}

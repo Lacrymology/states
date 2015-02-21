@@ -1,13 +1,5 @@
-{#-
-Use of this source code is governed by a BSD license that can be found
-in the doc/license.rst file.
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
-
-Shinken Broker state.
-
-The broker daemon exports and manages data from schedulers. The broker uses
-modules exclusively to get the job done.
--#}
 {%- from 'shinken/init.sls' import shinken_install_module with context -%}
 {% set ssl = salt['pillar.get']('shinken:ssl', False) %}
 include:

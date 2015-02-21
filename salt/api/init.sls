@@ -1,10 +1,5 @@
-{#-
-Use of this source code is governed by a BSD license that can be found
-in the doc/license.rst file.
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
-
-Setup a Salt API REST server.
--#}
 {%- from 'upstart/rsyslog.jinja2' import manage_upstart_log with context -%}
 {%- set api_version = '0.8.4' -%}
 {%- set ssl = salt['pillar.get']('salt_api:ssl', False) %}

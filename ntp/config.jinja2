@@ -1,8 +1,5 @@
-{#-
-Use of this source code is governed by a BSD license that can be found
-in the doc/license.rst file.
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
--#}
 # {{ salt['pillar.get']('message_do_not_modify') }}
 
 {#-driftfile /var/lib/ntp/ntp.drift#}
@@ -22,15 +19,17 @@ fudge 127.127.1.1 stratum 3 refid NIST
 server {{ server }}
 {% endfor %}
 
-# Access control configuration; see /usr/share/doc/ntp-doc/html/accopt.html for
-# details.  The web page <http://support.ntp.org/bin/view/Support/AccessRestrictions>
-# might also be helpful.
-#
-# Note that "restrict" applies to both servers and clients, so a configuration
-# that might be intended to block requests from certain clients could also end
-# up blocking replies from your own upstream servers.
+{#-
+Access control configuration; see /usr/share/doc/ntp-doc/html/accopt.html for
+details.  The web page <http://support.ntp.org/bin/view/Support/AccessRestrictions>
+might also be helpful.
 
-# By default, exchange time with everybody, but don't allow configuration.
+Note that "restrict" applies to both servers and clients, so a configuration
+that might be intended to block requests from certain clients could also end
+up blocking replies from your own upstream servers.
+
+By default, exchange time with everybody, but don't allow configuration.
+#}
 restrict -4 default kod notrap nomodify nopeer noquery
 restrict -6 default kod notrap nomodify nopeer noquery
 {#- loopback is unrestricted for nagios NTP check #}

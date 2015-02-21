@@ -1,8 +1,5 @@
-{#-
-Use of this source code is governed by a BSD license that can be found
-in the doc/license.rst file.
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
--#}
 {%- from "upstart/absent.sls" import upstart_absent with context -%}
 {%- set version = '0.20.6' -%}
 {%- set web_root_dir = '/usr/local/graylog2-web-interface-' + version -%}

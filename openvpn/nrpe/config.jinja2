@@ -1,9 +1,9 @@
-{#-
-Use of this source code is governed by a BSD license that can be found
-in the doc/license.rst file.
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
--#}
-{%- set servers = salt['pillar.get']('openvpn:servers', {}) %}
+{%- set servers = salt['pillar.get']('openvpn:servers', {}) -%}
+
+# {{ salt['pillar.get']('message_do_not_modify') }}
+
 {%- for instance in servers %}
 openvpn_{{ instance }}:
   description: OpenVPN Instance {{ instance }}

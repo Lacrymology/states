@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# {{ salt['pillar.get']('message_do_not_modify') }}
+# Usage of this is governed by a license that can be found in doc/license.rst
 
 """
 Mirror clamav database files localy

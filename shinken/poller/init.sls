@@ -1,16 +1,5 @@
-{#-
-Use of this source code is governed by a BSD license that can be found
-in the doc/license.rst file.
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
-
-Shinken Poller state.
-
-The poller daemon launches check plugins as requested by schedulers. When the
-check is finished it returns the result to the schedulers. Pollers can be
-tagged for specialized checks (ex. Windows versus Unix, customer A versus
-customer B, DMZ) There can be many pollers for load-balancing or hot standby
-spare roles.
--#}
 {%- from 'shinken/init.sls' import shinken_install_module with context -%}
 {% set ssl = salt['pillar.get']('shinken:ssl', False) %}
 include:

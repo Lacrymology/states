@@ -1,5 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
+# Usage of this is governed by a license that can be found in doc/license.rst
+
 import argparse
 import datetime
 import sys

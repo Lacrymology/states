@@ -1,11 +1,8 @@
 #!/bin/bash
 # {{ salt['pillar.get']('message_do_not_modify') }}
+# Use of this is governed by a license that can be found in doc/license.rst.
+
 set -e
-# Use of this source code is governed by a BSD license that can be
-# found in the doc/license.rst file.
-#
-# Author: Bruno Clermont <bruno@robotinfra.com>
-# Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 
 if [ -z "$1" ]; then
     echo "Missing argument: minion id"

@@ -1,7 +1,4 @@
-{#-
-Use of this source code is governed by a BSD license that can be found
-in the doc/license.rst file.
-
+{#- Usage of this is governed by a license that can be found in doc/license.rst
 
 How to create a snapshot of saltstack Ubuntu PPA::
 
@@ -19,6 +16,7 @@ To only keep precise & trusty::
    # because some deb can be used for all (E.g: salt-api)
    find pool/ \( -type f -name '*.deb' \( -name '*lucid*' -or  -name '*oneiric*' -or  -name '*quantal*' -or  -name '*raring*' -or -name '*saucy*' \) \) -delete
 -#}
+
 include:
   - apt
   - salt.patch_salt

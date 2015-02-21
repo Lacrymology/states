@@ -1,7 +1,4 @@
-{#-
-Use of this source code is governed by a BSD license that can be found
-in the doc/license.rst file.
-
+{#- Usage of this is governed by a license that can be found in doc/license.rst
 
 These are required to run some Salt states/modules
 for e.g, `salt.modules.dig` need `dnsutils` to be installed

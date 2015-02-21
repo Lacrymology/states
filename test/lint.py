@@ -1,16 +1,10 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8
+# Usage of this is governed by a license that can be found in doc/license.rst
 
 """
 A lint script for SaltStack SLS
 """
-
-# Use of this source code is governed by a BSD license that can be
-# found in the doc/license.rst file.
-
-__author__ = 'Viet Hung Nguyen'
-__maintainer__ = 'Viet Hung Nguyen'
-__email__ = 'hvn@robotinfra.com'
 
 import re
 import sys

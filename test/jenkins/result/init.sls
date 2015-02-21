@@ -1,9 +1,8 @@
-{#-
-Use of this source code is governed by a BSD license that can be found
-in the doc/license.rst file.
+{#- Usage of this is governed by a license that can be found in doc/license.rst
 
+run these stuff AFTER integration.py to make sure them do not be deleted/changed by integration.py
 -#}
-{#- run these stuff AFTER integration.py to make sure them do not be deleted/changed by integration.py #}
+
 ci-agent:
   user:
     - present

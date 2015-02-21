@@ -1,5 +1,10 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+
 {%- set check_mail_stack = salt['pillar.get']('mail:check_mail_stack', {}) -%}
-{%- if check_mail_stack is mapping and check_mail_stack|length > 0 %}
+
+# {{ salt['pillar.get']('message_do_not_modify') }}
+
+{%- if check_mail_stack is mapping and check_mail_stack|length > 0 -%}
     {%- set username = salt['pillar.get']('mail:check_mail_stack:username') -%}
     {%- set mailname = salt['pillar.get']('mail:mailname') %}
 mailstack_functionality:

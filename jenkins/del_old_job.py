@@ -1,13 +1,11 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
+# Use of this is governed by a license that can be found in doc/license.rst.
 
 '''
 Script for deleting old disabled jobs.
 A job is considered old if all log files are older than N days.
 '''
-
-# Use of this source code is governed by a BSD license that can be
-# found in the doc/license.rst file.
 
 __author__ = 'Viet Hung Nguyen <hvn@robotinfra.com>'
 __maintainer__ = 'Viet Hung Nguyen <hvn@robotinfra.com>'

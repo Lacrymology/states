@@ -1,11 +1,5 @@
-{#-
-Use of this source code is governed by a BSD license that can be found
-in the doc/license.rst file.
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
-            Quan Tong Anh <quanta@robotinfra.com>
-
-Diamond statistics for Sentry.
--#}
 {%- from 'diamond/macro.jinja2' import uwsgi_diamond with context %}
 {%- call uwsgi_diamond('sentry') %}
 - memcache.diamond

@@ -1,5 +1,6 @@
 #!/bin/sh
 # {{ salt['pillar.get']('message_do_not_modify') }}
+# Usage of this is governed by a license that can be found in doc/license.rst
 
 queue_length=$(mailq | grep -v "Mail queue is empty" | grep -c '^\w')
 echo "postfix.queue_length $queue_length"

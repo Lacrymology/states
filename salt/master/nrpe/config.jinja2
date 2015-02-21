@@ -1,10 +1,9 @@
-{#-
-Use of this source code is governed by a BSD license that can be found
-in the doc/license.rst file.
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
--#}
-{% set timeout = 30 %}
-{% set workers = salt['pillar.get']('salt_master:workers', 5) %}
+{%- set timeout = 30 -%}
+{%- set workers = salt['pillar.get']('salt_master:workers', 5) -%}
+
+# {{ salt['pillar.get']('message_do_not_modify') }}
 
 salt_master_procs:
   description: Salt Master Daemon

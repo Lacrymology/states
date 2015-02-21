@@ -1,15 +1,9 @@
 # -*- coding: utf-8 -*-
-
-# Use of this source code is governed by a BSD license that can be
-# found in the doc/license.rst file.
+# Usage of this is governed by a license that can be found in doc/license.rst
 
 """
 Common code for backup file checking nrpe plugins
 """
-
-__author__ = 'Tomas Neme'
-__maintainer__ = 'Tomas Neme'
-__email__ = 'tomas@robotinfra.com'
 
 import datetime
 import logging

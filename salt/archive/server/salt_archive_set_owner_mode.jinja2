@@ -1,13 +1,6 @@
 #!/bin/bash
 # {{ salt['pillar.get']('message_do_not_modify') }}
-
-{#-
-Use of this source code is governed by a BSD license that can be found
-in the doc/license.rst file.
-
-Author: Bruno Clermont <bruno@robotinfra.com>
-Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
--#}
+# Usage of this is governed by a license that can be found in doc/license.rst
 
 {%- set home = salt['user.info']('salt_archive')['home'] -%}
 {#- make sure everything is owner root:salt_archive #}

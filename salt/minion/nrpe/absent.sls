@@ -1,10 +1,5 @@
-{#-
-Use of this source code is governed by a BSD license that can be found
-in the doc/license.rst file.
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
-
-Remove Nagios NRPE check for Salt Minion.
--#}
 {%- from 'nrpe/passive.jinja2' import passive_absent with context %}
 /usr/lib/nagios/plugins/check_minion_last_success.py:
   file:

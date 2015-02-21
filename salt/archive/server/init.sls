@@ -1,10 +1,4 @@
-{#-
-Use of this source code is governed by a BSD license that can be found
-in the doc/license.rst file.
-
-
-Salt Archive Server HTTP/HTTPS.
--#}
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
 {%- set ssl = salt['pillar.get']('salt_archive:ssl', False) -%}
 

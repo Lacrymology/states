@@ -1,14 +1,12 @@
-{#-
-Use of this source code is governed by a BSD license that can be found
-in the doc/license.rst file.
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
--#}
 # {{ salt['pillar.get']('message_do_not_modify') }}
-{# TODO: this needs to be changed to use config files, it requires a
+
+{#- TODO: this needs to be changed to use config files, it requires a
     single config value `domain` with the domain name #}
 command[{{ deployment }}_robots]=/usr/lib/nagios/plugins/check_robots.py {{ domain_name }}
 command[{{ deployment }}_django_admin]=/usr/lib/nagios/plugins/check_http {% if https|default(False) -%}-S{% endif %} -H {{ domain_name }} -u /admin/ -e '200 OK' -I {{ salt['network.ip_addrs']()[0] }}{%- if salt['pillar.get']('__test__', False) %} -v{%- endif %}
 command[{{ deployment }}_sitemap]=/usr/lib/nagios/plugins/check_sitemap.py -w 2:65535 -c 1:65535 -s http://{{ domain_name }}/sitemap.xml
-{# TODO: this needs to be changed to use config files, it requires a
+{#- TODO: this needs to be changed to use config files, it requires a
     single config value `sitemap` with the link #}
 command[{{ deployment }}_sitemaplink]=/usr/lib/nagios/plugins/check_sitemaplink.py -c 0:0 -s http://{{ domain_name }}/sitemap.xml

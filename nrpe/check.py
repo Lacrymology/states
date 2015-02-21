@@ -1,7 +1,6 @@
 #!/usr/local/nagios/bin/python
-
-# Use of this source code is governed by a BSD license that can be
-# found in the doc/license.rst file.
+# -*- coding: utf-8 -*-
+# Use of this is governed by a license that can be found in doc/license.rst.
 
 """
 Nagios plugin to check the memory usage.

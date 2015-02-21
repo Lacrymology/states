@@ -1,11 +1,7 @@
 #!/usr/local/openerp/bin/python
 # -*- coding: utf-8 -*-
+# Use of this is governed by a license that can be found in doc/license.rst.
 
-# Use of this source code is governed by a BSD license that can be
-# found in the doc/license.rst file.
-#
-#Author: Lam Dang Tung <lam@robotinfra.com>
-#Maintainer: Diep Pham <favadi@robotinfra.com>
 
 import os
 import sys

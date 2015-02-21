@@ -1,4 +1,7 @@
 #!/bin/bash
+# {{ salt['pillar.get']('message_do_not_modify') }}
+# Usage of this is governed by a license that can be found in doc/license.rst
+
 # script to removes all SSL relate stuff from files locate into input dir
 # this will change the origin pillar files, make it become non-SSL pillar,
 # which used to test formulas with non-SSL.

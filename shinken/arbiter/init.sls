@@ -1,20 +1,5 @@
-{#-
-Use of this source code is governed by a BSD license that can be found
-in the doc/license.rst file.
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
-
-State for Shinken Arbiter.
-
-A daemon reads the configuration, divides it into parts
-(N schedulers = N parts), and distributes them to the appropriate Shinken
-daemons. Additionally, it manages the high availability features: if a
-particular daemon dies, it re-routes the configuration managed by this failed
-daemon to the configured spare. Finally, it can receive input from users (such
-as external commands from nagios.cmd) or passive check results and routes them
-to the appropriate daemon. Passive check results are forwarded to the Scheduler
-responsible for the check. There can only be one active arbiter with other
-arbiters acting as hot standby spares in the architecture.
--#}
 {% set ssl = salt['pillar.get']('shinken:ssl', False) %}
 include:
   - hostname

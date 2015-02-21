@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Use of this source code is governed by a BSD license that can be
-# found in the doc/license.rst file.
+# Usage of this is governed by a license that can be found in doc/license.rst.
 
 __author__ = 'Bruno Clermont'
 __maintainer__ = 'Bruno Clermont'

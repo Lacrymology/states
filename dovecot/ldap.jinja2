@@ -1,30 +1,28 @@
-{#-
-Use of this source code is governed by a BSD license that can be found
-in the doc/license.rst file.
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
--#}
 # {{ salt['pillar.get']('message_do_not_modify') }}
+
 {#-
-# This file is opened as root, so it should be owned by root and mode 0600.
-#
-# http://wiki2.dovecot.org/AuthDatabase/LDAP
-#
-# NOTE: If you're not using authentication binds, you'll need to give
-# dovecot-auth read access to userPassword field in the LDAP server.
-# With OpenLDAP this is done by modifying /etc/ldap/slapd.conf. There should
-# already be something like this:
+This file is opened as root, so it should be owned by root and mode 0600.
 
-# access to attribute=userPassword
-#        by dn="<dovecot's dn>" read # add this
-#        by anonymous auth
-#        by self write
-#        by * none
+http://wiki2.dovecot.org/AuthDatabase/LDAP
 
-# Space separated list of LDAP hosts to use. host:port is allowed too.
-#hosts =
+NOTE: If you're not using authentication binds, you'll need to give
+dovecot-auth read access to userPassword field in the LDAP server.
+With OpenLDAP this is done by modifying /etc/ldap/slapd.conf. There should
+already be something like this:
 
-# LDAP URIs to use. You can use this instead of hosts list. Note that this
-# setting isn't supported by all LDAP libraries.
+access to attribute=userPassword
+       by dn="<dovecot's dn>" read # add this
+       by anonymous auth
+       by self write
+       by * none
+
+Space separated list of LDAP hosts to use. host:port is allowed too.
+hosts =
+
+LDAP URIs to use. You can use this instead of hosts list. Note that this
+setting isn't supported by all LDAP libraries.
 #}
 uris = {{ salt['pillar.get']('ldap:host', 'ldap://127.0.0.1') }}
 

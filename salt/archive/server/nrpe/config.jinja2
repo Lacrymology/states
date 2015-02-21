@@ -1,9 +1,9 @@
-{#-
-Use of this source code is governed by a BSD license that can be found
-in the doc/license.rst file.
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
--#}
 {%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
+
+# {{ salt['pillar.get']('message_do_not_modify') }}
+
 {{ nginx_instance(formula='salt.archive.server', allow_ssl_redirect=False, deployment='salt_archive', pillar_prefix='salt_archive') }}
 
 {%- if salt['pillar.get']('salt_archive:source', False) %}

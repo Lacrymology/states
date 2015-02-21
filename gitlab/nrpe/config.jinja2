@@ -1,17 +1,16 @@
-{#-
-Use of this source code is governed by a BSD license that can be found
-in the doc/license.rst file.
-
--#}
-
-gitlab_sidekiq_procs:
-  description: GitLab Sidekiq Process
-  command: /usr/lib/nagios/plugins/check_procs -c 1:1 -u gitlab -a 'sidekiq 2.17.0'
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
 {%- from 'uwsgi/nrpe/instance.jinja2' import uwsgi_instance with context -%}
 {%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
 {%- from 'postgresql/server/nrpe/instance.jinja2' import postgresql_instance with context -%}
 {%- set deployment = 'gitlab' %}
+
+# {{ salt['pillar.get']('message_do_not_modify') }}
+
+gitlab_sidekiq_procs:
+  description: GitLab Sidekiq Process
+  command: /usr/lib/nagios/plugins/check_procs -c 1:1 -u gitlab -a 'sidekiq 2.17.0'
+
 {{ uwsgi_instance(deployment) }}
 {{ postgresql_instance(deployment, "gitlabhq_production", salt['password.pillar']("gitlab:db:password"), username=deployment) }}
 {{ nginx_instance(deployment, timeout=40, http_uri='/users/sign_in', extra_dependencies=('gitlab_uwsgi_worker', 'gitlabhq_production_postgresql')) }}

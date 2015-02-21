@@ -1,3 +1,5 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+
 {%- macro passive_check(formula, domain_name=None, pillar_prefix=None, check_ssl_score=False, file_name=None) -%}
     {%- if not pillar_prefix -%}
         {%- set pillar_prefix = formula -%}

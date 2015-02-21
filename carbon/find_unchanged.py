@@ -1,14 +1,12 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8
+# Use of this is governed by a license that can be found in doc/license.rst.
 
 """
 A script for finding (and/or deleting) all old files/directories under
 given path.  A directory is considered old if ALL files it contains have not
 changed since last N days, N passed by user.
 """
-
-# Use of this source code is governed by a BSD license that can be
-# found in the doc/license.rst file.
 
 __author__ = 'Viet Hung Nguyen'
 __maintainer__ = 'Viet Hung Nguyen'

@@ -338,7 +338,7 @@ Number of forward retransmits.
 tcp.TCPLoss
 ~~~~~~~~~~~
 
-.. todo:: Find out what it is.
+.. TODO Find out what it is.
 
 tcp.TCPLostRetransmit
 ~~~~~~~~~~~~~~~~~~~~~

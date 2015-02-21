@@ -1,4 +1,7 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+
 # {{ salt['pillar.get']('message_do_not_modify') }}
+
 {%- set authentication = salt['pillar.get']('pgbouncer:authentication', False) %}
 {%- set auth_type = salt['pillar.get']('pgbouncer:auth_type', 'md5') %}
 [databases]

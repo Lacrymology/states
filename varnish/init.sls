@@ -1,10 +1,8 @@
-{#-
-Use of this source code is governed by a BSD license that can be found
-in the doc/license.rst file.
+{#- Usage of this is governed by a license that can be found in doc/license.rst
 
+config varnish storage backend
 -#}
 
-# config varnish storage backend
 {% set storage_backend = salt['pillar.get']('varnish:storage_backend', 'malloc') %}
 
 {% if storage_backend not in ['malloc', 'file'] %}

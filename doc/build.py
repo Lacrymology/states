@@ -1,11 +1,6 @@
 #!/usr/bin/env python
-# Use of this source code is governed by a BSD license that can be
-# found in the doc/license.rst file.
-#
-# Author: Viet Hung Nguyen <hvn@robotinfra.com>
-# Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
-#
-# Script for building salt common documentation.
+# -*- coding: utf-8 -*-
+# Usage of this is governed by a license that can be found in doc/license.rst
 
 import os
 import sys

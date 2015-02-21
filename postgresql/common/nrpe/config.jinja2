@@ -1,11 +1,11 @@
-{#-
-Use of this source code is governed by a BSD license that can be found
-in the doc/license.rst file.
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
--#}
 {%- from "postgresql/init.sls" import postgresql_version with context -%}
 {%- set timeout = 30 -%}
 {%- set version = postgresql_version() -%}
+
+# {{ salt['pillar.get']('message_do_not_modify') }}
+
 postgresql_procs:
   description: PostgreSQL Daemon
   command: "/usr/lib/nagios/plugins/check_procs -c 1:2 -a '/usr/lib/postgresql/{{ version }}/bin/postgres -D /var/lib/postgresql/{{ version }}/main -c config_file=/etc/postgresql/{{ version }}/main/postgresql.conf' -C postgres -u postgres"

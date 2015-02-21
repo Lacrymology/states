@@ -1,10 +1,5 @@
-{#-
-Use of this source code is governed by a BSD license that can be found
-in the doc/license.rst file.
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
-
-Common stuff for all shinken components.
--#}
 {%- set files_archive = salt['pillar.get']('files_archive', False) %}
 {%- macro shinken_install_module(module_name) %}
 {#-

@@ -1,10 +1,8 @@
-{#-
-Use of this source code is governed by a BSD license that can be found
-in the doc/license.rst file.
-
+{#- Usage of this is governed by a license that can be found in doc/license.rst
 
 Change shell of predefined user (UID <= 99) from `/bin/sh` to `/usr/sbin/nologin`
 -#}
+
 include:
   - apt
 

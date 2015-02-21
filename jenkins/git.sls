@@ -1,13 +1,11 @@
-{#-
-Use of this source code is governed by a BSD license that can be found
-in the doc/license.rst file.
-
+{#- Usage of this is governed by a license that can be found in doc/license.rst
 
 Jenkins is optional depends on git, only when you use Jenkins to build
 code from git. This formula setup some things that needed to make jenkins works
 with git, not to install jenkins git plugin or setup private ssh key - which
 must be done by user used jenkins web UI
-#}
+-#}
+
 include:
   - git
   - jenkins

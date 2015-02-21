@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-# Use of this source code is governed by a BSD license that can be
-# found in the doc/license.rst file.
+# {{ salt['pillar.get']('message_do_not_modify') }}
+# Use of this is governed by a license that can be found in doc/license.rst.
 
 """
 This script sends reminders to developers with open dev vms to close them when
@@ -52,10 +51,6 @@ destroy_vm_reminder:
 
                       Admin
 """
-
-__author__ = 'Tomas Neme'
-__maintainer__ = 'Bruno Clermont, Viet Hung Nguyen, Tomas Neme'
-__email__ = 'bruno@robotinfra.com, hvn@robotinfra.com, tomas@robotinfra.com'
 
 import re
 import json

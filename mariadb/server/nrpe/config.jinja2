@@ -1,9 +1,9 @@
-{#-
-Use of this source code is governed by a BSD license that can be found
-in the doc/license.rst file.
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
--#}
 {%- set timeout = 30 -%}
+
+# {{ salt['pillar.get']('message_do_not_modify') }}
+
 mysql_procs:
   description: MariaDB Daemon
   command: /usr/lib/nagios/plugins/check_procs -c 1:1 -u mysql -C mysqld -a '--basedir=/usr --datadir=/var/lib/mysql --plugin-dir=/usr/lib/mysql/plugin --user=mysql --pid-file=/var/run/mysqld/mysqld.pid --socket=/var/run/mysqld/mysqld.sock'

@@ -1,3 +1,9 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+
+{%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
+
+# {{ salt['pillar.get']('message_do_not_modify') }}
+
 apt_cache_procs:
   description: Apt Cache Daemon
   command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -C apt-cacher-ng -u apt-cacher-ng'
@@ -10,7 +16,6 @@ apt_cache_port:
   dependencies:
     - apt_cache_procs
 
-{%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
 {#-
 curl -I http://localhost:3142
 

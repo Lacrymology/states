@@ -1,9 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-__author__ = 'Bruno Clermont'
-__maintainer__ = 'Bruno Clermont'
-__email__ = 'bruno@robotinfra.com'
+# {{ salt['pillar.get']('message_do_not_modify') }}
+# Usage of this is governed by a license that can be found in doc/license.rst
 
 import logging
 import os

@@ -1,16 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-# Use of this source code is governed by a BSD license that can be
-# found in the doc/license.rst file.
+# {{ salt['pillar.get']('message_do_not_modify') }}
+# Use of this is governed by a license that can be found in doc/license.rst.
 
 """
 This script import test data output uploaded by cp.push to jenkins workspace.
 """
-
-__author__ = 'Viet Hung Nguyen'
-__maintainer__ = 'Bruno Clermont, Hung Nguyen viet'
-__email__ = 'bruno@robotinfra.com, hvn@robotinfra.com'
 
 import os
 import pwd

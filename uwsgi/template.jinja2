@@ -1,7 +1,4 @@
-{#-
-Use of this source code is governed by a BSD license that can be found
-in the doc/license.rst file.
-
+{#- Usage of this is governed by a license that can be found in doc/license.rst
 
 To use this template, extends it and define blocks that you want to replace,
 This template need:
@@ -9,10 +6,14 @@ This template need:
 - context variable(s): chdir, appname, [wsgi_file], [virtualenv], [django_settings], [module], [uid], [gid]
 [something] means optional
 -#}
-{%- set cheaper = salt['pillar.get'](appname + ':cheaper', False) %}
-{%- set workers = salt['pillar.get'](appname + ':workers', 1) %}
-{%- set timeout = salt['pillar.get'](appname + ':timeout', 60) %}
-{%- set idle = salt['pillar.get'](appname + ':idle', 300) %}
+
+{%- set cheaper = salt['pillar.get'](appname + ':cheaper', False) -%}
+{%- set workers = salt['pillar.get'](appname + ':workers', 1) -%}
+{%- set timeout = salt['pillar.get'](appname + ':timeout', 60) -%}
+{%- set idle = salt['pillar.get'](appname + ':idle', 300) -%}
+
+# {{ salt['pillar.get']('message_do_not_modify') }}
+
 uwsgi:
 {%- block header %}
 {%- endblock %}

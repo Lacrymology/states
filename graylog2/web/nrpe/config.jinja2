@@ -1,11 +1,11 @@
-{#-
-Use of this source code is governed by a BSD license that can be found
-in the doc/license.rst file.
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
--#}
 {%- set version = '0.20.6' -%}
 {%- set timeout = 45 -%}
 {%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
+
+# {{ salt['pillar.get']('message_do_not_modify') }}
+
 {{ nginx_instance('graylog2.web', http_uri='/login', deployment='graylog2', pillar_prefix='graylog2', extra_dependencies=('graylog2_web_port',), timeout=30) }}
 
 graylog2_web_procs:

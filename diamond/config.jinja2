@@ -1,9 +1,7 @@
-{#-
-Use of this source code is governed by a BSD license that can be found
-in the doc/license.rst file.
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
--#}
 # {{ salt['pillar.get']('message_do_not_modify') }}
+
 {%- set __test__ = salt['pillar.get']("__test__", False) %}
 {%- set graphite_address = salt['pillar.get']('graphite_address', False) %}
 [server]

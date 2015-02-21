@@ -1,7 +1,7 @@
-{#-
-Use of this source code is governed by a BSD license that can be found
-in the doc/license.rst file.
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
-#}
 {%- from 'tomcat/nrpe_macro.jinja2' import tomcat_monitor with context -%}
+
+# {{ salt['pillar.get']('message_do_not_modify') }}
+
 {{ tomcat_monitor(7) }}

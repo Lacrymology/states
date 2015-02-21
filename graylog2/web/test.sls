@@ -1,4 +1,4 @@
-{#-
+{#- Usage of this is governed by a license that can be found in doc/license.rst
  -*- ci-automatic-discovery: off -*-
 
  graylog2.web is only used on a complete log server integrated with:

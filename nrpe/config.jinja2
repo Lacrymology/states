@@ -1,8 +1,7 @@
-{#-
-Use of this source code is governed by a BSD license that can be found
-in the doc/license.rst file.
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
--#}
+# {{ salt['pillar.get']('message_do_not_modify') }}
+
 nsca_passive_procs:
   description: NSCA Passive daemon Processes
   command: '/usr/lib/nagios/plugins/check_procs -u nagios -C nsca_passive -c 1:1'
@@ -10,7 +9,7 @@ nsca_passive_procs:
 free_disks_space:
   description: All Disks
   command: /usr/lib/nagios/plugins/check_disk -w 20% -c 10% -X tmpfs
-{%- if grains['virtual'] == 'VirtualBox' %} -X vboxsf{% endif %}
+{%- if grains['virtual'] == 'VirtualBox' %} -X vboxsf{% endif -%}
 
 {%- set max_proc = salt['pillar.get']('nrpe:max_proc', 150)|int -%}
 {%- set max_proc_15_percent = max_proc + (max_proc / 100.0 * 15) %}

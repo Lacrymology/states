@@ -1,3 +1,5 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+
 {%- macro ssl_config(certname, ip=None) %}
     listen {% if ip %}{{ ip }}:{% endif %}443 ssl;
     ssl_certificate /etc/ssl/certs/{{ certname }}_chained.crt;

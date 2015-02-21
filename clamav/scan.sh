@@ -1,11 +1,5 @@
 #!/bin/bash
-
-# Use of this source code is governed by a BSD license that can be
-# found in the doc/license.rst file.
-
-# Author: Diep Pham <favadi@robotinfra.com>
-# Maintainer: Diep Pham <favadi@robotinfra.com>
-
+# Use of this is governed by a license that can be found in doc/license.rst.
 # Run a full scan on / except some directories ( /sys, /dev, /proc, /run)
 
 # limit resources usage

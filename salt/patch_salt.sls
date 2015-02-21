@@ -1,3 +1,5 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+
 {%- from "python/init.sls" import root_bin_py with context -%}
 
 patch_salt_fix_require_sls:

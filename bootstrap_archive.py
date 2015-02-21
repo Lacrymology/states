@@ -1,8 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 
-# Use of this source code is governed by a BSD license that can be
-# found in the doc/license.rst file.
+# Use of this is governed by a license that can be found in doc/license.rst.
 
 """
 Salt master or test bootstrap creator.

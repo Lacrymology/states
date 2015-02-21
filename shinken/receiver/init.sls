@@ -1,13 +1,5 @@
-{#-
-Use of this source code is governed by a BSD license that can be found
-in the doc/license.rst file.
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
-
-State for Shinken Receiver.
-
-Shinken Receiver will receive the NSCA messages and queue them to be sent to the
-Arbiter or Scheduler for processing.
--#}
 {%- from 'shinken/init.sls' import shinken_install_module with context -%}
 {% set ssl = salt['pillar.get']('shinken:ssl', False) %}
 include:

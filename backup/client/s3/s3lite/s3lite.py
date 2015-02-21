@@ -1,12 +1,10 @@
 #!/usr/local/s3lite/bin/python
 # -*- encoding: utf-8
+# Use of this is governed by a license that can be found in doc/license.rst.
 
 """
 Backup script which syncs files to S3 with small memory using.
 """
-
-# Use of this source code is governed by a BSD license that can be
-# found in the doc/license.rst file.
 
 __author__ = 'Viet Hung Nguyen'
 __maintainer__ = 'Viet Hung Nguyen'

@@ -1,9 +1,7 @@
-{#-
-Use of this source code is governed by a BSD license that can be found
-in the doc/license.rst file.
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
--#}
 # {{ salt['pillar.get']('message_do_not_modify') }}
+
 export PS1="\[$(tput bold)\]\[$(tput setaf 4)\][\[$(tput setaf 8)\]\t\[$(tput setaf 4)\]] \u\[$(tput setaf 8)\]@\[$(tput setaf 4)\]\h\[$(tput setaf 1)\]
 {%- if 'availabilityZone' in grains -%}
 (\[$(tput setaf 2)\]{{ grains['availabilityZone'] }}:{{ grains['instanceId'] }}\[$(tput setaf 1)\])

@@ -1,15 +1,5 @@
-{#-
-Use of this source code is governed by a BSD license that can be found
-in the doc/license.rst file.
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
-
-Shinken reactionner state.
-
-The reactionner daemon issues notifications and launches event_handlers. This
-centralizes communication channels with external systems in order to simplify
-SMTP authorizations or RSS feed sources (only one for all hosts/services).
-There can be many reactionners for load-balancing and spare roles
--#}
 {%- from 'upstart/rsyslog.jinja2' import manage_upstart_log with context -%}
 {% set ssl = salt['pillar.get']('shinken:ssl', False) %}
 include:

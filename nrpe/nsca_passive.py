@@ -144,7 +144,7 @@ class PassiveDaemon(object):
                 self.stats.gauge('passive_check.total_failure',
                                  counters.total_failure)
                 if counters.ever_success:
-                    transport_logger.warning(
+                    transport_logger.info(
                         "Can't send to server '%s' as it never worked",
                         sender.remote_host)
                 else:

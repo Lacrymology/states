@@ -5,6 +5,11 @@
 import os
 import sys
 
+ROBOTS_TXT = """
+User-agent: *
+Disallow:
+"""
+
 def in_directory(dir1, dir2):
     dirs1 = dir1.split(os.sep)
     dirs2 = dir2.split(os.sep)
@@ -61,6 +66,9 @@ def main():
     sys.exit(
         load_entry_point('Sphinx', 'console_scripts', 'sphinx-build')()
     )
+
+    with open(os.path.join(output_dir, 'robots.txt'), 'w') as robots:
+        robots.write(ROBOTS_TXT)
 
 if __name__ == '__main__':
     main()

@@ -8,7 +8,7 @@ hostname:
     - user: root
     - group: root
     - mode: 444
-    - source: salt://hostname/hostname.jinja2
+    - contents: {{ grains['id'] }}
   host:
     - present
     - name: {{ grains['id'] }}

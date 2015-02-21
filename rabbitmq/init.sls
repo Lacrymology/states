@@ -48,7 +48,7 @@ rabbitmq_erlang_cookie:
     - user: rabbitmq
     - group: rabbitmq
     - mode: 400
-    - source: salt://rabbitmq/cookie.jinja2
+    - contents: {{ salt['pillar.get']('rabbitmq:cluster:cookie') }}
     - require:
       - file: /var/lib/rabbitmq
 

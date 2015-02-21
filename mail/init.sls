@@ -3,7 +3,10 @@
 /etc/mailname:
   file:
     - managed
-    - source: salt://mail/mailname.jinja2
+    - user: root
+    - group: root
+    - mode: 440
+    - contents: {{ salt['pillar.get']('mail:mailname') }}
     - template: jinja
 
 {%- set mailname = salt['pillar.get']('mail:mailname') %}

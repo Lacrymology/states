@@ -53,9 +53,7 @@ git_server_{{ key }}:
     - group: git
     - mode: 440
     - template: jinja
-    - source: salt://git/server/description.jinja2
-    - context:
-        repository: {{ repository }}
+    - contents: {{ repository }}
     - require:
       - module: /var/lib/git-server/{{ repository }}.git
 {% endfor %}

@@ -186,6 +186,7 @@ def run_all_checks(**kwargs):
     try:
         __salt__['monitoring.shinken']({__opts__['id']: monitoring_data})
     except ValueError, err:
+        logger.info("monitoring_data: %s", monitoring_data)
         ret['comment'] = str(err)
         ret['result'] = False
         return ret

@@ -14,9 +14,15 @@ file contains all common macros
 {%- endmacro -%}
 
 {%- macro salt_deb_version() -%}
-{#- example: salt-minion_0.17.5-1precise1_all.deb
-    this macro will provide ``0.17.5-1precise1`` -#}
-    {{ salt_version() }}{{ grains['lsb_distrib_codename'] }}1
+    {#-
+        example: salt-minion_0.17.5-1precise1_all.deb
+        this macro will provide ``0.17.5-1precise1``
+    -#}
+    {%- if grains['lsb_distrib_codename'] == 'trusty' -%}
+        2014.1.10+ds-1{{ grains['lsb_distrib_codename'] }}1
+    {%- else -%}
+        {{ salt_version() }}{{ grains['lsb_distrib_codename'] }}1
+    {%- endif -%}
 {%- endmacro -%}
 
 {#- manage pid file owner/mode only if it exists, as if always manage it may

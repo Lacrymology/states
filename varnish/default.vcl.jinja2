@@ -11,9 +11,3 @@ backend default {
 {%- if extra_config %}
 {{ extra_config }}
 {%- endif %}
-
-{%- if salt['pillar.get']("__test__", False) %}
-sub vcl_recv {
-    set req.http.host = "archive.robotinfra.com";
-}
-{%- endif %}

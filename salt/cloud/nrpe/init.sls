@@ -7,6 +7,7 @@ include:
   - pip.nrpe
   - requests.nrpe
   - salt.master.nrpe
+  - salt.cloud
   - sudo.nrpe
 
 {%- from 'nrpe/passive.jinja2' import passive_check, passive_absent with context %}
@@ -39,6 +40,9 @@ include:
       - module: nrpe-virtualenv
       - file: /etc/sudoers.d/nrpe_salt_cloud
       - file: nsca-salt.cloud
+      - file: salt_cloud_digital_ocean_v2_module
+      - file: /etc/salt/cloud.profiles
+      - file: /etc/salt/cloud.providers
     - require_in:
       - service: nagios-nrpe-server
       - service: nsca_passive

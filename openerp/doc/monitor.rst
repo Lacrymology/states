@@ -32,3 +32,13 @@ Monitor :doc:`index` scheduler daemon, expect exactly one process.
 .. include:: /nginx/doc/monitor_ssl.inc
 
 .. note:: Only check if :ref:`pillar-openerp-ssl` is turned on.
+
+.. _monitor-openerp_backup_postgres_company_age:
+
+openerp_backup_postgres_{{ company }}_age
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. copied from backup/doc/monitor_postgres_age.inc
+
+Check if the :doc:`/postgresql/doc/index` database is backed up less than
+:ref:`pillar-backup-age` hours ago and its size is greater than zero (``0``).

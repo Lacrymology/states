@@ -147,7 +147,7 @@ List of data retention rules, see the
 for details of syntax.
 
 Default: all metrics will be stored each 60 seconds,
-in 30 days (``[{'.*': '60s:30d'}]``).
+in 30 days (``[{'pattern' : '.*', 'retentions': '60s:30d'}]``).
 
 Conditional
 -----------

@@ -12,7 +12,7 @@ test_cron_{{ suffix }}:
         {% endif %}
   cmd:
     - run
-    - name: run-parts --report /etc/cron.{{ suffix }}
+    - name: run-parts --report{% if salt['pillar.get']('__test__', False) %} --verbose{% endif %} /etc/cron.{{ suffix }}
     - onlyif: test -d /etc/cron.{{ suffix }}
         {%- if caller is defined -%}
             {%- for line in caller().split("\n") -%}

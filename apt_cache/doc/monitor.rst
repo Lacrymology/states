@@ -11,12 +11,15 @@ Mandatory
 apt_cache_procs
 ~~~~~~~~~~~~~~~
 
-.. TODO: WTF
+.. include:: /nrpe/doc/check_procs.inc
 
 .. _monitor-apt_cache_port:
 
 apt_cache_port
 ~~~~~~~~~~~~~~
+
+:doc:`index` port :ref:`glossary-TCP` ``3142`` is listening on
+:ref:`glossary-localhost`.
 
 .. include:: /nginx/doc/monitor.inc
 

@@ -6,7 +6,7 @@
 pattern = ^{{ grains['id']}}\.carbon\.
 retentions = 60:90d
 
-{%- for retention in salt['pillar.get']('carbon:retentions', [{'.*': '60s:30d'}]) %}
+{%- for retention in salt['pillar.get']('carbon:retentions', [{'pattern' : '.*', 'retentions': '60s:30d'}]) %}
 [rule_{{ loop.index }}]
 pattern = {{ retention['pattern'] }}
 retentions = {{ retention['retentions'] }}

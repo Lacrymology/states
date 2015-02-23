@@ -29,7 +29,7 @@ replace: olcLogLevel
 {%- if salt['pillar.get']('debug', False) %}
 olcLogLevel: -1
 {%- else %}
-olcLogLevel: 256
+olcLogLevel: None
 {%- endif -%}
 {%- if salt['pillar.get']('ldap:ssl', False) %}
 -

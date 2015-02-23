@@ -49,7 +49,6 @@ Optional
 Example::
 
   ldap:
-    log_level: 256
     data:
       example.com
         alice:

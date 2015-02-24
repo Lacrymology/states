@@ -116,6 +116,11 @@ test_openvpn_tls_cleanup_{{ instance }}_{{ client }}:
     - name: pkill -f 'openvpn {{ client }}.conf'
     - require:
       - cmd: test_openvpn_tls_connect_{{ instance }}_{{ client }}
+  file:
+    - absent
+    - name: /tmp/openvpn_{{ client }}
+    - require:
+      - cmd: test_openvpn_tls_cleanup_{{ instance }}_{{ client }}
 
                 {%- endif %}{#- client not in revocations list -#}
             {%- endfor -%}

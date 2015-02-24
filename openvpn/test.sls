@@ -91,14 +91,27 @@ test_openvpn_tls_{{ instance }}_{{ client }}:
     - watch:
       - module: test_openvpn_tls_{{ instance }}_{{ client }}
 
+test_openvpn_tls_restart_{{ instance }}_{{ client }}:
+  module:
+    - run
+    - name: service.stop
+    - m_name: openvpn-{{ instance }}
+    - require:
+      - cmd: test_openvpn_tls_{{ instance }}_{{ client }}
+  cmd:
+    - run
+    - name: screen -d -m -S start_openvpn_{{ instance }} openvpn --config /etc/openvpn/{{ instance }}/config --status /var/log/openvpn/{{ instance }}.log 1
+    - require:
+      - module: test_openvpn_tls_restart_{{ instance }}_{{ client }}
+
 test_openvpn_tls_connect_{{ instance }}_{{ client }}:
   cmd:
     - wait
     {#- Wait 10 seconds for OpenVPN client to connect
-    The status file is updated every minute #}
-    - name: sleep 70 && grep ^{{ client }} /var/log/openvpn/{{ instance }}.log
+    The status file is updated every second #}
+    - name: sleep 11 && grep ^{{ client }} /var/log/openvpn/{{ instance }}.log
     - watch:
-      - cmd: test_openvpn_tls_{{ instance }}_{{ client }}
+      - cmd: test_openvpn_tls_restart_{{ instance }}_{{ client }}
 
 test_openvpn_tls_cleanup_{{ instance }}_{{ client }}:
   cmd:

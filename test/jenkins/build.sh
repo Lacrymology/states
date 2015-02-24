@@ -117,8 +117,16 @@ virtualenv --system-site-packages $WORKSPACE/virtualenv
 . $WORKSPACE/virtualenv/bin/activate
 
 if [ "${with_ssl:-true}" = "false" ]; then
-  $WORKSPACE/common/test/jenkins/generate_non_ssl_pillar.sh pillar
+  find pillar -name '*.sls' -type f -exec sed -i -e 's/  ssl_redirect:.*//g' -e 's/  ssl:.*//g' {} \;
 fi
+
+if [ "${WITH_FILES_ARCHIVE:-true}" = "false" ]; then
+  find pillar -name '*.sls' -type f -exec sed -i -e 's/^files_archive:.*//g' {} \;
+fi
+
+echo "---- Diff to Pillar ----"
+(cd pillar; git diff)
+echo "---- End of Diff to Pillar ----"
 
 cd common
 test/lint.py --warn-nonstable

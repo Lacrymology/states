@@ -12,6 +12,29 @@ proftpd:
     - dead
     - enable: False
 
+proftpd_fake_mail_path:
+  # postrm script of proftpd-basic logs error if it cannot delete mail
+  # dir/files of that user.
+  # So this create fake one for those users to avoid error log when absent runs
+  file:
+    - managed
+    - name: /var/mail/proftpd
+    - makedirs: True
+    - require:
+      - service: proftpd
+    - require_in:
+      - pkg: proftpd
+
+proftpd_fake_mail_path_ftp:
+  file:
+    - managed
+    - name: /var/mail/ftp
+    - makedirs: True
+    - require:
+      - service: proftpd
+    - require_in:
+      - pkg: proftpd
+
 /var/log/proftpd:
   file:
     - absent

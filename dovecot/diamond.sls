@@ -16,3 +16,11 @@ dovecot_diamond_resources:
       - |
         [[dovecot]]
         exe = ^\/usr\/sbin\/dovecot$
+        [[dovecot-imap]]
+        exe = ^\/usr\/lib\/dovecot\/imap$
+        [[dovecot-imap-login]]
+        exe = ^\/usr\/lib\/dovecot\/imap-login$
+        [[dovecot-pop3]]
+        exe = ^\/usr\/lib\/dovecot\/pop3$
+        [[dovecot-pop3-login]]
+        exe = ^\/usr\/lib\/dovecot\/pop3-login$

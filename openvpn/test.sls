@@ -56,6 +56,13 @@ test_openvpn_{{ instance }}:
       - sls: openvpn
 
         {%- if mode == 'tls' -%}
+        {#-
+        Testing conectivity by:
+          - copy the client cert
+          - starting the client
+          - change the interval to update the status file every second
+          - grep the status file for the client's common name
+        -#}
             {%- for client in servers[instance]['clients'] -%}
                 {%- if client not in servers[instance]['revocations'] %}
 test_openvpn_tls_{{ instance }}_{{ client }}:

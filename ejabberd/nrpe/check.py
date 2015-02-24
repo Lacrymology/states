@@ -46,6 +46,8 @@ class XMPPCheck(nagiosplugin.Resource):
         self._password = password
         if address:
             self._address = (address, 5222)
+        else:
+            self._address = ()
         self._use_tls = use_tls
         self.state = nagiosplugin.state.Ok
         self.error = ""
@@ -106,4 +108,6 @@ def check_xmpp(config):
     )
 
 if __name__ == '__main__':
-    nrpe.check(check_xmpp, {})
+    nrpe.check(check_xmpp, {
+        'address': None,
+    })

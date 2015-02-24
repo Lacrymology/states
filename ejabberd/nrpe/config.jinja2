@@ -40,6 +40,7 @@ ejabberd_admin_http:
 {%- set monitor_user = "ejabberd_monitor" %}
 {%- set hostname = salt['pillar.get']('ejabberd:hostnames')[0] %}
 {%- set monitor_password = salt['password.generate']('ejabberd_monitor') %}
+{%- set ssl = salt['pillar.get']('ejabberd:ssl', False) %}
 ejabberd_xmpp:
   description: Check XMPP server functionality
   command: /usr/lib/nagios/plugins/check_xmpp.py --formula=ejabberd --check=ejabberd_xmpp
@@ -52,6 +53,8 @@ ejabberd_xmpp:
 {%- if salt['pillar.get']("__test__", False) %}
     address: "127.0.0.1"
     use_tls: False
+{% else %}
+    use_tls: {% if ssl %}True{% else %}False{% endif %}
 {%- endif %}
 
 {%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context %}

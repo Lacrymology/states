@@ -111,16 +111,19 @@ test_openvpn_tls_connect_{{ instance }}_{{ client }}:
       - cmd: test_openvpn_tls_{{ instance }}_{{ client }}
 
 test_openvpn_tls_cleanup_{{ instance }}_{{ client }}:
-  cmd:
+  module:
     - run
-    - name: pkill -f 'openvpn {{ client }}.conf'
+    - name: ps.pkill
+    - pattern: 'openvpn {{ client }}.conf'
+    - user: nobody
+    - full: True
     - require:
       - cmd: test_openvpn_tls_connect_{{ instance }}_{{ client }}
   file:
     - absent
     - name: /tmp/openvpn_{{ client }}
     - require:
-      - cmd: test_openvpn_tls_cleanup_{{ instance }}_{{ client }}
+      - module: test_openvpn_tls_cleanup_{{ instance }}_{{ client }}
 
                 {%- endif %}{#- client not in revocations list -#}
             {%- endfor -%}

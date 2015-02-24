@@ -8,7 +8,6 @@ include:
   - openvpn.diamond
   - openvpn.nrpe
   - salt.minion.deps
-  - screen
 
 test:
   monitoring:
@@ -68,7 +67,7 @@ test_openvpn_{{ instance }}:
 test_openvpn_tls_{{ instance }}_{{ client }}:
   file:
     - directory
-    - name: /tmp/openvpn
+    - name: /tmp/openvpn_{{ client }}
     - user: root
     - group: root
     - mode: 750
@@ -79,15 +78,13 @@ test_openvpn_tls_{{ instance }}_{{ client }}:
     - run
     - name: archive.unzip
     - zipfile: /etc/openvpn/{{ instance }}/clients/{{ client }}.zip
-    - dest: /tmp/openvpn
+    - dest: /tmp/openvpn_{{ client }}
     - require:
       - file: test_openvpn_tls_{{ instance }}_{{ client }}
   cmd:
     - wait
-    - name: screen -d -m -S test_openvpn_{{ client }} openvpn {{ client }}.conf
-    - cwd: /tmp
-    - require:
-      - pkg: screen
+    - name: nohup openvpn {{ client }}.conf > /dev/null 2>&1 &
+    - cwd: /tmp/openvpn_{{ client }}
     - watch:
       - module: test_openvpn_tls_{{ instance }}_{{ client }}
 
@@ -100,7 +97,7 @@ test_openvpn_tls_restart_{{ instance }}_{{ client }}:
       - cmd: test_openvpn_tls_{{ instance }}_{{ client }}
   cmd:
     - run
-    - name: screen -d -m -S start_openvpn_{{ instance }} openvpn --config /etc/openvpn/{{ instance }}/config --status /var/log/openvpn/{{ instance }}.log 1
+    - name: nohup openvpn --config /etc/openvpn/{{ instance }}/config --status /var/log/openvpn/{{ instance }}.log 1 > /dev/null 2>&1 &
     - require:
       - module: test_openvpn_tls_restart_{{ instance }}_{{ client }}
 

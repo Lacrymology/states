@@ -30,7 +30,7 @@ file contains all common macros
  pillars.
 #}
 {%- macro dict_default(d, key, default) -%}
-    {%- if d.get(key, default) == None -%}
+    {%- if key not in d or d.get(key, default) == None -%}
         {%- do d.update({key: default}) -%}
     {%- endif -%}
 {%- endmacro -%}

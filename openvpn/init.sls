@@ -189,6 +189,17 @@ openvpn_{{ instance }}_client:
 
     {%- elif servers[instance]['mode'] == 'tls' %}
 
+openvpn_create_empty_crl_{{ instance }}:
+  module:
+    - wait
+    - name: tls.create_empty_crl
+    - ca_dir: '/etc/openvpn'
+    - ca_filename: 'ca'
+    - ca_name: {{ ca_name }}
+    - crl_path: '/etc/openvpn/{{ instance }}/crl.pem'
+    - watch:
+      - module: openvpn_ca
+
 openvpn_server_csr_{{ instance }}:
   module:
     - wait
@@ -330,7 +341,7 @@ openvpn_{{ instance }}_{{ client }}:
         {%- endfor %}{# client cert -#}
 
         {#- Revoke clients certificate -#}
-        {%- for r_client in servers[instance]['revocations'] -%}
+        {%- for r_client in servers[instance]['revocations'] %}
 openvpn_revoke_client_cert_{{ r_client }}:
   module:
     - run
@@ -343,6 +354,7 @@ openvpn_revoke_client_cert_{{ r_client }}:
     - crl_path: {{ config_dir }}/crl.pem
     - require:
       - pkg: salt_minion_deps
+      - module: openvpn_create_empty_crl_{{ instance }}
     - watch_in:
       - service: openvpn-{{ instance }}
         {%- endfor -%}
@@ -351,6 +363,7 @@ openvpn_revoke_client_cert_{{ r_client }}:
       - cmd: openvpn_dh
       - file: openvpn_{{ instance }}_config
       - module: openvpn_ca
+      - module: openvpn_create_empty_crl_{{ instance }}
       - module: openvpn_server_cert_{{ instance }}
       - file: /etc/default/openvpn
 {%- endcall -%}

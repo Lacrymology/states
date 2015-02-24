@@ -32,7 +32,7 @@ test:
 {%- set servers = salt['pillar.get']('openvpn:servers', {}) -%}
 {%- if servers is iterable and servers | length > 0 -%}
     {%- for instance in servers -%}
-        {%- set mode = servers[instance]['mode'] -%}
+        {%- set mode = servers[instance]['mode'] %}
         {{ dict_default(servers[instance], 'clients', []) }}
         {{ dict_default(servers[instance], 'revocations', []) }}
 test_openvpn_{{ instance }}:
@@ -58,10 +58,23 @@ test_openvpn_{{ instance }}:
         {#-
         Testing conectivity by:
           - copy the client cert
-          - starting the client
           - change the interval to update the status file every second
+          - starting the client
           - grep the status file for the client's common name
-        -#}
+        #}
+test_openvpn_tls_restart_{{ instance }}:
+  module:
+    - run
+    - name: service.stop
+    - m_name: openvpn-{{ instance }}
+    - require:
+      - sls: openvpn
+  cmd:
+    - run
+    - name: nohup openvpn --config /etc/openvpn/{{ instance }}/config --status /var/log/openvpn/{{ instance }}.log 1 > /dev/null 2>&1 &
+    - require:
+      - module: test_openvpn_tls_restart_{{ instance }}
+
             {%- for client in servers[instance]['clients'] -%}
                 {%- if client not in servers[instance]['revocations'] %}
 test_openvpn_tls_{{ instance }}_{{ client }}:
@@ -72,8 +85,8 @@ test_openvpn_tls_{{ instance }}_{{ client }}:
     - group: root
     - mode: 750
     - require:
-      - sls: openvpn
       - monitoring: test
+      - cmd: test_openvpn_tls_restart_{{ instance }}
   module:
     - run
     - name: archive.unzip
@@ -88,19 +101,6 @@ test_openvpn_tls_{{ instance }}_{{ client }}:
     - watch:
       - module: test_openvpn_tls_{{ instance }}_{{ client }}
 
-test_openvpn_tls_restart_{{ instance }}_{{ client }}:
-  module:
-    - run
-    - name: service.stop
-    - m_name: openvpn-{{ instance }}
-    - require:
-      - cmd: test_openvpn_tls_{{ instance }}_{{ client }}
-  cmd:
-    - run
-    - name: nohup openvpn --config /etc/openvpn/{{ instance }}/config --status /var/log/openvpn/{{ instance }}.log 1 > /dev/null 2>&1 &
-    - require:
-      - module: test_openvpn_tls_restart_{{ instance }}_{{ client }}
-
 test_openvpn_tls_connect_{{ instance }}_{{ client }}:
   cmd:
     - wait
@@ -108,7 +108,7 @@ test_openvpn_tls_connect_{{ instance }}_{{ client }}:
     The status file is updated every second #}
     - name: sleep 11 && grep ^{{ client }} /var/log/openvpn/{{ instance }}.log
     - watch:
-      - cmd: test_openvpn_tls_restart_{{ instance }}_{{ client }}
+      - cmd: test_openvpn_tls_{{ instance }}_{{ client }}
 
 test_openvpn_tls_cleanup_{{ instance }}_{{ client }}:
   cmd:

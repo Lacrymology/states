@@ -1,4 +1,5 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+# postgresql client side checks
 
 {% set ssl = salt['pillar.get']('postgresql:ssl', False) %}
 include:

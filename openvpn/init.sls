@@ -127,7 +127,7 @@ openvpn_{{ instance }}_config:
     - name: {{ config_dir }}/config
     - user: nobody
     - group: nogroup
-    - source: salt://openvpn/{{ servers[instance]['mode'] }}.jinja2
+    - source: salt://openvpn/{{ mode }}.jinja2
     - template: jinja
     - mode: 400
     - context:
@@ -166,7 +166,7 @@ openvpn_{{ instance }}_client:
     - name: {{ config_dir }}/client.conf
     - user: nobody
     - group: nogroup
-    - source: salt://openvpn/client/{{ servers[instance]['mode'] }}.jinja2
+    - source: salt://openvpn/client/{{ mode }}.jinja2
     - template: jinja
     - mode: 400
     - context:

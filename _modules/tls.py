@@ -712,6 +712,53 @@ def create_ca_signed_cert(
                     )
 
 
+def create_empty_crl(
+        ca_name,
+        ca_dir=None,
+        ca_filename=None,
+        crl_path=None):
+
+    if ca_dir is None:
+        ca_dir = '{0}/{1}'.format(_cert_base_path(), ca_name)
+
+    if ca_filename is None:
+        ca_filename = '{0}_ca_cert'.format(ca_name)
+
+    if crl_path is None:
+        crl_path = '{0}/{1}/crl.pem'.format(
+                _cert_base_path(),
+                ca_name
+                )
+
+    if os.path.exists('{0}'.format(crl_path)):
+        return 'CRL "{0}" already exists'.format(crl_path)
+
+    try:
+        ca_cert = OpenSSL.crypto.load_certificate(
+                OpenSSL.crypto.FILETYPE_PEM,
+                salt.utils.fopen('{0}/{1}.crt'.format(
+                    ca_dir,
+                    ca_filename
+                    )).read()
+                )
+        ca_key = OpenSSL.crypto.load_privatekey(
+                OpenSSL.crypto.FILETYPE_PEM,
+                salt.utils.fopen('{0}/{1}.key'.format(
+                    ca_dir,
+                    ca_filename)).read()
+                )
+    except IOError:
+        return 'There is no CA named "{0}"'.format(ca_name)
+
+    crl = OpenSSL.crypto.CRL()
+    crl_text = crl.export(ca_cert, ca_key)
+
+    with salt.utils.fopen(crl_path, 'w') as f:
+        f.write(crl_text)
+
+    return ('Created empty CRL: "{0}"'.format(crl_path))
+
+
 def revoke_cert(
         ca_name,
         CN,

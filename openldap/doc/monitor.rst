@@ -37,14 +37,3 @@ expected query result for the configured query in this check.
 .. include:: /backup/doc/monitor.inc
 
 .. include:: /backup/doc/monitor_procs.inc
-
-Optional
---------
-
-.. _monitor-openldap_base_through_tls_ssl:
-
-openldap_base_through_tls_ssl
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Same as :ref:`monitor-openldap_base` but through TLS/SSL, only check if
-:ref:`pillar-ldap-ssl` is turned on.

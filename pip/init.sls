@@ -60,7 +60,7 @@ python-setuptools:
     - group: root
     - mode: 550
 
-{%- set version='6.0.3' %}
+{%- set version='6.0.8' %}
 
 pip:
   file:
@@ -75,7 +75,7 @@ pip:
 {%- else %}
     - source: https://pypi.python.org/packages/source/p/pip/pip-{{ version }}.tar.gz
 {%- endif %}
-    - source_hash: md5=1ca6788e57a176abbdf6d99d69f54ae0
+    - source_hash: md5=2332e6f97e75ded3bddde0ced01dbda3
     - archive_format: tar
     - tar_options: z
     - if_missing: {{ opts['cachedir'] }}/pip/pip-{{ version }}

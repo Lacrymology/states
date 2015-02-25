@@ -33,6 +33,22 @@ both index and ``files_archive`` (provided by option ``find-links``).
 
 Default: use :ref:`pillar-files_archive` as pkg source if available (``False``).
 
+.. _pillar-pip-trusted_hosts:
+
+pip:trusted_hosts
+~~~~~~~~~~~~~~~~~
+
+List of trusted hosts - which :doc:`index` will install package from them
+even without :ref:`glossary-HTTPS` or bad/self-signed :doc:`/ssl/doc/index`
+certificate.
+
+.. note::
+
+  If :ref:`pillar-files_archive` is used, it will be automatically added as a
+  trusted host.
+
+Default: No trusted host (``[]``).
+
 .. _pillar-proxy_server:
 
 proxy_server

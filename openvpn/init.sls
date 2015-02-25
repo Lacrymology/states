@@ -196,7 +196,7 @@ openvpn_create_empty_crl_{{ instance }}:
     - ca_dir: '/etc/openvpn'
     - ca_filename: 'ca'
     - ca_name: {{ ca_name }}
-    - crl_path: '/etc/openvpn/{{ instance }}/crl.pem'
+    - crl_file: '/etc/openvpn/{{ instance }}/crl.pem'
     - watch:
       - module: openvpn_ca
 
@@ -351,7 +351,7 @@ openvpn_revoke_client_cert_{{ r_client }}:
     - ca_filename: 'ca'
     - CN: {{ r_client }}
     - cert_dir: '/etc/openvpn/{{ instance }}/clients'
-    - crl_path: {{ config_dir }}/crl.pem
+    - crl_file: '{{ config_dir }}/crl.pem'
     - require:
       - pkg: salt_minion_deps
       - module: openvpn_create_empty_crl_{{ instance }}

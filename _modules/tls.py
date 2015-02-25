@@ -716,7 +716,7 @@ def create_empty_crl(
         ca_name,
         ca_dir=None,
         ca_filename=None,
-        crl_path=None):
+        crl_file=None):
 
     if ca_dir is None:
         ca_dir = '{0}/{1}'.format(_cert_base_path(), ca_name)
@@ -724,14 +724,14 @@ def create_empty_crl(
     if ca_filename is None:
         ca_filename = '{0}_ca_cert'.format(ca_name)
 
-    if crl_path is None:
-        crl_path = '{0}/{1}/crl.pem'.format(
+    if crl_file is None:
+        crl_file = '{0}/{1}/crl.pem'.format(
                 _cert_base_path(),
                 ca_name
                 )
 
-    if os.path.exists('{0}'.format(crl_path)):
-        return 'CRL "{0}" already exists'.format(crl_path)
+    if os.path.exists('{0}'.format(crl_file)):
+        return 'CRL "{0}" already exists'.format(crl_file)
 
     try:
         ca_cert = OpenSSL.crypto.load_certificate(
@@ -753,10 +753,10 @@ def create_empty_crl(
     crl = OpenSSL.crypto.CRL()
     crl_text = crl.export(ca_cert, ca_key)
 
-    with salt.utils.fopen(crl_path, 'w') as f:
+    with salt.utils.fopen(crl_file, 'w') as f:
         f.write(crl_text)
 
-    return ('Created empty CRL: "{0}"'.format(crl_path))
+    return ('Created empty CRL: "{0}"'.format(crl_file))
 
 
 def revoke_cert(
@@ -766,7 +766,7 @@ def revoke_cert(
         ca_filename=None,
         cert_dir=None,
         cert_filename=None,
-        crl_path=None):
+        crl_file=None):
 
     if ca_dir is None:
         ca_dir = '{0}/{1}'.format(_cert_base_path(), ca_name)
@@ -855,12 +855,19 @@ def revoke_cert(
 
     crl_text = crl.export(ca_cert, ca_key)
 
-    if crl_path is None:
-        crl_path = '{0}/{1}/crl.pem'.format(
+    if crl_file is None:
+        crl_file = '{0}/{1}/crl.pem'.format(
                 _cert_base_path(),
                 ca_name
                 )
-    with salt.utils.fopen(crl_path, 'w') as f:
+
+    ret = {}
+    if os.path.isdir('{0}'.format(crl_file)):
+        ret['retcode'] = 1
+        ret['comment'] = 'crl_file "{0}" is an existing directory'.format(crl_file)
+        return ret
+
+    with salt.utils.fopen(crl_file, 'w') as f:
         f.write(crl_text)
 
     return ('Revoked Certificate: "{0}/{1}.crt", '

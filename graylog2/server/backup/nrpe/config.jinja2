@@ -2,6 +2,7 @@
 
 # {{ salt['pillar.get']('message_do_not_modify') }}
 
+{%- set mongodb_suffix = '0-20' %}
 graylog2_backup_mongodb_procs:
   description: Graylog2 Backup MongoDB Process
   command: '/usr/lib/nagios/plugins/check_procs -c 0:1 -u root -a "/usr/local/bin/backup-mongodb graylog2"'
@@ -12,7 +13,7 @@ graylog2_backup:
   check_interval: {{ 12 * 60 }} {#- 12 hours  #}
   freshness_threshold: {{ ((12 * 60) + 10) * 60 }} {#- 12 hours + 10 minutes #}
   arguments:
-    facility: graylog2
+    facility: mongodb-graylog2-{{ mongodb_suffix }}
     warning: {{ salt['pillar.get']('backup:age', 48) }}
   timeout: 55
   dependencies:

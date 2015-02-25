@@ -65,7 +65,7 @@ tests="$*"
 PREPARE_STDOUT_LOG=/root/salt/stdout.prepare
 PREPARE_STDERR_LOG=/root/salt/stderr.prepare
 CUSTOM_CONFIG_DIR=/root/salt/states/test
-BUILD_IDENTITY="integration-$JOB_NAME-$BUILD_NUMBER"
+BUILD_IDENTITY="integration-$JOB_NAME-$BUILD_DISPLAY_NAME"
 
 function timer {
     finish_run_test_time=$(date +%s)

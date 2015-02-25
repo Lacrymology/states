@@ -34,23 +34,23 @@ class Encoding(nap.Resource):
                   |          |           |         |       | postgres=CTc/postgres
 
         '''
-        log.info("Encoding.probe started")
+        log.debug("Encoding.probe started")
         cmd = ['psql', '-l']
-        log.info(cmd)
+        log.debug(cmd)
         output = subprocess.check_output(cmd).split('\n')
         log.debug(output)
         for line in output:
             cols = line.split(' | ')
             if (self.dbname == cols[0].strip() and
                     self.encoding == cols[2].strip()):
-                log.info(self.dbname)
-                log.info('Expect: {0}, found {1}'.format(self.encoding,
+                log.debug(self.dbname)
+                log.debug('Expect: {0}, found {1}'.format(self.encoding,
                                                          cols[2].strip()))
-                log.info("Encoding.probe finished")
+                log.debug("Encoding.probe finished")
                 log.debug("returning %d", 0)
                 return [nap.Metric('encoding', 0, context='encoding')]
 
-        log.info("Ecoding.probe finished")
+        log.debug("Ecoding.probe finished")
         log.debug("returning %d", 1)
         return [nap.Metric('encoding', 1, context='encoding')]
 

@@ -860,7 +860,14 @@ def revoke_cert(
                 _cert_base_path(),
                 ca_name
                 )
-    with salt.utils.fopen(crl_path, 'w') as f:
+
+    ret = {}
+    if os.path.isdir('{0}'.format(crl_file)):
+        ret['retcode'] = 1
+        ret['comment'] = 'crl_file "{0}" is an existing directory'.format(crl_file)
+        return ret
+
+    with salt.utils.fopen(crl_file, 'w') as f:
         f.write(crl_text)
 
     return ('Revoked Certificate: "{0}/{1}.crt", '

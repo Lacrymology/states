@@ -96,6 +96,8 @@ known_hosts:
         {{ key['contents'] | indent(8) }}
     - require:
       - file: /etc/ssh/keys
+    - require_in:
+      - file: /etc/ssh/keys/{{ local }}
       {%- endfor %}
     {%- endfor -%}
   {%- endfor -%}

@@ -11,13 +11,12 @@ ionice -c idle -p $$
 source /usr/local/bin/backup-validate
 validate_archive "$1"
 
-archive_path="$1"
-archive_name=$(basename $archive_path)
+archive_path=$(readlink -f "$1")
 subdir={{ salt['pillar.get']('backup_server:subdir', False)|default(grains['id'], boolean=True) }}
 tmpdir=$(mktemp -d)
-cd ${tmpdir}
+cd "${tmpdir}"
 mkdir "${subdir}"
-mv $archive_path "${subdir}"
+mv "${archive_path}" "${subdir}"
 rsync --archive --quiet --relative ./"${subdir}"/ root@{{ salt['pillar.get']('backup_server:address') }}:/var/lib/backup
 cd /
-rm -rf ${tmpdir}
+rm -rf "${tmpdir}"

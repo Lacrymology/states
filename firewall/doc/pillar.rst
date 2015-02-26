@@ -18,6 +18,9 @@ Example::
         - 22
         - 80
         - 443
+    blacklist:
+      - 1.2.3.4
+      - 5.6.7.8
 
 .. _pillar-ip_addresses:
 
@@ -37,6 +40,15 @@ Dict of protocol (:ref:`glossary-TCP` and :ref:`glossary-UDP`) with inside it th
 allowed from external networks.
 
 Default: Empty dict (``{}``).
+
+.. _pillar-firewall-blacklist:
+
+firewall:blacklist
+~~~~~~~~~~~~~~~~~~
+
+List of all IP addresses which will be blocked.
+
+Default: Empty list (``[]``).
 
 Conditional
 -----------

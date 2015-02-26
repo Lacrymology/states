@@ -25,6 +25,9 @@ COMMIT
 {%- if filter|length > 0 %}
 :INPUT {% if grains['virtual'] == 'openvzve' %}ACCEPT{% else %}DROP{% endif %} [0:0]
 :FORWARD {% if grains['virtual'] == 'openvzve' %}ACCEPT{% else %}DROP{% endif %} [0:0]
+{%- for ip in salt['pillar.get']('firewall:blacklist', []) %}
+-A INPUT -i {% if grains['virtual'] == 'openvzve' %}venet0{% else %}eth0{% endif %} -s {{ ip }}/32 -j DROP
+{%- endfor %}
 -A INPUT -i lo -j ACCEPT
 -A INPUT -p icmp -j ACCEPT
 -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT

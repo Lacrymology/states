@@ -24,7 +24,8 @@ sslyze:
 {%- if files_archive %}
     - source: {{ files_archive }}/mirror/sslyze-{{ version|replace(".", "_") }}-linux{{ bits }}.zip
 {%- else %}
-    - source: https://github.com/iSECPartners/sslyze/releases/download/release-{{ version }}/sslyze-{{ version|replace(".", "_") }}-linux{{ bits }}.zip
+    {#- source: https://github.com/iSECPartners/sslyze #}
+    - source: http://archive.robotinfra.com/mirror/sslyze-{{ version|replace(".", "_") }}-linux{{ bits }}.zip
 {%- endif %}
     - source_hash: md5={{ sum }}
     - if_missing: /usr/local/src/sslyze-{{ version|replace(".", "_") }}-linux{{ bits }}

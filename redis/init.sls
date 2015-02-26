@@ -42,9 +42,10 @@ redis:
       - redis-server: {{ files_archive|replace('file://', '')|replace('https://', 'http://') }}/mirror/{{ filename }}
       - redis-tools: {{ files_archive|replace('file://', '')|replace('https://', 'http://') }}/mirror/{{ redistools }}
 {%- else %}
-      - libjemalloc1: http://ppa.launchpad.net/chris-lea/redis-server/ubuntu/pool/main/j/jemalloc/{{ jemalloc }}
-      - redis-server: http://ppa.launchpad.net/chris-lea/redis-server/ubuntu/pool/main/r/redis/{{ filename }}
-      - redis-tools: http://ppa.launchpad.net/chris-lea/redis-server/ubuntu/pool/main/r/redis/{{ redistools }}
+      {#- source: http://ppa.launchpad.net/chris-lea/redis-server #}
+      - libjemalloc1: http://archive.robotinfra.com/mirror/{{ jemalloc }}
+      - redis-server: http://archive.robotinfra.com/mirror/{{ filename }}
+      - redis-tools: http://archive.robotinfra.com/mirror/{{ redistools }}
 {%- endif %}
   user:
     - present

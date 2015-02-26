@@ -2,6 +2,7 @@
 
 include:
   - apt
+  - rsyslog
 
 /etc/python:
   file:
@@ -26,6 +27,9 @@ python:
     - mode: 444
     - require:
       - file: /etc/python
+      {#- This config contains `syslog` as a handler
+      So, rsyslog service must be running before the consumer (`pysc`, ...) can use it #}
+      - service: rsyslog
 
 {#-
  Return path to

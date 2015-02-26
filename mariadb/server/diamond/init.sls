@@ -6,6 +6,8 @@ include:
   - mariadb.server
   - python.dev
   - salt.minion.diamond
+  {#- mysqlclient-python depends on libssl-dev #}
+  - ssl.dev
 
 mysql_diamond_collector:
   file:
@@ -62,6 +64,7 @@ diamond_mysql_python:
     - require:
       - virtualenv: diamond
       - pkg: python-dev
+      - pkg: ssl-dev
       - pkg: libmariadbclient-dev
     - watch:
       - file: diamond_mysql_python

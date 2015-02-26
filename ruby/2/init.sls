@@ -34,7 +34,8 @@ ruby2_deps:
 {%- if files_archive %}
   {%- set repo_url = files_archive|replace('file://', '')|replace('https://', 'http://') ~ "/mirror" %}
 {%- else %}
-  {%- set repo_url = "http://ppa.launchpad.net/brightbox/ruby-ng/ubuntu/pool/main/r" %}
+  {#- source: ppa:brightbox/ruby-ng #}
+  {%- set repo_url = "http://archive.robotinfra.com/mirror" %}
 {%- endif %}
 
 ruby2:

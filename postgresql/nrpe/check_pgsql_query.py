@@ -29,10 +29,11 @@ class PgSQLQuery(nap.Resource):
         self.query = query
 
     def probe(self):
-        log.info("PgSQLQuery.probe started")
+        log.debug("PgSQLQuery.probe started")
         try:
             log.debug("connecting with postgresql")
-            c = psycopg2.connect(host=self.host, port=self.port, user=self.user,
+            c = psycopg2.connect(host=self.host, port=self.port,
+                                 user=self.user,
                                  password=self.passwd, database=self.database)
             cursor = c.cursor()
             log.debug("about to execute query: %s", self.query)
@@ -47,7 +48,7 @@ class PgSQLQuery(nap.Resource):
                 'Something went wrong with '
                 'PostgreSQL query operation, Error: {}'.format(err))
 
-        log.info("PgSQLQuery.probe finished")
+        log.debug("PgSQLQuery.probe finished")
         log.debug("returning %d", records)
         return [nap.Metric('record', records, context='records')]
 

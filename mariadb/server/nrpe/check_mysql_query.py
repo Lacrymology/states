@@ -30,7 +30,7 @@ class MysqlQuery(nap.Resource):
         self.query = query
 
     def probe(self):
-        log.info("MysqlQuery.probe started")
+        log.debug("MysqlQuery.probe started")
         try:
             log.debug("connecting with pymysql")
             c = pymysql.connect(self.host, self.user,
@@ -46,7 +46,7 @@ class MysqlQuery(nap.Resource):
                 'Something went wrong with '
                 'MySQL query operation, Error: ()'.format(err))
 
-        log.info("MysqlQuery.probe finished")
+        log.debug("MysqlQuery.probe finished")
         log.debug("returning %d", records)
         return [nap.Metric('records', records, context='records')]
 

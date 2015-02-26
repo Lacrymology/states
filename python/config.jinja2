@@ -39,7 +39,7 @@ logging:
         - process_name
         {%- endif %}
     console:
-      level: {% if salt['pillar.get']('__test__', False) %}DEBUG{% else %}ERROR{% endif %}
+      level: {% if salt['pillar.get']('__test__', False) %}INFO{% else %}ERROR{% endif %}
       class: logging.StreamHandler
       formatter: only_message
         {%- if config['dsn'] %}

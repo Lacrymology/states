@@ -23,7 +23,7 @@ log = logging.getLogger("nagiosplugin.apt.half_installed")
 
 class HalfRemoved(nagiosplugin.Resource):
     def probe(self):
-        log.info("HalfRemoved.probe started")
+        log.debug("HalfRemoved.probe started")
         pkgs = []
         dpkg = os.popen('dpkg -l')
         for line in dpkg.readlines():
@@ -32,7 +32,7 @@ class HalfRemoved(nagiosplugin.Resource):
                 log.debug("Half-Removed package: %s", cols[0])
                 pkgs.append(cols[1])
 
-        log.info("HalfRemoved.probe finished")
+        log.debug("HalfRemoved.probe finished")
         log.debug("returning %d", len(pkgs))
         return [nagiosplugin.Metric('halfinstalled', len(pkgs), min=0)]
 

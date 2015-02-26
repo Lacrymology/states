@@ -25,8 +25,8 @@ class BackupFile(nagiosplugin.Resource):
         self.facility = facility
 
     def probe(self):
-        log.info("BackupFile probe started")
-        log.info("Probe backup for facility: %s", self.facility)
+        log.debug("BackupFile probe started")
+        log.debug("Probe backup for facility: %s", self.facility)
 
         files = {}
         log.debug("Searching keys with prefix %s", self.prefix)
@@ -37,8 +37,8 @@ class BackupFile(nagiosplugin.Resource):
             if (key not in files) or (value['date'] > files[key]['date']):
                 log.debug("Adding file to return dict")
                 files.update(file)
-        log.info("%s on S3? %s", self.facility,
-                 str(not files.get(self.facility, None) is None))
+        log.debug("%s on S3? %s", self.facility,
+                  str(not files.get(self.facility, None) is None))
 
         backup_file = files.get(self.facility, {
             'date': datetime.datetime.fromtimestamp(0),
@@ -52,7 +52,7 @@ class BackupFile(nagiosplugin.Resource):
             min=0)
         size_metric = nagiosplugin.Metric('size', backup_file['size'], min=0)
 
-        log.info("BackupFile.probe finished")
+        log.debug("BackupFile.probe finished")
         log.debug("returning age: %s, size: %s", age_metric, size_metric)
         return [age_metric, size_metric]
 
@@ -64,7 +64,7 @@ class BackupFile(nagiosplugin.Resource):
         raise NotImplementedError()
 
     def make_file(self, filename, size):
-        log.info("Creating file dict for: %s(%sB)", filename, size)
+        log.debug("Creating file dict for: %s(%sB)", filename, size)
         match = re.match(r'(?P<facility>.+)-(?P<date>[0-9\-_]{19})',
                          filename)
         if match:

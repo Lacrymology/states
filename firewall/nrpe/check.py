@@ -22,7 +22,7 @@ log = logging.getLogger("nagiosplugin.firewall.rules")
 
 class Rules(nagiosplugin.Resource):
     def probe(self):
-        log.info("Rules.probe started")
+        log.debug("Rules.probe started")
         total = 0
         try:
             proc = subprocess.Popen(['iptables-save'], stdout=subprocess.PIPE)
@@ -32,7 +32,7 @@ class Rules(nagiosplugin.Resource):
             for line in proc.stdout.readlines():
                 if line.startswith('-'):
                     total += 1
-        log.info("Rules.probe finished")
+        log.debug("Rules.probe finished")
         log.debug("Returning %d", total)
         return [nagiosplugin.Metric('rules', total, min=0)]
 

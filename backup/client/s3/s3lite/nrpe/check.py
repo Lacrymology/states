@@ -37,7 +37,7 @@ class BackupAge(nap.Resource):
         self.allow_empty = allow_empty
 
     def probe(self):
-        log.info("BackupAge.probe started")
+        log.debug("BackupAge.probe started")
 
         def log_and_return(value, *msg, **kwargs):
             log_func = log.__getattribute__(kwargs.get('loglevel', 'error'))
@@ -46,7 +46,7 @@ class BackupAge(nap.Resource):
 
             return [nap.Metric('age', value, 'hours')]
 
-        log.info("About to get bucket %s from s3", self.bucket)
+        log.debug("About to get bucket %s from s3", self.bucket)
         log.debug("Connect to s3")
         s3 = boto.connect_s3(self.key, self.secret)
         log.debug("get bucket")
@@ -58,7 +58,7 @@ class BackupAge(nap.Resource):
         log_path = os.path.join(self.prefix.strip('/'), backup_identifier)
         log.debug("getting log key: %s", log_path)
         logkey = bucket.get_key(log_path)
-        log.info("Got log file")
+        log.debug("Got log file")
         if logkey:
             log.debug(logkey)
             backup_mdata = json.loads(logkey.get_contents_as_string())
@@ -74,7 +74,7 @@ class BackupAge(nap.Resource):
                                          '%a, %d %b %Y %H:%M:%S %Z')
                 now = datetime.utcnow()
                 age_in_hours = (now - last).total_seconds() / 60 / 60
-                log.info("BackupAge.probe finished")
+                log.debug("BackupAge.probe finished")
                 return log_and_return(
                     age_in_hours,
                     'Last backup processed %d files',

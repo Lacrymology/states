@@ -1,6 +1,11 @@
 Pillar
 ======
 
+.. warning::
+
+  To not interfer with jobs that are executed with ``test/jenkins/build.sh``
+  pillar key :ref`pillar-salt_master-reactor` must be set to ``False``.
+
 .. include:: /doc/include/add_pillar.inc
 
 - :doc:`/jenkins/doc/index` :doc:`/jenkins/doc/pillar`

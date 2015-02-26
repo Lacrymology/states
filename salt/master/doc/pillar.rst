@@ -112,3 +112,13 @@ salt_master:keep_jobs_hours
 Set the number of hours to keep old job information in the job cache
 
 Default: ``24``.
+
+.. _pillar-salt_master-reactor:
+
+salt_master:reactor
+~~~~~~~~~~~~~~~~~~~
+
+Automatically process most of the common events, such as run ``state.highstate``
+on newly created minion with :doc:`/salt/cloud/doc/index`.
+
+Default: turn it on (``True``).

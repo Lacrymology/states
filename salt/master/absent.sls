@@ -28,18 +28,20 @@ GitPython:
 {% endif %}
 -#}
 
-{%- for file in ('pillars', 'salt') %}
+{%- for file in ('pillars', 'salt', 'reactor') %}
 /srv/{{ file }}:
   file:
     - absent
     - require:
       - pkg: salt-master
-{% endfor %}
+{%- endfor -%}
 
+{%- for prefix in ('job_changes', 'event_debug') %}
 salt-master-job_changes.py:
   file:
     - absent
-    - name: /usr/local/bin/salt-master-job_changes.py
+    - name: /usr/local/bin/salt-master-{{ prefix }}.py
+{%- endfor %}
 
 salt-master-requirements:
   file:

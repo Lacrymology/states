@@ -1,0 +1,12 @@
+{#-
+  Usage of this is governed by a license that can be found in doc/license.rst
+
+  Run highstate once a VM is created by salt-cloud.
+-#}
+{%- raw %}{#- {% endraw -%}
+{{ salt['pillar.get']('message_do_not_modify') }}
+{%- raw %}-#}{% endraw %}
+
+highstate_run:
+  {% if grains['saltversioninfo'] >= (2015, 2, 0, 0) %}local{% else %}cmd{% endif %}.state.highstate:
+    - tgt: {% raw %}{{ data['name'] }}{% endraw %}

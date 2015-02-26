@@ -195,6 +195,12 @@ def run_check(check_name, checks=None):
                                      runas='nagios')
     ret['comment'] = "stdout: '{0}' stderr: '{1}'".format(output['stdout'],
                                                           output['stderr'])
+
+    if output['retcode'] == 0 and output['stderr']:
+        ret['comment'] += "\nCheck is considered fail cos stderr is not empty"
+        ret['result'] = False
+        return ret
+
     ret['result'] = output['retcode'] == 0
     return ret
 

@@ -21,7 +21,8 @@ nodejs:
 {%- if files_archive %}
       - nodejs: {{ files_archive|replace('file://', '')|replace('https://', 'http://') }}/mirror/{{ filename }}
 {%- else %}
-      - nodejs: http://ppa.launchpad.net/chris-lea/node.js/ubuntu/pool/main/n/nodejs/{{ filename }}
+      {#- source: ppa:chris-lea/node.js #}
+      - nodejs: http://archive.robotinfra.com/mirror/{{ filename }}
 {%- endif %}
     - require:
       - pkg: rlwrap

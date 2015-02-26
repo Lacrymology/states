@@ -136,7 +136,8 @@ openerp:
 {%- if files_archive %}
     - source: {{ files_archive }}/mirror/openerp/{{ filename }}.tar.gz
 {%- else %}
-    - source: http://nightly.openerp.com/7.0/nightly/src/{{ filename }}.tar.gz
+    {#- source: http://nightly.odoo.com/7.0/nightly/src/ #}
+    - source: https://archive.robotinfra.com/mirror/openerp/openerp-7.0-20130909-231057.tar.gz
 {%- endif %}
     - source_hash: md5=0e139452d2f0bcd8f09b0a494b3ac839
     - archive_format: tar

@@ -4,6 +4,7 @@ Metrics
 :doc:`/diamond/doc/process`:
 
 * ``openvpn`` - :doc:`index`
+* ``openvpn-backup-file``
 
 OpenVPN
 -------

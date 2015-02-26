@@ -6,6 +6,7 @@
         'dsn': sentry_dsn|default(False),
         'default_dsn': salt['pillar.get']('sentry_dsn', False)
     } -%}
+{%- set is_test = salt['pillar.get']('__test__', False) %}
 {%- if not config['dsn'] and config['default_dsn'] -%}
     {% do config.update({'dsn': config['default_dsn']}) -%}
 {%- endif -%}
@@ -38,11 +39,18 @@ logging:
       filters:
         - process_name
         {%- endif %}
-    console:
-      level: {% if salt['pillar.get']('__test__', False) %}INFO{% else %}ERROR{% endif %}
+    stderr:
+      level: ERROR
       class: logging.StreamHandler
       formatter: only_message
         {%- if config['dsn'] %}
+{%- if is_test %}
+    stdout:
+      level: DEBUG
+      class: logging.StreamHandler
+      formatter: only_message
+      stream: ext://sys.stdout
+{%- endif %}
     sentry:
       level: WARNING
       class: raven.handlers.logging.SentryHandler
@@ -55,7 +63,10 @@ logging:
       level: DEBUG
       handlers:
         - syslog
-        - console
+        - stderr
+{%- if is_test %}
+        - stdout
+{%- endif %}
         {%- if config['dsn'] %}
         - sentry
         {%- endif -%}

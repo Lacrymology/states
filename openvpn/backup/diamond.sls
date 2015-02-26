@@ -14,5 +14,5 @@ openvpn_backup_diamond_resources:
       - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
     - text:
       - |
-        [[backup-openvpn-file]]
+        [[openvpn-backup-file]]
         cmdline = ^\/usr\/local\/bin\/backup-file openvpn

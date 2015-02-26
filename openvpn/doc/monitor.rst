@@ -29,3 +29,17 @@ openvpn_{{ instance }}_port
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 :doc:`index` ``{{ instance }}`` is listening to given port.
+
+.. _monitor-openvpn_backup_procs:
+
+openvpn_backup_procs
+~~~~~~~~~~~~~~~~~~~~
+
+.. include:: /nrpe/doc/check_procs.inc
+
+.. _monitor-openvpn_backup:
+
+openvpn_backup
+~~~~~~~~~~~~~~
+
+Check :doc:`index` backup age and size.

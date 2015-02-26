@@ -154,7 +154,7 @@ call.
 
 Example::
 
-  {%- from 'cron/test.jinja2' import test_cron with context -%}
+  {%- from 'cron/macro.jinja2' import test_cron with context -%}
   {%- call test_cron() %}
   - sls: vim
   - sls: vim.backup

@@ -1,6 +1,6 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
-{%- from 'cron/test.jinja2' import test_cron with context %}
+{%- from 'cron/macro.jinja2' import test_cron with context %}
 {%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 {%- set roles = ('arbiter', 'broker', 'poller', 'reactionner', 'scheduler', 'receiver') %}
 include:

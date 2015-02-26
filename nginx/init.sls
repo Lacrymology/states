@@ -147,7 +147,8 @@ nginx:
 {%- if files_archive %}
       - nginx: {{ files_archive|replace('file://', '')|replace('https://', 'http://') }}/mirror/{{ filename }}
 {%- else %}
-      - nginx: http://nginx.org/packages/mainline/ubuntu/pool/nginx/n/nginx/{{ filename }}
+      {#- source: http://nginx.org/packages/mainline/ubuntu #}
+      - nginx: https://archive.robotinfra.com/mirror/{{ filename }}
 {%- endif %}
     - require:
       - user: web

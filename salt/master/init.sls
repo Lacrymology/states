@@ -24,7 +24,8 @@ include:
     - directory
     - user: root
     - group: root
-    # jenkins user needs execute permission on this folder, thus set bit 1 for ``other``
+    {#- jenkins user needs execute permission on this folder, thus set bit 1 for
+        ``other`` #}
     - mode: 551
 
 {%- if use_ext_pillar %}

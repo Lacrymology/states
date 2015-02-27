@@ -29,6 +29,7 @@ except ImportError:
 
 # Import salt libs
 import salt.utils
+from salt._compat import string_types
 
 
 log = logging.getLogger(__name__)
@@ -163,6 +164,30 @@ def _ca_exists(ca_name, ca_dir=None, ca_filename=None):
     return False
 
 
+def _check_onlyif_unless(onlyif, unless):
+    ret = None
+    retcode = __salt__['cmd.retcode']
+    if onlyif is not None:
+        if not isinstance(onlyif, string_types):
+            if not onlyif:
+                ret = {'comment': 'onlyif execution failed',
+                        'result': True}
+        elif isinstance(onlyif, string_types):
+            if retcode(onlyif) != 0:
+                ret = {'comment': 'onlyif execution failed',
+                        'result': True}
+    if unless is not None:
+        if not isinstance(unless, string_types):
+            if unless:
+                ret = {'comment': 'unless execution succeeded',
+                        'result': True}
+        elif isinstance(unless, string_types):
+            if retcode(unless) == 0:
+                ret = {'comment': 'unless execution succeeded',
+                        'result': True}
+    return ret
+
+
 def create_ca(
         ca_name,
         bits=2048,
@@ -175,7 +200,9 @@ def create_ca(
         OU=None,
         emailAddress='xyz@pdq.net',
         ca_dir=None,
-        ca_filename=None):
+        ca_filename=None,
+        onlyif=None,
+        unless=None):
     '''
     Create a Certificate Authority (CA)
 
@@ -220,6 +247,10 @@ def create_ca(
 
         salt '*' tls.create_ca test_ca
     '''
+    status = _check_onlyif_unless(onlyif, unless)
+    if status is not None:
+        return None
+
     if ca_dir is None:
         ca_dir = '{0}/{1}'.format(_cert_base_path(), ca_name)
 
@@ -330,7 +361,9 @@ def create_csr(
         OU=None,
         emailAddress='xyz@pdq.net',
         cert_dir=None,
-        cert_filename=None):
+        cert_filename=None,
+        onlyif=None,
+        unless=None):
     '''
     Create a Certificate Signing Request (CSR) for a
     particular Certificate Authority (CA)
@@ -376,6 +409,10 @@ def create_csr(
 
         salt '*' tls.create_csr test
     '''
+    status = _check_onlyif_unless(onlyif, unless)
+    if status is not None:
+        return None
+
     if ca_dir is None:
         ca_dir = '{0}/{1}'.format(_cert_base_path(), ca_name)
 

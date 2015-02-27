@@ -32,7 +32,7 @@ class Graylog2Throughput(nagiosplugin.Resource):
         self._max_retry = max_retry
 
     def probe(self):
-        log.info("Graylog2Throughput.probe started")
+        log.debug("Graylog2Throughput.probe started")
         try:
             # /system/throughput sometimes returns 0 (which is normal),
             # retry max_retry times before returns 0
@@ -57,7 +57,7 @@ class Graylog2Throughput(nagiosplugin.Resource):
                 'Invalid response from graylog2 server: {}'.format(
                     self._api_url))
 
-        log.info("Graylog2Throughput finished")
+        log.debug("Graylog2Throughput finished")
         log.debug("returning %d", int(throughput))
         return [
             nagiosplugin.Metric('throughput', int(throughput), min=0)

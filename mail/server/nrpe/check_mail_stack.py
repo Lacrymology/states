@@ -41,8 +41,8 @@ class MailStackHealth(nap.Resource):
                  password,
                  smtp_wait,
                  ssl):
-        log.info("MailStackHealth(%s, %s, %s, <password>, %s, %s)",
-                 imap_server, smtp_server, username, smtp_wait, ssl)
+        log.debug("MailStackHealth(%s, %s, %s, <password>, %s, %s)",
+                  imap_server, smtp_server, username, smtp_wait, ssl)
         if ssl:
             self.imap = imaplib.IMAP4_SSL(imap_server)
             self.smtp = smtplib.SMTP_SSL(smtp_server, 465)
@@ -73,18 +73,18 @@ class MailStackHealth(nap.Resource):
         self.waittime = smtp_wait
 
     def probe(self):
-        log.info("MailStackHealth.probe started")
+        log.debug("MailStackHealth.probe started")
         inboxtest = self.test_send_and_receive_email_in_inbox_mailbox()
         spamtest = self.test_send_and_receive_GTUBE_spam_in_spam_folder()
         virustest = self.test_send_virus_email_and_discarded_by_amavis()
-        log.info("MailStackHealth.probe finished")
+        log.debug("MailStackHealth.probe finished")
         log.debug("returning all(%s)", str((spamtest, inboxtest, virustest)))
         return [nap.Metric('mail_stack_health',
                            all((spamtest, inboxtest, virustest)),
                            context='null')]
 
     def send_email(self, subject, rcpts, body, _from=None, wait=0):
-        log.info("Sending email to %s", rcpts)
+        log.debug("Sending email to %s", rcpts)
         if _from is None:
             _from = self.username
         msg = '''\

@@ -53,7 +53,7 @@ class XMPPCheck(nagiosplugin.Resource):
         self.error = ""
 
     def probe(self):
-        log.info("XMPPCheck.probe started")
+        log.debug("XMPPCheck.probe started")
         xmpp = SendMsg(
             self._jid, self._password, self._jid, 'a test message')
 
@@ -66,7 +66,7 @@ class XMPPCheck(nagiosplugin.Resource):
         if xmpp.connect(
                 reattempt=False, address=self._address, use_tls=self._use_tls):
             xmpp.add_event_handler("failed_auth", raise_failed_auth)
-            log.info("XMPPCheck connected to server")
+            log.debug("XMPPCheck connected to server")
             try:
                 xmpp.process(block=True)
             except sleekxmpp.exceptions.XMPPError as err:

@@ -26,7 +26,7 @@ def elasticsearch_version():
 
 class ClusterNodes(nagiosplugin.Resource):
     def probe(self):
-        log.info("ClusterNode.probe started")
+        log.debug("ClusterNode.probe started")
         major = elasticsearch_version()[0]
         if major < 1:
             rsc = 'nodes/'
@@ -35,7 +35,7 @@ class ClusterNodes(nagiosplugin.Resource):
         log.debug("calling localhost to get cluster %s", rsc)
         req = requests.get('http://127.0.0.1:9200/_cluster/' + rsc)
         log.debug("response: %s", req.content)
-        log.info("ClusterNode.probe finished")
+        log.debug("ClusterNode.probe finished")
         return [nagiosplugin.Metric('nodes', len(req.json()['nodes']), min=0)]
 
 

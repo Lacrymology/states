@@ -65,7 +65,7 @@ class ImageIds(nagiosplugin.Resource):
         self.providers_file = providers_file
 
     def probe(self):
-        log.info("ImageIds.probe started")
+        log.debug("ImageIds.probe started")
         profile_list = pysc.unserialize_yaml(self.profile_file, critical=True)
         providers = pysc.unserialize_yaml(self.providers_file, critical=True)
 
@@ -73,11 +73,14 @@ class ImageIds(nagiosplugin.Resource):
         proc = subprocess.Popen(['salt-cloud',
                                  '--list-images=all',
                                  '--out=yaml'],
+                                stderr=subprocess.PIPE,
                                 stdout=subprocess.PIPE)
         salt_list = yaml.load(proc.stdout)
         if not salt_list:
+            log.error(proc.stderr.read())
             log.error("Can't list any images from providers")
         else:
+            log.debug(proc.stderr.read())
             log.debug("salt list: %s", str(salt_list))
 
             ids = set()
@@ -92,7 +95,7 @@ class ImageIds(nagiosplugin.Resource):
             imgs = set(str(prof['image']) for prof in profile_list.values())
             log.debug("profile images: %s", str(imgs))
             yield nagiosplugin.Metric('missing', imgs - ids)
-            log.info("ImageIds.probe ended")
+            log.debug("ImageIds.probe ended")
 
 
 def check_saltcloud_images(config):

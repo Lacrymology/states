@@ -26,7 +26,7 @@ class SaltDebugEvent(pysc.Application):
         master_conf = os.path.join(syspaths.CONFIG_DIR, 'master')
         opts = salt.config.client_config(master_conf)
 
-        logger.debug("Initailize MasterEvent with %s", opts['sock_dir'])
+        logger.debug("Initialize MasterEvent with %s", opts['sock_dir'])
         event = salt.utils.event.MasterEvent(opts['sock_dir'])
 
         try:

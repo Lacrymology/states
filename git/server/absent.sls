@@ -14,3 +14,11 @@ git-server:
   file:
     - absent
     - name: /var/lib/git-server/.ssh
+
+git_server_user_fake_mailbox_to_stop_userdel_error_log:
+  file:
+    - name: /var/mail/git
+    - managed
+    - makedirs: True
+    - require_in:
+      - user: git-server

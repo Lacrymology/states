@@ -6,6 +6,8 @@
 
 set -x
 
+BUILD_IDENTITY="integration-$JOB_NAME-${BUILD_DISPLAY_NAME/\#/}"
+
 # allow multiple --repo options to get all non-common repositories
 # each value passed to  --repo is relative path to user-specific directory from
 # $WORKSPACE. The structure after all SCM checkout looks like:
@@ -16,7 +18,8 @@ set -x
 # then use --repo repo1 --repo repo2
 options=$(getopt \
     --options "" \
-    --longoptions "repo:,profile:,find-step-longer:,master-timeout:,failfast" \
+    --longoptions \
+      "repo:,profile:,find-step-longer:,master-timeout:,failfast,destroy" \
     -- "$@")
 
 if [[ $? -ne 0 ]]; then
@@ -32,6 +35,10 @@ tests=""
 
 while true; do
     case "$1" in
+        --destroy)
+            sudo salt-cloud --destroy --assume-yes "$BUILD_IDENTITY"
+            exit $?
+            ;;
         --repo)
             shift
             repo="$1"
@@ -65,7 +72,6 @@ tests="$*"
 PREPARE_STDOUT_LOG=/root/salt/stdout.prepare
 PREPARE_STDERR_LOG=/root/salt/stderr.prepare
 CUSTOM_CONFIG_DIR=/root/salt/states/test
-BUILD_IDENTITY="integration-$JOB_NAME-${BUILD_DISPLAY_NAME/\#/}"
 
 function timer {
     finish_run_test_time=$(date +%s)

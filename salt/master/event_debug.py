@@ -9,6 +9,7 @@ Log Salt Events, this is obsolete in 2014.7 with salt runner event
 
 import logging
 import os
+import sys
 
 import pysc
 
@@ -32,7 +33,7 @@ class SaltDebugEvent(pysc.Application):
             for data in event.iter_events(full=True):
                 logger.info("Event: %s", data)
         except KeyboardInterrupt:
-            pass
+            sys.exit(0)
 
 if __name__ == '__main__':
     SaltDebugEvent().run()

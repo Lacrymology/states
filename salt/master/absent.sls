@@ -37,7 +37,7 @@ GitPython:
 {%- endfor -%}
 
 {%- for prefix in ('job_changes', 'event_debug') %}
-salt-master-job_changes.py:
+salt-master-{{ prefix }}.py:
   file:
     - absent
     - name: /usr/local/bin/salt-master-{{ prefix }}.py

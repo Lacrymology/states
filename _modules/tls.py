@@ -176,6 +176,7 @@ def _check_onlyif_unless(onlyif, unless):
             if retcode(onlyif) != 0:
                 ret = {'comment': 'onlyif execution failed',
                         'result': True}
+                log.debug('onlyif execution failed')
     if unless is not None:
         if not isinstance(unless, string_types):
             if unless:
@@ -185,6 +186,7 @@ def _check_onlyif_unless(onlyif, unless):
             if retcode(unless) == 0:
                 ret = {'comment': 'unless execution succeeded',
                         'result': True}
+                log.debug('unless execution succeeded')
     return ret
 
 

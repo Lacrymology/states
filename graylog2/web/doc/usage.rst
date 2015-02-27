@@ -53,7 +53,7 @@ Stream
 
 For creating :doc:`/graylog2/doc/index` streams, see the `official
 documentation
-<https://www.graylog2.org/resources/documentation/general/streams>`_.
+<http://docs.graylog.org/en/1.0/pages/streams.html>`_.
 
 We predefined two streams for two common errors:
 
@@ -77,3 +77,10 @@ We predefined two streams for two common errors:
   * level must be smaller than ``4``
 
     Messages with log levels: err, crit, alert, emerg
+
+Avoid to use ``.*`` in regular expression of rule for stream, it's slow and
+will be ``Paused`` by :doc:`index`.
+See `Stream Processing Runtime Limits
+<http://docs.graylog.org/en/1.0/pages/streams.html#stream-processing-runtime
+-limits>`_
+for more details.

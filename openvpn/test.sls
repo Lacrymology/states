@@ -58,23 +58,9 @@ test_openvpn_{{ instance }}:
         {#-
         Testing conectivity by:
           - copy the client cert
-          - change the interval to update the status file every second
           - starting the client
           - grep the status file for the client's common name
         #}
-test_openvpn_tls_restart_{{ instance }}:
-  module:
-    - run
-    - name: service.stop
-    - m_name: openvpn-{{ instance }}
-    - require:
-      - sls: openvpn
-  cmd:
-    - run
-    - name: nohup openvpn --config /etc/openvpn/{{ instance }}/config --status /var/log/openvpn/{{ instance }}.log 1 > /dev/null 2>&1 &
-    - require:
-      - module: test_openvpn_tls_restart_{{ instance }}
-
             {%- for client in servers[instance]['clients'] -%}
                 {%- if client not in servers[instance]['revocations'] %}
 test_openvpn_tls_{{ instance }}_{{ client }}:
@@ -86,7 +72,6 @@ test_openvpn_tls_{{ instance }}_{{ client }}:
     - mode: 750
     - require:
       - monitoring: test
-      - cmd: test_openvpn_tls_restart_{{ instance }}
   module:
     - run
     - name: archive.unzip
@@ -105,7 +90,7 @@ test_openvpn_tls_connect_{{ instance }}_{{ client }}:
   cmd:
     - wait
     {#- Wait 10 seconds for OpenVPN client to connect
-    The status file is updated every second #}
+    The status file is updated every second if the __test__ pillar key is True #}
     - name: sleep 11 && grep ^{{ client }} /var/log/openvpn/{{ instance }}.log
     - watch:
       - cmd: test_openvpn_tls_{{ instance }}_{{ client }}
@@ -119,6 +104,7 @@ test_openvpn_tls_cleanup_{{ instance }}_{{ client }}:
     - full: True
     - require:
       - cmd: test_openvpn_tls_connect_{{ instance }}_{{ client }}
+      - pkg: salt_minion_deps
   file:
     - absent
     - name: /tmp/openvpn_{{ client }}
@@ -126,9 +112,9 @@ test_openvpn_tls_cleanup_{{ instance }}_{{ client }}:
       - module: test_openvpn_tls_cleanup_{{ instance }}_{{ client }}
 
                 {%- endif %}{#- client not in revocations list -#}
-            {%- endfor -%}
+            {%- endfor %}{#- clients #}
         {%- endif %}{#- tls mode -#}
-    {%- endfor -%}
+    {%- endfor %}{#- instances -#}
 {%- endif %}{#- servers is iterable #}
 
 extend:

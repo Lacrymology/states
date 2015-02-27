@@ -73,11 +73,14 @@ class ImageIds(nagiosplugin.Resource):
         proc = subprocess.Popen(['salt-cloud',
                                  '--list-images=all',
                                  '--out=yaml'],
+                                stderr=subprocess.PIPE,
                                 stdout=subprocess.PIPE)
         salt_list = yaml.load(proc.stdout)
         if not salt_list:
+            log.error(proc.stderr.read())
             log.error("Can't list any images from providers")
         else:
+            log.debug(proc.stderr.read())
             log.debug("salt list: %s", str(salt_list))
 
             ids = set()

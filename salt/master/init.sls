@@ -19,7 +19,8 @@ include:
   - salt
   - ssh.client
 
-/srv/salt:
+{%- for dirname in ('salt', 'reactor') %}
+/srv/{{ dirname }}:
   file:
     - directory
     - user: root
@@ -27,6 +28,35 @@ include:
     {#- jenkins user needs execute permission on this folder, thus set bit 1 for
         ``other`` #}
     - mode: 551
+    - require_in:
+      - file: /etc/salt/master
+{%- endfor -%}
+
+{%- for dirname in ('create', 'destroy', 'job') %}
+/srv/reactor/{{ dirname }}:
+  file:
+    - directory
+    - user: root
+    - group: root
+    - mode: 550
+    - require:
+      - file: /srv/reactor
+    - require_in:
+      - file: /etc/salt/master
+{%- endfor %}
+
+/srv/reactor/create/highstate.sls:
+  file:
+    - managed
+    - source: salt://salt/master/highstate.jinja2
+    - user: root
+    - group: root
+    - template: jinja
+    - mode: 440
+    - require:
+      - file: /srv/reactor/create
+    - require_in:
+      - file: /etc/salt/master
 
 {%- if use_ext_pillar %}
 /srv/pillars:
@@ -78,16 +108,18 @@ salt-master-requirements:
     - require:
       - file: /srv/salt
 
-salt-master-job_changes.py:
+{%- for prefix in ('job_changes', 'event_debug') %}
+salt-master-{{ prefix }}.py:
   file:
     - managed
-    - name: /usr/local/bin/salt-master-job_changes.py
+    - name: /usr/local/bin/salt-master-{{ prefix }}.py
     - user: root
     - group: root
     - mode: 550
-    - source: salt://salt/master/job_changes.py
+    - source: salt://salt/master/{{ prefix }}.py
     - require:
       - file: /usr/local
+{%- endfor -%}
 
 {%- from "macros.jinja2" import salt_version,salt_deb_version with context %}
 {%- set version = salt_version() %}

@@ -43,4 +43,14 @@ extension_modules: {{ opts['cachedir'] }}/extmods
 sentry_common: {{ sentry_dsn }}
 sentry_handler:
   dsn: requests+{{ sentry_dsn }}
-{%- endif %}
+{%- endif -%}
+
+{%- if salt['pillar.get']('salt_master:reactor', True) %}
+reactor:
+  - 'salt/cloud/*/created':
+    - /srv/reactor/create/*.sls
+  - 'salt/cloud/*/destroyed':
+    - /srv/reactor/destroy/*.sls
+  - 'salt/job/*/ret/*':
+    - /srv/reactor/job/*.sls
+{%- endif -%}

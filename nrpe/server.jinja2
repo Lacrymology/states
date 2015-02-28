@@ -46,8 +46,15 @@ nrpe_group=nagios
  file to allow only the specified host to connect to the port
  you are running this daemon on.
  NOTE: This option is ignored if NRPE is running under either inetd or xinetd
+ No need to care about duplicate host or , in the end of line, the daemon
+ can work perfectly with that.
 #}
-allowed_hosts={% for host in salt['pillar.get']('shinken_pollers', []) -%}
+allowed_hosts= {%- if salt['pillar.get']('__test__', False) -%}
+                 {% for my_ip in grains['ipv4'] -%}
+                   {{ my_ip }},
+                 {%- endfor %}
+               {%- endif -%}
+    {%- for host in salt['pillar.get']('shinken_pollers', []) -%}
     {{ host }}
     {%- if not loop.last %},{% endif -%}
 {%- endfor -%}

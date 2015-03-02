@@ -5,3 +5,4 @@ include:
   - raven.nrpe
   - rsyslog.nrpe
   - cron.nrpe
+  - requests.nrpe

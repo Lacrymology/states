@@ -5,6 +5,7 @@ include:
   - raven
   - rsyslog
   - cron
+  - requests
 
 /usr/bin/mail:
   file:
@@ -17,6 +18,7 @@ include:
       - module: raven
       - service: rsyslog
       - module: pysc
+      - module: requests
 
 /usr/bin/ravenmail:
   file:

@@ -1,8 +1,18 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+{%- set is_test = salt['pillar.get']('__test__', False) %}
+include:
+  - amavis.diamond.absent
+{%- if is_test %}
+  - diamond.absent
+{%- endif %}
 
 amavis:
   service:
     - dead
+{%- if is_test %}
+    - require:
+      - service: diamond
+{%- endif %}
   pkg:
     - purged
     - name: amavisd-new

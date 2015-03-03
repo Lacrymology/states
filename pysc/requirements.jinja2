@@ -9,7 +9,11 @@ requests==2.4.3
   as pysc formula ends in the same python environment as salt, hardcode a
   working version. #}
 psutil==1.2.1
+raven==4.1.1
 pysc==0.3.11
 {%- else %}
 http://archive.robotinfra.com/pip/pysc-0.3.11.tar.bz2
+psutil==1.2.1
+raven==4.1.1
+requests==2.4.3
 {%- endif %}

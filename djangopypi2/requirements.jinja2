@@ -21,7 +21,7 @@ raven==4.1.1
 {%- if salt['pillar.get']('files_archive', False) %}
 django-insecure==0.1
 {%- else %}
--e git+git@github.com:bclermont/django-insecure.git@ce529583fc02db20a5ea2b34f1ee8f3d4538a14e#egg=django-insecure
+https://github.com/bclermont/django-insecure/archive/v0.2.tar.gz
 {%- endif %}
 ipython==0.13.2
 {%- set smtp = salt['pillar.get']('djangopypi2:email', False)|default(salt['pillar.get']('smtp'), boolean=True) -%}

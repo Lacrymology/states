@@ -27,7 +27,7 @@ py2cairo==1.8.10
 django-insecure==0.1
 {%- else %}
 http://cairographics.org/releases/py2cairo-1.8.10.tar.gz
--e git+git@github.com:bclermont/django-insecure.git@ce529583fc02db20a5ea2b34f1ee8f3d4538a14e#egg=django-insecure
+https://github.com/bclermont/django-insecure/archive/v0.2.tar.gz
 {%- endif %}
 Twisted==13.1.0
 {%- if salt['pillar.get']('graphite:smtp', False) %}

@@ -61,8 +61,10 @@ class LintCheckFinalNewline(LintCheck):
                     ret = False
                     error_paths.append(path)
 
-        template = 'file: {0} doesn\'t end with newline character'
-        print '\n'.join([template.format(path) for path in error_paths])
+        if ret is False:
+            self.print_header('Line must end with newline.')
+            template = 'file: {0} doesn\'t end with newline character'
+            print '\n'.join([template.format(path) for path in error_paths])
 
         return ret
 

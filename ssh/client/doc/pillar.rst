@@ -11,8 +11,13 @@ Optional
 Example::
 
   ssh:
-    known_hosts:
-      github.com: github.com ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==
+    hosts:
+      github.com:
+        fingerprint: 16:27:ac:a5:76:28:2d:36:63:1b:56:4d:eb:df:a6:48
+      anotherhost.com:
+        port: 22022
+    forgot_hosts:
+      bitbucket.org:
     keys:
       - contents: |
             -----BEGIN RSA PRIVATE KEY-----
@@ -35,32 +40,65 @@ Example::
         MIIEdsfadsfsdaXXXXXXXXXXX...
         -----END RSA PRIVATE KEY-----
 
-.. _pillar-ssh-known_hosts:
+.. _pillar-ssh-hosts:
 
-ssh:known_hosts
+ssh:hosts
 ~~~~~~~~~~~~~~~
 
-`Known hosts <http://en.wikibooks.org/wiki/OpenSSH/Client_Configuration_Files#.7E.2F.ssh.2Fknown_hosts>`_ that will added to ``.ssh/known_hosts``.
-Data formed as a dictionary ``domain_name``:``server public key``
-with server public key can be obtained by run ``ssh-keyscan domain``
+`Known hosts <http://en.wikibooks.org/wiki/OpenSSH/Client_Configuration_Files#
+.7E.2F.ssh.2Fhosts>`_ that will be managed.
+Data formed as list of dictionaries, which in turn has structure:
+``domain_name:{'port': PORT_NUMBER, 'fingerprint': FINGERPRINT}``.
+``port`` and ``fingerprint`` can be omitted.
 
-Example::
+Default: no known host (``{}``).
 
-    $ ssh-keyscan github.com
-    # github.com SSH-2.0-OpenSSH_5.9p1 Debian-5ubuntu1+github5
-    github.com ssh-rsa
-    AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==
+.. _pillar-ssh-hosts-hostname-port:
 
-The public key of `github.com <https://github.com>`_ is ``AAAAB......aQ==``.
-Though, prefix the key with ``github.com ssh-rsa`` still valid and improve
-redability.
+ssh:hosts:{{ hostname }}:port
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. note::
+Which port of ``hostname`` will be used to check for hostkey.
 
-  github.com and `bitbucket.org <https://bitbucket.org>`_ public keys are
-  already managed by this formula as they are often required by other one.
+Default: (``22``).
 
-Default: no custom known hosts (``{}``).
+.. _pillar-ssh-hosts-hostname-fingerprint:
+
+ssh:hosts:{{ hostname }}:fingerprint
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Using this pillar to avoid :doc:`/ssh/doc/index` to ``hostname`` when
+it is compromised, which might changed host fingerprint.
+Also avoid :ref:`glossary-DNS` attack, which may point domain
+of ``hostname`` to another host.
+
+Fingerprint can be obtained by following steps::
+
+    $ ssh-keyscan github.com > /tmp/github_hostkey
+    # github.com SSH-2.0-libssh-0.6.0
+    $ ssh-keygen -lf /tmp/github_hostkey
+    2048 16:27:ac:a5:76:28:2d:36:63:1b:56:4d:eb:df:a6:48 github.com (RSA)
+
+Default: no set (``None``).
+
+.. _pillar-ssh-hosts-hostname-additional:
+
+ssh:hosts:{{ hostname }}:additional
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+List of additional :doc:`/ssh/doc/index` configuration for ``hostname``.
+
+Default: no additional configuration (``[]``).
+
+.. _pillar-ssh-forgot_hosts:
+
+ssh:forgot_hosts
+~~~~~~~~~~~~~~~~
+
+Hosts to be removed from list of known hosts. Must not already provided
+in :ref:`pillar-ssh-hosts`.
+
+Default: no remove any known host (``{}``).
 
 .. _pillar-ssh-keys:
 

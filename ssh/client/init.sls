@@ -20,43 +20,51 @@ openssh-client:
     - require:
       - cmd: apt_sources
 
-ssh_known_hosts:
+{%- from 'ssh/common.sls' import root_home with context %}
+{%- set root_home = root_home() -%}
+
+{%- for domain in salt['pillar.get']('ssh:hosts', {}) %}
+ssh_known_host_{{ domain }}:
+  ssh_known_hosts:
+    - present
+    - name: {{ domain }}
+  {%- set port = salt['pillar.get']('ssh:hosts:' ~ domain ~ ':port', 22) %}
+  {%- if port %}
+    - port: {{ port }}
+  {%- endif %}
+  {%- set fingerprint = salt['pillar.get']('ssh:hosts:' ~ domain ~ ':fingerprint', None) %}
+  {%- if fingerprint %}
+    - fingerprint: {{ fingerprint }}
+  {%- endif %}
+    - config: /etc/ssh/ssh_known_hosts
+    - require_in:
+    {#- under-hood ssh_known_hosts and pkg installing will in charge of make
+        sure system wide ssh_known_hosts file exist, this is require_in
+        system_ssh_known_hosts to use it as API #}
+      - file: system_ssh_known_hosts
+    - require:
+      - pkg: openssh-client
+{%- endfor %}
+
+{#- forgot_hosts formed as a dict to be consistent with its counter part - hosts #}
+{%- for domain in salt['pillar.get']('ssh:forgot_hosts', {}) %}
+ssh_forgot_host_{{ domain }}:
+  ssh_known_hosts:
+    - absent
+    - name: {{ domain }}
+    - require_in:
+      - file: system_ssh_known_hosts
+    - require:
+      - pkg: openssh-client
+{%- endfor %}
+
+system_ssh_known_hosts:
   file:
     - managed
     - name: /etc/ssh/ssh_known_hosts
     - user: root
     - group: root
-    - mode: 640
-    - require:
-      - pkg: openssh-client
-
-{%- from 'ssh/common.sls' import root_home with context %}
-{%- set root_home = root_home() -%}
-
-{%- for domain, id in salt['pillar.get']('ssh:known_hosts', {}).items() %}
-ssh_{{ domain }}:
-  file:
-    - append
-    - name: /etc/ssh/ssh_known_hosts
-    - makedirs: True
-    - text: |
-        {{ id }}
-    - require:
-      - file: {{ root_home }}/.ssh
-      - file: ssh_known_hosts
-    - require_in:
-      - file: known_hosts
-{%- endfor %}
-
-known_hosts:
-  file:
-    - append
-    - name: /etc/ssh/ssh_known_hosts
-    - text: |
-        github.com ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==
-        bitbucket.org ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAubiN81eDcafrgMeLzaFPsw2kNvEcqTKl/VqLat/MaB33pZy0y3rJZtnqwR2qOOvbwKZYKiEO1O6VqNEBxKvJJelCq0dTXWT5pbO2gDXC6h6QDXCaHo6pOHGPUy+YBaGQRGuSusMEASYiWunYN0vCAI8QaXnWMXNMdFP3jHAJH0eDsoiGnLPBlBp4TNm6rYI74nMzgz3B9IikW4WVK+dc8KZJZWYjAuORU3jc1c/NPskD2ASinf8v3xnfXeukU0sJ5N6m5E8VLjObPEO+mN2t/FZTMZLiFqPWc/ALSqnMnnhwrNi2rbfg/rd/IpL8Le3pSBne8+seeFVBoGqzHM9yXw==
-    - require:
-      - file: ssh_known_hosts
+    - mode: 444
 
 /etc/ssh/keys:
   file:

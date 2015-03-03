@@ -16,7 +16,7 @@ amavis_diamond_resources:
     - text:
       - |
         [[amavis]]
-        name = ^amavisd
+        cmdline = .*amavisd.+
 
 /etc/diamond/collectors/AmavisCollector.conf:
   file:

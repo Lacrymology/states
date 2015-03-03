@@ -1,7 +1,6 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
 # {{ salt['pillar.get']('message_do_not_modify') }}
-{%- if salt['pillar.get']('files_archive', False) %}
 requests==2.4.3
 {#- psutil 2.0.0 don't work with
   http://docs.saltstack.com/en/latest/ref/modules/all/salt.modules.ps.html#module-salt.modules.ps
@@ -10,10 +9,8 @@ requests==2.4.3
   working version. #}
 psutil==1.2.1
 raven==4.1.1
+{%- if salt['pillar.get']('files_archive', False) %}
 pysc==0.3.11
 {%- else %}
 http://archive.robotinfra.com/pip/pysc-0.3.11.tar.bz2
-psutil==1.2.1
-raven==4.1.1
-requests==2.4.3
 {%- endif %}

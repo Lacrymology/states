@@ -43,7 +43,11 @@ case "$1" in
         log_daemon_msg "Starting PgBouncer" $NAME
         test -d $PIDDIR || install -d -o postgres -g postgres -m 2775 $PIDDIR
         $SSD --start --chuid $RUNASUSER --oknodo -- $OPTS 2> /dev/null
-        log_end_msg $?
+        RETVAL=$?
+        if [ "$RETVAL" -eq 0 ]; then
+            initctl emit pgbouncer-started --no-wait
+        fi
+        log_end_msg "$RETVAL"
         ;;
 
     stop)

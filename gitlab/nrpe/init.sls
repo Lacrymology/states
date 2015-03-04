@@ -12,7 +12,6 @@ include:
   - postgresql.server.nrpe
   - python.nrpe
   - redis.nrpe
-  - rsyslog.nrpe
   - ssh.server.nrpe
 {%- if salt['pillar.get']('gitlab:ssl', False) %}
   - ssl.nrpe

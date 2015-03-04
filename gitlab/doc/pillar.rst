@@ -7,7 +7,6 @@ Pillar
 - :doc:`/git/doc/index` :doc:`/git/doc/pillar`
 - :doc:`/nginx/doc/index` :doc:`/nginx/doc/pillar`
 - :doc:`/postgresql/doc/index` :doc:`/postgresql/doc/pillar`
-- :doc:`/rsyslog/doc/index` :doc:`/rsyslog/doc/pillar`
 - :doc:`/ssh/server/doc/index` :doc:`/ssh/server/doc/pillar`
 
 .. warning::

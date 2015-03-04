@@ -47,7 +47,6 @@ Related Formulas
 * :doc:`/postgresql/doc/index`
 * :doc:`/python/doc/index`
 * :doc:`/redis/doc/index`
-* :doc:`/rsyslog/doc/index`
 * :doc:`/ruby/doc/index`
 * :doc:`/ssh/doc/index`
 * :doc:`/ssl/doc/index`

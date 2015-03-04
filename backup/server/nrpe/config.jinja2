@@ -1,12 +1,12 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+{%- from 'nrpe/passive.jinja2' import passive_interval with context -%}
 
 # {{ salt['pillar.get']('message_do_not_modify') }}
 
 backups_last:
   description: Backups
   command: sudo /usr/lib/nagios/plugins/check_backups.py --formula=backup.server --check=backups_last
-  check_interval: 60 {#- 1 hour  #}
-  freshness_threshold: {{ (60 + 10) * 60 }} {#- 1 hour + 10 minutes #}
+  {{ passive_interval(6 * 60) }}
   timeout: 55
   dependencies:
     {#- no alert if load is too high #}

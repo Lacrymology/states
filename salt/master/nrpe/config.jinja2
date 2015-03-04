@@ -1,5 +1,5 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
-
+{%- from 'nrpe/passive.jinja2' import passive_interval with context -%}
 {%- set timeout = 30 -%}
 {%- set workers = salt['pillar.get']('salt_master:workers', 5) -%}
 
@@ -42,8 +42,7 @@ salt_master_return_port_remote:
     {%- if not salt['pillar.get']('__test__', False) %}
 salt_master_mine:
   description: Salt Master Unfinished Minions
-  check_interval: {{ 12 * 60 }} {#- 12 hours  #}
-  freshness_threshold: {{ ((12 * 60) + 10) * 60 }} {#- 12 hours + 10 minutes #}
+  {{ passive_interval(12 * 60) }} {#- 12 hours #}
   dependencies:
     - salt_master_procs
     {#- no alert if load is too high #}

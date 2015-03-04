@@ -1,5 +1,5 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
-
+{%- from 'nrpe/passive.jinja2' import passive_interval with context -%}
 {%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
 
 # {{ salt['pillar.get']('message_do_not_modify') }}
@@ -10,7 +10,6 @@
   {%- set max_age = salt['pillar.get']('salt_archive:max_age', 3600) %}
 salt_archive_timestamp:
   description: Salt Archive Synchronization
-  check_interval: {{ 15 * 60 }} {#- 15 hours #}
-  freshness_threshold: {{ ((15 * 60) + 10) * 60 }} {#- 24 hours + 10 minutes #}
+  {{ passive_interval(15 * 60) }} {#- 15 hours #}
   command: 'sudo /usr/lib/nagios/plugins/check_file_age -w {{ max_age }} -c {{ max_age }} {{ opts['cachedir'] }}/sync_timestamp.dat'
 {%- endif -%}

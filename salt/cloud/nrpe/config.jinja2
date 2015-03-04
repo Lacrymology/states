@@ -1,11 +1,12 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+{%- from 'nrpe/passive.jinja2' import passive_interval with context -%}
 
 # {{ salt['pillar.get']('message_do_not_modify') }}
 
 salt_cloud_configurations_check:
   description: Salt-Cloud Image Monitor
   command: sudo /usr/lib/nagios/plugins/check_saltcloud_images.py --formula=salt.cloud --check=salt_cloud_configurations_check
-  check_interval: {{ 24 * 60 }} {# 1 day #}
+  {{ passive_interval(24 * 60) }} {#- 1 day #}
   timeout: 120
   arguments:
     profiles: /etc/salt/cloud.profiles

@@ -1,4 +1,5 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+{%- from 'nrpe/passive.jinja2' import passive_interval with context -%}
 
 {%- set version = '0.20.6' -%}
 {%- set timeout = 45 -%}
@@ -39,14 +40,14 @@ graylog2_incoming_logs:
 graylog2_input_gelf:
   description: Graylog2 GELF Input
   command: /usr/lib/nagios/plugins/check_udp_listen 12201
-  check_interval: 60
+  {{ passive_interval(15) }} {#- 15 minutes #}
   dependencies:
     - graylog2_procs
 
 graylog2_input_syslog:
   description: Graylog2 GELF Input
   command: /usr/lib/nagios/plugins/check_udp_listen 1514
-  check_interval: 60
+  {{ passive_interval(15) }} {#- 15 minutes #}
   dependencies:
     - graylog2_procs
 

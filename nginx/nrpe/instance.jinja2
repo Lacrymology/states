@@ -1,4 +1,5 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+{%- from 'nrpe/passive.jinja2' import passive_interval with context -%}
 
 {%- macro nginx_instance(formula, http=True, http_uri='/', http_result=None, http_port=80, https_uri=None, https_result="200 OK", pillar_prefix=None, timeout=False, domain_name=None, allow_ssl_redirect=True, check_interval=False, deployment=None, extra_dependencies=()) -%}
     {%- set first_ip = salt['network.ip_addrs']()[0] -%}
@@ -33,8 +34,7 @@
   timeout: {{ timeout }}
     {%- endif %}
     {%- if check_interval %}
-  check_interval: {{ check_interval }}
-  freshness_threshold: {{ (check_interval + 10) * 60 }} {#- check_interval + 10 minutes in seconds #}
+  {{ passive_interval(check_interval) }}
     {%- endif %}
   dependencies:
     - nginx_master
@@ -55,8 +55,7 @@
   timeout: {{ timeout }}
     {%- endif -%}
     {%- if check_interval %}
-  check_interval: {{ check_interval }}
-  freshness_threshold: {{ (check_interval + 10) * 60 }} {#- check_interval + 10 minutes in seconds #}
+  {{ passive_interval(check_interval) }}
     {%- endif %}
   dependencies:
     - nginx_master
@@ -66,8 +65,7 @@
 
 {{ formula }}_nginx_https_certificate:
   description: {{ deployment|capitalize }} HTTPS Certificate Expiration
-  check_interval: {{ 24 * 60 }} {#- a day  #}
-  freshness_threshold: {{ ((24 * 60) + 10) * 60 }} {#- 24 hours + 10 minutes #}
+  {{ passive_interval(24 * 60) }} {#- a day  #}
   command: /usr/lib/nagios/plugins/check_http -S -H {{ domain_name }} -C {{ salt['pillar.get']('ssl:expiry_days', 15) }} -I {{ first_ip }}
         {%- if timeout %} --timeout={{ timeout }}{% endif -%}
         {%- if __test__ %} -v{%- endif %}
@@ -80,8 +78,7 @@
   {% if domain_name|replace('.', '')|int == 0 %} {# only check if it is a domain, not IP. int returns 0 for unconvertible value #}
 {{ formula }}_ssl_configuration:
   description: {{ deployment|capitalize }} SSL Configuration
-  check_interval: {{ 24 * 60 }} {#- a day  #}
-  freshness_threshold: {{ ((24 * 60) + 10) * 60 }} {#- 24 hours + 10 minutes #}
+  {{ passive_interval(24 * 60) }} {#- a day  #}
   command: /usr/lib/nagios/plugins/check_ssl_configuration.py --formula={{ formula }} --check={{ formula }}_ssl_configuration
   timeout: 55
   arguments:

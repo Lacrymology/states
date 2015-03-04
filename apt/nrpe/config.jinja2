@@ -1,17 +1,18 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+{%- from 'nrpe/passive.jinja2' import passive_interval with context -%}
 
 # {{ salt['pillar.get']('message_do_not_modify') }}
 
-apt:
-  {%- set timeout = 50 %} {#- seconds  #}
-  description: APT Updates
-  {#-
+{#-
   Services that don't affect production and that have high cost in CPU, I/O
   and RAM to performs.
   Run them only each 6 hours.
-  #}
-  check_interval: {{ 6 * 60 }} {#- 6 hours #}
-  freshness_threshold: {{ ((6 * 60) + 10) * 60 }} {#- 6 hours + 10 minutes #}
+-#}
+{%- set timeout = 50 %} {#- seconds #}
+
+apt:
+  description: APT Updates
+  {{ passive_interval(6 * 60) }}
   notifications_enabled: 0
   {#- enable only notification for real error #}
   notification_options: n
@@ -29,13 +30,12 @@ apt:
 
 apt_rc:
   description: APT Not-Purged
-  check_interval: {{ 6 * 60 }} {#- 6 hours #}
-  freshness_threshold: {{ ((6 * 60) + 10) * 60 }} {#- 6 hours + 10 minutes #}
+  {{ passive_interval(6 * 60) }}
   notifications_enabled: 0
   notification_options: n
   {#- if error, retry 5 times every 3 minutes after any failure, for a max of 15
       minutes #}
   retry_interval: 3
   max_check_attempts: 5
-  timeout: 50
+  timeout: {{ timeout }}
   command: /usr/lib/nagios/plugins/check_apt-rc.py --formula=apt --check=apt_rc

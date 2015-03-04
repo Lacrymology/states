@@ -31,6 +31,7 @@ redis:
     - order: 50
     - watch:
       - file: redis
+      - file: /etc/init.d/redis-server
       - pkg: redis
       - user: redis
   pkg:
@@ -50,6 +51,17 @@ redis:
   user:
     - present
     - shell: /bin/false
+    - require:
+      - pkg: redis
+
+/etc/init.d/redis-server:
+  file:
+    - managed
+    - source: salt://redis/sysvinit.jinja2
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 550
     - require:
       - pkg: redis
 

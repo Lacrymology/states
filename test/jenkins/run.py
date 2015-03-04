@@ -105,6 +105,7 @@ def main(suffix='> /root/salt/stdout.log 2> /root/salt/stderr.log'):
         ))
     else:
         command = ' '.join((integration_py, suffix))
+    print command
     os.system(command)
 
 if __name__ == '__main__':

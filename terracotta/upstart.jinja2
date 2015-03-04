@@ -2,7 +2,9 @@
 
 # {{ salt['pillar.get']('message_do_not_modify') }}
 
-start on (local-filesystems and net-device-up IFACE=eth0)
+start on (local-filesystems
+          and net-device-up IFACE=eth0
+          and started rsyslog)
 stop  on shutdown
 
 setuid terracotta

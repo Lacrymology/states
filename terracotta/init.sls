@@ -46,6 +46,7 @@ terracotta:
       - file: /var/log/terracotta/server-logs
       - file: /var/lib/terracotta/server-data
       - host: hostname
+      - service: rsyslog
     - watch:
       - user: terracotta
       - file: terracotta

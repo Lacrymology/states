@@ -66,6 +66,7 @@ users_list = set()
 unclean = set()
 
 NO_TEST_STRING = '-*- ci-automatic-discovery: off -*-'
+IGNORED_RESULTS = ('One or more requisite failed',)
 
 all_states = client('cp.list_states')
 ran_states_cntr = collections.Counter()
@@ -688,7 +689,9 @@ class States(unittest.TestCase):
         global ran_states_cntr
         ran_states_cntr.update(sid.split('|')[0] for sid in output)
         for state in output:
-            if not output[state]['result']:
+            if not output[state]['result'] and \
+                output[state]['comment'] not in IGNORED_RESULTS:
+
                 # remove not useful keys
                 for key in ('result', '__run_num__'):
                     try:

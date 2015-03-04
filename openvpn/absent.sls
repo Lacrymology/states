@@ -9,9 +9,14 @@
 
 {{ upstart_absent('openvpn-' + instance) }}
 
-/etc/openvpn/{{ instance }}:
+        {%- if loop.last %}
+openvpn_absent_last_instance:
+        {%- else %}
+openvpn_absent_{{ instance }}:
+        {%- endif %}
   file:
     - absent
+    - name: /etc/openvpn/{{ instance }}
     - require:
       - service: openvpn-{{ instance }}
     {# /var/log/upstart/network-interface- #}
@@ -20,6 +25,8 @@
 openvpn:
   pkg:
     - purged
+  require:
+    - file: openvpn_absent_last_instance
 
 /etc/default/openvpn:
   file:

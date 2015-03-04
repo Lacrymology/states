@@ -84,6 +84,7 @@ openvpn_ca:
     - O: {{ organization }}
     - OU: {{ organizational_unit }}
     - emailAddress: {{ email }}
+    - unless: test -f /etc/openvpn/ca.crt
     - require:
       - pkg: salt_minion_deps
       - file: openvpn
@@ -216,6 +217,7 @@ openvpn_server_csr_{{ instance }}:
     - O: {{ organization }}
     - OU: {{ organizational_unit }}
     - emailAddress: {{ email }}
+    - unless: test -f /etc/openvpn/{{ instance }}/server.crt
     - watch:
       - module: openvpn_ca
 
@@ -271,6 +273,7 @@ openvpn_client_csr_{{ instance }}_{{ client }}:
     - O: {{ organization }}
     - OU: {{ organizational_unit }}
     - emailAddress: {{ email }}
+    - unless: test -f /etc/openvpn/{{ instance }}/clients/{{ client }}.crt
     - require:
       - module: openvpn_ca
       - file: {{ config_dir }}/clients
@@ -321,6 +324,7 @@ openvpn_{{ instance }}_{{ client }}:
         client: {{ client }}
     - require:
       - file: {{ config_dir }}
+                {%- if not salt['file.file_exists'](config_dir + '/clients/' + client + '.zip') %}
   module:
     - wait
     - name: archive.{% if grains['saltversioninfo'] >= (2015, 2, 0, 0) %}cmd_{% endif %}zip
@@ -337,6 +341,7 @@ openvpn_{{ instance }}_{{ client }}:
       - module: openvpn_client_cert_{{ instance }}_{{ client }}
     - require:
       - pkg: salt_minion_deps
+                {%- endif -%}
             {%- endif %}{# client cert not in revocation list -#}
         {%- endfor %}{# client cert -#}
 

@@ -56,9 +56,21 @@ postgresql:
       - user: postgres
       - pkg: postgresql
       - file: postgresql
+      - file: /etc/init.d/postgresql
 {% if ssl %}
       - cmd: ssl_cert_and_key_for_{{ ssl }}
 {% endif %}
+
+/etc/init.d/postgresql:
+  file:
+    - managed
+    - source: salt://postgresql/server/sysvinit.jinja2
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 550
+    - require:
+      - pkg: postgresql
 
 {%- call manage_pid('/var/run/postgresql/' + version + '-main.pid', 'postgres', 'postgres', 'postgresql') %}
 - pkg: postgresql

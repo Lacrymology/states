@@ -49,6 +49,7 @@ case "$1" in
     if start-stop-daemon --start --quiet --umask 007 --pidfile $PIDFILE --chuid redis:redis --exec $DAEMON -- $DAEMON_ARGS
     then
         echo "$NAME."
+        initctl emit redis-started --no-wait
     else
         echo "failed"
     fi

@@ -36,6 +36,39 @@ class LintCheck(object):
         print '-' * 10
 
 
+class LintCheckFinalNewline(LintCheck):
+    stable = True
+
+    def run(self):
+        '''
+        Check whether a file ends with newline.
+        '''
+        ret = True
+        error_paths = []
+        for path in self.paths:
+            with open(path) as f:
+                try:
+                    f.seek(-1, os.SEEK_END)  # move to before last character
+                except IOError:
+                    f.seek(0)  # move to begin of file
+                    if f.read() == '':
+                        continue  # file is empty
+                    else:
+                        raise
+
+                last_char = f.read()
+                if last_char != os.linesep:
+                    ret = False
+                    error_paths.append(path)
+
+        if ret is False:
+            self.print_header('Line must end with newline.')
+            template = 'file: {0} doesn\'t end with newline character'
+            print '\n'.join([template.format(path) for path in error_paths])
+
+        return ret
+
+
 class LintCheckEndingSpace(LintCheck):
     stable = True
 
@@ -390,6 +423,7 @@ def main():
                  LintCheckMaintainer,
                  LintCheckSubkeyInSaltPillar,
                  LintCheckEndingSpace,
+                 LintCheckFinalNewline,
                  )
 
     if args.stable:

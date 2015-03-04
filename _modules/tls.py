@@ -19,6 +19,7 @@ import time
 import logging
 import hashlib
 from datetime import datetime
+import re
 
 HAS_SSL = False
 try:
@@ -29,6 +30,7 @@ except ImportError:
 
 # Import salt libs
 import salt.utils
+from salt._compat import string_types
 
 
 log = logging.getLogger(__name__)
@@ -163,6 +165,32 @@ def _ca_exists(ca_name, ca_dir=None, ca_filename=None):
     return False
 
 
+def _check_onlyif_unless(onlyif, unless):
+    ret = None
+    retcode = __salt__['cmd.retcode']
+    if onlyif is not None:
+        if not isinstance(onlyif, string_types):
+            if not onlyif:
+                ret = {'comment': 'onlyif execution failed',
+                        'result': True}
+        elif isinstance(onlyif, string_types):
+            if retcode(onlyif) != 0:
+                ret = {'comment': 'onlyif execution failed',
+                        'result': True}
+                log.debug('onlyif execution failed')
+    if unless is not None:
+        if not isinstance(unless, string_types):
+            if unless:
+                ret = {'comment': 'unless execution succeeded',
+                        'result': True}
+        elif isinstance(unless, string_types):
+            if retcode(unless) == 0:
+                ret = {'comment': 'unless execution succeeded',
+                        'result': True}
+                log.debug('unless execution succeeded')
+    return ret
+
+
 def create_ca(
         ca_name,
         bits=2048,
@@ -175,7 +203,9 @@ def create_ca(
         OU=None,
         emailAddress='xyz@pdq.net',
         ca_dir=None,
-        ca_filename=None):
+        ca_filename=None,
+        onlyif=None,
+        unless=None):
     '''
     Create a Certificate Authority (CA)
 
@@ -220,6 +250,10 @@ def create_ca(
 
         salt '*' tls.create_ca test_ca
     '''
+    status = _check_onlyif_unless(onlyif, unless)
+    if status is not None:
+        return None
+
     if ca_dir is None:
         ca_dir = '{0}/{1}'.format(_cert_base_path(), ca_name)
 
@@ -330,7 +364,9 @@ def create_csr(
         OU=None,
         emailAddress='xyz@pdq.net',
         cert_dir=None,
-        cert_filename=None):
+        cert_filename=None,
+        onlyif=None,
+        unless=None):
     '''
     Create a Certificate Signing Request (CSR) for a
     particular Certificate Authority (CA)
@@ -376,6 +412,10 @@ def create_csr(
 
         salt '*' tls.create_csr test
     '''
+    status = _check_onlyif_unless(onlyif, unless)
+    if status is not None:
+        return None
+
     if ca_dir is None:
         ca_dir = '{0}/{1}'.format(_cert_base_path(), ca_name)
 
@@ -812,34 +852,49 @@ def revoke_cert(
             client_cert,
             ca_dir)
 
-    revoke_date = _four_digit_year_to_two_digit(datetime.now())
-
     index_serial_subject = '{0}\tunknown\t{1}'.format(
             serial_number,
             subject)
     index_v_data = 'V\t{0}\t\t{1}'.format(
             expire_date,
             index_serial_subject)
+    index_r_data_pattern = re.compile(
+            r"R\t" +
+            expire_date +
+            r"\t\d{12}Z\t" +
+            re.escape(index_serial_subject))
     index_r_data = 'R\t{0}\t{1}\t{2}'.format(
             expire_date,
-            revoke_date,
+            _four_digit_year_to_two_digit(datetime.now()),
             index_serial_subject)
 
+    ret = {}
     with salt.utils.fopen(index_file) as f:
         for line in f:
-            if index_r_data in line:
-                return ('"{0}/{1}.crt" was already revoked, '
-                        'serial number: {2}').format(
-                                cert_dir,
-                                cert_filename,
-                                serial_number
-                                )
+            if index_r_data_pattern.match(line):
+                revoke_date = line.split('\t')[2]
+                try:
+                    datetime.strptime(revoke_date, two_digit_year_fmt)
+                    return ('"{0}/{1}.crt" was already revoked, '
+                            'serial number: {2}').format(
+                                    cert_dir,
+                                    cert_filename,
+                                    serial_number
+                                    )
+                except ValueError:
+                    ret['retcode'] = 1
+                    ret['comment'] = ("Revocation date '{0}' does not match"
+                                     " format '{1}'").format(
+                                             revoke_date,
+                                             two_digit_year_fmt)
+                    return ret
             elif index_serial_subject in line:
                 __salt__['file.replace'](
                         index_file,
                         index_v_data,
                         index_r_data,
                         backup=False)
+                break
 
     crl = OpenSSL.crypto.CRL()
 
@@ -861,7 +916,6 @@ def revoke_cert(
                 ca_name
                 )
 
-    ret = {}
     if os.path.isdir('{0}'.format(crl_file)):
         ret['retcode'] = 1
         ret['comment'] = 'crl_file "{0}" is an existing directory'.format(crl_file)

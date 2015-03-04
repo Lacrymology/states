@@ -11,7 +11,7 @@ user nobody
 group nogroup
 persist-key
 persist-tun
-status /var/log/openvpn/{{ instance }}.log
+status /var/log/openvpn/{{ instance }}.log {% if salt['pillar.get']("__test__", False) %}1{% endif %}
 syslog vpn-{{ instance }}
 {%- if salt['pillar.get']('debug', False) %}
 verb 15

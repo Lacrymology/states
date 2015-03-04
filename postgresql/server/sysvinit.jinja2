@@ -37,6 +37,9 @@ case "$1" in
     for v in $versions; do
         $1 $v
     done
+    if [ "$1" = "start" -a -z "$2" ]; then
+        initctl emit postgresql-started --no-wait
+    fi
         ;;
     status)
     LS=`pg_lsclusters -h`

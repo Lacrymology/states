@@ -25,7 +25,7 @@ whisper==0.9.12
 zope.interface==4.0.5
 {%- if salt['pillar.get']('files_archive', False) %}
 py2cairo==1.8.10
-django-insecure==0.1
+django-insecure==0.2
 {%- else %}
 http://cairographics.org/releases/py2cairo-1.8.10.tar.gz
 https://github.com/bclermont/django-insecure/archive/v0.2.tar.gz

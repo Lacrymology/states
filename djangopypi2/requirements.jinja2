@@ -19,7 +19,7 @@ psycopg2==2.5.1
 requests==0.14.2
 raven==4.1.1
 {%- if salt['pillar.get']('files_archive', False) %}
-django-insecure==0.1
+django-insecure==0.2
 {%- else %}
 https://github.com/bclermont/django-insecure/archive/v0.2.tar.gz
 {%- endif %}

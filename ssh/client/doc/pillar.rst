@@ -14,26 +14,28 @@ Example::
     hosts:
       github.com:
         fingerprint: 16:27:ac:a5:76:28:2d:36:63:1b:56:4d:eb:df:a6:48
+      myhost.com
+        keys:
+          key_name:
+            nagios:
+              - root
+              - gitlab
+            backup: backup
+          another_key:
+            root: backup
       anotherhost.com:
         port: 22022
     forgot_hosts:
       bitbucket.org:
     keys:
-      - contents: |
+      key_name: |
             -----BEGIN RSA PRIVATE KEY-----
             MIIEowIBAAKCAQEA3wk5tqR1i...
             -----END RSA PRIVATE KEY-----
-        map:
-          ci.example.com:
-          alerts.example.com:
-            nagios:
-              - root
-              - gitlab
-            backup: backup
-      - contents: |
-         ...
-        map:
-          www.bleh.com:
+      another_key: |
+            -----BEGIN RSA PRIVATE KEY-----
+            LDJLJFLAKFJdlfj...
+            -----END RSA PRIVATE KEY-----
 
     root_key: |
         -----BEGIN RSA PRIVATE KEY-----
@@ -43,20 +45,19 @@ Example::
 .. _pillar-ssh-hosts:
 
 ssh:hosts
-~~~~~~~~~~~~~~~
+~~~~~~~~~
 
-`Known hosts <http://en.wikibooks.org/wiki/OpenSSH/Client_Configuration_Files#
-.7E.2F.ssh.2Fhosts>`_ that will be managed.
-Data formed as list of dictionaries, which in turn has structure:
-``domain_name:{'port': PORT_NUMBER, 'fingerprint': FINGERPRINT}``.
-``port`` and ``fingerprint`` can be omitted.
+Data of hosts that this :doc:`index` can connect to.
+Data formed as a nested dictionary. Each sub dictionary contains data about
+a host which including ``port``, ``fingerprint``, ``keys``, ``additional``,
+which all are described below.
 
-Default: no known host (``{}``).
+Default: no managed host (``{}``).
 
 .. _pillar-ssh-hosts-hostname-port:
 
 ssh:hosts:{{ hostname }}:port
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Which port of ``hostname`` will be used to check for hostkey.
 
@@ -65,7 +66,12 @@ Default: (``22``).
 .. _pillar-ssh-hosts-hostname-fingerprint:
 
 ssh:hosts:{{ hostname }}:fingerprint
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Fingerprint of remote ``hostname`` which will be checked when that ``hostname``
+be managed as
+`known host <http://en.wikibooks.org/wiki/OpenSSH/Client_Configuration_Files#
+.7E.2F.ssh.2Fhosts>`_.
 
 Using this pillar to avoid :doc:`/ssh/doc/index` to ``hostname`` when
 it is compromised, which might changed host fingerprint.
@@ -81,10 +87,32 @@ Fingerprint can be obtained by following steps::
 
 Default: no set (``None``).
 
+.. _pillar-ssh-hosts-hostname-keys:
+
+ssh:hosts:{{ hostname }}:keys
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Data in form::
+
+    {{ keyname }}:
+      {{ localuser1 }}: {{ remoteuser1 }}
+      {{ localuser2 }}:
+        - {{ remoteuser1 }}
+        - {{ remoteuser2 }}
+    {{ keyname2 }}:
+      ...
+
+``localuser`` is local Linux user, who will run ssh and use the managed key.
+``remoteuser`` is remote :doc:`/ssh/doc/index` user on ``hostname``, which will
+be logged in as. This can also be a list of remote users.
+``keyname`` is defined key in :ref:`pillar-ssh-keys`.
+
+Default: no set (``None``).
+
 .. _pillar-ssh-hosts-hostname-additional:
 
 ssh:hosts:{{ hostname }}:additional
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 List of additional :doc:`/ssh/doc/index` configuration for ``hostname``.
 
@@ -105,28 +133,11 @@ Default: no remove any known host (``{}``).
 ssh:keys
 ~~~~~~~~
 
-List of key mapping, each map use below structure::
+Map of key name and key private content. These keys can be used in
+:ref:`pillar-ssh-hosts` to use with that host. For key private content,
+see :doc:`/ssh/doc/index`.
 
-  contents: |
-      {{ PRIVATE_KEY }}
-  map:
-    {{ address }}:
-      {{ localuser1 }}: {{ remoteuser1 }}
-      {{ localuser2 }}:
-        - {{ remoteuser1 }}
-        - {{ remoteuser2 }}
-
-
-For private content, see :doc:`/ssh/doc/index`
-
-Use address of remote host (domain or IP) for ``address``
-``localuser`` is local Linux user, who will run ssh and use the managed key.
-``remoteuser`` is remote :doc:`/ssh/doc/index` user on ``address``, which will
-be logged in as. This can also be a list of remote users.
-
-If no ``localuser``:``remoteuser`` provided, use ``root``:``root``
-
-Default: Unused (``[]``).
+Default: Unused (``{}``).
 
 .. _pillar-ssh-root_key:
 

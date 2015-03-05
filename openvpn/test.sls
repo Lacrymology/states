@@ -7,6 +7,9 @@ include:
   - openvpn
   - openvpn.diamond
   - openvpn.nrpe
+  - openvpn.backup
+  - openvpn.backup.nrpe
+  - openvpn.backup.diamond
   - salt.minion.deps
 
 test:
@@ -16,6 +19,8 @@ test:
   qa:
     - test
     - name: openvpn
+    - additional:
+      - openvpn.backup
     - pillar_doc: {{ opts['cachedir'] }}/doc/output
     - require:
       - monitoring: test

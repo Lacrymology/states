@@ -17,6 +17,7 @@ python-memcached==1.53
 pytz==2013b
 requests==2.4.3
 raven==4.1.1
+setuptools==0.6c11
 simplejson==3.3.2
 statsd==2.0.1
 txamqp==0.6.2
@@ -24,10 +25,10 @@ whisper==0.9.12
 zope.interface==4.0.5
 {%- if salt['pillar.get']('files_archive', False) %}
 py2cairo==1.8.10
-django-insecure==0.1
+django-insecure==0.2
 {%- else %}
-http://cairographics.org/releases/py2cairo-1.8.10.tar.gz
--e git+git@github.com:bclermont/django-insecure.git@ce529583fc02db20a5ea2b34f1ee8f3d4538a14e#egg=django-insecure
+https://archive.robotinfra.com/pip/py2cairo-1.8.10.tar.bz2
+https://archive.robotinfra.com/pip/django-insecure-0.2.tar.bz2
 {%- endif %}
 Twisted==13.1.0
 {%- if salt['pillar.get']('graphite:smtp', False) %}

@@ -1,0 +1,12 @@
+#!/bin/bash
+# Usage of this is governed by a license that can be found in doc/license.rst
+# {{ salt['pillar.get']('message_do_not_modify') }}
+
+# log start stop time to syslog
+source /usr/local/share/salt_common.sh
+# Ensure that only one instance of this script is running at a time
+locking_script
+log_start_script "$@"
+trap "log_stop_script \$?" EXIT
+
+/usr/lib/nagios/plugins/check_mine_minions.py --formula=salt.master --check=salt_master_mine --cronjob

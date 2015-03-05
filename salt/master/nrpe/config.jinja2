@@ -51,6 +51,6 @@ salt_master_mine:
   arguments:
     freshness: {{ 12 * 60 + 20 }} {#- cron interval + timeout + 5 mins #}
 {#- sudo for reading salt config files #}
-  command: sudo /usr/lib/nagios/plugins/check_mine_minions.py --formula=salt.master --check=salt_master_mine
+  command: sudo /usr/lib/nagios/plugins/check_mine_minions.py --formula=salt.master --check=salt_master_mine --cronresult
     {%- endif -%}
 {%- endblock -%}

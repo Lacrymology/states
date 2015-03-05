@@ -3,6 +3,7 @@
 {%- from 'nrpe/passive.jinja2' import passive_check with context %}
 include:
   - apt.nrpe
+  - cron
   - git.nrpe
   - pip.nrpe
   - nrpe
@@ -27,6 +28,7 @@ include:
   file:
     - managed
     - source: salt://salt/master/nrpe/check_mine.py
+    - template: jinja
     - user: nagios
     - group: nagios
     - mode: 550
@@ -40,3 +42,20 @@ include:
       - service: nsca_passive
 
 {{ passive_check('salt.master') }}
+
+salt_mine_collect_minions_data:
+  file:
+    - name: /etc/cron.twice_daily/salt_mine_data
+{%- if salt['pillar.get']('__test__', False) %}
+    - absent
+{%- else %}
+    - managed
+    - user: root
+    - group: root
+    - mode: 500
+    - template: jinja
+    - source: salt://salt/master/nrpe/cron.jinja2
+    - require:
+      - file: /etc/cron.twice_daily
+      - file: /usr/lib/nagios/plugins/check_mine_minions.py
+{%- endif %}

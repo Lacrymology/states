@@ -107,7 +107,7 @@ Data in form::
 be logged in as. This can also be a list of remote users.
 ``keyname`` is defined key in :ref:`pillar-ssh-keys`.
 
-Default: no set (``None``).
+Default: no data (``{}``).
 
 .. _pillar-ssh-hosts-hostname-additional:
 

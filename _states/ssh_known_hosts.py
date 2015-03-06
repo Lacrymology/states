@@ -82,18 +82,15 @@ def present(
             comment = 'Specify either "key" or "fingerprint", not both.'
             ret['result'] = False
             return dict(ret, comment=comment)
-        elif key:
-            if not enc:
-                comment = 'Required argument "enc" if using "key" argument.'
-                ret['result'] = False
-                return dict(ret, comment=comment)
-            result = __salt__['ssh.check_known_host'](user, name,
-                                                      key=key,
-                                                      config=config)
-        elif fingerprint:
-            result = __salt__['ssh.check_known_host'](user, name,
-                                                      fingerprint=fingerprint,
-                                                      config=config)
+        elif key and not enc:
+            comment = 'Required argument "enc" if using "key" argument.'
+            ret['result'] = False
+            return dict(ret, comment=comment)
+
+        result = __salt__['ssh.check_known_host'](user, name,
+                                                  key=key,
+                                                  fingerprint=fingerprint,
+                                                  config=config)
 
         if result == 'exists':
             comment = 'Host {0} is already in {1}'.format(name, config)

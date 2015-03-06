@@ -20,6 +20,9 @@ _prog_name=$(basename "$0")
 _log_tag="${_prog_name}[$$]"
 
 {%- if salt['pillar.get']('debug', False) %}
+# File descriptor #4 is attached to logger for writing
+# It means that the output write to that file descriptor will be redirected to logger
+# then end in syslog
 exec 4> >(logger -t "${_log_tag}" -p 'local0.debug')
 # Available from 4.1
 # This allows to specify the file descriptor to write the set -x debugging output to.

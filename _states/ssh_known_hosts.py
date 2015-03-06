@@ -94,10 +94,7 @@ def present(
             result = __salt__['ssh.check_known_host'](user, name,
                                                       fingerprint=fingerprint,
                                                       config=config)
-        else:
-            comment = 'Arguments key or fingerprint required.'
-            ret['result'] = False
-            return dict(ret, comment=comment)
+
         if result == 'exists':
             comment = 'Host {0} is already in {1}'.format(name, config)
             ret['result'] = True

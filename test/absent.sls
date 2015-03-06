@@ -9,6 +9,7 @@ include:
   - postgresql.server.absent
   - proftpd.absent
   - uwsgi.absent
+  - redis.absent
 {%- set company_db = salt['pillar.get']('openerp:company_db', False) %}
 {%- if company_db %}
   - openerp.absent
@@ -32,3 +33,7 @@ extend:
       - require:
         - service: graylog2-server
         - service: graylog2-web
+  redis:
+    service:
+      - require:
+        - service: gitlab

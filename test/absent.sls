@@ -2,6 +2,9 @@ include:
   - ejabberd.absent
   - etherpad.absent
   - gitlab.absent
+  - graylog2.server.absent
+  - graylog2.web.absent
+  - mongodb.absent
   - pgbouncer.absent
   - postgresql.server.absent
   - proftpd.absent
@@ -24,3 +27,8 @@ extend:
 {%- if company_db %}
         - service: openerp
 {%- endif %}
+  mongodb:
+    service:
+      - require:
+        - service: graylog2-server
+        - service: graylog2-web

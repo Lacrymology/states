@@ -23,6 +23,9 @@ extend:
   salt.master-monitoring:
     monitoring:
       - source: salt://salt/ci/nrpe/config.jinja2
+  salt_mine_collect_minions_data:
+    file:
+      - absent
 
 {#- workaround for include sls bug #}
 salt_ci_dummy:

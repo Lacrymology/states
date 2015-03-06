@@ -11,84 +11,133 @@ Optional
 Example::
 
   ssh:
-    known_hosts:
-      github.com: github.com ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==
-    keys:
-      - contents: |
-            -----BEGIN RSA PRIVATE KEY-----
-            MIIEowIBAAKCAQEA3wk5tqR1i...
-            -----END RSA PRIVATE KEY-----
-        map:
-          ci.example.com:
-          alerts.example.com:
+    hosts:
+      github.com:
+        fingerprint: 16:27:ac:a5:76:28:2d:36:63:1b:56:4d:eb:df:a6:48
+      myhost.com
+        keys:
+          key_name:
             nagios:
               - root
               - gitlab
             backup: backup
-      - contents: |
-         ...
-        map:
-          www.bleh.com:
+          another_key:
+            root: backup
+      anotherhost.com:
+        port: 22022
+    forgot_hosts:
+      bitbucket.org:
+    keys:
+      key_name: |
+            -----BEGIN RSA PRIVATE KEY-----
+            MIIEowIBAAKCAQEA3wk5tqR1i...
+            -----END RSA PRIVATE KEY-----
+      another_key: |
+            -----BEGIN RSA PRIVATE KEY-----
+            LDJLJFLAKFJdlfj...
+            -----END RSA PRIVATE KEY-----
 
     root_key: |
         -----BEGIN RSA PRIVATE KEY-----
         MIIEdsfadsfsdaXXXXXXXXXXX...
         -----END RSA PRIVATE KEY-----
 
-.. _pillar-ssh-known_hosts:
+.. _pillar-ssh-hosts:
 
-ssh:known_hosts
-~~~~~~~~~~~~~~~
+ssh:hosts
+~~~~~~~~~
 
-`Known hosts <http://en.wikibooks.org/wiki/OpenSSH/Client_Configuration_Files#.7E.2F.ssh.2Fknown_hosts>`_ that will added to ``.ssh/known_hosts``.
-Data formed as a dictionary ``domain_name``:``server public key``
-with server public key can be obtained by run ``ssh-keyscan domain``
+Data of hosts that this :doc:`index` can connect to.
+Data formed as a nested dictionary. Each sub dictionary contains data about
+a host which including ``port``, ``fingerprint``, ``keys``, ``additional``,
+which all are described below.
 
-Example::
+Default: no managed host (``{}``).
 
-    $ ssh-keyscan github.com
-    # github.com SSH-2.0-OpenSSH_5.9p1 Debian-5ubuntu1+github5
-    github.com ssh-rsa
-    AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==
+.. _pillar-ssh-hosts-hostname-port:
 
-The public key of `github.com <https://github.com>`_ is ``AAAAB......aQ==``.
-Though, prefix the key with ``github.com ssh-rsa`` still valid and improve
-redability.
+ssh:hosts:{{ hostname }}:port
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. note::
+Which port of ``hostname`` will be used to check for hostkey.
 
-  github.com and `bitbucket.org <https://bitbucket.org>`_ public keys are
-  already managed by this formula as they are often required by other one.
+Default: (``22``).
 
-Default: no custom known hosts (``{}``).
+.. _pillar-ssh-hosts-hostname-fingerprint:
+
+ssh:hosts:{{ hostname }}:fingerprint
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Fingerprint of remote ``hostname`` which will be checked when that ``hostname``
+be managed as
+`known host <http://en.wikibooks.org/wiki/OpenSSH/Client_Configuration_Files#
+.7E.2F.ssh.2Fhosts>`_.
+
+Using this pillar to avoid :doc:`/ssh/doc/index` to ``hostname`` when
+it is compromised, which might changed host fingerprint.
+Also avoid :ref:`glossary-DNS` attack, which may point domain
+of ``hostname`` to another host.
+
+Fingerprint can be obtained by following steps::
+
+    $ ssh-keyscan github.com > /tmp/github_hostkey
+    # github.com SSH-2.0-libssh-0.6.0
+    $ ssh-keygen -lf /tmp/github_hostkey
+    2048 16:27:ac:a5:76:28:2d:36:63:1b:56:4d:eb:df:a6:48 github.com (RSA)
+
+Default: no set (``None``).
+
+.. _pillar-ssh-hosts-hostname-keys:
+
+ssh:hosts:{{ hostname }}:keys
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Data in form::
+
+    {{ keyname }}:
+      {{ localuser1 }}: {{ remoteuser1 }}
+      {{ localuser2 }}:
+        - {{ remoteuser1 }}
+        - {{ remoteuser2 }}
+    {{ keyname2 }}:
+      ...
+
+``localuser`` is local Linux user, who will run ssh and use the managed key.
+``remoteuser`` is remote :doc:`/ssh/doc/index` user on ``hostname``, which will
+be logged in as. This can also be a list of remote users.
+``keyname`` is defined key in :ref:`pillar-ssh-keys`.
+
+Default: no set (``None``).
+
+.. _pillar-ssh-hosts-hostname-additional:
+
+ssh:hosts:{{ hostname }}:additional
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+List of additional :doc:`/ssh/doc/index` configuration for ``hostname``.
+
+Default: no additional configuration (``[]``).
+
+.. _pillar-ssh-forgot_hosts:
+
+ssh:forgot_hosts
+~~~~~~~~~~~~~~~~
+
+Hosts to be removed from list of known hosts. Must not already provided
+in :ref:`pillar-ssh-hosts`.
+
+Default: no remove any known host (``{}``).
 
 .. _pillar-ssh-keys:
 
 ssh:keys
 ~~~~~~~~
 
-List of key mapping, each map use below structure::
+Map of key name and key private content. These keys can be used in
+:ref:`pillar-ssh-hosts` to use with that host. For key private content,
+see :doc:`/ssh/doc/index`.
 
-  contents: |
-      {{ PRIVATE_KEY }}
-  map:
-    {{ address }}:
-      {{ localuser1 }}: {{ remoteuser1 }}
-      {{ localuser2 }}:
-        - {{ remoteuser1 }}
-        - {{ remoteuser2 }}
-
-
-For private content, see :doc:`/ssh/doc/index`
-
-Use address of remote host (domain or IP) for ``address``
-``localuser`` is local Linux user, who will run ssh and use the managed key.
-``remoteuser`` is remote :doc:`/ssh/doc/index` user on ``address``, which will
-be logged in as. This can also be a list of remote users.
-
-If no ``localuser``:``remoteuser`` provided, use ``root``:``root``
-
-Default: Unused (``[]``).
+Default: Unused (``{}``).
 
 .. _pillar-ssh-root_key:
 

@@ -26,5 +26,5 @@ git:
     - require:
       - pkg: openssh-client
       - cmd: apt_sources
-      - file: known_hosts
+      - file: system_ssh_known_hosts
       - pkgrepo: git

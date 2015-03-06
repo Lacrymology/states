@@ -70,23 +70,25 @@ mode: permission of PID file
 
 {#- extend for change owner of ssh keys -#}
 {%- macro change_ssh_key_owner(owner, requisites) -%}
+{%- set managed_users = [] -%}
     {#- a dirty hack to make sure this macro will render at least one state to
         extend #}
   /etc/ssh/keys:
     file:
       - directory
 
-    {%- set managed_users = [] -%}
-    {%- for elem in salt['pillar.get']('ssh:keys', []) -%}
-        {%- set maps = elem['map'] -%}
-        {%- for hostname in maps -%}
-            {%- set local_remotes = maps[hostname] if maps[hostname] != none else {'root': 'root'} -%}
-            {%- for local in local_remotes -%}
-                {%- do managed_users.append(local) -%}
-            {%- endfor -%}
+    {# get list of managed local user #}
+    {%- for domain in salt['pillar.get']('ssh:hosts', {}) %}
+      {%- set key_map = salt['pillar.get']('ssh:hosts:' ~ domain ~ ':keys', {}) -%}
+      {%- for keyname in key_map %}
+        {%- set local_remotes = key_map[keyname] if key_map[keyname] != none else {} %}
+        {%- for local in local_remotes -%}
+          {%- do managed_users.append(local) %}
         {%- endfor -%}
+      {%- endfor -%}
     {%- endfor -%}
-    {%- if owner in managed_users %}
+
+   {%- if owner in managed_users %}
   /etc/ssh/keys/{{ owner }}:
     file:
       - user: {{ owner }}

@@ -23,3 +23,7 @@ openssh-client:
 /etc/ssh/ssh_known_hosts:
   file:
     - absent
+
+/etc/ssh/ssh_known_hosts.old:
+  file:
+    - absent

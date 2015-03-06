@@ -149,7 +149,7 @@ def absent(name, user=None, config=None):
     '''
     ret = {'name': name,
            'changes': {},
-           'result': None if __opts__['test'] else True,
+           'result': True,
            'comment': ''}
 
     if not user:
@@ -170,6 +170,7 @@ def absent(name, user=None, config=None):
     if __opts__['test']:
         comment = 'Key for {0} is set to be removed from {1}'.format(name,
                                                                      config)
+        ret['result'] = None
         return dict(ret, comment=comment)
 
     rm_result = __salt__['ssh.rm_known_host'](user=user, hostname=name,

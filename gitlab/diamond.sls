@@ -4,7 +4,6 @@
 {%- call uwsgi_diamond('gitlab') %}
 - postgresql.server.diamond
 - redis.diamond
-- rsyslog.diamond
 - ssh.server.diamond
 {%- endcall %}
 

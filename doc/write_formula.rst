@@ -343,3 +343,44 @@ It often consists of ``pillar.rst``, ``troubleshoot.rst``, and ``usage.rst``.
 Examples::
 
     elasticsearch:nodes:{{ node minion ID }}:_network:public
+
+Upstart
+-------
+
+`Upstart <http://upstart.ubuntu.com/>`_ is an event-based replacement for the
+/sbin/init daemon which handles starting of tasks and services during boot,
+stopping them during shutdown and supervising them while the system is running.
+
+Dependency
+~~~~~~~~~~
+
+An upstart script must define all their dependencies to make it starts successful
+when reboot.
+
+A typical upstart script will contains.
+
+.. code-block:: bash
+
+   start on (net-device-up
+             and local-filesystems
+             and runlevel [2345]
+             and started rsyslog)
+
+An upstart service can depends on SysV init script. In SysV init script,
+generate an event with `initctl emit
+<http://upstart.ubuntu.com/cookbook/#initctl-emit>`_ command.
+
+.. code-block:: bash
+
+   # in start section of SysV init script
+   initctl emit myservice-started --no-wait
+
+After that, we can make another upstart script start on this event.
+
+.. code-block:: bash
+
+   # in upstart script
+   start on (net-device-up
+             and local-filesystems
+             and runlevel [2345]
+             and myservice-started)

@@ -10,7 +10,6 @@ include:
   - postgresql.server
   - python
   - redis
-  - rsyslog
   - ruby.2
   - ssh.server
 {%- if ssl %}

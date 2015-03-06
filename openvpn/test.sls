@@ -10,6 +10,9 @@ include:
   - openvpn.backup.nrpe
   - openvpn.diamond
   - openvpn.nrpe
+  - openvpn.backup
+  - openvpn.backup.nrpe
+  - openvpn.backup.diamond
   - salt.minion.deps
 
 test:

@@ -17,6 +17,8 @@ tmpdir=$(mktemp -d)
 cd "${tmpdir}"
 mkdir "${subdir}"
 mv "${archive_path}" "${subdir}"
-rsync --archive --quiet --relative ./"${subdir}"/ root@{{ salt['pillar.get']('backup_server:address') }}:/var/lib/backup
+# Do not preserve permission as it also change the permission of /var/lib/backup
+# which need to be in 775 for the monitoring check (run as non-root) to read some files
+rsync --archive --no-perms --quiet --relative ./"${subdir}"/ root@{{ salt['pillar.get']('backup_server:address') }}:/var/lib/backup
 cd /
 rm -rf "${tmpdir}"

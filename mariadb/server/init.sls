@@ -25,6 +25,12 @@ include:
     - group: root
     - mode: 440
     - makedirs: True
+    - require:
+{%- if ssl %}
+      - cmd: ssl_cert_and_key_for_{{ ssl }}
+{%- endif %}
+      - file: /etc/mysql
+      - user: mysql-server
 
 remove_bin_log:
   cmd:
@@ -57,7 +63,6 @@ mysql-server:
     - require:
       - pkgrepo: mariadb
       - pkg: mariadb
-      - file: /etc/mysql/my.cnf
       - debconf: mysql-server
       - pkg: python-mysqldb
   {#-

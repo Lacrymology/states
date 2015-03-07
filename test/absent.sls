@@ -100,6 +100,7 @@ include:
   "shinken-receiver",
   "shinken-scheduler",
   "squid3",
+  "openerp",
   "openssh-server",
   "statsd",
   "terracotta",
@@ -109,10 +110,6 @@ include:
   "varnish",
   "xinetd",
   ]) %}
-{%- set company_db = salt['pillar.get']('openerp:company_db', False) %}
-{%- if company_db %}
-  {%- do local.services.append(['openerp']) %}
-{%- endif %}
 
 {%- for service in local.services %}
   {#- all services except rsyslog, nsca_passsive, nrpe-nagios-server, diamond #}
@@ -129,9 +126,7 @@ extend:
         - service: pgbouncer
         - service: proftpd
         - service: uwsgi
-{%- if company_db %}
         - service: openerp
-{%- endif %}
   mongodb:
     service:
       - require:

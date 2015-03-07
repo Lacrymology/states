@@ -9,7 +9,7 @@
 # Nagios plugin for checking if a UDP port is listen on localhost
 #
 # require:
-#   - netcat
+#   - netcat-traditional
 
 set -o errexit
 
@@ -33,7 +33,7 @@ elif [[ ! "$1" =~ ^[0-9]+$ ]]; then  # "$1" is not a number
 fi
 
 port="$1"
-nc -zu localhost "$port"
+nc.traditional -zu localhost "$port"
 
 if [[ $? -eq 0 ]]; then
     echo "${port}/UDP OK"

@@ -248,7 +248,7 @@ service: nagios-nrpe-server #}
 /usr/lib/nagios/plugins/check_udp_listen:
   pkg:
     - installed
-    - name: netcat
+    - name: netcat-traditional
     - require:
       - cmd: apt_sources
   file:

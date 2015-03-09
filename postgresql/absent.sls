@@ -1,6 +1,6 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
-{%- import "os.jinja2" as os with context %}
+{%- from "os.jinja2" import os with context %}
 
 {%- if os.is_precise %}
 /etc/apt/sources.list.d/postgresql.list:

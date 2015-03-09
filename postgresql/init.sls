@@ -7,7 +7,7 @@ include:
   - ssl
 {% endif %}
 
-{%- import "os.jinja2" as os with context %}
+{%- from "os.jinja2" import os with context %}
 
 postgresql-dev:
 {%- if os.is_precise %}

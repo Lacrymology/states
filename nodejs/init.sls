@@ -3,7 +3,7 @@
 include:
   - apt
 
-{%- import "os.jinja2" as os with context %}
+{%- from "os.jinja2" import os with context %}
 
 {%- if os.is_precise %}
   {% set version = '0.10.32' %}

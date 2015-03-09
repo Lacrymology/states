@@ -3,7 +3,7 @@
 include:
   - apt
 
-{% import "os.jinja2" as os with context %}
+{%- from "os.jinja2" import os with context %}
 
 {#- PID file owned by root, no need to manage #}
 rsyslog:

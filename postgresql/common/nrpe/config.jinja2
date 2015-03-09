@@ -1,11 +1,9 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
-
+# {{ salt['pillar.get']('message_do_not_modify') }}
 
 {%- set timeout = 30 -%}
 {% from "postgresql/map.jinja2" import postgresql with context %}
 {% set version = postgresql.version %}
-
-# {{ salt['pillar.get']('message_do_not_modify') }}
 
 postgresql_procs:
   description: PostgreSQL Daemon

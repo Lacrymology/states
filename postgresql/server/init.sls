@@ -1,6 +1,10 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
-{% set ssl = salt['pillar.get']('postgresql:ssl', False) %}
+{%- from 'macros.jinja2' import manage_pid with context %}
+{%- from "postgresql/map.jinja2" import postgresql with context %}
+{%- set version = postgresql.version %}
+{%- set ssl = salt['pillar.get']('postgresql:ssl', False) %}
+
 include:
   - apt
   - hostname
@@ -10,10 +14,6 @@ include:
 {% if ssl %}
   - ssl
 {% endif %}
-
-{%- from 'macros.jinja2' import manage_pid with context %}
-{% from "postgresql/map.jinja2" import postgresql with context %}
-{% set version = postgresql.version %}
 
 postgresql:
   pkg:

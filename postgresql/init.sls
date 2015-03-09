@@ -1,13 +1,13 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
 {% set ssl = salt['pillar.get']('postgresql:ssl', False) %}
+{%- from "os.jinja2" import os with context %}
+
 include:
   - apt
 {% if ssl %}
   - ssl
 {% endif %}
-
-{%- from "os.jinja2" import os with context %}
 
 postgresql-dev:
 {%- if os.is_precise %}

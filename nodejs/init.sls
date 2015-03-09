@@ -1,9 +1,9 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
+{%- from "os.jinja2" import os with context %}
+
 include:
   - apt
-
-{%- from "os.jinja2" import os with context %}
 
 {%- if os.is_precise %}
   {% set version = '0.10.32' %}

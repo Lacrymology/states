@@ -1,0 +1,7 @@
+{%- set is_trusty = False %}
+{%- set is_precise = False %}
+{%- if grains["oscodename"] == "trusty" %}
+  {%- set is_trusty = True %}
+{%- elif grains["oscodename"] == "precise" %}
+  {%- set is_precise = True %}
+{%- endif %}

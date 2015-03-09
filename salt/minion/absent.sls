@@ -3,10 +3,6 @@
 {%- from "upstart/absent.sls" import upstart_absent with context -%}
 {{ upstart_absent('salt-minion') }}
 
-/etc/cron.daily/salt_highstate:
-  file:
-    - absent
-
 extend:
   salt-minion:
     file:

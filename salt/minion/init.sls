@@ -2,11 +2,6 @@
 
 {%- from 'upstart/rsyslog.jinja2' import manage_upstart_log with context -%}
 include:
-{%- set highstate = salt['pillar.get']('salt:highstate', True) %}
-{%- if highstate %}
-  - bash
-  - cron
-{%- endif %}
   - pysc
   - raven
   - requests
@@ -69,16 +64,4 @@ salt-fire-event:
 
 /etc/cron.daily/salt_highstate:
   file:
-{%- if highstate %}
-    - managed
-    - user: root
-    - group: root
-    - mode: 500
-    - template: jinja
-    - source: salt://salt/minion/cron.jinja2
-    - require:
-      - pkg: cron
-      - file: bash
-{%- else %}
     - absent
-{%- endif %}

@@ -3,12 +3,13 @@
 
 -#}
 
-{%- from "postgresql/init.sls" import postgresql_version with context -%}
+{% from "postgresql/map.jinja2" import postgresql with context %}
+{% set version = postgresql.version %}
 
 include:
   - postgresql.server.absent
 
-/var/lib/postgresql/{{ postgresql_version() }}/main/recovery.conf:
+/var/lib/postgresql/{{ version }}/main/recovery.conf:
   file:
     - absent
     - require:

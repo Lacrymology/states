@@ -7,33 +7,30 @@ include:
   - ssl
 {% endif %}
 
-{%- macro postgresql_version() -%}
-    {%- if grains['lsb_distrib_codename'] == 'precise' -%}
-        9.2
-    {%- else -%}
-        9.3
-    {%- endif -%}
-{%- endmacro -%}
+{%- import "os.jinja2" as os with context %}
 
 postgresql-dev:
+{%- if os.is_precise %}
   pkgrepo:
     - managed
-{%- set files_archive = salt['pillar.get']('files_archive', False) %}
-{%- if files_archive %}
+  {%- set files_archive = salt['pillar.get']('files_archive', False) %}
+  {%- if files_archive %}
     - name: deb {{ files_archive|replace('https://', 'http://') }}/mirror/postgresql/9.2.4-0 {{ grains['lsb_distrib_codename'] }} main
     - key_url: salt://postgresql/key.gpg
-{%- else %}
+  {%- else %}
     - ppa: pitti/postgresql
-{%- endif %}
+  {%- endif %}
+    - require_in:
+      - pkg: postgresql-dev
     - file: /etc/apt/sources.list.d/postgresql.list
     - clean_file: True
     - require:
       - pkg: apt_sources
+{%- endif %}
   pkg:
     - installed
     - name: libpq-dev
     - require:
-      - pkgrepo: postgresql-dev
       - cmd: apt_sources
 
 postgresql-common:

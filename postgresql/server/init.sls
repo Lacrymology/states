@@ -1,7 +1,5 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
-{%- from "postgresql/init.sls" import postgresql_version with context -%}
-{%- from 'macros.jinja2' import manage_pid with context %}
 {% set ssl = salt['pillar.get']('postgresql:ssl', False) %}
 include:
   - apt
@@ -13,7 +11,9 @@ include:
   - ssl
 {% endif %}
 
-{% set version = postgresql_version() %}
+{%- from 'macros.jinja2' import manage_pid with context %}
+{% from "postgresql/map.jinja2" import postgresql with context %}
+{% set version = postgresql.version %}
 
 postgresql:
   pkg:
@@ -24,7 +24,7 @@ postgresql:
     - require:
       - host: hostname
       - cmd: system_locale
-      - pkgrepo: postgresql-dev
+      - pkg: postgresql-dev
       - cmd: apt_sources
 {% set encoding = salt['pillar.get']('encoding', 'en_US.UTF-8') %}
     - env:
@@ -43,8 +43,6 @@ postgresql:
     - require:
       - pkg: postgresql
       - user: postgres
-    - context:
-        version: {{ version }}
   service:
     - running
     - enable: True

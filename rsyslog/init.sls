@@ -3,35 +3,41 @@
 include:
   - apt
 
+{% import "os.jinja2" as os with context %}
+
 {#- PID file owned by root, no need to manage #}
 rsyslog:
+{%- if os.is_precise %}
   pkgrepo:
     - managed
-{%- set files_archive = salt['pillar.get']('files_archive', False) %}
-{%- if files_archive %}
+  {%- set files_archive = salt['pillar.get']('files_archive', False) %}
+  {%- if files_archive %}
     - name: deb {{ files_archive|replace('https://', 'http://') }}/mirror/rsyslog/7.4.4 {{ grains['lsb_distrib_codename'] }} main
-{%- else %}
+  {%- else %}
     {#- source: ppa: tmortensen/rsyslogv7 #}
     - name: deb http://archive.robotinfra.com/mirror/rsyslog/7.4.4 {{ grains['lsb_distrib_codename'] }} main
-{%- endif %}
+  {%- endif %}
     - key_url: salt://rsyslog/key.gpg
     - file: /etc/apt/sources.list.d/rsyslogv7.list
     - clean_file: True
     - require:
       - pkg: apt_sources
+    - require_in:
+      - pkg: rsyslog
+{%- endif %}
   pkg:
     - installed
+{%- if os.is_precise %}
     - version: 7.4.4-0ubuntu1ppa1
+{%- endif %}
     - require:
       - cmd: apt_sources
-      - pkgrepo: rsyslog
   user:
     - present
     - name: syslog
     - shell: /bin/false
     - require:
       - pkg: rsyslog
-      - pkgrepo: rsyslog
   file:
     - managed
     - name: /etc/rsyslog.conf

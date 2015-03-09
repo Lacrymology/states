@@ -1,8 +1,6 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
-{%- from "os.jinja2" import os with context %}
-
-{%- if os.is_precise %}
+{# only for ubuntu precise #}
 php:
   file:
     - absent
@@ -19,16 +17,16 @@ php:
     - onlyif: apt-key list | grep -q 67E15F46
   pkgrepo:
     - absent
-  {%- set files_archive = salt['pillar.get']('files_archive', False) %}
-  {%- if files_archive %}
+{%- set files_archive = salt['pillar.get']('files_archive', False) %}
+{%- if files_archive %}
     - name: deb {{ files_archive|replace('https://', 'http://') }}/mirror/lucid-php5 {{ grains['lsb_distrib_codename'] }} main
-  {%- else %}
+{%- else %}
     - ppa: l-mierzwa/lucid-php5
-  {%- endif %}
+{%- endif %}
 
 /etc/apt/sources.list.d/l-mierzwa-lucid-php5-{{ grains['oscodename'] }}.list:
   file:
     - absent
     - require:
       - pkgrepo: php
-{%- endif %}
+{# end for ubuntu precise #}

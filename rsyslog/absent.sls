@@ -1,6 +1,5 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
-{%- from "os.jinja2" import os with context %}
 rsyslog:
   pkg:
     - purged
@@ -13,7 +12,7 @@ rsyslog:
       - pkg: rsyslog
   service:
     - dead
-{%- if os.is_precise %}
+{# only for ubuntu precise #}
   cmd:
     - run
     - name: 'apt-key del 431533D8'
@@ -32,7 +31,7 @@ rsyslog:
     - absent
     - require:
       - pkgrepo: rsyslog
-{%- endif %}
+{# end for ubuntu precise #}
 
 /etc/rsyslog.d:
   file:
@@ -40,11 +39,11 @@ rsyslog:
     - require:
       - service: rsyslog
 
-{%- if os.is_precise %}
+{# only for ubuntu precise #}
 /etc/apt/sources.list.d/rsyslogv7.list:
   file:
     - absent
-{%- endif %}
+{# end for ubuntu precise #}
 
 /var/spool/rsyslog:
   file:

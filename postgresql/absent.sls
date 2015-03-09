@@ -1,8 +1,6 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
-{%- from "os.jinja2" import os with context %}
-
-{%- if os.is_precise %}
+{# only for ubuntu precise #}
 /etc/apt/sources.list.d/postgresql.list:
   file:
     - absent
@@ -27,7 +25,7 @@ postgresql-dev:
     - name: /etc/apt/sources.list.d/pitti-postgresql-{{ grains['oscodename'] }}.list
     - require:
       - pkgrepo: postgresql-dev
-{%- endif %}
+{# end for ubuntu precise #}
 
 postgresql-common:
   pkg:

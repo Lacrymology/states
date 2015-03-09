@@ -3,7 +3,9 @@
 {%- from 'nrpe/passive.jinja2' import passive_check with context %}
 include:
   - apt.nrpe
+  - bash.nrpe
   - cron
+  - cron.nrpe
   - git.nrpe
   - pip.nrpe
   - nrpe

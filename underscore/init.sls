@@ -2,24 +2,32 @@
 
 include:
   - apt
-{%- set version = '1.4.2-1chl1~precise1' %}
+
+{%- from "os.jinja2" import os with context %}
+
 libjs-underscore:
+{%- if os.is_precise %}
+  {%- set version = '1.4.2-1chl1~precise1' %}
   pkgrepo:
     - managed
-{%- set files_archive = salt['pillar.get']('files_archive', False) %}
-{%- if files_archive %}
+  {%- set files_archive = salt['pillar.get']('files_archive', False) %}
+  {%- if files_archive %}
     - name: deb {{ files_archive|replace('https://', 'http://') }}/mirror/underscore/1.4.2-1 {{ grains['lsb_distrib_codename'] }} main
     - key_url: salt://underscore/key.gpg
-{%- else %}
+  {%- else %}
     - ppa: chris-lea/libjs-underscore
-{%- endif %}
+  {%- endif %}
     - file: /etc/apt/sources.list.d/chris-lea-libjs-underscore-{{ grains['oscodename'] }}.list
     - clean_file: True
     - require:
       - cmd: apt_sources
+    - require_in:
+      - pkg: libjs-underscore
+{%- endif %}
   pkg:
     - installed
+{%- if os.is_precise %}
     - version: {{ version }}
+{%- endif %}
     - require:
-      - pkgrepo: libjs-underscore
       - cmd: apt_sources

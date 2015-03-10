@@ -29,7 +29,8 @@ openldap_port
 openldap_base
 ~~~~~~~~~~~~~
 
-A local client is able to `bind <http://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol#Bind_.28authenticate.29>`
+A local client is able to
+`bind <http://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol#Bind_.28authenticate.29>`_
 to :ref:`pillar-ldap-rootdn`. This check return OK means the
 :doc:`/openldap/doc/index` server can be accessed by a local client and returned
 expected query result for the configured query in this check.

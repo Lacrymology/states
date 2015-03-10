@@ -5,7 +5,7 @@ CPUCollector
 ------------
 
 Take a look at
-`section 1.8 in <https://www.kernel.org/doc/Documentation/filesystems/proc.txt>`_
+`section 1.8 in Linux kernel documentation <https://www.kernel.org/doc/Documentation/filesystems/proc.txt>`_
 document for more details.
 
 These numbers identify the amount of time the CPU has spent performing

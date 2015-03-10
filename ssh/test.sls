@@ -20,7 +20,7 @@ ssh_backup_key:
 ssh_add_key:
   cmd:
     - run
-    - name: cat {{ root_home }}/.ssh/id_*.pub >> {{ root_home }}/.ssh/authorized_keys
+    - name: cat /etc/ssh/keys/root/*.pub >> {{ root_home }}/.ssh/authorized_keys
   {%- if authorized_keys_exists %}
     - require:
       - file: ssh_backup_key

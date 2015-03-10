@@ -35,8 +35,8 @@ needs to be defined.
 
 The user ``root`` running the :doc:`/salt/master/doc/index` need read
 access to the :doc:`/git/doc/index` repositories.
-The pillar key :ref:`pillar-ssh-root_key` is probably
-required or :ref:`pillar-ssh-keys` and it's key authorized to read the
+The pillar key :ref:`pillar-ssh-keys` is probably
+required  and it's key authorized to read the
 repository. And the server :ref:`pillar-ssh-hosts` defined too.
 
 Look in :doc:`/ssh/client/doc/index` for more details, more importantly the

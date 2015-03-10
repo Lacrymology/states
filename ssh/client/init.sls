@@ -24,8 +24,6 @@ openssh-client:
 {%- set root_home = root_home() -%}
 
 {#- manage multiple ssh private keys for multiple users #}
-{%- set managed_keys = [] -%}
-{%- set managed_locals = [] %}{# track which local users exists to make sure it's not file.directory more than once #}
 
 {%- for domain in salt['pillar.get']('ssh:hosts', {}) %}
 ssh_known_host_{{ domain }}:
@@ -48,32 +46,26 @@ ssh_known_host_{{ domain }}:
       - file: system_ssh_known_hosts
     - require:
       - pkg: openssh-client
+{%- endfor %}
 
-  {%- set key_map = salt['pillar.get']('ssh:hosts:' ~ domain ~ ':keys', {}) -%}
-  {%- set keyname_contents = salt['pillar.get']('ssh:keys', {}) -%}
+{%- set user_keys = salt['pillar.get']('ssh:users', {}) -%}
+{%- set keyname_contents = salt['pillar.get']('ssh:keys', {}) -%}
 
-  {%- for keyname in key_map %}
-    {%- set local_remotes = key_map[keyname] if key_map[keyname] != none else {} %}
-    {%- for local in local_remotes -%}
-      {#- make sure /etc/ssh/keys/{{ local }} is managed only once -#}
-      {%- if local not in managed_locals -%}
-        {%- do managed_locals.append(local) %}
-/etc/ssh/keys/{{ local }}:
+{%- for local_user in user_keys %}
+ssh_key_dir_for_user_{{ local_user }}:
   file:
     - directory
+    - clean: True
+    - name: /etc/ssh/keys/{{ local_user }}
     - mode: 750
     - require:
       - file: /etc/ssh/keys
-      {%- endif -%}
 
-      {%- set remotes = local_remotes[local] %}
-      {%- set remotes = [remotes] if remotes is string else remotes %}
-      {%- for remote in remotes %}
-        {%- set ssh_priv_key = '/etc/ssh/keys/{0}/{1}@{2}'.format(local, remote, domain) -%}
-        {%- do managed_keys.append(ssh_priv_key) %}
-{{ ssh_priv_key }}:
+  {%- for keyname in user_keys[local_user] %}
+ssh_private_key_{{ local_user }}_{{ keyname }}:
   file:
     - managed
+    - name: /etc/ssh/keys/{{ local_user }}/{{ keyname }}
     - makedirs: True {#- file.directory state run after this will set the expected dir mode/owner #}
     - mode: 400
     - contents: |
@@ -81,9 +73,35 @@ ssh_known_host_{{ domain }}:
     - require:
       - file: /etc/ssh/keys
     - require_in:
-      - file: /etc/ssh/keys/{{ local }}
-      {%- endfor %}
-    {%- endfor -%}
+      - file: ssh_key_dir_for_user_{{ local_user }}
+
+ssh_public_key_{{ local_user }}_{{ keyname }}:
+  cmd:
+    - wait
+    - name: ssh-keygen -y -f /etc/ssh/keys/{{ local_user }}/{{ keyname }} > /etc/ssh/keys/{{ local_user }}/{{ keyname }}.pub
+    - watch:
+      - file: ssh_private_key_{{ local_user }}_{{ keyname }}
+    - require:
+      - pkg: openssh-client
+  file:
+    - managed
+    - name: /etc/ssh/keys/{{ local_user }}/{{ keyname }}.pub
+    - user: root
+    - group: root
+    - mode: 400
+    - require:
+      - cmd: ssh_public_key_{{ local_user }}_{{ keyname }}
+    - require_in:
+      - file: ssh_key_dir_for_user_{{ local_user }}
+
+ssh_config_{{ local_user }}_{{ keyname }}_accumulate:
+  file:
+    - accumulated
+    - name: ssh_identity_config
+    - filename: /etc/ssh/ssh_config
+    - require_in:
+      - file: openssh-client
+    - text: {{ keyname }}
   {%- endfor -%}
 {%- endfor -%}
 
@@ -112,59 +130,3 @@ system_ssh_known_hosts:
     - directory
     - require:
       - pkg: openssh-client
-
-{#- remove all unmanaged keys -#}
-{%- for keyfile in salt['file.find']('/etc/ssh/keys', type='f') -%}
-  {%- if keyfile not in managed_keys %}
-{{ keyfile }}:
-  file:
-    - absent
-  {%- endif -%}
-{%- endfor %}
-
-{%- set root_key = salt['pillar.get']('ssh:root_key', False) -%}
-{%- set extensions = ('', '.pub') -%}
-{%- if root_key -%}
-    {%- set type = 'rsa' if 'BEGIN RSA PRIVATE' in root_key else 'dsa' %}
-root_ssh_private_key:
-  file:
-    - managed
-    - name: {{ root_home }}/.ssh/id_{{ type }}
-    - contents: |
-        {{ root_key | indent(8) }}
-    - user: root
-    - group: root
-    - mode: 400
-    - require:
-      - file: {{ root_home }}/.ssh
-    - require_in:
-      - pkg: openssh-client
-  cmd:
-    - wait
-    - name: ssh-keygen -y -f {{ root_home }}/.ssh/id_{{ type }} > {{ root_home }}/.ssh/id_{{ type }}.pub
-    - watch:
-      - file: root_ssh_private_key
-    - require:
-      - pkg: openssh-client
-
-    {#- remove the other private and public key #}
-    {%- for extension in extensions %}
-{{ root_home }}/.ssh/id_{{ 'dsa' if type == 'rsa' else 'rsa' }}{{ extension }}:
-  file:
-    - absent
-    - require_in:
-      - file: root_ssh_private_key
-    {%- endfor -%}
-
-{%- else -%}
-    {#-  remove all public and private key of root user -#}
-    {%- for type in ('rsa', 'dsa') -%}
-        {%- for extension in extensions %}
-{{ root_home }}/.ssh/id_{{ type }}{{ extension }}:
-  file:
-    - absent
-    - require_in:
-      - pkg: openssh-client
-        {%- endfor -%}
-    {%- endfor -%}
-{%- endif -%}

@@ -1,16 +1,17 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
+{%- from "os.jinja2" import os with context %}
+
 include:
   - apt
 
-{%- from "os.jinja2" import os with context %}
+{%- set files_archive = salt['pillar.get']('files_archive', False) %}
 
 libjs-underscore:
 {%- if os.is_precise %}
   {%- set version = '1.4.2-1chl1~precise1' %}
   pkgrepo:
     - managed
-  {%- set files_archive = salt['pillar.get']('files_archive', False) %}
   {%- if files_archive %}
     - name: deb {{ files_archive|replace('https://', 'http://') }}/mirror/underscore/1.4.2-1 {{ grains['lsb_distrib_codename'] }} main
     - key_url: salt://underscore/key.gpg
@@ -26,8 +27,5 @@ libjs-underscore:
 {%- endif %}
   pkg:
     - installed
-{%- if os.is_precise %}
-    - version: {{ version }}
-{%- endif %}
     - require:
       - cmd: apt_sources

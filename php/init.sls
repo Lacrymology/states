@@ -5,11 +5,12 @@
 include:
   - apt
 
+{%- set files_archive = salt['pillar.get']('files_archive', False) %}
+
 php:
 {%- if os.is_precise %}
   pkgrepo:
     - managed
-  {%- set files_archive = salt['pillar.get']('files_archive', False) %}
   {%- if files_archive %}
     - name: deb {{ files_archive|replace('https://', 'http://') }}/mirror/lucid-php5 {{ grains['lsb_distrib_codename'] }} main
     - key_url: salt://php/key.gpg

@@ -1,22 +1,22 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
+{%- from "os.jinja2" import os with context %}
+
 include:
   - apt
 
-{%- from "os.jinja2" import os with context %}
+{%- set files_archive = salt['pillar.get']('files_archive', False) %}
 
 {#- PID file owned by root, no need to manage #}
 rsyslog:
 {%- if os.is_precise %}
   pkgrepo:
     - managed
-  {%- set files_archive = salt['pillar.get']('files_archive', False) %}
-  {%- if files_archive %}
-    - name: deb {{ files_archive|replace('https://', 'http://') }}/mirror/rsyslog/7.4.4 {{ grains['lsb_distrib_codename'] }} main
-  {%- else %}
-    {#- source: ppa: tmortensen/rsyslogv7 #}
-    - name: deb http://archive.robotinfra.com/mirror/rsyslog/7.4.4 {{ grains['lsb_distrib_codename'] }} main
+  {%- if not files_archive %}
+    {%- set files_archive = "http://archive.robotinfra.com" %}
   {%- endif %}
+    {#- source: ppa: tmortensen/rsyslogv7 #}
+    - name: deb {{ files_archive|replace('https://', 'http://') }}/mirror/rsyslog/7.4.4 {{ grains['lsb_distrib_codename'] }} main
     - key_url: salt://rsyslog/key.gpg
     - file: /etc/apt/sources.list.d/rsyslogv7.list
     - clean_file: True

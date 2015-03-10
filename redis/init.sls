@@ -2,6 +2,7 @@
 
 {%- from 'macros.jinja2' import manage_pid with context %}
 {%- from "os.jinja2" import os with context %}
+{%- set files_archive = salt['pillar.get']('files_archive', False) %}
 
 {%- if os.is_precise %}
   {%- set redis_version = "2.8.4" %}
@@ -38,17 +39,13 @@ redis:
     - installed
 {%- if os.is_precise %}
     - sources:
-  {%- set files_archive = salt['pillar.get']('files_archive', False) %}
-  {%- if files_archive %}
+  {%- if not files_archive %}
+    {%- set files_archive = 'http://archive.robotinfra.com' %}
+  {%- endif %}
+      {#- source: http://ppa.launchpad.net/chris-lea/redis-server #}
       - libjemalloc1: {{ files_archive|replace('file://', '')|replace('https://', 'http://') }}/mirror/{{ jemalloc }}
       - redis-server: {{ files_archive|replace('file://', '')|replace('https://', 'http://') }}/mirror/{{ filename }}
       - redis-tools: {{ files_archive|replace('file://', '')|replace('https://', 'http://') }}/mirror/{{ redistools }}
-  {%- else %}
-      {#- source: http://ppa.launchpad.net/chris-lea/redis-server #}
-      - libjemalloc1: http://archive.robotinfra.com/mirror/{{ jemalloc }}
-      - redis-server: http://archive.robotinfra.com/mirror/{{ filename }}
-      - redis-tools: http://archive.robotinfra.com/mirror/{{ redistools }}
-  {%- endif %}
 {%- elif os.is_trusty %}
     - name: redis-server
 {%- endif %}

@@ -3,8 +3,7 @@
 # Use of this is governed by a license that can be found in doc/license.rst.
 
 set -e
-
-# limit resources usage
+{# limit resources usage #}
 renice -n 19 -p $$ > /dev/null
 ionice -c idle -p $$
 
@@ -17,8 +16,8 @@ tmpdir=$(mktemp -d)
 cd "${tmpdir}"
 mkdir "${subdir}"
 mv "${archive_path}" "${subdir}"
-# Do not preserve permission as it also change the permission of /var/lib/backup
-# which need to be in 775 for the monitoring check (run as non-root) to read some files
+{#- Do not preserve permission as it also change the permission of /var/lib/backup
+which need to be in 775 for the monitoring check (run as non-root) to read some files #}
 rsync --archive --no-perms --quiet --relative ./"${subdir}"/ root@{{ salt['pillar.get']('backup_server:address') }}:/var/lib/backup
 cd /
 rm -rf "${tmpdir}"

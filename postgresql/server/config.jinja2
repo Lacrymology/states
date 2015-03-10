@@ -106,12 +106,10 @@ log_min_duration_statement = {{ salt['pillar.get']('postgresql:log_slow_query', 
 {%- if salt['pillar.get']('debug', False) %}
 log_error_verbosity = verbose
 log_min_messages = debug5
-client_min_messages = debug5
 log_min_error_statement = debug5
 {%- else %}
 log_error_verbosity = default
 log_min_messages = warning
-client_min_messages = notice
 log_min_error_statement = error
 {%- endif %}
 

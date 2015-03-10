@@ -13,4 +13,4 @@ export TERM=dumb
 
 /usr/bin/salt -G 'highstate:True' state.highstate \
     --return syslog,timestamps{% if salt['pillar.get']('sentry_dsn', False) %},sentry_common{% endif %} \
-    > /dev/null &
+    > /dev/null

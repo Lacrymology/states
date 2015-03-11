@@ -189,9 +189,10 @@ salt_master_old_version:
     - name: salt-master
 {%- endif %}
 
-/etc/cron.daily/salt_highstate:
+salt_master_cron_highstate:
   file:
     - managed
+    - name: /etc/cron.daily/salt_highstate
     - source: salt://salt/master/cron.jinja2
     - template: jinja
     - user: root

@@ -62,6 +62,7 @@ salt-fire-event:
       - pkg: salt-minion
       - module: pysc
 
-/etc/cron.daily/salt_highstate:
+salt_minion_cron_highstate:
   file:
     - absent
+    - name: /etc/cron.daily/salt_highstate

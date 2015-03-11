@@ -15,6 +15,7 @@ include:
 {% if salt['pillar.get']('graphite_address', False) %}
   - statsd.nrpe
 {% endif %}
+  - redis.nrpe
   - sudo.nrpe
   - uwsgi.nrpe
   - virtualenv.nrpe

@@ -5,5 +5,6 @@
 - memcache.diamond
 - postgresql.server.diamond
 - rsyslog.diamond
+- redis.diamond
 - statsd.diamond
 {%- endcall %}

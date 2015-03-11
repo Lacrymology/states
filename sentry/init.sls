@@ -18,6 +18,7 @@ include:
 {% if salt['pillar.get']('graphite_address', False) %}
   - statsd
 {% endif %}
+  - redis
   - sudo
   - uwsgi
   - virtualenv
@@ -105,6 +106,7 @@ sentry-uwsgi:
       - service: memcached
       - service: uwsgi
       - service: rsyslog
+      - service: redis
   module:
     - wait
     - name: file.touch

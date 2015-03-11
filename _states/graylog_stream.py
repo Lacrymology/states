@@ -22,7 +22,7 @@ def __virtual__():
 
 def present(
         name, description='', creator=None, rules=[],
-        receivers_type="emails", receivers=[]):
+        receivers_type="emails", receivers=[], alert_grace=1):
     """
     Makes sure that a stream with the given parameters exists.
     Do nothing if a streams with same title exists.
@@ -34,7 +34,8 @@ def present(
                             "inverted": false, "type": 1}]
     :receivers_type: "emails" or "users". Default to "emails".
     :receivers: List of alerts receivers of the streams. Default to [].
-
+    :alert_grace: time (in minutes) to wait until triggering a new
+                  alert. Default to 1 minute.
     """
 
     ret = {
@@ -53,7 +54,7 @@ def present(
 
     params = dict(
         title=name, description=description, creator=creator,
-        rules=rules, receivers=receivers,
+        rules=rules, receivers=receivers, alert_grace=alert_grace,
     )
 
     if __opts__['test']:

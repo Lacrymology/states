@@ -33,7 +33,9 @@ sentry:
       - file: /usr/local
   pkg:
     - latest
-    - name: libevent-dev
+    - pkgs:
+        - libevent-dev
+        - libffi-dev
     - require:
       - cmd: apt_sources
   file:

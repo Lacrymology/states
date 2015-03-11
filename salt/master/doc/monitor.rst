@@ -43,8 +43,8 @@ salt_master_return_port_remote
 salt_master_git_branch
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Check if git repositories used in :doc:`index` contains branches with bad
-characters.
+Check if git repositories used in :doc:`index` contains branches which have name
+contains bad characters.
 
 List of bad characters:
 

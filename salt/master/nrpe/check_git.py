@@ -68,7 +68,7 @@ def _list_branches(repo):
     return branches
 
 
-def _validate(repos):
+def _branch_filter(repos):
     """
     return list of git repo that contains bad characters
     """
@@ -114,7 +114,7 @@ class GitBranchesCheck(nagiosplugin.Resource):
         repos.extend(_parse_ext_pillar(config.get('ext_pillar', [])))
         log.debug("list of git repositories to check: %s", repos)
 
-        bad_branches = _validate(repos)
+        bad_branches = _branch_filter(repos)
         log.debug("bad branch names: %s", bad_branches)
 
         if bad_branches:

@@ -11,6 +11,6 @@ trap "log_stop_script \$?" EXIT
 
 export TERM=dumb
 
-/usr/bin/salt -G 'highstate:True' state.highstate \
+/usr/bin/salt --async -G 'highstate:True' state.highstate \
     --return syslog,timestamps{% if salt['pillar.get']('sentry_dsn', False) %},sentry_common{% endif %} \
     > /dev/null

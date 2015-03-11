@@ -197,6 +197,7 @@ Format::
           - {{ email }}
           - ...
         receivers_type: {{ "emails" or "users" }}
+        alert_grace: 10
 
 Only ``{{ stream_name }}`` is mandatory.
 

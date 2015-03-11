@@ -142,7 +142,7 @@ def streams():
 
 def create_stream(
         title, description='', creator=None, rules=[],
-        receivers_type="emails", receivers=None):
+        receivers_type="emails", receivers=None, alert_grace=1):
 
     """
     Create a stream.
@@ -155,6 +155,8 @@ def create_stream(
                             "inverted": false, "type": 1}]
     :receivers_type: "emails" or "users". Default to "emails".
     :receivers: List of alerts receivers of the streams. Default to None.
+    :alert_grace: time (in minutes) to wait until triggering a new
+                  alert. Default to 1 minute.
     """
 
     stream_params = {

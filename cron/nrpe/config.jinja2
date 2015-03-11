@@ -4,5 +4,4 @@
 
 cron_procs:
   description: Cron Daemon
-  passive: False
   command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -u root --ereg-argument-array="^cron$"'

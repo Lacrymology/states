@@ -78,8 +78,12 @@ def _branch_filter(repos):
         for branch in branches:
             for char in BAD_CHARS:
                 if char in branch:
-                    bad_branches.setdefault(repo, branch)
+                    if bad_branches.get(repo, None):
+                        bad_branches[repo].append(branch)
+                    else:
+                        bad_branches[repo] = [branch]
                     log.debug("Bad branch name: %s of repo: %s", branch, repo)
+                    break
 
     return bad_branches
 

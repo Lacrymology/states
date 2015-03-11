@@ -54,15 +54,27 @@ nagios-nrpe-server:
 /usr/local/nagiosplugin:
   file:
     - absent
+    - require:
+      - service: nagios-nrpe-server
+      - service: nsca_passive
 
 /etc/sudoers.d/nrpe_oom:
   file:
     - absent
+    - require:
+      - service: nagios-nrpe-server
+      - service: nsca_passive
 
 /etc/cron.d/passive-checks-nrpe.cfg:
   file:
     - absent
+    - require:
+      - service: nagios-nrpe-server
+      - service: nsca_passive
 
 /etc/rsyslog.d/nrpe.conf:
   file:
     - absent
+    - require:
+      - service: nagios-nrpe-server
+      - service: nsca_passive

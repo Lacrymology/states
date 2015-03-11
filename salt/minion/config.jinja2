@@ -26,4 +26,14 @@ sentry_handler:
 {%- endif %}
 {%- if salt['pillar.get']('salt:highstate', True) %}
 state_verbose: False
-{%- endif -%}
+{%- endif %}
+
+grains:
+{%- for role in salt['pillar.get']('roles', []) -%}
+    {%- if loop.first %}
+  roles:
+    {%- endif %}
+    - {{ role }}
+{%- endfor %}
+  branch: {{ salt['pillar.get']('branch', 'master') }}
+  highstate: {{ salt['pillar.get']('salt:highstate', True) }}

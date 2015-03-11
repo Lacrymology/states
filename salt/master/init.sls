@@ -9,6 +9,8 @@ and use it to install the master.
 {%- set use_ext_pillar = salt['pillar.get']('salt_master:pillar:branch', False) and salt['pillar.get']('salt_master:pillar:remote', False) -%}
 
 include:
+  - bash
+  - cron
   - local
   - git
 {%- if use_ext_pillar %}
@@ -186,3 +188,15 @@ salt_master_old_version:
     - removed
     - name: salt-master
 {%- endif %}
+
+/etc/cron.daily/salt_highstate:
+  file:
+    - managed
+    - source: salt://salt/master/cron.jinja2
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 500
+    - require:
+      - pkg: cron
+      - file: bash

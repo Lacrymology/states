@@ -12,6 +12,7 @@ rsyslog:
       - pkg: rsyslog
   service:
     - dead
+{# only for ubuntu precise #}
   cmd:
     - run
     - name: 'apt-key del 431533D8'
@@ -30,6 +31,7 @@ rsyslog:
     - absent
     - require:
       - pkgrepo: rsyslog
+{# end for ubuntu precise #}
 
 /etc/rsyslog.d:
   file:
@@ -37,9 +39,11 @@ rsyslog:
     - require:
       - service: rsyslog
 
+{# only for ubuntu precise #}
 /etc/apt/sources.list.d/rsyslogv7.list:
   file:
     - absent
+{# end for ubuntu precise #}
 
 /var/spool/rsyslog:
   file:

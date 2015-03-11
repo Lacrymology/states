@@ -1,0 +1,10 @@
+{% set os = salt["grains.filter_by"]({
+  "precise": {
+    "is_precise": True,
+    "is_trusty": False,
+  },
+  "trusty": {
+    "is_precise": False,
+    "is_trusty": True,
+  },
+}, grain="oscodename", default="precise") %}

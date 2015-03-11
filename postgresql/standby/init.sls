@@ -2,12 +2,12 @@
 -*- ci-automatic-discovery: off -*-
 -#}
 
-{%- from "postgresql/init.sls" import postgresql_version with context -%}
+{%- from "postgresql/map.jinja2" import postgresql with context %}
+{%- set version = postgresql.version %}
 
 include:
   - postgresql.server
 
-{%- set version = postgresql_version() %}
 extend:
   postgresql:
     file:

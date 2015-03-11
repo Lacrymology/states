@@ -27,11 +27,13 @@ require: require other "over" state run before it. In above example,
 Master servers need to setup before standby servers to provide basebackup for
 standby servers.
 -#}
-{%- from "postgresql/init.sls" import postgresql_version with context -%}
+
+{% from "postgresql/map.jinja2" import postgresql with context %}
+{% set version = postgresql.version %}
+
 include:
   - postgresql.server
 
-{%- set version = postgresql_version() %}
 extend:
   postgresql:
     file:

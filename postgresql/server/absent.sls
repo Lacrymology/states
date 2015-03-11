@@ -1,7 +1,7 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
-{%- from "postgresql/init.sls" import postgresql_version with context -%}
-{%- set version = postgresql_version() %}
+{% from "postgresql/map.jinja2" import postgresql with context %}
+{% set version = postgresql.version %}
 
 postgresql:
   pkg:

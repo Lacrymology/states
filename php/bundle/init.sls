@@ -11,6 +11,5 @@ php_bundle:
       - php5-mysql
       - php5-mcrypt
       - php5-curl
-      - php5-cli
     - require:
-      - pkgrepo: php
+      - pkg: php

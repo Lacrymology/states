@@ -1,5 +1,6 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
+{# only for ubuntu precise #}
 php:
   file:
     - absent
@@ -28,3 +29,4 @@ php:
     - absent
     - require:
       - pkgrepo: php
+{# end for ubuntu precise #}

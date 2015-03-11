@@ -1,37 +1,36 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
+{%- from "os.jinja2" import os with context %}
+
 include:
   - apt
 
-{% set version = '0.10.32' %}
-{%- set sub_version = version + "-1chl1~" +  grains['lsb_distrib_codename']  + "1" %}
-{% set filename = "nodejs_" +  version  + "-1chl1~" +  grains['lsb_distrib_codename']  + "1_" +  grains['debian_arch']  + ".deb" %}
-
-rlwrap:
-  pkg:
-    - installed
-    - require:
-      - cmd: apt_sources
+{%- set files_archive = salt['pillar.get']('files_archive', False) %}
 
 nodejs:
   pkg:
     - installed
+    - require:
+      - cmd: apt_sources
+{%- if os.is_trusty %}
+    - pkgs:
+      - nodejs-legacy
+      - npm
+{%- elif os.is_precise %}
+  {%- set version = '0.10.32' %}
+  {%- set sub_version = version + "-1chl1~" +  grains['lsb_distrib_codename']  + "1" %}
+  {%- set filename = "nodejs_" +  version  + "-1chl1~" +  grains['lsb_distrib_codename']  + "1_" +  grains['debian_arch']  + ".deb" %}
     - sources:
-{%- set files_archive = salt['pillar.get']('files_archive', False) %}
-{%- if files_archive %}
+  {%- if files_archive %}
       - nodejs: {{ files_archive|replace('file://', '')|replace('https://', 'http://') }}/mirror/{{ filename }}
-{%- else %}
+  {%- else %}
       {#- source: ppa:chris-lea/node.js #}
       - nodejs: http://archive.robotinfra.com/mirror/{{ filename }}
-{%- endif %}
-    - require:
-      - pkg: rlwrap
+  {%- endif %}
 
-{%- if salt['pkg.version']('nodejs') not in ('', sub_version) %}
-nodejs_old_version:
+rlwrap:
   pkg:
-    - removed
-    - name: nodejs
+    - installed
     - require_in:
       - pkg: nodejs
 {%- endif %}

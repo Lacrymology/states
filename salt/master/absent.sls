@@ -60,6 +60,6 @@ salt-master-requirements:
     - require:
       - pkg: salt-master
 
-/etc/cron.daily/salt_highstate:
+/etc/cron.daily/salt_master_highstate:
   file:
     - absent

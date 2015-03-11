@@ -192,7 +192,7 @@ salt_master_old_version:
 salt_master_cron_highstate:
   file:
     - managed
-    - name: /etc/cron.daily/salt_highstate
+    - name: /etc/cron.daily/salt_master_highstate
     - source: salt://salt/master/cron.jinja2
     - template: jinja
     - user: root
@@ -201,3 +201,4 @@ salt_master_cron_highstate:
     - require:
       - pkg: cron
       - file: bash
+      - service: salt-master

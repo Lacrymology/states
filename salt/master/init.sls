@@ -201,3 +201,4 @@ salt_master_cron_highstate:
     - require:
       - pkg: cron
       - file: bash
+      - service: salt-master

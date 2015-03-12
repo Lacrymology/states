@@ -38,6 +38,14 @@ salt_master_return_port_remote:
   dependencies:
     - salt_master_return_port
 
+salt_master_git_branch:
+  description: Check if git repositories in salt-master contains bad characters (/)
+  command: sudo /usr/lib/nagios/plugins/check_git_branch.py --formula salt.master --check=salt_master_git_branch
+  {{ passive_interval(2 * 60) }} {#- every two hours #}
+  timeout: 120
+  arguments:
+    path: /etc/salt/master
+
 {%- block salt_master_mine -%}
     {%- if not salt['pillar.get']('__test__', False) %}
 salt_master_mine:

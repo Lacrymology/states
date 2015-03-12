@@ -40,6 +40,16 @@ salt_master_return_port_remote
 
 :doc:`/salt/master/doc/index` Return port can be accessed remotely.
 
+salt_master_git_branch
+~~~~~~~~~~~~~~~~~~~~~~
+
+Check if git repositories used in :doc:`index` contains branches which have name
+contains bad characters.
+
+List of bad characters:
+
+* ``/``
+
 .. |deployment| replace:: salt_master
 
 .. include:: /backup/doc/monitor_procs.inc

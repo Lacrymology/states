@@ -28,9 +28,15 @@ CACHES = {
     }
 }
 
+SENTRY_CACHE = 'sentry.cache.django.DjangoCache'
+
 # Set this to false to require authentication
 SENTRY_PUBLIC = False
-SENTRY_ALLOW_REGISTRATION = False
+# disable account register
+SENTRY_FEATURES = {
+  'auth:register': False,
+  'social-auth:register': False,
+}
 
 # You should configure the absolute URI to Sentry. It will attempt to guess it if you don't
 # but proxies may interfere with this.
@@ -117,10 +123,10 @@ EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
     {%- endif -%}
 {%- else %}
 EMAIL_USE_TLS = False
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 {%- endif %}
 
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
-SENTRY_SERVER_EMAIL = SERVER_EMAIL
 
 {% if salt['pillar.get']('graphite_address', False) %}
 MIDDLEWARE_CLASSES = MIDDLEWARE_CLASSES + (
@@ -139,3 +145,36 @@ STATIC_URL = '/_static/'
 
 {#- XMPP/ejabber integration #}
 INSTALLED_APPS += ('sentry_xmpp',)
+
+
+{#- upgrade: 6.4.4 - 7.40 #}
+
+# You should not change this setting after your database has been created
+# unless you have altered all schemas first
+SENTRY_USE_BIG_INTS = True
+
+# The administrative email for this installation.
+# Note: This will be reported back to getsentry.com as the point of contact. See
+# the beacon documentation for more information.
+SENTRY_ADMIN_EMAIL = 'noone@nowhere.local'
+# Turn off beacon
+SENTRY_BEACON = False
+
+# Queue
+CELERY_ALWAYS_EAGER = False
+BROKER_URL = 'redis://localhost:6379'
+
+SENTRY_RATELIMITER = 'sentry.ratelimits.redis.RedisRateLimiter'
+SENTRY_BUFFER = 'sentry.buffer.redis.RedisBuffer'
+SENTRY_QUOTAS = 'sentry.quotas.redis.RedisQuota'
+SENTRY_TSDB = 'sentry.tsdb.redis.RedisTSDB'
+SENTRY_FILESTORE = 'django.core.files.storage.FileSystemStorage'
+
+# File storage
+SENTRY_FILESTORE_OPTIONS = {
+    'location': '/var/lib/deployments/sentry/sentry-files',
+}
+
+# If this file ever becomes compromised, it's important to regenerate your SECRET_KEY
+# Changing this value will result in all current sessions being invalidated
+SECRET_KEY = '{{ salt['password.generate']('monitoring_user', 56) }}'

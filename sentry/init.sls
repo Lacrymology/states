@@ -87,6 +87,29 @@ sentry:
     - require:
       - postgres_user: sentry
       - service: postgresql
+  service:
+    - running
+    - name: sentry-celery
+    - enable: True
+    - require:
+      - file: /var/lib/deployments/sentry
+      - service: redis
+    - watch:
+      - cmd: sentry_settings
+      - file: /etc/init/sentry-celery.conf
+      - file: sentry
+
+/etc/init/sentry-celery.conf:
+  file:
+    - managed
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 400
+    - source: salt://sentry/upstart.jinja2
+    - require:
+      - file: /var/lib/deployments/sentry
+      - module: sentry
 
 sentry-uwsgi:
   file:
@@ -218,17 +241,18 @@ sentry-migrate-fake:
       - file: web
       - file: sentry-uwsgi
 
+{#-
+  can't use module.wait django.collectstatic, sentry.conf.server doesn't
+  read /etc/sentry.conf.py
+#}
 sentry_collectstatic:
-  module:
+  cmd:
     - wait
-    - name: django.collectstatic
-    - settings_module: sentry.conf.server
-    - bin_env: /usr/local/sentry
-    - env:
-        SENTRY_CONF: /etc/sentry.conf.py
+    - name: /usr/local/sentry/manage collectstatic --noinput
     - require:
       - cmd: sentry_settings
       - cmd: sentry
+      - file: /usr/local/sentry/manage
     - watch:
       - file: sentry_settings
       - module: sentry

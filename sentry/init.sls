@@ -23,6 +23,7 @@ include:
   - uwsgi
   - virtualenv
   - web
+  - xml
 
 sentry:
   virtualenv:
@@ -58,6 +59,7 @@ sentry:
     - requirements: /usr/local/sentry/salt-requirements.txt
     - require:
       - virtualenv: sentry
+      - pkg: xml-dev
     - watch:
       - pkg: sentry
       - pkg: python-dev

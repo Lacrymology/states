@@ -23,9 +23,9 @@ salt_minion_pillar_render:
   description: Salt Minion pillar render
   command: sudo /usr/lib/nagios/plugins/check_minion_pillar_render.py --formula=salt.minion --check=salt_minion_pillar_render --cronresult
   {{ passive_interval(12 * 60) }} {#- 12 hours #}
-  timeout: 55
+  timeout: {{ 10 * 60 }} {#- cron jobs timeout after 12 minutes
   arguments:
-    freshness: {{ 12 * 60 + 20 }} {#- cron interval + timeout + 5 mins #}
+    freshness: {{ (12 * 60) + 10 + 5 }} {#- cron interval + timeout + 5 mins #}
   dependencies:
     {#- no alert if load is too high #}
     - load_average

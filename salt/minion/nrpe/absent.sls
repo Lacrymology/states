@@ -20,3 +20,8 @@ salt_minion_pillar_render_data_collector:
     - absent
 
 {{ passive_absent('salt.minion') }}
+
+salt_minion_pillar_render_cron:
+  file:
+    - absent
+    - name: /etc/cron.twice_daily/salt_minion_pillar_render

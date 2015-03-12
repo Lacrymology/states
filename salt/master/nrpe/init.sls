@@ -61,3 +61,20 @@ salt_mine_collect_minions_data:
       - file: /etc/cron.twice_daily
       - file: /usr/lib/nagios/plugins/check_mine_minions.py
 {%- endif %}
+
+/usr/lib/nagios/plugins/check_git_branch.py:
+  file:
+    - managed
+    - source: salt://salt/master/nrpe/check_git.py
+    - template: jinja
+    - user: nagios
+    - group: nagios
+    - mode: 550
+    - require:
+      - pkg: nagios-nrpe-server
+      - module: nrpe-virtualenv
+      - file: /etc/sudoers.d/nrpe_salt_master
+      - file: nsca-salt.master
+    - require_in:
+      - service: nagios-nrpe-server
+      - service: nsca_passive

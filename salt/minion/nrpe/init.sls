@@ -3,6 +3,8 @@
 {%- from 'nrpe/passive.jinja2' import passive_check with context %}
 include:
   - apt.nrpe
+  - bash
+  - cron
   - nrpe
   - pysc.nrpe
   - raven.nrpe
@@ -55,3 +57,17 @@ sudo_salt_minion_nrpe:
       - service: nsca_passive
 
 {{ passive_check('salt.minion') }}
+
+salt_minion_pillar_render_cron:
+  file:
+    - managed
+    - name: /etc/cron.twice_daily/salt_minion_pillar_render
+    - source: salt://salt/minion/nrpe/cron.jinja2
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 500
+    - require:
+      - file: bash
+      - file: /etc/cron.twice_daily
+      - file: /usr/lib/nagios/plugins/check_minion_pillar_render.py

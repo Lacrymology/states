@@ -212,7 +212,7 @@ def create_stream(
 
     alert_condition = {
         "parameters": {
-            "grace": 1, "time": 1, "backlog": 100,
+            "grace": alert_grace, "time": 1, "backlog": 100,
             "threshold_type": "more", "threshold": 1
         },
         "type": "message_count",

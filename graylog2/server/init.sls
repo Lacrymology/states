@@ -232,6 +232,7 @@ import_graylog2_syslog:
 {%- for stream_name, stream_data in streams.iteritems() %}
   {%- set rules = stream_data['rules']|default([]) %}
   {%- set receivers = stream_data['receivers']|default([]) %}
+  {%- set alert_grace = stream_data['alert_grace']|default(1) %}
   {% set receivers_type = stream_data['receivers_type']|default("emails") %}
 {{ stream_name|lower|replace(' ', '_') }}_graylog2_stream:
   graylog_stream:
@@ -251,6 +252,7 @@ import_graylog2_syslog:
       - {{ receiver }}
   {%- endfor %}
     - receivers_type: {{ receivers_type }}
+    - alert_grace: {{ alert_grace }}
     - require:
       - process: graylog2-server
       - module: requests

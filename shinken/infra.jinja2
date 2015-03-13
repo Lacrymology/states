@@ -152,6 +152,12 @@ define command {
     command_line /usr/lib/nagios/plugins/check_ssl_configuration.py -H $ARG1$
 }
 
+{#- fire a salt event when a service goes into hard problem state #}
+define command {
+  command_name fire_salt_event
+  command_line /usr/bin/sudo /usr/local/shinken/bin/salt_event_handler --service-state '$SERVICESTATE$' --service-state-type '$SERVICESTATETYPE$' --service-desc '$SERVICEDESC$' --service-display-name '$SERVICEDISPLAYNAME$' --hostname '$HOSTNAME$'
+}
+
 define timeperiod {
     timeperiod_name 24x7
     alias 24_Hours_A_Day,_7_Days_A_Week
@@ -176,9 +182,9 @@ define service {
     obsess_over_service 1
     # Service notifications are enabled
     notifications_enabled 1
-    event_handler_enabled 0
     # Service event handler is enabled
-{#-    event_handler super_event_kill_everyone!DIE#}
+    event_handler_enabled 1
+    event_handler fire_salt_event
     # Flap detection is enabled
     flap_detection_enabled 1
     # Failure prediction is enabled

@@ -6,7 +6,7 @@ include:
   - raven
   - requests
   - rsyslog
-  - salt.minion.event
+  - salt.event
   - salt.minion.upgrade
 
 {# it's mandatory to remove this file if the master is changed #}

@@ -5,7 +5,7 @@
 include:
   - pysc
   - rsyslog
-  - salt.minion.event
+  - salt.event
   - shinken
 {% if ssl %}
   - ssl

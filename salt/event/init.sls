@@ -10,7 +10,7 @@ salt-fire-event:
   file:
     - managed
     - template: jinja
-    - source: salt://salt/minion/event/sudo.jinja2
+    - source: salt://salt/event/sudo.jinja2
     - mode: 440
     - user: root
     - group: root
@@ -22,7 +22,7 @@ salt-fire-event:
   file:
     - managed
     - template: jinja
-    - source: salt://salt/minion/salt_fire_event.py
+    - source: salt://salt/event/salt_fire_event.py
     - mode: 551
     - user: root
     - group: root

@@ -5,6 +5,7 @@
 include:
   - pysc
   - rsyslog
+  - salt.minion.event
   - shinken
 {% if ssl %}
   - ssl
@@ -77,5 +78,6 @@ shinken-reactionner:
     - mode: 550
     - require:
       - virtualenv: shinken
+      - file: /usr/local/bin/salt_fire_event.py
     - require_in:
       - service: shinken-reactionner

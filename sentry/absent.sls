@@ -26,3 +26,7 @@ sentry-uwsgi:
 /var/lib/deployments/sentry:
   file:
     - absent
+
+/etc/cron.daily/sentry-cleanup:
+  file:
+    - absent

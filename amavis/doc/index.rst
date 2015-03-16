@@ -8,15 +8,16 @@ Amavis
 Introduction
 ------------
 
-Amavis is an open source content filter for electronic mail, implementing mail
-message transfer, decoding, some processing and checking, and interfacing with
-external content filters to provide protection against spam, viruses and other
-malware. It can be considered an interface between a :ref:`glossary-mta` and one or more content
-filters.
+:doc:`index` is an open source content filter for electronic mail,
+implementing mail message transfer, decoding, some processing and checking,
+and interfacing with external content filters to provide protection against
+spam, viruses and other malware. It can be considered an interface between
+a :ref:`glossary-mta` and one or more content filters.
 
 .. http://en.wikipedia.org/wiki/Amavis - 2015-01-24
 
-Every use of ``amavisd`` or ``amavis`` is this documentation implies ``amavisd-new``.
+Every use of ``amavisd`` or ``amavis`` is this documentation
+implies ``amavisd-new``.
 
 .. note::
 

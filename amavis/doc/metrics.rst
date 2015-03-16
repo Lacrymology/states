@@ -3,15 +3,15 @@ Metrics
 
 :doc:`/diamond/doc/process`:
 
-* ``amavis`` (:doc:`/amavis/doc/index` daemon and all its subprocesses).
+* ``amavis`` (:doc:`index` daemon and all its subprocesses).
 
 Amavis
 ------
 
-:doc:`/amavis/doc/index` receives emails from MTA
+:doc:`index` receives emails from :ref:`glossary-mta`
 (e.g :doc:`/postfix/doc/index`)
-and perform spam filtering and/or virus scanning on those emails.
-These metrics are statistics of :doc:`/amavis/doc/index` daemon about its
+and performs spam filtering and/or virus scanning on those emails.
+These metrics are statistics of :doc:`index` daemon about its
 email processing.
 
 Unit:

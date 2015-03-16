@@ -7,16 +7,16 @@ Firewall
 
 .. warning::
 
-  These 2 :ref:`glossary-daemon` don't need to be open unless it's plan to be
+  These 2 ports don't need to be opened unless it's plan to be
   run on a separated hosts as the :doc:`/mail/server/doc/index`. Which is not
   usually the case.
 
-  In case of doubt, don't allow traffic in for these.
+  In case of doubt, don't allow traffic in for them.
 
 Amavis
 ------
 
-:doc:`/amavis/doc/index` run on the following port: :ref:`glossary-TCP`
+:doc:`index` runs on the following port: :ref:`glossary-TCP`
 ``10024``.
 
 Clamav

@@ -31,11 +31,11 @@ If the check is not ``OK``, maybe a manual intervention is needed, such as:
 
 - Get list of package in ``rc`` state::
 
-      dpkg --list |grep "^rc"
+      dpkg --list | grep "^rc"
 
 - Purge package::
 
       sudo dpkg --purge package-name
 
-Consult `dpkg man page <http://manpages.ubuntu.com/manpages/precise/man1/dpkg.1.html>`_
-for more detail.
+Consult `dpkg man page <http://manpages.ubuntu.com/manpages/precise/
+man1/dpkg.1.html>`_ for more detail.

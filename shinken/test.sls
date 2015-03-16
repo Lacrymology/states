@@ -76,3 +76,13 @@ start_shinken:
     - name: /usr/local/bin/shinken-ctl.sh start
     - require:
       - cmd: stop_shinken
+
+test_salt_event_handler:
+  cmd.run:
+    - name: >
+        /usr/local/shinken/bin/salt_event_handler
+        --service-state CRITICAL --service-state-type HARD
+        --service-desc ci_test --service-display-name 'CI TEST'
+        --hostname 'shinken_ci_test'
+    - require:
+      - sls: shinken.reactionner

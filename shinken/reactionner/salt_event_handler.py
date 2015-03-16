@@ -55,12 +55,11 @@ class FireEvent(pysc.Application):
                     "service_display_name": service_display_name,
                 }})
             tag = "salt-common/alert/" + service_desc
-            logger.debug(
-                "shinken fire event: payload %s, tag %s", "payload", "tag")
             subprocess.check_call(
                 ["/usr/local/bin/salt_fire_event.py",
                  "--payload", payload, "--tag", tag])
-
+            logger.debug(
+                "shinken fired event: payload %s, tag %s", "payload", "tag")
 
 if __name__ == '__main__':
     FireEvent().run()

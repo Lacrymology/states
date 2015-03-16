@@ -34,7 +34,7 @@ include:
       - file: /etc/salt/master
 {%- endfor -%}
 
-{%- for dirname in ('create', 'destroy', 'job') %}
+{%- for dirname in ('create', 'destroy', 'job', 'alert') %}
 /srv/reactor/{{ dirname }}:
   file:
     - directory
@@ -50,13 +50,26 @@ include:
 /srv/reactor/create/highstate.sls:
   file:
     - managed
-    - source: salt://salt/master/highstate.jinja2
+    - source: salt://salt/master/reactor/highstate.jinja2
     - user: root
     - group: root
     - template: jinja
     - mode: 440
     - require:
       - file: /srv/reactor/create
+    - require_in:
+      - file: /etc/salt/master
+
+/srv/reactor/alert/shinken.sls:
+  file:
+    - managed
+    - source: salt://salt/master/reactor/shinken_alert.jinja2
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - require:
+      - file: /srv/reactor/alert
     - require_in:
       - file: /etc/salt/master
 

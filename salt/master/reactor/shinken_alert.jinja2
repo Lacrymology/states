@@ -1,0 +1,12 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+
+{%- raw %}{#- {% endraw -%}
+{{ salt['pillar.get']('message_do_not_modify') }}
+{%- raw %} -#}{% endraw %}
+
+restart_shinken_receiver:
+  {% if grains['saltversioninfo'] >= (2015, 2, 0, 0) %}local{% else %}cmd{% endif %}.state.sls:
+    - tgt: {% raw %}{{ data['data']['minion_id'] }}{% endraw %}
+    - arg:
+      - shinken.receiver.reaction.{% raw %}{{ data['data']['service_desc'] }}{% endraw %}
+    - ret: syslog,timestamps{% if salt['pillar.get']('sentry_dsn', False) %},sentry_common{% endif %}

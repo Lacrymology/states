@@ -13,11 +13,14 @@
 #     --service-display-name $SERVICEDISPLAYNAME$ \
 #     --host-name $HOSTNAME$
 
-import logging
 import json
-import subprocess
+import logging
+import sys
 
 import pysc
+
+sys.path.append('/usr/local/bin')
+from salt_fire_event import fire_event
 
 logger = logging.getLogger(__name__)
 
@@ -55,11 +58,9 @@ class FireEvent(pysc.Application):
                     "service_display_name": service_display_name,
                 }})
             tag = "salt-common/alert/" + service_desc
-            subprocess.check_call(
-                ["/usr/local/bin/salt_fire_event.py",
-                 "--payload", payload, "--tag", tag])
+            fire_event(payload, tag)
             logger.debug(
-                "shinken fired event: payload %s, tag %s", "payload", "tag")
+                "shinken fired event: payload %s, tag %s", payload, tag)
 
 if __name__ == '__main__':
     FireEvent().run()

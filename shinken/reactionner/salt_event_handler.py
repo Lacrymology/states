@@ -54,11 +54,13 @@ class FireEvent(pysc.Application):
         minion_id = self.config["hostname"]
         formula = self.config["formula"]
 
-        if service_state == "CRITICAL" and service_state_type == "HARD":
+        if service_state != "OK" and service_state_type == "HARD":
             payload = json.dumps(
                 {"data": {
                     "minion_id": minion_id,
                     "service_desc": service_desc,
+                    "service_state": service_state,
+                    "service_state_type": service_state_type,
                     "service_display_name": service_display_name,
                     "formula": formula,
                 }})

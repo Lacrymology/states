@@ -177,4 +177,4 @@ SENTRY_FILESTORE_OPTIONS = {
 
 # If this file ever becomes compromised, it's important to regenerate your SECRET_KEY
 # Changing this value will result in all current sessions being invalidated
-SECRET_KEY = '{{ salt['password.generate']('monitoring_user', 56) }}'
+SECRET_KEY = '{{ salt['password.generate']('sentry_secret_key', 56) }}'

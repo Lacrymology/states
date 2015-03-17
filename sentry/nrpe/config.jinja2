@@ -9,4 +9,8 @@
 
 {{ uwsgi_instance(deployment) }}
 {{ postgresql_instance_prefix(deployment) }}
-{{ nginx_instance(deployment, http_uri='/login/', extra_dependencies=('sentry_uwsgi_worker', 'sentry_postgresql')) }}
+{{ nginx_instance(deployment, http_uri='/auth/login/', extra_dependencies=('sentry_uwsgi_worker', 'sentry_postgresql')) }}
+
+sentry_celery_procs:
+  description: Sentry Celery daemon
+  command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -u www-data -a 'config=/etc/sentry.conf.py celery worker -B'"

@@ -15,12 +15,14 @@ include:
 {% if salt['pillar.get']('graphite_address', False) %}
   - statsd.nrpe
 {% endif %}
+  - redis.nrpe
   - sudo.nrpe
   - uwsgi.nrpe
   - virtualenv.nrpe
 {%- if salt['pillar.get'](formula + ':ssl', False) %}
   - ssl.nrpe
 {%- endif %}
+  - xml.nrpe
 
 {{ passive_check(formula, check_ssl_score=True) }}
 

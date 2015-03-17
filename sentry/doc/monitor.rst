@@ -21,6 +21,11 @@ Mandatory
 
 .. include:: /backup/doc/monitor.inc
 
+sentry_celery_procs
+~~~~~~~~~~~~~~~~~~~
+
+.. include:: /nrpe/doc/check_procs.inc
+
 Optional
 --------
 

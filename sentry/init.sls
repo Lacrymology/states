@@ -18,10 +18,12 @@ include:
 {% if salt['pillar.get']('graphite_address', False) %}
   - statsd
 {% endif %}
+  - redis
   - sudo
   - uwsgi
   - virtualenv
   - web
+  - xml
 
 sentry:
   virtualenv:
@@ -33,7 +35,9 @@ sentry:
       - file: /usr/local
   pkg:
     - latest
-    - name: libevent-dev
+    - pkgs:
+        - libevent-dev
+        - libffi-dev
     - require:
       - cmd: apt_sources
   file:
@@ -55,6 +59,7 @@ sentry:
     - requirements: /usr/local/sentry/salt-requirements.txt
     - require:
       - virtualenv: sentry
+      - pkg: xml-dev
     - watch:
       - pkg: sentry
       - pkg: python-dev
@@ -84,6 +89,29 @@ sentry:
     - require:
       - postgres_user: sentry
       - service: postgresql
+  service:
+    - running
+    - name: sentry-celery
+    - enable: True
+    - require:
+      - file: /var/lib/deployments/sentry
+      - service: redis
+    - watch:
+      - cmd: sentry_settings
+      - file: /etc/init/sentry-celery.conf
+      - file: sentry
+
+/etc/init/sentry-celery.conf:
+  file:
+    - managed
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 400
+    - source: salt://sentry/upstart.jinja2
+    - require:
+      - file: /var/lib/deployments/sentry
+      - module: sentry
 
 sentry-uwsgi:
   file:
@@ -103,6 +131,7 @@ sentry-uwsgi:
       - service: memcached
       - service: uwsgi
       - service: rsyslog
+      - service: redis
   module:
     - wait
     - name: file.touch
@@ -214,20 +243,42 @@ sentry-migrate-fake:
       - file: web
       - file: sentry-uwsgi
 
+{#-
+  can't use module.wait django.collectstatic, sentry.conf.server doesn't
+  read /etc/sentry.conf.py
+#}
 sentry_collectstatic:
-  module:
+  cmd:
     - wait
-    - name: django.collectstatic
-    - settings_module: sentry.conf.server
-    - bin_env: /usr/local/sentry
-    - env:
-        SENTRY_CONF: /etc/sentry.conf.py
+    - name: /usr/local/sentry/manage collectstatic --noinput
     - require:
       - cmd: sentry_settings
       - cmd: sentry
+      - file: /usr/local/sentry/manage
     - watch:
       - file: sentry_settings
       - module: sentry
+
+{#-
+work around for the error when upgrade from 6.4.4 to 7.4.1
+https://github.com/getsentry/sentry/issues/1386
+remove this state when upgrade to sentry > 7.4.1
+#}
+sentry_upgrade_workaround:
+  cmd:
+    - wait_script
+    - name: upgrade.sh
+    - source: salt://sentry/upgrade.sh
+    - user: postgres
+    - group: postgres
+    - shell: /bin/bash
+    - require:
+      - service: postgresql
+    - watch:
+      - file: sentry_settings
+      - module: sentry
+    - require_in:
+      - cmd: sentry_settings
 
 {% if ssl %}
 extend:

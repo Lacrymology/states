@@ -57,11 +57,14 @@ def returner(ret):
             'logger': "sentry_common.returner",
             'server_name': ret['id'],
             'platform': 'python',
-            'culprit': result['name'],
         }
+
+        if result:
+            sentry_data.update({'culprit': result['name']})
+            del result['name']
+
         del ret['jid']
         del ret['id']
-        del result['name']
 
         sentry_data['extra'] = {
             'result': ret,
@@ -75,6 +78,10 @@ def returner(ret):
         except Exception, err:
             logger.error("Can't send message '%s' data '%s' to sentry: %s",
                          message, sentry_data, err)
+
+    if not isinstance(ret['return'], dict):
+        send_sentry(ret)
+        return
 
     requisite_error = 'One or more requisite failed'
     try:

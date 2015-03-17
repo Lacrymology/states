@@ -30,15 +30,15 @@ Salt Archive
 
 As many minions will be created over time, we don't want the tests to run for
 extra hours just to download files over public internet. that is costly and
-ineffective. The :doc:`/salt/archive/server/doc/index` is mandatory to have
+ineffective. The :doc:`/salt/archive/doc/index` is mandatory to have
 effective CI. And that reduce the risks of tests that failed because some
 public resource is unavailable such as github.com.
 
 To make sure that archive is up to date, the synchronization with upstream
-:doc:`/salt/archive/server/doc/index` is executed each 5 minutes trough a
+:doc:`/salt/archive/doc/index` is executed each 5 minutes trough a
 cronjob.
 
-Look in :doc:`/salt/archive/server/doc/index` for more details.
+Look in :doc:`/salt/archive/doc/index` for more details.
 
 Salt Cloud
 ~~~~~~~~~~

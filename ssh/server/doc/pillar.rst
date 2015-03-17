@@ -57,5 +57,5 @@ Default: No extra configs will be used (``[]``).
 .. warning::
 
   Some formula such as :doc:`/git/server/doc/index`, :doc:`/gitlab/doc/index`
-  and :doc:`/salt/archive/server/doc/index` requires some users allowed to
+  and :doc:`/salt/archive/doc/index` requires some users allowed to
   log in.

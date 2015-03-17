@@ -10,7 +10,7 @@ Introduction
 
 .. TODO: INTRODUCTION TO SALT MASTER
 
-Consider seriously adding a :doc:`/salt/archive/server/doc/index`
+Consider seriously adding a :doc:`/salt/archive/doc/index`
 to the role of the Salt Master. That will speed up deployment of hosts and make
 them more resilient on third-party failure.
 

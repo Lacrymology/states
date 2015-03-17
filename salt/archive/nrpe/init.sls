@@ -17,12 +17,12 @@ include:
   - sudo
   - sudo.nrpe
 
-sudo_salt_archive_server_nrpe:
+sudo_salt.archive_nrpe:
   file:
     - managed
-    - name: /etc/sudoers.d/salt_archive_server_nrpe
+    - name: /etc/sudoers.d/salt_archive_nrpe
     - template: jinja
-    - source: salt://salt/archive/server/nrpe/sudo.jinja2
+    - source: salt://salt/archive/nrpe/sudo.jinja2
     - mode: 440
     - user: root
     - group: root
@@ -31,4 +31,8 @@ sudo_salt_archive_server_nrpe:
     - require_in:
       - service: nagios-nrpe-server
 
-{{ passive_check('salt.archive.server', pillar_prefix='salt_archive', check_ssl_score=True) }}
+/etc/sudoers.d/salt_archive_server_nrpe:
+  file:
+    - absent
+
+{{ passive_check('salt.archive', pillar_prefix='salt_archive', check_ssl_score=True) }}

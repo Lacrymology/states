@@ -4,13 +4,13 @@ Monitor
 Mandatory
 ---------
 
-.. |deployment| replace:: salt.archive.server
+.. |deployment| replace:: salt.archive
 
 .. warning::
 
    In this document, when refer to a pillar key ``pillar_prefix``
 
-   means ``salt.archive.server``.
+   means ``salt.archive``.
 
 .. include:: /nginx/doc/monitor.inc
 

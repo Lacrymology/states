@@ -52,6 +52,11 @@ def load_check(formula, remove_sensitive_data=True):
     filename = os.path.join(NSCA_D, basename)
     try:
         check = _yaml(filename)
+        # append formula name to check data, use for custom macro in
+        # shinken event handler
+        for data in check.itervalues():
+            data['formula'] = formula
+        logger.debug("monitoring checks: %s", check)
     except Exception, err:
         logger.error("Can't load '%s': %s", filename, err)
         return {}

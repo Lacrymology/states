@@ -155,7 +155,7 @@ define command {
 {#- fire a salt event when a service goes into hard problem state #}
 define command {
   command_name fire_salt_event
-  command_line /usr/bin/sudo /usr/local/shinken/bin/salt_event_handler --service-state '$SERVICESTATE$' --service-state-type '$SERVICESTATETYPE$' --service-desc '$SERVICEDESC$' --service-display-name '$SERVICEDISPLAYNAME$' --hostname '$HOSTNAME$'
+  command_line /usr/bin/sudo /usr/local/shinken/bin/salt_event_handler --service-state '$SERVICESTATE$' --service-state-type '$SERVICESTATETYPE$' --service-desc '$SERVICEDESC$' --service-display-name '$SERVICEDISPLAYNAME$' --hostname '$HOSTNAME$' --formula '$_SERVICEFORMULA$'
 }
 
 define timeperiod {
@@ -263,6 +263,7 @@ define service {
     check_command {{ check_command }}!{{ check_timeout }}
         {%- endif %}
     display_name {{ check.data['description'] }}
+    _FORMULA {{ check.data['formula'] }}
         {%- if not check.data.get('passive', True) -%}
             {#- by default check are passive #}
     active_checks_enabled 1

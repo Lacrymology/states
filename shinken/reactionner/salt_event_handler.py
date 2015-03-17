@@ -11,7 +11,7 @@
 #     --service-state $SERVICESTATE$ --service-state-type $SERVICESTATETYPE$ \
 #     --service-desc $SERVICEDESC$ \
 #     --service-display-name $SERVICEDISPLAYNAME$ \
-#     --host-name $HOSTNAME$
+#     --host-name $HOSTNAME$ --formula $_SERVICEFORMULA$
 
 import json
 import logging
@@ -41,6 +41,9 @@ class FireEvent(pysc.Application):
         argp.add_argument(
             "--hostname", help="hostname of service",
             required=True)
+        argp.add_argument(
+            "--formula", help="formula of service",
+            required=True)
         return argp
 
     def main(self):
@@ -49,6 +52,7 @@ class FireEvent(pysc.Application):
         service_desc = self.config["service_desc"]
         service_display_name = self.config["service_display_name"]
         minion_id = self.config["hostname"]
+        formula = self.config["formula"]
 
         if service_state == "CRITICAL" and service_state_type == "HARD":
             payload = json.dumps(
@@ -56,6 +60,7 @@ class FireEvent(pysc.Application):
                     "minion_id": minion_id,
                     "service_desc": service_desc,
                     "service_display_name": service_display_name,
+                    "formula": formula,
                 }})
             tag = "salt-common/alert/" + service_desc
             fire_event(payload, tag)

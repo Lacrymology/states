@@ -1,8 +1,15 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
+{%- set sentry_dsn = salt['pillar.get']('sentry_dsn', False) %}
+
 include:
   - apt
   - hostname
+{%- if sentry_dsn %}
+  - raven.mail
+{%- else %}
+  - ssmtp
+{%- endif %}
 
 sudo:
   file:
@@ -15,6 +22,11 @@ sudo:
     - mode: 440
     - require:
       - pkg: sudo
+{%- if sentry_dsn %}
+      - file: /usr/bin/ravenmail
+{%- else %}
+      - pkg: ssmtp
+{%- endif %}
   pkg:
     - installed
     - require:

@@ -26,5 +26,17 @@ ubuntu ALL=(ALL) NOPASSWD:ALL
 {#- Allow members of group sudo to execute any command #}
 %sudo ALL=(ALL:ALL) ALL
 
+{#- Send mail when the user running sudo does not enter the correct password #}
+Defaults mail_badpass
+{#- Send mail if the invoking user exists in the sudoers file,
+    but is not allowed to run commands on the current host #}
+Defaults mail_no_host
+{#- Send mail if the invoking user is allowed to use sudo
+    but the command they are trying is not listed in their sudoers file entry
+    or is explicitly denied #}
+Defaults mail_no_perms
+Defaults mailerpath={% if salt['pillar.get']('sentry_dsn', False) %}/usr/bin/ravenmail{% else %}/usr/sbin/sendmail
+Defaults mailto={{ salt['pillar.get']('sudo:mailto') }}{% endif %}
+
 {#- See sudoers(5) for more information on "#include" directives: #}
 #includedir /etc/sudoers.d

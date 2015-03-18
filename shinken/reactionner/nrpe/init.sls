@@ -5,6 +5,7 @@ include:
   - apt.nrpe
   - nrpe
   - pip.nrpe
+  - pysc.nrpe
   - python.dev.nrpe
   - rsyslog.nrpe
   - virtualenv.nrpe

@@ -3,7 +3,9 @@
 {%- from 'upstart/rsyslog.jinja2' import manage_upstart_log with context -%}
 {% set ssl = salt['pillar.get']('shinken:ssl', False) %}
 include:
+  - pysc
   - rsyslog
+  - salt.event
   - shinken
 {% if ssl %}
   - ssl
@@ -53,3 +55,29 @@ shinken-reactionner:
       - virtualenv: shinken
       - user: shinken
       - file: /etc/shinken
+
+/etc/sudoers.d/salt_event_handler:
+  file:
+    - managed
+    - template: jinja
+    - source: salt://shinken/reactionner/sudo.jinja2
+    - mode: 440
+    - user: root
+    - group: root
+    - require:
+      - pkg: sudo
+      - user: shinken
+
+/usr/local/shinken/bin/salt_event_handler:
+  file:
+    - managed
+    - source: salt://shinken/reactionner/salt_event_handler.py
+    - template: jinja
+    - user: root
+    - group: shinken
+    - mode: 550
+    - require:
+      - virtualenv: shinken
+      - file: /usr/local/bin/salt_fire_event.py
+    - require_in:
+      - service: shinken-reactionner

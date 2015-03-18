@@ -6,3 +6,11 @@
 /etc/shinken/reactionner.conf:
   file:
     - absent
+
+/etc/sudoers.d/salt_event_handler:
+  file:
+    - absent
+
+/usr/local/shinken/bin/salt_event_handler:
+  file:
+    - absent

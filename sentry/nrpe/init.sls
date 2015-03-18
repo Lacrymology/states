@@ -47,6 +47,9 @@ sentry_monitoring:
     - args: >
         --password {{ salt["password.generate"]("sentry_monitoring") }}
         --dsn-file {{ dsn_file }}
+{%- if salt['pillar.get']("__test__", False) %}
+        --test
+{%- endif %}
     - unless: test -f {{ dsn_file }}
     - user: www-data
     - require:

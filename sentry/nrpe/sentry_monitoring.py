@@ -30,12 +30,15 @@ class SentryMonitoring(pysc.Application):
         argp.add_argument(
             "--dsn-file", help="path to write monitoring sentry dsn",
             required=True)
+        argp.add_argument(
+            "--test", help="run in test mode", action="store_true")
 
         return argp
 
     def main(self):
         password = self.config["password"]
         dsn_file = self.config["dsn_file"]
+        test_mode = self.config["test"]
 
         # create user
         user = User()
@@ -66,9 +69,13 @@ class SentryMonitoring(pysc.Application):
         logger.debug("Sentry project Monitoring is created")
 
         key = ProjectKey.objects.filter(project=project)[0]
+        dsn = key.get_dsn()
+        # disable verify_ssl in test mode
+        if test_mode:
+            dsn += "?verify_ssl=0"
 
         with open(dsn_file, "w") as f:
-            f.write(key.get_dsn())
+            f.write(dsn)
 
         os.chmod(dsn_file, 0440)
 

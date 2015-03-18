@@ -2,6 +2,7 @@
 
 {%- from 'diamond/macro.jinja2' import uwsgi_diamond with context %}
 {%- call uwsgi_diamond('sentry') %}
+- cron.diamond
 - memcache.diamond
 - postgresql.server.diamond
 - rsyslog.diamond

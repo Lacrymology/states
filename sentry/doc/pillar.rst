@@ -123,3 +123,11 @@ sentry:ssl_redirect
 .. |deployment| replace:: sentry
 
 .. include:: /uwsgi/doc/pillar.inc
+
+sentry:clean_days
+~~~~~~~~~~~~~~~~~
+
+:doc:`index` runs a daily crob job to clean up old data. Data that live longer
+than this pillar value (in days) will be deleted.
+
+Default: do not delete old data (``False``).

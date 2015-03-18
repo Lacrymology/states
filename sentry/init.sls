@@ -5,6 +5,7 @@
 include:
   - apt
   - bash
+  - cron
   - local
   - nginx
   - pip
@@ -291,3 +292,24 @@ extend:
       - watch:
         - cmd: ssl_cert_and_key_for_{{ ssl }}
 {% endif %}
+
+{%- set clean_days = salt['pillar.get']('sentry:clean_days', False) %}
+/etc/cron.daily/sentry-cleanup:
+  file:
+{%- if clean_days %}
+    - managed
+    - user: root
+    - group: root
+    - mode: 500
+    - template: jinja
+    - source: salt://sentry/cron_daily.jinja2
+    - context:
+        clean_days: {{ clean_days }}
+    - require:
+      - file: bash
+      - file: sentry-uwsgi
+      - file: sentry_settings
+      - pkg: cron
+{%- else %}
+    - absent
+{%- endif %}

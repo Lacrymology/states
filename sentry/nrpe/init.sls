@@ -5,6 +5,7 @@
 include:
   - apt.nrpe
   - bash.nrpe
+  - cron.nrpe
   - memcache.nrpe
   - nginx.nrpe
   - nrpe

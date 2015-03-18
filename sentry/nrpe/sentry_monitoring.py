@@ -69,6 +69,10 @@ class SentryMonitoring(pysc.Application):
         logger.debug("Sentry project Monitoring is created")
 
         key = ProjectKey.objects.filter(project=project)[0]
+        key.roles = 3  # enable Web API access role
+        key.save()
+        logger.debug("Web API access role enabled")
+
         dsn = key.get_dsn()
         # disable verify_ssl in test mode
         if test_mode:

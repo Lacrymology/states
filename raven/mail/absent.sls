@@ -16,7 +16,7 @@
 cron_sendmail_patch:
   cmd:
     - wait
-    - name: perl -pi -e "s|/usr/sbin/ravenmail|/usr/bin/sendmail|" /usr/sbin/cron
+    - name: perl -pi -e "s|/usr/bin/ravenmail|/usr/sbin/sendmail|" /usr/sbin/cron
     - unless: grep -a sendmail /usr/sbin/cron
     - watch:
       - file: /usr/bin/mail

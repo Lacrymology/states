@@ -3,6 +3,8 @@
 {%- set formula = 'sentry' -%}
 {%- from 'nrpe/passive.jinja2' import passive_check with context %}
 include:
+  - bash
+  - cron
   - sentry
   - web
   - apt.nrpe
@@ -58,3 +60,18 @@ sentry_monitoring:
       - module: pysc
       - service: sentry
       - user: web
+
+/etc/cron.hourly/sentry-monitoring:
+  file:
+    - managed
+    - user: root
+    - group: root
+    - mode: 500
+    - template: jinja
+    - source: salt://sentry/nrpe/cron_hourly.jinja2
+    - context:
+        dsn_file: {{ dsn_file }}
+    - require:
+      - cmd: sentry_monitoring
+      - module: raven
+      - pkg: cron

@@ -78,7 +78,8 @@ start_shinken:
       - cmd: stop_shinken
 
 test_salt_event_handler:
-  cmd.run:
+  cmd:
+    - run
     - name: >
         /usr/local/shinken/bin/salt_event_handler
         --service-state CRITICAL --service-state-type HARD

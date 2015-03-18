@@ -3,6 +3,8 @@
 {%- set formula = 'sentry' -%}
 {%- from 'nrpe/passive.jinja2' import passive_check with context %}
 include:
+  - sentry
+  - web
   - apt.nrpe
   - bash.nrpe
   - cron.nrpe
@@ -36,3 +38,20 @@ extend:
     file:
       - require:
         - file: nsca-{{ formula }}
+
+{%- set dsn_file = "/var/lib/deployments/sentry/monitoring_dsn" %}
+sentry_monitoring:
+  cmd:
+    - script
+    - source: salt://sentry/nrpe/sentry_monitoring.py
+    - args: >
+        --password {{ salt["password.generate"]("sentry_monitoring") }}
+        --dsn-file {{ dsn_file }}
+    - unless: test -f {{ dsn_file }}
+    - user: www-data
+    - require:
+      - file: /var/lib/deployments/sentry
+      - file: sentry-uwsgi
+      - module: pysc
+      - service: sentry
+      - user: web

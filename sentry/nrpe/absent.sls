@@ -10,3 +10,7 @@
 /etc/nagios/nrpe.d/postgresql-sentry.cfg:
   file:
     - absent
+
+/usr/lib/nagios/plugins/check_sentry_events.py:
+  file:
+    - absent

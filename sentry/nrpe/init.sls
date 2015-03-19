@@ -75,3 +75,18 @@ sentry_monitoring:
       - cmd: sentry_monitoring
       - module: raven
       - pkg: cron
+
+/usr/lib/nagios/plugins/check_sentry_events.py:
+  file:
+    - managed
+    - source: salt://sentry/nrpe/check.py
+    - user: nagios
+    - group: nagios
+    - mode: 550
+    - require:
+      - cmd: sentry_monitoring
+      - module: nrpe-virtualenv
+      - pkg: nagios-nrpe-server
+    - require_in:
+      - service: nagios-nrpe-server
+      - service: nsca_passive

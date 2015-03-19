@@ -2,6 +2,7 @@
 
 {%- from 'uwsgi/nrpe/instance.jinja2' import uwsgi_instance with context -%}
 {%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
+{%- from 'nrpe/passive.jinja2' import passive_interval with context -%}
 {%- from 'postgresql/server/nrpe/instance.jinja2' import postgresql_instance_prefix with context -%}
 {%- set deployment = 'sentry' -%}
 
@@ -14,3 +15,13 @@
 sentry_celery_procs:
   description: Sentry Celery daemon
   command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -u www-data -a 'config=/etc/sentry.conf.py celery worker -B'"
+
+sentry_monitoring_events:
+  description: Number of events in monitoring/monitoring project
+  command: /usr/lib/nagios/plugins/check_sentry_events.py --formula=sentry --check=sentry_monitoring_events
+  {{ passive_interval(60) }} {#- 1 hour #}
+  dependencies:
+    - {{ deployment }}_uwsgi_worker
+    - {{ deployment }}_uwsgi_master
+  arguments:
+    dsn_file: /var/lib/deployments/sentry/monitoring_dsn

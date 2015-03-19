@@ -118,6 +118,7 @@ define command {
 {%- set hostnames = salt['pillar.get']('shinken:hostnames') %}
 {%- set ssl = salt['pillar.get']('shinken:ssl', False) %}
     command_line /usr/bin/printf "%b" "Shinken Notification\n\nType:$NOTIFICATIONTYPE$\nHost: $HOSTALIAS$\nState: $HOSTSTATE$\nAddress: $HOSTADDRESS$\nInfo: $HOSTOUTPUT$\nWhen: $LONGDATETIME$\n\nLast Up: $LASTHOSTUP$\nLast Down: $LASTHOSTDOWN$\nLast Unreachable: $LASTHOSTUNREACHABLE$\n\nURL: http{% if ssl %}s{% endif %}://{{ salt['pillar.get']('shinken:hostnames')[0] }}/host/$HOSTNAME$ " | /usr/bin/bsd-mailx -s "Host $HOSTSTATE$ alert for $HOSTNAME$!" $CONTACTEMAIL$
+}
 
 # send email for a service
 define command {

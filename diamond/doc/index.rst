@@ -11,14 +11,8 @@ collecting CPU, memory, network, I/O, load and disk metrics. Additionally, it
 features an API for implementing custom collectors for gathering metrics from
 almost any source.
 
-It also plug with third party daemon such as :doc:`/postgresql/doc/index` to
+It also plugs with third party daemon such as :doc:`/postgresql/doc/index` to
 gather those stats as well.
-
-
-Links
------
-
-* `Amavisd page <http://www.ijs.si/software/amavisd/>`_
 
 Related Formulas
 ----------------

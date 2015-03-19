@@ -10,6 +10,8 @@ __email__ = 'favadi@robotinfra.com'
 
 import os
 import logging
+import pwd
+import grp
 
 import pysc
 
@@ -81,6 +83,9 @@ class SentryMonitoring(pysc.Application):
         with open(dsn_file, "w") as f:
             f.write(dsn)
 
+        os.chown(dsn_file,
+                 pwd.getpwnam("www-data").pw_uid,
+                 grp.getgrnam("nagios").gr_gid)
         os.chmod(dsn_file, 0440)
 
 if __name__ == '__main__':

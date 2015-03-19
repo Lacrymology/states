@@ -40,6 +40,11 @@ extend:
     file:
       - require:
         - file: nsca-{{ formula }}
+  /var/lib/deployments/sentry:
+    file:
+      - group: nagios
+      - require:
+        - user: nagios-nrpe-server
 
 {%- set dsn_file = "/var/lib/deployments/sentry/monitoring_dsn" %}
 sentry_monitoring:
@@ -53,12 +58,12 @@ sentry_monitoring:
         --test
 {%- endif %}
     - unless: test -f {{ dsn_file }}
-    - user: www-data
     - require:
       - file: /var/lib/deployments/sentry
       - file: sentry-uwsgi
       - module: pysc
       - service: sentry
+      - user: nagios-nrpe-server
       - user: web
 
 /etc/cron.hourly/sentry-monitoring:

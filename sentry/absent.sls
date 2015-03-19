@@ -30,6 +30,11 @@ sentry-uwsgi:
   file:
     - absent
 
+
 /etc/cron.daily/sentry-cleanup:
+  file:
+    - absent
+
+/etc/cron.hourly/sentry-monitoring:
   file:
     - absent

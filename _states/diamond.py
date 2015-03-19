@@ -114,12 +114,12 @@ def test(name, map):
         comments = []
         comments.append(__salt__['common.format_error_msg'](
             sorted(unexpected_zero_metrics),
-            "%d expected non-zero value"
+            "{} expected non-zero value metrics"
             )
         )
         comments.append(__salt__['common.format_error_msg'](
             sorted(not_collected_metrics),
-            "%d not collected"
+            "{} not collected metrics"
             )
         )
 

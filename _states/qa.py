@@ -173,44 +173,44 @@ def test_pillar(name, pillar_doc):
         comments = []
         comments.append(__salt__['common.format_error_msg'](
             sorted(undocumented),
-            "%d undocumented pillars"
+            "{} undocumented pillars"
             )
         )
         comments.append(__salt__['common.format_error_msg'](
             sorted(unused),
-            "%d unused documented pillars"
+            "{} unused documented pillars"
             )
         )
         comments.append(__salt__['common.format_error_msg'](
             sorted(bad_mandatory_calls),
-            "%d mandatory pillars used with defaults"
+            "{} mandatory pillars used with defaults"
             )
         )
         comments.append(__salt__['common.format_error_msg'](
             sorted(multiple_defaults),
-            "%d pillars with different default value calls"
+            "{} pillars with different default value calls"
             )
         )
         comments.append(__salt__['common.format_error_msg'](
             sorted(bad_defaults),
-            "%d pillars with defaults different than documented"
+            "{} pillars with defaults different than documented"
             )
         )
         comments.append(__salt__['common.format_error_msg'](
             errors,
-            "%d errors"
+            "{} errors"
             )
         )
 
         # extra debug output
         comments.append(__salt__['common.format_error_msg'](
             sorted(all_documented),
-            "%d total documented pillars"
+            "{} total documented pillars"
             )
         )
         comments.append(__salt__['common.format_error_msg'](
             sorted(__salt__['pillar.get_call_desc']()),
-            "%d calls"
+            "{} calls"
             )
         )
 
@@ -293,29 +293,29 @@ def test_monitor(name, pillar_doc, additional=()):
         comments = []
         comments.append(__salt__['common.format_error_msg'](
             not_documented,
-            "%d undocumented checks"
+            "{} undocumented checks"
             )
         )
         comments.append(__salt__['common.format_error_msg'](
             not_present,
-            "%d documented unused checks"
+            "{} documented unused checks"
             )
         )
         comments.append(__salt__['common.format_error_msg'](
             doc_errors,
-            "%d document errors"
+            "{} document errors"
             )
         )
 
         # extra debug output
         comments.append(__salt__['common.format_error_msg'](
             doc_names,
-            "%d total documented checks"
+            "{} total documented checks"
             )
         )
         comments.append(__salt__['common.format_error_msg'](
             check_names,
-            "%d total present checks"
+            "{} total present checks"
             )
         )
 

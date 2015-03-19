@@ -9,25 +9,26 @@ Introduction
 ------------
 
 Clam AntiVirus (ClamAV) is a free and open-source, cross-platform antivirus
-software tool-kit able to detect many types of malicious software, including viruses.
-One of its main uses is on mail servers as a server-side email virus scanner
+software tool-kit able to detect many types of malicious software, including
+viruses.  One of its main uses is on mail servers as a server-side email virus
+scanner
 
 .. http://en.wikipedia.org/wiki/Clam_AntiVirus
 
 .. note::
 
-  If Clamav is used to filter mail for virus, look :doc:`/mail/server/doc/index`
-  to setup a full-stack mail system.
+  If Clamav is used to filter mail for virus, look
+  :doc:`/mail/server/doc/index` to setup a full-stack mail system.
 
 .. _clamav-freshclam:
 
 Freshclam
 ---------
 
-`FreshClam`_ :ref:`glossary-daemon` come with Clamav and is used to update it's
-virus database.
+FreshClam_ :ref:`glossary-daemon` come with :doc:`index`
+and is used to update it's virus database.
 
-This is as much important as Clamav itself.
+This is as much important as :doc:`index` itself.
 
 Link
 ----

@@ -81,3 +81,44 @@ shinken-reactionner:
       - file: /usr/local/bin/salt_fire_event.py
     - require_in:
       - service: shinken-reactionner
+
+{%- set xmpp = salt["pillar.get"]("shinken:xmpp", False) %}
+{%- if xmpp %}
+/var/lib/shinken/notify-by-xmpp.yml:
+  file:
+    - managed
+    - contents: |
+        jid: {{ xmpp["jid"] }}
+        password: {{ xmpp["password"] }}
+        recipients: {{ xmpp["recipients"]|default([])|yaml }}
+        rooms: {{ xmpp["rooms"]|default([])|yaml }}
+    - user: shinken
+    - group: shinken
+    - mode: 440
+    - require:
+      - virtualenv: shinken
+    - require_in:
+      - service: shinken-reactionner
+
+/usr/local/shinken/bin/notify-by-xmpp:
+  file:
+    - managed
+    - source: salt://shinken/reactionner/notify-by-xmpp.py
+    - template: jinja
+    - user: root
+    - group: shinken
+    - mode: 550
+    - require:
+      - file: /var/lib/shinken/notify-by-xmpp.yml
+      - module: shinken
+    - require_in:
+      - service: shinken-reactionner
+{%- else %}
+/var/lib/shinken/notify-by-xmpp.yml:
+  file:
+    - absent
+
+/usr/local/shinken/bin/notify-by-xmpp:
+  file:
+    - absent
+{%- endif %}

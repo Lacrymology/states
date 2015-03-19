@@ -197,6 +197,26 @@ Define level of logging.
 
 Default: just log informational messages (``INFO``).
 
+shinken:xmpp
+~~~~~~~~~~~~
+
+Enable notification for :doc:`index`.
+
+Format::
+
+  shinken:
+    xmpp:
+      jid: <joe@chat.example.com>
+      password: <password>
+      recipients:
+        - recipient1
+        - recipient2
+      rooms:
+        - room1
+        - room2
+
+Default: turn off notify by XMPP (``False``).
+
 Conditional
 -----------
 

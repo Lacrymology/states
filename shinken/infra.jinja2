@@ -3,6 +3,7 @@
 # {{ salt['pillar.get']('message_do_not_modify') }}
 
 {%- set mine = salt['mine.get']('*', 'monitoring.data') %}
+{%- set xmpp = salt["pillar.get"]("shinken:xmpp", False) %}
 
 define host {
     name salt-host
@@ -126,6 +127,34 @@ define command {
     command_line /usr/bin/printf "%b" "Shinken Notification\n\nNotification Type: $NOTIFICATIONTYPE$\n\nService: $SERVICEDESC$\nHost: $HOSTALIAS$\nAddress: $HOSTADDRESS$\nState: $SERVICESTATE$\nWhen: $LONGDATETIME$\n\nAdditional Info : $SERVICEOUTPUT$\n\nLast OK: $LASTSERVICEOK$\nLast Warning: $LASTSERVICEWARNING$\nLast Unknown: $LASTSERVICEUNKNOWN$\nLast Critical: $LASTSERVICECRITICAL$\n\nServices OK: $TOTALSERVICESOK$\nServices Warning/Unhandled: $TOTALSERVICESWARNING$/$TOTALSERVICESWARNINGUNHANDLED$\nServices Critical/Unhandled: $TOTALSERVICESCRITICAL$/$TOTALSERVICESCRITICALUNHANDLED$\nServices Unknown/Unhandled: $TOTALSERVICESUNKNOWN$/$TOTALSERVICESUNKNOWNUNHANDLED$\nTotal Services Problems/Unhandlded: $TOTALSERVICEPROBLEMS$/$TOTALSERVICEPROBLEMSUNHANDLED$\n\nURL: http{% if ssl %}s{% endif %}://{{ salt['pillar.get']('shinken:hostnames')[0] }}/host/$HOSTNAME$ "| /usr/bin/bsd-mailx -s "** $NOTIFICATIONTYPE$ alert - $HOSTALIAS$/$SERVICEDESC$ is $SERVICESTATE$ ** " $CONTACTEMAIL$
 }
 
+{%- if xmpp %}
+
+define contact {
+    contact_name xmpp
+    can_submit_commands 0
+    is_admin 0
+    host_notification_period 24x7
+    host_notification_options d,u,r,f,s
+    host_notification_commands notify-host-by-xmpp
+    host_notifications_enabled 1
+    service_notification_period 24x7
+    service_notification_options c,w,r,u
+    service_notification_commands notify-service-by-xmpp
+    service_notifications_enabled 1
+    register 1
+}
+
+define command {
+  command_name notify-host-by-xmpp
+  command_line /usr/local/shinken/bin/notify-by-xmpp --xmpp-config /var/lib/shinken/notify-by-xmpp.yml --mode=host --host-address="$HOSTADDRESS$" --host-alias="$HOSTALIAS$" --host-output="$HOSTOUTPUT$" --host-state="$HOSTSTATE$" --long-date-time="$LONGDATETIME$" --notification-type="$NOTIFICATIONTYPE$"
+}
+
+define command {
+  command_name notify-service-by-xmpp
+  command_line /usr/local/shinken/bin/notify-by-xmpp --xmpp-config /var/lib/shinken/notify-by-xmpp.yml --mode=service --host-address="$HOSTADDRESS$" --host-alias="$HOSTALIAS$" --host-name="$HOSTNAME$" --long-date-time="$LONGDATETIME$" --notification-type="$NOTIFICATIONTYPE$" --service-desc="$SERVICEDESC$" --service-output="$SERVICEOUTPUT$" --service-state="$SERVICESTATE$" --host-state="$HOSTSTATE$" --host-output="$HOSTOUTPUT$"
+}
+{%- endif %}
+
 define command {
     command_name check_nrpe
     command_line /usr/lib/nagios/plugins/check_nrpe -H $HOSTADDRESS$ -t $ARG2$ -u -c $ARG1$
@@ -207,6 +236,9 @@ define service {
     # Re-check the service every three minutes until a hard state can be
     # determined
     retry_interval 3
+{%- if xmpp %}
+    contacts xmpp
+{%- endif %}
     contact_groups admins
     # Send notifications about warning, unknown, critical, and recovery events
     notification_options w,u,c,r

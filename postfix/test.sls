@@ -35,7 +35,7 @@ test:
     - name: postfix
     - additional:
       - postfix.backup
-    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - doc: {{ opts['cachedir'] }}/doc/output
     - require:
       - monitoring: test
       - cmd: doc

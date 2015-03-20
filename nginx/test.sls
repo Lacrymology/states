@@ -31,7 +31,7 @@ test:
   qa:
     - test
     - name: nginx
-    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - doc: {{ opts['cachedir'] }}/doc/output
     - require:
       - monitoring: test
       - cmd: doc

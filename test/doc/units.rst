@@ -257,4 +257,4 @@ Example::
       - test
       - additional:
         - vim.backup
-      - pillar_doc: /var/doc/output
+      - doc: /var/doc/output

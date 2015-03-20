@@ -23,7 +23,7 @@ test:
   qa:
     - test
     - name: backup.server
-    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - doc: {{ opts['cachedir'] }}/doc/output
     - require:
       - monitoring: test
       - cmd: doc

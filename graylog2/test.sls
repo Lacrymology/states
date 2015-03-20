@@ -70,7 +70,7 @@ test_graylog2:
     - additional:
       - graylog2.web
       - graylog2.server.backup
-    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - doc: {{ opts['cachedir'] }}/doc/output
     - require:
       - monitoring: test
       - cmd: doc

@@ -21,7 +21,7 @@ test_salt_archive:
   qa:
     - test
     - name: salt.archive
-    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - doc: {{ opts['cachedir'] }}/doc/output
     - require:
       - monitoring: test_salt_archive
       - cmd: doc

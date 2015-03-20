@@ -48,7 +48,7 @@ test:
   qa:
     - test
     - name: denyhosts
-    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - doc: {{ opts['cachedir'] }}/doc/output
     - require:
       - monitoring: test
       - cmd: doc

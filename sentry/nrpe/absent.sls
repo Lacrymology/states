@@ -14,3 +14,8 @@
 /usr/lib/nagios/plugins/check_sentry_events.py:
   file:
     - absent
+
+
+/etc/cron.hourly/sentry-monitoring:
+  file:
+    - absent

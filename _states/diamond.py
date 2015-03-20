@@ -46,15 +46,19 @@ def test(name, map):
         'comment': '',
     }
 
-    unexpected_zero_metrics = []
-    not_collected_metrics = []
+    unexpected_zero_metrics = {}
+    not_collected_metrics = {}
+    comments = []
     for collector, metrics in map.items():
-        ret['changes'][collector] = change = {}
         _remove_log(logfile)
 
         if (not collector.startswith('/') and
            not collector.endswith("Collector")):
             collector += 'Collector'
+
+        ret['changes'][collector] = {}
+        unexpected_zero_metrics.update({collector: []})
+        not_collected_metrics.update({collector: []})
 
         command = ('/usr/local/diamond/bin/python '
                    '/usr/local/diamond/bin/diamond -l -r {}').format(collector)
@@ -103,26 +107,32 @@ def test(name, map):
                     value = None
 
                 if (not metrics[metric]) and (not value):
-                    unexpected_zero_metrics.append(key)
+                    unexpected_zero_metrics[collector].append(key)
+
+                ret['changes'][collector].update({key: value})
             else:
-                not_collected_metrics.append(fullpath)
+                not_collected_metrics[collector].append(fullpath)
 
-    if not unexpected_zero_metrics and not not_collected_metrics:
-        ret['comment'] += "All metrics are collected with expected value."
-    else:
+        if (unexpected_zero_metrics[collector] or
+                not_collected_metrics[collector]):
+            comments.append(collector)
+            comments.append("=" * 10)
+            comments.append(__salt__['common.format_error_msg'](
+                unexpected_zero_metrics[collector],
+                "expected non-zero value metrics"
+                )
+            )
+            comments.append(__salt__['common.format_error_msg'](
+                not_collected_metrics[collector],
+                "not collected metrics"
+                )
+            )
+
+    if comments:
         ret['result'] = False
-        comments = []
-        comments.append(__salt__['common.format_error_msg'](
-            sorted(unexpected_zero_metrics),
-            "{} expected non-zero value metrics"
-            )
-        )
-        comments.append(__salt__['common.format_error_msg'](
-            sorted(not_collected_metrics),
-            "{} not collected metrics"
-            )
-        )
-
         ret['comment'] = os.linesep.join(comments)
+        ret['changes'] = {}
+    else:
+        ret['comment'] = "All metrics are collected with expected value."
 
     return ret

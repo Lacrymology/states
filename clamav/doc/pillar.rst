@@ -62,7 +62,7 @@ Link to the
 
 .. note::
 
-  :doc:`/salt/archive/server/doc/index` provides mirror for :doc:`index`,
+  :doc:`/salt/archive/doc/index` provides mirror for :doc:`index`,
   set its address for this if it is deployed. That will speed up
   :doc:`index` update process and save bandwidth a lot.
 

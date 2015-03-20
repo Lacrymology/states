@@ -122,7 +122,7 @@ Default: ``master``.
 files_archive
 ~~~~~~~~~~~~~
 
-Path to :doc:`/salt/archive/server/doc/index` where download most files
+Path to :doc:`/salt/archive/doc/index` where download most files
 (archives, packages, pip) to apply states.
 
 Default: directly get files from public Internet resources. There is no

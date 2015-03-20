@@ -4,7 +4,7 @@
 
 # {{ salt['pillar.get']('message_do_not_modify') }}
 
-{{ nginx_instance(formula='salt.archive.server', allow_ssl_redirect=False, deployment='salt_archive', pillar_prefix='salt_archive') }}
+{{ nginx_instance(formula='salt.archive', allow_ssl_redirect=False, deployment='salt_archive', pillar_prefix='salt_archive') }}
 
 {%- if salt['pillar.get']('salt_archive:source', False) %}
   {%- set max_age = salt['pillar.get']('salt_archive:max_age', 3600) %}

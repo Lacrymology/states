@@ -9,8 +9,8 @@
     - absent
 
 {%- from 'nrpe/passive.jinja2' import passive_absent with context %}
-{{ passive_absent('salt.archive.server') }}
+{{ passive_absent('salt.archive') }}
 
-/etc/sudoers.d/salt_archive_server_nrpe:
+/etc/sudoers.d/salt_archive_nrpe:
   file:
     - absent

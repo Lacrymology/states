@@ -53,9 +53,9 @@ Define all those pillar keys.
 been installed. Any value such as ``https://x:y@hostname/0`` can be used until
 Sentry server is installed, team and project created.
 
-Take extra care with ``files_archive`` if :doc:`/salt/archive/server/doc/index`
+Take extra care with ``files_archive`` if :doc:`/salt/archive/doc/index`
 need to be bootstraped. Set the value of ``files_archive`` to same as
-``salt_archive:source`` (:doc:`/salt/archive/server/doc/pillar`) until it's
+``salt_archive:source`` (:doc:`/salt/archive/doc/pillar`) until it's
 deployed and then change it to any hostname in ``salt_archive:hostnames``.
 
 Salt Master
@@ -91,8 +91,8 @@ And then on :doc:`/salt/master/doc/index` run::
 Here is a suggestion of sequence. This is a list of formulas
 and not roles:
 
-#. :doc:`/salt/archive/server/doc/index`. After that you should change
-   ``files_archive`` in :doc:`/salt/archive/server/doc/pillar` for one of the
+#. :doc:`/salt/archive/doc/index`. After that you should change
+   ``files_archive`` in :doc:`/salt/archive/doc/pillar` for one of the
    ``salt_archive:hostnames``.
 #. :doc:`/sentry/doc/index`
 #. :doc:`/carbon/doc/index`

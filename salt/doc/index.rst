@@ -31,6 +31,6 @@ Content
    ../master/doc/index
    ../cloud/doc/index
    ../api/doc/index
-   ../archive/server/doc/index
+   ../archive/doc/index
    ../ci/doc/index
    *

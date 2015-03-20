@@ -3,13 +3,13 @@
 {%- from 'cron/macro.jinja2' import test_cron with context %}
 include:
   - doc
-  - salt.archive.server
-  - salt.archive.server.diamond
-  - salt.archive.server.nrpe
+  - salt.archive
+  - salt.archive.diamond
+  - salt.archive.nrpe
 
 {%- call test_cron() %}
-- sls: salt.archive.server
-- sls: salt.archive.server.nrpe
+- sls: salt.archive
+- sls: salt.archive.nrpe
 {%- endcall %}
 
 test_salt_archive:
@@ -20,7 +20,7 @@ test_salt_archive:
       - cmd: test_crons
   qa:
     - test
-    - name: salt.archive.server
+    - name: salt.archive
     - pillar_doc: {{ opts['cachedir'] }}/doc/output
     - require:
       - monitoring: test_salt_archive

@@ -19,8 +19,8 @@ running.
 dovecot_config_procs
 ~~~~~~~~~~~~~~~~~~~~
 
-``dovecot/config`` :ref:`glossary-daemon` parses the configuration file and sends the
-configuration to other processes.
+``dovecot/config`` :ref:`glossary-daemon` parses the configuration file and
+sends the configuration to other processes.
 
 .. include:: /nrpe/doc/check_procs.inc
 
@@ -48,14 +48,14 @@ dovecot_anvil_procs
 dovecot_imap
 ~~~~~~~~~~~~
 
-:doc:`/dovecot/doc/index` IMAP protocol is functional.
+:doc:`index` :ref:`glossary-imap` protocol is functional.
 
 .. _monitor-dovecot_pop:
 
 dovecot_pop
 ~~~~~~~~~~~
 
-:doc:`/dovecot/doc/index` POP3 protocol is functional.
+:doc:`index` :ref:`glossary-pop3` protocol is functional.
 
 .. _monitor-dovecot_managesieve_port:
 
@@ -68,13 +68,13 @@ port is listening and can be accessed locally.
 dovecot_port_imap
 ~~~~~~~~~~~~~~~~~
 
-Dovecot IMAP Port port is listening and can be accessed locally.
-
+Dovecot :ref:`glossary-imap` Port port is listening and can be accessed
+locally.
 
 dovecot_port_pop3
 ~~~~~~~~~~~~~~~~~
 
-Dovecot POP3 Port port is listening and can be accessed locally.
+Dovecot :ref:`glossary-pop3` Port port is listening and can be accessed locally.
 
 Optional
 --------
@@ -84,16 +84,16 @@ Optional
 dovecot_spop
 ~~~~~~~~~~~~
 
-:doc:`/dovecot/doc/index` POP3 protocol over :doc:`/ssl/doc/index`
-is functional.
+:doc:`index` :ref:`glossary-pop3` protocol over :doc:`/ssl/doc/index` is
+functional.
 
 .. _monitor-dovecot_simap:
 
 dovecot_simap
 ~~~~~~~~~~~~~
 
-:doc:`/dovecot/doc/index` IMAP protocol over :doc:`/ssl/doc/index`
-is functional.
+:doc:`index` :ref:`glossary-imap` protocol over :doc:`/ssl/doc/index` is
+functional.
 
 .. _monitor-dovecot_port_pop3s:
 

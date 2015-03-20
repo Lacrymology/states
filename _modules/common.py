@@ -137,17 +137,17 @@ def unique_hostname(pillar):
 
 
 def iter_to_bullet_list(iterable):
-    return os.linesep.join(['- {}'.format(item) for item in iterable])
+    return os.linesep.join('- {}'.format(item) for item in iterable)
 
 
-def format_error_msg(iterable, message):
+def format_error_msg(iterable, message, sort=True):
     # if there is no error to append to comments, just skip it
     if iterable:
         header = '-' * 10
         return os.linesep.join((
-            message.format(len(iterable)),
+            str(len(iterable)) + ' ' + message,
             header,
-            iter_to_bullet_list(iterable)
+            iter_to_bullet_list(sorted(iterable) if sort else iterable)
         ))
     else:
         return ''

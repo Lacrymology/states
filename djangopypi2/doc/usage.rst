@@ -7,8 +7,8 @@ Developers: How to upload packages
 Uploading to your PyPI
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Assuming you are running your :doc:`/django/doc/index` site locally for now, add the following to
-your ``~/.pypirc`` file::
+Assuming you are running your :doc:`/django/doc/index` site locally for now,
+add the following to your ``~/.pypirc`` file::
 
   [distutils]
   index-servers =
@@ -59,8 +59,8 @@ To install your package with :doc:`/pip/doc/index`::
 
 If you want to fall back to PyPi or another repository in the event the
 package is not on your new server, or in particular if you are installing a
-number of packages, some on your private server and some on another, you can use
-:doc:`/pip/doc/index` in the following manner::
+number of packages, some on your private server and some on another, you can
+use :doc:`/pip/doc/index` in the following manner::
 
   pip install -i http://pypi.example.com/simple/ \
     --extra-index-url=http://pypi.python.org/simple/ \

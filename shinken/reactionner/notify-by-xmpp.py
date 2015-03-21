@@ -7,7 +7,7 @@ Sent shinken notifications
 Usage::
 
    notify-by-xmpp \
-       --xmpp-config /var/lib/shinken/notify-by-xmpp.yml \
+       --xmpp-config /etc/shinken/notify-by-xmpp.yml \
        --mode host \
        --host-address '$HOSTADDRESS$' \
        --host-alias '$HOSTALIAS$' \

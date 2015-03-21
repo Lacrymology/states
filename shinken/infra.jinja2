@@ -146,12 +146,12 @@ define contact {
 
 define command {
   command_name notify-host-by-xmpp
-  command_line /usr/local/shinken/bin/notify-by-xmpp --xmpp-config /var/lib/shinken/notify-by-xmpp.yml --mode=host --host-address="$HOSTADDRESS$" --host-alias="$HOSTALIAS$" --host-output="$HOSTOUTPUT$" --host-state="$HOSTSTATE$" --long-date-time="$LONGDATETIME$" --notification-type="$NOTIFICATIONTYPE$"
+  command_line /usr/local/shinken/bin/notify-by-xmpp --xmpp-config /etc/shinken/notify-by-xmpp.yml --mode=host --host-address="$HOSTADDRESS$" --host-alias="$HOSTALIAS$" --host-output="$HOSTOUTPUT$" --host-state="$HOSTSTATE$" --long-date-time="$LONGDATETIME$" --notification-type="$NOTIFICATIONTYPE$"
 }
 
 define command {
   command_name notify-service-by-xmpp
-  command_line /usr/local/shinken/bin/notify-by-xmpp --xmpp-config /var/lib/shinken/notify-by-xmpp.yml --mode=service --host-address="$HOSTADDRESS$" --host-alias="$HOSTALIAS$" --host-name="$HOSTNAME$" --long-date-time="$LONGDATETIME$" --notification-type="$NOTIFICATIONTYPE$" --service-desc="$SERVICEDESC$" --service-output="$SERVICEOUTPUT$" --service-state="$SERVICESTATE$" --host-state="$HOSTSTATE$" --host-output="$HOSTOUTPUT$"
+  command_line /usr/local/shinken/bin/notify-by-xmpp --xmpp-config /etc/shinken/notify-by-xmpp.yml --mode=service --host-address="$HOSTADDRESS$" --host-alias="$HOSTALIAS$" --host-name="$HOSTNAME$" --long-date-time="$LONGDATETIME$" --notification-type="$NOTIFICATIONTYPE$" --service-desc="$SERVICEDESC$" --service-output="$SERVICEOUTPUT$" --service-state="$SERVICESTATE$" --host-state="$HOSTSTATE$" --host-output="$HOSTOUTPUT$"
 }
 {%- endif %}
 

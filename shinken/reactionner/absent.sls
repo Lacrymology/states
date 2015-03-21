@@ -15,7 +15,7 @@
   file:
     - absent
 
-/var/lib/shinken/notify-by-xmpp.yml:
+/etc/shinken/notify-by-xmpp.yml:
   file:
     - absent
 

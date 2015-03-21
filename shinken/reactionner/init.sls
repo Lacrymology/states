@@ -84,7 +84,7 @@ shinken-reactionner:
 
 {%- set xmpp = salt["pillar.get"]("shinken:xmpp", False) %}
 {%- if xmpp %}
-/var/lib/shinken/notify-by-xmpp.yml:
+/etc/shinken/notify-by-xmpp.yml:
   file:
     - managed
     - contents: |
@@ -97,6 +97,7 @@ shinken-reactionner:
     - mode: 440
     - require:
       - virtualenv: shinken
+      - file: /etc/shinken
     - require_in:
       - service: shinken-reactionner
 
@@ -109,12 +110,12 @@ shinken-reactionner:
     - group: shinken
     - mode: 550
     - require:
-      - file: /var/lib/shinken/notify-by-xmpp.yml
+      - file: /etc/shinken/notify-by-xmpp.yml
       - module: shinken
     - require_in:
       - service: shinken-reactionner
 {%- else %}
-/var/lib/shinken/notify-by-xmpp.yml:
+/etc/shinken/notify-by-xmpp.yml:
   file:
     - absent
 

@@ -60,7 +60,6 @@ sentry_monitoring:
     - script
     - source: salt://sentry/nrpe/sentry_monitoring.py
     - args: >
-        --password {{ salt["password.generate"]("sentry_monitoring") }}
         --dsn-file {{ dsn_file }}
 {%- if salt['pillar.get']("__test__", False) %}
         --test

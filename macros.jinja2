@@ -76,7 +76,7 @@ mode: permission of PID file
     file:
       - directory
 
-  {%- if salt['pillar.get']('ssh:users:owner', False) %}
+  {%- if owner in salt['pillar.get']('ssh:users', {}) %}
   /etc/ssh/keys/{{ owner }}:
     file:
       - user: {{ owner }}

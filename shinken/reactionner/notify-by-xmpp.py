@@ -3,25 +3,11 @@
 
 """
 Sent shinken notifications
-
-Usage::
-
-   notify-by-xmpp \
-       --xmpp-config /etc/shinken/notify-by-xmpp.yml \
-       --mode host \
-       --host-address '$HOSTADDRESS$' \
-       --host-alias '$HOSTALIAS$' \
-       --long-date-time '$LONGDATETIME$' \
-       --notification-type '$NOTIFICATIONTYPE$'\
-       --service-desc '$SERVICEDESC$' \
-       --service-output '$SERVICEOUTPUT$' \
-       --service-state '$SERVICESTATE' \
 """
 import logging
 
 import pysc
 import sleekxmpp
-import yaml
 
 logger = logging.getLogger(__name__)
 
@@ -116,39 +102,11 @@ class NotifyByXMPP(pysc.Application):
         )
         return argp
 
-    def parse_xmpp_config(self):
-        """
-        XMPP config format::
-
-           jid: test@example.com
-           password: 123
-           recipients:
-             - rpt1@example.com
-             - rpt2@example.com
-           rooms:
-             - rpt1@conferences.example.com
-
-        """
-        xmpp_config = self.config["xmpp_config"]
-        try:
-            with open(xmpp_config) as config_file:
-                loaded = yaml.load(config_file)
-                # validate format
-                if isinstance(loaded, dict) \
-                   and "jid" in loaded \
-                   and "password" in loaded:
-                    return loaded
-                else:
-                    raise ValueError(
-                        "Malformed XMPP config file: %s", xmpp_config)
-        except Exception:
-            logger.error("Could not load XMPP config file: %s", xmpp_config)
-            raise
-
     def main(self):
 
         # get XMPP configs
-        xmpp_configs = self.parse_xmpp_config()
+        xmpp_configs = pysc.unserialize_yaml(
+            self.config["xmpp_config"], critical=True)
         self._jid = xmpp_configs["jid"]
         self._password = xmpp_configs["password"]
         self._recipients = xmpp_configs["recipients"] \
@@ -157,37 +115,11 @@ class NotifyByXMPP(pysc.Application):
 
         logger.debug("config: %s", self.config)
         mode = self.config["mode"]
-        host_address = self.config["host_address"]
-        host_alias = self.config["host_alias"]
-        host_name = self.config["host_name"]
-        long_date_time = self.config["long_date_time"]
-        notification_type = self.config["notification_type"]
-        service_desc = self.config["service_desc"]
-        service_output = self.config["service_output"]
-        service_state = self.config["service_state"]
-        host_state = self.config["host_state"]
-        host_output = self.config["host_output"]
         if mode == "service":
-            message = SERVICE_MESSAGE_FMT.format(
-                host_address=host_address,
-                host_alias=host_alias,
-                host_name=host_name,
-                long_date_time=long_date_time,
-                notification_type=notification_type,
-                service_desc=service_desc,
-                service_output=service_output,
-                service_state=service_state,
-                host_state=host_state,
-                host_output=host_output)
+            message = SERVICE_MESSAGE_FMT.format(**self.config)
             logger.debug("shinken message: %s", message)
         elif mode == "host":
-            message = HOST_MESSAGE_FMT.format(
-                notification_type=notification_type,
-                host_alias=host_alias,
-                host_state=host_state,
-                host_address=host_address,
-                host_output=host_output,
-                long_date_time=long_date_time)
+            message = HOST_MESSAGE_FMT.format(**self.config)
         else:
             raise ValueError("Invalid notification mode: %s", mode)
 

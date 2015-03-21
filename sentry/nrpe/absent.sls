@@ -15,7 +15,6 @@
   file:
     - absent
 
-
 /etc/cron.hourly/sentry-monitoring:
   file:
     - absent

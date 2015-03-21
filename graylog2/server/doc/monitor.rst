@@ -54,8 +54,8 @@ Critical: ``0`` msg/seccond
 graylog2_input_gelf
 ~~~~~~~~~~~~~~~~~~~
 
-Monitor :doc:`/graylog2/doc/index` `GELF
-<http://www.graylog2.org/gelf>`__ input port ``12201/udp``.
+Monitor :doc:`/graylog2/doc/index` `GELF <http://www.graylog2.org/gelf>`_ input
+port ``12201/udp``.
 
 graylog2_input_syslog
 ~~~~~~~~~~~~~~~~~~~~~

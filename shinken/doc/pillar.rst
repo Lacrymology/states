@@ -202,12 +202,12 @@ shinken:xmpp
 
 Enable notification for :doc:`index`.
 
-Format::
+Example::
 
   shinken:
     xmpp:
-      jid: <joe@chat.example.com>
-      password: <password>
+      jid: joe@chat.example.com
+      password: password
       recipients:
         - recipient1
         - recipient2
@@ -215,7 +215,21 @@ Format::
         - room1
         - room2
 
-Default: turn off notify by XMPP (``False``).
+Format:
+
+  jid
+      `Jabber Identifier <http://xmpp.org/extensions/xep-0029.html>`_
+  password
+      password of :ref:`glossary-xmpp` account
+  recipients
+      list of recipients will receive :doc:`index` notifications via private
+      message.
+  rooms
+      list of chat rooms will receive :doc:`index` notifications via multi-user
+      chat (MUC).
+
+
+Default: turn off notify by :ref:`glossary-xmpp` (``False``).
 
 Conditional
 -----------

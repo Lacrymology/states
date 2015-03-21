@@ -6,12 +6,16 @@
 Nagios plugin to check number of events in a graylog2 server
 """
 
+__author__ = 'Diep Pham'
+__maintainer__ = 'Diep Pham'
+__email__ = 'favadi@robotinfra.com'
+
 import logging
-import raven
+import urlparse
 
 import nagiosplugin
+import raven
 import requests
-import urlparse
 
 from pysc import nrpe
 

@@ -47,6 +47,14 @@ extend:
         - user: nagios-nrpe-server
 
 {%- set dsn_file = "/var/lib/deployments/sentry/monitoring_dsn" %}
+{#-
+the command below will create dsn_file with:
+  * user: www-data
+  * group: nagios
+  * mode: 0400
+
+It will be executed if dsn_file is missing.
+#}
 sentry_monitoring:
   cmd:
     - script

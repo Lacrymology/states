@@ -22,6 +22,5 @@ sentry_monitoring_events:
   {{ passive_interval(60) }} {#- 1 hour #}
   dependencies:
     - {{ deployment }}_uwsgi_worker
-    - {{ deployment }}_uwsgi_master
   arguments:
     dsn_file: /var/lib/deployments/sentry/monitoring_dsn

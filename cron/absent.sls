@@ -29,3 +29,9 @@ cron_absent_crontab:
     - name: /etc/crontab
     - require:
       - pkg: cron
+
+/etc/cron.hourly:
+  file:
+    - absent
+    - require:
+      - pkg: cron

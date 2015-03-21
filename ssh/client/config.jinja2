@@ -16,7 +16,11 @@ Host *
     HashKnownHosts yes
     GSSAPIAuthentication yes
     GSSAPIDelegateCredentials no
-    IdentityFile /etc/ssh/keys/%u/%r@%h
+{%- if accumulator|default(False) %}
+    {%- for line in accumulator['ssh_identity_config'] %}
+    IdentityFile /etc/ssh/keys/%u/{{ line }}
+    {%- endfor %}
+{%- endif %}
     IdentityFile ~/.ssh/id_rsa
     IdentityFile ~/.ssh/id_dsa
 {% endblock %}

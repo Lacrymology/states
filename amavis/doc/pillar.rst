@@ -57,11 +57,11 @@ to user defined in :ref:`pillar-mail-postmaster`.
 amavis:sa_tag_level
 ~~~~~~~~~~~~~~~~~~~
 
-Add :doc:`/spamassassin/doc/index` tag to all emails have score greater than set
-value.
+Add :doc:`/spamassassin/doc/index` tag to all emails have score greater than
+set value.
 
 Default: a very low value to set spam info headers for all emails (``-999``).
-This help user ensuring that email is processed by :doc:`/amavis/doc/index` by
+This helps user ensuring that email is processed by :doc:`index` by
 just looking into email header.
 
 .. _pillar-amavis-sa_tag2_level:
@@ -70,7 +70,7 @@ amavis:sa_tag2_level
 ~~~~~~~~~~~~~~~~~~~~
 
 Emails which have score greater than this value considered "spammy"
-(looks like spam), add spammy tag for it.
+(looks like spam), add "spammy" tag for it.
 
 Default: a good value concluded from experiments (``3``).
 As our email used for testing mail stack functionality always got score
@@ -83,8 +83,7 @@ amavis:sa_kill_level
 
 Email spam score exceeds this value is considered spam.
 
-Default: Using same value in example file mentioned in
-:ref:`pillar-amavis-sa_tag_level` (``6.31``) .
+Default: a sane default value from experiments (``6.31``) .
 
 .. _pillar-amavis-dsn_cutoff_level:
 
@@ -94,5 +93,4 @@ amavis:dsn_cutoff_level
 When spam score exceeds this pillar value, do not send delivery status
 notification message.
 
-Default: Using same value in example file mentioned in
-:ref:`pillar-amavis-sa_tag_level` (``9``).
+Default: a sane default value from experiments (``9``).

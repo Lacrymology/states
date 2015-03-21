@@ -102,6 +102,25 @@ class LintCheckTabCharacter(LintCheck):
         return True
 
 
+class LintCheckDocLinkDoubleUnderscore(LintCheck):
+    stable = True
+
+    def run(self):
+        '''
+        Checks whether a doc file contains link notation with double underscore
+        '''
+        if not self.exts:
+            self.exts = ['rst']
+        found = _grep(self.paths, '`__[^a-zA-Z]', *self.exts)
+
+        if found:
+            self.print_header('Must use single underscore for link'
+                              ' annotation.')
+            _print_grep_result(found)
+            return False
+        return True
+
+
 class LintCheckBadCronFilename(LintCheck):
     '''
     Check whether a state manage a cron file with filename contains ``.``
@@ -424,6 +443,7 @@ def main():
                  LintCheckSubkeyInSaltPillar,
                  LintCheckEndingSpace,
                  LintCheckFinalNewline,
+                 LintCheckDocLinkDoubleUnderscore,
                  )
 
     if args.stable:

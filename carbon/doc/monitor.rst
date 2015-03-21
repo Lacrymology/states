@@ -3,10 +3,15 @@ Monitor
 
 Terminology:
 
-- `Plaintext port <http://graphite.readthedocs.org/en/latest/carbon-daemons.html#carbon-relay-py>`_
-- `Pickle port <http://graphite.readthedocs.org/en/latest/feeding-carbon.html#the-pickle-protocol>`_
-
-.. TODO explains Cache Query port.
+- `Plaintext port <http://graphite.readthedocs.org/en/latest/carbon-daemons.html
+  #carbon-relay-py>`_
+- `Pickle port <http://graphite.readthedocs.org/en/latest/feeding-carbon.html
+  #the-pickle-protocol>`_
+- Cache Query port: port that carbon-cache daemon listen to, allows
+  :doc:`/graphite/doc/index` webapp to query for data that has not
+  yet been persisted. See `graphite config setting
+  <http://graphite.readthedocs.org/en/latest/config-local-settings.html?
+  highlight=query#cluster-configuration>`_ for more details.
 
 Mandatory
 ---------
@@ -16,8 +21,8 @@ Mandatory
 carbon_cache_{{ instance }}_procs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-`Carbon-cache daemon <http://graphite.readthedocs.org/en/latest/carbon-daemons.html#carbon-cache-py>`_
-process is the daemon which accepts metrics sent from multiple
+carbon-cache_ daemon
+process is the :ref:`glossary-daemon` which accepts metrics sent from multiple
 sources/protocols and writes them to disk. Number of this daemons is
 the value defined in :ref:`pillar-carbon-cache_daemons`.
 
@@ -28,7 +33,7 @@ the value defined in :ref:`pillar-carbon-cache_daemons`.
 carbon_cache_{{ instance }}_plaintext_port
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Carbon Cache {{ instance }} plaintext port is listening on localhost
+carbon-cache_ {{ instance }} plaintext port is listening on localhost
 (``127.0.0.1``).
 
 .. _monitor-carbon_cache_instance_pickle_port:
@@ -36,7 +41,7 @@ Carbon Cache {{ instance }} plaintext port is listening on localhost
 carbon_cache_{{ instance }}_pickle_port
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Carbon Cache {{ instance }} pickle port is listening on localhost
+carbon-cache_ {{ instance }} pickle port is listening on localhost
 (``127.0.0.1``).
 
 .. _monitor-carbon_cache_instance_cache_query_port:
@@ -44,7 +49,7 @@ Carbon Cache {{ instance }} pickle port is listening on localhost
 carbon_cache_{{ instance }}_cache_query_port
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Carbon Cache {{ instance }} query port is listening on localhost
+carbon-cache_ {{ instance }} query port is listening on localhost
 (``127.0.0.1``).
 
 .. _monitor-carbon_cache_procs:
@@ -52,24 +57,20 @@ Carbon Cache {{ instance }} query port is listening on localhost
 carbon_cache_procs
 ~~~~~~~~~~~~~~~~~~
 
-.. TODO: use include?
-
 Number of `carbon-cache` processes equal to value set in
 :ref:`pillar-carbon-cache_daemons`.
 
-Alert if missing any process (such as if daemon died) or there are more than
-expected processes - maybe a :doc:`/carbon/doc/index` formula bug or someone ran
-those daemon manually.
+.. include:: /nrpe/doc/check_procs.inc
 
 .. _monitor-carbon_relay_procs:
 
 carbon_relay_procs
 ~~~~~~~~~~~~~~~~~~
 
-`Carbon relay daemon <http://graphite.readthedocs.org/en/latest/carbon-daemons.html#carbon-relay-py>`_
+carbon-relay_ daemon
 process serves two distinct purposes: replication and sharding.
-This formula support only one instance of `carbon-relay` daemon, which will
-relay all incoming metrics to multiple backend `carbon-cache` daemons.
+This formula support only one instance of carbon-relay_ daemon, which will
+relay all incoming metrics to multiple backend carbon-cache_ daemons.
 
 .. include:: /nrpe/doc/check_procs.inc
 
@@ -78,35 +79,35 @@ relay all incoming metrics to multiple backend `carbon-cache` daemons.
 carbon_plaintext_port_remote
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. TODO: link to carbon relay doc
-
-Carbon-relay PlainText port is listening and can be reached from outside.
+carbon-relay_ PlainText port is listening and can be reached from outside.
 
 .. _monitor-carbon_pickle_port_remote:
 
 carbon_pickle_port_remote
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. TODO: link to carbon relay doc
-
-Carbon-relay daemon Pickle port is listening and can be reached from outside.
+carbon-relay_ daemon Pickle port is listening and can be reached from outside.
 
 .. _monitor-carbon_plaintext_port:
 
 carbon_plaintext_port
 ~~~~~~~~~~~~~~~~~~~~~
 
-Carbon-relay PlainText Port is listening on localhost (``127.0.0.1``).
+carbon-relay_ PlainText Port is listening on localhost (``127.0.0.1``).
 
 .. _monitor-carbon_pickle_port:
 
 carbon_pickle_port
 ~~~~~~~~~~~~~~~~~~
 
-Carbon-relay Pickle Port is listening on localhost (``127.0.0.1``).
+carbon-relay_ Pickle Port is listening on localhost (``127.0.0.1``).
 
 .. |deployment| replace:: carbon
 
 .. include:: /backup/doc/monitor_procs.inc
 
 .. include:: /backup/doc/monitor.inc
+
+.. _carbon-relay: http://graphite.readthedocs.org/en/latest/carbon-daemons.html#carbon-relay-py
+
+.. _carbon-cache: http://graphite.readthedocs.org/en/latest/carbon-daemons.html#carbon-cache-py

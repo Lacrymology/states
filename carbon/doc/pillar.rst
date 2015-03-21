@@ -22,9 +22,7 @@ Example::
 carbon:cache_daemons
 ~~~~~~~~~~~~~~~~~~~~
 
-.. TODO: link to carbon-cache
-
-Number of Carbon-cache daemons to deploy, should <= numbers of
+Number of carbon-cache_ daemons to deploy, should <= numbers of
 `CPU cores <https://en.wikipedia.org/wiki/Multi-core_processor>`_.
 
 Optional
@@ -55,7 +53,7 @@ need to open many files (``16384``).
 carbon:interface
 ~~~~~~~~~~~~~~~~
 
-IP address to bind Carbon-relay daemon.
+IP address to bind carbon-relay_ daemon.
 
 Default: binds to all available IP addresses of all interfaces (``0.0.0.0``).
 
@@ -68,9 +66,10 @@ Softly limits the number of whisper files that get created each minute.
 Setting this value low (like at ``50``) is a good way to ensure your graphite
 system will not be adversely impacted when a bunch of new metrics are
 sent to it. The trade off is that it will take much longer for those metrics'
-database files to all get created and thus longer until the data becomes usable.
-Setting this value high (like ``inf`` for infinity) will cause :doc:`/graphite/doc/index` to create
-the files quickly but at the risk of slowing I/O down considerably for a while.
+database files to all get created and thus longer until the data becomes
+usable.  Setting this value high (like ``inf`` for infinity) will cause
+:doc:`/graphite/doc/index` to create the files quickly but at the risk of
+slowing I/O down considerably for a while.
 
 Default: No limit (``inf``).
 
@@ -85,7 +84,7 @@ prevent over-utilizing the disk and thus starving the rest of the system.
 When the rate of required updates exceeds this, then carbon's caching will
 take effect and increase the overall throughput accordingly.
 
-Default: :doc:`/carbon/doc/index` default value ``500``.
+Default: :doc:`index` default value ``500``.
 
 .. _pillar-carbon-replication:
 
@@ -94,7 +93,7 @@ carbon:replication
 
 Add redundancy of data by replicating.
 
-Every data point and relaying it to N Carbon-cache daemons
+Every data point and relaying it to N carbon-cache_ daemons
 (0 < N <= number of Carbon-cache daemon).
 
 Default: ``1``. Which is only one copy for each metric, thus no replication.
@@ -115,8 +114,8 @@ Default: Unused (``None``).
 carbon:max_cache_size
 ~~~~~~~~~~~~~~~~~~~~~
 
-Limit the size of the :doc:`/carbon/doc/index` cache to avoid swapping or becoming CPU bound.
-Size of :doc:`/carbon/doc/index` cache = maximum number of datapoints it can hold.
+Limit the size of the :doc:`index` cache to avoid swapping or becoming CPU
+bound.  Size of :doc:`index` cache = maximum number of datapoints it can hold.
 Consult http://graphite.readthedocs.org/en/latest/terminology.html#term-series
 for more detail on datapoints.
 
@@ -129,7 +128,8 @@ carbon:retentions
 
 The retentions policies of metrics stored on disk. Frequency should >= 60
 seconds as metric collectors usually configured to send data each 60 seconds.
-Setting frequency < 60 seconds may cause discontinuous line in :doc:`/graphite/doc/index` graph.
+Setting frequency < 60 seconds may cause discontinuous line in
+:doc:`/graphite/doc/index` graph.
 Changing this pillar key will change retentions policy of new ``.wsp`` files,
 it will not affect existed ``.wsp`` files, use ``whisper-resize.py``
 to convert existed files.
@@ -162,3 +162,7 @@ List of regular expressions of black or white listed metrics.
 Used only if :ref:`pillar-carbon-filter-type` is turned on.
 
 Default: no filter rule (``[]``).
+
+.. _carbon-relay: http://graphite.readthedocs.org/en/latest/carbon-daemons.html#carbon-relay-py
+
+.. _carbon-cache: http://graphite.readthedocs.org/en/latest/carbon-daemons.html#carbon-cache-py

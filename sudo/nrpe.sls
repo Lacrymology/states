@@ -2,3 +2,8 @@
 
 include:
   - apt.nrpe
+{%- if salt['pillar.get']('sentry_dsn', False) %}
+  - raven.mail.nrpe
+{%- else %}
+  - ssmtp.nrpe
+{%- endif %}

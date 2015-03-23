@@ -40,27 +40,22 @@ class SentryMonitoring(pysc.Application):
         user, _ = User.objects.get_or_create(username="monitoring")
         user.is_superuser = False
         user.save()
-        logger.debug("Sentry user monitoring is created")
 
         # get a create Monitoring organization
         organization, _ = Organization.objects.get_or_create(
             name="Monitoring", owner=user)
-        logger.debug("Sentry organization Monitoring is created")
 
         # get a create Monitoring team
         team, _ = Team.objects.get_or_create(
             name="Monitoring", organization=organization, owner=user)
-        logger.debug("Sentry team Monitoring is created")
 
         # get a create Monitoring project
         project, _ = Project.objects.get_or_create(
             name="Monitoring", team=team, organization=organization)
-        logger.debug("Sentry project Monitoring is created")
 
         key = ProjectKey.objects.get(project=project)
         key.roles = 3  # enable Web API access role
         key.save()
-        logger.debug("Web API access role enabled")
 
         dsn = key.get_dsn()
         # disable verify_ssl in test mode

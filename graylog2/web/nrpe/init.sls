@@ -10,6 +10,5 @@ include:
 {% if salt['pillar.get']('graylog2:ssl', False) %}
   - ssl.nrpe
 {%- endif %}
-  - sudo.nrpe
 
 {{ passive_check('graylog2.web', pillar_prefix='graylog2', check_ssl_score=True) }}

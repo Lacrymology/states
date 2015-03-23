@@ -156,7 +156,7 @@ The size of `heap
 <http://en.wikipedia.org/wiki/Java_virtual_machine#Heap>`_ give for
 JVM.
 
-Default: use JVM default (``False``).
+Default: ``'1g'``.
 
 .. _pillar-graylog2-server-user:
 

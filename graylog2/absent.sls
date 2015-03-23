@@ -12,3 +12,9 @@ include:
       - service: graylog2-server
       - service: graylog2-web
 {%- endfor -%}
+
+{%- set version = '1.0' %}
+graylog:
+  pkgrepo:
+    - absent
+    - name: deb https://packages.graylog2.org/repo/debian/ {{ grains['lsb_distrib_codename'] }} {{ version }}

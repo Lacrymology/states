@@ -1,47 +1,32 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
 {%- from "upstart/absent.sls" import upstart_absent with context -%}
-{%- set version = '0.20.6' -%}
-{%- set server_root_dir = '/usr/local/graylog2-server-' + version -%}
-{%- set user = salt['pillar.get']('graylog2:server:user', 'graylog2') -%}
 
-{{ upstart_absent('graylog2-server') }}
-{{ upstart_absent('graylog2-server-prep') }}
+{{ upstart_absent("graylog-server")}}
 
 extend:
-  graylog2-server:
+  graylog-server:
     user:
       - absent
-      - name: {{ user }}
+      - name: graylog
       - require:
-        - service: graylog2-server
+        - service: graylog-server
     group:
       - absent
-      - name: {{ user }}
+      - name: graylog
       - require:
-        - user: graylog2-server
+        - user: graylog-server
+    pkg:
+      - purged
 
-{%- for file in ('/etc/graylog2.conf', server_root_dir, '/etc/graylog2') %}
-{{ file }}:
+/etc/graylog/server:
   file:
     - absent
     - require:
-      - service: graylog2-server
-{% endfor %}
+      - service: graylog-server
 
-/var/log/graylog2:
+/var/log/graylog-server:
   file:
     - absent
     - require:
-      - service: graylog2-server
-
-/var/lib/graylog2/server-node-id:
-  file:
-    - absent
-    - require:
-      - service: graylog2-server
-
-graylog2_rsyslog_config:
-  file:
-    - absent
-    - name: /etc/rsyslog.d/graylog2-server.conf
+      - service: graylog-server

@@ -13,7 +13,6 @@ include:
   - local
   - rsyslog
   - pysc
-  - sudo
   - requests
 {#-
   graylog2.server require elasticsearch, install it when testing to
@@ -26,41 +25,59 @@ include:
   - elasticsearch
 {%- endif %}
 
-{%- set version = '0.20.6' %}
-{%- set checksum = 'md5=a9105a4fb5c950b3760df02dface6465' %}
-{%- set server_root_dir = '/usr/local/graylog2-server-' + version %}
-{%- set user = salt['pillar.get']('graylog2:server:user', 'graylog2') %}
+{%- set user = 'graylog' %}
 {%- set mongodb_suffix = '0-20' %}
 {%- set elasticsearch_suffix = '0-20' %}
 
-{#-
-{% for previous_version in () %}
-/usr/local/graylog2-server-{{ previous_version }}:
-  file:
-    - absent
-{% endfor %}
-#}
-
-/var/log/graylog2/server.log:
-  file:
-    - absent
-
 /etc/graylog2:
   file:
-    - directory
-    - user: {{ user }}
-    - group: {{ user }}
-    - mode: 550
-    - require:
-      - user: graylog2
+    - absent
 
-{# For cluster using, all node's data should be explicit: http,master,data,port and/or name #}
-/etc/graylog2/elasticsearch.yml:
+/var/lib/graylog2:
+  file:
+    - absent
+
+/etc/graylog2.conf:
+  file:
+    - absent
+
+/usr/local/graylog2-server-0.20.6:
+  file:
+    - absent
+
+/var/log/graylog2:
+  file:
+    - absent
+
+/var/run/graylog2:
+  file:
+    - absent
+
+/etc/rsyslog.d/graylog2-server.conf:
+  file:
+    - absent
+
+{{ upstart_absent('graylog2-server') }}
+extend:
+  graylog2-server:
+    user:
+      - absent
+      - name: graylog2
+      - require:
+        - service: graylog2-server
+    group:
+      - absent
+      - name: graylog2
+      - require:
+        - user: graylog2-server
+
+{#- For cluster using, all node's data should be explicit: http,master,data,port and/or name #}
+/etc/graylog/server/elasticsearch.yml:
   file:
     - managed
     - source: salt://elasticsearch/config.jinja2
     - template: jinja
-    - user: {{ user }}
+    - user: root
     - group: {{ user }}
     - mode: 440
     - context:
@@ -68,83 +85,51 @@ include:
         data: 'false'
         origin_state: graylog2.server
     - require:
-      - file: /etc/graylog2
-      - user: graylog2
+      - pkg: graylog-server
 
-/var/lib/graylog2:
-  file:
-    - directory
-    - user: {{ user }}
-    - group: {{ user }}
-    - mode: 750
-    - require:
-      - archive: graylog2-server
-      - user: graylog2
-
-graylog2.conf:
+/etc/graylog/server/server.conf:
   file:
     - managed
-    - name: /etc/graylog2.conf
     - template: jinja
-    - user: {{ user }}
+    - user: root
     - group: {{ user }}
     - mode: 440
     - source: salt://graylog2/server/config.jinja2
     - context:
-        version: {{ version }}
         mongodb_suffix: {{ mongodb_suffix }}
         elasticsearch_suffix: {{ elasticsearch_suffix }}
     - require:
-      - user: graylog2
+      - pkg: graylog-server
 
-graylog2-server:
-  archive:
-    - extracted
-    - name: /usr/local/
-{%- set files_archive = salt['pillar.get']('files_archive', False) %}
-{%- if files_archive %}
-    - source: {{ files_archive }}/mirror/graylog2-server-{{ version }}.tar.gz
-{%- else %}
-    - source: http://packages.graylog2.org/releases/graylog2-server/graylog2-server-{{ version }}.tgz
-{%- endif %}
-    - source_hash: {{ checksum }}
-    - archive_format: tar
-    - tar_options: z
-    - if_missing: {{ server_root_dir }}
-    - require:
-      - file: /usr/local
+/etc/default/graylog-server:
   file:
     - managed
-    - name: /etc/init/graylog2-server.conf
     - template: jinja
     - user: root
-    - group: root
-    - mode: 400
-    - source: salt://graylog2/server/upstart.jinja2
-    - context:
-        version: {{ version }}
-        user: {{ user }}
+    - group: {{ user }}
+    - mode: 440
+    - source: salt://graylog2/server/default.jinja2
     - require:
-      - pkg: sudo
+      - pkg: graylog-server
+
+graylog-server:
+  pkg:
+    - installed
+    - name: graylog-server
+    - require:
+      - pkgrepo: graylog
   service:
     - running
     - enable: True
     - order: 50
     - watch:
-      - file: graylog2-server
       - pkg: jre-7
       - file: jre-7
-      - file: graylog2.conf
-      - file: /etc/graylog2/elasticsearch.yml
-      - archive: graylog2-server
-      - user: graylog2
-      - file: /var/lib/graylog2
+      - file: /etc/graylog/server/server.conf
+      - file: /etc/graylog/server/elasticsearch.yml
+      - file: /etc/default/graylog-server
     - require:
-      - file: /var/log/graylog2
-      - file: /var/log/graylog2/server.log
       - service: mongodb
-      - file: {{ server_root_dir }}
-      - file: /var/run/graylog2
 {%- if salt['pillar.get']("__test__", False) %}
       - process: elasticsearch
 {%- endif %}
@@ -156,45 +141,9 @@ graylog2-server:
     - address: {{ hostname }}
     - port: {{ port }}
     - require:
-      - service: graylog2-server
+      - service: graylog-server
 
-{{ manage_upstart_log('graylog2-server') }}
-
-{%- call manage_pid('/var/run/graylog2/graylog2.pid', user, 'syslog', 'graylog2-server') %}
-- user: graylog2
-- file: /var/run/graylog2
-- pkg: rsyslog
-{%- endcall %}
-
-graylog2_rsyslog_config:
-  file:
-    - managed
-    - mode: 440
-    - source: salt://rsyslog/template.jinja2
-    - name: /etc/rsyslog.d/graylog2-server.conf
-    - template: jinja
-    - require:
-      - pkg: rsyslog
-    - watch_in:
-      - service: rsyslog
-    - context:
-        file_path: /var/log/graylog2/server.fifo
-        tag_name: graylog2-server
-        severity: info
-        facility: local7
-
-{{ server_root_dir }}:
-  file:
-    - directory
-    - user: {{ user }}
-    - group: {{ user }}
-    - mode: 750
-    - recurse:
-      - user
-      - group
-    - require:
-      - archive: graylog2-server
-      - user: graylog2
+{{ manage_upstart_log('graylog-server') }}
 
 import_graylog2_gelf:
   graylog:
@@ -208,7 +157,7 @@ import_graylog2_gelf:
     - bind_address: 0.0.0.0
     - buffer_size: 1048576
     - require:
-      - process: graylog2-server
+      - process: graylog-server
       - module: requests
 
 import_graylog2_syslog:
@@ -225,7 +174,7 @@ import_graylog2_syslog:
     - store_full_message: false
     - force_rdns: false
     - require:
-      - process: graylog2-server
+      - process: graylog-server
       - module: requests
 
 {%- set streams = salt['pillar.get']('graylog2:streams', {}) %}
@@ -254,16 +203,6 @@ import_graylog2_syslog:
     - receivers_type: {{ receivers_type }}
     - alert_grace: {{ alert_grace }}
     - require:
-      - process: graylog2-server
+      - process: graylog-server
       - module: requests
 {%- endfor %}
-
-/var/log/graylog2:
-  file:
-    - directory
-    - user: {{ user }}
-    - group: {{ user }}
-    - mode: 755  {# syslog user needs to read the fifo in this folder #}
-    - makedirs: True
-    - require:
-      - user: graylog2

@@ -70,6 +70,13 @@ sentry_monitoring:
       - file: sentry-uwsgi
       - module: pysc
       - service: sentry
+  file:
+    - managed
+    - create: False
+    - user: www-data
+    - group: nagios
+    - mode: 440
+    - require:
       - user: nagios-nrpe-server
       - user: web
 

@@ -16,6 +16,7 @@ import logging
 from pysc import nrpe
 
 log = logging.getLogger("nagiosplugin.elasticsearch.cluster_nodes")
+logging.getLogger("requests").setLevel(logging.WARNING)
 
 
 def elasticsearch_version():

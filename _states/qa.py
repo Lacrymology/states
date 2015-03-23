@@ -19,26 +19,6 @@ def __virtual__():
     return __virtualname__
 
 
-def _iter_to_bullet_list(iterable):
-    output = ""
-    for item in iterable:
-        output += "- %s%s" % (item, os.linesep)
-    return output
-
-
-def _comment(iterable, message, comments):
-    # if there is no error to append to comments, just skip it
-    if iterable:
-        header = '-' * 10
-        comments.append(
-            os.linesep.join((
-                message % len(iterable),
-                header,
-                _iter_to_bullet_list(iterable)
-            ))
-        )
-
-
 def _contains(iterable, elem):
     """
     Returns whether an element matches any of an iterable
@@ -191,21 +171,19 @@ def test_pillar(name, pillar_doc):
     else:
         ret['result'] = False
         comments = []
-        _comment(sorted(undocumented), "%d undocumented pillars", comments)
-        _comment(sorted(unused), "%d unused documented pillars", comments)
-        _comment(sorted(bad_mandatory_calls), "%d mandatory pillars used with defaults",
-                 comments)
-        _comment(sorted(multiple_defaults), "%d pillars with different default value calls",
-                 comments)
-        _comment(sorted(bad_defaults), ("%d pillars with defaults different than "
-                                "documented"), comments)
-        _comment(errors, "%d errors", comments)
+        for error, msg in [(undocumented, "undocumented pillars"),
+                (unused, "unused documented pillars"),
+                (bad_mandatory_calls, "mandatory pillars used with defaults"),
+                (multiple_defaults,
+                    "pillars with different default value calls"),
+                (bad_defaults,
+                    "pillars with defaults different than documented"),
+                (errors, "errors"),
+                (all_documented, "total documented pillars"),
+                (__salt__['pillar.get_call_desc'](), "calls")]:
+            comments.append(__salt__['common.format_error_msg'](error, msg))
 
-        # extra debug output
-        _comment(sorted(all_documented), "%d total documented pillars", comments)
-        _comment(sorted(__salt__['pillar.get_call_desc']()), "%d calls", comments)
-
-        ret['comment'] = os.linesep.join(comments)
+        rer['comment'] = os.linesep.join(comments)
     __salt__['pillar.reset']()
     return ret
 
@@ -282,13 +260,12 @@ def test_monitor(name, pillar_doc, additional=()):
     else:
         ret['result'] = False
         comments = []
-        _comment(not_documented, "%d undocumented checks", comments)
-        _comment(not_present, "%d documented unused checks", comments)
-        _comment(doc_errors, "%d document errors", comments)
-
-        # extra debug output
-        _comment(doc_names, "%d total documented checks", comments)
-        _comment(check_names, "%d total present checks", comments)
+        for error, msg in [(not_documented, "undocumented checks"),
+                (not_present, "documented unused checks"),
+                (doc_errors, "document errors"),
+                (doc_names, "total documented checks"),
+                (check_names, "total present checks")]:
+            comments.append(__salt__['common.format_error_msg'](error, msg))
 
         ret['comment'] = os.linesep.join(comments)
     return ret

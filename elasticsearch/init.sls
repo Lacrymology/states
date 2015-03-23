@@ -13,7 +13,7 @@ include:
   - nginx
   - ssl
 {% endif %}
-{%- set version = '0.90.10' %}
+{%- set version = '1.4.4' %}
 
 /etc/default/elasticsearch:
   file:

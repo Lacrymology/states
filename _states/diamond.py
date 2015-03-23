@@ -117,16 +117,11 @@ def test(name, map):
                 not_collected_metrics[collector]):
             comments.append(collector)
             comments.append("=" * 10)
-            comments.append(__salt__['common.format_error_msg'](
-                unexpected_zero_metrics[collector],
-                "expected non-zero value metrics"
-                )
-            )
-            comments.append(__salt__['common.format_error_msg'](
-                not_collected_metrics[collector],
-                "not collected metrics"
-                )
-            )
+            for error, msg in [
+                    (unexpected_zero_metrics[collector],
+                        "expected non-zero value metrics"),
+                    (not_collected_metrics[collector], "not collected metrics")]:
+                comments.append(__salt__['common.format_error_msg'](error, msg))
 
     if comments:
         ret['result'] = False

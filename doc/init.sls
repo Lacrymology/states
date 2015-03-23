@@ -49,6 +49,7 @@ doc_root:
     - mode: 440
     - require:
       - module: pip
+      - virtualenv: doc
 
 {{ opts['cachedir'] }}/doc/output:
   file:

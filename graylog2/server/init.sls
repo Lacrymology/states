@@ -150,10 +150,8 @@ import_graylog2_gelf:
     - gelf_input
     {#- The following parameters have their default values and are unnecessary #}
     - title: gelf
-{%- set admin_username = salt['pillar.get']('graylog2:admin_username', 'admin') %}
     - stype: udp
     - port: 12201
-    - creator: {{ salt['pillar.get']('graylog2:admin_username', 'admin') }}
     - bind_address: 0.0.0.0
     - buffer_size: 1048576
     - require:
@@ -167,7 +165,6 @@ import_graylog2_syslog:
     - title: syslog
     - stype: udp
     - port: 1514
-    - creator: {{ salt['pillar.get']('graylog2:admin_username', 'admin') }}
     - bind_address: 0.0.0.0
     - buffer_size: 1048576
     - allow_override_date: true

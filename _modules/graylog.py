@@ -44,13 +44,12 @@ def inputs():
         return json.loads(res.content)['inputs']
 
 
-def _create_input(title, jtype, creator, configuration):
+def _create_input(title, jtype, configuration):
     """
     Creates an input in the graylog server with the given configuration.
     Creates only GLOBAL inputs
     """
     params = {
-        'creator_user_id': creator or _auth()[0],
         'title': title,
         'type': jtype,
         'global': True,
@@ -66,7 +65,7 @@ def _create_input(title, jtype, creator, configuration):
         res.raise_for_status()
 
 
-def create_gelf_input(title='gelf', stype="udp", port=12201, creator=None,
+def create_gelf_input(title='gelf', stype="udp", port=12201,
                       bind_address='0.0.0.0', buffer_size=1048576):
     """
     Creates a gelf input in the graylog server with the given parameters.
@@ -75,8 +74,6 @@ def create_gelf_input(title='gelf', stype="udp", port=12201, creator=None,
     :param title: Descriptive name of the node. Defaults to 'gelf'
     :param stype: Socket type. One of ['tcp', 'udp']. Defaults to udp
     :param port: Port to listen on. Default 12201
-    :param creator: The user ID for the creator of this input. Defaults to the
-                    admin user.
     :param bind_address: Address to listen on
     :param buffer_size: The size in bytes of the recvBufferSize for network
                         connections to this input. Default 1048576
@@ -93,10 +90,10 @@ def create_gelf_input(title='gelf', stype="udp", port=12201, creator=None,
         'recv_buffer_size': buffer_size
     }
 
-    return _create_input(title, jtype, creator, configuration)
+    return _create_input(title, jtype, configuration)
 
 
-def create_syslog_input(title='syslog', stype="udp", port=1514, creator=None,
+def create_syslog_input(title='syslog', stype="udp", port=1514,
                         bind_address='0.0.0.0', buffer_size=1048576,
                         allow_override_date=True, store_full_message=False,
                         force_rdns=False):
@@ -107,8 +104,6 @@ def create_syslog_input(title='syslog', stype="udp", port=1514, creator=None,
     :param title: Descriptive name of the node. Defaults to 'syslog'
     :param stype: Socket type. One of ['tcp', 'udp']. Defaults to udp
     :param port: Port to listen on. Default 1514
-    :param creator: The user ID for the creator of this input. Defaults to the
-                    admin user.
     :param bind_address: Address to listen on
     :param buffer_size: The size in bytes of the recvBufferSize for network
                         connections to this input. Default 1048576
@@ -128,7 +123,7 @@ def create_syslog_input(title='syslog', stype="udp", port=1514, creator=None,
         'force_rdns': force_rdns,
     }
 
-    return _create_input(title, jtype, creator, configuration)
+    return _create_input(title, jtype, configuration)
 
 
 def streams():
@@ -141,15 +136,14 @@ def streams():
 
 
 def create_stream(
-        title, description='', creator=None, rules=[],
-        receivers_type="emails", receivers=None, alert_grace=1):
+        title, description='', rules=[], receivers_type="emails",
+        receivers=None, alert_grace=1):
 
     """
     Create a stream.
 
     :param title: Descriptive name of the stream.
     :param description: Description of the stream. Defaults to empty string.
-    :param creator: Name of the creator. Default to name of the auth user.
     :param rules: rules to add to the stream.
                   syntax: [{"field": "source", "value": "aaaa",
                             "inverted": false, "type": 1}]
@@ -162,7 +156,6 @@ def create_stream(
     stream_params = {
         'title': title,
         'description': description,
-        'creator_user_id': creator or _auth()[0],
     }
 
     def raise_if_error(res):
@@ -216,7 +209,6 @@ def create_stream(
             "threshold_type": "more", "threshold": 1
         },
         "type": "message_count",
-        "creator_user_id": creator or _auth()[0],
     }
 
     res_create_alert = requests.post(

@@ -7,9 +7,8 @@
 NRPE check if pillar for current host can be rendered successfully.
 '''
 
-import json
 import logging
-import subprocess
+import os
 
 import nagiosplugin as nap
 
@@ -19,13 +18,22 @@ from pysc import nrpe
 
 
 class PillarRender(nap.Resource):
+    def __init__(self, salt_timeout):
+        self.salt_timeout = salt_timeout
+
     def probe(self):
-        get_all_pillar_cmd = 'salt-call pillar.items --out=json'.split()
-        out = subprocess.check_output(get_all_pillar_cmd)
-        jsonoutput = json.loads(out)
-        log.debug(jsonoutput)
-        if "_errors" in jsonoutput['local']:
-            error = jsonoutput['local']['_errors']
+        import salt.syspaths as syspaths
+        import salt.config
+        import salt.minion
+
+        config_file = os.path.join(syspaths.CONFIG_DIR, 'minion')
+        opts = salt.config.minion_config(config_file)
+        opts['auth_timeout'] = self.salt_timeout
+        minion = salt.minion.SMinion(opts)
+        output = minion.functions['pillar.items']()
+
+        if "_errors" in output:
+            error = output['_errors']
             log.error('Error: %s', error)
             render_errors = 1
         else:
@@ -36,7 +44,7 @@ class PillarRender(nap.Resource):
 
 def check_good_pillar(config):
     return (
-        PillarRender(),
+        PillarRender(config['salt_timeout']),
         nap.ScalarContext('errors', warning='0:0', critical='0:0'),
     )
 

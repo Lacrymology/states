@@ -26,6 +26,7 @@ salt_minion_pillar_render:
   timeout: {{ 10 * 60 }} {#- cron jobs timeout after 12 minutes
   arguments:
     freshness: {{ (12 * 60) + 10 + 5 }} {#- cron interval + timeout + 5 mins #}
+    salt_timeout: {{ 60 * 5 }} {#- 5 minutes #}
   dependencies:
     {#- no alert if load is too high #}
     - load_average

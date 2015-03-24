@@ -3,6 +3,7 @@
   "requisites": [],
   "passive_absents": [],
   "nagios_plugins": [],
+  "diamond_collectors": [],
   } -%}
 
 {%- do local.passive_absents.extend([
@@ -151,6 +152,22 @@
   "/usr/lib/nagios/plugins/check_elasticsearch_cluster.py",
   ]) %}
 
+{%- do local.diamond_collectors.extend([
+  "memcached_diamond_collector",
+  "postgresql_diamond_collector",
+  "diamond_rabbitmq",
+  "diamond_ntp",
+  "/etc/diamond/collectors/RedisCollector.conf",
+  "mysql_diamond_collector",
+  "postfix_diamond_collector",
+  "/etc/diamond/collectors/ElasticSearchCollector.conf",
+  "/etc/diamond/collectors/AmavisCollector.conf",
+  "diamond_mongodb",
+  "nginx_diamond_collector",
+  "openvpn_diamond_collector",
+  "varnish_diamond_VarnishCollector",
+  ]) %}
+
 {%- for service in local.services %}
   {#- all services except rsyslog, nsca_passsive, nrpe-nagios-server, diamond #}
   {%- do local.requisites.append({"service": service}) %}
@@ -221,6 +238,18 @@ include:
   - mail.server.nrpe.absent
   - postgresql.nrpe.absent
   - django.absent
+  - memcache.diamond.absent
+  - postgresql.common.diamond.absent
+  - rabbitmq.diamond.absent
+  - ntp.diamond.absent
+  - redis.diamond.absent
+  - mariadb.server.diamond.absent
+  - elasticsearch.diamond.absent
+  - amavis.diamond.absent
+  - mongodb.diamond.absent
+  - nginx.diamond.absent
+  - openvpn.diamond.absent
+  - varnish.diamond.absent
 {%- for formula in local.passive_absents %}
   - {{ formula }}.nrpe.absent
 {%- endfor %}
@@ -290,3 +319,13 @@ extend:
         - service: nsca_passive
         - service: nagios-nrpe-server
 {%- endfor %}
+{%- for collector in local.diamond_collectors %}
+  {{ collector }}:
+    file:
+      - require:
+        - service: diamond
+{%- endfor %}
+  amavis:
+    pkg:
+      - require:
+        - service: diamond

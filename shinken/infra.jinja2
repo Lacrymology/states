@@ -272,7 +272,7 @@ define servicegroup {
 }
 {%- endfor -%}
 
-{%- set reserved_keys = ('check', 'description', 'passive', 'dependencies', 'service_dependencies', 'timeout') -%}
+{%- set reserved_keys = ('check', 'description', 'passive', 'dependencies', 'service_dependencies', 'timeout', 'formula', 'reaction') -%}
 {%- set data = salt['monitoring.shinken'](mine) -%}
 {%- set data_keys = data.keys() -%}
 {%- do data_keys.sort() -%}

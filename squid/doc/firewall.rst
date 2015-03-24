@@ -1,4 +1,4 @@
 Firewall
 ========
 
-:doc:`index` daemon run on the following port :ref:`glossary-TCP` ``3128``.
+:doc:`index` daemon runs on port :ref:`glossary-TCP` ``3128``.

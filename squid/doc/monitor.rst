@@ -27,4 +27,4 @@ squid_unlinkd_procs
 squid_proxy_port
 ~~~~~~~~~~~~~~~~
 
-Monitor :doc:`/squid/doc/index` port :ref:`glossary-TCP` ``3128``.
+Monitor :doc:`index` port :ref:`glossary-TCP` ``3128``.

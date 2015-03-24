@@ -25,8 +25,9 @@ tomcat_port
 tomcat_command_port
 ~~~~~~~~~~~~~~~~~~~
 
-The :ref:`glossary-TCP`/IP port on which this server waits for a shutdown command can be
-connected locally. Consult http://tomcat.apache.org/tomcat-6.0-doc/config/server.html#Common_Attributes
+The :ref:`glossary-TCP`/IP port on which this server waits for a shutdown
+command can be connected locally. Consult
+http://tomcat.apache.org/tomcat-6.0-doc/config/server.html#Common_Attributes
 for more detail.
 
 .. warning::

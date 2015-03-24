@@ -11,7 +11,8 @@
 #     --service-state $SERVICESTATE$ --service-state-type $SERVICESTATETYPE$ \
 #     --service-desc $SERVICEDESC$ \
 #     --service-display-name $SERVICEDISPLAYNAME$ \
-#     --host-name $HOSTNAME$ --formula $_SERVICEFORMULA$
+#     --host-name $HOSTNAME$ \
+#     --formula $_SERVICEFORMULA$ --reaction $_SERVICEREACTION$
 
 import json
 import logging
@@ -44,6 +45,9 @@ class FireEvent(pysc.Application):
         argp.add_argument(
             "--formula", help="formula of service",
             required=True)
+        argp.add_argument(
+            "--reaction", help="service healing reaction",
+            required=True)
         return argp
 
     def main(self):
@@ -56,7 +60,7 @@ class FireEvent(pysc.Application):
                     "service_state": c["service_state"],
                     "service_state_type": c["service_state_type"],
                     "service_display_name": c["service_display_name"],
-                    "reaction": c["reaction"],
+                    "reaction": c["reaction"]
                 }})
             tag = "salt-common/alert/" + c["service_desc"]
             fire_event(payload, tag)

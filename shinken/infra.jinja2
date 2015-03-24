@@ -185,7 +185,7 @@ define command {
 {#- fire a salt event when a service goes into hard problem state #}
 define command {
   command_name fire_salt_event
-  command_line /usr/bin/sudo /usr/local/shinken/bin/salt_event_handler --service-state '$SERVICESTATE$' --service-state-type '$SERVICESTATETYPE$' --service-desc '$SERVICEDESC$' --service-display-name '$SERVICEDISPLAYNAME$' --hostname '$HOSTNAME$' --formula '$_SERVICEFORMULA$'
+  command_line /usr/bin/sudo /usr/local/shinken/bin/salt_event_handler --service-state '$SERVICESTATE$' --service-state-type '$SERVICESTATETYPE$' --service-desc '$SERVICEDESC$' --service-display-name '$SERVICEDISPLAYNAME$' --hostname '$HOSTNAME$' --formula '$_SERVICEFORMULA$' --reaction '$_SERVICEREACTION$'
 }
 
 define timeperiod {
@@ -306,9 +306,10 @@ define service {
       $formula.reactions.$reaction
       and it worth turn on event handler.
       -#}
-    {%- if check.data.get('formula', False) %}
+    {%- if check.data.get('reaction', False) %}
     event_handler_enabled 1
     _FORMULA {{ check.data['formula'] }}
+    _REACTION {{ check.data['reaction'] }}
     {%- endif -%}
 
         {%- if not check.data.get('passive', True) -%}

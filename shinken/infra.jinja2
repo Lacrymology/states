@@ -185,7 +185,7 @@ define command {
 {#- fire a salt event when a service goes into hard problem state #}
 define command {
   command_name fire_salt_event
-  command_line /usr/bin/sudo /usr/local/shinken/bin/salt_event_handler --service-state '$SERVICESTATE$' --service-state-type '$SERVICESTATETYPE$' --service-desc '$SERVICEDESC$' --service-display-name '$SERVICEDISPLAYNAME$' --hostname '$HOSTNAME$' --formula '$_SERVICEFORMULA$'
+  command_line /usr/bin/sudo /usr/local/shinken/bin/salt_event_handler --service-state '$SERVICESTATE$' --service-state-type '$SERVICESTATETYPE$' --service-desc '$SERVICEDESC$' --service-display-name '$SERVICEDISPLAYNAME$' --hostname '$HOSTNAME$' --formula '$_SERVICEFORMULA$' --reaction '$_SERVICEREACTION$'
 }
 
 define timeperiod {
@@ -212,10 +212,14 @@ define service {
     obsess_over_service 1
     # Service notifications are enabled
     notifications_enabled 1
-    # Service event handler is enabled
-    event_handler_enabled 1
+
+    {#-
+      Service event handler is disabled by default.
+      It's only turned on if there is a reaction linked to a check.
+      #}
+    event_handler_enabled 0
     event_handler fire_salt_event
-    # Flap detection is enabled
+
     flap_detection_enabled 1
     # Failure prediction is enabled
     failure_prediction_enabled 1
@@ -268,7 +272,7 @@ define servicegroup {
 }
 {%- endfor -%}
 
-{%- set reserved_keys = ('check', 'description', 'passive', 'dependencies', 'service_dependencies', 'timeout') -%}
+{%- set reserved_keys = ('check', 'description', 'passive', 'dependencies', 'service_dependencies', 'timeout', 'formula', 'reaction') -%}
 {%- set data = salt['monitoring.shinken'](mine) -%}
 {%- set data_keys = data.keys() -%}
 {%- do data_keys.sort() -%}
@@ -296,7 +300,18 @@ define service {
     check_command {{ check_command }}!{{ check_timeout }}
         {%- endif %}
     display_name {{ check.data['description'] }}
+
+    {#-
+      If reaction key is defined that mean the minion do have access to a
+      $formula.reactions.$reaction
+      and it worth turn on event handler.
+      -#}
+    {%- if check.data.get('reaction', False) %}
+    event_handler_enabled 1
     _FORMULA {{ check.data['formula'] }}
+    _REACTION {{ check.data['reaction'] }}
+    {%- endif -%}
+
         {%- if not check.data.get('passive', True) -%}
             {#- by default check are passive #}
     active_checks_enabled 1

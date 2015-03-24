@@ -11,7 +11,8 @@
 #     --service-state $SERVICESTATE$ --service-state-type $SERVICESTATETYPE$ \
 #     --service-desc $SERVICEDESC$ \
 #     --service-display-name $SERVICEDISPLAYNAME$ \
-#     --host-name $HOSTNAME$ --formula $_SERVICEFORMULA$
+#     --host-name $HOSTNAME$ \
+#     --formula $_SERVICEFORMULA$ --reaction $_SERVICEREACTION$
 
 import json
 import logging
@@ -44,28 +45,26 @@ class FireEvent(pysc.Application):
         argp.add_argument(
             "--formula", help="formula of service",
             required=True)
+        argp.add_argument(
+            "--reaction", help="service healing reaction",
+            required=True)
         return argp
 
     def main(self):
-        service_state = self.config["service_state"]
-        service_state_type = self.config["service_state_type"]
-        service_desc = self.config["service_desc"]
-        service_display_name = self.config["service_display_name"]
-        minion_id = self.config["hostname"]
-        formula = self.config["formula"]
-
-        if service_state != "OK" and service_state_type == "HARD":
+        c = self.config
+        if c["service_state"] != "OK" and c["service_state_type"] == "HARD":
             payload = json.dumps(
-                {"data": {
-                    "minion_id": minion_id,
-                    "service_desc": service_desc,
-                    "service_state": service_state,
-                    "service_state_type": service_state_type,
-                    "service_display_name": service_display_name,
-                    "formula": formula,
-                }})
-            tag = "salt-common/alert/" + service_desc
-            fire_event(payload, tag)
+                {
+                    "minion_id": c["hostname"],
+                    "service_desc": c["service_desc"],
+                    "service_state": c["service_state"],
+                    "service_state_type": c["service_state_type"],
+                    "service_display_name": c["service_display_name"],
+                    "formula": c["formula"],
+                    "reaction": c["reaction"]
+                })
+            tag = "salt-common/alert/" + c["service_desc"]
+            fire_event(json.loads(payload), tag)
 
 if __name__ == '__main__':
     FireEvent().run()

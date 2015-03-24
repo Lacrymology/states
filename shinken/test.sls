@@ -84,6 +84,7 @@ test_salt_event_handler:
         /usr/local/shinken/bin/salt_event_handler
         --service-state CRITICAL --service-state-type HARD
         --service-desc ci_test --service-display-name 'CI TEST'
-        --hostname 'shinken_ci_test' --formula 'ci'
+        --hostname 'shinken_ci_test' --formula 'test'
+        --reaction 'noop'
     - require:
       - sls: shinken.reactionner

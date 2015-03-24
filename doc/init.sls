@@ -19,6 +19,14 @@ And run::
 
   doc/build.py /var/cache/salt/minion/doc/output
 -#}
+{#- in testing, requirements file must be in ``doc`` dir or it will be
+    removed by pip.absent and make doc rebuild every test #}
+{%- if salt['pillar.get']("__test__", False) %}
+  {%- set requirements =  opts['cachedir'] ~ "/doc/requirements.txt" %}
+{%- else %}
+  {%- set requirements =  opts['cachedir'] ~ "/pip/doc" %}
+{%- endif %}
+
 include:
   - locale
   - pip
@@ -29,18 +37,19 @@ doc_root:
   module:
     - wait
     - name: pip.install
-    - requirements: {{ opts['cachedir'] }}/pip/doc
+    - requirements: {{ requirements }}
     - watch:
       - file: doc_root
   file:
     - managed
-    - name: {{ opts['cachedir'] }}/pip/doc
+    - name: {{ requirements }}
     - source: salt://doc/requirements.txt
     - user: root
     - group: root
     - mode: 440
     - require:
       - module: pip
+      - virtualenv: doc
 
 {{ opts['cachedir'] }}/doc/output:
   file:

@@ -26,7 +26,6 @@ def _contains(iterable, elem):
     """
     _key_re = re.compile(r'{{ ([\w\-\_\.]+) }}')
     sub_key = r"([\w\-\_\.]+)"
-    key_list = []
     for key in iterable:
         # transform {{ xxx }} into ([\w\d_]+)
         key_re = r"^({})$".format(_key_re.sub(sub_key, key))
@@ -105,7 +104,7 @@ def test_pillar(name, pillar_doc):
 
     bad_mandatory_calls = []
     # check that no mandatory keys have been called with defaults
-    #for key in doctrees[name]['mandatory']['keys']:
+    # for key in doctrees[name]['mandatory']['keys']:
     for key, kcalls in calls.iteritems():
         if not _contains(doctrees[name]['mandatory']['keys'],
                          key):
@@ -120,21 +119,20 @@ def test_pillar(name, pillar_doc):
             default = kcalls.pop()
             # NOTE: this is coupled with the custom pillar module.
             if default is not KeyError:
-                bad_mandatory_calls.append("{}: called with default: {}".format(
-                    key, default))
-
+                bad_mandatory_calls.append(
+                    "{}: called with default: {}".format(key, default))
 
     # pillar key usage that have default values different to the one documented
     bad_defaults = set()
-    #for key in doctrees[name]['optional']:
+    # for key in doctrees[name]['optional']:
     for key, kcall in calls.iteritems():
         # I don't report keys already reported as multiple defaults or that's
         #  not in the docs
         match_name = _contains(doctrees[name]['optional'], key)
         if (key not in multiple_defaults and
-            key not in undocumented and
-            key not in unused and
-            match_name):
+                key not in undocumented and
+                key not in unused and
+                match_name):
             doc_default = doctrees[name]['optional'][match_name]['default']
             kcall = copy.copy(kcall)
             if len(kcall) > 1:
@@ -171,7 +169,8 @@ def test_pillar(name, pillar_doc):
     else:
         ret['result'] = False
         comments = []
-        for error, msg in [(undocumented, "undocumented pillars"),
+        for error, msg in [
+                (undocumented, "undocumented pillars"),
                 (unused, "unused documented pillars"),
                 (bad_mandatory_calls, "mandatory pillars used with defaults"),
                 (multiple_defaults,
@@ -180,10 +179,11 @@ def test_pillar(name, pillar_doc):
                     "pillars with defaults different than documented"),
                 (errors, "errors"),
                 (all_documented, "total documented pillars"),
-                (__salt__['pillar.get_call_desc'](), "calls")]:
+                (__salt__['pillar.get_call_desc'](), "calls")
+                ]:
             comments.append(__salt__['common.format_error_msg'](error, msg))
 
-        rer['comment'] = os.linesep.join(comments)
+        ret['comment'] = os.linesep.join(comments)
     __salt__['pillar.reset']()
     return ret
 
@@ -260,11 +260,13 @@ def test_monitor(name, pillar_doc, additional=()):
     else:
         ret['result'] = False
         comments = []
-        for error, msg in [(not_documented, "undocumented checks"),
+        for error, msg in [
+                (not_documented, "undocumented checks"),
                 (not_present, "documented unused checks"),
                 (doc_errors, "document errors"),
                 (doc_names, "total documented checks"),
-                (check_names, "total present checks")]:
+                (check_names, "total present checks")
+                ]:
             comments.append(__salt__['common.format_error_msg'](error, msg))
 
         ret['comment'] = os.linesep.join(comments)

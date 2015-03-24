@@ -19,6 +19,7 @@ Example::
 memcache:memory
 ~~~~~~~~~~~~~~~
 
-Set the amount of memory allocated to memcached for object storage. Unit is MB.
+Set the amount of memory allocated to :doc:`index` for object storage.
+Unit is MB.
 
 Default: use ``64`` MB.

@@ -127,15 +127,15 @@ Number of ``delete`` commands for keys not existing within the cache.
 main.evicted_unfetched
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Number of objects removed from the cache to free up memory for new items because
-:doc:`index` reached it's maximum memory setting (see
+Number of objects removed from the cache to free up memory for new items
+because :doc:`index` reached it's maximum memory setting (see
 `main.limit_maxbytes`_ ) that never has been fetched.
 
 main.evictions
 ~~~~~~~~~~~~~~
 
-Number of objects removed from the cache to free up memory for new items because
-:doc:`index` reached it's maximum memory setting (see
+Number of objects removed from the cache to free up memory for new items
+because :doc:`index` reached it's maximum memory setting (see
 `main.limit_maxbytes`_).
 
 main.expired_unfetched

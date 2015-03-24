@@ -151,6 +151,7 @@ archive_rsync:
       - file: salt_archive
 {%- endif %}
 
+{#- enforce owner/permissions when run incoming.py #}
 /usr/local/bin/salt_archive_set_owner_mode.sh:
   file:
     - managed

@@ -1,4 +1,5 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+{%- from 'nrpe/passive.jinja2' import passive_interval with context -%}
 
 {%- set timeout = 30 -%}
 
@@ -7,6 +8,7 @@
 rsync_port:
   description: Rsync Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 873 -t {{ timeout }}
+  {{ passive_interval(60) }} {#- 1 hour #}
   timeout: {{ timeout }}
   dependencies:
     - xinetd_daemon_proc

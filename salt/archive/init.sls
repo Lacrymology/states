@@ -189,8 +189,7 @@ salt-archive-clamav:
       - file: /usr/local/bin/salt_archive_set_owner_mode.sh
   cmd:
     - run
-    {#- - name: /usr/local/bin/salt_archive_clamav.py #}
-    - name: true
+    - name: /usr/local/bin/salt_archive_clamav.py
     - require:
       - file: salt-archive-clamav
       - user: salt_archive

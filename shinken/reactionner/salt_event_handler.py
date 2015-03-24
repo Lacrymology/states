@@ -54,16 +54,17 @@ class FireEvent(pysc.Application):
         c = self.config
         if c["service_state"] != "OK" and c["service_state_type"] == "HARD":
             payload = json.dumps(
-                {"data": {
+                {
                     "minion_id": c["hostname"],
                     "service_desc": c["service_desc"],
                     "service_state": c["service_state"],
                     "service_state_type": c["service_state_type"],
                     "service_display_name": c["service_display_name"],
+                    "formula": c["formula"],
                     "reaction": c["reaction"]
-                }})
+                })
             tag = "salt-common/alert/" + c["service_desc"]
-            fire_event(payload, tag)
+            fire_event(json.loads(payload), tag)
 
 if __name__ == '__main__':
     FireEvent().run()

@@ -92,8 +92,8 @@ Default: ``False``.
 roundcube:ldap:suffix
 ~~~~~~~~~~~~~~~~~~~~~
 
-LDAP suffix used to config Roundcube supports changing password (LDAP password)
-of user through Roundcube WebUI.
+LDAP suffix used to config :doc:`index`
+supports changing password (LDAP password) of user through :doc:`index` WebUI.
 
 Default: ``False`` - means use value provided for ``ldap:suffix`` pillar key.
 
@@ -105,4 +105,5 @@ roundcube:ldap:ssl
 Whether to use STARTTLS for :doc:`/openldap/doc/index` connection when changing
 password or not.
 
-Default: ``False`` - means use value provided for ``ldap:ssl`` :doc:`/openldap/doc/pillar` key.
+Default: ``False`` - means use value provided for ``ldap:ssl``
+:doc:`/openldap/doc/pillar` key.

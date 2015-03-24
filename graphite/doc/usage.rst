@@ -6,7 +6,7 @@ Usage
 Web UI
 ------
 
-After installing, you can login to the :doc:`/graphite/doc/index` web by using
+After installing, you can login to the :doc:`index` web by using
 the account that is defined in :doc:`pillar`
 ``graphite:initial_admin_user``.
 
@@ -41,7 +41,8 @@ A few functions to get the data you want:
 
     mostDeviant(3,*.os.memory.MemFree)
 
-`Full list of function <http://graphite.readthedocs.org/en/latest/functions.html>`_
+`Full list of function
+<http://graphite.readthedocs.org/en/latest/functions.html>`_
 
 Cleanup Metrics
 ---------------

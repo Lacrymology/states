@@ -11,28 +11,29 @@ Mandatory
 graphite_uwsgi_master
 ~~~~~~~~~~~~~~~~~~~~~
 
-Graphite uWSGI Master Process is running.
+Graphite :doc:`/uwsgi/doc/index` Master Process is running.
 
 .. _monitor-graphite_uwsgi_worker:
 
 graphite_uwsgi_worker
 ~~~~~~~~~~~~~~~~~~~~~
 
-Graphite uWSGI Workers Process is running.
+Graphite :doc:`/uwsgi/doc/index` Workers Process is running.
 
 .. _monitor-graphite_uwsgi_ping:
 
 graphite_uwsgi_ping
 ~~~~~~~~~~~~~~~~~~~
 
-Graphite uWSGI Ping checks successfully.
+Graphite :doc:`/uwsgi/doc/index` Ping checks successfully.
 
 .. _monitor-graphite_nginx_http:
 
 graphite_nginx_http
 ~~~~~~~~~~~~~~~~~~~
 
-:doc:`/graphite/doc/index` :doc:`/nginx/doc/index` :ref:`glossary-HTTP` Protocol works properly
+:doc:`index` :doc:`/nginx/doc/index` :ref:`glossary-HTTP`
+Protocol works properly
 
 .. _monitor-graphite_nginx_https:
 

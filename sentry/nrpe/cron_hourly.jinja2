@@ -13,4 +13,4 @@ trap "log_stop_script \$?" EXIT
 sentry_dsn=$(cat "{{ dsn_file }}")
 
 su www-data -s /bin/bash \
-    -c "raven test $sentry_dsn"
+    -c "raven test $sentry_dsn > /dev/null"

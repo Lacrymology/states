@@ -55,15 +55,6 @@ The secret key is used to secure cryptographics functions.
 
 Default: randomly generated (``False``).
 
-.. _pillar-graylog2-web-user:
-
-graylog2:web:user
-~~~~~~~~~~~~~~~~~
-
-The Unix user (UID) who will run :doc:`index`.
-
-Default: ``graylog2-ui``
-
 .. _pillar-graylog2-web-heap_size:
 
 graylog2:web:heap_size

@@ -1,6 +1,5 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
-{%- set user = salt['pillar.get']('graylog2:server:user', 'graylog2') %}
 {%- set files_archive = salt['pillar.get']('files_archive', False) %}
 {%- if not files_archive %}
   {%- set files_archive = "http://archive.robotinfra.com" %}

@@ -5,7 +5,8 @@ CPUCollector
 ------------
 
 Take a look at
-`section 1.8 in Linux kernel documentation <https://www.kernel.org/doc/Documentation/filesystems/proc.txt>`_
+`section 1.8 in Linux kernel documentation
+<https://www.kernel.org/doc/Documentation/filesystems/proc.txt>`_
 document for more details.
 
 These numbers identify the amount of time the CPU has spent performing
@@ -15,7 +16,8 @@ second).
 cpu.guest
 ~~~~~~~~~
 
-Time spent running a virtual CPU for a guest operating system (virtual machine).
+Time spent running a virtual CPU for a guest operating system (virtual
+machine).
 
 cpu.guest_nice
 ~~~~~~~~~~~~~~
@@ -56,14 +58,11 @@ Time spent in other operating system when running in a virtualized environment.
 cpu.system
 ~~~~~~~~~~
 
-.. TODO: define kernel mode
-
-Time spent in kernel mode.
+Time spent in kernel mode (or `system mode
+<http://www.tldp.org/LDP/tlk/kernel/processes.html>`_).
 
 cpu.user
 ~~~~~~~~
-
-.. TODO: define user mode
 
 Time spent in user mode.
 
@@ -73,9 +72,7 @@ DiskSpaceCollector
 byte_avail
 ~~~~~~~~~~
 
-.. TODO: define non-super user
-
-Free bytes available to non-super user.
+Free bytes available to non :ref:`glossary-superuser`.
 
 byte_free
 ~~~~~~~~~
@@ -97,24 +94,22 @@ Total number of used bytes.
 inode_avail
 ~~~~~~~~~~~
 
-Free inodes for unprivileged user.
+Free inodes_ for unprivileged user.
 
 inode_free
 ~~~~~~~~~~
 
-.. TODO: define inodes
-
-Total free inodes.
+Total free inodes_.
 
 inode_percentfree
 ~~~~~~~~~~~~~~~~~
 
-Percentage of free inodes.
+Percentage of free inodes_.
 
 inode_used
 ~~~~~~~~~~
 
-Total number of used inodes.
+Total number of used inodes_.
 
 DiskUsageCollector
 ------------------
@@ -145,7 +140,9 @@ InterruptCollector
 ------------------
 
 Take a look at
-`Process Interrupts documentation <https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/s2-proc-interrupts.html>`_
+`Process Interrupts documentation
+<https://access.redhat.com/documentation/en-US/
+Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/s2-proc-interrupts.html>`_
 for more details.
 
 LoadAverageCollector
@@ -172,14 +169,17 @@ MemoryCollector
 ---------------
 
 Take a look at
-`/proc/meminfo documentation <https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/s2-proc-meminfo.html>`_
+`/proc/meminfo documentation
+<https://access.redhat.com/documentation/en-US/
+Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/s2-proc-meminfo.html>`_
 for more details.
 
 NetworkCollector
 ----------------
 
 See details in
-`/proc/net/ article <http://www.onlamp.com/pub/a/linux/2000/11/16/LinuxAdmin.html>`_.
+`/proc/net/ article
+<http://www.onlamp.com/pub/a/linux/2000/11/16/LinuxAdmin.html>`_.
 
 PingCollector
 -------------
@@ -187,9 +187,7 @@ PingCollector
 ping.<host>
 ~~~~~~~~~~~
 
-.. TODO: define ICMP
-
-ICMP round trip times to that host.
+:ref:`glossary-ICMP` round trip times to that host.
 
 ProcessStatCollector
 --------------------
@@ -202,16 +200,14 @@ Boot time, in seconds since the Epoch (January 1st 1970).
 proc.ctxt
 ~~~~~~~~~
 
-.. TODO: define context switch
-
-The number of context switches that the system underwent.
+The number of `context switches
+<https://en.wikipedia.org/wiki/Context_switch>`_ that the system underwent.
 
 proc.processes
 ~~~~~~~~~~~~~~
 
-.. TODO: define forks?
-
-Number of forks since boot.
+Number of `forks <http://man7.org/linux/man-pages/man2/fork.2.html>`_
+since boot.
 
 proc.procs_blocked
 ~~~~~~~~~~~~~~~~~~
@@ -244,7 +240,8 @@ Memory (in bytes) allocated for :ref:`glossary-TCP` sockets.
 sockets.tcp_orphan
 ~~~~~~~~~~~~~~~~~~
 
-Number of orphan :ref:`glossary-TCP` sockets (not attached to any file descriptor)
+Number of orphan :ref:`glossary-TCP` sockets (not attached to any file
+descriptor)
 
 sockets.tcp_tw
 ~~~~~~~~~~~~~~
@@ -272,16 +269,16 @@ TCPCollector
 tcp.ActiveOpens
 ~~~~~~~~~~~~~~~
 
-The number of times :ref:`glossary-TCP` connections have made a direct transition to the
-SYN-SENT state from the CLOSED state.
+The number of times :ref:`glossary-TCP` connections have made a direct
+transition to the SYN-SENT state from the CLOSED state.
 
 tcp.AttemptFails
 ~~~~~~~~~~~~~~~~
 
-The number of times :ref:`glossary-TCP` connections have made a direct transition to the CLOSED
-state from either the SYN-SENT state or the SYN-RCVD state, plus the number of
-times :ref:`glossary-TCP` connections have made a direct transition to the LISTEN state from
-the SYN-RCVD state.
+The number of times :ref:`glossary-TCP` connections have made a direct
+transition to the CLOSED state from either the SYN-SENT state or the SYN-RCVD
+state, plus the number of times :ref:`glossary-TCP` connections have made a
+direct transition to the LISTEN state from the SYN-RCVD state.
 
 tcp.CurrEstab
 ~~~~~~~~~~~~~
@@ -291,14 +288,15 @@ Number of current :ref:`glossary-TCP` sockets in ESTABLISHED state.
 tcp.EstabResets
 ~~~~~~~~~~~~~~~
 
-The number of times :ref:`glossary-TCP` connections have made a direct transition to the CLOSED
-state from either the ESTABLISHED state or the CLOSE-WAIT state.
+The number of times :ref:`glossary-TCP` connections have made a direct
+transition to the CLOSED state from either the ESTABLISHED state or the
+CLOSE-WAIT state.
 
 tcp.InErrs
 ~~~~~~~~~~
 
-The total number of segments received in error (for example, bad :ref:`glossary-TCP`
-checksums).
+The total number of segments received in error (for example, bad
+:ref:`glossary-TCP` checksums).
 
 tcp.ListenDrops
 ~~~~~~~~~~~~~~~
@@ -338,7 +336,7 @@ Number of forward retransmits.
 tcp.TCPLoss
 ~~~~~~~~~~~
 
-.. TODO Find out what it is.
+Number packet loss on :ref:`glossary-TCP` connections
 
 tcp.TCPLostRetransmit
 ~~~~~~~~~~~~~~~~~~~~~
@@ -366,8 +364,8 @@ The number of minutes the system has been up.
 VMStatCollector
 ---------------
 
-Look in `Memory Management <http://www.tldp.org/LDP/tlk/mm/memory.html>`_ for more
-details.
+Look in `Memory Management <http://www.tldp.org/LDP/tlk/mm/memory.html>`_ for
+more details.
 
 vmstat.pgpgin
 ~~~~~~~~~~~~~
@@ -388,3 +386,5 @@ vmstat.pswpout
 ~~~~~~~~~~~~~~
 
 Number of kilobytes the system has swapped out to disk per second.
+
+.. _inodes: https://en.wikipedia.org/wiki/Inode

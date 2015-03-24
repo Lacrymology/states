@@ -27,17 +27,17 @@ Example::
 ip_addresses
 ~~~~~~~~~~~~
 
-List of additional hosts inside that will get full access to this server.
+List of additional hosts that will get full access to this server.
 
-Default: Unused (empty list ``[]``).
+Default: no host allowed to fully access (empty list ``[]``).
 
 .. _pillar-firewall-filter:
 
 firewall:filter
 ~~~~~~~~~~~~~~~
 
-Dict of protocol (:ref:`glossary-TCP` and :ref:`glossary-UDP`) with inside it the list of ports that are
-allowed from external networks.
+Dict of protocol (:ref:`glossary-TCP` and :ref:`glossary-UDP`) with inside it
+the list of ports that are allowed from external networks.
 
 Default: Empty dict (``{}``).
 

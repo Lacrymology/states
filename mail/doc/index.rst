@@ -20,7 +20,8 @@ system.
   - SMTP: :doc:`/postfix/doc/index`
   - IMAP/POP3: :doc:`/dovecot/doc/index`
   - User/password database: :doc:`/openldap/doc/index`
-  - Virus scanner, spam filter: :doc:`/amavis/doc/index`, :doc:`/spamassassin/doc/index`, :doc:`/clamav/doc/index`
+  - Virus scanner, spam filter: :doc:`/amavis/doc/index`,
+    :doc:`/spamassassin/doc/index`, :doc:`/clamav/doc/index`
   - Webmail: :doc:`/roundcube/doc/index`
 
 Architecture

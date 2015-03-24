@@ -507,3 +507,38 @@ developed through several versions, with version 3 (POP3) being the current
 standard.
 
 .. Copied from http://en.wikipedia.org/wiki/Post_Office_Protocol - 2015-01-26
+
+.. _glossary-superuser:
+
+superuser
+~~~~~~~~~
+
+On Unix-like systems, the superuser (commonly known as 'root') owns all the
+privileges. Ordinary users are granted only enough permissions to accomplish
+their most common tasks. UNIX systems have built-in security features. Most
+users cannot set up a new user account nor do other administrative procedures.
+The user “root” is a special user, something called super-user, which can do
+anything at all on the system. This high degree power is necessary to fully
+administer a UNIX system, but it also allows its user to make a mistake and
+cause system problems.
+
+.. Copied from https://en.wikipedia.org/wiki/Privilege_%28computing%29#Unix
+   - 2015-03-19
+
+.. _glossary-ICMP:
+
+ICMP
+~~~~
+
+The Internet Control Message Protocol (ICMP) is one of the main protocols of
+the Internet Protocol Suite. It is used by network devices, like routers, to
+send error messages indicating, for example, that a requested service is not
+available or that a host or router could not be reached. ICMP can also be used
+to relay query messages. It is assigned protocol number 1. ICMP
+differs from transport protocols such as TCP and UDP in that it is not
+typically used to exchange data between systems, nor is it regularly employed
+by end-user network applications (with the exception of some diagnostic tools
+like ping and traceroute).
+
+.. Copied from https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol
+   - 2015-03-19

@@ -8,7 +8,8 @@ Dovecot
 Introduction
 ------------
 
-Dovecot is an open-source :ref:`glossary-imap` and :ref:`glossary-pop3` server for Linux/UNIX-like systems,
+Dovecot is an open-source :ref:`glossary-imap` and :ref:`glossary-pop3` server
+for Linux/UNIX-like systems,
 written primarily with security in mind. Timo Sirainen originated Dovecot and
 first released it in July 2002. Dovecot developers primarily aim to produce a
 lightweight, fast and easy-to-set-up open-source mailserver.

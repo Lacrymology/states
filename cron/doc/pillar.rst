@@ -18,7 +18,7 @@ Example::
 crontab_hour
 ~~~~~~~~~~~~
 
-Each days :doc:`index` launch a daily group of tasks, they are located
+Each day :doc:`index` launch a daily group of tasks, they are located
 in ``/etc/cron.daily/``.
 
 This is the time of the day when they're executed.

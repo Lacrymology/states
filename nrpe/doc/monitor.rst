@@ -32,7 +32,8 @@ Warning if it is greater than :ref:`pillar-nrpe-max_proc`.
 zombie_procs
 ~~~~~~~~~~~~
 
-Check if there is any `zombie process <http://en.wikipedia.org/wiki/Zombie_process>`_.
+Check if there is any `zombie process
+<http://en.wikipedia.org/wiki/Zombie_process>`_.
 
 .. _monitor-nrpe_procs:
 
@@ -61,7 +62,8 @@ oom_messages
 ~~~~~~~~~~~~
 
 Check if there is any `Out Of Memory
-<http://en.wikipedia.org/wiki/Out_of_memory>`_ message in the :doc:`/rsyslog/doc/index`.
+<http://en.wikipedia.org/wiki/Out_of_memory>`_ message in the
+:doc:`/rsyslog/doc/index`.
 
 .. _monitor-free_memory:
 
@@ -76,7 +78,8 @@ load_average
 ~~~~~~~~~~~~
 
 The system `load averages
-<http://blog.scoutapp.com/articles/2009/07/31/understanding-load-averages>`_ for the past 1, 5, and 15 minutes.
+<http://blog.scoutapp.com/articles/2009/07/31/understanding-load-averages>`_
+for the past 1, 5, and 15 minutes.
 
 .. _monitor-nrpe-remote-port:
 

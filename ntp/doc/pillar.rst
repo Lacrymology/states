@@ -31,6 +31,6 @@ Default: Not used to synchronize peers with ourselves (``False``).
 ntp:servers
 ~~~~~~~~~~~
 
-The list of NTP servers to connect to as a NTP client.
+The list of :doc:`index` servers to connect to as a :doc:`index` client.
 
 Default: Empty list (``[]``) - not connect to any.

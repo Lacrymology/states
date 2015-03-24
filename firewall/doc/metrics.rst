@@ -6,10 +6,12 @@ Metrics
 Linux Kernel Connection Table
 -----------------------------
 
-Linux kernel :doc:`/firewall/doc/index` provides an "API" to consult it.
+Linux kernel :doc:`index` provides an "API" to consult it.
 
-`connection tracking <https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/sect-Security_Guide-Firewalls-IPTables_and_Connection_Tracking.html>`_
-
+`connection tracking
+<https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6
+/html/Security_Guide/sect-Security_Guide-Firewalls-
+IPTables_and_Connection_Tracking.html>`_
 
 The connection tracking table is turn into the following metrics.
 

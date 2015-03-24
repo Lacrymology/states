@@ -51,7 +51,7 @@ diamond:batch
 
 How many metrics to store before sending to the :doc:`/carbon/doc/index` server.
 
-Default: :doc:`/diamond/doc/index` default value (``256``).
+Default: :doc:`index` default value (``256``).
 
 Conditional
 -----------

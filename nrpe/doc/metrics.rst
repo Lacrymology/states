@@ -3,6 +3,6 @@ Metrics
 
 :doc:`/diamond/doc/process`:
 
-* :doc:`/nrpe/doc/index`
+* :doc:`index`
 
 * ``nsca_passive``

@@ -8,12 +8,14 @@ ProFPTD
 Introduction
 ------------
 
-ProFTPD (short for Pro FTP daemon) is a :ref:`glossary-ftp` server. ProFTPD is Free and open-source
-software, compatible with Unix-like systems and Microsoft Windows (via Cygwin).
-Along with vsftpd and Pure-FTPd, ProFTPD is among the most popular :ref:`glossary-ftp` servers
-in Unix-like environments today. Compared to those, which focus e.g. on simplicity,
-speed or security, ProFTPD's primary design goal is to be a highly feature rich
-:ref:`glossary-ftp` server, exposing a large amount of configuration options to the user
+ProFTPD_ (short for Pro FTP daemon) is a :ref:`glossary-ftp` server. ProFTPD_
+is Free and open-source software, compatible with Unix-like systems and
+Microsoft Windows (via Cygwin).  Along with vsftpd and Pure-FTPd, ProFTPD_ is
+among the most popular :ref:`glossary-ftp` servers in Unix-like environments
+today.  Compared to those, which focus e.g. on simplicity, speed or security,
+ProFTPD_'s primary design goal is to be a highly feature rich
+:ref:`glossary-ftp` server, exposing a large amount of configuration options to
+the user
 
 .. http://en.wikipedia.org/wiki/ProFTPD
 
@@ -25,12 +27,12 @@ speed or security, ProFTPD's primary design goal is to be a highly feature rich
 But a client wanted to upload files from a special software used
 during sports competitions.
 They wanted to have the results available on their website.
-And it only support FTP.
+And it only support :ref:`glossary-ftp`.
 
 For security reason this state had been designed to be as less intrusive as
 possible in the rest of the system.
-It to depends on already existing PostgreSQL server to not not mess with Unix
-users/passwords.
+It to depends on already existing :doc:`/postgresql/doc/index`
+server to not not mess with Unix users/passwords.
 
 Links
 -----
@@ -52,3 +54,5 @@ Content
     :glob:
 
     *
+
+.. _ProFTPD: http://www.proftpd.org

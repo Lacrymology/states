@@ -1,6 +1,7 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
 {%- from 'nrpe/passive.jinja2' import passive_check with context %}
+{%- set source = salt['pillar.get']('salt_archive:source', False) %}
 include:
   - apt.nrpe
   - bash.nrpe
@@ -16,6 +17,9 @@ include:
 {%- endif %}
   - sudo
   - sudo.nrpe
+{%- if not source %}
+  - requests.nrpe
+{%- endif %}
 
 sudo_salt.archive_nrpe:
   file:

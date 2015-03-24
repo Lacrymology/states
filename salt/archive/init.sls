@@ -85,6 +85,15 @@ salt_archive:
       - file: salt_archive
     {%- endfor %}
 
+/var/lib/salt_archive/mirror/clamav:
+    file:
+    - directory
+    - user: root
+    - group: salt_archive
+    - mode: 750
+    - require:
+      - file: /var/lib/salt_archive/mirror
+
 /usr/local/bin/salt_archive_incoming.py:
   pkg:
     - installed
@@ -142,6 +151,7 @@ archive_rsync:
       - file: salt_archive
 {%- endif %}
 
+{#- enforce owner/permissions when run incoming.py #}
 /usr/local/bin/salt_archive_set_owner_mode.sh:
   file:
     - managed
@@ -187,10 +197,10 @@ salt-archive-clamav:
       - module: requests
       - pkg: salt-archive-clamav
       - file: /usr/local/bin/salt_archive_set_owner_mode.sh
+      - file: /var/lib/salt_archive/mirror/clamav
   cmd:
     - run
-    {#- - name: /usr/local/bin/salt_archive_clamav.py #}
-    - name: true
+    - name: /usr/local/bin/salt_archive_clamav.py
     - require:
       - file: salt-archive-clamav
       - user: salt_archive

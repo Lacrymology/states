@@ -67,15 +67,6 @@ Dict of :doc:`/ssh/client/doc/index` keys allowed to log in user.
 
 Default: allow no :doc:`/ssh/client/doc/index` key (``{}``).
 
-.. _pillar-salt_archive-delete:
-
-salt_archive:delete
-~~~~~~~~~~~~~~~~~~~
-
-Delete file in target server that does not exist in source server.
-
-Default: don't delete file in target server (``False``).
-
 .. _pillar-salt_archive-max_age:
 
 salt_archive:max_age
@@ -92,6 +83,19 @@ salt_archive:ssl_redirect
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. include:: /nginx/doc/ssl_redirect.inc
+
+Conditional
+-----------
+
+.. _pillar-salt_archive-delete:
+
+salt_archive:delete
+~~~~~~~~~~~~~~~~~~~
+
+Delete file in target server that does not exist in source server, only use if
+:ref:`pillar-salt_archive-source` is undefined.
+
+Default: don't delete file in target server (``False``).
 
 Rsync
 -----

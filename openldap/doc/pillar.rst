@@ -30,7 +30,8 @@ Example: dc=example,dc=com
 ldap:rootdn
 ~~~~~~~~~~~
 
-Root Distinguished Name - see ``olcRootDN`` in http://www.openldap.org/doc/admin24/slapdconf2.html
+Root Distinguished Name - see ``olcRootDN`` in
+http://www.openldap.org/doc/admin24/slapdconf2.html
 
 Example: ``cn=admin,dc=example,dc=com``
 
@@ -39,7 +40,7 @@ Example: ``cn=admin,dc=example,dc=com``
 ldap:rootpw
 ~~~~~~~~~~~
 
-OpenLDAP `root`'s password (plaintext or encrypted which can be generate by
+:doc:`index` `root`'s password (plaintext or encrypted which can be generate by
 using ``slappasswd`` - an utility in ``slapd`` package). Consult ``olcRootPW``
 in http://www.openldap.org/doc/admin24/slapdconf2.html for more details.
 
@@ -69,7 +70,7 @@ Example::
 ldap:data
 ~~~~~~~~~
 
-Nested dict contain user information, that will be used for create LDAP users
+Nested dict contains user information, that will be used for create LDAP users
 and mapping emails (user@mailname) to mailboxes.
 
 Default: does not create any LDAP user entry (``{}``).

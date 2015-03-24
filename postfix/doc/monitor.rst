@@ -13,7 +13,7 @@ postfix_qmgr
 
 `Postfix Queue manager <http://www.postfix.org/qmgr.8.html>`_ daemon awaits
 the arrival of incoming mail and arranges for its delivery via
-:doc:`/postfix/doc/index` delivery processes.
+:doc:`index` delivery processes.
 
 .. include:: /nrpe/doc/check_procs.inc
 
@@ -35,7 +35,7 @@ postfix_master
 ~~~~~~~~~~~~~~
 
 `Postfix Master <www.postfix.org/master.8.html>`_ daemon is the resident
-process that runs :doc:`/postfix/doc/index` daemons on demand:
+process that runs :doc:`index` daemons on demand:
 daemons to send or receive messages via the network,
 daemons to deliver mail locally, etc.
 These daemons are created on demand up to a configurable maximum number per
@@ -48,13 +48,12 @@ service.
 postfix_port_smtp
 ~~~~~~~~~~~~~~~~~
 
-:doc:`/postfix/doc/index` `SMTP <http://en.wikipedia.org/wiki/Simple_Mail_Transfer_Protocol>`_
-Port is listening locally.
+:doc:`index` :ref:`glossary-smtp` Port is listening locally.
 
 postfix_queue_length
 ~~~~~~~~~~~~~~~~~~~~
 
-Check the number of messages in the :doc:`/postfix/doc/index` queue.
+Check the number of messages in the :doc:`index` queue.
 
 .. include:: /backup/doc/monitor.inc
 
@@ -68,7 +67,8 @@ Optional
 postfix_port_spam_handler
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-`Postfix SPAM handler port <http://www.ijs.si/software/amavisd/README.postfix.txt>`_
+`Postfix SPAM handler port
+<http://www.ijs.si/software/amavisd/README.postfix.txt>`_
 is listening locally.
 Only check if :ref:`pillar-postfix-spam_filter` enabled.
 
@@ -77,7 +77,7 @@ Only check if :ref:`pillar-postfix-spam_filter` enabled.
 postfix_port_smtps
 ~~~~~~~~~~~~~~~~~~
 
-:doc:`/postfix/doc/index` SMTP Port over :doc:`/ssl/doc/index` is listening
+:doc:`index` :ref:`glossary-smtp` port over :doc:`/ssl/doc/index` is listening
 locally.
 
 Only check if :ref:`pillar-postfix-ssl` is turned on.

@@ -6,7 +6,8 @@ Pillar
 - :doc:`/apt/doc/index` :doc:`/apt/doc/pillar`
 - :doc:`/mail/doc/index` :doc:`/mail/doc/pillar`
 - :doc:`/openldap/doc/index` :doc:`/openldap/doc/pillar`
-- :doc:`/ssl/doc/index` :doc:`/ssl/doc/pillar` if :ref:`pillar-postfix-ssl` is set.
+- :doc:`/ssl/doc/index` :doc:`/ssl/doc/pillar` if :ref:`pillar-postfix-ssl` is
+  set.
 
 .. note::
 
@@ -70,13 +71,16 @@ Example::
 postfix:mydestination
 ~~~~~~~~~~~~~~~~~~~~~
 
-List of canonical domains <http://www.postfix.org/VIRTUAL_README.html#canonical>
-that this mail server will be final `destination <http://www.postfix.org/postconf.5.html#mydestination>__`.
+List of canonical domains
+<http://www.postfix.org/VIRTUAL_README.html#canonical>
+that this mail server will be final `destination
+<http://www.postfix.org/postconf.5.html#mydestination>__`.
 Consult http://www.postfix.org/postconf.5.html#mydestination for more detail.
 
 To support multiple domains on one server, using virtual mailboxes will
 help without any problem compared to the canonical domain. List of domains
-(called `Hosted domains <http://www.postfix.org/VIRTUAL_README.html#canonical>`)
+(called `Hosted domains
+<http://www.postfix.org/VIRTUAL_README.html#canonical>`)
 can be specified in :ref:`pillar-postfix-domains`.
 
 Default: allow sending local mail to UNIX mailboxes
@@ -88,7 +92,7 @@ mails to other addresses (see :ref:`pillar-postfix-aliases`)
 postfix:domains
 ~~~~~~~~~~~~~~~
 
-List of domains that :doc:`/postfix/doc/index` will receive emails for.
+List of domains that :doc:`index` will receive emails for.
 If one needs to setup mail server for domain ``mydomain.com``, this pillar
 should be set as following::
 
@@ -96,7 +100,7 @@ should be set as following::
     domains:
       - mydomain.com
 
-This will translate to value of :doc:`/postfix/doc/index` configure directive
+This will translate to value of :doc:`index` configure directive
 ``virtual_mailbox_domains``.
 Mails are delivered via the ``virtual_transport``.
 Consult http://www.postfix.org/postconf.5.html#virtual_mailbox_domains
@@ -129,8 +133,8 @@ Default: disabled (``False``).
 postfix:allow_remote_client
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Allowing remote SMTP client (who does not in the same network with
-:doc:`/postfix/doc/index`) to authenticate and if it successes,
+Allowing remote :ref:`glossary-smtp` client (who does not in the same network
+with :doc:`index`) to authenticate and if it successes,
 allow it to send email. This done by using :doc:`/dovecot/doc/index`
 `SASL <http://wiki2.dovecot.org/Sasl>`_.
 
@@ -144,9 +148,9 @@ clients to login and send email remotely.
 postfix:virtual_aliases
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-Support `alias(mail forwarding) <http://www.postfix.org/postconf.5.html#virtual_alias_maps>`_.
-for virtual mailboxes.
-Multiple lines string, uses below syntax::
+Support `alias(mail forwarding)
+<http://www.postfix.org/postconf.5.html#virtual_alias_maps>`_.
+for virtual mailboxes.  Multiple lines string, uses below syntax::
 
   <source_addr> <dest_addr>
   <source_addr2> <dest_addr2>
@@ -160,7 +164,8 @@ Default: no aliasing (``False``).
 postfix:ssl
 ~~~~~~~~~~~
 
-Name of :doc:`/ssl/doc/index` key to support SMTP over :doc:`/ssl/doc/index`
+Name of :doc:`/ssl/doc/index` key to support :ref:`glossary-smtp`
+over :doc:`/ssl/doc/index`
 (`SMTPS <http://en.wikipedia.org/wiki/SMTPS>`_).
 
 Default: not support SMTPS (``False``).
@@ -182,7 +187,9 @@ postfix:mynetworks
 List of trusted networks that :doc:`index` will relay mail from.
 Consults http://www.postfix.org/postconf.5.html#mynetworks for more detail.
 
-Default: Trust only `loopback network <http://en.wikipedia.org/wiki/Localhost#Name_resolution>`_ (``['127.0.0.0/8']``).
+Default: Trust only `loopback network
+<http://en.wikipedia.org/wiki/Localhost#Name_resolution>`_
+(``['127.0.0.0/8']``).
 
 .. _pillar-postfix-relayhost:
 
@@ -263,7 +270,8 @@ specified in :ref:`pillar-postfix-virtual_aliases`.
    pillar key.
 
 Default: ``['$virtual_alias_maps']`` - uses same value with $virtual_alias_maps
-This is :doc:`index` `default value <http://www.postfix.org/postconf.5.html#virtual_alias_domains>`_.
+This is :doc:`index` `default value
+<http://www.postfix.org/postconf.5.html#virtual_alias_domains>`_.
 
 Example, if one wants to receive email for address ``salt@example.org`` then
 forward it to email ``saltstack@example.com``, following pillar keys should be

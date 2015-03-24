@@ -10,10 +10,9 @@ Introduction
 
 Consult :doc:`/mail/doc/index` for setting up a full-stack mail system.
 
-In computing, Postfix is a free and open-source :ref:`glossary-mta` that
+In computing, Postfix_ is a free and open-source :ref:`glossary-mta` that
 routes and delivers electronic mail, intended as an alternative to the widely
-used Sendmail :ref:`glossary-mta`. As an :ref:`glossary-smtp` client, Postfix implements a high-performance
-parallelized mail-delivery engine.
+used Sendmail :ref:`glossary-mta`.
 
 .. http://en.wikipedia.org/wiki/Postfix_(software) - 2015-01-22
 
@@ -44,4 +43,4 @@ Content
 
     *
 
-
+.. _Postfix: http://www.postfix.org

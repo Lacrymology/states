@@ -212,10 +212,14 @@ define service {
     obsess_over_service 1
     # Service notifications are enabled
     notifications_enabled 1
-    # Service event handler is enabled
-    event_handler_enabled 1
+
+    {#-
+      Service event handler is disabled by default.
+      It's only turned on if there is a reaction linked to a check.
+      -#}
+    event_handler_enabled 0
     event_handler fire_salt_event
-    # Flap detection is enabled
+
     flap_detection_enabled 1
     # Failure prediction is enabled
     failure_prediction_enabled 1
@@ -296,7 +300,17 @@ define service {
     check_command {{ check_command }}!{{ check_timeout }}
         {%- endif %}
     display_name {{ check.data['description'] }}
+
+    {#-
+      If reaction key is defined that mean the minion do have access to a
+      $formula.reactions.$reaction
+      and it worth turn on event handler.
+      -#}
+    {%- if check.data.get('formula', False) %}
+    event_handler_enabled 1
     _FORMULA {{ check.data['formula'] }}
+    {%- endif -%}
+
         {%- if not check.data.get('passive', True) -%}
             {#- by default check are passive #}
     active_checks_enabled 1

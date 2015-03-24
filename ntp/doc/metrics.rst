@@ -7,7 +7,7 @@ http://tools.ietf.org/html/rfc5905 for more informations.
 
 :doc:`/diamond/doc/process`:
 
-* :doc:`/ntp/doc/index` daemon process
+* :doc:`index` daemon process
 
 Ntpd
 ----
@@ -39,8 +39,8 @@ informations.
 ntpd.poll
 ~~~~~~~~~
 
-How often :doc:`/ntp/doc/index` queries remote time servers in seconds, value
-always is power of ``2``. :doc:`/ntp/doc/index` will adjust this value itself,
+How often :doc:`index` queries remote time servers in seconds, value
+always is power of ``2``. :doc:`index` will adjust this value itself,
 value will range from ``minpoll`` (default ``6``. ``2^6 = 64`` seconds) to
 ``maxpoll`` (default ``10``, ``2^10 = 1024`` seconds).
 
@@ -72,7 +72,7 @@ However, the last four polls worked fine.
 ntpd.stratum
 ~~~~~~~~~~~~
 
-:doc:`/ntp/doc/index` uses a hierarchical, semi-layered system of time sources.
+:doc:`index` uses a hierarchical, semi-layered system of time sources.
 Each level of this hierarchy is termed a *stratum* and is assigned a number
 starting with zero at the top. The number represents the distance from the
 reference clock and is used to prevent cyclical dependencies in the hierarchy.
@@ -103,11 +103,12 @@ poll value.
 ntpd.offset
 ~~~~~~~~~~~
 
-Value calculated by formula
-http://en.wikipedia.org/wiki/Network_Time_Protocol#Clock_synchronization_algorithm.
+Value calculated by `this formula
+<http://en.wikipedia.org/wiki/Network_Time_Protocol#
+Clock_synchronization_algorithm.>`_.
 Present how symmetric the round-trip time is. The more symmetric (close to
 ``0``) it is, the more accurate the estimate of the current time. Value is less
-than ``0`` means time to send packet from this machine to :doc:`/ntp/doc/index`
+than ``0`` means time to send packet from this machine to :doc:`index`
 server is less than time to send packet from that server back to this machine
 and vice versa.
 
@@ -115,8 +116,8 @@ ntpd.frequency
 ~~~~~~~~~~~~~~
 
 clock frequency offset (PPM parts-per-million)
-calculated by running :doc:`/ntp/doc/index` daemon. This mean how different
-between this :doc:`/ntp/doc/index` to remote reference server.
+calculated by running :doc:`index` daemon. This mean how different
+between this :doc:`index` to remote reference server.
 The closer to ``0``, the more precise the time is.
 
 ntpd.est_error

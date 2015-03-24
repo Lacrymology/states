@@ -27,4 +27,4 @@ server is in expected range.
 ntp_sync
 ~~~~~~~~
 
-Check if :doc:`/ntp/doc/index` server is in sync.
+Check if :doc:`index` server is in sync.

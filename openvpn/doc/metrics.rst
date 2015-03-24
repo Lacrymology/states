@@ -34,7 +34,8 @@ Total amount of data :doc:`index` instance has written via
 {{ instance }}.global.tun-tap_read_bytes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Total amount of data :doc:`index` instance has read via TUN/TAP device in bytes.
+Total amount of data :doc:`index` instance has read via TUN/TAP device in
+bytes.
 
 {{ instance}}.global.tun-tap_write_bytes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

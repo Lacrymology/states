@@ -8,9 +8,9 @@ sysctl
 Introduction
 ------------
 
-sysctl is an interface for examining and dynamically changing parameters in the
-BSD and Linux operating systems. The implementation mechanism in these two systems
-is very different.
+sysctl_ is an interface for examining and dynamically changing parameters in
+the BSD and Linux operating systems. The implementation mechanism in these two
+systems is very different.
 
 .. http://en.wikipedia.org/wiki/Sysctl - 2-15-01-23
 
@@ -27,3 +27,5 @@ Content
     :glob:
 
     *
+
+.. _sysctl: https://www.kernel.org/doc/Documentation/sysctl

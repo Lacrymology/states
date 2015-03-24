@@ -11,7 +11,7 @@ postgres.database.{{ dbname }}.blks_hit
 ---------------------------------------
 
 Number of times disk blocks were found already in the buffer cache,
-so that a read was not necessary (this only includes hits in the PostgreSQL
+so that a read was not necessary (this only includes hits in the :doc:`index`
 buffer cache, not the operating system's file system cache)
 
 .. _metrics-postgres.database.dbname.blks_read:

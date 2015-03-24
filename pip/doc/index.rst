@@ -8,7 +8,7 @@ Python PIP
 Introduction
 ------------
 
-`PIP`_ is a package management system used to
+pip_ is a package management system used to
 install and manage software packages written in :doc:`/python/doc/index`. Many
 packages can be found in the `Python Package Index`_ (PyPI).
 
@@ -19,7 +19,7 @@ Links
 
 * `Wikipedia <http://en.wikipedia.org/wiki/Pip_(package_manager)>`_
 * `Python Package Index`_
-* `PIP`_
+* pip_
 
 Related Formulas
 ----------------
@@ -37,6 +37,5 @@ Content
 
     *
 
-
 .. _Python Package Index: https://pypi.python.org/pypi
-.. _PIP: https://github.com/pypa/pip
+.. _pip: https://github.com/pypa/pip

@@ -14,13 +14,13 @@ proftpd_procs
 proftpd_port
 ~~~~~~~~~~~~
 
-Check if the :doc:`/proftpd/doc/index` `port
+Check if the :doc:`index` `port
 <http://www.proftpd.org/docs/directives/linked/config_ref_Port.html>`_ is open.
 
 proftpd_ftp
 ~~~~~~~~~~~
 
-Check that a complete FTP handshake works.
+Check that a complete :ref:`glossary-ftp` handshake works.
 
 .. include:: /postgresql/doc/monitor.inc
 

@@ -14,7 +14,9 @@ terracotta:environment
 ~~~~~~~~~~~~~~~~~~~~~~
 
 .. Copied from
-.. http://terracotta.org/documentation/3.7.4/bigmemorymax/terracotta-server-array/config-reference#tctc-configsystemconfiguration-model
+   http://terracotta.org/documentation/3.7.4/bigmemorymax/
+   terracotta-server-array/config-reference#
+   tctc-configsystemconfiguration-model
 
 The configuration-model element is for informational purposes. The two
 configuration-model options are 'development' and 'production'. These values
@@ -41,7 +43,8 @@ terracotta:java_ms
 ~~~~~~~~~~~~~~~~~~
 
 Set initial `Java heap size
-<https://docs.oracle.com/cd/E13222_01/wls/docs81/perform/JVMTuning.html#1131866>`_ (-Xms).
+<https://docs.oracle.com/cd/E13222_01/wls/docs81/perform/
+JVMTuning.html#1131866>`_ (-Xms).
 
 Format: <size>[g|G|m|M|k|K].
 

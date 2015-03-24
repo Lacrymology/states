@@ -1,5 +1,5 @@
 ..
-   Author: Luan Vo Ngoc <luan@robotinfra.com>
+   Author: Bruno Clermont <bruno@robotinfra.com>
    Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 
 Backup Client
@@ -11,7 +11,8 @@ different backup solutions, such as:
 - :doc:`/backup/client/s3/doc/index` for backup data to :ref:`glossary-S3`.
 - :doc:`/backup/client/scp/doc/index` for backup data to
   :doc:`/ssh/server/doc/index` setup by :doc:`/backup/server/doc/index`.
-- :doc:`/backup/client/noop/doc/index` used for testing purpose only, ignore it.
+- :doc:`/backup/client/noop/doc/index` used for testing purpose only, ignore
+  it.
 
 .. warning::
 

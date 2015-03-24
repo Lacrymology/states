@@ -22,8 +22,8 @@ Example::
 backup:s3:secret_key
 ~~~~~~~~~~~~~~~~~~~~
 
-`Amazon <https://aws-portal.amazon.com/gp/aws/developer/account/index.html?action=access-key>`_
-access key.
+`Amazon access key <https://aws-portal.amazon.com/gp/
+aws/developer/account/index.html?action=access-key>`_.
 
 .. _pillar-backup-s3-access_key:
 
@@ -37,8 +37,8 @@ Amazon account secret key.
 backup:s3:bucket
 ~~~~~~~~~~~~~~~~
 
-`Amazon S3 bucket <http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html>`_
-name.
+`Amazon S3 bucket
+<http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html>`_ name.
 
 .. _pillar-backup-s3-path:
 

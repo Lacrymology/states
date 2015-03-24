@@ -1,7 +1,8 @@
 Firewall
 ========
 
-:doc:`index` daemon run on the following port: :ref:`glossary-TCP` ``783`` spamd.
+:doc:`index` daemon (spamd)
+runs on the following port: :ref:`glossary-TCP` ``783``
 
 .. warning::
 

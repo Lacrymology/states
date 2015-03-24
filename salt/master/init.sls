@@ -60,10 +60,10 @@ include:
     - require_in:
       - file: /etc/salt/master
 
-/srv/reactor/alert/shinken.sls:
+/srv/reactor/alert/monitor.sls:
   file:
     - managed
-    - source: salt://salt/master/reactor/shinken_alert.jinja2
+    - source: salt://salt/master/reactor/monitor.jinja2
     - template: jinja
     - user: root
     - group: root

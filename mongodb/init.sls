@@ -5,7 +5,7 @@ include:
   - logrotate
 
 {% set version = '2.4.9' %}
-{% set filename = 'mongodb-10gen_' + version + '_' + grains['debian_arch'] + '.deb' %}
+{% set filename = 'mongodb-10gen_' + version + '_' + grains['osarch'] + '.deb' %}
 
 mongodb:
   file:
@@ -35,7 +35,7 @@ mongodb:
 {%- if files_archive %}
       - mongodb-10gen: {{ files_archive|replace('file://', '')|replace('https://', 'http://') }}/mirror/{{ filename }}
 {%- else %}
-      - mongodb-10gen: http://downloads-distro.mongodb.org/repo/ubuntu-upstart/dists/dist/10gen/binary-{{ grains['debian_arch'] }}/{{ filename }}
+      - mongodb-10gen: http://downloads-distro.mongodb.org/repo/ubuntu-upstart/dists/dist/10gen/binary-{{ grains['osarch'] }}/{{ filename }}
 {%- endif %}
   user:
     - present

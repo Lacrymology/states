@@ -32,16 +32,18 @@ Optional
 postgresql:listen_addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Specifies the :ref:`glossary-TCP`/IP address(es) on which the server is to listen for
+Specifies the :ref:`glossary-TCP`/IP address(es) on which the server is to
+listen for
 connections from client applications. The value takes the form of a
 comma-separated list of host names and/or numeric IP addresses. The special
-entry ``*`` corresponds to all available IP interfaces. The entry ``0.0.0.0`` allows
+entry ``*`` corresponds to all available IP interfaces. The entry ``0.0.0.0``
+allows
 listening for all IPv4 addresses and :: allows listening for all IPv6
 addresses. If the list is empty, the server does not listen on any IP interface
 at all, in which case only Unix-domain sockets can be used to connect to it.
 
-Default: allows only local :ref:`glossary-TCP`/IP "loopback" connections to be made
-(``localhost``).
+Default: allows only local :ref:`glossary-TCP`/IP "loopback" connections to be
+made (``localhost``).
 
 .. _pillar-postgresql-listen_port:
 
@@ -49,7 +51,8 @@ postgresql:listen_port
 ~~~~~~~~~~~~~~~~~~~~~~
 
 The :ref:`glossary-TCP` port the server listens on.
-Note that the same port number is used for all IP addresses the server listens on.
+Note that the same port number is used for all IP addresses the server listens
+on.
 
 Default: :doc:`index` default value (``5432``).
 
@@ -122,9 +125,10 @@ postgresql:replication
 ~~~~~~~~~~~~~~~~~~~~~~
 
 Keys prefix with ``postgresql:replication:`` are only used for cluster setup.
-For more details on :doc:`/postgresql/doc/index` replication setting up, consult
+For more details on :doc:`index` replication setting up, consult
 http://www.postgresql.org/docs/9.1/static/high-availability.html.
-This formula uses http://www.postgresql.org/docs/9.1/static/continuous-archiving.html
+This formula uses
+http://www.postgresql.org/docs/9.1/static/continuous-archiving.html
 method for replication and high availability.
 
 .. _pillar-postgresql-replication-master:
@@ -132,7 +136,8 @@ method for replication and high availability.
 postgresql:replication:master
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-IP address of `master server <http://www.postgresql.org/docs/9.1/static/high-availability.html>`_.
+IP address of `master server
+<http://www.postgresql.org/docs/9.1/static/high-availability.html>`_.
 
 This key is mandatory in setting up a cluster.
 
@@ -141,7 +146,7 @@ This key is mandatory in setting up a cluster.
 postgresql:replication:username
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-:doc:`/postgresql/doc/index` username used for replication.
+:doc:`index` username used for replication.
 
 Default: ``replication_agent``.
 
@@ -151,7 +156,8 @@ postgresql:replication:hot_standby
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Run standby servers in
-`hot standby mode <http://www.postgresql.org/docs/9.1/static/hot-standby.html>`_
+`hot standby mode
+<http://www.postgresql.org/docs/9.1/static/hot-standby.html>`_
 
 Default: run standby servers in hot standby mode (``True``).
 

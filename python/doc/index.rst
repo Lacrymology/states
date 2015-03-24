@@ -8,9 +8,10 @@ Python
 Introduction
 ------------
 
-Python is a widely used general-purpose, high-level programming language. Its
-design philosophy emphasizes code readability, and its syntax allows programmers
-to express concepts in fewer lines of code than would be possible in languages
+Python_ is a widely used general-purpose, high-level programming language. Its
+design philosophy emphasizes code readability, and its syntax allows
+programmers to express concepts in fewer lines of code than would be possible
+in languages
 such as ref:`glossary-cplusplus` or :doc:`/java/doc/index`. The language
 provides constructs intended to enable clear programs on both a small and large
 scale.
@@ -25,5 +26,4 @@ Links
 * `Python Homepage <https://www.python.org/>`_
 * `Wikipedia <http://en.wikipedia.org/wiki/Python_(programming_language)>`_
 
-
-
+.. _Python: https://www.python.org

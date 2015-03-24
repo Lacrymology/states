@@ -182,10 +182,11 @@ openvpn:servers:{{ instance }}:config
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Map to :doc:`index` configuration options. Please consult
-`OpenVPN document <http://openvpn.net/index.php/open-source/documentation.html>`_
+`OpenVPN document
+<http://openvpn.net/index.php/open-source/documentation.html>`_
 for more details.
 
-Note: some keys is "reserved" or "blocked" when provide throught this salt
+Note: some keys is "reserved" or "blocked" when provide through this salt
 formula.
 
 Reserved keys::

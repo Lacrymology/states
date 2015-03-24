@@ -13,7 +13,7 @@ openvpn_procs
 
 All :doc:`index` processes are running.
 
-Expected condition: Exactly each process for each item under openvpn
+Expected condition: Exactly each process for each item under :doc:`index`
 pillar key with command line name ``openvpn``.
 
 .. _monitor-openvpn_instance:

@@ -2,6 +2,7 @@
   "services": [],
   "requisites": [],
   "passive_absents": [],
+  "nagios_plugins": [],
   } -%}
 
 {%- do local.passive_absents.extend([
@@ -127,6 +128,29 @@
   "xinetd",
   ]) %}
 
+{%- do local.nagios_plugins.extend([
+  "/usr/lib/nagios/plugins/check_backups.py",
+  "/usr/local/nagios/lib/python2.7/check_backup_base.py",
+  "check_backup.py",
+  "/usr/lib/nagios/plugins/check_backup_s3lite.py",
+  "/usr/lib/nagios/plugins/check_psql_encoding.py",
+  "/usr/lib/nagios/plugins/check_postgres",
+  "/usr/lib/nagios/plugins/check_pgsql_query.py",
+  "/usr/lib/nagios/plugins/check_mine_minions.py",
+  "/usr/lib/nagios/plugins/check_git_branch.py",
+  "/usr/lib/nagios/plugins/check_saltcloud_images.py",
+  "/usr/lib/nagios/plugins/check_mail_stack.py",
+  "/usr/lib/nagios/plugins/check_robots.py",
+  "/usr/lib/nagios/plugins/check_firewall.py",
+  "/usr/lib/nagios/plugins/check_apt-rc.py",
+  "/usr/lib/nagios/plugins/check_mysql_query.py",
+  "/usr/lib/nagios/plugins/check_uwsgi",
+  "/usr/lib/nagios/plugins/check_uwsgi_nostderr",
+  "/usr/lib/nagios/plugins/check_dns_caching.py",
+  "/usr/lib/nagios/plugins/check_new_logs.py",
+  "/usr/lib/nagios/plugins/check_elasticsearch_cluster.py",
+  ]) %}
+
 {%- for service in local.services %}
   {#- all services except rsyslog, nsca_passsive, nrpe-nagios-server, diamond #}
   {%- do local.requisites.append({"service": service}) %}
@@ -191,6 +215,12 @@ include:
   - uwsgi.absent
   - varnish.absent
   - xinetd.absent
+  - backup.server.nrpe.absent
+  - backup.client.base.nrpe.absent
+  - backup.client.s3.nrpe.absent
+  - mail.server.nrpe.absent
+  - postgresql.nrpe.absent
+  - django.absent
 {%- for formula in local.passive_absents %}
   - {{ formula }}.nrpe.absent
 {%- endfor %}
@@ -252,4 +282,11 @@ extend:
         - service: nsca_passive
         - service: nagios-nrpe-server
     {%- endfor %}
+{%- endfor %}
+{%- for plugin in local.nagios_plugins %}
+  {{ plugin }}:
+    file:
+      - require:
+        - service: nsca_passive
+        - service: nagios-nrpe-server
 {%- endfor %}

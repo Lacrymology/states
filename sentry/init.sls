@@ -260,27 +260,6 @@ sentry_collectstatic:
       - file: sentry_settings
       - module: sentry
 
-{#-
-work around for the error when upgrade from 6.4.4 to 7.4.1
-https://github.com/getsentry/sentry/issues/1386
-remove this state when upgrade to sentry > 7.4.1
-#}
-sentry_upgrade_workaround:
-  cmd:
-    - wait_script
-    - name: upgrade.sh
-    - source: salt://sentry/upgrade.sh
-    - user: postgres
-    - group: postgres
-    - shell: /bin/bash
-    - require:
-      - service: postgresql
-    - watch:
-      - file: sentry_settings
-      - module: sentry
-    - require_in:
-      - cmd: sentry_settings
-
 {% if ssl %}
 extend:
   nginx.conf:

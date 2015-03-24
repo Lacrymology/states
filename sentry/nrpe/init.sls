@@ -3,6 +3,10 @@
 {%- set formula = 'sentry' -%}
 {%- from 'nrpe/passive.jinja2' import passive_check with context %}
 include:
+  - bash
+  - cron
+  - sentry
+  - web
   - apt.nrpe
   - bash.nrpe
   - cron.nrpe
@@ -36,3 +40,72 @@ extend:
     file:
       - require:
         - file: nsca-{{ formula }}
+  /var/lib/deployments/sentry:
+    file:
+      - group: nagios
+      - require:
+        - user: nagios-nrpe-server
+
+{%- set dsn_file = "/var/lib/deployments/sentry/monitoring_dsn" %}
+{#-
+the command below will create dsn_file with:
+  * user: www-data
+  * group: nagios
+  * mode: 0400
+
+It will be executed if dsn_file is missing.
+#}
+sentry_monitoring:
+  cmd:
+    - script
+    - source: salt://sentry/nrpe/sentry_monitoring.py
+    - args: >
+        --dsn-file {{ dsn_file }}
+{%- if salt['pillar.get']("__test__", False) %}
+        --test
+{%- endif %}
+    - unless: test -f {{ dsn_file }}
+    - require:
+      - file: /var/lib/deployments/sentry
+      - file: sentry-uwsgi
+      - module: pysc
+      - service: sentry
+  file:
+    - managed
+    - create: False
+    - user: www-data
+    - group: nagios
+    - mode: 440
+    - require:
+      - user: nagios-nrpe-server
+      - user: web
+
+/etc/cron.hourly/sentry-monitoring:
+  file:
+    - managed
+    - user: root
+    - group: root
+    - mode: 500
+    - template: jinja
+    - source: salt://sentry/nrpe/cron_hourly.jinja2
+    - context:
+        dsn_file: {{ dsn_file }}
+    - require:
+      - cmd: sentry_monitoring
+      - module: raven
+      - pkg: cron
+
+/usr/lib/nagios/plugins/check_sentry_events.py:
+  file:
+    - managed
+    - source: salt://sentry/nrpe/check.py
+    - user: nagios
+    - group: nagios
+    - mode: 550
+    - require:
+      - cmd: sentry_monitoring
+      - module: nrpe-virtualenv
+      - pkg: nagios-nrpe-server
+    - require_in:
+      - service: nagios-nrpe-server
+      - service: nsca_passive

@@ -26,6 +26,17 @@ sentry_celery_procs
 
 .. include:: /nrpe/doc/check_procs.inc
 
+sentry_monitoring_events
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Retrieve the number of events from ``Monitoring`` project in ``Monitoring``
+organization to test :doc:`index` functionality.
+
+.. warning::
+
+   User ``monitoring``, organization ``Monitoring``, project ``Monitoring`` are
+   automatically created and only use for monitoring purpose.
+
 Optional
 --------
 

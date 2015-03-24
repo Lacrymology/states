@@ -1,0 +1,17 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst
+
+This execute $formula/reaction/$reactioname.sls
+
+When monitoring send event on bus.
+-#}
+
+{%- raw %}{#- {% endraw -%}
+{{ salt['pillar.get']('message_do_not_modify') }}
+{%- raw %} -#}{% endraw %}
+
+monitor-{% raw %}{{ data['data']['formula'] }}{% endraw %}-{% raw %}{{ data['data']['reaction'] }}{% endraw %}:
+  {% if grains['saltversioninfo'] >= (2015, 2, 0, 0) %}local{% else %}cmd{% endif %}.state.sls:
+    - tgt: {% raw %}{{ data['data']['minion_id'] }}{% endraw %}
+    - arg:
+      - {% raw %}{{ data['data']['formula'] }}{% endraw %}.reaction.{% raw %}{{ data['data']['reaction'] }}{% endraw %}
+    - ret: syslog,timestamps{% if salt['pillar.get']('sentry_dsn', False) %},sentry_common{% endif %}

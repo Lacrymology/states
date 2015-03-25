@@ -28,6 +28,13 @@ Address: {host_address}
 Info: {host_output}
 When: {long_date_time}"""
 
+MUC_DEPRECATED = "Use of send mask waiters is deprecated."
+
+
+class SleekXMPPMUC(logging.Filter):
+    def filter(self, record):
+        return not record.getMessage() == MUC_DEPRECATED
+
 
 class SendMsg(sleekxmpp.ClientXMPP):
 
@@ -60,6 +67,24 @@ class SendMsg(sleekxmpp.ClientXMPP):
 
 
 class NotifyByXMPP(pysc.Application):
+
+    def setup_logging(self):
+        """
+        override pysc.setup_logging to add custom logging filter
+        """
+        if self.config.get('debug', None):
+            return pysc.set_logging_debug()
+
+        try:
+            logging.config.dictConfig(self.config['logging'])
+            # suppress deprecated warning from sleekxmpp MUC plugin
+            for handler in logging.root.handlers:
+                handler.addFilter(SleekXMPPMUC())
+
+        except Exception:
+            pysc.set_logging_debug()
+            raise
+
     def get_argument_parser(self):
         argp = super(NotifyByXMPP, self).get_argument_parser()
         argp.add_argument(

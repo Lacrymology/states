@@ -28,7 +28,3 @@
 /usr/lib/nagios/plugins/check_postgres:
   file:
     - absent
-
-/etc/sudoers.d/nrpe_postgresql_common:
-  file:
-    - absent

@@ -1,4 +1,5 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst
+-*- ci-automatic-discovery: off -*-
 
 run these stuff AFTER integration.py to make sure them do not be deleted/changed by integration.py
 -#}

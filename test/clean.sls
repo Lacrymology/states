@@ -1,4 +1,5 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst
+-*- ci-automatic-discovery: off -*-
 
 This state take a salt-minion and remove all debian packages that aren't
 required to run only it.

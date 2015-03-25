@@ -459,7 +459,7 @@ class TestStateMeta(type):
 
         # map SLSes to test methods then add to this class
         for state in attrs['all_states']:
-            if state.startswith('test.') or state in ('top', 'overstate'):
+            if state in ('top', 'overstate'):
                 logger.debug("Ignore state %s", state)
             else:
                 # skip SLS contains string that indicate NO-TEST

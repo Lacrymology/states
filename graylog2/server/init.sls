@@ -122,6 +122,14 @@ extend:
     - source: salt://graylog2/server/log4j.jinja2
     - require:
       - pkg: graylog-server
+      - service: rsyslog
+
+{#- write log directly to syslog #}
+/var/log/graylog-server:
+  file:
+    - absent
+    - require:
+      - service: graylog-server
 
 graylog-server:
   pkg:

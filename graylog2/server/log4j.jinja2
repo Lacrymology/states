@@ -1,17 +1,9 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+{%- from "java/macro.jinja2" import log4j_syslog with context -%}
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE log4j:configuration PUBLIC "-//APACHE//DTD LOG4J 1.2//EN" "log4j.dtd">
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
-
-    <!-- Appenders -->
-    <appender name="fileAppender" class="org.apache.log4j.RollingFileAppender">
-        <param name="append" value="true"/>
-        <param name="file" value="/var/log/graylog-server/server.log"/>
-        <param name="MaxFileSize" value="10MB"/>
-        <param name="MaxBackupIndex" value="10"/>
-        <layout class="org.apache.log4j.PatternLayout">
-            <param name="ConversionPattern" value="%d{yyyy-MM-dd'T'HH:mm:ss.SSSXXX} %-5p [%c{1}] %m%n"/>
-        </layout>
-    </appender>
+{{ log4j_syslog()|indent(4) }}
 
     <!-- Application Loggers -->
     <logger name="org.graylog2">
@@ -34,8 +26,8 @@
     </logger>
     <!-- Root Logger -->
     <root>
-        <priority value="warn"/>
-        <appender-ref ref="fileAppender"/>
+        <priority value="{% if salt['pillar.get']('debug', False) %}DEBUG{% else %}INFO{% endif %}"/>
+        <appender-ref ref="SYSLOG"/>
     </root>
 
 </log4j:configuration>

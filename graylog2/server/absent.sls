@@ -25,8 +25,3 @@ extend:
     - require:
       - service: graylog-server
 
-/var/log/graylog-server:
-  file:
-    - absent
-    - require:
-      - service: graylog-server

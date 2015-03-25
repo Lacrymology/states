@@ -6,9 +6,9 @@
   file:
     - absent
     - require_in:
-      - service: graylog2-web
+      - service: graylog-web
 
-{{ upstart_absent('graylog2-web') }}
+{{ upstart_absent('graylog-web') }}
 
 extend:
   graylog-web:

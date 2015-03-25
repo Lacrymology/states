@@ -4,17 +4,21 @@ include:
   - graylog2.server.absent
   - graylog2.web.absent
 
-{%- for file in ['/var/run/graylog2', '/var/lib/graylog2'] %}
+{%- for file in ['/var/run/graylog', '/var/lib/graylog'] %}
 {{ file }}:
   file:
     - absent
     - require:
-      - service: graylog2-server
-      - service: graylog2-web
-{%- endfor -%}
+      - service: graylog-server
+      - service: graylog-web
+{%- endfor %}
 
-{%- set version = '1.0' %}
 graylog:
   pkgrepo:
     - absent
-    - name: deb https://packages.graylog2.org/repo/debian/ {{ grains['lsb_distrib_codename'] }} {{ version }}
+    - name: deb https://packages.graylog2.org/repo/debian/ {{ grains['lsb_distrib_codename'] }} 1.0
+  file:
+    - absent
+    - name: /etc/apt/sources.list.d/graylog.list
+    - require:
+      - pkgrepo: graylog

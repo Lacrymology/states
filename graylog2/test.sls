@@ -36,7 +36,7 @@ graylog2_log_one_msg:
     - run
     - name: logger test
     - require:
-      - service: graylog2-server
+      - service: graylog-server
 
 test:
   monitoring:

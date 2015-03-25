@@ -268,8 +268,8 @@ extend:
   mongodb:
     service:
       - require:
-        - service: graylog2-server
-        - service: graylog2-web
+        - service: graylog-server
+        - service: graylog-web
   redis:
     service:
       - require:

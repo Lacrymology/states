@@ -8,12 +8,12 @@ StatsD
 Introduction
 ------------
 
-StatsD is originally a simple daemon developed and released by Etsy to aggregate
-and summarize application metrics. With StatsD, applications are to be instrumented
-by developers using language-specific client libraries. These libraries will
-then communicate with the StatsD daemon using its dead-simple protocol, and the
-daemon will then generate aggregate metrics and relay them to virtually any
-graphing or monitoring backend.
+StatsD is originally a simple daemon developed and released by Etsy to
+aggregate and summarize application metrics. With StatsD, applications are to
+be instrumented by developers using language-specific client libraries. These
+libraries will then communicate with the StatsD daemon using its dead-simple
+protocol, and the daemon will then generate aggregate metrics and relay them to
+virtually any graphing or monitoring backend.
 
 .. https://www.datadoghq.com/2013/08/statsd/ - 2015-01-23
 

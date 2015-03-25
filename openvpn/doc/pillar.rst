@@ -166,7 +166,7 @@ Conditional
 openvpn:servers:{{ instance }}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Name of tunnel
+Name of tunnel.
 
 .. _pillar-openvpn-servers-instance-mode:
 
@@ -216,7 +216,7 @@ Dictionnary of peers.
 openvpn:servers:{{ instance }}:peers:{{ peername }}:vpn_address
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Address of VPN endpoint.
+Address of :ref:`glossary-VPN` endpoint.
 
 .. _pillar-openvpn-servers-instance-peers-peername-address:
 
@@ -247,7 +247,7 @@ on.
 openvpn:servers:{{ instance }}:protocol
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-TCP or UDP server.
+:ref:`glossary-TCP` or :ref:`glossary-UDP` server.
 
 .. _pillar-openvpn-servers-{{ instance }}-device:
 
@@ -262,8 +262,8 @@ openvpn:servers:{{ instance }}:device
 openvpn:servers:{{ instance }}:server
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Configure server mode and supply a VPN subnet for :doc:`index` to draw client
-addresses from.
+Configure server mode and supply a :ref:`glossary-VPN` subnet for :doc:`index`
+to draw client addresses from.
 
 .. _pillar-openvpn-servers-{{ instance }}-extra_configs:
 

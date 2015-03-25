@@ -8,7 +8,8 @@ Raven
 Introduction
 ------------
 
-Raven is a standalone (and the official) :ref:`glossary-python` client for :doc:`/sentry/doc/index`.
+Raven is a standalone (and the official) :ref:`glossary-python` client for
+:doc:`/sentry/doc/index`.
 
 .. http://raven.readthedocs.org/en/latest/ - 2015-01-23
 

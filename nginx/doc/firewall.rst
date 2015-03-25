@@ -5,7 +5,7 @@ http
 ----
 
 All web apps in this set of states do have their interface is reachable through
-:doc:`/nginx/doc/index` on port :ref:`glossary-TCP` ``80``.
+:doc:`index` on port :ref:`glossary-TCP` ``80``.
 
 https
 -----

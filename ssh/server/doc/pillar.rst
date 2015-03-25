@@ -38,7 +38,7 @@ Example::
 ssh:server:ports
 ~~~~~~~~~~~~~~~~
 
-List of SSH port that :doc:`/ssh/server/doc/index` listens on.
+List of SSH port that :doc:`index` listens on.
 
 Default: Port ``[22]``
 
@@ -57,5 +57,4 @@ Default: No extra configs will be used (``[]``).
 .. warning::
 
   Some formula such as :doc:`/git/server/doc/index`, :doc:`/gitlab/doc/index`
-  and :doc:`/salt/archive/doc/index` requires some users allowed to
-  log in.
+  and :doc:`/salt/archive/doc/index` requires some users allowed to log in.

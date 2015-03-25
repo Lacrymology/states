@@ -118,11 +118,17 @@ Requires files in source:
   contains the public key that will be included in your certificate. A private
   key is usually created at the same time that you create the CSR.
 
-  How to generate a CSR (requires an existing key file):
-  ``openssl req -new -keyout server.key -out server.csr``
-  How to generate a new CSR (no need for existing key file):
-  ``openssl req -new -newkey rsa:2048 -nodes -keyout server.key -out server.csr``
-  How to decode a CSR: ``openssl req -in server.csr -noout -text``
+How to generate a CSR (requires an existing key file)::
+
+  openssl req -new -keyout server.key -out server.csr
+
+How to generate a new CSR (no need for existing key file)::
+
+  openssl req -new -newkey rsa:2048 -nodes -keyout server.key -out server.csr
+
+How to decode a CSR::
+
+  openssl req -in server.csr -noout -text
 
 To use those SSL files in your states, you need to do the following:
 

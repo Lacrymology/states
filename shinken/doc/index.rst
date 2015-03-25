@@ -8,7 +8,7 @@ Shinken
 Introduction
 ------------
 
-Shinken is an open source computer system and network monitoring software
+:doc:`index` is an open source computer system and network monitoring software
 application compatible with Nagios. It watches hosts and services, gathers
 performance data and alerts users when error conditions occur and again when
 the conditions clear.
@@ -28,8 +28,9 @@ by :doc:`/shinken/scheduler/doc/index`.
 Scheduler
 ---------
 
-The :doc:`/shinken/scheduler/doc/index` daemon manages the dispatching of checks and actions
-to the :doc:`/shinken/poller/doc/index` and :doc:`/shinken/reactionner/doc/index` daemons respectively.
+The :doc:`/shinken/scheduler/doc/index` daemon manages the dispatching of
+checks and actions to the :doc:`/shinken/poller/doc/index` and
+:doc:`/shinken/reactionner/doc/index` daemons respectively.
 
 Formula: ``shinken.scheduler``.
 
@@ -38,8 +39,9 @@ Formula: ``shinken.scheduler``.
 Broker
 ------
 
-The :doc:`/shinken/broker/doc/index` daemon exports and manages data from :doc:`/shinken/scheduler/doc/index`. The broker
-uses modules exclusively to get the job done.
+The :doc:`/shinken/broker/doc/index` daemon exports and manages data from
+:doc:`/shinken/scheduler/doc/index`. The broker uses modules exclusively to get
+the job done.
 
 Formula: ``shinken.broker``.
 
@@ -48,7 +50,8 @@ Formula: ``shinken.broker``.
 Reactionner
 -----------
 
-The :doc:`/shinken/reactionner/doc/index` daemon issues notifications and launches event_handlers.
+The :doc:`/shinken/reactionner/doc/index` daemon issues notifications and
+launches event_handlers.
 
 Formula: ``shinken.reactionner``.
 
@@ -57,9 +60,9 @@ Formula: ``shinken.reactionner``.
 Arbiter
 -------
 
-The :doc:`/shinken/arbiter/doc/index` daemon reads the configuration, divides it into parts
-(N :doc:`/shinken/scheduler/doc/index`\ s = N parts), and distributes them to the appropriate :doc:`/shinken/doc/index`
-daemons.
+The :doc:`/shinken/arbiter/doc/index` daemon reads the configuration, divides
+it into parts (N :doc:`/shinken/scheduler/doc/index`\ s = N parts), and
+distributes them to the appropriate :doc:`/shinken/doc/index` daemons.
 
 Formula: ``shinken.arbiter``.
 
@@ -68,8 +71,8 @@ Formula: ``shinken.arbiter``.
 Receiver
 --------
 
-The :doc:`/shinken/receiver/doc/index` daemon receives passive check data and serves as a distributed
-command buffer.
+The :doc:`/shinken/receiver/doc/index` daemon receives passive check data and
+serves as a distributed command buffer.
 
 Web UI
 ------

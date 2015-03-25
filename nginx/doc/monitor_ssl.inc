@@ -1,8 +1,8 @@
 |deployment|\_nginx_https
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Check :doc:`/nginx/doc/index` https connection for |deployment|. See detail
-options for this check in :doc:`/nginx/doc/pillar`.
+Check :doc:`index` https connection for |deployment|. See detail options for
+this check in :doc:`/nginx/doc/pillar`.
 
 This check is only enabled if ``pillar_prefix:ssl`` is True.
 
@@ -12,8 +12,8 @@ Critical: not receive response or receive unexpected return code.
 |deployment|\_nginx_https_certificate
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Check :doc:`/nginx/doc/index` :doc:`/ssl/doc/index` certificate status for
-|deployment|. See detail options for this check in :doc:`/nginx/doc/pillar`.
+Check :doc:`index` :doc:`/ssl/doc/index` certificate status for |deployment|.
+See detail options for this check in :doc:`/nginx/doc/pillar`.
 
 This check is only enabled if ``pillar_prefix:ssl`` is True.
 
@@ -23,8 +23,8 @@ Crirital: not receive response or there is some problems with SSL certificate.
 |deployment|\_ssl_configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Check :doc:`/nginx/doc/index` :doc:`/ssl/doc/index` configuration for
-|deployment|. See detail options for this check in :doc:`/nginx/doc/pillar`.
+Check :doc:`index` :doc:`/ssl/doc/index` configuration for |deployment|. See
+detail options for this check in :doc:`/nginx/doc/pillar`.
 
 This check is only enabled if ``pillar_prefix:ssl`` is ``True``.
 

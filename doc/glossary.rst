@@ -120,6 +120,17 @@ service offered by Amazon Web Services.
 
 .. Copied from https://en.wikipedia.org/wiki/Amazon_S3 - 2015-01-26
 
+.. _glossary-IP:
+
+IP
+~~
+
+An Internet Protocol address (IP address) is a numerical label assigned to each
+device (e.g., computer, printer) participating in a computer network that uses
+the Internet Protocol for communication.
+
+.. Copied from http://en.wikipedia.org/wiki/IP_address - 2015-03-25
+
 .. _glossary-TCP:
 
 TCP
@@ -542,3 +553,69 @@ like ping and traceroute).
 
 .. Copied from https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol
    - 2015-03-19
+
+.. _glossary-SSL:
+
+SSL
+~~~
+
+Secure Sockets Layer (SSL), are cryptographic protocols designed to provide
+communications security over a computer network.
+
+.. Copied from http://en.wikipedia.org/wiki/Transport_Layer_Security
+   - 2015-03-25
+
+.. _glossary-NAT:
+
+NAT
+~~~
+
+Network address translation (NAT) is a methodology of remapping one IP address
+space into another by modifying network address information in Internet
+Protocol (IP) datagram packet headers while they are in transit across a
+traffic routing device.
+
+.. Copied from http://en.wikipedia.org/wiki/Network_address_translation
+   - 2015-03-25
+
+.. _glossary-TUN:
+
+TUN
+~~~
+
+TUN (namely network TUNnel) simulates a network layer device and it operates
+with layer 3 packets like IP packets.
+TUN is used with routing.
+
+.. _glossary-TAP:
+
+TAP
+~~~
+
+TAP (namely network tap) simulates a link layer device and it operates with
+layer 2 packets like Ethernet frames.
+TAP is used for creating a network bridge.
+
+.. Copied from http://en.wikipedia.org/wiki/TUN/TAP on 2015-03-25
+
+.. _glossary-Unix-socket:
+
+Unix socket
+~~~~~~~~~~~
+
+A Unix domain socket or IPC socket (inter-process communication socket) is a
+data communications endpoint for exchanging data between processes executing
+within the same host operating system.
+
+.. Copied from http://en.wikipedia.org/wiki/Unix_domain_socket on 2015-03-25
+
+.. _glossary-file-descriptor:
+
+File descriptor
+~~~~~~~~~~~~~~~
+
+In Unix and related computers operating systems, a file descriptor (FD, less
+frequently fildes) is an abstract indicator used to access a file or other
+input/output resource, such as a pipe or network connection.
+
+.. Copied from http://en.wikipedia.org/wiki/File_descriptor on 2015-03-25

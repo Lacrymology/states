@@ -32,7 +32,7 @@ Default: Not use (``False``).
 mysql:bind
 ~~~~~~~~~~
 
-What IP does :doc:`/mariadb/server/doc/index` will bind to.
+What :ref:`glossary-IP` does :doc:`index` will bind to.
 
 Default: ``127.0.0.1``.
 

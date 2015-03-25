@@ -19,3 +19,7 @@ jenkins:
 /etc/cron.daily/jenkins_delete_old_jobs:
   file:
     - absent
+
+/etc/jenkins:
+  file:
+    - absent

@@ -7,6 +7,9 @@
 
 define host {
     name salt-host
+{%- if xmpp %}
+    contacts xmpp
+{%- endif %}
     contact_groups admins
     notification_interval 0
     first_notification_delay 0

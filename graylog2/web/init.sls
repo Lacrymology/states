@@ -75,6 +75,13 @@ include:
     - source: salt://graylog2/web/logback.jinja2
     - require:
       - pkg: graylog-web
+      - service: rsyslog
+
+/var/log/graylog-web:
+  file:
+    - absent
+    - require:
+      - service: graylog-web
 
 graylog-web:
   pkg:

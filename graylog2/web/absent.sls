@@ -26,9 +26,3 @@ extend:
     - absent
     - require:
       - service: graylog-web
-
-/var/log/graylog-web:
-  file:
-    - absent
-    - require:
-      - service: graylog-web

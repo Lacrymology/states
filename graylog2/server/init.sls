@@ -112,6 +112,17 @@ extend:
     - require:
       - pkg: graylog-server
 
+/etc/graylog/server/log4j.xml:
+  file:
+    - managed
+    - template: jinja
+    - user: root
+    - group: {{ user }}
+    - mode: 440
+    - source: salt://graylog2/server/log4j.jinja2
+    - require:
+      - pkg: graylog-server
+
 graylog-server:
   pkg:
     - installed
@@ -128,6 +139,7 @@ graylog-server:
       - file: /etc/graylog/server/server.conf
       - file: /etc/graylog/server/elasticsearch.yml
       - file: /etc/default/graylog-server
+      - file: /etc/graylog/server/log4j.xml
     - require:
       - service: mongodb
 {%- if salt['pillar.get']("__test__", False) %}

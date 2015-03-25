@@ -65,6 +65,17 @@ include:
     - require:
       - pkg: graylog-web
 
+/etc/graylog/web/logback.xml:
+  file:
+    - managed
+    - template: jinja
+    - user: root
+    - group: {{ user }}
+    - mode: 440
+    - source: salt://graylog2/web/logback.jinja2
+    - require:
+      - pkg: graylog-web
+
 graylog-web:
   pkg:
     - installed
@@ -76,6 +87,7 @@ graylog-web:
     - watch:
       - file: /etc/graylog/web/web.conf
       - file: /etc/default/graylog-web
+      - file: /etc/graylog/web/logback.xml
       - pkg: jre-7
       - file: jre-7
       - pkg: graylog-web

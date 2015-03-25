@@ -14,8 +14,8 @@ jre-7:
     - append
     - name: /etc/environment
     - text: |
-        export JAVA_HOME="/usr/lib/jvm/java-7-openjdk-{{ grains['debian_arch'] }}"
-        export JRE_HOME="/usr/lib/jvm/java-7-openjdk-{{ grains['debian_arch'] }}/jre"
+        export JAVA_HOME="/usr/lib/jvm/java-7-openjdk-{{ grains['osarch'] }}"
+        export JRE_HOME="/usr/lib/jvm/java-7-openjdk-{{ grains['osarch'] }}/jre"
 
 {%- if grains['cpuarch'] == 'i686' %}
 jre-7-i386:

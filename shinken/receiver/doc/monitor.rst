@@ -21,3 +21,9 @@ Check if the receiver port can be reached from the :doc:`shinken
 </shinken/doc/index>` poller.
 
 See :doc:`/shinken/arbiter/doc/monitor` for troubleshooting.
+
+shinken_receiver_memory_usage
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Check the memory usage of ``shinken-receiver`` processes.
+Restart this daemon when it reach 50% of total memory.

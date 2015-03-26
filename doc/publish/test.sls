@@ -17,7 +17,7 @@ test:
       - cmd: test_crons
   qa:
     - test
-    - name: doc
+    - name: doc.publish
     - pillar_doc: {{ opts['cachedir'] }}/doc/output
     - require:
       - monitoring: test

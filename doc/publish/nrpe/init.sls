@@ -12,4 +12,4 @@ include:
   - ssl.nrpe
 {%- endif %}
 
-{{ passive_check('doc.publish', check_ssl_score=True) }}
+{{ passive_check("doc.publish", pillar_prefix="doc", check_ssl_score=True) }}

@@ -23,7 +23,7 @@ doc:ssl
 
 .. include:: /nginx/doc/ssl.inc
 
-gitlab:ssl_redirect
-~~~~~~~~~~~~~~~~~~~
+doc:ssl_redirect
+~~~~~~~~~~~~~~~~
 
 .. include:: /nginx/doc/ssl_redirect.inc

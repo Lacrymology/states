@@ -15,3 +15,5 @@ monitor-{% raw %}{{ data['data']['formula'] }}{% endraw %}-{% raw %}{{ data['dat
     - arg:
       - {% raw %}{{ data['data']['formula'] }}{% endraw %}.reaction.{% raw %}{{ data['data']['reaction'] }}{% endraw %}
     - ret: syslog,timestamps{% if salt['pillar.get']('sentry_dsn', False) %},sentry_common{% endif %}
+    - kwarg:
+        env: {{ salt['pillar.get']('branch', 'base') }}

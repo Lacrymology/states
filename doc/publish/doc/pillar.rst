@@ -16,6 +16,8 @@ doc:hostnames
 Optional
 --------
 
+.. _pillar-doc-ssl:
+
 doc:ssl
 ~~~~~~~
 

@@ -158,8 +158,9 @@ JVM.
 
 .. note::
 
-   This value must be adjusted bases on memory size of server. Please consult
-   :ref:`pillar-graylog2-web-heap_size`.
+   This value must be adjusted bases on memory size of server. Also see
+   :ref:`pillar-graylog2-web-heap_size`, as both :doc:`/graylog2/web/doc/index`
+   and :doc:`index` will be installed in same machine.
 
 Default: use JVM default (``False``).
 

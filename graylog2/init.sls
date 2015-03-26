@@ -17,4 +17,4 @@ graylog:
     - file: /etc/apt/sources.list.d/graylog.list
     - clean_file: True
     - require:
-        - cmd: apt_sources
+      - cmd: apt_sources

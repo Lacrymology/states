@@ -14,11 +14,6 @@ include:
 {%- endfor %}
 
 graylog:
-  pkgrepo:
-    - absent
-    - name: deb https://packages.graylog2.org/repo/debian/ {{ grains['lsb_distrib_codename'] }} 1.0
   file:
     - absent
     - name: /etc/apt/sources.list.d/graylog.list
-    - require:
-      - pkgrepo: graylog

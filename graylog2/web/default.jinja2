@@ -1,14 +1,14 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 # {{ salt['pillar.get']('message_do_not_modify') }}
 
-{%- set heap_size = salt['pillar.get']('graylog2:web:heap_size', '1g') %}
+{%- set heap_size = salt['pillar.get']('graylog2:web:heap_size', False) %}
 
 # HTTP server settings.
 GRAYLOG_WEB_HTTP_ADDRESS="0.0.0.0"
 GRAYLOG_WEB_HTTP_PORT="9000"
 
 # Might be used to adjust the Java heap size. (i.e. "-Xms1024m -Xmx2048m")
-GRAYLOG_WEB_JAVA_OPTS="-Xms{{heap_size}} -Xmx{{heap_size}}"
+GRAYLOG_WEB_JAVA_OPTS="{% if heap_size %}-Xms{{ heap_size }} -Xmx{{ heap_size }}{% endif %}"
 
 # Pass some extra args to graylog-web. (i.e. "-d" to enable debug mode)
 GRAYLOG_WEB_ARGS=""

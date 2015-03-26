@@ -156,7 +156,12 @@ The size of `heap
 <http://en.wikipedia.org/wiki/Java_virtual_machine#Heap>`_ give for
 JVM.
 
-Default: ``'1g'``.
+.. note::
+
+   This value must be adjusted bases on memory size of server. Please consult
+   :ref:`pillar-graylog2-web-heap_size`.
+
+Default: use JVM default (``False``).
 
 .. _pillar-graylog2-password_secret:
 

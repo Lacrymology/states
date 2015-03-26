@@ -110,15 +110,52 @@ jenkins_old_version:
 /etc/cron.daily/jenkins_delete_old_jobs:
   file:
     - managed
-    - template: jinja
     - source: salt://jenkins/del_old_job.py
     - mode: 500
+    - user: root
+    - group: root
     - require:
       - service: jenkins
       - pkg: cron
       - module: requests
+      - module: pysc
+      - file: /etc/jenkins/old_jobs.yml
+
+/etc/jenkins:
+  file:
+    - directory
+    - mode: 500
+    - user: root
+    - group: root
+    - require:
+      - pkg: jenkins
+
+/etc/jenkins/old_jobs.yml:
+  file:
+    - managed
+    - template: jinja
+    - source: salt://jenkins/del_old_job_config.jinja2
+    - mode: 500
+    - user: root
+    - group: root
+    - context:
+        username: {{ salt['pillar.get']('jenkins:job_cleaner:username') }}
+        token: {{ salt['pillar.get']('jenkins:job_cleaner:token') }}
+        url: {% if salt['pillar.get']('jenkins:ssl', False) %}https{%- else %}http{%- endif %}://{{ salt['pillar.get']('jenkins:hostnames')[0] }}
+        days: salt['pillar.get']('jenkins:job_cleaner:days_to_del', 15)
+    - require:
+      - file: /etc/jenkins
+
 {%- else %}
 /etc/cron.daily/jenkins_delete_old_jobs:
+  file:
+    - absent
+
+/etc/jenkins:
+  file:
+    - absent
+
+/etc/jenkins/old_jobs.yml:
   file:
     - absent
 {%- endif %}

@@ -9,7 +9,7 @@ include:
   - cron.nrpe
   - elasticsearch.nrpe.instance
   - nrpe
-  - tmpreaper.nrpe
+  - rsyslog.nrpe
 {%- if ssl %}
   - ssl.nrpe
   - nginx.nrpe

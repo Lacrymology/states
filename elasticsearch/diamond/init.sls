@@ -5,7 +5,7 @@ include:
   - elasticsearch
   - cron.diamond
   - diamond
-  - tmpreaper.diamond
+  - rsyslog.diamond
 {% if ssl %}
   - nginx.diamond
 {% endif %}

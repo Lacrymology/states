@@ -5,7 +5,7 @@
 /home/gitlab/gitlabhq-{{ version }}/log/*.log {
     daily
     missingok
-    rotate 90
+    rotate 7
     compress
     notifempty
     copytruncate
@@ -14,7 +14,7 @@
 /var/log/gitlab/gitlab-shell/gitlab-shell.log {
     daily
     missingok
-    rotate 90
+    rotate 7
     compress
     notifempty
     copytruncate

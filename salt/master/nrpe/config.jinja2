@@ -55,9 +55,9 @@ salt_master_mine:
     - salt_master_procs
     {#- no alert if load is too high #}
     - load_average
-  timeout: 120
+  timeout: 300
   arguments:
-    freshness: {{ 12 * 60 + 2 + 5 }} {#- cron interval + timeout + 5 mins #}
+    freshness: {{ 12 * 60 + 5 + 5 }} {#- cron interval + timeout + 5 mins #}
 {#- sudo for reading salt config files #}
   command: sudo /usr/lib/nagios/plugins/check_mine_minions.py --formula=salt.master --check=salt_master_mine --cronresult
     {%- endif -%}

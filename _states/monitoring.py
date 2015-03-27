@@ -87,7 +87,7 @@ def managed(name, source=None, template='jinja',
     log.debug("Parsing yaml file %s from %s", source, sfn)
     with open(sfn) as f:
         try:
-            loaded = yamlloader.load(f, Loader=yamlloader.CustomLoader)
+            loaded = yamlloader.load(f, Loader=yamlloader.SaltYamlSafeLoader)
         except Exception, err:
             f.seek(0)
             yaml = f.read()

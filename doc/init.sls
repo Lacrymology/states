@@ -30,6 +30,7 @@ And run::
 include:
   - locale
   - pip
+  - ssh.client
   - virtualenv
 
 {# installs doc requirements on system-wide python env, required for _module/qa.py #}
@@ -40,6 +41,7 @@ doc_root:
     - requirements: {{ requirements }}
     - watch:
       - file: doc_root
+    - reload_modules: True
   file:
     - managed
     - name: {{ requirements }}
@@ -49,6 +51,7 @@ doc_root:
     - mode: 440
     - require:
       - module: pip
+      - sls: ssh.client
       - virtualenv: doc
 
 {{ opts['cachedir'] }}/doc/output:
@@ -79,6 +82,8 @@ doc:
     - bin_env: {{ opts['cachedir'] }}/doc
     - requirements: {{ opts['cachedir'] }}/doc/requirements.txt
     - require:
+      - module: pip
+      - sls: ssh.client
       - virtualenv: doc
     - watch:
       - file: doc

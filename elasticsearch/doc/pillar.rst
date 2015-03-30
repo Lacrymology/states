@@ -141,9 +141,10 @@ Default: Unused (``False``)
 elasticsearch:heap_size
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-Java format of max memory consumed by JVM heap.
+:doc:`/java/doc/index` format of max memory consumed by :doc:`/java/doc/index`
+Virtual Machine heap.
 
-Default: use JVM default (``False``).
+Default: use :doc:`/java/doc/index` Virtual Machine default (``False``).
 
 .. _pillar-elasticsearch-ssl:
 

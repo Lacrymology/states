@@ -41,7 +41,7 @@ appender:
     type: syslog
     header: true
     syslogHost: 127.0.0.1:514
-    facility: local0
+    facility: daemon
     layout:
       type: pattern
       conversionPattern: "[%d{ISO8601}][%-5p][%-25c] %m%n"
@@ -50,7 +50,7 @@ appender:
     type: syslog
     header: true
     syslogHost: 127.0.0.1:514
-    facility: local2
+    facility: daemon
     layout:
       type: pattern
       conversionPattern: "[%d{ISO8601}][%-5p][%-25c] %m%n"
@@ -59,7 +59,7 @@ appender:
     type: syslog
     header: true
     syslogHost: 127.0.0.1:514
-    facility: local3
+    facility: daemon
     layout:
       type: pattern
       conversionPattern: "[%d{ISO8601}][%-5p][%-25c] %m%n"

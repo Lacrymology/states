@@ -25,13 +25,13 @@ Example::
       bitbucket.org:
     keys:
       key_name: |
-            -----BEGIN RSA PRIVATE KEY-----
-            MIIEowIBAAKCAQEA3wk5tqR1i...
-            -----END RSA PRIVATE KEY-----
+          -----BEGIN RSA PRIVATE KEY-----
+          MIIEowIBAAKCAQEA3wk5tqR1i...
+          -----END RSA PRIVATE KEY-----
       another_key: |
-            -----BEGIN RSA PRIVATE KEY-----
-            LDJLJFLAKFJdlfj...
-            -----END RSA PRIVATE KEY-----
+          -----BEGIN RSA PRIVATE KEY-----
+          LDJLJFLAKFJdlfj...
+          -----END RSA PRIVATE KEY-----
       root_key: |
           -----BEGIN RSA PRIVATE KEY-----
           MIIEdsfadsfsdaXXXXXXXXXXX...

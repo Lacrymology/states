@@ -1,6 +1,6 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
-{% for filename in ('/etc/default/elasticsearch', '/etc/elasticsearch', '/etc/cron.daily/elasticsearch-cleanup', '/etc/nginx/conf.d/elasticsearch.conf') %}
+{% for filename in ('/etc/default/elasticsearch', '/etc/elasticsearch', '/etc/nginx/conf.d/elasticsearch.conf') %}
 {{ filename }}:
   file:
     - absent

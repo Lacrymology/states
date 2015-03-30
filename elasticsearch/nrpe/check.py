@@ -19,25 +19,16 @@ log = logging.getLogger("nagiosplugin.elasticsearch.cluster_nodes")
 logging.getLogger("requests").setLevel(logging.WARNING)
 
 
-def elasticsearch_version():
-    req = requests.get('http://127.0.0.1:9200/')
-    major, minor, bug = req.json()['version']['number'].split('.')
-    return int(major), int(minor), int(bug)
-
-
 class ClusterNodes(nagiosplugin.Resource):
     def probe(self):
         log.debug("ClusterNode.probe started")
-        major = elasticsearch_version()[0]
-        if major < 1:
-            rsc = 'nodes/'
-        else:
-            rsc = 'states/nodes/'
+        rsc = 'health'
         log.debug("calling localhost to get cluster %s", rsc)
         req = requests.get('http://127.0.0.1:9200/_cluster/' + rsc)
         log.debug("response: %s", req.content)
         log.debug("ClusterNode.probe finished")
-        return [nagiosplugin.Metric('nodes', len(req.json()['nodes']), min=0)]
+        return [nagiosplugin.Metric(
+            'nodes', req.json()['number_of_nodes'], min=0)]
 
 
 def check_procs(config):

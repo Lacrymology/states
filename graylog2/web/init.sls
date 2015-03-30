@@ -16,132 +16,88 @@ include:
   - ssl
 {% endif %}
   - web
-  - sudo
 
-{% set version = '0.20.6' %}
-{% set checksum = 'md5=27d20967a7de68ead66f66ff07de281c' %}
-{% set user = salt['pillar.get']('graylog2:web:user', 'graylog2-ui') %}
-{% set web_root_dir = '/usr/local/graylog2-web-interface-' + version %}
+{% set user = 'graylog-web' %}
 
-{#-
-{% for previous_version in () %}
-/usr/local/graylog2-web-interface-{{ previous_version }}:
+{{ upstart_absent('graylog2-web') }}
+
+/usr/local/graylog2-web-interface-0.20.6:
   file:
     - absent
-{% endfor %}
-#}
+    - require_in:
+      - service: graylog2-web
 
-graylog2-web-{{ user }}:
-  user:
-    - present
-    - name: {{ user }}
-    - home: /var/run/{{ user }}
-    - shell: /bin/false
-
-/var/run/{{ user }}:
+/etc/logrotate.d/graylog2-web:
   file:
-    - directory
-    - user: {{ user }}
-    - group: {{ user }}
-    - mode: 750
-    - makedirs: True
-    - require:
-      - user: graylog2-web-{{ user }}
+    - absent
 
-/var/log/{{ user }}:
+/var/run/graylog2-ui:
   file:
-    - directory
-    - user: {{ user }}
-    - group: {{ user }}
-    - mode: 775
-    - makedirs: True
-    - require:
-      - user: graylog2-web-{{ user }}
+    - absent
+    - require_in:
+      - service: graylog2-web
 
-{{ web_root_dir }}/logs:
+/var/log/graylog2-ui:
   file:
-    - symlink
-    - force: True
-    - target: /var/log/{{ user }}
-    - require:
-      - archive: graylog2-web
-      - file: /var/log/{{ user }}
+    - absent
+    - require_in:
+      - service: graylog2-web
 
-graylog2-web-logrotate:
+/etc/graylog/web/web.conf:
   file:
     - managed
-    - name: /etc/logrotate.d/graylog2-web
     - template: jinja
     - user: root
-    - group: root
-    - mode: 440
-    - source: salt://graylog2/web/logrotate.jinja2
-    - require:
-      - pkg: logrotate
-
-graylog2-web.conf:
-  file:
-    - managed
-    - name: {{ web_root_dir }}/conf/graylog2-web-interface.conf
-    - template: jinja
-    - user: {{ user }}
     - group: {{ user }}
     - mode: 440
     - source: salt://graylog2/web/config.jinja2
     - require:
-      - archive: graylog2-web
-      - user: graylog2-web-{{ user }}
+      - pkg: graylog-web
 
-graylog2-web:
+/etc/default/graylog-web:
   file:
     - managed
-    - name: /etc/init/graylog2-web.conf
     - template: jinja
     - user: root
-    - group: root
-    - mode: 400
-    - source: salt://graylog2/web/upstart.jinja2
-    - context:
-        web_root_dir: {{ web_root_dir }}
-        user: {{ user }}
+    - group: {{ user }}
+    - mode: 440
+    - source: salt://graylog2/web/default.jinja2
     - require:
-      - pkg: sudo
-  archive:
-    - extracted
-    - name: /usr/local/
-{%- set files_archive = salt['pillar.get']('files_archive', False) %}
-{%- if files_archive %}
-    - source: {{ files_archive }}/mirror/graylog2-web-interface-{{ version }}.tar.gz
-{%- else %}
-    - source: http://packages.graylog2.org/releases/graylog2-web-interface/graylog2-web-interface-{{ version }}.tgz
-{%- endif %}
-    - source_hash: {{ checksum }}
-    - archive_format: tar
-    - tar_options: z
-    - if_missing: {{ web_root_dir }}
+      - pkg: graylog-web
+
+/etc/graylog/web/logback.xml:
+  file:
+    - managed
+    - template: jinja
+    - user: root
+    - group: {{ user }}
+    - mode: 440
+    - source: salt://graylog2/web/logback.jinja2
     - require:
-      - file: /usr/local
+      - pkg: graylog-web
+      - service: rsyslog
+
+/var/log/graylog-web:
+  file:
+    - absent
+    - require:
+      - service: graylog-web
+
+graylog-web:
+  pkg:
+    - installed
+    - require:
+      - pkgrepo: graylog
   service:
     - running
     - enable: True
     - watch:
-      - file: graylog2-web
-      - file: graylog2-web.conf
+      - file: /etc/graylog/web/web.conf
+      - file: /etc/default/graylog-web
+      - file: /etc/graylog/web/logback.xml
       - pkg: jre-7
       - file: jre-7
-      - archive: graylog2-web
-      - user: graylog2-web-{{ user }}
-    - require:
-      - file: /var/run/{{ user }}
-      - file: /var/log/{{ user }}
-
-{{ manage_upstart_log('graylog2-web') }}
-
-{% for command in ('streamalarms', 'subscriptions') %}
-/etc/cron.hourly/graylog2-web-{{ command }}:
-  file:
-    - absent
-{% endfor %}
+      - pkg: graylog-web
 
 /etc/nginx/conf.d/graylog2-web.conf:
   file:
@@ -155,11 +111,21 @@ graylog2-web:
       - pkg: nginx
     - watch_in:
       - service: nginx
-    - context:
-        version: {{ version }}
 
-{% if ssl %}
+{#- remove old graylog2-web user #}
 extend:
+  graylog2-web:
+    user:
+      - absent
+      - name: graylog2-ui
+      - require:
+        - service: graylog2-web
+    group:
+      - absent
+      - name: graylog2-ui
+      - require:
+        - user: graylog2-web
+{% if ssl %}
   nginx.conf:
     file:
       - context:
@@ -169,10 +135,3 @@ extend:
       - watch:
         - cmd: ssl_cert_and_key_for_{{ ssl }}
 {% endif %}
-
-{%- from 'macros.jinja2' import manage_pid with context %}
-{%- call manage_pid('/var/run/graylog2-web/graylog2-web.pid', user , 'syslog', 'graylog2-web') %}
-- user: graylog2-web-{{ user }}
-- file: /var/run/{{ user }}
-- pkg: rsyslog
-{%- endcall %}

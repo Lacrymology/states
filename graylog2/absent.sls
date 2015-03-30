@@ -4,11 +4,16 @@ include:
   - graylog2.server.absent
   - graylog2.web.absent
 
-{%- for file in ['/var/run/graylog2', '/var/lib/graylog2'] %}
+{%- for file in ['/var/run/graylog', '/var/lib/graylog'] %}
 {{ file }}:
   file:
     - absent
     - require:
-      - service: graylog2-server
-      - service: graylog2-web
-{%- endfor -%}
+      - service: graylog-server
+      - service: graylog-web
+{%- endfor %}
+
+graylog:
+  file:
+    - absent
+    - name: /etc/apt/sources.list.d/graylog.list

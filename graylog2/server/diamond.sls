@@ -18,4 +18,4 @@ graylog2_server_diamond_resources:
     - text:
       - |
         [[graylog2]]
-        cmdline = ^java.+\-jar \/usr\/local\/graylog2\-server\-.+\/graylog2-server.jar
+        cmdline = java.+\/usr\/share\/graylog-server\/graylog\.jar

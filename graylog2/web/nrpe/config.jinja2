@@ -1,6 +1,6 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
-{%- set version = '0.20.6' -%}
+{%- set version = '1.0.1' -%}
 {%- set timeout = 45 -%}
 {%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
 
@@ -10,7 +10,7 @@
 
 graylog2_web_procs:
   description: Graylog2 Web Daemon
-  command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -C java -a 'graylog2-web-interface-{{ version }}.jar'"
+  command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -C java -a 'graylog-web-interface-{{ version }}.jar'"
 
 graylog2_web_port:
   description: Graylog2 Web TCP Port

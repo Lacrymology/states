@@ -145,7 +145,7 @@ graylog2:ring_size
 Size of internal ring buffers. Raise this if raising
 :ref:`pillar-graylog2-processbuffer_processors` does not help anymore.
 
-Default: ``1024``.
+Default: ``65536``.
 
 .. _pillar-graylog2-heap_size:
 
@@ -156,16 +156,13 @@ The size of `heap
 <http://en.wikipedia.org/wiki/Java_virtual_machine#Heap>`_ give for
 JVM.
 
+.. note::
+
+   This value must be adjusted bases on memory size of server. Also see
+   :ref:`pillar-graylog2-web-heap_size`, as both :doc:`/graylog2/web/doc/index`
+   and :doc:`index` will be installed in same machine.
+
 Default: use JVM default (``False``).
-
-.. _pillar-graylog2-server-user:
-
-graylog2:server:user
-~~~~~~~~~~~~~~~~~~~~
-
-The Unix user (UID) who will run :doc:`index`.
-
-Default: ``graylog2``.
 
 .. _pillar-graylog2-password_secret:
 

@@ -8,7 +8,7 @@
 
 graylog2_procs:
   description: Graylog2 Daemon
-  command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -C java -a '-jar /usr/local/graylog2-server-{{ version }}/graylog2-server'"
+  command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -C java -a '/usr/share/graylog-server/graylog.jar'"
 
 graylog2_api_port:
   description: Graylog2 API Port

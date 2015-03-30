@@ -8,12 +8,12 @@ include:
   - cron
   - java.7
   - salt.minion.deps
-  - tmpreaper
+  - rsyslog
 {% if ssl %}
   - nginx
   - ssl
 {% endif %}
-{%- set version = '0.90.10' %}
+{%- set version = '1.4.4' %}
 
 /etc/default/elasticsearch:
   file:
@@ -36,18 +36,19 @@ include:
     - source: salt://elasticsearch/logging.jinja2
     - require:
       - pkg: elasticsearch
+      - service: rsyslog
+
+/var/log/elasticsearch:
+  file:
+    - absent
+    - require:
+      - service: elasticsearch
 
 /etc/cron.daily/elasticsearch-cleanup:
   file:
-    - managed
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 500
-    - source: salt://elasticsearch/cron_daily.jinja2
+    - absent
     - require:
-      - pkg: cron
-      - file: bash
+      - service: elasticsearch
 
 {%- call manage_pid('/var/run/elasticsearch.pid', 'elasticsearch', 'elasticsearch', 'elasticsearch') %}
 - pkg: elasticsearch

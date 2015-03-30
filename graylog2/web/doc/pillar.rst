@@ -55,15 +55,6 @@ The secret key is used to secure cryptographics functions.
 
 Default: randomly generated (``False``).
 
-.. _pillar-graylog2-web-user:
-
-graylog2:web:user
-~~~~~~~~~~~~~~~~~
-
-The Unix user (UID) who will run :doc:`index`.
-
-Default: ``graylog2-ui``
-
 .. _pillar-graylog2-web-heap_size:
 
 graylog2:web:heap_size
@@ -72,5 +63,11 @@ graylog2:web:heap_size
 The size of `heap
 <http://en.wikipedia.org/wiki/Java_virtual_machine#Heap>`_ give for
 JVM.
+
+.. note::
+
+   This value must be adjusted bases on memory size of server. Also see
+   :ref:`pillar-graylog2-heap_size`, as both :doc:`/graylog2/server/doc/index`
+   and :doc:`index` will be installed in same machine.
 
 Default: use JVM default (``False``).

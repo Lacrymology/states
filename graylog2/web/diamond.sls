@@ -1,6 +1,6 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
-{% set version = '0.20.6' %}
+{% set version = '1.0.1' %}
 
 include:
   - diamond
@@ -18,4 +18,4 @@ graylog2_web_diamond_resource:
     - text:
       - |
         [[graylog2-web]]
-        cmdline = java.+\-Duser\.dir=/usr/local/graylog2\-web\-interface-{{ version }}
+        cmdline = java.+graylog\-web\-interface\-{{ version }}\.jar

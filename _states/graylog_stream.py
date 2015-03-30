@@ -21,14 +21,13 @@ def __virtual__():
 
 
 def present(
-        name, description='', creator=None, rules=[],
+        name, description='', rules=[],
         receivers_type="emails", receivers=[], alert_grace=1):
     """
     Makes sure that a stream with the given parameters exists.
     Do nothing if a streams with same title exists.
     :param title: Descriptive name of the stream.
     :param description: Description of the stream. Defaults to empty string.
-    :param creator: Name of the creator. Default to name of the auth user.
     :param rules: rules to add to the stream.
                   syntax: [{"field": "source", "value": "aaaa",
                             "inverted": false, "type": 1}]
@@ -53,7 +52,7 @@ def present(
             return ret
 
     params = dict(
-        title=name, description=description, creator=creator,
+        title=name, description=description,
         rules=rules, receivers=receivers, alert_grace=alert_grace,
     )
 

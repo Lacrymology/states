@@ -1,0 +1,12 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+{%- from "java/macro.jinja2" import logback_syslog with context -%}
+<configuration>
+  <conversionRule conversionWord="coloredLevel" converterClass="play.api.Logger$ColoredLevel" />
+{{ logback_syslog()|indent(2) }}
+  <logger name="play" level="INFO" />
+  <logger name="application" level="INFO" />
+
+  <root level="{% if salt['pillar.get']('debug', False) %}DEBUG{% else %}INFO{% endif %}">
+    <appender-ref ref="SYSLOG" />
+  </root>
+</configuration>

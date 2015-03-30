@@ -74,9 +74,6 @@ def unique_states(states_dir, root_states='root/salt/states'):
         for filename in files_dir_iter(dirname):
             output[filename] = os.path.join(dirname, filename)
 
-    # top.sls is copy of salt/master/top.jinja2 but not rendered
-    output['top.sls'] = output['salt/master/top.jinja2']
-
     clean_root_states = root_states.rstrip(os.sep)
     filenames = output.keys()
     filenames.sort()

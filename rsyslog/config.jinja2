@@ -75,12 +75,12 @@ auth,authpriv.* /var/log/auth.log
  First some standard log files.  Log by facility.
 
 #}
-{% if not salt['pillar.get']('debug', False) %}
-{%- for f in 'sshd', 'cron', 'sudo' %}
-    {%- for act in 'opened', 'closed' %}
+{%- if not salt['pillar.get']('debug', False) %}
+    {%- for f in 'sshd', 'cron', 'sudo' %}
+        {%- for act in 'opened', 'closed' %}
 :msg, contains, "pam_unix({{ f }}:session): session {{ act }} for user" stop
+        {%- endfor %}
     {%- endfor %}
-{%- endfor %}
 {#- discard uwsgi ping log msg produced by NRPE check #}
 :msg, isequal, " PING" stop
 {#- discard ssh monitoring check msg #}
@@ -89,7 +89,9 @@ auth,authpriv.* /var/log/auth.log
 if ($programname == "uwsgi-graylog2" or $programname == "nginx" and $msg contains "GET /health/currentthroughput") then stop
 {# discard nginx response buffer msg #}
 if ($programname == "nginx" and $msg contains "an upstream response is buffered to a temporary file") then stop
-{% endif %}
+{#- discard notice/info/debug sshd msg #}
+if ($programname == 'sshd' and $syslogseverity > '4') then stop
+{%- endif %}
 {#-
 kern.* -/var/log/kern.log
 mail.* -/var/log/mail.log

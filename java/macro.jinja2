@@ -2,11 +2,12 @@
 <!-- Syslog -->
 <appender name="SYSLOG" class="org.apache.log4j.net.SyslogAppender">
   <param name="Facility" value="LOCAL0"/>
+  <param name="FacilityPrinting" value="false"/>
   <param name="Header" value="true"/>
   <param name="Threshold" value="{% if salt['pillar.get']('debug', False) %}DEBUG{% else %}{{ log_level|default("INFO", boolean=True) }}{% endif %}"/>
   <param name="SyslogHost" value="localhost"/>
     <layout class="org.apache.log4j.PatternLayout">
-        <param name="ConversionPattern" value="%d{yyyy-MM-dd'T'HH:mm:ss.SSSXXX} %-5p [%c{1}] %m%n"/>
+        <param name="ConversionPattern" value="%p: %c{2} %x %m %n"/>
     </layout>
 </appender>
 {%- endmacro %}

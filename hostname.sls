@@ -15,6 +15,7 @@ hostname:
     - ip: 127.0.0.1
     - require:
       - cmd: hostname
+      - host: localhost
   cmd:
 {%- if grains['id'] != grains['localhost'] %}
     - run
@@ -24,3 +25,9 @@ hostname:
     - name: hostname `cat /etc/hostname`
     - watch:
       - file: hostname
+
+localhost:
+  host:
+    - present
+    - name: localhost
+    - ip: 127.0.0.1

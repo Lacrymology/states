@@ -84,11 +84,11 @@ doc:
     - name: {{ opts['cachedir'] }}/doc/bin/python doc/build.py {{ opts['cachedir'] }}/doc/output
     - require:
       - cmd: system_locale
+      - module: doc_root
     - watch:
       - virtualenv: doc
       - module: doc
       - file: {{ opts['cachedir'] }}/doc/output
-      - module: doc_root
     - env:
       - VIRTUAL_ENV: {{ opts['cachedir'] }}/doc
 {#- if in local file client mode, cp.cache_master module is useless, just run

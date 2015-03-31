@@ -20,7 +20,7 @@ server {
     server_name {% for hostname in  hostnames %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
     location / {
         try_files $uri $uri/index.html;
-        root /usr/local/salt-doc;
+        root /usr/local/salt-common-doc;
         gzip_static on;
         expires max;
         add_header Cache-Control public;

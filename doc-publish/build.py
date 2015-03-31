@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 class PublishDoc(pysc.Application):
 
-    defaults = {"config": "/etc/publish-doc.yml"}
+    defaults = {"config": "/etc/doc-publish.yml"}
 
     def main(self):
         import salt.syspaths as syspaths

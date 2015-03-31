@@ -15,7 +15,7 @@ include:
   - ssl
 {%- endif %}
 
-/usr/local/salt-doc:
+/usr/local/salt-common-doc:
   file:
     - directory
     - user: root
@@ -25,11 +25,11 @@ include:
       - file: /usr/local
       - user: web
 
-/etc/publish-doc.yml:
+/etc/doc-publish.yml:
   file:
     - managed
     - template: jinja
-    - source: salt://doc/publish/config.jinja2
+    - source: salt://doc-publish/config.jinja2
     - user: root
     - group: root
     - mode: 400
@@ -44,35 +44,35 @@ include:
         minion_config_file: /root/salt/states/test/minion
 {%- endif %}
         cwd: {{ cwd }}
-        output: /usr/local/salt-doc
+        output: /usr/local/salt-common-doc
         saltenv: {{ salt['common.saltenv']() }}
         virtualenv: {{ opts['cachedir'] }}/doc
 
-publish-doc:
+doc-publish:
   file:
     - managed
-    - name: /etc/cron.hourly/publish-doc
-    - source: salt://doc/publish/build.py
+    - name: /etc/cron.hourly/doc-publish
+    - source: salt://doc-publish/build.py
     - user: root
     - group: root
     - mode: 500
     - require:
       - cmd: doc
-      - file: /usr/local/salt-doc
-      - file: /etc/publish-doc.yml
+      - file: /usr/local/salt-common-doc
+      - file: /etc/doc-publish.yml
       - module: pysc
       - pkg: cron
   cmd:
     - wait
-    - name: /etc/cron.hourly/publish-doc
+    - name: /etc/cron.hourly/doc-publish
     - watch:
-      - file: /etc/cron.hourly/publish-doc
-      - file: publish-doc
+      - file: /etc/cron.hourly/doc-publish
+      - file: doc-publish
 
 /etc/nginx/conf.d/salt-doc.conf:
   file:
     - managed
-    - source: salt://doc/publish/nginx.jinja2
+    - source: salt://doc-publish/nginx.jinja2
     - template: jinja
     - user: root
     - group: www-data
@@ -80,7 +80,7 @@ publish-doc:
     - require:
       - pkg: nginx
       - user: web
-      - cmd: publish-doc
+      - cmd: doc-publish
 {%- if ssl %}
       - cmd: ssl_cert_and_key_for_{{ ssl }}
 {%- endif %}

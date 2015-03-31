@@ -4,7 +4,7 @@ Monitor
 Mandatory
 ---------
 
-.. |deployment| replace:: doc.publish
+.. |deployment| replace:: doc-publish
 
 .. include:: /nginx/doc/monitor.inc
 

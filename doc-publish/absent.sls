@@ -1,14 +1,14 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
-/usr/local/salt-doc:
+/usr/local/salt-common-doc:
   file:
     - absent
 
-/etc/publish-doc.yml:
+/etc/doc-publish.yml:
   file:
     - absent
 
-/etc/cron.hourly/publish-doc:
+/etc/cron.hourly/doc-publish:
   file:
     - absent
 

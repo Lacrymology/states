@@ -9,6 +9,7 @@ include:
 - sls: doc-publish.nrpe
 {%- endcall %}
 
+{#- can't test diamond metrics, /etc/cron.hourly/doc-publish is not a daemon #}
 test:
   monitoring:
     - run_all_checks

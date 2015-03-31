@@ -248,9 +248,7 @@ service: nagios-nrpe-server #}
 /usr/lib/nagios/plugins/check_udp_listen:
   pkg:
     - installed
-    - name: netcat
-    - require:
-      - cmd: apt_sources
+    - name: iproute  {# for ss #}
   file:
     - managed
     - source: salt://nrpe/check_udp_listen.sh

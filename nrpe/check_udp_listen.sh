@@ -4,12 +4,11 @@
 
 # Author: Diep Pham <favadi@robotinfra.com>
 # Maintainer: Diep Pham <favadi@robotinfra.com>
-#             Quan Tong Anh <quanta@robotinfra.com>
 
 # Nagios plugin for checking if a UDP port is listen on localhost
 #
 # require:
-#   - netcat
+#   - ss
 
 set -o errexit
 
@@ -33,12 +32,22 @@ elif [[ ! "$1" =~ ^[0-9]+$ ]]; then  # "$1" is not a number
 fi
 
 port="$1"
-nc -zu localhost "$port"
 
-if [[ $? -eq 0 ]]; then
-    echo "${port}/UDP OK"
-    exit "$STATE_OK"
-else
+# get list of listening UDP ports
+listen_ports=($(ss -nlu | awk 'NR > 2 {sub(/^.*:/, "", $4); print $4}'))
+
+found=0  # not found
+for listen_port in "${listen_ports[@]}"; do
+    if [[ "$listen_port" -eq  "$port" ]]; then
+        found=1  # found
+        break
+    fi
+done
+
+if [[ "$found" -eq 0 ]]; then  # not found
     echo "${port}/UDP CRITICAL"
     exit "$STATE_CRITICAL"
 fi
+
+echo "${port}/UDP OK"
+exit "$STATE_OK"

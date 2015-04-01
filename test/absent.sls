@@ -296,9 +296,10 @@ extend:
     service:
       - require: {{ local.requisites|yaml }}
   salt-master:
-    cmd:
+    service:
       - require_in:
         - pkg: git
+        - file: openssh-client
 {%- for formula in local.passive_absents %}
   {%- for file in [
     "/var/lib/nagios/" ~ formula ~ "_ssl_configuration.yml",

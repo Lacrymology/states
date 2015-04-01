@@ -1,0 +1,30 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst
+
+This execute $formula/reaction/$reactioname.sls
+
+When monitoring send event on bus.
+-#}
+
+{%- raw %}{#- {% endraw -%}
+{{ salt['pillar.get']('message_do_not_modify') }}
+{%- raw %} -#}{% endraw %}
+
+{% raw %}{%- if data["fun"] == "state.highstate" and data["retcode"] != 0 %}{% endraw %}
+xmpp-{% raw %}{{ data['jid'] }}{% endraw %}-{% raw %}{{ data['id'] }}{% endraw %}:
+  {% if grains['saltversioninfo'] >= (2015, 2, 0, 0) %}local{% else %}cmd{% endif %}.xmpp.send_msg_multi:
+    - tgt: {{ grains['id'] }}
+    - ret: syslog,timestamps{% if salt['pillar.get']('sentry_dsn', False) %},sentry_common{% endif %}
+    - kwarg:
+        recipients: {{ recipients|yaml }}
+        rooms: {{ rooms|yaml }}
+        {%- raw %}
+        message: |
+
+          SaltStack: state.highstate failed
+          id: {{ data["id"] }}
+          jid: {{ data["jid"] }}
+          retcode: {{ data["retcode"] }}
+          return: {{ data["return"] }}
+        {%- endraw %}
+        profile: salt-master-xmpp
+{% raw %}{%- endif %}{% endraw %}

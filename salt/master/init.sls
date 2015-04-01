@@ -7,6 +7,7 @@ and use it to install the master.
 {%- from 'upstart/rsyslog.jinja2' import manage_upstart_log with context -%}
 
 {%- set use_ext_pillar = salt['pillar.get']('salt_master:pillar:branch', False) and salt['pillar.get']('salt_master:pillar:remote', False) -%}
+{%- set xmpp = salt["pillar.get"]("salt_master:xmpp", {}) %}
 
 include:
   - bash
@@ -21,6 +22,9 @@ include:
   - rsyslog
   - salt
   - ssh.client
+{%- if xmpp %}
+  - sleekxmpp
+{%- endif %}
 
 {%- for dirname in ('salt', 'reactor') %}
 /srv/{{ dirname }}:
@@ -73,6 +77,46 @@ include:
       - file: /srv/reactor/alert
     - require_in:
       - file: /etc/salt/master
+
+/srv/reactor/job/xmpp.sls:
+  file:
+{%- if xmpp and "highstate" in xmpp["events"] %}
+    - managed
+    - template: jinja
+    - source: salt://salt/master/reactor/xmpp.jinja2
+    - user: root
+    - group: root
+    - mode: 440
+    - context:
+        recipients: {{ xmpp["recipients"]|default([]) }}
+        rooms: {{ xmpp["rooms"]|default([]) }}
+    - require:
+      - file: /srv/reactor/job
+      - file: /etc/salt/master.d/xmpp.conf
+    - require_in:
+      - file: /etc/salt/master
+{%- else %}
+    - absent
+{%- endif %}
+
+/etc/salt/master.d/xmpp.conf:
+  file:
+{%- if xmpp %}
+    - managed
+    - user: root
+    - group: root
+    - mode: 400
+    - contents: |
+        salt-master-xmpp:
+          xmpp.jid: {{ xmpp["jid"] }}
+          xmpp.password: {{ xmpp["password"] }}
+    - require:
+      - pkg: salt-master
+    - watch_in:
+      - service: salt-master
+{%- else %}
+    - absent
+{%- endif %}
 
 {%- if use_ext_pillar %}
 /srv/pillars:

@@ -49,14 +49,31 @@ class ClamavMirror(pysc.Application):
 
     logger = logger
 
+    def _download(self, url, times=5, sleep=30):
+        '''
+        Download an ``url`` and retry ``times`` each after ``sleep``
+        if there is failure.
+        '''
+        for i in xrange(1, times + 1):
+            req = requests.get(url, stream=True)
+            if req.ok:
+                return req
+            else:
+                self.logger.info('Retrying %d/%d times in next %d seconds',
+                                 i, times, sleep)
+                time.sleep(sleep)
+
+        self.logger.error("Can't download '%s' code %d reason '%s'",
+                          url, req.status_code, req.reason)
+        return False
+
     def mirror_file(self, filename):
         http_header_size = 'content-length'
         url = 'http://%s/%s' % (self.config['mirror'], filename)
         logger.debug("Going to check %s", url)
-        req = requests.get(url, stream=True)
-        if not req.ok:
-            logger.error("Can't download '%s' code %d reason '%s'",
-                         url, req.status_code, req.reason)
+
+        req = self._download(url)
+        if not req:
             return
 
         # convert last-modified header string into a datetime instance

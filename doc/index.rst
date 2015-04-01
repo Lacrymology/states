@@ -13,6 +13,7 @@ Welcome to Infrastructure Documentation:
     :glob:
 
     intro
+    /doc-publish/doc/index
     usage
     license
     pillar

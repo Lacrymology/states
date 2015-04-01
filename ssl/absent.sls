@@ -7,8 +7,19 @@ ssl-cert:
     - absent
     - require:
       - pkg: ssl-cert
+
+{#-
+don't remove /etc/ssl directory
+/etc/ssl/openssl.cnf is mandatory to use openssl
+#}
+/etc/ssl/certs:
   file:
     - absent
-    - name: /etc/ssl
+    - require:
+      - pkg: ssl-cert
+
+/etc/ssl/private:
+  file:
+    - absent
     - require:
       - pkg: ssl-cert

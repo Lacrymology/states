@@ -9,6 +9,12 @@ ssl-cert:
     - require:
       - cmd: apt_sources
 
+/etc/ssl/openssl.cnf:
+  file:
+    - exists
+    - require:
+      - pkg: ssl-cert
+
 {% for name in salt['pillar.get']('ssl:certs', {}) -%}
 /etc/ssl/{{ name }}:
   file:

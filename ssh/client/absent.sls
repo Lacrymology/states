@@ -1,5 +1,7 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
+{#- first state to be run, it needs to specify the order to setting
+    order correctly if other absent needs to be run before/after all states in this SLS #}
 openssh-client:
   file:
     - absent
@@ -15,15 +17,28 @@ openssh-client:
 {{ salt['user.info']('root')['home'] }}/.ssh:
   file:
     - absent
-
-/etc/ssh/keys:
-  file:
-    - absent
+    - require:
+      - file: openssh-client
+    - require_in:
+      - file: /etc/ssh/keys
 
 /etc/ssh/ssh_known_hosts:
   file:
     - absent
+    - require:
+      - file: openssh-client
+    - require_in:
+      - file: /etc/ssh/keys
 
 /etc/ssh/ssh_known_hosts.old:
+  file:
+    - absent
+    - require:
+      - file: openssh-client
+    - require_in:
+      - file: /etc/ssh/keys
+
+{#- latest state to be run #}
+/etc/ssh/keys:
   file:
     - absent

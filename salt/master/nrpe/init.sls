@@ -9,6 +9,7 @@ include:
   - git.nrpe
   - pip.nrpe
   - nrpe
+  - pysc.nrpe
   - python.dev.nrpe
   - rsyslog.nrpe
   - ssh.client.nrpe

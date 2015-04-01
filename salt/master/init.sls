@@ -16,6 +16,7 @@ include:
 {%- if use_ext_pillar %}
   - pip
 {%- endif %}
+  - pysc
   - python.dev
   - rsyslog
   - salt
@@ -134,6 +135,7 @@ salt-master-{{ prefix }}.py:
     - source: salt://salt/master/{{ prefix }}.py
     - require:
       - file: /usr/local
+      - module: pysc
 {%- endfor -%}
 
 {%- from "macros.jinja2" import salt_version,salt_deb_version with context %}

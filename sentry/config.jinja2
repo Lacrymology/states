@@ -24,7 +24,7 @@ SENTRY_KEY = '{{ salt['password.pillar']('sentry:django_key', 50) }}'
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': 'unix:/tmp/memcached.sock',
+        'LOCATION': 'unix:/var/run/memcache/memcache.sock',
     }
 }
 

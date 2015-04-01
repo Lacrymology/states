@@ -65,6 +65,11 @@ elasticsearch:cluster:nodes:{{ node_minion_ID }}:{{ state }}
 A node can only actual run a :doc:`index` node, or a
 :doc:`/graylog2/server/doc/index`.
 
+Possible values for ``{{ state }}``:
+
+* ``graylog2.server``
+* ``elasticsearch``
+
 Optional
 --------
 

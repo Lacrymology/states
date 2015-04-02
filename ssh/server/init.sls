@@ -48,6 +48,7 @@ ssh_server_root_authorized_keys:
 {%- endfor %}
     - require:
       - file: {{ root_home() }}/.ssh
+      - file: /usr/local/bin/root-shell-wrapper
 
 /usr/local/bin/root-shell-wrapper:
   file:

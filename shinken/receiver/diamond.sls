@@ -14,4 +14,4 @@ shinken_receiver_diamond_resources:
     - text:
       - |
         [[shinken-receiver]]
-        cmdline = ^\/usr\/local\/shinken\/bin\/python \/usr\/local\/shinken\/bin\/shinken-receiver
+        name = shinken-receive

@@ -43,7 +43,7 @@ test:
     - test
     - map:
         ProcessResources:
-    {{ diamond_process_test('postfix', zmempct=False) }}
+    {{ diamond_process_test('postfix') }}
     {#- TODO fix postfix collector to get more meaning metric and test it. #}
     - require:
       - sls: postfix

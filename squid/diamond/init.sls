@@ -30,3 +30,14 @@ squid_diamond_SquidCollector:
       - service: squid
     - watch_in:
       - service: diamond
+
+squid_diamond_use_publish_not_derivative:
+  file:
+    - replace
+    - name: /usr/local/diamond/share/diamond/collectors/squid/squid.py
+    - pattern: self.publish_counter
+    - repl: self.publish
+    - require:
+      - module: diamond
+    - watch_in:
+      - service: diamond

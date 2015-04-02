@@ -36,10 +36,10 @@ test:
           rabbitmq.health.disk_free: False
           rabbitmq.health.proc_used: False
           rabbitmq.health.proc_total: False
-          rabbitmq.object_totals.connections: False
-          rabbitmq.object_totals.channels: False
-          rabbitmq.object_totals.queues: False
-          rabbitmq.object_totals.consumers: False
+          rabbitmq.object_totals.connections: True
+          rabbitmq.object_totals.channels: True
+          rabbitmq.object_totals.queues: True
+          rabbitmq.object_totals.consumers: True
           rabbitmq.object_totals.exchanges: False
     - require:
       - sls: rabbitmq

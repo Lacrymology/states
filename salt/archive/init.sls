@@ -195,7 +195,6 @@ salt-archive-clamav:
     - mode: 550
     - require:
       - module: requests
-      - pkg: salt-archive-clamav
       - file: /usr/local/bin/salt_archive_set_owner_mode.sh
       - file: /var/lib/salt_archive/mirror/clamav
   cmd:
@@ -204,11 +203,6 @@ salt-archive-clamav:
     - require:
       - file: salt-archive-clamav
       - user: salt_archive
-  pkg:
-    - installed
-    - name: wget
-    - require:
-      - cmd: apt_sources
 {%- endif -%}
 
 {%- for key, enc in salt['pillar.get']('salt_archive:keys', {}).iteritems() %}

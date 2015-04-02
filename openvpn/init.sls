@@ -116,8 +116,8 @@ openvpn_ca:
 {{ config_dir }}/clients:
   file:
     - directory
-    - user: nobody
-    - group: nogroup
+    - user: root
+    - group: root
     - mode: 550
     - require:
       - file: {{ config_dir }}
@@ -314,8 +314,8 @@ openvpn_{{ instance }}_{{ client }}:
   file:
     - managed
     - name: {{ config_dir }}/clients/{{ client }}.conf
-    - user: nobody
-    - group: nogroup
+    - user: root
+    - group: root
     - source: salt://openvpn/client/{{ servers[instance]['mode'] }}.jinja2
     - template: jinja
     - mode: 400

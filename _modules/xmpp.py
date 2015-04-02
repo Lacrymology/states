@@ -35,9 +35,12 @@ Module for Sending Messages via XMPP (a.k.a. Jabber)
 # Import Python Libs
 from __future__ import absolute_import
 
+import logging
+
 HAS_LIBS = False
 try:
     from sleekxmpp import ClientXMPP as _ClientXMPP
+    from sleekxmpp.exceptions import XMPPError
     HAS_LIBS = True
 except ImportError:
     class _ClientXMPP(object):
@@ -45,6 +48,7 @@ except ImportError:
         Fake class in order not to raise errors
         '''
 
+log = logging.getLogger(__name__)
 
 __virtualname__ = 'xmpp'
 
@@ -65,17 +69,41 @@ class SendMsgBot(_ClientXMPP):
         # disable call
         super(SendMsgBot, self).__init__(jid, password)
 
-        self.recipient = recipient
+        self.recipients = [] if recipient is None else [recipient]
+        self.rooms = []
+
         self.msg = msg
 
         self.add_event_handler('session_start', self.start)
 
+    @classmethod
+    def create_multi(cls, jid, password, msg, recipients=None, rooms=None,
+                     nick="SaltStack Bot"):
+        '''
+        Alternate constructor that accept multiple recipients and rooms
+        '''
+        obj = SendMsgBot(jid, password, None, msg)
+        obj.recipients = [] if recipients is None else recipients
+        obj.rooms = [] if rooms is None else rooms
+        obj.nick = nick
+        return obj
+
     def start(self, event):
         self.send_presence()
+        self.get_roster()
 
-        self.send_message(mto=self.recipient,
-                          mbody=self.msg,
-                          mtype='chat')
+        for recipient in self.recipients:
+            self.send_message(mto=recipient,
+                              mbody=self.msg,
+                              mtype='chat')
+
+        for room in self.rooms:
+            self.plugin['xep_0045'].joinMUC(room,
+                                            self.nick,
+                                            wait=True)
+            self.send_message(mto=room,
+                              mbody=self.msg,
+                              mtype='groupchat')
 
         self.disconnect(wait=True)
 
@@ -103,4 +131,48 @@ def send_msg(recipient, message, jid=None, password=None, profile=None):
     if xmpp.connect():
         xmpp.process(block=True)
         return True
+    return False
+
+
+def send_msg_multi(message,
+                   recipients=None,
+                   rooms=None,
+                   jid=None,
+                   password=None,
+                   nick="SaltStack Bot",
+                   profile=None):
+    '''
+    Send a message to an XMPP recipient, support send message to
+    multiple recipients or chat room.
+
+    CLI Examples::
+
+        xmpp.send_msg recipients=['admins@xmpp.example.com'] \
+            rooms=['secret@conference.xmpp.example.com'] \
+            'This is a salt module test' \
+            profile='my-xmpp-account'
+        xmpp.send_msg recipients=['admins@xmpp.example.com'] \
+            rooms=['secret@conference.xmpp.example.com'] \
+           'This is a salt module test' \
+            jid='myuser@xmpp.example.com/salt' password='verybadpass'
+
+    '''
+    if profile:
+        creds = __salt__['config.option'](profile)
+        jid = creds.get('xmpp.jid')
+        password = creds.get('xmpp.password')
+
+    xmpp = SendMsgBot.create_multi(
+        jid, password, message, recipients=recipients, rooms=rooms)
+
+    if rooms:
+        xmpp.register_plugin('xep_0045')  # MUC plugin
+    if xmpp.connect():
+        try:
+            xmpp.process(block=True)
+            return True
+        except XMPPError as err:
+            log.error("Could not send message, error: %s", err)
+    else:
+        log.error("Could not connect to XMPP server")
     return False

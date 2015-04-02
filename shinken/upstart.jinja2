@@ -10,6 +10,9 @@ stop on runlevel [!2345]
 
 respawn
 respawn limit 5 60
+{%- if max_rss|default(False) %}
+limit rss {{ max_rss }} {{ max_rss }}
+{%- endif %}
 
 pre-start script
   install -o shinken -g  shinken -m 750 -d /var/run/shinken

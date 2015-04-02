@@ -7,6 +7,12 @@ Pillar
 - :doc:`/mongodb/doc/index`
 - :doc:`/rsyslog/doc/index` :doc:`/rsyslog/doc/pillar`
 
+.. note::
+
+   :doc:`index` will act as a :doc:`/elasticsearch/doc/index` node, it requires
+   :ref:`pillar-elasticsearch-cluster-nodes` to be set as a normal
+   :doc:`/elasticsearch/doc/index` node.
+
 Mandatory
 ---------
 

@@ -10,7 +10,7 @@ extend:
       - require:
         - service: memcached
 
-/tmp/memcached.sock:
+/var/run/memcache/memcache.sock:
   file:
     - absent
     - require:

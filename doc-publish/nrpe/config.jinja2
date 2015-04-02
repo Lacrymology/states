@@ -1,0 +1,4 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+{%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
+{#- redirect / to doc/intro.html #}
+{{ nginx_instance("doc-publish", pillar_prefix="doc", http_result="301 Moved Permanently", https_result="301 Moved Permanently") }}

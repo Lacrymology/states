@@ -26,8 +26,6 @@ Example::
             public: 204.168.1.1
             private: 192.168.1.1
           elasticsearch: {}
-    hostnames:
-      - search.example.com
 
 .. _pillar-elasticsearch-cluster-name:
 
@@ -67,10 +65,10 @@ elasticsearch:cluster:nodes:{{ node_minion_ID }}:{{ state }}
 A node can only actual run a :doc:`index` node, or a
 :doc:`/graylog2/server/doc/index`.
 
-elasticsearch:hostnames
-~~~~~~~~~~~~~~~~~~~~~~~
+Possible values for ``{{ state }}``:
 
-.. include:: /nginx/doc/hostnames.inc
+* ``graylog2.server``
+* ``elasticsearch``
 
 Optional
 --------
@@ -178,6 +176,23 @@ Default: don't install `elasticsearch-cloud-aws
 
 Conditional
 -----------
+
+Example::
+
+  elasticsearch:
+    hostnames:
+      - search.example.com
+    username: es_user
+    password: es_password
+
+elasticsearch:hostnames
+~~~~~~~~~~~~~~~~~~~~~~~
+
+.. include:: /nginx/doc/hostnames.inc
+
+Only used if :ref:`pillar-elasticsearch-ssl` is defined. :doc:`/nginx/doc/index`
+will be installed in :doc:`index` server to serve :doc:`index`
+:ref:`glossary-api` with SSL support.
 
 .. _pillar-elasticsearch-aws-secret_key:
 

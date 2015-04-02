@@ -7,9 +7,10 @@ stop on runlevel [!2345]
 
 respawn
 respawn limit 10 5
+
+pre-start script
+    install -o www-data -g www-data -m 750 -d /var/run/memcache
+end script
+
 {%- set memory = salt['pillar.get']('memcache:memory', 64) %}
-{%- if memory %}
-exec /usr/bin/memcached -m {{ memory }} -s /tmp/memcached.sock -u www-data
-{%- else %}
-exec /usr/bin/memcached -s /tmp/memcached.sock -u www-data
-{%- endif %}
+exec /usr/bin/memcached {% if memory %}-m {{ memory }}{% endif %} -s /var/run/memcache/memcache.sock -u www-data

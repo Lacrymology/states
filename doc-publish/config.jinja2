@@ -1,0 +1,8 @@
+{%- extends "python/config.jinja2" -%}
+{%- block body %}
+cwd: {{ cwd }}
+minion_config_file: {{ minion_config_file }}
+output: {{ output }}
+saltenv: {{ saltenv }}
+virtualenv: {{ virtualenv }}
+{%- endblock -%}

@@ -52,6 +52,8 @@ log = logging.getLogger(__name__)
 
 __virtualname__ = 'xmpp'
 
+MUC_DEPRECATED = "Use of send mask waiters is deprecated."
+
 
 def __virtual__():
     '''
@@ -60,6 +62,11 @@ def __virtual__():
     if HAS_LIBS:
         return __virtualname__
     return False
+
+
+class SleekXMPPMUC(logging.Filter):
+    def filter(self, record):
+        return not record.getMessage() == MUC_DEPRECATED
 
 
 class SendMsgBot(_ClientXMPP):
@@ -157,6 +164,11 @@ def send_msg_multi(message,
             jid='myuser@xmpp.example.com/salt' password='verybadpass'
 
     '''
+
+    # Remove: [WARNING ] Use of send mask waiters is deprecated.
+    for handler in logging.root.handlers:
+        handler.addFilter(SleekXMPPMUC())
+
     if profile:
         creds = __salt__['config.option'](profile)
         jid = creds.get('xmpp.jid')

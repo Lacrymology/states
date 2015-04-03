@@ -21,6 +21,22 @@ Example::
         branch: develop
         remote: git@git.example.com:dev/pillars.git
 
+.. _pillar-salt_master-timeout:
+
+salt_master:timeout
+~~~~~~~~~~~~~~~~~~~
+
+Set the default timeout for the salt command and api.
+
+Default: ``50000`` seconds.
+
+.. note::
+
+  Setting this value too low (< 300 seconds) might cause
+  :doc:`/salt/minion/doc/index`
+  do not return when running a time-consuming highstate. This is a known-bug
+  of :doc:`index`
+
 .. _pillar-salt_master-gitfs_remotes:
 
 salt_master:gitfs_remotes

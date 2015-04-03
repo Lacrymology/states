@@ -33,21 +33,21 @@ server {
     location /_admin_media/ {
         expires 1h;
         autoindex off;
-        alias /usr/local/sentry/lib/python{{ python_version }}/site-packages/django/contrib/admin/static/;
+        alias /var/lib/deployments/sentry/static/admin/;
     }
 
     location /_static/ {
         expires 1h;
         autoindex off;
-        alias /usr/local/sentry/lib/python{{ python_version }}/site-packages/sentry/static/;
+        alias /var/lib/deployments/sentry/static/;
     }
 
     location = /favicon.ico {
-        alias /usr/local/sentry/lib/python{{ python_version }}/site-packages/sentry/static/sentry/images/favicon.ico;
+        alias /var/lib/deployments/sentry/static/sentry/images/favicon.ico;
     }
 
     location ~ ^/apple-touch-icon {
-        root /usr/local/sentry/lib/python{{ python_version }}/site-packages/sentry/static/sentry/bootstrap/docs/assets/ico;
+        root /var/lib/deployments/sentry/static/sentry/vendor/bootstrap/docs/assets/ico/;
         rewrite ^/apple-touch-icon-([0-9]+)x[0-9]+.png$ /apple-touch-icon-$1-precomposed.png;
     }
 

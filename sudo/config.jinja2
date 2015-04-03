@@ -36,7 +36,7 @@ Defaults mail_no_host
     or is explicitly denied #}
 Defaults mail_no_perms
 Defaults mailerpath={% if salt['pillar.get']('sentry_dsn', False) %}/usr/bin/ravenmail{% else %}/usr/sbin/sendmail
-Defaults mailto={{ salt['pillar.get']('sudo:mailto') }}{% endif %}
+Defaults mailto={{ salt['pillar.get']('smtp:root') }}{% endif %}
 
 {#- See sudoers(5) for more information on "#include" directives: #}
 #includedir /etc/sudoers.d

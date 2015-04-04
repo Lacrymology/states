@@ -5,6 +5,14 @@
 nsca_passive_procs:
   description: NSCA Passive daemon Processes
   command: '/usr/lib/nagios/plugins/check_procs -u nagios -C nsca_passive -c 1:1'
+{#-
+  Since
+  https://github.com/monitoring-plugins/monitoring-plugins/commit/77fc3548ae1be360584082d771fa01696d4f4479
+  it's not possible to have nsca_passive check for itself.
+-#}
+{%- if grains['lsb_distrib_codename'] != 'precise' %}
+  passive: False
+{%- endif %}
 
 free_disks_space:
   description: All Disks

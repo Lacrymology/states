@@ -3,6 +3,7 @@
 {%- from 'upstart/rsyslog.jinja2' import manage_upstart_log with context -%}
 include:
   - apt
+  - hostname
   - mail.client
   - rsyslog
   - ssl.dev
@@ -127,6 +128,7 @@ nginx:
     - enable: True
     - order: 50
     - watch:
+      - host: hostname
       - user: web
       - file: nginx
       - file: nginx.conf

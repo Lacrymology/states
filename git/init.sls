@@ -24,7 +24,6 @@ git:
     - name: git-core
 {%- endif %}
     - require:
-      - pkg: openssh-client
+      - file: openssh-client
       - cmd: apt_sources
-      - file: system_ssh_known_hosts
       - pkgrepo: git

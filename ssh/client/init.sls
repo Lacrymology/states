@@ -5,6 +5,19 @@ include:
   - ssh.common
 
 openssh-client:
+  pkg:
+    - latest
+    - require:
+      - cmd: apt_sources
+{#- API #}
+  file:
+    - managed
+    - name: /etc/ssh/ssh_known_hosts
+    - user: root
+    - group: root
+    - mode: 444
+
+ssh_systemwide_config:
   file:
     - managed
     - name: /etc/ssh/ssh_config
@@ -15,13 +28,14 @@ openssh-client:
     - source: salt://ssh/client/config.jinja2
     - require:
       - pkg: openssh-client
-  pkg:
-    - latest
-    - require:
-      - cmd: apt_sources
+    - require_in:
+      - file: openssh-client
 
-{%- from 'ssh/common.sls' import root_home with context %}
-{%- set root_home = root_home() -%}
+/etc/ssh/keys:
+  file:
+    - directory
+    - require:
+      - pkg: openssh-client
 
 {#- manage multiple ssh private keys for multiple users #}
 
@@ -42,8 +56,8 @@ ssh_known_host_{{ domain }}:
     - require_in:
     {#- under-hood ssh_known_hosts and pkg installing will in charge of make
         sure system wide ssh_known_hosts file exist, this is require_in
-        system_ssh_known_hosts to use it as API #}
-      - file: system_ssh_known_hosts
+        file: openssh-client to use it as API #}
+      - file: openssh-client
     - require:
       - pkg: openssh-client
 {%- endfor %}
@@ -60,6 +74,8 @@ ssh_key_dir_for_user_{{ local_user }}:
     - mode: 750
     - require:
       - file: /etc/ssh/keys
+    - require_in:
+      - file: openssh-client
 
   {%- for keyname in user_keys[local_user] %}
 ssh_private_key_{{ local_user }}_{{ keyname }}:
@@ -100,7 +116,7 @@ ssh_config_{{ local_user }}_{{ keyname }}_accumulate:
     - name: ssh_identity_config
     - filename: /etc/ssh/ssh_config
     - require_in:
-      - file: openssh-client
+      - file: ssh_systemwide_config
     - text: {{ keyname }}
   {%- endfor -%}
 {%- endfor -%}
@@ -112,21 +128,7 @@ ssh_forgot_host_{{ domain }}:
     - absent
     - name: {{ domain }}
     - require_in:
-      - file: system_ssh_known_hosts
+      - file: openssh-client
     - require:
       - pkg: openssh-client
 {%- endfor %}
-
-system_ssh_known_hosts:
-  file:
-    - managed
-    - name: /etc/ssh/ssh_known_hosts
-    - user: root
-    - group: root
-    - mode: 444
-
-/etc/ssh/keys:
-  file:
-    - directory
-    - require:
-      - pkg: openssh-client

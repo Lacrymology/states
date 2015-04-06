@@ -142,7 +142,7 @@ shinken:ip_source
 
 By default :doc:`index` will use public IP for internal connection. If set this
 value to ``'private'``, private IP will be using instead. Public and private IPs
-can be explicit set using :ref:`pillar-ip_addrss` or automatically collected in
+can be explicit set using :ref:`pillar-ip_addrs` or automatically collected in
 case of Amazon EC2 instances.
 
 Possible values:

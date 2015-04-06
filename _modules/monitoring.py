@@ -118,9 +118,10 @@ def data():
         }
 
     # figure how monitoring can reach this host
-    if __salt__['pillar.get']('ip_addrs', False):
+    ip_addrs = __salt__['pillar.get']('ip_addrs', False)
+    if ip_addrs:
         # from pillar data
-        output['ip_addrs'] = __salt__['pillar.get']('ip_addrs')
+        output['ip_addrs'] = ip_addrs
     elif 'amazon_ec2' in output:
         # if IP not defined, just pick those from EC2
         output['ip_addrs'] = {

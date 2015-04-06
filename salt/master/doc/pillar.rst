@@ -137,7 +137,7 @@ salt_master:reactor
 Automatically process most of the common events, such as run ``state.highstate``
 on newly created minion with :doc:`/salt/cloud/doc/index`.
 
-Default: turn it on (``True``).
+Default: turn it off (``False``).
 
 salt_master:xmpp
 ~~~~~~~~~~~~~~~~

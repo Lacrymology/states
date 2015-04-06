@@ -9,12 +9,15 @@ shinken_arbiter_procs:
 {#- for some reason arbiter don't change it's user id to shinken #}
   command: "/usr/lib/nagios/plugins/check_procs -c 1:10 -u root -C shinken-arbiter -a /etc/shinken/arbiter.conf"
 
+{%- set arbiter_mine = salt['mine.get'](grains['id'], 'monitoring.data') %}
+{%- if arbiter_mine %}
 shinken_arbiter_port:
   description: Shinken Arbiter Local Port
-  command: "/usr/lib/nagios/plugins/check_tcp -H {{ salt['mine.get'](grains['id'], 'monitoring.data')[grains['id']]['ip_addrs']['private'] }} -p 7770 -t {{ timeout }}"
+  command: "/usr/lib/nagios/plugins/check_tcp -H {{ arbiter_mine[grains['id']]['ip_addrs']['private'] }} -p 7770 -t {{ timeout }}"
   timeout: {{ timeout }}
   dependencies:
     - shinken_arbiter_procs
+{%- endif %}
 
 shinken_arbiter_port_remote:
   description: Shinken Arbiter Remote Port

@@ -1,6 +1,8 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
 {%- from 'nrpe/passive.jinja2' import passive_check with context %}
+{%- set xmpp = salt["pillar.get"]("salt_master:xmpp", {}) %}
+
 include:
   - apt.nrpe
   - bash.nrpe
@@ -9,11 +11,15 @@ include:
   - git.nrpe
   - pip.nrpe
   - nrpe
+  - pysc.nrpe
   - python.dev.nrpe
   - rsyslog.nrpe
   - ssh.client.nrpe
   - sudo
   - sudo.nrpe
+{%- if xmpp %}
+  - sleekxmpp.nrpe
+{%- endif %}
 
 /etc/sudoers.d/nrpe_salt_master:
   file:

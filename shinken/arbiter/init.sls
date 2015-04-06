@@ -95,6 +95,8 @@ shinken-arbiter:
     - require:
       - file: /etc/shinken
       - user: shinken
+    - context:
+        ip_source: {{ salt["pillar.get"]("shinken:ip_source", "public") }}
 {% endfor %}
 
 {% from 'upstart/rsyslog.jinja2' import manage_upstart_log with context %}

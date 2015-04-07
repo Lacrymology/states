@@ -44,6 +44,12 @@ if [ $LOCAL_MODE -eq 1 ]; then
     echo "Salt master-less (local) mode"
     echo $1 > /etc/hostname
     hostname `cat /etc/hostname`
+
+    # in local mode create a file_root that only hold a symlink back to
+    # salt/master/top.jinja2.
+    mkdir -p /root/salt/top
+    ln -s /root/salt/states/salt/master/top.jinja2 /root/salt/top/top.sls
+
     echo """master: 127.0.0.1
 id: $1
 mysql.default_file: '/etc/mysql/debian.cnf'
@@ -52,6 +58,7 @@ file_client: local
 file_roots:
   base:
     - /root/salt/states
+    - /root/salt/top
 pillar_roots:
   base:
     - /root/salt/pillar""" > /etc/salt/minion

@@ -63,7 +63,6 @@ class EventCountCheck(nagiosplugin.Resource):
 
     def probe(self):
         logger.debug("EventCountCheck.probe started")
-        print self._verify_ssl
         try:
             r = requests.get(
                 self._url, auth=(self._public_key, self._secret_key),

@@ -250,6 +250,7 @@ include:
   - nginx.diamond.absent
   - openvpn.diamond.absent
   - varnish.diamond.absent
+  - ssh.client.absent
 {%- for formula in local.passive_absents %}
   - {{ formula }}.nrpe.absent
 {%- endfor %}

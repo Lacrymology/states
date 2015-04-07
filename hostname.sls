@@ -31,3 +31,19 @@ localhost:
     - present
     - name: localhost
     - ip: 127.0.0.1
+
+{%- for ip, hostname in salt['pillar.get']('hostname:present', {}).iteritems() %}
+hostname_{{ hostname }}_{{ ip }}:
+  host:
+    - present
+    - name: {{ hostname }}
+    - ip: {{ ip }}
+{%- endfor %}
+
+{%- for ip, hostname in salt['pillar.get']('hostname:absent', {}).iteritems() %}
+hostname_{{ hostname }}_{{ ip }}_absent:
+  host:
+    - absent
+    - name: {{ hostname }}
+    - ip: {{ ip }}
+{%- endfor %}

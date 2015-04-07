@@ -1,5 +1,7 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
+{%- from "os.jinja2" import os with context %}
+{%- from 'macros.jinja2' import manage_pid with context %}
 include:
   - apt
 {#- include $formula.nrpe here as this is root of all nrpe SLSes,
@@ -172,11 +174,12 @@ service: nagios-nrpe-server #}
       - file: nagios-nrpe-server
       - file: /etc/nagios/nrpe_local.cfg
       - file: /etc/nagios/nrpe.d/000.nagios.servers.cfg
-
-{%- from 'macros.jinja2' import manage_pid with context %}
-{%- call manage_pid('/var/run/nagios/nrpe.pid', 'nagios', 'nagios', 'nagios-nrpe-server') %}
+{#- PID file owned by root in trusty, no need to manage #}
+{%- if os.is_precise %}
+  {%- call manage_pid('/var/run/nagios/nrpe.pid', 'nagios', 'nagios', 'nagios-nrpe-server') %}
 - pkg: nagios-nrpe-server
-{%- endcall %}
+  {%- endcall %}
+{%- endif %}
 
 {#- Change /usr/local/nagios owner #}
 /usr/local/nagios:

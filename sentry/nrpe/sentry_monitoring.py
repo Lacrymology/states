@@ -10,6 +10,8 @@ __email__ = 'favadi@robotinfra.com'
 
 import logging
 
+import yaml
+
 import pysc
 
 # Bootstrap the Sentry environment
@@ -63,7 +65,7 @@ class SentryMonitoring(pysc.Application):
             dsn += "?verify_ssl=0"
 
         with open(dsn_file, "w") as f:
-            f.write(dsn)
+            yaml.dump({"dsn": dsn}, f)
 
 if __name__ == '__main__':
     SentryMonitoring().run()

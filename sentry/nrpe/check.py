@@ -17,7 +17,7 @@ import nagiosplugin
 import raven
 import requests
 
-from pysc import nrpe
+from pysc import nrpe, unserialize_yaml
 
 logger = logging.getLogger('sentry.nrpe.check')
 # disable warning: InsecureRequestWarning: Unverified HTTPS request is
@@ -29,9 +29,10 @@ class EventCountCheck(nagiosplugin.Resource):
 
     def __init__(self, dsn_file):
         try:
-            with open(dsn_file) as f:
-                sentry_dsn = f.readline()
-                logger.debug("sentry_dsn: %s", sentry_dsn)
+            loaded = unserialize_yaml(dsn_file, critical=True)
+            sentry_dsn = loaded["dsn"]
+            self._sentry_dsn = sentry_dsn
+            logger.debug("sentry_dsn: %s", sentry_dsn)
         except IOError as err:
             logger.error(
                 "Sentry monitoring DSN file %s does not exist"
@@ -63,6 +64,14 @@ class EventCountCheck(nagiosplugin.Resource):
 
     def probe(self):
         logger.debug("EventCountCheck.probe started")
+        # send an event for testing
+        dsn = self._sentry_dsn
+        if not dsn.startswith("requests+"):
+            dsn = "requests+" + dsn
+        client = raven.Client(dsn=dsn)
+        logger.debug("send monitoring messaage to sentry")
+        client.captureMessage("sentry monitoring")
+
         try:
             r = requests.get(
                 self._url, auth=(self._public_key, self._secret_key),
@@ -93,5 +102,5 @@ def count_events(config):
 
 if __name__ == '__main__':
     nrpe.check(count_events, {
-        "dsn_file": "/var/lib/deployments/sentry/monitoring_dsn"
+        "dsn_file": "/var/lib/deployments/sentry/monitoring_dsn.yml"
     })

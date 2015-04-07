@@ -3,7 +3,6 @@
 {%- set formula = 'sentry' -%}
 {%- from 'nrpe/passive.jinja2' import passive_check with context %}
 include:
-  - bash
   - cron
   - sentry
   - web
@@ -46,7 +45,13 @@ extend:
       - require:
         - user: nagios-nrpe-server
 
-{%- set dsn_file = "/var/lib/deployments/sentry/monitoring_dsn" %}
+/var/lib/deployments/sentry/monitoring_dsn:
+  file:
+    - absent
+    - require:
+      - file: /usr/lib/nagios/plugins/check_sentry_events.py
+
+{%- set dsn_file = "/var/lib/deployments/sentry/monitoring_dsn.yml" %}
 {#-
 the command below will create dsn_file with:
   * user: www-data
@@ -82,18 +87,7 @@ sentry_monitoring:
 
 /etc/cron.hourly/sentry-monitoring:
   file:
-    - managed
-    - user: root
-    - group: root
-    - mode: 500
-    - template: jinja
-    - source: salt://sentry/nrpe/cron_hourly.jinja2
-    - context:
-        dsn_file: {{ dsn_file }}
-    - require:
-      - cmd: sentry_monitoring
-      - module: raven
-      - pkg: cron
+    - absent
 
 /usr/lib/nagios/plugins/check_sentry_events.py:
   file:

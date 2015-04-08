@@ -137,4 +137,41 @@ salt_master:reactor
 Automatically process most of the common events, such as run ``state.highstate``
 on newly created minion with :doc:`/salt/cloud/doc/index`.
 
-Default: turn it on (``True``).
+Default: turn it off (``False``).
+
+salt_master:xmpp
+~~~~~~~~~~~~~~~~
+
+Enable :doc:`index` :ref:`glossary-xmpp` integration.
+
+Example::
+
+  salt_master:
+    xmpp:
+      jid: joe@chat.example.com
+      password: password
+      recipients:
+        - recipient1
+        - recipient2
+      rooms:
+        - room1@conference.chat.example.com
+      events:
+        - highstate
+
+Format:
+
+  jid
+      `Jabber Identifier <http://xmpp.org/extensions/xep-0029.html>`_
+  password
+      password of :ref:`glossary-xmpp` account
+  recipients
+      list of recipients will receive :doc:`index` notifications via private
+      message.
+  rooms
+      list of chat rooms will receive :doc:`index` notifications via multi-user
+      chat (MUC).
+  events:
+      list of events to fire notification, currently only ``highstate`` is
+      supported
+
+Default: turn off notify by :ref:`glossary-xmpp` (``{}``).

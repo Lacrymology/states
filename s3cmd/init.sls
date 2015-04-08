@@ -6,6 +6,9 @@ include:
 s3cmd:
   pkg:
     - latest
+    - pkgs:
+      - s3cmd
+      - python-magic
     - require:
       - cmd: apt_sources
 

@@ -256,6 +256,9 @@ include:
 {%- endfor %}
 
 extend:
+  cron:
+    service:
+      - order: first
   postgresql:
     service:
       - require:

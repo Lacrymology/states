@@ -112,7 +112,9 @@ Optional
 
 Example::
 
-  ip_addrs: 1.2.3.4
+  ip_addrs:
+    public: 1.2.3.4
+    private: 1.4.5.6
   monitor: False
   shinken:
     architecture:
@@ -135,7 +137,7 @@ used to gather specific data of a minion for monitoring.
 
 Define public and private IP of a minion.
 
-Default: Unused (``False``)
+Default: Unused (``{}``)
 
 shinken:ip_source
 ~~~~~~~~~~~~~~~~~

@@ -118,7 +118,7 @@ def data():
         }
 
     # figure how monitoring can reach this host
-    ip_addrs = __salt__['pillar.get']('ip_addrs', False)
+    ip_addrs = __salt__['pillar.get']('ip_addrs', {})
     if ip_addrs:
         # from pillar data
         output['ip_addrs'] = ip_addrs

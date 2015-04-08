@@ -9,6 +9,23 @@ ssl-cert:
     - require:
       - cmd: apt_sources
 
+{#-
+package ca-certificates can't be removed because salt-minion require it,
+this command is for regenerating ssl-cert because /etc/ssl/certs is remove in ssl.absent
+Visa_eCommerce_Root.pem is one of valid cert in /usr/share/ca-certificates
+#}
+ca-certificates:
+  pkg:
+    - latest
+    - require:
+      - pkg: ssl-cert
+  cmd:
+    - run
+    - name: update-ca-certificates
+    - require:
+      - pkg: ca-certificates
+    - unless: test -f /etc/ssl/certs/Visa_eCommerce_Root.pem
+
 /etc/ssl/openssl.cnf:
   file:
     - exists
@@ -127,6 +144,8 @@ ssl_create_symlink_by_hash_for_{{ name }}:
       - file: /etc/ssl/certs/{{ name }}.crt
       - file: /etc/ssl/certs/{{ name }}_ca.crt
       - file: /etc/ssl/certs/{{ name }}_chained.crt
+    - require:
+      - cmd: ca-certificates
 
 {#- as service need to watch all cert files, use this cmd as trigger that
     service restart everywhen cert files changed #}

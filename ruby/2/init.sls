@@ -62,6 +62,6 @@ ruby2:
       - ruby2.1-dev: {{ repo_url }}/ruby2.1/ruby2.1-dev_{{ version }}_{{ arch }}.deb
       - libruby2.1: {{ repo_url }}/ruby2.1/libruby2.1_{{ version }}_{{ arch }}.deb
     - require:
-      - pkg: ssl-cert
       - cmd: system_locale
       - pkg: ruby2_deps
+      - cmd: ca-certificates

@@ -3,6 +3,9 @@
 s3cmd:
   pkg:
     - purged
+    - pkgs:
+      - s3cmd
+      - python-magic
 
 /root/.s3cfg:
   file:

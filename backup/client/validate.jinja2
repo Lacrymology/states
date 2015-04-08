@@ -35,13 +35,29 @@ function validate_archive() {
             ;;
         *.xz)
             # not a tarball
-            if [ $(xz --list $1 | wc -l) -lt 2 ];then
+            if [ $(xz --list $1 | wc -l) -lt 2 ]; then
                 echo "Archive $1 empty or broken"
                 exit 1
             fi
             # check whether the original file is empty (size = 0)
             if [ "$(xz --list --robot $1 | grep ^file | cut -f5)" -eq 0 ]; then
                 echo "The original file is empty"
+                exit 1
+            fi
+            ;;
+        *.zip)
+            unzip -t $1 > /dev/null 2> /dev/null
+            if [ $? != 0 ]; then
+                echo "Archive $1 is invalid"
+                exit 1
+            fi
+            # empty archive
+            if [ $(unzip -t $1 | grep OK | wc -l) -eq 0 ]; then
+                echo "Archive $1 empty"
+                exit 1
+            fi
+            if (unzip -v $1 | tail -n 1 | tr -s ' ' | grep -q '^ 0 '); then
+                echo "Archive $1 empty"
                 exit 1
             fi
             ;;

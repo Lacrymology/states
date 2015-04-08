@@ -3,6 +3,7 @@
 include:
   - bash
   - local
+  - salt.minion.deps
 
 /usr/local/bin/backup-file:
   file:
@@ -27,3 +28,5 @@ include:
     - require:
       - file: /usr/local
       - file: bash
+      {#- for unzip #}
+      - pkg: salt_minion_deps

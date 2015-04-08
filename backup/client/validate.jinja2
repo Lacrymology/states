@@ -13,6 +13,16 @@ function validate_archive() {
         exit 1
     fi
 
+    if [ ! -r $1 ]; then
+        echo "Can't read $1"
+        exit 1
+    fi
+
+    if [ ! -s $1 ]; then
+        echo "Archive $1 is zero size"
+        exit 1
+    fi
+
     # limit resources usage
     renice -n 19 -p $$ > /dev/null
     ionice -c idle -p $$

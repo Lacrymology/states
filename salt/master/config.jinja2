@@ -2,7 +2,6 @@
 
 # {{ salt['pillar.get']('message_do_not_modify') }}
 
-timeout: {{ salt['pillar.get']('salt_master:timeout', 50000) }}
 fileserver_backend:
   - roots
   - git

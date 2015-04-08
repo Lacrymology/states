@@ -29,6 +29,7 @@ eval set -- "$options"
 repos=()
 profile='ci-minion'
 time_threshold=30
+master_timeout=300
 failfast=""
 tests=""
 
@@ -170,12 +171,7 @@ sudo salt -t 5 "$BUILD_IDENTITY" --output json cmd.run "salt-call test.ping"
 start_run_test_time=$(date +%s)
 echo "TIME-METER: Preparing for test took: $((start_run_test_time - start_time)) seconds"
 echo '------------ Running CI test  ------------'
-if [ -z "$master_timeout" ]; then
-    sudo salt --verbose "$BUILD_IDENTITY" cmd.run \
-        "$CUSTOM_CONFIG_DIR/jenkins/run.py $failfast $tests"
-else
-    sudo salt --verbose -t "$master_timeout" "$BUILD_IDENTITY" cmd.run \
-        "$CUSTOM_CONFIG_DIR/jenkins/run.py $failfast $tests"
-fi
+sudo salt --verbose -t "$master_timeout" "$BUILD_IDENTITY" cmd.run \
+    "$CUSTOM_CONFIG_DIR/jenkins/run.py $failfast $tests"
 finish_run_test_time=$(date +%s)
 echo "TIME-METER: Run integration.py took: $((finish_run_test_time - start_run_test_time)) seconds"

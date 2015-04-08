@@ -22,7 +22,7 @@ http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects
 define arbiter {
     arbiter_name arbiter-{{ id }}
     host_name {{ id }}
-    address {{ mine[id]['ip_addrs']['private'] }}
+    address {{ mine[id]['ip_addrs'][ip_source] }}
     port 7770
     modules PickleRetentionArbiter
     {# only the first one is not a spare #}
@@ -59,7 +59,7 @@ http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects
   {%- if id in mine %}
 define scheduler {
     scheduler_name scheduler-{{ id }}
-    address {{ mine[id]['ip_addrs']['public'] }}
+    address {{ mine[id]['ip_addrs'][ip_source] }}
     port 7768
     modules scheduler-retention
     realm All
@@ -98,7 +98,7 @@ define module{
   {%- if id in mine %}
 define poller {
     poller_name poller-{{ id }}
-    address {{ mine[id]['ip_addrs']['public'] }}
+    address {{ mine[id]['ip_addrs'][ip_source] }}
     port 7771
     poller_tags {{ salt['pillar.get']('shinken:architecture:poller:' + id) }}
     realm All
@@ -130,7 +130,7 @@ http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects
 define broker {
     broker_name broker-{{ id }}
 {%- set graphite_address = salt['pillar.get']('graphite_address', False) %}
-    address {{ mine[id]['ip_addrs']['public'] }}
+    address {{ mine[id]['ip_addrs'][ip_source] }}
     port 7772
     modules Syslog, PickleRetentionBroker, webui{% if salt['pillar.get']('graphite_address', False) %}, graphite{% endif %}
     realm All
@@ -255,7 +255,7 @@ http://www.shinken-monitoring.org/wiki/official/configuringshinken/configobjects
 define reactionner {
   {%- if id in mine %}
     reactionner_name reactionner-{{ id }}
-    address {{ mine[id]['ip_addrs']['public'] }}
+    address {{ mine[id]['ip_addrs'][ip_source] }}
     port 7769
     realm All
 {#-  Optional
@@ -294,7 +294,7 @@ load passive modules (like NSCA) and be read by the arbiter to dispatch data.
 define receiver {
   {%- if id in mine %}
     receiver_name receiver-{{ id }}
-    address {{ mine[id]['ip_addrs']['public'] }}
+    address {{ mine[id]['ip_addrs'][ip_source] }}
     port 7773
     modules nsca
     realm All

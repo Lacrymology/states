@@ -42,6 +42,8 @@ extend:
     file:
       - require:
         - pkg: ruby2
+      - context:
+          rack: True
     cmd:
       - watch:
         - pkg: ruby2

@@ -85,10 +85,8 @@ geminabox:
     - mode: 440
     - context:
         proxy_mode: {{ proxy_mode }}
-{%- if username and password %}
         username: {{ username }}
         password: {{ password }}
-{%- endif %}
     - require:
       - file: /usr/local/geminabox/Gemfile
       - file: /var/lib/geminabox-data

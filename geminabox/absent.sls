@@ -6,7 +6,6 @@
 geminabox-uwsgi:
   file:
     - absent
-    - purge: True
     - name: /etc/uwsgi/geminabox.yml
 
 geminabox:

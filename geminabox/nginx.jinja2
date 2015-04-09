@@ -1,14 +1,13 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst #}
+{%- set ssl = salt['pillar.get']('geminabox:ssl', False) %}
+{%- set hostnames = salt['pillar.get']('geminabox:hostnames') %}
 upstream geminabox {
     server unix:///var/lib/uwsgi/geminabox.sock;
 }
-
 server {
     listen 80;
-{%- set ssl = salt['pillar.get']('geminabox:ssl', False) %}
 {%- if ssl %}
 {%- if salt['pillar.get']('geminabox:ssl_redirect', False) %}
-{%- set hostnames = salt['pillar.get']('geminabox:hostnames') %}
     {# if https, redirect http port 80 to https port 443 #}
     server_name {% for hostname in hostnames %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
     return 301 https://{{ hostnames[0] }}$request_uri;
@@ -20,7 +19,7 @@ server {
     {{ ssl_config(ssl) }}
 {% endif %}
 {# web app logic #}
-    server_name {% for hostname in  pillar['geminabox']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+    server_name {% for hostname in hostnames %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
 
     location / {
         uwsgi_pass geminabox;

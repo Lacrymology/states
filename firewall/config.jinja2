@@ -1,7 +1,7 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
 {%- set mine = salt['mine.get']('*', 'monitoring.data') -%}
-{%- set pillars_ip = salt['pillar.get']('ip_addresses', []) -%}
+{%- set pillars_ip = salt['pillar.get']('firewall:allowed_ips', []) -%}
 
 # {{ salt['pillar.get']('message_do_not_modify') }}
 *nat

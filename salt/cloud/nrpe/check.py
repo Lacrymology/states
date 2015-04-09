@@ -9,16 +9,13 @@ file
 """
 
 __author__ = 'Tomas Neme'
-__maintainer__ = 'Tomas Neme'
-__email__ = 'tomas@robotinfra.com'
+__maintainer__ = 'Viet Hung Nguyen'
+__email__ = 'hvn@robotinfra.com'
 
 import logging
-import subprocess
 
 import nagiosplugin
-import yaml
 
-import pysc
 from pysc import nrpe
 
 log = logging.getLogger("nagiosplugin.salt.cloud.images")
@@ -59,55 +56,56 @@ class ImageIds(nagiosplugin.Resource):
     """
     Checks the salt-cloud instances list against cloud.profile
     """
-    def __init__(self, profile_file, providers_file):
-        log.debug("ImageIds(%s, %s)", profile_file, providers_file)
-        self.profile_file = profile_file
-        self.providers_file = providers_file
+    def __init__(self, salt_cloud_config_file):
+        log.debug("ImageIds(%s)", salt_cloud_config_file)
+        self.cloud_cfg = salt_cloud_config_file
 
     def probe(self):
         log.debug("ImageIds.probe started")
-        profile_list = pysc.unserialize_yaml(self.profile_file, critical=True)
-        providers = pysc.unserialize_yaml(self.providers_file, critical=True)
 
-        # get salt-cloud output
-        proc = subprocess.Popen(['salt-cloud',
-                                 '--list-images=all',
-                                 '--out=yaml'],
-                                stderr=subprocess.PIPE,
-                                stdout=subprocess.PIPE)
-        salt_list = yaml.load(proc.stdout)
-        if not salt_list:
-            log.error(proc.stderr.read())
+        # must import it late or logging won't work, a known-bug of salt
+        import salt.cloud
+        cloudc = salt.cloud.CloudClient('/etc/salt/cloud')
+        all_images = cloudc.list_images()
+
+        profile_list = cloudc.opts['profiles']
+        providers = cloudc.opts['providers']
+
+        if not all_images:
             log.error("Can't list any images from providers")
         else:
-            log.debug(proc.stderr.read())
-            log.debug("salt list: %s", str(salt_list))
+            log.debug("salt list: %s", all_images)
 
             ids = set()
             # get the providers and their drivers' names and populate a list of
             # ids
-            for provider, data in providers.items():
-                salt_list_data = salt_list[provider][data['provider']]
-                ids.update(str(salt_list_data[inst]['id'])
-                           for inst in salt_list_data)
-            log.debug("received ids: %s", str(ids))
+            for prv_id, prv_id_data in providers.iteritems():
+                for prv_name, prv_data in prv_id_data.iteritems():
+                    a_provider_images = all_images[prv_id][prv_name]
+                    try:
+                        ids.update(str(a_provider_images[inst]['id'])
+                                   for inst in a_provider_images)
+                    except KeyError:
+                        # amazon uses key ``imageId``
+                        ids.update(str(a_provider_images[inst]['imageId'])
+                                   for inst in a_provider_images)
+
+            log.debug("received ids: %s", ids)
 
             imgs = set(str(prof['image']) for prof in profile_list.values())
-            log.debug("profile images: %s", str(imgs))
+            log.debug("profile images: %s", imgs)
             yield nagiosplugin.Metric('missing', imgs - ids)
             log.debug("ImageIds.probe ended")
 
 
 def check_saltcloud_images(config):
     return (
-        ImageIds(config['profile_file'],
-                 config['providers_file']),
+        ImageIds(config['cloud_config_file']),
         MissingImageContext('missing'),
         Summary())
 
 
 if __name__ == '__main__':
     nrpe.check(check_saltcloud_images, {
-        'profile_file': '/etc/salt/cloud.profiles',
-        'providers_file': '/etc/salt/cloud.providers',
+        'cloud_config_file': '/etc/salt/cloud',
     })

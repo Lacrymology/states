@@ -9,5 +9,4 @@ salt_cloud_configurations_check:
   {{ passive_interval(24 * 60) }} {#- 1 day #}
   timeout: 120
   arguments:
-    profiles: /etc/salt/cloud.profiles
-    providers: /etc/salt/cloud.providers
+    cloud_config_file: /etc/salt/cloud

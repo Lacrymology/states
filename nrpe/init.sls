@@ -208,7 +208,7 @@ service: nagios-nrpe-server #}
 /usr/lib/nagios/plugins/check_memory.py:
   file:
     - managed
-    - source: salt://nrpe/check.py
+    - source: salt://nrpe/check_memory.py
     - user: nagios
     - group: nagios
     - mode: 550

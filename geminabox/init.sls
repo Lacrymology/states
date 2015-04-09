@@ -1,33 +1,8 @@
-{#-
-Copyright (c) 2014, Diep Pham
-All rights reserved.
-
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met:
-
-1. Redistributions of source code must retain the above copyright notice, this
-   list of conditions and the following disclaimer.
-2. Redistributions in binary form must reproduce the above copyright notice,
-   this list of conditions and the following disclaimer in the documentation
-   and/or other materials provided with the distribution.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
-ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-Author: Diep Pham <imeo@favadi.com>
-Maintainer: Diep Pham <imeo@favadi.com>
-
+{#- Usage of this is governed by a license that can be found in doc/license.rst
 Install geminabox (https://github.com/geminabox/geminabox)
 -#}
 
+{%- set ssl = salt['pillar.get']('geminabox:ssl', False) %}
 include:
   - local
   - nginx
@@ -63,7 +38,7 @@ geminabox:
     - managed
     - name: /usr/local/geminabox/Gemfile
     - source: salt://geminabox/Gemfile
-    - user: geminabox
+    - user: root
     - group: geminabox
     - mode: 440
     - require:
@@ -82,7 +57,7 @@ geminabox:
   file:
     - managed
     - source: salt://geminabox/Gemfile.lock
-    - user: geminabox
+    - user: root
     - group: geminabox
     - mode: 440
     - require:
@@ -97,14 +72,23 @@ geminabox:
     - require:
       - user: geminabox
 
+{%- set username = salt["pillar.get"]("geminabox:username", False) %}
+{%- set password = salt["pillar.get"]("geminabox:password", False) %}
+{%- set proxy_mode = salt["pillar.get"]("geminabox:proxy_mode", False) %}
 /usr/local/geminabox/config.ru:
   file:
     - managed
     - source: salt://geminabox/config.ru.jinja2
     - template: jinja
-    - user: geminabox
+    - user: root
     - group: geminabox
     - mode: 440
+    - context:
+        proxy_mode: {{ proxy_mode }}
+{%- if username and password %}
+        username: {{ username }}
+        password: {{ password }}
+{%- endif %}
     - require:
       - file: /usr/local/geminabox/Gemfile
       - file: /var/lib/geminabox-data
@@ -115,7 +99,7 @@ geminabox-uwsgi:
     - name: /etc/uwsgi/geminabox.yml
     - source: salt://geminabox/uwsgi.jinja2
     - template: jinja
-    - user: geminabox
+    - user: root
     - group: geminabox
     - mode: 440
     - context:
@@ -126,7 +110,7 @@ geminabox-uwsgi:
       gid: geminabox
     - require:
       - cmd: geminabox
-      - service: uwsgi_emperor
+      - service: uwsgi
       - file: /usr/local/geminabox/config.ru
   module:
     - wait
@@ -150,8 +134,8 @@ geminabox-uwsgi:
       - pkg: nginx
       - user: web
       - file: geminabox-uwsgi
-{%- if salt['pillar.get']('gitlab:ssl', False) %}
-      - cmd: ssl_cert_and_key_for_{{ pillar['geminabox']['ssl'] }}
+{%- if ssl %}
+      - cmd: ssl_cert_and_key_for_{{ ssl }}
 {%- endif %}
     - watch_in:
       - service: nginx

@@ -1,3 +1,4 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 {% extends "uwsgi/template.jinja2" %}
 {% block footer %}
   rbrequire: rubygems
@@ -5,6 +6,5 @@
   post-buffering: 4096
   buffer-size: 32768
   env: RAILS_ENV=production
-  env: BUNDLE_GEMFILE=Gemfile
   rack: {{ rack }}
 {% endblock %}

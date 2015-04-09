@@ -2,6 +2,7 @@
 
 include:
   - apt
+  - hostname
 
 {#-
 
@@ -43,6 +44,7 @@ mariadb:
     - name: libmysqlclient18
     - require:
       - pkgrepo: mariadb
+      - host: hostname
       - pkg: mysql-common
 
 mysql-common:

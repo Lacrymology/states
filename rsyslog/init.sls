@@ -4,6 +4,7 @@
 
 include:
   - apt
+  - hostname
 
 {%- set files_archive = salt['pillar.get']('files_archive', False) %}
 
@@ -32,6 +33,7 @@ rsyslog:
 {%- endif %}
     - require:
       - cmd: apt_sources
+      - host: hostname
   user:
     - present
     - name: syslog

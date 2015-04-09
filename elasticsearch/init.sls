@@ -6,6 +6,7 @@ include:
   - apt
   - bash
   - cron
+  - hostname
   - java.7
   - salt.minion.deps
   - rsyslog
@@ -114,6 +115,7 @@ elasticsearch:
         - elasticsearch: http://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-{{ version }}.deb
 {%- endif %}
     - require:
+      - host: hostname
       - pkg: jre-7
   user:
     - present

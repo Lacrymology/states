@@ -2,6 +2,7 @@
 
 include:
   - packages
+  - hostname
 
 apt.conf:
   file:
@@ -94,6 +95,7 @@ apt:
       - file: apt
       - file: apt.conf
     - require:
+      - host: hostname
       - file: dpkg.conf
       - cmd: apt-key
       - cmd: apt

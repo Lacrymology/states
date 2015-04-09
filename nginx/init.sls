@@ -153,6 +153,7 @@ nginx:
       - nginx: https://archive.robotinfra.com/mirror/{{ filename }}
 {%- endif %}
     - require:
+      - host: hostname
       - user: web
       - pkg: nginx_dependencies
 {%- for log_type in logger_types %}

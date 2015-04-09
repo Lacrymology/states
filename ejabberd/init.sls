@@ -6,6 +6,7 @@ include:
   - apt
   - erlang
   - erlang.pgsql
+  - hostname
   - locale
   - nginx
   - postgresql.server
@@ -41,6 +42,7 @@ ejabberd:
       - pkg: postgresql
       - cmd: erlang_mod_pgsql
       - cmd: system_locale
+      - host: hostname
   service:
     - running
     - name: ejabberd

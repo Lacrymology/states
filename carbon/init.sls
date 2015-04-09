@@ -5,6 +5,7 @@
 
 include:
   - cron
+  - hostname
   - graphite.common
   - logrotate
   - local
@@ -57,6 +58,7 @@ carbon:
     - source: salt://carbon/requirements.jinja2
     - require:
       - virtualenv: graphite
+      - host: hostname
   module:
     - wait
     - name: pip.install

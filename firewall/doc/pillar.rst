@@ -10,9 +10,9 @@ Optional
 
 Example::
 
-  ip_addresses:
-    - 192.168.1.1
   firewall:
+    allowed_ips:
+      - 192.168.1.1
     filter:
       tcp:
         - 22
@@ -22,10 +22,10 @@ Example::
       - 1.2.3.4
       - 5.6.7.8
 
-.. _pillar-ip_addresses:
+.. _pillar-firewall-allowed_ips:
 
-ip_addresses
-~~~~~~~~~~~~
+firewall:allowed_ips
+~~~~~~~~~~~~~~~~~~~~
 
 List of additional hosts that will get full access to this server.
 

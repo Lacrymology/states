@@ -9,8 +9,8 @@ file
 """
 
 __author__ = 'Tomas Neme'
-__maintainer__ = 'Tomas Neme'
-__email__ = 'tomas@robotinfra.com'
+__maintainer__ = 'Viet Hung Nguyen'
+__email__ = 'hvn@robotinfra.com'
 
 import logging
 
@@ -74,7 +74,7 @@ class ImageIds(nagiosplugin.Resource):
         if not all_images:
             log.error("Can't list any images from providers")
         else:
-            log.debug("salt list: %s", str(all_images))
+            log.debug("salt list: %s", all_images)
 
             ids = set()
             # get the providers and their drivers' names and populate a list of
@@ -90,10 +90,10 @@ class ImageIds(nagiosplugin.Resource):
                         ids.update(str(a_provider_images[inst]['imageId'])
                                    for inst in a_provider_images)
 
-            log.debug("received ids: %s", str(ids))
+            log.debug("received ids: %s", ids)
 
             imgs = set(str(prof['image']) for prof in profile_list.values())
-            log.debug("profile images: %s", str(imgs))
+            log.debug("profile images: %s", imgs)
             yield nagiosplugin.Metric('missing', imgs - ids)
             log.debug("ImageIds.probe ended")
 

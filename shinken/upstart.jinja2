@@ -10,8 +10,8 @@ stop on runlevel [!2345]
 
 respawn
 respawn limit 5 60
-{%- if max_rss|default(False) %}
-limit rss {{ max_rss }} {{ max_rss }}
+{%- if max_as|default(False) %}
+limit as {{ max_as }} {{ max_as }}
 {%- endif %}
 
 pre-start script

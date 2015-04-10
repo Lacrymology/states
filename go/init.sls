@@ -23,6 +23,3 @@ go:
     - name: golang-go
     - require:
       - pkgrepo: go
-
-
-

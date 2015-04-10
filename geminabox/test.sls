@@ -5,11 +5,15 @@ include:
   - geminabox
   - geminabox.diamond
   - geminabox.nrpe
+  - geminabox.backup.diamond
+  - geminabox.backup.nrpe
 
 {%- call test_cron() %}
 - sls: geminabox
 - sls: geminabox.nrpe
 - sls: geminabox.diamond
+- sls: geminabox.backup.diamond
+- sls: geminabox.backup.nrpe
 {%- endcall %}
 
 test:
@@ -27,9 +31,13 @@ test:
       - sls: geminabox
       - sls: geminabox.diamond
       - sls: geminabox.nrpe
+      - sls: geminabox.backup.diamond
+      - sls: geminabox.backup.nrpe
   qa:
     - test
     - name: geminabox
+    - additional:
+      - geminabox.backup
     - pillar_doc: {{ opts['cachedir'] }}/doc/output
     - require:
       - monitoring: test

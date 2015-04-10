@@ -2,7 +2,7 @@
 boto==2.29.1
 requests==2.4.3
 {%- if salt['pillar.get']('files_archive', False) %}
-pysc==0.3.16
+pysc==0.3.17
 {%- else %}
-http://archive.robotinfra.com/pip/pysc-0.3.16.tar.bz2
+http://archive.robotinfra.com/pip/pysc-0.3.17.tar.bz2
 {%- endif %}

@@ -9,5 +9,6 @@ include:
 {%- if ssl %}
   - ssl.nrpe
 {%- endif %}
+  - ruby.nrpe
 
 {{ passive_check(formula, check_ssl_score=True) }}

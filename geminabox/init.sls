@@ -27,13 +27,6 @@ geminabox:
       - www-data
     - require:
       - user: web
-  gem:
-    - installed
-    - name: bundler
-    - version: 1.7.3
-    - user: root
-    - require:
-      - pkg: ruby
   file:
     - managed
     - name: /usr/local/geminabox/Gemfile
@@ -49,7 +42,7 @@ geminabox:
     - user: geminabox
     - cwd: /usr/local/geminabox
     - require:
-      - gem: geminabox
+      - gem: ruby
     - watch:
       - file: /usr/local/geminabox/Gemfile.lock
 

@@ -61,4 +61,11 @@ does not currently have.
 
 Default: disable proxy mode (``False``).
 
+geminabox:gem_source
+~~~~~~~~~~~~~~~~~~~~
+
+Gem repository to install :doc:`index`.
+
+Default: use official repository (``"https://rubygems.org"``).
+
 .. include:: /uwsgi/doc/pillar.inc

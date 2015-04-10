@@ -3,6 +3,7 @@ Install geminabox (https://github.com/geminabox/geminabox)
 -#}
 
 {%- set ssl = salt['pillar.get']('geminabox:ssl', False) %}
+{%- set gem_source = salt["pillar.get"]("geminabox:gem_source", "https://rubygems.org") %}
 include:
   - local
   - nginx
@@ -30,10 +31,13 @@ geminabox:
   file:
     - managed
     - name: /usr/local/geminabox/Gemfile
-    - source: salt://geminabox/Gemfile
+    - template: jinja
+    - source: salt://geminabox/Gemfile.jinja2
     - user: root
     - group: geminabox
     - mode: 440
+    - context:
+        gem_source: {{ gem_source }}
     - require:
       - file: /usr/local/geminabox
   cmd:
@@ -49,10 +53,13 @@ geminabox:
 /usr/local/geminabox/Gemfile.lock:
   file:
     - managed
-    - source: salt://geminabox/Gemfile.lock
+    - source: salt://geminabox/Gemfile.lock.jinja2
+    - template: jinja
     - user: root
     - group: geminabox
     - mode: 440
+    - context:
+        gem_source: {{ gem_source }}
     - require:
       - file: /usr/local/geminabox/Gemfile
 

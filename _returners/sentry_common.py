@@ -80,7 +80,8 @@ def returner(return_data):
     If an error occurs, log it to sentry
     """
     if not isinstance(return_data['return'], dict):
-        send_sentry(return_data, 'Return data is not a dict')
+        send_sentry(return_data, 'Expects return data as a dict,'
+                    'got {0}'.format(type(return_data['result'])))
         return
 
     requisite_error = 'One or more requisite failed'

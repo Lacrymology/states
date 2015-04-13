@@ -221,9 +221,9 @@ test:
           amavis.TimeElapsedReceiving.time: True
           amavis.TimeElapsedSending.frequency: True
           amavis.TimeElapsedSending.time: True
-          amavis.TimeElapsedSpamCheck.frequency: False
+          amavis.TimeElapsedSpamCheck.frequency: True
           amavis.TimeElapsedSpamCheck.time: False
-          amavis.TimeElapsedTotal.frequency: False
+          amavis.TimeElapsedTotal.frequency: True
           amavis.TimeElapsedTotal.time: False
           amavis.OpsDecType-asc.count: False
           amavis.OpsDecType-asc.percentage: False

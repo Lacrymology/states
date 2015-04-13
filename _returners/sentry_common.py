@@ -98,8 +98,13 @@ def returner(ret):
         else:
             returned = ret['return']
             for state in returned:
+                # only send alert for the first failed in the requisite chain
+                # or there will be a lot of events when the beginning fails
+                if returned[state]['comment'].startswith(requisite_error):
+                    continue
+
                 result = returned[state]['result']
-                if result is not None and not result and \
-                   not returned[state]['comment'].startswith(requisite_error):
-                    send_sentry(returned[state]['comment'],
-                                returned[state])
+                if result is None:
+                    continue
+                if not result:
+                    send_sentry(returned[state]['comment'], returned[state])

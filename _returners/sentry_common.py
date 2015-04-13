@@ -23,7 +23,7 @@ __virtualname__ = 'sentry_common'
 
 
 def __virtual__():
-    if not __virtualname__ in __opts__:
+    if __virtualname__ not in __opts__:
         logger.info("Missing '%s' value in configuration, skip.",
                     __virtualname__)
         return False
@@ -73,7 +73,8 @@ def returner(ret):
             'striped_grains': remove_grains
         }
         try:
-            __salt__['raven.alert'](__opts__[__virtualname__], message, 'ERROR',
+            __salt__['raven.alert'](__opts__[__virtualname__],
+                                    message, 'ERROR',
                                     sentry_data)
         except Exception, err:
             logger.error("Can't send message '%s' data '%s' to sentry: %s",
@@ -92,7 +93,9 @@ def returner(ret):
     except KeyError:
         send_sentry("Can't find 'return'")
     else:
-        if not success:
+        if success:
+            logger.debug("All states run successfully")
+        else:
             returned = ret['return']
             for state in returned:
                 result = returned[state]['result']
@@ -100,5 +103,3 @@ def returner(ret):
                    returned[state]['comment'] != requisite_error:
                     send_sentry(returned[state]['comment'],
                                 returned[state])
-        else:
-            logger.debug("All states run successfully")

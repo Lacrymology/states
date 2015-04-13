@@ -15,4 +15,4 @@ geminabox_backup_diamond_resources:
     - text:
       - |
         [[backup-geminabox]]
-        cmdline = ^\/usr\/local\/bin\/backup-file gitlab \/var\/lib geminabox-data$
+        cmdline = ^\/usr\/local\/bin\/backup-file geminabox \/var\/lib geminabox-data$

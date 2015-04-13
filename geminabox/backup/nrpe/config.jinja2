@@ -5,7 +5,7 @@
 
 geminabox_backup_procs:
   description: Geminabox Backup Process
-  command: '/usr/lib/nagios/plugins/check_procs -c 0:1 -u root -a "/usr/local/bin/backup-file gitlab /var/lib geminabox-data"'
+  command: '/usr/lib/nagios/plugins/check_procs -c 0:1 -u root -a "/usr/local/bin/backup-file geminabox /var/lib geminabox-data"'
 
 geminabox_backup:
   description: Geminabox Backup Age

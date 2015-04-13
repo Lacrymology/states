@@ -25,3 +25,10 @@ sysctl:fs.file-max
 ~~~~~~~~~~~~~~~~~~
 
 The maximum number of file-handlers that the Linux kernel will allocate.
+
+.. _pillar-sysctl-{{ key }}:
+
+sysctl:{{ key }}
+~~~~~~~~~~~~~~~~
+
+Kernel configuration value to set for {{ key }}.

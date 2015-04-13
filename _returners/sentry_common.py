@@ -100,6 +100,6 @@ def returner(ret):
             for state in returned:
                 result = returned[state]['result']
                 if result is not None and not result and \
-                   returned[state]['comment'] != requisite_error:
+                   not returned[state]['comment'].startswith(requisite_error):
                     send_sentry(returned[state]['comment'],
                                 returned[state])

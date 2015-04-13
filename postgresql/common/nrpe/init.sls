@@ -38,7 +38,7 @@ check_postgres:
     - target: /usr/local/nagios/src/check_postgres-{{ check_pg_version }}/check_postgres.pl
     - name: /usr/lib/nagios/plugins/check_postgres
     - require:
-      - pkg: nagios-nrpe-server
+      - module: nrpe-virtualenv
       - archive: check_postgres
 
 check_psql_encoding.py:

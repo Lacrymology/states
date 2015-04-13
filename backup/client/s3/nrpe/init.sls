@@ -18,7 +18,7 @@ include:
     - group: nagios
     - mode: 440
     - require:
-      - pkg: nagios-nrpe-server
+      - module: nrpe-virtualenv
 
 backup_client_nrpe-requirements:
   file:
@@ -53,7 +53,7 @@ check_backup.py:
     - require:
       - file: /etc/nagios/backup.yml
       - file: /usr/local/nagios/lib/python2.7/check_backup_base.py
-      - pkg: nagios-nrpe-server
+      - module: nrpe-virtualenv
       - module: backup_client_nrpe-requirements
 
 /usr/lib/nagios/plugins/check_backup_s3lite.py:

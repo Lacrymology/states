@@ -104,7 +104,7 @@ nsca-{{ formula }}:
     - source: salt://{{ formula|replace('.', '/') }}/nrpe/config.jinja2
 {%- endif %}
     - require:
-      - pkg: nagios-nrpe-server
+      - module: nrpe-virtualenv
 {%- if caller is defined -%}
     {%- for line in caller().split("\n") %}
 {{ line|trim|indent(6, indentfirst=True) }}

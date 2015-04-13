@@ -48,7 +48,7 @@ test:
           squid.3128.client_http.errors: True
           squid.3128.client_http.hit_kbytes_out: True
           squid.3128.client_http.hits: False
-          squid.3128.client_http.kbytes_in: False
+          squid.3128.client_http.kbytes_in: True
           squid.3128.client_http.kbytes_out: False
           squid.3128.client_http.requests: False
           squid.3128.cpu_time: True
@@ -67,7 +67,7 @@ test:
           squid.3128.icp.replies_recv: True
           squid.3128.icp.replies_sent: True
           squid.3128.icp.times_used: True
-          squid.3128.page_faults: False
+          squid.3128.page_faults: True
           squid.3128.select_loops: False
           squid.3128.server.all.errors: True
           squid.3128.server.all.kbytes_in: True

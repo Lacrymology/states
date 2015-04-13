@@ -1,0 +1,55 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+
+# {{ salt['pillar.get']('message_do_not_modify') }}
+
+{%- from 'macros.jinja2' import dict_default with context %}
+
+{#-
+ Name of the local system for authentication purposes
+ (must match the second field in /etc/ppp/chap-secrets entries)
+ #}
+name {{ server_name }}
+
+{%- set instance = salt['pillar.get']('ppp:instances:' + server_name, {}) -%}
+{{ dict_default(instance, 'encryption', {}) }}
+{%- set encryption = instance['encryption'] -%}
+
+{{ dict_default(encryption, 'refuse', ('pap', 'chap', 'mschap')) }}
+{%- for proto in encryption['refuse'] %}
+refuse-{{ proto }}
+{%- endfor -%}
+
+{{ dict_default(encryption, 'require', ('mschap-v2',)) }}
+{%- for proto in encryption['require'] %}
+require-{{ proto }}
+{%- endfor -%}
+
+{{ dict_default(instance, 'dns', []) }}
+{%- for addr in instance['dns'][0:2] %}
+ms-dns {{ addr }}
+{%- endfor -%}
+
+{{ dict_default(instance, 'wins', []) }}
+{%- for addr in instance['wins'][0:2] %}
+ms-wins {{ addr }}
+{%- endfor -%}
+
+{{ dict_default(instance, 'options', []) }}
+{%- for option in instance['options'] %}
+{{ option }}
+{%- endfor -%}
+
+{#-
+  Create a UUCP-style lock file for the pseudo-tty to ensure exclusive access.
+#}
+lock
+
+{#-
+ turn off logging to stderr, since this may be redirected to pptpd, which may
+ trigger a loopback
+#}
+nologfd
+
+{%- if salt['pillar.get']('ppp:debug', False) or salt['pillar.get']('debug', False) %}
+debug
+{%- endif %}

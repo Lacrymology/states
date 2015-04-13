@@ -29,3 +29,10 @@ ruby:
       {#- gem requires SSL to works when packages are available trough https #}
       - pkg: ssl-cert
       - cmd: system_locale
+  gem:
+    - installed
+    - name: bundler
+    - version: 1.7.3
+    - user: root
+    - require:
+      - pkg: ruby

@@ -9,6 +9,8 @@ extend:
     file:
       - require:
         - pkg: ruby
+      - context:
+          rack: True
     cmd:
       - watch:
         - pkg: ruby

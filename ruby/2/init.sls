@@ -65,3 +65,10 @@ ruby2:
       - cmd: system_locale
       - pkg: ruby2_deps
       - cmd: ca-certificates
+  gem:
+    - installed
+    - name: bundler
+    - version: 1.7.3
+    - user: root
+    - require:
+      - pkg: ruby2

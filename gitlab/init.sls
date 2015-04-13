@@ -253,20 +253,13 @@ gitlabhq-{{ version }}:
       - cmd: gitlab_gems
 
 gitlab_gems:
-  gem:
-    - installed
-    - name: bundler
-    - version: 1.7.3
-    - user: root
-    - require:
-      - pkg: ruby2
   cmd:
     - wait
     - name: bundle install --deployment --without development test mysql aws
     - user: gitlab
     - cwd: /home/gitlab/gitlabhq-{{ version }}
     - require:
-      - gem: gitlab_gems
+      - gem: ruby2
     - watch:
       - archive: gitlab
 

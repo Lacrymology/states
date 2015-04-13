@@ -53,7 +53,7 @@ nrpe_remove_old_config_files_{{ filepath }}:
     - group: nagios
     - mode: 440
     - require:
-      - pkg: nagios-nrpe-server
+      - module: nrpe-virtualenv
 
 nrpe-virtualenv:
   {# remove system-wide nagiosplugin, only use one in our nrpe-virtualenv #}
@@ -96,6 +96,7 @@ nrpe-virtualenv:
       - file: nrpe-virtualenv
       - pkg: yaml
       - pkg: python-dev
+      - pkg: nagios-nrpe-server
 
 /usr/local/nagios/src:
   file:
@@ -140,7 +141,6 @@ service: nagios-nrpe-server #}
     - require:
       - pkg: nagios-plugins
       - cmd: apt_sources
-      - module: nrpe-virtualenv
       - file: bash
   group:
     - present
@@ -203,7 +203,7 @@ service: nagios-nrpe-server #}
     - group: nagios
     - mode: 550
     - require:
-      - pkg: nagios-nrpe-server
+      - module: nrpe-virtualenv
 
 /usr/lib/nagios/plugins/check_memory.py:
   file:
@@ -277,7 +277,7 @@ service: nagios-nrpe-server #}
     - group: nagios
     - mode: 550
     - require:
-      - pkg: nagios-nrpe-server
+      - module: nrpe-virtualenv
 
 /etc/nagios/nsca.yaml:
   file:
@@ -288,7 +288,7 @@ service: nagios-nrpe-server #}
     - group: nagios
     - mode: 440
     - require:
-      - pkg: nagios-nrpe-server
+      - module: nrpe-virtualenv
     - context:
         daemon_user: nagios
         daemon_group: nagios
@@ -322,7 +322,7 @@ nsca_passive:
     - running
     - require:
       - service: rsyslog
-      - pkg: nagios-nrpe-server
+      - module: nrpe-virtualenv
       - file: /etc/nagios/python.yml
     - watch:
       - file: nsca_passive

@@ -29,7 +29,7 @@ include:
     - require:
       - module: nrpe-virtualenv
       - file: /etc/sudoers.d/nrpe_firewall
-      - pkg: nagios-nrpe-server
+      - module: nrpe-virtualenv
       - file: nsca-firewall
     - require_in:
       - service: nagios-nrpe-server

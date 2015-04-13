@@ -22,7 +22,7 @@ include:
     - group: nagios
     - mode: 440
     - require:
-      - pkg: nagios-nrpe-server
+      - module: nrpe-virtualenv
 
 check_backup.py:
   file:

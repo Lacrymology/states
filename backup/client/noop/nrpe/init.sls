@@ -19,4 +19,4 @@ check_backup.py:
     - group: nagios
     - mode: 550
     - require:
-      - pkg: nagios-nrpe-server
+      - module: nrpe-virtualenv

@@ -36,7 +36,7 @@ pyelasticsearch:
     - mode: 550
     - require:
       - module: pyelasticsearch
-      - pkg: nagios-nrpe-server
+      - module: nrpe-virtualenv
     - require_in:
       - service: nagios-nrpe-server
       - service: nsca_passive

@@ -47,7 +47,7 @@ include:
     - user: www-data
     - group: www-data
     - require:
-      - pkg: nagios-nrpe-server
+      - module: nrpe-virtualenv
       - user: web
       - file: bash
 

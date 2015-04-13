@@ -40,7 +40,7 @@ check_{{ check }}:
     - mode: 550
     - source: salt://django/check_{{ check }}.py
     - require:
-      - pkg: nagios-nrpe-server
+      - module: nrpe-virtualenv
       - module: python-sitemap
 {%- endfor %}
 

@@ -219,7 +219,9 @@ def test_monitor(name, pillar_doc, additional=()):
     check_names = set(check_names)
 
     if yml_invalids:
-        ret['comment'] = "%d invalid or missing yml files: %s%s" % (
+        ret['comment'] = ("%d invalid or missing yml files. Or uses "
+                          "test_pillar instead to validate doc only:"
+                          "%s%s.") % (
             len(yml_invalids), os.linesep, os.linesep.join(yml_invalids)
         )
         ret['result'] = False

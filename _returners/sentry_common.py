@@ -33,7 +33,7 @@ def __virtual__():
     return __virtualname__
 
 
-def send_sentry(return_data, message, result=None):
+def send_sentry(return_data, message, failed_state_data=None):
     pillar_data = __salt__['pillar.data']()
 
     # prepare grains
@@ -54,8 +54,8 @@ def send_sentry(return_data, message, result=None):
         'platform': 'python',
     }
 
-    if result:
-        sentry_data.update({'culprit': result['name']})
+    if failed_state_data:
+        sentry_data.update({'culprit': failed_state_data['name']})
 
     del return_data['jid']
     del return_data['id']

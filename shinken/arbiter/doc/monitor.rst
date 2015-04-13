@@ -11,6 +11,19 @@ shinken_arbiter_procs
 
 .. _shinken_arbiter_port:
 
+shinken_arbiter_port_remote
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Check if the :doc:`/shinken/arbiter/doc/index` port can be reached from the
+:doc:`/shinken/poller/doc/index`. It depends on :ref:`shinken_arbiter_port`.
+
+In case it cannot be reached, first, make sure that the
+:ref:`shinken_arbiter_port` is open, then check the firewall to see if there is
+any rule block it.
+
+Optional
+--------
+
 shinken_arbiter_port
 ~~~~~~~~~~~~~~~~~~~~
 
@@ -23,12 +36,6 @@ If not, make sure that the configuration file contains no errors::
 Then check the log file ``/var/log/upstart/shinken-arbiter.log`` for more
 details.
 
-shinken_arbiter_port_remote
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Check if the :doc:`/shinken/arbiter/doc/index` port can be reached from the
-:doc:`/shinken/poller/doc/index`. It depends on :ref:`shinken_arbiter_port`.
-
-In case it cannot be reached, first, make sure that the
-:ref:`shinken_arbiter_port` is open, then check the firewall to see if there is
-any rule block it.
+This check is only enable if `Salt mine
+<http://docs.saltstack.com/en/latest/topics/mine/index.html>`_ data for
+monitoring is available.

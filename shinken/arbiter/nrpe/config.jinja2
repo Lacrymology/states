@@ -25,4 +25,6 @@ shinken_arbiter_port_remote:
   timeout: {{ timeout }}
   passive: False
   dependencies:
+{%- if arbiter_mine %}
     - shinken_arbiter_port
+{%- endif %}

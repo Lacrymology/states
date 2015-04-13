@@ -1,0 +1,19 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+
+# {{ salt['pillar.get']('message_do_not_modify') }}
+
+ipsec_procs:
+  description: IPSec Process
+  command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -u root -a '/usr/lib/ipsec/pluto --nofork --secretsfile /etc/ipsec.secrets'"
+
+ipsec_ike_port:
+  description: IPSec IKE Port
+  command: "/usr/lib/nagios/plugins/check_udp_listen 500"
+  dependencies:
+    - ipsec_procs
+
+ipsec_nat-t_port:
+  description: IPSec NAT-T Port
+  command: "/usr/lib/nagios/plugins/check_udp_listen 4500"
+  dependencies:
+    - ipsec_procs

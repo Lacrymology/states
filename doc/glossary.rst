@@ -619,3 +619,17 @@ frequently fildes) is an abstract indicator used to access a file or other
 input/output resource, such as a pipe or network connection.
 
 .. Copied from http://en.wikipedia.org/wiki/File_descriptor on 2015-03-25
+
+.. _glossary-IKE:
+
+IKE
+~~~
+
+Internet Key Exchange (IKE or IKEv2) is the protocol used to set up a security
+association (SA) in the IPsec protocol suite. IKE builds upon the Oakley
+protocol and ISAKMP.[1] IKE uses X.509 certificates for authentication - either
+pre-shared or distributed using DNS (preferably with DNSSEC) and a
+Diffie–Hellman key exchange - to set up a shared session secret from which
+cryptographic keys are derived.
+
+.. Copied from http://en.wikipedia.org/wiki/Internet_Key_Exchange on 2015-04-06

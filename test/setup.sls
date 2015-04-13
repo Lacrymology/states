@@ -45,13 +45,3 @@ root:
     - enforce_password: True
     {# password: gZu4s7DMAsmIQRGb #}
     - password: $6$xzxRRSbJsoq/JPVg$T5ZIMb.4kiKfjoio2328oJWZyEbCRi.YJ6gTRmx8rhBnY8fAFkdl5FXglu5tqqlCSRdRCFhbzZqQAjjAmaD/H/
-
-upgrade_pkg:
-  module:
-    - wait
-    - name: pkg.upgrade
-    - refresh: True
-    - require:
-      - module: sync_all
-    - watch:
-      - user: root

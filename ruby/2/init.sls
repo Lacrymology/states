@@ -41,7 +41,7 @@ ruby2_deps:
 {#- have to uninstall old version first until this bug is fixed: https://github.com/saltstack/salt/issues/7772 #}
 {%- set current_version = salt["pkg.version"]("ruby2.1") %}
 {%- if current_version and current_version != version %}
-clean_old_{{ pkg }}:
+clean_old_ruby_2_pkgs:
   pkg:
     - purged
     - pkgs:

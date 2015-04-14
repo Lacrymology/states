@@ -14,7 +14,15 @@ respawn limit 5 60
 {% set check_command = "/usr/local/shinken/bin/shinken-arbiter --verify-config -c /etc/shinken/arbiter.conf" %}
 pre-start script
   install -o shinken -g  shinken -m 750 -d /var/run/shinken
-  {{ check_command }} || { echo "Shinken Arbiter {{ grains['id'] }} contains error(s)! See errors using:\n{{ check_command }}" | /usr/bin/mail -s 'Shinken Arbiter Config Error' {% for user in salt['pillar.get']('shinken:users') %}{{ salt['pillar.get']('shinken:users:' + user + ':email') }}{% if not loop.last %} {% endif %}{% endfor %}; stop; exit 0; }
+  {{ check_command }} > /tmp/$$.error || \
+  # after grep, only log >= Error and stack trace are left
+  { grep -v 'Info :' /tmp/$$.error | \
+  grep -v 'Debug :' | grep -v '^$' | \
+  {%- if not salt['pillar.get']('__test__', False) %}
+  grep -v "'configuration_errors': \[\]" | grep -v 'Warning :' | \{%-endif %}
+  /usr/bin/mail -s 'Shinken Arbiter Config Error' \
+  {% for user in salt['pillar.get']('shinken:users') %}{{ salt['pillar.get']('shinken:users:' + user + ':email') }}{% if not loop.last %} {% endif %}{% endfor %}; \
+  rm -f /tmp/$$.error; stop; exit 0; }
 end script
 
 script

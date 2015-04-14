@@ -5,10 +5,19 @@
 # Import Python libs
 from __future__ import absolute_import
 import io
+import sys
 
 # Import 3rd-party libs
 import yaml
-import salt.ext.six as six
+
+# Useful for very coarse version differentiation.
+PY2 = sys.version_info[0] == 2
+PY3 = sys.version_info[0] == 3
+
+if PY3:
+    text_type = str
+else:
+    text_type = unicode
 
 
 def yaml_dquote(text):
@@ -19,7 +28,7 @@ def yaml_dquote(text):
     '''
     with io.StringIO() as ostream:
         yemitter = yaml.emitter.Emitter(ostream)
-        yemitter.write_double_quoted(six.text_type(text))
+        yemitter.write_double_quoted(text_type(text))
         return ostream.getvalue()
 
 
@@ -31,7 +40,7 @@ def yaml_squote(text):
     '''
     with io.StringIO() as ostream:
         yemitter = yaml.emitter.Emitter(ostream)
-        yemitter.write_single_quoted(six.text_type(text))
+        yemitter.write_single_quoted(text_type(text))
         return ostream.getvalue()
 
 

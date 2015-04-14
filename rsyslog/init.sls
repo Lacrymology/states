@@ -63,6 +63,15 @@ rsyslog:
     - group: utmp
     - mode: 660
 
+/var/log/upstart:
+  file:
+    - directory
+    - user: root
+    - group: syslog {#- for reading upstart logs by rsyslog #}
+    - mode: 750
+    - require:
+      - user: rsyslog
+
 /var/spool/rsyslog:
   file:
     - directory

@@ -11,6 +11,15 @@ include:
 
 {{ test_logrotate('/etc/logrotate.d/rsyslog') }}
 
+rsyslog_test_syslog_user_upstart_permission:
+  cmd:
+    - run
+    - user: syslog
+    - shell: /bin/sh
+    - name: cat /var/log/upstart/rsyslog.log
+    - require:
+      - sls: rsyslog
+
 test:
   diamond:
     - test

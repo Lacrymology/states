@@ -28,7 +28,6 @@ shinken-receiver:
     - source: salt://shinken/upstart.jinja2
     - context:
         shinken_component: receiver
-        max_rss: {{ (grains['mem_total'] * 1024 * 50 / 100)|round|int }} {# 50% available memory #}
   service:
     - running
     - order: 50

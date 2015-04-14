@@ -23,7 +23,7 @@ __virtualname__ = 'sentry_common'
 
 
 def __virtual__():
-    if not __virtualname__ in __opts__:
+    if __virtualname__ not in __opts__:
         logger.info("Missing '%s' value in configuration, skip.",
                     __virtualname__)
         return False
@@ -33,72 +33,80 @@ def __virtual__():
     return __virtualname__
 
 
-def returner(ret):
+def send_sentry(return_data, message, failed_state_data=None):
+    pillar_data = __salt__['pillar.data']()
+
+    # prepare grains
+    grains = __salt__['grains.items']()
+    # remove useless grains
+    remove_grains = ('cpu_flags', 'gpus', 'id', 'kernel', 'path', 'ps',
+                     'pythonpath', 'pythonversion', 'saltpath')
+    for key in remove_grains:
+        try:
+            del grains[key]
+        except KeyError:
+            pass
+
+    sentry_data = {
+        'event_id': return_data['jid'],
+        'logger': "sentry_common.returner",
+        'server_name': return_data['id'],
+        'platform': 'python',
+    }
+
+    if failed_state_data:
+        sentry_data.update({'culprit': failed_state_data['name']})
+
+    del return_data['jid']
+    del return_data['id']
+
+    sentry_data['extra'] = {
+        'result': return_data,
+        'pillar': pillar_data,
+        'grains': grains,
+        'striped_grains': remove_grains
+    }
+    try:
+        __salt__['raven.alert'](__opts__[__virtualname__],
+                                message, 'ERROR',
+                                sentry_data)
+    except Exception, err:
+        logger.error("Can't send message '%s' data '%s' to sentry: %s",
+                     message, sentry_data, err)
+
+
+def returner(return_data):
     """
     If an error occurs, log it to sentry
     """
-    def send_sentry(message, result=None):
-
-        pillar_data = __salt__['pillar.data']()
-
-        # prepare grains
-        grains = __salt__['grains.items']()
-        # remove useless grains
-        remove_grains = ('cpu_flags', 'gpus', 'id', 'kernel', 'path', 'ps',
-                         'pythonpath', 'pythonversion', 'saltpath')
-        for key in remove_grains:
-            try:
-                del grains[key]
-            except KeyError:
-                pass
-
-        sentry_data = {
-            'event_id': ret['jid'],
-            'logger': "sentry_common.returner",
-            'server_name': ret['id'],
-            'platform': 'python',
-        }
-
-        if result:
-            sentry_data.update({'culprit': result['name']})
-            del result['name']
-
-        del ret['jid']
-        del ret['id']
-
-        sentry_data['extra'] = {
-            'result': ret,
-            'pillar': pillar_data,
-            'grains': grains,
-            'striped_grains': remove_grains
-        }
-        try:
-            __salt__['raven.alert'](__opts__[__virtualname__], message, 'ERROR',
-                                    sentry_data)
-        except Exception, err:
-            logger.error("Can't send message '%s' data '%s' to sentry: %s",
-                         message, sentry_data, err)
-
-    if not isinstance(ret['return'], dict):
-        send_sentry(ret)
+    if not isinstance(return_data['return'], dict):
+        send_sentry(return_data, 'Expects return data as a dict,'
+                    'got {0}'.format(type(return_data['result'])))
         return
 
     requisite_error = 'One or more requisite failed'
     try:
         logger.debug("Checking to see if there is a failed state")
-        success = all(ret['return'][state]['result']
-                      for state in ret['return'])
+        success = all(return_data['return'][state]['result']
+                      for state in return_data['return'])
         logger.debug("success: {0}".format(success))
     except KeyError:
-        send_sentry("Can't find 'return'")
+        send_sentry(return_data,
+                    "'return' key is not in return data dictionary")
     else:
-        if not success:
-            returned = ret['return']
-            for state in returned:
-                result = returned[state]['result']
-                if result is not None and not result and \
-                   returned[state]['comment'] != requisite_error:
-                    send_sentry(returned[state]['comment'],
-                                returned[state])
-        else:
+        if success:
             logger.debug("All states run successfully")
+        else:
+            returned = return_data['return']
+            for state in returned:
+                # only send alert for the first failed in the requisite chain
+                # or there will be a lot of events when the beginning fails
+                if returned[state]['comment'].startswith(requisite_error):
+                    continue
+
+                result = returned[state]['result']
+                if result is None:
+                    continue
+                if not result:
+                    send_sentry(return_data,
+                                returned[state]['comment'], returned[state])

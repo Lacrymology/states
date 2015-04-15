@@ -2,6 +2,7 @@
 
 {%- from 'nginx/macro.jinja2' import ssl_config with context -%}
 {%- set ssl = salt['pillar.get']('apt_cache:ssl', False) -%}
+{%- set hostnames = salt['pillar.get']('apt_cache:hostnames') %}
 
 # {{ salt['pillar.get']('message_do_not_modify') }}
 
@@ -12,19 +13,17 @@ upstream apt_cache {
 server {
     listen 80;
 {%- if ssl %}
+{%- if salt['pillar.get']('apt_cache:ssl_redirect', False) %}
+    {# if https, redirect http port 80 to https port 443 #}
+    server_name {% for hostname in hostnames %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+    return 301 https://{{ hostnames[0] }}$request_uri;
+}
+{# https server #}
+server {
+{% endif %}{# redirect http to https #}
     {{ ssl_config(ssl) }}
 {%- endif %}
-    server_name {% for hostname in salt['pillar.get']('apt_cache:hostnames') %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
-
-{#    root /var/cache/jenkins/war/;#}
-
-{#    location ~ "^/static/[0-9a-fA-F]{8}\/(.*)$" {#}
-{#        rewrite "^/static/[0-9a-fA-F]{8}\/(.*)" /$1 last;#}
-{#    }#}
-{##}
-{#    location ~ /securityRealm/user/(.*)/api/  {#}
-{#        deny all;#}
-{#    }#}
+    server_name {% for hostname in hostnames %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
 
 {% include "nginx/block_hacks.jinja2" %}
 

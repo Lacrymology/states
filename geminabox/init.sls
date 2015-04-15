@@ -3,7 +3,7 @@ Install geminabox (https://github.com/geminabox/geminabox)
 -#}
 
 {%- set ssl = salt['pillar.get']('geminabox:ssl', False) %}
-{%- set gem_source = salt["pillar.get"]("geminabox:gem_source", "https://rubygems.org") %}
+{%- set gem_source = salt["pillar.get"]("gem_source", "https://rubygems.org") %}
 include:
   - local
   - nginx

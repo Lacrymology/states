@@ -129,6 +129,13 @@ Default: directly get files from public Internet resources. There is no
 guarantee that those hosting services will be up during file
 transfer (``False``).
 
+gem_source
+~~~~~~~~~~
+
+Gem repository to install :doc:`index`.
+
+Default: use official repository (``"https://rubygems.org"``).
+
 .. _pillar-sentry_dsn:
 
 sentry_dsn

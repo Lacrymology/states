@@ -1,6 +1,7 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
 {%- set ssl = salt['pillar.get']('gitlab:ssl', False) %}
+{%- set gem_source = salt["pillar.get"]("gem_source", "https://rubygems.org") %}
 include:
   - apt
   - build
@@ -251,6 +252,24 @@ gitlabhq-{{ version }}:
       - file: gitlabhq-{{ version }}
     - require_in:
       - cmd: gitlab_gems
+
+{%- for file in ["Gemfile", "Gemfile.lock"] %}
+/home/gitlab/gitlabhq-{{ version }}/{{ file }}:
+  file:
+    - managed
+    - source: salt://gitlab/{{ file }}.jinja2
+    - user: gitlab
+    - group: gitlab
+    - template: jinja
+    - mode: 440
+    - require:
+      - user: gitlab
+      - file: gitlabhq-{{ version }}
+    - context:
+        gem_source: {{ gem_source }}
+    - require_in:
+      - cmd: gitlab_gems
+{%- endfor %}
 
 gitlab_gems:
   cmd:

@@ -27,13 +27,30 @@ include:
     - require_in:
       - service: apt_cache
 {%- else %}
-  - absent
+    - absent
 {%- endif %}
+
+/etc/rsyslog.d/apt-cacher-ng.conf:
+  file:
+    - managed
+    - mode: 440
+    - source: salt://rsyslog/template.jinja2
+    - template: jinja
+    - require:
+      - pkg: rsyslog
+      - file: /etc/apt-cacher-ng/acng.conf
+    - watch_in:
+      - service: rsyslog
+    - context:
+        file_path: /var/log/apt-cacher-ng/apt-cacher.err
+        tag_name: apt-cacher-ng
+        severity: error
+        facility: daemon
 
 /etc/apt-cacher-ng/acng.conf:
   file:
     - managed
-    - source: salt://apt_cache/acng.jinja2
+    - source: salt://apt_cache/config.jinja2
     - template: jinja
     - user: root
     - group: apt-cacher-ng

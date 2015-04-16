@@ -21,7 +21,7 @@ apt_cache_absent_log:
   file:
     - absent
 
-/etc/apt-cacher-ng/security.conf:
+/etc/apt-cacher-ng:
   file:
     - absent
     - require:

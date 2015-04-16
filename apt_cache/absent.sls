@@ -20,3 +20,9 @@ apt_cache_absent_log:
 /etc/nginx/conf.d/apt_cache.conf:
   file:
     - absent
+
+/etc/apt-cacher-ng:
+  file:
+    - absent
+    - require:
+      - pkg: apt_cache

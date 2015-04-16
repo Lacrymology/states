@@ -377,8 +377,8 @@ class TestStateMeta(type):
             func = getattr(self, test_func_name)
             logger.debug("Run unit %s", test_func_name)
             func(*args, **kwargs)
-        output_func.__name__ = new_func_name
-        output_func.__doc__ = doc
+        output_func.__name__ = new_func_name.encode("ascii", errors="replace")
+        output_func.__doc__ = doc.encode("ascii", errors="replace")
         logger.debug("Add method %s that run self.%s(...)", new_func_name,
                      test_func_name)
         attrs[new_func_name] = output_func

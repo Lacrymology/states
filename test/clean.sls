@@ -120,7 +120,6 @@ clean_pkg:
       - ntfs-3g
       - ntpdate
       - openssh-server
-      - openssl
       - os-prober
       - parted
       - patch

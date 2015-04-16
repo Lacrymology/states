@@ -126,4 +126,16 @@ User mapping to ssh key. Data in form of::
 ``localuser`` is local Linux user, who will run ssh and use the managed key.
 ``keyname`` is defined key in :ref:`pillar-ssh-keys`.
 
+.. note::
+
+  To allow user ``USERNAME`` to use managed keys that map to it, the SLS which
+  manages user ``USERNAME`` must use macro ``change_ssh_key_owner`` from
+  ``macros.jinja2`` to correctly set owner for managed keys::
+
+      extend:
+      {%- from 'macros.jinja2' import change_ssh_key_owner with context %}
+      {{ change_ssh_key_owner('USERNAME', {'statemodule': 'ID_TO_REQUIRE'}) }}
+
+  See ``nrpe/init.sls`` and ``jenkins/init.sls`` for examples.
+
 Default: no user is managed (``{}``).

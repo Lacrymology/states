@@ -32,7 +32,8 @@ localhost:
     - name: localhost
     - ip: 127.0.0.1
 
-{%- for ip, hostname in salt['pillar.get']('hostname:present', {}).iteritems() %}
+{%- for ip, hostnames in salt['pillar.get']('hostname:present', {}).iteritems() %}
+  {%- for hostname in hostnames %}
 hostname_{{ hostname }}_{{ ip }}:
   host:
     - present
@@ -40,9 +41,11 @@ hostname_{{ hostname }}_{{ ip }}:
     - ip: {{ ip }}
     - require_in:
       - host: hostname
+  {%- endfor %}
 {%- endfor %}
 
 {%- for ip, hostname in salt['pillar.get']('hostname:absent', {}).iteritems() %}
+  {%- for hostname in hostnames %}
 hostname_{{ hostname }}_{{ ip }}_absent:
   host:
     - absent
@@ -50,4 +53,5 @@ hostname_{{ hostname }}_{{ ip }}_absent:
     - ip: {{ ip }}
     - require_in:
       - host: hostname
+  {%- endfor %}
 {%- endfor %}

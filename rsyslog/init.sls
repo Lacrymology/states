@@ -69,6 +69,11 @@ rsyslog:
     - user: root
     - group: syslog {#- for reading upstart logs by rsyslog #}
     - mode: 750
+    - file_mode: 640
+    - recurse:
+      - user
+      - group
+      - mode
     - require:
       - user: rsyslog
 

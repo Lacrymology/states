@@ -1,6 +1,16 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
 {%- macro manage_upstart_log(service) %}
+{{ service }}_upstart_set_file_owner:
+  file:
+    - managed
+    - name: /var/log/upstart/{{ service }}.log
+    - user: root
+    - group: syslog
+    - mode: 640
+    - require:
+      - pkg: rsyslog
+
 {{ service }}_upstart_rsyslog_config:
   file:
     - managed
@@ -10,6 +20,7 @@
     - template: jinja
     - require:
       - pkg: rsyslog
+      - file: {{ service }}_upstart_set_file_owner
     - watch_in:
       - service: rsyslog
     - context:

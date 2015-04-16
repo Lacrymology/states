@@ -54,17 +54,27 @@ class ClamavMirror(pysc.Application):
         Download an ``url`` and retry ``times`` each after ``sleep``
         if there is failure.
         '''
+        req = None
+        exception = None
         for i in xrange(1, times + 1):
-            req = requests.get(url, stream=True)
-            if req.ok:
-                return req
-            else:
+            try:
+                req = requests.get(url, stream=True)
+                if req.ok:
+                    return req
+                else:
+                    raise requests.ConnectionError
+            except requests.ConnectionError as e:
+                exception = e
                 self.logger.info('Retrying %d/%d times in next %d seconds',
                                  i, times, sleep)
                 time.sleep(sleep)
 
-        self.logger.error("Can't download '%s' code %d reason '%s'",
-                          url, req.status_code, req.reason)
+        if req:
+            self.logger.error("Can't download '%s' code %d reason '%s'",
+                              url, req.status_code, req.reason)
+        else:
+            self.logger.error("Can't download '%s'. Got exception %s.",
+                              url, exception)
         return False
 
     def mirror_file(self, filename):

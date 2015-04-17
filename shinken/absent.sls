@@ -7,12 +7,18 @@ include:
 {% endfor %}
 
 shinken:
-  user:
-    - absent
+  process:
+    - wait_for_dead
+    - name: ''
+    - user: shinken
     - require:
 {% for role in roles %}
       - service: shinken-{{ role }}
 {% endfor %}
+  user:
+    - absent
+    - require:
+      - process: shinken
 
 {% for rootdir in ('etc', 'usr/local', 'var/log', 'var/lib', 'var/run') %}
 /{{ rootdir }}/shinken:

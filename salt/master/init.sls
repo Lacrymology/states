@@ -64,6 +64,8 @@ include:
       - file: /srv/reactor/create
     - require_in:
       - file: /etc/salt/master
+    - watch_in:
+      - service: salt-master
 
 /srv/reactor/alert/monitor.sls:
   file:
@@ -77,6 +79,8 @@ include:
       - file: /srv/reactor/alert
     - require_in:
       - file: /etc/salt/master
+    - watch_in:
+      - service: salt-master
 
 /srv/reactor/job/xmpp.sls:
   file:
@@ -95,6 +99,8 @@ include:
       - file: /etc/salt/master.d/xmpp.conf
     - require_in:
       - file: /etc/salt/master
+    - watch_in:
+      - service: salt-master
 {%- else %}
     - absent
 {%- endif %}

@@ -1,6 +1,6 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
-{%- macro manage_upstart_log(service) %}
+{%- macro manage_upstart_log(service, severity="error") %}
 {{ service }}_upstart_set_file_owner:
   file:
     - managed
@@ -26,6 +26,6 @@
     - context:
         file_path: /var/log/upstart/{{ service }}.log
         tag_name: {{ service }}-upstart
-        severity: error
+        severity: {{ severity }}
         facility: daemon
 {%- endmacro %}

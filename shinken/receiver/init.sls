@@ -46,7 +46,7 @@ shinken-receiver:
 {% endif %}
 {#- does not use PID, no need to manage #}
 {% from 'upstart/rsyslog.jinja2' import manage_upstart_log with context %}
-{{ manage_upstart_log('shinken-receiver') }}
+{{ manage_upstart_log('shinken-receiver', severity="info") }}
 
 /etc/shinken/receiver.conf:
   file:

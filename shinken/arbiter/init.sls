@@ -100,4 +100,4 @@ shinken-arbiter:
 {% endfor %}
 
 {% from 'upstart/rsyslog.jinja2' import manage_upstart_log with context %}
-{{ manage_upstart_log('shinken-arbiter') }}
+{{ manage_upstart_log('shinken-arbiter', severity="info") }}

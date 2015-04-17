@@ -39,7 +39,7 @@ shinken-reactionner:
 {% endif %}
 {#- does not use PID, no need to manage #}
 
-{{ manage_upstart_log('shinken-reactionner') }}
+{{ manage_upstart_log('shinken-reactionner', severity="info") }}
 
 /etc/shinken/reactionner.conf:
   file:

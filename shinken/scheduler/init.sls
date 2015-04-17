@@ -47,7 +47,7 @@ shinken-scheduler:
 {#- does not use PID, no need to manage #}
 
 {% from 'upstart/rsyslog.jinja2' import manage_upstart_log with context %}
-{{ manage_upstart_log('shinken-scheduler') }}
+{{ manage_upstart_log('shinken-scheduler', severity="info") }}
 
 /etc/shinken/scheduler.conf:
   file:

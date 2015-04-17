@@ -100,7 +100,7 @@ shinken-broker:
 {#- does not use PID, no need to manage #}
 
 {% from 'upstart/rsyslog.jinja2' import manage_upstart_log with context %}
-{{ manage_upstart_log('shinken-broker') }}
+{{ manage_upstart_log('shinken-broker', severity="info") }}
 
 /etc/shinken/broker.conf:
   file:

@@ -9,8 +9,10 @@ Mirror clamav database files localy
 
 import datetime
 from email.utils import parsedate
+import grp
 import logging
 import os
+import pwd
 import subprocess as spr
 import tempfile
 import time
@@ -24,7 +26,7 @@ logger = logging.getLogger(__name__)
 CHUNK_SIZE = 1024
 
 
-def save(local, stream, last_modified):
+def save(local, stream, last_modified, owner, group):
     size = 0
     tmp = tempfile.NamedTemporaryFile(delete=False)
     logger.debug("Create temp file %s", tmp.name)
@@ -34,6 +36,10 @@ def save(local, stream, last_modified):
             output.write(chunk)
     logger.debug("Wrote %d bytes to %s", size, tmp.name)
     logger.debug("Move %s to %s", tmp.name, local)
+    os.chown(tmp.name,
+             pwd.getpwnam(owner).pw_uid,
+             grp.getgrnam(group).gr_gid,
+             )
     os.rename(tmp.name, local)
     mtime = time.mktime(last_modified.timetuple())
     os.utime(local, (mtime, mtime))
@@ -44,6 +50,8 @@ class ClamavMirror(pysc.Application):
         'mirror': 'db.local.clamav.net',
         'files': ('bytecode', 'daily', 'main'),
         'output': '/var/lib/salt_archive/mirror/clamav',
+        'owner': 'root',
+        'group': 'salt_archive',
         'lock': '/var/run/clamav_mirror.pid'
     }
 
@@ -96,7 +104,8 @@ class ClamavMirror(pysc.Application):
             stat = os.stat(local)
         except OSError:
             logger.info("File %s don't already exist, download.", filename)
-            save(local, req.iter_content(CHUNK_SIZE), source_timestamp)
+            save(local, req.iter_content(CHUNK_SIZE), source_timestamp,
+                 self.config['owner'], self.config['group'])
         else:
             local_timestamp = datetime.datetime.fromtimestamp(
                 stat.st_mtime)
@@ -104,7 +113,8 @@ class ClamavMirror(pysc.Application):
                 delta = source_timestamp - local_timestamp
                 logger.info("Local file %s is outdated %d seconds, download",
                             local, delta.total_seconds())
-                save(local, req.iter_content(CHUNK_SIZE), source_timestamp)
+                save(local, req.iter_content(CHUNK_SIZE), source_timestamp,
+                     self.config['owner'], self.config['group'])
             elif local_timestamp > source_timestamp:
                 logger.info("URL '%s' timestamp is '%s' and local '%s' "
                             "timestamp is '%s': mirror is outdated, skip.",
@@ -126,7 +136,8 @@ class ClamavMirror(pysc.Application):
                                        " download again", local,
                                        stat.st_size, url, remote_size)
                         save(local, req.iter_content(CHUNK_SIZE),
-                             source_timestamp)
+                             source_timestamp,
+                             self.config['owner'], self.config['group'])
 
     def main(self):
         for prefix in self.config['files']:

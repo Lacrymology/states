@@ -13,7 +13,7 @@
   file:
     - absent
 
-cron_sendmail_patch:
+cron_sendmail_unpatch:
   cmd:
     - wait
     - name: perl -pi -e "s|/usr/bin/ravenmail|/usr/sbin/sendmail|" /usr/sbin/cron

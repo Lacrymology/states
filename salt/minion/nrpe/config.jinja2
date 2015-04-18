@@ -14,7 +14,7 @@ salt_minion_last_success:
   timeout: 55
   arguments:
     max_hours: 48
-  {{ passive_interval(60) }} {#- 1 hour #}
+  {{ passive_interval(24 * 60) }} {#- 1 day, wait for the first highstate is run #}
   dependencies:
     {#- no alert if load is too high #}
     - load_average

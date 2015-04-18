@@ -3,6 +3,7 @@
 {% set version = "0.9" %}
 include:
   - cron
+  - hostname
   - local
   - nrpe
   - salt.minion.deps
@@ -71,6 +72,7 @@ check_ssl_configuration.py:
     - group: nagios
     - mode: 550
     - require:
+      - host: hostname
       - pkg: nagios-nrpe-server
       - module: nrpe-virtualenv
       - cmd: sslyze

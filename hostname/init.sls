@@ -9,7 +9,7 @@ hostname:
     - group: root
     - mode: 444
     - contents: {{ grains['id'] }}
-  host:
+  host: {#- API #}
     - present
     - name: {{ grains['id'] }}
     - ip: 127.0.0.1
@@ -31,3 +31,27 @@ localhost:
     - present
     - name: localhost
     - ip: 127.0.0.1
+
+{%- for ip, hostnames in salt['pillar.get']('hostname:present', {}).iteritems() %}
+  {%- for hostname in hostnames %}
+hostname_{{ hostname }}_{{ ip }}:
+  host:
+    - present
+    - name: {{ hostname }}
+    - ip: {{ ip }}
+    - require_in:
+      - host: hostname
+  {%- endfor %}
+{%- endfor %}
+
+{%- for ip, hostname in salt['pillar.get']('hostname:absent', {}).iteritems() %}
+  {%- for hostname in hostnames %}
+hostname_{{ hostname }}_{{ ip }}_absent:
+  host:
+    - absent
+    - name: {{ hostname }}
+    - ip: {{ ip }}
+    - require_in:
+      - host: hostname
+  {%- endfor %}
+{%- endfor %}

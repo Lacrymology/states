@@ -3,6 +3,7 @@
 include:
   - bash
   - local
+  - hostname
   - salt.minion.deps
 
 /usr/local/bin/backup-file:
@@ -14,6 +15,7 @@ include:
     - template: jinja
     - source: salt://backup/file.jinja2
     - require:
+      - host: hostname
       - file: /usr/local
       - file: bash
 

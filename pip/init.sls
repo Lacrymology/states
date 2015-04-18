@@ -3,6 +3,7 @@
 include:
   - apt
   - git
+  - hostname
   - local
   - mercurial
   - python
@@ -80,6 +81,7 @@ pip:
     - tar_options: z
     - if_missing: {{ opts['cachedir'] }}/pip/pip-{{ version }}
     - require:
+      - host: hostname
       - file: /usr/local
       - file: {{ opts['cachedir'] }}/pip
   module:

@@ -5,6 +5,7 @@
 {%- set admin_password = salt["pillar.get"]("apt_cache:admin_password", False) %}
 include:
   - apt
+  - hostname
   - nginx
 {%- if ssl %}
   - ssl
@@ -66,6 +67,7 @@ apt_cache:
     - name: apt-cacher-ng
     - require:
       - cmd: apt_sources
+      - host: hostname
   service:
     - running
     - name: apt-cacher-ng

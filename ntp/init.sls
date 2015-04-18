@@ -2,6 +2,7 @@
 
 include:
   - apt
+  - hostname
   - rsyslog
 
 {% if salt['pillar.get']('ntp:servers', []) | length > 0 %}
@@ -27,6 +28,7 @@ ntp:
     - installed
     - require:
       - cmd: apt_sources
+      - host: hostname
   user:
     - present
     - shell: /bin/false

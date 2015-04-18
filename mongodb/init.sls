@@ -1,6 +1,7 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
 include:
+  - hostname
   - locale
   - logrotate
 
@@ -30,6 +31,7 @@ mongodb:
     - installed
     - require:
       - cmd: system_locale
+      - host: hostname
     - sources:
 {%- set files_archive = salt['pillar.get']('files_archive', False) %}
 {%- if files_archive %}

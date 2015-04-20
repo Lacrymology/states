@@ -32,7 +32,7 @@ Default: Not use (``False``).
 mysql:bind
 ~~~~~~~~~~
 
-What :ref:`glossary-IP` does :doc:`index` will bind to.
+What :ref:`glossary-IP` will :doc:`index` bind to.
 
 Default: ``127.0.0.1``.
 

@@ -1,5 +1,5 @@
 Firewall
 ========
 
-:doc:`index` server act like regular :ref:`glossary-DNS` server, so they need
-all client to be allowed to reach the server using :ref:`glossary-UDP` ``53``.
+:doc:`index` server acts like regular :ref:`glossary-DNS` server, so it need
+all clients to be allowed to reach the server using :ref:`glossary-UDP` ``53``.

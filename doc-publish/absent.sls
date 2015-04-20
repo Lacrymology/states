@@ -15,3 +15,7 @@
 /etc/nginx/conf.d/salt-doc.conf:
   file:
     - absent
+
+/usr/local/bin/build-salt-common-doc.py:
+  file:
+    - absent

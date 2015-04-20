@@ -4,6 +4,7 @@
 {%- set ssl = salt['pillar.get']('doc:ssl', False) %}
 {%- from 'nrpe/passive.jinja2' import passive_check with context %}
 include:
+  - bash.nrpe
   - cron.nrpe
   - nginx.nrpe
   - python.nrpe

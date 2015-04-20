@@ -2,6 +2,7 @@
 
 include:
   - apt
+  - local
   - locale
   - ssl
 
@@ -36,3 +37,4 @@ ruby:
     - user: root
     - require:
       - pkg: ruby
+      - file: /usr/local

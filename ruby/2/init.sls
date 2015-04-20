@@ -5,6 +5,7 @@ Install ruby version 2.1
 {%- from "ruby/2/map.jinja2" import ruby_2 with context %}
 include:
   - apt
+  - local
   - locale
   - ssl
 
@@ -72,3 +73,4 @@ ruby2:
     - user: root
     - require:
       - pkg: ruby2
+      - file: /usr/local

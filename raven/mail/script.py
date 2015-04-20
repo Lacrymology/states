@@ -10,6 +10,7 @@ RavenMail: Emulate /usr/bin/mail(x) but send mail to a Sentry server instead.
 
 import os
 import sys
+import re
 
 import pysc
 
@@ -42,7 +43,16 @@ class Mail(pysc.Application):
 
     def main(self):
         # consume standard input early
-        body = os.linesep.join(sys.stdin.readlines())
+        lines = []
+        p = re.compile("Subject: Cron <root@[^ ]+> (.*)")
+        for line in sys.stdin:
+            if p.search(line):
+                subject = p.search(line).group(1)
+                lines.append("Subject: {}\n".format(subject))
+            else:
+                lines.append(line)
+
+        body = os.linesep.join(lines)
         if not len(body):
             sys.stderr.write("Empty stdin, nothing to report")
             sys.stderr.write(os.linesep)
@@ -58,7 +68,7 @@ class Mail(pysc.Application):
         if self.config['subject']:
             msg = os.linesep.join((self.config['subject'], body))
         else:
-            msg = body
+            msg = os.linesep.join((subject, body))
         client.captureMessage(msg, extra=os.environ)
 
 if __name__ == "__main__":

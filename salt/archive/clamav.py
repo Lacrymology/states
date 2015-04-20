@@ -47,12 +47,12 @@ def save(local, stream, last_modified, owner, group):
 
 class ClamavMirror(pysc.Application):
     defaults = {
-        'mirror': 'db.local.clamav.net',
         'files': ('bytecode', 'daily', 'main'),
         'output': '/var/lib/salt_archive/mirror/clamav',
         'owner': 'root',
         'group': 'salt_archive',
-        'lock': '/var/run/clamav_mirror.pid'
+        'lock': '/var/run/clamav_mirror.pid',
+        'config': '/etc/salt-archive-clamav.yml',
     }
 
     logger = logger

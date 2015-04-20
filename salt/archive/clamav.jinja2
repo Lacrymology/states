@@ -1,0 +1,6 @@
+{%- extends "python/config.jinja2" -%}
+{%- block body %}
+{%- if mirror|default(False) %}
+mirror: {{ mirror }}
+{%- endif %}
+{%- endblock -%}

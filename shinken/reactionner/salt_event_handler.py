@@ -48,6 +48,10 @@ class FireEvent(pysc.Application):
         argp.add_argument(
             "--reaction", help="service healing reaction",
             required=True)
+        argp.add_argument(
+            "--salt-env", help="salt environment",
+            required=True,
+        )
         return argp
 
     def main(self):
@@ -61,7 +65,8 @@ class FireEvent(pysc.Application):
                     "service_state_type": c["service_state_type"],
                     "service_display_name": c["service_display_name"],
                     "formula": c["formula"],
-                    "reaction": c["reaction"]
+                    "reaction": c["reaction"],
+                    "salt_env": c["salt_env"],
                 })
             tag = "salt-common/alert/" + c["service_desc"]
             fire_event(json.loads(payload), tag)

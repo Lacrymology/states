@@ -85,6 +85,6 @@ test_salt_event_handler:
         --service-state CRITICAL --service-state-type HARD
         --service-desc ci_test --service-display-name 'CI TEST'
         --hostname {{ grains['id'] }} --formula 'test'
-        --reaction 'noop'
+        --reaction 'noop' --salt-env 'base'
     - require:
       - sls: shinken.reactionner

@@ -176,7 +176,7 @@ define command {
 {#- fire a salt event when a service goes into hard problem state #}
 define command {
   command_name fire_salt_event
-  command_line /usr/bin/sudo /usr/local/shinken/bin/salt_event_handler --service-state '$SERVICESTATE$' --service-state-type '$SERVICESTATETYPE$' --service-desc '$SERVICEDESC$' --service-display-name '$SERVICEDISPLAYNAME$' --hostname '$HOSTNAME$' --formula '$_SERVICEFORMULA$' --reaction '$_SERVICEREACTION$'
+  command_line /usr/bin/sudo /usr/local/shinken/bin/salt_event_handler --service-state '$SERVICESTATE$' --service-state-type '$SERVICESTATETYPE$' --service-desc '$SERVICEDESC$' --service-display-name '$SERVICEDISPLAYNAME$' --hostname '$HOSTNAME$' --formula '$_SERVICEFORMULA$' --reaction '$_SERVICEREACTION$' --salt-env '$_SALT_ENV$'
 }
 
 define timeperiod {
@@ -263,7 +263,7 @@ define servicegroup {
 }
 {%- endfor -%}
 
-{%- set reserved_keys = ('check', 'description', 'passive', 'dependencies', 'service_dependencies', 'timeout', 'formula', 'reaction') -%}
+{%- set reserved_keys = ('check', 'description', 'passive', 'dependencies', 'service_dependencies', 'timeout', 'formula', 'reaction', 'salt_env') -%}
 {%- set data = salt['monitoring.shinken'](mine) -%}
 {%- set data_keys = data.keys() -%}
 {%- do data_keys.sort() -%}
@@ -301,6 +301,7 @@ define service {
     event_handler_enabled 1
     _FORMULA {{ check.data['formula'] }}
     _REACTION {{ check.data['reaction'] }}
+    _SALT_ENV {{ check.data['salt_env'] }}
     {%- endif -%}
 
         {%- if not check.data.get('passive', True) -%}

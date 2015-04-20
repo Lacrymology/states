@@ -1,7 +1,9 @@
 {%- extends "python/config.jinja2" -%}
 {%- block body %}
 cwd: {{ cwd }}
+{%- if minion_config_file|default(False) %}
 minion_config_file: {{ minion_config_file }}
+{%- endif %}
 output: {{ output }}
 saltenv: {{ saltenv }}
 virtualenv: {{ virtualenv }}

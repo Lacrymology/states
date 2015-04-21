@@ -30,7 +30,7 @@ include:
   file:
     - managed
     - template: jinja
-    - source: salt://doc-publish/config.jinja2
+    - source: salt://doc/publish/config.jinja2
     - user: root
     - group: root
     - mode: 400
@@ -52,7 +52,7 @@ include:
 /usr/local/bin/build-salt-common-doc.py:
   file:
     - managed
-    - source: salt://doc-publish/build.py
+    - source: salt://doc/publish/build.py
     - user: root
     - group: root
     - mode: 500
@@ -67,7 +67,7 @@ doc-publish:
     - managed
     - name: /etc/cron.hourly/doc-publish
     - template: jinja
-    - source: salt://doc-publish/cron.jinja2
+    - source: salt://doc/publish/cron.jinja2
     - user: root
     - group: root
     - mode: 500
@@ -85,7 +85,7 @@ doc-publish:
 /etc/nginx/conf.d/salt-doc.conf:
   file:
     - managed
-    - source: salt://doc-publish/nginx.jinja2
+    - source: salt://doc/publish/nginx.jinja2
     - template: jinja
     - user: root
     - group: www-data

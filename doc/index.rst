@@ -13,7 +13,6 @@ Welcome to Infrastructure Documentation:
     :glob:
 
     intro
-    /doc/publish/doc/index
     usage
     license
     pillar
@@ -44,4 +43,5 @@ Formulas Document:
     :titlesonly:
     :maxdepth: 1
 
+    /doc/publish/doc/index
     /*/doc/index

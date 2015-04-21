@@ -5,6 +5,7 @@
 {%- set is_test = salt['pillar.get']('__test__', False) %}
 {%- set hostnames = salt['pillar.get']('doc:hostnames') %}
 include:
+  - bash
   - cron
   - doc
   - local
@@ -29,7 +30,7 @@ include:
   file:
     - managed
     - template: jinja
-    - source: salt://doc-publish/config.jinja2
+    - source: salt://doc/publish/config.jinja2
     - user: root
     - group: root
     - mode: 400
@@ -48,11 +49,10 @@ include:
         saltenv: {{ salt['common.saltenv']() }}
         virtualenv: {{ opts['cachedir'] }}/doc
 
-doc-publish:
+/usr/local/bin/build-salt-common-doc.py:
   file:
     - managed
-    - name: /etc/cron.hourly/doc-publish
-    - source: salt://doc-publish/build.py
+    - source: salt://doc/publish/build.py
     - user: root
     - group: root
     - mode: 500
@@ -61,6 +61,19 @@ doc-publish:
       - file: /usr/local/salt-common-doc
       - file: /etc/doc-publish.yml
       - module: pysc
+
+doc-publish:
+  file:
+    - managed
+    - name: /etc/cron.hourly/doc-publish
+    - template: jinja
+    - source: salt://doc/publish/cron.jinja2
+    - user: root
+    - group: root
+    - mode: 500
+    - require:
+      - file: bash
+      - file: /usr/local/bin/build-salt-common-doc.py
       - pkg: cron
   cmd:
     - wait
@@ -72,7 +85,7 @@ doc-publish:
 /etc/nginx/conf.d/salt-doc.conf:
   file:
     - managed
-    - source: salt://doc-publish/nginx.jinja2
+    - source: salt://doc/publish/nginx.jinja2
     - template: jinja
     - user: root
     - group: www-data

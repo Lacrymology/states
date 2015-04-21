@@ -97,6 +97,13 @@ Delete file in target server that does not exist in source server, only use if
 
 Default: don't delete file in target server (``False``).
 
+salt_archive:clamav_source
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The mirror to download :doc:`/clamav/doc/index` database from.
+
+Default: ``'db.local.clamav.net'``.
+
 Rsync
 -----
 

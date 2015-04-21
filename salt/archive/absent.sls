@@ -50,3 +50,7 @@ salt-archive-clamav:
 /var/cache/salt/master/sync_timestamp.dat:
   file:
     - absent
+
+/etc/salt-archive-clamav.yml:
+  file:
+    - absent

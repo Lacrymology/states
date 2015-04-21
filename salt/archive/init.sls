@@ -197,13 +197,29 @@ salt-archive-clamav:
       - module: requests
       - file: /usr/local/bin/salt_archive_set_owner_mode.sh
       - file: /var/lib/salt_archive/mirror/clamav
+      - file: /etc/salt-archive-clamav.yml
   cmd:
     - run
     - name: /usr/local/bin/salt_archive_clamav.py
     - require:
       - file: salt-archive-clamav
       - user: salt_archive
-{%- endif -%}
+{%- endif %}
+
+/etc/salt-archive-clamav.yml:
+  file:
+{%- if source %}
+    - absent
+{%- else %}
+    - managed
+    - template: jinja
+    - source: salt://salt/archive/clamav.jinja2
+    - user: root
+    - group: root
+    - mode: 440
+    - context:
+        mirror: {{ salt["pillar.get"]("salt_archive:clamav_source", "db.local.clamav.net") }}
+{%- endif %}
 
 {%- for key, enc in salt['pillar.get']('salt_archive:keys', {}).iteritems() %}
 salt_archive_{{ key }}:

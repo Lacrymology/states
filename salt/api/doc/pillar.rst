@@ -41,8 +41,9 @@ salt_api:ssl_redirect
 salt_api:external_auth
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Dict of {authenticate_system: {username: password}} used to authenticate
-against for run :doc:`/salt/doc/index` modules. Possible authenticate_system such as ``pam`` or
+Dict of ``{authenticate_system: {username: password}}`` used to authenticate
+against for run :doc:`/salt/doc/index` modules. Possible ``authenticate_system``
+are: ``pam`` or
 ``ldap``. See http://docs.saltstack.com/en/latest/topics/eauth/index.html for
 more detail.
 
@@ -56,5 +57,5 @@ Conditional
 salt_api:external_auth:pam
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Dict of {user: password} which will be given permission to run :doc:`/salt/doc/index` modules
-through salt-api.
+Dict of ``{user: password}`` which will be given permission to run
+:doc:`/salt/doc/index` modules through :doc:`index`.

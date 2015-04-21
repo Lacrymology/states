@@ -4,10 +4,16 @@
 {%- set ssl_redirect = salt['pillar.get']('doc:ssl_redirect', False) %}
 {%- set is_test = salt['pillar.get']('__test__', False) %}
 {%- set hostnames = salt['pillar.get']('doc:hostnames') %}
+{%- set source = salt["pillar.get"]("doc:source") %}
+{%- set rev = salt['pillar.get']('branch', 'master') %}
+{% if is_test %}
+  {%- set rev = "develop" %}
+{%- endif %}
 include:
   - bash
   - cron
   - doc
+  - git
   - local
   - nginx
   - python
@@ -26,6 +32,18 @@ include:
       - file: /usr/local
       - user: web
 
+doc-source:
+  git:
+    - latest
+    - name: {{ source }}
+    - target: /usr/local/salt-common-doc-source
+    - rev: {{ rev }}
+    - force: True
+    - force_reset: True
+    - require:
+      - file: /usr/local
+      - pkg: git
+
 /etc/doc-publish.yml:
   file:
     - managed
@@ -35,16 +53,7 @@ include:
     - group: root
     - mode: 400
     - context:
-{%- if opts['file_client'] == 'local' %}
-  {%- set cwd = opts['file_roots'][opts['file_roots'].keys()[0]][0] %}
-{%- else -%}
-    {%- set saltenv = salt['common.saltenv']() %}
-  {%- set cwd = opts['cachedir'] ~ "/files/" ~  saltenv %}
-{%- endif %}
-{%- if is_test %}
-        minion_config_file: /root/salt/states/test/minion
-{%- endif %}
-        cwd: {{ cwd }}
+        cwd: /usr/local/salt-common-doc-source
         output: /usr/local/salt-common-doc
         saltenv: {{ salt['common.saltenv']() }}
         virtualenv: {{ opts['cachedir'] }}/doc
@@ -81,6 +90,7 @@ doc-publish:
     - watch:
       - file: /etc/cron.hourly/doc-publish
       - file: doc-publish
+      - git: doc-source
 
 /etc/nginx/conf.d/salt-doc.conf:
   file:

@@ -20,26 +20,17 @@ class PublishDoc(pysc.Application):
     defaults = {"config": "/etc/doc-publish.yml"}
 
     def main(self):
-        import salt.syspaths as syspaths
-        import salt.config
-        import salt.client
-
         config = self.config
         virtualenv = config["virtualenv"]
 
-        minion_config_file = config.get(
-            "minion_config_file", os.path.join(syspaths.CONFIG_DIR, 'minion'))
-
-        opts = salt.config.client_config(minion_config_file)
-        caller = salt.client.Caller(minion_config_file)
-
-        # get latest docs
-        if opts.get("file_client") != "local":
-            logger.debug("Running cp.cache_master")
-            caller.sminion.functions["cp.cache_master"](
-                saltenv=config["saltenv"])
+        logger.debug("Running git pull in %s", config["cwd"])
+        subprocess.check_call(
+            ["git", "pull"],
+            cwd=config["cwd"],
+        )
 
         # build docs
+        logger.debug("Building doc")
         env = os.environ
         env["VIRTUAL_ENV"] = virtualenv
         subprocess.check_call(

@@ -13,6 +13,11 @@ doc:hostnames
 
 .. include:: /nginx/doc/hostnames.inc
 
+doc:source
+~~~~~~~~~~
+
+Location of :doc:`/git/doc/index` documentation repository.
+
 Optional
 --------
 

@@ -19,3 +19,7 @@
 /usr/local/bin/build-salt-common-doc.py:
   file:
     - absent
+
+/usr/local/salt-common-doc-source:
+  file:
+    - absent

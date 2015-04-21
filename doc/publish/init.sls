@@ -5,10 +5,7 @@
 {%- set is_test = salt['pillar.get']('__test__', False) %}
 {%- set hostnames = salt['pillar.get']('doc:hostnames') %}
 {%- set source = salt["pillar.get"]("doc:source") %}
-{%- set rev = salt['pillar.get']('branch', 'master') %}
-{% if is_test %}
-  {%- set rev = "develop" %}
-{%- endif %}
+{%- set rev = salt['pillar.get']('doc:branch', 'develop') %}
 include:
   - bash
   - cron

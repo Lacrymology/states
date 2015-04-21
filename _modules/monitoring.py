@@ -54,8 +54,10 @@ def load_check(formula, remove_sensitive_data=True):
         check = _yaml(filename)
         # append formula name to check data, use for custom macro in
         # shinken event handler
+        salt_env = __salt__['pillar.get']('branch', 'master')
         for data in check.itervalues():
             data['formula'] = formula
+            data['salt_env'] = salt_env
         logger.debug("monitoring checks: %s", check)
     except Exception, err:
         logger.error("Can't load '%s': %s", filename, err)

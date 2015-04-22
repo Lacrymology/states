@@ -23,3 +23,9 @@ rabbitmq:
     - require:
       - service: rabbitmq-server
       - file: /etc/rabbitmq
+
+{%- for log_file in ("shutdown", "startup") %}
+/etc/rsyslog.d/rabbitmq-{{ log_file }}.conf:
+  file:
+    - absent
+{%- endfor %}

@@ -10,6 +10,7 @@ include:
   - ssl
 {%- endif %}
   - nginx
+  - rsyslog
 
 {% set master_id = salt['pillar.get']('rabbitmq:cluster:master') %}
 
@@ -75,6 +76,25 @@ rabbitmq_config_file:
     - require:
       - pkg: rabbitmq-server
       - user: rabbitmq
+
+{%- for log_file in ("shutdown", "startup") %}
+/etc/rsyslog.d/rabbitmq-{{ log_file }}.conf:
+  file:
+    - managed
+    - mode: 440
+    - source: salt://rsyslog/template.jinja2
+    - template: jinja
+    - require:
+      - pkg: rsyslog
+      - service: rabbitmq-server
+    - watch_in:
+      - service: rsyslog
+    - context:
+        file_path: /var/log/rabbitmq/{{ log_file }}_err
+        tag_name: rabbitmq-{{ log_file }}
+        severity: error
+        facility: daemon
+{%- endfor %}
 
 rabbitmq-server:
   file:

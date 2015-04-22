@@ -3,14 +3,6 @@ RabbitMQ
 
 There's three RabbitMQ-related custom execution modules.
 
-rabbitmq
---------
-
-.. automodule:: _modules.rabbitmq
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 rabbitmq_cluster
 ----------------
 

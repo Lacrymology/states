@@ -10,5 +10,6 @@ include:
 {%- if salt['pillar.get']('rabbitmq:ssl', False) %}
   - ssl.nrpe
 {%- endif %}
+  - rsyslog.nrpe
 
 {{ passive_check('rabbitmq', check_ssl_score=True) }}

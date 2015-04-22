@@ -7,6 +7,7 @@ include:
   - pip
   - rabbitmq
   - nginx.diamond
+  - rsyslog.diamond
 
 rabbitmq_diamond_resources:
   file:

@@ -18,12 +18,3 @@ rabbitmq_cluster
     :members:
     :undoc-members:
     :show-inheritance:
-
-rabbitmq_plugins
-----------------
-
-.. automodule:: _modules.rabbitmq_plugins
-    :members:
-    :undoc-members:
-    :show-inheritance:
-

@@ -6,6 +6,7 @@
 include:
   - bash.nrpe
   - cron.nrpe
+  - git.nrpe
   - nginx.nrpe
   - python.nrpe
   - pysc.nrpe

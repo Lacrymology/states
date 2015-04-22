@@ -30,14 +30,3 @@ python:
       {#- This config contains `syslog` as a handler
       So, rsyslog service must be running before the consumer (`pysc`, ...) can use it #}
       - service: rsyslog
-
-{#-
- Return path to
--#}
-{%- macro root_bin_py() -%}
-    {%- if grains['lsb_distrib_codename'] == 'precise' -%}
-        /usr/share/pyshared
-    {%- else -%}
-        /usr/lib/python2.7/dist-packages
-    {%- endif -%}
-{%- endmacro -%}

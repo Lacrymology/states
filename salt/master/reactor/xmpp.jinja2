@@ -9,11 +9,15 @@ When monitoring send event on bus.
 {{ salt['pillar.get']('message_do_not_modify') }}
 {%- raw %} -#}{% endraw %}
 
-{% raw %}{%- if data["fun"] == "state.highstate" and data["retcode"] != 0 %}{% endraw %}
+{%- raw %}
+{%- set retcode = data.get("retcode", "N/A") %}
+{%- endraw %}
+
+{% raw %}{%- if data["fun"] == "state.highstate" and retcode != 0 %}{% endraw %}
 xmpp-{% raw %}{{ data['jid'] }}{% endraw %}-{% raw %}{{ data['id'] }}{% endraw %}:
   {% if grains['saltversioninfo'] >= (2015, 2, 0, 0) %}local{% else %}cmd{% endif %}.xmpp.send_msg_multi:
     - tgt: {{ grains['id'] }}
-    - ret: syslog,timestamps
+    - ret: syslog
     - kwarg:
         recipients: {{ recipients|yaml }}
         rooms: {{ rooms|yaml }}
@@ -23,8 +27,8 @@ xmpp-{% raw %}{{ data['jid'] }}{% endraw %}-{% raw %}{{ data['id'] }}{% endraw %
           SaltStack: state.highstate failed
           id: {{ data["id"] }}
           jid: {{ data["jid"] }}
-          retcode: {{ data["retcode"] }}
-          return: {{ data["return"]|string|truncate }}
+          retcode: {{ retcode }}
+          return: {{ data["return"]|string|truncate|indent(10) }}
         {%- endraw %}
         profile: salt-master-xmpp
 {% raw %}{%- endif %}{% endraw %}

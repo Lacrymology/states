@@ -8,6 +8,7 @@ These data can be useful for compiling into stats later.
 import os
 import re
 import fnmatch
+import datetime
 
 # Import salt libs
 import salt.utils
@@ -522,3 +523,16 @@ def version():
     ret = salt.utils.fopen(procf, 'r').read().strip()
 
     return ret
+
+
+def current_time():
+    '''
+    Return the current time in ISO format
+
+    CLI Example:
+
+    .. code-block:: bash
+
+        salt '*' status.current_time
+    '''
+    return datetime.datetime.now().isoformat()

@@ -2,11 +2,12 @@
 
 # {{ salt['pillar.get']('message_do_not_modify') }}
 {%- set source = salt['pillar.get']('salt_archive:source', False) %}
-{%- if source %}
+{%- set is_test = salt['pillar.get']('__test__', False) %}
+{%- if not is_test %}
+  {%- if source %}
 */15 * * * * root /usr/local/bin/salt_archive_sync.sh
-{%- else %}
+  {%- else %}
 0 0 * * * root /usr/local/bin/salt_archive_clamav.py
-{%- endif -%}
-{%- if not source %}
 */5 * * * * root /usr/local/bin/salt_archive_incoming.py
+  {%- endif %}
 {%- endif %}

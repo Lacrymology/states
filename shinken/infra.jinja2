@@ -162,6 +162,19 @@ define command {
     command_line /usr/lib/nagios/plugins/check_tcp -H $HOSTADDRESS$ -p $ARG1$ -t $ARG2$
 }
 
+{#-
+ check http and https make sure that an http(s) request return expected HTTP code
+ #}
+define command {
+    command_name check_http
+    command_line /usr/lib/nagios/plugins/check_http -H $ARG1$ -u $ARG2$ -e $ARG3$
+}
+
+define command {
+    command_name check_https
+    command_line /usr/lib/nagios/plugins/check_http -H $ARG1$ --ssl -u $ARG2$ -e $ARG3$
+}
+
 define command {
     command_name check_dummy
     command_line /usr/lib/nagios/plugins/check_dummy 0

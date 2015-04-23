@@ -36,6 +36,11 @@ If not, make sure that the ``webui`` module is installed::
 and loaded. Also take a look at the log file
 ``/var/log/upstart/shinken-broker.log`` to know what happens.
 
+.. note::
+
+   In high availability mode, one is active while another is spare. So, it's
+   normal to see this check is CRITICAL on the spare node.
+
 shinken_broker_http
 ~~~~~~~~~~~~~~~~~~~
 

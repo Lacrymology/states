@@ -13,7 +13,7 @@ When monitoring send event on bus.
 xmpp-{% raw %}{{ data['jid'] }}{% endraw %}-{% raw %}{{ data['id'] }}{% endraw %}:
   {% if grains['saltversioninfo'] >= (2015, 2, 0, 0) %}local{% else %}cmd{% endif %}.xmpp.send_msg_multi:
     - tgt: {{ grains['id'] }}
-    - ret: syslog,timestamps
+    - ret: syslog
     - kwarg:
         recipients: {{ recipients|yaml }}
         rooms: {{ rooms|yaml }}

@@ -7,7 +7,7 @@
   cmd:
     - run
 {%- if salt['cmd.has_exec'](cmd) %}
-    - name: {{ cmd }}
+    - name: {{ cmd }} {{ arg }}
 {%- else %}
     - name: echo "Redis not yet installed"
 {%- endif %}

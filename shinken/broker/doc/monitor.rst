@@ -38,14 +38,14 @@ and loaded. Also take a look at the log file
 
 .. note::
 
-   In high availability mode, one is active while another is spare. So, it's
-   normal to see this check is CRITICAL on the spare node.
+   In high availability mode, one is active while another nodes are spare. So,
+   it's normal to see this check is CRITICAL on the spare nodes.
 
 shinken_broker_http
 ~~~~~~~~~~~~~~~~~~~
 
 Check if the web UI is working by sending a :ref:`glossary-http` request to the
-``/user/login`` URI and expect a ``200 OK`` response.
+``/user/login`` URI and expecting a ``200 OK`` response.
 
 shinken_broker_web_cluster
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -53,7 +53,8 @@ shinken_broker_web_cluster
 This uses `business rules
 <http://shinken.readthedocs.org/en/latest/06_medium/business-rules.html>`_ to
 check if there is one broker is active.
-If both are down, only one notification would be sent, rather than two.
+If all nodes are down, only one notification would be sent, rather than
+multiple.
 
 .. include:: /nginx/doc/monitor.inc
 

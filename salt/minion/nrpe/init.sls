@@ -25,6 +25,17 @@ sudo_salt_minion_nrpe:
     - require:
       - pkg: sudo
 
+{%- if not salt['data.getval']('returner_timestamps_last_success') %}
+set_last_success_timestamp:
+  module:
+    - run
+    - name: data.update
+    - key: 'returner_timestamps_last_success'
+    - value: '{{ salt['status.current_time']() }}'
+    - require_in:
+      - file: /usr/lib/nagios/plugins/check_minion_last_success.py
+{%- endif %}
+
 /usr/lib/nagios/plugins/check_minion_last_success.py:
   file:
     - managed

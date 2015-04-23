@@ -31,7 +31,7 @@ open.
 
 If not, make sure that the ``webui`` module is installed::
 
-  /usr/local/shinken/bin/shinken inventory
+  /usr/local/shinken/bin/shinken -c /var/lib/shinken/.shinken.ini inventory
 
 and loaded. Also take a look at the log file
 ``/var/log/upstart/shinken-broker.log`` to know what happens.

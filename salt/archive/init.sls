@@ -120,6 +120,10 @@ salt_archive:
      directory.
     #}
 
+/usr/local/bin/salt_archive_incoming.py:
+  file:
+    - absent
+
 /var/lib/salt_archive/incoming:
   file:
     - absent

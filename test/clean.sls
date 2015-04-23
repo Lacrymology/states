@@ -228,3 +228,19 @@ clean_pkg:
     - require:
       - pkg: clean_pkg
 {%- endfor -%}
+
+{%- if salt['cmd.has_exec']('deborphan') -%}
+    {%- for pkg in salt['cmd.run']('deborphan').split("\n") -%}
+        {%- if pkg != '' -%}
+            {%- if loop.first %}
+orphans:
+  pkg:
+    - purged
+    - require:
+      - pkg: clean_pkg
+    - pkgs:
+            {%- endif %}
+      -  {{ pkg }}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endif -%}

@@ -28,7 +28,7 @@ xmpp-{% raw %}{{ data['jid'] }}{% endraw %}-{% raw %}{{ data['id'] }}{% endraw %
           id: {{ data["id"] }}
           jid: {{ data["jid"] }}
           retcode: {{ retcode }}
-          return: {{ data["return"]|string|truncate }}
+          return: {{ data["return"]|string|truncate|indent(10) }}
         {%- endraw %}
         profile: salt-master-xmpp
 {% raw %}{%- endif %}{% endraw %}

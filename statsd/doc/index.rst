@@ -29,6 +29,8 @@ Links
 * `Python implementation of StatsD <https://pypi.python.org/pypi/statsd/>`_.
 * `Original implementation of StastD <https://github.com/etsy/statsd>`_
    in :doc:`/nodejs/doc/index`.
+* `Gauges support implementation of StatsD
+  <https://github.com/Jonty/py-statsd>`_.
 
 Related Formulas
 ----------------

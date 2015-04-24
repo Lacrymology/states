@@ -17,6 +17,12 @@ virtually any graphing or monitoring backend.
 
 .. https://www.datadoghq.com/2013/08/statsd/ - 2015-01-23
 
+.. note::
+
+   `py-statsd <https://github.com/Jonty/py-statsd>`_ will be used instead of
+   `pystatsd <https://github.com/sivy/pystatsd>`_ as it support sending `Gauges
+   <http://statsd.readthedocs.org/en/latest/types.html#gauges>`_ metric.
+
 Links
 -----
 

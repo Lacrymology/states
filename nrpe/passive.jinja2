@@ -52,10 +52,6 @@ nsca-{{ formula }}:
 {%- endif %}
       - service: nagios-nrpe-server
 
-/etc/cron.d/passive-checks-{{ formula|replace('.', '-') }}:
-  file:
-    - absent
-
 {% if check_ssl_score -%}
     {%- if ssl %}
         {#- manage cron file for sslyze NRPE check consumer -#}

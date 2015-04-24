@@ -14,12 +14,6 @@ include:
 
 {{ passive_check('mail.server') }}
 
-/etc/cron.d/mail-server-nrpe:
-  file:
-    - absent
-    - watch_in:
-      - service: cron
-
 /usr/lib/nagios/plugins/check_mail_stack.py:
   file:
     - managed

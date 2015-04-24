@@ -2,18 +2,22 @@
 
 /usr/bin/mail:
   file:
+{%- if salt['file.file_exists']('/etc/alternatives/mail') %}
     - symlink
     - target: /etc/alternatives/mail
     - force: True
     - user: root
     - group: root
     - mode: 775
+{%- else %}
+    - absent
+{%- endif %}
 
 /usr/bin/ravenmail:
   file:
     - absent
 
-cron_sendmail_patch:
+cron_sendmail_unpatch:
   cmd:
     - wait
     - name: perl -pi -e "s|/usr/bin/ravenmail|/usr/sbin/sendmail|" /usr/sbin/cron

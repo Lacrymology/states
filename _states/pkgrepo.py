@@ -194,6 +194,10 @@ def managed(name, **kwargs):
        file.  The consolidate will run every time the state is processed. The
        option only needs to be set on one repo managed by salt to take effect.
 
+    clean_file
+       If set to true, empty file before config repo, dangerous if use
+       multiple sources in one file.
+
     refresh_db
        If set to false this will skip refreshing the apt package database on
        debian based systems.
@@ -287,6 +291,11 @@ def managed(name, **kwargs):
                           'to the differences in the configured repositories.'
                           .format(name))
         return ret
+
+    # empty the file before configure
+    if kwargs.get('clean_file', False):
+        open(kwargs['file'], 'w').close()
+
     try:
         if __grains__['os_family'] == 'Debian':
             __salt__['pkg.mod_repo'](saltenv=__env__, **kwargs)

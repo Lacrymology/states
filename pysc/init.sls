@@ -53,6 +53,15 @@ pip_systemwide_verify_pyyaml_installed_with_libyaml:
       - module: pysc
       - pkg: yaml
 
+{#- argparse is installed by statsd, which is redundant for python2.7 #}
+argparse-pypi:
+  module:
+    - wait
+    - name: pip.uninstall
+    - pkgs: argparse
+    - watch:
+      - module: pysc
+
 pysc_log_test:
   file:
     - managed

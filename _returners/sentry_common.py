@@ -98,15 +98,22 @@ def returner(return_data):
             logger.debug("All states run successfully")
         else:
             returned = return_data['return']
-            for state in returned:
+            for state_name, sdata in returned.iteritems():
                 # only send alert for the first failed in the requisite chain
                 # or there will be a lot of events when the beginning fails
-                if returned[state]['comment'].startswith(requisite_error):
+                if sdata['comment'].startswith(requisite_error):
                     continue
 
-                result = returned[state]['result']
-                if result is None:
-                    continue
-                if not result:
-                    send_sentry(return_data,
-                                returned[state]['comment'], returned[state])
+                try:
+                    result = sdata['result']
+                    if result is None:
+                        continue
+                    if not result:
+                        send_sentry(return_data,
+                                    sdata['comment'],
+                                    sdata)
+                except KeyError as e:
+                    send_sentry(
+                        return_data,
+                        'Key not in state {0} data: {1}'.format(state_name, e)
+                    )

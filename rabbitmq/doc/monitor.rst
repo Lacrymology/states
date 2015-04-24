@@ -16,8 +16,8 @@ Mandatory
 rabbitmq_procs
 ~~~~~~~~~~~~~~
 
-:doc:`index` daemon is an
-`AMQP <http://en.wikipedia.org/wiki/Advanced_Message_Queuing_Protocol>`_ broker.
+:doc:`index` daemon is an `AMQP
+<http://en.wikipedia.org/wiki/Advanced_Message_Queuing_Protocol>`_ broker.
 
 .. include:: /nrpe/doc/check_procs.inc
 
@@ -26,7 +26,8 @@ rabbitmq_procs
 rabbitmq_management_port
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-:doc:`index` `Management Port <http://previous.rabbitmq.com/v3_1_x/management.html>`_ is open.
+:doc:`index` `Management Port
+<http://previous.rabbitmq.com/v3_1_x/management.html>`_ is open.
 
 .. _monitor-rabbitmq_amqp_port:
 

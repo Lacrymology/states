@@ -4,13 +4,12 @@
 set -o errexit
 set -o pipefail
 
-# log start stop time to syslog
+{#- log start stop time to syslog #}
 source /usr/local/share/salt_common.sh
 log_start_script "$@"
 trap "log_stop_script \$?" EXIT
 
-# automatically trim stale data
+{#- automatically trim stale data #}
 
-su www-data -s /bin/bash \
-    -c '/usr/local/sentry/bin/sentry --config=/etc/sentry.conf.py cleanup --days={{ clean_days }}' 2>&1 \
+/usr/local/sentry/manage cleanup --days={{ clean_days }}' 2>&1 \
     | logger -t sentry-cleanup -p local0.info

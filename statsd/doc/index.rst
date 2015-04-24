@@ -19,8 +19,10 @@ virtually any graphing or monitoring backend.
 
 .. note::
 
-   `py-statsd <https://github.com/Jonty/py-statsd>`_ will be used instead of
-   `pystatsd <https://github.com/sivy/pystatsd>`_ as it support sending `Gauges
+   The server was written in Node.js but this formula will install the Python
+   version. Moreover, `py-statsd <https://github.com/Jonty/py-statsd>`_ will be
+   used instead of `pystatsd <https://github.com/sivy/pystatsd>`_ as it support
+   sending `Gauges
    <http://statsd.readthedocs.org/en/latest/types.html#gauges>`_ metric.
 
 Links

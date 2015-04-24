@@ -39,7 +39,7 @@ include:
       - file: /etc/salt/master
 {%- endfor -%}
 
-{%- for dirname in ('create', 'destroy', 'job', 'alert') %}
+{%- for dirname in ('create', 'destroy', 'job', 'reaction') %}
 /srv/reactor/{{ dirname }}:
   file:
     - directory
@@ -67,16 +67,24 @@ include:
     - watch_in:
       - service: salt-master
 
-/srv/reactor/alert/monitor.sls:
+/srv/reactor/alert:
+  file:
+    - absent
+    - require_in:
+      - file: /etc/salt/master
+    - watch_in:
+      - service: salt-master
+
+/srv/reactor/reaction/reaction.sls:
   file:
     - managed
-    - source: salt://salt/master/reactor/monitor.jinja2
+    - source: salt://salt/master/reactor/reaction.jinja2
     - template: jinja
     - user: root
     - group: root
     - mode: 440
     - require:
-      - file: /srv/reactor/alert
+      - file: /srv/reactor/reaction
     - require_in:
       - file: /etc/salt/master
     - watch_in:

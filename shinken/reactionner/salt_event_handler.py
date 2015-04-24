@@ -68,7 +68,7 @@ class FireEvent(pysc.Application):
                     "reaction": c["reaction"],
                     "salt_env": c["salt_env"],
                 })
-            tag = "salt-common/alert/" + c["service_desc"]
+            tag = "salt-common/reaction/" + c["service_desc"]
             fire_event(json.loads(payload), tag)
 
 if __name__ == '__main__':

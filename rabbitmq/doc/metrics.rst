@@ -25,7 +25,7 @@ Disk free space limit of the partition on which :doc:`index` is storing data.
 rabbitmq.health.fd_total
 ------------------------
 
-Number of :ref:`glossary-file-descriptors` available (system-wide set by
+Number of :ref:`glossary-file-descriptor` available (system-wide set by
 ``ulimit``).
 
 .. _metrics-rabbitmq.health.fd_used:
@@ -33,7 +33,7 @@ Number of :ref:`glossary-file-descriptors` available (system-wide set by
 rabbitmq.health.fd_used
 -----------------------
 
-Number of :ref:`glossary-file-descriptors` used by RabbitMQ.
+Number of :ref:`glossary-file-descriptor` used by RabbitMQ.
 
 .. _metrics-rabbitmq.health.mem_limit:
 

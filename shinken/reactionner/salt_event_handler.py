@@ -12,7 +12,8 @@
 #     --service-desc $SERVICEDESC$ \
 #     --service-display-name $SERVICEDISPLAYNAME$ \
 #     --host-name $HOSTNAME$ \
-#     --formula $_SERVICEFORMULA$ --reaction $_SERVICEREACTION$
+#     --formula $_SERVICEFORMULA$ --reaction $_SERVICEREACTION$ \
+#     --salt-env $_SALT_ENV$
 
 import json
 import logging

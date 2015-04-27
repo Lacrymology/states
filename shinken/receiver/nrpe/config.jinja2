@@ -27,5 +27,6 @@ shinken_receiver_memory_usage:
   description: Shinken Receiver Memory Usage
   command: "/usr/lib/nagios/plugins/check_procs -u shinken -C shinken-receive -m RSS -c {{ (grains['mem_total'] * 1024 * 20 / 100) | int }}"
   reaction: memory
+  salt_env: {{ salt['pillar.get']('branch', 'master') }}
   dependencies:
     - shinken_receiver_procs

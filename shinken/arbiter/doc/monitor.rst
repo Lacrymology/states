@@ -14,7 +14,7 @@ shinken_arbiter_procs
 shinken_arbiter_port_remote
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Check if the :doc:`/shinken/arbiter/doc/index` port can be reached from the
+Check if the :doc:`index` port can be reached from the
 :doc:`/shinken/poller/doc/index`. It depends on :ref:`shinken_arbiter_port`.
 
 In case it cannot be reached, first, make sure that the

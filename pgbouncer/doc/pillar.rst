@@ -27,14 +27,14 @@ Example::
 pgbouncer:databases
 ~~~~~~~~~~~~~~~~~~~
 
-Define the login information for connecting (from :doc:`/pgbouncer/doc/index`)
-to the backend :doc:`/postgresql/doc/index` server.
+Define the login information for connecting from :doc:`index` to the backend
+:doc:`/postgresql/doc/index` server.
 
 Data formed as a dictionary where key will be taken as a database name and
 value is a dictionary of key-value.
 
 * ``example``: an alias of the database name which will be used when connecting
-  via :doc:`/pgbouncer/doc/index`, something like this::
+  via :doc:`index`, something like this::
 
     psql -h localhost -p 6432 -U foo -W example
 
@@ -50,7 +50,7 @@ value is a dictionary of key-value.
 
    This is different from the accounts which is defined in the pillar key
    :ref:`pillar-pgbouncer-authentication`. That is used for connecting from
-   client to :doc:`/pgbouncer/doc/index`.
+   client to :doc:`index`.
 
 Optional
 --------
@@ -75,8 +75,8 @@ Example::
 pgbouncer:authentication
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-Define whether :doc:`/pgbouncer/doc/index` use its own user database or getting
-from :doc:`/postgresql/doc/index` server.
+Define whether :doc:`index` use its own user database or getting from
+:doc:`/postgresql/doc/index` server.
 
 Data formed as a dictionary with key is the username and value is the password.
 
@@ -87,13 +87,13 @@ Default: ``False`` (use user/password from :ref:`pillar-pgbouncer-databases`).
 pgbouncer:listen_addr
 ~~~~~~~~~~~~~~~~~~~~~
 
-Specifies list of addresses, where to listen for TCP connections. You may also
-use `*` meaning "listen on all addresses". When not set, only Unix socket
-connections are allowed.
+Specifies list of addresses, where to listen for :ref:`glossary-TCP`
+connections. You may also use `*` meaning "listen on all addresses". When not
+set, only :ref:`glossary-Unix-socket` connections are allowed.
 
 Addresses can be specified numerically (IPv4/IPv6) or by name.
 
-Default: only listen to localhost (``[127.0.0.1]``).
+Default: only listen to :ref:`glossary-localhost` (``[127.0.0.1]``).
 
 .. _pillar-pgbouncer-listen_port:
 

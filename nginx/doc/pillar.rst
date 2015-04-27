@@ -24,7 +24,7 @@ Example::
 nginx:worker_processes
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Number of :doc:`/nginx/doc/index` workers.
+Number of :doc:`index` workers.
 
 Default: use the number of available CPU cores (``auto``).
 
@@ -44,7 +44,7 @@ nginx:log_format
 ~~~~~~~~~~~~~~~~
 
 The `format of log <http://nginx.org/en/docs/http/ngx_http_log_module.html>`_
-in :doc:`/nginx/doc/index` log file.
+in :doc:`index` log file.
 
 Default: ``$scheme://$host:$server_port$uri$is_args$args $remote_addr:$remote_user "$request" $request_time $request_length:$bytes_sent $status "$http_referer" "$http_user_agent" "$http_x_forwarded_for"``
 
@@ -53,8 +53,9 @@ Default: ``$scheme://$host:$server_port$uri$is_args$args $remote_addr:$remote_us
 nginx:client_body_buffer_size
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Set :doc:`/nginx/doc/index` config directive
-`client_body_buffer_size <http://nginx.org/en/docs/http/ngx_http_core_module.html#client_body_buffer_size>`_
+Set :doc:`index` config directive
+`client_body_buffer_size <http://nginx.org/en/docs/http/
+ngx_http_core_module.html#client_body_buffer_size>`_
 Unit is Kilobytes of memory.
 
 Default: ``200`` kilobytes.
@@ -76,8 +77,8 @@ Conditional
 nginx:redirect_numeric_ip
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-URL where connection to this host using the numeric IP
-(such as ``http://1.2.3.4``) get permanently redirected to.
+:ref:`glossary-URL` where connection to this host using the numeric
+:ref:`glossary-IP` (such as ``http://1.2.3.4``) get permanently redirected to.
 
 This affect all resources under that URL, not only the root (``/``).
 

@@ -16,4 +16,4 @@ ssh_procs
 ssh_port
 ~~~~~~~~
 
-Check if :doc:`/ssh/server/doc/index` port is open.
+Check if :doc:`index` port is open.

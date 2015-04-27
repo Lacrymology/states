@@ -14,12 +14,12 @@ shinken_broker_procs
 shinken_broker_port
 ~~~~~~~~~~~~~~~~~~~
 
-Check if the :doc:`/shinken/broker/doc/index` port is open.
+Check if the :doc:`index` port is open.
 
 shinken_broker_port_remote
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Check if the :doc:`/shinken/broker/doc/index` port can be reached from the
+Check if the :doc:`index` port can be reached from the
 :doc:`/shinken/doc/index` :doc:`/shinken/poller/doc/index`.
 
 shinken_broker_http_port

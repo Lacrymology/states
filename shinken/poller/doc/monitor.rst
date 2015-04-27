@@ -12,11 +12,12 @@ shinken_poller_procs
 shinken_poller_port
 ~~~~~~~~~~~~~~~~~~~
 
-Check if the :doc:`/shinken/poller/doc/index` port is open.
+Check if the :doc:`index` port is open.
 
 shinken_poller_port_remote
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Check if the poller port can be reached from the :doc:`/shinken/doc/index` poller.
+Check if the poller port can be reached from the :doc:`/shinken/doc/index`
+poller.
 
 See :doc:`/shinken/arbiter/doc/monitor` for troubleshooting.

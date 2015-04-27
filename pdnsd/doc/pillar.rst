@@ -25,11 +25,10 @@ Example::
 pdnsd:sections
 ~~~~~~~~~~~~~~
 
-Define multiple server sections. Each section specifies a list of DNS
-servers that pdnsd should try to get information from.
+Define multiple server sections. Each section specifies a list of
+:ref:`glossary-DNS` servers that pdnsd should try to get information from.
 
-If defined, it makes :doc:`/pdnsd/doc/index` behave like a caching,
-recursive DNS server.
+If defined, it makes :doc:`index` behave like a caching, recursive DNS server.
 
 Default: empty dictionary  (``{}``), which mean use ``/etc/resolv.conf`` and
 automatically configure from DNS servers listed there.
@@ -37,7 +36,7 @@ automatically configure from DNS servers listed there.
 pdnsd:ip_address
 ~~~~~~~~~~~~~~~~
 
-The IP address daemon listens on for requests.
+The :ref:`glossary-IP` address daemon listens on for requests.
 
 Default: listen on all interfaces (``0.0.0.0``).
 

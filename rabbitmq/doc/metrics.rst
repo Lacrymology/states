@@ -1,7 +1,7 @@
 Metrics
 =======
 
-Data from :doc:`/rabbitmq/doc/index` collected through the admin interface.
+Data from :doc:`index` collected through the admin interface.
 Locates in ``os.rabbitmq``.
 
 Also consult https://www.rabbitmq.com/configure.html for more detail.
@@ -11,30 +11,29 @@ Also consult https://www.rabbitmq.com/configure.html for more detail.
 rabbitmq.health.disk_free
 -------------------------
 
-Disk free space of the partition on which :doc:`/rabbitmq/doc/index` is
-storing data (bytes).
+Disk free space of the partition on which :doc:`index` is storing data (bytes).
 
 .. _metrics-rabbitmq.health.disk_free_limit:
 
 rabbitmq.health.disk_free_limit
 -------------------------------
 
-Disk free space limit of the partition on which :doc:`/rabbitmq/doc/index`
-is storing data.
+Disk free space limit of the partition on which :doc:`index` is storing data.
 
 .. _metrics-rabbitmq.health.fd_total:
 
 rabbitmq.health.fd_total
 ------------------------
 
-Number of file descriptors available (system-wide set by ``ulimit``).
+Number of :ref:`glossary-file-descriptor` available (system-wide set by
+``ulimit``).
 
 .. _metrics-rabbitmq.health.fd_used:
 
 rabbitmq.health.fd_used
 -----------------------
 
-Number of file descriptors used by RabbitMQ.
+Number of :ref:`glossary-file-descriptor` used by RabbitMQ.
 
 .. _metrics-rabbitmq.health.mem_limit:
 

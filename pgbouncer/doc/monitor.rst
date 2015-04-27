@@ -12,7 +12,7 @@ pgbouncer_procs
 pgbouncer_port
 ~~~~~~~~~~~~~~
 
-:doc:`/pgbouncer/doc/index` port can be connected locally.
+:doc:`index` port can be connected locally.
 
 pgbouncer_special_virtual_db
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~

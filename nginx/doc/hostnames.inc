@@ -3,8 +3,8 @@ webapp.
 
 .. warning::
 
-  The formula won't create automatically the
-  `DNS <http://en.wikipedia.org/wiki/Dns>`_ entries automatically.
+  The formula won't create automatically the :ref:`glossary-DNS` entries
+  automatically.
 
   The role is the place to configure DNS.
   Or it can be done manually.

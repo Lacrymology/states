@@ -11,5 +11,5 @@ trap "log_stop_script \$?" EXIT
 
 {#- automatically trim stale data #}
 
-/usr/local/sentry/manage cleanup --days={{ clean_days }}' 2>&1 \
+/usr/local/sentry/manage cleanup --days='{{ clean_days }}' 2>&1 \
     | logger -t sentry-cleanup -p local0.info

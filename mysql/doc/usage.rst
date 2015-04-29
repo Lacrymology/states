@@ -1,7 +1,7 @@
 Troubleshoot
 ============
 
-How to know the MariaDB root password
+How to know the MySQL root password
 -------------------------------------
 
 Run the following command::
@@ -10,9 +10,9 @@ Run the following command::
 
 Output will be something like this::
 
-  mariadb-server-5.5    mysql-server/root_password_again \
+  mysql-server-5.5    mysql-server/root_password_again \
   password  KPMRB22Hh93yDiyZOqKe
-  mariadb-server-5.5    mysql-server/root_password \
+  mysql-server-5.5    mysql-server/root_password \
   password  KPMRB22Hh93yDiyZOqKe
 
 So the password of `root` user is ``KPMRB22Hh93yDiyZOqKe``.

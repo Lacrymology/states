@@ -5,25 +5,25 @@
 # {{ salt['pillar.get']('message_do_not_modify') }}
 
 mysql_procs:
-  description: MariaDB Daemon
-  command: /usr/lib/nagios/plugins/check_procs -c 1:1 -u mysql -C mysqld -a '--basedir=/usr --datadir=/var/lib/mysql --plugin-dir=/usr/lib/mysql/plugin --user=mysql --pid-file=/var/run/mysqld/mysqld.pid --socket=/var/run/mysqld/mysqld.sock'
+  description: MySQL Daemon
+  command: /usr/lib/nagios/plugins/check_procs -c 1:1 -u mysql -C mysqld
 
 mysql_port:
-  description: MariaDB Local Port
+  description: MySQL Local Port
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 3306 -t {{ timeout }}
   timeout: {{ timeout }}
   dependencies:
     - mysql_procs
 
 {%- if not salt['pillar.get']('__test__', False) -%}
-{%- from 'mariadb/server/nrpe/instance.jinja2' import mysql_instance with context %}
-{{ mysql_instance('mariadb.server', 'mysql', salt['password.pillar']('mysql:password'), 'root') }}
+{%- from 'mysql/server/nrpe/instance.jinja2' import mysql_instance with context %}
+{{ mysql_instance('mysql.server', 'mysql', salt['password.pillar']('mysql:password'), 'root') }}
 {%- endif -%}
 
 {%- if salt['pillar.get']('mysql:bind', '127.0.0.1') != '127.0.0.1' %}
 mysql_port_remote:
   check: check_tcp!3306
-  description: MariaDB Remote Port
+  description: MySQL Remote Port
   timeout: {{ timeout }}
   passive: False
   dependencies:

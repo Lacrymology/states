@@ -4,7 +4,7 @@
 {%- set ssl = salt['pillar.get']('mysql:ssl', False) %}
 include:
   - apt
-  - mariadb
+  - mysql
 {% if ssl %}
   - ssl
 {% endif %}
@@ -19,7 +19,7 @@ include:
 /etc/mysql/my.cnf:
   file:
     - managed
-    - source: salt://mariadb/server/config.jinja2
+    - source: salt://mysql/server/config.jinja2
     - template: jinja
     - user: root
     - group: root
@@ -35,8 +35,8 @@ include:
 remove_bin_log:
   cmd:
     - run
-    - name: rm -f /var/log/mysql/mariadb-bin.*
-    - onlyif: ls /var/log/mysql/mariadb-bin.*
+    - name: rm -f /var/log/mysql/mysql-bin.*
+    - onlyif: ls /var/log/mysql/mysql-bin.*
     - watch_in:
       - service: mysql-server
 
@@ -59,10 +59,9 @@ python-mysqldb:
 mysql-server:
   pkg:
     - latest
-    - name: mariadb-server
+    - name: mysql-server
     - require:
-      - pkgrepo: mariadb
-      - pkg: mariadb
+      - pkg: mysql
       - debconf: mysql-server
       - pkg: python-mysqldb
   {#-
@@ -113,7 +112,7 @@ mysql-server:
       - pkg: mysql-server
   debconf:
     - set
-    - name: mariadb-server-5.5
+    - name: mysql-server-5.5
     - data:
         'mysql-server/root_password': {'type': 'password', 'value': {{ salt['password.pillar']('mysql:password') }}}
         'mysql-server/root_password_again': {'type': 'password', 'value': {{ salt['password.pillar']('mysql:password') }}}
@@ -128,4 +127,4 @@ mysql-server:
       - ssl-cert
   {%- endif %}
     - require:
-      - pkg: mariadb-server
+      - pkg: mysql-server

@@ -3,10 +3,10 @@
 {%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
   - doc
-  - mariadb.server
-  - mariadb.server.backup
-  - mariadb.server.diamond
-  - mariadb.server.nrpe
+  - mysql.server
+  - mysql.server.backup
+  - mysql.server.diamond
+  - mysql.server.nrpe
 
 test:
   cmd:
@@ -305,14 +305,14 @@ test:
         ProcessResources:
           {{ diamond_process_test('mysql') }}
     - require:
-      - sls: mariadb.server
-      - sls: mariadb.server.diamond
+      - sls: mysql.server
+      - sls: mysql.server.diamond
   monitoring:
     - run_all_checks
     - order: last
   qa:
     - test
-    - name: mariadb.server
+    - name: mysql.server
     - pillar_doc: {{ opts['cachedir'] }}/doc/output
     - require:
       - monitoring: test

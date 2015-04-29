@@ -1,6 +1,6 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
-{%- macro mariadb_backup_diamond(deployment, prefix=None) %}
+{%- macro mysql_backup_diamond(deployment, prefix=None) %}
   {%- if not prefix %}
     {%- set prefix = deployment %}
   {%- endif %}

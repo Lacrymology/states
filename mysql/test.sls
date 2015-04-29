@@ -1,9 +1,9 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
 include:
-  - mariadb
-  - mariadb.client
-  - mariadb.nrpe
+  - mysql
+  - mysql.client
+  - mysql.nrpe
 
 test:
   monitoring:

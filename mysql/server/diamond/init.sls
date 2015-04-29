@@ -3,7 +3,7 @@
 include:
   - apt
   - diamond
-  - mariadb.server
+  - mysql.server
   - python.dev
   - salt.minion.diamond
   {#- mysqlclient-python depends on libssl-dev #}
@@ -17,7 +17,7 @@ mysql_diamond_collector:
     - user: root
     - group: root
     - mode: 440
-    - source: salt://mariadb/server/diamond/config.jinja2
+    - source: salt://mysql/server/diamond/config.jinja2
     - require:
       - file: /etc/diamond/collectors
       - service: mysql-server
@@ -36,13 +36,12 @@ mysql_diamond_resources:
         [[mysql]]
         exe = ^\/usr\/sbin\/mysqld
 
-libmariadbclient-dev:
+libmysqlclient-dev:
   pkg:
     - installed
     - require:
-      - pkgrepo: mariadb
       - cmd: apt_sources
-      - pkg: mariadb
+      - pkg: mysql
 
 diamond_mysql_python:
   file:
@@ -52,7 +51,7 @@ diamond_mysql_python:
     - user: root
     - group: root
     - mode: 440
-    - source: salt://mariadb/server/diamond/requirements.jinja2
+    - source: salt://mysql/server/diamond/requirements.jinja2
     - require:
       - virtualenv: diamond
   module:
@@ -65,7 +64,7 @@ diamond_mysql_python:
       - virtualenv: diamond
       - pkg: python-dev
       - pkg: ssl-dev
-      - pkg: libmariadbclient-dev
+      - pkg: libmysqlclient-dev
     - watch:
       - file: diamond_mysql_python
     - watch_in:

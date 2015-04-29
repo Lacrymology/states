@@ -9,4 +9,4 @@
     - absent
 
 {%- from 'nrpe/passive.jinja2' import passive_absent with context %}
-{{ passive_absent('mariadb.server') }}
+{{ passive_absent('mysql.server') }}

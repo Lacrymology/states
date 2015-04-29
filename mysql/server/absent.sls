@@ -12,7 +12,7 @@ mysql-server:
     - dead
   pkg:
     - purged
-    - name: mariadb-server-5.5
+    - name: mysql-server-5.5
     - require_in:
       - file: /etc/mysql
     - require:
@@ -37,6 +37,12 @@ mysql-server:
     - name: /var/lib/mysql
     - require:
       - pkg: mysql-server
+
+/var/log/upstart/mysql.log:
+  file:
+    - absent
+    - require:
+      - service: mysql-server
 
 {%- for extension in ('/', '.log', '.err') %}
 /var/log/mysql{{ extension }}:

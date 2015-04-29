@@ -2,13 +2,12 @@
 
 include:
   - apt
-  - mariadb
+  - mysql
 
 mysql-client:
   pkg:
     - installed
-    - name: mariadb-client
+    - name: mysql-client
     - require:
       - cmd: apt_sources
-      - pkgrepo: mariadb
-      - pkg: mariadb
+      - pkg: mysql

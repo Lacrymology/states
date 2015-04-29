@@ -38,7 +38,7 @@
   "graylog2.web",
   "jenkins",
   "jenkins.backup",
-  "mariadb.server",
+  "mysql.server",
   "memcache",
   "mongodb",
   "nginx",
@@ -198,7 +198,7 @@ include:
   - graylog2.server.absent
   - graylog2.web.absent
   - jenkins.absent
-  - mariadb.server.absent
+  - mysql.server.absent
   - memcache.absent
   - mongodb.absent
   - nginx.absent
@@ -243,7 +243,7 @@ include:
   - rabbitmq.diamond.absent
   - ntp.diamond.absent
   - redis.diamond.absent
-  - mariadb.server.diamond.absent
+  - mysql.server.diamond.absent
   - elasticsearch.diamond.absent
   - amavis.diamond.absent
   - mongodb.diamond.absent

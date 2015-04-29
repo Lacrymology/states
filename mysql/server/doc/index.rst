@@ -2,16 +2,16 @@
    Author: Viet Hung Nguyen <hvn@robotinfra.com>
    Maintainer: Quan Tong Anh <quanta@robotinfra.com>
 
-MariaDB Server
-==============
+MySQL Server
+============
 
 Introduction
 ------------
 
-.. Copied from http://en.wikipedia.org/wiki/MariaDB on 2014-12-13
+.. Copied from http://en.wikipedia.org/wiki/MySQL on 2015-04-29
 
-MariaDB is a community-developed fork of the MySQL relational database
-management system intended to remain free under the GNU GPL.
+MySQL is the world's second most widely used relational database management
+system (RDBMS) and most widely used open-source RDBMS.
 
 .. toctree::
     :glob:

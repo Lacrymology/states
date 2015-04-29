@@ -43,8 +43,8 @@ States
 
 Each ``init.sls`` should have its counter-part ``absent.sls`` . That means:
 
-* if a formula has ``mariadb/server/init.sls``, it should have
-  ``mariadb/server/absent.sls``
+* if a formula has ``mysql/server/init.sls``, it should have
+  ``mysql/server/absent.sls``
 * absent state must contain some state IDs like in ``init.sls`` ,
   if one includes both ``init.sls`` and ``absent.sls`` of a formula into
   a SLS, it will cause conflict and formula writer will easy to detect that
@@ -54,40 +54,40 @@ Use only standard style to write state.
 
 Good::
 
-  mariadb-server:
+  mysql-server:
     pkg:
       - installed
 
 Bad::
 
-  mariadb-server:
+  mysql-server:
     pkg.installed
 
 States should be group together if it makes sense:
 
 Good::
 
-  mariadb-server:
+  mysql-server:
     pkg:
       - installed
     service:
       - running
       - name: mysql
       - require:
-        - pkg: mariadb-server
+        - pkg: mysql-server
 
 Not so good::
 
-  mariadb-server:
+  mysql-server:
     pkg:
       - installed
 
-  mariadb-service:
+  mysql-service:
     service:
       - running
       - name: mysql
       - require:
-        - pkg: mariadb-server
+        - pkg: mysql-server
 
 ``pkg`` state module
 ~~~~~~~~~~~~~~~~~~~~

@@ -384,3 +384,10 @@ After that, we can make another upstart script start on this event.
              and local-filesystems
              and runlevel [2345]
              and myservice-started)
+
+NRPE
+----
+
+All checks that use ``/usr/lib/nagios/plugins/check_procs``
+should provide ``-C`` and ``-u`` if possible. This helps avoid the check
+matching itself.

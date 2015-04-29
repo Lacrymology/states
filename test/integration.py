@@ -45,11 +45,6 @@ import salt.client
 
 # global variables
 logger = logging.getLogger()
-# salt client
-caller = salt.client.Caller('/root/salt/states/test/minion')
-caller.opts.update({'id': socket.gethostname()})
-caller.sminion = salt.minion.SMinion(caller.opts)
-client = caller.function
 # is a cleanup required before next test
 is_clean = False
 # has previous cleanup failed
@@ -68,6 +63,14 @@ unclean = set()
 NO_TEST_STRING = '-*- ci-automatic-discovery: off -*-'
 IGNORED_RESULTS = ('One or more requisite failed',)
 
+
+def _get_salt_client(config_file='/root/salt/states/test/minion'):
+    opts = salt.config.minion_config(config_file)
+    opts['id'] = socket.gethostname()
+    caller = salt.client.Caller(mopts=opts)
+    return caller.function
+
+client = _get_salt_client()
 all_states = client('cp.list_states')
 ran_states_cntr = collections.Counter()
 
@@ -90,7 +93,7 @@ def if_change(result):
 
 
 def tearDownModule():
-    global client
+    client = _get_salt_client()
     global ran_states_cntr
     logger.debug("Running tearDownModule")
     logger.info('COUNTER: Ran totally: %d States',
@@ -105,7 +108,7 @@ def setUpModule():
     """
     Prepare minion for tests, this is executed only once time.
     """
-    global client
+    client = _get_salt_client()
     logger.debug("Running setUpModule")
 
     # force HOME to be root directory
@@ -216,7 +219,7 @@ def list_user_space_processes():
     """
     return all running processes on minion
     """
-    global client
+    client = _get_salt_client()
     result = client('status.procs')
     output = {}
 
@@ -271,12 +274,12 @@ def get_groups():
     """
     return a set of groups
     """
-    global client
+    client = _get_salt_client()
     return set(group['name'] for group in client('group.getent', True))
 
 
 def get_users():
-    global client
+    client = _get_salt_client()
     return set(user['name'] for user in client('user.getent'))
 
 
@@ -443,7 +446,6 @@ class TestStateMeta(type):
         '''
         Return a class which consist of all needed test state functions
         '''
-        global client
         global all_states
         # Get all SLSes to test
         attrs['all_states'] = all_states

@@ -79,26 +79,33 @@ def returner(return_data):
     """
     If an error occurs, log it to sentry
     """
-    if not isinstance(return_data['return'], dict):
+    try:
+        rdata = return_data['return']
+    except KeyError:
+        send_sentry(return_data,
+                    "'return' key is not in return data dictionary")
+        return
+
+    if not isinstance(rdata, dict):
         send_sentry(return_data, 'Expects return data as a dict,'
-                    'got {0}'.format(type(return_data['return'])))
+                    'got type {0}: {1}'.format(type(rdata), rdata))
         return
 
     requisite_error = 'One or more requisite failed'
     try:
         logger.debug("Checking to see if there is a failed state")
-        success = all(return_data['return'][state]['result']
-                      for state in return_data['return'])
+        success = all(rdata[state]['result']
+                      for state in rdata)
         logger.debug("success: {0}".format(success))
-    except KeyError:
+    except KeyError as e:
         send_sentry(return_data,
-                    "'return' key is not in return data dictionary")
+                    "`result` key is not in return data dictionary.")
+        return
     else:
         if success:
             logger.debug("All states run successfully")
         else:
-            returned = return_data['return']
-            for state_name, sdata in returned.iteritems():
+            for state_name, sdata in rdata.iteritems():
                 # only send alert for the first failed in the requisite chain
                 # or there will be a lot of events when the beginning fails
                 if sdata['comment'].startswith(requisite_error):
@@ -117,3 +124,4 @@ def returner(return_data):
                         return_data,
                         'Key not in state {0} data: {1}'.format(state_name, e)
                     )
+                    return

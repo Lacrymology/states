@@ -43,10 +43,14 @@ libmysqlclient-dev:
       - cmd: apt_sources
       - pkg: mysql
 
+/usr/local/diamond/salt-mysql-requirements.txt:
+  file:
+    - absent
+
 diamond_mysql_python:
   file:
     - managed
-    - name: /usr/local/diamond/salt-mysql-requirements.txt
+    - name: {{ opts['cachedir'] }}/pip/mysql.server
     - template: jinja
     - user: root
     - group: root
@@ -59,7 +63,7 @@ diamond_mysql_python:
     - name: pip.install
     - upgrade: True
     - bin_env: /usr/local/diamond
-    - requirements: /usr/local/diamond/salt-mysql-requirements.txt
+    - requirements: {{ opts['cachedir'] }}/pip/mysql.server
     - require:
       - virtualenv: diamond
       - pkg: python-dev

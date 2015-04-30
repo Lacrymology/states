@@ -22,10 +22,14 @@ rabbitmq_diamond_resources:
         exe = ^\/usr\/lib\/erlang\/erts-.+\/bin\/inet_gethost$,^\/usr\/lib\/erlang\/erts-.+\/bin\/epmd$
         cmdline = ^inet_gethost 4$,^\/usr\/lib\/erlang\/erts-.+\/bin\/beam.+rabbitmq.+$,
 
+/usr/local/diamond/salt-rabbitmq-requirements.txt:
+  file:
+    - absent
+
 diamond-pyrabbit:
   file:
     - managed
-    - name: /usr/local/diamond/salt-rabbitmq-requirements.txt
+    - name: {{ opts['cachedir'] }}/pip/rabbitmq.diamond
     - template: jinja
     - user: root
     - group: root
@@ -38,7 +42,7 @@ diamond-pyrabbit:
     - name: pip.install
     - upgrade: True
     - bin_env: /usr/local/diamond
-    - requirements: /usr/local/diamond/salt-rabbitmq-requirements.txt
+    - requirements: {{ opts['cachedir'] }}/pip/rabbitmq.diamond
     - require:
       - virtualenv: diamond
     - watch:

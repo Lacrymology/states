@@ -7,10 +7,14 @@ include:
   file:
     - absent
 
+/usr/local/nagios/salt-elasticsearch-requirements.txt:
+  file:
+    - absent
+
 pyelasticsearch:
   file:
     - managed
-    - name: /usr/local/nagios/salt-elasticsearch-requirements.txt
+    - name: {{ opts['cachedir'] }}/pip/elasticsearch
     - source: salt://elasticsearch/nrpe/requirements.jinja2
     - template: jinja
     - user: root
@@ -23,7 +27,7 @@ pyelasticsearch:
     - name: pip.install
     - upgrade: True
     - bin_env: /usr/local/nagios
-    - requirements: /usr/local/nagios/salt-elasticsearch-requirements.txt
+    - requirements: {{ opts['cachedir'] }}/pip/elasticsearch
     - watch:
       - file: pyelasticsearch
 

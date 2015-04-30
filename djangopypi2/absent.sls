@@ -22,3 +22,7 @@ djangopypi2-uwsgi:
     - absent
     - require:
       - file: djangopypi2-uwsgi
+
+{{ opts['cachedir'] }}/pip/djangopypi2:
+  file:
+    - absent

@@ -77,10 +77,14 @@ postfix_diamond_queue_length:
     - watch_in:
       - service: rsyslog
 
+/usr/local/diamond/salt-postfix-requirements.txt:
+  file:
+    - absent
+
 postfix_stats-requirements:
   file:
     - managed
-    - name: /usr/local/diamond/salt-postfix-requirements.txt
+    - name: {{ opts['cachedir'] }}/pip/postfix.diamond
     - template: jinja
     - user: root
     - group: root
@@ -109,7 +113,7 @@ postfix_stats:
     - name: pip.install
     - upgrade: True
     - bin_env: /usr/local/diamond
-    - requirements: /usr/local/diamond/salt-postfix-requirements.txt
+    - requirements: {{ opts['cachedir'] }}/pip/postfix.diamond
     - require:
       - virtualenv: diamond
     - watch:

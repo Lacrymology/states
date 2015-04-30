@@ -18,6 +18,10 @@ include:
     - require:
       - virtualenv: statsd
 
+/usr/local/statsd/salt-requirements.txt:
+  file:
+    - absent
+
 statsd:
   file:
     - managed
@@ -64,7 +68,7 @@ statsd:
   module:
     - wait
     - name: pip.install
-    - requirements: /usr/local/statsd/salt-requirements.txt
+    - requirements: {{ opts['cachedir'] }}/pip/statsd
     - bin_env: /usr/local/statsd
     - require:
       - virtualenv: statsd
@@ -77,7 +81,7 @@ statsd:
 statsd_requirements:
   file:
     - managed
-    - name: /usr/local/statsd/salt-requirements.txt
+    - name: {{ opts['cachedir'] }}/pip/statsd
     - template: jinja
     - user: root
     - group: root

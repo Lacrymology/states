@@ -139,6 +139,10 @@ include:
     - require:
       - virtualenv: shinken
 
+/usr/local/shinken/salt-requirements.txt:
+  file:
+    - absent
+
 shinken:
   pkg:
     - installed
@@ -170,7 +174,7 @@ shinken:
       - file: /usr/local/shinken/src
   file:
     - managed
-    - name: /usr/local/shinken/salt-requirements.txt
+    - name: {{ opts['cachedir'] }}/pip/shinken
     - template: jinja
     - user: root
     - group: root
@@ -185,7 +189,7 @@ shinken:
     - name: pip.install
     - upgrade: True
     - bin_env: /usr/local/shinken/bin/pip
-    - requirements: /usr/local/shinken/salt-requirements.txt
+    - requirements: {{ opts['cachedir'] }}/pip/shinken
     - require:
       - virtualenv: shinken
     - watch:

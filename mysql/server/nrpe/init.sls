@@ -9,10 +9,14 @@ include:
   - ssl.nrpe
 {%- endif %}
 
+/usr/local/nagios/salt-mysql-query-check-requirements.txt:
+  file:
+    - absent
+
 nrpe_mysql_check_querry:
   file:
     - managed
-    - name: /usr/local/nagios/salt-mysql-query-check-requirements.txt
+    - name: {{ opts['cachedir'] }}/pip/mysql.server.nrpe
     - source: salt://mysql/server/nrpe/requirements.jinja2
     - template: jinja
     - user: root
@@ -25,7 +29,7 @@ nrpe_mysql_check_querry:
     - name: pip.install
     - upgrade: True
     - bin_env: /usr/local/nagios
-    - requirements: /usr/local/nagios/salt-mysql-query-check-requirements.txt
+    - requirements: {{ opts['cachedir'] }}/pip/mysql.server.nrpe
     - watch:
       - file: nrpe_mysql_check_querry
 

@@ -4,7 +4,6 @@
   file:
     - absent
 
-diamond_redis:
+{{ opts['cachedir'] }}/pip/redis.diamond:
   file:
     - absent
-    - name: /usr/local/diamond/salt-redis-requirements.txt

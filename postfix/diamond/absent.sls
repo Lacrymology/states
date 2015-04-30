@@ -21,7 +21,6 @@ postfix_diamond_queue_length:
   file:
     - absent
 
-postfix_stats-requirements:
+{{ opts['cachedir'] }}/pip/postfix.diamond:
   file:
     - absent
-    - name: /usr/local/diamond/salt-postfix-requirements.txt

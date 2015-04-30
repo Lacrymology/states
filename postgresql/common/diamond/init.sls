@@ -8,10 +8,14 @@ include:
   - postgresql.common.user
   - rsyslog.diamond
 
+/usr/local/diamond/salt-postgresql-requirements.txt:
+  file:
+    - absent
+
 diamond_collector-psycopg2:
   file:
     - managed
-    - name: /usr/local/diamond/salt-postgresql-requirements.txt
+    - name: {{ opts['cachedir'] }}/pip/postgresql.common.diamond
     - template: jinja
     - user: root
     - group: root
@@ -24,7 +28,7 @@ diamond_collector-psycopg2:
     - name: pip.install
     - upgrade: True
     - bin_env: /usr/local/diamond
-    - requirements: /usr/local/diamond/salt-postgresql-requirements.txt
+    - requirements: {{ opts['cachedir'] }}/pip/postgresql.common.diamond
     - watch:
       - pkg: python-dev
       - pkg: postgresql-dev

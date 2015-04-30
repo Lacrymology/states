@@ -7,3 +7,7 @@
 /usr/local/bin/glances:
   file:
     - absent
+
+{{ opts['cachedir'] }}/pip/glances:
+  file:
+    - absent

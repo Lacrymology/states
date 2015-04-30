@@ -13,7 +13,7 @@ graphite-web:
       - file: graphite-web
 {% endfor %}
 
-{% for local in ('manage', 'salt-graphite-requirements.txt', 'bin/build-index.sh') %}
+{% for local in ('manage', 'bin/build-index.sh') %}
 /usr/local/graphite/{{ local }}:
   file:
     - absent
@@ -28,3 +28,7 @@ graphite-web:
     - require:
       - file: graphite-web
 {% endfor %}
+
+{{ opts['cachedir'] }}/pip/graphite:
+  file:
+    - absent

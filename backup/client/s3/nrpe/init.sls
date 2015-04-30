@@ -20,10 +20,14 @@ include:
     - require:
       - module: nrpe-virtualenv
 
+/usr/local/nagios/backup.client.s3.nrpe-requirements.txt:
+  file:
+    - absent
+
 backup_client_nrpe-requirements:
   file:
     - managed
-    - name: /usr/local/nagios/backup.client.s3.nrpe-requirements.txt
+    - name: {{ opts['cachedir'] }}/pip/backup.client.s3.nrpe
     - template: jinja
     - user: root
     - group: root
@@ -36,7 +40,7 @@ backup_client_nrpe-requirements:
     - name: pip.install
     - upgrade: True
     - bin_env: /usr/local/nagios
-    - requirements: /usr/local/nagios/backup.client.s3.nrpe-requirements.txt
+    - requirements: {{ opts['cachedir'] }}/pip/backup.client.s3.nrpe
     - require:
       - virtualenv: nrpe-virtualenv
     - watch:

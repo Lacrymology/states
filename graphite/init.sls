@@ -90,10 +90,14 @@ graphite_wsgi:
       - pkg: sudo
       - file: bash
 
+/usr/local/graphite/salt-graphite-requirements.txt:
+  file:
+    - absent
+
 graphite-web:
   file:
     - managed
-    - name: /usr/local/graphite/salt-graphite-requirements.txt
+    - name: {{ opts['cachedir'] }}/pip/graphite
     - template: jinja
     - user: root
     - group: root
@@ -106,7 +110,7 @@ graphite-web:
     - name: pip.install
     - upgrade: True
     - bin_env: /usr/local/graphite/bin/pip
-    - requirements: /usr/local/graphite/salt-graphite-requirements.txt
+    - requirements: {{ opts['cachedir'] }}/pip/graphite
     - install_options:
       - "--prefix=/usr/local/graphite"
       - "--install-lib=/usr/local/graphite/lib/python{{ python_version }}/site-packages"

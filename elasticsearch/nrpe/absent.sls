@@ -19,3 +19,7 @@ pyelasticsearch:
   file:
     - absent
     - name: /usr/local/nagios/salt-elasticsearch-requirements.txt
+
+{{ opts['cachedir'] }}/pip/elasticsearch:
+  file:
+    - absent

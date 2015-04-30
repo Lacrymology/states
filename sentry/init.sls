@@ -26,6 +26,10 @@ include:
   - web
   - xml
 
+/usr/local/sentry/salt-requirements.txt:
+  file:
+    - absent
+
 sentry:
   virtualenv:
     - manage
@@ -43,7 +47,7 @@ sentry:
       - cmd: apt_sources
   file:
     - managed
-    - name: /usr/local/sentry/salt-requirements.txt
+    - name: {{ opts['cachedir'] }}/pip/sentry
     - template: jinja
     - user: root
     - group: root
@@ -57,7 +61,7 @@ sentry:
     - name: pip.install
     - upgrade: True
     - bin_env: /usr/local/sentry/bin/pip
-    - requirements: /usr/local/sentry/salt-requirements.txt
+    - requirements: {{ opts['cachedir'] }}/pip/sentry
     - require:
       - virtualenv: sentry
       - pkg: xml-dev

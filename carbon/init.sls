@@ -47,10 +47,14 @@ include:
       - user: graphite
       - file: /etc/graphite
 
+/usr/local/graphite/salt-carbon-requirements.txt:
+  file:
+    - absent
+
 carbon:
   file:
     - managed
-    - name: /usr/local/graphite/salt-carbon-requirements.txt
+    - name: {{ opts['cachedir'] }}/pip/carbon
     - template: jinja
     - user: root
     - group: root
@@ -64,7 +68,7 @@ carbon:
     - name: pip.install
     - upgrade: True
     - bin_env: /usr/local/graphite/bin/pip
-    - requirements: /usr/local/graphite/salt-carbon-requirements.txt
+    - requirements: {{ opts['cachedir'] }}/pip/carbon
     - install_options:
       - "--prefix=/usr/local/graphite"
       - "--install-lib=/usr/local/graphite/lib/python{{ grains['pythonversion'][0] }}.{{ grains['pythonversion'][1] }}/site-packages"

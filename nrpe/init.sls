@@ -55,6 +55,10 @@ nrpe_remove_old_config_files_{{ filepath }}:
     - require:
       - module: nrpe-virtualenv
 
+/usr/local/nagios/salt-requirements.txt:
+  file:
+    - absent
+
 nrpe-virtualenv:
   {# remove system-wide nagiosplugin, only use one in our nrpe-virtualenv #}
   pip:
@@ -76,7 +80,7 @@ nrpe-virtualenv:
       - pkg: yaml
   file:
     - managed
-    - name: /usr/local/nagios/salt-requirements.txt
+    - name: {{ opts['cachedir'] }}/pip/nrpe
     - template: jinja
     - user: root
     - group: root
@@ -89,7 +93,7 @@ nrpe-virtualenv:
     - name: pip.install
     - upgrade: True
     - bin_env: /usr/local/nagios
-    - requirements: /usr/local/nagios/salt-requirements.txt
+    - requirements: {{ opts['cachedir'] }}/pip/nrpe
     - require:
       - virtualenv: nrpe-virtualenv
     - watch:

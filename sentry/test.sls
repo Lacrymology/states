@@ -4,6 +4,7 @@
 {%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
   - doc
+  - hostname
   - sentry
   - sentry.backup
   - sentry.backup.diamond
@@ -27,6 +28,7 @@ test:
     - order: last
     - require:
       - cmd: test_crons
+      - host: hostname
   qa:
     - test
     - name: sentry

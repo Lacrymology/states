@@ -81,7 +81,7 @@ def returner(return_data):
     """
     if not isinstance(return_data['return'], dict):
         send_sentry(return_data, 'Expects return data as a dict,'
-                    'got {0}'.format(type(return_data['result'])))
+                    'got {0}'.format(type(return_data['return'])))
         return
 
     requisite_error = 'One or more requisite failed'

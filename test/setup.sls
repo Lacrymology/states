@@ -22,6 +22,7 @@ fake_mine:
         def get(*args):
             minion_id = __salt__['grains.item']('id')['id']
             return {minion_id: __salt__['monitoring.data']()}
+    - reload_modules: true
 
 sync_all:
   module:

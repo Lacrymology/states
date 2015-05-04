@@ -188,7 +188,7 @@ def test_pillar(name, pillar_doc):
     return ret
 
 
-def test_monitor(name, monitor_doc, additional=()):
+def test_monitor(name, monitor_doc, additional=None):
     '''
     Test monitor documentation for the given formula
 
@@ -199,6 +199,8 @@ def test_monitor(name, monitor_doc, additional=()):
     :param monitor_doc: Absolute path to the doc build output directory
     :param additional: Additional formulas to test
     '''
+    if additional is None:
+        additional = ()
     formulas = [name]
     formulas.extend(additional)
 
@@ -275,7 +277,7 @@ def test_monitor(name, monitor_doc, additional=()):
     return ret
 
 
-def test(name, doc, additional=()):
+def test(name, doc, additional=None):
     """
     Test both pillars and monitoring documentation for the given formula
 
@@ -283,6 +285,8 @@ def test(name, doc, additional=()):
     :param doc: Absolute path to the doc build output directory
     :param additional: Additional formulas to test
     """
+    if additional is None:
+        additional = ()
     pillar = test_pillar(name, doc)
     monitor = test_monitor(name, doc, additional=additional)
     ret = {'name': name,

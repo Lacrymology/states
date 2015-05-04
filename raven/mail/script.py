@@ -44,11 +44,13 @@ class Mail(pysc.Application):
     def main(self):
         # consume standard input early
         lines = []
+        is_cron = False
         p = re.compile("Subject: Cron <root@[^ ]+> (.*)")
         for line in sys.stdin:
             if p.search(line):
-                subject = p.search(line).group(1)
-                lines.append("Subject: {}\n".format(subject))
+                is_cron = True
+                cron_subject = p.search(line).group(1)
+                lines.append("Subject: {}\n".format(cron_subject))
             else:
                 lines.append(line)
 
@@ -66,9 +68,12 @@ class Mail(pysc.Application):
         client = Client(dsn=dsn)
 
         if self.config['subject']:
-            msg = os.linesep.join((self.config['subject'], body))
+            subject = self.config['subject']
+        elif is_cron:
+            subject = cron_subject
         else:
-            msg = os.linesep.join((subject, body))
+            subject = lines[0]
+        msg = os.linesep.join((subject, body))
         client.captureMessage(msg, extra=os.environ)
 
 if __name__ == "__main__":

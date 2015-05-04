@@ -85,6 +85,7 @@ def encrypt_shadow(unencrypted_password, salt_key=None, hash_type='6'):
     '''
     if salt_key is None:
         salt_key = _generate_random_password(16)
+    unencrypted_password = str(unencrypted_password)
     return crypt.crypt(unencrypted_password,
                        "$%s$%s%s" % (hash_type, salt_key,
                                      unencrypted_password))

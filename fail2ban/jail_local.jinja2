@@ -1,0 +1,19 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+
+# {{ salt['pillar.get']('message_do_not_modify') }}
+
+{%- set action = salt['pillar.get']('fail2ban:action', 'action_') %}
+{%- if action != 'action_' %}
+action = %({{ action }})s
+destemail = {{ salt['pillar.get']('fail2ban:destemail') }}
+sendername = {{ salt['pillar.get']('fail2ban:sendername') }}
+mta = {{ salt['pillar.get']('fail2ban:mta') }}
+{%- endif %}
+
+[ssh]
+
+enabled  = true
+port     = {% for port in salt['pillar.get']('ssh:server:ports', [22]) %}{{ port }}{% if not loop.last %},{% endif %}{% endfor %}
+filter   = sshd
+logpath  = /var/log/auth.log
+maxretry = {{ salt['pillar.get']('fail2ban:maxretry', 3) }}

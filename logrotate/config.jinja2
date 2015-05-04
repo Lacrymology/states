@@ -14,6 +14,7 @@ rotate 4
 {#- create new (empty) log files after rotating old ones #}
 create
 compress
+su root syslog
 include /etc/logrotate.d
 {#- no packages own wtmp, or btmp -- we'll rotate them here #}
 {% set logs = {'wtmp': '0664', 'btmp': '0660'} %}

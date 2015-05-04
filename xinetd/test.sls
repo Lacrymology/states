@@ -2,18 +2,23 @@
 
 include:
   - doc
+  - logrotate
   - xinetd
   - xinetd.diamond
+  - xinetd.fail2ban
   - xinetd.nrpe
 
 {%- from 'cron/macro.jinja2' import test_cron with context %}
 {%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
+{%- from 'fail2ban/macro.jinja2' import fail2ban_regex_test with context %}
 
 {%- call test_cron() %}
 - sls: xinetd
 - sls: xinetd.diamond
 - sls: xinetd.nrpe
 {%- endcall %}
+
+{{ fail2ban_regex_test('xinetd', 'xinetd-fail', 'xinetd[16256]', "FAIL: telnet address from=5.6.7.8") }}
 
 test:
   monitoring:
@@ -26,7 +31,9 @@ test:
     - test
     - map:
         ProcessResources:
-    {{ diamond_process_test('xinetd') }}
+          {{ diamond_process_test('xinetd') }}
+        UserScripts:
+          fail2ban.xinetd: True
     - require:
       - monitoring: test
       - sls: xinetd

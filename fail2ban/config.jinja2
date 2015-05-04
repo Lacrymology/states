@@ -1,0 +1,11 @@
+# {{ salt['pillar.get']('message_do_not_modify') }}
+
+[Definition]
+
+loglevel = {{ salt['pillar.get']('fail2ban:debug', 3) }}
+
+logtarget = SYSLOG
+
+socket = /var/run/fail2ban/fail2ban.sock
+
+pidfile = /var/run/fail2ban/fail2ban.pid

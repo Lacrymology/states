@@ -2,10 +2,9 @@
 
 include:
   - diamond
-  - postgresql.server.diamond
-  - rsyslog.diamond
+  - firewall.diamond
 
-proftpd_diamond_resources:
+xinetd_diamond_resources:
   file:
     - accumulated
     - name: processes
@@ -14,5 +13,8 @@ proftpd_diamond_resources:
       - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
     - text:
       - |
-        [[proftpd]]
-        exe = ^\/usr\/sbin\/proftpd$
+        [[xinetd]]
+        exe = ^\/usr\/sbin\/xinetd$
+
+{%- from 'diamond/macro.jinja2' import fail2ban_count_ip with context %}
+{{ fail2ban_count_ip('xinetd-fail') }}

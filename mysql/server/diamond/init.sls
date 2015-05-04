@@ -4,6 +4,7 @@ include:
   - apt
   - diamond
   - mysql.server
+  - firewall.diamond
   - python.dev
   - salt.minion.diamond
   {#- mysqlclient-python depends on libssl-dev #}
@@ -35,6 +36,9 @@ mysql_diamond_resources:
       - |
         [[mysql]]
         exe = ^\/usr\/sbin\/mysqld
+
+{%- from 'diamond/macro.jinja2' import fail2ban_count_ip with context %}
+{{ fail2ban_count_ip('mysqld-auth') }}
 
 libmysqlclient-dev:
   pkg:

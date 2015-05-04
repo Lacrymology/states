@@ -2,6 +2,7 @@
 
 {%- from 'cron/macro.jinja2' import test_cron with context %}
 {%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
+{%- from 'fail2ban/macro.jinja2' import fail2ban_regex_test with context %}
 include:
   - doc
   - proftpd
@@ -9,6 +10,7 @@ include:
   - proftpd.backup.nrpe
   - proftpd.backup.diamond
   - proftpd.diamond
+  - proftpd.fail2ban
   - proftpd.nrpe
 
 {%- call test_cron() %}
@@ -20,12 +22,18 @@ include:
 - sls: proftpd.nrpe
 {%- endcall %}
 
+{%- set fake_ip = '5.6.7.8' %}
+
+{{ fail2ban_regex_test('proftpd', tag='proftpd[1234]', message="localhost (" ~ fake_ip ~ "[" ~ fake_ip ~"]) - USER root: no such user found from " ~ fake_ip ~ " [" ~ fake_ip ~ "] to " ~ salt['network.ip_addrs']()[0] ~ ":21") }}
+
 test:
   diamond:
     - test
     - map:
         ProcessResources:
           {{ diamond_process_test('proftpd') }}
+        UserScripts:
+          fail2ban.proftpd: True
     - require:
       - sls: proftpd
       - sls: proftpd.diamond

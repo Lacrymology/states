@@ -17,6 +17,7 @@ include:
   - dovecot.backup.diamond
   - dovecot.backup.nrpe
   - dovecot.diamond
+  - dovecot.fail2ban
   - dovecot.nrpe
   - mail.server.nrpe
   - mail.server.diamond
@@ -25,6 +26,7 @@ include:
   - openldap.nrpe
   - postfix.nrpe
   - postfix.diamond
+  - postfix.fail2ban
 
 {%- call test_cron() %}
 - sls: amavis
@@ -57,12 +59,14 @@ test:
     - test
     - map:
         Amavis:
+          {#-
           amavis.CacheAttempts.count: False
           amavis.CacheAttempts.percentage: False
           amavis.CacheAttempts.frequency: False
           amavis.CacheMisses.count: False
           amavis.CacheMisses.percentage: False
           amavis.CacheMisses.frequency: False
+          #}
           amavis.ContentCleanMsgs.count: False
           amavis.ContentCleanMsgs.percentage: False
           amavis.ContentCleanMsgs.frequency: True

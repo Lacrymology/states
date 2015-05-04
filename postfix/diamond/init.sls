@@ -9,6 +9,7 @@ include:
     {%- endif %}
 {%- endif %}
   - diamond
+  - firewall.diamond
   - postfix
   - rsyslog
   - local
@@ -52,6 +53,9 @@ postfix_diamond_queue_length:
     - require:
       - module: diamond
       - file: diamond.conf
+
+{%- from 'diamond/macro.jinja2' import fail2ban_count_ip with context %}
+{{ fail2ban_count_ip('postfix') }}
 
 /var/log/mail.log:
   file:

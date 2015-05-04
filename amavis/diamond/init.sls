@@ -2,8 +2,8 @@
 
 include:
   - amavis
-  - diamond
   - cron.diamond
+  - diamond
   - spamassassin.diamond
 
 amavis_diamond_resources:

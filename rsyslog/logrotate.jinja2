@@ -16,15 +16,16 @@
 /var/log/debug
 /var/log/messages
 {
-       rotate {{ salt['pillar.get']('rsyslog:rotate', 14) }}
-       daily
-       missingok
-       notifempty
-       delaycompress
-       compress
-       sharedscripts
-       create 640 syslog adm
-       postrotate
-           reload rsyslog >/dev/null 2>&1 || true
-       endscript
+    rotate {{ salt['pillar.get']('rsyslog:rotate', 14) }}
+    daily
+    missingok
+    notifempty
+    delaycompress
+    compress
+    sharedscripts
+    create 640 syslog adm
+    postrotate
+        reload rsyslog >/dev/null 2>&1 || true
+    endscript
+    su root syslog
 }

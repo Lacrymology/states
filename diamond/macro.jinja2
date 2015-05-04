@@ -54,3 +54,26 @@ set zmempct=False to fail the test if that happens.
           process.{{ state }}.num_threads: False
           process.{{ state }}.uptime: False
 {%- endmacro %}
+
+{%- macro fail2ban_count_ip(jail) %}
+/usr/local/diamond/share/diamond/user_scripts/count_banned_{{ jail }}.sh:
+  file:
+    - managed
+    - source: salt://fail2ban/diamond/count_banned_ip.jinja2
+    - template: jinja
+    - context:
+        jail: {{ jail }}
+    - user: root
+    - group: root
+    - mode: 550
+    - require:
+      - module: diamond
+      - file: diamond.conf
+      - pkg: iptables
+{%- endmacro %}
+
+{%- macro fail2ban_count_ip_absent(jail) %}
+/usr/local/diamond/share/diamond/user_scripts/count_banned_{{ jail }}.sh:
+  file:
+    - absent
+{%- endmacro %}

@@ -1,0 +1,44 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+
+{%- from "os.jinja2" import os with context %}
+{%- macro fail2ban_regex_test(formula, jail, tag, message, timeout=60) %}
+
+{%- set fake_ip = '5.6.7.8' %}
+
+fake_{{ formula }}_login:
+  cmd:
+    - script
+    - source: salt://fail2ban/fake_login.jinja2
+    - template: jinja
+    - args: |
+        {{ tag|default(formula) }} "{{ message }}"
+    - require:
+      - sls: bash
+      - sls: fail2ban
+  module:
+    - run
+    - name: service.restart
+    - m_name: fail2ban
+    - require:
+      - cmd: fake_{{ formula }}_login
+
+test_fail2ban_{{ formula }}:
+  cmd:
+    - script
+    - source: salt://fail2ban/wait_for_banned.py
+    - args: "-c fail2ban-{{ jail|default(formula) }} -s {{ fake_ip }} -j {% if os.is_precise %}DROP{% else %}REJECT{% endif %}"
+    - require:
+      - module: fake_{{ formula }}_login
+      - pkg: python
+      - pkg: iptables
+  module:
+    - run
+    - name: cmd.run
+    {%- if os.is_precise %}
+    - cmd: iptables -D fail2ban-{{ jail|default(formula) }} -s {{ fake_ip }} -j DROP
+    {%- else %}
+    - cmd: fail2ban-client set {{ jail|default(formula) }} unbanip {{ fake_ip }}
+    {%- endif %}
+    - require:
+      - cmd: test_fail2ban_{{ formula }}
+{%- endmacro %}

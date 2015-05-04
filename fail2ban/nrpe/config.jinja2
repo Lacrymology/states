@@ -1,0 +1,5 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+
+fail2ban_procs:
+  description: Fail2ban Daemon
+  command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -a "/usr/bin/fail2ban-server -b -s /var/run/fail2ban/fail2ban.sock{% if grains['oscodename'] == 'trusty' %} -p /var/run/fail2ban/fail2ban.pid{% endif %}" -u root'

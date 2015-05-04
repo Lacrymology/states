@@ -20,6 +20,7 @@ And run::
   doc/build.py /var/cache/salt/minion/doc/output
 -#}
 include:
+  - git
   - locale
   - pip
   - ssh.client
@@ -33,6 +34,7 @@ doc_root:
     - requirements: {{ opts['cachedir'] }}/pip/doc
     - watch:
       - file: doc_root
+      - pkg: git
     - reload_modules: True
   file:
     - managed

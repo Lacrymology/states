@@ -188,7 +188,7 @@ def test_pillar(name, pillar_doc):
     return ret
 
 
-def test_monitor(name, pillar_doc, additional=()):
+def test_monitor(name, monitor_doc, additional=None):
     '''
     Test monitor documentation for the given formula
 
@@ -196,9 +196,11 @@ def test_monitor(name, pillar_doc, additional=()):
               checks
 
     :param name: The name of the formula to test
-    :param pillar_doc: Absolute path to the doc build output directory
+    :param monitor_doc: Absolute path to the doc build output directory
     :param additional: Additional formulas to test
     '''
+    if additional is None:
+        additional = ()
     formulas = [name]
     formulas.extend(additional)
 
@@ -230,7 +232,7 @@ def test_monitor(name, pillar_doc, additional=()):
     logger.debug("Found %d for all %d formulas: %s", len(check_names),
                  len(formulas), ','.join(check_names))
 
-    doctrees = __salt__['qa.parse_doctrees'](pillar_doc)
+    doctrees = __salt__['qa.parse_doctrees'](monitor_doc)
 
     # extract documented check names and errors
     doc_names = []
@@ -275,16 +277,18 @@ def test_monitor(name, pillar_doc, additional=()):
     return ret
 
 
-def test(name, pillar_doc, additional=()):
+def test(name, doc, additional=None):
     """
     Test both pillars and monitoring documentation for the given formula
 
     :param name: The name of the formula to test
-    :param pillar_doc: Absolute path to the doc build output directory
+    :param doc: Absolute path to the doc build output directory
     :param additional: Additional formulas to test
     """
-    pillar = test_pillar(name, pillar_doc)
-    monitor = test_monitor(name, pillar_doc, additional=additional)
+    if additional is None:
+        additional = ()
+    pillar = test_pillar(name, doc)
+    monitor = test_monitor(name, doc, additional=additional)
     ret = {'name': name,
            'changes': {},
            'result': pillar['result'] and monitor['result'],

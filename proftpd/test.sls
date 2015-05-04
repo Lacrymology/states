@@ -40,6 +40,6 @@ test:
     - name: proftpd
     - additional:
       - proftpd.backup
-    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - doc: {{ opts['cachedir'] }}/doc/output
     - require:
       - cmd: doc

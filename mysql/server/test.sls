@@ -313,7 +313,7 @@ test:
   qa:
     - test
     - name: mysql.server
-    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - doc: {{ opts['cachedir'] }}/doc/output
     - require:
       - monitoring: test
       - cmd: doc

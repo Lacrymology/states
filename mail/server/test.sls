@@ -246,11 +246,12 @@ test:
   qa:
 {%- if check_mail_stack is mapping and check_mail_stack|length > 0 %}
     - test
+    - doc: {{ opts['cachedir'] }}/doc/output
 {%- else %}
     - test_pillar
+    - pillar_doc: {{ opts['cachedir'] }}/doc/output
 {%- endif %}
     - name: mail.server
-    - pillar_doc: {{ opts['cachedir'] }}/doc/output
     - require:
       - monitoring: test
       - cmd: doc

@@ -35,7 +35,7 @@ test:
   qa:
     - test
     - name: rsyslog
-    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - doc: {{ opts['cachedir'] }}/doc/output
     - require:
       - monitoring: test
       - cmd: doc

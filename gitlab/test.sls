@@ -46,7 +46,7 @@ test:
     - name: gitlab
     - additional:
       - gitlab.backup
-    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - doc: {{ opts['cachedir'] }}/doc/output
     - require:
       - monitoring: test
       - cmd: doc

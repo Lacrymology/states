@@ -97,6 +97,6 @@ test:
   qa:
     - test
     - name: squid
-    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - doc: {{ opts['cachedir'] }}/doc/output
     - require:
       - cmd: doc

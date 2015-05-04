@@ -56,7 +56,7 @@ test_postgresql_common:
   qa:
     - test_monitor
     - name: postgresql.common
-    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - monitor_doc: {{ opts['cachedir'] }}/doc/output
     - require:
       - monitoring: test
       - cmd: doc

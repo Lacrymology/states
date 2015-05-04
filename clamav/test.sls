@@ -34,7 +34,7 @@ test:
   qa:
     - test
     - name: clamav
-    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - doc: {{ opts['cachedir'] }}/doc/output
     - require:
       - monitoring: test
       - cmd: doc

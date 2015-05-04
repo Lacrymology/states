@@ -55,7 +55,7 @@ test_{{ role }}:
   qa:
     - test_monitor
     - name: shinken.{{ role }}
-    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - monitor_doc: {{ opts['cachedir'] }}/doc/output
     - require:
       - monitoring: test
       - cmd: doc

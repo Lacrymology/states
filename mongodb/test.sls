@@ -38,7 +38,7 @@ test:
   qa:
     - test_monitor
     - name: mongodb
-    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - monitor_doc: {{ opts['cachedir'] }}/doc/output
     - require:
       - monitoring: test
       - cmd: doc

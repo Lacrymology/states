@@ -3,6 +3,14 @@
 # {{ salt['pillar.get']('message_do_not_modify') }}
 HostKey /etc/ssh/ssh_host_rsa_key
 HostKey /etc/ssh/ssh_host_dsa_key
+
+KexAlgorithms diffie-hellman-group-exchange-sha256
+MACs hmac-sha2-512,hmac-sha2-256
+Ciphers aes256-ctr,aes192-ctr,aes128-ctr
+
+PubkeyAuthentication yes
+PasswordAuthentication no
+
 ServerKeyBits 768
 # default values set by debian openssh-server
 Protocol 2

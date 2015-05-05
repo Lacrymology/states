@@ -2,6 +2,9 @@
 
 # {{ salt['pillar.get']('message_do_not_modify') }}
 
+{#- Ensure KnownHosts are unreadable if leaked - it is otherwise easier to know which hosts your keys have access to #}
+HashKnownHosts yes
+
 {%- for domain in salt['pillar.get']('ssh:hosts', {}) %}
 Host {{ domain }}
   {%- for cfg in salt['pillar.get']('ssh:hosts:' ~ domain ~ ':additional', []) %}

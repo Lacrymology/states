@@ -21,7 +21,7 @@ pgbouncer_{{ db }}:
       - service: postgresql
   postgres_database:
     - present
-    - name: {{ db }}
+    - name: {{ values['dbname']|default(db) }}
     - owner: {{ values['username'] }}
     - runas: postgres
     - require:

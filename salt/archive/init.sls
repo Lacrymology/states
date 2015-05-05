@@ -222,7 +222,7 @@ salt-archive-clamav:
     - group: root
     - mode: 440
     - context:
-        mirror: {{ salt["pillar.get"]("salt_archive:clamav_source", "db.local.clamav.net") }}
+        mirror: {{ salt["pillar.get"]("salt_archive:clamav:source", "db.local.clamav.net") }}
 {%- endif %}
 
 {%- for key, enc in salt['pillar.get']('salt_archive:keys', {}).iteritems() %}

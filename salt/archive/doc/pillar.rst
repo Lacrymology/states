@@ -41,6 +41,8 @@ Example::
     ssl: mykeyname
     keys:
       00daedbeef: ssh-dss
+    clamav:
+      time_elapsed: 86400
 
 .. _pillar-salt_archive-source:
 
@@ -84,6 +86,15 @@ salt_archive:ssl_redirect
 
 .. include:: /nginx/doc/ssl_redirect.inc
 
+.. _pillar-salt_archive-clamav-time_elapsed:
+
+salt_archive:clamav:time_elapsed
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Max time elapsed in seconds of the ``salt_archive_clamav.py`` process.
+
+Default: ``86400`` seconds.
+
 Conditional
 -----------
 
@@ -97,7 +108,9 @@ Delete file in target server that does not exist in source server, only use if
 
 Default: don't delete file in target server (``False``).
 
-salt_archive:clamav_source
+.. _pillar-salt_archive-clamav-source:
+
+salt_archive:clamav:source
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The mirror to download :doc:`/clamav/doc/index` database from.

@@ -27,6 +27,29 @@ Example::
 Optional
 --------
 
+postgresql:version
+~~~~~~~~~~~~~~~~~~
+
+Version of :doc:`index` to install.
+
+Possible values:
+
+* Precise
+
+  * ``9.2`` (default)
+  * ``9.4``
+
+* Trusty
+
+  * ``9.3`` (default)
+  * ``9.4``
+
+Default: depends on Ubuntu release (``None``).
+
+.. warning::
+
+   Switching between :doc:`index` versions is not supported.
+
 .. _pillar-postgresql-listen_addresses:
 
 postgresql:listen_addresses

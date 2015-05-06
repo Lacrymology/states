@@ -7,7 +7,7 @@
 [databases]
 {% block databases %}
 {%- for db, value in salt['pillar.get']('pgbouncer:databases').iteritems() %}
-{{ value['dbname'] | default(db) }} = host={{ value['host'] }} port={{ salt['pillar.get']('postgresql:listen_port', 5432) }} dbname={{ db }} {% if auth_type == 'any' or authentication %}user={{ value['username'] }} password={{ value['password'] }}{% endif %}
+{{ db }} = host={{ value['host'] }} port={{ salt['pillar.get']('postgresql:listen_port', 5432) }} dbname={{ value['dbname']|default(db) }} {% if auth_type == 'any' or authentication %}user={{ value['username'] }} password={{ value['password'] }}{% endif %}
 {%- endfor %}
 {% endblock %}
 [pgbouncer]

@@ -12,4 +12,8 @@ salt_archive_timestamp:
   description: Salt Archive Synchronization
   {{ passive_interval(15 * 60) }} {#- 15 hours #}
   command: 'sudo /usr/lib/nagios/plugins/check_file_age -w {{ max_age }} -c {{ max_age }} {{ opts['cachedir'] }}/sync_timestamp.dat'
+{%- else %}
+salt_archive_clamav_elapsed:
+  description: Salt Archive ClamAV Elapsed
+  command: '/usr/lib/nagios/plugins/check_procs -C salt_archive_cl -a salt_archive_clamav -m ELAPSED -c {{ salt['pillar.get']('salt_archive:clamav:time_elapsed', 86400) }}'
 {%- endif -%}

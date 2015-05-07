@@ -126,6 +126,17 @@ salt-api:
       - pkg: salt-master
       - module: salt-api-requirements
 
+salt_api_patch_post_empty_body_23404:
+  file:
+    - patch
+    - name: /usr/lib/python2.7/dist-packages/saltapi/netapi/rest_cherrypy/app.py
+    - hash: md5=85b5b015b12a1060af6212908c19b02f
+    - source: salt://salt/api/cherrypy.patch
+    - watch_in:
+      - service: salt-api
+    - require:
+      - pkg: salt-api
+
 {{ manage_upstart_log('salt-api') }}
 
 {%- if salt['pkg.version']('salt-api') not in ('', api_version) %}

@@ -33,3 +33,15 @@ test:
     - require:
       - sls: openswan.diamond
       - sls: openswan
+
+{#- Workaround for file.accumulated bug
+    https://github.com/saltstack/salt/issues/8881 #}
+extend:
+  openswan_diamond_resources:
+    file:
+      - require:
+        {#- Make sure that file.accumulated is run after reload_modules #}
+        - sls: doc
+        - sls: openswan
+        - sls: ppp
+        - sls: xl2tpd

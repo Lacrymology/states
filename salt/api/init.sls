@@ -1,7 +1,9 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
 {%- from 'upstart/rsyslog.jinja2' import manage_upstart_log with context -%}
-{%- set api_version = '0.8.4' -%}
+{%- from "macros.jinja2" import salt_version,salt_deb_version with context %}
+{%- set api_version =  salt_deb_version() %}
+{%- set api_path = salt_version() ~ '/pool/main/s/salt/salt-api_' + api_version + '_all.deb' %}
 {%- set ssl = salt['pillar.get']('salt_api:ssl', False) %}
 
 include:
@@ -89,8 +91,6 @@ salt-api-requirements:
       - service: nginx
 
 {#- PID file owned by root, no need to manage #}
-{%- from "macros.jinja2" import salt_version with context %}
-{%- set api_path = salt_version() ~ '/pool/main/s/salt-api/salt-api_' + api_version + '_all.deb' %}
 salt-api:
   file:
     - managed

@@ -44,6 +44,15 @@ pip-config:
       - file: {{ root_user_home }}/.pip
       - file: /var/cache/pip
 
+distutils-config:
+  file:
+    - managed
+    - name: {{ root_user_home }}/.pydistutils.cfg
+    - template: jinja
+    - source: salt://pip/distutils.jinja2
+    - user: root
+    - group: root
+
 python-pip:
   pkg:
     - purged
@@ -99,6 +108,7 @@ pip:
     - require:
       - pkg: python-pip
       - file: pip-config
+      - file: distutils-config
       - pkg: python
       - pkg: python-setuptools
       - file: pip

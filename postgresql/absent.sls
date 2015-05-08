@@ -1,31 +1,34 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
-{# only for ubuntu precise #}
 /etc/apt/sources.list.d/postgresql.list:
   file:
     - absent
 
-apt-key del 8683D8A2:
+/etc/apt/trusted.gpg.d/apt.postgresql.org.gpg~:
+  file:
+    - absent
+    - require:
+      - cmd: postgresql-9.4-apt-key
+
+postgresql-9.2-apt-key:
   cmd:
     - run
+    - name: apt-key del 8683D8A2
     - onlyif: apt-key list | grep -q 8683D8A2
 
-postgresql-dev:
+postgresql-9.4-apt-key:
+  cmd:
+    - run
+    - name: apt-key del ACCC4CF8
+    - onlyif: apt-key list | grep -q ACCC4CF8
+
 {#-
   Can't uninstall the following as they're used elsewhere
   pkg:
+postgresql-dev:
     - purged
     - name: libpq-dev
 #}
-  pkgrepo:
-    - absent
-    - ppa: pitti/postgresql
-  file:
-    - absent
-    - name: /etc/apt/sources.list.d/pitti-postgresql-{{ grains['oscodename'] }}.list
-    - require:
-      - pkgrepo: postgresql-dev
-{# end for ubuntu precise #}
 
 postgresql-common:
   pkg:

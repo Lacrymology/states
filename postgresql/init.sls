@@ -3,6 +3,7 @@
 {% set ssl = salt['pillar.get']('postgresql:ssl', False) %}
 {%- set files_archive = salt['pillar.get']('files_archive', False) %}
 {%- from "os.jinja2" import os with context %}
+{%- from "postgresql/map.jinja2" import postgresql with context %}
 
 include:
   - apt
@@ -10,16 +11,14 @@ include:
   - ssl
 {% endif %}
 
+{%- set repo = postgresql["repo_configs"][postgresql.version]["repo"] %}
+{%- set key = postgresql["repo_configs"][postgresql.version]["key"] %}
 postgresql-dev:
-{%- if os.is_precise %}
+{%- if repo and key %}
   pkgrepo:
     - managed
-  {%- if files_archive %}
-    - name: deb {{ files_archive|replace('https://', 'http://') }}/mirror/postgresql/9.2.4-0 {{ grains['lsb_distrib_codename'] }} main
-    - key_url: salt://postgresql/key.gpg
-  {%- else %}
-    - ppa: pitti/postgresql
-  {%- endif %}
+    - name: {{ repo }}
+    - key_url: salt://postgresql/{{ key }}
     - require_in:
       - pkg: postgresql-dev
     - file: /etc/apt/sources.list.d/postgresql.list

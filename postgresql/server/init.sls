@@ -70,7 +70,7 @@ postgresql:
     - require:
       - pkg: postgresql
 
-{%- call manage_pid('/var/run/postgresql/' + version + '-main.pid', 'postgres', 'postgres', 'postgresql') %}
+{%- call manage_pid('/var/run/postgresql/' ~ version ~ '-main.pid', 'postgres', 'postgres', 'postgresql') %}
 - pkg: postgresql
 {%- endcall %}
 

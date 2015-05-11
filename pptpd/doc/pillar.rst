@@ -24,17 +24,17 @@ following::
 Mandatory
 ---------
 
-.. _pillar-pptpd-local_ip:
+.. _pillar-pptpd-local_ips:
 
-pptpd:local_ip
-~~~~~~~~~~~~~~
+pptpd:local_ips
+~~~~~~~~~~~~~~~
 
 Specifies the list of local IP address ranges.
 
 Example::
 
   pptpd:
-    local_ip:
+    local_ips:
       - 192.168.0.234
       - 192.168.0.245-249
       - 192.168.0.254
@@ -54,14 +54,14 @@ If a single local IP is given, that's ok - all local IPs will
 be set to the given one. At least one remote IP for each simultaneous client
 must be defined.
 
-.. _pillar-pptpd-remote_ip:
+.. _pillar-pptpd-remote_ips:
 
-pptpd:remote_ip
-~~~~~~~~~~~~~~~
+pptpd:remote_ips
+~~~~~~~~~~~~~~~~
 
 Specifies the list of remote IP address ranges.
 
-Same format as :ref:`pillar-pptpd-local_ip`.
+Same format as :ref:`pillar-pptpd-local_ips`.
 
 Optional
 --------
@@ -83,6 +83,6 @@ pptpd:max_connections
 Limits the number of client connections that may be accepted.
 
 If :doc:`index` is allocating IP addresses then the number of connections is
-also limited by the :ref:`pillar-pptpd-remote_ip` value.
+also limited by the :ref:`pillar-pptpd-remote_ips` value.
 
 Default: ``100`` connections.

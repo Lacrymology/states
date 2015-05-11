@@ -137,6 +137,16 @@ nagios-plugins:
   file:
     - absent
 
+{#- old formula cause wrong group, can be removed later #}
+/var/lib/nagios:
+  file:
+    - directory
+    - user: nagios
+    - group: nagios
+    - require:
+      - user: nagios-nrpe-server
+      - group: nagios-nrpe-server
+
 nagios-nrpe-server:
 {#- all states that require nrpe should require this state or
 service: nagios-nrpe-server #}
@@ -149,13 +159,14 @@ service: nagios-nrpe-server #}
   group:
     - present
     - name: nagios
+    - require:
+      - pkg: nagios-nrpe-server
   user:
     - present
     - name: nagios
     - shell: /bin/false
     - require:
       - pkg: nagios-nrpe-server
-      - group: nagios-nrpe-server
   file:
     - managed
     - name: /etc/nagios/nrpe.cfg
@@ -178,6 +189,7 @@ service: nagios-nrpe-server #}
       - file: nagios-nrpe-server
       - file: /etc/nagios/nrpe_local.cfg
       - file: /etc/nagios/nrpe.d/000.nagios.servers.cfg
+      - file: /var/lib/nagios
 {#- PID file owned by root in trusty, no need to manage #}
 {%- if os.is_precise %}
   {%- call manage_pid('/var/run/nagios/nrpe.pid', 'nagios', 'nagios', 'nagios-nrpe-server') %}
@@ -355,13 +367,5 @@ nsca_passive:
 {% endif %}
 
 extend:
-{%- for state_id in ('apt', 'apt.conf', 'dpkg.conf') %}
-  {{ state_id }}:
-    file:
-      - group: nagios
-      - require:
-        - group: nagios-nrpe-server
-{%- endfor %}
-
 {%- from 'macros.jinja2' import change_ssh_key_owner with context %}
 {{ change_ssh_key_owner('nagios', {'pkg': 'nagios-nrpe-server'}) }}

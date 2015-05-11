@@ -2,7 +2,7 @@
 
 include:
   - apt
-  - ppp
+  - pppd
 
 xl2tpd:
   pkg:

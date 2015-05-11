@@ -10,7 +10,7 @@
  #}
 name {{ server_name }}
 
-{%- set instance = salt['pillar.get']('ppp:instances:' + server_name, {}) -%}
+{%- set instance = salt['pillar.get']('pppd:instances:' + server_name, {}) -%}
 {{ dict_default(instance, 'encryption', {}) }}
 {%- set encryption = instance['encryption'] -%}
 
@@ -50,6 +50,6 @@ lock
 #}
 nologfd
 
-{%- if salt['pillar.get']('ppp:debug', False) or salt['pillar.get']('debug', False) %}
+{%- if salt['pillar.get']('pppd:debug', False) or salt['pillar.get']('debug', False) %}
 debug
 {%- endif %}

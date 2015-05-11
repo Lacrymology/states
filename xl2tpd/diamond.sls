@@ -2,7 +2,7 @@
 
 include:
   - diamond
-  - ppp.diamond
+  - pppd.diamond
   - xl2tpd
 
 xl2tpd_diamond_resources:

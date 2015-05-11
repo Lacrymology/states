@@ -11,8 +11,8 @@ Optional
 
 .. _pillar-ppp-debug:
 
-ppp:debug
-~~~~~~~~~
+pppd:debug
+~~~~~~~~~~
 
 Turns on (more) debugging to syslog.
 
@@ -20,8 +20,8 @@ Default: no debugging (``False``).
 
 .. _pillar-ppp-instances:
 
-ppp:instances
-~~~~~~~~~~~~~
+pppd:instances
+~~~~~~~~~~~~~~
 
 Data formed as a dictionary with key is the instance name and value is a dict.
 
@@ -29,22 +29,22 @@ Default: no instance (``{}``).
 
 .. _pillar-ppp-instances-instance:
 
-ppp:instances:{{ instance }}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+pppd:instances:{{ instance }}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Define some options of an pppd instance. Look below for details.
+Define some options of an :doc:`index` instance. Look below for details.
 
 Default: no option (``{}``).
 
 .. _pillar-ppp-instances-instance-dns:
 
-ppp:instances:{{ instance }}:dns
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+pppd:instances:{{ instance }}:dns
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Specify a list of IP addresses of :ref:`glossary-DNS` servers.
 
-If pppd is acting as a server for Microsoft Windows clients, this option allows
-pppd to supply one or two :ref:`glossary-DNS` addresses to the clients.  The
+If :doc:`index` is acting as a server for Microsoft Windows clients, this option allows
+:doc:`index` to supply one or two :ref:`glossary-DNS` addresses to the clients.  The
 first instance of this option specifies the primary :ref:`glossary-DNS`
 address; the second instance (if given) specifies the secondary
 :ref:`glossary-DNS` address.
@@ -58,11 +58,11 @@ Default: no DNS server (``[]``).
 
 .. _pillar-ppp-instances-instance-wins:
 
-ppp:instances:{{ instance }}:wins
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+pppd:instances:{{ instance }}:wins
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If pppd is acting as a server for Microsoft Windows or "Samba" clients, this
-option allows pppd to supply one or two
+If :doc:`index` is acting as a server for Microsoft Windows or "Samba" clients, this
+option allows :doc:`index` to supply one or two
 http://en.wikipedia.org/wiki/Windows_Internet_Name_Service (WINS) server
 addresses to the clients.  The first instance of this option specifies the
 primary WINS address; the second instance (if given) specifies the secondary
@@ -72,8 +72,8 @@ Default: no WINS server (``[]``).
 
 .. _pillar-ppp-instances-instance-encryption:
 
-ppp:instances:{{ instance }}:encryption
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+pppd:instances:{{ instance }}:encryption
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Data formed as a dictionary with key is ``refuse`` or ``require`` and value is
 the encryption mechanism.
@@ -82,8 +82,8 @@ Default: no encryption (``{}``).
 
 .. _pillar-ppp-instances-instance-encryption-refuse:
 
-ppp:instances:{{ instance }}:encryption:refuse
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+pppd:instances:{{ instance }}:encryption:refuse
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 List of encryption mechanism refused.
 
@@ -95,8 +95,8 @@ Default: ``('pap', 'chap', 'mschap')``
 
 .. _pillar-ppp-instances-instance-encryption-require:
 
-ppp:instances:{{ instance }}:encryption:require
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+pppd:instances:{{ instance }}:encryption:require
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 List of encryption mechanism required.
 
@@ -104,14 +104,14 @@ Default: ``('mschap-v2',)``
 
 - ``mschap-v2``: https://en.wikipedia.org/wiki/MS-CHAP
 
-ppp:instances:{{ instance }}:options
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+pppd:instances:{{ instance }}:options
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 List of additional :doc:`index` options to add to configuration files.
 
 Example::
 
-  ppp:
+  pppd:
     instances:
       pptpd:
         - nobsdcomp

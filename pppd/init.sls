@@ -1,5 +1,5 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
-{%- set instances = salt['pillar.get']('ppp:instances', {}) -%}
+{%- set instances = salt['pillar.get']('pppd:instances', {}) -%}
 
 include:
   - apt
@@ -14,8 +14,8 @@ ppp:
 ppp-options-{{ server_name }}:
   file:
     - managed
-    - name: /etc/ppp/options.{{ server_name }}
-    - source: salt://ppp/options.jinja2
+    - name: /etc/ppp/{{ server_name }}-options
+    - source: salt://pppd/options.jinja2
     - template: jinja
     - user: root
     - group: root

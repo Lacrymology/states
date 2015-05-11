@@ -4,6 +4,6 @@
 
 include:
   - apt.nrpe
-  - ppp.nrpe
+  - pppd.nrpe
 
 {{ passive_check('xl2tpd') }}

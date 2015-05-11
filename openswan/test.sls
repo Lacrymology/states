@@ -7,9 +7,9 @@ include:
   - openswan
   - openswan.diamond
   - openswan.nrpe
-  - ppp
-  - ppp.diamond
-  - ppp.nrpe
+  - pppd
+  - pppd.diamond
+  - pppd.nrpe
   - xl2tpd
   - xl2tpd.diamond
   - xl2tpd.nrpe
@@ -43,5 +43,5 @@ extend:
         {#- Make sure that file.accumulated is run after reload_modules #}
         - sls: doc
         - sls: openswan
-        - sls: ppp
+        - sls: pppd
         - sls: xl2tpd

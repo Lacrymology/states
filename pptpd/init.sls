@@ -2,11 +2,11 @@
 
 include:
   - apt
-  - ppp
+  - pppd
   - rsyslog
   - sysctl
 
-{%- set instances = salt['pillar.get']('ppp:instances', {}) -%}
+{%- set instances = salt['pillar.get']('pppd:instances', {}) -%}
 {%- set pptp = instances.get('pptpd', {}) -%}
 {%- set encryption = pptp.get('encryption', {}) %}
 

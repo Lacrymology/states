@@ -5,7 +5,7 @@
 include:
   - apt.nrpe
   - nrpe
-  - ppp.nrpe
+  - pppd.nrpe
   - rsyslog.nrpe
 
 {{ passive_check('pptpd') }}

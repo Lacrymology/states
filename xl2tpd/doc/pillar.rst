@@ -13,10 +13,10 @@ following::
 ppp
 ---
 
-:doc:`/ppp/doc/index` :doc:`/ppp/doc/pillar` need to have at least the
+:doc:`/pppd/doc/index` :doc:`/pppd/doc/pillar` need to have at least the
 following::
 
-  ppp:
+  pppd:
     instances:
       xl2tpd:
         ... values ...

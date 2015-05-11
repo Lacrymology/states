@@ -2,7 +2,7 @@
 
 include:
   - diamond
-  - ppp.diamond
+  - pppd.diamond
   - rsyslog.diamond
 
 pptpd_diamond_resources:

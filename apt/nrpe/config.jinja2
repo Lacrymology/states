@@ -21,11 +21,10 @@ apt:
   retry_interval: 3
   max_check_attempts: 5
   timeout: {{ timeout }}
-  command: /usr/lib/nagios/plugins/
-{%- if not salt['pillar.get']('__test__', False) -%}
-  check_apt -t {{ timeout }}
-{%- else -%}
-  check_dummy 0 "No real check in test mode"
+{%- if not salt['pillar.get']('__test__', False) %}
+  command: sudo /usr/lib/nagios/plugins/check_apt -t {{ timeout }}
+{%- else %}
+  command: /usr/lib/nagios/plugins/check_dummy 0 "No real check in test mode"
 {%- endif %}
 
 apt_rc:
@@ -38,4 +37,4 @@ apt_rc:
   retry_interval: 3
   max_check_attempts: 5
   timeout: {{ timeout }}
-  command: /usr/lib/nagios/plugins/check_apt-rc.py --formula=apt --check=apt_rc
+  command: sudo /usr/lib/nagios/plugins/check_apt-rc.py --formula=apt --check=apt_rc

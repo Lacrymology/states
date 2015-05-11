@@ -1,0 +1,13 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+
+# {{ salt['pillar.get']('message_do_not_modify') }}
+[easy_install]
+{%- set files_archive = salt['pillar.get']('files_archive', False) %}
+{%- if files_archive %}
+  {%- set allow_hosts = salt['common.urlparse'](files_archive).hostname  %}
+  {%- if salt['pillar.get']('pip:allow_pypi', False) %}
+    {%- set allow_hosts = allow_hosts ~ ",pypi.python.org"  %}
+  {%- endif %}
+allow_hosts = {{ allow_hosts }}
+find_links = {{ files_archive }}/pip/
+{%- endif %}

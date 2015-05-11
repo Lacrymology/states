@@ -19,6 +19,10 @@
   file:
     - absent
 
+{{ salt['user.info']('root')['home'] }}/.pydistutils.cfg:
+  file:
+    - absent
+
 {#
   Can't uninstall the following as they're used elsewhere
 python-setuptools:

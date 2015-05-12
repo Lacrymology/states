@@ -10,6 +10,14 @@ ppp:
     - require:
       - cmd: apt_sources
 
+{%- for file in salt['file.find']('/etc/ppp', name='*-options', type='f') %}
+  {%- if salt['file.basename'](file).split("-")[0] not in instances %}
+{{ file }}:
+  file:
+    - absent
+  {%- endif %}
+{%- endfor %}
+
 {%- for server_name in instances %}
 ppp-options-{{ server_name }}:
   file:

@@ -103,7 +103,7 @@ salt_archive:delete
 Delete file in target server that does not exist in source server, only use if
 :ref:`pillar-salt_archive-source` is undefined.
 
-Default: don't delete file in target server (``False``).
+Default: delete file in target server (``True``).
 
 .. _pillar-salt_archive-clamav-source:
 

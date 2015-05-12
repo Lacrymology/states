@@ -5,14 +5,18 @@
 {%- set master = salt['pillar.get']('salt:master', False) %}
 {%- if master %}
 master: {{ master }}
+file_client: remote
 {%- else %}{# master-less #}
+file_client: local
+{%- endif %}
+
 file_roots:
   base:
     - /srv/salt/states
 pillar_roots:
   base:
     - /srv/salt/pillar
-{%- endif %}
+
 id: {{ grains['id'] }}
 
 mine_functions:

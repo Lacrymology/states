@@ -16,7 +16,7 @@ env PID=/var/run/nginx.pid
 
 pre-start script
     # `nginx -t` write error to stderr, not stdout
-    $DAEMON -t || { $DAEMON -t 2>&1 | /usr/bin/mail -s 'Nginx: Configuration File Test Failed{% if not salt['pillar.get']('sentry_dsn', False) %} on {{ grains['id'] }}{% endif %}' root; exit 1; }
+    $DAEMON -t 2>/dev/null || { $DAEMON -t 2>&1 | /usr/bin/mail -s 'Nginx: Configuration File Test Failed{% if not salt['pillar.get']('sentry_dsn', False) %} on {{ grains['id'] }}{% endif %}' root; exit 1; }
 end script
 
 exec $DAEMON -c /etc/nginx/nginx.conf

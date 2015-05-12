@@ -16,7 +16,7 @@ salt_minion_master_key:
     - name: file.remove
     - path: /etc/salt/pki/minion/minion_master.pub
     - watch:
-      - file: /etc/salt/minion
+      - file: /etc/salt/minion.d/master.conf
     - watch_in:
       - service: salt-minion
 
@@ -33,7 +33,6 @@ extend:
         - pkgrepo: salt
         - cmd: apt_sources
         - pkg: apt_sources
-
 
 salt_minion_cron_highstate:
   file:

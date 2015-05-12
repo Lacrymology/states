@@ -4,7 +4,6 @@
 
 {%- set master = salt['pillar.get']('salt:master', False) %}
 {%- if master %}
-master: {{ master }}
 file_client: remote
 {%- else %}{# master-less #}
 file_client: local

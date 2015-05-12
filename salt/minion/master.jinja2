@@ -1,4 +1,7 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
 # {{ salt['pillar.get']('message_do_not_modify') }}
-master: {{ salt['pillar.get']('salt:master', False) }}
+{%- set master = salt['pillar.get']('salt:master', False) %}
+{%- if master %}
+master: {{ master }}
+{%- endif %}

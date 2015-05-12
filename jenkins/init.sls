@@ -142,7 +142,7 @@ jenkins_old_version:
         username: {{ salt['pillar.get']('jenkins:job_cleaner:username') }}
         token: {{ salt['pillar.get']('jenkins:job_cleaner:token') }}
         url: {% if salt['pillar.get']('jenkins:ssl', False) %}https{%- else %}http{%- endif %}://{{ salt['pillar.get']('jenkins:hostnames')[0] }}
-        days: salt['pillar.get']('jenkins:job_cleaner:days_to_del', 15)
+        days: {{ salt['pillar.get']('jenkins:job_cleaner:days_to_del', 15) }}
     - require:
       - file: /etc/jenkins
 

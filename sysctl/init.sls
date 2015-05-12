@@ -6,4 +6,14 @@
   sysctl:
     - present
     - value: {{ salt['pillar.get']('sysctl:' ~ key, False) }}
+    - require_in:
+      - file: sysctl
 {%- endfor %}
+
+sysctl: {# API #}
+  file:
+    - managed
+    - name: /etc/sysctl.conf
+    - user: root
+    - group: root
+    - mode: 644

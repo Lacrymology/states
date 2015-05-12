@@ -15,4 +15,4 @@ shinken_poller_diamond_resources:
     - text:
       - |
         [[shinken-poller]]
-        cmdline = ^\/usr\/local\/shinken\/bin\/python \/usr\/local\/shinken\/bin\/shinken-poller
+        name = shinken-poller

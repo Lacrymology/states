@@ -1,10 +1,11 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
 {%- for key in salt['pillar.get']('sysctl', {}) %}
-
-sysctl_{{ key|replace(':','.') }}:
+{%- set name = key|replace(':','.') %}
+sysctl_{{ name }}:
   sysctl:
     - present
+    - name: {{ name }}
     - value: {{ salt['pillar.get']('sysctl:' ~ key, False) }}
     - require_in:
       - file: sysctl

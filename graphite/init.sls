@@ -302,6 +302,17 @@ graphite_admin_user:
       - file: /var/lib/graphite/whisper
       - file: bash
 
+graphite_patch_issue_608_pickle_unsafe:
+  file:
+    - patch
+    - hash: md5=bb7c570be8ffae1714ab5a5d82693d5a
+    - name: /usr/local/graphite/lib/python2.7/site-packages/graphite/util.py
+    - source: salt://graphite/pickle_608.patch
+    - require:
+      - virtualenv: graphite
+    - watch_in:
+      - module: graphite-web-uwsgi
+
 /etc/nginx/conf.d/graphite.conf:
   file:
     - managed

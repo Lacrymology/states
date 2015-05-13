@@ -4,6 +4,7 @@
 include:
   - apt.nrpe
   - bash.nrpe
+  - cron.nrpe
   - nrpe
 
 {{ passive_check('amavis') }}

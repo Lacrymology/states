@@ -1,0 +1,40 @@
+@@ -31,6 +31,15 @@ from graphite.account.models import Profile
+ from graphite.logger import log
+
+
++BASE_PICKLE_SAFE = {
++  'copy_reg': set(['_reconstructor']),
++  '__builtin__': set(['object', 'list']),
++  'collections': set(['deque']),
++  'graphite.render.datalib': set(['TimeSeries']),
++  'graphite.intervals': set(['Interval', 'IntervalSet']),
++}
++
++
+ # There are a couple different json modules floating around out there with
+ # different APIs. Hide the ugliness here.
+ try:
+@@ -86,10 +95,7 @@ if not environ.get('READTHEDOCS'):
+ # This code also lives in carbon.util
+ if USING_CPICKLE:
+   class SafeUnpickler(object):
+-    PICKLE_SAFE = {
+-      'copy_reg': set(['_reconstructor']),
+-      '__builtin__': set(['object']),
+-    }
++    PICKLE_SAFE = BASE_PICKLE_SAFE
+
+     @classmethod
+     def find_class(cls, module, name):
+@@ -109,10 +115,7 @@ if USING_CPICKLE:
+
+ else:
+   class SafeUnpickler(pickle.Unpickler):
+-    PICKLE_SAFE = {
+-      'copy_reg': set(['_reconstructor']),
+-      '__builtin__': set(['object']),
+-    }
++    PICKLE_SAFE = BASE_PICKLE_SAFE
+
+     def find_class(self, module, name):
+       if not module in self.PICKLE_SAFE:

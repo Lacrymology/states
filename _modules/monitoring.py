@@ -199,8 +199,15 @@ def run_check(check_name, checks=None):
         ret['comment'] = "Can't find check '{0}'".format(check_name)
         return ret
 
-    output = __salt__['cmd.run_all'](checks[check_name]['command'],
-                                     runas='nagios')
+    cmd = checks[check_name]['command']
+    verbose_cmd = cmd + ' --help'
+    outputverbose = __salt__['cmd.run_all'](verbose_cmd, runas='nagios')
+    if ' -v,' in outputverbose['stdout']:
+        # yeah, the check supports verbose, let be verbose
+        cmd += ' -vv'
+
+    output = __salt__['cmd.run_all'](cmd, runas='nagios')
+
     ret['comment'] = "stdout: '{0}' stderr: '{1}'".format(output['stdout'],
                                                           output['stderr'])
 

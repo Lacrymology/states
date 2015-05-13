@@ -2,7 +2,7 @@
 
 {%- for key in salt['pillar.get']('sysctl', {}) %}
 
-{{ key|replace(':','.') }}:
+sysctl_{{ key|replace(':','.') }}:
   sysctl:
     - present
     - value: {{ salt['pillar.get']('sysctl:' ~ key, False) }}

@@ -14,4 +14,4 @@ shinken_scheduler_diamond_resources:
     - text:
       - |
         [[shinken-scheduler]]
-        cmdline = ^\/usr\/local\/shinken\/bin\/python \/usr\/local\/shinken\/bin\/shinken-scheduler
+        name = shinken-schedul

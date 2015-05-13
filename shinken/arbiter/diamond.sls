@@ -15,4 +15,4 @@ shinken_arbiter_diamond_resources:
     - text:
       - |
         [[shinken-arbiter]]
-        cmdline = ^\/usr\/local\/shinken\/bin\/python \/usr\/local\/shinken\/bin\/shinken-arbiter
+        name = shinken-arbiter

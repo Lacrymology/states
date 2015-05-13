@@ -15,4 +15,4 @@ shinken_broker_diamond_resources:
     - text:
       - |
         [[shinken-broker]]
-        cmdline = ^\/usr\/local\/shinken\/bin\/python \/usr\/local\/shinken\/bin\/shinken-broker
+        name = shinken-broker

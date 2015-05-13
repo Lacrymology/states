@@ -14,4 +14,4 @@ shinken_reactionner_diamond_resources:
     - text:
       - |
         [[shinken-reactionner]]
-        cmdline = ^\/usr\/local\/shinken\/bin\/python \/usr\/local\/shinken\/bin\/shinken-reactionner
+        name = shinken-reactio

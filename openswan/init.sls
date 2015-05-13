@@ -30,7 +30,7 @@ openswan:
       - file: openswan
       - file: /etc/ipsec.secrets
       {#- requires specific pillar key, look in pptpd/doc/pillar.rst #}
-      - sysctl: net.ipv4.ip_forward
+      - file: sysctl
 
 /etc/ipsec.secrets:
   file:

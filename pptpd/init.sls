@@ -38,7 +38,7 @@ pptpd:
     - require:
       - service: rsyslog
       {#- requires specific pillar key, look in pptp/doc/pillar.rst #}
-      - sysctl: net.ipv4.ip_forward
+      - file: sysctl
 
 {%- if 'mppe-128' in encryption.get('require', []) %}
 ppp_mppe:

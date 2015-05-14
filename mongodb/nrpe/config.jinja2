@@ -6,7 +6,7 @@
 
 mongodb_http:
   description: MongoDB HTTP Interface
-  command: /usr/lib/nagios/plugins/check_http -t {{ timeout }} -I 127.0.0.1 -p 28017{%- if salt['pillar.get']('debug', False) %} -v{%- endif %}
+  command: /usr/lib/nagios/plugins/check_http -t {{ timeout }} -I 127.0.0.1 -p 28017
   timeout: {{ timeout }}
   dependencies:
     - mongodb_http_port

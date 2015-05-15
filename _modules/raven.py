@@ -36,9 +36,9 @@ def alert(dsn, message, level='INFO', data=None):
         ``{protocol}://{public}:{private}@{host}/{path}{project id}``.
         The protocol is always forced to use the requests+http(s) transport if
         the requests library is present, or sync+http(s) otherwise. See
-        :raven:`/transports/index` for more information. If `dsn` is set to
-        ``None``, though, raven defaults to using the `SENTRY_DSN` environment
-        variable
+        `here <http://raven.readthedocs.org/en/latest/transports/>`_ for more
+        information. If `dsn` is set to ``None``, though, raven defaults to
+        using the `SENTRY_DSN` environment variable
 
     :param message: The message string you want to send
     :param level: The level of the message

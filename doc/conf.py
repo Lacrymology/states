@@ -12,15 +12,9 @@ import sphinx_rtd_theme
 
 extensions = ['sphinx.ext.todo',
               'sphinx.ext.autodoc',
-              'sphinx.ext.intersphinx',
               'sphinx.ext.extlinks']
 todo_include_todos = True
 autodoc_default_flags = ['members', 'undoc-members']
-intersphinx_mapping = {
-    'salt': ('http://docs.saltstack.com/', None),
-    'raven': ('http://raven.readthedocs.org/',
-              'http://raven.readthedocs.org/en/latest/objects.inv'),
-}
 extlinks = {
     'salt': ('http://docs.saltstack.com/en/latest%s.html', ''),
     'raven': ('http://raven.readthedocs.org/en/latest%s.html', 'raven'),

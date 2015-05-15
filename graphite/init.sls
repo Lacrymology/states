@@ -305,7 +305,7 @@ graphite_admin_user:
 graphite_patch_issue_608_pickle_unsafe:
   file:
     - patch
-    - hash: md5=bb7c570be8ffae1714ab5a5d82693d5a
+    - hash: md5=209cfbdefc2abdfff0fb4112270dcc16
     - name: /usr/local/graphite/lib/python2.7/site-packages/graphite/util.py
     - source: salt://graphite/pickle_608.patch
     - require:

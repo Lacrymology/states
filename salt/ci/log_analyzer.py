@@ -45,7 +45,7 @@ def filtered_logs(logfile, slsname):
     This depends on the log of integration.py, change it accordingly if
     integration.py changes.
     '''
-    start_of_run_sls = 'Run top: {0}'.format(slsname)
+    begin_sls = 'Run top: {0}'.format(slsname)
     start_of_next_sls = 'Run top:'
 
     foundsls = False
@@ -55,7 +55,8 @@ def filtered_logs(logfile, slsname):
             if write and start_of_next_sls in line:
                 # it is writing and meet the next sls log, stop
                 break
-            if start_of_run_sls == line:
+            # a bit optimizing to not always strip line
+            if begin_sls in line and line.strip().endswith(begin_sls):
                 foundsls = True
                 logger.debug("Start writing log relate to %s", slsname)
                 write = True

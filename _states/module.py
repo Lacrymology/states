@@ -15,7 +15,8 @@ state:
 
 Note that this example is probably unnecessary to use in practice, since the
 ``mine_functions`` and ``mine_interval`` config parameters can be used to
-schedule updates for the mine (see :salt:`here </topics/mine/index>` for more
+schedule updates for the mine (see `here
+<http://docs.saltstack.com/en/latest/topics/mine/>`_ for more
 info).
 
 It is sometimes desirable to trigger a function call after a state is executed,
@@ -64,12 +65,14 @@ def wait(name, **kwargs):
         return ``True`` but not actually execute, unless one of the following
         two things happens:
 
-        1. The state has a :salt:`watch requisite </ref/states/requisites>`, and
-           the state which it is watching changes.
+        1. The state has a `watch requisite
+           <http://docs.saltstack.com/en/latest/ref/states/requisites.html>`_,
+           and the state which it is watching changes.
 
-        2. Another state has a :salt:`watch_in requisite
-           </ref/states/requisites>` which references this state, and the state
-           wth the ``watch_in`` changes.
+        2. Another state has a `watch_in requisite
+           <http://docs.saltstack.com/en/latest/ref/states/requisites.html>`_
+           which references this state, and the state with the ``watch_in``
+           changes.
     '''
     return {'name': name,
             'changes': {},

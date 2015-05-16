@@ -188,8 +188,7 @@ class LintCheckBadStateStyle(LintCheck):
             # currently, this works because we only extend *.py states.
             data_without_pystates = {lino: sid for lino, sid in
                                      data.iteritems()
-                                     if not sid.endswith('.py:')
-                                     and not sid.endswith('.conf:')}
+                                     if not sid.endswith(('.py:', '.conf:'))}
             if data_without_pystates:
                 filtered_found.update({fn: data_without_pystates})
 
@@ -309,7 +308,7 @@ class LintCheckSubkeyInSaltPillar(CheckPillarStyleBase):
 
 
 def _filter_files_with_exts(paths, exts):
-    return set(filter(lambda p: any(p.endswith(e) for e in exts), paths))
+    return set(filter(lambda p: p.endswith(tuple(exts)), paths))
 
 
 def _grep_file(filename, regex_ptr):

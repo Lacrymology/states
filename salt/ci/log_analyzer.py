@@ -14,6 +14,7 @@ import shutil
 import subprocess as spr
 import logging
 import tempfile
+from contextlib import contextmanager
 
 
 logging.basicConfig(level=logging.DEBUG)
@@ -48,6 +49,7 @@ def filtered_logs(logfile, slsname):
     begin_sls = 'Run top: {0}'.format(slsname)
     start_of_next_sls = 'Run top:'
 
+    logger.debug("Looking for line with '%s' in file %s", begin_sls, logfile)
     foundsls = False
     with open(logfile) as origfile:
         write = False
@@ -92,18 +94,38 @@ def output_log_nearby(log_generator, errormsg, count=7):
         beforerr = line
 
 
-def unxz(xzfile):
+@contextmanager
+def unxz(xzpath):
     '''
-    Make a copy of xzfile, and extract it to be able to choose destination
+    Make a copy of xzpath, and extract it to be able to choose destination
     dir for extracting.
     Returns path of extracted file.
     '''
     tempdir = tempfile.mkdtemp()
-    logger.debug("Copying from %s to %s", xzfile, tempdir)
-    shutil.copy(xzfile, tempdir)
-    xzcopy = os.path.join(tempdir, os.path.basename(xzfile))
+    logger.debug("Copying from %s to %s", xzpath, tempdir)
+    shutil.copy(xzpath, tempdir)
+    xzcopy = os.path.join(tempdir, os.path.basename(xzpath))
     spr.call(['unxz', xzcopy])
-    return os.path.splitext(xzcopy)[0]
+    logtxt = os.path.splitext(xzcopy)[0]
+
+    yield logtxt
+
+    shutil.rmtree(tempdir)
+    logger.info("Deleted directory %s and all files under it", tempdir)
+
+
+def analyze(logtxt, sls, errormsg, outputdir=None):
+    ofile = logtxt + ".short.log"
+
+    if outputdir:
+        ofile = os.path.join(outputdir, os.path.basename(logtxt))
+
+    with open(ofile, 'w+') as of:
+        for line in filtered_logs(logtxt, sls):
+            of.write(line)
+
+    with open(ofile) as f:
+        output_log_nearby(f, errormsg)
 
 
 def main():
@@ -124,28 +146,12 @@ def main():
     if args.logfile.startswith('http'):
         args.logfile = link_to_localpath(args.logfile)
 
-    logtxt = args.logfile
     if args.logfile.endswith('.xz'):
-        logtxt = unxz(args.logfile)
-        logger.debug("Extracted, got: %s", logtxt)
-
-    ofile = logtxt + ".short.log"
-
-    if args.C:
-        outfn = os.path.basename(logtxt)
-        ofile = os.path.join(args.C, outfn)
-
-    with open(ofile, 'w+') as of:
-        for line in filtered_logs(logtxt, args.sls):
-            of.write(line)
-
-    # only remove log file if it has been extracted from xz archive
-    if args.logfile.endswith('.xz'):
-        os.remove(logtxt)
-        logger.info("Deleted file %s", logtxt)
-
-    with open(ofile) as f:
-        output_log_nearby(f, args.errorlog)
+        with unxz(args.logfile) as logtxt:
+            logger.debug("Extracted, got: %s", logtxt)
+            analyze(logtxt, args.sls, args.errorlog, args.C)
+    else:
+        analyze(args.logfile, args.sls, args.errorlog, args.C)
 
 
 if __name__ == "__main__":

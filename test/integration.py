@@ -505,8 +505,7 @@ class TestStateMeta(type):
                 else:
                     logger.debug("%s is not an absent state", state)
 
-                    if state.endswith('.nrpe') or state.endswith('.diamond') \
-                       or state.endswith('.test'):
+                    if state.endswith(('.nrpe', '.diamond', '.test')):
                         logger.debug("Add single test for %s", state)
                         mcs.wrap_test_func(attrs, 'top', mcs.func_name(state),
                                            'Run test %s' % state, [state])

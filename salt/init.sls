@@ -19,7 +19,6 @@ To only keep precise & trusty::
 
 include:
   - apt
-  - salt.patch_salt
 
 {%- for i in ('list', 'list.save') %}
 salt_absent_old_apt_salt_{{ i }}:
@@ -34,8 +33,6 @@ salt:
   pkg:
     - installed
     - name: salt-common
-    - require_in:
-      - file: patch_salt_fix_require_sls
   pkgrepo:
     - managed
 {%- set files_archive = salt['pillar.get']('files_archive', False) %}
@@ -58,16 +55,6 @@ salt:
     - name: echo "state(s) in ``salt`` have been changed"
     - watch:
       - pkg: salt
-      - file: patch_salt_fix_require_sls
-
-salt_patch_util:
-  pkg:
-    - installed
-    - name: patch
-    - require:
-      - cmd: apt_sources
-    - require_in:
-      - file: patch_salt_fix_require_sls
 
 /var/cache/salt:
   file:

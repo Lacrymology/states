@@ -180,8 +180,8 @@ openvpn_{{ instance }}_client:
     - zipfile: {{ config_dir }}/client.zip
     - cwd: {{ config_dir }}
     - sources:
-      - {{ config_dir }}/client.conf
-      - {{ config_dir }}/secret.key
+      - client.conf
+      - secret.key
     - watch:
       - file: openvpn_{{ instance }}_client
       - file: {{ instance }}_secret
@@ -325,16 +325,10 @@ openvpn_{{ instance }}_{{ client }}:
     - require:
       - file: {{ config_dir }}
                 {%- if not salt['file.file_exists'](config_dir + '/clients/' + client + '.zip') %}
-  module:
+  cmd:
     - wait
-    - name: archive.{% if grains['saltversioninfo'] >= (2015, 2, 0, 0) %}cmd_{% endif %}zip
-    - zipfile: {{ config_dir }}/clients/{{ client }}.zip
-    - cwd: {{ config_dir }}
-    - sources:
-      - {{ client_dir }}/{{ client }}.conf
-      - /etc/openvpn/ca.crt
-      - {{ client_dir }}/{{ client }}.crt
-      - {{ client_dir }}/{{ client }}.key
+    - name: zip -j {{ config_dir }}/clients/{{ client }}.zip {{ client }}.conf {{ client }}.crt {{ client }}.key /etc/openvpn/ca.crt
+    - cwd: {{ config_dir }}/clients
     - watch:
       - file: openvpn_{{ instance }}_{{ client }}
       - module: openvpn_ca

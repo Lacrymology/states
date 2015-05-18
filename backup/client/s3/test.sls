@@ -25,11 +25,11 @@ test_s3lite:
       - sls: backup.client.s3
       - sls: backup.client.s3.nrpe
   file:
-    - serialize
+    - managed
     - name: /etc/nagios/nsca.d/backup.client.s3lite.yml
     - require:
       - file: /etc/nagios/nsca.d
-    - dataset:
+    - contents: |
         test_s3lite:
           command: /usr/lib/nagios/plugins/check_backup_s3lite.py --formula=backup.client.s3lite --check=test_s3lite
           arguments:
@@ -66,11 +66,11 @@ test_s3cmd:
       - file: /usr/local/bin/create_dumb
       - file: /etc/nagios/backup.yml
   file:
-    - serialize
+    - managed
     - name: /etc/nagios/nsca.d/backup.client.s3cmd.yml
     - require:
       - file: /etc/nagios/nsca.d
-    - dataset:
+    - contents: |
         test_s3cmd:
           command: /usr/lib/nagios/plugins/check_backup.py --formula=backup.client.s3cmd --check=test_s3cmd
           arguments:

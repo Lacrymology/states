@@ -15,4 +15,4 @@ salt_master_diamond_resources:
     - text:
       - |
         [[salt-master]]
-        cmdline = ^\/usr\/bin\/python \/usr\/bin\/salt\-master$
+        cmdline = ^\/usr\/bin\/python \/usr\/bin\/salt\-master

@@ -10,7 +10,7 @@ file contains all common macros
     change a lot in ppa structure.
 -#}
 {%- macro salt_version() -%}
-    2014.1.10-1
+    2014.7.5+ds-1
 {%- endmacro -%}
 
 {%- macro salt_deb_version() -%}
@@ -18,11 +18,7 @@ file contains all common macros
         example: salt-minion_0.17.5-1precise1_all.deb
         this macro will provide ``0.17.5-1precise1``
     -#}
-    {%- if grains['lsb_distrib_codename'] == 'trusty' -%}
-        2014.1.10+ds-1{{ grains['lsb_distrib_codename'] }}1
-    {%- else -%}
         {{ salt_version() }}{{ grains['lsb_distrib_codename'] }}1
-    {%- endif -%}
 {%- endmacro -%}
 
 {#-

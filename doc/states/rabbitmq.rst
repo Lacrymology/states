@@ -10,12 +10,3 @@ rabbitmq_cluster
     :members:
     :undoc-members:
     :show-inheritance:
-
-rabbitmq_user
--------------
-
-.. automodule:: _states.rabbitmq_user
-    :members:
-    :undoc-members:
-    :show-inheritance:
-

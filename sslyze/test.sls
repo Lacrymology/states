@@ -6,11 +6,11 @@ include:
 
 nsca-test:
   file:
-    - serialize
+    - managed
     - name: /etc/nagios/nsca.d/test.yml
     - require:
       - file: /etc/nagios/nsca.d
-    - dataset:
+    - contents: |
         sslyze:
           command: /usr/lib/nagios/plugins/check_ssl_configuration.py --formula=test --check=sslyze
           arguments:

@@ -1,6 +1,5 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst
 -*- ci-automatic-discovery: off -*-
-
 Copy files archive if necessary.
 -#}
 
@@ -18,7 +17,12 @@ salt_archive:
     - mode: 775
   cmd:
     - run
-    - name: rsync -av --delete --exclude ".*" {{ salt['pillar.get']('salt_archive:source', False) }} {{ archive_dir }}/
+{% set source = salt['pillar.get']('salt_archive:source', False) %}
+{%- if source %}
+    - name: rsync -av --delete --exclude ".*" {{ source }} {{ archive_dir }}/
+{%- else %}
+    - name: echo no pillar defined for archive source
+{%- endif %}
     - require:
       - pkg: salt_archive
       - file: salt_archive

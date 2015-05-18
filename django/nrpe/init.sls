@@ -46,19 +46,9 @@ check_{{ check }}:
     - require:
       - module: nrpe-virtualenv
       - module: python-sitemap
+    - require_in:
+      - file: /var/lib/nagios
 {%- endfor %}
-
-/var/lib/nagios:
-  file:
-    - directory
-    - user: nagios
-    - group: nagios
-    - mode: 755
-    - require:
-      - file: check_robots
-      - file: check_sitemap
-      - file: check_links
-      - file: check_sitemaplink
 
 /var/lib/nrpe:
   file:

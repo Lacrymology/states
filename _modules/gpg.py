@@ -26,7 +26,10 @@ import salt.syspaths
 from salt.exceptions import SaltInvocationError
 
 # Import 3rd-party libs
-import salt.ext.six as six
+try:
+    from salt.ext.six import string_types
+except ImportError:
+    from salt._compat import string_types
 
 # Set up logging
 log = logging.getLogger(__name__)
@@ -692,7 +695,7 @@ def export_key(keyids=None, secret=False, user=None, gnupghome=None):
     '''
     gpg = _create_gpg(user, gnupghome)
 
-    if isinstance(keyids, six.string_types):
+    if isinstance(keyids, string_types):
         keyids = keyids.split(',')
     return gpg.export_keys(keyids, secret)
 
@@ -733,7 +736,7 @@ def receive_keys(keyserver=None, keys=None, user=None, gnupghome=None):
     if not keyserver:
         keyserver = 'pgp.mit.edu'
 
-    if isinstance(keys, six.string_types):
+    if isinstance(keys, string_types):
         keys = keys.split(',')
 
     recv_data = gpg.recv_keys(keyserver, *keys)

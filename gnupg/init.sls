@@ -1,0 +1,46 @@
+{% set users = salt["pillar.get"]("gnupg:users", {}) %}
+include:
+  - apt
+
+gnupg:
+  pkg:
+    - latest
+    - pkgs:
+      - gnupg
+      - python-gnupg
+    - require:
+      - cmd: apt_sources
+  cmd: {# API #}
+    - wait
+    - name: "true"
+
+{%- for user, data in users.iteritems() %}
+  {%- set import_keys = data["import_keys"]|default({}) %}
+  {%- for name, key in import_keys.iteritems() %}
+gnupg_import_pub_key_{{ name }}_for_user_{{ user }}:
+  module:
+    - run
+    - name: gpg.import_key
+    - user: {{ user }}
+    - text: |
+        {{ key|indent(8) }}
+    - require:
+      - pkg: gnupg
+    - require_in:
+      - cmd: gnupg
+  {%- endfor %}
+  {%- set delete_keys = data["delete_keys"]|default({}) %}
+  {%- for name, key in delete_keys.iteritems() %}
+gnupg_delete_pub_key_{{ name }}_for_user_{{ user }}:
+  module:
+    - run
+    - name: gpg.delete_key
+    - user: {{ user }}
+    - text: |
+        {{ key|indent(8) }}
+    - require:
+      - pkg: gnupg
+    - require_in:
+      - cmd: gnupg
+  {%- endfor %}
+{%- endfor %}

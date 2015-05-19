@@ -16,8 +16,8 @@ gnupg:
 
 {%- for user, data in users.iteritems() %}
   {%- set import_keys = data["import_keys"]|default({}) %}
-  {%- for name, key in import_keys.iteritems() %}
-gnupg_import_pub_key_{{ name }}_for_user_{{ user }}:
+  {%- for keyid, key in import_keys.iteritems() %}
+gnupg_import_pub_key_{{ keyid }}_for_user_{{ user }}:
   module:
     - run
     - name: gpg.import_key
@@ -29,18 +29,22 @@ gnupg_import_pub_key_{{ name }}_for_user_{{ user }}:
     - require_in:
       - cmd: gnupg
   {%- endfor %}
-  {%- set delete_keys = data["delete_keys"]|default({}) %}
-  {%- for name, key in delete_keys.iteritems() %}
-gnupg_delete_pub_key_{{ name }}_for_user_{{ user }}:
+
+  {%- if 'gpg' in salt["sys.list_modules"]() %}
+    {%- set imported_keys = salt["gpg.list_keys"]() %}
+    {%- for imported_key in imported_keys %}
+      {%- if imported_key["keyid"] not in import_keys %}
+gnupg_delete_pub_key_{{ imported_key["keyid"] }}_for_user_{{ user }}:
   module:
     - run
     - name: gpg.delete_key
     - user: {{ user }}
-    - text: |
-        {{ key|indent(8) }}
+    - keyid: {{ imported_key["keyid"] }}
     - require:
       - pkg: gnupg
     - require_in:
       - cmd: gnupg
-  {%- endfor %}
+      {%- endif %}
+    {%- endfor %}
+  {%- endif %}
 {%- endfor %}

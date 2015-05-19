@@ -4,6 +4,7 @@
 {%- from 'nrpe/passive.jinja2' import passive_check with context %}
 include:
   - apt.nrpe
+  - ejabberd
   - erlang.nrpe
   - nginx.nrpe
   - nrpe
@@ -60,6 +61,7 @@ check_xmpp.py:
       - module: check_xmpp-requirements
       - module: nrpe-virtualenv
       - pkg: nagios-nrpe-server
+      - cmd: ejabberd_reg_monitor_user
     - require_in:
       - service: nagios-nrpe-server
       - service: nsca_passive

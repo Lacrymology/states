@@ -142,9 +142,9 @@ ejabberd_reg_{{ user }}:
 ejabberd_reg_monitor_user:
   cmd:
     - run
-    - name: ejabberdctl register {{ monitor_user }} {{ hostname }} {{ monitor_password }}
+    - name: ejabberdctl unregister '{{ monitor_user }}' '{{ hostname }}' && ejabberdctl register '{{ monitor_user }}' '{{ hostname }}' '{{ monitor_password }}'
     - user: root
-    - unless: ejabberdctl check-account {{ monitor_user }} {{ hostname }}
+    - unless: ejabberdctl check_password '{{ monitor_user }}' '{{ hostname }}' '{{ monitor_password }}'
     - require:
       - pkg: ejabberd
       - service: ejabberd

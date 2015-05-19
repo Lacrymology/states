@@ -10,7 +10,7 @@
 
 nginx_status:
   description: Nginx Status Page
-  command: '/usr/lib/nagios/plugins/check_http -t {{ timeout }} -H 127.0.0.1 -I 127.0.0.1 -u /nginx_status -p 80 -e "200 OK"{%- if salt["pillar.get"]("__test__", False) %} -v{%- endif %}'
+  command: '/usr/lib/nagios/plugins/check_http -t {{ timeout }} -H 127.0.0.1 -I 127.0.0.1 -u /nginx_status -p 80 -e "200 OK"'
   timeout: {{ timeout }}
   dependencies:
     - nginx_workers

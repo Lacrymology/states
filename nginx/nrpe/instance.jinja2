@@ -29,7 +29,6 @@
   command: /usr/lib/nagios/plugins/check_http -H {{ domain_name }} -u {{ http_uri }} -p {{ http_port }} -e '{{ http_result }}' -I {{ first_ip }}
     {%- if timeout %} --timeout={{ timeout }}{% endif -%}
 {%- set __test__ = salt['pillar.get']('__test__', False) %}
-    {%- if __test__ %} -v{%- endif -%}
     {%- if timeout %}
   timeout: {{ timeout }}
     {%- endif %}
@@ -50,7 +49,6 @@
   description: {{ deployment|capitalize }} NGINX HTTPS Protocol
   command: /usr/lib/nagios/plugins/check_http -S -H {{ domain_name }} -u {{ https_uri }} -e '{{ https_result }}' -I {{ first_ip }}
         {%- if timeout %} --timeout={{ timeout }}{% endif -%}
-        {%- if __test__ %} -v{%- endif %}
     {%- if timeout %}
   timeout: {{ timeout }}
     {%- endif -%}
@@ -68,7 +66,6 @@
   {{ passive_interval(24 * 60) }} {#- a day  #}
   command: /usr/lib/nagios/plugins/check_http -S -H {{ domain_name }} -C {{ salt['pillar.get']('ssl:expiry_days', 15) }} -I {{ first_ip }}
         {%- if timeout %} --timeout={{ timeout }}{% endif -%}
-        {%- if __test__ %} -v{%- endif %}
     {%- if timeout %}
   timeout: {{ timeout }}
     {%- endif %}

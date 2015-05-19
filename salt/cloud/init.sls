@@ -1,6 +1,5 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
-{%- from "python/init.sls" import root_bin_py with context -%}
 {%- from "macros.jinja2" import salt_version with context %}
 include:
   - apt
@@ -68,7 +67,7 @@ salt-cloud:
 salt_cloud_bootstrap_script:
   file:
     - copy
-    - source: {{ root_bin_py() }}/salt/cloud/deploy/bootstrap-salt.sh
+    - source: {{ grains['saltpath'] }}/cloud/deploy/bootstrap-salt.sh
     - name: /etc/salt/cloud.deploy.d/bootstrap-salt.sh
     - require:
       - module: salt-cloud
@@ -91,7 +90,7 @@ salt_cloud_digital_ocean_v2_module:
   file:
     - managed
     - source: salt://salt/cloud/digital_ocean_v2.py
-    - name: {{ root_bin_py() }}/salt/cloud/clouds/digital_ocean_v2.py
+    - name: {{ grains['saltpath'] }}/cloud/clouds/digital_ocean_v2.py
     - require:
       - pkg: salt
       - pkg: salt-cloud

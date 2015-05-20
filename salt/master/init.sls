@@ -266,3 +266,14 @@ salt_master_cron_highstate:
       - pkg: cron
       - file: bash
       - service: salt-master
+
+salt_master_gitfs_patch:
+  file:
+    - patch
+    - name: /usr/lib/python2.7/dist-packages/salt/fileserver/gitfs.py
+    - hash: md5=aa302de8bd4852ac024104c72ee0adfe
+    - source: salt://salt/master/gitfs.patch
+    - require:
+      - pkg: salt-master
+    - watch_in:
+      - service: salt-master

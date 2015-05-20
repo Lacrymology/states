@@ -1,0 +1,9 @@
+393,395d392
+<     except gitdb.exc.BadObject:
+<         pass
+<     else:
+397c394,395
+<     return None
+---
+>     except gitdb.exc.ODBError:
+>         return None

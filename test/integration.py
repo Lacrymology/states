@@ -306,7 +306,6 @@ def list_system_files(dirs=("/bin", "/etc", "/usr", "/lib", "/sbin", "/var"),
 
     Most of the time it will only make sense to be called with absolute paths
     """
-    ret = set()
     for directory in dirs:
         if os.path.isdir(directory):
 
@@ -319,8 +318,8 @@ def list_system_files(dirs=("/bin", "/etc", "/usr", "/lib", "/sbin", "/var"),
                         is_ignored = True
                         break
                 if not is_ignored:
-                    ret.add(filename)
-    return ret
+                    yield filename
+    return
 
 
 def render_state_template(state):
@@ -536,7 +535,7 @@ class States(unittest.TestCase):
         compared against `original`. If they differ, the test fails.
 
         :params original: a set or None
-        :params function: a function that returns a set
+        :params function: a function that returns a set or a generator function
         :params messages: a list of 3 strings used for logging.
             - the first element must take an integer and is used when the set
               is first filled in (original is None)
@@ -548,13 +547,19 @@ class States(unittest.TestCase):
         global clean_up_failed
         # check processes
         if not original:
-            original.update(function())
+            # function can be a generator function, so get a set of it
+            original.update(set(function()))
             logger.debug(messages[0], len(original))
+            logger.debug('Stat: size of stored list: %d',
+                         sys.getsizeof(original))
         else:
             current = function()
-            logger.debug(messages[1], len(current))
             global unclean
-            unclean = current - original
+            for i, e in enumerate(current):
+                if e not in original:
+                    unclean.add(e)
+
+            logger.debug(messages[1], i)
 
             if unclean:
                 clean_up_failed = True

@@ -19,7 +19,6 @@ import logging
 import pwd
 import tempfile
 import collections
-import subprocess
 try:
     import unittest2 as unittest
 except ImportError:
@@ -309,16 +308,11 @@ def list_system_files(dirs=("/bin", "/etc", "/usr", "/lib", "/sbin", "/var"),
     for directory in dirs:
         if os.path.isdir(directory):
 
-            for filename in subprocess.check_output(["find",
-                                                     directory]).split(
-                    os.linesep):
-                is_ignored = False
-                for path in ignored:
-                    if filename.startswith(path):
-                        is_ignored = True
-                        break
-                if not is_ignored:
-                    yield filename
+            for root, _, files in os.walk(directory):
+                for fn in files:
+                    filename = os.path.join(root, fn)
+                    if not filename.startswith(tuple(ignored)):
+                        yield filename
     return
 
 

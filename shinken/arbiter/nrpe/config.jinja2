@@ -24,7 +24,7 @@ shinken_arbiter_port_remote:
   check: check_tcp!7770
   timeout: {{ timeout }}
   passive: False
-  dependencies:
 {%- if arbiter_mine %}
+  dependencies:
     - shinken_arbiter_port
 {%- endif %}

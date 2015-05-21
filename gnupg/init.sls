@@ -28,6 +28,7 @@ gnupg_import_pub_key_{{ keyid }}_for_user_{{ user }}:
       - pkg: gnupg
     - require_in:
       - cmd: gnupg
+      - file: gnupg_fix_gnupghome_owner_{{ user }}
   {%- endfor %}
 
   {%- if 'gpg' in salt["sys.list_modules"]() %}
@@ -44,7 +45,22 @@ gnupg_delete_pub_key_{{ imported_key["keyid"] }}_for_user_{{ user }}:
       - pkg: gnupg
     - require_in:
       - cmd: gnupg
+      - file: gnupg_fix_gnupghome_owner_{{ user }}
       {%- endif %}
     {%- endfor %}
   {%- endif %}
+
+  {#- workaround for incorrect owner for files in ~/.gnupg #}
+  {%- set user_info = salt["user.info"](user) %}
+gnupg_fix_gnupghome_owner_{{ user }}:
+  file:
+    - directory
+    - name: {{ user_info["home"] }}
+    - recurse:
+      - user
+      - group
+    - user: {{ user }}
+    - group: {{ user_info["gid"] }}
+    - require_in:
+      - cmd: gnupg
 {%- endfor %}

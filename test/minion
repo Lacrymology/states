@@ -11,3 +11,4 @@ file_roots:
 pillar_roots:
   base:
     - /root/salt/pillar
+state_verbose: False

@@ -68,7 +68,7 @@ shinken-module-{{ module_name }}:
     {%- endif %}
 {%- endmacro %}
 
-{% set version = "2.0.3" %}
+{% set version = "2.4" %}
 {% set ssl = salt['pillar.get']('shinken:ssl', False) %}
 include:
   - apt
@@ -164,12 +164,12 @@ shinken:
 {%- if files_archive %}
     - source: {{ files_archive }}/mirror/shinken/{{ version }}.tar.gz
 {%- else %}
-    - source: https://pypi.python.org/packages/source/S/Shinken/Shinken-{{ version }}.tar.gz
+    - source: https://github.com/naparuba/shinken/archive/{{ version }}.tar.gz
 {%- endif %}
-    - source_hash: md5=0350cc0fbeba6405d88e5fbce3580a91
+    - source_hash: md5=e27941d5eb32399d5d7554ad937d8b82
     - archive_format: tar
     - tar_options: z
-    - if_missing: /usr/local/shinken/src/Shinken-{{ version }}
+    - if_missing: /usr/local/shinken/src/shinken-{{ version }}
     - require:
       - file: /usr/local/shinken/src
   file:
@@ -199,7 +199,7 @@ shinken:
       - pkg: shinken
   cmd:
     - wait
-    - cwd: /usr/local/shinken/src/Shinken-{{ version }}
+    - cwd: /usr/local/shinken/src/shinken-{{ version }}
     - name: /usr/local/shinken/bin/python setup.py install --install-scripts=/usr/local/shinken/bin --record=/usr/local/shinken/install.log
     - watch:
       - archive: shinken
@@ -227,7 +227,7 @@ shinken:
 shinken_replace_etc_shinken:
   file:
     - replace
-    - name: /usr/local/shinken/src/Shinken-{{ version }}/setup.py
+    - name: /usr/local/shinken/src/shinken-{{ version }}/setup.py
     - pattern: '"/etc/shinken"'
     - repl: '"/usr/local/shinken/etc/shinken"'
     - require:
@@ -236,7 +236,7 @@ shinken_replace_etc_shinken:
 shinken_replace_etc:
   file:
     - replace
-    - name: /usr/local/shinken/src/Shinken-{{ version }}/setup.py
+    - name: /usr/local/shinken/src/shinken-{{ version }}/setup.py
     - pattern: "'/etc'"
     - repl: "'/usr/local/shinken/etc'"
     - require:
@@ -245,7 +245,7 @@ shinken_replace_etc:
 shinken_replace_init:
   file:
     - replace
-    - name: /usr/local/shinken/src/Shinken-{{ version }}/setup.py
+    - name: /usr/local/shinken/src/shinken-{{ version }}/setup.py
     - pattern: "'/etc/init.d/shinken"
     - repl: "'/usr/local/shinken/etc/init.d/shinken"
     - require:
@@ -255,7 +255,7 @@ shinken_replace_init:
 shinken{{ suffix }}_python_path:
   file:
     - replace
-    - name: /usr/local/shinken/src/Shinken-{{ version }}/bin/shinken{{ suffix }}
+    - name: /usr/local/shinken/src/shinken-{{ version }}/bin/shinken{{ suffix }}
     - pattern: "#!/usr/bin/env python"
     - repl: "#!/usr/local/shinken/bin/python"
     - backup: False

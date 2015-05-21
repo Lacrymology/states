@@ -18,3 +18,4 @@ sysctl: {# API #}
     - user: root
     - group: root
     - mode: 644
+    - replace: False

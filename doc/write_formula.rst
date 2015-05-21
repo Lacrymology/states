@@ -38,6 +38,9 @@ If the Python environment destination is the root (``/usr/local``), it's
 filename should be ``{{ opts['cachedir'] }}/pip/$statename``.
 If it's in a virtualenv it should be ``/usr/local/$venv/salt-requirements.txt``.
 
+When upgrade a software by pip to newer version, remember to also upgrade
+its dependencies to the versions that the software required.
+
 States
 ------
 

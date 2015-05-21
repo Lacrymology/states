@@ -64,6 +64,7 @@ rsyslog:
     - user: root
     - group: utmp
     - mode: 660
+    - replace: False
 
 /var/log/upstart:
   file:

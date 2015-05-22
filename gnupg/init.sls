@@ -55,12 +55,16 @@ gnupg_delete_pub_key_{{ imported_key["keyid"] }}_for_user_{{ user }}:
 gnupg_fix_gnupghome_owner_{{ user }}:
   file:
     - directory
-    - name: {{ user_info["home"] }}
+    - name: {{ user_info["home"] }}/.gnupg
     - recurse:
       - user
       - group
-    - user: {{ user }}
+    - user: "{{ user }}"
+  {%- if user == "root" %}
+    - group: root  {#- 0 number will count as False boolean value #}
+  {%- else %}
     - group: {{ user_info["gid"] }}
+  {%- endif %}
     - require_in:
       - cmd: gnupg
 {%- endfor %}

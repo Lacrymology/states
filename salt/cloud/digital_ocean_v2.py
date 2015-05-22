@@ -146,11 +146,11 @@ def list_nodes(call=None):
             'The list_nodes function must be called with -f or --function.'
         )
 
-    items = query(method='droplets')
+    items = list_nodes_full(forOutput=False)
 
     ret = {}
-    for node in items['droplets']:
-        ret[node['name']] = {
+    for nodename, node in items.iteritems():
+        ret[nodename] = {
             'id': node['id'],
             'image': node['image']['name'],
             'networks': str(node['networks']),
@@ -169,16 +169,24 @@ def list_nodes_full(call=None, forOutput=True):
             'The list_nodes_full function must be called with -f or --function.'
         )
 
-    items = query(method='droplets')
-
+    fetch = True
+    page = 1
     ret = {}
-    for node in items['droplets']:
-        ret[node['name']] = {}
-        for item in node.keys():
-            value = node[item]
-            if value is not None and forOutput:
-                value = str(value)
-            ret[node['name']][item] = value
+
+    while fetch:
+        items = query(method='droplets', command='?page=' + str(page))
+
+        for node in items['droplets']:
+            ret[node['name']] = {}
+            for item in node.keys():
+                value = node[item]
+                if value is not None and forOutput:
+                    value = str(value)
+                ret[node['name']][item] = value
+
+        page += 1
+        fetch = 'next' in items['links']['pages']
+
     return ret
 
 

@@ -33,10 +33,15 @@ master_timeout=300
 failfast=""
 tests=""
 
+
+function destroy_test_vm() {
+    sudo salt-cloud --destroy --assume-yes "$BUILD_IDENTITY"
+}
+
 while true; do
     case "$1" in
         --destroy)
-            sudo salt-cloud --destroy --assume-yes "$BUILD_IDENTITY"
+            destroy_test_vm
             exit $?
             ;;
         --repo)
@@ -180,3 +185,6 @@ echo "if below command show that integration.py still is running, \
       test has not finished and cmd.run integration.py returned too soon."
 sudo salt -t 5 "$BUILD_IDENTITY" --output json cmd.run 'ps xau | grep integration.p[y]' \
     --out yaml | grep "integration.p[y]" || true
+if ${DESTROY_VM:-false}; then
+    destroy_test_vm
+fi

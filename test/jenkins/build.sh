@@ -174,3 +174,9 @@ sudo salt --verbose -t "$master_timeout" "$BUILD_IDENTITY" cmd.run \
     "$CUSTOM_CONFIG_DIR/jenkins/run.py $failfast $tests"
 finish_run_test_time=$(date +%s)
 echo "TIME-METER: Run integration.py took: $((finish_run_test_time - start_run_test_time)) seconds"
+
+sudo salt -t 5 "$BUILD_IDENTITY" --output json cmd.run "salt-call test.ping"
+echo "if below command show that integration.py still is running, \
+      test has not finished and cmd.run integration.py returned too soon."
+sudo salt -t 5 "$BUILD_IDENTITY" --output json cmd.run 'ps xau | grep integration.p[y]' \
+    --out yaml | grep "integration.p[y]" || true

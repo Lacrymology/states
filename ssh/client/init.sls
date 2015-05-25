@@ -102,8 +102,6 @@ ssh_public_key_{{ local_user }}_{{ keyname }}:
   file:
     - managed
     - name: /etc/ssh/keys/{{ local_user }}/{{ keyname }}.pub
-    - user: root
-    - group: root
     - mode: 400
     - require:
       - cmd: ssh_public_key_{{ local_user }}_{{ keyname }}

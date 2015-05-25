@@ -10,8 +10,12 @@ ppp:
     - require:
       - cmd: apt_sources
 
+{%- set managed_files = [] %}
+{%- for instance in instances %}
+    {%- do managed_files.append('/etc/ppp/' + instance + '-options') %}
+{%- endfor %}
 {%- for file in salt['file.find']('/etc/ppp', name='*-options', type='f') %}
-  {%- if salt['file.basename'](file).split("-")[0] not in instances %}
+  {%- if file not in managed_files %}
 {{ file }}:
   file:
     - absent

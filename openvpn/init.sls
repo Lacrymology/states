@@ -254,6 +254,8 @@ openvpn_server_cert_{{ instance }}:
     - mode: 400
     - require:
       - module: openvpn_server_cert_{{ instance }}
+    - require_in:
+      - service: openvpn-{{ instance }}
 
         {%- for client in servers[instance]['clients'] -%}
             {%- if client not in servers[instance]['revocations'] %}

@@ -12,7 +12,7 @@ Example::
 
   git-server:
     keys:
-      00deadbeefsshkey: ssh-dss
+      - ssh-dss 00deadbeefsshkey
     repositories:
       myreponame:
         push_notification: False
@@ -22,9 +22,7 @@ Example::
 git-server:keys
 ~~~~~~~~~~~~~~~
 
-Dict of all users that can access the :doc:`/git/doc/index`
-repository. Each key is a dict of the :doc:`/ssh/doc/index` public key
-and the value is the key format.
+List of SSH public keys to grant access to :doc:`/git/doc/index` repository.
 
 .. _pillar-git-server-repositories:
 

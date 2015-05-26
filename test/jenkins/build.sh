@@ -89,6 +89,7 @@ function collect_logs {
     echo "Analysing stdout.log"
     sudo salt -t 30 "$BUILD_IDENTITY" --output json cmd.run "$CUSTOM_CONFIG_DIR/findgap.py --verbose --larger-equal $time_threshold /root/salt/stdout.log"
 
+    echo "Start collecting log files..."
     for prepare_log in $PREPARE_STDOUT_LOG $PREPARE_STDERR_LOG; do
         sudo salt -t 30 "$BUILD_IDENTITY" --output json cmd.run "xz -c $prepare_log > /tmp/$BUILD_IDENTITY-$(basename $prepare_log).log.xz"
     done
@@ -98,17 +99,22 @@ function collect_logs {
     done
 
     sudo salt -t 30 "$BUILD_IDENTITY" --output json cmd.run "tar -C /var/log -cJf /tmp/$BUILD_IDENTITY-upstart.log.tar.xz upstart"
+    echo "Finished collecting log files."
 
-    sudo salt -t 30 "$BUILD_IDENTITY" --output json cmd.run "grep COUNTER: /root/salt/stdout.log"
+    sudo salt -t 30 "$BUILD_IDENTITY" --output yaml cmd.run "grep COUNTER: /root/salt/stdout.log"
     sudo salt -t 60 "$BUILD_IDENTITY" --output json cmd.run_all "salt-call -l info -c $CUSTOM_CONFIG_DIR state.sls test.jenkins.result"
 
+    echo "Organizing files in current workspaces..."
     cp /home/ci-agent/$BUILD_IDENTITY-result.xml $WORKSPACE/result.xml
 
-    xz -d -c /home/ci-agent/$BUILD_IDENTITY-stderr.log.xz
     for f in /home/ci-agent/$BUILD_IDENTITY-*.xz; do
       cp $f $WORKSPACE/`basename $f | sed "s/$BUILD_IDENTITY/$JOB_NAME/"`
     done
     mv /srv/salt/jenkins_archives/$BUILD_IDENTITY.tar.gz $WORKSPACE/bootstrap-archive.tar.gz
+
+    echo "Start of error logs"
+    xz -d -c /home/ci-agent/$BUILD_IDENTITY-stderr.log.xz
+    echo "End of error logs."
 
     echo "TIME-METER: Total time: $(($(date +%s) - start_time)) seconds"
 }

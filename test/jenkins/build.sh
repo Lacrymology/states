@@ -187,6 +187,7 @@ finish_run_test_time=$(date +%s)
 echo "TIME-METER: Run integration.py took: $((finish_run_test_time - start_run_test_time)) seconds"
 
 sudo salt -t 5 "$BUILD_IDENTITY" --output json cmd.run "salt-call test.ping"
+sudo salt -t 5 "$BUILD_IDENTITY" --output yaml cmd.run "cat /root/salt/*.xml"
 echo "if below command show that integration.py still is running, \
       test has not finished and cmd.run integration.py returned too soon."
 sudo salt -t 5 "$BUILD_IDENTITY" --output json cmd.run 'ps xau | grep integration.p[y]' \

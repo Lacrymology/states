@@ -120,7 +120,6 @@ function collect_logs {
 }
 
 function collect_logs_then_fail {
-    collect_logs
     exit 1
 }
 

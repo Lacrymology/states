@@ -39,25 +39,22 @@ ci-agent:
     - require:
       - file: ci-agent
 
-{%- set result_file = '/home/ci-agent/result.xml' -%}
-{%- set test_files = salt['file.find']('/root/salt/', name='TEST-*-salt.xml') %}
-
 openssh-client:
   pkg:
     - installed
 
+{%- set result_file = '/home/ci-agent/result.xml' %}
+{%- set test_files = salt['file.find']('/root/salt/', name='TEST-*-salt.xml') %}
 test_result:
+{%- if test_files %}
   file:
-{%- if test_files -%}
     {#- integration.py worked #}
     - rename
     - source: {{ test_files[0] }}
-{%- else -%}
-    {#- integration.py failed #}
-    - managed
-    - source: salt://test/jenkins/result/failure.xml
-{%- endif %}
     - name: {{ result_file }}
+    - require_in:
+      - cmd: test_result
+{%- endif %}
   cmd:
     - run
     - user: ci-agent
@@ -65,7 +62,6 @@ test_result:
     - name: scp -P {{ ssh_port }} {{ result_file }} ci-agent@{{ grains['master'] }}:/home/ci-agent/{{ grains['id'] }}-result.xml
     - path: {{ result_file }}
     - require:
-      - file: test_result
       - file: /home/ci-agent/.ssh/known_hosts
       - file: /home/ci-agent/.ssh/id_rsa
       - pkg: openssh-client

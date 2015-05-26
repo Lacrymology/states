@@ -33,10 +33,15 @@ master_timeout=300
 failfast=""
 tests=""
 
+
+function destroy_test_vm() {
+    sudo salt-cloud --destroy --assume-yes "$BUILD_IDENTITY"
+}
+
 while true; do
     case "$1" in
         --destroy)
-            sudo salt-cloud --destroy --assume-yes "$BUILD_IDENTITY"
+            destroy_test_vm
             exit $?
             ;;
         --repo)
@@ -84,6 +89,7 @@ function collect_logs {
     echo "Analysing stdout.log"
     sudo salt -t 30 "$BUILD_IDENTITY" --output json cmd.run "$CUSTOM_CONFIG_DIR/findgap.py --verbose --larger-equal $time_threshold /root/salt/stdout.log"
 
+    echo "Start collecting log files..."
     for prepare_log in $PREPARE_STDOUT_LOG $PREPARE_STDERR_LOG; do
         sudo salt -t 30 "$BUILD_IDENTITY" --output json cmd.run "xz -c $prepare_log > /tmp/$BUILD_IDENTITY-$(basename $prepare_log).log.xz"
     done
@@ -93,23 +99,27 @@ function collect_logs {
     done
 
     sudo salt -t 30 "$BUILD_IDENTITY" --output json cmd.run "tar -C /var/log -cJf /tmp/$BUILD_IDENTITY-upstart.log.tar.xz upstart"
+    echo "Finished collecting log files."
 
-    sudo salt -t 30 "$BUILD_IDENTITY" --output json cmd.run "grep COUNTER: /root/salt/stdout.log"
+    sudo salt -t 30 "$BUILD_IDENTITY" --output yaml cmd.run "grep COUNTER: /root/salt/stdout.log"
     sudo salt -t 60 "$BUILD_IDENTITY" --output json cmd.run_all "salt-call -l info -c $CUSTOM_CONFIG_DIR state.sls test.jenkins.result"
 
+    echo "Organizing files in current workspaces..."
     cp /home/ci-agent/$BUILD_IDENTITY-result.xml $WORKSPACE/result.xml
 
-    xz -d -c /home/ci-agent/$BUILD_IDENTITY-stderr.log.xz
     for f in /home/ci-agent/$BUILD_IDENTITY-*.xz; do
       cp $f $WORKSPACE/`basename $f | sed "s/$BUILD_IDENTITY/$JOB_NAME/"`
     done
     mv /srv/salt/jenkins_archives/$BUILD_IDENTITY.tar.gz $WORKSPACE/bootstrap-archive.tar.gz
 
+    echo "Start of error logs"
+    xz -d -c /home/ci-agent/$BUILD_IDENTITY-stderr.log.xz
+    echo "End of error logs."
+
     echo "TIME-METER: Total time: $(($(date +%s) - start_time)) seconds"
 }
 
 function collect_logs_then_fail {
-    collect_logs
     exit 1
 }
 
@@ -174,3 +184,14 @@ sudo salt --verbose -t "$master_timeout" "$BUILD_IDENTITY" cmd.run \
     "$CUSTOM_CONFIG_DIR/jenkins/run.py $failfast $tests"
 finish_run_test_time=$(date +%s)
 echo "TIME-METER: Run integration.py took: $((finish_run_test_time - start_run_test_time)) seconds"
+
+sudo salt -t 5 "$BUILD_IDENTITY" --output json cmd.run "salt-call test.ping"
+sudo salt -t 5 "$BUILD_IDENTITY" --output yaml cmd.run "cat /root/salt/*.xml"
+echo "if below command show that integration.py still is running, \
+      test has not finished and cmd.run integration.py returned too soon."
+sudo salt -t 5 "$BUILD_IDENTITY" --output json cmd.run 'ps xau | grep integration.p[y]' \
+    --out yaml | grep "integration.p[y]" || true
+sudo salt -t 5 "$BUILD_IDENTITY" --output yaml cmd.run "salt-call -c $CUSTOM_CONFIG_DIR state.sls test.teardown -lerror"
+if ${DESTROY_VM:-false}; then
+    destroy_test_vm
+fi

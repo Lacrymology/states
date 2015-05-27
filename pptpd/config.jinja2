@@ -22,7 +22,7 @@ connections {{ salt['pillar.get']('pptpd:max_connections', 100) }}
   option in the pppd options file, or run bcrelay.
  -#}
 {%- for type in ('local', 'remote') %}
-{{ type }}ip {% for ip_range in salt['pillar.get']('pptpd:' ~ type ~ '_ip') -%}
+{{ type }}ip {% for ip_range in salt['pillar.get']('pptpd:' ~ type ~ '_ips') -%}
     {{ ip_range }}
         {%- if not loop.last -%},{%- endif -%}
     {%- endfor -%}

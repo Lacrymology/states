@@ -17,7 +17,7 @@ git-server:
 {%- set keys = salt['pillar.get']('git-server:keys') %}
 {% for key in keys %}
   {%- set key_type, key_content = key.split()[:2] %}
-git_server_{{ key_content }}:
+git_server_ssh_auth_{{ loop.index }}:
   ssh_auth:
     - present
     - name: {{ key_content }}

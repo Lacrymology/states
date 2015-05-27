@@ -227,7 +227,7 @@ salt-archive-clamav:
 
 {%- for key in salt['pillar.get']('salt_archive:keys', []) %}
   {%- set key_type, key_content = key.split()[:2] %}
-salt_archive_{{ loop.index }}:
+salt_archive_ssh_auth_{{ loop.index }}:
   ssh_auth:
     - present
     - name: {{ key_content }}

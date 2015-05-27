@@ -40,7 +40,7 @@ Example::
     delete: True
     ssl: mykeyname
     keys:
-      00daedbeef: ssh-dss
+      - ssh-dss 00daedbeef
 
 .. _pillar-salt_archive-source:
 
@@ -63,9 +63,9 @@ salt_archive:ssl
 salt_archive:keys
 ~~~~~~~~~~~~~~~~~
 
-Dict of :doc:`/ssh/client/doc/index` keys allowed to log in user.
+List of :doc:`/ssh/client/doc/index` keys allowed to log in user.
 
-Default: allow no :doc:`/ssh/client/doc/index` key (``{}``).
+Default: allow no :doc:`/ssh/client/doc/index` key (``[]``).
 
 .. _pillar-salt_archive-max_age:
 

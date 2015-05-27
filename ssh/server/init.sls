@@ -42,9 +42,9 @@ ssh_server_root_authorized_keys:
     - mode: 400
     - contents: |
 {%- for user in salt['pillar.get']('ssh:server:root_keys', {}) -%}
-  {%- for key, type in salt['pillar.get']('ssh:server:root_keys:' ~ user, {}).iteritems() %}
-        command="/usr/local/bin/root-shell-wrapper {{ user }}" {{ type }} {{ key }}
-  {%- endfor -%}
+  {%- for key in salt['pillar.get']('ssh:server:root_keys:' ~ user, []) %}
+        command="/usr/local/bin/root-shell-wrapper {{ user }}" {{ key }}
+  {%- endfor %}
 {%- endfor %}
     - require:
       - file: {{ root_home() }}/.ssh

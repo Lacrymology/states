@@ -225,13 +225,14 @@ salt-archive-clamav:
         mirror: {{ salt["pillar.get"]("salt_archive:clamav:source", "db.local.clamav.net") }}
 {%- endif %}
 
-{%- for key, enc in salt['pillar.get']('salt_archive:keys', {}).iteritems() %}
-salt_archive_{{ key }}:
+{%- for key in salt['pillar.get']('salt_archive:keys', []) %}
+  {%- set key_type, key_content = key.split()[:2] %}
+salt_archive_ssh_auth_{{ loop.index }}:
   ssh_auth:
     - present
-    - name: {{ key }}
+    - name: {{ key_content }}
     - user: salt_archive
-    - enc: {{ enc }}
+    - enc: {{ key_type }}
     - require:
       - file: salt_archive
       - service: openssh-server

@@ -16,14 +16,15 @@ git-server:
 
 {%- set keys = salt['pillar.get']('git-server:keys') %}
 {% for key in keys %}
-git_server_{{ key }}:
+  {%- set key_type, key_content = key.split()[:2] %}
+git_server_ssh_auth_{{ loop.index }}:
   ssh_auth:
     - present
-    - name: {{ key }}
+    - name: {{ key_content }}
     - user: git
     - require:
       - user: git-server
-    - enc: {{ keys[key] }}
+    - enc: {{ key_type }}
 {% endfor %}
 
 {% for repository in salt['pillar.get']('git-server:repositories') %}

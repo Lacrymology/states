@@ -72,6 +72,9 @@ Example::
             aZvhqSvVfCfLRgtR62thX1j03XTHrCXPx26UiHgcaCVkfRrny4sDLRqRVrnSa9hR
             =3zdr
             -----END PGP PUBLIC KEY BLOCK-----
+        private_keys:
+          {{ long gpg keyid }}: |
+            {{ private gpg key}}
 
 ``import_keys`` is dictionary with key is long :doc:`index` keyid, value is its
 public key contents. To get long :doc:`index` keyid, use following command::

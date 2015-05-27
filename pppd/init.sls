@@ -37,18 +37,3 @@ ppp-options-{{ server_name }}:
     - context:
         server_name: {{ server_name }}
 {%- endfor %}
-
-/etc/ppp/chap-secrets:
-  file:
-    - managed
-    - user: root
-    - group: root
-    - mode: 600
-    - contents: |
-{%- for server_name in instances -%}
-  {%- for client, secret in instances[server_name]['chap'].iteritems() %}
-        {{ client }} {{ server_name }} {{ secret }} *
-  {%- endfor -%}
-{%- endfor %}
-    - require:
-      - pkg: ppp

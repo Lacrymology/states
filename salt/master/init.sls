@@ -22,6 +22,7 @@ include:
   - rsyslog
   - salt
   - ssh.client
+  - salt.minion.deps
 {%- if xmpp %}
   - sleekxmpp
 {%- endif %}
@@ -275,5 +276,6 @@ salt_master_gitfs_patch:
     - source: salt://salt/master/gitfs.patch
     - require:
       - pkg: salt-master
+      - pkg: salt_minion_deps
     - watch_in:
       - service: salt-master

@@ -394,3 +394,36 @@ NRPE
 All checks that use ``/usr/lib/nagios/plugins/check_procs``
 should provide ``-C`` and ``-u`` if possible. This helps avoid the check
 matching itself.
+
+Diamond
+-------
+
+ProcessResourcesCollector
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+A Diamond collector that collects memory usage of each process defined in it's
+config file by matching them with their executable filepath or the process
+name. This collector can also be used to collect memory usage for the Diamond
+process.
+
+Documentation: https://github.com/BrightcoveOS/Diamond/wiki/collectors-ProcessResourcesCollector
+
+.. copied from
+   https://github.com/BrightcoveOS/Diamond/wiki/collectors-ProcessResourcesCollector
+
+A process can be matched using exe, name or cmdline.
+
+exe
+  executable file written in ``/proc/{{ processid }}/cmdline``
+
+name
+  command name, list all running processes with their names with following
+  command::
+
+    ps -eo pid,comm
+
+cmdline
+  command with all its arguments as a string, list all running
+  processes with their cmdline with following command::
+
+    ps -eo pid,args

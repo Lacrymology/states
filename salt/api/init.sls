@@ -13,6 +13,7 @@ include:
   - pip
   - rsyslog
   - salt.master
+  - salt.minion.deps
 {% if ssl %}
   - ssl
 {% endif %}
@@ -129,13 +130,14 @@ salt-api:
 salt_api_patch_post_empty_body_23404:
   file:
     - patch
-    - name: /usr/lib/python2.7/dist-packages/saltapi/netapi/rest_cherrypy/app.py
-    - hash: md5=85b5b015b12a1060af6212908c19b02f
+    - name: /usr/lib/python2.7/dist-packages/salt/netapi/rest_cherrypy/app.py
+    - hash: md5=148e640f3da21453c4e6ae316baa6896
     - source: salt://salt/api/cherrypy.patch
     - watch_in:
       - service: salt-api
     - require:
       - pkg: salt-api
+      - pkg: salt_minion_deps
 
 {{ manage_upstart_log('salt-api') }}
 

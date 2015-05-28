@@ -3,6 +3,7 @@
 {%- from 'macros.jinja2' import manage_pid with context %}
 
 {%- set version = '0.8.14' %}
+{%- set files_archive = salt['pillar.get']('files_archive', False) %}
 
 include:
   - apt
@@ -36,7 +37,11 @@ fail2ban:
   archive:
     - extracted
     - name: /usr/local/fail2ban/src
+{%- if files_archive %}
+    - source: {{ files_archive }}/pip/fail2ban-{{ version }}.tar.gz
+{%- else %}
     - source: https://github.com/fail2ban/fail2ban/archive/{{ version }}.tar.gz
+{%- endif %}
     - source_hash: md5=a8697d82bab9bbdb99e5c93a76551742
     - if_missing: /usr/local/fail2ban/src/fail2ban-{{ version }}
     - archive_format: tar

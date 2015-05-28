@@ -24,6 +24,12 @@ salt-cloud:
 python-libcloud:
   pkg:
     - purged
+  {#- contains *.pyc, won't be removed by dpkg #}
+  file:
+    - absent
+    - name: /usr/lib/python2.7/dist-packages/libcloud
+    - require:
+      - pkg: python-libcloud
 
 salt_cloud_digital_ocean_v2_module:
   file:

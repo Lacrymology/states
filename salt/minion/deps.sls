@@ -8,6 +8,7 @@ salt_minion_deps:
   pkg:
     - installed
     - pkgs:
+      - patch {# for file.patch #}
       - lsb-release
       - openssh-client {#- for ssh_known_host #}
       - zip {#- for archive.zip module #}

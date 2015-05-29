@@ -94,6 +94,7 @@ openvpn_ca:
     - user: root
     - group: root
     - mode: 400
+    - replace: False
     - require:
       - module: openvpn_ca
 
@@ -252,6 +253,7 @@ openvpn_server_cert_{{ instance }}:
     - user: root
     - group: root
     - mode: 400
+    - replace: False
     - require:
       - module: openvpn_server_cert_{{ instance }}
     - require_in:
@@ -309,6 +311,7 @@ openvpn_client_cert_{{ instance }}_{{ client }}:
     - user: root
     - group: root
     - mode: 400
+    - replace: False
     - require:
       - module: openvpn_client_cert_{{ instance }}_{{ client }}
 

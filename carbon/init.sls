@@ -270,6 +270,7 @@ carbon-relay:
     - mode: 440
     - user: root
     - group: graphite
+    - replace: False
     - require:
       - file: /etc/graphite
       - user: graphite

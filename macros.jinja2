@@ -49,6 +49,7 @@ mode: permission of PID file
     - user: {{ user }}
     - group: {{ group }}
     - mode: {{ mode }}
+    - replace: False
         {%- if caller is defined -%}
             {%- for line in caller().split("\n") -%}
                 {%- if loop.first %}

@@ -63,6 +63,7 @@ postfix_diamond_queue_length:
     - user: syslog
     - group: adm
     - mode: 640
+    - replace: False
     - require:
       - pkg: rsyslog
     - require_in:

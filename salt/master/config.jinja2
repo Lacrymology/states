@@ -19,6 +19,8 @@ gitfs_remotes:
   - {{ repo }}
 {%- endfor %}
 
+pillar_opts: False {# hide ``master`` key in minion pillar #}
+
 log_file: file:///dev/log
 {%- if salt['pillar.get']('debug', False) %}
 log_level: debug

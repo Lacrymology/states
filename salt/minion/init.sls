@@ -10,6 +10,7 @@ include:
   - salt.minion.upgrade
 
 {# it's mandatory to remove this file if the master is changed #}
+{%- if salt['file.file_exists']('/etc/salt/pki/minion/minion_master.pub') %}
 salt_minion_master_key:
   module:
     - wait
@@ -19,6 +20,7 @@ salt_minion_master_key:
       - file: /etc/salt/minion.d/master.conf
     - watch_in:
       - service: salt-minion
+{%- endif %}
 
 {{ manage_upstart_log('salt-minion') }}
 

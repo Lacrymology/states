@@ -1,9 +1,6 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
 {%- from 'upstart/rsyslog.jinja2' import manage_upstart_log with context -%}
-{%- from "macros.jinja2" import salt_version,salt_deb_version with context %}
-{%- set api_version =  salt_deb_version() %}
-{%- set api_path = salt_version() ~ '/pool/main/s/salt/salt-api_' + api_version + '_all.deb' %}
 {%- set ssl = salt['pillar.get']('salt_api:ssl', False) %}
 
 include:
@@ -116,13 +113,6 @@ salt-api:
       - pkg: salt-api
   pkg:
     - installed
-    - sources:
-{%- set files_archive = salt['pillar.get']('files_archive', False) %}
-{%- if files_archive %}
-      - salt-api: {{ files_archive|replace('file://', '')|replace('https://', 'http://') }}/mirror/salt/{{ api_path }}
-{%- else %}
-      - salt-api: http://archive.robotinfra.com/mirror/salt/{{ api_path }}
-{%- endif %}
     - require:
       - pkg: salt-master
       - module: salt-api-requirements
@@ -140,15 +130,6 @@ salt_api_patch_post_empty_body_23404:
       - pkg: salt_minion_deps
 
 {{ manage_upstart_log('salt-api') }}
-
-{%- if salt['pkg.version']('salt-api') not in ('', api_version) %}
-salt_api_old_version:
-  pkg:
-    - purged
-    - name: salt-api
-    - require_in:
-      - pkg: salt-api
-{%- endif %}
 
 {% if ssl %}
 extend:

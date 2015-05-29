@@ -20,6 +20,7 @@ proftpd_fake_mail_path:
     - managed
     - name: /var/mail/proftpd
     - makedirs: True
+    - replace: False
     - require:
       - service: proftpd
     - require_in:
@@ -30,6 +31,7 @@ proftpd_fake_mail_path_ftp:
     - managed
     - name: /var/mail/ftp
     - makedirs: True
+    - replace: False
     - require:
       - service: proftpd
     - require_in:

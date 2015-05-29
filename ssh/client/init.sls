@@ -16,6 +16,7 @@ openssh-client:
     - user: root
     - group: root
     - mode: 444
+    - replace: False
 
 ssh_systemwide_config:
   file:
@@ -103,6 +104,7 @@ ssh_public_key_{{ local_user }}_{{ keyname }}:
     - managed
     - name: /etc/ssh/keys/{{ local_user }}/{{ keyname }}.pub
     - mode: 400
+    - replace: False
     - require:
       - cmd: ssh_public_key_{{ local_user }}_{{ keyname }}
     - require_in:

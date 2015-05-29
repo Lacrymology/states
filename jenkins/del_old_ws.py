@@ -27,20 +27,20 @@ class DelOldWs(pysc.Application):
 
     def main(self):
         # No workspace has created yet. This is likely a new installed Jenkins
-        c = self.config
-        if not os.path.isdir(c['workspace']):
+        ws_path = self.config['workspace']
+        if not os.path.isdir(ws_path):
             sys.exit(0)
 
-        workspaces = [name for name in os.listdir(c['workspace'])
-                      if os.path.isdir(os.path.join(c['workspace'], name))]
+        workspaces = [name for name in os.listdir(ws_path)
+                      if os.path.isdir(os.path.join(ws_path, name))]
         for ws in workspaces:
             job_is_existing = False
-            for jdir in os.listdir(c['jobs_dir']):
+            for jdir in os.listdir(self.config['jobs_dir']):
                 if ws.startswith(jdir):
                     job_is_existing = True
                     break
             if not job_is_existing:
-                shutil.rmtree(os.path.join(c['workspace'], ws))
+                shutil.rmtree(os.path.join(ws_path, ws))
 
 
 if __name__ == '__main__':

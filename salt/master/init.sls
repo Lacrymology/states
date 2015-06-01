@@ -271,7 +271,7 @@ salt_master_cron_highstate:
 salt_master_gitfs_patch:
   file:
     - managed
-    - name: /usr/lib/python2.7/dist-packages/salt/fileserver/gitfs.py
+    - name: {{ grains['saltpath'] }}/fileserver/gitfs.py
     - source: salt://salt/master/gitfs.py
     - require:
       - pkg: salt-master

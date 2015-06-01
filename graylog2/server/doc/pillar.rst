@@ -28,6 +28,20 @@ graylog2:admin_password
 
 Graylog2 admin password.
 
+.. _pillar-graylog2-password_secret:
+
+graylog2:password_secret
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+To secure/pepper the stored user passwords, use at least 64
+characters.
+
+.. warning::
+
+   changing this value will makes all existing users unable to login. In case
+   old value is lost, use administrator password defined in
+   :ref:`pillar-graylog2-admin_password` to reset password for existing users.
+
 Optional
 --------
 
@@ -169,16 +183,6 @@ JVM.
    and :doc:`index` will be installed in same machine.
 
 Default: use JVM default (``False``).
-
-.. _pillar-graylog2-password_secret:
-
-graylog2:password_secret
-~~~~~~~~~~~~~~~~~~~~~~~~
-
-To secure/pepper the stored user passwords, use at least 64
-characters.
-
-Default: randomly generated (``None``).
 
 graylog2:streams
 ~~~~~~~~~~~~~~~~

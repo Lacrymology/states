@@ -50,6 +50,39 @@ gnupg_delete_pub_key_{{ imported_key["keyid"] }}_for_user_{{ user }}:
     {%- endfor %}
   {%- endif %}
 
+  {%- set private_keys = data["private_keys"]|default({}) %}
+  {%- for key_id, key in private_keys.iteritems() %}
+gnupg_import_priv_key_{{ key_id }}_for_user_{{ user }}:
+  cmd:
+    - run
+    - name: |
+        echo "{{ key|indent(8) }}" | gpg --no-tty --batch --import -
+    - user: {{ user }}
+    - require:
+      - pkg: gnupg
+    - unless: gpg --list-secret-keys --with-colons | grep {{ key_id }}
+  {%- endfor %}
+
+  {%- if 'gpg' in salt["sys.list_modules"]() %}
+    {%- set imported_private_keys = salt["gpg.list_secret_keys"]() %}
+    {%- for imported_private_key in imported_private_keys %}
+      {%- if imported_private_key["keyid"] not in private_keys %}
+gnupg_delete_priv_key_{{ imported_private_key["keyid"] }}_for_user_{{ user }}:
+  module:
+    - run
+    - name: gpg.delete_key
+    - user: {{ user }}
+    - keyid: {{ imported_private_key["keyid"] }}
+    - delete_secret: True
+    - require:
+      - pkg: gnupg
+    - require_in:
+      - cmd: gnupg
+      - file: gnupg_fix_gnupghome_owner_{{ user }}
+      {%- endif %}
+    {%- endfor %}
+  {%- endif %}
+
   {#- workaround for incorrect owner for files in ~/.gnupg #}
   {%- set user_info = salt["user.info"](user) %}
 gnupg_fix_gnupghome_owner_{{ user }}:

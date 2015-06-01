@@ -270,12 +270,10 @@ salt_master_cron_highstate:
 
 salt_master_gitfs_patch:
   file:
-    - patch
-    - name: /usr/lib/python2.7/dist-packages/salt/fileserver/gitfs.py
-    - hash: md5=aa302de8bd4852ac024104c72ee0adfe
-    - source: salt://salt/master/gitfs.patch
+    - managed
+    - name: {{ grains['saltpath'] }}/fileserver/gitfs.py
+    - source: salt://salt/master/gitfs.py
     - require:
       - pkg: salt-master
-      - pkg: salt_minion_deps
     - watch_in:
       - service: salt-master

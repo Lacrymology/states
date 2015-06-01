@@ -390,11 +390,9 @@ def _get_tree_gitpython(repo, tgt_env):
         return None
     try:
         commit = repo['repo'].rev_parse(tgt_env)
-    except gitdb.exc.BadObject:
-        pass
-    else:
         return commit.tree
-    return None
+    except gitdb.exc.ODBError:
+        return None
 
 
 def _get_tree_pygit2(repo, tgt_env):
@@ -840,11 +838,15 @@ def _init_gitpython(rp_, repo_url, ssl_verify):
     if not os.listdir(rp_):
         # Repo cachedir is empty, initialize a new repo there
         repo = git.Repo.init(rp_)
+        # TODO change this when git.Repo.init supports choosing backend.
+        # for now using Repo.init to initialize new Repo then replaces the
+        # returned Repo object with another instance with cgit backend.
+        repo = git.Repo(rp_, odbt=git.GitCmdObjectDB)
         new = True
     else:
         # Repo cachedir exists, try to attach
         try:
-            repo = git.Repo(rp_)
+            repo = git.Repo(rp_, odbt=git.GitCmdObjectDB)
         except git.exc.InvalidGitRepositoryError:
             log.error(_INVALID_REPO.format(rp_, repo_url))
             return None, new

@@ -2,6 +2,7 @@
 
 include:
   - apt
+  - rsyslog
 
 logrotate:
   pkg:
@@ -18,3 +19,15 @@ logrotate:
     - template: jinja
     - require:
       - pkg: logrotate
+
+/etc/logrotate.d/upstart:
+  file:
+    - managed
+    - source: salt://logrotate/upstart_logrotate.jinja2
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 400
+    - require:
+      - pkg: logrotate
+      - user: rsyslog

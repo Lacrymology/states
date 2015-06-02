@@ -1,8 +1,12 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst
 
 Install Denyhosts used to block SSH brute-force attack.
+Warning: denyhosts is not availble in official trusty repository, use
+fail2ban instead
 -#}
 
+{%- from "os.jinja2" import os with context %}
+{%- if os.is_precise %}
 include:
   - apt
   - local
@@ -67,3 +71,4 @@ denyhosts:
     - require:
       - service: denyhosts
 {% endfor %}
+{%- endif %} {# os.is_precise #}

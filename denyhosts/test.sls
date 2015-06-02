@@ -1,5 +1,7 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
+{%- from "os.jinja2" import os with context %}
+{%- if os.is_precise %}
 {%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
   - bash
@@ -52,3 +54,4 @@ test:
     - require:
       - monitoring: test
       - cmd: doc
+{%- endif %} {# os.is_precise #}

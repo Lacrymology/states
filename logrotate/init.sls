@@ -18,3 +18,14 @@ logrotate:
     - template: jinja
     - require:
       - pkg: logrotate
+
+/etc/logrotate.d/upstart:
+  file:
+    - managed
+    - source: salt://logrotate/upstart.jinja2
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 644
+    - require:
+      - pkg: logrotate

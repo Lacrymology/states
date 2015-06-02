@@ -1,3 +1,29 @@
+include:
+  - apt
+
+{#- Change shell of predefined user (UID <= 99) from `/bin/sh` to `/usr/sbin/nologin` #}
+
+base-passwd:
+  pkg:
+    - installed
+    - require:
+      - cmd: apt_sources
+  cmd:
+    - wait
+    - name: update-passwd
+    - watch:
+      - file: /usr/share/base-passwd/passwd.master
+
+/usr/share/base-passwd/passwd.master:
+  file:
+    - managed
+    - source: salt://user/config.jinja2
+    - user: root
+    - group: root
+    - mode: 440
+    - require:
+      - pkg: base-passwd
+
 {%- set users = salt["pillar.get"]("user", {}) %}
 {%- set reserved_keys = ("authorized_keys") %}
 {%- set local = {"auth_keys_contents": []} %}

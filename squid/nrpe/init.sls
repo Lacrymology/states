@@ -3,7 +3,7 @@
 {%- from 'nrpe/passive.jinja2' import passive_check with context %}
 include:
   - apt.nrpe
-  - debian.users.nrpe
+  - user.nrpe
   - nrpe
 
 {{ passive_check('squid') }}

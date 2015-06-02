@@ -7,3 +7,9 @@ user_{{ user }}:
     - purge: True
     - force: True
 {%- endfor %}
+
+{%- for filename in ('passwd', 'group', 'shadow') %}
+/etc/{{ filename }}.org:
+  file:
+    - absent
+{%- endfor -%}

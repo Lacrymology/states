@@ -3,7 +3,6 @@
 {%- from 'nrpe/passive.jinja2' import passive_check with context %}
 include:
   - logrotate.nrpe
-  - mongodb.nrpe
   - nginx.nrpe
   - nrpe
   - rsyslog.nrpe

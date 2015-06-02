@@ -17,7 +17,7 @@ Example::
   gnupg:
     users:
       John:
-        import_keys:
+        public_keys:
           {{ long gpg keyid }}: |
             {{ Max public key }}
           7907B85E3DDDE757: |
@@ -76,7 +76,7 @@ Example::
           {{ long gpg keyid }}: |
             {{ private gpg key}}
 
-``import_keys`` is dictionary with key is long :doc:`index` keyid, value is its
+``public_keys`` is dictionary with key is long :doc:`index` keyid, value is its
 public key contents. To get long :doc:`index` keyid, use following command::
 
   gpg --list-public-keys --with-colons
@@ -84,6 +84,6 @@ public key contents. To get long :doc:`index` keyid, use following command::
 .. warning::
 
    All public keys exist in key chain but aren't specified in the
-   ``import_keys`` dictionary above will be deleted.
+   ``public_keys`` dictionary above will be deleted.
 
 Default: manage no user (``{}``).

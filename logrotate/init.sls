@@ -23,11 +23,11 @@ logrotate:
 /etc/logrotate.d/upstart:
   file:
     - managed
-    - source: salt://logrotate/upstart.jinja2
+    - source: salt://logrotate/upstart_logrotate.jinja2
     - template: jinja
     - user: root
     - group: root
-    - mode: 644
+    - mode: 400
     - require:
       - pkg: logrotate
       - user: rsyslog

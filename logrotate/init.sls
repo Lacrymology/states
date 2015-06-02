@@ -2,6 +2,7 @@
 
 include:
   - apt
+  - rsyslog
 
 logrotate:
   pkg:
@@ -29,3 +30,4 @@ logrotate:
     - mode: 644
     - require:
       - pkg: logrotate
+      - user: rsyslog

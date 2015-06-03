@@ -10,23 +10,22 @@ Mandatory
 
 Example::
 
-  git-server:
+  git_server:
     keys:
       - ssh-dss 00deadbeefsshkey
     repositories:
-      myreponame:
-        push_notification: False
+      - myreponame
 
-.. _pillar-git-server-keys:
+.. _pillar-git_server-keys:
 
-git-server:keys
+git_server:keys
 ~~~~~~~~~~~~~~~
 
 List of SSH public keys to grant access to :doc:`/git/doc/index` repository.
 
-.. _pillar-git-server-repositories:
+.. _pillar-git_server-repositories:
 
-git-server:repositories
+git_server:repositories
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 List of all repo handled by the server.  On first run, repo are

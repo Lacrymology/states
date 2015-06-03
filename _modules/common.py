@@ -63,7 +63,7 @@ def saltenv():
         return 'base'
 
     logger.debug("file_client not in local mode.")
-    output = __salt__['pillar.get']('branch', 'base')
+    output = __salt__['pillar.get']('branch', 'master')
     if output == 'master':
         return 'base'
     return output

@@ -104,6 +104,28 @@ postfix:
 {% endif %}
 {#- does not use PID, no need to manage #}
 
+postfix_header_checks:
+  pkg:
+    - installed
+    - name: postfix-pcre
+    - require:
+      - pkg: postfix
+    - watch_in:
+      - service: postfix
+  file:
+    - managed
+    - name: /etc/postfix/smtp_header_checks
+    - source: salt://postfix/smtp_header_checks.jinja2
+    - template: jinja
+    - user: postfix
+    - group: postfix
+    - mode: 400
+    - require:
+      - pkg: postfix_header_checks
+      - file: /etc/postfix
+    - watch_in:
+      - service: postfix
+
 /etc/postfix:
   file:
     - directory

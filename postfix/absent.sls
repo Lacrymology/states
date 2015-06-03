@@ -6,6 +6,7 @@ postfix:
     - pkgs:
       - postfix
       - postfix-ldap
+      - postfix-pcre
   service:
     - dead
     - enable: False

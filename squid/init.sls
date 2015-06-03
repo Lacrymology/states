@@ -4,7 +4,7 @@
 
 include:
   - apt
-  - debian.users
+  - user
 
 squid:
   pkg:

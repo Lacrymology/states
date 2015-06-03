@@ -6,8 +6,7 @@
 user
 ====
 
-Normal users creation and management. System users should be managed in the
-formula that use them.
+Users creation and management.
 
 .. toctree::
     :glob:

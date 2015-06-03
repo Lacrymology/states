@@ -9,7 +9,6 @@ include:
   - java.7
   - local
   - logrotate
-  - mongodb
   - nginx
   - rsyslog
 {% if ssl %}

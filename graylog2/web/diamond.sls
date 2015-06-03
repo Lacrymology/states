@@ -4,7 +4,6 @@
 
 include:
   - diamond
-  - mongodb.diamond
   - nginx.diamond
   - rsyslog.diamond
 

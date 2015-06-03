@@ -14,8 +14,7 @@ Example::
     keys:
       - ssh-dss 00deadbeefsshkey
     repositories:
-      myreponame:
-        push_notification: False
+      - myreponame
 
 .. _pillar-git_server-keys:
 

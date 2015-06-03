@@ -26,12 +26,9 @@ but most important are the following values::
 
   git-server:
     repositories:
-      salt-common:
-        push_notification: False
-      salt-states:
-        push_notification: False
-      salt-pillars:
-        push_notification: False
+      - salt-common
+      - salt-states
+      - salt-pillars
 
 The public key of local :doc:`/ssh/doc/index` client must be listed in
 :ref:`pillar-git-server-keys` for last step during the ``git push``.

@@ -8,7 +8,7 @@
 include:
   - apt
 
-{%- set version = '1.0.1' %}
+{%- set version = '1.0.2' %}
 graylog:
   pkgrepo:
     - managed

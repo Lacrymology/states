@@ -35,7 +35,7 @@ include:
     - group: root
     {#- jenkins user needs execute permission on this folder, thus set bit 1 for
         ``other`` #}
-    - mode: 551
+    - mode: 555
     - require_in:
       - file: /etc/salt/master
 {%- endfor -%}

@@ -31,7 +31,7 @@ but most important are the following values::
       - salt-pillars
 
 The public key of local :doc:`/ssh/doc/index` client must be listed in
-:ref:`pillar-git-server-keys` for last step during the ``git push``.
+:ref:`pillar-git_server-keys` for last step during the ``git push``.
 
 On the master side the following pillars values are required to be set::
 

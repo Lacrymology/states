@@ -43,7 +43,7 @@ nagios-nrpe-server:
   file:
     - absent
     - require:
-      - user: nagios
+      - user: nagios-nrpe-server
       - service: nsca_passive
       - pkg: nagios-nrpe-server
 {% endfor %}

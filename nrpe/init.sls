@@ -53,7 +53,7 @@ nrpe_remove_old_config_files_{{ filepath }}:
     - group: nagios
     - mode: 440
     - require:
-      - module: nrpe-virtualenv
+      - group: nagios-nrpe-server
 
 /usr/local/nagios/salt-requirements.txt:
   file:

@@ -63,3 +63,13 @@ salt-master-requirements:
 /etc/cron.daily/salt_master_highstate:
   file:
     - absent
+
+salt_master_script_git_pull_repos:
+  file:
+    - absent
+    - name: /usr/local/bin/salt_master_git_pull_repos.sh
+
+salt_master_cron_git_pull_repos:
+  file:
+    - absent
+    - name: /etc/cron.d/salt-master-pull-repos

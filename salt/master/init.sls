@@ -283,7 +283,7 @@ salt_master_script_git_pull_repos:
     - managed
     - name: /usr/local/bin/salt_master_git_pull_repos.sh
     - source: salt://salt/master/git_pull_repos.sh
-    - mode: 751
+    - mode: 551
     - user: root
     - group: root
     - require:

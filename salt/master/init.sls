@@ -175,9 +175,16 @@ salt-master-requirements:
 
 /srv/salt/top.sls:
   file:
+    - absent
+    - require:
+      - file: /srv/salt
+
+/srv/salt/top/top.sls:
+  file:
     - managed
     - user: root
     - group: root
+    - makedirs: True
     - mode: 440
     - source: salt://salt/master/top.jinja2
     - require:

@@ -7,9 +7,9 @@ fileserver_backend:
 
 {%- set git_branch = salt['pillar.get']('branch', 'master') %}
 file_roots:
-{%- if git_branch == "master" %}
-  {{ base }}:
-{%- else %}
+  base:
+    - /srv/salt/top
+{%- if git_branch != "master" %}
   {{ git_branch }}:
 {%- endif %}
 {%- for repo in salt['pillar.get']('salt_master:gitfs_remotes', []) %}

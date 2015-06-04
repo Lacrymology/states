@@ -57,8 +57,8 @@ Default: ``[]``.
 salt_master:git_pull_frequency
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-How often does repositories in :ref:`salt_master-gitfs_remotes` be fetched
-(in minutes, only allows value from ``0`` to ``59``).
+How often does repositories in :ref:`pillar-salt_master-gitfs_remotes` be
+fetched (in minutes, only allows value from ``0`` to ``59``).
 
 Default: ``5`` minutes.
 

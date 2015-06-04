@@ -18,17 +18,16 @@ gnupg:
   {%- set public_keys = data["public_keys"]|default({}) %}
   {%- for keyid, key in public_keys.iteritems() %}
 gnupg_import_pub_key_{{ keyid }}_for_user_{{ user }}:
-  module:
+  cmd:
     - run
-    - name: gpg.import_key
+    - name: |
+        echo "{{ key|indent(8) }}" | gpg --no-tty --batch --import -
     - user: {{ user }}
-    - text: |
-        {{ key|indent(8) }}
     - require:
       - pkg: gnupg
     - require_in:
       - cmd: gnupg
-      - file: gnupg_fix_gnupghome_owner_{{ user }}
+    - unless: gpg --list-keys --with-colons | grep {{ keyid }}
   {%- endfor %}
 
   {%- set private_keys = data["private_keys"]|default({}) %}
@@ -61,7 +60,6 @@ gnupg_delete_pub_key_{{ imported_key["keyid"] }}_for_user_{{ user }}:
       - cmd: gnupg_delete_all_priv_keys_for_user_{{ user }}
     - require_in:
       - cmd: gnupg
-      - file: gnupg_fix_gnupghome_owner_{{ user }}
       {%- endif %}
     {%- endfor %}
 
@@ -79,7 +77,6 @@ gnupg_delete_priv_key_{{ imported_private_key["keyid"] }}_for_user_{{ user }}:
       - pkg: gnupg
     - require_in:
       - cmd: gnupg
-      - file: gnupg_fix_gnupghome_owner_{{ user }}
     - watch_in:
       - cmd: gnupg_delete_all_priv_keys_for_user_{{ user }}
       {%- endif %}
@@ -90,22 +87,4 @@ gnupg_delete_all_priv_keys_for_user_{{ user }}:
   cmd:
     - wait
     - name: echo "The keys from secret keyrings but not defined in the pillar has been deleted"
-
-  {#- workaround for incorrect owner for files in ~/.gnupg #}
-  {%- set user_info = salt["user.info"](user) %}
-gnupg_fix_gnupghome_owner_{{ user }}:
-  file:
-    - directory
-    - name: {{ user_info["home"] }}/.gnupg
-    - recurse:
-      - user
-      - group
-    - user: "{{ user }}"
-  {%- if user == "root" %}
-    - group: root  {#- 0 number will count as False boolean value #}
-  {%- else %}
-    - group: {{ user_info["gid"] }}
-  {%- endif %}
-    - require_in:
-      - cmd: gnupg
 {%- endfor %}

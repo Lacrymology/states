@@ -52,6 +52,16 @@ Default: ``[]``.
   Make sure there is no branch names under a sub-directory namespace
   (with a ``/`` into it. This cause Salt 2014.1.x to fail.
 
+.. _pillar-salt_master-git_pull_frequency:
+
+salt_master:git_pull_frequency
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+How often does repositories in :ref:`salt_master-gitfs_remotes` be fetched
+(in minutes, only allows value from ``0`` to ``59``).
+
+Default: ``5`` minutes.
+
 .. _pillar-salt_master-pillar-remote:
 
 salt_master:pillar:remote

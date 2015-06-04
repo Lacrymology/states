@@ -1,4 +1,4 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
 # {{ salt['pillar.get']('message_do_not_modify') }}
-*/5 * * * * root /usr/local/bin/salt_master_git_pull_repos.sh /srv/salt/states {{ salt['pillar.get']('branch', 'master') }}
+*/{{ salt['pillar.get']('salt_master:git_pull_frequency', 5) }} * * * * root /usr/local/bin/salt_master_git_pull_repos.sh /srv/salt/states {{ salt['pillar.get']('branch', 'master') }}

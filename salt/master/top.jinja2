@@ -3,7 +3,7 @@
 {#- empty is True if no roles (or roles.absent) are applied -#}
 {%- set local = {
     'empty': True,
-    'saltenv': salt['pillar.get']('branch', 'base'),
+    'saltenv': salt['pillar.get']('branch', 'master'),
     'roles': salt['pillar.get']('roles', []),
     'global_roles': salt['pillar.get']('global_roles', [])
     } -%}

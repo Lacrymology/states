@@ -35,7 +35,7 @@ include:
     - group: root
     {#- jenkins user needs execute permission on this folder, thus set bit 1 for
         ``other`` #}
-    - mode: 551
+    - mode: 555
     - require_in:
       - file: /etc/salt/master
 {%- endfor -%}
@@ -277,3 +277,48 @@ salt_master_gitfs_patch:
       - pkg: salt-master
     - watch_in:
       - service: salt-master
+
+salt_master_script_git_pull_repos:
+  file:
+    - managed
+    - name: /usr/local/bin/salt_master_git_pull_repos.sh
+    - source: salt://salt/master/git_pull_repos.sh
+    - mode: 551
+    - user: root
+    - group: root
+    - require:
+      - file: /usr/local
+      - file: bash
+
+salt_master_cron_git_pull_repos:
+  file:
+    - managed
+    - name: /etc/cron.d/salt-master-pull-repos
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 500
+    - source: salt://salt/master/cron_fetch_repos.jinja2
+    - require:
+      - file: bash
+      - pkg: git
+      - file: openssh-client
+      - file: salt_master_script_git_pull_repos
+
+{%- for repo in salt['pillar.get']('salt_master:gitfs_remotes', []) %}
+salt_master_git_repo_{{ loop.index }}:
+  git:
+    - latest
+    - name: '{{ repo }}'
+{# needs prefix loop.index because 2 different repos from different sources
+   can have the same name #}
+{%- set dirname = loop.index ~ repo.split('/')[-1] %}
+    - rev: {{ salt['pillar.get']('branch', 'master') }}
+    - target: /srv/salt/states/{{ dirname }}
+    - require:
+      - pkg: git
+      - file: /srv/salt
+      - file: openssh-client
+    - require_in:
+      - file: salt_master_cron_git_pull_repos
+{%- endfor %}

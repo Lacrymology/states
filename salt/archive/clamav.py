@@ -66,7 +66,7 @@ class ClamavMirror(pysc.Application):
         exception = None
         for i in xrange(1, times + 1):
             try:
-                req = requests.get(url, stream=True)
+                req = requests.get(url, stream=True, timeout=10)
                 if req.ok:
                     return req
                 else:

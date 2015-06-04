@@ -5,21 +5,26 @@
 
 # {{ salt['pillar.get']('message_do_not_modify') }}
 *nat
+{%- block nat %}
 :PREROUTING ACCEPT [0:0]
 :POSTROUTING ACCEPT [0:0]
 {%- if grains['osrelease']|float < 12.04 %}
 :INPUT ACCEPT [0:0]
 {%- endif %}
 :OUTPUT ACCEPT [0:0]
+{%- endblock nat %}
 COMMIT
 *mangle
+{%- block mangle %}
 :PREROUTING ACCEPT [0:0]
 :INPUT ACCEPT [0:0]
 :OUTPUT ACCEPT [0:0]
 :POSTROUTING ACCEPT [0:0]
 :FORWARD ACCEPT [0:0]
+{%- endblock mangle %}
 COMMIT
 *filter
+{%- block filter %}
 :OUTPUT ACCEPT [0:0]
 {%- set filter = salt['pillar.get']('firewall:filter', {}) -%}
 {%- if filter|length > 0 %}
@@ -62,4 +67,5 @@ COMMIT
 :INPUT ACCEPT [0:0]
 :FORWARD ACCEPT [0:0]
 {%- endif %}
+{%- endblock filter %}
 COMMIT

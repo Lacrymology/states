@@ -12,6 +12,7 @@ function update_repo () {
   cd $file_roots
 }
 
+cd $file_roots
 for repo in */;
 do
   if [ -e "$repo/.git" ]; then

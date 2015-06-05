@@ -16,8 +16,21 @@ gnupg:
 
 {%- for user, data in users.iteritems() %}
   {%- set public_keys = data["public_keys"]|default({}) %}
-  {%- for keyid, key in public_keys.iteritems() %}
+  {%- set private_keys = data["private_keys"]|default({}) %}
+
+  {%- for key_type in ("public", "private") %}
+    {%- if key_type == "public" %}
+      {%- set import_keys = public_keys %}
+    {%- elif key_type =="private" %}
+      {%- set import_keys = private_keys %}
+    {%- endif %}
+
+    {%- for keyid, key in import_keys.iteritems() %}
+      {%- if key_type == "public" %}
 gnupg_import_pub_key_{{ keyid }}_for_user_{{ user }}:
+      {%- elif key_type =="private" %}
+gnupg_import_priv_key_{{ keyid }}_for_user_{{ user }}:
+      {%- endif %}
   cmd:
     - run
     - name: |
@@ -27,20 +40,12 @@ gnupg_import_pub_key_{{ keyid }}_for_user_{{ user }}:
       - pkg: gnupg
     - require_in:
       - cmd: gnupg
+      {%- if key_type == "public" %}
     - unless: gpg --list-keys --with-colons | grep {{ keyid }}
-  {%- endfor %}
-
-  {%- set private_keys = data["private_keys"]|default({}) %}
-  {%- for key_id, key in private_keys.iteritems() %}
-gnupg_import_priv_key_{{ key_id }}_for_user_{{ user }}:
-  cmd:
-    - run
-    - name: |
-        echo "{{ key|indent(8) }}" | gpg --no-tty --batch --import -
-    - user: {{ user }}
-    - require:
-      - pkg: gnupg
-    - unless: gpg --list-secret-keys --with-colons | grep {{ key_id }}
+      {%- elif key_type == "private" %}
+    - unless: gpg --list-secret-keys --with-colons | grep {{ keyid }}
+      {%- endif %}
+    {%- endfor %}
   {%- endfor %}
 
   {%- if 'gpg' in salt["sys.list_modules"]() %}

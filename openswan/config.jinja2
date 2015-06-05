@@ -11,11 +11,7 @@ config setup
     oe=off
     protostack=netkey
 
-conn L2TP-PSK-NAT
-    rightsubnet=vhost:%priv
-    also=L2TP-PSK-noNAT
-
-conn L2TP-PSK-noNAT
+conn L2TP-PSK
     authby=secret
     pfs=no
     auto=add

@@ -33,7 +33,21 @@ test:
     - test
     - map:
         ProcessResources:
-    {{ diamond_process_test('salt-master', zmempct=False) }}
+{%- set salt_master_procs = (
+  "salt-master-ProcessManager",
+  "salt-master-_clear_old_jobs",
+  "salt-master-Publisher",
+  "salt-master-EventPublisher",
+  "salt-master-ReqServer_ProcessManager",
+  "salt-master-MWorker",
+  "salt-master-MWorkerQueue",
+)%}
+{%- if salt['pillar.get']('salt_master:reactor', False) %}
+  {%- do salt_master_procs.append("salt-master-Reactor") %}
+{%- endif %}
+{%- for proc in salt_master_procs %}
+    {{ diamond_process_test(proc, zmempct=False) }}
+{%- endfor %}
     - require:
       - sls: salt.master
       - sls: salt.master.diamond

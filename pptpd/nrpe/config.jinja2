@@ -1,0 +1,16 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+
+# {{ salt['pillar.get']('message_do_not_modify') }}
+
+{%- set timeout = 30 %}
+
+pptpd_procs:
+  description: PPTPD Daemon
+  command: '/usr/lib/nagios/plugins/check_procs -C pptpd -w 1:1 -u root'
+
+pptpd_port:
+  description: PPTPD Port
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 1723 -t {{ timeout }}
+  timeout: {{ timeout }}
+  dependencies:
+    - pptpd_procs

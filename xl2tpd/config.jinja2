@@ -1,0 +1,16 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+
+; {{ salt['pillar.get']('message_do_not_modify') }}
+
+[global]
+ipsec saref = no
+
+[lns default]
+ip range = 10.152.2.2-10.152.2.254
+local ip = 10.152.2.1
+require chap = yes
+refuse pap = yes
+require authentication = yes
+ppp debug = yes
+pppoptfile = /etc/ppp/xl2tpd-options
+length bit = yes

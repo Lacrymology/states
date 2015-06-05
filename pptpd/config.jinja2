@@ -1,0 +1,54 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+
+# {{ salt['pillar.get']('message_do_not_modify') }}
+
+ppp /usr/sbin/pppd
+option /etc/ppp/pptpd-options
+
+{#- Use wtmp(5) to record client connections and disconnections. #}
+logwtmp
+
+{%- if salt['pillar.get']('pptpd:debug', False) or salt['pillar.get']('debug', False) %}
+debug
+{%- endif %}
+
+connections {{ salt['pillar.get']('pptpd:max_connections', 100) }}
+
+{#-
+  This option is ignored if delegate option is set.
+
+  But if you want to use MS-Windows networking, you should
+  use IP addresses out of the LAN address space and use the proxyarp
+  option in the pppd options file, or run bcrelay.
+ -#}
+{%- for type in ('local', 'remote') %}
+{{ type }}ip {% for ip_range in salt['pillar.get']('pptpd:' ~ type ~ '_ips') -%}
+    {{ ip_range }}
+        {%- if not loop.last -%},{%- endif -%}
+    {%- endfor -%}
+{%- endfor -%}
+
+{#-
+  Specifies timeout (in seconds) on starting ctrl connection
+stimeout 10
+ -#}
+
+{#-
+  Suppress the passing of the client's IP address to PPP, which is
+  done by default otherwise.
+noipparam
+-#}
+
+{#-
+  Turns on broadcast relay to clients from interface <if>
+bcrelay eth1
+-#}
+
+{#-
+ Delegates the allocation of client IP addresses to pppd.
+ Without this option, which is the default, pptpd manages the list of
+ IP addresses for clients and passes the next free address to pppd.
+ With this option, pptpd does not pass an address, and so pppd may use
+ radius or chap-secrets to allocate an address.
+delegate
+-#}

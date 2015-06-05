@@ -1,0 +1,13 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+
+# {{ salt['pillar.get']('message_do_not_modify') }}
+
+l2tp_procs:
+  description: L2TP Process
+  command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -u root -a '/usr/sbin/xl2tpd'"
+
+l2tp_port:
+  description: L2TP Port
+  command: "/usr/lib/nagios/plugins/check_udp_listen 1701"
+  dependencies:
+    - l2tp_procs

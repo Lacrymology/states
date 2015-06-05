@@ -60,6 +60,15 @@ include:
       - pkg: jenkins
       - file: /srv/salt
 
+/srv/salt/top/jenkins_archives:
+  file:
+    - symlink
+    - target: /srv/salt/jenkins_archives
+    - require:
+      - pkg: jenkins
+      - /srv/salt/jenkins_archives
+      - file: /srv/salt/top/top.sls
+
 ci-agent:
   user:
     - present

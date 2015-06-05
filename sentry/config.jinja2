@@ -84,26 +84,25 @@ LOGGING = {
             'class': 'raven.contrib.django.handlers.SentryHandler'
         }
     },
-{%- set graphite_address = salt['pillar.get']('graphite_address', False) %}
     'loggers': {
         'django': {
-            'handlers': ['sentry', 'syslog'{% if salt['pillar.get']('graphite_address', False) %}, 'gelf'{% endif %}],
+            'handlers': ['sentry', 'syslog'{% if graylog2_address %}, 'gelf'{% endif %}],
             'propagate': True,
             'level':'DEBUG'
         },
         'raven': {
-            'handlers': ['sentry', 'syslog'{% if salt['pillar.get']('graphite_address', False) %}, 'gelf'{% endif %}],
+            'handlers': ['sentry', 'syslog'{% if graylog2_address %}, 'gelf'{% endif %}],
             'propagate': False,
             'level': 'WARN'
         },
         'sentry.errors': {
-            'handlers': ['syslog'{% if salt['pillar.get']('graphite_address', False) %}, 'gelf'{% endif %}],
+            'handlers': ['syslog'{% if graylog2_address %}, 'gelf'{% endif %}],
             'level': 'DEBUG',
             'propagate': False
         }
     },
     'root': {
-        'handlers': ['sentry', 'syslog'{% if salt['pillar.get']('graphite_address', False) %}, 'gelf'{% endif %}],
+        'handlers': ['sentry', 'syslog'{% if graylog2_address %}, 'gelf'{% endif %}],
         'propagate': True,
         'level': 'NOTSET'
     }

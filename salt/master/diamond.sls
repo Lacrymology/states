@@ -14,5 +14,21 @@ salt_master_diamond_resources:
       - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
     - text:
       - |
-        [[salt-master]]
-        cmdline = ^\/usr\/bin\/python \/usr\/bin\/salt\-master
+        [[salt-master-ProcessManager]]
+        cmdline = ^\/usr\/bin\/python \/usr\/bin\/salt-master ProcessManager$
+        [[salt-master-clear-old-jobs]]
+        cmdline = ^\/usr\/bin\/python \/usr\/bin\/salt-master _clear_old_jobs$
+        [[salt-master-Publisher]]
+        cmdline = ^\/usr\/bin\/python \/usr\/bin\/salt-master Publisher$
+        [[salt-master-EventPublisher]]
+        cmdline = ^\/usr\/bin\/python \/usr\/bin\/salt-master EventPublisher$
+        [[salt-master-ReqServer_ProcessManager]]
+        cmdline = ^\/usr\/bin\/python \/usr\/bin\/salt-master ReqServer_ProcessManager$
+        [[salt-master-MWorker]]
+        cmdline = ^\/usr\/bin\/python \/usr\/bin\/salt-master MWorker$
+        [[salt-master-MWorkerQueue]]
+        cmdline = ^\/usr\/bin\/python \/usr\/bin\/salt-master MWorkerQueue$
+{%- if salt['pillar.get']('salt_master:reactor', False) %}
+        [[salt-master-Reactor]]
+        cmdline = ^\/usr\/bin\/python \/usr\/bin\/salt-master Reactor$
+{%- endif %}

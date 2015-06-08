@@ -4,7 +4,6 @@
 include:
   - apt
   - hostname
-  - mail.client
   - rsyslog
   - ssl.dev
   - web
@@ -138,10 +137,6 @@ nginx:
 {%- endfor %}
       - pkg: nginx
       - user: nginx
-      - file: /usr/bin/mail
-{%- if not salt['pillar.get']('sentry_dsn', False) %}
-      - pkg: ssmtp
-{%- endif %}
 {%- set files_archive = salt['pillar.get']('files_archive', False) %}
   pkg:
     - installed

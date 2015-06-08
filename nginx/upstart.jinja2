@@ -15,8 +15,16 @@ env DAEMON=/usr/sbin/nginx
 env PID=/var/run/nginx.pid
 
 pre-start script
-    # `nginx -t` write error to stderr, not stdout
-    $DAEMON -t 2>/dev/null || { $DAEMON -t 2>&1 | /usr/bin/mail -s 'Nginx: Configuration File Test Failed{% if not salt['pillar.get']('sentry_dsn', False) %} on {{ grains['id'] }}{% endif %}' root; exit 1; }
+    {#- `nginx -t` write error to stderr, not stdout #}
+    if ! $DAEMON -t 2>/dev/null; then
+        {#- raven.mail is installed #}
+        if [ -x '/usr/bin/ravenmail' ]; then
+            $DAEMON -t 2>&1 | /usr/bin/ravenmail -s 'Nginx: Configuration File Test Failed on {{ grains['id'] }}' root
+        elif [ -x '/usr/bin/mail' ]; then
+            $DAEMON -t 2>&1 | /usr/bin/mail -s 'Nginx: Configuration File Test Failed' root
+        fi
+        exit 1
+    fi
 end script
 
 exec $DAEMON -c /etc/nginx/nginx.conf

@@ -32,7 +32,7 @@ virtualbox:
 virtualbox-oracle-extpack:
   file:
     - managed
-    - name: /tmp/{{ extpack_file }}
+    - name: {{ opts['cachedir'] }}/{{ extpack_file }}
     - source: {{ source }}
     - source_hash: md5=25b70fa71d9320e2836b9be138457ee0
     - user: root
@@ -41,7 +41,7 @@ virtualbox-oracle-extpack:
     - unless: vboxmanage list extpacks | grep 'Oracle VM VirtualBox Extension Pack'
   cmd:
     - run
-    - name: vboxmanage extpack install /tmp/{{ extpack_file }}
+    - name: vboxmanage extpack install {{ opts['cachedir'] }}/{{ extpack_file }}
     - unless: vboxmanage list extpacks | grep 'Oracle VM VirtualBox Extension Pack'
     - require:
       - pkg: virtualbox
@@ -50,6 +50,6 @@ virtualbox-oracle-extpack:
 cleanup_virtualbox-oracle-extpack:
   file:
     - absent
-    - name: /tmp/{{ extpack_file }}
+    - name: {{ opts['cachedir'] }}/{{ extpack_file }}
     - require:
       - cmd: virtualbox-oracle-extpack

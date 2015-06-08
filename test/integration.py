@@ -157,9 +157,6 @@ def setUpModule():
             logger.error("Catch error: %s", err, exc_info=True)
             raise ValueError("%s: %s" % (err, changes))
 
-    logger.info("Run state equivalent of unittest setup class/function.")
-    check_error(client('state.sls', 'test.setup'))
-
     logger.info("Uninstall more packages, with deborphan.")
     ret = client('state.sls', 'test.clean')
     check_error(ret)

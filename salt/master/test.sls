@@ -35,7 +35,7 @@ test:
         ProcessResources:
 {%- set salt_master_procs = (
   "salt-master-ProcessManager",
-  "salt-master-_clear_old_jobs",
+  "salt-master-clear-old-jobs",
   "salt-master-Publisher",
   "salt-master-EventPublisher",
   "salt-master-ReqServer_ProcessManager",

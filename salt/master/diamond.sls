@@ -16,7 +16,7 @@ salt_master_diamond_resources:
       - |
         [[salt-master-ProcessManager]]
         cmdline = ^\/usr\/bin\/python \/usr\/bin\/salt-master ProcessManager$
-        [[salt-master-_clear_old_jobs]]
+        [[salt-master-clear-old-jobs]]
         cmdline = ^\/usr\/bin\/python \/usr\/bin\/salt-master _clear_old_jobs$
         [[salt-master-Publisher]]
         cmdline = ^\/usr\/bin\/python \/usr\/bin\/salt-master Publisher$

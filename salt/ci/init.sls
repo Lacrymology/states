@@ -103,3 +103,16 @@ ci-agent:
     - require:
       - pkg: cron
       - user: ci-agent
+      - file: bash
+
+/etc/cron.daily/salt-ci-cleanup-archive:
+  file:
+    - managed
+    - user: root
+    - group: root
+    - mode: 500
+    - source: salt://salt/ci/cron_jenkins_archive.jinja2
+    - template: jinja
+    - require:
+      - pkg: cron
+      - file: bash

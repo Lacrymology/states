@@ -42,3 +42,7 @@ ci-agent:
 /etc/cron.daily/ci-agent-cleanup-build-logs:
   file:
     - absent
+
+/etc/cron.daily/salt-ci-cleanup-archive:
+  file:
+    - absent

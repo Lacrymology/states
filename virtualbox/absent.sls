@@ -2,7 +2,12 @@
 
 virtualbox:
   pkg:
-    - removed
+    - purged
+  group:
+    - absent
+    - name: vboxusers
+    - require:
+      - pkg: virtualbox
 
 /usr/lib/virtualbox:
   file:

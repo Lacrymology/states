@@ -53,14 +53,28 @@ class MineMinion(nap.Resource):
             diff_ids = set(list(all_ids - ids_from_salt_key) +
                            list(all_ids - ids_from_mine))
             log.debug('Diff minion IDs: %s', diff_ids)
+            self.diff = diff_ids
             log.debug("MineMinion.probe ended")
             log.debug("returning %d", len(diff_ids))
             return [nap.Metric('mine_minions', len(diff_ids),
                                min=0, context='minions')]
 
 
+class MineSummary(nap.Summary):
+    def problem(self, result):
+        return (
+            '{0} IDs do not match are: {1}'.format(
+                result.results[0].metric.value,
+                ', '.join(result.results[0].resource.diff)
+            )
+        )
+
+
 def check_mine_minions(_):
-    return (MineMinion(), nap.ScalarContext('minions', '0:0', '0:0'))
+    return (MineMinion(),
+            nap.ScalarContext('minions', '0:0', '0:0'),
+            MineSummary(),
+            )
 
 
 if __name__ == "__main__":

@@ -31,4 +31,5 @@ Content
 .. toctree::
     :glob:
 
+    *
     ../guest/doc/index

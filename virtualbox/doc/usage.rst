@@ -4,7 +4,7 @@ Usage
 For complete :doc:`index` manual, visit:
 https://www.virtualbox.org/manual/UserManual.html
 
-.. virtualbox-usage-remote-installing-in-a-headless-server::
+.. _virtualbox-usage-remote-installing-in-a-headless-server:
 
 Remote installing in a headless server
 --------------------------------------

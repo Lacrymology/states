@@ -4,3 +4,8 @@ dhcp-server:
   pkg:
     - purged
     - name: isc-dhcp-server
+  user:
+    - absent
+    - name: dhcpd
+    - require:
+      - pkg: dhcp-server

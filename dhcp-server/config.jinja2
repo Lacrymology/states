@@ -1,0 +1,14 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+
+# {{ salt['pillar.get']('message_do_not_modify') }}
+ddns-update-style none;
+default-lease-time 600;
+max-lease-time 7200;
+log-facility local7;
+
+subnet {{ subnet }} netmask 255.255.255.0 {
+  range {{ range }};
+{%- for option, value in options.iteritems() %}
+  {{ option }}: {{ value }};
+{%- endfor %}
+}

@@ -84,7 +84,7 @@ include:
 
 graylog-web:
   pkg:
-    - installed
+    - latest
     - require:
       - pkgrepo: graylog
   service:

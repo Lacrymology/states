@@ -133,7 +133,7 @@ extend:
 
 graylog-server:
   pkg:
-    - installed
+    - latest
     - name: graylog-server
     - require:
       - pkgrepo: graylog

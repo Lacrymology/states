@@ -7,6 +7,7 @@ __email__ = 'bruno@robotinfra.com'
 
 import logging
 import os
+import re
 from UserList import UserList
 from UserDict import IterableUserDict, UserDict
 
@@ -200,7 +201,8 @@ def run_check(check_name, checks=None):
         return ret
 
     cmd = checks[check_name]['command']
-    verbose_cmd = cmd + ' --help'
+    # nagios user may not have permission to run sudo with --help
+    verbose_cmd = re.sub(r'^sudo\s+', '', cmd) + ' --help'
     outputverbose = __salt__['cmd.run_all'](verbose_cmd, runas='nagios')
     if ' -v,' in outputverbose['stdout']:
         # yeah, the check supports verbose, let be verbose

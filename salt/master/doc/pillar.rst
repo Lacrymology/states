@@ -88,17 +88,6 @@ Default: ``False`` - not used.
 
   To work it also need :ref:`pillar-salt_master-pillar-remote` defined.
 
-.. _pillar-salt_master-workers:
-
-salt_master:workers
-~~~~~~~~~~~~~~~~~~~
-
-Numbers of workers.
-
-.. TODO: use number of cores
-
-Default: ``5``.
-
 .. _pillar-salt_master-loop_interval:
 
 salt_master:loop_interval
@@ -169,3 +158,12 @@ Format:
       supported
 
 Default: turn off notify by :ref:`glossary-xmpp` (``{}``).
+
+.. _pillar-salt_master-workers:
+
+salt_master:workers
+~~~~~~~~~~~~~~~~~~~
+
+Numbers of workers.
+
+Default: uses number of CPU cores (``None``).

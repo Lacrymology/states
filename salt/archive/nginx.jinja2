@@ -38,11 +38,12 @@ server {
 
 {% include "nginx/block_hacks.jinja2" %}
 
-    location ~* \.(gz|txt|zip)$ {
+    {#- do not add .txt here, it will break robots.txt config #}
+    location ~* \.(gz|zip)$ {
         expires max;
     }
 
-{% include 'nginx/location_robots.jinja2' %}
+    {% include 'nginx/location_robots.jinja2' %}
 
     location / {
         autoindex on;

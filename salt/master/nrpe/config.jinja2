@@ -3,7 +3,8 @@
 
 {%- from 'nrpe/passive.jinja2' import passive_interval with context -%}
 {%- set timeout = 30 -%}
-{%- set workers = salt['pillar.get']('salt_master:workers', 5) -%}
+{%- set workers = salt['pillar.get']('salt_master:workers', None)|default(grains['num_cpus'], boolean=True) -%}
+
 {%- set processes = workers + 6 | int %}
 {%- if salt['pillar.get']('salt_master:reactor', False) %}
   {%- set processes = processes + 1 %}

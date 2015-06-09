@@ -173,6 +173,9 @@ run_and_check_return_code 10 "salt-call -c $CUSTOM_CONFIG_DIR state.sls salt.pat
 sudo salt -t 20 "$BUILD_IDENTITY" --output json cmd.run "restart salt-minion"
 # first cmd after restart often does not return, just ping
 sudo salt -t 5 "$BUILD_IDENTITY" --output json cmd.run "salt-call test.ping"
+# for some reasons, calling test.setup in integration.py using Caller interface sometimes does not sync the "fake" mine module
+# move it here and let the saltutil.sync_all run one more time after that
+run_and_check_return_code 600 "salt-call -c $CUSTOM_CONFIG_DIR state.sls test.setup >> $PREPARE_STDOUT_LOG 2>> $PREPARE_STDERR_LOG"
 run_and_check_return_code 20 "salt-call -c $CUSTOM_CONFIG_DIR saltutil.sync_all >> $PREPARE_STDOUT_LOG 2>> $PREPARE_STDERR_LOG"
 run_and_check_return_code 10 "salt-call -c $CUSTOM_CONFIG_DIR saltutil.refresh_modules >> $PREPARE_STDOUT_LOG 2>> $PREPARE_STDERR_LOG"
 # ping again before run integration.py, thing may brake after refresh_modules.

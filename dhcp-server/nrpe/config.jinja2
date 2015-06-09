@@ -4,8 +4,8 @@
 
 dhcp_server:
   description: Check DHCP server functionality
-  command: /usr/lib/nagios/plugins/check_dhcp -s {{ grains["ip_interfaces"][interface]|first }} -i {{ interface }} -u
+  command: sudo /usr/lib/nagios/plugins/check_dhcp -s {{ grains["ip_interfaces"][interface]|first }} -i {{ interface }} -u
 
-dhcp_proc:
+dhcp_server_proc:
   description: Check DHCP server process
   command: /usr/lib/nagios/plugins/check_procs -c 1:1 -u dhcpd -a "/etc/dhcp/dhcpd.conf {{ interface }}"

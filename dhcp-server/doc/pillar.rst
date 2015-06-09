@@ -13,7 +13,7 @@ Example::
 
 
 dhcp-server:interface
-~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
 
 Network interface to serve DHCP requests.
 
@@ -39,8 +39,8 @@ Example::
       domain-name-servers: 8.8.8.8, 8.8.4.4
 
 dhcp-server:options
--------------------
+~~~~~~~~~~~~~~~~~~~
 
-Dictionary contains specific option of :ref:`dhcp-server`.
+Dictionary contains specific option of :ref:`pillar-dhcp-server-subnet`.
 
-Default: pass no option to client `{}`.
+Default: pass no option to client ``{}``.

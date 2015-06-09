@@ -18,7 +18,6 @@ dhcp-server:
     - group: root
     - mode: 440
     - context:
-        dns: {{ salt["pillar.get"]("dhcp-server:dns") }}
         subnet: {{ salt["pillar.get"]("dhcp-server:subnet") }}
         range: {{ salt["pillar.get"]("dhcp-server:range") }}
         options: {{ salt["pillar.get"]("dhcp-server:options", {}) }}

@@ -90,7 +90,9 @@ def main(suffix='> /root/salt/stdout.log 2> /root/salt/stderr.log'):
                 str_index, str_size = arg.split('/')
                 args.remove(arg)
                 tests.add_chunk(int(str_index), int(str_size))
-        tests.add_filtered(args)
+            else:
+                tests.add_filtered(args)
+
         command = ' '.join((
             integration_py,
             ' '.join(tests),

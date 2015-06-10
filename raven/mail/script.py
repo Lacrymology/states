@@ -44,15 +44,17 @@ class Mail(pysc.Application):
     def main(self):
         # consume standard input early
         lines = []
-        is_cron = False
         p = re.compile("Subject: Cron <root@[^ ]+> (.*)")
+        mail_subject = 'This mail has no subject.'
         for line in sys.stdin:
-            if p.search(line):
-                is_cron = True
-                cron_subject = p.search(line).group(1)
-                lines.append("Subject: {}\n".format(cron_subject))
-            else:
-                lines.append(line)
+            line = line.rstrip()
+            lines.append(line)
+            if line.startswith('Subject:'):
+                mail_subject = line
+                # Removes hostname from cron subject to aggregate sentry events
+                if p.search(line):
+                    cron_subject = p.search(line).group(1)
+                    mail_subject = "Subject: Cron {0}".format(cron_subject)
 
         body = os.linesep.join(lines)
         if not len(body):
@@ -69,10 +71,8 @@ class Mail(pysc.Application):
 
         if self.config['subject']:
             subject = self.config['subject']
-        elif is_cron:
-            subject = cron_subject
         else:
-            subject = lines[0]
+            subject = mail_subject
         msg = os.linesep.join((subject, body))
         client.captureMessage(msg, extra=os.environ)
 

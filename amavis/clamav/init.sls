@@ -3,7 +3,7 @@
 include:
   - amavis
   - apt
-  - clamav
+  - clamav.server
 
 extend:
   clamav:

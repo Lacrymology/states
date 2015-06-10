@@ -13,7 +13,7 @@
   "backup.server",
   "carbon",
   "carbon.backup",
-  "clamav",
+  "clamav.server",
   "cron",
   "denyhosts",
   "diamond",

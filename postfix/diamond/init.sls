@@ -5,7 +5,7 @@ include:
 {%- if salt['pillar.get']('postfix:spam_filter', False) %}
   - amavis.diamond
     {%- if salt['pillar.get']('amavis:check_virus', True) %}
-  - clamav.diamond
+  - clamav.server.diamond
     {%- endif %}
 {%- endif %}
   - diamond

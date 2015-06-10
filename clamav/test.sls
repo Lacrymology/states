@@ -1,9 +1,9 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
 include:
-  - clamav
-  - clamav.nrpe
-  - clamav.diamond
+  - clamav.server
+  - clamav.server.nrpe
+  - clamav.server.diamond
   - doc
 
 {%- from 'cron/macro.jinja2' import test_cron with context %}
@@ -11,8 +11,8 @@ include:
 
 {%- call test_cron() %}
 - sls: clamav
-- sls: clamav.nrpe
-- sls: clamav.diamond
+- sls: clamav.server.nrpe
+- sls: clamav.server.diamond
 {%- endcall %}
 
 test:
@@ -29,8 +29,8 @@ test:
     {{ diamond_process_test('clamav') }}
     {{ diamond_process_test('freshclam') }}
     - require:
-      - sls: clamav
-      - sls: clamav.diamond
+      - sls: clamav.server
+      - sls: clamav.server.diamond
   qa:
     - test
     - name: clamav

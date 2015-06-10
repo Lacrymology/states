@@ -5,7 +5,7 @@ include:
 {%- if salt['pillar.get']('postfix:spam_filter', False) %}
   - amavis.nrpe
     {%- if salt['pillar.get']('amavis:check_virus', True) %}
-  - clamav.nrpe
+  - clamav.server.nrpe
     {%- endif %}
 {%- endif %}
   - apt.nrpe

@@ -63,14 +63,10 @@ class Tests(UserList):
         lines.reverse()
         # remove empty line
         lines = filter(None, lines)
-        output = []
-        for line in lines:
-            if line.startswith(self._prefix):
-                output.append(line.split(':')[0])
-            else:
-                # first line that don't starts with prefix mean list is done
-                output.sort()
-        return output
+
+        output = [line.split(':')[0] for line in lines
+                  if line.startswith(self._prefix)]
+        return sorted(output)
 
     def add_chunk(self, slice_index, size):
         for test in list(chunks(self.all_tests, size))[slice_index - 1]:

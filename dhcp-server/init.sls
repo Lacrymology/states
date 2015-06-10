@@ -19,6 +19,7 @@ dhcp-server:
     - mode: 440
     - context:
         subnet: {{ salt["pillar.get"]("dhcp-server:subnet") }}
+        netmask: {{ salt["pillar.get"]("dhcp-server:netmask") }}
         range: {{ salt["pillar.get"]("dhcp-server:range") }}
         options: {{ salt["pillar.get"]("dhcp-server:options", {}) }}
     - require:

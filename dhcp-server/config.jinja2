@@ -6,7 +6,7 @@ default-lease-time 600;
 max-lease-time 7200;
 log-facility local7;
 
-subnet {{ subnet }} netmask 255.255.255.0 {
+subnet {{ subnet }} netmask {{ netmask }} {
   range {{ range }};
 {%- for option, value in options.iteritems() %}
   option {{ option }} {{ value }};

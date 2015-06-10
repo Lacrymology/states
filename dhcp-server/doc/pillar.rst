@@ -9,6 +9,7 @@ Example::
   dhcp-server:
     interface: eth1
     subnet: 192.168.1.0
+    netmask: 255.255.255.0
     range: 192.168.1.100 192.168.1.150
 
 
@@ -23,6 +24,11 @@ dhcp-server:subnet
 ~~~~~~~~~~~~~~~~~~
 
 Subnet to serve :ref:`glossary-DHCP` requests.
+
+dhcp-server:netmask
+~~~~~~~~~~~~~~~~~~~
+
+Netmask of :ref:`pillar-dhcp-server-subnet`.
 
 dhcp-server:range
 ~~~~~~~~~~~~~~~~~

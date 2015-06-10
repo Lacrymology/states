@@ -633,3 +633,18 @@ Diffie–Hellman key exchange - to set up a shared session secret from which
 cryptographic keys are derived.
 
 .. Copied from http://en.wikipedia.org/wiki/Internet_Key_Exchange on 2015-04-06
+
+.. _glossary-DHCP:
+
+DHCP
+~~~~
+
+The Dynamic Host Configuration Protocol (DHCP) is a standardized network
+protocol used on Internet Protocol (IP) networks for dynamically distributing
+network configuration parameters, such as IP addresses for interfaces and
+services. With DHCP, computers request IP addresses and networking parameters
+automatically from a DHCP server, reducing the need for a network administrator
+or a user to configure these settings manually.
+
+.. Copied from http://en.wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol
+   on 2015-06-10

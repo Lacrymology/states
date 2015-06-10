@@ -297,10 +297,14 @@ salt_master_script_git_pull_repos:
       - file: /usr/local
       - file: bash
 
+{%- set remotes = salt['pillar.get']('salt_master:gitfs_remotes', []) %}
 salt_master_cron_git_pull_repos:
   file:
-    - managed
     - name: /etc/cron.d/salt-master-pull-repos
+{%- if not remotes %}
+    - absent
+{%- else %}
+    - managed
     - template: jinja
     - user: root
     - group: root
@@ -311,8 +315,9 @@ salt_master_cron_git_pull_repos:
       - pkg: git
       - file: openssh-client
       - file: salt_master_script_git_pull_repos
+{%- endif %}
 
-{%- for repo in salt['pillar.get']('salt_master:gitfs_remotes', []) %}
+{%- for repo in remotes %}
 salt_master_git_repo_{{ loop.index }}:
   git:
     - latest

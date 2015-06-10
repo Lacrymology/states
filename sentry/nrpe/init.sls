@@ -77,11 +77,13 @@ sentry_monitoring:
       - service: sentry
   file:
     - managed
+    - name: {{ dsn_file }}
     - create: False
     - user: www-data
     - group: nagios
     - mode: 440
     - require:
+      - cmd: sentry_monitoring
       - user: nagios-nrpe-server
       - user: web
 
@@ -97,7 +99,7 @@ sentry_monitoring:
     - group: nagios
     - mode: 550
     - require:
-      - cmd: sentry_monitoring
+      - file: sentry_monitoring
       - module: nrpe-virtualenv
       - pkg: nagios-nrpe-server
     - require_in:

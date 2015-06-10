@@ -115,3 +115,11 @@ The workaround is go ``/manage`` (Manage Jenkins) and click
 **Reload Configuration from Disk**
 
 Even if the bug 15156 had been marked as fixed, the problem still exists.
+
+Log Jenkins to syslog
+~~~~~~~~~~~~~~~~~~~~~
+
+https://wiki.jenkins-ci.org/display/JENKINS/Syslog+Logger+Plugin
+
+Used to send :doc:`index` log to syslog. It's configurable through options in
+``/configure``.

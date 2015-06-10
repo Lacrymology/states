@@ -4,7 +4,7 @@
 include:
   - apt.nrpe
   - bash.nrpe
-  - cron
+  - cron.nrpe
   - nrpe
   - rsyslog.nrpe
 

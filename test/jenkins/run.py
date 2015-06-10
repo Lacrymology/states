@@ -20,7 +20,6 @@ __email__ = 'bruno@robotinfra.com'
 import sys
 import subprocess
 import os
-from UserList import UserList
 
 
 def test_script():
@@ -42,11 +41,11 @@ def chunks(l, n):
     yield l[n*newn-newn:]
 
 
-class Tests(UserList):
+class Tests(object):
     def __init__(self, prefix='States.'):
         self._prefix = prefix
         self.__all_tests = None
-        UserList.__init__(self)
+        self.data = set()
 
     @property
     def all_tests(self):
@@ -69,9 +68,7 @@ class Tests(UserList):
         return sorted(output)
 
     def add_chunk(self, slice_index, size):
-        for test in list(chunks(self.all_tests, size))[slice_index - 1]:
-            if test not in self.data:
-                self.data.append(test)
+        self.data.update(list(chunks(self.all_tests, size))[slice_index - 1])
 
     def add_filtered(self, keywords):
         """
@@ -79,8 +76,8 @@ class Tests(UserList):
         """
         for test in self.all_tests:
             for arg in keywords:
-                if arg in test and test not in self.data:
-                    self.data.append(test)
+                if arg in test:
+                    self.data.add(test)
 
 
 def main(suffix='> /root/salt/stdout.log 2> /root/salt/stderr.log'):

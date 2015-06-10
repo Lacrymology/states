@@ -3,6 +3,7 @@
 {%- set files_archive = salt['pillar.get']('files_archive', False) %}
 include:
   - apt
+  - kernel.dev
 
 virtualbox:
   pkg:
@@ -14,6 +15,7 @@ virtualbox:
       - libgl1-mesa-glx
     - require:
       - cmd: apt_sources
+      - pkg: kernel-headers
 {#- use RDP for VDRP, required for Windows machine #}
   cmd:
     - wait

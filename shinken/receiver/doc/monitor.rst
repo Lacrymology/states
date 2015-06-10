@@ -26,4 +26,4 @@ shinken_receiver_memory_usage
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Check the memory usage of ``shinken-receiver`` processes.
-Restart this daemon when it reach 50% of total memory.
+Restart this daemon when it reach 20% of total memory.

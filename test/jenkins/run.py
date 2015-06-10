@@ -62,7 +62,7 @@ class Tests(UserList):
             os.linesep)
         lines.reverse()
         # remove empty line
-        del lines[0]
+        lines = filter(None, lines)
         output = []
         for line in lines:
             if line.startswith(self._prefix):

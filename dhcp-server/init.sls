@@ -15,7 +15,7 @@ dhcp-server:
     - template: jinja
     - source: salt://dhcp-server/config.jinja2
     - user: root
-    - group: root
+    - group: dhcpd
     - mode: 440
     - context:
         subnet: {{ salt["pillar.get"]("dhcp-server:subnet") }}
@@ -27,6 +27,7 @@ dhcp-server:
     - running
     - name: isc-dhcp-server
     - watch:
+      - file: /etc/default/isc-dhcp-server
       - file: dhcp-server
       - pkg: dhcp-server
 

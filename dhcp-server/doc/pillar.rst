@@ -15,19 +15,19 @@ Example::
 dhcp-server:interface
 ~~~~~~~~~~~~~~~~~~~~~
 
-Network interface to serve DHCP requests.
+Network interface to serve :ref:`glossary-DHCP` requests.
 
 .. _pillar-dhcp-server-subnet:
 
 dhcp-server:subnet
 ~~~~~~~~~~~~~~~~~~
 
-Subnet to serve DHCP requests.
+Subnet to serve :ref:`glossary-DHCP` requests.
 
 dhcp-server:range
 ~~~~~~~~~~~~~~~~~
 
-Range of IPs to offer to DHCP clients.
+Range of IPs to offer to :ref:`glossary-DHCP` clients.
 
 Optional
 --------

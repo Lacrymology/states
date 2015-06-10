@@ -7,9 +7,9 @@ Mandatory
 dhcp_server
 ~~~~~~~~~~~
 
-Check if DHCP server is working and has free IPs to offer.
+Check if :ref:`glossary-DHCP` server is working and has free IPs to offer.
 
 dhcp_server_proc
 ~~~~~~~~~~~~~~~~
 
-Check if DHCP daemon is running.
+Check if :ref:`glossary-DHCP` daemon is running.

@@ -38,7 +38,6 @@ Remote installing in a headless server
 
 .. code-block:: bash
 
-
    vboxmanage storagectl "Windows7-dev" --name "SATA Controller" --add sata --controller IntelAHCI
    vboxmanage storageattach "Windows7-dev" --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium "Windows7-dev.vdi"
 
@@ -58,8 +57,8 @@ Remote installing in a headless server
 .. warning::
 
    with above command, connect to the VM will not require authentication.  It's
-   recommened to only allow trusted machines access above port, or `setup
-   authentication <https://www.virtualbox.org/manual/ch07.html#vbox-auth>`_.
+   recommended to only allow trusted machines access above port, or
+   `setup authentication <https://www.virtualbox.org/manual/ch07.html#vbox-auth>`_.
 
 7. Use a RDP client to connect to VM. In Linux machine, `rdesktop` program can
    be used for this purpose.

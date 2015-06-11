@@ -13,6 +13,7 @@ include:
     - user: root
     - group: root
     - mode: 775
+    - follow_symlinks: False
     - source: salt://raven/mail/script.py
     - require:
       - module: raven

@@ -66,7 +66,7 @@ dovecot:
     - managed
     - source: salt://dovecot/config.jinja2
     - template: jinja
-    - mode: 400
+    - mode: 444 {#- dovecot-agent needs to read it too, no sensitive data #}
     - user: dovecot
     - group: dovecot
     - require:

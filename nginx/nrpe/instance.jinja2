@@ -89,3 +89,13 @@
   {%- endif %}
 {%- endif -%}
 {%- endmacro %}
+
+{%- macro check_bad_link(formula, pillar_prefix=None) %}
+  {%- set pillar_prefix = pillar_prefix or formula %}
+  {%- set https_arg = "-ssl" if salt['pillar.get'](pillar_prefix ~ ':ssl_redirect', False) else "" %}
+  {%- set domain_name = salt['pillar.get'](pillar_prefix ~ ':hostnames')[0] -%}
+check_bad_link_{{ formula }}:
+  cmd:
+    - run
+    - name: /usr/lib/nagios/plugins/check_http -H {{ domain_name }} -u /{{ salt['password.generate']('random_url_' ~ formula) }} -e '404 Not Found' {{ https_arg }}
+{%- endmacro %}

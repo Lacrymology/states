@@ -31,3 +31,16 @@ geminabox:
     - absent
     - require:
       - process: geminabox
+
+{# workaround userdel bug logs error if it cannot delete mail dir of that user
+This create fake one for those users to avoid error log when user.absent runs #}
+geminabox_fake_mail_path:
+  file:
+    - managed
+    - name: /var/mail/geminabox
+    - makedirs: True
+    - replace: False
+    - require:
+      - process: geminabox
+    - require_in:
+      - user: geminabox

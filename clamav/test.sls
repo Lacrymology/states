@@ -32,9 +32,20 @@ test:
       - sls: clamav.server
       - sls: clamav.server.diamond
   qa:
-    - test
+    - test_pillar
     - name: clamav
-    - doc: {{ opts['cachedir'] }}/doc/output
+    - additional:
+      - clamav.server
+    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - require:
+      - monitoring: test
+      - cmd: doc
+
+test_clamav_server:
+  qa:
+    - test_monitor
+    - name: clamav.server
+    - monitor_doc: {{ opts['cachedir'] }}/doc/output
     - require:
       - monitoring: test
       - cmd: doc

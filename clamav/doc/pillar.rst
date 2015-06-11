@@ -12,6 +12,7 @@ Optional
 Example::
 
   clamav:
+    mode: network
     dns_db:
       - current.cvd.clamav.net
     connect_timeout: 30
@@ -20,6 +21,15 @@ Example::
     db_mirrors:
       - db.local.clamav.net
       - database.clamav.net
+
+.. _pillar-clamav-mode:
+
+clamav:mode
+~~~~~~~~~~~
+
+Which mode :doc:`index` will be run. Either ``local`` or ``network``.
+
+Default: running in ``local`` mode.
 
 .. _pillar-clamav-connect_timeout:
 
@@ -101,3 +111,30 @@ Link to the
 
 Default: uses default value provided by the package
 (``['current.cvd.clamav.net']``).
+
+Conditional
+-----------
+
+Example::
+
+  clamav:
+    server_minion_id: clamav
+    port: 3310
+
+.. _pillar-clamav-server_minion_id:
+
+clamav:server_minion_id
+~~~~~~~~~~~~~~~~~~~~~~~
+
+The :doc:`/salt/minion/doc/index` id of the ``clamd`` server.
+
+.. _pillar-clamav-port:
+
+clamav:port
+~~~~~~~~~~~
+
+Which port ``clamd`` daemon is listening to.
+
+Default: ``3310``
+
+These are used only if :doc:`index` is running in ``network`` mode.

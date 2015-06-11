@@ -22,14 +22,23 @@ fake_mine:
         def get(*args):
             minion_id = __salt__['grains.item']('id')['id']
             return {minion_id: __salt__['monitoring.data']()}
-    - reload_modules: true
+
+{#-
+clear cache to make sure salt load fake mine module
+#}
+clear_minion_cache:
+  module:
+    - run
+    - name: saltutil.clear_cache
+    - require:
+      - file: fake_mine
 
 sync_all:
   module:
     - run
     - name: saltutil.sync_all
     - require:
-      - file: fake_mine
+      - module: clear_minion_cache
 
 {%- set root_info = salt['user.info']('root') -%}
 

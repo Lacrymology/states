@@ -1,11 +1,18 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
 # {{ salt['pillar.get']('message_do_not_modify') }}
+{%- if salt['pillar.get']('clamav:mode', 'local') == "local" %}
 LocalSocket /var/run/clamav/clamd.ctl
 FixStaleSocket true
 LocalSocketGroup clamav
 LocalSocketMode 666
 User clamav
+{%- else %}
+{%- set server_minion_id = salt['pillar.get']('clamav:server_minion_id', grains['id']) %}
+TCPAddr {{ salt['mine.get'](server_minion_id, 'monitoring.data')[server_minion_id]['ip_addrs']['private'] }}
+TCPSocket {{ salt['pillar.get']('clamav:port', 3310)}}
+User root
+{%- endif %}
 AllowSupplementaryGroups true
 ScanMail true
 ScanArchive true

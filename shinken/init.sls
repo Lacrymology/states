@@ -204,6 +204,7 @@ shinken:
     - watch:
       - archive: shinken
     - require:
+      - file: shinken_disable_hard_ssl_name_check
       - file: shinken_replace_etc_shinken
       - file: shinken_replace_etc
       - file: shinken_replace_init
@@ -238,6 +239,18 @@ shinken:
     - require:
       - user: shinken
       - virtualenv: shinken
+
+{#- Workaround for this bug: https://github.com/naparuba/shinken/issues/1641 #}
+shinken_disable_hard_ssl_name_check:
+  file:
+    - replace
+    - name: /usr/local/shinken/src/shinken-{{ version }}/shinken/objects/satellitelink.py
+    - pattern: |
+        'hard_ssl_name_check': BoolProp\(default=True, fill_brok=\['full_status'\]\),$
+    - repl: "'hard_ssl_name_check': BoolProp(default=False, fill_brok=['full_status']),\n"
+    - backup: False
+    - require:
+      - archive: shinken
 
 shinken_replace_etc_shinken:
   file:

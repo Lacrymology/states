@@ -183,6 +183,9 @@ sudo salt -t 5 "$BUILD_IDENTITY" --output json cmd.run "salt-call test.ping"
 start_run_test_time=$(date +%s)
 echo "TIME-METER: Preparing for test took: $((start_run_test_time - start_time)) seconds"
 echo '------------ Running CI test  ------------'
+sudo salt --verbose -t 100 "$BUILD_IDENTITY" cmd.run \
+    "$CUSTOM_CONFIG_DIR/jenkins/run.py --dry-run $failfast $tests"
+
 sudo salt --verbose -t "$master_timeout" "$BUILD_IDENTITY" cmd.run \
     "$CUSTOM_CONFIG_DIR/jenkins/run.py $failfast $tests"
 finish_run_test_time=$(date +%s)

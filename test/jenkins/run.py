@@ -17,10 +17,9 @@ __author__ = 'Bruno Clermont'
 __maintainer__ = 'Bruno Clermont'
 __email__ = 'bruno@robotinfra.com'
 
-import sys
+import argparse
 import subprocess
 import os
-from UserList import UserList
 
 
 def test_script():
@@ -42,11 +41,11 @@ def chunks(l, n):
     yield l[n*newn-newn:]
 
 
-class Tests(UserList):
+class Tests(object):
     def __init__(self, prefix='States.'):
         self._prefix = prefix
         self.__all_tests = None
-        UserList.__init__(self)
+        self.data = set()
 
     @property
     def all_tests(self):
@@ -62,51 +61,52 @@ class Tests(UserList):
             os.linesep)
         lines.reverse()
         # remove empty line
-        del lines[0]
-        output = []
-        for line in lines:
-            if line.startswith(self._prefix):
-                output.append(line.split(':')[0])
-            else:
-                # first line that don't starts with prefix mean list is done
-                output.sort()
-        return output
+        lines = filter(None, lines)
+
+        output = [line.split(':')[0] for line in lines
+                  if line.startswith(self._prefix)]
+        return sorted(output)
 
     def add_chunk(self, slice_index, size):
-        for test in list(chunks(self.all_tests, size))[slice_index - 1]:
-            if test not in self.data:
-                self.data.append(test)
+        self.data.update(list(chunks(self.all_tests, size))[slice_index - 1])
 
-    def add_filtered(self, keywords):
-        """
-        :param keywords: list of string to look in test name
-        """
-        for test in self.all_tests:
-            for arg in keywords:
-                if arg in test and test not in self.data:
-                    self.data.append(test)
+    def add_filtered(self, keyword):
+        for test_name in self.all_tests:
+            if keyword in test_name:
+                self.data.add(test_name)
 
 
 def main(suffix='> /root/salt/stdout.log 2> /root/salt/stderr.log'):
     integration_py = test_script()
-    if len(sys.argv) > 1:
+    argp = argparse.ArgumentParser()
+    argp.add_argument('words', nargs='*', help='prefix or chunk')
+    argp.add_argument('--dry-run', action='store_true',
+                      help='show command that will be run')
+
+    args = argp.parse_args()
+
+    if args.words:
         tests = Tests()
-        args = sys.argv[1:]
-        for arg in args:
+        arguments = args.words[:]
+        for arg in arguments[:]:
             if '/' in arg:
                 str_index, str_size = arg.split('/')
-                args.remove(arg)
+                arguments.remove(arg)
                 tests.add_chunk(int(str_index), int(str_size))
-        tests.add_filtered(args)
+            else:
+                tests.add_filtered(arg)
+
         command = ' '.join((
             integration_py,
-            ' '.join(tests),
+            ' '.join(tests.data),
             suffix
         ))
     else:
         command = ' '.join((integration_py, suffix))
+
     print command
-    os.system(command)
+    if not args.dry_run:
+        os.system(command)
 
 if __name__ == '__main__':
     main()

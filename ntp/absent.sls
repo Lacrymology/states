@@ -24,3 +24,8 @@ ntp:
   service:
     - dead
     - enable: False
+  user:
+    - absent
+    - purge: True
+    - require:
+      - pkg: ntp

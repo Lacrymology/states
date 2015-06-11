@@ -12,6 +12,7 @@ geminabox:
   user:
     - absent
     - force: True
+    - purge: True
     - require:
       - process: geminabox
   process:

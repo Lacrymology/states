@@ -13,6 +13,7 @@ mongodb:
     - dead
   user:
     - absent
+    - purge: True
     - require:
       - pkg: mongodb
   group:

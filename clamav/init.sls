@@ -50,7 +50,8 @@ clamav:
 {%- set daily_scan = salt['pillar.get']('clamav:daily_scan', False) %}
 {%- if daily_scan %}
     - managed
-    - source: salt://clamav/scan.sh
+    - source: salt://clamav/scan.jinja2
+    - template: jinja
     - user: root
     - group: root
     - mode: 500

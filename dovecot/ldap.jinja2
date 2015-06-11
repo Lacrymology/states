@@ -105,6 +105,8 @@ base = ou=people,{{ suffix }}
 #user_filter = (&(objectClass=posixAccount)(uid=%u))
 #}
 user_filter = (&(objectClass=inetOrgPerson)(uid=%u))
+iterate_attrs = uid=user
+iterate_filter = (objectClass=inetOrgPerson)
 {#-
 # Password checking attributes:
 #  user: Virtual user name (user@domain), if you wish to change the

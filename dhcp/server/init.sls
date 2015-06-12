@@ -13,7 +13,7 @@ dhcp-server:
     - managed
     - name: /etc/dhcp/dhcpd.conf
     - template: jinja
-    - source: salt://dhcp-server/config.jinja2
+    - source: salt://dhcp/server/config.jinja2
     - user: root
     - group: dhcpd
     - mode: 440
@@ -36,7 +36,7 @@ dhcp-server:
   file:
     - managed
     - template: jinja
-    - source: salt://dhcp-server/default.jinja2
+    - source: salt://dhcp/server/default.jinja2
     - user: root
     - group: root
     - mode: 440

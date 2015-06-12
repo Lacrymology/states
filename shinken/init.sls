@@ -245,6 +245,7 @@ shinken_replace_etc_shinken:
     - name: /usr/local/shinken/src/shinken-{{ version }}/setup.py
     - pattern: '"/etc/shinken"'
     - repl: '"/usr/local/shinken/etc/shinken"'
+    - backup: False
     - require:
       - archive: shinken
 
@@ -254,6 +255,7 @@ shinken_replace_etc:
     - name: /usr/local/shinken/src/shinken-{{ version }}/setup.py
     - pattern: "'/etc'"
     - repl: "'/usr/local/shinken/etc'"
+    - backup: False
     - require:
       - archive: shinken
 
@@ -263,6 +265,7 @@ shinken_replace_init:
     - name: /usr/local/shinken/src/shinken-{{ version }}/setup.py
     - pattern: "'/etc/init.d/shinken"
     - repl: "'/usr/local/shinken/etc/init.d/shinken"
+    - backup: False
     - require:
       - archive: shinken
 

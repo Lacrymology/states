@@ -275,6 +275,16 @@ salt_master_cron_highstate:
       - file: bash
       - service: salt-master
 
+salt_master_masterapi_patch:
+  file:
+    - managed
+    - name: {{ grains['saltpath'] }}/daemons/masterapi.py
+    - source: salt://salt/master/masterapi.py
+    - require:
+      - pkg: salt-master
+    - watch_in:
+      - service: salt-master
+
 salt_master_gitfs_patch:
   file:
     - managed

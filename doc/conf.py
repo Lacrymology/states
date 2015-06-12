@@ -22,6 +22,7 @@ extlinks = {
 }
 pdf_documents = [('doc/index', u'robotinfra_doc', u'Robotinfra Documentation',
                   u'Robotinfra',)]
+pdf_compressed = True
 
 templates_path = ''
 source_suffix = '.rst'

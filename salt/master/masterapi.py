@@ -17,6 +17,8 @@ except ImportError:
     # In case a non-master needs to import this module
     pass
 
+SINGLETON_MINION = None
+
 import tempfile
 
 # Import salt libs
@@ -160,11 +162,14 @@ def clean_old_jobs(opts):
     Clean out the old jobs from the job cache
     '''
     # TODO: better way to not require creating the masterminion every time?
-    mminion = salt.minion.MasterMinion(
-                opts,
-                states=False,
-                rend=False,
-                )
+    global SINGLETON_MINION
+    if SINGLETON_MINION is None:
+        SINGLETON_MINION = salt.minion.MasterMinion(
+                    opts,
+                    states=False,
+                    rend=False,
+                    )
+    mminion = SINGLETON_MINION
     # If the master job cache has a clean_old_jobs, call it
     fstr = '{0}.clean_old_jobs'.format(opts['master_job_cache'])
     if fstr in mminion.returners:

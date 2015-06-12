@@ -21,3 +21,9 @@ Check if the scheduler port can be reached from the
 :doc:`/shinken/poller/doc/index`.
 
 See :doc:`/shinken/arbiter/doc/monitor` for troubleshooting.
+
+shinken_scheduler_memory_usage
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Check the memory usage of ``shinken-scheduler`` processes.
+Restart this daemon when it reach 20% of total memory.

@@ -9,6 +9,7 @@ extend:
   terracotta:
     user:
       - absent
+      - purge: True
       - require:
         - service: terracotta
 

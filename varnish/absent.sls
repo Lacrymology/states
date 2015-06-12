@@ -22,6 +22,7 @@ varnish:
   user:
     - absent
     - name: {{ user }}
+    - purge: True
     - require:
       - pkg: varnish
   group:

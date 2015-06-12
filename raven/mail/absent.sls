@@ -2,15 +2,18 @@
 
 /usr/bin/mail:
   file:
-{%- if salt['file.file_exists']('/etc/alternatives/mail') %}
-    - symlink
-    - target: /etc/alternatives/mail
-    - force: True
-    - user: root
-    - group: root
-    - mode: 775
-{%- else %}
     - absent
+
+{%- if salt['file.file_exists']('/etc/alternatives/mail') %}
+update-alternatives-mailx:
+  module:
+    - run
+    - name: alternatives.auto
+    - m_name: mailx
+    - require:
+      - file: /usr/bin/mail
+    - require_in:
+      - cmd: cron_sendmail_unpatch
 {%- endif %}
 
 /usr/bin/ravenmail:

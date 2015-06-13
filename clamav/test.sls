@@ -10,7 +10,7 @@ include:
 {%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 
 {%- call test_cron() %}
-- sls: clamav
+- file: /usr/local/bin/clamav-scan.sh
 - sls: clamav.server.nrpe
 - sls: clamav.server.diamond
 {%- endcall %}
@@ -26,10 +26,10 @@ test:
     - test
     - map:
         ProcessResources:
-    {{ diamond_process_test('clamav') }}
-    {{ diamond_process_test('freshclam') }}
+          {{ diamond_process_test('clamav') }}
+          {{ diamond_process_test('freshclam') }}
     - require:
-      - sls: clamav.server
+      - service: clamav-daemon
       - sls: clamav.server.diamond
   qa:
     - test_pillar

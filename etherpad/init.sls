@@ -124,7 +124,6 @@ etherpad:
       - file: {{ web_root_dir }}/APIKEY.txt
       - file: {{ web_root_dir }}/settings.json
       - file: etherpad
-      - pkg: git
 
 {{ manage_upstart_log('etherpad') }}
 

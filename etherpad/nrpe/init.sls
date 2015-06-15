@@ -4,7 +4,6 @@
 {%- from 'nrpe/passive.jinja2' import passive_check with context %}
 include:
   - apt.nrpe
-  - git.nrpe
   - nginx.nrpe
   - nodejs.nrpe
   - nrpe

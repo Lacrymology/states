@@ -1,38 +1,8 @@
-{#-
-Copyright (C) 2013 the Institute for Institutional Innovation by Data
-Driven Design Inc.
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-"Software"), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE  MASSACHUSETTS INSTITUTE OF
-TECHNOLOGY AND THE INSTITUTE FOR INSTITUTIONAL INNOVATION BY DATA
-DRIVEN DESIGN INC. BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-Except as contained in this notice, the names of the Institute for
-Institutional Innovation by Data Driven Design Inc. shall not be used in
-advertising or otherwise to promote the sale, use or other dealings
-in this Software without prior written authorization from the
-Institute for Institutional Innovation by Data Driven Design Inc.
-
-Author: Lam Dang Tung <lamdt@familug.org>
-Maintainer: Lam Dang Tung <lamdt@familug.org>
--#}
+{%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
+  - doc
   - wordpress
   - wordpress.backup
   - wordpress.backup.diamond
@@ -41,13 +11,32 @@ include:
   - wordpress.nrpe
 
 test:
-  nrpe:
+  monitoring:
     - run_all_checks
-    - order: last
-    - wait: 30
+    - require:
+      - sls: wordpress
+      - sls: wordpress.diamond
+      - sls: wordpress.nrpe
+  diamond:
+    - test
+    - map:
+        ProcessResources:
+    {{ diamond_process_test('uwsgi-wordpress', zmempct=False) }}
+    - require:
+      - sls: wordpress
+      - sls: wordpress.diamond
+  qa:
+    - test
+    - name: wordpress
+    - additional:
+      - wordpress.backup
+    - doc: {{ opts['cachedir'] }}/doc/output
+    - require:
+      - monitoring: test
+      - cmd: doc
   cmd:
     - run
     - name: /etc/cron.daily/backup-wordpress
     - require:
-      - file: backup-wordpress
-    - order: last
+      - sls: wordpress
+      - sls: wordpress.backup

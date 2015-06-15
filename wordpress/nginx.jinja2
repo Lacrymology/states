@@ -1,38 +1,6 @@
-{#-
-Copyright (C) 2013 the Institute for Institutional Innovation by Data
-Driven Design Inc.
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-"Software"), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE  MASSACHUSETTS INSTITUTE OF
-TECHNOLOGY AND THE INSTITUTE FOR INSTITUTIONAL INNOVATION BY DATA
-DRIVEN DESIGN INC. BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-Except as contained in this notice, the names of the Institute for
-Institutional Innovation by Data Driven Design Inc. shall not be used in
-advertising or otherwise to promote the sale, use or other dealings
-in this Software without prior written authorization from the
-Institute for Institutional Innovation by Data Driven Design Inc.
-
-Author: Lam Dang Tung <lamdt@familug.org>
-Maintainer: Lam Dang Tung <lamdt@familug.org>
--#}
-# {{ pillar['message_do_not_modify'] }}
+# {{ salt['pillar.get']('message_do_not_modify') }}
 upstream wordpress {
     server unix:///var/lib/uwsgi/wordpress.sock;
 }
@@ -42,18 +10,18 @@ server {
 {% if salt['pillar.get']('wordpress:ssl', False) %}
 {% if salt['pillar.get']('wordpress:ssl_redirect', False) %}
     {# if https, redirect http port 80 to https port 443 #}
-    server_name {% for hostname in pillar['wordpress']['hostnames'] %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
-    return 301 https://{{ pillar['wordpress']['hostnames'][0] }}$request_uri;
+    server_name {% for hostname in salt['pillar.get']('wordpress:hostnames') %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+    return 301 https://{{ salt['pillar.get']('wordpress:hostnames')[0] }}$request_uri;
 }
 {# https server #}
 server {
 {% endif %}{# redirect http to https #}
 {%- from 'nginx/macro.jinja2' import ssl_config with context %}
-    {{ ssl_config(pillar['wordpress']['ssl']) }}
+    {{ ssl_config(salt['pillar.get']('wordpress:ssl')) }}
 {% endif %}
 
 {# web app logic #}
-    server_name {% for hostname in pillar['wordpress']['hostnames'] -%}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+    server_name {% for hostname in salt['pillar.get']('wordpress:hostnames') -%}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
     root {{ dir }};
 
 {% include "nginx/block_hacks.jinja2" %}

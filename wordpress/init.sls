@@ -1,48 +1,14 @@
-{#-
-Copyright (C) 2013 the Institute for Institutional Innovation by Data
-Driven Design Inc.
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-"Software"), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
+{%- set ssl = salt['pillar.get']('wordpress:ssl', False) %}
 
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE  MASSACHUSETTS INSTITUTE OF
-TECHNOLOGY AND THE INSTITUTE FOR INSTITUTIONAL INNOVATION BY DATA
-DRIVEN DESIGN INC. BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-Except as contained in this notice, the names of the Institute for
-Institutional Innovation by Data Driven Design Inc. shall not be used in
-advertising or otherwise to promote the sale, use or other dealings
-in this Software without prior written authorization from the
-Institute for Institutional Innovation by Data Driven Design Inc.
-
-Author: Lam Dang Tung <lamdt@familug.org>
-Maintainer: Lam Dang Tung <lamdt@familug.org>
-
-A blogging tool and content management system.
--#}
 include:
   - local
   - nginx
-{%- if salt['pillar.get']('debug', False) %}
   - logrotate
-{%- endif %}
-  - {{ salt['pillar.get']('wordpress:mysql_variant', 'mariadb') }}.server
+  - mysql.server
   - php.dev
-{%- if salt['pillar.get']('wordpress:ssl', False) %}
+{%- if ssl %}
   - ssl
 {%- endif %}
   - uwsgi.php
@@ -58,8 +24,9 @@ wordpress:
   archive:
     - extracted
     - name: /usr/local/
-{%- if 'files_archive' in pillar %}
-    - source: {{ pillar['files_archive'] }}/mirror/wordpress-{{ version }}.tar.gz
+{%- set files_archive = salt['pillar.get']('files_archive', False) %}
+{%- if files_archive %}
+    - source: {{ files_archive }}/mirror/wordpress-{{ version }}.tar.gz
 {%- else %}
     - source: http://wordpress.org/wordpress-{{ version }}.tar.gz
 {%- endif %}
@@ -104,25 +71,37 @@ wordpress:
     - require:
       - mysql_user: wordpress
       - mysql_database: wordpress
-  uwsgi:
-    - available
-    - enabled: True
-    - name: wordpress
-    - source: salt://wordpress/uwsgi.jinja2
+
+wordpress_uwsgi:
+  file:
+    - managed
+    - name: /etc/uwsgi/wordpress.yml
+    - template: jinja
     - user: www-data
     - group: www-data
     - mode: 440
+    - source: salt://uwsgi/template.jinja2
     - template: jinja
     - context:
-      dir: {{ wordpressdir }}
+        dir: {{ wordpressdir }}
+        chdir: {{ wordpressdir }}
+        appname: wordpress
     - require:
       - module: wordpress_initial
-      - service: uwsgi_emperor
+      - service: uwsgi
       - service: mysql-server
     - watch:
       - file: {{ wordpressdir }}/wp-config.php
       - archive: wordpress
       - pkg: php5-mysql
+  module:
+    - wait
+    - name: file.touch
+    - m_name: /etc/uwsgi/wordpress.yml
+    - require:
+      - file: /etc/uwsgi/wordpress.yml
+    - watch:
+      - file: wordpress_uwsgi
 
 {{ wordpressdir }}/wp-content/uploads:
   file:
@@ -135,12 +114,6 @@ wordpress:
     - require:
       - archive: wordpress
       - file: /var/lib/deployments/wordpress/upload
-
-php5-mysql:
-  pkg:
-    - installed
-    - require:
-      - pkg: php-dev
 
 {{ wordpressdir }}/wp-config.php:
   file:
@@ -158,6 +131,12 @@ php5-mysql:
       dbuserpass: {{ dbuserpass }}
       dbname: {{ dbname }}
       dbuser: {{ dbuser }}
+
+php5-mysql:
+  pkg:
+    - installed
+    - require:
+      - pkg: php-dev
 
 wordpress_initial:
   file:
@@ -205,13 +184,12 @@ wordpress_initial:
     - template: jinja
     - require:
       - pkg: nginx
-      - uwsgi: wordpress
+      - module: wordpress_uwsgi
     - watch_in:
       - service: nginx
     - context:
       dir: {{ wordpressdir }}
 
-{%- if salt['pillar.get']('debug', False) %}
 /etc/logrotate.d/wordpress:
   file:
     - managed
@@ -224,7 +202,6 @@ wordpress_initial:
       - pkg: logrotate
     - context:
       web_dir: {{ wordpressdir }}
-{%- endif %}
 
 /var/lib/deployments/wordpress/upload:
   file:
@@ -236,10 +213,10 @@ wordpress_initial:
     - require:
       - user: web
 
-{%- if salt['pillar.get']('wordpress:ssl', False) %}
+{%- if ssl %}
 extend:
   nginx:
     service:
       - watch:
-        - cmd: ssl_cert_and_key_for_{{ pillar['wordpress']['ssl'] }}
+        - cmd: ssl_cert_and_key_for_{{ ssl }}
 {%- endif %}

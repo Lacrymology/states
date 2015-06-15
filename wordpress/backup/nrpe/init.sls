@@ -1,46 +1,16 @@
-{#-
-Copyright (c) 2014, Hung Nguyen Viet
-All rights reserved.
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met:
-
-1. Redistributions of source code must retain the above copyright notice, this
-   list of conditions and the following disclaimer.
-2. Redistributions in binary form must reproduce the above copyright notice,
-   this list of conditions and the following disclaimer in the documentation
-   and/or other materials provided with the distribution.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
-ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-Author: Hung Nguyen Viet <hvnsweeting@gmail.com>
-Maintainer: Hung Nguyen Viet <hvnsweeting@gmail.com>
-
-Nagios NRPE check for Wordpress backup
--#}
 include:
-  - backup.client.{{ pillar['backup_storage'] }}.nrpe
+  - bash.nrpe
+  - backup.client.{{ salt['pillar.get']('backup_storage') }}.nrpe
   - cron.nrpe
   - nrpe
 
-/etc/nagios/nrpe.d/backup-wordpress.cfg:
-  file:
-    - managed
-    - template: jinja
-    - user: nagios
-    - group: nagios
-    - mode: 440
-    - source: salt://wordpress/backup/nrpe/config.jinja2
-    - require:
-      - pkg: nagios-nrpe-server
-    - watch_in:
-      - service: nagios-nrpe-server
+{%- from 'nrpe/passive.jinja2' import passive_check with context -%}
+{{ passive_check('wordpress.backup') }}
+
+extend:
+  check_backup.py:
+    file:
+      - require:
+        - file: nsca-wordpress.backup

@@ -1,35 +1,14 @@
-.. Copyright (c) 2013, Bruno Clermont
-.. All rights reserved.
 ..
-.. Redistribution and use in source and binary forms, with or without
-.. modification, are permitted provided that the following conditions are met:
-..
-..     1. Redistributions of source code must retain the above copyright notice,
-..        this list of conditions and the following disclaimer.
-..     2. Redistributions in binary form must reproduce the above copyright
-..        notice, this list of conditions and the following disclaimer in the
-..        documentation and/or other materials provided with the distribution.
-..
-.. Neither the name of Bruno Clermont nor the names of its contributors may be used
-.. to endorse or promote products derived from this software without specific
-.. prior written permission.
-..
-.. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-.. AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
-.. THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-.. PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
-.. BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-.. CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-.. SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-.. INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-.. CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-.. ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-.. POSSIBILITY OF SUCH DAMAGE.
+   Author: Viet Hung Nguyen <hvn@robotinfra.com>
+   Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
+
+Pillar
+======
 
 .. include:: /doc/include/add_pillar.inc
 
 - :doc:`/nginx/doc/index` :doc:`/nginx/doc/pillar`
-- :doc:`/mariadb/server/doc/index` :doc:`/mariadb/server/doc/pillar`
+- :doc:`/mysql/server/doc/index` :doc:`/mysql/server/doc/pillar`
 
 Mandatory
 ---------
@@ -44,28 +23,38 @@ Example::
     admin_password: mypassword
     email: admin@mydomain.com
 
+.. _pillar-wordpress-hostnames:
+
 wordpress:hostnames
 ~~~~~~~~~~~~~~~~~~~
 
 .. include:: /nginx/doc/hostnames.inc
+
+.. _pillar-wordpress-title:
 
 wordpress:title
 ~~~~~~~~~~~~~~~
 
 Site's title.
 
+.. _pillar-wordpress-username:
+
 wordpress:username
 ~~~~~~~~~~~~~~~~~~
 
 Administrator's username.
+
+.. _pillar-wordpress-admin_password:
 
 wordpress:admin_password
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 Administrator's password.
 
-wordpress:email
-~~~~~~~~~~~~~~~
+.. _pillar-wordpress-admin_email:
+
+wordpress:admin_email
+~~~~~~~~~~~~~~~~~~~~~
 
 Administrator's email.
 
@@ -74,11 +63,12 @@ Optional
 
 Example::
 
-  debug: False
   wordpress:
-    password: dbpassword
+    db:
+      password: dbpassword
+      user: wp_user
+      name: wordpress
     public: 1
-    mysql_variant: mariadb
     ssl: False
     ssl_redirect: True
     workers: 2
@@ -86,22 +76,34 @@ Example::
     timeout: 60
     idle: 300
 
-debug
-~~~~~
+.. _pillar-wordpress-db-password:
 
-Enable Debug logging to the ``/wp-content/debug.log`` file
+wordpress:db:password
+~~~~~~~~~~~~~~~~~~~~~
 
-wordpress:password
-~~~~~~~~~~~~~~~~~~
+:doc:`/mysql/doc/index` user's password.
 
-:doc:`/mariadb/doc/index` user password.
+Default: auto generated (``None``).
 
-wordpress:mysql_variant
-~~~~~~~~~~~~~~~~~~~~~~~
+.. _pillar-wordpress-db-name:
 
-Variation of the MySQL that you use.
+wordpress:db:name
+~~~~~~~~~~~~~~~~~
 
-Default: ``MariaDB``.
+:doc:`/mysql/doc/index` database name.
+
+Default: ``wordpress``.
+
+.. _pillar-wordpress-db-username:
+
+wordpress:db:username
+~~~~~~~~~~~~~~~~~~~~~
+
+:doc:`/mysql/doc/index` username.
+
+Default: ``wordpress``.
+
+.. _pillar-wordpress-public:
 
 wordpress:public
 ~~~~~~~~~~~~~~~~
@@ -110,17 +112,20 @@ Site appear in search engines.
 
 Default: ``1`` (yes).
 
+.. _pillar-wordpress-ssl:
+
 wordpress:ssl
 ~~~~~~~~~~~~~
 
 .. include:: /nginx/doc/ssl.inc
+
+.. _pillar-wordpress-ssl_redirect:
 
 wordpress:ssl_redirect
 ~~~~~~~~~~~~~~~~~~~~~~
 
 .. include:: /nginx/doc/ssl_redirect.inc
 
-wordpress:(workers|cheapers|idle|timeout)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. |deployment| replace:: wordpress
 
 .. include:: /uwsgi/doc/pillar.inc

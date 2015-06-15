@@ -6,13 +6,13 @@ include:
   - sudo
   - sudo.nrpe
 
-{{ passive_check("dhcp-server") }}
+{{ passive_check("dhcp.server") }}
 
 /etc/sudoers.d/dhcp-server:
   file:
     - managed
     - template: jinja
-    - source: salt://dhcp-server/nrpe/sudo.jinja2
+    - source: salt://dhcp/server/nrpe/sudo.jinja2
     - user: root
     - group: root
     - mode: 440

@@ -3,9 +3,9 @@
 {%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
   - doc
-  - dhcp-server
-  - dhcp-server.nrpe
-  - dhcp-server.diamond
+  - dhcp.server
+  - dhcp.server.nrpe
+  - dhcp.server.diamond
 
 test:
   cmd:
@@ -14,21 +14,21 @@ test:
   monitoring:
     - run_all_checks
     - require:
-      - sls: dhcp-server
-      - sls: dhcp-server.nrpe
-      - sls: dhcp-server.diamond
+      - sls: dhcp.server
+      - sls: dhcp.server.nrpe
+      - sls: dhcp.server.diamond
   diamond:
     - test
     - map:
         ProcessResources:
     {{ diamond_process_test('dhcp-server') }}
     - require:
-      - sls: dhcp-server
-      - sls: dhcp-server.nrpe
-      - sls: dhcp-server.diamond
+      - sls: dhcp.server
+      - sls: dhcp.server.nrpe
+      - sls: dhcp.server.diamond
   qa:
     - test
-    - name: dhcp-server
+    - name: dhcp.server
     - doc: {{ opts['cachedir'] }}/doc/output
     - require:
       - monitoring: test

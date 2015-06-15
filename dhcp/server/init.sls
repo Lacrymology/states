@@ -13,15 +13,15 @@ dhcp-server:
     - managed
     - name: /etc/dhcp/dhcpd.conf
     - template: jinja
-    - source: salt://dhcp-server/config.jinja2
+    - source: salt://dhcp/server/config.jinja2
     - user: root
     - group: dhcpd
     - mode: 440
     - context:
-        subnet: {{ salt["pillar.get"]("dhcp-server:subnet") }}
-        netmask: {{ salt["pillar.get"]("dhcp-server:netmask") }}
-        range: {{ salt["pillar.get"]("dhcp-server:range") }}
-        options: {{ salt["pillar.get"]("dhcp-server:options", {}) }}
+        subnet: {{ salt["pillar.get"]("dhcp_server:subnet") }}
+        netmask: {{ salt["pillar.get"]("dhcp_server:netmask") }}
+        range: {{ salt["pillar.get"]("dhcp_server:range") }}
+        options: {{ salt["pillar.get"]("dhcp_server:options", {}) }}
     - require:
       - pkg: dhcp-server
   service:
@@ -36,11 +36,11 @@ dhcp-server:
   file:
     - managed
     - template: jinja
-    - source: salt://dhcp-server/default.jinja2
+    - source: salt://dhcp/server/default.jinja2
     - user: root
     - group: root
     - mode: 440
     - context:
-        interface: {{ salt["pillar.get"]("dhcp-server:interface") }}
+        interface: {{ salt["pillar.get"]("dhcp_server:interface") }}
     - require:
       - pkg: dhcp-server

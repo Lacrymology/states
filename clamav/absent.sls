@@ -1,16 +1,17 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
 clamav-daemon:
-  pkg:
-    - purged
-    - name: clamav-base
-    - require:
-      - service: clamav-daemon
   service:
     - dead
     - names:
       - clamav-daemon
       - clamav-freshclam
+  pkg:
+    - purged
+    - name: clamav-base
+    - require:
+      - service: clamav-daemon
+      - file: /var/lib/clamav
   file:
     - absent
     - name: /etc/clamav
@@ -31,7 +32,7 @@ clamav-daemon:
   file:
     - absent
     - require:
-      - pkg: clamav-daemon
+      - service: clamav-daemon
 
 /etc/cron.daily/clamav_scan:
   file:

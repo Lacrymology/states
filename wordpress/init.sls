@@ -14,7 +14,7 @@ include:
   - uwsgi.php
   - web
 
-{%- set version = "3.5.2" %}
+{%- set version = "4.2.2" %}
 {%- set wordpressdir = "/usr/local/wordpress" %}
 {%- set dbuser = salt['pillar.get']('wordpress:db:username', 'wordpress') %}
 {%- set dbuserpass = salt['password.pillar']('wordpress:db:password', 10) %}
@@ -30,7 +30,7 @@ wordpress:
 {%- else %}
     - source: http://wordpress.org/wordpress-{{ version }}.tar.gz
 {%- endif %}
-    - source_hash: md5=90acae65199db7b33084ef36860d7f22
+    - source_hash: md5=c40d56cf85975482d5f5fa8c4b97d1d2
     - archive_format: tar
     - tar_options: z
     - if_missing: {{ wordpressdir }}

@@ -71,16 +71,16 @@ Example::
 postfix:mydestination
 ~~~~~~~~~~~~~~~~~~~~~
 
-List of canonical domains
-<http://www.postfix.org/VIRTUAL_README.html#canonical>
+List of `canonical domains
+<http://www.postfix.org/VIRTUAL_README.html#canonical>`_
 that this mail server will be final `destination
-<http://www.postfix.org/postconf.5.html#mydestination>__`.
+<http://www.postfix.org/postconf.5.html#mydestination>`_.
 Consult http://www.postfix.org/postconf.5.html#mydestination for more detail.
 
 To support multiple domains on one server, using virtual mailboxes will
 help without any problem compared to the canonical domain. List of domains
 (called `Hosted domains
-<http://www.postfix.org/VIRTUAL_README.html#canonical>`)
+<http://www.postfix.org/VIRTUAL_README.html#canonical>`_)
 can be specified in :ref:`pillar-postfix-domains`.
 
 Default: allow sending local mail to UNIX mailboxes

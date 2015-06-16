@@ -8,7 +8,7 @@ NodeJS
 Introduction
 ------------
 
-NodeJS is a platform built on `Chrome<http://www.google.com/chrome/>_`\'s :ref:`glossary-javascript`
+NodeJS is a platform built on `Chrome <http://www.google.com/chrome/>`_ :ref:`glossary-javascript`
 runtime for easily building fast, scalable network applications. Node.js uses an
 event-driven, non-blocking I/O model that makes it lightweight and efficient,
 perfect for data-intensive real-time applications that run across distributed

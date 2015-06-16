@@ -19,7 +19,7 @@ Here're the common steps to setup :doc:`index` client:
 
 2. Download the zip file that include a config file, secret key or
    `Certificate Authority
-   <http://en.wikipedia.org/wiki/Certificate_authority>_`
+   <http://en.wikipedia.org/wiki/Certificate_authority>`_
    and client certificate depends on which authentication mode. They are
    located in ``/etc/openvpn/{{ instance }}/clients`` on the :doc:`index`
    server.

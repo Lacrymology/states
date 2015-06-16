@@ -89,7 +89,7 @@ Assume that we have a Windows VM image named `E11 - Win7.ova`.
 
 2. Config machine to use host-only networking (optional)
 
-.. code-block::
+.. code-block:: bash
 
    vboxmanage modifyvm "Win7-IE11" --nic1 hostonly --hostonlyadapter1 tap1
 

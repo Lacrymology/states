@@ -87,7 +87,17 @@ Assume that we have a Windows VM image named `E11 - Win7.ova`.
 
    vboxmanage import "IE11 - Win7.ova" --vsys 0 --vmname "Win7-IE11" --memory 1024
 
-2. Start VM
+2. Config machine to use host-only networking (optional)
+
+.. code-block::
+
+   vboxmanage modifyvm "Win7-IE11" --nic1 hostonly --hostonlyadapter1 tap1
+
+Remember to use the appropriate network interface (``tap1`` in example
+above). It is a good practice to name the VM with the interface they use, for
+example ``tap1-win7-ie11``.
+
+3. Start VM
 
 .. code-block:: bash
 

@@ -3,6 +3,7 @@ include:
 {#TODO: choose java version base on what project use #}
   - java.7.jdk
   - local
+  - salt.minion.deps
 
 android_sdk:
   pkg:
@@ -28,6 +29,7 @@ android_sdk:
     - if_missing: /usr/local/android-sdk-linux
     - require:
       - file: /usr/local
+      - pkg: salt_minion_deps
   file:
     - append
     - name: /etc/environment
@@ -41,6 +43,8 @@ android_sdk:
 android_sdk_buildtools:
   cmd:
     - run
+    - env:
+      - ANDROID_HOME: /usr/local/android-sdk-linux
     - name: echo -e "y\n" | $ANDROID_HOME/tools/android update sdk -u -a -t 7 # 21.1.2
     - require:
       - file: android_sdk
@@ -48,6 +52,8 @@ android_sdk_buildtools:
 android_sdk_platform_api:
   cmd:
     - run
+    - env:
+      - ANDROID_HOME: /usr/local/android-sdk-linux
     - name: echo -e "y\n" | $ANDROID_HOME/tools/android update sdk -u -a -t 26 #  SDK Platform Android 5.0.1, API 21
     - require:
       - file: android_sdk

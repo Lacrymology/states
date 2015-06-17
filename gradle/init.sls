@@ -1,5 +1,6 @@
 include:
   - local
+  - salt.minion.deps
 
 gradle_archive:
   archive:
@@ -16,6 +17,7 @@ gradle_archive:
     - if_missing: /usr/local/gradle-2.4
     - require:
       - file: /usr/local
+      - pkg: salt_minion_deps
   file:
     - symlink
     - name: /usr/local/bin/gradle

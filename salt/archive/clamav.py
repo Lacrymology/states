@@ -126,7 +126,7 @@ class ClamavMirror(pysc.Application):
                 delta = source_timestamp - local_timestamp
                 logger.info("Local file %s is outdated %d seconds, download",
                             local, delta.total_seconds())
-                save(local, save, source_timestamp,
+                save(local, url, source_timestamp,
                      self.config['owner'], self.config['group'])
             elif local_timestamp > source_timestamp:
                 logger.info("URL '%s' timestamp is '%s' and local '%s' "
@@ -148,7 +148,7 @@ class ClamavMirror(pysc.Application):
                                        "even if both have same last modified,"
                                        " download again", local,
                                        stat.st_size, url, remote_size)
-                        save(local, save,
+                        save(local, url,
                              source_timestamp,
                              self.config['owner'], self.config['group'])
 

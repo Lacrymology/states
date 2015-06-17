@@ -24,25 +24,66 @@ import pysc
 
 logger = logging.getLogger(__name__)
 CHUNK_SIZE = 1024
+MAX_RETRIES = 5
+SLEEP_PERIOD = 30
 
 
-def save(local, stream, last_modified, owner, group):
+def _new_request(url, times=MAX_RETRIES, sleep=SLEEP_PERIOD):
+    '''
+    Download an ``url`` and retry ``times`` each after ``sleep``
+    if there is failure.
+    '''
+    req = None
+    exception = None
+    for i in xrange(times):
+        try:
+            req = requests.get(url, stream=True, timeout=10)
+            req.raise_for_status()
+            return req
+        except requests.exception.HTTPError:
+            logger.info('Retrying %d/%d times in next %d seconds',
+                        i, times, sleep)
+            time.sleep(sleep)
+
+    if req:
+        logger.error("Can't download '%s' code %d reason '%s'",
+                     url, req.status_code, req.reason)
+    else:
+        logger.error("Can't download '%s'. Got exception %s.",
+                     url, exception)
+    return False
+
+
+def save(local, url, last_modified, owner, group,
+         times=MAX_RETRIES, sleep=SLEEP_PERIOD):
     size = 0
     tmp = tempfile.NamedTemporaryFile(delete=False)
-    logger.debug("Create temp file %s", tmp.name)
-    with open(tmp.name, 'wb') as output:
-        for chunk in stream:
-            size += len(chunk)
-            output.write(chunk)
-    logger.debug("Wrote %d bytes to %s", size, tmp.name)
-    logger.debug("Move %s to %s", tmp.name, local)
-    os.chown(tmp.name,
-             pwd.getpwnam(owner).pw_uid,
-             grp.getgrnam(group).gr_gid,
-             )
-    os.rename(tmp.name, local)
-    mtime = time.mktime(last_modified.timetuple())
-    os.utime(local, (mtime, mtime))
+
+    for i in xrange(times):
+        try:
+            logger.debug("Create temp file %s", tmp.name)
+            with open(tmp.name, 'wb') as output:
+                stream = _new_request(url).iter_content(CHUNK_SIZE)
+                for chunk in stream:
+                    size += len(chunk)
+                    output.write(chunk)
+            logger.debug("Wrote %d bytes to %s", size, tmp.name)
+            logger.debug("Move %s to %s", tmp.name, local)
+            os.chown(tmp.name,
+                     pwd.getpwnam(owner).pw_uid,
+                     grp.getgrnam(group).gr_gid,
+                     )
+            logger.info(local)
+            os.rename(tmp.name, local)
+            mtime = time.mktime(last_modified.timetuple())
+            os.utime(local, (mtime, mtime))
+            return
+        except requests.exceptions.Timeout:
+            logger.info('Timeout, retry: %s %d/%d times in next %d seconds',
+                        url, i, times, sleep)
+            if i == times - 1:
+                raise
+            time.sleep(sleep)
 
 
 class ClamavMirror(pysc.Application):
@@ -57,40 +98,12 @@ class ClamavMirror(pysc.Application):
 
     logger = logger
 
-    def _download(self, url, times=5, sleep=30):
-        '''
-        Download an ``url`` and retry ``times`` each after ``sleep``
-        if there is failure.
-        '''
-        req = None
-        exception = None
-        for i in xrange(1, times + 1):
-            try:
-                req = requests.get(url, stream=True, timeout=10)
-                if req.ok:
-                    return req
-                else:
-                    raise requests.ConnectionError
-            except requests.ConnectionError as e:
-                exception = e
-                self.logger.info('Retrying %d/%d times in next %d seconds',
-                                 i, times, sleep)
-                time.sleep(sleep)
-
-        if req:
-            self.logger.error("Can't download '%s' code %d reason '%s'",
-                              url, req.status_code, req.reason)
-        else:
-            self.logger.error("Can't download '%s'. Got exception %s.",
-                              url, exception)
-        return False
-
     def mirror_file(self, filename):
         http_header_size = 'content-length'
         url = 'http://%s/%s' % (self.config['mirror'], filename)
         logger.debug("Going to check %s", url)
 
-        req = self._download(url)
+        req = _new_request(url)
         if not req:
             return
 
@@ -104,7 +117,7 @@ class ClamavMirror(pysc.Application):
             stat = os.stat(local)
         except OSError:
             logger.info("File %s don't already exist, download.", filename)
-            save(local, req.iter_content(CHUNK_SIZE), source_timestamp,
+            save(local, url, source_timestamp,
                  self.config['owner'], self.config['group'])
         else:
             local_timestamp = datetime.datetime.fromtimestamp(
@@ -113,7 +126,7 @@ class ClamavMirror(pysc.Application):
                 delta = source_timestamp - local_timestamp
                 logger.info("Local file %s is outdated %d seconds, download",
                             local, delta.total_seconds())
-                save(local, req.iter_content(CHUNK_SIZE), source_timestamp,
+                save(local, url, source_timestamp,
                      self.config['owner'], self.config['group'])
             elif local_timestamp > source_timestamp:
                 logger.info("URL '%s' timestamp is '%s' and local '%s' "
@@ -135,7 +148,7 @@ class ClamavMirror(pysc.Application):
                                        "even if both have same last modified,"
                                        " download again", local,
                                        stat.st_size, url, remote_size)
-                        save(local, req.iter_content(CHUNK_SIZE),
+                        save(local, url,
                              source_timestamp,
                              self.config['owner'], self.config['group'])
 

@@ -51,5 +51,6 @@ Content
     :glob:
 
     *
+    ../server/doc/index
 
 .. _FreshClam: https://packages.debian.org/sid/clamav-freshclam

@@ -9,8 +9,8 @@ include:
   - amavis.nrpe
   - amavis.diamond
   - amavis.clamav
-  - clamav.nrpe
-  - clamav.diamond
+  - clamav.server.nrpe
+  - clamav.server.diamond
   - doc
   - dovecot
   - dovecot.backup
@@ -33,8 +33,8 @@ include:
 - sls: amavis.nrpe
 - sls: amavis.diamond
 {# - sls: amavis.clamav this formula only extend this requirement fail #}
-- sls: clamav.nrpe
-- sls: clamav.diamond
+- sls: clamav.server.nrpe
+- sls: clamav.server.diamond
 - sls: dovecot
 - sls: dovecot.backup
 - sls: dovecot.backup.nrpe

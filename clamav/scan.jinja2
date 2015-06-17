@@ -30,7 +30,7 @@ done
 scan_list=$(find / -maxdepth 1 -mindepth 1 $exclude_string | xargs)
 
 retval=""
-clamdscan --fdpass --quiet $scan_list | logger -t clamdscan -p local0.info; \
+clamdscan {% if salt['pillar.get']('clamav:mode', 'local') == "local" %}--fdpass {% endif %}--quiet $scan_list | logger -t clamdscan -p local0.info; \
     retval="$?" || true
 
 case "$retval" in

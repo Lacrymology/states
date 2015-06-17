@@ -4,8 +4,8 @@ include:
   - amavis.clamav
   - amavis.diamond
   - amavis.nrpe
-  - clamav.nrpe
-  - clamav.diamond
+  - clamav.server.nrpe
+  - clamav.server.diamond
 
 test:
   monitoring:

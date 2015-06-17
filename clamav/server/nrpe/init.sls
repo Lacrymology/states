@@ -4,8 +4,8 @@
 include:
   - apt.nrpe
   - bash.nrpe
-  - cron
+  - cron.nrpe
   - nrpe
   - rsyslog.nrpe
 
-{{ passive_check('clamav') }}
+{{ passive_check('clamav.server') }}

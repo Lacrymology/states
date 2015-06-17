@@ -1,18 +1,18 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
 include:
-  - clamav
-  - clamav.nrpe
-  - clamav.diamond
+  - clamav.server
+  - clamav.server.nrpe
+  - clamav.server.diamond
   - doc
 
 {%- from 'cron/macro.jinja2' import test_cron with context %}
 {%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 
 {%- call test_cron() %}
-- sls: clamav
-- sls: clamav.nrpe
-- sls: clamav.diamond
+- file: /usr/local/bin/clamav-scan.sh
+- sls: clamav.server.nrpe
+- sls: clamav.server.diamond
 {%- endcall %}
 
 test:
@@ -26,15 +26,26 @@ test:
     - test
     - map:
         ProcessResources:
-    {{ diamond_process_test('clamav') }}
-    {{ diamond_process_test('freshclam') }}
+          {{ diamond_process_test('clamav') }}
+          {{ diamond_process_test('freshclam') }}
     - require:
-      - sls: clamav
-      - sls: clamav.diamond
+      - service: clamav-daemon
+      - sls: clamav.server.diamond
   qa:
-    - test
+    - test_pillar
     - name: clamav
-    - doc: {{ opts['cachedir'] }}/doc/output
+    - additional:
+      - clamav.server
+    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - require:
+      - monitoring: test
+      - cmd: doc
+
+test_clamav_server:
+  qa:
+    - test_monitor
+    - name: clamav.server
+    - monitor_doc: {{ opts['cachedir'] }}/doc/output
     - require:
       - monitoring: test
       - cmd: doc

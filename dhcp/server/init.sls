@@ -22,6 +22,7 @@ dhcp-server:
         netmask: {{ salt["pillar.get"]("dhcp_server:netmask") }}
         range: {{ salt["pillar.get"]("dhcp_server:range") }}
         options: {{ salt["pillar.get"]("dhcp_server:options", {}) }}
+        reservations: {{ salt["pillar.get"]("dhcp_server:reservations", {}) }}
     - require:
       - pkg: dhcp-server
   service:

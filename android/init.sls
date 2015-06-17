@@ -10,7 +10,7 @@ android_sdk:
     - name: /usr/local/
 {%- set files_archive = salt['pillar.get']('files_archive', False) %}
 {%- if files_archive %}
-    - source: http://dl.google.com/android/android-sdk_r24.3.2-linux.tgz
+    - source: {{ files_archive }}/mirror/android-sdk_r24.3.2-linux.tgz
 {%- else %}
     - source: http://dl.google.com/android/android-sdk_r24.3.2-linux.tgz
 {%- endif %}

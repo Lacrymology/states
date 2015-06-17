@@ -7,7 +7,7 @@ gradle_archive:
     - name: /usr/local/
 {%- set files_archive = salt['pillar.get']('files_archive', False) %}
 {%- if files_archive %}
-    - source: https://services.gradle.org/distributions/gradle-2.4-bin.zip
+    - source: {{ files_archive }}/mirror/gradle-2.4-bin.zip
 {%- else %}
     - source: https://services.gradle.org/distributions/gradle-2.4-bin.zip
 {%- endif %}

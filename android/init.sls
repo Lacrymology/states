@@ -5,6 +5,14 @@ include:
   - local
 
 android_sdk:
+  pkg:
+    - installed
+    - pkgs:
+      - libncurses5:i386
+      - libstdc++6:i386
+      - zlib1g:i386
+    - require:
+      - cmd: apt_sources
   archive:
     - extracted
     - name: /usr/local/
@@ -25,6 +33,9 @@ android_sdk:
     - name: /etc/environment
     - text: |
         export ANDROID_HOME="/usr/local/android-sdk-linux"
+    - require:
+      - archive: android_sdk
+      - pkg: android_sdk
 
 {# TODO: find a way to auto choosing target base on version #}
 android_sdk_buildtools:

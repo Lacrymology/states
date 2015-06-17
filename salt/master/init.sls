@@ -246,20 +246,12 @@ salt-master:
       - cmd: salt
 {#- PID file owned by root, no need to manage #}
   pkg:
-    - installed
+    - latest
     - skip_verify: True
     - require:
       - cmd: salt
-{%- if salt['pkg.version']('salt-master') not in ('', pkg_version) %}
-      - pkg: salt_master_old_version
 
 {{ manage_upstart_log('salt-master') }}
-
-salt_master_old_version:
-  pkg:
-    - removed
-    - name: salt-master
-{%- endif %}
 
 salt_master_cron_highstate:
   file:

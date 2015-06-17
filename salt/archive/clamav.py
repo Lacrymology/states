@@ -40,7 +40,7 @@ def _new_request(url, times=MAX_RETRIES, sleep=SLEEP_PERIOD):
             req = requests.get(url, stream=True, timeout=10)
             req.raise_for_status()
             return req
-        except requests.exception.HTTPError:
+        except (requests.exceptions.HTTPError, requests.exceptions.Timeout):
             logger.info('Retrying %d/%d times in next %d seconds',
                         i, times, sleep)
             time.sleep(sleep)

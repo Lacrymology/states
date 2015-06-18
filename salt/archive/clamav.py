@@ -14,6 +14,7 @@ import logging
 import os
 import pwd
 import subprocess as spr
+import sys
 import tempfile
 import time
 
@@ -42,7 +43,7 @@ def _new_request(url, times=MAX_RETRIES, sleep=SLEEP_PERIOD):
             return req
         except (requests.exceptions.HTTPError, requests.exceptions.Timeout):
             logger.info('Retrying %d/%d times in next %d seconds',
-                        i, times, sleep)
+                        i + 1, times, sleep)
             time.sleep(sleep)
 
     if req:
@@ -63,6 +64,10 @@ def save(local, url, last_modified, owner, group,
         try:
             logger.debug("Create temp file %s", tmp.name)
             with open(tmp.name, 'wb') as output:
+                req = _new_request(url)
+                if not req:
+                    logger.error("Max retries exceeded, exiting.")
+                    sys.exit(1)
                 stream = _new_request(url).iter_content(CHUNK_SIZE)
                 for chunk in stream:
                     size += len(chunk)

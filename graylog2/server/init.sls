@@ -3,6 +3,7 @@
 {%- from 'macros.jinja2' import manage_pid with context -%}
 {%- from 'upstart/rsyslog.jinja2' import manage_upstart_log with context -%}
 {%- from "upstart/absent.sls" import upstart_absent with context %}
+{%- set files_archive = salt['pillar.get']('files_archive', False) %}
 include:
   - python
   - apt
@@ -223,3 +224,15 @@ import_graylog2_syslog:
       - process: graylog-server
       - module: requests
 {%- endfor %}
+
+{%- set mirror = files_archive|replace('file://', '')|replace('https://', 'http://') if files_archive else "http://archive.robotinfra.com" %}
+{%- set alarmcallback_jabber = mirror ~ "/mirror/alarmcallback-jabber-1.1.0-SNAPSHOT.deb" %}
+graylog-alarmcallback-jabber:
+  pkg:
+    - installed
+    - sources:
+      - graylog-alarmcallback-jabber: {{ alarmcallback_jabber }}
+    - require:
+      - cmd: apt_sources
+    - watch_in:
+      - service: graylog-server

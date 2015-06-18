@@ -1,6 +1,7 @@
 include:
   - local
   - salt.minion.deps
+  - java.7.jdk
 
 gradle_archive:
   archive:
@@ -24,3 +25,4 @@ gradle_archive:
     - target: /usr/local/gradle-2.4/bin/gradle
     - require:
       - archive: gradle_archive
+      - pkg: jdk-7

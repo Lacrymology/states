@@ -1,6 +1,5 @@
 include:
   - gradle
-{#TODO: choose java version base on what project use #}
   - java.7.jdk
   - local
   - salt.minion.deps
@@ -39,21 +38,21 @@ android_sdk:
       - archive: android_sdk
       - pkg: android_sdk
 
-{# TODO: find a way to auto choosing target base on version #}
 android_sdk_buildtools:
   cmd:
     - run
     - env:
       - ANDROID_HOME: /usr/local/android-sdk-linux
-    - name: echo -e "y\n" | $ANDROID_HOME/tools/android update sdk -u -a -t 7 # 21.1.2
+    - name: echo -e "y\n" | $ANDROID_HOME/tools/android update sdk -u -a -t {{ salt['pillar.get]('android:buildtools_index') }}
     - require:
       - file: android_sdk
+
 
 android_sdk_platform_api:
   cmd:
     - run
     - env:
       - ANDROID_HOME: /usr/local/android-sdk-linux
-    - name: echo -e "y\n" | $ANDROID_HOME/tools/android update sdk -u -a -t 26 #  SDK Platform Android 5.0.1, API 21
+    - name: echo -e "y\n" | $ANDROID_HOME/tools/android update sdk -u -a -t {{ salt['pillar.get]('android:sdk_platform_index') }}
     - require:
       - file: android_sdk

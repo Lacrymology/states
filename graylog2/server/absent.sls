@@ -25,7 +25,6 @@ extend:
     - require:
       - service: graylog-server
 
-
 graylog-alarmcallback-jabber:
   pkg:
     - purged

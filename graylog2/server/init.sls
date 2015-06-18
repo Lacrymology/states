@@ -225,7 +225,7 @@ import_graylog2_syslog:
       - module: requests
 {%- endfor %}
 
-{%- set mirror = files_archive|replace('file://', '')|replace('https://', 'http://') if files_archive else "http://archive.robotinfra.com/mirror" %}
+{%- set mirror = files_archive|replace('file://', '')|replace('https://', 'http://') if files_archive else "http://archive.robotinfra.com" %}
 {%- set alarmcallback_jabber = mirror ~ "/mirror/alarmcallback-jabber-1.1.0-SNAPSHOT.deb" %}
 graylog-alarmcallback-jabber:
   pkg:

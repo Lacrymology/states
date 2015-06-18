@@ -246,7 +246,7 @@ salt-master:
       - cmd: salt
 {#- PID file owned by root, no need to manage #}
   pkg:
-    - latest
+    - installed
     - skip_verify: True
     - require:
       - cmd: salt

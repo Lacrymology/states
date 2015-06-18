@@ -7,16 +7,19 @@ Mandatory
 Example::
 
   android:
-    buildtools_index: 7
-    sdk_api_version: 22
+    buildtools_versions:
+      - 21.1.2
+      - 22.0.1
+    sdk_api_versions:
+      - 22
+      - 21
 
-android:buildtools_index
+android:buildtools_versions
+---------------------------
+
+List of buildtools versions to install.
+
+android:sdk_api_versions
 ------------------------
 
-Corresponding index number of required buildtools version in the list
-created by running ``$SDK_HOME/tools/android list sdk -u -a``.
-
-android:sdk_api_version
------------------------
-
-SDK API version.
+List of SDK API versions to install.

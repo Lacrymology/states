@@ -38,21 +38,16 @@ android_sdk:
       - archive: android_sdk
       - pkg: android_sdk
 
-android_sdk_buildtools:
+android_sdk_buildtools_and_api:
   cmd:
     - run
     - env:
       - ANDROID_HOME: /usr/local/android-sdk-linux
-    - name: echo y | $ANDROID_HOME/tools/android update sdk -u -a -t {{ salt['pillar.get]('android:buildtools_index') }}
-    - require:
-      - file: android_sdk
-
-
-android_sdk_platform_api:
-  cmd:
-    - run
-    - env:
-      - ANDROID_HOME: /usr/local/android-sdk-linux
-    - name: echo y | $ANDROID_HOME/tools/android update sdk -u -a -t {{ salt['pillar.get]('android:sdk_api_version') }}
+    - name: echo y | $ANDROID_HOME/tools/android update sdk --no-ui --all --filter {% for buildtools_ver in salt['pillar.get']('android:buildtools_versions') -%}
+      build-tools-{{ buildtools_ver }},
+      {%- endfor -%}
+      {%- for api_ver in salt['pillar.get']('android:sdk_api_versions') -%}
+      android-{{ api_ver }},
+      {%- endfor %}
     - require:
       - file: android_sdk

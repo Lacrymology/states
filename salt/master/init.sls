@@ -38,7 +38,7 @@ include:
     - mode: 555
     - require_in:
       - file: /etc/salt/master
-{%- endfor -%}
+{%- endfor %}
 
 {%- for dirname in ('create', 'destroy', 'job', 'reaction') %}
 /srv/reactor/{{ dirname }}:
@@ -202,11 +202,7 @@ salt-master-{{ prefix }}.py:
     - require:
       - file: /usr/local
       - module: pysc
-{%- endfor -%}
-
-{%- from "macros.jinja2" import salt_version,salt_deb_version with context %}
-{%- set version = salt_version() %}
-{%- set pkg_version =  salt_deb_version() %}
+{%- endfor %}
 
 /etc/salt/master:
   file:

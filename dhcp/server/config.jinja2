@@ -13,3 +13,10 @@ subnet {{ subnet }} netmask {{ netmask }} {
   option {{ option }} {{ value }};
 {%- endfor %}
 }
+
+{%- for mac, ip in reservations.iteritems() %}
+host reservation-{{ loop.index }} {
+  hardware ethernet {{ mac }};
+  fixed-address {{ ip }};
+}
+{%- endfor %}

@@ -43,7 +43,7 @@ android_sdk_buildtools:
     - run
     - env:
       - ANDROID_HOME: /usr/local/android-sdk-linux
-    - name: echo -e "y\n" | $ANDROID_HOME/tools/android update sdk -u -a -t {{ salt['pillar.get]('android:buildtools_index') }}
+    - name: echo y | $ANDROID_HOME/tools/android update sdk -u -a -t {{ salt['pillar.get]('android:buildtools_index') }}
     - require:
       - file: android_sdk
 
@@ -53,6 +53,6 @@ android_sdk_platform_api:
     - run
     - env:
       - ANDROID_HOME: /usr/local/android-sdk-linux
-    - name: echo -e "y\n" | $ANDROID_HOME/tools/android update sdk -u -a -t {{ salt['pillar.get]('android:sdk_platform_index') }}
+    - name: echo y | $ANDROID_HOME/tools/android update sdk -u -a -t {{ salt['pillar.get]('android:sdk_platform_index') }}
     - require:
       - file: android_sdk

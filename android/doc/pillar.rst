@@ -14,10 +14,14 @@ Example::
       - 22
       - 21
 
+.. _pillar-android-buildtools_versions:
+
 android:buildtools_versions
 ---------------------------
 
 List of buildtools versions to install.
+
+.. _pillar-android-sdk_api_versions:
 
 android:sdk_api_versions
 ------------------------

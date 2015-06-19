@@ -22,7 +22,7 @@
 
 {{ deployment }}_uwsgi_ping:
   description: {{ deployment|capitalize }} uWSGI Ping
-  command: sudo /usr/lib/nagios/plugins/check_uwsgi_nostderr {{ deployment }}
+  command: sudo -u www-data /usr/lib/nagios/plugins/check_uwsgi_nostderr {{ deployment }}
   timeout: 55
   dependencies:
     - {{ deployment }}_uwsgi_worker

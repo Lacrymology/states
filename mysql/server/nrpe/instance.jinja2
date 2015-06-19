@@ -1,6 +1,6 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
-{%- macro mysql_instance(formula, dbname, password=None, username=None) -%}
+{%- macro mysql_instance(formula, dbname, password=None, username=None, check_empty=True) -%}
 {#- password args is not used anymore but turned to kwarg for backward compatible #}
 {%- if not username is defined %}
 {%- set username = dbname %}
@@ -18,9 +18,10 @@
   dependencies:
     - mysql_port
 
-{{ dbname }}_mysql_empty:
+{%- if check_empty %}
+{{ dbname }}_mysql_not_empty:
   description: {{ formula|capitalize }} MySQL Database Empty{{ dbname }}
-  command: /usr/lib/nagios/plugins/check_mysql_query.py --formula={{ formula }} --check={{ dbname }}_mysql_empty
+  command: /usr/lib/nagios/plugins/check_mysql_query.py --formula={{ formula }} --check={{ dbname }}_mysql_not_empty
   arguments:
     timeout: 15 {#- 15 seconds to run statement  #}
     passwd: {{ password }}
@@ -31,4 +32,16 @@
     critical: "1:"
   dependencies:
     - {{ dbname }}_mysql
+{%- endif %}
 {%- endmacro %}
+
+{%- macro mysql_instance_prefix(deployment, prefix=None, check_empty=True) -%}
+    {%- if not prefix -%}
+        {%- set prefix = deployment -%}
+    {%- endif %}
+    {%- set formula = deployment %}
+    {%- set dbname = salt['pillar.get'](prefix + ':db:name', deployment)  %}
+    {%- set password = salt['password.pillar'](prefix + ':db:password', 10) %}
+    {%- set username = salt['pillar.get'](prefix + ':db:username', deployment)  %}
+    {{ mysql_instance(formula, dbname, password, username, check_empty) }}
+{%- endmacro  %}

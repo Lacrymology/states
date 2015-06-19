@@ -201,12 +201,13 @@ def run_check(check_name, checks=None):
         return ret
 
     cmd = checks[check_name]['command']
-    # nagios user may not have permission to run sudo with --help
-    verbose_cmd = re.sub(r'^sudo\s+', '', cmd) + ' --help'
-    outputverbose = __salt__['cmd.run_all'](verbose_cmd, runas='nagios')
-    if ' -v,' in outputverbose['stdout']:
-        # yeah, the check supports verbose, let be verbose
-        cmd += ' -vv'
+    if __salt__['pillar.get']('__test__', False):
+        # nagios user may not have permission to run sudo with --help
+        verbose_cmd = re.sub(r'^sudo\s+', '', cmd) + ' --help'
+        outputverbose = __salt__['cmd.run_all'](verbose_cmd, runas='nagios')
+        if ' -v,' in outputverbose['stdout']:
+            # yeah, the check supports verbose, let be verbose
+            cmd += ' -vv'
 
     output = __salt__['cmd.run_all'](cmd, runas='nagios')
 

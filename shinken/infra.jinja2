@@ -2,6 +2,8 @@
 
 # {{ salt['pillar.get']('message_do_not_modify') }}
 
+{%- from 'macros.jinja2' import dict_default with context %}
+
 {%- set mine = salt['mine.get']('*', 'monitoring.data') %}
 {%- set xmpp = salt["pillar.get"]("shinken:xmpp", False) %}
 
@@ -323,7 +325,8 @@ define service {
     passive_checks_enabled 0
     check_freshness 0
         {%- endif %}
-    {% for dependency in check.data.get('dependencies', []) -%}
+    {{ dict_default(check.data, 'dependencies', []) }}
+    {% for dependency in check.data['dependencies'] -%}
         {%- if loop.first %}service_dependencies {% endif -%}
         ,{{ dependency.shinken_service_description() }}
         {%- if not loop.last %},{% endif -%}

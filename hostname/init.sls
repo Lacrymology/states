@@ -7,7 +7,7 @@ hostname:
     - name: /etc/hostname
     - user: root
     - group: root
-    - mode: 444
+    - mode: 644
     - contents: {{ grains['id'] }}
   host: {#- API #}
     - present

@@ -33,7 +33,7 @@ include:
     - template: jinja
     - source: salt://uwsgi/nrpe/nostderr_wrap.jinja2
     - mode: 550
-    - user: www-data
+    - user: root
     - group: www-data
     - require:
       - file: /usr/lib/nagios/plugins/check_uwsgi
@@ -44,7 +44,7 @@ include:
     - template: jinja
     - source: salt://uwsgi/nrpe/check.jinja2
     - mode: 550
-    - user: www-data
+    - user: root
     - group: www-data
     - require:
       - module: nrpe-virtualenv

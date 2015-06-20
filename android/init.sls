@@ -53,3 +53,10 @@ android_sdk_buildtools_and_api:
       {%- endfor %}
     - require:
       - file: android_sdk
+    - unless: {% for buildtools_ver in salt['pillar.get']('android:buildtools_versions') -%}
+      test -d /usr/local/android-sdk-linux/build-tools/{{ buildtools_ver }} &&
+              {%- endfor -%}
+              {%- for api_ver in salt['pillar.get']('android:sdk_api_versions') -%}
+      test -d /usr/local/android-sdk-linux/platforms/android-{{ api_ver }}
+                {%- if not loop.last %}&&{%- endif -%}
+              {%- endfor %}

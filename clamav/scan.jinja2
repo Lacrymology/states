@@ -29,18 +29,20 @@ done
 
 scan_list=$(find / -maxdepth 1 -mindepth 1 $exclude_string | xargs)
 
+# empty the last scan result before scanning
+> "$status_file"
+
 retval=""
-clamdscan {% if salt['pillar.get']('clamav:mode', 'local') == "local" %}--fdpass {% endif %}--quiet $scan_list | logger -t clamdscan -p local0.info; \
+clamdscan {% if salt['pillar.get']('clamav:mode', 'local') == "local" %}--fdpass {% endif %}--quiet $scan_list -l "$status_file"; \
     retval="$?" || true
 
 case "$retval" in
-    0 )  # no virus found
-        touch "$status_file"
+    0 ) # no virus found
         exit 0 ;;
-    1 )  # virus(es) found
+    1 ) # virus(es) found
         echo 'Virus(es) found!' | logger -t clamdscan -p local0.error
         exit 1 ;;
-    2 )  # an error occured
+    2 ) # an error occured
         echo 'An error occured!' | logger -t clamdscan -p local0.error
         exit 2 ;;
 esac

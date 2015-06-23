@@ -35,3 +35,6 @@ extend:
     file:
       - require:
         - pkg: php-dev
+    cmd:
+      - watch:
+        - pkg: php-dev

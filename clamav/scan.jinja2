@@ -20,29 +20,29 @@ locking_script
 log_start_script "$@"
 trap "log_stop_script \$?" EXIT
 
-exclude_list=('sys' 'dev' 'proc' 'run')
+exclude_list=('/sys' '/dev' '/proc' '/run')
 
 exclude_string=""
 for exclude in "${exclude_list[@]}"; do
-    exclude_string="$exclude_string""! -name $exclude "
+    exclude_string="${exclude_string}! ( -path $exclude -prune ) "
 done
 
-scan_list=$(find / -maxdepth 1 -mindepth 1 $exclude_string | xargs)
+find / $exclude_string {% for path in salt['pillar.get']('clamav:exclude_paths', []) %}! \( -path {{ path }} -prune \){% if not loop.last %} {% endif %}{% endfor %} -type f > /tmp/clamav_file_list.$$
 
 # empty the last scan result before scanning
 > "$status_file"
 
-retval=""
-clamdscan {% if salt['pillar.get']('clamav:mode', 'local') == "local" %}--fdpass {% endif %}--quiet $scan_list -l "$status_file"; \
-    retval="$?" || true
+retval=0
+clamdscan {% if salt['pillar.get']('clamav:mode', 'local') == "local" %}--fdpass {% endif %}--quiet -f /tmp/clamav_file_list.$$ -l "$status_file" || retval=$?
+rm -f /tmp/clamav_file_list.$$
 
 case "$retval" in
     0 ) # no virus found
         exit 0 ;;
     1 ) # virus(es) found
-        echo 'Virus(es) found!' | logger -t clamdscan -p local0.error
+        grep 'FOUND' "$status_file" | logger -s -t clamdscan -p local0.error
         exit 1 ;;
     2 ) # an error occured
-        echo 'An error occured!' | logger -t clamdscan -p local0.error
+        grep 'WARNING' "$status_file" | logger -s -t clamdscan -p local0.error
         exit 2 ;;
 esac

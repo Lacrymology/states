@@ -1,10 +1,9 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
-{# only for ubuntu precise #}
 php:
   file:
     - absent
-    - name: /etc/apt/sources.list.d/lucid-php5.list
+    - name: /etc/apt/sources.list.d/php.list
 {#-
   Can't uninstall the following as they're used elsewhere
   pkg:
@@ -29,4 +28,9 @@ php:
     - absent
     - require:
       - pkgrepo: php
-{# end for ubuntu precise #}
+
+php-5.6:
+  cmd:
+    - run
+    - name: apt-key del E5267A6C
+    - onlyif: apt-key list | grep -q E5267A6C

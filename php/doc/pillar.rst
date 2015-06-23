@@ -10,6 +10,30 @@ Example::
       max_input_vars: 1000
       error_reporting: E_ALL & ~E_DEPRECATED & ~E_STRICT
 
+
+php:version
+~~~~~~~~~~~
+
+Which version of :doc:`index` to install.
+
+Possible values:
+
+* Precise
+
+  * ``5.4`` (default)
+  * ``5.6``
+
+* Trusty
+
+  * ``5.5`` (default)
+  * ``5.6``
+
+Default: depends on Ubuntu release (``None``).
+
+.. warning::
+
+   Switching between :doc:`index` versions is not supported.
+
 .. _pillar-php-max_input_vars:
 
 php:max_input_vars

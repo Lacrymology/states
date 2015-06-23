@@ -39,7 +39,7 @@ Example::
 salt_cloud:profiles
 ~~~~~~~~~~~~~~~~~~~
 
-Dict of {profile_name: {attribute_name: value}}, each dict contains data
+Dict of ``{profile_name: {attribute_name: value}}``, each dict contains data
 to configure a salt-cloud profile.
 
 Consult http://docs.saltstack.com/en/latest/topics/cloud/index.html#salt-cloud
@@ -52,7 +52,7 @@ Default: ``{}``.
 salt_cloud:providers
 ~~~~~~~~~~~~~~~~~~~~
 
-Dict of {provider_name: {attribute_name: value}}, each dict contains data
+Dict of ``{provider_name: {attribute_name: value}}``, each dict contains data
 to configure a salt-cloud provider.
 
 Consult http://docs.saltstack.com/en/latest/topics/cloud/index.html#salt-cloud

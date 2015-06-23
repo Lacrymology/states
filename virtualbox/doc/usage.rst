@@ -69,14 +69,14 @@ Remote installing in a headless server
 
    Now the VM can be installed as normal.
 
-Create VM from virtual disk image
----------------------------------
+Create VM from Appliance
+------------------------
 
 Installing VM from ISO file can be time consuming, developer can export the VM
-from his development machine (laptop, desktop) and import in virtualbox host
+from their development machine (laptop, desktop) and import in :doc:`index` host
 instead.
 
-For Windows, Microsofts provides `VM images <http://dev.modern.ie/tools/vms/>`_
+For Windows, Microsoft provides `VM images <http://dev.modern.ie/tools/vms/>`_
 for testing purpose.
 
 Assume that we have a Windows VM image named `E11 - Win7.ova`.

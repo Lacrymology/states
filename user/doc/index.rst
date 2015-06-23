@@ -3,7 +3,7 @@
    Maintainer: Diep Pham <favadi@robotinfra.com>
 
 
-user
+User
 ====
 
 Users creation and management.

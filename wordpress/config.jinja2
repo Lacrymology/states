@@ -17,7 +17,8 @@
 
   @package WordPress
 #}
-
+{%- set scheme = 'https' if ssl else 'http' %}
+define('WP_SITEURL', '{{ scheme ~ "://" ~ salt['pillar.get']('wordpress:hostnames')[0] }}');
 {#-
  The name of the database for WordPress
 #}

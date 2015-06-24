@@ -131,6 +131,7 @@ wordpress_uwsgi:
       dbuserpass: {{ dbuserpass }}
       dbname: {{ dbname }}
       dbuser: {{ dbuser }}
+      ssl: {{ ssl }}
 
 php5-mysql:
   pkg:

@@ -1,6 +1,5 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
-{%- from "os.jinja2" import os with context %}
 {%- from "php/map.jinja2" import php with context %}
 
 include:

@@ -120,6 +120,8 @@ Example::
   clamav:
     server_minion_id: clamav
     port: 3310
+    exclude_paths:
+      - /tmp/clamav
 
 .. _pillar-clamav-server_minion_id:
 
@@ -138,3 +140,14 @@ Which port ``clamd`` daemon is listening to.
 Default: ``3310``
 
 These are used only if :doc:`index` is running in ``network`` mode.
+
+.. _pillar-clamav-exclude_paths:
+
+clamav:exclude_paths
+~~~~~~~~~~~~~~~~~~~~
+
+A list of excluded directories besides ``/dev``, ``/proc``, ``/run``, ``/sys``.
+
+Default: do not exclude other directories (``[]``).
+
+Only used if :ref:`pillar-daily_scan` is ``True``.

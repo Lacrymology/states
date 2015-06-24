@@ -4,7 +4,7 @@ include:
   - diamond
   - rsyslog.diamond
 
-statsd_diamond_resources:
+statsdaemon_diamond_resources:
   file:
     - accumulated
     - name: processes
@@ -14,4 +14,4 @@ statsd_diamond_resources:
     - text:
       - |
         [[statsd]]
-        cmdline = ^\/usr\/local\/statsd\/bin\/python \/usr\/local\/statsd\/bin\/pystatsd\-server
+        name = statsdaemon

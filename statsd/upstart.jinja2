@@ -12,4 +12,6 @@ respawn
 respawn limit 10 5
 umask 022
 
-exec /usr/local/statsd/bin/pystatsd-server --transport graphite --flush-interval 10000 --name {{ grains['id'] }} --graphite-host {{ salt['pillar.get']('graphite_address', False) }} --gauges-prefix '{{ grains['id'] }}.stats' --counters-prefix '{{ grains['id'] }}.stats' --timers-prefix '{{ grains['id'] }}.stats' --pidfile /var/run/pystatsd.pid {% if salt['pillar.get']('debug', False) %}--debug {% endif %}| logger -t "statsd" -p debug
+setuid nobody
+
+exec /usr/local/statsdaemon/statsdaemon {% if salt['pillar.get']('debug', False) %}--debug {% endif %} -graphite={{ salt['pillar.get']('graphite_address', False) }}:2003 -prefix="{{ grains['id'] }}.stats." | logger -t "statsdaemon" -p debug

@@ -4,10 +4,10 @@ Monitor
 Mandatory
 ---------
 
-.. _monitor-statsd_procs:
+.. _monitor-statsdaemon_procs:
 
-statsd_procs
-~~~~~~~~~~~~
+statsdaemon_procs
+~~~~~~~~~~~~~~~~~
 
 :doc:`index` daemon process listens for statistics, like counters and timers,
 sent over :ref:`glossary-UDP` or :ref:`glossary-TCP` and sends aggregates to
@@ -15,12 +15,12 @@ one or more pluggable backend services.
 
 .. include:: /nrpe/doc/check_procs.inc
 
-.. _monitor-statsd_logger:
+.. _monitor-statsdaemon_logger:
 
-statsd_logger
-~~~~~~~~~~~~~
+statsdaemon_logger
+~~~~~~~~~~~~~~~~~~
 
 Process which does logging for :doc:`index`. It pipelined with
-:ref:`monitor-statsd_procs` and sends log to :doc:`/rsyslog/doc/index`.
+:ref:`monitor-statsdaemon_procs` and sends log to :doc:`/rsyslog/doc/index`.
 
 .. include:: /nrpe/doc/check_procs.inc

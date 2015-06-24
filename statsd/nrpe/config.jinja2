@@ -2,12 +2,12 @@
 
 # {{ salt['pillar.get']('message_do_not_modify') }}
 
-statsd_procs:
-  description: StatsD Daemon
-  command: '/usr/lib/nagios/plugins/check_procs -C pystatsd-server -c 1:1 -u root'
+statsdaemon_procs:
+  description: Statsdaemon Daemon
+  command: '/usr/lib/nagios/plugins/check_procs -C statsdaemon -c 1:1 -u nobody'
 
-statsd_logger:
-  description: StatsD Logger
-  command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -C logger -a "-t statsd"'
+statsdaemon_logger:
+  description: Statsdaemon Logger
+  command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -C logger -a "-t statsdaemon"'
   dependencies:
-    - statsd_procs
+    - statsdaemon_procs

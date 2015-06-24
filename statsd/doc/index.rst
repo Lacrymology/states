@@ -1,9 +1,9 @@
 ..
-   Author: Bruno Clermont <bruno@robotinfra.com>
-   Maintainer: Quan Tong Anh <quanta@robotinfra.com>
+   Author: Viet Hung Nguyen <hvn@robotinfra.com>
+   Maintainer: Viet Hung Nguyen <hvn@robotinfra.com>
 
-StatsD
-======
+statsdaemon
+===========
 
 Introduction
 ------------
@@ -19,25 +19,19 @@ virtually any graphing or monitoring backend.
 
 .. note::
 
-   The server was written in Node.js but this formula will install the Python
-   version. Moreover, `py-statsd <https://github.com/Jonty/py-statsd>`_ will be
-   used instead of `pystatsd <https://github.com/sivy/pystatsd>`_ as it support
-   sending `Gauges
-   <http://statsd.readthedocs.org/en/latest/types.html#gauges>`_ metric.
+   The server was written in :doc:`/nodejs/doc/index` but this formula
+   will install the :doc:`/go/doc/index` version.
 
 Links
 -----
 
-* `Python implementation of StatsD <https://pypi.python.org/pypi/statsd/>`_.
+* `Golang implementation of StatsD <https://github.com/bitly/statsdaemon>`_.
 * `Original implementation of StatsD <https://github.com/etsy/statsd>`_
    in :doc:`/nodejs/doc/index`.
-* `Gauges support implementation of StatsD
-  <https://github.com/Jonty/py-statsd>`_.
 
 Related Formulas
 ----------------
 
-* :doc:`/python/doc/index`
 * :doc:`/rsyslog/doc/index`
 
 Content

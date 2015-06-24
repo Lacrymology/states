@@ -8,7 +8,8 @@ function update_repo () {
   cd "$file_roots"
   cd "$1"
   git checkout --quiet "$2"
-  git pull origin --quiet "$2" >/dev/null
+  git fetch --quiet origin "$branch"
+  git reset --hard --quiet FETCH_HEAD
   cd $file_roots
 }
 

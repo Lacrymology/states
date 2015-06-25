@@ -1,0 +1,29 @@
+{%- set files_archive = salt['pillar.get']('files_archive', False)|default("https://archive.robotinfra.com/")|replace('https://', 'http://') %}
+{% set php = salt["grains.filter_by"]({
+  "precise": {
+    "version": salt["pillar.get"]("php:version", None)|default("5.4", boolean=True)|string,
+    "repo_configs": {
+      "5.4": {
+        "repo": "deb " ~ files_archive ~ "/mirror/lucid-php5 precise main",
+        "key": "key-5.4.gpg",
+      },
+      "5.6": {
+        "repo": "deb " ~ files_archive ~ "/mirror/php/5.6.10+dfsg-1 precise main",
+        "key": "key-5.6.gpg",
+      },
+    },
+  },
+  "trusty": {
+    "version": salt["pillar.get"]("php:version", None)|default("5.5", boolean=True)|string,
+    "repo_configs": {
+      "5.5": {
+        "repo": None,
+        "key": None,
+      },
+     "5.6": {
+        "repo": "deb " ~ files_archive ~ "/mirror/php/5.6.10+dfsg-1 trusty main",
+        "key": "key-5.6.gpg",
+      },
+    },
+  },
+}, grain="oscodename", default="precise") %}

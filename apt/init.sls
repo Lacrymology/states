@@ -120,6 +120,15 @@ update-notifier-common:
     - require_in:
       - cmd: apt_sources
 
+{#- `apt-xapian-index` may need a lot of memory to speed up search operation #}
+apt-xapian-index:
+  pkg:
+    - purged
+    - require:
+      - module: apt
+    - require_in:
+      - cmd: apt_sources
+
 {#- simple state, just keep the API as others used it #}
 apt_sources:
   pkg:

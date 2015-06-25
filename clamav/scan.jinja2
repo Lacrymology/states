@@ -40,9 +40,9 @@ case "$retval" in
     0 ) # no virus found
         exit 0 ;;
     1 ) # virus(es) found
-        grep 'FOUND' "$status_file" | logger -s -t clamdscan -p local0.error
+        grep ' FOUND$' "$status_file" | logger -s -t clamdscan -p local0.error
         exit 1 ;;
     2 ) # an error occured
-        grep 'WARNING' "$status_file" | logger -s -t clamdscan -p local0.error
+        grep '^WARNING: ' "$status_file" | logger -s -t clamdscan -p local0.error
         exit 2 ;;
 esac

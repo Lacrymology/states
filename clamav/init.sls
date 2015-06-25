@@ -84,6 +84,7 @@ clamav:
     - user: clamav
     - group: clamav
     - mode: 640
+    - replace: False
     - require:
       - file: /etc/cron.daily/clamav_scan
 {%- else %}

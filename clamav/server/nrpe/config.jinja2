@@ -29,13 +29,7 @@ clamav_remote_port:
     - clamav_procs
 {%- endif %}
 
-{%- set max_age = 24 * 60 * 60 %}  {# one day #}
+{%- set max_age = 86400 %}  {# one day in seconds #}
 clamav_last_update:
   description: ClamAV Last Update
   command: '/usr/lib/nagios/plugins/check_file_age -w {{ max_age }} -c {{ max_age }} /var/lib/clamav/last-update'
-
-{%- if salt['pillar.get']('clamav:daily_scan', False) %}
-clamav_last_scan:
-  description: ClamAV Last Successful Scan
-  command: '/usr/lib/nagios/plugins/check_file_age -w {{ max_age }} -c {{ max_age }} /var/lib/clamav/last-scan'
-{%- endif %}

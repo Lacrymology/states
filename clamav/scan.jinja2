@@ -27,7 +27,7 @@ for exclude in "${exclude_list[@]}"; do
     exclude_string="${exclude_string}! ( -path $exclude -prune ) "
 done
 
-find / $exclude_string {% for path in salt['pillar.get']('clamav:exclude_paths', []) %}! \( -path {{ path }} -prune \){% if not loop.last %} {% endif %}{% endfor %} -type f > /tmp/clamav_file_list.$$
+find / $exclude_string {% for path in salt['pillar.get']('clamav:exclude_paths', []) %}! \( -path "{{ path }}" -prune \){% if not loop.last %} {% endif %}{% endfor %} -type f > /tmp/clamav_file_list.$$
 
 # empty the last scan result before scanning
 > "$status_file"

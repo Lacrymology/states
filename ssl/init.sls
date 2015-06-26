@@ -71,6 +71,9 @@ ca-certificates:
     - user: root
     - group: ssl-cert
     - mode: 444
+  {%- if ca_crt == "" %}
+    - replace: False
+  {%- endif %}
     - require:
       - pkg: ssl-cert
 

@@ -3,8 +3,10 @@
 {%- extends "openvpn/client/base.jinja2" %}
 
 {%- block authentication_mode %}
+{%- set default_interface = salt['pillar.get']('network_interface', 'eth0') %}
+{%- set openvpn_interface = salt['pillar.get']('openvpn:public_interface', False)|default(default_interface, boolean=True) %}
 client
-remote {% if 'availabilityZone' in salt['grains.ls']() %}{{ grains['public-ipv4'] }}{% else %}{{ salt['network.ip_addrs']('eth0')[0] }}{% endif %} {{ vpn_instance['port'] | default(1194) }}
+remote {% if 'availabilityZone' in salt['grains.ls']() %}{{ grains['public-ipv4'] }}{% else %}{{ salt['network.ip_addrs'](openvpn_interface)[0] }}{% endif %} {{ vpn_instance['port'] | default(1194) }}
 ca ca.crt
 cert {{ client }}.crt
 key {{ client }}.key

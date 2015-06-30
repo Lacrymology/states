@@ -3,14 +3,15 @@
 To use this template, extends it and define blocks that you want to replace,
 This template need:
 - pillar data for this app
-- context variable(s): chdir, appname, [wsgi_file], [virtualenv], [django_settings], [module], [uid], [gid]
+- context variable(s): chdir, appname, pillar_prefix, [wsgi_file], [virtualenv], [django_settings], [module], [uid], [gid]
 [something] means optional
 -#}
 
-{%- set cheaper = salt['pillar.get'](appname + ':cheaper', False) -%}
-{%- set workers = salt['pillar.get'](appname + ':workers', 1) -%}
-{%- set timeout = salt['pillar.get'](appname + ':timeout', 60) -%}
-{%- set idle = salt['pillar.get'](appname + ':idle', 300) -%}
+{%- set pillar_prefix = pillar_prefix if pillar_prefix|default(False) else appname %}
+{%- set cheaper = salt['pillar.get'](pillar_prefix + ':cheaper', False) -%}
+{%- set workers = salt['pillar.get'](pillar_prefix + ':workers', 1) -%}
+{%- set timeout = salt['pillar.get'](pillar_prefix + ':timeout', 60) -%}
+{%- set idle = salt['pillar.get'](pillar_prefix + ':idle', 300) -%}
 
 # {{ salt['pillar.get']('message_do_not_modify') }}
 

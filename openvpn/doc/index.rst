@@ -35,3 +35,5 @@ Content
     :glob:
 
     *
+    ../server/doc/index
+    ../client/doc/index

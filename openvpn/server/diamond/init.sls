@@ -4,7 +4,9 @@
 
 include:
   - diamond
-  - openvpn
+{%- if servers %}
+  - openvpn.server
+{%- endif %}
   - rsyslog.diamond
 
 {%- if servers %}
@@ -16,7 +18,7 @@ openvpn_diamond_collector:
     - user: root
     - group: root
     - mode: 440
-    - source: salt://openvpn/diamond/config.jinja2
+    - source: salt://openvpn/server/diamond/config.jinja2
     - context:
         instances:
     {%- for instance in servers %}

@@ -7,10 +7,10 @@ include:
   - nrpe
 
 {%- from 'nrpe/passive.jinja2' import passive_check with context -%}
-{{ passive_check('openvpn.backup') }}
+{{ passive_check('openvpn.server.backup') }}
 
 extend:
   check_backup.py:
     file:
       - require:
-        - file: nsca-openvpn.backup
+        - file: nsca-openvpn.server.backup

@@ -5,11 +5,11 @@
 # {{ salt['pillar.get']('message_do_not_modify') }}
 
 {%- for instance in servers %}
-openvpn_{{ instance }}:
+openvpn_server_{{ instance }}:
   description: OpenVPN Instance {{ instance }}
   command: "/usr/lib/nagios/plugins/check_procs -C openvpn -c 1:1 -a '--config /etc/openvpn/{{ instance }}/config'"
 
-openvpn_{{ instance }}_port:
+openvpn_server_{{ instance }}_port:
   {%- set port = servers[instance]['port'] | default(1194) %}
   description: OpenVPN Instance {{ instance }} Port
     {%- if servers[instance]['protocol'] | default('udp') == 'udp' %}
@@ -18,9 +18,9 @@ openvpn_{{ instance }}_port:
   command: "/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p {{ port }}"
     {%- endif %}
   dependencies:
-    - openvpn_{{ instance }}
+    - openvpn_server_{{ instance }}
 {%- endfor %}
 
-openvpn_procs:
+openvpn_server_procs:
   description: OpenVPN Daemon
   command: '/usr/lib/nagios/plugins/check_procs -c {{ servers|length }}:{{ servers|length }} -C openvpn'

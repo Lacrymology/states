@@ -13,7 +13,7 @@ backup-openvpn:
     - group: root
     - mode: 500
     - template: jinja
-    - source: salt://openvpn/backup/cron.jinja2
+    - source: salt://openvpn/server/backup/cron.jinja2
     - require:
       - pkg: cron
       - file: /usr/local/bin/backup-file

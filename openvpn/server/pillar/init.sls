@@ -2,13 +2,13 @@
 
 include:
   - salt.master
-  - openvpn
+  - openvpn.server
 
 openvpn_pillar:
   file:
     - managed
     - name: {{ grains['saltpath'] }}/pillar/openvpn.py
-    - source: salt://openvpn/pillar/ext_pillar.py
+    - source: salt://openvpn/server/pillar/ext_pillar.py
     - user: root
     - group: root
     - mode: 444
@@ -24,7 +24,7 @@ openvpn_pillar:
     - user: root
     - group: root
     - mode: 440
-    - source: salt://openvpn/pillar/config.jinja2
+    - source: salt://openvpn/server/pillar/config.jinja2
     - require:
       - file: openvpn_pillar
     - watch_in:

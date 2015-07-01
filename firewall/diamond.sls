@@ -3,6 +3,7 @@
 {% if grains['virtual'] != 'openvzve' %}
 include:
   - diamond
+  - kernel.modules
   - firewall
   - rsyslog.diamond
 
@@ -18,7 +19,7 @@ firewall_nf_conntrack_diamond_collector:
         files = nf_conntrack_count,nf_conntrack_max
     - require:
       - file: /etc/diamond/collectors
-      - kmod: firewall_nf_conntrack
+      - file: kernel_modules
     - watch_in:
       - service: diamond
 {% endif %}

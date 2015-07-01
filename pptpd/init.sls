@@ -39,12 +39,3 @@ pptpd:
       - service: rsyslog
       {#- requires specific pillar key, look in pptp/doc/pillar.rst #}
       - file: sysctl
-
-{%- if 'mppe-128' in encryption.get('require', []) %}
-ppp_mppe:
-  kmod:
-    - present
-    - persist: True
-    - require_in:
-      - service: pptpd
-{%- endif %}

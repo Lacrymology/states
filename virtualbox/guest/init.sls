@@ -11,20 +11,15 @@ virtualbox-guest:
     - pkgs:
       - virtualbox-guest-utils
       - virtualbox-guest-dkms
-    - required:
-      - pkg: kernel-headers
-  kmod:
-    - present
-    - name: vboxsf
-    - persist: True
     - require:
-      - pkg: virtualbox-guest
+      - pkg: kernel-headers
+    - require_in:
+      - cmd: kernel_modules
   service:
     - running
     - name: virtualbox-guest-utils
     - require:
-      - kmod: virtualbox-guest
-
+      - file: kernel_modules
 
 {%- else %}
 include:

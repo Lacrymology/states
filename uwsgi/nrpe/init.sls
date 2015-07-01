@@ -37,6 +37,7 @@ include:
     - group: www-data
     - require:
       - file: /usr/lib/nagios/plugins/check_uwsgi
+      - file: /etc/sudoers.d/nrpe_uwsgi
 
 /usr/lib/nagios/plugins/check_uwsgi:
   file:

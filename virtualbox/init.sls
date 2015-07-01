@@ -3,7 +3,7 @@
 {%- set files_archive = salt['pillar.get']('files_archive', False) %}
 include:
   - apt
-  - kernel.dev
+  - kernel.image.dev
 
 virtualbox:
   pkg:

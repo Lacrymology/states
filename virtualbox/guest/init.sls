@@ -2,7 +2,8 @@
 
 {%- if grains['virtual'] == 'VirtualBox' -%}
 include:
-  - kernel.dev
+  - kernel.image.dev
+  - kernel.modules
 
 virtualbox-guest:
   pkg:

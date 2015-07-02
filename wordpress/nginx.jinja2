@@ -35,7 +35,7 @@ server {
 
     index index.php index.html index.htm;
     location / {
-        try_files $uri $uri/ /index.html;
+        try_files $uri $uri/ /index.php?$args;
     }
 
 {% include 'nginx/location_robots.jinja2' %}

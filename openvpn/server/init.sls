@@ -41,9 +41,10 @@ include:
 
 openvpn_dh:
   cmd:
-    - wait
+    - run
     - name: openssl dhparam -out /etc/openvpn/dh.pem {{ salt['pillar.get']('openvpn:dhparam:key_size', 2048) }}
-    - watch:
+    - unless: test -f /etc/openvpn/dh.pem
+    - require:
       - pkg: ssl-cert
       - pkg: openvpn
 

@@ -10,9 +10,20 @@ test:
     - run_all_checks
     - order: last
   qa:
-    - test
+    - test_pillar
     - name: openvpn.client
-    - doc: {{ opts['cachedir'] }}/doc/output
+    - pillar_doc: {{ opts['cachedir'] }}/doc/output
     - require:
       - monitoring: test
       - cmd: doc
+
+{%- if not salt['pillar.get']('__test__', False) %}
+openvpn_client_monitor_doc:
+  qa:
+    - test_monitor
+    - name: openvpn.client
+    - monitor_doc: {{ opts['cachedir'] }}/doc/output
+    - require:
+      - monitoring: test
+      - cmd: doc
+{%- endif %}

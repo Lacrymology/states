@@ -7,4 +7,6 @@ include:
   - rsyslog.nrpe
   - ssl.nrpe
 
+{%- if not salt['pillar.get']('__test__', False) %}
 {{ passive_check('openvpn.client') }}
+{%- endif %}

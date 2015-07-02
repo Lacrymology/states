@@ -78,6 +78,12 @@ openvpn_client:
     - mode: 440
     - context:
         instance: {{ instance }}
+  {#-
+  There is no way to test openvpn.client via CI currently.
+  We can do it later in QA project.
+  In the mean time, don't start client service if running in the test mode.
+  #}
+{%- if not salt['pillar.get']('__test__', False) %}
   service:
     - running
     - name: openvpn-client-{{ instance }}
@@ -88,3 +94,4 @@ openvpn_client:
       - file: /etc/openvpn/client/{{ instance }}/{{ grains['id'] }}.key
       - file: /etc/openvpn/client/{{ instance }}/{{ grains['id'] }}.conf
       - file: openvpn_client
+{%- endif %}

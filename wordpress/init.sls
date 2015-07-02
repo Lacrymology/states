@@ -153,7 +153,7 @@ wordpress_initial:
       - user: web
   cmd:
     - wait
-    - name: php init.php
+    - name: php init.php 2>/dev/null
     - cwd: {{ wordpressdir }}/wp-admin
     - user: www-data
     - require:

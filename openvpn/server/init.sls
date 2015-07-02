@@ -155,14 +155,10 @@ openvpn_{{ instance }}_client:
         instance: {{ instance }}
     - require:
       - file: {{ config_dir }}
-  module:
+  cmd:
     - wait
-    - name: archive.{% if grains['saltversioninfo'] >= (2015, 2, 0, 0) %}cmd_{% endif %}zip
-    - zipfile: {{ config_dir }}/client.zip
+    - name: zip -j {{ config_dir }}/client.zip client.conf secret.key
     - cwd: {{ config_dir }}
-    - sources:
-      - client.conf
-      - secret.key
     - watch:
       - file: openvpn_{{ instance }}_client
       - file: {{ instance }}_secret

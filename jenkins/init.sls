@@ -39,7 +39,7 @@ jenkins_dependencies:
     - require:
       - pkg: jenkins
 
-{%- set version = '1.598' %}
+{%- set version = '1.618' %}
 jenkins:
   pkg:
     - installed

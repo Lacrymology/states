@@ -54,7 +54,7 @@ wordpress:
     - name: {{ dbname }}
     - pkg: python-mysqldb
     - require:
-      - file: /etc/salt/minion.d/mysql.conf
+      - service: salt-minion
       - service: mysql-server
       - pkg: python-mysqldb
   mysql_user:
@@ -63,7 +63,7 @@ wordpress:
     - name: {{ dbuser }}
     - password: {{ dbuserpass }}
     - require:
-      - file: /etc/salt/minion.d/mysql.conf
+      - service: salt-minion
       - service: mysql-server
       - pkg: python-mysqldb
   mysql_grants:

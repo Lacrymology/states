@@ -157,7 +157,7 @@ openvpn_{{ instance }}_client:
       - file: {{ config_dir }}
   cmd:
     - wait
-    - name: zip -j {{ config_dir }}/client.zip client.conf secret.key
+    - name: zip client.zip client.conf secret.key
     - cwd: {{ config_dir }}
     - watch:
       - file: openvpn_{{ instance }}_client
@@ -308,7 +308,7 @@ openvpn_{{ instance }}_{{ client }}:
                 {%- if not salt['file.file_exists'](config_dir + '/clients/' + client + '.zip') %}
   cmd:
     - wait
-    - name: zip -j {{ config_dir }}/clients/{{ client }}.zip {{ client }}.conf {{ client }}.crt {{ client }}.key /etc/openvpn/ca.crt
+    - name: zip -j {{ client }}.zip {{ client }}.conf {{ client }}.crt {{ client }}.key /etc/openvpn/ca.crt
     - cwd: {{ config_dir }}/clients
     - watch:
       - file: openvpn_{{ instance }}_{{ client }}

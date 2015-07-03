@@ -37,16 +37,36 @@ bsd-mailx:
       - pkg: ssmtp
       - cmd: apt_sources
 
-{% for template, config in (('config', 'ssmtp.conf'), ('revaliases', 'revaliases')) %}
-/etc/ssmtp/{{ config }}:
+{%- set smtp_user = salt['pillar.get']('smtp:user', None) %}
+{%- set smtp_passwd = salt['pillar.get']('smtp:password', None) %}
+
+/etc/ssmtp/ssmtp.conf:
   file:
     - managed
     - template: jinja
-    - source: salt://ssmtp/{{ template }}.jinja2
+    - source: salt://ssmtp/config.jinja2
     - user: root
     - group: root
     - mode: 644
+    - context:
+        smtp_user: {{ smtp_user }}
+        smtp_passwd: {{ smtp_passwd }}
     - require:
       - pkg: bsd-mailx
       - pkg: ssmtp
-{% endfor %}
+
+/etc/ssmtp/revaliases:
+  file:
+{%- if smtp_user and smtp_passwd %}
+    - managed
+    - template: jinja
+    - source: salt://ssmtp/revaliases.jinja2
+    - user: root
+    - group: root
+    - mode: 644
+{%- else %}
+    - absent
+{%- endif %}
+    - require:
+      - pkg: bsd-mailx
+      - pkg: ssmtp

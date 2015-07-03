@@ -25,7 +25,7 @@ include:
 jenkins_set_git_email:
   cmd:
     - wait
-    - name: git config --global user.email "{{ salt['pillar.get']('smtp:user') }}"
+    - name: git config --global user.email "{{ salt['pillar.get']('smtp:user', None) }}"
     - user: jenkins
     - watch:
       - pkg: git

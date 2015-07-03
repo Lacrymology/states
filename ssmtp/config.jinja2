@@ -5,8 +5,10 @@
 mailhub={{ salt['pillar.get']('smtp:server') }}:{{ salt['pillar.get']('smtp:port') }}
 root={{ salt['pillar.get']('smtp:root') }}
 hostname={{ salt['pillar.get']('mail:mailname') }}
-AuthUser={{ salt['pillar.get']('smtp:user') }}
-AuthPass={{ salt['pillar.get']('smtp:password') }}
+{%- if smtp_user and smtp_passwd %}
+AuthUser={{ smtp_user }}
+AuthPass={{ smtp_passwd }}
+{%- endif %}
 {%- set encryption = salt['pillar.get']('smtp:encryption', 'plain') -%}
 {%- if encryption in ('ssl', 'starttls') -%}
     {%- if encryption == 'ssl' %}

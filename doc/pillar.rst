@@ -63,6 +63,9 @@ smtp:from
 
 The address that will appear in the "From:" field of the email.
 
+Optional
+--------
+
 .. _pillar-smtp-user:
 
 smtp:user
@@ -70,13 +73,18 @@ smtp:user
 
 The username used to log into the remote SMTP server.
 
+Default: No specify user (no authentication) (``None``).
+
+.. _pillar-smtp-password:
+
 smtp:password
 ~~~~~~~~~~~~~
 
 Password for account login, if :ref:`pillar-smtp-user` is defined.
 
-Optional
---------
+Default: No specify password (no authentication) (``None``).
+
+.. _pillar-smtp-encryption:
 
 smtp:encryption
 ~~~~~~~~~~~~~~~

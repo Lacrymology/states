@@ -70,6 +70,7 @@ mine_functions:
     salt-call saltutil.sync_all
 else
     echo """id: $1
+mysql.default_file: '/etc/mysql/debian.cnf'
 log_level: debug
 master: $2
 mine_functions:

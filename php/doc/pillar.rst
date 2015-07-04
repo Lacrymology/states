@@ -10,6 +10,7 @@ Example::
       max_input_vars: 1000
       error_reporting: E_ALL & ~E_DEPRECATED & ~E_STRICT
 
+.. _pillar-php-version:
 
 php:version
 ~~~~~~~~~~~

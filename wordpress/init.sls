@@ -81,7 +81,7 @@ wordpress_uwsgi:
     - managed
     - name: /etc/uwsgi/wordpress.yml
     - template: jinja
-    - user: www-data
+    - user: root
     - group: www-data
     - mode: 440
     - source: salt://uwsgi/template.jinja2
@@ -94,7 +94,6 @@ wordpress_uwsgi:
       - module: wordpress_initial
       - service: uwsgi
       - service: mysql-server
-    - watch:
       - file: {{ wordpressdir }}/wp-config.php
       - archive: wordpress
       - pkg: php5-mysql
@@ -106,6 +105,8 @@ wordpress_uwsgi:
       - file: /etc/uwsgi/wordpress.yml
     - watch:
       - file: wordpress_uwsgi
+      - file: {{ wordpressdir }}/wp-config.php
+      - archive: wordpress
 
 {{ wordpressdir }}/wp-content/uploads:
   file:
@@ -125,7 +126,7 @@ wordpress_uwsgi:
     - name: {{ wordpressdir }}/wp-config.php
     - template: jinja
     - source: salt://wordpress/config.jinja2
-    - user: www-data
+    - user: root
     - group: www-data
     - mode: 440
     - require:
@@ -149,7 +150,7 @@ wordpress_initial:
     - name: {{ wordpressdir }}/wp-admin/init.php
     - source: salt://wordpress/init.jinja2
     - template: jinja
-    - user: www-data
+    - user: root
     - group: www-data
     - mode: 440
     - require:
@@ -183,7 +184,7 @@ wordpress_initial:
   file:
     - managed
     - source: salt://wordpress/nginx.jinja2
-    - user: www-data
+    - user: root
     - group: www-data
     - mode: 440
     - template: jinja

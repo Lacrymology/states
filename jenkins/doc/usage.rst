@@ -123,3 +123,15 @@ https://wiki.jenkins-ci.org/display/JENKINS/Syslog+Logger+Plugin
 
 Used to send :doc:`index` log to syslog. It's configurable through options in
 ``/configure``.
+
+ClamAV Plugin
+~~~~~~~~~~~~~
+
+https://wiki.jenkins-ci.org/display/JENKINS/ClamAV+Plugin
+
+This plugin allows you to check the artifacts with :doc:`/clamav/doc/index`,
+which is an open source (GPL) antivirus engine designed for detecting Trojans,
+viruses, malware and other malicious threats.
+
+A :doc:`/clamav/doc/index` server instance installed in network mode is
+required.

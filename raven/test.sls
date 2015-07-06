@@ -8,6 +8,7 @@ include:
   - raven.mail.nrpe
   - raven.nrpe
   - requests
+  - ssl
 
 {%- set sentry_dsn = salt['pillar.get']('sentry_dsn', False) -%}
 {%- if sentry_dsn %}
@@ -24,6 +25,12 @@ test:
     - require:
       - module: raven
       - module: requests
+{#-
+when run CI test, the ubuntu default requests version is loaded (0.8.2
+in case of precise). It may not have built in ca-certificates bundle
+and rely on system certs.
+#}
+      - cmd: ca-certificates
   monitoring:
     - run_all_checks
     - order: last

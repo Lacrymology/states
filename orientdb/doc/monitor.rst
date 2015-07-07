@@ -11,6 +11,9 @@ Mandatory
    In this document, when refer to a pillar key ``pillar_prefix``
    means ``orientdb``.
 
+orientdb_procs
+~~~~~~~~~~~~~~
+
 .. include:: /nrpe/doc/check_procs.inc
 
 .. _monitor-orientdb-http_port:
@@ -35,3 +38,9 @@ orientdb_port
 
 Monitor :doc:`index` :ref:`glossary-TCP` port
 :ref:`glossary-TCP` ``2424``.
+
+orientdb_backup_dummy
+~~~~~~~~~~~~~~~~~~~~~
+
+Dummy check to prevent the monitoring of :doc:`index` to become empty, always
+success.

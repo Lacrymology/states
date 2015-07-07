@@ -21,4 +21,9 @@ orientdb_backup_{{ name }}_age:
     - load_average
 
     {%- endif -%}
-{%- endfor %}
+  {%- endfor %}
+
+{#- this file can't be empty #}
+orientdb_backup_dummy:
+  description: Please ignore this check
+  command: /usr/lib/nagios/plugins/check_dummy 0

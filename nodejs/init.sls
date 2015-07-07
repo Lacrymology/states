@@ -28,9 +28,11 @@ nodejs:
       - nodejs: http://archive.robotinfra.com/mirror/{{ filename }}
   {%- endif %}
 
-rlwrap:
+nodejs_deps:
   pkg:
     - installed
+    - pkgs:
+      - rlwrap
     - require_in:
       - pkg: nodejs
 {%- endif %}

@@ -5,9 +5,11 @@ include:
 
 {%- set files_archive = salt['pillar.get']('files_archive', False) %}
 
-rlwrap:
+iojs_deps:
   pkg:
     - installed
+    - pkgs:
+      - rlwrap
     - require:
       - cmd: apt_sources
 
@@ -22,7 +24,7 @@ iojs:
 {%- endif %}
     - require:
       - pkgrepo: iojs
-      - pkg: rlwrap
+      - pkg: iojs_deps
   pkgrepo:
     - absent
     - name: deb https://deb.nodesource.com/iojs_1.x {{ grains['lsb_distrib_codename'] }} main

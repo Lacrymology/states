@@ -9,6 +9,7 @@ And it can't be executed trough ``integration.py``
 
 {%- if grains['virtual'] == 'VirtualBox' and salt['pillar.get']('__test__', True) -%}
 include:
+  - kernel.modules
   - salt
     {%- if grains['kernelrelease'].endswith('-virtual') %}
   - virtualbox.guest
@@ -90,7 +91,7 @@ virtualbox-modules:
     - run
     - name: tar -cvf {{ opts['cachedir'] }}/vbox.tar /lib/modules/{{ grains['kernelrelease'] }}/updates/dkms/vbox*
     - require:
-      - kmod: virtualbox-guest
+      - file: kernel_modules
   pkg:
     - purged
     - name: virtualbox-guest-dkms

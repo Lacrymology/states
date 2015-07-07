@@ -80,6 +80,15 @@ the encryption mechanism.
 
 Default: no encryption (``{}``).
 
+.. note::
+
+   If ``mppe-128`` is defined here, then it requires an additional pillar key
+   in :ref:`pillar-kernel-modules`::
+
+     kernel:
+       modules:
+         - ppp_mppe
+
 .. _pillar-ppp-instances-instance-encryption-refuse:
 
 pppd:instances:{{ instance }}:encryption:refuse

@@ -9,6 +9,4 @@ log_start_script "$@"
 trap "log_stop_script \$?" EXIT
 
 cd /var/backups/orientdb
-for file in ""`echo *.zip`""; do
-    /usr/local/bin/backup-store $file
-done
+find . -name '*.zip' -print0 | xargs -0 -I file /usr/local/bin/backup-store file

@@ -1,0 +1,14 @@
+#!/bin/bash
+# {{ salt['pillar.get']('message_do_not_modify') }}
+
+set -e
+
+source /usr/local/share/salt_common.sh
+locking_script
+log_start_script "$@"
+trap "log_stop_script \$?" EXIT
+
+cd /var/backups/orientdb
+for file in ""`echo *.zip`""; do
+    /usr/local/bin/backup-store $file
+done

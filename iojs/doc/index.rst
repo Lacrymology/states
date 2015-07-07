@@ -1,3 +1,7 @@
+..
+   Author: Bruno Clermont <bruno@robotinfra.com>
+   Maintainer: Diep Pham <favadi@robotinfra.com>
+
 io.js
 =====
 

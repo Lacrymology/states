@@ -156,7 +156,7 @@ sudo salt-cloud --profile $profile $BUILD_IDENTITY
 sudo salt $BUILD_IDENTITY test.ping | grep True
 sudo salt -t 10 "$BUILD_IDENTITY" cmd.run "hostname $BUILD_IDENTITY"
 sudo salt -t 60 "$BUILD_IDENTITY" cp.get_file salt://jenkins_archives/$BUILD_IDENTITY.tar.gz /tmp/bootstrap-archive.tar.gz
-sudo salt -t 60 "$BUILD_IDENTITY" archive.tar xzf /tmp/bootstrap-archive.tar.gz cwd=/
+sudo salt -t 60 "$BUILD_IDENTITY" cmd.run "tar xzf /tmp/bootstrap-archive.tar.gz -C /"
 
 function run_and_check_return_code {
     sudo salt -t $1 "$BUILD_IDENTITY" --output json cmd.run_all "$2" | ./test/jenkins/retcode_check.py

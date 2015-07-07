@@ -12,6 +12,7 @@ include:
 {%- set debug = salt['pillar.get']('orientdb:debug', False) -%}
 {%- set storages = salt['pillar.get']('orientdb:storages') -%}
 {%- set cluster = salt['pillar.get']('orientdb:cluster', {}) %}
+{%- set files_archive = salt['pillar.get']('files_archive', False) %}
 
 /etc/orientdb:
   file:
@@ -95,14 +96,15 @@ orientdb:
     - extracted
     - name: /usr/local/
     - archive_format: tar
-{#-
-    - source: "http://www.orientechnologies.com/download.php?file=orientdb-community-{{ version }}.tar.gz"
-    - source_hash: md5={{ cksum }}
-    - tar_options: z
-#}
+{%- if files_archive %}
     - source: https://archive.robotinfra.com/mirror/orientdb/{{ version }}.tar.xz
     - source_hash: md5={{ tar_xz_checksum }}
-    - tar_options: " --xz -"
+    - tar_options: J
+{%- else %}
+    - source: "http://www.orientechnologies.com/download.php?file=orientdb-community-{{ version }}.tar.gz"
+    - source_hash: md5={{ tar_gz_checksum }}
+    - tar_options: z
+{%- endif %}
     - if_missing: /usr/local/orientdb-community-{{ version }}
     - require:
       - file: /usr/local

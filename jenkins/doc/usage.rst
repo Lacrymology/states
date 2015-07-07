@@ -135,3 +135,16 @@ viruses, malware and other malicious threats.
 
 A :doc:`/clamav/doc/index` server instance installed in network mode is
 required.
+
+Go Plugin
+~~~~~~~~~
+
+https://wiki.jenkins-ci.org/display/JENKINS/Go+Plugin
+
+Plugin allows build Golang projects with Jenkins.
+
+.. note::
+
+  from Jenkins 1.608+, when install Go plugin 1.1 may cause ``/configure``
+  failed to load, see a workaround here:
+  https://issues.jenkins-ci.org/browse/JENKINS-27499

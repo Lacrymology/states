@@ -18,6 +18,10 @@ Example::
         username: roger
         password: rabbit
         backup: True
+    cluster:
+      nodes:
+        - node1
+        - node2
 
 Mandatory
 ---------
@@ -140,3 +144,17 @@ orientdb:storages:{{ name }}:password
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Storage :ref:`pillar-orientdb-storages-name-username` password.
+
+orientdb:backup_frequency
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+:doc:`index` backup frequency in hours.
+
+Default: every ``24`` hours.
+
+orientdb:cluster
+~~~~~~~~~~~~~~~~
+
+If defined, run :doc:`index` in cluster node, contains data of nodes in cluster.
+
+Default: doesn't run in cluster mode (``{}``).

@@ -10,7 +10,6 @@
 		<join>
 			<multicast enabled="false"></multicast>
 			<tcp-ip enabled="true">
-{%- set nodes = salt['pillar.get']('orientdb:cluster:nodes', {}) -%}
 {%- for name in nodes %}
 				<member>{{ nodes[name] }}</member>
 {%- endfor %}

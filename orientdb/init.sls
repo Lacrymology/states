@@ -207,6 +207,8 @@ orientdb-create-initial-{{ name }}:
     - template: jinja
     - mode: 440
     - source: salt://orientdb/cluster.jinja2
+    - context:
+        nodes: {{ cluster["nodes"] if cluster else [] }}
     - require:
       - group: orientdb
       - file: /etc/orientdb

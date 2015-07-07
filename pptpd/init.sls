@@ -7,8 +7,8 @@ include:
   - sysctl
 
 {%- set instances = salt['pillar.get']('pppd:instances', {}) -%}
-{%- set pptp = instances.get('pptpd', {}) -%}
-{%- set encryption = pptp.get('encryption', {}) %}
+{%- set pptpd = instances.get('pptpd', {}) -%}
+{%- set encryption = pptpd.get('encryption', {}) %}
 
 pptpd:
   pkg:
@@ -33,9 +33,13 @@ pptpd:
     - watch:
       - pkg: pptpd
       - file: pptpd
-      {#- requires specific pillar key, look in pptp/doc/pillar.rst #}
+      {#- requires specific pillar key, look in pptpd/doc/pillar.rst #}
       - file: ppp-options-pptpd
     - require:
       - service: rsyslog
-      {#- requires specific pillar key, look in pptp/doc/pillar.rst #}
+      {#- requires specific pillar key, look in pptpd/doc/pillar.rst #}
       - file: sysctl
+      {#- requires specific pillar key, look in pptpd/doc/pillar.rst #}
+{%- if 'mppe-128' in encryption.get('require', []) %}
+      - kmod: kernel_module_ppp_mppe
+{%- endif %}

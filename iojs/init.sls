@@ -23,8 +23,4 @@ iojs:
         - iojs: https://deb.nodesource.com/iojs_1.x/pool/main/i/iojs/iojs_1.3.0-1nodesource1~trusty1_{{ grains['osarch'] }}.deb
 {%- endif %}
     - require:
-      - pkgrepo: iojs
       - pkg: iojs_deps
-  pkgrepo:
-    - absent
-    - name: deb https://deb.nodesource.com/iojs_1.x {{ grains['lsb_distrib_codename'] }} main

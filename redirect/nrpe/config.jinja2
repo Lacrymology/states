@@ -2,7 +2,7 @@
 
 {%- set first_ip = salt['network.ip_addrs']()[0] -%}
 {%- set reply = '301 Moved Permanently' -%}
-{%- for map in salt['pillar.get']('redirect:map', {}) -%}
+{%- for map in salt['pillar.get']('redirect:map') -%}
   {%- for hostname in map['hostnames'] %}
 redirect_nginx_http_{{ hostname|replace('.', '_') }}:
   description: Redirect NGINX HTTP Protocol

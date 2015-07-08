@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- {{ salt['pillar.get']('message_do_not_modify') }} -->
+<hazelcast xsi:schemaLocation="http://www.hazelcast.com/schema/config hazelcast-config-3.0.xsd"
+           xmlns="http://www.hazelcast.com/schema/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <group>
+        <name>orientdb</name>
+        <password>orientdb</password>
+    </group>
+    <network>
+        <join>
+            <multicast enabled="false"></multicast>
+            <tcp-ip enabled="true">
+{%- for name in nodes %}
+                <member>{{ nodes[name] }}</member>
+{%- endfor %}
+            </tcp-ip>
+        </join>
+        {#- communication can be secure, but we don't turn that on #}
+    </network>
+    <executor-service>
+        <pool-size>16</pool-size>
+    </executor-service>
+</hazelcast>

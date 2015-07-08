@@ -1,0 +1,27 @@
+# {{ salt['pillar.get']('message_do_not_modify') }}
+{%- set timeout = 45 %}
+
+orientdb_procs:
+  description: OrientDB Daemon
+  command: /usr/lib/nagios/plugins/check_procs -c 1:1 -C java -u orientdb -a com.orientechnologies.orient.server.OServerMain
+
+orientdb_http:
+  description: OrientDB HTTP
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 2480 -t {{ timeout }}
+  timeout: {{ timeout }}
+  dependencies:
+    - orientdb_procs
+
+orientdb_api:
+  description: OrientDB API
+  command: /usr/lib/nagios/plugins/check_http -I 127.0.0.1 -u / -p 2480 -e '200 OK' -t {{ timeout }}
+  timeout: {{ timeout }}
+  dependencies:
+    - orientdb_http
+
+orientdb_port:
+  description: OrientDB Port
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 2424 -t {{ timeout }}
+  timeout: {{ timeout }}
+  dependencies:
+    - orientdb_procs

@@ -1,0 +1,12 @@
+#!/bin/bash
+export ORIENTDB_HOME={{ directory }}
+export HOME={{ directory }}
+cd {{ directory }}
+
+sudo -E -u orientdb -g orientdb /usr/bin/java -client \
+    -Djava.awt.headless=true -Dfile.encoding=UTF8 \
+    -Djava.util.logging.config.file=/etc/orientdb/logging.properties \
+    -Dorientdb.config.file=/etc/orientdb/config.xml \
+    -Dorientdb.build.number="salt@{{ version }}" \
+    -cp "/usr/local/orientdb-community-{{ version }}/{{ version }}/lib/orientdb-server-{{ version }}.jar:/usr/local/orientdb-community-{{ version }}/lib/*" \
+    com.orientechnologies.orient.graph.console.OGremlinConsole $*

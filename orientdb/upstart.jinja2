@@ -1,0 +1,36 @@
+# {{ salt['pillar.get']('message_do_not_modify') }}
+
+{%- set heap_size = salt['pillar.get']('orientdb:heap_size', False) -%}
+{%- set perm_size = salt['pillar.get']('orientdb:perm_size', False) -%}
+{%- set buffer_size = salt['pillar.get']('orientdb:buffer_size', False) %}
+
+start on (net-device-up
+          and local-filesystems
+          and runlevel [2345]
+          and started rsyslog)
+stop on runlevel [!2345]
+
+nice 10
+respawn
+
+setuid orientdb
+setgid orientdb
+
+env ORIENTDB_HOME=/var/lib/orientdb/
+
+script
+exec /usr/bin/java -server \
+    {%- if salt['pillar.get']('orientdb:cluster', {}) %} -Ddistributed=true \{% endif %}
+    {%- if heap_size %} -Xms{{ heap_size }} -Xmx{{ heap_size }} \{% endif %}
+    {%- if perm_size %} -XX:PermSize={{ perm_size }} -XX:MaxPermSize={{ perm_size }} \{% endif %}
+    {%- if buffer_size %} -Dstorage.diskCache.bufferSize={{ buffer_size }} \{% endif %}
+    -XX:+UseConcMarkSweepGC -XX:+CMSParallelRemarkEnabled \
+    -Djna.nosys=true -XX:+HeapDumpOnOutOfMemoryError \
+    -Djava.awt.headless=true -Dfile.encoding=UTF8 -Drhino.opt.level=9 \
+    -Djava.util.logging.config.file=/etc/orientdb/logging.properties \
+    -Dorientdb.config.file=/etc/orientdb/config.xml \
+    -Dorientdb.www.path={{ root_dir }}/www \
+    -Dorientdb.build.number="salt@{{ version }}" \
+    -cp "{{ root_dir }}/{{ version }}/lib/orientdb-server-{{ version }}.jar:/usr/local/orientdb-community-{{ version }}/lib/*" \
+    com.orientechnologies.orient.server.OServerMain
+end script

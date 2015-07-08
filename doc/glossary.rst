@@ -648,3 +648,20 @@ or a user to configure these settings manually.
 
 .. Copied from http://en.wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol
    on 2015-06-10
+
+
+.. _glossary-CA:
+
+CA
+~~
+
+In cryptography, a certificate authority or certification authority (CA) is an
+entity that issues digital certificates. A digital certificate certifies the
+ownership of a public key by the named subject of the certificate. This allows
+others (relying parties) to rely upon signatures or on assertions made by the
+private key that corresponds to the certified public key. In this model of
+trust relationships, a CA is a trusted third party – trusted both by the
+subject (owner) of the certificate and by the party relying upon the
+certificate.
+
+.. https://en.wikipedia.org/wiki/Certificate_authority - 2015-07-02

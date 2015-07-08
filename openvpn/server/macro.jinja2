@@ -9,7 +9,7 @@ openvpn-{{ instance }}:
     - user: root
     - group: root
     - mode: 440
-    - source: salt://openvpn/upstart.jinja2
+    - source: salt://openvpn/server/upstart.jinja2
     - template: jinja
     - require:
       - file: /etc/openvpn/{{ instance }}/config

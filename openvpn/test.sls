@@ -4,15 +4,15 @@
 {%- from 'macros.jinja2' import dict_default with context %}
 include:
   - doc
-  - openvpn
-  - openvpn.backup
-  - openvpn.backup.diamond
-  - openvpn.backup.nrpe
-  - openvpn.diamond
-  - openvpn.nrpe
-  - openvpn.backup
-  - openvpn.backup.nrpe
-  - openvpn.backup.diamond
+  - openvpn.server
+  - openvpn.server.backup
+  - openvpn.server.backup.diamond
+  - openvpn.server.backup.nrpe
+  - openvpn.server.diamond
+  - openvpn.server.nrpe
+  - openvpn.server.backup
+  - openvpn.server.backup.nrpe
+  - openvpn.server.backup.diamond
   - salt.minion.deps
 
 test:
@@ -21,9 +21,9 @@ test:
     - order: last
   qa:
     - test
-    - name: openvpn
+    - name: openvpn.server
     - additional:
-      - openvpn.backup
+      - openvpn.server.backup
     - doc: {{ opts['cachedir'] }}/doc/output
     - require:
       - monitoring: test
@@ -34,8 +34,8 @@ test:
         ProcessResources:
           {{ diamond_process_test('openvpn') }}
     - require:
-      - sls: openvpn.diamond
-      - sls: openvpn
+      - sls: openvpn.server.diamond
+      - sls: openvpn.server
 
 {%- set servers = salt['pillar.get']('openvpn:servers', {}) -%}
 {%- if servers is iterable and servers | length > 0 -%}
@@ -59,8 +59,8 @@ test_openvpn_{{ instance }}:
           openvpn.{{ instance }}.global.max_bcast-mcast_queue_length: True
         {%- endif %}
     - require:
-      - sls: openvpn.diamond
-      - sls: openvpn
+      - sls: openvpn.server.diamond
+      - sls: openvpn.server
 
         {%- if mode == 'tls' -%}
         {#-
@@ -129,4 +129,4 @@ extend:
   openvpn_diamond_collector:
     file:
       - require:
-        - sls: openvpn
+        - sls: openvpn.server

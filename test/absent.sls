@@ -47,8 +47,8 @@
   "openerp.backup",
   "openldap",
   "openldap.backup",
-  "openvpn",
-  "openvpn.backup",
+  "openvpn.server",
+  "openvpn.server.backup",
   "pdnsd",
   "postfix",
   "postfix.backup",
@@ -248,7 +248,7 @@ include:
   - amavis.diamond.absent
   - mongodb.diamond.absent
   - nginx.diamond.absent
-  - openvpn.diamond.absent
+  - openvpn.server.diamond.absent
   - varnish.diamond.absent
   - ssh.client.absent
 {%- for formula in local.passive_absents %}

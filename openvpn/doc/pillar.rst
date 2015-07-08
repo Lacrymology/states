@@ -13,6 +13,7 @@ Mandatory
 Example::
 
   openvpn:
+    public_interface: eth1
     ca:
       name: example
       bits: 2048
@@ -24,6 +25,15 @@ Example::
       organization: My Company Ltd
       organizational_unit: IT
       email: info@example.com
+
+.. _pillar-openvpn-public_interface:
+
+openvpn:public_interface
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+The public interface of :doc:`/openvpn/server/doc/index`.
+
+Default: use the value from :ref:`pillar-network-interface` (``False``).
 
 .. _pillar-openvpn-ca-name:
 

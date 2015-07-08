@@ -7,4 +7,4 @@ include:
   - rsyslog.nrpe
   - ssl.nrpe
 
-{{ passive_check('openvpn') }}
+{{ passive_check('openvpn.server') }}

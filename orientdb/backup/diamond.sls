@@ -3,3 +3,4 @@
 include:
   - backup.diamond
   - cron.diamond
+  - orientdb.diamond

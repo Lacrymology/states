@@ -1,5 +1,6 @@
 include:
   - diamond
+  - rsyslog.diamond
 {#-
   - orientdb
 #}

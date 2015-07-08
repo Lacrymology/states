@@ -5,6 +5,7 @@ include:
   - bash.nrpe
   - cron.nrpe
   - nrpe
+  - orientdb.nrpe
 
 {%- from 'nrpe/passive.jinja2' import passive_check with context %}
 {{ passive_check('orientdb.backup') }}

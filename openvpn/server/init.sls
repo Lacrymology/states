@@ -165,6 +165,16 @@ openvpn_{{ instance }}_client:
     - require:
       - pkg: salt_minion_deps
 
+{{ config_dir }}/client.zip:
+  file:
+    - managed
+    - user: root
+    - group: root
+    - mode: 400
+    - replace: False
+    - require:
+      - cmd: openvpn_{{ instance }}_client
+
     {%- elif servers[instance]['mode'] == 'tls' %}
 
 openvpn_create_empty_crl_{{ instance }}:
@@ -316,6 +326,16 @@ openvpn_{{ instance }}_{{ client }}:
       - module: openvpn_client_cert_{{ instance }}_{{ client }}
     - require:
       - pkg: salt_minion_deps
+
+{{ config_dir }}/clients/{{ client }}.zip:
+  file:
+    - managed
+    - user: root
+    - group: root
+    - mode: 400
+    - replace: False
+    - require:
+      - cmd: openvpn_{{ instance }}_{{ client }}
                 {%- endif -%}
             {%- endif %}{# client cert not in revocation list -#}
         {%- endfor %}{# client cert -#}

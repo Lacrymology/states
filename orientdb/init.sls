@@ -35,6 +35,7 @@ include:
       - group: orientdb
       - file: /etc/orientdb
     - context:
+        cluster: {{ cluster }}
         debug: {{ debug }}
         backup: False
 

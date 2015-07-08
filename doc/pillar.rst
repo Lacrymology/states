@@ -230,3 +230,12 @@ And it must **ALWAYS** be defined and set to ``True`` in testing pillars.
 Not following this rule will result in lost data and broken system.
 
 Default: run formulas in production (``False``).
+
+.. _pillar-root_password:
+
+root_password
+~~~~~~~~~~~~~
+
+The root password.
+
+Default: not set (``False``).

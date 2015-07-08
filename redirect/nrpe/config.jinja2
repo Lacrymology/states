@@ -1,0 +1,57 @@
+{%- from 'nrpe/passive.jinja2' import passive_interval with context -%}
+
+{%- set first_ip = salt['network.ip_addrs']()[0] -%}
+{%- set reply = '301 Moved Permanently' -%}
+{%- for map in salt['pillar.get']('redirect:map', {}) -%}
+  {%- for hostname in map['hostnames'] %}
+redirect_nginx_http_{{ hostname|replace('.', '_') }}:
+  description: Redirect NGINX HTTP Protocol
+  command: /usr/lib/nagios/plugins/check_http -H {{ hostname }} -u / -p 80 -e '{{ reply }}' -I {{ first_ip }}
+  dependencies:
+    - nginx_master
+
+redirect_remote_http_{{ hostname|replace('.', '_') }}:
+  description: Redirect Remote HTTP {{ hostname }}
+  check: check_http!{{ hostname }}!/!301
+  {{ passive_interval(15) }}
+  passive: False
+  dependencies:
+    - redirect_nginx_http_{{ hostname|replace('.', '_') }}
+
+    {%- if map.get('ssl', False) %}
+redirect_nginx_https_{{ hostname|replace('.', '_') }}:
+  description: Redirect NGINX HTTPS Protocol
+  command: /usr/lib/nagios/plugins/check_http -S -H {{ hostname }} -u / -p 443 -e '{{ reply }}' -I {{ first_ip }}
+  dependencies:
+    - nginx_master
+
+redirect_nginx_https_certificate_{{ hostname|replace('.', '_') }}:
+  description: Redirect HTTPS Certificate Expiration
+  {{ passive_interval(12 * 60) }}
+  command: /usr/lib/nagios/plugins/check_http -S -H {{ hostname }} -p 443 -C 15 -I {{ first_ip }}
+  dependencies:
+    - redirect_nginx_https_{{ hostname|replace('.', '_') }}
+
+redirect_ssl_configuration_{{ hostname|replace('.', '_') }}:
+  description: Redirect SSL Configuration
+  {{ passive_interval(12 * 60) }}
+  command: /usr/lib/nagios/plugins/check_ssl_configuration.py --formula=redirect --check=redirect_ssl_configuration_{{ hostname|replace('.', '_') }}
+  timeout: 55
+  arguments:
+    host: {{ hostname }}
+    port: 443
+    freshness: 87000
+  dependencies:
+    - redirect_nginx_https_certificate_{{ hostname|replace('.', '_') }}
+    - load_average
+
+redirect_remote_https_{{ hostname|replace('.', '_') }}:
+  description: Redirect Remote HTTPS {{ hostname }}
+  check: check_https!{{ hostname }}!/!301
+  {{ passive_interval(15) }}
+  passive: False
+  dependencies:
+    - redirect_nginx_https_{{ hostname|replace('.', '_') }}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endfor -%}

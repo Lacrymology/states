@@ -6,6 +6,17 @@ Pillar
 - :doc:`/git/doc/index` :doc:`/git/doc/pillar`
 - :doc:`/rsyslog/doc/index` :doc:`/rsyslog/doc/pillar`
 
+Kernel modules
+--------------
+
+In order to use `Conntrack Collector
+<https://github.com/BrightcoveOS/Diamond/tree/master/src/collectors/conntrack>`_,
+the following pillar keys must be defined::
+
+  kernel:
+    modules:
+      - nf_conntrack
+
 Optional
 --------
 

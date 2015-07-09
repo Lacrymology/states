@@ -1,0 +1,25 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+
+# {{ salt['pillar.get']('message_do_not_modify') }}
+
+strongswan_ipsec_starter_procs:
+  description: Strongswan IPSec Process
+  command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -u root -a '/usr/lib/ipsec/starter{% if grains['oscodename'] == 'trusty' %} --daemon charon{% endif %}'"
+
+strongswan_ipsec_charon_procs:
+  description: Strongswan IPSec Process
+  command: "/usr/lib/nagios/plugins/check_procs -c 1:1 -u root -a '/usr/lib/ipsec/charon --use-syslog'"
+  dependencies:
+    - strongswan_ipsec_starter_procs
+
+strongswan_ipsec_ike_port:
+  description: Strongswan IPSec IKE Port
+  command: "/usr/lib/nagios/plugins/check_udp_listen 500"
+  dependencies:
+    - strongswan_ipsec_charon_procs
+
+strongswan_ipsec_nat-t_port:
+  description: Strongswan IPSec NAT-T Port
+  command: "/usr/lib/nagios/plugins/check_udp_listen 4500"
+  dependencies:
+    - strongswan_ipsec_charon_procs

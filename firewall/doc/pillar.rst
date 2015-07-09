@@ -29,7 +29,7 @@ firewall:allowed_ips
 
 List of additional hosts that will get full access to this server.
 
-Default: no host allowed to fully access (empty list ``[]``).
+Default: no host allowed to fully access (``[]``).
 
 .. _pillar-firewall-filter:
 
@@ -39,7 +39,7 @@ firewall:filter
 Dict of protocol (:ref:`glossary-TCP` and :ref:`glossary-UDP`) with inside it
 the list of ports that are allowed from external networks.
 
-Default: Empty dict (``{}``).
+Default: do not allow to access any ports from outside (``{}``).
 
 .. _pillar-firewall-blacklist:
 
@@ -48,7 +48,7 @@ firewall:blacklist
 
 List of all IP addresses which will be blocked.
 
-Default: Empty list (``[]``).
+Default: do not block any IP (``[]``).
 
 Conditional
 -----------
@@ -60,4 +60,15 @@ firewall:filter:tcp
 
 List of :ref:`glossary-TCP` ports which are allowed to access from outside.
 
-Default: Empty list (``[]``).
+Default: do not allow to access any :ref:`glossary-TCP` ports from outside
+(``[]``).
+
+.. _pillar-firewall-filter-udp:
+
+firewall:filter:udp
+~~~~~~~~~~~~~~~~~~~
+
+List of :ref:`glossary-UDP` ports which are allowed to access from outside.
+
+Default: do not allow to access any :ref:`glossary-UDP` ports from outside
+(``[]``).

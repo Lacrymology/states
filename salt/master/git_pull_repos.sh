@@ -7,7 +7,7 @@ branch="$2"
 function update_repo () {
   cd "$file_roots"
   cd "$1"
-  git checkout --quiet "$2"
+  git checkout --quiet "$branch"
   git fetch --quiet origin "$branch"
   git reset --hard --quiet FETCH_HEAD
   cd $file_roots

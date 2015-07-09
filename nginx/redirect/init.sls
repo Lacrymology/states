@@ -11,7 +11,7 @@ include:
   file:
     - managed
     - template: jinja
-    - source: salt://redirect/nginx.jinja2
+    - source: salt://nginx/redirect/nginx.jinja2
     - user: root
     - group: www-data
     - mode: 440

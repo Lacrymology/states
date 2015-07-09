@@ -6,4 +6,4 @@ include:
   - ssl.nrpe
 {%- endif %}
 
-{{ passive_check('redirect') }}
+{{ passive_check('nginx.redirect') }}

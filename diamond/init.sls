@@ -6,6 +6,7 @@ include:
   - diamond.nrpe
 {% endif %}
   - git
+  - kernel.modules
   - local
   - python.dev
   - rsyslog
@@ -92,6 +93,8 @@ diamond:
     - order: 50
     - require:
       - service: rsyslog
+      {#- requires specific pillar key, look at diamond/doc/pillar.rst #}
+      - kmod: kernel_module_nf_conntrack
     - watch:
       - virtualenv: diamond
       - file: diamond.conf

@@ -7,7 +7,6 @@ include:
 test:
   monitoring:
     - run_all_checks
-    - order: last
     - require:
       - sls: redirect
       - sls: redirect.nrpe

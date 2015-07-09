@@ -4,7 +4,6 @@ include:
   - apt
   - diamond
   - mysql.server
-  - firewall.diamond
   - python.dev
   - salt.minion.diamond
   {#- mysqlclient-python depends on libssl-dev #}

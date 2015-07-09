@@ -71,6 +71,7 @@ Example::
     public: 1
     ssl: False
     ssl_redirect: True
+    reverse_proxy_ssl: True
     workers: 2
     cheaper: 1
     timeout: 60
@@ -129,3 +130,14 @@ wordpress:ssl_redirect
 .. |deployment| replace:: wordpress
 
 .. include:: /uwsgi/doc/pillar.inc
+
+.. _pillar-wordpress-reverse_proxy_ssl:
+
+wordpress:reverse_proxy_ssl
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Whether :doc:`index` is running behind a reverse proxy that provides
+:ref:`glossary-SSL` or not.
+
+Default: run under a web server directly or reverse proxy does not provide
+:ref:`glossary-SSL` (``False``).

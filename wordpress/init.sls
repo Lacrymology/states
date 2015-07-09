@@ -8,8 +8,6 @@ include:
   - logrotate
   - mysql.server
   - php.dev
-{#- In order to connect to MySQL, certain configuration is required in /etc/salt/minion.d/mysql.conf #}
-  - salt.minion.upgrade
 {%- if ssl %}
   - ssl
 {%- endif %}
@@ -54,7 +52,6 @@ wordpress:
     - name: {{ dbname }}
     - pkg: python-mysqldb
     - require:
-      - file: /etc/salt/minion.d/mysql.conf
       - service: mysql-server
       - pkg: python-mysqldb
   mysql_user:
@@ -63,7 +60,6 @@ wordpress:
     - name: {{ dbuser }}
     - password: {{ dbuserpass }}
     - require:
-      - file: /etc/salt/minion.d/mysql.conf
       - service: mysql-server
       - pkg: python-mysqldb
   mysql_grants:

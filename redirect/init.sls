@@ -5,6 +5,7 @@ include:
 {%- if ssl %}
   - ssl
 {%- endif %}
+  - web
 
 /etc/nginx/conf.d/redirect.conf:
   file:
@@ -16,6 +17,7 @@ include:
     - mode: 440
     - require:
       - pkg: nginx
+      - user: web
     - watch_in:
       - service: nginx
     - context:

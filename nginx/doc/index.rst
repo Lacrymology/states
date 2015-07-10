@@ -35,3 +35,5 @@ Content
     :glob:
 
     *
+
+    ../redirect/doc/index

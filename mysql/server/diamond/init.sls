@@ -3,6 +3,9 @@
 include:
   - apt
   - diamond
+{%- if salt['pillar.get']('fail2ban:banaction', 'hostsdeny').startswith('iptables') %}
+  - firewall
+{%- endif %}
   - mysql.server
   - python.dev
   - salt.minion.diamond

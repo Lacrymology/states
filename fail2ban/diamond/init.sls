@@ -1,7 +1,7 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
 include:
-  - firewall.diamond
+  - firewall
   - rsyslog.diamond
 
 fail2ban_diamond_resources:

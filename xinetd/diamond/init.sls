@@ -2,7 +2,9 @@
 
 include:
   - diamond
-  - firewall.diamond
+{%- if salt['pillar.get']('fail2ban:banaction', 'hostsdeny').startswith('iptables') %}
+  - firewall
+{%- endif %}
 
 xinetd_diamond_resources:
   file:

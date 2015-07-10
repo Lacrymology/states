@@ -176,3 +176,17 @@ Default: allocate ``2G`` bytes to use as :doc:`index` storage backend.
 
    The pre-allocate action will not happen if the unit is ``K`` (too
    small) or ``T`` (too much time to pre-allocate).
+
+varnish:monitor
+~~~~~~~~~~~~~~~
+
+Provide hostname and expected response code to monitor backend response.
+
+Example::
+
+  varnish:
+    monitor:
+      hostname: archive.robotinfra.com
+      response: 200 OK
+
+Default: do not provide additional information (``False``).

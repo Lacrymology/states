@@ -36,3 +36,4 @@ Content
 
     *
     ../server/doc/index
+    ../client/doc/index

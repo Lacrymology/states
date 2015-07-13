@@ -22,8 +22,8 @@ varnish_status:
   description: Varnish HTTP status
   command: >
       /usr/lib/nagios/plugins/check_http -I {{ listen_address }} -p {{ listen_port }} -t {{ timeout }}
-      {% if "hostname" in monitor %} -H "{{ monitor["hostname"] }}"{% endif %}
-      {% if "response" in monitor %} -e "{{ monitor["response"] }}"{% endif %}
+      {%- if "hostname" in monitor %} -H "{{ monitor["hostname"] }}"{% endif %}
+      {%- if "response" in monitor %} -e "{{ monitor["response"] }}"{% endif %}
   timeout: {{ timeout }}
   dependencies:
     - varnish_port

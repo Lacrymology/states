@@ -65,7 +65,7 @@ bind_zone_dir:
     - name: /var/lib/bind/zones
     - user: root
     - group: bind
-    - mode: 775 {# bind group needs to write to update dynamic DNS #}
+    - mode: 770 {# bind group needs to write to update dynamic DNS #}
     - require:
       - pkg: bind
 

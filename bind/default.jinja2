@@ -3,4 +3,4 @@
 RESOLVCONF=no
 
 {# startup options for the server #}
-OPTIONS="-u bind -4"
+OPTIONS="-u bind {% if salt['pillar.get']('bind:ipv4_only', True) %}-4{% endif %}"

@@ -6,6 +6,16 @@ Pillar
 Optional
 --------
 
+.. _pillar-ipv4_only:
+
+bind:ipv4_only
+~~~~~~~~~~~~~~
+
+Whether to allow only support for IPV4. If set to ``False`` it will serve
+both IPv4 and IPv6.
+
+Default: serves only IPv4 (``True``).
+
 .. _pillar-allowed_subnets:
 
 bind:allowed_subnets

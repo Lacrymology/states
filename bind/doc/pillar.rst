@@ -3,6 +3,15 @@ Pillar
 
 .. include:: /doc/include/add_pillar.inc
 
+.. note::
+
+  all ``TTL`` in this document has different meaning to :ref:`glossary-ttl`,
+  TTL here which is the time to live of the :ref:`glossary-RR`.  This field is
+  a 32 bit integer in units of seconds, an is primarily used by resolvers when
+  they cache :ref:`glossary-RR` . The TTL describes how long a
+  :ref:`glossary-RR` can be cached before it should be discarded.
+  See http://www.ietf.org/rfc/rfc1035.txt for more details.
+
 Optional
 --------
 
@@ -136,7 +145,8 @@ Default: ``1048576`` seconds.
 bind:zones:{{ zone_name }}:minimum
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Minimum TTL field that should be exported with any RR from this zone.
+Minimum TTL field that should be exported with any :ref:`glossary-RR`
+ from this zone.
 
 Default: ``2560`` seconds.
 

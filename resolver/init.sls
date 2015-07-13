@@ -11,9 +11,9 @@ dns_resolver:
     - managed
     - name: /etc/resolvconf/resolv.conf.d/head
     - contents: |
-        nameserver 127.0.0.1
-        nameserver 208.67.222.222
-        nameserver 8.8.8.8
+{% for nameserver in salt['pillar.get']('resolver:nameservers', []) %}
+        nameserver {{ nameserver }}
+{% endfor %}
     - require:
       - pkg: dns_resolver
   cmd:

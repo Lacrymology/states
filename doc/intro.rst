@@ -17,7 +17,6 @@ such as:
 - cron
 - logging rotation
 - :doc:`/ntp/doc/index` client and server
-- :doc:`/pdnsd/doc/index`
 - sudo
 - :doc:`Simple SMTP client </ssmtp/doc/index>`
 - screen

@@ -5,20 +5,8 @@ include:
   - apt.nrpe
   - nrpe
   - pip
-  - sudo
-  - sudo.nrpe
-
-sudo_pdnsd_nrpe:
-  file:
-    - managed
-    - name: /etc/sudoers.d/pdnsd_nrpe
-    - template: jinja
-    - source: salt://pdnsd/nrpe/sudo.jinja2
-    - mode: 440
-    - user: root
-    - group: root
-    - require:
-      - pkg: sudo
+  - resolver.nrpe
+  - rsyslog.nrpe
 
 pydns:
   file:
@@ -28,7 +16,7 @@ pydns:
     - user: root
     - group: root
     - mode: 440
-    - source: salt://pdnsd/nrpe/requirements.jinja2
+    - source: salt://bind/nrpe/requirements.jinja2
     - require:
       - file: {{ opts['cachedir'] }}/pip
   module:
@@ -44,16 +32,16 @@ pydns:
 /usr/lib/nagios/plugins/check_dns_caching.py:
   file:
     - managed
-    - source: salt://pdnsd/nrpe/check.py
+    - source: salt://bind/nrpe/check.py
     - user: nagios
     - group: nagios
     - mode: 550
     - require:
       - module: nrpe-virtualenv
       - pkg: nagios-nrpe-server
-      - file: nsca-pdnsd
+      - file: nsca-bind
     - require_in:
       - service: nagios-nrpe-server
       - service: nsca_passive
 
-{{ passive_check('pdnsd') }}
+{{ passive_check('bind') }}

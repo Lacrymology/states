@@ -3,4 +3,4 @@ Metrics
 
 :doc:`/diamond/doc/process`:
 
-* :doc:`/pdnsd/doc/index` daemon process
+* :doc:`index` daemon process (``named``).

@@ -3,25 +3,25 @@
 {%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
   - doc
-  - pdnsd
-  - pdnsd.diamond
-  - pdnsd.nrpe
+  - bind
+  - bind.diamond
+  - bind.nrpe
 
 test:
   diamond:
     - test
     - map:
         ProcessResources:
-          {{ diamond_process_test('pdnsd') }}
+          {{ diamond_process_test('bind') }}
     - require:
-      - sls: pdnsd
-      - sls: pdnsd.diamond
+      - sls: bind
+      - sls: bind.diamond
   monitoring:
     - run_all_checks
     - order: last
   qa:
     - test
-    - name: pdnsd
+    - name: bind
     - doc: {{ opts['cachedir'] }}/doc/output
     - require:
       - monitoring: test

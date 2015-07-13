@@ -1,0 +1,51 @@
+# {{ salt['pillar.get']('message_do_not_modify') }}
+{#
+Consider adding the 1918 zones here, if they are not used in your
+organization
+#}
+include "/etc/bind/zones.rfc1918";
+
+{%- macro zone(key, args, file, masters, forwarders) %}
+{%- set zone_type = args['type']|default('master') %}
+zone "{{ key }}" {
+  type {{ zone_type }};
+  {% if args['dnssec'] is defined and args['dnssec'] -%}
+  file "/var/lib/bind/zones/{{ file }}.signed";
+  {% else -%}
+  file "/var/lib/bind/zones/{{ file }}";
+  {%- endif %}
+  {% if args['allow-update'] is defined -%}
+  allow-update { {{args['allow-update']}}; };
+  {%- endif %}
+  {%- if args.update_policy is defined %}
+  update-policy {
+  {%-   for policy in args.update_policy %}
+    {{ policy }};
+  {%- endfor %}
+  };
+  {%- endif %}
+  {% if zone_type == "master" -%}
+    {% if 'notify' in args -%}
+  notify yes;
+    {% else -%}
+  notify no;
+    {%- endif -%}
+  {% else -%}
+  notify no;
+    {%- if masters %}
+  masters { {% for ip in masters %}{{ ip }};{% endfor %} };
+    {%- endif %}
+  {%- endif %}
+    {%- if forwarders %}
+  forward only;
+  forwarders { {% for fwd in forwarders %}{{ fwd }}; {% endfor -%} };
+    {%- endif %}
+};
+{%- endmacro %}
+
+{% for key, args in salt['pillar.get']('bind:zones', {}).iteritems() -%}
+  {%- set file = salt['pillar.get']("bind:zones:" + key + ":file") %}
+  {%- set masters = salt['pillar.get']("bind:zones:" + key + ":masters", []) %}
+  {%- set forwarders = salt['pillar.get']("bind:zones:" + key + ":forwarders", []) %}
+{{ zone(key, args, file, masters, forwarders) }}
+{% endfor %}

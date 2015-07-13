@@ -2,8 +2,9 @@
 
 include:
   - diamond
+  - rsyslog.diamond
 
-pdsnd_diamond_resources:
+bind_diamond_resources:
   file:
     - accumulated
     - name: processes
@@ -12,5 +13,5 @@ pdsnd_diamond_resources:
       - file: /etc/diamond/collectors/ProcessResourcesCollector.conf
     - text:
       - |
-        [[pdnsd]]
-        exe = ^\/usr\/sbin\/pdnsd$
+        [[bind]]
+        name = named

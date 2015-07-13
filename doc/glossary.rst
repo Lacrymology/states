@@ -665,3 +665,16 @@ subject (owner) of the certificate and by the party relying upon the
 certificate.
 
 .. https://en.wikipedia.org/wiki/Certificate_authority - 2015-07-02
+
+.. _glossary-RR:
+
+RR
+~~
+
+A domain name identifies a node.  Each node has a set of resource
+information, which may be empty.  The set of resource information
+associated with a particular name is composed of separate resource
+records (RRs).  The order of RRs in a set is not significant, and need
+not be preserved by name servers, resolvers, or other parts of the DNS.
+
+.. http://www.ietf.org/rfc/rfc1034.txt - 2015-07-13

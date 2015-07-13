@@ -49,7 +49,6 @@
   "openldap.backup",
   "openvpn.server",
   "openvpn.server.backup",
-  "pdnsd",
   "postfix",
   "postfix.backup",
   "postgresql.common",
@@ -101,7 +100,6 @@
   "nginx",
   "ntp",
   "slapd",
-  "pdnsd",
   "pgbouncer",
   "postfix_stats",
   "postfix",
@@ -206,7 +204,6 @@ include:
   - ntp.absent
   - openerp.absent
   - openldap.absent
-  - pdnsd.absent
   - pgbouncer.absent
   - postfix.diamond.absent
   - postfix.absent

@@ -1,0 +1,14 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+
+# {{ salt['pillar.get']('message_do_not_modify') }}
+
+bind_procs:
+  description: named process
+  command: '/usr/lib/nagios/plugins/check_procs -C named -u bind -w 1:1'
+
+bind_caching:
+  description: DNS Caching
+  command: /usr/lib/nagios/plugins/check_dns_caching.py --formula=bind --check=bind_caching
+  timeout: 30
+  dependencies:
+    - bind_procs

@@ -1,0 +1,22 @@
+; {{ salt['pillar.get']('message_do_not_modify') }}
+; {{ zonename }}
+{#- NOTICE: all the magic default numbers are get from RR of ns1.opendns.com
+    $ dig ns1.opendns.com @208.67.222.222 | grep SOA
+-#}
+
+$TTL    {{ salt['pillar.get']('bind:zones:' ~ zonename ~ ':ttl', 2560) }}
+@       IN      SOA     ns.{{ zonename }}. {{ zonedata['admin_email']|replace('@', '.') }}. (
+                                            {{ zonedata['serial'] }};
+                                            {{ zonedata['refresh']|default(16384) }} ;
+                                            {{ zonedata['retry']|default(2048) }} ;
+                                            {{ zonedata['expire']|default(1048576) }} ;
+                                            {{ zonedata['negative_cache_ttl']|default(2560) }});
+        IN      NS      ns
+;
+{%- set myip = grains['ip_interfaces']['eth0'][0] %}
+        IN      A       {{ myip }}
+ns     IN      A       {{ myip }}
+{%- set resource_records = zonedata['resource_records'] %}
+{%- for rr in resource_records %}
+{{ rr['name'] }} {% if 'ttl' in resource_records %}{{ rr['ttl'] }}{% endif %} IN {{ rr['type'] }} {{ rr['rdata'] }};
+{%- endfor %}

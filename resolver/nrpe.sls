@@ -1,0 +1,2 @@
+include:
+  - apt.nrpe

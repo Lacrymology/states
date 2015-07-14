@@ -4,12 +4,35 @@ include:
   - apt
   - resolver
 
+{#- bind formula replaces pdnsd formula, clean up before setting #}
+pdnsd:
+  pkg:
+    - purged
+    - require:
+      - service: pdnsd
+  service:
+    - dead
+    - enable: False
+  user:
+    - absent
+    - require:
+      - pkg: pdnsd
+
+{% for file in ('default/pdnsd', 'pdnsd.conf') %}
+/etc/{{ file }}:
+  file:
+    - absent
+    - require:
+      - pkg: pdnsd
+{% endfor %}
+
 bind:
   pkg:
     - installed
     - name: bind9
     - require:
       - cmd: apt_sources
+      - service: pdnsd
   service:
     - running
     - name: bind9

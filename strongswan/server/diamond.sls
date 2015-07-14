@@ -2,6 +2,7 @@
 
 include:
   - diamond
+  - firewall.diamond
   - strongswan.server
 
 strongswan_diamond_resources:

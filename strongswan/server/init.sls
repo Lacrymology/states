@@ -4,6 +4,7 @@
 
 include:
   - apt
+  - firewall
   - strongswan
   - sysctl
 

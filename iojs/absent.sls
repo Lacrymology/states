@@ -3,3 +3,9 @@
 iojs:
   pkg:
     - purged
+
+/usr/lib/node_modules:
+  file:
+    - absent
+    - require:
+      - pkg: iojs

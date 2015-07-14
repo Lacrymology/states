@@ -2,6 +2,7 @@
 
 {%- set mine = salt['mine.get']('*', 'monitoring.data') -%}
 {%- set pillars_ip = salt['pillar.get']('firewall:allowed_ips', []) -%}
+{%- set public_interface = salt['pillar.get']('network_interface', 'eth0') %}
 
 # {{ salt['pillar.get']('message_do_not_modify') }}
 *nat
@@ -31,7 +32,7 @@ COMMIT
 :INPUT {% if grains['virtual'] == 'openvzve' %}ACCEPT{% else %}DROP{% endif %} [0:0]
 :FORWARD {% if grains['virtual'] == 'openvzve' %}ACCEPT{% else %}DROP{% endif %} [0:0]
 {%- for ip in salt['pillar.get']('firewall:blacklist', []) %}
--A INPUT -i {% if grains['virtual'] == 'openvzve' %}venet0{% else %}eth0{% endif %} -s {{ ip }}/32 -j DROP
+-A INPUT -i {% if grains['virtual'] == 'openvzve' %}venet0{% else %}{{ public_interface }}{% endif %} -s {{ ip }}/32 -j DROP
 {%- endfor %}
 -A INPUT -i lo -j ACCEPT
 -A INPUT -p icmp -j ACCEPT
@@ -45,19 +46,19 @@ COMMIT
     {%- endif -%}
     {%- for addr_type in addr_types -%}
       {%- if mine[host]['ip_addrs'][addr_type] not in pillars_ip %}
--A INPUT -i {% if grains['virtual'] == 'openvzve' %}venet0{% else %}eth0{% endif %} -s {{ mine[host]['ip_addrs'][addr_type] }}/32 -j ACCEPT
+-A INPUT -i {% if grains['virtual'] == 'openvzve' %}venet0{% else %}{{ public_interface }}{% endif %} -s {{ mine[host]['ip_addrs'][addr_type] }}/32 -j ACCEPT
       {%- endif -%}
     {%- endfor -%}
   {%- endfor -%}
   {%- for host in pillars_ip %}
--A INPUT -i {% if grains['virtual'] == 'openvzve' %}venet0{% else %}eth0{% endif %} -s {{ host }}/32 -j ACCEPT
+-A INPUT -i {% if grains['virtual'] == 'openvzve' %}venet0{% else %}{{ public_interface }}{% endif %} -s {{ host }}/32 -j ACCEPT
   {%- endfor -%}
   {%- for protocol in filter -%}
     {%- set ports = salt['pillar.get']('firewall:filter:' + protocol, []) -%}
     {%- if ports|length == 1 %}
--A INPUT -i {% if grains['virtual'] == 'openvzve' %}venet0{% else %}eth0{% endif %} -p {{ protocol }} -m {{ protocol }} --dport {{ ports[0] }} -j ACCEPT
+-A INPUT -i {% if grains['virtual'] == 'openvzve' %}venet0{% else %}{{ public_interface }}{% endif %} -p {{ protocol }} -m {{ protocol }} --dport {{ ports[0] }} -j ACCEPT
     {%- else %}
--A INPUT -i {% if grains['virtual'] == 'openvzve' %}venet0{% else %}eth0{% endif %} -p {{ protocol }} -m multiport --dports {% for port in ports %}{{ port }}{% if not loop.last %},{% endif %}{% endfor %} -j ACCEPT
+-A INPUT -i {% if grains['virtual'] == 'openvzve' %}venet0{% else %}{{ public_interface }}{% endif %} -p {{ protocol }} -m multiport --dports {% for port in ports %}{{ port }}{% if not loop.last %},{% endif %}{% endfor %} -j ACCEPT
     {%- endif %}{# if length == 1 -#}
     {%- if grains['virtual'] == 'openvzve' %}
 -A INPUT -i venet0 -j DROP

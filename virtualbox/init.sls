@@ -22,6 +22,11 @@ virtualbox:
     - name: vboxmanage setproperty vrdeextpack 'Oracle VM VirtualBox Extension Pack'
     - require:
       - cmd: virtualbox-oracle-extpack
+  service:
+    - running
+    - watch:
+      - pkg: virtualbox
+      - pkg: kernel-headers
 
 {#- Oracle VM VirtualBox Extension Pack #}
 {%- set extpack_file = "Oracle_VM_VirtualBox_Extension_Pack-4.3.10-93012.vbox-extpack" %}

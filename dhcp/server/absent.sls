@@ -13,3 +13,8 @@ dhcp-server:
     - name: dhcpd
     - require:
       - pkg: dhcp-server
+
+dhcp-server_acl:
+  pkg:
+    - purged
+    - name: acl

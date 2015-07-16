@@ -8,6 +8,3 @@ mysql_diamond_collector:
 {{ opts['cachedir'] }}/pip/mariadb.server:
   file:
     - absent
-
-{%- from 'diamond/macro.jinja2' import fail2ban_count_ip_absent with context %}
-{{ fail2ban_count_ip_absent('mysqld-auth') }}

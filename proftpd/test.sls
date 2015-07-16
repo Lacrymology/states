@@ -11,6 +11,7 @@ include:
   - proftpd.backup.diamond
   - proftpd.diamond
   - proftpd.fail2ban
+  - proftpd.fail2ban.diamond
   - proftpd.nrpe
 
 {%- call test_cron() %}
@@ -19,6 +20,8 @@ include:
 - sls: proftpd.backup.nrpe
 - sls: proftpd.backup.diamond
 - sls: proftpd.diamond
+- sls: proftpd.fail2ban
+- sls: proftpd.fail2ban.diamond
 - sls: proftpd.nrpe
 {%- endcall %}
 

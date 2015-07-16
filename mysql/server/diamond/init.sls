@@ -3,10 +3,6 @@
 include:
   - apt
   - diamond
-{#- Take a look at /diamond/doc/fail2ban.rst for more details -#}
-{%- if salt['pillar.get']('fail2ban:banaction', 'hostsdeny').startswith('iptables') %}
-  - firewall
-{%- endif %}
   - mysql.server
   - python.dev
   - salt.minion.diamond
@@ -39,9 +35,6 @@ mysql_diamond_resources:
       - |
         [[mysql]]
         exe = ^\/usr\/sbin\/mysqld
-
-{%- from 'diamond/macro.jinja2' import fail2ban_count_ip with context %}
-{{ fail2ban_count_ip('mysqld-auth') }}
 
 libmysqlclient-dev:
   pkg:

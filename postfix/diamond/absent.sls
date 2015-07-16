@@ -13,9 +13,6 @@ postfix_diamond_queue_length:
     - absent
     - name: /usr/local/diamond/share/diamond/user_scripts/postfix_queue_length.sh
 
-{%- from 'diamond/macro.jinja2' import fail2ban_count_ip_absent with context %}
-{{ fail2ban_count_ip_absent('postfix') }}
-
 /etc/rsyslog.d/postfix_stats.conf:
   file:
     - absent

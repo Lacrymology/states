@@ -9,10 +9,6 @@ include:
     {%- endif %}
 {%- endif %}
   - diamond
-{#- Take a look at /diamond/doc/fail2ban.rst for more details -#}
-{%- if salt['pillar.get']('fail2ban:banaction', 'hostsdeny').startswith('iptables') %}
-  - firewall
-{%- endif %}
   - postfix
   - rsyslog
   - local
@@ -56,9 +52,6 @@ postfix_diamond_queue_length:
     - require:
       - module: diamond
       - file: diamond.conf
-
-{%- from 'diamond/macro.jinja2' import fail2ban_count_ip with context %}
-{{ fail2ban_count_ip('postfix') }}
 
 /var/log/mail.log:
   file:

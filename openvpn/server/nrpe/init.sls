@@ -5,6 +5,6 @@ include:
   - apt.nrpe
   - nrpe
   - rsyslog.nrpe
-  - ssl.nrpe
+  - openssl.nrpe
 
 {{ passive_check('openvpn.server') }}

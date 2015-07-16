@@ -2,5 +2,3 @@
 
 include:
   - apt.nrpe
-  - openssl.nrpe
-  - sslyze

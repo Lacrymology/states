@@ -5,6 +5,7 @@
 include:
   - apt
   - firewall
+  - openssl
   - strongswan
   - sysctl
 
@@ -49,6 +50,8 @@ strongswan_ca_cert:
     - cwd: /etc/ipsec.d/cacerts
     - cmd: openssl x509 -in {{ ca_name }}_cert.pem -inform pem -out {{ ca_name }}_cert.der -outform der
     - unless: test -f /etc/ipsec.d/cacerts/{{ ca_name }}_cert.der
+    - require:
+      - pkg: openssl
     - watch:
       - cmd: strongswan_ca_cert
 
@@ -119,6 +122,8 @@ strongswan_client_{{ client }}_cert:
     - cwd: /etc/ipsec.d/certs
     - cmd: openssl pkcs12 -export -inkey /etc/ipsec.d/private/{{ client }}_key.pem -in {{ client }}_cert.pem -name "{{ client }}" -certfile /etc/ipsec.d/cacerts/{{ ca_name }}_cert.pem -caname "{{ ca_name }} CA" -out {{ client }}_cert.p12 -password pass:{{ password }}
     - unless: test -f /etc/ipsec.d/certs/{{ client }}_cert.p12
+    - require:
+      - pkg: openssl
     - watch:
       - cmd: strongswan_client_{{ client }}_cert
 {%- endfor %}

@@ -2,12 +2,14 @@
 
 include:
   - apt
+  - openssl
 
 ssl-cert:
   pkg:
     - latest
     - require:
       - cmd: apt_sources
+      - pkg: openssl
 
 {#-
 package ca-certificates can't be removed because salt-minion require it,

@@ -57,7 +57,8 @@ dhcp-server_acl:
     - name: acl
     - require:
       - cmd: apt_sources
-  cmd.run:
+  cmd:
+    - run
     - name: setfacl -m u:dhcpd:rwx /var/lib/dhcp
     - unless: getfacl /var/lib/dhcp | grep user:dhcpd:rwx
     - require:
@@ -67,7 +68,8 @@ dhcp-server_acl:
       - service: dhcp-server
 
 dhcp-server_acl_default:
-  cmd.run:
+  cmd:
+    - run
     - name: setfacl -dm u:dhcpd:rwx /var/lib/dhcp
     - unless: getfacl /var/lib/dhcp | grep default:user:dhcpd:rwx
     - require:

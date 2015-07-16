@@ -3,7 +3,6 @@
 {%- from "upstart/absent.sls" import upstart_absent with context -%}
 {{ upstart_absent('fail2ban') }}
 
-
 extend:
   fail2ban:
     process:
@@ -16,18 +15,16 @@ extend:
         - file: fail2ban
         - file: /etc/rsyslog.d/fail2ban-upstart.conf
         - file: fail2ban-log
-
-fail2ban_installed_files:
-  cmd:
-    - run
-    - name: rm -f $(cat /usr/local/fail2ban/install.log)
-    - require:
-      - process: fail2ban
+    cmd:
+      - run
+      - name: rm -f $(cat /usr/local/fail2ban/install.log)
+      - require:
+        - process: fail2ban
 
 {%- for dir in ('/etc', '/etc/logrotate.d', '/usr/local', '/usr/share', '/usr/share/doc', '/var/log', '/var/run') %}
 {{ dir }}/fail2ban:
   file:
     - absent
     - require:
-      - cmd: fail2ban_installed_files
+      - cmd: fail2ban
 {%- endfor %}

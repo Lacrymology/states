@@ -46,19 +46,19 @@ def __is_timeouted(start_time, timeout):
     return dict
 
     """
-    # timeout exceed
+    # timeout exceeded
     if __current_time() - start_time > timeout:
         return (True,
                 lambda return_dict, name, user: return_dict.update(
                     {'result': False,
-                     'comment': ('Timeout exceed (pattern: "{}",'
+                     'comment': ('Timeout exceeded (pattern: "{}", '
                                  'user: "{}")'.format(name, user))}))
     return (False, None)
 
 
 def wait(name, timeout=30, user=None, **kargs):
     """
-    Sate that wait to a process to appear in process list, return
+    State that wait to a process to appear in process list, return
     False if exceed a timeout value
 
     .. code-block:: yaml
@@ -116,7 +116,7 @@ def wait(name, timeout=30, user=None, **kargs):
 
 def wait_for_dead(name, timeout=30, user=None, **kargs):
     """
-    Sate that wait to a process to disappear in process list, return
+    State that wait to a process to disappear in process list, return
     False if exceed a timeout value
 
     .. code-block:: yaml

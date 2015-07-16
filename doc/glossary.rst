@@ -702,3 +702,16 @@ as a single file. It is commonly used to bundle a private key with its X.509
 certificate or to bundle all the members of a chain of trust.
 
 .. https://en.wikipedia.org/wiki/PKCS_12 - 2015-07-17
+
+.. _glossary-TCP-Wrapper:
+
+TCP Wrapper
+~~~~~~~~~~~
+
+TCP Wrapper is a host-based networking ACL system, used to filter network
+access to Internet Protocol servers on (Unix-like) operating systems such as
+Linux or BSD. It allows host or subnetwork IP addresses, names and/or ident
+query replies, to be used as tokens on which to filter for access control
+purposes.
+
+.. https://en.wikipedia.org/wiki/TCP_Wrapper - 2015-07-16

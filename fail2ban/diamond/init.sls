@@ -1,7 +1,10 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
 include:
+{#- Take a look at /diamond/doc/fail2ban.rst for more details -#}
+{%- if salt['pillar.get']('fail2ban:banaction', 'hostsdeny').startswith('iptables') %}
   - firewall
+{%- endif %}
   - rsyslog.diamond
 
 fail2ban_diamond_resources:

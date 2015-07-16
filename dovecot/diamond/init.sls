@@ -2,6 +2,7 @@
 
 include:
   - diamond
+{#- Take a look at /diamond/doc/fail2ban.rst for more details -#}
 {%- if salt['pillar.get']('fail2ban:banaction', 'hostsdeny').startswith('iptables') %}
   - firewall
 {%- endif %}

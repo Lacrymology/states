@@ -35,20 +35,24 @@ Example::
     secret_types:
       eap:
         user: pass
+    rightsourceip_pools:
+      - 192.168.10.0/24
+    dns_servers:
+      - 208.67.222.222
 
 .. _pillar-strongswan-ca-name:
 
 strongswan:ca:name
 ~~~~~~~~~~~~~~~~~~
 
-Name of the Certificate Authority.
+Name of the :ref:`glossary-CA`.
 
 .. _pillar-strongswan-ca-days:
 
 strongswan:ca:days
 ~~~~~~~~~~~~~~~~~~
 
-Number of days the Certificate Authority will be valid.
+Number of days the :ref:`glossary-CA` will be valid.
 
 .. _pillar-strongswan-ca-country:
 
@@ -97,14 +101,15 @@ The certificate `Common Name <http://info.ssl.com/article.aspx?id=10048>`_.
 strongswan:ca:email
 ~~~~~~~~~~~~~~~~~~~
 
-Email Address.
+Email Address that will be put into the :ref:`glossary-CA` certificate's
+subject.
 
 .. _pillar-strongswan-secret_types:
 
 strongswan:secret_types
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-A dict of secret types with key is the type and value maybe is another dict of
+A dict of secret types with key is the type and value is another dict of
 username and password.
 
 .. _pillar-strongswan-secret_types-type:
@@ -121,6 +126,19 @@ strongswan:rightsourceip_pools
 
 List of pools in :ref:`glossary-CIDR` notation.
 
+.. _pillar-strongswan-dns_servers:
+
+strongswan:dns_servers
+~~~~~~~~~~~~~~~~~~~~~~
+
+List of :ref:`glossary-DNS` servers that will be assigned to peer via
+mode-config (IKEv1) or configuration payload (IKEv2).
+
+.. note::
+
+   This list must not include a client named ``server`` which will override
+   the server certificate.
+
 Optional
 --------
 
@@ -132,15 +150,13 @@ Example::
     public_interface: eth0
     clients:
       ios: 456
-    dns_servers:
-      - 208.67.222.222
 
 .. _pillar-strongswan-ca-bits:
 
 strongswan:ca:bits
 ~~~~~~~~~~~~~~~~~~
 
-Number of RSA key bits.
+The number of bits in the :ref:`glossary-RSA` key.
 
 Default: ``2048`` bit :ref:`glossary-RSA`.
 
@@ -162,18 +178,3 @@ Data formed as a dictionary with key is the name of the client certificate and
 value is the password of :ref:`glossary-pkcs12` certificate file.
 
 Default: just support Android, no extra clients (``{}``).
-
-.. _pillar-strongswan-dns_servers:
-
-strongswan:dns_servers
-~~~~~~~~~~~~~~~~~~~~~~
-
-List of :ref:`glossary-DNS` servers that will be assigned to peer via
-mode-config (IKEv1) or configuration payload (IKEv2).
-
-Default: uses Google :ref:`glossary-DNS` (``['8.8.8.8', '8.8.4.4']``).
-
-.. note::
-
-   This list must not include a client named ``server`` which will override
-   the server certificate.

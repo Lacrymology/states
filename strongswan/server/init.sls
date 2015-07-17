@@ -65,7 +65,7 @@ strongswan_server_key:
       - pkg: strongswan
   file:
     - managed
-    - name: /etc/ipsec.d/private/server.key
+    - name: /etc/ipsec.d/private/server_key.pem
     - user: root
     - group: root
     - mode: 400

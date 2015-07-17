@@ -68,7 +68,7 @@ fail2ban:
     - running
     - watch:
       - file: fail2ban
-      - file: /etc/init/fail2ban.conf
+      - file: /etc/init.d/fail2ban
 
 /usr/local/fail2ban/src:
   file:
@@ -79,14 +79,14 @@ fail2ban:
     - require:
       - virtualenv: fail2ban
 
-/etc/init/fail2ban.conf:
+/etc/init.d/fail2ban:
   file:
     - managed
-    - source: salt://fail2ban/upstart.jinja2
+    - source: salt://fail2ban/sysvinit.jinja2
     - template: jinja
     - user: root
     - group: root
-    - mode: 440
+    - mode: 550
     - require:
       - cmd: fail2ban
 

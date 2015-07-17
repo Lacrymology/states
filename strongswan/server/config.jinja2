@@ -15,7 +15,6 @@ conn %default
     keyingtries=1
     keyexchange=ikev2
     left={{ grains['ip_interfaces'][strongswan_interface][0] }}
-    left=
     leftcert=server_cert.pem
     leftauth=pubkey
     leftfirewall=yes

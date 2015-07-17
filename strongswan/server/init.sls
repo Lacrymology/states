@@ -149,7 +149,7 @@ strongswan_client_{{ client }}_cert:
         # {{ salt['pillar.get']('message_do_not_modify') }}
 
         {{ strongswan.ike_daemon }} {
-    {%- for dns in salt['pillar.get']('strongswan:dns_servers', ['8.8.8.8', '8.8.4.4']) %}
+    {%- for dns in salt['pillar.get']('strongswan:dns_servers') %}
             dns{{ loop.index }} = {{ dns }}
     {%- endfor %}
         }

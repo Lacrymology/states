@@ -678,3 +678,25 @@ records (RRs).  The order of RRs in a set is not significant, and need
 not be preserved by name servers, resolvers, or other parts of the DNS.
 
 .. http://www.ietf.org/rfc/rfc1034.txt - 2015-07-13
+
+.. _glossary-RSA:
+
+RSA
+~~~
+
+RSA is one of the first practical public-key cryptosystems and is widely used
+for secure data transmission. In such a cryptosystem, the encryption key is
+public and differs from the decryption key which is kept secret. In RSA, this
+asymmetry is based on the practical difficulty of factoring the product of two
+large prime numbers, the factoring problem.
+
+.. https://en.wikipedia.org/wiki/RSA_(cryptosystem) - 2015-7-09
+
+.. _glossary-PKCS12:
+
+PKCS12
+~~~~~~
+
+PKCS #12 defines an archive file format for storing many cryptography objects
+as a single file. It is commonly used to bundle a private key with its X.509
+certificate or to bundle all the members of a chain of trust.

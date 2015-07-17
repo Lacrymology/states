@@ -1,0 +1,11 @@
+{% extends "firewall/config.jinja2" %}
+
+{%- set default_interface = salt['pillar.get']('network_interface', 'eth0') %}
+{%- set strongswan_interface = salt['pillar.get']('strongswan:public_interface', False)|default(default_interface, boolean=True) %}
+{%- set pools = salt['pillar.get']('strongswan:rightsourceip_pools') %}
+
+{% block nat %}
+{{ super() }}
+-A POSTROUTING -s {% for pool in pools %}{{ pool }}{% if not loop.last %},{% endif %}{% endfor %} -o {{ strongswan_interface }} -m policy --dir out --pol ipsec -j ACCEPT
+-A POSTROUTING -s {% for pool in pools %}{{ pool }}{% if not loop.last %},{% endif %}{% endfor %} -o {{ strongswan_interface }} -j MASQUERADE
+{% endblock %}

@@ -7,7 +7,7 @@ include:
   - openvpn
   - rsyslog
   - salt.minion.deps
-  - ssl
+  - openssl
 
 /etc/default/openvpn:
   file:
@@ -45,7 +45,7 @@ openvpn_dh:
     - name: openssl dhparam -out /etc/openvpn/dh.pem {{ salt['pillar.get']('openvpn:dhparam:key_size', 2048) }}
     - unless: test -f /etc/openvpn/dh.pem
     - require:
-      - pkg: ssl-cert
+      - pkg: openssl
       - pkg: openvpn
 
 openvpn_ca:

@@ -1,0 +1,37 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+
+# {{ salt['pillar.get']('message_do_not_modify') }}
+
+{%- set default_interface = salt['pillar.get']('network_interface', 'eth0') %}
+{%- set strongswan_interface = salt['pillar.get']('strongswan:public_interface', False)|default(default_interface, boolean=True) %}
+
+config setup
+    nat_traversal=yes
+
+conn %default
+    ikelifetime=60m
+    keylife=20m
+    rekeymargin=3m
+    keyingtries=1
+    keyexchange=ikev2
+    left={{ grains['ip_interfaces'][strongswan_interface][0] }}
+    left=
+    leftcert=server_cert.pem
+    leftauth=pubkey
+    leftfirewall=yes
+    leftsubnet=0.0.0.0/0
+    right=%any
+    rightsourceip={% for pool in salt['pillar.get']('strongswan:rightsourceip_pools') %}{{ pool }}{% if not loop.last %},{% endif %}{% endfor %}
+
+conn android
+    rightauth=eap-mschapv2
+    rightsendcert=never
+    eap_identity=%any
+    auto=add
+
+conn ios
+    keyexchange=ikev1
+    authby=xauthrsasig
+    xauth=server
+    pfs=no
+    auto=add

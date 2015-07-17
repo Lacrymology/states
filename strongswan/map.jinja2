@@ -1,0 +1,12 @@
+{% set strongswan = salt["grains.filter_by"]({
+  "precise": {
+    "config_file": "/etc/strongswan.conf",
+    "ike_daemon": "pluto",
+    "starter_name": "ipsec",
+  },
+  "trusty": {
+    "config_file": "/etc/strongswan.d/charon.conf",
+    "ike_daemon": "charon",
+    "starter_name": "strongswan",
+  },
+}, grain="oscodename", default="precise") %}

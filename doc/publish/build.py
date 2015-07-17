@@ -25,7 +25,11 @@ class PublishDoc(pysc.Application):
 
         logger.debug("Running git pull in %s", config["cwd"])
         subprocess.check_call(
-            ["git", "pull"],
+            ["git", "fetch", "origin", config["rev"]],
+            cwd=config["cwd"],
+        )
+        subprocess.check_call(
+            ["git", "reset", "--hard", "FETCH_HEAD"],
             cwd=config["cwd"],
         )
 

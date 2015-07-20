@@ -54,6 +54,7 @@ doc-source:
         output: /usr/local/salt-common-doc
         saltenv: {{ salt['common.saltenv']() }}
         virtualenv: {{ opts['cachedir'] }}/doc
+        rev: {{ rev }}
 
 /usr/local/bin/build-salt-common-doc.py:
   file:

@@ -4,7 +4,7 @@
 include:
   - apt.nrpe
   - nrpe
-  - rsyslog.nrpe
   - openssl.nrpe
+  - rsyslog.nrpe
 
 {{ passive_check('openvpn.server') }}

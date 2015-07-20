@@ -700,3 +700,5 @@ PKCS12
 PKCS #12 defines an archive file format for storing many cryptography objects
 as a single file. It is commonly used to bundle a private key with its X.509
 certificate or to bundle all the members of a chain of trust.
+
+.. https://en.wikipedia.org/wiki/PKCS_12 - 2015-07-17

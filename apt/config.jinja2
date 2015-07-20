@@ -10,7 +10,7 @@ APT::Clean-Installed "true";
 {%- if proxy_server %}
 Acquire::http::Proxy "http://{{ proxy_server }}";
 {%- endif -%}
-{%- if salt['pillar.get']('debug', False) %}
+{%- if salt['pillar.get']('apt:debug', False) %}
 quiet "0";
 quiet::NoUpdate "false";
 Debug::pkgDPkgProgressReporting "true";

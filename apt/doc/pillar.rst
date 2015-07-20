@@ -45,6 +45,15 @@ Example::
       - cmon
       - nmap
 
+.. _pillar-apt-debug:
+
+apt:debug
+~~~~~~~~~
+
+Turn on debug output for :doc:`index`.
+
+Default: turn off all debug (``False``).
+
 .. _pillar-apt-upgrade:
 
 apt:upgrade

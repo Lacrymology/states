@@ -6,7 +6,7 @@
 
 shinken_poller_procs:
   description: Shinken Poller Deamon
-  command: "/usr/lib/nagios/plugins/check_procs -c 1:10 -u shinken -C shinken-poller -a /etc/shinken/poller.conf"
+  command: "/usr/lib/nagios/plugins/check_procs -c 1:10 -u shinken -a 'shinken-poller -c /etc/shinken/poller.conf'"
 
 shinken_poller_port:
   description: Shinken Poller Local Port

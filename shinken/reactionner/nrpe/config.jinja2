@@ -6,7 +6,7 @@
 
 shinken_reactionner_procs:
   description: Shinken Reactionner Deamon
-  command: "/usr/lib/nagios/plugins/check_procs -c 1:10 -u shinken -C shinken-reactio -a /etc/shinken/reactionner.conf"
+  command: "/usr/lib/nagios/plugins/check_procs -c 1:10 -u shinken -a 'shinken-reactionner -c /etc/shinken/reactionner.conf'"
 
 shinken_reactionner_port:
   description: Shinken Reactionner Local Port

@@ -68,7 +68,7 @@ fail2ban:
     - running
     - watch:
       - file: fail2ban
-      - file: /etc/init/fail2ban.conf
+      - file: /etc/init.d/fail2ban
 
 /usr/local/fail2ban/src:
   file:
@@ -79,14 +79,37 @@ fail2ban:
     - require:
       - virtualenv: fail2ban
 
-/etc/init/fail2ban.conf:
+fail2ban_remove_upstart:
+  file:
+    - absent
+    - names:
+      - /etc/init/fail2ban.conf
+      - /etc/init/fail2ban.override
+      - /etc/rsyslog.d/fail2ban-upstart.conf
+      - /var/log/upstart/fail2ban.log
+    - watch_in:
+      - service: fail2ban
+
+{%- for log_file in salt['file.find']('/var/log/upstart/', name='fail2ban.log.*', type='f') %}
+{{ log_file }}:
+  file:
+    - absent
+{%- endfor %}
+
+{%- for log_file in salt['file.find']('/var/log/upstart/', name='network-interface-*', type='f') %}
+{{ log_file }}:
+  file:
+    - absent
+{%- endfor %}
+
+/etc/init.d/fail2ban:
   file:
     - managed
-    - source: salt://fail2ban/upstart.jinja2
+    - source: salt://fail2ban/sysvinit.jinja2
     - template: jinja
     - user: root
     - group: root
-    - mode: 440
+    - mode: 550
     - require:
       - cmd: fail2ban
 

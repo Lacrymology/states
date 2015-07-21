@@ -83,7 +83,7 @@ Default: no encryption (``{}``).
 .. note::
 
    If ``mppe-128`` is defined here, then it requires an additional pillar key
-   in :ref:`pillar-kernel-modules`::
+   in :ref:`pillar-kernel_modules`::
 
      kernel:
        modules:

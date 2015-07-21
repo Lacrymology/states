@@ -68,7 +68,7 @@ shinken-module-{{ module_name }}:
     {%- endif %}
 {%- endmacro %}
 
-{% set version = "2.4" %}
+{% set version = "2.4.1" %}
 {% set ssl = salt['pillar.get']('shinken:ssl', False) %}
 include:
   - apt
@@ -171,7 +171,7 @@ shinken:
 {%- else %}
     - source: https://github.com/naparuba/shinken/archive/{{ version }}.tar.gz
 {%- endif %}
-    - source_hash: md5=e27941d5eb32399d5d7554ad937d8b82
+    - source_hash: md5=b3e3dbb8a65bf0fb160dfecc2cc45aad
     - archive_format: tar
     - tar_options: z
     - if_missing: /usr/local/shinken/src/shinken-{{ version }}

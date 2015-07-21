@@ -66,7 +66,7 @@ stop_shinken:
     - run
     - name: /usr/local/bin/shinken-ctl.sh stop
     - require:
-{%- for role in ('arbiter', 'broker', 'poller', 'reactionner', 'scheduler', 'receiver') %}
+{%- for role in roles %}
       - sls: shinken.{{ role }}
 {%- endfor %}
 

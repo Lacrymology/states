@@ -68,7 +68,7 @@ shinken-module-{{ module_name }}:
     {%- endif %}
 {%- endmacro %}
 
-{% set version = "2.0.3" %}
+{% set version = "2.4.1" %}
 {% set ssl = salt['pillar.get']('shinken:ssl', False) %}
 include:
   - apt
@@ -143,6 +143,11 @@ include:
   file:
     - absent
 
+shinken_absent_old_version:
+  file:
+    - absent
+    - name: /usr/local/shinken/src/Shinken-2.0.3
+
 shinken:
   pkg:
     - installed
@@ -164,12 +169,12 @@ shinken:
 {%- if files_archive %}
     - source: {{ files_archive }}/mirror/shinken/{{ version }}.tar.gz
 {%- else %}
-    - source: https://pypi.python.org/packages/source/S/Shinken/Shinken-{{ version }}.tar.gz
+    - source: https://github.com/naparuba/shinken/archive/{{ version }}.tar.gz
 {%- endif %}
-    - source_hash: md5=0350cc0fbeba6405d88e5fbce3580a91
+    - source_hash: md5=b3e3dbb8a65bf0fb160dfecc2cc45aad
     - archive_format: tar
     - tar_options: z
-    - if_missing: /usr/local/shinken/src/Shinken-{{ version }}
+    - if_missing: /usr/local/shinken/src/shinken-{{ version }}
     - require:
       - file: /usr/local/shinken/src
   file:
@@ -199,11 +204,13 @@ shinken:
       - pkg: shinken
   cmd:
     - wait
-    - cwd: /usr/local/shinken/src/Shinken-{{ version }}
+    - cwd: /usr/local/shinken/src/shinken-{{ version }}
     - name: /usr/local/shinken/bin/python setup.py install --install-scripts=/usr/local/shinken/bin --record=/usr/local/shinken/install.log
     - watch:
       - archive: shinken
     - require:
+      - file: shinken_absent_old_version
+      - file: shinken_disable_hard_ssl_name_check
       - file: shinken_replace_etc_shinken
       - file: shinken_replace_etc
       - file: shinken_replace_init
@@ -224,30 +231,60 @@ shinken:
       - pkg: ssl-cert
 {%- endif %}
 
+/usr/local/shinken/etc/shinken/packs:
+  file:
+    - directory
+    - user: shinken
+    - group: shinken
+    - mode: 770
+    - makedirs: True
+    - recurse:
+      - user
+      - group
+      - mode
+    - require:
+      - user: shinken
+      - virtualenv: shinken
+
+{#- Workaround for this bug: https://github.com/naparuba/shinken/issues/1641 #}
+shinken_disable_hard_ssl_name_check:
+  file:
+    - replace
+    - name: /usr/local/shinken/src/shinken-{{ version }}/shinken/objects/satellitelink.py
+    - pattern: |
+        'hard_ssl_name_check': BoolProp\(default=True, fill_brok=\['full_status'\]\),$
+    - repl: "'hard_ssl_name_check': BoolProp(default=False, fill_brok=['full_status']),\n"
+    - backup: False
+    - require:
+      - archive: shinken
+
 shinken_replace_etc_shinken:
   file:
     - replace
-    - name: /usr/local/shinken/src/Shinken-{{ version }}/setup.py
+    - name: /usr/local/shinken/src/shinken-{{ version }}/setup.py
     - pattern: '"/etc/shinken"'
     - repl: '"/usr/local/shinken/etc/shinken"'
+    - backup: False
     - require:
       - archive: shinken
 
 shinken_replace_etc:
   file:
     - replace
-    - name: /usr/local/shinken/src/Shinken-{{ version }}/setup.py
+    - name: /usr/local/shinken/src/shinken-{{ version }}/setup.py
     - pattern: "'/etc'"
     - repl: "'/usr/local/shinken/etc'"
+    - backup: False
     - require:
       - archive: shinken
 
 shinken_replace_init:
   file:
     - replace
-    - name: /usr/local/shinken/src/Shinken-{{ version }}/setup.py
+    - name: /usr/local/shinken/src/shinken-{{ version }}/setup.py
     - pattern: "'/etc/init.d/shinken"
     - repl: "'/usr/local/shinken/etc/init.d/shinken"
+    - backup: False
     - require:
       - archive: shinken
 
@@ -255,7 +292,7 @@ shinken_replace_init:
 shinken{{ suffix }}_python_path:
   file:
     - replace
-    - name: /usr/local/shinken/src/Shinken-{{ version }}/bin/shinken{{ suffix }}
+    - name: /usr/local/shinken/src/shinken-{{ version }}/bin/shinken{{ suffix }}
     - pattern: "#!/usr/bin/env python"
     - repl: "#!/usr/local/shinken/bin/python"
     - backup: False
@@ -273,6 +310,8 @@ shinken{{ suffix }}_python_path:
     - group: shinken
     - mode: 750
     - require:
+      - file: /var/lib/shinken
+      - file: /usr/local/shinken/etc/shinken/packs
       - user: shinken
 
 {%- if files_archive %}

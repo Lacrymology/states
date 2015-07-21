@@ -107,6 +107,7 @@ bind_{{ zonename }}_zone_file:
         zonedata: {{ salt['pillar.get']('bind:zones:' ~ zonename) }}
     - require:
       - file: bind_zone_dir
+      - pkg: bind
     - watch_in:
       - service: bind
 {%- endfor %}

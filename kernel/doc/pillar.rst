@@ -8,13 +8,12 @@ Optional
 
 Example::
 
-  kernel:
-    modules:
-      - vboxsf
+  kernel_modules:
+    - vboxsf
 
-.. _pillar-kernel-modules:
+.. _pillar-kernel_modules:
 
-kernel:modules
+kernel_modules
 ~~~~~~~~~~~~~~
 
 List of all required kernel modules which need to be loaded.

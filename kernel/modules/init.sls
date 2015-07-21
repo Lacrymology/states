@@ -1,6 +1,6 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
-{%- for module in salt['pillar.get']('kernel:modules', []) %}
+{%- for module in salt['pillar.get']('kernel_modules', []) %}
 kernel_module_{{ module }}:
   kmod:
     - present

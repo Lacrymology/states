@@ -20,7 +20,7 @@ env ORIENTDB_HOME=/var/lib/orientdb/
 
 script
 exec /usr/bin/java -server \
-    {% if salt['pillar.get']('orientdb:cluster', {}) %}-Ddistributed=true \{% endif %}
+    {%- if salt['pillar.get']('orientdb:cluster', {}) %}-Ddistributed=true \{% endif %}
     {% if heap_size %}-Xms{{ heap_size }} -Xmx{{ heap_size }} \{% endif %}
     {% if perm_size %}-XX:PermSize={{ perm_size }} -XX:MaxPermSize={{ perm_size }} \{% endif %}
     {% if buffer_size %}-Dstorage.diskCache.bufferSize={{ buffer_size }} \{% endif %}

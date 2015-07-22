@@ -4,7 +4,6 @@
 
 include:
   - apt.nrpe
-  - firewall.nrpe
   - openssl.nrpe
 
 {{ passive_check('strongswan.server') }}

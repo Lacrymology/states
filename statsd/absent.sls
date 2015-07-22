@@ -2,13 +2,3 @@
 
 {%- from "upstart/absent.sls" import upstart_absent with context -%}
 {{ upstart_absent('statsd') }}
-
-/usr/local/statsd:
-  file:
-    - absent
-    - require:
-      - service: statsd
-
-{{ opts['cachedir'] }}/pip/statsd:
-  file:
-    - absent

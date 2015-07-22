@@ -224,21 +224,6 @@ shinken:
       - pkg: ssl-cert
 {%- endif %}
 
-/usr/local/shinken/etc/shinken/packs:
-  file:
-    - directory
-    - user: shinken
-    - group: shinken
-    - mode: 770
-    - makedirs: True
-    - recurse:
-      - user
-      - group
-      - mode
-    - require:
-      - user: shinken
-      - virtualenv: shinken
-
 shinken_replace_etc_shinken:
   file:
     - replace
@@ -291,8 +276,6 @@ shinken{{ suffix }}_python_path:
     - group: shinken
     - mode: 750
     - require:
-      - file: /var/lib/shinken
-      - file: /usr/local/shinken/etc/shinken/packs
       - user: shinken
 
 {%- if files_archive %}

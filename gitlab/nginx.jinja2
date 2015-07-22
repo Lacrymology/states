@@ -30,6 +30,13 @@ server {
 
 {% include "nginx/block_hacks.jinja2" %}
 
+    if ($http_user_agent ~* "Go") {
+        return 200 "
+        <!DOCTYPE html>
+        <head><meta content='$host$uri git $scheme://$host$uri.git' name='go-import'></head>
+        </html>";
+    }
+
 {#- GitLab clone/push via https is broken, block it #}
     location ~ \.git$ {
         return 404;

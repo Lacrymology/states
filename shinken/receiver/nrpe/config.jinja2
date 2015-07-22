@@ -6,7 +6,7 @@
 
 shinken_receiver_procs:
   description: Shinken Receiver Deamon
-  command: "/usr/lib/nagios/plugins/check_procs -c 1:10 -u shinken -a 'shinken-receiver -c /etc/shinken/receiver.conf'"
+  command: "/usr/lib/nagios/plugins/check_procs -c 1:10 -u shinken -C shinken-receive -a /etc/shinken/receiver.conf"
 
 shinken_receiver_port:
   description: Shinken Receiver Local Port

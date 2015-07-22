@@ -7,7 +7,7 @@
 shinken_arbiter_procs:
   description: Shinken Arbiter Daemon
 {#- for some reason arbiter don't change it's user id to shinken #}
-  command: "/usr/lib/nagios/plugins/check_procs -c 1:10 -u root -a 'shinken-arbiter -c /etc/shinken/arbiter.conf'"
+  command: "/usr/lib/nagios/plugins/check_procs -c 1:10 -u root -C shinken-arbiter -a /etc/shinken/arbiter.conf"
 
 {%- set arbiter_mine = salt['mine.get'](grains['id'], 'monitoring.data') %}
 {%- if arbiter_mine %}

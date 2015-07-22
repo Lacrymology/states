@@ -33,6 +33,22 @@ Example::
     job_cleaner:
       username: cleaner
       token: JENKINS_APITOKEN_FOR_CLEANER
+    gitconfig:
+      git.example.com: gitlab
+      github.com: git
+
+
+.. _pillar-jenkins-gitconfig:
+
+jenkins:gitconfig
+~~~~~~~~~~~~~~~~~
+
+Map of address to user that will be used in gitconfig file of jenkins
+user. By setting this, a :doc:`index` job can run ``go get`` shell command
+against repositories from configured addresses. This support targets mainly
+:doc:`/go/doc/index` user.
+
+Default: do not provide gitconfig (``{}``).
 
 .. _pillar-jenkins-job_cleaner:
 

@@ -143,11 +143,6 @@ include:
   file:
     - absent
 
-shinken_absent_old_version:
-  file:
-    - absent
-    - name: /usr/local/shinken/src/Shinken-2.0.3
-
 shinken:
   pkg:
     - installed
@@ -209,7 +204,6 @@ shinken:
     - watch:
       - archive: shinken
     - require:
-      - file: shinken_absent_old_version
       - file: shinken_disable_hard_ssl_name_check
       - file: shinken_replace_etc_shinken
       - file: shinken_replace_etc

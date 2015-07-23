@@ -28,6 +28,7 @@ Welcome to Infrastructure Documentation:
     execution_logging
     run_tests
     troubleshoot
+    errordb
     changelog
     /_pillars/index
     pysc

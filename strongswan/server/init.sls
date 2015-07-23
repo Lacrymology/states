@@ -4,7 +4,6 @@
 
 include:
   - apt
-  - firewall
   - openssl
   - strongswan
   - sysctl
@@ -180,6 +179,3 @@ extend:
         - cmd: strongswan_server_cert
         {#- ip_forward must be enabled #}
         - file: sysctl
-  iptables:
-    file:
-      - source: salt://strongswan/server/firewall.jinja2

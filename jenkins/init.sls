@@ -39,6 +39,21 @@ jenkins_dependencies:
     - require:
       - pkg: jenkins
 
+{#- ``go get`` does not support using ssh, this config git to do that,
+    thus allow using ``go get`` with private repositories. #}
+jenkins_git_config_allow_use_git_through_ssh_instead_of_https:
+  file:
+    - managed
+    - name: /var/lib/jenkins/.gitconfig
+    - source: salt://jenkins/gitconfig.jinja2
+    - template: jinja
+    - require:
+      - pkg: git
+      - pkg: jenkins
+      - file: openssh-client
+    - require_in:
+      - service: jenkins
+
 {%- set version = '1.618' %}
 jenkins:
   pkg:

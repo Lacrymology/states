@@ -1,9 +1,11 @@
 // {{ salt['pillar.get']('message_do_not_modify') }}
 
-{%- set allowed_subnets = salt['pillar.get']('bind:allowed_subnets', []) %}
-{%- if allowed_subnets %}
-acl salt_hosts { {% for ip in allowed_subnets %}{{ ip }};{% endfor %} };
+{%- set allowed_subnets = salt['pillar.get']('bind:allowed_subnets') %}
+
+{%- if allowed_subnets != ['any'] %}
+acl salt_hosts { {% for ip in allowed_subnets %}{{ ip }}; {% endfor %} };
 {%- endif %}
+
 options {
     directory "/var/cache/bind";
 
@@ -35,7 +37,9 @@ options {
 
     auth-nxdomain no;    {# conform to RFC1035 #}
     listen-on-v6 { any; };
-    {%- if allowed_subnets %}
+{%- if allowed_subnets != ['any'] %}
     allow-query { salt_hosts; };
-    {%- endif %}
+{%- else %}
+    allow-query { any; };
+{%- endif %}
 };

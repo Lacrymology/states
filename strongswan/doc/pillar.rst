@@ -35,8 +35,11 @@ Example::
     secret_types:
       eap:
         user: pass
-    rightsourceip_pools:
-      - 192.168.10.0/24
+    rightsourceip:
+      android_pools:
+        - 192.168.10.0/24
+      ios_pools:
+        - 192.168.11.0/24
     dns_servers:
       - 208.67.222.222
 
@@ -119,12 +122,28 @@ strongswan:secret_types:{{ type }}
 
 A dict of username and password of the ``{{ type }}`` of secret.
 
-.. _pillar-strongswan-rightsourceip_pools:
+.. _pillar-strongswan-rightsourceip-android_pools:
 
-strongswan:rightsourceip_pools
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+strongswan:rightsourceip:android_pools
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-List of pools in :ref:`glossary-CIDR` notation.
+List of pools in :ref:`glossary-CIDR` notation that will be used for android
+devices.
+
+.. _pillar-strongswan-rightsourceip-ios_pools:
+
+strongswan:rightsourceip:ios_pools
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+List of pools in :ref:`glossary-CIDR` notation that will be used for iOS
+devices.
+
+.. note::
+
+   In :doc:`index` 4.x, two :ref:`glossary-IKE` protocol versions were handled
+   by two separate :ref:`glossary-IKE` daemons. They both have their own state,
+   so this must be different from
+   :ref:`pillar-strongswan-rightsourceip-android_pools`.
 
 .. _pillar-strongswan-dns_servers:
 

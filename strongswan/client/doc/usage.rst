@@ -105,3 +105,37 @@ Config VPN
   * Apply then Connect
 
 To disconnect, click on the icon in the status bar --> disconnect strongSwan.
+
+Windows
+-------
+
+Import Certificate
+~~~~~~~~~~~~~~~~~~
+
+* Download the :ref:`glossary-CA` certificate to the workstation and rename to
+  .crt.
+* Start --> Search --> mmc (Microsoft Management Console) --> Yes
+* File --> Add/Remove Snap-in
+* Certificates --> Add --> select Computer account --> Next --> Local computer
+  --> Finish --> OK
+* Certificates (Local Computer) / Trusted Root Certification Authorities /
+  Certificates
+* More Actions --> All Tasks --> Import --> Next --> browse to the certificate
+  file that has been downloaded --> Open --> Next --> Next --> Finish --> OK
+
+Config VPN
+~~~~~~~~~~
+
+* Network and Sharing Center --> Set up a new connection or network
+* Connect to a workplace --> Next --> Use my Internet connection (VPN):
+
+  * Internet address: the public IP address of the
+    :doc:`/strongswan/server/doc/index`
+  * Destination name: ``strongSwan``
+  * Select "Don't connect now, just set it up so I can connect later" --> Next
+  * Username: the key of :ref:`pillar-strongswan-secret_types-type`
+  * Password: the value of :ref:`pillar-strongswan-secret_types-type`
+  * Create --> Connect now
+
+To disconnect, click on the network icon on the taskbar, right click on the VPN
+connection and choose Disconnect.

@@ -20,11 +20,11 @@ conn %default
     leftfirewall=yes
     leftsubnet=0.0.0.0/0
     right=%any
-    rightsourceip={% for pool in salt['pillar.get']('strongswan:rightsourceip_pools') %}{{ pool }}{% if not loop.last %},{% endif %}{% endfor %}
 
 conn android
     rightauth=eap-mschapv2
     rightsendcert=never
+    rightsourceip={% for pool in salt['pillar.get']('strongswan:rightsourceip:android_pools') %}{{ pool }}{% if not loop.last %},{% endif %}{% endfor %}
     eap_identity=%any
     auto=add
 
@@ -32,5 +32,6 @@ conn ios
     keyexchange=ikev1
     authby=xauthrsasig
     xauth=server
+    rightsourceip={% for pool in salt['pillar.get']('strongswan:rightsourceip:ios_pools') %}{{ pool }}{% if not loop.last %},{% endif %}{% endfor %}
     pfs=no
     auto=add

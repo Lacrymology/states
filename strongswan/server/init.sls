@@ -79,7 +79,7 @@ strongswan_server_cert:
   cmd:
     - run
     - cwd: /etc/ipsec.d/certs
-    - name: ipsec pki --pub --in /etc/ipsec.d/private/server_key.pem | ipsec pki --issue --cacert /etc/ipsec.d/cacerts/{{ ca_name }}_cert.pem --cakey /etc/ipsec.d/private/{{ ca_name }}_key.pem --dn "C={{ country }}, ST= {{ state }}, L={{ locality }}, O={{ organization }}, OU={{ organizational_unit }}, CN=server, E={{ email }}" --san {{ grains['ip_interfaces'][strongswan_interface][0] }} --flag serverAuth --flag ikeIntermediate --outform pem > server_cert.pem
+    - name: ipsec pki --pub --in /etc/ipsec.d/private/server_key.pem | ipsec pki --issue --cacert /etc/ipsec.d/cacerts/{{ ca_name }}_cert.pem --cakey /etc/ipsec.d/private/{{ ca_name }}_key.pem --dn "C={{ country }}, ST= {{ state }}, L={{ locality }}, O={{ organization }}, OU={{ organizational_unit }}, CN=server, E={{ email }}" --san @{{ grains['ip_interfaces'][strongswan_interface][0] }} --flag serverAuth --flag ikeIntermediate --outform pem > server_cert.pem
     - unless: test -f /etc/ipsec.d/certs/server.der
     - require:
       - cmd: strongswan_ca_key

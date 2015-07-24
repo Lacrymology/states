@@ -3,6 +3,11 @@
 
 set -e
 
+source /usr/local/share/salt_common.sh
+locking_script
+log_start_script "$@"
+trap "log_stop_script \$?" EXIT
+
 file_roots="$1"
 branch="$2"
 

@@ -10,10 +10,10 @@ function update_repo () {
   git checkout --quiet "$branch"
   git fetch --quiet origin "$branch"
   git reset --hard --quiet FETCH_HEAD
-  cd $file_roots
+  cd "$file_roots"
 }
 
-cd $file_roots
+cd "$file_roots"
 for repo in */;
 do
   if [ -e "$repo/.git" ]; then

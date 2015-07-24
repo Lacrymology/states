@@ -42,7 +42,7 @@ iOS
 Import certfificate
 ~~~~~~~~~~~~~~~~~~~
 
-* Download the :ref:`glossary-CA` certificate and the clientCert.p12 to the
+* Download the :ref:`glossary-CA` certificate and the ios_cert.p12 to the
   workstation and send it via email.
 * On the iOS device, tap on the attach files to install it.
 
@@ -72,15 +72,15 @@ OS X
 Import Certificate
 ~~~~~~~~~~~~~~~~~~
 
-* Download the :ref:`glossary-CA` certificate and the clientCert.p12 to the
+* Download the :ref:`glossary-CA` certificate and the ios_cert.p12 to the
   workstation
 * Open the Keychain Access application
 * Choose System keychain
 * File --> Import Items --> choose :ref:`glossary-CA` certificate --> Always
   Trust
-* File --> Import Items --> choose osx.p12
-* Double click on the client certificate, set Access Control to "Allow all
-  applications to access this item"
+* File --> Import Items --> choose ios_cert.p12
+* Expand the certificate, double click on the private key, set Access Control
+  to "Allow all applications to access this item"
 
 Config VPN
 ~~~~~~~~~~

@@ -35,7 +35,7 @@ redirect_nginx_https_certificate_{{ hostname|replace('.', '_') }}:
 redirect_ssl_configuration_{{ hostname|replace('.', '_') }}:
   description: Redirect SSL Configuration
   {{ passive_interval(12 * 60) }}
-  command: /usr/lib/nagios/plugins/check_ssl_configuration.py --formula=redirect --check=redirect_ssl_configuration_{{ hostname|replace('.', '_') }}
+  command: /usr/lib/nagios/plugins/check_ssl_configuration.py --formula=nginx.redirect --check=redirect_ssl_configuration_{{ hostname|replace('.', '_') }}
   timeout: 55
   arguments:
     host: {{ hostname }}

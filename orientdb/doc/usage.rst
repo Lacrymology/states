@@ -32,6 +32,10 @@ You can use :doc:`/s3cmd/doc/index` to copy it such as::
 Create and restore
 ~~~~~~~~~~~~~~~~~~
 
+You have to stop :doc:`index` service before create and restore database::
+
+  stop orientdb
+
 Use the :doc:`index` console to create a new database and restore the archive.
 
   /usr/local/bin/orientdb
@@ -60,3 +64,12 @@ Example::
   [snip]
   - Uncompressing file SP_UniqueSocialAccount0.hib...
   Database restored in 2.58 seconds
+
+If the database is already exist, connect to it with following command::
+
+  orientdb> connect plocal:/var/lib/orientdb/databases/myolddb username password
+
+..  warning::
+
+    * Username and password of a database can change after restore.
+    * Remember to start :doc:`index` service after restore

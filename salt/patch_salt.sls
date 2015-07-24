@@ -17,3 +17,12 @@ patch_salt_utils:
     - group: root
     - mode: 644
     - source: salt://salt/patch/utils.py
+
+patch_salt_log_setup_fix_deadlock:
+  file:
+    - managed
+    - name: {{ grains['saltpath'] }}/log/setup.py
+    - user: root
+    - group: root
+    - mode: 644
+    - source: salt://salt/patch/log_setup.py

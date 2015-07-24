@@ -12,6 +12,27 @@ Pillar
   :ref:`glossary-RR` can be cached before it should be discarded.
   See http://www.ietf.org/rfc/rfc1035.txt for more details.
 
+Mandatory
+---------
+
+Example::
+
+  bind:
+    allowed_subnets:
+      - any
+
+.. _pillar-allowed_subnets:
+
+bind:allowed_subnets
+~~~~~~~~~~~~~~~~~~~~
+
+List of IP addresses which are allowed to issue query to the server.
+
+.. note::
+
+   In the above example, ``any`` means that all hosts are allowed to make
+   queries.
+
 Optional
 --------
 
@@ -24,13 +45,6 @@ Whether to allow only support for IPV4. If set to ``False`` it will serve
 both IPv4 and IPv6.
 
 Default: serves only IPv4 (``True``).
-
-.. _pillar-allowed_subnets:
-
-bind:allowed_subnets
-~~~~~~~~~~~~~~~~~~~~
-
-Default: use default configuration, allows any subnet to query (``[]``).
 
 .. _pillar-forwarders:
 

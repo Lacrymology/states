@@ -39,6 +39,12 @@ orientdb_port
 Monitor :doc:`index` :ref:`glossary-TCP` port
 :ref:`glossary-TCP` ``2424``.
 
+orientdb_backup_{{ databse }}_age
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Check if the :doc:`index` database is backed up less than
+:ref:`pillar-backup-age` hours ago.
+
 orientdb_backup_dummy
 ~~~~~~~~~~~~~~~~~~~~~
 

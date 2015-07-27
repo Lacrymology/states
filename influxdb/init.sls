@@ -9,6 +9,7 @@ include:
   if files_archive else "http://influxdb.s3.amazonaws.com"
 %}
 {%- set pkg_url = mirror ~ "/influxdb_" ~ version ~ "_" ~ grains["osarch"] ~ ".deb"%}
+{%- set admin = salt["pillar.get"]("influxdb:admin", False) %}
 
 influxdb:
   pkg:
@@ -25,6 +26,8 @@ influxdb:
     - user: root
     - group: root
     - mode: 444
+    - context:
+        auth_enabled: "{{ "true" if admin else "false" }}"
     - require:
       - pkg: influxdb
   service:
@@ -53,11 +56,35 @@ python-influxdb:
     - watch:
       - file: python-influxdb
 
+{%- if admin %}
+influxdb_admin:
+  cmd:
+    - run
+    - name: |
+        /opt/influxdb/influx -execute "CREATE USER {{ admin["user"] }} WITH PASSWORD '{{ admin["password"] }}' WITH ALL PRIVILEGES"
+    - onlyif: |
+        /opt/influxdb/influx -execute 'SHOW USERS' {# can query without authentication #}
+    - require:
+      - service: influxdb
+{%- endif %}
+
 {%- for db in salt["pillar.get"]("influxdb:databases", []) %}
 influxdb_database_{{ db }}:
-  influxdb_database:
-    - present
-    - name: {{ db }}
+  cmd:
+    - run
+    - name: >
+        /opt/influxdb/influx -execute "CREATE DATABASE {{ db }}"
+  {%- if admin %}
+        -username '{{ admin["user"] }}'
+        -password '{{ admin["password"] }}'
+  {%- endif %}
+    - unless: >
+        /opt/influxdb/influx -execute "SHOW DATABASES"
+  {%- if admin %}
+        -username '{{ admin["user"] }}'
+        -password '{{ admin["password"] }}'
+  {%- endif %}
+        | sed -e '1,2d' | grep '^{{ db }}$'
     - require:
       - service: influxdb
       - module: python-influxdb

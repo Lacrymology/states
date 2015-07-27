@@ -15,3 +15,7 @@ influxdb:
 {{ opts["cachedir"] }}/pip/influxdb:
   file:
     - absent
+
+/etc/influxdb:
+  file:
+    - absent

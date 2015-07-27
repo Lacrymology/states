@@ -36,6 +36,13 @@ influxdb:
       - pkg: influxdb
       - file: influxdb
 
+/etc/influxdb:
+  file:
+    - symlink
+    - target: /etc/opt/influxdb
+    - require:
+      - pkg: influxdb
+
 /var/lib/influxdb:
   file:
     - directory

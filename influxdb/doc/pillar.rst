@@ -4,8 +4,8 @@ Pillar
 Optional
 --------
 
-databases
-~~~~~~~~~
+influxdb:databases
+~~~~~~~~~~~~~~~~~~
 
 List of :doc:`index` databases to create.
 

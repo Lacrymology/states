@@ -294,6 +294,7 @@ salt_master_script_git_pull_repos:
     - require:
       - file: /usr/local
       - file: bash
+      - file: /usr/local/share/salt_common.sh
 
 {%- set remotes = salt['pillar.get']('salt_master:gitfs_remotes', []) %}
 salt_master_cron_git_pull_repos:

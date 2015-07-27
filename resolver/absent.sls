@@ -1,3 +1,5 @@
+{%- set pkgs = salt["pkg.list_pkgs"]() %}
+{%- if "resolvconf" in pkgs %}
 dns_resolver:
   file:
     - managed
@@ -18,3 +20,4 @@ dns_resolver:
     - name: resolvconf -u
     - watch:
       - file: dns_resolver
+{%- endif %}

@@ -5,4 +5,4 @@ include:
   - apt.nrpe
   - pip.nrpe
 
-{{ passive_check('influxdb', check_ssl_score=True) }}
+{{ passive_check('influxdb') }}

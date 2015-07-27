@@ -36,6 +36,34 @@ influxdb:
       - pkg: influxdb
       - file: influxdb
 
+/var/lib/influxdb:
+  file:
+    - directory
+    - user: influxdb
+    - group: influxdb
+    - mod: 755
+    - require:
+      - pkg: influxdb
+
+/var/opt/influxdb:
+  file:
+    - absent
+    - require:
+      - service: influxdb
+
+{%- for dir in ('meta', 'data', 'hh') %}
+/var/lib/influxdb/{{ dir }}:
+  file:
+    - directory
+    - user: influxdb
+    - group: influxdb
+    - mod: 755
+    - require:
+      - file: /var/lib/influxdb
+    - require_in:
+      - file: influxdb
+{%- endfor %}
+
 python-influxdb:
   file:
     - managed

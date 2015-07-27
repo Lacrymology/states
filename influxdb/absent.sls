@@ -6,7 +6,7 @@ influxdb:
     - require:
       - service: influxdb
 
-/var/opt/influxdb:
+/var/lib/influxdb:
   file:
     - absent
     - require:

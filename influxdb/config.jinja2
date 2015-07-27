@@ -4,7 +4,7 @@
 reporting-disabled = true
 
 [meta]
-  dir = "/var/opt/influxdb/meta"
+  dir = "/var/lib/influxdb/meta"
   hostname = "localhost"
   bind-address = ":8088"
   retention-autocreate = true
@@ -14,7 +14,7 @@ reporting-disabled = true
   commit-timeout = "50ms"
 
 [data]
-  dir = "/var/opt/influxdb/data"
+  dir = "/var/lib/influxdb/data"
   MaxWALSize = 104857600
   WALFlushInterval = "10m"
   WALPartitionFlushDelay = "2s"
@@ -63,7 +63,7 @@ reporting-disabled = true
 
 [hinted-handoff]
   enabled = true
-  dir = "/var/opt/influxdb/hh"
+  dir = "/var/lib/influxdb/hh"
   max-size = 1073741824
   max-age = "168h"
   retry-rate-limit = 0

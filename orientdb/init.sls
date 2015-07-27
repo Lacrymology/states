@@ -98,7 +98,7 @@ orientdb:
     - name: /usr/local/
     - archive_format: tar
 {%- if files_archive %}
-    - source: https://archive.robotinfra.com/mirror/orientdb/{{ version }}.tar.xz
+    - source: {{ files_archive|replace('file://', '')|replace('https://', 'http://') }}/mirror/orientdb/{{ version }}.tar.xz
     - source_hash: md5={{ tar_xz_checksum }}
     - tar_options: J
 {%- else %}

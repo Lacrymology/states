@@ -3,6 +3,7 @@ include:
   - pip
 
 {%- set files_archive = salt['pillar.get']('files_archive', False) %}
+{%- set graphite_address = salt['pillar.get']('graphite_address', False) %}
 {%- set version = "0.9.1" %}
 {%- set mirror = files_archive|replace('file://', '')|replace('https://', 'http://') ~ "/mirror"
   if files_archive else "http://influxdb.s3.amazonaws.com"
@@ -16,10 +17,21 @@ influxdb:
       - influxdb: {{ pkg_url }}
     - require:
       - cmd: apt_sources
-  service:
-    - running
+  file:
+    - managed
+    - name: /etc/opt/influxdb/influxdb.conf
+    - template: jinja
+    - source: salt://influxdb/config.jinja2
+    - user: root
+    - group: root
+    - mode: 444
     - require:
       - pkg: influxdb
+  service:
+    - running
+    - watch:
+      - pkg: influxdb
+      - file: influxdb
 
 python-influxdb:
   file:

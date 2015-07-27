@@ -148,3 +148,10 @@ Plugin allows build Golang projects with Jenkins.
   from Jenkins 1.608+, when install Go plugin 1.1 may cause ``/configure``
   failed to load, see a workaround here:
   https://issues.jenkins-ci.org/browse/JENKINS-27499
+
+Role Strategy Plugin
+~~~~~~~~~~~~~~~~~~~~
+
+https://wiki.jenkins-ci.org/display/JENKINS/Role+Strategy+Plugin
+
+Add role-based strategy to ease and fasten users management.

@@ -1,0 +1,15 @@
+#!/bin/bash
+# {{ salt['pillar.get']('message_do_not_modify') }}
+# Usage of this is governed by a license that can be found in doc/license.rst
+
+set -e
+
+# log start stop time to syslog
+source /usr/local/share/salt_common.sh
+locking_script
+log_start_script "$@"
+trap "log_stop_script \$?" EXIT
+
+now=$(date '+%Y-%m-%d-%H_%M_%S')
+/opt/influxdb/influxd backup /var/lib/influxdb/backup/influxdb-"$now"
+/usr/local/bin/backup-file influxdb /var/lib/influxdb/backup influxdb-"$now"

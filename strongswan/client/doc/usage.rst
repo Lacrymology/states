@@ -139,3 +139,52 @@ Config VPN
 
 To disconnect, click on the network icon on the taskbar, right click on the VPN
 connection and choose Disconnect.
+
+Linux
+-----
+
+CLI
+~~~
+
+* Install :doc:`/strongswan/server/doc/index`::
+
+    apt-get install strongswan
+
+* Change the ``/etc/ipsec.conf`` file as follow::
+
+    conn strongswan
+      right=the public IP address of the :doc:`/strongswan/server/doc/index`
+      rightsubnet=0.0.0.0/0
+      rightauth=pubkey
+      rightid="gateway cert's subject"
+      leftsourceip=%config
+      leftauth=eap
+      leftid=ubuntu
+      eap_identity=the key of :ref:`pillar-strongswan-secret_types-type`
+      auto=add
+
+* Add username/password into the ``/etc/ipsec.secrets``::
+
+    <username> : EAP "<password>"
+
+  while <username> is the key of :ref:`pillar-strongswan-secret_types-type` and
+  <password> is the value of :ref:`pillar-strongswan-secret_types-type`.
+
+* Copy the :ref:`glossary-CA` certificate from the
+  :doc:`/strongswan/server/doc/index` to ``/etc/ipsec.d/cacerts``.
+
+* Connect by running::
+
+    ipsec up strongswan
+
+  If everything is OK, the following will appear at the end of the above output
+  in the terminal::
+
+    installing DNS server 8.8.8.8 to /etc/resolv.conf
+    installing new virtual IP 172.16.0.129
+
+  If not, look at the errors to troubleshoot.
+
+* To disconnect, run the following command::
+
+    ipsec down strongswan

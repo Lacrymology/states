@@ -2,6 +2,7 @@ include:
   - diamond
   - cron.diamond
   - backup.diamond
+  - influxdb.diamond
 
 influxdb_backup_diamond_resources:
   file:

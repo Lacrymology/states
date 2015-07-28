@@ -99,7 +99,7 @@ influxdb_admin:
         /opt/influxdb/influx -execute "CREATE USER {{ admin["user"] }} WITH PASSWORD '{{ admin["password"] }}' WITH ALL PRIVILEGES"
     - onlyif: |
         /opt/influxdb/influx -execute 'SHOW USERS' {# can query without authentication #}
-{%- else %
+{%- else %}
     - wait
     - name: echo 'influxdb authentication is disable'
 {%- endif %}

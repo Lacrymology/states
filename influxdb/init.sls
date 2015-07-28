@@ -91,17 +91,20 @@ python-influxdb:
     - watch:
       - file: python-influxdb
 
-{%- if admin %}
 influxdb_admin:
   cmd:
+{%- if admin %}
     - run
     - name: |
         /opt/influxdb/influx -execute "CREATE USER {{ admin["user"] }} WITH PASSWORD '{{ admin["password"] }}' WITH ALL PRIVILEGES"
     - onlyif: |
         /opt/influxdb/influx -execute 'SHOW USERS' {# can query without authentication #}
+{%- else %
+    - wait
+    - name: echo 'influxdb authentication is disable'
+{%- endif %}
     - require:
       - service: influxdb
-{%- endif %}
 
 {%- for db in salt["pillar.get"]("influxdb:databases", []) %}
 influxdb_database_{{ db }}:
@@ -121,6 +124,6 @@ influxdb_database_{{ db }}:
   {%- endif %}
         | sed -e '1,2d' | grep '^{{ db }}$'
     - require:
-      - service: influxdb
+      - cmd: influxdb_admin
       - module: python-influxdb
 {%- endfor %}

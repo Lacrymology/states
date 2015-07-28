@@ -245,8 +245,38 @@ openvpn_server_cert_{{ instance }}:
     - require_in:
       - service: openvpn-{{ instance }}
 
+{{ config_dir }}/ccd:
+  file:
+    - directory
+    - user: nobody
+    - group: nogroup
+    - mode: 550
+    - require:
+      - file: {{ config_dir }}
+
+{%- set server_octets = servers[instance]['server'].split()[0].split('.') %}
+{%- set server_last_octet = server_octets[3]|int + 1 %}
+
         {%- for client in servers[instance]['clients'] -%}
-            {%- if client not in servers[instance]['revocations'] %}
+            {%- if client not in servers[instance]['revocations'] -%}
+                {%- if client is mapping -%}
+                    {%- set client, ip = servers[instance]['clients'][loop.index0].items()[0] %}
+{{ config_dir }}/ccd/{{ client }}:
+  file:
+    - managed
+    - user: nobody
+    - group: nogroup
+    - mode: 400
+    - contents: |
+        # {{ salt['pillar.get']('message_do_not_modify') }}
+
+        ifconfig-push {{ ip }} {{ server_octets[0] + "." + server_octets[1] + "." + server_octets[2] + "." + server_last_octet|string }}
+    - require:
+      - file: {{ config_dir }}/ccd
+    - watch_in:
+      - service: openvpn-{{ instance }}
+                {%- endif %}
+
 openvpn_client_csr_{{ instance }}_{{ client }}:
   module:
     - run

@@ -140,6 +140,7 @@ Example::
         clients:
           - client1
           - client2
+          - client3: 172.16.0.3
       hr:
         mode: tls
         port: 1195
@@ -294,6 +295,10 @@ for :ref:`pillar-sysctl`::
 openvpn:servers:{{ instance }}:clients
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-A list of client's name that will be appended to the ``{{ instance }}_`` to
-become a `common name <http://info.ssl.com/article.aspx?id=10048>`_ when
-generating client certificates.
+A list of client's name. The element can be a single value that will be
+appended to the ``{{ instance }}_`` to become a
+`common name <http://info.ssl.com/article.aspx?id=10048>`_ when generating
+client certificates.
+
+If the element is a dictionary, then the value is the static :ref:`glossary-IP`
+that will be allocated to that client based on its common name.

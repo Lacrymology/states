@@ -1,6 +1,8 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
-{%- for module in salt['pillar.get']('kernel_modules', []) %}
+{%- set default_modules = ['nf_conntrack'] if grains['virtual'] != 'openvzve' else [] %}
+
+{%- for module in salt['pillar.get']('kernel_modules', [])|default(default_modules, boolean=True) %}
 kernel_module_{{ module }}:
   kmod:
     - present

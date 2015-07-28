@@ -7,10 +7,9 @@
 
 include:
   - apt
-  - firewall
   - local
-  - virtualenv
   - rsyslog
+  - virtualenv
 
 /etc/rsyslog.d/fail2ban.conf:
   file:

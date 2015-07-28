@@ -1,6 +1,5 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst #}
 # {{ salt['pillar.get']('message_do_not_modify') }}
-{%- set admin = salt["pillar.get"]("influxdb:admin", False) %}
 
 influxdb_procs:
   description: InfluxDB processes
@@ -12,7 +11,7 @@ influxdb_admin_port:
 
 influxdb_admin_http:
   description: InfluxDB admin TCP port
-  command: /usr/lib/nagios/plugins/check_http -H 127.0.0.1 -p 8083 {% if admin %}-e '401 Unauthorized'{% endif %}
+  command: /usr/lib/nagios/plugins/check_http -H 127.0.0.1 -p 8083
 
 influxdb_data_port:
   description: InfluxDB data TCP port

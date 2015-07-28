@@ -35,6 +35,12 @@ influxdb:
     - watch:
       - pkg: influxdb
       - file: influxdb
+  process:
+    - wait_socket
+    - address: "127.0.0.1"
+    - port: 8086
+    - require:
+      - service: influxdb
 
 /etc/influxdb:
   file:
@@ -104,7 +110,7 @@ influxdb_admin:
     - name: echo 'influxdb authentication is disable'
 {%- endif %}
     - require:
-      - service: influxdb
+      - process: influxdb
 
 {%- for db in salt["pillar.get"]("influxdb:databases", []) %}
 influxdb_database_{{ db }}:

@@ -5,6 +5,14 @@ influxdb:
     - purged
     - require:
       - service: influxdb
+  user:
+    - absent
+    - require:
+      - pkg: influxdb
+  group:
+    - absent
+    - require:
+      - pkg: influxdb
 
 /var/lib/influxdb:
   file:

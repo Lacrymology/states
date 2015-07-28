@@ -12,6 +12,18 @@ include:
 - pkg: clamav-daemon
 {%- endcall %}
 
+/etc/clamav/onerrorexecute.d/err-dbvirus-mail.sh:
+  file:
+    - managed
+    - source: salt://clamav/err_mail.jinja2
+    - template: jinja
+    - user: clamav
+    - group: clamav
+    - mode: 550
+    - require:
+      - pkg: clamav-freshclam
+      - user: clamav
+
 extend:
   clamav-freshclam:
     cmd:
@@ -40,6 +52,7 @@ extend:
       - order: 50
       - require:
         - cmd: clamav-freshclam
+        - file: /etc/clamav/onerrorexecute.d/err-dbvirus-mail.sh
       - watch:
         - file: clamav-freshclam
         - pkg: clamav-freshclam

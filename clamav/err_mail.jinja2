@@ -1,0 +1,8 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+# {{ salt['pillar.get']('message_do_not_modify') }}
+
+if [ -x '/usr/bin/ravenmail' ]; then
+    echo "freshclam: virus database update failed." | /usr/bin/ravenmail -s "{{ grains['id'] }}: clamav virus db update failed." root
+elif [ -x '/usr/bin/mail' ]; then
+    echo "freshclam: virus database update failed." | /usr/bin/mail -s "freshclam: clamav virus db update failed." root
+fi

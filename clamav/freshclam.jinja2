@@ -36,3 +36,4 @@ DatabaseMirror {{ mirror }}
 DNSDatabaseInfo {{ dns_db }}
 {%- endfor %}
 OnUpdateExecute touch /var/lib/clamav/last-update
+OnErrorExecute /etc/clamav/onerrorexecute.d/err-dbvirus-mail.sh

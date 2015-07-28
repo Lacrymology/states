@@ -29,7 +29,7 @@ clamav_remote_port:
     - clamav_procs
 {%- endif %}
 
-{%- set max_age = 86400 %}  {# one day in seconds #}
+{%- set max_age = 604800 %}  {# one week in seconds #}
 clamav_last_update:
   description: ClamAV Last Update
   command: '/usr/lib/nagios/plugins/check_file_age -w {{ max_age }} -c {{ max_age }} /var/lib/clamav/last-update'

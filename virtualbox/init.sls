@@ -32,8 +32,10 @@ virtualbox:
 {#- Oracle VM VirtualBox Extension Pack #}
 {%- if os.is_precise %}
   {%- set extpack_file = "Oracle_VM_VirtualBox_Extension_Pack-4.1.12-77245.vbox-extpack" %}
+  {%- set extpack_hash = "sha256=57a98286a9393e49c36ab8873878a89d0ac6b1179bf9a5c0d5fd517e272a8881" %}
 {%- elif os.is_trusty %}
   {%- set extpack_file = "Oracle_VM_VirtualBox_Extension_Pack-4.3.10-93012.vbox-extpack" %}
+  {%- set extpack_hash = "md5=25b70fa71d9320e2836b9be138457ee0" %}
 {%- endif %}
 {%- if files_archive %}
   {%- set source = files_archive ~ "/mirror/" ~ extpack_file %}
@@ -46,7 +48,7 @@ virtualbox-oracle-extpack:
     - managed
     - name: {{ opts['cachedir'] }}/{{ extpack_file }}
     - source: {{ source }}
-    - source_hash: md5=25b70fa71d9320e2836b9be138457ee0
+    - source_hash: {{ extpack_hash }}
     - user: root
     - group: root
     - mode: 644

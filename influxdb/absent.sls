@@ -29,6 +29,7 @@ influxdb:
   "/etc/rc5.d/S20influxdb",
   "/var/log/influxdb/",
   "/var/lib/influxdb/",
+  "/var/lib/update-rc.d/influxdb",
   "/etc/influxdb",
 )%}
 {{ file }}:

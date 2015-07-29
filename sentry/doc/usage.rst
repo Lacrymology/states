@@ -5,7 +5,7 @@ Usage
 
    Current version of :doc:`index` (7.4.1) has a bug that causes infinite
    redirect loop when a newly created user logins (see this `bug report
-   <https://github.com/getsentry/sentry/issues/1463>`_). An user without an
+   <https://github.com/getsentry/sentry/issues/1463>`_). A user without an
    organization will be redirected to organization creating page, that always
    redirect to itself. To workaround this problem, login to :doc:`index`
    :doc:`/django/doc/index` admin page (append ``/admin`` to hostnames defined

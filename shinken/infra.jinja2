@@ -191,7 +191,7 @@ define command {
 {#- fire a salt event when a service goes into hard problem state #}
 define command {
   command_name fire_salt_event
-  command_line /usr/bin/sudo /usr/local/shinken/bin/salt_event_handler --service-state '$SERVICESTATE$' --service-state-type '$SERVICESTATETYPE$' --service-desc '$SERVICEDESC$' --service-display-name '$SERVICEDISPLAYNAME$' --hostname '$HOSTNAME$' --formula '$_SERVICEFORMULA$' --reaction '$_SERVICEREACTION$' --salt-env '$_SERVICESALT_ENV$'
+  command_line env SHELL='/bin/bash' /usr/bin/sudo /usr/local/shinken/bin/salt_event_handler --service-state '$SERVICESTATE$' --service-state-type '$SERVICESTATETYPE$' --service-desc '$SERVICEDESC$' --service-display-name '$SERVICEDISPLAYNAME$' --hostname '$HOSTNAME$' --formula '$_SERVICEFORMULA$' --reaction '$_SERVICEREACTION$' --salt-env '$_SERVICESALT_ENV$'
 }
 
 define timeperiod {

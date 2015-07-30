@@ -1,6 +1,20 @@
 strongSwan Client
 =================
 
+Certificate type and location
+-----------------------------
+
+* ``/etc/ipsec.d/cacerts/{{ ca_name }}_cert.der``: :ref:`glossary-CA`
+  certificate with ``{{ ca_name }}`` is the value of
+  :ref:`pillar-strongswan-ca-name`. This will be used for Android devices as it
+  only support this type.
+* ``/etc/ipsec.d/cacerts/{{ ca_name }}_cert.pem``: :ref:`glossary-CA`
+  certificate that can be used for others: iOS/OS X, Windows, ...
+* ``/etc/ipsec.d/certs/{{ client }}_cert.pem``: client certificate with
+  ``{{ client }}`` is the key of :ref:`pillar-strongswan-clients`.
+* ``/etc/ipsec.d/certs/{{ client }}_cert.p12``: client certificate in
+  :ref:`glossary-PKCS12` format. This will be used for iOS/OS X.
+
 Android
 -------
 
@@ -18,7 +32,7 @@ Android
   * Password: the value of :ref:`pillar-strongswan-secret_types-type`
   * CA certificate: Uncheck "Select automatically"
 
-    * Download the :ref:`glossary-CA` certificate from the
+    * Download the :ref:`glossary-CA` certificate (``.der`` format) from the
       :doc:`/strongswan/server/doc/index` to the workstation
     * Copy that certificate to the Android device by uploading to a web server,
       sending an email, or via a third-party app like Android File Transfer
@@ -42,8 +56,8 @@ iOS
 Import certfificate
 ~~~~~~~~~~~~~~~~~~~
 
-* Download the :ref:`glossary-CA` certificate and the ios_cert.p12 to the
-  workstation and send it via email.
+* Download the :ref:`glossary-CA` certificate (``.pem`` format) and the
+  ``{{ client }}_cert.p12`` to the workstation and send it via email.
 * On the iOS device, tap on the attach files to install it.
 
 Config VPN
@@ -64,7 +78,7 @@ Config VPN
     be "Connected" and a "VPN" symbol will be displayed in the status bar at
     the top left corner of the screen.
 
-To disconnect, move the slide-bar to the left.
+To disconnect, move the slide bar to the left.
 
 OS X
 ----
@@ -72,13 +86,13 @@ OS X
 Import Certificate
 ~~~~~~~~~~~~~~~~~~
 
-* Download the :ref:`glossary-CA` certificate and the ios_cert.p12 to the
-  workstation
+* Download the :ref:`glossary-CA` certificate (``.pem`` format) and the
+  ``{{ client }}_cert.p12`` to the Mac VPN client
 * Open the Keychain Access application
 * Choose System keychain
 * File --> Import Items --> choose :ref:`glossary-CA` certificate --> Always
   Trust
-* File --> Import Items --> choose ios_cert.p12
+* File --> Import Items --> choose ``{{ client }}_cert.p12``
 * Expand the certificate, double click on the private key, set Access Control
   to "Allow all applications to access this item"
 
@@ -112,8 +126,8 @@ Windows
 Import Certificate
 ~~~~~~~~~~~~~~~~~~
 
-* Download the :ref:`glossary-CA` certificate to the workstation and rename to
-  .crt.
+* Download the :ref:`glossary-CA` certificate (``.pem`` format) to the
+  Windows VPN client and rename the extension to ``.crt``.
 * Start --> Search --> mmc (Microsoft Management Console) --> Yes
 * File --> Add/Remove Snap-in
 * Certificates --> Add --> select Computer account --> Next --> Local computer
@@ -139,3 +153,52 @@ Config VPN
 
 To disconnect, click on the network icon on the taskbar, right click on the VPN
 connection and choose Disconnect.
+
+Linux
+-----
+
+CLI
+~~~
+
+* Install :doc:`/strongswan/server/doc/index`::
+
+    apt-get install strongswan
+
+* Change the ``/etc/ipsec.conf`` file as follow::
+
+    conn strongswan
+      right=the public IP address of the :doc:`/strongswan/server/doc/index`
+      rightsubnet=0.0.0.0/0
+      rightauth=pubkey
+      rightid="gateway cert's subject"
+      leftsourceip=%config
+      leftauth=eap
+      leftid=ubuntu
+      eap_identity=the key of :ref:`pillar-strongswan-secret_types-type`
+      auto=add
+
+* Add username/password into the ``/etc/ipsec.secrets``::
+
+    <username> : EAP "<password>"
+
+  while <username> is the key of :ref:`pillar-strongswan-secret_types-type` and
+  <password> is the value of :ref:`pillar-strongswan-secret_types-type`.
+
+* Copy the :ref:`glossary-CA` certificate from the
+  :doc:`/strongswan/server/doc/index` to ``/etc/ipsec.d/cacerts``.
+
+* Connect by running::
+
+    ipsec up strongswan
+
+  If everything is OK, the following will appear at the end of the above output
+  in the terminal::
+
+    installing DNS server 8.8.8.8 to /etc/resolv.conf
+    installing new virtual IP 172.16.0.129
+
+  If not, look at the errors to troubleshoot.
+
+* To disconnect, run the following command::
+
+    ipsec down strongswan

@@ -147,11 +147,13 @@ strongswan_client_{{ client }}_cert:
     - contents: |
         # {{ salt['pillar.get']('message_do_not_modify') }}
 
-        {{ strongswan.ike_daemon }} {
+{%- for daemon in strongswan.ike_daemon %}
+        {{ daemon }} {
     {%- for dns in salt['pillar.get']('strongswan:dns_servers') %}
             dns{{ loop.index }} = {{ dns }}
     {%- endfor %}
         }
+{%- endfor %}
     - require:
       - pkg: strongswan
 

@@ -1,0 +1,70 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst #}
+# {{ salt['pillar.get']('message_do_not_modify') }}
+
+reporting-disabled = true
+
+[meta]
+  dir = "/var/lib/influxdb/meta"
+  hostname = "localhost"
+  bind-address = ":8088"
+  retention-autocreate = true
+  election-timeout = "1s"
+  heartbeat-timeout = "1s"
+  leader-lease-timeout = "500ms"
+  commit-timeout = "50ms"
+
+[data]
+  dir = "/var/lib/influxdb/data"
+  MaxWALSize = 104857600
+  WALFlushInterval = "10m"
+  WALPartitionFlushDelay = "2s"
+
+[cluster]
+  shard-writer-timeout = "5s"
+
+[retention]
+  enabled = true
+  check-interval = "10m"
+
+[admin]
+  enabled = true
+  bind-address = ":8083"
+
+[http]
+  enabled = true
+  bind-address = ":8086"
+  auth-enabled = {{ auth_enabled }}
+  log-enabled = true
+  write-tracing = false
+  pprof-enabled = false
+
+[[graphite]]
+  enabled = false
+
+[collectd]
+  enabled = false
+
+[opentsdb]
+  enabled = false
+
+[udp]
+  enabled = false
+
+[monitoring]
+  enabled = false
+  write-interval = "24h"
+
+[continuous_queries]
+  enabled = true
+  recompute-previous-n = 2
+  recompute-no-older-than = "10m"
+  compute-runs-per-interval = 10
+  compute-no-more-than = "2m"
+
+[hinted-handoff]
+  enabled = true
+  dir = "/var/lib/influxdb/hh"
+  max-size = 1073741824
+  max-age = "168h"
+  retry-rate-limit = 0
+  retry-interval = "1s"

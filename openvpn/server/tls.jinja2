@@ -9,5 +9,6 @@ key /etc/openvpn/{{ instance }}/server.key
 dh /etc/openvpn/dh.pem
 server {{ vpn_instance['server'] }}
 ifconfig-pool-persist /var/lib/openvpn/{{ instance }}.ipp
+client-config-dir /etc/openvpn/{{ instance }}/ccd
 crl-verify /etc/openvpn/{{ instance }}/crl.pem
 {%- endblock authentication_mode %}

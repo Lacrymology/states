@@ -22,23 +22,28 @@ fake_{{ formula }}_login:
     - require:
       - cmd: fake_{{ formula }}_login
 
+{%- set banaction = salt['pillar.get']('fail2ban:banaction', 'hostsdeny') %}
+
 test_fail2ban_{{ formula }}:
   cmd:
     - script
-    - source: salt://fail2ban/wait_for_banned.py
+    - source: salt://fail2ban/wait_for_banned.jinja2
+    - template: jinja
+{%- if banaction.startswith('iptables') %}
     - args: "-c fail2ban-{{ jail|default(formula) }} -s {{ fake_ip }} -j {% if os.is_precise %}DROP{% else %}REJECT{% endif %}"
+{%- else %}
+    - args: "-n {{ formula }} -s {{ fake_ip }}"
+{%- endif %}
     - require:
       - module: fake_{{ formula }}_login
       - pkg: python
+{%- if banaction.startswith('iptables') %}
       - pkg: iptables
+{%- endif %}
   module:
     - run
     - name: cmd.run
-    {%- if os.is_precise %}
-    - cmd: iptables -D fail2ban-{{ jail|default(formula) }} -s {{ fake_ip }} -j DROP
-    {%- else %}
-    - cmd: fail2ban-client set {{ jail|default(formula) }} unbanip {{ fake_ip }}
-    {%- endif %}
+    - cmd: fail2ban-client set {% if banaction.startswith('iptables') %}{{ jail|default(formula) }}{% else %}{{ formula }}{% endif %} unbanip {{ fake_ip }}
     - require:
       - cmd: test_fail2ban_{{ formula }}
 {%- endmacro %}

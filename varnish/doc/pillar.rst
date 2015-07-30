@@ -177,6 +177,8 @@ Default: allocate ``2G`` bytes to use as :doc:`index` storage backend.
    The pre-allocate action will not happen if the unit is ``K`` (too
    small) or ``T`` (too much time to pre-allocate).
 
+.. _pillar-varnish-monitor:
+
 varnish:monitor
 ~~~~~~~~~~~~~~~
 
@@ -190,3 +192,18 @@ Example::
       response: 200 OK
 
 Default: do not provide additional information (``False``).
+
+Conditional
+-----------
+
+varnish:monitor:hostname
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Only valid if :ref:`pillar-varnish-monitor` is defined, set hostname when check
+backend response.
+
+varnish:monitor:response
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Only valid if :ref:`pillar-varnish-monitor` is defined, set expect return code
+when check backend reponse.

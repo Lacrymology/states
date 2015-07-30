@@ -1,4 +1,4 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
 # {{ salt['pillar.get']('message_do_not_modify') }}
-shinken ALL=(root) NOPASSWD:/usr/local/shinken/bin/salt_event_handler
+shinken ALL=(root) NOPASSWD:SETENV:/usr/local/shinken/bin/salt_event_handler

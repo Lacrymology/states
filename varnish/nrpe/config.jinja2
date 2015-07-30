@@ -4,6 +4,8 @@
 {%- set listen_port = salt['pillar.get']('varnish:listen_port', 80) -%}
 {%- set listen_address = salt['pillar.get']('varnish:listen_address', '')|default('127.0.0.1', boolean=True) -%}
 {%- set monitor = salt["pillar.get"]("varnish:monitor", False) %}
+{%- set monitor_hostname = salt["pillar.get"]("varnish:monitor:hostname", False) %}
+{%- set monitor_response = salt["pillar.get"]("varnish:monitor:response", False) %}
 
 # {{ salt['pillar.get']('message_do_not_modify') }}
 
@@ -22,8 +24,10 @@ varnish_status:
   description: Varnish HTTP status
   command: >
       /usr/lib/nagios/plugins/check_http -I {{ listen_address }} -p {{ listen_port }} -t {{ timeout }}
-      {%- if "hostname" in monitor %} -H "{{ monitor["hostname"] }}"{% endif %}
-      {%- if "response" in monitor %} -e "{{ monitor["response"] }}"{% endif %}
+{%- if monitor %}
+  {%- if monitor_hostname %} -H "{{ monitor_hostname }}"{% endif %}
+  {%- if monitor_response in monitor %} -e "{{ monitor_response }}"{% endif %}
+{%- endif %}
   timeout: {{ timeout }}
   dependencies:
     - varnish_port

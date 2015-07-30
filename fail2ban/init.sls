@@ -65,6 +65,8 @@ fail2ban:
       - cmd: fail2ban
   service:
     - running
+    - require:
+      - service: rsyslog
     - watch:
       - file: fail2ban
       - file: /etc/init.d/fail2ban

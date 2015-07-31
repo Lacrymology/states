@@ -131,6 +131,18 @@ the Internet Protocol for communication.
 
 .. Copied from http://en.wikipedia.org/wiki/IP_address - 2015-03-25
 
+.. _glossary-IPv6:
+
+IPv6
+~~~~
+
+Internet Protocol version 6 (IPv6) is the most recent version of the Internet
+Protocol (:ref:`glossary-IP`), the communications protocol that provides an
+identification and location system for computers on networks and routes traffic
+across the Internet.
+
+.. Copied from https://en.wikipedia.org/wiki/IPv6 - 2015-07-31
+
 .. _glossary-TCP:
 
 TCP

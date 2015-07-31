@@ -17,6 +17,7 @@ external_auth:
     {%- for username in external_auth[authen_system] %}
     {{ username }}:
       - .*
+      - '@jobs'
     {%- endfor %}
   {%- endfor %}
 {%- endif %}

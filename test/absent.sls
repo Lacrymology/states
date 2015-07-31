@@ -11,6 +11,7 @@
   "apt",
   "apt_cache",
   "backup.server",
+  "bind",
   "carbon",
   "carbon.backup",
   "clamav.server",

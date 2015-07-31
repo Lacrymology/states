@@ -69,7 +69,9 @@ set zmempct=False to fail the test if that happens.
     - require:
       - module: diamond
       - file: diamond.conf
+  {%- if salt['pillar.get']('fail2ban:banaction', 'hostsdeny').startswith('iptables') %}
       - pkg: iptables
+  {%- endif %}
 {%- endmacro %}
 
 {%- macro fail2ban_count_ip_absent(jail) %}

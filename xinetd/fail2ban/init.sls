@@ -11,7 +11,6 @@ xinetd_jail:
     - filter: xinetd-fail
     - ports:
       - all
-    - banaction: iptables-multiport-log
     - logpath: /var/log/syslog
     - require:
       - cmd: fail2ban

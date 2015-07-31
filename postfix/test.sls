@@ -11,6 +11,7 @@ include:
   - postfix.backup.nrpe
   - postfix.diamond
   - postfix.fail2ban
+  - postfix.fail2ban.diamond
   - postfix.nrpe
   - openldap
   - openldap.diamond
@@ -20,6 +21,8 @@ include:
 - sls: postfix
 - sls: postfix.backup
 - sls: postfix.diamond
+- sls: postfix.fail2ban
+- sls: postfix.fail2ban.diamond
 - sls: postfix.nrpe
 - sls: openldap
 - sls: openldap.diamond

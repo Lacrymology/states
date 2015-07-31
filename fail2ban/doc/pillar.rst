@@ -116,7 +116,7 @@ shorewall, etc)
 
 It is used to define ``action_*`` variables.
 
-Default: ``iptables-multiport``.
+Default: ``hostsdeny``.
 
 Conditional
 -----------

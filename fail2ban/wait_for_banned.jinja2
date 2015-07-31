@@ -33,6 +33,7 @@ def __validate_arguments(name, timeout):
     # arguments valid
     return True, return_dict
 
+{%- set banaction = salt['pillar.get']('fail2ban:banaction', 'hostsdeny') %}
 
 def __is_timeouted(start_time, timeout):
     """
@@ -42,14 +43,21 @@ def __is_timeouted(start_time, timeout):
     # timeout exceeded
     if time.time() - start_time > timeout:
         return (True,
-                lambda return_dict, name, source, jump: return_dict.update(
+{%- if banaction.startswith('iptables') %}
+                lambda return_dict, chain, source, jump: return_dict.update(
                     {'result': False,
                      'comment': ('Timeout exceeded (chain: "{}", '
-                                 'rule: "-s {} -j {}")'.format(name, source, jump))}))
+                                 'rule: "-s {} -j {}")'.format(chain, source, jump))}))
+{%- else %}
+                lambda return_dict, name, source: return_dict.update(
+                    {'result': False,
+                     'comment': ('Timeout exceeded (name: "{}", '
+                                 'IP: "{}")'.format(name, source))}))
+{%- endif %}
     return (False, None)
 
 
-def wait_for_banned():
+def wait_for_iptables_banned():
     """
     Wait for an iptables rule to appear in a specific chain,
     return False if exceeded a timeout value
@@ -101,5 +109,55 @@ def wait_for_banned():
     return ret
 
 
+def wait_for_hostsdeny_banned():
+    """
+    Wait for an IP to appear in /etc/hosts.deny,
+    return False if exceeded a timeout value
+    """
+
+    argp = argparse.ArgumentParser(description=__doc__)
+    argp.add_argument('-n', '--name', metavar='SERVICE_NAME')
+    argp.add_argument('-s', '--source', metavar='SOURCE')
+    argp.add_argument('-t', '--timeout', nargs='?', type=int, default=60, metavar='TIMEOUT')
+    args = argp.parse_args()
+
+    name = args.name
+    source = args.source
+    timeout = args.timeout
+
+    # validate arguments
+    is_valid, ret = __validate_arguments(name, timeout)
+    if not is_valid:
+        return ret
+
+    # record timestamp before wait for process
+    start_time = time.time()
+
+    retcode = 1
+    while retcode == 1:
+        if name + ": " + source in open('/etc/hosts.deny').read():
+            retcode = 0
+
+        # check timeout
+        is_timeouted, ret_fmt = __is_timeouted(start_time, timeout)
+        if is_timeouted:
+            ret_fmt(ret, name, source)
+            return ret
+
+        time.sleep(1)
+
+    if retcode == 0:
+        ret['result'] = True
+        ret['comment'] = "service: {}, IP: {}".format(name, source)
+    else:
+        ret['result'] = False
+        ret['comment'] = return_data['stderr']
+    return ret
+
+
 if __name__ == '__main__':
-    wait_for_banned()
+{%- if banaction.startswith('iptables') %}
+        wait_for_iptables_banned()
+{%- else %}
+        wait_for_hostsdeny_banned()
+{%- endif %}

@@ -8,6 +8,7 @@ include:
   - mysql.server.backup
   - mysql.server.diamond
   - mysql.server.fail2ban
+  - mysql.server.fail2ban.diamond
   - mysql.server.nrpe
 
 {{ fail2ban_regex_test('mysql', tag='mysqld', message="150114  3:40:50 [Warning] Access denied for user 'root'@'5.6.7.8' (using password: YES)") }}

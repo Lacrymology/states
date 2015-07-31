@@ -18,6 +18,7 @@ include:
   - dovecot.backup.nrpe
   - dovecot.diamond
   - dovecot.fail2ban
+  - dovecot.fail2ban.diamond
   - dovecot.nrpe
   - mail.server.nrpe
   - mail.server.diamond
@@ -39,6 +40,8 @@ include:
 - sls: dovecot.backup
 - sls: dovecot.backup.nrpe
 - sls: dovecot.diamond
+- sls: dovecot.fail2ban
+- sls: dovecot.fail2ban.diamond
 - sls: dovecot.nrpe
 - sls: mail.server.nrpe
 - sls: openldap

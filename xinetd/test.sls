@@ -6,6 +6,7 @@ include:
   - xinetd
   - xinetd.diamond
   - xinetd.fail2ban
+  - xinetd.fail2ban.diamond
   - xinetd.nrpe
 
 {%- from 'cron/macro.jinja2' import test_cron with context %}
@@ -15,6 +16,8 @@ include:
 {%- call test_cron() %}
 - sls: xinetd
 - sls: xinetd.diamond
+- sls: xinetd.fail2ban
+- sls: xinetd.fail2ban.diamond
 - sls: xinetd.nrpe
 {%- endcall %}
 

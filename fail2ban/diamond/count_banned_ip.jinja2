@@ -1,9 +1,13 @@
 #!/bin/sh
 # {{ salt['pillar.get']('message_do_not_modify') }}
 
+{%- if salt['pillar.get']('fail2ban:banaction', 'hostsdeny').startswith('iptables') %}
 if iptables -nL | grep -q fail2ban-{{ jail }}; then
     count=$(iptables -nL fail2ban-{{ jail }} | grep -c REJECT)
 else
     count=0
 fi
+{%- else %}
+count=$(grep -vc '^{{ jail }}:' /etc/hosts.deny)
+{%- endif %}
 echo "fail2ban.{{ jail }} $count"

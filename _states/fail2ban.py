@@ -27,6 +27,7 @@ def _error(ret, err_msg):
 def enabled(name,
             ports,
             filter=None,
+            actions=None,
             sfn='',
             source=None,
             source_hash='{}',
@@ -37,6 +38,13 @@ def enabled(name,
 
     if filter is None:
         filter = name
+
+    if actions is None:
+        actions = []
+
+    default_action = __salt__['pillar.get']('fail2ban:banaction', 'hostsdeny')
+    if not actions and default_action == 'hostsdeny':
+        actions = [default_action + '[daemon_list=' + name + ']']
 
     ret = {'name': name,
            'result': True,
@@ -54,6 +62,9 @@ def enabled(name,
             '\n'.join('{} = {}'.format(k, v) for k, v in kwargs.iteritems()) +
             "\n"
             )
+    if actions:
+        contents = contents + "action = " + "\n".join(
+                a if i == 0 else " " * 9 + a for i, a in enumerate(actions)) + "\n"
     log.debug('contents: {}'.format(contents))
 
     try:

@@ -1,8 +1,8 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
 include:
-  - postfix
   - fail2ban
+  - postfix
 
 postfix_jail:
   fail2ban:

@@ -4,7 +4,6 @@
 include:
   - diamond
   - kernel.modules
-  - firewall
   - rsyslog.diamond
 
 firewall_nf_conntrack_diamond_collector:

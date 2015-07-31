@@ -2,7 +2,6 @@
 
 include:
   - diamond
-  - firewall.diamond
 
 xinetd_diamond_resources:
   file:
@@ -15,6 +14,3 @@ xinetd_diamond_resources:
       - |
         [[xinetd]]
         exe = ^\/usr\/sbin\/xinetd$
-
-{%- from 'diamond/macro.jinja2' import fail2ban_count_ip with context %}
-{{ fail2ban_count_ip('xinetd-fail') }}

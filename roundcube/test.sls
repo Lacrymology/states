@@ -12,6 +12,7 @@ include:
   - roundcube.backup.nrpe
   - roundcube.diamond
   - roundcube.fail2ban
+  - roundcube.fail2ban.diamond
   - roundcube.nrpe
 
 {%- call test_cron() %}
@@ -20,6 +21,8 @@ include:
 - sls: roundcube.backup.diamond
 - sls: roundcube.backup.nrpe
 - sls: roundcube.diamond
+- sls: roundcube.fail2ban
+- sls: roundcube.fail2ban.diamond
 - sls: roundcube.nrpe
 {%- endcall %}
 

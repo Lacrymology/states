@@ -1,5 +1,7 @@
 # {{ salt['pillar.get']('message_do_not_modify') }}
 
+{%- set banaction = salt['pillar.get']('fail2ban:banaction', 'hostsdeny') %}
+
 [DEFAULT]
 
 ignoreip = {% for ip in salt['pillar.get']('fail2ban:whitelist', ['127.0.0.1/8']) %}{{ ip }}{% if not loop.last %} {% endif %}{% endfor %}
@@ -17,7 +19,7 @@ destemail = {{ salt['pillar.get']('fail2ban:destemail', 'root@localhost') }}
 
 sendername = {{ salt['pillar.get']('fail2ban:sendername', 'Fail2Ban') }}
 
-banaction = {{ salt['pillar.get']('fail2ban:banaction', 'iptables-multiport') }}
+banaction = {{ banaction }}
 
 mta = {{ salt['pillar.get']('fail2ban:mta', 'sendmail') }}
 
@@ -25,7 +27,11 @@ protocol = tcp
 
 chain = INPUT
 
+{%- if banaction.startswith('iptables') %}
 action_ = %(banaction)s[name=%(__name__)s, port="%(port)s", protocol="%(protocol)s", chain="%(chain)s"]
+{%- else %}
+action_ = %(banaction)s
+{%- endif %}
 
 action_mw = %(banaction)s[name=%(__name__)s, port="%(port)s", protocol="%(protocol)s", chain="%(chain)s"]
               %(mta)s-whois[name=%(__name__)s, dest="%(destemail)s", protocol="%(protocol)s", chain="%(chain)s", sendername="%(sendername)s"]

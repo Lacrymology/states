@@ -2,7 +2,6 @@
 
 include:
   - diamond
-  - firewall.diamond
   - postfix.diamond
   - rsyslog.diamond
 
@@ -30,6 +29,3 @@ dovecot_diamond_resources:
         [[dovecot-pop3-login]]
         exe = ^\/usr\/lib\/dovecot\/pop3-login$
         count_workers = True
-
-{%- from 'diamond/macro.jinja2' import fail2ban_count_ip with context %}
-{{ fail2ban_count_ip('dovecot') }}

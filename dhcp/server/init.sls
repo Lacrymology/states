@@ -33,6 +33,47 @@ dhcp-server:
       - file: dhcp-server
       - pkg: dhcp-server
 
+{%- set subnet6 = salt["pillar.get"]("dhcp_server:subnet6", None) %}
+{%- set range6 = salt["pillar.get"]("dhcp_server:range6", None) %}
+{%- set enabled_ipv6 = subnet6 and range6 %}
+
+dhcp-server6:
+{%- if enabled_ipv6 %}
+  file:
+    - managed
+    - name: /etc/dhcp/dhcpd6.conf
+    - template: jinja
+    - source: salt://dhcp/server/config6.jinja2
+    - user: root
+    - group: dhcpd
+    - mode: 440
+    - context:
+        subnet6: {{ subnet6 }}
+        range6: {{ range6 }}
+        options6: {{ salt["pillar.get"]("dhcp_server:options6", {}) }}
+        reservations6: {{ salt["pillar.get"]("dhcp_server:reservations6", {}) }}
+    - require:
+      - pkg: dhcp-server
+  service:
+    - running
+    - name: isc-dhcp-server6
+    - enable: True
+    - watch:
+      - file: /etc/default/isc-dhcp-server
+      - file: dhcp-server6
+      - pkg: dhcp-server
+{%- else %}
+  file:
+    - absent
+    - name: /etc/dhcp/dhcpd.conf
+    - require:
+      - service: dhcp-server6
+  service:
+    - dead
+    - name: isc-dhcp-server6
+    - enable: False
+{%- endif %}
+
 /etc/default/isc-dhcp-server:
   file:
     - managed

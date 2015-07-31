@@ -1,0 +1,22 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+
+# {{ salt['pillar.get']('message_do_not_modify') }}
+ddns-update-style none;
+default-lease-time 600;
+max-lease-time 7200;
+log-facility local7;
+
+subnet6 {{ subnet6 }} {
+  range6 {{ range6 }};
+  authoritative;
+{%- for option, value in options6.iteritems() %}
+  option {{ option }} {{ value }};
+{%- endfor %}
+}
+
+{%- for mac, ip in reservations6.iteritems() %}
+host reservation-{{ loop.index }} {
+  hardware ethernet {{ mac }};
+  fixed-address {{ ip }};
+}
+{%- endfor %}

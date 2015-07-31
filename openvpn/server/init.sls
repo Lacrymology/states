@@ -114,7 +114,6 @@ openvpn_{{ instance }}_config:
     - mode: 400
     - context:
         instance: {{ instance }}
-        data: {{ servers[instance] }}
     - watch_in:
       - service: openvpn-{{ instance }}
     - require:
@@ -270,7 +269,7 @@ openvpn_server_cert_{{ instance }}:
     - contents: |
         # {{ salt['pillar.get']('message_do_not_modify') }}
 
-        ifconfig-push {{ ip }} {{ server_octets[0] + "." + server_octets[1] + "." + server_octets[2] + "." + server_last_octet|string }}
+        ifconfig-push {{ ip }} {{ servers[instance]['server'].split()[1] }}
     - require:
       - file: {{ config_dir }}/ccd
     - watch_in:

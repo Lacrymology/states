@@ -115,6 +115,7 @@ Example::
       key_size: 2048
     servers:
       <instance>:
+        topology: subnet
         mode: static
         config:
           key1: value1
@@ -135,6 +136,7 @@ Example::
         protocol: udp
         device: tun
         server: 172.16.0.0 255.255.255.0
+        ifconfig-pool: 172.16.0.1 172.16.0.9
         extra_configs:
           - client-to-client
         clients:
@@ -178,6 +180,25 @@ openvpn:servers:{{ instance }}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Name of tunnel.
+
+.. _pillar-openvpn-servers-instance-topology:
+
+openvpn:servers:{{ instance }}:topology
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Which topology will be used for this instance.
+
+Available options:
+
+* ``subnet``: The recommended topology for modern servers. Note that this is
+  not the current default. Addressing is done by IP & netmask.
+* ``net30``: This is the old topology for support with Windows clients running
+  2.0.9 or older clients. This is the default as of OpenVPN 2.3, but not
+  recommended for current use. Each client is allocated a virtual /30, taking 4
+  IPs per client, plus 4 for the server.
+* ``p2p``: This topology uses Point-to-Point networking. This is not compatible
+  with Windows clients, though use with non-Windows allows use of the entire
+  subnet (no "lost" IPs.)
 
 .. _pillar-openvpn-servers-instance-mode:
 
@@ -275,6 +296,18 @@ openvpn:servers:{{ instance }}:server
 
 Configure server mode and supply a :ref:`glossary-VPN` subnet for :doc:`index`
 to draw client addresses from.
+
+.. _pillar-openvpn-servers-{{ instance }}-ifconfig-pool:
+
+openvpn:servers:{{ instance }}:ifconfig-pool
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+A pool of subnets to be dynamically allocated to connecting clients. Data
+formed as ``<start-IP> <end-IP>``.
+
+.. note::
+
+   Static :ref:`glossary-IP` addresses should be assigned outside of this pool.
 
 .. _pillar-openvpn-servers-{{ instance }}-extra_configs:
 

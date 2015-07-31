@@ -2,6 +2,9 @@
 
 # {{ salt['pillar.get']('message_do_not_modify') }}
 {%- set vpn_instance = salt['pillar.get']('openvpn:servers:' ~ instance) %}
+{%- block topology %}
+{%- endblock topology %}
+
 port {{ vpn_instance['port'] | default(1194) }}
 proto {{ vpn_instance['protocol'] | default('udp') }}
 dev {{ vpn_instance['device'] | default('tun') }}

@@ -200,6 +200,8 @@ Available options:
   with Windows clients, though use with non-Windows allows use of the entire
   subnet (no "lost" IPs.)
 
+Default: use the topology for modern servers (``subnet``).
+
 .. _pillar-openvpn-servers-instance-mode:
 
 openvpn:servers:{{ instance }}:mode

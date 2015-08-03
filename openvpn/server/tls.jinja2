@@ -3,7 +3,7 @@
 {%- extends "openvpn/server/base.jinja2" %}
 
 {%- set vpn_instance = salt['pillar.get']('openvpn:servers:' ~ instance) %}
-{%- set topology = vpn_instance['topology'] %}
+{%- set topology = salt['pillar.get']('openvpn:servers:' ~ instance + ':topology', 'subnet') %}
 {%- set server = vpn_instance['server']%}
 {%- set server_octets = server.split()[0].split('.') %}
 {%- set server_netmask = server.split()[1] %}

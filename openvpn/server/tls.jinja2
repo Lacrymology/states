@@ -10,27 +10,36 @@
 {%- set server_last_octet = server_octets[3]|int + 1 %}
 {%- set server_ip = server_octets[0] + "." + server_octets[1] + "." + server_octets[2] + "." + server_last_octet|string %}
 
-{%- if topology == "subnet" -%}
-  {%- block topology %}
+{%- set static_ips = [] %}
+
+{%- for client in vpn_instance['clients'] if client is mapping -%}
+  {%- set static_ips = static_ips.append(client) -%}
+{%- endfor %}
+
+{%- block topology -%}
+  {%- if static_ips %}
 mode server
 tls-server
+push "route-gateway {{ server_ip }}"
+    {%- if topology == "subnet" %}
 topology "subnet"
 push "topology subnet"
-push "route-gateway {{ server_ip }}"
-  {%- endblock topology -%}
-{%- endif %}
+ifconfig {{ server_ip }} {{ server_netmask }}
+ifconfig-pool {{ vpn_instance['ifconfig-pool'] }} {{ server_netmask }}
+    {%- elif topology == "net30" %}
+ifconfig {{ server_ip }} {{ server_octets[0] + "." + server_octets[1] + "." + server_octets[2] + "." + (server_last_octet + 1)|string }}
+ifconfig-pool {{ vpn_instance['ifconfig-pool'] }}
+    {%- endif -%}
+  {%- else %}
+server {{ server }}
+  {%- endif -%}
+{%- endblock topology %}
 
 {%- block authentication_mode %}
 ca /etc/openvpn/ca.crt
 cert /etc/openvpn/{{ instance }}/server.crt
 key /etc/openvpn/{{ instance }}/server.key
 dh /etc/openvpn/dh.pem
-  {%- if topology == "subnet" %}
-ifconfig {{ server_ip }} {{ server_netmask }}
-ifconfig-pool {{ vpn_instance['ifconfig-pool'] }} {{ server_netmask }}
-  {%- else %}
-server {{ server }}
-  {%- endif %}
 ifconfig-pool-persist /var/lib/openvpn/{{ instance }}.ipp
 client-config-dir /etc/openvpn/{{ instance }}/ccd
 crl-verify /etc/openvpn/{{ instance }}/crl.pem

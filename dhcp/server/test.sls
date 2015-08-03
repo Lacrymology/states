@@ -10,7 +10,7 @@ include:
 test:
   cmd:
     - run
-    - name: ip address add 192.168.20.1/24 dev eth0
+    - name: ip address add 192.168.20.1/24 dev eth0 && ip -6 address add 2001:470:8cc0:9002::1/64 dev eth0
   monitoring:
     - run_all_checks
     - require:
@@ -37,7 +37,7 @@ test:
 clean:
   cmd:
     - run
-    - name: ip address delete 192.168.20.1/24 dev eth0
+    - name: ip address delete 192.168.20.1/24 dev eth0 && ip -6 address delete 2001:470:8cc0:9002::1/64 dev eth0
     - order: latest
 
 extend:

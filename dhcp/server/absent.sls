@@ -8,6 +8,9 @@ dhcp-server:
   pkg:
     - purged
     - name: isc-dhcp-server
+    - require:
+      - service: isc-dhcp-server
+      - service: isc-dhcp-server6
   user:
     - absent
     - name: dhcpd
@@ -18,3 +21,15 @@ dhcp-server_acl:
   pkg:
     - purged
     - name: acl
+
+/var/lib/dhcp:
+  file:
+    - absent
+    - require:
+      - pkg: dhcp-server
+
+/etc/dhcp/dhcpd6.conf:
+  file:
+    - absent
+    - require:
+      - pkg: dhcp-server

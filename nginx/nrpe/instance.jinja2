@@ -1,8 +1,19 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 {%- from 'nrpe/passive.jinja2' import passive_interval with context -%}
+{%- from 'macros.jinja2' import enable_ipv4, enable_ipv6 with context %}
+{%- set local = {"first_ipv6": None} %}
 
 {%- macro nginx_instance(formula, http=True, http_uri='/', http_result=None, http_port=80, https_uri=None, https_result="200 OK", pillar_prefix=None, timeout=False, domain_name=None, allow_ssl_redirect=True, check_interval=False, deployment=None, extra_dependencies=()) -%}
     {%- set first_ip = salt['network.ip_addrs']()[0] -%}
+    {%- set ip_addrs6 = salt["network.ip_addrs6"]() %}
+    {%- for ip_addr in ip_addrs6 %}
+        {%- if not (ip_addr.startswith("fe80::601") or local.first_ipv6) %}
+            {%- do local.update({"first_ipv6": ip_addr}) %}
+        {%- endif %}
+    {%- endfor %}
+    {%- set first_ipv6 = local.first_ipv6 %}
+    {#- we can't do testing if an IPv6 address is not available #}
+    {%- set _enable_ipv6 = True if (enable_ipv6 and first_ipv6) else False %}
     {%- if not pillar_prefix -%}
         {%- set pillar_prefix = formula -%}
     {%- endif -%}
@@ -24,41 +35,61 @@
     {%- endif %}
 
 {%- if http %}
+    {% for ip_version, enabled in {"ipv4": enable_ipv4, "ipv6": _enable_ipv6}.iteritems() %}
+        {% if enabled %}
+            {%- if ip_version == "ipv4" %}
 {{ formula }}_nginx_http:
   description: {{ deployment|capitalize }} NGINX HTTP Protocol
   command: /usr/lib/nagios/plugins/check_http -H {{ domain_name }} -u {{ http_uri }} -p {{ http_port }} -e '{{ http_result }}' -I {{ first_ip }}
-    {%- if timeout %} --timeout={{ timeout }}{% endif -%}
-{%- set __test__ = salt['pillar.get']('__test__', False) %}
-    {%- if timeout %}
+            {%- elif ip_version == "ipv6" %}
+{{ formula }}_nginx_http_ipv6:
+  description: {{ deployment|capitalize }} NGINX HTTP Protocol using IPv6
+  command: /usr/lib/nagios/plugins/check_http -6 -H {{ domain_name }} -u {{ http_uri }} -p {{ http_port }} -e '{{ http_result }}' -I [{{ first_ipv6 }}]
+            {%- endif %}
+            {%- if timeout %} --timeout={{ timeout }}{% endif -%}
+            {%- set __test__ = salt['pillar.get']('__test__', False) %}
+            {%- if timeout %}
   timeout: {{ timeout }}
-    {%- endif %}
-    {%- if check_interval %}
+            {%- endif %}
+            {%- if check_interval %}
   {{ passive_interval(check_interval) }}
-    {%- endif %}
+            {%- endif %}
   dependencies:
     - nginx_master
-    {%- for extra_dependency in extra_dependencies %}
+            {%- for extra_dependency in extra_dependencies %}
     - {{ extra_dependency }}
-    {%- endfor -%}
-{%- endif %}
+            {%- endfor -%}
+        {%- endif %}
+    {%- endfor %}
+{% endif %}
 
 {%- if salt['pillar.get'](pillar_prefix + ':ssl', False) %}
-{%- set https_uri = http_uri if not https_uri %}
+    {%- set https_uri = http_uri if not https_uri %}
 
+    {% for ip_version, enabled in {"ipv4": enable_ipv4, "ipv6": _enable_ipv6}.iteritems() %}
+        {% if enabled %}
+            {%- if ip_version == "ipv4" %}
 {{ formula }}_nginx_https:
   description: {{ deployment|capitalize }} NGINX HTTPS Protocol
   command: /usr/lib/nagios/plugins/check_http -S -H {{ domain_name }} -u {{ https_uri }} -e '{{ https_result }}' -I {{ first_ip }}
-        {%- if timeout %} --timeout={{ timeout }}{% endif -%}
-    {%- if timeout %}
+            {%- elif ip_version == "ipv6" %}
+{{ formula }}_nginx_https_ipv6:
+  description: {{ deployment|capitalize }} NGINX HTTPS Protocol for IPv6
+  command: /usr/lib/nagios/plugins/check_http -6 -S -H {{ domain_name }} -u {{ https_uri }} -e '{{ https_result }}' -I [{{ first_ipv6 }}]
+            {%- endif %}
+            {%- if timeout %} --timeout={{ timeout }}{% endif -%}
+            {%- if timeout %}
   timeout: {{ timeout }}
-    {%- endif -%}
-    {%- if check_interval %}
+            {%- endif -%}
+            {%- if check_interval %}
   {{ passive_interval(check_interval) }}
-    {%- endif %}
+            {%- endif %}
   dependencies:
     - nginx_master
-    {%- for extra_dependency in extra_dependencies %}
+            {%- for extra_dependency in extra_dependencies %}
     - {{ extra_dependency }}
+            {%- endfor %}
+        {%- endif %}
     {%- endfor %}
 
 {{ formula }}_nginx_https_certificate:

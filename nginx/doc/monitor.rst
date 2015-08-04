@@ -35,4 +35,4 @@ Optional
 nginx_status_ipv6
 ~~~~~~~~~~~~~~~~~
 
-Sames as :ref:`monitor-nginx-status` but for :ref:`IPv6`.
+Sames as :ref:`monitor-nginx_status` but for :ref:`glossary-IPv6`.

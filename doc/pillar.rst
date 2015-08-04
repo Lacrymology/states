@@ -244,15 +244,15 @@ Default: not set (``False``).
 ip_version
 ~~~~~~~~~~
 
-Which version of :ref:`IP` to use.
+Which version of :ref:`glossary-IP` to use.
 
 Choices:
 
 ``v4``
-  Only use :ref:`IPv4`.
+  Only use :ref:`glossary-IPv4`.
 ``v6``
-  Only use :ref:`IPv6`.
+  Only use :ref:`glossary-IPv6`.
 ``both``
-  Use both :ref:`IPv4` and :ref:`IPv6`.
+  Use both :ref:`glossary-IPv4` and :ref:`glossary-IPv6`.
 
 Default: ``v4``.

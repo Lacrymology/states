@@ -259,7 +259,10 @@ openvpn_server_cert_{{ instance }}:
         {%- for client in servers[instance]['clients'] -%}
             {%- if client not in servers[instance]['revocations'] -%}
                 {%- if client is mapping -%}
-                    {%- set client, ip = servers[instance]['clients'][loop.index0].items()[0] %}
+                    {{ dict_default(servers[instance], 'topology', 'subnet') }}
+                    {%- set topology = servers[instance]['topology'] %}
+                    {%- set client, client_ip = servers[instance]['clients'][loop.index0].items()[0] %}
+
 {{ config_dir }}/ccd/{{ client }}:
   file:
     - managed
@@ -269,7 +272,13 @@ openvpn_server_cert_{{ instance }}:
     - contents: |
         # {{ salt['pillar.get']('message_do_not_modify') }}
 
-        ifconfig-push {{ ip }} {{ servers[instance]['server'].split()[1] }}
+                    {%- if topology == "subnet" %}
+        ifconfig-push {{ client_ip }} {{ servers[instance]['server'].split()[1] }}
+                    {%- elif topology == "net30" %}
+                        {%- set client_octets = client_ip.split('.') -%}
+                        {%- set server_last_octet = client_octets[3]|int + 1 %}
+        ifconfig-push {{ client_ip }} {{ client_octets[0] + "." + client_octets[1] + "." + client_octets[2] + "." + server_last_octet|string }}
+                    {%- endif %}
     - require:
       - file: {{ config_dir }}/ccd
     - watch_in:

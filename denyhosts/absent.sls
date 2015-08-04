@@ -14,10 +14,17 @@ denyhosts:
     - dead
     - enable: False
 
-{% for file in ('/etc/hosts.deny', '/etc/logrotate.d/denyhosts', '/var/log/denyhosts', '/var/lib/denyhosts', '/usr/local/bin/denyhosts-unblock') %}
+{% for file in ('/etc/logrotate.d/denyhosts', '/var/log/denyhosts', '/var/lib/denyhosts', '/usr/local/bin/denyhosts-unblock') %}
 {{ file }}:
   file:
     - absent
     - require:
       - service: denyhosts
 {% endfor %}
+
+hostsdeny_empty_contents:
+  cmd:
+    - run
+    - name: cat /dev/null > /etc/hosts.deny
+    - require:
+      - service: denyhosts

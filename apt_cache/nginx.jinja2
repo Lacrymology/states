@@ -1,6 +1,6 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
-{%- from 'nginx/macro.jinja2' import ssl_config with context -%}
+{%- from 'nginx/macro.jinja2' import http_listen, ssl_config with context -%}
 {%- set ssl = salt['pillar.get']('apt_cache:ssl', False) -%}
 {%- set hostnames = salt['pillar.get']('apt_cache:hostnames') %}
 
@@ -11,7 +11,7 @@ upstream apt_cache {
 }
 
 server {
-    listen 80;
+    {{ http_listen() }}
 {%- if ssl %}
 {%- if salt['pillar.get']('apt_cache:ssl_redirect', False) %}
     {# if https, redirect http port 80 to https port 443 #}

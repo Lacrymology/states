@@ -131,6 +131,18 @@ the Internet Protocol for communication.
 
 .. Copied from http://en.wikipedia.org/wiki/IP_address - 2015-03-25
 
+.. _glossary-IPv4:
+
+IPv4
+~~~~
+
+Internet Protocol version 4 (IPv4) is the fourth version in the development of
+the Internet Protocol :ref:`glossary-IP`. It is one of the core protocols of
+standards-based internetworking methods in the Internet, and was the first
+version deployed for production in the ARPANET in 1983.
+
+.. Copied from https://en.wikipedia.org/wiki/IPv4 - 2015-08-03
+
 .. _glossary-IPv6:
 
 IPv6

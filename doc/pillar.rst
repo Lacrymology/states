@@ -239,3 +239,20 @@ root_password
 The root password.
 
 Default: not set (``False``).
+
+
+ip_version
+~~~~~~~~~~
+
+Which version of :ref:`IP` to use.
+
+Choices:
+
+``v4``
+  Only use :ref:`IPv4`.
+``v6``
+  Only use :ref:`IPv6`.
+``both``
+  Use both :ref:`IPv4` and :ref:`IPv6`.
+
+Default: ``v4``.

@@ -1,6 +1,7 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
 # {{ salt['pillar.get']('message_do_not_modify') }}
+{%- from 'macros.jinja2' import enable_ipv4, enable_ipv6 with context %}
 
 user www-data www-data;
 worker_processes {{ salt['pillar.get']('nginx:worker_processes', 'auto') }};
@@ -122,13 +123,21 @@ http {
 
     # turn on nginx_status on localhost
     server {
+{%- if enable_ipv4 %}
         listen 127.0.0.1:80;
-        server_name 127.0.0.1 localhost;
+{%- endif %}
+{%- if enable_ipv6 %}
+        listen [::1]:80;
+{%- endif %}
+        server_name 127.0.0.1 [::1] localhost;
 {% block localhost %}
         location /nginx_status {
             stub_status on;
             access_log off;
             allow 127.0.0.1;
+{%- if enable_ipv6 %}
+            allow ::1;
+{%- endif %}
             deny all;
         }
 {% endblock %}
@@ -139,14 +148,24 @@ http {
         http://nginx.org/en/docs/http/request_processing.html#how_to_prevent_undefined_server_names
         #}
     server {
+{%- if enable_ipv4 %}
         listen 80 default_server;
+{%- endif %}
+{%- if enable_ipv6 %}
+        listen [::]:80 default_server;
+{%- endif %}
         server_name "";
         return 404;
     }
 
 {% if ssl|default(False) %}
     server {
+{%- if enable_ipv4 %}
         listen 443 default_server ssl;
+{%- endif %}
+{%- if enable_ipv6 %}
+        listen [::]:443 default_server ssl;
+{%- endif %}
         ssl_certificate /etc/ssl/certs/{{ ssl }}_chained.crt;
         ssl_certificate_key /etc/ssl/private/{{ ssl }}.pem;
         ssl_client_certificate /etc/ssl/certs/{{ ssl }}_ca.crt;

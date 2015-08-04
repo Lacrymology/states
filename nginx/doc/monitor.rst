@@ -26,3 +26,13 @@ nginx_master
 
 Check if there is only one process with arguments that contains
 ``nginx: master`` is running.
+
+Optional
+--------
+
+.. _monitor-nginx_status_ipv6:
+
+nginx_status_ipv6
+~~~~~~~~~~~~~~~~~
+
+Sames as :ref:`monitor-nginx-status` but for :ref:`IPv6`.

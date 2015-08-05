@@ -1,6 +1,7 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
 # {{ salt['pillar.get']('message_do_not_modify') }}
+{%- from 'nginx/macro.jinja2' import http_listen, ssl_config with context %}
 
 {%- set hostnames = salt['pillar.get']('graylog2:hostnames') %}
 upstream graylog2 {
@@ -12,7 +13,7 @@ upstream rest_api {
 }
 
 server {
-    listen 80;
+    {{ http_listen() }}
 {%- set ssl = salt['pillar.get']('graylog2:ssl', False) %}
 {% if ssl %}
 {% if salt['pillar.get']('graylog2:ssl_redirect', False) %}
@@ -23,7 +24,6 @@ server {
 {#- https server #}
 server {
 {% endif %}{# redirect http to https #}
-{%- from 'nginx/macro.jinja2' import ssl_config with context %}
     {{ ssl_config(salt['pillar.get']('graylog2:ssl', False)) }}
 {% endif %}
 {#- web app logic #}

@@ -61,6 +61,24 @@ amavis:
     Moreover, `/usr/sbin/amavisd-new-cronjob` must be run as `amavis` user
     #}
     - absent
+
+/var/lib/amavis/.spamassassin:
+  file:
+    - directory
+    - user: amavis
+    - group: amavis
+    - mode: 700
+    - require:
+      - user: amavis
+
+/var/lib/amavis/.spamassassin/user_prefs:
+  file:
+    - managed
+    - user: amavis
+    - group: amavis
+    - mode: 640
+    - require:
+      - file: /var/lib/amavis/.spamassassin
 {%- endif %}
 
 {%- call manage_pid('/var/run/amavis/amavisd.pid', 'amavis', 'amavis', 'amavis', 640) %}

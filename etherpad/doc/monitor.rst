@@ -68,6 +68,6 @@ Same as :ref:`pillar-etherpad_javascript_http` but connect via
 Only use if :ref:`pillar-__test__` is ``True`` and if :ref:`pillar-etherpad-ssl`
 is defined.
 
-Only use if :ref:`pillar-ip_version` is set to ``ipv6`` or ``both``.
+Only use if an :ref:`glossary-IPv6` address is present.
 
 .. include:: /nginx/doc/monitor_ipv6.inc

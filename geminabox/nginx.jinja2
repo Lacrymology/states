@@ -1,13 +1,14 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst #}
 {%- set ssl = salt['pillar.get']('geminabox:ssl', False) %}
 {%- set hostnames = salt['pillar.get']('geminabox:hostnames') %}
-{%- from 'nginx/macro.jinja2' import http_listen, ssl_config with context %}
+{%- from 'nginx/macro.jinja2' import ssl_config with context %}
 
 upstream geminabox {
     server unix:///var/lib/uwsgi/geminabox.sock;
 }
 server {
-    {{ http_listen() }}
+    listen 80;
+    listen [::]:80;
 {%- if ssl %}
 {%- if salt['pillar.get']('geminabox:ssl_redirect', False) %}
     {# if https, redirect http port 80 to https port 443 #}

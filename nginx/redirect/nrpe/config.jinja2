@@ -1,5 +1,4 @@
 {%- from 'nrpe/passive.jinja2' import passive_interval with context %}
-{%- from 'macros.jinja2' import enable_ipv4, enable_ipv6 with context %}
 
 {%- set first_ip = salt['network.ip_addrs']()[0] -%}
 {%- set local = {"first_ipv6": None} %}
@@ -10,21 +9,17 @@
   {%- endif %}
 {%- endfor %}
 {%- set first_ipv6 = local.first_ipv6 %}
-{#- we can't do testing if an IPv6 address is not available #}
-{%- set _enable_ipv6 = True if (enable_ipv6 and first_ipv6) else False %}
 {%- set reply = '301 Moved Permanently' -%}
 
 {%- for map in salt['pillar.get']('redirect:map') -%}
   {%- for hostname in map['hostnames'] %}
-    {%- if enable_ipv4 %}
 redirect_nginx_http_{{ hostname|replace('.', '_') }}:
   description: Redirect NGINX HTTP Protocol
   command: /usr/lib/nagios/plugins/check_http -H {{ hostname }} -u / -p 80 -e '{{ reply }}' -I {{ first_ip }}
   dependencies:
     - nginx_master
-    {%- endif %}
 
-    {%- if _enable_ipv6 %}
+    {%- if first_ipv6 %}
 redirect_nginx_http_{{ hostname|replace('.', '_') }}_ipv6:
   description: Redirect NGINX HTTP Protocol with IPv6
   command: /usr/lib/nagios/plugins/check_http -6 -H {{ hostname }} -u / -p 80 -e '{{ reply }}' -I [{{ first_ipv6 }}]
@@ -41,15 +36,13 @@ redirect_remote_http_{{ hostname|replace('.', '_') }}:
     - redirect_nginx_http_{{ hostname|replace('.', '_') }}
 
     {%- if map.get('ssl', False) %}
-      {%- if enable_ipv4 %}
 redirect_nginx_https_{{ hostname|replace('.', '_') }}:
   description: Redirect NGINX HTTPS Protocol
   command: /usr/lib/nagios/plugins/check_http -S -H {{ hostname }} -u / -p 443 -e '{{ reply }}' -I {{ first_ip }}
   dependencies:
     - nginx_master
-      {%- endif %}
 
-      {%- if _enable_ipv6 %}
+      {%- if first_ipv6 %}
 redirect_nginx_https_{{ hostname|replace('.', '_') }}_ipv6:
   description: Redirect NGINX HTTPS Protocol with IPv6
   command: /usr/lib/nagios/plugins/check_http -6 -S -H {{ hostname }} -u / -p 443 -e '{{ reply }}' -I {{ first_ipv6 }}

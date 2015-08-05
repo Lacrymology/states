@@ -1,14 +1,15 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
 # {{ salt['pillar.get']('message_do_not_modify') }}
-{%- from 'nginx/macro.jinja2' import http_listen, ssl_config with context %}
+{%- from 'nginx/macro.jinja2' import ssl_config with context %}
 
 upstream jenkins {
     server localhost:8080;
 }
 
 server {
-    {{ http_listen() }}
+    listen 80;
+    listen [::]:80;
 {%- set ssl = salt['pillar.get']('jenkins:ssl', False) %}
 {% if ssl %}
 {% if salt['pillar.get']('jenkins:ssl_redirect', False) %}

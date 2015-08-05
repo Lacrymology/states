@@ -4,10 +4,11 @@
 
 {%- set ssl = salt['pillar.get']('salt_api:ssl', False) %}
 {%- set hostnames = salt['pillar.get']('salt_api:hostnames') %}
-{%- from 'nginx/macro.jinja2' import http_listen, ssl_config with context %}
+{%- from 'nginx/macro.jinja2' import ssl_config with context %}
 
 server {
-    {{ http_listen() }}
+    listen 80;
+    listen [::]:80;
 {% if ssl %}
 {% if salt['pillar.get']('salt_api:ssl_redirect', False) %}
     {# if https, redirect http port 80 to https port 443 #}

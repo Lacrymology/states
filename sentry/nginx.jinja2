@@ -2,14 +2,15 @@
 
 # {{ salt['pillar.get']('message_do_not_modify') }}
 {%- set python_version = '%d.%d' % (grains['pythonversion'][0], grains['pythonversion'][1]) %}
-{%- from 'nginx/macro.jinja2' import http_listen, ssl_config with context %}
+{%- from 'nginx/macro.jinja2' import ssl_config with context %}
 
 upstream sentry {
     server unix:///var/lib/uwsgi/sentry.sock;
 }
 
 server {
-    {{ http_listen() }}
+    listen 80;
+    listen [::]:80;
 {%- set ssl = salt['pillar.get']('sentry:ssl', False) %}
 {% if ssl %}
 {% if salt['pillar.get']('sentry:ssl_redirect', False) %}

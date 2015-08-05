@@ -1,10 +1,10 @@
 # {{ salt['pillar.get']('message_do_not_modify') }}
-
-{%- from 'nginx/macro.jinja2' import http_listen, ssl_config with context -%}
+{%- from 'nginx/macro.jinja2' import ssl_config with context -%}
 
 {%- for map in salt['pillar.get']('redirect:map') %}
 server {
-    {{ http_listen() }}
+    listen 80;
+    listen [::]:80;
 {%- if map.get('ssl', False) and ssl -%}
     {{ ssl_config(ssl) }}
 {%- endif %}

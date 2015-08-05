@@ -1,7 +1,7 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
 # {{ salt['pillar.get']('message_do_not_modify') }}
-{%- from 'nginx/macro.jinja2' import http_listen, ssl_config with context %}
+{%- from 'nginx/macro.jinja2' import ssl_config with context %}
 
 {%- set hostnames = salt['pillar.get']('etherpad:hostnames') %}
 upstream etherpad {
@@ -9,7 +9,8 @@ upstream etherpad {
 }
 
 server {
-    {{ http_listen() }}
+    listen 80;
+    listen [::]:80;
 {%- set ssl = salt['pillar.get']('etherpad:ssl', False) %}
 {%- if ssl %}
   {%- if salt['pillar.get']('etherpad:ssl_redirect', False) %}

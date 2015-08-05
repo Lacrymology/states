@@ -33,6 +33,6 @@ Only use if :ref:`pillar-wordpress-ssl` is turned on.
 
 .. include:: /nginx/doc/monitor_ssl.inc
 
-Only use if :ref:`pillar-ip_version` is set to ``ipv6`` or ``both``.
+Only use if an :ref:`glossary-IPv6` address is present.
 
 .. include:: /nginx/doc/monitor_ipv6.inc

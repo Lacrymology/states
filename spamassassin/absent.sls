@@ -9,7 +9,7 @@ spamassassin:
       - razor
   file:
     - absent
-    - name: /root/.pyzor
+    - name: /var/lib/amavis/.pyzor
     - require:
       - pkg: spamassassin
   user:

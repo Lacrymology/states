@@ -3,6 +3,7 @@
 {%- from "os.jinja2" import os with context %}
 {%- from 'macros.jinja2' import manage_pid with context %}
 include:
+  - amavis.common
   - apt
   - bash
   - cron
@@ -10,27 +11,16 @@ include:
   - mail
   - spamassassin
 
-amavis:
-  pkg:
-    - latest
-    - name: amavisd-new
-    - require:
-      - cmd: apt_sources
-      - file: /etc/mailname
-  user:
-    - present
-    - shell: /usr/sbin/nologin
-    - require:
-      - pkg: amavis
-    - watch_in:
-      - service: amavis
-  service:
-    - running
-    - order: 50
-    - watch:
-      - pkg: amavis
-    - require:
-      - pkg: spamassassin
+extend:
+  amavis:
+    service:
+      - running
+      - order: 50
+      - watch:
+        - pkg: amavis
+        - user: amavis
+      - require:
+        - cmd: pyzor_test
 
 /etc/amavis/conf.d/50-user:
   file:

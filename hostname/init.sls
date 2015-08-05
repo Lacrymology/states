@@ -1,5 +1,4 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
-{%- from 'macros.jinja2' import enable_ipv4, enable_ipv6 with context %}
 
 hostname:
   file:
@@ -57,16 +56,15 @@ hostname_{{ hostname }}_{{ ip }}_absent:
   {%- endfor %}
 {%- endfor %}
 
-{%- if enable_ipv6 %}
-  {%- set ipv6_hosts = {
+{%- set ipv6_hosts = {
     "::1": ["ip6-localhost", "ip6-loopback", ],
     "fe00::0": ["ip6-localnet", ],
     "ff00::0": ["ip6-mcastprefix", ],
     "ff02::1": ["ip6-allnodes", ],
     "ff02::2": ["ip6-allrouters", ],
     "ff02::3": ["ip6-allhosts", ],
-  }%}
-  {%- for ip, hosts in ipv6_hosts.iteritems() %}
+}%}
+{%- for ip, hosts in ipv6_hosts.iteritems() %}
 hostname_ipv6_{{ loop.index }}:
   host:
     - present
@@ -74,5 +72,4 @@ hostname_ipv6_{{ loop.index }}:
     - names: {{ hosts|yaml }}
     - require_in:
       - host: hostname
-  {%- endfor %}
-{%- endif %}
+{%- endfor %}

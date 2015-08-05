@@ -5,7 +5,6 @@
 {%- if not salt['pillar.get']('nginx:worker_processes', 'auto') -%}
     {%- do config.update({'num_workers': salt['pillar.get']('nginx:worker_processes')}) -%}
 {%- endif -%}
-{%- from 'macros.jinja2' import enable_ipv4, enable_ipv6 with context %}
 
 # {{ salt['pillar.get']('message_do_not_modify') }}
 
@@ -16,14 +15,12 @@ nginx_status:
   dependencies:
     - nginx_workers
 
-{%- if enable_ipv6 %}
 nginx_status_ipv6:
   description: Nginx Status Page
   command: '/usr/lib/nagios/plugins/check_http -6 -t {{ timeout }} -H [::1] -I [::1] -u /nginx_status -p 80 -e "200 OK"'
   timeout: {{ timeout }}
   dependencies:
     - nginx_workers
-{%- endif %}
 
 nginx_workers:
   description: Nginx Worker Processes

@@ -239,21 +239,3 @@ root_password
 The root password.
 
 Default: not set (``False``).
-
-.. _pillar-ip_version:
-
-ip_version
-~~~~~~~~~~
-
-Which version of :ref:`glossary-IP` to use.
-
-Choices:
-
-``v4``
-  Only use :ref:`glossary-IPv4`.
-``v6``
-  Only use :ref:`glossary-IPv6`.
-``both``
-  Use both :ref:`glossary-IPv4` and :ref:`glossary-IPv6`.
-
-Default: ``v4``.

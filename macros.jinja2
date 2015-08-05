@@ -88,13 +88,3 @@ mode: permission of PID file
         {%- endfor -%}
     {%- endif -%}
 {%- endmacro -%}
-
-{%- set enable_ipv4 = True %}
-{%- set enable_ipv6 = False %}
-{%- set _ip_version = salt["pillar.get"]("ip_version", "v4") %}
-{%- if _ip_version == "v6" %}
-  {%- set enable_ipv4 = False %}
-  {%- set enable_ipv6 = True %}
-{%- elif _ip_version == "both" %}
-  {%- set enable_ipv6 = True %}
-{%- endif %}

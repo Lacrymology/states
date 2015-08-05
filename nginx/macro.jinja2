@@ -26,3 +26,12 @@
     {%- endfor -%}
   {%- endif -%}
 {%- endmacro %}
+
+{%- macro http_listen() %}
+  {%- if enable_ipv4 %}
+    listen 80;
+  {%- endif %}
+  {%- if enable_ipv6 %}
+    listen [::]:80;
+  {%- endif %}
+{%- endmacro  %}

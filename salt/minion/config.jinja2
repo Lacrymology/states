@@ -40,3 +40,5 @@ grains:
 {%- endfor %}
   branch: {{ salt['pillar.get']('branch', 'master') }}
   highstate: {{ salt['pillar.get']('salt:highstate', True) }}
+
+ipv6: True

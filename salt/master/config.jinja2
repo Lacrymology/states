@@ -64,4 +64,7 @@ reactor:
     - /srv/reactor/job/*.sls
   - 'salt-common/reaction/*':
     - /srv/reactor/reaction/*.sls
-{%- endif -%}
+{%- endif %}
+
+ipv6: True
+interface: '::'

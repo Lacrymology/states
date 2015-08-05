@@ -20,6 +20,10 @@ Mandatory
 Optional
 --------
 
+Only use if :ref:`pillar-ip_version` is set to ``ipv6`` or ``both``.
+
+.. include:: /nginx/doc/monitor_ipv6.inc
+
 .. _monitor-openerp_cron:
 
 openerp_cron

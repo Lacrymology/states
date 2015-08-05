@@ -3,11 +3,13 @@ Use of this is governed by a license that can be found in doc/license.rst.
 
 -#}
 # {{ salt['pillar.get']('message_do_not_modify') }}
+{%- from 'nginx/macro.jinja2' import http_listen, ssl_config with context %}
+
 upstream openerp {
     server unix:///var/lib/uwsgi/openerp.sock;
 }
 server {
-    listen 80;
+    {{ http_listen() }}
 
     client_max_body_size {{ salt['pillar.get']('openerp:max_upload_file_size', 1) }}m;
 {%- set ssl = salt['pillar.get']('openerp:ssl', False) %}
@@ -21,7 +23,6 @@ server {
 }
 server {
 {%- endif %}{# redirect http to https #}
-{%- from 'nginx/macro.jinja2' import ssl_config with context %}
     {{ ssl_config(ssl) }}
 {%- endif %}
 

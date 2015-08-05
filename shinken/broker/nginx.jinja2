@@ -3,7 +3,7 @@
 # {{ salt['pillar.get']('message_do_not_modify') }}
 
 {%- set mine = salt['mine.get']('*', 'monitoring.data') -%}
-{%- from 'nginx/macro.jinja2' import ssl_config with context %}
+{%- from 'nginx/macro.jinja2' import http_listen, ssl_config with context %}
 
 upstream shinken-backend {
     ip_hash;
@@ -20,7 +20,7 @@ upstream shinken-backend {
 }
 
 server {
-    listen 80;
+    {{ http_listen() }}
 {%- set ssl = salt['pillar.get']('shinken:ssl', False) -%}
 {%- if ssl -%}
   {%- if salt['pillar.get']('shinken:ssl_redirect', False) %}

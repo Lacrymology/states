@@ -38,3 +38,7 @@ salt_archive_clamav_elapsed
 Check time elapsed of the ``salt_archive_clamav.py`` process.
 
 .. note:: Only check if :ref:`pillar-salt_archive-source` is not defined.
+
+Only use if :ref:`pillar-ip_version` is set to ``ipv6`` or ``both``.
+
+.. include:: /nginx/doc/monitor_ipv6.inc

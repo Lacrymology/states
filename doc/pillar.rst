@@ -240,6 +240,7 @@ The root password.
 
 Default: not set (``False``).
 
+.. _pillar-ip_version:
 
 ip_version
 ~~~~~~~~~~

@@ -36,16 +36,6 @@ List of IP addresses which are allowed to issue query to the server.
 Optional
 --------
 
-.. _pillar-bind-ipv4_only:
-
-bind:ipv4_only
-~~~~~~~~~~~~~~
-
-Whether to allow only support for IPV4. If set to ``False`` it will serve
-both IPv4 and IPv6.
-
-Default: serves only IPv4 (``True``).
-
 .. _pillar-bind-forwarders:
 
 bind:forwarders

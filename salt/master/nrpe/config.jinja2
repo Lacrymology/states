@@ -35,6 +35,13 @@ salt_master_publish_port:
   dependencies:
     - salt_master_procs
 
+salt_master_publish_port_ipv6:
+  description: Salt Master Local Port Publish with IPv6
+  command: /usr/lib/nagios/plugins/check_tcp -6 -H ::1 -p 4505 -t {{ timeout }}
+  timeout: {{ timeout }}
+  dependencies:
+    - salt_master_procs
+
 salt_master_publish_port_remote:
   description: Salt Master Remote Port Publish
   check: check_tcp!4505
@@ -45,6 +52,13 @@ salt_master_publish_port_remote:
 salt_master_return_port:
   description: Salt Master Local Port Return
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 4506 -t {{ timeout }}
+  timeout: {{ timeout }}
+  dependencies:
+    - salt_master_procs
+
+salt_master_return_port_ipv6:
+  description: Salt Master Local Port Return
+  command: /usr/lib/nagios/plugins/check_tcp -6 -H ::1 -p 4506 -t {{ timeout }}
   timeout: {{ timeout }}
   dependencies:
     - salt_master_procs

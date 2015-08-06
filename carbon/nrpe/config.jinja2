@@ -55,6 +55,8 @@ carbon_pickle_port_remote:
   dependencies:
     - carbon_pickle_port
 
+{%- set carbon_interface = salt['pillar.get']('carbon:interface', '::') %}
+{%- if carbon_interface in ("::", "0.0.0.0", "127.0.0.1") %}
 carbon_plaintext_port:
   description: Carbon Local Port PlainText Protocol
   command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 2003 -t {{ timeout }}
@@ -68,3 +70,20 @@ carbon_pickle_port:
   timeout: {{ timeout }}
   dependencies:
     - carbon_cache_procs
+{%- endif %}
+
+{%- if carbon_interface in ("::", "::1")%}
+carbon_plaintext_port_ipv6:
+  description: Carbon Local Port PlainText Protocol using IPv6
+  command: /usr/lib/nagios/plugins/check_tcp -6 -H ::1 -p 2003 -t {{ timeout }}
+  timeout: {{ timeout }}
+  dependencies:
+    - carbon_cache_procs
+
+carbon_pickle_port_ipv6:
+  description: Carbon Local Port Pickle Protocol using IPv6
+  command: /usr/lib/nagios/plugins/check_tcp -6 -H ::1 -p 2004 -t {{ timeout }}
+  timeout: {{ timeout }}
+  dependencies:
+    - carbon_cache_procs
+{%- endif %}

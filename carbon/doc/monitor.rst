@@ -90,6 +90,22 @@ carbon-relay_ daemon Pickle port is listening and can be reached from outside.
 
 .. _monitor-carbon_plaintext_port:
 
+.. |deployment| replace:: carbon
+
+.. include:: /backup/doc/monitor_procs.inc
+
+.. include:: /backup/doc/monitor.inc
+
+.. _carbon-relay: http://graphite.readthedocs.org/en/latest/carbon-daemons.html#carbon-relay-py
+
+.. _carbon-cache: http://graphite.readthedocs.org/en/latest/carbon-daemons.html#carbon-cache-py
+
+Optional
+--------
+
+Following checks are only enable if :ref:`pillar-carbon-interface` is set to
+``::``, ``0.0.0.0`` or ``127.0.0.1``.
+
 carbon_plaintext_port
 ~~~~~~~~~~~~~~~~~~~~~
 
@@ -102,12 +118,19 @@ carbon_pickle_port
 
 carbon-relay_ Pickle Port is listening on localhost (``127.0.0.1``).
 
-.. |deployment| replace:: carbon
+Following checks are only enable if :ref:`pillar-carbon-interface` is set to
+``::`` or ``::1``.
 
-.. include:: /backup/doc/monitor_procs.inc
+.. _monitor-carbon_plaintext_port_ipv6:
 
-.. include:: /backup/doc/monitor.inc
+carbon_plaintext_port_ipv6
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. _carbon-relay: http://graphite.readthedocs.org/en/latest/carbon-daemons.html#carbon-relay-py
+carbon-relay_ PlainText Port is listening on ip6-localhost (``::1``).
 
-.. _carbon-cache: http://graphite.readthedocs.org/en/latest/carbon-daemons.html#carbon-cache-py
+.. _monitor-carbon_pickle_port_ipv6:
+
+carbon_pickle_port_ipv6
+~~~~~~~~~~~~~~~~~~~~~~~
+
+carbon-relay_ Pickle Port is listening on ip6-localhost usi (``::1``).

@@ -31,7 +31,7 @@ MAX_CREATES_PER_MINUTE = {{ salt['pillar.get']('carbon:max_creates_per_minute', 
 #}
 ENABLE_UDP_LISTENER = False
 {#-
-UDP_RECEIVER_INTERFACE = {{ salt['pillar.get']('carbon:interface', '0.0.0.0') }}
+UDP_RECEIVER_INTERFACE = {{ salt['pillar.get']('carbon:interface', '::') }}
 UDP_RECEIVER_PORT = 2013
 
  Per security concerns outlined in Bug #817247 the pickle receiver
@@ -154,7 +154,7 @@ To configure special settings for the carbon-cache instance 'b', uncomment this:
 
 [relay]
 USER = graphite
-{%- set receiver_interface = salt['pillar.get']('carbon:interface', '0.0.0.0') %}
+{%- set receiver_interface = salt['pillar.get']('carbon:interface', '::') %}
 LINE_RECEIVER_INTERFACE = {{ receiver_interface }}
 LINE_RECEIVER_PORT = 2003
 PICKLE_RECEIVER_INTERFACE = {{ receiver_interface }}
@@ -232,9 +232,9 @@ USE_WHITELIST = {{ filtering }}
 
 {#-
 [aggregator]
-LINE_RECEIVER_INTERFACE = {{ salt['pillar.get']('carbon:interface', '0.0.0.0') }}
+LINE_RECEIVER_INTERFACE = {{ salt['pillar.get']('carbon:interface', '::') }}
 LINE_RECEIVER_PORT = 2023
 
-PICKLE_RECEIVER_INTERFACE = {{ salt['pillar.get']('carbon:interface', '0.0.0.0') }}
+PICKLE_RECEIVER_INTERFACE = {{ salt['pillar.get']('carbon:interface', '::') }}
 PICKLE_RECEIVER_PORT = 2024
 #}

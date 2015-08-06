@@ -33,7 +33,7 @@ Example::
   carbon:
     files_max: 65535
     replication: 1
-    interface: 0.0.0.0
+    interface: '::'
     max_creates_per_minute: inf
     max_updates_per_second: 500
 
@@ -55,7 +55,7 @@ carbon:interface
 
 IP address to bind carbon-relay_ daemon.
 
-Default: binds to all available IP addresses of all interfaces (``0.0.0.0``).
+Default: binds to all available IP addresses of all interfaces (``'::'``).
 
 .. _pillar-carbon-max_creates_per_minute:
 

@@ -7,7 +7,6 @@ include:
   - apt
   - bash
   - cron
-  - locale
   - mail
   - spamassassin
 
@@ -43,7 +42,6 @@ extend:
     - require:
       - pkg: cron
       - file: bash
-      - cmd: system_locale
       - pkg: amavis
 {%- else %}
     {#-

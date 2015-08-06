@@ -17,3 +17,8 @@ ssh_port
 ~~~~~~~~
 
 Check if :doc:`index` port is open.
+
+ssh_port_ipv6
+~~~~~~~~~~~~~
+
+Check if :doc:`index` port is open using ref:`glossary-IPv6` address.

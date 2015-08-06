@@ -15,3 +15,10 @@ ssh_port:
   timeout: {{ timeout }}
   dependencies:
     - ssh_procs
+
+ssh_port_ipv6:
+  description: SSH Server Local Port
+  command: "/usr/lib/nagios/plugins/check_tcp -H ::1 -p {{ salt['pillar.get']('ssh:server:ports', [22])[0] }} -t {{ timeout }}"
+  timeout: {{ timeout }}
+  dependencies:
+    - ssh_procs

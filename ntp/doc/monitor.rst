@@ -28,3 +28,8 @@ ntp_sync
 ~~~~~~~~
 
 Check if :doc:`index` server is in sync.
+
+ntp_sync_ipv6
+~~~~~~~~~~~~~
+
+Check if :doc:`index` server is in sync using :ref:`glossary-IPv6` address.

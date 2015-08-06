@@ -22,4 +22,11 @@ ntp_sync:
   timeout: {{ timeout }}
   dependencies:
     - ntp_procs
+
+ntp_sync_ipv6:
+  description: NTP Synchronization
+  command: /usr/lib/nagios/plugins/check_ntp_peer -6 -H ::1 -w 2 -C 5 -t {{ timeout }}
+  timeout: {{ timeout }}
+  dependencies:
+    - ntp_procs
 {%- endif %}

@@ -44,7 +44,7 @@ class Mail(pysc.Application):
     def main(self):
         # consume standard input early
         lines = []
-        p = re.compile("Subject: Cron <root@[^ ]+> (.*)")
+        p = re.compile("Subject: Cron <[^@]+@[^ ]+> (.*)")
         mail_subject = 'This mail has no subject.'
         for line in sys.stdin:
             line = line.rstrip()

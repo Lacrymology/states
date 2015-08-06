@@ -2,6 +2,7 @@
 
 include:
   - apt
+  - locale
   - mail
 
 amavis:
@@ -11,6 +12,7 @@ amavis:
     - require:
       - cmd: apt_sources
       - file: /etc/mailname
+      - cmd: system_locale
   user:
     - present
     - shell: /usr/sbin/nologin

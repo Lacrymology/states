@@ -15,6 +15,13 @@ nginx_status:
   dependencies:
     - nginx_workers
 
+nginx_status_ipv6:
+  description: Nginx Status Page
+  command: '/usr/lib/nagios/plugins/check_http -6 -t {{ timeout }} -H [::1] -I [::1] -u /nginx_status -p 80 -e "200 OK"'
+  timeout: {{ timeout }}
+  dependencies:
+    - nginx_workers
+
 nginx_workers:
   description: Nginx Worker Processes
   command: '/usr/lib/nagios/plugins/check_procs -c {{ config['num_workers'] }}:{{ config['num_workers'] }} -a "nginx: worker process" -u www-data'

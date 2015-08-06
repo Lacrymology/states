@@ -29,3 +29,7 @@ Optional
 Only use if :ref:`pillar-apt_cache-ssl` is set to ``True``.
 
 .. include:: /nginx/doc/monitor_ssl.inc
+
+Only use if an :ref:`glossary-IPv6` address is present.
+
+.. include:: /nginx/doc/monitor_ipv6.inc

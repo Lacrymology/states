@@ -7,12 +7,12 @@ include:
   - shinken.broker.nrpe
 
 {%- set check_list = [('shinken_broker_http_port', 'Connection refused'),
-                    ('shinken_broker_http', 'Connection refused'),
-                    ('shinken.broker_nginx_http', 'Invalid HTTP response')] %}
-
-{%- if salt['pillar.get']('shinken:ssl', False) %}
-    {%- set check_list = check_list + [('shinken.broker_nginx_https', 'Invalid HTTP response')] %}
-{%- endif %}
+                     ('shinken_broker_http', 'Connection refused'),
+                     ('shinken.broker_nginx_http', 'Invalid HTTP response'),
+                     ('shinken.broker_nginx_http_ipv6', 'Invalid HTTP response'),
+                     ('shinken.broker_nginx_https', 'Invalid HTTP response'),
+                     ('shinken.broker_nginx_https_ipv6', 'Invalid HTTP response'),
+                     ]%}
 
 {%- call test_cron() %}
 - sls: shinken.broker

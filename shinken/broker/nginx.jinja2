@@ -21,6 +21,7 @@ upstream shinken-backend {
 
 server {
     listen 80;
+    listen [::]:80;
 {%- set ssl = salt['pillar.get']('shinken:ssl', False) -%}
 {%- if ssl -%}
   {%- if salt['pillar.get']('shinken:ssl_redirect', False) %}

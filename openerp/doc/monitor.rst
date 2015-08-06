@@ -20,6 +20,10 @@ Mandatory
 Optional
 --------
 
+Only use if an :ref:`glossary-IPv6` address is present.
+
+.. include:: /nginx/doc/monitor_ipv6.inc
+
 .. _monitor-openerp_cron:
 
 openerp_cron

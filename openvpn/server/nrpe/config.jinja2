@@ -12,7 +12,7 @@ openvpn_server_{{ instance }}:
 openvpn_server_{{ instance }}_port:
   {%- set port = servers[instance]['port'] | default(1194) %}
   description: OpenVPN Instance {{ instance }} Port
-    {%- if servers[instance]['protocol'] | default('udp') == 'udp' %}
+    {%- if (servers[instance]['protocol']|default('udp')).startswith('udp') %}
   command: "/usr/lib/nagios/plugins/check_udp_listen {{ port }}"
     {%- else %}
   command: "/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p {{ port }}"

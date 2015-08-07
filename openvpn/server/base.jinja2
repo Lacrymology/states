@@ -6,7 +6,7 @@
 {%- endblock topology %}
 
 port {{ vpn_instance['port'] | default(1194) }}
-proto {{ vpn_instance['protocol'] | default('udp') }}
+proto {{ vpn_instance['protocol'] | default('udp6') }}
 dev {{ vpn_instance['device'] | default('tun') }}
 keepalive 10 120
 comp-lzo

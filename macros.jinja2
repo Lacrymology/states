@@ -9,6 +9,8 @@ file contains all common macros
     Changing directly in consumer only needed when new version of salt
     change a lot in ppa structure.
 -#}
+{%- set _local = {"first_ipv6": None} %}
+
 {%- macro salt_version() -%}
     2014.7.5+ds-1
 {%- endmacro -%}
@@ -88,3 +90,10 @@ mode: permission of PID file
         {%- endfor -%}
     {%- endif -%}
 {%- endmacro -%}
+
+{%- for ip_addr in salt["network.ip_addrs6"]() %}
+  {%- if not (ip_addr.startswith("fe80") or _local.first_ipv6) %}
+    {%- do _local.update({"first_ipv6": ip_addr}) %}
+  {%- endif %}
+{%- endfor %}
+{%- set first_ipv6 = _local.first_ipv6 %}

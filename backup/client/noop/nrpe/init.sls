@@ -15,7 +15,7 @@ check_backup.py:
         # # {{ salt['pillar.get']('message_do_not_modify') }}
         # A place-holder script always return 0
         # Which replaces check_backup.py in test mode
-    - user: nagios
+    - user: root
     - group: nagios
     - mode: 550
     - require:

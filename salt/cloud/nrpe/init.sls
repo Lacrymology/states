@@ -32,7 +32,7 @@ include:
   file:
     - managed
     - source: salt://salt/cloud/nrpe/check.py
-    - user: nagios
+    - user: root
     - group: nagios
     - mode: 550
     - require:

@@ -18,7 +18,7 @@ include:
     - managed
     - template: jinja
     - source: salt://backup/client/scp/nrpe/config.jinja2
-    - user: nagios
+    - user: root
     - group: nagios
     - mode: 440
     - require:
@@ -29,7 +29,7 @@ check_backup.py:
     - managed
     - name: /usr/lib/nagios/plugins/check_backup.py
     - source: salt://backup/client/scp/nrpe/check.py
-    - user: nagios
+    - user: root
     - group: nagios
     - mode: 550
     - require:

@@ -37,7 +37,7 @@ include:
     - managed
     - source: salt://salt/master/nrpe/check_mine.py
     - template: jinja
-    - user: nagios
+    - user: root
     - group: nagios
     - mode: 550
     - require:
@@ -73,7 +73,7 @@ salt_mine_collect_minions_data:
     - managed
     - source: salt://salt/master/nrpe/check_git.py
     - template: jinja
-    - user: nagios
+    - user: root
     - group: nagios
     - mode: 550
     - require:

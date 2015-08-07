@@ -14,7 +14,7 @@ include:
     - managed
     - template: jinja
     - source: salt://backup/client/s3/nrpe/config.jinja2
-    - user: nagios
+    - user: root
     - group: nagios
     - mode: 440
     - require:
@@ -51,7 +51,7 @@ check_backup.py:
     - managed
     - name: /usr/lib/nagios/plugins/check_backup.py
     - source: salt://backup/client/s3/nrpe/check.py
-    - user: nagios
+    - user: root
     - group: nagios
     - mode: 550
     - require:
@@ -64,7 +64,7 @@ check_backup.py:
   file:
     - managed
     - source: salt://backup/client/s3/s3lite/nrpe/check.py
-    - user: nagios
+    - user: root
     - group: nagios
     - mode: 550
     - require:

@@ -95,7 +95,7 @@ sentry_monitoring:
   file:
     - managed
     - source: salt://sentry/nrpe/check.py
-    - user: nagios
+    - user: root
     - group: nagios
     - mode: 550
     - require:

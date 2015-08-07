@@ -27,7 +27,7 @@ include:
 /var/log/graphite/carbon:
   file:
     - directory
-    - user: graphite
+    - user: root
     - group: graphite
     - mode: 770
     - makedirs: True
@@ -39,7 +39,7 @@ include:
   file:
     - managed
     - template: jinja
-    - user: graphite
+    - user: root
     - group: graphite
     - mode: 440
     - source: salt://carbon/storage.jinja2
@@ -195,7 +195,7 @@ carbon-relay:
     - managed
     - source: salt://carbon/relay-rules.jinja2
     - template: jinja
-    - user: graphite
+    - user: root
     - group: graphite
     - mode: 440
     - require:
@@ -208,7 +208,7 @@ carbon-relay:
     - absent
 {%- else %}
     - directory
-    - user: graphite
+    - user: root
     - group: graphite
     - mode: 550
     - require:
@@ -220,7 +220,7 @@ carbon-relay:
   file:
   {%- if all_filter_type == filter_type %}
     - managed
-    - user: graphite
+    - user: root
     - group: graphite
     - mode: 440
     - contents: |

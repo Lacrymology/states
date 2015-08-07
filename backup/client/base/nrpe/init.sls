@@ -8,7 +8,7 @@ include:
   file:
     - managed
     - source: salt://backup/client/base/nrpe/check_backup_base.py
-    - user: nagios
+    - user: root
     - group: nagios
     - mode: 440
     - require:

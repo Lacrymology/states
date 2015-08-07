@@ -37,7 +37,7 @@ nrpe_mysql_check_querry:
   file:
     - managed
     - source: salt://mysql/server/nrpe/check_mysql_query.py
-    - user: nagios
+    - user: root
     - group: nagios
     - mode: 550
     - require:

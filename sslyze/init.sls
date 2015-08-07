@@ -68,7 +68,7 @@ check_ssl_configuration.py:
     - managed
     - name: /usr/lib/nagios/plugins/check_ssl_configuration.py
     - source: salt://sslyze/check_ssl_configuration.py
-    - user: nagios
+    - user: root
     - group: nagios
     - mode: 550
     - require:

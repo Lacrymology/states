@@ -33,7 +33,7 @@ pydns:
   file:
     - managed
     - source: salt://bind/nrpe/check.py
-    - user: nagios
+    - user: root
     - group: nagios
     - mode: 550
     - require:

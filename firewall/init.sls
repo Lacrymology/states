@@ -17,6 +17,10 @@ iptables:
     - group: root
     - mode: 440
     - source: salt://firewall/config.jinja2
+    - context:
+        pillars_ip: {{ salt['pillar.get']('firewall:allowed_ips', []) }}
+        filter: {{ salt['pillar.get']('firewall:filter', {}) }}
+        blacklist: {{ salt['pillar.get']('firewall:blacklist', []) }}
     - require:
       - pkg: iptables
   pkg:
@@ -33,6 +37,30 @@ iptables:
     - stateful: False
     - watch:
       - file: iptables
+
+ip6tables:
+  file:
+    - managed
+    - name: /etc/iptables/rules.v6
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - source: salt://firewall/config.jinja2
+    - context:
+        {#- IPv6 doesn't support NAT chain #}
+        disable_nat: True
+        pillars_ip: {{ salt['pillar.get']('firewall:allowed_ip6s', []) }}
+        filter: {{ salt['pillar.get']('firewall:filter6', {}) }}
+        blacklist: {{ salt['pillar.get']('firewall:blacklist6', []) }}
+    - require:
+      - pkg: iptables
+  cmd:
+    - wait
+    - name: ip6tables-restore < /etc/iptables/rules.v6
+    - stateful: False
+    - watch:
+      - file: ip6tables
 
 {% if grains['virtual'] != 'openvzve' %}
 firewall_nf_conntrack:

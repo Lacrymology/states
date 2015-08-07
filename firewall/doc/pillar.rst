@@ -31,6 +31,16 @@ List of additional hosts that will get full access to this server.
 
 Default: no host allowed to fully access (``[]``).
 
+.. _pillar-firewall-allowed_ip6s:
+
+firewall:allowed_ip6s
+~~~~~~~~~~~~~~~~~~~~~
+
+List of additional :ref:`glossary-IPv6` addresses that will get full access to
+this server.
+
+Default: no host allowed to fully access (``[]``).
+
 .. _pillar-firewall-filter:
 
 firewall:filter
@@ -41,12 +51,30 @@ the list of ports that are allowed from external networks.
 
 Default: do not allow to access any ports from outside (``{}``).
 
+.. _pillar-firewall-filter6:
+
+firewall:filter6
+~~~~~~~~~~~~~~~~
+
+Same as :ref:`pillar-firewall-filter` but with :ref:`glossary-IPv6`.
+
+Default: do not allow to access any ports from outside (``{}``).
+
 .. _pillar-firewall-blacklist:
 
 firewall:blacklist
 ~~~~~~~~~~~~~~~~~~
 
 List of all IP addresses which will be blocked.
+
+Default: do not block any IP (``[]``).
+
+.. _pillar-firewall-blacklist6:
+
+firewall:blacklist6
+~~~~~~~~~~~~~~~~~~~
+
+List of all :ref:`glossary-IPv6` addresses which will be blocked.
 
 Default: do not block any IP (``[]``).
 

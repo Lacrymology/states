@@ -39,7 +39,7 @@ check_{{ check }}:
   file:
     - managed
     - name: /usr/lib/nagios/plugins/check_{{ check }}.py
-    - user: nagios
+    - user: root
     - group: nagios
     - mode: 550
     - source: salt://django/check_{{ check }}.py

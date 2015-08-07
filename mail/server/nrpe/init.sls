@@ -18,7 +18,7 @@ include:
   file:
     - managed
     - source: salt://mail/server/nrpe/check_mail_stack.py
-    - user: nagios
+    - user: root
     - group: nagios
     - mode: 550
     - require:

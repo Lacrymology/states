@@ -25,7 +25,7 @@ nsca-{{ formula }}:
     - managed
     - name: /etc/nagios/nsca.d/{{ file_name }}.yml
     - makedirs: True
-    - user: nagios
+    - user: root
     - group: nagios
     - mode: 440
     - template: jinja

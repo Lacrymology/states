@@ -54,7 +54,7 @@ check_xmpp.py:
     - managed
     - name: /usr/lib/nagios/plugins/check_xmpp.py
     - source: salt://ejabberd/nrpe/check.py
-    - user: nagios
+    - user: root
     - group: nagios
     - mode: 550
     - require:

@@ -17,9 +17,9 @@ include:
     - managed
     - source: salt://apt_cache/security.jinja2
     - template: jinja
-    - user: apt-cacher-ng
+    - user: root
     - group: apt-cacher-ng
-    - mode: 400
+    - mode: 440
     - context:
         admin_username: {{ admin_username }}
         admin_password: {{ admin_password }}

@@ -46,7 +46,7 @@ check_psql_encoding.py:
     - managed
     - name: /usr/lib/nagios/plugins/check_psql_encoding.py
     - source: salt://postgresql/common/nrpe/check_encoding.py
-    - user: nagios
+    - user: root
     - group: nagios
     - mode: 555
     - require:

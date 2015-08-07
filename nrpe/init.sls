@@ -127,7 +127,7 @@ nagios-plugins:
 /var/lib/nagios:
   file:
     - directory
-    - user: nagios
+    - user: root
     - group: nagios
     - require:
       - user: nagios-nrpe-server
@@ -157,7 +157,7 @@ service: nagios-nrpe-server #}
     - managed
     - name: /etc/nagios/nrpe.cfg
     - template: jinja
-    - user: nagios
+    - user: root
     - group: nagios
     - mode: 440
     - source: salt://nrpe/server.jinja2
@@ -187,7 +187,7 @@ service: nagios-nrpe-server #}
 /usr/local/nagios:
   file:
     - directory
-    - user: nagios
+    - user: root
     - group: nagios
     - mode: 750
     - require:
@@ -201,7 +201,7 @@ service: nagios-nrpe-server #}
   file:
     - managed
     - source: salt://nrpe/check_domain.sh
-    - user: nagios
+    - user: root
     - group: nagios
     - mode: 550
     - require:
@@ -211,7 +211,7 @@ service: nagios-nrpe-server #}
   file:
     - managed
     - source: salt://nrpe/check_memory.py
-    - user: nagios
+    - user: root
     - group: nagios
     - mode: 550
     - require:
@@ -226,7 +226,7 @@ service: nagios-nrpe-server #}
   file:
     - managed
     - source: salt://nrpe/check_oom.py
-    - user: nagios
+    - user: root
     - group: nagios
     - mode: 550
     - require:
@@ -257,7 +257,7 @@ service: nagios-nrpe-server #}
   file:
     - managed
     - source: salt://nrpe/check_udp_listen.sh
-    - user: nagios
+    - user: root
     - group: nagios
     - mode: 550
     - require:
@@ -275,7 +275,7 @@ service: nagios-nrpe-server #}
 /etc/nagios/nsca.d:
   file:
     - directory
-    - user: nagios
+    - user: root
     - group: nagios
     - mode: 550
     - require:
@@ -286,7 +286,7 @@ service: nagios-nrpe-server #}
     - managed
     - template: jinja
     - source: salt://nrpe/nsca.jinja2
-    - user: nagios
+    - user: root
     - group: nagios
     - mode: 440
     - require:
@@ -304,7 +304,7 @@ service: nagios-nrpe-server #}
     - managed
     - source: salt://nrpe/nsca_passive.py
     - mode: 500
-    - user: nagios
+    - user: root
     - group: nagios
     - require:
       - module: nrpe-virtualenv

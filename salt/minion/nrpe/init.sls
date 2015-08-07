@@ -40,7 +40,7 @@ set_last_success_timestamp:
   file:
     - managed
     - source: salt://salt/minion/nrpe/check_last_success.py
-    - user: nagios
+    - user: root
     - group: nagios
     - mode: 550
     - require:
@@ -56,7 +56,7 @@ set_last_success_timestamp:
   file:
     - managed
     - source: salt://salt/minion/nrpe/check_pillar.py
-    - user: nagios
+    - user: root
     - group: nagios
     - mode: 550
     - require:

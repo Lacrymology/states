@@ -18,6 +18,15 @@ patch_salt_utils:
     - mode: 644
     - source: salt://salt/patch/utils.py
 
+patch_salt_utils_dictupdate:
+  file:
+    - managed
+    - name: {{ grains['saltpath'] }}/utils/dictupdate.py
+    - source: salt://salt/patch/dictupdate.py
+    - user: root
+    - group: root
+    - mode: 644
+
 patch_salt_log_setup_fix_deadlock:
   file:
     - managed

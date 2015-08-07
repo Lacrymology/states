@@ -145,6 +145,23 @@ def data():
             }
         output['ip_addrs']['private'] = output['ip_addrs']['public']
 
+    # figure how monitoring can reach this host using IPv6
+    ip_addrs6 = __salt__['pillar.get']('ip_addrs6', {})
+    if ip_addrs6:
+        output['ip_addrs6'] = ip_addrs6
+    else:
+        interface = __salt__['pillar.get']('network_interface', 'eth0')
+        valid_ip_addrs6 = [
+            ip for ip in __salt__['network.ip_addrs6'](interface=interface)
+            if not ip.startswith("fe80")]  # filter out link local
+        if len(valid_ip_addrs6) > 0:
+            output['ip_addrs6'] = {
+                'public': valid_ip_addrs6[0]
+            }
+            output['ip_addrs6']['private'] = output['ip_addrs6']['public']
+        else:
+            ip_addrs6 = {'public': None, 'private': None}
+
     # check monitoring_data pillar for extra values to return
     monitoring_data = __salt__['pillar.get']('monitoring_data', {})
     extra_data = {}

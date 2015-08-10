@@ -64,6 +64,14 @@ salt-master-requirements:
   file:
     - absent
 
+/usr/local/bin/salt_master_highstate.sh:
+  file:
+    - absent
+
+/etc/cron.d/salt_master_highstate:
+  file:
+    - absent
+
 salt_master_script_git_pull_repos:
   file:
     - absent

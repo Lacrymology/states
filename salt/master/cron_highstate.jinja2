@@ -1,0 +1,7 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+
+# {{ salt['pillar.get']('message_do_not_modify') }}
+
+{%- set days = salt['pillar.get']('salt_master:highstate_days', [1, 2, 3, 4, 5]) %}
+
+27 {{ salt['pillar.get']('crontab_hour', 6) }} * * {% for day in days %}{{ day }}{% if not loop.last %},{% endif %}{% endfor %} root /usr/local/bin/salt_master_highstate.sh

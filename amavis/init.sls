@@ -7,11 +7,19 @@ include:
   - apt
   - bash
   - cron
+  - locale
   - mail
   - spamassassin
 
 extend:
   amavis:
+    pkg:
+      - latest
+      - name: amavisd-new
+      - require:
+        - cmd: apt_sources
+        - file: /etc/mailname
+        - cmd: system_locale
     service:
       - running
       - order: 50
@@ -65,8 +73,11 @@ extend:
     - user: amavis
     - group: amavis
     - mode: 640
+    - replace: False
     - require:
       - file: /var/lib/amavis/.spamassassin
+    - require_in:
+      - pkg: amavis
 {%- endif %}
 
 {%- call manage_pid('/var/run/amavis/amavisd.pid', 'amavis', 'amavis', 'amavis', 640) %}

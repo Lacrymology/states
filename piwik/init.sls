@@ -32,6 +32,7 @@ piwik:
     - require:
       - service: mysql-server
       - pkg: php
+      - pkgrepo: piwik
   mysql_database:
     - present
     - name: piwik

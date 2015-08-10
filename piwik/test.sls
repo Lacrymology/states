@@ -6,6 +6,9 @@ include:
   - piwik
   - piwik.nrpe
   - piwik.diamond
+  - piwik.backup
+  - piwik.backup.nrpe
+  - piwik.backup.diamond
 
 test:
   monitoring:
@@ -14,6 +17,9 @@ test:
       - sls: piwik
       - sls: piwik.nrpe
       - sls: piwik.diamond
+      - sls: piwik.backup
+      - sls: piwik.backup.nrpe
+      - sls: piwik.backup.diamond
   diamond:
     - test
     - map:
@@ -25,7 +31,15 @@ test:
   qa:
     - test
     - name: piwik
+    - additional:
+      - piwik.backup
     - doc: {{ opts['cachedir'] }}/doc/output
     - require:
       - monitoring: test
       - cmd: doc
+  cmd:
+    - run
+    - name: /etc/cron.daily/backup-piwik
+    - require:
+      - sls: piwik
+      - sls: piwik.backup

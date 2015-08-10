@@ -13,6 +13,9 @@ include:
 test:
   monitoring:
     - run_all_checks
+    - exclude:
+{#- database hasn't been initialized after install #}
+      - piwik_mysql_not_empty
     - require:
       - sls: piwik
       - sls: piwik.nrpe

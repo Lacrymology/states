@@ -139,6 +139,13 @@ Define public and private IP of a minion.
 
 Default: Unused (``{}``)
 
+.. _pillar-ip_addrs6:
+
+ip_addrs6
+~~~~~~~~~
+
+Same as :ref:`pillar-ip_addrs` but for :ref:`glossary-IPv6`.
+
 shinken:ip_source
 ~~~~~~~~~~~~~~~~~
 

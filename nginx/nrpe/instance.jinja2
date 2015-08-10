@@ -1,17 +1,9 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 {%- from 'nrpe/passive.jinja2' import passive_interval with context -%}
-{%- set local = {"first_ipv6": None} %}
+{%- from 'macros.jinja2' import first_ipv6 with context %}
 
 {%- macro nginx_instance(formula, http=True, http_uri='/', http_result=None, http_port=80, https_uri=None, https_result="200 OK", pillar_prefix=None, timeout=False, domain_name=None, allow_ssl_redirect=True, check_interval=False, deployment=None, extra_dependencies=()) -%}
     {%- set first_ip = salt['network.ip_addrs']()[0] -%}
-    {%- set ip_addrs6 = salt["network.ip_addrs6"]() %}
-    {%- for ip_addr in ip_addrs6 %}
-        {%- if not (ip_addr.startswith("fe80::601") or local.first_ipv6) %}
-            {%- do local.update({"first_ipv6": ip_addr}) %}
-        {%- endif %}
-    {%- endfor %}
-    {%- set first_ipv6 = local.first_ipv6 %}
-
     {%- if not pillar_prefix -%}
         {%- set pillar_prefix = formula -%}
     {%- endif -%}

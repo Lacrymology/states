@@ -9,5 +9,5 @@
 {{ uwsgi_instance(deployment) }}
 {{ mysql_instance(deployment, dbname=deployment, username=deployment,
                   password = salt["pillar.get"]("piwik:db:password")) }}
-{{ nginx_instance(deployment,
+{{ nginx_instance(deployment, timeout=60,
                   extra_dependencies=('piwik_uwsgi_worker', 'piwik_mysql')) }}

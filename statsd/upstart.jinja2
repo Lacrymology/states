@@ -14,4 +14,7 @@ umask 022
 
 setuid nobody
 
-exec /usr/local/statsdaemon/statsdaemon {% if salt['pillar.get']('debug', False) %}--debug {% endif %} -graphite={{ salt['pillar.get']('graphite_address', False) }}:2003 -prefix="{{ grains['id'] }}.stats." | logger -t "statsdaemon" -p debug
+{%- set is_debug = salt['pillar.get']('debug', False) %}
+exec /usr/local/statsdaemon/statsdaemon {% if is_debug %} -debug {% endif %} \
+         -graphite={{ salt['pillar.get']('graphite_address', False) }}:2003 \
+         -prefix="{{ grains['id'] }}.stats." 2>&1 >/dev/null | cut -d' ' -f3- | {% if not is_debug %}grep -v 'stats to' | {% endif %} logger -t "statsdaemon" -p daemon.warning

@@ -155,3 +155,11 @@ Role Strategy Plugin
 https://wiki.jenkins-ci.org/display/JENKINS/Role+Strategy+Plugin
 
 Add role-based strategy to ease and fasten users management.
+
+Warnings Plugin
+~~~~~~~~~~~~~~~
+
+https://wiki.jenkins-ci.org/display/JENKINS/Warnings+Plugin
+
+This plugin generates the trend report for compiler warnings in the console log
+or in log files.

@@ -285,8 +285,8 @@ openvpn:servers:{{ instance }}:protocol
 
 Choices:
 
-* udp
-* udp6 (default)
+* udp (default)
+* udp6
 * tcp
 * tcp6
 

@@ -3,6 +3,13 @@
 piwik:
   pkg:
     - purged
+  file:
+    - absent
+    - name: /etc/apt/sources.list.d/piwik.list
+  cmd:
+    - run
+    - name: apt-key del 66FED89E
+    - onlyif: apt-key list | grep -q 66FED89E
 
 /etc/uwsgi/piwik.yml:
   file:

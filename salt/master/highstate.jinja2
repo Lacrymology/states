@@ -11,6 +11,10 @@ trap "log_stop_script \$?" EXIT
 
 export TERM=dumb
 
-/usr/bin/salt --async -G 'highstate:True' state.highstate \
-    --return syslog,timestamps{% if salt['pillar.get']('sentry_dsn', False) %},sentry_common{% endif %} \
-    > /dev/null
+{%- set master_id = grains['id'] -%}
+{%- set sentry_dsn = salt['pillar.get']('sentry_dsn', False) %}
+
+/usr/bin/salt {{ master_id }} state.highstate \
+    --return syslog,timestamps{% if sentry_dsn %},sentry_common{% endif %} > /dev/null
+/usr/bin/salt --async -C 'G@highstate:True and not G@id:{{ master_id }}' state.highstate \
+    --return syslog,timestamps{% if sentry_dsn %},sentry_common{% endif %} > /dev/null

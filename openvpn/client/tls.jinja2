@@ -14,9 +14,9 @@
 client
 {%- set protocol = vpn_instance['protocol']|default('udp6') %}
 {%- if protocol.endswith("6") and first_ipv6 %}
-remote {{ remote_address }} {{ vpn_instance['port']|default(1194) }} {{ protocol }}
+remote {{ first_ipv6 }} {{ vpn_instance['port']|default(1194) }} {{ protocol }}
 {%- endif %}
-remote {{ first_ipv6 }} {{ vpn_instance['port']|default(1194) }} {{ (protocol|list)[:-1]|join }}
+remote {{ remote_address }} {{ vpn_instance['port']|default(1194) }} {{ (protocol|list)[:-1]|join }}
 
 ca ca.crt
 cert {{ client }}.crt

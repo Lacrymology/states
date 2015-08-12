@@ -1,0 +1,20 @@
+#!/bin/bash
+# {{ salt['pillar.get']('message_do_not_modify') }}
+# Usage of this is governed by a license that can be found in doc/license.rst
+
+# log start stop time to syslog
+source /usr/local/share/salt_common.sh
+# Ensure that only one instance of this script is running at a time
+locking_script
+log_start_script "$@"
+trap "log_stop_script \$?" EXIT
+
+export TERM=dumb
+
+{%- set master_id = grains['id'] -%}
+{%- set sentry_dsn = salt['pillar.get']('sentry_dsn', False) %}
+
+/usr/bin/salt {{ master_id }} state.highstate \
+    --return syslog,timestamps{% if sentry_dsn %},sentry_common{% endif %} > /dev/null
+/usr/bin/salt --async -C 'G@highstate:True and not G@id:{{ master_id }}' state.highstate \
+    --return syslog,timestamps{% if sentry_dsn %},sentry_common{% endif %} > /dev/null

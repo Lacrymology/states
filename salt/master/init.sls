@@ -249,11 +249,29 @@ salt-master:
 
 {{ manage_upstart_log('salt-master') }}
 
+/etc/cron.daily/salt_master_highstate:
+  file:
+    - absent
+
+salt_master_script_highstate:
+  file:
+    - managed
+    - name: /usr/local/bin/salt_master_highstate.sh
+    - source: salt://salt/master/highstate.jinja2
+    - mode: 550
+    - user: root
+    - group: root
+    - require:
+      - file: /usr/local
+      - file: bash
+      - file: /usr/local/share/salt_common.sh
+      - file: /etc/cron.daily/salt_master_highstate
+
 salt_master_cron_highstate:
   file:
     - managed
-    - name: /etc/cron.daily/salt_master_highstate
-    - source: salt://salt/master/cron.jinja2
+    - name: /etc/cron.d/salt_master_highstate
+    - source: salt://salt/master/cron_highstate.jinja2
     - template: jinja
     - user: root
     - group: root
@@ -262,6 +280,7 @@ salt_master_cron_highstate:
       - pkg: cron
       - file: bash
       - service: salt-master
+      - file: salt_master_script_highstate
 
 salt_master_masterapi_patch:
   file:

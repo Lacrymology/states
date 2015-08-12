@@ -167,3 +167,17 @@ salt_master:workers
 Numbers of workers.
 
 Default: uses number of CPU cores (``None``).
+
+Conditional
+-----------
+
+.. _pillar-salt_master-highstate_days:
+
+salt_master:highstate_days
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+A list of days :doc:`index` will run highstate on all VMs which has
+:ref:`pillar-salt-highstate` set to ``True``.
+
+The day is in the number format (same as the :doc:`/cron/doc/index`): 0 to 6
+are Sunday to Saturday.

@@ -23,12 +23,13 @@ def print_non_root_writable(pathname):
     mode = statinfo.st_mode
     if stat.S_ISREG(mode):
         uid = statinfo.st_uid
-        if uid != 0 and (mode & stat.S_IWUSR):
+        gid = statinfo.st_gid
+        if uid != 0 or (gid != 0 and (mode & stat.S_IWGRP)):
             print("{0} mode={1} user={2} group={3}".format(
                 pathname,
                 oct(mode)[4:],
                 pwd.getpwuid(uid).pw_name,
-                grp.getgrgid(statinfo.st_gid).gr_name))
+                grp.getgrgid(gid).gr_name))
 
 
 def walktree(top):

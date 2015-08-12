@@ -14,4 +14,15 @@ umask 022
 
 setuid nobody
 
-exec /usr/local/statsdaemon/statsdaemon {% if salt['pillar.get']('debug', False) %}--debug {% endif %} -graphite={{ salt['pillar.get']('graphite_address', False) }}:2003 -prefix="{{ grains['id'] }}.stats." | logger -t "statsdaemon" -p debug
+{#-
+statsdaemon logs to both stdout and stderr, the log in stdout is useless
+and will be dropped, the logs sent to stderr which will be redirected to
+syslog by using logger needs to remove the timestamp as logger will
+add timestamp for each log message.
+The log contains "stats to" is useless, remove it.
+#}
+
+{%- set is_debug = salt['pillar.get']('debug', False) %}
+exec /usr/local/statsdaemon/statsdaemon {% if is_debug %} -debug {% endif %} \
+         -graphite={{ salt['pillar.get']('graphite_address', False) }}:2003 \
+         -prefix="{{ grains['id'] }}.stats." 2>&1 >/dev/null | cut -d' ' -f3- | {% if not is_debug %}grep -v 'stats to' | {% endif %} logger -t "statsdaemon" -p daemon.warning

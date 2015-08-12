@@ -8,7 +8,9 @@ include:
   - mysql.server.nrpe
   - nginx.nrpe
   - php.nrpe
+  - pip.nrpe
   - uwsgi.nrpe
+  - virtualenv.nrpe
 {%- if ssl %}
   - ssl.nrpe
 {%- endif %}

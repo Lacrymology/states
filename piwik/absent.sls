@@ -18,3 +18,11 @@ piwik:
 /etc/nginx/conf.d/piwik.conf:
   file:
     - absent
+
+/usr/local/piwik:
+  file:
+    - absent
+
+{{ opts['cachedir'] }}/pip/piwik:
+  file:
+    - absent

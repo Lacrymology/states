@@ -5,14 +5,22 @@
 {%- set repo = files_archive|replace('https://', 'http://') ~ "/mirror/piwik/" ~ version
   if files_archive else "http://archive.robotinfra.com/mirror/piwik/2.14.3-1/"
 %}
+{%- set hostnames = salt['pillar.get']('piwik:hostnames') %}
 {%- set ssl = salt['pillar.get']('piwik:ssl', False) %}
+{%- set admin_username = salt['pillar.get']('piwik:admin:username') %}
+{%- set admin_password = salt['pillar.get']('piwik:admin:password') %}
+{%- set admin_email = salt['pillar.get']('piwik:admin:email') %}
+{%- set db_password = salt["pillar.get"]("piwik:db:password") %}
+{%- set is_test = salt['pillar.get']('__test__', False) %}
 
 include:
   - apt
   - mysql.server
   - nginx
   - php
+  - pip
   - uwsgi.php
+  - virtualenv
 {%- if ssl %}
   - ssl
 {%- endif %}
@@ -43,7 +51,7 @@ piwik:
     - present
     - host: localhost
     - name: piwik
-    - password: {{ salt["pillar.get"]("piwik:db:password") }}
+    - password: {{ db_password }}
     - require:
       - service: mysql-server
       - pkg: python-mysqldb
@@ -94,7 +102,7 @@ piwik_uwsgi:
     - group: www-data
     - mode: 440
     - context:
-        hostnames: {{ salt['pillar.get']('piwik:hostnames') }}
+        hostnames: {{ hostnames }}
         ssl: {{ ssl }}
         ssl_redirect: {{ salt['pillar.get']('piwik:ssl_redirect', False) }}
     - require:
@@ -102,6 +110,45 @@ piwik_uwsgi:
       - pkg: piwik
     - watch_in:
       - service: nginx
+
+piwik_initial_setup:
+  virtualenv:
+    - manage
+    - upgrade: True
+    - name: /usr/local/piwik
+  file:
+    - managed
+    - name: {{ opts['cachedir'] }}/pip/piwik
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 440
+    - source: salt://piwik/requirements.jinja2
+    - require:
+      - virtualenv: piwik_initial_setup
+  pip:
+    - installed
+    - requirements: {{ opts['cachedir'] }}/pip/piwik
+    - upgrade: True
+    - bin_env: /usr/local/piwik
+    - require:
+      - virtualenv: piwik_initial_setup
+    - watch:
+      - file: piwik_initial_setup
+      - module: pip
+  cmd:
+    - wait_script
+    - source: salt://piwik/initial_setup.py
+    - name: >
+        initial_setup.py
+        --url 'http{% if ssl %}s{% endif %}://{{ hostnames[0] }}'
+        --user '{{ admin_username }}' --password '{{ admin_password }}'
+        --email '{{ admin_email }}' --database-password '{{ db_password }}'
+        {% if is_test %}--test{% endif %}
+    - require:
+      - pip: piwik_initial_setup
+    - watch:
+        - mysql_database: piwik
 
 {%- if ssl %}
 extend:

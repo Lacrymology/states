@@ -18,6 +18,10 @@ Example::
       - mydomain.com
     db:
       password: test
+    admin:
+      username: admin
+      password: adminadmin
+      email: admin@example.com
 
 .. _pillar-piwik-hostnames:
 
@@ -32,6 +36,21 @@ piwik:db:password
 ~~~~~~~~~~~~~~~~~
 
 Password of the :doc:`/mysql/doc/index` account.
+
+piwik:admin:username
+~~~~~~~~~~~~~~~~~~~~
+
+Username for :doc:`index` initial super account.
+
+piwik:admin:password
+~~~~~~~~~~~~~~~~~~~~
+
+Password for :doc:`index` initial super account.
+
+piwik:admin:email
+~~~~~~~~~~~~~~~~~
+
+Email for :doc:`index` initial super user.
 
 Optional
 --------

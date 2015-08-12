@@ -19,6 +19,7 @@ include:
   - nginx
   - php
   - pip
+  - python
   - uwsgi.php
   - virtualenv
 {%- if ssl %}
@@ -147,6 +148,7 @@ piwik_initial_setup:
         {% if is_test %}--test{% endif %}
     - require:
       - pip: piwik_initial_setup
+      - file: python
     - watch:
         - mysql_database: piwik
 

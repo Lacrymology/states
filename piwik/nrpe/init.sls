@@ -9,6 +9,7 @@ include:
   - nginx.nrpe
   - php.nrpe
   - pip.nrpe
+  - python.nrpe
   - uwsgi.nrpe
   - virtualenv.nrpe
 {%- if ssl %}

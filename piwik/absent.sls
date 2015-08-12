@@ -11,18 +11,12 @@ piwik:
     - name: apt-key del 66FED89E
     - onlyif: apt-key list | grep -q 66FED89E
 
-/etc/uwsgi/piwik.yml:
+{% for file in ("/etc/uwsgi/piwik.yml",
+                "/etc/nginx/conf.d/piwik.conf",
+                "/usr/local/piwik",
+                opts["cachedir"] ~ "/pip/piwik",
+                "/etc/piwik",) %}
+{{ file }}:
   file:
     - absent
-
-/etc/nginx/conf.d/piwik.conf:
-  file:
-    - absent
-
-/usr/local/piwik:
-  file:
-    - absent
-
-{{ opts['cachedir'] }}/pip/piwik:
-  file:
-    - absent
+{%- endfor %}

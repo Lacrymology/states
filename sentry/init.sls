@@ -123,7 +123,7 @@ sentry-uwsgi:
     - managed
     - name: /etc/uwsgi/sentry.yml
     - template: jinja
-    - user: www-data
+    - user: root
     - group: www-data
     - mode: 440
     - source: salt://sentry/uwsgi.jinja2
@@ -152,13 +152,13 @@ sentry_settings:
   file:
     - managed
     - name: /etc/sentry.conf.py
+    - source: salt://sentry/config.jinja2
     - template: jinja
-    - user: www-data
+    - user: root
     - group: www-data
+    - mode: 440
     - require:
       - user: web
-    - mode: 440
-    - source: salt://sentry/config.jinja2
   cmd:
     - wait
     - stateful: False

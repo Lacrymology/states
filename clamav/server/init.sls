@@ -24,7 +24,7 @@ include:
     - managed
     - source: salt://clamav/err_mail.jinja2
     - template: jinja
-    - user: clamav
+    - user: root
     - group: clamav
     - mode: 550
     - require:
@@ -38,8 +38,8 @@ extend:
       - name: /etc/clamav/freshclam.conf
       - source: salt://clamav/freshclam.jinja2
       - template: jinja
-      - mode: 444
-      - user: clamav
+      - mode: 440
+      - user: root
       - group: clamav
       - require:
         - pkg: clamav-freshclam

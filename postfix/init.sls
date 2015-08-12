@@ -35,8 +35,8 @@ include:
     - managed
     - source: salt://postfix/vmailbox.jinja2
     - template: jinja
-    - mode: 400
-    - user: postfix
+    - mode: 440
+    - user: root
     - group: postfix
     - require:
       - pkg: postfix
@@ -79,9 +79,9 @@ postfix:
     - name: /etc/postfix/main.cf
     - source: salt://postfix/main.jinja2
     - template: jinja
-    - user: postfix
+    - user: root
     - group: postfix
-    - file_mode: 400
+    - file_mode: 440
     - require:
       - pkg: postfix
       - file: /etc/postfix
@@ -119,9 +119,9 @@ postfix_header_checks:
     - name: /etc/postfix/smtp_header_checks
     - source: salt://postfix/smtp_header_checks.jinja2
     - template: jinja
-    - user: postfix
+    - user: root
     - group: postfix
-    - mode: 400
+    - mode: 440
     - require:
       - pkg: postfix_header_checks
       - file: /etc/postfix
@@ -141,9 +141,9 @@ postfix_header_checks:
     - managed
     - source: salt://postfix/master.jinja2
     - template: jinja
-    - user: postfix
+    - user: root
     - group: postfix
-    - mode: 400
+    - mode: 440
     - require:
       - file: /etc/postfix
 
@@ -172,8 +172,8 @@ postfix_virtual_aliases:
     - managed
     - name: /etc/postfix/virtual
     - template: jinja
-    - mode: 400
-    - user: postfix
+    - mode: 440
+    - user: root
     - group: postfix
     - contents: |
         {{ salt['pillar.get']('postfix:virtual_aliases', False) | indent(8) }}

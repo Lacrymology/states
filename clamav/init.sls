@@ -31,8 +31,8 @@ clamav-daemon:
     - name: /etc/clamav/clamd.conf
     - source: salt://clamav/clamd.jinja2
     - template: jinja
-    - mode: 400
-    - user: clamav
+    - mode: 440
+    - user: root
     - group: clamav
     - require:
       - pkg: clamav-daemon

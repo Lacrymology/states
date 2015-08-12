@@ -36,7 +36,7 @@ postgresql:
     - managed
     - name: /etc/postgresql/{{ version }}/main/postgresql.conf
     - source: salt://postgresql/server/config.jinja2
-    - user: postgres
+    - user: root
     - group: postgres
     - mode: 440
     - template: jinja

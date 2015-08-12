@@ -69,9 +69,9 @@ rabbitmq_config_file:
     - managed
     - name: /etc/rabbitmq/rabbitmq.config
     - template: jinja
-    - user: rabbitmq
+    - user: root
     - group: rabbitmq
-    - mode: 400
+    - mode: 440
     - source: salt://rabbitmq/config.jinja2
     - require:
       - pkg: rabbitmq-server

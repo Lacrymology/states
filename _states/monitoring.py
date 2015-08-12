@@ -41,7 +41,7 @@ def absent(name):
 
 
 def managed(name, source=None, template='jinja',
-            user='nagios', group='nagios', mode='440',
+            user='root', group='nagios', mode='440',
             context={},
             makedirs=False,
             show_diff=True,

@@ -318,7 +318,7 @@ gitlab-uwsgi:
     - name: /etc/uwsgi/gitlab.yml
     - source: salt://gitlab/uwsgi.jinja2
     - template: jinja
-    - user: gitlab
+    - user: root
     - group: gitlab
     - mode: 440
     - context:

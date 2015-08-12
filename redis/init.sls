@@ -26,7 +26,7 @@ redis:
     - template: jinja
     - source: salt://redis/config.jinja2
     - name: /etc/redis/redis.conf
-    - user: redis
+    - user: root
     - group: redis
     - mode: 440
     - require:

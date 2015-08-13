@@ -15,6 +15,7 @@
 
 include:
   - apt
+  - hostname
   - mysql.server
   - nginx
   - php
@@ -149,6 +150,7 @@ piwik_initial_setup:
     - require:
       - pip: piwik_initial_setup
       - file: python
+      - host: hostname
     - watch:
         - mysql_database: piwik
 

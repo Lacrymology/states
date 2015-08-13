@@ -6,7 +6,7 @@ Monitor
 .. warning::
 
    In this document, when refer to a pillar key ``pillar_prefix``
-   means ``wordpress``.
+   means ``piwik``.
 
 Mandatory
 ---------
@@ -28,7 +28,7 @@ Mandatory
 Optional
 --------
 
-Only use if :ref:`pillar-wordpress-ssl` is turned on.
+Only use if :ref:`pillar-piwik-ssl` is turned on.
 
 .. include:: /nginx/doc/monitor_ssl.inc
 

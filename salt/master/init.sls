@@ -258,6 +258,7 @@ salt_master_script_highstate:
     - managed
     - name: /usr/local/bin/salt_master_highstate.sh
     - source: salt://salt/master/highstate.jinja2
+    - template: jinja
     - mode: 550
     - user: root
     - group: root

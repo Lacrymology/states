@@ -35,6 +35,13 @@ test:
     - order: last
     - require:
       - cmd: test_crons
+  cmd:
+    {# ensuring that apache2 was not installed #}
+    - run
+    - name: false
+    - onlyif: dpkg -l 'apache2'
+    - require:
+      - monitoring: test
   qa:
     - test
     - name: roundcube

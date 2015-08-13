@@ -121,7 +121,9 @@ roundcube:
 roundcube_password_plugin_ldap_driver_dependency:
   pkg:
     - installed
-    - name: php-net-ldap2
+    - pkgs:
+      - php5-cgi {#- on Trusty, php-net-ldap2 require php5, which in turn require one of four php provider packages, php5-cgi is the lightest and not require apache2 #}
+      - php-net-ldap2
 
 {{ roundcubedir }}/plugins/password/config.inc.php:
   file:

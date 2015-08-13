@@ -12,7 +12,9 @@ php5-pgsql:
 roundcube_password_plugin_ldap_driver_dependency:
   pkg:
     - purged
-    - name: php-net-ldap2
+    - pkgs:
+      - php5-cgi
+      - php-net-ldap2
 #}
 
 {{ roundcubedir }}:

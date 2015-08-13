@@ -13,11 +13,12 @@
 {%- block authentication_mode %}
 client
 {%- set protocol = vpn_instance['protocol']|default('udp') %}
+{%- set port = vpn_instance['port']|default(1194) %}
 {%- if protocol.endswith("6") and first_ipv6 %}
-remote {{ first_ipv6 }} {{ vpn_instance['port']|default(1194) }} {{ protocol }}
-remote {{ remote_address }} {{ vpn_instance['port']|default(1194) }} {{ (protocol|list)[:-1]|join }}
+remote {{ first_ipv6 }} {{ port }} {{ protocol }}
+remote {{ remote_address }} {{ port }} {{ (protocol|list)[:-1]|join }}
 {%- else %}
-remote {{ remote_address }} {{ vpn_instance['port']|default(1194) }} {{ protocol }}
+remote {{ remote_address }} {{ port }} {{ protocol }}
 {%- endif %}
 
 ca ca.crt

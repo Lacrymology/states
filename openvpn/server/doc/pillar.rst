@@ -283,6 +283,13 @@ openvpn:servers:{{ instance }}:protocol
 
 :ref:`glossary-TCP` or :ref:`glossary-UDP` server.
 
+Choices:
+
+* udp (default)
+* udp6
+* tcp
+* tcp6
+
 .. _pillar-openvpn-servers-{{ instance }}-device:
 
 openvpn:servers:{{ instance }}:device

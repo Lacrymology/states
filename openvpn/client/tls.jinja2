@@ -1,12 +1,26 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
 {%- extends "openvpn/client/base.jinja2" %}
-
-{%- block authentication_mode %}
+{%- from 'macros.jinja2' import first_ipv6 with context %}
 {%- set default_interface = salt['pillar.get']('network_interface', 'eth0') %}
 {%- set openvpn_interface = salt['pillar.get']('openvpn:public_interface', False)|default(default_interface, boolean=True) %}
+{%- if 'availabilityZone' in salt['grains.ls']() %}
+  {%- set remote_address = grains['public-ipv4'] %}
+{%- else %}
+  {%- set remote_address = salt['network.ip_addrs'](openvpn_interface)[0] %}
+{%- endif %}
+
+{%- block authentication_mode %}
 client
-remote {% if 'availabilityZone' in salt['grains.ls']() %}{{ grains['public-ipv4'] }}{% else %}{{ salt['network.ip_addrs'](openvpn_interface)[0] }}{% endif %} {{ vpn_instance['port'] | default(1194) }}
+{%- set protocol = vpn_instance['protocol']|default('udp') %}
+{%- set port = vpn_instance['port']|default(1194) %}
+{%- if protocol.endswith("6") and first_ipv6 %}
+remote {{ first_ipv6 }} {{ port }} {{ protocol }}
+remote {{ remote_address }} {{ port }} {{ (protocol|list)[:-1]|join }}
+{%- else %}
+remote {{ remote_address }} {{ port }} {{ protocol }}
+{%- endif %}
+
 ca ca.crt
 cert {{ client }}.crt
 key {{ client }}.key

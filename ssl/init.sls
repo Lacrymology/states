@@ -34,6 +34,23 @@ ca-certificates:
     - require:
       - pkg: ssl-cert
 
+ssl_dhparam:
+  cmd:
+    - run
+    - name: openssl dhparam -out /etc/ssl/dhparam.pem {{ salt['pillar.get']('ssl:dhparam:key_size', 2048) }}
+    - unless: test -f /etc/ssl/dhparam.pem
+    - require:
+      - pkg: openssl
+      - pkg: ssl-cert
+  file:
+    - managed
+    - name: /etc/ssl/dhparam.pem
+    - user: root
+    - group: ssl-cert
+    - mode: 440
+    - require:
+      - cmd: ssl_dhparam
+
 {% for name in salt['pillar.get']('ssl:certs', {}) -%}
 /etc/ssl/{{ name }}:
   file:
@@ -157,7 +174,7 @@ ssl_create_symlink_by_hash_for_{{ name }}:
 ssl_cert_and_key_for_{{ name }}:
   cmd:
     - wait
-    - name: echo managed ssl cert for {{ name }}
+    - name: echo managed ssl cert and dhparam for {{ name }}
     - watch:
       - file: /etc/ssl/private/{{ name }}.key
       - file: /etc/ssl/certs/{{ name }}.crt
@@ -167,4 +184,5 @@ ssl_cert_and_key_for_{{ name }}:
       - file: /etc/ssl/private/{{ name }}_bundle.pem
     - require:
       - cmd: ssl_create_symlink_by_hash_for_{{ name }}
+      - file: ssl_dhparam
 {% endfor -%}

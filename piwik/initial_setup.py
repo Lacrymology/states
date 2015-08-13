@@ -1,6 +1,16 @@
 #!/usr/local/piwik/bin/python
 # -*- coding: utf-8 -*-
 
+# Usage of this is governed by a license that can be found in doc/license.rst.
+
+"""Piwik initial setup
+
+"""
+
+__author__ = 'Diep Pham'
+__maintainer__ = 'Diep Pham'
+__email__ = 'favadi@robotinfra.com'
+
 import logging
 
 import bs4

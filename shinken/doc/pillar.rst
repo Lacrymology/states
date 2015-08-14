@@ -146,6 +146,8 @@ ip_addrs6
 
 Same as :ref:`pillar-ip_addrs` but for :ref:`glossary-IPv6`.
 
+Default: Unused (``{}``)
+
 shinken:ip_source
 ~~~~~~~~~~~~~~~~~
 

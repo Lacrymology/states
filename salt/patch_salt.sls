@@ -35,3 +35,12 @@ patch_salt_log_setup_fix_deadlock:
     - group: root
     - mode: 644
     - source: salt://salt/patch/log_setup.py
+
+patch_salt_fileclient_fix_communication:
+  file:
+    - managed
+    - name: {{ grains['saltpath'] }}/fileclient.py
+    - user: root
+    - group: root
+    - mode: 644
+    - source: salt://salt/patch/fileclient.py

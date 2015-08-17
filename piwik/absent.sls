@@ -15,7 +15,8 @@ piwik:
                 "/etc/nginx/conf.d/piwik.conf",
                 "/usr/local/piwik",
                 opts["cachedir"] ~ "/pip/piwik",
-                "/etc/piwik",) %}
+                "/etc/piwik",
+                "/etc/cron.daily/piwik-geoip",) %}
 {{ file }}:
   file:
     - absent

@@ -15,10 +15,13 @@
 
 include:
   - apt
+  - bash
+  - cron
   - hostname
   - mysql.server
   - nginx
   - php
+  - php.geoip
   - pip
   - python
   - uwsgi.php
@@ -67,6 +70,48 @@ piwik:
       - mysql_user: piwik
       - mysql_database: piwik
 
+/var/lib/piwik/geoip:
+  file:
+    - directory
+    - user: www-data
+    - group: www-data
+    - mode: 755
+    - require:
+      - user: web
+      - pkg: piwik
+
+piwik_geoip:
+  pkg:
+    - latest
+    - pkgs:
+      - gzip
+      - wget
+    - require:
+      - cmd: apt_sources
+  file:
+    - managed
+    - name: /etc/cron.daily/piwik-geoip
+    - source: salt://piwik/cron_daily.jinja2
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 500
+    - require:
+      - file: bash
+      - file: /var/lib/piwik/geoip
+      - pkg: cron
+      - user: web
+{%- if not is_test %}
+  cmd:
+    - run
+    - name: /etc/cron.daily/piwik-geoip
+    - unless: test -f /var/lib/piwik/geoip/GeoIPCity.dat
+    - require:
+      - file: piwik_geoip
+    - require_in:
+      - module: piwik_uwsgi
+{%- endif %}
+
 piwik_uwsgi:
   file:
     - managed
@@ -81,6 +126,7 @@ piwik_uwsgi:
         dir: /usr/share/piwik
         chdir: /usr/share/piwik
         appname: piwik
+        php_settings: '  php-set: geoip.custom_directory=/var/lib/piwik/geoip'
     - require:
       - mysql_grants: piwik
       - service: uwsgi
@@ -94,6 +140,7 @@ piwik_uwsgi:
     - watch:
       - file: piwik_uwsgi
       - pkg: piwik
+      - pkg: php_geoip
 
 /etc/nginx/conf.d/piwik.conf:
   file:

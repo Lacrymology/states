@@ -61,9 +61,6 @@ log_stop_script() {
         test -f "${_pid_file}" && rm -f "${_pid_file}"
         logger -t "${_log_tag}" -p 'local0.info' \
             "PID file: ${_pid_file} deleted"
-    else
-        logger -t "${_log_tag}" -p 'local0.info' \
-            "PID file does not exist"
     fi
 }
 

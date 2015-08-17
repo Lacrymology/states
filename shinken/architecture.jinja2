@@ -200,7 +200,7 @@ define module {
     host 0.0.0.0
 {%- endif %}
     port 7767
-    auth_secret CHANGE_ME
+    auth_secret {{ salt['pillar.get']('shinken:webui:auth_secret') }}
     manage_acl 1
     login_text Monitoring
 {#-    allow_html_output 0       ; Allow or not HTML chars in plugins output.

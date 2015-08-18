@@ -4,6 +4,7 @@ include:
   - amavis.clamav
   - amavis.diamond
   - amavis.nrpe
+  - clamav.server
   - clamav.server.nrpe
   - clamav.server.diamond
 

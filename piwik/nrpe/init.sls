@@ -5,6 +5,8 @@
 include:
   - nrpe
   - apt.nrpe
+  - bash.nrpe
+  - cron.nrpe
   - mysql.server.nrpe
   - nginx.nrpe
   - php.nrpe

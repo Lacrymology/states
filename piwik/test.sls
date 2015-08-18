@@ -1,6 +1,8 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
 {%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
+{%- from 'cron/macro.jinja2' import test_cron with context %}
+
 include:
   - doc
   - piwik
@@ -9,6 +11,11 @@ include:
   - piwik.backup
   - piwik.backup.nrpe
   - piwik.backup.diamond
+
+{%- call test_cron() %}
+- sls: piwik
+- sls: piwik.backup
+{%- endcall %}
 
 test:
   monitoring:
@@ -37,9 +44,3 @@ test:
     - require:
       - monitoring: test
       - cmd: doc
-  cmd:
-    - run
-    - name: /etc/cron.daily/backup-piwik
-    - require:
-      - sls: piwik
-      - sls: piwik.backup

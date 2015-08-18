@@ -70,6 +70,6 @@ if __name__ == '__main__':
         'server': '127.0.0.1',
         'domain': 'robotinfra.com',
         'record': 'a',
-        'warning': '1',
-        'critical': '2',
+        'warning': '3',
+        'critical': '5',
     })

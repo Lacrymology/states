@@ -340,7 +340,11 @@ salt_master_cron_git_pull_repos:
 salt_master_git_repo_{{ loop.index }}:
   git:
     - latest
+    {%- if ' ' in repo -%}
+    - name: {{ repo.split(' ')[1] }}
+    {%- else %}
     - name: '{{ repo }}'
+    {%- endif %}
 {# needs prefix loop.index because 2 different repos from different sources
    can have the same name #}
 {%- set dirname = loop.index ~ repo.split('/')[-1] %}

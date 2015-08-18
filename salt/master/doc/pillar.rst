@@ -16,6 +16,7 @@ Example::
       gitfs_remotes:
         - git@git.example.com:common.git
         - git@git.example.com:states.git
+        - subdir git@git.example.com:anotherstates.git
       workers: 1
       pillar:
         branch: develop
@@ -44,6 +45,11 @@ following pillar keys are probably required:
 
 If the :doc:`index` act also as the :doc:`/git/server/doc/index`, look for
 :doc:`/git/server/doc/pillar` exact pillars keys details.
+
+.. note::
+
+  To use a subdir from the checkout of an repo as a file root, specify the
+  dirname before the git link
 
 Default: ``[]``.
 

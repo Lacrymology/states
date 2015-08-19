@@ -6,9 +6,9 @@ include:
   - locale
   - rsyslog
 
-{%- set version = '2.0.6' -%}
-{%- set tar_gz_checksum = 'bff731187790ff3449841d88418d1c99' -%}
-{%- set tar_xz_checksum = 'fa12e53e2e48d691026e8f7cefac1498' -%}
+{%- set version = '2.1.0' -%}
+{%- set old_version = '2.0.6' -%}
+{%- set checksum = 'e50e1a607d7ca1dc2c92461f55974e3f' %}
 {%- set debug = salt['pillar.get']('orientdb:debug', False) -%}
 {%- set storages = salt['pillar.get']('orientdb:storages') -%}
 {%- set cluster = salt['pillar.get']('orientdb:cluster', {}) %}
@@ -82,6 +82,13 @@ agafua-syslog:
     - require:
       - archive: orientdb
 
+oriendb_cleanup:
+  file:
+    - absent
+    - name: /usr/local/orientdb-community-{{ old_version }}
+    - require:
+      - service: orientdb
+
 orientdb:
   group:
     - present
@@ -98,14 +105,12 @@ orientdb:
     - name: /usr/local/
     - archive_format: tar
 {%- if files_archive %}
-    - source: {{ files_archive|replace('file://', '')|replace('https://', 'http://') }}/mirror/orientdb/{{ version }}.tar.xz
-    - source_hash: md5={{ tar_xz_checksum }}
-    - tar_options: J
+    - source: {{ files_archive|replace('file://', '')|replace('https://', 'http://') }}/mirror/orientdb/orientdb-community-{{ version }}.tar.gz
 {%- else %}
     - source: "http://www.orientechnologies.com/download.php?file=orientdb-community-{{ version }}.tar.gz"
-    - source_hash: md5={{ tar_gz_checksum }}
-    - tar_options: z
 {%- endif %}
+    - source_hash: md5={{ checksum }}
+    - tar_options: z
     - if_missing: /usr/local/orientdb-community-{{ version }}
     - require:
       - file: /usr/local

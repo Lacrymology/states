@@ -12,7 +12,7 @@
       - service: orientdb
 {%- endfor %}
 
-{%- for version in ('2.0.5', '2.0.6') %}
+{%- for version in ('2.0.6', '2.1.0') %}
 /usr/local/orientdb-community-{{ version }}:
   file:
     - absent

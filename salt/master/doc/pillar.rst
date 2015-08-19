@@ -16,7 +16,7 @@ Example::
       gitfs_remotes:
         - git@git.example.com:common.git
         - git@git.example.com:states.git
-        - subdir git@git.example.com:anotherstates.git
+        - git@git.example.com:anotherstates.git: subdir
       workers: 1
       pillar:
         branch: develop
@@ -49,7 +49,7 @@ If the :doc:`index` act also as the :doc:`/git/server/doc/index`, look for
 .. note::
 
   To use a subdir from the checkout of an repo as a file root, specify the
-  dirname before the git link
+  dirname after the git link, separated by a ``:``.
 
 Default: ``[]``.
 

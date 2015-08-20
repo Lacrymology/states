@@ -12,3 +12,11 @@ rsync_port:
   timeout: {{ timeout }}
   dependencies:
     - xinetd_daemon_proc
+
+rsync_port_ipv6:
+  description: Rsync Port using IPv6
+  command: /usr/lib/nagios/plugins/check_tcp -H ::1 -p 873 -t {{ timeout }}
+  {{ passive_interval(60) }} {#- 1 hour #}
+  timeout: {{ timeout }}
+  dependencies:
+    - xinetd_daemon_proc

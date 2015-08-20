@@ -26,3 +26,17 @@ test:
     - require:
       - monitoring: test
       - cmd: doc
+
+{%- set metrics = {
+  "statsd_ipv4": "127.0.0.1",
+  "statsd_ipv6": "::1",
+} %}
+{%- for metric, host in metrics.iteritems() %}
+{{ metric }}:
+  cmd:
+    - run
+    - name: echo "{{ metric }}:1|c" > "/dev/udp/{{ host }}/8125"
+    - shell: /bin/bash
+    - require:
+      - sls: statsd
+{%- endfor %}

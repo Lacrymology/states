@@ -304,7 +304,6 @@ salt_master_gitfs_patch:
       - service: salt-master
 
 salt_master_script_git_pull_repos:
-{%- set dirname = loop.index ~ repo.split('/')[-1] %}
   file:
     - managed
     - name: /usr/local/bin/salt_master_git_pull_repos.sh

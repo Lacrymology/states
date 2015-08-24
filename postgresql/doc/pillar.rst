@@ -61,7 +61,7 @@ connections from client applications. The value takes the form of a
 comma-separated list of host names and/or numeric IP addresses. The special
 entry ``*`` corresponds to all available IP interfaces. The entry ``0.0.0.0``
 allows
-listening for all IPv4 addresses and :: allows listening for all IPv6
+listening for all IPv4 addresses and ``::`` allows listening for all IPv6
 addresses. If the list is empty, the server does not listen on any IP interface
 at all, in which case only Unix-domain sockets can be used to connect to it.
 

@@ -22,6 +22,9 @@ redis:
     - absent
     - require:
       - user: redis
+  file:
+    - absent
+    - name: /etc/apt/sources.list.d/chris-lea-redis-server.list
 
 {% for filename in ('/var/log', '/etc') %}
 {{ filename }}/redis:

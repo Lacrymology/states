@@ -1,20 +1,26 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
+include:
+  - apt
+
 {%- from 'macros.jinja2' import manage_pid with context %}
 {%- from "os.jinja2" import os with context %}
 {%- set files_archive = salt['pillar.get']('files_archive', False) %}
 
-{%- if os.is_precise %}
-  {%- set redis_version = "2.8.4" %}
-  {%- set jemalloc_version = "3.4.1" %}
-  {%- set redis_sub_version = "2:{0}-1chl1~{1}1".format(redis_version, grains['lsb_distrib_codename']) %}
-  {%- set jemalloc_sub_version = "{0}-1chl1~{1}1".format(jemalloc_version, grains['lsb_distrib_codename']) %}
-  {%- set jemalloc = "libjemalloc1_{0}-1chl1~{1}1_{2}.deb".format(jemalloc_version, grains['lsb_distrib_codename'], grains['osarch']) %}
-  {%- set filename = "redis-server_{0}-1chl1~{1}1_{2}.deb".format(redis_version, grains['lsb_distrib_codename'], grains['osarch']) %}
-  {%- set redistools = "redis-tools_{0}-1chl1~{1}1_{2}.deb".format(redis_version, grains['lsb_distrib_codename'], grains['osarch']) %}
-{%- endif %}
-
 redis:
+  pkgrepo:
+    - managed
+{%- set files_archive = salt['pillar.get']('files_archive', False) %}
+{%- if files_archive %}
+    - name: deb {{ files_archive|replace('https://', 'http://') }}/mirror/redis {{ grains['lsb_distrib_codename'] }} main
+    - key_url: salt://redis/key.gpg
+{%- else %}
+    - ppa: chris-lea/redis
+{%- endif %}
+    - file: /etc/apt/sources.list.d/chris-lea-redis-server.list
+    - clean_file: True
+    - require:
+      - cmd: apt_sources
   file:
     - managed
     - template: jinja
@@ -37,18 +43,9 @@ redis:
       - user: redis
   pkg:
     - installed
-{%- if os.is_precise %}
-    - sources:
-  {%- if not files_archive %}
-    {%- set files_archive = 'http://archive.robotinfra.com' %}
-  {%- endif %}
-      {#- source: http://ppa.launchpad.net/chris-lea/redis-server #}
-      - libjemalloc1: {{ files_archive|replace('file://', '')|replace('https://', 'http://') }}/mirror/{{ jemalloc }}
-      - redis-server: {{ files_archive|replace('file://', '')|replace('https://', 'http://') }}/mirror/{{ filename }}
-      - redis-tools: {{ files_archive|replace('file://', '')|replace('https://', 'http://') }}/mirror/{{ redistools }}
-{%- elif os.is_trusty %}
     - name: redis-server
-{%- endif %}
+    - require:
+      - pkgrepo: redis
   user:
     - present
     - shell: /bin/false

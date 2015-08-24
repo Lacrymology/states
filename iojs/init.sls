@@ -4,6 +4,7 @@ include:
   - apt
 
 {%- set files_archive = salt['pillar.get']('files_archive', False) %}
+{%- from "iojs/map.jinja2" import iojs with context %}
 
 iojs_deps:
   pkg:
@@ -13,14 +14,19 @@ iojs_deps:
     - require:
       - cmd: apt_sources
 
+{%- if salt['pkg.version']('iojs') not in ('', iojs.version) %}
+iojs_old_version:
+  pkg:
+    - removed
+    - name: iojs
+    - require_in:
+      - pkg: iojs
+{%- endif %}
+
 iojs:
   pkg:
     - installed
     - sources:
-{%- if files_archive %}
-        - iojs: {{ files_archive|replace('file://', '')|replace('https://', 'http://') }}/mirror/iojs/iojs_1.3.0-1nodesource1~trusty1_{{ grains['osarch'] }}.deb
-{%- else %}
-        - iojs: https://deb.nodesource.com/iojs_1.x/pool/main/i/iojs/iojs_1.3.0-1nodesource1~trusty1_{{ grains['osarch'] }}.deb
-{%- endif %}
+      - iojs: {{ iojs.source }}
     - require:
       - pkg: iojs_deps

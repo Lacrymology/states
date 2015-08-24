@@ -16,3 +16,10 @@ test:
     - name: iojs --version
     - require:
       - sls: iojs
+  qa:
+    - test_pillar
+    - name: iojs
+    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - require:
+      - monitoring: test
+      - cmd: doc

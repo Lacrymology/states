@@ -7,6 +7,7 @@ include:
 {%- set check_virus = salt['pillar.get']('amavis:check_virus', True) %}
     {%- if check_virus %}
   - amavis.clamav
+  - clamav.server
     {%- else %}
   - amavis
     {%- endif -%}

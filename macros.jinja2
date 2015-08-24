@@ -3,14 +3,14 @@
 file contains all common macros
 -#}
 
+{%- set _local = {"first_ipv6": None} %}
+
 {#- when upgrading salt, it should only change salt version here and in
     bootstrap.sh (not managed by salt),
     all consumer of these macros should got it automatically,
     Changing directly in consumer only needed when new version of salt
     change a lot in ppa structure.
 -#}
-{%- set _local = {"first_ipv6": None} %}
-
 {%- macro salt_version() -%}
     2014.7.5+ds-1
 {%- endmacro -%}
@@ -91,6 +91,7 @@ mode: permission of PID file
     {%- endif -%}
 {%- endmacro -%}
 
+{#- get the first non loopback, link-local IPv6 address #}
 {%- for ip_addr in salt["network.ip_addrs6"]() %}
   {%- if not (ip_addr.startswith("fe80") or _local.first_ipv6) %}
     {%- do _local.update({"first_ipv6": ip_addr}) %}

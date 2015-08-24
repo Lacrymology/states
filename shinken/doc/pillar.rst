@@ -13,6 +13,8 @@ Mandatory
 Example::
 
   shinken:
+    webui:
+      auth_secret: ooyoogheiNiex3bohmaiYaishooph5xa
     graphite_url: http://graphite.example.com
     users:
       username:
@@ -31,6 +33,13 @@ Example::
         integration-0: all
     hostname:
       - shinken.example.com
+
+.. _pillar-shinken-webui-auth_secret:
+
+shinken:webui:auth_secret
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The private key to build cookie.
 
 .. _pillar-shinken-graphite_url:
 
@@ -145,6 +154,8 @@ ip_addrs6
 ~~~~~~~~~
 
 Same as :ref:`pillar-ip_addrs` but for :ref:`glossary-IPv6`.
+
+Default: Unused (``{}``)
 
 shinken:ip_source
 ~~~~~~~~~~~~~~~~~

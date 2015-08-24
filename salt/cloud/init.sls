@@ -86,6 +86,22 @@ salt_cloud_bootstrap_script_patch:
     - require:
       - file: salt_cloud_bootstrap_script
 
+salt_cloud_digital_ocean_v1_obsoleted:
+  file:
+    - absent
+    - name: {{ grains['saltpath'] }}/cloud/clouds/digital_ocean.py
+    - require:
+      - pkg: salt
+      - pkg: salt-cloud
+
+salt_cloud_digital_ocean_v1_obsoleted_pyc:
+  file:
+    - absent
+    - name: {{ grains['saltpath'] }}/cloud/clouds/digital_ocean.pyc
+    - require:
+      - pkg: salt
+      - pkg: salt-cloud
+
 salt_cloud_digital_ocean_v2_module:
   file:
     - managed
@@ -95,3 +111,4 @@ salt_cloud_digital_ocean_v2_module:
       - pkg: salt
       - pkg: salt-cloud
       - module: requests
+      - file: salt_cloud_digital_ocean_v1_obsoleted

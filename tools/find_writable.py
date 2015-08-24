@@ -18,6 +18,10 @@ import pwd
 import grp
 
 
+uids = [u.pw_uid for u in pwd.getpwall()]
+gids = [g.gr_gid for g in grp.getgrall()]
+
+
 def print_non_root_writable(pathname):
     statinfo = os.stat(pathname)
     mode = statinfo.st_mode
@@ -25,11 +29,13 @@ def print_non_root_writable(pathname):
         uid = statinfo.st_uid
         gid = statinfo.st_gid
         if uid != 0 or (gid != 0 and (mode & stat.S_IWGRP)):
+            owner = pwd.getpwuid(uid).pw_name if uid in uids else uid
+            group = grp.getgrgid(gid).gr_name if gid in gids else gid
             print("{0} mode={1} user={2} group={3}".format(
                 pathname,
                 oct(mode)[4:],
-                pwd.getpwuid(uid).pw_name,
-                grp.getgrgid(gid).gr_name))
+                owner,
+                group))
 
 
 def walktree(top):

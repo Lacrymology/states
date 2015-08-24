@@ -258,6 +258,7 @@ salt_master_script_highstate:
     - managed
     - name: /usr/local/bin/salt_master_highstate.sh
     - source: salt://salt/master/highstate.jinja2
+    - template: jinja
     - mode: 550
     - user: root
     - group: root
@@ -339,10 +340,18 @@ salt_master_cron_git_pull_repos:
 salt_master_git_repo_{{ loop.index }}:
   git:
     - latest
+{%- set outer_loop_index = loop.index %}
+    {%- if repo is mapping -%}
+      {%- for gitlink, _ in repo.iteritems() %}
+    - name: {{ gitlink }}
+        {%- set dirname = outer_loop_index ~ gitlink.split('/')[-1] %}
+      {%- endfor %}
+    {%- else %}
+      {%- set dirname = loop.index ~ repo.split('/')[-1] %}
     - name: '{{ repo }}'
+    {%- endif %}
 {# needs prefix loop.index because 2 different repos from different sources
    can have the same name #}
-{%- set dirname = loop.index ~ repo.split('/')[-1] %}
     - rev: {{ salt['pillar.get']('branch', 'master') }}
     - target: /srv/salt/states/{{ dirname }}
     - require:

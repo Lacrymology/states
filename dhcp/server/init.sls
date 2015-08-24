@@ -65,7 +65,7 @@ dhcp-server6:
 {%- else %}
   file:
     - absent
-    - name: /etc/dhcp/dhcpd.conf
+    - name: /etc/dhcp/dhcpd6.conf
     - require:
       - service: dhcp-server6
   service:

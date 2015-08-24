@@ -195,6 +195,14 @@ define command {
 }
 
 define timeperiod {
+    timeperiod_name weekdays
+    alias 24_Hours_A_Day,_5_Days_A_Week
+{%- for day in ('tues', 'wednes', 'thurs', 'fri', 'satur') %}
+    {{ day }}day 00:00-24:00
+{%- endfor %}
+}
+
+define timeperiod {
     timeperiod_name 24x7
     alias 24_Hours_A_Day,_7_Days_A_Week
 {%- for day in ('sun', 'mon', 'tues', 'wednes', 'thurs', 'fri', 'satur') %}

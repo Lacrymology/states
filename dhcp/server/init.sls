@@ -101,7 +101,7 @@ dhcp-server_acl:
   cmd:
     - run
     - name: setfacl -m u:dhcpd:rwx /var/lib/dhcp
-    - unless: getfacl /var/lib/dhcp | grep user:dhcpd:rwx
+    - unless: getfacl /var/lib/dhcp | grep ^user:dhcpd:rwx$
     - require:
       - pkg: dhcp-server
       - pkg: dhcp-server_acl
@@ -112,7 +112,7 @@ dhcp-server_acl_default:
   cmd:
     - run
     - name: setfacl -dm u:dhcpd:rwx /var/lib/dhcp
-    - unless: getfacl /var/lib/dhcp | grep default:user:dhcpd:rwx
+    - unless: getfacl /var/lib/dhcp | grep ^default:user:dhcpd:rwx$
     - require:
       - pkg: dhcp-server
       - pkg: dhcp-server_acl

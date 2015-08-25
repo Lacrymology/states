@@ -160,7 +160,7 @@ def data():
             }
             output['ip_addrs6']['private'] = output['ip_addrs6']['public']
         else:
-            ip_addrs6 = {'public': None, 'private': None}
+            output['ip_addrs6'] = {'public': None, 'private': None}
 
     # check monitoring_data pillar for extra values to return
     monitoring_data = __salt__['pillar.get']('monitoring_data', {})

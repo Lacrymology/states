@@ -5,6 +5,7 @@
 {%- set public_interface = salt['pillar.get']('network_interface', 'eth0')
   if not is_openvzve else "venet0"
 %}
+{%- set netmask = "128" if ip_addrs_key == "ip_addrs6" else "32" %}
 
 # {{ salt['pillar.get']('message_do_not_modify') }}
 {%- if not disable_nat|default(False) %}
@@ -35,7 +36,7 @@ COMMIT
 :INPUT {% if is_openvzve %}ACCEPT{% else %}DROP{% endif %} [0:0]
 :FORWARD {% if is_openvzve %}ACCEPT{% else %}DROP{% endif %} [0:0]
 {%- for ip in blacklist %}
--A INPUT -i {{ public_interface }} -s {{ ip }}/32 -j DROP
+-A INPUT -i {{ public_interface }} -s {{ ip }}/{{ netmask }} -j DROP
 {%- endfor %}
 -A INPUT -i lo -j ACCEPT
 -A INPUT -p icmp -j ACCEPT
@@ -50,12 +51,12 @@ COMMIT
     {%- for addr_type in addr_types -%}
       {%- set ip_addr = mine[host][ip_addrs_key][addr_type] %}
       {%- if ip_addr and ip_addr not in pillars_ip %}
--A INPUT -i {{ public_interface }} -s {{ mine[host][ip_addrs_key][addr_type] }}/32 -j ACCEPT
+-A INPUT -i {{ public_interface }} -s {{ mine[host][ip_addrs_key][addr_type] }}/{{ netmask }} -j ACCEPT
       {%- endif -%}
     {%- endfor -%}
   {%- endfor -%}
   {%- for host in pillars_ip %}
--A INPUT -i {{ public_interface }} -s {{ host }}/32 -j ACCEPT
+-A INPUT -i {{ public_interface }} -s {{ host }}/{{ netmask }} -j ACCEPT
   {%- endfor -%}
   {%- for protocol, ports in filter.iteritems() -%}
     {%- if ports|length == 1 %}

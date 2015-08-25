@@ -42,7 +42,7 @@ COMMIT
 -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
   {%- for host in mine -%}
     {#- if private == public only process public -#}
-    {%- if mine[host][ip_addrs_key]['public'] == mine[host][ip_addrs_key]['private'] -%}
+    {%- if ip_addrs_key in mine[host] and mine[host][ip_addrs_key]['public'] == mine[host][ip_addrs_key]['private'] -%}
       {%- set addr_types = ['public'] -%}
     {%- else -%}
       {%- set addr_types = ['public', 'private'] -%}

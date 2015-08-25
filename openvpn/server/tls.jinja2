@@ -13,7 +13,7 @@
 {%- set static_ips = [] %}
 
 {%- for client in vpn_instance['clients'] if client is mapping -%}
-  {%- set static_ips = static_ips.append(client) -%}
+  {%- do static_ips.append(client) -%}
 {%- endfor %}
 
 {%- block topology -%}

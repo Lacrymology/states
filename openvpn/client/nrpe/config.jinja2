@@ -2,7 +2,7 @@
 
 # {{ salt['pillar.get']('message_do_not_modify') }}
 
-{%- set instance = salt['pillar.get']('openvpn_client:server_instance') -%}
+{%- set instance = salt['pillar.get']('openvpn_client:server_instance') %}
 
 openvpn_client_{{ instance }}:
   description: OpenVPN Client Instance {{ instance }}

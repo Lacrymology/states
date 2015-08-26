@@ -7,6 +7,10 @@ jenkins:
     - purged
     - require:
       - service: jenkins
+  user:
+    - absent
+    - require:
+      - pkg: jenkins
 
 /etc/nginx/conf.d/jenkins.conf:
   file:

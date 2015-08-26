@@ -50,7 +50,7 @@ COMMIT
       {%- set addr_types = ['public', 'private'] -%}
     {%- endif -%}
     {%- for addr_type in addr_types -%}
-      {%- set ip_addr = mine[host][ip_addrs_key][addr_type]|default(None) %}
+      {%- set ip_addr = mine[host][ip_addrs_key][addr_type] if ip_addrs_key in mine[host] else None %}
       {%- if ip_addr and ip_addr not in pillars_ip %}
 -A INPUT -i {{ public_interface }} -s {{ mine[host][ip_addrs_key][addr_type] }}/{{ netmask }} -j ACCEPT
       {%- endif -%}

@@ -6,6 +6,7 @@
   if not is_openvzve else "venet0"
 %}
 {%- set netmask = "128" if ip_addrs_key == "ip_addrs6" else "32" %}
+{%- set icmp_type = "icmpv6" if ip_addrs_key == "ip_addrs6" else "icmp" %}
 
 # {{ salt['pillar.get']('message_do_not_modify') }}
 {%- if not disable_nat|default(False) %}
@@ -39,7 +40,7 @@ COMMIT
 -A INPUT -i {{ public_interface }} -s {{ ip }}/{{ netmask }} -j DROP
 {%- endfor %}
 -A INPUT -i lo -j ACCEPT
--A INPUT -p icmp -j ACCEPT
+-A INPUT -p {{ icmp_type }} -j ACCEPT
 -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
   {%- for host in mine -%}
     {#- if private == public only process public -#}

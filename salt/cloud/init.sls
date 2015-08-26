@@ -78,7 +78,7 @@ salt_cloud_bootstrap_script_patch:
     - replace
     - name: /etc/salt/cloud.deploy.d/bootstrap-salt.sh
     - pattern: 'add-apt-repository -y ppa:saltstack/salt'
-    - repl: echo "deb http://leo.robotinfra.com/mirror/salt/{{ salt_version() }}/ `lsb_release -c -s` main" > /etc/apt/sources.list.d/saltstack-salt-`lsb_release -c -s`.list && apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0E27C0A6
+    - repl: echo "deb http://archive.robotinfra.com/mirror/salt/{{ salt_version() }}/ `lsb_release -c -s` main" > /etc/apt/sources.list.d/saltstack-salt-`lsb_release -c -s`.list && apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0E27C0A6
     - mode: 500
     - user: root
     - group: root

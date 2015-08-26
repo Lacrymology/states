@@ -21,7 +21,7 @@ file_roots:
       {%- for gitlink, subdir in repo.iteritems() %}
         {%- set dirname = outer_loop_index ~ gitlink.split('/')[-1] %}
     - /srv/salt/states/{{ dirname }}/{{ subdir }}
-      {%- endfor %}
+      {%- endfor -%}
     {%- else %}
       {%- set dirname = outer_loop_index ~ repo.split('/')[-1] %}
     - /srv/salt/states/{{ dirname }}

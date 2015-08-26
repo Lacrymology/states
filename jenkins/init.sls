@@ -26,7 +26,7 @@ jenkins_dependencies:
       - daemon
       - psmisc
 
-{%- call manage_pid('/var/run/jenkins/jenkins.pid', 'jenkins', 'nogroup', 'jenkins') %}
+{%- call manage_pid('/var/run/jenkins/jenkins.pid', 'jenkins', 'jenkins', 'jenkins') %}
 - pkg: jenkins
 {%- endcall %}
 
@@ -34,7 +34,7 @@ jenkins_dependencies:
   file:
     - directory
     - user: jenkins
-    - group: nogroup
+    - group: jenkins
     - mode: 750
     - require:
       - pkg: jenkins
@@ -79,11 +79,17 @@ jenkins:
     - mode: 644
     - require:
       - pkg: jenkins
+  user:
+    - present
+    - name: jenkins
+    - require:
+      - pkg: jenkins
   service:
     - running
     - watch:
       - file: /var/lib/jenkins/tmp
       - file: jenkins
+      - user: jenkins
       - pkg: jre-7
       - file: jre-7
 

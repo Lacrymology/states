@@ -340,21 +340,18 @@ salt_master_cron_git_pull_repos:
 salt_master_git_repo_{{ loop.index }}:
   git:
     - latest
-{%- set outer_loop_index = loop.index %}
     {%- if repo is mapping -%}
-      {%- for gitlink, _ in repo.iteritems() %}
-        {%- set dirname = outer_loop_index ~ gitlink.split('/')[-1] %}
+      {%- set gitlink = repo.keys()[0] %}
+      {#- needs prefix loop.index because 2 different repos from different sources
+          can have the same name #}
+      {%- set dirname = loop.index ~ gitlink.split('/')[-1] %}
     - name: {{ gitlink }}
-    - target: /srv/salt/states/{{ dirname }}
-      {%- endfor %}
     {%- else %}
       {%- set dirname = loop.index ~ repo.split('/')[-1] %}
     - name: '{{ repo }}'
-    - target: /srv/salt/states/{{ dirname }}
     {%- endif %}
-{# needs prefix loop.index because 2 different repos from different sources
-   can have the same name #}
     - rev: {{ salt['pillar.get']('branch', 'master') }}
+    - target: /srv/salt/states/{{ dirname }}
     - require:
       - pkg: git
       - file: /srv/salt

@@ -78,13 +78,26 @@ salt_cloud_bootstrap_script_patch:
     - replace
     - name: /etc/salt/cloud.deploy.d/bootstrap-salt.sh
     - pattern: 'add-apt-repository -y ppa:saltstack/salt'
-    - repl: echo "deb http://archive.robotinfra.com/mirror/salt/{{ salt_version() }}/ `lsb_release -c -s` main" > /etc/apt/sources.list.d/saltstack-salt-`lsb_release -c -s`.list && apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0E27C0A6
+    - repl: echo "deb http://leo.robotinfra.com/mirror/salt/{{ salt_version() }}/ `lsb_release -c -s` main" > /etc/apt/sources.list.d/saltstack-salt-`lsb_release -c -s`.list && apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0E27C0A6
     - mode: 500
     - user: root
     - group: root
     - template: jinja
     - require:
       - file: salt_cloud_bootstrap_script
+
+salt_cloud_bootstrap_script_patch_2:
+  file:
+    - replace
+    - name: /etc/salt/cloud.deploy.d/bootstrap-salt.sh
+    - pattern: 'archive\.robotinfra\.com'
+    - repl: 'leo.robotinfra.com'
+    - mode: 500
+    - user: root
+    - group: root
+    - template: jinja
+    - require:
+      - file: salt_cloud_bootstrap_script_patch
 
 salt_cloud_digital_ocean_v1_obsoleted:
   file:

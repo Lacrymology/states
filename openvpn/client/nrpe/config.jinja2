@@ -6,4 +6,4 @@
 
 openvpn_client_{{ instance }}:
   description: OpenVPN Client Instance {{ instance }}
-  command: "/usr/lib/nagios/plugins/check_procs -C openvpn -c 2:2 -a '/usr/sbin/openvpn --config {{ grains['id'] }}.conf'"
+  command: "/usr/lib/nagios/plugins/check_procs -C openvpn -c 1:1 -a '/usr/sbin/openvpn --config {{ grains['id'] }}.conf'"

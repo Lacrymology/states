@@ -51,6 +51,16 @@ running()
     lsmod | grep -q "$1[^_-]"
 }
 
+rmmod_retry()
+{
+    mod=$1
+    attemps=0
+    until rmmod "$mod" || [ "$attemps" -ge 5 ]; do
+        attemps=$((attemps+1))
+        sleep 1
+    done
+}
+
 start()
 {
     log_begin_msg "Starting VirtualBox kernel modules"
@@ -135,7 +145,7 @@ stop()
     fi
     
     if running vboxdrv; then
-        if ! rmmod vboxdrv 2>/dev/null; then
+        if ! rmmod_retry vboxdrv 2>/dev/null; then
             log_failure_msg "Cannot unload module vboxdrv"
             log_end_msg 1
             return 1

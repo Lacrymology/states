@@ -21,7 +21,7 @@ virtualbox:
   cmd:
     - wait
     - name: vboxmanage setproperty vrdeextpack 'Oracle VM VirtualBox Extension Pack'
-    - require:
+    - watch:
       - cmd: virtualbox-oracle-extpack
   service:
     - running

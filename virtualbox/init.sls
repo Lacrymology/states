@@ -67,3 +67,15 @@ cleanup_virtualbox-oracle-extpack:
     - name: {{ opts['cachedir'] }}/{{ extpack_file }}
     - require:
       - cmd: virtualbox-oracle-extpack
+
+/etc/init.d/virtualbox:
+ file:
+   - managed
+   - user: root
+   - group: root
+   - mode: 755
+   - source: salt://virtualbox/sysvinit
+   - require:
+     - pkg: virtualbox
+   - require_in:
+     - service: virtualbox

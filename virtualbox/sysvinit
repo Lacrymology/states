@@ -64,7 +64,7 @@ rmmod_retry()
 start()
 {
     log_begin_msg "Starting VirtualBox kernel modules"
-    
+
     if ! running vboxdrv; then
         if ! modprobe vboxdrv > /dev/null 2>&1; then
             if ! find /lib/modules/`uname -r` -name "vboxdrv\.*" 2>/dev/null|grep -q vboxdrv; then
@@ -76,7 +76,7 @@ start()
             return 1
         fi
     fi
-    
+
     if ! running vboxnetflt; then
         if ! modprobe vboxnetflt > /dev/null 2>&1; then
             if ! find /lib/modules/`uname -r` -name "vboxnetflt\.*" 2>/dev/null|grep -q vboxnetflt; then
@@ -88,7 +88,7 @@ start()
             return 1
         fi
     fi
-    
+
     if ! running vboxnetadp; then
         if ! modprobe vboxnetadp > /dev/null 2>&1; then
             if ! find /lib/modules/`uname -r` -name "vboxnetadp\.*" 2>/dev/null|grep -q vboxnetadp; then
@@ -100,7 +100,7 @@ start()
             return 1
         fi
     fi
-    
+
     if ! running vboxpci; then
         if ! modprobe vboxpci > /dev/null 2>&1; then
             if ! find /lib/modules/`uname -r` -name "vboxpci\.*" 2>/dev/null|grep -q vboxpci; then
@@ -112,14 +112,14 @@ start()
             return 1
         fi
     fi
-    
+
     log_end_msg 0
 }
 
 stop()
 {
     log_begin_msg "Stopping VirtualBox kernel modules"
-    
+
     if running vboxnetadp; then
         if ! rmmod vboxnetadp 2>/dev/null; then
             log_failure_msg "Cannot unload module vboxnetadp"
@@ -127,7 +127,7 @@ stop()
             return 1
         fi
     fi
-    
+
     if running vboxnetflt; then
         if ! rmmod vboxnetflt 2>/dev/null; then
             log_failure_msg "Cannot unload module vboxnetflt"
@@ -135,7 +135,7 @@ stop()
             return 1
         fi
     fi
-    
+
     if running vboxpci; then
         if ! rmmod vboxpci 2>/dev/null; then
             log_failure_msg "Cannot unload module vboxpci"
@@ -143,7 +143,7 @@ stop()
             return 1
         fi
     fi
-    
+
     if running vboxdrv; then
         if ! rmmod_retry vboxdrv 2>/dev/null; then
             log_failure_msg "Cannot unload module vboxdrv"
@@ -151,12 +151,12 @@ stop()
             return 1
         fi
     fi
-    
+
     log_end_msg 0
 }
 
 # enter the following variables in /etc/default/virtualbox:
-#   SHUTDOWN_USERS="foo bar"  
+#   SHUTDOWN_USERS="foo bar"
 #     check for running VMs of user foo and user bar
 #   SHUTDOWN=poweroff
 #   SHUTDOWN=acpibutton
@@ -167,9 +167,9 @@ stop_vms()
     if ! pidof VBoxSVC > /dev/null; then
         return 0
     fi
-    
+
     wait=0
-    
+
     for i in $SHUTDOWN_USERS; do
         if [ -d /tmp/.vbox-$i-ipc ]; then
             export VBOX_IPC_SOCKETID="$i"
@@ -198,7 +198,7 @@ stop_vms()
             fi
         fi
     done
-    
+
     # wait for some seconds when doing ACPI shutdown
     if [ "$wait" -ne 0 ]; then
         log_action_begin_msg "Waiting for $wait seconds for VM shutdown"
@@ -212,7 +212,7 @@ dmnstatus()
 {
     if running vboxdrv && running vboxnetflt && running vboxnetadp && running vboxpci; then
         echo "VirtualBox kernel modules are loaded."
-        
+
         for i in $SHUTDOWN_USERS; do
             if [ -d /tmp/.vbox-$i-ipc ]; then
                 export VBOX_IPC_SOCKETID="$i"

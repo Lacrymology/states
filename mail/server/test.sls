@@ -10,6 +10,7 @@ include:
   - amavis.diamond
   - amavis.clamav
   - clamav.server
+  - clamav.server.apparmor
   - clamav.server.nrpe
   - clamav.server.diamond
   - doc

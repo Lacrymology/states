@@ -26,6 +26,16 @@ include:
 
 extend:
   clamav-freshclam:
+    file:
+      - managed
+      - name: /etc/clamav/freshclam.conf
+      - source: salt://clamav/freshclam.jinja2
+      - template: jinja
+      - mode: 444
+      - user: clamav
+      - group: clamav
+      - require:
+        - pkg: clamav-freshclam
     cmd:
       - wait
       {#- on the very first run, it may say it cannot notify clamd, it's normal,
@@ -37,16 +47,6 @@ extend:
       - watch:
         - pkg: clamav-freshclam
         - user: clamav
-    file:
-      - managed
-      - name: /etc/clamav/freshclam.conf
-      - source: salt://clamav/freshclam.jinja2
-      - template: jinja
-      - mode: 444
-      - user: clamav
-      - group: clamav
-      - require:
-        - pkg: clamav-freshclam
     service:
       - running
       - order: 50

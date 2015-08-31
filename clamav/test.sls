@@ -2,6 +2,7 @@
 
 include:
   - clamav.server
+  - clamav.server.apparmor
   - clamav.server.nrpe
   - clamav.server.diamond
   - doc

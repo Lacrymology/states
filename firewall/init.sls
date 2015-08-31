@@ -49,8 +49,6 @@ ip6tables:
     - mode: 440
     - source: salt://firewall/config.jinja2
     - context:
-        {#- IPv6 doesn't support NAT chain #}
-        disable_nat: True
         ip_addrs_key: ip_addrs6
         pillars_ip: {{ salt['pillar.get']('firewall:allowed_ip6s', []) }}
         filter: {{ salt['pillar.get']('firewall:filter6', {}) }}

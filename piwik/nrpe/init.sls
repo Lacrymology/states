@@ -12,6 +12,7 @@ include:
   - php.nrpe
   - pip.nrpe
   - python.nrpe
+  - sudo.nrpe
   - uwsgi.nrpe
   - virtualenv.nrpe
 {%- if ssl %}

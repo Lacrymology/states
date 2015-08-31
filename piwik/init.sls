@@ -190,7 +190,8 @@ piwik_initial_setup:
     - source: salt://piwik/initial_setup.py
     - name: >
         initial_setup.py
-        --url 'http{% if ssl %}s{% endif %}://{{ hostnames[0] }}'
+        --host '{{ hostnames[0] }}'
+        --url 'http{% if ssl %}s{% endif %}://127.0.0.1'
         --user '{{ admin_username }}' --password '{{ admin_password }}'
         --email '{{ admin_email }}' --database-password '{{ db_password }}'
         {% if is_test %}--test{% endif %}

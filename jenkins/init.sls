@@ -82,6 +82,8 @@ jenkins:
   user:
     - present
     - name: jenkins
+    - groups:
+      - jenkins
     - require:
       - pkg: jenkins
   service:

@@ -24,6 +24,7 @@ include:
   - php.geoip
   - pip
   - python
+  - sudo
   - uwsgi.php
   - virtualenv
 {%- if ssl %}
@@ -200,6 +201,22 @@ piwik_initial_setup:
       - host: hostname
     - watch:
         - mysql_database: piwik
+
+piwik_archive:
+  file:
+    - managed
+    - name: /etc/cron.hourly/piwik-archive
+    - source: salt://piwik/cron_hourly.jinja2
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 500
+    - require:
+      - file: bash
+      - pkg: cron
+      - pkg: piwik
+      - pkg: sudo
+      - user: web
 
 {%- if ssl %}
 extend:

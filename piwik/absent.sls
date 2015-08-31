@@ -16,6 +16,7 @@ piwik:
                 "/usr/local/piwik",
                 opts["cachedir"] ~ "/pip/piwik",
                 "/etc/piwik",
+                "/etc/cron.hourly/piwik-archive",
                 "/etc/cron.daily/piwik-geoip",) %}
 {{ file }}:
   file:

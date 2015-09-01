@@ -48,6 +48,9 @@ class InitializePiwik(pysc.Application):
         argp.add_argument(
             '--url', type=str, required=True, help='piwik install URL')
         argp.add_argument(
+            '--host', type=str, default=None,
+            help='use custom Host header')
+        argp.add_argument(
             '--database-user', type=str, default='piwik',
             help='piwik MySQL database user')
         argp.add_argument(
@@ -102,10 +105,12 @@ class InitializePiwik(pysc.Application):
 
         browser = mechanicalsoup.Browser()
 
+        headers = {'Host': c['host']} if c['host'] else None
+
         # fill database information form
         db_setup_url = 'index.php?action=databaseSetup&trackerStatus=0'
         db_setup_page = browser.get(
-            '/'.join([c['url'], db_setup_url]), verify=verify)
+            '/'.join([c['url'], db_setup_url]), verify=verify, headers=headers)
         logger.debug('db_setup_page: %s', db_setup_page.text)
         db_setup_form = db_setup_page.soup.select('#databasesetupform')[0]
         db_setup_form.select(
@@ -116,7 +121,8 @@ class InitializePiwik(pysc.Application):
             '#dbname-0')[0]['value'] = c['database_name']
 
         # check if tables creation is success
-        create_tables_page = browser.submit(db_setup_form, db_setup_page.url)
+        create_tables_page = browser.submit(db_setup_form, db_setup_page.url,
+                                            headers=headers)
         logger.debug('create_tables_page: %s', create_tables_page.text)
         _raise_on_failure(create_tables_page)
         super_user_url = create_tables_page.soup.select(
@@ -124,7 +130,8 @@ class InitializePiwik(pysc.Application):
 
         # create super user
         super_user_page = browser.get(
-            '/'.join([c['url'], super_user_url]), verify=verify)
+            '/'.join([c['url'], super_user_url]), verify=verify,
+            headers=headers)
         logger.debug('super_user_page: %s', super_user_page.text)
         super_user_form = super_user_page.soup.select('#generalsetupform')[0]
         super_user_form.select('#login-0')[0]['value'] = c['user']
@@ -139,7 +146,7 @@ class InitializePiwik(pysc.Application):
         # Piwik requires to setup a website to complete the installation
         # Setup a fake one
         setup_website_page = browser.submit(
-            super_user_form, super_user_page.url)
+            super_user_form, super_user_page.url, headers=headers)
         logger.debug('setup_website_page: %s', setup_website_page.text)
         _raise_on_failure(setup_website_page)
         setup_website_form = setup_website_page.soup.select(
@@ -154,7 +161,7 @@ class InitializePiwik(pysc.Application):
 
         # JavaScript Tracking Code page
         js_tracking_code_page = browser.submit(
-            setup_website_form, setup_website_page.url)
+            setup_website_form, setup_website_page.url, headers=headers)
         logger.debug('js_tracking_code_page: %s', js_tracking_code_page.text)
         _raise_on_failure(js_tracking_code_page)
         congratulations_url = create_tables_page.soup.select(
@@ -162,11 +169,13 @@ class InitializePiwik(pysc.Application):
 
         # Congratulations page
         congratulations_page = browser.get(
-            '/'.join([c['url'], congratulations_url]), verify=verify)
+            '/'.join([c['url'], congratulations_url]), verify=verify,
+            headers=headers)
         logger.debug('congratulations_page: %s', congratulations_page.text)
         complete_form = congratulations_page.soup.select(
             '#defaultsettingsform')[0]
-        browser.submit(complete_form, congratulations_page.url)
+        browser.submit(complete_form, congratulations_page.url,
+                       headers=headers)
 
 
 if __name__ == '__main__':

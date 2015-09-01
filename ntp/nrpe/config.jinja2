@@ -13,7 +13,7 @@ ntp_procs:
 {%- if servers|length > 0 %}
 ntp_time:
   description: NTP clock offset between the localhost and remote server
-  command: '/usr/lib/nagios/plugins/check_ntp_time -H {{ servers[0] }} -w 2 -c 5'  {% if not first_ipv6 %}-4{% endif %}
+  command: '/usr/lib/nagios/plugins/check_ntp_time -H {{ servers[0] }} -w 2 -c 5 {% if not first_ipv6 %}-4{% endif %}'
 {%- endif %}
 
 {% if salt['pillar.get']('ntp:is_server', False) %}

@@ -237,6 +237,7 @@ dmnstatus()
 case "$1" in
 start)
     start
+    initctl emit virtualbox-started --no-wait
     ;;
 stop)
     stop_vms && stop

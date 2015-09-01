@@ -187,3 +187,13 @@ A list of days :doc:`index` will run highstate on all VMs which has
 
 The day is in the number format (same as the :doc:`/cron/doc/index`): 0 to 6
 are Sunday to Saturday.
+
+.. _pillar-salt_master-mine_ignores:
+
+salt_master:mine_ignores
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+List of salt minions that will be ignore in :ref:`monitor-salt_master_mine`
+monitoring check.
+
+Default: ignore no minion (``[]``).

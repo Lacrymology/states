@@ -39,19 +39,25 @@ class MineMinion(nap.Resource):
         log.debug('Minion IDs in Salt Mine monitoring.data: %s', ret)
         return ret
 
+    def _ignored_ids(self):
+        client = salt.client.Caller('/etc/salt/minion')
+        ignored_ids = client.function(
+            'pillar.get', 'salt_master:mine_ignores', [])
+        log.debug('Ignored minion IDs: %s', ignored_ids)
+        return ignored_ids
+
     def probe(self):
         log.debug("MineMinion.probe started")
         ids_from_mine = self._mine_ids()
         ids_from_salt_key = self._accepted_ids()
+        ignored_ids = self._ignored_ids()
         if set(ids_from_salt_key) == set(ids_from_mine):
             log.debug("MineMinion.probe ended")
             log.debug("returning 0")
             return [nap.Metric('mine_minions', 0, min=0, context='minions')]
         else:
-            all_ids = set(list(ids_from_salt_key)
-                          + list(ids_from_mine))
-            diff_ids = set(list(all_ids - ids_from_salt_key) +
-                           list(all_ids - ids_from_mine))
+            diff_ids = (set(ids_from_salt_key) ^ set(ids_from_mine))
+            diff_ids = diff_ids - set(ignored_ids)
             log.debug('Diff minion IDs: %s', diff_ids)
             self.diff = diff_ids
             log.debug("MineMinion.probe ended")

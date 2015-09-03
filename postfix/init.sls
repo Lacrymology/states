@@ -8,6 +8,7 @@ include:
     {%- if check_virus %}
   - amavis.clamav
   - clamav.server
+  - clamav.server.apparmor
     {%- else %}
   - amavis
     {%- endif -%}

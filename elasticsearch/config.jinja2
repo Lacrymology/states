@@ -5,7 +5,7 @@
 {% set nodes = salt['pillar.get']('elasticsearch:cluster:nodes') %}
 
 bootstrap:
-  mlockall: true
+  mlockall: {{ salt['pillar.get']('elasticsearch:mlockall', True)|lower }}
 
 cluster:
   name: {{ salt['pillar.get']('elasticsearch:cluster:name') }}

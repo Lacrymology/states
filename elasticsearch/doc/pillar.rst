@@ -146,6 +146,18 @@ Virtual Machine heap.
 
 Default: use :doc:`/java/doc/index` Virtual Machine default (``False``).
 
+elasticsearch:mlockall
+~~~~~~~~~~~~~~~~~~~~~~
+
+Lock the process address space into RAM, preventing any :doc:`index` memory from
+being swapped out.
+
+.. warning::
+
+   Disable mlockall will cause drastically reduce in term of throughput.
+
+Default: ``True``.
+
 .. _pillar-elasticsearch-ssl:
 
 elasticsearch:ssl

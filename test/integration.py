@@ -34,6 +34,12 @@ except ImportError:
 
 import yaml
 
+try:
+    import psutil
+    HAS_PSUTIL = True
+except ImportError:
+    HAS_PSUTIL = False
+
 # until https://github.com/saltstack/salt/issues/4994 is fixed, logger must
 # be configured before importing salt.client
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG,
@@ -558,10 +564,25 @@ class States(unittest.TestCase):
         return ""
 
     @staticmethod
-    def get_rss():
-        # http://man7.org/linux/man-pages/man5/proc.5.html
-        with open('/proc/{0}/stat'.format(os.getpid())) as f:
-            return int(f.readline().split()[23])
+    def get_rss(top=10):
+        """Get processeses with highest memory usages
+        """
+        procs = []
+        if HAS_PSUTIL:
+            for p in psutil.process_iter():
+                if int(psutil.__version__.split('.')[0]) < 2:
+                    procs.append({"name": p.name,
+                                  "cmdline": p.cmdline,
+                                  "memory_percent": p.get_memory_percent(),
+                                  })
+                else:
+                    procs.append({"name": p.name,
+                                  "cmdline": p.cmdline(),
+                                  "memory_percent": p.memory_percent(),
+                                  })
+            procs = sorted(procs, key=lambda p: p["memory_percent"],
+                           reverse=True)[0:top]
+        return procs
 
     def setUp(self):
         """
@@ -697,10 +718,7 @@ class States(unittest.TestCase):
         #     result: true
         global ran_states_cntr
 
-        logger.debug('Stat: RSS: %d, counter size: %d.',
-                     self.get_rss(),
-                     sys.getsizeof(ran_states_cntr),
-                     )
+        logger.debug('Processes with high memory usages: %s', self.get_rss())
 
         ran_states_cntr.update(sid.split('|')[0] for sid in output)
         for state in output:

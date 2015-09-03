@@ -26,6 +26,7 @@ cron:
     - order: 50
     - require:
       - service: rsyslog
+      - file: /etc/cron.twice_daily
     - watch:
       - pkg: cron
       - file: cron

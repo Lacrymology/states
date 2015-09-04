@@ -8,18 +8,29 @@
 {%- set netmask = "128" if ip_addrs_key == "ip_addrs6" else "32" %}
 {%- set icmp_type = "icmpv6" if ip_addrs_key == "ip_addrs6" else "icmp" %}
 
+{#- IPV6 NAT only supported in kernel 3.8+ and iptables 1.4.17+ #}
+{%- set kernel_version_support_ipv6_nat = False %}
+{%- set kmajor, kminor = grains['kernelrelease'].split('.')[:2] %}
+{%- if kmajor|float >= 3 %}
+  {%- if kminor|float >= 8 %}
+     {%- set kernel_version_support_ipv6_nat = True %}
+  {%- endif %}
+{%- endif %}
+
 # {{ salt['pillar.get']('message_do_not_modify') }}
-{%- if not disable_nat|default(False) %}
+{%- if ip_addrs_key == 'ip_addrs6' and kernel_version_support_ipv6_nat %}
+  {%- if not disable_nat|default(False) %}
 *nat
 {%- block nat %}
 :PREROUTING ACCEPT [0:0]
 :POSTROUTING ACCEPT [0:0]
-{%- if grains['osrelease']|float < 12.04 %}
+    {%- if grains['osrelease']|float < 12.04 %}
 :INPUT ACCEPT [0:0]
-{%- endif %}
+    {%- endif %}
 :OUTPUT ACCEPT [0:0]
 {%- endblock nat %}
 COMMIT
+  {%- endif %}
 {%- endif %}
 *mangle
 {%- block mangle %}

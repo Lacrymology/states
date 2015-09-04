@@ -28,16 +28,27 @@ ci-agent:
     - require:
       - file: ci-agent
 
-/home/ci-agent/.ssh/known_hosts:
+salt_ci_known_hosts:
+{%- if salt['pillar.get']('salt_ci:host_key', False) %}
   file:
     - managed
+    - name: /home/ci-agent/.ssh/known_hosts
     - user: ci-agent
     - group: ci-agent
     - mode: 644
     - contents: |
-        {{ salt['pillar.get']('salt_ci:host_key')|indent(8) }}
+        {{ salt['pillar.get']('salt_ci:host_key', False)|indent(8) }}
     - require:
       - file: ci-agent
+{%- else %}
+  ssh_known_hosts:
+    - present
+    - name: {{ grains['master'] }}
+    - port: {{ salt['pillar.get']('salt_ci:ssh_port', 22) }}
+{%- endif %}
+    - require_in:
+      - cmd: test_result
+      - cmd: scp_logs_to_master
 
 openssh-client:
   pkg:
@@ -62,7 +73,6 @@ test_result:
     - name: scp -P {{ ssh_port }} {{ result_file }} ci-agent@{{ grains['master'] }}:/home/ci-agent/{{ grains['id'] }}-result.xml
     - path: {{ result_file }}
     - require:
-      - file: /home/ci-agent/.ssh/known_hosts
       - file: /home/ci-agent/.ssh/id_rsa
       - pkg: openssh-client
 
@@ -72,6 +82,5 @@ scp_logs_to_master:
     - name: scp -P {{ ssh_port }} /tmp/*.xz ci-agent@{{ grains['master'] }}:/home/ci-agent/
     - user: ci-agent
     - require:
-      - file: /home/ci-agent/.ssh/known_hosts
       - file: /home/ci-agent/.ssh/id_rsa
       - pkg: openssh-client

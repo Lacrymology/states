@@ -15,13 +15,6 @@ Pillar
 Mandatory
 ---------
 
-.. _pillar-salt_ci-host_key:
-
-salt_ci:host_key
-~~~~~~~~~~~~~~~~
-
-Host key of CI host. This need to be filled after setup CI server.
-
 .. _pillar-salt_ci-agent_pubkey:
 
 salt_ci:agent_pubkey
@@ -40,11 +33,19 @@ SSH private key of ci-agent.
 Optional
 --------
 
+.. _pillar-salt_ci-host_key:
+
+salt_ci:host_key
+~~~~~~~~~~~~~~~~
+
+Host key of CI host. Set this to avoid network failure which may happen
+when ssh-keyscan gets host key of CI host.
+
 .. _pillar-salt_ci-ssh_port:
 
 salt_ci:ssh_port
 ~~~~~~~~~~~~~~~~
 
-SSH port to copy result files through
+SSH port to copy result files through and scanning host key.
 
 Default: ``22``

@@ -44,6 +44,7 @@ salt_ci_known_hosts:
   ssh_known_hosts:
     - present
     - name: {{ grains['master'] }}
+    - port: {{ salt['pillar.get']('salt_ci:ssh_port', 22) }}
 {%- endif %}
     - require_in:
       - cmd: test_result

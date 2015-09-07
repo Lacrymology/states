@@ -1,0 +1,6 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+# {{ salt['pillar.get']('message_do_not_modify') }}
+{%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
+
+{{ nginx_instance("syncthing", http_result="401 Unauthorized",
+                  https_result="401 Unauthorized") }}

@@ -23,3 +23,7 @@ extend:
     - absent
     - require:
       - service: syncthing
+
+/etc/apt/sources.list.d/syncthing.list:
+  file:
+    - absent

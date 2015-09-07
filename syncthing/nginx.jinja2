@@ -1,0 +1,30 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+# {{ salt['pillar.get']('message_do_not_modify') }}
+{%- from 'nginx/macro.jinja2' import ssl_config with context %}
+
+upstream syncthing {
+  server 127.0.0.1:8384;
+}
+
+server {
+    listen 80;
+    listen [::]:80;
+{%- if ssl %}
+  {%- if ssl_redirect %}
+    {# if https, redirect http port 80 to https port 443 #}
+    server_name {% for hostname in hostnames %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+    return 301 https://{{ salt['pillar.get']('gitlab:hostnames')[0] }}$request_uri;
+}
+{# https server #}
+server {
+  {% endif %}{# redirect http to https #}
+    {{ ssl_config(ssl) }}
+{% endif %}
+{# web app logic #}
+    server_name {% for hostname in hostnames %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+{% include 'nginx/location_robots.jinja2' %}
+{% include "nginx/block_hacks.jinja2" %}
+    location / {
+        proxy_pass http://syncthing;
+    }
+}

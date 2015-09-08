@@ -39,7 +39,6 @@ syncthing:
     - mode: 440
     - user: root
     - group: root
-    - mode: 440
     - context:
         username: "admin"
         password: {{ salt["pillar.get"]("syncthing:password") }}

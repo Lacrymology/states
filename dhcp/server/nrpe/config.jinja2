@@ -2,9 +2,9 @@
 
 {%- set interface = salt["pillar.get"]("dhcp_server:interface") %}
 
-dhcp_server:
-  description: Check DHCP server functionality
-  command: sudo /usr/lib/nagios/plugins/check_dhcp -s {{ grains["ip_interfaces"][interface]|first }} -i {{ interface }} -u
+dhcp_server_port:
+  description: Check DHCP server UDP port
+  command: /usr/lib/nagios/plugins/check_udp_listen 67
 
 dhcp_server_proc:
   description: Check DHCP server process

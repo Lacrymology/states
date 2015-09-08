@@ -1,7 +1,4 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
-{% for filename in ('broker', 'nginx') %}
-/etc/nagios/nrpe.d/shinken-{{ filename }}.cfg:
-  file:
-    - absent
-{% endfor %}
+{%- from 'nrpe/passive.jinja2' import passive_absent with context %}
+{{ passive_absent('shinken.broker') }}

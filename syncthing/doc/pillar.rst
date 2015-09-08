@@ -26,7 +26,7 @@ syncthing:hostnames
 syncthing:password
 ~~~~~~~~~~~~~~~~~~
 
-Password for :doc:`index` "admin" account.
+Password for :doc:`index` ``admin`` account.
 
 Optional
 --------

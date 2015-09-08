@@ -10,6 +10,7 @@
 include:
   - apt
   - nginx
+  - rsyslog
 {%- if ssl %}
   - ssl
 {%- endif %}
@@ -48,9 +49,14 @@ syncthing:
   service:
     - running
     - enable: True
+    - require:
+      - service: rsyslog
     - watch:
       - pkg: syncthing
       - file: syncthing
+
+{% from 'upstart/rsyslog.jinja2' import manage_upstart_log with context %}
+{{ manage_upstart_log('syncthing', severity="info") }}
 
 /etc/nginx/conf.d/syncthing.conf:
   file:

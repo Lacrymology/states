@@ -1,0 +1,7 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+# {{ salt['pillar.get']('message_do_not_modify') }}
+{%- set timeout = 5 %}
+
+dhcp_offer:
+  description: Check DHCP Server Response
+  command: /usr/lib/nagios/plugins/check_dhcp -t {{ timeout }}

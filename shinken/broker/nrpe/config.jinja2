@@ -37,12 +37,14 @@ shinken_broker_http:
   dependencies:
     - shinken_broker_http_port
 
+{%- if salt['pillar.get']('shinken:architecture:broker')|length > 1 %}
 shinken_broker_web_cluster:
   description: Shinken Broker Web UI Cluster
   check: bp_rule!{%- for host in salt['pillar.get']('shinken:architecture:broker') -%}{%- if loop.first -%}({%- endif -%}{{ host }},shinken_broker_http{%- if not loop.last -%} | {%- else -%} ){%- endif -%}{%- endfor %}
   passive: False
   business_rule_service_notification_options: n
   business_rule_smart_notifications: 1
+{%- endif %}
 
 {%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context %}
 {{ nginx_instance('shinken.broker', deployment='shinken', pillar_prefix='shinken', http_uri='/user/login', extra_dependencies=('shinken_broker_http',)) }}

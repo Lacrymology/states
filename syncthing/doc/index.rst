@@ -15,6 +15,8 @@ transmitted over the Internet.
 
 Homepage: https://syncthing.net/
 
+Github: https://github.com/syncthing/syncthing
+
 Content
 -------
 

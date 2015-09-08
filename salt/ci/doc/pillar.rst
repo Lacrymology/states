@@ -41,6 +41,8 @@ salt_ci:host_key
 Host key of CI host. Set this to avoid network failure which may happen
 when ssh-keyscan gets host key of CI host.
 
+Default: auto scanning (``None``).
+
 .. _pillar-salt_ci-ssh_port:
 
 salt_ci:ssh_port

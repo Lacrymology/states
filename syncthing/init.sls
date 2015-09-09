@@ -16,13 +16,6 @@ include:
   - ssl
 {%- endif %}
 
-{%- if salt["file.file_exists"]("/var/lib/syncthing/config.xml") %}
-  {%- set own_device_id = salt["syncthing.generate"]("/var/lib/syncthing") %}
-{%- else %}
-  {%- set own_device_id = salt["syncthing.generate"](
-     opts["cachedir"] + "/syncthing") %}
-{%- endif %}
-
 syncthing:
   user:
     - present
@@ -64,33 +57,17 @@ syncthing:
       - pkg: syncthing
       - file: syncthing
 
-syncthing_generate:
-  module:
-    - run
-    - name: file.copy
-    - src: {{ opts["cachedir"] }}/syncthing
-    - dst: /var/lib
-    - recurse: True
-    - onlyif: test -f {{ opts["cachedir"] }}/syncthing
-    - require:
-      - user: syncthing
-    - require_in:
-      - service: syncthing
-  file:
-    - absent
-    - name: {{ opts["cachedir"] }}/syncthing
-    - require:
-      - module: syncthing_generate
-
 /var/lib/syncthing/cert.pem:
   file:
     - managed
     - mode: 444
     - user: syncthing
     - group: syncthing
-    - replace: False
+    - contents_pillar: syncthing:cert
     - require:
-      - file: syncthing_generate
+      - user: syncthing
+    - watch_in:
+      - service: syncthing
 
 /var/lib/syncthing/key.pem:
   file:
@@ -98,9 +75,11 @@ syncthing_generate:
     - mode: 400
     - user: syncthing
     - group: syncthing
-    - replace: False
+    - contents_pillar: syncthing:key
     - require:
-      - file: syncthing_generate
+      - user: syncthing
+    - watch_in:
+      - service: syncthing
 
 {%- set folders = salt["pillar.get"]("syncthing:folders", {}) %}
 {%- for config in folders.itervalues() %}
@@ -108,7 +87,7 @@ syncthing_generate:
 {%- endfor %}
 {%- do folders.update({"default": {"path": "/var/lib/syncthing/Sync", "devices": [grains["id"]]}}) %}
 {%- set devices = salt["pillar.get"]("syncthing:devices", {}) %}
-{%- do devices.update({grains["id"]: {"id": own_device_id }}) %}
+{%- do devices.update({grains["id"]: {"id": salt["pillar.get"]("syncthing:device_id")}}) %}
 /var/lib/syncthing/config.xml:
   file:
     - managed

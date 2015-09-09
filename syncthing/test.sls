@@ -19,3 +19,8 @@ test:
     - require:
       - monitoring: test
       - cmd: doc
+  cmd:
+    - script
+    - source: salt://syncthing/generate.sh
+    - require:
+      - sls: syncthing

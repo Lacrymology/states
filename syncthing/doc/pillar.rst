@@ -15,6 +15,9 @@ Example::
     hostnames:
       - syncthing.example.com
     password: mypassword
+  device_id: 75A342E-5HLNEZU-6NVOSZ6-733RABR-XNFCF3Z-IS76VK5-7S3D6EI-M32YQAM
+  cert: {{ openssl cert }}
+  key: {{ openssl key }}
 
 .. _pillar-syncthing-hostnames:
 
@@ -23,10 +26,37 @@ syncthing:hostnames
 
 .. include:: /nginx/doc/hostnames.inc
 
+.. _pillar-syncthing-password:
+
 syncthing:password
 ~~~~~~~~~~~~~~~~~~
 
 Password for :doc:`index` ``admin`` account.
+
+.. _pillar-syncthing-device_id:
+
+syncthing:device_id
+~~~~~~~~~~~~~~~~~~~
+
+Device ID of :doc:`index` instance. For more information, consult `official docs
+<http://docs.syncthing.net/dev/device-ids.html>`_. Use generate.sh script in
+:doc:`index` formula to create pillar for new installation.
+
+.. _pillar-syncthing-cert:
+
+syncthing:cert
+~~~~~~~~~~~~~~
+
+SSL cerfiticate of :doc:`index` instance. Use generate.sh script in :doc:`index`
+formula to create pillar for new installation.
+
+.. _pillar-syncthing-key:
+
+syncthing:key
+~~~~~~~~~~~~~
+
+SSL key of :doc:`index` instance. Use generate.sh script in :doc:`index` formula
+to create pillar for new installation.
 
 Optional
 --------

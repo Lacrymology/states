@@ -50,3 +50,60 @@ syncthing:ssl_redirect
 ~~~~~~~~~~~~~~~~~~~~~~
 
 .. include:: /nginx/doc/ssl_redirect.inc
+
+.. _pillar-syncthing-folders:
+
+syncthing:folders
+~~~~~~~~~~~~~~~~~
+
+Folders to share with other devices.
+
+Example::
+
+  synthing:
+    folders:
+      test:
+        path: /usr/local/test # optional, default to /var/lib/syncthing/test
+        readonly: True # optional, default to False
+        devices:
+          - device-1
+          - device-2
+
+Devices attribute must be a list of devices define in
+:ref:`pillar-syncthing-devices`.
+
+:doc:`index` formula implicitly defines a folder with following config::
+
+  syncthing:
+    folders:
+      default:
+        path: /var/lib/syncthing/Sync
+        devices:
+          - {{ minion_id }}
+
+Default: share no folder (``{}``).
+
+.. _pillar-syncthing-devices:
+
+syncthing:devices
+~~~~~~~~~~~~~~~~~
+
+Known devices to share resources with.
+
+Example::
+
+  syncthing:
+    devices:
+      laptop:
+        id: MFZWI3D-BONSGYC-YLTMRWG-C43ENR5-QXGZDMM-FZWI3DP-BONSGYY-LTMRWAD
+        compression: always # optional, default to "metadata"
+        introducer: True # optional, default to False
+
+:doc:`index` formula implicitly defines a device with following config::
+
+  syncthing:
+    devices:
+      {{ grains["id"] }}:
+        id: {{ own syncthing id }}
+
+Default: share resources with no device (``{}``).

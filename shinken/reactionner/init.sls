@@ -45,7 +45,7 @@ shinken-reactionner:
   file:
     - managed
     - template: jinja
-    - user: shinken
+    - user: root
     - group: shinken
     - mode: 440
     - source: salt://shinken/config.jinja2
@@ -92,7 +92,7 @@ shinken-reactionner:
         password: {{ xmpp["password"] }}
         recipients: {{ xmpp["recipients"]|default([])|yaml }}
         rooms: {{ xmpp["rooms"]|default([])|yaml }}
-    - user: shinken
+    - user: root
     - group: shinken
     - mode: 440
     - require:

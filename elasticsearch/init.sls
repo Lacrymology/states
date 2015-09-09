@@ -31,7 +31,7 @@ include:
   file:
     - managed
     - template: jinja
-    - user: elasticsearch
+    - user: root
     - group: elasticsearch
     - mode: 440
     - source: salt://elasticsearch/logging.jinja2
@@ -69,7 +69,7 @@ elasticsearch:
     - managed
     - name: /etc/elasticsearch/elasticsearch.yml
     - template: jinja
-    - user: elasticsearch
+    - user: root
     - group: elasticsearch
     - mode: 440
     - source: salt://elasticsearch/config.jinja2

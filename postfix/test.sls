@@ -4,6 +4,7 @@
 {%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 {%- from 'fail2ban/macro.jinja2' import fail2ban_regex_test with context %}
 include:
+  - clamav.server.apparmor
   - doc
   - postfix
   - postfix.backup
@@ -18,6 +19,7 @@ include:
   - openldap.nrpe
 
 {%- call test_cron() %}
+- sls: clamav.server.apparmor
 - sls: postfix
 - sls: postfix.backup
 - sls: postfix.diamond

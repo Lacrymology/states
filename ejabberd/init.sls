@@ -66,9 +66,9 @@ ejabberd:
     - name: /etc/ejabberd/ejabberd.cfg
     - source: salt://ejabberd/config.jinja2
     - template: jinja
-    - user: ejabberd
+    - user: root
     - group: ejabberd
-    - mode: 600
+    - mode: 440
     - require:
       - pkg: ejabberd
       - postgres_database: ejabberd

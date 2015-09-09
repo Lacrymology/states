@@ -51,7 +51,7 @@ graphite_graph_templates:
     - managed
     - name: /etc/graphite/graphTemplates.conf
     - template: jinja
-    - user: www-data
+    - user: root
     - group: graphite
     - mode: 440
     - source: salt://graphite/graph_templates.jinja2
@@ -149,7 +149,7 @@ graphite-web-uwsgi:
     - managed
     - name: /etc/uwsgi/graphite.yml
     - template: jinja
-    - user: www-data
+    - user: root
     - group: www-data
     - mode: 440
     - source: salt://uwsgi/template.jinja2

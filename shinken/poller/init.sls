@@ -64,7 +64,7 @@ shinken-poller:
   file:
     - managed
     - template: jinja
-    - user: shinken
+    - user: root
     - group: shinken
     - mode: 440
     - source: salt://shinken/config.jinja2

@@ -24,6 +24,7 @@ freshclam_apparmor:
     - require:
       - pkg: apparmor
     - watch:
+      - file: /etc/apparmor.d/disable/usr.bin.freshclam
       - file: freshclam_apparmor
     - require_in:
       - file: clamav-freshclam

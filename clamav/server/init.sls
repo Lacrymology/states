@@ -8,7 +8,14 @@ include:
 {%- call manage_pid('/var/run/clamav/freshclam.pid', 'clamav', 'clamav', 'clamav-freshclam', 660) %}
 - pkg: clamav-freshclam
 {%- endcall %}
-{%- call manage_pid('/var/run/clamav/clamd.pid', 'clamav', 'clamav', 'clamav-daemon', 664) %}
+
+{%- if salt['pillar.get']('clamav:mode', 'local') == "local" -%}
+  {%- set daemon_user = "clamav" -%}
+{%- else -%}
+  {%- set daemon_user = "root" -%}
+{%- endif %}
+
+{%- call manage_pid('/var/run/clamav/clamd.pid', daemon_user, daemon_user, 'clamav-daemon', 664) %}
 - pkg: clamav-daemon
 {%- endcall %}
 

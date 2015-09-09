@@ -8,7 +8,7 @@ start on (local-filesystems
 stop on runlevel [!2345]
 
 env STNORESTART=yes
-env HOME=/home/syncthing
+env HOME=/var/lib/syncthing
 env STGUIAUTH="{{ username }}:{{ password }}"
 setuid syncthing
 setgid syncthing

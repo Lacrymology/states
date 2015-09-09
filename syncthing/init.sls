@@ -18,6 +18,7 @@ include:
 syncthing:
   user:
     - present
+    - home: /var/lib/syncthing
     - shell: /bin/false
   pkgrepo:
     - managed

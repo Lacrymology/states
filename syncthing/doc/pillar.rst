@@ -15,9 +15,6 @@ Example::
     hostnames:
       - syncthing.example.com
     password: mypassword
-  device_id: 75A342E-5HLNEZU-6NVOSZ6-733RABR-XNFCF3Z-IS76VK5-7S3D6EI-M32YQAM
-  cert: {{ openssl cert }}
-  key: {{ openssl key }}
 
 .. _pillar-syncthing-hostnames:
 

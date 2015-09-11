@@ -125,6 +125,8 @@ Example::
         id: MFZWI3D-BONSGYC-YLTMRWG-C43ENR5-QXGZDMM-FZWI3DP-BONSGYY-LTMRWAD
         compression: always # optional, default to "metadata"
         introducer: True # optional, default to False
+        addresses:  # optional, default to auto discovery
+          - 192.168.1.100
 
 :doc:`index` formula implicitly defines a device with following config::
 

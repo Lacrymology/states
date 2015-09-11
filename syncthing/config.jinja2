@@ -20,11 +20,17 @@
     </folder>
 {%- endfor %}
 {%- for name, config in devices.iteritems() %}
-    <device id="{{ config["id"]}} "
+    <device id="{{ config["id"]}}"
             name="{{ name }}"
             compression="{{ config.get("compression", "metadata") }}"
             introducer="{{ config.get('introducer', False)|lower }}">
+  {%- if config["addresses"]|default(False) %}
+      {%- for address in config["addresses"] %}
+        <address>{{ address }}</address>
+      {%- endfor %}
+  {%- else %}
         <address>dynamic</address>
+  {%- endif %}
     </device>
 {%- endfor %}
     <gui enabled="true" tls="false">

@@ -5,5 +5,5 @@
 
 dhcp_offer:
   description: Check DHCP Server Response
-  command: /usr/lib/nagios/plugins/check_dhcp -t {{ timeout }}
+  command: sudo /usr/lib/nagios/plugins/check_dhcp -t {{ timeout }}
   {{ passive_interval(1 * 60) }}

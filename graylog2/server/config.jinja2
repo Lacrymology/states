@@ -377,7 +377,7 @@ transport_email_use_tls = false
 {%- endif %}
 transport_email_hostname = {{ email['server'] }}
 transport_email_port = {{ email['port'] }}
-transport_email_use_auth = true
+transport_email_use_auth = {% if email['password']|default('') == '' %}false{% else %}true{% endif %}
 transport_email_auth_username = {{ email['user']|default("null") }}
 transport_email_auth_password = {{ email['password']|default("null") }}
 transport_email_subject_prefix = [graylog2]

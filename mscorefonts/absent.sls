@@ -4,3 +4,8 @@ mscorefonts:
   pkg:
     - purged
     - name: ttf-mscorefonts-installer
+
+{#- exist if failed to download fonts #}
+/var/lib/update-notifier:
+  file:
+    - absent

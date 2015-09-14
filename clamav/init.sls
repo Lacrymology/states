@@ -62,7 +62,7 @@ clamav:
     - absent
 {%- endif %}
 
-/etc/cron.daily/clamav_scan:
+/etc/cron.daily/zz_clamav_scan:
   file:
 {%- if daily_scan %}
     - symlink
@@ -86,7 +86,7 @@ clamav:
     - mode: 640
     - replace: False
     - require:
-      - file: /etc/cron.daily/clamav_scan
+      - file: /etc/cron.daily/zz_clamav_scan
 {%- else %}
    - absent
 {%- endif %}

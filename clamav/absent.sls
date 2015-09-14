@@ -46,6 +46,6 @@ clamav-freshclam:
     - require:
       - service: clamav-freshclam
 
-/etc/cron.daily/clamav_scan:
+/etc/cron.daily/zz_clamav_scan:
   file:
     - absent

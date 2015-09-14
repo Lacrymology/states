@@ -1,5 +1,7 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
+{%- from "os.jinja2" import os with context %}
+
 # {{ salt['pillar.get']('message_do_not_modify') }}
 
 nsca_passive_procs:
@@ -26,7 +28,7 @@ total_procs:
   {#- send only notification if it's critical for more than 10 minutes #}
   first_notification_delay: 10
   notification_options: c,u,r
-  command: /usr/lib/nagios/plugins/check_procs -w {{ max_proc }} -c {{ max_proc_15_percent|int }}
+  command: /usr/lib/nagios/plugins/check_procs -w {{ max_proc }} -c {{ max_proc_15_percent|int }} {% if os.is_trusty %}-k{% endif %}
 
 zombie_procs:
   description: Zombie Processes

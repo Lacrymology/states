@@ -21,6 +21,7 @@ upstream {{ name }} {
 
 server {
     listen 80;
+    listen [::]:80;
 {% if ssl %}
 {% if salt['pillar.get'](name + ':ssl_redirect', False) %}
     {# if https, redirect http port 80 to https port 443 #}

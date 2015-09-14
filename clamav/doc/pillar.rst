@@ -164,4 +164,4 @@ A list of excluded directories besides ``/dev``, ``/proc``, ``/run``, ``/sys``.
 
 Default: do not exclude other directories (``[]``).
 
-Only used if :ref:`pillar-daily_scan` is ``True``.
+Only used if :ref:`pillar-clamav-daily_scan` is ``True``.

@@ -89,7 +89,7 @@ A local mirror does support this method.
 
 Default: ``True``.
 
-.. _pillar-daily_scan:
+.. _pillar-clamav-daily_scan:
 
 clamav:daily_scan
 ~~~~~~~~~~~~~~~~~
@@ -120,6 +120,7 @@ Example::
   clamav:
     server_minion_id: clamav
     port: 3310
+    time_limit: 10h
     exclude_paths:
       - /tmp/clamav
 
@@ -140,6 +141,19 @@ Which port ``clamd`` daemon is listening to.
 Default: ``3310``
 
 These are used only if :doc:`index` is running in ``network`` mode.
+
+.. _pillar-clamav-time_limit:
+
+clamav:time_limit
+~~~~~~~~~~~~~~~~~
+
+The duration that ``/etc/cron.daily/zz_clamav_scan`` will be allowed to
+running. It will be killed after that.
+
+Optional suffix: ``s`` for seconds (the default), ``m`` for minutes, ``h`` for
+hours or ``d`` for days.
+
+Default: ``23h``.
 
 .. _pillar-clamav-exclude_paths:
 

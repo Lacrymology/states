@@ -31,7 +31,7 @@ done
 > "$status_file"
 
 retval=0
-find / $exclude_string {% for path in salt['pillar.get']('clamav:exclude_paths', []) %}! \( -path "{{ path }}" -prune \){% if not loop.last %} {% endif %}{% endfor %} -mtime -1 -type f -print0 | xargs -0 clamdscan {% if salt['pillar.get']('clamav:mode', 'local') == "local" %}--fdpass {% endif %}--quiet -l "$status_file" || retval=$?
+timeout {{ salt['pillar.get']('clamav:time_limit', '23h') }} find / $exclude_string {% for path in salt['pillar.get']('clamav:exclude_paths', []) %}! \( -path "{{ path }}" -prune \){% if not loop.last %} {% endif %}{% endfor %} -mtime -1 -type f -print0 | xargs -0 clamdscan {% if salt['pillar.get']('clamav:mode', 'local') == "local" %}--fdpass {% endif %}--quiet -l "$status_file" || retval=$?
 
 case "$retval" in
     0 ) # no virus found

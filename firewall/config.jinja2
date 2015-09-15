@@ -18,8 +18,10 @@
 {%- endif %}
 
 # {{ salt['pillar.get']('message_do_not_modify') }}
-{%- if ip_addrs_key == 'ip_addrs6' and kernel_version_support_ipv6_nat %}
-  {%- if not disable_nat|default(False) %}
+{%- if not disable_nat|default(False) %}
+  {%- if ip_addrs_key == 'ip_addrs6' and not kernel_version_support_ipv6_nat %}
+    {# does not include config for NAT #}
+  {%- else %}
 *nat
 {%- block nat %}
 :PREROUTING ACCEPT [0:0]

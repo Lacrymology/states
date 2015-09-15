@@ -16,13 +16,6 @@ Example::
       - syncthing.example.com
     password: mypassword
 
-.. _pillar-syncthing-hostnames:
-
-syncthing:hostnames
-~~~~~~~~~~~~~~~~~~~
-
-.. include:: /nginx/doc/hostnames.inc
-
 .. _pillar-syncthing-password:
 
 syncthing:password
@@ -87,7 +80,7 @@ Folders to share with other devices.
 
 Example::
 
-  synthing:
+  syncthing:
     folders:
       test:
         path: /usr/local/test # optional, default to /var/lib/syncthing/test
@@ -140,3 +133,12 @@ configured to use auto discovery.
         id: {{ own syncthing id }}
 
 Default: share resources with no device (``{}``).
+
+.. _pillar-syncthing-hostnames:
+
+syncthing:hostnames
+~~~~~~~~~~~~~~~~~~~
+
+.. include:: /nginx/doc/hostnames.inc
+
+Default: don't use web interface (``[]``).

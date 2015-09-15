@@ -7,6 +7,8 @@
 {%- set version = "0.11.24" %}
 {%- set repo = mirror ~ "/" ~ version %}
 {%- set ssl = salt["pillar.get"]("syncthing:ssl", False) %}
+{%- set ssl_redirect = salt["pillar.get"]("syncthing:ssl_redirect", False) %}
+{%- set hostnames = salt["pillar.get"]("syncthing:hostnames", [])|default(False, boolean=True) %}
 
 include:
   - apt
@@ -109,6 +111,7 @@ syncthing:
 
 /etc/nginx/conf.d/syncthing.conf:
   file:
+{%- if hostnames %}
     - managed
     - source: salt://syncthing/nginx.jinja2
     - template: jinja
@@ -116,19 +119,23 @@ syncthing:
     - group: www-data
     - mode: 440
     - context:
-        ssl: {{ salt["pillar.get"]("syncthing:ssl", False) }}
-        ssl_redirect: {{ salt["pillar.get"]("syncthing:ssl_redirect", False) }}
-        hostnames: {{ salt["pillar.get"]("syncthing:hostnames") }}
+        ssl: {{ ssl }}
+        ssl_redirect: {{ ssl_redirect }}
+        hostnames: {{ hostnames }}
     - require:
       - pkg: nginx
       - service: syncthing
-{%- if ssl %}
+  {%- if ssl %}
       - cmd: ssl_cert_and_key_for_{{ ssl }}
+  {%- endif %}
+{%- else %}
+    - absent
 {%- endif %}
     - watch_in:
       - service: nginx
 
-{%- if ssl %}
+{%- if hostnames %}
+  {%- if ssl %}
 extend:
   nginx.conf:
     file:
@@ -138,4 +145,5 @@ extend:
     service:
       - watch:
         - cmd: ssl_cert_and_key_for_{{ ssl }}
+  {%- endif %}
 {%- endif %}

@@ -1,10 +1,17 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 # {{ salt['pillar.get']('message_do_not_modify') }}
-{%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
 
-{{ nginx_instance("syncthing", http_result="401 Unauthorized",
+{%- if salt["pillar.get"]("syncthing:hostnames", [])|default(False, boolean=True) %}
+  {%- from 'nginx/nrpe/instance.jinja2' import nginx_instance with context -%}
+  {{ nginx_instance("syncthing", http_result="401 Unauthorized",
                   https_result="401 Unauthorized") }}
+{%- endif %}
 
 syncthing_procs:
   description: Syncthing Procs
   command: /usr/lib/nagios/plugins/check_procs -c 1:1 -u syncthing -C syncthing
+
+{#- this file can't be empty #}
+syncthing_dummy:
+  description: Please ignore this check
+  command: /usr/lib/nagios/plugins/check_dummy 0

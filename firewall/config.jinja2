@@ -3,8 +3,7 @@
 {%- set mine = salt['mine.get']('*', 'monitoring.data') -%}
 {%- set is_openvzve = grains['virtual'] == 'openvzve' %}
 {%- set public_interface = salt['pillar.get']('network_interface', 'eth0')
-  if not is_openvzve else "venet0"
-%}
+  if not is_openvzve else "venet0" %}
 {%- set netmask = "128" if ip_addrs_key == "ip_addrs6" else "32" %}
 {%- set icmp_type = "icmpv6" if ip_addrs_key == "ip_addrs6" else "icmp" %}
 
@@ -15,12 +14,12 @@
   {%- if kminor|float >= 8 %}
      {%- set kernel_version_support_ipv6_nat = True %}
   {%- endif %}
-{%- endif %}
+{%- endif -%}
 
 # {{ salt['pillar.get']('message_do_not_modify') }}
 {%- if not disable_nat|default(False) %}
   {%- if ip_addrs_key == 'ip_addrs6' and not kernel_version_support_ipv6_nat %}
-    {# does not include config for NAT #}
+    {#- does not include config for NAT #}
   {%- else %}
 *nat
 {%- block nat %}

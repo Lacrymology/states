@@ -239,3 +239,17 @@ root_password
 The root password.
 
 Default: not set (``False``).
+
+.. _pillar-parent_hosts:
+
+parent_hosts
+~~~~~~~~~~~~
+
+A list of the minion ID of the "parent" hosts for this minion. This will be
+used as a value of `parents
+<http://shinken.readthedocs.org/en/latest/05_thebasics/networkreachability.html>`_
+directive in :doc:`/shinken/arbiter/doc/index`.
+When all its parents are down or unreachable, the host will be unreachable
+instead of down.
+
+Default: no parent hosts (``[]``).

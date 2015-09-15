@@ -110,7 +110,8 @@ def data():
         'shinken_pollers': __salt__['pillar.get']('shinken_pollers', []),
         'roles': __salt__['pillar.get']('roles', []),
         'checks': list_checks(),
-        'monitor': __salt__['pillar.get']('monitor', True)
+        'monitor': __salt__['pillar.get']('monitor', True),
+        'parents': __salt__['pillar.get']('parent_hosts', [])
     }
 
     if 'availabilityZone' in __salt__['grains.ls']():

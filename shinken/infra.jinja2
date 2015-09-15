@@ -15,7 +15,7 @@ define host {
     contact_groups admins
     notification_interval 0
     first_notification_delay 0
-    notification_options d,u,r
+    notification_options d,r
     notification_period 24x7
     notifications_enabled 1
     active_checks_enabled 1
@@ -51,7 +51,10 @@ define host {
     host_name {{ host }}
     address {{ mine[host]['ip_addrs'][ip_source] }}
     alias {{ host }}
-    hostgroups {% for role in mine[host]['roles'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}
+    hostgroups {{ mine[host]['roles']|join(',') }}
+        {%- if mine[host]['parents'] %}
+    parents {{ mine[host]['parents']|join(',') }}
+        {%- endif %}
 }
     {%- endif -%}
 {%- endfor %}

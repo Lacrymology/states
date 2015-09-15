@@ -13,6 +13,11 @@ Mandatory
 
 .. include:: /nginx/doc/monitor.inc
 
+syncthing_procs
+~~~~~~~~~~~~~~~
+
+.. include:: /nrpe/doc/check_procs.inc
+
 Optional
 --------
 

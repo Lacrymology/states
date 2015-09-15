@@ -4,3 +4,7 @@
 
 {{ nginx_instance("syncthing", http_result="401 Unauthorized",
                   https_result="401 Unauthorized") }}
+
+syncthing_procs:
+  description: Syncthing Procs
+  command: /usr/lib/nagios/plugins/check_procs -c 1:1 -u syncthing -C syncthing

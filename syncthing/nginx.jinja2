@@ -13,7 +13,7 @@ server {
   {%- if ssl_redirect %}
     {# if https, redirect http port 80 to https port 443 #}
     server_name {% for hostname in hostnames %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
-    return 301 https://{{ salt['pillar.get']('gitlab:hostnames')[0] }}$request_uri;
+    return 301 https://{{ hostnames[0] }}$request_uri;
 }
 {# https server #}
 server {

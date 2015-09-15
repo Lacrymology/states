@@ -4,7 +4,7 @@ include:
   - apt.nrpe
   - nginx.nrpe
   - rsyslog.nrpe
-{%- if salt['pillar.get']('gitlab:ssl', False) %}
+{%- if salt['pillar.get']('syncthing:ssl', False) %}
   - ssl.nrpe
 {%- endif %}
 

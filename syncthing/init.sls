@@ -12,8 +12,10 @@
 
 include:
   - apt
-  - nginx
   - rsyslog
+{%- if hostnames %}
+  - nginx
+{%- endif %}
 {%- if ssl %}
   - ssl
 {%- endif %}

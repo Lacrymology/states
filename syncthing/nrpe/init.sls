@@ -3,10 +3,16 @@
 {%- set hostnames = salt["pillar.get"]("syncthing:hostnames", [])|default(False, boolean=True) %}
 include:
   - apt.nrpe
-  - nginx.nrpe
   - rsyslog.nrpe
 {%- if salt['pillar.get']('syncthing:ssl', False) %}
   - ssl.nrpe
 {%- endif %}
+{%- if hostnames %}
+  - nginx.nrpe
+{%- endif %}
 
-{{ passive_check('syncthing', check_ssl_score=True, domain_name=hostnames[0]) }}
+{%- if hostnames %}
+  {{ passive_check('syncthing', check_ssl_score=True, domain_name=hostnames[0]) }}
+{%- else %}
+  {{ passive_check('syncthing') }}
+{%- endif %}

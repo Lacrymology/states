@@ -1,6 +1,9 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+{%- set hostnames = salt["pillar.get"]("syncthing:hostnames", [])|default(False, boolean=True) %}
 include:
+{%- if hostnames %}
   - nginx.diamond
+{%- endif %}
   - rsyslog.diamond
 
 syncthing_diamond_resources:

@@ -1,5 +1,6 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
+{%- from 'diamond/macro.jinja2' import diamond_process_test with context %}
 include:
   - doc
   - syncthing
@@ -12,6 +13,14 @@ test:
     - require:
       - sls: syncthing
       - sls: syncthing.nrpe
+  diamond:
+    - test
+    - map:
+        ProcessResources:
+    {{ diamond_process_test('syncthing') }}
+    - require:
+      - sls: syncthing
+      - sls: syncthing.diamond
   qa:
     - test
     - name: syncthing

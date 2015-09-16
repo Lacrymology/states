@@ -53,9 +53,8 @@ server {
 {%- endfor %}
 {%- endblock %}
 
-{%- set timeout = salt['pillar.get'](name ~ ':timeout', 60) %}
-
 {%- block root_location -%}
+{%- set timeout = salt['pillar.get'](name ~ ':timeout', 60) %}
 {#- magic number: php(14), ruby(7) #}
     location / {
         gzip off;

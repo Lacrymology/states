@@ -11,7 +11,11 @@ Mandatory
    In this document, when refer to a pillar key ``pillar_prefix``
    means ``syncthing``.
 
-.. include:: /nginx/doc/monitor.inc
+syncthing_dummy
+~~~~~~~~~~~~~~~
+
+Dummy check to prevent the monitoring of :doc:`index` to become empty, always
+success.
 
 syncthing_procs
 ~~~~~~~~~~~~~~~
@@ -20,6 +24,10 @@ syncthing_procs
 
 Optional
 --------
+
+Only use if :ref:`pillar-syncthing-hostnames` is defined.
+
+.. include:: /nginx/doc/monitor.inc
 
 Only use if :ref:`pillar-syncthing-ssl` is turned defined.
 

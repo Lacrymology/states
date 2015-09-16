@@ -55,7 +55,7 @@ nsca-{{ formula }}:
 {% if check_ssl_score -%}
     {%- if ssl %}
         {#- manage cron file for sslyze NRPE check consumer -#}
-        {%- set domain_name = salt['pillar.get'](pillar_prefix + ':hostnames')[0] if not domain_name -%}
+        {%- set domain_name = salt['pillar.get'](pillar_prefix + ':hostnames')[0] if not domain_name else domain_name -%}
         {%- if domain_name|replace('.', '')|int == 0 -%}
     {#- only check if it is a domain, not IP. int returns 0 for unconvertible value #}
 /etc/cron.twice_daily/sslyze_check_{{ formula|replace('.', '-') }}:

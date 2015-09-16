@@ -52,7 +52,7 @@ define host {
     address {{ mine[host]['ip_addrs'][ip_source] }}
     alias {{ host }}
     hostgroups {{ mine[host]['roles']|join(',') }}
-        {%- if mine[host]['parents'] %}
+        {%- if salt['pillar.get']('parent_hosts', []) %}
     parents {{ mine[host]['parents']|join(',') }}
         {%- endif %}
 }

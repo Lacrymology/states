@@ -130,11 +130,11 @@ syncthing:
   {%- if ssl %}
       - cmd: ssl_cert_and_key_for_{{ ssl }}
   {%- endif %}
+    - watch_in:
+      - service: nginx
 {%- else %}
     - absent
 {%- endif %}
-    - watch_in:
-      - service: nginx
 
 {%- if hostnames %}
   {%- if ssl %}

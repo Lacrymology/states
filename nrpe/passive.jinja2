@@ -12,15 +12,18 @@
   freshness_threshold: {{ (interval_minutes + delay_minutes) * 60 }}
 {%- endmacro -%}
 
-{%- macro passive_check(formula, domain_name=None, pillar_prefix=None, check_ssl_score=False, file_name=None) -%}
+{%- macro passive_check(formula, domain_name=None, pillar_prefix=None, check_ssl_score=False, file_name=None, state_id=None, context={}) -%}
     {%- if not pillar_prefix -%}
         {%- set pillar_prefix = formula -%}
     {%- endif %}
     {%- if not file_name %}
       {%- set file_name = formula %}
     {%- endif %}
+    {%- if not state_id %}
+      {%- set state_id = formula %}
+    {%- endif %}
 
-nsca-{{ formula }}:
+nsca-{{ state_id }}:
   file:
     - managed
     - name: /etc/nagios/nsca.d/{{ file_name }}.yml
@@ -33,6 +36,12 @@ nsca-{{ formula }}:
     - source: salt://nrpe/config.jinja2
 {%- else %}
     - source: salt://{{ formula|replace('.', '/') }}/nrpe/config.jinja2
+    {%- if context %}
+    - context:
+        {%- for k, v in context.iteritems() %}
+        {{ k }}: {{ v }}
+        {%- endfor %}
+    {%- endif %}
 {%- endif %}
     - require:
       - file: /etc/nagios/nsca.d
@@ -58,46 +67,52 @@ nsca-{{ formula }}:
         {%- set domain_name = salt['pillar.get'](pillar_prefix + ':hostnames')[0] if not domain_name else domain_name -%}
         {%- if domain_name|replace('.', '')|int == 0 -%}
     {#- only check if it is a domain, not IP. int returns 0 for unconvertible value #}
-/etc/cron.twice_daily/sslyze_check_{{ formula|replace('.', '-') }}:
+/etc/cron.twice_daily/sslyze_check_{{ state_id|replace('.', '-') }}:
   file:
     - absent
 
-/etc/cron.d/sslyze_check_{{ formula|replace('.', '-') }}:
+/etc/cron.d/sslyze_check_{{ state_id|replace('.', '-') }}:
   file:
     - absent
 
-            {%- if formula|replace('.', '') != formula %}
-/etc/cron.twice_daily/sslyze_check_{{ formula }}:
+            {%- if state_id|replace('.', '') != state_id %}
+/etc/cron.twice_daily/sslyze_check_{{ state_id }}:
   file:
     - absent
             {%- endif -%}
 
         {%- else %}
-/etc/cron.twice_daily/sslyze_check_{{ formula|replace('.', '-') }}:
+/etc/cron.twice_daily/sslyze_check_{{ state_id|replace('.', '-') }}:
   file:
     - absent
         {%- endif -%}
     {%- else -%}
 {#- same as next statement #}
-/etc/cron.twice_daily/sslyze_check_{{ formula|replace('.', '-') }}:
+/etc/cron.twice_daily/sslyze_check_{{ state_id|replace('.', '-') }}:
   file:
     - absent
     {%- endif -%}
 {%- else -%}
 {#- same as other previous statement  #}
-/etc/cron.twice_daily/sslyze_check_{{ formula|replace('.', '-') }}:
+/etc/cron.twice_daily/sslyze_check_{{ state_id|replace('.', '-') }}:
   file:
     - absent
 {%- endif %}
 
-{{ formula }}-monitoring:
+{{ state_id }}-monitoring:
   monitoring:
     - managed
-    - name: {{ formula }}
+    - name: {{ state_id|replace('-', '.') }}
 {%- if formula == 'nrpe' %}
     - source: salt://nrpe/config.jinja2
 {%- else %}
     - source: salt://{{ formula|replace('.', '/') }}/nrpe/config.jinja2
+    {%- if context %}
+    - context:
+        {%- for k, v in context.iteritems() %}
+        {{ k }}: {{ v }}
+        {%- endfor %}
+    {%- endif %}
 {%- endif %}
     - require:
       - module: nrpe-virtualenv
@@ -110,25 +125,28 @@ nsca-{{ formula }}:
       - service: nagios-nrpe-server
 {%- endmacro -%}
 
-{%- macro passive_absent(formula, file_name=None) %}
+{%- macro passive_absent(formula, file_name=None, state_id=None) %}
     {%- if not file_name %}
       {%- set file_name = formula %}
     {%- endif %}
+    {%- if not state_id %}
+      {%- set state_id = formula %}
+    {%- endif %}
 
-/etc/nagios/nrpe.d/{{ formula }}.cfg:
+/etc/nagios/nrpe.d/{{ state_id }}.cfg:
   file:
     - absent
 
-nsca-{{ formula }}:
+nsca-{{ state_id }}:
   file:
     - absent
     - name: /etc/nagios/nsca.d/{{ file_name }}.yml
 
-/etc/cron.twice_daily/sslyze_check_{{ formula|replace('.', '-') }}:
+/etc/cron.twice_daily/sslyze_check_{{ state_id|replace('.', '-') }}:
   file:
     - absent
 
-/var/lib/nagios/{{ formula }}_ssl_configuration.yml:
+/var/lib/nagios/{{ state_id }}_ssl_configuration.yml:
   file:
     - absent
 {%- endmacro %}

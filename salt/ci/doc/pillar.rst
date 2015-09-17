@@ -38,7 +38,8 @@ Optional
 salt_ci:ssh_port
 ~~~~~~~~~~~~~~~~
 
-SSH port to copy result files through and scanning host key.
+:doc:`/ssh/server/doc/index` port to copy result files through and scanning
+host key.
 
 Default: ``22``
 

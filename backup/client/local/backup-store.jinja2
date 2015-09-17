@@ -1,0 +1,21 @@
+#!/bin/bash
+# {{ salt['pillar.get']('message_do_not_modify') }}
+# Use of this is governed by a license that can be found in doc/license.rst.
+
+set -e
+
+source /usr/local/bin/backup-validate
+
+readonly path="{{ path }}"
+readonly subdir="{{ subdir }}"
+
+# limit resources usage
+renice -n 19 -p $$ > /dev/null
+ionice -c idle -p $$
+
+archive_file="$1"
+validate_archive "$archive_file"
+
+backup_dir="$path/$subdir"
+mkdir -p "$backup_dir"
+mv "$archive_file" "$backup_dir"

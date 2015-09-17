@@ -20,7 +20,7 @@ backup:local:path
 The directory to put back up archive files.
 
 Optional
-~~~~~~~~
+--------
 
 .. _pillar-backup-local-subdir:
 

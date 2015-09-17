@@ -1,6 +1,7 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 include:
   - backup.client.local
+  - backup.client.local.diamond
   - backup.client.local.nrpe
   - backup.dumb
   - doc

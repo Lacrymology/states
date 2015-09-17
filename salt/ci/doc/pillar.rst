@@ -33,16 +33,6 @@ SSH private key of ci-agent.
 Optional
 --------
 
-.. _pillar-salt_ci-host_key:
-
-salt_ci:host_key
-~~~~~~~~~~~~~~~~
-
-Host key of CI host. Set this to avoid network failure which may happen
-when ssh-keyscan gets host key of CI host.
-
-Default: auto scanning (``None``).
-
 .. _pillar-salt_ci-ssh_port:
 
 salt_ci:ssh_port
@@ -51,3 +41,17 @@ salt_ci:ssh_port
 SSH port to copy result files through and scanning host key.
 
 Default: ``22``
+
+Conditional
+-----------
+
+.. _pillar-salt_ci-host_key:
+
+salt_ci:host_key
+~~~~~~~~~~~~~~~~
+
+Host key of CI host. Set this to avoid network failure which may happen
+when ssh-keyscan gets host key of CI host when sending test result back
+to CI server.
+
+Default: auto scanning (``None``).

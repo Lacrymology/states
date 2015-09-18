@@ -249,6 +249,19 @@ case "$1" in
         $0 start $2
         ;;
 
+    status)
+        rc=3
+        for i in /var/run/quagga/*.pid; do
+          if [ -f "$i" ]; then
+            d=`basename $i .pid`
+            running="$running $d"
+            rc=0
+          fi
+        done
+        echo $running
+        exit $rc
+        ;;
+
     *)
         echo "Usage: /etc/init.d/quagga {start|stop|restart|force-reload|<priority>} [daemon]"
         echo "       E.g. '/etc/init.d/quagga 5' would start all daemons with a prio 1-5."

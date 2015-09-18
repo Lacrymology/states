@@ -1,0 +1,11 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+
+{%- extends "pysc/config.jinja2" -%}
+
+{%- block body %}
+    {{ super() }}
+nsca_dir: /etc/nagios/nsca.d
+
+backup:
+  prefix: {{ path }}/{{ subdir }}
+{%- endblock -%}

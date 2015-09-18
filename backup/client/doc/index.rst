@@ -28,3 +28,4 @@ Contents:
     ../s3/doc/index
     ../scp/doc/index
     ../noop/doc/index
+    ../local/doc/index

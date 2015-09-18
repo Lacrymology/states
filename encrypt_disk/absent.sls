@@ -1,4 +1,14 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+
+cryptsetup:
+  pkg:
+    - purged
+  file:
+    - absent
+    - name: /etc/crypttab
+    - require:
+      - pkg: cryptsetup
+
 {%- set enc = salt["pillar.get"]("encrypt_disk", {}) %}
 {%- set is_test = salt['pillar.get']('__test__', False) %}
 {%- for disk, config in enc.iteritems() %}
@@ -29,7 +39,9 @@ cleanup_{{ disk }}:
   cmd:
     - run
     - name: cryptsetup luksClose '{{ device_name }}'
-    - onlyif: cryptsetup luksUUID '{{ disk }}'
+    - onlyif: which cryptsetup && cryptsetup luksUUID '{{ disk }}'
+    - require_in:
+      - pkg: cryptsetup
   file:
     - absent
     - name: '{{ disk }}'

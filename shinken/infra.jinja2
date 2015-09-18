@@ -44,6 +44,8 @@ define host {
     address 127.0.0.1
 }
 
+{%- set read_only_users = salt['pillar.get']('shinken:read_only_users', {}) %}
+
 {%- for host in mine -%}
     {%- if mine[host]['monitor'] %}
 define host {
@@ -54,6 +56,17 @@ define host {
     hostgroups {{ mine[host]['roles']|join(',') }}
         {%- if 'parents' in mine[host] and mine[host]['parents'] %}
     parents {{ mine[host]['parents']|join(',') }}
+        {%- endif %}
+        {%- set contacts = [] -%}
+        {%- for ro_user in read_only_users -%}
+            {#- workaround for `LintCheckSubkeyInSaltPillar()` -#}
+            {%- set managed_hosts = salt['pillar.get']('shinken:read_only_users:' ~ ro_user ~ ':managed_hosts', []) -%}
+            {%- if host in managed_hosts -%}
+                {%- do contacts.append(ro_user) -%}
+            {%- endif -%}
+        {%- endfor -%}
+        {%- if contacts %}
+    contacts {{ contacts|join(',') }}
         {%- endif %}
 }
     {%- endif -%}
@@ -74,6 +87,15 @@ define contact {
     register 0
 }
 
+{%- if read_only_users %}
+define contact {
+    name read-only-contact
+    use salt-contact
+    can_submit_commands 0
+    is_admin 0
+}
+{%- endif %}
+
 {#-
  This file contains the checks for the low-level infrastructure components
  supported by salt.
@@ -86,6 +108,15 @@ define contact {
     email {{ salt['pillar.get']('shinken:users:' + user + ':email') }}
     password {{ salt['pillar.get']('shinken:users:' + user + ':password') }}
     use salt-contact
+}
+{%- endfor %}
+
+{%- for ro_user in read_only_users %}
+define contact {
+    contact_name {{ ro_user }}
+    email {{ salt['pillar.get']('shinken:read_only_users:' + ro_user + ':email') }}
+    password {{ salt['pillar.get']('shinken:read_only_users:' + ro_user + ':password') }}
+    use read-only-contact
 }
 {%- endfor %}
 

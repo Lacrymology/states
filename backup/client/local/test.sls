@@ -31,7 +31,7 @@ test_check_backup:
       - cmd: test_check_backup
       - file: test_check_backup
 
-clean_tets_check_backup:
+clean_test_check_backup:
   file:
     - absent
     - name: {{ salt["pillar.get"]("backup:local:path") }}

@@ -1,0 +1,27 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+
+# {{ salt['pillar.get']('message_do_not_modify') }}
+
+{%- set daemon_ip_ports = {
+    'ospfd': ['127.0.0.1', '2604'],
+    'ospf6d': ['::1', '2606']
+} %}
+
+{%- for daemon, ip_port in daemon_ip_ports.iteritems() %}
+{{ daemon }}_procs:
+  description: {{ daemon|upper }} Daemon
+  command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -u quagga -a "/usr/lib/quagga/{{ daemon }} --daemon"'
+
+{{ daemon }}_port:
+  description: {{ daemon|upper }} Local Port
+  command: /usr/lib/nagios/plugins/check_tcp -H {{ ip_port[0] }} -p {{ ip_port[1] }}
+  dependencies:
+    - {{ daemon }}_procs
+
+{{ daemon }}_remote_port:
+  check: check_tcp!{{ ip_port[1] }}
+  description: {{ daemon|upper }} Remote Port
+  passive: False
+  dependencies:
+    - {{ daemon }}_procs
+{%- endfor %}

@@ -1,0 +1,9 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+
+! {{ salt['pillar.get']('message_do_not_modify') }}
+
+hostname Router@{{ grains['id'] }}
+password {{ salt['pillar.get']('quagga:zebra:password', False)|default(salt['pillar.get']('quagga:password'), boolean=True) }}
+enable password {{ salt['pillar.get']('quagga:zebra:enable_password', False)|default(salt['pillar.get']('quagga:enable_password'), boolean=True) }}
+
+log syslog

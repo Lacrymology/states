@@ -1,0 +1,12 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+
+# {{ salt['pillar.get']('message_do_not_modify') }}
+
+vtysh_enable=yes
+zebra_options="--daemon -A 127.0.0.1"
+bgpd_options="--daemon -A 127.0.0.1"
+ospfd_options="--daemon -A 127.0.0.1"
+ospf6d_options="--daemon -A ::1"
+ripd_options="--daemon -A 127.0.0.1"
+ripngd_options="--daemon -A ::1"
+isisd_options="--daemon -A 127.0.0.1"

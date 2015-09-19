@@ -1,0 +1,43 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+
+! {{ salt['pillar.get']('message_do_not_modify') }}
+
+hostname ospf6d@{{ grains['id'] }}
+password {{ salt['pillar.get']('quagga:ospf6d:password', False)|default(salt['pillar.get']('quagga:password'), boolean=True) }}
+enable password {{ salt['pillar.get']('quagga:ospf6d:enable_password', False)|default(salt['pillar.get']('quagga:enable_password'), boolean=True) }}
+log syslog
+service advanced-vty
+!
+debug ospf6 neighbor state
+!
+interface lo0
+ ipv6 ospf6 cost 1
+ ipv6 ospf6 hello-interval 10
+ ipv6 ospf6 dead-interval 40
+ ipv6 ospf6 retransmit-interval 5
+ ipv6 ospf6 priority 1
+ ipv6 ospf6 transmit-delay 1
+ ipv6 ospf6 instance-id 0
+!
+router ospf6
+ router-id {{ salt['pillar.get']('quagga:ospf6d:router_id', False)|default(grains['ip_interfaces'][salt['pillar.get']('network_interface', 'eth0')][0], boolean=True) }}
+ redistribute static route-map static-ospf6
+!
+access-list access4 permit 127.0.0.1/32
+!
+ipv6 access-list access6 permit 3ffe:501::/32
+ipv6 access-list access6 permit 2001:200::/48
+ipv6 access-list access6 permit ::1/128
+!
+ipv6 prefix-list test-prefix seq 1000 deny any
+!
+route-map static-ospf6 permit 10
+ match ipv6 address prefix-list test-prefix
+ set metric-type type-2
+ set metric 2000
+!
+line vty
+ access-class access4
+ ipv6 access-class access6
+ exec-timeout 0 0
+!

@@ -39,7 +39,7 @@ cleanup_{{ disk }}:
   cmd:
     - run
     - name: cryptsetup luksClose '{{ device_name }}'
-    - onlyif: which cryptsetup && cryptsetup luksUUID '{{ disk }}'
+    - onlyif: cryptsetup luksUUID '{{ disk }}'
     - require_in:
       - pkg: cryptsetup
   file:

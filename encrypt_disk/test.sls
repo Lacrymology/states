@@ -1,6 +1,8 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 include:
   - encrypt_disk
+  - encrypt_disk.nrpe
+  - encrypt_disk.diamond
   - doc
 
 {%- set enc = salt["pillar.get"]("encrypt_disk", {}) %}
@@ -14,10 +16,16 @@ allocate_disk_{{ disk }}:
 {%- endfor %}
 
 test:
-  qa:
-    - test_pillar
-    - name: encrypt_disk
-    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+  monitoring:
+    - run_all_checks
     - require:
       - sls: encrypt_disk
+      - sls: encrypt_disk.nrpe
+      - sls: encrypt_disk.diamond
+  qa:
+    - test
+    - name: encrypt_disk
+    - doc: {{ opts['cachedir'] }}/doc/output
+    - require:
+      - monitoring: test
       - cmd: doc

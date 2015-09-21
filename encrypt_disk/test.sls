@@ -5,7 +5,6 @@ include:
 
 {%- set enc = salt["pillar.get"]("encrypt_disk", {}) %}
 {%- for disk in enc %}
-  {%- set device_name = disk|replace("/", "_") %}
 allocate_disk_{{ disk }}:
   cmd:
     - run

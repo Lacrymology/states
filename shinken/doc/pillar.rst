@@ -57,12 +57,14 @@ shinken:users
 List contact users.
 Please replace {{ username }} by real username.
 
-.. _pillar-shinken-username-email:
+.. _pillar-shinken-users-username-email:
 
 shinken:users:{{ username }}:email
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 :doc:`index` user's email
+
+.. _pillar-shinken-users-username-password:
 
 shinken:users:{{ username }}:password
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

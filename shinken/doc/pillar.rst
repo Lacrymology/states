@@ -128,6 +128,13 @@ Example::
     private: 1.4.5.6
   monitor: False
   shinken:
+    read_only_users:
+      ro:
+        email: ro@example.com
+        password: pass
+        managed_hosts:
+          - foo
+          - bar
     architecture:
       receiver:
         - integration-0
@@ -191,6 +198,17 @@ monitoring_data
 Extra value can be passed to the Shinken for monitoring.
 
 Default: No extra value (empty dictionary ``{}``).
+
+.. _pillar-shinken-read_only_users:
+
+shinken:read_only_users
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Data formed as a dict with key is the username and value is another dict (see
+below for details). They are read-only users which don't have permission to
+submit commands in the web UI.
+
+Default: No read-only user (``{}``).
 
 .. _pillar-shinken-architecture-receiver:
 
@@ -281,3 +299,26 @@ The network interface of a minion which is used for monitoring.
 Default: The first network interface (``eth0``)
 
 Only used if :ref:`pillar-ip_addrs` is not defined.
+
+.. _pillar-shinken-read_only_users-username-email:
+
+shinken:read_only_users:{{ username }}:email
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Same as :ref:`pillar-shinken-users-username-email` but for read-only users.
+
+.. _pillar-shinken-read_only_users-username-password:
+
+shinken:read_only_users:{{ username }}:password
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Same as :ref:`pillar-shinken-users-username-password` but for read-only users.
+
+.. _pillar-shinken-read_only_users-username-managed_hosts:
+
+shinken:read_only_users:{{ username }}:managed_hosts
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+List of managed hosts that the user {{ username }} is the contacts of.
+
+Default: user {{ username }} is not the contact of any host (``[]``).

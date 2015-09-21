@@ -5,7 +5,7 @@
 Encrypt Disks
 =============
 
-Secure disks encryption with dm-crypt and LUKS.
+Secure disks encryption with :ref:`glossary-dm-crypt` and :ref:`glossary-LUKS`.
 
 .. toctree::
     :glob:

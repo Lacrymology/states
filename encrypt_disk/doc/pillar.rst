@@ -33,7 +33,7 @@ Default: don't encrypt disk (``False``).
 encrypt_disk:{{ disk }}:fstype
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Type of filesystem to format the LUKS device.
+Type of filesystem to format the :ref:`glossary-LUKS` device.
 
 Default: ``ext4``.
 
@@ -42,7 +42,7 @@ Default: ``ext4``.
 encrypt_disk:{{ disk }}:block
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Mount point to mount the LUKS device to.
+Mount point to mount the :ref:`glossary-LUKS` device to.
 
 Default: don't mount (``False``).
 

@@ -739,3 +739,30 @@ query replies, to be used as tokens on which to filter for access control
 purposes.
 
 .. https://en.wikipedia.org/wiki/TCP_Wrapper - 2015-07-16
+
+.. _glossary-LUKS:
+
+LUKS
+~~~~
+
+LUKS is the standard for Linux hard disk encryption. By providing a standard
+on-disk-format, it does not only facilitate compatibility among distributions,
+but also provides secure management of multiple user passwords.  In contrast to
+existing solution, LUKS stores all setup necessary setup information in the
+partition header, enabling the user to transport or migrate his data seamlessly.
+
+.. https://gitlab.com/cryptsetup/cryptsetup - 2015-21-09
+
+.. _glossary-dm-crypt:
+
+dm-crypt
+~~~~~~~~
+
+Device-mapper is infrastructure in the Linux 2.6 and 3.x kernel that provides a
+generic way to create virtual layers of block devices.
+
+Device-mapper crypt target provides transparent encryption of block devices
+using the kernel crypto API.
+
+
+.. https://gitlab.com/cryptsetup/cryptsetup/wikis/DMCrypt - 2015-21-09

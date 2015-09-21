@@ -1,4 +1,11 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
 # {{ salt['pillar.get']('message_do_not_modify') }}
+{%- set is_test = salt['pillar.get']('__test__', False) %}
 nagios ALL=(root)NOPASSWD:/usr/lib/nagios/plugins/check_oom.py
+nagios ALL=(root) NOPASSWD:/usr/lib/nagios/plugins/check_disk -w 20% -c 10% -X tmpfs -X devtmpfs
+{%- if grains['virtual'] == 'VirtualBox' %} -X vboxsf{% endif -%}
+{%- if is_test %}
+nagios ALL=(root) NOPASSWD:/usr/lib/nagios/plugins/check_disk -w 20% -c 10% -X tmpfs -X devtmpfs
+  {%- if grains['virtual'] == 'VirtualBox' %} -X vboxsf{% endif %} -vv
+{%- endif %}

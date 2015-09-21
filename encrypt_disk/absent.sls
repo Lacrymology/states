@@ -25,7 +25,7 @@ unmount_disk_{{ disk }}:
         - cmd: cleanup_{{ disk }}
     {%- for dir in bind_dirs %}
       {%- set src = mount_point ~ dir %}
-bind_{{ dir }}:
+encrypt_disk_bind_{{ dir }}:
   mount:
     - unmounted
     - name: {{ dir }}

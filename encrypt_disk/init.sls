@@ -62,7 +62,7 @@ mount_disk_{{ disk }}:
       - cmd: disk_encryption
       {%- for dir in bind_dirs %}
         {%- set src = mount_point ~ dir %}
-bind_{{ dir }}:
+encrypt_disk_bind_{{ dir }}:
   file:
     - directory
     - name: {{ src }}
@@ -83,7 +83,7 @@ bind_{{ dir }}:
     - mkmnt: True
     - persist: False
     - require:
-      - file: bind_{{ dir }}
+      - file: encrypt_disk_bind_{{ dir }}
     - require_in:
       - cmd: disk_encryption
       {%- endfor %}

@@ -10,7 +10,7 @@ cryptsetup:
   pkg:
     - latest
     - require:
-        - cmd: apt_sources
+      - cmd: apt_sources
 
 {%- set enc = salt["pillar.get"]("encrypt_disk", {}) %}
 {%- for disk, config in enc.iteritems() %}

@@ -47,15 +47,6 @@ shinken_broker_http
 Check if the web UI is working by sending a :ref:`glossary-http` request to the
 ``/user/login`` URI and expecting a ``200 OK`` response.
 
-shinken_broker_web_cluster
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-This uses `business rules
-<http://shinken.readthedocs.org/en/latest/06_medium/business-rules.html>`_ to
-check if there is one broker is active.
-If all nodes are down, only one notification would be sent, rather than
-multiple.
-
 .. include:: /nginx/doc/monitor.inc
 
 Optional
@@ -68,3 +59,14 @@ Only use if :ref:`pillar-shinken-ssl` is turned on.
 Only use if an :ref:`glossary-IPv6` address is present.
 
 .. include:: /nginx/doc/monitor_ipv6.inc
+
+shinken_broker_web_cluster
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This uses `business rules
+<http://shinken.readthedocs.org/en/latest/06_medium/business-rules.html>`_ to
+check if there is one broker is active.
+If all nodes are down, only one notification would be sent, rather than
+multiple.
+
+Only use if the number of brokers are greater than 1.

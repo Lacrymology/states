@@ -7,6 +7,7 @@ salt_minion_procs:
   description: Salt Minion Daemon
   command: /usr/lib/nagios/plugins/check_procs -c 1:3 -a '/usr/bin/python /usr/bin/salt-minion' -u root
 
+{%- if salt['pillar.get']('salt:highstate', True) %}
 salt_minion_last_success:
   description: Salt Minion last success highstate call
   command: sudo /usr/lib/nagios/plugins/check_minion_last_success.py --formula=salt.minion --check=salt_minion_last_success
@@ -20,6 +21,7 @@ salt_minion_last_success:
   dependencies:
     {#- no alert if load is too high #}
     - load_average
+{%- endif %}
 
 salt_minion_pillar_render:
   description: Salt Minion pillar render

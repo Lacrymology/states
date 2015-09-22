@@ -44,7 +44,11 @@ define host {
     address 127.0.0.1
 }
 
-{%- set read_only_users = salt['pillar.get']('shinken:read_only_users', {}) %}
+{%- set users = salt['pillar.get']('shinken:users') -%}
+{%- set ro_users = [] -%}
+{%- for ro_user in users if salt['pillar.get']('shinken:users:' + ro_user + ':read_only', False) -%}
+    {%- do ro_users.append(ro_user) -%}
+{%- endfor %}
 
 {%- for host in mine -%}
     {%- if mine[host]['monitor'] %}
@@ -58,9 +62,9 @@ define host {
     parents {{ mine[host]['parents']|join(',') }}
         {%- endif %}
         {%- set contacts = [] -%}
-        {%- for ro_user in read_only_users -%}
+        {%- for ro_user in ro_users -%}
             {#- workaround for `LintCheckSubkeyInSaltPillar()` -#}
-            {%- set managed_hosts = salt['pillar.get']('shinken:read_only_users:' ~ ro_user ~ ':managed_hosts', []) -%}
+            {%- set managed_hosts = salt['pillar.get']('shinken:users:' ~ ro_user ~ ':managed_hosts', []) -%}
             {%- if host in managed_hosts -%}
                 {%- do contacts.append(ro_user) -%}
             {%- endif -%}
@@ -87,7 +91,7 @@ define contact {
     register 0
 }
 
-{%- if read_only_users %}
+{%- if ro_users %}
 define contact {
     name read-only-contact
     use salt-contact
@@ -101,29 +105,23 @@ define contact {
  supported by salt.
 #}
 
-{%- set users = salt['pillar.get']('shinken:users') %}
 {%- for user in users %}
 define contact {
     contact_name {{ user }}
     email {{ salt['pillar.get']('shinken:users:' + user + ':email') }}
     password {{ salt['pillar.get']('shinken:users:' + user + ':password') }}
-    use salt-contact
-}
-{%- endfor %}
-
-{%- for ro_user in read_only_users %}
-define contact {
-    contact_name {{ ro_user }}
-    email {{ salt['pillar.get']('shinken:read_only_users:' + ro_user + ':email') }}
-    password {{ salt['pillar.get']('shinken:read_only_users:' + ro_user + ':password') }}
+    {%- if salt['pillar.get']('shinken:users:' + user + ':read_only', False) %}
     use read-only-contact
+    {%- else %}
+    use salt-contact
+    {%- endif %}
 }
 {%- endfor %}
 
 define contactgroup {
     contactgroup_name admins
     alias admins
-    members {% for user in users %}{{ user }}{% if not loop.last %},{% endif %}{% endfor %}
+    members {% for user in users if not salt['pillar.get']('shinken:users:' + user + ':read_only', False) %}{{ user }}{% if not loop.last %},{% endif %}{% endfor %}
     # host notifications can be sent anytime
     host_notification_period 24x7
     # send notifications for all host states, flapping events (f), and scheduled

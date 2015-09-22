@@ -17,7 +17,7 @@
         <pullers>0</pullers>
         <hashers>0</hashers>
         <order>random</order>
-        <ignoreDelete>false</ignoreDelete>
+        <ignoreDelete>{{ config.get("ignore_delete", False)|lower}}</ignoreDelete>
     </folder>
 {%- endfor %}
 {%- for name, config in devices.iteritems() %}

@@ -128,7 +128,7 @@ Example::
     private: 1.4.5.6
   monitor: False
   shinken:
-    read_only_users:
+    users:
       ro:
         email: ro@example.com
         password: pass
@@ -199,16 +199,14 @@ Extra value can be passed to the Shinken for monitoring.
 
 Default: No extra value (empty dictionary ``{}``).
 
-.. _pillar-shinken-read_only_users:
+.. _pillar-shinken-users-username-read_only:
 
-shinken:read_only_users
-~~~~~~~~~~~~~~~~~~~~~~~
+shinken:users:{{ username }}:read_only
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Data formed as a dict with key is the username and value is another dict (see
-below for details). They are read-only users which don't have permission to
-submit commands in the web UI.
+Whether this user has only read permission in the Web UI or not.
 
-Default: No read-only user (``{}``).
+Default: is an admin and can submit the commands (``False``).
 
 .. _pillar-shinken-architecture-receiver:
 
@@ -300,25 +298,13 @@ Default: The first network interface (``eth0``)
 
 Only used if :ref:`pillar-ip_addrs` is not defined.
 
-.. _pillar-shinken-read_only_users-username-email:
+.. _pillar-shinken-users-username-managed_hosts:
 
-shinken:read_only_users:{{ username }}:email
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Same as :ref:`pillar-shinken-users-username-email` but for read-only users.
-
-.. _pillar-shinken-read_only_users-username-password:
-
-shinken:read_only_users:{{ username }}:password
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Same as :ref:`pillar-shinken-users-username-password` but for read-only users.
-
-.. _pillar-shinken-read_only_users-username-managed_hosts:
-
-shinken:read_only_users:{{ username }}:managed_hosts
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+shinken:users:{{ username }}:managed_hosts
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 List of managed hosts that the user {{ username }} is the contacts of.
 
 Default: user {{ username }} is not the contact of any host (``[]``).
+
+Only used if :ref:`pillar-shinken-users-username-read_only` is True.

@@ -21,7 +21,7 @@ pre-start script
   {%- if not salt['pillar.get']('__test__', False) %}
   grep -v "'configuration_errors': \[\]" | grep -v 'Warning :' | \{%-endif %}
   /usr/bin/mail -s 'Shinken Arbiter Config Error' \
-  {% for user in salt['pillar.get']('shinken:users') %}{{ salt['pillar.get']('shinken:users:' + user + ':email') }}{% if not loop.last %} {% endif %}{% endfor %}; \
+  {% for user in salt['pillar.get']('shinken:users') if not salt['pillar.get']('shinken:users:' + user + ':read_only', False) %}{{ salt['pillar.get']('shinken:users:' + user + ':email') }}{% if not loop.last %} {% endif %}{% endfor %}; \
   rm -f /tmp/$$.error; stop; exit 0; }
 end script
 

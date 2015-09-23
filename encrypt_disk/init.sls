@@ -63,6 +63,7 @@ mount_disk_{{ disk }}:
       {%- for dir in bind_dirs %}
         {%- set src = mount_point ~ dir %}
 encrypt_disk_bind_{{ dir }}:
+{#- only create directory if not already existed #}
   file:
     - directory
     - name: {{ src }}

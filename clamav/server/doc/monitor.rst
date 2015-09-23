@@ -35,14 +35,14 @@ Optional
 clamav_port
 ~~~~~~~~~~~
 
-Monitor :doc:`index` local port :ref:`glossary-TCP` :ref:`pillar-clamav-port`.
+Monitor :doc:`index` local port :ref:`glossary-TCP` `3310`.
 
 .. _monitor-clamav_remote_port:
 
 clamav_remote_port
 ~~~~~~~~~~~~~~~~~~
 
-Monitor :doc:`index` remote port :ref:`glossary-TCP` :ref:`pillar-clamav-port`.
+Monitor :doc:`index` remote port :ref:`glossary-TCP` `3310`.
 
 .. _monitor-clamav_last_scan:
 

@@ -26,3 +26,9 @@ postgresql:
 /var/log/postgresql/postgresql-{{ version }}-main.log:
   file:
     - absent
+
+/etc/postgresql/{{ version }}/main/pg_hba.conf:
+  file:
+    - absent
+    - require:
+      - service: postgresql

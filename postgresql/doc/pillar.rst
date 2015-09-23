@@ -192,3 +192,11 @@ postgresql:replication:standby
 List of addresses of standby nodes in cluster.
 
 Default: no standby node (``[]``).
+
+postgresql:remote
+~~~~~~~~~~~~~~~~~
+
+List of :ref:`glossary-CIDR` format networks that are allowed to connect to
+:doc:`index` remotely.
+
+Default: allow no remote connection (``[]``).

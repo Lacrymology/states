@@ -108,6 +108,9 @@ local   all             postgres                                peer
 local   all             all                                     peer
 host    all             all             127.0.0.1/32            md5
 host    all             all             ::1/128                 md5
+{%- for cidr in salt["pillar.get"]("postgresql:remote", []) %}
+host    all             all             {{ cidr }}              md5
+{%- endfor %}
 {%- if master|default(False) %}
 local   replication     postgres                                peer
   {%- for standby in salt['pillar.get']('postgresql:replication:standby', []) %}

@@ -249,7 +249,6 @@ service: nagios-nrpe-server #}
       - pkg: sudo
     - require_in:
       - file: nsca-nrpe
-      - pkg: nagios-nrpe-server
 
 /usr/lib/nagios/plugins/check_udp_listen:
   pkg:

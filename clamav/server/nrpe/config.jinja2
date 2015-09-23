@@ -16,7 +16,7 @@ clamav_procs:
 {%- if mode == "network" %}
 clamav_port:
   description: ClamAV Port
-  command: "/usr/lib/nagios/plugins/check_tcp -H {{ salt['mine.get'](server_minion_id, 'monitoring.data')[server_minion_id]['ip_addrs']['private'] }} -p 3310"
+  command: "/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p 3310"
   dependencies:
     - clamav_procs
 

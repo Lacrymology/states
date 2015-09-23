@@ -764,5 +764,4 @@ generic way to create virtual layers of block devices.
 Device-mapper crypt target provides transparent encryption of block devices
 using the kernel crypto API.
 
-
 .. https://gitlab.com/cryptsetup/cryptsetup/wikis/DMCrypt - 2015-21-09

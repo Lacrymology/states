@@ -22,7 +22,7 @@ unmount_disk_{{ disk }}:
     - name: {{ mount_point }}
     - device: /dev/mapper/{{ device_name }}
     - require_in:
-        - cmd: cleanup_{{ disk }}
+        - cmd: encrypt_disk_cleanup_{{ disk }}
     {%- for dir in bind_dirs %}
       {%- set src = mount_point ~ dir %}
 encrypt_disk_bind_{{ dir }}:
@@ -31,11 +31,11 @@ encrypt_disk_bind_{{ dir }}:
     - name: {{ dir }}
     - device: /dev/mapper/{{ device_name }}
     - require_in:
-      - cmd: cleanup_{{ disk }}
+      - cmd: encrypt_disk_cleanup_{{ disk }}
     {%- endfor %}
   {%- endif %}
   {%- if is_test %}
-cleanup_{{ disk }}:
+encrypt_disk_cleanup_{{ disk }}:
   cmd:
     - run
     - name: cryptsetup luksClose '{{ device_name }}'
@@ -46,6 +46,6 @@ cleanup_{{ disk }}:
     - absent
     - name: '{{ disk }}'
     - require:
-      - cmd: cleanup_{{ disk }}
+      - cmd: encrypt_disk_cleanup_{{ disk }}
   {%- endif %}
 {%- endfor %}

@@ -55,7 +55,9 @@ mount_disk_{{ disk }}:
     - device: /dev/mapper/{{ device_name }}
     - fstype: {{ fstype }}
     - mkmnt: True
-    - persist: False
+    - persist: True
+    - opts:
+      - nobootwait
     - require:
       - cmd: mkfs_disk_{{ disk }}
     - require_in:
@@ -79,10 +81,11 @@ encrypt_disk_bind_{{ dir }}:
     - name: {{ dir }}
     - device: {{ src }}
     - fstype: {{ fstype }}
+    - mkmnt: True
+    - persist: True
     - opts:
       - bind
-    - mkmnt: True
-    - persist: False
+      - nobootwait
     - require:
       - file: encrypt_disk_bind_{{ dir }}
     - require_in:

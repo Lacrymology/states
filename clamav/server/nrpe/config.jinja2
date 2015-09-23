@@ -4,7 +4,6 @@
 
 {%- set mode = salt['pillar.get']('clamav:mode', 'local') %}
 {%- set server_minion_id = salt['pillar.get']('clamav:server_minion_id', grains['id']) %}
-{%- set port = salt['pillar.get']('clamav:port', 3310) %}
 
 freshclam_procs:
   description: FreshClam Daemon
@@ -17,13 +16,13 @@ clamav_procs:
 {%- if mode == "network" %}
 clamav_port:
   description: ClamAV Port
-  command: "/usr/lib/nagios/plugins/check_tcp -H {{ salt['mine.get'](server_minion_id, 'monitoring.data')[server_minion_id]['ip_addrs']['private'] }} -p {{ port }}"
+  command: "/usr/lib/nagios/plugins/check_tcp -H {{ salt['mine.get'](server_minion_id, 'monitoring.data')[server_minion_id]['ip_addrs']['private'] }} -p 3310"
   dependencies:
     - clamav_procs
 
 clamav_remote_port:
   description: ClamAV Remote Port
-  check: check_tcp!{{ port }}
+  check: check_tcp!3310
   passive: False
   dependencies:
     - clamav_procs

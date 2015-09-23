@@ -119,7 +119,6 @@ Example::
 
   clamav:
     server_minion_id: clamav
-    port: 3310
     time_limit: 10h
     exclude_paths:
       - /tmp/clamav
@@ -130,17 +129,6 @@ clamav:server_minion_id
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 The :doc:`/salt/minion/doc/index` id of the ``clamd`` server.
-
-.. _pillar-clamav-port:
-
-clamav:port
-~~~~~~~~~~~
-
-Which port ``clamd`` daemon is listening to.
-
-Default: ``3310``
-
-These are used only if :doc:`index` is running in ``network`` mode.
 
 .. _pillar-clamav-time_limit:
 

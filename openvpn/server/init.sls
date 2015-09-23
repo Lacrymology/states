@@ -189,7 +189,7 @@ openvpn_create_empty_crl_{{ instance }}:
 
 openvpn_server_csr_{{ instance }}:
   module:
-    - wait
+    - run
     - name: tls.create_csr
     - ca_name: {{ ca_name }}
     - ca_dir: '/etc/openvpn'
@@ -204,7 +204,7 @@ openvpn_server_csr_{{ instance }}:
     - OU: {{ organizational_unit }}
     - emailAddress: {{ email }}
     - unless: test -f /etc/openvpn/{{ instance }}/server.crt
-    - watch:
+    - require:
       - module: openvpn_ca
 
 openvpn_server_cert_{{ instance }}:

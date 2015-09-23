@@ -178,13 +178,14 @@ openvpn_{{ instance }}_client:
 
 openvpn_create_empty_crl_{{ instance }}:
   module:
-    - wait
+    - run
     - name: tls.create_empty_crl
     - ca_dir: '/etc/openvpn'
     - ca_filename: 'ca'
     - ca_name: {{ ca_name }}
     - crl_file: '/etc/openvpn/{{ instance }}/crl.pem'
-    - watch:
+    - unless: test -f /etc/openvpn/{{ instance }}/crl.pem
+    - require:
       - module: openvpn_ca
 
 openvpn_server_csr_{{ instance }}:

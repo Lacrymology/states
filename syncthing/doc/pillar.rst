@@ -85,12 +85,17 @@ Example::
       test:
         path: /usr/local/test # optional, default to /var/lib/syncthing/test
         readonly: True # optional, default to False
+        ignore_delete: True # optional, default to False
         devices:
           - device-1
           - device-2
 
 Devices attribute must be a list of devices define in
 :ref:`pillar-syncthing-devices`.
+
+`ignore_delete <http://docs.syncthing.net/advanced/folder-ignoredelete.html>`_
+causes the shared directory to ignore all delete instructions. This is an
+advance feature, be careful when using it.
 
 :doc:`index` formula implicitly defines a folder with following config::
 

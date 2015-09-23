@@ -93,7 +93,7 @@ postgresql:
     - managed
     - template: jinja
     - source: salt://postgresql/server/pg_hba.jinja2
-    - user: postgres
+    - user: root
     - group: postgres
     - mode: 440
     - require:

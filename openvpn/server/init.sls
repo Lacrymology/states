@@ -204,7 +204,7 @@ openvpn_server_csr_{{ instance }}:
     - O: {{ organization }}
     - OU: {{ organizational_unit }}
     - emailAddress: {{ email }}
-    - unless: test -f /etc/openvpn/{{ instance }}/server.crt
+    - unless: test -f /etc/openvpn/{{ instance }}/server.csr
     - require:
       - module: openvpn_ca
 

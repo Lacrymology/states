@@ -13,6 +13,7 @@ openvpn-{{ instance }}:
     - template: jinja
     - require:
       - file: /etc/openvpn/{{ instance }}/config
+      - file: /etc/openvpn/{{ instance }}/ccd
       - file: /var/lib/openvpn
       - file: /var/run/openvpn
       - file: /var/log/openvpn

@@ -1,5 +1,6 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
+{%- set is_test = salt['pillar.get']('__test__', False) %}
 cryptsetup:
   pkg:
     - purged
@@ -9,13 +10,13 @@ cryptsetup:
     - require:
       - pkg: cryptsetup
 
-{%- set enc = salt["pillar.get"]("encrypt_disk", {}) %}
-{%- set is_test = salt['pillar.get']('__test__', False) %}
-{%- for disk, config in enc.iteritems() %}
-  {%- set device_name = disk|replace("/", "_") %}
-  {%- set mount_point = salt["pillar.get"]("encrypt_disk:" ~ disk ~ ":block", False) %}
-  {%- set bind_dirs = salt["pillar.get"]("encrypt_disk:" ~ disk ~ ":bind", []) %}
-  {%- if mount_point %}
+{%- if is_test %}
+  {%- set enc = salt["pillar.get"]("encrypt_disk", {}) %}
+  {%- for disk, config in enc.iteritems() %}
+    {%- set device_name = disk|replace("/", "_") %}
+    {%- set mount_point = salt["pillar.get"]("encrypt_disk:" ~ disk ~ ":block", False) %}
+    {%- set bind_dirs = salt["pillar.get"]("encrypt_disk:" ~ disk ~ ":bind", []) %}
+    {%- if mount_point %}
 unmount_disk_{{ disk }}:
   mount:
     - unmounted
@@ -23,8 +24,8 @@ unmount_disk_{{ disk }}:
     - device: /dev/mapper/{{ device_name }}
     - require_in:
         - cmd: encrypt_disk_cleanup_{{ disk }}
-    {%- for dir in bind_dirs %}
-      {%- set src = mount_point ~ dir %}
+      {%- for dir in bind_dirs %}
+        {%- set src = mount_point ~ dir %}
 encrypt_disk_bind_{{ dir }}:
   mount:
     - unmounted
@@ -32,9 +33,8 @@ encrypt_disk_bind_{{ dir }}:
     - device: /dev/mapper/{{ device_name }}
     - require_in:
       - cmd: encrypt_disk_cleanup_{{ disk }}
-    {%- endfor %}
-  {%- endif %}
-  {%- if is_test %}
+      {%- endfor %}
+    {%- endif %}
 encrypt_disk_cleanup_{{ disk }}:
   cmd:
     - run
@@ -47,5 +47,5 @@ encrypt_disk_cleanup_{{ disk }}:
     - name: '{{ disk }}'
     - require:
       - cmd: encrypt_disk_cleanup_{{ disk }}
-  {%- endif %}
-{%- endfor %}
+  {%- endfor %}
+{%- endif %}

@@ -87,3 +87,16 @@ postgresql:
       - pkg: postgresql
     - require_in:
       - service: postgresql
+
+/etc/postgresql/{{ version }}/main/pg_hba.conf:
+  file:
+    - managed
+    - template: jinja
+    - source: salt://postgresql/server/pg_hba.jinja2
+    - user: root
+    - group: postgres
+    - mode: 440
+    - require:
+      - pkg: postgresql
+    - watch_in:
+      - service: postgresql

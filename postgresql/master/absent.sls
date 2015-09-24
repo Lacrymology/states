@@ -4,9 +4,3 @@
 {% set version = postgresql.version %}
 include:
   - postgresql.server.absent
-
-/etc/postgresql/{{ version }}/main/pg_hba.conf:
-  file:
-    - absent
-    - require:
-      - service: postgresql

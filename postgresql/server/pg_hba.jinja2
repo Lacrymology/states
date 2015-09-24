@@ -1,0 +1,16 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst #}
+# {{ salt['pillar.get']('message_do_not_modify') }}
+{#- http://www.postgresql.org/docs/devel/static/auth-pg-hba-conf.html #}
+local all postgres peer
+local all all peer
+host all all 127.0.0.1/32 md5
+host all all ::1/128 md5
+{%- for cidr in salt["pillar.get"]("postgresql:remote", []) %}
+host all all {{ cidr }} md5
+{%- endfor %}
+{%- if master|default(False) %}
+local replication postgres peer
+  {%- for standby in salt['pillar.get']('postgresql:replication:standby', []) %}
+host replication replication_agent {{ standby }}/32 trust
+  {%- endfor %}
+{%- endif %}

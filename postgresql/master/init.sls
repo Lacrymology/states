@@ -34,26 +34,6 @@ standby servers.
 include:
   - postgresql.server
 
-extend:
-  postgresql:
-    file:
-      - context:
-          version: {{ version }}
-          role: master
-
-/etc/postgresql/{{ version }}/main/pg_hba.conf:
-  file:
-    - managed
-    - template: jinja
-    - source: salt://postgresql/master/pg_hba.jinja2
-    - user: postgres
-    - group: postgres
-    - mode: 440
-    - require:
-      - pkg: postgresql
-    - watch_in:
-      - service: postgresql
-
 replication_agent:
   postgres_user:
     - present
@@ -62,3 +42,14 @@ replication_agent:
     - superuser: True
     - require:
       - service: postgresql
+
+extend:
+  /etc/postgresql/{{ version }}/main/pg_hba.conf:
+    file:
+      - context:
+          master: True
+  postgresql:
+    file:
+      - context:
+          version: {{ version }}
+          role: master

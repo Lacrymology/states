@@ -14,4 +14,4 @@ pre-start script
   install -o root -g root -m 770 -d /var/run/openvpn
 end script
 
-exec /usr/sbin/openvpn --config /etc/openvpn/{{ identifier }}/config
+exec /usr/sbin/openvpn --config /etc/openvpn/{{ instance }}/config

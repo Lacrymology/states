@@ -20,6 +20,7 @@ openvpn-{{ instance }}:
         identifier: {{ instance }}
   service:
     - running
+    - enable: True
     - order: 50
     - watch:
       - file: openvpn-{{ instance }}

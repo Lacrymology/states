@@ -27,7 +27,7 @@ openvpn_diamond_collector:
     - require:
       - file: /etc/diamond/collectors
     {%- for instance in servers %}
-      - service: openvpn-{{ instance }}
+      - process: openvpn-{{ instance }}
     {%- endfor %}
     - watch_in:
       - service: diamond

@@ -6,11 +6,11 @@
 
   {%- for mount in bind_dirs %}
 free_disks_space{{ mount|replace("/", "_") }}:
-  description: Disk free of {{ mount }}
+  description: Free space of {{ mount }}
   command: sudo /usr/lib/nagios/plugins/check_disk -w 20% -c 10% -p {{ mount }}
   {%- endfor %}
 
 free_disks_space{{ mount_point|replace("/", "_") }}:
-  description: Disk free of {{ mount_point }}
+  description: Free space of {{ mount_point }}
   command: sudo /usr/lib/nagios/plugins/check_disk -w 20% -c 10% -p {{ mount_point }}
 {%- endfor %}

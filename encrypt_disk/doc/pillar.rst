@@ -16,6 +16,8 @@ Example::
       bind:
         - /root/.gnupg
 
+.. _pillar-encrypt_disk:
+
 encrypt_disk
 ~~~~~~~~~~~~
 

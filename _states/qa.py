@@ -24,8 +24,8 @@ def _contains(iterable, elem):
     Returns whether an element matches any of an iterable
     of "template" names (such as `foo:{{ id }}:bar`)
     """
-    _key_re = re.compile(r'{{ ([\w\-\_\.]+) }}')
-    sub_key = r"([\w\-\_\.]+)"
+    _key_re = re.compile(r'{{ ([\w\-\_\.\/]+) }}')
+    sub_key = r"([\w\-\_\.\/]+)"
     for key in iterable:
         # transform {{ xxx }} into ([\w\d_]+)
         key_re = r"^({})$".format(_key_re.sub(sub_key, key))

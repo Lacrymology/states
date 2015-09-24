@@ -1,0 +1,16 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst #}
+{%- set enc = salt["pillar.get"]("encrypt_disk", {}) %}
+{%- for disk, config in enc.iteritems() %}
+  {%- set mount_point = salt["pillar.get"]("encrypt_disk:" ~ disk ~ ":block", False) %}
+  {%- set bind_dirs = salt["pillar.get"]("encrypt_disk:" ~ disk ~ ":bind", []) %}
+
+  {%- for mount in bind_dirs %}
+free_disks_space{{ mount|replace("/", "_") }}:
+  description: Free space of {{ mount }}
+  command: sudo /usr/lib/nagios/plugins/check_disk -w 20% -c 10% -p {{ mount }}
+  {%- endfor %}
+
+free_disks_space{{ mount_point|replace("/", "_") }}:
+  description: Free space of {{ mount_point }}
+  command: sudo /usr/lib/nagios/plugins/check_disk -w 20% -c 10% -p {{ mount_point }}
+{%- endfor %}

@@ -1,0 +1,15 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst #}
+# {{ salt['pillar.get']('message_do_not_modify') }}
+{%- set enc = salt["pillar.get"]("encrypt_disk", {}) %}
+{%- set is_test = salt['pillar.get']('__test__', False) %}
+{%- for disk, config in enc.iteritems() %}
+  {%- set mount_point = salt["pillar.get"]("encrypt_disk:" ~ disk ~ ":block", False) %}
+  {%- set bind_dirs = salt["pillar.get"]("encrypt_disk:" ~ disk ~ ":bind", []) %}
+nagios ALL=(root) NOPASSWD:/usr/lib/nagios/plugins/check_disk -w 20% -c 10% -p {{ mount_point }}
+  {%- if is_test %}
+nagios ALL=(root) NOPASSWD:/usr/lib/nagios/plugins/check_disk -w 20% -c 10% -p {{ mount_point }} -vv
+  {%- endif %}
+  {%- for mount in bind_dirs %}
+nagios ALL=(root) NOPASSWD:/usr/lib/nagios/plugins/check_disk -w 20% -c 10% -p {{ mount }}
+  {%- endfor %}
+{%- endfor %}

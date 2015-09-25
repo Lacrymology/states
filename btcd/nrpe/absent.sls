@@ -1,3 +1,3 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst #}
-{%- from "upstart/absent.sls" import upstart_absent with context %}
-{{ upstart_absent("btcd") }}
+{%- from "nrpe/passive.jinja2" import passive_absent with context %}
+{{ passive_absent("btcd") }}

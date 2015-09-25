@@ -43,6 +43,16 @@ bind:forwarders
 
 Default: does not use forwarder (``[]``).
 
+.. _pillar-bind-tsig_key:
+
+bind:tsig_key
+~~~~~~~~~~~~~
+
+HMAC-MD5 TSIG key created by dnssec-keygen tool. Used for updating DNS
+information dynamically from a remote client.
+
+Default: does not provide any key, disable dynamic update (``None``).
+
 .. _pillar-bind-zones:
 
 bind:zones
@@ -76,6 +86,15 @@ List of forwarders that this server will forward the queries that it cannot
 satisfy from its cache to another caching name server.
 
 Default: no forward queries (``[]``).
+
+.. _pillar-bind-zones-{{ zone_name }}-allow_dynamic:
+
+bind:zones:{{ zone_name }}:allow_dynamic
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Allowing dynamic update for the zone.
+
+Default: disable (``False``).
 
 .. _pillar-bind-zones-{{ zone_name }}-masters:
 

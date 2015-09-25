@@ -5,6 +5,7 @@
 {%- set vpn_instance = salt['pillar.get']('openvpn:servers:' ~ instance) %}
 {%- set topology = salt['pillar.get']('openvpn:servers:' ~ instance + ':topology', 'subnet') %}
 {%- set server = vpn_instance['server']%}
+{%- set server_ipv6 = vpn_instance['server-ipv6']%}
 {%- set server_octets = server.split()[0].split('.') %}
 {%- set server_netmask = server.split()[1] %}
 {%- set server_last_octet = server_octets[3]|int + 1 %}
@@ -29,9 +30,12 @@ ifconfig-pool {{ vpn_instance['ifconfig-pool'] }} {{ server_netmask }}
     {%- elif topology == "net30" %}
 ifconfig {{ server_ip }} {{ server_octets[0] + "." + server_octets[1] + "." + server_octets[2] + "." + (server_last_octet + 1)|string }}
 ifconfig-pool {{ vpn_instance['ifconfig-pool'] }}
-    {%- endif -%}
+    {%- endif %}
+ifconfig-ipv6 {{ salt['common.calc_range'](server_ipv6)[1]|string }} {{ salt['common.calc_range'](server_ipv6)[2]|string }}
+ifconfig-ipv6-pool {{ vpn_instance['ifconfig-ipv6-pool'] }}
   {%- else %}
 server {{ server }}
+server-ipv6 {{ server_ipv6 }}
   {%- endif -%}
 {%- endblock topology %}
 

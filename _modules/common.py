@@ -10,6 +10,7 @@ import datetime
 import logging
 
 import salt._compat
+from IPy import IP
 
 logger = logging.getLogger(__name__)
 
@@ -151,3 +152,8 @@ def format_error_msg(iterable, message, sort=True):
         ))
     else:
         return ''
+
+
+def calc_range(subnet):
+    # Returns a list of IP addresses of a network
+    return IP(subnet, make_net=True)

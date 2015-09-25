@@ -118,6 +118,7 @@ openvpn_{{ instance }}_config:
       - service: openvpn-{{ instance }}
     - require:
       - file: {{ config_dir }}
+      - pkg: salt_minion_deps
 
     {%- if mode == 'static' %}
         {#- only 2 remotes are supported -#}

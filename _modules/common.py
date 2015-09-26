@@ -10,7 +10,11 @@ import datetime
 import logging
 
 import salt._compat
-from IPy import IP
+
+try:
+    from IPy import IP
+except ImportError:
+    pass
 
 logger = logging.getLogger(__name__)
 

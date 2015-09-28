@@ -5,10 +5,21 @@ organization
 #}
 include "/etc/bind/zones.rfc1918";
 
-{%- macro zone(key, args, file, masters, forwarders) %}
+{%- set tsig_key = salt['pillar.get']('bind:tsig_key', None) %}
+{%- if tsig_key %}
+key salt-managed. {
+    algorithm hmac-md5;
+    secret "{{ tsig_key }}";
+};
+{%- endif %}
+
+{%- macro zone(key, args, file, masters, forwarders, allow_dynamic) %}
 {%- set zone_type = args['type']|default('master') %}
 zone "{{ key }}" {
   type {{ zone_type }};
+  {%- if tsig_key and allow_dynamic %}
+  allow-update { key salt-managed. ;};
+  {%- endif %}
   {% if args['dnssec'] is defined and args['dnssec'] -%}
   file "/var/lib/bind/zones/{{ file }}.signed";
   {% else -%}
@@ -47,5 +58,6 @@ zone "{{ key }}" {
   {%- set file = salt['pillar.get']("bind:zones:" + key + ":file") %}
   {%- set masters = salt['pillar.get']("bind:zones:" + key + ":masters", []) %}
   {%- set forwarders = salt['pillar.get']("bind:zones:" + key + ":forwarders", []) %}
-{{ zone(key, args, file, masters, forwarders) }}
+  {%- set allow_dynamic = salt['pillar.get']("bind:zones:" + key + ":allow_dynamic", False) %}
+{{ zone(key, args, file, masters, forwarders, allow_dynamic) }}
 {% endfor %}

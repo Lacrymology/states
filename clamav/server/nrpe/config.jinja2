@@ -3,7 +3,6 @@
 # {{ salt['pillar.get']('message_do_not_modify') }}
 
 {%- set mode = salt['pillar.get']('clamav:mode', 'local') %}
-{%- set server_minion_id = salt['pillar.get']('clamav:server_minion_id', grains['id']) %}
 
 freshclam_procs:
   description: FreshClam Daemon

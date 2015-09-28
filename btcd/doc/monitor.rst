@@ -19,11 +19,11 @@ btcd_procs
 btcd_port
 ~~~~~~~~~
 
-Check if :doc:`index` is listening on :ref:`glossary-TCP` defined in
-:ref:`pillar-btcd-listen`.
+Check if :doc:`index` is listening on address and :ref:`glossary-TCP` port
+defined in :ref:`pillar-btcd-listen`.
 
 btcd_rpc_port
 ~~~~~~~~~~~~~
 
-Check if :doc:`index` is listening on :ref:`glossary-TCP` defined in
-:ref:`pillar-btcd-rpclisten`.
+Check if :doc:`index` is listening on address and :ref:`glossary-TCP` port
+defined in :ref:`pillar-btcd-rpclisten`.

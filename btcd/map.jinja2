@@ -9,7 +9,7 @@
 {%- elif grains["osarch"]== "amd64" %}
   {%- set source_hash = "md5=91510e27649d893d6d29c9f715c8e846" %}
 {%- endif %}
-{%- set install_dir = "/usr/local/btcd-" ~ version %}
+{%- set install_dir = "/usr/local/btcd/" ~ version %}
 
 {%- set btcd = {
         "version": version,

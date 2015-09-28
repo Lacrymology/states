@@ -5,7 +5,7 @@ include:
   - local
   - logrotate
 
-{{ btcd.install_dir }}:
+/usr/local/btcd:
   file:
     - directory
     - user: root
@@ -14,6 +14,25 @@ include:
     - require:
       - file: /usr/local
       - user: btcd
+
+{{ btcd.install_dir }}:
+  file:
+    - directory
+    - user: root
+    - group: btcd
+    - mode: 550
+    - require:
+      - file: /usr/local/btcd
+      - user: btcd
+
+btcd_cleanup_old_files:
+  cmd:
+    - wait
+    - name: find /usr/local/btcd -maxdepth 1 -mindepth 1 -type d ! -name '{{ btcd.version }}' -exec rm -r '{}' \;
+    - require:
+      - service: btcd
+    - watch:
+      - file: {{ btcd.install_dir }}
 
 {%- for dir in ("/var/lib/btcd", "/var/log/btcd") %}
 {{ dir }}:

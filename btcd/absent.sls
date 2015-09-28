@@ -5,7 +5,7 @@
 
 {{ upstart_absent("btcd") }}
 
-{%- for file in (btcd.install_dir, "/etc/btcd", "/var/lib/btcd",
+{%- for file in ("/usr/local/btcd", "/etc/btcd", "/var/lib/btcd",
                  "/var/log/btcd", "/etc/logrotate.d/btcd") %}
 {{ file }}:
   file:

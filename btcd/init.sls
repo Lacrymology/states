@@ -84,6 +84,7 @@ btcd:
     - watch:
       - file: btcd
       - file: /etc/btcd/btcd.conf
+      - user: btcd
 
 /etc/logrotate.d/btcd:
   file:

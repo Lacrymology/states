@@ -1,12 +1,10 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst #}
 {%- set btcd_listen = salt["pillar.get"]("btcd:listen", ":8333") %}
-{%- set btcd_listen_ip = btcd_listen.split(":")[0] %}
+{%- set btcd_listen_ip, btcd_listen_port = btcd_listen.split(":") %}
 {%- set btcd_listen_ip = "127.0.0.1" if btcd_listen_ip == "" else btcd_listen_ip %}
-{%- set btcd_listen_port = btcd_listen.split(":")[1] %}
 {%- set btcd_rpclisten = salt["pillar.get"]("btcd:rpclisten", ":8334") %}
-{%- set btcd_rpclisten_ip = btcd_rpclisten.split(":")[0] %}
+{%- set btcd_rpclisten_ip, btcd_rpclisten_port = btcd_rpclisten.split(":") %}
 {%- set btcd_rpclisten_ip = "127.0.0.1" if btcd_rpclisten_ip == "" else btcd_rpclisten_ip %}
-{%- set btcd_rpclisten_port = btcd_rpclisten.split(":")[1] %}
 
 btcd_procs:
   description: Btcd Process

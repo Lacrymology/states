@@ -1,4 +1,8 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+{# -*- ci-automatic-discovery: off -*-
+This formula needs a working DNS authoritative server to work, it
+will be tested with bind in test.sls
+#}
 
 include:
   - pip

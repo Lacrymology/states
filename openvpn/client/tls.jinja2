@@ -1,7 +1,7 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
 {%- extends "openvpn/client/base.jinja2" %}
-{%- from 'macros.jinja2' import first_ipv6 with context %}
+{%- set first_ipv6 = salt['monitoring.data']()['ip_addrs6']['public'] %}
 {%- set default_interface = salt['pillar.get']('network_interface', 'eth0') %}
 {%- set openvpn_interface = salt['pillar.get']('openvpn:public_interface', False)|default(default_interface, boolean=True) %}
 {%- if 'availabilityZone' in salt['grains.ls']() %}

@@ -5,11 +5,15 @@
 {%- set vpn_instance = salt['pillar.get']('openvpn:servers:' ~ instance) %}
 {%- set topology = salt['pillar.get']('openvpn:servers:' ~ instance ~ ':topology', 'subnet') %}
 {%- set server = vpn_instance['server']%}
-{%- set server_ipv6 = vpn_instance['server-ipv6']%}
 {%- set server_octets = server.split()[0].split('.') %}
 {%- set server_netmask = server.split()[1] %}
 {%- set server_last_octet = server_octets[3]|int + 1 %}
 {%- set server_ip = server_octets[0] + "." + server_octets[1] + "." + server_octets[2] + "." + server_last_octet|string %}
+{%- set first_ipv6 = salt['monitoring.data']()['ip_addrs6']['public'] %}
+
+{%- if first_ipv6 %}
+  {%- set server_ipv6 = vpn_instance['server-ipv6'] %}
+{%- endif %}
 
 {%- set static_ips = [] %}
 
@@ -31,11 +35,15 @@ ifconfig-pool {{ vpn_instance['ifconfig-pool'] }} {{ server_netmask }}
 ifconfig {{ server_ip }} {{ server_octets[0] + "." + server_octets[1] + "." + server_octets[2] + "." + (server_last_octet + 1)|string }}
 ifconfig-pool {{ vpn_instance['ifconfig-pool'] }}
     {%- endif %}
+    {%- if first_ipv6 %}
 ifconfig-ipv6 {{ salt['common.calc_range'](server_ipv6)[1]|string }} {{ salt['common.calc_range'](server_ipv6)[2]|string }}
 ifconfig-ipv6-pool {{ vpn_instance['ifconfig-ipv6-pool'] }}
+    {%- endif %}
   {%- else %}
 server {{ server }}
+    {%- if first_ipv6 %}
 server-ipv6 {{ server_ipv6 }}
+    {%- endif %}
   {%- endif -%}
 {%- endblock topology %}
 

@@ -16,4 +16,10 @@ setgid syncthing
 respawn
 respawn limit 10 5
 
+nice 19
+
 exec /usr/bin/syncthing -logflags=0 -home=/var/lib/syncthing
+
+post-start script
+   ionice -c3 -p $(pidof syncthing)
+end script

@@ -15,7 +15,7 @@ include:
       - file: /usr/local
       - user: btcd
 
-{%- for dir in ("/etc/btcd", "/var/lib/btcd", "/var/log/btcd") %}
+{%- for dir in ("/var/lib/btcd", "/var/log/btcd") %}
 {{ dir }}:
   file:
     - directory
@@ -25,6 +25,15 @@ include:
     - require:
       - user: btcd
 {%- endfor %}
+
+/etc/btcd:
+  file:
+    - directory
+    - user: root
+    - group: btcd
+    - mode: 750
+    - require:
+      - user: btcd
 
 /etc/btcd/btcd.conf:
   file:

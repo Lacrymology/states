@@ -8,6 +8,10 @@ LocalSocketGroup clamav
 LocalSocketMode 666
 User clamav
 {%- else %}
+    {%- set server_minion_id = salt['pillar.get']('clamav:server_minion_id', grains['id']) -%}
+    {%- if server_minion_id != grains['id'] %}
+TCPAddr {{ salt['mine.get'](server_minion_id, 'monitoring.data')[server_minion_id]['ip_addrs']['private'] }}
+    {%- endif %}
 TCPSocket 3310
 User root
 {%- endif %}

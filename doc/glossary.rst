@@ -765,3 +765,16 @@ Device-mapper crypt target provides transparent encryption of block devices
 using the kernel crypto API.
 
 .. https://gitlab.com/cryptsetup/cryptsetup/wikis/DMCrypt - 2015-21-09
+
+.. _glossary-RPC:
+
+RPC
+~~~
+
+In computer science, a remote procedure call (RPC) is an inter-process
+communication that allows a computer program to cause a subroutine or procedure
+to execute in another address space (commonly on another computer on a shared
+network) without the programmer explicitly coding the details for this remote
+interaction.
+
+.. https://en.wikipedia.org/wiki/Remote_procedure_call - 2015-25-09

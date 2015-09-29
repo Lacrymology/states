@@ -47,12 +47,12 @@ def _matches(iterable, template):
     return ''
 
 
-def test_pillar(name, pillar_doc):
+def test_pillar(name, doc):
     """
     Test pillar documentation for the given formula
 
     :param name: The name of the formula to test
-    :param pillar_doc: Absolute path to the doc build output directory
+    :param doc: Absolute path to the doc build output directory
     """
     ret = {'name': name,
            'changes': {},
@@ -63,7 +63,7 @@ def test_pillar(name, pillar_doc):
         ret['comment'] = "Skipping test because __test__ = False"
         return ret
 
-    doctrees = __salt__['qa.parse_doctrees'](pillar_doc)
+    doctrees = __salt__['qa.parse_doctrees'](doc)
     calls = __salt__['pillar.get_calls']()
     all_accessed = calls.keys()
 
@@ -188,7 +188,7 @@ def test_pillar(name, pillar_doc):
     return ret
 
 
-def test_monitor(name, monitor_doc, additional=None):
+def test_monitor(name, doc, additional=None):
     '''
     Test monitor documentation for the given formula
 
@@ -196,7 +196,7 @@ def test_monitor(name, monitor_doc, additional=None):
               checks
 
     :param name: The name of the formula to test
-    :param monitor_doc: Absolute path to the doc build output directory
+    :param doc: Absolute path to the doc build output directory
     :param additional: Additional formulas to test
     '''
     if additional is None:
@@ -232,7 +232,7 @@ def test_monitor(name, monitor_doc, additional=None):
     logger.debug("Found %d for all %d formulas: %s", len(check_names),
                  len(formulas), ','.join(check_names))
 
-    doctrees = __salt__['qa.parse_doctrees'](monitor_doc)
+    doctrees = __salt__['qa.parse_doctrees'](doc)
 
     # extract documented check names and errors
     doc_names = []

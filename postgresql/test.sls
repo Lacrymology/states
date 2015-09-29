@@ -47,7 +47,7 @@ test:
     - additional:
       - postgresql.server
       - postgresql.server.backup
-    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - doc: {{ opts['cachedir'] }}/doc/output
     - require:
       - monitoring: test
       - cmd: doc
@@ -56,7 +56,7 @@ test_postgresql_common:
   qa:
     - test_monitor
     - name: postgresql.common
-    - monitor_doc: {{ opts['cachedir'] }}/doc/output
+    - doc: {{ opts['cachedir'] }}/doc/output
     - require:
       - monitoring: test
       - cmd: doc

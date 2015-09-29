@@ -14,7 +14,7 @@ test:
   qa:
     - test_pillar
     - name: php
-    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - doc: {{ opts['cachedir'] }}/doc/output
     - require:
       - monitoring: test
       - cmd: doc

@@ -45,7 +45,7 @@ test:
 {%- for role in roles %}
       - shinken.{{ role }}
 {%- endfor %}
-    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - doc: {{ opts['cachedir'] }}/doc/output
     - require:
       - monitoring: test
       - cmd: doc
@@ -55,7 +55,7 @@ test_{{ role }}:
   qa:
     - test_monitor
     - name: shinken.{{ role }}
-    - monitor_doc: {{ opts['cachedir'] }}/doc/output
+    - doc: {{ opts['cachedir'] }}/doc/output
     - require:
       - monitoring: test
       - cmd: doc

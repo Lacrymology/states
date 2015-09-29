@@ -3,7 +3,6 @@
 # {{ salt['pillar.get']('message_do_not_modify') }}
 {%- set vpn_instance = salt['pillar.get']('openvpn:servers:' ~ instance) %}
 dev {{ vpn_instance['device'] | default('tun') }}
-tun-ipv6
 proto {{ vpn_instance['protocol'] | default('udp') }}
 resolv-retry infinite
 nobind

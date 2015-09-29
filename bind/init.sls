@@ -93,15 +93,17 @@ bind_zone_dir:
       - pkg: bind
 
 {%- for zonename in salt['pillar.get']('bind:zones', {}) %}
+  {%- set zonepath = '/var/lib/bind/zones/' ~ salt['pillar.get']("bind:zones:" + zonename + ":file") %}
 bind_{{ zonename }}_zone_file:
   file:
     - managed
-    - name: /var/lib/bind/zones/{{ salt['pillar.get']("bind:zones:" + zonename + ":file") }}
+    - name: {{ zonepath }}
     - source: salt://bind/zone.jinja2
     - template: jinja
     - mode: 440
     - user: root
     - group: bind
+    - onlyif: test -e {{ zonepath }} {#- bind will update the zone file if dynamic update is used, do not override the data #}
     - context:
         zonename: {{ zonename }}
         zonedata: {{ salt['pillar.get']('bind:zones:' ~ zonename) }}

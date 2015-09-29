@@ -103,7 +103,7 @@ bind_{{ zonename }}_zone_file:
     - mode: 440
     - user: root
     - group: bind
-    - onlyif: test -e {{ zonepath }} {#- bind will update the zone file if dynamic update is used, do not override the data #}
+    - unless: test -e {{ zonepath }} {#- bind will update the zone file if dynamic update is used, do not override the data #}
     - context:
         zonename: {{ zonename }}
         zonedata: {{ salt['pillar.get']('bind:zones:' ~ zonename) }}

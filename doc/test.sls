@@ -47,6 +47,6 @@ doc-pillar-documented-different-default:
   qa:
     - test_pillar
     - name: common
-    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - doc: {{ opts['cachedir'] }}/doc/output
     - require:
       - cmd: doc

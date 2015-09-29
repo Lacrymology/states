@@ -258,7 +258,7 @@ test:
     - doc: {{ opts['cachedir'] }}/doc/output
 {%- else %}
     - test_pillar
-    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - doc: {{ opts['cachedir'] }}/doc/output
 {%- endif %}
     - name: mail.server
     - require:

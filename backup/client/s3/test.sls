@@ -106,7 +106,7 @@ test:
   qa:
     - test_pillar
     - name: backup.client.s3
-    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - doc: {{ opts['cachedir'] }}/doc/output
     - require:
       - monitoring: test
       - cmd: doc

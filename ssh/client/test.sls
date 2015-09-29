@@ -12,7 +12,7 @@ test:
   qa:
     - test_pillar
     - name: ssh.client
-    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - doc: {{ opts['cachedir'] }}/doc/output
     - require:
       - monitoring: test
       - cmd: doc

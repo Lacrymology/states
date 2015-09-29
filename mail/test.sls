@@ -8,6 +8,6 @@ test:
   qa:
     - test_pillar
     - name: mail
-    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - doc: {{ opts['cachedir'] }}/doc/output
     - require:
       - cmd: doc

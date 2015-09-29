@@ -12,7 +12,7 @@ test:
   qa:
     - test_pillar
     - name: openvpn.client
-    - pillar_doc: {{ opts['cachedir'] }}/doc/output
+    - doc: {{ opts['cachedir'] }}/doc/output
     - require:
       - monitoring: test
       - cmd: doc
@@ -22,7 +22,7 @@ openvpn_client_monitor_doc:
   qa:
     - test_monitor
     - name: openvpn.client
-    - monitor_doc: {{ opts['cachedir'] }}/doc/output
+    - doc: {{ opts['cachedir'] }}/doc/output
     - require:
       - monitoring: test
       - cmd: doc

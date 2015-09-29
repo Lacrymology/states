@@ -21,6 +21,6 @@ test:
   qa:
     - test_monitor
     - name: salt.minion
-    - monitor_doc: {{ opts['cachedir'] }}/doc/output
+    - doc: {{ opts['cachedir'] }}/doc/output
     - require:
       - cmd: doc

@@ -91,10 +91,16 @@ mode: permission of PID file
     {%- endif -%}
 {%- endmacro -%}
 
-{#- get the first non loopback, link-local IPv6 address #}
-{%- for ip_addr in salt["network.ip_addrs6"]() %}
-  {%- if not (ip_addr.startswith("fe80") or _local.first_ipv6) %}
-    {%- do _local.update({"first_ipv6": ip_addr}) %}
-  {%- endif %}
-{%- endfor %}
+{#- Check if there is an IPv6 address defined in pillar or attached to the first public interface #}
+{%- set ip_addrs6 = salt['pillar.get']('ip_addrs6', {}) %}
+{%- if ip_addrs6 %}
+  {%- do _local.update({"first_ipv6": ip_addrs6['public']}) %}
+{%- else %}
+  {%- set public_interface = salt['pillar.get']('network_interface', 'eth0') %}
+  {%- for ip_addr in salt["network.ip_addrs6"](public_interface) %}
+    {%- if not (ip_addr.startswith("fe80") or _local.first_ipv6) %}
+      {%- do _local.update({"first_ipv6": ip_addr}) %}
+    {%- endif %}
+  {%- endfor %}
+{%- endif %}
 {%- set first_ipv6 = _local.first_ipv6 %}

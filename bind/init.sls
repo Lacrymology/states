@@ -93,6 +93,8 @@ bind_zone_dir:
       - pkg: bind
 
 {%- for zonename in salt['pillar.get']('bind:zones', {}) %}
+  {%- set zonedata =  salt['pillar.get']("bind:zones:" ~ zonename) %}
+  {%- if 'masters' not in zonedata %} {#- filter out the master zones #}
   {%- set zonepath = '/var/lib/bind/zones/' ~ salt['pillar.get']("bind:zones:" + zonename + ":file") %}
 bind_{{ zonename }}_zone_file:
   file:
@@ -112,4 +114,5 @@ bind_{{ zonename }}_zone_file:
       - pkg: bind
     - watch_in:
       - service: bind
+  {%- endif %}
 {%- endfor %}

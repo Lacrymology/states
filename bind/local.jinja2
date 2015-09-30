@@ -20,12 +20,14 @@ zone "{{ key }}" {
 
   {% if zone_type == "master" %}
   notify {{ args['notify']|default('no') }};
+  allow-update {
     {%- if tsig_key and allow_dynamic %}
-  allow-update { key salt-managed. ;};
+    key salt-managed. ;
     {%- endif %}
     {% if args['allow-update'] is defined -%}
-  allow-update { {{ args['allow-update'] }}; };
+    {{ args['allow-update'] }};
     {%- endif %}
+  };
     {%- if args.update_policy is defined %}
   update-policy { {{ args.update_policy|join(';\n') }}; };
     {%- endif %}

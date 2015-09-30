@@ -16,4 +16,4 @@ syncthing_diamond_resources:
     - text:
       - |
         [[syncthing]]
-        cmdline = ^\/usr\/bin\/syncthing -logflags=0 -home=\/var\/lib\/syncthing
+        cmdline = ^\/usr\/bin\/syncthing -logflags=0 -home=\/etc\/syncthing

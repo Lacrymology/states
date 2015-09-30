@@ -2,6 +2,7 @@
 {%- from 'nrpe/passive.jinja2' import passive_check with context %}
 {%- set hostnames = salt["pillar.get"]("syncthing:hostnames", [])|default(False, boolean=True) %}
 include:
+  - syncthing
   - apt.nrpe
   - rsyslog.nrpe
 {%- if salt['pillar.get']('syncthing:ssl', False) %}
@@ -16,3 +17,11 @@ include:
 {%- else %}
   {{ passive_check('syncthing') }}
 {%- endif %}
+
+extend:
+  nagios-nrpe-server:
+    user:
+      - groups:
+        - syncthing
+      - require:
+        - user: syncthing

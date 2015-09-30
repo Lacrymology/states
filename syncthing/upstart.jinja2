@@ -18,7 +18,7 @@ respawn limit 10 5
 
 nice 19
 
-exec /usr/bin/syncthing -logflags=0 -home=/var/lib/syncthing
+exec /usr/bin/syncthing -logflags=0 -home=/etc/syncthing
 
 post-start script
    ionice -c3 -p $(pidof syncthing)

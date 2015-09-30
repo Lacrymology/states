@@ -14,39 +14,34 @@ key salt-managed. {
 {%- endif %}
 
 {%- macro zone(key, args, file, masters, forwarders, allow_dynamic) %}
-{%- set zone_type = args['type']|default('master') %}
+{%- set zone_type = 'slave' if masters else 'master' %}
 zone "{{ key }}" {
   type {{ zone_type }};
-  {%- if tsig_key and allow_dynamic %}
+
+  {% if zone_type == "master" %}
+  notify {{ args['notify']|default('no') }};
+    {%- if tsig_key and allow_dynamic %}
   allow-update { key salt-managed. ;};
+    {%- endif %}
+    {% if args['allow-update'] is defined -%}
+  allow-update { {{ args['allow-update'] }}; };
+    {%- endif %}
+    {%- if args.update_policy is defined %}
+  update-policy {
+    {{ args.update_policy|join(';\n') }}
+  };
+    {%- endif %}
+  {%- else %}
+  notify no;
+  masters { {{ masters|join(';') }} };
   {%- endif %}
+
   {% if args['dnssec'] is defined and args['dnssec'] -%}
   file "/var/lib/bind/zones/{{ file }}.signed";
   {% else -%}
   file "/var/lib/bind/zones/{{ file }}";
   {%- endif %}
-  {% if args['allow-update'] is defined -%}
-  allow-update { {{args['allow-update']}}; };
-  {%- endif %}
-  {%- if args.update_policy is defined %}
-  update-policy {
-  {%-   for policy in args.update_policy %}
-    {{ policy }};
-  {%- endfor %}
-  };
-  {%- endif %}
-  {% if zone_type == "master" -%}
-    {% if 'notify' in args -%}
-  notify yes;
-    {% else -%}
-  notify no;
-    {%- endif -%}
-  {% else -%}
-  notify no;
-    {%- if masters %}
-  masters { {% for ip in masters %}{{ ip }};{% endfor %} };
-    {%- endif %}
-  {%- endif %}
+
     {%- if forwarders %}
   forward only;
   forwarders { {% for fwd in forwarders %}{{ fwd }}; {% endfor -%} };

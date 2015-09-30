@@ -406,6 +406,7 @@ openvpn_revoke_client_cert_{{ r_client }}:
       - module: openvpn_create_empty_crl_{{ instance }}
       - module: openvpn_server_cert_{{ instance }}
       - file: /etc/default/openvpn
+      - file: {{ config_dir }}/ccd
 {%- endcall -%}
     {%- endif %}{# tls -#}
 {%- endfor -%}

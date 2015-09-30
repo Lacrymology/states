@@ -24,8 +24,8 @@ zone "{{ key }}" {
     {%- if tsig_key and allow_dynamic %}
     key salt-managed. ;
     {%- endif %}
-    {% if args['allow-update'] is defined -%}
-    {{ args['allow-update'] }};
+    {% if args['allow_update'] is defined -%}
+    {{ args['allow_update'] }};
     {%- endif %}
   };
     {%- if 'slaves' in args %}

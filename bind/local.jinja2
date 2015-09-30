@@ -28,9 +28,6 @@ zone "{{ key }}" {
     {{ args['allow-update'] }};
     {%- endif %}
   };
-    {%- if args.update_policy is defined %}
-  update-policy { {{ args.update_policy|join(';\n') }}; };
-    {%- endif %}
     {%- if 'slaves' in args %}
   allow-transfer { {{ args['slaves']|join(';') }}; };
     {%- endif %}

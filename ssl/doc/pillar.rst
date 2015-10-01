@@ -25,6 +25,8 @@ Format::
 Example::
 
   ssl:
+    dhparam:
+      key_size: 2048
     certs:
       example_com:
         server_crt: |
@@ -147,6 +149,18 @@ To use those SSL files in your states, you need to do the following:
     /etc/ssl/certs/{{ pillar['my_app']['ssl'] }}_chained.crt;
     tls_key = /etc/ssl/private/{{ pillar['my_app']['ssl'] }}.pem;
 
+.. _pillar-ssl-dhparam-key_size:
+
+ssl:dhparam:key_size
+~~~~~~~~~~~~~~~~~~~~
+
+Number of bits of `DH
+<http://en.wikipedia.org/wiki/Diffie–Hellman_key_exchange>`_ parameters.
+
+Default: ``2048`` bits.
+
+.. _pillar-ssl-certs:
+
 ssl:certs
 ~~~~~~~~~
 
@@ -156,6 +170,8 @@ Default: ``{}``.
 
 Conditional
 -----------
+
+.. _pillar-ssl-expiry_days:
 
 ssl:expiry_days
 ~~~~~~~~~~~~~~~
@@ -167,6 +183,8 @@ Default: ``15``.
 
 Used only if ``{{ appname }}:ssl`` is turned on.
 
+.. _pillar-ssl-certs-name-server_key:
+
 ssl:certs:{{ name }}:server_key
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -174,12 +192,16 @@ The server key.
 
 Used only if ``ssl:certs`` is defined.
 
+.. _pillar-ssl-certs-name-server_crt:
+
 ssl:certs:{{ name }}:server_crt
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The server certificate.
 
 Used only if ``ssl:certs`` is defined.
+
+.. _pillar-ssl-certs-name-ca_crt:
 
 ssl:certs:{{ name }}:ca_crt
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~

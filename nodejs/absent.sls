@@ -3,3 +3,6 @@
 nodejs:
   pkg:
     - purged
+  file:
+    - name: /etc/apt/sources.list.d/nodejs.list
+    - absent

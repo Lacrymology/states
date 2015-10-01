@@ -1,0 +1,28 @@
+{%- from "os.jinja2" import os with context %}
+
+{%- set files_archive = salt['pillar.get']('files_archive', False) %}
+{%- set mirror = files_archive|replace('https://', 'http://') if files_archive
+    else "http://archive.robotinfra.com/" %}
+
+{%- set version = salt["pillar.get"]("nodejs:version", None) %}
+{%- set precise_default = "0.10.32" %}
+{%- set trusty_default = "0.10.25" %}
+{%- set default_version = False %}
+{%- if os.is_trusty and
+       version|default(trusty_default, boolean=True) == trusty_default %}
+  {%- set default_version = True %}
+  {%- set version = trusty_default %}
+{%- elif os.is_precise and
+         version|default(precise_default, boolean=True) == precise_default %}
+  {%- set default_version = True %}
+  {%- set version = precise_default %}
+{%- endif %}
+
+{%- set repo = "deb " ~ mirror ~ "/mirror/nodejs/" ~ version ~
+               " " ~ grains["lsb_distrib_codename"] ~ " main" %}
+
+{% set nodejs = {
+    "default_version": default_version,
+    "version": version,
+    "repo": repo,
+} %}

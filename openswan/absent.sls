@@ -4,14 +4,15 @@ openswan:
   service:
     - dead
     - enable: False
+  pkg:
+    - purged
+    - require:
+      - service: openswan
   file:
     - absent
     - names:
       - /etc/ipsec.conf
       - /etc/ipsec.d
       - /etc/ipsec.secrets
-    - pkg: openswan
-  pkg:
-    - purged
     - require:
-      - service: openswan
+      - pkg: openswan

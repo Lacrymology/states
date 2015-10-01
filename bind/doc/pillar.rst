@@ -173,6 +173,16 @@ Minimum TTL field that should be exported with any :ref:`glossary-RR`
 
 Default: ``2560`` seconds.
 
+.. _pillar-bind-zones-{{ zone_name }}-slaves:
+
+bind:zones:{{ zone_name }}:slaves
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+List of IP of slaves servers of this zone. Order of elements matter, as it
+will be assigned as ns2, ns3, etc...
+
+Default: No slave server ``[]``.
+
 .. _pillar-bind-zones-{{ zone_name }}-resource_records:
 
 bind:zones:{{ zone_name }}:resource_records

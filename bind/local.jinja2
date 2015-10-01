@@ -13,23 +13,23 @@ key salt-managed. {
 };
 {%- endif %}
 
-{%- macro zone(key, args, file, masters, forwarders, allow_dynamic) %}
+{%- macro zone(zonename, zonedata, file, masters, forwarders, allow_dynamic) %}
 {%- set zone_type = 'slave' if masters else 'master' %}
-zone "{{ key }}" {
+zone "{{ zonename }}" {
   type {{ zone_type }};
 
   {% if zone_type == "master" %}
-  notify {{ args['notify']|default('no') }};
+  notify {{ zonedata['notify']|default('no') }};
   allow-update {
     {%- if tsig_key and allow_dynamic %}
     key salt-managed. ;
     {%- endif %}
-    {% if args['allow_update'] is defined -%}
-    {{ args['allow_update'] }};
+    {% if zonedata['allow_update'] is defined -%}
+    {{ zonedata['allow_update'] }};
     {%- endif %}
   };
-    {%- if 'slaves' in args %}
-  allow-transfer { {{ args['slaves']|join(';') }}; };
+    {%- if 'slaves' in zonedata %}
+  allow-transfer { {{ zonedata['slaves']|join(';') }}; };
     {%- endif %}
 
   {%- else %}
@@ -37,7 +37,7 @@ zone "{{ key }}" {
   masters { {{ masters|join(';') }}; };
   {%- endif %}
 
-  {% if args['dnssec'] is defined and args['dnssec'] -%}
+  {% if zonedata['dnssec'] is defined and zonedata['dnssec'] -%}
   file "/var/lib/bind/zones/{{ file }}.signed";
   {% else -%}
   file "/var/lib/bind/zones/{{ file }}";
@@ -50,10 +50,10 @@ zone "{{ key }}" {
 };
 {%- endmacro %}
 
-{% for key, args in salt['pillar.get']('bind:zones', {}).iteritems() -%}
-  {%- set file = salt['pillar.get']("bind:zones:" + key + ":file") %}
-  {%- set masters = salt['pillar.get']("bind:zones:" + key + ":masters", []) %}
-  {%- set forwarders = salt['pillar.get']("bind:zones:" + key + ":forwarders", []) %}
-  {%- set allow_dynamic = salt['pillar.get']("bind:zones:" + key + ":allow_dynamic", False) %}
-{{ zone(key, args, file, masters, forwarders, allow_dynamic) }}
+{% for zonename, zonedata in salt['pillar.get']('bind:zones', {}).iteritems() -%}
+  {%- set file = salt['pillar.get']("bind:zones:" + zonename + ":file") %}
+  {%- set masters = salt['pillar.get']("bind:zones:" + zonename + ":masters", []) %}
+  {%- set forwarders = salt['pillar.get']("bind:zones:" + zonename + ":forwarders", []) %}
+  {%- set allow_dynamic = salt['pillar.get']("bind:zones:" + zonename + ":allow_dynamic", False) %}
+{{ zone(zonename, zonedata, file, masters, forwarders, allow_dynamic) }}
 {% endfor %}

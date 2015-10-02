@@ -5,7 +5,7 @@
 #}
 $TTL    {{ salt['pillar.get']('bind:zones:' ~ zonename ~ ':ttl', 2560) }}
 @       IN      SOA     ns1.{{ zonename }}. {{ zonedata['admin_email']|replace('@', '.') }}. (
-                                            {{ zonedata['serial'] }};
+                                            {{ zonedata['serial']|default(1) }};
                                             {{ zonedata['refresh']|default(16384) }} ;
                                             {{ zonedata['retry']|default(2048) }} ;
                                             {{ zonedata['expire']|default(1048576) }} ;

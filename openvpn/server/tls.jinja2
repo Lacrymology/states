@@ -18,12 +18,12 @@
 {%- endfor %}
 
 {%- block topology -%}
+topology {{ topology }}
   {%- if static_ips %}
 mode server
 tls-server
 push "route-gateway {{ server_ip }}"
     {%- if topology == "subnet" %}
-topology "subnet"
 push "topology subnet"
 ifconfig {{ server_ip }} {{ server_netmask }}
 ifconfig-pool {{ vpn_instance['ifconfig-pool'] }} {{ server_netmask }}

@@ -18,8 +18,10 @@ key salt-managed. {
 zone "{{ zonename }}" {
   type {{ zone_type }};
 
-  {% if zone_type == "master" %}
-  notify {{ zonedata['notify']|default('no') }};
+  {%- if 'notify' in zonedata %}
+  notify {{ zonedata['notify'] }};
+  {%- endif %}
+  {%- if zone_type == "master" %}
   allow-update {
     {%- if tsig_key and allow_dynamic %}
     key salt-managed. ;
@@ -33,7 +35,6 @@ zone "{{ zonename }}" {
     {%- endif %}
 
   {%- else %}
-  notify no;
   masters { {{ masters|join(';') }}; };
   {%- endif %}
 

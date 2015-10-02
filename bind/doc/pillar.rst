@@ -132,7 +132,11 @@ Version number of this zone.
 .. note::
 
   This number MUST be increased everywhen there is a change in the
-  {{ zone_name }}
+  {{ zone_name }}. When :ref:`pillar-bind-zones-{{ zone_name }}-allow_dynamic`
+  is `True`, the number will be increased automatically after each change
+  by dynamic DNS.
+
+Default: ``1``.
 
 .. _pillar-bind-zones-{{ zone_name }}-refresh:
 

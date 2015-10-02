@@ -20,6 +20,15 @@ include:
   - ssl
 {%- endif %}
 
+/etc/syncthing:
+  file:
+    - directory
+    - user: syncthing
+    - group: syncthing
+    - mode: 700
+    - require:
+      - user: syncthing
+
 syncthing:
   user:
     - present
@@ -61,7 +70,18 @@ syncthing:
       - pkg: syncthing
       - file: syncthing
 
-/var/lib/syncthing/cert.pem:
+/var/lib/syncthing:
+  file:
+    - directory
+    - user: syncthing
+    - group: syncthing
+    - mode: 750
+    - require:
+      - user: syncthing
+    - watch_in:
+      - service: syncthing
+
+/etc/syncthing/cert.pem:
   file:
     - managed
     - mode: 444
@@ -69,11 +89,11 @@ syncthing:
     - group: syncthing
     - contents_pillar: syncthing:cert
     - require:
-      - user: syncthing
+      - file: /etc/syncthing
     - watch_in:
       - service: syncthing
 
-/var/lib/syncthing/key.pem:
+/etc/syncthing/key.pem:
   file:
     - managed
     - mode: 400
@@ -81,7 +101,7 @@ syncthing:
     - group: syncthing
     - contents_pillar: syncthing:key
     - require:
-      - user: syncthing
+      - file: /etc/syncthing
     - watch_in:
       - service: syncthing
 
@@ -92,7 +112,23 @@ syncthing:
 {%- do folders.update({"default": {"path": "/var/lib/syncthing/Sync", "devices": [grains["id"]]}}) %}
 {%- set devices = salt["pillar.get"]("syncthing:devices", {}) %}
 {%- do devices.update({grains["id"]: {"id": salt["pillar.get"]("syncthing:device_id")}}) %}
-/var/lib/syncthing/config.xml:
+
+{%- for id, config in folders.iteritems() %}
+  {%- set path = config.get("path", "/var/lib/syncthing/" + id) %}
+syncthing_shared_directory_{{ path }}:
+  file:
+    - directory
+    - name: {{ path }}
+    - user: syncthing
+    - group: syncthing
+    - mode: 750
+    - require:
+      - user: syncthing
+    - require_in:
+      - service: syncthing
+{%- endfor %}
+
+/etc/syncthing/config.xml:
   file:
     - managed
     - template: jinja
@@ -104,8 +140,8 @@ syncthing:
         folders: {{ folders }}
         devices: {{ devices }}
     - require:
-      - file: /var/lib/syncthing/cert.pem
-      - file: /var/lib/syncthing/key.pem
+      - file: /etc/syncthing/cert.pem
+      - file: /etc/syncthing/key.pem
     - watch_in:
       - service: syncthing
 
@@ -149,3 +185,19 @@ extend:
         - cmd: ssl_cert_and_key_for_{{ ssl }}
   {%- endif %}
 {%- endif %}
+
+{%- for file in ("cert.pem",
+                 "key.pem",
+                 "config.xml",
+                 "https-cert.pem",
+                 "https-key.pem",
+                 "index-v0.11.0.db",
+)
+%}
+syncthing_cleanup_{{ file }}:
+  file:
+    - name: /var/lib/syncthing/{{ file }}
+    - absent
+    - require:
+      - service: syncthing
+{%- endfor %}

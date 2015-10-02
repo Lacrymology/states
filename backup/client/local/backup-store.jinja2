@@ -19,3 +19,6 @@ validate_archive "$archive_file"
 backup_dir="$path/$subdir"
 mkdir -p "$backup_dir"
 mv "$archive_file" "$backup_dir"
+
+{%- block extra_commands %}
+{%- endblock %}

@@ -27,3 +27,9 @@ extend:
 /etc/apt/sources.list.d/syncthing.list:
   file:
     - absent
+
+/etc/syncthing:
+  file:
+    - absent
+    - require:
+      - service: syncthing

@@ -9,12 +9,10 @@ include:
 
 {%- set check_list = [('shinken_broker_http_port', 'Connection refused'),
                       ('shinken_broker_http', 'Connection refused'),
-                      ('shinken.broker_nginx_http', 'Invalid HTTP response'),
                       ('shinken.broker_nginx_https', 'Invalid HTTP response'),
                      ] %}
 {%- if first_ipv6 %}
-  {%- do check_list.append([
-    ('shinken.broker_nginx_http_ipv6', 'Invalid HTTP response'),
+  {%- do check_list.extend([
     ('shinken.broker_nginx_https_ipv6', 'Invalid HTTP response'),]) %}
 {%- endif %}
 

@@ -1,5 +1,11 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
-    location /robots.txt {
-        alias /var/www/robots.txt;
+{%- macro robots_location(location='/var/www') %}
+    location = /robots.txt {
+        try_files $uri @robots;
     }
+
+    location @robots {
+        root {{ location }};
+    }
+{%- endmacro %}

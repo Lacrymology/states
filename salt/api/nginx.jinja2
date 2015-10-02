@@ -31,7 +31,8 @@ server {
 
 {% include "nginx/block_hacks.jinja2" %}
 
-{% include 'nginx/location_robots.jinja2' %}
+{%- from 'nginx/location_robots.jinja2' import robots_location with context %}
+    {{ robots_location() }}
 
     location / {
         proxy_pass http://127.0.0.1:8000;

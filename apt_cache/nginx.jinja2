@@ -37,7 +37,8 @@ server {
         proxy_pass http://apt_cache;
     }
 
-{% include 'nginx/location_robots.jinja2' %}
+{%- from 'nginx/location_robots.jinja2' import robots_location with context %}
+    {{ robots_location() }}
 
     location /favicon.ico {
         deny all;

@@ -28,7 +28,8 @@ server {
 
 {% include "nginx/block_hacks.jinja2" %}
 
-{% include "nginx/location_robots.jinja2" %}
+{%- from 'nginx/location_robots.jinja2' import robots_location with context %}
+    {{ robots_location() }}
 
     location / {
         proxy_set_header X-Real-IP $remote_addr;

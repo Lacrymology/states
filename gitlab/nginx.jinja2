@@ -54,7 +54,8 @@ server {
         uwsgi_pass gitlab;
     }
 
-{% include 'nginx/location_robots.jinja2' %}
+{%- from 'nginx/location_robots.jinja2' import robots_location with context %}
+    {{ robots_location() }}
 
     location /assets/ {
         gzip_static on;

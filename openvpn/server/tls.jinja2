@@ -3,7 +3,7 @@
 {%- extends "openvpn/server/base.jinja2" %}
 
 {%- set vpn_instance = salt['pillar.get']('openvpn:servers:' ~ instance) %}
-{%- set topology = salt['pillar.get']('openvpn:servers:' ~ instance + ':topology', 'subnet') %}
+{%- set topology = salt['pillar.get']('openvpn:servers:' ~ instance ~ ':topology', 'subnet') %}
 {%- set server = vpn_instance['server']%}
 {%- set server_ipv6 = vpn_instance['server-ipv6']%}
 {%- set server_octets = server.split()[0].split('.') %}
@@ -18,12 +18,12 @@
 {%- endfor %}
 
 {%- block topology -%}
+topology {{ topology }}
   {%- if static_ips %}
 mode server
 tls-server
 push "route-gateway {{ server_ip }}"
     {%- if topology == "subnet" %}
-topology "subnet"
 push "topology subnet"
 ifconfig {{ server_ip }} {{ server_netmask }}
 ifconfig-pool {{ vpn_instance['ifconfig-pool'] }} {{ server_netmask }}

@@ -47,6 +47,7 @@ proxy_cache_path /var/cache/nginx/{{ hostnames[0] }}_{{ http_port|default(80) }}
 server {
 {% if http_port|default(80) %}
     listen {{ http_port|default(80) }};
+    listen [::]:{{ http_port|default(80) }};
 {% endif %}
 
 {% if ssl|default(False) %}

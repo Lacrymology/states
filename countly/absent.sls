@@ -7,16 +7,19 @@
   file:
     - absent
     - require:
-      - service: countly
+      - service: countly_api
+      - service: countly_dashboard
 
 /var/lib/countly:
   file:
     - absent
     - require:
-      - service: countly
+      - service: countly_api
+      - service: countly_dashboard
 
 /etc/nginx/conf.d/countly.conf:
   file:
     - absent
-    - require:
-      - service: countly
+    - require_in:
+      - service: countly_api
+      - service: countly_dashboard

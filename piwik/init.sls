@@ -195,7 +195,7 @@ piwik_initial_setup:
         --url 'http{% if ssl %}s{% endif %}://127.0.0.1'
         --user '{{ admin_username }}' --password '{{ admin_password }}'
         --email '{{ admin_email }}' --database-password '{{ db_password }}'
-        {% if is_test %}--test{% endif %}
+        --test
     - require:
       - pip: piwik_initial_setup
       - file: python

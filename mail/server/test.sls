@@ -36,6 +36,7 @@ include:
 - sls: amavis.nrpe
 - sls: amavis.diamond
 {# - sls: amavis.clamav this formula only extend this requirement fail #}
+- sls: clamav.server.apparmor
 - sls: clamav.server.nrpe
 - sls: clamav.server.diamond
 - sls: dovecot

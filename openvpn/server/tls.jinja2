@@ -17,7 +17,7 @@
   {%- do static_ips.append(client) -%}
 {%- endfor %}
 
-{%- block topology -%}
+{%- block topology %}
 topology {{ topology }}
   {%- if static_ips %}
 mode server

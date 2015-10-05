@@ -33,7 +33,8 @@ server {
 
 {% include "nginx/block_hacks.jinja2" %}
 
-{% include 'nginx/location_robots.jinja2' %}
+{%- from 'nginx/location_robots.jinja2' import robots_location with context %}
+    {{ robots_location() }}
 
 {%- set timeout = salt['pillar.get']('openerp:timeout', 60) %}
 

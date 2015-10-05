@@ -32,7 +32,8 @@ server {
         try_files $uri $uri/ /index.php?$args;
     }
 
-{% include 'nginx/location_robots.jinja2' %}
+{%- from 'nginx/location_robots.jinja2' import robots_location with context %}
+    {{ robots_location() }}
 
     location ~ \.php$ {
         gzip off;

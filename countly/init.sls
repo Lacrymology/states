@@ -158,7 +158,7 @@ countly_plugins:
     - group: www-data
     - mode: 440
     - require:
-      - archive: countly
+      - cmd: countly
       - user: web
   cmd:
     - wait

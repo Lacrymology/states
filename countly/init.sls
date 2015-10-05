@@ -98,7 +98,7 @@ countly:
     - tar_options: z
     - if_missing: {{ countly.install_dir }}/countly
     - require:
-      - file: /usr/local/countly
+      - file: {{ countly.install_dir }}
   cmd:
     - wait
     - name: npm install --verbose
@@ -170,6 +170,9 @@ countly_plugins:
       - file: countly_javascripts_min
       - file: countly_stylesheets_min
       - file: countly_localization_min
+      - file: countly_config
+      - file: countly_api_config
+      - file: countly_dashboard_config
     - watch:
       - file: countly_plugins
       - archive: countly

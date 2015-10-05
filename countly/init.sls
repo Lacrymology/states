@@ -46,7 +46,7 @@ countly_cleanup_old_files:
       - service: countly_api
       - service: countly_dashboard
     - watch:
-      - countly_install_dir
+      - file: countly_install_dir
 
 /var/lib/countly:
   file:
@@ -101,7 +101,7 @@ countly:
     - tar_options: z
     - if_missing: {{ countly.install_dir }}/countly
     - require:
-      - countly_install_dir
+      - file: countly_install_dir
   cmd:
     - wait
     - name: npm install --verbose

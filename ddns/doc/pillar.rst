@@ -15,7 +15,7 @@ Example::
   ddns:
     zone: private.example.com
     nameserver: 192.243.86.11
-    tsigkey: xdfydasfsaf+1Q==
+    tsig_key: xdfydasfsaf+1Q==
     ttl: 3000
     domains:
       - {{ grains['id'] }}

@@ -27,9 +27,10 @@ include:
       - file: /usr/local
       - user: web
 
-{{ countly.install_dir }}:
+countly_install_dir:
   file:
     - directory
+    - name: {{ countly.install_dir }}
     - user: root
     - group: www-data
     - mode: 550
@@ -45,14 +46,14 @@ countly_cleanup_old_files:
       - service: countly_api
       - service: countly_dashboard
     - watch:
-      - file: {{ countly.install_dir }}
+      - countly_install_dir
 
 /var/lib/countly:
   file:
     - directory
     - user: www-data
     - group: www-data
-    - mode: 770
+    - mode: 750
     - require:
       - user: web
 
@@ -62,7 +63,7 @@ countly-node_modules:
     - name: {{ countly.install_dir }}/countly/node_modules
     - user: www-data
     - group: www-data
-    - mode: 770
+    - mode: 750
     - require:
       - archive: countly
 
@@ -89,6 +90,8 @@ countly:
     - installed
     - pkgs:
       - imagemagick
+    - require:
+      - cmd: apt_sources
   archive:
     - extracted
     - name: {{ countly.install_dir }}
@@ -98,7 +101,7 @@ countly:
     - tar_options: z
     - if_missing: {{ countly.install_dir }}/countly
     - require:
-      - file: {{ countly.install_dir }}
+      - countly_install_dir
   cmd:
     - wait
     - name: npm install --verbose
@@ -118,7 +121,7 @@ countly_javascripts_min:
     - name: {{ countly.install_dir }}/countly/frontend/express/public/javascripts/min
     - user: www-data
     - group: www-data
-    - mode: 770
+    - mode: 750
     - require:
       - archive: countly
       - user: web
@@ -129,7 +132,7 @@ countly_stylesheets_min:
     - name: {{ countly.install_dir }}/countly/frontend/express/public/stylesheets
     - user: www-data
     - group: www-data
-    - mode: 770
+    - mode: 750
     - require:
       - archive: countly
       - user: web
@@ -140,7 +143,7 @@ countly_localization_min:
     - name: {{ countly.install_dir }}/countly/frontend/express/public/localization/min
     - user: www-data
     - group: www-data
-    - mode: 770
+    - mode: 750
     - require:
       - archive: countly
       - user: web
@@ -298,3 +301,15 @@ countly_dashboard:
 {%- endif %}
     - watch_in:
       - service: nginx
+
+{%- if ssl %}
+extend:
+  nginx.conf:
+    file:
+      - context:
+          ssl: {{ ssl }}
+  nginx:
+    service:
+      - watch:
+        - cmd: ssl_cert_and_key_for_{{ ssl }}
+{%- endif %}

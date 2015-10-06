@@ -1,7 +1,6 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
 {%- from 'cron/macro.jinja2' import test_cron with context %}
-{%- from 'macros.jinja2' import first_ipv6 with context %}
 include:
   - shinken.broker
   - shinken.broker.diamond
@@ -11,7 +10,7 @@ include:
                       ('shinken_broker_http', 'Connection refused'),
                       ('shinken.broker_nginx_https', 'Invalid HTTP response'),
                      ] %}
-{%- if first_ipv6 %}
+{%- if salt['monitoring.data']()['ip_addrs6']['public'] %}
   {%- do check_list.extend([
     ('shinken.broker_nginx_https_ipv6', 'Invalid HTTP response'),]) %}
 {%- endif %}

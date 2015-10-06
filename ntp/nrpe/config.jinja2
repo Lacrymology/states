@@ -2,7 +2,6 @@
 
 {%- set timeout = 30 -%}
 {%- set servers = salt['pillar.get']('ntp:servers', []) -%}
-{%- from 'macros.jinja2' import first_ipv6 with context %}
 
 # {{ salt['pillar.get']('message_do_not_modify') }}
 
@@ -13,7 +12,7 @@ ntp_procs:
 {%- if servers|length > 0 %}
 ntp_time:
   description: NTP clock offset between the localhost and remote server
-  command: '/usr/lib/nagios/plugins/check_ntp_time -H {{ servers[0] }} -w 2 -c 5 {% if not first_ipv6 %}-4{% endif %}'
+  command: '/usr/lib/nagios/plugins/check_ntp_time -H {{ servers[0] }} -w 2 -c 5 {% if not salt['monitoring.data']()['ip_addrs6']['public'] %}-4{% endif %}'
 {%- endif %}
 
 {% if salt['pillar.get']('ntp:is_server', False) %}

@@ -1,7 +1,6 @@
 # {{ salt['pillar.get']('message_do_not_modify') }}
-{%- from 'macros.jinja2' import first_ipv6 with context %}
 {# run resolvconf? #}
 RESOLVCONF=no
 
 {# startup options for the server #}
-OPTIONS="-u bind{% if not first_ipv6 %} -4{% endif %}"
+OPTIONS="-u bind{% if not salt['monitoring.data']()['ip_addrs6']['public'] %} -4{% endif %}"

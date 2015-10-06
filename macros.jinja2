@@ -3,8 +3,6 @@
 file contains all common macros
 -#}
 
-{%- set _local = {"first_ipv6": None} %}
-
 {#- when upgrading salt, it should only change salt version here and in
     bootstrap.sh (not managed by salt),
     all consumer of these macros should got it automatically,
@@ -90,17 +88,3 @@ mode: permission of PID file
         {%- endfor -%}
     {%- endif -%}
 {%- endmacro -%}
-
-{#- Check if there is an IPv6 address defined in pillar or attached to the first public interface #}
-{%- set ip_addrs6 = salt['pillar.get']('ip_addrs6', {}) %}
-{%- if ip_addrs6 %}
-  {%- do _local.update({"first_ipv6": ip_addrs6['public']}) %}
-{%- else %}
-  {%- set public_interface = salt['pillar.get']('network_interface', 'eth0') %}
-  {%- for ip_addr in salt["network.ip_addrs6"](public_interface) %}
-    {%- if not (ip_addr.startswith("fe80") or _local.first_ipv6) %}
-      {%- do _local.update({"first_ipv6": ip_addr}) %}
-    {%- endif %}
-  {%- endfor %}
-{%- endif %}
-{%- set first_ipv6 = _local.first_ipv6 %}

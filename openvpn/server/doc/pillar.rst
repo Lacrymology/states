@@ -306,6 +306,14 @@ openvpn:servers:{{ instance }}:server
 Configure server mode and supply a :ref:`glossary-VPN` subnet for :doc:`index`
 to draw client addresses from.
 
+.. _pillar-openvpn-servers-{{ instance }}-server-ipv6:
+
+openvpn:servers:{{ instance }}:server-ipv6
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Same as :ref:`pillar-openvpn-servers-{{ instance }}-server` but for
+:ref:`glossary-IPv6`.
+
 .. _pillar-openvpn-servers-{{ instance }}-ifconfig-pool:
 
 openvpn:servers:{{ instance }}:ifconfig-pool
@@ -317,6 +325,14 @@ formed as ``<start-IP> <end-IP>``.
 .. note::
 
    Static :ref:`glossary-IP` addresses should be assigned outside of this pool.
+
+.. _pillar-openvpn-servers-{{ instance }}-ifconfig-ipv6-pool:
+
+openvpn:servers:{{ instance }}:ifconfig-ipv6-pool
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Same as :ref:`pillar-openvpn-servers-{{ instance }}-ifconfig-pool` but for
+:ref:`glossary-IPv6`.
 
 .. _pillar-openvpn-servers-{{ instance }}-extra_configs:
 

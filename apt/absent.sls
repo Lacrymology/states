@@ -55,6 +55,8 @@ unattended-upgrades:
     - purged
   file:
     - absent
-    - name: /etc/apt/apt.conf.d/20auto-upgrades
+    - names:
+      - /etc/apt/apt.conf.d/20auto-upgrades
+      - /var/log/unattended-upgrades
     - require:
       - pkg: unattended-upgrades

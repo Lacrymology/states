@@ -19,9 +19,9 @@ server {
 {% endif %}
 {# web app logic #}
     server_name {% for hostname in  hostnames %}{{ hostname }}{% if not loop.last %} {% endif %}{% endfor %};
+    root /usr/local/salt-common-doc;
     location / {
         try_files $uri $uri/index.html =404;
-        root /usr/local/salt-common-doc;
         gzip_static on;
         expires max;
         add_header Cache-Control public;

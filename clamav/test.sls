@@ -12,6 +12,7 @@ include:
 
 {%- call test_cron() %}
 - file: /usr/local/bin/clamav-scan.sh
+- sls: clamav.server.apparmor
 - sls: clamav.server.nrpe
 - sls: clamav.server.diamond
 {%- endcall %}

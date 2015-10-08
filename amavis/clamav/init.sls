@@ -13,9 +13,6 @@ extend:
       - require:
         - pkg: clamav-daemon
         - pkg: amavis
-      - watch_in:
-        - service: clamav-daemon
-        - service: clamav-freshclam
   amavis:
     user:
       - groups:

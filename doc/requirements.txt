@@ -5,3 +5,4 @@ Sphinx==1.2.3
 pyyaml==3.11
 docutils==0.11
 rst2pdf==0.93
+Pillow==2.8.2

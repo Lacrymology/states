@@ -5,6 +5,7 @@ include:
   - local
   - locale
   - rsyslog
+  - sudo
 
 {%- set version = '2.1.0' -%}
 {%- set old_version = '2.0.6' -%}
@@ -176,6 +177,7 @@ orientdb-console:
       - file: /usr/local
       - user: orientdb
       - group: orientdb
+      - pkg: sudo
     - context:
         version: {{ version }}
         directory: /var/lib/orientdb

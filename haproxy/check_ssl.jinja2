@@ -1,0 +1,6 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+
+{%- set ssl_certs = [] -%}
+{%- for instance in salt['pillar.get']('haproxy:instances').itervalues() if instance.get('ssl', False) -%}
+    {%- do ssl_certs.append(instance['ssl']) -%}
+{%- endfor -%}

@@ -1,0 +1,56 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+
+# {{ salt['pillar.get']('message_do_not_modify') }}
+
+{%- from 'macros.jinja2' import dict_default with context %}
+
+{%- set first_ipv6 = salt['monitoring.data']()['ip_addrs6']['public'] %}
+
+haproxy_procs:
+  description: HAProxy Daemon
+  command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -u haproxy -C haproxy -a "-f /etc/haproxy/haproxy.cfg -D -p /var/run/haproxy.pid"'
+
+{%- for instance_name, instance in salt['pillar.get']('haproxy:instances').iteritems() %}
+  {{ dict_default(instance, 'mode', 'http') }}
+  {%- if instance['mode'] == 'http' %}
+haproxy_{{ instance_name }}_http:
+  description: HAProxy {{ instance_name }} HTTP
+  command: /usr/lib/nagios/plugins/check_http -H 127.0.0.1 -p {{ instance['port'] }}
+  dependencies:
+    - haproxy_procs
+    {{ dict_default(instance, 'ssl', False) }}
+    {%- if instance['ssl'] and first_ipv6 %}
+haproxy_{{ instance_name }}_http_ipv6:
+  description: HAProxy {{ instance_name }} HTTP IPv6
+  command: /usr/lib/nagios/plugins/check_http -S -6 -H [::1] -p {{ instance['port'] }}
+  dependencies:
+    - haproxy_procs
+    {%- elif instance['ssl'] %}
+haproxy_{{ instance_name }}_https:
+  description: HAProxy {{ instance_name }} HTTPS
+  command: /usr/lib/nagios/plugins/check_http -S -H 127.0.0.1 -p {{ instance['port'] }}
+  dependencies:
+    - haproxy_procs
+    {%- elif first_ipv6 %}
+haproxy_{{ instance_name }}_https_ipv6:
+  description: HAProxy {{ instance_name }} HTTPS IPv6
+  command: /usr/lib/nagios/plugins/check_http -6 -H [::1] -p {{ instance['port'] }}
+  dependencies:
+    - haproxy_procs
+    {%- endif %}
+  {%- endif %}
+
+haproxy_{{ instance_name }}_port:
+  description: HAProxy {{ instance_name }} Local Port
+  command: /usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p {{ instance['port'] }}
+  dependencies:
+    - haproxy_procs
+
+haproxy_{{ instance_name }}_remote_port:
+  description: HAProxy {{ instance_name }} Remote Port
+  passive: False
+  check: check_tcp!{{ instance['port'] }}
+  dependencies:
+    - haproxy_procs
+    - haproxy_{{ instance_name }}_port
+{%- endfor %}

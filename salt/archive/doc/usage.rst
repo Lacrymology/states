@@ -67,3 +67,26 @@ Or any version or codename that represent the repository status at this point.
 Replace ``$PPA_USERNAME`` and ``$PROJECT_NAME`` by the value of PPA URL:
 
 ``https://launchpad.net/~PPA_USERNAME/+archive/ubuntu/PROJECT_NAME``
+
+Mirroring apt repository with apt-mirror
+----------------------------------------
+
+Another way to mirroring apt repository is using ``apt-mirror``.
+Just fill the configuration file and then run ``apt-mirror path_to_config``,
+it will mirror all files to ``/var/spool/apt-mirror/mirror``.  For example,
+using bellow config file to mirror postgresql, say ``~/postgres_mirror``::
+
+    set nthreads     20
+    set _tilde 0
+    deb-i386 http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main
+    deb-i386 http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main
+    deb-amd64 http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main
+    deb-amd64 http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main
+
+Then run ``apt-mirror ~/postgres_mirror``, wait until it finish.
+Afterwards, to keep only interested files, run bellow commands. Here keeps
+just files relate to version 9.4 and remove unused software::
+
+    cd /var/spool/apt-mirror/mirror/apt.postgresql.org/pub/repos/apt
+    rm -r pool/main/p/{pgadmin3,pgloader,postgis}
+    find . -name '*postgresql-*' ! -name '*postgresql-9.4*' -exec rm -r {} \;

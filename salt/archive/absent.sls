@@ -13,6 +13,25 @@ salt_archive:
     - absent
     - name: /var/lib/salt_archive
 
+apt-mirror:
+  pkg:
+    - purged
+  file:
+    - absent
+    - names:
+      - /etc/apt/mirror.list
+      - /var/spool/apt-mirror
+    - require:
+      - pkg: apt-mirror
+  user:
+    - absent
+    - require:
+      - pkg: apt-mirror
+  group:
+    - absent
+    - require:
+      - pkg: apt-mirror
+
 /etc/nginx/conf.d/salt_archive.conf:
   file:
     - absent

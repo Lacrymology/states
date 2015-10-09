@@ -3,6 +3,7 @@
 {%- set ssl = salt['pillar.get']('salt_archive:ssl', False) -%}
 
 include:
+  - apt
   - bash
   - cron
   - local
@@ -98,6 +99,8 @@ salt_archive:
   pkg:
     - installed
     - name: lsof
+    - require:
+      - cmd: apt_sources
   file:
     - managed
     - user: root
@@ -185,6 +188,21 @@ archive_rsync:
 /usr/local/bin/salt_archive_clamav.sh:
   file:
     - absent
+
+apt-mirror:
+  pkg:
+    - installed
+    - require:
+      - cmd: apt_sources
+  file:
+{#- the application will be used as command line tool for developers,
+    remove all files with different usage purposes #}
+    - absent
+    - names:
+      - /etc/apt/mirror.list
+      - /etc/cron.d/apt-mirror
+    - require:
+      - pkg: apt-mirror
 
 salt-archive-clamav:
   file:

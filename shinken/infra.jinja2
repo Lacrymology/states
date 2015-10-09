@@ -5,13 +5,30 @@
 {%- from 'macros.jinja2' import dict_default with context %}
 
 {%- set mine = salt['mine.get']('*', 'monitoring.data') %}
-{%- set xmpp = salt["pillar.get"]("shinken:xmpp", False) %}
+{%- set hostname = salt['pillar.get']('shinken:hostnames')[0] %}
+{%- set ssl = salt['pillar.get']('shinken:ssl', False) %}
+{%- set scheme = 'https' if ssl else 'http' %}
+{%- set channel = salt["pillar.get"]("shinken:slack:channel", None) %}
+{%- set token = salt["pillar.get"]("shinken:slack:token", None) %}
+{%- set integrations = {
+    'xmpp': {
+        'pillar': salt["pillar.get"]("shinken:xmpp", False),
+        'notify-host': '/usr/local/shinken/bin/notify-by-xmpp --xmpp-config /etc/shinken/notify-by-xmpp.yml --mode=host --host-address="$HOSTADDRESS$" --host-alias="$HOSTALIAS$" --host-output="$HOSTOUTPUT$" --host-state="$HOSTSTATE$" --long-date-time="$LONGDATETIME$" --notification-type="$NOTIFICATIONTYPE$"',
+        'notify-service': '/usr/local/shinken/bin/notify-by-xmpp --xmpp-config /etc/shinken/notify-by-xmpp.yml --mode=service --host-address="$HOSTADDRESS$" --host-alias="$HOSTALIAS$" --host-name="$HOSTNAME$" --long-date-time="$LONGDATETIME$" --notification-type="$NOTIFICATIONTYPE$" --service-desc="$SERVICEDESC$" --service-output="$SERVICEOUTPUT$" --service-state="$SERVICESTATE$" --host-state="$HOSTSTATE$" --host-output="$HOSTOUTPUT$"'
+    },
+    'slack': {
+        'pillar': salt["pillar.get"]("shinken:slack", False),
+        'notify-host': '/usr/bin/printf "%b" "Shinken Notification\\n\\nType:$NOTIFICATIONTYPE$\\nHost: $HOSTALIAS$\\nState: $HOSTSTATE$\\nAddress: $HOSTADDRESS$\\nInfo: $HOSTOUTPUT$\\nWhen: $LONGDATETIME$\\n\\nLast Up: $LASTHOSTUP$\\nLast Down: $LASTHOSTDOWN$\\nLast Unreachable: $LASTHOSTUNREACHABLE$\\n\\nURL: ' ~ scheme ~ '://' ~ hostname ~ '/host/$HOSTNAME$ " | /usr/local/shinken/bin/slacker -c ' ~ channel ~ ' -t ' ~ token,
+        'notify-service': '/usr/bin/printf "%b" "Shinken Notification\\n\\nNotification Type: $NOTIFICATIONTYPE$\\n\\nService: $SERVICEDESC$\\nHost: $HOSTALIAS$\\nAddress: $HOSTADDRESS$\\nState: $SERVICESTATE$\\nWhen: $LONGDATETIME$\\n\\nAdditional Info : $SERVICEOUTPUT$\\n\\nLast OK: $LASTSERVICEOK$\\nLast Warning: $LASTSERVICEWARNING$\\nLast Unknown: $LASTSERVICEUNKNOWN$\\nLast Critical: $LASTSERVICECRITICAL$\\n\\nServices OK: $TOTALSERVICESOK$\\nServices Warning/Unhandled: $TOTALSERVICESWARNING$/$TOTALSERVICESWARNINGUNHANDLED$\\nServices Critical/Unhandled: $TOTALSERVICESCRITICAL$/$TOTALSERVICESCRITICALUNHANDLED$\\nServices Unknown/Unhandled: $TOTALSERVICESUNKNOWN$/$TOTALSERVICESUNKNOWNUNHANDLED$\\nTotal Services Problems/Unhandlded: $TOTALSERVICEPROBLEMS$/$TOTALSERVICEPROBLEMSUNHANDLED$\\n\\nURL: ' ~ scheme ~ '://' ~ hostname ~ '/host/$HOSTNAME$ "| /usr/local/shinken/bin/slacker -c ' ~ channel ~ ' -t ' ~ token,
+    },
+} %}
 
 define host {
     name salt-host
-{%- if xmpp %}
-    contacts xmpp
-{%- endif %}
+{%- for i in integrations if integrations[i]['pillar'] %}
+    {%- if loop.first %}
+    contacts {% endif %}{{ i }}{% if not loop.last %},{% endif %}
+{%- endfor %}
     contact_groups admins
     notification_interval 0
     first_notification_delay 0
@@ -141,44 +158,42 @@ define contactgroup {
 
 define command {
     command_name notify-host-by-email
-{%- set hostnames = salt['pillar.get']('shinken:hostnames') %}
-{%- set ssl = salt['pillar.get']('shinken:ssl', False) %}
-    command_line /usr/bin/printf "%b" "Shinken Notification\n\nType:$NOTIFICATIONTYPE$\nHost: $HOSTALIAS$\nState: $HOSTSTATE$\nAddress: $HOSTADDRESS$\nInfo: $HOSTOUTPUT$\nWhen: $LONGDATETIME$\n\nLast Up: $LASTHOSTUP$\nLast Down: $LASTHOSTDOWN$\nLast Unreachable: $LASTHOSTUNREACHABLE$\n\nURL: http{% if ssl %}s{% endif %}://{{ salt['pillar.get']('shinken:hostnames')[0] }}/host/$HOSTNAME$ " | /usr/bin/bsd-mailx -s "Host $HOSTSTATE$ alert for $HOSTNAME$!" $CONTACTEMAIL$
+    command_line /usr/bin/printf "%b" "Shinken Notification\n\nType:$NOTIFICATIONTYPE$\nHost: $HOSTALIAS$\nState: $HOSTSTATE$\nAddress: $HOSTADDRESS$\nInfo: $HOSTOUTPUT$\nWhen: $LONGDATETIME$\n\nLast Up: $LASTHOSTUP$\nLast Down: $LASTHOSTDOWN$\nLast Unreachable: $LASTHOSTUNREACHABLE$\n\nURL: {{ scheme }}://{{ hostname }}/host/$HOSTNAME$ " | /usr/bin/bsd-mailx -s "Host $HOSTSTATE$ alert for $HOSTNAME$!" $CONTACTEMAIL$
 }
 
 # send email for a service
 define command {
     command_name notify-service-by-email
-    command_line /usr/bin/printf "%b" "Shinken Notification\n\nNotification Type: $NOTIFICATIONTYPE$\n\nService: $SERVICEDESC$\nHost: $HOSTALIAS$\nAddress: $HOSTADDRESS$\nState: $SERVICESTATE$\nWhen: $LONGDATETIME$\n\nAdditional Info : $SERVICEOUTPUT$\n\nLast OK: $LASTSERVICEOK$\nLast Warning: $LASTSERVICEWARNING$\nLast Unknown: $LASTSERVICEUNKNOWN$\nLast Critical: $LASTSERVICECRITICAL$\n\nServices OK: $TOTALSERVICESOK$\nServices Warning/Unhandled: $TOTALSERVICESWARNING$/$TOTALSERVICESWARNINGUNHANDLED$\nServices Critical/Unhandled: $TOTALSERVICESCRITICAL$/$TOTALSERVICESCRITICALUNHANDLED$\nServices Unknown/Unhandled: $TOTALSERVICESUNKNOWN$/$TOTALSERVICESUNKNOWNUNHANDLED$\nTotal Services Problems/Unhandlded: $TOTALSERVICEPROBLEMS$/$TOTALSERVICEPROBLEMSUNHANDLED$\n\nURL: http{% if ssl %}s{% endif %}://{{ salt['pillar.get']('shinken:hostnames')[0] }}/host/$HOSTNAME$ "| /usr/bin/bsd-mailx -s "** $NOTIFICATIONTYPE$ alert - $HOSTALIAS$/$SERVICEDESC$ is $SERVICESTATE$ ** " $CONTACTEMAIL$
+    command_line /usr/bin/printf "%b" "Shinken Notification\n\nNotification Type: $NOTIFICATIONTYPE$\n\nService: $SERVICEDESC$\nHost: $HOSTALIAS$\nAddress: $HOSTADDRESS$\nState: $SERVICESTATE$\nWhen: $LONGDATETIME$\n\nAdditional Info : $SERVICEOUTPUT$\n\nLast OK: $LASTSERVICEOK$\nLast Warning: $LASTSERVICEWARNING$\nLast Unknown: $LASTSERVICEUNKNOWN$\nLast Critical: $LASTSERVICECRITICAL$\n\nServices OK: $TOTALSERVICESOK$\nServices Warning/Unhandled: $TOTALSERVICESWARNING$/$TOTALSERVICESWARNINGUNHANDLED$\nServices Critical/Unhandled: $TOTALSERVICESCRITICAL$/$TOTALSERVICESCRITICALUNHANDLED$\nServices Unknown/Unhandled: $TOTALSERVICESUNKNOWN$/$TOTALSERVICESUNKNOWNUNHANDLED$\nTotal Services Problems/Unhandlded: $TOTALSERVICEPROBLEMS$/$TOTALSERVICEPROBLEMSUNHANDLED$\n\nURL: {{ scheme }}://{{ hostname }}/host/$HOSTNAME$ "| /usr/bin/bsd-mailx -s "** $NOTIFICATIONTYPE$ alert - $HOSTALIAS$/$SERVICEDESC$ is $SERVICESTATE$ ** " $CONTACTEMAIL$
 }
 
-{%- if xmpp %}
+{%- for i in integrations if integrations[i]['pillar'] %}
 
 define contact {
-    contact_name xmpp
+    contact_name {{ i }}
     can_submit_commands 0
     is_admin 0
     host_notification_period 24x7
     host_notification_options d,u,r,f,s
-    host_notification_commands notify-host-by-xmpp
+    host_notification_commands notify-host-by-{{ i }}
     host_notifications_enabled 1
     service_notification_period 24x7
     service_notification_options c,w,r,u
-    service_notification_commands notify-service-by-xmpp
+    service_notification_commands notify-service-by-{{ i }}
     service_notifications_enabled 1
     register 1
 }
 
 define command {
-  command_name notify-host-by-xmpp
-  command_line /usr/local/shinken/bin/notify-by-xmpp --xmpp-config /etc/shinken/notify-by-xmpp.yml --mode=host --host-address="$HOSTADDRESS$" --host-alias="$HOSTALIAS$" --host-output="$HOSTOUTPUT$" --host-state="$HOSTSTATE$" --long-date-time="$LONGDATETIME$" --notification-type="$NOTIFICATIONTYPE$"
+    command_name notify-host-by-{{ i }}
+    command_line {{ integrations[i]['notify-host'] }}
 }
 
 define command {
-  command_name notify-service-by-xmpp
-  command_line /usr/local/shinken/bin/notify-by-xmpp --xmpp-config /etc/shinken/notify-by-xmpp.yml --mode=service --host-address="$HOSTADDRESS$" --host-alias="$HOSTALIAS$" --host-name="$HOSTNAME$" --long-date-time="$LONGDATETIME$" --notification-type="$NOTIFICATIONTYPE$" --service-desc="$SERVICEDESC$" --service-output="$SERVICEOUTPUT$" --service-state="$SERVICESTATE$" --host-state="$HOSTSTATE$" --host-output="$HOSTOUTPUT$"
+    command_name notify-service-by-{{ i }}
+    command_line {{ integrations[i]['notify-service'] }}
 }
-{%- endif %}
+{%- endfor %}
 
 define command {
     command_name check_nrpe
@@ -292,9 +307,10 @@ define service {
     # Re-check the service every three minutes until a hard state can be
     # determined
     retry_interval 3
-{%- if xmpp %}
-    contacts xmpp
-{%- endif %}
+{%- for i in integrations if integrations[i]['pillar'] %}
+    {%- if loop.first %}
+    contacts {% endif %}{{ i }}{% if not loop.last %},{% endif %}
+{%- endfor %}
     contact_groups admins
     # Send notifications about warning, unknown, critical, and recovery events
     notification_options w,u,c,r

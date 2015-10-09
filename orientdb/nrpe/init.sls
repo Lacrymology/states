@@ -5,5 +5,6 @@ include:
   - apt.nrpe
   - nrpe
   - rsyslog.nrpe
+  - sudo.nrpe
 
 {{ passive_check('orientdb') }}

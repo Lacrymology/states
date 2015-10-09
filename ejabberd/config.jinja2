@@ -63,7 +63,7 @@ Hostname
 #}
 {listen,
  [
-  {5222, ejabberd_c2s, [
+  { {5222, "::"}, ejabberd_c2s, [
                        {access, c2s},
                        {shaper, c2s_shaper},
 {%- set ssl = salt['pillar.get']('ejabberd:ssl', False) %}
@@ -77,13 +77,13 @@ Hostname
                        ]},
 
 {%- if salt['pillar.get']('ejabberd:server_to_server', False) %}
-  {5269, ejabberd_s2s_in, [
+  { {5269, "::"}, ejabberd_s2s_in, [
                           {shaper, s2s_shaper},
                           {max_stanza_size, 131072}
                           ]},
 {%- endif %}
 
-  {5280, ejabberd_http, [
+  { {5280, "::"}, ejabberd_http, [
                         %%{request_handlers,
                         %% [
                         %%  {["pub", "archive"], mod_http_fileserver}

@@ -4,7 +4,7 @@
 {%- from 'nginx/macro.jinja2' import ssl_config with context %}
 
 upstream ejabberd {
-    server 127.0.0.1:5280;
+    server localhost:5280;
 }
 
 server {

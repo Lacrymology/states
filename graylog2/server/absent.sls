@@ -30,3 +30,9 @@ graylog-alarmcallback-jabber:
     - purged
     - require:
       - service: graylog-server
+
+graylog-plugin-slack:
+  pkg:
+    - purged
+    - require:
+      - service: graylog-server

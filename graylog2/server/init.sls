@@ -236,3 +236,24 @@ graylog-alarmcallback-jabber:
       - cmd: apt_sources
     - watch_in:
       - service: graylog-server
+
+{%- set slack_plugin_version = "1.1.5" %}
+{%- set slack_plugin_name = "graylog-plugin-slack-" ~
+                            slack_plugin_version ~ ".jar" %}
+{%- set slack_plugin_source = mirror ~ "/mirror/" ~
+                              slack_plugin_name %}
+{%- set slack_plugin_source_hash = "md5=6d7d90e52a436f89b90a2d697c3ed67f" %}
+
+graylog-plugin-slack:
+  file:
+    - managed
+    - name: /usr/share/graylog-server/plugin/{{ slack_plugin_name }}
+    - source: {{ slack_plugin_source }}
+    - source_hash: {{ slack_plugin_source_hash }}
+    - user: root
+    - group: root
+    - mode: 644
+    - require:
+      - pkg: graylog-server
+    - watch_in:
+      - service: graylog-server

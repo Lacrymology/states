@@ -84,3 +84,17 @@ See `Stream Processing Runtime Limits
 <http://docs.graylog.org/en/1.0/pages/streams.html#stream-processing-runtime
 -limits>`_
 for more details.
+
+Slack Plugin
+------------
+
+1. Create Slack API token
+
+   The plugin configuration asks for a Slack API token which can be created by
+   visiting https://api.slack.com/web and press "Create token". (make sure you are
+   logged in)
+
+2. Create alarm callback
+
+   Create a "Slack alarm callback" on the "Manage alerts" page of the
+   stream. Enter the requested configuration and save.

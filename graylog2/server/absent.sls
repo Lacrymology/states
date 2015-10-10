@@ -25,8 +25,8 @@ extend:
     - require:
       - service: graylog-server
 
-graylog-alarmcallback-jabber:
-  pkg:
-    - purged
-    - require:
-      - service: graylog-server
+/usr/share/graylog-server/plugin:
+  file:
+    - absent
+    - require_in:
+      - pkg: graylog-server

@@ -5,7 +5,7 @@
 
 {%- set hostnames = salt['pillar.get']('etherpad:hostnames') %}
 upstream etherpad {
-    server localhost:9001;
+    server 127.0.0.1:9001;
 }
 
 server {

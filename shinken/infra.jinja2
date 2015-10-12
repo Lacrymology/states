@@ -18,8 +18,8 @@
     },
     'slack': {
         'pillar': salt["pillar.get"]("shinken:slack", False),
-        'notify-host': '/usr/bin/printf "%b" "Shinken Notification\\n\\nType:$NOTIFICATIONTYPE$\\nHost: $HOSTALIAS$\\nState: $HOSTSTATE$\\nAddress: $HOSTADDRESS$\\nInfo: $HOSTOUTPUT$\\nWhen: $LONGDATETIME$\\n\\nLast Up: $LASTHOSTUP$\\nLast Down: $LASTHOSTDOWN$\\nLast Unreachable: $LASTHOSTUNREACHABLE$\\n\\nURL: ' ~ scheme ~ '://' ~ hostname ~ '/host/$HOSTNAME$ " | /usr/local/shinken/bin/slacker -c ' ~ channel ~ ' -t ' ~ token,
-        'notify-service': '/usr/bin/printf "%b" "Shinken Notification\\n\\nNotification Type: $NOTIFICATIONTYPE$\\n\\nService: $SERVICEDESC$\\nHost: $HOSTALIAS$\\nAddress: $HOSTADDRESS$\\nState: $SERVICESTATE$\\nWhen: $LONGDATETIME$\\n\\nAdditional Info : $SERVICEOUTPUT$\\n\\nLast OK: $LASTSERVICEOK$\\nLast Warning: $LASTSERVICEWARNING$\\nLast Unknown: $LASTSERVICEUNKNOWN$\\nLast Critical: $LASTSERVICECRITICAL$\\n\\nServices OK: $TOTALSERVICESOK$\\nServices Warning/Unhandled: $TOTALSERVICESWARNING$/$TOTALSERVICESWARNINGUNHANDLED$\\nServices Critical/Unhandled: $TOTALSERVICESCRITICAL$/$TOTALSERVICESCRITICALUNHANDLED$\\nServices Unknown/Unhandled: $TOTALSERVICESUNKNOWN$/$TOTALSERVICESUNKNOWNUNHANDLED$\\nTotal Services Problems/Unhandlded: $TOTALSERVICEPROBLEMS$/$TOTALSERVICEPROBLEMSUNHANDLED$\\n\\nURL: ' ~ scheme ~ '://' ~ hostname ~ '/host/$HOSTNAME$ "| /usr/local/shinken/bin/slacker -c ' ~ channel ~ ' -t ' ~ token,
+        'notify-host': '/usr/bin/printf "%b" "Shinken Notification\\n\\nType:$NOTIFICATIONTYPE$\\nHost: $HOSTALIAS$\\nState: $HOSTSTATE$\\nAddress: $HOSTADDRESS$\\nInfo: $HOSTOUTPUT$\\nWhen: $LONGDATETIME$\\n\\nURL: ' ~ scheme ~ '://' ~ hostname ~ '/host/$HOSTNAME$ " | /usr/local/shinken/bin/slacker -c ' ~ channel ~ ' -t ' ~ token,
+        'notify-service': '/usr/bin/printf "%b" "Shinken Notification\\n\\nNotification Type: $NOTIFICATIONTYPE$\\n\\nService: $SERVICEDESC$\\nHost: $HOSTALIAS$\\nAddress: $HOSTADDRESS$\\nState: $SERVICESTATE$\\nWhen: $LONGDATETIME$\\n\\nAdditional Info : $SERVICEOUTPUT$\\n\\nServices OK: $TOTALSERVICESOK$\\nServices Warning/Unhandled: $TOTALSERVICESWARNING$/$TOTALSERVICESWARNINGUNHANDLED$\\nServices Critical/Unhandled: $TOTALSERVICESCRITICAL$/$TOTALSERVICESCRITICALUNHANDLED$\\nServices Unknown/Unhandled: $TOTALSERVICESUNKNOWN$/$TOTALSERVICESUNKNOWNUNHANDLED$\\nTotal Services Problems/Unhandlded: $TOTALSERVICEPROBLEMS$/$TOTALSERVICEPROBLEMSUNHANDLED$\\n\\nURL: ' ~ scheme ~ '://' ~ hostname ~ '/host/$HOSTNAME$ "| /usr/local/shinken/bin/slacker -c ' ~ channel ~ ' -t ' ~ token,
     },
 } %}
 
@@ -166,13 +166,13 @@ define contactgroup {
 
 define command {
     command_name notify-host-by-email
-    command_line /usr/bin/printf "%b" "Shinken Notification\n\nType:$NOTIFICATIONTYPE$\nHost: $HOSTALIAS$\nState: $HOSTSTATE$\nAddress: $HOSTADDRESS$\nInfo: $HOSTOUTPUT$\nWhen: $LONGDATETIME$\n\nLast Up: $LASTHOSTUP$\nLast Down: $LASTHOSTDOWN$\nLast Unreachable: $LASTHOSTUNREACHABLE$\n\nURL: {{ scheme }}://{{ hostname }}/host/$HOSTNAME$ " | /usr/bin/bsd-mailx -s "Host $HOSTSTATE$ alert for $HOSTNAME$!" $CONTACTEMAIL$
+    command_line /usr/bin/printf "%b" "Shinken Notification\n\nType:$NOTIFICATIONTYPE$\nHost: $HOSTALIAS$\nState: $HOSTSTATE$\nAddress: $HOSTADDRESS$\nInfo: $HOSTOUTPUT$\nWhen: $LONGDATETIME$\n\nURL: {{ scheme }}://{{ hostname }}/host/$HOSTNAME$ " | /usr/bin/bsd-mailx -s "Host $HOSTSTATE$ alert for $HOSTNAME$!" $CONTACTEMAIL$
 }
 
 # send email for a service
 define command {
     command_name notify-service-by-email
-    command_line /usr/bin/printf "%b" "Shinken Notification\n\nNotification Type: $NOTIFICATIONTYPE$\n\nService: $SERVICEDESC$\nHost: $HOSTALIAS$\nAddress: $HOSTADDRESS$\nState: $SERVICESTATE$\nWhen: $LONGDATETIME$\n\nAdditional Info : $SERVICEOUTPUT$\n\nLast OK: $LASTSERVICEOK$\nLast Warning: $LASTSERVICEWARNING$\nLast Unknown: $LASTSERVICEUNKNOWN$\nLast Critical: $LASTSERVICECRITICAL$\n\nServices OK: $TOTALSERVICESOK$\nServices Warning/Unhandled: $TOTALSERVICESWARNING$/$TOTALSERVICESWARNINGUNHANDLED$\nServices Critical/Unhandled: $TOTALSERVICESCRITICAL$/$TOTALSERVICESCRITICALUNHANDLED$\nServices Unknown/Unhandled: $TOTALSERVICESUNKNOWN$/$TOTALSERVICESUNKNOWNUNHANDLED$\nTotal Services Problems/Unhandlded: $TOTALSERVICEPROBLEMS$/$TOTALSERVICEPROBLEMSUNHANDLED$\n\nURL: {{ scheme }}://{{ hostname }}/host/$HOSTNAME$ "| /usr/bin/bsd-mailx -s "** $NOTIFICATIONTYPE$ alert - $HOSTALIAS$/$SERVICEDESC$ is $SERVICESTATE$ ** " $CONTACTEMAIL$
+    command_line /usr/bin/printf "%b" "Shinken Notification\n\nNotification Type: $NOTIFICATIONTYPE$\n\nService: $SERVICEDESC$\nHost: $HOSTALIAS$\nAddress: $HOSTADDRESS$\nState: $SERVICESTATE$\nWhen: $LONGDATETIME$\n\nAdditional Info : $SERVICEOUTPUT$\n\nServices OK: $TOTALSERVICESOK$\nServices Warning/Unhandled: $TOTALSERVICESWARNING$/$TOTALSERVICESWARNINGUNHANDLED$\nServices Critical/Unhandled: $TOTALSERVICESCRITICAL$/$TOTALSERVICESCRITICALUNHANDLED$\nServices Unknown/Unhandled: $TOTALSERVICESUNKNOWN$/$TOTALSERVICESUNKNOWNUNHANDLED$\nTotal Services Problems/Unhandlded: $TOTALSERVICEPROBLEMS$/$TOTALSERVICEPROBLEMSUNHANDLED$\n\nURL: {{ scheme }}://{{ hostname }}/host/$HOSTNAME$ "| /usr/bin/bsd-mailx -s "** $NOTIFICATIONTYPE$ alert - $HOSTALIAS$/$SERVICEDESC$ is $SERVICESTATE$ ** " $CONTACTEMAIL$
 }
 
 {%- for i in integrations if integrations[i]['pillar'] %}

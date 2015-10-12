@@ -89,4 +89,4 @@ just files relate to version 9.4 and remove unused software::
 
     cd /var/spool/apt-mirror/mirror/apt.postgresql.org/pub/repos/apt
     rm -r pool/main/p/{pgadmin3,pgloader,postgis}
-    find . -name '*postgresql-*' ! -name '*postgresql-9.4*' -exec rm -r {} \;
+    find . -name '*postgresql-*' ! -name '*9.4*' -exec rm -r {} \;

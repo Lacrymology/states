@@ -25,10 +25,9 @@
 
 define host {
     name salt-host
-{%- for i in integrations if integrations[i]['pillar'] %}
-    {%- if loop.first %}
-    contacts {% endif %}{{ i }}{% if not loop.last %},{% endif %}
-{%- endfor %}
+{%- if integrations["xmpp"]["pillar"] %}
+    contacts xmpp
+{%- endif %}
     contact_groups admins
     notification_interval 0
     first_notification_delay 0
@@ -67,6 +66,8 @@ define host {
     {%- do ro_users.append(ro_user) -%}
 {%- endfor %}
 
+{%- set slack_managed_hosts = salt["pillar.get"]("shinken:slack:managed_hosts", []) %}
+
 {%- for host in mine -%}
     {%- if mine[host]['monitor'] %}
 define host {
@@ -86,6 +87,13 @@ define host {
                 {%- do contacts.append(ro_user) -%}
             {%- endif -%}
         {%- endfor -%}
+        {%- if not slack_managed_hosts -%}
+            {%- do contacts.append("slack") -%}
+        {%- else -%}
+            {%- if host in slack_managed_hosts -%}
+                {%- do contacts.append("slack") -%}
+            {%- endif -%}
+        {%- endif -%}
         {%- if contacts %}
     contacts {{ contacts|join(',') }}
         {%- endif %}
@@ -307,10 +315,9 @@ define service {
     # Re-check the service every three minutes until a hard state can be
     # determined
     retry_interval 3
-{%- for i in integrations if integrations[i]['pillar'] %}
-    {%- if loop.first %}
-    contacts {% endif %}{{ i }}{% if not loop.last %},{% endif %}
-{%- endfor %}
+{%- if integrations["xmpp"]["pillar"] %}
+    contacts xmpp
+{%- endif %}
     contact_groups admins
     # Send notifications about warning, unknown, critical, and recovery events
     notification_options w,u,c,r

@@ -12,7 +12,7 @@ $TTL    {{ salt['pillar.get']('bind:zones:' ~ zonename ~ ':ttl', 2560) }}
                                             {{ zonedata['negative_cache_ttl']|default(2560) }});
         IN      NS      ns1
 ;
-{%- set myip = grains['ip_interfaces']['eth0'][0] %}
+{%- set myip = salt['pillar.get']('bind:public_ip', None)|default(grains['ip_interfaces']['eth0'][0], boolean=True) %}
         IN      A       {{ myip }}
 ns1     IN      A       {{ myip }}
 {%- for slave_ip in zonedata['slaves'] %}

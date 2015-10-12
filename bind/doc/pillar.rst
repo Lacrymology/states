@@ -27,6 +27,9 @@ bind:allowed_subnets
 ~~~~~~~~~~~~~~~~~~~~
 
 List of IP addresses which are allowed to issue query to the server.
+Special keyword ``salt_mine`` can be mixed with list of subnets. It will
+automatically add all public IPs of all hosts in :doc:`/salt/master/doc/index`
+mine.
 
 .. note::
 
@@ -35,6 +38,16 @@ List of IP addresses which are allowed to issue query to the server.
 
 Optional
 --------
+
+.. _pillar-bind-public_ip:
+
+bind:public_ip
+~~~~~~~~~~~~~~
+
+Specify public IP of this host. It's sometimes necessary when the public IP
+does not attach directly to the host's interface.
+
+Default: use first IP from eth0 interface on the host. (``None``)
 
 .. _pillar-bind-forwarders:
 

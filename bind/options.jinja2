@@ -3,12 +3,11 @@
 {%- set allowed_subnets = salt['pillar.get']('bind:allowed_subnets') %}
 
 {%- if allowed_subnets != ['any'] %}
-  {%- if allowed_subnets == ['salt_mine'] %}
+  {%- if 'salt_mine' in allowed_subnets %}
     {%- set mine = salt['mine.get']('*', 'monitoring.data') %}
-acl salt_hosts { {% for minion in mine %}{{ mine[minion]['ip_addrs']['public'] }}/32; {% endfor %} };
-  {%- else %}
-acl salt_hosts { {% for ip in allowed_subnets %}{{ ip }}; {% endfor %} };
+acl salt_mine_hosts { {% for minion in mine %}{{ mine[minion]['ip_addrs']['public'] }}/32; {% endfor %} };
   {%- endif %}
+acl salt_hosts { {% for ip in allowed_subnets if ip != 'salt_mine' %}{{ ip }}; {% endfor %} };
 {%- endif %}
 
 options {
@@ -44,7 +43,7 @@ options {
     listen-on-v6 { any; };
     notify yes; {# default #}
 {%- if allowed_subnets != ['any'] %}
-    allow-query { salt_hosts; };
+    allow-query { salt_hosts; {% if 'salt_mine' in allowed_subnets %}salt_mine_hosts; {%- endif %} };
 {%- else %}
     allow-query { any; };
 {%- endif %}

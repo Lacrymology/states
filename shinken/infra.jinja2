@@ -66,8 +66,6 @@ define host {
     {%- do ro_users.append(ro_user) -%}
 {%- endfor %}
 
-{%- set slack_managed_hosts = salt["pillar.get"]("shinken:slack:managed_hosts", []) %}
-
 {%- for host in mine -%}
     {%- if mine[host]['monitor'] %}
 define host {
@@ -87,11 +85,14 @@ define host {
                 {%- do contacts.append(ro_user) -%}
             {%- endif -%}
         {%- endfor -%}
-        {%- if not slack_managed_hosts -%}
-            {%- do contacts.append("slack") -%}
-        {%- else -%}
-            {%- if host in slack_managed_hosts -%}
+        {%- if integrations["slack"]["pillar"] -%}
+            {%- set slack_managed_hosts = salt["pillar.get"]("shinken:slack:managed_hosts", []) -%}
+            {%- if not slack_managed_hosts -%}
                 {%- do contacts.append("slack") -%}
+            {%- else -%}
+                {%- if host in slack_managed_hosts -%}
+                    {%- do contacts.append("slack") -%}
+                {%- endif -%}
             {%- endif -%}
         {%- endif -%}
         {%- if contacts %}

@@ -316,10 +316,6 @@ define service {
     # Re-check the service every three minutes until a hard state can be
     # determined
     retry_interval 3
-{%- if integrations["xmpp"]["pillar"] %}
-    contacts xmpp
-{%- endif %}
-    contact_groups admins
     # Send notifications about warning, unknown, critical, and recovery events
     notification_options w,u,c,r
     # Re-notify about service problems every hour

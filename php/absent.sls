@@ -39,14 +39,14 @@ php5-cli:
   pkg:
     - purged
 
-php5-pear:
+php-pear:
   pkg:
     - purged
   file:
     - name: /etc/pear
     - absent
     - require:
-      - pkg: php5-pear
+      - pkg: php-pear
 
 {%- set pkgs = salt["pkg.list_pkgs"]() %}
 {%- if "php5-common" in pkgs and salt["pkg.version_cmp"](pkgs["php5-common"], "5.5.0") == 1 %}

@@ -44,7 +44,7 @@ mkfs_disk_{{ disk }}:
       - cmd: luksOpen_disk_{{ disk }}
     - onchanges:
       - cmd: luksFormat_disk_{{ disk }}
-    - require_in:
+    - watch_in:
       - cmd: disk_encryption
 
     {%- if mount_point %}
@@ -60,7 +60,7 @@ mount_disk_{{ disk }}:
       - nobootwait
     - require:
       - cmd: mkfs_disk_{{ disk }}
-    - require_in:
+    - watch_in:
       - cmd: disk_encryption
       {%- for dir in bind_dirs %}
         {%- set src = mount_point ~ dir %}
@@ -88,7 +88,7 @@ encrypt_disk_bind_{{ dir }}:
       - nobootwait
     - require:
       - file: encrypt_disk_bind_{{ dir }}
-    - require_in:
+    - watch_in:
       - cmd: disk_encryption
       {%- endfor %}
     {%- endif %}

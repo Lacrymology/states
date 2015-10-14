@@ -120,6 +120,8 @@ Example::
   clamav:
     server_minion_id: clamav
     time_limit: 10h
+    paths:
+      - /mnt/foo
     exclude_paths:
       - /tmp/clamav
 
@@ -142,6 +144,15 @@ Optional suffix: ``s`` for seconds (the default), ``m`` for minutes, ``h`` for
 hours or ``d`` for days.
 
 Default: ``23h``.
+
+.. _pillar-clamav-paths:
+
+clamav:paths
+~~~~~~~~~~~~
+
+A list of paths to scan.
+
+Default: the root filesystem (``[/]``).
 
 .. _pillar-clamav-exclude_paths:
 

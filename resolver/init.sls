@@ -21,3 +21,15 @@ dns_resolver:
     - name: resolvconf -u
     - watch:
       - file: dns_resolver
+      - file: dns_resolver_config_append
+
+dns_resolver_config_append:
+  file:
+    - managed
+    - name: /etc/resolvconf/resolv.conf.d/tail
+    - contents: |
+{% for nameserver in salt['pillar.get']('resolver:append', []) %}
+        nameserver {{ nameserver }}
+{% endfor %}
+    - require:
+      - pkg: dns_resolver

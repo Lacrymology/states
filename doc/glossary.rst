@@ -778,3 +778,17 @@ network) without the programmer explicitly coding the details for this remote
 interaction.
 
 .. https://en.wikipedia.org/wiki/Remote_procedure_call - 2015-25-09
+
+
+.. _glossary-C:
+
+C
+~
+
+C is a general-purpose, imperative computer programming language, supporting
+structured programming, lexical variable scope and recursion, while a static
+type system prevents many unintended operations. By design, C provides
+constructs that map efficiently to typical machine instructions, and therefore
+it has found lasting use in applications that had formerly been coded in
+assembly language, including operating systems, as well as various application
+software for computers ranging from supercomputers to embedded systems.

@@ -29,7 +29,7 @@ class HalfRemoved(nagiosplugin.Resource):
         for line in dpkg.readlines():
             cols = line.split()
             if cols[0] == 'rc':
-                log.debug("Half-Removed package: %s", cols[0])
+                log.debug("Half-Removed package: %s", cols[1])
                 pkgs.append(cols[1])
 
         log.debug("HalfRemoved.probe finished")

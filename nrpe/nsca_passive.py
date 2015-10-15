@@ -11,10 +11,8 @@ __maintainer__ = 'Viet Hung Nguyen'
 __email__ = 'hvn@robotinfra.com'
 
 import glob
-import grp
 import logging
 import os
-import pwd
 import shlex
 import subprocess32 as subprocess
 import sys
@@ -28,32 +26,6 @@ import pysc
 
 logger = logging.getLogger(__name__)
 transport_logger = logging.getLogger('nsca_passive.transport')
-
-
-def drop_privilege_with_groups(user_name, group_name):
-    """
-    Drop privilege and change supplemental groups.
-    :param user_name:
-    :param group_name:
-    :return:
-    """
-    try:
-        user = pwd.getpwnam(user_name)
-    except KeyError as err:
-        raise ValueError("Invalid user %r" % err)
-
-    try:
-        group = grp.getgrnam(group_name)
-    except KeyError as err:
-        raise ValueError("Invalid group %r" % err)
-
-    groups = [gr.gr_gid for gr in grp.getgrall()
-              if user.pw_name in gr.gr_mem]
-    groups.append(user.pw_gid)
-
-    os.setgroups(groups)
-    os.setgid(group.gr_gid)
-    os.setuid(user.pw_uid)
 
 
 class NSCAServerMetrics(object):
@@ -292,6 +264,4 @@ class NscaPassive(pysc.Application):
 
 
 if __name__ == '__main__':
-    # set additional groups of nagios user
-    pysc.drop_privilege = drop_privilege_with_groups
     NscaPassive().run()

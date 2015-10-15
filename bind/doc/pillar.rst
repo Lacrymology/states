@@ -82,13 +82,13 @@ bind:disable_recursion
 ~~~~~~~~~~~~~~~~~~~~~~
 
 Whether to disable recursion feature on an authoritative server, which
-has :ref:`bind-zones` defined.
+has :ref:`pillar-bind-zones` defined.
 
 .. note::
 
-  A public :doc:`index` server, which sets :ref:`bind-allowed_subnets` to
-  [`any`] and expose to Internet must set this value to ``True`` to not to be
-  an open resolver. See `this <http://serverfault.com/questions/573465/
+  A public :doc:`index` server, which sets :ref:`pillar-bind-allowed_subnets`
+  to [`any`] and expose to Internet must set this value to ``True`` to not to
+  be an open resolver. See `this <http://serverfault.com/questions/573465/
   what-is-an-open-dns-resolver-and-how-can-i-protect-my-server-from-
   being-misused>`_ for more detail.
 

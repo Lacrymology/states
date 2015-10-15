@@ -10,7 +10,7 @@ requests==2.4.3
 psutil==1.2.1
 raven==4.1.1
 {%- if salt['pillar.get']('files_archive', False) %}
-pysc==0.3.19
+pysc==0.3.20
 {%- else %}
-http://archive.robotinfra.com/pip/pysc-0.3.19.tar.bz2
+http://archive.robotinfra.com/pip/pysc-0.3.20.tar.bz2
 {%- endif %}

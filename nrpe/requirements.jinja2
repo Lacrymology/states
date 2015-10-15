@@ -14,8 +14,8 @@ requests==2.4.3
 subprocess32==3.2.6
 {%- if salt['pillar.get']('files_archive', False) %}
 send_nsca==0.1.4.2-hvn
-pysc==0.3.19
+pysc==0.3.20
 {%- else %}
 http://archive.robotinfra.com/pip/send_nsca-0.1.4.2-hvn.tar.bz2
-http://archive.robotinfra.com/pip/pysc-0.3.19.tar.bz2
+http://archive.robotinfra.com/pip/pysc-0.3.20.tar.bz2
 {%- endif -%}

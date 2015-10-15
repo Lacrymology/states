@@ -48,9 +48,10 @@ options {
     allow-query { any; };
 {%- endif %}
 
-{#- disable these on Authoritative Name Server to improve stability #}
 {%- if salt['pillar.get']('bind:zones', {}) %}
+  {%- if salt['pillar.get']('bind:disable_recursion', True) %}
     allow-query-cache { none; };
     recursion no;
+  {%- endif %}
 {%- endif %}
 };

@@ -69,11 +69,11 @@ wsgiref==0.1.2
 {%- if files_archive %}
 django-insecure==0.2
 sentry-xmpp==0.0.1
-pysc==0.3.19
+pysc==0.3.20
 {%- else %}
 https://github.com/bclermont/django-insecure/archive/v0.2.tar.gz
 http://archive.robotinfra.com/pip/sentry-xmpp-0.0.1.tar.bz2
-http://archive.robotinfra.com/pip/pysc-0.3.19.tar.bz2
+http://archive.robotinfra.com/pip/pysc-0.3.20.tar.bz2
 {%- endif %}
 {%- if salt['pillar.get']('graylog2_address', False) %}
 graypy==0.2.9

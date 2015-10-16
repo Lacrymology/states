@@ -230,15 +230,6 @@ class NscaPassive(pysc.Application):
         'config': '/etc/nagios/nsca.yaml',
     }
 
-    def parse_config(self):
-        # HACK: this test needs to drop its privilege WITHIN main, and this
-        # is not supported by the current workflow. So I have to remove the
-        # UID and GID config values and re-set them aferwards
-        super(NscaPassive, self).parse_config()
-        # this removes the gid and uid settings from config
-        self.uid = self.config.get('process', {}).pop('gid', None)
-        self.gid = self.config.get('process', {}).pop('uid', None)
-
     def main(self):
 
         with open('/etc/hostname') as f:
@@ -260,14 +251,6 @@ class NscaPassive(pysc.Application):
             sys.exit(1)
 
         try:
-            # late drop_privilege because it needs to read salt minion config
-            if self.uid:
-                self.config['process']['uid'] = self.uid
-            if self.gid:
-                self.config['process']['gid'] = self.gid
-            # if nothing happened above, this call will do nothing, and luckily
-            # the lock file can be acquired multiple times transparently
-            self.setup_process()
             PassiveDaemon(self.stats,
                           minion_id,
                           nsca_servers,

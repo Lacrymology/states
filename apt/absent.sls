@@ -49,12 +49,3 @@ apt-key:
   file:
     - absent
 {%- endfor -%}
-
-unattended-upgrades:
-  pkg:
-    - purged
-  file:
-    - absent
-    - name: /etc/apt/apt.conf.d/20auto-upgrades
-    - require:
-      - pkg: unattended-upgrades

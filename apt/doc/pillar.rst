@@ -63,15 +63,6 @@ Whether to refresh :doc:`index` database and upgrade all packages.
 
 Default: do not refresh and don't upgrade (``False``).
 
-.. _pillar-apt-unattended_upgrades:
-
-apt:unattended_upgrades
-~~~~~~~~~~~~~~~~~~~~~~~
-
-Whether to install security updates automatically.
-
-Default: install security updates automatically (``True``).
-
 .. _pillar-apt-proxy_server:
 
 apt:proxy_server

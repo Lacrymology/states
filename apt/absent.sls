@@ -48,15 +48,4 @@ apt-key:
 {{ save_file }}:
   file:
     - absent
-{%- endfor %}
-
-unattended-upgrades:
-  pkg:
-    - purged
-  file:
-    - absent
-    - names:
-      - /etc/apt/apt.conf.d/20auto-upgrades
-      - /var/log/unattended-upgrades
-    - require:
-      - pkg: unattended-upgrades
+{%- endfor -%}

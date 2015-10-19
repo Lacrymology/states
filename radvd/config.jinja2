@@ -1,0 +1,19 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+# {{ salt['pillar.get']('message_do_not_modify') }}
+
+interface {{ salt['pillar.get']('radvd:interface') }} {
+    AdvManagedFlag on;
+    AdvSendAdvert on;
+    AdvLinkMTU {{ salt['pillar.get']('radvd:mtu', 1500) }};
+    AdvOtherConfigFlag on;
+    MinRtrAdvInterval 3;
+    MaxRtrAdvInterval 60;
+  {%- for config in salt['pillar.get']('radvd:additional', []) %}
+    {{ config | indent(4) }};
+  {%- endfor %}
+    prefix {{ salt['pillar.get']('radvd:prefix') }} {
+        AdvOnLink on;
+        AdvAutonomous on;
+        AdvRouterAddr on;
+    };
+};

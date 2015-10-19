@@ -792,3 +792,17 @@ constructs that map efficiently to typical machine instructions, and therefore
 it has found lasting use in applications that had formerly been coded in
 assembly language, including operating systems, as well as various application
 software for computers ranging from supercomputers to embedded systems.
+
+.. _glossary-MTU:
+
+MTU
+~~~
+
+In computer networking, the maximum transmission unit (MTU) of a communications
+protocol of a layer is the size (in bytes or octets) of the largest protocol
+data unit that the layer can pass onwards. MTU parameters usually appear in
+association with a communications interface (NIC, serial port, etc.). Standards
+(Ethernet, for example) can fix the size of an MTU; or systems (such as
+point-to-point serial links) may decide MTU at connect time.
+
+.. https://en.wikipedia.org/wiki/Maximum_transmission_unit - 2015-10-23

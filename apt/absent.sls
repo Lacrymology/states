@@ -48,7 +48,7 @@ apt-key:
 {{ save_file }}:
   file:
     - absent
-{%- endfor %}
+{%- endfor -%}
 
 unattended-upgrades:
   pkg:

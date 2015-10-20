@@ -23,4 +23,4 @@ openvpn_server_{{ instance }}_port:
 
 openvpn_server_procs:
   description: OpenVPN Daemon
-  command: '/usr/lib/nagios/plugins/check_procs -c {{ servers|length }}:{{ servers|length }} -C openvpn'
+  command: '/usr/lib/nagios/plugins/check_procs -c {{ servers|length }}:{{ servers|length }} -C openvpn --ereg-argument-array "--config /etc/openvpn/.*/config$"'

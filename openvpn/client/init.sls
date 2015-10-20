@@ -67,6 +67,13 @@ include:
     - require:
       - file: /etc/openvpn/client/{{ instance }}
 
+/var/run/openvpn-client:
+  file:
+    - directory
+    - user: root
+    - group: root
+    - mode: 770
+
 openvpn_client:
   file:
     - managed
@@ -88,6 +95,8 @@ openvpn_client:
     - running
     - name: openvpn-client-{{ instance }}
     - order: 50
+    - require:
+      - file: /var/run/openvpn-client
     - watch:
       - file: /etc/openvpn/client/{{ instance }}/ca.crt
       - file: /etc/openvpn/client/{{ instance }}/{{ grains['id'] }}.crt

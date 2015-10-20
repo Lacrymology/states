@@ -22,8 +22,8 @@ remote {{ remote_address }} {{ port }} {{ (protocol|list)[:-1]|join }}
 remote {{ remote_address }} {{ port }} {{ protocol }}
 {%- endif %}
 
-ca ca.crt
-cert {{ client }}.crt
-key {{ client }}.key
+ca /etc/openvpn/client/{{ instance }}/ca.crt
+cert /etc/openvpn/client/{{ instance }}/{{ client }}.crt
+key /etc/openvpn/client/{{ instance }}/{{ client }}.key
 remote-cert-tls server
 {%- endblock authentication_mode %}

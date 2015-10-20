@@ -11,11 +11,13 @@ group nogroup
 persist-key
 persist-tun
 comp-lzo
+syslog openvpn-client-{{ instance }}
 {%- if salt['pillar.get']('debug', False) %}
 verb 15
 {%- else %}
 verb 4
 {%- endif %}
+writepid /var/run/openvpn-client/{{ instance }}.pid
 
 {%- block authentication_mode %}
 {%- endblock authentication_mode %}

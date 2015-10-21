@@ -3,8 +3,6 @@
 include:
   - openvpn
 
-{%- set instance = salt['pillar.get']('openvpn_client:server_instance') %}
-
 /etc/openvpn/client:
   file:
     - directory
@@ -14,7 +12,15 @@ include:
     - require:
       - pkg: openvpn
 
-/etc/openvpn/client/{{ instance }}:
+/var/run/openvpn-client:
+  file:
+    - directory
+    - user: root
+    - group: root
+    - mode: 770
+
+{%- for instance_name, instance in salt['pillar.get']('openvpn_client:instances').iteritems() %}
+/etc/openvpn/client/{{ instance_name }}:
   file:
     - directory
     - user: root
@@ -23,84 +29,71 @@ include:
     - require:
       - file: /etc/openvpn/client
 
-/etc/openvpn/client/{{ instance }}/ca.crt:
+/etc/openvpn/client/{{ instance_name }}/ca.crt:
   file:
     - managed
     - user: root
     - group: root
     - mode: 440
     - contents: |
-        {{ salt['pillar.get']('openvpn_client:' + instance + ':ca')|indent(8) }}
+        {{ instance['ca'] | indent(8) }}
     - require:
-      - file: /etc/openvpn/client/{{ instance }}
+      - file: /etc/openvpn/client/{{ instance_name }}
 
-/etc/openvpn/client/{{ instance }}/{{ grains['id'] }}.crt:
+/etc/openvpn/client/{{ instance_name }}/{{ grains['id'] }}.crt:
   file:
     - managed
     - user: root
     - group: root
     - mode: 440
     - contents: |
-        {{ salt['pillar.get']('openvpn_client:' + instance + ':crt')|indent(8) }}
+        {{ instance['crt'] | indent(8) }}
     - require:
-      - file: /etc/openvpn/client/{{ instance }}
+      - file: /etc/openvpn/client/{{ instance_name }}
 
-/etc/openvpn/client/{{ instance }}/{{ grains['id'] }}.key:
+/etc/openvpn/client/{{ instance_name }}/{{ grains['id'] }}.key:
   file:
     - managed
     - user: root
     - group: root
     - mode: 400
     - contents: |
-        {{ salt['pillar.get']('openvpn_client:' + instance + ':key')|indent(8) }}
+        {{ instance['key'] | indent(8) }}
     - require:
-      - file: /etc/openvpn/client/{{ instance }}
+      - file: /etc/openvpn/client/{{ instance_name }}
 
-/etc/openvpn/client/{{ instance }}/{{ grains['id'] }}.conf:
+/etc/openvpn/client/{{ instance_name }}/{{ grains['id'] }}.conf:
   file:
     - managed
     - user: root
     - group: root
     - mode: 400
     - contents: |
-        {{ salt['pillar.get']('openvpn_client:' + instance + ':conf')|indent(8) }}
+        {{ instance['conf'] | indent(8) }}
     - require:
-      - file: /etc/openvpn/client/{{ instance }}
+      - file: /etc/openvpn/client/{{ instance_name }}
 
-/var/run/openvpn-client:
-  file:
-    - directory
-    - user: root
-    - group: root
-    - mode: 770
-
-openvpn_client:
+openvpn_client_{{ instance_name }}:
   file:
     - managed
-    - name: /etc/init/openvpn-client-{{ instance }}.conf
+    - name: /etc/init/openvpn-client-{{ instance_name }}.conf
     - source: salt://openvpn/client/upstart.jinja2
     - template: jinja
     - user: root
     - group: root
     - mode: 440
     - context:
-        instance: {{ instance }}
-  {#-
-  There is no way to test openvpn.client via CI currently.
-  We can do it later in QA project.
-  In the mean time, don't start client service if running in the test mode.
-  #}
-{%- if not salt['pillar.get']('__test__', False) %}
+        instance: {{ instance_name }}
   service:
     - running
-    - name: openvpn-client-{{ instance }}
+    - name: openvpn-client-{{ instance_name }}
     - order: 50
     - require:
       - file: /var/run/openvpn-client
     - watch:
-      - file: /etc/openvpn/client/{{ instance }}/ca.crt
-      - file: /etc/openvpn/client/{{ instance }}/{{ grains['id'] }}.crt
-      - file: /etc/openvpn/client/{{ instance }}/{{ grains['id'] }}.key
-      - file: /etc/openvpn/client/{{ instance }}/{{ grains['id'] }}.conf
-      - file: openvpn_client
-{%- endif %}
+      - file: /etc/openvpn/client/{{ instance_name }}/ca.crt
+      - file: /etc/openvpn/client/{{ instance_name }}/{{ grains['id'] }}.crt
+      - file: /etc/openvpn/client/{{ instance_name }}/{{ grains['id'] }}.key
+      - file: /etc/openvpn/client/{{ instance_name }}/{{ grains['id'] }}.conf
+      - file: openvpn_client_{{ instance_name }}
+{%- endfor %}

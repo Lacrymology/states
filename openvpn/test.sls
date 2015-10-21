@@ -10,9 +10,9 @@ include:
   - openvpn.server.backup.nrpe
   - openvpn.server.diamond
   - openvpn.server.nrpe
-  - openvpn.server.backup
-  - openvpn.server.backup.nrpe
-  - openvpn.server.backup.diamond
+  - openvpn.server.pillar
+  - openvpn.client
+  - openvpn.client.nrpe
   - salt.minion.deps
 
 test:
@@ -24,6 +24,7 @@ test:
     - name: openvpn.server
     - additional:
       - openvpn.server.backup
+      - openvpn.client
     - doc: {{ opts['cachedir'] }}/doc/output
     - require:
       - monitoring: test
@@ -65,10 +66,25 @@ test_openvpn_{{ instance }}:
         {%- if mode == 'tls' -%}
         {#-
         Testing conectivity by:
-          - copy the client cert
-          - starting the client
+          - start the client
+          - wait for a while
           - grep the status file for the client's common name
         #}
+test_openvpn_refresh_pillar:
+  module:
+    - wait
+    - name: saltutil.refresh_pillar
+    - watch:
+      - file: openvpn_pillar
+    - watch_in:
+      - file: /etc/openvpn/client/{{ instance }}/ca.crt
+      - file: /etc/openvpn/client/{{ instance }}/{{ grains['id'] }}.crt
+      - file: /etc/openvpn/client/{{ instance }}/{{ grains['id'] }}.key
+      - file: /etc/openvpn/client/{{ instance }}/{{ grains['id'] }}.conf
+    - require_in:
+      - file: nsca-openvpn.client
+      - monitoring: openvpn.client-monitoring
+
             {%- for client in servers[instance]['clients'] -%}
                 {%- if client not in servers[instance]['revocations'] -%}
                     {%- if client is mapping -%}
@@ -77,52 +93,17 @@ test_openvpn_{{ instance }}:
                         {%- set cn = client -%}
                     {%- endif %}
 test_openvpn_tls_{{ instance }}_{{ cn }}:
-  file:
-    - directory
-    - name: /tmp/openvpn_{{ instance }}_{{ cn }}
-    - user: root
-    - group: root
-    - mode: 750
+  process:
+    - wait
+    - name: "/usr/sbin/openvpn --config /etc/openvpn/client/{{ instance }}/{{ cn }}.conf"
     - require:
-      - monitoring: test
-  module:
-    - run
-    - name: archive.unzip
-    - zipfile: /etc/openvpn/{{ instance }}/clients/{{ cn }}.zip
-    - dest: /tmp/openvpn_{{ instance }}_{{ cn }}
-    - require:
-      - file: test_openvpn_tls_{{ instance }}_{{ cn }}
+      - service: openvpn_client_{{ instance }}
   cmd:
     - wait
-    - name: nohup openvpn {{ cn }}.conf > /dev/null 2>&1 &
-    - cwd: /tmp/openvpn_{{ instance }}_{{ cn }}
+    {#- The status file is updated every second if the __test__ pillar key is True #}
+    - name: sleep 1 && grep ^{% if client is mapping %}{{ ip }},{% endif %}{{ cn }} /var/log/openvpn/{{ instance }}.log
     - watch:
-      - module: test_openvpn_tls_{{ instance }}_{{ cn }}
-
-test_openvpn_tls_connect_{{ instance }}_{{ cn }}:
-  cmd:
-    - wait
-    {#- Wait 10 seconds for OpenVPN client to connect
-    The status file is updated every second if the __test__ pillar key is True #}
-    - name: sleep 11 && grep ^{% if client is mapping %}{{ ip }},{% endif %}{{ cn }} /var/log/openvpn/{{ instance }}.log
-    - watch:
-      - cmd: test_openvpn_tls_{{ instance }}_{{ cn }}
-
-test_openvpn_tls_cleanup_{{ instance }}_{{ cn }}:
-  module:
-    - run
-    - name: ps.pkill
-    - pattern: 'openvpn {{ cn }}.conf'
-    - user: nobody
-    - full: True
-    - require:
-      - cmd: test_openvpn_tls_connect_{{ instance }}_{{ cn }}
-      - pkg: salt_minion_deps
-  file:
-    - absent
-    - name: /tmp/openvpn_{{ instance }}_{{ cn }}
-    - require:
-      - module: test_openvpn_tls_cleanup_{{ instance }}_{{ cn }}
+      - process: test_openvpn_tls_{{ instance }}_{{ cn }}
 
                 {%- endif %}{#- client not in revocations list -#}
             {%- endfor %}{#- clients #}

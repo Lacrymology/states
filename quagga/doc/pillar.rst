@@ -11,6 +11,9 @@ Example::
   quagga:
     password: edcrfv
     enable_password: tgbyhn
+    zebra:
+      lo:
+        address: 10.255.250.1/32
     ospfd:
       networks:
         - 192.168.1.0/24
@@ -31,6 +34,13 @@ quagga:enable_password
 
 The enable password to access to various privilege levels of :doc:`index`
 daemons.
+
+.. _pillar-quagga-zebra-lo-address:
+
+quagga:zebra:lo:address
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Which address will be advertised via loopback interface.
 
 .. _pillar-quagga-ospfd-networks:
 

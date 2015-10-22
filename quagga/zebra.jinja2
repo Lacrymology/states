@@ -6,4 +6,8 @@ hostname Router@{{ grains['id'] }}
 password {{ salt['pillar.get']('quagga:zebra:password', False)|default(salt['pillar.get']('quagga:password'), boolean=True) }}
 enable password {{ salt['pillar.get']('quagga:zebra:enable_password', False)|default(salt['pillar.get']('quagga:enable_password'), boolean=True) }}
 
+interface lo
+  description loopback-interface
+  ip address {{ salt['pillar.get']('quagga:zebra:lo:address') }}
+
 log syslog

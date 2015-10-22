@@ -55,3 +55,9 @@ quagga:
     - watch_in:
       - service: quagga
 {%- endfor %}
+
+/etc/environment:
+  file:
+    - append
+    - text: |
+        VTYSH_PAGER=more

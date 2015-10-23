@@ -20,20 +20,25 @@ locking_script
 log_start_script "$@"
 trap "log_stop_script \$?" EXIT
 
-exclude_list=('/sys' '/dev' '/proc' '/run')
-
-exclude_string=""
-for exclude in "${exclude_list[@]}"; do
-    exclude_string="${exclude_string}! ( -path $exclude -prune ) "
-done
-
 # empty the last scan result before scanning
 > "$status_file"
 
 {%- set time_limit = salt['pillar.get']('clamav:time_limit', '23h') %}
+{%- set paths = salt['pillar.get']('clamav:paths', ['/']) %}
+{%- set exclude_paths = salt['pillar.get']('clamav:exclude_paths', []) %}
+{%- for exclude_path in ('/dev', '/proc', '/run', '/sys') %}
+  {%- do exclude_paths.append(exclude_path) %}
+{%- endfor %}
 
 retval=0
-timeout {{ time_limit }} find {{ salt['pillar.get']('clamav:paths', ['/']) | join(' ') }} $exclude_string {% for path in salt['pillar.get']('clamav:exclude_paths', []) %}! \( -path "{{ path }}" -prune \){% if not loop.last %} {% endif %}{% endfor %} -mtime -1 -type f -print0 | xargs -0 clamdscan {% if salt['pillar.get']('clamav:mode', 'local') == "local" %}--fdpass {% endif %}--quiet -l "$status_file" || retval=$?
+timeout {{ time_limit }} find {{ paths | join(' ') }} \
+{%- for path in paths -%}
+  {%- for exc_path in exclude_paths %}
+    ! \( -path "{{ path }}{{ exc_path }}" -prune \) \
+  {%- endfor -%}
+{%- endfor %}
+    -mtime -1 -type f -print0 | \
+    xargs -0 clamdscan {% if salt['pillar.get']('clamav:mode', 'local') == "local" %}--fdpass {% endif %}--quiet -l "$status_file" || retval=$?
 
 case "$retval" in
     0 ) # no virus found

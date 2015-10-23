@@ -2,8 +2,14 @@
 
 # {{ salt['pillar.get']('message_do_not_modify') }}
 
-{%- set instance = salt['pillar.get']('openvpn_client:server_instance') %}
+{%- set instances = salt['pillar.get']('openvpn_client:instances') %}
 
+{%- for instance in instances %}
 openvpn_client_{{ instance }}:
   description: OpenVPN Client Instance {{ instance }}
-  command: "/usr/lib/nagios/plugins/check_procs -C openvpn -c 1:1 -a '/usr/sbin/openvpn --config {{ grains['id'] }}.conf'"
+  command: "/usr/lib/nagios/plugins/check_procs -C openvpn -c 1:1 -a '--config /etc/openvpn/client/{{ instance }}/{{ grains['id'] }}.conf'"
+{%- endfor %}
+
+openvpn_client_procs:
+  description: OpenVPN Client Processes
+  command: '/usr/lib/nagios/plugins/check_procs -c {{ instances | length }}:{{ instances | length }} -C openvpn --ereg-argument-array "--config /etc/openvpn/client/.*/{{ grains['id'] }}.conf$"'

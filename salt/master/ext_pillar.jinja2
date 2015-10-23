@@ -1,0 +1,12 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+# {{ salt['pillar.get']('message_do_not_modify') }}
+
+ext_pillar:
+  - git: {{ branch }} {{ remote }}
+{%- if accumulator|default(False) -%}
+  {%- if 'ext_pillar' in accumulator -%}
+    {%- for line in accumulator['ext_pillar'] %}
+{{ line | indent(2, indentfirst=True) }}
+    {%- endfor -%}
+  {%- endif -%}
+{%- endif %}

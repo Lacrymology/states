@@ -1,8 +1,6 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
-# {{ salt['pillar.get']('message_do_not_modify') }}
 {%- set vpn_instance = salt['pillar.get']('openvpn:servers:' ~ instance) %}
-dev {{ vpn_instance['device'] | default('tun') }}
 proto {{ vpn_instance['protocol'] | default('udp') }}
 resolv-retry infinite
 nobind

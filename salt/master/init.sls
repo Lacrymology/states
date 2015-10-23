@@ -6,7 +6,9 @@ and use it to install the master.
 
 {%- from 'upstart/rsyslog.jinja2' import manage_upstart_log with context -%}
 
-{%- set use_ext_pillar = salt['pillar.get']('salt_master:pillar:branch', False) and salt['pillar.get']('salt_master:pillar:remote', False) -%}
+{%- set branch = salt['pillar.get']('salt_master:pillar:branch', False) %}
+{%- set remote = salt['pillar.get']('salt_master:pillar:remote', False) %}
+{%- set use_ext_pillar = branch and remote %}
 {%- set xmpp = salt["pillar.get"]("salt_master:xmpp", {}) %}
 
 include:
@@ -134,6 +136,22 @@ include:
 {%- endif %}
 
 {%- if use_ext_pillar %}
+/etc/salt/master.d/ext_pillar.conf:
+  file:
+    - managed
+    - source: salt://salt/master/ext_pillar.jinja2
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 400
+    - context:
+        branch: {{ branch }}
+        remote: {{ remote }}
+    - require:
+      - pkg: salt-master
+    - watch_in:
+      - service: salt-master
+
 /srv/pillars:
   file:
     - absent
@@ -161,6 +179,10 @@ salt-master-requirements:
     - require_in:
       - pkg: salt-master
 {%- else %}
+/etc/salt/master.d/ext_pillar.conf:
+  file:
+    - absent
+
 /srv/pillars:
   file:
     - directory
@@ -214,8 +236,7 @@ salt-master-{{ prefix }}.py:
     - mode: 400
     - require:
       - pkg: salt-master
-    - context:
-        use_ext_pillar: {{ use_ext_pillar }}
+
 salt-master:
   file:
     - managed

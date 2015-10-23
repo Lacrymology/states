@@ -39,7 +39,7 @@ def ext_pillar(minion_id, pillar):
     except KeyError:
         servers = {}
 
-    output = {OPENVPN_PILLAR_KEY: {}}
+    output = {OPENVPN_PILLAR_KEY: {'instances': {}}}
     for server in servers:
         if servers[server]['mode'] == 'tls':
             data = {}
@@ -60,5 +60,5 @@ def ext_pillar(minion_id, pillar):
                     data[extension] = fh.read()
             with open(os.path.join(OPENVPN_DIR, "ca.crt")) as fh:
                 data["ca"] = fh.read()
-            output[OPENVPN_PILLAR_KEY][server] = data
+            output[OPENVPN_PILLAR_KEY]['instances'][server] = data
     return output

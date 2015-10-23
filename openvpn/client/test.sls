@@ -1,29 +1,8 @@
-{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+{#- Usage of this is governed by a license that can be found in doc/license.rst
+ -*- ci-automatic-discovery: off -*-
 
-include:
-  - doc
-  - openvpn.client
-  - openvpn.client.nrpe
+ openvpn.client is only used when there is an openvpn server.
 
-test:
-  monitoring:
-    - run_all_checks
-    - order: last
-  qa:
-    - test_pillar
-    - name: openvpn.client
-    - doc: {{ opts['cachedir'] }}/doc/output
-    - require:
-      - monitoring: test
-      - cmd: doc
-
-{%- if not salt['pillar.get']('__test__', False) %}
-openvpn_client_monitor_doc:
-  qa:
-    - test_monitor
-    - name: openvpn.client
-    - doc: {{ opts['cachedir'] }}/doc/output
-    - require:
-      - monitoring: test
-      - cmd: doc
-{%- endif %}
+ There is no reason to perform standalone test. Skip and only let
+ openvpn.test perform all integration tests.
+-#}

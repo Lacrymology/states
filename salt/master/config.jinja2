@@ -28,11 +28,6 @@ file_roots:
     {%- endif %}
 {%- endfor %}
 
-{%- if use_ext_pillar %}
-ext_pillar:
-  - git: {{ salt['pillar.get']('salt_master:pillar:branch', False) }} {{ salt['pillar.get']('salt_master:pillar:remote', False) }}
-{%- endif %}
-
 worker_threads: {{ salt['pillar.get']('salt_master:workers', None)|default(grains['num_cpus'], boolean=True) }}
 
 pillar_opts: False {# hide ``master`` key in minion pillar #}

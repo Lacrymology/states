@@ -33,7 +33,7 @@ test:
     - test
     - map:
         ProcessResources:
-{%- set salt_master_procs = (
+{%- set salt_master_procs = [
   "salt-master-ProcessManager",
   "salt-master-clear-old-jobs",
   "salt-master-Publisher",
@@ -41,7 +41,7 @@ test:
   "salt-master-ReqServer_ProcessManager",
   "salt-master-MWorker",
   "salt-master-MWorkerQueue",
-)%}
+] %}
 {%- if salt['pillar.get']('salt_master:reactor', False) %}
   {%- do salt_master_procs.append("salt-master-Reactor") %}
 {%- endif %}

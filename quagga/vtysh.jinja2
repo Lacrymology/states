@@ -4,5 +4,5 @@
 
 ! service integrated-vtysh-config
 hostname quagga-router@{{ grains['id'] }}
-username root {{ salt['pillar.get']('quagga:vtysh:root_password') }}
+username root nopassword
 !

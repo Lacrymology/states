@@ -268,7 +268,7 @@ openvpn:servers:{{ instance }}:peers:{{ peername }}:port
 
 Default: use port 1194 (``''``).
 
-.. _pillar-openvpn-servers-{{ instance }}-port:
+.. _pillar-openvpn-servers-instance-port:
 
 openvpn:servers:{{ instance }}:port
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -276,7 +276,7 @@ openvpn:servers:{{ instance }}:port
 Which :ref:`glossary-TCP`/:ref:`glossary-UDP` port should this instance listen
 on.
 
-.. _pillar-openvpn-servers-{{ instance }}-protocol:
+.. _pillar-openvpn-servers-instance-protocol:
 
 openvpn:servers:{{ instance }}:protocol
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -290,7 +290,7 @@ Choices:
 * tcp
 * tcp6
 
-.. _pillar-openvpn-servers-{{ instance }}-device:
+.. _pillar-openvpn-servers-instance-device:
 
 openvpn:servers:{{ instance }}:device
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -298,7 +298,7 @@ openvpn:servers:{{ instance }}:device
 ``dev tun`` will create a routed IP tunnel,
 ``dev tap`` will create an ethernet tunnel.
 
-.. _pillar-openvpn-servers-{{ instance }}-server:
+.. _pillar-openvpn-servers-instance-server:
 
 openvpn:servers:{{ instance }}:server
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -306,15 +306,15 @@ openvpn:servers:{{ instance }}:server
 Configure server mode and supply a :ref:`glossary-VPN` subnet for :doc:`index`
 to draw client addresses from.
 
-.. _pillar-openvpn-servers-{{ instance }}-server-ipv6:
+.. _pillar-openvpn-servers-instance-server-ipv6:
 
 openvpn:servers:{{ instance }}:server-ipv6
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Same as :ref:`pillar-openvpn-servers-{{ instance }}-server` but for
+Same as :ref:`pillar-openvpn-servers-instance-server` but for
 :ref:`glossary-IPv6`.
 
-.. _pillar-openvpn-servers-{{ instance }}-ifconfig-pool:
+.. _pillar-openvpn-servers-instance-ifconfig-pool:
 
 openvpn:servers:{{ instance }}:ifconfig-pool
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -326,15 +326,15 @@ formed as ``<start-IP> <end-IP>``.
 
    Static :ref:`glossary-IP` addresses should be assigned outside of this pool.
 
-.. _pillar-openvpn-servers-{{ instance }}-ifconfig-ipv6-pool:
+.. _pillar-openvpn-servers-instance-ifconfig-ipv6-pool:
 
 openvpn:servers:{{ instance }}:ifconfig-ipv6-pool
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Same as :ref:`pillar-openvpn-servers-{{ instance }}-ifconfig-pool` but for
+Same as :ref:`pillar-openvpn-servers-instance-ifconfig-pool` but for
 :ref:`glossary-IPv6`.
 
-.. _pillar-openvpn-servers-{{ instance }}-extra_configs:
+.. _pillar-openvpn-servers-instance-extra_configs:
 
 openvpn:servers:{{ instance }}:extra_configs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -348,7 +348,7 @@ for :ref:`pillar-sysctl`::
   sysctl:
     net.ipv4.ip_forward: 1
 
-.. _pillar-openvpn-servers-{{ instance }}-clients:
+.. _pillar-openvpn-servers-instance-clients:
 
 openvpn:servers:{{ instance }}:clients
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

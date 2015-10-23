@@ -69,6 +69,9 @@ include:
     - group: root
     - mode: 400
     - contents: |
+        # {{ salt['pillar.get']('message_do_not_modify') }}
+
+        dev {{ salt['pillar.get']('openvpn_client:instances:' ~ instance_name ~ ':device') }}
         {{ instance['conf'] | indent(8) }}
     - require:
       - file: /etc/openvpn/client/{{ instance_name }}

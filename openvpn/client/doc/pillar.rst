@@ -7,15 +7,15 @@ Pillar
 - :doc:`/rsyslog/doc/index` :doc:`/rsyslog/doc/pillar`
 - :doc:`/ssl/doc/index` :doc:`/ssl/doc/pillar`
 
-.. note::
-
-   All of these are generated on the :doc:`/openvpn/server/doc/index` then
-   inject into pillar via `external pillars
-   <http://docs.saltstack.com/en/latest/topics/development/external_pillars.html>`_.
-   No need to define manually.
-
 Mandatory
 ---------
+
+Example::
+
+  openvpn_client:
+    instances:
+      devops:
+        device: tap1
 
 .. _pillar-openvpn_client-instances:
 
@@ -23,8 +23,25 @@ openvpn_client:instances
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 A dictionary with key is the :doc:`/openvpn/server/doc/index` instance that
-client will connect to and value is another dictionary of ``ca``, ``crt``,
-``key``, ``conf``.
+client will connect to and value is another dictionary of ``device``, ``ca``,
+``crt``, ``key``, ``conf``.
+
+.. _pillar-openvpn_client-instances-instance-device:
+
+openvpn_client:instances:{{ instance }}:device
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Same as :ref:`pillar-openvpn-servers-instance-device` but on the client side.
+
+Make sure that it is unique when there are multiple instances running on a
+machine.
+
+.. note::
+
+   All of the below are generated on the :doc:`/openvpn/server/doc/index` then
+   inject into pillar via `external pillars
+   <http://docs.saltstack.com/en/latest/topics/development/external_pillars.html>`_.
+   No need to define manually.
 
 Conditional
 -----------

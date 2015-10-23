@@ -17,8 +17,6 @@ Example::
     ospfd:
       networks:
         - 192.168.1.0/24
-    vtysh:
-      root_password: pl,okm
 
 .. _pillar-quagga-password:
 
@@ -48,13 +46,6 @@ quagga:ospfd:networks
 ~~~~~~~~~~~~~~~~~~~~~
 
 List of networks for router ospf.
-
-.. _pillar-quagga-vtysh-root_password:
-
-quagga:vtysh:root_password
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-The root password of ``vtysh``.
 
 Optional
 --------

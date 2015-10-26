@@ -35,30 +35,26 @@ def ext_pillar(minion_id, pillar):
     """
     # this works only if some pillar key are turned on
     try:
-        servers = pillar['openvpn']['servers']
+        instances = pillar[OPENVPN_PILLAR_KEY]['instances']
     except KeyError:
-        servers = {}
+        instances = {}
 
     output = {OPENVPN_PILLAR_KEY: {'instances': {}}}
-    for server in servers:
-        if servers[server]['mode'] == 'tls':
-            data = {}
-            if os.path.exists(_vpn_file(minion_id, server, 'conf')):
-                logger.debug("Found existing client %s for %s", minion_id,
-                             server)
-            else:
-                logger.debug("No client %s for %s, create one", minion_id,
-                             server)
-                # here run __salt__["tls.create_ca_signed_cert"] OR
-                # os.system() the equivalent of to create the SSL certs
-                # raise NotImplementedError("need quanta")
-                # if actually __salt__ works, we need to switch from low-level python
-                # to salt API in the rest of the code
-
+    for instance in instances:
+        openvpn_pillar = {}
+        if os.path.exists(_vpn_file(minion_id, instance, 'conf')):
+            logger.debug("Found existing client %s for %s", minion_id, instance)
             for extension in ("crt", "key", "conf"):
-                with open(_vpn_file(minion_id, server, extension)) as fh:
-                    data[extension] = fh.read()
+                with open(_vpn_file(minion_id, instance, extension)) as fh:
+                    openvpn_pillar[extension] = fh.read()
             with open(os.path.join(OPENVPN_DIR, "ca.crt")) as fh:
-                data["ca"] = fh.read()
-            output[OPENVPN_PILLAR_KEY]['instances'][server] = data
+                openvpn_pillar["ca"] = fh.read()
+            output[OPENVPN_PILLAR_KEY]['instances'][instance] = openvpn_pillar
+        else:
+            logger.debug("No client %s for %s, create one", minion_id, instance)
+            # here run __salt__["tls.create_ca_signed_cert"] OR
+            # os.system() the equivalent of to create the SSL certs
+            # raise NotImplementedError("need quanta")
+            # if actually __salt__ works, we need to switch from low-level python
+            # to salt API in the rest of the code
     return output

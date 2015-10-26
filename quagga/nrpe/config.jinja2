@@ -17,11 +17,4 @@
   command: /usr/lib/nagios/plugins/check_tcp -H {{ ip_port[0] }} -p {{ ip_port[1] }}
   dependencies:
     - {{ daemon }}_procs
-
-{{ daemon }}_remote_port:
-  check: check_tcp!{{ ip_port[1] }}
-  description: {{ daemon|upper }} Remote Port
-  passive: False
-  dependencies:
-    - {{ daemon }}_procs
 {%- endfor %}

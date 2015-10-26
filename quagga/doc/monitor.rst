@@ -23,13 +23,6 @@ ospfd_port
 
 Monitor :doc:`index` local port :ref:`glossary-TCP` ``2604``.
 
-.. _monitor-ospfd_remote_port:
-
-ospfd_remote_port
-~~~~~~~~~~~~~~~~~
-
-Monitor :doc:`index` remote port :ref:`glossary-TCP` ``2604``.
-
 .. _monitor-ospf6d_procs:
 
 ospf6d_procs
@@ -46,10 +39,3 @@ ospf6d_port
 ~~~~~~~~~~~
 
 Monitor :doc:`index` local port :ref:`glossary-TCP` ``2606``.
-
-.. _monitor-ospf6d_remote_port:
-
-ospf6d_remote_port
-~~~~~~~~~~~~~~~~~~
-
-Monitor :doc:`index` remote port :ref:`glossary-TCP` ``2606``.

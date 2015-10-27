@@ -8,6 +8,11 @@ include:
   file:
     - absent
 
+{%- set allowed_protocols = salt['pillar.get']('firewall:allowed_protocols', ['icmp']) -%}
+{%- if 'icmp' not in allowed_protocols -%}
+  {%- do allowed_protocols.append('icmp') -%}
+{%- endif %}
+
 iptables:
   file:
     - managed
@@ -19,7 +24,7 @@ iptables:
     - source: salt://firewall/config.jinja2
     - context:
         ip_addrs_key: ip_addrs
-        allowed_protocols: {{ salt['pillar.get']('firewall:allowed_protocols', ['icmp']) }}
+        allowed_protocols: {{ allowed_protocols }}
         pillars_ip: {{ salt['pillar.get']('firewall:allowed_ips', []) }}
         filter: {{ salt['pillar.get']('firewall:filter', {}) }}
         blacklist: {{ salt['pillar.get']('firewall:blacklist', []) }}
@@ -40,6 +45,11 @@ iptables:
     - watch:
       - file: iptables
 
+{%- set allowed_protocol6s = salt['pillar.get']('firewall:allowed_protocol6s', ['icmpv6']) -%}
+{%- if 'icmpv6' not in allowed_protocol6s -%}
+  {%- do allowed_protocol6s.append('icmpv6') -%}
+{%- endif %}
+
 ip6tables:
   file:
     - managed
@@ -51,7 +61,7 @@ ip6tables:
     - source: salt://firewall/config.jinja2
     - context:
         ip_addrs_key: ip_addrs6
-        allowed_protocols: {{ salt['pillar.get']('firewall:allowed_protocol6s', ['icmpv6']) }}
+        allowed_protocols: {{ allowed_protocol6s }}
         pillars_ip: {{ salt['pillar.get']('firewall:allowed_ip6s', []) }}
         filter: {{ salt['pillar.get']('firewall:filter6', {}) }}
         blacklist: {{ salt['pillar.get']('firewall:blacklist6', []) }}

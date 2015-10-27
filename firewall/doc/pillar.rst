@@ -53,7 +53,16 @@ List of `protocol names or numbers
 <http://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml>`_
 that will be allowed to reach this server.
 
-Default: do not allow any additional protocol (``[]``).
+Default: only allow :ref:`glossary-ICMP` (``['icmp']``).
+
+.. _pillar-firewall-allowed_protocol6s:
+
+firewall:allowed_protocol6s
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Same as :ref:`pillar-firewall-allowed_protocols` but for :ref:`glossary-IPv6`.
+
+Default: only allow :ref:`glossary-ICMPv6` (``['icmpv6']``).
 
 .. _pillar-firewall-filter:
 

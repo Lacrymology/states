@@ -5,7 +5,6 @@
 {%- set public_interface = salt['pillar.get']('network_interface', 'eth0')
   if not is_openvzve else "venet0" %}
 {%- set netmask = "128" if ip_addrs_key == "ip_addrs6" else "32" %}
-{%- set icmp_type = "icmpv6" if ip_addrs_key == "ip_addrs6" else "icmp" %}
 
 {#- IPV6 NAT only supported in kernel 3.8+ and iptables 1.4.17+ #}
 {%- set kernel_version_support_ipv6_nat = False %}
@@ -45,9 +44,6 @@ COMMIT
 *filter
 {%- block filter %}
 :OUTPUT ACCEPT [0:0]
-{%- for protocol in allowed_protocols %}
--A INPUT -p {{ protocol }} -j ACCEPT
-{%- endfor %}
 {%- if filter|length > 0 %}
 :INPUT {% if is_openvzve %}ACCEPT{% else %}DROP{% endif %} [0:0]
 :FORWARD {% if is_openvzve %}ACCEPT{% else %}DROP{% endif %} [0:0]
@@ -55,7 +51,9 @@ COMMIT
 -A INPUT -i {{ public_interface }} -s {{ ip }}/{{ netmask }} -j DROP
 {%- endfor %}
 -A INPUT -i lo -j ACCEPT
--A INPUT -p {{ icmp_type }} -j ACCEPT
+{%- for protocol in allowed_protocols %}
+-A INPUT -p {{ protocol }} -j ACCEPT
+{%- endfor %}
 -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
   {%- for host in mine -%}
     {#- if private == public only process public -#}

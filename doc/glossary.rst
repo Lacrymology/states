@@ -585,9 +585,9 @@ ICMPv6
 
 Internet Control Message Protocol version 6 (ICMPv6) is the implementation of
 the Internet Control Message Protocol (ICMP) for Internet Protocol version 6
-(IPv6) defined in RFC 4443. ICMPv6 is an integral part of IPv6 and performs
-error reporting and diagnostic functions (e.g., ping), and has a framework for
-extensions to implement future changes.
+(IPv6) defined in `RFC 4443 <https://tools.ietf.org/html/rfc4443>`_. ICMPv6 is
+an integral part of IPv6 and performs error reporting and diagnostic functions
+(e.g., ping), and has a framework for extensions to implement future changes.
 
 .. https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol_version_6 -
    2015-10-27

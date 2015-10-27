@@ -13,6 +13,9 @@ Example::
   firewall:
     allowed_ips:
       - 192.168.1.1
+    allowed_protocols:
+      - gre
+      - 89
     filter:
       tcp:
         - 22
@@ -40,6 +43,17 @@ List of additional :ref:`glossary-IPv6` addresses that will get full access to
 this server.
 
 Default: no host allowed to fully access (``[]``).
+
+.. _pillar-firewall-allowed_protocols:
+
+firewall:allowed_protocols
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+List of `protocol names or numbers
+<http://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml>`_
+that will be allowed to reach this server.
+
+Default: do not allow any additional protocol (``[]``).
 
 .. _pillar-firewall-filter:
 

@@ -45,6 +45,9 @@ COMMIT
 *filter
 {%- block filter %}
 :OUTPUT ACCEPT [0:0]
+{%- for protocol in allowed_protocols %}
+-A INPUT -p {{ protocol }} -j ACCEPT
+{%- endfor %}
 {%- if filter|length > 0 %}
 :INPUT {% if is_openvzve %}ACCEPT{% else %}DROP{% endif %} [0:0]
 :FORWARD {% if is_openvzve %}ACCEPT{% else %}DROP{% endif %} [0:0]

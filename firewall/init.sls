@@ -8,8 +8,6 @@ include:
   file:
     - absent
 
-{%- set allowed_protocols = salt['pillar.get']('firewall:allowed_protocols', []) %}
-
 iptables:
   file:
     - managed
@@ -21,7 +19,7 @@ iptables:
     - source: salt://firewall/config.jinja2
     - context:
         ip_addrs_key: ip_addrs
-        allowed_protocols: {{ allowed_protocols }}
+        allowed_protocols: {{ salt['pillar.get']('firewall:allowed_protocols', ['icmp']) }}
         pillars_ip: {{ salt['pillar.get']('firewall:allowed_ips', []) }}
         filter: {{ salt['pillar.get']('firewall:filter', {}) }}
         blacklist: {{ salt['pillar.get']('firewall:blacklist', []) }}
@@ -53,7 +51,7 @@ ip6tables:
     - source: salt://firewall/config.jinja2
     - context:
         ip_addrs_key: ip_addrs6
-        allowed_protocols: {{ allowed_protocols }}
+        allowed_protocols: {{ salt['pillar.get']('firewall:allowed_protocol6s', ['icmpv6']) }}
         pillars_ip: {{ salt['pillar.get']('firewall:allowed_ip6s', []) }}
         filter: {{ salt['pillar.get']('firewall:filter6', {}) }}
         blacklist: {{ salt['pillar.get']('firewall:blacklist6', []) }}

@@ -34,7 +34,7 @@ retval=0
 timeout {{ time_limit }} find {{ paths | join(' ') }} \
 {%- for path in paths -%}
   {%- for exc_path in exclude_paths %}
-    ! \( -path "{{ path }}{{ exc_path }}" -prune \) \
+    ! \( -path "{% if path != "/" %}{{ path }}{% endif %}{{ exc_path }}" -prune \) \
   {%- endfor -%}
 {%- endfor %}
     -mtime -1 -type f -print0 | \

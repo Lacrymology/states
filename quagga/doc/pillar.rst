@@ -57,6 +57,9 @@ Example::
       password: qazwsx
       enable_password: tgbyhn
     ospfd:
+      interfaces:
+        tap1:
+          priority: 100
       password: qazwsx
       enable_password: tgbyhn
     ospf6d:
@@ -82,6 +85,16 @@ The enable password to access to various privilege levels of {{ daemon }} daemon
 
 Default: use the value of :ref:`pillar-quagga-enable_password` (``False``).
 
+.. _pillar-quagga-ospfd-interfaces:
+
+quagga:ospfd:interfaces
+~~~~~~~~~~~~~~~~~~~~~~~
+
+A dictionary with key is the OSPF interface and value is another dictionary of
+properties which will be set on that interface. Details as belows.
+
+Default: no additional interface (``{}``).
+
 .. _pillar-quagga-ospf6d-router_id:
 
 quagga:ospf6d:router_id
@@ -95,3 +108,17 @@ router-ID! If one is not specified then ``ospf6d`` will obtain a router-ID
 automatically from ``zebra``.
 
 Default: use the :ref:`glossary-IPv4` address (``False``).
+
+Conditional
+-----------
+
+.. _pillar-quagga-ospfd-interfaces-interface-priority:
+
+quagga:ospfd:interfaces:{{ interface }}:priority
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Set RouterPriority integer value in range 0-255. The router with the highest
+priority will be more eligible to become Designated Router. Setting the value
+to 0, makes the router ineligible to become Designated Router.
+
+Default: ``1``.

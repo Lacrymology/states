@@ -2,10 +2,9 @@
 
 {%- from "upstart/absent.sls" import upstart_absent with context -%}
 
-{%- set prefix = '/etc/init/' -%}
-{%- set upstart_files = salt['file.find'](prefix, name='openvpn-*.conf', type='f') -%}
+{%- set upstart_files = salt['file.find'](path='/etc/init/', name='openvpn-*.conf', type='f', print='name') -%}
     {%- for filename in upstart_files -%}
-        {%- set instance = filename.replace(prefix + 'openvpn-', '').replace('.conf', '') %}
+        {%- set instance = filename.replace('openvpn-', '').replace('.conf', '') %}
 
 {{ upstart_absent('openvpn-' + instance) }}
 

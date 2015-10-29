@@ -21,9 +21,12 @@ salt:highstate
 
 .. TODO: replace highstate with link to salt doc for this module
 
-Run highstate every day.
+Allows :doc:`/salt/master/doc/index` calls `state.highstate
+<https://docs.saltstack.com/en/latest/ref/modules/all/
+salt.modules.state.html#salt.modules.state.highstate>`_ against this minion
+daily through its :doc:`/cron/doc/index` job.
 
-Default: Apply ``highstate`` every day (`True``).
+Default: Allow ``highstate`` every day (``True``).
 
 .. _pillar-salt-master:
 

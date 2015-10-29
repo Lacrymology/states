@@ -2,6 +2,8 @@
 
 {%- from 'openvpn/server/macro.jinja2' import service_openvpn with context -%}
 {%- from 'macros.jinja2' import dict_default with context %}
+{%- from 'upstart/absent.sls' import upstart_absent with context %}
+
 include:
   - apt
   - openvpn
@@ -77,6 +79,23 @@ openvpn_ca:
     - replace: False
     - require:
       - module: openvpn_ca
+
+{%- set upstart_files = salt['file.find'](path='/etc/init/', regex='openvpn-(?!client).+\.conf', type='f', print='name') -%}
+{%- for file in upstart_files if file.replace('openvpn-', '').replace('.conf', '') not in servers %}
+    {%- set instance = file.replace('openvpn-', '').replace('.conf', '') %}
+{{ upstart_absent('openvpn-' ~ instance) }}
+
+    {%- if loop.last %}
+openvpn_absent_last_old_instance:
+    {%- else %}
+openvpn_absent_old_{{ instance }}:
+    {%- endif %}
+  file:
+    - absent
+    - name: /etc/openvpn/{{ instance }}
+    - require:
+      - service: openvpn-{{ instance }}
+{%- endfor %}
 
 {%- for instance in servers -%}
     {%- set config_dir = '/etc/openvpn/' + instance -%}
@@ -407,6 +426,7 @@ openvpn_revoke_client_cert_{{ r_client }}:
       - module: openvpn_server_cert_{{ instance }}
       - file: /etc/default/openvpn
       - file: {{ config_dir }}/ccd
+      - file: openvpn_absent_last_old_instance
 {%- endcall -%}
     {%- endif %}{# tls -#}
 {%- endfor -%}

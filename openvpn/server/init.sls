@@ -95,6 +95,12 @@ openvpn_absent_old_{{ instance }}:
     - name: /etc/openvpn/{{ instance }}
     - require:
       - service: openvpn-{{ instance }}
+    {%- for server in servers %}
+        {%- if loop.first %}
+    - require_in:
+        {%- endif %}
+      - service: openvpn-{{ server }}
+    {%- endfor %}
 {%- endfor %}
 
 {%- for instance in servers -%}
@@ -426,7 +432,6 @@ openvpn_revoke_client_cert_{{ r_client }}:
       - module: openvpn_server_cert_{{ instance }}
       - file: /etc/default/openvpn
       - file: {{ config_dir }}/ccd
-      - file: openvpn_absent_last_old_instance
 {%- endcall -%}
     {%- endif %}{# tls -#}
 {%- endfor -%}

@@ -116,3 +116,9 @@ ci-agent:
     - require:
       - pkg: cron
       - file: bash
+
+extend:
+{#- minions managed by salt-master on CI server does not need highstate daily #}
+  salt_master_cron_highstate:
+    file:
+      - absent

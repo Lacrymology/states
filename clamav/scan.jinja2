@@ -31,14 +31,14 @@ trap "log_stop_script \$?" EXIT
 {%- endfor %}
 
 retval=0
-timeout {{ time_limit }} find {{ paths | join(' ') }} \
+find {{ paths | join(' ') }} \
 {%- for path in paths -%}
   {%- for exc_path in exclude_paths %}
     ! \( -path "{% if path != "/" %}{{ path }}{% endif %}{{ exc_path }}" -prune \) \
   {%- endfor -%}
 {%- endfor %}
     -mtime -1 -type f -print0 | \
-    xargs -0 clamdscan {% if salt['pillar.get']('clamav:mode', 'local') == "local" %}--fdpass {% endif %}--quiet -l "$status_file" || retval=$?
+    timeout {{ time_limit }} xargs -0 clamdscan {% if salt['pillar.get']('clamav:mode', 'local') == "local" %}--fdpass {% endif %}--quiet -l "$status_file" || retval=$?
 
 case "$retval" in
     0 ) # no virus found

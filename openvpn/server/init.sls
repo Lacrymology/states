@@ -280,8 +280,9 @@ openvpn_server_cert_{{ instance }}:
     - require:
       - file: {{ config_dir }}
 
-{%- set server_octets = servers[instance]['server'].split()[0].split('.') %}
-{%- set server_last_octet = server_octets[3]|int + 1 %}
+        {%- set server_octets = servers[instance]['server'].split()[0].split('.') %}
+        {%- set server_last_octet = server_octets[3]|int + 1 %}
+        {%- set clients = [] %}
 
         {%- for client in servers[instance]['clients'] -%}
             {%- if client not in servers[instance]['revocations'] -%}
@@ -311,6 +312,7 @@ openvpn_server_cert_{{ instance }}:
     - watch_in:
       - service: openvpn-{{ instance }}
                 {%- endif %}
+                {%- do clients.append(client) %}
 
 openvpn_client_csr_{{ instance }}_{{ client }}:
   module:
@@ -423,6 +425,19 @@ openvpn_revoke_client_cert_{{ r_client }}:
     - watch_in:
       - service: openvpn-{{ instance }}
         {%- endfor -%}
+
+        {#- Delete all client certs that is not in the client list anymore -#}
+        {%- set client_files = salt['file.find'](path='/etc/openvpn/' ~ instance ~ '/clients', name='*.conf', type='f', print='name') -%}
+        {%- for file in client_files if file.replace('.conf', '') not in clients -%}
+            {%- set client = file.replace('.conf', '') %}
+openvpn_absent_old_client_{{ instance }}_{{ client }}:
+  file:
+    - absent
+    - names:
+            {%- for ext in ('conf', 'crt', 'csr', 'key', 'zip') %}
+      - /etc/openvpn/{{ instance }}/clients/{{ client }}.{{ ext }}
+            {%- endfor %}
+        {%- endfor %}
 
 {%- call service_openvpn(instance) %}
       - cmd: openvpn_dh

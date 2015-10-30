@@ -34,6 +34,9 @@ def __virtual__():
 
 
 def send_sentry(return_data, message, failed_state_data=None):
+    if __opts__['test']:
+        return
+
     pillar_data = __salt__['pillar.data']()
 
     # prepare grains

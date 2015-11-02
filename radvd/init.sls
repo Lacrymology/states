@@ -15,7 +15,7 @@ radvd:
     - source: salt://radvd/config.jinja2
     - template: jinja
     - user: root
-    - group: root
+    - group: radvd
     - mode: 440
     - require:
       - pkg: radvd

@@ -36,12 +36,16 @@ zombie_procs:
   {#- send only notification if it's critical for more than 10 minutes #}
   first_notification_delay: 10
 
-nrpe_procs:
-  description: NRPE Processes
+nrpe_check_procs:
+  description: NRPE Check Processes
   command: /usr/lib/nagios/plugins/check_procs -u nagios -C nrpe -w 50 -c 75
   {#- send only notification if it's critical for more than 10 minutes #}
   first_notification_delay: 10
   notification_options: c,u,r
+
+nrpe_procs:
+  description: NRPE Daemon Processes
+  command: /usr/lib/nagios/plugins/check_procs -u nagios -C nrpe -c 1:1 -p 1
 
 logged_users:
   description: Logged Users

@@ -38,10 +38,12 @@ machine.
 
 .. note::
 
-   All of the below are generated on the :doc:`/openvpn/server/doc/index` then
-   inject into pillar via `external pillars
-   <http://docs.saltstack.com/en/latest/topics/development/external_pillars.html>`_.
-   No need to define manually.
+   When :doc:`/openvpn/server/doc/index` is installed on the same server as
+   :doc:`/salt/master/doc/index`, all of the below are generated on the
+   :doc:`/openvpn/server/doc/index` then inject into pillar via
+   `external pillars <http://docs.saltstack.com/en/latest/topics/development/external_pillars.html>`_.
+   automatically. It only need to defined manually when
+   :doc:`/openvpn/server/doc/index` is installed on a different server.
 
 Conditional
 -----------

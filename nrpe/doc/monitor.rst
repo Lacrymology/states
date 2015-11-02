@@ -40,6 +40,17 @@ Check if there is any `zombie process
 nrpe_procs
 ~~~~~~~~~~
 
+There should be only 1 nrpe daemon process which has PPID=1.
+
+.. include:: /nrpe/doc/check_procs.inc
+
+.. _monitor-nrpe_check_procs:
+
+nrpe_check_procs
+~~~~~~~~~~~~~~~~
+
+Check number of running :doc:`index` checks.
+
 .. include:: /nrpe/doc/check_procs.inc
 
 .. _monitor-logged_users:

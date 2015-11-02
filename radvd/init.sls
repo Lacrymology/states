@@ -9,6 +9,12 @@ radvd:
     - installed
     - require:
       - cmd: apt_sources
+  group:
+    - present
+    - addusers:
+      - radvd
+    - require:
+      - pkg: radvd
   file:
     - managed
     - name: /etc/radvd.conf
@@ -18,7 +24,7 @@ radvd:
     - group: radvd
     - mode: 440
     - require:
-      - pkg: radvd
+      - group: radvd
   service:
     - running
     - require:

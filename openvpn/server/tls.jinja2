@@ -36,7 +36,9 @@ ifconfig {{ server_ip }} {{ server_octets[0] + "." + server_octets[1] + "." + se
 ifconfig-pool {{ vpn_instance['ifconfig-pool'] }}
     {%- endif %}
     {%- if first_ipv6 %}
+      {%- if vpn_instance['device'].startswith('tun') %}
 tun-ipv6
+      {%- endif %}
 ifconfig-ipv6 {{ salt['common.calc_range'](server_ipv6)[1]|string }} {{ salt['common.calc_range'](server_ipv6)[2]|string }}
 ifconfig-ipv6-pool {{ vpn_instance['ifconfig-ipv6-pool'] }}
     {%- endif %}

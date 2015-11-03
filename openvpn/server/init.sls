@@ -382,7 +382,6 @@ openvpn_{{ instance }}_{{ client }}:
         client: {{ client }}
     - require:
       - file: {{ config_dir }}
-                {%- if not salt['file.file_exists'](config_dir + '/clients/' + client + '.zip') %}
   cmd:
     - wait
     - name: zip -j {{ client }}.zip {{ client }}.conf {{ client }}.crt {{ client }}.key /etc/openvpn/ca.crt
@@ -401,9 +400,8 @@ openvpn_{{ instance }}_{{ client }}:
     - group: root
     - mode: 400
     - replace: False
-    - require:
+    - watch:
       - cmd: openvpn_{{ instance }}_{{ client }}
-                {%- endif -%}
             {%- endif %}{# client cert not in revocation list -#}
         {%- endfor %}{# client cert -#}
 

@@ -47,4 +47,20 @@ ddns_setup_dynamic_dns_{{ domain }}_{{ loop.index }}:
     - require:
       - pip: ddns_dnspython
   {%- endfor %}
+  {#- Remove all A records that is not in the pillar anymore #}
+  {%- for addr in salt['dnsutil.A'](domain ~ '.' ~ zone, nameserver=nameserver) if addr not in ips %}
+ddns_{{ domain }}_absent_old_ip_{{ loop.index }}:
+  ddns:
+    - absent
+    - name: {{ domain }}
+    - zone: {{ zone }}
+    - ttl: {{ ttl }}
+    - nameserver: {{ nameserver }}
+    - data: {{ addr }}
+    - keyfile: {{ opts['cachedir'] }}/ddns
+    - watch:
+      - file: ddns_tsig_key
+    - require:
+      - pip: ddns_dnspython
+  {%- endfor %}
 {%- endfor %}

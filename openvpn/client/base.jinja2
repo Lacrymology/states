@@ -1,8 +1,8 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
+{%- set vpn_instance = salt['pillar.get']('openvpn:servers:' ~ instance) %}
 {%- block device %}
 {%- endblock device %}
-{%- set vpn_instance = salt['pillar.get']('openvpn:servers:' ~ instance) %}
 proto {{ vpn_instance['protocol'] | default('udp') }}
 resolv-retry infinite
 nobind

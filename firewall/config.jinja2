@@ -2,8 +2,6 @@
 
 {%- set mine = salt['mine.get']('*', 'monitoring.data') -%}
 {%- set is_openvzve = grains['virtual'] == 'openvzve' %}
-{%- set public_interface = salt['pillar.get']('network_interface', 'eth0')
-  if not is_openvzve else "venet0" %}
 {%- set netmask = "128" if ip_addrs_key == "ip_addrs6" else "32" %}
 
 {#- IPV6 NAT only supported in kernel 3.8+ and iptables 1.4.17+ #}
@@ -48,7 +46,7 @@ COMMIT
 :INPUT {% if is_openvzve %}ACCEPT{% else %}DROP{% endif %} [0:0]
 :FORWARD {% if is_openvzve %}ACCEPT{% else %}DROP{% endif %} [0:0]
 {%- for ip in blacklist %}
--A INPUT -i {{ public_interface }} -s {{ ip }}/{{ netmask }} -j DROP
+-A INPUT -s {{ ip }}/{{ netmask }} -j DROP
 {%- endfor %}
 -A INPUT -i lo -j ACCEPT
 {%- for protocol in allowed_protocols %}
@@ -65,18 +63,18 @@ COMMIT
     {%- for addr_type in addr_types -%}
       {%- set ip_addr = mine[host][ip_addrs_key][addr_type] if ip_addrs_key in mine[host] else None %}
       {%- if ip_addr and ip_addr not in pillars_ip %}
--A INPUT -i {{ public_interface }} -s {{ mine[host][ip_addrs_key][addr_type] }}/{{ netmask }} -j ACCEPT
+-A INPUT -s {{ mine[host][ip_addrs_key][addr_type] }}/{{ netmask }} -j ACCEPT
       {%- endif -%}
     {%- endfor -%}
   {%- endfor -%}
   {%- for host in pillars_ip %}
--A INPUT -i {{ public_interface }} -s {{ host }}/{{ netmask }} -j ACCEPT
+-A INPUT -s {{ host }}/{{ netmask }} -j ACCEPT
   {%- endfor -%}
   {%- for protocol, ports in filter.iteritems() -%}
     {%- if ports|length == 1 %}
--A INPUT -i {{ public_interface }} -p {{ protocol }} -m {{ protocol }} --dport {{ ports[0] }} -j ACCEPT
+-A INPUT -p {{ protocol }} -m {{ protocol }} --dport {{ ports[0] }} -j ACCEPT
     {%- else %}
--A INPUT -i {{ public_interface }} -p {{ protocol }} -m multiport --dports {% for port in ports %}{{ port }}{% if not loop.last %},{% endif %}{% endfor %} -j ACCEPT
+-A INPUT -p {{ protocol }} -m multiport --dports {% for port in ports %}{{ port }}{% if not loop.last %},{% endif %}{% endfor %} -j ACCEPT
     {%- endif %}{# if length == 1 -#}
     {%- if grains['virtual'] == 'openvzve' %}
 -A INPUT -i venet0 -j DROP

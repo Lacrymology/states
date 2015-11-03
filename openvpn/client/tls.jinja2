@@ -2,6 +2,12 @@
 
 {%- extends "openvpn/client/base.jinja2" %}
 
+{%- set mine = salt['mine.get']('*', 'monitoring.data') -%}
+{%- block device -%}
+  {%- if client not in mine %}
+dev {{ vpn_instance['device'] | default('tun') }}
+  {%- endif -%}
+{%- endblock device -%}
 {%- set ip_addrs = salt['pillar.get']('ip_addrs', {}) -%}
 {%- if ip_addrs -%}
   {%- set remote_address = ip_addrs['public'] -%}
@@ -28,9 +34,15 @@ remote {{ remote_address }} {{ port }} {{ (protocol|list)[:-1]|join }}
 {%- else %}
 remote {{ remote_address }} {{ port }} {{ protocol }}
 {%- endif %}
-
-ca /etc/openvpn/client/{{ instance }}/ca.crt
-cert /etc/openvpn/client/{{ instance }}/{{ client }}.crt
-key /etc/openvpn/client/{{ instance }}/{{ client }}.key
+ca ca.crt
+cert {{ client }}.crt
+key {{ client }}.key
 remote-cert-tls server
-{%- endblock authentication_mode %}
+{%- endblock authentication_mode -%}
+
+{%- block additional -%}
+  {%- if client in mine %}
+syslog openvpn-client-{{ instance }}
+writepid /var/run/openvpn-client/{{ instance }}.pid
+  {%- endif -%}
+{%- endblock additional %}

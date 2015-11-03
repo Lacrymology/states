@@ -1,5 +1,7 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
+{%- block device %}
+{%- endblock device %}
 {%- set vpn_instance = salt['pillar.get']('openvpn:servers:' ~ instance) %}
 proto {{ vpn_instance['protocol'] | default('udp') }}
 resolv-retry infinite
@@ -9,13 +11,13 @@ group nogroup
 persist-key
 persist-tun
 comp-lzo
-syslog openvpn-client-{{ instance }}
 {%- if salt['pillar.get']('debug', False) %}
 verb 15
 {%- else %}
 verb 4
 {%- endif %}
-writepid /var/run/openvpn-client/{{ instance }}.pid
 
 {%- block authentication_mode %}
 {%- endblock authentication_mode %}
+{%- block additional %}
+{%- endblock additional %}

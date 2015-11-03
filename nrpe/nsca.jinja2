@@ -25,7 +25,7 @@ nsca:
 {%- block logging_loggers %}
     {{ super() }}
     apscheduler:
-      level: ERROR
+      level: WARNING
       propagate: True
       handlers:
         - syslog

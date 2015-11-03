@@ -25,20 +25,26 @@ ddns_tsig_key:
     - group: root
     - mode: 400
 
+{%- set zone = salt['pillar.get']('ddns:zone') %}
+{%- set ttl = salt['pillar.get']('ddns:ttl', 3600) %}
+{%- set nameserver = salt['pillar.get']('ddns:nameserver') %}
 {%- set domains = salt['pillar.get']('ddns:domains', None)|default(grains['id'], boolean=True) %}
 {%- set interface = salt['pillar.get']('network_interface', 'eth0') %}
 {%- for domain in domains %}
-ddns_setup_dynamic_dns_{{ domain }}:
+  {%- set ips = salt['pillar.get']('ddns:domains:' ~ domain ~ ':ips', None) | default(salt['network.ip_addrs'](interface), boolean=True) %}
+  {%- for ip in ips %}
+ddns_setup_dynamic_dns_{{ domain }}_{{ loop.index }}:
   ddns:
     - present
     - name: {{ domain }}
-    - zone: {{ salt['pillar.get']('ddns:zone') }}
-    - ttl: {{ salt['pillar.get']('ddns:ttl', 3600) }}
-    - nameserver: {{ salt['pillar.get']('ddns:nameserver') }}
-    - data: {{ salt['pillar.get']('ddns:public_ip', salt['network.interface_ip'](interface)) }}
+    - zone: {{ zone }}
+    - ttl: {{ ttl }}
+    - nameserver: {{ nameserver }}
+    - data: {{ ip }}
     - keyfile: {{ opts['cachedir'] }}/ddns
     - watch:
       - file: ddns_tsig_key
     - require:
       - pip: ddns_dnspython
+  {%- endfor %}
 {%- endfor %}

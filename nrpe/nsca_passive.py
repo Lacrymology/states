@@ -93,6 +93,7 @@ class PassiveDaemon(object):
         '''
         Run specified check, connect to NSCA server and send results.
         '''
+        logger.info("List jobs: %s", self.sched.get_jobs())
         logger.debug('Running {0}'.format(check_name))
         try:
             p = subprocess.Popen(command, stdout=subprocess.PIPE,
@@ -211,7 +212,7 @@ class PassiveDaemon(object):
             logger.debug("Create scheduler job for interval %d and checks %s",
                          interval, checks)
             self.sched.add_interval_job(self.run_checks, minutes=interval,
-                                        args=(checks,))
+                                        args=(checks,), misfire_grace_time=10)
         logger.debug("Starting scheduler")
         try:
             # blocking

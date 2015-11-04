@@ -1,5 +1,7 @@
 {#- Usage of this is governed by a license that can be found in doc/license.rst -#}
 
+{%- from "upstart/absent.sls" import upstart_absent with context -%}
+
 include:
   - openvpn
 
@@ -19,7 +21,28 @@ include:
     - group: root
     - mode: 770
 
-{%- for instance_name, instance in salt['pillar.get']('openvpn_client:instances').iteritems() %}
+{%- set instances = salt['pillar.get']('openvpn_client:instances') -%}
+{%- set upstart_files = salt['file.find']('/etc/init', name='openvpn-client-*.conf', type='f', print='name') -%}
+{%- for filename in upstart_files -%}
+  {%- set old_instance = filename.replace('openvpn-client-', '').replace('.conf', '') %}
+
+{{ upstart_absent('openvpn-client-' + old_instance) }}
+
+openvpn_client_absent_{{ old_instance }}:
+  file:
+    - absent
+    - name: /etc/openvpn/client/{{ old_instance }}
+    - require:
+      - service: openvpn-client-{{ old_instance }}
+  {%- for instance in instances %}
+    {%- if loop.first %}
+    - require_in:
+    {%- endif %}
+      - service: openvpn_client_{{ instance }}
+  {%- endfor %}
+{%- endfor %}
+
+{%- for instance_name, instance in instances.iteritems() %}
 /etc/openvpn/client/{{ instance_name }}:
   file:
     - directory

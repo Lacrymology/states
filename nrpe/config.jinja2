@@ -16,9 +16,10 @@ nsca_passive_procs:
   passive: False
 {%- endif %}
 
+{%- set warning_percentage = salt['pillar.get']('nrpe:disk_warning_percentage', 20) | int %}
 free_disks_space:
   description: All Disks
-  command: /usr/lib/nagios/plugins/check_disk -w 20% -c 10% -X tmpfs -X devtmpfs -X none
+  command: /usr/lib/nagios/plugins/check_disk -w {{ warning_percentage }}% -c {{ (warning_percentage / 2) | int }}% -X tmpfs -X devtmpfs -X none
 {%- if grains['virtual'] == 'VirtualBox' %} -X vboxsf{% endif -%}
 
 {%- set max_proc = salt['pillar.get']('nrpe:max_proc', 150)|int -%}

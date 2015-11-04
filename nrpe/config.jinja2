@@ -48,11 +48,11 @@ nrpe_check_procs:
     matching, this check will use state ``Ss`` which also matches ``S``.#}
 nrpe_procs:
   description: NRPE Daemon Processes
-  command: /usr/lib/nagios/plugins/check_procs -u nagios -C nrpe -c 1: -p 1 -s Ss
+  command: '/usr/lib/nagios/plugins/check_procs -u nagios -C nrpe -c 1: -p 1 -s Ss'
 
 nrpe_hang_check_procs:
   description: NRPE Check Processes which took too long
-  command: /usr/lib/nagios/plugins/check_procs -m ELAPSED -c :1800 -s S -C nrpe -p 1 -u nagios
+  command: '/usr/lib/nagios/plugins/check_procs -m ELAPSED -c :1800 -s S -C nrpe -p 1 -u nagios'
 
 logged_users:
   description: Logged Users

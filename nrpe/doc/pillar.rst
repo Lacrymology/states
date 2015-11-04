@@ -32,6 +32,16 @@ this case).
 Optional
 --------
 
+.. _pillar-nrpe-disk-warning_percentage:
+
+nrpe:disk_warning_percentage
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+`check_disk <https://www.monitoring-plugins.org/doc/man/check_disk.html>`_ will
+exit with WARNING status if less than PERCENT of disk space is free.
+
+Default: ``20`` %.
+
 .. _pillar-nrpe-max_proc:
 
 nrpe:max_proc

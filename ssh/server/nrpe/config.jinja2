@@ -6,7 +6,7 @@
 
 ssh_procs:
   description: SSH Server Daemon
-  command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -C sshd -u root -a /usr/sbin/sshd'
+  command: '/usr/lib/nagios/plugins/check_procs -c 1:1 -C sshd -u root -a /usr/sbin/sshd -p 1'
 
 {#- check only one port to see if ssh daemon works, no need to check all ports #}
 ssh_port:

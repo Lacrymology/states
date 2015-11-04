@@ -40,7 +40,9 @@ Check if there is any `zombie process
 nrpe_procs
 ~~~~~~~~~~
 
-There should be only 1 nrpe daemon process which has PPID=1.
+There should always have at least 1 :doc:`index` daemon process which has
+PPID=1. The check does not check for singularity of :doc:`index` daemon
+process but make sure its existence.
 
 .. include:: /nrpe/doc/check_procs.inc
 
@@ -52,6 +54,16 @@ nrpe_check_procs
 Check number of running :doc:`index` checks.
 
 .. include:: /nrpe/doc/check_procs.inc
+
+.. _monitor-nrpe_hang_check_procs:
+
+nrpe_hang_check_procs
+~~~~~~~~~~~~~~~~~~~~~
+
+Check number of long running :doc:`index` check processes,
+which probably are hanging processes.
+This check base on ELAPSE time of process, and with state ``S``.
+The main :doc:`index` process has state ``Ss``.
 
 .. _monitor-logged_users:
 

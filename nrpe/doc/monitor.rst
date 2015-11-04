@@ -53,6 +53,16 @@ Check number of running :doc:`index` checks.
 
 .. include:: /nrpe/doc/check_procs.inc
 
+.. _monitor-nrpe_hang_check_procs:
+
+nrpe_hang_check_procs
+~~~~~~~~~~~~~~~~~~~~~
+
+Check number of long running :doc:`index` check processes,
+which probably are hanging processes.
+This check base on ELAPSE time of process, and with state ``S``.
+The main :doc:`index` process has state ``Ss``.
+
 .. _monitor-logged_users:
 
 logged_users

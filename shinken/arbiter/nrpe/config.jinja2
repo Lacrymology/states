@@ -13,7 +13,7 @@ shinken_arbiter_procs:
 {%- if arbiter_mine %}
 shinken_arbiter_port:
   description: Shinken Arbiter Local Port
-  command: "/usr/lib/nagios/plugins/check_tcp -H {{ arbiter_mine[grains['id']]['ip_addrs']['private'] }} -p 7770 -t {{ timeout }}"
+  command: "/usr/lib/nagios/plugins/check_tcp -H {{ arbiter_mine[grains['id']]['ip_addrs'][salt['pillar.get']('shinken:ip_source', 'public')] }} -p 7770 -t {{ timeout }}"
   timeout: {{ timeout }}
   dependencies:
     - shinken_arbiter_procs

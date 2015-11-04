@@ -85,11 +85,7 @@ openvpn_ca:
     {%- set instance = file.replace('openvpn-', '').replace('.conf', '') %}
 {{ upstart_absent('openvpn-' ~ instance) }}
 
-    {%- if loop.last %}
-openvpn_absent_last_old_instance:
-    {%- else %}
 openvpn_absent_old_{{ instance }}:
-    {%- endif %}
   file:
     - absent
     - name: /etc/openvpn/{{ instance }}

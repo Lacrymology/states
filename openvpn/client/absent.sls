@@ -9,11 +9,7 @@
 
 {{ upstart_absent('openvpn-client-' + instance) }}
 
-        {%- if loop.last %}
-openvpn_client_absent_last_instance:
-        {%- else %}
 openvpn_client_absent_{{ instance }}:
-        {%- endif %}
   file:
     - absent
     - name: /etc/openvpn/client/{{ instance }}

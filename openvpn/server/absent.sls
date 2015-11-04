@@ -32,6 +32,7 @@ openvpn_absent_{{ instance }}:
     - absent
 {%- endfor %}
 
-{{ opts['cachedir'] }}/{{ salt['pillar.get']('openvpn:ca:name') }}.serial:
-  file:
-    - absent
+openvpn_absent_serial:
+  cmd:
+    - run
+    - name: rm -f {{ opts['cachedir'] }}/*.serial

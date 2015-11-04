@@ -23,8 +23,8 @@ include:
 
 {%- set instances = salt['pillar.get']('openvpn_client:instances') -%}
 {%- set upstart_files = salt['file.find']('/etc/init', name='openvpn-client-*.conf', type='f', print='name') -%}
-{%- for filename in upstart_files -%}
-  {%- set old_instance = filename.replace('openvpn-client-', '').replace('.conf', '') %}
+{%- for file in upstart_files if file.replace('openvpn-client-', '').replace('.conf', '') not in instances -%}
+  {%- set old_instance = file.replace('openvpn-client-', '').replace('.conf', '') %}
 
 {{ upstart_absent('openvpn-client-' + old_instance) }}
 

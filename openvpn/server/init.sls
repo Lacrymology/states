@@ -413,6 +413,7 @@ openvpn_revoke_client_cert_{{ r_client }}:
     - CN: {{ r_client }}
     - cert_dir: '/etc/openvpn/{{ instance }}/clients'
     - crl_file: '{{ config_dir }}/crl.pem'
+    - unless: grep '^R.*CN={{ r_client }}' /etc/openvpn/index.txt
     - require:
       - pkg: salt_minion_deps
       - module: openvpn_create_empty_crl_{{ instance }}

@@ -812,7 +812,13 @@ def revoke_cert(
         ca_filename=None,
         cert_dir=None,
         cert_filename=None,
-        crl_file=None):
+        crl_file=None,
+        onlyif=None,
+        unless=None):
+
+    status = _check_onlyif_unless(onlyif, unless)
+    if status is not None:
+        return None
 
     if ca_dir is None:
         ca_dir = '{0}/{1}'.format(_cert_base_path(), ca_name)

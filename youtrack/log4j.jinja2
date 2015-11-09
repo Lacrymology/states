@@ -1,0 +1,9 @@
+{#- Usage of this is governed by a license that can be found in doc/license.rst -#}
+
+{%- from "java/macro.jinja2" import log4j_syslog with context -%}
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- {{ salt['pillar.get']('message_do_not_modify') }} -->
+<!DOCTYPE log4j:configuration PUBLIC "-//APACHE//DTD LOG4J 1.2//EN" "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+{{ log4j_syslog()|indent(4) }}
+</log4j:configuration>

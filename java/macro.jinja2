@@ -1,7 +1,7 @@
 {%- macro log4j_syslog(log_level=None) %}
 <!-- Syslog -->
 <appender name="SYSLOG" class="org.apache.log4j.net.SyslogAppender">
-  <param name="Facility" value="LOCAL0"/>
+  <param name="Facility" value="DAEMON"/>
   <param name="FacilityPrinting" value="false"/>
   <param name="Header" value="true"/>
   <param name="Threshold" value="{% if salt['pillar.get']('debug', False) %}DEBUG{% else %}{{ log_level|default("INFO", boolean=True) }}{% endif %}"/>
